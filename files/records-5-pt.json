@@ -1,0 +1,1175 @@
+{
+ "target": "pt",
+ "phases": {
+  "before": {
+   "texts": {
+    "ageA": {
+     "v": "Age ",
+     "connected": true
+    },
+    "ageB": {
+     "v": "16",
+     "connected": true
+    },
+    "ownA": {
+     "v": "Goals this season: ",
+     "connected": true
+    },
+    "ownB": {
+     "v": "3",
+     "connected": true
+    },
+    "twA": {
+     "v": "Followers: ",
+     "connected": true
+    },
+    "twB": {
+     "v": "10",
+     "connected": true
+    },
+    "rmA": {
+     "v": "Striker",
+     "connected": true
+    },
+    "rmB": {
+     "v": " · Age ",
+     "connected": true
+    },
+    "rmC": {
+     "v": "16",
+     "connected": true
+    },
+    "insA": {
+     "v": "You have ",
+     "connected": true
+    },
+    "insB": {
+     "v": "3",
+     "connected": true
+    },
+    "insC": {
+     "v": " goals this season",
+     "connected": true
+    },
+    "agA": {
+     "v": "Minute ",
+     "connected": true
+    },
+    "agB": {
+     "v": "1",
+     "connected": true
+    },
+    "qA": {
+     "v": "The season starts in August",
+     "connected": true
+    }
+   },
+   "html": {
+    "age": "Age 16",
+    "own": "Goals this season: 3",
+    "twice": "Followers: 10",
+    "rm": "Striker · Age 16",
+    "ins": "You have 3 goals this season",
+    "again": "Minute 1",
+    "quiet": "The season starts in August",
+    "after": ""
+   },
+   "kids": {
+    "age": 2,
+    "own": 2,
+    "twice": 2,
+    "rm": 3,
+    "ins": 3,
+    "again": 2,
+    "quiet": 1,
+    "after": 0
+   },
+   "stats": {
+    "swaps": 0,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 0,
+    "returned": 0
+   }
+  },
+  "translated": {
+   "texts": {
+    "ageA": {
+     "v": "Age ",
+     "connected": false
+    },
+    "ageB": {
+     "v": "16",
+     "connected": false
+    },
+    "ownA": {
+     "v": "Goals this season: ",
+     "connected": false
+    },
+    "ownB": {
+     "v": "3",
+     "connected": false
+    },
+    "twA": {
+     "v": "Followers: ",
+     "connected": false
+    },
+    "twB": {
+     "v": "10",
+     "connected": false
+    },
+    "rmA": {
+     "v": "Striker",
+     "connected": false
+    },
+    "rmB": {
+     "v": " · Age ",
+     "connected": false
+    },
+    "rmC": {
+     "v": "16",
+     "connected": false
+    },
+    "insA": {
+     "v": "You have ",
+     "connected": false
+    },
+    "insB": {
+     "v": "3",
+     "connected": false
+    },
+    "insC": {
+     "v": " goals this season",
+     "connected": false
+    },
+    "agA": {
+     "v": "Minute ",
+     "connected": false
+    },
+    "agB": {
+     "v": "1",
+     "connected": false
+    },
+    "qA": {
+     "v": "The season starts in August",
+     "connected": false
+    }
+   },
+   "html": {
+    "age": "<font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">16 </font><font dir=\"auto\" style=\"vertical-align: inherit;\">anos</font></font>",
+    "own": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Gols nesta temporada: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">3</font></font>",
+    "twice": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Seguidores: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">10</font></font>",
+    "rm": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Atacante </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">16 anos</font></font>",
+    "ins": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Você tem </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">3 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">gols nesta temporada.</font></font>",
+    "again": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Minuto </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "quiet": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">A temporada começa em agosto.</font></font>",
+    "after": ""
+   },
+   "kids": {
+    "age": 2,
+    "own": 2,
+    "twice": 2,
+    "rm": 3,
+    "ins": 3,
+    "again": 2,
+    "quiet": 1,
+    "after": 0
+   },
+   "stats": {
+    "swaps": 15,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 0,
+    "returned": 0
+   }
+  },
+  "pre": {
+   "texts": {
+    "ageA": {
+     "v": "Age ",
+     "connected": false
+    },
+    "ageB": {
+     "v": "17",
+     "connected": false
+    },
+    "ownA": {
+     "v": "Goals this season: ",
+     "connected": false
+    },
+    "ownB": {
+     "v": "3",
+     "connected": false
+    },
+    "twA": {
+     "v": "Followers: ",
+     "connected": false
+    },
+    "twB": {
+     "v": "12",
+     "connected": false
+    },
+    "rmA": {
+     "v": "Striker",
+     "connected": false
+    },
+    "rmB": {
+     "v": " · Age ",
+     "connected": false
+    },
+    "rmC": {
+     "v": "17",
+     "connected": false
+    },
+    "insA": {
+     "v": "You have ",
+     "connected": false
+    },
+    "insB": {
+     "v": "4",
+     "connected": false
+    },
+    "insC": {
+     "v": " goals this season",
+     "connected": false
+    },
+    "agA": {
+     "v": "Minute ",
+     "connected": false
+    },
+    "agB": {
+     "v": "2",
+     "connected": false
+    },
+    "qA": {
+     "v": "The season starts in August",
+     "connected": false
+    }
+   },
+   "html": {
+    "age": "<font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">17 </font><font dir=\"auto\" style=\"vertical-align: inherit;\">anos</font></font>",
+    "own": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Gols nesta temporada: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">3</font></font>",
+    "twice": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Seguidores: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">12</font></font>",
+    "rm": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Atacante </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">17 anos</font></font>",
+    "ins": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Você tem </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">4 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">gols nesta temporada.</font></font>",
+    "again": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Minuto </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">2</font></font>",
+    "quiet": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">A temporada começa em agosto.</font></font>",
+    "after": ""
+   },
+   "kids": {
+    "age": 2,
+    "own": 2,
+    "twice": 2,
+    "rm": 3,
+    "ins": 3,
+    "again": 2,
+    "quiet": 1,
+    "after": 0
+   },
+   "stats": {
+    "swaps": 29,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 14,
+    "returned": 0
+   }
+  },
+  "restore": {
+   "texts": {
+    "ageA": {
+     "v": "Age ",
+     "connected": false
+    },
+    "ageB": {
+     "v": "17",
+     "connected": false
+    },
+    "ownA": {
+     "v": "Goals this season: ",
+     "connected": true
+    },
+    "ownB": {
+     "v": "3",
+     "connected": true
+    },
+    "twA": {
+     "v": "Followers: ",
+     "connected": false
+    },
+    "twB": {
+     "v": "12",
+     "connected": false
+    },
+    "rmA": {
+     "v": "Striker",
+     "connected": false
+    },
+    "rmB": {
+     "v": " · Age ",
+     "connected": false
+    },
+    "rmC": {
+     "v": "17",
+     "connected": false
+    },
+    "insA": {
+     "v": "You have ",
+     "connected": false
+    },
+    "insB": {
+     "v": "4",
+     "connected": false
+    },
+    "insC": {
+     "v": " goals this season",
+     "connected": false
+    },
+    "agA": {
+     "v": "Minute ",
+     "connected": false
+    },
+    "agB": {
+     "v": "2",
+     "connected": false
+    },
+    "qA": {
+     "v": "The season starts in August",
+     "connected": true
+    }
+   },
+   "html": {
+    "age": "Age 17",
+    "own": "Goals this season: 3",
+    "twice": "Followers: 12",
+    "rm": "Striker · Age 17",
+    "ins": "You have 4 goals this season",
+    "again": "Minute 2",
+    "quiet": "The season starts in August",
+    "after": ""
+   },
+   "kids": {
+    "age": 2,
+    "own": 2,
+    "twice": 2,
+    "rm": 3,
+    "ins": 3,
+    "again": 2,
+    "quiet": 1,
+    "after": 0
+   },
+   "stats": {
+    "swaps": 29,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 14,
+    "returned": 15
+   }
+  },
+  "post": {
+   "texts": {
+    "ageA": {
+     "v": "Age ",
+     "connected": false
+    },
+    "ageB": {
+     "v": "18",
+     "connected": false
+    },
+    "ownA": {
+     "v": "Goals this season: ",
+     "connected": true
+    },
+    "ownB": {
+     "v": "4",
+     "connected": true
+    },
+    "twA": {
+     "v": "Followers: ",
+     "connected": false
+    },
+    "twB": {
+     "v": "13",
+     "connected": false
+    },
+    "rmA": {
+     "v": "Striker",
+     "connected": false
+    },
+    "rmB": {
+     "v": " · Age ",
+     "connected": false
+    },
+    "rmC": {
+     "v": "17",
+     "connected": false
+    },
+    "insA": {
+     "v": "You have ",
+     "connected": false
+    },
+    "insB": {
+     "v": "4",
+     "connected": false
+    },
+    "insC": {
+     "v": " goals this season",
+     "connected": false
+    },
+    "agA": {
+     "v": "Minute ",
+     "connected": false
+    },
+    "agB": {
+     "v": "2",
+     "connected": false
+    },
+    "qA": {
+     "v": "The season starts in August",
+     "connected": true
+    }
+   },
+   "html": {
+    "age": "Age 18",
+    "own": "Goals this season: 4",
+    "twice": "Followers: 13",
+    "rm": "Striker · Age ",
+    "ins": "You have <b>only </b>4 goals this season",
+    "again": "Minute 2",
+    "quiet": "The season starts in August",
+    "after": ""
+   },
+   "kids": {
+    "age": 2,
+    "own": 2,
+    "twice": 2,
+    "rm": 2,
+    "ins": 4,
+    "again": 2,
+    "quiet": 1,
+    "after": 0
+   },
+   "stats": {
+    "swaps": 29,
+    "removed": 1,
+    "inserted": 1,
+    "restored": 23,
+    "returned": 15
+   }
+  },
+  "again": {
+   "texts": {
+    "ageA": {
+     "v": "Age ",
+     "connected": false
+    },
+    "ageB": {
+     "v": "18",
+     "connected": false
+    },
+    "ownA": {
+     "v": "Goals this season: ",
+     "connected": false
+    },
+    "ownB": {
+     "v": "4",
+     "connected": false
+    },
+    "twA": {
+     "v": "Followers: ",
+     "connected": false
+    },
+    "twB": {
+     "v": "13",
+     "connected": false
+    },
+    "rmA": {
+     "v": "Striker",
+     "connected": false
+    },
+    "rmB": {
+     "v": " · Age ",
+     "connected": false
+    },
+    "rmC": {
+     "v": "17",
+     "connected": false
+    },
+    "insA": {
+     "v": "You have ",
+     "connected": false
+    },
+    "insB": {
+     "v": "4",
+     "connected": false
+    },
+    "insC": {
+     "v": " goals this season",
+     "connected": false
+    },
+    "agA": {
+     "v": "Minute ",
+     "connected": false
+    },
+    "agB": {
+     "v": "2",
+     "connected": false
+    },
+    "qA": {
+     "v": "The season starts in August",
+     "connected": false
+    }
+   },
+   "html": {
+    "age": "<font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">18 </font><font dir=\"auto\" style=\"vertical-align: inherit;\">anos</font></font>",
+    "own": "Goals this season: 4",
+    "twice": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Seguidores: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">13</font></font>",
+    "rm": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Atacante </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">· Idade</font></font>",
+    "ins": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Você </font></font><b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">só</font></font></b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\"> tem 4 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">gols nesta temporada.</font></font>",
+    "again": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Minuto </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">2</font></font>",
+    "quiet": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">A temporada começa em agosto.</font></font>",
+    "after": ""
+   },
+   "kids": {
+    "age": 2,
+    "own": 2,
+    "twice": 2,
+    "rm": 2,
+    "ins": 4,
+    "again": 2,
+    "quiet": 1,
+    "after": 0
+   },
+   "stats": {
+    "swaps": 44,
+    "removed": 1,
+    "inserted": 1,
+    "restored": 25,
+    "returned": 15
+   }
+  },
+  "post2": {
+   "texts": {
+    "ageA": {
+     "v": "Age ",
+     "connected": false
+    },
+    "ageB": {
+     "v": "19",
+     "connected": false
+    },
+    "ownA": {
+     "v": "Goals this season: ",
+     "connected": false
+    },
+    "ownB": {
+     "v": "5",
+     "connected": false
+    },
+    "twA": {
+     "v": "Followers: ",
+     "connected": false
+    },
+    "twB": {
+     "v": "13",
+     "connected": false
+    },
+    "rmA": {
+     "v": "Striker",
+     "connected": false
+    },
+    "rmB": {
+     "v": " · Age ",
+     "connected": false
+    },
+    "rmC": {
+     "v": "17",
+     "connected": false
+    },
+    "insA": {
+     "v": "You have ",
+     "connected": false
+    },
+    "insB": {
+     "v": "4",
+     "connected": false
+    },
+    "insC": {
+     "v": " goals this season",
+     "connected": false
+    },
+    "agA": {
+     "v": "Minute ",
+     "connected": false
+    },
+    "agB": {
+     "v": "3",
+     "connected": false
+    },
+    "qA": {
+     "v": "The season starts in August",
+     "connected": false
+    }
+   },
+   "html": {
+    "age": "<font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">19 </font><font dir=\"auto\" style=\"vertical-align: inherit;\">anos</font></font>",
+    "own": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Gols nesta temporada: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">5</font></font>",
+    "twice": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Seguidores: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">13</font></font>",
+    "rm": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Atacante </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">· Idade</font></font>",
+    "ins": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Você </font></font><b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">só</font></font></b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\"> tem 4 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">gols nesta temporada.</font></font>",
+    "again": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Minuto </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">3</font></font>",
+    "quiet": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">A temporada começa em agosto.</font></font>",
+    "after": ""
+   },
+   "kids": {
+    "age": 2,
+    "own": 2,
+    "twice": 2,
+    "rm": 2,
+    "ins": 4,
+    "again": 2,
+    "quiet": 1,
+    "after": 0
+   },
+   "stats": {
+    "swaps": 50,
+    "removed": 1,
+    "inserted": 1,
+    "restored": 31,
+    "returned": 15
+   }
+  },
+  "restore2": {
+   "texts": {
+    "ageA": {
+     "v": "Age ",
+     "connected": false
+    },
+    "ageB": {
+     "v": "19",
+     "connected": false
+    },
+    "ownA": {
+     "v": "Goals this season: ",
+     "connected": false
+    },
+    "ownB": {
+     "v": "5",
+     "connected": false
+    },
+    "twA": {
+     "v": "Followers: ",
+     "connected": false
+    },
+    "twB": {
+     "v": "13",
+     "connected": false
+    },
+    "rmA": {
+     "v": "Striker",
+     "connected": false
+    },
+    "rmB": {
+     "v": " · Age ",
+     "connected": false
+    },
+    "rmC": {
+     "v": "17",
+     "connected": false
+    },
+    "insA": {
+     "v": "You have ",
+     "connected": false
+    },
+    "insB": {
+     "v": "4",
+     "connected": false
+    },
+    "insC": {
+     "v": " goals this season",
+     "connected": false
+    },
+    "agA": {
+     "v": "Minute ",
+     "connected": false
+    },
+    "agB": {
+     "v": "3",
+     "connected": false
+    },
+    "qA": {
+     "v": "The season starts in August",
+     "connected": true
+    }
+   },
+   "html": {
+    "age": "Age 19",
+    "own": "Goals this season: 5",
+    "twice": "Followers: 13",
+    "rm": "Striker · Age ",
+    "ins": "You have <b>only </b>4 goals this season",
+    "again": "Minute 3",
+    "quiet": "The season starts in August",
+    "after": ""
+   },
+   "kids": {
+    "age": 2,
+    "own": 2,
+    "twice": 2,
+    "rm": 2,
+    "ins": 4,
+    "again": 2,
+    "quiet": 1,
+    "after": 0
+   },
+   "stats": {
+    "swaps": 50,
+    "removed": 1,
+    "inserted": 1,
+    "restored": 31,
+    "returned": 30
+   }
+  },
+  "after": {
+   "texts": {
+    "ageA": {
+     "v": "Age ",
+     "connected": false
+    },
+    "ageB": {
+     "v": "20",
+     "connected": false
+    },
+    "ownA": {
+     "v": "Goals this season: ",
+     "connected": false
+    },
+    "ownB": {
+     "v": "6",
+     "connected": false
+    },
+    "twA": {
+     "v": "Followers: ",
+     "connected": false
+    },
+    "twB": {
+     "v": "14",
+     "connected": false
+    },
+    "rmA": {
+     "v": "Striker",
+     "connected": false
+    },
+    "rmB": {
+     "v": " · Age ",
+     "connected": false
+    },
+    "rmC": {
+     "v": "17",
+     "connected": false
+    },
+    "insA": {
+     "v": "You have ",
+     "connected": false
+    },
+    "insB": {
+     "v": "4",
+     "connected": false
+    },
+    "insC": {
+     "v": " goals this season",
+     "connected": false
+    },
+    "agA": {
+     "v": "Minute ",
+     "connected": false
+    },
+    "agB": {
+     "v": "4",
+     "connected": false
+    },
+    "qA": {
+     "v": "The season starts in August",
+     "connected": true
+    }
+   },
+   "html": {
+    "age": "Age 20",
+    "own": "Goals this season: 6",
+    "twice": "Followers: 14",
+    "rm": "Striker · Age ",
+    "ins": "You have <b>only </b>4 goals this season",
+    "again": "Minute 4",
+    "quiet": "The season starts in August",
+    "after": ""
+   },
+   "kids": {
+    "age": 2,
+    "own": 2,
+    "twice": 2,
+    "rm": 2,
+    "ins": 4,
+    "again": 2,
+    "quiet": 1,
+    "after": 0
+   },
+   "stats": {
+    "swaps": 50,
+    "removed": 1,
+    "inserted": 1,
+    "restored": 39,
+    "returned": 30
+   }
+  }
+ },
+ "timings": {},
+ "translated": true,
+ "hosts": {
+  "allowed": [
+   "127.0.0.1",
+   "translate.google.com",
+   "www.gstatic.com",
+   "translate.googleapis.com",
+   "translate-pa.googleapis.com"
+  ],
+  "blocked": [
+   "fonts.gstatic.com",
+   "www.google.com"
+  ]
+ },
+ "run": {
+  "installed": true,
+  "lines": {
+   "translated": {
+    "age": "16 anos [2 nodes, 4 font]",
+    "own": "Gols nesta temporada: 3 [2 nodes, 4 font]",
+    "twice": "Seguidores: 10 [2 nodes, 4 font]",
+    "rm": "Atacante · 16 anos [3 nodes, 6 font]",
+    "ins": "Você tem 3 gols nesta temporada. [3 nodes, 6 font]",
+    "again": "Minuto 1 [2 nodes, 4 font]",
+    "quiet": "A temporada começa em agosto. [1 nodes, 2 font]",
+    "after": " [0 nodes, 0 font]"
+   },
+   "pre": {
+    "age": "17 anos [2 nodes, 4 font]",
+    "own": "Gols nesta temporada: 3 [2 nodes, 4 font]",
+    "twice": "Seguidores: 12 [2 nodes, 4 font]",
+    "rm": "Atacante · 17 anos [3 nodes, 6 font]",
+    "ins": "Você tem 4 gols nesta temporada. [3 nodes, 6 font]",
+    "again": "Minuto 2 [2 nodes, 4 font]",
+    "quiet": "A temporada começa em agosto. [1 nodes, 2 font]",
+    "after": " [0 nodes, 0 font]"
+   },
+   "restore": {
+    "age": "Age 17 [2 nodes, 0 font]",
+    "own": "Goals this season: 3 [2 nodes, 0 font]",
+    "twice": "Followers: 12 [2 nodes, 0 font]",
+    "rm": "Striker · Age 17 [3 nodes, 0 font]",
+    "ins": "You have 4 goals this season [3 nodes, 0 font]",
+    "again": "Minute 2 [2 nodes, 0 font]",
+    "quiet": "The season starts in August [1 nodes, 0 font]",
+    "after": " [0 nodes, 0 font]"
+   },
+   "post": {
+    "age": "Age 18 [2 nodes, 0 font]",
+    "own": "Goals this season: 4 [2 nodes, 0 font]",
+    "twice": "Followers: 13 [2 nodes, 0 font]",
+    "rm": "Striker · Age  [2 nodes, 0 font]",
+    "ins": "You have only 4 goals this season [4 nodes, 0 font]",
+    "again": "Minute 2 [2 nodes, 0 font]",
+    "quiet": "The season starts in August [1 nodes, 0 font]",
+    "after": " [0 nodes, 0 font]"
+   },
+   "again": {
+    "age": "18 anos [2 nodes, 4 font]",
+    "own": "Goals this season: 4 [2 nodes, 0 font]",
+    "twice": "Seguidores: 13 [2 nodes, 4 font]",
+    "rm": "Atacante · Idade [2 nodes, 4 font]",
+    "ins": "Você só tem 4 gols nesta temporada. [4 nodes, 8 font]",
+    "again": "Minuto 2 [2 nodes, 4 font]",
+    "quiet": "A temporada começa em agosto. [1 nodes, 2 font]",
+    "after": " [0 nodes, 0 font]"
+   },
+   "post2": {
+    "age": "19 anos [2 nodes, 4 font]",
+    "own": "Gols nesta temporada: 5 [2 nodes, 4 font]",
+    "twice": "Seguidores: 13 [2 nodes, 4 font]",
+    "rm": "Atacante · Idade [2 nodes, 4 font]",
+    "ins": "Você só tem 4 gols nesta temporada. [4 nodes, 8 font]",
+    "again": "Minuto 3 [2 nodes, 4 font]",
+    "quiet": "A temporada começa em agosto. [1 nodes, 2 font]",
+    "after": " [0 nodes, 0 font]"
+   },
+   "restore2": {
+    "age": "Age 19 [2 nodes, 0 font]",
+    "own": "Goals this season: 5 [2 nodes, 0 font]",
+    "twice": "Followers: 13 [2 nodes, 0 font]",
+    "rm": "Striker · Age  [2 nodes, 0 font]",
+    "ins": "You have only 4 goals this season [4 nodes, 0 font]",
+    "again": "Minute 3 [2 nodes, 0 font]",
+    "quiet": "The season starts in August [1 nodes, 0 font]",
+    "after": " [0 nodes, 0 font]"
+   },
+   "after": {
+    "age": "Age 20 [2 nodes, 0 font]",
+    "own": "Goals this season: 6 [2 nodes, 0 font]",
+    "twice": "Followers: 14 [2 nodes, 0 font]",
+    "rm": "Striker · Age  [2 nodes, 0 font]",
+    "ins": "You have only 4 goals this season [4 nodes, 0 font]",
+    "again": "Minute 4 [2 nodes, 0 font]",
+    "quiet": "The season starts in August [1 nodes, 0 font]",
+    "after": " [0 nodes, 0 font]"
+   }
+  },
+  "stats": {
+   "translated": {
+    "swaps": 15,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 0,
+    "returned": 0
+   },
+   "pre": {
+    "swaps": 29,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 14,
+    "returned": 0
+   },
+   "restore": {
+    "swaps": 29,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 14,
+    "returned": 15
+   },
+   "post": {
+    "swaps": 29,
+    "removed": 1,
+    "inserted": 1,
+    "restored": 23,
+    "returned": 15
+   },
+   "again": {
+    "swaps": 44,
+    "removed": 1,
+    "inserted": 1,
+    "restored": 25,
+    "returned": 15
+   },
+   "post2": {
+    "swaps": 50,
+    "removed": 1,
+    "inserted": 1,
+    "restored": 31,
+    "returned": 15
+   },
+   "restore2": {
+    "swaps": 50,
+    "removed": 1,
+    "inserted": 1,
+    "restored": 31,
+    "returned": 30
+   },
+   "after": {
+    "swaps": 50,
+    "removed": 1,
+    "inserted": 1,
+    "restored": 39,
+    "returned": 30
+   }
+  },
+  "restoreHow": "pressed :1.restore",
+  "fontsAfterRestore": 0,
+  "lang": "en / ",
+  "againHow": "pressed :1.confirm",
+  "againRecords": 30,
+  "fontsAfterAgain": 26,
+  "restore2How": "pressed :1.restore",
+  "fontsAfterRestore2": 0,
+  "records": [
+   "restore | childList | font(off) | added  | removed font(off) | prev null | next null | ",
+   "restore | childList | font(off) | added T:ownA=\"Goals this season: \" | removed  | prev null | next null | ",
+   "restore | characterData | T:ownA=\"Goals this season: \" | added  | removed  | prev null | next null | was \"Goals this season: \"",
+   "restore | childList | font(off) | added  | removed T:ownA=\"Goals this season: \" | prev null | next null | ",
+   "restore | childList | p#own | added T:ownA=\"Goals this season: \" | removed  | prev null | next font(off) | ",
+   "restore | childList | p#own | added  | removed font(off) | prev T:ownA=\"Goals this season: \" | next font(off) | ",
+   "restore | childList | font(off) | added  | removed font(off) | prev null | next null | ",
+   "restore | childList | font(off) | added T:ownB=\"3\" | removed  | prev null | next null | ",
+   "restore | characterData | T:ownB=\"3\" | added  | removed  | prev null | next null | was \"3\"",
+   "restore | childList | font(off) | added  | removed T:ownB=\"3\" | prev null | next null | ",
+   "restore | childList | p#own | added T:ownB=\"3\" | removed  | prev T:ownA=\"Goals this season: \" | next font(off) | ",
+   "restore | childList | p#own | added  | removed font(off) | prev T:ownB=\"3\" | next null | ",
+   "restore | childList | font(off) | added  | removed font(off) | prev null | next null | ",
+   "restore | childList | font(off) | added T:qA=\"The season starts in August\" | removed  | prev null | next null | ",
+   "restore | characterData | T:qA=\"The season starts in August\" | added  | removed  | prev null | next null | was \"The season starts in August\"",
+   "restore | childList | font(off) | added  | removed T:qA=\"The season starts in August\" | prev null | next null | ",
+   "restore | childList | p#quiet | added T:qA=\"The season starts in August\" | removed  | prev null | next font(off) | ",
+   "restore | childList | p#quiet | added  | removed font(off) | prev T:qA=\"The season starts in August\" | next null | ",
+   "restore | childList | font(off) | added text=\"Age \" | removed  | prev null | next null | ",
+   "restore | characterData | text=\"Age \" | added  | removed  | prev null | next null | was \"Age \"",
+   "restore | childList | font(off) | added  | removed text=\"Age \" | prev null | next null | ",
+   "restore | childList | p#age | added text=\"Age \" | removed  | prev null | next font(off) | ",
+   "restore | childList | p#age | added  | removed font(off) | prev text=\"Age \" | next font(off) | ",
+   "restore | childList | font(off) | added  | removed font(off) | prev null | next font(off) | ",
+   "restore | childList | font(off) | added  | removed font(off) | prev null | next null | ",
+   "restore | childList | font(off) | added text=\"17\" | removed  | prev null | next null | ",
+   "restore | characterData | text=\"17\" | added  | removed  | prev null | next null | was \"17\"",
+   "restore | childList | font(off) | added  | removed text=\"17\" | prev null | next null | ",
+   "restore | childList | p#age | added text=\"17\" | removed  | prev text=\"Age \" | next font(off) | ",
+   "restore | childList | p#age | added  | removed font(off) | prev text=\"17\" | next null | ",
+   "restore | childList | font(off) | added  | removed font(off) | prev null | next null | ",
+   "restore | childList | font(off) | added text=\"Striker\" | removed  | prev null | next null | ",
+   "restore | characterData | text=\"Striker\" | added  | removed  | prev null | next null | was \"Striker\"",
+   "restore | childList | font(off) | added  | removed text=\"Striker\" | prev null | next null | ",
+   "restore | childList | p#rm | added text=\"Striker\" | removed  | prev null | next font(off) | ",
+   "restore | childList | p#rm | added  | removed font(off) | prev text=\"Striker\" | next font(off) | ",
+   "restore | childList | font(off) | added  | removed font(off) | prev null | next null | ",
+   "restore | childList | font(off) | added text=\" · Age \" | removed  | prev null | next null | ",
+   "restore | characterData | text=\" · Age \" | added  | removed  | prev null | next null | was \" · Age \"",
+   "restore | childList | font(off) | added  | removed text=\" · Age \" | prev null | next null | ",
+   "restore | childList | p#rm | added text=\" · Age \" | removed  | prev text=\"Striker\" | next font(off) | ",
+   "restore | childList | p#rm | added  | removed font(off) | prev text=\" · Age \" | next font(off) | ",
+   "restore | childList | font(off) | added  | removed font(off) | prev null | next null | ",
+   "restore | childList | font(off) | added text=\"17\" | removed  | prev null | next null | ",
+   "restore | characterData | text=\"17\" | added  | removed  | prev null | next null | was \"17\"",
+   "restore | childList | font(off) | added  | removed text=\"17\" | prev null | next null | ",
+   "restore | childList | p#rm | added text=\"17\" | removed  | prev text=\" · Age \" | next font(off) | ",
+   "restore | childList | p#rm | added  | removed font(off) | prev text=\"17\" | next null | ",
+   "restore | childList | font(off) | added  | removed font(off) | prev null | next null | ",
+   "restore | childList | font(off) | added text=\"You have \" | removed  | prev null | next null | ",
+   "restore | characterData | text=\"You have \" | added  | removed  | prev null | next null | was \"You have \"",
+   "restore | childList | font(off) | added  | removed text=\"You have \" | prev null | next null | ",
+   "restore | childList | p#ins | added text=\"You have \" | removed  | prev null | next font(off) | ",
+   "restore | childList | p#ins | added  | removed font(off) | prev text=\"You have \" | next font(off) | ",
+   "restore | childList | font(off) | added  | removed font(off) | prev null | next null | ",
+   "restore | childList | font(off) | added text=\"4\" | removed  | prev null | next null | ",
+   "restore | characterData | text=\"4\" | added  | removed  | prev null | next null | was \"4\"",
+   "restore | childList | font(off) | added  | removed text=\"4\" | prev null | next null | ",
+   "restore | childList | p#ins | added text=\"4\" | removed  | prev text=\"You have \" | next font(off) | ",
+   "restore | childList | p#ins | added  | removed font(off) | prev text=\"4\" | next font(off) | "
+  ]
+ },
+ "records": [
+  "restore | childList | font(off) | added  | removed font(off) | prev null | next null | ",
+  "restore | childList | font(off) | added T:ownA=\"Goals this season: \" | removed  | prev null | next null | ",
+  "restore | characterData | T:ownA=\"Goals this season: \" | added  | removed  | prev null | next null | was \"Goals this season: \"",
+  "restore | childList | font(off) | added  | removed T:ownA=\"Goals this season: \" | prev null | next null | ",
+  "restore | childList | p#own | added T:ownA=\"Goals this season: \" | removed  | prev null | next font(off) | ",
+  "restore | childList | p#own | added  | removed font(off) | prev T:ownA=\"Goals this season: \" | next font(off) | ",
+  "restore | childList | font(off) | added  | removed font(off) | prev null | next null | ",
+  "restore | childList | font(off) | added T:ownB=\"3\" | removed  | prev null | next null | ",
+  "restore | characterData | T:ownB=\"3\" | added  | removed  | prev null | next null | was \"3\"",
+  "restore | childList | font(off) | added  | removed T:ownB=\"3\" | prev null | next null | ",
+  "restore | childList | p#own | added T:ownB=\"3\" | removed  | prev T:ownA=\"Goals this season: \" | next font(off) | ",
+  "restore | childList | p#own | added  | removed font(off) | prev T:ownB=\"3\" | next null | ",
+  "restore | childList | font(off) | added  | removed font(off) | prev null | next null | ",
+  "restore | childList | font(off) | added T:qA=\"The season starts in August\" | removed  | prev null | next null | ",
+  "restore | characterData | T:qA=\"The season starts in August\" | added  | removed  | prev null | next null | was \"The season starts in August\"",
+  "restore | childList | font(off) | added  | removed T:qA=\"The season starts in August\" | prev null | next null | ",
+  "restore | childList | p#quiet | added T:qA=\"The season starts in August\" | removed  | prev null | next font(off) | ",
+  "restore | childList | p#quiet | added  | removed font(off) | prev T:qA=\"The season starts in August\" | next null | ",
+  "restore | childList | font(off) | added text=\"Age \" | removed  | prev null | next null | ",
+  "restore | characterData | text=\"Age \" | added  | removed  | prev null | next null | was \"Age \"",
+  "restore | childList | font(off) | added  | removed text=\"Age \" | prev null | next null | ",
+  "restore | childList | p#age | added text=\"Age \" | removed  | prev null | next font(off) | ",
+  "restore | childList | p#age | added  | removed font(off) | prev text=\"Age \" | next font(off) | ",
+  "restore | childList | font(off) | added  | removed font(off) | prev null | next font(off) | ",
+  "restore | childList | font(off) | added  | removed font(off) | prev null | next null | ",
+  "restore | childList | font(off) | added text=\"17\" | removed  | prev null | next null | ",
+  "restore | characterData | text=\"17\" | added  | removed  | prev null | next null | was \"17\"",
+  "restore | childList | font(off) | added  | removed text=\"17\" | prev null | next null | ",
+  "restore | childList | p#age | added text=\"17\" | removed  | prev text=\"Age \" | next font(off) | ",
+  "restore | childList | p#age | added  | removed font(off) | prev text=\"17\" | next null | ",
+  "restore | childList | font(off) | added  | removed font(off) | prev null | next null | ",
+  "restore | childList | font(off) | added text=\"Striker\" | removed  | prev null | next null | ",
+  "restore | characterData | text=\"Striker\" | added  | removed  | prev null | next null | was \"Striker\"",
+  "restore | childList | font(off) | added  | removed text=\"Striker\" | prev null | next null | ",
+  "restore | childList | p#rm | added text=\"Striker\" | removed  | prev null | next font(off) | ",
+  "restore | childList | p#rm | added  | removed font(off) | prev text=\"Striker\" | next font(off) | ",
+  "restore | childList | font(off) | added  | removed font(off) | prev null | next null | ",
+  "restore | childList | font(off) | added text=\" · Age \" | removed  | prev null | next null | ",
+  "restore | characterData | text=\" · Age \" | added  | removed  | prev null | next null | was \" · Age \"",
+  "restore | childList | font(off) | added  | removed text=\" · Age \" | prev null | next null | ",
+  "restore | childList | p#rm | added text=\" · Age \" | removed  | prev text=\"Striker\" | next font(off) | ",
+  "restore | childList | p#rm | added  | removed font(off) | prev text=\" · Age \" | next font(off) | ",
+  "restore | childList | font(off) | added  | removed font(off) | prev null | next null | ",
+  "restore | childList | font(off) | added text=\"17\" | removed  | prev null | next null | ",
+  "restore | characterData | text=\"17\" | added  | removed  | prev null | next null | was \"17\"",
+  "restore | childList | font(off) | added  | removed text=\"17\" | prev null | next null | ",
+  "restore | childList | p#rm | added text=\"17\" | removed  | prev text=\" · Age \" | next font(off) | ",
+  "restore | childList | p#rm | added  | removed font(off) | prev text=\"17\" | next null | ",
+  "restore | childList | font(off) | added  | removed font(off) | prev null | next null | ",
+  "restore | childList | font(off) | added text=\"You have \" | removed  | prev null | next null | ",
+  "restore | characterData | text=\"You have \" | added  | removed  | prev null | next null | was \"You have \"",
+  "restore | childList | font(off) | added  | removed text=\"You have \" | prev null | next null | ",
+  "restore | childList | p#ins | added text=\"You have \" | removed  | prev null | next font(off) | ",
+  "restore | childList | p#ins | added  | removed font(off) | prev text=\"You have \" | next font(off) | ",
+  "restore | childList | font(off) | added  | removed font(off) | prev null | next null | ",
+  "restore | childList | font(off) | added text=\"4\" | removed  | prev null | next null | ",
+  "restore | characterData | text=\"4\" | added  | removed  | prev null | next null | was \"4\"",
+  "restore | childList | font(off) | added  | removed text=\"4\" | prev null | next null | ",
+  "restore | childList | p#ins | added text=\"4\" | removed  | prev text=\"You have \" | next font(off) | ",
+  "restore | childList | p#ins | added  | removed font(off) | prev text=\"4\" | next font(off) | ",
+  "restore | childList | font(off) | added  | removed font(off) | prev null | next null | ",
+  "restore | childList | font(off) | added text=\" goals this season\" | removed  | prev null | next null | ",
+  "restore | characterData | text=\" goals this season\" | added  | removed  | prev null | next null | was \" goals this season\"",
+  "restore | childList | font(off) | added  | removed text=\" goals this season\" | prev null | next null | ",
+  "restore | childList | p#ins | added text=\" goals this season\" | removed  | prev text=\"4\" | next font(off) | ",
+  "restore | childList | p#ins | added  | removed font(off) | prev text=\" goals this season\" | next null | ",
+  "restore | childList | font(off) | added  | removed font(off) | prev null | next null | ",
+  "restore | childList | font(off) | added text=\"Minute \" | removed  | prev null | next null | ",
+  "restore | characterData | text=\"Minute \" | added  | removed  | prev null | next null | was \"Minute \"",
+  "restore | childList | font(off) | added  | removed text=\"Minute \" | prev null | next null | ",
+  "restore | childList | p#again | added text=\"Minute \" | removed  | prev null | next font(off) | ",
+  "restore | childList | p#again | added  | removed font(off) | prev text=\"Minute \" | next font(off) | ",
+  "restore | childList | font(off) | added  | removed font(off) | prev null | next null | ",
+  "restore | childList | font(off) | added text=\"2\" | removed  | prev null | next null | ",
+  "restore | characterData | text=\"2\" | added  | removed  | prev null | next null | was \"2\"",
+  "restore | childList | font(off) | added  | removed text=\"2\" | prev null | next null | ",
+  "restore | childList | p#again | added text=\"2\" | removed  | prev text=\"Minute \" | next font(off) | ",
+  "restore | childList | p#again | added  | removed font(off) | prev text=\"2\" | next null | ",
+  "restore | childList | font(off) | added  | removed font(off) | prev null | next null | ",
+  "restore | childList | font(off) | added text=\"Followers: \" | removed  | prev null | next null | ",
+  "restore | characterData | text=\"Followers: \" | added  | removed  | prev null | next null | was \"Followers: \"",
+  "restore | childList | font(off) | added  | removed text=\"Followers: \" | prev null | next null | ",
+  "restore | childList | p#twice | added text=\"Followers: \" | removed  | prev null | next font(off) | ",
+  "restore | childList | p#twice | added  | removed font(off) | prev text=\"Followers: \" | next font(off) | ",
+  "restore | childList | font(off) | added  | removed font(off) | prev null | next null | ",
+  "restore | childList | font(off) | added text=\"12\" | removed  | prev null | next null | ",
+  "restore | characterData | text=\"12\" | added  | removed  | prev null | next null | was \"12\"",
+  "restore | childList | font(off) | added  | removed text=\"12\" | prev null | next null | ",
+  "restore | childList | p#twice | added text=\"12\" | removed  | prev text=\"Followers: \" | next font(off) | ",
+  "restore | childList | p#twice | added  | removed font(off) | prev text=\"12\" | next null | ",
+  "again | childList | p#age | added font | removed  | prev null | next text=\"Age \"(off) | ",
+  "again | childList | p#age | added font | removed  | prev text=\"Age \"(off) | next text=\"18\"(off) | ",
+  "again | childList | font | added font | removed  | prev null | next null | ",
+  "again | childList | font | added text=\"18 \" | removed  | prev null | next null | ",
+  "again | characterData | text=\"18 \" | added  | removed  | prev null | next null | was \"18\"",
+  "again | childList | font | added font | removed  | prev font | next null | ",
+  "again | childList | font | added text=\"anos\" | removed  | prev null | next null | ",
+  "again | characterData | text=\"anos\" | added  | removed  | prev null | next null | was \"Age \"",
+  "again | childList | p#age | added  | removed text=\"Age \"(off) | prev font | next font | ",
+  "again | childList | p#age | added  | removed text=\"18\"(off) | prev font | next null | ",
+  "again | childList | p#own | added font(off) | removed  | prev null | next T:ownA=\"Goals this season: \"(off) | ",
+  "again | childList | p#own | added font(off) | removed  | prev T:ownA=\"Goals this season: \"(off) | next T:ownB=\"4\"(off) | ",
+  "again | childList | font(off) | added font(off) | removed  | prev null | next null | ",
+  "again | childList | font(off) | added text=\"Gols nesta temporada: \"(off) | removed  | prev null | next null | ",
+  "again | characterData | text=\"Gols nesta temporada: \"(off) | added  | removed  | prev null | next null | was \"Goals this season: \"",
+  "again | childList | font(off) | added font(off) | removed  | prev null | next null | ",
+  "again | childList | font(off) | added text=\"4\"(off) | removed  | prev null | next null | ",
+  "again | characterData | text=\"4\"(off) | added  | removed  | prev null | next null | was \"4\"",
+  "again | childList | p#own | added  | removed T:ownA=\"Goals this season: \"(off) | prev font(off) | next font(off) | ",
+  "again | childList | p#own | added  | removed T:ownB=\"4\"(off) | prev font(off) | next null | ",
+  "again | childList | p#twice | added font | removed  | prev null | next text=\"Followers: \"(off) | ",
+  "again | childList | p#twice | added font | removed  | prev text=\"Followers: \"(off) | next text=\"13\"(off) | ",
+  "again | childList | font | added font | removed  | prev null | next null | ",
+  "again | childList | font | added text=\"Seguidores: \" | removed  | prev null | next null | ",
+  "again | characterData | text=\"Seguidores: \" | added  | removed  | prev null | next null | was \"Followers: \"",
+  "again | childList | font | added font | removed  | prev null | next null | ",
+  "again | childList | font | added text=\"13\" | removed  | prev null | next null | ",
+  "again | characterData | text=\"13\" | added  | removed  | prev null | next null | was \"13\"",
+  "again | childList | p#twice | added  | removed text=\"Followers: \"(off) | prev font | next font | ",
+  "again | childList | p#twice | added  | removed text=\"13\"(off) | prev font | next null | "
+ ],
+ "errors": []
+}

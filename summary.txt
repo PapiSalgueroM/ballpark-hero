@@ -1,0 +1,5 @@
+vitest exit=0 3s |    Duration  2.53s (transform 165ms, setup 76ms, collect 320ms, tests 1.03s, environment 533ms, prepare 191ms)
+m5pt exit=0 27s | measure done
+m6pt exit=0 44s | measure done
+tsc exit=0 53s | 
+m6de exit=0 44s | measure done

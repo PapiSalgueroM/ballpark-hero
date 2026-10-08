@@ -1,0 +1,364 @@
+{
+ "target": "pt",
+ "phases": {
+  "before": {
+   "lines": {
+    "pre1": "en: Balance: 200",
+    "pre2": "en: Your club has won 21 trophies this decade",
+    "pre3": "en: Welcome back to the training ground",
+    "never": "en: The window closes in August",
+    "tick1": "en: next find in ~20s",
+    "m0": "en: Money in the bank: 1",
+    "m1": "en: Fans in the ground: 1",
+    "m2": "en: Tickets sold today: 1",
+    "m3": "en: Shirts sold today: 1",
+    "m4": "en: Beds in the hotel: 1",
+    "m5": "en: Staff on the payroll: 1",
+    "m6": "en: Seats in the stand: 1",
+    "m7": "en: Pies sold today: 1",
+    "after": "empty: "
+   },
+   "stats": {
+    "swaps": 0,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 0,
+    "returned": 0
+   }
+  },
+  "translated": {
+   "lines": {
+    "pre1": "en: Balance: 200",
+    "pre2": "en: Your club has won 21 trophies this decade",
+    "pre3": "en: Welcome back to the training ground",
+    "never": "pt: A janela de oportunidade fecha em agosto.",
+    "tick1": "pt: próxima descoberta em ~ 20 segundos",
+    "m0": "pt: Dinheiro no banco: 1",
+    "m1": "pt: Torcedores no estádio: 1",
+    "m2": "pt: Bilhetes vendidos hoje: 1",
+    "m3": "pt: Camisas vendidas hoje: 1",
+    "m4": "pt: Camas no hotel: 1",
+    "m5": "pt: Funcionários na folha de pagamento: 1",
+    "m6": "pt: Lugares na arquibancada: 1",
+    "m7": "pt: Tortas vendidas hoje: 1",
+    "after": "empty: "
+   },
+   "stats": {
+    "swaps": 26,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 6,
+    "returned": 0
+   }
+  },
+  "translated+5s": {
+   "lines": {
+    "pre1": "en: Balance: 200",
+    "pre2": "en: Your club has won 21 trophies this decade",
+    "pre3": "en: Welcome back to the training ground",
+    "never": "pt: A janela de oportunidade fecha em agosto.",
+    "tick1": "pt: próxima descoberta em ~ 20 segundos",
+    "m0": "pt: Dinheiro no banco: 1",
+    "m1": "pt: Torcedores no estádio: 1",
+    "m2": "pt: Bilhetes vendidos hoje: 1",
+    "m3": "pt: Camisas vendidas hoje: 1",
+    "m4": "pt: Camas no hotel: 1",
+    "m5": "pt: Funcionários na folha de pagamento: 1",
+    "m6": "pt: Lugares na arquibancada: 1",
+    "m7": "pt: Tortas vendidas hoje: 1",
+    "after": "empty: "
+   },
+   "stats": {
+    "swaps": 26,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 6,
+    "returned": 0
+   }
+  },
+  "later": {
+   "lines": {
+    "pre1": "pt: Saldo: 200",
+    "pre2": "pt: Seu clube conquistou 21 troféus nesta década.",
+    "pre3": "pt: Bem-vindos de volta ao campo de treinamento.",
+    "never": "pt: A janela de oportunidade fecha em agosto.",
+    "tick1": "pt: próxima descoberta em ~ 20 segundos",
+    "m0": "pt: Dinheiro no banco: 1",
+    "m1": "pt: Torcedores no estádio: 1",
+    "m2": "pt: Bilhetes vendidos hoje: 1",
+    "m3": "pt: Camisas vendidas hoje: 1",
+    "m4": "pt: Camas no hotel: 1",
+    "m5": "pt: Funcionários na folha de pagamento: 1",
+    "m6": "pt: Lugares na arquibancada: 1",
+    "m7": "pt: Tortas vendidas hoje: 1",
+    "after": "pt: O jogo começa às 3h."
+   },
+   "stats": {
+    "swaps": 34,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 6,
+    "returned": 0
+   }
+  },
+  "tick1-rest": {
+   "lines": {
+    "pre1": "pt: Saldo: 200",
+    "pre2": "pt: Seu clube conquistou 21 troféus nesta década.",
+    "pre3": "pt: Bem-vindos de volta ao campo de treinamento.",
+    "never": "pt: A janela de oportunidade fecha em agosto.",
+    "tick1": "pt: próxima descoberta em ~ 8 segundos",
+    "m0": "pt: Dinheiro no banco: 1",
+    "m1": "pt: Torcedores no estádio: 1",
+    "m2": "pt: Bilhetes vendidos hoje: 1",
+    "m3": "pt: Camisas vendidas hoje: 1",
+    "m4": "pt: Camas no hotel: 1",
+    "m5": "pt: Funcionários na folha de pagamento: 1",
+    "m6": "pt: Lugares na arquibancada: 1",
+    "m7": "pt: Tortas vendidas hoje: 1",
+    "after": "pt: O jogo começa às 3h."
+   },
+   "stats": {
+    "swaps": 70,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 42,
+    "returned": 0
+   }
+  },
+  "after": {
+   "lines": {
+    "pre1": "pt: Saldo: 200",
+    "pre2": "pt: Seu clube conquistou 21 troféus nesta década.",
+    "pre3": "pt: Bem-vindos de volta ao campo de treinamento.",
+    "never": "pt: A janela de oportunidade fecha em agosto.",
+    "tick1": "pt: próxima descoberta em ~ 8 segundos",
+    "m0": "pt: Dinheiro no banco: 24",
+    "m1": "pt: Torcedores no estádio: 36",
+    "m2": "pt: Ingressos vendidos hoje: 48",
+    "m3": "pt: Camisas vendidas hoje: 60",
+    "m4": "pt: Número de camas no hotel: 72",
+    "m5": "pt: Número de funcionários na folha de pagamento: 84",
+    "m6": "pt: Lugares na arquibancada: 96",
+    "m7": "pt: Tortas vendidas hoje: 108",
+    "after": "pt: O jogo começa às 3h."
+   },
+   "stats": {
+    "swaps": 262,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 234,
+    "returned": 0
+   }
+  }
+ },
+ "timings": {},
+ "translated": true,
+ "hosts": {
+  "allowed": [
+   "127.0.0.1",
+   "translate.google.com",
+   "www.gstatic.com",
+   "translate.googleapis.com",
+   "translate-pa.googleapis.com"
+  ],
+  "blocked": [
+   "fonts.gstatic.com",
+   "www.google.com"
+  ]
+ },
+ "run": {
+  "installed": true,
+  "lines": {
+   "translated": {
+    "pre1": "en: Balance: 200",
+    "pre2": "en: Your club has won 21 trophies this decade",
+    "pre3": "en: Welcome back to the training ground",
+    "never": "pt: A janela de oportunidade fecha em agosto.",
+    "tick1": "pt: próxima descoberta em ~ 20 segundos",
+    "m0": "pt: Dinheiro no banco: 1",
+    "m1": "pt: Torcedores no estádio: 1",
+    "m2": "pt: Bilhetes vendidos hoje: 1",
+    "m3": "pt: Camisas vendidas hoje: 1",
+    "m4": "pt: Camas no hotel: 1",
+    "m5": "pt: Funcionários na folha de pagamento: 1",
+    "m6": "pt: Lugares na arquibancada: 1",
+    "m7": "pt: Tortas vendidas hoje: 1",
+    "after": "empty: "
+   },
+   "translated+5s": {
+    "pre1": "en: Balance: 200",
+    "pre2": "en: Your club has won 21 trophies this decade",
+    "pre3": "en: Welcome back to the training ground",
+    "never": "pt: A janela de oportunidade fecha em agosto.",
+    "tick1": "pt: próxima descoberta em ~ 20 segundos",
+    "m0": "pt: Dinheiro no banco: 1",
+    "m1": "pt: Torcedores no estádio: 1",
+    "m2": "pt: Bilhetes vendidos hoje: 1",
+    "m3": "pt: Camisas vendidas hoje: 1",
+    "m4": "pt: Camas no hotel: 1",
+    "m5": "pt: Funcionários na folha de pagamento: 1",
+    "m6": "pt: Lugares na arquibancada: 1",
+    "m7": "pt: Tortas vendidas hoje: 1",
+    "after": "empty: "
+   },
+   "later": {
+    "pre1": "pt: Saldo: 200",
+    "pre2": "pt: Seu clube conquistou 21 troféus nesta década.",
+    "pre3": "pt: Bem-vindos de volta ao campo de treinamento.",
+    "never": "pt: A janela de oportunidade fecha em agosto.",
+    "tick1": "pt: próxima descoberta em ~ 20 segundos",
+    "m0": "pt: Dinheiro no banco: 1",
+    "m1": "pt: Torcedores no estádio: 1",
+    "m2": "pt: Bilhetes vendidos hoje: 1",
+    "m3": "pt: Camisas vendidas hoje: 1",
+    "m4": "pt: Camas no hotel: 1",
+    "m5": "pt: Funcionários na folha de pagamento: 1",
+    "m6": "pt: Lugares na arquibancada: 1",
+    "m7": "pt: Tortas vendidas hoje: 1",
+    "after": "pt: O jogo começa às 3h."
+   },
+   "tick1-rest": {
+    "pre1": "pt: Saldo: 200",
+    "pre2": "pt: Seu clube conquistou 21 troféus nesta década.",
+    "pre3": "pt: Bem-vindos de volta ao campo de treinamento.",
+    "never": "pt: A janela de oportunidade fecha em agosto.",
+    "tick1": "pt: próxima descoberta em ~ 8 segundos",
+    "m0": "pt: Dinheiro no banco: 1",
+    "m1": "pt: Torcedores no estádio: 1",
+    "m2": "pt: Bilhetes vendidos hoje: 1",
+    "m3": "pt: Camisas vendidas hoje: 1",
+    "m4": "pt: Camas no hotel: 1",
+    "m5": "pt: Funcionários na folha de pagamento: 1",
+    "m6": "pt: Lugares na arquibancada: 1",
+    "m7": "pt: Tortas vendidas hoje: 1",
+    "after": "pt: O jogo começa às 3h."
+   },
+   "after": {
+    "pre1": "pt: Saldo: 200",
+    "pre2": "pt: Seu clube conquistou 21 troféus nesta década.",
+    "pre3": "pt: Bem-vindos de volta ao campo de treinamento.",
+    "never": "pt: A janela de oportunidade fecha em agosto.",
+    "tick1": "pt: próxima descoberta em ~ 8 segundos",
+    "m0": "pt: Dinheiro no banco: 24",
+    "m1": "pt: Torcedores no estádio: 36",
+    "m2": "pt: Ingressos vendidos hoje: 48",
+    "m3": "pt: Camisas vendidas hoje: 60",
+    "m4": "pt: Número de camas no hotel: 72",
+    "m5": "pt: Número de funcionários na folha de pagamento: 84",
+    "m6": "pt: Lugares na arquibancada: 96",
+    "m7": "pt: Tortas vendidas hoje: 108",
+    "after": "pt: O jogo começa às 3h."
+   }
+  },
+  "stats": {
+   "translated": {
+    "swaps": 26,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 6,
+    "returned": 0
+   },
+   "translated+5s": {
+    "swaps": 26,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 6,
+    "returned": 0
+   },
+   "later": {
+    "swaps": 34,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 6,
+    "returned": 0
+   },
+   "tick1-rest": {
+    "swaps": 70,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 42,
+    "returned": 0
+   },
+   "after": {
+    "swaps": 262,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 234,
+    "returned": 0
+   }
+  },
+  "share": {
+   "one": {
+    "count": {
+     "tick1": {
+      "pt": 106,
+      "en": 14,
+      "mixed": 0,
+      "empty": 0
+     }
+    },
+    "requests": 13,
+    "restored": 36,
+    "swaps": 36
+   },
+   "eight": {
+    "count": {
+     "m0": {
+      "pt": 108,
+      "en": 12,
+      "mixed": 0,
+      "empty": 0
+     },
+     "m1": {
+      "pt": 108,
+      "en": 12,
+      "mixed": 0,
+      "empty": 0
+     },
+     "m2": {
+      "pt": 108,
+      "en": 12,
+      "mixed": 0,
+      "empty": 0
+     },
+     "m3": {
+      "pt": 108,
+      "en": 12,
+      "mixed": 0,
+      "empty": 0
+     },
+     "m4": {
+      "pt": 108,
+      "en": 12,
+      "mixed": 0,
+      "empty": 0
+     },
+     "m5": {
+      "pt": 108,
+      "en": 12,
+      "mixed": 0,
+      "empty": 0
+     },
+     "m6": {
+      "pt": 108,
+      "en": 12,
+      "mixed": 0,
+      "empty": 0
+     },
+     "m7": {
+      "pt": 108,
+      "en": 12,
+      "mixed": 0,
+      "empty": 0
+     }
+    },
+    "requests": 13,
+    "restored": 192,
+    "swaps": 192
+   }
+  }
+ },
+ "records": [],
+ "errors": []
+}
