@@ -1,0 +1,7 @@
+#!serial
+m-etclear: node .rc/x/rv-mutate.mjs etclear && node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx src/test/liveSimCelebration.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -- src; exit $rc
+m-reducedhold: node .rc/x/rv-mutate.mjs reducedhold && node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx src/test/liveSimCelebration.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -- src; exit $rc
+m-flash: node .rc/x/rv-mutate.mjs flash && node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx src/test/liveSimCelebration.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -- src; exit $rc
+m-possession: node .rc/x/rv-mutate.mjs possession && node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx src/test/liveSimCelebration.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -- src; exit $rc
+m-nth: node .rc/x/rv-mutate.mjs nth && node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx src/test/liveSimCelebration.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -- src; exit $rc
+m-cardside: node .rc/x/rv-mutate.mjs cardside && node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx src/test/liveSimCelebration.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -- src; exit $rc
