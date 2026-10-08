@@ -1,5 +1,17 @@
 ## Latest season review preparation, October 8, 2026
 
+Preparation2 changes only clipping-control cleanup after completed run37726167854.
+First run104313e7 passed real types/build, readers20 and closing source holds.
+Native failed at320-stress cleanup: complete geometry/state restored, but pane
+HTML gained exactly one empty style attribute. One natural parent pair completed;
+the remaining profiles and controls were not credited. Original12 remain red.
+Early artifact11527958072 and full11529425088 are retained. No runtime was cancelled.
+Root's one-anchor worker proposal25b20000 reverses exactly to3352fcfb; independent
+peer08e62615 confirms the full equality check stays intact. Scroll offsets restore
+before the exact absent/present style, whose capture and restored value are retained.
+Precise old mutation mechanism and the correction's effectiveness remain unproven
+until the next remote run. Product, wrapper and workflow are unchanged.
+
 1095 is a scoped page change on accepted sale parent23a540a8, not a release.
 Manual Latest season replaces the stacked previous table. Each open captures the
 actual current-visit result label/position/table; subsequent results cannot replace
