@@ -9,10 +9,15 @@
  * read but refuses every write (full, or a quota of zero): there the cookie
  * banner threw on its own button and could never be dismissed.
  *
- * What this file decides, once, before anything else in the app runs:
+ * What this file decides as it loads, by READING only. It never writes as it
+ * loads: three committed checks (scripts/playInboxCard.mjs and the two
+ * Club Manager walks under scripts/qa) pin the auth client's own probe as the
+ * only storage write an import of the client may cause, and they are right
+ * to. A write here would also fire a storage event in every other open tab on
+ * every page load.
  *
- *   ok       a probe write and remove both worked. The seam IS the browser's
- *            own storage, the very same object, and nothing else changes.
+ *   ok       the storage can be read. The seam passes every call straight
+ *            through to the browser's own storage and keeps nothing itself.
  *   blocked  the storage cannot be read at all. The seam is a store that
  *            lives for the visit, and it is also put on window in place of the
  *            accessor that throws, so the several hundred call sites that say
@@ -20,13 +25,18 @@
  *            Nothing is kept past the visit. The Web Locks API is refused
  *            in the same browsers, so that gets a stand in too (see
  *            standInForLocks below).
- *   full     reads work, writes throw. The seam is a store for the visit laid
- *            over the browser's own, so whatever is already saved can still be
- *            read. It is NOT put on window: a game that guards its own save
- *            has to keep seeing the write fail, so it can say so.
+ *   full     reads work, writes throw. That cannot be known without writing,
+ *            so it is learned later, one of three ways: probeStorageWrites()
+ *            (one write and one remove, once a visit, asked for by the
+ *            notice when a game page opens), a write through the seam that
+ *            the browser refuses, or a refused safeSetItem. From the first
+ *            refusal the seam keeps what it is given for the visit, laid over
+ *            the browser's own store so whatever is already saved can still
+ *            be read. Nothing is put on window: a game that guards its own
+ *            save has to keep seeing the write fail, so it can say so.
  *
- * StorageNotice reads storageTrouble and tells the player, once a page, that
- * progress is not being saved here.
+ * StorageNotice reads getStorageTrouble() and tells the player, once a page,
+ * that progress is not being saved here.
  *
  * window.__DUKB_RAW_STORAGE__ (read once, here) hands back the browser's own
  * storage with no probe and no fallback. It exists for one reason:
@@ -47,10 +57,12 @@ const PROBE_KEY = '__dukb_storage_probe__';
 
 /**
  * A Storage shaped store that lives for the visit. Given the browser's own
- * storage as `under` (the full case), reads fall through to it, a write tries
- * it first and is kept here when it refuses, and a remove reaches it too.
+ * storage as `under`, reads fall through to it, a write tries it first and is
+ * kept here only when it refuses (and `onRefused` hears about it), and a
+ * remove reaches it too. While the browser takes every write this keeps
+ * nothing and is a plain pass through.
  */
-export function createMemoryStorage(under: Storage | null = null): Storage {
+export function createMemoryStorage(under: Storage | null = null, onRefused?: () => void): Storage {
   const kept = new Map<string, string>();
   /* Keys removed here that the store underneath would not let go of. */
   const gone = new Set<string>();
@@ -83,7 +95,7 @@ export function createMemoryStorage(under: Storage | null = null): Storage {
       const v = String(value);
       gone.delete(k);
       if (below) {
-        try { below.setItem(k, v); kept.delete(k); return; } catch { /* still refusing writes */ }
+        try { below.setItem(k, v); kept.delete(k); return; } catch { onRefused?.(); }
       }
       kept.set(k, v);
     },
@@ -103,27 +115,23 @@ export function createMemoryStorage(under: Storage | null = null): Storage {
   return store as Storage;
 }
 
-interface Resolved { storage: Storage; trouble: StorageTrouble | null }
+interface Resolved { storage: Storage; real: Storage | null; blocked: boolean }
 
-function resolve(name: StorageName): Resolved {
+function resolve(name: StorageName, onRefused: () => void): Resolved {
   let real: Storage | null = null;
   try { real = window[name] ?? null; } catch { real = null; }
   if (real) {
     try {
-      real.setItem(PROBE_KEY, '1');
-      real.removeItem(PROBE_KEY);
-      return { storage: real, trouble: null };
-    } catch { /* it refuses writes: can it at least be read? */ }
-    try {
+      /* A read, never a write: see the header. */
       real.getItem(PROBE_KEY);
-      return { storage: createMemoryStorage(real), trouble: 'full' };
-    } catch { /* no: treat it as blocked */ }
+      return { storage: createMemoryStorage(real, onRefused), real, blocked: false };
+    } catch { /* it cannot even be read: treat it as blocked */ }
   }
   const memory = createMemoryStorage();
   try {
     Object.defineProperty(window, name, { configurable: true, enumerable: true, get: () => memory });
   } catch { /* window would not take it: everything on the seam still works */ }
-  return { storage: memory, trouble: 'blocked' };
+  return { storage: memory, real: null, blocked: true };
 }
 
 /**
@@ -170,25 +178,60 @@ function rawRequested(): boolean {
    purpose: under blocked storage this line throws exactly as the app did
    before this round. */
 const raw = rawRequested();
-const local: Resolved = raw ? { storage: window.localStorage, trouble: null } : resolve('localStorage');
-const session: Resolved = raw ? { storage: window.sessionStorage, trouble: null } : resolve('sessionStorage');
-if (local.trouble === 'blocked') standInForLocks();
+
+/* True from the first write this browser refused on this visit. */
+let refusedWrite = false;
+const noteRefusedWrite = (): void => { refusedWrite = true; };
+
+const local: Resolved = raw
+  ? { storage: window.localStorage, real: null, blocked: false }
+  : resolve('localStorage', noteRefusedWrite);
+const session: Resolved = raw
+  ? { storage: window.sessionStorage, real: null, blocked: false }
+  : resolve('sessionStorage', () => { /* a full session store is not the notice's business */ });
+if (local.blocked) standInForLocks();
 
 /** localStorage, or a stand in for the visit when this browser will not keep anything. */
 export const safeLocalStorage: Storage = local.storage;
 /** sessionStorage, same idea. */
 export const safeSessionStorage: Storage = session.storage;
-/** Why nothing is being kept in this browser, or null when it is. */
-export const storageTrouble: StorageTrouble | null = local.trouble;
-/** True when saves made on this visit will not be there on the next one. */
-export const storageIsMemory: boolean = local.trouble !== null;
+
 /**
- * True when sessionStorage will not outlive a reload of this page. A "reload
- * once" marker written there is gone the moment the reload happens, so
- * anything that reloads on its own must not, or it reloads for ever
- * (src/lib/freshBuild.ts reads this).
+ * Why nothing is being kept in this browser, or null when it is (or when
+ * nobody has found out yet: 'full' is only known once a write was refused).
  */
-export const sessionStorageIsMemory: boolean = session.trouble !== null;
+export function getStorageTrouble(): StorageTrouble | null {
+  if (local.blocked) return 'blocked';
+  return refusedWrite ? 'full' : null;
+}
+
+let probedWrites = false;
+/**
+ * Finds out whether this browser takes a write at all: one write and one
+ * remove of a key nothing else uses, at most once a visit. NOT run as this
+ * file loads (see the header). The notice asks when a game page opens, which
+ * is the only place the answer changes what is on the page.
+ */
+export function probeStorageWrites(): StorageTrouble | null {
+  if (!probedWrites && !raw && local.real) {
+    probedWrites = true;
+    try {
+      local.real.setItem(PROBE_KEY, '1');
+      local.real.removeItem(PROBE_KEY);
+    } catch { refusedWrite = true; }
+  }
+  return getStorageTrouble();
+}
+
+/**
+ * True when sessionStorage will not outlive a reload of this page, which is
+ * the blocked case: the stand in dies with the page. A "reload once" marker
+ * written there is gone the moment the reload happens, so anything that
+ * reloads on its own must not, or it reloads for ever (src/lib/freshBuild.ts
+ * reads this). A session store that is merely full keeps what it has and
+ * refuses the marker, and freshBuild already stands down on that refusal.
+ */
+export const sessionStorageIsMemory: boolean = session.blocked;
 
 /**
  * A write that must not take the page down with it, and says whether it was
@@ -215,6 +258,8 @@ export function safeSetItem(key: string, value: string): boolean {
     localStorage.setItem(key, value);
     return true;
   } catch {
+    /* a refused write is how the full case is learned (see the header) */
+    refusedWrite = true;
     return false;
   }
 }

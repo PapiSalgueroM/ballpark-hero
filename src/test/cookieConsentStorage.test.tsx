@@ -48,6 +48,8 @@ afterEach(() => {
     if (d) Object.defineProperty(window, name, d); else delete (window as unknown as Record<string, unknown>)[name];
   }
   document.querySelectorAll(ANALYTICS).forEach(el => el.remove());
+  document.querySelectorAll('script[src*="adsbygoogle.js"]').forEach(el => el.remove());
+  delete (window as unknown as Record<string, unknown>).adsbygoogle;
   delete window.dataLayer;
   delete window.gtag;
 });
@@ -56,10 +58,12 @@ describe.each(['blocked', 'full'] as const)('the cookie banner with storage %s',
   it('Essential only: the banner leaves, the answer holds for the visit, and no analytics load', async () => {
     breakStorage(kind);
     const { seam, view, CookieConsent } = await mountBanner();
-    expect(seam.storageTrouble).toBe(kind);
+    /* blocked is known from the first read; full is only known once a write was refused */
+    expect(seam.getStorageTrouble()).toBe(kind === 'blocked' ? 'blocked' : null);
     expect(banner()).not.toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Essential only' }));
     expect(banner()).toBeNull();
+    expect(seam.getStorageTrouble()).toBe(kind);
     expect(seam.safeLocalStorage.getItem('cookie-consent')).toBe('essential');
     expect(document.querySelector(ANALYTICS)).toBeNull();
     /* a later mount in the same visit (the banner asks again only when no answer is held) */
@@ -84,12 +88,18 @@ describe.each(['blocked', 'full'] as const)('the cookie banner with storage %s',
 
 describe('the cookie banner, the cases around those two', () => {
   it('storage that fills up after the page loaded: Essential only still dismisses and nothing loads', async () => {
-    const { seam } = await mountBanner();
-    expect(seam.storageTrouble).toBeNull();
+    const { seam, view, CookieConsent } = await mountBanner();
+    expect(seam.getStorageTrouble()).toBeNull();
     vi.spyOn(Storage.prototype, 'setItem').mockImplementation(quota);
     fireEvent.click(screen.getByRole('button', { name: 'Essential only' }));
     expect(banner()).toBeNull();
     expect(document.querySelector(ANALYTICS)).toBeNull();
+    /* the seam heard the refusal: the answer is held for the visit and the banner does not ask again */
+    expect(seam.getStorageTrouble()).toBe('full');
+    expect(seam.safeLocalStorage.getItem('cookie-consent')).toBe('essential');
+    view.unmount();
+    render(<MemoryRouter><CookieConsent /></MemoryRouter>);
+    expect(banner()).toBeNull();
   });
 
   it('storage full with an answer already stored: the banner does not ask again', async () => {
@@ -101,9 +111,48 @@ describe('the cookie banner, the cases around those two', () => {
 
   it('a browser that stores normally: the answer goes to the real storage, exactly as before', async () => {
     const { seam } = await mountBanner();
-    expect(seam.safeLocalStorage).toBe(window.localStorage);
     fireEvent.click(screen.getByRole('button', { name: 'Essential only' }));
     expect(banner()).toBeNull();
     expect(window.localStorage.getItem('cookie-consent')).toBe('essential');
+    expect(seam.getStorageTrouble()).toBeNull();
+  });
+});
+
+/* Review finding: the ad slot's own read of the answer had no test. Put back
+   on the bare localStorage it reads nothing with storage full (the answer
+   lives only in the seam there), so Accept would never have shown an ad slot
+   that visit, and every gate stayed green. */
+describe.each(['blocked', 'full'] as const)('the ad slot with storage %s', kind => {
+  const slot = () => document.querySelector('[data-dukb-manual-ad] ins.adsbygoogle');
+  async function mountBannerAndSlot() {
+    const mounted = await mountBanner();
+    const { default: AdBanner } = await import('@/components/ads/AdBanner');
+    return { ...mounted, AdBanner };
+  }
+
+  it('Accept: a slot already on the page appears, and so does one mounted later in the visit', async () => {
+    breakStorage(kind);
+    const { AdBanner } = await mountBannerAndSlot();
+    const first = render(<AdBanner slot="1234567890" />);
+    expect(slot()).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Accept' }));
+    expect(slot()).not.toBeNull();
+    /* the next page of the visit: a fresh mount, with no consent event to hear */
+    first.unmount();
+    expect(slot()).toBeNull();
+    render(<AdBanner slot="1234567890" />);
+    expect(slot()).not.toBeNull();
+  });
+
+  it('Essential only: no slot, now or on a later mount', async () => {
+    breakStorage(kind);
+    const { AdBanner } = await mountBannerAndSlot();
+    const first = render(<AdBanner slot="1234567890" />);
+    fireEvent.click(screen.getByRole('button', { name: 'Essential only' }));
+    expect(slot()).toBeNull();
+    first.unmount();
+    render(<AdBanner slot="1234567890" />);
+    expect(slot()).toBeNull();
+    expect(document.querySelector('script[src*="adsbygoogle.js"]')).toBeNull();
   });
 });

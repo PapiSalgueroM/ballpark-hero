@@ -83,7 +83,7 @@ describe('a game under blocked storage', () => {
   it('boots, takes an answer and keeps it for the visit', async () => {
     blockStorage();
     const seam = await bootSeam();
-    expect(seam.storageTrouble).toBe('blocked');
+    expect(seam.getStorageTrouble()).toBe('blocked');
     const view = renderHook(useChampOrNot);
     await waitFor(() => expect(view.result.current.loadState).toBe('ready'));
     expect(view.result.current.rounds).toHaveLength(10);
@@ -156,5 +156,80 @@ describe('the storage notice', () => {
     await bootSeam();
     await mountNotice('/champ-or-not');
     expect(notice()).toBeNull();
+  });
+
+  /* Review finding: five games are routed and playable but commented out of
+     the registry, and the notice went by the registry alone, so they got no
+     line at all (one of them tells the player his streak is saved here). */
+  it.each(['/football-timeline', '/guess-nfl-team', '/shirt-number', '/higher-lower-transfers', '/pack-battle'])(
+    'says so on %s, a game the registry no longer lists', async path => {
+      blockStorage();
+      await bootSeam();
+      await mountNotice(path);
+      expect(notice()).not.toBeNull();
+    });
+
+  it('every unlisted game route is still routed, and still not in the registry', async () => {
+    const { UNLISTED_GAME_ROUTES } = await import('@/components/StorageNotice');
+    const { ALL_GAMES } = await import('@/data/gameRegistry');
+    const app = (await import('node:fs')).readFileSync('src/App.tsx', 'utf8');
+    for (const path of UNLISTED_GAME_ROUTES) {
+      /* a route that was retired, or a game that came back to the registry, has to leave the list */
+      expect(app).toContain(`<Route path="${path}" element={<`);
+      expect(app).not.toContain(`<Route path="${path}" element={<Navigate`);
+      expect(ALL_GAMES.some(g => g.path === path)).toBe(false);
+    }
+  });
+
+  /* Review finding: the seam used to probe with a write as it loaded, in
+     every browser, on every page. Now only the notice asks, only on a game
+     page, and the seam remembers the answer for the visit. */
+  it('in a browser that stores normally: nothing is written off a game page, and one probe on the first game page', async () => {
+    await bootSeam();
+    const writes = vi.spyOn(Storage.prototype, 'setItem');
+    const removes = vi.spyOn(Storage.prototype, 'removeItem');
+    const home = await mountNotice('/');
+    home.unmount();
+    const hub = await mountNotice('/soccer');
+    hub.unmount();
+    expect(writes).not.toHaveBeenCalled();
+    expect(removes).not.toHaveBeenCalled();
+    const game = await mountNotice('/soccer-career');
+    expect(notice()).toBeNull();
+    game.unmount();
+    await mountNotice('/club-manager');
+    expect(notice()).toBeNull();
+    expect(writes.mock.calls.map(c => c[0])).toEqual(['__dukb_storage_probe__']);
+    expect(removes.mock.calls.map(c => c[0])).toEqual(['__dukb_storage_probe__']);
+    expect(window.localStorage.length).toBe(0);
+  });
+
+  it('storage full: the line is there on the first render of a game page, and the home page asks nothing', async () => {
+    const writes = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new DOMException('The quota has been exceeded.', 'QuotaExceededError');
+    });
+    await bootSeam();
+    const home = await mountNotice('/');
+    expect(notice()).toBeNull();
+    expect(writes).not.toHaveBeenCalled();
+    home.unmount();
+    const { StorageNotice } = await import('@/components/StorageNotice');
+    const { renderToStaticMarkup } = await import('react-dom/server');
+    /* one synchronous render, no effects: what the first paint holds */
+    const html = renderToStaticMarkup(<MemoryRouter initialEntries={['/footle']}><StorageNotice /></MemoryRouter>);
+    expect(html).toContain('data-dukb-storage-notice="full"');
+    expect(writes).toHaveBeenCalledTimes(1);
+  });
+
+  it('the phone line is the short one, so it fits one line at 320 wide', async () => {
+    blockStorage();
+    await bootSeam();
+    await mountNotice('/soccer-career');
+    const phone = notice()!.querySelector('span.sm\\:hidden');
+    const wide = notice()!.querySelector('span.hidden.sm\\:inline');
+    expect(phone!.textContent).toBe("Storage is blocked, so progress won't save.");
+    expect(wide!.textContent).toBe("This browser blocks storage, so progress won't be saved. You can still play everything.");
+    /* measured on the runner: 56 characters wrapped at 360 wide. The phone line stays well under that. */
+    expect(phone!.textContent!.length).toBeLessThanOrEqual(44);
   });
 });

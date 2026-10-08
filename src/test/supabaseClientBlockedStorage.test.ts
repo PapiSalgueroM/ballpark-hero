@@ -79,6 +79,23 @@ describe('the Supabase client when the browser blocks storage', () => {
     expect(fetch).not.toHaveBeenCalled();
   });
 
+  /* Review finding: the seam's first cut wrote and removed a probe key on both
+     stores as it loaded, so every import of this client did. Three committed
+     browser checks pin the auth client's own `lswt-` probe as the only write
+     an import of the client causes, and went red on that. This is the same
+     pin, close to the file that broke it. */
+  it('importing the client in a browser that stores normally writes nothing but the auth client\'s own probe', async () => {
+    const writes = vi.spyOn(Storage.prototype, 'setItem');
+    const removes = vi.spyOn(Storage.prototype, 'removeItem');
+    const mod = await loadClient();
+    await mod.supabase.auth.getSession();
+    const written = writes.mock.calls.map(c => String(c[0]));
+    const removed = removes.mock.calls.map(c => String(c[0]));
+    expect(written.filter(k => !/^lswt-/.test(k))).toEqual([]);
+    expect(removed.filter(k => !/^lswt-/.test(k))).toEqual([]);
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
   it('keeps a signed in player signed in when storage is full (reads still reach the stored session)', async () => {
     const session = fixtureSession();
     window.localStorage.setItem(AUTH_KEY, JSON.stringify(session));

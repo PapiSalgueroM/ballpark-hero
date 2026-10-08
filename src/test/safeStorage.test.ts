@@ -37,18 +37,55 @@ afterEach(() => {
 });
 
 describe('safeStorage: a browser that stores normally', () => {
-  it('hands back the very same storage objects and reports no trouble', async () => {
+  it('passes every call straight through to the browser storage and reports no trouble', async () => {
     const realLocal = window.localStorage;
     const realSession = window.sessionStorage;
+    realLocal.setItem('old-save', 'from last week');
     const seam = await load();
-    expect(seam.safeLocalStorage).toBe(realLocal);
-    expect(seam.safeSessionStorage).toBe(realSession);
-    expect(seam.storageTrouble).toBeNull();
-    expect(seam.storageIsMemory).toBe(false);
+    expect(seam.getStorageTrouble()).toBeNull();
+    expect(seam.sessionStorageIsMemory).toBe(false);
+    expect(seam.safeLocalStorage.getItem('old-save')).toBe('from last week');
+    seam.safeLocalStorage.setItem('k', 'v');
+    expect(realLocal.getItem('k')).toBe('v');
+    expect(seam.safeLocalStorage.length).toBe(2);
+    seam.safeLocalStorage.removeItem('k');
+    expect(realLocal.getItem('k')).toBeNull();
+    seam.safeSessionStorage.setItem('s', '1');
+    expect(realSession.getItem('s')).toBe('1');
+    expect(realLocal.getItem('s')).toBeNull();
+    /* window is left exactly as the browser made it */
+    expect(window.localStorage).toBe(realLocal);
+    expect(seam.getStorageTrouble()).toBeNull();
   });
 
-  it('leaves no probe key behind', async () => {
+  /* The review's finding: the first cut probed with a write and a remove as
+     the module loaded, on both stores, in every browser. Three committed
+     checks pin the auth client's own probe as the only write an import of the
+     client causes (scripts/playInboxCard.mjs, scripts/qa/managerWorldBrowser1077.mjs,
+     scripts/qa/managerMatchPlans1079.mjs), and each page load fired a storage
+     event in every other tab. */
+  it('writes and removes NOTHING as it loads', async () => {
+    const writes = vi.spyOn(Storage.prototype, 'setItem');
+    const removes = vi.spyOn(Storage.prototype, 'removeItem');
+    const clears = vi.spyOn(Storage.prototype, 'clear');
     await load();
+    expect(writes).not.toHaveBeenCalled();
+    expect(removes).not.toHaveBeenCalled();
+    expect(clears).not.toHaveBeenCalled();
+  });
+
+  it('the write probe is one write and one remove of its own key, once a visit, only when asked', async () => {
+    const seam = await load();
+    const writes = vi.spyOn(Storage.prototype, 'setItem');
+    const removes = vi.spyOn(Storage.prototype, 'removeItem');
+    expect(seam.probeStorageWrites()).toBeNull();
+    expect(writes.mock.calls.map(c => c[0])).toEqual(['__dukb_storage_probe__']);
+    expect(removes.mock.calls.map(c => c[0])).toEqual(['__dukb_storage_probe__']);
+    expect(writes.mock.contexts[0]).toBe(window.localStorage);
+    expect(seam.probeStorageWrites()).toBeNull();
+    expect(seam.probeStorageWrites()).toBeNull();
+    expect(writes).toHaveBeenCalledTimes(1);
+    expect(removes).toHaveBeenCalledTimes(1);
     expect(window.localStorage.length).toBe(0);
     expect(window.sessionStorage.length).toBe(0);
   });
@@ -59,8 +96,9 @@ describe('safeStorage: storage blocked', () => {
     blockAccessors();
     expect(() => window.localStorage).toThrow();
     const seam = await load();
-    expect(seam.storageTrouble).toBe('blocked');
-    expect(seam.storageIsMemory).toBe(true);
+    expect(seam.getStorageTrouble()).toBe('blocked');
+    /* nothing to probe: there is no browser store to write to */
+    expect(seam.probeStorageWrites()).toBe('blocked');
     seam.safeLocalStorage.setItem('k', 'v');
     expect(seam.safeLocalStorage.getItem('k')).toBe('v');
     /* the call sites that never heard of the seam: the bare global works now */
@@ -75,7 +113,7 @@ describe('safeStorage: storage blocked', () => {
   it('stands in when the browser hands back null (a web view with storage turned off)', async () => {
     for (const name of NAMES) Object.defineProperty(window, name, { configurable: true, get: () => null });
     const seam = await load();
-    expect(seam.storageTrouble).toBe('blocked');
+    expect(seam.getStorageTrouble()).toBe('blocked');
     expect(localStorage.getItem('nothing')).toBeNull();
     localStorage.setItem('a', 'b');
     expect(seam.safeLocalStorage.getItem('a')).toBe('b');
@@ -85,7 +123,7 @@ describe('safeStorage: storage blocked', () => {
     vi.spyOn(Storage.prototype, 'setItem').mockImplementation(denied);
     vi.spyOn(Storage.prototype, 'getItem').mockImplementation(denied);
     const seam = await load();
-    expect(seam.storageTrouble).toBe('blocked');
+    expect(seam.getStorageTrouble()).toBe('blocked');
     seam.safeLocalStorage.setItem('k', 'v');
     expect(seam.safeLocalStorage.getItem('k')).toBe('v');
     expect(window.localStorage).toBe(seam.safeLocalStorage);
@@ -99,7 +137,7 @@ describe('safeStorage: storage blocked', () => {
       return define(o, p, d);
     }) as typeof Object.defineProperty);
     const seam = await load();
-    expect(seam.storageTrouble).toBe('blocked');
+    expect(seam.getStorageTrouble()).toBe('blocked');
     seam.safeLocalStorage.setItem('k', 'v');
     expect(seam.safeLocalStorage.getItem('k')).toBe('v');
     expect(() => window.localStorage).toThrow();
@@ -112,8 +150,12 @@ describe('safeStorage: storage full', () => {
     const realLocal = window.localStorage;
     fillStorage();
     const seam = await load();
-    expect(seam.storageTrouble).toBe('full');
-    expect(seam.storageIsMemory).toBe(true);
+    /* not known yet: nothing has written, and the seam does not write as it loads */
+    expect(seam.getStorageTrouble()).toBeNull();
+    expect(seam.probeStorageWrites()).toBe('full');
+    expect(seam.getStorageTrouble()).toBe('full');
+    /* a full session store is still the browser's own and outlives a reload: only blocked is "memory" */
+    expect(seam.sessionStorageIsMemory).toBe(false);
     expect(seam.safeLocalStorage).not.toBe(realLocal);
     expect(seam.safeLocalStorage.getItem('old-save')).toBe('kept from last week');
     seam.safeLocalStorage.setItem('cookie-consent', 'essential');
@@ -122,6 +164,33 @@ describe('safeStorage: storage full', () => {
     expect(realLocal.getItem('cookie-consent')).toBeNull();
     expect(window.localStorage).toBe(realLocal);
     expect(() => window.localStorage.setItem('x', 'y')).toThrow();
+  });
+
+  it('learns it is full from the first write the browser refuses, with no probe at all', async () => {
+    const realLocal = window.localStorage;
+    fillStorage();
+    const seam = await load();
+    expect(seam.getStorageTrouble()).toBeNull();
+    seam.safeLocalStorage.setItem('cookie-consent', 'accepted');
+    expect(seam.getStorageTrouble()).toBe('full');
+    expect(seam.safeLocalStorage.getItem('cookie-consent')).toBe('accepted');
+    expect(realLocal.getItem('cookie-consent')).toBeNull();
+  });
+
+  it('learns it is full from a refused safeSetItem too', async () => {
+    fillStorage();
+    const seam = await load();
+    expect(seam.getStorageTrouble()).toBeNull();
+    expect(seam.safeSetItem('footle-rules-seen', '1')).toBe(false);
+    expect(seam.getStorageTrouble()).toBe('full');
+  });
+
+  it('a session store that refuses a write says nothing about saves', async () => {
+    const seam = await load();
+    fillStorage();
+    seam.safeSessionStorage.setItem('dukb-reloaded-for', 'index-abc.js');
+    expect(seam.safeSessionStorage.getItem('dukb-reloaded-for')).toBe('index-abc.js');
+    expect(seam.getStorageTrouble()).toBeNull();
   });
 
   it('a remove reaches the browser store underneath, so a cleared choice stays cleared after a reload', async () => {
@@ -141,7 +210,11 @@ describe('safeStorage: the raw switch (the harness control)', () => {
     const realLocal = window.localStorage;
     const seam = await load();
     expect(seam.safeLocalStorage).toBe(realLocal);
-    expect(seam.storageTrouble).toBeNull();
+    expect(seam.getStorageTrouble()).toBeNull();
+    /* and the probe stands down, so the control really is the app as it was */
+    const writes = vi.spyOn(Storage.prototype, 'setItem');
+    expect(seam.probeStorageWrites()).toBeNull();
+    expect(writes).not.toHaveBeenCalled();
   });
 
   it('throws as the module loads when storage is blocked, which is the dead page this round fixes', async () => {

@@ -28,9 +28,18 @@
  *   3. src/integrations/supabase/client.ts hands the seam to the auth client
  *      and never names localStorage itself. That one line is what killed the
  *      whole site under blocked storage.
+ *   4. src/lib/safeStorage.ts only READS as it loads. Its first cut probed
+ *      with a write and a remove on both stores at module scope, so every
+ *      import of the Supabase client wrote to storage, and three committed
+ *      browser checks that pin the auth client's own probe as the only such
+ *      write went red (scripts/playInboxCard.mjs and the two Club Manager
+ *      walks under scripts/qa). The write probe is a function the notice
+ *      calls on a game page now, and nothing module scope reaches may write.
  *
- * MEASURED on this tree: 120 .setItem calls in 87 files, 118 inside a try of
- * their own function, 2 allowed (see ALLOWED), 0 offenders. The header is
+ * MEASURED on this tree: 120 .setItem calls in 87 files, 118 inside a try
+ * that has a catch, of their own function, 2 allowed (see ALLOWED), 0
+ * offenders, 0 of them in a try with only a finally; and in the seam 9
+ * write, remove or clear calls, none reachable as it loads. The header is
  * refreshed by hand; the summary line prints the live numbers.
  *
  * NEGATIVE CONTROLS, each one changes a file IN MEMORY only, asserts the text
@@ -40,6 +49,10 @@
  *   SIM_STORAGE_WRITES_CONTROL=client   puts `storage: localStorage` back.
  *   SIM_STORAGE_WRITES_CONTROL=caller   takes the try off one writeIndex call,
  *                                        so the ALLOWED reason stops being true.
+ *   SIM_STORAGE_WRITES_CONTROL=nocatch  turns the cookie banner's try and catch
+ *                                        into a try and finally, which still throws.
+ *   SIM_STORAGE_WRITES_CONTROL=probe    puts the write probe back in resolve,
+ *                                        which runs as the seam loads.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -71,6 +84,8 @@ if (CONTROL === 'unguard') control('src/pages/Footle.tsx', "safeSetItem('footle-
 else if (CONTROL === 'order') control('src/main.tsx', 'import "./lib/safeStorage";', 'import "./lib/translateGuard";');
 else if (CONTROL === 'client') control('src/integrations/supabase/client.ts', 'storage: safeLocalStorage,', 'storage: localStorage,');
 else if (CONTROL === 'caller') control('src/lib/clubManagerSlots.ts', 'try { writeIndex(from); } catch {', '{ writeIndex(from); } {');
+else if (CONTROL === 'nocatch') control('src/components/CookieConsent.tsx', "try { safeLocalStorage.setItem('cookie-consent', choice); } catch { /* see above */ }", "try { safeLocalStorage.setItem('cookie-consent', choice); } finally { /* see above */ }");
+else if (CONTROL === 'probe') control('src/lib/safeStorage.ts', 'real.getItem(PROBE_KEY);', "real.setItem(PROBE_KEY, '1'); real.removeItem(PROBE_KEY);");
 else if (CONTROL) { console.error(`unknown SIM_STORAGE_WRITES_CONTROL=${CONTROL}`); process.exit(2); }
 
 const read = full => overrides.get(full) ?? fs.readFileSync(full, 'utf8');
@@ -78,11 +93,14 @@ const parse = full => ts.createSourceFile(full, read(full), ts.ScriptTarget.Late
 const isFunction = n => ts.isFunctionDeclaration(n) || ts.isFunctionExpression(n) || ts.isArrowFunction(n)
   || ts.isMethodDeclaration(n) || ts.isGetAccessorDeclaration(n) || ts.isSetAccessorDeclaration(n) || ts.isConstructorDeclaration(n);
 
-/** True when the node is inside the try block of the function it runs in. */
+/** True when the node is inside the try block, of a try that has a CATCH, of the
+ *  function it runs in. A try with only a finally still throws, so it does not
+ *  count and the climb carries on to the next try out (review finding: the
+ *  first cut counted any try). */
 function guarded(node) {
   for (let n = node; n.parent; n = n.parent) {
     const p = n.parent;
-    if (ts.isTryStatement(p) && p.tryBlock === n) return true;
+    if (ts.isTryStatement(p) && p.tryBlock === n && p.catchClause) return true;
     if (isFunction(p)) return false;
   }
   return false;
@@ -97,6 +115,7 @@ function ownerName(node) {
   }
   return '';
 }
+const isInsideFunction = node => { for (let n = node.parent; n; n = n.parent) if (isFunction(n)) return true; return false; };
 function calls(sf, test) {
   const found = [];
   const walk = n => { if (ts.isCallExpression(n) && test(n)) found.push(n); ts.forEachChild(n, walk); };
@@ -193,6 +212,21 @@ console.log('3. the Supabase client takes its auth storage from the seam');
   walk(sf);
   if (storage === 'safeLocalStorage' && namesLocal === 0) ok('auth.storage is safeLocalStorage and the file never names localStorage');
   else fail(`auth.storage is "${storage}" and the file names localStorage ${namesLocal} time(s): reading it there throws under blocked storage and nothing after it runs`);
+}
+
+console.log('4. the storage seam only READS as it loads: no write, remove or clear at module scope or in what module scope calls');
+{
+  const full = path.join(SRC, 'lib', 'safeStorage.ts');
+  const sf = parse(full);
+  const WRITES = new Set(['setItem', 'removeItem', 'clear']);
+  /* what runs as the module loads: its top level statements, and the functions they call by name */
+  const atLoad = new Set(calls(sf, n => ts.isIdentifier(n.expression) && ownerName(n) === '' && !isInsideFunction(n)).map(n => n.expression.text));
+  const hits = calls(sf, n => ts.isPropertyAccessExpression(n.expression) && WRITES.has(n.expression.name.text));
+  const early = hits.filter(n => !isInsideFunction(n) || atLoad.has(ownerName(n)));
+  if (!atLoad.has('resolve')) fail(`safeStorage.ts no longer calls resolve at module scope (it calls ${[...atLoad].join(', ') || 'nothing'}): this check is not reading the file it thinks it is`);
+  else if (hits.length < 4) fail(`only ${hits.length} write, remove or clear calls found in safeStorage.ts: the scan is not reading the seam`);
+  else if (early.length) fail(`${early.length} storage write(s) run as the seam loads (line ${early.map(n => lineOf(sf, n)).join(', ')}): every import of the Supabase client would write, which three committed browser checks forbid`);
+  else ok(`${hits.length} write, remove or clear calls in the seam, 0 of them at module scope or in ${[...atLoad].sort().join(', ')}`);
 }
 
 console.log(`\nsimStorageWrites${CONTROL ? ` (control ${CONTROL})` : ''}: ${failures === 0 ? 'all green' : failures + ' failed'}`);

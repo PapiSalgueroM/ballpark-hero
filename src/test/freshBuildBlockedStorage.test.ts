@@ -70,7 +70,9 @@ describe('the stale chunk reload', () => {
       throw new DOMException('The quota has been exceeded.', 'QuotaExceededError');
     });
     const page = await pageLoad();
-    expect(page.seam.sessionStorageIsMemory).toBe(true);
+    /* a full session store is still the browser's own and outlives a reload;
+       what stops the reload here is the marker write being refused */
+    expect(page.seam.sessionStorageIsMemory).toBe(false);
     expect(page.fresh.reloadOnceForStaleChunk()).toBe(false);
     expect(reload).not.toHaveBeenCalled();
   });
@@ -88,5 +90,98 @@ describe('the stale chunk reload', () => {
       }
     }
     expect(reloads).toBe(4);
+  });
+});
+
+/* Review finding: the same rule in check(), the reload for a new build when
+   the tab gets focus back, had no test. Taking the guard out left every gate
+   green and would have reloaded the page on every focus under blocked
+   storage, throwing the game in progress away each time. check() is private,
+   so this drives it the way the browser does: wire the watcher, let the page
+   get old enough, and give the window focus. */
+describe('the new build reload on focus', () => {
+  const T0 = 1_800_000_000_000;
+  let now = T0;
+  const wired: Array<{ target: EventTarget; type: string; fn: EventListenerOrEventListenerObject }> = [];
+  const fetched = vi.fn(async () => ({
+    ok: true,
+    text: async () => '<script type="module" crossorigin src="/assets/index-NEWBUILD9.js"></script>',
+  }));
+  const settle = async () => { for (let i = 0; i < 5; i += 1) await new Promise(resolve => setTimeout(resolve, 0)); };
+
+  /** One page load that booted on the old build, with the watcher wired. */
+  async function bootOldBuild() {
+    const page = await pageLoad();
+    const ofWindow = window.addEventListener.bind(window);
+    const ofDocument = document.addEventListener.bind(document);
+    const w = vi.spyOn(window, 'addEventListener').mockImplementation(((type: string, fn: EventListenerOrEventListenerObject) => {
+      wired.push({ target: window, type, fn });
+      ofWindow(type, fn);
+    }) as typeof window.addEventListener);
+    const d = vi.spyOn(document, 'addEventListener').mockImplementation(((type: string, fn: EventListenerOrEventListenerObject) => {
+      wired.push({ target: document, type, fn });
+      ofDocument(type, fn);
+    }) as typeof document.addEventListener);
+    page.fresh.watchForNewBuild();
+    w.mockRestore();
+    d.mockRestore();
+    return page;
+  }
+  /** The tab comes back `seconds` later. */
+  async function focusAfter(seconds: number) {
+    now += seconds * 1000;
+    window.dispatchEvent(new Event('focus'));
+    await settle();
+  }
+
+  beforeEach(() => {
+    now = T0;
+    vi.spyOn(Date, 'now').mockImplementation(() => now);
+    fetched.mockClear();
+    vi.stubGlobal('fetch', fetched);
+    const entry = document.createElement('script');
+    entry.type = 'module';
+    entry.setAttribute('src', '/assets/index-OLDBUILD1.js');
+    entry.setAttribute('data-test-entry', '');
+    document.head.appendChild(entry);
+  });
+  afterEach(() => {
+    for (const x of wired.splice(0)) x.target.removeEventListener(x.type, x.fn);
+    document.querySelectorAll('script[data-test-entry]').forEach(el => el.remove());
+  });
+
+  it('a browser that stores normally: reloads once for the new build, and the marker stops the second one', async () => {
+    await bootOldBuild();
+    await focusAfter(11);
+    expect(fetched).toHaveBeenCalledTimes(1);
+    expect(reload).toHaveBeenCalledTimes(1);
+    expect(window.sessionStorage.getItem('dukb-reloaded-for')).toBe('index-NEWBUILD9.js');
+    await focusAfter(61);
+    expect(fetched).toHaveBeenCalledTimes(2);
+    expect(reload).toHaveBeenCalledTimes(1);
+  });
+
+  it('storage blocked: sees the new build and never reloads, on this page load or the next three', async () => {
+    for (let load = 0; load < 4; load += 1) {
+      /* a real reload hands the page the blocked accessor again, not the last page's stand in */
+      for (const name of NAMES) Object.defineProperty(window, name, { configurable: true, get: denied });
+      const page = await bootOldBuild();
+      expect(page.seam.sessionStorageIsMemory).toBe(true);
+      await focusAfter(11);
+      /* the check got as far as seeing a different build, so what held it back was the rule */
+      expect(fetched).toHaveBeenCalledTimes(load + 1);
+      for (const x of wired.splice(0)) x.target.removeEventListener(x.type, x.fn);
+    }
+    expect(reload).not.toHaveBeenCalled();
+  });
+
+  it('storage full: the marker is refused, so no reload', async () => {
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new DOMException('The quota has been exceeded.', 'QuotaExceededError');
+    });
+    await bootOldBuild();
+    await focusAfter(11);
+    expect(fetched).toHaveBeenCalledTimes(1);
+    expect(reload).not.toHaveBeenCalled();
   });
 });
