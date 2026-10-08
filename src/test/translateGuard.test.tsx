@@ -125,6 +125,17 @@ function Header() {
   );
 }
 
+/** The Bank's shape: a sign that appears in front of a figure. An empty string makes no node at all. */
+function Money() {
+  const [plus, setPlus] = useState(false);
+  return (
+    <div>
+      <button onClick={() => setPlus(true)}>gain</button>
+      <p data-testid="money">{plus ? '+' : ''}{'$50k'}</p>
+    </div>
+  );
+}
+
 /** Stands in for the route error boundary: what a player sees when a commit throws. */
 class Boundary extends Component<{ children: ReactNode }, { broke: boolean }> {
   state = { broke: false };
@@ -325,5 +336,51 @@ describe('layer two: a string React removes takes its translated copy with it', 
     expect(stats().swaps).toBe(before.swaps);
     expect(stats().removed).toBe(before.removed + 1);
     parent.remove();
+  });
+});
+
+describe('layer two: a new node lands before the string it precedes', () => {
+  it('an element goes in front of a translated string, not at the end', async () => {
+    const { container } = render(<Boundary><Banner /></Boundary>);
+    translateReal(container);
+    const line = screen.getByTestId('line');
+    expect(line.textContent).toBe('pt:tail words');
+    await settle();
+    const before = stats();
+    act(() => {
+      fireEvent.click(screen.getByRole('button'));
+    });
+    expect(screen.queryByRole('alert')).toBeNull();
+    expect(line.firstElementChild?.nodeName).toBe('I');
+    expect(line.firstChild).toBe(line.firstElementChild);
+    expect(line.textContent).toBe('NEWtail words');
+    expect(stats().inserted).toBe(before.inserted + 1);
+    translateReal(container);
+    expect(line.textContent).toBe('pt:NEWpt:tail words');
+    expect(line.firstChild?.nodeName).toBe('I');
+  });
+
+  it('a sign goes in front of a translated figure', () => {
+    const { container } = render(<Boundary><Money /></Boundary>);
+    translateReal(container);
+    const money = screen.getByTestId('money');
+    expect(money.textContent).toBe('pt:$50k');
+    act(() => {
+      fireEvent.click(screen.getByRole('button'));
+    });
+    expect(screen.queryByRole('alert')).toBeNull();
+    expect(money.textContent).toBe('+$50k');
+    expect(fontsIn(money)).toBe(0);
+    translateReal(container);
+    expect(money.textContent).toBe('pt:+$50k');
+  });
+
+  it('a reference nobody translated still falls back to the end', () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const parent = document.createElement('div');
+    const kept = parent.appendChild(document.createElement('em'));
+    const fresh = document.createElement('i');
+    parent.insertBefore(fresh, document.createTextNode('gone'));
+    expect(Array.from(parent.childNodes)).toEqual([kept, fresh]);
   });
 });

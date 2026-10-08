@@ -97,6 +97,8 @@ interface Natives {
 interface Live {
   /** React removes `child`, which `parent` no longer holds. True when its copy was removed in its place. */
   remove(parent: Node, child: Node): boolean;
+  /** React inserts before `reference`, which `parent` no longer holds. What stands there now, or null. */
+  before(parent: Node, reference: Node): Node | null;
 }
 
 const isWrapper = (node: Node | null): node is Element => !!node && node.nodeType === 1 && node.nodeName === 'FONT';
@@ -204,6 +206,17 @@ function makeLive(win: GuardWindow, native: Natives): Live | null {
       refresh(parent);
       return true;
     },
+    before(parent, reference) {
+      if (reference.nodeType !== 3) return null;
+      flush();
+      const copy = shown.get(reference);
+      if (!copy || copy.parentNode !== parent) return null;
+      // The new node lands in the middle of a sentence the translator shared out its own way, so the
+      // sentence goes back whole and the new node takes its place among React's words.
+      refresh(parent);
+      stats.inserted += 1;
+      return shown.get(reference) || null;
+    },
   };
 }
 
@@ -243,6 +256,15 @@ export function installTranslateGuard(win: GuardWindow = window as GuardWindow):
 
   proto.insertBefore = function <T extends Node>(this: Node, node: T, reference: Node | null): T {
     if (reference && reference.parentNode !== this) {
+      if (live) {
+        let copy: Node | null = null;
+        try {
+          copy = live.before(this, reference);
+        } catch {
+          // layer one, below
+        }
+        if (copy && copy.parentNode === this) return nativeInsertBefore.call(this, node, copy) as T;
+      }
       tell('Appended instead of inserting before');
       return nativeInsertBefore.call(this, node, null) as T;
     }
