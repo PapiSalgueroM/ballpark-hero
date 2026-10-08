@@ -350,10 +350,20 @@ function scan(mods, R) {
       if (men.some(m => m.group === v.group && m.since === v.year)) C.roleFresh += 1;
       if (v.arrivals.length) { C.roleArrival += 1; note('role arrival', `${v.club} ${v.year}`); }
     }
-    /* 9: a save the club has frozen out reads as frozen, with a plan of 8 at most */
-    if ((s.frozenOut ?? 0) > 0) {
-      C.frozenSaves += 1;
-      if (!v.trust.frozen || v.trust.expected > 8 || v.trust.inPlans || v.trust.label !== 'Frozen out') { C.frozenBad += 1; note('frozen', `${v.club} ${v.year}: plan ${v.trust.expected}, ${v.trust.label}`); }
+    /* 9: a save the club has frozen out reads as frozen, with a plan of 8 at
+       most. The fleet never stays where it is frozen out (it takes the way
+       out it is offered), so every tenth season is read again as the same
+       save with the freeze set by hand. A freeze belongs to his own club: the
+       same frozen save asked about another club reads as not frozen. */
+    if ((s.frozenOut ?? 0) > 0 || C.seasons % 10 === 0) {
+      const f = (s.frozenOut ?? 0) > 0 ? s : { ...s, frozenOut: 2 };
+      const at = lib.squadNow(f);
+      const t = at ? lib.managerTrust(f, at) : null;
+      const away = at ? lib.managerTrust(f, { ...at, club: `${at.club} (another club)` }) : null;
+      if (t) {
+        C.frozenSaves += 1;
+        if (!t.frozen || t.expected > 8 || t.inPlans || t.label !== 'Frozen out' || t.pct > 22 || away.frozen) { C.frozenBad += 1; note('frozen', `${v.club} ${v.year}: plan ${t.expected}, ${t.label}`); }
+      }
     }
     /* 5: real, by role or invented, and never one passed off as another */
     const baked = lib.clubSquad(v.club, v.year);
@@ -483,7 +493,6 @@ const FLOORS = {
   underGap: 8.3,                          // 10: seasons with the "under the level" line play this many fewer
   sameSlotMax: 0.027,                     // 7: share of moves that meet a namesake in the same slot
   age30Min: 5500,                         // 3: rows played at 30 or over
-  frozenMin: null,                        // 9: seasons read from a save the club has frozen out
   cutUnderMin: null,                      // 10: last seasons that hold fewer games than league games
 };
 /* FLOORS-END */
@@ -731,8 +740,8 @@ function sec9(R, S, C) {
   const swings = {};
   for (const r of all) swings[r.s.swing] = (swings[r.s.swing] || 0) + 1;
   say(`   dressing room swings the fleet saw: ${JSON.stringify(swings)}`);
-  say(`   ${C.frozenSaves} seasons read from a save the club has frozen out: ${C.frozenBad} not read as frozen with a plan of 8 at most`);
-  floor('9', 'frozenMin', C.frozenSaves, (line, v) => v >= line, `${C.frozenSaves} frozen out seasons read`);
+  say(`   ${C.frozenSaves} saves read with the club freezing him out (the freeze set by hand on every tenth season): ${C.frozenBad} not read as frozen with a plan of 8 at most`);
+  check('9', C.frozenSaves >= SIZE * 2, `only ${C.frozenSaves} frozen out saves were read`);
   check('9', C.frozenBad === 0, `${C.frozenBad} frozen out saves read as if the club still planned to play him`);
 }
 
