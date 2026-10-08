@@ -540,7 +540,10 @@ export function simSeason(
        counted differently across eras, so 200 is the conservative bound the
        realism harness has always used, and the engine now agrees with it. */
     line.tackles = Math.min(200, Math.round((62 + (form - 62) * 3.1 + rng() * 26) * g));
-    line.sacks = Math.max(0, Math.round(((form - 66) * 0.18 + rng() * 3) * g * 10) / 10);
+    /* Round 1104: a sack is credited whole or split in two, so the line is
+       rounded to halves (it was tenths: 11.3 sacks is not a number football
+       has). The same at the two other sack lines below. */
+    line.sacks = Math.max(0, Math.round(((form - 66) * 0.18 + rng() * 3) * g * 2) / 2);
     line.picks = Math.max(0, Math.round(((form - 70) * 0.05 + rng() * 2) * g));
     line.forcedFum = Math.max(0, Math.round((rng() * 3) * g));
   } else if (c.pos === 'CB') {
@@ -566,7 +569,7 @@ export function simSeason(
        written in Round 97 when 22.5 really was the record, and the engine had
        no cap at all, so on the day somebody broke the record in real life the
        harness became both wrong and still, occasionally, right. */
-    line.sacks = Math.min(23, Math.max(0, Math.round(((form - 64) * 0.52 + rng() * 5) * g * 10) / 10));
+    line.sacks = Math.min(23, Math.max(0, Math.round(((form - 64) * 0.52 + rng() * 5) * g * 2) / 2));
     line.tackles = Math.round((32 + (form - 62) * 1.1 + rng() * 16) * g);
     line.forcedFum = Math.max(0, Math.round(((form - 74) * 0.06 + rng() * 3) * g));
     line.passDef = Math.max(0, Math.round((rng() * 4) * g));
@@ -619,7 +622,7 @@ export function simSeason(
       line.poLine = `${fg} of ${fg + (rng() < 0.5 ? 0 : 1)} on field goals`;
     } else {
       const tk = Math.max(0, Math.round((95 + (pf - 62) * 2.4) * per));
-      const sk = Math.max(0, Math.round((3 + (pf - 62) * 0.35) * per * 10) / 10);
+      const sk = Math.max(0, Math.round((3 + (pf - 62) * 0.35) * per * 2) / 2);
       /* Round 833: a corner records no sacks in the regular season, so his
          January line is passes defended, on the regular season's own curve at
          its average draw. Derived, no extra rng call, so no draw moves. */
@@ -1220,7 +1223,8 @@ export function careerTotals(c: CareerState): NflCareerSums {
     t.passDef += s.passDef ?? 0; t.forcedFum += s.forcedFum ?? 0;
     t.fgMade += s.fgMade ?? 0; t.fgAtt += s.fgAtt ?? 0;
   }
-  /* Half sacks are tenths in this engine, so the sum is rounded the way
+  /* Sacks come in halves since Round 1104, but a season saved before it
+     keeps its tenths, so the sum is still rounded to a tenth the way
      nflBadgeFacts already rounds it, never printed as 41.300000000000004. */
   t.sacks = Math.round(t.sacks * 10) / 10;
   return t;
