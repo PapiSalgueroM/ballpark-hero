@@ -1,0 +1,6 @@
+save: Everton 2029 invented rank 2/8 arrivals 2 trust Nailed on starter
+sheet chunk: SquadSheet-D4QXeCd9.js
+first failure in a tab: chunk requests 1, page navigations after the press 1, sheet "no sheet", scrollY 400 -> 0, stale chunk flag 1, text ""
+second failure in the same tab: boundary shown: "The squad could not open. Your career is safe. ↻ Retry ← Back to your career", chunk requests 2
+  Retry 1 with the network back: THE SHEET OPENED, new requests for the chunk 1
+RVWALK3 DONE
