@@ -1,0 +1,3 @@
+tsc exit=0 32s | 
+vitest exit=1 13s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/homeSearchRecovery.test.tsx,title=src/test/homeSearchRecovery.test.tsx > a failed focus prewarm keeps 
+simHomeSearchRecovery exit=0 36s | Home search recovery: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/home-search-recovery-artifacts/outcomes

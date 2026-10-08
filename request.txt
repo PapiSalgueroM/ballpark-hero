@@ -1,0 +1,4 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/homeSearchRecovery.test.tsx src/test/boxingShowForecast.test.tsx --testTimeout=300000 --hookTimeout=120000
+simHomeSearchRecovery: node scripts/simHomeSearchRecovery.mjs
