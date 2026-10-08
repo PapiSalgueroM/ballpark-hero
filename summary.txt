@@ -1,0 +1,6 @@
+vit-hall exit=0 22s |    Duration  21.44s (transform 4.14s, setup 588ms, collect 11.69s, tests 27.06s, environment 2.96s, prepare 1.10s)
+tsc exit=0 90s | 
+simHarnessAnchors exit=0 40s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 19s | No rival product names found. 0 findings.
+full-nfl exit=0 206s | simCareerHall nfl: all 33 checks green
+ctl-nfl exit=0 227s | controls nfl: 38 run, 0 not as expected

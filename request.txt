@@ -1,0 +1,7 @@
+# Round 1051 fixer 2, step check on abc797de
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vit-hall: node_modules/.bin/vitest run src/test/careerHall.test.tsx src/test/careerHallV1Replay.test.ts src/test/usCareerHallBoard.test.tsx src/test/usCareerActionConfirm.test.tsx --testTimeout=300000 --hookTimeout=120000
+full-nfl: TMPDIR=$(mktemp -d) node scripts/simCareerHall.mjs nfl
+ctl-nfl: bash .rc/x/rc-controls2.sh nfl
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
