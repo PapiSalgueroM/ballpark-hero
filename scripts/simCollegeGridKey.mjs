@@ -44,10 +44,14 @@
      7. UNDRAFTED PROBE. Entries marked undrafted whose folded surname and a
         school match a draft row within a year of their first season (a row
         no other career holds) stay at or under UNDRAFTED_PROBE_BASELINE.
-     8. TABLE EQUALS FILE. (8a) the committed file's rows equal the fresh
-        derivation. (8b) public.college_grid_players row count and a hash of
-        its judged columns equal the file. 8b SKIPS LOUDLY while the table
-        does not exist or Supabase is unreachable.
+     8. FILE EQUALS DERIVATION. The committed file's rows equal the fresh
+        derivation. (This was 8a. Until Round 1105 an 8b also compared
+        public.college_grid_players with the file, because the page judged
+        from that table. The page no longer reads it: the key ships with
+        the site as two files generated from the committed file, fenced
+        offline by scripts/simCollegeGridShipped.mjs. The table comparison
+        moved to scripts/qa/collegeGridKeyVsTable.mjs, a release fence the
+        lead runs once, so this harness reads the table for nothing now.)
      9. ONE DRAFT SLOT, ONE PERSON. No career is split from a draft row of its
         own draft slot (its NFL key draft, or its roster draft number in the
         year before or the year of its first season) held by a non-career
@@ -117,7 +121,6 @@
    Run: node scripts/simCollegeGridKey.mjs
 */
 import { spawnSync } from 'node:child_process';
-import crypto from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -148,7 +151,6 @@ const ALIAS_MIN_CAREERS = 3;
 const MIN_TWO_SOURCE = 3;
 const FAME_SEASONS = 5;
 const RARE = ['Heisman Winner', 'Top 5 Pick', '1st Overall Pick'];
-const TABLE_COLUMNS = ['id', 'display_name', 'name_norm', 'colleges', 'colleges_agreed', 'groups', 'best_pick', 'first_round', 'undrafted', 'heisman_year', 'first_season', 'seasons', 'dup'];
 const PINS = [
   ['Deion Sanders', 'Florida State', 'Defensive Back'],
   ['Champ Bailey', 'Georgia', 'Defensive Back'],
@@ -610,11 +612,6 @@ function sectionThirteen(list, tamper = () => 0) {
   return { out, pairs, split, tampered };
 }
 
-const judgedHash = rows => {
-  const canonRows = rows.map(r => TABLE_COLUMNS.map(c => r[c] ?? null)).sort((x, y) => (x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0));
-  return crypto.createHash('sha256').update(JSON.stringify(canonRows)).digest('hex').slice(0, 16);
-};
-
 function sectionEightA(fileRows) {
   const out = [];
   if (JSON.stringify(file.columns) !== JSON.stringify(COLUMNS)) out.push('the committed file does not carry the columns the generator writes');
@@ -625,47 +622,6 @@ function sectionEightA(fileRows) {
     out.push(`the committed file differs from the fresh derivation from row ${diff} (${String(fileRows[diff]?.[0])}); run node scripts/genCollegeGridData.mjs`);
   }
   return { out };
-}
-
-const REST = (() => {
-  const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
-  const url = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
-  const key = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)[1];
-  return { url, headers: { apikey: key, authorization: `Bearer ${key}` } };
-})();
-
-/** The table's rows, or { skip } naming why they could not be read. */
-async function readTable() {
-  let res;
-  try {
-    res = await fetch(`${REST.url}/rest/v1/college_grid_players?select=id&limit=1`, { headers: REST.headers, signal: AbortSignal.timeout(20000) });
-  } catch (err) {
-    return { skip: `Supabase is unreachable (${String(err).slice(0, 80)})` };
-  }
-  if (!res.ok) {
-    const body = await res.text().catch(() => '');
-    if (res.status === 404 || /PGRST205|42P01|does not exist|Could not find the table/i.test(body)) return { skip: 'public.college_grid_players does not exist yet (the Round 611 migration is written but not applied)' };
-    return { error: `HTTP ${res.status}: ${body.slice(0, 160)}` };
-  }
-  const rows = [];
-  for (let from = 0; ; from += 1000) {
-    const r = await fetch(`${REST.url}/rest/v1/college_grid_players?select=${TABLE_COLUMNS.join(',')}&order=id.asc&offset=${from}&limit=1000`, { headers: REST.headers });
-    if (!r.ok) return { error: `HTTP ${r.status} on the page from ${from}` };
-    const page = await r.json();
-    rows.push(...page);
-    if (page.length < 1000) break;
-  }
-  return { rows };
-}
-
-function sectionEightB(table, fileRows) {
-  const out = [];
-  const asObjects = fileRows.map(r => Object.fromEntries(COLUMNS.map((c, i) => [c, r[i]])));
-  if (table.rows.length !== asObjects.length) out.push(`the table holds ${table.rows.length} rows and the file ${asObjects.length}`);
-  const a = judgedHash(table.rows);
-  const b = judgedHash(asObjects);
-  if (a !== b) out.push(`the judged columns hash to ${a} in the table and ${b} in the file`);
-  return { out, hash: b };
 }
 
 // ---------------------------------------------------------------------------
@@ -704,7 +660,6 @@ function unknownShare() {
 // ---------------------------------------------------------------------------
 
 const derivedVerdict = (y, k) => inFirstRound(y, k, ends);
-let tableRead = null;
 
 if (!ONLY) {
   console.log('\n1) Round one is derived: first_round follows the boundary, never the raw round column');
@@ -771,19 +726,11 @@ if (!ONLY) {
     console.log(`   ${r.listed.length} listed (baseline ${UNDRAFTED_PROBE_BASELINE}): ${r.listed.join('; ') || 'none'}`);
   }
 
-  console.log('\n8) Table equals file');
+  console.log('\n8) File equals derivation');
   {
     const a = sectionEightA(file.rows);
     a.out.forEach(fail);
     console.log(`   8a: the committed file's ${file.rows.length} rows ${a.out.length ? 'DIFFER from' : 'equal'} the fresh derivation`);
-    tableRead = await readTable();
-    if (tableRead.skip) console.log(`   8b: SKIPPED, NOT CHECKED: ${tableRead.skip}. The table's row count and judged-column hash were not compared with the file.`);
-    else if (tableRead.error) fail(`8b: the table could not be read: ${tableRead.error}`);
-    else {
-      const b = sectionEightB(tableRead, file.rows);
-      b.out.forEach(fail);
-      console.log(`   8b: the table holds ${tableRead.rows.length} rows; judged columns hash ${b.hash} in the file`);
-    }
   }
 
   console.log('\n9) One draft slot, one person: no career split from a draft row of its own slot');
@@ -940,13 +887,6 @@ if (want('droprow')) {
   mustChange('droprow', rows.length === file.rows.length - 1 && file.rows.length > 0, 'the file has no rows');
   const a = sectionEightA(rows);
   grade('droprow', a.out.length > 0, `8a: ${a.out.join(' | ') || 'stayed green'}`);
-  if (!tableRead) tableRead = await readTable();
-  if (tableRead.skip) console.log(`   8b under droprow: SKIPPED, NOT CHECKED: ${tableRead.skip}`);
-  else if (!tableRead.error) {
-    const b = sectionEightB(tableRead, rows);
-    if (!b.out.length) fail('control droprow: 8b stayed green against a file one row short');
-    else console.log(`   fired in 8b too: ${b.out.join(' | ')}`);
-  }
 }
 
 if (want('noslotjoin')) {
@@ -1016,5 +956,4 @@ if (failures > 0) {
   console.error(`simCollegeGridKey: red, ${failures} failure${failures === 1 ? '' : 's'} above.`);
   process.exit(1);
 }
-const skipNote = tableRead?.skip ? ` Section 8b SKIPPED (${tableRead.skip}).` : '';
-console.log(`simCollegeGridKey: green. The key is derived from its tables, all 75 boards are proven and finish offline both ways, and all ${fired.length} controls fired.${skipNote}`);
+console.log(`simCollegeGridKey: green. The key is derived from its tables, all 75 boards are proven and finish offline both ways, and all ${fired.length} controls fired.`);
