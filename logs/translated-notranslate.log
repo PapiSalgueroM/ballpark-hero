@@ -1,0 +1,329 @@
+playTranslatedPage: http://localhost:4173, 10 page(s), views phone and desktop, text off, CONTROL=notranslate
+  PASS  0. the served entry chunk (/assets/index-2izWCruA.js) holds the guard's off switch __DUKB_NO_TRANSLATE_GUARD__
+  PASS  0. the served entry chunk holds the guard's console line
+  PASS  0. the served entry chunk holds layer two's off switch __DUKB_NO_TRANSLATE_LIVE__
+
+/club-manager phone off
+  PASS  1. /club-manager phone off: the translator is off: 0 font element(s)
+  PASS  1. /club-manager phone off: the guard is installed on the page
+  PASS  8. /club-manager phone off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  10. /club-manager phone off: the page says what React holds, at every look: 317 element(s) with words of their own at the fullest look
+  PASS  11. /club-manager phone off: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /club-manager phone off: no text the translator will not take again is back on the page
+  PASS  17. /club-manager phone off: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  9. /club-manager phone off: on a page nobody translated layer two did nothing: {"swaps":0,"removed":0,"inserted":0,"restored":0,"returned":0}
+  PASS  5. /club-manager phone off: the walk pressed at least two controls: 8: How to play > Let's Play! > 📅2026-27Today. Real s > 📅 Starting 2026-27 > 🏟️2020-21Haaland and  > 🏟️ Starting 2020-21 > 🦊2015-16The Leicester > 🦊 Starting 2015-16
+  PASS  6. /club-manager phone off: the route error boundary never appeared
+  PASS  7. /club-manager phone off: no NotFoundError
+
+/ phone off
+  PASS  1. / phone off: the translator is off: 0 font element(s)
+  PASS  1. / phone off: the guard is installed on the page
+  PASS  8. / phone off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  10. / phone off: the page says what React holds, at every look: 1058 element(s) with words of their own at the fullest look
+  PASS  11. / phone off: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. / phone off: no text the translator will not take again is back on the page
+  PASS  17. / phone off: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  9. / phone off: on a page nobody translated layer two did nothing: {"swaps":0,"removed":0,"inserted":0,"restored":0,"returned":0}
+  PASS  5. / phone off: the walk pressed at least two controls: 8: Make a free one > Close > Pin Cage Clash > Pin Deadline Day > Pin Gauntlet Draft: NH > Pin Aussie Rules Manag > 🥊 Ali > Unpin Cage Clash
+  PASS  6. / phone off: the route error boundary never appeared
+  PASS  7. / phone off: no NotFoundError
+
+/nba-my-career phone off
+  PASS  1. /nba-my-career phone off: the translator is off: 0 font element(s)
+  PASS  1. /nba-my-career phone off: the guard is installed on the page
+  PASS  8. /nba-my-career phone off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  10. /nba-my-career phone off: the page says what React holds, at every look: 253 element(s) with words of their own at the fullest look
+  PASS  11. /nba-my-career phone off: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /nba-my-career phone off: no text the translator will not take again is back on the page
+  PASS  17. /nba-my-career phone off: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  9. /nba-my-career phone off: on a page nobody translated layer two did nothing: {"swaps":0,"removed":0,"inserted":0,"restored":0,"returned":0}
+  PASS  5. /nba-my-career phone off: the walk pressed at least two controls: 8: Let's Play! > 🏀 2026The league as i > ⏪ 2003-04 throwbackThe > PG > SG > SF > PF > C
+  PASS  6. /nba-my-career phone off: the route error boundary never appeared
+  PASS  7. /nba-my-career phone off: no NotFoundError
+
+/nba-my-career#bank phone off
+  PASS  1. /nba-my-career#bank phone off: the translator is off: 0 font element(s)
+  PASS  1. /nba-my-career#bank phone off: the guard is installed on the page
+  PASS  8. /nba-my-career#bank phone off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  10. /nba-my-career#bank phone off: the page says what React holds, at every look: 253 element(s) with words of their own at the fullest look
+  PASS  11. /nba-my-career#bank phone off: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /nba-my-career#bank phone off: no text the translator will not take again is back on the page
+  PASS  17. /nba-my-career#bank phone off: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  9. /nba-my-career#bank phone off: on a page nobody translated layer two did nothing: {"swaps":0,"removed":0,"inserted":0,"restored":0,"returned":0}
+  PASS  15. /nba-my-career#bank phone off: The Bank's statement got a line that came in and a line that went out: 5 of 5 presses, 5 line(s) at the end: ["+$200k","-$200k","+$50k","+$50k","-$100k"]
+  PASS  16. /nba-my-career#bank phone off: every figure in the statement has its sign in front and nothing behind: 5 line(s) read: ["+$200k","-$200k","+$50k","+$50k","-$100k"]
+  PASS  5. /nba-my-career#bank phone off: the walk pressed at least two controls: 8: Let's Play! > Enter the draft > 💰The Bank$0.3M$2.5M a > Save half > Take out half > Take it all out > Save it all > Take it all out
+  PASS  6. /nba-my-career#bank phone off: the route error boundary never appeared
+  PASS  7. /nba-my-career#bank phone off: no NotFoundError
+
+/nfl-my-career phone off
+  PASS  1. /nfl-my-career phone off: the translator is off: 0 font element(s)
+  PASS  1. /nfl-my-career phone off: the guard is installed on the page
+  PASS  8. /nfl-my-career phone off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  10. /nfl-my-career phone off: the page says what React holds, at every look: 259 element(s) with words of their own at the fullest look
+  PASS  11. /nfl-my-career phone off: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /nfl-my-career phone off: no text the translator will not take again is back on the page
+  PASS  17. /nfl-my-career phone off: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  9. /nfl-my-career phone off: on a page nobody translated layer two did nothing: {"swaps":0,"removed":0,"inserted":0,"restored":0,"returned":0}
+  PASS  5. /nfl-my-career phone off: the walk pressed at least two controls: 8: Let's Play! > 🏈 2026The league as i > ⏪ 2005 throwbackThe 20 > QB > RB > WR > TE > LB
+  PASS  6. /nfl-my-career phone off: the route error boundary never appeared
+  PASS  7. /nfl-my-career phone off: no NotFoundError
+
+/stadium-tycoon phone off
+  PASS  1. /stadium-tycoon phone off: the translator is off: 0 font element(s)
+  PASS  1. /stadium-tycoon phone off: the guard is installed on the page
+  PASS  8. /stadium-tycoon phone off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  10. /stadium-tycoon phone off: the page says what React holds, at every look: 257 element(s) with words of their own at the fullest look
+  PASS  11. /stadium-tycoon phone off: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /stadium-tycoon phone off: no text the translator will not take again is back on the page
+  PASS  17. /stadium-tycoon phone off: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  9. /stadium-tycoon phone off: on a page nobody translated layer two did nothing: {"swaps":0,"removed":0,"inserted":0,"restored":0,"returned":0}
+  PASS  5. /stadium-tycoon phone off: the walk pressed at least two controls: 8: Close the rules > 🏟️ Stadium > 🎓 Academy > Close the rules > 🏆 League > Northquay Swifts > 🏟️ Stadium > How it works
+  PASS  6. /stadium-tycoon phone off: the route error boundary never appeared
+  PASS  7. /stadium-tycoon phone off: no NotFoundError
+
+/college-grid phone off
+  PASS  1. /college-grid phone off: the translator is off: 0 font element(s)
+  PASS  1. /college-grid phone off: the guard is installed on the page
+  PASS  8. /college-grid phone off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  10. /college-grid phone off: the page says what React holds, at every look: 191 element(s) with words of their own at the fullest look
+  PASS  11. /college-grid phone off: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /college-grid phone off: no text the translator will not take again is back on the page
+  PASS  17. /college-grid phone off: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  9. /college-grid phone off: on a page nobody translated layer two did nothing: {"swaps":0,"removed":0,"inserted":0,"restored":0,"returned":0}
+  PASS  5. /college-grid phone off: the walk pressed at least two controls: 8: Close > How to play > Let's Play! > + > Type a player name... > Report > Close > How to play
+  PASS  6. /college-grid phone off: the route error boundary never appeared
+  PASS  7. /college-grid phone off: no NotFoundError
+
+/soccer-career phone off
+  PASS  1. /soccer-career phone off: the translator is off: 0 font element(s)
+  PASS  1. /soccer-career phone off: the guard is installed on the page
+  PASS  8. /soccer-career phone off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  2. /soccer-career phone off: the create screen drew
+  PASS  2. /soccer-career phone off: all three picks registered, Brazil among them: nationality box "Brazil", position box "Striker (ST)", era box "Current era (2025 start)"
+  PASS  2. /soccer-career phone off: each pick can be READ in its box: readable: nationality, position, era; hidden: none
+  PASS  3. /soccer-career phone off: the create flow reached the career: h1 "🇧🇷Joao Teste", create form gone, save Joao Teste, Brazil, youth, age 16
+  PASS  4. /soccer-career phone off: one season forward and the hub still stands: age 16 to 17 on press 1, h1 "🇧🇷Joao Teste", phase contract_offer; the walk went on to age 18, phase random_events
+  PASS  10. /soccer-career phone off: the page says what React holds, at every look: 321 element(s) with words of their own at the fullest look
+  PASS  11. /soccer-career phone off: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /soccer-career phone off: no text the translator will not take again is back on the page
+  PASS  17. /soccer-career phone off: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  9. /soccer-career phone off: on a page nobody translated layer two did nothing: {"swaps":0,"removed":0,"inserted":0,"restored":0,"returned":0}
+  PASS  13. /soccer-career phone off: no box holds its placeholder beside its pick: nationality: was "Choose nationality", now "Brazil🇧🇷"; position: was "Choose position", now "Striker (ST)"; era: was "Choose era", now "Current era (2025 start)"
+  PASS  14. /soccer-career phone off: the age in the hub's line is the age in the save: 13 look(s) at the line, 12 of them after a birthday
+  PASS  5. /soccer-career phone off: the walk pressed at least two controls: 20: Brazil🇧🇷 > Striker (ST) > Current era (2025 star > 🎲 Generate Starting P > 🎲 Roll again > 🎮 Customize your buil > ✅ Lock in build > ⚽ Begin Career > Next Year
+  PASS  6. /soccer-career phone off: the route error boundary never appeared
+  PASS  7. /soccer-career phone off: no NotFoundError
+
+/build-your-xi phone off
+  PASS  1. /build-your-xi phone off: the translator is off: 0 font element(s)
+  PASS  1. /build-your-xi phone off: the guard is installed on the page
+  PASS  8. /build-your-xi phone off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  10. /build-your-xi phone off: the page says what React holds, at every look: 200 element(s) with words of their own at the fullest look
+  PASS  11. /build-your-xi phone off: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /build-your-xi phone off: no text the translator will not take again is back on the page
+  PASS  17. /build-your-xi phone off: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  9. /build-your-xi phone off: on a page nobody translated layer two did nothing: {"swaps":0,"removed":0,"inserted":0,"restored":0,"returned":0}
+  PASS  5. /build-your-xi phone off: the walk pressed at least two controls: 8: Got it! > How to play > Let's Play! > 4-3-311 players > GK > LB > CB > RB
+  PASS  6. /build-your-xi phone off: the route error boundary never appeared
+  PASS  7. /build-your-xi phone off: no NotFoundError
+
+/front-office phone off
+  PASS  1. /front-office phone off: the translator is off: 0 font element(s)
+  PASS  1. /front-office phone off: the guard is installed on the page
+  PASS  8. /front-office phone off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  10. /front-office phone off: the page says what React holds, at every look: 250 element(s) with words of their own at the fullest look
+  PASS  11. /front-office phone off: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /front-office phone off: no text the translator will not take again is back on the page
+  PASS  17. /front-office phone off: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  9. /front-office phone off: on a page nobody translated layer two did nothing: {"swaps":0,"removed":0,"inserted":0,"restored":0,"returned":0}
+  PASS  5. /front-office phone off: the walk pressed at least two controls: 8: Arizona CardinalsNFC W > Process, patience, all > 👔Roster52 under contr > Hub > 💼Free agency$151M of  > Sign > Abandon franchise and  > Atlanta FalconsNFC Sou
+  PASS  6. /front-office phone off: the route error boundary never appeared
+  PASS  7. /front-office phone off: no NotFoundError
+
+/ desktop off
+  PASS  1. / desktop off: the translator is off: 0 font element(s)
+  PASS  1. / desktop off: the guard is installed on the page
+  PASS  8. / desktop off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  10. / desktop off: the page says what React holds, at every look: 1058 element(s) with words of their own at the fullest look
+  PASS  11. / desktop off: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. / desktop off: no text the translator will not take again is back on the page
+  PASS  17. / desktop off: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  9. / desktop off: on a page nobody translated layer two did nothing: {"swaps":0,"removed":0,"inserted":0,"restored":0,"returned":0}
+  PASS  5. / desktop off: the walk pressed at least two controls: 8: Scroll the daily puzzl > Make a free one > Close > Pin Cage Clash > Pin Deadline Day > Pin Gauntlet Draft: NH > Pin Aussie Rules Manag > 🥊 Ali
+  PASS  6. / desktop off: the route error boundary never appeared
+  PASS  7. / desktop off: no NotFoundError
+
+/club-manager desktop off
+  PASS  1. /club-manager desktop off: the translator is off: 0 font element(s)
+  PASS  1. /club-manager desktop off: the guard is installed on the page
+  PASS  8. /club-manager desktop off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  10. /club-manager desktop off: the page says what React holds, at every look: 317 element(s) with words of their own at the fullest look
+  PASS  11. /club-manager desktop off: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /club-manager desktop off: no text the translator will not take again is back on the page
+  PASS  17. /club-manager desktop off: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  9. /club-manager desktop off: on a page nobody translated layer two did nothing: {"swaps":0,"removed":0,"inserted":0,"restored":0,"returned":0}
+  PASS  5. /club-manager desktop off: the walk pressed at least two controls: 8: How to play > Let's Play! > 📅2026-27Today. Real s > 📅 Starting 2026-27 > 🏟️2020-21Haaland and  > 🏟️ Starting 2020-21 > 🦊2015-16The Leicester > 🦊 Starting 2015-16
+  PASS  6. /club-manager desktop off: the route error boundary never appeared
+  PASS  7. /club-manager desktop off: no NotFoundError
+
+/nba-my-career desktop off
+  PASS  1. /nba-my-career desktop off: the translator is off: 0 font element(s)
+  PASS  1. /nba-my-career desktop off: the guard is installed on the page
+  PASS  8. /nba-my-career desktop off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  10. /nba-my-career desktop off: the page says what React holds, at every look: 253 element(s) with words of their own at the fullest look
+  PASS  11. /nba-my-career desktop off: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /nba-my-career desktop off: no text the translator will not take again is back on the page
+  PASS  17. /nba-my-career desktop off: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  9. /nba-my-career desktop off: on a page nobody translated layer two did nothing: {"swaps":0,"removed":0,"inserted":0,"restored":0,"returned":0}
+  PASS  5. /nba-my-career desktop off: the walk pressed at least two controls: 8: Let's Play! > 🏀 2026The league as i > ⏪ 2003-04 throwbackThe > PG > SG > SF > PF > C
+  PASS  6. /nba-my-career desktop off: the route error boundary never appeared
+  PASS  7. /nba-my-career desktop off: no NotFoundError
+
+/nba-my-career#bank desktop off
+  PASS  1. /nba-my-career#bank desktop off: the translator is off: 0 font element(s)
+  PASS  1. /nba-my-career#bank desktop off: the guard is installed on the page
+  PASS  8. /nba-my-career#bank desktop off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  10. /nba-my-career#bank desktop off: the page says what React holds, at every look: 253 element(s) with words of their own at the fullest look
+  PASS  11. /nba-my-career#bank desktop off: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /nba-my-career#bank desktop off: no text the translator will not take again is back on the page
+  PASS  17. /nba-my-career#bank desktop off: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  9. /nba-my-career#bank desktop off: on a page nobody translated layer two did nothing: {"swaps":0,"removed":0,"inserted":0,"restored":0,"returned":0}
+  PASS  15. /nba-my-career#bank desktop off: The Bank's statement got a line that came in and a line that went out: 5 of 5 presses, 5 line(s) at the end: ["+$200k","-$200k","+$50k","+$50k","-$100k"]
+  PASS  16. /nba-my-career#bank desktop off: every figure in the statement has its sign in front and nothing behind: 5 line(s) read: ["+$200k","-$200k","+$50k","+$50k","-$100k"]
+  PASS  5. /nba-my-career#bank desktop off: the walk pressed at least two controls: 8: Let's Play! > Enter the draft > 💰The Bank$0.3M$2.5M a > Save half > Take out half > Take it all out > Save it all > Take it all out
+  PASS  6. /nba-my-career#bank desktop off: the route error boundary never appeared
+  PASS  7. /nba-my-career#bank desktop off: no NotFoundError
+
+/nfl-my-career desktop off
+  PASS  1. /nfl-my-career desktop off: the translator is off: 0 font element(s)
+  PASS  1. /nfl-my-career desktop off: the guard is installed on the page
+  PASS  8. /nfl-my-career desktop off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  10. /nfl-my-career desktop off: the page says what React holds, at every look: 259 element(s) with words of their own at the fullest look
+  PASS  11. /nfl-my-career desktop off: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /nfl-my-career desktop off: no text the translator will not take again is back on the page
+  PASS  17. /nfl-my-career desktop off: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  9. /nfl-my-career desktop off: on a page nobody translated layer two did nothing: {"swaps":0,"removed":0,"inserted":0,"restored":0,"returned":0}
+  PASS  5. /nfl-my-career desktop off: the walk pressed at least two controls: 8: Let's Play! > 🏈 2026The league as i > ⏪ 2005 throwbackThe 20 > QB > RB > WR > TE > LB
+  PASS  6. /nfl-my-career desktop off: the route error boundary never appeared
+  PASS  7. /nfl-my-career desktop off: no NotFoundError
+
+/stadium-tycoon desktop off
+  PASS  1. /stadium-tycoon desktop off: the translator is off: 0 font element(s)
+  PASS  1. /stadium-tycoon desktop off: the guard is installed on the page
+  PASS  8. /stadium-tycoon desktop off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  10. /stadium-tycoon desktop off: the page says what React holds, at every look: 257 element(s) with words of their own at the fullest look
+  PASS  11. /stadium-tycoon desktop off: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /stadium-tycoon desktop off: no text the translator will not take again is back on the page
+  PASS  17. /stadium-tycoon desktop off: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  9. /stadium-tycoon desktop off: on a page nobody translated layer two did nothing: {"swaps":0,"removed":0,"inserted":0,"restored":0,"returned":0}
+  PASS  5. /stadium-tycoon desktop off: the walk pressed at least two controls: 8: Close the rules > 🏟️ Stadium > 🎓 Academy > Close the rules > 🏆 League > Northquay Swifts > 🏟️ Stadium > How it works
+  PASS  6. /stadium-tycoon desktop off: the route error boundary never appeared
+  PASS  7. /stadium-tycoon desktop off: no NotFoundError
+
+/college-grid desktop off
+  PASS  1. /college-grid desktop off: the translator is off: 0 font element(s)
+  PASS  1. /college-grid desktop off: the guard is installed on the page
+  PASS  8. /college-grid desktop off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  10. /college-grid desktop off: the page says what React holds, at every look: 191 element(s) with words of their own at the fullest look
+  PASS  11. /college-grid desktop off: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /college-grid desktop off: no text the translator will not take again is back on the page
+  PASS  17. /college-grid desktop off: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  9. /college-grid desktop off: on a page nobody translated layer two did nothing: {"swaps":0,"removed":0,"inserted":0,"restored":0,"returned":0}
+  PASS  5. /college-grid desktop off: the walk pressed at least two controls: 8: Close > How to play > Let's Play! > + > Type a player name... > Report > Close > How to play
+  PASS  6. /college-grid desktop off: the route error boundary never appeared
+  PASS  7. /college-grid desktop off: no NotFoundError
+
+/soccer-career desktop off
+  PASS  1. /soccer-career desktop off: the translator is off: 0 font element(s)
+  PASS  1. /soccer-career desktop off: the guard is installed on the page
+  PASS  8. /soccer-career desktop off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  2. /soccer-career desktop off: the create screen drew
+  PASS  2. /soccer-career desktop off: all three picks registered, Brazil among them: nationality box "Brazil", position box "Striker (ST)", era box "Current era (2025 start)"
+  PASS  2. /soccer-career desktop off: each pick can be READ in its box: readable: nationality, position, era; hidden: none
+  PASS  3. /soccer-career desktop off: the create flow reached the career: h1 "🇧🇷Joao Teste", create form gone, save Joao Teste, Brazil, youth, age 16
+  PASS  4. /soccer-career desktop off: one season forward and the hub still stands: age 16 to 17 on press 1, h1 "🇧🇷Joao Teste", phase contract_offer; the walk went on to age 18, phase random_events
+  PASS  10. /soccer-career desktop off: the page says what React holds, at every look: 321 element(s) with words of their own at the fullest look
+  PASS  11. /soccer-career desktop off: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /soccer-career desktop off: no text the translator will not take again is back on the page
+  PASS  17. /soccer-career desktop off: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  9. /soccer-career desktop off: on a page nobody translated layer two did nothing: {"swaps":0,"removed":0,"inserted":0,"restored":0,"returned":0}
+  PASS  13. /soccer-career desktop off: no box holds its placeholder beside its pick: nationality: was "Choose nationality", now "Brazil🇧🇷"; position: was "Choose position", now "Striker (ST)"; era: was "Choose era", now "Current era (2025 start)"
+  PASS  14. /soccer-career desktop off: the age in the hub's line is the age in the save: 13 look(s) at the line, 12 of them after a birthday
+  PASS  5. /soccer-career desktop off: the walk pressed at least two controls: 20: Brazil🇧🇷 > Striker (ST) > Current era (2025 star > 🎲 Generate Starting P > 🎲 Roll again > 🎮 Customize your buil > ✅ Lock in build > ⚽ Begin Career > Next Year
+  PASS  6. /soccer-career desktop off: the route error boundary never appeared
+  PASS  7. /soccer-career desktop off: no NotFoundError
+
+/build-your-xi desktop off
+  PASS  1. /build-your-xi desktop off: the translator is off: 0 font element(s)
+  PASS  1. /build-your-xi desktop off: the guard is installed on the page
+  PASS  8. /build-your-xi desktop off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  10. /build-your-xi desktop off: the page says what React holds, at every look: 200 element(s) with words of their own at the fullest look
+  PASS  11. /build-your-xi desktop off: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /build-your-xi desktop off: no text the translator will not take again is back on the page
+  PASS  17. /build-your-xi desktop off: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  9. /build-your-xi desktop off: on a page nobody translated layer two did nothing: {"swaps":0,"removed":0,"inserted":0,"restored":0,"returned":0}
+  PASS  5. /build-your-xi desktop off: the walk pressed at least two controls: 8: Got it! > How to play > Let's Play! > 4-3-311 players > GK > LB > CB > RB
+  PASS  6. /build-your-xi desktop off: the route error boundary never appeared
+  PASS  7. /build-your-xi desktop off: no NotFoundError
+
+/front-office desktop off
+  PASS  1. /front-office desktop off: the translator is off: 0 font element(s)
+  PASS  1. /front-office desktop off: the guard is installed on the page
+  PASS  8. /front-office desktop off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  10. /front-office desktop off: the page says what React holds, at every look: 250 element(s) with words of their own at the fullest look
+  PASS  11. /front-office desktop off: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /front-office desktop off: no text the translator will not take again is back on the page
+  PASS  17. /front-office desktop off: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  9. /front-office desktop off: on a page nobody translated layer two did nothing: {"swaps":0,"removed":0,"inserted":0,"restored":0,"returned":0}
+  PASS  5. /front-office desktop off: the walk pressed at least two controls: 8: Arizona CardinalsNFC W > Process, patience, all > 👔Roster52 under contr > Hub > 💼Free agency$151M of  > Sign > Abandon franchise and  > Atlanta FalconsNFC Sou
+  PASS  6. /front-office desktop off: the route error boundary never appeared
+  PASS  7. /front-office desktop off: no NotFoundError
+
+EVERY WALK
+  page                 view     text   boundary                          NotFound  guard line  moved nodes  stale text  steps
+  /soccer-career       phone    off    none                              0         0           0            0           22
+  /                    phone    off    none                              0         0           0            0           9
+  /club-manager        phone    off    none                              0         0           0            0           9
+  /nba-my-career       phone    off    none                              0         0           0            0           9
+  /nba-my-career#bank  phone    off    none                              0         0           0            0           9
+  /nfl-my-career       phone    off    none                              0         0           0            0           9
+  /stadium-tycoon      phone    off    none                              0         0           0            0           9
+  /college-grid        phone    off    none                              0         0           0            0           9
+  /build-your-xi       phone    off    none                              0         0           0            0           9
+  /front-office        phone    off    none                              0         0           0            0           9
+  /soccer-career       desktop  off    none                              0         0           0            0           22
+  /                    desktop  off    none                              0         0           0            0           9
+  /club-manager        desktop  off    none                              0         0           0            0           9
+  /nba-my-career       desktop  off    none                              0         0           0            0           9
+  /nba-my-career#bank  desktop  off    none                              0         0           0            0           9
+  /nfl-my-career       desktop  off    none                              0         0           0            0           9
+  /stadium-tycoon      desktop  off    none                              0         0           0            0           9
+  /college-grid        desktop  off    none                              0         0           0            0           9
+  /build-your-xi       desktop  off    none                              0         0           0            0           9
+  /front-office        desktop  off    none                              0         0           0            0           9
+
+BY PAGE
+  /soccer-career       broke in 0 of 2 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0; stale text at most 0
+  /                    broke in 0 of 2 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0; stale text at most 0
+  /club-manager        broke in 0 of 2 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0; stale text at most 0
+  /nba-my-career       broke in 0 of 2 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0; stale text at most 0
+  /nba-my-career#bank  broke in 0 of 2 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0; stale text at most 0
+  /nfl-my-career       broke in 0 of 2 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0; stale text at most 0
+  /stadium-tycoon      broke in 0 of 2 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0; stale text at most 0
+  /college-grid        broke in 0 of 2 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0; stale text at most 0
+  /build-your-xi       broke in 0 of 2 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0; stale text at most 0
+  /front-office        broke in 0 of 2 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0; stale text at most 0
+
+WHAT THE THREE BOXES READ after the picks
+  phone    off    nationality "Brazil" (readable) | position "Striker (ST)" (readable) | era "Current era (2025 start)" (readable)
+  desktop  off    nationality "Brazil" (readable) | position "Striker (ST)" (readable) | era "Current era (2025 start)" (readable)
+
+LAYER TWO on 20 page load(s): 0 text node(s) seen taken, 0 removal(s) and 0 insert(s) put through, 0 string(s) handed back fresh, 0 node(s) taken up again after the translator gave them back. Text the translator will not take again, back on the page: 0.
+
+nothing left this machine: 32 request(s) to the database host aborted, other hosts aborted [fonts.googleapis.com], 8 screenshot(s) in /home/runner/work/_temp/rc-out/files/translated-notranslate
+  PASS  9. with the translator off the guard printed nothing and no call named a moved node: 0 of 20 page(s) printed the guard's line, 0 moved node(s)
+
+control "notranslate": green with the translator off, zero guard lines, zero moved nodes.
+playTranslatedPage: 242 checks, 0 failed

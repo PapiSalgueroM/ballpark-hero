@@ -1,0 +1,9 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+translated-plain exit=0 128s | playTranslatedPage: 447 checks, 0 failed
+translated-nolive exit=1 128s | playTranslatedPage: 447 checks, 73 failed (control "nolive", red on purpose)
+translated-notranslate exit=0 60s | playTranslatedPage: 242 checks, 0 failed
+translated-noguard exit=1 165s | playTranslatedPage: 183 checks, 16 failed (control "noguard", red on purpose)
+translated-undocopies exit=1 128s | playTranslatedPage: 447 checks, 8 failed (control "undocopies", red on purpose)
+storage-main exit=0 271s | playStorageBlocked: 826 checks, 0 failed
+storage-open exit=0 246s | playStorageBlocked (control open): 743 checks, 0 failed
+storage-raw exit=1 632s | playStorageBlocked (control raw): 786 checks, 266 failed
