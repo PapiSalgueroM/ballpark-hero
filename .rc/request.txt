@@ -1,0 +1,7 @@
+simHomeCopy: node scripts/simHomeCopy.mjs
+simStaleChunk: node scripts/simStaleChunk.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+vitest-boundary: node_modules/.bin/vitest run src/test/translateGuard.test.tsx src/test/soccerCareerSaveRecovery.test.tsx src/test/soccerCareerSaveRetry.test.tsx --testTimeout=300000 --hookTimeout=120000
