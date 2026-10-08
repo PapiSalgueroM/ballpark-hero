@@ -1,0 +1,6 @@
+#!playwright
+#!serial
+mainbuild: git worktree add /tmp/r1138-main 6f57ce78 && ln -s "$PWD/node_modules" /tmp/r1138-main/node_modules && W="$PWD" && cd /tmp/r1138-main && node node_modules/vite/bin/vite.js build --outDir "$W/.sim-control/race-main-1138/dist" 2>&1 | tail -3 && ls "$W/.sim-control/race-main-1138/dist" | head -3
+measure-1138: RACE_EXPECT=stale RACE_DIST=.sim-control/race-main-1138/dist node scripts/playAutocompleteRace.mjs
+measure-2138: RACE_EXPECT=stale RACE_SEED=2138 RACE_WIDTHS=390 RACE_DIST=.sim-control/race-main-1138/dist node scripts/playAutocompleteRace.mjs
+measure-3138: RACE_EXPECT=stale RACE_SEED=3138 RACE_WIDTHS=390 RACE_DIST=.sim-control/race-main-1138/dist node scripts/playAutocompleteRace.mjs
