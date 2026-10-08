@@ -1,0 +1,7 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fit exit=1 62s | playLiveMatchFit: 2 failures.
+fit-bar exit=1 58s | playLiveMatchFit: control bar turned section 3 red and left sections 1, 2 and 4 green, as it must.
+sweepWeight exit=1 19s | sweepWeight: 3 failures
+playClubManager exit=0 270s | Played Club Manager through its own screens. 0 findings.
+simPrerender exit=1 0s | simPrerender: 7 failures
+sizes exit=0 0s | dist/assets/ClubManager-SlXXBR7s.js raw=77850 gzip=24000
