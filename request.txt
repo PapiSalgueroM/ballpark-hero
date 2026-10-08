@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+cost: COST=1 CAREER_PRESSES=12 COST_REPS=3 OUT_JSON=$RC_OUT/cost.json ENGINES=chromium node scripts/playTranslatedPage.mjs
+m5pt: node_modules/.bin/esbuild src/lib/translateGuard.ts --bundle --format=iife --global-name=TG --outfile=$RC_OUT/tg5-pt.js && BUNDLE=$RC_OUT/tg5-pt.js PAGE=page5.js TL=pt node .rc/x/measure.mjs $RC_OUT/records-5-pt.json
+m6pt: node_modules/.bin/esbuild src/lib/translateGuard.ts --bundle --format=iife --global-name=TG --outfile=$RC_OUT/tg6-pt.js && BUNDLE=$RC_OUT/tg6-pt.js PAGE=page6.js TL=pt node .rc/x/measure.mjs $RC_OUT/records-6-pt.json
