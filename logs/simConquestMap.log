@@ -1,0 +1,32 @@
+1) Every region carries exactly one owner colour
+2) No two bordering territories with different owners look alike
+   2000 states rendered across 5 sports, 153600 region draws, 76432 of them patterned
+   regions with other than one fill: 0; fills not matching the owner's look: 0
+   209212 borders between different owners, 0 look alike; nearest plain-on-plain border dE 12.1 over 52433 (floor 12); nearest border of any kind dE 0.0
+   NFL: 32 teams, 2 of 6 looks used, 9 patterned, 0 pairs indistinguishable league wide
+   NBA: 30 teams, 3 of 6 looks used, 14 patterned, 0 pairs indistinguishable league wide
+   MLB: 30 teams, 4 of 6 looks used, 16 patterned, 0 pairs indistinguishable league wide
+   NHL: 32 teams, 6 of 6 looks used, 13 patterned, 0 pairs indistinguishable league wide
+   SOCCER: 96 teams, 6 of 6 looks used, 61 patterned, 0 pairs indistinguishable league wide
+3) The takeover marks exactly the flipped regions, and spreads from the winner's border
+   NFL borders: 56 rows, one way edges: none, regions drawn without borders or bordered without a drawing: none
+   NBA borders: 58 rows, one way edges: none, regions drawn without borders or bordered without a drawing: none
+   MLB borders: 58 rows, one way edges: none, regions drawn without borders or bordered without a drawing: none
+   NHL borders: 58 rows, one way edges: none, regions drawn without borders or bordered without a drawing: none
+   SOCCER borders: 154 rows, one way edges: none, regions drawn without borders or bordered without a drawing: none
+   1831 takeovers rendered (1011 of them whole empires), 7802 region flips, 0 overlays naming the wrong region set, 0 wrong old owners, 0 regions in a wave that does not border the wave before it, 0 overlays drawn with no takeover
+4) The 5 sports go through the same component, and no other file draws regions
+   files in src/components/conquest: 14; files drawing region paths: ConquestRegionMap.tsx
+5) The fight is on the map: rings before the roll, the exact gain after
+   213 single-winner takeovers checked: 0 with wrong role rings, 0 without a dashed pending arrow, 0 with a wrong result chip; unclaimed target rings wrong on 0 of 5 sports
+6) One label per empire, and reduced motion turns the takeover into a plain colour change
+   14226 empires seen, 0 renders with a label count off, 0 labels that were neither the name nor the code; names on 3333, codes on 10893
+   rendered style carries a reduced motion rule that stills the takeover overlay: yes
+7) The stage props draw what they say, and nothing when absent
+   camera: 480 takeover pairs focused, 365 zoomed past 1, 48 at the 2.6 cap, 0 without exactly one transformed group, 0 with a scale outside [1, 2.6], 0 with data-camera-scale off, 0 with the focused box outside the viewBox, 0 with a layer outside the group, 0 without the 450ms transition, 0 without the reduced motion rule; 0 of 10 null or empty cameras wrong
+   home rings: 213 teams listed across 5 sports, 0 without exactly one ring at the label point, 0 rings for a region that does not exist
+   highlight: 250 empires highlighted, 0 with the wrong ring set, 0 fills lifted or not against their owner, stolen region kept its own filter on 250 of 250
+   caps: 14226 labels over 400 renders, 0 not the uppercase name or code, 0 without tracking, 0 under the 5.5 floor, 0 renders without the caps attribute; names on 2466 caps labels against 3253 classic; fitter wrong on 0 of 219 teams
+   identity: 200 renders with no new prop, 0 differ from the explicit defaults, 0 carry a stage layer, attribute or rule; card class wrong on 0, stage class wrong on 0
+
+ALL CONQUEST MAP CHECKS PASSED

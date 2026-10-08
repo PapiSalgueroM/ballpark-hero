@@ -1,0 +1,14 @@
+1) Swing stays inside its cap
+   worst swing 0.140 (cap 0.14)
+2) Overextension penalises the runaway leader
+   even 0.000 | growing 0.028 | bloated -0.064
+3) Landless teams fight harder
+   landless 0.033 vs nearly-landless -0.038
+4) Ratings still decide most games
+   KC over CAR: 0.628 raw -> 0.603 vs a healthy rival empire
+5) 40 seeded seasons
+   40/40 seasons had a wiped-out team recover land
+   39/40 seasons changed leader after halfway
+   22 different teams finished on top across 40 seasons
+
+ALL CONQUEST CHECKS PASSED

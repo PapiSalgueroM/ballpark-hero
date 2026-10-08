@@ -1,0 +1,59 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mNFL Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mNFL Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 544 -> 544, period 17, phase recap -> recap
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mNFL Front Office, full rosters: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mNFL Front Office, full rosters: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 544 -> 544, period 17, phase recap -> recap
+
+ [32m✓[39m src/components/front-office/FrontOfficeCuts.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[33m 2181[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office: a cut costs dead money on the board[2m > [22mquotes the dead money before the tap, asks twice, and only then charges it [33m 300[2mms[22m[39m
+ [32m✓[39m src/components/front-office/FrontOfficeDraftCapital.test.tsx [2m([22m[2m25 tests[22m[2m)[22m[33m 3273[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL draft capital outcomes[2m > [22mpersists rival batch progress across refresh and never repeats the completed offseason [33m 303[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL draft capital outcomes[2m > [22mrejects a durable terminal draft counter instead of showing a dead Continue [33m 325[2mms[22m[39m
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mNBA Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mNBA Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 2400 -> 2400, period 20, phase recap -> recap
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mMLB Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mMLB Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 4860 -> 4860, period 27, phase recap -> recap
+
+ [32m✓[39m src/components/front-office/FrontOfficeTagDepth.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 835[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office: the depth chart and the franchise tag on the board[2m > [22mopens the chart from the Roster box, swaps two men on two taps, saves the order and moves strength [33m 473[2mms[22m[39m
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mNHL Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mNHL Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 2560 -> 2560, period 20, phase recap -> recap
+
+ [32m✓[39m src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx [2m([22m[2m25 tests[22m[2m)[22m[33m 4947[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office: the season closes once[2m > [22mdraws the recap again after a reload and does not replay the season [33m 362[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office: the season closes once[2m > [22mplays the next season after the draft: the record refuses only the closed one [33m 300[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office, full rosters: the season closes once[2m > [22mdraws the recap again after a reload and does not replay the season [33m 341[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office, full rosters: the season closes once[2m > [22mplays the next season after the draft: the record refuses only the closed one [33m 963[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmDeskMount.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[32m 277[2mms[22m[39m
+ [32m✓[39m src/components/front-office/FrontOfficePromotion.test.tsx [2m([22m[2m26 tests[22m[2m)[22m[33m 1394[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL practice promotion cap outcomes[2m > [22msaves the exact affordable player and depth and restores that promotion once [33m 407[2mms[22m[39m
+ [32m✓[39m src/components/front-office/FrontOfficeFullRoster.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1769[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office: a full roster on the board[2m > [22mcalls a practice squad man up while there is a spot, and greys the button at 53 [33m 376[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office: a full roster on the board[2m > [22mmarks a rating that is only a draft spot on the depth chart and both trade lists [33m 309[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office: a full roster on the board[2m > [22mlocks Play with the count owed until a GM over 53 cuts down himself [33m 548[2mms[22m[39m
+ [32m✓[39m src/test/frontOfficeSaveRecovery.test.tsx [2m([22m[2m36 tests[22m[2m)[22m[33m 5253[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL actual save recovery[2m > [22mrestores current progress, contracts and counters without rewriting storage [33m 643[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL actual save recovery[2m > [22mloads supported older saves and advances the same league once [33m 509[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL actual save recovery[2m > [22mallows a fresh club to replace the unusable save without clearing another game [33m 450[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual save recovery[2m > [22mloads supported older saves and advances the same league once [33m 401[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual save recovery[2m > [22mkeeps the existing duplicate and missing entity ID repair [33m 336[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual save recovery[2m > [22mallows a fresh club to replace the unusable save without clearing another game [33m 727[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmLineupPanel.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 405[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmSeatCard.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 158[2mms[22m[39m
+ [32m✓[39m src/components/front-office/FrontOfficeRatingEvidence.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 889[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL saved opening rating evidence[2m > [22mexplains a partial new estimate instead of reusing the old draft-only claim [33m 338[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmBooksPanel.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 168[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmInboxPanel.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 59[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m13 passed[39m[22m[90m (13)[39m
+[2m      Tests [22m [1m[32m177 passed[39m[22m[90m (177)[39m
+[2m   Start at [22m 14:25:57
+[2m   Duration [22m 16.00s[2m (transform 3.75s, setup 996ms, collect 11.29s, tests 21.61s, environment 6.46s, prepare 1.39s)[22m
+

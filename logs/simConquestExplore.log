@@ -1,0 +1,21 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/conquestExplore.test.tsx > conquest Explore geometry > bounds zoom and pan, retaining the viewport center and the full map aspect ratio 2ms
+ ✓ src/test/conquestExplore.test.tsx > conquest Explore geometry > fits actual region bounds with padding and clamps edge fits within the map 1ms
+ ✓ src/test/conquestExplore.test.tsx > actual Conquest map Explore > starts quiet and retains the map, hit nodes, fills and selected details across open, filter and close 232ms
+ ✓ src/test/conquestExplore.test.tsx > actual Conquest map Explore > combines search, owner and availability against current territory facts and gives truthful empty counts 132ms
+ ✓ src/test/conquestExplore.test.tsx > actual Conquest map Explore > counts a power-up only on unclaimed land and updates filters and details from live ownership 66ms
+ ✓ src/test/conquestExplore.test.tsx > actual Conquest map Explore > uses a bounded manual viewport with a stable identity camera and restores the automatic camera on exit 551ms
+ ✓ src/test/conquestExplore.test.tsx > actual Conquest map Explore > fits only matching regions without dropping hit nodes and keeps clones of current facts quiet 64ms
+ ✓ src/test/conquestExplore.test.tsx > actual Conquest map Explore > suppresses the drag click only, uses the starting screen matrix, then allows a fresh tap and cancelled gesture 183ms
+ ✓ src/test/conquestExplore.test.tsx > actual Conquest map Explore > hands the camera back immediately on scene gating and resets view, filters and mode for a new sport 100ms
+ ✓ src/test/conquestExplore.test.tsx > actual Conquest map Explore > keeps focused controls independent of territory keyboard activation and preserves Space details and close focus 131ms
+
+ Test Files  1 passed (1)
+      Tests  10 passed (10)
+   Start at  14:27:31
+   Duration  2.70s (transform 177ms, setup 62ms, collect 296ms, tests 1.46s, environment 348ms, prepare 81ms)
+
+
+simConquestExplore: ten actual map/helper checks passed for live combined filters, bounded fit/zoom/pan, retained regions, drag-versus-keyboard routing and immediate scene camera hand-back.

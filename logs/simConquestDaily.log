@@ -1,0 +1,26 @@
+1) A store holding only what was written by round N restores the identical run, every N, every sport (2026-09-12)
+   nfl: 21 settled rounds, 21 restored identical, 7/21 called, champion MIA, score 225
+   nba: 17 settled rounds, 17 restored identical, 6/17 called, champion HOU, score 200
+   mlb: 17 settled rounds, 17 restored identical, 6/17 called, champion TOR, score 150
+   nhl: 19 settled rounds, 19 restored identical, 7/19 called, champion FLA, score 599
+   soccer: 13 settled rounds, 13 restored identical, 5/13 called, champion AVL, score 131
+2) Reloading at any round and then calling everything right pays no more than not reloading
+   nfl: ceiling 575 (every call right), honest run 225; 20 reload points, 0 where reloading gained points (biggest 0), 0 where the score did not equal the ceiling minus the calls already missed; most a reload could have bought before this round 325
+   nba: ceiling 475 (every call right), honest run 200; 16 reload points, 0 where reloading gained points (biggest 0), 0 where the score did not equal the ceiling minus the calls already missed; most a reload could have bought before this round 250
+   mlb: ceiling 425 (every call right), honest run 150; 16 reload points, 0 where reloading gained points (biggest 0), 0 where the score did not equal the ceiling minus the calls already missed; most a reload could have bought before this round 250
+   nhl: ceiling 899 (every call right), honest run 599; 18 reload points, 0 where reloading gained points (biggest 0), 0 where the score did not equal the ceiling minus the calls already missed; most a reload could have bought before this round 300
+   soccer: ceiling 331 (every call right), honest run 131; 12 reload points, 0 where reloading gained points (biggest 0), 0 where the score did not equal the ceiling minus the calls already missed; most a reload could have bought before this round 200
+3) After the season ends, twenty reloads restore nothing playable and the result never moves
+   nfl: 20 reloads, 0 restored a playable run, 0 changed the stored result, 0 moved the streak; ceiling 575 against the leaderboard cap 943
+   nba: 20 reloads, 0 restored a playable run, 0 changed the stored result, 0 moved the streak; ceiling 475 against the leaderboard cap 849
+   mlb: 20 reloads, 0 restored a playable run, 0 changed the stored result, 0 moved the streak; ceiling 425 against the leaderboard cap 849
+   nhl: 20 reloads, 0 restored a playable run, 0 changed the stored result, 0 moved the streak; ceiling 899 against the leaderboard cap 899
+   soccer: 20 reloads, 0 restored a playable run, 0 changed the stored result, 0 moved the streak; ceiling 331 against the leaderboard cap 1037
+4) Every conquest route renders the one shared board with a sport injected
+   imperialism board files in src/components/conquest: ImperialismBoardShared.tsx; routes wired to the shared board: 5 of 5
+   sport keys nfl, nba, mlb, nhl, soccer; daily record slugs conquest-nfl, conquest-nba, conquest-mlb, conquest-nhl, conquest-soccer
+5) Every path in the board that produces a new run writes the log in the same function
+   run producing paths: start, play; without a log write: none; restore sits in a useState initialiser: yes
+   negative: with one saveDailyRun call removed the audit names start, so it is reading the code
+
+ALL CONQUEST DAILY CHECKS PASSED

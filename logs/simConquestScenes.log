@@ -1,0 +1,32 @@
+Seeded seasons: 5 sports x 8 dates through the daily rng, a mixed caller right every third call
+   nfl: 8 seasons, settled rounds 21/21/21/21/21/21/21/21, hits 7/7/7/7/7/7/7/7
+   nba: 8 seasons, settled rounds 17/17/17/17/17/17/17/17, hits 6/6/6/6/6/6/6/6
+   mlb: 8 seasons, settled rounds 17/17/17/17/17/17/17/17, hits 6/6/6/6/6/6/6/6
+   nhl: 8 seasons, settled rounds 19/19/19/19/19/19/19/19, hits 7/7/7/7/7/7/7/7
+   soccer: 8 seasons, settled rounds 13/13/13/13/13/13/13/13, hits 5/5/5/5/5/5/5/5
+   40 seasons, 696 settled rounds in all
+1) For every settled round the scene list is exactly that round's games in engine order, one of them featured
+   696 settled rounds, 11832 scenes; 0 rounds with a scene count off the game count, 0 scenes not the engine's game at that index, 0 out of range indexes that returned scenes
+   696 rounds with exactly one featured scene, 0 with the wrong or no featured scene, 0 featured scenes with a wrong call or hit, 0 other scenes carrying a call or hit; hits 248, misses 448
+2) Every scene's score is the engine's, and the scene length is the four beats with the takeover dropped when nothing moved
+   11832 scenes: 0 with a score off the engine's, 0 with a length off the beats; 3303 moved land, 8529 moved nothing; beats 700+900+600+900=3100, wheel 1600ms
+3) Every scene flips exactly the regions its game flipped, the scenes chain back to the engine's map, and the renderer marks exactly those regions
+   11832 scenes: 0 flipped lists off the game's, 0 before/after diffs not naming exactly those regions with the loser as old owner, 0 scenes not opening on the previous scene's map, 0 after maps off the independent recomputation, 0 rounds whose last scene does not close on the engine's next map
+   426 scenes with land moving rendered through the real map, 0 overlays naming a different region set
+4) The four season records equal an independent recomputation over history and rounds, every finished run, every sport
+   40 finished runs: 0 with the wrong keys, titles or order (empty case included), disagreements with the recomputation: landGrab 0, reign 0, conquered 0, collapse 0; records naming a team: landGrab 40, reign 40, conquered 40, collapse 40; 0 details not naming the team and a real round
+5) history is one map per settled round plus the opening map, replayRun reproduces it, and the daily record is still the club plus the calls
+   40 runs: 0 with history off rounds plus one, 0 phase transitions that broke the invariant, 0 not opening on the seed, 0 not closing on the run's owners, 0 sharing an object between entries; 696 mid season snapshots, 0 not a prefix of the finished run; 0 replays not byte identical; 0 daily records not the Round 476 shape
+6) The wheel lands on the featured attacker in the sport's team order and the map's colours, and arrowAngle answers the compass
+   696 featured pairings: 0 wheels not in the sport's team order, 0 not landing on the attacker, 0 with a wedge off the map's colour or name; 0 unknown attackers that landed; compass cases wrong 0 of 5, random arrows off [0, 360): 0 of 200
+   5 maps rendered with none of the Round 529 props, 0 drew a camera, home or highlight layer or carried a size or label style attribute
+7) The player mounts the score only at its beats with the scene's score, hands the map the right frame, the wheel lands on the attacker, the timeline and the strip are the season, and reduced motion stills every animation
+   174 settled rounds, 1364 player renders over beats card, fight, score, takeover, done: 0 with the cursor off the initial one, 0 with a score before its beat, 0 without one at its beat, 0 with a score that is not the scene's, 0 with the wrong card, 0 not naming both teams, 0 handing the map the wrong frame, 0 with the gain chip wrong, 0 without a Skip button
+   761 featured renders: 0 with the call wrong or on the wrong scene, 0 with the hit wrong or early; 174 reduced motion plays, 0 not landing on the last scene at done with nothing playing
+   92 wheels: 0 not one wedge per team in order, 0 not landing on the attacker (unknown attacker included), 0 needles without the angle, 0 showing the needle or landed while still spinning, 0 with an image, 0 drawing a path
+   30 timelines: 0 without one stop per kept map or the right label; 30 strips: 0 not one chip per team, 0 without the favourite first, 0 out of rank order, 0 with a count off the engine's, 0 with the summary wrong, 0 compact strips not top eight plus more
+   4 style blocks (map, player, wheel, timeline): 0 without the reduced motion rule, 0 animated classes not stilled; camera transform none under reduced motion: yes
+8) The scene card, the wheel and the timeline live in their own files, the board imports all five and seasonRecords, and no other file draws them
+   14 files in src/components/conquest; 5 owned attributes, 0 missing from their owner, 0 stray carriers; the board imports 5 of 5 new components and renders 5, seasonRecords imported and called: yes, record rows carry the data attributes: yes; 5 shapes scanned, 0 drawn outside their files
+
+ALL CONQUEST SCENE CHECKS PASSED

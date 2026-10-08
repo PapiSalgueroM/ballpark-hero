@@ -1,0 +1,76 @@
+   .. nfl seed 1: 10 seasons in 3.7 s
+   .. nfl seed 2: 10 seasons in 3.3 s
+   .. nfl seed 3: 10 seasons in 2.5 s
+   .. nba seed 1: 10 seasons in 0.9 s
+   .. nba seed 2: 10 seasons in 0.6 s
+   .. nba seed 3: 10 seasons in 0.6 s
+   .. mlb seed 1: 10 seasons in 2.2 s
+   .. mlb seed 2: 10 seasons in 2.1 s
+   .. mlb seed 3: 10 seasons in 1.8 s
+   .. nhl seed 1: 10 seasons in 0.7 s
+   .. nhl seed 2: 10 seasons in 0.4 s
+   .. nhl seed 3: 10 seasons in 0.4 s
+
+== nfl: 1080 periods, 4771.0 covers, 10.7 claims, 0 engine returns per 3 leagues
+   tier size by summer: 16.0 16.0 16.0 16.0 16.0 16.0 16.0 16.0 16.0 16.0; pool: 39 40 40 40 40 40 40 40 40 40
+   ok   [1] nfl: 1080 periods checked
+   ok   [1] nfl: no cap broken (0)
+   ok   [1] nfl: no farm step took a club over the cap (0)
+   ok   [2] nfl: every cover came from the club's own tier (0 bad)
+   ok   [2] nfl: covers by league 4796 4706 4811, floor 2400 each
+   ok   [3] nfl: claims by league 11 12 9, floor 2 each
+   ok   [3] nfl: no claimed man came back by a farm or waiver path (0)
+   ok   [3] nfl: the return probe was live in 3 of 3 leagues
+   ok   [3] nfl: the loser never got him back in the probe (0 back)
+   ok   [4] nfl: young squad men gain 2.48 a summer, young active men 1.50 (n 5165 and 5052); gap by league 0.98 0.97 0.99, floor 0.5 each
+   ok   [6] nfl: farm block 1720 to 1959 bytes over 30 summers (the league itself 326221 to 331741), budget 2400
+   ok   [6] nfl: no ledger row for a man who left (0)
+   ok   [7] nfl: every kind of move ran live (waivers, a squad man cut; Expose to waivers; Call up)
+   ok   [7] nfl: 1498 buttons did what they say (0 did not)
+
+== nba: 1260 periods, 2930.0 covers, 0.0 claims, 0 engine returns per 3 leagues
+   tier size by summer: 3.0 3.0 3.0 3.0 3.0 3.0 3.0 3.0 3.0 3.0; pool: 30 58 30 82 30 78 30 76 30 76
+   ok   [1] nba: 1260 periods checked
+   ok   [1] nba: no cap broken (0)
+   ok   [2] nba: every cover came from the club's own tier (0 bad)
+   ok   [2] nba: covers by league 2966 2950 2874, floor 1400 each
+   --   [3] nba: no farm move exposes an NBA man, section 3 not graded (claims seen 0)
+   ok   [6] nba: farm block 12637 to 12837 bytes over 30 summers (the league itself 74499 to 75079), budget 16000
+   ok   [6] nba: no ledger row for a man who left (0)
+   ok   [7] nba: every kind of move ran live (Sign to a standard contract; refused after a call up)
+   ok   [7] nba: 360 buttons did what they say (0 did not)
+
+== mlb: 2520 periods, 4221.3 covers, 388.0 claims, 2 engine returns per 3 leagues
+   tier size by summer: 19.5 17.7 18.9 16.8 17.7 17.1 17.3 17.0 17.6 16.9; pool: 1 173 78 309 100 199 146 269 116 224
+   ok   [1] mlb: 2520 periods checked
+   ok   [1] mlb: no cap broken (0)
+   ok   [2] mlb: every cover came from the club's own tier (0 bad)
+   ok   [2] mlb: covers by league 4208 4222 4234, floor 2000 each
+   ok   [3] mlb: claims by league 397 380 387, floor 200 each
+   ok   [3] mlb: no claimed man came back by a farm or waiver path (0)
+   ok   [3] mlb: the return probe was live in 3 of 3 leagues
+   ok   [3] mlb: the loser never got him back in the probe (0 back)
+   ok   [5] mlb: 240.0 draftees a league in the tier, 0.0 to the pool, 0 misplaced
+   ok   [6] mlb: farm block 80821 to 98881 bytes over 30 summers (the league itself 139346 to 146028), budget 128000
+   ok   [6] mlb: no ledger row for a man who left (0)
+   ok   [7] mlb: every kind of move ran live (Expose to waivers; Option him; Add to the 40 man and call up; Call up)
+   ok   [7] mlb: 1009 buttons did what they say (0 did not)
+
+== nhl: 1290 periods, 1412.0 covers, 161.0 claims, 0 engine returns per 3 leagues
+   tier size by summer: 8.8 8.8 9.6 8.8 8.9 8.8 9.0 8.8 8.9 8.8; pool: 3 92 30 155 45 113 51 119 60 109
+   ok   [1] nhl: 1290 periods checked
+   ok   [1] nhl: no cap broken (0)
+   ok   [1] nhl: no farm step took a club over the cap (0)
+   ok   [2] nhl: every cover came from the club's own tier (0 bad)
+   ok   [2] nhl: covers by league 1430 1415 1391, floor 650 each
+   ok   [3] nhl: claims by league 159 162 162, floor 85 each
+   ok   [3] nhl: no claimed man came back by a farm or waiver path (0)
+   ok   [3] nhl: the return probe was live in 3 of 3 leagues
+   ok   [3] nhl: the loser never got him back in the probe (0 back)
+   ok   [5] nhl: 240.0 draftees a league in the tier, 0.0 to the pool, 0 misplaced
+   ok   [6] nhl: farm block 52287 to 66380 bytes over 30 summers (the league itself 85427 to 86403), budget 88000
+   ok   [6] nhl: no ledger row for a man who left (0)
+   ok   [7] nhl: every kind of move ran live (Expose to waivers; Call up; Send to the farm club)
+   ok   [7] nhl: 495 buttons did what they say (0 did not)
+
+simGmFarm: 49 checks, 0 failures, 19.0 s

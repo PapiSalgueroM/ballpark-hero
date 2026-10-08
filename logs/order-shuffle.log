@@ -1,0 +1,44 @@
+0) the inputs are there and counted
+   32 clubs; starters rows 480, bench rows 1158, practice rows 525, lineage rows 2163; the frozen arm holds 2163 men
+   production rows 1469: agree 289, settled 40, disagree 149, one source 991; lines a rating may read 326; ledger rows 16, confirmed fullbacks 15
+   starters per group (a line with 8 or more games and half the reference workload): QB 33 (reference 460), RB 54 (reference 173), WR 84 (reference 44), TE 35 (reference 52)
+   offense men among the fifteen with 2025 play and no production term: 0
+1) one number per man
+   men with two numbers: 0 shipped (2163 men, 4326 printed numbers); on main 459 of the 480 fifteen had two (the seed on the row, another through the override)
+   NFL Conquest, printed and not asserted on this branch: 320 typed men; 247 on the same club in the roster, of whom 225 print another number there; 34 are on another club; 39 are in no club's game roster (reserve list men, name variants, unsigned men); 2 of 34 free agent rows name a rostered man (Za'Darius Smith 82, Stefon Diggs 88)
+   NBA, printed only (decision 10): 300 typed Conquest men and 300 Front Office opening estimates; 300 men are in both on the same club, of whom 278 print two numbers (median gap 4, largest 16); the MLB and NHL Conquest files carry no player row
+2) the production file is two sourced
+   disputed and feeding nothing: 149 (core 0, bench 105, practice 44); settled by a third source: 40, every one siding with source B
+3) the order agrees with the field
+   QB: 33 starters, rank agreement with 2025 production 0.769 shipped, 0.512 main, bar main + 0.12
+   RB: 54 starters, rank agreement with 2025 production 0.866 shipped, 0.489 main, bar main + 0.18
+   WR: 84 starters, rank agreement with 2025 production 0.830 shipped, 0.378 main, bar main + 0.22
+   TE: 35 starters, rank agreement with 2025 production 0.742 shipped, 0.226 main, bar main + 0.25
+   holdout, not circular, printed only: rated on 2023 and 2024 alone, against 2025 production: QB 0.199 layer against 0.223 v2.2 (n 29); RB 0.632 layer against 0.347 v2.2 (n 43); WR 0.632 layer against 0.364 v2.2 (n 75); TE 0.228 layer against 0.065 v2.2 (n 29)
+   defence, one source and printed only, the baseline for the next part: DE label 0.750 (n 50); DT and NT label 0.652 (n 101); LB shelf 0.333 (n 180); CB 0.477 (n 112); S 0.499 (n 109)
+4) no man outranks a team mate with ten times his workload
+   club and shelf pairs where a man with a tenth of the leader's workload is rated above him: 0 shipped, 2 on main (LV RB: Connor Heyward 77, Dylan Laube 68 over Ashton Jeanty 65 | MIA WR: Ryan Miller 72 over Malik Washington 66)
+5) the top of a group played
+   QB: of the 10 highest rated, men who played 8 games on under 60 percent of a starter's load a game: 0 shipped, 0 main
+   QB: of the ten most productive starters a game, among the fifteen highest rated: 9 shipped, 8 main
+   RB: of the 10 highest rated, men who played 8 games on under 60 percent of a starter's load a game: 0 shipped, 3 main (Samaje Perine, Justice Hill, Ray Davis)
+   RB: of the ten most productive starters a game, among the fifteen highest rated: 9 shipped, 8 main
+   WR: of the 15 highest rated, men who played 8 games on under 60 percent of a starter's load a game: 0 shipped, 0 main
+   WR: of the ten most productive starters a game, among the fifteen highest rated: 8 shipped, 5 main, bar 7
+   TE: of the 10 highest rated, men who played 8 games on under 60 percent of a starter's load a game: 0 shipped, 0 main
+   TE: of the ten most productive starters a game, among the fifteen highest rated: 9 shipped, 6 main, bar 8
+6) the mark is counted
+   marked on active rosters: 940 shipped, 930 main; QB 21 of 89 (main 21), RB 27 of 122 (main 17), WR 36 of 192 (main 36), TE 26 of 120 (main 26), OL 300 of 300 (main 300), DL 83 of 236 (main 83), LB 258 of 258 (main 258), DB 189 of 321 (main 189)
+   the record labels 16 men FB; 15 are confirmed by both pages and rated flat; on the normal path: BUF|Brock Lampe|RB 66
+   active fullbacks in the top two of their club's backs by number: 0 shipped, 5 main (CLE Michael Burton, DAL Hunter Luepke, KC Ben VanSumeren, LV Connor Heyward, SF Kyle Juszczyk)
+   active backs who are not fullbacks at or under 63: 0 shipped (none), 0 main
+   marked offense men (fullbacks apart) who hold an agreed 2025 line of 4 or more games: 0
+7) the league does not flip
+   control shuffle: the offense numbers are dealt to other clubs' men on the same shelf before the league is built (216 starters rows, 427 bench and practice rows)
+   (a) opening club strength, rank agreement between what ships and main over 32 clubs: -0.224, floor 0.34
+   FAIL [7] (a) the clubs keep their order of strength: -0.224 under 0.34
+   (b) mean wins of the clubs in strength ranks 1 to 8: 10.80 shipped (sampling error 0.023), 10.95 main (0.040), bar main plus or minus 0.62
+   (b) mean wins of the clubs in strength ranks 9 to 24: 8.56 shipped (sampling error 0.011), 8.57 main (0.035), printed only
+   (b) mean wins of the clubs in strength ranks 25 to 32: 6.08 shipped (sampling error 0.038), 5.91 main (0.035), bar main plus or minus 0.57
+   (c) the spread of the 32 clubs' mean wins: 1.83 shipped (sampling error 0.017), 1.96 main (0.009), bar main plus or minus 0.47
+control shuffle fired: sections 7 went red, expected exactly 7; in section 7 the parts (a), expected exactly (a)

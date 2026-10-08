@@ -1,0 +1,33 @@
+NEGATIVE CONTROL ON: nodefault; check 1 must go red
+1) a save from before the desk plays exactly as the engine did before this round
+  FAIL [1]: seed 11 season 1: the league is not the one the engine before this round played (79178398d4 vs a51613d007)
+  FAIL [1]: seed 11 season 2: the league is not the one the engine before this round played (38cc873125 vs 40a672505f)
+  FAIL [1]: seed 11 season 3: the league is not the one the engine before this round played (20b9ecd564 vs aec8efbcbc)
+  FAIL [1]: seed 22 season 1: the league is not the one the engine before this round played (992d47a547 vs e616d4d11a)
+  FAIL [1]: seed 22 season 2: the league is not the one the engine before this round played (616a79f056 vs e9934b9dff)
+  FAIL [1]: seed 22 season 3: the league is not the one the engine before this round played (8d49f6d8eb vs a175872a81)
+  FAIL [1]: seed 33 season 1: the league is not the one the engine before this round played (9a212a6ea5 vs 854d4b1203)
+  FAIL [1]: seed 33 season 2: the league is not the one the engine before this round played (dc4fa1fba2 vs f727cd6599)
+  FAIL [1]: (further failures in this check not printed)
+   9 seasons replayed against 8f27082f
+2) over ten seasons a seed, no expiring man of yours leaves without a recorded decision, applied as written
+   1689 expiring men: 844 decided by the GM, 845 by the staff's rule; 148 draftees came up after exactly four seasons, 60 with the option; 40 tagged men held by the tag
+   the board runs the summer and the draft through the desk (read from FrontOfficeBoard.tsx)
+3) no trade lands after the deadline, and deals do land before it
+   736 deals before the deadline, 700 tries after it, 0 landed; 1551 buyer and 551 seller places at the deadline
+   1400 seed holders at the deadline, every one a buyer; a cut by record alone would have missed 5
+   1700 weeks where the trade paths' refusal matched the window; 4 of 4 board trade handlers ask the deadline first
+4) picks are conserved league wide after every deal and every summer
+   846 ledger checks, 733 deals with a pick in them
+5) the staff's effects change their consumer at every level step
+  FAIL [5]: a level 1 staff moves the game: 0.4805474969743853 against 0.5010964673342736 with no desk
+   each post alone: hc win 0.481 to 0.511; oc win 0.481 to 0.547; dc win 0.481 to 0.506; scouting miss 2.199 to 0.556; trainer out 3.000 to 2.253
+   the staff a new franchise opens with: edge 0.32 (NYJ) to 2.58 (LA), median 1.33 (JAX)
+   edge 0.00 to 3.00, win 0.481 to 0.602, miss 2.20 to 0.56, weeks out 3.00 to 2.25
+6) migration keeps every marker, a corrupt block resets alone, a trade moves the contract and leaves the dead money the rule sets
+   736 walk deals left dead money on your cap, every one the rule's figure
+   the package cap check counts a leaver's dead money: 12M of room refused (refused), 15M passed (passed)
+7) every desk panel draws, and the re-sign desk shows a tile for every expiring man
+   4 panels drawn, 8 re-sign tiles for 8 expiring men
+control nodefault: red in ["1","5"], wanted 1
+simNflGmDesk: control nodefault fired (10 failures, as it should)
