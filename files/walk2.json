@@ -1,0 +1,456 @@
+[
+ {
+  "kind": "PASS",
+  "where": "byx2-390-mo",
+  "message": "a tap outside closes the panel and keeps the text",
+  "extra": {
+   "options": [],
+   "listbox": null,
+   "value": "qzxalp"
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx2-390-mo",
+  "message": "coming back shows Finding players, not the names from before",
+  "extra": {
+   "options": [],
+   "listbox": "Finding players..."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx2-390-mo",
+  "message": "coming back searched again",
+  "extra": {
+   "extraRequests": 2
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx2-390-mo",
+  "message": "the page did not scroll through leave and return",
+  "extra": {
+   "before": 72,
+   "after": 72
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx2-390-mo",
+  "message": "an answer that lands after the player left opens nothing",
+  "extra": {
+   "options": [],
+   "listbox": null
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx2-390-mo",
+  "message": "back after leaving mid search: Finding players, no name fetched before leaving",
+  "extra": {
+   "options": [],
+   "listbox": "Finding players..."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx2-390-mo",
+  "message": "and it searched again",
+  "extra": {
+   "extraRequests": 2
+  }
+ },
+ {
+  "kind": "INFO",
+  "where": "byx2-390-mo",
+  "message": "typing three more letters at 150 ms a key under an open list",
+  "extra": {
+   "frames": 46,
+   "framesWithNames": 15,
+   "framesFinding": 31,
+   "collapses": 1,
+   "panelHeights": [
+    119,
+    46,
+    60
+   ]
+  }
+ },
+ {
+  "kind": "INFO",
+  "where": "byx2-390-mo",
+  "message": "requests",
+  "extra": {
+   "searches": 12,
+   "validator": 0,
+   "blocked": 2
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx2-1280-rm",
+  "message": "a tap outside closes the panel and keeps the text",
+  "extra": {
+   "options": [],
+   "listbox": null,
+   "value": "qzxalp"
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx2-1280-rm",
+  "message": "coming back shows Finding players, not the names from before",
+  "extra": {
+   "options": [],
+   "listbox": "Finding players..."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx2-1280-rm",
+  "message": "coming back searched again",
+  "extra": {
+   "extraRequests": 2
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx2-1280-rm",
+  "message": "the page did not scroll through leave and return",
+  "extra": {
+   "before": 84,
+   "after": 84
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx2-1280-rm",
+  "message": "an answer that lands after the player left opens nothing",
+  "extra": {
+   "options": [],
+   "listbox": null
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx2-1280-rm",
+  "message": "back after leaving mid search: Finding players, no name fetched before leaving",
+  "extra": {
+   "options": [],
+   "listbox": "Finding players..."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx2-1280-rm",
+  "message": "and it searched again",
+  "extra": {
+   "extraRequests": 2
+  }
+ },
+ {
+  "kind": "INFO",
+  "where": "byx2-1280-rm",
+  "message": "typing three more letters at 150 ms a key under an open list",
+  "extra": {
+   "frames": 45,
+   "framesWithNames": 14,
+   "framesFinding": 31,
+   "collapses": 1,
+   "panelHeights": [
+    119,
+    46,
+    60
+   ]
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx2-1280-rm",
+  "message": "tabbing out of the box drops the list",
+  "extra": {
+   "trail": [
+    "BUTTON[option] in opts=2",
+    "BUTTON[option] in opts=2",
+    "BUTTON out opts=0"
+   ],
+   "filled": "0/11",
+   "value": "qzxalp"
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx2-1280-rm",
+  "message": "focus back by keyboard: Finding players, then a fresh list",
+  "extra": {
+   "options": [],
+   "listbox": "Finding players..."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx2-1280-rm",
+  "message": "the keyboard return searched again",
+  "extra": {
+   "extraRequests": 2
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx2-1280-rm",
+  "message": "Escape closes the panel and keeps the text",
+  "extra": {
+   "listbox": null,
+   "value": "qzxalp"
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx2-1280-rm",
+  "message": "after Escape, one more letter and Enter picks the only name: one check, one slot",
+  "extra": {
+   "filled": "1/11",
+   "requests": 1
+  }
+ },
+ {
+  "kind": "INFO",
+  "where": "byx2-1280-rm",
+  "message": "requests",
+  "extra": {
+   "searches": 18,
+   "validator": 1,
+   "blocked": 2
+  }
+ },
+ {
+  "kind": "INFO",
+  "where": "mxi-tap-main-fast",
+  "message": "one tap on the only name",
+  "extra": {
+   "spent": true,
+   "guessBefore": "GUESS 1 OF 3",
+   "guessAfter": "GUESS 2 OF 3",
+   "tried": "Already tried: Qzxalpha Fixture",
+   "value": "",
+   "option": {
+    "y": 452,
+    "h": 58
+   },
+   "lock": {
+    "y": 457,
+    "h": 52
+   },
+   "tapAt": {
+    "x": 195,
+    "y": 481
+   }
+  }
+ },
+ {
+  "kind": "INFO",
+  "where": "mxi-tap-main-90",
+  "message": "one tap on the only name",
+  "extra": {
+   "spent": false,
+   "guessBefore": "GUESS 1 OF 3",
+   "guessAfter": "GUESS 1 OF 3",
+   "tried": null,
+   "value": "Qzxalpha Fixture",
+   "option": {
+    "y": 452,
+    "h": 58
+   },
+   "lock": {
+    "y": 457,
+    "h": 52
+   },
+   "tapAt": {
+    "x": 195,
+    "y": 481
+   }
+  }
+ },
+ {
+  "kind": "INFO",
+  "where": "mxi-tap-main-250",
+  "message": "one tap on the only name",
+  "extra": {
+   "spent": false,
+   "guessBefore": "GUESS 1 OF 3",
+   "guessAfter": "GUESS 1 OF 3",
+   "tried": null,
+   "value": "Qzxalpha Fixture",
+   "option": {
+    "y": 452,
+    "h": 58
+   },
+   "lock": {
+    "y": 457,
+    "h": 52
+   },
+   "tapAt": {
+    "x": 195,
+    "y": 481
+   }
+  }
+ },
+ {
+  "kind": "INFO",
+  "where": "mxi-tap-branch-fast",
+  "message": "one tap on the only name",
+  "extra": {
+   "spent": true,
+   "guessBefore": "GUESS 1 OF 3",
+   "guessAfter": "GUESS 2 OF 3",
+   "tried": "Already tried: Qzxalpha Fixture",
+   "value": "",
+   "option": {
+    "y": 452,
+    "h": 58
+   },
+   "lock": {
+    "y": 457,
+    "h": 52
+   },
+   "tapAt": {
+    "x": 195,
+    "y": 481
+   }
+  }
+ },
+ {
+  "kind": "INFO",
+  "where": "mxi-tap-branch-90",
+  "message": "one tap on the only name",
+  "extra": {
+   "spent": false,
+   "guessBefore": "GUESS 1 OF 3",
+   "guessAfter": "GUESS 1 OF 3",
+   "tried": null,
+   "value": "Qzxalpha Fixture",
+   "option": {
+    "y": 452,
+    "h": 58
+   },
+   "lock": {
+    "y": 457,
+    "h": 52
+   },
+   "tapAt": {
+    "x": 195,
+    "y": 481
+   }
+  }
+ },
+ {
+  "kind": "INFO",
+  "where": "mxi-tap-branch-250",
+  "message": "one tap on the only name",
+  "extra": {
+   "spent": false,
+   "guessBefore": "GUESS 1 OF 3",
+   "guessAfter": "GUESS 1 OF 3",
+   "tried": null,
+   "value": "Qzxalpha Fixture",
+   "option": {
+    "y": 452,
+    "h": 58
+   },
+   "lock": {
+    "y": 457,
+    "h": 52
+   },
+   "tapAt": {
+    "x": 195,
+    "y": 481
+   }
+  }
+ },
+ {
+  "kind": "INFO",
+  "where": "mxi-tap",
+  "message": "guess spent by ONE tap on the name (true means the tap also locked the guess in)",
+  "extra": {
+   "main-fast": true,
+   "main-90": false,
+   "main-250": false,
+   "branch-fast": true,
+   "branch-90": false,
+   "branch-250": false
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "mxi-tap",
+  "message": "fast: the branch spends a guess on one tap only where main does too",
+  "extra": {
+   "main": true,
+   "branch": true
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "mxi-tap",
+  "message": "90: the branch spends a guess on one tap only where main does too",
+  "extra": {
+   "main": false,
+   "branch": false
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "mxi-tap",
+  "message": "250: the branch spends a guess on one tap only where main does too",
+  "extra": {
+   "main": false,
+   "branch": false
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "oldsave",
+  "message": "main: one wrong guess is on the board",
+  "extra": {
+   "guess": "GUESS 2 OF 3",
+   "tried": "Already tried: Qzxalpha Fixture"
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "oldsave",
+  "message": "branch: the save written by main loads as guess 2 of 3 with the tried name",
+  "extra": {
+   "guess": "GUESS 2 OF 3",
+   "tried": "Already tried: Qzxalpha Fixture"
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "oldsave",
+  "message": "branch: a second wrong guess plays on from the old save",
+  "extra": {
+   "guess": "GUESS 3 OF 3",
+   "tried": "Already tried: Qzxalpha Fixture, Qzxbravo Van Fixture"
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "oldsave",
+  "message": "branch: after a reload both tries are still there",
+  "extra": {
+   "guess": "GUESS 3 OF 3",
+   "tried": "Already tried: Qzxalpha Fixture, Qzxbravo Van Fixture"
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "oldsave",
+  "message": "no key main wrote is missing after the branch played",
+  "extra": {
+   "gone": [],
+   "newKeys": []
+  }
+ }
+]

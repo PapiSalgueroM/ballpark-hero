@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+mainbuild: git worktree add /tmp/r1138-rv-main ddc2c0425242f956fc0d4e8c3e8f1900908dca1a && ln -s "$PWD/node_modules" /tmp/r1138-rv-main/node_modules && W="$PWD" && cd /tmp/r1138-rv-main && node node_modules/vite/bin/vite.js build --outDir "$W/.sim-control/rv-main/dist" 2>&1 | tail -3 && ls "$W/.sim-control/rv-main/dist" | head -3
+walk2: MAIN_DIST=.sim-control/rv-main/dist node .rc/x/rv-walk2.mjs
+mut3: MUT_PLAIN=1 MUT_TAG=-c MUT_ONLY=MN1-door-open-for-nation,MN2-door-label-fallback,MN3-enter-during-composition,MN4-commit-leaves-search-in-flight,MN5-no-giveup-after-history,MN6-cancel-does-not-abort,MN8-every-unverified-says-allowance,MN15-any-blur-leaves node .rc/x/rv-mut.mjs

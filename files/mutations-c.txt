@@ -1,0 +1,21 @@
+MN1-door-open-for-nation: exit=0 signal=null tests=49/49 failed=0
+MN2-door-label-fallback: exit=1 signal=null tests=48/49 failed=1
+      - lineupValidatorClient > the door stays shut for a club label with no stored names
+MN3-enter-during-composition: exit=1 signal=null tests=61/62 failed=1
+      - playerAutocompleteStale > Enter picks the only name showing when the page asks for a pick from the list
+MN4-commit-leaves-search-in-flight: exit=0 signal=null tests=62/62 failed=0
+MN5-no-giveup-after-history: exit=1 signal=null tests=48/49 failed=1
+      - lineupValidatorClient > a pick given up while its history is read is dropped
+MN6-cancel-does-not-abort: exit=1 signal=null tests=44/49 failed=5
+      - lineupValidatorClient > a reroll cancels the check in flight
+      - lineupValidatorClient > a real refusal reads as a refusal
+      - lineupValidatorClient > a valid answer is accepted
+      - lineupValidatorClient > a club row the position gate refuses is still refused
+      - lineupValidatorClient > a pick given up while its history is read is dropped
+MN8-every-unverified-says-allowance: exit=1 signal=null tests=45/49 failed=4
+      - lineupValidatorClient > reads both flags at once
+      - lineupValidatorClient > reads a plain unverified answer
+      - lineupValidatorClient > a 200 with both flags is not counted
+      - lineupValidatorClient > a 200 unverified answer is not counted
+MN15-any-blur-leaves: exit=1 signal=null tests=61/62 failed=1
+      - playerAutocompleteStale > drops the list when the player leaves the box and searches again on return
