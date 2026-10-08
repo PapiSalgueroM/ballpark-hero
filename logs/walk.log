@@ -1,0 +1,121 @@
+WALK phone-motion: 34 steps in 79s, stop="", translated=true, reached=true, age 16 -> 19 -> 19
+  worst at one look: structure 2, raw 2, digits 13; different in all: structure 4, raw 8, digits 12
+  age line: 24 looks, 0 wrong
+  boxes: {"nationality":{"react":"Brazil🇧🇷","shown":"Brasil"},"position":{"react":"Striker (ST)","shown":"Striker (ST)"},"era":{"react":"Current era (2025 start)","shown":"Current era (2025 start)"}}
+  restore: {"how":"banner button :1.restore","fontsBefore":544,"backsBefore":0,"ms":904,"fontsAfter":0,"backsAfter":552,"lang":"en","cls":""}
+  layer two stats at the end: {"swaps":1476,"removed":10,"inserted":0,"restored":74}; guard lines 0; NotFoundError 0; errors []
+  net: db aborted 4, other hosts aborted ["fonts.googleapis.com","fonts.gstatic.com","www.google.com"]; last step {"n":"original press 8","pend":0,"fonts":0,"judged":324}
+    structure [translated @ choose position Striker] div.space-y-1.5>button.flex>span: React  | screen "Striker (ST)"
+    structure [translated @ choose era Current era] div.space-y-1.5>button.flex>span: React  | screen "F:Atacante (ST)"
+    structure [translated @ choose era Current era] div.space-y-1.5>button.flex>span: React  | screen "Current era (2025 start)"
+    structure [translated @ Generate Starting Potential] div.space-y-1.5>button.flex>span: React  | screen "F:Era atual (início em 2025)"
+    raw [after show original @ original press 4] div.mt-2>div.text-xs>span: React 🌍 Colombia won the Copa América. | screen 🏆 Won Player of the Month (October 2028)!
+    raw [after show original @ original press 4] div.mt-2>div.text-xs>span: React 🤝 Rival Shows Respect | screen 🌍 Colombia won the Copa América.
+    raw [after show original @ original press 5] div.mt-2>div.text-xs>span: React 📱 🎬 Go viral with celebration clip: gained 0.7M followers! | screen 🏆 Won Player of the Month (October 2028)!
+    raw [after show original @ original press 5] div.mt-2>div.text-xs>span: React 🏪 NEW SPONSORSHIP: Local Brand Deal, €0.5M/year! | screen 🌍 Colombia won the Copa América.
+    raw [after show original @ original press 7] div.mt-2>div.text-xs>span: React 🏪 NEW SPONSORSHIP: Local Brand Deal, €0.5M/year! | screen 🏆 Won Player of the Month (October 2028)!
+    raw [after show original @ original press 7] div.mt-2>div.text-xs>span: React 🧢 Signed with Cousin Ricky. What could go wrong | screen 🌍 Colombia won the Copa América.
+    digits [translated @ translated] div>ol.list-decimal>li: React Roll your starting potential, somewhere in the mid 50s to high 60s, and reroll as many times as you like. Rerolls are fr | screen Role seu potencial inicial, que geralmente fica entre 55 e 60, e role novamente quantas vezes quiser. As rolagens adicio
+    digits [translated @ career press 1] div.grid>div.rounded-lg>div.text-sm: React 63    | screen 63 +1   
+    digits [translated @ career press 1] div.rounded-lg>div.text-sm>span.text-[hsl(var(--wc-green-ink))]: React +1  | screen  
+    digits [translated @ career press 1] div.grid>div.rounded-lg>div.text-sm: React 65    | screen 65 +3   
+    digits [translated @ career press 1] div.rounded-lg>div.text-sm>span.text-[hsl(var(--wc-green-ink))]: React +3  | screen  
+    digits [translated @ career press 1] div.grid>div.rounded-lg>div.text-sm: React 55    | screen 55 +1   
+WALK phone-nolive: 34 steps in 79s, stop="", translated=true, reached=true, age 16 -> 18 -> 19
+  worst at one look: structure 3, raw 4, digits 15; different in all: structure 9, raw 4, digits 25
+  age line: 24 looks, 17 wrong first {"step":"career press 1","shown":"ST · 16 anos · Brasil","save":17,"restored":false}
+  boxes: {"nationality":{"react":"Choose nationalityBrazil🇧🇷","shown":"Escolha a nacionalidade Brazil"},"position":{"react":"Choose positionStriker (ST)","shown":"Escolha a posiçãoStriker (ST)"},"era":{"react":"Choose eraCurrent era (2025 start)","shown":"Escolha a eraCurrent era (2025 start)"}}
+  restore: {"how":"banner button :1.restore","fontsBefore":428,"backsBefore":0,"ms":867,"fontsAfter":0,"backsAfter":436,"lang":"en","cls":""}
+  layer two stats at the end: null; guard lines 1; NotFoundError 0; errors []
+  net: db aborted 4, other hosts aborted ["fonts.googleapis.com","fonts.gstatic.com","www.google.com"]; last step {"n":"original press 8","pend":0,"fonts":0,"judged":311}
+    structure [translated @ choose nationality Brazil] div.space-y-1.5>button.flex>span: React  | screen "F:Escolha a nacionalidade" <span>
+    structure [translated @ choose position Striker] div.space-y-1.5>button.flex>span: React  | screen "F:Escolha a posição" "Striker (ST)"
+    structure [translated @ choose era Current era] div.space-y-1.5>button.flex>span: React  | screen "F:Escolha a posição" "F:Atacante (ST)"
+    structure [translated @ choose era Current era] div.space-y-1.5>button.flex>span: React  | screen "F:Escolha a era" "Current era (2025 start)"
+    structure [translated @ Generate Starting Potential] div.space-y-1.5>button.flex>span: React  | screen "F:Escolha a era" "F:Era atual (início em 2025)"
+    structure [translated @ Lock in build] div.space-y-1.5>button.flex>span: React  | screen "F:Atacante (ST)"
+    raw [after show original @ just after show original] div.flex>div.min-w-0>p.text-xs: React 18 | screen 16
+    raw [after show original @ just after show original] div.mt-2>div.text-xs>span: React 🦅 Lost a footrace to the mascot. The internet will never let go | screen 📋 Joined Coritiba Youth Academy aged 16
+    raw [after show original @ just after show original] div.mt-2>div.text-xs>span: React 🎺 The mariachi band followed him for three days. Prank war: won | screen 📱 🏋️ Post training video: gained 0.1M followers!
+    raw [after show original @ just after show original] div.mt-2>div.text-xs>span: React 🎤 Apologised on camera for the pitchside outburst. The gaffer accepted it in fr | screen 🎭 You leaned into it: The Showman is born
+    digits [translated @ translated] div>ol.list-decimal>li: React Roll your starting potential, somewhere in the mid 50s to high 60s, and reroll as many times as you like. Rerolls are fr | screen Role seu potencial inicial, que geralmente fica entre 55 e 60, e role novamente quantas vezes quiser. As rolagens adicio
+    digits [translated @ Generate Starting Potential] div.bg-card>div.rounded-xl>div.text-6xl: React 59  | screen 49 
+    digits [translated @ career press 1] div.flex>div.min-w-0>p.text-xs: React ST  · Age  17  ·   | screen ST  ·  16 anos  · 
+    digits [translated @ career press 1] div.grid>div.rounded-lg>div.text-sm: React 64    | screen 64 +5   
+    digits [translated @ career press 1] div.rounded-lg>div.text-sm>span.text-[hsl(var(--wc-green-ink))]: React +5  | screen  
+    digits [translated @ career press 1] div.grid>div.rounded-lg>div.text-sm: React 60    | screen 60 +1   
+WALK desktop-reduce: 34 steps in 79s, stop="", translated=true, reached=true, age 16 -> 19 -> 19
+  worst at one look: structure 2, raw 3, digits 15; different in all: structure 2, raw 12, digits 15
+  age line: 24 looks, 0 wrong
+  boxes: {"nationality":{"react":"Brazil🇧🇷","shown":"Brasil"},"position":{"react":"Striker (ST)","shown":"Atacante (ST)"},"era":{"react":"Current era (2025 start)","shown":"Era atual (início em 2025)"}}
+  restore: {"how":"banner button :1.restore","fontsBefore":536,"backsBefore":0,"ms":873,"fontsAfter":0,"backsAfter":544,"lang":"en","cls":""}
+  layer two stats at the end: {"swaps":1450,"removed":9,"inserted":0,"restored":57}; guard lines 0; NotFoundError 0; errors []
+  net: db aborted 4, other hosts aborted ["fonts.googleapis.com","fonts.gstatic.com","www.google.com"]; last step {"n":"original press 8","pend":0,"fonts":0,"judged":321}
+    structure [translated @ choose position Striker] div.space-y-1.5>button.flex>span: React  | screen "F:Atacante (ST)"
+    structure [translated @ choose era Current era] div.space-y-1.5>button.flex>span: React  | screen "F:Era atual (início em 2025)"
+    raw [after show original @ original press 4] div.mt-2>div.text-xs>span: React ⚠️ Your contract is expiring! | screen 🏆 Won Player of the Month (November 2028)!
+    raw [after show original @ original press 4] div.mt-2>div.text-xs>span: React 🌍 Colombia won the Copa América. | screen ⚠️ Your contract is expiring!
+    raw [after show original @ original press 4] div.mt-2>div.text-xs>span: React 🤝 Rival Shows Respect | screen 🌍 Colombia won the Copa América.
+    raw [after show original @ original press 5] div.mt-2>div.text-xs>span: React 🤝 Rival Shows Respect | screen 🏆 Won Player of the Month (November 2028)!
+    raw [after show original @ original press 5] div.mt-2>div.text-xs>span: React 📱 🎬 Go viral with celebration clip: gained 0.7M followers! | screen ⚠️ Your contract is expiring!
+    raw [after show original @ original press 5] div.mt-2>div.text-xs>span: React 🏪 NEW SPONSORSHIP: Local Brand Deal, €0.5M/year! | screen 🌍 Colombia won the Copa América.
+    digits [translated @ translated] div>ol.list-decimal>li: React Roll your starting potential, somewhere in the mid 50s to high 60s, and reroll as many times as you like. Rerolls are fr | screen Role seu potencial inicial, que geralmente fica entre 55 e 60, e role novamente quantas vezes quiser. As rolagens adicio
+    digits [translated @ Customize your build] div>ul.list-disc>li: React Retirement is suggested from age 30 once you drop 10 off your peak or hit 75 overall, forced below 50 overall at 33 or o | screen A aposentadoria é sugerida a partir dos 30 anos, quando você perde 10 pontos em relação ao seu pico de desempenho ou ati
+    digits [translated @ career press 1] div.grid>div.rounded-lg>div.text-sm: React 56    | screen 56 +4   
+    digits [translated @ career press 1] div.rounded-lg>div.text-sm>span.text-[hsl(var(--wc-green-ink))]: React +4  | screen  
+    digits [translated @ career press 1] div.grid>div.rounded-lg>div.text-sm: React 58    | screen 58 +6   
+    digits [translated @ career press 1] div.rounded-lg>div.text-sm>span.text-[hsl(var(--wc-green-ink))]: React +6  | screen  
+WALK desktop-plain: 24 steps in 36s, stop="", translated=undefined, reached=true, age 16 -> 18 -> 18
+  worst at one look: structure 2, raw 0, digits 0; different in all: structure 2, raw 0, digits 0
+  age line: 15 looks, 0 wrong
+  boxes: {"nationality":{"react":"Brazil🇧🇷","shown":"Brazil"},"position":{"react":"Striker (ST)","shown":"Striker (ST)"},"era":{"react":"Current era (2025 start)","shown":"Current era (2025 start)"}}
+  restore: null
+  layer two stats at the end: {"swaps":0,"removed":0,"inserted":0,"restored":0}; guard lines 0; NotFoundError 0; errors []
+  net: db aborted 3, other hosts aborted ["fonts.googleapis.com"]; last step {"n":"career press 14","pend":0,"fonts":0,"judged":302}
+    structure [translated @ choose position Striker] div.space-y-1.5>button.flex>span: React  | screen "Striker (ST)"
+    structure [translated @ choose era Current era] div.space-y-1.5>button.flex>span: React  | screen "Current era (2025 start)"
+WALK desktop-motion: 34 steps in 78s, stop="", translated=true, reached=true, age 16 -> 19 -> 19
+  worst at one look: structure 2, raw 3, digits 15; different in all: structure 2, raw 12, digits 15
+  age line: 24 looks, 0 wrong
+  boxes: {"nationality":{"react":"Brazil🇧🇷","shown":"Brasil"},"position":{"react":"Striker (ST)","shown":"Atacante (ST)"},"era":{"react":"Current era (2025 start)","shown":"Era atual (início em 2025)"}}
+  restore: {"how":"banner button :1.restore","fontsBefore":536,"backsBefore":0,"ms":860,"fontsAfter":0,"backsAfter":544,"lang":"en","cls":""}
+  layer two stats at the end: {"swaps":1450,"removed":9,"inserted":0,"restored":55}; guard lines 0; NotFoundError 0; errors []
+  net: db aborted 4, other hosts aborted ["fonts.googleapis.com","fonts.gstatic.com","www.google.com"]; last step {"n":"original press 8","pend":0,"fonts":0,"judged":321}
+    structure [translated @ choose position Striker] div.space-y-1.5>button.flex>span: React  | screen "F:Atacante (ST)"
+    structure [translated @ choose era Current era] div.space-y-1.5>button.flex>span: React  | screen "F:Era atual (início em 2025)"
+    raw [after show original @ original press 4] div.mt-2>div.text-xs>span: React ⚠️ Your contract is expiring! | screen 🏆 Won Player of the Month (November 2028)!
+    raw [after show original @ original press 4] div.mt-2>div.text-xs>span: React 🌍 Colombia won the Copa América. | screen ⚠️ Your contract is expiring!
+    raw [after show original @ original press 4] div.mt-2>div.text-xs>span: React 🤝 Rival Shows Respect | screen 🌍 Colombia won the Copa América.
+    raw [after show original @ original press 5] div.mt-2>div.text-xs>span: React 🤝 Rival Shows Respect | screen 🏆 Won Player of the Month (November 2028)!
+    raw [after show original @ original press 5] div.mt-2>div.text-xs>span: React 📱 🎬 Go viral with celebration clip: gained 0.7M followers! | screen ⚠️ Your contract is expiring!
+    raw [after show original @ original press 5] div.mt-2>div.text-xs>span: React 🏪 NEW SPONSORSHIP: Local Brand Deal, €0.5M/year! | screen 🌍 Colombia won the Copa América.
+    digits [translated @ translated] div>ol.list-decimal>li: React Roll your starting potential, somewhere in the mid 50s to high 60s, and reroll as many times as you like. Rerolls are fr | screen Role seu potencial inicial, que geralmente fica entre 55 e 60, e role novamente quantas vezes quiser. As rolagens adicio
+    digits [translated @ Customize your build] div>ul.list-disc>li: React Retirement is suggested from age 30 once you drop 10 off your peak or hit 75 overall, forced below 50 overall at 33 or o | screen A aposentadoria é sugerida a partir dos 30 anos, quando você perde 10 pontos em relação ao seu pico de desempenho ou ati
+    digits [translated @ career press 1] div.grid>div.rounded-lg>div.text-sm: React 57    | screen 57 +4   
+    digits [translated @ career press 1] div.rounded-lg>div.text-sm>span.text-[hsl(var(--wc-green-ink))]: React +4  | screen  
+    digits [translated @ career press 1] div.grid>div.rounded-lg>div.text-sm: React 59    | screen 59 +6   
+    digits [translated @ career press 1] div.rounded-lg>div.text-sm>span.text-[hsl(var(--wc-green-ink))]: React +6  | screen  
+WALK phone-reduce: 34 steps in 78s, stop="", translated=true, reached=true, age 16 -> 19 -> 19
+  worst at one look: structure 2, raw 3, digits 14; different in all: structure 4, raw 12, digits 14
+  age line: 24 looks, 0 wrong
+  boxes: {"nationality":{"react":"Brazil🇧🇷","shown":"Brasil"},"position":{"react":"Striker (ST)","shown":"Striker (ST)"},"era":{"react":"Current era (2025 start)","shown":"Current era (2025 start)"}}
+  restore: {"how":"banner button :1.restore","fontsBefore":498,"backsBefore":0,"ms":887,"fontsAfter":0,"backsAfter":506,"lang":"en","cls":""}
+  layer two stats at the end: {"swaps":1416,"removed":9,"inserted":0,"restored":57}; guard lines 0; NotFoundError 0; errors []
+  net: db aborted 4, other hosts aborted ["fonts.googleapis.com","fonts.gstatic.com","www.google.com"]; last step {"n":"original press 8","pend":0,"fonts":0,"judged":321}
+    structure [translated @ choose position Striker] div.space-y-1.5>button.flex>span: React  | screen "Striker (ST)"
+    structure [translated @ choose era Current era] div.space-y-1.5>button.flex>span: React  | screen "F:Atacante (ST)"
+    structure [translated @ choose era Current era] div.space-y-1.5>button.flex>span: React  | screen "Current era (2025 start)"
+    structure [translated @ Generate Starting Potential] div.space-y-1.5>button.flex>span: React  | screen "F:Era atual (início em 2025)"
+    raw [after show original @ original press 4] div.mt-2>div.text-xs>span: React ⚠️ Your contract is expiring! | screen 🏆 Won Player of the Month (November 2028)!
+    raw [after show original @ original press 4] div.mt-2>div.text-xs>span: React 🌍 Colombia won the Copa América. | screen ⚠️ Your contract is expiring!
+    raw [after show original @ original press 4] div.mt-2>div.text-xs>span: React 🤝 Rival Shows Respect | screen 🌍 Colombia won the Copa América.
+    raw [after show original @ original press 5] div.mt-2>div.text-xs>span: React 🤝 Rival Shows Respect | screen 🏆 Won Player of the Month (November 2028)!
+    raw [after show original @ original press 5] div.mt-2>div.text-xs>span: React 📱 🎬 Go viral with celebration clip: gained 0.7M followers! | screen ⚠️ Your contract is expiring!
+    raw [after show original @ original press 5] div.mt-2>div.text-xs>span: React 🏪 NEW SPONSORSHIP: Local Brand Deal, €0.5M/year! | screen 🌍 Colombia won the Copa América.
+    digits [translated @ translated] div>ol.list-decimal>li: React Roll your starting potential, somewhere in the mid 50s to high 60s, and reroll as many times as you like. Rerolls are fr | screen Role seu potencial inicial, que geralmente fica entre 55 e 60, e role novamente quantas vezes quiser. As rolagens adicio
+    digits [translated @ career press 1] div.grid>div.rounded-lg>div.text-sm: React 60    | screen 60 +4   
+    digits [translated @ career press 1] div.rounded-lg>div.text-sm>span.text-[hsl(var(--wc-green-ink))]: React +4  | screen  
+    digits [translated @ career press 1] div.grid>div.rounded-lg>div.text-sm: React 62    | screen 62 +6   
+    digits [translated @ career press 1] div.rounded-lg>div.text-sm>span.text-[hsl(var(--wc-green-ink))]: React +6  | screen  
+    digits [translated @ career press 1] div.grid>div.rounded-lg>div.text-sm: React 52    | screen 52 +4   
+rv-walk: 6 walk(s) done, 0 stopped early
