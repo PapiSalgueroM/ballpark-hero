@@ -1,0 +1,2432 @@
+{
+ "base": "http://localhost:4173",
+ "control": "nospans",
+ "entry": "/assets/index-DfpXGm-O.js",
+ "seed": 20261008,
+ "checks": 79,
+ "failed": [
+  "2. /soccer-career phone alter: each pick can be READ in its box: readable: position, era; hidden: nationality",
+  "10. /soccer-career phone alter: the page says what React holds, at every look: 11 different stale text(s), 5 at once at most, first at \"the create screen draws\": React \"Soccer Career: Free Football Career Simulator\", the screen \"Soccer Career Simulator\", in h2.text-lg < div.text-center < section.max-w-2xl",
+  "11. /soccer-career phone alter: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy stayed; inserted before: at the end; rewritten 16 to 17: still shows \"copy of 16\"",
+  "13. /soccer-career phone alter: no box holds its placeholder beside its pick: nationality: was \"Choose nationality\", now \"Choose nationalityBrazil🇧🇷\"; position: was \"Choose position\", now \"Choose positionStriker (ST)\"; era: was \"Choose era\", now \"Choose eraCurrent era (2025 start)\"",
+  "14. /soccer-career phone alter: the age in the hub's line is the age in the save: 12 of 13 look(s) wrong: at \"career press 1\" the header said Age 16 and the save said 17",
+  "18. /soccer-career phone alter: after the translator undid itself no wrapper is left and the page says what React holds, at every look: 3 different stale text(s), 3 at once at most, first at \"the translator undoes itself\": React \"ST · Age 18 ·\", the screen \"ST · Age 16 ·\", in p.text-xs < div.min-w-0 < div.flex",
+  "19. /soccer-career phone alter: after the undo the age in the hub's line is still the age in the save, a birthday later: 5 of 8 look(s) wrong: at \"the translator undoes itself\" the header said Age 16 and the save said 18",
+  "2. /soccer-career phone keep: each pick can be READ in its box: readable: position, era; hidden: nationality",
+  "10. /soccer-career phone keep: the page says what React holds, at every look: 11 different stale text(s), 5 at once at most, first at \"the create screen draws\": React \"Soccer Career: Free Football Career Simulator\", the screen \"Soccer Career Simulator\", in h2.text-lg < div.text-center < section.max-w-2xl",
+  "11. /soccer-career phone keep: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy stayed; inserted before: at the end; rewritten 16 to 17: still shows \"copy of 16\"",
+  "13. /soccer-career phone keep: no box holds its placeholder beside its pick: nationality: was \"Choose nationality\", now \"Choose nationalityBrazil🇧🇷\"; position: was \"Choose position\", now \"Choose positionStriker (ST)\"; era: was \"Choose era\", now \"Choose eraCurrent era (2025 start)\"",
+  "14. /soccer-career phone keep: the age in the hub's line is the age in the save: 12 of 13 look(s) wrong: at \"career press 1\" the header said Age 16 and the save said 17",
+  "18. /soccer-career phone keep: after the translator undid itself no wrapper is left and the page says what React holds, at every look: 3 different stale text(s), 3 at once at most, first at \"the translator undoes itself\": React \"ST · Age 18 ·\", the screen \"ST · Age 16 ·\", in p.text-xs < div.min-w-0 < div.flex",
+  "19. /soccer-career phone keep: after the undo the age in the hub's line is still the age in the save, a birthday later: 5 of 8 look(s) wrong: at \"the translator undoes itself\" the header said Age 16 and the save said 18",
+  "2. /soccer-career desktop keep: each pick can be READ in its box: readable: position, era; hidden: nationality",
+  "10. /soccer-career desktop keep: the page says what React holds, at every look: 11 different stale text(s), 5 at once at most, first at \"the create screen draws\": React \"Soccer Career: Free Football Career Simulator\", the screen \"Soccer Career Simulator\", in h2.text-lg < div.text-center < section.max-w-2xl",
+  "11. /soccer-career desktop keep: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy stayed; inserted before: at the end; rewritten 16 to 17: still shows \"copy of 16\"",
+  "13. /soccer-career desktop keep: no box holds its placeholder beside its pick: nationality: was \"Choose nationality\", now \"Choose nationalityBrazil🇧🇷\"; position: was \"Choose position\", now \"Choose positionStriker (ST)\"; era: was \"Choose era\", now \"Choose eraCurrent era (2025 start)\"",
+  "14. /soccer-career desktop keep: the age in the hub's line is the age in the save: 12 of 13 look(s) wrong: at \"career press 1\" the header said Age 16 and the save said 17",
+  "18. /soccer-career desktop keep: after the translator undid itself no wrapper is left and the page says what React holds, at every look: 3 different stale text(s), 3 at once at most, first at \"the translator undoes itself\": React \"ST · Age 18 ·\", the screen \"ST · Age 16 ·\", in p.text-xs < div.min-w-0 < div.flex",
+  "19. /soccer-career desktop keep: after the undo the age in the hub's line is still the age in the save, a birthday later: 5 of 8 look(s) wrong: at \"the translator undoes itself\" the header said Age 16 and the save said 18",
+  "2. /soccer-career desktop alter: each pick can be READ in its box: readable: position, era; hidden: nationality",
+  "10. /soccer-career desktop alter: the page says what React holds, at every look: 9 different stale text(s), 4 at once at most, first at \"choose nationality Brazil\": React \"\", the screen \"Choose nationality\", in span < button.flex < div.space-y-1.5",
+  "11. /soccer-career desktop alter: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy stayed; inserted before: at the end; rewritten 16 to 17: still shows \"copy of 16\"",
+  "13. /soccer-career desktop alter: no box holds its placeholder beside its pick: nationality: was \"Choose nationality\", now \"Choose nationalityBrazil🇧🇷\"; position: was \"Choose position\", now \"Choose positionStriker (ST)\"; era: was \"Choose era\", now \"Choose eraCurrent era (2025 start)\"",
+  "14. /soccer-career desktop alter: the age in the hub's line is the age in the save: 12 of 13 look(s) wrong: at \"career press 1\" the header said Age 16 and the save said 17",
+  "18. /soccer-career desktop alter: after the translator undid itself no wrapper is left and the page says what React holds, at every look: 2 different stale text(s), 2 at once at most, first at \"the translator undoes itself\": React \"ST · Age 18 ·\", the screen \"ST · Age 16 ·\", in p.text-xs < div.min-w-0 < div.flex",
+  "19. /soccer-career desktop alter: after the undo the age in the hub's line is still the age in the save, a birthday later: 5 of 8 look(s) wrong: at \"the translator undoes itself\" the header said Age 16 and the save said 18"
+ ],
+ "rows": [
+  {
+   "route": "/soccer-career",
+   "view": "phone",
+   "mode": "keep",
+   "steps": 30,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 1,
+   "guardOn": true,
+   "moved": 4,
+   "movedByTranslator": 4,
+   "movedList": [
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "Choose nationality",
+     "byTranslator": true
+    },
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "Choose position",
+     "byTranslator": true
+    },
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "Choose era",
+     "byTranslator": true
+    },
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "s",
+     "byTranslator": true
+    }
+   ],
+   "swapped": 1379,
+   "maxStale": 5,
+   "staleSample": [
+    {
+     "react": "",
+     "screen": "Choose nationality",
+     "at": "span < button.flex < div.space-y-1.5",
+     "left": true
+    },
+    {
+     "react": "",
+     "screen": "Choose position",
+     "at": "span < button.flex < div.space-y-1.5",
+     "left": true
+    },
+    {
+     "react": "",
+     "screen": "Choose era",
+     "at": "span < button.flex < div.space-y-1.5",
+     "left": true
+    },
+    {
+     "react": "60",
+     "screen": "57",
+     "at": "div.text-6xl < div.rounded-xl < div.bg-card"
+    },
+    {
+     "react": "Soccer Career: Free Football Career Simulator",
+     "screen": "Soccer Career Simulator",
+     "at": "h2.text-lg < div.text-center < section.max-w-2xl"
+    }
+   ],
+   "staleList": [
+    {
+     "react": "Soccer Career: Free Football Career Simulator",
+     "screen": "Soccer Career Simulator",
+     "at": "h2.text-lg < div.text-center < section.max-w-2xl",
+     "step": "career press 12"
+    },
+    {
+     "react": "",
+     "screen": "Choose nationality",
+     "at": "span < button.flex < div.space-y-1.5",
+     "left": true,
+     "step": "Roll again"
+    },
+    {
+     "react": "",
+     "screen": "Choose position",
+     "at": "span < button.flex < div.space-y-1.5",
+     "left": true,
+     "step": "Roll again"
+    },
+    {
+     "react": "",
+     "screen": "Choose era",
+     "at": "span < button.flex < div.space-y-1.5",
+     "left": true,
+     "step": "Roll again"
+    },
+    {
+     "react": "60",
+     "screen": "57",
+     "at": "div.text-6xl < div.rounded-xl < div.bg-card",
+     "step": "Generate Starting Potential"
+    },
+    {
+     "react": "60",
+     "screen": "65",
+     "at": "div.text-6xl < div.rounded-xl < div.bg-card",
+     "step": "Roll again"
+    },
+    {
+     "react": "ST · Age 17 ·",
+     "screen": "ST · Age 16 ·",
+     "at": "p.text-xs < div.min-w-0 < div.flex",
+     "step": "career press 3"
+    },
+    {
+     "react": "ST · Age 18 ·",
+     "screen": "ST · Age 16 ·",
+     "at": "p.text-xs < div.min-w-0 < div.flex",
+     "step": "career press 12"
+    },
+    {
+     "react": "🏠 Life Event · 3 events remaining",
+     "screen": "🏠 Life Event · 4 events remaining",
+     "at": "span.text-[10px] < div.text-center < div.rounded-xl",
+     "step": "career press 10"
+    },
+    {
+     "react": "⚡ Positive Event · 2 events remaining",
+     "screen": "🏠 Life Event · 4 events remaining",
+     "at": "span.text-[10px] < div.text-center < div.rounded-xl",
+     "step": "career press 11"
+    },
+    {
+     "react": "🏠 Life Event · 1 event remaining",
+     "screen": "🏠 Life Event · 4 events remaining",
+     "at": "span.text-[10px] < div.text-center < div.rounded-xl",
+     "step": "career press 12"
+    }
+   ],
+   "staleAt": "the create screen draws",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 325,
+   "live": null,
+   "age": {
+    "looks": 13,
+    "older": 12,
+    "wrong": 12,
+    "wrongAt": "at \"career press 1\" the header said Age 16 and the save said 17"
+   },
+   "maxLeft": 3,
+   "undo": {
+    "on": true,
+    "back": 314,
+    "copies": 0,
+    "looks": 8,
+    "presses": 7,
+    "fonts": 0,
+    "maxStale": 3,
+    "staleAt": "the translator undoes itself",
+    "returned": 0,
+    "ageAt": 18,
+    "ageLooks": 8,
+    "ageOlder": 3,
+    "ageWrong": 5,
+    "ageWrongAt": "at \"the translator undoes itself\" the header said Age 16 and the save said 18",
+    "staleList": [
+     {
+      "react": "ST · Age 18 ·",
+      "screen": "ST · Age 16 ·",
+      "at": "p.text-xs < div.min-w-0 < div.flex",
+      "step": "after the undo, press 4"
+     },
+     {
+      "react": "🏠 Life Event · 1 event remaining",
+      "screen": "🏠 Life Event · 4 events remaining",
+      "at": "span.text-[10px] < div.text-center < div.rounded-xl",
+      "step": "the translator undoes itself"
+     },
+     {
+      "react": "Soccer Career: Free Football Career Simulator",
+      "screen": "Soccer Career Simulator",
+      "at": "h2.text-lg < div.text-center < section.max-w-2xl",
+      "step": "after the undo, press 7"
+     }
+    ]
+   },
+   "bank": null,
+   "directLive": {
+    "remove": "the copy stayed",
+    "insert": "at the end",
+    "write": "still shows \"copy of 16\"",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Brazil🇧🇷",
+    "Striker (ST)",
+    "Current era (2025 start)",
+    "🎲 Generate Starting Potential",
+    "🎲 Roll again",
+    "🎮 Customize your build",
+    "✅ Lock in build",
+    "⚽ Begin Career",
+    "Next Year",
+    "Review contract",
+    "Sign contract",
+    "Next Season",
+    "Continue to Season Summary →",
+    "Continue →",
+    "Continue →",
+    "🏋️Post training videoShow off your skills in the gym+0.1-0.",
+    "Continue →",
+    "🎭The ShowmanFame comes easy: followers grow 60% faster, spo",
+    "🃏One night only55%: win €0.4M · 45%: lose €0.8M",
+    "🤝Dedicate it to the teamOverall +1, Market value +€3M",
+    "🕊️Gently decline pigeon ownershipGerald visits on his own s",
+    "Request transfer 📤",
+    "Review contract",
+    "Sign contract",
+    "Next Season",
+    "Continue to Season Summary →",
+    "Continue →"
+   ],
+   "dbBlocked": 4,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [
+    "Choose nationality",
+    "Choose position",
+    "Choose era"
+   ],
+   "create": {
+    "drawn": true,
+    "boxes": {
+     "nationality": {
+      "shown": "Choose nationality Brazil",
+      "has": true,
+      "visible": false,
+      "was": "Choose nationality",
+      "words": "Choose nationalityBrazil🇧🇷"
+     },
+     "position": {
+      "shown": "Choose positionStriker (ST)",
+      "has": true,
+      "visible": true,
+      "was": "Choose position",
+      "words": "Choose positionStriker (ST)"
+     },
+     "era": {
+      "shown": "Choose eraCurrent era (2025 start)",
+      "has": true,
+      "visible": true,
+      "was": "Choose era",
+      "words": "Choose eraCurrent era (2025 start)"
+     }
+    },
+    "reached": true,
+    "reachedDetail": "h1 \"🇧🇷Joao Teste\", create form gone, save Joao Teste, Brazil, youth, age 16",
+    "seasonAt": 1,
+    "seasonDetail": "age 16 to 17 on press 1, h1 \"🇧🇷Joao Teste\", phase contract_offer; the walk went on to age 18, phase random_events"
+   },
+   "stepList": [
+    {
+     "name": "the create screen draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 1,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "type the name",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 1,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "choose nationality Brazil",
+     "ok": true,
+     "did": "Brazil🇧🇷",
+     "by": "",
+     "boundary": false,
+     "moved": 1,
+     "stale": 2,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "choose position Striker",
+     "ok": true,
+     "did": "Striker (ST)",
+     "by": "",
+     "boundary": false,
+     "moved": 2,
+     "stale": 3,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "choose era Current era",
+     "ok": true,
+     "did": "Current era (2025 start)",
+     "by": "",
+     "boundary": false,
+     "moved": 3,
+     "stale": 4,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Generate Starting Potential",
+     "ok": true,
+     "did": "🎲 Generate Starting Potential",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 5,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Roll again",
+     "ok": true,
+     "did": "🎲 Roll again",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 5,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Customize your build",
+     "ok": true,
+     "did": "🎮 Customize your build",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 1,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Lock in build",
+     "ok": true,
+     "did": "✅ Lock in build",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 1,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Begin Career",
+     "ok": true,
+     "did": "⚽ Begin Career",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 1,
+     "phase": "youth",
+     "age": 16
+    },
+    {
+     "name": "career press 1",
+     "ok": true,
+     "did": "Next Year",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "contract_offer",
+     "age": 17
+    },
+    {
+     "name": "career press 2",
+     "ok": true,
+     "did": "Review contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "contract_offer",
+     "age": 17
+    },
+    {
+     "name": "career press 3",
+     "ok": true,
+     "did": "Sign contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "playing",
+     "age": 17
+    },
+    {
+     "name": "career press 4",
+     "ok": true,
+     "did": "Next Season",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "newspaper",
+     "age": 18
+    },
+    {
+     "name": "career press 5",
+     "ok": true,
+     "did": "Continue to Season Summary →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "season_summary",
+     "age": 18
+    },
+    {
+     "name": "career press 6",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "ballon_dor",
+     "age": 18
+    },
+    {
+     "name": "career press 7",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "social_media_action",
+     "age": 18
+    },
+    {
+     "name": "career press 8",
+     "ok": true,
+     "did": "🏋️Post training videoShow off your skills in the gym+0.1-0.",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "social_media_action",
+     "age": 18
+    },
+    {
+     "name": "career press 9",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "career press 10",
+     "ok": true,
+     "did": "🎭The ShowmanFame comes easy: followers grow 60% faster, spo",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 3,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "career press 11",
+     "ok": true,
+     "did": "🃏One night only55%: win €0.4M · 45%: lose €0.8M",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 3,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "career press 12",
+     "ok": true,
+     "did": "🤝Dedicate it to the teamOverall +1, Market value +€3M",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 3,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "the translator undoes itself",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 4,
+     "stale": 3,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 1",
+     "ok": true,
+     "did": "🕊️Gently decline pigeon ownershipGerald visits on his own s",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 2,
+     "phase": "transfer_window",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 2",
+     "ok": true,
+     "did": "Request transfer 📤",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 2,
+     "phase": "transfer_window",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 3",
+     "ok": true,
+     "did": "Review contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 2,
+     "phase": "transfer_window",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 4",
+     "ok": true,
+     "did": "Sign contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 2,
+     "phase": "playing",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 5",
+     "ok": true,
+     "did": "Next Season",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 1,
+     "phase": "newspaper",
+     "age": 19
+    },
+    {
+     "name": "after the undo, press 6",
+     "ok": true,
+     "did": "Continue to Season Summary →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 1,
+     "phase": "season_summary",
+     "age": 19
+    },
+    {
+     "name": "after the undo, press 7",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 1,
+     "phase": "ballon_dor",
+     "age": 19
+    }
+   ]
+  },
+  {
+   "route": "/soccer-career",
+   "view": "desktop",
+   "mode": "keep",
+   "steps": 30,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 1,
+   "guardOn": true,
+   "moved": 4,
+   "movedByTranslator": 4,
+   "movedList": [
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "Choose nationality",
+     "byTranslator": true
+    },
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "Choose position",
+     "byTranslator": true
+    },
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "Choose era",
+     "byTranslator": true
+    },
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "s",
+     "byTranslator": true
+    }
+   ],
+   "swapped": 1379,
+   "maxStale": 5,
+   "staleSample": [
+    {
+     "react": "",
+     "screen": "Choose nationality",
+     "at": "span < button.flex < div.space-y-1.5",
+     "left": true
+    },
+    {
+     "react": "",
+     "screen": "Choose position",
+     "at": "span < button.flex < div.space-y-1.5",
+     "left": true
+    },
+    {
+     "react": "",
+     "screen": "Choose era",
+     "at": "span < button.flex < div.space-y-1.5",
+     "left": true
+    },
+    {
+     "react": "60",
+     "screen": "57",
+     "at": "div.text-6xl < div.rounded-xl < div.bg-card"
+    },
+    {
+     "react": "Soccer Career: Free Football Career Simulator",
+     "screen": "Soccer Career Simulator",
+     "at": "h2.text-lg < div.text-center < section.max-w-2xl"
+    }
+   ],
+   "staleList": [
+    {
+     "react": "Soccer Career: Free Football Career Simulator",
+     "screen": "Soccer Career Simulator",
+     "at": "h2.text-lg < div.text-center < section.max-w-2xl",
+     "step": "career press 12"
+    },
+    {
+     "react": "",
+     "screen": "Choose nationality",
+     "at": "span < button.flex < div.space-y-1.5",
+     "left": true,
+     "step": "Roll again"
+    },
+    {
+     "react": "",
+     "screen": "Choose position",
+     "at": "span < button.flex < div.space-y-1.5",
+     "left": true,
+     "step": "Roll again"
+    },
+    {
+     "react": "",
+     "screen": "Choose era",
+     "at": "span < button.flex < div.space-y-1.5",
+     "left": true,
+     "step": "Roll again"
+    },
+    {
+     "react": "60",
+     "screen": "57",
+     "at": "div.text-6xl < div.rounded-xl < div.bg-card",
+     "step": "Generate Starting Potential"
+    },
+    {
+     "react": "60",
+     "screen": "65",
+     "at": "div.text-6xl < div.rounded-xl < div.bg-card",
+     "step": "Roll again"
+    },
+    {
+     "react": "ST · Age 17 ·",
+     "screen": "ST · Age 16 ·",
+     "at": "p.text-xs < div.min-w-0 < div.flex",
+     "step": "career press 3"
+    },
+    {
+     "react": "ST · Age 18 ·",
+     "screen": "ST · Age 16 ·",
+     "at": "p.text-xs < div.min-w-0 < div.flex",
+     "step": "career press 12"
+    },
+    {
+     "react": "🏠 Life Event · 3 events remaining",
+     "screen": "🏠 Life Event · 4 events remaining",
+     "at": "span.text-[10px] < div.text-center < div.rounded-xl",
+     "step": "career press 10"
+    },
+    {
+     "react": "⚡ Positive Event · 2 events remaining",
+     "screen": "🏠 Life Event · 4 events remaining",
+     "at": "span.text-[10px] < div.text-center < div.rounded-xl",
+     "step": "career press 11"
+    },
+    {
+     "react": "🏠 Life Event · 1 event remaining",
+     "screen": "🏠 Life Event · 4 events remaining",
+     "at": "span.text-[10px] < div.text-center < div.rounded-xl",
+     "step": "career press 12"
+    }
+   ],
+   "staleAt": "the create screen draws",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 325,
+   "live": null,
+   "age": {
+    "looks": 13,
+    "older": 12,
+    "wrong": 12,
+    "wrongAt": "at \"career press 1\" the header said Age 16 and the save said 17"
+   },
+   "maxLeft": 3,
+   "undo": {
+    "on": true,
+    "back": 314,
+    "copies": 0,
+    "looks": 8,
+    "presses": 7,
+    "fonts": 0,
+    "maxStale": 3,
+    "staleAt": "the translator undoes itself",
+    "returned": 0,
+    "ageAt": 18,
+    "ageLooks": 8,
+    "ageOlder": 3,
+    "ageWrong": 5,
+    "ageWrongAt": "at \"the translator undoes itself\" the header said Age 16 and the save said 18",
+    "staleList": [
+     {
+      "react": "ST · Age 18 ·",
+      "screen": "ST · Age 16 ·",
+      "at": "p.text-xs < div.min-w-0 < div.flex",
+      "step": "after the undo, press 4"
+     },
+     {
+      "react": "🏠 Life Event · 1 event remaining",
+      "screen": "🏠 Life Event · 4 events remaining",
+      "at": "span.text-[10px] < div.text-center < div.rounded-xl",
+      "step": "the translator undoes itself"
+     },
+     {
+      "react": "Soccer Career: Free Football Career Simulator",
+      "screen": "Soccer Career Simulator",
+      "at": "h2.text-lg < div.text-center < section.max-w-2xl",
+      "step": "after the undo, press 7"
+     }
+    ]
+   },
+   "bank": null,
+   "directLive": {
+    "remove": "the copy stayed",
+    "insert": "at the end",
+    "write": "still shows \"copy of 16\"",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Brazil🇧🇷",
+    "Striker (ST)",
+    "Current era (2025 start)",
+    "🎲 Generate Starting Potential",
+    "🎲 Roll again",
+    "🎮 Customize your build",
+    "✅ Lock in build",
+    "⚽ Begin Career",
+    "Next Year",
+    "Review contract",
+    "Sign contract",
+    "Next Season",
+    "Continue to Season Summary →",
+    "Continue →",
+    "Continue →",
+    "🏋️Post training videoShow off your skills in the gym+0.1-0.",
+    "Continue →",
+    "🎭The ShowmanFame comes easy: followers grow 60% faster, spo",
+    "🃏One night only55%: win €0.4M · 45%: lose €0.8M",
+    "🤝Dedicate it to the teamOverall +1, Market value +€3M",
+    "🕊️Gently decline pigeon ownershipGerald visits on his own s",
+    "Request transfer 📤",
+    "Review contract",
+    "Sign contract",
+    "Next Season",
+    "Continue to Season Summary →",
+    "Continue →"
+   ],
+   "dbBlocked": 4,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [
+    "Choose nationality",
+    "Choose position",
+    "Choose era"
+   ],
+   "create": {
+    "drawn": true,
+    "boxes": {
+     "nationality": {
+      "shown": "Choose nationality Brazil",
+      "has": true,
+      "visible": false,
+      "was": "Choose nationality",
+      "words": "Choose nationalityBrazil🇧🇷"
+     },
+     "position": {
+      "shown": "Choose positionStriker (ST)",
+      "has": true,
+      "visible": true,
+      "was": "Choose position",
+      "words": "Choose positionStriker (ST)"
+     },
+     "era": {
+      "shown": "Choose eraCurrent era (2025 start)",
+      "has": true,
+      "visible": true,
+      "was": "Choose era",
+      "words": "Choose eraCurrent era (2025 start)"
+     }
+    },
+    "reached": true,
+    "reachedDetail": "h1 \"🇧🇷Joao Teste\", create form gone, save Joao Teste, Brazil, youth, age 16",
+    "seasonAt": 1,
+    "seasonDetail": "age 16 to 17 on press 1, h1 \"🇧🇷Joao Teste\", phase contract_offer; the walk went on to age 18, phase random_events"
+   },
+   "stepList": [
+    {
+     "name": "the create screen draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 1,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "type the name",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 1,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "choose nationality Brazil",
+     "ok": true,
+     "did": "Brazil🇧🇷",
+     "by": "",
+     "boundary": false,
+     "moved": 1,
+     "stale": 2,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "choose position Striker",
+     "ok": true,
+     "did": "Striker (ST)",
+     "by": "",
+     "boundary": false,
+     "moved": 2,
+     "stale": 3,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "choose era Current era",
+     "ok": true,
+     "did": "Current era (2025 start)",
+     "by": "",
+     "boundary": false,
+     "moved": 3,
+     "stale": 4,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Generate Starting Potential",
+     "ok": true,
+     "did": "🎲 Generate Starting Potential",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 5,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Roll again",
+     "ok": true,
+     "did": "🎲 Roll again",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 5,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Customize your build",
+     "ok": true,
+     "did": "🎮 Customize your build",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 1,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Lock in build",
+     "ok": true,
+     "did": "✅ Lock in build",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 1,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Begin Career",
+     "ok": true,
+     "did": "⚽ Begin Career",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 1,
+     "phase": "youth",
+     "age": 16
+    },
+    {
+     "name": "career press 1",
+     "ok": true,
+     "did": "Next Year",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "contract_offer",
+     "age": 17
+    },
+    {
+     "name": "career press 2",
+     "ok": true,
+     "did": "Review contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "contract_offer",
+     "age": 17
+    },
+    {
+     "name": "career press 3",
+     "ok": true,
+     "did": "Sign contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "playing",
+     "age": 17
+    },
+    {
+     "name": "career press 4",
+     "ok": true,
+     "did": "Next Season",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "newspaper",
+     "age": 18
+    },
+    {
+     "name": "career press 5",
+     "ok": true,
+     "did": "Continue to Season Summary →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "season_summary",
+     "age": 18
+    },
+    {
+     "name": "career press 6",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "ballon_dor",
+     "age": 18
+    },
+    {
+     "name": "career press 7",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "social_media_action",
+     "age": 18
+    },
+    {
+     "name": "career press 8",
+     "ok": true,
+     "did": "🏋️Post training videoShow off your skills in the gym+0.1-0.",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "social_media_action",
+     "age": 18
+    },
+    {
+     "name": "career press 9",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "career press 10",
+     "ok": true,
+     "did": "🎭The ShowmanFame comes easy: followers grow 60% faster, spo",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 3,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "career press 11",
+     "ok": true,
+     "did": "🃏One night only55%: win €0.4M · 45%: lose €0.8M",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 3,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "career press 12",
+     "ok": true,
+     "did": "🤝Dedicate it to the teamOverall +1, Market value +€3M",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 3,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "the translator undoes itself",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 4,
+     "stale": 3,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 1",
+     "ok": true,
+     "did": "🕊️Gently decline pigeon ownershipGerald visits on his own s",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 2,
+     "phase": "transfer_window",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 2",
+     "ok": true,
+     "did": "Request transfer 📤",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 2,
+     "phase": "transfer_window",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 3",
+     "ok": true,
+     "did": "Review contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 2,
+     "phase": "transfer_window",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 4",
+     "ok": true,
+     "did": "Sign contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 2,
+     "phase": "playing",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 5",
+     "ok": true,
+     "did": "Next Season",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 1,
+     "phase": "newspaper",
+     "age": 19
+    },
+    {
+     "name": "after the undo, press 6",
+     "ok": true,
+     "did": "Continue to Season Summary →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 1,
+     "phase": "season_summary",
+     "age": 19
+    },
+    {
+     "name": "after the undo, press 7",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 1,
+     "phase": "ballon_dor",
+     "age": 19
+    }
+   ]
+  },
+  {
+   "route": "/soccer-career",
+   "view": "phone",
+   "mode": "alter",
+   "steps": 30,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 1,
+   "guardOn": true,
+   "moved": 4,
+   "movedByTranslator": 4,
+   "movedList": [
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "Choose nationality",
+     "byTranslator": true
+    },
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "Choose position",
+     "byTranslator": true
+    },
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "Choose era",
+     "byTranslator": true
+    },
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "s",
+     "byTranslator": true
+    }
+   ],
+   "swapped": 1379,
+   "maxStale": 5,
+   "staleSample": [
+    {
+     "react": "",
+     "screen": "Choose nationality",
+     "at": "span < button.flex < div.space-y-1.5",
+     "left": true
+    },
+    {
+     "react": "",
+     "screen": "Choose position",
+     "at": "span < button.flex < div.space-y-1.5",
+     "left": true
+    },
+    {
+     "react": "",
+     "screen": "Choose era",
+     "at": "span < button.flex < div.space-y-1.5",
+     "left": true
+    },
+    {
+     "react": "60",
+     "screen": "57",
+     "at": "div.text-6xl < div.rounded-xl < div.bg-card"
+    },
+    {
+     "react": "Soccer Career: Free Football Career Simulator",
+     "screen": "Soccer Career Simulator",
+     "at": "h2.text-lg < div.text-center < section.max-w-2xl"
+    }
+   ],
+   "staleList": [
+    {
+     "react": "Soccer Career: Free Football Career Simulator",
+     "screen": "Soccer Career Simulator",
+     "at": "h2.text-lg < div.text-center < section.max-w-2xl",
+     "step": "career press 12"
+    },
+    {
+     "react": "",
+     "screen": "Choose nationality",
+     "at": "span < button.flex < div.space-y-1.5",
+     "left": true,
+     "step": "Roll again"
+    },
+    {
+     "react": "",
+     "screen": "Choose position",
+     "at": "span < button.flex < div.space-y-1.5",
+     "left": true,
+     "step": "Roll again"
+    },
+    {
+     "react": "",
+     "screen": "Choose era",
+     "at": "span < button.flex < div.space-y-1.5",
+     "left": true,
+     "step": "Roll again"
+    },
+    {
+     "react": "60",
+     "screen": "57",
+     "at": "div.text-6xl < div.rounded-xl < div.bg-card",
+     "step": "Generate Starting Potential"
+    },
+    {
+     "react": "60",
+     "screen": "65",
+     "at": "div.text-6xl < div.rounded-xl < div.bg-card",
+     "step": "Roll again"
+    },
+    {
+     "react": "ST · Age 17 ·",
+     "screen": "ST · Age 16 ·",
+     "at": "p.text-xs < div.min-w-0 < div.flex",
+     "step": "career press 3"
+    },
+    {
+     "react": "ST · Age 18 ·",
+     "screen": "ST · Age 16 ·",
+     "at": "p.text-xs < div.min-w-0 < div.flex",
+     "step": "career press 12"
+    },
+    {
+     "react": "🏠 Life Event · 3 events remaining",
+     "screen": "🏠 Life Event · 4 events remaining",
+     "at": "span.text-[10px] < div.text-center < div.rounded-xl",
+     "step": "career press 10"
+    },
+    {
+     "react": "⚡ Positive Event · 2 events remaining",
+     "screen": "🏠 Life Event · 4 events remaining",
+     "at": "span.text-[10px] < div.text-center < div.rounded-xl",
+     "step": "career press 11"
+    },
+    {
+     "react": "🏠 Life Event · 1 event remaining",
+     "screen": "🏠 Life Event · 4 events remaining",
+     "at": "span.text-[10px] < div.text-center < div.rounded-xl",
+     "step": "career press 12"
+    }
+   ],
+   "staleAt": "the create screen draws",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 325,
+   "live": null,
+   "age": {
+    "looks": 13,
+    "older": 12,
+    "wrong": 12,
+    "wrongAt": "at \"career press 1\" the header said Age 16 and the save said 17"
+   },
+   "maxLeft": 3,
+   "undo": {
+    "on": true,
+    "back": 314,
+    "copies": 0,
+    "looks": 8,
+    "presses": 7,
+    "fonts": 0,
+    "maxStale": 3,
+    "staleAt": "the translator undoes itself",
+    "returned": 0,
+    "ageAt": 18,
+    "ageLooks": 8,
+    "ageOlder": 3,
+    "ageWrong": 5,
+    "ageWrongAt": "at \"the translator undoes itself\" the header said Age 16 and the save said 18",
+    "staleList": [
+     {
+      "react": "ST · Age 18 ·",
+      "screen": "ST · Age 16 ·",
+      "at": "p.text-xs < div.min-w-0 < div.flex",
+      "step": "after the undo, press 4"
+     },
+     {
+      "react": "🏠 Life Event · 1 event remaining",
+      "screen": "🏠 Life Event · 4 events remaining",
+      "at": "span.text-[10px] < div.text-center < div.rounded-xl",
+      "step": "the translator undoes itself"
+     },
+     {
+      "react": "Soccer Career: Free Football Career Simulator",
+      "screen": "Soccer Career Simulator",
+      "at": "h2.text-lg < div.text-center < section.max-w-2xl",
+      "step": "after the undo, press 7"
+     }
+    ]
+   },
+   "bank": null,
+   "directLive": {
+    "remove": "the copy stayed",
+    "insert": "at the end",
+    "write": "still shows \"copy of 16\"",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Brazil🇧🇷",
+    "Striker (ST)",
+    "Current era (2025 start)",
+    "🎲 Generate Starting Potential",
+    "🎲 Roll again",
+    "🎮 Customize your build",
+    "✅ Lock in build",
+    "⚽ Begin Career",
+    "Next Year",
+    "Review contract",
+    "Sign contract",
+    "Next Season",
+    "Continue to Season Summary →",
+    "Continue →",
+    "Continue →",
+    "🏋️Post training videoShow off your skills in the gym+0.1-0.",
+    "Continue →",
+    "🎭The ShowmanFame comes easy: followers grow 60% faster, spo",
+    "🃏One night only55%: win €0.4M · 45%: lose €0.8M",
+    "🤝Dedicate it to the teamOverall +1, Market value +€3M",
+    "🕊️Gently decline pigeon ownershipGerald visits on his own s",
+    "Request transfer 📤",
+    "Review contract",
+    "Sign contract",
+    "Next Season",
+    "Continue to Season Summary →",
+    "Continue →"
+   ],
+   "dbBlocked": 4,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [
+    "Choose nationality",
+    "Choose position",
+    "Choose era"
+   ],
+   "create": {
+    "drawn": true,
+    "boxes": {
+     "nationality": {
+      "shown": "«Choose nationality» «Brazil»",
+      "has": true,
+      "visible": false,
+      "was": "Choose nationality",
+      "words": "Choose nationalityBrazil🇧🇷"
+     },
+     "position": {
+      "shown": "«Choose position»«Striker (ST)»",
+      "has": true,
+      "visible": true,
+      "was": "Choose position",
+      "words": "Choose positionStriker (ST)"
+     },
+     "era": {
+      "shown": "«Choose era»«Current era (2025 start)»",
+      "has": true,
+      "visible": true,
+      "was": "Choose era",
+      "words": "Choose eraCurrent era (2025 start)"
+     }
+    },
+    "reached": true,
+    "reachedDetail": "h1 \"🇧🇷Joao Teste\", create form gone, save Joao Teste, Brazil, youth, age 16",
+    "seasonAt": 1,
+    "seasonDetail": "age 16 to 17 on press 1, h1 \"🇧🇷Joao Teste\", phase contract_offer; the walk went on to age 18, phase random_events"
+   },
+   "stepList": [
+    {
+     "name": "the create screen draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 1,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "type the name",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 1,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "choose nationality Brazil",
+     "ok": true,
+     "did": "Brazil🇧🇷",
+     "by": "",
+     "boundary": false,
+     "moved": 1,
+     "stale": 2,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "choose position Striker",
+     "ok": true,
+     "did": "Striker (ST)",
+     "by": "",
+     "boundary": false,
+     "moved": 2,
+     "stale": 3,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "choose era Current era",
+     "ok": true,
+     "did": "Current era (2025 start)",
+     "by": "",
+     "boundary": false,
+     "moved": 3,
+     "stale": 4,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Generate Starting Potential",
+     "ok": true,
+     "did": "🎲 Generate Starting Potential",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 5,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Roll again",
+     "ok": true,
+     "did": "🎲 Roll again",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 5,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Customize your build",
+     "ok": true,
+     "did": "🎮 Customize your build",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 1,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Lock in build",
+     "ok": true,
+     "did": "✅ Lock in build",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 1,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Begin Career",
+     "ok": true,
+     "did": "⚽ Begin Career",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 1,
+     "phase": "youth",
+     "age": 16
+    },
+    {
+     "name": "career press 1",
+     "ok": true,
+     "did": "Next Year",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "contract_offer",
+     "age": 17
+    },
+    {
+     "name": "career press 2",
+     "ok": true,
+     "did": "Review contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "contract_offer",
+     "age": 17
+    },
+    {
+     "name": "career press 3",
+     "ok": true,
+     "did": "Sign contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "playing",
+     "age": 17
+    },
+    {
+     "name": "career press 4",
+     "ok": true,
+     "did": "Next Season",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "newspaper",
+     "age": 18
+    },
+    {
+     "name": "career press 5",
+     "ok": true,
+     "did": "Continue to Season Summary →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "season_summary",
+     "age": 18
+    },
+    {
+     "name": "career press 6",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "ballon_dor",
+     "age": 18
+    },
+    {
+     "name": "career press 7",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "social_media_action",
+     "age": 18
+    },
+    {
+     "name": "career press 8",
+     "ok": true,
+     "did": "🏋️Post training videoShow off your skills in the gym+0.1-0.",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "social_media_action",
+     "age": 18
+    },
+    {
+     "name": "career press 9",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "career press 10",
+     "ok": true,
+     "did": "🎭The ShowmanFame comes easy: followers grow 60% faster, spo",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 3,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "career press 11",
+     "ok": true,
+     "did": "🃏One night only55%: win €0.4M · 45%: lose €0.8M",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 3,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "career press 12",
+     "ok": true,
+     "did": "🤝Dedicate it to the teamOverall +1, Market value +€3M",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 3,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "the translator undoes itself",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 4,
+     "stale": 3,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 1",
+     "ok": true,
+     "did": "🕊️Gently decline pigeon ownershipGerald visits on his own s",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 2,
+     "phase": "transfer_window",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 2",
+     "ok": true,
+     "did": "Request transfer 📤",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 2,
+     "phase": "transfer_window",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 3",
+     "ok": true,
+     "did": "Review contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 2,
+     "phase": "transfer_window",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 4",
+     "ok": true,
+     "did": "Sign contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 2,
+     "phase": "playing",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 5",
+     "ok": true,
+     "did": "Next Season",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 1,
+     "phase": "newspaper",
+     "age": 19
+    },
+    {
+     "name": "after the undo, press 6",
+     "ok": true,
+     "did": "Continue to Season Summary →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 1,
+     "phase": "season_summary",
+     "age": 19
+    },
+    {
+     "name": "after the undo, press 7",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 1,
+     "phase": "ballon_dor",
+     "age": 19
+    }
+   ]
+  },
+  {
+   "route": "/soccer-career",
+   "view": "desktop",
+   "mode": "alter",
+   "steps": 30,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 1,
+   "guardOn": true,
+   "moved": 4,
+   "movedByTranslator": 4,
+   "movedList": [
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "Choose nationality",
+     "byTranslator": true
+    },
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "Choose position",
+     "byTranslator": true
+    },
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "Choose era",
+     "byTranslator": true
+    },
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "s",
+     "byTranslator": true
+    }
+   ],
+   "swapped": 1380,
+   "maxStale": 4,
+   "staleSample": [
+    {
+     "react": "",
+     "screen": "Choose nationality",
+     "at": "span < button.flex < div.space-y-1.5",
+     "left": true
+    },
+    {
+     "react": "",
+     "screen": "Choose position",
+     "at": "span < button.flex < div.space-y-1.5",
+     "left": true
+    },
+    {
+     "react": "",
+     "screen": "Choose era",
+     "at": "span < button.flex < div.space-y-1.5",
+     "left": true
+    },
+    {
+     "react": "60",
+     "screen": "65",
+     "at": "div.text-6xl < div.rounded-xl < div.bg-card"
+    }
+   ],
+   "staleList": [
+    {
+     "react": "",
+     "screen": "Choose nationality",
+     "at": "span < button.flex < div.space-y-1.5",
+     "left": true,
+     "step": "Roll again"
+    },
+    {
+     "react": "",
+     "screen": "Choose position",
+     "at": "span < button.flex < div.space-y-1.5",
+     "left": true,
+     "step": "Roll again"
+    },
+    {
+     "react": "",
+     "screen": "Choose era",
+     "at": "span < button.flex < div.space-y-1.5",
+     "left": true,
+     "step": "Roll again"
+    },
+    {
+     "react": "60",
+     "screen": "65",
+     "at": "div.text-6xl < div.rounded-xl < div.bg-card",
+     "step": "Roll again"
+    },
+    {
+     "react": "ST · Age 17 ·",
+     "screen": "ST · Age 16 ·",
+     "at": "p.text-xs < div.min-w-0 < div.flex",
+     "step": "career press 3"
+    },
+    {
+     "react": "ST · Age 18 ·",
+     "screen": "ST · Age 16 ·",
+     "at": "p.text-xs < div.min-w-0 < div.flex",
+     "step": "career press 12"
+    },
+    {
+     "react": "🏠 Life Event · 3 events remaining",
+     "screen": "🏠 Life Event · 4 events remaining",
+     "at": "span.text-[10px] < div.text-center < div.rounded-xl",
+     "step": "career press 10"
+    },
+    {
+     "react": "⚡ Positive Event · 2 events remaining",
+     "screen": "🏠 Life Event · 4 events remaining",
+     "at": "span.text-[10px] < div.text-center < div.rounded-xl",
+     "step": "career press 11"
+    },
+    {
+     "react": "🏠 Life Event · 1 event remaining",
+     "screen": "🏠 Life Event · 4 events remaining",
+     "at": "span.text-[10px] < div.text-center < div.rounded-xl",
+     "step": "career press 12"
+    }
+   ],
+   "staleAt": "choose nationality Brazil",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 325,
+   "live": null,
+   "age": {
+    "looks": 13,
+    "older": 12,
+    "wrong": 12,
+    "wrongAt": "at \"career press 1\" the header said Age 16 and the save said 17"
+   },
+   "maxLeft": 3,
+   "undo": {
+    "on": true,
+    "back": 314,
+    "copies": 0,
+    "looks": 8,
+    "presses": 7,
+    "fonts": 0,
+    "maxStale": 2,
+    "staleAt": "the translator undoes itself",
+    "returned": 0,
+    "ageAt": 18,
+    "ageLooks": 8,
+    "ageOlder": 3,
+    "ageWrong": 5,
+    "ageWrongAt": "at \"the translator undoes itself\" the header said Age 16 and the save said 18",
+    "staleList": [
+     {
+      "react": "ST · Age 18 ·",
+      "screen": "ST · Age 16 ·",
+      "at": "p.text-xs < div.min-w-0 < div.flex",
+      "step": "after the undo, press 4"
+     },
+     {
+      "react": "🏠 Life Event · 1 event remaining",
+      "screen": "🏠 Life Event · 4 events remaining",
+      "at": "span.text-[10px] < div.text-center < div.rounded-xl",
+      "step": "the translator undoes itself"
+     }
+    ]
+   },
+   "bank": null,
+   "directLive": {
+    "remove": "the copy stayed",
+    "insert": "at the end",
+    "write": "still shows \"copy of 16\"",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Brazil🇧🇷",
+    "Striker (ST)",
+    "Current era (2025 start)",
+    "🎲 Generate Starting Potential",
+    "🎲 Roll again",
+    "🎮 Customize your build",
+    "✅ Lock in build",
+    "⚽ Begin Career",
+    "Next Year",
+    "Review contract",
+    "Sign contract",
+    "Next Season",
+    "Continue to Season Summary →",
+    "Continue →",
+    "Continue →",
+    "🏋️Post training videoShow off your skills in the gym+0.1-0.",
+    "Continue →",
+    "🎭The ShowmanFame comes easy: followers grow 60% faster, spo",
+    "🃏One night only55%: win €0.4M · 45%: lose €0.8M",
+    "🤝Dedicate it to the teamOverall +1, Market value +€3M",
+    "🕊️Gently decline pigeon ownershipGerald visits on his own s",
+    "Request transfer 📤",
+    "Review contract",
+    "Sign contract",
+    "Next Season",
+    "Continue to Season Summary →",
+    "Continue →"
+   ],
+   "dbBlocked": 4,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [
+    "Choose nationality",
+    "Choose position",
+    "Choose era"
+   ],
+   "create": {
+    "drawn": true,
+    "boxes": {
+     "nationality": {
+      "shown": "«Choose nationality» «Brazil»",
+      "has": true,
+      "visible": false,
+      "was": "Choose nationality",
+      "words": "Choose nationalityBrazil🇧🇷"
+     },
+     "position": {
+      "shown": "«Choose position»«Striker (ST)»",
+      "has": true,
+      "visible": true,
+      "was": "Choose position",
+      "words": "Choose positionStriker (ST)"
+     },
+     "era": {
+      "shown": "«Choose era»«Current era (2025 start)»",
+      "has": true,
+      "visible": true,
+      "was": "Choose era",
+      "words": "Choose eraCurrent era (2025 start)"
+     }
+    },
+    "reached": true,
+    "reachedDetail": "h1 \"🇧🇷Joao Teste\", create form gone, save Joao Teste, Brazil, youth, age 16",
+    "seasonAt": 1,
+    "seasonDetail": "age 16 to 17 on press 1, h1 \"🇧🇷Joao Teste\", phase contract_offer; the walk went on to age 18, phase random_events"
+   },
+   "stepList": [
+    {
+     "name": "the create screen draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "type the name",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "choose nationality Brazil",
+     "ok": true,
+     "did": "Brazil🇧🇷",
+     "by": "",
+     "boundary": false,
+     "moved": 1,
+     "stale": 1,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "choose position Striker",
+     "ok": true,
+     "did": "Striker (ST)",
+     "by": "",
+     "boundary": false,
+     "moved": 2,
+     "stale": 2,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "choose era Current era",
+     "ok": true,
+     "did": "Current era (2025 start)",
+     "by": "",
+     "boundary": false,
+     "moved": 3,
+     "stale": 3,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Generate Starting Potential",
+     "ok": true,
+     "did": "🎲 Generate Starting Potential",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 3,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Roll again",
+     "ok": true,
+     "did": "🎲 Roll again",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 4,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Customize your build",
+     "ok": true,
+     "did": "🎮 Customize your build",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Lock in build",
+     "ok": true,
+     "did": "✅ Lock in build",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Begin Career",
+     "ok": true,
+     "did": "⚽ Begin Career",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 0,
+     "phase": "youth",
+     "age": 16
+    },
+    {
+     "name": "career press 1",
+     "ok": true,
+     "did": "Next Year",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 1,
+     "phase": "contract_offer",
+     "age": 17
+    },
+    {
+     "name": "career press 2",
+     "ok": true,
+     "did": "Review contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 1,
+     "phase": "contract_offer",
+     "age": 17
+    },
+    {
+     "name": "career press 3",
+     "ok": true,
+     "did": "Sign contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 1,
+     "phase": "playing",
+     "age": 17
+    },
+    {
+     "name": "career press 4",
+     "ok": true,
+     "did": "Next Season",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 1,
+     "phase": "newspaper",
+     "age": 18
+    },
+    {
+     "name": "career press 5",
+     "ok": true,
+     "did": "Continue to Season Summary →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 1,
+     "phase": "season_summary",
+     "age": 18
+    },
+    {
+     "name": "career press 6",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 1,
+     "phase": "ballon_dor",
+     "age": 18
+    },
+    {
+     "name": "career press 7",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 1,
+     "phase": "social_media_action",
+     "age": 18
+    },
+    {
+     "name": "career press 8",
+     "ok": true,
+     "did": "🏋️Post training videoShow off your skills in the gym+0.1-0.",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 1,
+     "phase": "social_media_action",
+     "age": 18
+    },
+    {
+     "name": "career press 9",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 1,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "career press 10",
+     "ok": true,
+     "did": "🎭The ShowmanFame comes easy: followers grow 60% faster, spo",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "career press 11",
+     "ok": true,
+     "did": "🃏One night only55%: win €0.4M · 45%: lose €0.8M",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 3,
+     "stale": 2,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "career press 12",
+     "ok": true,
+     "did": "🤝Dedicate it to the teamOverall +1, Market value +€3M",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 2,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "the translator undoes itself",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 4,
+     "stale": 2,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 1",
+     "ok": true,
+     "did": "🕊️Gently decline pigeon ownershipGerald visits on his own s",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 1,
+     "phase": "transfer_window",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 2",
+     "ok": true,
+     "did": "Request transfer 📤",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 1,
+     "phase": "transfer_window",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 3",
+     "ok": true,
+     "did": "Review contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 1,
+     "phase": "transfer_window",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 4",
+     "ok": true,
+     "did": "Sign contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 1,
+     "phase": "playing",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 5",
+     "ok": true,
+     "did": "Next Season",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 0,
+     "phase": "newspaper",
+     "age": 19
+    },
+    {
+     "name": "after the undo, press 6",
+     "ok": true,
+     "did": "Continue to Season Summary →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 0,
+     "phase": "season_summary",
+     "age": 19
+    },
+    {
+     "name": "after the undo, press 7",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 0,
+     "phase": "ballon_dor",
+     "age": 19
+    }
+   ]
+  }
+ ]
+}
