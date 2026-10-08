@@ -1,0 +1,19 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerInternationals.test.ts src/lib/clubManagerSlots.test.ts src/lib/gmStaff.test.ts src/test/academyFilters.test.tsx src/test/calendarCurrentDate.test.tsx src/test/clubManagerBracketMoment.test.tsx src/test/clubManagerDealMoment.test.tsx src/test/clubManagerDecisions.test.tsx src/test/clubManagerDeskCues.test.tsx src/test/clubManagerEraLoad.test.tsx src/test/clubManagerEraNationalities.test.ts src/test/clubManagerJobHunt.test.ts src/test/clubManagerManagerFace.test.tsx src/test/clubManagerSave.test.tsx src/test/clubManagerShootoutOrder.test.ts src/test/clubManagerShootoutTile.test.tsx src/test/clubManagerSlots.test.tsx src/test/clubManagerWorldEditor.test.tsx src/test/clubManagerWorldEditorPage.test.tsx src/test/cmDataOnDemandIdentity.test.ts src/test/contractPreview.test.tsx src/test/facilitiesPreview.test.tsx src/test/inboxCard.test.tsx src/test/liveSimMotion.test.tsx src/test/managerHotSeatCarryOn.test.ts src/test/managerHotSeatCarryOnCard.test.tsx src/test/managerMatchPlans.test.tsx src/test/managerWorldBrowser.test.tsx src/test/numberFormatting.test.tsx src/test/staffScreen.test.tsx  src/lib/soccerCareerLeague.test.ts --testTimeout=300000 --hookTimeout=120000
+simClubManager: node scripts/simClubManager.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+simDailyClubPool: node scripts/simDailyClubPool.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simCareerClubPool: node scripts/simCareerClubPool.mjs
+simManagerCareer: node scripts/simManagerCareer.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simClubManagerClubList: node scripts/simClubManagerClubList.mjs
+simCmInternationals: node scripts/simCmInternationals.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simJobMarket: node scripts/simJobMarket.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simCmDataOnDemand: node scripts/simCmDataOnDemand.mjs
+simNationalities: node scripts/simNationalities.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure,drop4,cupless,shapes
