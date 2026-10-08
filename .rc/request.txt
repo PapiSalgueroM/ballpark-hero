@@ -1,0 +1,4 @@
+#!serial
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+simHomeFront: node scripts/simHomeFront.mjs
