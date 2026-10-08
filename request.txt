@@ -1,0 +1,2 @@
+#!serial
+m6-vitest: node .rc/x/vm6.mjs && node_modules/.bin/vitest run src/test/usSeason.test.ts --testTimeout=300000 --hookTimeout=120000

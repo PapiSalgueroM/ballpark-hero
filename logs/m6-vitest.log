@@ -1,0 +1,64 @@
+VM6 PATCHED src/lib/season/us.ts: the mutation is in place
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/usSeason.test.ts [2m([22m[2m26 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 158[2mms[22m[39m
+   [32m✓[39m the season length ledger[2m > [22mhas windows in order that never overlap or leave a gap, the last one open[32m 3[2mms[22m[39m
+   [32m✓[39m the season length ledger[2m > [22mholds a year exactly when its real length is not the one the career plays[32m 5[2mms[22m[39m
+   [32m✓[39m the season length ledger[2m > [22msays each kind of held year in its own words[32m 0[2mms[22m[39m
+   [32m✓[39m the league shape ledger[2m > [22mhas whole divisions, no team twice, and two conferences of equal size[32m 3[2mms[22m[39m
+   [32m✓[39m the league shape ledger[2m > [22mnever has two windows for one sport, era and year[32m 0[2mms[22m[39m
+   [32m✓[39m the league shape ledger[2m > [22manswers only for the era and the years it holds[32m 0[2mms[22m[39m
+   [32m✓[39m the league shape ledger[2m > [22mknows who hosts the 17th game only where two sources say so[32m 0[2mms[22m[39m
+   [32m✓[39m the league shape ledger[2m > [22mholds a scoring mean for both NBA eras[32m 0[2mms[22m[39m
+   [32m✓[39m splitTotal[2m > [22malways sums to the total with every cap and minimum held[32m 23[2mms[22m[39m
+   [32m✓[39m splitTotal[2m > [22mgives null when the caps or the minimums cannot hold the total[32m 0[2mms[22m[39m
+   [32m✓[39m splitTotal[2m > [22mfollows the weights, and a zero weight only gets what is forced[32m 0[2mms[22m[39m
+   [32m✓[39m dealUnnamed[2m > [22mmeets every opponent once, one game a round, home and away split evenly[32m 20[2mms[22m[39m
+   [32m✓[39m dealUnnamed[2m > [22mkeys the side of the odd game, so both eight and nine home games happen[32m 1[2mms[22m[39m
+   [32m✓[39m the NBA schedule formula, dealt for every team[2m > [22mmeets every kind of opponent as often as the formula says, 41 at home, whoever he plays for[32m 32[2mms[22m[39m
+   [32m✓[39m the NBA schedule formula, dealt for every team[2m > [22mis caught when a division rival is met three times[32m 0[2mms[22m[39m
+   [32m✓[39m an NBA season, derived from its saved line[2m > [22mlands the games played, the averages, the band and the names[32m 19[2mms[22m[39m
+   [32m✓[39m an NBA season, derived from its saved line[2m > [22mholds a year whose real length is not 82, and never names a throwback opponent[32m 3[2mms[22m[39m
+   [32m✓[39m an NBA season, derived from its saved line[2m > [22mgives each stat its own number a game, so a big scoring night is not by rule his best rebounding night[32m 4[2mms[22m[39m
+   [32m✓[39m an NBA season, derived from its saved line[2m > [22monly calls a night a takeover when it was one: 20 or more, 1.3 times his average, in a win[32m 14[2mms[22m[39m
+   [32m✓[39m an NBA season, derived from its saved line[2m > [22mnames a team of his own season in the worked example, never his own, and nobody when unnamed[32m 1[2mms[22m[39m
+   [32m✓[39m an NBA season, derived from its saved line[2m > [22mprints his points once: the chip is the points, the bits are the rest[32m 0[2mms[22m[39m
+   [32m✓[39m an NBA season, derived from its saved line[2m > [22mgives no view to a banned year or a season with no games[32m 0[2mms[22m[39m
+   [32m✓[39m the NBA playoff path[2m > [22mlays out every depth and every number of playoff games that fits it[32m 17[2mms[22m[39m
+[31m   [31m×[31m the NBA playoff path[2m > [22mdraws every round before the Finals from his own conference, and only the Finals from the other[39m[32m 8[2mms[22m[39m
+[31m     → DEN "Lost in the first round" round 1 against Philadelphia 76ers: expected false to be true // Object.is equality[39m
+   [32m✓[39m the NBA playoff path[2m > [22mhas no path for a missed postseason or a result the engine never wrote[32m 0[2mms[22m[39m
+   [32m✓[39m the NBA clock[2m > [22mreads a quarter at every minute[32m 1[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeason.test.ts[2m > [22mthe NBA playoff path[2m > [22mdraws every round before the Finals from his own conference, and only the Finals from the other
+[31m[1mAssertionError[22m: DEN "Lost in the first round" round 1 against Philadelphia 76ers: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m forEach src/test/usSeason.test.ts:[2m362:95[22m[39m
+    [90m360| [39m            expect(conf, `${st.opp} is a team of the league`).toBeDefi…
+    [90m361| [39m            /* round index 3 is the Finals: the only round against the…
+    [90m362| [39m            expect(conf === mine, `${team} "${teamResult}" round ${r +…
+    [90m   | [39m                                                                                              [31m^[39m
+    [90m363| [39m            [35mif[39m (r [33m<[39m [34m3[39m) early [33m+=[39m [34m1[39m[33m;[39m [35melse[39m finals [33m+=[39m [34m1[39m[33m;[39m
+    [90m364| [39m          })[33m;[39m
+[90m [2m❯[22m forEach src/test/usSeason.test.ts:[2m358:22[22m[39m
+[90m [2m❯[22m src/test/usSeason.test.ts:[2m355:27[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m25 passed[39m[22m[90m (26)[39m
+[2m   Start at [22m 10:56:26
+[2m   Duration [22m 1.43s[2m (transform 397ms, setup 54ms, collect 488ms, tests 158ms, environment 316ms, prepare 172ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeason.test.ts,title=src/test/usSeason.test.ts > the NBA playoff path > draws every round before the Finals from his own conference%2C and only the Finals from the other,line=362,column=95::AssertionError: DEN "Lost in the first round" round 1 against Philadelphia 76ers: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ forEach src/test/usSeason.test.ts:362:95%0A ❯ forEach src/test/usSeason.test.ts:358:22%0A ❯ src/test/usSeason.test.ts:355:27%0A%0A

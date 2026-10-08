@@ -1,0 +1,1 @@
+m6-vitest exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeason.test.ts,title=src/test/usSeason.test.ts > the NBA playoff path > draws every round before the
