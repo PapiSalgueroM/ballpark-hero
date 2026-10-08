@@ -1,0 +1,6 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 83s | 
+play-c exit=0 83s | playSeasonCentreMotion: 61 checks, 0 failed (only C)
+play-held exit=1 84s | playSeasonCentreMotion: 61 checks, 2 failed (control held) (only C)
+vitest-round exit=0 53s |    Duration  52.37s (transform 4.76s, setup 594ms, collect 7.43s, tests 48.07s, environment 3.67s, prepare 1.10s)
+m7src exit=1 111s | m7 source mutation: part C exit=1

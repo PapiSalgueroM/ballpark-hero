@@ -1,0 +1,25 @@
+tar: .: file changed as we read it
+m7 applied once. The line now reads: const offered = useMemo(() => (canPlay && plan ? planMoments(SOCCER, row, ctx, plan) : []), [canPlay, held, plan, row, ctx]);
+--- building the mutated copy
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[32m✓ built in 35.61s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+--- part C on the mutated build
+--- every FAIL line of part C under m7:
+55:FAIL C8. matchday 7 of that season shows node's table WITH the YOUR CALL he banked, which is not the table as saved (20 rows; with his call: false; as saved: true)
+56:FAIL C8. and the score as he played it (0-1; he played it 1-1, the record had 0-1)
+--- C8 lines:
+2:C) chunks: Season Centre SoccerSeasonCentre-C0E9Fodr.js, little pitch MiniPitch-CGsBQ591.js, pitch part PitchSurface-BxwzpMC8.js
+6:ok   C8. node: his YOUR CALL changes the score of matchday 7 and the table that week
+15:ok   C2. nothing asked for from the press to the first match carries a Club Manager marker (2 files: MiniPitch-CGsBQ591.js PitchSurface-BxwzpMC8.js)
+54:ok   C8. opened from the career page, the season he played a moment in offers none (kick off card line false, fixtures marked on 0 of 7 matchdays)
+55:FAIL C8. matchday 7 of that season shows node's table WITH the YOUR CALL he banked, which is not the table as saved (20 rows; with his call: false; as saved: true)
+56:FAIL C8. and the score as he played it (0-1; he played it 1-1, the record had 0-1)
+--- tail:
+ok   C6. every button of the Season Centre is at least 44 px tall and every speed button 44 px wide, on 17 screens (0 short, 0 narrow)
+ok   C6. no text of the Season Centre is under 12 px outside the table card (0; inside the table card, which is not this round's: 69)
+ok   C6. the header's club and season are never clipped and nothing scrolls sideways (0, 0)
+ok   C5. on 9 screens the career walker never presses one of this round's buttons, and none of their labels starts like an action it presses (0 picks, no clash)
+ok   C. no page error on any screen (none)
+playSeasonCentreMotion: 61 checks, 2 failed (only C)
+m7 source mutation: part C exit=1
