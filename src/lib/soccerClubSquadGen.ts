@@ -19,7 +19,7 @@
  * WHO THEY ARE. Names come only from the closed name families in
  * intlNames.ts, every one of which is fenced against real players, and the
  * caller decides whether names are shown at all: a real past season with no
- * checked squad is drawn BY ROLE ONLY ("First choice striker"), because an
+ * checked squad is drawn BY ROLE ONLY ("First choice forward"), because an
  * invented name must never be attached to a real club in a real past season.
  *
  * AGREEING WITH THE ENGINE. The engine gives 20 to 30 league games to a
@@ -79,11 +79,12 @@ export const FOREIGN_NATIONS: readonly string[] = [
   'USA', 'Mexico', 'Colombia', 'Uruguay', 'Denmark', 'Sweden', 'Norway', 'Poland', 'Turkey', 'Egypt',
 ];
 
-/** What a role is called on a sheet with no names. */
-export const ROLE_WORD: Record<string, string> = {
-  GK: 'keeper', CB: 'centre back', RB: 'right back', LB: 'left back',
-  CM: 'central midfielder', CDM: 'holding midfielder', CAM: 'attacking midfielder',
-  ST: 'striker', RW: 'right winger', LW: 'left winger',
+/** What a role is called on a sheet with no names: his place in his LINE on
+ *  rating, the same order the eleven and his own rank are read in, so the
+ *  "third choice forward" is in the eleven and the fourth is not. His exact
+ *  position is printed beside it. */
+export const ROLE_WORD: Record<SquadGroup, string> = {
+  GK: 'keeper', DEF: 'defender', MID: 'midfielder', ATT: 'forward',
 };
 const CHOICE_WORD = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh'];
 
@@ -254,9 +255,9 @@ export function genClubSquad(q: GenQuery): SquadMan[] {
   if (!named) {
     const seen: Record<string, number> = {};
     for (const man of men) {
-      const k = seen[man.pos] ?? 0;
-      seen[man.pos] = k + 1;
-      const role = `${CHOICE_WORD[k] ?? `Number ${k + 1}`} choice ${ROLE_WORD[man.pos] ?? man.pos}`;
+      const k = seen[man.group] ?? 0;
+      seen[man.group] = k + 1;
+      const role = `${CHOICE_WORD[k] ?? `Number ${k + 1}`} choice ${ROLE_WORD[man.group]}`;
       man.name = role;
       man.role = role;
       delete man.nation;

@@ -163,12 +163,13 @@ describe('the invented squad', () => {
       expect(m.role).toBe(m.name);
       expect(pool.has(m.name)).toBe(false);
       expect(m.nation).toBeUndefined();
-      expect(m.name).toMatch(/^(First|Second|Third|Fourth) choice [a-z ]+$/);
+      expect(m.name).toMatch(/^(First|Second|Third|Fourth|Fifth|Sixth|Seventh) choice (keeper|defender|midfielder|forward)$/);
     }
     /* the same men underneath: ids, ages and ratings agree with the named sheet */
     const byId = new Map(named.map(m => [m.id, m]));
     for (const m of roles) expect([m.age, m.ovr, m.pos]).toEqual([byId.get(m.id)?.age, byId.get(m.id)?.ovr, byId.get(m.id)?.pos]);
-    expect(roles.find(m => m.pos === 'ST')?.name).toBe('First choice striker');
+    expect(roles.find(m => m.group === 'ATT')?.name).toBe('First choice forward');
+    expect(roles.filter(m => m.group === 'MID').map(m => m.name)[6]).toBe('Seventh choice midfielder');
   });
 
   it('every signing nation and the three aliased countries have a name family', () => {
