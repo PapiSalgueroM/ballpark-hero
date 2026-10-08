@@ -8,52 +8,13 @@ import { useEffect, useState } from "react";
    handful of divs. No canvas, no libraries, no bundle cost worth measuring.
    All of it respects prefers-reduced-motion by rendering the end state. */
 
-const prefersReducedMotion = () =>
-  typeof window !== "undefined" &&
-  typeof window.matchMedia === "function" &&
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-const CONFETTI_COLORS = ["#FBBF24", "#F59E0B", "#10B981", "#3B82F6", "#EC4899", "#A855F7", "#FFFFFF"];
-
-/** Falling confetti burst. Absolutely positioned inside a relative parent. */
-export const Confetti = ({ pieces = 40, gold = false }: { pieces?: number; gold?: boolean }) => {
-  const [on, setOn] = useState(false);
-  useEffect(() => {
-    if (prefersReducedMotion()) return;
-    setOn(true);
-  }, []);
-  if (!on) return null;
-
-  const palette = gold ? ["#FBBF24", "#F59E0B", "#FDE68A", "#FFFFFF"] : CONFETTI_COLORS;
-
-  return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-xl" aria-hidden="true">
-      {Array.from({ length: pieces }).map((_, i) => {
-        // Deterministic-ish spread from the index so pieces never clump
-        const left = ((i * 37) % 100);
-        const delay = ((i * 13) % 22) / 10;
-        const duration = 2.4 + ((i * 7) % 14) / 10;
-        const size = 5 + ((i * 5) % 6);
-        const color = palette[i % palette.length];
-        return (
-          <span
-            key={i}
-            className="absolute top-0 animate-confetti-fall"
-            style={{
-              left: `${left}%`,
-              width: `${size}px`,
-              height: `${size * 1.6}px`,
-              backgroundColor: color,
-              borderRadius: i % 3 === 0 ? "50%" : "2px",
-              animationDelay: `${delay}s`,
-              animationDuration: `${duration}s`,
-            }}
-          />
-        );
-      })}
-    </div>
-  );
-};
+/* Round 1107: the confetti and the reduced motion test moved word for word
+   to the career moment kit (src/components/career-moments/Confetti.tsx).
+   It is re-exported from here so every importer of this path stands. The
+   kit is imported by FILE, never through its index, so the fight and US
+   career pages that import this module do not take the whole kit. */
+import { prefersReducedMotion } from "@/components/career-moments/Confetti";
+export { Confetti } from "@/components/career-moments/Confetti";
 
 /** Gold shine sweeping across a container. Wrap anything trophy-ish. */
 export const ShineWrap = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (

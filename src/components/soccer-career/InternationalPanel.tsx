@@ -4,6 +4,7 @@ import { FlagImg } from "@/components/FlagImg";
 import { useRevealScroll } from "@/hooks/useRevealScroll";
 import { Confetti } from "@/components/soccer-career/CareerFx";
 import { beatStyle, tournamentMomentKey, useCareerMoment } from "@/components/soccer-career/careerMoments";
+import { TrophyMoment } from "@/components/career-moments/CareerMomentCard";
 import { revealDelay } from "@/components/club-manager/Celebration";
 import { SpeechChoices, SpokenSpeech } from "@/components/career/AwardsNightCard";
 import { givenSpeechOf, type GivenSpeech } from "@/lib/careerAwardsNight";
@@ -110,13 +111,18 @@ type Screen = "home" | "qualifying" | "squad" | "bracket" | "matches";
    reload, in a new tab, or after the browser was closed.
 
    Round 985 moved it onto the page's one rule for moments (careerMoments.ts),
-   which needs no storage: the page settles every moment the save already
-   holds when it loads it, this card's included, so only a tournament that
-   ends in this visit plays. That closes both replays the first version had
+   which needs no storage. That closes both replays the first version had
    to accept (a save already on a won card the day it shipped, and a browser
    that could not write its list). The key is still the run, not just the
    edition (tournamentMomentKey), so a different career's win gets its own
-   moment. */
+   moment.
+
+   Round 1107: a moment is settled on load only when the save SITS on its
+   card. The tournament is played inside the season step and its card comes
+   two or three Continues later, so a save reloaded in between (on the
+   newspaper, the season summary or the awards night) still holds a card
+   nobody has seen: it plays when he reaches it. A save reloaded ON this card
+   has been seen and stays still. */
 /** The card's entrance pace: the kit's stagger, started early and stepped a
     little tighter than a season feed, because it carries up to fourteen beats
     and the speech should not wait three seconds behind them. */
@@ -376,8 +382,9 @@ export function TournamentCard({
   ];
 
   /* Round 926: a won tournament lands as the biggest night of the career.
-     Gold confetti, the trophy and the title slam in, and every line under
-     them ticks in on the kit's pace. This is every tournament the engine
+     Gold confetti, the cup lifts (Round 1107: the shared cup, where an emoji
+     used to slam), the title slams in, and every line under them ticks in on
+     the kit's pace. This is every tournament the engine
      runs, not only the World Cup: the Euros, the Copa, the Africa Cup of
      Nations, the Asian Cup, the Gold Cup and the OFC Nations Cup too.
      Anything else (out in the group, beaten
@@ -387,8 +394,35 @@ export function TournamentCard({
      Transforms and opacity only, so the card's box never moves. */
   const won = fresh && isWinner;
   const quiet = fresh && !isWinner;
-  let beat = 0;
+  /* Round 1107: on a won card the head is the career moment kit's Trophy
+     scene, which lifts the shared cup at beat 0 and slams the title at beat 1
+     on its own pace (0.1 s and 0.3 s). The card's own counter then starts at
+     2, so the nation row still lands at 0.42 s and the card reads top to
+     bottom exactly as it did. */
+  let beat = isWinner ? 2 : 0;
   const nextBeat = () => beatStyle(moment, beatDelay(beat++));
+  /* The two rows under the title, the same two elements on every path. */
+  const nationRow = (
+    <div
+      className={`flex items-center justify-center gap-1.5 flex-wrap${won ? " cm-rise" : ""}`}
+      style={won ? nextBeat() : undefined}
+    >
+      <span className="text-xs font-bold flex items-center gap-1">
+        <FlagImg name={t.nation} size={16} />{t.nation}
+      </span>
+      <ResultPill result={t.myResult} />
+    </div>
+  );
+  const championsLine = (
+    <p
+      className={`text-[11px] text-muted-foreground flex items-center justify-center gap-1 flex-wrap${won ? " cm-rise" : ""}`}
+      style={won ? nextBeat() : undefined}
+    >
+      Champions: <FlagImg name={t.champion} size={14} />
+      <span className="font-bold text-foreground">{t.champion}</span>
+      {t.runnerUp && <span>beat {t.runnerUp} in the final</span>}
+    </p>
+  );
 
   return (
     <div
@@ -397,31 +431,34 @@ export function TournamentCard({
       className={`relative rounded-xl border-2 ${border} bg-gradient-to-b ${grad} to-transparent p-4 space-y-3${quiet ? " cm-rise" : ""}`}
       style={quiet && !moment.live ? { animationPlayState: "paused" } : undefined}
     >
-      <div className="text-center space-y-1.5">
-        <div className={`text-3xl${won ? " cm-slam" : ""}`} style={won ? nextBeat() : undefined}>
-          {isWinner ? "🏆" : missed ? "😞" : "🌍"}
-        </div>
-        <h3 className={`text-lg font-black leading-tight${won ? " cm-slam" : ""}`} style={won ? nextBeat() : undefined}>
-          {t.name} {t.year}
-        </h3>
-        <div
-          className={`flex items-center justify-center gap-1.5 flex-wrap${won ? " cm-rise" : ""}`}
-          style={won ? nextBeat() : undefined}
+      {isWinner ? (
+        /* The cup comes to this card (the season summary already lifted one
+           for the same win two cards earlier). The card's own moment is
+           handed in, so the kit watches nothing, a tile and Back leave it
+           still, and its key is the card's. Embedded: no button, no bar and
+           no confetti of the kit's own; the card keeps all three. */
+        <TrophyMoment
+          embedded
+          stacked
+          bind="sc-intl-trophy"
+          moment={{ ...moment, fresh }}
+          spec={{ kind: "trophy", key: null, title: `${t.name} ${t.year}`, tone: "gold" }}
         >
-          <span className="text-xs font-bold flex items-center gap-1">
-            <FlagImg name={t.nation} size={16} />{t.nation}
-          </span>
-          <ResultPill result={t.myResult} />
+          {nationRow}
+          {championsLine}
+        </TrophyMoment>
+      ) : (
+        <div className="text-center space-y-1.5">
+          <div className="text-3xl">
+            {missed ? "😞" : "🌍"}
+          </div>
+          <h3 className="text-lg font-black leading-tight">
+            {t.name} {t.year}
+          </h3>
+          {nationRow}
+          {championsLine}
         </div>
-        <p
-          className={`text-[11px] text-muted-foreground flex items-center justify-center gap-1 flex-wrap${won ? " cm-rise" : ""}`}
-          style={won ? nextBeat() : undefined}
-        >
-          Champions: <FlagImg name={t.champion} size={14} />
-          <span className="font-bold text-foreground">{t.champion}</span>
-          {t.runnerUp && <span>beat {t.runnerUp} in the final</span>}
-        </p>
-      </div>
+      )}
 
       {t.playerApps > 0 && (
         <div className="grid grid-cols-4 gap-1.5">

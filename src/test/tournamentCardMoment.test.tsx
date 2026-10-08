@@ -30,6 +30,14 @@
  * confetti draws in an effect (it honours reduced motion there), and a static
  * render would report it missing on a card that does draw it. Reduced motion
  * itself is CSS that jsdom does not apply; the kit's own block holds it.
+ *
+ * Round 1107 made four edits here and no more: the number reader skips style
+ * blocks (the won head now mounts the shared cup, which carries one); the won
+ * head is held as the career moment kit's Trophy scene; the two counts that
+ * named the emoji's beat went from 14 to 13 (the cup carries no inline delay
+ * and is aria hidden); and the reload helper settles the way a save sitting
+ * ON the card does (phase world_cup), because that is the only load that
+ * settles a tournament now.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render } from '@testing-library/react';
@@ -94,9 +102,12 @@ function mount(t: IntlTournament, Card: typeof TournamentCard = TournamentCard) 
     the save it loaded, which sits on the tournament `save`. Pass null for the
     control: a load that settled nothing, as when the tournament ends in this
     visit. */
-async function reload(save: IntlTournament | null): Promise<typeof TournamentCard> {
+async function reload(save: IntlTournament | null, phase: CareerState['phase'] = 'world_cup'): Promise<typeof TournamentCard> {
   const moments = await import('@/components/soccer-career/careerMoments');
-  if (save) moments.settleLoadedMoments({ pendingTournament: save } as CareerState);
+  /* Round 1107: a save sitting ON the card is phase world_cup, and only that
+     settles the card's moment now. Another phase is a save that still holds
+     the tournament a Continue or two before its card. */
+  if (save) moments.settleLoadedMoments({ phase, pendingTournament: save } as CareerState);
   return (await import('@/components/soccer-career/InternationalPanel')).TournamentCard;
 }
 
@@ -122,7 +133,12 @@ function fixtureNumbers(t: IntlTournament): Set<string> {
 
 function strayNumbers(c: HTMLElement, t: IntlTournament): string[] {
   const allowed = fixtureNumbers(t);
-  const printed = (card(c).textContent ?? '').match(/\d+(?:\.\d+)?/g) ?? [];
+  /* Round 1107: the won card's head mounts the shared cup, which carries its
+     own style block, and a style block's CSS is not printed text. So the card
+     is read from a clone with every style element taken out. */
+  const copy = card(c).cloneNode(true) as HTMLElement;
+  copy.querySelectorAll('style').forEach(s => s.remove());
+  const printed = (copy.textContent ?? '').match(/\d+(?:\.\d+)?/g) ?? [];
   return printed.filter(n => !allowed.has(n));
 }
 
@@ -241,12 +257,24 @@ describe('Round 926: the won tournament moment', () => {
     expect(strayNumbers(container, winner(2032))).toEqual(['99']);
   });
 
+  it('Round 1107: the number reader skips style blocks and nothing else: a bare text node is still caught', () => {
+    const { container } = mount(winner(2046));
+    /* The head's style blocks are in the card and are full of digits. */
+    const css = [...card(container).querySelectorAll('style')].map(s => s.textContent ?? '').join(' ');
+    expect(css).toMatch(/\d/);
+    expect(strayNumbers(container, winner(2046))).toEqual([]);
+    card(container).appendChild(document.createTextNode('777'));
+    expect(strayNumbers(container, winner(2046))).toEqual(['777']);
+  });
+
   it('the staggered lines strictly increase, and the speech lands last and gated', () => {
     const { container } = mount(winner(2033));
     const delays = staggerDelays(container);
-    /* trophy, title, nation row, champions line, four stat tiles, honours,
-       four tiles, the speech: fourteen beats on a won card with honours. */
-    expect(delays.length).toBe(14);
+    /* title, nation row, champions line, four stat tiles, honours, four
+       tiles, the speech: thirteen beats on a won card with honours. Round
+       1107: the cup that replaced the trophy emoji carries no inline delay
+       (it is the shared cup, on its own clock) and is aria hidden. */
+    expect(delays.length).toBe(13);
     for (let i = 1; i < delays.length; i++) expect(delays[i]).toBeGreaterThan(delays[i - 1]);
     const allGated = [...card(container).querySelectorAll<HTMLElement>('.cm-rise-gated')];
     const gated = allGated[allGated.length - 1];
@@ -344,7 +372,7 @@ describe('Round 926: the moment plays once', () => {
       expect(card(first.container).dataset.intlMoment).toBe('won');
       const beats = [...card(first.container).querySelectorAll<HTMLElement>('[style]')]
         .filter(el => el.style.animationDelay && !el.closest('[aria-hidden="true"]'));
-      expect(beats.length).toBe(14);
+      expect(beats.length).toBe(13);
       expect(beats.filter(el => el.style.animationPlayState !== 'paused')).toEqual([]);
       expect(confettiPieces(first.container)).toBe(0);
       cleanup();
@@ -397,4 +425,99 @@ describe('Round 926: the quiet card also plays once', () => {
     expect(card(later.container).dataset.intlMoment).toBe('none');
     expect(card(later.container).className).not.toContain('cm-rise');
   }, RELOAD_TIMEOUT);
+});
+
+describe('Round 1107: the won card\'s head is the career moment kit\'s Trophy scene', () => {
+  const trophy = (c: HTMLElement) => [...card(c).querySelectorAll<HTMLElement>('[data-career-moment="trophy"][data-cmo-bind="sc-intl-trophy"]')];
+  /* jsdom has no IntersectionObserver, so a plain mount is live by the time
+     render returns. The fresh half needs an observer that never reports. */
+  class Unseen { observe() {} unobserve() {} disconnect() {} takeRecords() { return []; } }
+
+  it('one Trophy scene, first in the card, lifting one cup where the emoji was', () => {
+    const { container } = mount(winner(2050));
+    const scenes = trophy(container);
+    expect(scenes.length).toBe(1);
+    expect(card(container).querySelectorAll('[data-career-moment]').length).toBe(1);
+    expect(card(container).firstElementChild).toBe(scenes[0]);
+    expect(scenes[0].querySelectorAll('.victory-cup').length).toBe(1);
+    expect(scenes[0].dataset.cmoTone).toBe('gold');
+    expect(scenes[0].querySelector('h3')).toBe(card(container).querySelector('h3'));
+    /* Embedded: the card keeps its own confetti, Continue and border. */
+    expect(scenes[0].querySelectorAll('button, .cmo-bar, .animate-confetti-fall').length).toBe(0);
+    expect(scenes[0].textContent).not.toContain('🏆');
+  });
+
+  it('fresh until it is seen, then live', () => {
+    vi.stubGlobal('IntersectionObserver', Unseen);
+    try {
+      const unseen = mount(winner(2051));
+      expect(trophy(unseen.container)[0].dataset.cmoState).toBe('fresh');
+      expect(trophy(unseen.container)[0].className).toContain('cmo-wait');
+    } finally {
+      vi.unstubAllGlobals();
+    }
+    cleanup();
+    resetCareerMomentsForTest();
+    const seen = mount(winner(2051));
+    expect(trophy(seen.container)[0].dataset.cmoState).toBe('live');
+    expect(trophy(seen.container)[0].className).not.toContain('cmo-wait');
+  });
+
+  it('still after a tile and Back, after a second mount, and after a reload on the card', async () => {
+    const { container, getByText } = mount(winner(2052));
+    expect(trophy(container)[0].dataset.cmoState).toBe('live');
+    fireEvent.click(getByText('Bracket'));
+    /* A tile takes the whole card over: the head is gone while it is open. */
+    expect(container.querySelectorAll('[data-career-moment]').length).toBe(0);
+    fireEvent.click(getByText(/Back/));
+    expect(trophy(container)[0].dataset.cmoState).toBe('still');
+    expect(trophy(container)[0].className).toContain('cmo-still');
+    cleanup();
+    expect(trophy(mount(winner(2052)).container)[0].dataset.cmoState).toBe('still');
+    cleanup();
+    vi.resetModules();
+    const after = mount(winner(2053), await reload(winner(2053)));
+    expect(trophy(after.container)[0].dataset.cmoState).toBe('still');
+    expect(trophy(after.container)[0].querySelectorAll('.victory-cup').length).toBe(1);
+  }, RELOAD_TIMEOUT);
+
+  it('a group exit and a missed tournament hold no scene at all', () => {
+    const lost = mount(groupExit(2054));
+    expect(lost.container.querySelectorAll('[data-career-moment], .victory-cup').length).toBe(0);
+    cleanup();
+    const missed = mount({ ...groupExit(2055), myResult: 'Did Not Qualify', qualified: false, squad: null, matches: [], playerApps: 0 });
+    expect(card(missed.container)).not.toBeNull();
+    expect(missed.container.querySelectorAll('[data-career-moment], .victory-cup').length).toBe(0);
+  });
+});
+
+describe('Round 1107: a tournament is settled on load only when the save sits on its card', () => {
+  it('a save loaded on the season summary that reaches the won card in this visit PLAYS', async () => {
+    vi.resetModules();
+    const Card = await reload(winner(2056), 'season_summary');
+    const reached = mount(winner(2056), Card);
+    expect(card(reached.container).dataset.intlMoment).toBe('won');
+    expect(confettiPieces(reached.container)).toBeGreaterThan(0);
+    expect(card(reached.container).querySelector('[data-career-moment="trophy"]')?.getAttribute('data-cmo-state')).toBe('live');
+    /* Once, like any other: a second mount in the same visit is still. */
+    cleanup();
+    expect(card(mount(winner(2056), Card).container).dataset.intlMoment).toBe('none');
+  }, RELOAD_TIMEOUT);
+
+  it('the same save reloaded ON the card does not', async () => {
+    vi.resetModules();
+    const onCard = mount(winner(2056), await reload(winner(2056), 'world_cup'));
+    expect(card(onCard.container).dataset.intlMoment).toBe('none');
+    expect(confettiPieces(onCard.container)).toBe(0);
+    expect(card(onCard.container).querySelector('[data-career-moment="trophy"]')?.getAttribute('data-cmo-state')).toBe('still');
+  }, RELOAD_TIMEOUT);
+
+  it('every phase but the card\'s own leaves the tournament to play', async () => {
+    for (const phase of ['season_summary', 'ballon_dor', 'newspaper', 'international_debut'] as CareerState['phase'][]) {
+      vi.resetModules();
+      const Card = await reload(winner(2057), phase);
+      expect(card(mount(winner(2057), Card).container).dataset.intlMoment, String(phase)).toBe('won');
+      cleanup();
+    }
+  }, RELOAD_TIMEOUT * 2);
 });
