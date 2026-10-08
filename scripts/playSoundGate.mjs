@@ -241,7 +241,7 @@ function instrument([save, pref, prerender, seed, n]) {
       createBufferSource() {
         const src = super.createBufferSource(), ctx = this;
         const start = src.start.bind(src), halt = src.stop.bind(src);
-        src.start = (when = 0, ...rest) => { snd.starts.push({ delay: when - ctx.currentTime, len: src.buffer ? src.buffer.length : -1, at: performance.now() }); return start(when, ...rest); };
+        src.start = (when = 0, ...rest) => { snd.starts.push({ when, delay: when - ctx.currentTime, len: src.buffer ? src.buffer.length : -1, at: performance.now() }); return start(when, ...rest); };
         src.stop = (...a) => { snd.stops += 1; return halt(...a); };
         return src;
       }
@@ -253,12 +253,14 @@ function instrument([save, pref, prerender, seed, n]) {
   }
   try { Navigator.prototype.vibrate = function vibrate(p) { snd.buzz.push(Array.isArray(p) ? p.slice() : [p]); return true; }; } catch { /* a browser with no buzz */ }
   setInterval(() => { snd.ua.push(!!(navigator.userActivation && navigator.userActivation.hasBeenActive)); }, 100);
-  /* the moment the card's rows enter the document: the clock its countdown runs on */
+  /* the clock the card's countdown runs on: the first frame after its rows entered the document, which is
+     when their CSS animations start counting their delays */
+  let seen = false;
   new MutationObserver(() => {
-    if (!snd.mountAt && n > 0 && document.querySelectorAll('.cm-tick-in').length >= n) {
-      snd.mountAt = performance.now();
-      if (window.__cardMounted) window.__cardMounted();
-    }
+    if (seen || n <= 0 || document.querySelectorAll('.cm-tick-in').length < n) return;
+    seen = true;
+    requestAnimationFrame(ts => { snd.mountAt = ts; });
+    if (window.__cardMounted) window.__cardMounted();
   }).observe(document, { childList: true, subtree: true });
   try {
     if (!sessionStorage.getItem('sound-gate')) {
@@ -369,6 +371,97 @@ if (runs(1)) {
     check(o.errors.length === 0, `/soccer-career at ${width}: no page error${o.errors.length ? `: ${o.errors[0]}` : ''}`);
     await o.ctx.close();
   }
+}
+
+/* ---------- 3. awards night out loud, once ----------
+   MEASURED on a GitHub runner, 2026-10-08 (see the round's report for the runs): how far the first tick lands
+   from its row's 0.6 s on the CARD's clock (the frame its rows entered on), over the flows of this section.
+   The tolerance below is set from that spread and stays well under one step of the countdown, 0.22 s. The
+   spacing between sounds is held much tighter, because one plan schedules them all against one audio clock. */
+const FIRST_TICK_TOL = 0.12, SPACING_TOL = 0.02;
+const STEP = 0.22, FIRST = 0.6;
+/** what one night sounded like: its ticks in order, the sting, the crowd, and where the first tick landed */
+function heard(s) {
+  const ticks = s.starts.filter(x => cueOf(x.len) === 'tick').sort((a, b) => a.when - b.when);
+  const sting = s.starts.find(x => cueOf(x.len) === 'sting'), crowd = s.starts.find(x => cueOf(x.len) === 'crowd');
+  const first = ticks[0];
+  /* the first tick on the card's clock: when it was scheduled, plus how far ahead */
+  const landed = first && s.mountAt ? (first.at - s.mountAt) / 1000 + first.delay : NaN;
+  const spacing = ticks.map((t, k) => t.when - ticks[0].when - k * STEP);
+  return { ticks, sting, crowd, landed, worstSpacing: spacing.reduce((m, d) => Math.max(m, Math.abs(d)), 0), other: s.starts.length - ticks.length - (sting ? 1 : 0) - (crowd ? 1 : 0) };
+}
+const ms = x => (Number.isFinite(x) ? `${Math.round(x * 1000)} ms` : 'not measured');
+async function night(kind, width, height, { cold = false } = {}) {
+  const save = SAVES[kind], n = save.n, tag = cold ? 'cold' : '';
+  const o = await open({ width, height, save, pref: 'on', kit: cold ? 'hold' : 'serve', holdMs: 300 });
+  const through = await clickThrough(o, save);
+  await o.page.waitForTimeout(waitOut(n) + 500);
+  const s = await read(o.page), h = heard(s);
+  const what = `${kind} at ${width}${cold ? ', a cold kit (held 300 ms past the card)' : ''}`;
+  check(through.there && through.loads === 1, `${what}: clicked through from ${through.from} without leaving the document, the night on screen (${n} names)`);
+  const want = { win: [n, 1, 1], podium: [n, 1, 0], out: [n, 0, 0] }[kind];
+  check(h.ticks.length === want[0] && (h.sting ? 1 : 0) === want[1] && (h.crowd ? 1 : 0) === want[2] && h.other === 0,
+    `${what}: ${h.ticks.length} ticks, ${h.sting ? 1 : 0} sting, ${h.crowd ? 1 : 0} crowd, ${h.other} other (wanted ${want.join(', ')}, 0): ${names(s.starts).join(' ')}`, tag);
+  check(Math.abs(h.landed - FIRST) <= FIRST_TICK_TOL, `${what}: the first tick lands ${ms(h.landed)} after the rows appear (the row's own delay is 600 ms, within ${FIRST_TICK_TOL * 1000})`, tag);
+  check(h.ticks.length > 1 && h.worstSpacing <= SPACING_TOL, `${what}: every tick is one step, 220 ms, after the last (worst ${ms(h.worstSpacing)} off)`, tag);
+  if (want[1]) {
+    const gap = h.sting && h.ticks[0] ? h.sting.when - h.ticks[0].when : NaN, wantGap = 0.75 + n * STEP + 0.24 - FIRST;
+    check(Math.abs(gap - wantGap) <= SPACING_TOL, `${what}: the sting starts ${ms(gap)} after the first tick, as the headline lands (wanted ${ms(wantGap)})`, tag);
+  }
+  if (want[2]) check(Math.abs(h.crowd.when - h.sting.when - 0.3) <= 0.005, `${what}: the crowd swells ${ms(h.crowd.when - h.sting.when)} after the sting (300 ms)`);
+  const wantBuzz = kind === 'win' ? '[[30,40,30]]' : '[]';
+  check(JSON.stringify(s.buzz) === wantBuzz, `${what}: buzz ${JSON.stringify(s.buzz)} (wanted ${wantBuzz})`);
+  if (!cold) {
+    /* once: nothing more on its own, and nothing more when the card re-renders with his speech */
+    await o.page.waitForTimeout(2000);
+    const later = await read(o.page);
+    check(later.starts.length === s.starts.length, `${what}: 2 s later, ${later.starts.length - s.starts.length} new starts`, 'once');
+    if (kind === 'win') {
+      const speech = o.page.locator('.cm-rise-gated button').first();
+      const can = (await speech.count()) > 0;
+      if (can) await speech.click();
+      await o.page.waitForTimeout(1500);
+      const spoken = await o.page.evaluate(() => !!document.querySelector('[data-spoken-speech]'));
+      const after = await read(o.page);
+      check(can && spoken, `${what}: he gave a speech and the card shows it`);
+      check(after.starts.length === s.starts.length, `${what}: the speech re-rendered the card and brought ${after.starts.length - s.starts.length} new starts`, 'once');
+      check(after.made === 1, `${what}: ${after.made} context throughout`, 'once');
+    }
+  }
+  check(o.errors.length === 0, `${what}: no page error${o.errors.length ? `: ${o.errors[0]}` : ''}`);
+  await o.ctx.close();
+  return h.landed;
+}
+if (runs(3)) {
+  head(3, 'Awards night out loud, once');
+  const landed = [];
+  for (const [width, height] of SIZES) landed.push(await night('win', width, height));
+  landed.push(await night('podium', 1280, 900));
+  landed.push(await night('out', 1280, 900));
+  landed.push(await night('win', 1280, 900, { cold: true }));
+  console.log(`   first tick, measured this run: ${landed.map(ms).join(', ')} (its row: 600 ms)`);
+}
+
+/* ---------- 4. never before a tap ---------- */
+if (runs(4)) {
+  head(4, 'Never before a tap');
+  const save = SAVES.win;
+  const o = await open({ save, pref: 'on' });
+  await o.page.goto(`${BASE}/soccer-career`, { waitUntil: 'load', timeout: 60000 });
+  /* hands off: no evaluate, no locator, nothing that Playwright sends with a gesture */
+  await o.page.waitForTimeout(6000 + waitOut(save.n));
+  const s = await o.page.evaluate(() => ({ ...JSON.parse(JSON.stringify(window.__snd)), rows: document.querySelectorAll('.cm-tick-in').length }));
+  const untouched = s.ua.length > 20 && s.ua.every(v => v === false);
+  if (!untouched) console.log(`   NOT CHECKED: the walk itself tapped the page (${s.ua.filter(Boolean).length} of ${s.ua.length} activation samples were true)`);
+  check(untouched, `the page was never tapped: ${s.ua.length} activation samples, all false`);
+  check(s.rows >= save.n, `the winner's night was on screen the whole time (${s.rows} rows)`);
+  check(s.made === 0, `contexts made with no tap: ${s.made}`, 'notap');
+  check(s.starts.length === 0, `starts with no tap: ${s.starts.length}`, 'notap');
+  await o.page.mouse.click(5, 5);
+  await o.page.waitForTimeout(1500);
+  const after = await read(o.page);
+  check(after.starts.length === 0, `then one real click on empty space: ${after.starts.length} starts 1.5 s later (the countdown he missed is not played late)`, 'notap');
+  await o.ctx.close();
 }
 
 /* ---------- 9. no audio file ---------- */
