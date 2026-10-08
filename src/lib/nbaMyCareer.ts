@@ -514,6 +514,11 @@ function gamesFor(c: NbaCareerState, rng: () => number): { games: number; note: 
   return { games: 78 + Math.floor(rng() * 5), note: null };
 }
 
+/** Round 1048: every team result simNbaSeason writes, in playoff depth order. The Season Center reads the
+ *  stage by exact equality against this list, never out of a sentence (the Round 103 rule). */
+export const NBA_MISSED_PLAYOFFS = 'Missed the playoffs';
+export const NBA_PLAYOFF_RESULTS = ['Lost in the first round', 'Lost in the conference semis', 'Lost the Conference Finals', 'Lost the NBA Finals', 'WON THE NBA FINALS'] as const;
+
 export function simNbaSeason(
   c: NbaCareerState, teamQuality: number, rng: () => number,
 ): { line: NbaSeasonLine; notes: string[] } {
@@ -552,10 +557,10 @@ export function simNbaSeason(
 
   const strength = teamQuality + (c.ovr - 78) * 0.5;
   const playoffOdds = Math.max(0.05, Math.min(0.92, (strength - 66) / 28));
-  let result = 'Missed the playoffs';
+  let result: string = NBA_MISSED_PLAYOFFS;
   let poStage = -1;
   if (rng() < playoffOdds) {
-    const stages = ['Lost in the first round', 'Lost in the conference semis', 'Lost the Conference Finals', 'Lost the NBA Finals', 'WON THE NBA FINALS'];
+    const stages = NBA_PLAYOFF_RESULTS;
     let stage = 0;
     while (stage < 4 && rng() < 0.42 + (strength - 78) / 80) stage++;
     poStage = stage;

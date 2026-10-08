@@ -442,6 +442,11 @@ function seasonGames(c: CareerState, rng: () => number): { games: number; injury
   return { games: 17, injuryNote: null };
 }
 
+/** Round 1048: every team result simSeason writes, in playoff depth order. The Season Center reads the
+ *  stage by exact equality against this list, never out of a sentence (the Round 103 rule). */
+export const NFL_MISSED_PLAYOFFS = 'Missed the playoffs';
+export const NFL_PLAYOFF_RESULTS = ['Lost in the Wild Card round', 'Lost in the Divisional round', 'Lost the Conference Championship', 'Lost the Super Bowl', 'WON THE SUPER BOWL'] as const;
+
 export function simSeason(
   c: CareerState, teamQuality: number, rng: () => number,
 ): { line: SeasonLine; notes: string[] } {
@@ -545,10 +550,10 @@ export function simSeason(
   // team result
   const strength = teamQuality + (c.ovr - 74) * (c.pos === 'QB' ? 0.55 : c.pos === 'K' ? 0.08 : DEFENSIVE_POS.includes(c.pos) ? 0.22 : 0.25);
   const playoffOdds = Math.max(0.04, Math.min(0.92, (strength - 66) / 26));
-  let result = 'Missed the playoffs';
+  let result: string = NFL_MISSED_PLAYOFFS;
   let poStage = -1;
   if (rng() < playoffOdds) {
-    const runs = ['Lost in the Wild Card round', 'Lost in the Divisional round', 'Lost the Conference Championship', 'Lost the Super Bowl', 'WON THE SUPER BOWL'];
+    const runs = NFL_PLAYOFF_RESULTS;
     let stage = 0;
     while (stage < 4 && rng() < 0.42 + (strength - 76) / 90) stage++;
     poStage = stage;
