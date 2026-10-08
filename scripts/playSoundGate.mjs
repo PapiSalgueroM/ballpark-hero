@@ -375,6 +375,105 @@ if (runs(1)) {
   }
 }
 
+/* ---------- 2. the switch ---------- */
+const FOOT = 'footer [data-sound-toggle="text"]';
+if (runs(2) && !MOUNTED.footer) skipped(2, 'no switch is mounted in the footer');
+if (runs(2) && MOUNTED.footer) {
+  head(2, 'The switch');
+  for (const [width, height] of SIZES) {
+    const o = await open({ width, height, save: SAVES.out });
+    await o.page.goto(`${BASE}/soccer-career`, { waitUntil: 'load', timeout: 60000 });
+    await settle(o.page);
+    const sw = o.page.locator(FOOT);
+    await sw.scrollIntoViewIfNeeded();
+    await o.page.waitForTimeout(400);
+    const look = () => o.page.evaluate(sel => {
+      const b = document.querySelector(sel);
+      return { text: b.textContent.trim(), pressed: b.getAttribute('aria-pressed'), stored: localStorage.getItem('dukb-sound'), y: window.scrollY, snd: JSON.parse(JSON.stringify(window.__snd)) };
+    }, FOOT);
+    /* press it where it is: a click that had to scroll first would hide a page that jumps */
+    const press = async () => { const before = await look(); await sw.click(); await o.page.waitForTimeout(900); const after = await look(); return { before, after, still: before.y === after.y }; };
+    const at = `at ${width}`;
+    const first = await look();
+    check(first.text === 'Sound: off' && first.pressed === 'false' && first.snd.made === 0 && o.kitAsked() === 0, `${at}: it reads "${first.text}", pressed ${first.pressed}, contexts ${first.snd.made}, the kit chunk requested ${o.kitAsked()} times`);
+    const on = await press();
+    check(on.after.text === 'Sound: on' && on.after.pressed === 'true' && on.after.stored === 'on', `${at}, a press: "${on.after.text}", pressed ${on.after.pressed}, stored ${on.after.stored}`);
+    check(o.kitAsked() === 1 && on.after.snd.made === 1 && on.after.snd.starts.length === 1 && cueOf(on.after.snd.starts[0]?.len) === 'tick',
+      `${at}, a press: the kit chunk requested ${o.kitAsked()} time, ${on.after.snd.made} context, ${on.after.snd.starts.length} start (${names(on.after.snd.starts).join(', ')}): one tick says it worked`);
+    const off = await press();
+    check(off.after.text === 'Sound: off' && off.after.stored === 'off' && off.after.snd.starts.length === 1 && off.after.snd.suspends >= 1, `${at}, a second press: "${off.after.text}", stored ${off.after.stored}, ${off.after.snd.starts.length - 1} new starts, ${off.after.snd.suspends} suspend`);
+    const again = await press();
+    check(again.after.text === 'Sound: on' && again.after.snd.made === 1 && again.after.snd.starts.length === 2 && cueOf(again.after.snd.starts[1]?.len) === 'tick' && o.kitAsked() === 1,
+      `${at}, a third press: "${again.after.text}", still ${again.after.snd.made} context, ${again.after.snd.starts.length - 1} more tick, the kit chunk still requested once`);
+    check(on.still && off.still && again.still, `${at}: the page did not move under any press (scrollY ${on.before.y}, ${on.after.y}, ${off.after.y}, ${again.after.y})`);
+    /* a reload: remembered, and silent until he taps. Hands off until the one read. */
+    await o.page.reload({ waitUntil: 'load', timeout: 60000 });
+    await o.page.waitForTimeout(5000);
+    const back = await look();
+    check(back.text === 'Sound: on' && back.pressed === 'true', `${at}, a reload: it still reads "${back.text}"`);
+    check(back.snd.made === 0 && back.snd.starts.length === 0, `${at}, a reload: contexts ${back.snd.made}, starts ${back.snd.starts.length} before any tap (untouched: ${back.snd.ua.every(v => v === false)})`);
+    check(o.kitAsked() === 2, `${at}, a reload: the kit chunk asked for once more (${o.kitAsked() - 1}), ready for his first tap`);
+    check(o.errors.length === 0, `${at}: no page error${o.errors.length ? `: ${o.errors[0]}` : ''}`);
+    await o.ctx.close();
+  }
+}
+
+/* ---------- 8. the footer row and the header hold ---------- */
+if (runs(8) && !MOUNTED.footer && !MOUNTED.header) skipped(8, 'no switch is mounted');
+if (runs(8) && (MOUNTED.footer || MOUNTED.header)) {
+  head(8, 'The footer row and the header hold their shape');
+  /** boxes: the switch, its row's other children, the footer; and whether the switch's words sit on one line */
+  const shape = (page, sel) => page.evaluate(s => {
+    const b = document.querySelector(s);
+    if (!b) return null;
+    const box = e => { const r = e.getBoundingClientRect(); return { x: r.left, y: r.top, r: r.right, b: r.bottom, w: r.width, h: r.height }; };
+    const range = document.createRange();
+    range.selectNodeContents(b);
+    const lines = new Set([...range.getClientRects()].map(r => Math.round(r.top))).size;
+    const row = b.parentElement, me = box(b), foot = b.closest('footer, header');
+    const overlaps = [...row.children].filter(c => c !== b).map(box).filter(o => o.w > 0 && o.x < me.r - 0.5 && o.r > me.x + 0.5 && o.y < me.b - 0.5 && o.b > me.y + 0.5).length;
+    return { me, row: box(row), holder: box(foot), lines, overlaps, wide: document.documentElement.scrollWidth, inner: window.innerWidth, shown: getComputedStyle(b).display !== 'none' && me.w > 0 };
+  }, sel);
+  if (MOUNTED.footer) {
+    for (const [width, height] of [[320, 700], [390, 844], [1280, 900]]) {
+      for (const route of ['/', '/soccer-career']) {
+        const o = await open({ width, height });
+        await o.page.goto(`${BASE}${route}`, { waitUntil: 'load', timeout: 60000 });
+        await settle(o.page);
+        const sw = o.page.locator(FOOT);
+        await sw.scrollIntoViewIfNeeded();
+        const offShape = await shape(o.page, FOOT);
+        await sw.click(); await o.page.waitForTimeout(500);
+        const onShape = await shape(o.page, FOOT);
+        const at = `${route} at ${width}`;
+        check(offShape.wide <= offShape.inner && onShape.wide <= onShape.inner, `${at}: the page is no wider than the screen (${onShape.wide} of ${onShape.inner})`);
+        check(offShape.me.x >= offShape.row.x - 0.5 && offShape.me.r <= offShape.row.r + 0.5 && offShape.overlaps === 0 && onShape.overlaps === 0, `${at}: the switch sits inside the footer's link row and on no neighbour`);
+        check(offShape.lines === 1 && onShape.lines === 1, `${at}: its words sit on one line, off and on (${offShape.lines}, ${onShape.lines})`);
+        check(offShape.me.w === onShape.me.w && offShape.holder.h === onShape.holder.h, `${at}: one width (${offShape.me.w} px, then ${onShape.me.w}) and one footer height (${offShape.holder.h} px, then ${onShape.holder.h}) whichever it says`);
+        await o.ctx.close();
+      }
+    }
+  }
+  if (MOUNTED.header) {
+    const HEAD = 'header [data-sound-toggle="icon"]';
+    const heights = {};
+    for (const [width, height] of [[320, 700], [390, 844], [640, 800], [1280, 900]]) {
+      const o = await open({ width, height });
+      await o.page.goto(`${BASE}/`, { waitUntil: 'load', timeout: 60000 });
+      await settle(o.page);
+      const h = await shape(o.page, HEAD);
+      heights[width] = h.holder.h;
+      const at = `the home page at ${width}`;
+      check(h.wide <= h.inner, `${at}: no wider than the screen (${h.wide} of ${h.inner})`);
+      if (width < 640) check(!h.shown, `${at}: the header's switch is not shown (a phone has no room for it, the footer has one)`);
+      else check(h.shown && h.me.w >= 44 && h.me.h >= 44 && h.overlaps === 0 && h.me.y >= h.holder.y - 0.5 && h.me.b <= h.holder.b + 0.5,
+        `${at}: the header's switch is a ${h.me.w} by ${h.me.h} px target inside the bar, on no neighbour`);
+      await o.ctx.close();
+    }
+    check(new Set(Object.values(heights)).size === 1, `the bar is one height with and without the switch (${Object.entries(heights).map(([w, h]) => `${h} px at ${w}`).join(', ')})`);
+  }
+}
+
 /* ---------- 3. awards night out loud, once ----------
    MEASURED on a GitHub runner, 2026-10-08, six runs of this section (five of them three at a time on one
    machine), thirty nights in all, a cold kit among them every run:
