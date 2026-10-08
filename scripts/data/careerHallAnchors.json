@@ -21,12 +21,17 @@
       "OTHER LEAGUES, read narrowly. A man is skipped when the listed total itself mixes in another league's numbers (the combined NBA and ABA lists), when he played seasons in another major league after his first season in this one, or when he was inducted and then played on. A season in another league before his first season here does not skip him: the list, his line and his Hall case are this league's.",
       "AWARDS THAT CAME LATE. A man is skipped when his last season is before the first year a count the engine reads for his position was given (the AP Defensive Player of the Year from 1971 for a defender; the Finals MVP from 1969). A career that only began before that year stays in.",
       "POSITIONS. The engine's CB is its only defensive back, so a real corner or safety is read at CB. Its EDGE is every pass rusher on the sack list, defensive end or outside linebacker. In basketball and hockey a man is read at the first position his stat line's publisher lists for him, mapped to the engine's five.",
-      "FIRST ELIGIBLE CLASS outside baseball. Basketball, football and hockey publish no ballot, so a man's first eligible class is his last season plus that Hall's waiting rule (the eligibility block, two sourced once per sport), and first, later or never follows by arithmetic from his two sourced class. Where a page says in words that he went in his first eligible year, the words are recorded too."
+      "FIRST ELIGIBLE CLASS outside baseball. Basketball, football and hockey publish no ballot, so a man's first eligible class is his last season plus that Hall's waiting rule (the eligibility block, two sourced once per sport), and first, later or never follows by arithmetic from his two sourced class. Where a page says in words that he went in his first eligible year, the words are recorded too.",
+      "ADDED 2026-10-08 for football, before any football anchor was scored.",
+      "FOOTBALL'S PUBLISHERS. Pro Football Reference refuses a fetch, so it is read through the Internet Archive's capture of the same page and the capture's address is what is recorded. The first team AP All-Pro count is its Nx All-Pro, checked season by season against The Football Database's AP NFL All-Pro Team pages (the First Team of every season he played). Titles, the AP award and the Hall are checked against StatMuse's career sentence, and against the Hall's own page where one was read.",
+      "FOOTBALL'S RING. A Super Bowl won as a player: the engine's title is the season's last game. A league title of 1966 to 1969 that was followed by a lost Super Bowl is not a ring.",
+      "FOOTBALL'S SACKS. The league has counted sacks since 1982. A man whose listed total holds a season before 1982 is skipped: the list's publisher adds its own unofficial count for those years and the league's page has none, so the two cannot agree.",
+      "FOOTBALL'S SEASONS. The seasons he played a game in: the league's own page and StatMuse agree on every count used (the reference site's year rows also list a season he sat out).",
+      "FOOTBALL'S DEFENDERS. Tackles, passes defended and forced fumbles are null for every defender: no official career count runs across these careers and the publishers read do not agree. The harness reads a null as zero, so a defender's base is under-read in the raw reading, and it says so.",
+      "SOURCES DISAGREE. A man whose count in a fact group differs between the two publishers, with no line above settling it, is skipped with both readings recorded, and the next name on his list is taken."
     ],
-    "sportsBuilt": ["mlb", "nba", "nhl"],
-    "sportsNotBuilt": {
-      "nfl": "not built: the awards group cannot be two sourced. The count the rule asks for is first team AP All-Pro selections, and the one publisher read that separates the AP's team is Pro Football Reference (it refuses a fetch and is readable only through its archived pages). The Hall's own pages count first team All-Pro seasons of every selector and so disagree by rule (for the receptions leader: named first-team All-Pro 11 consecutive seasons, against ten AP first teams). The stat lines (nfl.com) and the classes (profootballhof.com) can be read. The lead decides: one publisher for football's awards, a count by any selector, or football unjudged."
-    }
+    "sportsBuilt": ["mlb", "nba", "nhl", "nfl"],
+    "sportsNotBuilt": {}
   },
   "eligibility": {
     "nba": { "rule": "five years after his last season through the classes this file reads (in practice the sixth year: last season ending in year Y, first eligible class Y + 6); three calendar years from the class of 2018, when both men here whose last seasons ended in 2013 and 2014 were newly eligible",
@@ -38,7 +43,13 @@
       "sources": [
         { "publisher": "Hockey Hall of Fame", "url": "https://hhof.com/induction_archives/ind01press.shtml", "read": "2026-10-08", "says": "players must have concluded their respective playing or officiating careers for a minimum of three playing seasons; First year eligible players are those that retired after the 1997-98 season (the 2001 class)" },
         { "publisher": "Hockey Hall of Fame", "url": "https://hth.hhof.com/induction/factsandfigures.html", "read": "2026-10-08", "says": "the mandatory three-year waiting period for Induction in the Player Category; waived for 1972 Gordie Howe, 1997 Mario Lemieux and 1999 Wayne Gretzky among ten" },
-        { "publisher": "NHL.com", "url": "https://www.nhl.com/news/this-date-in-nhl-history-june-23-280997942", "read": "2026-10-08", "says": "The Hockey Hall of Fame waives the usual three-year waiting period and announces that Wayne Gretzky will be part of the Class of 1999" } ] }
+        { "publisher": "NHL.com", "url": "https://www.nhl.com/news/this-date-in-nhl-history-june-23-280997942", "read": "2026-10-08", "says": "The Hockey Hall of Fame waives the usual three-year waiting period and announces that Wayne Gretzky will be part of the Class of 1999" } ] },
+    "nfl": { "rule": "retired for at least five seasons (last season Y, named by the year it began: first eligible class Y + 6). A man a seniors committee put in is never with route committee",
+      "sources": [
+        { "publisher": "Pro Football Hall of Fame", "url": "https://www.profootballhof.com/hall-of-famers/selection-process/", "read": "2026-10-08", "says": "A Player must have been retired for at least five seasons before he can be considered; A candidate for the 2027 class must have concluded his career not later than the 2021 season" },
+        { "publisher": "NFL.com", "url": "https://www.nfl.com/news/finalists-for-pro-football-hall-of-fame-class-of-2021-revealed", "read": "2026-10-08", "says": "Peyton Manning, Calvin Johnson, Charles Woodson and Jared Allen are in their first years of eligibility (each last played in the 2015 season); the finalists include senior finalist Drew Pearson" },
+        { "publisher": "ESPN", "url": "https://www.espn.com/nfl/story/_/id/30849436/2021-pro-football-hall-fame-inductees", "read": "2026-10-08", "says": "published Feb 6, 2021: Manning, Woodson and Johnson were all in their first year of eligibility; Drew Pearson was elected as a senior inductee" },
+        { "publisher": "Pro Football Hall of Fame", "url": "https://www.profootballhof.com/hall-of-famers/senior-finalists/", "read": "2026-10-08", "says": "the year-by-year senior nominees, those elected indicated in CAPS; of the men read here only Ken Riley (2023) is on it" } ] }
   },
   "decisions": [
     { "sport": "mlb", "pos": "LF", "kind": "standout", "stat": "sb", "action": "halved", "what": "steals standout",
@@ -65,7 +76,12 @@
     { "sport": "nba", "family": "reb", "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/leaders/trb_career.html", "read": "2026-10-08", "says": "NBA & ABA Career Leaders and Records for Total Rebounds: 1 Wilt Chamberlain* 23924, 2 Bill Russell* 21620, 3 Moses Malone* 17834, 4 Kareem Abdul-Jabbar* 17440, 5 Artis Gilmore* 16330, 6 Elvin Hayes* 16279, 7 Tim Duncan* 15091, 8 Karl Malone* 14968, 9 Robert Parish* 14715, 10 Kevin Garnett* 14662, 11 Dwight Howard* 14627, 12 Nate Thurmond* 14464, 13 Walt Bellamy* 14241, 14 Wes Unseld* 13769, 15 Hakeem Olajuwon* 13748, 16 Shaquille O'Neal* 13099, 17 Buck Williams 13017 (an asterisk marks a Hall of Famer)" },
     { "sport": "nba", "family": "ast", "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/leaders/ast_career.html", "read": "2026-10-08", "says": "NBA & ABA Career Leaders and Records for Assists: 1 John Stockton* 15806, 2 Chris Paul 12552, 3 Jason Kidd* 12091, 4 LeBron James (bold, active) 12016, 5 Russell Westbrook 10351, 6 Steve Nash* 10335, 7 Mark Jackson 10334, 8 Magic Johnson* 10141, 9 Oscar Robertson* 9887, 10 Isiah Thomas* 9061" },
     { "sport": "nhl", "family": "goals", "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/leaders/goals_career.html", "read": "2026-10-08", "says": "1 Alex Ovechkin (bold, active) 929, 2 Wayne Gretzky* 894 1979-99, 3 Gordie Howe* 801 1946-80, 4 Jaromir Jagr 766 1990-18, 5 Brett Hull* 741 1986-06, 6 Marcel Dionne* 731 1971-89, 7 Phil Esposito* 717 1963-81, 8 Mike Gartner* 708 1979-98, 9 Mark Messier* 694 1979-04, 10 Steve Yzerman* 692 1983-06, 11 Mario Lemieux* 690 1984-06, 12 Teemu Selanne* 684 1992-14, 13 Luc Robitaille* 668 1986-06, 14 Brendan Shanahan* 656 1987-09, 15 Sidney Crosby (bold) 654, 16 Dave Andreychuk* 640 1982-06; every name from 17 to 40 is bold (active) or carries the Hall of Fame asterisk, bar Patrick Marleau 566 1997-21; 41 Pat Verbeek 522 1982-02; 42 to 47 all carry the asterisk or are bold; 48 Peter Bondra 503 1990-07" },
-    { "sport": "nhl", "family": "assists", "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/leaders/assists_career.html", "read": "2026-10-08", "says": "1 Wayne Gretzky* 1963 1979-99, 2 Ron Francis* 1249 1981-04, 3 Mark Messier* 1193 1979-04, 4 Ray Bourque* 1169 1979-01, 5 Jaromir Jagr 1155 1990-18, 6 Paul Coffey* 1135 1980-01, 7 Sidney Crosby (bold) 1109, 7 Joe Thornton* 1109 1997-22, 9 Adam Oates* 1079" }
+    { "sport": "nhl", "family": "assists", "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/leaders/assists_career.html", "read": "2026-10-08", "says": "1 Wayne Gretzky* 1963 1979-99, 2 Ron Francis* 1249 1981-04, 3 Mark Messier* 1193 1979-04, 4 Ray Bourque* 1169 1979-01, 5 Jaromir Jagr 1155 1990-18, 6 Paul Coffey* 1135 1980-01, 7 Sidney Crosby (bold) 1109, 7 Joe Thornton* 1109 1997-22, 9 Adam Oates* 1079" },
+    { "sport": "nfl", "family": "rec", "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251231055352/https://www.pro-football-reference.com/leaders/rec_career.htm", "read": "2026-10-08", "says": "NFL Receptions Career Leaders: 1 Jerry Rice+ 1,549 1985-2004, 2 Larry Fitzgerald 1,432 2004-2020, 3 Tony Gonzalez+ 1,325 1997-2013, 4 Jason Witten 1,228 2003-2020, 5 Marvin Harrison+ 1,102 1996-2008, 6 Cris Carter+ 1,101 1987-2002, 7 Tim Brown+ 1,094 1988-2004, 8 Terrell Owens+ 1,078 1996-2010 (a plus marks a Hall of Famer)" },
+    { "sport": "nfl", "family": "recTd", "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251227182012/https://www.pro-football-reference.com/leaders/rec_td_career.htm", "read": "2026-10-08", "says": "NFL Receiving Touchdowns Career Leaders: 1 Jerry Rice+ 197 1985-2004, 2 Randy Moss+ 156 1998-2012, 3 Terrell Owens+ 153 1996-2010, 4 Cris Carter+ 130 1987-2002, 5 Marvin Harrison+ 128 1996-2008, 6 Larry Fitzgerald 121 2004-2020 (a plus marks a Hall of Famer)" },
+    { "sport": "nfl", "family": "picks", "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251230164828/https://www.pro-football-reference.com/leaders/def_int_career.htm", "read": "2026-10-08", "says": "NFL Interceptions Career Leaders: 1 Paul Krause+ 81 1964-1979, 2 Emlen Tunnell+ 79 1948-1961, 3 Rod Woodson+ 71 1987-2003, 4 Night Train Lane+ 68 1952-1965, 5 Ken Riley+ 65 1969-1983, 5 Charles Woodson+ 65 1998-2015, 7 Ed Reed+ 64 2002-2013, 8 Ronnie Lott+ 63 1981-1994 (a plus marks a Hall of Famer)" },
+    { "sport": "nfl", "family": "sacks", "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260101022939/https://www.pro-football-reference.com/leaders/sacks_career.htm", "read": "2026-10-08", "says": "NFL Sacks Career Leaders: 1 Bruce Smith+ 200.0 1985-2003, 2 Reggie White+ 198.0 1985-2000, 3 Deacon Jones+ 173.5 1961-1974, 4 Kevin Greene+ 160.0 1985-1999, 5 Julius Peppers+ 159.5 2002-2018, 6 Jack Youngblood+ 151.5 1971-1984, 7 Chris Doleman+ 150.5 1985-1999, 8 Alan Page+ 148.5 1967-1981, 9 Lawrence Taylor+ 142.0 1981-1993, 10 Michael Strahan+ 141.5 1993-2007, 11 Jason Taylor+ 139.5 1997-2011 (a plus marks a Hall of Famer)" },
+    { "sport": "nfl", "family": "fgMade", "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260113135806/https://www.pro-football-reference.com/leaders/fgm_career.htm", "read": "2026-10-08", "says": "NFL Field Goals Made Career Leaders: 1 Adam Vinatieri 599 1996-2019, 2 Morten Andersen+ 565 1982-2007, 3 Gary Anderson 538 1982-2004, 4 Jason Hanson 495 1992-2012, 5 John Carney 478 1988-2010, 6 Matt Stover 471 1991-2009, 7 John Kasay 461 1991-2011, 8 Robbie Gould 447 2005-2022 (a plus marks a Hall of Famer)" }
   ],
   "skipped": [
     { "sport": "mlb", "family": "saves", "player": "Kenley Jansen", "reason": "active (bold on the career list)" },
@@ -92,7 +108,18 @@
     { "sport": "nhl", "family": "goals", "player": "Mario Lemieux", "reason": "inducted and then played on: the Hall lists 1997 among the waiting periods it waived and the career list gives his years as 1984-06; passed on the walk down", "url": "https://hth.hhof.com/induction/factsandfigures.html" },
     { "sport": "nhl", "family": "goals", "player": "Sidney Crosby", "reason": "active (bold on the career list); passed on the walk down" },
     { "sport": "nhl", "family": "goals", "player": "names 17 to 40 and 42 to 47 on the list", "reason": "passed over on the walk down: only a never was still missing and the list page marks each a Hall of Famer or active, bar Patrick Marleau (last season after 2015)" },
-    { "sport": "nhl", "family": "assists", "player": "Jaromir Jagr", "reason": "last season after 2015" }
+    { "sport": "nhl", "family": "assists", "player": "Jaromir Jagr", "reason": "last season after 2015" },
+    { "sport": "nfl", "family": "rec", "player": "Larry Fitzgerald", "reason": "last season after 2015 (the career list gives 2004-2020)" },
+    { "sport": "nfl", "family": "rec", "player": "Jason Witten", "reason": "last season after 2015 (the career list gives 2003-2020)" },
+    { "sport": "nfl", "family": "picks", "player": "Emlen Tunnell", "reason": "his last season (1961) is before the first AP Defensive Player of the Year (1971), the count the engine reads for a defender" },
+    { "sport": "nfl", "family": "picks", "player": "Night Train Lane", "reason": "his last season (1965) is before the first AP Defensive Player of the Year (1971), the count the engine reads for a defender" },
+    { "sport": "nfl", "family": "sacks", "player": "Deacon Jones", "reason": "his listed total holds seasons before 1982 (the career list gives 1961-1974), when the league did not count sacks" },
+    { "sport": "nfl", "family": "sacks", "player": "Julius Peppers", "reason": "last season after 2015 (the career list gives 2002-2018)" },
+    { "sport": "nfl", "family": "sacks", "player": "Jack Youngblood", "reason": "his listed total holds seasons before 1982 (the career list gives 1971-1984)" },
+    { "sport": "nfl", "family": "sacks", "player": "Alan Page", "reason": "his listed total holds seasons before 1982 (the career list gives 1967-1981)" },
+    { "sport": "nfl", "family": "sacks", "player": "Lawrence Taylor", "reason": "his listed total holds a season before 1982 (the career list gives 1981-1993)" },
+    { "sport": "nfl", "family": "fgMade", "player": "Adam Vinatieri", "reason": "last season after 2015 (the career list gives 1996-2019)" },
+    { "sport": "nfl", "family": "fgMade", "player": "John Carney", "reason": "the two publishers differ on his titles: the reference site's recognition list reads \"2x Pro Bowl; 1x All-Pro; 1x SB Champ\", StatMuse's career sentence names no championship (\"John Carney played 23 seasons for 7 teams, including the Chargers and Saints. He was 478 for 580 on field goals and 628 for 638 on extra points for 2,062 points. He was selected to play in 2 Pro Bowls.\")", "url": "https://web.archive.org/web/20260111051748/https://www.pro-football-reference.com/players/C/carnejoh01.htm" }
   ],
   "anchors": [
     { "id": "mlb-saves-1", "sport": "mlb", "player": "Mariano Rivera", "pos": "RP", "family": "saves", "fromList": true,
@@ -701,6 +728,407 @@
           { "publisher": "Elite Prospects", "url": "https://www.eliteprospects.com/player/8553/peter-bondra", "read": "2026-10-08", "says": "NHL First All-Star Team in 0 seasons, NHL Second All-Star Team in 0; NHL Stanley Cup Champion in 0; NHL Most Valuable Player (Hart Trophy) in 0; NHL Stanley Cup MVP (Conn Smythe Trophy) in 0" } ],
         "hall": [
           { "publisher": "National Hockey League", "url": "https://records.nhl.com/site/api/player?cayenneExp=id=8445575", "read": "2026-10-08", "says": "inHockeyHof false, hofInductionYear null" },
-          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/b/bondrpe01.html", "read": "2026-10-08", "says": "no Hall of Fame line on his page, and the career goals list carries no Hall of Fame asterisk beside his name; last played in 2007" } ] } }
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/b/bondrpe01.html", "read": "2026-10-08", "says": "no Hall of Fame line on his page, and the career goals list carries no Hall of Fame asterisk beside his name; last played in 2007" } ] } },
+    { "id": "nfl-rec-1", "sport": "nfl", "player": "Jerry Rice", "pos": "WR", "family": "rec", "fromList": true, "seasons": 20, "lastSeason": 2004, "games": 303,
+      "totals": { "rec": 1549, "recYds": 22895, "recTd": 197 },
+      "awards": { "rings": 3, "mvps": 0, "allPros": 10 },
+      "hall": { "ballot": "first", "class": 2010, "firstEligibleClass": 2010, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251228152630/https://www.pro-football-reference.com/players/R/RiceJe00.htm", "read": "2026-10-08", "says": "Position: WR; 1985 to 2004; Career G 303, Rec 1549, Yds 22895, TD 197" },
+          { "publisher": "NFL.com", "url": "https://www.nfl.com/players/jerry-rice/stats/career", "read": "2026-10-08", "says": "Receiving TOTAL 303 1549 22895 14.8 96 197 (G, REC, YDS, AVG, LNG, TD); 20 seasons listed" } ],
+        "awards": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251228152630/https://www.pro-football-reference.com/players/R/RiceJe00.htm", "read": "2026-10-08", "says": "Recognition: 10x All-Pro, 3x SB Champ; no AP MVP listed" },
+          { "publisher": "The Football Database", "url": "https://www.footballdb.com/awards/ap-nfl-all-pro-team", "read": "2026-10-08", "says": "AP NFL All-Pro Team, First Team, in 1986, 1987, 1988, 1989, 1990, 1992, 1993, 1994, 1995, 1996 (the season pages 1985 to 2004)" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/jerry-rice-career-stats", "read": "2026-10-08", "says": "He was selected to play in 13 Pro Bowls. He won 2 Offensive Player of the Year awards, 1 Super Bowl MVP award and 3 championships. He was inducted into the Hall of Fame in 2010." } ],
+        "hall": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251228152630/https://www.pro-football-reference.com/players/R/RiceJe00.htm", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2010; last season 2004" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/jerry-rice-career-stats", "read": "2026-10-08", "says": "He was inducted into the Hall of Fame in 2010." },
+          { "publisher": "Pro Football Hall of Fame", "url": "https://www.profootballhof.com/players/jerry-rice/", "read": "2026-10-08", "says": "WR / WR Jerry Rice, Class of 2010" } ] } },
+    { "id": "nfl-rec-2", "sport": "nfl", "player": "Tony Gonzalez", "pos": "TE", "family": "rec", "fromList": true, "seasons": 17, "lastSeason": 2013, "games": 270,
+      "totals": { "rec": 1325, "recYds": 15127, "recTd": 111 },
+      "awards": { "rings": 0, "mvps": 0, "allPros": 6 },
+      "hall": { "ballot": "first", "class": 2019, "firstEligibleClass": 2019, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251231123809/https://www.pro-football-reference.com/players/G/GonzTo00.htm", "read": "2026-10-08", "says": "Position: TE; 1997 to 2013; Career G 270, Rec 1325, Yds 15127, TD 111" },
+          { "publisher": "NFL.com", "url": "https://www.nfl.com/players/tony-gonzalez/stats/career", "read": "2026-10-08", "says": "Receiving TOTAL 270 1325 15127 11.4 73 111 (G, REC, YDS, AVG, LNG, TD); 17 seasons listed" } ],
+        "awards": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251231123809/https://www.pro-football-reference.com/players/G/GonzTo00.htm", "read": "2026-10-08", "says": "Recognition: 6x All-Pro; no SB Champ, no AP MVP listed" },
+          { "publisher": "The Football Database", "url": "https://www.footballdb.com/awards/ap-nfl-all-pro-team", "read": "2026-10-08", "says": "AP NFL All-Pro Team, First Team, in 1999, 2000, 2001, 2003, 2008, 2012 (the season pages 1997 to 2013)" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/tony-gonzalez-career-stats", "read": "2026-10-08", "says": "He was selected to play in 14 Pro Bowls. He was inducted into the Hall of Fame in 2019. (no championship named)" } ],
+        "hall": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251231123809/https://www.pro-football-reference.com/players/G/GonzTo00.htm", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2019; last season 2013" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/tony-gonzalez-career-stats", "read": "2026-10-08", "says": "He was inducted into the Hall of Fame in 2019." } ] } },
+    { "id": "nfl-rec-3", "sport": "nfl", "player": "Marvin Harrison", "pos": "WR", "family": "rec", "fromList": true, "seasons": 13, "lastSeason": 2008, "games": 190,
+      "totals": { "rec": 1102, "recYds": 14580, "recTd": 128 },
+      "awards": { "rings": 1, "mvps": 0, "allPros": 3 },
+      "hall": { "ballot": "later", "class": 2016, "firstEligibleClass": 2014, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251231175144/https://www.pro-football-reference.com/players/H/HarrMa00.htm", "read": "2026-10-08", "says": "Position: WR; 1996 to 2008; Career G 190, Rec 1102, Yds 14580, TD 128" },
+          { "publisher": "NFL.com", "url": "https://www.nfl.com/players/marvin-harrison/stats/career", "read": "2026-10-08", "says": "Receiving TOTAL 190 1102 14580 13.2 80 128 (G, REC, YDS, AVG, LNG, TD); 13 seasons listed" } ],
+        "awards": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251231175144/https://www.pro-football-reference.com/players/H/HarrMa00.htm", "read": "2026-10-08", "says": "Recognition: 3x All-Pro, 1x SB Champ; no AP MVP listed" },
+          { "publisher": "The Football Database", "url": "https://www.footballdb.com/awards/ap-nfl-all-pro-team", "read": "2026-10-08", "says": "AP NFL All-Pro Team, First Team, in 1999, 2002, 2006 (the season pages 1996 to 2008)" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/player/marvin-harrison-8513", "read": "2026-10-08", "says": "He was selected to play in 8 Pro Bowls, and won 1 championship. He was inducted into the Hall of Fame in 2016." } ],
+        "hall": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251231175144/https://www.pro-football-reference.com/players/H/HarrMa00.htm", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2016; last season 2008" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/player/marvin-harrison-8513", "read": "2026-10-08", "says": "He was inducted into the Hall of Fame in 2016." },
+          { "publisher": "Pro Football Hall of Fame", "url": "https://www.profootballhof.com/players/marvin-harrison/", "read": "2026-10-08", "says": "WR / WR Marvin Harrison, Class of 2016" } ] } },
+    { "id": "nfl-rec-4", "sport": "nfl", "player": "Cris Carter", "pos": "WR", "family": "rec", "fromList": true, "seasons": 16, "lastSeason": 2002, "games": 234,
+      "totals": { "rec": 1101, "recYds": 13899, "recTd": 130 },
+      "awards": { "rings": 0, "mvps": 0, "allPros": 2 },
+      "hall": { "ballot": "later", "class": 2013, "firstEligibleClass": 2008, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260110172144/https://www.pro-football-reference.com/players/C/CartCr00.htm", "read": "2026-10-08", "says": "Position: WR; 1987 to 2002; Career G 234, Rec 1101, Yds 13899, TD 130" },
+          { "publisher": "NFL.com", "url": "https://www.nfl.com/players/cris-carter/stats/career", "read": "2026-10-08", "says": "Receiving TOTAL 234 1101 13899 12.6 80 130 (G, REC, YDS, AVG, LNG, TD); 16 seasons listed" } ],
+        "awards": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260110172144/https://www.pro-football-reference.com/players/C/CartCr00.htm", "read": "2026-10-08", "says": "Recognition: 2x All-Pro; no SB Champ, no AP MVP listed" },
+          { "publisher": "The Football Database", "url": "https://www.footballdb.com/awards/ap-nfl-all-pro-team", "read": "2026-10-08", "says": "AP NFL All-Pro Team, First Team, in 1994, 1999 (the season pages 1987 to 2002)" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/cris-carter-career-stats", "read": "2026-10-08", "says": "He was selected to play in 8 Pro Bowls, and won the Walter Payton NFL Man of the Year award. He was inducted into the Hall of Fame in 2013. (no championship named)" } ],
+        "hall": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260110172144/https://www.pro-football-reference.com/players/C/CartCr00.htm", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2013; last season 2002" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/cris-carter-career-stats", "read": "2026-10-08", "says": "He was inducted into the Hall of Fame in 2013." } ] } },
+    { "id": "nfl-rec-5", "sport": "nfl", "player": "Tim Brown", "pos": "WR", "family": "rec", "fromList": true, "seasons": 17, "lastSeason": 2004, "games": 255,
+      "totals": { "rec": 1094, "recYds": 14934, "recTd": null },
+      "nulls": { "recTd": "one publisher only (the reference site's 100); the second publisher read gives his touchdowns of every kind, so it is read as zero" },
+      "awards": { "rings": 0, "mvps": 0, "allPros": 0 },
+      "hall": { "ballot": "later", "class": 2015, "firstEligibleClass": 2010, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260302095230/https://www.pro-football-reference.com/players/B/BrowTi00.htm", "read": "2026-10-08", "says": "Position: WR; 1988 to 2004; Career G 255, Rec 1094, Yds 14934, TD 100" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/player/tim-brown-2536", "read": "2026-10-08", "says": "Tim Brown played 17 seasons for the Raiders and Buccaneers. He had 1,094 catches for 14,934 yards and scored 105 touchdowns, along with 326 punt returns for 3,320 yards." } ],
+        "awards": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260302095230/https://www.pro-football-reference.com/players/B/BrowTi00.htm", "read": "2026-10-08", "says": "Recognition: none of the counts read; no All-Pro, no SB Champ, no AP MVP listed" },
+          { "publisher": "The Football Database", "url": "https://www.footballdb.com/awards/ap-nfl-all-pro-team", "read": "2026-10-08", "says": "on no AP NFL All-Pro First Team in the season pages 1988 to 2004" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/player/tim-brown-2536", "read": "2026-10-08", "says": "He was selected to play in 9 Pro Bowls. He was inducted into the Hall of Fame in 2015. (no championship named)" } ],
+        "hall": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260302095230/https://www.pro-football-reference.com/players/B/BrowTi00.htm", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2015; last season 2004" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/player/tim-brown-2536", "read": "2026-10-08", "says": "He was inducted into the Hall of Fame in 2015." },
+          { "publisher": "Pro Football Hall of Fame", "url": "https://www.profootballhof.com/players/tim-brown/", "read": "2026-10-08", "says": "WR/KR/PR / WR Tim Brown, Class of 2015" } ] } },
+    { "id": "nfl-recTd-1", "sport": "nfl", "player": "Jerry Rice", "pos": "WR", "family": "recTd", "fromList": true, "sameAs": "nfl-rec-1", "seasons": 20, "lastSeason": 2004, "games": 303,
+      "totals": { "rec": 1549, "recYds": 22895, "recTd": 197 },
+      "awards": { "rings": 3, "mvps": 0, "allPros": 10 },
+      "hall": { "ballot": "first", "class": 2010, "firstEligibleClass": 2010, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251228152630/https://www.pro-football-reference.com/players/R/RiceJe00.htm", "read": "2026-10-08", "says": "Position: WR; 1985 to 2004; Career G 303, Rec 1549, Yds 22895, TD 197" },
+          { "publisher": "NFL.com", "url": "https://www.nfl.com/players/jerry-rice/stats/career", "read": "2026-10-08", "says": "Receiving TOTAL 303 1549 22895 14.8 96 197 (G, REC, YDS, AVG, LNG, TD); 20 seasons listed" } ],
+        "awards": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251228152630/https://www.pro-football-reference.com/players/R/RiceJe00.htm", "read": "2026-10-08", "says": "Recognition: 10x All-Pro, 3x SB Champ; no AP MVP listed" },
+          { "publisher": "The Football Database", "url": "https://www.footballdb.com/awards/ap-nfl-all-pro-team", "read": "2026-10-08", "says": "AP NFL All-Pro Team, First Team, in 1986, 1987, 1988, 1989, 1990, 1992, 1993, 1994, 1995, 1996 (the season pages 1985 to 2004)" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/jerry-rice-career-stats", "read": "2026-10-08", "says": "He was selected to play in 13 Pro Bowls. He won 2 Offensive Player of the Year awards, 1 Super Bowl MVP award and 3 championships. He was inducted into the Hall of Fame in 2010." } ],
+        "hall": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251228152630/https://www.pro-football-reference.com/players/R/RiceJe00.htm", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2010; last season 2004" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/jerry-rice-career-stats", "read": "2026-10-08", "says": "He was inducted into the Hall of Fame in 2010." },
+          { "publisher": "Pro Football Hall of Fame", "url": "https://www.profootballhof.com/players/jerry-rice/", "read": "2026-10-08", "says": "WR / WR Jerry Rice, Class of 2010" } ] } },
+    { "id": "nfl-recTd-2", "sport": "nfl", "player": "Randy Moss", "pos": "WR", "family": "recTd", "fromList": true, "seasons": 14, "lastSeason": 2012, "games": 218,
+      "totals": { "rec": 982, "recYds": 15292, "recTd": 156 },
+      "awards": { "rings": 0, "mvps": 0, "allPros": 4 },
+      "hall": { "ballot": "first", "class": 2018, "firstEligibleClass": 2018, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260102074345/https://www.pro-football-reference.com/players/M/MossRa00.htm", "read": "2026-10-08", "says": "Position: WR; 1998 to 2012; Career G 218, Rec 982, Yds 15292, TD 156" },
+          { "publisher": "NFL.com", "url": "https://www.nfl.com/players/randy-moss/stats/career", "read": "2026-10-08", "says": "Receiving TOTAL 218 982 15292 15.6 82 156 (G, REC, YDS, AVG, LNG, TD); 14 seasons listed" } ],
+        "awards": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260102074345/https://www.pro-football-reference.com/players/M/MossRa00.htm", "read": "2026-10-08", "says": "Recognition: 4x All-Pro; no SB Champ, no AP MVP listed" },
+          { "publisher": "The Football Database", "url": "https://www.footballdb.com/awards/ap-nfl-all-pro-team", "read": "2026-10-08", "says": "AP NFL All-Pro Team, First Team, in 1998, 2000, 2003, 2007 (the season pages 1998 to 2012)" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/randy-moss-career-stats", "read": "2026-10-08", "says": "He was selected to play in 6 Pro Bowls, and won the Offensive Rookie of the Year award. He was inducted into the Hall of Fame in 2018. (no championship named)" } ],
+        "hall": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260102074345/https://www.pro-football-reference.com/players/M/MossRa00.htm", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2018; last season 2012" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/randy-moss-career-stats", "read": "2026-10-08", "says": "He was inducted into the Hall of Fame in 2018." } ] } },
+    { "id": "nfl-recTd-3", "sport": "nfl", "player": "Terrell Owens", "pos": "WR", "family": "recTd", "fromList": true, "seasons": 15, "lastSeason": 2010, "games": 219,
+      "totals": { "rec": 1078, "recYds": 15934, "recTd": 153 },
+      "awards": { "rings": 0, "mvps": 0, "allPros": 5 },
+      "hall": { "ballot": "later", "class": 2018, "firstEligibleClass": 2016, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260114093002/https://www.pro-football-reference.com/players/O/OwenTe00.htm", "read": "2026-10-08", "says": "Position: WR; 1996 to 2010; Career G 219, Rec 1078, Yds 15934, TD 153" },
+          { "publisher": "NFL.com", "url": "https://www.nfl.com/players/terrell-owens/stats/career", "read": "2026-10-08", "says": "Receiving TOTAL 219 1078 15934 14.8 98 153 (G, REC, YDS, AVG, LNG, TD); 15 seasons listed" } ],
+        "awards": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260114093002/https://www.pro-football-reference.com/players/O/OwenTe00.htm", "read": "2026-10-08", "says": "Recognition: 5x All-Pro; no SB Champ, no AP MVP listed" },
+          { "publisher": "The Football Database", "url": "https://www.footballdb.com/awards/ap-nfl-all-pro-team", "read": "2026-10-08", "says": "AP NFL All-Pro Team, First Team, in 2000, 2001, 2002, 2004, 2007 (the season pages 1996 to 2010)" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/terrell-owens-career-stats", "read": "2026-10-08", "says": "He was selected to play in 6 Pro Bowls. He was inducted into the Hall of Fame in 2018. (no championship named)" } ],
+        "hall": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260114093002/https://www.pro-football-reference.com/players/O/OwenTe00.htm", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2018; last season 2010" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/terrell-owens-career-stats", "read": "2026-10-08", "says": "He was inducted into the Hall of Fame in 2018." } ] } },
+    { "id": "nfl-recTd-4", "sport": "nfl", "player": "Cris Carter", "pos": "WR", "family": "recTd", "fromList": true, "sameAs": "nfl-rec-4", "seasons": 16, "lastSeason": 2002, "games": 234,
+      "totals": { "rec": 1101, "recYds": 13899, "recTd": 130 },
+      "awards": { "rings": 0, "mvps": 0, "allPros": 2 },
+      "hall": { "ballot": "later", "class": 2013, "firstEligibleClass": 2008, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260110172144/https://www.pro-football-reference.com/players/C/CartCr00.htm", "read": "2026-10-08", "says": "Position: WR; 1987 to 2002; Career G 234, Rec 1101, Yds 13899, TD 130" },
+          { "publisher": "NFL.com", "url": "https://www.nfl.com/players/cris-carter/stats/career", "read": "2026-10-08", "says": "Receiving TOTAL 234 1101 13899 12.6 80 130 (G, REC, YDS, AVG, LNG, TD); 16 seasons listed" } ],
+        "awards": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260110172144/https://www.pro-football-reference.com/players/C/CartCr00.htm", "read": "2026-10-08", "says": "Recognition: 2x All-Pro; no SB Champ, no AP MVP listed" },
+          { "publisher": "The Football Database", "url": "https://www.footballdb.com/awards/ap-nfl-all-pro-team", "read": "2026-10-08", "says": "AP NFL All-Pro Team, First Team, in 1994, 1999 (the season pages 1987 to 2002)" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/cris-carter-career-stats", "read": "2026-10-08", "says": "He was selected to play in 8 Pro Bowls, and won the Walter Payton NFL Man of the Year award. He was inducted into the Hall of Fame in 2013. (no championship named)" } ],
+        "hall": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260110172144/https://www.pro-football-reference.com/players/C/CartCr00.htm", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2013; last season 2002" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/cris-carter-career-stats", "read": "2026-10-08", "says": "He was inducted into the Hall of Fame in 2013." } ] } },
+    { "id": "nfl-recTd-5", "sport": "nfl", "player": "Marvin Harrison", "pos": "WR", "family": "recTd", "fromList": true, "sameAs": "nfl-rec-3", "seasons": 13, "lastSeason": 2008, "games": 190,
+      "totals": { "rec": 1102, "recYds": 14580, "recTd": 128 },
+      "awards": { "rings": 1, "mvps": 0, "allPros": 3 },
+      "hall": { "ballot": "later", "class": 2016, "firstEligibleClass": 2014, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251231175144/https://www.pro-football-reference.com/players/H/HarrMa00.htm", "read": "2026-10-08", "says": "Position: WR; 1996 to 2008; Career G 190, Rec 1102, Yds 14580, TD 128" },
+          { "publisher": "NFL.com", "url": "https://www.nfl.com/players/marvin-harrison/stats/career", "read": "2026-10-08", "says": "Receiving TOTAL 190 1102 14580 13.2 80 128 (G, REC, YDS, AVG, LNG, TD); 13 seasons listed" } ],
+        "awards": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251231175144/https://www.pro-football-reference.com/players/H/HarrMa00.htm", "read": "2026-10-08", "says": "Recognition: 3x All-Pro, 1x SB Champ; no AP MVP listed" },
+          { "publisher": "The Football Database", "url": "https://www.footballdb.com/awards/ap-nfl-all-pro-team", "read": "2026-10-08", "says": "AP NFL All-Pro Team, First Team, in 1999, 2002, 2006 (the season pages 1996 to 2008)" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/player/marvin-harrison-8513", "read": "2026-10-08", "says": "He was selected to play in 8 Pro Bowls, and won 1 championship. He was inducted into the Hall of Fame in 2016." } ],
+        "hall": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251231175144/https://www.pro-football-reference.com/players/H/HarrMa00.htm", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2016; last season 2008" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/player/marvin-harrison-8513", "read": "2026-10-08", "says": "He was inducted into the Hall of Fame in 2016." },
+          { "publisher": "Pro Football Hall of Fame", "url": "https://www.profootballhof.com/players/marvin-harrison/", "read": "2026-10-08", "says": "WR / WR Marvin Harrison, Class of 2016" } ] } },
+    { "id": "nfl-picks-1", "sport": "nfl", "player": "Paul Krause", "pos": "CB", "family": "picks", "fromList": true, "seasons": 16, "lastSeason": 1979, "games": 226,
+      "totals": { "picks": 81, "passDef": null, "tackles": null },
+      "nulls": { "passDef": "one publisher only, and not counted across his era the way the engine counts it; read as zero", "tackles": "no official career count; the publishers read do not agree; read as zero" },
+      "awards": { "rings": 0, "mvps": 0, "allPros": 3 },
+      "hall": { "ballot": "later", "class": 1998, "firstEligibleClass": 1985, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260107114337/https://www.pro-football-reference.com/players/K/KrauPa00.htm", "read": "2026-10-08", "says": "Position: DB-WR; 1964 to 1979; Career G 226, Int 81" },
+          { "publisher": "NFL.com", "url": "https://www.nfl.com/players/paul-krause/stats/career", "read": "2026-10-08", "says": "Defense G Total Solo AST SCK SFTY PDEF INT TDS YDS AVG LNG | TOTAL 226 0 0 0 0 0 0 81; 16 seasons listed" } ],
+        "awards": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260107114337/https://www.pro-football-reference.com/players/K/KrauPa00.htm", "read": "2026-10-08", "says": "Recognition: 3x All-Pro; no SB Champ, no AP Def. PoY listed" },
+          { "publisher": "The Football Database", "url": "https://www.footballdb.com/awards/ap-nfl-all-pro-team", "read": "2026-10-08", "says": "AP NFL All-Pro Team, First Team, in 1964, 1965, 1975 (the season pages 1964 to 1979)" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/paul-krause-career-stats", "read": "2026-10-08", "says": "He was selected to play in 8 Pro Bowls, and won 1 championship. He was inducted into the Hall of Fame in 1998." },
+          { "publisher": "Pro Football Hall of Fame", "url": "https://www.profootballhof.com/players/paul-krause/", "read": "2026-10-08", "says": "Born on February 19, 1942, in Flint, Mich., Paul was the starting free safety in Super Bowls IV, VIII, IX and XI, and in the 1969 NFL Championship Game and NFC title games in 1973, 1974, 1976 and 1977." } ],
+        "hall": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260107114337/https://www.pro-football-reference.com/players/K/KrauPa00.htm", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 1998; last season 1979" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/paul-krause-career-stats", "read": "2026-10-08", "says": "He was inducted into the Hall of Fame in 1998." },
+          { "publisher": "Pro Football Hall of Fame", "url": "https://www.profootballhof.com/players/paul-krause/", "read": "2026-10-08", "says": "S / DB Paul Krause, Class of 1998" } ] } },
+    { "id": "nfl-picks-2", "sport": "nfl", "player": "Rod Woodson", "pos": "CB", "family": "picks", "fromList": true, "seasons": 17, "lastSeason": 2003, "games": 238,
+      "totals": { "picks": 71, "passDef": null, "tackles": null },
+      "nulls": { "passDef": "one publisher only, and not counted across his era the way the engine counts it; read as zero", "tackles": "no official career count; the publishers read do not agree; read as zero" },
+      "awards": { "rings": 1, "mvps": 1, "allPros": 6 },
+      "hall": { "ballot": "first", "class": 2009, "firstEligibleClass": 2009, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251201220308/https://www.pro-football-reference.com/players/W/WoodRo01.htm", "read": "2026-10-08", "says": "Position: DB; 1987 to 2003; Career G 238, Int 71" },
+          { "publisher": "NFL.com", "url": "https://www.nfl.com/players/rod-woodson/stats/career", "read": "2026-10-08", "says": "Defense G Total Solo AST SCK SFTY PDEF INT TDS YDS AVG LNG | TOTAL 238 937 788 149 13.5 0 274 71; 17 seasons listed" } ],
+        "awards": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251201220308/https://www.pro-football-reference.com/players/W/WoodRo01.htm", "read": "2026-10-08", "says": "Recognition: 6x All-Pro, 1x SB Champ, 1993 AP Def. PoY" },
+          { "publisher": "The Football Database", "url": "https://www.footballdb.com/awards/ap-nfl-all-pro-team", "read": "2026-10-08", "says": "AP NFL All-Pro Team, First Team, in 1989, 1990, 1992, 1993, 1994, 2002 (the season pages 1987 to 2003)" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/rod-woodson-career-stats", "read": "2026-10-08", "says": "He was selected to play in 11 Pro Bowls. He won 1 Defensive Player of the Year award and 1 championship. He was inducted into the Hall of Fame in 2009." } ],
+        "hall": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251201220308/https://www.pro-football-reference.com/players/W/WoodRo01.htm", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2009; last season 2003" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/rod-woodson-career-stats", "read": "2026-10-08", "says": "He was inducted into the Hall of Fame in 2009." } ] } },
+    { "id": "nfl-picks-3", "sport": "nfl", "player": "Ken Riley", "pos": "CB", "family": "picks", "fromList": true, "seasons": 15, "lastSeason": 1983, "games": 207,
+      "totals": { "picks": 65, "passDef": null, "tackles": null },
+      "nulls": { "passDef": "one publisher only, and not counted across his era the way the engine counts it; read as zero", "tackles": "no official career count; the publishers read do not agree; read as zero" },
+      "awards": { "rings": 0, "mvps": 0, "allPros": 1 },
+      "hall": { "ballot": "never", "route": "committee", "class": 2023, "firstEligibleClass": 1989 },
+      "sources": {
+        "line": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251230063344/https://www.pro-football-reference.com/players/R/RileKe20.htm", "read": "2026-10-08", "says": "Position: DB; 1969 to 1983; Career G 207, Int 65" },
+          { "publisher": "NFL.com", "url": "https://www.nfl.com/players/ken-riley/stats/career", "read": "2026-10-08", "says": "Defense G Total Solo AST SCK SFTY PDEF INT TDS YDS AVG LNG | TOTAL 207 49 46 3 0 0 36 65; 15 seasons listed" } ],
+        "awards": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251230063344/https://www.pro-football-reference.com/players/R/RileKe20.htm", "read": "2026-10-08", "says": "Recognition: 1x All-Pro; no SB Champ, no AP Def. PoY listed" },
+          { "publisher": "The Football Database", "url": "https://www.footballdb.com/awards/ap-nfl-all-pro-team", "read": "2026-10-08", "says": "AP NFL All-Pro Team, First Team, in 1983 (the season pages 1969 to 1983)" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/ken-riley-career-stats", "read": "2026-10-08", "says": "He was inducted into the Hall of Fame in 2023. (no championship named)" } ],
+        "hall": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251230063344/https://www.pro-football-reference.com/players/R/RileKe20.htm", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2023; last season 1983" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/ken-riley-career-stats", "read": "2026-10-08", "says": "He was inducted into the Hall of Fame in 2023." },
+          { "publisher": "Pro Football Hall of Fame", "url": "https://www.profootballhof.com/players/ken-riley/", "read": "2026-10-08", "says": "CB / DB Ken Riley, Class of 2023" },
+          { "publisher": "Pro Football Hall of Fame", "url": "https://www.profootballhof.com/hall-of-famers/senior-finalists/", "read": "2026-10-08", "says": "year-by-year senior nominees, those elected are indicated in CAPS: 2023 - CHUCK HOWLEY, JOE KLECKO, KEN RILEY" },
+          { "publisher": "NFL.com", "url": "https://www.nfl.com/news/pro-football-hall-of-fame-class-of-2023-revealed-at-nfl-honors", "read": "2026-10-08", "says": "Ken Riley (senior)" } ] } },
+    { "id": "nfl-picks-4", "sport": "nfl", "player": "Charles Woodson", "pos": "CB", "family": "picks", "fromList": true, "seasons": 18, "lastSeason": 2015, "games": 254,
+      "totals": { "picks": 65, "passDef": null, "tackles": null },
+      "nulls": { "passDef": "one publisher only, and not counted across his era the way the engine counts it; read as zero", "tackles": "no official career count; the publishers read do not agree; read as zero" },
+      "awards": { "rings": 1, "mvps": 1, "allPros": 3 },
+      "hall": { "ballot": "first", "class": 2021, "firstEligibleClass": 2021, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251130084845/https://www.pro-football-reference.com/players/W/WoodCh00.htm", "read": "2026-10-08", "says": "Position: DB; 1998 to 2015; Career G 254, Int 65" },
+          { "publisher": "NFL.com", "url": "https://www.nfl.com/players/charles-woodson/stats/career", "read": "2026-10-08", "says": "Defense G Total Solo AST SCK SFTY PDEF INT TDS YDS AVG LNG | TOTAL 254 1082 860 222 20 0 202 65; 18 seasons listed" } ],
+        "awards": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251130084845/https://www.pro-football-reference.com/players/W/WoodCh00.htm", "read": "2026-10-08", "says": "Recognition: 3x All-Pro, 1x SB Champ, 2009 AP Def. PoY" },
+          { "publisher": "The Football Database", "url": "https://www.footballdb.com/awards/ap-nfl-all-pro-team", "read": "2026-10-08", "says": "AP NFL All-Pro Team, First Team, in 1999, 2009, 2011 (the season pages 1998 to 2015)" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/charles-woodson-career-stats", "read": "2026-10-08", "says": "He was selected to play in 9 Pro Bowls. He won 1 Defensive Player of the Year award, the Defensive Rookie of the Year award and 1 championship. He was inducted into the Hall of Fame in 2021." } ],
+        "hall": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251130084845/https://www.pro-football-reference.com/players/W/WoodCh00.htm", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2021; last season 2015" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/charles-woodson-career-stats", "read": "2026-10-08", "says": "He was inducted into the Hall of Fame in 2021." } ] } },
+    { "id": "nfl-picks-5", "sport": "nfl", "player": "Ed Reed", "pos": "CB", "family": "picks", "fromList": true, "seasons": 12, "lastSeason": 2013, "games": 174,
+      "totals": { "picks": 64, "passDef": null, "tackles": null },
+      "nulls": { "passDef": "one publisher only, and not counted across his era the way the engine counts it; read as zero", "tackles": "no official career count; the publishers read do not agree; read as zero" },
+      "awards": { "rings": 1, "mvps": 1, "allPros": 5 },
+      "hall": { "ballot": "first", "class": 2019, "firstEligibleClass": 2019, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251219045035/https://www.pro-football-reference.com/players/R/ReedEd00.htm", "read": "2026-10-08", "says": "Position: DB; 2002 to 2013; Career G 174, Int 64" },
+          { "publisher": "NFL.com", "url": "https://www.nfl.com/players/ed-reed/stats/career", "read": "2026-10-08", "says": "Defense G Total Solo AST SCK SFTY PDEF INT TDS YDS AVG LNG | TOTAL 174 558 447 111 6 1 140 64; 12 seasons listed" } ],
+        "awards": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251219045035/https://www.pro-football-reference.com/players/R/ReedEd00.htm", "read": "2026-10-08", "says": "Recognition: 5x All-Pro, 1x SB Champ, 2004 AP Def. PoY" },
+          { "publisher": "The Football Database", "url": "https://www.footballdb.com/awards/ap-nfl-all-pro-team", "read": "2026-10-08", "says": "AP NFL All-Pro Team, First Team, in 2004, 2006, 2007, 2008, 2010 (the season pages 2002 to 2013)" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/ed-reed-career-stats", "read": "2026-10-08", "says": "He was selected to play in 9 Pro Bowls. He won 1 Defensive Player of the Year award and 1 championship. He was inducted into the Hall of Fame in 2019." } ],
+        "hall": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251219045035/https://www.pro-football-reference.com/players/R/ReedEd00.htm", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2019; last season 2013" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/ed-reed-career-stats", "read": "2026-10-08", "says": "He was inducted into the Hall of Fame in 2019." } ] } },
+    { "id": "nfl-sacks-1", "sport": "nfl", "player": "Bruce Smith", "pos": "EDGE", "family": "sacks", "fromList": true, "seasons": 19, "lastSeason": 2003, "games": 279,
+      "totals": { "sacks": 200, "tackles": null, "forcedFum": null },
+      "nulls": { "tackles": "no official career count; the publishers read do not agree; read as zero", "forcedFum": "one publisher only; read as zero" },
+      "awards": { "rings": 0, "mvps": 2, "allPros": 8 },
+      "hall": { "ballot": "first", "class": 2009, "firstEligibleClass": 2009, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260101114750/https://www.pro-football-reference.com/players/S/SmitBr00.htm", "read": "2026-10-08", "says": "Position: DE; 1985 to 2003; Career G 279, Sk 200" },
+          { "publisher": "NFL.com", "url": "https://www.nfl.com/players/bruce-smith/stats/career", "read": "2026-10-08", "says": "Defense G Total Solo AST SCK SFTY PDEF INT TDS YDS AVG LNG | TOTAL 279 1055 811 244 200 2 39 2; 19 seasons listed" } ],
+        "awards": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260101114750/https://www.pro-football-reference.com/players/S/SmitBr00.htm", "read": "2026-10-08", "says": "Recognition: 8x All-Pro, 2x AP Def. PoY; no SB Champ listed" },
+          { "publisher": "The Football Database", "url": "https://www.footballdb.com/awards/ap-nfl-all-pro-team", "read": "2026-10-08", "says": "AP NFL All-Pro Team, First Team, in 1987, 1988, 1990, 1993, 1994, 1995, 1996, 1997 (the season pages 1985 to 2003)" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/bruce-smith-career-stats", "read": "2026-10-08", "says": "He was selected to play in 11 Pro Bowls, and won 2 Defensive Player of the Year awards. He was inducted into the Hall of Fame in 2009. (no championship named)" } ],
+        "hall": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260101114750/https://www.pro-football-reference.com/players/S/SmitBr00.htm", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2009; last season 2003" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/bruce-smith-career-stats", "read": "2026-10-08", "says": "He was inducted into the Hall of Fame in 2009." } ] } },
+    { "id": "nfl-sacks-2", "sport": "nfl", "player": "Reggie White", "pos": "EDGE", "family": "sacks", "fromList": true, "seasons": 15, "lastSeason": 2000, "games": 232,
+      "totals": { "sacks": 198, "tackles": null, "forcedFum": null },
+      "nulls": { "tackles": "no official career count; the publishers read do not agree; read as zero", "forcedFum": "one publisher only; read as zero" },
+      "awards": { "rings": 1, "mvps": 2, "allPros": 8 },
+      "hall": { "ballot": "first", "class": 2006, "firstEligibleClass": 2006, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260101134633/https://www.pro-football-reference.com//players/W/WhitRe00.htm", "read": "2026-10-08", "says": "Position: DE-DT; 1985 to 2000; Career G 232, Sk 198" },
+          { "publisher": "NFL.com", "url": "https://www.nfl.com/players/reggie-white-3/stats/career", "read": "2026-10-08", "says": "Defense G Total Solo AST SCK SFTY PDEF INT TDS YDS AVG LNG | TOTAL 232 663 538 125 198 0 43 3; 15 seasons listed" } ],
+        "awards": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260101134633/https://www.pro-football-reference.com//players/W/WhitRe00.htm", "read": "2026-10-08", "says": "Recognition: 8x All-Pro, 1x SB Champ, 2x AP Def. PoY" },
+          { "publisher": "The Football Database", "url": "https://www.footballdb.com/awards/ap-nfl-all-pro-team", "read": "2026-10-08", "says": "AP NFL All-Pro Team, First Team, in 1986, 1987, 1988, 1989, 1990, 1991, 1995, 1998 (the season pages 1985 to 2000)" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/reggie-white-career-stats", "read": "2026-10-08", "says": "He was selected to play in 13 Pro Bowls. He won 2 Defensive Player of the Year awards and 1 championship. He was inducted into the Hall of Fame in 2006." } ],
+        "hall": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260101134633/https://www.pro-football-reference.com//players/W/WhitRe00.htm", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2006; last season 2000" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/reggie-white-career-stats", "read": "2026-10-08", "says": "He was inducted into the Hall of Fame in 2006." } ] } },
+    { "id": "nfl-sacks-3", "sport": "nfl", "player": "Kevin Greene", "pos": "EDGE", "family": "sacks", "fromList": true, "seasons": 15, "lastSeason": 1999, "games": 228,
+      "totals": { "sacks": 160, "tackles": null, "forcedFum": null },
+      "nulls": { "tackles": "no official career count; the publishers read do not agree; read as zero", "forcedFum": "one publisher only; read as zero" },
+      "awards": { "rings": 0, "mvps": 0, "allPros": 2 },
+      "hall": { "ballot": "later", "class": 2016, "firstEligibleClass": 2005, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260101071157/https://www.pro-football-reference.com/players/G/GreeKe00.htm", "read": "2026-10-08", "says": "Position: LB-DE; 1985 to 1999; Career G 228, Sk 160" },
+          { "publisher": "NFL.com", "url": "https://www.nfl.com/players/kevin-greene-2/stats/career", "read": "2026-10-08", "says": "Defense G Total Solo AST SCK SFTY PDEF INT TDS YDS AVG LNG | TOTAL 228 603 502 101 160 3 47 5; 15 seasons listed" } ],
+        "awards": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260101071157/https://www.pro-football-reference.com/players/G/GreeKe00.htm", "read": "2026-10-08", "says": "Recognition: 2x All-Pro; no SB Champ, no AP Def. PoY listed" },
+          { "publisher": "The Football Database", "url": "https://www.footballdb.com/awards/ap-nfl-all-pro-team", "read": "2026-10-08", "says": "AP NFL All-Pro Team, First Team, in 1994, 1996 (the season pages 1985 to 1999)" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/kevin-greene-career-stats", "read": "2026-10-08", "says": "He was selected to play in 5 Pro Bowls. He was inducted into the Hall of Fame in 2016. (no championship named)" } ],
+        "hall": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260101071157/https://www.pro-football-reference.com/players/G/GreeKe00.htm", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2016; last season 1999" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/kevin-greene-career-stats", "read": "2026-10-08", "says": "He was inducted into the Hall of Fame in 2016." } ] } },
+    { "id": "nfl-sacks-4", "sport": "nfl", "player": "Chris Doleman", "pos": "EDGE", "family": "sacks", "fromList": true, "seasons": 15, "lastSeason": 1999, "games": 232,
+      "totals": { "sacks": 150.5, "tackles": null, "forcedFum": null },
+      "nulls": { "tackles": "no official career count; the publishers read do not agree; read as zero", "forcedFum": "one publisher only; read as zero" },
+      "awards": { "rings": 0, "mvps": 0, "allPros": 2 },
+      "hall": { "ballot": "later", "class": 2012, "firstEligibleClass": 2005, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251209204207/https://www.pro-football-reference.com/players/D/DoleCh00.htm", "read": "2026-10-08", "says": "Position: DE-LB; 1985 to 1999; Career G 232, Sk 150.5" },
+          { "publisher": "NFL.com", "url": "https://www.nfl.com/players/chris-doleman/stats/career", "read": "2026-10-08", "says": "Defense G Total Solo AST SCK SFTY PDEF INT TDS YDS AVG LNG | TOTAL 232 615 466 149 150.5 2 34 8; 15 seasons listed" } ],
+        "awards": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251209204207/https://www.pro-football-reference.com/players/D/DoleCh00.htm", "read": "2026-10-08", "says": "Recognition: 2x All-Pro; no SB Champ, no AP Def. PoY listed" },
+          { "publisher": "The Football Database", "url": "https://www.footballdb.com/awards/ap-nfl-all-pro-team", "read": "2026-10-08", "says": "AP NFL All-Pro Team, First Team, in 1989, 1992 (the season pages 1985 to 1999)" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/chris-doleman-career-stats", "read": "2026-10-08", "says": "He was selected to play in 8 Pro Bowls. He was inducted into the Hall of Fame in 2012. (no championship named)" } ],
+        "hall": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251209204207/https://www.pro-football-reference.com/players/D/DoleCh00.htm", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2012; last season 1999" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/chris-doleman-career-stats", "read": "2026-10-08", "says": "He was inducted into the Hall of Fame in 2012." } ] } },
+    { "id": "nfl-sacks-5", "sport": "nfl", "player": "Michael Strahan", "pos": "EDGE", "family": "sacks", "fromList": true, "seasons": 15, "lastSeason": 2007, "games": 216,
+      "totals": { "sacks": 141.5, "tackles": null, "forcedFum": null },
+      "nulls": { "tackles": "no official career count; the publishers read do not agree; read as zero", "forcedFum": "one publisher only; read as zero" },
+      "awards": { "rings": 1, "mvps": 1, "allPros": 4 },
+      "hall": { "ballot": "later", "class": 2014, "firstEligibleClass": 2013, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251231193507/https://www.pro-football-reference.com/players/S/StraMi02.htm", "read": "2026-10-08", "says": "Position: DE; 1993 to 2007; Career G 216, Sk 141.5" },
+          { "publisher": "NFL.com", "url": "https://www.nfl.com/players/michael-strahan/stats/career", "read": "2026-10-08", "says": "Defense G Total Solo AST SCK SFTY PDEF INT TDS YDS AVG LNG | TOTAL 216 740 537 203 141.5 1 36 4; 15 seasons listed" } ],
+        "awards": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251231193507/https://www.pro-football-reference.com/players/S/StraMi02.htm", "read": "2026-10-08", "says": "Recognition: 4x All-Pro, 1x SB Champ, 2001 AP Def. PoY" },
+          { "publisher": "The Football Database", "url": "https://www.footballdb.com/awards/ap-nfl-all-pro-team", "read": "2026-10-08", "says": "AP NFL All-Pro Team, First Team, in 1997, 1998, 2001, 2003 (the season pages 1993 to 2007)" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/michael-strahan-career-stats", "read": "2026-10-08", "says": "He was selected to play in 7 Pro Bowls. He won 1 Defensive Player of the Year award and 1 championship. He was inducted into the Hall of Fame in 2014." } ],
+        "hall": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251231193507/https://www.pro-football-reference.com/players/S/StraMi02.htm", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2014; last season 2007" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/michael-strahan-career-stats", "read": "2026-10-08", "says": "He was inducted into the Hall of Fame in 2014." } ] } },
+    { "id": "nfl-fgMade-1", "sport": "nfl", "player": "Morten Andersen", "pos": "K", "family": "fgMade", "fromList": true, "seasons": 25, "lastSeason": 2007, "games": 382,
+      "totals": { "fgMade": 565 },
+      "awards": { "rings": 0, "mvps": 0, "allPros": 3 },
+      "hall": { "ballot": "later", "class": 2017, "firstEligibleClass": 2013, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260109085244/https://www.pro-football-reference.com/players/A/andermor01.htm", "read": "2026-10-08", "says": "Position: K; 1982 to 2007; Career G 382, FGM 565" },
+          { "publisher": "NFL.com", "url": "https://www.nfl.com/players/morten-andersen/stats/career", "read": "2026-10-08", "says": "Kicking G 1-19 20-29 30-39 40-49 50-59 60+ FGM FG ATT PCT | TOTAL 382 13-14 176-181 189-214 147-216 0-0 0-0 565 709 79.7; 25 seasons listed" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/morten-andersen-career-stats", "read": "2026-10-08", "says": "Morten Andersen played 25 seasons for 5 teams, including the Saints and Falcons. He was 565 for 709 on field goals and 849 for 859 on extra points for 2,544 points." } ],
+        "awards": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260109085244/https://www.pro-football-reference.com/players/A/andermor01.htm", "read": "2026-10-08", "says": "Recognition: 3x All-Pro; no SB Champ, no AP MVP listed" },
+          { "publisher": "The Football Database", "url": "https://www.footballdb.com/awards/ap-nfl-all-pro-team", "read": "2026-10-08", "says": "AP NFL All-Pro Team, First Team, in 1986, 1987, 1995 (the season pages 1982 to 2007)" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/morten-andersen-career-stats", "read": "2026-10-08", "says": "He was selected to play in 7 Pro Bowls. He was inducted into the Hall of Fame in 2017. (no championship named)" } ],
+        "hall": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260109085244/https://www.pro-football-reference.com/players/A/andermor01.htm", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2017; last season 2007" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/morten-andersen-career-stats", "read": "2026-10-08", "says": "He was inducted into the Hall of Fame in 2017." },
+          { "publisher": "Pro Football Hall of Fame", "url": "https://www.profootballhof.com/players/morten-andersen/", "read": "2026-10-08", "says": "K / K Morten Andersen, Class of 2017" } ] } },
+    { "id": "nfl-fgMade-2", "sport": "nfl", "player": "Gary Anderson", "pos": "K", "family": "fgMade", "fromList": true, "seasons": 23, "lastSeason": 2004, "games": 353,
+      "totals": { "fgMade": 538 },
+      "awards": { "rings": 0, "mvps": 0, "allPros": 1 },
+      "hall": { "ballot": "never", "route": "main", "firstEligibleClass": 2010 },
+      "sources": {
+        "line": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251231042125/https://www.pro-football-reference.com/players/A/andergar02.htm", "read": "2026-10-08", "says": "Position: K; 1982 to 2004; Career G 353, FGM 538" },
+          { "publisher": "NFL.com", "url": "https://www.nfl.com/players/gary-anderson/stats/career", "read": "2026-10-08", "says": "Kicking G 1-19 20-29 30-39 40-49 50-59 60+ FGM FG ATT PCT | TOTAL 353 12-13 172-186 181-207 161-226 0-0 0-0 538 672 80.1; 23 seasons listed" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/player/gary-anderson-23218", "read": "2026-10-08", "says": "Gary Anderson played 23 seasons for 5 teams, including the Steelers and Vikings. He was 538 for 672 on field goals and 820 for 827 on extra points for 2,434 points." } ],
+        "awards": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251231042125/https://www.pro-football-reference.com/players/A/andergar02.htm", "read": "2026-10-08", "says": "Recognition: 1x All-Pro; no SB Champ, no AP MVP listed" },
+          { "publisher": "The Football Database", "url": "https://www.footballdb.com/awards/ap-nfl-all-pro-team", "read": "2026-10-08", "says": "AP NFL All-Pro Team, First Team, in 1998 (the season pages 1982 to 2004)" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/player/gary-anderson-23218", "read": "2026-10-08", "says": "He was selected to play in 4 Pro Bowls. (no championship named)" } ],
+        "hall": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20251231042125/https://www.pro-football-reference.com/players/A/andergar02.htm", "read": "2026-10-08", "says": "no Hall of Fame line on his page, and the career list carries no Hall of Fame mark beside his name; last season 2004" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/player/gary-anderson-23218", "read": "2026-10-08", "says": "the career sentence names no Hall of Fame induction (it does for every inducted man read here): Gary Anderson played 23 seasons for 5 teams, including the Steelers and Vikings. He was 538 for 672 on field goals and 820 for 827 on extra points for 2,434 points. He was selected to play in 4 Pro Bowls." } ] } },
+    { "id": "nfl-fgMade-3", "sport": "nfl", "player": "Jason Hanson", "pos": "K", "family": "fgMade", "fromList": true, "seasons": 21, "lastSeason": 2012, "games": 327,
+      "totals": { "fgMade": 495 },
+      "awards": { "rings": 0, "mvps": 0, "allPros": 0 },
+      "hall": { "ballot": "never", "route": "main", "firstEligibleClass": 2018 },
+      "sources": {
+        "line": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260102095809/https://www.pro-football-reference.com/players/H/hansojas01.htm", "read": "2026-10-08", "says": "Position: K; 1992 to 2012; Career G 327, FGM 495" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/jason-hanson-career-stats", "read": "2026-10-08", "says": "Jason Hanson played 21 seasons for the Lions. He was 495 for 601 on field goals and 665 for 673 on extra points for 2,150 points." } ],
+        "awards": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260102095809/https://www.pro-football-reference.com/players/H/hansojas01.htm", "read": "2026-10-08", "says": "Recognition: none of the counts read; no All-Pro, no SB Champ, no AP MVP listed" },
+          { "publisher": "The Football Database", "url": "https://www.footballdb.com/awards/ap-nfl-all-pro-team", "read": "2026-10-08", "says": "on no AP NFL All-Pro First Team in the season pages 1992 to 2012" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/jason-hanson-career-stats", "read": "2026-10-08", "says": "He was selected to play in 2 Pro Bowls. (no championship named)" } ],
+        "hall": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260102095809/https://www.pro-football-reference.com/players/H/hansojas01.htm", "read": "2026-10-08", "says": "no Hall of Fame line on his page, and the career list carries no Hall of Fame mark beside his name; last season 2012" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/jason-hanson-career-stats", "read": "2026-10-08", "says": "the career sentence names no Hall of Fame induction (it does for every inducted man read here): Jason Hanson played 21 seasons for the Lions. He was 495 for 601 on field goals and 665 for 673 on extra points for 2,150 points. He was selected to play in 2 Pro Bowls." } ] } },
+    { "id": "nfl-fgMade-4", "sport": "nfl", "player": "Matt Stover", "pos": "K", "family": "fgMade", "fromList": true, "seasons": 19, "lastSeason": 2009, "games": 297,
+      "totals": { "fgMade": 471 },
+      "awards": { "rings": 1, "mvps": 0, "allPros": 1 },
+      "hall": { "ballot": "never", "route": "main", "firstEligibleClass": 2015 },
+      "sources": {
+        "line": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260102114611/https://www.pro-football-reference.com/players/S/stovemat01.htm", "read": "2026-10-08", "says": "Position: K; 1991 to 2009; Career G 297, FGM 471" },
+          { "publisher": "NFL.com", "url": "https://www.nfl.com/players/matt-stover/stats/career", "read": "2026-10-08", "says": "Kicking G 1-19 20-29 30-39 40-49 50-59 60+ FGM FG ATT PCT | TOTAL 297 14-15 170-173 146-162 128-181 0-0 0-0 471 563 83.7; 19 seasons listed" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/matt-stover-career-stats", "read": "2026-10-08", "says": "Matt Stover played 19 seasons for the Ravens, Browns and Colts. He was 471 for 563 on field goals and 591 for 594 on extra points for 2,004 points." } ],
+        "awards": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260102114611/https://www.pro-football-reference.com/players/S/stovemat01.htm", "read": "2026-10-08", "says": "Recognition: 1x All-Pro, 1x SB Champ; no AP MVP listed" },
+          { "publisher": "The Football Database", "url": "https://www.footballdb.com/awards/ap-nfl-all-pro-team", "read": "2026-10-08", "says": "AP NFL All-Pro Team, First Team, in 2000 (the season pages 1991 to 2009)" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/matt-stover-career-stats", "read": "2026-10-08", "says": "He was selected to play in 1 Pro Bowl, and won 1 championship." } ],
+        "hall": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260102114611/https://www.pro-football-reference.com/players/S/stovemat01.htm", "read": "2026-10-08", "says": "no Hall of Fame line on his page, and the career list carries no Hall of Fame mark beside his name; last season 2009" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/matt-stover-career-stats", "read": "2026-10-08", "says": "the career sentence names no Hall of Fame induction (it does for every inducted man read here): Matt Stover played 19 seasons for the Ravens, Browns and Colts. He was 471 for 563 on field goals and 591 for 594 on extra points for 2,004 points. He was selected to play in 1 Pro Bowl, and won 1 championship." } ] } },
+    { "id": "nfl-fgMade-5", "sport": "nfl", "player": "John Kasay", "pos": "K", "family": "fgMade", "fromList": true, "seasons": 20, "lastSeason": 2011, "games": 301,
+      "totals": { "fgMade": 461 },
+      "awards": { "rings": 0, "mvps": 0, "allPros": 0 },
+      "hall": { "ballot": "never", "route": "main", "firstEligibleClass": 2017 },
+      "sources": {
+        "line": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260101071158/https://www.pro-football-reference.com/players/K/kasayjoh01.htm", "read": "2026-10-08", "says": "Position: K; 1991 to 2011; Career G 301, FGM 461" },
+          { "publisher": "NFL.com", "url": "https://www.nfl.com/players/john-kasay/stats/career", "read": "2026-10-08", "says": "Kicking G 1-19 20-29 30-39 40-49 50-59 60+ FGM FG ATT PCT | TOTAL 301 12-12 144-147 143-160 120-161 0-0 0-0 461 563 81.9; 20 seasons listed" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/john-kasay-career-stats", "read": "2026-10-08", "says": "John Kasay played 20 seasons for the Panthers, Seahawks and Saints. He was 461 for 563 on field goals and 587 for 598 on extra points for 1,970 points." } ],
+        "awards": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260101071158/https://www.pro-football-reference.com/players/K/kasayjoh01.htm", "read": "2026-10-08", "says": "Recognition: none of the counts read; no All-Pro, no SB Champ, no AP MVP listed" },
+          { "publisher": "The Football Database", "url": "https://www.footballdb.com/awards/ap-nfl-all-pro-team", "read": "2026-10-08", "says": "on no AP NFL All-Pro First Team in the season pages 1991 to 2011" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/john-kasay-career-stats", "read": "2026-10-08", "says": "He was selected to play in 1 Pro Bowl. (no championship named)" } ],
+        "hall": [
+          { "publisher": "Pro Football Reference (archived copy)", "url": "https://web.archive.org/web/20260101071158/https://www.pro-football-reference.com/players/K/kasayjoh01.htm", "read": "2026-10-08", "says": "no Hall of Fame line on his page, and the career list carries no Hall of Fame mark beside his name; last season 2011" },
+          { "publisher": "StatMuse", "url": "https://www.statmuse.com/nfl/ask/john-kasay-career-stats", "read": "2026-10-08", "says": "the career sentence names no Hall of Fame induction (it does for every inducted man read here): John Kasay played 20 seasons for the Panthers, Seahawks and Saints. He was 461 for 563 on field goals and 587 for 598 on extra points for 1,970 points. He was selected to play in 1 Pro Bowl." } ] } }
   ]
 }
