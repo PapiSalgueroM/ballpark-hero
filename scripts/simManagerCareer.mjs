@@ -589,7 +589,6 @@ for (const seed of SEEDS) {
 }
 console.log(`   ${cover.seasons} seasons: ${cover.home} at a club of the list, ${cover.market} at a market club, ${cover.verified} with a verified size, ${cover.thin} with no rival to name`);
 console.log(`   ${cover.named} named rows checked, ${cover.unnamed} unnamed; wrong league ${bad.league}, himself twice ${bad.self}, "of N" wrong ${bad.ofN}, size wrong ${bad.size}`);
-console.log(`   ${cover.home} seasons at a club of the list, ${cover.market} at a market club outside it`);
 console.log(`   ${cover.accepted} market jobs taken (${cover.relabelled} in a league the list spells another way), ${cover.up} promotions to the Premier League, ${cover.down} relegations to the Championship, ${cover.zones} seasons in a named league of unknown size (${cover.bigUnverified} knowing 20 or more clubs)`);
 console.log(`   table not his league ${bad.table}, known clubs wrong ${bad.known}, a position in a league of unknown size ${bad.zone}, promotion or relegation words wrong ${bad.words}`);
 console.log(`   ${cover.past} seasons before 2026-27 in a league the list knows clubs of, ${cover.early} finishes in the English pair's move zones before 2004/05; a past season naming a rival or misflagged ${bad.past}`);

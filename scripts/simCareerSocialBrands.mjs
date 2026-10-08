@@ -47,7 +47,13 @@
  *      and 2 old saves; only the world rule in (the phone's cup winners by
  *      association, written into the saved world), 25 careers and all 35 old
  *      saves; the whole round 43 careers and 35 old saves, the union; the
- *      post, cover and agent units move nowhere. Soccer calls Math.random
+ *      post, cover and agent units move nowhere. Round 1100 (every league a
+ *      real league) re-recorded it, twice and identical, from its branch
+ *      commit on a CI runner (the header's sha). Round 1100: the career club
+ *      pool grew from 241 to 460 clubs, and eight plain leagues got a size,
+ *      a format and a derby cadence. Attribution: the same tree with the
+ *      seven source files that round changed read from Release AL's gated
+ *      tree replays the old fixture whole. Soccer calls Math.random
  *      in a fixed order, so a lift that moves one draw shows up here. The
  *      section also requires the fixture to have exercised what it claims
  *      (every post, every personality, every agent, the cover offer both
