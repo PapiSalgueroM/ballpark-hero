@@ -1,0 +1,11 @@
+MUT m13: the winner's crowd starts at 0.03 s, not 0.3 s (src/lib/soundKit.ts)
+  simSound exit=0 | simSound: 158 checks, 0 failed
+  vitest exit=0 | Tests  25 passed (25)
+  build exit=0 | - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+  playSoundGate exit=1 | playSoundGate: 146 checks, 4 failed
+     FAIL win at 390: the crowd swells 30 ms after the sting (300 ms)
+     FAIL win at 1280: the crowd swells 30 ms after the sting (300 ms)
+     FAIL win at 1280, a cold kit (held 300 ms past the card): the crowd swells 30 ms after the sting (300 ms)
+     FAIL choice on: the crowd 300 ms after it (30 ms)
+  restored src/lib/soundKit.ts
+MUT m13 (the winner's crowd starts at 0.03 s, not 0.3 s): KILLED by playSoundGate

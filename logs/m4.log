@@ -1,0 +1,9 @@
+MUT m4: the plan key drops the year (src/components/career/AwardsNightCard.tsx)
+  simSound exit=0 | simSound: 158 checks, 0 failed
+  vitest exit=1 | Tests  1 failed | 24 passed (25)
+     × Round 1132: what the awards night asks the sound switch for > next season is a new plan: this scope is hushed once, then the night plays again 25ms
+     ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/awardsNightSound.test.tsx,title=src/test/awardsNightSound.test.tsx > Round 1132%3A what the awards night asks the sound switch for > next season is a ne
+     FAIL  src/test/awardsNightSound.test.tsx > Round 1132: what the awards night asks the sound switch for > next season is a new plan: this scope is hushed once, then the night plays again
+     AssertionError: expected [ 'tap@0.600', 'tap@0.820', …(4) ] to deeply equal [ 'tap@0.600', 'tap@0.820', …(11) ]
+  restored src/components/career/AwardsNightCard.tsx
+MUT m4 (the plan key drops the year): KILLED by vitest

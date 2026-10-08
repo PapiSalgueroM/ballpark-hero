@@ -1,0 +1,11 @@
+MUT m19: leaving the screen no longer hushes the plan (src/hooks/useSoundPlan.ts)
+  simSound exit=0 | simSound: 158 checks, 0 failed
+  vitest exit=1 | Tests  2 failed | 23 passed (25)
+     × Round 1132: what the awards night asks the sound switch for > leaving the screen hushes this card alone 19ms
+     × Round 1132: what the awards night asks the sound switch for > strict mode mounts twice: the plan, a hush, then the plan again, in that order 12ms
+     ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/awardsNightSound.test.tsx,title=src/test/awardsNightSound.test.tsx > Round 1132%3A what the awards night asks the sound switch for > leaving the screen 
+     ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/awardsNightSound.test.tsx,title=src/test/awardsNightSound.test.tsx > Round 1132%3A what the awards night asks the sound switch for > strict mode mounts 
+     FAIL  src/test/awardsNightSound.test.tsx > Round 1132: what the awards night asks the sound switch for > leaving the screen hushes this card alone
+     AssertionError: expected [ 'tap@0.600', 'tap@0.820', …(4) ] to deeply equal [ 'tap@0.600', 'tap@0.820', …(5) ]
+  restored src/hooks/useSoundPlan.ts
+MUT m19 (leaving the screen no longer hushes the plan): KILLED by vitest

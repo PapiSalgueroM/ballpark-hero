@@ -1,0 +1,11 @@
+MUT m2: the result lands on the row pace start, 0.6, not the headline 0.75 (src/components/career/AwardsNightCard.tsx)
+  simSound exit=0 | simSound: 158 checks, 0 failed
+  vitest exit=1 | Tests  7 failed | 18 passed (25)
+     × Round 1132: what the awards night asks the sound switch for > he wins a list of five: a tick per name, then the winner at 2.09 s, in one scope, and nothing else 43ms
+     × Round 1132: what the awards night asks the sound switch for > giving the speech re-renders the card and plays nothing again 23ms
+     × Round 1132: what the awards night asks the sound switch for > next season is a new plan: this scope is hushed once, then the night plays again 19ms
+     × Round 1132: what the awards night asks the sound switch for > another award of the same year, place and length is a new plan too 16ms
+     × Round 1132: what the awards night asks the sound switch for > leaving the screen hushes this card alone 11ms
+     × Round 1132: what the awards night asks the sound switch for > second place gets the sting and no crowd; off the podium and off the ballot get the ticks alone 4ms
+  restored src/components/career/AwardsNightCard.tsx
+MUT m2 (the result lands on the row pace start, 0.6, not the headline 0.75): KILLED by vitest

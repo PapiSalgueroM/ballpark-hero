@@ -1,0 +1,14 @@
+MUT m11: the stale test loses its 250 ms of grace (due < 0) (src/lib/soundKit.ts)
+  simSound exit=0 | simSound: 158 checks, 0 failed
+  vitest exit=0 | Tests  25 passed (25)
+  build exit=0 | - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+  playSoundGate exit=1 | playSoundGate: 146 checks, 7 failed
+     FAIL at 390, a press: the kit chunk requested 1 time, 1 context, 0 start (): one tick says it worked
+     FAIL at 390, a second press: "Sound: off", stored off, -1 new starts, 1 suspend
+     FAIL at 390, a third press: "Sound: on", still 1 context, -1 more tick, the kit chunk still requested once
+     FAIL at 1280, a third press: "Sound: on", still 1 context, 0 more tick, the kit chunk still requested once
+     FAIL choice on: 0 starts (), no tick
+     FAIL choice on: the sting starts at once (missing ahead)
+     FAIL choice on: the crowd 300 ms after it (missing)
+  restored src/lib/soundKit.ts
+MUT m11 (the stale test loses its 250 ms of grace (due < 0)): KILLED by playSoundGate
