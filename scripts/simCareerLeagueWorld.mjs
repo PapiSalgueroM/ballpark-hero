@@ -52,6 +52,7 @@ const EXTRA = {
   derby: 'lib/soccerCareerDerby.ts',
   season: 'lib/season/soccer.ts',
   rivalries: 'data/clubRivalries.ts',
+  pool: 'data/soccerCareerClubPool.ts',
 };
 const t0 = Date.now();
 const mod = await bundleCareerSources({ root: ROOT, tmpDir, extra: EXTRA });
@@ -393,6 +394,8 @@ function finish() {
 }
 const GENERATED = POOL.slice(HAND.length);
 const BIG_FIVE = new Set(['Premier League', 'La Liga', 'Serie A', 'Bundesliga', 'Ligue 1']);
+const LADDER = mod.pool.CAREER_LEAGUE_LADDER;
+const WORLD = readJson(path.join(DATA, 'soccerCareerFacts.json')).leagueWorld;
 
 /* ─── B. POOL ─── */
 head('B1', 'POOL: the rows main shipped are still the first rows, in order');
@@ -467,6 +470,78 @@ head('C1', "BAND: main's recorded cross, the five big leagues and every season b
   ok(count.five > 0 && count.past > 0 && count.other > 0, `an empty group: five ${count.five}, past ${count.past}, other ${count.other}`);
   ok(count.sizedPairs === 0 ? count.changed === 0 : count.changed > 0, `${count.sizedPairs} (league, year) pairs gained a size and ${count.changed} answers moved`);
   console.log(`  held: ${count.five} rows in the five big leagues, ${count.past} rows before 2026 outside them; free to move: ${count.other} rows, ${count.changed} moved over ${count.sizedPairs} pairs that gained a size`);
+}
+
+head('C2', 'BAND: the worked examples, exact, and every ladder club banded at its own place');
+{
+  /* [rank, n, size, rating, last] and the band a reviewer can check by hand
+     (brief 3.5): the Primeira Liga's 4th of 18 on a 7.0, a 7.6 and a 6.0, its
+     17th, the Segunda's 20th of 20 known clubs in a league of 22, and a group
+     of eleven clubs the ladder cannot order, places 8 to 18 of 18 */
+  const WORKED = [
+    [[4, 18, 18, 7.0], [2, 7]], [[4, 18, 18, 7.6], [2, 5]], [[4, 18, 18, 6.0], [3, 9]],
+    [[17, 18, 18, 7.0], [14, 18]], [[20, 20, 22, 7.0], [19, 22]], [[8, 18, 18, 7.0, 18], [5, 18]],
+    [[1, 18, 18, 7.0], [2, 4]], [[1, 1, 1, 7.0], [1, 1]],
+  ];
+  for (const [args, want] of WORKED) {
+    const got = LG.ladderBand(...args);
+    ok(got[0] === want[0] && got[1] === want[1], `ladderBand(${args.join(', ')}) = ${got.join(' to ')}, ${want.join(' to ')} expected`);
+  }
+  for (const [key, want] of [['Probe|Braga|2027|30|7|4|7', 'Braga'], ['A|B|Braga|2027|30|7|4|7.25', 'Braga'], ['x', null], ['s17', null], ['a|b|c|d|e|f|g', null], ['Probe|Braga|2027|30|7|4|', null], ['Braga|2027|30|7|4|7', null]]) {
+    ok(LG.seedKeyClub(key) === want, `seedKeyClub(${JSON.stringify(key)}) = ${LG.seedKeyClub(key)}, ${want} expected`);
+  }
+  let clubs = 0;
+  for (const [label, groups] of Object.entries(LADDER)) {
+    if (BIG_FIVE.has(label)) continue;
+    const size = WORLD[label].size;
+    const n = groups.flat().length;
+    let before = 0;
+    for (const g of groups) {
+      for (const club of g) {
+        clubs += 1;
+        const got = LG.finishBandFor({ league: label, year: 2027, tier: 4, elite: false, rating: 7, leagueTitle: false, seedKey: crossKey('engine', club, 2027, 7) }, size);
+        const want = LG.ladderBand(before + 1, n, size, 7, before + g.length);
+        ok(got.by === 'ladder' && got.band[0] === want[0] && got.band[1] === want[1], `${club} (${label}): band ${got.band.join(' to ')} by ${got.by}, ${want.join(' to ')} by the ladder expected`);
+      }
+      before += g.length;
+    }
+  }
+  ok(clubs > 250, `only ${clubs} ladder clubs outside the five big leagues`);
+  console.log(`  ${WORKED.length} worked bands and 7 seed keys exact; ${clubs} clubs of ${Object.keys(LADDER).filter(l => !BIG_FIVE.has(l)).length} ladder leagues each banded at their own place`);
+}
+
+head('C3', 'BAND: every ladder club, five ratings, 200 engine shaped keys');
+{
+  const RATINGS = [5.9, 6.3, 7.0, 7.5, 8.4];
+  let draws = 0; let bad = 0; let groupsSeen = 0;
+  for (const [label, groups] of Object.entries(LADDER)) {
+    if (BIG_FIVE.has(label)) continue;
+    const size = WORLD[label].size;
+    const sized = LG.leagueSizeFor(label, 2027) !== null;
+    for (const g of groups) {
+      if (g.length > 1) groupsSeen += 1;
+      for (const rating of RATINGS) {
+        const bands = new Set();
+        for (const club of g) {
+          for (let k = 0; k < 200; k += 1) {
+            const input = { league: label, year: 2026 + (k % 30), tier: 1 + (k % 5), elite: false, rating, leagueTitle: false, seedKey: `Player ${k}|${club}|${2026 + (k % 30)}|${10 + (k % 29)}|${k % 31}|${k % 17}|${rating}` };
+            const b = LG.finishBandFor(input, size);
+            draws += 1;
+            if (k === 0) bands.add(b.band.join());
+            if (b.by !== 'ladder' || !(b.band[0] >= 2 && b.band[0] <= b.band[1] && b.band[1] <= size)) { bad += 1; if (bad <= 3) fail(`${club} (${label}) ${rating}: band ${b.band.join(' to ')} by ${b.by} in a league of ${size}`); }
+            if (sized) {
+              const d = LG.drawLeagueFinish(input);
+              if (!(d.leagueSize === size && d.leagueFinish >= b.band[0] && d.leagueFinish <= b.band[1])) { bad += 1; if (bad <= 3) fail(`${club} (${label}) ${rating}: drew ${JSON.stringify(d)} outside ${b.band.join(' to ')}`); }
+            }
+          }
+        }
+        ok(bands.size === 1, `${label}: the clubs of one group (${g.slice(0, 3).join(', ')}) do not share a band at ${rating}`);
+      }
+    }
+  }
+  ok(bad === 0, `${bad} bands or draws outside their table`);
+  ok(draws > 250000 && groupsSeen > 0, `only ${draws} bands and ${groupsSeen} groups of several`);
+  console.log(`  ${draws} bands, every one from the ladder and inside 2 to the league's size; ${groupsSeen} groups the ladder cannot order, each sharing one band at every rating`);
 }
 
 finish();

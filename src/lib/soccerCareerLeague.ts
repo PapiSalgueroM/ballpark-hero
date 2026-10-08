@@ -18,6 +18,7 @@
 import { adjustClubsForYear } from "./careerEras";
 import { SC_CLUB_CANON } from "../data/clubRivalries";
 import { CAREER_LEAGUE_SEASONS } from "../data/careerLeagueSeasons";
+import { CAREER_LEAGUE_LADDER } from "../data/soccerCareerClubPool";
 import type { ClubData } from "./soccerCareerEngine";
 
 /* ─── League sizes, verified ───
@@ -161,6 +162,69 @@ export function finishBand(tier: number, elite: boolean, size: number, rating: n
   return [lo, hi];
 }
 
+/* ─── Round 1100: the band relative to the league ───
+   finishBand reads the tier as if every league were one of the five big
+   ones: tier 4 is the bottom third. That is right where the tiers were set
+   (a tier 4 club in La Liga is a relegation candidate) and wrong everywhere
+   else: 14 of the Eredivisie's 18 clubs are tier 4, and 22 of the
+   Championship's 24, so with a size row and nothing else every one of them
+   would finish in the bottom third every season. Outside the five, from
+   LIST_SEASON on, the band comes from the club's place in its own league:
+   CAREER_LEAGUE_LADDER (generated beside the club pool from the game's own
+   tiers and Club Manager's XI) scaled to the league's real size, a band
+   about a third of the table wide around that place, with the same rating
+   nudge as finishBand. A club the ladder cannot place among its neighbours
+   (a group of several) draws across the whole of the group's places.
+
+   The five big leagues, every season before LIST_SEASON, a league with no
+   ladder and a club the ladder does not hold all keep finishBand exactly as
+   it was. A title is still 1st and still the engine's coin: the tier's, so
+   a small club's rare title sits apart from its band, as it does in the big
+   five. A great season moves a club a tenth of the table and no further. */
+const ABSOLUTE_BAND = new Set(["Premier League", "La Liga", "Serie A", "Bundesliga", "Ligue 1"]);
+
+/** The club inside the engine's seed key
+ *  (`name|club|year|apps|goals|assists|rating`), counted from the END so a
+ *  "|" typed into a player's name cannot move it. Null for any other shape:
+ *  fewer than seven fields, or a last five that are not all numbers. */
+export function seedKeyClub(seedKey: string): string | null {
+  const parts = seedKey.split("|");
+  if (parts.length < 7) return null;
+  if (!parts.slice(-5).every(p => p.trim() !== "" && Number.isFinite(Number(p)))) return null;
+  return parts[parts.length - 6] || null;
+}
+
+/** The band of a club the ladder places `rank`th of `n` (1 based), or of a
+ *  group it cannot order that fills places `rank` to `last`, in a league of
+ *  `size` clubs. Pure: the worked numbers in the harness are asserted here. */
+export function ladderBand(rank: number, n: number, size: number, rating: number, last = rank): [number, number] {
+  const at = (share: number) => Math.round(share * size);
+  /* his place scaled to the real size (the Segunda's 20 known clubs in 22) */
+  const place = (r: number) => Math.round(n > 1 ? 1 + ((r - 1) * (size - 1)) / (n - 1) : r);
+  const half = Math.max(2, at(0.15));
+  const nudge = rating >= 7.5 ? -at(0.1) : rating < 6.3 ? at(0.1) : 0;
+  const lo = Math.min(size, Math.max(2, place(rank) - half + nudge));
+  const hi = Math.min(size, Math.max(lo, place(last) + half + nudge));
+  return [lo, hi];
+}
+
+/** The band a season draws from, and where it came from (for the harness):
+ *  'ladder' or 'absolute'. */
+export function finishBandFor(input: LeagueFinishInput, size: number): { band: [number, number]; by: "ladder" | "absolute" } {
+  const groups = input.year >= LIST_SEASON && input.league !== null && !ABSOLUTE_BAND.has(input.league)
+    ? CAREER_LEAGUE_LADDER[input.league] : undefined;
+  const club = groups ? seedKeyClub(input.seedKey) : null;
+  if (groups && club !== null) {
+    const n = groups.reduce((sum, g) => sum + g.length, 0);
+    let before = 0;
+    for (const g of groups) {
+      if (g.includes(club)) return { band: ladderBand(before + 1, n, size, input.rating, before + g.length), by: "ladder" };
+      before += g.length;
+    }
+  }
+  return { band: finishBand(input.tier, input.elite, size, input.rating), by: "absolute" };
+}
+
 export interface LeagueFinishInput {
   /** The league the club played that season (leagueKeyInYear), or null
    *  when the game cannot say: a title is still 1st, nothing else is drawn. */
@@ -182,7 +246,7 @@ export function drawLeagueFinish(input: LeagueFinishInput): LeagueFinish {
   const size = input.league === null ? null : leagueSizeFor(input.league, input.year);
   if (input.leagueTitle) return { leagueFinish: 1, ...(size ? { leagueSize: size } : {}) };
   if (!size) return {};
-  const [lo, hi] = finishBand(input.tier, input.elite, size, input.rating);
+  const { band: [lo, hi] } = finishBandFor(input, size);
   const rng = forkRng(input.seedKey);
   const finish = lo + Math.floor(rng() * (hi - lo + 1));
   return { leagueFinish: Math.min(size, Math.max(2, finish)), leagueSize: size };
