@@ -1,0 +1,6 @@
+#!serial
+mutL1: bash .rc/x/rv-mutrun.sh L1 sense vitest career
+mutL2: bash .rc/x/rv-mutrun.sh L2 sense vitest career
+mutL5: bash .rc/x/rv-mutrun.sh L5 sense vitest career
+mutL6: bash .rc/x/rv-mutrun.sh L6 sense vitest career awards
+clean: git status --short -- src scripts | head -5; echo "tree clean check done"

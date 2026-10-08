@@ -1,0 +1,5 @@
+mutL1 exit=1 91s | mutation L1: CAUGHT (a check went red: 1)
+mutL2 exit=1 95s | mutation L2: CAUGHT (a check went red: 1)
+mutL5 exit=1 91s | mutation L5: CAUGHT (a check went red: 1)
+mutL6 exit=1 93s | mutation L6: CAUGHT (a check went red: 1)
+clean exit=0 0s | tree clean check done

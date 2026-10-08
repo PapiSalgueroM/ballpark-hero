@@ -1,0 +1,10 @@
+mutation L1 applied to src/lib/nbaMyCareer.ts
+restored
+mutL1 sense exit=1 | simNbaAwardsSense: 121 checks, 1 failed (full size), 91s
+  FAIL [R] my share of the head to head years, percent: mean 61.856 (62.18, 61.85, 61.24, 61.8, 62.21) against main's 62.594 (62.33, 63.02, 62.3, 62.52, 62.8), 0.738 apart, allowed 0.67 (three standard errors at 6000 careers a seed)
+red sections: R
+mutL1 vitest exit=0 |    Duration  2.84s (transform 1.19s, setup 412ms, collect 2.77s, tests 1.06s, environment 2.17s, prepare 540ms)
+ Test Files  3 passed (3)
+      Tests  48 passed (48)
+mutL1 career exit=0 | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest
+mutation L1: CAUGHT (a check went red: 1)

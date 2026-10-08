@@ -1,0 +1,15 @@
+mutation L6 applied to src/lib/nbaMyCareer.ts
+restored
+mutL6 sense exit=1 | simNbaAwardsSense: 121 checks, 5 failed (full size), 92s
+  FAIL [H] Hall of Fame inducted, percent: mean 26.414 (26.97, 26.35, 26.32, 26.35, 26.08) against main's 31.732 (31.7, 31.88, 31.78, 31.75, 31.55), 5.318 apart, allowed 1.14 (three standard errors at 6000 careers a seed)
+  FAIL [H] first ballot, percent: mean 21.894 (22.75, 22.17, 21.62, 21.53, 21.4) against main's 27.562 (27.03, 27.93, 27.83, 27.57, 27.45), 5.668 apart, allowed 1.094 (three standard errors at 6000 careers a seed)
+  FAIL [B6] MVPs a career (sd over careers 0.277): mean 0.056 (0.053, 0.054, 0.061, 0.055, 0.057) against main's 0.315 (0.316, 0.323, 0.31, 0.313, 0.311), 0.259 apart, allowed 0.014 (three standard errors at 6000 careers a seed)
+  FAIL [B6] All-NBA a career (sd over careers 1.996): mean 1.71 (1.711, 1.701, 1.706, 1.715, 1.715) against main's 1.986 (1.972, 2.006, 1.981, 1.987, 1.986), 0.277 apart, allowed 0.049 (three standard errors at 6000 careers a seed)
+  FAIL [B6] careers with an MVP, percent (main 16.22, 16.85, 16.27, 16.75, 16.68: the same awards a career, spread over more careers): mean 4.584 (4.35, 4.38, 4.87, 4.57, 4.75) against what Round 1103 shipped, 17.442 (17.18, 17.07, 17.73, 17.7, 17.53), 12.858 apart, allowed 0.93 (three standard errors at 6000 careers a seed)
+red sections: H, B6
+mutL6 vitest exit=0 |    Duration  3.60s (transform 1.55s, setup 523ms, collect 3.33s, tests 1.19s, environment 2.75s, prepare 1.10s)
+ Test Files  3 passed (3)
+      Tests  48 passed (48)
+mutL6 career exit=0 | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest
+mutL6 awards exit=1 | 1 FAILURES
+mutation L6: CAUGHT (a check went red: 1)

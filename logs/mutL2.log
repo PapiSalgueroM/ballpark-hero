@@ -1,0 +1,11 @@
+mutation L2 applied to src/lib/nbaMyCareer.ts
+restored
+mutL2 sense exit=1 | simNbaAwardsSense: 121 checks, 2 failed (full size), 94s
+  FAIL [A1] the 2003 line over the 2026 line is the league rows' ratio within 2 percent: ppg 0.810 against 0.808, rpg 0.798 against 0.963, apg 0.797 against 0.798, spg 0.938 against 0.940, bpg 1.075 against 1.063
+  FAIL [B6] All-Defensive a career (sd over careers 2.352): mean 1.243 (1.247, 1.228, 1.27, 1.235, 1.236) against main's 1.356 (1.342, 1.383, 1.357, 1.337, 1.361), 0.113 apart, allowed 0.058 (three standard errors at 6000 careers a seed)
+red sections: A1, B6
+mutL2 vitest exit=0 |    Duration  3.05s (transform 1.18s, setup 484ms, collect 2.69s, tests 1.13s, environment 2.44s, prepare 442ms)
+ Test Files  3 passed (3)
+      Tests  48 passed (48)
+mutL2 career exit=0 | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest
+mutation L2: CAUGHT (a check went red: 1)

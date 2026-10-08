@@ -1,0 +1,10 @@
+mutation L5 applied to src/lib/nbaMyCareer.ts
+restored
+mutL5 sense exit=1 | simNbaAwardsSense: 121 checks, 1 failed (full size), 90s
+  FAIL [B3] before 2023-24 the rule did not exist: 196, 192, 158, 189, 193 seasons under 65 games hold one of those awards (at least 1750 in the run, so "none before" is seen to fire)
+red sections: B3
+mutL5 vitest exit=0 |    Duration  3.15s (transform 1.30s, setup 375ms, collect 2.91s, tests 1.22s, environment 2.13s, prepare 454ms)
+ Test Files  3 passed (3)
+      Tests  48 passed (48)
+mutL5 career exit=0 | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest
+mutation L5: CAUGHT (a check went red: 1)
