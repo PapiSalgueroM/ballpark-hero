@@ -171,7 +171,7 @@ const read = (page, key) => page.evaluate(([k, words]) => {
   const toasts = [...document.querySelectorAll('[data-sonner-toast]')].map(t => (t.textContent ?? '').trim());
   return {
     notice: notice ? { op: notice.getAttribute('data-save-operation'), box: box(notice), seen } : null,
-    line: line ? { trouble: line.getAttribute('data-dukb-storage-notice'), box: box(line), words: (line.textContent ?? '').trim().slice(0, 44) } : null,
+    line: line ? { trouble: line.getAttribute('data-dukb-storage-notice'), box: box(line), words: (line.querySelector('span')?.textContent ?? line.textContent ?? '').trim() } : null,
     toasts: toasts.length, saveToasts: toasts.filter(t => t.includes(words)).length,
     broke: (document.body.textContent ?? '').includes('This page broke'),
     phase, refused: window.__seamRefused ? window.__seamRefused.total : -1,
