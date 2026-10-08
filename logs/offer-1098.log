@@ -1,0 +1,142 @@
+identity exit=0
+.rc/request.txt: OK
+.rc/run.sh: OK
+.github/workflows/lane-remote-check.yml: OK
+locked-packages exit=0
+Verified 521 actual installed locked package versions.
+runtime exit=0
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 120 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 120 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 120 MiB
+Chrome Headless Shell 156.0.8078.4 (playwright chromium-headless-shell v1248) downloaded to /home/runner/.cache/ms-playwright/chromium_headless_shell-1248
+Version 1.64.0
+brand-runtime exit=0
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.4/5.4 MB 134.1 MB/s eta 0:00:00
+Downloading pillow-12.3.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (6.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.9/6.9 MB 186.2 MB/s eta 0:00:00
+Installing collected packages: pillow, fonttools
+Successfully installed fonttools-4.66.1 pillow-12.3.0
+syntax exit=0
+types exit=0
+build exit=0
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[32m✓ built in 30.39s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+assets exit=0
+Prepared 91 actual font and flag dependencies for 83 career-club countries.
+asset-cache-hold exit=0
+helper exit=0
+Actual review outcomes: 9/9 normal groups passed.
+Retained observations: 237 comparisons across 28 generated and explicitly staged offer fixtures.
+Copied helper controls: 19/19 effective mapped assertion failures, each with a completely unchanged engine baseline.
+Evidence binding: 20 actual raw workers and executable bundles; 2802 original source holds.
+Soccer offer review: passed.
+helper-receipt exit=0
+Accepted actual9 helper groups and19 effective controls.
+native exit=0
+Soccer offer review: 9 actual-route journeys, 12 effective restored DOM controls, no forwarded writes.
+native-receipt exit=0
+Accepted actual9 native journeys and12 restored DOM controls.
+parent exit=0
+parent-receipt exit=0
+Untouched main rejects the identical first signed terms at its exact stale euro assertion.
+reader-simAdsense exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simAdsense.mjs                  0.5s
+
+All 1 harnesses green.
+reader-simBrand exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simBrand.mjs                    0.5s
+
+All 1 harnesses green.
+reader-simHeadTags exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simHeadTags.mjs                 0.4s
+
+All 1 harnesses green.
+reader-simHiddenPages exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simHiddenPages.mjs              0.4s
+
+All 1 harnesses green.
+reader-simHubs exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simHubs.mjs                     0.4s
+
+All 1 harnesses green.
+reader-simIndexNow exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simIndexNow.mjs                 0.3s
+
+All 1 harnesses green.
+reader-simIndexing exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simIndexing.mjs                 0.4s
+
+All 1 harnesses green.
+reader-simInternalLinks exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simInternalLinks.mjs            0.4s
+
+All 1 harnesses green.
+reader-simNoRivalNames exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simNoRivalNames.mjs            10.9s
+
+All 1 harnesses green.
+reader-simPrerender exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simPrerender.mjs                0.7s
+
+All 1 harnesses green.
+reader-simPrerenderBoot exit=0
+
+Serving dist on 4173 for 1 browser harnesses
+  PASS  simPrerenderBoot.mjs           13.3s
+
+All 1 harnesses green.
+reader-simRetiredRoutes exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simRetiredRoutes.mjs            0.4s
+
+All 1 harnesses green.
+reader-simSchema exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simSchema.mjs                   0.4s
+
+All 1 harnesses green.
+reader-simSitemap exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simSitemap.mjs                  0.4s
+
+All 1 harnesses green.
+reader-simSnapshotAssets exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simSnapshotAssets.mjs           0.4s
+
+All 1 harnesses green.
+reader-receipts exit=0
+All15 actual named dist/public readers printed their passing outcomes.
+core-maps exit=0
+Bound all5 actual product source bodies to their emitted JavaScript maps.
+closing exit=0
+dependency-cache-hold exit=0
+Every original application package byte is held; only ordinary new cache files are allowed.
+Soccer offer1098 strict label: failed=0, complete=1, source=c48919a9c22d036280a29253bb0044068ed04ac9, request=e328135167bdbde3d25add5b596556184c2a2b6a.

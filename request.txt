@@ -1,0 +1,2 @@
+#!serial
+offer-1098: bash .rc/x/offer-review-1098.sh
