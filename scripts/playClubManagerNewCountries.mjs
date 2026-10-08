@@ -123,14 +123,17 @@ for (const [w, h] of VIEWPORTS) {
     }
     const first = c.leagues[0];
     await tile(page, new RegExp(esc(first.name))).click({ timeout: 8000 }).catch(() => fail(`${tag}: step 2: could not open ${first.name}`));
-    await tile(page, new RegExp(`^\\s*${esc(first.clubs[0])}`)).waitFor({ timeout: 8000 }).catch(() => {});
+    /* A club's tile is the button that holds its name and no longer club name of the league that contains it
+       (a tile's text runs its parts together, so the name is matched as text, not as a word). */
+    const clubTile = name => { let loc = page.locator('button:visible').filter({ hasText: name }); for (const longer of first.clubs.filter(x => x !== name && x.includes(name))) loc = loc.filter({ hasNotText: longer }); return loc.first(); };
+    await clubTile(first.clubs[0]).waitFor({ timeout: 8000 }).catch(() => {});
     const seen = [];
-    for (const club of first.clubs) if (await page.locator('button:visible').filter({ hasText: new RegExp(`(^|\\s)${esc(club)}(\\s|$)`) }).count()) seen.push(club);
+    for (const club of first.clubs) if (await clubTile(club).count()) seen.push(club);
     if (seen.length !== first.clubs.length) fail(`${tag}: step 2: ${seen.length} of ${first.clubs.length} ${first.name} clubs have a tile (missing ${first.clubs.filter(x => !seen.includes(x)).slice(0, 5).join(', ')})`);
     await overflow(page, 'the club step');
     /* 3. a career at the league's first club */
     const club = first.clubs[0];
-    await tile(page, new RegExp(`^\\s*${esc(club)}`)).click({ timeout: 8000 }).catch(() => fail(`${tag}: step 3: no ${club} tile to press`));
+    await clubTile(club).click({ timeout: 8000 }).catch(() => fail(`${tag}: step 3: no ${club} tile to press`));
     await tile(page, /take the job|confirm|start/i).click({ timeout: 8000 }).catch(() => {});
     await page.getByText(/who is in the dugout/i).first().waitFor({ timeout: 8000 }).catch(() => {});
     await tile(page, /skip: just manage/i).click({ timeout: 8000 }).catch(() => {});
