@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simClubManagerGathered: node scripts/simClubManagerGathered.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+livesim: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx src/test/cmWorldIdentity1052.test.ts --testTimeout=300000 --hookTimeout=120000
+era-lines: node .rc/x/rv-probe-engine.mjs era
+gen-check: node scripts/genClubManagerGathered.mjs russia2026 --check
