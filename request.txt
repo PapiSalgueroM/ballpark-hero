@@ -1,0 +1,2 @@
+#!serial
+home-search-1150: bash .rc/x/home-search-1150.sh
