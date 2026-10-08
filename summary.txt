@@ -1,0 +1,13 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+mut-tie exit=0 53s | MUT tie vitest=1 simCareerSquad=1 simClubSquads=1
+mut-eleven exit=0 48s | MUT eleven vitest=1 simCareerSquad=1 simClubSquads=0
+oldsave exit=0 127s | OLDSAVE DONE: 18 base saves loaded on the branch build, 4 not clean; reader throws raw 0, repaired 0
+mut-keeps exit=0 51s | MUT keeps vitest=0 simCareerSquad=0 simClubSquads=0
+mut-year exit=0 54s | MUT year vitest=1 simCareerSquad=0 simClubSquads=0
+walk exit=0 206s | RVWALK DONE 36 sessions
+mut-window exit=0 54s | MUT window vitest=1 simCareerSquad=1 simClubSquads=0
+mut-since exit=0 61s | MUT since vitest=1 simCareerSquad=1 simClubSquads=0
+mut-frozen exit=0 61s | MUT frozen vitest=1 simCareerSquad=0 simClubSquads=0
+mut-under exit=0 65s | MUT under vitest=0 simCareerSquad=0 simClubSquads=0
+mut-carry exit=0 55s | MUT carry vitest=1 simCareerSquad=0 simClubSquads=0
+mut-youth exit=0 47s | MUT youth vitest=1 simCareerSquad=1 simClubSquads=0

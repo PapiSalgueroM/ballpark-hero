@@ -1,0 +1,20 @@
+mutation carry applied to src/lib/soccerClubSquadGen.ts: "const man: SquadMan | null = y < left ? { name: real.name, pos: real.p" -> "const man: SquadMan | null = { name: real.name, pos: real.pos, ovr: re"
+ src/lib/soccerClubSquadGen.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- vitest
+   × the invented squad > carries a real squad on into the game's own years, man by man 17ms
+     → expected 21 to be +0 // Object.is equality
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/lib/soccerClubSquad.test.ts > the invented squad > carries a real squad on into the game's own years, man by man
+AssertionError: expected 21 to be +0 // Object.is equality
+ Test Files  1 failed (1)
+      Tests  1 failed | 22 passed (23)
+::error file=/tmp/mut-carry/src/lib/soccerClubSquad.test.ts,title=src/lib/soccerClubSquad.test.ts > the invented squad > carries a real squad on into the game's own years%2C man by man,line=204,column=20::AssertionError:
+--- simCareerSquad
+simCareerSquad: 2147 checks, 0 failed
+   (49 s, work folder /home/runner/work/_temp/t-mut-carry/careersquad-JpqoIN)
+simCareerSquad: 2147 checks, 0 failed
+--- simClubSquads
+
+simClubSquads: green. The squad is the real one, you are in the right place in it, and the game never noticed.
+MUT carry vitest=1 simCareerSquad=0 simClubSquads=0

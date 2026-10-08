@@ -1,0 +1,14 @@
+mutation under applied to src/lib/soccerClubSquadSheet.ts: "if (row.ovr < centre - 5) {" -> "if (row.ovr <= centre - 5) {"
+ src/lib/soccerClubSquadSheet.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- vitest
+ Test Files  1 passed (1)
+      Tests  23 passed (23)
+--- simCareerSquad
+simCareerSquad: 2147 checks, 0 failed
+   (60 s, work folder /home/runner/work/_temp/t-mut-under/careersquad-62JOlw)
+simCareerSquad: 2147 checks, 0 failed
+--- simClubSquads
+
+simClubSquads: green. The squad is the real one, you are in the right place in it, and the game never noticed.
+MUT under vitest=0 simCareerSquad=0 simClubSquads=0

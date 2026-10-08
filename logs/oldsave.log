@@ -1,0 +1,25 @@
+base main tree: ddc2c0425242f956fc0d4e8c3e8f1900908dca1a
+base engine at /tmp/base-main: 295 playing saves from 64 careers (0 careers stopped on a step error), plus 99 cut down variants
+frozen readers over 394 base saves: sources {"real":47,"invented":69,"roles":278,"none":0}
+  throws on the raw save: 0
+  throws on the repaired save (what the page hands the tile): 0
+  repairCareer on the branch changes the JSON of 33 of 394; the tile's reading differs raw against repaired in 0
+  1990-94-c0-p1: tile rank 2 (lib 2), page rewrote the save on load: false, save the same after the sheet: true
+  1990-94-c2-p5: tile rank 1 (lib 1), page rewrote the save on load: false, save the same after the sheet: true
+  1990-94-c4-p15: tile rank 1 (lib 1), page rewrote the save on load: false, save the same after the sheet: true
+  1990-94-c7-p1: tile rank 3 (lib 3), page rewrote the save on load: false, save the same after the sheet: true
+  1995-99-c1-p5: tile rank 4 (lib 4), page rewrote the save on load: false, save the same after the sheet: true
+  1995-99-c3-p10: tile rank 1 (lib 1), page rewrote the save on load: false, save the same after the sheet: true
+  1995-99-c6-p1: tile rank 2 (lib 2), page rewrote the save on load: false, save the same after the sheet: true
+  2000-04-c0-p5: tile rank 1 (lib 1), page rewrote the save on load: false, save the same after the sheet: true
+  2000-04-c2-p15: tile rank 1 (lib 1), page rewrote the save on load: false, save the same after the sheet: true
+  2000-04-c5-p2: tile rank 6 (lib 6), page rewrote the save on load: false, save the same after the sheet: true
+  2000-04-c7-p5: tile rank 1 (lib 1), page rewrote the save on load: false, save the same after the sheet: true
+  2005-09-c1-p10: tile rank 2 (lib 2), page rewrote the save on load: false, save the same after the sheet: true
+  1990-94-c0-p1-nophone: tile rank 2 (lib 2), page rewrote the save on load: false, save the same after the sheet: true
+  1990-94-c2-p1-barerows: no tile (lib says 3/8) body "Skip to main content DOUKNOWBALL Back Track stats We couldn't open this save. You can crea"
+  1990-94-c4-p1-nocountry: no tile (lib says 2/6) body "Skip to main content DOUKNOWBALL Back Track stats We couldn't open this save. You can crea"
+  1990-94-c7-p10-nophone: tile rank 1 (lib 1), page rewrote the save on load: false, save the same after the sheet: true
+  1995-99-c1-p10-barerows: no tile (lib says 1/8) body "Skip to main content DOUKNOWBALL Back Track stats We couldn't open this save. You can crea"
+  1995-99-c3-p5-nocountry: no tile (lib says 1/4) body "Skip to main content DOUKNOWBALL Back Track stats We couldn't open this save. You can crea"
+OLDSAVE DONE: 18 base saves loaded on the branch build, 4 not clean; reader throws raw 0, repaired 0

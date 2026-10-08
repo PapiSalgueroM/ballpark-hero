@@ -1,0 +1,30 @@
+mutation year applied to src/lib/soccerClubSquad.ts: "    year: (last?.year ?? 0) + 1,
+  };
+}" -> "    year: (last?.year ?? 0),
+  };
+}"
+ src/lib/soccerClubSquad.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- vitest
+   × the living squad > has three sources and says which 12ms
+     → expected 2023 to be 2024 // Object.is equality
+   × odd saves and odd years > survives a save with one row, an unknown position, a hand edited first row and bad numbers 1ms
+     → expected 2025 to be 2026 // Object.is equality
+   × odd saves and odd years > never calls a career in a real past season by an invented name, in any year before 2027 23ms
+     → expected 'roles' to be 'invented' // Object.is equality
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/lib/soccerClubSquad.test.ts > the living squad > has three sources and says which
+AssertionError: expected 2023 to be 2024 // Object.is equality
+ FAIL  src/lib/soccerClubSquad.test.ts > odd saves and odd years > survives a save with one row, an unknown position, a hand edited first row and bad numbers
+AssertionError: expected 2025 to be 2026 // Object.is equality
+ FAIL  src/lib/soccerClubSquad.test.ts > odd saves and odd years > never calls a career in a real past season by an invented name, in any year before 2027
+AssertionError: expected 'roles' to be 'invented' // Object.is equality
+ Test Files  1 failed (1)
+--- simCareerSquad
+simCareerSquad: 2147 checks, 0 failed
+   (49 s, work folder /home/runner/work/_temp/t-mut-year/careersquad-PcnIUC)
+simCareerSquad: 2147 checks, 0 failed
+--- simClubSquads
+
+simClubSquads: green. The squad is the real one, you are in the right place in it, and the game never noticed.
+MUT year vitest=1 simCareerSquad=0 simClubSquads=0

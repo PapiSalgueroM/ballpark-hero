@@ -1,0 +1,22 @@
+mutation window applied to src/lib/soccerClubSquad.ts: "if (at.year > CLUB_SQUAD_YEARS.last) {" -> "if (at.year >= CLUB_SQUAD_YEARS.last) {"
+ src/lib/soccerClubSquad.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- vitest
+   × odd saves and odd years > never calls a career in a real past season by an invented name, in any year before 2027 26ms
+     → expected 'invented' to be 'roles' // Object.is equality
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/lib/soccerClubSquad.test.ts > odd saves and odd years > never calls a career in a real past season by an invented name, in any year before 2027
+AssertionError: expected 'invented' to be 'roles' // Object.is equality
+ Test Files  1 failed (1)
+      Tests  1 failed | 22 passed (23)
+::error file=/tmp/mut-window/src/lib/soccerClubSquad.test.ts,title=src/lib/soccerClubSquad.test.ts > odd saves and odd years > never calls a career in a real past season by an invented name%2C in any year before 2027,lin
+--- simCareerSquad
+   FAIL [5] 410 squads carry the wrong source
+FAILED [5] 410 squads carry the wrong source
+simCareerSquad: 2147 checks, 1 failed
+FAILED [5] 410 squads carry the wrong source
+simCareerSquad: 2147 checks, 1 failed
+--- simClubSquads
+
+simClubSquads: green. The squad is the real one, you are in the right place in it, and the game never noticed.
+MUT window vitest=1 simCareerSquad=1 simClubSquads=0

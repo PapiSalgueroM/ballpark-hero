@@ -1,0 +1,380 @@
+{
+ "A": {
+  "club": "Levante",
+  "year": 2030,
+  "source": "invented",
+  "rank": 3,
+  "groupSize": 8,
+  "inXI": true,
+  "trust": {
+   "pct": 58,
+   "expected": 22,
+   "band": {
+    "min": 20,
+    "max": 30
+   },
+   "swing": -3,
+   "frozen": false,
+   "inPlans": true,
+   "label": "Starter most weeks"
+  },
+  "queue": [
+   "Íñigo Larrañaga:CM:61:25:2029",
+   "Manu Elizalde:CDM:57:23:2030",
+   "*Jo Vale:CM:57::",
+   "Jorge Otxoa:CM:49:29:2028",
+   "Ikechukwu Ikpeba-Ola:CAM:48:31:2028",
+   "Borja Cendoya:CM:44:20:2030",
+   "Oriol Barragán:CDM:43:21:2028",
+   "Guillem Puigdemont:CM:40:22:2027"
+  ],
+  "bench": 12,
+  "carried": 0,
+  "last": {
+   "club": "Levante",
+   "year": 2029,
+   "loan": false,
+   "leagueApps": 19,
+   "apps": 22,
+   "thin": true,
+   "lines": [
+    "Nothing in your record explains it beyond selection: your range going in was 20 to 30 league games."
+   ]
+  }
+ },
+ "M": {
+  "club": "Girona",
+  "year": 2028,
+  "source": "invented",
+  "rank": 5,
+  "groupSize": 6,
+  "inXI": false,
+  "trust": {
+   "pct": 29,
+   "expected": 11,
+   "band": {
+    "min": 8,
+    "max": 18
+   },
+   "swing": -2,
+   "frozen": false,
+   "inPlans": false,
+   "label": "Squad player"
+  },
+  "queue": [
+   "Viktor Tsygankov:RW:79::",
+   "Íñigo Zubizarreta:RW:72:26:2028",
+   "Unai Puigdemont:LW:66:27:2028",
+   "Bruno Cardozo:ST:62:33:2028",
+   "*Jo Vale:ST:62::",
+   "Curro Gaztañaga:LW:57:20:2027"
+  ],
+  "bench": 12,
+  "carried": 9,
+  "last": {
+   "club": "Girona",
+   "year": 2027,
+   "loan": false,
+   "leagueApps": 12,
+   "apps": 13,
+   "thin": true,
+   "lines": [
+    "On our ratings you went into the season 5th of 6 forwards, and Mert Akbulut was the last one in ahead of you.",
+    "Going into that season you were 11 rating points under the level that squad expects."
+   ]
+  }
+ },
+ "B": {
+  "club": "Newcastle",
+  "year": 2019,
+  "source": "real",
+  "rank": 6,
+  "groupSize": 6,
+  "inXI": false,
+  "trust": {
+   "pct": 61,
+   "expected": 23,
+   "band": {
+    "min": 20,
+    "max": 30
+   },
+   "swing": -2,
+   "frozen": false,
+   "inPlans": true,
+   "label": "Starter most weeks"
+  },
+  "queue": [
+   "Sean Longstaff:CM:82::",
+   "Jonjo Shelvey:CM:80::",
+   "Matt Ritchie:RM:78::",
+   "Isaac Hayden:CDM:77::",
+   "Sung-yueng Ki:CDM:74::",
+   "*Jo Vale:CAM:63::"
+  ],
+  "bench": 12,
+  "carried": 0,
+  "last": {
+   "club": "Newcastle",
+   "year": 2018,
+   "loan": false,
+   "leagueApps": 26,
+   "apps": 28,
+   "thin": false,
+   "lines": []
+  }
+ },
+ "R1": {
+  "club": "Derby County",
+  "year": 1995,
+  "source": "roles",
+  "rank": 1,
+  "groupSize": 6,
+  "inXI": true,
+  "trust": {
+   "pct": 58,
+   "expected": 22,
+   "band": {
+    "min": 20,
+    "max": 30
+   },
+   "swing": -3,
+   "frozen": false,
+   "inPlans": true,
+   "label": "Starter most weeks"
+  },
+  "queue": [
+   "*Jo Vale:ST:59::",
+   "First choice forward:ST:58:31:1990",
+   "Second choice forward:RW:57:27:1991",
+   "Third choice forward:LW:49:22:1994",
+   "Fourth choice forward:ST:47:25:1992",
+   "Fifth choice forward:LW:40:19:1993"
+  ],
+  "bench": 12,
+  "carried": 0,
+  "last": {
+   "club": "Derby County",
+   "year": 1994,
+   "loan": false,
+   "leagueApps": 25,
+   "apps": 18,
+   "thin": false,
+   "lines": [
+    "19 weeks out injured (ACL rupture)."
+   ]
+  }
+ },
+ "R2": {
+  "club": "Athletic Bilbao",
+  "year": 1994,
+  "source": "roles",
+  "rank": 4,
+  "groupSize": 6,
+  "inXI": false,
+  "trust": {
+   "pct": 29,
+   "expected": 11,
+   "band": {
+    "min": 8,
+    "max": 18
+   },
+   "swing": -2,
+   "frozen": false,
+   "inPlans": false,
+   "label": "Squad player"
+  },
+  "queue": [
+   "First choice forward:ST:79:25:1990",
+   "Second choice forward:RW:73:29:1992",
+   "Third choice forward:LW:66:22:1993",
+   "*Jo Vale:ST:63::",
+   "Fourth choice forward:ST:62:32:1992",
+   "Fifth choice forward:LW:60:24:1990"
+  ],
+  "bench": 12,
+  "carried": 0,
+  "last": {
+   "club": "Athletic Bilbao",
+   "year": 1993,
+   "loan": false,
+   "leagueApps": 16,
+   "apps": 17,
+   "thin": true,
+   "lines": [
+    "On our ratings you went into the season 5th of 6 forwards, and the third choice forward was the last one in ahead of you.",
+    "Going into that season you were 10 rating points under the level that squad expects."
+   ]
+  }
+ },
+ "S": {
+  "club": "Lincoln City",
+  "year": 2029,
+  "source": "invented",
+  "rank": 2,
+  "groupSize": 6,
+  "inXI": true,
+  "trust": {
+   "pct": 61,
+   "expected": 23,
+   "band": {
+    "min": 20,
+    "max": 30
+   },
+   "swing": -2,
+   "frozen": false,
+   "inPlans": true,
+   "label": "Starter most weeks"
+  },
+  "queue": [
+   "Neil Prescott:ST:61:28:2029",
+   "*Jo Vale:ST:59::",
+   "Adam Hollis:RW:55:22:2028",
+   "Eddie Hollis:LW:49:31:2025",
+   "Neil Radlett:ST:46:32:2029",
+   "Craig Dunmore:LW:40:20:2026"
+  ],
+  "bench": 12,
+  "carried": 0,
+  "last": {
+   "club": "Lincoln City",
+   "year": 2028,
+   "loan": false,
+   "leagueApps": 21,
+   "apps": 24,
+   "thin": false,
+   "lines": []
+  }
+ },
+ "F": {
+  "club": "Levante",
+  "year": 2030,
+  "source": "invented",
+  "rank": 3,
+  "groupSize": 8,
+  "inXI": true,
+  "trust": {
+   "pct": 16,
+   "expected": 6,
+   "band": {
+    "min": 20,
+    "max": 30
+   },
+   "swing": -3,
+   "frozen": true,
+   "inPlans": false,
+   "label": "Frozen out"
+  },
+  "queue": [
+   "Íñigo Larrañaga:CM:61:25:2029",
+   "Manu Elizalde:CDM:57:23:2030",
+   "*Jo Vale:CM:57::",
+   "Jorge Otxoa:CM:49:29:2028",
+   "Ikechukwu Ikpeba-Ola:CAM:48:31:2028",
+   "Borja Cendoya:CM:44:20:2030",
+   "Oriol Barragán:CDM:43:21:2028",
+   "Guillem Puigdemont:CM:40:22:2027"
+  ],
+  "bench": 12,
+  "carried": 0,
+  "last": {
+   "club": "Levante",
+   "year": 2029,
+   "loan": false,
+   "leagueApps": 19,
+   "apps": 22,
+   "thin": true,
+   "lines": [
+    "Nothing in your record explains it beyond selection: your range going in was 20 to 30 league games."
+   ]
+  }
+ },
+ "D": {
+  "club": "PSG",
+  "year": 2022,
+  "source": "real",
+  "rank": 10,
+  "groupSize": 10,
+  "inXI": false,
+  "trust": {
+   "pct": 24,
+   "expected": 9,
+   "band": {
+    "min": 8,
+    "max": 16
+   },
+   "swing": -3,
+   "frozen": false,
+   "inPlans": false,
+   "label": "Squad player"
+  },
+  "queue": [
+   "Neymar:CAM:89::",
+   "Marco Verratti:CM:86::",
+   "Georginio Wijnaldum:CM:82::",
+   "Leandro Paredes:CDM:80::",
+   "Xavi Simons:CAM:80::",
+   "Idrissa Gueye:CDM:78::",
+   "Ander Herrera:CM:77::",
+   "Junior Dina Ebimbe:RM:76::",
+   "Warren Zaïre-Emery:CM:74::",
+   "*Jo Vale:CM:66::"
+  ],
+  "bench": 15,
+  "carried": 0,
+  "last": {
+   "club": "Levante",
+   "year": 2021,
+   "loan": false,
+   "leagueApps": 19,
+   "apps": 22,
+   "thin": true,
+   "lines": [
+    "Nothing in your record explains it beyond selection: your range going in was 20 to 30 league games."
+   ]
+  }
+ },
+ "E": {
+  "club": "Real Madrid",
+  "year": 2023,
+  "source": "real",
+  "rank": 5,
+  "groupSize": 8,
+  "inXI": false,
+  "trust": {
+   "pct": 58,
+   "expected": 22,
+   "band": {
+    "min": 20,
+    "max": 30
+   },
+   "swing": -3,
+   "frozen": false,
+   "inPlans": true,
+   "label": "Starter most weeks"
+  },
+  "queue": [
+   "Éder Militão:CB:88::",
+   "David Alaba:CB:86::",
+   "Antonio Rüdiger:CB:84::",
+   "Ferland Mendy:LB:84::",
+   "*Jo Vale:CB:84::",
+   "Daniel Carvajal:RB:79::",
+   "Lucas Vázquez:RB:76::",
+   "Nacho Fernández:CB:74::"
+  ],
+  "bench": 9,
+  "carried": 0,
+  "last": {
+   "club": "Levante",
+   "year": 2022,
+   "loan": false,
+   "leagueApps": 19,
+   "apps": 22,
+   "thin": true,
+   "lines": [
+    "Nothing in your record explains it beyond selection: your range going in was 20 to 30 league games."
+   ]
+  }
+ },
+ "Y": null
+}

@@ -1,0 +1,14 @@
+#!serve
+#!playwright
+walk: node .rc/x/rvWalk.mjs
+oldsave: bash .rc/x/rvOldSave.sh
+mut-tie: bash .rc/x/rvMut.sh tie
+mut-eleven: bash .rc/x/rvMut.sh eleven
+mut-keeps: bash .rc/x/rvMut.sh keeps
+mut-year: bash .rc/x/rvMut.sh year
+mut-window: bash .rc/x/rvMut.sh window
+mut-since: bash .rc/x/rvMut.sh since
+mut-under: bash .rc/x/rvMut.sh under
+mut-frozen: bash .rc/x/rvMut.sh frozen
+mut-carry: bash .rc/x/rvMut.sh carry
+mut-youth: bash .rc/x/rvMut.sh youth

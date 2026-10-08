@@ -1,0 +1,22 @@
+mutation youth applied to src/lib/soccerClubSquad.ts: "if (first && first.type === 'youth' && c.currentClub === first.club) r" -> ""
+ src/lib/soccerClubSquad.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- vitest
+   × the living squad > shows nothing in the academy or after retiring, but still answers a caller with its own club 6ms
+     → expected { club: 'Newcastle Youth', …(3) } to be null
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/lib/soccerClubSquad.test.ts > the living squad > shows nothing in the academy or after retiring, but still answers a caller with its own club
+AssertionError: expected { club: 'Newcastle Youth', …(3) } to be null
+ Test Files  1 failed (1)
+      Tests  1 failed | 22 passed (23)
+::error file=/tmp/mut-youth/src/lib/soccerClubSquad.test.ts,title=src/lib/soccerClubSquad.test.ts > the living squad > shows nothing in the academy or after retiring%2C but still answers a caller with its own club,line=2
+--- simCareerSquad
+   FAIL [13] an academy save renders a tile
+FAILED [13] an academy save renders a tile
+simCareerSquad: 2147 checks, 1 failed
+FAILED [13] an academy save renders a tile
+simCareerSquad: 2147 checks, 1 failed
+--- simClubSquads
+
+simClubSquads: green. The squad is the real one, you are in the right place in it, and the game never noticed.
+MUT youth vitest=1 simCareerSquad=1 simClubSquads=0

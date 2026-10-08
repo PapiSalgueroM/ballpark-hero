@@ -1,0 +1,14 @@
+mutation keeps applied to src/lib/soccerClubSquad.ts: "chart.men[ELEVEN_SHAPE[chart.group] - 1] ?? null," -> "chart.men[ELEVEN_SHAPE[chart.group]] ?? null,"
+ src/lib/soccerClubSquad.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- vitest
+ Test Files  1 passed (1)
+      Tests  23 passed (23)
+--- simCareerSquad
+simCareerSquad: 2147 checks, 0 failed
+   (47 s, work folder /home/runner/work/_temp/t-mut-keeps/careersquad-hfskUP)
+simCareerSquad: 2147 checks, 0 failed
+--- simClubSquads
+
+simClubSquads: green. The squad is the real one, you are in the right place in it, and the game never noticed.
+MUT keeps vitest=0 simCareerSquad=0 simClubSquads=0

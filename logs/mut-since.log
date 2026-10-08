@@ -1,0 +1,22 @@
+mutation since applied to src/lib/soccerClubSquadGen.ts: "if (base) man.since = Math.max(man.since ?? y, kept ? kept.left : base" -> ""
+ src/lib/soccerClubSquadGen.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- vitest
+   × the invented squad > carries a real squad on into the game's own years, man by man 6ms
+     → expected 2025 to be greater than or equal to 2027
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/lib/soccerClubSquad.test.ts > the invented squad > carries a real squad on into the game's own years, man by man
+AssertionError: expected 2025 to be greater than or equal to 2027
+ Test Files  1 failed (1)
+      Tests  1 failed | 22 passed (23)
+::error file=/tmp/mut-since/src/lib/soccerClubSquad.test.ts,title=src/lib/soccerClubSquad.test.ts > the invented squad > carries a real squad on into the game's own years%2C man by man,line=194,column=25::AssertionError:
+--- simCareerSquad
+   FAIL [7] 3005 new men are not dated to the summer they arrived
+FAILED [7] 3005 new men are not dated to the summer they arrived
+simCareerSquad: 2147 checks, 1 failed
+FAILED [7] 3005 new men are not dated to the summer they arrived
+simCareerSquad: 2147 checks, 1 failed
+--- simClubSquads
+
+simClubSquads: green. The squad is the real one, you are in the right place in it, and the game never noticed.
+MUT since vitest=1 simCareerSquad=1 simClubSquads=0

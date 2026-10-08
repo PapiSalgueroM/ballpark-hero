@@ -1,0 +1,35 @@
+mutation eleven applied to src/lib/soccerClubSquad.ts: "const inElevenOnRating = rank <= ELEVEN_SHAPE[chart.group];" -> "const inElevenOnRating = rank < ELEVEN_SHAPE[chart.group];"
+ src/lib/soccerClubSquad.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- vitest
+   × the living squad > puts him exactly once across the eleven and the bench, in lines of 1, 4, 3 and 3 7ms
+     → expected true to be false // Object.is equality
+   × the living squad > agrees with the plan at the line by construction: 67 is in both pictures, 66 in neither 2ms
+     → expected [ false, true ] to deeply equal [ true, true ]
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/lib/soccerClubSquad.test.ts > the living squad > puts him exactly once across the eleven and the bench, in lines of 1, 4, 3 and 3
+AssertionError: expected true to be false // Object.is equality
+ FAIL  src/lib/soccerClubSquad.test.ts > the living squad > agrees with the plan at the line by construction: 67 is in both pictures, 66 in neither
+AssertionError: expected [ false, true ] to deeply equal [ true, true ]
+ Test Files  1 failed (1)
+      Tests  2 failed | 21 passed (23)
+::error file=/tmp/mut-eleven/src/lib/soccerClubSquad.test.ts,title=src/lib/soccerClubSquad.test.ts > the living squad > puts him exactly once across the eleven and the bench%2C in lines of 1%2C 4%2C 3 and 3,line=256,colu
+::error file=/tmp/mut-eleven/src/lib/soccerClubSquad.test.ts,title=src/lib/soccerClubSquad.test.ts > the living squad > agrees with the plan at the line by construction%3A 67 is in both pictures%2C 66 in neither,line=266
+--- simCareerSquad
+   FAIL [8] pooled gap, eleven minus the rest 6.81, the line is 8.6
+   FAIL [8b] rating and plan disagree in 34.48% of the seasons in squads the game made, the line is 0.011
+   FAIL [13] invented: the eleven is not 11 cells with him in it exactly when his rank says so
+   FAIL [13] real: the eleven is not 11 cells with him in it exactly when his rank says so
+   FAIL [13] roles: the eleven is not 11 cells with him in it exactly when his rank says so
+FAILED [8] pooled gap, eleven minus the rest 6.81, the line is 8.6
+FAILED [8b] rating and plan disagree in 34.48% of the seasons in squads the game made, the line is 0.011
+FAILED [13] invented: the eleven is not 11 cells with him in it exactly when his rank says so
+FAILED [13] real: the eleven is not 11 cells with him in it exactly when his rank says so
+FAILED [13] roles: the eleven is not 11 cells with him in it exactly when his rank says so
+simCareerSquad: 2147 checks, 5 failed
+FAILED [13] roles: the eleven is not 11 cells with him in it exactly when his rank says so
+simCareerSquad: 2147 checks, 5 failed
+--- simClubSquads
+
+simClubSquads: green. The squad is the real one, you are in the right place in it, and the game never noticed.
+MUT eleven vitest=1 simCareerSquad=1 simClubSquads=0

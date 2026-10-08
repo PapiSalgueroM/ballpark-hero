@@ -1,0 +1,35 @@
+mutation tie applied to src/lib/soccerClubSquad.ts: "const ahead = rivals.filter(m => m.ovr >= me.ovr).length;" -> "const ahead = rivals.filter(m => m.ovr > me.ovr).length;"
+ src/lib/soccerClubSquad.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- vitest
+   × the real squad readers, recorded before Round 1115 touched them > every real depth chart is what it was 89ms
+     → expected '9d7969b2' to be '774db77f' // Object.is equality
+   × the living squad > agrees with the plan at the line by construction: 67 is in both pictures, 66 in neither 2ms
+     → expected [ true, false ] to deeply equal [ false, false ]
+   × the living squad > computes the numbers in the help, and the help prints them 5ms
+     → expected { …(16) } to match object { atOrAbove: 2, rank: 3, …(10) }
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/lib/soccerClubSquad.test.ts > the real squad readers, recorded before Round 1115 touched them > every real depth chart is what it was
+AssertionError: expected '9d7969b2' to be '774db77f' // Object.is equality
+ FAIL  src/lib/soccerClubSquad.test.ts > the living squad > agrees with the plan at the line by construction: 67 is in both pictures, 66 in neither
+AssertionError: expected [ true, false ] to deeply equal [ false, false ]
+ FAIL  src/lib/soccerClubSquad.test.ts > the living squad > computes the numbers in the help, and the help prints them
+AssertionError: expected { …(16) } to match object { atOrAbove: 2, rank: 3, …(10) }
+ Test Files  1 failed (1)
+--- simCareerSquad
+   FAIL [8b] rating and plan disagree in 2.89% of the seasons in squads the game made, the line is 0.011
+FAILED [8b] rating and plan disagree in 2.89% of the seasons in squads the game made, the line is 0.011
+simCareerSquad: 2147 checks, 1 failed
+FAILED [8b] rating and plan disagree in 2.89% of the seasons in squads the game made, the line is 0.011
+simCareerSquad: 2147 checks, 1 failed
+--- simClubSquads
+  FAIL: Real Madrid 2018 GK at 74: says 1 ahead, the squad has 2
+  FAIL: Real Madrid 2018 CB at 82: says 5 ahead, the squad has 6
+  FAIL: Real Madrid 2018 LB at 82: says 5 ahead, the squad has 6
+  FAIL: Real Madrid 2018 CM at 90: says 0 ahead, the squad has 2
+  FAIL: Real Madrid 2018 CAM at 90: says 0 ahead, the squad has 2
+  FAIL: Real Madrid 2018 LW at 90: says 1 ahead, the squad has 2
+cut: write error: Broken pipe
+
+simClubSquads: 353 failures
+MUT tie vitest=1 simCareerSquad=1 simClubSquads=1
