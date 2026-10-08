@@ -1,0 +1,44 @@
+CONTROL open: the blocked and full arms run with storage left alone
+FAIL [blocked] nba blocked (storage left alone): the page plays, the line says blocked, and no save is called refused (line none, Retry notice none, save toasts 0, refused writes 0, on the browser's store: prospect)
+FAIL [blocked] nba blocked (storage left alone): nothing reached the browser's own store (prospect)
+ok   [errors] nba blocked (storage left alone): no page error and no sideways scroll at 390
+FAIL [full] nba full (storage left alone): the line says full, the Retry notice is up for a write and nothing reached the store (line none, Retry notice none, save toasts 0, refused writes 0, on the browser's store: prospect)
+FAIL [full] nba full (storage left alone): the Retry notice is in view on the first screen with nothing over it (line none, Retry notice none, save toasts 0, refused writes 0, on the browser's store: prospect)
+FAIL [full] nba full (storage left alone): the refused save is said in exactly one toast (0 of 0 on screen)
+FAIL [full] nba full (storage left alone): the line and the Retry notice do not overlap (line none, Retry notice none, save toasts 0, refused writes 0, on the browser's store: prospect)
+FAIL [retry] nba full (storage left alone): once the browser takes writes again Retry save puts the prospect on the store and the notice goes (line none, Retry notice none, save toasts 0, refused writes 0, on the browser's store: prospect)
+ok   [toast] nba full (storage left alone): the toast that said the save had failed is gone with the notice (Retry pressed 906 ms after the refusal)
+ok   [errors] nba full (storage left alone): no page error and no sideways scroll at 390
+FAIL [blocked] nfl blocked (storage left alone): the page plays, the line says blocked, and no save is called refused (line none, Retry notice none, save toasts 0, refused writes 0, on the browser's store: prospect)
+FAIL [blocked] nfl blocked (storage left alone): nothing reached the browser's own store (prospect)
+ok   [errors] nfl blocked (storage left alone): no page error and no sideways scroll at 390
+FAIL [full] nfl full (storage left alone): the line says full, the Retry notice is up for a write and nothing reached the store (line none, Retry notice none, save toasts 0, refused writes 0, on the browser's store: prospect)
+FAIL [full] nfl full (storage left alone): the Retry notice is in view on the first screen with nothing over it (line none, Retry notice none, save toasts 0, refused writes 0, on the browser's store: prospect)
+FAIL [full] nfl full (storage left alone): the refused save is said in exactly one toast (0 of 0 on screen)
+FAIL [full] nfl full (storage left alone): the line and the Retry notice do not overlap (line none, Retry notice none, save toasts 0, refused writes 0, on the browser's store: prospect)
+FAIL [retry] nfl full (storage left alone): once the browser takes writes again Retry save puts the prospect on the store and the notice goes (line none, Retry notice none, save toasts 0, refused writes 0, on the browser's store: prospect)
+ok   [toast] nfl full (storage left alone): the toast that said the save had failed is gone with the notice (Retry pressed 906 ms after the refusal)
+ok   [errors] nfl full (storage left alone): no page error and no sideways scroll at 390
+FAIL [blocked] mlb blocked (storage left alone): the page plays, the line says blocked, and no save is called refused (line none, Retry notice none, save toasts 0, refused writes 0, on the browser's store: prospect)
+FAIL [blocked] mlb blocked (storage left alone): nothing reached the browser's own store (prospect)
+ok   [errors] mlb blocked (storage left alone): no page error and no sideways scroll at 390
+FAIL [full] mlb full (storage left alone): the line says full, the Retry notice is up for a write and nothing reached the store (line none, Retry notice none, save toasts 0, refused writes 0, on the browser's store: prospect)
+FAIL [full] mlb full (storage left alone): the Retry notice is in view on the first screen with nothing over it (line none, Retry notice none, save toasts 0, refused writes 0, on the browser's store: prospect)
+FAIL [full] mlb full (storage left alone): the refused save is said in exactly one toast (0 of 0 on screen)
+FAIL [full] mlb full (storage left alone): the line and the Retry notice do not overlap (line none, Retry notice none, save toasts 0, refused writes 0, on the browser's store: prospect)
+FAIL [retry] mlb full (storage left alone): once the browser takes writes again Retry save puts the prospect on the store and the notice goes (line none, Retry notice none, save toasts 0, refused writes 0, on the browser's store: prospect)
+ok   [toast] mlb full (storage left alone): the toast that said the save had failed is gone with the notice (Retry pressed 905 ms after the refusal)
+ok   [errors] mlb full (storage left alone): no page error and no sideways scroll at 390
+FAIL [blocked] nhl blocked (storage left alone): the page plays, the line says blocked, and no save is called refused (line none, Retry notice none, save toasts 0, refused writes 0, on the browser's store: prospect)
+FAIL [blocked] nhl blocked (storage left alone): nothing reached the browser's own store (prospect)
+ok   [errors] nhl blocked (storage left alone): no page error and no sideways scroll at 390
+FAIL [full] nhl full (storage left alone): the line says full, the Retry notice is up for a write and nothing reached the store (line none, Retry notice none, save toasts 0, refused writes 0, on the browser's store: prospect)
+FAIL [full] nhl full (storage left alone): the Retry notice is in view on the first screen with nothing over it (line none, Retry notice none, save toasts 0, refused writes 0, on the browser's store: prospect)
+FAIL [full] nhl full (storage left alone): the refused save is said in exactly one toast (0 of 0 on screen)
+FAIL [full] nhl full (storage left alone): the line and the Retry notice do not overlap (line none, Retry notice none, save toasts 0, refused writes 0, on the browser's store: prospect)
+FAIL [retry] nhl full (storage left alone): once the browser takes writes again Retry save puts the prospect on the store and the notice goes (line none, Retry notice none, save toasts 0, refused writes 0, on the browser's store: prospect)
+ok   [toast] nhl full (storage left alone): the toast that said the save had failed is gone with the notice (Retry pressed 905 ms after the refusal)
+ok   [errors] nhl full (storage left alone): no page error and no sideways scroll at 390
+requests to supabase.co aborted: 8
+control open: RED AT THE NAMED CHECK (blocked, full); checks red: blocked, full, retry
+playUsCareerSaveSeam: 8 journeys, 40 checks, 28 failed (control open)
