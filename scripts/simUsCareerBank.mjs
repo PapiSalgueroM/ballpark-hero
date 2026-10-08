@@ -48,7 +48,9 @@
  *                           and with the old repair: 1a and 3 go red for that
  *                           sport and nothing else does.
  *   refill                  every negative balance is rebuilt on load again: 3
- *                           goes red for all four and nothing else does.
+ *                           goes red for all four, and so does 1b, whose load
+ *                           case (a played save with savings behind a debt)
+ *                           reads the same marker. Nothing else does.
  *   nocover                 the floor writes a shortfall off without asking
  *                           savings: 1b goes red for all four and nothing else
  *                           does.
@@ -342,7 +344,7 @@ if (CONTROL) {
      required, because requiring a thing that depends on the draw is a coin
      toss. No tag of another sport may appear. */
   const must = (SPORT_IDS.includes(CONTROL) ? [`1a:${CONTROL}`, `3:${CONTROL}`]
-    : CONTROL === 'refill' ? SPORT_IDS.map(id => `3:${id}`) : SPORT_IDS.map(id => `1b:${id}`));
+    : CONTROL === 'refill' ? SPORT_IDS.flatMap(id => [`1b:${id}`, `3:${id}`]) : SPORT_IDS.map(id => `1b:${id}`));
   const may = SPORT_IDS.includes(CONTROL) ? [`1b:${CONTROL}`, `2:${CONTROL}`] : [];
   const missing = must.filter(t => !tags.includes(t));
   const stray = tags.filter(t => !must.includes(t) && !may.includes(t));
