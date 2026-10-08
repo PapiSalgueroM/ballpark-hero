@@ -1,0 +1,28 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+rvlabels: node .rc/x/rvlabels.mjs
+walk-cha: PORT=4562 ENGINES=chromium PLAY_LEAGUE_WORLD_SAVE=cha node scripts/playCareerLeagueWorld.mjs
+walk-ere: PORT=4561 ENGINES=chromium node scripts/playCareerLeagueWorld.mjs
+sweepWeight: ENGINES=chromium node scripts/sweepWeight.mjs
+vitest-round: node_modules/.bin/vitest run src/lib/soccerCareerContinental.test.ts src/test/soccerCareerDugoutTable.test.tsx --testTimeout=300000 --hookTimeout=120000
+world0: SEEDSET=0 node scripts/simCareerLeagueWorld.mjs
+world-crownnobody: SIM_LEAGUE_WORLD_CONTROL=crownnobody node scripts/simCareerLeagueWorld.mjs
+world-nudgeedge: SIM_LEAGUE_WORLD_CONTROL=nudgeedge node scripts/simCareerLeagueWorld.mjs
+world-nudgelow: SIM_LEAGUE_WORLD_CONTROL=nudgelow node scripts/simCareerLeagueWorld.mjs
+centreTable: node scripts/simSeasonCentreTable.mjs
+centreTable-opentitle: TABLE_CONTROL=opentitle node scripts/simSeasonCentreTable.mjs
+agree0: SEEDSET=0 node scripts/simSeasonCentreAgreement.mjs
+clubPool: node scripts/simCareerClubPool.mjs
+clubPool-allranked: SIM_CLUB_POOL_CONTROL=allranked node scripts/simCareerClubPool.mjs
+clubPool-sinceorder: SIM_CLUB_POOL_CONTROL=sinceorder node scripts/simCareerClubPool.mjs
+clubPool-relabel: SIM_CLUB_POOL_CONTROL=relabel node scripts/simCareerClubPool.mjs
+facts: node scripts/simCareerFacts.mjs
+facts-shapeunread: SIM_CAREER_FACTS_CONTROL=shapeunread node scripts/simCareerFacts.mjs
+facts-pointsunread: SIM_CAREER_FACTS_CONTROL=pointsunread node scripts/simCareerFacts.mjs
+leagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+leagueSeasons-unheld: SIM_LEAGUE_SEASONS_CONTROL=unheld node scripts/simCareerLeagueSeasons.mjs
+manager: node scripts/simManagerCareer.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+vitest-full: node_modules/.bin/vitest run --reporter=dot --testTimeout=300000 --hookTimeout=120000
+vitest-base: git fetch -q origin main; B=$TMPDIR/base-main; git worktree add --detach $B origin/main > /dev/null 2>&1 || git worktree add --detach $B FETCH_HEAD > /dev/null 2>&1; git -C $B rev-parse HEAD; ln -s $PWD/node_modules $B/node_modules; cd $B && node_modules/.bin/vitest run --reporter=dot --testTimeout=300000 --hookTimeout=120000
