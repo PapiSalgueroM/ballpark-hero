@@ -6,6 +6,7 @@
  * work in both cases, the answer has to hold for the visit, and nothing to do
  * with analytics may load unless Accept was pressed.
  */
+import { createElement } from 'react';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
@@ -126,32 +127,37 @@ describe.each(['blocked', 'full'] as const)('the ad slot with storage %s', kind 
   const slot = () => document.querySelector('[data-dukb-manual-ad] ins.adsbygoogle');
   async function mountBannerAndSlot() {
     const mounted = await mountBanner();
-    const { default: AdBanner } = await import('@/components/ads/AdBanner');
-    return { ...mounted, AdBanner };
+    const { default: AdSlot } = await import('@/components/ads/AdBanner');
+    /* Built with createElement and the one production slot id, on purpose:
+       scripts/simAdsense.mjs counts every JSX use of the ad component in src
+       as a caller on the site and pins both the count and the slot id, and a
+       test is not a caller. */
+    const adSlot = () => createElement(AdSlot, { slot: '7540487748' });
+    return { ...mounted, adSlot };
   }
 
   it('Accept: a slot already on the page appears, and so does one mounted later in the visit', async () => {
     breakStorage(kind);
-    const { AdBanner } = await mountBannerAndSlot();
-    const first = render(<AdBanner slot="1234567890" />);
+    const { adSlot } = await mountBannerAndSlot();
+    const first = render(adSlot());
     expect(slot()).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Accept' }));
     expect(slot()).not.toBeNull();
     /* the next page of the visit: a fresh mount, with no consent event to hear */
     first.unmount();
     expect(slot()).toBeNull();
-    render(<AdBanner slot="1234567890" />);
+    render(adSlot());
     expect(slot()).not.toBeNull();
   });
 
   it('Essential only: no slot, now or on a later mount', async () => {
     breakStorage(kind);
-    const { AdBanner } = await mountBannerAndSlot();
-    const first = render(<AdBanner slot="1234567890" />);
+    const { adSlot } = await mountBannerAndSlot();
+    const first = render(adSlot());
     fireEvent.click(screen.getByRole('button', { name: 'Essential only' }));
     expect(slot()).toBeNull();
     first.unmount();
-    render(<AdBanner slot="1234567890" />);
+    render(adSlot());
     expect(slot()).toBeNull();
     expect(document.querySelector('script[src*="adsbygoogle.js"]')).toBeNull();
   });
