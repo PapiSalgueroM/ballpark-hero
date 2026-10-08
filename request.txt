@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+after: node .rc/x/weight2.mjs "$PWD" 4391 /soccer-career /fight-career /nba-my-career
+before: git fetch -q origin 24dd72477a4907ad2e0876af2639af11d045b118 || git fetch -q --unshallow origin; git worktree add -f /tmp/base 24dd72477a4907ad2e0876af2639af11d045b118 >/dev/null 2>&1; ls /tmp/base/package.json && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build > /tmp/base-build.log 2>&1; tail -3 /tmp/base-build.log) && node .rc/x/weight2.mjs /tmp/base 4392 /soccer-career /fight-career /nba-my-career

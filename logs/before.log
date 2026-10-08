@@ -1,0 +1,7 @@
+/tmp/base/package.json
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[32m✓ built in 28.52s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+/soccer-career 758.6K gz over 42 files (776767 bytes), supabase requests blocked: 1
+/fight-career 311.8K gz over 27 files (319282 bytes), supabase requests blocked: 1
+/nba-my-career 535.0K gz over 46 files (547817 bytes), supabase requests blocked: 1
