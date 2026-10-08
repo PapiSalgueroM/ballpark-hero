@@ -1,0 +1,43 @@
+--- native.log (tail)
+    '   the Ratings dialog when it is opened (step 7 of the round: the weight it\n' +
+    '   adds is paid here, never by a budget). */\n' +
+    'const SoccerSeasonCentre = lazy(() => import("@/components/soccer-career/SoccerSeasonCentre"));\n' +
+    'const SeasonRatings = lazy(() => import("@/components/soccer-career/SeasonRatings"));\n' +
+    '/* Round 1045: a boundary inside the lazy chunk cannot catch the chunk failing\n' +
+    '   to load (a deploy swapped the files), so the mount carries its own: the\n' +
+    '   overlay says so with Retry and Close, and the save is never touched.\n' +
+    '   Retry reloads the page (src/lib/freshBuild.ts, Round 832): a lazy import\n' +
+    '   that failed stays failed for the life of the page, so a remount alone\n' +
+    '   would throw the same error again. The save is already on disk. */\n' +
+    'class CentreMountBoundary extends Component<{ onClose: () => void; what?: string; children: ReactNode }, { failed: boolean; tries: number }> {\n' +
+    '  state = { failed: false, tries: 0 };\n' +
+    '  static getDerivedStateFromError() { return { failed: true }; }\n' +
+    '  render() {\n' +
+    '    if (!this.state.failed) return <Fragment key={this.state.tries}>{this.props.children}</Fragment>;\n' +
+    '    return (\n' +
+    '      <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4" data-season-centre>\n' +
+    '        <div role="dialog" aria-modal="true" aria-label={this.props.what ?? "Season Centre"} tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(this.props.onClose)} className="w-full max-w-sm space-y-3 rounded-2xl border border-border bg-card p-4 text-center outline-none">\n' +
+    `          <p className="text-sm">Couldn't load the {this.props.what ?? "Season Centre"}. Your career is safe.</p>\n` +
+    '          <div className="flex gap-2">\n' +
+    '            <button type="button" onClick={() => { if (!reloadToRetryChunk()) this.setState(s => ({ failed: false, tries: s.tries + 1 })); }} className="h-10 flex-1 rounded-lg border border-border text-sm font-semibold">↻ Retry</button>\n' +
+    '            <button type="button" onClick={this.props.onClose} className="h-10 flex-1 rounded-lg bg-primary text-sm font-bold text-primary-foreground">✕ Close it</button>\n' +
+    '          </div>\n' +
+    '        </div>\n' +
+    '      </div>\n' +
+    '    );\n' +
+    '  }\n' +
+    '}\n' +
+    '\n' +
+    '/* ─── Constants ─── */\n' +
+    '// Round 76: 131 nations (was 49), every one with a real flag in FlagImg,\n' +
+    '// sorted alphabetically so yours is findable in the scroll.\n' +
+    'const NATIONALITIES = [\n' +
+    '  "Albania","Algeria","Angola","Argentina","Armenia","Australia","Austria","Azerbaijan",\n' +
+    '  "Bahrain","Belarus","Belgiu'... 249475 more characters,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+grep: write error: Broken pipe
+hub1089 exit code 1 | AssertionError [ERR_ASSERTION]: Two-line inverse exactly restores pinned old page

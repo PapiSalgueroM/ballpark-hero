@@ -1,0 +1,21 @@
+--- prefetch.log (tail)
+US career recovery: cached 9 actual template font assets.
+--- native.log (tail)
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.goto: Timeout 15000ms exceeded.
+Call log:
+  - navigating to "http://127.0.0.1:44721/nfl-my-career", waiting until "networkidle"
+
+    at openCase (/home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/usCareerSaveRecovery1084.mjs:365:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/usCareerSaveRecovery1084.mjs:526:66 {
+  log: [
+    '  - navigating to "http://127.0.0.1:44721/nfl-my-career", waiting until "networkidle"'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0
+native scripts/qa/usCareerSaveRecovery1084.mjs exit code 1 | 

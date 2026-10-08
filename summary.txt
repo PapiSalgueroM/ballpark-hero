@@ -1,0 +1,9 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+goalflight exit=0 100s | goalflight exit code 0 | simTycoonGoalFlight: PASS, 4/4 effective copied controls; historical expected failure=true.
+homenative exit=0 34s | homenative exit code 0 | Home search native: PASS, 4/4 completed route journeys.
+sale1083 exit=0 91s | native scripts/playTycoonSaleReview1083.mjs exit code 0 | 
+boxing1086 exit=0 7s | native scripts/playBoxingShowForecast1086.mjs exit code 0 | Boxing forecast: 4 actual-route journeys passed.
+offer1082 exit=1 13s | offer1082 exit code 1 | Node.js v24.21.0
+hub1089 exit=1 7s | hub1089 exit code 1 | AssertionError [ERR_ASSERTION]: Two-line inverse exactly restores pinned old page
+us-throttle exit=0 114s | usdiag throttle exit code 0 | 
+uscareer1084 exit=1 280s | native scripts/qa/usCareerSaveRecovery1084.mjs exit code 1 | 

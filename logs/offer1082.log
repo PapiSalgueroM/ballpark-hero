@@ -1,0 +1,24 @@
+--- native.log (tail)
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Visible signed wage equals the actual acceptance outcome
++ actual - expected
+
++ '€57,106/wk'
+- '€57106/wk'
+      ^
+
+    at checkTerms (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerOfferReview1082.mjs:229:10)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerOfferReview1082.mjs:386:40 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '€57,106/wk',
+  expected: '€57106/wk',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+offer1082 exit code 1 | Node.js v24.21.0
