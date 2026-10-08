@@ -90,7 +90,7 @@ function findTerminalFixtures() {
 /* Round 670 review: one real Champions League decider of a real walk, its
    second half drawn on many seeds by the engine, kept twice: once level at 90
    (extra time due) and once not. Nothing about either is typed by hand. */
-let whistleMaterial: { due: CareerState; notDue: CareerState } | null = null;
+let whistleMaterial: { due: CareerState; notDue: CareerState; pre: CareerState } | null = null;
 function findWhistleMaterial() {
   if (whistleMaterial) return whistleMaterial;
   let pre: CareerState | null = null;
@@ -126,7 +126,8 @@ function findWhistleMaterial() {
   expect(notDue, 'every seed left the decider level at 90').not.toBeNull();
   due!.live!.minute = 89.4;
   notDue!.live!.minute = 89.4;
-  whistleMaterial = { due: due!, notDue: notDue! };
+  /* Round 1101: the career just before the decider goes along too, for a test that searches a second half of its own. */
+  whistleMaterial = { due: due!, notDue: notDue!, pre: pre! };
   return whistleMaterial;
 }
 const stageOf = (container: HTMLElement) => container.querySelector('[data-cm-live-stage]')!.getAttribute('data-cm-live-stage');
@@ -935,14 +936,15 @@ const R3_FLOOR = 45;
 const R4_FLOOR = 0.3;
 /** R6, one action at a time. Measured on the 200 half feeds (2,130 chances, 262 goals with play left after
  *  them; the per seed counts are printed by R6 and recorded here):
- *  - still playing when the next one starts: 12 of 2,130 (per seed R6_SEEDS_OVERLAP), every one by a twentieth
+ *  - still playing when the next one starts: 12 of 2,130 (per seed 1 5 5 1 0), every one by a twentieth
  *    or a tenth of a minute beside the last kick of a period, which is wound up to END on the whistle and can
  *    not wait. The length is a hard rule (0 offenders); the count may be one chance in 50 (42), 3.5 times
  *    what was measured.
  *  - set aside because it had no lead in (it started straight off the action or the kick off before it): 64
- *    of 2,130. One in 10 (213) keeps the holder rule read on nine chances in ten, 3.3 times the measured.
+ *    of 2,130 (per seed 11 of 394, 15 of 420, 18 of 433, 6 of 434, 14 of 449). One in 10 (213) keeps the holder
+ *    rule read on nine chances in ten, 3.3 times the measured.
  *  - a goal whose kick off is seen for less than a beat: 10 of 262 (9 cut by the next chance, 1 by the last
- *    kick's wind up; per seed R6_SEEDS_SHORT). These are minutes too full to hold a goal, its kick off and
+ *    kick's wind up; per seed 2 of 43, 1 of 52, 3 of 55, 1 of 56, 3 of 56). These are minutes too full to hold a goal, its kick off and
  *    the next chance, where the next chance has waited as long as it may. One in 12 (21) is twice the
  *    measured; before chances took turns it was 42 of 91 with no full kick off, and with the beat of kick
  *    off taken out again (control restartbeat) it is far over. */
@@ -1303,21 +1305,36 @@ describe('The goal sequence', () => {
   }, 180000);
 
   it('a line fired late by Skip is not played again when extra time starts', async () => {
-    const { due } = findWhistleMaterial();
-    const drawn = startExtraTime(structuredClone(due))!;
-    const board = boardAt(due, 90);
+    const { pre } = findWhistleMaterial();
     const eleven = (input: PitchInput) => JSON.stringify([input.mine, input.theirs].map(list => list.map(f => [f.key, f.name ?? ''])));
-    const goingOn = eleven(stagePitchInput(drawn, drawn.live!, null, 'extra', 90, 0, 120 + (drawn.live!.added?.et ?? 0)));
-    /* A chance of the second half that plays out (not its last kick), from a minute where both elevens are
-       already the men who start extra time. The part drops an action by itself when the line up under it
-       changes, which would hide a late line left alive whatever the viewer did about it. */
-    const chance = [...liveFeed(due.live!)].reverse().find(e => ['goal', 'save', 'shot'].includes(e.kind) && e.minute >= 48 && clockPos(e) < 90 + board - ACTION_SPAN
-      && eleven(stagePitchInput(due, due.live!, null, 'second', e.minute - 1, 0, 90 + board)) === goingOn
-      && eleven(stagePitchInput(due, due.live!, null, 'second', 90, board, 90 + board)) === goingOn);
-    expect(chance, 'no chance of this second half is watched by the eleven that starts extra time').toBeDefined();
-    console.log(`[1101 extra] the late line is a ${chance!.kind} at ${clockPos(chance!)}, the board is ${board}`);
+    /* A decider level at 90 whose last chance that plays out is INSIDE the ninety: Skip leaves that one behind as
+       the action, started at the end of the board, and extra time's clock (90) is past its place. A chance in
+       the board would not do: its place is ahead of extra time's clock, the viewer takes it for a line the
+       redraw may have replaced and drops it whatever else it does (the etclear control stayed green on such a
+       half). Both elevens are the men who start extra time from the minute before that chance: the part drops
+       an action by itself when the line up under it changes, which would hide a late line left alive too. */
+    let found: { due: CareerState; drawn: CareerState; chance: LiveFeedEvent; board: number; seeds: number } | null = null;
+    for (let k = 0; k < 30000 && !found; k++) {
+      vi.mocked(Math.random).mockImplementation(seeded(110310 + k * 7919));
+      const r1 = playNextEntry(pre);
+      if (r1.kind !== 'halftime' || !r1.state.live) continue;
+      const second = startSecondHalf(r1.state)!;
+      if (!isExtraTimeDue(second)) continue;
+      const board = boardAt(second, 90);
+      const chances = liveFeed(second.live!).filter(e => e.minute >= 46 && ['goal', 'save', 'shot'].includes(e.kind) && clockPos(e) !== 90 + board);
+      const last = chances[chances.length - 1];
+      if (!last || last.minute < 48 || chances.some(e => clockPos(e) > 89)) continue;
+      const drawn = startExtraTime(structuredClone(second))!;
+      const goingOn = eleven(stagePitchInput(drawn, drawn.live!, null, 'extra', 90, 0, 120 + (drawn.live!.added?.et ?? 0)));
+      if (eleven(stagePitchInput(second, second.live!, null, 'second', last.minute - 1, 0, 90 + board)) !== goingOn) continue;
+      if (eleven(stagePitchInput(second, second.live!, null, 'second', 90, board, 90 + board)) !== goingOn) continue;
+      found = { due: second, drawn, chance: last, board, seeds: k + 1 };
+    }
+    expect(found, 'no decider level at 90 keeps its last chance inside the ninety').not.toBeNull();
+    const { due, drawn, chance, board } = found!;
+    console.log(`[1101 extra] the late line is a ${chance.kind} at ${clockPos(chance)}, the board is ${board}, found on seed ${found!.seeds} of 30000`);
     const start = structuredClone(due);
-    start.live!.minute = chance!.minute - .5;
+    start.live!.minute = chance.minute - .5;
     const callbacks = { onSub: vi.fn(), onShape: vi.fn(), onTalk: vi.fn(), onSecondHalf: vi.fn(), onExit: vi.fn(), onStartSecondHalf: vi.fn(), onStartExtraTime: vi.fn(), onChange: vi.fn(), onMark: vi.fn() };
     function Page() {
       const [career, setCareer] = useState<CareerState>(start);

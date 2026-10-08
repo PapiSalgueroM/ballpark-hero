@@ -60,8 +60,8 @@
  * bundled alone (react external, css empty) and must not carry Club Manager: two strings that live in the
  * engine are absent from the bundle and present in src/lib/clubManager.ts, no file of the folder has an
  * import specifier reaching the engine, the viewer's folder or its hook (comments stripped first), and
- * the bundle stays under its measured size plus a fifth. Measured on the commit that added the section
- * (step 7 of Round 1101, on top of a532b4df): see BUNDLE_MEASURED below.
+ * the bundle stays under its measured size plus a fifth. Measured on a GitHub runner at 455edf1c, after the
+ * review's fixes (18,154 and 7,680 on the commit that added the section): see BUNDLE_MEASURED below.
  * LIVE_MOTION_ONLY=bundle runs that section alone.
  */
 import { readFile, writeFile, readdir, mkdtemp, realpath, rm } from 'node:fs/promises';
@@ -82,7 +82,7 @@ const REVIEW = ['turns', 'restartbeat', 'kickoffside', 'throwside', 'foulside', 
 assert.ok(['', ...OLD, ...NEW, ...REVIEW].includes(control), 'Unknown live motion control');
 assert.ok(['', 'bundle'].includes(only), 'Unknown LIVE_MOTION_ONLY');
 /* Minified bytes and gzip bytes of the part alone, and the ceiling: each plus a fifth. */
-const BUNDLE_MEASURED = { min: 18154, gzip: 7680 };
+const BUNDLE_MEASURED = { min: 19277, gzip: 8077 };
 const BUNDLE_CEILING = { min: Math.ceil(BUNDLE_MEASURED.min * 1.2), gzip: Math.ceil(BUNDLE_MEASURED.gzip * 1.2) };
 const PART = path.join(root, 'src/components/pitch-motion');
 const lf = async file => (await readFile(file, 'utf8')).replaceAll('\r\n', '\n');
