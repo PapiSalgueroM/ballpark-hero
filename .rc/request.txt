@@ -1,0 +1,4 @@
+#!serial
+homefront-merged: node scripts/simHomeFront.mjs
+homefront-base-board: cp src/components/us-career/UsCareerBoard.tsx /tmp/board.bak && cp .rc/x/UsCareerBoard.base.tsx src/components/us-career/UsCareerBoard.tsx && node scripts/simHomeFront.mjs; s=$?; cp /tmp/board.bak src/components/us-career/UsCareerBoard.tsx; exit $s
+homefront-fixed-anchor: cp .rc/x/simHomeFront.fixed.mjs scripts/simHomeFront.mjs && node scripts/simHomeFront.mjs
