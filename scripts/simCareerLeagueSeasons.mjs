@@ -73,6 +73,11 @@
      offeryear    nextSeasonYear one season early                     -> b
      selfnamed    his own club left among a past table's rivals       -> b
      phonemine    the phone reads his league from today's label       -> b
+     unheld       (Round 1100 review) Hertha Berlin dropped from
+                  RELABELLED_1037, so its finish is placed in a league
+                  the size of the one it left                         -> a
+   (unheld measured red on 2026-10-08: the table is not the seven released
+   clubs, and a saved Hertha finish is placed in the 2. Bundesliga.)
    Each measured red on 2026-10-06 (seed 1, base origin/release-ah): the
    file differs from the ledgers and the lookup has West Ham in two leagues
    in 2011 (wrongseason); Fiorentina meets Bologna in seasons Bologna was a
@@ -155,6 +160,8 @@ const CONTROLS = {
   jobyear: ['b', 'src/lib/soccerCareerEngine.ts', swap('?? 2024) + (s.managerState?.season ?? 0) + 1;', '?? 2024) + (s.managerState?.season ?? 0);')],
   offeryear: ['b', 'src/lib/soccerCareerEngine.ts', swap('return (s.seasons[s.seasons.length - 1]?.year ?? 0) + 1;', 'return (s.seasons[s.seasons.length - 1]?.year ?? 0);')],
   selfnamed: ['b', 'src/lib/soccerCareerLeague.ts', swap('let named = s.clubs.filter(n => !(member && me.canon === n));', 'let named = [...s.clubs];')],
+  /* Round 1100 review: Hertha Berlin dropped from the table finishLeague reads */
+  unheld: ['a', 'src/lib/soccerCareerLeague.ts', swap('"Hertha Berlin": "Bundesliga", ', '')],
   phonemine: ['b', 'src/lib/soccerPhone.ts', swap('const mine = name === myLeague;', 'const mine = name === s.currentLeague;')],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
@@ -268,6 +275,17 @@ for (const c of WORLD) {
    ledgers' league */
 let guarded = 0;
 const heldSameSize = [];
+/* the seven Round 1022 released, as they stood in the base: id and old label
+   (section c puts them back in the base engine from the same list) */
+const RELEASED = [['fb-43', 'Premier League'], ['fb-66', 'Bundesliga'], ['fb-70', 'Ligue 1'], ['fb-93', 'Primera Division Paraguay'],
+  ['fb-96', 'La Liga'], ['fb-106', 'Premier League'], ['fb-137', 'Liga 1 Indonesia']];
+/* Round 1100 review: the hold below learned each club's old label from
+   RELABELLED_1037, the very table finishLeague reads, so a club dropped from
+   that table fell to the other branch and passed. The old labels are this
+   harness's own list, and the src table must be exactly it. */
+const releasedOld = new Map(RELEASED.map(([id, old]) => [WORLD.find(c => c.id === id)?.name, old]));
+ok(!releasedOld.has(undefined) && JSON.stringify(Object.entries(L.RELABELLED_1037).sort()) === JSON.stringify([...releasedOld].sort()),
+  `RELABELLED_1037 (${Object.keys(L.RELABELLED_1037).join(', ')}) is not the seven released clubs with the labels they left (${[...releasedOld.keys()].join(', ')})`);
 for (const c of WORLD) {
   for (let y = 1990; y < LIST_SEASON; y++) {
     const want = truthOf(c.name, y);
@@ -289,7 +307,7 @@ for (const c of WORLD) {
        NO finish for that club (RELABELLED_1037), in any save. The guard fails
        when the two sizes are equal and the club is not held, and when they
        differ and the label is not printed. */
-    const old = L.RELABELLED_1037[c.name];
+    const old = releasedOld.get(c.name);
     const sameSize = old !== undefined && old !== c.league && L.leagueSizeFor(old, 2030) === now;
     if (sameSize) { heldSameSize.push(c.name); ok(L.finishLeague(c, 2030, now) === null, `${c.name} 2030-31: it left ${old} for ${c.league}, both ${now} clubs, yet a saved finish is placed in ${c.league}`); }
     else ok(L.finishLeague(c, 2030, now)?.name === c.league, `${c.name} 2030-31: a finish saved at ${now} prints ${L.finishLeague(c, 2030, now)?.name ?? 'no league'}, the label ${c.league}`);
@@ -606,9 +624,6 @@ for (const [k, min] of Object.entries(FLOOR)) ok(cov[k] >= min, `coverage: ${k} 
 /* ─── c. BASELINE ─── */
 head('c', `BASELINE: from 2026-27 on, nothing moves against ${BASE}`);
 const PINS = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts', 'data', 'soccerCareerFacts.json'), 'utf8')).clubLeagues;
-/* the seven Round 1022 released, as they stood in the base: name and old label */
-const RELEASED = [['fb-43', 'Premier League'], ['fb-66', 'Bundesliga'], ['fb-70', 'Ligue 1'], ['fb-93', 'Primera Division Paraguay'],
-  ['fb-96', 'La Liga'], ['fb-106', 'Premier League'], ['fb-137', 'Liga 1 Indonesia']];
 const BASELINE_CAREERS = Number(process.env.SIM_LEAGUE_SEASONS_BASELINE || 12);
 let baseRoot = null;
 try {

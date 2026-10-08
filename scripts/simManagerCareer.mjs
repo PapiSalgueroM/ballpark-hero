@@ -614,6 +614,9 @@ const PAST_FLOOR = 3000, EARLY_FLOOR = 120;
    the list is rare now: 101 seasons at a market club where the tree before
    it read 567 (the same run with main's pool file put back passes the old
    floor of 250, so the pool moved it and nothing else). About half of 101.
+   The 101 is exact, not a sample: this harness plays its own eight fixed
+   seeds, so the count moves only when the pool or the engine does, and the
+   floor is a coverage floor (the path was walked), not a band against noise.
    When Serie B, Ligue 2 and the Segunda Division are released every job
    market club is a list club: this floor then reads 0 and the path is gone. */
 const MARKET_FLOOR = 50;

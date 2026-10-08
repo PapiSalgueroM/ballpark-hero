@@ -317,9 +317,17 @@ function measureSeason(career, row) {
    standings) and hands back its labels and the row on top. Up to D1_DRAWN
    tables a league are drawn, the first ones the careers reach. */
 const D1_DRAWN = Number(process.env.D1_DRAWN || 300);
-/* fewest tables a league must have had drawn at 300 careers: TO SET from the
-   three seed sets (placeholder until measured) */
-const D1_DRAWN_FLOOR = 1;
+/* The fewest tables a league must have had drawn, and the fewest of them in
+   a season he did not win (the ones whose top place is somebody else's), so
+   the label checks cannot pass on nothing. MEASURED 2026-10-08, 300 careers a
+   nation, seed sets 0, 1 and 2: seven of the eight leagues reach the cap of
+   300 (930 to 3,939 tables each; the Primeira Liga drew 298 in set 2, two
+   seasons the Season Centre could not derive), 221 to 294 of them not his
+   title. The 2. Bundesliga is the thin one, a second flight few careers
+   pass through: 110, 168 and 135 tables, 106, 164 and 130 not his title.
+   Each floor is that league's lowest count minus its spread of 58. Scaled
+   by CAREERS / 300. */
+const D1_DRAWN_FLOOR = { tables: 52, open: 48 };
 function drawnTable(row, ctx) {
   const keep = Math.random;
   Math.random = () => { throw new Error('Math.random called while drawing a season'); };
@@ -855,7 +863,13 @@ head('C4', 'BAND: a higher place on the ladder finishes higher, tier 4 clubs inc
    Portugal 77.6, 82.9, 81.0; Turkey 78.4, 81.7, 77.6; Belgium 73.0, 79.1,
    78.1; Brazil 77.9, 78.9, 78.1; Saudi Arabia 82.9, 79.9, 80.9 (main: 17.7
    to 24.5 in all six). Fewer CAREERS means more noise than these floors
-   allow for: they are set for the default 300. */
+   allow for: they are set for the default 300.
+   "Named table rows" is the count of names a season COULD print (his club,
+   the rivals, the champion and the league's named clubs), the measure main
+   was recorded with, so D2 compares like with like. It is not the table as
+   drawn: D1 derives up to D1_DRAWN tables a league the way the page does and
+   reads their labels (review fix; four leagues read 18 of 18 by the count
+   while their drawn table had "another club" in 1st place). */
 const WORLD_FLOOR = { finish: 0.665, table: 0.632, named: 0.632 };
 const NATION_FLOOR = { Netherlands: 0.751, Portugal: 0.723, Turkey: 0.735, Belgium: 0.669, Brazil: 0.759, 'Saudi Arabia': 0.769 };
 const RUN_WORLD = process.env.WORLD !== '0' && (!CONTROL || CONTROLS[CONTROL].world === true);
@@ -936,7 +950,10 @@ if (RUN_WORLD) {
   const blank = { all: 0, n: 0, open: 0, none: 0 };
   for (const l of sizedLadder) {
     const t = d1.drawn[l] ?? blank;
-    ok(t.n >= D1_DRAWN_FLOOR * (CAREERS / 300) && t.open >= D1_DRAWN_FLOOR * 0.5 * (CAREERS / 300), `${l}: only ${t.n} tables drawn, ${t.open} of them seasons he did not win`);
+    /* the floors are for the default cap: a smaller D1_DRAWN (a quick local
+       run) can only ask that every league was drawn at all */
+    if (D1_DRAWN >= 300) ok(t.n >= D1_DRAWN_FLOOR.tables * (CAREERS / 300) && t.open >= D1_DRAWN_FLOOR.open * (CAREERS / 300), `${l}: only ${t.n} tables drawn, ${t.open} of them seasons he did not win (floors ${D1_DRAWN_FLOOR.tables} and ${D1_DRAWN_FLOOR.open} at 300 careers)`);
+    else ok(t.n > 0 && t.open > 0, `${l}: ${t.n} tables drawn, ${t.open} of them seasons he did not win`);
   }
   console.log(`  seed set ${SEEDSET}, ${CAREERS} careers x ${NATIONS.length} nations in ${secs} s: ${run.overall.seasons} seasons, ${d1.sized} in a sized league (a finish from 1 to the size, 2 x (size - 1) matchdays), ${d1.tables} tables in a ladder league outside the five whose names cover every row`);
   console.log(`  drawn as the page draws them (up to ${D1_DRAWN} a league): ${drawnAll} tables, every row named, 1st place named, no club of the league left off: ${sizedLadder.map(l => { const t = d1.drawn[l] ?? blank; return `${l} ${t.n} of ${t.all} (${t.open} not his title${t.none ? `, ${t.none} the Season Centre could not derive` : ''})`; }).join('; ')}`);
