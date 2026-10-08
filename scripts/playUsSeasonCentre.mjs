@@ -19,10 +19,15 @@
  *             two frames after the press (the viewer chunk slowed) nothing
  *             is played and the button says it is loading; a viewer chunk
  *             that fails once reloads the page with NO season played, and
- *             the next press plays the season Play would have; with the
- *             one reload already spent the "could not be loaded" tile
- *             shows, still with no season played, Back returns to the hub
- *             and Reload gets a page whose next press works
+ *             the next press plays the season Play saves on a page loaded
+ *             twice (a second load is not a first visit: the page's
+ *             generator has been drawn a different number of times, which
+ *             the walk prints); with the one reload already spent the
+ *             "could not be loaded" tile shows, still with no season
+ *             played, Back returns to the hub, a second press with the
+ *             chunk still gone shows the tile again, and Reload gets a page
+ *             whose next press works. Written so it reads the same whether
+ *             the browser keeps a failed import failed or asks again.
  *  cover      on every frame from the press until the viewer is up, the
  *             curtain is never on screen without the opaque cover over it
  *  clock      frames sampled through a game: the score bug equals the points
@@ -46,7 +51,7 @@
  * refusing to run unless its needle is in the built chunk exactly once, each
  * expected to go red at its own check (a control run exits 1 and says so):
  *   static  the page imports the viewer chunk as it loads      -> lazy
- *   write   the viewer chunk writes a marker onto the save     -> same press
+ *   write   the viewer writes a marker onto the save as it opens -> same press
  *   count   the score bug reads ahead of the feed              -> clock
  *   cover   the cover is hidden                                -> cover
  *   playfirst the entry does not wait for the viewer (the order
@@ -132,8 +137,14 @@ let STATIC_EXTRA = '';
 const once = (hay, needle, what) => { const n = hay.split(needle).length - 1; if (n !== 1) throw new Error(`control ${CONTROL} refused: ${what} appears ${n} times`); };
 if (CONTROL === 'static') { STATIC_EXTRA = `/assets/${VIEWER}`; console.log('CONTROL static: the page imports the viewer chunk as it loads'); }
 if (CONTROL === 'write') {
-  served.set(VIEWER, `try{for(const k of ["nba-my-career-save-v1","nfl-my-career-save-v1"]){const v=JSON.parse(localStorage.getItem(k)||"null");if(v){v.c.centreSeen=1;localStorage.setItem(k,JSON.stringify(v));}}}catch(e){}\n${textOf(VIEWER)}`);
-  console.log('CONTROL write: the served viewer chunk writes centreSeen onto the save when it loads');
+  /* The write happens when the viewer OPENS, not when its chunk loads. Since the fix pass of 2026-10-08
+     the chunk is in memory before the season is played, so a write at load time is overwritten by the
+     season's own save and the check stayed green (seen on the runner that day: the control did not fire).
+     An observer runs in the same task as the commit that puts the viewer on the page, so the marker is on
+     the save before the walk reads it. */
+  once(textOf(VIEWER), 'data-us-season-centre', "the viewer's marker");
+  served.set(VIEWER, `try{const o=new MutationObserver(()=>{if(!document.querySelector("[data-us-season-centre]"))return;o.disconnect();try{for(const k of ["nba-my-career-save-v1","nfl-my-career-save-v1"]){const v=JSON.parse(localStorage.getItem(k)||"null");if(v){v.c.centreSeen=1;localStorage.setItem(k,JSON.stringify(v));}}}catch(e){}});o.observe(document.documentElement,{childList:true,subtree:true});}catch(e){}\n${textOf(VIEWER)}`);
+  console.log('CONTROL write: the served viewer chunk writes centreSeen onto the save when the viewer opens');
 }
 if (CONTROL === 'count') {
   const re = /(\w+)\.pts&&\1\.min<=(\w+)/g;
@@ -188,7 +199,9 @@ async function open(slug, save, { width, height, reduced = false, seed = 1048 },
     /* the site reloads once for a stale chunk (src/lib/freshBuild.ts): `spent` says that one reload is used up */
     try { if (spent) sessionStorage.setItem('dukb-reloaded-stale-chunk', '1'); } catch { /* private mode */ }
     let t = s >>> 0;
-    Math.random = () => { t = (t + 0x6D2B79F5) >>> 0; let x = Math.imul(t ^ (t >>> 15), 1 | t); x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x; return ((x ^ (x >>> 14)) >>> 0) / 4294967296; };
+    /* counted, so a walk can say how far the page's generator had been drawn when he pressed */
+    window.__usDraws = 0;
+    Math.random = () => { window.__usDraws += 1; t = (t + 0x6D2B79F5) >>> 0; let x = Math.imul(t ^ (t >>> 15), 1 | t); x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x; return ((x ^ (x >>> 14)) >>> 0) / 4294967296; };
     try {
       if (!sessionStorage.getItem('us-centre-harness')) {
         sessionStorage.setItem('us-centre-harness', '1');
@@ -267,9 +280,24 @@ const hubState = (page, key) => page.evaluate(k => ({
 const waitFor = async (fn, ms = 15000) => { const t0 = Date.now(); while (Date.now() - t0 < ms) { if (await fn()) return true; await new Promise(r => setTimeout(r, 100)); } return false; };
 const hubBack = page => page.waitForFunction(() => [...document.querySelectorAll('button')].some(b => /Play the \d+ season/.test(b.textContent ?? '')), { timeout: 40000 }).then(() => page.waitForTimeout(600)).catch(() => {});
 const pressEntry = page => page.evaluate(() => document.querySelector('[data-week-by-week]')?.click());
+const drawsOf = page => page.evaluate(() => window.__usDraws ?? -1).catch(() => -1);
 
 /** A tab left open across a release: the viewer's chunk is gone from the host when he presses. */
-async function staleWalks(slug, vp, save, afterPlay, tag) {
+async function staleWalks(slug, vp, save, afterPlay, firstDraws, tag) {
+  /* The season Play saves on a page that was loaded a second time. The career's seasons come out of the
+     page's generator, and a second load is not a first visit (it draws a different number of times before
+     he presses, printed below), so a reloaded page is held against Play on a reloaded page, never against
+     Play on a first visit. */
+  const R = await open(slug, save, vp);
+  await R.page.reload({ waitUntil: 'domcontentloaded', timeout: 60000 });
+  await hubBack(R.page);
+  const reloadDraws = await drawsOf(R.page);
+  await clickText(R.page, 'Play the');
+  await need(R.page, '[data-season-reveal]', `${tag}: the curtain after Play on a page loaded twice`);
+  await R.page.waitForTimeout(500);
+  const afterReloadPlay = await savedString(R.page, save.key);
+  await R.ctx.close();
+
   /* 1: the site's one reload for a stale chunk is still there */
   const S = await open(slug, save, vp, { failViewer: 1 });
   await pressEntry(S.page);
@@ -278,15 +306,21 @@ async function staleWalks(slug, vp, save, afterPlay, tag) {
   const s1 = await hubState(S.page, save.key).catch(() => ({}));
   check('load first', reloaded && s1.saved === save.value && s1.hub && s1.entry && !s1.curtain && !s1.failed && !s1.viewer,
     `${tag}: a viewer chunk that fails once reloads the page with no season played (page loads ${S.state.loads}, save untouched ${s1.saved === save.value}, hub ${s1.hub}, entry ${s1.entry}, curtain ${s1.curtain}, failed tile ${s1.failed})`);
+  const staleDraws = await drawsOf(S.page);
+  console.log(`     the generator had been drawn ${firstDraws} times at the press on a first visit, ${reloadDraws} on a page loaded twice, ${staleDraws} after the stale chunk reload`);
   await pressEntry(S.page);
   await S.page.waitForSelector('[data-season-centre] [data-kickoff]', { timeout: 20000 }).catch(() => {});
   const s1b = await hubState(S.page, save.key).catch(() => ({}));
-  check('load first', s1b.viewer && s1b.saved === afterPlay, `${tag}: after that reload the next press opens the viewer on the season Play would have saved (viewer ${s1b.viewer}, same bytes ${s1b.saved === afterPlay})`);
+  check('load first', s1b.viewer && afterReloadPlay !== save.value && s1b.saved === afterReloadPlay,
+    `${tag}: after that reload the next press opens the viewer on the season Play saves on a page loaded twice (viewer ${s1b.viewer}, same bytes ${s1b.saved === afterReloadPlay}, same as a first visit ${s1b.saved === afterPlay})`);
   check('errors', S.errors.length === 0, `${tag}: the stale chunk walk, no page error and no console error${S.errors.length ? `: ${S.errors.slice(0, 2).join(' | ')}` : ''}`);
   await S.ctx.close();
 
-  /* 2: that one reload is already spent, so the page has to say so itself */
-  const T = await open(slug, save, vp, { failViewer: 1, staleSpent: true });
+  /* 2: that one reload is already spent, so the page has to say so itself. The chunk stays gone until this
+     walk says the host serves it again, so the walk reads the same whether the browser keeps a failed
+     import failed for the life of the page (the Chromium of the 2026-10-07 review did: asked for once) or
+     asks the network again on the next import (the runner's Chromium on 2026-10-08 did: asked for twice). */
+  const T = await open(slug, save, vp, { failViewer: Infinity, staleSpent: true });
   await pressEntry(T.page);
   await T.page.waitForSelector('[data-season-centre-failed]', { timeout: 15000 }).catch(() => {});
   const t1 = await hubState(T.page, save.key);
@@ -298,7 +332,12 @@ async function staleWalks(slug, vp, save, afterPlay, tag) {
   check('load first', !t2.failed && t2.hub && t2.entry && t2.focusOnEntry && t2.saved === save.value, `${tag}: Back closes the tile on the hub with the focus on Week by week (tile ${t2.failed}, hub ${t2.hub}, focus ${t2.focusOnEntry})`);
   await pressEntry(T.page);
   await T.page.waitForSelector('[data-season-centre-failed]', { timeout: 15000 }).catch(() => {});
+  const t2b = await hubState(T.page, save.key);
   const asked = T.state.viewerAsked;
+  check('load first', t2b.failed && t2b.saved === save.value && !t2b.curtain && !t2b.viewer && T.state.loads === 1,
+    `${tag}: a second press with the chunk still gone shows the tile again and plays nothing (tile ${t2b.failed}, save untouched ${t2b.saved === save.value}, viewer ${t2b.viewer}, page loads ${T.state.loads})`);
+  /* the host serves the chunk again; the tile's Reload is the way back in either kind of browser */
+  T.state.fail = 0;
   await clickText(T.page, 'Reload');
   const again = await waitFor(async () => T.state.loads >= 2);
   await hubBack(T.page);
@@ -306,9 +345,9 @@ async function staleWalks(slug, vp, save, afterPlay, tag) {
   await pressEntry(T.page);
   await T.page.waitForSelector('[data-season-centre] [data-kickoff]', { timeout: 20000 }).catch(() => {});
   const t4 = await hubState(T.page, save.key).catch(() => ({}));
-  console.log(`     the viewer chunk was asked for ${asked} time(s) before the Reload (a failed import stays failed in chromium), ${T.state.viewerAsked} after it`);
-  check('load first', again && t3.saved === save.value && t3.hub && t4.viewer && t4.saved === afterPlay,
-    `${tag}: Reload gets a new page with no season played, and its next press opens the viewer on the season Play would have saved (page loads ${T.state.loads}, save untouched ${t3.saved === save.value}, viewer ${t4.viewer}, same bytes ${t4.saved === afterPlay})`);
+  console.log(`     the viewer chunk was asked for ${asked} time(s) over two presses before the Reload (1: this browser keeps a failed import failed; 2: it asks again), ${T.state.viewerAsked} with the press after it`);
+  check('load first', again && t3.saved === save.value && t3.hub && t4.viewer && t4.saved === afterReloadPlay,
+    `${tag}: Reload gets a new page with no season played, and its next press opens the viewer on the season Play saves on a page loaded twice (page loads ${T.state.loads}, save untouched ${t3.saved === save.value}, viewer ${t4.viewer}, same bytes ${t4.saved === afterReloadPlay})`);
   check('errors', T.errors.length === 0, `${tag}: the spent reload walk, no page error and no console error${T.errors.length ? `: ${T.errors.slice(0, 2).join(' | ')}` : ''}`);
   await T.ctx.close();
 }
@@ -322,6 +361,7 @@ async function walk(slug, vp) {
   /* A: he presses Play */
   const A = await open(slug, save, vp);
   await centreEntry(A.page);
+  const firstDraws = await drawsOf(A.page);
   await clickText(A.page, 'Play the');
   await need(A.page, '[data-season-reveal]', `${tag}: the curtain after Play`);
   await A.page.waitForTimeout(500);
@@ -505,7 +545,7 @@ async function walk(slug, vp) {
     const held = await H.page.evaluate(() => ({ line: document.querySelector('[data-season-centre-held]')?.textContent ?? '', button: !!document.querySelector('[data-week-by-week]') }));
     check('held', held.line.startsWith('📺') && !held.button, `${tag}: the held year ${d.held.year} shows its line and no button ("${held.line.slice(0, 70)}")`);
     await H.ctx.close();
-    await staleWalks(slug, vp, save, afterPlay, tag);
+    await staleWalks(slug, vp, save, afterPlay, firstDraws, tag);
   }
 }
 
