@@ -1,0 +1,200 @@
+{
+ "notes": [
+  "base tree d61f2ce52626cdba0f59abe2f2a146d1b7acbab9 extracted; branch head 069de54ba4395018b23fe705de8d110097d85d63 (request commit's parent)",
+  "bundled soccer, Club Manager and the NBA binding from both trees",
+  "base engine made 29 soccer saves: youth#0 contract_offer#0 playing#0 newspaper#0 season_summary#0 ballon_dor#0 international_debut#0 world_cup#0 social_media_action#0 random_events#0 transfer_window#0 moral_dilemma#0 rivalry_event#0 rehab_choice#0 retirement_suggestion#0 youth#1 contract_offer#1 playing#1 newspaper#1 season_summary#1 ballon_dor#1 international_debut#1 world_cup#1 social_media_action#1 random_events#1 transfer_window#1 rivalry_event#1 moral_dilemma#1 retirement_suggestion#1",
+  "Club Manager old save (Real Madrid): same seed, base plays 18 (stops \"window\" week 28); table digest equal: true",
+  "Club Manager old save (Arsenal): same seed, base plays 18 (stops \"window\" week 28); table digest equal: true",
+  "Club Manager old save (Boca Juniors): same seed, base plays 0 (stops \"seasonOver\" week 54); table digest equal: true",
+  "Club Manager old save (Celtic): same seed, base plays 10 (stops \"window\" week 20); table digest equal: true",
+  "base NBA save made under nba-my-career-save-v1 (3571 chars)",
+  "[phone-mo] soccer phone order (stage offsets): table null, record panel null, list button 753, so far tiles 809",
+  "[phone-mo] soccer: the bar's next button read \"▶ Matchday 5\"",
+  "[phone-mo] Club Manager: club name on the first screen: true; pressed \"Resume Career\"",
+  "[phone-mo] sound: header icon null, footer text {\"w\":80,\"h\":16,\"top\":10307,\"shown\":true,\"pressed\":\"false\"}; before the switch: {\"ac\":0,\"plays\":0,\"stored\":[]}; after switching on with [data-sound-toggle=\"text\"]: pressed=true {\"ac\":1,\"plays\":0,\"stored\":[\"dukb-sound=on\"]}",
+  "[phone-rm] soccer phone order (stage offsets): table null, record panel null, list button 439, so far tiles 495",
+  "[phone-rm] soccer: the bar's next button read \"▶ Matchday 4\"",
+  "[phone-rm] Club Manager: club name on the first screen: true; pressed \"Resume Career\"",
+  "[phone-rm] sound: header icon null, footer text {\"w\":80,\"h\":16,\"top\":10307,\"shown\":true,\"pressed\":\"false\"}; before the switch: {\"ac\":0,\"plays\":0,\"stored\":[]}; after switching on with [data-sound-toggle=\"text\"]: pressed=true {\"ac\":1,\"plays\":0,\"stored\":[\"dukb-sound=on\"]}",
+  "[desk-mo] soccer: the bar's next button read \"▶ Matchday 5\"",
+  "[desk-mo] Club Manager: club name on the first screen: true; pressed \"Resume Career\"",
+  "[desk-mo] sound: header icon null, footer text {\"w\":80,\"h\":16,\"top\":7232,\"shown\":true,\"pressed\":\"false\"}; before the switch: {\"ac\":0,\"plays\":0,\"stored\":[]}; after switching on with [data-sound-toggle=\"text\"]: pressed=true {\"ac\":1,\"plays\":0,\"stored\":[\"dukb-sound=on\"]}",
+  "[desk-rm] soccer: the bar's next button read \"▶ League game 4\"",
+  "[desk-rm] Club Manager: club name on the first screen: true; pressed \"Resume Career\"",
+  "[desk-rm] sound: header icon null, footer text {\"w\":80,\"h\":16,\"top\":7232,\"shown\":true,\"pressed\":\"false\"}; before the switch: {\"ac\":0,\"plays\":0,\"stored\":[]}; after switching on with [data-sound-toggle=\"text\"]: pressed=true {\"ac\":1,\"plays\":0,\"stored\":[\"dukb-sound=on\"]}"
+ ],
+ "measures": [
+  {
+   "tag": "phone-mo",
+   "game": "soccer",
+   "errors": [],
+   "aborted": 2
+  },
+  {
+   "tag": "phone-mo",
+   "game": "nba",
+   "errors": [],
+   "aborted": 1
+  },
+  {
+   "tag": "phone-mo",
+   "game": "cm",
+   "errors": [],
+   "aborted": 1
+  },
+  {
+   "tag": "phone-mo",
+   "game": "sound",
+   "icon": null,
+   "text": {
+    "w": 80,
+    "h": 16,
+    "top": 10307,
+    "shown": true,
+    "pressed": "false"
+   },
+   "before": {
+    "ac": 0,
+    "plays": 0,
+    "stored": []
+   },
+   "afterOn": {
+    "ac": 1,
+    "plays": 0,
+    "stored": [
+     "dukb-sound=on"
+    ]
+   },
+   "errors": []
+  },
+  {
+   "tag": "phone-rm",
+   "game": "soccer",
+   "errors": [],
+   "aborted": 2
+  },
+  {
+   "tag": "phone-rm",
+   "game": "nba",
+   "errors": [],
+   "aborted": 1
+  },
+  {
+   "tag": "phone-rm",
+   "game": "cm",
+   "errors": [],
+   "aborted": 1
+  },
+  {
+   "tag": "phone-rm",
+   "game": "sound",
+   "icon": null,
+   "text": {
+    "w": 80,
+    "h": 16,
+    "top": 10307,
+    "shown": true,
+    "pressed": "false"
+   },
+   "before": {
+    "ac": 0,
+    "plays": 0,
+    "stored": []
+   },
+   "afterOn": {
+    "ac": 1,
+    "plays": 0,
+    "stored": [
+     "dukb-sound=on"
+    ]
+   },
+   "errors": []
+  },
+  {
+   "tag": "desk-mo",
+   "game": "soccer",
+   "errors": [],
+   "aborted": 2
+  },
+  {
+   "tag": "desk-mo",
+   "game": "nba",
+   "errors": [],
+   "aborted": 1
+  },
+  {
+   "tag": "desk-mo",
+   "game": "cm",
+   "errors": [],
+   "aborted": 1
+  },
+  {
+   "tag": "desk-mo",
+   "game": "sound",
+   "icon": null,
+   "text": {
+    "w": 80,
+    "h": 16,
+    "top": 7232,
+    "shown": true,
+    "pressed": "false"
+   },
+   "before": {
+    "ac": 0,
+    "plays": 0,
+    "stored": []
+   },
+   "afterOn": {
+    "ac": 1,
+    "plays": 0,
+    "stored": [
+     "dukb-sound=on"
+    ]
+   },
+   "errors": []
+  },
+  {
+   "tag": "desk-rm",
+   "game": "soccer",
+   "errors": [],
+   "aborted": 2
+  },
+  {
+   "tag": "desk-rm",
+   "game": "nba",
+   "errors": [],
+   "aborted": 1
+  },
+  {
+   "tag": "desk-rm",
+   "game": "cm",
+   "errors": [],
+   "aborted": 1
+  },
+  {
+   "tag": "desk-rm",
+   "game": "sound",
+   "icon": null,
+   "text": {
+    "w": 80,
+    "h": 16,
+    "top": 7232,
+    "shown": true,
+    "pressed": "false"
+   },
+   "before": {
+    "ac": 0,
+    "plays": 0,
+    "stored": []
+   },
+   "afterOn": {
+    "ac": 1,
+    "plays": 0,
+    "stored": [
+     "dukb-sound=on"
+    ]
+   },
+   "errors": []
+  }
+ ]
+}

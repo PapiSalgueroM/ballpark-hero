@@ -1,0 +1,8 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+newc exit=0 61s | playClubManagerNewCountries: green. Russia can be picked, started, played live and found in an old save's world (3 runs: 390x844, 1280x800, 390x844 reduced motion).
+fit exit=0 95s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+fit-silentlist exit=1 63s | playLiveMatchFit: control silentlist turned section 7 red on the line it must (the list never said this goal, 1 GOAL! rewritten) and left the rest green.
+us exit=0 60s | playUsSeasonCentre: 55 checks, 0 failed
+homefold exit=0 31s | playHomeFold: green. The first thing on the page is something to play.
+soundgate exit=0 151s | playSoundGate: 146 checks, 0 failed
+walk exit=1 277s | rvWalk: 115 checks, 4 failed

@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+walk: node .rc/x/rvWalk.mjs
+fit: PORT=4603 node scripts/playLiveMatchFit.mjs
+newc: node scripts/playClubManagerNewCountries.mjs
+fit-silentlist: PORT=4604 LIVE_FIT_SHOTS= RC_OUT= LIVE_FIT_CONTROL=silentlist node scripts/playLiveMatchFit.mjs
+us: PORT=4606 node scripts/playUsSeasonCentre.mjs
+soundgate: PORT=4607 node scripts/playSoundGate.mjs
+homefold: node scripts/playHomeFold.mjs

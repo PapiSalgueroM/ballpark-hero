@@ -1,0 +1,138 @@
+info base tree d61f2ce52626cdba0f59abe2f2a146d1b7acbab9 extracted; branch head 069de54ba4395018b23fe705de8d110097d85d63 (request commit's parent)
+info bundled soccer, Club Manager and the NBA binding from both trees
+info base engine made 29 soccer saves: youth#0 contract_offer#0 playing#0 newspaper#0 season_summary#0 ballon_dor#0 international_debut#0 world_cup#0 social_media_action#0 random_events#0 transfer_window#0 moral_dilemma#0 rivalry_event#0 rehab_choice#0 retirement_suggestion#0 youth#1 contract_offer#1 playing#1 newspaper#1 season_summary#1 ballon_dor#1 international_debut#1 world_cup#1 social_media_action#1 random_events#1 transfer_window#1 rivalry_event#1 moral_dilemma#1 retirement_suggestion#1
+ok   soccer old save youth#0: the branch engine plays it on to retirement (196 steps, 22 seasons)
+ok   soccer old save contract_offer#0: the branch engine plays it on to retirement (218 steps, 23 seasons)
+ok   soccer old save playing#0: the branch engine plays it on to retirement (194 steps, 22 seasons)
+ok   soccer old save newspaper#0: the branch engine plays it on to retirement (195 steps, 22 seasons)
+ok   soccer old save season_summary#0: the branch engine plays it on to retirement (214 steps, 24 seasons)
+ok   soccer old save ballon_dor#0: the branch engine plays it on to retirement (199 steps, 22 seasons)
+ok   soccer old save international_debut#0: the branch engine plays it on to retirement (206 steps, 22 seasons)
+ok   soccer old save world_cup#0: the branch engine plays it on to retirement (191 steps, 22 seasons)
+ok   soccer old save social_media_action#0: the branch engine plays it on to retirement (204 steps, 22 seasons)
+ok   soccer old save random_events#0: the branch engine plays it on to retirement (212 steps, 25 seasons)
+ok   soccer old save transfer_window#0: the branch engine plays it on to retirement (181 steps, 21 seasons)
+ok   soccer old save moral_dilemma#0: the branch engine plays it on to retirement (164 steps, 22 seasons)
+ok   soccer old save rivalry_event#0: the branch engine plays it on to retirement (135 steps, 22 seasons)
+ok   soccer old save rehab_choice#0: the branch engine plays it on to retirement (58 steps, 21 seasons)
+ok   soccer old save retirement_suggestion#0: the branch engine plays it on to retirement (1 steps, 22 seasons)
+ok   soccer old save youth#1: the branch engine plays it on to retirement (203 steps, 22 seasons)
+ok   soccer old save contract_offer#1: the branch engine plays it on to retirement (195 steps, 22 seasons)
+ok   soccer old save playing#1: the branch engine plays it on to retirement (207 steps, 22 seasons)
+ok   soccer old save newspaper#1: the branch engine plays it on to retirement (200 steps, 23 seasons)
+ok   soccer old save season_summary#1: the branch engine plays it on to retirement (173 steps, 21 seasons)
+ok   soccer old save ballon_dor#1: the branch engine plays it on to retirement (203 steps, 22 seasons)
+ok   soccer old save international_debut#1: the branch engine plays it on to retirement (202 steps, 23 seasons)
+ok   soccer old save world_cup#1: the branch engine plays it on to retirement (196 steps, 23 seasons)
+ok   soccer old save social_media_action#1: the branch engine plays it on to retirement (200 steps, 23 seasons)
+ok   soccer old save random_events#1: the branch engine plays it on to retirement (176 steps, 21 seasons)
+ok   soccer old save transfer_window#1: the branch engine plays it on to retirement (167 steps, 22 seasons)
+ok   soccer old save rivalry_event#1: the branch engine plays it on to retirement (164 steps, 21 seasons)
+ok   soccer old save moral_dilemma#1: the branch engine plays it on to retirement (138 steps, 22 seasons)
+ok   soccer old save retirement_suggestion#1: the branch engine plays it on to retirement (1 steps, 22 seasons)
+ok   Club Manager old save (Real Madrid): the branch loads it
+ok   Club Manager old save (Real Madrid): loads to the same state the base loads (95640 chars)
+ok   Club Manager old save (Real Madrid): the branch plays on 18 matches, stops on "window" at week 28
+info Club Manager old save (Real Madrid): same seed, base plays 18 (stops "window" week 28); table digest equal: true
+ok   Club Manager old save (Arsenal): the branch loads it
+ok   Club Manager old save (Arsenal): loads to the same state the base loads (95254 chars)
+ok   Club Manager old save (Arsenal): the branch plays on 18 matches, stops on "window" at week 28
+info Club Manager old save (Arsenal): same seed, base plays 18 (stops "window" week 28); table digest equal: true
+ok   Club Manager old save (Boca Juniors): the branch loads it
+ok   Club Manager old save (Boca Juniors): loads to the same state the base loads (98343 chars)
+ok   Club Manager old save (Boca Juniors): the branch plays on 0 matches, stops on "seasonOver" at week 54
+info Club Manager old save (Boca Juniors): same seed, base plays 0 (stops "seasonOver" week 54); table digest equal: true
+ok   Club Manager old save (Celtic): the branch loads it
+ok   Club Manager old save (Celtic): loads to the same state the base loads (92978 chars)
+ok   Club Manager old save (Celtic): the branch plays on 10 matches, stops on "window" at week 20
+info Club Manager old save (Celtic): same seed, base plays 10 (stops "window" week 20); table digest equal: true
+info base NBA save made under nba-my-career-save-v1 (3571 chars)
+ok   [phone-mo] soccer: the base save playing#0 opens on the hub, no error screen
+ok   [phone-mo] soccer hub: no sideways scroll (scrollWidth 390)
+ok   [phone-mo] soccer hub: the week by week button is there
+ok   [phone-mo] soccer: the Season Centre opens on the base save
+ok   [phone-mo] soccer kick off card: nothing off the side (none)
+ok   [phone-mo] soccer: the start button reads "Kick off"
+ok   [phone-mo] soccer game one: nothing off the side, no error (none)
+info [phone-mo] soccer phone order (stage offsets): table null, record panel null, list button 753, so far tiles 809
+ok   [phone-mo] soccer phone list: nothing off the side
+info [phone-mo] soccer: the bar's next button read "▶ Matchday 5"
+ok   [phone-mo] soccer: walked every game to the review
+ok   [phone-mo] soccer review: no sideways scroll, no error, no undefined or NaN words (0)
+ok   [phone-mo] soccer: no page or console errors (none)
+ok   [phone-mo] nba: the base save opens on the hub, no error screen, no sideways scroll (scrollWidth 390)
+FAIL [phone-mo] nba hub: a Week by week button is there
+ok   [phone-mo] nba: no page or console errors (none)
+ok   [phone-mo] Club Manager: the page opens with a base save of Real Madrid, no error screen, no sideways scroll (scrollWidth 390)
+info [phone-mo] Club Manager: club name on the first screen: true; pressed "Resume Career"
+ok   [phone-mo] Club Manager: the base career of Real Madrid is on screen after the press, no error screen
+ok   [phone-mo] Club Manager: no page or console errors (none)
+info [phone-mo] sound: header icon null, footer text {"w":80,"h":16,"top":10307,"shown":true,"pressed":"false"}; before the switch: {"ac":0,"plays":0,"stored":[]}; after switching on with [data-sound-toggle="text"]: pressed=true {"ac":1,"plays":0,"stored":["dukb-sound=on"]}
+ok   [phone-mo] sound: nothing is made or played before he switches it on (AudioContext 0, play() 0)
+ok   [phone-mo] sound: the switch turns on with reduced motion off
+ok   [phone-rm] soccer: the base save playing#0 opens on the hub, no error screen
+ok   [phone-rm] soccer hub: no sideways scroll (scrollWidth 390)
+ok   [phone-rm] soccer hub: the week by week button is there
+ok   [phone-rm] soccer: the Season Centre opens on the base save
+ok   [phone-rm] soccer kick off card: nothing off the side (none)
+ok   [phone-rm] soccer: the start button reads "Kick off"
+ok   [phone-rm] soccer game one: nothing off the side, no error (none)
+info [phone-rm] soccer phone order (stage offsets): table null, record panel null, list button 439, so far tiles 495
+ok   [phone-rm] soccer phone list: nothing off the side
+info [phone-rm] soccer: the bar's next button read "▶ Matchday 4"
+ok   [phone-rm] soccer: walked every game to the review
+ok   [phone-rm] soccer review: no sideways scroll, no error, no undefined or NaN words (0)
+ok   [phone-rm] soccer: no page or console errors (none)
+ok   [phone-rm] nba: the base save opens on the hub, no error screen, no sideways scroll (scrollWidth 390)
+FAIL [phone-rm] nba hub: a Week by week button is there
+ok   [phone-rm] nba: no page or console errors (none)
+ok   [phone-rm] Club Manager: the page opens with a base save of Real Madrid, no error screen, no sideways scroll (scrollWidth 390)
+info [phone-rm] Club Manager: club name on the first screen: true; pressed "Resume Career"
+ok   [phone-rm] Club Manager: the base career of Real Madrid is on screen after the press, no error screen
+ok   [phone-rm] Club Manager: no page or console errors (none)
+info [phone-rm] sound: header icon null, footer text {"w":80,"h":16,"top":10307,"shown":true,"pressed":"false"}; before the switch: {"ac":0,"plays":0,"stored":[]}; after switching on with [data-sound-toggle="text"]: pressed=true {"ac":1,"plays":0,"stored":["dukb-sound=on"]}
+ok   [phone-rm] sound: nothing is made or played before he switches it on (AudioContext 0, play() 0)
+ok   [phone-rm] sound: the switch turns on with reduced motion on
+ok   [desk-mo] soccer: the base save playing#0 opens on the hub, no error screen
+ok   [desk-mo] soccer hub: no sideways scroll (scrollWidth 1280)
+ok   [desk-mo] soccer hub: the week by week button is there
+ok   [desk-mo] soccer: the Season Centre opens on the base save
+ok   [desk-mo] soccer kick off card: nothing off the side (none)
+ok   [desk-mo] soccer: the start button reads "Kick off"
+ok   [desk-mo] soccer game one: nothing off the side, no error (none)
+info [desk-mo] soccer: the bar's next button read "▶ Matchday 5"
+ok   [desk-mo] soccer: walked every game to the review
+ok   [desk-mo] soccer review: no sideways scroll, no error, no undefined or NaN words (0)
+ok   [desk-mo] soccer: no page or console errors (none)
+ok   [desk-mo] nba: the base save opens on the hub, no error screen, no sideways scroll (scrollWidth 1280)
+FAIL [desk-mo] nba hub: a Week by week button is there
+ok   [desk-mo] nba: no page or console errors (none)
+ok   [desk-mo] Club Manager: the page opens with a base save of Real Madrid, no error screen, no sideways scroll (scrollWidth 1280)
+info [desk-mo] Club Manager: club name on the first screen: true; pressed "Resume Career"
+ok   [desk-mo] Club Manager: the base career of Real Madrid is on screen after the press, no error screen
+ok   [desk-mo] Club Manager: no page or console errors (none)
+info [desk-mo] sound: header icon null, footer text {"w":80,"h":16,"top":7232,"shown":true,"pressed":"false"}; before the switch: {"ac":0,"plays":0,"stored":[]}; after switching on with [data-sound-toggle="text"]: pressed=true {"ac":1,"plays":0,"stored":["dukb-sound=on"]}
+ok   [desk-mo] sound: nothing is made or played before he switches it on (AudioContext 0, play() 0)
+ok   [desk-mo] sound: the switch turns on with reduced motion off
+ok   [desk-rm] soccer: the base save playing#0 opens on the hub, no error screen
+ok   [desk-rm] soccer hub: no sideways scroll (scrollWidth 1280)
+ok   [desk-rm] soccer hub: the week by week button is there
+ok   [desk-rm] soccer: the Season Centre opens on the base save
+ok   [desk-rm] soccer kick off card: nothing off the side (none)
+ok   [desk-rm] soccer: the start button reads "Kick off"
+ok   [desk-rm] soccer game one: nothing off the side, no error (none)
+info [desk-rm] soccer: the bar's next button read "▶ League game 4"
+ok   [desk-rm] soccer: walked every game to the review
+ok   [desk-rm] soccer review: no sideways scroll, no error, no undefined or NaN words (0)
+ok   [desk-rm] soccer: no page or console errors (none)
+ok   [desk-rm] nba: the base save opens on the hub, no error screen, no sideways scroll (scrollWidth 1280)
+FAIL [desk-rm] nba hub: a Week by week button is there
+ok   [desk-rm] nba: no page or console errors (none)
+ok   [desk-rm] Club Manager: the page opens with a base save of Real Madrid, no error screen, no sideways scroll (scrollWidth 1280)
+info [desk-rm] Club Manager: club name on the first screen: true; pressed "Resume Career"
+ok   [desk-rm] Club Manager: the base career of Real Madrid is on screen after the press, no error screen
+ok   [desk-rm] Club Manager: no page or console errors (none)
+info [desk-rm] sound: header icon null, footer text {"w":80,"h":16,"top":7232,"shown":true,"pressed":"false"}; before the switch: {"ac":0,"plays":0,"stored":[]}; after switching on with [data-sound-toggle="text"]: pressed=true {"ac":1,"plays":0,"stored":["dukb-sound=on"]}
+ok   [desk-rm] sound: nothing is made or played before he switches it on (AudioContext 0, play() 0)
+ok   [desk-rm] sound: the switch turns on with reduced motion on
+rvWalk: 115 checks, 4 failed
