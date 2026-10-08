@@ -33,7 +33,12 @@
  *   - the swap is two steps: a font goes in BEFORE the node, then the node
  *     leaves (the record of the removal names the font as previous sibling).
  *   - a node it has taken once it never takes again, however often it is put
- *     back: the real one marks the node.
+ *     back: the real one marks the node. Until it undoes itself: then every
+ *     wrapper on the page gives back the very node it took (the node goes
+ *     into the wrapper, its saved words are written to it, it comes out, goes
+ *     in front, and the wrapper leaves), the marks are forgotten and html
+ *     loses lang="pt". window.__walk.undo() plays that, as measured on the
+ *     real one's own "show original" button.
  *   - text nodes side by side are one sentence, and the words are not kept
  *     node by node. The worst case measured is the one played: every wrapper
  *     of the run comes back empty but the last, which holds the sentence.
@@ -52,7 +57,10 @@
  *   /soccer-career  the whole create flow (name, nationality Brazil, position,
  *                   era, the roll, a reroll, Customize your build and Lock in,
  *                   Begin Career), then the career itself until the save is a
- *                   year older, then on to twelve presses in all.
+ *                   year older, then on to twelve presses in all. Since the
+ *                   review of Round 1141 the translator then undoes itself
+ *                   and the career goes on to the next birthday and three
+ *                   looks more (UNDO_PRESSES at most, 30).
  *   / /club-manager /nba-my-career /nfl-my-career /stadium-tycoon
  *   /college-grid /build-your-xi /front-office
  *                   the first eight things a player can press: the rules
@@ -106,6 +114,13 @@
  *       and each is printed with React's words, the screen's words and the
  *       element. It leans on neither the guard nor the walk's own bookkeeping,
  *       and the notranslate control proves it is silent on an ordinary page.
+ *       Since the review: React's words are read from React's own record of
+ *       each string, not from the text node (a translator that undoes itself
+ *       writes its saved words into the node it took), and an element in
+ *       which React holds no string any more is judged too: a translator's
+ *       copy still standing there is a leftover (a placeholder that gave way
+ *       to an element). Only wrappers count there, never plain text, which
+ *       the page may have written by hand.
  *   11. Asked directly on every page, the way check 8 asks layer one, but IN
  *       the document where the guard can see the swap: a string is taken the
  *       way the translator takes it, and then the page removes it (the copy
@@ -113,7 +128,9 @@
  *       in front, not at the end) and rewrites it (the page must show the new
  *       words). It does not lean on the app's own copy either. The judge of
  *       check 10 also lists every element it finds out of place among words,
- *       as a record, not as a pass or fail.
+ *       as a record, not as a pass or fail. No run has shown that list with
+ *       anything in it so far, the nolive control's included, so it has not
+ *       yet proven it can show anything: do not lean on it.
  *   12. No text the translator will never take again is back on the page: a
  *       guard that put React's own node back would leave the visitor's page
  *       half in the first language. The real translator never retakes one.
@@ -127,6 +144,27 @@
  *       order and with nothing behind it.
  *   9.  On a page nobody translated (the notranslate control) layer two did
  *       nothing: window.__dukbTranslateStats is there and every count is 0.
+ *
+ * WHAT IT ASSERTS SINCE THE REVIEW OF ROUND 1141 (the translator undoes itself:
+ * "show original", a failed translation, the back and forward cache). Review
+ * pressed the real translator's own button on the built site and found that
+ * every string layer two had refreshed stopped following React for good (the
+ * header read Age 19 with the save at 20), where layer one alone healed:
+ *   17. Asked directly on every page, in the document: a string is taken,
+ *       rewritten (layer two puts a stand in there), taken again, GIVEN BACK
+ *       the way the real one gives back, and rewritten once more. The page
+ *       must show the last words. Layer one alone passes this as well (it gets
+ *       React's own node back), so it is not the nolive control's: it is red
+ *       on a layer two that forgets who a stand in was made for, which is the
+ *       reviewed build. That build was run against this file once, see below.
+ *   18. Create walk: after the career presses the translator undoes itself
+ *       (every wrapper on the page gives its node back) and the career goes
+ *       on, to the next birthday and three looks more. No wrapper is left, the
+ *       page says what React holds at every one of those looks, and layer two
+ *       took nodes up again (its count of them is above zero).
+ *   19. Create walk: after the undo the age in the hub's line is the age in
+ *       the save at every look, at least one of them after a birthday that
+ *       came after the undo, or nothing was measured and the check fails.
  *
  * WHAT IT COUNTS, as a record and not as a pass or fail: on how many pages
  * the guard printed its console line (it prints once a page), and, through a
@@ -174,7 +212,20 @@
  *                at the wrong end (16), with no boundary and no NotFoundError
  *                anywhere. Exit 1 is the control firing. Exit 2 means it did
  *                not fire, or a walk broke, or a check failed that has nothing
- *                to do with layer two, and proves nothing.
+ *                to do with layer two, and proves nothing. Checks 18 and 19
+ *                are its own too: with layer one alone the undo puts back
+ *                copies React removed long ago and nodes holding the words
+ *                the translator saved, wrong until React's next write.
+ *   undocopies   (after review) both layers on, and the translator's undo
+ *                gives back a COPY of every node it took in place of the node
+ *                itself. No translator was seen to do that and no guard can
+ *                follow it, which is the point: everything before the undo
+ *                must stay green, and checks 18 and 19 must go red on every
+ *                create walk (stale text, the age line behind the save). Exit
+ *                1 is the control firing, exit 2 means it did not or something
+ *                else failed. It shows the two checks able to fire. That the
+ *                FIX is what keeps them green is shown by the reviewed build
+ *                itself, run against this file once (see the numbers below).
  *   notranslate  the same walk with the translator off. It must stay green
  *                AND count zero console lines and zero moved nodes: the guard
  *                does nothing on an ordinary page. Since 1141 it is also where
@@ -229,14 +280,18 @@
  *                own judged at one look). 64 calls named a moved node, 9 on
  *                each create walk and 7 on each Bank walk, and layer two put
  *                every one through: layer one had to fall back, and printed
- *                its line, on 0 of 40 page loads. Layer two saw 27,241 text
- *                nodes taken, put 44 removals and 20 inserts through and
- *                handed 1,619 strings back fresh. All three boxes readable in
+ *                its line, on 0 of 40 page loads. Layer two saw about 27,200
+ *                text nodes taken, put 44 removals and 20 inserts through and
+ *                handed about 1,600 strings back fresh (27,241 and 1,619 in
+ *                this run, 27,254 and 1,644 in the next one on the same build:
+ *                the walks wait on the page, so counts like these move a
+ *                little from run to run). All three boxes readable in
  *                4 of 4. The age line was right at 13 of 13 looks, 12 of them
  *                after a birthday. The Bank's statement after the five moves:
  *                +$200k, -$200k, +$50k, +$50k, -$100k.
- *   nolive       exit 1, red on purpose. 399 checks, 74 failed and every one
- *                its own: asked directly on 40 of 40 pages (the copy stayed,
+ *   nolive       exit 1, red on purpose. 399 checks, 74 failed (73 in the next
+ *                run: how many walks show stale text moves by one) and every
+ *                one its own: asked directly on 40 of 40 pages (the copy stayed,
  *                the element landed at the end, the page still showed the copy
  *                of 16); stale text in 22 of 40 walks, 52 different, 6 on
  *                screen at once at most (three runs gave 52, 54 and 57); a
@@ -285,6 +340,58 @@
  *                Nothing a person could see, and on the real page nothing the
  *                numbers can tell from noise.
  *
+ * MEASURED AFTER THE REVIEW OF ROUND 1141, 2026-10-08, on a GitHub runner (what
+ * stands above is from before it and stays as that build's record; checks 17
+ * to 19 add 48 checks to a full run):
+ *   plain        exit 0. 447 checks, 0 failed, 40 walks. THE UNDO on the four
+ *                create walks: the translator gave back 308 nodes each time
+ *                and layer two took all 308 up again; the career went on for
+ *                7 presses and 8 looks with no stale text at any of them, and
+ *                the age line was right at 8 of 8, 3 of them after a birthday
+ *                that came after the undo. Asked directly (17): right on 40
+ *                of 40 pages. 68 calls named a moved node, 0 fallbacks.
+ *   nolive       exit 1, red on purpose. 447 checks, 78 failed, every one its
+ *                own (10, 11, 13, 14, 16, 18, 19). After the undo: up to 6
+ *                stale texts at once and the age line wrong at 5 of 8 looks.
+ *                The judge's new branch (a copy left in an element whose own
+ *                strings have all gone) fired in 4 of 4 create walks here and
+ *                in 0 of 40 walks of the plain run.
+ *   undocopies   exit 1, red on purpose. 447 checks, 8 failed: 18 and 19 on
+ *                the four create walks and nothing else. After the undo up to
+ *                4 stale texts at once, the age line wrong at 3 of 8 looks.
+ *   notranslate  exit 0. 242 checks, 0 failed, 20 walks, every count of layer
+ *                two at 0.
+ *   noguard      exit 1, red on purpose. 183 checks, 36 failed, as before.
+ *   the reviewed build (src/lib/translateGuard.ts as it stood at 3a0fa96e, put
+ *                back, built and walked by this file, ONLY=/soccer-career):
+ *                exit 1, 79 checks, 12 failed, which are 17, 18 and 19 on all
+ *                four create walks and nothing else. Asked directly it "still
+ *                shows 17"; after the undo 8 different stale texts and the
+ *                header at Age 18 with the save at 19. So the three checks
+ *                are red on the defect review found and green on the fix.
+ *   the real translator undoing itself (its own "show original" button, the
+ *                module bundled as it ships, Portuguese): 15 of 15 nodes came
+ *                back and were taken up again. Then "Age 17" rewritten read
+ *                "Age 18", a removed number left, an inserted word landed in
+ *                front. "Translate" pressed again took the same nodes and the
+ *                page followed ("19 anos"), a second undo and it followed
+ *                again ("Age 20"). No page error.
+ *   what the real translator does not take: strings rewritten on the page
+ *                BEFORE its first pass came back from that pass in the first
+ *                language (rule four hands them back while it is not
+ *                listening) and stayed so until something else on the page
+ *                changed. With the hand over again in the module they read
+ *                translated at the first look, 3 s on, in Portuguese and in
+ *                German. This copy of the translator always listens, so it
+ *                cannot show that: only the unit tests and that measurement
+ *                hold it. A line ticking once a second read translated at 105
+ *                to 120 of 120 samples 100 ms apart over four runs (the first
+ *                language shows for a tenth of a second or two after a tick),
+ *                eight such lines together at 101 to 120, at one request a tick.
+ *   COST         not measured again as a whole before this was written: on a
+ *                page nobody translated the fix round added one look at each
+ *                node a batch of changes brought in, and no timer is ever set.
+ *
  * Run: npm run build, then ENGINES=chromium node scripts/playTranslatedPage.mjs
  * (Chromium only: it is where page translation lives). BASE names the server,
  * default http://localhost:4173; when nothing answers there and dist/ exists
@@ -295,7 +402,8 @@
  * time), each with its own context and its own seeded dice, and every wait is
  * for something on the page (the translator has caught up, the button is
  * back), so a slow machine is a slow run and not a red one. PAGE_PRESSES and
- * CAREER_PRESSES deepen a walk. ONLY=/nba-my-career#bank walks The Bank alone.
+ * CAREER_PRESSES deepen a walk, UNDO_PRESSES caps the presses after the undo.
+ * ONLY=/nba-my-career#bank walks The Bank alone.
  * SIM_READ, SIM_DELAY and SIM_LATE set how the translator reads and answers.
  * COST=1 (with COST_REPS, COST_WEEK_MS) measures and checks nothing. Every request that is not the local server is
  * aborted (the database host by its own rule, on every page) except the flag
