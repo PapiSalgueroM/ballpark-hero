@@ -1,0 +1,5 @@
+#!serial
+#!playwright
+base-build: git checkout -q c623e77d -- src scripts public index.html && npm run build > /dev/null 2>&1; (node scripts/lib/hostLikeServer.mjs dist 4173 > /dev/null 2>&1 &); sleep 4; git log -1 --format=%h c623e77d
+base-playCareerHub: ENGINES=chromium node scripts/playCareerHub.mjs
+base-playSoccerCareer: ENGINES=chromium node scripts/playSoccerCareer.mjs
