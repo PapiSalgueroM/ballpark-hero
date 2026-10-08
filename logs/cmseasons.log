@@ -1,0 +1,13 @@
+info base d61f2ce52626cdba0f59abe2f2a146d1b7acbab9
+info A. 0 of 40 days from 2026-10-08 deal the same; first day a deal moves: none in 40 days
+info B. opening Hot Seat run identical on 0 of 14 days; opening Deadline Day run identical on 0 of 14 days
+info C. the branch's Russian Premier League: 16 clubs (Zenit, Krasnodar, Spartak Moscow, CSKA Moscow ...)
+ok   C. sixteen Russian clubs in the engine (16)
+ok   C. base save of Real Madrid on the branch: season one 36 matches (0 unknown opponents, 0 NaN scores, 0 of 20 rows short of 38 games), offers none; season two at Real Madrid: 52 matches (0 unknown, 0 NaN, 0 of 20 rows short of 38)
+ok   C. base save of Arsenal on the branch: sacked in season one after 33 matches
+ok   C. base save of Celtic on the branch: season one 20 matches (0 unknown opponents, 0 NaN scores, 0 of 12 rows short of 22 games), offers Sporting CP, Brighton; season two at Celtic: 31 matches (0 unknown, 0 NaN, 0 of 12 rows short of 22)
+ok   C. base save of Shakhtar Donetsk on the branch: season one 0 matches (0 unknown opponents, 0 NaN scores, 0 of 20 rows short of 38 games), offers Coventry City, Arsenal; season two at Shakhtar Donetsk: 7 matches (0 unknown, 0 NaN, 0 of 20 rows short of 38)
+ok   C. a fresh career at Zenit: Russian Premier League, cup Russian Cup: 31 matches, table of 16 (0 rows not on 30 games, 0 clubs from outside the league), 0 unknown opponents, season score 43; bottom two Akron Tolyatti and Fakel Voronezh, still in next season's league: 2; next season 16 clubs
+ok   C. a fresh career at Krasnodar: Russian Premier League, cup Russian Cup: 34 matches, table of 16 (0 rows not on 30 games, 0 clubs from outside the league), 0 unknown opponents, season score 72; bottom two Dynamo Makhachkala and Fakel Voronezh, still in next season's league: 2; next season 16 clubs
+ok   C. a fresh career at Spartak Moscow: Russian Premier League, cup Russian Cup: 31 matches, table of 16 (0 rows not on 30 games, 0 clubs from outside the league), 0 unknown opponents, season score 45; bottom two Krylia Sovetov and Orenburg, still in next season's league: 2; next season 16 clubs
+rvDaily: 8 checks, 0 failed

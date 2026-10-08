@@ -1,0 +1,1 @@
+cmseasons exit=0 3s | rvDaily: 8 checks, 0 failed
