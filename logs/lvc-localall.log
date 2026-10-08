@@ -1,0 +1,403 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads an HTTP 429 with an error body 2ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads a failed response that claims valid 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads null 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads an array 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads a string 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads an empty object 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads an error body with a 200 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads valid as the string true 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads valid as the number 1 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads both flags at once 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads an allowance answer 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads a plain unverified answer 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads a refusal with a reason 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads a refusal with an object for a reason 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads valid 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads valid with a stored name 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > says valid for the boolean true on an ok response and for nothing else 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A, asking: one wait, and a caller who can give up > waits fifteen seconds for an answer and no longer 4ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A, asking: one wait, and a caller who can give up > hears the caller give up at once, after it asked or before 1ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door opens for a club row at the slot club 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door opens for the club under its second stored name 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door opens for a split season that includes the club 0ms
+ × src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a row at another club 7ms
+   → expected true to be false // Object.is equality
+ × src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a nation slot whatever the row says 1ms
+   → expected true to be false // Object.is equality
+ × src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a row with no club 1ms
+   → expected true to be false // Object.is equality
+ × src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a row with no position 0ms
+   → expected true to be false // Object.is equality
+ × src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a row with a position spelling the map does not know 1ms
+   → expected true to be false // Object.is equality
+ × src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a club label with no stored names 0ms
+   → expected true to be false // Object.is equality
+ × src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for no row at all 0ms
+   → expected true to be false // Object.is equality
+ × src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a side whose name only starts with the slot club 0ms
+   → expected true to be false // Object.is equality
+ × src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a second side of the club under its longer stored name 0ms
+   → expected true to be false // Object.is equality
+ × src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a club name that is only a piece of the stored name 0ms
+   → expected true to be false // Object.is equality
+ × src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a split season whose nearest club is a near miss 0ms
+   → expected true to be false // Object.is equality
+ × src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a club field that is only the separator 0ms
+   → expected true to be false // Object.is equality
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a club pick on file at the club lands with no request to the validator 17ms
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > a club pick whose row is at another club goes to the validator 3ms
+   → expected [] to have a length of 1 but got +0
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > a club pick whose row has no known position goes to the validator 2ms
+   → undefined: expected [] to have a length of 1 but got +0
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > a nation pick always goes to the validator 2ms
+   → expected [] to have a length of 1 but got +0
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > an HTTP 429 with an error body is not counted 2ms
+   → expected [] to have a length of 1 but got +0
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > an HTTP 500 is not counted 2ms
+   → expected [] to have a length of 1 but got +0
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > a 200 that is not JSON is not counted 2ms
+   → expected [] to have a length of 1 but got +0
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > a 200 with an empty object is not counted 2ms
+   → expected [] to have a length of 1 but got +0
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > a 200 with valid as a string is not counted 2ms
+   → expected [] to have a length of 1 but got +0
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > a 200 with both flags is not counted 1ms
+   → expected [] to have a length of 1 but got +0
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > a 200 unverified answer is not counted 1ms
+   → expected [] to have a length of 1 but got +0
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > a rejected fetch is not counted 1ms
+   → expected [] to have a length of 1 but got +0
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > an allowance answer blocks only that pick 2ms
+   → expected 1 to be +0 // Object.is equality
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > a check that never answers is given up and cancelled 2ms
+   → expected [] to have a length of 1 but got +0
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > a reroll cancels the check in flight 1009ms
+   → expected [] to have a length of 1 but got +0
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div />[39m
+  [36m</body>[39m
+[36m</html>[39m
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > a real refusal reads as a refusal 2ms
+   → expected null to be 'Never played there.' // Object.is equality
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > a valid answer is accepted 1ms
+   → expected [] to have a length of 1 but got +0
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a club row the position gate refuses is still refused 2ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a pick given up while its history is read is dropped 3ms
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > giving up drops an answer that was already on its way 1003ms
+   → a reroll: expected [] to have a length of 1 but got +0
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div />[39m
+  [36m</body>[39m
+[36m</html>[39m
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > leaving the page cancels the check in flight 1002ms
+   → expected [] to have a length of 1 but got +0
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div />[39m
+  [36m</body>[39m
+[36m</html>[39m
+
+ Test Files  1 failed (1)
+      Tests  30 failed | 25 passed (55)
+   Start at  11:22:36
+   Duration  4.17s (transform 221ms, setup 51ms, collect 338ms, tests 3.09s, environment 302ms, prepare 132ms)
+
+
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 30 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a row at another club
+ FAIL  src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a nation slot whatever the row says
+ FAIL  src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a row with no club
+ FAIL  src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a row with no position
+ FAIL  src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a row with a position spelling the map does not know
+ FAIL  src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a club label with no stored names
+ FAIL  src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for no row at all
+ FAIL  src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a side whose name only starts with the slot club
+ FAIL  src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a second side of the club under its longer stored name
+ FAIL  src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a club name that is only a piece of the stored name
+ FAIL  src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a split season whose nearest club is a near miss
+ FAIL  src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a club field that is only the separator
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ src/test/lineupValidatorClient.test.tsx:140:48
+    138|   });
+    139|   it.each(shut)('the door stays shut for %s', (_name, team, pick) => {
+    140|     expect(clubPickVerifies(team, 'RB', pick)).toBe(false);
+       |                                                ^
+    141|   });
+    142| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/30]⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > a club pick whose row is at another club goes to the validator
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/test/lineupValidatorClient.test.tsx:225:30
+    223|     const game = start([REAL], SLOT.RB);
+    224|     await act(async () => { await game.current.submitPlayer(TYPED, { .…
+    225|     expect(validatorCalls()).toHaveLength(1);
+       |                              ^
+    226|     expect(validatorCalls()[0].body).toEqual({ playerName: TYPED, team…
+    227|     expect(game.current.filledSlots.get(SLOT.RB)?.playerName).toBe('St…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/30]⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > a club pick whose row has no known position goes to the validator
+AssertionError: undefined: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/test/lineupValidatorClient.test.tsx:235:53
+    233|       const game = start([REAL], SLOT.RB);
+    234|       await act(async () => { await game.current.submitPlayer(TYPED, {…
+    235|       expect(validatorCalls(), String(rawPosition)).toHaveLength(1);
+       |                                                     ^
+    236|       expect(game.current.filledSlots.get(SLOT.RB)?.playerName, String…
+    237|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/30]⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > a nation pick always goes to the validator
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/test/lineupValidatorClient.test.tsx:244:30
+    242|     const game = start([BRAZIL], SLOT.RB);
+    243|     await act(async () => { await game.current.submitPlayer(TYPED, ON_…
+    244|     expect(validatorCalls()).toHaveLength(1);
+       |                              ^
+    245|     expect(validatorCalls()[0].url).toBe('http://stub/functions/v1/val…
+    246|     expect(validatorCalls()[0].body).toEqual({ playerName: TYPED, team…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/30]⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > an HTTP 429 with an error body is not counted
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > an HTTP 500 is not counted
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > a 200 that is not JSON is not counted
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > a 200 with an empty object is not counted
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > a 200 with valid as a string is not counted
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > a 200 with both flags is not counted
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > a 200 unverified answer is not counted
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > a rejected fetch is not counted
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/test/lineupValidatorClient.test.tsx:264:30
+    262|     const game = start([BRAZIL], SLOT.RB);
+    263|     await act(async () => { await game.current.submitPlayer(TYPED, ON_…
+    264|     expect(validatorCalls()).toHaveLength(1);
+       |                              ^
+    265|     nothingCounted(game.current, BRAZIL, SLOT.RB);
+    266|     expect(game.current.validationError).toMatch(/Couldn't verify that…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/30]⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > an allowance answer blocks only that pick
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ nothingCounted src/test/lineupValidatorClient.test.tsx:186:33
+    184| /** "Burn nothing": what must be true after every answer that could no…
+    185| function nothingCounted(game: Game, team: TeamAssignment, slot: number…
+    186|   expect(game.filledSlots.size).toBe(0);
+       |                                 ^
+    187|   expect(game.filledCount).toBe(0);
+    188|   expect(game.currentTeam).toEqual(team);
+ ❯ src/test/lineupValidatorClient.test.tsx:275:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/30]⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > a check that never answers is given up and cancelled
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/test/lineupValidatorClient.test.tsx:304:30
+    302|     act(() => { void game.current.submitPlayer(TYPED, ON_FILE); });
+    303|     await act(async () => { await vi.advanceTimersByTimeAsync(VALIDATO…
+    304|     expect(validatorCalls()).toHaveLength(1);
+       |                              ^
+    305|     expect(validatorCalls()[0].signal?.aborted).toBe(false);
+    306|     expect(game.current.isValidating).toBe(true);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/30]⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > a reroll cancels the check in flight
+AssertionError: expected [] to have a length of 1 but got +0
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div />[39m
+  [36m</body>[39m
+[36m</html>[39m
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/test/lineupValidatorClient.test.tsx:320:50
+    318|     let done: Promise<void> | undefined;
+    319|     act(() => { done = game.current.submitPlayer(TYPED, ON_FILE); });
+    320|     await waitFor(() => expect(validatorCalls()).toHaveLength(1));
+       |                                                  ^
+    321|     expect(game.current.isValidating).toBe(true);
+    322|     await act(async () => { game.current.rerollTeam(); await ended(don…
+ ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/30]⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > a real refusal reads as a refusal
+AssertionError: expected null to be 'Never played there.' // Object.is equality
+
+- Expected: 
+"Never played there."
+
++ Received: 
+null
+
+ ❯ src/test/lineupValidatorClient.test.tsx:346:42
+    344|     const game = start([BRAZIL], SLOT.RB);
+    345|     await act(async () => { await game.current.submitPlayer(TYPED, ON_…
+    346|     expect(game.current.validationError).toBe('Never played there.');
+       |                                          ^
+    347|     expect(game.current.filledSlots.size).toBe(0);
+    348|     expect(game.current.isValidating).toBe(false);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/30]⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > a valid answer is accepted
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/test/lineupValidatorClient.test.tsx:360:30
+    358|     const game = start([BRAZIL], SLOT.RB);
+    359|     await act(async () => { await game.current.submitPlayer(TYPED, ON_…
+    360|     expect(validatorCalls()).toHaveLength(1);
+       |                              ^
+    361|     expect(game.current.filledSlots.get(SLOT.RB)?.playerName).toBe('St…
+    362|     expect(game.current.filledSlots.get(SLOT.RB)?.assignedTeam).toBe('…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/30]⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > giving up drops an answer that was already on its way
+AssertionError: a reroll: expected [] to have a length of 1 but got +0
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div />[39m
+  [36m</body>[39m
+[36m</html>[39m
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/test/lineupValidatorClient.test.tsx:420:58
+    418|       let done: Promise<void> | undefined;
+    419|       act(() => { done = game.current.submitPlayer(TYPED, ON_FILE); });
+    420|       await waitFor(() => expect(validatorCalls(), name).toHaveLength(…
+       |                                                          ^
+    421|       expect(validatorCalls()[0].signal?.aborted, name).toBe(false);
+    422|       act(() => giveUp(game.current));
+ ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/30]⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > leaving the page cancels the check in flight
+AssertionError: expected [] to have a length of 1 but got +0
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div />[39m
+  [36m</body>[39m
+[36m</html>[39m
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/test/lineupValidatorClient.test.tsx:438:50
+    436|     const hook = mount([BRAZIL], SLOT.RB);
+    437|     act(() => { void hook.result.current.submitPlayer(TYPED, ON_FILE);…
+    438|     await waitFor(() => expect(validatorCalls()).toHaveLength(1));
+       |                                                  ^
+    439|     expect(validatorCalls()[0].signal?.aborted).toBe(false);
+    440|     hook.unmount();
+ ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/30]⎯
+
+simLineupValidatorClient localall control: 15 named checks rejected the changed hook and 5 named checks stayed green.
