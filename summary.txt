@@ -1,0 +1,3 @@
+careersquad-noshift exit=0 36s | simCareerSquad QUICK: 825 checks, 0 failed, floors not asserted
+careersquad-quick exit=0 73s | simCareerSquad QUICK: 845 checks, 0 failed, floors not asserted
+careersquad exit=0 179s | simCareerSquad: 2203 checks, 0 failed
