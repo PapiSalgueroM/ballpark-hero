@@ -184,10 +184,10 @@ const LEAGUE: Record<UsAwardSport, Record<string, { mean: number; sd: number }>>
     K: { mean: 116.2, sd: 15.9 },
   },
   nba: {
-    PG: { mean: 36.9, sd: 16.5 },
-    SG: { mean: 34.9, sd: 15.7 },
-    SF: { mean: 37.6, sd: 16.9 },
-    PF: { mean: 34.4, sd: 14.8 },
+    PG: { mean: 36.8, sd: 16.4 },
+    SG: { mean: 34.9, sd: 15.6 },
+    SF: { mean: 37.4, sd: 16.8 },
+    PF: { mean: 34.3, sd: 14.9 },
     C: { mean: 35.7, sd: 15.5 },
   },
   mlb: {
@@ -385,14 +385,14 @@ const NFL_DPOY: Record<string, FieldConfig | null> = {
      MVP none to -0.37 (0.303 to 0.327; main 0.310 to 0.323)
      Finals MVP 0.3 to 0.04 (0.143 to 0.168; main 0.140 to 0.159)
      All-Defensive 0.2 to -0.12 (1.34 to 1.37; main 1.34 to 1.38)
-     Rookie of the Year -1.6 to -2.15 and Defensive Player -0.2 to -0.5 (a rookie's and an anchor's line fell
+     Rookie of the Year -1.6 to -2.15 and Defensive Player -0.2 to -0.45 (a rookie's and an anchor's line fell
      furthest against the field, and at the old grades the two awards fired a fifth and a half as often).
    What one grade cannot hold is how the awards are SPREAD: on the new line 18 percent of careers win an MVP
    against 16.5 and 63 percent an All-NBA against 59, at the same number a career. Section B6a of
    scripts/simNbaAwardsSense.mjs judges the rates and prints the spread. */
 const NBA_ALL_NBA: FieldConfig = { pool: 150, slots: 15, grade: -0.15 };
 const NBA_MVP: FieldConfig = { pool: 150, slots: 1, grade: -0.37 };
-const NBA_DPOY: FieldConfig = { pool: 150, slots: 1, grade: -0.5 };
+const NBA_DPOY: FieldConfig = { pool: 150, slots: 1, grade: -0.45 };
 /** Rookie of the Year, one a year out of the rookies who actually play. */
 const NBA_ROY: FieldConfig = { pool: 45, slots: 1, grade: -2.15 };
 /**

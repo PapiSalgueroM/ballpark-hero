@@ -521,7 +521,33 @@ export function nbaMarketSalary(c: NbaCareerState): number {
    used or not, so a seeded career replays and another caller can hand it a rival's season.
 
    The noise is a multiplier. The line it replaces added up to two assists and two rebounds to everybody, which
-   is what had a centre passing like a guard. */
+   is what had a centre passing like a guard.
+
+   WHAT IT GIVES. Healthy starters of modern careers, mean points/rebounds/assists by rating, with the minutes.
+   Measured 2026-10-07 by scripts/simNbaAwardsSense.mjs on the real engine (6,000 careers a seed, seeds 1 to 5;
+   this is seed 1, and the five agree to a tenth or two):
+     rating   minutes   PG             SG             SF             PF             C
+     72-75    26.6      9.2/2.7/3.6    10.2/3.1/1.7   9.3/4.0/2.4    9.1/4.2/1.5    8.8/6.2/1.4
+     76-79    28.8      12.1/3.2/4.6   13.2/3.7/2.2   12.1/4.8/3.0   12.1/5.2/2.0   11.7/7.6/1.8
+     80-83    31.0      15.8/3.8/5.8   17.3/4.4/2.8   15.9/5.8/3.9   15.8/6.2/2.5   15.1/9.1/2.2
+     84-87    32.9      20.2/4.4/6.9   21.4/5.1/3.5   19.9/6.7/4.7   19.6/7.3/3.0   18.9/10.6/2.7
+     88-91    34.6      24.8/5.0/8.0   26.2/5.8/4.2   24.8/7.6/5.7   23.5/8.4/3.3   22.8/12.2/3.1
+   Rookies rated 75 to 79 average 8.0 points (starters 9.5, bench 5.8). Bench seasons: 7.7 points in 17.2
+   minutes. Thirty points a game is under 3 percent of starter seasons and ten assists under 1.
+
+   HOW THE CONSTANTS WERE SET. The median healthy starter at every position has to sit inside the real starters'
+   quartiles for 2025-26 in all six columns (src/data/nbaLeagueNorms.ts; section A of the harness). The brief's
+   starting constants put 26 of 30 cells inside. Five were then moved, each only to bring a cell in or off an
+   edge, never to chase a run:
+     NBA_POS_REB (new): SF 0.92 and PF 0.75. A rebounding rate with no position in it had a power forward
+       at 8.4 a game where the real starters' quartiles are 4.4 to 6.8.
+     NBA_POS_STL: PG 1.5 to 1.25 (1.5 a game sat on the top edge), C 0.8 to 1.2 (0.5 a game was under the band).
+     NBA_POS_BLK: SG 0.35 to 0.55 (under the band), C 1.25 to 0.9 (1.4 sat on the top edge).
+     The upper points line 0.0695 + d * 0.0222 to 0.0811 + d * 0.0212 (the same kink; the p99 starter season
+       came down from 34.4 points to 33.4, a point under the league leaders' mean plus one sd).
+     NBA_POS_AST SF 0.75 to 0.85: at 0.75 thirty elite careers found one triple double season between them, so
+       the triple double badge hung on a coin. At 0.85 they find four or five, and SG and SF starters at eight
+       assists are 1.0 to 1.3 percent of theirs (main: 19 percent). */
 export interface NbaLineInput {
   /** Exactly the form simNbaSeason computes: rating, morale, club and the season's swing. */
   form: number;
@@ -619,7 +645,7 @@ const NBA_RIVAL_SCALE: Record<string, readonly [number, number]> = { PG: [46.3, 
 /** The new line's scores lean to the right of the old line's at the same mean and spread, so a plain z bridge
  *  left my share of the head to head years about a point under main's (61.1 to 61.9 percent on five shrunk
  *  fleets against 62.3 to 63.0). This many old scale points put it back. Measured, and deleted with the bridge. */
-const NBA_RIVAL_BRIDGE_SHIFT = 0.6;
+const NBA_RIVAL_BRIDGE_SHIFT = 0.4;
 /** Defensive Player of the Year: was 11 rebounds a game. */
 const NBA_DPOY_RPG_GATE = 10.4;
 /** Most Improved: was a jump of 6 points a game on last season. */
@@ -1123,7 +1149,7 @@ export const NBA_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = { 1: N
  *  the old one. 1 is no adjustment. The new line scores about a fifth lower than the old on purpose, and the
  *  Hall of Fame is held, not recalibrated, in this round: this is the one lever, set from the measured Hall
  *  rate (scripts/simNbaAwardsSense.mjs section H). The legacy recalibration round replaces it. */
-export const NBA_LEGACY_NEW_LINE_SCALE: number = 1.15;
+export const NBA_LEGACY_NEW_LINE_SCALE: number = 1.25;
 
 export function nbaLegacyOf(c: NbaCareerState): NbaLegacy {
   const t = nbaCareerTotals(c);
