@@ -1,0 +1,52 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/lib/frontOfficeRatings.test.ts[2m > [22m[2mNFL opening rating checkpoint[2m > [22m[2msaves only five original lineage fields below700KiB and reloads them without rerating
+[22m[39mNFL_RATING_SAVE_SIZE {"rawBytes":633220,"gzipBytes":66928,"players":2163}
+
+[90mstdout[2m | src/lib/frontOfficeRatings.test.ts[2m > [22m[2mNFL opening rating checkpoint[2m > [22m[2mplays four actual seasons playoffs drafts and summers with bounded saves and a nonnegative normal cap
+[22m[39mNFL_RATING_CAMPAIGN {"games":1088,"playoffs":52,"drafted":84,"saves":24,"maxSave":639176,"finalSeason":2030,"scope":"One seeded normal simulation; salary-matching trades are separately known to permit negative cap."}
+
+ [31m❯[39m src/lib/frontOfficeRatings.test.ts [2m([22m[2m14 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 6463[2mms[22m[39m
+   [32m✓[39m NFL opening rating checkpoint[2m > [22mpreserves the physical56356be9 no-depth league and draw sequence as an independent baseline[32m 80[2mms[22m[39m
+   [32m✓[39m NFL opening rating checkpoint[2m > [22mkeeps explicit legacy depth and saved old grades unchanged as an independent baseline[32m 153[2mms[22m[39m
+   [32m✓[39m NFL opening rating checkpoint[2m > [22mreproduces all2163 frozen candidate grades fictional prices and years without named overrides[32m 57[2mms[22m[39m
+   [32m✓[39m NFL opening rating checkpoint[2m > [22mretains dated-role partial labels and their concrete limitation reasons[32m 70[2mms[22m[39m
+   [32m✓[39m NFL opening rating checkpoint[2m > [22minitializes every candidate tuple while retaining32 exact untrimmed budgets membership and terms[32m 84[2mms[22m[39m
+   [32m✓[39m NFL opening rating checkpoint[2m > [22mrebakes the committed depth core and left-out files exactly without writing them[32m 88[2mms[22m[39m
+   [32m✓[39m NFL opening rating checkpoint[2m > [22msaves only five original lineage fields below700KiB and reloads them without rerating[32m 152[2mms[22m[39m
+   [32m✓[39m NFL opening rating checkpoint[2m > [22mshrinks coverage on targets rather than unrelated defensive snaps[32m 1[2mms[22m[39m
+   [32m✓[39m NFL opening rating checkpoint[2m > [22mkeeps missing defensive features absent instead of granting zero-valued evidence[32m 0[2mms[22m[39m
+   [32m✓[39m NFL opening rating checkpoint[2m > [22mbounds the measured target before small-sample blending and requires dated normalizers[32m 8[2mms[22m[39m
+[31m   [31m×[31m NFL opening rating checkpoint[2m > [22mkeeps source-stat observations and fitted models outside the browser data with a dated manifest[39m[32m 9[2mms[22m[39m
+[31m     → expected 'e3d221a9eb40873a8b9920efacb73250d8483…' to be 'cd0befccedbba0b74d06620ad47feb0f28cc2…' // Object.is equality[39m
+   [32m✓[39m NFL opening rating checkpoint[2m > [22mcarries original player evidence through real trades cuts and practice promotion[32m 6[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL opening rating checkpoint[2m > [22mplays four actual seasons playoffs drafts and summers with bounded saves and a nonnegative normal cap [33m 473[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL opening rating checkpoint[2m > [22mrefuses stale identity or source records before the real generator CLI writes outputs [33m 3983[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mkeeps source-stat observations and fitted models outside the browser data with a dated manifest
+[31m[1mAssertionError[22m: expected 'e3d221a9eb40873a8b9920efacb73250d8483…' to be 'cd0befccedbba0b74d06620ad47feb0f28cc2…' // Object.is equality[39m
+
+Expected: [32m"cd0befccedbba0b74d06620ad47feb0f28cc2f08cc240200c4b8133f8970581f"[39m
+Received: [31m"e3d221a9eb40873a8b9920efacb73250d8483f7e0f34d06204a061c2d8e9de8d"[39m
+
+[36m [2m❯[22m src/lib/frontOfficeRatings.test.ts:[2m216:60[22m[39m
+    [90m214| [39m    expect(inputs.sourceManifest.checkpoint.version).toBe(FO_OPENING_R…
+    [90m215| [39m    expect(inputs.sourceManifest.checkpoint.extraction).toContain('not…
+    [90m216| [39m    expect(hash(read('scripts/data/nflRosters2026.json'))).toBe(inputs…
+    [90m   | [39m                                                           [31m^[39m
+    [90m217| [39m    expect(hash(JSON.stringify(record))).toBe(inputs.sourceManifest.re…
+    [90m218| [39m    expect(hash(norm(read('src/data/frontOfficePlayers.ts').toString()…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m13 passed[39m[22m[90m (14)[39m
+[2m   Start at [22m 05:26:06
+[2m   Duration [22m 7.99s[2m (transform 670ms, setup 51ms, collect 765ms, tests 6.46s, environment 296ms, prepare 145ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/frontOfficeRatings.test.ts,title=src/lib/frontOfficeRatings.test.ts > NFL opening rating checkpoint > keeps source-stat observations and fitted models outside the browser data with a dated manifest,line=216,column=60::AssertionError: expected 'e3d221a9eb40873a8b9920efacb73250d8483…' to be 'cd0befccedbba0b74d06620ad47feb0f28cc2…' // Object.is equality%0A%0AExpected: "cd0befccedbba0b74d06620ad47feb0f28cc2f08cc240200c4b8133f8970581f"%0AReceived: "e3d221a9eb40873a8b9920efacb73250d8483f7e0f34d06204a061c2d8e9de8d"%0A%0A ❯ src/lib/frontOfficeRatings.test.ts:216:60%0A%0A

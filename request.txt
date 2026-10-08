@@ -1,0 +1,7 @@
+# The BASE tree (origin/release-al-gate, no Round 1105): the reds seen on the merged tree, to see whose they are
+#!serial
+guessfinish: node_modules/.bin/vitest run src/test/guessFinishMoment.test.tsx --testTimeout=300000 --hookTimeout=120000
+frontoffice: node_modules/.bin/vitest run src/lib/frontOfficeRatings.test.ts --testTimeout=300000 --hookTimeout=120000
+shapes-1: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000
+shapes-2: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000
+dsh-shapes: R848_PART=shapes node scripts/simDailySaveHardening.mjs

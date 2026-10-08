@@ -1,0 +1,5 @@
+guessfinish exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/guessFinishMoment.test.tsx,title=src/test/guessFinishMoment.test.tsx > a clue guesser ends on the shar
+frontoffice exit=1 8s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/frontOfficeRatings.test.ts,title=src/lib/frontOfficeRatings.test.ts > NFL opening rating checkpoint > k
+shapes-1 exit=1 19s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/dailySaveShapes.test.tsx,title=src/test/dailySaveShapes.test.tsx > a damaged daily save resets itself 
+shapes-2 exit=1 19s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/dailySaveShapes.test.tsx,title=src/test/dailySaveShapes.test.tsx > a damaged daily save resets itself 
+dsh-shapes exit=1 20s | simDailySaveHardening: 2 failure(s)

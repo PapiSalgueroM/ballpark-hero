@@ -1,0 +1,83 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [31m❯[39m src/test/guessFinishMoment.test.tsx [2m([22m[2m10 tests[22m[2m | [22m[31m3 failed[39m[2m)[22m[33m 743[2mms[22m[39m
+[31m   [31m×[31m a clue guesser ends on the shared result moment[2m > [22mplays a live win with the points the board scored, and keeps the answer line, share and nothing invented[39m[32m 167[2mms[22m[39m
+[31m     → expected '1,000' to be '1000' // Object.is equality[39m
+[31m   [31m×[31m a clue guesser ends on the shared result moment[2m > [22mwalks every clue: the pill shows exactly the score the board saved[39m[32m 56[2mms[22m[39m
+[31m     → expected '1,000' to be '1000' // Object.is equality[39m
+   [32m✓[39m a clue guesser ends on the shared result moment[2m > [22mplays a live loss quietly: the loss state, zero points, no confetti[32m 95[2mms[22m[39m
+[31m   [31m×[31m a clue guesser ends on the shared result moment[2m > [22mshows a reloaded daily settled, with the same facts and no confetti[39m[32m 67[2mms[22m[39m
+[31m     → expected '1,000' to be '1000' // Object.is equality[39m
+   [32m✓[39m a clue guesser ends on the shared result moment[2m > [22mkeeps an old daily settled when it is reopened from the menu after a live unlimited game[32m 132[2mms[22m[39m
+   [32m✓[39m useLiveFinish plays only a finish it watched[2m > [22mforgets the game at the menu, so a live finish reopened under the same key stays settled[32m 2[2mms[22m[39m
+   [32m✓[39m useLiveFinish plays only a finish it watched[2m > [22mkeeps Round 951 dailies on their rule when no key is given[32m 2[2mms[22m[39m
+   [32m✓[39m useLiveFinish plays only a finish it watched[2m > [22mkeeps a different game that arrives already finished settled[32m 1[2mms[22m[39m
+   [32m✓[39m a chain ends on the shared result moment[2m > [22mcalls every chain that added a link close, badge or not, at every length from 0 to 25[32m 2[2mms[22m[39m
+   [32m✓[39m a chain ends on the shared result moment[2m > [22mshows the chain length, the badge the game earned and the reason it gave, and plays only when live[32m 216[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/guessFinishMoment.test.tsx[2m > [22ma clue guesser ends on the shared result moment[2m > [22mplays a live win with the points the board scored, and keeps the answer line, share and nothing invented
+[31m[1mAssertionError[22m: expected '1,000' to be '1000' // Object.is equality[39m
+
+Expected: [32m"1000"[39m
+Received: [31m"1[7m,[27m000"[39m
+
+[36m [2m❯[22m src/test/guessFinishMoment.test.tsx:[2m53:24[22m[39m
+    [90m 51| [39m    [34mexpect[39m([34mfinish[39m(view))[33m.[39m[34mtoHaveAttribute[39m([32m'data-guess-finish'[39m[33m,[39m [32m'live'[39m)[33m;[39m
+    [90m 52| [39m    [34mexpect[39m([34msettled[39m(view))[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m 53| [39m    [34mexpect[39m([34mpill[39m(view))[33m.[39m[34mtoBe[39m([32m'1000'[39m)[33m;[39m
+    [90m   | [39m                       [31m^[39m
+    [90m 54| [39m    [34mexpect[39m([34mconfetti[39m(view))[33m.[39m[34mtoBe[39m([34m28[39m)[33m;[39m
+    [90m 55| [39m    [34mexpect[39m(view[33m.[39m[34mgetByText[39m([32m'1000 pts'[39m))[33m.[39m[34mtoBeVisible[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/guessFinishMoment.test.tsx[2m > [22ma clue guesser ends on the shared result moment[2m > [22mwalks every clue: the pill shows exactly the score the board saved
+[31m[1mAssertionError[22m: expected '1,000' to be '1000' // Object.is equality[39m
+
+Expected: [32m"1000"[39m
+Received: [31m"1[7m,[27m000"[39m
+
+[36m [2m❯[22m src/test/guessFinishMoment.test.tsx:[2m68:26[22m[39m
+    [90m 66| [39m      [34mclick[39m(view[33m,[39m [32m'Fixture correct guess'[39m)[33m;[39m
+    [90m 67| [39m      const scoreLine = view.getByText(/ pts$/, { selector: 'span' }).…
+    [90m 68| [39m      [34mexpect[39m([34mpill[39m(view))[33m.[39m[34mtoBe[39m(scoreLine[33m.[39m[34mreplace[39m([32m' pts'[39m[33m,[39m [32m''[39m))[33m;[39m
+    [90m   | [39m                         [31m^[39m
+    [90m 69| [39m      [34mcleanup[39m()[33m;[39m
+    [90m 70| [39m    }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/guessFinishMoment.test.tsx[2m > [22ma clue guesser ends on the shared result moment[2m > [22mshows a reloaded daily settled, with the same facts and no confetti
+[31m[1mAssertionError[22m: expected '1,000' to be '1000' // Object.is equality[39m
+
+Expected: [32m"1000"[39m
+Received: [31m"1[7m,[27m000"[39m
+
+[36m [2m❯[22m src/test/guessFinishMoment.test.tsx:[2m91:25[22m[39m
+    [90m 89| [39m    expect(finish(again)).toHaveAttribute('data-guess-finish', 'restor…
+    [90m 90| [39m    [34mexpect[39m([34msettled[39m(again))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m 91| [39m    [34mexpect[39m([34mpill[39m(again))[33m.[39m[34mtoBe[39m([32m'1000'[39m)[33m;[39m
+    [90m   | [39m                        [31m^[39m
+    [90m 92| [39m    [34mexpect[39m([34mconfetti[39m(again))[33m.[39m[34mtoBe[39m([34m0[39m)[33m;[39m
+    [90m 93| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (10)[39m
+[2m   Start at [22m 05:26:03
+[2m   Duration [22m 2.14s[2m (transform 360ms, setup 53ms, collect 602ms, tests 743ms, environment 321ms, prepare 174ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/guessFinishMoment.test.tsx,title=src/test/guessFinishMoment.test.tsx > a clue guesser ends on the shared result moment > plays a live win with the points the board scored%2C and keeps the answer line%2C share and nothing invented,line=53,column=24::AssertionError: expected '1,000' to be '1000' // Object.is equality%0A%0AExpected: "1000"%0AReceived: "1,000"%0A%0A ❯ src/test/guessFinishMoment.test.tsx:53:24%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/guessFinishMoment.test.tsx,title=src/test/guessFinishMoment.test.tsx > a clue guesser ends on the shared result moment > walks every clue%3A the pill shows exactly the score the board saved,line=68,column=26::AssertionError: expected '1,000' to be '1000' // Object.is equality%0A%0AExpected: "1000"%0AReceived: "1,000"%0A%0A ❯ src/test/guessFinishMoment.test.tsx:68:26%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/guessFinishMoment.test.tsx,title=src/test/guessFinishMoment.test.tsx > a clue guesser ends on the shared result moment > shows a reloaded daily settled%2C with the same facts and no confetti,line=91,column=25::AssertionError: expected '1,000' to be '1000' // Object.is equality%0A%0AExpected: "1000"%0AReceived: "1,000"%0A%0A ❯ src/test/guessFinishMoment.test.tsx:91:25%0A%0A
