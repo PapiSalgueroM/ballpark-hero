@@ -1,0 +1,66 @@
+simCareerSquad: 200 careers an era, seed 7
+1. Names
+   4896 names the generator can show against 2819 real names: 0 shared
+   83 club countries, 3 by alias, 0 with no name family
+2. The two copies
+   squad level by tier, from the engine's own projection: 80, 72, 62, 55, 60
+   the national eleven: {"GK":1,"DEF":4,"MID":3,"ATT":3}
+   (fleet recorded in 35 s)
+3. The fleet
+   1990-94   4124 pro seasons: real 0, by role 4124, invented 0, invented with real men still there 0, none 0
+   1995-99   4119 pro seasons: real 143, by role 3976, invented 0, invented with real men still there 0, none 0
+   2000-04   4121 pro seasons: real 675, by role 3446, invented 0, invented with real men still there 0, none 0
+   2005-09   4132 pro seasons: real 1137, by role 2811, invented 109, invented with real men still there 75, none 0
+   2010-14   4125 pro seasons: real 966, by role 2034, invented 650, invented with real men still there 475, none 0
+   2015-19   4079 pro seasons: real 686, by role 1314, invented 1548, invented with real men still there 531, none 0
+   2020-24   4153 pro seasons: real 294, by role 706, invented 2734, invented with real men still there 419, none 0
+   2025      4087 pro seasons: real 0, by role 0, invented 3764, invented with real men still there 323, none 0
+   1600 careers, 32940 seasons, recording 14.4 MB, slim save proven on 1932; careers ended on an unknown phase: none
+   played rows by age going in: 16 to 21: 8000, 22 to 25: 6396, 26 to 29: 5718, 30 to 33: 5560, 34 to 40: 3615
+4. Shape
+   32940 seasons, 0 with no view, 29039 squads that are not real; bad shape 0, not once 0, wrong size 0, a name twice 0, rating out of range 0, age out of range 0
+5. Real, by role or invented, never one passed off as another
+   3901 real squads, 3901 exactly the baked one; wrong source 0; a role sheet with a name on it 0; an invented man with a real name 0; a real man who was not in the club's last real squad 0; 218264 invented men checked against their name family, 0 outside it
+6. The same every time, and keyed to the save
+   6a 2500 club years asked of two separately loaded copies: 0 differ
+   6b 500 saves through JSON and back: 0 read differently
+   6c Math.random drawn 0 times inside the readers over 32940 seasons
+   6d 800 pairs of different saves at the same club and season: 0 got the same squad
+   6e 300 saves with the nation swapped: 0 read differently
+7. Ageing and turnover
+   22471 summers at one club, 361161 men carried over, 0 broke "same man, one year older", 0 arrivals dated wrong; arrivals a summer 5.49 over 20965 summers (37 with none)
+   1490 moves between two invented squads: 15 (1.01%) meet a man with the same name in the same slot, 228 share any name
+8. Rank tracks the games the engine hands out
+   1990-94  ranked 1st 27.88 (n 1621), 3rd 21.91 (n 753), gap 5.96
+   1995-99  ranked 1st 27.45 (n 1573), 3rd 22.04 (n 711), gap 5.41
+   2000-04  ranked 1st 27.35 (n 1467), 3rd 21.78 (n 614), gap 5.57
+   2005-09  ranked 1st 27.71 (n 1255), 3rd 21.77 (n 488), gap 5.94
+   2010-14  ranked 1st 27.61 (n 1118), 3rd 21.86 (n 422), gap 5.75
+   2015-19  ranked 1st 28.09 (n 1175), 3rd 21.69 (n 429), gap 6.40
+   2020-24  ranked 1st 27.74 (n 1319), 3rd 22.04 (n 594), gap 5.70
+   2025     ranked 1st 27.73 (n 1548), 3rd 21.85 (n 660), gap 5.88
+   pooled, squads the game made: in the eleven on rating 25.47 (n 21137), outside it 11.05 (n 3103), gap 14.42
+   real squads, pooled: ranked 1st 26.32 (n 609), 3rd 20.83 (n 380), gap 5.50
+8b. Two pictures: where rating puts him, and the plan
+   made  24240 seasons, the two disagree in 159 (0.66%); outside the eleven on rating but in the plans 158
+   mixed 1618 seasons, the two disagree in 545 (33.68%); outside the eleven on rating but in the plans 542
+   real  3431 seasons, the two disagree in 1640 (47.80%); outside the eleven on rating but in the plans 1589
+9. Trust is the engine's own expectation
+   29289 played seasons: league games minus the plan, mean -0.16
+   First name on the team sheet   n      5  mean -1.40  (printed only: under 200)
+   In and out of the side         n     59  mean -1.41  (printed only: under 200)
+   Nailed on starter              n  12415  mean -0.04
+   Squad player                   n   3956  mean -0.26
+   Starter most weeks             n  12854  mean -0.24
+   dressing room swings the fleet saw: {"0":1600,"-2":3200,"-3":24489}
+10. The reasons for a thin season
+   30811 last seasons read, 7773 under 20 league games: 0 with no line, 2559 (32.92%) with only the fallback
+   "under the level" line: 11.28 league games with it (n 4531), 25.21 without (n 26280), gap 13.93
+11. Offers
+   60144 offers shown to the fleet, 0 without a rank inside the group: {"roles":33943,"real":6825,"invented":19376}
+12. It changes nothing
+   480 careers played twice from one seed, 480 past four seasons: 0 final saves differ
+13. The screens
+   rendered 300 + 300 + 300 seasons (made, mixed, real): 2124 sentences about the eleven or the last shirt, 0 without "our ratings"
+   (56 s, work folder /home/runner/work/_temp/t-simCareerSquad-seed7/careersquad-mnOBLy)
+simCareerSquad: 2143 checks, 0 failed

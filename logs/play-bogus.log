@@ -1,0 +1,8 @@
+file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerSquad.mjs:84
+if (CONTROL && !CONTROLS.includes(CONTROL)) throw new Error(`unknown CAREER_SQUAD_PLAY_CONTROL ${CONTROL}`);
+                                                  ^
+
+Error: unknown CAREER_SQUAD_PLAY_CONTROL nosuchcontrol
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerSquad.mjs:84:51
+
+Node.js v24.21.0

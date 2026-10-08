@@ -1,0 +1,78 @@
+simCareerSquad: 200 careers an era, seed 1
+1. Names
+   4896 names the generator can show against 2819 real names: 0 shared
+   83 club countries, 3 by alias, 0 with no name family
+2. The two copies
+   squad level by tier, from the engine's own projection: 80, 72, 62, 55, 60
+   the national eleven: {"GK":1,"DEF":4,"MID":3,"ATT":3}
+   (fleet recorded in 45 s)
+3. The fleet
+   1990-94   4146 pro seasons: real 0, by role 4146, invented 0, invented with real men still there 0, none 0
+   1995-99   4115 pro seasons: real 146, by role 3969, invented 0, invented with real men still there 0, none 0
+   2000-04   4120 pro seasons: real 686, by role 3434, invented 0, invented with real men still there 0, none 0
+   2005-09   4112 pro seasons: real 1094, by role 2846, invented 95, invented with real men still there 77, none 0
+   2010-14   4145 pro seasons: real 964, by role 2036, invented 646, invented with real men still there 499, none 0
+   2015-19   4132 pro seasons: real 663, by role 1337, invented 1584, invented with real men still there 548, none 0
+   2020-24   4103 pro seasons: real 289, by role 711, invented 2741, invented with real men still there 362, none 0
+   2025      4142 pro seasons: real 0, by role 0, invented 3814, invented with real men still there 328, none 0
+   1600 careers, 33015 seasons, recording 14.5 MB, slim save proven on 1936; careers ended on an unknown phase: none
+   played rows by age going in: 16 to 21: 8000, 22 to 25: 6399, 26 to 29: 5693, 30 to 33: 5606, 34 to 40: 3729
+4. Shape
+   33015 seasons, 0 with no view, 29173 squads that are not real; bad shape 0, not once 0, wrong size 0, a name twice 0, rating out of range 0, age out of range 0
+5. Real, by role or invented, never one passed off as another
+   3842 real squads, 3842 exactly the baked one; wrong source 0; a role sheet with a name on it 0; an invented man with a real name 0; a real man who was not in the club's last real squad 0; 220290 invented men checked against their name family, 0 outside it
+6. The same every time, and keyed to the save
+   6a 2500 club years asked of two separately loaded copies: 0 differ
+   6b 500 saves through JSON and back: 0 read differently
+   6c Math.random drawn 0 times inside the readers over 33015 seasons
+   6d 800 pairs of different saves at the same club and season: 0 got the same squad
+   6e 300 saves with the nation swapped: 0 read differently
+7. Ageing and turnover
+   22678 summers at one club, 364826 men carried over, 0 broke "same man, one year older", 0 arrivals dated wrong; arrivals a summer 5.50 over 21185 summers (44 with none)
+   1490 moves between two invented squads: 15 (1.01%) meet a man with the same name in the same slot, 231 share any name
+8. Rank tracks the games the engine hands out
+   1990-94  ranked 1st 27.96 (n 1650), 3rd 22.08 (n 778), gap 5.89
+   1995-99  ranked 1st 27.55 (n 1511), 3rd 21.88 (n 745), gap 5.67
+   2000-04  ranked 1st 27.56 (n 1492), 3rd 21.99 (n 654), gap 5.56
+   2005-09  ranked 1st 27.92 (n 1190), 3rd 21.94 (n 547), gap 5.98
+   2010-14  ranked 1st 28.07 (n 1138), 3rd 21.72 (n 418), gap 6.34
+   2015-19  ranked 1st 27.85 (n 1214), 3rd 21.94 (n 459), gap 5.92
+   2020-24  ranked 1st 27.75 (n 1414), 3rd 21.72 (n 550), gap 6.03
+   2025     ranked 1st 27.81 (n 1513), 3rd 21.60 (n 702), gap 6.21
+   pooled, squads the game made: in the eleven on rating 25.50 (n 21387), outside it 10.97 (n 3043), gap 14.53
+   real squads, pooled: ranked 1st 26.29 (n 681), 3rd 20.87 (n 368), gap 5.42
+8b. Two pictures: where rating puts him, and the plan
+   made  24430 seasons, the two disagree in 140 (0.57%); outside the eleven on rating but in the plans 136
+   mixed 1606 seasons, the two disagree in 512 (31.88%); outside the eleven on rating but in the plans 509
+   real  3391 seasons, the two disagree in 1607 (47.39%); outside the eleven on rating but in the plans 1556
+9. Trust is the engine's own expectation
+   29427 played seasons: league games minus the plan, mean -0.15
+   First name on the team sheet   n      3  mean -3.00  (printed only: under 200)
+   In and out of the side         n     57  mean -0.89  (printed only: under 200)
+   Nailed on starter              n  12571  mean -0.04
+   Squad player                   n   3860  mean -0.27
+   Starter most weeks             n  12936  mean -0.22
+   dressing room swings the fleet saw: {"0":1600,"-2":3200,"-3":24627}
+10. The reasons for a thin season
+   30929 last seasons read, 7683 under 20 league games: 0 with no line, 2672 (34.78%) with only the fallback
+   "under the level" line: 11.21 league games with it (n 4339), 25.26 without (n 26590), gap 14.05
+11. Offers
+   60648 offers shown to the fleet, 0 without a rank inside the group: {"roles":34157,"real":6953,"invented":19538}
+12. It changes nothing
+   480 careers played twice from one seed, 480 past four seasons: 0 final saves differ
+13. The screens
+   rendered 300 + 300 + 300 seasons (made, mixed, real): 2112 sentences about the eleven or the last shirt, 0 without "our ratings"
+14. Negative controls
+   widen     the last baked squad is served for every later year: red in 5 (must be red in 5)
+   names     a real past season with no checked squad gets invented names: red in 5 (must be red in 5)
+   unkey     the generator draws from Math.random: red in 4, 6a, 6c, 7 (must be red in 6a and 6c)
+   shared    the squad is keyed to the club only: red in 6d (must be red in 6d)
+   nation    the nation is back in the key: red in 6e, 7 (must be red in 6e)
+   noage     nobody gets older: red in 7 (must be red in 7)
+   nokeeper  the eleven has no keeper: red in 2, 4, 8, 8b (must be red in 4)
+   invert    men rated at or below him count as ahead: red in 8, 8b (must be red in 8)
+   jitter    the last starter is rated like any other starter: red in 8b (must be red in 8b)
+   noswing   trust ignores the dressing room: red in 9 (must be red in 9)
+   bare      the headline drops the words "on our ratings": red in 13 (must be red in 13)
+   (139 s, work folder /home/runner/work/_temp/t-simCareerSquad/careersquad-HEAriA)
+simCareerSquad: 2158 checks, 0 failed

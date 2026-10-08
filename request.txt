@@ -1,0 +1,25 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCareerSquad: node scripts/simCareerSquad.mjs
+play: ENGINES=chromium REQUIRE_PAGE=1 PORT=5110 SHOTS=$RC_OUT/shots node scripts/playCareerSquad.mjs
+play-rank: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=rank PORT=5120 SHOTS=/tmp/shots-rank node scripts/playCareerSquad.mjs
+play-write: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=write PORT=5130 SHOTS=/tmp/shots-write node scripts/playCareerSquad.mjs
+play-still: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=still PORT=5140 SHOTS=/tmp/shots-still node scripts/playCareerSquad.mjs
+play-nofill: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=nofill PORT=5150 SHOTS=/tmp/shots-nofill node scripts/playCareerSquad.mjs
+play-static: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=static PORT=5160 SHOTS=/tmp/shots-static node scripts/playCareerSquad.mjs
+play-label: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=label PORT=5170 SHOTS=/tmp/shots-label node scripts/playCareerSquad.mjs
+play-clip: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=clip PORT=5180 SHOTS=/tmp/shots-clip node scripts/playCareerSquad.mjs
+play-shift: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=shift PORT=5190 SHOTS=/tmp/shots-shift node scripts/playCareerSquad.mjs
+play-bogus: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=nosuchcontrol PORT=5200 SHOTS=/tmp/shots-bogus node scripts/playCareerSquad.mjs
+vitest-squad: node_modules/.bin/vitest run src/lib/soccerClubSquad.test.ts --testTimeout=300000 --hookTimeout=120000
+simClubSquads: node scripts/simClubSquads.mjs
+simSoccerOfferReview: node scripts/simSoccerOfferReview.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simCareerSquad-seed7: SEED=7 CAREER_SQUAD_NO_CONTROLS=1 node scripts/simCareerSquad.mjs
+simCareerSquad-bogus: CAREER_SQUAD_CONTROL=nosuchcontrol node scripts/simCareerSquad.mjs 40
