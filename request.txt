@@ -1,0 +1,9 @@
+#!build
+#!playwright
+gate: ENGINES=chromium node scripts/playSoundGate.mjs
+nohide: SOUND_GATE_CONTROL=nohide PORT=4601 ENGINES=chromium node scripts/playSoundGate.mjs
+reloadkit: SOUND_GATE_CONTROL=reloadkit PORT=4602 ENGINES=chromium node scripts/playSoundGate.mjs
+nowait: SOUND_GATE_CONTROL=nowait PORT=4603 ENGINES=chromium node scripts/playSoundGate.mjs
+everytick: SOUND_GATE_CONTROL=everytick PORT=4604 ENGINES=chromium node scripts/playSoundGate.mjs
+slowkit: SOUND_GATE_CONTROL=slowkit PORT=4605 ENGINES=chromium node scripts/playSoundGate.mjs
+eager: SOUND_GATE_CONTROL=eager PORT=4606 ENGINES=chromium node scripts/playSoundGate.mjs

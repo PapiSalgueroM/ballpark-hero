@@ -1,0 +1,19 @@
+cues by length: whistle 18522, net 13230, crowd 61740, tick 2205, sting 39690, thud 9702
+saves after 3 seeded careers: out (a list of 10, 2012, placed 22); win (a list of 10, 2018, placed 1); podium (a list of 10, 2018, placed 3)
+CONTROL eager: SoccerCareer-BcQRI-Pp.js makes a context as it loads
+this Chromium, a context made after a tap: running at first, resume resolved in 0 ms, then running, its clock at 0.31 s after 0.3 s
+switches mounted: footer no, header no
+
+1) Off by default
+   ok   / at 390: contexts 0, starts 0, buzzes 0, the kit chunk requested 0 times (tapped: true)
+   ok   /club-manager at 390: contexts 0, starts 0, buzzes 0, the kit chunk requested 0 times (tapped: true)
+   ok   /soccer-career at 390: the winner's night was on screen (10 names) and a speech was given
+   FAIL /soccer-career at 390, the whole night and a speech: contexts 1, starts 0, buzzes 0, the kit chunk requested 0 times (tapped: true)
+   ok   /soccer-career at 390: no page error
+   ok   / at 1280: contexts 0, starts 0, buzzes 0, the kit chunk requested 0 times (tapped: true)
+   ok   /club-manager at 1280: contexts 0, starts 0, buzzes 0, the kit chunk requested 0 times (tapped: true)
+   ok   /soccer-career at 1280: the winner's night was on screen (10 names) and a speech was given
+   FAIL /soccer-career at 1280, the whole night and a speech: contexts 1, starts 0, buzzes 0, the kit chunk requested 0 times (tapped: true)
+   ok   /soccer-career at 1280: no page error
+
+playSoundGate control eager: fired, 2 aimed checks red in section 1

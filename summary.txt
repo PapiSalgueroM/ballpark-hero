@@ -1,0 +1,8 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+nohide exit=0 11s | playSoundGate control nohide: fired, 1 aimed checks red in section 5
+reloadkit exit=0 12s | playSoundGate control reloadkit: fired, 2 aimed checks red in section 10
+nowait exit=0 16s | playSoundGate control nowait: fired, 1 aimed checks red in section 4
+everytick exit=0 49s | playSoundGate control everytick: fired, 2 aimed checks red in section 3
+slowkit exit=0 49s | playSoundGate control slowkit: fired, 1 aimed checks red in section 3
+eager exit=0 26s | playSoundGate control eager: fired, 2 aimed checks red in section 1
+gate exit=1 112s | playSoundGate: 93 checks, 1 failed
