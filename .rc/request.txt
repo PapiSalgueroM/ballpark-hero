@@ -1,0 +1,2 @@
+#!serial
+m5all: node .rc/x/rvMut.mjs m5 && { node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 > vitest-m5.log 2>&1; a=$?; tail -8 vitest-m5.log; node scripts/simCareerLeagueWorld.mjs > /dev/null 2>&1; b=$?; node scripts/simCmLeagueRules.mjs > /dev/null 2>&1; c=$?; node scripts/simCareerClubPool.mjs > /dev/null 2>&1; d=$?; node scripts/simCmDataOnDemand.mjs > /dev/null 2>&1; e=$?; git checkout -q -- src scripts; echo "m5all vitestAll=$a simCareerLeagueWorld=$b simCmLeagueRules=$c simCareerClubPool=$d simCmDataOnDemand=$e"; }
