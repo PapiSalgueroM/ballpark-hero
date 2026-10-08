@@ -1,0 +1,5 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+press-head-again exit=1 88s | playCareerPress: 1 failure
+writes-head-again exit=1 13s | simWritesAreSent: 2 failures
+daily-head-again exit=0 40s | simDailySaveHardening: part all green
+base3 exit=0 158s | BASE3 on 4c0491d1d9e190652680c184ebb11e218b14d9e8: playCareerPress=1 simWritesAreSent=1 simDailySaveHardening=0

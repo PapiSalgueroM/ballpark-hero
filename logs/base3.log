@@ -1,0 +1,11 @@
+base commit 4c0491d1d9e190652680c184ebb11e218b14d9e8
+== BASE playCareerPress exit=1
+  FAIL  the accountability scrum arrived within the losing stretch (2 seasons played)
+playCareerPress: 1 failure
+== BASE simWritesAreSent exit=1
+  FAIL: the harness could not drive Guess the Nation to a finish: TimeoutError: locator.click: Timeout 8000ms exceeded.
+  FAIL: no guess was ever submitted, so this section proved nothing about the write
+simWritesAreSent: 2 failures
+== BASE simDailySaveHardening exit=0
+simDailySaveHardening: part all green
+BASE3 on 4c0491d1d9e190652680c184ebb11e218b14d9e8: playCareerPress=1 simWritesAreSent=1 simDailySaveHardening=0
