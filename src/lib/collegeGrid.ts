@@ -16,19 +16,32 @@ import {
  * The page used to send every guess to an AI validator that runs out of its
  * free allowance for most of the US day, and a guess it could not confirm was
  * never counted, so boards could be neither won nor lost. This module judges
- * a guess in memory against public.college_grid_players, which is
- * scripts/data/collegeGridPlayers.json loaded row for row. Every fact on a
- * row is derived by scripts/genCollegeGridData.mjs (the rules are written on
- * the file); this module only reads them and turns them into yes, no or
- * unknown. A guess costs a turn only on a no, and a no only comes from a
- * complete fact.
+ * a guess in memory against the answer key, scripts/data/collegeGridPlayers.json.
+ * Every fact on a row is derived by scripts/genCollegeGridData.mjs (the rules
+ * are written on the file); this module only reads them and turns them into
+ * yes, no or unknown. A guess costs a turn only on a no, and a no only comes
+ * from a complete fact.
+ *
+ * ROUND 1105: THE KEY SHIPS WITH THE SITE. The browser no longer pages
+ * public.college_grid_players (36 reads and 9.4 MB before the board showed).
+ * The generator writes two compact files from the key into
+ * src/data/collegeGrid/: the display names in prominence order, and the
+ * schools plus only the facts the thirteen criteria read. They are fetched
+ * once by their hashed addresses, decoded here, and both the judge and the
+ * search read memory. This module never imports those files itself: node
+ * scripts bundle it with esbuild, so the addresses arrive as arguments from
+ * src/lib/collegeGridKey.ts.
  *
  * EXPORTS
- *   COLLEGE_GRID_PLAYER_SOURCE  the PlayerAutocomplete source: the key's display names.
- *   MIN_POOL_SIZE               fewer rows than this means a broken fetch (the key holds 35,611).
- *   fetchCollegeGridData()      pages the whole key once through gridEngine and indexes it; null on failure.
- *   toCollegeEntry(raw)         one table row (or one row of the JSON file read back into
- *                               column keys) to an entry, namesake flags not yet set.
+ *   MIN_POOL_SIZE               fewer rows than this means a broken load (the key holds 35,598).
+ *   fetchCollegeGridData(urls)  loads the two files once through gridEngine's static source
+ *                               and indexes them; null on failure. Never reads the table.
+ *   decodeCollegeKey(files)     the two parsed files to one row per player, or null on any doubt.
+ *   loadCollegeSearch(url)      the search file's names, folded once and kept; null on failure.
+ *   collegeSearchSource(url)    the PlayerAutocomplete source over those names: no request per search.
+ *   toCollegeJudgeEntry(raw)    one row to what the judge reads (what the browser holds).
+ *   toCollegeEntry(raw)         one row of the JSON file read back into column keys (or one
+ *                               table row) to a full entry, namesake flags not yet set.
  *   indexCollegeEntries(raws)   rows to entries with the namesake flags set. This is what a
  *                               node script calls on the JSON file's rows: pure, no fetch.
  *   markCollegeNamesakes(list)  sets identityOpen and heismanOpen across a list of entries.
@@ -39,7 +52,8 @@ import {
  *   judgeCollegeCell(entry, row, col)
  *                               yes when both labels are yes, no when either is no, unknown otherwise.
  *   schoolsOnRecord(entry)      the schools the records hold, for the toast on a college unknown.
- *   Verdict, LabelKind, CollegeLabel, CollegeGridEntry, CollegeGridData (types).
+ *   Verdict, LabelKind, CollegeLabel, CollegeJudgeEntry, CollegeGridEntry, CollegeGridData,
+ *   CollegeSearchList (types).
  *
  * PER LABEL
  *   A school            yes when the school is in colleges; otherwise unknown. A college
@@ -118,7 +132,7 @@ export interface CollegeGridEntry extends CollegeJudgeEntry {
   dup: boolean;
 }
 
-export type CollegeGridData = FranchiseGridData<CollegeGridEntry>;
+export type CollegeGridData = FranchiseGridData<CollegeJudgeEntry>;
 
 // ---------------------------------------------------------------------------
 // The closed vocabulary
@@ -302,37 +316,34 @@ export function schoolsOnRecord(entry: CollegeJudgeEntry): string[] {
 // The key holds 35,611 rows (2026-09-15); far fewer means a broken fetch.
 export const MIN_POOL_SIZE = 25000;
 
-const COLLEGE_GRID: FranchiseGridConfig<CollegeGridEntry> = {
+/* Round 1105: the rows come from the two shipped files (the static source set
+   in fetchCollegeGridData), so the four table fields below are never read.
+   They stay because the engine's config type requires them and they name
+   where the key also lives. The page makes no request to that table. */
+const COLLEGE_GRID: FranchiseGridConfig<CollegeJudgeEntry> = {
   table: 'college_grid_players',
-  select: 'id, display_name, name_norm, colleges, colleges_agreed, groups, best_pick, first_round, undrafted, heisman_year, first_season, seasons, dup',
-  /* Paged on colleges, which is never null (text[] not null default '{}'), so
-     the engine's null filter drops nothing; ordered on the primary key. */
+  select: 'display_name, colleges, groups, best_pick, first_round, undrafted, heisman_year',
   franchiseColumn: 'colleges',
   orderColumn: 'id',
   minPoolSize: MIN_POOL_SIZE,
-  toPlayer: toCollegeEntry,
+  toPlayer: toCollegeJudgeEntry,
 };
 
 /**
- * Fetches the whole key once and builds the in-memory index every guess is
- * judged against. Returns null on failure or an implausibly small result, so
- * the page can show its error card instead of a board it cannot judge.
+ * Loads the key once (two files that ship with the site, their addresses
+ * handed in by src/lib/collegeGridKey.ts) and builds the in-memory index every
+ * guess is judged against. Null when a file cannot be had, is not the key, or
+ * is implausibly small. A null is never a reason to accept a guess and never a
+ * reason to read the table instead: the hook calls the pick unverified.
+ * identityOpen and heismanOpen ride in the judge file, set by the generator
+ * with markCollegeNamesakes over the whole key, so nothing is marked here.
  */
-export async function fetchCollegeGridData(): Promise<CollegeGridData | null> {
-  const data = await fetchFranchiseGridData(COLLEGE_GRID);
-  if (!data) return null;
-  markCollegeNamesakes(data.players);
-  return data;
+export async function fetchCollegeGridData(urls: { search: string; judge: string }): Promise<CollegeGridData | null> {
+  return fetchFranchiseGridData({
+    ...COLLEGE_GRID,
+    staticSource: { urls: [urls.search, urls.judge], toRows: decodeCollegeKey },
+  });
 }
-
-/** The search box source: the key's display names, longest NFL careers first. */
-export const COLLEGE_GRID_PLAYER_SOURCE: PlayerSourceConfig = {
-  table: 'college_grid_players',
-  nameColumn: 'display_name',
-  prominenceColumn: 'seasons',
-  ilikeLimit: 200,
-  prominenceLimit: 1000,
-};
 
 // ---------------------------------------------------------------------------
 // The two files that ship (Round 1105)
