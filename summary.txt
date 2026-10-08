@@ -1,0 +1,1 @@
+simDailySaveHardening exit=1 55s | simDailySaveHardening: 2 failure(s)
