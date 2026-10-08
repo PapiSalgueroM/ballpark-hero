@@ -1,0 +1,138 @@
+playTranslatedPage: http://localhost:4173, 1 page(s), views phone and desktop, text keep and alter, CONTROL=nospans
+  PASS  0. the served entry chunk (/assets/index-b9mGuBSx.js) holds the guard's off switch __DUKB_NO_TRANSLATE_GUARD__
+  PASS  0. the served entry chunk holds the guard's console line
+  PASS  0. the served entry chunk holds layer two's off switch __DUKB_NO_TRANSLATE_LIVE__
+
+/soccer-career phone alter
+  PASS  1. /soccer-career phone alter: the translator ran: 1366 text node(s) swapped, lang="pt"
+  PASS  1. /soccer-career phone alter: the guard is installed on the page
+  PASS  8. /soccer-career phone alter: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  2. /soccer-career phone alter: the create screen drew
+  PASS  2. /soccer-career phone alter: all three picks registered, Brazil among them: nationality box "«Choose nationality» «Brazil»", position box "«Choose position»«Striker (ST)»", era box "«Choose era»«Current era (2025 start)»"
+  FAIL  2. /soccer-career phone alter: each pick can be READ in its box: readable: position, era; hidden: nationality
+  PASS  3. /soccer-career phone alter: the create flow reached the career: h1 "🇧🇷Joao Teste", create form gone, save Joao Teste, Brazil, youth, age 16
+  PASS  4. /soccer-career phone alter: one season forward and the hub still stands: age 16 to 17 on press 1, h1 "🇧🇷Joao Teste", phase contract_offer; the walk went on to age 18, phase random_events
+  FAIL  10. /soccer-career phone alter: the page says what React holds, at every look: 10 different stale text(s), 5 at once at most, first at "the create screen draws": React "Soccer Career: Free Football Career Simulator", the screen "Soccer Career Simulator", in h2.text-lg < div.text-center < section.max-w-2xl
+  FAIL  11. /soccer-career phone alter: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy stayed; inserted before: at the end; rewritten 16 to 17: still shows "copy of 16"
+  PASS  12. /soccer-career phone alter: no text the translator will not take again is back on the page
+  PASS  17. /soccer-career phone alter: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  FAIL  13. /soccer-career phone alter: no box holds its placeholder beside its pick: nationality: was "Choose nationality", now "Choose nationalityBrazil🇧🇷"; position: was "Choose position", now "Choose positionStriker (ST)"; era: was "Choose era", now "Choose eraCurrent era (2025 start)"
+  FAIL  14. /soccer-career phone alter: the age in the hub's line is the age in the save: 12 of 13 look(s) wrong: at "career press 1" the header said Age 16 and the save said 17
+  FAIL  18. /soccer-career phone alter: after the translator undid itself no wrapper is left and the page says what React holds, at every look: 3 different stale text(s), 3 at once at most, first at "the translator undoes itself": React "ST · Age 18 ·", the screen "ST · Age 16 ·", in p.text-xs < div.min-w-0 < div.flex
+  FAIL  19. /soccer-career phone alter: after the undo the age in the hub's line is still the age in the save, a birthday later: 5 of 8 look(s) wrong: at "the translator undoes itself" the header said Age 16 and the save said 18
+  PASS  5. /soccer-career phone alter: the walk pressed at least two controls: 27: Brazil🇧🇷 > Striker (ST) > Current era (2025 star > 🎲 Generate Starting P > 🎲 Roll again > 🎮 Customize your buil > ✅ Lock in build > ⚽ Begin Career > Next Year
+  PASS  6. /soccer-career phone alter: the route error boundary never appeared
+  PASS  7. /soccer-career phone alter: no NotFoundError
+
+/soccer-career phone keep
+  PASS  1. /soccer-career phone keep: the translator ran: 1365 text node(s) swapped, lang="pt"
+  PASS  1. /soccer-career phone keep: the guard is installed on the page
+  PASS  8. /soccer-career phone keep: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  2. /soccer-career phone keep: the create screen drew
+  PASS  2. /soccer-career phone keep: all three picks registered, Brazil among them: nationality box "Choose nationality Brazil", position box "Choose positionStriker (ST)", era box "Choose eraCurrent era (2025 start)"
+  FAIL  2. /soccer-career phone keep: each pick can be READ in its box: readable: position, era; hidden: nationality
+  PASS  3. /soccer-career phone keep: the create flow reached the career: h1 "🇧🇷Joao Teste", create form gone, save Joao Teste, Brazil, youth, age 16
+  PASS  4. /soccer-career phone keep: one season forward and the hub still stands: age 16 to 17 on press 1, h1 "🇧🇷Joao Teste", phase contract_offer; the walk went on to age 18, phase random_events
+  FAIL  10. /soccer-career phone keep: the page says what React holds, at every look: 11 different stale text(s), 5 at once at most, first at "the create screen draws": React "Soccer Career: Free Football Career Simulator", the screen "Soccer Career Simulator", in h2.text-lg < div.text-center < section.max-w-2xl
+  FAIL  11. /soccer-career phone keep: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy stayed; inserted before: at the end; rewritten 16 to 17: still shows "copy of 16"
+  PASS  12. /soccer-career phone keep: no text the translator will not take again is back on the page
+  PASS  17. /soccer-career phone keep: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  FAIL  13. /soccer-career phone keep: no box holds its placeholder beside its pick: nationality: was "Choose nationality", now "Choose nationalityBrazil🇧🇷"; position: was "Choose position", now "Choose positionStriker (ST)"; era: was "Choose era", now "Choose eraCurrent era (2025 start)"
+  FAIL  14. /soccer-career phone keep: the age in the hub's line is the age in the save: 12 of 13 look(s) wrong: at "career press 1" the header said Age 16 and the save said 17
+  FAIL  18. /soccer-career phone keep: after the translator undid itself no wrapper is left and the page says what React holds, at every look: 3 different stale text(s), 3 at once at most, first at "the translator undoes itself": React "ST · Age 18 ·", the screen "ST · Age 16 ·", in p.text-xs < div.min-w-0 < div.flex
+  FAIL  19. /soccer-career phone keep: after the undo the age in the hub's line is still the age in the save, a birthday later: 5 of 8 look(s) wrong: at "the translator undoes itself" the header said Age 16 and the save said 18
+  PASS  5. /soccer-career phone keep: the walk pressed at least two controls: 27: Brazil🇧🇷 > Striker (ST) > Current era (2025 star > 🎲 Generate Starting P > 🎲 Roll again > 🎮 Customize your buil > ✅ Lock in build > ⚽ Begin Career > Next Year
+  PASS  6. /soccer-career phone keep: the route error boundary never appeared
+  PASS  7. /soccer-career phone keep: no NotFoundError
+
+/soccer-career desktop keep
+  PASS  1. /soccer-career desktop keep: the translator ran: 1365 text node(s) swapped, lang="pt"
+  PASS  1. /soccer-career desktop keep: the guard is installed on the page
+  PASS  8. /soccer-career desktop keep: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  2. /soccer-career desktop keep: the create screen drew
+  PASS  2. /soccer-career desktop keep: all three picks registered, Brazil among them: nationality box "Choose nationality Brazil", position box "Choose positionStriker (ST)", era box "Choose eraCurrent era (2025 start)"
+  FAIL  2. /soccer-career desktop keep: each pick can be READ in its box: readable: position, era; hidden: nationality
+  PASS  3. /soccer-career desktop keep: the create flow reached the career: h1 "🇧🇷Joao Teste", create form gone, save Joao Teste, Brazil, youth, age 16
+  PASS  4. /soccer-career desktop keep: one season forward and the hub still stands: age 16 to 17 on press 1, h1 "🇧🇷Joao Teste", phase contract_offer; the walk went on to age 18, phase random_events
+  FAIL  10. /soccer-career desktop keep: the page says what React holds, at every look: 11 different stale text(s), 5 at once at most, first at "the create screen draws": React "Soccer Career: Free Football Career Simulator", the screen "Soccer Career Simulator", in h2.text-lg < div.text-center < section.max-w-2xl
+  FAIL  11. /soccer-career desktop keep: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy stayed; inserted before: at the end; rewritten 16 to 17: still shows "copy of 16"
+  PASS  12. /soccer-career desktop keep: no text the translator will not take again is back on the page
+  PASS  17. /soccer-career desktop keep: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  FAIL  13. /soccer-career desktop keep: no box holds its placeholder beside its pick: nationality: was "Choose nationality", now "Choose nationalityBrazil🇧🇷"; position: was "Choose position", now "Choose positionStriker (ST)"; era: was "Choose era", now "Choose eraCurrent era (2025 start)"
+  FAIL  14. /soccer-career desktop keep: the age in the hub's line is the age in the save: 12 of 13 look(s) wrong: at "career press 1" the header said Age 16 and the save said 17
+  FAIL  18. /soccer-career desktop keep: after the translator undid itself no wrapper is left and the page says what React holds, at every look: 3 different stale text(s), 3 at once at most, first at "the translator undoes itself": React "ST · Age 18 ·", the screen "ST · Age 16 ·", in p.text-xs < div.min-w-0 < div.flex
+  FAIL  19. /soccer-career desktop keep: after the undo the age in the hub's line is still the age in the save, a birthday later: 5 of 8 look(s) wrong: at "the translator undoes itself" the header said Age 16 and the save said 18
+  PASS  5. /soccer-career desktop keep: the walk pressed at least two controls: 27: Brazil🇧🇷 > Striker (ST) > Current era (2025 star > 🎲 Generate Starting P > 🎲 Roll again > 🎮 Customize your buil > ✅ Lock in build > ⚽ Begin Career > Next Year
+  PASS  6. /soccer-career desktop keep: the route error boundary never appeared
+  PASS  7. /soccer-career desktop keep: no NotFoundError
+
+/soccer-career desktop alter
+  PASS  1. /soccer-career desktop alter: the translator ran: 1366 text node(s) swapped, lang="pt"
+  PASS  1. /soccer-career desktop alter: the guard is installed on the page
+  PASS  8. /soccer-career desktop alter: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  2. /soccer-career desktop alter: the create screen drew
+  PASS  2. /soccer-career desktop alter: all three picks registered, Brazil among them: nationality box "«Choose nationality» «Brazil»", position box "«Choose position»«Striker (ST)»", era box "«Choose era»«Current era (2025 start)»"
+  FAIL  2. /soccer-career desktop alter: each pick can be READ in its box: readable: position, era; hidden: nationality
+  PASS  3. /soccer-career desktop alter: the create flow reached the career: h1 "🇧🇷Joao Teste", create form gone, save Joao Teste, Brazil, youth, age 16
+  PASS  4. /soccer-career desktop alter: one season forward and the hub still stands: age 16 to 17 on press 1, h1 "🇧🇷Joao Teste", phase contract_offer; the walk went on to age 18, phase random_events
+  FAIL  10. /soccer-career desktop alter: the page says what React holds, at every look: 10 different stale text(s), 5 at once at most, first at "the create screen draws": React "Soccer Career: Free Football Career Simulator", the screen "Soccer Career Simulator", in h2.text-lg < div.text-center < section.max-w-2xl
+  FAIL  11. /soccer-career desktop alter: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy stayed; inserted before: at the end; rewritten 16 to 17: still shows "copy of 16"
+  PASS  12. /soccer-career desktop alter: no text the translator will not take again is back on the page
+  PASS  17. /soccer-career desktop alter: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  FAIL  13. /soccer-career desktop alter: no box holds its placeholder beside its pick: nationality: was "Choose nationality", now "Choose nationalityBrazil🇧🇷"; position: was "Choose position", now "Choose positionStriker (ST)"; era: was "Choose era", now "Choose eraCurrent era (2025 start)"
+  FAIL  14. /soccer-career desktop alter: the age in the hub's line is the age in the save: 12 of 13 look(s) wrong: at "career press 1" the header said Age 16 and the save said 17
+  FAIL  18. /soccer-career desktop alter: after the translator undid itself no wrapper is left and the page says what React holds, at every look: 3 different stale text(s), 3 at once at most, first at "the translator undoes itself": React "ST · Age 18 ·", the screen "ST · Age 16 ·", in p.text-xs < div.min-w-0 < div.flex
+  FAIL  19. /soccer-career desktop alter: after the undo the age in the hub's line is still the age in the save, a birthday later: 5 of 8 look(s) wrong: at "the translator undoes itself" the header said Age 16 and the save said 18
+  PASS  5. /soccer-career desktop alter: the walk pressed at least two controls: 27: Brazil🇧🇷 > Striker (ST) > Current era (2025 star > 🎲 Generate Starting P > 🎲 Roll again > 🎮 Customize your buil > ✅ Lock in build > ⚽ Begin Career > Next Year
+  PASS  6. /soccer-career desktop alter: the route error boundary never appeared
+  PASS  7. /soccer-career desktop alter: no NotFoundError
+
+EVERY WALK
+  page                 view     text   boundary                          NotFound  guard line  moved nodes  stale text  steps
+  /soccer-career       phone    keep   none                              0         1           4 (4 taken)  5           30
+  /soccer-career       desktop  keep   none                              0         1           4 (4 taken)  5           30
+  /soccer-career       phone    alter  none                              0         1           4 (4 taken)  5           30
+  /soccer-career       desktop  alter  none                              0         1           4 (4 taken)  5           30
+
+BY PAGE
+  /soccer-career       broke in 0 of 4 walk(s); the guard printed its line in 4; moved nodes per walk 4, 4, 4, 4; stale text at most 5
+
+WHAT THE THREE BOXES READ after the picks
+  phone    keep   nationality "Choose nationality Brazil" (HIDDEN) | position "Choose positionStriker (ST)" (readable) | era "Choose eraCurrent era (2025 start)" (readable)
+  desktop  keep   nationality "Choose nationality Brazil" (HIDDEN) | position "Choose positionStriker (ST)" (readable) | era "Choose eraCurrent era (2025 start)" (readable)
+  phone    alter  nationality "«Choose nationality» «Brazil»" (HIDDEN) | position "«Choose position»«Striker (ST)»" (readable) | era "«Choose era»«Current era (2025 start)»" (readable)
+  desktop  alter  nationality "«Choose nationality» «Brazil»" (HIDDEN) | position "«Choose position»«Striker (ST)»" (readable) | era "«Choose era»«Current era (2025 start)»" (readable)
+
+THE CALLS THAT NAMED A MOVED NODE (4 different, each one a crash without the guard)
+  4x /soccer-career: removeChild under <span> of "Choose nationality"
+  4x /soccer-career: removeChild under <span> of "Choose position"
+  4x /soccer-career: removeChild under <span> of "Choose era"
+  4x /soccer-career: removeChild under <span> of "s"
+
+STALE TEXT: 11 different across 4 walk(s). Most on screen at once: 5 on /soccer-career phone keep.
+  4x /soccer-career: React "Soccer Career: Free Football Career Simulator" | the screen "Soccer Career Simulator" | in h2.text-lg < div.text-center < section.max-w-2xl (first at "career press 12")
+  4x /soccer-career: React "" | the screen "Choose nationality" | in span < button.flex < div.space-y-1.5 (first at "Roll again")
+  4x /soccer-career: React "" | the screen "Choose position" | in span < button.flex < div.space-y-1.5 (first at "Roll again")
+  4x /soccer-career: React "" | the screen "Choose era" | in span < button.flex < div.space-y-1.5 (first at "Roll again")
+  2x /soccer-career: React "60" | the screen "57" | in div.text-6xl < div.rounded-xl < div.bg-card (first at "Generate Starting Potential")
+  4x /soccer-career: React "60" | the screen "65" | in div.text-6xl < div.rounded-xl < div.bg-card (first at "Roll again")
+  4x /soccer-career: React "ST · Age 17 ·" | the screen "ST · Age 16 ·" | in p.text-xs < div.min-w-0 < div.flex (first at "career press 3")
+  4x /soccer-career: React "ST · Age 18 ·" | the screen "ST · Age 16 ·" | in p.text-xs < div.min-w-0 < div.flex (first at "career press 12")
+  4x /soccer-career: React "🏠 Life Event · 3 events remaining" | the screen "🏠 Life Event · 4 events remaining" | in span.text-[10px] < div.text-center < div.rounded-xl (first at "career press 10")
+  4x /soccer-career: React "⚡ Positive Event · 2 events remaining" | the screen "🏠 Life Event · 4 events remaining" | in span.text-[10px] < div.text-center < div.rounded-xl (first at "career press 11")
+  4x /soccer-career: React "🏠 Life Event · 1 event remaining" | the screen "🏠 Life Event · 4 events remaining" | in span.text-[10px] < div.text-center < div.rounded-xl (first at "career press 12")
+
+THE UNDO on 4 create walk(s): the translator gave back 309, 309, 309, 309 node(s); then 7, 7, 7, 7 press(es) and 8, 8, 8, 8 look(s); stale text at most 3, 3, 3, 3; the age line wrong at 5 of 8, 5 of 8, 5 of 8, 5 of 8 look(s), 3, 3, 3, 3 of them after a birthday that came after the undo.
+  after the undo: React "ST · Age 18 ·" | the screen "ST · Age 16 ·" | in p.text-xs < div.min-w-0 < div.flex (first at "after the undo, press 4")
+  after the undo: React "🏠 Life Event · 1 event remaining" | the screen "🏠 Life Event · 4 events remaining" | in span.text-[10px] < div.text-center < div.rounded-xl (first at "the translator undoes itself")
+  after the undo: React "Soccer Career: Free Football Career Simulator" | the screen "Soccer Career Simulator" | in h2.text-lg < div.text-center < section.max-w-2xl (first at "after the undo, press 7")
+
+A COPY LEFT in an element whose own strings have all gone: in 4 walk(s), 3 at once at most (counted in the stale text above).
+
+nothing left this machine: 16 request(s) to the database host aborted, other hosts aborted [fonts.googleapis.com], 16 screenshot(s) in /home/runner/work/_temp/rc-out/files/translated-nospans
+16 call(s) in all named a node its parent no longer owned, each one a crash without the guard. Layer one had to fall back, and printed its line, on 4 of 4 page load(s).
+
+79 checks, 28 failed
+control "nospans": three placeholders served bare on 4 create walk(s); a placeholder beside its pick in 4 of them, check 13 red 4 time(s).
+control "nospans": the page stood and check 13 went red on every create walk. RED on purpose, the check works.
+playTranslatedPage: 79 checks, 28 failed (control "nospans", red on purpose)
