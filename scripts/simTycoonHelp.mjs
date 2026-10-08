@@ -38,6 +38,25 @@
  *      typedscreen the away card says "half speed" again                 red M2
  *      typedblurb Boardroom Sway's blurb says 12% while the engine pays 10%  red L1
  *
+ * Release AL: the ticket offers (Round 1080). The guide's two paragraphs about
+ * them and the rules modal's one are claimed like everything else, with one
+ * difference: a ticket claim types no expected number of its own. ticketFacts
+ * measures the three offers through the engine (attendance, incomePerSec and
+ * fanGrowthPerSec, on clubs that differ only in the offer), and each claim
+ * requires the numbers its own phrase prints, in reading order, to be the
+ * measured ones. So a rate changed in TICKET_POLICIES turns the guide's
+ * sentence red in G2 until the words follow it. Their controls, each a copy
+ * of the guide or the engine with one thing changed; an engine fault must turn
+ * exactly the ticket claims listed for it red, and no other claim:
+ *      ticketcopy    the guide says Community takes 16 percent              red G1, G3
+ *      ticketturnout Premium draws half the supporters, not three quarters  red G2
+ *      ticketwhole   Community stops drawing the whole fanbase              red G2
+ *      ticketgate    Premium takes money off the gate instead of adding it  red G2
+ *      ticketcut     Community takes 20 percent off the gate                red G2
+ *      ticketgrowth  Community grows the supporters 40 percent faster       red G2
+ *      ticketslow    Premium grows the supporters 40 percent slower         red G2
+ *      ticketstalls  the offer's rate reaches the snacks and the shop too   red G2
+ *
  * Control copies go to dist/.tycoon-help-control-<name>/. Never run this while a
  * build is running.
  *
@@ -336,6 +355,84 @@ function kickClaims(T, m) {
   return Object.fromEntries(['offer', 'award', 'example'].map(key => [key, cases.map(result => result[key]).filter(Boolean).join('; ')]));
 }
 
+/* ---- Release AL: the ticket offers (Round 1080) ---- */
+
+/** The words that state a ticket rate or rule: five in the guide, one in the rules modal. */
+const TICKET_WORDS = {
+  share: 'On Standard and Community that is your whole fanbase, and on Premium it is 75 percent of it',
+  community: 'Community takes 15 percent off the gate money each fan pays and grows your supporters 50 percent faster',
+  premium: 'Premium adds 25 percent to the gate money each fan pays, draws 75 percent of your supporters and grows them 25 percent slower',
+  own: 'Snacks, the shop, parking and the payroll keep their own rates',
+  example: 'A new 120 seat ground with 90 supporters draws 67 on Premium and earns less than Standard, and Premium earns more once 75 percent of your supporters still fill the ground',
+  modal: 'so Premium pays less there, and it pays more once',
+};
+
+/** What the three offers do, measured through the engine's public functions on clubs
+ *  that differ only in the offer. Nothing here is read off TICKET_POLICIES and nothing
+ *  is compared with a typed rate: the claims compare it with their own words. */
+function ticketFacts(T, m) {
+  const OFFERS = ['standard', 'community', 'premium'];
+  const on = (s, id) => T.setTicketPolicy(s, id);
+  const each = f => Object.fromEntries(OFFERS.map(id => [id, f(id)]));
+  const income = (club, id) => T.incomePerSec(on(club, id));
+  /* 400 supporters in 1,000 seats, so the seat cap is out of the way. Three clubs that
+     differ only in what earns: the gate alone, then snacks and the shop on top of it,
+     then parking and a payroll on top of that. Each difference is one income line. */
+  const gateOnly = { ...m.fresh, fanbase: 400, streak: 3, levels: { ...m.fresh.levels, stands: 22, tickets: 3, lights: 2, academy: 1 } };
+  const withStalls = { ...gateOnly, levels: { ...gateOnly.levels, snacks: 2, shop: 1 } };
+  const withAll = { ...withStalls, levels: { ...withStalls.levels, parking: 2 }, staffLevels: { [T.STAFF[0].id]: 2 } };
+  const crowd = each(id => T.attendance(on(withAll, id)));
+  const gate = each(id => income(gateOnly, id) / crowd[id]);
+  const stalls = each(id => (income(withStalls, id) - income(gateOnly, id)) / crowd[id]);
+  const rest = each(id => income(withAll, id) - income(withStalls, id));
+  const growth = each(id => T.fanGrowthPerSec(on(withAll, id)));
+  const turnout = each(id => (crowd[id] / withAll.fanbase) * 100);
+  const packed = { ...withAll, fanbase: T.capacity(withAll) * 5 };
+  /* The worked example's ground, and the fanbase at which Premium first fills it
+     (the engine's own attendance decides "fills"), with five fanbases from there up. */
+  const seats = T.capacity(m.fresh);
+  const premiumCrowdAt = fans => T.attendance(on({ ...m.fresh, fanbase: fans }, 'premium'));
+  let firstFull = seats;
+  while (firstFull <= seats * 4 && premiumCrowdAt(firstFull) < seats) firstFull += 1;
+  const full = firstFull > seats * 4 ? [] : [0, 1, 7, 40, 400].map(more => ({ ...m.fresh, fanbase: firstFull + more }));
+  return {
+    turnout,
+    capped: OFFERS.every(id => T.attendance(on(packed, id)) === T.capacity(packed)),
+    gateChange: each(id => (gate[id] / gate.standard - 1) * 100),
+    growthChange: each(id => (growth[id] / growth.standard - 1) * 100),
+    stalls, rest,
+    ownRates: stalls.standard > 0 && rest.standard > 0 && OFFERS.every(id => near(stalls[id], stalls.standard) && near(rest[id], rest.standard)),
+    seats,
+    supporters: m.fresh.fanbase,
+    premiumCrowd: T.attendance(on(m.fresh, 'premium')),
+    lessThere: income(m.fresh, 'premium') < income(m.fresh, 'standard'),
+    firstFull,
+    /* Premium first fills the ground where its measured share of the fanbase reaches the seats, not one supporter sooner. */
+    fullAtShare: full.length > 0 && (firstFull * turnout.premium) / 100 >= seats - 1e-9 && ((firstFull - 1) * turnout.premium) / 100 < seats,
+    moreOnceFull: full.length > 0 && income(packed, 'premium') > income(packed, 'standard')
+      && full.every(club => income(club, 'premium') > income(club, 'standard')),
+  };
+}
+
+/** The numbers a phrase prints, in reading order. */
+const printed = phrase => [...phrase.matchAll(/\d+(?:\.\d+)?/g)].map(hit => Number(hit[0]));
+
+/** A ticket claim. `read` turns the measurement into the numbers the phrase must print,
+ *  in order, and a rule that must hold beside them (its text is the reading when it fails). */
+function ticketClaim(where, key, read, source) {
+  const phrase = TICKET_WORDS[key];
+  return {
+    where, phrase, ...(source ? { source } : {}),
+    check: (T, m) => {
+      const { numbers = [], broken = '' } = read(ticketFacts(T, m));
+      const says = printed(phrase);
+      const same = says.length === numbers.length && numbers.every((value, i) => near(value, says[i], 1e-6));
+      return same ? broken : `the engine measures ${numbers.map(value => Number(value.toFixed(4))).join(', ')} where the words print ${says.join(', ')}`;
+    },
+  };
+}
+const ticketExample = f => (f.lessThere && f.fullAtShare && f.moreOnceFull ? '' : `on the new ground Premium ${f.lessThere ? 'earns less than' : 'does not earn less than'} Standard; Premium first fills it at ${f.firstFull} supporters, which ${f.fullAtShare ? 'is' : 'is not'} where its share reaches the seats; from there up Premium ${f.moreOnceFull ? 'earns more' : 'does not always earn more'}`);
+
 /** Each row: the exact phrase in the guide (or the modal text), and what the
  *  engine must say for it to be true. A check returns '' when the claim holds,
  *  or the engine's answer when it does not. */
@@ -565,7 +662,20 @@ const CLAIMS = [
     },
   },
 
+  /* ---- Release AL: the ticket offers (Round 1080). The numbers are in the words only. ---- */
+  ticketClaim('stadium', 'share', f => ({
+    numbers: [f.turnout.premium],
+    broken: f.turnout.standard === 100 && f.turnout.community === 100 && f.capped ? '' : `Standard draws ${f.turnout.standard} percent of the fanbase and Community ${f.turnout.community}, and a packed ground ${f.capped ? 'stops' : 'does not stop'} at its seats`,
+  })),
+  ticketClaim('stadium', 'community', f => ({ numbers: [-f.gateChange.community, f.growthChange.community] })),
+  ticketClaim('stadium', 'premium', f => ({ numbers: [f.gateChange.premium, f.turnout.premium, -f.growthChange.premium] })),
+  ticketClaim('stadium', 'own', f => ({
+    broken: f.ownRates ? '' : `per fan the snacks and the shop pay ${JSON.stringify(f.stalls)}, and parking with the payroll pays ${JSON.stringify(f.rest)}`,
+  })),
+  ticketClaim('stadium', 'example', f => ({ numbers: [f.seats, f.supporters, f.premiumCrowd, f.turnout.premium], broken: ticketExample(f) })),
+
   /* ---- the rules modal's own words (its numbers are computed) ---- */
+  ticketClaim('modal', 'modal', f => ({ broken: ticketExample(f) }), [PAGE, 'draws {h.freshPremiumCrowd} on Premium, so Premium pays less there, and it pays more once {h.ticketPremiumDemand}% of your supporters still fill the ground.']),
   {
     where: 'modal', phrase: 'A penalty or free-kick offer appears once per watched match.',
     check: (T, m) => kickClaims(T, m).offer,
@@ -863,6 +973,26 @@ function changedKickEngine(T, name, replacement, probe) {
   if (JSON.stringify(probe(changed)) === JSON.stringify(probe(T))) abort(`  control: ${name} did not change its measured kick outcome`);
   return changed;
 }
+/* Release AL: a ticket fault is the engine's own source with one thing in one line
+   changed, bundled the way the real engine is. `claims` names the ticket claims that
+   fault must turn red in G2; the loop below refuses any other red claim beside them. */
+const COMMUNITY_ROW = "{ id: 'community', label: 'Community', gate: 0.85, demand: 1, growth: 1.5 }";
+const PREMIUM_ROW = "{ id: 'premium', label: 'Premium', gate: 1.25, demand: 0.75, growth: 0.75 }";
+const OFFER_RATE_LINE = '  return (0.05 + tk * 0.011) * ticketTerms(s).gate + sn * 0.009 + sh * 0.016;';
+const ticketFault = (name, why, line, from, to, claims) => ({
+  name, why, claims,
+  red: ['G2'], green: ['G1', 'G3', 'M1', 'M2', 'L1'],
+  engine: async () => {
+    const dir = path.join(ROOT, 'dist', `.tycoon-help-control-${name}`);
+    controlDirs.push(dir);
+    fs.mkdirSync(dir, { recursive: true });
+    const file = path.join(dir, 'stadiumTycoon.ts');
+    fs.writeFileSync(file, mustReplace(read(LIB), line, mustReplace(line, from, to, `control ${name}'s own line`), 'stadiumTycoon.ts'));
+    const lib = await bundle(file, `${name}-control`);
+    fs.rmSync(dir, { recursive: true, force: true });
+    return lib;
+  },
+});
 const CLAIM_CONTROLS = [
   {
     name: 'kickcopy', why: 'the new kick instructions promise twenty seconds instead of twelve',
@@ -972,6 +1102,18 @@ const CLAIM_CONTROLS = [
     red: ['L1'], green: ['G1', 'G2', 'G3', 'M1', 'M2'],
     lib: t => ({ ...t, LEGACY_PERKS: t.LEGACY_PERKS.map(p => (p.id === 'sway' ? { ...p, blurb: p.blurb.replace('10%', '12%') } : p)) }),
   },
+  {
+    name: 'ticketcopy', why: 'the guide says Community takes 16 percent off the gate while the engine takes 15',
+    red: ['G1', 'G3'], green: ['G2', 'M1', 'M2', 'L1'],
+    guides: g => { g['/stadium-tycoon'] = JSON.parse(mustReplace(JSON.stringify(g['/stadium-tycoon']), 'Community takes 15 percent', 'Community takes 16 percent', 'the stadium guide')); },
+  },
+  ticketFault('ticketturnout', 'the engine\'s Premium draws half the supporters instead of three quarters', PREMIUM_ROW, 'demand: 0.75', 'demand: 0.5', ['share', 'premium', 'example']),
+  ticketFault('ticketwhole', 'the engine\'s Community stops drawing the whole fanbase', COMMUNITY_ROW, 'demand: 1,', 'demand: 0.9,', ['share']),
+  ticketFault('ticketgate', 'the engine\'s Premium takes money off the gate instead of adding it', PREMIUM_ROW, 'gate: 1.25', 'gate: 0.95', ['premium', 'example', 'modal']),
+  ticketFault('ticketcut', 'the engine\'s Community takes 20 percent off the gate', COMMUNITY_ROW, 'gate: 0.85', 'gate: 0.8', ['community']),
+  ticketFault('ticketgrowth', 'the engine\'s Community grows the supporters 40 percent faster', COMMUNITY_ROW, 'growth: 1.5', 'growth: 1.4', ['community']),
+  ticketFault('ticketslow', 'the engine\'s Premium grows the supporters 40 percent slower', PREMIUM_ROW, 'growth: 0.75', 'growth: 0.6', ['premium']),
+  ticketFault('ticketstalls', 'the engine\'s offer rate reaches the snacks and the shop as well as the gate', OFFER_RATE_LINE, '(0.05 + tk * 0.011) * ticketTerms(s).gate + sn * 0.009 + sh * 0.016', '(0.05 + tk * 0.011 + sn * 0.009 + sh * 0.016) * ticketTerms(s).gate', ['own']),
 ];
 for (const control of CLAIM_CONTROLS) {
   console.log('');
@@ -984,6 +1126,13 @@ for (const control of CLAIM_CONTROLS) {
   report(result);
   for (const s of control.red) if (result[s].length === 0) fail(`control ${control.name}: ${s} stayed green, so that check is dead`);
   for (const s of control.green) if (result[s].length > 0) fail(`control ${control.name}: ${s} went red too (${result[s][0]})`);
+  if (control.claims) {
+    /* A ticket fault must turn exactly its own claims red: a G2 reading is '"phrase": what the engine measures'. */
+    for (const msg of result.G2) console.log(`         measured: ${msg}`);
+    const got = [...new Set(result.G2.map(msg => msg.slice(1, msg.indexOf('": '))))].sort();
+    const want = control.claims.map(key => TICKET_WORDS[key]).sort();
+    if (got.join('\n') !== want.join('\n')) fail(`control ${control.name}: the fault turned these claims red: ${got.map(p => `"${p.slice(0, 48)}"`).join(', ') || 'none'}; it should turn exactly these red: ${want.map(p => `"${p.slice(0, 48)}"`).join(', ')}`);
+  }
 }
 
 console.log('');
