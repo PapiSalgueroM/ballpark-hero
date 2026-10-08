@@ -1,3 +1,13 @@
+## Round 1098 preparation: grouped contract wages in browser assertions, October 8
+
+Fresh main cd496098 is the base. Exactly three visible wage expectations in
+playSoccerOfferReview1082 now group actual numeric values with independent
+en-US formatting. Numeric attributes, product source and all other predicates
+are unchanged. Claude identified the stale expectations after Release AL.
+Actual remote helper/browser/type/build/reader and closing holds are pending.
+The existing remote checker kit is being used, with a fresh request name and
+strict actual report acceptance. No local execution or READY claim.
+
 ## Release AL LIVE, 2026-10-08 05:38 EDT: ten Codex rounds, playable moments, and a translated page no longer crashes
 
 Claude lane (session F: session E died when the PC was restarted at 00:03 EDT with this release's gate running).

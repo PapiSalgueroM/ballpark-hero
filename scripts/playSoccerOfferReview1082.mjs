@@ -226,14 +226,14 @@ async function readTerms(page) {
 }
 function checkTerms(terms, before, fixture, signed) {
   assert.equal(terms.club.text, fixture.offer.club.name, 'Review identifies the actual offered club');
-  assert.equal(terms.signed.text, `€${signed.weeklyWage}/wk`, 'Visible signed wage equals the actual acceptance outcome');
+  assert.equal(terms.signed.text, `€${signed.weeklyWage.toLocaleString('en-US')}/wk`, 'Visible signed wage equals the actual acceptance outcome');
   assert.equal(Number(terms.signed.value), signed.weeklyWage);
   assert.equal(terms.years.text, `${signed.contractYearsLeft}-year contract`, 'Visible years equal actual acceptance');
   if (fixture.comparison === 'current') {
     const delta = signed.weeklyWage - before.weeklyWage;
-    assert.equal(terms.currentWage.text, `€${before.weeklyWage}/wk`);
+    assert.equal(terms.currentWage.text, `€${before.weeklyWage.toLocaleString('en-US')}/wk`);
     assert(terms.current.text.includes(before.loan?.parentClub ?? before.currentClub));
-    assert.equal(terms.delta.text, delta === 0 ? 'Same weekly wage as your current deal.' : `€${Math.abs(delta)}/wk ${delta > 0 ? 'more' : 'less'} than your current deal.`);
+    assert.equal(terms.delta.text, delta === 0 ? 'Same weekly wage as your current deal.' : `€${Math.abs(delta).toLocaleString('en-US')}/wk ${delta > 0 ? 'more' : 'less'} than your current deal.`);
     assert.equal(Number(terms.delta.value), delta);
   } else {
     assert.equal(terms.currentWage, null, 'No stale current wage is presented as an available deal');
