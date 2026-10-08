@@ -1,0 +1,1 @@
+academy-1162 exit=0 254s | Club Manager academy1162 strict label: failed=0, complete=1, source=9a5438d8a30ae795d45a8a19d11cf0e8644426f5, request=09f17ad98d8199f32b0ef4d9781905e5dceb2d4d.

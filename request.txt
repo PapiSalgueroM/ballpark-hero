@@ -1,0 +1,2 @@
+#!serial
+academy-1162: bash .rc/x/cm-academy-action-names-1162.sh
