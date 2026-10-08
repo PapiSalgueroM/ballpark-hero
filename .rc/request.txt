@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+#!serial
+# Release AL close, job 3: the other lane's two remote only browser proofs, each with the setup its own workflow gives it.
+# cm-quick-subs.yml: fonts prefetched by freeKickLab1070, then the proof with the offline transport required.
+quicksubs: export SIM_NETWORK=offline ENGINES=chromium FREE_KICK_FONT_CACHE=cm-quick-subs-artifacts/font-cache; mkdir -p cm-quick-subs-artifacts && node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmQuickSubs.mjs
+# soccer-offer-review.yml: fonts and flags cached by soccerOfferAssets1082, then the proof with the offline transport required.
+offerreview: export TZ=UTC SIM_NETWORK=offline ENGINES=chromium; mkdir -p soccer-offer-review-artifacts && export SIM_OFFLINE_RECEIPT=soccer-offer-review-artifacts/transport.log && node scripts/qa/soccerOfferAssets1082.mjs && SOCCER_OFFER_REVIEW_ASSET_CACHE="$PWD/soccer-offer-review-artifacts/font-cache/manifest.json" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerOfferReview1082.mjs
+# Diagnostic only: the same proof from a throwaway copy whose three visible wage expectations follow the page's grouping, to see what is behind the first assertion.
+offerreview-grouped: export TZ=UTC SIM_NETWORK=offline ENGINES=chromium; export SIM_OFFLINE_RECEIPT=soccer-offer-review-artifacts/transport-grouped.log && node .rc/x/groupwages.mjs && SOCCER_OFFER_REVIEW_ASSET_CACHE="$PWD/soccer-offer-review-artifacts/font-cache/manifest.json" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerOfferReview1082.grouped.mjs
