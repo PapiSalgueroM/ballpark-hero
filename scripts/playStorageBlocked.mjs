@@ -74,9 +74,9 @@
  *   The presses, identical in every arm: four on /soccer-career (nationality,
  *   position, era, surprise me), /club-manager, /nfl-my-career, /front-office
  *   and /build-your-xi, four with three that change the page on
- *   /nba-my-career, four with two on /stadium-tycoon, two with one on
- *   /free-kick, and one on /footle and /college-grid, whose next move is
- *   typing a name.
+ *   /nba-my-career, four with two or three on /stadium-tycoon (an idle game,
+ *   the page moves on its own), two with one on /free-kick, and one on
+ *   /footle and /college-grid, whose next move is typing a name.
  *
  * CONTROLS.
  *   PLAY_STORAGE_CONTROL=raw   sets window.__DUKB_RAW_STORAGE__ before the app
