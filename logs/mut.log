@@ -1,0 +1,14 @@
+MUT handle-minted-every-call: vitest exit=1 CAUGHT |  ❯ src/test/guestHandleVisit.test.tsx (6 tests | 2 failed) 242ms |  Test Files  1 failed (1) |       Tests  2 failed | 4 passed (6)
+MUT new-build-reload-guard-gone: vitest exit=1 CAUGHT |  ❯ src/test/freshBuildBlockedStorage.test.ts (7 tests | 1 failed) 98ms |  Test Files  1 failed (1) |       Tests  1 failed | 6 passed (7)
+MUT stale-chunk-reload-guard-gone: vitest exit=1 CAUGHT |  ❯ src/test/freshBuildBlockedStorage.test.ts (7 tests | 1 failed) 96ms |  Test Files  1 failed (1) |       Tests  1 failed | 6 passed (7)
+MUT ad-slot-reads-bare-storage: vitest exit=1 CAUGHT |  ❯ src/test/cookieConsentStorage.test.tsx (11 tests | 1 failed) 245ms |  Test Files  1 failed (1) |       Tests  1 failed | 10 passed (11)
+MUT banner-writes-bare-storage: vitest exit=1 CAUGHT |  ❯ src/test/cookieConsentStorage.test.tsx (11 tests | 4 failed) 244ms |  Test Files  1 failed (1) |       Tests  4 failed | 7 passed (11)
+MUT vote-sent-without-a-marker: vitest exit=1 CAUGHT |  ❯ src/test/hofOrBustVoteOnce.test.tsx (4 tests | 1 failed) 119ms |  Test Files  1 failed (1) |       Tests  1 failed | 3 passed (4)
+MUT seam-writes-as-it-loads: vitest exit=1 CAUGHT |  ❯ src/test/safeStorage.test.ts (27 tests | 6 failed) 55ms |  Test Files  1 failed (1) |       Tests  6 failed | 21 passed (27)
+MUT seam-writes-as-it-loads (client pin): vitest exit=1 CAUGHT |  ❯ src/test/supabaseClientBlockedStorage.test.ts (6 tests | 2 failed) 75ms |  Test Files  1 failed (1) |       Tests  2 failed | 4 passed (6)
+MUT refused-seam-write-not-heard: vitest exit=1 CAUGHT |  ❯ src/test/safeStorage.test.ts (27 tests | 1 failed) 49ms |  Test Files  1 failed (1) |       Tests  1 failed | 26 passed (27)
+MUT refused-safeSetItem-not-heard: vitest exit=1 CAUGHT |  ❯ src/test/safeStorage.test.ts (27 tests | 1 failed) 51ms |  Test Files  1 failed (1) |       Tests  1 failed | 26 passed (27)
+MUT unlisted-games-dropped: vitest exit=1 CAUGHT |  ❯ src/test/storageBlockedBoot.test.tsx (20 tests | 5 failed) 311ms |  Test Files  1 failed (1) |       Tests  5 failed | 15 passed (20)
+MUT notice-never-probes: vitest exit=1 CAUGHT |  ❯ src/test/storageBlockedBoot.test.tsx (20 tests | 10 failed) 286ms |  Test Files  1 failed (1) |       Tests  10 failed | 10 passed (20)
+
+mutations: 12 of 12 caught

@@ -1,0 +1,14 @@
+HMUT old-guest-handle (the render loop): exit=1 CAUGHT | playStorageBlocked: 73 checks, 3 failed | 3 aimed FAIL of 3
+     FAIL  /soccer-career phone FULL leaving: 7934 writes refused in one idle second (ceiling 50)
+     FAIL  /footle phone FULL leaving: the link was pressed, the next page NEVER DREW in 10000 ms (address /whats-new, heading still "FOOTLE") (untouched 110 ms)
+     FAIL  /footle phone FULL leaving: 7655 writes refused in one idle second (ceiling 50)
+HMUT ad-slot-reads-bare-storage: exit=1 CAUGHT | playStorageBlocked: 36 checks, 1 failed | 1 aimed FAIL of 1
+     FAIL  cookie banner FULL "Accept": the answer held, /footle mounted its ad slot (false) and asked for the ad script 0 time(s)
+HMUT vote-sent-without-a-marker: exit=1 CAUGHT | playStorageBlocked: 38 checks, 1 failed | 1 aimed FAIL of 1
+     FAIL  /hof-or-bust phone FULL played: 2 community votes sent for 2 votes cast (a vote nothing remembers is not sent)
+HMUT long-notice-on-a-phone: exit=1 CAUGHT | playStorageBlocked: 45 checks, 3 failed | 3 aimed FAIL of 3
+     FAIL  /soccer-career 320 wide BLOCKED: the notice is one line tall, 48px (ceiling 30): "This browser blocks storage, so progress won't be saved."
+     FAIL  /soccer-career 344 wide BLOCKED: the notice is one line tall, 48px (ceiling 30): "This browser blocks storage, so progress won't be saved."
+     FAIL  /soccer-career 360 wide BLOCKED: the notice is one line tall, 48px (ceiling 30): "This browser blocks storage, so progress won't be saved."
+
+browser mutations: 4 of 4 caught
