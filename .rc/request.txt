@@ -1,0 +1,5 @@
+#!serial
+genPool: node scripts/genCareerClubPool.mjs > /dev/null 2>&1; a=$?; git diff --stat -- src/data/soccerCareerClubPool.ts | tail -1; git diff --quiet -- src/data/soccerCareerClubPool.ts; b=$?; git checkout -q -- src; echo "genPool gen=$a poolFileChanged=$b"
+genKeywords: node scripts/genSearchKeywords.mjs > /dev/null 2>&1; a=$?; git diff --numstat -- src/data/searchKeywords.json; git diff --quiet -- src/data/searchKeywords.json; b=$?; git checkout -q -- src; echo "genKeywords gen=$a keywordsChanged=$b"
+genDailyCheck: node scripts/genDailyClubPool.mjs --check
+genSeasonsCheck: node scripts/genCareerLeagueSeasons.mjs --check
