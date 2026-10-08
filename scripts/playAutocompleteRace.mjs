@@ -51,8 +51,29 @@
  *       race came back on every page and width at or above FLOOR. The side
  *       build takes minutes.
  *
- * MEASURED ON MAIN (6f57ce78, before the fix), stale picks of 34 per page and width:
- *   (written by the build step that measured them, see MEASURED below)
+ * MEASURED ON MAIN (a real build of 6f57ce78, the box before the fix, walked
+ * with RACE_EXPECT=stale on a GitHub runner, Linux Chromium, 2026-10-08).
+ * Stale picks of 34 trials per page and width:
+ *   seed 1138, 390 and 1280:  /build-your-xi 34 and 34, /football-connect-4
+ *                             34 and 34, /missing-xi 34 and 34 (204 of 204);
+ *                             target leg 20 of 20
+ *   seed 2138, 390 only:      34, 34, 34 (102 of 102); target leg 10 of 10
+ *   seed 3138, 390 only:      34, 34, 34 (102 of 102); target leg 10 of 10
+ * (Seeds 2138 and 3138 were walked at the phone width only: on main every
+ * trial ends in a landed pick and a page reload.) It is every trial, not a
+ * rate, because the hold keeps the second search unanswered for as long as
+ * the walk likes, and on main the last list stays painted until that answer
+ * lands. The seeded offset only moves the tap inside a window that is all
+ * stale. So the lowest count measured is 34 and the notag control's floor is
+ * 17 on every page and width. The target leg stays: on main the list outlived
+ * a change of square 20 times of 20.
+ * AFTER THE FIX, same runner, seeds 1138, 2138 and 3138: 204 taps, 0 stale
+ * names offered, 0 stale picks, 6 of 6 current picks landed, target leg 0 of
+ * 20, on each seed.
+ *
+ * A first visit to /missing-xi opens its rules in a dialog, and a dialog traps
+ * focus; focus leaving the box drops its list since this round. The walk marks
+ * the rules as read (rules-gate-seen), as a player who closed them has.
  *
  * Run after npm run build. ENGINES is not read: chromium only.
  */
@@ -101,7 +122,7 @@ const ROWS = [row(A, 2000000), row(B, 1000000)];
 /* MEASURED: the lowest stale pick count of any page at any width over the
    measurement runs on main, and the floor the notag control must reach on
    every page and width (half of it, rounded up). */
-const MEASURED_LOWEST = 0;
+const MEASURED_LOWEST = 34; // of 34, on every page, width and seed: see the header
 const FLOOR = Math.ceil(MEASURED_LOWEST / 2);
 
 function mulberry32(seed) {
