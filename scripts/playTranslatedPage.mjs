@@ -390,9 +390,17 @@
  *                to 120 of 120 samples 100 ms apart over four runs (the first
  *                language shows for a tenth of a second or two after a tick),
  *                eight such lines together at 101 to 120, at one request a tick.
- *   COST         not measured again as a whole before this was written: on a
- *                page nobody translated the fix round added one look at each
- *                node a batch of changes brought in, and no timer is ever set.
+ *   COST         again after the fix round, one runner, the middle of three runs,
+ *                both layers / layer one only / no guard. On a page nobody
+ *                translated the fix round added one look at each node a batch
+ *                of changes brought in, and no timer is ever set. The create
+ *                walk and 12 presses: script 0.77 / 0.76 / 0.76 s, tasks 2.05
+ *                / 2.04 / 2.05 s. A season week by week: script 0.27 / 0.27 /
+ *                0.27 s, tasks 1.44 / 1.45 / 1.46 s. The calls alone: 100,000
+ *                rewrites 90 / 81 / 82 ms; 20,000 inserts and removals of an
+ *                element 87 / 61 / 59 ms and of a text node 88 / 66 / 51 ms
+ *                (under two millionths of a second a pair). Still nothing the
+ *                real page can tell from noise.
  *
  * Run: npm run build, then ENGINES=chromium node scripts/playTranslatedPage.mjs
  * (Chromium only: it is where page translation lives). BASE names the server,
