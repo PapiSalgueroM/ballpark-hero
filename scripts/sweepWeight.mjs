@@ -172,6 +172,10 @@
  *
  * /club-manager's budget comes down to 564; the three other manager routes get
  * rows of their own (measured plus 3K), so none of it can be given back quietly.
+ * Measured again on the round's last tree, the branch merged with
+ * release-al-int at 8fe82a4d (faaf358a): the five figures above the same to
+ * the tenth, so the budgets stand. The release gate measures the release
+ * build once more, and the ceilings follow that figure.
  *
  * Run: npm run build && npx serve -s dist -l 4173, then
  *      ENGINES=chromium node scripts/sweepWeight.mjs
