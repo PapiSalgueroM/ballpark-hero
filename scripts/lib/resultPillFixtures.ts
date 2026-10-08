@@ -131,7 +131,7 @@ export function pillCases(): PillCase[] {
     ['a duel tied to the last extra round', faceOff('versus', 'pro', DUEL_MAX)],
     [`a full speed win over ${rivalFor('legend').label}`, faceOff('unlimited', 'legend', LEGEND_CLOSE)],
     [`shut out by ${rivalFor('rookie').label}`, faceOff('unlimited', 'rookie', ROOKIE_ROUT)],
-  ] as const) out.push({ route: '/face-off', what, fix: { faceOff: f }, expect: `${f.totals.you} to ${f.totals.rival}` });
+  ] as const) out.push({ route: '/face-off', what, fix: { faceOff: f }, expect: `${formatNumber(f.totals.you)} to ${formatNumber(f.totals.rival)}` });
   for (const right of [10, 0]) {
     out.push({ route: '/champ-or-not', what: `${right} right`, fix: { champ: champ(right) }, expect: `${right}/10` });
     out.push({ route: '/whod-they-beat', what: `${right} right`, fix: { whod: whod(right) }, expect: `${right}/10` });

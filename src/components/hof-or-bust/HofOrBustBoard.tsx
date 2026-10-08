@@ -5,6 +5,7 @@ import ReportQuestion from '@/components/game/ReportQuestion';
 import { Eye, RotateCcw, Trophy, Skull } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { hallStatusLine } from '@/lib/hofHall';
+import { formatNumber } from '@/lib/formatNumber';
 
 const SPORT_EMOJI: Record<string, string> = {
   soccer: '⚽', nfl: '🏈', nba: '🏀', baseball: '⚾', hockey: '🏒',
@@ -138,7 +139,7 @@ export function HofOrBustBoard() {
               </>
             }
             funFact={player.funFact}
-            statRow={[{ label: 'Score', value: `${score} pts` }]}
+            statRow={[{ label: 'Score', value: `${formatNumber(score)} pts` }]}
             emojiGrid={emojiResult}
             share={{
               score: shareScore,

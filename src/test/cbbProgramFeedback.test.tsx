@@ -48,11 +48,11 @@ describe('actual CBB program committed feedback', () => {
   it('never calls a committed first-clue win wrong at the old delayed boundary', async () => {
     const view = await mount(); await start(view, true); correct(view);
     tick(50); expect(view.queryByText('Wrong guess! Try again...')).toBeNull();
-    expect(view.getByText('1000 pts')).toBeVisible(); expect(cue(view)).toHaveAttribute('data-cbb-program-feedback', 'correct');
+    expect(view.getByText('1,000 pts')).toBeVisible(); expect(cue(view)).toHaveAttribute('data-cbb-program-feedback', 'correct');
     expect(result(view)).toHaveAttribute('data-cbb-program-result', 'won'); expect(result(view)).toHaveClass(styles.won);
     expect(cue(view)).toHaveTextContent('Correct guess. Program found.');
     expect(saved()).toEqual(exactSaved(1, ['Fixture School'], 'won', 1000)); expect(recordCompletion).toHaveBeenCalledExactlyOnceWith('/guess-cbb-team', 1000, 'FixtureBaller', 0);
-    tick(550); expect(cue(view)).toBeNull(); expect(result(view)).toBeNull(); expect(view.getByText('1000 pts')).toBeVisible();
+    tick(550); expect(cue(view)).toBeNull(); expect(result(view)).toBeNull(); expect(view.getByText('1,000 pts')).toBeVisible();
   });
 
   it('cues each actual repeated wrong append while preserving stable clues and the 600 win', async () => {

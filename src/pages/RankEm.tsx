@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils';
 import { Trophy, ArrowDown, RotateCcw } from 'lucide-react';
 import styles from './RankEmOrder.module.css';
 import { advanceCircuit, CIRCUIT_SPORTS, circuitRound, circuitScore, createCircuit, editCircuit, loadCircuit, lockCircuit, saveCircuit, startCircuit, type CircuitState } from '@/lib/rankEmCircuit';
+import { formatNumber } from '@/lib/formatNumber';
 import {
   RankRound,
   RANK_POINTS_PER_SLOT,
@@ -414,7 +415,7 @@ const RankEm = () => {
                   headline={`${correctCount} / 5 correct`}
                   statLine={<>{round.sport} · {round.statLabel}</>}
                   funFact={<>💡 Correct order: {round.items.map((it) => it.name).join(' › ')}</>}
-                  statRow={[{ label: 'Score', value: <span className="inline-flex items-center gap-1"><Trophy className="w-4 h-4" />{score}</span> }]}
+                  statRow={[{ label: 'Score', value: <span className="inline-flex items-center gap-1"><Trophy className="w-4 h-4" />{formatNumber(score)}</span> }]}
                   emojiGrid={`📊 Rank 'Em, ${round.sport} ${round.statLabel}: ${correctCount}/5`}
                   share={{
                     score: `${correctCount}/5 on today's Rank 'Em`,

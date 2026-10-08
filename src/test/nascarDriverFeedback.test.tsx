@@ -44,11 +44,11 @@ describe('actual NASCAR driver committed feedback', () => {
   it('never calls a committed first-clue win wrong at the old delayed boundary', () => {
     const view = mount(); start(view, true); correct(view);
     tick(50); expect(view.queryByText('Wrong guess! Try again...')).toBeNull();
-    expect(view.getByText('1000 pts')).toBeVisible(); expect(cue(view)).toHaveAttribute('data-nascar-driver-feedback', 'correct');
+    expect(view.getByText('1,000 pts')).toBeVisible(); expect(cue(view)).toHaveAttribute('data-nascar-driver-feedback', 'correct');
     expect(result(view)).toHaveAttribute('data-nascar-driver-result', 'won'); expect(result(view)).toHaveClass(styles.won);
     expect(cue(view)).toHaveTextContent('Correct guess. Driver found.');
     expect(saved()).toEqual(exactSaved(1, ['Fixture Racer'], 'won', 1000)); expect(recordCompletion).toHaveBeenCalledExactlyOnceWith('/guess-nascar-driver', 1000, 'FixtureBaller', 0);
-    tick(550); expect(cue(view)).toBeNull(); expect(result(view)).toBeNull(); expect(view.getByText('1000 pts')).toBeVisible();
+    tick(550); expect(cue(view)).toBeNull(); expect(result(view)).toBeNull(); expect(view.getByText('1,000 pts')).toBeVisible();
   });
 
   it('cues each actual repeated wrong append while preserving stable clues and the 600 win', () => {

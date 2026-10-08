@@ -49,7 +49,7 @@ describe('actual Tennis Player committed feedback', () => {
     expect(view.queryByText('Wrong guess! Try again...')).toBeNull(); expect(cue(view)).toHaveAttribute('data-tennis-player-feedback', 'correct'); expect(cue(view)).toHaveTextContent('Correct guess. Player found.');
     expect(result(view)).toHaveAttribute('data-tennis-player-result', 'won'); expect(result(view)).toHaveClass(styles.won);
     expect(saved()).toEqual(exactSave(1, [fixture.row.player_name], 'won', 1000)); expect(recordCompletion).toHaveBeenCalledExactlyOnceWith('/guess-tennis-player', 1000, 'FixtureBaller', 0);
-    tick(550); expect(cue(view)).toBeNull(); expect(result(view)).toBeNull(); expect(view.getByText('1000 pts')).toBeVisible();
+    tick(550); expect(cue(view)).toBeNull(); expect(result(view)).toBeNull(); expect(view.getByText('1,000 pts')).toBeVisible();
   });
 
   it('cues repeated accepted wrong appends with stable clues and the original600 win', async () => {

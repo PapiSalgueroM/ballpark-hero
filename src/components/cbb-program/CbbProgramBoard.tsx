@@ -8,6 +8,7 @@ import { ClueFinishMoment, useLiveFinish } from '@/components/guess-finish/Guess
 import { GameNav } from '@/components/game/GameNav';
 import { MAX_CLUES, type CbbProgramState } from '@/types/cbbProgram';
 import feedbackStyles from './CbbProgramFeedback.module.css';
+import { formatNumber } from '@/lib/formatNumber';
 
 const CLUE_LABELS = ['Vibe', 'Region & State', 'Conference', 'Tournament History', 'Championships', 'Mascot'];
 
@@ -187,7 +188,7 @@ export function CbbProgramBoard() {
               <>
                 <p className={`${feedbackStyles.guessName} text-xl font-bold text-amber-400`}>{puzzle.school_name}</p>
                 <p className="text-slate-400">
-                  Guessed in {revealedClues} clue{revealedClues > 1 ? 's' : ''}: <span className="text-amber-400 font-bold">{score} pts</span>
+                  Guessed in {revealedClues} clue{revealedClues > 1 ? 's' : ''}: <span className="text-amber-400 font-bold">{formatNumber(score)} pts</span>
                 </p>
               </>
             ) : (

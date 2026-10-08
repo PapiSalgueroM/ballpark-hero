@@ -60,7 +60,7 @@ describe('a clue guesser ends on the shared result moment', () => {
     expect(numberOf(pill(view))).toBe(POINTS_BY_CLUE[0]);
     expect(pill(view)).toBe('1,000');
     expect(confetti(view)).toBe(28);
-    expect(view.getByText('1000 pts')).toBeVisible();
+    expect(view.getByText('1,000 pts')).toBeVisible();
     expect(view.getByText('Fixture Racer')).toBeVisible();
     tick(600);
     expect(finish(view)).toHaveAttribute('data-guess-finish', 'live');
