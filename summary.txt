@@ -1,0 +1,15 @@
+sense-plain exit=0 21s | simNbaAwardsSense: 121 checks, 0 failed (shrunk run, judged at its own size), 20s
+vitest-new exit=0 3s |    Duration  3.12s (transform 1.25s, setup 391ms, collect 3.06s, tests 971ms, environment 2.27s, prepare 966ms)
+vitest-list exit=0 60s |    Duration  59.31s (transform 12.81s, setup 1.91s, collect 31.58s, tests 124.44s, environment 9.15s, prepare 2.13s)
+simNbaCareer exit=0 25s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest
+tsc exit=0 111s | 
+simNbaSeasonStats exit=0 16s | simNbaSeasonStats: 72 checks passed over 10 seeded franchises and 3 seasons each. Every game adds up, the box takes nothing from the league, the awards follow their rules
+simNoRivalNames exit=0 18s | No rival product names found. 0 findings.
+sense-full exit=0 151s | simNbaAwardsSense: 124 checks, 0 failed (full size), 149s
+simNoInventedQuotes exit=0 27s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simAwards exit=0 7s | PASS: ALL AWARD SCARCITY CHECKS PASSED
+simCareerParity exit=0 6s | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+simUsCareerDeckC exit=0 81s | simUsCareerDeckC: all checks passed
+simCareerRealism exit=0 5s | ALL CAREER REALISM CHECKS PASSED
+simUsCareerWeight exit=0 0s | simUsCareerWeight: green. 28 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+simHarnessAnchors exit=1 45s | simHarnessAnchors: 1 failure(s)
