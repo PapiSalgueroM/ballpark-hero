@@ -1,0 +1,34 @@
+   NEGATIVE CONTROL ON: the pre 422 line is back, income is never banked
+1) money arrives: a played career ends richer than it started
+  FAIL: nfl: started on 0.1m and finished on 0.1m after earning 26m, so the pay never reached the bank
+   nfl: earned   26m, banked     0.1m
+  FAIL: nba: started on 0.3m and finished on 0.3m after earning 30m, so the pay never reached the bank
+   nba: earned   30m, banked     0.3m
+  FAIL: mlb: started on 0.4m and finished on 0.4m after earning 10m, so the pay never reached the bank
+   mlb: earned   10m, banked     0.4m
+  FAIL: nhl: started on 0.5m and finished on 0.5m after earning 11m, so the pay never reached the bank
+   nhl: earned   11m, banked     0.5m
+2) a player who never spends never goes backwards
+   4 careers walked season by season, no unexplained falls
+3) the owner's case: 30m a year with upkeep running must build a fortune
+  FAIL: nfl: 8 years at 30m with 2.5m upkeep ended on -19.9m, which is not banking the pay
+   nfl: 8 years at 30m -> -19.9m banked
+  FAIL: nba: 8 years at 30m with 2.5m upkeep ended on -19.7m, which is not banking the pay
+   nba: 8 years at 30m -> -19.7m banked
+  FAIL: mlb: 8 years at 30m with 2.5m upkeep ended on -19.6m, which is not banking the pay
+   mlb: 8 years at 30m -> -19.6m banked
+  FAIL: nhl: 8 years at 30m with 2.5m upkeep ended on -19.5m, which is not banking the pay
+   nhl: 8 years at 30m -> -19.5m banked
+4) what you bank scales with what you earn
+  FAIL: nfl: 25m a year banked 0.1m against 0.1m on 2m a year, so pay barely moves the balance
+   nfl: 2m/yr -> 0.1m, 25m/yr -> 0.1m
+  FAIL: nba: 25m a year banked 0.3m against 0.3m on 2m a year, so pay barely moves the balance
+   nba: 2m/yr -> 0.3m, 25m/yr -> 0.3m
+  FAIL: mlb: 25m a year banked 0.4m against 0.4m on 2m a year, so pay barely moves the balance
+   mlb: 2m/yr -> 0.4m, 25m/yr -> 0.4m
+  FAIL: nhl: 25m a year banked 0.5m against 0.5m on 2m a year, so pay barely moves the balance
+   nhl: 2m/yr -> 0.5m, 25m/yr -> 0.5m
+5) the repair rebuilds a broken old save, leaves a healthy one alone, and never refills a played one
+   5 repairs checked: old save rebuilt, healthy untouched, purchases deducted, two played saves stopped at zero
+
+simCareerBanking control: green. The unbanked pay was reported (12 findings), so this harness works.
