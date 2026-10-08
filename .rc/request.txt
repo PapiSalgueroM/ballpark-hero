@@ -1,0 +1,2 @@
+#!serial
+hub-grid-1155: bash .rc/x/hub-grid-control-1155.sh
