@@ -19,6 +19,10 @@ import { cardsAndSubsAt, liveLines, reportLines } from '@/lib/clubManagerMatchCe
 import type { CardsAndSubs } from '@/lib/clubManagerMatchCentre';
 import { LivePitchPlayer, useLiveSimMotion } from '@/components/club-manager/LiveSimMotion';
 import type { MotionEvent } from '@/components/club-manager/LiveSimMotion';
+/* Round 1101: the pitch itself is the shared part now. New imports go on their own lines: the two
+   above are anchors a harness swaps by exact text. */
+import { BEAT_SPAN } from '@/components/pitch-motion/contract';
+import type { PitchFigure, PitchInput, PitchSide } from '@/components/pitch-motion/contract';
 
 /**
  * Round 158: the Live Sim. His words, the ones he said to really pay
@@ -256,6 +260,58 @@ function pickCarrier(men: { mine: Man[]; theirs: Man[] }, possMine: number, prev
     if (roll <= 0) return { side, index: i };
   }
   return { side, index: list.length - 1 };
+}
+
+/** Round 1101: a 32 bit hash of a string, the pitch's seed. Nothing here ever draws from Math.random. */
+function seedOf(text: string): number {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < text.length; i++) { h ^= text.charCodeAt(i); h = Math.imul(h, 0x01000193); }
+  return h >>> 0;
+}
+
+/**
+ * Round 1101: everything the shared pitch needs to draw one period of this match, as plain data.
+ * The viewer calls it and the harness calls it, so no test rebuilds the mapping by hand. It reads
+ * the committed match and decides nothing: the feed is liveFeed(live), cut to the period.
+ *
+ * The figures are roles and slots (what the old placement read off each man), the span runs from
+ * where the period's clock starts to the end of its board, and the share of the ball is the
+ * period's own (possH1, possH2), which is constant for the stage: the running stat on the counter
+ * moves every minute and would re-roll who has the ball for the whole plan each time.
+ */
+export function stagePitchInput(
+  career: CareerState, live: LiveMatch | null, report: MatchWeekReport | null, stage: Stage, minute: number, plus: number | undefined, stageStop: number,
+): PitchInput {
+  const men = menAt(career, live, report, minute, plus);
+  const mentality: Mentality = live?.mentality ?? career.mentality;
+  const figure = (m: Man): PitchFigure => {
+    const f: PitchFigure = { key: m.key, line: pitchLineOf(m.slot), slot: slotPosition(m.slot, m.side === 'me' ? mentality : 'balanced') };
+    if (m.name !== undefined) f.name = m.name;
+    return f;
+  };
+  const mine = men.mine.map(figure);
+  const theirs = men.theirs.map(figure);
+  const seed = seedOf(`${career.clubName}:${live?.week ?? 0}:${stage}`);
+  if (!live || (stage !== 'first' && stage !== 'second' && stage !== 'extra')) {
+    /* The interval, and a finished match drawn off its report: nothing is left to play, so the pitch
+       holds the kick off shape for one beat. */
+    return { mine, theirs, feed: [], span: { from: stageStop, to: stageStop + BEAT_SPAN }, kickoffs: [{ at: stageStop, side: 'me' }], possession: 0.5, seed };
+  }
+  const lo = stage === 'first' ? 0 : stage === 'extra' ? 91 : 46;
+  const hi = stage === 'first' ? 45 : stage === 'extra' ? live.et?.to ?? 120 : 90;
+  const from = stage === 'first' ? 0 : stage === 'extra' ? 90 : 46;
+  /* Whoever kicked off the match kicks off extra time, and the other side the second half. */
+  const first: PitchSide = live.home === false ? 'opp' : 'me';
+  const kicking: PitchSide = stage === 'second' ? (first === 'me' ? 'opp' : 'me') : first;
+  const share = stage === 'first' ? live.possH1 : live.possH2 ?? live.possH1;
+  return {
+    mine, theirs,
+    feed: liveFeed(live).filter(e => e.kind !== 'halftime' && e.minute >= lo && e.minute <= hi),
+    span: { from, to: Math.max(from + BEAT_SPAN, stageStop) },
+    kickoffs: [{ at: from, side: kicking }],
+    possession: (share ?? 50) / 100,
+    seed,
+  };
 }
 
 function fitnessTone(f: number): string {

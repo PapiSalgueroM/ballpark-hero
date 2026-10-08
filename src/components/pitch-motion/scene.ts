@@ -1,74 +1,309 @@
-import type { PitchFigure, PitchInput, PitchLine, PitchPoint, PitchSide } from '@/components/pitch-motion/contract';
-import { BEAT_SPAN } from '@/components/pitch-motion/contract';
+import type { PitchEvent, PitchFigure, PitchInput, PitchLine, PitchPoint, PitchSide } from '@/components/pitch-motion/contract';
+import { ACTION_SPAN, BEAT_SPAN } from '@/components/pitch-motion/contract';
 import type { MotionPlayer, MotionScene } from '@/components/pitch-motion/motion';
 import { keyedRng } from '@/lib/keyedRng';
 
 /** Round 1101: where everybody stands between the lines of a feed. Pure functions of (input, clock):
  *  no React, no clock of its own, and never Math.random. Everything drawn between events comes from
  *  keyedRng, one fresh stream per beat, so beat i never depends on how many draws another beat made.
- *  It decides nothing about the match: no goal, shot or minute is made here. */
+ *  It decides nothing about the match: no goal, shot or minute is made here.
+ *
+ *  THE PLAN is a list of stretches, each with its own start on the binder's clock. Open play runs on a
+ *  grid of BEAT_SPAN from the start of the span. A goal, a shot or a save at place p owns two stretches
+ *  written over that grid: an approach from p - 2 beats, and a carrier stretch from p - 1 beat to the end
+ *  of the action, in which the shooter has the ball, so the frame the action starts from has it at his
+ *  feet and nothing changes under the action. What follows a chance (the kick off, the goal kick, the
+ *  keeper with the ball) starts at exactly p + ACTION_SPAN, so the walk back is the hook's own tween.
+ *  A corner, a throw in and a foul are staged from their own place. An action wins over a dead ball, a
+ *  dead ball over open play, and of two at one place the later line of the feed is the one staged.
+ *
+ *  THE SHAPE places each side as ONE block around the ball, in its own frame (own goal at y 100), and
+ *  mirrors the other side. */
 
 /** A figure placed on the pitch for one scene. */
 export interface PitchPlaced extends MotionPlayer { line: PitchLine }
-
-type BeatState = 'open';
-interface PlanEntry {
-  /** Where this stretch starts on the binder's clock. */
+export type PitchBeatState = 'open' | 'kickoff' | 'corner' | 'throwin' | 'freekick' | 'goalkick' | 'keeper';
+/** One stretch of the plan. Read by the part and by its tests, never built by a binder. */
+export interface PitchBeat {
   start: number;
-  state: BeatState;
+  end: number;
+  state: PitchBeatState;
+  /** What put it there: the open grid, a chance's approach or carrier stretch, a follow up, a dead ball. */
+  via: 'grid' | 'approach' | 'carrier' | 'follow' | 'dead' | 'restart';
   /** The side with the ball. */
   side: PitchSide;
   /** The key of the figure on the ball, or null when that side has nobody on the pitch. */
   carrier: string | null;
+  /** Where the ball is wanted, in pitch coordinates ('me' attacks y 0). */
+  anchor: PitchPoint;
+  /** A control point: the ball arrives along a curve through it. */
+  arc?: PitchPoint;
+  /** A dead ball: the ball is exactly on its spot, nobody presses, nobody drifts. */
+  dead: boolean;
+  /** Keys the drift, and tells two stretches apart when they are merged. */
+  id: string;
 }
+/** A goal, a shot or a save the plan staged, and the instant its action starts. */
+export interface PitchStagedAction { event: PitchEvent; at: number }
 /** Opaque to binders: build it with pitchPlan and hand it back to pitchScene and pitchSceneKey. */
 export interface PitchPlan {
   readonly mine: PitchFigure[];
   readonly theirs: PitchFigure[];
   readonly seed: number;
-  readonly from: number;
-  readonly entries: PlanEntry[];
+  readonly entries: PitchBeat[];
+  readonly actions: PitchStagedAction[];
 }
 
 /** Who gets the ball: the front men most, the keeper hardly ever. */
 const CARRY: Record<PitchLine, number> = { attack: 3, midfield: 2.6, defence: 1.2, keeper: 0.25 };
-/** How far each line steps up when its side has the ball, in percent of the pitch. */
-const PUSH: Record<PitchLine, number> = { attack: 20, midfield: 17, defence: 14, keeper: 4 };
-/** How far each line drops toward its own goal when the other side has it. */
-const BACK: Record<PitchLine, number> = { attack: 9, midfield: 8, defence: 5, keeper: 0 };
-const clampPct = (v: number) => Math.max(3, Math.min(97, v));
+/** Where a man wants the ball when he has it, along the pitch in his own frame. */
+const ZONE: Record<PitchLine, [number, number]> = { keeper: [84, 90], defence: [62, 78], midfield: [38, 62], attack: [16, 38] };
+const EPS = 1e-9;
+const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
+const other = (side: PitchSide): PitchSide => (side === 'me' ? 'opp' : 'me');
+/** Own frame to pitch coordinates and back: 'opp' is 'me' turned half a turn. */
+const turn = (side: PitchSide, p: PitchPoint): PitchPoint => (side === 'me' ? p : { x: 100 - p.x, y: 100 - p.y });
+const placeOf = (event: PitchEvent) => event.minute + (event.plus ?? 0);
+const isChance = (event: PitchEvent) => (event.kind === 'goal' || event.kind === 'shot' || event.kind === 'save') && event.side !== 'none';
 
-function weightedPick(list: PitchFigure[], roll: number, skip: string | null): PitchFigure | null {
-  if (!list.length) return null;
-  const weights = list.map(f => (f.key === skip && list.length > 1 ? 0 : CARRY[f.line]));
-  const total = weights.reduce((sum, w) => sum + w, 0);
+function pickIndex(list: PitchFigure[], roll: number): number {
+  const total = list.reduce((sum, f) => sum + CARRY[f.line], 0);
   let left = roll * total;
-  for (let i = 0; i < list.length; i++) { left -= weights[i]; if (left <= 0) return list[i]; }
-  return list[list.length - 1];
+  for (let i = 0; i < list.length; i++) { left -= CARRY[list[i].line]; if (left <= 0) return i; }
+  return list.length - 1;
+}
+/** The most advanced outfield figure on a side's own chart, the first of them in list order. */
+function mostAdvanced(list: PitchFigure[]): PitchFigure | null {
+  let best: PitchFigure | null = null;
+  for (const f of list) if (f.line !== 'keeper' && (!best || f.slot.y < best.slot.y)) best = f;
+  return best ?? list[0] ?? null;
+}
+const keeperOf = (list: PitchFigure[]) => list.find(f => f.line === 'keeper') ?? list[0] ?? null;
+
+interface Layer extends Omit<PitchBeat, 'start' | 'end' | 'anchor'> {
+  start: number;
+  end: number;
+  priority: number;
+  order: number;
+  /** A fixed spot, or a spot worked out from where the ball was just before this stretch. */
+  anchor: PitchPoint | ((before: PitchPoint) => PitchPoint);
+  arcFrom?: (before: PitchPoint, anchor: PitchPoint) => PitchPoint;
+  carrierFrom?: (anchor: PitchPoint) => string | null;
 }
 
-/** Cuts the stretch into beats and says, for each, which side has the ball and who is on it. */
+/** Cuts the stretch into its plan: open play on a grid, and every chance and dead ball of the feed over it. */
 export function pitchPlan(input: PitchInput): PitchPlan {
   const seed = input.seed ?? 0;
   const possession = input.possession ?? 0.5;
   const from = input.span.from;
-  const beats = Math.max(1, Math.ceil((input.span.to - from) / BEAT_SPAN - 1e-9));
-  const entries: PlanEntry[] = [];
-  let previous: string | null = null;
-  for (let i = 0; i < beats; i++) {
-    let side: PitchSide = keyedRng(`${seed}:s:${Math.floor(i / 3)}`)() < possession ? 'me' : 'opp';
-    if (!(side === 'me' ? input.mine : input.theirs).length) side = side === 'me' ? 'opp' : 'me';
-    const list = side === 'me' ? input.mine : input.theirs;
-    const picked = weightedPick(list, keyedRng(`${seed}:${i}`)(), previous);
-    previous = picked ? picked.key : null;
-    entries.push({ start: from + i * BEAT_SPAN, state: 'open', side, carrier: previous });
+  const to = Math.max(from + BEAT_SPAN, input.span.to);
+  const lists: Record<PitchSide, PitchFigure[]> = { me: input.mine, opp: input.theirs };
+  const present = (side: PitchSide): PitchSide => (lists[side].length ? side : other(side));
+  const beats = Math.max(1, Math.ceil((to - from) / BEAT_SPAN - EPS));
+
+  /* ---- open play, the default ---- */
+  const spell = (i: number): PitchSide => present(keyedRng(`${seed}:s:${Math.floor(i / 3)}`)() < possession ? 'me' : 'opp');
+  const zoneAnchor = (side: PitchSide, figure: PitchFigure, rng: () => number): PitchPoint => {
+    const [lo, hi] = ZONE[figure.line];
+    return turn(side, { x: clamp(figure.slot.x + (rng() * 2 - 1) * 6, 6, 94), y: lo + rng() * (hi - lo) });
+  };
+  const open = (i: number): Layer => {
+    const side = spell(i);
+    const list = lists[side];
+    const rng = keyedRng(`${seed}:${i}`);
+    let index = list.length ? pickIndex(list, rng()) : -1;
+    /* Never the same man twice running: if the raw pick repeats the last beat's, the next man in the list has it. */
+    if (i > 0 && list.length > 1 && spell(i - 1) === side && pickIndex(list, keyedRng(`${seed}:${i - 1}`)()) === index) index = (index + 1) % list.length;
+    const figure = index >= 0 ? list[index] : null;
+    return {
+      start: from + i * BEAT_SPAN, end: from + (i + 1) * BEAT_SPAN, priority: 0, order: i,
+      state: 'open', via: 'grid', side, carrier: figure?.key ?? null, dead: false, id: `o${i}`,
+      anchor: figure ? zoneAnchor(side, figure, rng) : { x: 50, y: 50 },
+    };
+  };
+
+  const layers: Layer[] = [];
+  const kickoff = (at: number, side: PitchSide, priority: number, order: number, id: string) => {
+    const kicker = present(side);
+    layers.push({
+      start: at, end: at + 2 * BEAT_SPAN, priority, order, state: 'kickoff', via: 'restart', side: kicker,
+      carrier: mostAdvanced(lists[kicker])?.key ?? null, dead: true, id, anchor: { x: 50, y: 50 },
+    });
+  };
+  (input.kickoffs ?? []).forEach((k, n) => kickoff(k.at, k.side, 5, n, `k${n}`));
+
+  /* ---- the chances: which are staged, and when each action starts ---- */
+  const chances = input.feed.map((event, order) => ({ event, order, place: placeOf(event) }))
+    .filter(c => isChance(c.event) && c.place >= from - EPS && c.place <= to + EPS);
+  /* A chance with the last kick of the span is wound up to END at the end, and nothing else plays under it. */
+  const last = [...chances].reverse().find(c => c.place >= to - EPS);
+  const staged = new Map<number, { event: PitchEvent; order: number; at: number }>();
+  for (const c of chances) {
+    if (c === last) { staged.set(to - ACTION_SPAN, { event: c.event, order: c.order, at: to - ACTION_SPAN }); continue; }
+    if (c.place >= to - EPS || (last && c.place >= to - ACTION_SPAN - EPS)) continue;
+    /* Of two at one place the later line of the feed is the one played. */
+    staged.set(c.place, { event: c.event, order: c.order, at: c.place });
   }
-  return { mine: input.mine, theirs: input.theirs, seed, from, entries };
+  const actions = [...staged.values()].sort((a, b) => a.at - b.at);
+
+  /* ---- a chance: the approach, the carrier stretch and what follows it ---- */
+  const shooterOf = (side: PitchSide, event: PitchEvent) => lists[side].find(f => f.name === event.text) ?? mostAdvanced(lists[side]);
+  actions.forEach((a, n) => {
+    const side = present(a.event.side as PitchSide);
+    const shooter = shooterOf(side, a.event);
+    const rng = keyedRng(`${seed}:a:${a.order}`);
+    const mates = lists[side].filter(f => f.key !== shooter?.key && f.line !== 'keeper');
+    const feeder = mates.length ? mates[pickIndex(mates, rng())] : shooter;
+    if (feeder) layers.push({
+      start: a.at - 2 * BEAT_SPAN, end: a.at - BEAT_SPAN, priority: 2, order: n, state: 'open', via: 'approach', side,
+      carrier: feeder.key, dead: false, id: `a${a.order}`, anchor: zoneAnchor(side, feeder, rng),
+    });
+    const shot = a.event.penalty
+      ? { x: 50, y: 20 }
+      : { x: clamp((shooter?.slot.x ?? 50) + (rng() * 2 - 1) * 6, 25, 75), y: a.event.freeKick ? 30 : 22 + rng() * 8 };
+    layers.push({
+      start: a.at - BEAT_SPAN, end: a.at + ACTION_SPAN, priority: 4, order: n, state: 'open', via: 'carrier', side,
+      carrier: shooter?.key ?? null, dead: false, id: `c${a.order}`, anchor: turn(side, shot),
+    });
+    const after = a.at + ACTION_SPAN;
+    if (after >= to - EPS) return;
+    const defending = present(other(side));
+    if (a.event.kind === 'goal') {
+      kickoff(after, defending, 3, n, `g${a.order}`);
+    } else if (a.event.kind === 'shot') {
+      const wide = a.event.flank === 'left' ? 44 : a.event.flank === 'right' ? 56 : a.event.minute % 2 < 1 ? 44 : 56;
+      layers.push({
+        start: after, end: after + BEAT_SPAN, priority: 3, order: n, state: 'goalkick', via: 'follow', side: defending,
+        carrier: keeperOf(lists[defending])?.key ?? null, dead: true, id: `q${a.order}`,
+        anchor: defending === 'me' ? { x: wide, y: 94.5 } : { x: wide, y: 5.5 },
+      });
+    } else {
+      layers.push({
+        start: after, end: after + BEAT_SPAN, priority: 3, order: n, state: 'keeper', via: 'follow', side: defending,
+        carrier: keeperOf(lists[defending])?.key ?? null, dead: true, id: `h${a.order}`,
+        anchor: defending === 'me' ? { x: 50, y: 91 } : { x: 50, y: 9 },
+      });
+    }
+  });
+
+  /* ---- corners, throw ins and fouls, each staged from its own place ---- */
+  const nearest = (side: PitchSide, spot: PitchPoint, skipKeeper: boolean): PitchFigure | null => {
+    let best: PitchFigure | null = null;
+    let bestD = Infinity;
+    for (const f of lists[side]) {
+      if (skipKeeper && f.line === 'keeper') continue;
+      const at = turn(side, f.slot);
+      const d = Math.hypot(at.x - spot.x, (at.y - spot.y) * 0.5);
+      if (d < bestD) { best = f; bestD = d; }
+    }
+    return best ?? lists[side][0] ?? null;
+  };
+  input.feed.forEach((event, order) => {
+    const p = placeOf(event);
+    if (event.side === 'none' || p < from - EPS || p >= to - EPS) return;
+    if (event.kind === 'corner') {
+      const side = present(event.side);
+      const flagX = (before: PitchPoint) => (event.flank ? (event.flank === 'left' ? 2.5 : 97.5) : before.x < 50 ? 2.5 : 97.5);
+      const lineY = side === 'me' ? 2.5 : 97.5;
+      const flag = (before: PitchPoint): PitchPoint => ({ x: flagX(before), y: lineY });
+      const taker = (anchor: PitchPoint) => (lists[side].find(f => f.name === event.text && f.line !== 'keeper') ?? nearest(side, anchor, true))?.key ?? null;
+      layers.push({
+        start: p, end: p + BEAT_SPAN, priority: 1, order, state: 'corner', via: 'dead', side, carrier: null, carrierFrom: taker,
+        dead: true, id: `f${order}`, anchor: flag,
+      });
+      const rng = keyedRng(`${seed}:f:${order}`);
+      const target: PitchPoint = { x: 44 + rng() * 12, y: side === 'me' ? 9 : 91 };
+      const header = mostAdvanced(lists[side]);
+      layers.push({
+        start: p + BEAT_SPAN, end: p + 2 * BEAT_SPAN, priority: 1, order, state: 'open', via: 'dead', side,
+        carrier: header?.key ?? null, dead: false, id: `d${order}`, anchor: target,
+        /* The midpoint pulled 10 toward the centre of the pitch and 4 away from the goal. */
+        arcFrom: (before, anchor) => {
+          const mid = { x: (before.x + anchor.x) / 2, y: (before.y + anchor.y) / 2 };
+          return { x: mid.x + Math.sign(50 - mid.x) * 10, y: mid.y + (side === 'me' ? 4 : -4) };
+        },
+      });
+    } else if (event.kind === 'throwin') {
+      const side = present(event.side);
+      const spot = (before: PitchPoint): PitchPoint => ({ x: before.x < 50 ? 2 : 98, y: clamp(before.y, 6, 94) });
+      layers.push({
+        start: p, end: p + BEAT_SPAN, priority: 1, order, state: 'throwin', via: 'dead', side, carrier: null,
+        carrierFrom: anchor => nearest(side, anchor, true)?.key ?? null, dead: true, id: `t${order}`, anchor: spot,
+      });
+      const rng = keyedRng(`${seed}:t:${order}`);
+      const list = lists[side];
+      const receiver = list.length ? list[pickIndex(list, rng())] : null;
+      layers.push({
+        start: p + BEAT_SPAN, end: p + 2 * BEAT_SPAN, priority: 1, order, state: 'open', via: 'dead', side,
+        carrier: receiver?.key ?? null, dead: false, id: `u${order}`,
+        anchor: receiver ? (before: PitchPoint) => { const own = zoneAnchor(side, receiver, rng); return { x: (own.x + before.x) / 2, y: own.y }; } : { x: 50, y: 50 },
+      });
+    } else if (event.kind === 'foul') {
+      /* The line names the man who fouled, so the free kick is the other side's. */
+      const side = present(other(event.side));
+      layers.push({
+        start: p, end: p + BEAT_SPAN, priority: 1, order, state: 'freekick', via: 'dead', side, carrier: null,
+        carrierFrom: anchor => nearest(side, anchor, true)?.key ?? null, dead: true, id: `x${order}`,
+        anchor: before => ({ x: clamp(before.x, 6, 94), y: clamp(before.y, 8, 92) }),
+      });
+      const rng = keyedRng(`${seed}:x:${order}`);
+      const list = lists[side];
+      const receiver = list.length ? list[pickIndex(list, rng())] : null;
+      layers.push({
+        start: p + BEAT_SPAN, end: p + 2 * BEAT_SPAN, priority: 1, order, state: 'open', via: 'dead', side,
+        carrier: receiver?.key ?? null, dead: false, id: `y${order}`, anchor: receiver ? zoneAnchor(side, receiver, rng) : { x: 50, y: 50 },
+      });
+    }
+  });
+
+  /* ---- one timeline: the highest stretch at every instant, and of two equals the later ---- */
+  const cuts = new Set<number>();
+  const cut = (v: number) => { if (v > from - EPS && v < to + EPS) cuts.add(Math.round(clamp(v, from, to) * 1e6) / 1e6); };
+  for (let i = 0; i <= beats; i++) cut(from + i * BEAT_SPAN);
+  cut(from); cut(to);
+  for (const layer of layers) { cut(layer.start); cut(layer.end); }
+  const marks = [...cuts].sort((a, b) => a - b);
+  const pieces: { start: number; end: number; layer: Layer }[] = [];
+  for (let k = 0; k + 1 < marks.length; k++) {
+    const mid = (marks[k] + marks[k + 1]) / 2;
+    let top: Layer | null = null;
+    for (const layer of layers) {
+      if (layer.start > mid || mid >= layer.end) continue;
+      if (!top || layer.priority > top.priority || (layer.priority === top.priority && layer.order > top.order)) top = layer;
+    }
+    const layer = top ?? open(Math.min(beats - 1, Math.floor((mid - from) / BEAT_SPAN)));
+    const previous = pieces[pieces.length - 1];
+    /* A scrap of open play shorter than half a beat is not worth a pass: the stretch before it runs on. */
+    const scrap = layer.via === 'grid' && marks[k + 1] - marks[k] < BEAT_SPAN / 2 - EPS && !!previous;
+    if (previous && (scrap || previous.layer.id === layer.id)) previous.end = marks[k + 1];
+    else pieces.push({ start: marks[k], end: marks[k + 1], layer });
+  }
+  if (!pieces.length) pieces.push({ start: from, end: to, layer: open(0) });
+
+  const entries: PitchBeat[] = [];
+  let before: PitchPoint = { x: 50, y: 50 };
+  for (const piece of pieces) {
+    const layer = piece.layer;
+    const anchor = typeof layer.anchor === 'function' ? layer.anchor(before) : layer.anchor;
+    const beat: PitchBeat = {
+      start: piece.start, end: piece.end, state: layer.state, via: layer.via, side: layer.side,
+      carrier: layer.carrierFrom ? layer.carrierFrom(anchor) : layer.carrier, anchor, dead: layer.dead, id: layer.id,
+    };
+    if (layer.arcFrom) beat.arc = layer.arcFrom(before, anchor);
+    entries.push(beat);
+    before = anchor;
+  }
+  return { mine: input.mine, theirs: input.theirs, seed, entries, actions: actions.map(a => ({ event: a.event, at: a.at })) };
 }
 
 function entryIndex(plan: PitchPlan, clock: number): number {
-  const i = Math.floor((clock - plan.from) / BEAT_SPAN + 1e-9);
-  return Math.max(0, Math.min(plan.entries.length - 1, i));
+  let lo = 0;
+  let hi = plan.entries.length - 1;
+  while (lo < hi) {
+    const mid = (lo + hi + 1) >> 1;
+    if (plan.entries[mid].start <= clock + EPS) lo = mid; else hi = mid - 1;
+  }
+  return lo;
 }
 
 /** Changes exactly when the scene changes, so a binder can memoise the scene on it. */
@@ -76,47 +311,100 @@ export function pitchSceneKey(plan: PitchPlan, clock: number): string {
   return String(entryIndex(plan, clock));
 }
 
-function placeSide(figures: PitchFigure[], side: PitchSide, hasBall: boolean, drift: () => number, ballX: number | null): PitchPlaced[] {
-  return figures.map(f => {
-    let x = side === 'me' ? f.slot.x : 100 - f.slot.x;
-    let y = side === 'me' ? f.slot.y : 100 - f.slot.y;
-    const dir = side === 'me' ? -1 : 1;
-    if (hasBall) {
-      y += dir * PUSH[f.line];
-      if (f.line === 'keeper') y = side === 'me' ? Math.max(y, 68) : Math.min(y, 32);
-      else y = side === 'me' ? Math.max(y, 7) : Math.min(y, 93);
-    } else {
-      y -= dir * BACK[f.line];
-      x = 50 + (x - 50) * 0.86;
-    }
-    if (ballX !== null && f.line !== 'keeper' && Math.abs(f.slot.x - 50) >= 22) x += (ballX - x) * 0.18;
-    x += drift();
-    y += drift();
-    const placed: PitchPlaced = { key: f.key, keeper: f.line === 'keeper', line: f.line, x: clampPct(x), y: clampPct(y) };
-    if (f.name !== undefined) placed.name = f.name;
-    return placed;
+/** The stretch of the plan the clock is in: for the part's own tests and for a binder's sound or label. */
+export function pitchBeatAt(plan: PitchPlan, clock: number): PitchBeat {
+  return plan.entries[entryIndex(plan, clock)];
+}
+
+interface Row { back: number; length: number; width: number; shift: number }
+/** One side as one block around the ball `b`, both in that side's own frame. */
+function rowFor(beat: PitchBeat, side: PitchSide, b: PitchPoint): Row {
+  if (beat.state === 'kickoff') {
+    /* Everybody in his own half, and the side not kicking off well clear of the centre spot. */
+    return beat.side === side ? { back: 80, length: 27, width: 0.9, shift: 0 } : { back: 84, length: 22, width: 0.9, shift: 0 };
+  }
+  return beat.side === side
+    ? { back: clamp(b.y + 26, 46, 80), length: 38, width: 1, shift: (b.x - 50) * 0.18 }
+    : { back: clamp(b.y + 30, 58, 84), length: 30, width: 0.8, shift: (b.x - 50) * 0.3 };
+}
+
+interface Own { figure: PitchFigure; x: number; y: number }
+function blockOf(plan: PitchPlan, beat: PitchBeat, side: PitchSide): Own[] {
+  const list = side === 'me' ? plan.mine : plan.theirs;
+  const b = turn(side, beat.anchor);
+  const row = rowFor(beat, side, b);
+  const outfield = list.filter(f => f.line !== 'keeper');
+  const front = Math.min(...outfield.map(f => f.slot.y));
+  const deep = Math.max(...outfield.map(f => f.slot.y));
+  const placed: Own[] = list.map(figure => {
+    if (figure.line === 'keeper') return { figure, x: 50 + (b.x - 50) * 0.12, y: clamp(row.back + 12, 84, 93) };
+    const t = deep > front ? (figure.slot.y - front) / (deep - front) : 0.5;
+    return { figure, x: clamp(50 + (figure.slot.x - 50) * row.width + row.shift, 4, 96), y: Math.max(14, row.back - (1 - t) * row.length) };
   });
+  const hasBall = beat.side === side;
+  const carrier = hasBall ? placed.find(p => p.figure.key === beat.carrier) : undefined;
+  if (carrier) {
+    if (beat.dead) {
+      /* On a dead ball the man stands a step and a half behind it, on his own side of it. */
+      if (beat.state === 'keeper') { carrier.x = clamp(b.x, 40, 60); carrier.y = clamp(b.y, 86, 95); }
+      else { carrier.x = b.x; carrier.y = Math.min(97, b.y + 1.5); }
+    } else {
+      /* A man with the ball goes most of the way to where it is wanted. The shooter of a chance is all the
+         way there before his line fires, so his plant is a step and not a run through his own team. */
+      const pull = beat.via === 'carrier' ? 1 : 0.6;
+      carrier.x += (b.x - carrier.x) * pull;
+      carrier.y += (b.y - carrier.y) * pull;
+    }
+  }
+  if (!beat.dead) {
+    if (!hasBall) {
+      /* The press: the nearest outfield man goes part of the way to the ball. */
+      let presser: Own | null = null;
+      for (const p of placed) if (p.figure.line !== 'keeper' && (!presser || Math.hypot(p.x - b.x, p.y - b.y) < Math.hypot(presser.x - b.x, presser.y - b.y))) presser = p;
+      if (presser) { presser.x += (b.x - presser.x) * 0.35; presser.y += (b.y - presser.y) * 0.35; }
+    }
+    for (const p of placed) {
+      if (p.figure.line === 'keeper' || p === carrier) continue;
+      const rng = keyedRng(`${plan.seed}:d:${beat.id}:${p.figure.key}`);
+      p.x += (rng() * 2 - 1) * 1.2;
+      p.y += (rng() * 2 - 1) * 1.2;
+    }
+  }
+  /* Separation, last: nobody of one side stands on a team mate. The man on the ball is never the one moved. */
+  for (let pass = 0; pass < 3; pass++) {
+    for (let i = 0; i < placed.length; i++) for (let j = i + 1; j < placed.length; j++) {
+      const a = placed[i], c = placed[j];
+      const dx = c.x - a.x;
+      if (Math.abs(dx) >= 5 || Math.abs(c.y - a.y) >= 4) continue;
+      const short = 5 - Math.abs(dx);
+      const dir = dx >= 0 ? 1 : -1;
+      if (a === carrier) c.x += dir * short;
+      else if (c === carrier) a.x -= dir * short;
+      else { a.x -= dir * short / 2; c.x += dir * short / 2; }
+    }
+  }
+  for (const p of placed) { p.x = clamp(p.x, 3, 97); p.y = clamp(p.y, 3, 97); }
+  return placed;
 }
 
 /** Both sides and the ball for the stretch the clock is in. */
 export function pitchScene(plan: PitchPlan, clock: number): MotionScene<PitchPlaced> {
-  const index = entryIndex(plan, clock);
-  const entry = plan.entries[index];
-  const mineHasIt = entry.side === 'me';
-  const place = (ballX: number | null) => {
-    const rng = keyedRng(`${plan.seed}:d:${index}`);
-    const drift = () => (rng() - 0.5) * 5;
-    return {
-      mine: placeSide(plan.mine, 'me', mineHasIt, drift, ballX),
-      theirs: placeSide(plan.theirs, 'opp', !mineHasIt, drift, ballX),
-    };
-  };
-  const ballFrom = (holder: PitchPlaced | undefined): PitchPoint => (holder
-    ? { x: clampPct(holder.x + 1.6), y: clampPct(holder.y + (mineHasIt ? -2.2 : 2.2)) }
-    : { x: 50, y: 50 });
-  const holderOf = (sides: { mine: PitchPlaced[]; theirs: PitchPlaced[] }) => (mineHasIt ? sides.mine : sides.theirs).find(p => p.key === entry.carrier);
-  const lean = ballFrom(holderOf(place(null)));
-  const sides = place(lean.x);
-  const holder = holderOf(sides);
-  return { mine: sides.mine, theirs: sides.theirs, ball: ballFrom(holder), holderKey: holder?.key ?? null };
+  const beat = plan.entries[entryIndex(plan, clock)];
+  const place = (side: PitchSide): PitchPlaced[] => blockOf(plan, beat, side).map(own => {
+    const at = turn(side, own);
+    const placed: PitchPlaced = { key: own.figure.key, keeper: own.figure.line === 'keeper', line: own.figure.line, x: at.x, y: at.y };
+    if (own.figure.name !== undefined) placed.name = own.figure.name;
+    return placed;
+  });
+  const mine = place('me');
+  const theirs = place('opp');
+  const holder = (beat.side === 'me' ? mine : theirs).find(p => p.key === beat.carrier);
+  let ball: PitchPoint;
+  if (beat.dead && beat.state !== 'keeper') ball = { x: beat.anchor.x, y: beat.anchor.y };
+  else if (!holder) ball = { x: clamp(beat.anchor.x, 3, 97), y: clamp(beat.anchor.y, 3, 97) };
+  else if (beat.state === 'keeper') ball = { x: holder.x, y: holder.y + (beat.side === 'me' ? -1 : 1) };
+  else ball = { x: clamp(holder.x + 1.6, 3, 97), y: clamp(holder.y + (beat.side === 'me' ? -2.2 : 2.2), 3, 97) };
+  const scene: MotionScene<PitchPlaced> = { mine, theirs, ball, holderKey: holder?.key ?? null };
+  if (beat.arc) scene.arc = beat.arc;
+  return scene;
 }

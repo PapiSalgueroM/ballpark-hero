@@ -1,13 +1,11 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { ACTION_SPAN } from '@/components/pitch-motion/contract';
-import type { PitchEvent, PitchMoment, PitchMotionProps } from '@/components/pitch-motion/contract';
+import type { PitchMoment, PitchMotionProps } from '@/components/pitch-motion/contract';
 import { LivePitchPlayer, useLiveSimMotion } from '@/components/pitch-motion/motion';
 import type { MotionEvent } from '@/components/pitch-motion/motion';
 import { PitchSurface, pitchSpot } from '@/components/pitch-motion/PitchSurface';
 import { pitchPlan, pitchScene, pitchSceneKey } from '@/components/pitch-motion/scene';
-
-const place = (event: PitchEvent) => event.minute + (event.plus ?? 0);
-const isAction = (event: PitchEvent) => event.kind === 'goal' || event.kind === 'shot' || event.kind === 'save';
+import type { PitchStagedAction } from '@/components/pitch-motion/scene';
 
 /**
  * Round 1101: the ready made pitch for a binder that only has a feed and a clock.
@@ -29,12 +27,15 @@ export function PitchMotion({
   // The key changes exactly when the scene does, so the clock itself is deliberately not a dependency.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const scene = useMemo(() => pitchScene(plan, clock), [plan, sceneKey]);
-  let current: PitchEvent | null = null;
-  for (const line of feed) if (isAction(line) && place(line) <= clock && clock < place(line) + ACTION_SPAN) current = line;
-  const action: MotionEvent | null = useMemo(
-    () => (current ? { event: current, key: `${current.kind}:${current.side}:${current.minute}${current.plus ? `+${current.plus}` : ''}:${current.text}`, at: place(current) } : null),
-    [current],
-  );
+  /* The plan says which chances are played and when each starts: of two at one place the later line, and a
+     chance with the last kick of the span wound up to end at the end. */
+  let current: PitchStagedAction | null = null;
+  for (const staged of plan.actions) if (staged.at <= clock && clock < staged.at + ACTION_SPAN) current = staged;
+  const action: MotionEvent | null = useMemo(() => {
+    if (!current) return null;
+    const line = current.event;
+    return { event: line, key: `${line.kind}:${line.side}:${line.minute}${line.plus ? `+${line.plus}` : ''}:${line.text}`, at: current.at };
+  }, [current]);
   const frame = useLiveSimMotion(scene, action, clock, playing, reducedMotion);
 
   /* Once per moment, after the frame that shows it has been committed. A clock that goes back

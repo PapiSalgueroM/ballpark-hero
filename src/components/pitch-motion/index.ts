@@ -10,8 +10,8 @@ export type {
 } from '@/components/pitch-motion/contract';
 export { actionFrame, between, useLiveSimMotion, LivePitchPlayer, goalWindow } from '@/components/pitch-motion/motion';
 export type { MotionPlayer, MotionScene, MotionEvent, MotionFrame, Pose } from '@/components/pitch-motion/motion';
-export { pitchPlan, pitchScene, pitchSceneKey } from '@/components/pitch-motion/scene';
-export type { PitchPlan, PitchPlaced } from '@/components/pitch-motion/scene';
+export { pitchPlan, pitchScene, pitchSceneKey, pitchBeatAt } from '@/components/pitch-motion/scene';
+export type { PitchPlan, PitchPlaced, PitchBeat, PitchBeatState, PitchStagedAction } from '@/components/pitch-motion/scene';
 export { PitchSurface, pitchSpot } from '@/components/pitch-motion/PitchSurface';
 export type { PitchOrientation, PitchSurfaceProps } from '@/components/pitch-motion/PitchSurface';
 export { PitchMotion } from '@/components/pitch-motion/PitchMotion';

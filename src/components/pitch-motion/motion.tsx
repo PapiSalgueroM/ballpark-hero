@@ -5,7 +5,8 @@ import { ACTION_SPAN, NET_AT } from '@/components/pitch-motion/contract';
 
 interface Point { x: number; y: number; }
 export interface MotionPlayer extends Point { key: string; name?: string; keeper: boolean; }
-export interface MotionScene<T extends MotionPlayer> { mine: T[]; theirs: T[]; ball: Point; holderKey: string | null; }
+/** `arc` is optional: a control point, and the ball arrives at this scene along a curve through it. */
+export interface MotionScene<T extends MotionPlayer> { mine: T[]; theirs: T[]; ball: Point; holderKey: string | null; arc?: Point; }
 export interface MotionEvent { event: PitchEvent; key: string; at: number; }
 export interface Pose { kick?: number; dive?: number; catching?: number; celebrate?: number; hop?: number; }
 export interface MotionFrame<T extends MotionPlayer> extends MotionScene<T> {
@@ -26,7 +27,8 @@ export function actionFrame<T extends MotionPlayer>(scene: MotionScene<T>, actio
   const mine = event.side === 'me';
   const attackers = mine ? scene.mine : scene.theirs;
   const defenders = mine ? scene.theirs : scene.mine;
-  const striker = attackers.find(p => p.name === event.text) ?? attackers.find(p => !p.keeper);
+  // Round 1101: a shooter the feed does not name is the man the scene has on the ball, before the first outfield man.
+  const striker = attackers.find(p => p.name === event.text) ?? attackers.find(p => p.key === scene.holderKey && !p.keeper) ?? attackers.find(p => !p.keeper);
   const keeper = defenders.find(p => p.keeper);
   const p = bounded(elapsed / 1.05);
   const plant = smooth(p / .24);
@@ -47,9 +49,13 @@ export function actionFrame<T extends MotionPlayer>(scene: MotionScene<T>, actio
   const celebration = event.kind === 'goal' && flight === 1 ? smooth(resolve / .55) : 0;
   const teammates = celebration && striker ? attackers.filter(player => !player.keeper && player.key !== striker.key)
     .sort((a, b) => Math.hypot(a.x - planted.x, a.y - planted.y) - Math.hypot(b.x - planted.x, b.y - planted.y)).slice(0, 2) : [];
+  // Round 1101: nobody of the shooter's side stands where he plants. Such a man steps six to the side, away from the spot.
+  const aside = (player: T): T => striker && attackers.includes(player) && !player.keeper && player.key !== striker.key
+    && Math.abs(player.x - spot.x) < 5 && Math.abs(player.y - spot.y) < 4
+    ? { ...player, x: player.x + (player.x > spot.x || (player.x === spot.x && wing < 0) ? 6 : -6) * plant } : player;
   const patch = (players: T[]) => players.map(player => player.key === striker?.key ? { ...player, ...planted }
     : player.key === keeper?.key && keeperPosition ? { ...player, ...keeperPosition }
-    : teammates.some(teammate => teammate.key === player.key) ? { ...player, ...point(player, planted, celebration * .18) } : player);
+    : teammates.some(teammate => teammate.key === player.key) ? { ...aside(player), ...point(aside(player), planted, celebration * .18) } : aside(player));
   const poses: Record<string, Pose> = {};
   if (striker) poses[striker.key] = { kick: Math.sin(bounded((p - .12) / .24) * Math.PI) };
   if (keeper) poses[keeper.key] = { dive: (event.kind === 'save' ? wing : -wing) * dive * 68, catching: event.kind === 'save' ? dive : 0 };
@@ -65,9 +71,42 @@ export function actionFrame<T extends MotionPlayer>(scene: MotionScene<T>, actio
   };
 }
 
+/** Round 1101: two men of one side are never drawn on top of each other mid stride. When their straight
+ *  paths pass through each other during a tween, each steps aside along the line of their closest approach.
+ *  That line does not turn during a tween, so nobody jumps, and the step is zero at both ends of it. */
+function passing<T extends MotionPlayer>(before: T[], after: T[], now: T[], t: number): T[] {
+  const ease = Math.min(1, 5 * t, 5 * (1 - t));
+  if (ease <= 0) return now;
+  const start = after.map(player => before.find(p => p.key === player.key && p.name === player.name) ?? player);
+  const raw = now.map(player => ({ x: player.x, y: player.y }));
+  for (let i = 0; i < after.length; i++) for (let j = i + 1; j < after.length; j++) {
+    const r0 = { x: start[j].x - start[i].x, y: start[j].y - start[i].y };
+    const v = { x: after[j].x - after[i].x - r0.x, y: after[j].y - after[i].y - r0.y };
+    const speed = Math.hypot(v.x, v.y);
+    if (speed < 1e-6) continue;
+    const u = { x: v.x / speed, y: v.y / speed };
+    const from0 = r0.x * u.x + r0.y * u.y;
+    // Only a pair that really passes: the closest approach lies inside this tween.
+    if (from0 > 0 || from0 + speed < 0) continue;
+    const r = { x: raw[j].x - raw[i].x, y: raw[j].y - raw[i].y };
+    const along = r.x * u.x + r.y * u.y;
+    if (Math.abs(along) >= 6) continue;
+    let n = { x: r.x - along * u.x, y: r.y - along * u.y };
+    const gap = Math.hypot(n.x, n.y);
+    if (gap >= 3.6) continue;
+    n = gap < 1e-6 ? { x: -u.y, y: u.x } : { x: n.x / gap, y: n.y / gap };
+    const step = (3.6 - gap) * (Math.abs(along) <= 3.6 ? 1 : (6 - Math.abs(along)) / 2.4) * ease / 2;
+    now[i].x -= n.x * step; now[i].y -= n.y * step;
+    now[j].x += n.x * step; now[j].y += n.y * step;
+  }
+  return now;
+}
+
 export function between<T extends MotionPlayer>(from: MotionScene<T>, to: MotionScene<T>, t: number): MotionScene<T> {
-  const players = (before: T[], after: T[]) => after.map(player => ({ ...player, ...point(before.find(p => p.key === player.key && p.name === player.name) ?? player, player, t) }));
-  return { ...to, mine: players(from.mine, to.mine), theirs: players(from.theirs, to.theirs), ball: point(from.ball, to.ball, t) };
+  const players = (before: T[], after: T[]) => passing(before, after, after.map(player => ({ ...player, ...point(before.find(p => p.key === player.key && p.name === player.name) ?? player, player, t) })), t);
+  // Round 1101: a scene that carries an arc is reached along a quadratic curve (a corner's delivery), any other along a line.
+  const ball = to.arc ? point(point(from.ball, to.arc, t), point(to.arc, to.ball, t), t) : point(from.ball, to.ball, t);
+  return { ...to, mine: players(from.mine, to.mine), theirs: players(from.theirs, to.theirs), ball };
 }
 
 /** Uses the viewer's clock, so pausing freezes players, ball and action poses. */
