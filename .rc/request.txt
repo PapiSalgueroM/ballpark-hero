@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+# Round 1104 head: the harness whose build the relative import broke, the two walks that were red (three runs of the press walk: its scrum is a matter of chance), the type gate and the digest after the import fix
+benefits: node scripts/simUsCareerAnnualBenefits.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+digest: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts
+hub: ENGINES=chromium node scripts/playCareerHub.mjs
+press1: ENGINES=chromium node scripts/playCareerPress.mjs
+press2: ENGINES=chromium node scripts/playCareerPress.mjs
+press3: ENGINES=chromium node scripts/playCareerPress.mjs
+truth: node scripts/simNflTruth.mjs
