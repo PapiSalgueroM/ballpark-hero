@@ -1,0 +1,2 @@
+#!serial
+mut: MUT_TAG=-vf MUT_ONLY=none-box,none-hook,MK-minchars-off-by-one,MB-leave-no-id-bump,MB2-leave-no-abort-no-bump,MB3-leave-keeps-debounce-timer,MN4-commit-leaves-search-in-flight,MG-wait-ten-times-longer,MO-caller-signal-not-heard,MF-club-substring-match,MR-no-cancel-on-unmount,MS-new-formation-no-cancel,MT-reset-no-cancel,MQ-no-giveup-after-answer,FX6-escape-only-with-names node .rc/x/fx-mut.mjs
