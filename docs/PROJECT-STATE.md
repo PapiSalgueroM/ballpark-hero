@@ -1,3 +1,72 @@
+## Round 1090 preparation, 2026-10-07, Soccer Phone currency display
+
+Preparation 3 at0fdb8c67/run37708609456 completed red. Proper app types/build,
+mounted13 cases/37 effective controls and closing source/dependency holds passed.
+Independent full retention binds every mounted and native early file exactly.
+Native completed EUR320, then the first GBP390 wage fault lost its text locator;
+reparsing innerHTML also merged three original text nodes. No product failure was
+demonstrated. The next QA-only correction retains the original ElementHandle and
+child Node objects, then restores those same nodes. All assertions remain strict.
+Eight journeys/nine controls remain unaccepted until the corrected remote run.
+
+The unchanged AL8fe baseline was actually built in the same remote job with held
+dependencies and exact tracked-source manifests. Its five original checks failed
+the same named findings as the candidate:53.6 KB/61.0 KB save ceilings, nine missing
+What's New entries, four Buzzer/Cage sitemap date/hash findings, and Manager/Tycoon
+JSON-LD mismatches. This establishes inherited failures in these five checks,
+without waiving them or accepting the release. Full artifact11521975501 retains
+the original child logs/process exits, exact source/build archives and raw proof.
+Release ownership must resolve these old gates on the integrated release tree.
+
+Preparation 1 at 04616fa4/run37705722338 failed proper app types with eleven
+TS2339 findings on the new fixture's optional money field. Build and all proof
+suites were skipped. The next candidate adds only the same optional MoneyState
+intersection already used by the actual engine to the cloned test fixture.
+No runtime statement, assertion, product component or engine changed.
+
+Preparation 2 at 8c2fd4c5/run37706266326 passed proper app types/build and the mounted
+13 cases/37 copied controls; independent raw review accepted this scoped mounted proof. Native completed no journeys
+or controls: its QA-only bundle used classic JSX and threw `React is not defined` on opening
+PhonePanel. The next driver sets only `jsx: 'automatic'`, matching the app's `react-jsx` mode.
+Its geometry, input, capture, state assertions and product source stay unchanged. This correction
+is unexecuted. The completed run retains six of eight original regressions green: simMoney's
+53.6 KB and simPhone2's 61.0 KB save ceilings failed. All four original Phone focus controls
+failed their intended assertions and passed their wrappers. Seventeen of twenty readers passed;
+simPrerender (nine missing What's New entries), simSitemap (Buzzer/Cage dates and hashes), and
+simSeoMetaSplit (Manager/Tycoon JSON-LD) failed. Closing source/dependency holds passed. These
+original failures remain unresolved, with no pinned-base equivalence or whole-candidate acceptance.
+The next remote workflow also builds unchanged AL8fe in an isolated detached worktree with the same
+held dependency manifests, records all five original failures without changing their thresholds, and
+retains complete source/build bytes and process logs. Candidate original gates remain strict.
+
+Unverified preparation on `codex/soccer-phone-currency-1090`, pinned to Release AL integration
+`8fe82a4dc1346f7d5b8072f387f3acb34bbaa3c8`. The previously accepted 1073 branch remains untouched.
+The owned managed checkout is `soccer-phone-currency-1090/ballpark-hero`.
+The earlier1060 checkout belongs to another task and was restored cleanly to its
+original accepted1073 head2fe8e330; candidate0fdb8c67/treeb3217c46 was moved intact
+to the correctly attached1090 checkout. No remote amendment or restart occurred.
+This is not a main, live-site or release acceptance claim.
+
+The two-component correction makes the Phone header and money screens use the existing selected
+currency formatter, gives Bank an exact grouped integer wage, converts existing Shop narrative euro
+amounts and shows the existing dated rate note inside the Phone. Rates, euro-unit balances, market
+indices, percentages, action payloads, engine/data, saves and old tests stay unchanged.
+
+Authored remote proof: 13 actual mounted display/action/baseline cases and 37 separately mapped
+copied-source faults; eight actual Phone overlay journeys covering all existing preferences across
+320/390 touch and 1280 keyboard, plus nine restored DOM faults. The native fixtures are finite display
+states built from the actual engine, with financial boundary fields explicitly staged. They are not a
+full career route, campaign or earned-wealth proof. Native checks retain complete read-only career,
+storage, callback, RNG and clock observations, actual cached fonts, physical clipping/focus/Back/close,
+and both readable viewport and full PNGs. Existing small metadata is outside the new 12px leaf scope.
+
+All execution is remote-only. The new `soccer-phone-currency.yml` gate runs proper app types/build,
+the new suites, unchanged currency/money/parity/Phone regressions, four original Phone focus controls,
+all twenty built readers/source guards and exact source/dependency holds. It uploads mounted and
+native evidence promptly, with a finite native deadline. No authored count is credited as a pass until
+the exact committed candidate runs and its raw artifacts receive independent review. Runtime acceptance,
+PR, release integration and publication remain pending.
+
 ## Release AK LIVE, 2026-10-07 15:12 EDT, and the split of work with Codex
 
 Claude lane (session E, a new lead: session D stopped at its weekly limit with AK's gate still running).
