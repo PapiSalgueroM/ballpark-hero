@@ -1,0 +1,86 @@
+ran 400 careers a sport on and off in 186.5 s (seed 0)
+1) depth: cards answered per offseason
+   nfl: on median 3 mean 2.706 (6254 offseasons); off mean 1.000 (6140)
+   nba: on median 2 mean 1.999 (7367 offseasons); off mean 1.000 (7243)
+   mlb: on median 2 mean 1.807 (7550 offseasons); off mean 1.000 (7399)
+   nhl: on median 2 mean 2.200 (8136 offseasons); off mean 1.000 (8107)
+2) cooldown: an independent reading of the rule
+   nfl: 16001 cards checked, 0 inside their cooldown
+   nba: 13428 cards checked, 0 inside their cooldown
+   mlb: 11668 cards checked, 0 inside their cooldown
+   nhl: 16542 cards checked, 0 inside their cooldown
+3) story: no two cards of one offseason share a ledger key
+   nfl: 6254 summers, 1537 storied cards answered, 0 summers with a repeated key
+   nba: 7367 summers, 1149 storied cards answered, 0 summers with a repeated key
+   mlb: 7550 summers, 1018 storied cards answered, 0 summers with a repeated key
+   nhl: 8136 summers, 1182 storied cards answered, 0 summers with a repeated key
+3b) press: card 1 is a big press moment exactly when the one card draw is
+   nfl: big press in 887 of 6254 offseasons one card, 887 on the summer; 346 back to back; 0 differ; 0 later cards big
+   nba: big press in 1237 of 7367 offseasons one card, 1237 on the summer; 432 back to back; 0 differ; 0 later cards big
+   mlb: big press in 1926 of 7550 offseasons one card, 1926 on the summer; 965 back to back; 0 differ; 0 later cards big
+   nhl: big press in 1290 of 8136 offseasons one card, 1290 on the summer; 500 back to back; 0 differ; 0 later cards big
+7) coverage: distinct cards answered per career, on over off
+   nfl: 28.25 distinct cards a career on, 13.20 off, lift 2.14; 157 and 158 distinct over the fleet
+   nba: 30.73 distinct cards a career on, 15.27 off, lift 2.01; 159 and 159 distinct over the fleet
+   mlb: 24.29 distinct cards a career on, 13.66 off, lift 1.78; 151 and 149 distinct over the fleet
+   nhl: 31.75 distinct cards a career on, 16.09 off, lift 1.97; 160 and 160 distinct over the fleet
+10) later cards: no answer after card 1 moves the rating or its ceiling
+   nfl: 10670 later answers, 0 moved the rating; 112 of 17036 dealt cards skipped when shown
+   nba: 7362 later answers, 0 moved the rating; 131 of 14860 dealt cards skipped when shown
+   mlb: 6093 later answers, 0 moved the rating; 46 of 13689 dealt cards skipped when shown
+   nhl: 9761 later answers, 0 moved the rating; 82 of 17979 dealt cards skipped when shown
+11) the integrity arc stays with card 1: no corruption card after it
+   nfl: 932 corruption cards as card 1, 0 later
+   nba: 1173 corruption cards as card 1, 0 later
+   mlb: 847 corruption cards as card 1, 0 later
+   nhl: 1368 corruption cards as card 1, 0 later
+12) card 1: the one card draw, or when it rests, a fresh card of its kind
+   nfl: 6018 card 1s were the draw itself (0 were not); 236 draws were resting, 236 with a fresh card of their kind (35 rating cards), 0 redrawn in another kind
+   nba: 7240 card 1s were the draw itself (0 were not); 127 draws were resting, 127 with a fresh card of their kind (33 rating cards), 0 redrawn in another kind
+   mlb: 7349 card 1s were the draw itself (0 were not); 201 draws were resting, 201 with a fresh card of their kind (76 rating cards), 0 redrawn in another kind
+   nhl: 7520 card 1s were the draw itself (0 were not); 616 draws were resting, 616 with a fresh card of their kind (79 rating cards), 0 redrawn in another kind
+4) keyed: Math.random calls per offseason, cards 3 against cards 1, from one cloned state
+   nfl: 400 offseasons replayed, 0 differ
+   nba: 400 offseasons replayed, 0 differ
+   mlb: 400 offseasons replayed, 0 differ
+   nhl: 400 offseasons replayed, 0 differ
+5) never empty: every card in the deck stamped this season, card 1 still comes
+   nfl: 92 fully stamped offseasons, 0 dealt nothing
+   nba: 107 fully stamped offseasons, 0 dealt nothing
+   mlb: 95 fully stamped offseasons, 0 dealt nothing
+   nhl: 105 fully stamped offseasons, 0 dealt nothing
+6) balance: one child per sport, 2000 careers a sport a seed, 3 seeds
+   nfl: off peak 82.00, legacy median 284, Hall 14.8%; on peak 82.07, legacy median 288, Hall 15.1%
+      peak OVR: difference 0.07, interval [-0.05, 0.19], tolerance 1.00 either way: inside
+      median legacy: difference 1.4%, interval [-4.1%, 6.3%], tolerance 7.5% either way: inside
+      Hall share: difference 0.27 pts, interval [-1.01 pts, 1.54 pts], tolerance 3.00 pts either way: inside
+      headline awards a season: difference -6.7%, interval [-14.2%, 1.0%], tolerance 15.0% either way: inside
+      6b: on the summer loop, median career majors 0, 4.5% ever win one, Hall 15.1%
+   balance ran in 664.8 s
+   nba: off peak 86.16, legacy median 360, Hall 29.1%; on peak 86.32, legacy median 361, Hall 30.1%
+      peak OVR: difference 0.16, interval [0.04, 0.28], tolerance 1.00 either way: inside
+      median legacy: difference 0.3%, interval [-1.6%, 3.7%], tolerance 7.5% either way: inside
+      Hall share: difference 0.95 pts, interval [-0.68 pts, 2.58 pts], tolerance 3.00 pts either way: inside
+      headline awards a season: difference 0.8%, interval [-3.5%, 5.6%], tolerance 15.0% either way: inside
+      6b: on the summer loop, median career majors 0, 16.9% ever win one, Hall 30.1%
+   balance ran in 807.2 s
+   mlb: off peak 82.39, legacy median 392, Hall 30.9%; on peak 82.52, legacy median 404, Hall 32.0%
+      peak OVR: difference 0.13, interval [-0.00, 0.26], tolerance 1.00 either way: inside
+      median legacy: difference 3.1%, interval [0.8%, 4.9%], tolerance 7.5% either way: inside
+      Hall share: difference 1.18 pts, interval [-0.48 pts, 2.84 pts], tolerance 3.00 pts either way: inside
+      headline awards a season: difference 0.8%, interval [-4.9%, 6.1%], tolerance 15.0% either way: inside
+      6b: on the summer loop, median career majors 0, 7.6% ever win one, Hall 32.0%
+   balance ran in 815.9 s
+   nhl: off peak 85.95, legacy median 360, Hall 27.6%; on peak 86.09, legacy median 367, Hall 28.3%
+      peak OVR: difference 0.14, interval [0.01, 0.26], tolerance 1.00 either way: inside
+      median legacy: difference 1.9%, interval [0.0%, 3.9%], tolerance 7.5% either way: inside
+      Hall share: difference 0.67 pts, interval [-0.94 pts, 2.27 pts], tolerance 3.00 pts either way: inside
+      headline awards a season: difference 3.0%, interval [-1.6%, 7.4%], tolerance 15.0% either way: inside
+      6b: on the summer loop, median career majors 0, 15.5% ever win one, Hall 28.3%
+   balance ran in 793.7 s
+   balance ran in 817.0 s
+8) agreement: careerEventDeck.ts against soccerCareerEngine.ts on 10,000 cases
+   10000 cases, 1428 on cooldown, 0 disagree
+9) board: src/test/usCareerSummer.test.tsx on the real board
+   Vitest exit 0, 40 passed, 0 failed
+simUsCareerSummer: green. Sections 1, 2, 3, 3b, 4, 5, 6, 7, 8, 9, 10, 11, 12 held over 400 careers a sport.
