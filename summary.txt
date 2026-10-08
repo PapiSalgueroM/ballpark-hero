@@ -1,0 +1,5 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simPrerender exit=1 0s | simPrerender: 1 failure
+simSnapshotAssets exit=0 0s | simSnapshotAssets: green. Every page knows where its own code is, and finding out costs nobody a round trip.
+walk exit=0 9s | playFoOneRating: green. The roster shelf and the draft cards print the committed files' numbers at both sizes.
+walk-expect exit=0 9s | control expect fired: 4 of 4 comparisons went red on exactly the one man

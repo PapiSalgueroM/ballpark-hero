@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+walk: ENGINES=chromium node scripts/playFoOneRating.mjs
+walk-expect: FO_WALK_CONTROL=expect ENGINES=chromium node scripts/playFoOneRating.mjs
+simPrerender: node scripts/simPrerender.mjs
+simSnapshotAssets: node scripts/simSnapshotAssets.mjs
