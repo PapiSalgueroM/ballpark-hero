@@ -1,0 +1,35 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/seasonCore.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 69[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/seasonCentreSlots.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[32m 123[2mms[22m[39m
+ [32m✓[39m src/test/miniPitchScene.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 140[2mms[22m[39m
+ [32m✓[39m src/test/seasonResume.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m src/test/liveSimCelebration.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 46[2mms[22m[39m
+ [32m✓[39m src/test/rankShift.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 212[2mms[22m[39m
+ [32m✓[39m src/test/seasonReplays.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m src/test/liveSimMotion.test.tsx [2m([22m[2m24 tests[22m[2m)[22m[33m 17938[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mactual feed triggers player strikes, ball flight, saves and net contact [33m 901[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mmotion leaves committed state and settled results identical [33m 398[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'goal' reduced=false) [33m 1447[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'goal' reduced=true) [33m 575[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'save' reduced=false) [33m 553[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'save' reduced=true) [33m 410[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'goal' reduced=false) [33m 968[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'goal' reduced=true) [33m 778[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'save' reduced=false) [33m 604[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'save' reduced=true) [33m 446[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal resume shows contact and Skip keeps immediate exactly-once whistle callbacks [33m 3888[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mthe ninetieth minute asks the latest save: refused means full time, never thirty empty minutes [33m 2530[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mthe ninetieth minute asks the latest save: extra time drawn there is played, whatever this render was given [33m 1100[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mthe extra time banner says what is true: a second leg is level on aggregate [33m 1170[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22ma goal in the board is announced with its plus, GOAL! ... 90+N [33m 610[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m      Tests [22m [1m[32m130 passed[39m[22m[90m (130)[39m
+[2m   Start at [22m 16:49:04
+[2m   Duration [22m 22.19s[2m (transform 3.81s, setup 537ms, collect 6.42s, tests 18.56s, environment 2.89s, prepare 1.22s)[22m
+

@@ -1,0 +1,9 @@
+build exit=0 19s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simMotion exit=0 9s | simSeasonCentreMotion: 23 checks, 0 failed
+simMotion-fence exit=1 6s | simSeasonCentreMotion: 23 checks, 1 failed (control fence)
+simFlagship exit=0 0s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+vitest-round exit=0 23s |    Duration  22.19s (transform 3.81s, setup 537ms, collect 6.42s, tests 18.56s, environment 2.89s, prepare 1.22s)
+tsc exit=0 43s | 
+play-pitchside exit=1 26s | playSeasonCentreMotion: 2 checks, 1 failed (control pitchside) (only B5)
+play-pitchlayer exit=1 69s | playSeasonCentreMotion: 61 checks, 1 failed (control pitchlayer) (only C)
+play exit=0 123s | playSeasonCentreMotion: 77 checks, 0 failed
