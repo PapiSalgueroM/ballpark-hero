@@ -81,6 +81,8 @@ let sawScrum = false;
    came to two seasons and the walk went red on a career that had simply not
    met the scrum yet. The screen cap below only stops a walk that is stuck. */
 let seasonsPlayed = 0;
+/* How many of the rival's choice cards the walk answered, printed on the scrum line so a log shows the path was walked. */
+let rivalCalls = 0;
 for (let step = 0; step < 90 && !sawScrum; step++) {
   const body = await page.locator('body').innerText();
   if (body.includes('The accountability scrum')) { sawScrum = true; break; }
@@ -117,7 +119,7 @@ for (let step = 0; step < 90 && !sawScrum; step++) {
   if (await rivalCall.count()) {
     const answered = rivalCall.locator('button:has-text("Continue")');
     if (await answered.count()) await answered.first().click();
-    else await rivalCall.locator('[data-rivalry-option]').last().click();
+    else { await rivalCall.locator('[data-rivalry-option]').last().click(); rivalCalls += 1; }
     await page.waitForTimeout(700);
     continue;
   }
@@ -151,7 +153,7 @@ for (let step = 0; step < 90 && !sawScrum; step++) {
   }
   await page.waitForTimeout(900);
 }
-say(sawScrum, `the accountability scrum arrived within the losing stretch (${seasonsPlayed} seasons played)`, true);
+say(sawScrum, `the accountability scrum arrived within the losing stretch (${seasonsPlayed} seasons played, ${rivalCalls} rival choice cards answered)`, true);
 
 /* Without a scrum on screen there is no card to read and no answer to click
    (the old walk died on a 30 second click timeout here). The miss above is
