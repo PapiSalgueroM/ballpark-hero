@@ -1,0 +1,3 @@
+careersquad: node scripts/simCareerSquad.mjs
+careersquad-quick: node scripts/simCareerSquad.mjs 40
+careersquad-noshift: CAREER_SQUAD_CONTROL=noshift node scripts/simCareerSquad.mjs 40
