@@ -1,0 +1,79 @@
+
+prefers-reduced-motion: no-preference
+   rise      animation=cmRise         opacity=0 display=block
+   slam      animation=cmSlam         opacity=0 display=block
+   glow      animation=cmGoldGlow     opacity=1 display=block
+   confetti  animation=cmConfettiFall opacity=0 display=inline
+
+prefers-reduced-motion: reduce
+   rise      animation=none           opacity=1 display=block
+   slam      animation=none           opacity=1 display=block
+   glow      animation=none           opacity=1 display=block
+   confetti  animation=cmConfettiFall opacity=1 display=none
+
+Round 530 routes under prefers-reduced-motion: reduce, 20 routes served from dist
+   /                   text=22408 keyframeBlocks=3 ours=2 thirdParty=1 unguarded=0 reveal=10 animating=0 invisible=0 slowMotion=713/4668
+  FAIL: /: 713 element(s) still move for more than 10ms under reduce (button.items-center.justify-center t=150 a=0, button.inline-flex.items-center t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /cfb-dynasty        text=9525 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=83/455
+  FAIL: /cfb-dynasty: 83 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /cbb-dynasty        text=9360 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=79/441
+  FAIL: /cbb-dynasty: 79 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /front-office       text=13913 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=71/425
+  FAIL: /front-office: 71 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /nba-front-office   text=13228 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=69/412
+  FAIL: /nba-front-office: 69 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /mlb-front-office   text=9483 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=69/405
+  FAIL: /mlb-front-office: 69 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /nhl-front-office   text=13899 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=71/424
+  FAIL: /nhl-front-office: 71 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /nfl-my-career      text=25829 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=69/495
+  FAIL: /nfl-my-career: 69 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /nba-my-career      text=24328 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=66/486
+  FAIL: /nba-my-career: 66 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /mlb-my-career      text=24232 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=72/491
+  FAIL: /mlb-my-career: 72 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /nhl-my-career      text=23409 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=66/467
+  FAIL: /nhl-my-career: 66 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /club-manager       text=35654 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=45/475
+  FAIL: /club-manager: 45 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /soccer-career      text=15534 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=49/375
+  FAIL: /soccer-career: 49 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /rebuild            text=16034 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=48/329
+  FAIL: /rebuild: 48 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /idle-arena         text=11975 keyframeBlocks=3 ours=2 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=40/368
+  FAIL: /idle-arena: 40 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /stadium-tycoon     text=20741 keyframeBlocks=4 ours=3 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=58/490
+  FAIL: /stadium-tycoon: 58 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /wonderkid-factory  text=13526 keyframeBlocks=2 ours=1 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=38/343
+  FAIL: /wonderkid-factory: 38 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /fight-career       text=13508 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=58/393
+  FAIL: /fight-career: 58 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /fight-gym          text=7483 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=40/298
+  FAIL: /fight-gym: 40 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /fight-promoter     text=10839 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=39/315
+  FAIL: /fight-promoter: 39 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   Season Centre kick off  text=663 reveal=1 animating=0 invisible=0 slow=0
+   Season Centre matchday  text=520 reveal=1 animating=0 invisible=0 slow=0
+   Season Centre review    text=795 reveal=1 animating=0 invisible=0 slow=0
+   Round 1107 signing scene text=63 checked=5 animating=0 invisible=0 notGone=0 slow=0 confetti=0
+   Round 1107 trophy scene  text=72 checked=11 animating=0 invisible=0 notGone=0 slow=8 confetti=0
+  FAIL: trophy scene: 8 element(s) in its card still move for more than 10ms under reduce
+   our own keyframe CSS was present and guarded on 4 of 20 routes; the rest had not reached a reveal yet
+   no preference /front-office    elements that move for more than 10ms: 71 of 425
+   no preference /fight-career    elements that move for more than 10ms: 58 of 393
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4189/stadium-tycoon
+Call log:
+  - navigating to "http://127.0.0.1:4189/stadium-tycoon", waiting until "networkidle"
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playReducedMotion.mjs:453:13 {
+  log: [
+    '  - navigating to "http://127.0.0.1:4189/stadium-tycoon", waiting until "networkidle"'
+  ],
+  name: 'Error'
+}
+
+Node.js v24.21.0
