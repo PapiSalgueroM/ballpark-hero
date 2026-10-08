@@ -33,9 +33,22 @@
  *     close, every button at least 44 px tall, no text under 12 px, and at
  *     390 the panel does not scroll on any screen but the bench. On a sheet
  *     by role every role in the eleven reads whole ("2nd" over "choice"),
- *     and how many surnames are cut short is printed. (page) On the real
+ *     and no name is cut short, in the eleven or in a row of the bench or of
+ *     his line (a phone has no hover to read a cut one). (page) On the real
  *     page the sheet covers the screen and its panel sits inside it, at 390
  *     and at 1280, wherever the page behind it has scrolled to.
+ *  3b. After review. A squad of the game's own years that still holds real
+ *     men says REAL AND INVENTED and tags each real man where he is listed.
+ *     A real season is its own squad: Man City 2022/23 lists the striker who
+ *     signed in the summer of 2022.
+ *  4b. After review. Tab and Shift+Tab stay inside the sheet and the page
+ *     behind it does not move.
+ *  7b. After review. Short screens (375 by 553, 320 by 568, 360 by 640 and a
+ *     phone on its side, 844 by 390): on every screen, the first open
+ *     included, Back is on the screen, nothing covers it and a plain tap on
+ *     it works; a body taller than its box scrolls to its last line.
+ * 13. After review. An injured season prints the games that were played, and
+ *     never more league games than games.
  *  8. Motion: with motion on, 20 ms after the eleven opens its last cell is
  *     still invisible (the stagger holds its first frame). With reduced
  *     motion, 100 ms after each screen arrives nothing in the sheet is still
@@ -52,6 +65,9 @@
  *   nofill  the stagger's fill mode is stripped from the sheet     -> 8 red
  *   clip    a role in the eleven is one long unbreakable line      -> 7 red
  *   shift   the sheet is no longer pinned to the screen            -> 7 red
+ *   noscroll the sheet's body can neither give way nor scroll      -> 7b red
+ *   notrap  Tab is left to the browser                             -> 4b red
+ *   ellipsis a long surname goes back under an ellipsis            -> 7 red
  *   static  (page) the page imports the sheet chunk as it loads    -> 1 red
  *   label   (page) the home footer reads "Close"                   -> 9 red
  *
@@ -80,7 +96,7 @@ const PORT = Number(process.env.PORT || 4577);
 const BASE = `http://127.0.0.1:${PORT}`;
 const SHOTS = path.resolve(ROOT, process.env.SHOTS || '.tmp-fx/shots');
 const CONTROL = process.env.CAREER_SQUAD_PLAY_CONTROL ?? '';
-const CONTROLS = ['rank', 'write', 'still', 'nofill', 'clip', 'shift', 'static', 'label'];
+const CONTROLS = ['rank', 'write', 'still', 'nofill', 'clip', 'shift', 'static', 'label', 'noscroll', 'notrap', 'ellipsis'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) throw new Error(`unknown CAREER_SQUAD_PLAY_CONTROL ${CONTROL}`);
 const SAVE_KEY = 'soccerCareerSave';
 
@@ -159,21 +175,32 @@ const SAVES = {
   B: findSave('2015-19', 2015, s => playedRows(s) >= 1 && lib.squadView(s)?.source === 'real'),
   /* R: a real past season with no checked squad list: roles only */
   R: findSave('1990-94', 1990, s => playedRows(s) === 2 && lib.squadView(s)?.source === 'roles'),
+  /* M: the game's own years at a club whose last real squad is still partly there */
+  M: findSave('2025', 2025, s => playedRows(s) >= 1 && lib.squadView(s)?.source === 'invented' && lib.squadView(s).carried >= 5),
+  /* H: a season an injury took games off, so the row holds fewer games than league games */
+  H: findSave('2025', 2025, s => { const l = sheet.lastSeason(s); return !!l && l.cut && l.apps < l.leagueApps && !!lib.squadView(s); }),
 };
 /* C: an academy year */
 seedRandom(1115);
 SAVES.C = JSON.parse(JSON.stringify(engine.initCareer('Sam Carter', 'England', 'ST', '2025', abil(55), 55, 2025, CLUBS, null)));
 Math.random = realRandom;
-for (const k of ['A', 'B', 'R']) if (!SAVES[k]) { console.log(`no save ${k} was found in 400 seeded careers. NOT CHECKED.`); process.exit(1); }
-/* D: the longest real line there is, a midfielder at PSG going into 2022 (nine real midfielders) */
-{
-  const d = JSON.parse(JSON.stringify(SAVES.A));
-  const shift = 2021 - d.seasons[d.seasons.length - 1].year;
-  for (const row of d.seasons) row.year += shift;
-  Object.assign(d, { position: 'CM', currentClub: 'PSG', currentClubCountry: 'France', currentClubTier: 1, overall: 80 });
-  SAVES.D = d;
-}
+for (const k of ['A', 'B', 'R', 'M', 'H']) if (!SAVES[k]) { console.log(`no save ${k} was found in 400 seeded careers. NOT CHECKED.`); process.exit(1); }
+/* D: the longest real line there is, a midfielder at PSG going into 2021/22 (nine real midfielders).
+   E: the real squad whose eleven on rating has the oddest back line, a centre back at Real Madrid going into 2022/23.
+   F: a real season everybody can check, a striker at Man City going into 2022/23.
+   All three are save A moved to that club with its last row the season before. */
+const moved = (lastRow, to) => {
+  const s = JSON.parse(JSON.stringify(SAVES.A));
+  const shift = lastRow - s.seasons[s.seasons.length - 1].year;
+  for (const row of s.seasons) row.year += shift;
+  return Object.assign(s, to);
+};
+SAVES.D = moved(2020, { position: 'CM', currentClub: 'PSG', currentClubCountry: 'France', currentClubTier: 1, overall: 80 });
+SAVES.E = moved(2021, { position: 'CB', currentClub: 'Real Madrid', currentClubCountry: 'Spain', currentClubTier: 1, overall: 80 });
+SAVES.F = moved(2021, { position: 'ST', currentClub: 'Man City', currentClubCountry: 'England', currentClubTier: 1, overall: 80 });
 const VIEW = Object.fromEntries(Object.entries(SAVES).map(([k, s]) => [k, lib.squadView(s)]));
+check(VIEW.M?.source === 'invented' && VIEW.M.carried >= 5 && VIEW.E?.source === 'real' && VIEW.E.year === 2022 && VIEW.F?.source === 'real' && VIEW.F.year === 2022 && sheet.lastSeason(SAVES.H)?.cut === true,
+  `saves: M at ${VIEW.M?.club} ${VIEW.M?.year} with ${VIEW.M?.carried} real men still there, E real at ${VIEW.E?.club} ${VIEW.E?.year}, H after an injured season at ${sheet.lastSeason(SAVES.H)?.club}`);
 check(VIEW.A?.source === 'invented' && VIEW.B?.source === 'real' && VIEW.R?.source === 'roles' && VIEW.C === null && VIEW.D?.source === 'real' && VIEW.D.groupSize >= 9,
   `saves: A invented at ${VIEW.A?.club} ${VIEW.A?.year}, B real at ${VIEW.B?.club} ${VIEW.B?.year}, R by role at ${VIEW.R?.club} ${VIEW.R?.year}, C academy (no squad), D real with a line of ${VIEW.D?.groupSize}`);
 
@@ -213,6 +240,9 @@ let controlEdits = 0;
    tile's failure dialog wears the same classes and lives in another file). */
 const SHEET_BOX = 'fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-3 backdrop-blur-sm';
 const UNPINNED_BOX = SHEET_BOX.replace('fixed inset-0', 'absolute inset-0');
+/* The classes of the sheet's body and of a name in the eleven, as SquadSheet.tsx writes them. */
+const BODY_BOX = 'flex min-h-0 flex-col overflow-y-auto overscroll-contain';
+const CELL_NAME = 'w-full text-xs font-semibold leading-tight [overflow-wrap:anywhere]';
 function served(name, body) {
   const edit = (needle, swap) => {
     const n = body.split(needle).length - 1;
@@ -229,6 +259,12 @@ function served(name, body) {
   /* the role goes back to one long unbreakable line, the way it was first drawn */
   if (CONTROL === 'clip' && name.endsWith('.js')) edit('children: choiceOf(m.role)', 'children: m.role.split(" ").join("\\u00a0")');
   if (CONTROL === 'shift' && name.endsWith('.js') && /SquadSheet/.test(name)) edit(SHEET_BOX, UNPINNED_BOX);
+  /* the body of the sheet can neither give way nor scroll, the way the sheet was first built */
+  if (CONTROL === 'noscroll' && name.endsWith('.js')) edit(BODY_BOX, 'flex shrink-0 flex-col');
+  /* Tab is left to the browser, so it walks out of the sheet to the page behind */
+  if (CONTROL === 'notrap' && name.endsWith('.js')) edit('if (e.key !== "Tab") return;', 'if (true) return;');
+  /* a long surname goes back under an ellipsis */
+  if (CONTROL === 'ellipsis' && name.endsWith('.js')) edit(CELL_NAME, 'w-full truncate text-xs font-semibold');
   if (CONTROL === 'still' && name.endsWith('.css')) {
     edit('prefers-reduced-motion:reduce', 'prefers-reduced-motion:x-never');
     edit('prefers-reduced-motion: reduce', 'prefers-reduced-motion: x-never');
@@ -369,6 +405,53 @@ async function sourceFacts(page) {
   await ctx.close();
 }
 
+/* ── 3b. a squad that still holds real men says so, man by man; a real season is its own ── */
+{
+  const { ctx, page } = await open(SAVES.M);
+  await page.click(TILE);
+  await screenIs(page, 'home');
+  const chip = page.locator(`${SHEET} [data-squad-source]`).first();
+  check((await chip.innerText()).trim() === 'REAL AND INVENTED', `3b. save M's chip reads REAL AND INVENTED ("${(await chip.innerText()).trim()}")`);
+  const line = (await page.locator(`${SHEET} [data-squad-source-line]`).innerText()).replace(/\s+/g, ' ');
+  check(line.includes(`${VIEW.M.carried} of the real 2025/26 squad are still here`), `3b. and the home screen says how many (${line.slice(0, 110)})`);
+  let tagged = 0;
+  const realNames = new Set([...Object.values(VIEW.M.eleven).flat(), ...VIEW.M.bench].filter(m => !m.me && m.id === undefined).map(m => m.name));
+  const wrong = [];
+  for (const id of ['eleven', 'bench']) {
+    await page.click(`${SHEET} [data-squad-open="${id}"]`);
+    await screenIs(page, id);
+    await page.waitForTimeout(450);
+    const rows = await page.evaluate(sel => [...document.querySelectorAll(`${sel} [data-squad-man="other"]`)].map(e => ({
+      name: (e.getAttribute('title') || e.querySelector('[title]')?.getAttribute('title') || '').trim(), real: !!e.querySelector('[data-squad-real]'),
+    })), SHEET);
+    for (const r of rows) { if (r.real) tagged += 1; if (r.real !== realNames.has(r.name)) wrong.push(`${id}: ${r.name}`); }
+    await shot(page, `M-${id}-390`);
+    await backHome(page);
+  }
+  check(tagged === realNames.size && tagged >= 5 && wrong.length === 0, `3b. every real man still there is tagged REAL where he is listed, and nobody else is (${tagged} tagged of ${realNames.size}; wrong: ${wrong.slice(0, 3).join(', ') || 'none'})`);
+  await ctx.close();
+}
+{
+  /* the summer of 2022: the striker who signed that summer is in the squad of 2022/23 */
+  const { ctx, page } = await open(SAVES.F);
+  await page.click(TILE);
+  await screenIs(page, 'home');
+  const head = (await page.locator(`${SHEET} [role="dialog"]`).innerText()).replace(/\s+/g, ' ');
+  const names = [];
+  for (const id of ['eleven', 'bench']) {
+    await page.click(`${SHEET} [data-squad-open="${id}"]`);
+    await screenIs(page, id);
+    await page.waitForTimeout(450);
+    names.push(...await page.evaluate(sel => [...document.querySelectorAll(`${sel} [data-squad-man="other"]`)].map(e => (e.getAttribute('title') || e.querySelector('[title]')?.getAttribute('title') || '').trim()), SHEET));
+    await backHome(page);
+  }
+  const want = [...Object.values(VIEW.F.eleven).flat(), ...VIEW.F.bench].filter(m => !m.me).map(m => m.name);
+  check(head.includes('2022/23') && head.includes('REAL SQUAD') && head.includes('The real Man City squad of 2022/23'), `3b. save F is headed Man City 2022/23 REAL SQUAD (${head.slice(0, 90)})`);
+  check(names.includes('Erling Haaland') && names.length === want.length && want.every(n => names.includes(n)),
+    `3b. and it is that season's squad: the striker who signed in the summer of 2022 is on it, and the screen lists exactly the ${want.length} men the lib holds (${names.length} listed)`);
+  await ctx.close();
+}
+
 /* ── 4, 5, 6: every screen, the same every time, and nothing written ────── */
 async function walk(k, tag) {
   const { ctx, page } = await open(SAVES[k], { helpSeen: false });
@@ -440,11 +523,54 @@ const measure = (page) => page.evaluate(([tileSel, sheetSel]) => {
   if (panel) {
     const r = panel.getBoundingClientRect();
     out.outside = r.left < -0.5 || r.top < -0.5 || r.right > window.innerWidth + 0.5 || r.bottom > window.innerHeight + 0.5;
-    out.scrolls = panel.scrollHeight > panel.clientHeight + 1;
+    /* the panel is a header, a body and a foot: on a screen this tall neither
+       the panel nor its body has anything to scroll */
+    const body = panel.querySelector('[data-squad-body]');
+    out.scrolls = panel.scrollHeight > panel.clientHeight + 1 || !body || body.scrollHeight > body.clientHeight + 1;
     out.h = Math.round(r.height);
   }
   return out;
 }, [TILE, SHEET]);
+
+/* Can a thumb get out? Every button of the foot (the way back) and the ?
+   button must sit wholly inside the screen with nothing over its middle, the
+   panel must not spill, and when the body is taller than its box it must be a
+   box that scrolls all the way to its last line. */
+const reach = page => page.evaluate(sel => {
+  const sheetEl = document.querySelector(sel);
+  const panel = sheetEl?.querySelector('[role="dialog"]');
+  const body = panel?.querySelector('[data-squad-body]');
+  const foot = panel?.querySelector('[data-squad-foot]');
+  if (!panel || !body || !foot) return { ok: false, why: 'no header, body and foot', buttons: [] };
+  const why = [];
+  const buttons = [];
+  for (const b of [...foot.querySelectorAll('button'), panel.querySelector('button[aria-label="How the squad works"]')]) {
+    if (!b) { why.push('a button is missing'); continue; }
+    const r = b.getBoundingClientRect();
+    const x = r.left + r.width / 2; const y = r.top + r.height / 2;
+    const inside = r.top >= -0.5 && r.left >= -0.5 && r.bottom <= window.innerHeight + 0.5 && r.right <= window.innerWidth + 0.5;
+    const top = inside ? document.elementFromPoint(x, y) : null;
+    const hit = !!top && (top === b || b.contains(top));
+    const label = (b.getAttribute('aria-label') || b.textContent || '').trim();
+    buttons.push({ label, x, y, inside, hit, foot: foot.contains(b) });
+    if (!inside || !hit) why.push(`"${label}" at ${Math.round(r.top)} to ${Math.round(r.bottom)} of ${window.innerHeight}${inside ? ', covered' : ', off the screen'}`);
+  }
+  if (!foot.querySelector('button')) why.push('the foot holds no button');
+  const pr = panel.getBoundingClientRect();
+  if (pr.top < -0.5 || pr.bottom > window.innerHeight + 0.5) why.push(`the panel runs from ${Math.round(pr.top)} to ${Math.round(pr.bottom)} on a screen of ${window.innerHeight}`);
+  if (panel.scrollHeight > panel.clientHeight + 1) why.push(`the panel spills by ${panel.scrollHeight - panel.clientHeight} px`);
+  const scrolls = body.scrollHeight > body.clientHeight + 1;
+  if (scrolls) {
+    const oy = getComputedStyle(body).overflowY;
+    if (oy !== 'auto' && oy !== 'scroll') why.push(`the body is ${body.scrollHeight - body.clientHeight} px too tall and cannot scroll (${oy})`);
+    body.scrollTop = body.scrollHeight;
+    const lastEl = body.lastElementChild;
+    const cut = lastEl ? lastEl.getBoundingClientRect().bottom - body.getBoundingClientRect().bottom : 0;
+    if (cut > 1.5) why.push(`the last ${Math.round(cut)} px of the body cannot be scrolled to`);
+    body.scrollTop = 0;
+  }
+  return { ok: why.length === 0, why: why.join('; '), buttons, scrolls };
+}, SHEET);
 
 /* The cells of the eleven whose words do not fit: a box wider inside than
    out, on the cell or on anything it holds. */
@@ -464,12 +590,24 @@ const cutCells = page => page.evaluate(sel => {
   return out;
 }, SHEET);
 
+/* The names in the rows of the bench and of his own line that do not fit their box. */
+const rowNames = page => page.evaluate(sel => {
+  const out = { rows: 0, cut: [] };
+  for (const n of document.querySelectorAll(`${sel} [data-squad-name]`)) {
+    out.rows += 1;
+    if (n.clientWidth > 0 && n.scrollWidth > n.clientWidth + 1) out.cut.push(n.textContent.trim());
+  }
+  return out;
+}, SHEET);
+
 for (const [width, height] of [[390, 844], [1280, 800]]) {
-  for (const k of ['A', 'D', 'R', 'B']) {
+  for (const k of ['A', 'D', 'R', 'B', 'M', 'E']) {
     const { ctx, page } = await open(SAVES[k], { width, height });
     await page.evaluate(() => window.scrollTo(0, 120));
     const y0 = await page.evaluate(() => window.scrollY);
     const bad = { sideways: 0, outside: [], moved: [], short: [], small: [], scrolls: [] };
+    let rowsSeen = 0;
+    const cutRows = [];
     const heights = {};
     let xi = null;
     const note = (name, m) => {
@@ -494,6 +632,7 @@ for (const [width, height] of [[390, 844], [1280, 800]]) {
       await page.waitForTimeout(600);
       note(id, await measure(page));
       if (id === 'eleven') xi = await cutCells(page);
+      if (id === 'bench' || id === 'place') { const rr = await rowNames(page); rowsSeen += rr.rows; cutRows.push(...rr.cut.map(n => `${id}: ${n}`)); }
       await shot(page, `${k}-${id}-${width}`);
       await backHome(page);
     }
@@ -517,16 +656,125 @@ for (const [width, height] of [[390, 844], [1280, 800]]) {
     check(bad.scrolls.length === 0, `${where}: the panel does not scroll on any screen but the bench (${bad.scrolls.join(', ') || 'none'})`);
     /* A role is the only thing that says who a man is on a sheet with no
        names, so in the eleven it must read whole: "2nd" over "choice", never
-       a word cut short. A long surname may still be cut (the bench and the
-       place screen print it in full), and how many were is printed. */
+       a word cut short. A name is the same: a phone has no hover to read a
+       cut one, so a long surname goes onto a second line and none is cut,
+       in the eleven or in a row of the bench or of his own line. */
     if (k === 'R') {
       check(!!xi && xi.roles >= 10 && xi.cutRoles === 0 && xi.labels.every(l => /^(1st|2nd|3rd|4th) choice$/.test(l)),
         `${where}: every role in the eleven reads whole (${xi ? `${xi.roles} role cells, ${xi.cutRoles} cut, e.g. "${xi.labels[0]}"` : 'no eleven measured'})`);
     } else {
-      console.log(`note ${where}: ${xi ? `${xi.cutNames} of ${xi.cells} names in the eleven are cut short` : 'no eleven measured'}`);
+      check(!!xi && xi.cells === 11 && xi.cutNames === 0, `${where}: no name in the eleven is cut short (${xi ? `${xi.cutNames} of ${xi.cells} cut` : 'no eleven measured'})`);
     }
+    check(rowsSeen >= 10 && cutRows.length === 0, `${where}: no name in a row of the bench or of his line is cut short (${rowsSeen} rows read; cut: ${cutRows.slice(0, 3).join(', ') || 'none'})`);
     await ctx.close();
   }
+}
+
+/* ── 7b. short screens: the way out is always on the screen ─────────────── */
+/* A small phone with its browser bars showing, the smallest phone still sold,
+   a common Android height and a phone on its side. On every screen, the first
+   open included, a real tap (the mouse at the middle of the button, nothing
+   forced, nothing scrolled into view for it) lands on Back and it works. */
+const SHORT = [[375, 553], [320, 568], [360, 640], [844, 390]];
+for (const [width, height] of SHORT) {
+  for (const k of ['A', 'R']) {
+    const { ctx, page } = await open(SAVES[k], { width, height, helpSeen: k !== 'A' });
+    const where = `7b. save ${k} at ${width} by ${height}`;
+    const stuck = [];
+    let taps = 0;
+    const scrolled = [];
+    /* tap the foot's Back with the mouse, where it is, and say whether the screen changed */
+    const tapOut = async (name, expectHome) => {
+      await page.waitForTimeout(350);
+      const r = await reach(page);
+      if (r.scrolls) scrolled.push(name);
+      if (!r.ok) { stuck.push(`${name}: ${r.why}`); }
+      const back = r.buttons.filter(b => b.foot).pop();
+      if (!back || !back.inside) { stuck.push(`${name}: no Back to tap`); return false; }
+      await page.mouse.click(back.x, back.y);
+      taps += 1;
+      try {
+        if (expectHome) await screenIs(page, 'home');
+        else await page.waitForSelector(SHEET, { state: 'detached', timeout: 4000 });
+        return true;
+      } catch { stuck.push(`${name}: the tap on Back did nothing`); return false; }
+    };
+    await page.click(TILE);
+    let alive = true;
+    if (k === 'A') {
+      await screenIs(page, 'help');
+      await shot(page, `short-${k}-first-help-${width}x${height}`);
+      alive = await tapOut('first open (help)', true);
+    } else await screenIs(page, 'home');
+    for (const id of alive ? SCREENS : []) {
+      if (await page.locator(`${SHEET} [data-squad-open="${id}"]`).count() === 0) continue;
+      await page.click(`${SHEET} [data-squad-open="${id}"]`);
+      await screenIs(page, id);
+      if (id === 'place' || id === 'eleven') await shot(page, `short-${k}-${id}-${width}x${height}`);
+      if (!(await tapOut(id, true))) { alive = false; break; }
+    }
+    if (alive) {
+      await page.click(`${SHEET} button[aria-label="How the squad works"]`);
+      await screenIs(page, 'help');
+      await page.click(`${SHEET} button:has-text("Worked examples")`);
+      await screenIs(page, 'examples');
+      alive = await tapOut('examples', true);
+    }
+    if (alive) {
+      await shot(page, `short-${k}-home-${width}x${height}`);
+      alive = await tapOut('home', false);
+    }
+    check(alive && stuck.length === 0 && taps >= 6, `${where}: Back is on the screen and a tap on it works on every screen (${taps} taps; the body scrolls on ${scrolled.join(', ') || 'none'}; ${stuck.slice(0, 2).join(' | ') || 'never stuck'})`);
+    await ctx.close();
+  }
+}
+
+/* ── 4b. the keyboard stays inside the sheet ────────────────────────────── */
+{
+  const { ctx, page } = await open(SAVES.A);
+  await page.evaluate(() => window.scrollTo(0, 120));
+  const y0 = await page.evaluate(() => window.scrollY);
+  await page.click(TILE);
+  await screenIs(page, 'home');
+  let outside = 0; let stops = 0;
+  const seen = new Set();
+  const where = () => page.evaluate(sel => {
+    const a = document.activeElement;
+    return { inside: !!a && !!a.closest(sel), label: a ? (a.getAttribute('aria-label') || a.textContent || a.tagName).trim().slice(0, 24) : 'nothing' };
+  }, SHEET);
+  for (const key of [...Array(14).fill('Tab'), ...Array(8).fill('Shift+Tab')]) {
+    await page.keyboard.press(key);
+    const w = await where();
+    stops += 1;
+    seen.add(w.label);
+    if (!w.inside) outside += 1;
+  }
+  const y1 = await page.evaluate(() => window.scrollY);
+  check(outside === 0 && seen.size >= 4, `4b. Tab and Shift+Tab stay inside the sheet: ${outside} of ${stops} stops landed outside it, ${seen.size} different stops reached`);
+  check(y1 === y0, `4b. the page behind did not move while the keyboard went round the sheet (${y0} then ${y1})`);
+  await page.keyboard.press('Escape');
+  await page.waitForSelector(SHEET, { state: 'detached', timeout: 8000 });
+  const y2 = await page.evaluate(() => window.scrollY);
+  check(y2 === y0, `4b. and it is where it was after closing (${y0} then ${y2})`);
+  await ctx.close();
+}
+
+/* ── 13. an injured season: only games that were played ─────────────────── */
+{
+  const { ctx, page } = await open(SAVES.H);
+  const last = sheet.lastSeason(SAVES.H);
+  await page.click(TILE);
+  await screenIs(page, 'home');
+  const tileText = (await page.locator(`${SHEET} [data-squad-open="last"]`).innerText()).replace(/\s+/g, ' ');
+  await page.click(`${SHEET} [data-squad-open="last"]`);
+  await screenIs(page, 'last');
+  const text = (await page.locator(`${SHEET} [data-squad-screen="last"]`).innerText()).replace(/\s+/g, ' ');
+  check(last.cut && last.apps < last.leagueApps, `13. save H is an injured season: ${last.leagueApps} league games drawn, ${last.apps} games on the row`);
+  check(tileText.includes(sheet.lastTileValue(last)) && new RegExp(`\\b${last.apps} games?\\b`).test(tileText) && !tileText.includes('league'), `13. the Last season tile prints the ${last.apps} games played, not the league figure ("${tileText}")`);
+  check(text.includes(sheet.lastGamesLine(last)) && new RegExp(`\\b${last.apps} games? in all competitions`).test(text) && new RegExp(`worth ${last.leagueApps} league games?`).test(text) && !/\d+ league games?, \d+ in all/.test(text),
+    `13. the Last season screen never prints more league games than games ("${text.slice(0, 150)}")`);
+  await shot(page, 'H-last-390');
+  await ctx.close();
 }
 
 /* ── 8. motion ──────────────────────────────────────────────────────────── */
