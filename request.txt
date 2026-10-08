@@ -1,0 +1,6 @@
+#!serial
+gen-keywords: node scripts/genSearchKeywords.mjs && cp src/data/searchKeywords.json $RC_OUT/searchKeywords.json && git diff --stat -- src/data/searchKeywords.json | tail -1
+refresh-guides: node scripts/simGuideHeadings.mjs --refresh /club-manager && node scripts/simGuideHeadings.mjs --refresh /front-office && node scripts/simGuideHeadings.mjs --refresh /nfl-gauntlet-draft && cp scripts/data/guideHeadingsFrozen.json $RC_OUT/guideHeadingsFrozen.json && git diff --stat -- scripts/data/guideHeadingsFrozen.json | tail -1; git status --short | head -5
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simHomeCopy: node scripts/simHomeCopy.mjs

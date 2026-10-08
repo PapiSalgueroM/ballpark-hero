@@ -1,0 +1,4 @@
+simGuideHeadings: refreshed /club-manager from its actual guide (howToPlay 11, rules 20, example 2, tips 4)
+simGuideHeadings: refreshed /front-office from its actual guide (howToPlay 10, rules 10, example 2, tips 3)
+simGuideHeadings: refreshed /nfl-gauntlet-draft from its actual guide (howToPlay 4, rules 6, example 2, tips 3)
+ M src/data/searchKeywords.json

@@ -1,0 +1,4 @@
+searchKeywords.json: 133 of 133 games covered, 1215 keywords, 10972 bytes
+  filters: tf >= 2, df <= 33 of 133 guides, max 12 per game
+  guide source hash 3fa9b9cbb6aae470
+ 1 file changed, 1 insertion(+), 1 deletion(-)

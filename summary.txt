@@ -1,0 +1,5 @@
+gen-keywords exit=0 1s |  1 file changed, 1 insertion(+), 1 deletion(-)
+refresh-guides exit=0 0s |  M src/data/searchKeywords.json
+simGuideHeadings exit=0 0s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simSiteSearch exit=0 0s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simHomeCopy exit=0 0s | simHomeCopy: green. The one page a crawler reads first says only true things.
