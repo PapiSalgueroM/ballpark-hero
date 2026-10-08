@@ -18,6 +18,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { soFar, tableAt, type DerivedGame, type DerivedSeason, type SeasonWords } from '@/lib/season/core';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
+import { RankShiftTable } from '@/components/motion/RankShiftTable';
 import { CelebrationStyles } from '@/components/club-manager/CelebrationStyles';
 import { revealDelay } from '@/components/club-manager/Celebration';
 import { Confetti } from '@/components/soccer-career/CareerFx';
@@ -188,6 +189,8 @@ function TablePanel({ model, played, compact }: { model: CentreModel; played: nu
           </span>
         )}
       </div>
+      {/* Round 1046: the rows slide between two true tables; an order before a ball is kicked is not one */}
+      <RankShiftTable order={rows.map(r => keyOf(r.slot))} slide={played >= 1}>
       <LeagueTableCard
         rows={rows.map(r => ({ club: keyOf(r.slot), w: r.w, d: r.d, l: r.l, gf: r.gf, ga: r.ga, pts: r.pts }))}
         myClub={keyOf(0)}
@@ -197,6 +200,7 @@ function TablePanel({ model, played, compact }: { model: CentreModel; played: nu
         isUnnamed={k => unnamed.has(k)}
         footnote="Clubs level on points are split by goal difference, then goals scored: this game's rule."
       />
+      </RankShiftTable>
     </div>
   );
 }

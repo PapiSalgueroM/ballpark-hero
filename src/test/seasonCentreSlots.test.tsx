@@ -16,6 +16,7 @@
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
+import { RankShiftTable } from '@/components/motion/RankShiftTable';
 import { MatchClock, type SeasonClock } from '@/components/season-centre/MatchClock';
 import { SeasonCentre, type CentreModel, type CentreSport } from '@/components/season-centre/SeasonCentre';
 import {
@@ -130,6 +131,13 @@ describe('Season Centre: the markup this round found', () => {
   it('(a) the table card, whole and compact', () => {
     expect(renderToStaticMarkup(tableCard(false))).toMatchSnapshot('table card, whole');
     expect(renderToStaticMarkup(tableCard(true))).toMatchSnapshot('table card, compact');
+  });
+  it('(a) the sliding wrapper adds one element around the card and nothing inside it', () => {
+    for (const compact of [false, true]) {
+      const card = renderToStaticMarkup(tableCard(compact));
+      const wrapped = renderToStaticMarkup(<RankShiftTable order={TABLE_20.map(r => r.club)} slide>{tableCard(compact)}</RankShiftTable>);
+      expect(wrapped).toBe(`<div data-rank-shift="">${card}</div>`);
+    }
   });
   it('(b) the match clock with no stage slot, at full time', () => {
     const html = renderToStaticMarkup(<MatchClock game={HAND_GAME} clock={CLOCK} usName="Mine" themName="Club 3" speed={1} paused={false} reduced onFullTime={() => {}} />);
