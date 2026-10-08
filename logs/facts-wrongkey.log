@@ -1,0 +1,119 @@
+
+1. RECORDS: INT_SCORING_RECORDS equals the verified file, both ways
+  18 engine rows, 18 verified rows, 1 held (Senegal)
+
+2. PICKER: every nation on the creation screen, the award only on a verified row
+  134 nations on the picker: 18 can win it on a verified record, 116 cannot win it at all
+
+3. WIRING: the season calls the award, nothing else grants it, no fallback number
+  1 call from the season, after the summer tournament, 1 grant, inside awardAllTimeTopScorer, no fallback
+
+4. LABELS: every HAND_CLUBS league label verified, pinned or listed as unverified
+  188 labels verified across 82 evidence groups (all 2026-27 or 2026), 0 pinned to their old label (ratchet 0), 2 unverified (ratchet 2)
+
+5. PLAYED: seeded careers, the award the season his goals pass HIS nation's record
+  FAIL [5]: Colombia seed 116850: the award at 36 goals for Colombia, whose record is 36
+  FAIL [5]: Colombia seed 124769: the season 2031 ended on 39 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 124769: the season 2032 ended on 47 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 124769: the season 2033 ended on 50 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 124769: the season 2034 ended on 56 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 124769: the season 2035 ended on 59 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 124769: the season 2036 ended on 68 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 124769: the season 2037 ended on 71 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 124769: the season 2038 ended on 74 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 124769: the season 2039 ended on 76 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 124769: the season 2040 ended on 76 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 124769: the season 2041 ended on 76 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 124769: the season 2042 ended on 76 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 124769: the season 2043 ended on 76 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 124769: the season 2044 ended on 76 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 124769: the season 2045 ended on 76 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 132688: the season 2030 ended on 41 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 132688: the season 2031 ended on 44 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 132688: the season 2032 ended on 54 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 132688: the season 2033 ended on 57 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 132688: the season 2034 ended on 63 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 132688: the season 2035 ended on 66 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 132688: the season 2036 ended on 69 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 140607: the season 2030 ended on 46 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 140607: the season 2031 ended on 50 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 140607: the season 2033 ended on 52 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 140607: the season 2034 ended on 60 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 140607: the season 2035 ended on 63 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Nigeria seed 117859: the season 2030 ended on 41 goals, past Nigeria's record of 37, with no award
+  FAIL [5]: Nigeria seed 117859: the season 2031 ended on 44 goals, past Nigeria's record of 37, with no award
+  FAIL [5]: Nigeria seed 117859: the season 2032 ended on 50 goals, past Nigeria's record of 37, with no award
+  FAIL [5]: Nigeria seed 117859: the season 2033 ended on 53 goals, past Nigeria's record of 37, with no award
+  FAIL [5]: Nigeria seed 117859: the season 2034 ended on 62 goals, past Nigeria's record of 37, with no award
+  FAIL [5]: Nigeria seed 117859: the season 2035 ended on 65 goals, past Nigeria's record of 37, with no award
+  FAIL [5]: Nigeria seed 133697: the season 2030 ended on 44 goals, past Nigeria's record of 37, with no award
+  FAIL [5]: Nigeria seed 133697: the season 2031 ended on 46 goals, past Nigeria's record of 37, with no award
+  FAIL [5]: Nigeria seed 133697: the season 2032 ended on 56 goals, past Nigeria's record of 37, with no award
+  FAIL [5]: Nigeria seed 133697: the season 2033 ended on 59 goals, past Nigeria's record of 37, with no award
+  FAIL [5]: Croatia seed 118868: the season 2032 ended on 46 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 118868: the season 2033 ended on 50 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 118868: the season 2034 ended on 56 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 118868: the season 2035 ended on 59 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 118868: the season 2038 ended on 61 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 118868: the season 2039 ended on 66 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 118868: the season 2040 ended on 70 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 118868: the season 2041 ended on 70 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 118868: the season 2044 ended on 70 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 118868: the season 2045 ended on 70 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 118868: the season 2046 ended on 70 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 126787: the season 2031 ended on 47 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 126787: the season 2032 ended on 56 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 126787: the season 2033 ended on 59 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 126787: the season 2034 ended on 73 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 126787: the season 2035 ended on 76 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 134706: the season 2032 ended on 47 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 134706: the season 2033 ended on 51 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 134706: the season 2034 ended on 64 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 134706: the season 2035 ended on 68 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 134706: the season 2036 ended on 78 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 142625: the season 2031 ended on 47 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 142625: the season 2032 ended on 62 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 142625: the season 2033 ended on 64 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 142625: the season 2034 ended on 72 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 142625: the season 2035 ended on 75 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 142625: the season 2036 ended on 82 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 142625: the season 2037 ended on 84 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 142625: the season 2038 ended on 90 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 142625: the season 2039 ended on 93 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 142625: the season 2040 ended on 93 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 142625: the season 2041 ended on 93 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 142625: the season 2042 ended on 93 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 142625: the season 2043 ended on 93 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 142625: the season 2046 ended on 93 goals, past Croatia's record of 45, with no award
+  FAIL [5]: South Korea seed 128805: the season 2037 ended on 61 goals, past South Korea's record of 59, with no award
+  FAIL [5]: South Korea seed 128805: the season 2038 ended on 66 goals, past South Korea's record of 59, with no award
+  FAIL [5]: South Korea seed 128805: the season 2039 ended on 70 goals, past South Korea's record of 59, with no award
+  FAIL [5]: South Korea seed 128805: the season 2040 ended on 70 goals, past South Korea's record of 59, with no award
+  FAIL [5]: South Korea seed 128805: the season 2041 ended on 70 goals, past South Korea's record of 59, with no award
+  FAIL [5]: South Korea seed 128805: the season 2042 ended on 70 goals, past South Korea's record of 59, with no award
+  FAIL [5]: South Korea seed 128805: the season 2044 ended on 70 goals, past South Korea's record of 59, with no award
+  FAIL [5]: South Korea seed 136724: the season 2033 ended on 61 goals, past South Korea's record of 59, with no award
+  FAIL [5]: South Korea seed 136724: the season 2034 ended on 68 goals, past South Korea's record of 59, with no award
+  FAIL [5]: South Korea seed 136724: the season 2035 ended on 71 goals, past South Korea's record of 59, with no award
+  FAIL [5]: South Korea seed 136724: the season 2036 ended on 84 goals, past South Korea's record of 59, with no award
+  FAIL [5]: South Korea seed 136724: the season 2037 ended on 89 goals, past South Korea's record of 59, with no award
+  FAIL [5]: Norway seed 113976: the award at 38 goals for Norway, whose record is 65
+  FAIL [5]: Norway seed 129814: the season 2038 ended on 67 goals, past Norway's record of 65, with no award
+  FAIL [5]: Norway seed 137733: the award at 38 goals for Norway, whose record is 65
+  FAIL [5]: Norway seed 145652: the season 2034 ended on 70 goals, past Norway's record of 65, with no award
+  FAIL [5]: Norway seed 145652: the season 2035 ended on 73 goals, past Norway's record of 65, with no award
+  FAIL [5]: Norway seed 145652: the season 2036 ended on 80 goals, past Norway's record of 65, with no award
+  FAIL [5]: Norway seed 145652: the season 2037 ended on 83 goals, past Norway's record of 65, with no award
+  FAIL [5]: Norway seed 145652: the season 2038 ended on 89 goals, past Norway's record of 65, with no award
+  FAIL [5]: Norway seed 145652: the season 2039 ended on 89 goals, past Norway's record of 65, with no award
+  FAIL [5]: Norway seed 145652: the season 2040 ended on 89 goals, past Norway's record of 65, with no award
+  FAIL [5]: Norway seed 145652: the season 2041 ended on 89 goals, past Norway's record of 65, with no award
+  FAIL [5]: Norway seed 145652: the season 2042 ended on 89 goals, past Norway's record of 65, with no award
+  FAIL [5]: Norway seed 145652: the season 2043 ended on 89 goals, past Norway's record of 65, with no award
+  FAIL [5]: Norway seed 145652: the season 2044 ended on 89 goals, past Norway's record of 65, with no award
+  48 careers (seed 1), 1115 full seasons, 42 awards, every one the season his goals passed his own record (19 while abroad, 28 ina tournament season)
+
+6. LEAGUE WORLD: the pool generator and the facts file say the same thing
+  25 leagues, 438 member names, each lineup read from two hosts; 11 with a format read from two hosts, 2 with no format page and so no shape stated, 2 with no points rule stated; 1 colour(s) in words; 51 shipped, 275 held before 2026, 0 with a first season
+
+control wrongkey: section 5 went red as it must (red: 5)

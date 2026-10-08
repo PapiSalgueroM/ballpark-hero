@@ -1,0 +1,5 @@
+
+1. FRESH: the committed pool equals a fresh derive from Club Manager
+  FAIL [1]: the derive refused: West Ham (Championship) would be taken for the hand club West Ham of Premier League: give it a NAME_ALIASES row
+
+control relabel: section 2 stayed green, the control changed nothing it should have (red: 1)
