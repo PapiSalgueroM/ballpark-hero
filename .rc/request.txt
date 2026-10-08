@@ -1,0 +1,2 @@
+#!serial
+runner-1154: bash .rc/x/runner-discovery-1154.sh
