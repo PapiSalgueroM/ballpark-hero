@@ -8,7 +8,13 @@
    halfway, title decided, final day) and the review. Desktop is a three
    column modal that never scrolls the page; the phone is one column with a
    fixed bottom bar and the fixtures behind a tile with a back button.
-   Only arrival animates, with the shared kit's classes; no number counts. */
+   Only arrival animates, with the shared kit's classes; no number counts.
+
+   Round 1047: a matchday that holds one of his moments stops its clock a
+   beat before the minute and hands the stage to MomentHost. Letting it play
+   writes nothing; taking it goes through the model's CentreMoments (the
+   sport's board, the ledger, the bank). The season on screen is always the
+   model's, so a decision shows the moment the model is rebuilt. */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { soFar, tableAt, type DerivedGame, type DerivedSeason, type SeasonWords } from '@/lib/season/core';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
@@ -19,7 +25,8 @@ import VictoryMoment from '@/components/game/VictoryMoment';
 import { useCareerMoment } from '@/components/soccer-career/careerMoments';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { ordinal } from '@/lib/soccerCareerLeague';
-import { MatchClock, type ClockSpeed, type SeasonClock } from './MatchClock';
+import { MatchClock, scoreAt, type ClockSpeed, type SeasonClock } from './MatchClock';
+import { MomentHost, type CentreMoment, type CentreMoments } from './MomentHost';
 import { SeasonCentreHelp, useHelpOnce, type HelpWords } from './SeasonCentreHelp';
 
 export interface CentreReview {
@@ -59,6 +66,8 @@ export interface CentreModel {
   help: HelpWords;
   /** Play once keys for the clinch and the review (useCareerMoment). */
   momentKey: string;
+  /** Round 1047: the moments he may play this season; null or absent: none. */
+  moments?: CentreMoments | null;
 }
 
 /** The sport's side of the viewer: its clock, its words for a fixed game,
@@ -123,6 +132,7 @@ function useReducedMotion(): boolean {
 
 function FixtureList({ model, played, current }: { model: CentreModel; played: number; current: number | null }) {
   const { season: s, names, words } = model;
+  const yours = new Set((model.moments?.list ?? []).map(m => m.md));
   return (
     <ol className="space-y-1" data-fixtures>
       {s.games.map(g => {
@@ -135,6 +145,7 @@ function FixtureList({ model, played, current }: { model: CentreModel; played: n
             <span className="w-4 shrink-0 text-[10px] text-muted-foreground">{g.home ? 'H' : 'A'}</span>
             <span className={`min-w-0 flex-1 truncate ${done ? '' : 'text-muted-foreground'} ${names[g.opp] === words.unnamed ? 'italic' : ''}`}>{names[g.opp]}</span>
             {g.fixedKey && <span className="shrink-0 rounded bg-amber-500/20 px-1 text-[9px] font-bold text-amber-400">{model.sport.fixed.badge}</span>}
+            {yours.has(g.md) && <span className="shrink-0 text-[10px]" title="One of your moments" data-fixture-moment>🎯</span>}
             {g.md === s.games.length && <span className="shrink-0 rounded bg-sky-500/20 px-1 text-[9px] font-bold text-sky-400">FINAL DAY</span>}
             {done && <span className={`shrink-0 rounded px-1.5 text-[10px] font-bold tabular-nums ${PILL[r]}`}>{r} {g.us}-{g.them}</span>}
           </li>
@@ -202,6 +213,7 @@ function KickOff({ model, onKick, onStraight }: { model: CentreModel; onKick: ()
         {model.frameLine && <div className="mt-1 text-xs font-semibold" data-frame-line>{model.frameLine}</div>}
         {model.resultsWhy && <div className="mt-1 text-xs text-muted-foreground" data-results-why>{model.resultsWhy}</div>}
         {model.lastSeason && <div className="mt-1 text-xs text-muted-foreground">{model.lastSeason}</div>}
+        {model.moments?.kickoff && <div className="mt-1 text-xs font-semibold text-primary" data-kickoff-moments>🎯 {model.moments.kickoff}</div>}
       </div>
       <div>
         <div className="mb-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">First five</div>
@@ -325,6 +337,7 @@ function Review({ model, reduced }: { model: CentreModel; reduced: boolean }) {
         </div>
       )}
       {review.notes.map(n => <div key={n} className="text-xs text-muted-foreground">{n}</div>)}
+      {(model.moments?.review ?? []).map(n => <div key={n} className="text-xs" data-review-moments>🎯 {n}</div>)}
       {review.trophies.length > 0 && (
         <div className="rounded-lg border border-amber-500/20 bg-amber-500/10 p-2 text-center text-amber-400">
           {review.title
@@ -349,6 +362,12 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
   const [fixturesOpen, setFixturesOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useHelpOnce();
   const [postersSeen] = useState(() => new Set<number>());
+  /* Round 1047: the moment on the stage ("md|id"), and the ones he let play in this visit */
+  const [hosting, setHosting] = useState<string | null>(null);
+  const [passed, setPassed] = useState<readonly string[]>([]);
+  const moments = model.moments ?? null;
+  const momentKeyOf = (m: CentreMoment) => `${m.md}|${m.id}`;
+  const openMoment = (md: number): CentreMoment | null => (moments?.list ?? []).find(m => m.md === md && !m.taken && !passed.includes(momentKeyOf(m))) ?? null;
 
   useEffect(() => {
     /* the scroll lock pads the body by the scrollbar it hides, so the page
@@ -367,36 +386,59 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
 
   const go = useCallback((md: number) => {
     setFt(false);
+    setHosting(null);
     setPaused(false);
     setFixturesOpen(false);
     if (postersFor(s, md).length > 0 && !postersSeen.has(md)) { postersSeen.add(md); setStage({ kind: 'poster', md }); }
     else setStage({ kind: 'match', md });
   }, [s, postersSeen]);
-  const toEnd = useCallback(() => { setPlayed(M); setFt(true); setStage({ kind: 'review' }); }, [M]);
+  const toEnd = useCallback(() => { setHosting(null); setPlayed(M); setFt(true); setStage({ kind: 'review' }); }, [M]);
+  /* the season's stars bank at the review, once, or on the way out when no moment is left to play (a season with no moment taken banks nothing) */
+  const bankRef = useRef(moments?.bank);
+  bankRef.current = moments?.bank;
+  useEffect(() => { if (stage.kind === 'review') bankRef.current?.(true); }, [stage.kind]);
+  const leave = useCallback(() => { bankRef.current?.(false); onClose(); }, [onClose]);
   const current = stage.kind === 'match' || stage.kind === 'poster' ? stage.md : null;
   const onFullTime = useCallback(() => { if (current !== null) { setPlayed(p => Math.max(p, current)); setFt(true); } }, [current]);
   /* the next big game from the very next matchday on; when that next one is
      the big game the ▶ button already plays it (poster first), so ⏩ only
      shows for a big game further on and never jumps over one */
   let nextBig: number | null = null;
-  for (let md = played + 1; md <= M && nextBig === null; md += 1) if (postersFor(s, md).length) nextBig = md;
+  for (let md = played + 1; md <= M && nextBig === null; md += 1) if (postersFor(s, md).length || openMoment(md)) nextBig = md;
   if (nextBig !== null && nextBig <= played + 1) nextBig = null;
   const roundWord = s.mode === 'table' ? model.words.round : 'League game';
   const so = soFar(s, played);
   const soTiles = model.sport.soFar(so);
   const btn = 'h-10 shrink-0 whitespace-nowrap rounded-lg px-3 text-xs font-bold';
 
+  /* Round 1047: on a phone the fixtures take the stage's place, which unmounts
+     the match and whatever it is hosting. A moment is one go, so while one is
+     on the stage (offer, board or verdict) the fixtures stay shut and the
+     button is not drawn: there is no way to leave a board and meet its offer again. */
+  const fixturesShown = fixturesOpen && hosting === null;
+
   const stageBody = (() => {
     if (stage.kind === 'kickoff') return <KickOff model={model} onKick={() => go(1)} onStraight={toEnd} />;
     if (stage.kind === 'review') return <Review model={model} reduced={reduced} />;
     if (stage.kind === 'poster') return <Poster key={`p${stage.md}`} model={model} md={stage.md} reduced={reduced} />;
     const g = s.games[stage.md - 1];
+    const pending = openMoment(stage.md);
+    const host = hosting !== null ? (moments?.list ?? []).find(m => momentKeyOf(m) === hosting && m.md === stage.md) ?? null : null;
+    const [hu, ht] = host ? scoreAt(g.events, host.minute - 1) : [0, 0];
     return (
       <div key={`m${stage.md}`} className={`${reduced ? '' : 'cm-rise'} space-y-3`} data-matchday={stage.md}>
         <div className="text-xs text-muted-foreground">
           {roundWord} {stage.md}{s.mode === 'table' ? ` of ${M}` : ''} · {g.home ? 'Home' : 'Away'}{g.fixedKey ? ` · ${model.occasion[g.fixedKey] ?? model.sport.fixed.poster}` : ''}
         </div>
-        <MatchClock key={`clock-${stage.md}`} game={g} clock={model.sport.clock} usName={model.header.club} themName={model.names[g.opp]} speed={speed} paused={paused} reduced={reduced} onFullTime={onFullTime} />
+        <div className={host ? 'hidden' : undefined}>
+          <MatchClock key={`clock-${stage.md}`} game={g} clock={model.sport.clock} usName={model.header.club} themName={model.names[g.opp]} speed={speed} paused={paused} reduced={reduced} onFullTime={onFullTime}
+            holdAt={host ? host.minute : pending ? pending.minute : null} onHold={() => { if (pending) setHosting(momentKeyOf(pending)); }} />
+        </div>
+        {host && moments && (
+          <MomentHost key={hosting} moment={host} moments={moments} reduced={reduced}
+            scoreLine={`${model.sport.clock.label(host.minute)} · ${g.home ? `${hu}-${ht}` : `${ht}-${hu}`}`}
+            onDone={took => { if (!took) setPassed(p => [...p, momentKeyOf(host)]); setHosting(null); }} />
+        )}
         {(ft || !g.played) && <HisLine g={g} sport={model.sport} />}
       </div>
     );
@@ -410,7 +452,7 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
         aria-label={model.words.title}
         tabIndex={-1}
         ref={setDialog}
-        onKeyDown={escapeCloses(onClose)}
+        onKeyDown={escapeCloses(leave)}
         className="relative flex h-full w-full max-w-[1100px] flex-col overflow-hidden bg-background outline-none md:h-[min(860px,calc(100vh-2rem))] md:rounded-2xl md:border md:border-border"
       >
         <CelebrationStyles />
@@ -418,22 +460,22 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
           <span className="text-sm font-black">📺 {model.words.title}</span>
           <span className="min-w-0 flex-1 truncate text-xs text-muted-foreground">{model.header.club} · {model.header.seasonLabel}</span>
           <button type="button" onClick={() => setHelpOpen(true)} className="h-9 w-9 shrink-0 rounded-lg border border-border text-sm font-bold" aria-label="How the Season Centre works">?</button>
-          <button type="button" onClick={onClose} className="h-9 shrink-0 rounded-lg border border-border px-3 text-xs font-semibold" data-centre-exit>{exitLabel}</button>
+          <button type="button" onClick={leave} className="h-9 shrink-0 rounded-lg border border-border px-3 text-xs font-semibold" data-centre-exit>{exitLabel}</button>
         </div>
         <div className="grid min-h-0 flex-1 grid-cols-1 md:grid-cols-[240px_1fr_380px]">
           <aside className="hidden min-h-0 overflow-y-auto border-r border-border p-2 md:block" aria-label="Fixtures">
             <FixtureList model={model} played={played} current={current} />
           </aside>
           <main className="min-h-0 overflow-y-auto p-3 md:p-4" data-centre-stage>
-            {fixturesOpen ? (
+            {fixturesShown ? (
               <div className="space-y-2">
                 <button type="button" onClick={() => setFixturesOpen(false)} className="h-9 rounded-lg border border-border px-3 text-xs font-semibold">← Back</button>
                 <FixtureList model={model} played={played} current={current} />
               </div>
             ) : stageBody}
-            {!fixturesOpen && (
+            {!fixturesShown && (
               <div className="mt-4 space-y-3 md:hidden">
-                <button type="button" onClick={() => setFixturesOpen(true)} className="h-10 w-full rounded-lg border border-border text-xs font-semibold">🗓 Fixtures</button>
+                {hosting === null && <button type="button" onClick={() => setFixturesOpen(true)} className="h-10 w-full rounded-lg border border-border text-xs font-semibold" data-centre-fixtures>🗓 Fixtures</button>}
                 {!wide && <TablePanel model={model} played={played} compact />}
               </div>
             )}
@@ -453,7 +495,7 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
             </div>
           </aside>
         </div>
-        {stage.kind !== 'kickoff' && (<div className="flex flex-wrap items-center gap-2 border-t border-border bg-card px-2 py-2" data-centre-bar>
+        {stage.kind !== 'kickoff' && hosting === null && (<div className="flex flex-wrap items-center gap-2 border-t border-border bg-card px-2 py-2" data-centre-bar>
           {stage.kind === 'poster' && <button type="button" className={`${btn} flex-1 basis-full bg-emerald-600 text-black sm:basis-0`} onClick={() => setStage({ kind: 'match', md: stage.md })}>▶ {roundWord} {stage.md}</button>}
           {stage.kind === 'match' && !ft && (
             <button type="button" className={`${btn} flex-1 basis-full border border-border sm:basis-0`} onClick={() => setPaused(p => !p)}>{paused ? '▶ Resume' : '⏸ Pause'}</button>
@@ -473,7 +515,7 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
               ))}
             </div>
           )}
-          {stage.kind === 'review' && <button type="button" className={`${btn} flex-1 basis-full bg-emerald-600 text-black sm:basis-0`} onClick={onClose}>{exitLabel}</button>}
+          {stage.kind === 'review' && <button type="button" className={`${btn} flex-1 basis-full bg-emerald-600 text-black sm:basis-0`} onClick={leave}>{exitLabel}</button>}
         </div>)}
         {helpOpen && <SeasonCentreHelp words={model.help} onClose={closeHelp} />}
       </div>

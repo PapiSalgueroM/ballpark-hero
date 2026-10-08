@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const self = fileURLToPath(import.meta.url), stats = 'src/components/cage-clash/CageFightStats.tsx';
 const board = 'src/components/cage-clash/CageClashBoard.tsx', canvas = 'src/components/cage-clash/CageClashCanvas.tsx';
+const feedback = 'src/components/cage-clash/CagePracticeFeedback.tsx';
 const testFile = 'src/test/cageFightStats.test.tsx';
 const titles = {
   mapping: 'maps asymmetric literal counters into the correct labelled player and CPU columns',
@@ -62,7 +63,7 @@ if (mode === 'all') {
   process.exit(0);
 }
 const held = [];
-for (const relative of [stats, board, canvas, 'src/lib/cageClash.ts', 'src/lib/cagePractice.ts', 'src/lib/cageCircuit.ts', 'src/hooks/useCageClash.ts', testFile]) {
+for (const relative of [stats, board, canvas, feedback, 'src/lib/cageClash.ts', 'src/lib/cagePractice.ts', 'src/lib/cageCircuit.ts', 'src/hooks/useCageClash.ts', testFile]) {
   const file = path.join(root, relative);
   const bytes = await readFile(file);
   held.push(() => readFile(file).then(current => assert.deepEqual(current, bytes, `${relative} source bytes unchanged`)));
@@ -76,7 +77,7 @@ try {
     assert.equal(source.split(spec.from).length - 1, 1, 'Control binds one exact executable source anchor');
     const changed = source.replace(spec.from, spec.to); assert.notEqual(changed, source, 'Control changes actual executable code');
     const aliases = {};
-    for (const original of [stats, board, canvas]) {
+    for (const original of [stats, board, canvas, feedback]) {
       const file = path.join(folder, path.basename(original));
       await writeFile(file, original === spec.file ? changed : (await readFile(path.join(root, original), 'utf8')).replaceAll('\r\n', '\n'));
       aliases['@/' + original.slice(4).replace(/\.tsx?$/, '')] = file;

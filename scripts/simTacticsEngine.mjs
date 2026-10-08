@@ -500,7 +500,16 @@ const swapXi = (state, ia, ib) => {
   [xiIds[ia], xiIds[ib]] = [xiIds[ib], xiIds[ia]];
   return { ...state, xiIds };
 };
-const quick = (state, seed) => withSeed(seed, () => playNextEntry(state, { skipHalftime: true }));
+/* Release AL: every quick sim in this harness is played without the Round
+   1072 coach (noCoach). The harness compares arms "on one stream": the same
+   seed with one thing different, a man in the wrong slot, a duty, live
+   against quick. The coach replaces an injured man inside the first half and
+   that redraws the rest of the half, differently in each arm, so with him
+   in, sections 1, 4 and 7 went red on the merged tree (33 failures; main,
+   which has no coach, 0). He is a second actor, not part of what is being
+   measured, and scripts/simCmQuickSubs.mjs is where he is held. Coachless,
+   all sections pass on the release tree. */
+const quick = (state, seed) => withSeed(seed, () => playNextEntry(state, { skipHalftime: true, noCoach: true }));
 const h1Goals = r => r.report.myScorers.filter(s => s.minute <= 45).length;
 
 /* ---------- 1. fit ---------- */
@@ -780,7 +789,7 @@ begin(2, 'Retraining: a second position is earned over counted weeks');
       let done = false;
       let ticks = 0;
       while (calls < 60 && !done) {
-        const r = withSeed(200000 + calls, () => playNextEntry(s, { skipHalftime: true }));
+        const r = withSeed(200000 + calls, () => playNextEntry(s, { skipHalftime: true, noCoach: true }));
         calls += 1;
         s = r.state;
         const p = byId(s, cm0.id);
@@ -809,7 +818,7 @@ begin(2, 'Retraining: a second position is earned over counted weeks');
           if (!n) { fail(`could not start ${to}`); return state; }
           n = clone(n);
           byId(n, cm0.id).retraining.weeksLeft = 1;
-          const r = withSeed(seed, () => playNextEntry(n, { skipHalftime: true }));
+          const r = withSeed(seed, () => playNextEntry(n, { skipHalftime: true, noCoach: true }));
           return r.state;
         };
         s = push(s, 'CB', 210001);
@@ -1078,7 +1087,7 @@ begin(3, 'Set pieces: the armband and the takers reach the stream');
       if (!loaned) { fail(`${m.club}: ${cap.name} could not be loaned out`); continue; }
       for (const k of SET_PIECE_KEYS) if (loaned.setPieces?.[k] !== null) fail(`${m.club}: ${k} still reads ${J(loaned.setPieces?.[k])} after ${cap.name} was loaned out`);
       /* And the next match refills every job with somebody else. */
-      const next = withSeed(500004, () => playNextEntry(loaned, { skipHalftime: true }));
+      const next = withSeed(500004, () => playNextEntry(loaned, { skipHalftime: true, noCoach: true }));
       for (const k of SET_PIECE_KEYS) {
         const id = next.state.setPieces?.[k];
         if (!id || id === cap.id || !byId(next.state, id)) fail(`${m.club}: ${k} reads ${J(id)} at the next match after ${cap.name} left`);
@@ -1454,7 +1463,7 @@ begin(7, 'Round 504 still holds: the same seeded fixture live and quick gives th
         if (!s2) return { kind: 'null' };
         return resumeMatch(s2);
       });
-      const quickRun = withSeed(seed, () => playNextEntry(pre, { skipHalftime: true }));
+      const quickRun = withSeed(seed, () => playNextEntry(pre, { skipHalftime: true, noCoach: true }));
       if (liveRun.kind !== 'match' || quickRun.kind !== 'match') { fail(`${m.club} seed ${seed}: live gave "${liveRun.kind}", quick gave "${quickRun.kind}"`); continue; }
       const a = sameKeys(liveRun.report);
       const b = sameKeys(quickRun.report);

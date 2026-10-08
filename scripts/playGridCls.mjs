@@ -23,6 +23,17 @@
  * presence is sampled DURING loading, because by the time the page settles
  * the skeleton has correctly unmounted.
  *
+ * ROUND 1105: /college-grid no longer carries a skeleton past its first
+ * frame. Its board is up before any data lands (the labels are in the bundle)
+ * and its answer key is two files under /assets, not a database read, so on
+ * that route the two key files are held back 1500ms as well. Holding the
+ * database alone would no longer test late data there. The ceiling is the
+ * same 0.05. The noreserve control still fires through the other five grids:
+ * its "nothing to strip" guard sums across routes and one failing route is
+ * enough. That the board is up while the key is held is proven by
+ * scripts/playCollegeGridFirstTap.mjs, which also measures the shift on this
+ * route with both files held and never reaches the database.
+ *
  * Run: node scripts/playGridCls.mjs   (needs dist/ from npm run build)
  */
 import { spawn } from 'node:child_process';
@@ -73,6 +84,14 @@ for (const route of ROUTES) {
     await new Promise(res => setTimeout(res, DATA_DELAY_MS));
     await r.continue();
   });
+  /* Round 1105: College Grid's late data is its two key files now, not the
+     database, so those are held back the same 1500ms on that route. */
+  if (route === '/college-grid') {
+    await page.route('**/assets/collegeGrid*.json', async r => {
+      await new Promise(res => setTimeout(res, DATA_DELAY_MS));
+      await r.continue();
+    });
+  }
   await page.addInitScript(() => {
     window.__cls = 0;
     new PerformanceObserver(l => {

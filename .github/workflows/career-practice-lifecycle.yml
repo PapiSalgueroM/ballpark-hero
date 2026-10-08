@@ -1,0 +1,117 @@
+name: Career practice lifecycle
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - .github/workflows/career-practice-lifecycle.yml
+      - src/components/career/**
+      - src/components/soccer-career/TrainingPanel.tsx
+      - src/pages/SoccerCareer.tsx
+      - src/hooks/usePracticeClock.ts
+      - src/test/careerPracticeLifecycle.test.tsx
+      - src/test/soccerPracticeLifecycle.test.tsx
+      - src/test/careerTrainingGround.test.tsx
+      - src/test/careerRecordedStats.test.tsx
+      - scripts/simCareerPracticeLifecycle.mjs
+      - scripts/simSoccerPracticeLifecycle.mjs
+      - scripts/simCareerTraining.mjs
+      - scripts/simCareerRecordedStats.mjs
+      - scripts/qa/careerPractice1076.mjs
+permissions:
+  contents: read
+concurrency:
+  group: career-practice-lifecycle-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+      SEO_SPLIT_BASE_REF: HEAD
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare remote verification
+        run: |
+          mkdir -p career-practice-lifecycle-artifacts
+          git rev-parse HEAD > career-practice-lifecycle-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > career-practice-lifecycle-artifacts/source-tree.txt
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Type check and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-practice-lifecycle-artifacts/types.log
+          npm run build 2>&1 | tee career-practice-lifecycle-artifacts/build.log
+      - name: Shared practice outcomes and effective copied faults
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: CAREER_PRACTICE_LIFECYCLE_CONTROL=all ONLY=simCareerPracticeLifecycle node scripts/runAllSims.mjs 2>&1 | tee career-practice-lifecycle-artifacts/shared.log
+      - name: Soccer practice outcomes and effective copied faults
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: SOCCER_PRACTICE_LIFECYCLE_CONTROL=all ONLY=simSoccerPracticeLifecycle node scripts/runAllSims.mjs 2>&1 | tee career-practice-lifecycle-artifacts/soccer.log
+      - name: Recorded career totals and effective copied faults
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: CAREER_RECORDED_STATS_CONTROL=all ONLY=simCareerRecordedStats node scripts/runAllSims.mjs 2>&1 | tee career-practice-lifecycle-artifacts/recorded-stats.log
+      - name: Preserve uninterrupted drills and banking
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          export TMPDIR="$PWD/career-practice-lifecycle-artifacts/regression-evidence"
+          mkdir -p "$TMPDIR"
+          ONLY=simCareerTraining node scripts/runAllSims.mjs 2>&1 | tee career-practice-lifecycle-artifacts/training.log || failed=1
+          for control in tier overcap promise skinstat tell miss window slip; do
+            CAREER_TRAINING_CONTROL="$control" ONLY=simCareerTraining node scripts/runAllSims.mjs 2>&1 | tee "career-practice-lifecycle-artifacts/training-$control.log" || failed=1
+          done
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simUsCareerPractice.mjs 2>&1 | tee career-practice-lifecycle-artifacts/banking.log || failed=1
+          for control in before gain cap once save receipt renew rules abort pending reset carry; do
+            US_CAREER_PRACTICE_CONTROL="$control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simUsCareerPractice.mjs 2>&1 | tee "career-practice-lifecycle-artifacts/banking-$control.log" || failed=1
+          done
+          for harness in simTrainingFeedbackMotion simCareerDrills simDrillMotion simFirstTouchDrill simThroughBallDrill simNoDoubleRecord simCareerCleanSheets simCareerSeasonRatings simCareerDerbies; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-practice-lifecycle-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Native career practice journeys
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          node scripts/qa/careerPractice1076.mjs --prefetch-fonts-only 2>&1 | tee career-practice-lifecycle-artifacts/fonts.log
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/careerPractice1076.mjs 2>&1 | tee career-practice-lifecycle-artifacts/native.log
+      - name: All built readers and source anchors
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simSeoMetaSplit simHomeCopy simHarnessAnchors; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-practice-lifecycle-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Hold the reviewed implementation and untouched game rules
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --exit-code HEAD -- src/pages/SoccerCareer.tsx src/components/career src/components/soccer-career/TrainingPanel.tsx src/hooks/usePracticeClock.ts src/test scripts/simCareerPracticeLifecycle.mjs scripts/simSoccerPracticeLifecycle.mjs scripts/simCareerTraining.mjs scripts/simCareerRecordedStats.mjs scripts/qa/careerPractice1076.mjs
+          git diff --exit-code eeedbf433b07423b8fd27f0b8863b0ff9dddac8f HEAD -- src/lib/soccerCareerEngine.ts src/lib/careerTraining.ts src/lib/careerDrills.ts src/components/soccer-career/ThroughBallBoard.tsx src/components/soccer-career/FirstTouchBoard.tsx src/components/soccer-career/DrillBoard.tsx src/components/us-career/UsCareerBoard.tsx
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-practice-lifecycle-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 3
+          path: career-practice-lifecycle-artifacts/
