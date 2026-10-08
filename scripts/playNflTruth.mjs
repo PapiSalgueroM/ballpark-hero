@@ -7,14 +7,16 @@
  *      or later (pick 97 on) or an undrafted signing, the hub's contract chip
  *      is the salary the save holds and it is slot money (under $1M a year in
  *      2005 money, where the old rule could hand a kicker first pick money),
- *      and three played seasons are never longer than 16 games, with at
- *      least one full one of exactly 16.
+ *      and the played seasons are never longer than 16 games, with every one
+ *      the season curtain did not call hurt exactly 16 (the walk plays on,
+ *      seven seasons at the most, until it has seen one).
  *   2  The bank on load. A played save (it carries the summer marker) sitting
  *      at -0.4M opens on a Bank tile of $0M, and opening it again changes
  *      nothing. The same save with no marker (one last opened before the
  *      summers existed) is rebuilt the way Round 422 promised: $4.2M.
  *   3  An edge rusher in today's league: every sack total on a played season
- *      is a whole or a half.
+ *      is a whole or a half, and every season the curtain called neither
+ *      hurt nor a bench year is exactly 17 games.
  *   4  No sideways scroll on the hub at either width, and no page error.
  *
  * Assertions read the save the board wrote (the engine's own words) and the
@@ -81,19 +83,40 @@ async function quickStart(page, { throwback, pos, name }) {
 /** A career that lasts the walk: a late pick can be cut after a year (rated 64 or under is retired), and this
     walk is about schedules and stat lines, not about making the roster. Nothing here touches pay, the pick, the
     year or the era. */
-async function steady(page) {
-  await page.evaluate(k => {
+async function steady(page, { ovr = 80, pot = 88 } = {}) {
+  await page.evaluate(([k, o, p]) => {
     const s = JSON.parse(localStorage.getItem(k));
-    s.c.ovr = 80; s.c.pot = 88; s.c.role = 'starter'; s.c.health = 100; s.c.contractYears = 9;
+    s.c.ovr = o; s.c.pot = p; s.c.role = 'starter'; s.c.health = 100; s.c.contractYears = 9;
     localStorage.setItem(k, JSON.stringify(s));
-  }, KEY);
+  }, [KEY, ovr, pot]);
   await page.reload({ waitUntil: 'networkidle' });
   await page.waitForTimeout(1200);
 }
 
+/* WHY THE WALK READS THE CURTAIN (the fix pass of 2026-10-08). The first cut asserted "some season of three is
+   a full one" on the bare games column, and it went red on 2 of 6 plain runs of an unchanged head: every season
+   press runs the camp battle first, a starter rated more than 5 under the man the club brought in is benched,
+   and a bench year is 8 to 10 games. A season is also cut short by an injury. Neither is on the saved season
+   line, but the engine SAYS both on the season curtain, in its own words, so the walk reads them there and
+   holds the schedule only on the seasons the engine itself called neither. */
+const HURT = /Missed \d+ games? hurt/;
+const BENCH = /A backup season:/;
+const BANNED = /suspended list/;
+/** What the engine said about the season just played: the curtain's whole text, or null when no curtain is up. */
+async function curtainText(page) {
+  const el = page.locator('[data-season-reveal]');
+  if (!(await el.count())) return null;
+  return (await el.first().textContent()) ?? '';
+}
+const cutShort = t => (t == null ? 'no curtain' : HURT.test(t) ? 'hurt' : BENCH.test(t) ? 'bench' : BANNED.test(t) ? 'banned' : '');
+/** The seasons the engine called neither hurt, nor a bench year, nor a ban, by the curtain that came with each. */
+const fullSeasons = (lines, told) => lines.filter((_, i) => cutShort(told[i]) === '');
+const tellOf = (lines, told) => lines.map((s, i) => `${s.games}${cutShort(told[i]) ? ` ${cutShort(told[i])}` : ''}`).join(', ');
+
 /** Play `n` seasons and answer whatever comes between them, the way playCareerPress does. The board saves
-    inside the press, so the walk returns on the n-th press and never has to finish that summer. */
-async function playSeasons(page, n) {
+    inside the press, so the walk returns on the n-th press and never has to finish that summer. `told` gains
+    the curtain's text for every season pressed here, in order. */
+async function playSeasons(page, n, told = []) {
   const between = [
     '[data-season-reveal] button:has-text("Continue")',
     '[data-rivalry-event] button:has-text("Continue")',
@@ -118,6 +141,10 @@ async function playSeasons(page, n) {
       played += 1;
       await play.first().click();
       await page.waitForTimeout(1000);
+      /* Filed under the season line this press wrote, so a press that opened a contract talk and played
+         nothing can never shift the curtains against the seasons. */
+      const now = ((await readSave(page))?.c?.seasons ?? []).length;
+      if (now > 0 && told[now - 1] === undefined) told[now - 1] = await curtainText(page);
       if (played >= n) return played;
       continue;
     }
@@ -127,6 +154,20 @@ async function playSeasons(page, n) {
     await page.waitForTimeout(600);
   }
   console.log(`  (the walk stopped after ${played} of ${n} seasons on a screen it does not know: ${(await bodyText(page)).replace(/\s+/g, ' ').slice(0, 220)})`);
+  return played;
+}
+
+/** Three seasons, then one more at a time (seven at the most) until the engine has called one of them a full
+    year. An unlucky run of injuries costs the walk a few more presses and never its verdict. */
+async function playToAFullSeason(page, told, most = 7) {
+  let played = await playSeasons(page, 3, told);
+  while (played >= 3 && played < most) {
+    const lines = (await readSave(page))?.c?.seasons ?? [];
+    if (lines.length !== played || fullSeasons(lines, told).length) break;
+    const more = await playSeasons(page, 1, told);
+    if (!more) break;
+    played += more;
+  }
   return played;
 }
 
@@ -161,12 +202,14 @@ for (const [w, h] of WIDTHS) {
     say(c0.salary > 0 && c0.salary < 1, `a late pick is paid slot money in 2005 dollars: $${c0.salary}M a year`);
     say(await noSideScroll(page), `no sideways scroll on the hub at ${w} wide`);
     await steady(page);
-    const played = await playSeasons(page, 3);
+    const told = [];
+    const played = await playToAFullSeason(page, told);
     const lines = (await readSave(page))?.c?.seasons ?? [];
     const games = lines.map(s => s.games);
-    say(played === 3 && lines.length === 3, `three seasons were played (${played} presses, ${lines.length} season lines: ${lines.map(s => s.year).join(', ')})`);
+    const full = fullSeasons(lines, told);
+    say(played >= 3 && lines.length === played, `three seasons or more were played (${played} presses, ${lines.length} season lines: ${lines.map(s => s.year).join(', ')})`);
     say(games.length > 0 && games.every(g => g <= 16), `no throwback season is longer than 16 games (${games.join(', ')})`, true);
-    say(games.includes(16), `a healthy throwback season is exactly 16 games (${games.join(', ')})`, true);
+    say(full.length > 0 && full.every(s => s.games === 16), `every throwback season the engine did not call hurt is exactly 16 games, and there is one (${tellOf(lines, told)})`, true);
   }
   await context.close();
 }
@@ -199,12 +242,18 @@ for (const [w, h] of WIDTHS) {
   console.log(`3) an edge rusher today, at ${w} by ${h}`);
   const { context, page } = await open(w, h);
   await quickStart(page, { throwback: false, pos: 'EDGE', name: 'Edge Probe' });
-  await steady(page);
-  const played = await playSeasons(page, 3);
+  /* Rated 94: the man a club brings to camp is rated at most one over the club (a club is 94 at the most,
+     so 95), and a starter is benched only when he is more than 5 under that man, so this one keeps his job. The
+     curtain is read all the same, and a bench year would be set aside like a hurt one, not read as a full one. */
+  await steady(page, { ovr: 94, pot: 97 });
+  const told = [];
+  const played = await playToAFullSeason(page, told);
   const lines = (await readSave(page))?.c?.seasons ?? [];
   const sacks = lines.map(s => s.sacks);
-  say(played === 3 && lines.length === 3, `three seasons were played (${lines.length} season lines)`);
-  say(lines.length > 0 && lines.every(s => s.games <= 17) && lines.some(s => s.games === 17), `today's seasons are 17 games (${lines.map(s => s.games).join(', ')})`);
+  const full = fullSeasons(lines, told);
+  say(played >= 3 && lines.length === played, `three seasons or more were played (${played} presses, ${lines.length} season lines)`);
+  say(lines.length > 0 && lines.every(s => s.games <= 17), `no season today is longer than 17 games (${lines.map(s => s.games).join(', ')})`);
+  say(full.length > 0 && full.every(s => s.games === 17), `every season today the engine did not call hurt or a bench year is exactly 17 games, and there is one (${tellOf(lines, told)})`);
   say(sacks.length > 0 && sacks.every(v => typeof v === 'number' && Number.isInteger(v * 2)), `every sack total is a whole or a half (${sacks.join(', ')})`);
   say(sacks.some(v => v > 0), 'and at least one season had a sack, so the check read something');
   await context.close();
