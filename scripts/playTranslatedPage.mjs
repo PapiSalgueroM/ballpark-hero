@@ -1,5 +1,6 @@
 /**
  * Round 1140: a translated page in a real browser.
+ * Round 1141: and whether what it shows is RIGHT (the sections marked 1141 below).
  *
  * WHY THIS EXISTS. On 2026-10-08 a player in Brazil could not create a Soccer
  * Career, and Try this page again failed the same way. His browser had
@@ -18,9 +19,25 @@
  * THE TRANSLATOR here is a copy of what the real one does, put in with an init
  * script so it survives a reload the way "always translate" does. From 400 ms
  * after the load event, and then after every change through a
- * MutationObserver, each non empty text node under body is REPLACED by
- * font > font > a new text node, and html gets lang="pt" and the class
- * translated-ltr. It leaves alone what the real one leaves alone: script,
+ * MutationObserver, each non empty text node under body is taken out and
+ * font > font > a new text node stands where it was, and html gets lang="pt"
+ * and the class translated-ltr. Since Round 1141 it does that the way the real
+ * translator was MEASURED to do it (Google's, loaded into a plain page, in
+ * Portuguese, Japanese and German, 2026-10-08), because each of these changes
+ * what a guard has to do:
+ *   - it READS new text within a few milliseconds (SIM_READ, 4) and ANSWERS
+ *     later (SIM_DELAY, 150) with the words it read, whatever the node says by
+ *     then. SIM_LATE=0 makes it answer with the node's current words, which no
+ *     translator does: it exists to tell what the guard owes from what the
+ *     translator's own delay costs.
+ *   - the swap is two steps: a font goes in BEFORE the node, then the node
+ *     leaves (the record of the removal names the font as previous sibling).
+ *   - a node it has taken once it never takes again, however often it is put
+ *     back: the real one marks the node.
+ *   - text nodes side by side are one sentence, and the words are not kept
+ *     node by node. The worst case measured is the one played: every wrapper
+ *     of the run comes back empty but the last, which holds the sentence.
+ * It leaves alone what the real one leaves alone: script,
  * style, textarea, noscript, title, iframe, svg, code, anything editable, and
  * anything under translate="no" or class notranslate (so a later repair that
  * marks a subtree that way can be tested with this same file). Two modes, and
@@ -41,6 +58,14 @@
  *                   the first eight things a player can press: the rules
  *                   dialog a first visit opens, then one control after
  *                   another, never the same one twice while another is left.
+ *   /nba-my-career#bank (1141)
+ *                   the same page walked on purpose: the rules sheet, Enter
+ *                   the draft, The Bank, then money in and out five times.
+ *                   Its statement draws {amount >= 0 ? '+' : ''}{figure}, so a
+ *                   line that read -$100k has to read +$50k: a sign inserted
+ *                   in FRONT of a string the translator took, that string
+ *                   rewritten in the same commit, and later the sign removed.
+ *                   The reproduction's insertBefore crash was here.
  *
  * WHAT IT ASSERTS, and none of it is only "the page did not crash":
  *   0. The served build really carries the guard: the entry chunk named in the
@@ -52,9 +77,10 @@
  *   2. The create screen drew. All three picks registered: each select box
  *      holds its pick in its text, Brazil among them. And each pick can be
  *      READ in its box, which is not the same thing: the first line box of
- *      the words has to lie inside everything that clips it. One pick is
- *      known to fail that today and is on KNOWN_HIDDEN_PICKS, a ratchet (see
- *      WHAT THE GUARD DOES NOT FIX below).
+ *      the words has to lie inside everything that clips it. Under Round 1140
+ *      the nationality pick failed that and sat on KNOWN_HIDDEN_PICKS, a
+ *      ratchet. Round 1141 emptied the list: all three must be readable, and
+ *      only the nolive control expects that one hidden again.
  *   3. The create flow REACHED the career: the hub's h1 holds the typed name,
  *      the create form is gone and the save in the browser is his.
  *   4. One season forward: the save is a year older and the hub still stands.
@@ -69,25 +95,62 @@
  *      check that does not lean on the app's own copy, so it still means
  *      something the day every string on the walk has a span of its own.
  *
+ * WHAT IT ASSERTS SINCE ROUND 1141, on every walk but the noguard control's:
+ *   10. The page says what React holds, at EVERY look (after every press).
+ *       The judge is React's own tree. For each element that has strings of
+ *       its own, the words React holds, in its order, are set against the
+ *       words that element shows: its text nodes as they read and each
+ *       translator wrapper by the words the translator took. A copy left
+ *       behind, a number that did not move, a label that got lost and a
+ *       figure frozen by the translator's delay all show as a difference,
+ *       and each is printed with React's words, the screen's words and the
+ *       element. It leans on neither the guard nor the walk's own bookkeeping,
+ *       and the notranslate control proves it is silent on an ordinary page.
+ *   11. Asked directly on every page, the way check 8 asks layer one, but IN
+ *       the document where the guard can see the swap: a string is taken the
+ *       way the translator takes it, and then the page removes it (the copy
+ *       must leave with it), inserts in front of it (the new element must be
+ *       in front, not at the end) and rewrites it (the page must show the new
+ *       words). It does not lean on the app's own copy either. The judge of
+ *       check 10 also lists every element it finds out of place among words,
+ *       as a record, not as a pass or fail.
+ *   12. No text the translator will never take again is back on the page: a
+ *       guard that put React's own node back would leave the visitor's page
+ *       half in the first language. The real translator never retakes one.
+ *   13. Create walk: no box holds its placeholder beside its pick, by the
+ *       words in it ("Choose positionStriker (ST)" is what layer one leaves).
+ *   14. Create walk: the age in the hub's own line ("Striker · Age 17 · ...")
+ *       is the age in the save at every look, and at least one of those looks
+ *       came after a birthday, or nothing was measured and the check fails.
+ *   15, 16. The Bank: all five moves were made and the statement has its
+ *       lines, and every figure reads as a sign, a dollar and digits, in that
+ *       order and with nothing behind it.
+ *   9.  On a page nobody translated (the notranslate control) layer two did
+ *       nothing: window.__dukbTranslateStats is there and every count is 0.
+ *
  * WHAT IT COUNTS, as a record and not as a pass or fail: on how many pages
  * the guard printed its console line (it prints once a page), and, through a
  * recorder laid over removeChild and insertBefore that changes nothing and
  * only counts, how many calls on each page named a node its parent no longer
  * owns. Each of those is one crash the page would have had.
  *
- * WHAT THE GUARD DOES NOT FIX, measured here so nobody has to guess. The guard
- * stops the crash. It does not put the page right, and two costs stay:
+ * WHAT LAYER ONE ALONE LEAVES, which is what Round 1140 shipped and what the
+ * nolive control still shows. Layer one stops the crash. It does not put the
+ * page right:
  *   - A leftover. The translator's copy of a removed text stays where it was.
  *     In the nationality box that copy is the placeholder, the box shows one
  *     line, and the pick (drawn as a block, with its flag) lands on a second
  *     line nobody sees: the box still READS "Choose national..." after Brazil
- *     is chosen, at both sizes. The pick is taken and the flow goes on. The
- *     position and era picks sit on the same line and can be read.
+ *     is chosen, at both sizes. The pick is taken and the flow goes on.
  *   - Stale text. What React writes to a node the translator took never
- *     reaches the screen: the age line still says 16 when he is 18. Counted
- *     as "stale text" for every walk, the most on screen at once.
- * Both end when a changing string gets a span of its own, which is the create
- * path repair and not this round.
+ *     reaches the screen: the age line still says 16 when he is 18.
+ *   - A new element that belongs in front of a translated string lands at the
+ *     end: The Bank reads "-$100k+".
+ * Round 1141's layer two ends all three for every game at once (see
+ * src/lib/translateGuard.ts), and a fourth that no guard caused: a figure that
+ * ticks and then stops used to end on an older value, because the translator
+ * answers with the words it read a moment ago. The roll on the create screen
+ * ended on 56 when React held 60.
  *
  * CONTROLS (PLAY_TRANSLATED_CONTROL=):
  *   noguard      sets window.__DUKB_NO_TRANSLATE_GUARD__ before the app boots,
@@ -102,9 +165,27 @@
  *                or did not fire, and proves nothing. It also walks the other
  *                eight pages, which is the measurement of how wide the damage
  *                was without the guard.
+ *   nolive       (1141) sets window.__DUKB_NO_TRANSLATE_LIVE__ before the app
+ *                boots: layer one only, which is the build Round 1140 shipped.
+ *                The run must go RED for layer two's own reasons while the
+ *                page still STANDS: on every create walk stale text (check
+ *                10), a placeholder beside its pick (13) and the age line
+ *                behind the save (14), and in The Bank a figure with its sign
+ *                at the wrong end (16), with no boundary and no NotFoundError
+ *                anywhere. Exit 1 is the control firing. Exit 2 means it did
+ *                not fire, or a walk broke, or a check failed that has nothing
+ *                to do with layer two, and proves nothing.
  *   notranslate  the same walk with the translator off. It must stay green
  *                AND count zero console lines and zero moved nodes: the guard
- *                does nothing on an ordinary page.
+ *                does nothing on an ordinary page. Since 1141 it is also where
+ *                the judge of check 10 is itself judged (no stale text and
+ *                nothing out of place on a page nobody touched) and where
+ *                layer two must have done nothing at all (check 9).
+ *
+ * COST=1 (1141) is not a check. It times an untranslated create walk, and a
+ * burst of the calls React makes, on three builds of the same page (both
+ * layers, layer one only, no guard), COST_REPS times each, and prints the
+ * numbers that stand below.
  *
  * MEASURED 2026-10-08 on the Release AL tree with the guard in it, on a GitHub
  * runner, three runs of the plain walk giving the same numbers each time:
@@ -800,6 +881,46 @@ async function probeGuard(page) {
   }).catch(e => ({ remove: 'no answer', insert: String(e).slice(0, 60) }));
 }
 
+/* Round 1141, the same kind of question for layer two, and this time IN the document, where the guard
+   can see the swap happen (a font goes in before the node, then the node leaves). The box is marked
+   translate="no" so the walk's own translator keeps out of it. Three calls, the three React makes:
+   remove the node, insert in front of it, rewrite it. With layer two the copy leaves with the node,
+   the new element stands in front, and the page shows 17. With layer one alone the copy stays, the
+   element lands at the end and the page still shows the copy of 16, which is what the nolive control
+   has to see here on every page, whatever the app's own copy looks like by then. */
+async function probeLive(page) {
+  return page.evaluate(() => {
+    const out = { remove: '', insert: '', write: '' };
+    const box = document.createElement('div');
+    box.setAttribute('translate', 'no');
+    box.style.display = 'none';
+    document.body.appendChild(box);
+    const line = words => { const p = box.appendChild(document.createElement('p')); return [p, p.appendChild(document.createTextNode(words))]; };
+    const take = node => { const font = document.createElement('font'); font.textContent = 'copy of ' + node.nodeValue; node.parentNode.insertBefore(font, node); node.parentNode.removeChild(node); return font; };
+    try {
+      const [p, held] = line('held by the page');
+      const font = take(held);
+      p.removeChild(held);
+      out.remove = font.parentNode === p ? 'the copy stayed' : p.childNodes.length === 0 ? 'the copy left with it' : 'something else is there';
+    } catch (e) { out.remove = e.name; }
+    try {
+      const [p, held] = line('tail words');
+      take(held);
+      const fresh = document.createElement('b');
+      p.insertBefore(fresh, held);
+      out.insert = p.firstChild === fresh ? 'in front' : p.lastChild === fresh ? 'at the end' : 'somewhere else';
+    } catch (e) { out.insert = e.name; }
+    try {
+      const [p, held] = line('16');
+      take(held);
+      held.nodeValue = '17';
+      out.write = p.textContent === '17' ? 'shows 17' : `still shows "${p.textContent}"`;
+    } catch (e) { out.write = e.name; }
+    box.remove();
+    return out;
+  }).catch(e => ({ remove: 'no answer', insert: String(e).slice(0, 60), write: '' }));
+}
+
 /* The next thing a player would press. An open dialog, list or menu comes first (the rules dialog a
    first visit opens, the list a select just opened). Then, in the career, the flagship walker's own
    advancing actions in its own order. Otherwise the control pressed least so far, in page order, so
@@ -1091,6 +1212,7 @@ async function runWalk({ mode, view, route }, out) {
        the guard prints its once a page line for them on a page that never needed it. */
     rec.guardLines = W.guardLines;
     rec.direct = await probeGuard(W.page);
+    if (CONTROL !== 'noguard') rec.directLive = await probeLive(W.page);
     if (route === CREATE_ROUTE && rec.boundaryAt) retry = await retryAfterBoundary(W, rec);
   } catch (e) {
     if (!rec.stuckAt && !rec.boundaryAt) rec.stuckAt = 'the walk threw: ' + String(e).split('\n')[0].slice(0, 140);
@@ -1107,7 +1229,7 @@ async function runWalk({ mode, view, route }, out) {
     staleList: [...rec.staleAll.values()], staleAt: rec.staleAt, maxOrder: rec.maxOrder, orderList: [...rec.orderAll.values()],
     takenBack: rec.maxTakenBack, judged: rec.judged, live: last.live || null,
     age: { looks: rec.ageLooks, older: rec.ageLooksOlder, wrong: rec.ageWrong, wrongAt: rec.ageWrongAt },
-    bank: rec.bank || null,
+    bank: rec.bank || null, directLive: rec.directLive || null,
     pressed: rec.pressed, dbBlocked: W.dbBlocked, blocked: [...W.blocked], retry, direct: rec.direct || null,
     create: route === CREATE_ROUTE ? { drawn: !!rec.createDrawn, boxes: rec.boxes || {}, reached: !!rec.reached, reachedDetail: rec.reachedDetail || '', seasonAt: rec.seasonAt ?? null, seasonDetail: rec.seasonDetail || '' } : null,
     stepList: rec.steps,
@@ -1145,8 +1267,10 @@ async function runWalk({ mode, view, route }, out) {
       rec.judged === 0 ? 'no element with words of its own was found to judge' : rec.maxStale
         ? `${stale.length} different stale text(s), ${rec.maxStale} at once at most, first at "${rec.staleAt}": React ${JSON.stringify(stale[0].react)}, the screen ${JSON.stringify(stale[0].screen)}, in ${stale[0].at}`
         : `${rec.judged} element(s) with words of their own at the fullest look`);
-    check(`11. ${tag}: every element among words stands where React put it`, rec.maxOrder === 0,
-      rec.maxOrder ? `${row.orderList.length} out of place, for example ${JSON.stringify(row.orderList[0])}` : '');
+    const d2 = rec.directLive || {};
+    check(`11. ${tag}: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right`,
+      d2.remove === 'the copy left with it' && d2.insert === 'in front' && d2.write === 'shows 17',
+      `removed: ${d2.remove || 'not asked'}; inserted before: ${d2.insert || 'not asked'}; rewritten 16 to 17: ${d2.write || 'not asked'}`);
     check(`12. ${tag}: no text the translator will not take again is back on the page`, rec.maxTakenBack === 0, rec.maxTakenBack ? `${rec.maxTakenBack} at once` : '');
     if (mode === 'off') {
       const l = last.live;
@@ -1286,9 +1410,9 @@ const rows = done.filter(Boolean);
  * ------------------------------------------------------------------ */
 const pad = (s, n) => String(s).padEnd(n);
 console.log('\nEVERY WALK');
-console.log(`  ${pad('page', 17)}${pad('view', 9)}${pad('text', 7)}${pad('boundary', 34)}${pad('NotFound', 10)}${pad('guard line', 12)}${pad('moved nodes', 13)}${pad('stale text', 12)}steps`);
+console.log(`  ${pad('page', 21)}${pad('view', 9)}${pad('text', 7)}${pad('boundary', 34)}${pad('NotFound', 10)}${pad('guard line', 12)}${pad('moved nodes', 13)}${pad('stale text', 12)}steps`);
 for (const r of rows) {
-  console.log(`  ${pad(r.route, 17)}${pad(r.view, 9)}${pad(r.mode, 7)}${pad(r.boundaryAt ? 'at "' + r.boundaryAt.slice(0, 26) + '"' : 'none', 34)}${pad(r.notFound, 10)}${pad(r.guardLines, 12)}${pad(`${r.moved}${r.moved ? ' (' + r.movedByTranslator + ' taken)' : ''}`, 13)}${pad(r.maxStale, 12)}${r.steps}${r.stuckAt ? '  STUCK: ' + r.stuckAt.slice(0, 60) : ''}`);
+  console.log(`  ${pad(r.route, 21)}${pad(r.view, 9)}${pad(r.mode, 7)}${pad(r.boundaryAt ? 'at "' + r.boundaryAt.slice(0, 26) + '"' : 'none', 34)}${pad(r.notFound, 10)}${pad(r.guardLines, 12)}${pad(`${r.moved}${r.moved ? ' (' + r.movedByTranslator + ' taken)' : ''}`, 13)}${pad(r.maxStale, 12)}${r.steps}${r.stuckAt ? '  STUCK: ' + r.stuckAt.slice(0, 60) : ''}`);
 }
 console.log('\nBY PAGE');
 for (const route of ROUTES) {
@@ -1296,7 +1420,7 @@ for (const route of ROUTES) {
   const broke = mine.filter(r => r.boundaryAt);
   const where = [...new Set(broke.map(r => r.boundaryAt))];
   const moved = mine.map(r => r.moved);
-  console.log(`  ${pad(route, 17)}broke in ${broke.length} of ${mine.length} walk(s)${where.length ? ' (' + where.map(s => '"' + s + '"').join(', ') + ')' : ''}; the guard printed its line in ${mine.filter(r => r.guardLines > 0).length}; moved nodes per walk ${moved.join(', ')}; stale text at most ${Math.max(0, ...mine.map(r => r.maxStale))}`);
+  console.log(`  ${pad(route, 21)}broke in ${broke.length} of ${mine.length} walk(s)${where.length ? ' (' + where.map(s => '"' + s + '"').join(', ') + ')' : ''}; the guard printed its line in ${mine.filter(r => r.guardLines > 0).length}; moved nodes per walk ${moved.join(', ')}; stale text at most ${Math.max(0, ...mine.map(r => r.maxStale))}`);
 }
 const creates = rows.filter(r => r.create);
 if (creates.length) {
