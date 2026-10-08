@@ -1,0 +1,18 @@
+1) The takeover and the target over 240 seeded runs
+   targets: mean 6.07, 10 distinct, 6 trivial, 0 near a sweep, r vs club strength 0.266
+   ok  240 takeovers in league weeks 6 to 14, every board on 30, every target inside a point of a sweep
+2) Reading the room against talking past it, on the same dice
+   reads  mean points 6.30, survival 80.8 percent
+   silent mean points 6.25, survival 79.6 percent
+   wrong  mean points 6.15, survival 76.7 percent
+   reader minus wrong: +0.15 points, +4.2 survival points; 141 league results flipped by the talk, 95 toward the reader (67.4 percent); board sackings 9 of 720
+   ok  the reader takes more points and keeps the job more often, and the game can be won and lost
+3) A run rebuilt from its seed and choices matches the original
+   ok  24 replays match their runs in verdict, points, target, takeover and every score; a second start opens the same job; the daily is stable and varied
+4) A Club Manager save's registrations survive a hot seat run
+   ok  a custom club and a league override registered before the run are the same objects after a start, two matches, a press answer and a replay, and the hot seat world never shows them
+5) A manager who keeps the job carries on in Club Manager
+   54 setups in 27 leagues: 43 handed over (1 on a reprieve) from 25 leagues, 40 played to the end of the season, 3 sacked in Club Manager on the way, 24 sacked runs refused, 43 asked before replacing, 2 with a window before the next fixture, 164 of the previous manager's messages left behind
+   ok  every survivor's career opens in Club Manager on the hot seat's own table, with the takeover stamp and the card's numbers, and plays to the end of the season; a saved career is never replaced without the confirm, and a sacked manager is never offered one
+
+simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club Manager.

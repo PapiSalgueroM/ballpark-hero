@@ -1,0 +1,31 @@
+gen-check: node scripts/genClubManagerGathered.mjs russia2026 --check
+gathered: node scripts/simClubManagerGathered.mjs
+gathered-defaulted: GATHERED_CONTROL=defaulted node scripts/simClubManagerGathered.mjs
+gathered-unmarked: GATHERED_CONTROL=unmarked node scripts/simClubManagerGathered.mjs
+gathered-keeper: GATHERED_CONTROL=keeper node scripts/simClubManagerGathered.mjs
+gathered-twice: GATHERED_CONTROL=twice node scripts/simClubManagerGathered.mjs
+gathered-stale: GATHERED_CONTROL=stale node scripts/simClubManagerGathered.mjs
+gathered-invented: GATHERED_CONTROL=invented node scripts/simClubManagerGathered.mjs
+gathered-offcurve: GATHERED_CONTROL=offcurve node scripts/simClubManagerGathered.mjs
+newLeagues: node scripts/simClubManagerNewLeagues.mjs
+aleague: node scripts/simClubManagerALeague.mjs
+cmLeagueRules: node scripts/simCmLeagueRules.mjs
+appealIsolation: node scripts/simManagerAppealIsolation.mjs
+shootoutOrder: node scripts/simCmShootoutOrder.mjs
+nationalPools: node scripts/simNationalPools.mjs
+dataOnDemand: node scripts/simCmDataOnDemand.mjs
+dailyClubPool: node scripts/simDailyClubPool.mjs
+inventedNames: node scripts/simInventedNames.mjs
+hotSeat: node scripts/simManagerHotSeat.mjs
+deadlineDay: node scripts/simDeadlineDay.mjs
+clubManager: node scripts/simClubManager.mjs
+internationals: node scripts/simCmInternationals.mjs
+startingXi: node scripts/simStartingXi.mjs
+saveSize: node scripts/simClubManagerSaveSize.mjs
+slots: node scripts/simClubManagerSlots.mjs
+careerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+liveScores: node scripts/simLiveScores.mjs
+noRivalNames: node scripts/simNoRivalNames.mjs
+harnessAnchors: node scripts/simHarnessAnchors.mjs
+vitest-identity: node_modules/.bin/vitest run src/test/cmWorldIdentity1052.test.ts --testTimeout=300000
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
