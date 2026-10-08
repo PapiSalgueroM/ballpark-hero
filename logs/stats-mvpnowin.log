@@ -1,0 +1,29 @@
+   control mvpnowin: the MVP score ignores the club's record
+1) Every game adds up: 2400 box scores, then every club's season
+   2400 box scores, 900 club seasons over 30 closes
+2) The box takes nothing from the league generator: the same seed with and without lines
+   5 seeds played twice, two seasons each
+3) The award rules pick who the lines say: fixtures, then every simulated season against a typed copy of the rules
+   fixtures plus 30 simulated seasons; rookie of the year named in 20; 238 first year lines, 238 marked rookie
+4) The leaders tables are a recount
+5) The lines read like basketball and like this sim
+   club ppg 112.9 to 113.4 (mean 113.25); tenth scorer median 25.81 (24.6 to 26.8)
+   rating vs ppg Spearman 0.877 to 0.959; differential vs winning share 0.893 to 0.981
+   rebounds C 9.26 F 6.47 G 3.51; assists G 4.71 F 2.46 C 1.35
+6) The close happens once and is kept
+7) A save from before the round: no lines this season, lines from the summer
+   vitest skipped under this control: it reads src, which the control never touches
+8) The copy says what the engine does
+   Sixth Man winners, points a game over 30 seasons: 10th percentile 12.2, median 12.8, 90th 13.3; the page promises 13
+   1. every game adds up: 3 checks
+   2. the box takes nothing from the league generator: 20 checks
+   3. the award rules pick who the lines say: 16 checks, 3 FAILED
+   4. the leaders tables are a recount: 1 check
+   5. the lines read like basketball and like this sim: 6 checks
+   6. the close happens once and is kept: 6 checks
+   7. an old save: 5 checks
+   8. the copy says what the engine does: 12 checks
+   red: [3] MVP: the smaller line on the 60 win club beats the bigger line on the 20 win club: bad_star
+   red: [3] All-League: the five best by the MVP score, any position, in order: bad_star,good_star,c1,a2,b2
+   red: [3] every simulated season (30) names the man the typed rules name, for all five awards: seed 1 2026: engine {"mvp":"n8ncm1c16fma4i-51","allLeague":["n8ncm1c16fma4i-51","n8ncm1c16fma4i-1","n8ncm1c16fma4i-41","n8ncm1c16fma4i-211","n8ncm1c16fma4i-121"],"roy":null,"dpoy":"n8ncm1c16fma4i-85","sixth":"n8ncm1c16fma4i-285"} typed {"minGames":64,"mvp":"n8ncm1c16fma4i-1","allLeague":["n8ncm1c16fma4i-1","n8ncm1c16fma4i-51","n8ncm1c16fma4i-11","n8ncm1c16fma4i-41","n8ncm1c16fma4i-211"],"roy":null,"dpoy":"n8ncm1c16fma4i-85","sixth":"n8ncm1c16fma4i-285"} | seed 1 2027: engine {"mvp":"n8ncm1c16fma4i-51","allLeague":["n8ncm1c16fma4i-51","n8ncm1c16fma4i-41","n8ncm1c16fma4i-121","n8ncm1c16fma4i-1","n8ncm1c16fma4i-211"],"roy":"n8ncm1c16fma4i-452","dpoy":"n8ncm1c16fma4i-85","sixth":"n8ncm1c16fma4i-17"} typed {"minGames":64,"mvp":"n8ncm1c16fma4i-11","allLeague":["n8ncm1c16fma4i-11","n8ncm1c16fma4i-51","n8ncm1c16fma4i-41","n8ncm1c16fma4i-1","n8ncm1c16fma4i-211"],"roy":"n8ncm1c16fma4i-452","dpoy":"n8ncm1c16fma4i-85","sixth":"n8ncm1c16fma4i-17"} | seed 1 2028: engine {"mvp":"n8ncm1c16fma4i-41","allLeague":["n8ncm1c16fma4i-41","n8ncm1c16fma4i-51","n8ncm1c16fma4i-1","n8ncm1c16fma4i-452","n8ncm1c16fma4i-211"],"roy":"n8ncm1c16fma4i-543","dpoy":"n8ncm1c16fma4i-1","sixth":"n8ncm1c16fma4i-283"} typed {"minGames":64,"mvp":"n8ncm1c16fma4i-41","allLeague":["n8ncm1c16fma4i-41","n8ncm1c16fma4i-1","n8ncm1c16fma4i-51","n8ncm1c16fma4i-61","n8ncm1c16fma4i-21"],"roy":"n8ncm1c16fma4i-543","dpoy":"n8ncm1c16fma4i-1","sixth":"n8ncm1c16fma4i-283"}
+control "mvpnowin": section 3 went red as expected (3 failures) and nothing else moved, the check works. Exiting non zero because the checks did fail.

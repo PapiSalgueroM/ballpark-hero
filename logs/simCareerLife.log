@@ -1,0 +1,35 @@
+1) Driving careers through the real engine
+   260 careers (100 ordinary, 100 elite, 60 one club), 3773 season boundaries, 0 crashes
+2) Every peak is reachable, and almost none of them are free
+   longest unbroken run at one club anywhere in the sample: 18 seasons
+   24 badges, 17 of them earned by under 40% of careers
+   decade 100%, first_million 100%, cup 83.1%, league 73.1%, hundred_million 51.2%, caps_100 48.5%, apps_500 46.9%, league_5 39.6%, continental 33.5%, comeback 30.8%, clean_100 30.4%, merch_line 30%, assists_100 29.2%, signature_boot 25%, goals_100 24.2%, one_club 23.1%, ucl 20.8%, world_cup 16.5%, ballon_dor 16.5%, season_30 10%, rating_9 9.6%, goals_300 7.7%, ballon_dor_3 6.9%, treble 5%
+3) Six badge verdicts recomputed here from the raw save
+   1560 verdicts checked against the seasons themselves, 0 disagreements
+4) Nothing grew past its own ceiling
+   3773 season boundaries checked, 0 of them above the rolled potential
+5) The critic moves, and he moves with the football
+   3900 seasons scored, spread 0 to 100, median 62
+   backing 44.1%, watching 20.5%, doubting 19.1%, written_off 16.4%
+   mean season rating he backs 7.73, mean he writes off 5.65, gap 2.08
+6) The three answers land in measurably different places
+   say nothing about it   final mean 73.62, top quartile minus bottom 55.28, mean season to season swing 5.7
+   answer him back        final mean 70.43, top quartile minus bottom 62.72, mean season to season swing 6.34
+   let next season answer final mean 72.43, top quartile minus bottom 52.09, mean season to season swing 10.45
+   invite him in          final mean 79.73, top quartile minus bottom 48.42, mean season to season swing 5.32
+   the event fired in 219 careers; choices taken 76 / 68 / 75
+   the signature boot was offered in 91 careers; choices taken 35 / 30 / 26
+7) He never asks a position for a stat it does not carry
+   4800 clauses across 12 positions, 0 of them naming the wrong stat
+8) The column runs every time the paper does
+   3773 newspapers printed, 3773 of them carrying his column (100%)
+9) Nothing new on the save, and the old lifestyle band migrates
+   save carries 119 top level fields, 0 of them from this round; life flags in play: 4
+   reloaded save rebuilt 4 of his old columns from the seasons alone
+   an old save written when the top band was called Billionaire loads as Untouchable
+10) Branding money survives the season roll it used to be wiped by
+   40 careers rolled a season with a 3 pot and without: mean sponsorship 16.02 against 12.7, gap 3.32
+   the pot itself survived the roll in 40 of 40
+   5 catalogs scanned for money added straight to the field that gets recomputed, 0 found
+
+simCareerLife: green. Every peak is reachable, the critic has an opinion and it is about the football, and nothing about either of them is on the save.

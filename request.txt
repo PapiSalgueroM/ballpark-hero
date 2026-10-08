@@ -1,0 +1,49 @@
+# Round 1103 pass A gate, part 2: every harness that reads a file this round edits (3.10, critic 17)
+simAwards: node scripts/simAwards.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simCareerBanking: node scripts/simCareerBanking.mjs
+simCareerInbox: node scripts/simCareerInbox.mjs
+simCareerInboxBeats: node scripts/simCareerInboxBeats.mjs
+simCareerLife: node scripts/simCareerLife.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simCareerPress: node scripts/simCareerPress.mjs
+simCareerRealism: node scripts/simCareerRealism.mjs
+simCareerRivalryEvents: node scripts/simCareerRivalryEvents.mjs
+simDepthChart: node scripts/simDepthChart.mjs
+simExtension: node scripts/simExtension.mjs
+simFightCareer: node scripts/simFightCareer.mjs
+simFreeAgency: node scripts/simFreeAgency.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simNbaDraftCapital: node scripts/simNbaDraftCapital.mjs
+simNbaGmDesk: node scripts/simNbaGmDesk.mjs
+simNbaOpeningRatings: node scripts/simNbaOpeningRatings.mjs
+simNbaRotation: node scripts/simNbaRotation.mjs
+simNbaRotationUi: node scripts/simNbaRotationUi.mjs
+simNbaSeasonStats: node scripts/simNbaSeasonStats.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simSeasonCentreAgreement: node scripts/simSeasonCentreAgreement.mjs
+simSeasonCentreNeutral: node scripts/simSeasonCentreNeutral.mjs
+simSeasonCentreTable: node scripts/simSeasonCentreTable.mjs
+simSeasonMoments: node scripts/simSeasonMoments.mjs
+simSeasonReveal: node scripts/simSeasonReveal.mjs
+simSportEras: node scripts/simSportEras.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsCareerAnnualBenefits: node scripts/simUsCareerAnnualBenefits.mjs
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+simUsCareerDefects: node scripts/simUsCareerDefects.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simUsCoachCareer: node scripts/simUsCoachCareer.mjs
+simUsCoachPoaching: node scripts/simUsCoachPoaching.mjs
+simUsCoaching: node scripts/simUsCoaching.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simCareerRecordedStats: node scripts/simCareerRecordedStats.mjs
+stats-mvpnowin: NBA_STATS_CONTROL=mvpnowin node scripts/simNbaSeasonStats.mjs
+stats-noqualify: NBA_STATS_CONTROL=noqualify node scripts/simNbaSeasonStats.mjs
+stats-sixthstarters: NBA_STATS_CONTROL=sixthstarters node scripts/simNbaSeasonStats.mjs
+stats-doubleclose: NBA_STATS_CONTROL=doubleclose node scripts/simNbaSeasonStats.mjs
+stats-rookieany: NBA_STATS_CONTROL=rookieany node scripts/simNbaSeasonStats.mjs
+parity-deadbadge: PARITY_CONTROL=deadbadge node scripts/simCareerParity.mjs
+hall-nba: node scripts/simCareerHall.mjs nba
