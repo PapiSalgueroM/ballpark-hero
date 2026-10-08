@@ -123,14 +123,40 @@ function answer(jobs: ReturnType<typeof readNewText>) {
     const inner = doc.createElement('font');
     inner.textContent = `pt:${words}`;
     wrappers[wrappers.length - 1].appendChild(inner);
-    for (const t of here) {
+    here.forEach((t, i) => {
       takenOnce.add(t);
       t.parentNode!.removeChild(t);
-    }
+      ledger.push({ node: t, wrapper: wrappers[i], words: t.nodeValue || '' });
+    });
   }
 }
 function translateReal(root: Element) {
   answer(readNewText(root));
+}
+/**
+ * The translator undoing itself ("show original", a translation that failed, the page going into the back
+ * and forward cache). Measured on the real one, on its own button: every wrapper leaves and the very node
+ * it took comes back where the wrapper stood, holding the words the translator saved when it took it. It
+ * also forgets it ever took the node, so a second "translate" takes it again. Both ways of putting a node
+ * back are played (one replace, or an insert and a remove), and both ways of writing the saved words.
+ */
+const ledger: Array<{ node: Text; wrapper: Element; words: string }> = [];
+function undoTranslation(root: Element, how: 'replace' | 'two steps' = 'replace', words: 'data' | 'nodeValue' | 'none' = 'data') {
+  let back = 0;
+  for (const entry of ledger.splice(0)) {
+    const { node, wrapper } = entry;
+    if (!wrapper.isConnected || !root.contains(wrapper)) continue;
+    if (words === 'data') node.data = entry.words;
+    else if (words === 'nodeValue') node.nodeValue = entry.words;
+    if (how === 'replace') wrapper.parentNode!.replaceChild(node, wrapper);
+    else {
+      wrapper.parentNode!.insertBefore(node, wrapper);
+      wrapper.parentNode!.removeChild(wrapper);
+    }
+    takenOnce.delete(node);
+    back += 1;
+  }
+  return back;
 }
 const fontsIn = (el: Element) => el.querySelectorAll('font').length;
 /** Lets the observer read what has happened so far, so a count taken next is a count of what comes after. */
@@ -392,6 +418,28 @@ describe('layer two: a string React removes takes its translated copy with it', 
     expect(stats().swaps).toBe(before.swaps);
     expect(stats().removed).toBe(before.removed + 1);
     parent.remove();
+  });
+
+  it('a wrapper that already stands for one string is not claimed by the next string leaving in the same batch', async () => {
+    const p = document.body.appendChild(document.createElement('p'));
+    const first = p.appendChild(document.createTextNode('First words'));
+    const second = p.appendChild(document.createTextNode('second words'));
+    await settle();
+    const before = stats();
+    // the translator takes the first string only, the way the real one does it: a wrapper in, the node out
+    const outer = document.createElement('font');
+    outer.appendChild(document.createElement('font')).textContent = 'pt:First words';
+    p.insertBefore(outer, first);
+    p.removeChild(first);
+    // and before the observer has its turn React removes the second, which now leaves from right behind
+    // that brand new wrapper: a removal that looks exactly like a swap, except the wrapper is spoken for
+    p.removeChild(second);
+    await settle();
+    expect(stats().swaps).toBe(before.swaps + 1);
+    first.nodeValue = 'First words, again';
+    expect(p.textContent).toBe('First words, again');
+    expect(p.childNodes.length).toBe(1);
+    p.remove();
   });
 });
 
@@ -671,6 +719,30 @@ describe('layer two: a string rewritten while the translator was working on it',
     expect(screen.queryByRole('alert')).toBeNull();
   });
 
+  it('a writer that comes round with the same words for a stand in is not handed a new node again', async () => {
+    const p = document.body.appendChild(document.createElement('p'));
+    const words = p.appendChild(document.createTextNode('Minute 1'));
+    translateReal(p);
+    await settle();
+    words.nodeValue = 'Minute 2'; // a stand in is on the page now, waiting for the translator
+    await settle();
+    const first = p.firstChild as Text;
+    expect(first.nodeValue).toBe('Minute 2');
+    const before = stats();
+    // a translator that writes its answer into the node in place (the measured one never does)
+    first.nodeValue = 'pt:Minute 2';
+    const second = p.firstChild as Text;
+    expect(second).not.toBe(first);
+    expect(second.nodeValue).toBe('pt:Minute 2');
+    expect(stats().restored).toBe(before.restored + 1);
+    await settle();
+    // it finds the new node and writes the same answer: that has to be the end of it
+    second.nodeValue = 'pt:Minute 2';
+    expect(p.firstChild).toBe(second);
+    expect(stats().restored).toBe(before.restored + 1);
+    p.remove();
+  });
+
   it('a string that was never rewritten is left alone when it is taken', async () => {
     const p = document.body.appendChild(document.createElement('p'));
     p.appendChild(document.createTextNode('Quiet words'));
@@ -682,6 +754,167 @@ describe('layer two: a string rewritten while the translator was working on it',
     expect(p.firstChild).toBe(wrapper);
     expect(stats().restored).toBe(before.restored);
     expect(stats().swaps).toBe(before.swaps + 1);
+    p.remove();
+  });
+});
+
+/**
+ * The translator undoes itself. Found by review on the real translator, on the built site: after "show
+ * original" every string layer two had refreshed was cut off from React for good (the header read Age 19
+ * with the save at 20), where layer one alone healed. The map pointed at a wrapper that was gone, and the
+ * node that came back was a stand in nobody remembered.
+ */
+describe('layer two: the translator undoes itself (show original)', () => {
+  const pair = () => {
+    const p = document.body.appendChild(document.createElement('p'));
+    const label = p.appendChild(document.createTextNode('Age '));
+    const number = p.appendChild(document.createTextNode('16'));
+    return { p, label, number };
+  };
+
+  for (const how of ['replace', 'two steps'] as const) {
+    for (const words of ['data', 'nodeValue', 'none'] as const) {
+      it(`a number layer two had refreshed still follows React afterwards (${how}, saved words by ${words})`, async () => {
+        const { container } = render(<Boundary><Counter /></Boundary>);
+        const age = screen.getByTestId('age');
+        const press = () => act(() => { fireEvent.click(screen.getByRole('button')); });
+        translateReal(container);
+        await settle();
+        press(); // 17: both strings go back to the translator as stand ins
+        translateReal(container); // and it takes them
+        await settle();
+        expect(age.textContent).toBe('pt:Age 17');
+        const before = stats();
+        expect(undoTranslation(container, how, words)).toBeGreaterThanOrEqual(2);
+        await settle();
+        expect(age.textContent).toBe('Age 17');
+        expect(fontsIn(age)).toBe(0);
+        expect(stats().returned).toBe(before.returned + 3); // the label, the number and the button's word
+        press(); // 18, the next birthday
+        expect(age.textContent).toBe('Age 18');
+        press();
+        expect(age.textContent).toBe('Age 19');
+        expect(age.childNodes.length).toBe(2);
+        expect(screen.queryByRole('alert')).toBeNull();
+      });
+    }
+  }
+
+  it('a string React removes afterwards leaves the page, and a new node lands in front of the one it precedes', async () => {
+    const { p, label, number } = pair();
+    translateReal(p);
+    await settle();
+    number.nodeValue = '17';
+    translateReal(p);
+    await settle();
+    undoTranslation(p);
+    await settle();
+    expect(p.textContent).toBe('Age 17');
+    const before = stats();
+    p.insertBefore(document.createElement('i'), number).textContent = 'NEW ';
+    expect(p.textContent).toBe('Age NEW 17');
+    p.removeChild(label);
+    expect(p.textContent).toBe('NEW 17');
+    p.removeChild(number);
+    expect(p.textContent).toBe('NEW ');
+    // layer two put all three through: layer one never had to step in
+    expect(stats().inserted).toBe(before.inserted + 1);
+    expect(stats().removed).toBe(before.removed + 2);
+    p.remove();
+  });
+
+  it('React writing in the same turn as the undo is not lost', async () => {
+    const { p, number } = pair();
+    translateReal(p);
+    await settle();
+    number.nodeValue = '17';
+    translateReal(p);
+    await settle();
+    undoTranslation(p, 'two steps');
+    number.nodeValue = '18'; // before the observer has had its turn
+    expect(p.textContent).toBe('Age 18');
+    await settle();
+    expect(p.textContent).toBe('Age 18');
+    expect(p.childNodes.length).toBe(2);
+    p.remove();
+  });
+
+  it('a string nobody rewrote goes back to React as it was, and React writes it in place again', async () => {
+    const { p, label, number } = pair();
+    translateReal(p);
+    await settle();
+    const before = stats();
+    undoTranslation(p);
+    await settle();
+    expect(Array.from(p.childNodes)).toEqual([label, number]);
+    expect(stats().returned).toBe(before.returned + 2);
+    number.nodeValue = '17';
+    expect(p.textContent).toBe('Age 17');
+    expect(Array.from(p.childNodes)).toEqual([label, number]);
+    expect(stats().restored).toBe(before.restored);
+    p.removeChild(number);
+    expect(Array.from(p.childNodes)).toEqual([label]);
+    p.remove();
+  });
+
+  it('translated again after the undo, the page still follows React', async () => {
+    const { p, number } = pair();
+    translateReal(p);
+    await settle();
+    number.nodeValue = '17';
+    translateReal(p);
+    await settle();
+    undoTranslation(p);
+    await settle();
+    translateReal(p); // the translator is switched on again and takes the nodes it gave back
+    await settle();
+    expect(p.textContent).toBe('pt:Age 17');
+    number.nodeValue = '18';
+    expect(p.textContent).toBe('Age 18');
+    translateReal(p);
+    expect(p.textContent).toBe('pt:Age 18');
+    expect(p.childNodes.length).toBe(2);
+    p.remove();
+  });
+
+  it('an undo and a new translation in one go, before the observer has its turn, loses nothing either', async () => {
+    const { p, number } = pair();
+    translateReal(p);
+    await settle();
+    number.nodeValue = '17';
+    translateReal(p);
+    await settle();
+    undoTranslation(p, 'two steps');
+    translateReal(p);
+    await settle();
+    expect(p.textContent).toBe('pt:Age 17');
+    number.nodeValue = '18';
+    expect(p.textContent).toBe('Age 18');
+    translateReal(p);
+    await settle();
+    undoTranslation(p);
+    await settle();
+    number.nodeValue = '19';
+    expect(p.textContent).toBe('Age 19');
+    expect(p.childNodes.length).toBe(2);
+    p.remove();
+  });
+
+  it('a hundred rounds of translate, rewrite and undo leave exactly the nodes it started with', async () => {
+    const { p, number } = pair();
+    for (let i = 1; i <= 100; i++) {
+      translateReal(p);
+      if (i % 2) await settle();
+      number.nodeValue = String(16 + i);
+      expect(p.textContent).toBe(`Age ${16 + i}`);
+      if (i % 3 === 0) translateReal(p);
+      if (i % 5 === 0) await settle();
+      undoTranslation(p, i % 2 ? 'replace' : 'two steps');
+      expect(p.textContent).toBe(`Age ${16 + i}`);
+      expect(p.childNodes.length).toBe(2);
+    }
+    await settle();
+    expect(fontsIn(p)).toBe(0);
     p.remove();
   });
 });

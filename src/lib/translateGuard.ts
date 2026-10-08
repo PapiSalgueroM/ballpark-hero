@@ -90,6 +90,8 @@ export interface TranslateStats {
   inserted: number;
   /** translated copies handed back to the translator as fresh text */
   restored: number;
+  /** text nodes a translator gave back (it undid itself) that layer two took up again */
+  returned: number;
 }
 
 type GuardWindow = Window & typeof globalThis & {
@@ -125,13 +127,19 @@ function makeLive(win: GuardWindow, native: Natives): Live | null {
   const doc = win.document;
   if (!doc || typeof win.MutationObserver !== 'function') return null;
 
-  const stats: TranslateStats = { swaps: 0, removed: 0, inserted: 0, restored: 0 };
+  const stats: TranslateStats = { swaps: 0, removed: 0, inserted: 0, restored: 0, returned: 0 };
   win.__dukbTranslateStats = stats;
 
   /** React's text node, to what stands for it on the page: a translator's wrapper, or a stand in waiting for one. */
   const shown = new WeakMap<Node, Node>();
-  /** The other way round. */
+  /** The other way round, for what is on the page now. It forgets a stand in the moment the translator takes it. */
   const owner = new WeakMap<Node, Node>();
+  /**
+   * A stand in, to the node React holds, for good. A translator that undoes itself (show original, a
+   * translation that failed, the page going into the back and forward cache) puts back the very nodes it
+   * took, and for a string layer two had refreshed that node is a stand in `owner` has long forgotten.
+   */
+  const behind = new WeakMap<Node, Node>();
   /**
    * Stand ins made in this same turn. No translator has read them yet (it reads the page in a microtask at
    * the earliest), so one commit that touches an element five times makes its stand ins once.
@@ -153,8 +161,15 @@ function makeLive(win: GuardWindow, native: Natives): Live | null {
   const take = (records: MutationRecord[]) => {
     let arrived: Set<Node> | null = null;
     let late: Node[] | null = null;
+    let back: Node[] | null = null;
     for (let i = 0; i < records.length; i++) {
       const record = records[i];
+      const came = record.addedNodes;
+      // A text node that is on the map arrives on the page. Looked at below, once the batch is read.
+      for (let j = 0; j < came.length; j++) {
+        const text = came[j];
+        if (text.nodeType === 3 && (behind.has(text) || shown.has(text))) (back || (back = [])).push(text);
+      }
       const gone = record.removedNodes;
       if (gone.length === 0) continue;
       for (let j = 0; j < gone.length; j++) {
@@ -173,8 +188,17 @@ function makeLive(win: GuardWindow, native: Natives): Live | null {
         if (!wrapper && record.previousSibling && arrived.has(record.previousSibling)) wrapper = record.previousSibling;
         if (!wrapper && record.nextSibling && arrived.has(record.nextSibling)) wrapper = record.nextSibling;
         if (!wrapper || owner.has(wrapper) || wrapper.parentNode !== record.target) continue;
-        // A stand in of ours was taken: the entry belongs to the node React holds.
-        const mine = owner.get(text) || text;
+        // A stand in of ours was taken: the entry belongs to the node React holds. One the translator
+        // gave back and takes again in the same batch has no owner on record, only who it was made for.
+        let mine = owner.get(text);
+        if (!mine) {
+          const first = behind.get(text);
+          const now = first && shown.get(first);
+          if (first && !(now && now.isConnected)) {
+            mine = first;
+            if (now) owner.delete(now);
+          } else mine = text;
+        }
         owner.delete(text);
         shown.set(mine, wrapper);
         owner.set(wrapper, mine);
@@ -183,6 +207,12 @@ function makeLive(win: GuardWindow, native: Natives): Live | null {
       }
     }
     // Only once the whole batch is on the map: a sentence is refreshed whole or not at all.
+    if (back) {
+      for (let i = 0; i < back.length; i++) {
+        const parent = home(back[i]);
+        if (parent) (late || (late = [])).push(parent);
+      }
+    }
     if (late) for (let i = 0; i < late.length; i++) refresh(late[i]);
   };
   const observer = new win.MutationObserver(records => {
@@ -214,6 +244,7 @@ function makeLive(win: GuardWindow, native: Natives): Live | null {
         native.removeChild.call(parent, child);
         owner.delete(child);
         owner.set(standIn, mine);
+        behind.set(standIn, mine);
         shown.set(mine, standIn);
         if (!young) {
           young = new Set();
@@ -224,6 +255,42 @@ function makeLive(win: GuardWindow, native: Natives): Live | null {
       }
       child = next;
     }
+  };
+
+  /**
+   * THE WAY BACK. `text` is on the map and has just arrived on the page. Layer two never puts a node of
+   * React's back, and a stand in it makes is on record from the start, so anything else is the translator
+   * undoing itself: it puts back the very node it took, where the wrapper stood. Measured on the real one
+   * (its own "show original" button, on the built site): every wrapper left and every node it had taken
+   * came back. Without this the map still pointed at a wrapper that is gone, and every string layer two
+   * had ever refreshed was cut off from React until a reload, which layer one alone never did.
+   * Returns the element whose strings have to go back to the translator, or null.
+   */
+  const home = (text: Node): Node | null => {
+    const parent = text.parentNode;
+    if (!parent) return null; // it has left again since
+    const first = behind.get(text);
+    if (first) {
+      // A stand in of ours. Where layer two put it and nobody took it, there is nothing to do.
+      if (owner.get(text) === first) return null;
+      const copy = shown.get(first);
+      // Something newer already stands for that string. Not ours to judge.
+      if (copy && copy !== text && copy.isConnected) return null;
+      if (copy) owner.delete(copy);
+      shown.set(first, text);
+      owner.set(text, first);
+      stats.returned += 1;
+      // It stands for React's node again. If its words are not React's (a translator may put back the words
+      // it saved), the group goes round once more.
+      return text.nodeValue === first.nodeValue ? null : parent;
+    }
+    const copy = shown.get(text);
+    if (!copy || copy.isConnected) return null;
+    // React's own node is back where its wrapper stood. It is React's again, and nothing stands for it.
+    shown.delete(text);
+    owner.delete(copy);
+    stats.returned += 1;
+    return null;
   };
 
   return {
@@ -266,6 +333,10 @@ function makeLive(win: GuardWindow, native: Natives): Live | null {
         rewritten.add(text);
         return;
       }
+      // Words that did not change are nobody's news. It is also what ends a writer that is not React (a
+      // translator that writes its answer into the node in place, which the measured one never does)
+      // the second time it comes round with the same answer, where it used to be handed a new node for ever.
+      if (text.nodeValue === mine.nodeValue) return;
       // A stand in was rewritten in place: React found it as the only child of its element and wrote
       // to it. The node behind it gets the same words, and the stand in is made again, because the
       // translator may already be working on the old one.
