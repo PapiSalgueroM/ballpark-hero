@@ -112,8 +112,13 @@
    2.5 against 1.16).
    NOT HELD AT MAIN'S, and said on every run: careers with an MVP (17.4 percent against main's 16.6) and with
    an All-NBA (61.9 against 58.8). The brief's critic asked for main's band on both. The awards a career are
-   main's; they fall on more careers, because the MVP score now carries the club's wins, and one grade an
-   award cannot undo that. The two are fenced at this round's own rate (SPREAD_1103) and the lead rules on them.
+   main's; they fall on more careers, and the cause is the new LINE, not the new award rules: in pass A
+   (the old awards block, every award an independent draw on the season score, no club wins in any
+   score) the two shares were 18.3 and 63.5 at full size with the awards a career held at main's
+   (PASS_A_SPREAD below, 2026-10-07). The one pass, which ties MVP to the First Team and a playoff club,
+   took back about two fifths of that. A grade moves an award's count and its spread together, so one grade
+   an award cannot hold both; holding the spread too would take a second constant with nothing real behind
+   it. The two are fenced at this round's own rate (SPREAD_1103) and the lead rules on them.
 
    NEGATIVE CONTROLS, SIM_NBA_SENSE_CONTROL=<name>. Each swaps one line of SOURCE in memory (a plugin, never a
    file), refuses when its anchor is not there exactly once or the swap changed nothing, and must turn its own
@@ -177,10 +182,15 @@ const norm = s => s.replace(/\r\n/g, '\n');
 /* Triple double seasons the elite sweep must still find on every seed (set from five seeds, see the header). */
 const ELITE_TD_FLOOR = 2;
 /* Careers that win an MVP and an All-NBA at least once, percent, as Round 1103 shipped: its five full size
-   seeds (6,000 careers each), read on the tree of the round's last gate. Main has 16.6 and 58.8; with the old
-   block on the new line it was 18.4 and 64.0; the one pass, which ties MVP to the First Team and a playoff
-   club, brought it most of the way back. */
+   seeds (6,000 careers each), read on the tree of the round's last gate. Main has 16.6 and 58.8. */
 const SPREAD_1103 = { everMvp: [17.18, 17.07, 17.73, 17.7, 17.53], everAllNba: [61.7, 60.98, 62.35, 62.47, 62.2] };
+/* The same two shares in pass A: the new line under the OLD awards block (independent draws on the season
+   score, the 62 game gate, no club wins anywhere), its grades already solved so the awards a career were
+   main's (MVPs 0.312, All-NBA 1.962 against 0.315 and 1.986). Five full size seeds on 2026-10-07, the later
+   of two such runs during the fit (the earlier one: 18.29 and 63.61), kept so the note below can say where
+   the wider spread comes from: the line put it at 18.3 and 63.5, and the one pass took back about two fifths
+   of the gap to main (0.7 to 0.8 of 1.7 points, 1.6 to 1.9 of 4.7). Printed, never judged: that tree is gone. */
+const PASS_A_SPREAD = { everMvp: [18.43, 17.5, 18.03, 19.15, 18.27], everAllNba: [63.23, 64.2, 63.28, 63.13, 63.77] };
 const E_MEAN_TOL = 0.08;
 const E_SD_TOL = 0.06;
 /* B3: seasons under 65 games before 2023-24 holding an award the games rule names, in a full size run. */
@@ -1082,7 +1092,8 @@ else {
   for (const [key, label] of [['everMvp', 'careers with an MVP, percent'], ['everAllNba', 'careers with an All-NBA, percent']]) {
     heldAt(B6, SPREAD_1103[key], per.map(m => m[key]), `${label}, a fence at this round's own rate`, key, 'what Round 1103 shipped,');
     const mainMean = mean(base.nba.seeds.map(s => s.m[key])); const nowMean = mean(per.map(m => m[key]));
-    console.log(`  note [${B6}] NOT held at main's: ${label} is ${nowMean.toFixed(2)} here against main's ${mainMean.toFixed(2)} (${base.nba.seeds.map(s => s.m[key]).join(', ')}), ${(nowMean - mainMean).toFixed(2)} points more careers for the same awards a career. The brief's critic asked for main's band; one grade an award cannot give it, and the lead rules on it.`);
+    const passA = mean(PASS_A_SPREAD[key]);
+    console.log(`  note [${B6}] NOT held at main's: ${label} is ${nowMean.toFixed(2)} here against main's ${mainMean.toFixed(2)} (${base.nba.seeds.map(s => s.m[key]).join(', ')}), ${(nowMean - mainMean).toFixed(2)} points more careers for the same awards a career. The new line alone put it at ${passA.toFixed(2)} (pass A, the old awards block, ${PASS_A_SPREAD[key].join(', ')}); the one pass is ${(passA - nowMean).toFixed(2)} points back toward main from there. The brief's critic asked for main's band; one grade an award cannot give it, and the lead rules on it.`);
   }
 }
 
