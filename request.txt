@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+rvwalk-a: RV_PART=a node .rc/x/rv-walk.mjs
+rvwalk-b: RV_PART=b node .rc/x/rv-walk.mjs
+rvwalk-old: RV_PART=old node .rc/x/rv-walk.mjs
