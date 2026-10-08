@@ -1,0 +1,2 @@
+#!serial
+guide-1157: bash .rc/x/guide-generator-1157.sh
