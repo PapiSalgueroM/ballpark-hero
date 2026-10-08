@@ -1,0 +1,22 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/collegeGridFailClosed.test.tsx
+[22m[39mCGFAILCLOSED| board cg611-033: yes Jason Witten, no Darrell Green
+
+[90mstdout[2m | src/test/collegeGridFailClosed.test.tsx[2m > [22m[2mCollege Grid fail closed (Round 1105)[2m > [22m[2m(c) the key fails five ways: unverified each time, the next pick starts a new load, and a good load is judged
+[22m[39mCGFAILCLOSED| fail closed: 5 of 5 failure worlds left the pick unverified and judged it after the network healed
+
+[90mstdout[2m | src/test/collegeGridFailClosed.test.tsx[2m > [22m[2mdecodeCollegeKey: null on any doubt, never a row from a damaged file[2m > [22m[2mevery one of 44 damaged pairs is null, and none of them throws
+[22m[39mCGFAILCLOSED| decoder: 44 of 44 damaged pairs refused
+
+ [32m✓[39m src/test/collegeGridFailClosed.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 3204[2mms[22m[39m
+   [33m[2m✓[22m[39m College Grid fail closed (Round 1105)[2m > [22m(c) the key fails five ways: unverified each time, the next pick starts a new load, and a good load is judged [33m 1230[2mms[22m[39m
+   [33m[2m✓[22m[39m College Grid fail closed (Round 1105)[2m > [22m(d) the key lands 3 seconds after the pick: that pick is judged on the cell it was made for [33m 332[2mms[22m[39m
+   [33m[2m✓[22m[39m decodeCollegeKey: null on any doubt, never a row from a damaged file[2m > [22mevery one of 44 damaged pairs is null, and none of them throws [33m 726[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 08:20:25
+[2m   Duration [22m 5.40s[2m (transform 391ms, setup 96ms, collect 612ms, tests 3.20s, environment 499ms, prepare 310ms)[22m
+

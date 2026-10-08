@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vt-search: node_modules/.bin/vitest run src/test/collegeGridSearchMemory.test.ts --testTimeout=300000 --hookTimeout=120000
+vt-engine: node_modules/.bin/vitest run src/test/gridEngineSource.test.ts src/test/playerSearchLocal.test.ts src/test/gridNamesakes.test.ts src/test/playerSearchFailure.test.tsx --testTimeout=300000 --hookTimeout=120000
+vt-failclosed: node_modules/.bin/vitest run src/test/collegeGridFailClosed.test.tsx --testTimeout=300000 --hookTimeout=120000
+vt-offline: node_modules/.bin/vitest run src/test/collegeGridOffline.test.tsx --testTimeout=300000 --hookTimeout=120000
+simPage: node scripts/simCollegeGridPage.mjs

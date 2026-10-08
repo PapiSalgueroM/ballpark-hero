@@ -1,0 +1,13 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/playerSearchLocal.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m src/test/gridEngineSource.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 287[2mms[22m[39m
+ [32m✓[39m src/test/playerSearchFailure.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 898[2mms[22m[39m
+ [32m✓[39m src/test/gridNamesakes.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 315[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m39 passed[39m[22m[90m (39)[39m
+[2m   Start at [22m 08:20:20
+[2m   Duration [22m 3.86s[2m (transform 505ms, setup 510ms, collect 1.17s, tests 1.52s, environment 3.28s, prepare 936ms)[22m
+

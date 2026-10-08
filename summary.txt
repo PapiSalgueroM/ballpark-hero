@@ -1,0 +1,6 @@
+vt-engine exit=0 4s |    Duration  3.86s (transform 505ms, setup 510ms, collect 1.17s, tests 1.52s, environment 3.28s, prepare 936ms)
+vt-search exit=0 4s |    Duration  4.06s (transform 396ms, setup 123ms, collect 486ms, tests 1.51s, environment 832ms, prepare 386ms)
+vt-offline exit=0 6s |    Duration  5.32s (transform 270ms, setup 69ms, collect 450ms, tests 3.47s, environment 475ms, prepare 224ms)
+vt-failclosed exit=0 6s |    Duration  5.40s (transform 391ms, setup 96ms, collect 612ms, tests 3.20s, environment 499ms, prepare 310ms)
+simPage exit=0 0s | simCollegeGridPage: green. The page judges in memory, charges only a no, offers the key's names from memory, says only what the key holds, drops another board's save, loa
+tsc exit=0 62s | 
