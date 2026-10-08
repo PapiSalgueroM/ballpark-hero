@@ -67,6 +67,9 @@ const CARRY: Record<PitchLine, number> = { attack: 3, midfield: 2.6, defence: 1.
 const ZONE: Record<PitchLine, [number, number]> = { keeper: [84, 90], defence: [62, 78], midfield: [38, 62], attack: [16, 38] };
 /** How long a shooter has the ball at his feet before his line plays. */
 export const PITCH_LEAD = BEAT_SPAN;
+/** The least of that lead a chance is given when it has had to wait for the action before it: long enough
+ *  for both sides to be all but in place around him (the hook's walk between two pictures lasts 0.3). */
+export const PITCH_SQUEEZE = 0.25;
 /** How long a kick off is seen, at the least, before the next chance is led in. */
 export const PITCH_RESTART = BEAT_SPAN;
 /** The longest a chance waits for its turn after its own place: the clock still reads its minute when it starts. */
@@ -161,22 +164,21 @@ export function pitchPlan(input: PitchInput): PitchPlan {
   }
   const queue = [...picked.values()].sort((a, b) => a.place - b.place);
   /* ONE ACTION AT A TIME (the header says why). Forward: a chance that comes too soon after the action or the
-     kick off before it waits for its turn. It never waits more than PITCH_LATE, and never so long that it
-     would still be playing at the last kick's wind up or more than today's 0.05 past the whistle. When the
-     whole wait does not fit, it starts the moment the action before it ends. */
+     kick off before it waits for its turn, until `full`: that action over, a beat of kick off if it was a
+     goal, and PITCH_SQUEEZE with its own shooter on the ball. It never waits more than PITCH_LATE, and never
+     so long that it would still be playing at the last kick's wind up or more than today's 0.05 past the
+     whistle; when the whole wait does not fit it takes what does. */
   const ceiling = last ? to - 2 * ACTION_SPAN : to - 1;
-  const wait = (c: { place: number; at: number }, end: number, full: number) => {
+  const wait = (c: { place: number; at: number }, full: number) => {
     if (c.place >= full - EPS) return;
     const limit = Math.min(c.place + PITCH_LATE, Math.max(c.place, ceiling));
-    c.at = full <= limit + EPS ? full : Math.max(c.place, Math.min(end, limit));
+    c.at = Math.max(c.at, c.place, Math.min(full, limit));
   };
   queue.forEach((c, n) => {
     /* The period's own kick off is seen for a beat before a chance of its first minute is led in. */
-    for (const k of opening) if (k.at <= c.place + EPS) wait(c, k.at + PITCH_RESTART, k.at + PITCH_RESTART + PITCH_LEAD);
+    for (const k of opening) if (k.at <= c.place + EPS) wait(c, k.at + PITCH_RESTART + PITCH_SQUEEZE);
     const before = queue[n - 1];
-    if (!before) return;
-    const end = before.at + ACTION_SPAN;
-    wait(c, end, Math.max(c.at, end + (before.event.kind === 'goal' ? PITCH_RESTART : 0) + PITCH_LEAD));
+    if (before) wait(c, before.at + ACTION_SPAN + (before.event.kind === 'goal' ? PITCH_RESTART : 0) + PITCH_SQUEEZE);
   });
   /* And back: no wait may push an action into the one after it, which could not wait as long. */
   for (let n = queue.length - 2; n >= 0; n--) {
@@ -203,9 +205,12 @@ export function pitchPlan(input: PitchInput): PitchPlan {
     const shot = a.event.penalty
       ? { x: 50, y: 12 }
       : { x: clamp((shooter?.slot.x ?? 50) + (rng() * 2 - 1) * 6, 25, 75), y: a.event.freeKick ? 30 : 22 + rng() * 8 };
-    /* Nothing at all is drawn over the last kick's wind up: it is the only stretch above a kick off. */
+    /* The shooter is led in for PITCH_LEAD, but never under the action before his: the picture under an action
+       does not change while it plays. Nothing at all is drawn over the last kick's wind up: it is the only
+       stretch above a kick off. */
+    const lead = Math.min(a.at, Math.max(a.at - PITCH_LEAD, n > 0 ? actions[n - 1].at + ACTION_SPAN : -Infinity));
     layers.push({
-      start: a.at - PITCH_LEAD, end: a.at + ACTION_SPAN, priority: a.last ? 6 : 4, order: n, state: set ? 'freekick' : 'open', via: 'carrier', side,
+      start: lead, end: a.at + ACTION_SPAN, priority: a.last ? 6 : 4, order: n, state: set ? 'freekick' : 'open', via: 'carrier', side,
       carrier: shooter?.key ?? null, dead: set, id: `c${a.order}`, anchor: turn(side, shot),
     });
     const after = a.at + ACTION_SPAN;

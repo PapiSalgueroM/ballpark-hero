@@ -243,15 +243,87 @@ describe('The pitch part behind its contract', () => {
       { minute: 2, side: 'me', kind: 'corner', text: 'Home next', flank: 'left' },
       { minute: 4, side: 'opp', kind: 'throwin', text: '' },
       { minute: 6, side: 'opp', kind: 'foul', text: 'Away near' },
+      /* A penalty is a chance: its ball is dead before the strike, but it is told as its strike, with its line. */
+      { minute: 8, side: 'me', kind: 'goal', text: 'Home scorer', penalty: true },
     ] satisfies PitchEvent[];
     const props = {
-      ...FIVE, feed, span: { from: 0, to: 8 }, kickoffs: [{ at: 0, side: 'me' as const }], playing: true, reducedMotion: true,
+      ...FIVE, feed, span: { from: 0, to: 12 }, kickoffs: [{ at: 0, side: 'me' as const }], playing: true, reducedMotion: true,
       onMoment: (moment: string, line: PitchEvent | null) => { moments.push(`${moment}:${line === null ? 'no line' : line.kind}`); },
     };
     const mounted = render(<PitchMotion {...props} clock={0.05} />);
-    /* Twice inside each dead ball, and open play between them: each is told once, in order, and nothing else is. */
-    for (const clock of [0.2, 1.2, 2.05, 2.2, 3, 4.1, 4.3, 5, 6.1, 6.2, 7]) mounted.rerender(<PitchMotion {...props} clock={clock} />);
-    expect(moments).toEqual(['kickoff:no line', 'corner:no line', 'throwin:no line', 'freekick:no line']);
+    /* Twice inside each dead ball, and open play between them: each is told once, in order, and nothing else is.
+       7.8 is inside the penalty's own stretch, the taker a step behind a dead ball: no free kick is told there. */
+    for (const clock of [0.2, 1.2, 2.05, 2.2, 3, 4.1, 4.3, 5, 6.1, 6.2, 7, 7.8, 8.02, 8.5]) mounted.rerender(<PitchMotion {...props} clock={clock} />);
+    expect(moments).toEqual(['kickoff:no line', 'corner:no line', 'throwin:no line', 'freekick:no line', 'strike:goal', 'net:goal']);
+  });
+
+  it('playing false freezes the part on the frame it is showing, whatever the clock does', () => {
+    const mounted = render(<PitchMotion {...FIVE} clock={5.45} playing />);
+    const pitch = mounted.container.querySelector('[data-cm-live-pitch]')!;
+    expect(pitch.getAttribute('data-cm-motion')).toBe('goal');
+    expect(pitch.getAttribute('data-cm-motion-phase')).toBe('flight');
+    expect(pitch.querySelector('[data-cm-actor-pose="dive"]')).not.toBeNull();
+    const shown = pitch.outerHTML;
+    /* The contract: false freezes every figure, the ball and every pose on the current frame. The ball stays
+       in its flight and the keeper in his dive, with the clock where it was and with a clock that has moved on. */
+    mounted.rerender(<PitchMotion {...FIVE} clock={5.45} playing={false} />);
+    expect(pitch.outerHTML).toBe(shown);
+    mounted.rerender(<PitchMotion {...FIVE} clock={5.9} playing={false} />);
+    expect(pitch.outerHTML).toBe(shown);
+    /* Playing again, it goes on from the binder's clock. */
+    mounted.rerender(<PitchMotion {...FIVE} clock={5.9} playing />);
+    expect(pitch.getAttribute('data-cm-motion-phase')).toBe('net');
+    expect(pitch.outerHTML).not.toBe(shown);
+  });
+
+  it('a binder that hands over fresh arrays on every render still gets one unbroken action', () => {
+    const clocks = [4.9, 5.05, 5.2, 5.45, 5.6];
+    const steady = render(<PitchMotion {...FIVE} clock={clocks[0]} playing reducedMotion={false} />);
+    for (const clock of clocks.slice(1)) steady.rerender(<PitchMotion {...FIVE} clock={clock} playing reducedMotion={false} />);
+    const wanted = steady.container.querySelector('[data-cm-live-pitch]')!.outerHTML;
+    expect(steady.container.querySelector('[data-cm-live-pitch]')!.getAttribute('data-cm-motion-phase')).toBe('flight');
+    cleanup();
+    /* The same input, built again for every render the way an inline prop is: equal content, new arrays. */
+    const fresh = () => ({
+      ...FIVE, mine: FIVE.mine.map(f => ({ ...f, slot: { ...f.slot } })), theirs: FIVE.theirs.map(f => ({ ...f, slot: { ...f.slot } })),
+      feed: FIVE.feed.map(line => ({ ...line })), span: { ...FIVE.span },
+    });
+    const moments: string[] = [];
+    const onMoment = (moment: string) => { moments.push(moment); };
+    const loose = render(<PitchMotion {...fresh()} clock={clocks[0]} playing reducedMotion={false} onMoment={onMoment} />);
+    for (const clock of clocks.slice(1)) loose.rerender(<PitchMotion {...fresh()} clock={clock} playing reducedMotion={false} onMoment={onMoment} />);
+    /* Frame for frame what stable arrays draw: the action was started once, from the frame it began on. */
+    expect(loose.container.querySelector('[data-cm-live-pitch]')!.outerHTML).toBe(wanted);
+    expect(moments).toEqual(['strike']);
+  });
+
+  it('an action that starts with the ball somewhere else brings it to the shooter during his plant', () => {
+    /* The ball lies in the far net and nobody has it: the chance before this one was a goal at the other end. */
+    const far = { ...scene, ball: { x: 57, y: 99 }, holderKey: null as string | null };
+    const shot = event('me', 'shot');
+    const { result, rerender } = renderHook(({ clock }) => useLiveSimMotion(far, shot, clock, true, false), { initialProps: { clock: 5 } });
+    expect(result.current.action).toBe('shot');
+    /* On the frame the action starts, the ball is still where it was. */
+    expect(result.current.ball).toEqual({ x: 57, y: 99 });
+    /* Through the plant it travels: no step of it is a jump, and it is at his foot when he strikes. */
+    const plant = .24 * ACTION_SPAN;
+    let before = result.current.ball;
+    let steps = 0, jumps = 0;
+    for (let k = 1; k <= 25; k++) {
+      rerender({ clock: 5 + plant * k / 25 });
+      const now = result.current.ball;
+      steps++;
+      if (Math.hypot(now.x - before.x, now.y - before.y) > 6) jumps++;
+      before = now;
+    }
+    expect(steps).toBe(25);
+    expect(jumps).toBe(0);
+    const struck = actionFrame(far, shot, plant).ball;
+    expect(result.current.ball.x).toBeCloseTo(struck.x, 6);
+    expect(result.current.ball.y).toBeCloseTo(struck.y, 6);
+    /* From there on the hook draws the action's own ball, untouched. */
+    rerender({ clock: 5.6 });
+    expect(result.current.ball).toEqual(actionFrame(far, shot, .6).ball);
   });
 
   it("goalWindow says windup, net and over at the contract's instants", () => {

@@ -1,7 +1,10 @@
 /* Actual pitch poses and clock ownership. Controls mutate disposable copies.
-   LIVE_CELEBRATION_CONTROL=missing|figure|expiry|reduced|window|deadball: each must fail exactly its own row and
+   LIVE_CELEBRATION_CONTROL=missing|figure|expiry|reduced|window|deadball|penmoment|freeze|stable|ballstep: each must fail exactly its own row and
    leave the independent destinations row green (Round 1101: window reads goalWindow's net contact as 0, and
-   deadball, which mutates a copy of PitchMotion.tsx, stops it telling a binder about the plan's dead balls). */
+   deadball, which mutates a copy of PitchMotion.tsx, stops it telling a binder about the plan's dead balls).
+   The review's fixes: penmoment lets a penalty's own stretch be told as a free kick again, freeze lets the part
+   follow the clock while playing is false, stable rebuilds the plan whenever a binder hands over new arrays (all
+   three on PitchMotion.tsx), and ballstep lets the hook put the ball at the shooter's foot in one frame. */
 import assert from 'node:assert/strict';
 import { readFile, writeFile, mkdir, mkdtemp, rm, rmdir } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
@@ -10,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 /* Round 1101: the pitch moved to src/components/pitch-motion. A control mutates motion.tsx unless it names another file of the part. */
-const controlFile = { deadball: 'PitchMotion.tsx' }[process.env.LIVE_CELEBRATION_CONTROL || ''] ?? 'motion.tsx';
+const controlFile = { deadball: 'PitchMotion.tsx', penmoment: 'PitchMotion.tsx', freeze: 'PitchMotion.tsx', stable: 'PitchMotion.tsx' }[process.env.LIVE_CELEBRATION_CONTROL || ''] ?? 'motion.tsx';
 const sourceFile = path.join(root, 'src/components/pitch-motion', controlFile);
 const sourceBytes = await readFile(sourceFile);
 const source = sourceBytes.toString().replace(/\r\n/g, '\n');
@@ -23,6 +26,10 @@ const controls = {
   reduced: { anchor: 'reduced ? 1.05 : clock - action.event.at', replacement: 'clock - action.event.at', test: 'uses a static raised-arm finish under reduced motion' },
   /* Round 1101: goalWindow reads net contact as the instant the line fires, so a binder's score would change before the ball is in. */
   deadball: { anchor: 'if (beat.dead && (', replacement: 'if (false && (', test: 'PitchMotion tells a binder about each dead ball, once' },
+  penmoment: { anchor: " && beat.via !== 'carrier') {", replacement: ') {', test: 'PitchMotion tells a binder about each dead ball, once' },
+  freeze: { anchor: 'if (playing) held.current = clock;', replacement: 'held.current = clock;', test: 'playing false freezes the part on the frame it is showing, whatever the clock does' },
+  stable: { anchor: '[planKey]);', replacement: '[mine, theirs, feed, kickoffs]);', test: 'a binder that hands over fresh arrays on every render still gets one unbroken action' },
+  ballstep: { anchor: 'if (planted < 1) frame.ball', replacement: 'if (false) frame.ball', test: 'an action that starts with the ball somewhere else brings it to the shooter during his plant' },
   window: { anchor: "if (since < (reduced ? 0 : NET_AT)) return 'windup';", replacement: "if (since < 0) return 'windup';", test: "goalWindow says windup, net and over at the contract's instants" },
 };
 assert.ok(!control || Object.hasOwn(controls, control), 'Known celebration control');
@@ -63,7 +70,7 @@ try {
   const report = JSON.parse(await readFile(reportPath, 'utf8'));
   assert.equal(Number(report.numUnhandledErrors ?? 0), 0);
   const rows = report.testResults.flatMap(suite => suite.assertionResults);
-  assert.equal(rows.length, 14);
+  assert.equal(rows.length, 17);
   if (control) {
     assert.equal(run.status, 1);
     assert.equal(report.numFailedTests, 1);
@@ -75,8 +82,8 @@ try {
     console.log(`simLiveSimCelebration: ${control} changed source, intended assertion failed, independent destinations stayed green.`);
   } else {
     assert.equal(run.status, 0);
-    assert.equal(report.numPassedTests, 14);
-    console.log('simLiveSimCelebration: 14 outcome checks passed, correct side, net-first, real figure, freeze/expiry, reduced motion, the three recorded digests of the lift, the part behind its contract (its dead ball moments too), the penalty line up and the free kick wall.');
+    assert.equal(report.numPassedTests, 17);
+    console.log('simLiveSimCelebration: 17 outcome checks passed, correct side, net-first, real figure, freeze/expiry, reduced motion, the three recorded digests of the lift, the part behind its contract (its dead ball moments, the frame it freezes on, fresh arrays, the ball brought to the shooter), the penalty line up and the free kick wall.');
   }
 } finally {
   for (const file of owned) await rm(file, { force: true });

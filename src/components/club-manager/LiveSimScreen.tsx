@@ -1165,9 +1165,9 @@ export function LiveSimScreen({
   const poss = stats ? Math.round(stats.possession) : null;
   const scoreDigits = (
     <>
-      <span key={`m${shownMy}`} className={cardUp && gm?.side === 'me' ? 'cm-slam inline-block' : undefined}>{shownMy}</span>
+      <span key={`m${shownMy}`} data-cm-score-of="me" className={cardUp && gm?.side === 'me' ? 'cm-slam inline-block' : undefined}>{shownMy}</span>
       {' - '}
-      <span key={`o${shownOpp}`} className={cardUp && gm?.side === 'opp' ? 'cm-slam inline-block' : undefined}>{shownOpp}</span>
+      <span key={`o${shownOpp}`} data-cm-score-of="opp" className={cardUp && gm?.side === 'opp' ? 'cm-slam inline-block' : undefined}>{shownOpp}</span>
     </>
   );
 

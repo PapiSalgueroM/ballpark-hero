@@ -31,6 +31,26 @@
  *   stalejoin   the viewer keeps the eleven it mounted with for its dots          a substitution during a paused action
  *   takenback   the hook plays on an action the binder has taken back             the part drops an action the binder has taken back
  *   cmimport    the part's barrel re-exports from Club Manager's engine           the bundle section below
+ * The review's controls (2026-10-08), each a one token change a reviewer made by hand and saw survive:
+ *   turns        a chance no longer waits for the action before it                R6 (one action at a time)
+ *   restartbeat  the next chance is led in straight after a goal                   R6 (every goal gets its kick off)
+ *   kickoffside  the side that scored kicks off                                    R7
+ *   throwside    the throw in goes to the other side than its line names           R7
+ *   foulside     the side that fouled takes the free kick                          R7
+ *   cornerflank  a corner its line calls left is taken from the right flag         R7
+ *   goalkickside the side that missed takes the goal kick                          R7
+ *   secondkick   the same side kicks off both halves                               R8
+ *   possession   the pitch is handed the other side's share of the ball            R8
+ *   etclear      going into extra time no longer clears the action                 a line fired late by Skip
+ *   reducedhold  under reduced motion the hold lasts the whole action              under reduced motion the card is held
+ *   flash        the score waits only once the motion state has landed             no frame draws the new score
+ *   lastkick     the last kick's wind up takes one off the score                   a goal with the last kick of a period
+ *   dropped      a goal whose action the part dropped still waits                  a substitution in a goal's wind up
+ *   logearly     the list says GOAL when the line fires                            nothing says GOAL before the ball is in
+ *   nth          a scorer's later goals are counted on his first card              a scorer card counts his goals
+ *   cardside     an opponent who shares a name gets my player's season count       a scorer card counts his goals
+ *   bigpart      the part's barrel carries six kilobytes more                      the bundle section (its size ceiling)
+ * cmimport now trips the import specifier scan as well as the marker check, and is accepted only on both.
  * And one old control has a new test to turn red: lineup takes the hook's own guard out (an action is dropped
  * when the line up under it changes). The viewer joins the frame to its eleven by key now, so its substitution
  * test no longer needs that guard and stayed green under it; 'the part drops an action' proves it on the hook.
@@ -56,7 +76,10 @@ const control = process.env.LIVE_MOTION_CONTROL || '';
 const only = process.env.LIVE_MOTION_ONLY || '';
 const OLD = ['trigger', 'save', 'pause', 'mutation', 'lineup', 'speed', 'reduced', 'terminal', 'redraw', 'whistle', 'banner', 'boardgoal', 'etclock'];
 const NEW = ['block', 'kickoff', 'overlap', 'mouth', 'draw', 'approach', 'lag', 'hold', 'skipmoment', 'back', 'onepanel', 'labels', 'stalejoin', 'takenback', 'cmimport'];
-assert.ok(['', ...OLD, ...NEW].includes(control), 'Unknown live motion control');
+/* The review of 2026-10-08: six swapped argument mutations of the dead ball rules and six of the viewer left every test green.
+   Each of these has a test that reads it now. */
+const REVIEW = ['turns', 'restartbeat', 'kickoffside', 'throwside', 'foulside', 'cornerflank', 'goalkickside', 'secondkick', 'possession', 'etclear', 'reducedhold', 'flash', 'lastkick', 'dropped', 'logearly', 'nth', 'cardside', 'bigpart'];
+assert.ok(['', ...OLD, ...NEW, ...REVIEW].includes(control), 'Unknown live motion control');
 assert.ok(['', 'bundle'].includes(only), 'Unknown LIVE_MOTION_ONLY');
 /* Minified bytes and gzip bytes of the part alone, and the ceiling: each plus a fifth. */
 const BUNDLE_MEASURED = { min: 18154, gzip: 7680 };
@@ -68,7 +91,7 @@ const env = { ...process.env, FORCE_COLOR: '0', NO_COLOR: '1' };
 let behaved = true;
 let summary = '';
 try {
-  if (control && control !== 'cmimport') {
+  if (control && control !== 'cmimport' && control !== 'bigpart') {
     let viewer = await lf(path.join(root, 'src/components/club-manager/LiveSimScreen.tsx'));
     /* Round 1101: the pitch moved to src/components/pitch-motion. The mutated copy is still written as
        <folder>/LiveSimMotion.tsx, because the viewer copy imports './LiveSimMotion'. */
@@ -104,7 +127,7 @@ try {
     }
     if (control === 'mouth') motion = replace(motion, "y: mine ? (event.kind === 'save' ? 8 : 1) : (event.kind === 'save' ? 92 : 99) };", 'y: mine ? 1 : 99 };');
     if (control === 'draw') scene = replace(scene, "import { keyedRng } from '@/lib/keyedRng';", 'const keyedRng = (key: string) => { void key; return () => Math.random(); };');
-    if (control === 'approach') scene = replace(scene, 'start: a.at - PITCH_LEAD, end: a.at + ACTION_SPAN, priority: a.last ? 6 : 4', 'start: a.at, end: a.at + ACTION_SPAN, priority: a.last ? 6 : 4');
+    if (control === 'approach') scene = replace(scene, 'start: lead, end: a.at + ACTION_SPAN, priority: a.last ? 6 : 4', 'start: a.at, end: a.at + ACTION_SPAN, priority: a.last ? 6 : 4');
     if (control === 'lag') {
       viewer = replace(viewer, 'const shownMy = Math.max(0, myGoalsNow - waiting.me);', 'const shownMy = myGoalsNow;');
       viewer = replace(viewer, 'const shownOpp = Math.max(0, oppGoalsNow - waiting.opp);', 'const shownOpp = oppGoalsNow;');
@@ -115,6 +138,24 @@ try {
     if (control === 'onepanel') viewer = replace(viewer, '    setPicking(id);\n    setPanel(null);', '    setPicking(id);');
     if (control === 'labels') viewer = replace(viewer, 'const LABEL_BELOW = 6;', 'const LABEL_BELOW = -1;');
     if (control === 'takenback') motion = replace(motion, 'action.event === event && ', '');
+    /* ---- the review of 2026-10-08 ---- */
+    if (control === 'turns') scene = replace(scene, '    c.at = Math.max(c.at, c.place, Math.min(full, limit));', '    void limit;');
+    if (control === 'restartbeat') scene = replace(scene, "(before.event.kind === 'goal' ? PITCH_RESTART : 0)", '0');
+    if (control === 'kickoffside') scene = replace(scene, 'kickoff(after, defending, 4.5, n, `g${a.order}`);', 'kickoff(after, side, 4.5, n, `g${a.order}`);');
+    if (control === 'throwside') scene = replace(scene, '      const side = present(event.side);\n      const spot = (before: PitchPoint)', '      const side = present(other(event.side));\n      const spot = (before: PitchPoint)');
+    if (control === 'foulside') scene = replace(scene, "so the free kick is the other side's. */\n      const side = present(other(event.side));", "so the free kick is the other side's. */\n      const side = present(event.side);");
+    if (control === 'cornerflank') scene = replace(scene, "(event.flank ? (event.flank === 'left' ? 2.5 : 97.5)", "(event.flank ? (event.flank === 'left' ? 97.5 : 2.5)");
+    if (control === 'goalkickside') scene = replace(scene, "state: 'goalkick', via: 'follow', side: defending,", "state: 'goalkick', via: 'follow', side,");
+    if (control === 'secondkick') viewer = replace(viewer, "const kicking: PitchSide = stage === 'second' ? (first === 'me' ? 'opp' : 'me') : first;", 'const kicking: PitchSide = first;');
+    if (control === 'possession') viewer = replace(viewer, 'possession: (share ?? 50) / 100,', 'possession: 1 - (share ?? 50) / 100,');
+    if (control === 'etclear') viewer = replace(viewer, "        setStage('extra');\n        clearAction();", "        setStage('extra');");
+    if (control === 'reducedhold') viewer = replace(viewer, '(!reducedMotion || clock - gm.at < GOAL_HOLD_SPAN)', 'true');
+    if (control === 'flash') viewer = replace(viewer, '      waiting[e.side]++;', '      if (motionEvent?.event === e) waiting[e.side]++;');
+    if (control === 'lastkick') viewer = replace(viewer, 'const waiting: Record<Side, number> = { me: 0, opp: 0 };', "const lastKickBy = terminalWindup && terminalAction?.kind === 'goal' ? terminalAction.side : null; const waiting: Record<Side, number> = { me: lastKickBy === 'me' ? 1 : 0, opp: lastKickBy === 'opp' ? 1 : 0 };");
+    if (control === 'dropped') viewer = replace(viewer, ' || droppedKey === lineKey(e)) continue;', ') continue;');
+    if (control === 'logearly') viewer = replace(viewer, 'lines.splice(at, 1)[0]', 'lines[at]');
+    if (control === 'nth') viewer = replace(viewer, '(upTo < 0 || i <= upTo)', 'true');
+    if (control === 'cardside') viewer = replace(viewer, "const player = goal.side === 'me' ? career.squad.find(p => p.name === goal.text) : undefined;", 'const player = career.squad.find(p => p.name === goal.text);');
     if (control === 'stalejoin') viewer = replace(viewer, 'const manOf = useMemo(() => new Map([...men.mine, ...men.theirs].map(m => [m.key, m])), [men]);', 'const manOf = useMemo(() => new Map([...men.mine, ...men.theirs].map(m => [m.key, m])), []);');
     const componentPath = path.join(folder, 'LiveSimMotion.tsx').replaceAll('\\', '/');
     viewer = replace(viewer, "import { LivePitchPlayer, useLiveSimMotion } from '@/components/club-manager/LiveSimMotion';", "import { LivePitchPlayer, useLiveSimMotion } from './LiveSimMotion';");
@@ -149,9 +190,15 @@ try {
     block: 'R4: the block follows the ball', kickoff: 'R3: at a kick off', overlap: 'R2: nobody stands on a team mate', mouth: 'R1: the ball is in the goal mouth', draw: 'R5: nothing is decided here', approach: 'R6: a chance starts with the ball',
     lag: 'the score waits for the ball', hold: 'the score waits for the ball', skipmoment: 'after Skip the second half opens',
     back: 'Back folds the match', onepanel: 'one panel at a time', labels: 'a name goes above its figure',
+    turns: 'R6: a chance starts with the ball', restartbeat: 'R6: a chance starts with the ball',
+    kickoffside: 'R7: every dead ball', throwside: 'R7: every dead ball', foulside: 'R7: every dead ball', cornerflank: 'R7: every dead ball', goalkickside: 'R7: every dead ball',
+    secondkick: 'R8: the pitch is handed', possession: 'R8: the pitch is handed',
+    etclear: 'a line fired late by Skip is not played again', reducedhold: 'under reduced motion the card is held', flash: 'no frame draws the new score',
+    lastkick: 'a goal with the last kick of a period takes nothing off', dropped: 'a substitution in a goal', logearly: 'nothing says GOAL before the ball is in',
+    nth: 'a scorer card counts his goals', cardside: 'a scorer card counts his goals',
   };
   let passed = 0;
-  if (only !== 'bundle' && control !== 'cmimport') {
+  if (only !== 'bundle' && control !== 'cmimport' && control !== 'bigpart') {
     /* Round 1101: a test with no timeout of its own gets 60 seconds, not vitest's 5. On a machine with other
        lanes compiling, three controls went red on 'Test timed out in 5000ms', which is red for the wrong reason. */
     const args = [path.join(root, 'node_modules/vitest/vitest.mjs'), 'run', 'src/test/liveSimMotion.test.tsx', '--reporter=verbose', '--testTimeout=60000'];
@@ -177,7 +224,7 @@ try {
   }
 
   /* ---- the bundle section: the part carries nothing of Club Manager ---- */
-  if (behaved && (!control || control === 'cmimport')) {
+  if (behaved && (!control || control === 'cmimport' || control === 'bigpart')) {
     const problems = [];
     const engine = await lf(path.join(root, 'src/lib/clubManager.ts'));
     const MARKERS = ['4-3-3 holding', 'Standard line'];
@@ -186,9 +233,11 @@ try {
     assert.ok(files.length >= 6, `only ${files.length} source files found in src/components/pitch-motion`);
     const BANNED = ['@/lib/clubManager', '@/components/club-manager', '@/hooks/useClubManager'];
     let specifiers = 0;
+    /* Under cmimport the barrel that is scanned is the mutated one, so the control trips this check too. */
+    const CMIMPORT_LINE = "export { FORMATIONS } from '@/lib/clubManager';\n";
     for (const name of files) {
       /* Comments out first: the folder's own comments name Club Manager, and prose is not an import. */
-      const code = (await lf(path.join(PART, name))).replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`])\/\/[^\n]*/g, '$1');
+      const code = ((await lf(path.join(PART, name))) + (control === 'cmimport' && name === 'index.ts' ? CMIMPORT_LINE : '')).replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`])\/\/[^\n]*/g, '$1');
       for (const m of code.matchAll(/(?:from\s+|import\s+|import\(\s*)['"]([^'"]+)['"]/g)) {
         specifiers++;
         if (BANNED.some(b => m[1].startsWith(b))) problems.push(`${name} imports ${m[1]}`);
@@ -199,8 +248,17 @@ try {
     if (control === 'cmimport') {
       const barrel = await lf(entry);
       entry = path.join(folder, 'index.ts');
-      await writeFile(entry, barrel + "export { FORMATIONS } from '@/lib/clubManager';\n");
+      await writeFile(entry, barrel + CMIMPORT_LINE);
       console.log('Negative control changed temporary source: cmimport');
+    }
+    if (control === 'bigpart') {
+      /* Six kilobytes that do not squash: the ceiling is the measured size plus a fifth, and this is a third more. */
+      const barrel = await lf(entry);
+      let pad = '';
+      for (let i = 0; pad.length < 6000; i++) pad += ((i * 2654435761) >>> 0).toString(36);
+      entry = path.join(folder, 'index.ts');
+      await writeFile(entry, barrel + 'export const PAD = ' + JSON.stringify(pad) + ';\n');
+      console.log('Negative control changed temporary source: bigpart');
     }
     const esbuild = await import('esbuild');
     const atAlias = { name: 'at', setup(build) { build.onResolve({ filter: /^@\// }, args => build.resolve('./' + args.path.slice(2), { resolveDir: path.join(root, 'src'), kind: args.kind })); } };
@@ -216,8 +274,13 @@ try {
     else if (min > BUNDLE_CEILING.min || gzip > BUNDLE_CEILING.gzip) problems.push(`the part is ${min} bytes minified and ${gzip} gzipped, over its ceiling of ${BUNDLE_CEILING.min} and ${BUNDLE_CEILING.gzip} (measured ${BUNDLE_MEASURED.min} and ${BUNDLE_MEASURED.gzip}, plus a fifth)`);
     console.log(`[1101 bundle] the part alone: ${min} bytes minified, ${gzip} gzipped (ceiling ${BUNDLE_CEILING.min} and ${BUNDLE_CEILING.gzip}); ${files.length} files, ${specifiers} import specifiers read; problems ${problems.length}`);
     for (const p of problems) console.log('  FAIL: ' + p);
-    if (control === 'cmimport') {
-      behaved = problems.some(p => p.includes("carries the engine's"));
+    if (control === 'bigpart') {
+      behaved = problems.length === 1 && problems[0].includes('over its ceiling');
+      summary = behaved
+        ? `simLiveSimMotion: control bigpart made the part ${min} bytes and the bundle section went red on its size ceiling alone, as it must.`
+        : `simLiveSimMotion: control bigpart did NOT behave: ${problems.length} problems, ${min} bytes minified.`;
+    } else if (control === 'cmimport') {
+      behaved = problems.some(p => p.includes("carries the engine's")) && problems.some(p => p.includes('index.ts imports @/lib/clubManager'));
       summary = behaved
         ? `simLiveSimMotion: control cmimport put the engine in the part's bundle and the bundle section went red (${problems.length} problems), as it must.`
         : 'simLiveSimMotion: control cmimport did NOT behave: the bundle section stayed green with the engine imported.';

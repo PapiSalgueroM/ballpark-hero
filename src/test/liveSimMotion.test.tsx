@@ -6,14 +6,14 @@ import type { CareerState, LiveFeedEvent } from '@/lib/clubManager';
 import { ACTION_SPAN, BEAT_SPAN, GOAL_MOUTH } from '@/components/pitch-motion/contract';
 import type { PitchFigure, PitchInput } from '@/components/pitch-motion/contract';
 import type { MotionScene } from '@/components/pitch-motion/motion';
-import { pitchBeatAt, pitchPlan, pitchScene, pitchSceneKey } from '@/components/pitch-motion/scene';
+import { pitchBeatAt, pitchPlan, pitchScene, pitchSceneKey, PITCH_LATE, PITCH_LEAD, PITCH_RESTART, PITCH_SQUEEZE } from '@/components/pitch-motion/scene';
 import type { PitchBeat, PitchPlaced, PitchPlan } from '@/components/pitch-motion/scene';
 const motionPath = process.env.LIVE_MOTION_COMPONENT;
 /* Round 1101: the part lives in src/components/pitch-motion now, and `between` is exported there. */
 const { actionFrame, between, useLiveSimMotion } = motionPath ? await import(/* @vite-ignore */ motionPath) : await import('@/components/pitch-motion/motion');
 
 const viewerPath = process.env.LIVE_MOTION_VIEWER;
-const { LiveSimScreen, stagePitchInput, goalCardCount, labelsAbove } = viewerPath ? await import(/* @vite-ignore */ viewerPath) : await import('@/components/club-manager/LiveSimScreen');
+const { LiveSimScreen, stagePitchInput, goalCardCount, labelsAbove, labelsShort } = viewerPath ? await import(/* @vite-ignore */ viewerPath) : await import('@/components/club-manager/LiveSimScreen');
 const seeded = (seed: number) => () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
 const scene = {
   mine: [{ key: 'm0', name: 'Home keeper', keeper: true, x: 50, y: 90 }, { key: 'm9', name: 'Home striker', keeper: false, x: 40, y: 40 }],
@@ -632,14 +632,23 @@ interface SeedTally {
   /* R2 */ scenes: number; sceneOverlaps: Record<Arm, number>; tweenRuns: number; actionRuns: number; examples: string[];
   /* R3 */ kickBeats: number; kickSum: Record<Arm, number>; kickCount: Record<Arm, number>; kickOffenders: number;
   /* R4 */ follow: Record<Arm, { withBall: Line; without: Line }>;
-  /* R6 */ chances: number; holderOffenders: number; steadyOffenders: number; followOffenders: number; underKickoff: number; cutShort: number; lastKick: number;
+  /* R6 */ chances: number; holderOffenders: number; steadyOffenders: number; followOffenders: number; underKickoff: number; lastKick: number;
+  waited: number; lateSum: number; lateOffenders: number; overlapped: number; noLead: number; ledOn: number; followSeen: number;
+  goalsToRestart: number; kickoffSeen: number; kickoffShort: number; beforeLastKick: number;
+  /* R7 */ dead: Record<DeadKind, number>; deadOffenders: number; flanked: number; deadExamples: string[];
+  /* R8 */ handed: number; kickHandOffenders: number; shareOffenders: number; unevenShares: number; awayHalves: number;
 }
+type DeadKind = 'opening' | 'restart' | 'corner' | 'throwin' | 'freekick' | 'goalkick' | 'keeper';
 const tally = (club: string): SeedTally => ({
   club, matches: 0, halves: 0, frames: 0, goals: 0, goalsWithNetFrame: 0, mouthFrames: 0, mouthOffenders: 0,
   scenes: 0, sceneOverlaps: { new: 0, r504: 0 }, tweenRuns: 0, actionRuns: 0, examples: [],
   kickBeats: 0, kickSum: { new: 0, r504: 0 }, kickCount: { new: 0, r504: 0 }, kickOffenders: 0,
   follow: { new: { withBall: line(), without: line() }, r504: { withBall: line(), without: line() } },
-  chances: 0, holderOffenders: 0, steadyOffenders: 0, followOffenders: 0, underKickoff: 0, cutShort: 0, lastKick: 0,
+  chances: 0, holderOffenders: 0, steadyOffenders: 0, followOffenders: 0, underKickoff: 0, lastKick: 0,
+  waited: 0, lateSum: 0, lateOffenders: 0, overlapped: 0, noLead: 0, ledOn: 0, followSeen: 0,
+  goalsToRestart: 0, kickoffSeen: 0, kickoffShort: 0, beforeLastKick: 0,
+  dead: { opening: 0, restart: 0, corner: 0, throwin: 0, freekick: 0, goalkick: 0, keeper: 0 }, deadOffenders: 0, flanked: 0, deadExamples: [],
+  handed: 0, kickHandOffenders: 0, shareOffenders: 0, unevenShares: 0, awayHalves: 0,
 });
 type Sides = { mine: PitchPlaced[]; theirs: PitchPlaced[] };
 const inMouth = (ball: { x: number; y: number }) => ball.x >= GOAL_MOUTH.x0 && ball.x <= GOAL_MOUTH.x1 && (ball.y < GOAL_MOUTH.depth || ball.y > 100 - GOAL_MOUTH.depth);
@@ -660,8 +669,43 @@ function runs(samples: string[][]): number {
   return count;
 }
 
+/** R7: who takes a dead ball, and from where. Every dead stretch of the plan is traced back to the line of the
+ *  feed that put it there (the plan's own id carries that line's index) and read against THAT line: a kick
+ *  off after a goal is the side's that conceded, a corner and a throw in are the side's the line names, a
+ *  free kick is the side's that was fouled, a goal kick and a save are the defending keeper's. */
+function deadBall(t: SeedTally, input: PitchInput, beat: PitchBeat, scene: MotionScene<PitchPlaced>) {
+  if (!beat.dead || beat.via === 'carrier') return;
+  const flip = (side: string) => (side === 'me' ? 'opp' : 'me');
+  const holder = [...scene.mine, ...scene.theirs].find(p => p.key === scene.holderKey);
+  const holderSide = scene.mine.some(p => p.key === scene.holderKey) ? 'me' : scene.theirs.some(p => p.key === scene.holderKey) ? 'opp' : null;
+  const index = Number(beat.id.slice(1));
+  const source = input.feed[index];
+  const tag = beat.id[0];
+  const centre = scene.ball.x === 50 && scene.ball.y === 50;
+  let kind: DeadKind | null = null;
+  let wanted: string | null = null;
+  let spot = true;
+  if (tag === 'k' && beat.state === 'kickoff') { kind = 'opening'; wanted = input.kickoffs?.[index]?.side ?? null; spot = centre; }
+  else if (tag === 'g' && beat.state === 'kickoff' && source?.kind === 'goal') { kind = 'restart'; wanted = flip(source.side); spot = centre; }
+  else if (tag === 'f' && beat.state === 'corner' && source?.kind === 'corner') {
+    kind = 'corner'; wanted = source.side;
+    /* On a flag at the end that side attacks, and on the flank the line names when it names one. */
+    spot = scene.ball.y === (source.side === 'me' ? 2.5 : 97.5) && (scene.ball.x === 2.5 || scene.ball.x === 97.5);
+    if (source.flank) { t.flanked++; spot = spot && scene.ball.x === (source.flank === 'left' ? 2.5 : 97.5); }
+  } else if (tag === 't' && beat.state === 'throwin' && source?.kind === 'throwin') { kind = 'throwin'; wanted = source.side; spot = scene.ball.x === 2 || scene.ball.x === 98; }
+  else if (tag === 'x' && beat.state === 'freekick' && source?.kind === 'foul') { kind = 'freekick'; wanted = flip(source.side); }
+  else if (tag === 'q' && beat.state === 'goalkick' && source?.kind === 'shot') { kind = 'goalkick'; wanted = flip(source.side); spot = !!holder?.keeper && (wanted === 'me' ? scene.ball.y > 90 : scene.ball.y < 10); }
+  else if (tag === 'h' && beat.state === 'keeper' && source?.kind === 'save') { kind = 'keeper'; wanted = flip(source.side); spot = !!holder?.keeper && (wanted === 'me' ? scene.ball.y > 80 : scene.ball.y < 20); }
+  const bad = !kind || beat.side !== wanted || holderSide !== wanted || !spot;
+  if (kind) t.dead[kind]++;
+  if (!bad) return;
+  t.deadOffenders++;
+  if (t.deadExamples.length < 3) t.deadExamples.push(`${beat.state} ${beat.id} at ${beat.start.toFixed(2)}: the ball is ${beat.side}'s (held by ${holderSide}) at ${scene.ball.x.toFixed(1)},${scene.ball.y.toFixed(1)}, off the line ${source ? `${source.kind} ${source.side}${source.flank ? ` ${source.flank}` : ''}` : 'none'}, wanted ${wanted}`);
+}
+
 function replayHalf(t: SeedTally, input: PitchInput) {
   const plan: PitchPlan = pitchPlan(input);
+  const to = Math.max(input.span.from + BEAT_SPAN, input.span.to);
   t.halves++;
   let previous: MotionScene<PitchPlaced> | null = null;
   for (const beat of plan.entries) {
@@ -698,6 +742,7 @@ function replayHalf(t: SeedTally, input: PitchInput) {
       for (const p of scene.theirs) if (!p.keeper && p.y > 50 + 1e-9) t.kickOffenders++;
       for (const p of beat.side === 'me' ? scene.theirs : scene.mine) if (Math.hypot(p.x - 50, p.y - 50) < 9) t.kickOffenders++;
     }
+    deadBall(t, input, beat, scene);
     if (beat.state === 'open' && beat.via === 'grid') {
       for (const [arm, s] of [['new', scene], ['r504', old]] as const) {
         for (const side of ['me', 'opp'] as const) {
@@ -714,27 +759,50 @@ function replayHalf(t: SeedTally, input: PitchInput) {
   plan.actions.forEach((a, n) => {
     t.chances++;
     const action = { event: a.event, key: `chance${n}`, at: a.at };
-    /* The frame the hook captures is the one on screen just before the line fires. */
+    /* The frame the hook captures is the one on screen just before the action starts. */
     const just = a.at - .05;
     const captured: MotionScene<PitchPlaced> = pitchScene(plan, just);
     const underKickoff = pitchBeatAt(plan, just).state === 'kickoff';
-    const next = plan.actions[n + 1];
-    const cutShort = !!next && next.at - BEAT_SPAN < a.at + ACTION_SPAN - 1e-9;
-    if (underKickoff) t.underKickoff++;
+    const before = plan.actions[n - 1], next = plan.actions[n + 1];
+    const place = a.event.minute + (a.event.plus ?? 0);
+    const after = a.at + ACTION_SPAN;
+    /* How long it waited for its turn (the last kick of a period is wound up BEFORE its place: not a wait). */
+    if (a.at > place + 1e-9) { t.waited++; t.lateSum += a.at - place; }
+    if (a.at > place + PITCH_LATE + 1e-9) t.lateOffenders++;
+    /* One action at a time: is this one still playing when the next starts? */
+    if (next && next.at < after - 1e-9) t.overlapped++;
+    /* Did it get its lead in? Not when it had to start straight off the action, or the kick off, before it. */
+    const clear = before ? before.at + ACTION_SPAN + (before.event.kind === 'goal' ? PITCH_RESTART : 0) : -Infinity;
+    const noLead = a.at - clear < PITCH_SQUEEZE - 1e-9;
+    if (noLead) t.noLead++;
+    else if (underKickoff) t.underKickoff++;
     else {
       const attackers = a.event.side === 'me' ? captured.mine : captured.theirs;
       const holder = attackers.find(p => p.key === captured.holderKey);
       const picked = actionFrame(captured, action, 0).holderKey;
       if (!holder || picked !== holder.key || Math.hypot(captured.ball.x - holder.x, captured.ball.y - holder.y) > 3) t.holderOffenders++;
+      /* And nothing changes under it while it plays (unless the next one starts over it, counted above). */
+      if (!(next && next.at < after - 1e-9) && pitchSceneKey(plan, just) !== pitchSceneKey(plan, after - .01)) t.steadyOffenders++;
     }
-    if (cutShort) t.cutShort++;
-    else if (!underKickoff && pitchSceneKey(plan, just) !== pitchSceneKey(plan, a.at + ACTION_SPAN - .01)) t.steadyOffenders++;
-    const after = a.at + ACTION_SPAN;
-    if (after >= input.span.to - 1e-9) t.lastKick++;
-    else if (!cutShort) {
+    if (after >= to - 1e-9) t.lastKick++;
+    else if (a.event.kind === 'goal') {
+      /* A goal is followed by its kick off, on screen from the instant the action ends for at least a beat
+         before the next action starts. The one case that cannot be: the last kick's wind up comes first. */
+      t.goalsToRestart++;
+      const entry = pitchBeatAt(plan, after + 1e-6);
+      const seen = entry.state === 'kickoff' && Math.abs(entry.start - after) < 1e-6 ? Math.min(entry.end, next ? Math.max(next.at, after) : entry.end) - after : 0;
+      const nextIsLastKick = !!next && next.at < next.event.minute + (next.event.plus ?? 0) - 1e-9;
+      if (seen >= PITCH_RESTART - 1e-6) t.kickoffSeen++;
+      else if (nextIsLastKick) t.beforeLastKick++;
+      else t.kickoffShort++;
+    } else {
+      /* A miss is followed by the goal kick and a save by the keeper with the ball, unless the next chance's
+         shooter is led in straight away (its stretch starts by the time this action ends). */
       const follow = pitchBeatAt(plan, after + 1e-6);
-      const wanted = a.event.kind === 'goal' ? 'kickoff' : a.event.kind === 'shot' ? 'goalkick' : 'keeper';
-      if (follow.state !== wanted || Math.abs(follow.start - after) > 1e-6) t.followOffenders++;
+      const wanted = a.event.kind === 'shot' ? 'goalkick' : 'keeper';
+      if (follow.state === wanted && Math.abs(follow.start - after) < 1e-6) t.followSeen++;
+      else if (next && next.at - PITCH_LEAD <= after + 1e-6) t.ledOn++;
+      else t.followOffenders++;
     }
     if (a.event.kind === 'goal') t.goals++;
     const samples: string[][] = [];
@@ -812,6 +880,17 @@ function buildMaterial(): Material {
       const input: PitchInput = stagePitchInput(career, career.live!, null, stage, stage === 'first' ? 0 : 46, 0, cap + boardAt(career, cap));
       inputs++;
       replayHalf(t, input);
+      /* R8: what the viewer hands the pitch, read against the match itself. Whoever is at home kicks off the
+         match and the other side the second half, and the share of the ball is that half's own. */
+      const live = career.live!;
+      const opening = live.home === false ? 'opp' : 'me';
+      const kicking = stage === 'first' ? opening : opening === 'me' ? 'opp' : 'me';
+      const share = stage === 'first' ? live.possH1 : live.possH2 ?? live.possH1;
+      t.handed++;
+      if (live.home === false) t.awayHalves++;
+      if (input.kickoffs?.length !== 1 || input.kickoffs[0].side !== kicking || input.kickoffs[0].at !== input.span.from) t.kickHandOffenders++;
+      if (share !== undefined && share !== 50) t.unevenShares++;
+      if (Math.abs((input.possession ?? -1) - (share ?? 50) / 100) > 1e-9) t.shareOffenders++;
     });
     t.matches = walked.matches;
     draws += walked.draws;
@@ -842,6 +921,12 @@ const R3_FLOOR = 45;
  *  The floor is 0.30: 0.114 under the lowest seed, which is eleven spreads, and thirty times the old
  *  picture's highest seed plus two spreads (0.010). */
 const R4_FLOOR = 0.3;
+/** R6, one action at a time. PROVISIONAL until the first measured run: see the numbers printed by R6. */
+const R6_OVERLAP_ONE_IN = 50;
+const R6_NO_LEAD_ONE_IN = 20;
+const R6_SHORT_KICKOFF_ONE_IN = 20;
+/** R7. How many of each kind of dead ball the material must hold for the rule to have been read at all. PROVISIONAL. */
+const R7_FLOOR: Record<DeadKind, number> = { opening: 199, restart: 100, corner: 200, throwin: 200, freekick: 200, goalkick: 50, keeper: 50 };
 const LONG = 300000;
 
 describe('The pitch part on real feeds', () => {
@@ -869,7 +954,9 @@ describe('The pitch part on real feeds', () => {
     const scenes = sum(m.seeds.map(t => t.scenes));
     const fresh = sum(m.seeds.map(t => t.sceneOverlaps.new)), old = sum(m.seeds.map(t => t.sceneOverlaps.r504)), tweens = sum(m.seeds.map(t => t.tweenRuns)), acts = sum(m.seeds.map(t => t.actionRuns));
     console.log(`[1101 R2] scenes ${scenes}; overlapping pairs in a scene: new ${fresh}, Round 504 ${old}; pairs overlapping two samples running: in a tween ${tweens}, in an action ${acts}${acts + tweens ? `; first cases: ${m.seeds.flatMap(t => t.examples).slice(0, 6).join(" | ")}` : ""}`);
-    expect(scenes).toBeGreaterThan(20000);
+    /* A sample floor, not a band: 200 halves stage about 20,000 stretches (20,829 before chances waited their
+       turn, 20,370 since), and a data release that moves the number of chances moves this a few percent. */
+    expect(scenes).toBeGreaterThan(15000);
     expect(fresh).toBe(0);
     expect(tweens).toBe(0);
     expect(acts).toBe(0);
@@ -913,13 +1000,48 @@ describe('The pitch part on real feeds', () => {
   it('R6: a chance starts with the ball at the shooter and ends in its follow up', () => {
     const m = buildMaterial();
     const total = (pick: (t: SeedTally) => number) => sum(m.seeds.map(pick));
-    console.log(`[1101 R6] chances staged ${total(t => t.chances)}; holder offenders ${total(t => t.holderOffenders)}, steady offenders ${total(t => t.steadyOffenders)}, follow up offenders ${total(t => t.followOffenders)}; set aside and counted: started from a kick off picture ${total(t => t.underKickoff)}, cut short by the next chance ${total(t => t.cutShort)}, the last kick of the period ${total(t => t.lastKick)}`);
-    expect(total(t => t.chances)).toBeGreaterThan(1000);
+    const chances = total(t => t.chances), waited = total(t => t.waited);
+    console.log(`[1101 R6] chances staged ${chances}; holder offenders ${total(t => t.holderOffenders)}, steady offenders ${total(t => t.steadyOffenders)}, follow up offenders ${total(t => t.followOffenders)}; a miss or a save followed by its goal kick or its keeper ${total(t => t.followSeen)}, led straight on to the next chance ${total(t => t.ledOn)}; set aside and counted: no lead in ${total(t => t.noLead)}, started from a kick off picture ${total(t => t.underKickoff)}, the last kick of the period ${total(t => t.lastKick)}`);
+    console.log(`[1101 R6 turns] chances that waited for their turn ${waited} of ${chances}, by ${(total(t => t.lateSum) / Math.max(1, waited)).toFixed(2)} on average, later than ${PITCH_LATE} ${total(t => t.lateOffenders)}; still playing when the next one starts ${total(t => t.overlapped)}`);
+    console.log(`[1101 R6 kick offs] goals with play left after them ${total(t => t.goalsToRestart)}: kick off seen for a beat or more ${total(t => t.kickoffSeen)}, cut under a beat by the next chance ${total(t => t.kickoffShort)}, none because the last kick's wind up came first ${total(t => t.beforeLastKick)}`);
+    expect(chances).toBeGreaterThan(1000);
     expect(total(t => t.holderOffenders)).toBe(0);
     expect(total(t => t.steadyOffenders)).toBe(0);
     expect(total(t => t.followOffenders)).toBe(0);
-    /* The set aside cases stay the exception: a goal in the first minute of a period, two chances a minute apart. */
-    expect(total(t => t.underKickoff) + total(t => t.cutShort)).toBeLessThan(total(t => t.chances) / 3);
+    /* One action at a time, and each inside its own minute. */
+    expect(waited).toBeGreaterThan(100);
+    expect(total(t => t.lateOffenders)).toBe(0);
+    expect(total(t => t.overlapped) * R6_OVERLAP_ONE_IN).toBeLessThan(chances);
+    expect(total(t => t.noLead) * R6_NO_LEAD_ONE_IN).toBeLessThan(chances);
+    /* Every goal gets its kick off. */
+    expect(total(t => t.goalsToRestart)).toBeGreaterThan(100);
+    expect(total(t => t.kickoffShort) * R6_SHORT_KICKOFF_ONE_IN).toBeLessThan(total(t => t.goalsToRestart));
+  }, LONG);
+
+  it('R7: every dead ball is taken by the right side from the right place', () => {
+    const m = buildMaterial();
+    const kinds: DeadKind[] = ['opening', 'restart', 'corner', 'throwin', 'freekick', 'goalkick', 'keeper'];
+    const count = (kind: DeadKind) => sum(m.seeds.map(t => t.dead[kind]));
+    const offenders = sum(m.seeds.map(t => t.deadOffenders)), flanked = sum(m.seeds.map(t => t.flanked));
+    console.log(`[1101 R7] dead balls read against their own line of the feed: ${kinds.map(kind => `${kind} ${count(kind)}`).join(', ')}; corners whose line names a flank ${flanked}; offenders ${offenders}${offenders ? `; first cases: ${m.seeds.flatMap(t => t.deadExamples).slice(0, 4).join(' | ')}` : ''}`);
+    /* Nothing passes on an empty sample: every kind of dead ball is in the material, many times over. */
+    expect(count('opening')).toBe(200);
+    for (const kind of kinds) expect(count(kind), kind).toBeGreaterThan(R7_FLOOR[kind]);
+    expect(flanked).toBeGreaterThan(R7_FLOOR.corner / 2);
+    expect(offenders).toBe(0);
+  }, LONG);
+
+  it('R8: the pitch is handed the right kick off and the right share of the ball', () => {
+    const m = buildMaterial();
+    const total = (pick: (t: SeedTally) => number) => sum(m.seeds.map(pick));
+    console.log(`[1101 R8] halves handed to the pitch ${total(t => t.handed)} (${total(t => t.awayHalves)} of them away from home, ${total(t => t.unevenShares)} with a share of the ball that is not 50); kick off offenders ${total(t => t.kickHandOffenders)}, share offenders ${total(t => t.shareOffenders)}`);
+    expect(total(t => t.handed)).toBe(200);
+    /* Both kinds of match are in it, and shares a swap would show on. */
+    expect(total(t => t.awayHalves)).toBeGreaterThan(40);
+    expect(total(t => t.handed) - total(t => t.awayHalves)).toBeGreaterThan(40);
+    expect(total(t => t.unevenShares)).toBeGreaterThan(100);
+    expect(total(t => t.kickHandOffenders)).toBe(0);
+    expect(total(t => t.shareOffenders)).toBe(0);
   }, LONG);
 });
 
@@ -1050,6 +1172,202 @@ describe('The goal sequence', () => {
       await step(100);
     }
   }, 120000);
+
+  /* The review's findings on the sequence, each with a test that sees it. */
+  it('nothing says GOAL before the ball is in: not the list beside the pitch, not the line under it', async () => {
+    const fixture = fixtures.get('goal')!;
+    const mounted = mount(structuredClone(fixture.career));
+    /* This goal's own line on the list: its minute, the word, the scorer. (Earlier goals may be on the list already.) */
+    const told = () => [...mounted.container.querySelectorAll('[data-cm-live-log] li')]
+      .some(li => li.textContent!.startsWith(`${fixture.event.minute}'`) && li.textContent!.includes('GOAL!') && li.textContent!.includes(fixture.event.text));
+    const under = () => mounted.container.querySelector('[data-cm-live-event]')!.textContent!;
+    const card = () => mounted.container.querySelector<HTMLButtonElement>('[data-cm-goal-card]');
+    await step(430);
+    /* The line has fired and the ball is on its way: the list has not said it, and the line under the pitch
+       says nothing else meanwhile (a corner of the same minute used to sit there through the whole goal). */
+    expect(mounted.container.querySelector('[data-cm-live-pitch]')!.getAttribute('data-cm-motion-phase')).toBe('plant');
+    expect(told()).toBe(false);
+    expect(under()).toBe('');
+    await step(660);
+    /* In the net: the card, and with it the list and the line. */
+    expect(card()).not.toBeNull();
+    expect(told()).toBe(true);
+    expect(under().startsWith('GOAL!')).toBe(true);
+    expect(under()).toContain(fixture.event.text);
+    /* The card sits in the half the goal did NOT go in, clear of the scorer and the men around him. */
+    expect(card()!.className).toContain(fixture.event.side === 'me' ? 'top-[62%]' : 'top-[16%]');
+    expect(card()!.className).not.toContain(fixture.event.side === 'me' ? 'top-[16%]' : 'top-[62%]');
+  }, 60000);
+
+  it('no frame draws the new score before the ball is in', async () => {
+    const fixture = fixtures.get('goal')!;
+    const side = fixture.event.side;
+    const mounted = mount(structuredClone(fixture.career));
+    const score = mounted.container.querySelector('[data-cm-live-score]')!;
+    const was = score.querySelector(`[data-cm-score-of="${side}"]`)!.textContent!;
+    /* Every digit React puts into the score, commit by commit: a frame that drew the new score and was
+       corrected by an effect in the same tick leaves no trace in the page afterwards, only here. */
+    const observer = new MutationObserver(() => {});
+    observer.observe(score, { childList: true, subtree: true, characterData: true });
+    const drawn: string[] = [];
+    const read = () => {
+      for (const record of observer.takeRecords()) {
+        for (const node of record.addedNodes) if (node instanceof HTMLElement && node.getAttribute('data-cm-score-of') === side) drawn.push(node.textContent ?? '');
+        if (record.type === 'characterData' && record.target.parentElement?.getAttribute('data-cm-score-of') === side) drawn.push(record.target.textContent ?? '');
+      }
+    };
+    /* Frame by frame, from before the line fires (200 ms in) to just short of the net (956 ms in). */
+    for (let ms = 0; ms < 928; ms += 16) { await step(16); read(); }
+    expect(mounted.container.querySelector('[data-cm-live-pitch]')!.getAttribute('data-cm-motion-phase')).toBe('flight');
+    expect(drawn.filter(text => text !== was)).toEqual([]);
+    /* And once it is in, the new digit is drawn. */
+    for (let ms = 0; ms < 160; ms += 16) { await step(16); read(); }
+    expect(drawn).toContain(String(Number(was) + 1));
+    observer.disconnect();
+  }, 60000);
+
+  it('a goal with the last kick of a period takes nothing off the score while it winds up', async () => {
+    const base = fixtures.get('goal')!.career;
+    let found: { career: CareerState; cap: number; goal: LiveFeedEvent } | null = null;
+    for (let attempt = 0; attempt < 6000 && !found; attempt++) {
+      vi.mocked(Math.random).mockImplementation(seeded(110230 + attempt * 104729));
+      const first = changeLive(base, 0, { kind: 'shape', mentality: 'balanced' })!;
+      const second = startSecondHalf(first)!;
+      for (const [cap, career] of [[45, first], [90, second]] as const) {
+        const board = boardAt(career, cap);
+        const feed = liveFeed(career.live!);
+        const chance = (e: LiveFeedEvent) => ['goal', 'save', 'shot'].includes(e.kind);
+        const goal = [...feed].reverse().find(e => e.minute === cap && (e.plus ?? 0) === board && chance(e));
+        if (found || !goal || goal.kind !== 'goal') continue;
+        /* The side that scores it already has a goal on the board: a score that wrongly took one off would show
+           it (with none, 0 minus one reads 0 and the mistake is invisible). */
+        if (!feed.some(e => e !== goal && e.kind === 'goal' && e.side === goal.side && clockPos(e) < cap - 1.2)) continue;
+        /* And nothing else is in the air from where this test opens to the whistle. */
+        if (feed.some(e => e !== goal && chance(e) && e.minute <= cap && clockPos(e) >= cap - 1.2)) continue;
+        const copy = structuredClone(career);
+        copy.live!.minute = cap - 1.2;
+        found = { career: copy, cap, goal };
+      }
+    }
+    expect(found, 'no seed ended a period on a goal by a side that had already scored').not.toBeNull();
+    const { career, cap, goal } = found!;
+    const board = boardAt(career, cap);
+    console.log(`[1101 last kick] the period found ends at ${cap}+${board} on a goal by ${goal.side}, the score before it ${scoreBy(career, cap + board - 1)}`);
+    const mounted = mount(career);
+    /* Through the board to the middle of the wind up: the ball is struck, 0.65 before the whistle. */
+    await step(boardMs(career, cap) + 150 + 400);
+    const pitch = mounted.container.querySelector('[data-cm-live-pitch]')!;
+    expect(pitch.getAttribute('data-cm-motion')).toBe('goal');
+    expect(pitch.getAttribute('data-cm-motion-phase')).toBe('flight');
+    /* The engine has not counted this goal yet, so there is nothing to wait for: the score is the one before it. */
+    expect(readScore(mounted.container)).toBe(scoreBy(career, cap + board - 1));
+    expectWhistle(mounted, cap, false);
+  }, 180000);
+
+  it('a line fired late by Skip is not played again when extra time starts', async () => {
+    const { due } = findWhistleMaterial();
+    const drawn = startExtraTime(structuredClone(due))!;
+    const board = boardAt(due, 90);
+    const eleven = (input: PitchInput) => JSON.stringify([input.mine, input.theirs].map(list => list.map(f => [f.key, f.name ?? ''])));
+    const goingOn = eleven(stagePitchInput(drawn, drawn.live!, null, 'extra', 90, 0, 120 + (drawn.live!.added?.et ?? 0)));
+    /* A chance of the second half that plays out (not its last kick), from a minute where both elevens are
+       already the men who start extra time. The part drops an action by itself when the line up under it
+       changes, which would hide a late line left alive whatever the viewer did about it. */
+    const chance = [...liveFeed(due.live!)].reverse().find(e => ['goal', 'save', 'shot'].includes(e.kind) && e.minute >= 48 && clockPos(e) < 90 + board - ACTION_SPAN
+      && eleven(stagePitchInput(due, due.live!, null, 'second', e.minute - 1, 0, 90 + board)) === goingOn
+      && eleven(stagePitchInput(due, due.live!, null, 'second', 90, board, 90 + board)) === goingOn);
+    expect(chance, 'no chance of this second half is watched by the eleven that starts extra time').toBeDefined();
+    console.log(`[1101 extra] the late line is a ${chance!.kind} at ${clockPos(chance!)}, the board is ${board}`);
+    const start = structuredClone(due);
+    start.live!.minute = chance!.minute - .5;
+    const callbacks = { onSub: vi.fn(), onShape: vi.fn(), onTalk: vi.fn(), onSecondHalf: vi.fn(), onExit: vi.fn(), onStartSecondHalf: vi.fn(), onStartExtraTime: vi.fn(), onChange: vi.fn(), onMark: vi.fn() };
+    function Page() {
+      const [career, setCareer] = useState<CareerState>(start);
+      return <LiveSimScreen career={career} live={career.live ?? null} report={null} clubColor="#86bced" {...callbacks}
+        onStartExtraTime={() => { callbacks.onStartExtraTime(); setCareer(() => drawn); }} />;
+    }
+    const mounted = render(<Page />);
+    await step(160);
+    /* Skip fires every line still to come at the end of the board, late: the last of them is left as the action. */
+    fireEvent.click(mounted.getByRole('button', { name: /Skip/ }));
+    await step(96);
+    expect(callbacks.onStartExtraTime).toHaveBeenCalledTimes(1);
+    expect(stageOf(mounted.container)).toBe('extra');
+    /* Extra time's clock starts at 90, before that action's start: nothing of it is drawn as the clock comes up. */
+    for (let waited = 0; waited < 800; waited += 100) {
+      expect(mounted.container.querySelector('[data-cm-goal-card]')).toBeNull();
+      expect(mounted.container.querySelector('[data-cm-live-pitch]')!.getAttribute('data-cm-motion')).toBe('pass');
+      await step(100);
+    }
+  }, 120000);
+
+  it('under reduced motion the card is held for its first stretch only, and then the match runs on', async () => {
+    const original = window.matchMedia;
+    vi.spyOn(window, 'matchMedia').mockImplementation(query => ({ ...original(query), matches: true }));
+    const fixture = fixtures.get('goal')!;
+    const career = structuredClone(fixture.career);
+    const after = scoreBy(career, clockPos(fixture.event));
+    const mounted = mount(career);
+    const card = () => mounted.container.querySelector('[data-cm-goal-card]');
+    await step(330);
+    /* The last frame shows at once, so the card and the new score are up straight away. */
+    expect(card()).not.toBeNull();
+    expect(readScore(mounted.container)).toBe(after);
+    /* The hold is the first stretch of the action (1.8 real seconds at this speed); the rest of it runs at the
+       match's own pace (three quarters of a second). So three seconds after the line it is over. A hold that
+       lasted the whole action would keep the card up for more than six. */
+    await step(2800);
+    expect(card()).toBeNull();
+    expect(mounted.container.querySelector('[data-cm-live-pitch]')!.getAttribute('data-cm-motion')).toBe('pass');
+    expect(readScore(mounted.container)).toBe(after);
+  }, 60000);
+
+  it("a substitution in a goal's wind up takes the card with the action, and the score stops waiting", async () => {
+    const fixture = fixtures.get('goal')!;
+    const career = structuredClone(fixture.career);
+    const place = clockPos(fixture.event);
+    const before = scoreBy(career, place - 1), after = scoreBy(career, place);
+    const mounted = mount(career);
+    const pitch = () => mounted.container.querySelector('[data-cm-live-pitch]')!;
+    const card = () => mounted.container.querySelector('[data-cm-goal-card]');
+    await step(430);
+    expect(pitch().getAttribute('data-cm-motion')).toBe('goal');
+    expect(readScore(mounted.container)).toBe(before);
+    /* A man of mine is replaced under the action. The part drops an action when the line up under it changes. */
+    fireEvent.click(mounted.getByRole('button', { name: 'Pause' }));
+    const off = mounted.container.querySelector<HTMLButtonElement>('[data-cm-dot]')!.dataset.cmDot!;
+    const on = benchFor(career, off)[0];
+    const minute = Number(mounted.container.querySelector('[data-cm-live-minute]')!.getAttribute('data-cm-live-minute'));
+    const changed = changeLive(career, minute, { kind: 'sub', outId: off, inId: on.id })!;
+    /* The goal itself is at or before that minute, so the engine keeps it. */
+    expect(scoreBy(changed, place)).toBe(after);
+    mounted.rerender(<LiveSimScreen career={changed} live={changed.live!} report={null} clubColor="#86bced" {...mounted.callbacks} />);
+    await step(32);
+    /* Nothing is left to wait for: the pitch shows open play, so the score is the engine's and no card comes. */
+    expect(pitch().getAttribute('data-cm-motion')).toBe('pass');
+    expect(readScore(mounted.container)).toBe(after);
+    expect(card()).toBeNull();
+    fireEvent.click(mounted.getByRole('button', { name: 'Resume' }));
+    for (let waited = 0; waited < 800; waited += 100) {
+      await step(100);
+      expect(card()).toBeNull();
+      expect(readScore(mounted.container)).toBe(after);
+    }
+  }, 60000);
+
+  it('a scorer card counts his goals up to this one, and gives a season count only to one of mine', () => {
+    /* An invented feed on a real squad: one of my players twice, an opponent who happens to share his name
+       between the two, and a scorer who is not in my squad. No outcome of a match is read off it. */
+    const career = structuredClone(fixtures.get('goal')!.career);
+    const mine = career.squad.find(p => p.position !== 'GK')!;
+    mine.seasonGoals = 4;
+    const goal = (minute: number, side: 'me' | 'opp', text: string): LiveFeedEvent => ({ minute, side, kind: 'goal', text });
+    const feed = [goal(10, 'me', mine.name), goal(20, 'opp', mine.name), goal(30, 'me', mine.name), goal(40, 'me', 'Nobody In This Squad')];
+    expect(goalCardCount(career, feed, feed[0])).toEqual({ nth: 1, season: 5 });
+    expect(goalCardCount(career, feed, feed[2])).toEqual({ nth: 2, season: 6 });
+    expect(goalCardCount(career, feed, feed[1])).toEqual({ nth: 1, season: null });
+    expect(goalCardCount(career, feed, feed[3])).toEqual({ nth: 1, season: null });
+  });
 });
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -1155,6 +1473,62 @@ describe('Match mode', () => {
     expect(line).toContain(`xG ${xgMine} ${xgTheirs}`);
     /* And the full stats are in the markup the whole time, panel or no panel. */
     expect(mounted.container.querySelectorAll('[data-cm-live-stats]').length).toBe(1);
+  }, 60000);
+
+  it('level neighbours take a row each, and a wall shows numbers', () => {
+    /* Three men level and shoulder to shoulder, their keys not in their order across the pitch: the names
+       alternate above and under going across, and all three show a number without a name while they stand so. */
+    const wall = [{ key: 'o2', x: 36.5, y: 21 }, { key: 'o3', x: 40, y: 21 }, { key: 'o5', x: 43.5, y: 21 }];
+    const up = labelsAbove(wall);
+    expect([up.has('o2'), up.has('o3'), up.has('o5')]).toEqual([true, false, true]);
+    expect([...labelsShort(wall)].sort()).toEqual(['o2', 'o3', 'o5']);
+    /* Two men side by side are not a wall: both keep their names, one above and one under. */
+    const pair = [{ key: 'm4', x: 50, y: 60 }, { key: 'o9', x: 56, y: 61.5 }];
+    expect(labelsShort(pair).size).toBe(0);
+    expect(labelsAbove(pair).size).toBe(1);
+  });
+
+  it('at full time the folded card offers the report as well as the way back', async () => {
+    const career = structuredClone(fixtures.get('goal')!.career);
+    vi.mocked(Math.random).mockImplementation(seeded(6038));
+    const done = resumeMatch(career);
+    expect(done.report, 'the match was played to its report').toBeTruthy();
+    const callbacks = { onSub: vi.fn(), onShape: vi.fn(), onTalk: vi.fn(), onSecondHalf: vi.fn(), onExit: vi.fn(), onStartSecondHalf: vi.fn(), onStartExtraTime: vi.fn(), onChange: vi.fn(), onMark: vi.fn() };
+    const mounted = render(<LiveSimScreen career={done.state} live={null} report={done.report!} clubColor="#86bced" {...callbacks} />);
+    await step(32);
+    expect(stageOf(mounted.container)).toBe('done');
+    fireEvent.click(mounted.getByRole('button', { name: 'Back to the club page' }));
+    await step(32);
+    expect(mounted.container.querySelector('[data-cm-live-compact]')!.textContent).toContain('Full time');
+    expect(mounted.getByRole('button', { name: 'Back to the match' })).not.toBeNull();
+    fireEvent.click(mounted.getByRole('button', { name: 'Full report' }));
+    expect(callbacks.onExit).toHaveBeenCalledTimes(1);
+  }, 60000);
+
+  it('a phone on its side gets the pitch on its side', async () => {
+    const size = (width: number, height: number) => {
+      Object.defineProperty(window, 'innerWidth', { configurable: true, writable: true, value: width });
+      Object.defineProperty(window, 'innerHeight', { configurable: true, writable: true, value: height });
+    };
+    const was = [window.innerWidth, window.innerHeight];
+    try {
+      size(844, 390);
+      const mounted = mount(quiet());
+      await step(200);
+      const pitch = () => mounted.container.querySelector<HTMLElement>('[data-cm-live-pitch]')!;
+      const mine = () => [...mounted.container.querySelectorAll<HTMLElement>('[data-cm-dot]')].map(dot => ({ left: parseFloat(dot.style.left), top: parseFloat(dot.style.top) }));
+      expect(pitch().getAttribute('data-pm-orient')).toBe('landscape');
+      /* I attack right on it: my keeper stands at the left end, and nobody of mine is drawn at its foot as a keeper would be upright. */
+      expect(mine()).toHaveLength(11);
+      expect(Math.min(...mine().map(dot => dot.left))).toBeLessThan(20);
+      /* Turned upright again, the pitch is upright again and my keeper is at the foot of it. */
+      size(390, 844);
+      await act(async () => { window.dispatchEvent(new Event('resize')); });
+      expect(pitch().getAttribute('data-pm-orient')).toBe('portrait');
+      expect(Math.max(...mine().map(dot => dot.top))).toBeGreaterThan(80);
+    } finally {
+      size(was[0], was[1]);
+    }
   }, 60000);
 });
 
