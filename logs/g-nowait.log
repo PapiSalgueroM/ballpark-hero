@@ -1,0 +1,14 @@
+cues by length: whistle 18522, net 13230, crowd 61740, tick 2205, sting 39690, thud 9702
+saves after 3 seeded careers: out (a list of 10, 2012, placed 22); win (a list of 10, 2018, placed 1); podium (a list of 10, 2018, placed 3)
+CONTROL nowait: the wait for a tap, one hit in soundKit-C0VU1hwD.js
+this Chromium, a context made after a tap: running at first, resume resolved in 0 ms, then running, its clock at 0.31 s after 0.3 s
+switches mounted: footer yes, header yes
+
+4) Never before a tap
+   ok   the page was never tapped: 111 activation samples, all false
+   ok   the winner's night was on screen the whole time (10 rows)
+   FAIL contexts made with no tap: 1
+   ok   starts with no tap: 0
+   ok   then one real click on empty space: 0 starts 1.5 s later (the countdown he missed is not played late)
+
+playSoundGate control nowait: fired, 1 aimed checks red in section 4
