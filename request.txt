@@ -1,0 +1,14 @@
+# AN2 fixer, first look at the fixes (head c6ce1f65)
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-us: node_modules/.bin/vitest run src/test/usSeasonCentreEntry.test.tsx src/test/usCareerSaveRetry.test.tsx --testTimeout=300000 --hookTimeout=120000
+stale: node scripts/simStaleChunk.mjs
+stale-noprerender: SIM_STALE_CHUNK_CONTROL=noprerender node scripts/simStaleChunk.mjs
+stale-nooffline: SIM_STALE_CHUNK_CONTROL=nooffline node scripts/simStaleChunk.mjs
+stale-noguard: SIM_STALE_CHUNK_CONTROL=noguard node scripts/simStaleChunk.mjs
+stale-nolistener: SIM_STALE_CHUNK_CONTROL=nolistener node scripts/simStaleChunk.mjs
+stale-bogus: SIM_STALE_CHUNK_CONTROL=bogus node scripts/simStaleChunk.mjs
+squadplay: ENGINES=chromium REQUIRE_PAGE=1 PORT=4810 SHOTS=$RC_OUT/shots-plain node scripts/playCareerSquad.mjs
+squadplay-timeline: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=timeline PORT=4820 SHOTS=/tmp/shots-timeline node scripts/playCareerSquad.mjs
+saveretry: node scripts/simUsCareerSaveRetry.mjs

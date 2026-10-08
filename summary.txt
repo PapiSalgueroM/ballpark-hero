@@ -1,0 +1,12 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+stale exit=0 0s | simStaleChunk: green. A tab left open across a deploy reloads once for a missing chunk instead of painting the broken page.
+stale-noprerender exit=1 0s | simStaleChunk: control noprerender turned section(s) 2 red and nothing else. The check works.
+stale-nooffline exit=1 0s | simStaleChunk: control nooffline turned section(s) 2 red and nothing else. The check works.
+stale-noguard exit=1 0s | simStaleChunk: control noguard turned section(s) 2 red and nothing else. The check works.
+stale-nolistener exit=1 0s | simStaleChunk: control nolistener turned section(s) 1 red and nothing else. The check works.
+stale-bogus exit=2 0s | unknown control bogus
+vitest-us exit=0 18s |    Duration  17.70s (transform 2.82s, setup 139ms, collect 6.29s, tests 18.66s, environment 1.00s, prepare 368ms)
+tsc exit=0 83s | 
+squadplay exit=0 142s | playCareerSquad: 170 checks, 0 failed
+squadplay-timeline exit=1 140s | playCareerSquad (control timeline, 3 edits served): 170 checks, 6 failed
+saveretry exit=0 116s | US career save retry: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/us-career-save-recovery-artifacts/outcomes
