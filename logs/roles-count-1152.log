@@ -1,0 +1,132 @@
+identity exit=0
+.rc/request.txt: OK
+.rc/run.sh: OK
+.github/workflows/lane-remote-check.yml: OK
+.rc/x/roles-count-1152.mjs: OK
+src/components/club-manager/RolesScreen.tsx: OK
+locked-packages exit=0
+Verified 521 actual installed locked package versions.
+runtime exit=0
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 120 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 120 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 120 MiB
+Chrome Headless Shell 156.0.8078.4 (playwright chromium-headless-shell v1248) downloaded to /home/runner/work/_temp/roles-count-1152.wLoZBt/chromium-cache/chromium_headless_shell-1248
+Version 1.64.0
+brand-runtime exit=0
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.4/5.4 MB 60.2 MB/s eta 0:00:00
+Downloading pillow-12.3.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (6.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.9/6.9 MB 117.2 MB/s eta 0:00:00
+Installing collected packages: pillow, fonttools
+Successfully installed fonttools-4.66.1 pillow-12.3.0
+syntax exit=0
+types exit=0
+build exit=0
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[32m✓ built in 21.69s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+build-hold exit=0
+parent-prepare exit=0
+native exit=0
+PASS:12 actual component cases, three observed parent count defects, one effective copied preview-cap control; all navigation callbacks remain empty.
+native-receipt exit=0
+All12 actual component journeys, three observed parent clipped totals and one effective preview-cap control passed their exact contracts.
+reader-simAdsense exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simAdsense.mjs                  0.4s
+
+All 1 harnesses green.
+reader-simBrand exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simBrand.mjs                    0.3s
+
+All 1 harnesses green.
+reader-simHeadTags exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simHeadTags.mjs                 0.2s
+
+All 1 harnesses green.
+reader-simHiddenPages exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simHiddenPages.mjs              0.2s
+
+All 1 harnesses green.
+reader-simHubs exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simHubs.mjs                     0.3s
+
+All 1 harnesses green.
+reader-simIndexNow exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simIndexNow.mjs                 0.2s
+
+All 1 harnesses green.
+reader-simIndexing exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simIndexing.mjs                 0.3s
+
+All 1 harnesses green.
+reader-simInternalLinks exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simInternalLinks.mjs            0.2s
+
+All 1 harnesses green.
+reader-simNoRivalNames exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simNoRivalNames.mjs             7.2s
+
+All 1 harnesses green.
+reader-simPrerender exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simPrerender.mjs                0.5s
+
+All 1 harnesses green.
+reader-simPrerenderBoot exit=0
+
+Serving dist on 4173 for 1 browser harnesses
+  PASS  simPrerenderBoot.mjs           11.3s
+
+All 1 harnesses green.
+reader-simRetiredRoutes exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simRetiredRoutes.mjs            0.2s
+
+All 1 harnesses green.
+reader-simSchema exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simSchema.mjs                   0.3s
+
+All 1 harnesses green.
+reader-simSitemap exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simSitemap.mjs                  0.3s
+
+All 1 harnesses green.
+reader-simSnapshotAssets exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simSnapshotAssets.mjs           0.3s
+
+All 1 harnesses green.
+reader-receipts exit=0
+All15 actual dist/public readers printed passing outcomes.
+closing exit=0
+dependency-cache-hold exit=0
+Original app package bytes/links held, with only ordinary new build cache bytes permitted. Browser package bytes and installed Chromium cache paths/bytes/links are separately held.
+strict-gates exit=0
+Every actual named gate succeeded; no skipped or red reader is waived.
+Roles count1152 strict label: failed=0, complete=1, source=3f81eaa04550055864746af1067c3ba300886676, request=83c11cded5dd028cf4e1b876cd70e8be240849d7.
