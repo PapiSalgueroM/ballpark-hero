@@ -1,0 +1,11 @@
+#!build
+#!playwright
+needles: node .rc/x/fxNeedles.mjs dist/assets
+play-c: ONLY=C ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+play-b5: ONLY=B5 ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+play-pitchqueue: SEASON_MOTION_CONTROL=pitchqueue ONLY=B5 ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+play-held: SEASON_MOTION_CONTROL=held ONLY=C PORT=4571 SHOTS=/tmp/noshots-held ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+play-otherplace: SEASON_MOTION_CONTROL=otherplace ONLY=C PORT=4572 SHOTS=/tmp/noshots-other ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+play-chipword: SEASON_MOTION_CONTROL=chipword ONLY=C PORT=4573 SHOTS=/tmp/noshots-chip ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+play-pitchgone: SEASON_MOTION_CONTROL=pitchgone ONLY=C PORT=4574 SHOTS=/tmp/noshots-gone ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+vitest-round: node_modules/.bin/vitest run src/test/seasonCentreSlots.test.tsx src/test/rankShift.test.ts src/test/seasonResume.test.ts src/test/seasonReplays.test.tsx src/test/miniPitchScene.test.ts src/test/seasonCore.test.ts src/test/liveSimMotion.test.tsx --testTimeout=300000 --hookTimeout=120000
