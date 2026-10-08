@@ -1,0 +1,4 @@
+# Release AN fix pass 2: the shootout walk alone, so its screenshots come back (the 165 line request went over the 25 MB file allowance)
+#!serve
+#!playwright
+shootwalk: node .rc/x/shootwalk.mjs
