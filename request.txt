@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk: B=$(git rev-parse -q --verify origin/release-al-int || (git fetch -q origin release-al-int && git rev-parse FETCH_HEAD)); echo "base $B"; mkdir -p $RUNNER_TEMP/base && git archive $B src scripts/lib package.json | tar -x -C $RUNNER_TEMP/base && ln -s $PWD/node_modules $RUNNER_TEMP/base/node_modules; BASE_ROOT=$RUNNER_TEMP/base node .rc/x/rvwalk.mjs

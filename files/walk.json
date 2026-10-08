@@ -1,0 +1,983 @@
+{
+ "notes": [
+  "branch saves: out n=10 year=2012 rank=22; win n=10 year=2018 rank=1; podium n=10 year=2018 rank=3",
+  "base saves (built with origin/release-al-int's engine): out n=10 year=2012 rank=22 bytes=21247; win n=10 year=2018 rank=1 bytes=38615; podium n=10 year=2018 rank=3 bytes=38385",
+  "base win save equals branch win save byte for byte: true"
+ ],
+ "scenes": {
+  "chrome-320": {
+   "errors": [],
+   "header": {
+    "shown": false,
+    "box": null,
+    "bar": [
+     0,
+     32,
+     320,
+     57
+    ],
+    "overlaps": [],
+    "pokesOut": [],
+    "pageWider": false,
+    "scrollW": 320
+   },
+   "off": {
+    "text": "Sound: off",
+    "pressed": "false",
+    "box": [
+     62,
+     644,
+     80,
+     16
+    ],
+    "footerH": 439,
+    "scrollY": 26199,
+    "overlap": [],
+    "rowTops": 6,
+    "stored": null
+   },
+   "on": {
+    "text": "Sound: on",
+    "pressed": "true",
+    "box": [
+     62,
+     644,
+     80,
+     16
+    ],
+    "footerH": 439,
+    "scrollY": 26199,
+    "overlap": [],
+    "rowTops": 6,
+    "stored": "on"
+   },
+   "afterOn": {
+    "made": 1,
+    "starts": [
+     "tick@0"
+    ],
+    "stops": 0,
+    "suspends": 0,
+    "resumes": 2,
+    "buzz": []
+   },
+   "kitReq": 1,
+   "afterEnter": "Sound: off",
+   "afterSpace": "Sound: on"
+  },
+  "chrome-320-rm": {
+   "errors": [],
+   "header": {
+    "shown": false,
+    "box": null,
+    "bar": [
+     0,
+     32,
+     320,
+     57
+    ],
+    "overlaps": [],
+    "pokesOut": [],
+    "pageWider": false,
+    "scrollW": 320
+   },
+   "off": {
+    "text": "Sound: off",
+    "pressed": "false",
+    "box": [
+     62,
+     644,
+     80,
+     16
+    ],
+    "footerH": 439,
+    "scrollY": 26199,
+    "overlap": [],
+    "rowTops": 6,
+    "stored": null
+   },
+   "on": {
+    "text": "Sound: on",
+    "pressed": "true",
+    "box": [
+     62,
+     644,
+     80,
+     16
+    ],
+    "footerH": 439,
+    "scrollY": 26199,
+    "overlap": [],
+    "rowTops": 6,
+    "stored": "on"
+   },
+   "afterOn": {
+    "made": 1,
+    "starts": [
+     "tick@-0.02"
+    ],
+    "stops": 0,
+    "suspends": 0,
+    "resumes": 2,
+    "buzz": []
+   },
+   "kitReq": 1,
+   "afterEnter": "Sound: off",
+   "afterSpace": "Sound: on"
+  },
+  "chrome-390": {
+   "errors": [],
+   "header": {
+    "shown": false,
+    "box": null,
+    "bar": [
+     0,
+     32,
+     390,
+     57
+    ],
+    "overlaps": [],
+    "pokesOut": [],
+    "pageWider": false,
+    "scrollW": 390
+   },
+   "off": {
+    "text": "Sound: off",
+    "pressed": "false",
+    "box": [
+     135,
+     788,
+     80,
+     16
+    ],
+    "footerH": 352,
+    "scrollY": 22718,
+    "overlap": [],
+    "rowTops": 5,
+    "stored": null
+   },
+   "on": {
+    "text": "Sound: on",
+    "pressed": "true",
+    "box": [
+     135,
+     788,
+     80,
+     16
+    ],
+    "footerH": 352,
+    "scrollY": 22718,
+    "overlap": [],
+    "rowTops": 5,
+    "stored": "on"
+   },
+   "afterOn": {
+    "made": 1,
+    "starts": [
+     "tick@-0.02"
+    ],
+    "stops": 0,
+    "suspends": 0,
+    "resumes": 2,
+    "buzz": []
+   },
+   "kitReq": 1,
+   "afterEnter": "Sound: off",
+   "afterSpace": "Sound: on"
+  },
+  "chrome-390-rm": {
+   "errors": [],
+   "header": {
+    "shown": false,
+    "box": null,
+    "bar": [
+     0,
+     32,
+     390,
+     57
+    ],
+    "overlaps": [],
+    "pokesOut": [],
+    "pageWider": false,
+    "scrollW": 390
+   },
+   "off": {
+    "text": "Sound: off",
+    "pressed": "false",
+    "box": [
+     135,
+     788,
+     80,
+     16
+    ],
+    "footerH": 352,
+    "scrollY": 22718,
+    "overlap": [],
+    "rowTops": 5,
+    "stored": null
+   },
+   "on": {
+    "text": "Sound: on",
+    "pressed": "true",
+    "box": [
+     135,
+     788,
+     80,
+     16
+    ],
+    "footerH": 352,
+    "scrollY": 22718,
+    "overlap": [],
+    "rowTops": 5,
+    "stored": "on"
+   },
+   "afterOn": {
+    "made": 1,
+    "starts": [
+     "tick@-0.02"
+    ],
+    "stops": 0,
+    "suspends": 0,
+    "resumes": 2,
+    "buzz": []
+   },
+   "kitReq": 1,
+   "afterEnter": "Sound: off",
+   "afterSpace": "Sound: on"
+  },
+  "chrome-640": {
+   "errors": [],
+   "header": {
+    "shown": true,
+    "box": [
+     414,
+     38,
+     44,
+     44
+    ],
+    "bar": [
+     0,
+     32,
+     640,
+     57
+    ],
+    "overlaps": [],
+    "pokesOut": [],
+    "pageWider": false,
+    "scrollW": 640
+   },
+   "off": {
+    "text": "Sound: off",
+    "pressed": "false",
+    "box": [
+     215,
+     744,
+     80,
+     16
+    ],
+    "footerH": 289,
+    "scrollY": 15046,
+    "overlap": [],
+    "rowTops": 4,
+    "stored": null
+   },
+   "on": {
+    "text": "Sound: on",
+    "pressed": "true",
+    "box": [
+     215,
+     744,
+     80,
+     16
+    ],
+    "footerH": 289,
+    "scrollY": 15046,
+    "overlap": [],
+    "rowTops": 4,
+    "stored": "on"
+   },
+   "afterOn": {
+    "made": 1,
+    "starts": [
+     "tick@-0.02"
+    ],
+    "stops": 0,
+    "suspends": 0,
+    "resumes": 2,
+    "buzz": []
+   },
+   "kitReq": 1,
+   "afterEnter": "Sound: off",
+   "afterSpace": "Sound: on",
+   "headerAfterClick": {
+    "pressed": "false",
+    "title": "Sound is off",
+    "stored": "off"
+   }
+  },
+  "chrome-640-rm": {
+   "errors": [],
+   "header": {
+    "shown": true,
+    "box": [
+     414,
+     38,
+     44,
+     44
+    ],
+    "bar": [
+     0,
+     32,
+     640,
+     57
+    ],
+    "overlaps": [],
+    "pokesOut": [],
+    "pageWider": false,
+    "scrollW": 640
+   },
+   "off": {
+    "text": "Sound: off",
+    "pressed": "false",
+    "box": [
+     215,
+     744,
+     80,
+     16
+    ],
+    "footerH": 289,
+    "scrollY": 15046,
+    "overlap": [],
+    "rowTops": 4,
+    "stored": null
+   },
+   "on": {
+    "text": "Sound: on",
+    "pressed": "true",
+    "box": [
+     215,
+     744,
+     80,
+     16
+    ],
+    "footerH": 289,
+    "scrollY": 15046,
+    "overlap": [],
+    "rowTops": 4,
+    "stored": "on"
+   },
+   "afterOn": {
+    "made": 1,
+    "starts": [
+     "tick@-0.02"
+    ],
+    "stops": 0,
+    "suspends": 0,
+    "resumes": 2,
+    "buzz": []
+   },
+   "kitReq": 1,
+   "afterEnter": "Sound: off",
+   "afterSpace": "Sound: on"
+  },
+  "chrome-768": {
+   "errors": [],
+   "header": {
+    "shown": true,
+    "box": [
+     542,
+     38,
+     44,
+     44
+    ],
+    "bar": [
+     0,
+     32,
+     768,
+     57
+    ],
+    "overlaps": [],
+    "pokesOut": [],
+    "pageWider": false,
+    "scrollW": 768
+   },
+   "off": {
+    "text": "Sound: off",
+    "pressed": "false",
+    "box": [
+     492,
+     844,
+     80,
+     16
+    ],
+    "footerH": 265,
+    "scrollY": 12890,
+    "overlap": [],
+    "rowTops": 3,
+    "stored": null
+   },
+   "on": {
+    "text": "Sound: on",
+    "pressed": "true",
+    "box": [
+     492,
+     844,
+     80,
+     16
+    ],
+    "footerH": 265,
+    "scrollY": 12890,
+    "overlap": [],
+    "rowTops": 3,
+    "stored": "on"
+   },
+   "afterOn": {
+    "made": 1,
+    "starts": [
+     "tick@-0.02"
+    ],
+    "stops": 0,
+    "suspends": 0,
+    "resumes": 2,
+    "buzz": []
+   },
+   "kitReq": 1,
+   "afterEnter": "Sound: off",
+   "afterSpace": "Sound: on",
+   "headerAfterClick": {
+    "pressed": "false",
+    "title": "Sound is off",
+    "stored": "off"
+   }
+  },
+  "chrome-768-rm": {
+   "errors": [],
+   "header": {
+    "shown": true,
+    "box": [
+     542,
+     38,
+     44,
+     44
+    ],
+    "bar": [
+     0,
+     32,
+     768,
+     57
+    ],
+    "overlaps": [],
+    "pokesOut": [],
+    "pageWider": false,
+    "scrollW": 768
+   },
+   "off": {
+    "text": "Sound: off",
+    "pressed": "false",
+    "box": [
+     492,
+     844,
+     80,
+     16
+    ],
+    "footerH": 265,
+    "scrollY": 12890,
+    "overlap": [],
+    "rowTops": 3,
+    "stored": null
+   },
+   "on": {
+    "text": "Sound: on",
+    "pressed": "true",
+    "box": [
+     492,
+     844,
+     80,
+     16
+    ],
+    "footerH": 265,
+    "scrollY": 12890,
+    "overlap": [],
+    "rowTops": 3,
+    "stored": "on"
+   },
+   "afterOn": {
+    "made": 1,
+    "starts": [
+     "tick@-0.02"
+    ],
+    "stops": 0,
+    "suspends": 0,
+    "resumes": 2,
+    "buzz": []
+   },
+   "kitReq": 1,
+   "afterEnter": "Sound: off",
+   "afterSpace": "Sound: on"
+  },
+  "chrome-1280": {
+   "errors": [],
+   "header": {
+    "shown": true,
+    "box": [
+     990,
+     38,
+     44,
+     44
+    ],
+    "bar": [
+     0,
+     32,
+     1280,
+     57
+    ],
+    "overlaps": [],
+    "pokesOut": [],
+    "pageWider": false,
+    "scrollW": 1280
+   },
+   "off": {
+    "text": "Sound: off",
+    "pressed": "false",
+    "box": [
+     1133,
+     812,
+     80,
+     16
+    ],
+    "footerH": 265,
+    "scrollY": 9570,
+    "overlap": [],
+    "rowTops": 2,
+    "stored": null
+   },
+   "on": {
+    "text": "Sound: on",
+    "pressed": "true",
+    "box": [
+     1133,
+     812,
+     80,
+     16
+    ],
+    "footerH": 265,
+    "scrollY": 9570,
+    "overlap": [],
+    "rowTops": 2,
+    "stored": "on"
+   },
+   "afterOn": {
+    "made": 1,
+    "starts": [
+     "tick@-0.02"
+    ],
+    "stops": 0,
+    "suspends": 0,
+    "resumes": 2,
+    "buzz": []
+   },
+   "kitReq": 1,
+   "afterEnter": "Sound: off",
+   "afterSpace": "Sound: on",
+   "headerAfterClick": {
+    "pressed": "false",
+    "title": "Sound is off",
+    "stored": "off"
+   }
+  },
+  "chrome-1280-rm": {
+   "errors": [],
+   "header": {
+    "shown": true,
+    "box": [
+     990,
+     38,
+     44,
+     44
+    ],
+    "bar": [
+     0,
+     32,
+     1280,
+     57
+    ],
+    "overlaps": [],
+    "pokesOut": [],
+    "pageWider": false,
+    "scrollW": 1280
+   },
+   "off": {
+    "text": "Sound: off",
+    "pressed": "false",
+    "box": [
+     1133,
+     812,
+     80,
+     16
+    ],
+    "footerH": 265,
+    "scrollY": 9570,
+    "overlap": [],
+    "rowTops": 2,
+    "stored": null
+   },
+   "on": {
+    "text": "Sound: on",
+    "pressed": "true",
+    "box": [
+     1133,
+     812,
+     80,
+     16
+    ],
+    "footerH": 265,
+    "scrollY": 9570,
+    "overlap": [],
+    "rowTops": 2,
+    "stored": "on"
+   },
+   "afterOn": {
+    "made": 1,
+    "starts": [
+     "tick@-0.02"
+    ],
+    "stops": 0,
+    "suspends": 0,
+    "resumes": 2,
+    "buzz": []
+   },
+   "kitReq": 1,
+   "afterEnter": "Sound: off",
+   "afterSpace": "Sound: on"
+  },
+  "light-1280": {
+   "themeButtonFound": 1,
+   "htmlClass": "light"
+  },
+  "whatsnew-390": {
+   "found": 1,
+   "text": "Sound, if you want it. The site has been silent since day one. There is a Sound switch at the bottom of every page now, next to Light mode. It is off until you turn it on, and your browser remembers what you picked. First up is awards night in Soccer Career: the shortlist ticks down a name at a time and the result lands with a sting, plus the crowd if the golden ball is yours. More of the site gets its sound next. Every sound is made right in your browser, so nothing extra downloads unless you switch it on."
+  },
+  "night-win-390": {
+   "there": true,
+   "n": 10,
+   "made": 1,
+   "starts": [
+    "tick@0.57",
+    "tick@0.787",
+    "tick@1.007",
+    "tick@1.227",
+    "tick@1.447",
+    "tick@1.667",
+    "tick@1.887",
+    "tick@2.107",
+    "tick@2.327",
+    "tick@2.547",
+    "sting@3.128",
+    "crowd@3.416"
+   ],
+   "stops": 0,
+   "suspends": 0,
+   "resumes": 11,
+   "buzz": [
+    [
+     30,
+     40,
+     30
+    ]
+   ],
+   "firstTickAfterMountMs": 574,
+   "kitReq": 1,
+   "errors": [],
+   "afterSpeechStarts": 12
+  },
+  "night-win-1280": {
+   "there": true,
+   "n": 10,
+   "made": 1,
+   "starts": [
+    "tick@0.568",
+    "tick@0.786",
+    "tick@1.006",
+    "tick@1.226",
+    "tick@1.446",
+    "tick@1.666",
+    "tick@1.885",
+    "tick@2.106",
+    "tick@2.325",
+    "tick@2.545",
+    "sting@3.126",
+    "crowd@3.418"
+   ],
+   "stops": 0,
+   "suspends": 0,
+   "resumes": 11,
+   "buzz": [
+    [
+     30,
+     40,
+     30
+    ]
+   ],
+   "firstTickAfterMountMs": 573,
+   "kitReq": 1,
+   "errors": [],
+   "afterSpeechStarts": 12
+  },
+  "night-win-390-rm": {
+   "there": true,
+   "n": 10,
+   "made": 1,
+   "starts": [
+    "sting@-0.029",
+    "crowd@0.251"
+   ],
+   "stops": 0,
+   "suspends": 0,
+   "resumes": 1,
+   "buzz": [],
+   "firstTickAfterMountMs": 6,
+   "kitReq": 1,
+   "errors": [],
+   "afterSpeechStarts": 2
+  },
+  "night-podium-390": {
+   "there": true,
+   "n": 10,
+   "made": 1,
+   "starts": [
+    "tick@0.572",
+    "tick@0.789",
+    "tick@1.009",
+    "tick@1.229",
+    "tick@1.449",
+    "tick@1.669",
+    "tick@1.889",
+    "tick@2.109",
+    "tick@2.329",
+    "tick@2.549",
+    "sting@3.13"
+   ],
+   "stops": 0,
+   "suspends": 0,
+   "resumes": 11,
+   "buzz": [],
+   "firstTickAfterMountMs": 576,
+   "kitReq": 1,
+   "errors": []
+  },
+  "night-out-390": {
+   "there": true,
+   "n": 10,
+   "made": 1,
+   "starts": [
+    "tick@0.575",
+    "tick@0.792",
+    "tick@1.012",
+    "tick@1.232",
+    "tick@1.452",
+    "tick@1.672",
+    "tick@1.892",
+    "tick@2.112",
+    "tick@2.332",
+    "tick@2.552"
+   ],
+   "stops": 0,
+   "suspends": 0,
+   "resumes": 10,
+   "buzz": [],
+   "firstTickAfterMountMs": 579,
+   "kitReq": 1,
+   "errors": []
+  },
+  "off-mid-countdown": {
+   "there": true,
+   "scheduledBefore": 12,
+   "stopsAfterOff": 10,
+   "suspendsAfterOff": 1,
+   "startsAfterOff": 0,
+   "onAgain": [
+    "tick@0"
+   ],
+   "text": "Sound: on",
+   "errors": []
+  },
+  "leave-mid-countdown": {
+   "there": true,
+   "url": "http://localhost:4173/",
+   "scheduledBefore": 12,
+   "stops": 10,
+   "newStarts": 0,
+   "errors": []
+  },
+  "hidden-while-kit-loads-300": {
+   "there": true,
+   "kitReq": 1,
+   "made": 1,
+   "startsWhileHidden": [
+    "tick@0.088",
+    "tick@0.326",
+    "tick@0.546",
+    "tick@0.766",
+    "tick@0.986",
+    "tick@1.206",
+    "tick@1.426",
+    "tick@1.646",
+    "tick@1.866",
+    "tick@2.086",
+    "sting@2.664",
+    "crowd@2.955"
+   ],
+   "stops": 0,
+   "suspends": 0,
+   "buzz": [
+    [
+     30,
+     40,
+     30
+    ]
+   ],
+   "errors": []
+  },
+  "hidden-while-kit-loads-1200": {
+   "there": true,
+   "kitReq": 1,
+   "made": 1,
+   "startsWhileHidden": [
+    "tick@-0.02",
+    "tick@0.083",
+    "tick@0.303",
+    "tick@0.522",
+    "tick@0.742",
+    "tick@0.962",
+    "tick@1.182",
+    "sting@1.76",
+    "crowd@2.052"
+   ],
+   "stops": 0,
+   "suspends": 0,
+   "buzz": [
+    [
+     30,
+     40,
+     30
+    ]
+   ],
+   "errors": []
+  },
+  "oldsave-win": {
+   "thereOff": true,
+   "off": {
+    "made": 0,
+    "starts": [],
+    "stops": 0,
+    "suspends": 0,
+    "resumes": 0,
+    "buzz": []
+   },
+   "kitReqOff": 0,
+   "errorsOff": [],
+   "saveRewritten": "no, byte identical",
+   "thereOn": true,
+   "on": {
+    "made": 1,
+    "starts": [
+     "tick@0.57",
+     "tick@0.788",
+     "tick@1.008",
+     "tick@1.228",
+     "tick@1.448",
+     "tick@1.668",
+     "tick@1.887",
+     "tick@2.107",
+     "tick@2.327",
+     "tick@2.547",
+     "sting@3.128",
+     "crowd@3.408"
+    ],
+    "stops": 0,
+    "suspends": 0,
+    "resumes": 11,
+    "buzz": [
+     [
+      30,
+      40,
+      30
+     ]
+    ]
+   },
+   "errorsOn": []
+  },
+  "oldsave-podium": {
+   "thereOff": true,
+   "off": {
+    "made": 0,
+    "starts": [],
+    "stops": 0,
+    "suspends": 0,
+    "resumes": 0,
+    "buzz": []
+   },
+   "kitReqOff": 0,
+   "errorsOff": [],
+   "saveRewritten": "no, byte identical",
+   "thereOn": true,
+   "on": {
+    "made": 1,
+    "starts": [
+     "tick@0.573",
+     "tick@0.789",
+     "tick@1.01",
+     "tick@1.229",
+     "tick@1.449",
+     "tick@1.669",
+     "tick@1.889",
+     "tick@2.109",
+     "tick@2.329",
+     "tick@2.549",
+     "sting@3.13"
+    ],
+    "stops": 0,
+    "suspends": 0,
+    "resumes": 11,
+    "buzz": []
+   },
+   "errorsOn": []
+  },
+  "oldsave-out": {
+   "thereOff": true,
+   "off": {
+    "made": 0,
+    "starts": [],
+    "stops": 0,
+    "suspends": 0,
+    "resumes": 0,
+    "buzz": []
+   },
+   "kitReqOff": 0,
+   "errorsOff": [],
+   "saveRewritten": "no, byte identical",
+   "thereOn": true,
+   "on": {
+    "made": 1,
+    "starts": [
+     "tick@0.562",
+     "tick@0.788",
+     "tick@1.008",
+     "tick@1.228",
+     "tick@1.448",
+     "tick@1.668",
+     "tick@1.888",
+     "tick@2.108",
+     "tick@2.328",
+     "tick@2.548"
+    ],
+    "stops": 0,
+    "suspends": 0,
+    "resumes": 10,
+    "buzz": []
+   },
+   "errorsOn": []
+  }
+ }
+}
