@@ -1,0 +1,4 @@
+vitest exit=0 3s |    Duration  2.51s (transform 134ms, setup 78ms, collect 255ms, tests 979ms, environment 550ms, prepare 293ms)
+eslint exit=0 2s | 
+rivals exit=0 14s | No rival product names found. 0 findings.
+tsc exit=0 55s | 

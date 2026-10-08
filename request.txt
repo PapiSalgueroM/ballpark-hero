@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/translateGuard.test.tsx --testTimeout=300000 --hookTimeout=120000
+rivals: node scripts/simNoRivalNames.mjs
+eslint: node_modules/.bin/eslint src/lib/translateGuard.ts src/test/translateGuard.test.tsx
