@@ -1,0 +1,5 @@
+save: Held 0 2014 Arsenal; YOUR CALL at matchday 7 (finish, on the record missed), mirror 26; score as saved 0-1, as he played it 1-1; ledger {"v":1,"key":"Held 0|Arsenal|2014|25|10|4|6.8|centre","m":[[7,0,2]],"banked":1}
+page at matchday 7: score bug "1-1"; moments line on the kick off card: null; open 🎯 on fixtures: 0
+table equals node's WITH the decision: true; equals the table as saved (decision ignored): false
+save byte for byte the same after the replay reached its review: true; page errors: []
+rvHeld: a hub replay of the ledger's season SHOWS the banked YOUR CALL

@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+held: node .rc/x/rvHeld.mjs
+probe2: node .rc/x/rvProbeReplay.mjs
