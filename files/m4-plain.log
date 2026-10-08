@@ -1,0 +1,124 @@
+playTranslatedPage: http://localhost:4173 (dist/ served by this run), 2 page(s), views phone and desktop, text keep and alter
+  PASS  0. the served entry chunk (/assets/index-BNlJvtSH.js) holds the guard's off switch __DUKB_NO_TRANSLATE_GUARD__
+  PASS  0. the served entry chunk holds the guard's console line
+
+/club-manager phone keep
+  PASS  1. /club-manager phone keep: the translator ran: 715 text node(s) swapped, lang="pt"
+  PASS  1. /club-manager phone keep: the guard is installed on the page
+  PASS  8. /club-manager phone keep: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  5. /club-manager phone keep: the walk pressed at least two controls: 8: How to play > Let's Play! > 📅2026-27Today. Real s > 📅 Starting 2026-27 > 🏟️2020-21Haaland and  > 🏟️ Starting 2020-21 > 🦊2015-16The Leicester > 🦊 Starting 2015-16
+  PASS  6. /club-manager phone keep: the route error boundary never appeared
+  PASS  7. /club-manager phone keep: no NotFoundError
+
+/club-manager desktop keep
+  PASS  1. /club-manager desktop keep: the translator ran: 696 text node(s) swapped, lang="pt"
+  PASS  1. /club-manager desktop keep: the guard is installed on the page
+  PASS  8. /club-manager desktop keep: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  5. /club-manager desktop keep: the walk pressed at least two controls: 8: How to play > Let's Play! > 📅2026-27Today. Real s > 📅 Starting 2026-27 > 🏟️2020-21Haaland and  > 🏟️ Starting 2020-21 > 🦊2015-16The Leicester > 🦊 Starting 2015-16
+  PASS  6. /club-manager desktop keep: the route error boundary never appeared
+  PASS  7. /club-manager desktop keep: no NotFoundError
+
+/soccer-career phone keep
+  PASS  1. /soccer-career phone keep: the translator ran: 1349 text node(s) swapped, lang="pt"
+  PASS  1. /soccer-career phone keep: the guard is installed on the page
+  PASS  8. /soccer-career phone keep: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  2. /soccer-career phone keep: the create screen drew
+  PASS  2. /soccer-career phone keep: all three picks registered, Brazil among them: nationality box "Choose nationality Brazil", position box "Choose positionStriker (ST)", era box "Choose eraCurrent era (2025 start)"
+  PASS  2. /soccer-career phone keep: each pick can be READ in its box, bar the known hidden one (nationality): readable: position, era; hidden: nationality
+  PASS  3. /soccer-career phone keep: the create flow reached the career: h1 "🇧🇷Joao Teste", create form gone, save Joao Teste, Brazil, youth, age 16
+  PASS  4. /soccer-career phone keep: one season forward and the hub still stands: age 16 to 17 on press 1, h1 "🇧🇷Joao Teste", phase contract_offer; the walk went on to age 18, phase random_events
+  PASS  5. /soccer-career phone keep: the walk pressed at least two controls: 20: Brazil🇧🇷 > Striker (ST) > Current era (2025 star > 🎲 Generate Starting P > 🎲 Roll again > 🎮 Customize your buil > ✅ Lock in build > ⚽ Begin Career > Next Year
+  PASS  6. /soccer-career phone keep: the route error boundary never appeared
+  PASS  7. /soccer-career phone keep: no NotFoundError
+
+/soccer-career desktop keep
+  PASS  1. /soccer-career desktop keep: the translator ran: 1349 text node(s) swapped, lang="pt"
+  PASS  1. /soccer-career desktop keep: the guard is installed on the page
+  PASS  8. /soccer-career desktop keep: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  2. /soccer-career desktop keep: the create screen drew
+  PASS  2. /soccer-career desktop keep: all three picks registered, Brazil among them: nationality box "Choose nationality Brazil", position box "Choose positionStriker (ST)", era box "Choose eraCurrent era (2025 start)"
+  PASS  2. /soccer-career desktop keep: each pick can be READ in its box, bar the known hidden one (nationality): readable: position, era; hidden: nationality
+  PASS  3. /soccer-career desktop keep: the create flow reached the career: h1 "🇧🇷Joao Teste", create form gone, save Joao Teste, Brazil, youth, age 16
+  PASS  4. /soccer-career desktop keep: one season forward and the hub still stands: age 16 to 17 on press 1, h1 "🇧🇷Joao Teste", phase contract_offer; the walk went on to age 18, phase random_events
+  PASS  5. /soccer-career desktop keep: the walk pressed at least two controls: 20: Brazil🇧🇷 > Striker (ST) > Current era (2025 star > 🎲 Generate Starting P > 🎲 Roll again > 🎮 Customize your buil > ✅ Lock in build > ⚽ Begin Career > Next Year
+  PASS  6. /soccer-career desktop keep: the route error boundary never appeared
+  PASS  7. /soccer-career desktop keep: no NotFoundError
+
+/club-manager phone alter
+  PASS  1. /club-manager phone alter: the translator ran: 696 text node(s) swapped, lang="pt"
+  PASS  1. /club-manager phone alter: the guard is installed on the page
+  PASS  8. /club-manager phone alter: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  5. /club-manager phone alter: the walk pressed at least two controls: 8: How to play > Let's Play! > 📅2026-27Today. Real s > 📅 Starting 2026-27 > 🏟️2020-21Haaland and  > 🏟️ Starting 2020-21 > 🦊2015-16The Leicester > 🦊 Starting 2015-16
+  PASS  6. /club-manager phone alter: the route error boundary never appeared
+  PASS  7. /club-manager phone alter: no NotFoundError
+
+/soccer-career phone alter
+  PASS  1. /soccer-career phone alter: the translator ran: 1344 text node(s) swapped, lang="pt"
+  PASS  1. /soccer-career phone alter: the guard is installed on the page
+  PASS  8. /soccer-career phone alter: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  2. /soccer-career phone alter: the create screen drew
+  PASS  2. /soccer-career phone alter: all three picks registered, Brazil among them: nationality box "«Choose nationality» «Brazil»", position box "«Choose position»«Striker (ST)»", era box "«Choose era»«Current era (2025 start)»"
+  PASS  2. /soccer-career phone alter: each pick can be READ in its box, bar the known hidden one (nationality): readable: position, era; hidden: nationality
+  PASS  3. /soccer-career phone alter: the create flow reached the career: h1 "🇧🇷Joao Teste", create form gone, save Joao Teste, Brazil, youth, age 16
+  PASS  4. /soccer-career phone alter: one season forward and the hub still stands: age 16 to 17 on press 1, h1 "🇧🇷Joao Teste", phase contract_offer; the walk went on to age 18, phase random_events
+  PASS  5. /soccer-career phone alter: the walk pressed at least two controls: 20: Brazil🇧🇷 > Striker (ST) > Current era (2025 star > 🎲 Generate Starting P > 🎲 Roll again > 🎮 Customize your buil > ✅ Lock in build > ⚽ Begin Career > Next Year
+  PASS  6. /soccer-career phone alter: the route error boundary never appeared
+  PASS  7. /soccer-career phone alter: no NotFoundError
+
+/club-manager desktop alter
+  PASS  1. /club-manager desktop alter: the translator ran: 696 text node(s) swapped, lang="pt"
+  PASS  1. /club-manager desktop alter: the guard is installed on the page
+  PASS  8. /club-manager desktop alter: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  5. /club-manager desktop alter: the walk pressed at least two controls: 8: How to play > Let's Play! > 📅2026-27Today. Real s > 📅 Starting 2026-27 > 🏟️2020-21Haaland and  > 🏟️ Starting 2020-21 > 🦊2015-16The Leicester > 🦊 Starting 2015-16
+  PASS  6. /club-manager desktop alter: the route error boundary never appeared
+  PASS  7. /club-manager desktop alter: no NotFoundError
+
+/soccer-career desktop alter
+  PASS  1. /soccer-career desktop alter: the translator ran: 1344 text node(s) swapped, lang="pt"
+  PASS  1. /soccer-career desktop alter: the guard is installed on the page
+  PASS  8. /soccer-career desktop alter: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  2. /soccer-career desktop alter: the create screen drew
+  PASS  2. /soccer-career desktop alter: all three picks registered, Brazil among them: nationality box "«Choose nationality» «Brazil»", position box "«Choose position»«Striker (ST)»", era box "«Choose era»«Current era (2025 start)»"
+  PASS  2. /soccer-career desktop alter: each pick can be READ in its box, bar the known hidden one (nationality): readable: position, era; hidden: nationality
+  PASS  3. /soccer-career desktop alter: the create flow reached the career: h1 "🇧🇷Joao Teste", create form gone, save Joao Teste, Brazil, youth, age 16
+  PASS  4. /soccer-career desktop alter: one season forward and the hub still stands: age 16 to 17 on press 1, h1 "🇧🇷Joao Teste", phase contract_offer; the walk went on to age 18, phase random_events
+  PASS  5. /soccer-career desktop alter: the walk pressed at least two controls: 20: Brazil🇧🇷 > Striker (ST) > Current era (2025 star > 🎲 Generate Starting P > 🎲 Roll again > 🎮 Customize your buil > ✅ Lock in build > ⚽ Begin Career > Next Year
+  PASS  6. /soccer-career desktop alter: the route error boundary never appeared
+  PASS  7. /soccer-career desktop alter: no NotFoundError
+
+EVERY WALK
+  page             view     text   boundary                          NotFound  guard line  moved nodes  stale text  steps
+  /soccer-career   phone    keep   none                              0         1           9 (9 taken)  6           22
+  /club-manager    phone    keep   none                              0         1           0            0           9
+  /soccer-career   desktop  keep   none                              0         1           9 (9 taken)  6           22
+  /club-manager    desktop  keep   none                              0         1           0            0           9
+  /soccer-career   phone    alter  none                              0         1           9 (9 taken)  6           22
+  /club-manager    phone    alter  none                              0         1           0            0           9
+  /soccer-career   desktop  alter  none                              0         1           9 (9 taken)  6           22
+  /club-manager    desktop  alter  none                              0         1           0            0           9
+
+BY PAGE
+  /soccer-career   broke in 0 of 4 walk(s); the guard printed its line in 4; moved nodes per walk 9, 9, 9, 9; stale text at most 6
+  /club-manager    broke in 0 of 4 walk(s); the guard printed its line in 4; moved nodes per walk 0, 0, 0, 0; stale text at most 0
+
+WHAT THE THREE BOXES READ after the picks
+  phone    keep   nationality "Choose nationality Brazil" (HIDDEN) | position "Choose positionStriker (ST)" (readable) | era "Choose eraCurrent era (2025 start)" (readable)
+  desktop  keep   nationality "Choose nationality Brazil" (HIDDEN) | position "Choose positionStriker (ST)" (readable) | era "Choose eraCurrent era (2025 start)" (readable)
+  phone    alter  nationality "«Choose nationality» «Brazil»" (HIDDEN) | position "«Choose position»«Striker (ST)»" (readable) | era "«Choose era»«Current era (2025 start)»" (readable)
+  desktop  alter  nationality "«Choose nationality» «Brazil»" (HIDDEN) | position "«Choose position»«Striker (ST)»" (readable) | era "«Choose era»«Current era (2025 start)»" (readable)
+
+THE CALLS THAT NAMED A MOVED NODE (7 different, each one a crash without the guard)
+  4x /soccer-career: removeChild under <span> of "Choose nationality"
+  4x /soccer-career: removeChild under <span> of "Choose position"
+  4x /soccer-career: removeChild under <span> of "Choose era"
+  8x /soccer-career: removeChild under <span> of "Striker (ST)"
+  8x /soccer-career: removeChild under <span> of "Current era (2025 start)"
+  4x /soccer-career: removeChild under <span> of "📩 Professional contract offers received!"
+  4x /soccer-career: removeChild under <span> of "s"
+
+STALE TEXT, the cost the guard does not remove. Most at once: 6 on /soccer-career phone keep, for example [{"screen":"16","react":"18","around":"ST · Age 16 · 🇧🇷Brazil"},{"screen":"🏠 Life Event","react":"⚡ Positive Event","around":"🏠 Life Event · 4 events remaining"},{"screen":"4","react":"2","around":"🏠 Life Event · 4 events remaining"}]
+
+nothing left this machine: 16 request(s) to the database host aborted, other hosts aborted [fonts.googleapis.com]
+THE GUARD WAS NEEDED on 8 of 8 page load(s): 36 call(s) in all named a node its parent no longer owned.
+
+playTranslatedPage: 70 checks, 0 failed

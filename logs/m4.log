@@ -1,0 +1,21 @@
+--- vitest
+   [32m✓[39m before the guard: the crash is real here[2m > [22mremoveChild throws for a node that is not a child[32m 3[2mms[22m[39m
+   [32m✓[39m before the guard: the crash is real here[2m > [22minsertBefore throws when the reference node is gone[32m 1[2mms[22m[39m
+   [32m✓[39m before the guard: the crash is real here[2m > [22ma React update over translated text lands in the error boundary[32m 67[2mms[22m[39m
+   [32m✓[39m before the guard: the crash is real here[2m > [22mso does a new element that goes before a translated string[32m 9[2mms[22m[39m
+   [32m✓[39m with the guard[2m > [22minstalls once and says so[32m 0[2mms[22m[39m
+   [32m✓[39m with the guard[2m > [22mremoving a node that is not a child is a no-op[32m 1[2mms[22m[39m
+   [32m✓[39m with the guard[2m > [22minserting before a gone reference appends, so the new node still arrives[32m 0[2mms[22m[39m
+   [32m✓[39m with the guard[2m > [22ma placeholder gives way to a value on a translated page[32m 7[2mms[22m[39m
+   [32m✓[39m with the guard[2m > [22ma new element still shows up when the string it goes before was translated[32m 6[2mms[22m[39m
+[31m   [31m×[31m with the guard[2m > [22man untranslated page behaves exactly as before[39m[32m 14[2mms[22m[39m
+   [32m✓[39m with the guard[2m > [22mthe off switch leaves a window alone[32m 0[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/translateGuard.test.tsx[2m > [22mwith the guard[2m > [22man untranslated page behaves exactly as before
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m10 passed[39m[22m[90m (11)[39m
+--- plain
+playTranslatedPage: 70 checks, 0 failed
+--- notranslate
+  FAIL  9. with the translator off the guard printed nothing and no call named a moved node: 4 of 4 page(s) printed the guard's line, 0 moved node(s)
+playTranslatedPage: 37 checks, 1 failed
+MUT m4 vitest=1 build=0 plain=0 notranslate=1

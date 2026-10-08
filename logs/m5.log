@@ -1,0 +1,8 @@
+--- vitest
+ [32m✓[39m src/test/translateGuard.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[32m 104[2mms[22m[39m
+[2m      Tests [22m [1m[32m11 passed[39m[22m[90m (11)[39m
+--- plain
+playTranslatedPage: 70 checks, 0 failed
+--- notranslate
+playTranslatedPage: 37 checks, 0 failed
+MUT m5 vitest=0 build=0 plain=0 notranslate=0

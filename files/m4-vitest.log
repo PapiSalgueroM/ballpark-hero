@@ -1,0 +1,50 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/translateGuard.test.tsx [2m([22m[2m11 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 111[2mms[22m[39m
+   [32m✓[39m before the guard: the crash is real here[2m > [22mremoveChild throws for a node that is not a child[32m 3[2mms[22m[39m
+   [32m✓[39m before the guard: the crash is real here[2m > [22minsertBefore throws when the reference node is gone[32m 1[2mms[22m[39m
+   [32m✓[39m before the guard: the crash is real here[2m > [22ma React update over translated text lands in the error boundary[32m 67[2mms[22m[39m
+   [32m✓[39m before the guard: the crash is real here[2m > [22mso does a new element that goes before a translated string[32m 9[2mms[22m[39m
+   [32m✓[39m with the guard[2m > [22minstalls once and says so[32m 0[2mms[22m[39m
+   [32m✓[39m with the guard[2m > [22mremoving a node that is not a child is a no-op[32m 1[2mms[22m[39m
+   [32m✓[39m with the guard[2m > [22minserting before a gone reference appends, so the new node still arrives[32m 0[2mms[22m[39m
+   [32m✓[39m with the guard[2m > [22ma placeholder gives way to a value on a translated page[32m 7[2mms[22m[39m
+   [32m✓[39m with the guard[2m > [22ma new element still shows up when the string it goes before was translated[32m 6[2mms[22m[39m
+[31m   [31m×[31m with the guard[2m > [22man untranslated page behaves exactly as before[39m[32m 14[2mms[22m[39m
+[31m     → expected [ <a></a>, <b></b>, <i></i> ] to deeply equal [ <a></a>, <i></i>, <b></b> ][39m
+   [32m✓[39m with the guard[2m > [22mthe off switch leaves a window alone[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/translateGuard.test.tsx[2m > [22mwith the guard[2m > [22man untranslated page behaves exactly as before
+[31m[1mAssertionError[22m: expected [ <a></a>, <b></b>, <i></i> ] to deeply equal [ <a></a>, <i></i>, <b></b> ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[2m    <a />,[22m
+[32m-   <i />,[39m
+[2m    <b />,[22m
+[31m+   <i />,[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/test/translateGuard.test.tsx:[2m187:43[22m[39m
+    [90m185| [39m    [35mconst[39m c [33m=[39m document[33m.[39m[34mcreateElement[39m([32m'i'[39m)[33m;[39m
+    [90m186| [39m    parent[33m.[39m[34minsertBefore[39m(c[33m,[39m b)[33m;[39m
+    [90m187| [39m    [34mexpect[39m([33mArray[39m[33m.[39m[35mfrom[39m(parent[33m.[39mchildNodes))[33m.[39m[34mtoEqual[39m([a[33m,[39m c[33m,[39m b])[33m;[39m
+    [90m   | [39m                                          [31m^[39m
+    [90m188| [39m    parent[33m.[39m[34mremoveChild[39m(a)[33m;[39m
+    [90m189| [39m    [34mexpect[39m([33mArray[39m[33m.[39m[35mfrom[39m(parent[33m.[39mchildNodes))[33m.[39m[34mtoEqual[39m([c[33m,[39m b])[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m10 passed[39m[22m[90m (11)[39m
+[2m   Start at [22m 06:34:36
+[2m   Duration [22m 1.02s[2m (transform 55ms, setup 53ms, collect 132ms, tests 111ms, environment 308ms, prepare 131ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/translateGuard.test.tsx,title=src/test/translateGuard.test.tsx > with the guard > an untranslated page behaves exactly as before,line=187,column=43::AssertionError: expected [ <a></a>, <b></b>, <i></i> ] to deeply equal [ <a></a>, <i></i>, <b></b> ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A    <a />,%0A-   <i />,%0A    <b />,%0A+   <i />,%0A  ]%0A%0A ❯ src/test/translateGuard.test.tsx:187:43%0A%0A
