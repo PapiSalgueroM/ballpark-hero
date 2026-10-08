@@ -1,0 +1,11 @@
+CONTROL pitchgone: rewritten in the bundled source or in what is served, never a file on disk
+tables from node: 429 table seasons in the probe, five used: Probe 0 2001 AC Milan (34); Probe 9 2006 Atletico Madrid (38); Probe 14 2032 Man United (38); Probe 26 2011 Man City (38); Probe 33 2009 Fiorentina (38)
+C) chunks: Season Centre SeasonCentre-CkcXqdLH.js, little pitch MiniPitch-DpN9SO_E.js, pitch part PitchSurface-Bd-eWl9P.js
+file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSeasonCentreMotion.mjs:706
+      if (holders.length !== 1 || countOf(jsText[holders[0]], from) !== 1) throw new Error(`control refused: ${JSON.stringify(String(from).slice(0, 60))} is not in the served site exactly once (${holders.length} files hold it)`);
+                                                                                 ^
+
+Error: control refused: "return{gone:!0}" is not in the served site exactly once (0 files hold it)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSeasonCentreMotion.mjs:706:82
+
+Node.js v24.21.0

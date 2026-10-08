@@ -1,0 +1,59 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2mthe warning, Keep Playing, and the season that follows
+[22m[39mKEEP seed=850 problems=0
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2mthe warning, Keep Playing, and the season that follows
+[22m[39mKEEP seed=851 problems=0
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2mthe warning, Keep Playing, and the season that follows
+[22m[39mKEEP seed=852 problems=0
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2ma save left on the rehab choice or the conviction paper gets that year once
+[22m[39mSTOP seed=900 conviction at 26
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2ma save left on the rehab choice or the conviction paper gets that year once
+[22m[39mSTOP seed=901 conviction at 24
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2ma save left on the rehab choice or the conviction paper gets that year once
+[22m[39mSTOP seed=906 rehab at 18
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2ma save left on the rehab choice or the conviction paper gets that year once
+[22m[39mSTOP seed=909 rehab at 29
+
+ [32m✓[39m src/test/soccerCareerSaveRecovery.test.tsx [2m([22m[2m39 tests[22m[2m)[22m[33m 5948[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrestores current progress synchronously and advances the same career once [33m 341[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrejects null seasons before render, retains raw bytes and deletes only its own key on request [33m 371[2mms[22m[39m
+ [32m✓[39m src/test/careerKeepPlaying.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 6521[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: Keep Playing plays the season through the page[2m > [22mthe warning, Keep Playing, and the season that follows [33m 3033[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: Keep Playing plays the season through the page[2m > [22ma save left on the rehab choice or the conviction paper gets that year once [33m 1983[2mms[22m[39m
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: careers picked up at 17
+[22m[39mREACH start=17 careers=6 seasons=24 adultSeasons=12 offers=3 shows=3 adultShows=3
+
+ [32m✓[39m src/test/careerDilemmaSaves.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 3064[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: saves on the dilemma screens load and carry on[2m > [22ma save from before 819 on the social media screen posts, continues and plays the next season [33m 722[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: saves on the dilemma screens load and carry on[2m > [22ma decided dilemma reloaded before Continue draws its card, continues and plays on [33m 347[2mms[22m[39m
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: careers picked up at 19
+[22m[39mREACH start=19 careers=6 seasons=24 adultSeasons=24 offers=9 shows=9 adultShows=9
+
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: careers picked up at 24
+[22m[39mREACH start=24 careers=6 seasons=24 adultSeasons=24 offers=10 shows=10 adultShows=10
+
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: careers picked up at 30
+[22m[39mREACH start=30 careers=6 seasons=24 adultSeasons=24 offers=9 shows=9 adultShows=9
+
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: a player from 20 up sees dilemmas on screen
+[22m[39mREACH total adultOffers=31 adultShows=31
+
+ [32m✓[39m src/test/careerDilemmaReach.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 27081[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 17 [33m 8864[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 19 [33m 5008[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 24 [33m 5578[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 30 [33m 6127[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m50 passed[39m[22m[90m (50)[39m
+[2m   Start at [22m 18:00:05
+[2m   Duration [22m 33.44s[2m (transform 5.02s, setup 360ms, collect 14.71s, tests 42.61s, environment 3.11s, prepare 936ms)[22m
+
