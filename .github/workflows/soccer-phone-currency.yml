@@ -158,6 +158,77 @@ jobs:
             NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "soccer-phone-currency-artifacts/regressions/$harness.log" || failed=1
           done
           exit "$failed"
+      - name: Pinned starting-version diagnostics for unresolved original failures
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          candidate_dir="$PWD"
+          baseline_dir="$RUNNER_TEMP/soccer-phone-currency-baseline-1090"
+          evidence_dir="$candidate_dir/soccer-phone-currency-artifacts/pinned-baseline"
+          test ! -e "$baseline_dir"
+          mkdir -p "$evidence_dir/logs"
+          git worktree add --detach "$baseline_dir" 8fe82a4dc1346f7d5b8072f387f3acb34bbaa3c8
+          git archive 8fe82a4dc1346f7d5b8072f387f3acb34bbaa3c8 | gzip > "$evidence_dir/source.tar.gz"
+          ln -s "$candidate_dir/node_modules" "$baseline_dir/node_modules"
+          cd "$baseline_dir"
+          git rev-parse HEAD > "$evidence_dir/source-head.txt"
+          git rev-parse 'HEAD^{tree}' > "$evidence_dir/source-tree.txt"
+          cmp package.json "$candidate_dir/soccer-phone-currency-artifacts/dependencies/package.json"
+          cmp package-lock.json "$candidate_dir/soccer-phone-currency-artifacts/dependencies/package-lock.json"
+          export BASELINE_EVIDENCE="$evidence_dir"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import { execFileSync } from 'node:child_process'; import { createHash } from 'node:crypto';
+          const files=execFileSync('git',['ls-files','-z']).toString().split('\0').filter(Boolean);
+          const rows=files.map(path=>({path,sha256:createHash('sha256').update(fs.readFileSync(path)).digest('hex')}));
+          fs.writeFileSync(process.env.BASELINE_EVIDENCE+'/tracked-before.json',JSON.stringify(rows,null,2));
+          const original=JSON.parse(fs.readFileSync(process.env.BASELINE_EVIDENCE+'/../installed-before.json'));
+          for(const row of original){const raw=fs.readFileSync(row.path+'/package.json');assert.equal(JSON.parse(raw).version,row.version);assert.equal(createHash('sha256').update(raw).digest('hex'),row.sha256);}
+          console.log(`Pinned baseline retains ${rows.length} tracked source files and ${original.length} installed manifests.`);
+          NODE
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$evidence_dir/types.log"
+          npm run build 2>&1 | tee "$evidence_dir/build.log"
+          tar -czf "$evidence_dir/build.tar.gz" dist
+          mkdir -p "$evidence_dir/children"
+          cat > "$evidence_dir/retain-child-stdout.cjs" <<'CJS'
+          if (require('node:path').basename(process.argv[1] || '') === 'runAllSims.mjs') {
+            const cp = require('node:child_process'), fs = require('node:fs'), path = require('node:path');
+            const original = cp.spawn, names = new Set(['simMoney.mjs','simPhone2.mjs','simPrerender.mjs','simSitemap.mjs','simSeoMetaSplit.mjs']);
+            cp.spawn = function (...args) {
+              const child = original.apply(this,args), file = args[1]?.[0], name = file && path.basename(file);
+              if (args[0] === process.execPath && names.has(name)) {
+                const stem = path.join(process.env.BASELINE_EVIDENCE,'children',name.replace(/\.mjs$/,''));
+                for (const stream of ['stdout','stderr']) { fs.writeFileSync(stem+'.'+stream+'.log',''); child[stream].on('data',bytes=>fs.appendFileSync(stem+'.'+stream+'.log',bytes)); }
+                child.on('close',(code,signal)=>fs.writeFileSync(stem+'.process.json',JSON.stringify({file,code,signal,pid:child.pid},null,2)));
+              }
+              return child;
+            };
+            require('node:module').syncBuiltinESMExports();
+          }
+          CJS
+          printf 'harness\texit_code\n' > "$evidence_dir/processes.tsv"
+          for harness in simMoney simPhone2 simPrerender simSitemap simSeoMetaSplit; do
+            set +e
+            NODE_OPTIONS="--require=$baseline_dir/scripts/lib/offlineTransport.cjs --require=$evidence_dir/retain-child-stdout.cjs" SIM_OFFLINE_RECEIPT="$evidence_dir/transport.log" ONLY="$harness" timeout --signal=TERM --kill-after=15s 8m node scripts/runAllSims.mjs --browser 2>&1 | tee "$evidence_dir/logs/$harness.log"
+            result=${PIPESTATUS[0]}
+            set -e
+            printf '%s\t%s\n' "$harness" "$result" >> "$evidence_dir/processes.tsv"
+            test "$result" -eq 0 -o "$result" -eq 1
+            test "$(wc -l < "$evidence_dir/logs/$harness.log")" -ge 4
+            grep -Eq "(PASS|FAIL)[[:space:]]+$harness\.mjs" "$evidence_dir/logs/$harness.log"
+          done
+          git diff --exit-code HEAD -- src scripts public index.html package.json package-lock.json
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import { createHash } from 'node:crypto';
+          const before=JSON.parse(fs.readFileSync(process.env.BASELINE_EVIDENCE+'/tracked-before.json'));
+          const after=before.map(row=>({path:row.path,sha256:createHash('sha256').update(fs.readFileSync(row.path)).digest('hex')}));
+          fs.writeFileSync(process.env.BASELINE_EVIDENCE+'/tracked-after.json',JSON.stringify(after,null,2));assert.deepEqual(after,before);
+          for (const name of ['simMoney','simPhone2','simPrerender','simSitemap','simSeoMetaSplit']) {
+            const stem=process.env.BASELINE_EVIDENCE+'/children/'+name, r=JSON.parse(fs.readFileSync(stem+'.process.json'));
+            assert.equal(r.signal,null);assert([0,1].includes(r.code));assert.equal(r.file,process.cwd()+'/scripts/'+name+'.mjs');
+            const output=fs.readFileSync(stem+'.stdout.log','utf8')+fs.readFileSync(stem+'.stderr.log','utf8');assert(output.split('\n').filter(line=>line.trim()).length>=4);
+          }
+          console.log('Baseline diagnosis retained raw process results and complete source/build bytes. Original candidate gates remain independent and strict.');
+          NODE
+          cd "$candidate_dir"
       - name: Original engines data tests and dependencies held
         if: ${{ !cancelled() }}
         run: |

@@ -117,7 +117,7 @@ return <main style={{minHeight:'100vh',padding:16}}><button data-fixture-open st
 {open && <PhonePanel career={fixture.career} onAnswer={(...args)=>record('answer',args)} onMoney={(...args)=>record('money',args)} onBuyItem={(...args)=>record('buy',args)} onClose={()=>{record('close',[]);setOpen(false);}}/>}</main>; }
 createRoot(document.getElementById('root')).render(<Host/>);`;
   fs.writeFileSync(path.join(OUT, 'mount.tsx'), entry);
-  const ui = await build({ absWorkingDir: ROOT, stdin: { contents: entry, resolveDir: ROOT, loader: 'tsx' }, bundle: true, write: false, platform: 'browser', format: 'esm', metafile: true, alias: { '@': path.join(ROOT, 'src') }, define: { 'process.env.NODE_ENV': '"production"' }, logLevel: 'silent' });
+  const ui = await build({ absWorkingDir: ROOT, stdin: { contents: entry, resolveDir: ROOT, loader: 'tsx' }, bundle: true, write: false, platform: 'browser', format: 'esm', jsx: 'automatic', metafile: true, alias: { '@': path.join(ROOT, 'src') }, define: { 'process.env.NODE_ENV': '"production"' }, logLevel: 'silent' });
   const uiBytes = Buffer.from(ui.outputFiles[0].contents); fs.writeFileSync(path.join(OUT, 'mount.js'), uiBytes); json('mount-metafile.json', ui.metafile);
   for (const name of ['src/components/soccer-career/PhonePanel.tsx', 'src/components/soccer-career/MoneyScreens.tsx']) assert(ui.metafile.inputs[name], `Actual component is compiled: ${name}`);
   const styles = fs.readdirSync(path.join(ROOT, 'dist/assets')).filter(name => name.endsWith('.css')).sort(); assert(styles.length > 0);

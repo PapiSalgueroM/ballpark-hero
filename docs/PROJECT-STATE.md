@@ -6,6 +6,21 @@ suites were skipped. The next candidate adds only the same optional MoneyState
 intersection already used by the actual engine to the cloned test fixture.
 No runtime statement, assertion, product component or engine changed.
 
+Preparation 2 at 8c2fd4c5/run37706266326 passed proper app types/build and the mounted
+13 cases/37 copied controls; independent raw review accepted this scoped mounted proof. Native completed no journeys
+or controls: its QA-only bundle used classic JSX and threw `React is not defined` on opening
+PhonePanel. The next driver sets only `jsx: 'automatic'`, matching the app's `react-jsx` mode.
+Its geometry, input, capture, state assertions and product source stay unchanged. This correction
+is unexecuted. The completed run retains six of eight original regressions green: simMoney's
+53.6 KB and simPhone2's 61.0 KB save ceilings failed. All four original Phone focus controls
+failed their intended assertions and passed their wrappers. Seventeen of twenty readers passed;
+simPrerender (nine missing What's New entries), simSitemap (Buzzer/Cage dates and hashes), and
+simSeoMetaSplit (Manager/Tycoon JSON-LD) failed. Closing source/dependency holds passed. These
+original failures remain unresolved, with no pinned-base equivalence or whole-candidate acceptance.
+The next remote workflow also builds unchanged AL8fe in an isolated detached worktree with the same
+held dependency manifests, records all five original failures without changing their thresholds, and
+retains complete source/build bytes and process logs. Candidate original gates remain strict.
+
 Unverified preparation on `codex/soccer-phone-currency-1090`, pinned to Release AL integration
 `8fe82a4dc1346f7d5b8072f387f3acb34bbaa3c8`. The previously accepted 1073 branch remains untouched.
 The owned managed checkout is `career-season-compare-1060/ballpark-hero`, reused cleanly and recorded
