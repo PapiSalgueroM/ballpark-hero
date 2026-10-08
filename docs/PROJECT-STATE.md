@@ -1,3 +1,18 @@
+## Codex 1097 pure proof accepted, page integration in progress, October 8, 2026
+
+Second frozen ac2213f0, tree 43507ac7, run 37743661179 passed every actual
+pure workflow gate. Twelve engine checks and seven effective copied controls
+were independently accepted, including the positive 9.5859375 points margin
+control that fails specifically below 40. Baseline mean points gap 56.734375,
+mean wins gap 22.6640625, permanent points margin 40. All 3,653 source files,
+95 artifact entries and all raw 128-pair ledgers bind to the frozen source.
+Artifact 11534902869 SHA256 2ced4070765da56c188bf2f6d19aec0ff9dfbc9bd107fec8f1d92139d151efea.
+Independent raw receipt SHA256 5e2dda7c7d9b4c2b1928a7359e55fbd367bf2ea63491abdc0621c8ab538b1c36.
+Pure evidence unlocks the compact page and isolated hook; remote UI, build
+and strict reader gates are still pending. Score-cap migration is UNAPPLIED.
+F must verify/apply its derived 100 cap and own integration/publication.
+The first strict red remains retained. No READY or live claim.
+
 ## Codex 1097 pure baseline measured, second strict gate pending, October 8, 2026
 
 First frozen head 42c1dd74, tree 2d226a6b, run 37742438175 completed RED.

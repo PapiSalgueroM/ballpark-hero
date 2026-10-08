@@ -1,4 +1,4 @@
-name: Soccer Perfect Season pure adapter proof
+name: Soccer Perfect Season engine and UI proof
 
 on:
   push:
@@ -14,61 +14,167 @@ concurrency:
 jobs:
   pure:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 50
     env:
       QA_OUT: qa-artifacts
       SOCCER_SEASON_CONTROL: all
+      ENGINES: chromium
+      TZ: UTC
+      SIM_NETWORK: offline
+      SEO_SPLIT_BASE_REF: HEAD
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
           cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - name: Hold exact candidate
         id: hold
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p qa-artifacts
+          mkdir -p qa-artifacts/dependencies qa-artifacts/derived qa-artifacts/readers
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           git rev-parse HEAD HEAD^{tree} > qa-artifacts/source-identity.txt
+          git ls-tree -r HEAD > qa-artifacts/source-git-manifest.txt
           git archive --format=tar.gz -o qa-artifacts/source.tar.gz HEAD
           git ls-files -z | xargs -0 sha256sum > qa-artifacts/source-files.sha256
+          git ls-files -z -- . ':(exclude)src/data/seoMetaParts/seoMetaPart25.ts' | xargs -0 sha256sum > qa-artifacts/authored-files.sha256
           sha256sum package.json package-lock.json > qa-artifacts/packages.sha256
+          cp package.json package-lock.json qa-artifacts/dependencies/
+          cp src/data/seoMetaParts/seoMetaPart25.ts qa-artifacts/derived/seoMetaPart25.before.ts
+          sha256sum src/data/seoMetaParts/seoMetaPart25.ts > qa-artifacts/derived/before.sha256
+      - name: Check both worker syntax
+        id: parse
+        shell: bash
+        run: |
+          set -euo pipefail
+          failed=0
+          node --check scripts/simSoccerPerfectSeason.mjs 2>&1 | tee qa-artifacts/parse-pure.log || failed=1
+          node --check scripts/qa/soccerPerfectSeason1097.mjs 2>&1 | tee qa-artifacts/parse-native.log || failed=1
+          exit "$failed"
       - name: Install locked dependencies
         id: install
+        if: ${{ !cancelled() && steps.hold.outcome == 'success' }}
         shell: bash
         run: |
           set -euo pipefail
           npm ci 2>&1 | tee qa-artifacts/install.log
           node --version > qa-artifacts/node-version.txt
           npm ls vitest vite esbuild --json > qa-artifacts/installed-versions.json
-      - name: Check worker syntax
-        id: parse
+      - name: Prepare ephemeral remote browser and brand reader
+        id: runtime
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         shell: bash
         run: |
           set -euo pipefail
-          node --check scripts/simSoccerPerfectSeason.mjs 2>&1 | tee qa-artifacts/parse.log
+          npm install --no-save --package-lock=false playwright 2>&1 | tee qa-artifacts/dependencies/playwright-install.log
+          node_modules/.bin/playwright install --with-deps chromium 2>&1 | tee qa-artifacts/dependencies/browser-install.log
+          python -m pip install fonttools pillow 2>&1 | tee qa-artifacts/dependencies/python-install.log
+          python -m pip freeze > qa-artifacts/dependencies/python-versions.txt
+          npm ls vitest vite esbuild playwright react react-dom --json > qa-artifacts/dependencies/installed-versions.json
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import { createHash } from 'node:crypto';
+          const rows = [];
+          for (const name of ['playwright', 'playwright-core', 'vitest', 'vite', 'esbuild', 'react', 'react-dom', 'typescript']) {
+            const raw = fs.readFileSync('node_modules/' + name + '/package.json');
+            fs.writeFileSync('qa-artifacts/dependencies/' + name + '-package.json', raw);
+            rows.push({ name, version: JSON.parse(raw).version, sha256: createHash('sha256').update(raw).digest('hex') });
+          }
+          fs.writeFileSync('qa-artifacts/dependencies/runtime-packages.json', JSON.stringify(rows, null, 2));
+          fs.writeFileSync('qa-artifacts/dependencies/node-versions.json', JSON.stringify(process.versions, null, 2));
+          NODE
+          sha256sum --quiet -c qa-artifacts/packages.sha256
       - name: Proper application type gate
         id: types
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         shell: bash
         run: |
           set -euo pipefail
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee qa-artifacts/types.log
       - name: Actual adapter outcomes and effective controls
         id: adapter
+        if: ${{ !cancelled() && steps.parse.outcome == 'success' && steps.types.outcome == 'success' }}
         shell: bash
         run: |
           set -euo pipefail
-          node scripts/simSoccerPerfectSeason.mjs 2>&1 | tee qa-artifacts/adapter.log
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerPerfectSeason.mjs 2>&1 | tee qa-artifacts/adapter.log
+      - name: Build actual candidate and retain generated delivery
+        id: build
+        if: ${{ !cancelled() && steps.types.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          failed=0
+          npm run build -- --sourcemap 2>&1 | tee qa-artifacts/build.log || failed=1
+          sha256sum src/data/seoMetaParts/seoMetaPart25.ts > qa-artifacts/derived/after.sha256
+          cp src/data/seoMetaParts/seoMetaPart25.ts qa-artifacts/derived/seoMetaPart25.after.ts
+          git diff HEAD -- src/data/seoMetaParts/seoMetaPart25.ts > qa-artifacts/derived/seoMetaPart25.diff
+          git ls-files -z | xargs -0 sha256sum > qa-artifacts/post-build-source-files.sha256
+          git ls-files -z | tar -czf qa-artifacts/post-build-source.tar.gz --null -T -
+          if [ -d dist ]; then
+            tar -czf qa-artifacts/build.tar.gz dist
+            find dist -type f -print0 | sort -z | xargs -0 sha256sum > qa-artifacts/dist-files.sha256
+          fi
+          sha256sum --quiet -c qa-artifacts/authored-files.sha256
+          git diff --exit-code HEAD -- . ':(exclude)src/data/seoMetaParts/seoMetaPart25.ts'
+          git ls-files --others --exclude-standard -- src scripts .github/workflows public index.html package.json package-lock.json > qa-artifacts/untracked-source-after-build.txt
+          test ! -s qa-artifacts/untracked-source-after-build.txt
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee qa-artifacts/post-build-types.log || failed=1
+          exit "$failed"
+      - name: Finite real UI lifecycle and copied-source controls
+        id: native
+        if: ${{ !cancelled() && steps.parse.outcome == 'success' && steps.adapter.outcome == 'success' && steps.build.outcome == 'success' && steps.runtime.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" timeout --signal=TERM --kill-after=15s 20m node scripts/qa/soccerPerfectSeason1097.mjs 2>&1 | tee qa-artifacts/native.log
+      - name: All twenty built readers and relevant shared guards
+        id: readers
+        timeout-minutes: 15
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.runtime.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simSeoMetaSplit simHomeCopy simHarnessAnchors simSeoTitles simScoreShown simCompletionOnce simHelpDialogFocus simHelpConsentFocus; do
+            if NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ONLY="$harness" timeout --signal=TERM --kill-after=15s 3m node scripts/runAllSims.mjs --browser 2>&1 | tee "qa-artifacts/readers/$harness.log"; then
+              outcome=success
+            else
+              outcome=failure
+              failed=1
+            fi
+            printf '%s\t%s\n' "$harness" "$outcome" >> qa-artifacts/reader-outcomes.tsv
+          done
+          exit "$failed"
       - name: Closing source hold
         id: close
         if: always() && steps.hold.outcome == 'success'
         shell: bash
         run: |
           set -euo pipefail
-          sha256sum --quiet -c qa-artifacts/source-files.sha256
-          test -z "$(git diff --name-only)"
+          sha256sum --quiet -c qa-artifacts/authored-files.sha256
+          sha256sum --quiet -c qa-artifacts/packages.sha256
+          cmp package.json qa-artifacts/dependencies/package.json
+          cmp package-lock.json qa-artifacts/dependencies/package-lock.json
+          git diff --exit-code HEAD -- . ':(exclude)src/data/seoMetaParts/seoMetaPart25.ts'
+          git ls-files --others --exclude-standard -- src scripts .github/workflows public index.html package.json package-lock.json > qa-artifacts/untracked-source-close.txt
+          test ! -s qa-artifacts/untracked-source-close.txt
+          if [ -f qa-artifacts/derived/after.sha256 ]; then
+            sha256sum --quiet -c qa-artifacts/derived/after.sha256
+          else
+            sha256sum --quiet -c qa-artifacts/derived/before.sha256
+          fi
+          if [ -f qa-artifacts/dist-files.sha256 ]; then
+            find dist -type f -print0 | sort -z | xargs -0 sha256sum > qa-artifacts/dist-files-close.sha256
+            cmp qa-artifacts/dist-files.sha256 qa-artifacts/dist-files-close.sha256
+          fi
           git rev-parse HEAD HEAD^{tree} > qa-artifacts/source-identity-close.txt
           cmp qa-artifacts/source-identity.txt qa-artifacts/source-identity-close.txt
       - name: Strict final verdict
@@ -77,22 +183,26 @@ jobs:
         env:
           HOLD: ${{ steps.hold.outcome }}
           INSTALL: ${{ steps.install.outcome }}
+          RUNTIME: ${{ steps.runtime.outcome }}
           PARSE: ${{ steps.parse.outcome }}
           TYPES: ${{ steps.types.outcome }}
           ADAPTER: ${{ steps.adapter.outcome }}
+          BUILD: ${{ steps.build.outcome }}
+          NATIVE: ${{ steps.native.outcome }}
+          READERS: ${{ steps.readers.outcome }}
           CLOSE: ${{ steps.close.outcome }}
         run: |
           set -euo pipefail
           mkdir -p qa-artifacts
-          printf '{"hold":"%s","install":"%s","parse":"%s","types":"%s","adapter":"%s","close":"%s"}\n' "$HOLD" "$INSTALL" "$PARSE" "$TYPES" "$ADAPTER" "$CLOSE" > qa-artifacts/gates.json
+          printf '{"hold":"%s","install":"%s","runtime":"%s","parse":"%s","types":"%s","adapter":"%s","build":"%s","native":"%s","readers":"%s","close":"%s"}\n' "$HOLD" "$INSTALL" "$RUNTIME" "$PARSE" "$TYPES" "$ADAPTER" "$BUILD" "$NATIVE" "$READERS" "$CLOSE" > qa-artifacts/gates.json
           cat qa-artifacts/gates.json
-          for outcome in "$HOLD" "$INSTALL" "$PARSE" "$TYPES" "$ADAPTER" "$CLOSE"; do
+          for outcome in "$HOLD" "$INSTALL" "$RUNTIME" "$PARSE" "$TYPES" "$ADAPTER" "$BUILD" "$NATIVE" "$READERS" "$CLOSE"; do
             test "$outcome" = success
           done
       - name: Retain proof
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: soccer-perfect-season-pure-${{ github.run_id }}-${{ github.run_attempt }}
+          name: soccer-perfect-season-ui-${{ github.run_id }}-${{ github.run_attempt }}
           path: qa-artifacts/
           if-no-files-found: error
