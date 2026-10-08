@@ -92,7 +92,12 @@ if (KIT.length !== 1 || SWITCH.length !== 1) {
 const KIT_CHUNK = KIT[0], SWITCH_CHUNK = SWITCH[0];
 const kitText = textOf(KIT_CHUNK), switchText = textOf(SWITCH_CHUNK);
 
-/* ---------- 0. the built chunks ---------- */
+/* ---------- 0. the built chunks ----------
+   MEASURED on a GitHub runner, 2026-10-08: the kit chunk is 5,318 bytes, 2,424 gzipped, with the switch in the
+   entry chunk (the footer and the header mount it). Built with NO switch mounted, the switch's only home is the
+   Soccer Career chunk, the bundler lists that chunk's own imports at the top of the kit chunk, and it measured
+   6,853 bytes, 3,172 gzipped: the same code under a longer import list. So a build that drops both mounts goes
+   red on the cap here, and the answer then is the measurement, not a raised cap. */
 if (runs(0)) {
   head(0, 'The built chunks');
   const gz = zlib.gzipSync(Buffer.from(kitText)).length;
