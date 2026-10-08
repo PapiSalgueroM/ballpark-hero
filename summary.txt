@@ -1,0 +1,1 @@
+vitest-whole exit=1 400s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/frontOfficeRatings.test.ts,title=src/lib/frontOfficeRatings.test.ts > NFL opening rating checkpoint > k
