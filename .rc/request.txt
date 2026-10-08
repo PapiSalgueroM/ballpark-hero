@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+walk2: node .rc/x/rvWalk2.mjs
+grid: mkdir -p .rc/m7 && git archive HEAD | tar -x -C .rc/m7 && (cd .rc/m7 && node ../x/rvMut.mjs m7 && ../../node_modules/.bin/vite build > ../m7-build.log 2>&1; echo "mutant build exit=$?"); (node scripts/lib/hostLikeServer.mjs .rc/m7/dist 4175 > /dev/null 2>&1 &); sleep 4; BASE2=http://localhost:4175 node .rc/x/rvGrid.mjs
+moments: PORT=4605 CAREER_MOMENTS_SHOTS=$RC_OUT node scripts/playCareerMoments.mjs
+world: PORT=4608 SHOTS=$RC_OUT node scripts/playCareerLeagueWorld.mjs
