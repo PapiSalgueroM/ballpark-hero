@@ -1,0 +1,108 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/rvProbe.test.tsx[2m > [22m[2mRV probe: the ready made part as a binder would use it[2m > [22m[2mP1: playing false freezes the current frame (the contract says so)
+[22m[39m[RV P1] playing true : {"motion":"goal","phase":"flight","ball":"51.84170518331753% 15.571428571428564%","dive":true}
+[RV P1] playing false: {"motion":"pass","phase":"pass","ball":"46.62750109322369% 25.672857194393874%","dive":false}
+
+[90mstdout[2m | src/test/rvProbe.test.tsx[2m > [22m[2mRV probe: the ready made part as a binder would use it[2m > [22m[2mP2: a binder that builds its arrays in render (not memoised) still gets a clean goal
+[22m[39m[RV P2] unmemoised finals: 5.1:goal/plant 5.2:goal/plant 5.3:goal/flight 5.45:goal/flight 5.6:goal/flight 5.8:goal/net 5.9:goal/net 6:goal/net
+[RV P2] memoised finals  : 5.1:goal/plant 5.2:goal/plant 5.3:goal/flight 5.45:goal/flight 5.6:goal/flight 5.8:goal/net 5.9:goal/net 6:goal/net
+[RV P2] data-cm-motion attribute writes seen while unmemoised (a flip back to pass mid goal is a committed pass frame): [33m16[39m goal,goal,goal,goal,goal,goal,goal,goal,goal,goal,goal,goal,goal,goal,goal,goal
+
+[90mstdout[2m | src/test/rvProbe.test.tsx[2m > [22m[2mRV probe: old shapes of a live match still open in the viewer[2m > [22m[2mP3: as saved today (JSON round trip)
+[22m[39m[RV P3] as saved today (JSON round trip): {"stage":"first","minute":"17","figures":22,"ball":1,"randomCalls":1,"marks":0,"bodyOverflow":"hidden"}
+
+[90mstdout[2m | src/test/rvProbe.test.tsx[2m > [22m[2mRV probe: old shapes of a live match still open in the viewer[2m > [22m[2mP3: no board (before Round 781)
+[22m[39m[RV P3] no board (before Round 781): {"stage":"first","minute":"17","figures":22,"ball":1,"randomCalls":0,"marks":0,"bodyOverflow":"hidden"}
+[RV P3] no board (before Round 781): after unmount body overflow "", onMark calls [[17]]
+
+[90mstdout[2m | src/test/rvProbe.test.tsx[2m > [22m[2mRV probe: old shapes of a live match still open in the viewer[2m > [22m[2mP3: no committed play lines
+[22m[39m[RV P3] no committed play lines: {"stage":"first","minute":"17","figures":22,"ball":1,"randomCalls":0,"marks":0,"bodyOverflow":"hidden"}
+[RV P3] no committed play lines: after unmount body overflow "", onMark calls [[17]]
+
+[90mstdout[2m | src/test/rvProbe.test.tsx[2m > [22m[2mRV probe: old shapes of a live match still open in the viewer[2m > [22m[2mP3: no half shares of the ball
+[22m[39m[RV P3] no half shares of the ball: {"stage":"first","minute":"17","figures":22,"ball":1,"randomCalls":0,"marks":0,"bodyOverflow":"hidden"}
+[RV P3] no half shares of the ball: after unmount body overflow "", onMark calls [[17]]
+
+[90mstdout[2m | src/test/rvProbe.test.tsx[2m > [22m[2mRV probe: old shapes of a live match still open in the viewer[2m > [22m[2mP3: no opposition eleven
+[22m[39m[RV P3] no opposition eleven: {"stage":"first","minute":"17","figures":22,"ball":1,"randomCalls":0,"marks":0,"bodyOverflow":"hidden"}
+[RV P3] no opposition eleven: after unmount body overflow "", onMark calls [[17]]
+
+[90mstdout[2m | src/test/rvProbe.test.tsx[2m > [22m[2mRV probe: old shapes of a live match still open in the viewer[2m > [22m[2mP3: all of those at once
+[22m[39m[RV P3] all of those at once: {"stage":"first","minute":"17","figures":22,"ball":1,"randomCalls":0,"marks":0,"bodyOverflow":"hidden"}
+[RV P3] all of those at once: after unmount body overflow "", onMark calls [[17]]
+
+ [31m❯[39m src/test/rvProbe.test.tsx [2m([22m[2m8 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 6679[2mms[22m[39m
+[31m   [31m×[31m RV probe: the ready made part as a binder would use it[2m > [22mP1: playing false freezes the current frame (the contract says so)[39m[32m 61[2mms[22m[39m
+[31m     → expected { motion: 'pass', phase: 'pass', …(2) } to deeply equal { motion: 'goal', …(3) }[39m
+   [32m✓[39m RV probe: the ready made part as a binder would use it[2m > [22mP2: a binder that builds its arrays in render (not memoised) still gets a clean goal[32m 90[2mms[22m[39m
+[31m   [31m×[31m RV probe: old shapes of a live match still open in the viewer[2m > [22mP3: as saved today (JSON round trip)[39m[33m 1317[2mms[22m[39m
+[31m     → expected 1 to be +0 // Object.is equality[39m
+   [33m[2m✓[22m[39m RV probe: old shapes of a live match still open in the viewer[2m > [22mP3: no board (before Round 781) [33m 1086[2mms[22m[39m
+   [33m[2m✓[22m[39m RV probe: old shapes of a live match still open in the viewer[2m > [22mP3: no committed play lines [33m 1028[2mms[22m[39m
+   [33m[2m✓[22m[39m RV probe: old shapes of a live match still open in the viewer[2m > [22mP3: no half shares of the ball [33m 1036[2mms[22m[39m
+   [33m[2m✓[22m[39m RV probe: old shapes of a live match still open in the viewer[2m > [22mP3: no opposition eleven [33m 1056[2mms[22m[39m
+   [33m[2m✓[22m[39m RV probe: old shapes of a live match still open in the viewer[2m > [22mP3: all of those at once [33m 1003[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/rvProbe.test.tsx[2m > [22mRV probe: the ready made part as a binder would use it[2m > [22mP1: playing false freezes the current frame (the contract says so)
+[31m[1mAssertionError[22m: expected { motion: 'pass', phase: 'pass', …(2) } to deeply equal { motion: 'goal', …(3) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[32m-   "ball": "51.84170518331753% 15.571428571428564%",[39m
+[32m-   "dive": true,[39m
+[32m-   "motion": "goal",[39m
+[32m-   "phase": "flight",[39m
+[31m+   "ball": "46.62750109322369% 25.672857194393874%",[39m
+[31m+   "dive": false,[39m
+[31m+   "motion": "pass",[39m
+[31m+   "phase": "pass",[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/rvProbe.test.tsx:[2m47:20[22m[39m
+    [90m 45| [39m    console[33m.[39m[34mlog[39m([32m'[RV P1] playing true :'[39m[33m,[39m [33mJSON[39m[33m.[39m[34mstringify[39m(moving))[33m;[39m
+    [90m 46| [39m    console[33m.[39m[34mlog[39m([32m'[RV P1] playing false:'[39m[33m,[39m [33mJSON[39m[33m.[39m[34mstringify[39m(frozen))[33m;[39m
+    [90m 47| [39m    [34mexpect[39m(frozen)[33m.[39m[34mtoEqual[39m(moving)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m 48| [39m  })[33m;[39m
+    [90m 49| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/rvProbe.test.tsx[2m > [22mRV probe: old shapes of a live match still open in the viewer[2m > [22mP3: as saved today (JSON round trip)
+[31m[1mAssertionError[22m: expected 1 to be +0 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 0[39m
+[31m+ 1[39m
+
+[36m [2m❯[22m src/test/rvProbe.test.tsx:[2m135:31[22m[39m
+    [90m133| [39m      [34mexpect[39m(out[33m.[39mfigures)[33m.[39m[34mtoBeGreaterThanOrEqual[39m([34m20[39m)[33m;[39m
+    [90m134| [39m      [34mexpect[39m([33mNumber[39m(out[33m.[39mminute))[33m.[39m[34mtoBeGreaterThanOrEqual[39m([34m15[39m)[33m;[39m
+    [90m135| [39m      [34mexpect[39m(out[33m.[39mrandomCalls)[33m.[39m[34mtoBe[39m([34m0[39m)[33m;[39m
+    [90m   | [39m                              [31m^[39m
+    [90m136| [39m      mounted[33m.[39m[34munmount[39m()[33m;[39m
+    [90m137| [39m      console.log(`[RV P3] ${name}: after unmount body overflow "${doc…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m6 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 07:42:41
+[2m   Duration [22m 9.49s[2m (transform 1.56s, setup 53ms, collect 2.00s, tests 6.68s, environment 304ms, prepare 159ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/rvProbe.test.tsx,title=src/test/rvProbe.test.tsx > RV probe%3A the ready made part as a binder would use it > P1%3A playing false freezes the current frame (the contract says so),line=47,column=20::AssertionError: expected { motion: 'pass', phase: 'pass', …(2) } to deeply equal { motion: 'goal', …(3) }%0A%0A- Expected%0A+ Received%0A%0A  {%0A-   "ball": "51.84170518331753%25 15.571428571428564%25",%0A-   "dive": true,%0A-   "motion": "goal",%0A-   "phase": "flight",%0A+   "ball": "46.62750109322369%25 25.672857194393874%25",%0A+   "dive": false,%0A+   "motion": "pass",%0A+   "phase": "pass",%0A  }%0A%0A ❯ src/test/rvProbe.test.tsx:47:20%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/rvProbe.test.tsx,title=src/test/rvProbe.test.tsx > RV probe%3A old shapes of a live match still open in the viewer > P3%3A as saved today (JSON round trip),line=135,column=31::AssertionError: expected 1 to be +0 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 0%0A+ 1%0A%0A ❯ src/test/rvProbe.test.tsx:135:31%0A%0A

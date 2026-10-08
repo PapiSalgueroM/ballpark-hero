@@ -1,0 +1,7 @@
+probe exit=1 10s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/rvProbe.test.tsx,title=src/test/rvProbe.test.tsx > RV probe%3A old shapes of a live match still open i
+m-kickoffside exit=0 33s |    Duration  31.80s (transform 2.17s, setup 103ms, collect 2.83s, tests 29.20s, environment 667ms, prepare 335ms)
+m-throwside exit=0 33s |    Duration  32.26s (transform 1.82s, setup 104ms, collect 2.83s, tests 29.65s, environment 671ms, prepare 250ms)
+m-foulside exit=0 33s |    Duration  31.89s (transform 2.17s, setup 105ms, collect 2.87s, tests 29.26s, environment 669ms, prepare 307ms)
+m-cornerflank exit=0 33s |    Duration  32.11s (transform 1.93s, setup 102ms, collect 2.97s, tests 29.42s, environment 659ms, prepare 295ms)
+m-goalkickside exit=0 33s |    Duration  31.66s (transform 1.91s, setup 104ms, collect 2.92s, tests 28.97s, environment 683ms, prepare 152ms)
+m-secondkick exit=0 32s |    Duration  31.95s (transform 1.86s, setup 98ms, collect 2.88s, tests 29.33s, environment 650ms, prepare 306ms)
