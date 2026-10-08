@@ -1,0 +1,28 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/playerAutocompleteStale.test.tsx src/test/playerAutocompleteInteraction.test.tsx src/test/cmWorldIdentity1052.test.ts --testTimeout=300000
+gen-check: node scripts/genClubManagerGathered.mjs russia2026 --check
+simClubManagerGathered: node scripts/simClubManagerGathered.mjs
+simClubManagerGathered-defaulted: GATHERED_CONTROL=defaulted node scripts/simClubManagerGathered.mjs
+simClubManagerGathered-unmarked: GATHERED_CONTROL=unmarked node scripts/simClubManagerGathered.mjs
+simClubManagerGathered-keeper: GATHERED_CONTROL=keeper node scripts/simClubManagerGathered.mjs
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simNationalPools: node scripts/simNationalPools.mjs
+simCmDataOnDemand: node scripts/simCmDataOnDemand.mjs
+simDailyClubPool: node scripts/simDailyClubPool.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simHomeCopy: node scripts/simHomeCopy.mjs
+simPlayerAutocompleteInteraction: node scripts/simPlayerAutocompleteInteraction.mjs
+simPlayerAutocompleteInteraction-zerotimer: AUTOCOMPLETE_INTERACTION_CONTROL=zerotimer node scripts/simPlayerAutocompleteInteraction.mjs
+simPlayerAutocompleteInteraction-notag: AUTOCOMPLETE_INTERACTION_CONTROL=notag node scripts/simPlayerAutocompleteInteraction.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
