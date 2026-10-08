@@ -1,0 +1,84 @@
+playTranslatedPage: http://localhost:4173 (dist/ served by this run), 1 page(s), views phone and desktop, text keep and alter, CONTROL=noguard
+  PASS  0. the served entry chunk (/assets/index-YvqELkLn.js) holds the guard's off switch __DUKB_NO_TRANSLATE_GUARD__
+  PASS  0. the served entry chunk holds the guard's console line
+
+/soccer-career phone keep
+  PASS  1. /soccer-career phone keep: the translator ran: 1360 text node(s) swapped, lang="pt"
+  PASS  2. /soccer-career phone keep: the create screen drew
+  PASS  2. /soccer-career phone keep: all three picks registered, Brazil among them: the boundary took the page at "career press 12"
+  FAIL  2. /soccer-career phone keep: each pick can be READ in its box, bar the known hidden one (nationality): nationality can be read now: take it off KNOWN_HIDDEN_PICKS in this file and correct its header
+  PASS  3. /soccer-career phone keep: the create flow reached the career: h1 "🇧🇷Joao Teste", create form gone, save Joao Teste, Brazil, youth, age 16
+  PASS  4. /soccer-career phone keep: one season forward and the hub still stands: age 16 to 17 on press 1, h1 "🇧🇷Joao Teste", phase contract_offer; the walk went on to age 18, phase random_events
+  PASS  5. /soccer-career phone keep: the walk pressed at least two controls: 20: Brazil🇧🇷 > Striker (ST) > Current era (2025 star > 🎲 Generate Starting P > 🎲 Roll again > 🎮 Customize your buil > ✅ Lock in build > ⚽ Begin Career > Next Year
+  FAIL  6. /soccer-career phone keep: the route error boundary never appeared: it took the page at "career press 12"
+  FAIL  7. /soccer-career phone keep: no NotFoundError: console: NotFoundError: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.
+    at HTMLSpanElement.myRemove
+        Try this page again: reloaded and did not break again (stuck at the create screen draws: threw: TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.)
+
+/soccer-career desktop keep
+  PASS  1. /soccer-career desktop keep: the translator ran: 1360 text node(s) swapped, lang="pt"
+  PASS  2. /soccer-career desktop keep: the create screen drew
+  PASS  2. /soccer-career desktop keep: all three picks registered, Brazil among them: the boundary took the page at "career press 12"
+  FAIL  2. /soccer-career desktop keep: each pick can be READ in its box, bar the known hidden one (nationality): nationality can be read now: take it off KNOWN_HIDDEN_PICKS in this file and correct its header
+  PASS  3. /soccer-career desktop keep: the create flow reached the career: h1 "🇧🇷Joao Teste", create form gone, save Joao Teste, Brazil, youth, age 16
+  PASS  4. /soccer-career desktop keep: one season forward and the hub still stands: age 16 to 17 on press 1, h1 "🇧🇷Joao Teste", phase contract_offer; the walk went on to age 18, phase random_events
+  PASS  5. /soccer-career desktop keep: the walk pressed at least two controls: 20: Brazil🇧🇷 > Striker (ST) > Current era (2025 star > 🎲 Generate Starting P > 🎲 Roll again > 🎮 Customize your buil > ✅ Lock in build > ⚽ Begin Career > Next Year
+  FAIL  6. /soccer-career desktop keep: the route error boundary never appeared: it took the page at "career press 12"
+  FAIL  7. /soccer-career desktop keep: no NotFoundError: console: NotFoundError: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.
+    at HTMLSpanElement.myRemove
+        Try this page again: reloaded and did not break again (stuck at the create screen draws: threw: TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.)
+
+/soccer-career phone alter
+  PASS  1. /soccer-career phone alter: the translator ran: 1360 text node(s) swapped, lang="pt"
+  PASS  2. /soccer-career phone alter: the create screen drew
+  PASS  2. /soccer-career phone alter: all three picks registered, Brazil among them: the boundary took the page at "career press 12"
+  FAIL  2. /soccer-career phone alter: each pick can be READ in its box, bar the known hidden one (nationality): nationality can be read now: take it off KNOWN_HIDDEN_PICKS in this file and correct its header
+  PASS  3. /soccer-career phone alter: the create flow reached the career: h1 "🇧🇷Joao Teste", create form gone, save Joao Teste, Brazil, youth, age 16
+  PASS  4. /soccer-career phone alter: one season forward and the hub still stands: age 16 to 17 on press 1, h1 "🇧🇷Joao Teste", phase contract_offer; the walk went on to age 18, phase random_events
+  PASS  5. /soccer-career phone alter: the walk pressed at least two controls: 20: Brazil🇧🇷 > Striker (ST) > Current era (2025 star > 🎲 Generate Starting P > 🎲 Roll again > 🎮 Customize your buil > ✅ Lock in build > ⚽ Begin Career > Next Year
+  FAIL  6. /soccer-career phone alter: the route error boundary never appeared: it took the page at "career press 12"
+  FAIL  7. /soccer-career phone alter: no NotFoundError: console: NotFoundError: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.
+    at HTMLSpanElement.myRemove
+        Try this page again: reloaded and did not break again (stuck at the create screen draws: threw: TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.)
+
+/soccer-career desktop alter
+  PASS  1. /soccer-career desktop alter: the translator ran: 1356 text node(s) swapped, lang="pt"
+  PASS  2. /soccer-career desktop alter: the create screen drew
+  PASS  2. /soccer-career desktop alter: all three picks registered, Brazil among them: the boundary took the page at "career press 12"
+  FAIL  2. /soccer-career desktop alter: each pick can be READ in its box, bar the known hidden one (nationality): nationality can be read now: take it off KNOWN_HIDDEN_PICKS in this file and correct its header
+  PASS  3. /soccer-career desktop alter: the create flow reached the career: h1 "🇧🇷Joao Teste", create form gone, save Joao Teste, Brazil, youth, age 16
+  PASS  4. /soccer-career desktop alter: one season forward and the hub still stands: age 16 to 17 on press 1, h1 "🇧🇷Joao Teste", phase contract_offer; the walk went on to age 18, phase random_events
+  PASS  5. /soccer-career desktop alter: the walk pressed at least two controls: 20: Brazil🇧🇷 > Striker (ST) > Current era (2025 star > 🎲 Generate Starting P > 🎲 Roll again > 🎮 Customize your buil > ✅ Lock in build > ⚽ Begin Career > Next Year
+  FAIL  6. /soccer-career desktop alter: the route error boundary never appeared: it took the page at "career press 12"
+  FAIL  7. /soccer-career desktop alter: no NotFoundError: console: NotFoundError: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.
+    at HTMLSpanElement.myRemove
+        Try this page again: reloaded and did not break again (stuck at the create screen draws: threw: TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.)
+
+EVERY WALK
+  page             view     text   boundary                          NotFound  guard line  moved nodes  stale text  steps
+  /soccer-career   phone    keep   at "career press 12"              2         0           1 (1 taken)  3           22
+  /soccer-career   desktop  keep   at "career press 12"              2         0           1 (1 taken)  3           22
+  /soccer-career   phone    alter  at "career press 12"              2         0           1 (1 taken)  3           22
+  /soccer-career   desktop  alter  at "career press 12"              2         0           1 (1 taken)  3           22
+
+BY PAGE
+  /soccer-career   broke in 4 of 4 walk(s) ("career press 12"); the guard printed its line in 0; moved nodes per walk 1, 1, 1, 1; stale text at most 3
+
+WHAT THE THREE BOXES READ after the picks
+  phone    keep   nationality "Brazil" (readable) | position "Striker (ST)" (readable) | era "Current era (2025 start)" (readable)
+  desktop  keep   nationality "Brazil" (readable) | position "Striker (ST)" (readable) | era "Current era (2025 start)" (readable)
+  phone    alter  nationality "«Brazil»" (readable) | position "«Striker (ST)»" (readable) | era "«Current era (2025 start)»" (readable)
+  desktop  alter  nationality "«Brazil»" (readable) | position "«Striker (ST)»" (readable) | era "«Current era (2025 start)»" (readable)
+
+THE CALLS THAT NAMED A MOVED NODE (1 different, each one a crash without the guard)
+  4x /soccer-career: removeChild under <span> of "s"
+
+STALE TEXT, the cost the guard does not remove. Most at once: 3 on /soccer-career phone keep, for example [{"screen":"16","react":"18","around":"ST · Age 16 · 🇧🇷Brazil"},{"screen":"🏠 Life Event","react":"⚡ Positive Event","around":"🏠 Life Event · 4 events remaining"},{"screen":"4","react":"2","around":"🏠 Life Event · 4 events remaining"}]
+
+nothing left this machine: 16 request(s) to the database host aborted, other hosts aborted [fonts.googleapis.com]
+
+38 checks, 12 failed
+control "noguard": asked directly, removeChild and insertBefore of a moved node both threw NotFoundError on 4 of 4 page(s).
+control "noguard": without the guard 4 of 4 walk(s) ended in the error boundary with a NotFoundError behind it.
+control "noguard": the create flow broke in 4 of 4 walk(s), at "career press 12", which is NOT only the nationality step this control was written against. Still red for its own reason, but read the walk above.
+playTranslatedPage: 38 checks, 12 failed (control "noguard", red on purpose)

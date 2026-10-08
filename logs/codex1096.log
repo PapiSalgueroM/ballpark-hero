@@ -1,0 +1,23 @@
+codex head: 285550eb1 Round 1096: set the parent build path inside the runner step
+ src/components/FlagImg.tsx |  6 +++---
+ src/pages/SoccerCareer.tsx | 10 +++++-----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+build=0
+--- plain
+  FAIL  2. /soccer-career phone keep: each pick can be READ in its box, bar the known hidden one (nationality): nationality can be read now: take it off KNOWN_HIDDEN_PICKS in this file and correct its header
+  FAIL  2. /soccer-career phone alter: each pick can be READ in its box, bar the known hidden one (nationality): nationality can be read now: take it off KNOWN_HIDDEN_PICKS in this file and correct its header
+  FAIL  2. /soccer-career desktop keep: each pick can be READ in its box, bar the known hidden one (nationality): nationality can be read now: take it off KNOWN_HIDDEN_PICKS in this file and correct its header
+  FAIL  2. /soccer-career desktop alter: each pick can be READ in its box, bar the known hidden one (nationality): nationality can be read now: take it off KNOWN_HIDDEN_PICKS in this file and correct its header
+  phone    keep   nationality "Brazil" (readable) | position "Striker (ST)" (readable) | era "Current era (2025 start)" (readable)
+  desktop  keep   nationality "Brazil" (readable) | position "Striker (ST)" (readable) | era "Current era (2025 start)" (readable)
+  phone    alter  nationality "«Brazil»" (readable) | position "«Striker (ST)»" (readable) | era "«Current era (2025 start)»" (readable)
+  desktop  alter  nationality "«Brazil»" (readable) | position "«Striker (ST)»" (readable) | era "«Current era (2025 start)»" (readable)
+THE GUARD WAS NEEDED on 4 of 4 page load(s): 4 call(s) in all named a node its parent no longer owned.
+playTranslatedPage: 46 checks, 4 failed
+--- noguard
+38 checks, 12 failed
+control "noguard": asked directly, removeChild and insertBefore of a moved node both threw NotFoundError on 4 of 4 page(s).
+control "noguard": without the guard 4 of 4 walk(s) ended in the error boundary with a NotFoundError behind it.
+control "noguard": the create flow broke in 4 of 4 walk(s), at "career press 12", which is NOT only the nationality step this control was written against. Still red for its own reason, but read the walk above.
+playTranslatedPage: 38 checks, 12 failed (control "noguard", red on purpose)
+CODEX1096 plain=1 noguard=1
