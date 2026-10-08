@@ -1,0 +1,14 @@
+vitest-celeb exit=0 4s |    Duration  2.86s (transform 688ms, setup 81ms, collect 881ms, tests 395ms, environment 560ms, prepare 313ms)
+vitest-save exit=0 7s |    Duration  6.22s (transform 3.17s, setup 93ms, collect 4.08s, tests 1.02s, environment 434ms, prepare 179ms)
+vitest-motion exit=0 58s |    Duration  57.26s (transform 3.16s, setup 127ms, collect 3.99s, tests 51.46s, environment 655ms, prepare 256ms)
+simLiveSimCelebration exit=0 3s | simLiveSimCelebration: 14 outcome checks passed, correct side, net-first, real figure, freeze/expiry, reduced motion, the three recorded digests of the lift, the part beh
+simLiveSimMotion exit=0 51s | simLiveSimMotion: green. 40 tests passed (the viewer on real feeds, the pitch part's six rules on 200 half feeds, the goal sequence, match mode), and the part alone is 18
+tsc exit=0 90s | 
+simCmMatchCentre exit=0 4s | simCmMatchCentre: PASS. Every stat on the report and the live strip is counted off the committed play and lines, and every timeline row is an event the engine drew.
+simHarnessAnchors exit=0 44s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simMatchScreen exit=0 5s | simMatchScreen: PASS. One match, two ways through it, and a report that names both clubs, shows the clock it ran to, splits the ball two ways and draws a graph that moves
+simRevealMoments exit=1 10s | simRevealMoments: 1 FAILURE(S)
+simCmStoppageTime exit=0 34s | simCmStoppageTime: PASS. Goals fall in the board at a measured share without adding any, every line in a board says 45+N or 90+N wherever a minute is printed, extra time 
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
+simNoInventedQuotes exit=0 17s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simExtraTime exit=0 96s | simExtraTime: PASS. A level Champions League decider plays thirty minutes of extra time before penalties, nothing else does, goals per decider hold, the AI plays it too (
