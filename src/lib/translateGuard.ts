@@ -56,16 +56,22 @@
  * for each string of the group and nothing after it, and a hundred rewrites in a
  * row left the element with exactly the nodes it started with.
  *
- * Layer two cannot touch an untranslated page: it writes to the DOM only from
- * inside a call that names a text node with a translator's copy on record, and a
- * copy only gets on record when a <font> arrived in the very batch of changes that
- * took the text node away. Every step of it sits in a try that falls back to layer
- * one.
+ * Layer two cannot touch an untranslated page: it writes to the DOM only where a
+ * translator's copy is on record, and a copy only gets on record when a <font>
+ * arrived in the very batch of changes that took the text node away. Every step
+ * of it sits in a try that falls back to layer one. What it costs a page nobody
+ * translated is bookkeeping: a look at each batch of DOM changes, and one set
+ * entry for each text node rewritten in place. Measured on the built site, with
+ * both layers, with layer one only and with no guard: nothing the numbers can
+ * tell from noise on a real walk or on a season played week by week, and on a
+ * burst of calls alone about a tenth of a millionth of a second a rewrite
+ * (scripts/playTranslatedPage.mjs, COST=1, has the numbers).
  *
  * What it does not mend: a wrapper the translator shares between an element's own
  * strings and a child element's (bold words in the middle of a sentence) is only
  * refreshed on the outer side, and a text node React moves, as opposed to removes
- * or rewrites, is not followed.
+ * or rewrites, is not followed (none was seen on the forty walks of the harness).
+ * Not measured: the translator undoing itself ("show original").
  *
  * Switches, both read once, before the app boots, and both there for
  * scripts/playTranslatedPage.mjs:
@@ -179,7 +185,13 @@ function makeLive(win: GuardWindow, native: Natives): Live | null {
     // Only once the whole batch is on the map: a sentence is refreshed whole or not at all.
     if (late) for (let i = 0; i < late.length; i++) refresh(late[i]);
   };
-  const observer = new win.MutationObserver(take);
+  const observer = new win.MutationObserver(records => {
+    try {
+      take(records);
+    } catch {
+      // nothing to undo: layer one still holds the page up
+    }
+  });
   observer.observe(doc, { childList: true, subtree: true });
   /** React can commit in a microtask that runs ahead of the observer's own, so every lookup reads the queue first. */
   const flush = () => take(observer.takeRecords());
