@@ -1,0 +1,38 @@
+MUT none-box: exit=0 signal=null tests=66/66 failed=0
+MUT none-hook: exit=0 signal=null tests=58/58 failed=0
+MUT MB-leave-no-id-bump: exit=1 signal=null tests=64/66 failed=2
+      - playerAutocompleteStale > drops a search still in flight when the player leaves the box
+      - playerAutocompleteStale > Escape leaves the box while a search is in flight
+MUT MB2-leave-no-abort-no-bump: exit=1 signal=null tests=64/66 failed=2
+      - playerAutocompleteStale > drops a search still in flight when the player leaves the box
+      - playerAutocompleteStale > Escape leaves the box while a search is in flight
+MUT MB3-leave-keeps-debounce-timer: exit=1 signal=null tests=64/66 failed=2
+      - playerAutocompleteStale > drops a search still in flight when the player leaves the box
+      - playerAutocompleteStale > Escape leaves the box while a search is in flight
+MUT MK-minchars-off-by-one: exit=1 signal=null tests=64/66 failed=2
+      - playerAutocompleteStale > searches at exactly the fewest letters the page asks for
+      - playerAutocompleteStale > Escape leaves the box while a search is in flight
+MUT MG-wait-ten-times-longer: exit=1 signal=null tests=57/58 failed=1
+      - lineupValidatorClient > waits fifteen seconds for an answer and no longer
+MUT MO-caller-signal-not-heard: exit=1 signal=null tests=54/58 failed=4
+      - lineupValidatorClient > hears the caller give up at once, after it asked or before
+      - lineupValidatorClient > a reroll cancels the check in flight
+      - lineupValidatorClient > giving up drops an answer that was already on its way
+      - lineupValidatorClient > leaving the page cancels the check in flight
+MUT MF-club-substring-match: exit=1 signal=null tests=55/58 failed=3
+      - lineupValidatorClient > the door stays shut for a side whose name only starts with the slot club
+      - lineupValidatorClient > the door stays shut for a second side of the club under its longer stored name
+      - lineupValidatorClient > the door stays shut for a split season whose nearest club is a near miss
+MUT MR-no-cancel-on-unmount: exit=1 signal=null tests=57/58 failed=1
+      - lineupValidatorClient > leaving the page cancels the check in flight
+MUT MS-new-formation-no-cancel: exit=1 signal=null tests=57/58 failed=1
+      - lineupValidatorClient > giving up drops an answer that was already on its way
+MUT MT-reset-no-cancel: exit=1 signal=null tests=57/58 failed=1
+      - lineupValidatorClient > giving up drops an answer that was already on its way
+MUT MQ-no-giveup-after-answer: exit=1 signal=null tests=57/58 failed=1
+      - lineupValidatorClient > giving up drops an answer that was already on its way
+MUT MN4-commit-leaves-search-in-flight: exit=1 signal=null tests=65/66 failed=1
+      - playerAutocompleteStale > drops a search still in flight when a name is picked
+MUT FX6-escape-only-with-names: exit=1 signal=null tests=65/66 failed=1
+      - playerAutocompleteStale > Escape leaves the box while a search is in flight
+rv-mut: 15 runs, survived with every test green: none
