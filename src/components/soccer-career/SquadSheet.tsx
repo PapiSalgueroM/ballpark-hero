@@ -47,11 +47,20 @@ function helpSeen(): boolean {
 
 const seasonOf = (year: number) => `${year}/${String((year + 1) % 100).padStart(2, '0')}`;
 
-/** What a cell of the eleven calls a man: his surname, or his role's rank. */
-function shortName(m: SquadMan): string {
-  if (m.role) return m.role.split(' choice ')[0] + ' choice';
+/** A man's surname: everything after the first space, or the whole name. */
+function surname(m: SquadMan): string {
   const cut = m.name.indexOf(' ');
   return cut < 0 ? m.name : m.name.slice(cut + 1);
+}
+
+/* A cell of the eleven is too narrow for "Second choice", so a role reads
+   "2nd" over "choice". A word this table does not know is printed as it is. */
+const CHOICE_SHORT: Record<string, string> = {
+  First: '1st', Second: '2nd', Third: '3rd', Fourth: '4th', Fifth: '5th', Sixth: '6th', Seventh: '7th',
+};
+function choiceOf(role: string): string {
+  const word = role.split(' choice ')[0];
+  return CHOICE_SHORT[word] ?? word;
 }
 
 const BTN = 'min-h-[44px] rounded-xl border border-border px-4 text-sm font-semibold';
@@ -64,7 +73,9 @@ function ManRow({ m, year, captain }: { m: SquadMan; year: number; captain: bool
       className={`flex min-h-[36px] items-center gap-2 rounded-lg border px-2 py-1 text-sm ${m.me ? GOLD : 'border-border/60 bg-background/40 text-foreground'}`}
     >
       {m.nation ? <FlagImg name={m.nation} size={16} /> : null}
-      <span className="min-w-0 flex-1 truncate" title={m.name}>
+      {/* A name is cut with its full form in the title. A role is the only
+          thing that says who the man is, so it wraps instead of being cut. */}
+      <span className={m.role ? 'min-w-0 flex-1 leading-tight' : 'min-w-0 flex-1 truncate'} title={m.name}>
         {m.name}{m.me && captain ? ' ©' : ''}
       </span>
       {!m.me && m.since === year ? (
@@ -156,6 +167,14 @@ export default function SquadSheet({ career, view, onClose, initialScreen }: Pro
   if (screen === 'eleven') {
     const lines: SquadGroup[] = ['ATT', 'MID', 'DEF', 'GK'];
     let cell = 0;
+    /* Two men of the eleven with one surname each get their initial, so the
+       sheet never shows the same word in two cells. */
+    const surnames = new Map<string, number>();
+    for (const g of lines) for (const m of view.eleven[g]) if (!m.role) surnames.set(surname(m), (surnames.get(surname(m)) ?? 0) + 1);
+    const cellName = (m: SquadMan) => {
+      const s = surname(m);
+      return (surnames.get(s) ?? 0) > 1 && s !== m.name ? `${m.name.charAt(0)}. ${s}` : s;
+    };
     body = (
       <div data-squad-screen="eleven" className="flex flex-col gap-3">
         <div data-squad-xi className="flex flex-col gap-2 rounded-xl border border-border bg-emerald-950/30 p-2">
@@ -170,10 +189,17 @@ export default function SquadSheet({ career, view, onClose, initialScreen }: Pro
                     data-squad-man={m.me ? 'me' : 'other'}
                     title={m.name}
                     style={style}
-                    className={`animate-cell-reveal flex w-[76px] flex-col items-center rounded-lg border px-1 py-1 text-center ${m.me ? GOLD : 'border-border/60 bg-card text-foreground'}`}
+                    className={`animate-cell-reveal flex min-w-0 max-w-[104px] flex-1 basis-0 flex-col items-center justify-center rounded-lg border px-1 py-1 text-center ${m.me ? GOLD : 'border-border/60 bg-card text-foreground'}`}
                   >
                     <span className="text-xs text-muted-foreground">{m.pos}{m.me && captain ? ' ©' : ''}</span>
-                    <span className="w-full truncate text-xs font-semibold">{shortName(m)}</span>
+                    {m.role ? (
+                      <span className="text-xs font-semibold leading-tight" data-squad-role-cell>
+                        <span className="block">{choiceOf(m.role)}</span>
+                        <span className="block font-normal text-muted-foreground">choice</span>
+                      </span>
+                    ) : (
+                      <span className="w-full truncate text-xs font-semibold">{cellName(m)}</span>
+                    )}
                     <span className="text-sm font-bold tabular-nums">{m.ovr}</span>
                   </div>
                 );

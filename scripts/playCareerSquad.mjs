@@ -31,7 +31,11 @@
  *  7. At 390 by 844 and 1280 by 800: no sideways scroll, the panel inside
  *     the screen, window.scrollY unchanged across open, every screen and
  *     close, every button at least 44 px tall, no text under 12 px, and at
- *     390 the panel does not scroll on any screen but the bench.
+ *     390 the panel does not scroll on any screen but the bench. On a sheet
+ *     by role every role in the eleven reads whole ("2nd" over "choice"),
+ *     and how many surnames are cut short is printed. (page) On the real
+ *     page the sheet covers the screen and its panel sits inside it, at 390
+ *     and at 1280, wherever the page behind it has scrolled to.
  *  8. Motion: with motion on, 20 ms after the eleven opens its last cell is
  *     still invisible (the stagger holds its first frame). With reduced
  *     motion, 100 ms after each screen arrives nothing in the sheet is still
@@ -46,6 +50,8 @@
  *   write   the sheet writes a field into the save as it opens     -> 6 red
  *   still   the reduced motion blanket is stripped from the CSS    -> 8 red
  *   nofill  the stagger's fill mode is stripped from the sheet     -> 8 red
+ *   clip    a role in the eleven is one long unbreakable line      -> 7 red
+ *   shift   the sheet is no longer pinned to the screen            -> 7 red
  *   static  (page) the page imports the sheet chunk as it loads    -> 1 red
  *   label   (page) the home footer reads "Close"                   -> 9 red
  *
@@ -74,7 +80,7 @@ const PORT = Number(process.env.PORT || 4577);
 const BASE = `http://127.0.0.1:${PORT}`;
 const SHOTS = path.resolve(ROOT, process.env.SHOTS || '.tmp-fx/shots');
 const CONTROL = process.env.CAREER_SQUAD_PLAY_CONTROL ?? '';
-const CONTROLS = ['rank', 'write', 'still', 'nofill', 'static', 'label'];
+const CONTROLS = ['rank', 'write', 'still', 'nofill', 'clip', 'shift', 'static', 'label'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) throw new Error(`unknown CAREER_SQUAD_PLAY_CONTROL ${CONTROL}`);
 const SAVE_KEY = 'soccerCareerSave';
 
@@ -202,6 +208,11 @@ ${cssFiles.map(f => `<link rel="stylesheet" href="/assets/${f}">`).join('\n')}
 /* Controls change what is SERVED, never a file on disk. Each counts its edits
    and the run refuses to go on if a control edited nothing. */
 let controlEdits = 0;
+/* The sheet's own overlay classes, as SquadSheet.tsx writes them. The shift
+   control unpins exactly this box, and only in the sheet's own chunk (the
+   tile's failure dialog wears the same classes and lives in another file). */
+const SHEET_BOX = 'fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-3 backdrop-blur-sm';
+const UNPINNED_BOX = SHEET_BOX.replace('fixed inset-0', 'absolute inset-0');
 function served(name, body) {
   const edit = (needle, swap) => {
     const n = body.split(needle).length - 1;
@@ -215,6 +226,9 @@ function served(name, body) {
       `function SquadSheet({ career, view, onClose, initialScreen }) { try { const __s = JSON.parse(window.localStorage.getItem("${SAVE_KEY}")); __s.squadSeen = 1; window.localStorage.setItem("${SAVE_KEY}", JSON.stringify(__s)); } catch {}`);
   }
   if (CONTROL === 'nofill' && name.endsWith('.js')) edit('animationFillMode: "both"', 'animationFillMode: "none"');
+  /* the role goes back to one long unbreakable line, the way it was first drawn */
+  if (CONTROL === 'clip' && name.endsWith('.js')) edit('children: choiceOf(m.role)', 'children: m.role.split(" ").join("\\u00a0")');
+  if (CONTROL === 'shift' && name.endsWith('.js') && /SquadSheet/.test(name)) edit(SHEET_BOX, UNPINNED_BOX);
   if (CONTROL === 'still' && name.endsWith('.css')) {
     edit('prefers-reduced-motion:reduce', 'prefers-reduced-motion:x-never');
     edit('prefers-reduced-motion: reduce', 'prefers-reduced-motion: x-never');
@@ -432,6 +446,24 @@ const measure = (page) => page.evaluate(([tileSel, sheetSel]) => {
   return out;
 }, [TILE, SHEET]);
 
+/* The cells of the eleven whose words do not fit: a box wider inside than
+   out, on the cell or on anything it holds. */
+const cutCells = page => page.evaluate(sel => {
+  const over = el => el.clientWidth > 0 && el.scrollWidth > el.clientWidth + 1;
+  const out = { cells: 0, roles: 0, cutRoles: 0, cutNames: 0, labels: [] };
+  for (const c of document.querySelectorAll(`${sel} [data-squad-xi] [data-squad-man]`)) {
+    out.cells += 1;
+    const role = c.querySelector('[data-squad-role-cell]');
+    const cut = over(c) || [...c.querySelectorAll('span')].some(over);
+    if (role) {
+      out.roles += 1;
+      out.labels.push(role.innerText.split(/\s+/).filter(Boolean).join(' '));
+      if (cut) out.cutRoles += 1;
+    } else if (cut) out.cutNames += 1;
+  }
+  return out;
+}, SHEET);
+
 for (const [width, height] of [[390, 844], [1280, 800]]) {
   for (const k of ['A', 'D', 'R', 'B']) {
     const { ctx, page } = await open(SAVES[k], { width, height });
@@ -439,6 +471,7 @@ for (const [width, height] of [[390, 844], [1280, 800]]) {
     const y0 = await page.evaluate(() => window.scrollY);
     const bad = { sideways: 0, outside: [], moved: [], short: [], small: [], scrolls: [] };
     const heights = {};
+    let xi = null;
     const note = (name, m) => {
       if (m.sideways) bad.sideways += 1;
       if (m.outside) bad.outside.push(name);
@@ -460,6 +493,7 @@ for (const [width, height] of [[390, 844], [1280, 800]]) {
       await screenIs(page, id);
       await page.waitForTimeout(600);
       note(id, await measure(page));
+      if (id === 'eleven') xi = await cutCells(page);
       await shot(page, `${k}-${id}-${width}`);
       await backHome(page);
     }
@@ -481,6 +515,16 @@ for (const [width, height] of [[390, 844], [1280, 800]]) {
     check(bad.short.length === 0, `${where}: every button at least 44 px tall (${bad.short.slice(0, 3).join(' | ') || 'all'})`);
     check(bad.small.length === 0, `${where}: no text under 12 px (${bad.small.slice(0, 3).join(' | ') || 'none'})`);
     check(bad.scrolls.length === 0, `${where}: the panel does not scroll on any screen but the bench (${bad.scrolls.join(', ') || 'none'})`);
+    /* A role is the only thing that says who a man is on a sheet with no
+       names, so in the eleven it must read whole: "2nd" over "choice", never
+       a word cut short. A long surname may still be cut (the bench and the
+       place screen print it in full), and how many were is printed. */
+    if (k === 'R') {
+      check(!!xi && xi.roles >= 10 && xi.cutRoles === 0 && xi.labels.every(l => /^(1st|2nd|3rd|4th) choice$/.test(l)),
+        `${where}: every role in the eleven reads whole (${xi ? `${xi.roles} role cells, ${xi.cutRoles} cut, e.g. "${xi.labels[0]}"` : 'no eleven measured'})`);
+    } else {
+      console.log(`note ${where}: ${xi ? `${xi.cutNames} of ${xi.cells} names in the eleven are cut short` : 'no eleven measured'}`);
+    }
     await ctx.close();
   }
 }
@@ -555,6 +599,20 @@ if (mounted) {
         if (n) { controlEdits += n; chunkText = chunkText.split(needle).join('Close'); }
       }
     }
+    if (CONTROL === 'shift') {
+      const n = chunkText.split(SHEET_BOX).length - 1;
+      if (n) { controlEdits += n; chunkText = chunkText.split(SHEET_BOX).join(UNPINNED_BOX); }
+    }
+    /* Where the sheet sits on the REAL page: pinned to the screen, whatever
+       the page behind it has scrolled to and whatever box it is mounted in. */
+    const pinned = page => page.evaluate(sel => {
+      const box = document.querySelector(sel)?.getBoundingClientRect();
+      const panel = document.querySelector(`${sel} [role="dialog"]`)?.getBoundingClientRect();
+      if (!box || !panel) return { ok: false, why: 'no sheet' };
+      const covers = Math.abs(box.left) < 1 && Math.abs(box.top) < 1 && Math.abs(box.width - window.innerWidth) < 1 && Math.abs(box.height - window.innerHeight) < 1;
+      const inside = panel.left >= -0.5 && panel.top >= -0.5 && panel.right <= window.innerWidth + 0.5 && panel.bottom <= window.innerHeight + 0.5;
+      return { ok: covers && inside, why: `sheet ${Math.round(box.left)},${Math.round(box.top)} ${Math.round(box.width)}x${Math.round(box.height)}, panel ${Math.round(panel.left)},${Math.round(panel.top)} to ${Math.round(panel.right)},${Math.round(panel.bottom)}, screen ${window.innerWidth}x${window.innerHeight}` };
+    }, SHEET);
     /* the walker's own rule, read from its file's TEXT (the file runs on import) */
     const src = fs.readFileSync(path.join(ROOT, 'scripts/playSoccerCareer.mjs'), 'utf8').replace(/\r\n/g, '\n');
     const at = src.indexOf('const ACTIONS = [');
@@ -615,6 +673,8 @@ if (mounted) {
       let inside = 0; const clashes = new Set(); let screens = 0;
       const look = async () => { const r = await walkerPick(page); screens += 1; if (r.inside) inside += 1; r.clash.forEach(c => clashes.add(c)); return r; };
       const hub = await look();
+      await page.evaluate(sel => document.querySelector(sel).scrollIntoView({ block: 'center' }), TILE);
+      await shot(page, `page-${k}-hub-390`);
       await page.evaluate(() => window.scrollTo(0, 200));
       const y0 = await page.evaluate(() => window.scrollY);
       const before = await page.evaluate(key => window.localStorage.getItem(key), SAVE_KEY);
@@ -622,6 +682,10 @@ if (mounted) {
       await screenIs(page, 'home');
       if (k === 'A') check(js.filter(n => n === SHEET_CHUNK).length === 1, `1. one request for the sheet chunk after the press (${js.filter(n => n === SHEET_CHUNK).length})`);
       await look();
+      /* settle first: the sheet fades and grows in over 200 ms */
+      await page.waitForTimeout(700);
+      const at390 = await pinned(page);
+      check(at390.ok, `7. page, save ${k} at 390: the sheet covers the screen and its panel sits inside it, with the page scrolled to ${y0} (${at390.why})`);
       await shot(page, `page-${k}-home-390`);
       for (const id of SCREENS) {
         if (await page.locator(`${SHEET} [data-squad-open="${id}"]`).count() === 0) continue;
@@ -646,6 +710,22 @@ if (mounted) {
       check(clashes.size === 0, `9. page, save ${k}: no label in the tile or the sheet starts with a walker ACTIONS entry (${[...clashes].join(', ') || 'none'})`);
       check(y1 === y0, `7. page, save ${k}: the career page did not move across open, every screen and close (${y0} then ${y1})`);
       check(before === after, `6. page, save ${k}: the save string is byte identical after the sheet has been through every screen`);
+      await ctx.close();
+    }
+    /* the same on a desktop screen, where the hub is two panels side by side */
+    {
+      const { ctx, page } = await openPage(SAVES.A, { width: 1280, height: 800 });
+      await page.waitForTimeout(1500);
+      await page.evaluate(sel => document.querySelector(sel).scrollIntoView({ block: 'center' }), TILE);
+      await shot(page, 'page-A-hub-1280');
+      const y0 = await page.evaluate(() => window.scrollY);
+      await page.click(TILE);
+      await screenIs(page, 'home');
+      await page.waitForTimeout(700);
+      const at1280 = await pinned(page);
+      const y1 = await page.evaluate(() => window.scrollY);
+      check(at1280.ok && y1 === y0, `7. page, save A at 1280: the sheet covers the screen and its panel sits inside it, and the page stayed at ${y0} (${at1280.why}; now ${y1})`);
+      await shot(page, 'page-A-home-1280');
       await ctx.close();
     }
   } catch (e) {
