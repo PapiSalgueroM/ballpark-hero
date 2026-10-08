@@ -1,0 +1,78 @@
+A) every ledger row with a group ships once, under its own club, and nobody else does
+   310 ledger rows with a group, 310 shipped, 2 without a group held back
+   joined world: 1 stale baked row(s) dropped, 0 A-League names in two squads
+B) every value cites its club page and every rating sits on the shared curve
+   310 players checked against 12 club pages, 61 with no value at the floor (rating 48)
+   partial by the ledger rule: Central Coast Mariners (13 of 25)
+C) every shipped nationality and age stands on two hosts
+   299 nationalities shipped on two hosts, 11 left unknown, every age on two hosts
+D) 10 seeded seasons at A-League clubs, plus one at each club outside the cup
+   boards: {"Win the A-League Men":2,"Make the finals":5,"Finish mid-table or better":5}
+  FAIL: seed 0: the Australia Cup field is 12 clubs, not the ten Australian ones
+  FAIL: seed 0: 4 round of 16 ties and 4 byes, not 2 and 6
+  FAIL: seed 0: Auckland FC was drawn into the Australia Cup
+  FAIL: seed 0: Wellington Phoenix was drawn into the Australia Cup
+  FAIL: seed 1: the Australia Cup field is 12 clubs, not the ten Australian ones
+  FAIL: seed 1: 4 round of 16 ties and 4 byes, not 2 and 6
+  FAIL: seed 1: Auckland FC was drawn into the Australia Cup
+  FAIL: seed 1: Wellington Phoenix was drawn into the Australia Cup
+  FAIL: seed 2: the Australia Cup field is 12 clubs, not the ten Australian ones
+  FAIL: seed 2: 4 round of 16 ties and 4 byes, not 2 and 6
+  FAIL: seed 2: Auckland FC was drawn into the Australia Cup
+  FAIL: seed 2: Wellington Phoenix was drawn into the Australia Cup
+  FAIL: seed 3: the Australia Cup field is 12 clubs, not the ten Australian ones
+  FAIL: seed 3: 4 round of 16 ties and 4 byes, not 2 and 6
+  FAIL: seed 3: Auckland FC was drawn into the Australia Cup
+  FAIL: seed 3: Wellington Phoenix was drawn into the Australia Cup
+  FAIL: seed 4: the Australia Cup field is 12 clubs, not the ten Australian ones
+  FAIL: seed 4: 4 round of 16 ties and 4 byes, not 2 and 6
+  FAIL: seed 4: Auckland FC was drawn into the Australia Cup
+  FAIL: seed 4: Wellington Phoenix was drawn into the Australia Cup
+  FAIL: seed 5: the Australia Cup field is 12 clubs, not the ten Australian ones
+  FAIL: seed 5: 4 round of 16 ties and 4 byes, not 2 and 6
+  FAIL: seed 5: Auckland FC was drawn into the Australia Cup
+  FAIL: seed 5: Wellington Phoenix was drawn into the Australia Cup
+  FAIL: seed 6: the Australia Cup field is 12 clubs, not the ten Australian ones
+  FAIL: seed 6: 4 round of 16 ties and 4 byes, not 2 and 6
+  FAIL: seed 6: Auckland FC was drawn into the Australia Cup
+  FAIL: seed 6: Wellington Phoenix was drawn into the Australia Cup
+  FAIL: seed 7: the Australia Cup field is 12 clubs, not the ten Australian ones
+  FAIL: seed 7: 4 round of 16 ties and 4 byes, not 2 and 6
+  FAIL: seed 7: Auckland FC was drawn into the Australia Cup
+  FAIL: seed 7: Wellington Phoenix was drawn into the Australia Cup
+  FAIL: seed 8: the Australia Cup field is 12 clubs, not the ten Australian ones
+  FAIL: seed 8: 4 round of 16 ties and 4 byes, not 2 and 6
+  FAIL: seed 8: Auckland FC was drawn into the Australia Cup
+  FAIL: seed 8: Wellington Phoenix was drawn into the Australia Cup
+  FAIL: seed 9: the Australia Cup field is 12 clubs, not the ten Australian ones
+  FAIL: seed 9: 4 round of 16 ties and 4 byes, not 2 and 6
+  FAIL: seed 9: Auckland FC was drawn into the Australia Cup
+  FAIL: seed 9: Wellington Phoenix was drawn into the Australia Cup
+   10 home players asks read at Australian clubs, every one for Australia
+   10 seasons ended, 0 sacked, 10 Australia Cup finals with a winner (Melbourne Victory 3, Central Coast Mariners 1, Western Sydney Wanderers 1, Wellington Phoenix 1, Adelaide United 3, Brisbane Roar 1)
+  FAIL: Auckland FC schedules 4 cup weeks
+  FAIL: Auckland FC's career names a cup: Australia Cup
+  FAIL: Auckland FC is not told it sits out the Australia Cup (cupSatOutBy null), so the page says the league has no cup
+  FAIL: Auckland FC starts in the cup (R16)
+  FAIL: Auckland FC starts with cup byes
+  FAIL: Auckland FC's board sets a cup objective
+  FAIL: Auckland FC: a bracket was drawn
+  FAIL: Auckland FC played a cup match
+  FAIL: Auckland FC: the second season has a cup
+   Auckland FC: 4 cup weeks, cup Australia Cup, sits out the null, home players ask for New Zealand, season ended
+  FAIL: Wellington Phoenix schedules 4 cup weeks
+  FAIL: Wellington Phoenix's career names a cup: Australia Cup
+  FAIL: Wellington Phoenix is not told it sits out the Australia Cup (cupSatOutBy null), so the page says the league has no cup
+  FAIL: Wellington Phoenix starts in the cup (R16)
+  FAIL: Wellington Phoenix starts with cup byes
+  FAIL: Wellington Phoenix's board sets a cup objective
+  FAIL: Wellington Phoenix: a bracket was drawn
+  FAIL: Wellington Phoenix played a cup match
+  FAIL: Wellington Phoenix: the second season has a cup
+   Wellington Phoenix: 4 cup weeks, cup Australia Cup, sits out the null, home players ask for New Zealand, season ended
+   every short cup crowned a winner: scottish 12, austria 12, greece 14, denmark 12, switzerland 12, croatia 10, aleague 12; full fields of sixteen: 18
+   17 played brackets read for shape (round sizes, nobody twice, no self ties, each round fed by the last plus the byes): 0 faults
+E) the club, league, country and player counts in the copy agree with the engine
+   engine: 26 leagues, 438 clubs, 20 countries, 4710 real players in the joined world
+   10 count lines read across 6 files
+simClubManagerALeague: 58 failure(s) under control excluded

@@ -1,0 +1,14 @@
+simClubManagerALeague exit=0 6s | simClubManagerALeague: all checks passed
+al-offcurve exit=1 6s | simClubManagerALeague: 1 failure(s) under control offcurve
+al-invented exit=1 7s | simClubManagerALeague: 3 failure(s) under control invented
+al-excluded exit=1 6s | simClubManagerALeague: 58 failure(s) under control excluded
+al-nobyes exit=1 6s | simClubManagerALeague: 130 failure(s) under control nobyes
+al-onehost exit=1 6s | simClubManagerALeague: 2 failure(s) under control onehost
+al-samebye exit=1 6s | simClubManagerALeague: 87 failure(s) under control samebye
+al-stalecount exit=1 6s | simClubManagerALeague: 1 failure(s) under control stalecount
+al-nodedupe exit=1 6s | simClubManagerALeague: 2 failure(s) under control nodedupe
+al-nzcountry exit=1 6s | simClubManagerALeague: 2 failure(s) under control nzcountry
+al-nopartial exit=1 6s | simClubManagerALeague: 1 failure(s) under control nopartial
+al-satout exit=1 7s | simClubManagerALeague: 2 failure(s) under control satout
+gen-identical exit=0 1s | ALEAGUE-FILE-IDENTICAL
+identity exit=0 6s |    Duration  5.83s (transform 2.50s, setup 114ms, collect 176ms, tests 6.63s, environment 696ms, prepare 276ms)

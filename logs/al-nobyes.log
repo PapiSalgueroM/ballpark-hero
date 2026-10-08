@@ -1,0 +1,150 @@
+A) every ledger row with a group ships once, under its own club, and nobody else does
+   310 ledger rows with a group, 310 shipped, 2 without a group held back
+   joined world: 1 stale baked row(s) dropped, 0 A-League names in two squads
+B) every value cites its club page and every rating sits on the shared curve
+   310 players checked against 12 club pages, 61 with no value at the floor (rating 48)
+   partial by the ledger rule: Central Coast Mariners (13 of 25)
+C) every shipped nationality and age stands on two hosts
+   299 nationalities shipped on two hosts, 11 left unknown, every age on two hosts
+D) 10 seeded seasons at A-League clubs, plus one at each club outside the cup
+   boards: {"Win the A-League Men":2,"Make the finals":5,"Finish mid-table or better":5}
+  FAIL: seed 0: 5 round of 16 ties and 0 byes, not 2 and 6
+  FAIL: seed 0: the Australia Cup has no final winner
+  FAIL: seed 0 Australia Cup: a field of 10 plays 5 round of 16 ties, not 2
+  FAIL: seed 0 Australia Cup: the QF is not the R16 winners
+  FAIL: seed 0 Australia Cup: 2 QF ties, not 4
+  FAIL: seed 0 Australia Cup: 1 SF ties, not 2
+  FAIL: seed 0 Australia Cup: the F is not the SF winners
+  FAIL: seed 0 Australia Cup: 0 F ties, not 1
+  FAIL: seed 1: 5 round of 16 ties and 0 byes, not 2 and 6
+  FAIL: seed 1: the Australia Cup has no final winner
+  FAIL: seed 1 Australia Cup: a field of 10 plays 5 round of 16 ties, not 2
+  FAIL: seed 1 Australia Cup: the QF is not the R16 winners
+  FAIL: seed 1 Australia Cup: 2 QF ties, not 4
+  FAIL: seed 1 Australia Cup: 1 SF ties, not 2
+  FAIL: seed 1 Australia Cup: the F is not the SF winners
+  FAIL: seed 1 Australia Cup: 0 F ties, not 1
+  FAIL: seed 2: 5 round of 16 ties and 0 byes, not 2 and 6
+  FAIL: seed 2: the Australia Cup has no final winner
+  FAIL: seed 2 Australia Cup: a field of 10 plays 5 round of 16 ties, not 2
+  FAIL: seed 2 Australia Cup: the QF is not the R16 winners
+  FAIL: seed 2 Australia Cup: 2 QF ties, not 4
+  FAIL: seed 2 Australia Cup: 1 SF ties, not 2
+  FAIL: seed 2 Australia Cup: the F is not the SF winners
+  FAIL: seed 2 Australia Cup: 0 F ties, not 1
+  FAIL: seed 3: 5 round of 16 ties and 0 byes, not 2 and 6
+  FAIL: seed 3: the Australia Cup has no final winner
+  FAIL: seed 3 Australia Cup: a field of 10 plays 5 round of 16 ties, not 2
+  FAIL: seed 3 Australia Cup: the QF is not the R16 winners
+  FAIL: seed 3 Australia Cup: 2 QF ties, not 4
+  FAIL: seed 3 Australia Cup: 1 SF ties, not 2
+  FAIL: seed 3 Australia Cup: the F is not the SF winners
+  FAIL: seed 3 Australia Cup: 0 F ties, not 1
+  FAIL: seed 4: 5 round of 16 ties and 0 byes, not 2 and 6
+  FAIL: seed 4: the Australia Cup has no final winner
+  FAIL: seed 4 Australia Cup: a field of 10 plays 5 round of 16 ties, not 2
+  FAIL: seed 4 Australia Cup: the QF is not the R16 winners
+  FAIL: seed 4 Australia Cup: 2 QF ties, not 4
+  FAIL: seed 4 Australia Cup: 1 SF ties, not 2
+  FAIL: seed 4 Australia Cup: the F is not the SF winners
+  FAIL: seed 4 Australia Cup: 0 F ties, not 1
+  FAIL: seed 5: 5 round of 16 ties and 0 byes, not 2 and 6
+  FAIL: seed 5: the Australia Cup has no final winner
+  FAIL: seed 5 Australia Cup: a field of 10 plays 5 round of 16 ties, not 2
+  FAIL: seed 5 Australia Cup: the QF is not the R16 winners
+  FAIL: seed 5 Australia Cup: 2 QF ties, not 4
+  FAIL: seed 5 Australia Cup: 1 SF ties, not 2
+  FAIL: seed 5 Australia Cup: the F is not the SF winners
+  FAIL: seed 5 Australia Cup: 0 F ties, not 1
+  FAIL: seed 6: 5 round of 16 ties and 0 byes, not 2 and 6
+  FAIL: seed 6: the Australia Cup has no final winner
+  FAIL: seed 6 Australia Cup: a field of 10 plays 5 round of 16 ties, not 2
+  FAIL: seed 6 Australia Cup: the QF is not the R16 winners
+  FAIL: seed 6 Australia Cup: 2 QF ties, not 4
+  FAIL: seed 6 Australia Cup: 1 SF ties, not 2
+  FAIL: seed 6 Australia Cup: the F is not the SF winners
+  FAIL: seed 6 Australia Cup: 0 F ties, not 1
+  FAIL: seed 7: 5 round of 16 ties and 0 byes, not 2 and 6
+  FAIL: seed 7: the Australia Cup has no final winner
+  FAIL: seed 7 Australia Cup: a field of 10 plays 5 round of 16 ties, not 2
+  FAIL: seed 7 Australia Cup: the QF is not the R16 winners
+  FAIL: seed 7 Australia Cup: 2 QF ties, not 4
+  FAIL: seed 7 Australia Cup: 1 SF ties, not 2
+  FAIL: seed 7 Australia Cup: the F is not the SF winners
+  FAIL: seed 7 Australia Cup: 0 F ties, not 1
+  FAIL: seed 8: 5 round of 16 ties and 0 byes, not 2 and 6
+  FAIL: seed 8: the Australia Cup has no final winner
+  FAIL: seed 8 Australia Cup: a field of 10 plays 5 round of 16 ties, not 2
+  FAIL: seed 8 Australia Cup: the QF is not the R16 winners
+  FAIL: seed 8 Australia Cup: 2 QF ties, not 4
+  FAIL: seed 8 Australia Cup: 1 SF ties, not 2
+  FAIL: seed 8 Australia Cup: the F is not the SF winners
+  FAIL: seed 8 Australia Cup: 0 F ties, not 1
+  FAIL: seed 9: 5 round of 16 ties and 0 byes, not 2 and 6
+  FAIL: seed 9: the Australia Cup has no final winner
+  FAIL: seed 9 Australia Cup: a field of 10 plays 5 round of 16 ties, not 2
+  FAIL: seed 9 Australia Cup: the QF is not the R16 winners
+  FAIL: seed 9 Australia Cup: 2 QF ties, not 4
+  FAIL: seed 9 Australia Cup: 1 SF ties, not 2
+  FAIL: seed 9 Australia Cup: the F is not the SF winners
+  FAIL: seed 9 Australia Cup: 0 F ties, not 1
+   10 home players asks read at Australian clubs, every one for Australia
+   10 seasons ended, 0 sacked, 0 Australia Cup finals with a winner ()
+   Auckland FC: 0 cup weeks, cup null, sits out the Australia Cup, home players ask for New Zealand, season ended
+   Wellington Phoenix: 0 cup weeks, cup null, sits out the Australia Cup, home players ask for New Zealand, season ended
+  FAIL: scottish (Kilmarnock): the Scottish Cup has no final winner (field 12)
+  FAIL: scottish Scottish Cup: a field of 12 plays 6 round of 16 ties, not 4
+  FAIL: scottish Scottish Cup: 3 QF ties, not 4
+  FAIL: scottish Scottish Cup: the SF is not the QF winners
+  FAIL: scottish Scottish Cup: 1 SF ties, not 2
+  FAIL: scottish Scottish Cup: the F is not the SF winners
+  FAIL: scottish Scottish Cup: 0 F ties, not 1
+  FAIL: austria (Altach): the ÖFB Cup has no final winner (field 12)
+  FAIL: austria ÖFB Cup: a field of 12 plays 6 round of 16 ties, not 4
+  FAIL: austria ÖFB Cup: 3 QF ties, not 4
+  FAIL: austria ÖFB Cup: the SF is not the QF winners
+  FAIL: austria ÖFB Cup: 1 SF ties, not 2
+  FAIL: austria ÖFB Cup: the F is not the SF winners
+  FAIL: austria ÖFB Cup: 0 F ties, not 1
+  FAIL: greece (Kalamata): the Greek Cup has no final winner (field 14)
+  FAIL: greece Greek Cup: a field of 14 plays 7 round of 16 ties, not 6
+  FAIL: greece Greek Cup: the QF is not the R16 winners
+  FAIL: greece Greek Cup: 3 QF ties, not 4
+  FAIL: greece Greek Cup: the SF is not the QF winners
+  FAIL: greece Greek Cup: 1 SF ties, not 2
+  FAIL: greece Greek Cup: the F is not the SF winners
+  FAIL: greece Greek Cup: 0 F ties, not 1
+  FAIL: denmark (AC Horsens): the Danish Cup has no final winner (field 12)
+  FAIL: denmark Danish Cup: a field of 12 plays 6 round of 16 ties, not 4
+  FAIL: denmark Danish Cup: 3 QF ties, not 4
+  FAIL: denmark Danish Cup: the SF is not the QF winners
+  FAIL: denmark Danish Cup: 1 SF ties, not 2
+  FAIL: denmark Danish Cup: the F is not the SF winners
+  FAIL: denmark Danish Cup: 0 F ties, not 1
+  FAIL: switzerland (Luzern): the Swiss Cup has no final winner (field 12)
+  FAIL: switzerland Swiss Cup: a field of 12 plays 6 round of 16 ties, not 4
+  FAIL: switzerland Swiss Cup: 3 QF ties, not 4
+  FAIL: switzerland Swiss Cup: the SF is not the QF winners
+  FAIL: switzerland Swiss Cup: 1 SF ties, not 2
+  FAIL: switzerland Swiss Cup: the F is not the SF winners
+  FAIL: switzerland Swiss Cup: 0 F ties, not 1
+  FAIL: croatia (Rijeka): the Croatian Cup has no final winner (field 10)
+  FAIL: croatia Croatian Cup: a field of 10 plays 5 round of 16 ties, not 2
+  FAIL: croatia Croatian Cup: the QF is not the R16 winners
+  FAIL: croatia Croatian Cup: 2 QF ties, not 4
+  FAIL: croatia Croatian Cup: 1 SF ties, not 2
+  FAIL: croatia Croatian Cup: the F is not the SF winners
+  FAIL: croatia Croatian Cup: 0 F ties, not 1
+  FAIL: aleague (Perth Glory): the Australia Cup has no final winner (field 10)
+  FAIL: aleague Australia Cup: a field of 10 plays 5 round of 16 ties, not 2
+  FAIL: aleague Australia Cup: the QF is not the R16 winners
+  FAIL: aleague Australia Cup: 2 QF ties, not 4
+  FAIL: aleague Australia Cup: 1 SF ties, not 2
+  FAIL: aleague Australia Cup: the F is not the SF winners
+  FAIL: aleague Australia Cup: 0 F ties, not 1
+   every short cup crowned a winner: scottish 12, austria 12, greece 14, denmark 12, switzerland 12, croatia 10, aleague 10; full fields of sixteen: 18
+   17 played brackets read for shape (round sizes, nobody twice, no self ties, each round fed by the last plus the byes): 103 faults
+E) the club, league, country and player counts in the copy agree with the engine
+   engine: 26 leagues, 438 clubs, 20 countries, 4710 real players in the joined world
+   10 count lines read across 6 files
+simClubManagerALeague: 130 failure(s) under control nobyes
