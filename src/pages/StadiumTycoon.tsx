@@ -75,7 +75,11 @@ function seatRand(i: number): number {
 }
 
 function fmtMoney(n: number): string {
-  return tycoonMoney(n).replace(/^\$(-?\d+(?:\.\d+)?)([KMBTQ]?)$/, (_text, amount: string, unit: string) => `$${formatNumber(amount)}${unit}`);
+  return formatMoneyText(tycoonMoney(n));
+}
+
+function formatMoneyText(text: string): string {
+  return text.replace(/\$(-?\d+(?:\.\d+)?)([KMBTQ]?)/g, (_text, amount: string, unit: string) => `$${formatNumber(amount)}${unit}`);
 }
 
 /** Round 583: a rate under ten dollars a second keeps its cents, so a new club
@@ -567,7 +571,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
                 )}
                 style={{ left: `${f.x}%`, top: `${f.y}%` }}
               >
-                {f.text}
+                {formatMoneyText(f.text)}
               </span>
             ))}
             {/* confetti */}

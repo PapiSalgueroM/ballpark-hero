@@ -1,3 +1,39 @@
+Preparation 1 at 95804eab/run 37712341472 completed red. Types/build passed.
+The focused worker passed 3/4; its actual computed prospect price was 797,
+so the deliberately greater-than-1,000 fixture assertion stopped before hook
+mount. No copied controls ran. The next QA-only preparation stages the legal
+agent office at level 10 (maximum 20), with an explicit annotation, keeping
+the actual price assertion and all sale/save/RNG/three control checks strict.
+This changes shared staged fixture bytes, including the purchase baseline;
+the unchanged actual operation and exact current/original comparison remain.
+Product files and economic behavior are held. Remote confirmation is pending.
+Full artifact 11522518591 has 589 files, ZIP 695a8a9d. Early 11522606056 has
+34 files, ZIP fc5544a5. Original Tycoon Help and three built readers remain red;
+these gates are not waived or declared inherited without an actual baseline.
+Independent static proposal peer 78338be9 and reverse 4e03a649 are retained.
+
+## Round 1092 preparation, 2026-10-07, tycoon money labels
+
+Unverified preparation in the attached tycoon-money-display-1092 checkout,
+branch codex/tycoon-money-display-1092 from AL integration8fe82a4d.
+Academy's fmtCash uses the same dollar symbol as Stadium and groups its existing
+rounded digit strings. Its thresholds, suffix ladder, decimal places and values
+are unchanged. Both actual Academy player-sale floaters now show explicit dollars
+and en-US commas. Stadium groups dollar tokens only when rendering existing
+floaters, preserving the raw hook event text, minute labels and saved records.
+The three product files change fourteen lines in and nine out. No shared strength
+model, pitch, callback, price, save, source data or E-owned engine change.
+
+Compact authored proof will compare actual formatting boundaries and mixed
+floaters, plus the two real mounted Academy sale callbacks against the unchanged
+engine's full economic state and saves. Four cases and three effective copied
+controls are authored, pending execution. A QA-only appended export reaches Stadium's private formatter in a
+whole-file copy; it is not a full page or browser proof. Appropriate original
+tycoon gates, proper app types/build, all twenty built readers and exact source/
+dependency holds remain strict in remote CI. Nothing is credited until executed.
+Prior AL snapshot failures remain release-owner dependencies, not waivers.
+No local runtime, production query, PR, integration or publication acceptance.
+
 ## Release AK LIVE, 2026-10-07 15:12 EDT, and the split of work with Codex
 
 Claude lane (session E, a new lead: session D stopped at its weekly limit with AK's gate still running).

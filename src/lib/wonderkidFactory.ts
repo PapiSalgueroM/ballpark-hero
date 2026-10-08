@@ -30,6 +30,7 @@ import { intlName, NATION_FAMILY } from '@/lib/intlNames';
 import { ensureUniqueIds, makeIdMinter } from '@/lib/entityIds';
 import { basePrice } from '@/lib/playerValue';
 import { BOOT_IDS } from '@/lib/soccerBootIds';
+import { formatNumber } from '@/lib/formatNumber';
 export { basePrice } from '@/lib/playerValue';
 
 /* ------------------------------------------------------------------ tuning */
@@ -896,9 +897,9 @@ function clampClock(v: unknown, max: number): number {
 /** Compact money formatting, same ladder as the tycoon so the two idle games
  *  speak the same language. */
 export function fmtCash(n: number): string {
-  if (n >= 1e12) return `£${(n / 1e12).toFixed(2)}T`;
-  if (n >= 1e9) return `£${(n / 1e9).toFixed(2)}B`;
-  if (n >= 1e6) return `£${(n / 1e6).toFixed(2)}M`;
-  if (n >= 1e4) return `£${(n / 1e3).toFixed(1)}K`;
-  return `£${Math.floor(n).toLocaleString()}`;
+  if (n >= 1e12) return `$${formatNumber((n / 1e12).toFixed(2))}T`;
+  if (n >= 1e9) return `$${formatNumber((n / 1e9).toFixed(2))}B`;
+  if (n >= 1e6) return `$${formatNumber((n / 1e6).toFixed(2))}M`;
+  if (n >= 1e4) return `$${formatNumber((n / 1e3).toFixed(1))}K`;
+  return `$${formatNumber(Math.floor(n))}`;
 }
