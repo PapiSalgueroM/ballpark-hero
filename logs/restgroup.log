@@ -1,0 +1,14 @@
+MUT restgroup: src/data/soccerCareerClubPool.ts patched (occurrence 0 of 1)
+  vitest exit=0 2s | [2m   Duration [22m 1.42s[2m (transform 426ms, setup 219ms, collect 1.01s, tests 282ms, environment 1.30s, prepare 490ms)[22m
+  world exit=0 75s | simCareerLeagueWorld: all sections green (75.2 s)
+  clubPool exit=1 6s |   FAIL [1]: src/data/soccerCareerClubPool.ts is stale: rerun node scripts/genCareerClubPool.mjs
+      FAIL [1]: src/data/soccerCareerClubPool.ts is stale: rerun node scripts/genCareerClubPool.mjs
+  facts exit=0 2s | simCareerFacts: all sections green
+  leagueFinish exit=0 7s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4840 in a verified league; finish and title agree, the ladder holds, main's stream is untouched and the elite boost reads the era.
+  leagueSeasons exit=0 12s | simCareerLeagueSeasons: all sections green
+  manager exit=0 8s | ALL MANAGER CAREER CHECKS PASSED
+  centreTable exit=0 7s | simSeasonCentreTable: 4 checks, 0 failed
+  agree0 exit=0 9s | simSeasonCentreAgreement: 24 checks, 0 failed
+  derbies exit=0 12s | simCareerDerbies: all 8 sections green
+  restored (tree clean)
+MUT restgroup: CAUGHT by clubPool

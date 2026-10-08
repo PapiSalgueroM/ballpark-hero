@@ -1,0 +1,6 @@
+cadchamp exit=0 139s | MUT cadchamp: CAUGHT by world, leagueFinish, derbies
+formatdrop exit=0 140s | MUT formatdrop: CAUGHT by world
+oddclubs exit=0 139s | MUT oddclubs: CAUGHT by vitest, world
+holdkey exit=0 137s | MUT holdkey: CAUGHT by world, leagueSeasons
+ladderstale exit=0 138s | MUT ladderstale: CAUGHT by vitest, clubPool
+restgroup exit=0 139s | MUT restgroup: CAUGHT by clubPool
