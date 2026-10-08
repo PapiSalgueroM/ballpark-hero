@@ -16619,8 +16619,14 @@ const SCOUT_FIRST = [
   'Ray', 'Dermot', 'Paolo', 'Gus', 'Hakim', 'Bernd', 'Colin', 'Tomas', 'Rui', 'Wim',
   'Freddie', 'Nacho', 'Olu', 'Stefan', 'Duncan', 'Aleks', 'Pierre', 'Kenny', 'Sepp', 'Ivan',
 ];
+/* Round 1052: 'Kovac' left this bank, the Round 199 fix. Paired with the
+   Stefan above it named a man who exists: Stefan Kovac, a Bosnian midfielder
+   born 1999-01-14, in Baltika's 2026-27 squad on three lists (the Russian
+   Premier League joined the game in that round). 'Brankov' sits in its seat,
+   so no other scout's name moves; simInventedNames enumerates all 400
+   pairings against every real name on the site. */
 const SCOUT_LAST = [
-  'Brennan', 'Kovac', 'Delgado', 'Ohashi', 'Fenton', 'Lindqvist', 'Barros', 'Aziz', 'McGrath', 'Steiner',
+  'Brennan', 'Brankov', 'Delgado', 'Ohashi', 'Fenton', 'Lindqvist', 'Barros', 'Aziz', 'McGrath', 'Steiner',
   'Almeida', 'Duffy', 'Roussel', 'Vialli', 'Osei', 'Janssen', 'Salvatore', 'Bright', 'Radic', 'Nkemdi',
 ];
 
