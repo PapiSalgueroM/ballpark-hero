@@ -78,12 +78,29 @@ async function quickStart(page, { throwback, pos, name }) {
   await page.waitForTimeout(1000);
 }
 
-/** Play `n` seasons and answer whatever comes between them, the way playCareerPress does. */
+/** A career that lasts the walk: a late pick can be cut after a year (rated 64 or under is retired), and this
+    walk is about schedules and stat lines, not about making the roster. Nothing here touches pay, the pick, the
+    year or the era. */
+async function steady(page) {
+  await page.evaluate(k => {
+    const s = JSON.parse(localStorage.getItem(k));
+    s.c.ovr = 80; s.c.pot = 88; s.c.role = 'starter'; s.c.health = 100; s.c.contractYears = 9;
+    localStorage.setItem(k, JSON.stringify(s));
+  }, KEY);
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForTimeout(1200);
+}
+
+/** Play `n` seasons and answer whatever comes between them, the way playCareerPress does. The board saves
+    inside the press, so the walk returns on the n-th press and never has to finish that summer. */
 async function playSeasons(page, n) {
   const between = [
     '[data-season-reveal] button:has-text("Continue")',
     '[data-rivalry-event] button:has-text("Continue")',
+    '[data-rivalry-choice] button:has-text("Continue")',
+    '[data-rivalry-option]',
     '[data-decision-continue]',
+    '[data-extension-talk] button:has-text("year out")',
     'button:has-text("One more year")',
     '[data-career-decision-option]',
   ];
@@ -95,12 +112,13 @@ async function playSeasons(page, n) {
       if (await el.count()) { await el.first().click(); await page.waitForTimeout(600); clicked = true; break; }
     }
     if (clicked) continue;
-    const play = page.locator('button:has-text("Play the")');
+    /* The season button by its whole label: the extension talk has a "Play the year out" of its own. */
+    const play = page.locator('button', { hasText: /Play the \d{4} season/ });
     if (await play.count()) {
-      if (played >= n) return played;
       played += 1;
       await play.first().click();
-      await page.waitForTimeout(900);
+      await page.waitForTimeout(1000);
+      if (played >= n) return played;
       continue;
     }
     /* Some other crossroads is up: answer its first option and play on. */
@@ -108,6 +126,7 @@ async function playSeasons(page, n) {
     if (await opt.count()) await opt.click();
     await page.waitForTimeout(600);
   }
+  console.log(`  (the walk stopped after ${played} of ${n} seasons on a screen it does not know: ${(await bodyText(page)).replace(/\s+/g, ' ').slice(0, 220)})`);
   return played;
 }
 
@@ -141,6 +160,7 @@ for (const [w, h] of WIDTHS) {
     say(text.includes(`$${c0.salary}M x4`), `the hub's contract chip reads $${c0.salary}M x4`);
     say(c0.salary > 0 && c0.salary < 1, `a late pick is paid slot money in 2005 dollars: $${c0.salary}M a year`);
     say(await noSideScroll(page), `no sideways scroll on the hub at ${w} wide`);
+    await steady(page);
     const played = await playSeasons(page, 3);
     const lines = (await readSave(page))?.c?.seasons ?? [];
     const games = lines.map(s => s.games);
@@ -179,6 +199,7 @@ for (const [w, h] of WIDTHS) {
   console.log(`3) an edge rusher today, at ${w} by ${h}`);
   const { context, page } = await open(w, h);
   await quickStart(page, { throwback: false, pos: 'EDGE', name: 'Edge Probe' });
+  await steady(page);
   const played = await playSeasons(page, 3);
   const lines = (await readSave(page))?.c?.seasons ?? [];
   const sacks = lines.map(s => s.sacks);
