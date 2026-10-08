@@ -30,8 +30,12 @@
  * Negative control, run on the base on 2026-10-08 (CM_WORLD_IDENTITY_CONTROL=rating): the first man
  * of Sevilla's squad gains one rating point in memory after his old value is asserted, the file on
  * disk is never touched, and the club digests must fail naming Sevilla and nobody else.
- * RESULT ON THE BASE: see the line this header ends with, written from the run.
- * CONTROL RESULT: recorded below by step 1.
+ * MEASURED on the base (2005dc4e, which is 5ba57826 plus this file; a GitHub runner, 2026-10-08):
+ * two recordings taken one after the other were byte identical (26 leagues, 20 nations, 5 pyramids,
+ * 26 rules digests, 438 clubs, 7 free agents, 7 era rows: Rubin Kazan and Spartak Moscow in 2010-11,
+ * Zenit and CSKA Moscow in 2015-16, Lokomotiv Moscow, Krasnodar and Zenit in 2020-21); the plain run
+ * passed 6 of 6 in two seconds; the control failed 1 of 6, "clubs whose digest moved: Sevilla", and
+ * the other five stayed green, vitest exit 1.
  */
 import { describe, it, expect, vi, beforeAll } from 'vitest';
 import { createHash } from 'node:crypto';
