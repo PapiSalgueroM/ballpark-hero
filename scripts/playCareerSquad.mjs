@@ -263,8 +263,15 @@ function served(name, body) {
   if (CONTROL === 'noscroll' && name.endsWith('.js')) edit(BODY_BOX, 'flex shrink-0 flex-col');
   /* Tab is left to the browser, so it walks out of the sheet to the page behind */
   if (CONTROL === 'notrap' && name.endsWith('.js')) edit('if (e.key !== "Tab") return;', 'if (true) return;');
-  /* a long surname goes back under an ellipsis */
-  if (CONTROL === 'ellipsis' && name.endsWith('.js')) edit(CELL_NAME, 'w-full truncate text-xs font-semibold');
+  /* a long surname goes back under an ellipsis. Release AN: the cell also gives a long word a soft break
+     in its middle now (softBreaks), and a wbr breaks the line even under truncate's nowrap, so with the
+     class alone no name was cut any more and this control stopped firing (seen on the runner: 164
+     checks, 0 failed). It takes the soft break back out as well, where the served script holds the
+     call by name (the standalone bundle, which is where the cut names are measured). */
+  if (CONTROL === 'ellipsis' && name.endsWith('.js')) {
+    edit(CELL_NAME, 'w-full truncate text-xs font-semibold');
+    edit('children: softBreaks(cellName(m))', 'children: cellName(m)');
+  }
   if (CONTROL === 'still' && name.endsWith('.css')) {
     edit('prefers-reduced-motion:reduce', 'prefers-reduced-motion:x-never');
     edit('prefers-reduced-motion: reduce', 'prefers-reduced-motion: x-never');

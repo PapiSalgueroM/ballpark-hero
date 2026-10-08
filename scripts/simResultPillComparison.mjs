@@ -43,7 +43,12 @@
  * cramp leaves 17.0px spare and wraps all three Face Off scorelines onto two
  * lines (6 findings), which is why the widest Face Off case is in the list;
  * shift moves the card, the moment, the stat line and the emoji block by 32px
- * at the first frame in all 34 cases (136 findings).
+ * at the first frame in all 34 cases (136 findings). Measured 2026-10-08 on a
+ * GitHub runner for [under] (Release AN): 8 cards say what reads under their
+ * pill and all 8 agree as committed; bareline gives 8 findings, on all three
+ * pages (one Score cell on Rank 'Em and on Hall of Fame or Bust, where only
+ * the 1,000 case can differ, and the line plus the emoji block of each of
+ * Face Off's three scorelines), and leaves text, fit and shift green.
  *
  * NEGATIVE CONTROLS (RESULT_PILL_CONTROL=<name>), each mutates one anchor in
  * memory, refuses to run if the anchor is missing, and must turn its check red:
