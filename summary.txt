@@ -1,0 +1,5 @@
+mut-gate exit=0 33s | MUT gate: truth=0 digest=1 vround=0
+mut-injurylen exit=0 32s | MUT injurylen: truth=0 digest=1 vround=0
+mut-loop17 exit=0 39s | MUT loop17: truth=0 digest=0 vround=0 vwide=0
+mut-pacek exit=0 25s | MUT pacek: truth=1 digest=1
+mut-pacesack exit=0 24s | MUT pacesack: truth=0 digest=1

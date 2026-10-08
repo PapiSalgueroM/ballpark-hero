@@ -1,0 +1,9 @@
+truth exit=1 | simNflTruth: 1 section failed (1b: 2)
+  FAIL [1b]: K allPro: the throwback reads 0.087 against the 17 game arm's 0.239 (band plus or minus 0.088)
+  FAIL [1b]: K hall: the throwback reads 2.333 against the 17 game arm's 6.067 (band plus or minus 2.638)
+5) MEASURED, asserted on nothing
+digest exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career truth digest > every key equals
+   × Round 1104: the US career truth digest > every key equals the committed fixture, or moved only where this step is allowed to move it 18592ms
+ FAIL  src/test/usCareerTruthDigest.test.ts > Round 1104: the US career truth digest > every key equals the committed fixture, or moved only where this step is allowed to move it
+AssertionError: keys that moved against the committed fixture: expected [ 'nfl|y2005|K' ] to deeply equal []
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career truth digest > every key equals the committed fixture%2C or moved only 

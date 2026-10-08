@@ -1,0 +1,7 @@
+#!serial
+# Round 1104 review (runner lens): mutations A, schedule and awards
+mut-gate: bash .rc/x/rv-mutrun.sh gate truth digest vround
+mut-injurylen: bash .rc/x/rv-mutrun.sh injurylen truth digest vround
+mut-loop17: bash .rc/x/rv-mutrun.sh loop17 truth digest vround vwide
+mut-pacek: bash .rc/x/rv-mutrun.sh pacek truth digest
+mut-pacesack: bash .rc/x/rv-mutrun.sh pacesack truth digest

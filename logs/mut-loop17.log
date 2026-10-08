@@ -1,0 +1,10 @@
+rv-mut loop17: mutated src/lib/nflCareerLoop.ts
+rv-mut loop17: mutated src/lib/nflCareerLoop.ts
+ src/lib/nflCareerLoop.ts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+truth exit=0 | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves, and no receiver passes the r
+5) MEASURED, asserted on nothing
+digest exit=0 |    Duration  20.28s (transform 594ms, setup 28ms, collect 758ms, tests 19.01s, environment 168ms, prepare 74ms)
+vround exit=0 |    Duration  6.45s (transform 1.54s, setup 211ms, collect 3.60s, tests 7.07s, environment 1.76s, prepare 385ms)
+vwide exit=0 |    Duration  6.20s (transform 2.45s, setup 191ms, collect 6.02s, tests 6.62s, environment 1.53s, prepare 315ms)
+MUT loop17: truth=0 digest=0 vround=0 vwide=0
