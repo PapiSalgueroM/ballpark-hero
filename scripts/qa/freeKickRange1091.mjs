@@ -317,7 +317,12 @@ createRoot(document.getElementById('root')).render(<AuthProvider><Host/></AuthPr
       if (kind === 'practice') {
         row.displayedPoints = await page.getByText(/^Points\s+\d+$/).innerText();
         equal('Actual practice points follow settled engine results', row.displayedPoints.replace(/\s+/g, ' '), `Points ${after.shots.reduce((sum, value) => sum + value.result.points, 0)}`);
-      } else equal('Actual rendered verdict follows shot', await page.getByRole('status').innerText(), `${result.scored ? 'Goal' : result.saved ? 'Saved' : result.hitWall ? 'Blocked' : result.hitPost ? 'Off the post' : 'Missed'}\n${result.verdict}`);
+      } else {
+        const status = page.getByRole('status');
+        row.renderedVerdict = { text: await status.innerText(), heading: await status.locator('strong').innerText(), verdict: await status.locator('p').innerText() }; persist();
+        equal('Actual rendered heading follows shot', row.renderedVerdict.heading, result.scored ? 'Goal' : result.saved ? 'Saved' : result.hitWall ? 'Blocked' : result.hitPost ? 'Off the post' : 'Missed');
+        equal('Actual rendered verdict follows shot', row.renderedVerdict.verdict, result.verdict);
+      }
       await Promise.all([...pending]); equal('No runtime or transport errors', row.errors, []); equal('No sockets', row.sockets, []);
       const legal = { ...oldRun[selectedIndex], distance: 17, label: `17 m, ${oldRun[selectedIndex].wallSize} in the wall` };
       try { equal('Consumer uses the legal first changed walled setup', selected, legal); assert.equal(arm, 'current', 'Pinned-old control must be rejected'); row.complete = true; }

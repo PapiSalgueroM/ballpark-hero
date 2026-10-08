@@ -1,5 +1,19 @@
 ## Round 1091 preparation, 2026-10-07, legal direct-kick range
 
+Preparation 3 at 86aeaeea/run 37712897214 completed red. Types/build, engine
+6/12 and closing holds passed. Native remains 1/4 journeys, 0/2 old controls
+and 2/2 exact-restored DOM controls. Tycoon's result geometry now passes;
+its unchanged strong heading and paragraph render two separating newlines,
+while the QA driver assumed one. The next QA-only correction retains raw
+status text and compares the two actual text leaves exactly to the engine
+heading/verdict, with no whitespace normalization or product change. Every
+physical viewport, clipping, state/save/RNG and restoration check stays strict.
+New runtime remains pending. Full artifact 11522708008 has 773 files, including
+all 131 engine and 46 native early files byte-exact. The direct unchanged
+presentation report has 36 cases, 12 fixtures, 36 PNGs and no errors. Original
+8 PASS/1 EMPTY and readers 17/20 retain the same named AL findings, not waived.
+All 521 installed manifests stayed held. No production cap or release claim.
+
 Preparation 2 at4b52bef6/run37711656871 completed red. Types/build and engine6/12
 passed; actual engine records/copies/bundles are byte-exact to preparation1.
 Native completed practice390 and both DOM clipping controls, then Tycoon390's
