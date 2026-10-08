@@ -1,0 +1,8 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+play-write exit=1 70s | playCareerSquad (control write, 19 edits served): 97 checks, 3 failed
+play-still exit=1 70s | playCareerSquad (control still, 1104 edits served): 97 checks, 3 failed
+play-rank exit=1 73s | playCareerSquad (control rank, 24 edits served): 97 checks, 4 failed
+play-nofill exit=1 70s | playCareerSquad (control nofill, 19 edits served): 97 checks, 1 failed
+play-static exit=1 71s | playCareerSquad (control static, 1 edits served): 97 checks, 1 failed
+play-label exit=1 70s | playCareerSquad (control label, 1 edits served): 97 checks, 2 failed
+play-plain2 exit=0 61s | playCareerSquad: 97 checks, 0 failed
