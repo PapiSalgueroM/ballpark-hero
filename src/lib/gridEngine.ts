@@ -169,11 +169,11 @@ export async function fetchFranchiseGridData<P extends FranchisePlayer>(cfg: Fra
   try {
     const rows = cfg.staticSource ? await readStaticRows(cfg.staticSource) : await readPagedRows(cfg, select);
     if (!rows) return null;
-    /* The static door hands over a whole key in one piece, so the index is
-       built in a task of its own: a tap made while the key lands is answered
-       between the decode and the index instead of after both. */
-    if (cfg.staticSource) await nextTask();
-    const data = indexFranchiseRows(cfg, rows, opts);
+    /* The static door hands over a whole key in one piece, so its index is
+       built a slice at a time: a tap made while the key lands is answered
+       between two slices instead of after the whole of it. The paged door
+       already ends its task at every page, so it indexes in one go as before. */
+    const data = cfg.staticSource ? await indexFranchiseRowsInSlices(cfg, rows, opts) : indexFranchiseRows(cfg, rows, opts);
     /* Files that decoded but hold fewer players than the floor are refused AND
        forgotten, like files toRows refused: kept, every later load would get
        the same short files back with no request. The engine does it, so no
@@ -231,19 +231,41 @@ async function readPagedRows<P extends FranchisePlayer>(cfg: FranchiseGridConfig
  * fetchFranchiseGridData unchanged (Round 1105) so both doors index alike.
  */
 export function indexFranchiseRows<P extends FranchisePlayer>(cfg: FranchiseGridConfig<P>, rows: Record<string, unknown>[], opts: GridFetchOptions = {}): FranchiseGridData<P> | null {
-    const players: P[] = [];
-    const byNormalizedName = new Map<string, P[]>();
-    for (const raw of rows) {
+    const data: FranchiseGridData<P> = { players: [], byNormalizedName: new Map<string, P[]>() };
+    indexRowsInto(cfg, rows, opts, 0, rows.length, data);
+    return data.players.length >= cfg.minPoolSize ? data : null;
+}
+
+/** Rows from..to (to not included) into the index, in order. The one loop both ways of indexing run. */
+function indexRowsInto<P extends FranchisePlayer>(cfg: FranchiseGridConfig<P>, rows: Record<string, unknown>[], opts: GridFetchOptions, from: number, to: number, data: FranchiseGridData<P>): void {
+    for (let i = from; i < to; i += 1) {
+      const raw = rows[i];
       const entry = cfg.toPlayer(raw);
       if (!entry) continue;
       if (opts.withIds && cfg.idColumn && raw[cfg.idColumn] != null) entry.id = String(raw[cfg.idColumn]);
-      players.push(entry);
+      data.players.push(entry);
       const key = normalizeGridName(entry.name);
-      const under = byNormalizedName.get(key);
-      if (under) under.push(entry); else byNormalizedName.set(key, [entry]);
+      const under = data.byNormalizedName.get(key);
+      if (under) under.push(entry); else data.byNormalizedName.set(key, [entry]);
     }
+}
 
-    return players.length >= cfg.minPoolSize ? { players, byNormalizedName } : null;
+/**
+ * How many rows the static door indexes before it ends the task. Measured
+ * 2026-10-08 on a GitHub runner at 4 times CPU throttle: indexing the college
+ * key's 35,598 rows in one task held the page for 246 to 291 ms; 6,000 rows is
+ * about a sixth of that.
+ */
+export const STATIC_INDEX_SLICE = 6000;
+
+/** The same index as indexFranchiseRows, row for row, built STATIC_INDEX_SLICE rows to a task. */
+async function indexFranchiseRowsInSlices<P extends FranchisePlayer>(cfg: FranchiseGridConfig<P>, rows: Record<string, unknown>[], opts: GridFetchOptions): Promise<FranchiseGridData<P> | null> {
+    const data: FranchiseGridData<P> = { players: [], byNormalizedName: new Map<string, P[]>() };
+    for (let from = 0; from < rows.length; from += STATIC_INDEX_SLICE) {
+      await nextTask();
+      indexRowsInto(cfg, rows, opts, from, Math.min(rows.length, from + STATIC_INDEX_SLICE), data);
+    }
+    return data.players.length >= cfg.minPoolSize ? data : null;
 }
 
 // ---------------------------------------------------------------------------

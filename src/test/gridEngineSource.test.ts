@@ -183,7 +183,7 @@ describe('the paged door, recorded on main before Round 1105 touched the engine'
 /* Added WITH the lift (Round 1105): the static door.                         */
 /* ------------------------------------------------------------------------- */
 
-import { fetchStaticJson, type GridStaticSource } from '@/lib/gridEngine';
+import { fetchStaticJson, indexFranchiseRows, STATIC_INDEX_SLICE, type GridStaticSource } from '@/lib/gridEngine';
 
 type Reply = { ok: boolean; json: () => Promise<unknown> };
 const okJson = (body: unknown): Reply => ({ ok: true, json: async () => body });
@@ -360,6 +360,38 @@ describe('the static door (Round 1105)', () => {
     expect(signals[0].aborted).toBe(false);
     expect(log.cancelled).toBe(0);
     expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('the static door indexes one slice of rows to a task, and the index is row for row the one built in one go', async () => {
+    const urls = freshUrls();
+    const total = STATIC_INDEX_SLICE * 2 + 345;
+    const big = Array.from({ length: total }, (_, i) => ({
+      player_name: i === 7 || i === total - 3 ? 'Probe Namesake' : `Row ${i}`,
+      teams: i % 2 ? 'aaa, bbb' : 'CCC',
+      n: i,
+    }));
+    vi.stubGlobal('fetch', vi.fn(async (url: string) => okJson(url === urls[0] ? { stamp: 's1', rows: big } : { stamp: 's1' })));
+    const cfg = staticCfg(urls, pairToRows);
+    let indexed = 0;
+    const counting: FranchiseGridConfig<Probe> = { ...cfg, toPlayer: (raw) => { indexed += 1; return cfg.toPlayer(raw); } };
+    const load = fetchFranchiseGridData(counting);
+    let done = false;
+    void load.then(() => { done = true; });
+    /* One timer at a time: what was indexed between two of them is what one task indexed. */
+    const perTask: number[] = [];
+    for (let turn = 0; !done && turn < 40; turn += 1) {
+      const before = indexed;
+      await vi.advanceTimersToNextTimerAsync();
+      if (indexed > before) perTask.push(indexed - before);
+    }
+    expect(done, 'the load finished').toBe(true);
+    expect(perTask, 'two whole slices and the rest, each in a task of its own').toEqual([STATIC_INDEX_SLICE, STATIC_INDEX_SLICE, 345]);
+    const data = await load;
+    const whole = indexFranchiseRows(cfg, big)!;
+    expect(data!.players.map((p) => p.n)).toEqual(whole.players.map((p) => p.n));
+    expect(data!.byNormalizedName.size).toBe(whole.byNormalizedName.size);
+    expect(data!.byNormalizedName.get('probe namesake')?.map((p) => p.n), 'namesakes from two slices, in load order').toEqual([7, total - 3]);
+    expect(vi.getTimerCount(), 'no timer is left alive').toBe(0);
   });
 
   it('withIds with no id column is still refused before anything is fetched', async () => {
