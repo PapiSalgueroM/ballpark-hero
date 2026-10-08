@@ -161,7 +161,9 @@ export function buildFullRatings(inputs,layer=null){
   assert.equal(layer.base,inputs.version,'The offense layer stands on this checkpoint version');
   assert.ok(layer.production instanceof Map&&layer.fullbacks instanceof Set,'The offense layer needs its production Map and its fullback Set');
   cohorts=productionCohorts(inputs,layer);
-  for(const pos of OFFENSE_POSITIONS)assert.ok(cohorts[pos],'Agreed production among the fifteen is required for every offense position: '+pos);
+  /* allowNoProduction is for a holdout measurement only (the harness rates the pool with every 2025 line removed);
+     the generator never sets it, and readOffenseLayer refuses to bake on a thin production file */
+  for(const pos of OFFENSE_POSITIONS)assert.ok(cohorts[pos]||layer.allowNoProduction===true,'Agreed production among the fifteen is required for every offense position: '+pos);
  }
  const rated=inputs.records.map(p=>({...p,estimate:estimate(p,inputs.models,layer,cohorts)}));
  const prices=new Map();
