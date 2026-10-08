@@ -1,0 +1,13 @@
+merge exit=1 0s | 0
+tsc exit=0 40s | 
+vitest exit=0 7s |    Duration  6.47s (transform 2.83s, setup 357ms, collect 6.81s, tests 7.30s, environment 2.31s, prepare 639ms)
+simCareerMoments exit=0 8s | simCareerMoments: 1077 checks, 0 failed
+simRevealMoments exit=0 5s | simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's 
+simCareerAwardsNight exit=0 5s | simCareerAwardsNight: ALL 170 CHECKS PASSED
+simHarnessAnchors exit=0 24s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 10s | No rival product names found. 0 findings.
+build2 exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simVictoryMoment exit=0 18s | PASS reduce: motion, final facts, first-frame Continue and 320px layout
+simFlagshipWeight exit=0 0s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+walk exit=0 54s | playCareerMoments: 34 checks, 0 failed
+reduced exit=0 35s | playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone e
