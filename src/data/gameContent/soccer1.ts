@@ -14,79 +14,24 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       tips: "Soccer Perfect Season tips: spend for the whole XI",
       faq: "Soccer Perfect Season FAQ: fictional cards, Daily and saved runs",
     },
-    howToPlaySections: [
-      {
-        heading: "Choose Daily or Unlimited",
-        items: [
-          "Play Daily starts the shared deal for the Eastern date. New Unlimited starts a separate deal. Resume Daily or Resume Unlimited continues that mode's saved run. Work through eleven fixed slots in a 4-3-3.",
-        ],
-      },
-      {
-        heading: "Compare the current three offers",
-        items: [
-          "Each slot offers three role cards costing 3, 5 or 7 tokens. Compare strength, price and the slot's weight. Choose one card to fill that slot and move on. There are no rerolls or extra formations to manage.",
-        ],
-      },
-      {
-        heading: "Finish the XI, then reveal the season",
-        items: [
-          "Once all eleven slots are filled, read your team's strength and match chances. Next match reveals one result; Finish season reveals the rest. Keep going after a draw or loss: all 38 results still count toward your final points.",
-        ],
-      },
+    howToPlay: [
+      "Play Daily starts the shared deal for the Eastern date. New Unlimited starts a separate deal. Resume Daily or Resume Unlimited continues that mode's saved run. Work through eleven fixed slots in a 4-3-3.",
+      "Each slot offers three role cards costing 3, 5 or 7 tokens. Compare strength, price and the slot's weight. Choose one card to fill that slot and move on. There are no rerolls or extra formations to manage.",
+      "Once all eleven slots are filled, read your team's strength and match chances. Next match reveals one result; Finish season reveals the rest. Keep going after a draw or loss: all 38 results still count toward your final points.",
     ],
-    ruleSections: [
-      {
-        heading: "Keep three tokens for every later slot",
-        items: [
-          "A pick must leave at least 3 tokens for each slot still waiting. The basic card stays affordable. Costlier cards are disabled when their price would use that reserve, even if your balance covers the card itself.",
-        ],
-      },
-      {
-        heading: "Strength uses the slot weights",
-        items: [
-          "Team strength is the weighted average of the eleven selected cards. Goalkeeper and striker count twice; every other slot counts once. These weights are game rules. Spare tokens do not add strength or score.",
-        ],
-      },
-      {
-        heading: "The best affordable XI guarantees 38 wins",
-        items: [
-          "The game calculates the strongest XI you can afford on this exact deal. Matching that strength gives a 100% win chance for every match. Other XIs have seeded win, draw and loss outcomes, with the remaining chance split equally between a draw and a loss. These are game probabilities, not football predictions.",
-        ],
-      },
-      {
-        heading: "Perfect, unbeaten and the score",
-        items: [
-          "Perfect means 38 wins. A draw ends perfect but keeps unbeaten alive; a loss ends both. Earn 3 points per win and 1 per draw, up to 114. Your site score is those points divided by 114, multiplied by 100 and rounded.",
-        ],
-      },
+    rules: [
+      "A pick must leave at least 3 tokens for each slot still waiting. The basic card stays affordable. Costlier cards are disabled when their price would use that reserve, even if your balance covers the card itself.",
+      "Team strength is the weighted average of the eleven selected cards. Goalkeeper and striker count twice; every other slot counts once. These weights are game rules. Spare tokens do not add strength or score.",
+      "The game calculates the strongest XI you can afford on this exact deal. Matching that strength gives a 100% win chance for every match. Other XIs have seeded win, draw and loss outcomes, with the remaining chance split equally between a draw and a loss. These are game probabilities, not football predictions.",
+      "Perfect means 38 wins. A draw ends perfect but keeps unbeaten alive; a loss ends both. Earn 3 points per win and 1 per draw, up to 114. Your site score is those points divided by 114, multiplied by 100 and rounded.",
     ],
-    exampleSections: [
-      {
-        heading: "A premium pick changes what comes next",
-        paragraphs: [
-          "Suppose you have 13 tokens and three slots left. Taking the 7-token card leaves 6, so the last two picks must cost 3 each. Taking the 3-token card leaves 10, enough to spend 7 on one later slot and 3 on the other. Check the weights before deciding where that premium pick helps most.",
-        ],
-      },
-      {
-        heading: "One draw separates unbeaten from perfect",
-        paragraphs: [
-          "You finish with 37 wins, 1 draw and no losses. The wins earn 111 points and the draw adds 1, giving 112. Rounded onto the 100-point scale, that is 98. You stayed unbeaten, but the perfect target needed all 38 wins.",
-        ],
-      },
+    example: [
+      "Suppose you have 13 tokens and three slots left. Taking the 7-token card leaves 6, so the last two picks must cost 3 each. Taking the 3-token card leaves 10, enough to spend 7 on one later slot and 3 on the other. Check the weights before deciding where that premium pick helps most.",
+      "You finish with 37 wins, 1 draw and no losses. The wins earn 111 points and the draw adds 1, giving 112. Rounded onto the 100-point scale, that is 98. You stayed unbeaten, but the perfect target needed all 38 wins.",
     ],
-    tipSections: [
-      {
-        heading: "Plan beyond the current strongest card",
-        items: [
-          "Look at the remaining slots and their weights before spending 7. A smaller upgrade now can leave room for a larger contribution later. The reserve prevents a stuck draft; it does not promise that your remaining picks will be strong.",
-        ],
-      },
-      {
-        heading: "Use the result as a spending check",
-        items: [
-          "Compare your finished strength with this deal's achievable best. That gap tells you about the draft; one season's results also include seeded chance. Unlimited gives you another deal to practice on without using or changing the Daily.",
-        ],
-      },
+    tips: [
+      "Look at the remaining slots and their weights before spending 7. A smaller upgrade now can leave room for a larger contribution later. The reserve prevents a stuck draft; it does not promise that your remaining picks will be strong.",
+      "Compare your finished strength with this deal's achievable best. That gap tells you about the draft; one season's results also include seeded chance. Unlimited gives you another deal to practice on without using or changing the Daily.",
     ],
     faqs: [
       {

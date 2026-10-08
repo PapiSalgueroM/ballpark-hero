@@ -13,6 +13,7 @@ concurrency:
 
 jobs:
   pure:
+    if: ${{ !contains(github.event.head_commit.message, '[guide freeze]') }}
     runs-on: ubuntu-latest
     timeout-minutes: 50
     env:
@@ -241,5 +242,129 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: soccer-perfect-season-ui-${{ github.run_id }}-${{ github.run_attempt }}
+          path: qa-artifacts/
+          if-no-files-found: error
+  freeze_guide:
+    if: ${{ contains(github.event.head_commit.message, '[guide freeze]') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      SIM_NETWORK: offline
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold exact flat guide source
+        id: hold
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p qa-artifacts/dependencies qa-artifacts/derived
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git rev-parse HEAD HEAD^{tree} > qa-artifacts/source-identity.txt
+          git ls-tree -r HEAD > qa-artifacts/source-git-manifest.txt
+          git archive --format=tar.gz -o qa-artifacts/source.tar.gz HEAD
+          git ls-files -z | xargs -0 sha256sum > qa-artifacts/source-files.sha256
+          git ls-files -z -- . ':(exclude)scripts/data/guideHeadingsFrozen.json' | xargs -0 sha256sum > qa-artifacts/authored-files.sha256
+          sha256sum package.json package-lock.json > qa-artifacts/packages.sha256
+          cp package.json package-lock.json qa-artifacts/dependencies/
+          cp scripts/data/guideHeadingsFrozen.json qa-artifacts/derived/guideHeadingsFrozen.before.json
+          sha256sum scripts/data/guideHeadingsFrozen.json > qa-artifacts/derived/before.sha256
+      - name: Install locked freeze dependencies
+        id: install
+        if: ${{ !cancelled() && steps.hold.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci 2>&1 | tee qa-artifacts/install.log
+          node --version > qa-artifacts/node-version.txt
+          npm ls typescript esbuild react react-dom react-router-dom --json > qa-artifacts/dependencies/installed-versions.json
+      - name: Proper freeze application type gate
+        id: types
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee qa-artifacts/types.log
+      - name: Generate actual flat guide fixture
+        id: freeze
+        if: ${{ !cancelled() && steps.types.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          failed=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT=qa-artifacts/offline-blocked.txt timeout --signal=TERM --kill-after=15s 3m node scripts/simGuideHeadings.mjs --freeze /soccer-perfect-season 2>&1 | tee qa-artifacts/freeze.log || failed=1
+          cp scripts/data/guideHeadingsFrozen.json qa-artifacts/derived/guideHeadingsFrozen.after.json
+          sha256sum scripts/data/guideHeadingsFrozen.json > qa-artifacts/derived/after.sha256
+          git diff HEAD -- scripts/data/guideHeadingsFrozen.json > qa-artifacts/derived/guideHeadingsFrozen.diff
+          git ls-files -z | xargs -0 sha256sum > qa-artifacts/post-source-files.sha256
+          git ls-files -z | tar -czf qa-artifacts/post-source.tar.gz --null -T -
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import { createHash } from 'node:crypto';
+          const route = '/soccer-perfect-season';
+          const beforeRaw = fs.readFileSync('qa-artifacts/derived/guideHeadingsFrozen.before.json');
+          const afterRaw = fs.readFileSync('qa-artifacts/derived/guideHeadingsFrozen.after.json');
+          const before = JSON.parse(beforeRaw), after = JSON.parse(afterRaw);
+          assert(!Object.hasOwn(before.routes, route), 'New guide must not already be frozen');
+          assert.deepEqual(Object.keys(after.routes).sort(), [...Object.keys(before.routes), route].sort());
+          assert.deepEqual({ ...after, routes: before.routes }, before, 'Fixture metadata remains unchanged');
+          for (const [key, value] of Object.entries(before.routes)) assert.deepEqual(after.routes[key], value, 'Existing frozen route remains unchanged');
+          const parts = after.routes[route];
+          assert.deepEqual(Object.keys(parts).sort(), ['example', 'howToPlay', 'rules', 'tips']);
+          for (const part of Object.values(parts)) assert(Array.isArray(part) && part.length && part.every(line => typeof line === 'string' && line.trim()));
+          const sha = raw => createHash('sha256').update(raw).digest('hex');
+          fs.writeFileSync('qa-artifacts/freeze-receipt.json', JSON.stringify({ route, beforeSha256: sha(beforeRaw), afterSha256: sha(afterRaw), parts, existingRoutesHeld: Object.keys(before.routes).length }, null, 2));
+          NODE
+          sha256sum --quiet -c qa-artifacts/authored-files.sha256
+          git diff --exit-code HEAD -- . ':(exclude)scripts/data/guideHeadingsFrozen.json'
+          git ls-files --others --exclude-standard -- src scripts .github/workflows public index.html package.json package-lock.json > qa-artifacts/untracked-source-after.txt
+          test ! -s qa-artifacts/untracked-source-after.txt
+          test ! -s qa-artifacts/offline-blocked.txt
+          exit "$failed"
+      - name: Closing freeze source hold
+        id: close
+        if: always() && steps.hold.outcome == 'success'
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum --quiet -c qa-artifacts/authored-files.sha256
+          sha256sum --quiet -c qa-artifacts/packages.sha256
+          cmp package.json qa-artifacts/dependencies/package.json
+          cmp package-lock.json qa-artifacts/dependencies/package-lock.json
+          git diff --exit-code HEAD -- . ':(exclude)scripts/data/guideHeadingsFrozen.json'
+          git ls-files --others --exclude-standard -- src scripts .github/workflows public index.html package.json package-lock.json > qa-artifacts/untracked-source-close.txt
+          test ! -s qa-artifacts/untracked-source-close.txt
+          if [ -f qa-artifacts/derived/after.sha256 ]; then
+            sha256sum --quiet -c qa-artifacts/derived/after.sha256
+          else
+            sha256sum --quiet -c qa-artifacts/derived/before.sha256
+          fi
+          git rev-parse HEAD HEAD^{tree} > qa-artifacts/source-identity-close.txt
+          cmp qa-artifacts/source-identity.txt qa-artifacts/source-identity-close.txt
+      - name: Strict freeze verdict
+        if: always()
+        shell: bash
+        env:
+          HOLD: ${{ steps.hold.outcome }}
+          INSTALL: ${{ steps.install.outcome }}
+          TYPES: ${{ steps.types.outcome }}
+          FREEZE: ${{ steps.freeze.outcome }}
+          CLOSE: ${{ steps.close.outcome }}
+        run: |
+          set -euo pipefail
+          mkdir -p qa-artifacts
+          printf '{"hold":"%s","install":"%s","types":"%s","freeze":"%s","close":"%s"}\n' "$HOLD" "$INSTALL" "$TYPES" "$FREEZE" "$CLOSE" > qa-artifacts/gates.json
+          cat qa-artifacts/gates.json
+          for outcome in "$HOLD" "$INSTALL" "$TYPES" "$FREEZE" "$CLOSE"; do test "$outcome" = success; done
+      - name: Retain complete freeze capture
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-perfect-season-guide-freeze-${{ github.run_id }}-${{ github.run_attempt }}
           path: qa-artifacts/
           if-no-files-found: error

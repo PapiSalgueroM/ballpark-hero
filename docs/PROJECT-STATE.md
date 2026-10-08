@@ -1,3 +1,17 @@
+## Codex 1097 finite UI accepted, source guide registration next, October 8, 2026
+
+Run37748833696 at03654554: native19/19 and6/6 effective controls passed,
+pure12/12 and7 controls passed, types/build/closing passed. Independent full
+byte026ee29c/native6c9d076b/pure12db17d4 audits accepted those finite scopes.
+Reader18/25 remains strict RED overall. New guide registration still needs
+its generated flat original, one h4 and floor132; keyword source needs the
+existing generator. Those source obligations are prepared in this lane.
+Actual build-delivered part25 SHAba1906e329815cae189f58393f6a30ade3acee85f4bd997c981619d13f98ee55
+is copied from the audited artifact. No hand-generated fixture/index.
+F owns integrated saved pages/hubs/sitemap, cap100 application and publish.
+No READY, live claim, local runtime or production probe. Artifact11538000088
+SHA1538a365b68492ddd9eed8cd7424ea9fd232d2dc151b62b2b8dce5e67506a76c.
+
 ## Codex 1097 first UI proof red before gameplay, October 8, 2026
 
 Run 37747416709 at 48f884e6 failed types in existing cbbGrid.ts:180 before
