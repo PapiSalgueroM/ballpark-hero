@@ -1,0 +1,14 @@
+vitest-round exit=0 17s |    Duration  16.86s (transform 4.46s, setup 828ms, collect 10.81s, tests 22.71s, environment 5.64s, prepare 1.79s)
+digest exit=0 45s |    Duration  44.11s (transform 1.49s, setup 136ms, collect 2.07s, tests 40.87s, environment 421ms, prepare 151ms)
+simUsBoardParity exit=0 44s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+tsc exit=0 63s | 
+hall-nfl-base exit=3 6s | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks])
+hall-nfl-1 exit=3 4s | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks,base])
+hall-nfl-2 exit=3 5s | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+hall-nfl-3 exit=3 5s | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+hall-nfl-4 exit=3 5s | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+simUsCareerDeckC exit=0 47s | simUsCareerDeckC: all checks passed
+hall-nfl-5 exit=3 6s | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks])
+vitest-board exit=0 5s |    Duration  5.53s (transform 1.81s, setup 134ms, collect 4.56s, tests 2.34s, environment 753ms, prepare 291ms)
+truth exit=0 44s | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves
+hall exit=1 652s | simCareerHall: RED
