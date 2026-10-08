@@ -149,6 +149,11 @@
  *     keeper to any side without one, a full roster included (Release AM,
  *     a mutation the review found alive). Section 7a must go red, on its
  *     keeperless thirteen and nothing else.
+ *   CM_SHOOTOUT_CONTROL=keepleague   (Release AO) the arm that takes Round
+ *     1052's league out of the coachless engine is not built, so this
+ *     tree's world is held to the pinned engine as it stands. Sections 4
+ *     and 5 must go red (every row differs). It refuses to run once the
+ *     pinned engine holds the league itself.
  *
  * MEASURED, 2026-10-01, on the default seed and SIM_SEED=1 to 5 (six runs,
  * section 2 is 4000 paired shootouts an arm, 7 to 9 seconds a run):
@@ -267,7 +272,7 @@ const BUNDLE = `${TMP}/${TAG}.bundle.mjs`;
 const FIXTURE = `${ROOT}/scripts/data/cmShootoutUnset782.json`;
 
 const CONTROL = process.env.CM_SHOOTOUT_CONTROL || '';
-const KNOWN = ['ignoreorder', 'noskip', 'nocap', 'unsetpath', 'ownkeeper', 'wrongkeeper', 'nooppkeeper', 'oppworst', 'thinside', 'nomakeup', 'keeperonfull'];
+const KNOWN = ['ignoreorder', 'noskip', 'nocap', 'unsetpath', 'ownkeeper', 'wrongkeeper', 'nooppkeeper', 'oppworst', 'thinside', 'nomakeup', 'keeperonfull', 'keepleague'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`CM_SHOOTOUT_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(2); /* 2, like a runtime error below: a control that never ran must not read as one that fired (1) */
@@ -370,6 +375,9 @@ const baselinePath = `${TMP}/${TAG}.baseline428.engine.ts`;
 let historicalEnginePath = enginePath;
 let baselineEnginePath = enginePath;
 let baselineSourceHash = null;
+/* the coachless engine with Round 1052's league taken out (Release AO, below); null when the arm is not needed */
+const leagueOutPath = `${TMP}/${TAG}.leagueout.engine.ts`;
+let leagueOutEnginePath = null;
 if (!WRITE_FIXTURE) {
   const source = readLF(enginePath);
   const header = 'export function coachQuickMatch(career: CareerState): CareerState {\n';
@@ -380,6 +388,39 @@ if (!WRITE_FIXTURE) {
   fs.writeFileSync(baselinePath, baselineSource);
   baselineSourceHash = createHash('sha256').update(baselineSource).digest('hex');
   baselineEnginePath = baselinePath;
+  /* Release AO (2026-10-08): Round 1052 put a league into Club Manager's
+     world (the Russian Premier League), and a career draws its week from
+     every club of that world, so on a tree that holds the league no row of
+     sections 4 and 5 can equal an engine that does not (0 of 150 and 0 of
+     300 on the merged tree, 150 and 300 on Release AN's). No commit holds
+     the league without Round 1072, so the pin cannot simply move. The same
+     arm Round 1052 gave simCareerLeagueSeasons: a row that differs is played
+     once more on this tree's coachless engine with the league taken out in
+     memory (its rules row, its league row and its nation, the three things
+     that round appended to the engine's tables). Equal then, the move is
+     that round's and is counted and printed; still different, it fails as
+     before. The arm is built only while the pinned engine does not hold the
+     league: once the pin moves to a main that does, it is not needed and a
+     difference fails outright. The cut runs on the same source the coachless
+     arm is made from, so every control still reaches it (unsetpath is the
+     one that proves the arm cannot hide a changed unmanaged path). */
+  const R1052_LEAGUES = ['russia'];
+  const R1052_NATIONS = ['russia'];
+  const armNeeded = R1052_LEAGUES.some(id => !baselineSource.includes(`    id: '${id}',`));
+  if (CONTROL === 'keepleague' && !armNeeded) { console.error('control cannot run: the pinned engine already holds the league, so there is no arm to take away'); process.exit(2); }
+  if (armNeeded && CONTROL !== 'keepleague') {
+    let out = source.replace(header, header + '  return career;\n');
+    const cut = (start, end, what) => {
+      const a = out.indexOf(start);
+      const z = a < 0 ? -1 : out.indexOf(end, a);
+      if (a < 0 || z < 0 || out.indexOf(start, a + 1) >= 0) abort(`Round 1052 arm: ${what} is not in clubManager.ts exactly once`);
+      out = out.slice(0, a) + out.slice(z + end.length);
+    };
+    for (const id of R1052_LEAGUES) { cut(`\n  ${id}: {\n`, '\n  },', `the rules row ${id}`); cut(`\n  {\n    id: '${id}',`, '\n  },', `the league row ${id}`); }
+    for (const id of R1052_NATIONS) cut(`\n  { id: '${id}', name: `, ' },', `the nation ${id}`);
+    fs.writeFileSync(leagueOutPath, out);
+    leagueOutEnginePath = leagueOutPath;
+  }
 }
 
 fs.writeFileSync(ENTRY, `
@@ -393,11 +434,12 @@ globalThis.localStorage = {
 export const cm = await import('${enginePath}');
 export const historical = await import('${historicalEnginePath}');
 export const baseline = await import('${baselineEnginePath}');
+export const leagueOut = ${leagueOutEnginePath ? `await import('${leagueOutEnginePath}')` : 'null'};
 `);
 /* esbuild through its own module rather than a path under ROOT, so a worktree
    that resolves node_modules by walking up (no junction, ever) bundles too. */
 buildSync({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error', alias: { '@': `${ROOT_URL}/src` } });
-const { cm, historical, baseline } = await import(pathToFileURL(BUNDLE).href);
+const { cm, historical, baseline, leagueOut } = await import(pathToFileURL(BUNDLE).href);
 const {
   startCareer, playNextEntry, saveCareer, loadCareer, resolveXI, effectiveXIWithSlots, oppRosterFor,
   setShootoutOrder, shootoutOrderOf, runShootout, shootoutTakerOrder, shootoutSides, shootoutRosterSide,
@@ -473,6 +515,9 @@ const reachCup = (engine, baseSeed = BASE_SEED) => withSeed(baseSeed, () => {
 const atCup = reachCup(cm);
 const historicalCup = WRITE_FIXTURE ? atCup : reachCup(historical);
 const baselineCup = WRITE_FIXTURE ? atCup : reachCup(baseline);
+const leagueOutCup = leagueOut ? reachCup(leagueOut) : null;
+/* rows of sections 4 and 5 that equal the pinned engine only with Round 1052's league taken out */
+let by1052 = 0;
 const cupEntry = atCup.calendar[atCup.week];
 console.log(`   base: ${CLUB}, cup ${cupEntry.cupRound} in week ${atCup.week}, squad ${atCup.squad.length}, no order set: ${!('shootoutOrder' in atCup)}`);
 
@@ -774,14 +819,20 @@ const baselineEvidence = { baselineRef: '5b70b05f', baselineSourceHash, rows: []
   let sameRaw = 0;
   let baselineGolden = 0;
   for (const want of fixture.rows) {
-    const out = playCup(historicalCup, want.seed, historical);
-    const got = row(out);
+    let out = playCup(historicalCup, want.seed, historical);
     const baselineOut = playCup(baselineCup, want.seed, baseline);
     const base = row(baselineOut);
+    let content = compareContent(out, baselineOut);
+    if (!content.paired && leagueOut) {
+      /* Release AO: once more with Round 1052's league taken out of this tree's coachless engine */
+      const alt = playCup(leagueOutCup, want.seed, leagueOut);
+      const altContent = compareContent(alt, baselineOut);
+      if (altContent.paired) { out = alt; content = altContent; by1052 += 1; }
+    }
+    const got = row(out);
     const goldenCandidate = JSON.stringify(got) === JSON.stringify(want);
     const goldenBaseline = JSON.stringify(base) === JSON.stringify(want);
     const rawPaired = JSON.stringify(got) === JSON.stringify(base);
-    const content = compareContent(out, baselineOut);
     if (!rawPaired && !baselineEvidence.firstDifference) baselineEvidence.firstDifference = {
       seed: want.seed, candidate: { report: out.report, state: out.state },
       baseline: { report: baselineOut.report, state: baselineOut.state },
@@ -800,6 +851,8 @@ const baselineEvidence = { baselineRef: '5b70b05f', baselineSourceHash, rows: []
   console.log(`   ${sameBaseline} of ${fixture.rows.length} rows equal actual pre-1072 main in result, next draw and full content (${sameRaw} raw hashes); ancient golden mismatches candidate ${fixture.rows.length - same}, baseline ${fixture.rows.length - baselineGolden}`);
   baselineEvidence.summary = { rows: fixture.rows.length, paired: sameBaseline, rawPaired: sameRaw,
     goldenCandidateMismatches: fixture.rows.length - same, goldenBaselineMismatches: fixture.rows.length - baselineGolden };
+  if (by1052) console.log(`   ${by1052} of those rows equal it only with Round 1052's league taken out of this tree's world in memory (the move is that round's)`);
+  baselineEvidence.summary.by1052 = by1052;
   if (sameBaseline !== fixture.rows.length) fail(`${fixture.rows.length - sameBaseline} rows differ from the actual pre-1072 engine with no order set`);
   if (same !== baselineGolden) fail(`ancient golden matching counts differ: candidate ${same}, actual pre-1072 main ${baselineGolden}`);
   if (withKicks) fail(`${withKicks} reports carried shootout kicks with no order set`);
@@ -819,10 +872,17 @@ const baselineEvidence = { baselineRef: '5b70b05f', baselineSourceHash, rows: []
   let namedSame = 0;
   let namedPens = 0;
   let namedKicks = 0;
+  const namedLeagueOut = leagueOut ? reachCup(leagueOut, NAMED_BASE_SEED) : null;
+  let namedBy1052 = 0;
   for (const seed of NAMED_SEEDS) {
-    const out = playCup(namedHistorical, seed, historical);
+    let out = playCup(namedHistorical, seed, historical);
     const baselineOut = playCup(namedBaseline, seed, baseline);
-    const content = compareContent(out, baselineOut);
+    let content = compareContent(out, baselineOut);
+    if (!content.paired && leagueOut) {
+      const alt = playCup(namedLeagueOut, seed, leagueOut);
+      const altContent = compareContent(alt, baselineOut);
+      if (altContent.paired) { out = alt; content = altContent; namedBy1052 += 1; }
+    }
     if (content.paired) namedSame += 1;
     else if (shown++ < 3) console.error(`  differs from actual pre-1072 main on section 1's base, seed ${seed}: got ${JSON.stringify(row(out))}, baseline ${JSON.stringify(row(baselineOut))}`);
     if (baselineOut.decidedBy === 'pens') namedPens += 1;
@@ -830,7 +890,8 @@ const baselineEvidence = { baselineRef: '5b70b05f', baselineSourceHash, rows: []
   }
   const livePens = baselineEvidence.rows.filter(r => r.baseline.decidedBy === 'pens').length;
   console.log(`   on section 1's base: ${namedSame} of ${NAMED_SEEDS.length} rows equal actual pre-1072 main in result, next draw and full content, ${namedPens} of them settled on penalties by main (${livePens} on the fixture's base)`);
-  baselineEvidence.namedBase = { seed: NAMED_BASE_SEED, rows: NAMED_SEEDS.length, paired: namedSame, pens: namedPens };
+  if (namedBy1052) console.log(`   ${namedBy1052} of those rows equal it only with Round 1052's league taken out of this tree's world in memory`);
+  baselineEvidence.namedBase = { seed: NAMED_BASE_SEED, rows: NAMED_SEEDS.length, paired: namedSame, pens: namedPens, by1052: namedBy1052 };
   if (namedSame !== NAMED_SEEDS.length) fail(`${NAMED_SEEDS.length - namedSame} rows on section 1's base differ from the actual pre-1072 engine with no order set`);
   if (namedKicks) fail(`${namedKicks} reports on section 1's base carried shootout kicks with no order set`);
   if (namedPens < 12) fail(`main settles only ${namedPens} of the rows on section 1's base on penalties, under the floor of 12, so the one draw path is barely walked`);
@@ -858,8 +919,7 @@ section = 5;
   const probe = fixture?.rows?.find(r => pensNow.has(r.seed));
   if (!probe) fail(`none of the ${fixture?.rows?.length ?? 0} rows is a shootout on main's engine, so the old save never walks the one draw path`);
   if (probe) {
-    const out = playCup(back, probe.seed, historical);
-    const got = row(out);
+    let out = playCup(back, probe.seed, historical);
     const baselineOld = JSON.parse(JSON.stringify(baselineCup));
     delete baselineOld.shootoutOrder;
     if (!baseline.saveCareer(baselineOld)) abort('Actual pre-1072 main refused its old save');
@@ -867,11 +927,27 @@ section = 5;
     if (!baselineBack) abort('Actual pre-1072 main could not open its old save');
     const baselineOut = playCup(baselineBack, probe.seed, baseline);
     const base = row(baselineOut);
+    let content = compareContent(out, baselineOut);
+    let oldBy1052 = false;
+    if (!content.paired && leagueOut) {
+      /* Release AO: the same old save, written, loaded and played by this tree's
+         coachless engine with Round 1052's league taken out (section 4's arm) */
+      const oldOut = JSON.parse(JSON.stringify(leagueOutCup));
+      delete oldOut.shootoutOrder;
+      if (!leagueOut.saveCareer(oldOut)) abort('the league out engine refused its old save');
+      const backOut = leagueOut.loadCareer();
+      if (!backOut) abort('the league out engine could not open its old save');
+      if ('shootoutOrder' in backOut) fail('the league out engine gave an old save an order');
+      const alt = playCup(backOut, probe.seed, leagueOut);
+      const altContent = compareContent(alt, baselineOut);
+      if (altContent.paired) { out = alt; content = altContent; oldBy1052 = true; }
+    }
+    const got = row(out);
     const goldenCandidate = JSON.stringify(got) === JSON.stringify(probe);
     const goldenBaseline = JSON.stringify(base) === JSON.stringify(probe);
     const rawPaired = JSON.stringify(got) === JSON.stringify(base);
-    const content = compareContent(out, baselineOut);
-    baselineEvidence.oldLoad = { seed: probe.seed, candidate: got, baseline: base, goldenCandidate, goldenBaseline, rawPaired, ...content };
+    baselineEvidence.oldLoad = { seed: probe.seed, candidate: got, baseline: base, goldenCandidate, goldenBaseline, rawPaired, by1052: oldBy1052, ...content };
+    if (oldBy1052) console.log(`   the old save equals actual pre-1072 main only with Round 1052's league taken out of this tree's world in memory`);
     if (!content.paired) fail(`the loaded old save differs from actual pre-1072 main at seed ${probe.seed}: ${JSON.stringify(got)} vs ${JSON.stringify(base)}`);
     if (goldenCandidate !== goldenBaseline) fail('The loaded old save has a different ancient golden mismatch from actual pre-1072 main');
     console.log(`   loaded old save, seed ${probe.seed} (one of ${pensNow.size} rows main settles on penalties, decided ${base.decidedBy}): equal actual pre-1072 main ${content.paired}; ancient golden matches candidate ${goldenCandidate}, baseline ${goldenBaseline}`);
@@ -1090,7 +1166,7 @@ await new Promise(resolve => setImmediate(resolve));
 baselineEvidence.runtimeErrors = runtimeErrors;
 baselineEvidence.failedSections = failedSections;
 baselineEvidence.mutation = mutation;
-baselineEvidence.executedSources = [['candidate', enginePath], ['historical', historicalEnginePath], ['baseline428', baselineEnginePath]].map(([role, file]) => {
+baselineEvidence.executedSources = [['candidate', enginePath], ['historical', historicalEnginePath], ['baseline428', baselineEnginePath], ...(leagueOutEnginePath ? [['leagueout1052', leagueOutEnginePath]] : [])].map(([role, file]) => {
   const bytes = fs.readFileSync(file);
   const copy = CONTROL ? `${CONTROL}-${role}.engine.ts` : null;
   if (copy) fs.writeFileSync(path.join(evidenceDir, copy), bytes);
@@ -1104,7 +1180,7 @@ baselineEvidence.sources = sourceBytes.map(({ file, bytes }) => {
 });
 if (baselineEvidence.sources.some(source => !source.held)) fail('Original engine or ancient fixture source bytes changed');
 fs.writeFileSync(path.join(evidenceDir, `${CONTROL || 'normal'}-baseline.json`), JSON.stringify(baselineEvidence, null, 2));
-for (const f of [ENTRY, BUNDLE, `${TMP}/${TAG}.control.engine.ts`, historicalPath, baselinePath]) { try { fs.unlinkSync(f); } catch { /* not there */ } }
+for (const f of [ENTRY, BUNDLE, `${TMP}/${TAG}.control.engine.ts`, historicalPath, baselinePath, leagueOutPath]) { try { fs.unlinkSync(f); } catch { /* not there */ } }
 if (runtimeErrors.length || baselineEvidence.sources.some(source => !source.held)) {
   console.error('simCmShootoutOrder: runtime errors or changed original source bytes receive no control credit');
   process.exit(2);
