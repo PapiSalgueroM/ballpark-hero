@@ -1,0 +1,1 @@
+vitest-all exit=1 417s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/guessFinishMoment.test.tsx,title=src/test/guessFinishMoment.test.tsx > a clue guesser ends on the shar
