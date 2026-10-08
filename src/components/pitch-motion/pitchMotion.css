@@ -1,0 +1,29 @@
+.cm-pitch-player{display:block;width:24px;height:32px;overflow:visible;pointer-events:none}
+.cm-live-net{position:absolute;left:38%;right:38%;height:2.5%;border:1px solid #e1edf1b3;background-image:linear-gradient(#d8e9ed44 1px,transparent 1px),linear-gradient(90deg,#d8e9ed44 1px,transparent 1px);background-size:5px 5px;pointer-events:none}
+.cm-live-net--top{top:0;transform-origin:center top}
+.cm-live-net--bottom{bottom:0;transform-origin:center bottom}
+.cm-live-ball{position:absolute;width:7px;height:7px;border-radius:50%;background:radial-gradient(circle at 60% 35%,#fff 0 27%,#17394c 29% 42%,#f7efde 44%);box-shadow:0 2px 2px #06242b80;transform:translate(-50%,-50%);pointer-events:none;z-index:10}
+@media(prefers-reduced-motion:reduce){[data-cm-live-pitch] *,[data-cm-live-pitch] *::before,[data-cm-live-pitch] *::after{animation:none!important;transition:none!important}}
+/* Round 1101: the surface every binder draws on. Markings only, no artwork. */
+.pm-surface{position:relative;overflow:hidden;user-select:none;-webkit-user-select:none;background:linear-gradient(180deg,#14532d 0%,#166534 50%,#14532d 100%)}
+.pm-surface[data-pm-orient="landscape"]{background:linear-gradient(90deg,#14532d 0%,#166534 50%,#14532d 100%)}
+.pm-mark{position:absolute;pointer-events:none;border:0 solid #ffffff40}
+.pm-mark--half{left:0;right:0;top:50%;border-top-width:1px}
+.pm-mark--circle{left:50%;top:50%;width:22%;aspect-ratio:1;transform:translate(-50%,-50%);border-width:1px;border-radius:50%}
+.pm-mark--spot{width:3px;height:3px;border-radius:50%;background:#ffffff66;transform:translate(-50%,-50%)}
+.pm-mark--area{left:20%;right:20%;height:16%;border-left-width:1px;border-right-width:1px}
+.pm-mark--six{left:36.5%;right:36.5%;height:5.5%;border-left-width:1px;border-right-width:1px}
+.pm-mark--top{top:0;border-bottom-width:1px}
+.pm-mark--bottom{bottom:0;border-top-width:1px}
+.pm-surface[data-pm-orient="landscape"] .pm-mark--half{left:50%;right:auto;top:0;bottom:0;border-top-width:0;border-left-width:1px}
+.pm-surface[data-pm-orient="landscape"] .pm-mark--circle{width:auto;height:22%}
+.pm-surface[data-pm-orient="landscape"] .pm-mark--area{left:auto;right:auto;top:20%;bottom:20%;height:auto;width:16%;border-width:1px 0}
+.pm-surface[data-pm-orient="landscape"] .pm-mark--six{left:auto;right:auto;top:36.5%;bottom:36.5%;height:auto;width:5.5%;border-width:1px 0}
+.pm-surface[data-pm-orient="landscape"] .pm-mark--top{left:auto;right:0;border-left-width:1px}
+.pm-surface[data-pm-orient="landscape"] .pm-mark--bottom{left:0;right:auto;border-right-width:1px}
+.pm-surface[data-pm-orient="landscape"] .cm-live-net{left:auto;right:auto;top:38%;bottom:38%;height:auto;width:2.5%}
+.pm-surface[data-pm-orient="landscape"] .cm-live-net--top{right:0;transform-origin:right center}
+.pm-surface[data-pm-orient="landscape"] .cm-live-net--bottom{left:0;transform-origin:left center}
+.cm-live-net-bulge{position:absolute;left:50%;top:50%;width:30%;height:220%;border-radius:50%;background:#ffffff59;pointer-events:none}
+.pm-surface[data-pm-orient="landscape"] .cm-live-net-bulge{width:220%;height:30%}
+.pm-figure{position:absolute;display:flex;flex-direction:column;align-items:center;pointer-events:none;transform:translate(-50%,-24px)}
