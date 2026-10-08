@@ -1,0 +1,3 @@
+base-build exit=0 33s | c623e77d2
+base-playCareerHub exit=1 38s | Node.js v24.21.0
+base-playSoccerCareer exit=1 78s |   - 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to 
