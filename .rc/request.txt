@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+play-c: ONLY=C ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+play-pitchlayer: SEASON_MOTION_CONTROL=pitchlayer ONLY=C PORT=4564 SHOTS=/tmp/noshots4 ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
