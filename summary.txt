@@ -1,0 +1,1 @@
+vitest-words exit=0 3s |    Duration  2.62s (transform 1.05s, setup 117ms, collect 2.07s, tests 566ms, environment 709ms, prepare 297ms)

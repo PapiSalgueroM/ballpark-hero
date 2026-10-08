@@ -1,0 +1,1 @@
+vitest-words: node_modules/.bin/vitest run src/test/seasonCentreWords.test.tsx src/test/seasonCentreSlots.test.tsx --testTimeout=300000 --hookTimeout=120000
