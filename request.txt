@@ -1,0 +1,12 @@
+#!build
+#!playwright
+#!serial
+cgwalk: node scripts/playCollegeGridFirstTap.mjs
+cgwalk-nosurname: CGFIRST_CONTROL=nosurname node scripts/playCollegeGridFirstTap.mjs
+cgwalk-latecells: CGFIRST_CONTROL=latecells node scripts/playCollegeGridFirstTap.mjs
+cgwalk-paged: CGFIRST_CONTROL=paged node scripts/playCollegeGridFirstTap.mjs
+cgwalk-slow: CGFIRST_CONTROL=slow node scripts/playCollegeGridFirstTap.mjs
+cgwalk-nolist: CGFIRST_CONTROL=nolist node scripts/playCollegeGridFirstTap.mjs
+cgwalk-nojudge: CGFIRST_CONTROL=nojudge node scripts/playCollegeGridFirstTap.mjs
+cgwalk-accepted: CGFIRST_CONTROL=accepted node scripts/playCollegeGridFirstTap.mjs
+playGridCls: ENGINES=chromium node scripts/playGridCls.mjs
