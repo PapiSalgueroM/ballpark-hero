@@ -1,0 +1,1 @@
+olyprobe exit=0 3s |    Duration  2.29s (transform 433ms, setup 59ms, collect 291ms, tests 1.21s, environment 327ms, prepare 122ms)

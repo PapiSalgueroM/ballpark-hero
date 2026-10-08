@@ -1,0 +1,18 @@
+probe written: 14317 chars
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/zzOlympicsProbe.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/olympics
+[22m[39mPROBE2 {"sameFreshTwice":true,"at2":18769,"a":"\" href=\"/\" data-discover=\"true\">See all games →</a></p></div></div></div></main>","b":"\" href=\"/\" data-discover=\"true\">See all games →</a></p></div></div></div></main>"}
+
+[90mstdout[2m | src/test/zzOlympicsProbe.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/olympics
+[22m[39mR848_SHAPES {"route":"/olympics","slugs":[{"s":"olympics","i":28,"id":null}],"failures":[]}
+
+ [32m✓[39m src/test/zzOlympicsProbe.test.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 1213[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/olympics [33m 1212[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m   Start at [22m 12:08:18
+[2m   Duration [22m 2.29s[2m (transform 433ms, setup 59ms, collect 291ms, tests 1.21s, environment 327ms, prepare 122ms)[22m
+
