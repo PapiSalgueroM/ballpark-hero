@@ -1,0 +1,23 @@
+#!serve
+#!playwright
+# Round 1051 closing check (verifier, session F): MAJOR 1 reruns on the pushed head, read only
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vit-hall: node_modules/.bin/vitest run src/test/careerHall.test.tsx src/test/careerHallV1Replay.test.ts src/test/usCareerHallBoard.test.tsx src/test/usCareerActionConfirm.test.tsx --testTimeout=300000 --hookTimeout=120000
+full-nfl: TMPDIR=$(mktemp -d) node scripts/simCareerHall.mjs nfl
+full-nba: TMPDIR=$(mktemp -d) node scripts/simCareerHall.mjs nba
+full-mlb: TMPDIR=$(mktemp -d) node scripts/simCareerHall.mjs mlb
+full-nhl: TMPDIR=$(mktemp -d) node scripts/simCareerHall.mjs nhl
+big-nfl: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=standoutbig node scripts/simCareerHall.mjs nfl
+big-nba: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=standoutbig node scripts/simCareerHall.mjs nba
+big-mlb: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=standoutbig node scripts/simCareerHall.mjs mlb
+big-nhl: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=standoutbig node scripts/simCareerHall.mjs nhl
+gone-nfl: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=standoutgone node scripts/simCareerHall.mjs nfl
+gone-nba: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=standoutgone node scripts/simCareerHall.mjs nba
+gone-mlb: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=standoutgone node scripts/simCareerHall.mjs mlb
+gone-nhl: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=standoutgone node scripts/simCareerHall.mjs nhl
+back-nfl: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=decisionback node scripts/simCareerHall.mjs nfl
+back-nba: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=decisionback node scripts/simCareerHall.mjs nba
+back-mlb: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=decisionback node scripts/simCareerHall.mjs mlb
+back-nhl: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=decisionback node scripts/simCareerHall.mjs nhl
+walk: SHOTS=$RC_OUT node scripts/playCareerHallLine.mjs
+walk-noline: PLAY_CONTROL=noline SHOTS=$RC_OUT node scripts/playCareerHallLine.mjs

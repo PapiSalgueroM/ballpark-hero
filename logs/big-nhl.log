@@ -1,0 +1,46 @@
+simCareerHall nhl: 2000 careers, 0 crashed, seed base, CONTROL standoutbig
+  hof 31.7% (634), first ballot 73.3% of them; bottom third 42.7%, top third 100%
+  outcomes {"inducted":634,"notOnBallot":441,"waiting":925}; jerseys 801; talk reached 99.9% of careers
+  ladder 0.319 0.417 0.479 0.538 0.612 0.682 0.745 0.830 0.894 0.968; smallest step 0.059
+  deciles 0.37 0.44 0.41 0.63 0.63 0.87 0.98 1.00 1.00 1.00; cuts 0.41 0.41 0.47 0.45 0.48 0.44 0.38 0.33 0.30; smallest cut 0.296
+  misses: iff 0, outcome 0, table [], offset 0, promise 0/718, draws 0, notSame 0, sides 0, talk 0+0, jersey 0
+  talk timing: talks a career, median 1; first talk at 36; career ends at 39; non finite scores 0
+  board loop: 0 careers a policy, 0 crashed; talks answered one more year 0; identity misses 0
+  ends: retire now 0, talk farewells 0, deck farewells 0, misses 0
+  once: 0 offseasons with the talk (0 asked mid-summer, 0 after a banned year), 0 offered a retirement card; listed ids seen 0, unseen [nhlB_farewellTour,nhlB_walkAwayHealthy], farewell cards not listed [] (decks probed on 0 careers)
+  seek: 0 talks caught in the board loop, 0 forged summers on a deck retirement card, 0 landed on it with no hold-out (at card 1 0, at a later card 0), 0 with the board's
+  jersey (deck): 0 recorded, 0 at a club other than the one with most seasons, 0 misnamed; synthetic 0, 0 missed; wait answers 0, 0 wrote a club
+  era: verified from the Class of 2026; {"boundary":{"below":100,"above":100}}; misses 0
+  16 never below: table misses []; 0 of 2000 careers lower on 2; 279 moved up, 125 up a verdict tier, 41 newly in the Hall
+  19 (b) Hall share 29.6 -> 31.7 percent; legacy score median 368 -> 371, mean 446.6 -> 502.0 (points paid)
+     by position: C 27.3 -> 30.3, LW 28.0 -> 32.0, RW 27.0 -> 29.8, D 25.5 -> 25.8, G 40.5 -> 40.8
+  15 (d) calibration 2 as recorded: the table and the rules equal the recording; 6 of 20 recorded saves are told something else on 2 (6 of them with a standout)
+  17 (a) marks: 12 standout cells; at or over from, pooled 9.67 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 0.81 percent (band 0.27 to 1.69)
+  17 (b) half rule and ledger: 0 misses []
+     ramps (width in seasons at the from mark's own rate, to over the median): C goals 4.1s x1.88, C assists 2.8s x1.38, C points 3.3s x1.47, LW goals 3.9s x1.66, LW assists 3.4s x1.43, LW points 2.8s x1.40, RW goals 3.3s x1.46, RW assists 2.7s x1.37, RW points 3.0s x1.40, D assists 2.5s x1.34, D points 2.6s x1.38, G wins 2.2s x1.21 floor
+  17 (c) outcome: top 5 percent by family, Hall share on 1 > on 2: C goals 100>100, C assists 80>100, C points 100>100, LW goals 85>100, LW assists 65>100, LW points 100>100, RW goals 100>100, RW assists 85>100, RW points 95>100, D assists 100>100, D points 100>100, G wins 95>100
+     pooled over the cells under 90 percent on 1: 63 -> 80 of 80 careers, a gain of 21.3 points (needs 8.1); over the first ballot line (900) on 2 and not on 1: 90 careers (11 of them newly in the Hall)
+     the standout's own part, every cell: 221 in with the standout taken out, 240 with it, of 240, a gain of 7.9 points (needs 2.9)
+  17 (d) cap: 279 of 2000 careers off the restated score on 2; the standout paid on 279
+  19 (a) base: median base credit no base position in this sport; misses []
+  19 (c) words: example LW assists 732 to 1100: +900 on 2, +0 on 1; RW assists 749 to 1060: +900 on 2, +0 on 1; card lines off 0 of 4000 records (263 name a standout, 16 had one worth under 30 points and stay quiet); longest line the table can print 174 characters (budget 200); misses []
+  18 anchors: 16 men in 17 rows ({"first":12,"later":2,"never":2} men on the main ballot, 0 by a committee, printed apart); the majority call is first from a score of 615
+     nhl-goals-1 C goals real first: raw 2924 first > 4094 first; books 2962 first > 4132 first
+     nhl-goals-2 RW goals real first: raw 675 first > 675 first; books 700 first > 1600 first
+     nhl-goals-3 C goals real first: raw 404 never > 722 first; books 455 never > 1625 first
+     nhl-goals-4 C goals real first: raw 1064 first > 1064 first; books 1113 first > 2283 first
+     nhl-goals-5 RW goals real first: raw 207 never > 207 never; books 236 never > 1136 first
+     nhl-assists-1 C assists real first: raw 2924 first > 4094 first; books 2856 first > 3756 first
+     nhl-assists-2 C assists real first: raw 431 never > 1601 first; books 414 never > 1314 first
+     nhl-assists-3 LW assists real first: raw 1420 first > 2590 first; books 1391 first > 2291 first
+     nhl-assists-4 D assists real first: raw 1982 first > 2593 first; books 1987 first > 3053 first
+     nhl-assists-5 D assists real first: raw 1412 first > 1796 first; books 1420 first > 2476 first
+     nhl-goals-6 C goals real first: raw 637 first > 1103 first; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nhl-goals-7 RW goals real first: raw 493 never > 493 never; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nhl-goals-8 LW goals real first: raw 655 first > 655 first; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nhl-goals-9 LW goals real later: raw 612 first > 612 first; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nhl-goals-10 LW goals real later: raw 320 never > 320 never; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nhl-goals-11 RW goals real never: raw 284 never > 284 never; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nhl-goals-12 RW goals real never: raw 162 never > 162 never; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     agreement, in or out and exact ballot, calibration 1 > 2: raw 12 > 14 and 11 > 13 of 17; books 7 > 10 and 7 > 10 of 10; decisions the anchors made: []
+simCareerHall nhl CONTROL standoutbig: REFUSED, it cannot fire in this sport (the band holds with every push tripled: the books reading holds 0 real never or later men, and no call of theirs moves past the band)
