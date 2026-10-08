@@ -1,0 +1,4 @@
+#!playwright
+m4pt: node_modules/.bin/esbuild src/lib/translateGuard.ts --bundle --format=iife --global-name=TG --outfile=$RC_OUT/tg-pt.js && BUNDLE=$RC_OUT/tg-pt.js PAGE=page4.js TL=pt node .rc/x/measure.mjs $RC_OUT/records-4-pt.json
+m4ja: node_modules/.bin/esbuild src/lib/translateGuard.ts --bundle --format=iife --global-name=TG --outfile=$RC_OUT/tg-ja.js && BUNDLE=$RC_OUT/tg-ja.js PAGE=page4.js TL=ja node .rc/x/measure.mjs $RC_OUT/records-4-ja.json
+m4de: node_modules/.bin/esbuild src/lib/translateGuard.ts --bundle --format=iife --global-name=TG --outfile=$RC_OUT/tg-de.js && BUNDLE=$RC_OUT/tg-de.js PAGE=page4.js TL=de node .rc/x/measure.mjs $RC_OUT/records-4-de.json
