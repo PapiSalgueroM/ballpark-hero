@@ -72,6 +72,59 @@ function Banner() {
   );
 }
 
+/**
+ * Round 1141. The real translator, as measured on 2026-10-08 in three languages:
+ *  - a <font> goes in BEFORE the text node, then the text node leaves (two steps, not one replace);
+ *  - a node it has taken once is never taken again, however often it is put back;
+ *  - neighbouring text nodes are one sentence. Its words are shared out as the language needs, and the
+ *    worst case measured is the one played here: every wrapper of the run comes back EMPTY except the
+ *    last, which holds the whole sentence (Portuguese did that to "Age " and "16").
+ * Called again after a change, it does what the real one does next: it takes whatever text is new.
+ */
+const takenOnce = new WeakSet<Node>();
+function translateReal(root: Element) {
+  const doc = root.ownerDocument;
+  const walker = doc.createTreeWalker(root, 4 /* NodeFilter.SHOW_TEXT */);
+  const texts: Text[] = [];
+  while (walker.nextNode()) texts.push(walker.currentNode as Text);
+  const fresh = texts.filter(t => t.nodeValue && t.nodeValue.trim() && !takenOnce.has(t) && !t.parentElement?.closest('font'));
+  const runs: Text[][] = [];
+  for (const t of fresh) {
+    const last = runs[runs.length - 1];
+    if (last && last[last.length - 1].nextSibling === t) last.push(t);
+    else runs.push([t]);
+  }
+  for (const run of runs) {
+    const wrappers = run.map(t => {
+      const outer = doc.createElement('font');
+      t.parentNode!.insertBefore(outer, t);
+      return outer;
+    });
+    const inner = doc.createElement('font');
+    inner.textContent = `pt:${run.map(t => t.nodeValue).join('')}`;
+    wrappers[wrappers.length - 1].appendChild(inner);
+    for (const t of run) {
+      takenOnce.add(t);
+      t.parentNode!.removeChild(t);
+    }
+  }
+}
+const fontsIn = (el: Element) => el.querySelectorAll('font').length;
+/** Lets the observer read what has happened so far, so a count taken next is a count of what comes after. */
+const settle = () => new Promise<void>(resolve => setTimeout(resolve, 0));
+const stats = () => ({ ...(window as unknown as { __dukbTranslateStats: Record<string, number> }).__dukbTranslateStats });
+
+/** A sentence React builds from pieces, one of which can leave. */
+function Header() {
+  const [age, setAge] = useState<number | null>(16);
+  return (
+    <div>
+      <button onClick={() => setAge(null)}>hide age</button>
+      <p data-testid="header">Striker · Age {age} · England</p>
+    </div>
+  );
+}
+
 /** Stands in for the route error boundary: what a player sees when a commit throws. */
 class Boundary extends Component<{ children: ReactNode }, { broke: boolean }> {
   state = { broke: false };
@@ -195,5 +248,82 @@ describe('with the guard', () => {
     const before = (fake as unknown as { Node: { prototype: { removeChild?: unknown } } }).Node.prototype.removeChild;
     expect(installTranslateGuard(fake)).toBe(false);
     expect((fake as unknown as { Node: { prototype: { removeChild?: unknown } } }).Node.prototype.removeChild).toBe(before);
+  });
+});
+
+/**
+ * Round 1141: the translated page stays right. Every test here uses translateReal, and none of them is
+ * satisfied by "it did not throw": each one reads the words that are on the page afterwards.
+ */
+describe('layer two: a string React removes takes its translated copy with it', () => {
+  it('a placeholder gives way to a value and none of the old words stay behind', async () => {
+    const { container } = render(<Boundary><Picker /></Boundary>);
+    translateReal(container);
+    const trigger = screen.getByTestId('trigger');
+    expect(trigger.textContent).toBe('pt:Choose nationality');
+    await settle();
+    const before = stats();
+    act(() => {
+      fireEvent.click(screen.getByRole('button'));
+    });
+    expect(screen.queryByRole('alert')).toBeNull();
+    expect(trigger.textContent).toBe('Brazil');
+    expect(fontsIn(trigger)).toBe(0);
+    expect(trigger.childNodes.length).toBe(1);
+    expect(stats().removed).toBe(before.removed + 1);
+  });
+
+  it('when one piece of a sentence leaves, the rest goes back to the translator whole', () => {
+    const { container } = render(<Boundary><Header /></Boundary>);
+    translateReal(container);
+    const header = screen.getByTestId('header');
+    // the worst case measured: two empty wrappers and the whole sentence in the third
+    expect(header.textContent).toBe('pt:Striker · Age 16 · England');
+    expect(Array.from(header.children).map(c => c.textContent)).toEqual(['', '', 'pt:Striker · Age 16 · England']);
+    act(() => {
+      fireEvent.click(screen.getByRole('button'));
+    });
+    // React's words, React's order, nothing of the translator's left in this element
+    expect(header.textContent).toBe('Striker · Age  · England');
+    expect(fontsIn(header)).toBe(0);
+    expect(header.childNodes.length).toBe(2);
+    // and the translator takes those, because they are new nodes to it
+    translateReal(container);
+    expect(header.textContent).toBe('pt:Striker · Age  · England');
+  });
+
+  it('a node nobody translated is still left to layer one', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    await settle();
+    const before = stats();
+    const parent = document.createElement('div');
+    const kept = parent.appendChild(document.createElement('font'));
+    const stranger = document.createTextNode('x');
+    expect(parent.removeChild(stranger)).toBe(stranger);
+    expect(Array.from(parent.childNodes)).toEqual([kept]);
+    expect(stats()).toEqual(before);
+    warn.mockRestore();
+  });
+
+  it('an ordinary removal beside a <font> that was already there is not read as a swap', async () => {
+    const parent = document.body.appendChild(document.createElement('div'));
+    const own = parent.appendChild(document.createElement('font'));
+    own.textContent = 'kept';
+    const first = parent.appendChild(document.createTextNode('first'));
+    translateReal(parent);
+    expect(parent.textContent).toBe('keptpt:first');
+    await settle();
+    const before = stats();
+    // a second string arrives right after that <font> and leaves again before any translator sees it
+    const second = parent.insertBefore(document.createTextNode('second'), own.nextSibling);
+    parent.removeChild(second);
+    // now React drops the first one: its wrapper goes, the group is refreshed, and the older <font> is
+    // not mistaken for a copy of the string that just left
+    parent.removeChild(first);
+    expect(Array.from(parent.childNodes)).toEqual([own]);
+    expect(own.textContent).toBe('kept');
+    expect(stats().swaps).toBe(before.swaps);
+    expect(stats().removed).toBe(before.removed + 1);
+    parent.remove();
   });
 });
