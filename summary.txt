@@ -1,0 +1,6 @@
+build exit=0 20s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 125s | rv-walk: 4 configurations walked, 4 errors noted
+builder-walk exit=0 64s | playNbaNumbers: 68 checks, 0 failed
+walk-oldrow exit=1 10s | playNbaNumbers: 14 checks, 2 failed (control oldrow)
+walk-wide exit=1 62s | playNbaNumbers: 68 checks, 8 failed (control wide)
+simUsCoachPoaching exit=1 0s | Node.js v24.21.0

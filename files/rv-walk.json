@@ -1,0 +1,268 @@
+{
+ "configs": [
+  {
+   "tag": "390m",
+   "errors": [
+    "walk stopped: TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('[data-season-reveal]') to be visible\n"
+   ],
+   "console": [],
+   "reached": 0,
+   "notes": {
+    "gateBeforePlay": {
+     "has65": true,
+     "hasExample": true,
+     "has23": false,
+     "sideways": 0
+    },
+    "gateCut": [
+     {
+      "text": "82-0 NBA Perfect Season",
+      "cut": true,
+      "off": false,
+      "need": 151,
+      "room": 133,
+      "right": 178
+     },
+     {
+      "text": "Close",
+      "cut": true,
+      "off": false,
+      "need": 43,
+      "room": 1,
+      "right": 365
+     }
+    ],
+    "hubReached": true,
+    "revealEarlyText": "THE 2026 SEASON Detroit Pistons · age 19 · PG Missed the playoffs 7.4 ppg, 2.6 rpg, 4.3 apg 📊 24.2 mpg, 0.8 spg, 0.1 bpg. 🪞 Reese Nakamura went 14 ppg, 4.1 rpg, 3.8 apg. Nothing in it again. You lead the head to head 0-1. Continue",
+    "revealRookie": [
+     "THE 2026 SEASON",
+     "Detroit Pistons · age 19 · PG",
+     "Missed the playoffs",
+     "7.4 ppg, 2.6 rpg, 4.3 apg",
+     "📊 24.2 mpg, 0.8 spg, 0.1 bpg.",
+     "🪞 Reese Nakamura went 14 ppg, 4.1 rpg, 3.8 apg. Nothing in it again. You lead the head to head 0-1.",
+     "Continue"
+    ],
+    "revealRookieCut": [
+     {
+      "text": "82-0 NBA Perfect Season",
+      "cut": true,
+      "off": false,
+      "need": 151,
+      "room": 133,
+      "right": 178
+     }
+    ],
+    "revealSideways": 0,
+    "hubText": "NBA My Career Draft night to jersey retirement. Every summer bends the career. Walk Player · PG Detroit Pistons 2027 · age 20 OVR 78 $2.5M x3 ⭐ Starting five Last season: 7.4 ppg, 2.6 rpg, 4.3 apg · Missed the playoffs Play the 2027 season Career so far: 0 rings · 0 MVPs · 0 All-NBA · 577 career points Practice gym Play a drill. Earn up to +2 OVR for camp. 78OVR Ceiling 95 Start practice One banked session each season. Your ceiling still applies. 📊 MY PLAYER OVR 78 The fans down at 35 💰 THE BANK $1.4M $2.5M a year, 3 years left 📜 CAREER LOG 1 season 7.4 ppg, 2.6 rpg, 4.3 apg 🏆 TROPHY CASE Empty Nothing in it. Go and win something 📰 NEWS 4 headlines Two defenders, one ball, a hundred trips a morning. By October the press was a favor they were doing you. Rating +2 to 78, health -4. 📱 INBOX 3 unread Somebody is waiting on a reply NBA My Career: Basketball Career Simulator Build a fict",
+    "hubCut": [
+     {
+      "text": "Nothing in it. Go and win something",
+      "cut": true,
+      "off": false,
+      "need": 152,
+      "room": 149,
+      "right": 361
+     },
+     {
+      "text": "Two defenders, one ball, a hundred trips a morning. By October the press was a favor they ",
+      "cut": true,
+      "off": false,
+      "need": 575,
+      "room": 149,
+      "right": 178
+     },
+     {
+      "text": "82-0 NBA Perfect Season",
+      "cut": true,
+      "off": false,
+      "need": 151,
+      "room": 133,
+      "right": 178
+     }
+    ],
+    "hubSideways": 0
+   }
+  },
+  {
+   "tag": "390r",
+   "errors": [
+    "walk stopped: TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('[data-season-reveal]') to be visible\n"
+   ],
+   "console": [],
+   "reached": 0,
+   "notes": {
+    "gateBeforePlay": {
+     "has65": true,
+     "hasExample": true,
+     "has23": false,
+     "sideways": 0
+    },
+    "gateCut": [
+     {
+      "text": "82-0 NBA Perfect Season",
+      "cut": true,
+      "off": false,
+      "need": 151,
+      "room": 133,
+      "right": 178
+     },
+     {
+      "text": "Close",
+      "cut": true,
+      "off": false,
+      "need": 43,
+      "room": 1,
+      "right": 365
+     }
+    ],
+    "hubReached": true,
+    "revealEarlyText": "THE 2026 SEASON LA Clippers · age 21 · PG WON THE NBA FINALS 7.5 ppg, 1.8 rpg, 3.7 apg 🪑 Still the second unit. The minutes will come, keep pushing. 🪑 Second unit season: your numbers come in bench minutes. 📊 14.7 mpg, 0.5 spg, 0.1 bpg. 💍 A RING. 📊 Playoffs: 28 games, 9.1 ppg, 2.4 rpg, 4.3 apg. 🌱 All-Rookie First Team. 🔥 The rim looked like a swimming pool all season. 🪞 Emmett Brennan went",
+    "revealRookie": [
+     "THE 2026 SEASON",
+     "LA Clippers · age 21 · PG",
+     "WON THE NBA FINALS",
+     "7.5 ppg, 1.8 rpg, 3.7 apg",
+     "🪑 Still the second unit. The minutes will come, keep pushing.",
+     "🪑 Second unit season: your numbers come in bench minutes.",
+     "📊 14.7 mpg, 0.5 spg, 0.1 bpg.",
+     "💍 A RING.",
+     "📊 Playoffs: 28 games, 9.1 ppg, 2.4 rpg, 4.3 apg.",
+     "🌱 All-Rookie First Team.",
+     "🔥 The rim looked like a swimming pool all season.",
+     "🪞 Emmett Brennan went 11 ppg, 3.7 rpg, 3.3 apg. You had the better year. Head to head 1-0.",
+     "Continue"
+    ],
+    "revealRookieCut": [
+     {
+      "text": "82-0 NBA Perfect Season",
+      "cut": true,
+      "off": false,
+      "need": 151,
+      "room": 133,
+      "right": 178
+     }
+    ],
+    "revealSideways": 0,
+    "hubText": "NBA My Career Draft night to jersey retirement. Every summer bends the career. Walk Player · PG LA Clippers 2027 · age 22 OVR 77 $10.9M x3 🪑 Second unit Last season: 7.5 ppg, 1.8 rpg, 3.7 apg · WON THE NBA FINALS Play the 2027 season Career so far: 1 ring · 0 MVPs · 0 All-NBA · 615 career points Practice gym Play a drill. Earn up to +2 OVR for camp. 77OVR Ceiling 92 Start practice One banked session each season. Your ceiling still applies. 📊 MY PLAYER OVR 77 PG, age 22, 1 ring 💰 THE BANK $6.1M $11M a year, 3 years left 📜 CAREER LOG 1 season 7.5 ppg, 1.8 rpg, 3.7 apg 🏆 TROPHY CASE 1 honour 1 ring 📰 NEWS 6 headlines 🎙️ The locker room loves it. 📱 INBOX 3 unread Somebody is waiting on a reply NBA My Career: Basketball Career Simulator Build a fictional prospect and live a full NBA career inside the real league. Your position and archetype drive realistic per-game lines, and every su",
+    "hubCut": [
+     {
+      "text": "82-0 NBA Perfect Season",
+      "cut": true,
+      "off": false,
+      "need": 151,
+      "room": 133,
+      "right": 178
+     }
+    ],
+    "hubSideways": 0
+   }
+  },
+  {
+   "tag": "1280m",
+   "errors": [
+    "walk stopped: TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('[data-season-reveal]') to be visible\n"
+   ],
+   "console": [],
+   "reached": 0,
+   "notes": {
+    "gateBeforePlay": {
+     "has65": true,
+     "hasExample": true,
+     "has23": false,
+     "sideways": 0
+    },
+    "gateCut": [
+     {
+      "text": "Close",
+      "cut": true,
+      "off": false,
+      "need": 43,
+      "room": 1,
+      "right": 839
+     }
+    ],
+    "hubReached": true,
+    "revealEarlyText": "THE 2026 SEASON Miami Heat · age 19 · PG Missed the playoffs 5.2 ppg, 1.8 rpg, 2.3 apg 📊 21.4 mpg, 0.7 spg, 0.1 bpg. 🌱 All-Rookie Second Team. 🪞 Rhys Kowalski went 11 ppg, 3.8 rpg, 3.5 apg and had the better year of the two of you. Head to head 0-1. Continue",
+    "revealRookie": [
+     "THE 2026 SEASON",
+     "Miami Heat · age 19 · PG",
+     "Missed the playoffs",
+     "5.2 ppg, 1.8 rpg, 2.3 apg",
+     "📊 21.4 mpg, 0.7 spg, 0.1 bpg.",
+     "🌱 All-Rookie Second Team.",
+     "🪞 Rhys Kowalski went 11 ppg, 3.8 rpg, 3.5 apg and had the better year of the two of you. Head to head 0-1.",
+     "Continue"
+    ],
+    "revealRookieCut": [],
+    "revealSideways": 0,
+    "hubText": "NBA My Career Draft night to jersey retirement. Every summer bends the career. Walk Player · PG Miami Heat 2027 · age 20 OVR 78 $2.5M x3 ⭐ Starting five Last season: 5.2 ppg, 1.8 rpg, 2.3 apg · Missed the playoffs Play the 2027 season Career so far: 0 rings · 0 MVPs · 0 All-NBA · 411 career points Practice gym Play a drill. Earn up to +2 OVR for camp. 78OVR Ceiling 99 Start practice One banked session each season. Your ceiling still applies. 📊 MY PLAYER OVR 78 PG, age 20, 0 rings 💰 THE BANK $1.4M $2.5M a year, 3 years left 📜 CAREER LOG 1 season 5.2 ppg, 1.8 rpg, 2.3 apg 🏆 TROPHY CASE Empty Nothing in it. Go and win something 📰 NEWS 5 headlines You treated October scrimmages like Game 7 and had the job locked by the second preseason game. Rating +2 to 78, morale +6, health -5. 📱 INBOX 3 unread Somebody is waiting on a reply NBA My Career: Basketball Career Simulator Build a fictiona",
+    "hubCut": [
+     {
+      "text": "You treated October scrimmages like Game 7 and had the job locked by the second preseason ",
+      "cut": true,
+      "off": false,
+      "need": 599,
+      "room": 182,
+      "right": 731
+     }
+    ],
+    "hubSideways": 0
+   }
+  },
+  {
+   "tag": "1280r",
+   "errors": [
+    "walk stopped: TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator('[data-season-reveal]') to be visible\n"
+   ],
+   "console": [],
+   "reached": 0,
+   "notes": {
+    "gateBeforePlay": {
+     "has65": true,
+     "hasExample": true,
+     "has23": false,
+     "sideways": 0
+    },
+    "gateCut": [
+     {
+      "text": "Close",
+      "cut": true,
+      "off": false,
+      "need": 43,
+      "room": 1,
+      "right": 839
+     }
+    ],
+    "hubReached": true,
+    "revealEarlyText": "THE 2026 SEASON Brooklyn Nets · age 19 · PG Missed the playoffs 5.2 ppg, 1.4 rpg, 2.4 apg 🪑 Still the second unit. The minutes will come, keep pushing. 🪑 Second unit season: your numbers come in bench minutes. 📊 13.6 mpg, 0.5 spg, 0.1 bpg. 🌱 All-Rookie Second Team. 🪞 Quinn Beaumont went 13 ppg, 4.6 rpg, 4.3 apg and had the better year of the two of you. Head to head 0-1. Continue",
+    "revealRookie": [
+     "THE 2026 SEASON",
+     "Brooklyn Nets · age 19 · PG",
+     "Missed the playoffs",
+     "5.2 ppg, 1.4 rpg, 2.4 apg",
+     "🪑 Still the second unit. The minutes will come, keep pushing.",
+     "🪑 Second unit season: your numbers come in bench minutes.",
+     "📊 13.6 mpg, 0.5 spg, 0.1 bpg.",
+     "🌱 All-Rookie Second Team.",
+     "🪞 Quinn Beaumont went 13 ppg, 4.6 rpg, 4.3 apg and had the better year of the two of you. Head to head 0-1.",
+     "Continue"
+    ],
+    "revealRookieCut": [],
+    "revealSideways": 0,
+    "hubText": "NBA My Career Draft night to jersey retirement. Every summer bends the career. Walk Player · PG Brooklyn Nets 2027 · age 20 OVR 77 $2.5M x3 🪑 Second unit Last season: 5.2 ppg, 1.4 rpg, 2.4 apg · Missed the playoffs Play the 2027 season Career so far: 0 rings · 0 MVPs · 0 All-NBA · 411 career points Practice gym Play a drill. Earn up to +2 OVR for camp. 77OVR Ceiling 92 Start practice One banked session each season. Your ceiling still applies. 📊 MY PLAYER OVR 77 PG, age 20, 0 rings 💰 THE BANK $1.4M $2.5M a year, 3 years left 📜 CAREER LOG 1 season 5.2 ppg, 1.4 rpg, 2.4 apg 🏆 TROPHY CASE Empty Nothing in it. Go and win something 📰 NEWS 6 headlines Eleven months of grilled everything and zero joy. Health +11, rating +1 to 77, morale -4, and abs you did not ask for. 📱 INBOX 3 unread Somebody is waiting on a reply NBA My Career: Basketball Career Simulator Build a fictional prospect and",
+    "hubCut": [
+     {
+      "text": "Eleven months of grilled everything and zero joy. Health +11, rating +1 to 77, morale -4, ",
+      "cut": true,
+      "off": false,
+      "need": 492,
+      "room": 182,
+      "right": 731
+     }
+    ],
+    "hubSideways": 0
+   }
+  }
+ ]
+}
