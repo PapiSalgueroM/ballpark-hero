@@ -1,0 +1,62 @@
+   NEGATIVE CONTROL ON: the guards are stripped, this run must go red
+
+prefers-reduced-motion: no-preference
+   rise      animation=cmRise         opacity=0 display=block
+   slam      animation=cmSlam         opacity=0 display=block
+   glow      animation=cmGoldGlow     opacity=1 display=block
+   confetti  animation=cmConfettiFall opacity=0 display=inline
+
+prefers-reduced-motion: reduce
+   rise      animation=cmRise         opacity=0 display=block
+   slam      animation=cmSlam         opacity=0 display=block
+   glow      animation=cmGoldGlow     opacity=1 display=block
+   confetti  animation=cmConfettiFall opacity=0 display=inline
+  FAIL: cm-rise still animates under reduce
+  FAIL: cm-slam still animates under reduce
+  FAIL: cm-gold-glow still animates under reduce
+  FAIL: cm-rise left invisible at opacity 0, worse than the bug
+  FAIL: cm-slam left invisible at opacity 0
+  FAIL: confetti still falls under reduce
+
+Round 530 routes under prefers-reduced-motion: reduce, 20 routes served from dist
+   /                   text=22395 keyframeBlocks=3 ours=2 thirdParty=1 unguarded=1 reveal=10 animating=0 invisible=0 slowMotion=0/4664
+  FAIL: / mounts 1 <style> block(s) of our own with a keyframe and no reduced motion rule
+   /cfb-dynasty        text=9512 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/453
+   /cbb-dynasty        text=9347 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/439
+   /front-office       text=13615 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/423
+   /nba-front-office   text=13215 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/410
+   /mlb-front-office   text=9470 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/403
+   /nhl-front-office   text=13886 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/422
+   /nfl-my-career      text=25080 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/491
+   /nba-my-career      text=23701 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/482
+   /mlb-my-career      text=23556 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/487
+   /nhl-my-career      text=22779 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/463
+   /club-manager       text=34061 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/469
+   /soccer-career      text=15521 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/370
+   /rebuild            text=16021 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/327
+   /idle-arena         text=11962 keyframeBlocks=3 ours=2 thirdParty=1 unguarded=2 reveal=0 animating=0 invisible=0 slowMotion=0/366
+  FAIL: /idle-arena mounts 2 <style> block(s) of our own with a keyframe and no reduced motion rule
+   /stadium-tycoon     text=20728 keyframeBlocks=4 ours=3 thirdParty=1 unguarded=3 reveal=0 animating=0 invisible=0 slowMotion=0/488
+  FAIL: /stadium-tycoon mounts 3 <style> block(s) of our own with a keyframe and no reduced motion rule
+   /wonderkid-factory  text=13513 keyframeBlocks=2 ours=1 thirdParty=1 unguarded=1 reveal=0 animating=0 invisible=0 slowMotion=0/341
+  FAIL: /wonderkid-factory mounts 1 <style> block(s) of our own with a keyframe and no reduced motion rule
+   /fight-career       text=13495 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/391
+   /fight-gym          text=7470 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/296
+   /fight-promoter     text=10826 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/313
+   Season Centre kick off  text=663 reveal=1 animating=1 invisible=0 slow=0
+  FAIL: Season Centre kick off: 1 reveal element(s) still animate under reduce
+   Season Centre matchday  text=471 reveal=2 animating=2 invisible=0 slow=0
+  FAIL: Season Centre matchday: 2 reveal element(s) still animate under reduce
+   Season Centre review    text=769 reveal=8 animating=8 invisible=0 slow=0
+  FAIL: Season Centre review: 8 reveal element(s) still animate under reduce
+   Round 1107 signing scene text=63 checked=5 animating=5 invisible=0 notGone=0 slow=0 confetti=0
+  FAIL: signing scene: 5 element(s) still animate under reduce
+   Round 1107 trophy scene  text=72 checked=11 animating=11 invisible=0 notGone=0 slow=0 confetti=60
+  FAIL: trophy scene: 11 element(s) still animate under reduce
+  FAIL: trophy scene: 60 confetti piece(s) fall under reduce
+   our own keyframe CSS was present and guarded on 4 of 20 routes; the rest had not reached a reveal yet
+   no preference /front-office    elements that move for more than 10ms: 70 of 423
+   no preference /fight-career    elements that move for more than 10ms: 57 of 391
+   no preference /stadium-tycoon  elements that move for more than 10ms: 82 of 488
+
+playReducedMotion control: green. The stripped guard was reported on the synthetic page (6 findings) and on the routes (10), so both stages work.
