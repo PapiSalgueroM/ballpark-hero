@@ -252,9 +252,10 @@ function indexRowsInto<P extends FranchisePlayer>(cfg: FranchiseGridConfig<P>, r
 
 /**
  * How many rows the static door indexes before it ends the task. Measured
- * 2026-10-08 on a GitHub runner at 4 times CPU throttle: indexing the college
- * key's 35,598 rows in one task held the page for 246 to 291 ms; 6,000 rows is
- * about a sixth of that.
+ * 2026-10-08 on a GitHub runner at 4 times CPU throttle, three walks each way,
+ * on the college key's 35,598 rows: with the index built in one task the
+ * longest task while the key landed was 246, 279 and 291 ms; at 6,000 rows to
+ * a task it is 141, 143 and 149 ms.
  */
 export const STATIC_INDEX_SLICE = 6000;
 

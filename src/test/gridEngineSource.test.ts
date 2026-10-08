@@ -372,21 +372,22 @@ describe('the static door (Round 1105)', () => {
     }));
     vi.stubGlobal('fetch', vi.fn(async (url: string) => okJson(url === urls[0] ? { stamp: 's1', rows: big } : { stamp: 's1' })));
     const cfg = staticCfg(urls, pairToRows);
-    let indexed = 0;
-    const counting: FranchiseGridConfig<Probe> = { ...cfg, toPlayer: (raw) => { indexed += 1; return cfg.toPlayer(raw); } };
-    const load = fetchFranchiseGridData(counting);
-    let done = false;
-    void load.then(() => { done = true; });
-    /* One timer at a time: what was indexed between two of them is what one task indexed. */
-    const perTask: number[] = [];
-    for (let turn = 0; !done && turn < 40; turn += 1) {
-      const before = indexed;
-      await vi.advanceTimersToNextTimerAsync();
-      if (indexed > before) perTask.push(indexed - before);
+    /* A timer callback is a task of its own in a browser. Every callback gets a
+       number here, and each row is counted under the callback it was indexed
+       after, so the counts are what one task indexed. */
+    let task = 0;
+    const perTask = new Map<number, number>();
+    const counting: FranchiseGridConfig<Probe> = { ...cfg, toPlayer: (raw) => { perTask.set(task, (perTask.get(task) ?? 0) + 1); return cfg.toPlayer(raw); } };
+    const fakeSetTimeout = globalThis.setTimeout;
+    globalThis.setTimeout = ((cb: () => void, ms?: number) => fakeSetTimeout(() => { task += 1; cb(); }, ms)) as unknown as typeof setTimeout;
+    let data: { players: Probe[]; byNormalizedName: Map<string, Probe[]> } | null = null;
+    try {
+      data = await settle(fetchFranchiseGridData(counting));
+    } finally {
+      globalThis.setTimeout = fakeSetTimeout;
     }
-    expect(done, 'the load finished').toBe(true);
-    expect(perTask, 'two whole slices and the rest, each in a task of its own').toEqual([STATIC_INDEX_SLICE, STATIC_INDEX_SLICE, 345]);
-    const data = await load;
+    expect([...perTask.values()], 'two whole slices and the rest, each in a task of its own').toEqual([STATIC_INDEX_SLICE, STATIC_INDEX_SLICE, 345]);
+    expect([...perTask.keys()].every((k) => k > 0), 'and none of them in the task that started the load').toBe(true);
     const whole = indexFranchiseRows(cfg, big)!;
     expect(data!.players.map((p) => p.n)).toEqual(whole.players.map((p) => p.n));
     expect(data!.byNormalizedName.size).toBe(whole.byNormalizedName.size);
