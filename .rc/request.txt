@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+fit: VERBOSE=1 node scripts/playLiveMatchFit.mjs
+fit-bar: LIVE_FIT_CONTROL=bar node scripts/playLiveMatchFit.mjs
+playClubManager: ENGINES=chromium node scripts/playClubManager.mjs
+simRevealScroll: node scripts/simRevealScroll.mjs
