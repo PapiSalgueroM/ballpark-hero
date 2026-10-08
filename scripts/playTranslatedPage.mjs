@@ -167,7 +167,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(ROOT, 'dist');
 const BASE = (env.BASE || env.SWEEP_BASE || 'http://localhost:4173').replace(/\/+$/, '');
 const CONTROL = env.PLAY_TRANSLATED_CONTROL || '';
-const KNOWN_CONTROLS = ['noguard', 'notranslate'];
+const KNOWN_CONTROLS = ['noguard', 'nolive', 'notranslate'];
 if (CONTROL && !KNOWN_CONTROLS.includes(CONTROL)) {
   console.error(`PLAY_TRANSLATED_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN_CONTROLS.join(', ')})`);
   process.exit(2);
@@ -176,6 +176,11 @@ const V = !!env.VERBOSE;
 const SEED = Number(env.SEED || 20261008);
 const SIM_DELAY = Number(env.SIM_DELAY ?? 150);
 const SIM_START = Number(env.SIM_START ?? 400);
+/* The real translator read new text within 5 ms and answered 48 to 150 ms later. SIM_LATE=0 makes the
+   answer use the words the node holds when it lands, which no translator does: it is there to tell
+   apart what the guard owes from what the translator's own delay costs. */
+const SIM_READ = Number(env.SIM_READ ?? 4);
+const SIM_LATE = env.SIM_LATE !== '0';
 const CAREER_PRESSES = Number(env.CAREER_PRESSES ?? 12);
 const PAGE_PRESSES = Number(env.PAGE_PRESSES ?? 8);
 const SHOTS = env.SHOTS || (env.RC_OUT ? path.join(env.RC_OUT, `translated-${CONTROL || 'plain'}`) : '');
@@ -184,7 +189,10 @@ const OUT_JSON = env.OUT_JSON || (env.RC_OUT ? path.join(env.RC_OUT, `playTransl
 /* Git Bash rewrites an env value like /club-manager into C:/Program Files/Git/club-manager: undo that. */
 const unGitBash = s => s.replace(/^[A-Za-z]:[\\/].*?[\\/]Git(?=[\\/]|$)/, '').replace(/\\/g, '/') || '/';
 const CREATE_ROUTE = '/soccer-career';
-const ALL_ROUTES = [CREATE_ROUTE, '/', '/club-manager', '/nba-my-career', '/nfl-my-career', '/stadium-tycoon', '/college-grid', '/build-your-xi', '/front-office'];
+/* Round 1141: the second scripted walk. Same page as /nba-my-career, walked into The Bank, whose
+   statement is the site's insertBefore case: a plus sign that has to land in front of a figure. */
+const BANK_ROUTE = '/nba-my-career#bank';
+const ALL_ROUTES = [CREATE_ROUTE, '/', '/club-manager', '/nba-my-career', BANK_ROUTE, '/nfl-my-career', '/stadium-tycoon', '/college-grid', '/build-your-xi', '/front-office'];
 const ONLY = env.ONLY ? env.ONLY.split(',').map(s => unGitBash(s.trim())).filter(Boolean) : null;
 const ROUTES = ONLY ? ALL_ROUTES.filter(r => ONLY.includes(r)) : ALL_ROUTES;
 const VIEW_SIZES = { phone: { width: 390, height: 844 }, desktop: { width: 1280, height: 900 } };
@@ -201,15 +209,16 @@ const NAT = env.NAT || 'Brazil';
 const POS = env.POS || 'Striker';
 const ERA = env.ERA || 'Current era';
 const PICKS = [['nationality', NAT], ['position', POS], ['era', ERA]];
-/* A RATCHET, not a clean sheet. With the guard alone the nationality box still READS "Choose
-   national..." after a pick on a translated page: the pick is taken, the flow goes on, the words
-   are hidden (see boxReads). The cure is a span around the placeholder, which is the create path
-   repair and not this round. The day that lands this check goes red and says so: take the name off
-   this list, and from then on every pick must be readable. Anything not listed fails today. */
-const KNOWN_HIDDEN_PICKS = ['nationality'];
+/* Round 1140 kept the nationality box on this list: with layer one alone it still READS "Choose
+   national..." after a pick, because the translator's copy of the placeholder stays in the box.
+   Round 1141's layer two removes that copy, the ratchet said "take the name off", and it is off:
+   every pick must be readable. Under the nolive control layer two is switched off and the box is
+   hidden again, which is one of the three things that control has to show. */
+const KNOWN_HIDDEN_PICKS = CONTROL === 'nolive' ? ['nationality'] : [];
 const BOUNDARY_WORDS = 'This page broke';
 const RETRY_WORDS = 'Try this page again';
 const SWITCH = '__DUKB_NO_TRANSLATE_GUARD__';
+const SWITCH_LIVE = '__DUKB_NO_TRANSLATE_LIVE__';
 const GUARD_LINE = 'a node this page no longer owns';
 
 const failed = [];
@@ -271,6 +280,12 @@ if (CONTROL === 'noguard' && !switchInBuild) {
   console.error('control "noguard" cannot run: its switch is not in the served build, so setting it would change nothing. NOT CHECKED.');
   await stop(2);
 }
+const liveInBuild = entryText.includes(SWITCH_LIVE);
+checkLine(`0. the served entry chunk holds layer two's off switch ${SWITCH_LIVE}`, liveInBuild);
+if (CONTROL === 'nolive' && !liveInBuild) {
+  console.error('control "nolive" cannot run: its switch is not in the served build, so setting it would change nothing. NOT CHECKED.');
+  await stop(2);
+}
 
 /* ------------------------------------------------------------------ *
  * How the career is walked once it exists: the flagship walker's own list
@@ -315,6 +330,8 @@ function pageInit(cfg) {
   try { localStorage.setItem('cookie-consent', 'essential'); } catch (e) { /* storage blocked */ }
   /* THE CONTROL'S SWITCH: the guard reads this before it installs itself */
   if (cfg.noguard) window.__DUKB_NO_TRANSLATE_GUARD__ = true;
+  /* Round 1141, the second control's switch: layer one only, nothing follows the translator's copies */
+  if (cfg.nolive) window.__DUKB_NO_TRANSLATE_LIVE__ = true;
 
   /* the words React rendered, whatever the translator has done to them since */
   function origText(node) {
@@ -357,6 +374,94 @@ function pageInit(cfg) {
     w.counting = true;
   }
 
+  /* ---------------- what React holds, against what the screen says (Round 1141) ----------------
+     The judge of "stale text", and it leans on neither the guard nor the translator above. React keeps
+     a tree of its own (the fibers) with the words every string has RIGHT NOW. For each element that
+     has strings of its own, those words in React's order are set against the words the page shows in
+     that element: its text nodes as they read, and each translator wrapper by the words the
+     translator took (__simOrig, which is what the wrapper displays before the marks). A wrapper left
+     behind, a number that did not move and a label that got lost all show up as a difference. The
+     second list is about place, not words: the run of "text, element, text" inside the element has to
+     be the run React has, which is what catches a new element appended at the end. */
+  function reactSays() {
+    const out = { elements: 0, stale: [], order: [] };
+    const rootEl = document.getElementById('root');
+    if (!rootEl) return out;
+    let top = null;
+    for (const k in rootEl) if (k.indexOf('__reactContainer$') === 0 && rootEl[k] && rootEl[k].stateNode) top = rootEl[k].stateNode.current;
+    if (!top) return out;
+    const groups = new Map();
+    const groupOf = el => { let g = groups.get(el); if (!g) { g = { texts: [], kinds: [], portal: false, skip: false }; groups.set(el, g); } return g; };
+    const stack = [[top, rootEl, false]];
+    while (stack.length) {
+      const [f, host, portal] = stack.pop();
+      if (f.sibling) stack.push([f.sibling, host, portal]);
+      if (f.tag === 6) { // a string of its own
+        const g = groupOf(host);
+        const v = (f.stateNode && f.stateNode.nodeValue) || '';
+        if (v) { g.texts.push(v); g.kinds.push('T'); }
+        if (portal) g.portal = true;
+      } else if (f.tag === 5) { // an element
+        const g = groupOf(host);
+        g.kinds.push('E');
+        if (portal) g.portal = true;
+        const el = f.stateNode;
+        const p = f.memoizedProps || {};
+        if (p.dangerouslySetInnerHTML) groupOf(el).skip = true;
+        else if (typeof p.children === 'string' || typeof p.children === 'number') { const s = String(p.children); if (s) { const ge = groupOf(el); ge.texts.push(s); ge.kinds.push('T'); } }
+        if (f.child) stack.push([f.child, el, false]);
+      } else if (f.tag === 4) { // a portal: its children live in another element
+        if (f.child && f.stateNode && f.stateNode.containerInfo) stack.push([f.child, f.stateNode.containerInfo, true]);
+      } else if ((f.tag === 22 || f.tag === 23) && f.memoizedState !== null) {
+        /* a hidden tree (a suspended screen): React blanked it on purpose */
+      } else if (f.child) stack.push([f.child, host, portal]);
+    }
+    const squash = k => k.join('').replace(/T+/g, 'T');
+    const where = el => { const bits = []; for (let e = el, i = 0; e && e.nodeType === 1 && i < 3; e = e.parentElement, i += 1) bits.push(e.tagName.toLowerCase() + (e.id ? '#' + e.id : '') + (e.getAttribute('data-testid') ? `[${e.getAttribute('data-testid')}]` : '') + (typeof e.className === 'string' && e.className ? '.' + e.className.split(/\s+/)[0] : '')); return bits.join(' < '); };
+    const clip = s => s.replace(/\s+/g, ' ').trim().slice(0, 70);
+    for (const [el, g] of groups) {
+      if (g.skip || !g.texts.length || el.nodeType !== 1 || !el.isConnected) continue;
+      if (el.closest('svg,script,style,textarea,noscript,code,[contenteditable="true"]')) continue;
+      out.elements += 1;
+      const pieces = [];
+      const kinds = [];
+      for (const c of el.childNodes) {
+        if (c.nodeType === 3) { if (c.nodeValue) { pieces.push(c.nodeValue); kinds.push('T'); } }
+        else if (c.nodeType === 1) {
+          if (c.nodeName === 'FONT' && c.__simOrig !== undefined) { if (c.__simOrig) { pieces.push(c.__simOrig); kinds.push('T'); } }
+          else kinds.push('E');
+        }
+      }
+      const react = g.texts.join('');
+      const screen = pieces.join('');
+      let same = react === screen;
+      if (!same && g.portal) {
+        /* a box filled from more than one place (a select's value): the same words, in any order */
+        let rest = screen;
+        same = true;
+        for (const t of g.texts.slice().sort((a, b) => b.length - a.length)) {
+          const at = rest.indexOf(t);
+          if (at < 0) { same = false; break; }
+          rest = rest.slice(0, at) + '\u0000' + rest.slice(at + t.length);
+        }
+        if (same && rest.replace(/\u0000/g, '')) same = false;
+      }
+      if (!same) out.stale.push({ react: clip(react), screen: clip(screen), at: where(el) });
+      else if (!g.portal && squash(g.kinds) !== squash(kinds)) out.order.push({ react: squash(g.kinds), screen: squash(kinds), words: clip(react), at: where(el) });
+    }
+    return out;
+  }
+  w.reactSays = reactSays;
+  /* Text the translator will never take again, back on the page: what a guard that put React's own
+     node back would leave, in the visitor's first language in the middle of a translated page. */
+  w.takenBack = () => {
+    if (!document.body) return 0;
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    let n = 0;
+    for (let t = walker.nextNode(); t; t = walker.nextNode()) if (taken.has(t) && t.nodeValue && t.nodeValue.trim()) n += 1;
+    return n;
+  };
+
   /* ---------------- the translator ---------------- */
   const SKIP_TAGS = { SCRIPT: 1, STYLE: 1, TEXTAREA: 1, NOSCRIPT: 1, TITLE: 1, IFRAME: 1, SVG: 1, CODE: 1 };
   const made = new WeakSet();
@@ -367,8 +472,10 @@ function pageInit(cfg) {
     return lead + '«' + text.trim() + '»' + trail;
   }
   w.shown = translate;
+  const queued = new WeakSet(); // read, and the answer is on its way
   function eligible(node) {
-    if (made.has(node)) return false;
+    /* its own text, a node it has taken once (the real one marks those and never looks again), a node it has read */
+    if (made.has(node) || taken.has(node) || queued.has(node)) return false;
     if (!node.nodeValue || !node.nodeValue.trim()) return false;
     if (!node.isConnected) return false;
     let e = node.parentElement;
@@ -381,42 +488,80 @@ function pageInit(cfg) {
     }
     return true;
   }
-  function swap(node) {
-    const outer = document.createElement('font');
-    outer.setAttribute('style', 'vertical-align: inherit;');
-    const inner = document.createElement('font');
-    inner.setAttribute('style', 'vertical-align: inherit;');
-    const fresh = document.createTextNode(translate(node.nodeValue));
-    made.add(fresh);
-    inner.appendChild(fresh);
-    outer.appendChild(inner);
-    outer.__simOrig = node.nodeValue;
-    outer.__simNode = node; // the node React still holds: what React writes to it later never reaches the screen
-    taken.add(node);
-    node.parentNode.replaceChild(outer, node);
-    w.simCount += 1;
-  }
-  function sweep() {
+  /* READ. Every sentence of new text on the page, with the words each node holds right now. Text nodes
+     that stand side by side are one sentence, as they are to the real translator. */
+  function read() {
     layRecorder();
-    w.sweeps += 1;
-    if (!cfg.translate || !document.body) return;
+    if (!cfg.translate || !document.body) return [];
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-    const todo = [];
-    for (let n = walker.nextNode(); n; n = walker.nextNode()) if (eligible(n)) todo.push(n);
-    for (const n of todo) if (n.isConnected) swap(n);
+    const jobs = [];
+    for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+      if (!eligible(n)) continue;
+      queued.add(n);
+      const last = jobs[jobs.length - 1];
+      if (last && last.nodes[last.nodes.length - 1].nextSibling === n) { last.nodes.push(n); last.words.push(n.nodeValue); }
+      else jobs.push({ nodes: [n], words: [n.nodeValue] });
+    }
+    return jobs;
   }
-  let timer = null;
-  w.busy = () => timer !== null; // a change has been seen and its sweep has not run yet
+  /* ANSWER, a little later, and every step of it as measured on the real one (Round 1141): only the
+     nodes still on the page are taken; a <font> goes in BEFORE each and then the node leaves; the words
+     are the ones that were READ (cfg.late), whatever the node says by now; and they are not kept node
+     by node: the whole sentence lands in the last wrapper and the others come back empty, which is
+     what Portuguese did to "Age " and "16" and German to a five piece line. */
+  function answer(jobs) {
+    for (const job of jobs) {
+      const here = [];
+      const words = [];
+      job.nodes.forEach((node, i) => {
+        if (!node.isConnected || !node.parentNode) return;
+        here.push(node);
+        words.push(cfg.late ? job.words[i] : node.nodeValue);
+      });
+      if (!here.length) continue;
+      const said = words.join('');
+      here.forEach((node, i) => {
+        const outer = document.createElement('font');
+        outer.setAttribute('style', 'vertical-align: inherit;');
+        const lastOne = i === here.length - 1;
+        outer.__simOrig = lastOne ? said : '';
+        if (lastOne) {
+          const inner = document.createElement('font');
+          inner.setAttribute('style', 'vertical-align: inherit;');
+          const fresh = document.createTextNode(translate(said));
+          made.add(fresh);
+          inner.appendChild(fresh);
+          outer.appendChild(inner);
+        }
+        node.parentNode.insertBefore(outer, node);
+      });
+      for (const node of here) {
+        taken.add(node);
+        node.parentNode.removeChild(node);
+        w.simCount += 1;
+      }
+    }
+    w.sweeps += 1;
+  }
+  let reading = null;
+  let waiting = 0;
+  w.busy = () => reading !== null || waiting > 0; // a change has been seen and its answer has not landed yet
+  function look() {
+    reading = null;
+    const jobs = read();
+    if (!jobs.length) return;
+    waiting += 1;
+    setTimeout(() => { waiting -= 1; answer(jobs); }, cfg.simDelay);
+  }
   function schedule() {
-    if (timer !== null) return;
-    timer = setTimeout(() => { timer = null; sweep(); }, cfg.simDelay);
+    if (reading === null) reading = setTimeout(look, cfg.simRead);
   }
   function start() {
     if (cfg.translate) {
       document.documentElement.setAttribute('lang', 'pt');
       document.documentElement.classList.add('translated-ltr');
     }
-    sweep();
+    look();
     w.simStarted = true;
     new MutationObserver(schedule).observe(document.documentElement, { childList: true, subtree: true, characterData: true });
   }
@@ -434,7 +579,8 @@ if (SHOTS) fs.mkdirSync(SHOTS, { recursive: true });
 async function openWalk(view, mode) {
   const ctx = await browser.newContext({ viewport: VIEW_SIZES[view], locale: 'pt-BR', timezoneId: 'America/Sao_Paulo' });
   await ctx.addInitScript(pageInit, {
-    seed: SEED, translate: mode !== 'off', text: mode, simDelay: SIM_DELAY, simStart: SIM_START, noguard: CONTROL === 'noguard',
+    seed: SEED, translate: mode !== 'off', text: mode, simDelay: SIM_DELAY, simStart: SIM_START, simRead: SIM_READ, late: SIM_LATE,
+    noguard: CONTROL === 'noguard', nolive: CONTROL === 'nolive',
   });
   const w = { ctx, page: null, blocked: new Set(), dbBlocked: 0, guardLines: 0, notFound: [], consoleErrors: [], pageErrors: [] };
   /* nothing leaves this machine: flags get one local pixel, everything else that is not the server is aborted */
@@ -493,8 +639,21 @@ async function probe(page) {
     let save = null;
     try { const raw = localStorage.getItem('soccerCareerSave'); save = raw ? JSON.parse(raw) : null; } catch (e) { save = null; }
     const root = document.getElementById('root');
-    const stale = [...document.querySelectorAll('font')].filter(f => f.__simNode && f.__simNode.nodeValue !== f.__simOrig);
+    const says = w.reactSays();
+    /* the career hub's own line, "Striker · Age 17 · Brazil", as the screen has it */
+    let headerAge = null;
+    for (const p of document.querySelectorAll('p')) {
+      const m = /· Age (\d+) ·/.exec(text(p));
+      if (m) { headerAge = Number(m[1]); break; }
+    }
+    const live = window.__dukbTranslateStats;
     return {
+      headerAge,
+      live: live ? { swaps: live.swaps, removed: live.removed, inserted: live.inserted, restored: live.restored } : null,
+      takenBack: w.takenBack(),
+      judged: says.elements,
+      order: says.order.length,
+      orderSample: says.order.slice(0, 4),
       boundary,
       path: location.pathname,
       h1: [...document.querySelectorAll('h1')].map(text).slice(0, 3),
@@ -507,8 +666,8 @@ async function probe(page) {
       guardOn: Node.prototype.__dukbTranslateGuard === true,
       moved: w.moved.length,
       movedByTranslator: w.moved.filter(m => m.byTranslator).length,
-      stale: stale.length,
-      staleSample: stale.slice(0, 4).map(f => ({ screen: f.__simOrig.trim().slice(0, 28), react: (f.__simNode.nodeValue || '').trim().slice(0, 28), around: text(f.parentElement).slice(0, 60) })),
+      stale: says.stale.length,
+      staleSample: says.stale.slice(0, 6),
       save: save ? { phase: save.phase || '', age: save.age, name: save.playerName || '', nat: save.nationality || '' } : null,
     };
   }, [BOUNDARY_WORDS, RETRY_WORDS]);
@@ -606,6 +765,16 @@ async function boxReads(page, index, wanted) {
     }
     return { shown, has: true, visible };
   }, [index, wanted]);
+}
+
+/* Everything a select box says, in the words React and the translator between them put there: the
+   placeholder before a pick, and after it the pick alone, or the pick with the placeholder's copy
+   still beside it ("Choose positionStriker (ST)"), which is what layer one alone leaves. */
+async function boxWords(page, index) {
+  return page.evaluate(i => {
+    const trig = document.querySelectorAll('[role="combobox"]')[i];
+    return trig ? window.__walk.origText(trig).replace(/\s+/g, ' ').trim() : '';
+  }, index).catch(() => '');
 }
 
 /* The two patched calls, tried directly in this browser on this build, on a scratch element that is
@@ -707,7 +876,13 @@ async function advance(page, actions, skipSrc, counts) {
  * at the boundary, or where it could not find what it came to press.
  * ------------------------------------------------------------------ */
 function newRecord(route, view, mode, pass, out) {
-  return { route, view, mode, pass, out, steps: [], boundaryAt: null, stuckAt: null, pressed: [], state: null, first: null, maxStale: 0, staleSample: [] };
+  return {
+    route, view, mode, pass, out, steps: [], boundaryAt: null, stuckAt: null, pressed: [], state: null, first: null, maxStale: 0, staleSample: [],
+    /* Round 1141: every different stale text of the walk, where an element stood out of place, text
+       the translator will not take again, and the hub's age line against the save */
+    staleAll: new Map(), staleAt: '', maxOrder: 0, orderAll: new Map(), maxTakenBack: 0, judged: 0,
+    ageLooks: 0, ageLooksOlder: 0, ageWrong: 0, ageWrongAt: '',
+  };
 }
 let shotCount = 0;
 async function shot(page, rec, name) {
@@ -730,6 +905,20 @@ async function step(W, rec, name, fn) {
     rec.state = state;
     if (!rec.first) rec.first = state;
     if (state.stale > rec.maxStale) { rec.maxStale = state.stale; rec.staleSample = state.staleSample; }
+    if (state.stale > 0 && !rec.staleAt) rec.staleAt = name;
+    for (const s of state.staleSample) rec.staleAll.set(`${s.at} | ${s.react} | ${s.screen}`, { ...s, step: name });
+    if (state.order > rec.maxOrder) rec.maxOrder = state.order;
+    for (const s of state.orderSample) rec.orderAll.set(`${s.at} | ${s.words}`, { ...s, step: name });
+    if (state.takenBack > rec.maxTakenBack) rec.maxTakenBack = state.takenBack;
+    if (state.judged > rec.judged) rec.judged = state.judged;
+    if (state.headerAge !== null && state.save && typeof state.save.age === 'number') {
+      rec.ageLooks += 1;
+      if (rec.startAge !== undefined && state.save.age > rec.startAge) rec.ageLooksOlder += 1;
+      if (state.headerAge !== state.save.age) {
+        rec.ageWrong += 1;
+        if (!rec.ageWrongAt) rec.ageWrongAt = `at "${name}" the header said Age ${state.headerAge} and the save said ${state.save.age}`;
+      }
+    }
   }
   const did = action && (action.label || action.why) ? String(action.label || action.why) : '';
   if (action && action.ok && action.label) rec.pressed.push(action.label);
@@ -755,10 +944,12 @@ async function walkCreate(W, rec) {
   for (let i = 0; i < PICKS.length; i += 1) {
     const [what, want] = PICKS[i];
     await step(W, rec, `choose ${what} ${want}`, async () => {
+      const was = await boxWords(page, i);
       const r = await pickCombo(page, mode, i, want);
       if (!r.ok) return r;
       await settle(page, mode);
       rec.boxes[what] = await boxReads(page, i, want).catch(() => null);
+      if (rec.boxes[what]) { rec.boxes[what].was = was; rec.boxes[what].words = await boxWords(page, i); }
       return r;
     });
   }
@@ -818,6 +1009,54 @@ async function walkPage(W, rec) {
   if (env.SHOTS) await shot(page, rec, 'end');
 }
 
+/* Round 1141. NBA My Career, straight into The Bank. Its statement draws each figure as
+   {amount >= 0 ? '+' : ''}{figure}: two strings side by side, the first of which comes and goes. When
+   money comes out after money went in, the lines move down one, and a line that read "-$100k" has to
+   read "+$50k": a plus sign is inserted in FRONT of a text node the translator took, and that node is
+   rewritten in the same commit. Then the other way round, the sign leaves. It is the site's own case
+   of all three things layer two does, and the reproduction's NotFoundError on insertBefore was here. */
+const BANK_PRESSES = ['Save half', 'Take out half', 'Take it all out', 'Save it all', 'Take it all out'];
+const FIGURE = /^[+-]\$\d[\d.,]*[kM]?$/;
+async function walkBank(W, rec) {
+  const { page } = W;
+  await step(W, rec, 'the page draws', async () => {
+    await page.waitForFunction(() => !document.getElementById('dukb-boot') && [...document.querySelectorAll('#root button')].some(b => b.getBoundingClientRect().width > 2), null, { timeout: 30000 });
+    await started(page);
+    await sleep(page, 700);
+    return { ok: true };
+  });
+  await step(W, rec, 'answer the rules sheet', async () => {
+    const r = await press(page, '[role="dialog"] button,[role="alertdialog"] button', "Let's Play", 'starts');
+    if (!r.ok) return { ok: true, label: '' }; // no sheet on this visit
+    await page.waitForSelector('[role="dialog"]', { state: 'detached', timeout: 6000 }).catch(() => {});
+    return r;
+  });
+  await step(W, rec, 'Enter the draft', () => press(page, 'button', 'Enter the draft', 'exact'));
+  await step(W, rec, 'open The Bank', async () => {
+    await page.waitForSelector('[data-career-hub-buttons] button', { timeout: 10000 }).catch(() => {});
+    return press(page, '[data-career-hub-buttons] button', 'The Bank', 'includes');
+  });
+  /* the figure at the end of each line of the statement, as the screen has it */
+  const figures = () => page.evaluate(() => [...document.querySelectorAll('div.border-b > span.shrink-0 > span.font-black')].map(s => window.__walk.origText(s).replace(/\s+/g, ' ').trim())).catch(() => []);
+  const seen = [];
+  let pressed = 0;
+  for (const name of BANK_PRESSES) {
+    const ok = await step(W, rec, `the Bank: ${name}`, () => press(page, 'button', name, 'exact'));
+    if (!ok) break;
+    pressed += 1;
+    seen.push(await figures());
+  }
+  const last = seen[seen.length - 1] || [];
+  const wrong = [];
+  seen.forEach((lines, i) => lines.forEach(l => { if (!FIGURE.test(l)) wrong.push({ after: BANK_PRESSES[i], line: l }); }));
+  rec.bank = {
+    reached: pressed === BANK_PRESSES.length && last.length >= 4,
+    lines: last.length, sample: last.slice(0, 5), wrong,
+    detail: `${pressed} of ${BANK_PRESSES.length} presses, ${last.length} line(s) at the end: ${JSON.stringify(last.slice(0, 5))}`,
+  };
+  await shot(page, rec, 'bank');
+}
+
 /* What the report says happened to the player: Try this page again reloads into the same
    translated page and the same step breaks again. Only ever runs after a boundary. */
 async function retryAfterBoundary(W, rec) {
@@ -842,7 +1081,9 @@ async function runWalk({ mode, view, route }, out) {
   let retry = null;
   try {
     await W.page.goto(BASE + route, { waitUntil: 'load', timeout: 45000 });
-    if (route === CREATE_ROUTE) await walkCreate(W, rec); else await walkPage(W, rec);
+    if (route === CREATE_ROUTE) await walkCreate(W, rec);
+    else if (route === BANK_ROUTE) await walkBank(W, rec);
+    else await walkPage(W, rec);
     rec.movedList = await W.page.evaluate(() => (window.__walk ? window.__walk.moved.slice(0, 60) : [])).catch(() => []);
     /* Both counts are closed BEFORE the direct question: the recorder would count its two calls, and
        the guard prints its once a page line for them on a page that never needed it. */
@@ -861,6 +1102,10 @@ async function runWalk({ mode, view, route }, out) {
     guardLines: rec.guardLines ?? W.guardLines, guardOn: first.guardOn === true,
     moved: (rec.movedList || []).length, movedByTranslator: (rec.movedList || []).filter(m => m.byTranslator).length, movedList: rec.movedList || [],
     swapped: last.swapped || 0, maxStale: rec.maxStale, staleSample: rec.staleSample,
+    staleList: [...rec.staleAll.values()], staleAt: rec.staleAt, maxOrder: rec.maxOrder, orderList: [...rec.orderAll.values()],
+    takenBack: rec.maxTakenBack, judged: rec.judged, live: last.live || null,
+    age: { looks: rec.ageLooks, older: rec.ageLooksOlder, wrong: rec.ageWrong, wrongAt: rec.ageWrongAt },
+    bank: rec.bank || null,
     pressed: rec.pressed, dbBlocked: W.dbBlocked, blocked: [...W.blocked], retry, direct: rec.direct || null,
     create: route === CREATE_ROUTE ? { drawn: !!rec.createDrawn, boxes: rec.boxes || {}, reached: !!rec.reached, reachedDetail: rec.reachedDetail || '', seasonAt: rec.seasonAt ?? null, seasonDetail: rec.seasonDetail || '' } : null,
     stepList: rec.steps,
@@ -890,6 +1135,34 @@ async function runWalk({ mode, view, route }, out) {
       better.length ? `${better.join(', ')} can be read now: take it off KNOWN_HIDDEN_PICKS in this file and correct its header` : gone || `readable: ${readable.join(', ') || 'none'}; hidden: ${names.filter(n => !readable.includes(n)).join(', ') || 'none'}`);
     check(`3. ${tag}: the create flow reached the career`, !!rec.reached, rec.reachedDetail || gone);
     check(`4. ${tag}: one season forward and the hub still stands`, rec.seasonAt !== undefined && rec.hubStands === true, rec.seasonDetail || (rec.reached ? `the save never got a year older in ${CAREER_PRESSES} presses` : 'the career was never reached'));
+  }
+  /* Round 1141: the page is RIGHT, not only standing. Not asked of the noguard control, whose page is gone. */
+  if (CONTROL !== 'noguard') {
+    const stale = row.staleList;
+    check(`10. ${tag}: the page says what React holds, at every look`, rec.judged > 0 && rec.maxStale === 0,
+      rec.judged === 0 ? 'no element with words of its own was found to judge' : rec.maxStale
+        ? `${stale.length} different stale text(s), ${rec.maxStale} at once at most, first at "${rec.staleAt}": React ${JSON.stringify(stale[0].react)}, the screen ${JSON.stringify(stale[0].screen)}, in ${stale[0].at}`
+        : `${rec.judged} element(s) with words of their own at the fullest look`);
+    check(`11. ${tag}: every element among words stands where React put it`, rec.maxOrder === 0,
+      rec.maxOrder ? `${row.orderList.length} out of place, for example ${JSON.stringify(row.orderList[0])}` : '');
+    check(`12. ${tag}: no text the translator will not take again is back on the page`, rec.maxTakenBack === 0, rec.maxTakenBack ? `${rec.maxTakenBack} at once` : '');
+    if (mode === 'off') {
+      const l = last.live;
+      check(`9. ${tag}: on a page nobody translated layer two did nothing`, !!l && l.swaps + l.removed + l.inserted + l.restored === 0, l ? JSON.stringify(l) : 'window.__dukbTranslateStats is not there');
+    }
+  }
+  if (route === CREATE_ROUTE && CONTROL !== 'noguard') {
+    const boxes = rec.boxes || {};
+    const bad = PICKS.filter(([n, want]) => { const b = boxes[n]; return !b || !b.was || !b.words || !b.words.includes(want) || b.words.includes(b.was); });
+    check(`13. ${tag}: no box holds its placeholder beside its pick`, bad.length === 0,
+      PICKS.map(([n]) => `${n}: was "${boxes[n] ? boxes[n].was : ''}", now "${boxes[n] ? boxes[n].words : 'not there'}"`).join('; '));
+    check(`14. ${tag}: the age in the hub's line is the age in the save`, rec.ageLooksOlder >= 1 && rec.ageWrong === 0,
+      rec.ageWrong ? `${rec.ageWrong} of ${rec.ageLooks} look(s) wrong: ${rec.ageWrongAt}` : rec.ageLooksOlder ? `${rec.ageLooks} look(s) at the line, ${rec.ageLooksOlder} of them after a birthday` : `the line was looked at ${rec.ageLooks} time(s) and never after a birthday, so nothing was measured`);
+  }
+  if (route === BANK_ROUTE && CONTROL !== 'noguard') {
+    const b = rec.bank || {};
+    check(`15. ${tag}: The Bank's statement got a line that came in and a line that went out`, !!b.reached, b.detail || (rec.stuckAt ? `stuck at ${rec.stuckAt}` : 'the statement was never reached'));
+    check(`16. ${tag}: every figure in the statement has its sign in front and nothing behind`, !!b.reached && b.wrong.length === 0, b.reached ? (b.wrong.length ? `wrong: ${JSON.stringify(b.wrong.slice(0, 4))}` : `${b.lines} line(s) read: ${JSON.stringify(b.sample)}`) : '');
   }
   check(`5. ${tag}: the walk pressed at least two controls`, rec.pressed.length >= 2, `${rec.pressed.length}${rec.pressed.length ? ': ' + rec.pressed.slice(0, 9).map(p => p.slice(0, 22)).join(' > ') : ''}`);
   check(`6. ${tag}: the route error boundary never appeared`, !rec.boundaryAt, rec.boundaryAt ? `it took the page at "${rec.boundaryAt}"` : '');
@@ -955,8 +1228,31 @@ if (shapes.size) {
   console.log(`\nTHE CALLS THAT NAMED A MOVED NODE (${shapes.size} different, each one a crash without the guard)`);
   for (const [key, n] of [...shapes].slice(0, 60)) console.log(`  ${n}x ${key}`);
 }
+/* Round 1141: every different stale text, with React's words, the screen's words and the element, which
+   is what somebody needs to find the line in the source. */
+const staleKinds = new Map();
+for (const r of rows) for (const s of r.staleList) {
+  const key = `${r.route}: React ${JSON.stringify(s.react)} | the screen ${JSON.stringify(s.screen)} | in ${s.at}`;
+  const had = staleKinds.get(key) || { n: 0, step: s.step };
+  had.n += 1;
+  staleKinds.set(key, had);
+}
 const staleRow = rows.filter(r => r.maxStale > 0).sort((a, b) => b.maxStale - a.maxStale)[0];
-if (staleRow) console.log(`\nSTALE TEXT, the cost the guard does not remove. Most at once: ${staleRow.maxStale} on ${staleRow.route} ${staleRow.view} ${staleRow.mode}, for example ${JSON.stringify(staleRow.staleSample.slice(0, 3))}`);
+if (staleRow) {
+  console.log(`\nSTALE TEXT: ${staleKinds.size} different across ${rows.filter(r => r.maxStale > 0).length} walk(s). Most on screen at once: ${staleRow.maxStale} on ${staleRow.route} ${staleRow.view} ${staleRow.mode}.`);
+  for (const [key, v] of [...staleKinds].slice(0, 40)) console.log(`  ${v.n}x ${key} (first at "${v.step}")`);
+}
+const orderKinds = new Map();
+for (const r of rows) for (const s of r.orderList) orderKinds.set(`${r.route}: React has ${s.react}, the screen ${s.screen}, around ${JSON.stringify(s.words)} in ${s.at}`, (orderKinds.get(`${r.route}: React has ${s.react}, the screen ${s.screen}, around ${JSON.stringify(s.words)} in ${s.at}`) || 0) + 1);
+if (orderKinds.size) {
+  console.log(`\nOUT OF PLACE: ${orderKinds.size} different (T is a run of words, E an element)`);
+  for (const [key, n] of [...orderKinds].slice(0, 20)) console.log(`  ${n}x ${key}`);
+}
+const liveRows = rows.filter(r => r.live);
+if (liveRows.length) {
+  const sum = k => liveRows.reduce((a, r) => a + r.live[k], 0);
+  console.log(`\nLAYER TWO on ${liveRows.length} page load(s): ${sum('swaps')} text node(s) seen taken, ${sum('removed')} removal(s) and ${sum('inserted')} insert(s) put through, ${sum('restored')} string(s) handed back fresh. Text the translator will not take again, back on the page: ${Math.max(0, ...rows.map(r => r.takenBack))}.`);
+}
 const dbBlocked = rows.reduce((a, r) => a + r.dbBlocked, 0);
 const otherHosts = [...new Set(rows.flatMap(r => r.blocked))];
 console.log(`\nnothing left this machine: ${dbBlocked} request(s) to the database host aborted, other hosts aborted [${otherHosts.join(', ')}]${SHOTS ? `, ${shotCount} screenshot(s) in ${SHOTS}` : ''}`);
@@ -1007,6 +1303,45 @@ if (CONTROL === 'noguard') {
     }
   }
   console.log(`playTranslatedPage: ${checksRun} checks, ${failed.length} failed (control "noguard", red on purpose)`);
+  await stop(1);
+}
+if (CONTROL === 'nolive') {
+  /* The control's own reasons, and nothing else, earn exit 1: the page is WRONG the three ways Round
+     1140 left it, and it still stands. */
+  console.log(`${checksRun} checks, ${failed.length} failed`);
+  const withLive = rows.filter(r => r.live);
+  if (withLive.length) {
+    console.error(`control "nolive": layer two was running anyway on ${withLive.length} page(s), so the switch did nothing and this run proves nothing.`);
+    await stop(2);
+  }
+  const broke = rows.filter(r => r.boundaryAt || r.notFound > 0);
+  if (broke.length) {
+    console.error(`control "nolive": ${broke.length} walk(s) broke (${broke[0].route} ${broke[0].view} ${broke[0].mode}${broke[0].boundaryAt ? ' at "' + broke[0].boundaryAt + '"' : ''}). Layer one is still on and must hold the page up: this is a red of another kind.`);
+    await stop(2);
+  }
+  const own = /^(10|11|13|14|16)\. /;
+  const other = failed.filter(f => !own.test(f));
+  if (other.length) {
+    console.error(`control "nolive": ${other.length} check(s) failed that have nothing to do with layer two, first: ${other[0].slice(0, 200)}`);
+    await stop(2);
+  }
+  const createRows = rows.filter(r => r.route === CREATE_ROUTE);
+  const bankRows = rows.filter(r => r.route === BANK_ROUTE);
+  const stale = createRows.filter(r => r.maxStale > 0);
+  const beside = createRows.filter(r => PICKS.some(([n]) => { const b = r.create.boxes[n]; return b && b.was && b.words && b.words.includes(b.was); }));
+  const frozen = createRows.filter(r => r.age.wrong > 0);
+  const sign = bankRows.filter(r => r.bank && r.bank.wrong.length > 0);
+  if (createRows.length) console.log(`control "nolive": on the create walk, stale text in ${stale.length} of ${createRows.length}, a placeholder beside its pick in ${beside.length}, the age line behind the save in ${frozen.length}.`);
+  if (bankRows.length) console.log(`control "nolive": in The Bank a figure with its sign in the wrong place or old words in ${sign.length} of ${bankRows.length} walk(s)${sign.length ? ', for example ' + JSON.stringify(sign[0].bank.wrong[0]) : ''}.`);
+  const fired = createRows.length + bankRows.length > 0
+    && stale.length === createRows.length && beside.length === createRows.length && frozen.length === createRows.length
+    && sign.length === bankRows.length;
+  if (!fired) {
+    console.error('control "nolive": with layer two off the page was NOT wrong in every way this control was written against. THE CONTROL DID NOT FIRE.');
+    await stop(2);
+  }
+  console.log(`control "nolive": the page stood (no boundary, no NotFoundError in ${rows.length} walk(s)) and was wrong for its own reasons. RED on purpose, the checks work.`);
+  console.log(`playTranslatedPage: ${checksRun} checks, ${failed.length} failed (control "nolive", red on purpose)`);
   await stop(1);
 }
 if (failed.length) failed.forEach(f => console.log('  - ' + f));
