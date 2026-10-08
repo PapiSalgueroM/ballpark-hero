@@ -29,8 +29,26 @@
  * banner leaves, stays gone after moving to another page in the same visit,
  * and analytics requests appear after Accept and only after Accept.
  *
- * MEASURED (see the numbers block near the bottom of this header, filled in
- * from the runs that set the margins).
+ * MEASURED on the built site, on a Linux runner, 2026-10-08.
+ *   Before the fix (the raw control, which is the app as it was): BLOCKED
+ *   mounted on 0 of 41 route and screen pairs, 0 buttons, only the 68 links
+ *   of the saved copy. FULL put "This page broke" on 13 routes as they
+ *   opened: /footle and /build-your-xi, and of the fifteen mount only routes
+ *   every one but /conquest, /conquest-nba, /hof-or-bust and /score-predictor
+ *   (those four write on a press, not on the mount).
+ *   After: 41 of 41 mount in both arms, no error screen, no uncaught error.
+ *   Buttons plus links in #root against the untouched run of the same route:
+ *   a difference of 0 on all 82 broken arm runs, and 0 again on the 82 runs
+ *   of the open control, so the count has no run to run noise here. A page
+ *   on the error screen measured 17 and 20 short. COUNT_MARGIN is 3: room
+ *   for a link that depends on a fetch, none for a page that did not mount.
+ *   The notice is 28px tall on a phone on all 50 arms that show it (one line:
+ *   20px of text and 4px either side) and the game sits exactly 28px lower.
+ *   NOTICE_MAX_HEIGHT and GAME_SHIFT_MAX are 30: a second line would be 48.
+ *   The home page's first game tile is at y=315 untouched, blocked and full.
+ *   Chromium's own window.localStorage is an own, configurable accessor on
+ *   window, which is what lets the seam put its stand in there; the BLOCKED
+ *   arm replaces it like for like and prints what it found.
  *
  * CONTROLS.
  *   PLAY_STORAGE_CONTROL=raw   sets window.__DUKB_RAW_STORAGE__ before the app

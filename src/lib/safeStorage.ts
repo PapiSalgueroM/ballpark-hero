@@ -143,6 +143,13 @@ export const safeSessionStorage: Storage = session.storage;
 export const storageTrouble: StorageTrouble | null = local.trouble;
 /** True when saves made on this visit will not be there on the next one. */
 export const storageIsMemory: boolean = local.trouble !== null;
+/**
+ * True when sessionStorage will not outlive a reload of this page. A "reload
+ * once" marker written there is gone the moment the reload happens, so
+ * anything that reloads on its own must not, or it reloads for ever
+ * (src/lib/freshBuild.ts reads this).
+ */
+export const sessionStorageIsMemory: boolean = session.trouble !== null;
 
 /**
  * A write that must not take the page down with it, and says whether it was
