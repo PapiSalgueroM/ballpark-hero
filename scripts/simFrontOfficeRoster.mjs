@@ -31,8 +31,16 @@
       the saved page, and nothing that reads the roster file could ever have
       noticed, because the wrong claim was not in the file.
 
-   Sections 0 to 4 read the shipped file. Section 5 runs the generator's own
-   code over a synthetic league. Section 6 checks the file's header still
+   ROUND 1130. The shipped starters file now carries the full roster opening
+   estimate (one number per man), and the seed rating this fence was written
+   for is an inside step of the generator. Sections 0, 1, 2 and 4 still read
+   the shipped file; section 3 (a rank on a scale is a spread) and one line
+   of section 8 read the SEED bake, the generator's own legacy output of the
+   committed record. The table of which section reads which, and why, sits
+   beside the loader below. No bar moved.
+
+   Sections 0 to 4 read the shipped file (3: the seed bake, see above). Section
+   5 runs the generator's own code over a synthetic league. Section 6 checks the file's header still
    describes the method that made it, because a stale header is how a reader
    learns the wrong rule. Section 7 checks the shipped copy against the
    generator. Section 8 guards the four rating rules this round got wrong on
@@ -65,6 +73,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import {
   buildRoster, SLOTS, SCALE, DEFENSIVE, PEDIGREE_WEIGHT, pedigreeWeightFor,
   pedigreeScore, ROSTER_SEASON, STATS_SEASON, MIN_BUCKET,
+  bakeFromRecord, readTeamMeta, RECORD, SPOT_CHECK,
 } from './genFrontOfficeRoster.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -122,22 +131,64 @@ const TEAM_RE = new RegExp(`\\{ abbr: ${STR}, city: ${STR}, name: ${STR}, color:
 const ROW_RE = new RegExp(`\\{ name: ${STR}, pos: '(\\w+)', age: (\\d+), ovr: (\\d+), salary: ([\\d.]+), years: (\\d+) \\}`, 'g');
 const unq = s => s.replace(/\\(.)/g, '$1');
 
-let teams = [];
-for (const m of src.matchAll(TEAM_RE)) {
-  const players = [...m[7].matchAll(ROW_RE)].map(r => ({
-    name: unq(r[1]), pos: r[2], age: Number(r[3]), ovr: Number(r[4]), salary: Number(r[5]), years: Number(r[6]),
-  }));
-  teams.push({ abbr: unq(m[1]), division: unq(m[5]), defense: Number(m[6]), players });
-}
+const parseTeams = text => {
+  const out = [];
+  for (const m of text.matchAll(TEAM_RE)) {
+    const players = [...m[7].matchAll(ROW_RE)].map(r => ({
+      name: unq(r[1]), pos: r[2], age: Number(r[3]), ovr: Number(r[4]), salary: Number(r[5]), years: Number(r[6]),
+    }));
+    out.push({ abbr: unq(m[1]), division: unq(m[5]), defense: Number(m[6]), players });
+  }
+  return out;
+};
+let teams = parseTeams(src);
+
+/* ---- the seed bake (Round 1130) ----------------------------------------- */
+/* Since Round 1130 the shipped starters file carries the full roster opening
+   estimate, and the SEED rating (the rank on a scale that this fence was
+   written for) is an inside step of the generator: it decides who the fifteen
+   are and never reaches a browser file. So the fence has two things to read,
+   and each section reads the one it is really about:
+
+     section  reads    why
+     0        both     the parser must read all of either file; and the shipped
+                       fifteen are the seed's fifteen, same men, same order
+     1, 2, 4  shipped  a defence in the file, the smell list and the defenders'
+                       share are promises about the rows a player is dealt
+     3        seed     "a rank mapped onto a scale is a spread": the bars were
+                       measured on the seed rule and SCALE is the seed's scale.
+                       The shipped estimate's own scale is fenced by
+                       scripts/simFoRatingOrder.mjs; its spread is printed here
+     5, 8     code     the generator's own rules over synthetic leagues
+     6, 7     shipped  the shipped header and the shipped page copy
+     9 to 11  shipped  the real engine, bundled, on the league it is dealt
+
+   The seed text is the generator's own legacy bake of the committed record,
+   byte for byte the starters file as it shipped before Round 1130 (the suite
+   in src/lib/frontOfficeRatings.test.ts compares it with the physical
+   56356be9 file). */
+const seedBake = bakeFromRecord(
+  JSON.parse(fs.readFileSync(RECORD, 'utf8')), readTeamMeta(src),
+  JSON.parse(fs.readFileSync(SPOT_CHECK, 'utf8')).heldOut ?? [], { legacyDepth: true },
+);
+if (seedBake.ratingProblem) throw new Error(`the seed bake refused: ${seedBake.ratingProblem}`);
+let seedTeams = parseTeams(seedBake.text);
 
 /* ---- 0. the parser read the whole file --------------------------------- */
 const EXPECTED = 32 * Object.values(SLOTS).reduce((a, b) => a + b, 0);
 const parsed = teams.reduce((n, t) => n + t.players.length, 0);
-if (teams.length !== 32 || parsed !== EXPECTED) {
-  console.error(`FAIL [0] the parser read ${teams.length} teams and ${parsed} players, expected 32 and ${EXPECTED}. Nothing below was measured, so fix the parser or the bake before trusting this harness.`);
+const parsedSeed = seedTeams.reduce((n, t) => n + t.players.length, 0);
+if (teams.length !== 32 || parsed !== EXPECTED || seedTeams.length !== 32 || parsedSeed !== EXPECTED) {
+  console.error(`FAIL [0] the parser read ${teams.length} teams and ${parsed} players from the shipped file and ${seedTeams.length} and ${parsedSeed} from the seed bake, expected 32 and ${EXPECTED} of each. Nothing below was measured, so fix the parser or the bake before trusting this harness.`);
   process.exit(1);
 }
-console.log(`   parsed ${teams.length} teams and ${parsed} players`);
+console.log(`   parsed ${teams.length} teams and ${parsed} players, and the same count from the seed bake`);
+{
+  const who = list => list.map(t => `${t.abbr}:${t.players.map(p => `${p.name}|${p.pos}|${p.age}|${p.years}`).join(',')}`).join('\n');
+  const differs = teams.reduce((n, t, i) => n + t.players.filter((p, j) => p.ovr !== seedTeams[i].players[j]?.ovr).length, 0);
+  ok(0, 'the shipped fifteen are the selection rule\'s fifteen, same men in the same order', who(teams) === who(seedTeams));
+  console.log(`   the shipped file carries the opening estimate: ${differs} of ${parsed} rows print a number other than the seed's`);
+}
 
 /* ---- controls, applied to the parsed data ------------------------------ */
 if (CONTROL === 'offenceonly') {
@@ -146,19 +197,29 @@ if (CONTROL === 'offenceonly') {
   teams = teams.map(t => ({ ...t, players: t.players.filter(p => !DEFENSIVE.has(p.pos)) }));
   console.log(`   control offenceonly: removed ${before} defenders`);
 }
+let seedForSpread = seedTeams;
 if (CONTROL === 'flat') {
-  const spread = new Set(teams.flatMap(t => t.players.map(p => p.ovr))).size;
-  if (spread <= 1) throw new Error('control flat: every rating is already the same, so it would change nothing');
-  teams = teams.map(t => ({ ...t, players: t.players.map(p => ({ ...p, ovr: 82 })) }));
-  console.log(`   control flat: collapsed ${spread} distinct ratings to one`);
+  /* section 3 reads the seed bake, so that is what the control flattens (the
+     copy section 3 reads, and only that: section 8's seed line keeps the real
+     seed, so this control is still judged on section 3 alone) */
+  const spread = new Set(seedTeams.flatMap(t => t.players.map(p => p.ovr))).size;
+  if (spread <= 1) throw new Error('control flat: every seed rating is already the same, so it would change nothing');
+  seedForSpread = seedTeams.map(t => ({ ...t, players: t.players.map(p => ({ ...p, ovr: 82 })) }));
+  console.log(`   control flat: collapsed ${spread} distinct seed ratings to one`);
 }
 
+const group = list => {
+  const map = new Map();
+  for (const p of list) {
+    if (!map.has(p.pos)) map.set(p.pos, []);
+    map.get(p.pos).push(p);
+  }
+  return map;
+};
 const all = teams.flatMap(t => t.players.map(p => ({ ...p, team: t.abbr })));
-const byPos = new Map();
-for (const p of all) {
-  if (!byPos.has(p.pos)) byPos.set(p.pos, []);
-  byPos.get(p.pos).push(p);
-}
+const byPos = group(all);
+const seedByPos = group(seedTeams.flatMap(t => t.players.map(p => ({ ...p, team: t.abbr }))));
+const seedSpreadByPos = group(seedForSpread.flatMap(t => t.players.map(p => ({ ...p, team: t.abbr }))));
 
 /* ---- 1. the file has a defence ----------------------------------------- */
 for (const g of Object.keys(SLOTS)) {
@@ -196,11 +257,20 @@ ok(2, 'no player listed twice on one team', dupes.length === 0, dupes.slice(0, 3
    while still failing the two compressed passes this round actually shipped
    (the first of those had a quarterback floor of 84 against a 66 scale). */
 const IQR_BAR = { skill: 8, def: 8, OL: 3 };
+/* Round 1130: this is a promise about the SEED rule (a rank inside a position
+   mapped onto SCALE), so it reads the seed bake. The shipped estimate is not
+   a rank on that scale; its spread is printed beside each line and its scale
+   is fenced where it is measured, in scripts/simFoRatingOrder.mjs. */
 for (const g of Object.keys(SLOTS)) {
-  const list = (byPos.get(g) ?? []).map(p => p.ovr).sort((a, b) => a - b);
+  const list = (seedSpreadByPos.get(g) ?? []).map(p => p.ovr).sort((a, b) => a - b);
   if (!list.length) { ok(3, `${g} has ratings to measure`, false, 'no players'); continue; }
   const q = f => list[Math.floor((list.length - 1) * f)];
   const iqr = q(0.75) - q(0.25);
+  {
+    const shipped = (byPos.get(g) ?? []).map(p => p.ovr).sort((a, b) => a - b);
+    const sq = f => shipped[Math.floor((shipped.length - 1) * f)];
+    if (shipped.length) console.log(`   ${g}: seed ${q(0)} to ${q(1)}, interquartile range ${iqr}; shipped estimate ${sq(0)} to ${sq(1)}, interquartile range ${sq(0.75) - sq(0.25)}`);
+  }
   const kind = g === 'OL' ? 'OL' : DEFENSIVE.has(g) ? 'def' : 'skill';
   const [lo, hi] = g === 'OL' ? SCALE.OL : DEFENSIVE.has(g) ? SCALE.def : SCALE.skill;
   ok(3, `${g} ratings are spread`, iqr >= IQR_BAR[kind], `interquartile range ${iqr}, bar ${IQR_BAR[kind]}`);
@@ -588,6 +658,20 @@ ok(8, 'the elite corners the file kept are rated above its own median back',
   eliteFound.length
     ? `${eliteFound.map(p => `${p.name} ${p.ovr}`).join(', ')} against a median of ${dbMedian}`
     : 'none of them are in the file, so this proved nothing');
+/* Round 1130: the line above reads the shipped estimate (the promise is about
+   a real person, so it must hold on the number a player sees). The same
+   outcome on the SEED bake is what this section's rule, the pedigree blend,
+   actually produces, and it is what decides whether those men are kept. */
+{
+  const seedDbs = (seedByPos.get('DB') ?? []).map(p => p.ovr).sort((a, b) => a - b);
+  const seedMedian = seedDbs[Math.floor(seedDbs.length / 2)];
+  const seedElite = (seedByPos.get('DB') ?? []).filter(p => ELITE_CB.includes(p.name));
+  ok(8, 'and the seed rule rates them above its own median back',
+    seedElite.length > 0 && seedElite.every(p => p.ovr > seedMedian),
+    seedElite.length
+      ? `${seedElite.map(p => `${p.name} ${p.ovr}`).join(', ')} against a seed median of ${seedMedian}`
+      : 'none of them are in the seed bake, so this proved nothing');
+}
 
 /* 8c. THE JOIN FAILS CLOSED. A renamed games column routed every player to
    pedigree, changed 137 of 480 names, dropped Josh Allen from 97 to 78, and
