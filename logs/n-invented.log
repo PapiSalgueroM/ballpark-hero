@@ -1,0 +1,1082 @@
+THIN facts
+   THIN (one 2026-27 source, marked in the ligue1 row): Ligue 1's 2026-27 drop of two and the barrage
+   THIN (one 2026-27 source, marked in the serieb row): Serie B's 2026-27 promotion playoff rung (third to eighth)
+   THIN (one 2026-27 source, marked in the ligue2 row): Ligue 2's 2026-27 drop of two
+A) brasileirao: the rows
+   20 clubs, drop 4, cup Copa do Brasil; weakest Remo (62) is asked: Stay up. Avoid relegation (16)
+B) brasileirao: 6 seeded seasons
+   6 seasons ended, 0 sacked, 24 cup weeks scheduled, 6 cup finals won, cup named on 6 saves, 0 clubs moved in the summers, 273 headlines read
+C) brasileirao: strength orders the table
+   Flamengo 66.3 pts (rated 79) against Remo 29.3 (rated 62): gap 37.0
+   Palmeiras 73.3 pts (rated 79) against Chapecoense 19.7 (rated 66): gap 53.7
+   rank correlation, preview rating against mean points, 14 clubs: 0.927
+D) brasileirao: no invented men
+  FAIL: Flamengo fields Ravi Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Palmeiras fields Matteo Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Athletico Paranaense fields Emeka Lindholm (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Athletico Paranaense fields Emeka Adeyemi (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Athletico Paranaense fields Andres Silva (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Athletico Paranaense fields Nils Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Athletico Paranaense fields Luca Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Athletico Paranaense fields Oscar Ravenhill (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Athletico Paranaense fields Theo Vargas (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Fluminense fields Jamie Calvet (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Fluminense fields Aleks Diallo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Fluminense fields Jamie Adeyemi (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Fluminense fields Jamie Ferreira (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Fluminense fields Diego Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Bahia fields Ravi Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cruzeiro fields Rune Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cruzeiro fields Marco Weston (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cruzeiro fields Hugo Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlético Mineiro fields Zane Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlético Mineiro fields Luca Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Santos fields Hugo Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Coritiba fields Hugo Ravenhill (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Coritiba fields Kaan Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Coritiba fields Luca Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Coritiba fields Dimitri Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Coritiba fields Rune Ravenhill (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Coritiba fields Felix Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Coritiba fields Jamie Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Coritiba fields Omar Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Coritiba fields Tyler Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Coritiba fields Matteo Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Coritiba fields Emeka Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Red Bull Bragantino fields Tyler Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: São Paulo fields Tyler Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: São Paulo fields Omar Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Botafogo fields Andres Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Botafogo fields Jude Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Botafogo fields Tariq Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Botafogo fields Ravi Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Vitória fields Mats Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Vitória fields Diego Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Vitória fields Alfie Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Vitória fields Alfie Lindholm (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Vitória fields Tariq Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Vitória fields Leo Ferreiro (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Vitória fields Emeka Diallo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Corinthians fields Dimitri Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mirassol fields Alfie Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mirassol fields Kwame Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mirassol fields Rune Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mirassol fields Milo Lindqvist (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mirassol fields Rune Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mirassol fields Nils Ferreira (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mirassol fields Jude Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mirassol fields Kofi Weston (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mirassol fields Marco Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mirassol fields Soren Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mirassol fields Hugo Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mirassol fields Dimitri Vargas (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Vasco da Gama fields Kofi Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Grêmio fields Felix Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Internacional fields Anton Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Internacional fields Hugo Weston (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Remo fields Felix Adeyemi (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Remo fields Enzo Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Remo fields Noah Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Remo fields Alfie Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Remo fields Dimitri Ferreiro (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Remo fields Rune Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Remo fields Noah Adeyemi (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Remo fields Kwame Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Remo fields Jude Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Remo fields Yusuf Weston (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Remo fields Diego Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Remo fields Noah Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Remo fields Kofi Ferreiro (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Remo fields Kofi Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Chapecoense fields Anton Moretti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Chapecoense fields Enzo Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Chapecoense fields Nils Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Chapecoense fields Zane Lindqvist (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Chapecoense fields Yusuf Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Chapecoense fields Oscar Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Chapecoense fields Nils Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Chapecoense fields Emeka Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Chapecoense fields Sam Adeyemi (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Chapecoense fields Sam Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Chapecoense fields Anton Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Chapecoense fields Jamie Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Chapecoense fields Dimitri Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Chapecoense fields Enzo Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Chapecoense fields Jonas Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Chapecoense fields Oscar Vargas (Youth), who is neither in its real roster nor flagged as a youth pad
+   274 real men and 0 flagged pads on day one, 4 partial clubs
+A) ligamx: the rows
+   18 clubs, drop 0, cup null; weakest Puebla (61) is asked: Finish mid-table or better (14)
+   every board of 18 asks one of: Win the Liga MX | Make the Liguilla | Finish mid-table or better
+B) ligamx: 6 seeded seasons
+   6 seasons ended, 2 sacked, 0 cup weeks scheduled, 0 cup finals won, cup named on 8 saves, 0 clubs moved in the summers, 256 headlines read
+C) ligamx: strength orders the table
+   América 64.2 pts (rated 74) against Necaxa 53.7 (rated 69): gap 10.5
+   Guadalajara 57.3 pts (rated 74) against FC Juárez 49.0 (rated 68): gap 8.3
+   rank correlation, preview rating against mean points, 12 clubs: 0.908
+D) ligamx: no invented men
+  FAIL: América fields Anton Weston (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: América fields Tyler Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Guadalajara fields Tariq Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Guadalajara fields Andres Silva (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Guadalajara fields Marco Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Guadalajara fields Milo Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Guadalajara fields Kaan Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cruz Azul fields Omar Hallberg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cruz Azul fields Alfie Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cruz Azul fields Jonas Adeyemi (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Monterrey fields Marco Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tigres UANL fields Diego Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tigres UANL fields Ravi Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tigres UANL fields Anton Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tigres UANL fields Kaan Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Toluca fields Jude Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Toluca fields Mats Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pumas UNAM fields Emeka Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pumas UNAM fields Andres Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pumas UNAM fields Anton Ozturk (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pumas UNAM fields Kwame Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pumas UNAM fields Mats Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pumas UNAM fields Enzo Moretti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pumas UNAM fields Anton Calvet (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pachuca fields Jonas Ferreiro (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pachuca fields Luca Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pachuca fields Kaan Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pachuca fields Kwame Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pachuca fields Alfie Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pachuca fields Leo Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pachuca fields Theo Diallo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pachuca fields Jamie Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: León fields Milo Ferreira (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: León fields Hugo Ferreira (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: León fields Ravi Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: León fields Dimitri Ozturk (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: León fields Andres Moretti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: León fields Andres Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Santos Laguna fields Marco Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Santos Laguna fields Aleks Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Santos Laguna fields Dimitri Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Santos Laguna fields Kofi Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Santos Laguna fields Yusuf Lindqvist (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Santos Laguna fields Ravi Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Santos Laguna fields Enzo Lindholm (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Santos Laguna fields Zane Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Santos Laguna fields Mats Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Santos Laguna fields Tariq Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Santos Laguna fields Omar Silva (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Santos Laguna fields Ravi Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlas fields Tyler Calvet (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlas fields Rune Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlas fields Rune Adeyemi (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlas fields Ondrej Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlas fields Felix Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlas fields Enzo Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlas fields Hugo Diallo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlas fields Kwame Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlas fields Mats Lindqvist (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Necaxa fields Kofi Adeyemi (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Necaxa fields Marco Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Necaxa fields Zane Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Necaxa fields Theo Calvet (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Necaxa fields Jonas Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Necaxa fields Theo Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Puebla fields Oscar Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Puebla fields Anton Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Puebla fields Aleks Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Puebla fields Milo Moretti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Puebla fields Luca Weston (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Puebla fields Tyler Weston (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Puebla fields Tariq Ozturk (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Puebla fields Jamie Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Puebla fields Diego Silva (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Puebla fields Omar Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Puebla fields Yusuf Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Puebla fields Sam Hallberg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Puebla fields Felix Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Puebla fields Nils Weston (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Querétaro fields Nils Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Querétaro fields Soren Hallberg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Querétaro fields Tariq Ozturk (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Querétaro fields Alfie Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Querétaro fields Tyler Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Querétaro fields Dimitri Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Querétaro fields Jonas Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Querétaro fields Leo Ozturk (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Querétaro fields Emeka Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Querétaro fields Jamie Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Querétaro fields Theo Ozturk (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Querétaro fields Diego Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tijuana fields Jamie Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tijuana fields Dimitri Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tijuana fields Hugo Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tijuana fields Anton Lindqvist (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tijuana fields Andres Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tijuana fields Milo Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tijuana fields Enzo Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tijuana fields Omar Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tijuana fields Marco Silva (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tijuana fields Noah Ferreiro (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tijuana fields Rune Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: FC Juárez fields Oscar Lindholm (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: FC Juárez fields Diego Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: FC Juárez fields Ondrej Moretti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: FC Juárez fields Mats Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: FC Juárez fields Dimitri Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: FC Juárez fields Ondrej Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: FC Juárez fields Mats Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: FC Juárez fields Jude Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlético San Luis fields Yusuf Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlético San Luis fields Jude Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlético San Luis fields Zane Ravenhill (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlético San Luis fields Felix Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlético San Luis fields Jonas Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlético San Luis fields Emeka Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlante fields Enzo Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlante fields Diego Vargas (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlante fields Alfie Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlante fields Emeka Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlante fields Tariq Moretti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlante fields Anton Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlante fields Soren Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlante fields Luca Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlante fields Hugo Lindholm (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlante fields Mats Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlante fields Dimitri Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlante fields Andres Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlante fields Diego Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlante fields Marco Moretti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlante fields Luca Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Atlante fields Enzo Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+   167 real men and 0 flagged pads on day one, 6 partial clubs
+A) aleague: the rows
+   12 clubs, drop 0, cup Australia Cup; weakest Central Coast Mariners (58) is asked: Finish mid-table or better (9)
+   every board of 12 asks one of: Win the A-League Men | Make the finals | Finish mid-table or better
+B) aleague: 96 seeded seasons
+   96 seasons ended, 4 sacked, 400 cup weeks scheduled, 96 cup finals won, cup named on 100 saves, 0 clubs moved in the summers, 2996 headlines read
+C) aleague: strength orders the table
+   Adelaide United 30.6 pts (rated 61) against Central Coast Mariners 25.5 (rated 58): gap 5.0
+   rank correlation, preview rating against mean points, 6 clubs: 0.412
+D) aleague: no invented men
+  FAIL: Macarthur FC fields Oscar Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+   296 real men and 0 flagged pads on day one, 1 partial clubs
+A) serieb: the rows
+   20 clubs, drop 3, cup Coppa Italia; weakest Ascoli (60) is asked: Stay up. Avoid relegation (17)
+B) serieb: 48 seeded seasons
+   48 seasons ended, 7 sacked, 220 cup weeks scheduled, 48 cup finals won, cup named on 55 saves, 144 clubs moved in the summers, 2260 headlines read
+C) serieb: strength orders the table
+   2 unmanaged clubs with no baked man left out of the correlation: Juve Stabia, Arezzo
+   rank correlation, preview rating against mean points, 12 clubs: 0.963
+D) serieb: no invented men
+  FAIL: Cremonese fields Diego Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cremonese fields Enzo Calvet (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cremonese fields Jonas Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cremonese fields Leo Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cremonese fields Yusuf Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cremonese fields Oscar Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cremonese fields Leo Ravenhill (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cremonese fields Kwame Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cremonese fields Kaan Lindholm (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cremonese fields Dimitri Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Verona fields Zane Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Verona fields Luca Lindqvist (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Verona fields Diego Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Verona fields Tyler Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Verona fields Nils Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pisa fields Tyler Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pisa fields Jamie Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pisa fields Zane Ferreira (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pisa fields Luca Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pisa fields Aleks Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pisa fields Jonas Ozturk (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Avellino fields Ravi Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Avellino fields Kwame Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Avellino fields Aleks Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Avellino fields Rune Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Avellino fields Tyler Lindqvist (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Avellino fields Enzo Calvet (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Avellino fields Aleks Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Avellino fields Luca Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Avellino fields Jamie Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Avellino fields Theo Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Avellino fields Yusuf Diallo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Avellino fields Diego Diallo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Avellino fields Theo Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Avellino fields Jamie Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Carrarese fields Nils Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Carrarese fields Jude Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Carrarese fields Andres Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Carrarese fields Leo Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Carrarese fields Ondrej Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Carrarese fields Tyler Ozturk (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Carrarese fields Ondrej Silva (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Carrarese fields Kaan Calvet (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Carrarese fields Sam Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Carrarese fields Hugo Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Carrarese fields Soren Lindholm (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Carrarese fields Sam Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Carrarese fields Jude Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Carrarese fields Marco Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Catanzaro fields Ondrej Lindholm (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Catanzaro fields Noah Ravenhill (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Catanzaro fields Kofi Ravenhill (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Catanzaro fields Jamie Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Catanzaro fields Andres Lindholm (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Catanzaro fields Luca Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Catanzaro fields Rune Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Catanzaro fields Zane Ferreiro (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Catanzaro fields Marco Weston (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Catanzaro fields Oscar Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Catanzaro fields Dimitri Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Catanzaro fields Tariq Adeyemi (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Catanzaro fields Leo Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cesena fields Hugo Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cesena fields Jonas Moretti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cesena fields Hugo Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cesena fields Emeka Lindqvist (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cesena fields Zane Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cesena fields Enzo Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cesena fields Dimitri Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cesena fields Theo Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cesena fields Ondrej Ravenhill (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cesena fields Andres Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cesena fields Emeka Silva (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cesena fields Kofi Calvet (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Empoli fields Kofi Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Empoli fields Kaan Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Empoli fields Felix Diallo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Empoli fields Kwame Moretti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Empoli fields Jamie Silva (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Empoli fields Nils Silva (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Empoli fields Andres Lindqvist (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Empoli fields Aleks Lindholm (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Empoli fields Rune Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Empoli fields Zane Diallo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Empoli fields Emeka Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Empoli fields Ondrej Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Empoli fields Milo Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Entella fields Alfie Ferreiro (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Entella fields Mats Silva (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Entella fields Nils Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Entella fields Ondrej Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Entella fields Hugo Calvet (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Entella fields Ravi Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Entella fields Tariq Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Entella fields Kwame Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Entella fields Kofi Ravenhill (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Entella fields Anton Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Entella fields Kwame Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Entella fields Kaan Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Entella fields Tyler Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Juve Stabia fields Tariq Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Juve Stabia fields Ondrej Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Juve Stabia fields Milo Moretti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Juve Stabia fields Luca Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Juve Stabia fields Noah Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Juve Stabia fields Alfie Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Juve Stabia fields Anton Vargas (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Juve Stabia fields Yusuf Lindqvist (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Juve Stabia fields Sam Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Juve Stabia fields Luca Ferreiro (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Juve Stabia fields Emeka Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Juve Stabia fields Sam Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Juve Stabia fields Theo Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Juve Stabia fields Kwame Silva (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Juve Stabia fields Mats Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Juve Stabia fields Dimitri Vargas (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mantova fields Ravi Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mantova fields Tyler Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mantova fields Alfie Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mantova fields Jamie Ozturk (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mantova fields Enzo Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mantova fields Anton Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mantova fields Alfie Lindqvist (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mantova fields Omar Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mantova fields Jude Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mantova fields Marco Vargas (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mantova fields Milo Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mantova fields Jamie Diallo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mantova fields Omar Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mantova fields Aleks Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Modena fields Theo Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Modena fields Alfie Moretti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Modena fields Theo Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Modena fields Alfie Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Modena fields Jonas Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Modena fields Luca Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Modena fields Andres Weston (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Modena fields Enzo Moretti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Modena fields Theo Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Modena fields Rune Adeyemi (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Modena fields Alfie Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Modena fields Matteo Adeyemi (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Modena fields Kwame Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Modena fields Soren Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Padova fields Omar Moretti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Padova fields Felix Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Padova fields Mats Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Padova fields Mats Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Padova fields Hugo Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Padova fields Kofi Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Padova fields Jonas Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Padova fields Marco Ferreira (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Padova fields Hugo Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Padova fields Kaan Adeyemi (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Padova fields Sam Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Padova fields Tyler Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Palermo fields Nils Lindqvist (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Palermo fields Jude Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Palermo fields Matteo Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Palermo fields Anton Hallberg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Palermo fields Dimitri Weston (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Palermo fields Aleks Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Palermo fields Sam Weston (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Palermo fields Emeka Lindholm (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Palermo fields Enzo Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sampdoria fields Milo Adeyemi (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sampdoria fields Kwame Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sampdoria fields Omar Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sampdoria fields Emeka Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sampdoria fields Nils Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sampdoria fields Aleks Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sampdoria fields Kofi Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sampdoria fields Yusuf Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sampdoria fields Dimitri Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sampdoria fields Jonas Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sampdoria fields Leo Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sampdoria fields Diego Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Südtirol fields Ondrej Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Südtirol fields Milo Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Südtirol fields Hugo Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Südtirol fields Hugo Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Südtirol fields Andres Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Südtirol fields Kaan Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Südtirol fields Hugo Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Südtirol fields Omar Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Südtirol fields Ravi Ravenhill (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Südtirol fields Leo Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Südtirol fields Andres Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Südtirol fields Matteo Lindqvist (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Vicenza fields Enzo Ozturk (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Vicenza fields Matteo Ferreiro (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Vicenza fields Tyler Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Vicenza fields Tariq Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Vicenza fields Kaan Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Vicenza fields Soren Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Vicenza fields Rune Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Vicenza fields Tariq Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Vicenza fields Andres Vargas (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Vicenza fields Nils Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Arezzo fields Theo Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Arezzo fields Noah Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Arezzo fields Tyler Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Arezzo fields Enzo Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Arezzo fields Anton Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Arezzo fields Leo Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Arezzo fields Felix Adeyemi (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Arezzo fields Oscar Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Arezzo fields Tyler Ferreira (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Arezzo fields Enzo Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Arezzo fields Diego Diallo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Arezzo fields Matteo Ferreira (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Arezzo fields Noah Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Arezzo fields Andres Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Arezzo fields Milo Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Arezzo fields Mats Ferreira (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Benevento fields Theo Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Benevento fields Anton Lindqvist (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Benevento fields Leo Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Benevento fields Theo Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Benevento fields Marco Vargas (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Benevento fields Oscar Ozturk (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Benevento fields Nils Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Benevento fields Jude Hallberg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Benevento fields Kofi Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Benevento fields Mats Ozturk (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Benevento fields Oscar Ferreiro (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Benevento fields Omar Vargas (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Benevento fields Jonas Diallo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Benevento fields Dimitri Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ascoli fields Jude Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ascoli fields Sam Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ascoli fields Hugo Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ascoli fields Emeka Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ascoli fields Kaan Diallo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ascoli fields Kofi Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ascoli fields Aleks Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ascoli fields Kwame Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ascoli fields Felix Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ascoli fields Nils Ferreira (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ascoli fields Matteo Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ascoli fields Anton Hallberg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ascoli fields Sam Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ascoli fields Marco Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ascoli fields Nils Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+   78 real men and 0 flagged pads on day one, 18 partial clubs
+A) ligue2: the rows
+   18 clubs, drop 2, cup Coupe de France; weakest Dunkerque (60) is asked: Stay up. Avoid relegation (16)
+B) ligue2: 48 seeded seasons
+   48 seasons ended, 3 sacked, 204 cup weeks scheduled, 48 cup finals won, cup named on 51 saves, 96 clubs moved in the summers, 2050 headlines read
+C) ligue2: strength orders the table
+   Nantes 71.8 pts (rated 73) against Reims 60.4 (rated 68): gap 11.3
+   5 unmanaged clubs with no baked man left out of the correlation: Sochaux, Dijon, Pau, Grenoble, Rodez
+   rank correlation, preview rating against mean points, 7 clubs: 0.704
+D) ligue2: no invented men
+  FAIL: Metz fields Luca Moretti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Metz fields Luca Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Metz fields Matteo Ferreiro (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Metz fields Diego Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Metz fields Jonas Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Metz fields Felix Ferreiro (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Metz fields Sam Weston (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Metz fields Hugo Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Metz fields Matteo Calvet (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Metz fields Nils Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Nantes fields Milo Ferreiro (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Nantes fields Jude Lindqvist (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Nantes fields Tyler Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Nantes fields Milo Silva (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Saint-Étienne fields Hugo Vargas (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Saint-Étienne fields Tyler Ferreiro (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Saint-Étienne fields Kaan Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Saint-Étienne fields Diego Weston (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Saint-Étienne fields Soren Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Saint-Étienne fields Milo Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Saint-Étienne fields Milo Ferreiro (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Red Star FC fields Hugo Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Red Star FC fields Emeka Hallberg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Red Star FC fields Diego Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Red Star FC fields Marco Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Red Star FC fields Diego Lindholm (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Red Star FC fields Enzo Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Red Star FC fields Jonas Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Red Star FC fields Mats Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Red Star FC fields Enzo Silva (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Red Star FC fields Alfie Hallberg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Red Star FC fields Ravi Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Red Star FC fields Yusuf Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Red Star FC fields Dimitri Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Red Star FC fields Kwame Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Red Star FC fields Matteo Moretti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Reims fields Aleks Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Reims fields Noah Lindqvist (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Reims fields Noah Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Reims fields Kofi Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Reims fields Andres Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Reims fields Aleks Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Reims fields Kaan Diallo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Reims fields Yusuf Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Montpellier fields Hugo Diallo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Montpellier fields Sam Lindholm (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Montpellier fields Kofi Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Montpellier fields Felix Lindholm (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Montpellier fields Kaan Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Montpellier fields Alfie Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Montpellier fields Leo Lindholm (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Montpellier fields Theo Diallo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Montpellier fields Kwame Silva (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Montpellier fields Milo Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Nancy fields Kaan Silva (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Nancy fields Felix Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Nancy fields Mats Silva (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Nancy fields Milo Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Nancy fields Tariq Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Nancy fields Alfie Diallo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Nancy fields Enzo Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Nancy fields Luca Silva (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Nancy fields Alfie Calvet (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Nancy fields Rune Hallberg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Nancy fields Leo Vargas (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Nancy fields Rune Ozturk (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Nancy fields Noah Ferreira (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Nancy fields Andres Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Nancy fields Andres Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Annecy fields Tyler Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Annecy fields Hugo Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Annecy fields Ondrej Ferreira (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Annecy fields Theo Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Annecy fields Anton Weston (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Annecy fields Yusuf Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Annecy fields Nils Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Annecy fields Tariq Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Annecy fields Tariq Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Annecy fields Kofi Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Annecy fields Kaan Lindholm (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Annecy fields Emeka Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Annecy fields Anton Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Annecy fields Ravi Adeyemi (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Annecy fields Jude Lindqvist (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sochaux fields Hugo Ferreira (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sochaux fields Rune Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sochaux fields Felix Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sochaux fields Theo Ravenhill (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sochaux fields Theo Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sochaux fields Rune Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sochaux fields Rune Weston (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sochaux fields Aleks Ozturk (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sochaux fields Alfie Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sochaux fields Noah Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sochaux fields Noah Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sochaux fields Tyler Calvet (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sochaux fields Anton Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sochaux fields Jude Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sochaux fields Ondrej Diallo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sochaux fields Felix Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dijon fields Tariq Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dijon fields Milo Hallberg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dijon fields Kofi Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dijon fields Dimitri Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dijon fields Kaan Lindholm (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dijon fields Ravi Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dijon fields Milo Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dijon fields Felix Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dijon fields Jonas Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dijon fields Milo Ozturk (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dijon fields Nils Ravenhill (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dijon fields Rune Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dijon fields Oscar Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dijon fields Rune Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dijon fields Emeka Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dijon fields Yusuf Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pau fields Hugo Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pau fields Hugo Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pau fields Anton Ferreira (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pau fields Diego Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pau fields Kwame Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pau fields Luca Ferreiro (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pau fields Kaan Moretti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pau fields Milo Lindholm (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pau fields Aleks Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pau fields Marco Ozturk (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pau fields Matteo Calvet (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pau fields Zane Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pau fields Diego Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pau fields Kwame Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pau fields Felix Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Pau fields Leo Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Guingamp fields Leo Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Guingamp fields Enzo Diallo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Guingamp fields Emeka Ferreira (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Guingamp fields Oscar Hallberg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Guingamp fields Aleks Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Guingamp fields Ravi Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Guingamp fields Zane Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Guingamp fields Aleks Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Guingamp fields Marco Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Guingamp fields Mats Weston (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Guingamp fields Kwame Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Guingamp fields Marco Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Guingamp fields Aleks Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Guingamp fields Oscar Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Guingamp fields Matteo Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dunkerque fields Andres Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dunkerque fields Tyler Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dunkerque fields Matteo Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dunkerque fields Jonas Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dunkerque fields Ondrej Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dunkerque fields Ondrej Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dunkerque fields Nils Calvet (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dunkerque fields Omar Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dunkerque fields Alfie Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dunkerque fields Ondrej Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dunkerque fields Diego Ferreiro (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dunkerque fields Kaan Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dunkerque fields Marco Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dunkerque fields Felix Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Dunkerque fields Omar Ferreiro (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Grenoble fields Matteo Ravenhill (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Grenoble fields Milo Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Grenoble fields Anton Moretti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Grenoble fields Noah Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Grenoble fields Dimitri Moretti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Grenoble fields Felix Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Grenoble fields Omar Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Grenoble fields Hugo Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Grenoble fields Rune Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Grenoble fields Aleks Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Grenoble fields Hugo Ferreira (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Grenoble fields Diego Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Grenoble fields Dimitri Silva (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Grenoble fields Andres Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Grenoble fields Omar Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Grenoble fields Kwame Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Rodez fields Hugo Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Rodez fields Zane Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Rodez fields Kaan Hallberg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Rodez fields Omar Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Rodez fields Zane Hallberg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Rodez fields Aleks Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Rodez fields Alfie Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Rodez fields Tariq Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Rodez fields Sam Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Rodez fields Leo Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Rodez fields Enzo Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Rodez fields Aleks Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Rodez fields Theo Vargas (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Rodez fields Milo Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Rodez fields Ravi Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Rodez fields Omar Calvet (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Clermont fields Mats Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Clermont fields Luca Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Clermont fields Marco Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Clermont fields Nils Ozturk (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Clermont fields Felix Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Clermont fields Marco Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Clermont fields Andres Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Clermont fields Rune Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Clermont fields Diego Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Clermont fields Soren Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Clermont fields Hugo Lindqvist (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Clermont fields Ondrej Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Clermont fields Tyler Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Clermont fields Marco Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Clermont fields Kwame Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Boulogne fields Theo Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Boulogne fields Aleks Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Boulogne fields Alfie Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Boulogne fields Nils Ferreiro (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Boulogne fields Alfie Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Boulogne fields Milo Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Boulogne fields Yusuf Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Boulogne fields Dimitri Weston (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Boulogne fields Luca Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Boulogne fields Milo Diallo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Boulogne fields Soren Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Boulogne fields Soren Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Boulogne fields Tyler Weston (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Boulogne fields Dimitri Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Boulogne fields Mats Hallberg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Laval fields Marco Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Laval fields Oscar Moretti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Laval fields Sam Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Laval fields Anton Diallo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Laval fields Anton Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Laval fields Andres Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Laval fields Emeka Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Laval fields Rune Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Laval fields Nils Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Laval fields Mats Vargas (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Laval fields Emeka Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Laval fields Ravi Diallo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Laval fields Soren Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Laval fields Tyler Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Laval fields Kwame Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Laval fields Tyler Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+   49 real men and 0 flagged pads on day one, 15 partial clubs
+A) segunda: the rows
+   20 clubs, drop 4, cup Copa del Rey; weakest Albacete (61) is asked: Stay up. Avoid relegation (16)
+B) segunda: 48 seeded seasons
+   48 seasons ended, 9 sacked, 228 cup weeks scheduled, 48 cup finals won, cup named on 57 saves, 144 clubs moved in the summers, 2227 headlines read
+C) segunda: strength orders the table
+   Girona 80.2 pts (rated 72) against Mallorca 68.8 (rated 68): gap 11.4
+   6 unmanaged clubs with no baked man left out of the correlation: Sabadell, Tenerife, Córdoba, Eldense, FC Andorra, Ceuta
+   rank correlation, preview rating against mean points, 8 clubs: 0.939
+D) segunda: no invented men
+  FAIL: Real Oviedo fields Jude Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Real Oviedo fields Matteo Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Real Oviedo fields Sam Hallberg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Real Oviedo fields Luca Adeyemi (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Real Oviedo fields Zane Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Real Oviedo fields Milo Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Real Oviedo fields Alfie Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Real Oviedo fields Yusuf Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Real Oviedo fields Theo Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Real Oviedo fields Kwame Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Real Oviedo fields Ravi Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Real Oviedo fields Jamie Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Real Oviedo fields Diego Moretti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Girona fields Oscar Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Girona fields Jonas Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Girona fields Kwame Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Girona fields Hugo Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Girona fields Soren Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Girona fields Jonas Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Girona fields Theo Hallberg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Girona fields Mats Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mallorca fields Marco Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mallorca fields Leo Moretti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mallorca fields Luca Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mallorca fields Ondrej Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mallorca fields Enzo Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mallorca fields Zane Lindholm (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mallorca fields Zane Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Mallorca fields Yusuf Calvet (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eibar fields Anton Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eibar fields Emeka Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eibar fields Nils Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eibar fields Kwame Vargas (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eibar fields Ravi Weston (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eibar fields Mats Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eibar fields Ravi Ravenhill (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eibar fields Marco Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eibar fields Andres Ravenhill (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eibar fields Oscar Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eibar fields Jonas Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eibar fields Omar Lindqvist (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eibar fields Marco Moretti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eibar fields Kofi Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Castellón fields Tariq Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Castellón fields Kaan Calvet (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Castellón fields Tyler Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Castellón fields Anton Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Castellón fields Tyler Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Castellón fields Theo Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Castellón fields Omar Calvet (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Castellón fields Ravi Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Castellón fields Hugo Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Castellón fields Leo Ferreira (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Castellón fields Rune Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Castellón fields Soren Adeyemi (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Castellón fields Felix Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Castellón fields Jonas Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Almería fields Milo Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Almería fields Kwame Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Almería fields Felix Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Almería fields Felix Ferreira (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Almería fields Mats Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Almería fields Theo Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Almería fields Noah Calvet (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Almería fields Zane Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Almería fields Rune Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Almería fields Theo Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Almería fields Nils Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Burgos fields Noah Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Burgos fields Mats Silva (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Burgos fields Zane Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Burgos fields Kofi Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Burgos fields Ravi Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Burgos fields Ravi Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Burgos fields Rune Weston (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Burgos fields Oscar Ozturk (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Burgos fields Luca Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Burgos fields Kaan Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Burgos fields Kwame Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Burgos fields Omar Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Burgos fields Ravi Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Burgos fields Noah Lindholm (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Burgos fields Zane Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sabadell fields Anton Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sabadell fields Emeka Calvet (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sabadell fields Emeka Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sabadell fields Leo Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sabadell fields Luca Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sabadell fields Diego Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sabadell fields Nils Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sabadell fields Omar Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sabadell fields Milo Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sabadell fields Dimitri Vargas (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sabadell fields Kaan Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sabadell fields Luca Ferreira (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sabadell fields Luca Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sabadell fields Ondrej Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sabadell fields Ondrej Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sabadell fields Felix Ferreira (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sporting Gijón fields Zane Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sporting Gijón fields Sam Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sporting Gijón fields Ondrej Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sporting Gijón fields Tariq Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sporting Gijón fields Diego Ferreira (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sporting Gijón fields Omar Adeyemi (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sporting Gijón fields Yusuf Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sporting Gijón fields Ravi Adeyemi (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sporting Gijón fields Omar Moretti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sporting Gijón fields Dimitri Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sporting Gijón fields Jonas Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Sporting Gijón fields Aleks Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Granada fields Omar Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Granada fields Jude Ozturk (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Granada fields Tariq Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Granada fields Kaan Ferreiro (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Granada fields Aleks Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Granada fields Emeka Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Granada fields Zane Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Granada fields Soren Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Granada fields Matteo Ozturk (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Granada fields Diego Lindqvist (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Granada fields Felix Adeyemi (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Granada fields Emeka Hallberg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Granada fields Luca Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Granada fields Felix Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Granada fields Andres Diallo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Granada fields Ravi Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Las Palmas fields Tariq Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Las Palmas fields Dimitri Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Las Palmas fields Yusuf Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Las Palmas fields Tyler Silva (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Las Palmas fields Aleks Vargas (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Las Palmas fields Oscar Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Las Palmas fields Marco Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Las Palmas fields Tariq Vargas (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Las Palmas fields Kwame Adeyemi (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Las Palmas fields Alfie Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Las Palmas fields Anton Vargas (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tenerife fields Jamie Silva (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tenerife fields Alfie Hallberg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tenerife fields Ondrej Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tenerife fields Emeka Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tenerife fields Diego Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tenerife fields Zane Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tenerife fields Marco Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tenerife fields Jonas Ravenhill (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tenerife fields Jonas Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tenerife fields Aleks Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tenerife fields Rune Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tenerife fields Mats Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tenerife fields Oscar Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tenerife fields Kaan Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tenerife fields Mats Vargas (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Tenerife fields Kofi Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Leganés fields Luca Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Leganés fields Jonas Moretti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Leganés fields Diego Ozturk (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Leganés fields Jonas Ravenhill (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Leganés fields Jude Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Leganés fields Milo Ferreira (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Leganés fields Kaan Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Leganés fields Aleks Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Leganés fields Ravi Okonjo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Leganés fields Rune Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Leganés fields Theo Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Leganés fields Tyler Achebe (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Leganés fields Tariq Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Valladolid fields Matteo Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Valladolid fields Marco Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Valladolid fields Leo Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Valladolid fields Diego Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Valladolid fields Zane Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Valladolid fields Theo Lindqvist (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Valladolid fields Felix Lindholm (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Valladolid fields Ondrej Ferreira (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Valladolid fields Oscar Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Valladolid fields Oscar Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Valladolid fields Marco Calvet (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Valladolid fields Ondrej Ferreiro (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Valladolid fields Soren Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Valladolid fields Felix Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Córdoba fields Tariq Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Córdoba fields Ravi Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Córdoba fields Andres Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Córdoba fields Noah Silva (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Córdoba fields Soren Lindqvist (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Córdoba fields Marco Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Córdoba fields Emeka Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Córdoba fields Jonas Adeyemi (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Córdoba fields Kwame Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Córdoba fields Yusuf Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Córdoba fields Marco Weston (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Córdoba fields Jamie Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Córdoba fields Leo Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Córdoba fields Omar Vargas (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Córdoba fields Ravi Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Córdoba fields Oscar Lindholm (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eldense fields Mats Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eldense fields Leo Silva (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eldense fields Hugo Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eldense fields Dimitri Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eldense fields Sam Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eldense fields Emeka Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eldense fields Matteo Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eldense fields Jude Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eldense fields Kwame Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eldense fields Soren Ferreiro (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eldense fields Jamie Vargas (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eldense fields Soren Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eldense fields Nils Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eldense fields Hugo Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eldense fields Anton Weston (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Eldense fields Tariq Silva (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cádiz fields Alfie Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cádiz fields Kofi Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cádiz fields Dimitri Ashworth (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cádiz fields Omar Brennan (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cádiz fields Leo Diallo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cádiz fields Mats Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cádiz fields Leo Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cádiz fields Theo Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cádiz fields Noah Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cádiz fields Alfie Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cádiz fields Zane Ozturk (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cádiz fields Luca Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cádiz fields Omar Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Cádiz fields Diego Ferreiro (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: FC Andorra fields Kaan Adeyemi (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: FC Andorra fields Mats Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: FC Andorra fields Luca Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: FC Andorra fields Alfie Adeyemi (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: FC Andorra fields Luca Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: FC Andorra fields Rune Reyes (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: FC Andorra fields Jamie Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: FC Andorra fields Ondrej Diallo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: FC Andorra fields Kaan Vaszary (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: FC Andorra fields Hugo Diallo (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: FC Andorra fields Felix Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: FC Andorra fields Matteo Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: FC Andorra fields Jonas Vargas (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: FC Andorra fields Mats Ferreiro (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: FC Andorra fields Oscar Moretti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: FC Andorra fields Mats Dubois (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ceuta fields Noah Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ceuta fields Tyler Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ceuta fields Milo Miclea (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ceuta fields Kofi Voskuil (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ceuta fields Milo Ferreiro (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ceuta fields Anton Sato (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ceuta fields Mats Hansen (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ceuta fields Kwame Berg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ceuta fields Zane Tarrant (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ceuta fields Tariq Baptiste (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ceuta fields Kaan Ozturk (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ceuta fields Milo Hallberg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ceuta fields Kaan Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ceuta fields Hugo Silva (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ceuta fields Leo Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Ceuta fields Andres Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Albacete fields Matteo Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Albacete fields Noah Sundgren (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Albacete fields Enzo Petrov (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Albacete fields Jonas Hallberg (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Albacete fields Tariq Vargas (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Albacete fields Nils Novak (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Albacete fields Marco Kimura (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Albacete fields Luca Ozturk (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Albacete fields Theo Keane (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Albacete fields Emeka Vargas (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Albacete fields Tyler Walsh (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Albacete fields Theo Nyman (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Albacete fields Andres Calvet (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Albacete fields Andres Ferreira (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Albacete fields Hugo Calvet (Youth), who is neither in its real roster nor flagged as a youth pad
+   48 real men and 0 flagged pads on day one, 18 partial clubs
+A) russia: the rows
+   16 clubs, drop 2, cup Russian Cup; weakest Fakel Voronezh (63) is asked: Stay up. Avoid relegation (14)
+B) russia: 6 seeded seasons
+   6 seasons ended, 1 sacked, 28 cup weeks scheduled, 6 cup finals won, cup named on 7 saves, 0 clubs moved in the summers, 224 headlines read
+C) russia: strength orders the table
+   Zenit 57.3 pts (rated 77) against Fakel Voronezh 31.0 (rated 63): gap 26.3
+   Krasnodar 54.2 pts (rated 75) against Dynamo Makhachkala 31.2 (rated 66): gap 23.0
+   rank correlation, preview rating against mean points, 10 clubs: 0.906
+D) russia: no invented men
+  FAIL: Spartak Moscow fields Hugo Marchetti (Youth), who is neither in its real roster nor flagged as a youth pad
+  FAIL: Rodina Moscow fields Emeka Adeyemi (Youth), who is neither in its real roster nor flagged as a youth pad
+   390 real men and 0 flagged pads on day one, 0 partial clubs
+E) pyramids: premier/championship 3, bundesliga/bundesliga2 2, seriea/serieb 3, ligue1/ligue2 2, laliga/segunda 3
+   30 finished seasons filed their own league and its size on the record; 156 mover lines read for the league's name
+   30 summers checked (0 careers sacked on the way); clubs moved into each league per summer: premier 3, championship 3, bundesliga 2, bundesliga2 2, seriea 3, serieb 3, ligue1 2, ligue2 2, laliga 3, segunda 3
+   relegation career: Frosinone (rated 73) finishes 17, 20; starts in serieb, the board asks "Make the promotion playoffs"
+   wentDown: the first drop place reads relegated and the place above it does not, in premier, bundesliga, seriea, ligue1, laliga
+F) cup underdogs and the upset flag
+   premier: championship clubs in the last sixteen 2 2 2 2; over 128 pairings a top flight winner was flagged an upset 0 times and a championship winner went unflagged 0 times
+   bundesliga: bundesliga2 clubs in the last sixteen 3 3 3 3; over 64 pairings a top flight winner was flagged an upset 0 times and a bundesliga2 winner went unflagged 0 times
+   seriea: serieb clubs in the last sixteen 3 2 2 3; over 128 pairings a top flight winner was flagged an upset 0 times and a serieb winner went unflagged 0 times
+   ligue1: ligue2 clubs in the last sixteen 2 3 2 3; over 128 pairings a top flight winner was flagged an upset 0 times and a ligue2 winner went unflagged 0 times
+   laliga: segunda clubs in the last sixteen 2 3 3 2; over 128 pairings a top flight winner was flagged an upset 0 times and a segunda winner went unflagged 0 times
+   MLS (Atlanta United): 8 cup ties in the last sixteen; over 128 East and West pairings 0 flagged an upset
+G) a save written before the round
+   loaded, finished, first summer: seriea, ligue1, laliga kept their clubs and the Premier League took 3 up; second summer traded 3, 2, 3
+H) the countries of Round 1052
+   H1: Zenit won the league in 3 of 3 seasons played; 0 of those started the next season in a Champions League group
+   H2: 12 Russian Cup brackets read, each the sixteen Russian clubs
+   H3: a manager's table at Spartak Moscow under "Russian Premier League": 16 places, size verified true, names Zenit
+   H3: 16 Russian clubs on the job market under Russian Premier League; dugout size 16, playing career size null
+   H4: 7 past season Russian clubs read, each at its own season's strength
+   H4: 7 past season Russian sides read, 0 men fielded, 0 of them from today's squads
+simClubManagerNewLeagues: 986 failure(s) under control invented
