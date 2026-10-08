@@ -1,0 +1,67 @@
+   base: Real Madrid, cup R16 in week 9, squad 26, no order set: true
+   section 1 base: seed 782002, cup R16 against Valencia (22 on their roster, 2 keepers); the fixture base's tie is against Eibar (2 on theirs)
+1) The walk, through the whole match: my first five kicks are the first five listed men who finished
+   order: Vinicius Junior, Aurélien Tchouaméni, Dean Huijsen, Federico Valverde, Yan Diomande, Ibrahima Konaté, Kylian Mbappé
+   150 cup matches, 26 shootouts, 26 with my first kicks in the listed order, 26 where skipping a listed man off the pitch changed who took the first five
+   266 kicks, scored share 77.1% (base rate 0.76)
+   their first time round the list read off their roster in 26 shootouts, best first with the keeper last in 26
+2) The order is worth something: five best first beats five worst first, on common random numbers
+   synthetic eleven 90..62 vs itself, 4000 shootouts an arm: best five first 50.4%, worst five first 40.8%, gap 9.7 points
+   Real Madrid's eleven (outfield 82 to 94): best first 50.9%, worst first 48.6%, gap 2.3 points (printed, not asserted)
+3) The cap: no edge and no kick moves past it, either way
+   3600 taker and keeper pairs 40 to 99: 0 past the cap, the biggest move off the base rate 0.120 (twice the cap is 0.120)
+4) Historical unmanaged play equals actual pre-1072 main, with ancient golden drift recorded
+   0 of 150 rows reproduced (15 of them shootouts, written from clubManager.r781-premerge-71df177e.ts on 2026-10-01); 0 carried kicks
+   150 of 150 rows equal actual pre-1072 main in result, next draw and full content (0 raw hashes); ancient golden mismatches candidate 150, baseline 150
+   on section 1's base: 300 of 300 rows equal actual pre-1072 main in result, next draw and full content, 37 of them settled on penalties by main (9 on the fixture's base)
+5) An old save loads with no order, holds its historical unmanaged play, and keeps a chosen order
+   loaded old save, seed 782113 (one of 9 rows main settles on penalties, decided pens): equal actual pre-1072 main true; ancient golden matches candidate false, baseline false
+   order of 4 kept through save and load, a stranger refused, a loan signing listed, an empty list takes the field off
+6) The keeper facing each kick, and the other side's order
+   keeper 95 behind me and 55 behind them: won 71.7%, my kicks in 85.8%, theirs 74.1%
+   the same two keepers swapped: won 27.6%, my kicks in 73.7%, theirs 86.0%
+   4000 shootouts an arm: win share gap 44.2 points, my kicks minus theirs with the strong man behind me 11.7 points (the edges allow 2 x 6 = 12)
+   shootoutSides: my keeper off the slot (50, then 51 with an outfielder in goal), their keeper (66), their ten best first then the keeper, a blank side and a keeperless side: 0 wrong
+7) A thin side is made up to eleven: nobody of theirs kicks twice before the eleventh
+  FAIL: two names became 2 men (2 different), not eleven different men
+  FAIL: two names got 0 generated men, not nine outfield takers at 70
+  FAIL: the two name side kicks 2 with undefined last against keeper 64, not eleven with its own keeper (64) last
+  FAIL: 0 of the two name side's takers carry the generated mark, not nine
+  FAIL: five names and no keeper did not become eleven with one generated keeper at the club strength
+  FAIL: the keeperless five are read against null with A first, not against a generated keeper at 70 who kicks last, best real man first
+  FAIL: ten names with a keeper got 0 generated men, not one outfield taker
+  FAIL: a roster with nobody did not stay empty for shootoutSides to make up
+   shootoutRosterSide: two names, five without a keeper, ten, a full fourteen, a keeperless thirteen and nobody: 8 wrong
+  FAIL: seed 782970004: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970016: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970028: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970041: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970089: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970094: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970107: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970155: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970165: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970177: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970189: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970191: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970195: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970218: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970227: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970231: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970254: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970266: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970287: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970317: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970332: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970333: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970344: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970349: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970350: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970416: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+  FAIL: seed 782970419: Juan Bernat kicked again as their 3rd taker (Juan Bernat, Jonmi Magunagoitia, Juan Bernat)
+   thin tie: seed 782001, Eibar with 2 on their roster; 450 cup matches, 27 shootouts, 0 where nobody of theirs kicked twice before the eleventh and every made up man was marked
+   142 kicks of theirs, 0 by generated men, the longest shootout 12 of theirs (printed, not asserted)
+  FAIL: 27 of 27 shootouts against the thin side had a man kick twice early or a made up man unmarked
+  FAIL: no generated man kicked in any shootout against the thin side, so the making up was never walked
+
+simCmShootoutOrder: 37 FAILURE(S)

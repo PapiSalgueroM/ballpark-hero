@@ -1,0 +1,24 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+reveal: node scripts/simRevealMoments.mjs
+homefront: node scripts/simHomeFront.mjs
+sessionmarks: node scripts/simSessionMarks.mjs
+stalechunk: node scripts/simStaleChunk.mjs
+stalechunk-nooffline: SIM_STALE_CHUNK_CONTROL=nooffline node scripts/simStaleChunk.mjs
+boxing: env -u CI -u GITHUB_ACTIONS node scripts/simBoxingShowForecast.mjs
+homesearch: env -u CI -u GITHUB_ACTIONS node scripts/simHomeSearchRecovery.mjs
+salereview: env -u CI -u GITHUB_ACTIONS node scripts/simTycoonSaleReview.mjs
+uscareer: env -u CI -u GITHUB_ACTIONS node scripts/simUsCareerSaveRetry.mjs
+tycoonhelp: node scripts/simTycoonHelp.mjs
+norival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+shootout: node scripts/simCmShootoutOrder.mjs
+shootout-keeperonfull: CM_SHOOTOUT_CONTROL=keeperonfull node scripts/simCmShootoutOrder.mjs
+shootout-nomakeup: CM_SHOOTOUT_CONTROL=nomakeup node scripts/simCmShootoutOrder.mjs
+appeal: node scripts/simManagerAppealIsolation.mjs
+promoter: node scripts/simFightPromoter.mjs
+mma: node scripts/simMmaPromotion.mjs
+access: node scripts/simAccessibility.mjs
+numfmt: node scripts/simNumberFormatting.mjs
+loads: node scripts/simTycoonLoads.mjs
+pitch: node scripts/simTycoonPitch.mjs
+vitest: node_modules/.bin/vitest run src/test/tycoonSaleReview.test.tsx src/test/boxingShowForecast.test.tsx src/test/usCareerSaveRetry.test.tsx src/test/tycoonSetPiecePage.test.tsx src/test/tycoonLoads.test.tsx src/test/clubManagerShootoutTile.test.tsx src/test/homeSearchRecovery.test.tsx src/test/mmaPromotion.test.tsx src/test/numberFormatting.test.tsx src/test/tycoonHelp.test.tsx src/test/clubManagerEraLoad.test.tsx --testTimeout=300000 --hookTimeout=120000

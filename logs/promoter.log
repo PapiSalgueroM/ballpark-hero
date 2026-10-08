@@ -1,0 +1,43 @@
+simFightPromoter
+   90 promoters per policy, 40 shows each
+1) a sensibly run promotion survives and grows
+   survived 40 shows: 90 of 90 (100.0%)
+   reputation 51.4, average house 4,569, money 14.325m
+   ok   100.0% survive 40 shows (floor 35%)
+   ok   25 of 90 promotions ran at least one show at a loss
+2) neither matchmaking road wins on its own
+   money:      mismatches 9.558m, real fights 9.830m
+   reputation: mismatches 43.6, real fights 49.6
+   verdict:    mismatches 61.9, real fights 65.6
+   ok   real fights are worth 6.0 reputation over mismatches (margin 4)
+   at the door, same room and price, 35 states: the mismatch card takes +13.1% against the real fight
+   ok   feeding a name takes 13.1% more at the door tonight, and costs 6.0 reputation over a career
+3) pricing the room is a decision, not a slider
+   gate by ticket price: 0.4x 0.063m, 0.55x 0.081m, 0.7x 0.097m, 0.85x 0.109m, 1x 0.119m, 1.2x 0.128m, 1.45x 0.131m, 1.7x 0.126m, 2.1x 0.103m
+   best price multiplier 1.45x
+   house at 0.4x 942, at 2.1x 291
+   ok   the price moves the house, 942 down to 291
+   ok   pricing has an interior optimum at 1.45x, and both extremes take less
+4) a promotion with a name attracts better fighters
+   pool rating: name 5 gives 43.4, name 92 gives 58.5
+   ok   a name is worth 15.1 rating points on the fighters you can book (margin 6)
+5) the men on your shows are not props
+   fighters carrying real damage after 60 shows: 1.16 of 10 in the pool
+   ok   1.16 of 10 in the pool carry real damage (floor 0.5)
+6) "sold out" means every seat, and the percentage never reads fuller than the room
+   13730 shows: 1795 sold out, 88 at 98.5% or more with seats still empty
+   ok   the sample reaches the rooms that matter: 1795 full, 88 nearly full (floor 20 each)
+   ok   no show says sold out with an empty seat
+   ok   every full room says sold out
+   ok   the percentage never reads fuller than the room was
+7) handing over ends the game with a verdict, and beats going under
+   handed over after 20 shows: 90 of 90; booked past their means and went under: 89 of 90
+   ok   90 of 90 promotions closed with exit handed, so a good one reaches its verdict
+   paired over 89 seeds: handing over scores 38.1 more than going under
+   ok   handing over beats going under by 38.1 verdict points on the same seeds (margin 19)
+   forked at show 20 over 90 promotions: handed over scores 14.6 more than the same promotion gone under
+   ok   the verdict tells the endings apart by 14.6 points (margin 8)
+   show by show: 0 hand overs accepted before 10 shows, 5 of 5 accepted from it
+   ok   no hand over before 10 shows
+   ok   every hand over from that show on goes through and closes the promotion
+simFightPromoter: all sections passed
