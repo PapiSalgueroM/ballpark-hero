@@ -10,14 +10,18 @@
  */
 import { describe, expect, it } from 'vitest';
 import { CLUB_DATA_NAME, CLUB_SQUADS } from '@/data/clubSquads';
-import { clubSquad, depthChart, managerTrust, squadNow, squadSaveKey, squadView } from '@/lib/soccerClubSquad';
-import { lastSeason, offerFit, squadHelp, squadHelpExamples, trustLines } from '@/lib/soccerClubSquadSheet';
+import { clubSquad, depthChart, livingSquad, managerTrust, squadNow, squadSaveKey, squadView } from '@/lib/soccerClubSquad';
+import {
+  isMixed, lastGamesLine, lastSeason, lastTileValue, lastWorthLine, offerFit, rankHeadline, realAmongInvented,
+  sourceChip, squadHelp, squadHelpExamples, trustLines,
+} from '@/lib/soccerClubSquadSheet';
 import { FALLBACK_CLUBS, initCareer } from '@/lib/soccerCareerEngine';
 import type { CareerState, SeasonRecord } from '@/lib/soccerCareerEngine';
 import { phoneAppsSwing } from '@/lib/soccerPhone';
 import { allIntlNames } from '@/lib/intlNames';
 import {
-  genClubSquad, squadCentre, SQUAD_SLOTS, LAST_STARTER_SLOTS, FOREIGN_NATIONS, familyIdFor, CARRY_SEASONS,
+  genClubSquad, squadCentre, roleName, SQUAD_SLOTS, LAST_STARTER_SLOTS, FOREIGN_NATIONS, familyIdFor, CARRY_SEASONS,
+  ELEVEN_SHAPE, ROLE_WORD,
 } from '@/lib/soccerClubSquadGen';
 
 /* 32 bit FNV-1a, written here so the digest depends on nothing else. */
@@ -260,6 +264,36 @@ describe('the living squad', () => {
     }
   });
 
+  it('names the right man as the last one in ahead of him: never himself, always the lowest of his line in the eleven', () => {
+    let outside = 0;
+    let justOutside = 0;
+    for (const position of ['ST', 'CM', 'CB', 'GK', 'LW', 'RB']) {
+      for (const [club, country, tier, lastYear] of [['Leeds', 'England', 2, 2030], ['Leeds', 'England', 2, 2004], ['Real Madrid', 'Spain', 1, 2023], ['Real Madrid', 'Spain', 1, 2028]] as const) {
+        for (let ovr = 44; ovr <= 92; ovr += 1) {
+          const v = squadView({ ...save(club, country, tier, ovr, lastYear), position });
+          if (!v) throw new Error('no view');
+          if (v.inElevenOnRating) { expect(v.keepsMeOut).toBeNull(); continue; }
+          outside += 1;
+          const line = v.eleven[v.group];
+          const out = v.keepsMeOut;
+          if (!out) throw new Error(`nobody keeps a ${ovr} rated ${position} out at ${club}`);
+          expect(out.me).toBeUndefined();
+          expect(out.name).not.toBe('Test Player');
+          expect(line).toContain(out);
+          expect(out.ovr).toBe(Math.min(...line.map(m => m.ovr)));
+          expect(out.ovr).toBeGreaterThanOrEqual(ovr);
+          expect(v.queue.indexOf(out)).toBe(line.length - 1);
+          /* the case an off by one lands on him: the first man outside the eleven */
+          if (v.rank === line.length + 1) { justOutside += 1; expect(v.queue[v.rank - 1].me).toBe(true); }
+          expect(rankHeadline(v)).toContain(out.role ? out.role.toLowerCase() : out.name);
+          expect(rankHeadline(v)).not.toContain('Test Player');
+        }
+      }
+    }
+    expect(outside).toBeGreaterThan(300);
+    expect(justOutside).toBeGreaterThan(20);
+  });
+
   it('agrees with the plan at the line by construction: 67 is in both pictures, 66 in neither', () => {
     const inside = squadView(save('Leeds', 'England', 2, 67, 2030));
     const outside = squadView(save('Leeds', 'England', 2, 66, 2030));
@@ -330,6 +364,136 @@ describe('the living squad', () => {
     expect(help.examples[1]).toContain('20 to 30 league games, and 25 of 38 is trust 66%');
     expect(help.examples[2]).toContain('8 to 18 league games');
     expect(JSON.stringify(help)).not.toMatch(/4-3-3/);
+  });
+});
+
+/* ── Round 1115, after review: what the screens must never say ──────────── */
+describe('the sheet does not argue with itself', () => {
+  it('numbers his own line with him counted on a sheet by role', () => {
+    let sheets = 0;
+    let secondWithThirdUnder = 0;
+    for (const position of ['ST', 'CM', 'CB', 'GK']) {
+      for (const [club, tier] of [['Leeds', 2], ['Derby', 2], ['Wrexham', 3], ['Arsenal', 1]] as const) {
+        for (let ovr = 45; ovr <= 90; ovr += 3) {
+          const v = squadView({ ...save(club, 'England', tier, ovr, 1994), position });
+          if (!v) throw new Error('no view');
+          expect(v.source).toBe('roles');
+          sheets += 1;
+          const word = ROLE_WORD[v.group];
+          v.queue.forEach((m, i) => {
+            if (m.me) { expect(i).toBe(v.rank - 1); return; }
+            expect(m.name).toBe(roleName(i, v.group));
+            expect(m.role).toBe(m.name);
+          });
+          /* the roles inside the eleven are the first places of the line, and the next one is on the bench */
+          const shape = ELEVEN_SHAPE[v.group];
+          const inXi = new Set(v.eleven[v.group]);
+          v.queue.forEach((m, i) => expect(inXi.has(m)).toBe(i < shape));
+          for (const m of v.bench) if (!m.me && m.group === v.group) expect(v.queue.indexOf(m)).toBeGreaterThanOrEqual(shape);
+          /* nobody wears his ordinal, and nobody is "first" when the headline says nobody is above him */
+          const mine = roleName(v.rank - 1, v.group);
+          const everyone = [...Object.values(v.eleven).flat(), ...v.bench];
+          expect(everyone.some(m => !m.me && m.name === mine)).toBe(false);
+          expect(new Set(everyone.map(m => m.name)).size).toBe(everyone.length);
+          if (v.rank === 1) expect(rankHeadline(v)).toContain('nobody');
+          if (v.rank === 2 && v.queue[2]) { secondWithThirdUnder += 1; expect(v.queue[2].name).toBe(`Third choice ${word}`); }
+        }
+      }
+    }
+    expect(sheets).toBe(256);
+    expect(secondWithThirdUnder).toBeGreaterThan(5);
+    /* the squad itself (the player not in it) keeps counting the club's own men */
+    const bare = livingSquad('k', { club: 'Leeds', country: 'England', tier: 2, year: 1995 });
+    expect(bare?.men.filter(m => m.group === 'ATT').map(m => m.name)[0]).toBe('First choice forward');
+  });
+
+  it('never prints an arrival or a NEW man on a sheet by role, only in the game\'s own years', () => {
+    let roleSheetsWithANewMan = 0;
+    for (let year = 1990; year <= 2012; year += 1) {
+      const s = save('Leeds', 'England', 2, 60, year);
+      const v = squadView(s);
+      expect(v?.source).toBe('roles');
+      expect(v?.arrivals).toEqual([]);
+      const at = squadNow(s);
+      const squad = at ? livingSquad(squadSaveKey(s), at) : null;
+      if (squad?.men.some(m => m.group === 'ATT' && m.since === at?.year)) roleSheetsWithANewMan += 1;
+    }
+    /* the check above is not empty: the squads underneath do turn over */
+    expect(roleSheetsWithANewMan).toBeGreaterThan(5);
+    let arrivals = 0;
+    for (let year = 2030; year <= 2050; year += 1) arrivals += squadView(save('Leeds', 'England', 2, 60, year))?.arrivals.length ?? 0;
+    expect(arrivals).toBeGreaterThan(5);
+  });
+
+  it('never prints more league games than games: an injured season shows the total and says what the league figure is', () => {
+    const hurt = lastSeason(save('Leeds', 'England', 2, 74, 2030, [{ year: 2030, ovr: 74, leagueApps: 25, apps: 23, injuryWeeks: 10, injury: 'Hamstring tear' }]));
+    if (!hurt) throw new Error('no last season');
+    expect(hurt.cut).toBe(true);
+    expect(lastGamesLine(hurt)).toBe('23 games in all competitions');
+    expect(lastWorthLine(hurt)).toBe('An injury took games off that total. Before it, your place was worth 25 league games.');
+    expect(lastTileValue(hurt)).toBe('23 games');
+    /* an injury that leaves the total above the league figure is still not league games played */
+    const mild = lastSeason(save('Leeds', 'England', 2, 74, 2030, [{ year: 2030, ovr: 74, leagueApps: 28, apps: 31, injuryWeeks: 2 }]));
+    expect([mild?.cut, mild && lastGamesLine(mild), mild && lastTileValue(mild)]).toEqual([true, '31 games in all competitions', '31 games']);
+    const fit = lastSeason(save('Leeds', 'England', 2, 74, 2030, [{ year: 2030, ovr: 74, leagueApps: 24, apps: 30 }]));
+    if (!fit) throw new Error('no last season');
+    expect(fit.cut).toBe(false);
+    expect(lastGamesLine(fit)).toBe('24 league games, 30 in all competitions');
+    expect(lastWorthLine(fit)).toBeNull();
+    expect(lastTileValue(fit)).toBe('24 league games');
+    /* a hand edited row with fewer games than league games and no injury on it */
+    const odd = lastSeason(save('Leeds', 'England', 2, 74, 2030, [{ year: 2030, ovr: 74, leagueApps: 24, apps: 20 }]));
+    expect([odd?.cut, odd && lastGamesLine(odd), odd && lastWorthLine(odd)]).toEqual([true, '20 games in all competitions', 'Going in, your place was worth 24 league games.']);
+    const one = lastSeason(save('Leeds', 'England', 2, 74, 2030, [{ year: 2030, ovr: 74, leagueApps: 1, apps: 1 }]));
+    expect(one && lastGamesLine(one)).toBe('1 league game, 1 in all competitions');
+  });
+
+  it('still owes a thin season its selection line after an injury, because an injury never lowers the league figure', () => {
+    const thinHurt = lastSeason(save('Leeds', 'England', 2, 74, 2030, [{ year: 2030, ovr: 74, leagueApps: 12, apps: 9, injuryWeeks: 10, injury: 'Hamstring tear' }]));
+    expect(thinHurt?.lines).toEqual([
+      '10 weeks out injured (Hamstring tear).',
+      'The injury aside, nothing in your record explains the selection: your range going in was 20 to 30 league games.',
+    ]);
+    const thinFit = lastSeason(save('Leeds', 'England', 2, 74, 2030, [{ year: 2030, ovr: 74, leagueApps: 12, apps: 15 }]));
+    expect(thinFit?.lines).toEqual(['Nothing in your record explains it beyond selection: your range going in was 20 to 30 league games.']);
+  });
+
+  it('draws the "under the level" line exactly at the band\'s edge: five under has none, six under has it', () => {
+    const under = (ovr: number) => lastSeason(save('Leeds', 'England', 2, ovr, 2030, [{ year: 2030, ovr, leagueApps: 11, apps: 14 }]))?.lines.filter(l => l.includes('rating points under')) ?? [];
+    expect(squadCentre(2)).toBe(72);
+    expect(under(68)).toEqual([]);
+    expect(under(67)).toEqual([]);
+    expect(under(66)).toEqual(['Going into that season you were 6 rating points under the level that squad expects.']);
+    expect(under(65).length).toBe(1);
+  });
+
+  it('says so when a squad of the game\'s own years still holds real men, and marks each of them', () => {
+    const mixed = squadView(save('Real Madrid', 'Spain', 1, 84, 2027));
+    if (!mixed) throw new Error('no view');
+    expect(isMixed(mixed)).toBe(true);
+    expect(sourceChip(mixed)).toBe('REAL AND INVENTED');
+    const everyone = [...Object.values(mixed.eleven).flat(), ...mixed.bench];
+    const real = new Set((clubSquad('Real Madrid', 2026) ?? []).map(m => m.name));
+    let marked = 0;
+    for (const m of everyone) {
+      const isReal = realAmongInvented(mixed, m);
+      if (isReal) marked += 1;
+      expect(isReal).toBe(!m.me && real.has(m.name));
+      if (m.id !== undefined) expect(isReal).toBe(false);
+    }
+    expect(marked).toBe(mixed.carried);
+    expect(marked).toBeGreaterThan(0);
+    const invented = squadView(save('Leeds', 'England', 2, 70, 2030));
+    if (!invented) throw new Error('no view');
+    expect([isMixed(invented), sourceChip(invented)]).toEqual([false, 'INVENTED TEAMMATES']);
+    expect(sourceChip(squadView(save('Real Madrid', 'Spain', 1, 84, 2023)) ?? invented)).toBe('REAL SQUAD');
+    expect(sourceChip(squadView(save('Leeds', 'England', 2, 70, 2004)) ?? invented)).toBe('ROLES ONLY');
+  });
+
+  it('gives a tie to the teammate without saying he was there first', () => {
+    const help = squadHelp();
+    expect(JSON.stringify(help)).not.toMatch(/here first/);
+    expect(help.rules[1]).toContain('counts as ahead of you');
   });
 });
 

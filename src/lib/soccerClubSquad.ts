@@ -41,7 +41,7 @@ import { CLUB_SQUADS, CLUB_DATA_NAME, CLUB_SQUAD_YEARS } from '@/data/clubSquads
 import type { CareerState } from './soccerCareerEngine';
 import { projectLeagueApps } from './soccerCareerEngine';
 import { phoneAppsSwing } from './soccerPhone';
-import { genClubSquad, ELEVEN_SHAPE } from './soccerClubSquadGen';
+import { genClubSquad, roleName, ELEVEN_SHAPE } from './soccerClubSquadGen';
 
 export type SquadGroup = 'GK' | 'DEF' | 'MID' | 'ATT';
 
@@ -295,25 +295,26 @@ export function squadView(c: CareerState, at: SquadAt | null = squadNow(c), myOv
   if (!at) return null;
   const squad = livingSquad(squadSaveKey(c), at);
   if (!squad) return null;
-  const chart = chartFrom(squad.men, at.club, at.year, c.position, myOverall, c.playerName);
+  const men = squad.source === 'roles' ? rolesWithHim(squad.men, groupOf(c.position), myOverall) : squad.men;
+  const chart = chartFrom(men, at.club, at.year, c.position, myOverall, c.playerName);
   if (!chart) return null;
   const me = chart.men[chart.ahead];
   const eleven = { GK: [], DEF: [], MID: [], ATT: [] } as Record<SquadGroup, SquadMan[]>;
   const picked = new Set<SquadMan>();
   for (const g of GROUPS) {
-    const line = g === chart.group ? chart.men : squad.men.filter(m => m.group === g);
+    const line = g === chart.group ? chart.men : men.filter(m => m.group === g);
     eleven[g] = bySide(line.slice(0, ELEVEN_SHAPE[g]));
     for (const m of eleven[g]) picked.add(m);
   }
-  const everyone = [...squad.men];
-  everyone.splice(squad.men.filter(m => m.ovr >= me.ovr).length, 0, me);
+  const everyone = [...men];
+  everyone.splice(men.filter(m => m.ovr >= me.ovr).length, 0, me);
   const rank = chart.ahead + 1;
   const inElevenOnRating = rank <= ELEVEN_SHAPE[chart.group];
   return {
     club: at.club,
     year: at.year,
     source: squad.source,
-    carried: squad.source === 'invented' ? squad.men.filter(m => !m.id).length : 0,
+    carried: squad.source === 'invented' ? men.filter(m => !m.id).length : 0,
     group: chart.group,
     queue: chart.men,
     rank,
@@ -323,7 +324,31 @@ export function squadView(c: CareerState, at: SquadAt | null = squadNow(c), myOv
     keepsMeOut: inElevenOnRating ? null : chart.men[ELEVEN_SHAPE[chart.group] - 1] ?? null,
     eleven,
     bench: everyone.filter(m => !picked.has(m)),
-    arrivals: squad.men.filter(m => m.group === chart.group && m.id !== undefined && m.since === at.year),
+    /* Only the game's own world has arrivals. A sheet by role is a real club
+       in a real past year, and nobody is said to have signed for it. */
+    arrivals: squad.source === 'invented'
+      ? men.filter(m => m.group === chart.group && m.id !== undefined && m.since === at.year)
+      : [],
     trust: managerTrust(c, at, myOverall),
   };
+}
+
+/**
+ * A sheet by role names every man by his place in his line. In the player's
+ * own line he is one of the men being counted, so that line is numbered here
+ * with him in it: the man under a player ranked 2nd is the third choice, the
+ * roles inside the eleven are the first three (or four) and the next one is
+ * on the bench. Ties go to the teammate, exactly as chartFrom ranks them.
+ * Copies, never edits: the generator's squad is shared between callers.
+ */
+function rolesWithHim(men: SquadMan[], group: SquadGroup, myOverall: number): SquadMan[] {
+  const mine = Math.round(myOverall);
+  const ahead = men.filter(m => m.group === group && m.ovr >= mine).length;
+  let k = 0;
+  return men.map(m => {
+    if (m.group !== group) return m;
+    const role = roleName(k < ahead ? k : k + 1, group);
+    k += 1;
+    return { ...m, name: role, role };
+  });
 }

@@ -8,16 +8,23 @@
  * viewer flag saying the help has been seen.
  *
  * It loads as its own chunk (SquadTile.tsx imports it lazily), the page
- * behind it never moves, the only box that scrolls is the bench list, and
- * every hook sits above every return.
+ * behind it never moves, and every hook sits above every return.
+ *
+ * THREE PARTS, AND THE WAY OUT IS ALWAYS ON SCREEN. The panel is a header,
+ * a body and a foot. The foot holds the Back button and never scrolls. On a
+ * tall screen nothing scrolls but the bench list. On a short one (a small
+ * phone with its browser bars showing, a phone on its side) the body scrolls
+ * inside the panel instead of pushing the Back button off the screen. The
+ * keyboard stays inside the sheet: Tab goes round its own buttons.
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { CSSProperties, ReactNode } from 'react';
+import type { CSSProperties, KeyboardEvent, ReactNode } from 'react';
 import type { CareerState } from '@/lib/soccerCareerEngine';
 import { GROUP_LABEL, squadNow } from '@/lib/soccerClubSquad';
 import type { SquadGroup, SquadMan, SquadView } from '@/lib/soccerClubSquad';
 import {
-  SOURCE_CHIP, lastSeason, planLine, rankHeadline, sourceLine, squadHelp, trustLines, who,
+  isMixed, lastGamesLine, lastSeason, lastTileValue, lastWorthLine, planLine, rankHeadline, realAmongInvented,
+  sourceChip, sourceLine, squadHelp, trustLines, who,
 } from '@/lib/soccerClubSquadSheet';
 import { ordinal } from '@/lib/soccerCareerLeague';
 import { FlagImg } from '@/components/FlagImg';
@@ -56,7 +63,7 @@ function surname(m: SquadMan): string {
 /* A cell of the eleven is too narrow for "Second choice", so a role reads
    "2nd" over "choice". A word this table does not know is printed as it is. */
 const CHOICE_SHORT: Record<string, string> = {
-  First: '1st', Second: '2nd', Third: '3rd', Fourth: '4th', Fifth: '5th', Sixth: '6th', Seventh: '7th',
+  First: '1st', Second: '2nd', Third: '3rd', Fourth: '4th', Fifth: '5th', Sixth: '6th', Seventh: '7th', Eighth: '8th',
 };
 function choiceOf(role: string): string {
   const word = role.split(' choice ')[0];
@@ -66,19 +73,25 @@ function choiceOf(role: string): string {
 const BTN = 'min-h-[44px] rounded-xl border border-border px-4 text-sm font-semibold';
 const GOLD = 'border-yellow-500/70 bg-yellow-500/15 text-foreground';
 
-function ManRow({ m, year, captain }: { m: SquadMan; year: number; captain: boolean }) {
+function ManRow({ m, view, captain }: { m: SquadMan; view: SquadView; captain: boolean }) {
+  /* Only the game's own world has signings: a sheet by role is a real club in
+     a real past year, and nobody is said to have joined it. */
+  const fresh = view.source === 'invented' && !m.me && m.id !== undefined && m.since === view.year;
   return (
     <li
       data-squad-man={m.me ? 'me' : 'other'}
-      className={`flex min-h-[36px] items-center gap-2 rounded-lg border px-2 py-1 text-sm ${m.me ? GOLD : 'border-border/60 bg-background/40 text-foreground'}`}
+      className={`flex min-h-[36px] shrink-0 items-center gap-2 rounded-lg border px-2 py-1 text-sm ${m.me ? GOLD : 'border-border/60 bg-background/40 text-foreground'}`}
     >
       {m.nation ? <FlagImg name={m.nation} size={16} /> : null}
-      {/* A name is cut with its full form in the title. A role is the only
-          thing that says who the man is, so it wraps instead of being cut. */}
-      <span className={m.role ? 'min-w-0 flex-1 leading-tight' : 'min-w-0 flex-1 truncate'} title={m.name}>
+      {/* A name or a role is the only thing that says who the man is, and a
+          phone has no hover to read a cut one, so a long one wraps. */}
+      <span className="min-w-0 flex-1 break-words leading-tight" title={m.name} data-squad-name>
         {m.name}{m.me && captain ? ' ©' : ''}
       </span>
-      {!m.me && m.since === year ? (
+      {realAmongInvented(view, m) ? (
+        <span data-squad-real className="rounded bg-secondary px-1.5 py-0.5 text-xs font-bold text-foreground">REAL</span>
+      ) : null}
+      {fresh ? (
         <span data-squad-new className="animate-pop-correct rounded bg-primary/20 px-1.5 py-0.5 text-xs font-bold text-primary">NEW</span>
       ) : null}
       <span className="w-9 shrink-0 text-xs text-muted-foreground">{m.pos}</span>
@@ -111,14 +124,31 @@ export default function SquadSheet({ career, view, onClose, initialScreen }: Pro
   const label = GROUP_LABEL[view.group];
   const captain = !!career.isClubCaptain;
   const home = () => setScreen('home');
-  const onKey = (e: { key: string }) => {
-    if (e.key !== 'Escape') return;
-    if (screen === 'home') onClose(); else home();
+  const onKey = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Escape') {
+      if (screen === 'home') onClose(); else home();
+      return;
+    }
+    if (e.key !== 'Tab') return;
+    /* The sheet is modal: Tab goes round its own buttons and never out to
+       the page behind, which would scroll to wherever the focus landed. */
+    const box = panel.current;
+    if (!box) return;
+    const stops = [...box.querySelectorAll<HTMLElement>('button:not(:disabled)')];
+    const first = stops[0];
+    const end = stops[stops.length - 1];
+    const now = document.activeElement;
+    const outside = !now || !box.contains(now);
+    if (!first || outside || (e.shiftKey ? now === first || now === box : now === end)) {
+      e.preventDefault();
+      (e.shiftKey ? end : first)?.focus({ preventScroll: true });
+    }
   };
 
   const back = (
     <button type="button" onClick={home} className={`${BTN} text-muted-foreground`}>← Back</button>
   );
+  const mixed = isMixed(view);
 
   const planWord = view.trust.frozen ? 'Frozen out' : view.trust.inPlans ? 'In the plans' : 'Cover for now';
   const tiles: { id: SquadScreen; label: string; value: string }[] = [
@@ -126,9 +156,11 @@ export default function SquadSheet({ career, view, onClose, initialScreen }: Pro
     { id: 'bench', label: 'The bench', value: `${view.bench.length} players` },
     { id: 'place', label: 'Your place', value: `${ordinal(view.rank)} in line` },
   ];
-  if (last) tiles.push({ id: 'last', label: 'Last season', value: `${last.leagueApps} league games` });
+  if (last) tiles.push({ id: 'last', label: 'Last season', value: lastTileValue(last) });
 
   let body: ReactNode = null;
+  /* What stays at the bottom of the panel on every screen: the way out. */
+  let foot: ReactNode = back;
   if (screen === 'home') {
     body = (
       <div data-squad-screen="home" className="flex flex-col gap-3">
@@ -160,9 +192,9 @@ export default function SquadSheet({ career, view, onClose, initialScreen }: Pro
             </button>
           ))}
         </div>
-        <button type="button" onClick={onClose} className={`${BTN} text-muted-foreground`}>← Back to your career</button>
       </div>
     );
+    foot = <button type="button" onClick={onClose} className={`${BTN} text-muted-foreground`}>← Back to your career</button>;
   }
   if (screen === 'eleven') {
     const lines: SquadGroup[] = ['ATT', 'MID', 'DEF', 'GK'];
@@ -198,8 +230,10 @@ export default function SquadSheet({ career, view, onClose, initialScreen }: Pro
                         <span className="block font-normal text-muted-foreground">choice</span>
                       </span>
                     ) : (
-                      <span className="w-full truncate text-xs font-semibold">{cellName(m)}</span>
+                      /* a long surname goes onto a second line, never under an ellipsis */
+                      <span className="w-full text-xs font-semibold leading-tight [overflow-wrap:anywhere]" data-squad-cell-name>{cellName(m)}</span>
                     )}
+                    {realAmongInvented(view, m) ? <span data-squad-real className="text-xs font-bold leading-tight text-muted-foreground">REAL</span> : null}
                     <span className="text-sm font-bold tabular-nums">{m.ovr}</span>
                   </div>
                 );
@@ -209,6 +243,7 @@ export default function SquadSheet({ career, view, onClose, initialScreen }: Pro
         </div>
         <p className="text-xs leading-snug text-muted-foreground">
           {view.club}: the highest rated keeper, four defenders, three midfielders and three forwards on our ratings.
+          {mixed ? ' The men marked REAL are still here from the last real squad. Everyone else is invented.' : ''}
         </p>
         <p className="text-sm leading-snug text-foreground" data-squad-xi-line>
           {view.inElevenOnRating || !view.keepsMeOut
@@ -216,18 +251,19 @@ export default function SquadSheet({ career, view, onClose, initialScreen }: Pro
             : `On our ratings ${who(view.keepsMeOut)} is the last of the ${label} in ahead of you. You are ${ordinal(view.rank)} in line.`}
           {' '}{planLine(view.trust)}
         </p>
-        {back}
       </div>
     );
   }
   if (screen === 'bench') {
     body = (
       <div data-squad-screen="bench" className="flex min-h-0 flex-col gap-3">
-        <p className="text-sm font-semibold text-foreground">The bench: {view.bench.length} players, best first</p>
-        <ul className="flex max-h-[52dvh] flex-col gap-1 overflow-y-auto pr-1" data-squad-bench>
-          {view.bench.map(m => <ManRow key={m.me ? 'me' : m.id ?? m.name} m={m} year={view.year} captain={captain} />)}
+        <p className="shrink-0 text-sm font-semibold text-foreground">
+          The bench: {view.bench.length} players, best first{mixed ? '. REAL marks a man still here from the last real squad' : ''}
+        </p>
+        {/* The list takes the room the screen has and scrolls inside it. */}
+        <ul className="flex max-h-[52dvh] min-h-[72px] flex-col gap-1 overflow-y-auto pr-1" data-squad-bench>
+          {view.bench.map(m => <ManRow key={m.me ? 'me' : m.id ?? m.name} m={m} view={view} captain={captain} />)}
         </ul>
-        {back}
       </div>
     );
   }
@@ -241,7 +277,7 @@ export default function SquadSheet({ career, view, onClose, initialScreen }: Pro
       <div data-squad-screen="place" className="flex flex-col gap-2">
         <p className="text-sm font-semibold text-foreground">The {label}, on our ratings</p>
         <ul className="flex flex-col gap-1" data-squad-queue>
-          {shownRows.map(m => <ManRow key={m.me ? 'me' : m.id ?? m.name} m={m} year={view.year} captain={captain} />)}
+          {shownRows.map(m => <ManRow key={m.me ? 'me' : m.id ?? m.name} m={m} view={view} captain={captain} />)}
         </ul>
         {more > 0 ? <p className="text-xs text-muted-foreground" data-squad-more>{more} more in the line, {start} of them above these.</p> : null}
         <p className="text-sm font-semibold text-foreground">Manager&apos;s trust: {view.trust.label}</p>
@@ -255,23 +291,23 @@ export default function SquadSheet({ career, view, onClose, initialScreen }: Pro
             </li>
           ))}
         </ul>
-        {back}
       </div>
     );
   }
   if (screen === 'last' && last) {
+    const worth = lastWorthLine(last);
     body = (
       <div data-squad-screen="last" className="flex flex-col gap-3">
         <div>
           <p className="text-sm font-semibold text-foreground">Last season at {last.club}{last.loan ? ', on loan' : ''}</p>
-          <p className="text-sm text-muted-foreground">{last.leagueApps} league games, {last.apps} in all competitions</p>
+          <p className="text-sm text-muted-foreground" data-squad-games>{lastGamesLine(last)}</p>
+          {worth ? <p className="mt-1 text-xs leading-snug text-muted-foreground" data-squad-worth>{worth}</p> : null}
         </div>
         <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">What your record says</p>
         <ul className="flex flex-col gap-2 text-sm leading-snug text-foreground">
           {last.lines.map(r => <li key={r} data-squad-reason>{r}</li>)}
           {last.lines.length === 0 ? <li data-squad-reason="none">You were a regular. Nothing in your record needs explaining.</li> : null}
         </ul>
-        {back}
       </div>
     );
   }
@@ -283,11 +319,15 @@ export default function SquadSheet({ career, view, onClose, initialScreen }: Pro
         <ol className="flex list-decimal flex-col gap-2 pl-5 text-xs leading-snug text-foreground" data-squad-help>
           {(examples ? help.examples : help.rules).map(r => <li key={r}>{r}</li>)}
         </ol>
+      </div>
+    );
+    foot = (
+      <>
         <button type="button" onClick={() => setScreen(examples ? 'help' : 'examples')} className={`${BTN} text-foreground`}>
           {examples ? 'The rules' : 'Worked examples'}
         </button>
         {back}
-      </div>
+      </>
     );
   }
 
@@ -305,13 +345,13 @@ export default function SquadSheet({ career, view, onClose, initialScreen }: Pro
         tabIndex={-1}
         className="flex max-h-[calc(100dvh-24px)] w-full max-w-md flex-col gap-3 rounded-2xl border border-border bg-card p-4 outline-none animate-in fade-in zoom-in-95 duration-200"
       >
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-bold text-foreground">{view.club}</p>
             <p className="text-xs text-muted-foreground">
               {seasonOf(view.year)}{' '}
               <span data-squad-source={view.source} className="ml-1 rounded bg-secondary px-1.5 py-0.5 text-xs font-bold tracking-wide text-foreground">
-                {SOURCE_CHIP[view.source]}
+                {sourceChip(view)}
               </span>
             </p>
           </div>
@@ -324,7 +364,10 @@ export default function SquadSheet({ career, view, onClose, initialScreen }: Pro
             ?
           </button>
         </div>
-        {body}
+        {/* The body gives way before the foot does: when the screen is too
+            short for a screen's words, they scroll here and Back stays put. */}
+        <div data-squad-body className="flex min-h-0 flex-col overflow-y-auto overscroll-contain">{body}</div>
+        <div data-squad-foot className="flex shrink-0 flex-col gap-3">{foot}</div>
       </div>
     </div>
   );

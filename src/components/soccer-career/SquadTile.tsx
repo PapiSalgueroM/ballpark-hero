@@ -117,11 +117,15 @@ export function SquadTile({ career }: { career: CareerState }) {
       >
         <span className="min-w-0">
           <span className="block text-sm font-semibold text-foreground">👥 Squad</span>
-          <span className="block truncate text-xs text-muted-foreground">
-            {TILE_SOURCE[view.source]} · {view.trust.label}
+          <span className="block text-xs leading-snug text-muted-foreground">{TILE_SOURCE[view.source]}</span>
+          <span className="block text-xs leading-snug text-muted-foreground" data-squad-plan-label>
+            The plan: {view.trust.label}
           </span>
         </span>
         <span className="shrink-0 text-right">
+          {/* The rank is where RATING puts him. The label on the left is the
+              plan, and the two can disagree, so the number says which it is. */}
+          <span className="block text-xs text-muted-foreground" data-squad-rank-basis>On our ratings</span>
           <span className="block text-xl font-bold leading-tight tabular-nums text-foreground" data-squad-rank={view.rank}>
             {ordinal(view.rank)}
           </span>

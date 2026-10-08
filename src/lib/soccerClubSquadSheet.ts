@@ -99,6 +99,22 @@ export const SOURCE_CHIP: Record<SquadView['source'], string> = {
   invented: 'INVENTED TEAMMATES',
 };
 
+/** A squad of the game's own years that still holds real men: the chip says
+ *  both, and every real man in it is tagged where he is listed. */
+export function isMixed(view: SquadView): boolean {
+  return view.source === 'invented' && view.carried > 0;
+}
+
+/** The chip in the sheet's header: what kind of squad this is. */
+export function sourceChip(view: SquadView): string {
+  return isMixed(view) ? 'REAL AND INVENTED' : SOURCE_CHIP[view.source];
+}
+
+/** True for a real man still at the club in a squad that also holds invented ones. */
+export function realAmongInvented(view: SquadView, m: SquadMan): boolean {
+  return isMixed(view) && !m.me && m.id === undefined;
+}
+
 export interface LastSeason {
   club: string;
   year: number;
@@ -107,7 +123,36 @@ export interface LastSeason {
   apps: number;
   /** Under 20 league games: the engine's own line between a starter and cover. */
   thin: boolean;
+  /**
+   * The row lost games after selection. The engine draws his league games
+   * first and takes an injury off the season's TOTAL only, so on such a row
+   * the league figure is what his place was worth, never games played, and it
+   * can be higher than the total. The screen then prints the total alone.
+   */
+  cut: boolean;
+  injuryWeeks: number;
   lines: string[];
+}
+
+const count = (n: number, one: string) => `${n} ${one}${n === 1 ? '' : 's'}`;
+
+/** The games line on the Last season screen: only numbers that were played. */
+export function lastGamesLine(last: LastSeason): string {
+  return last.cut
+    ? `${count(last.apps, 'game')} in all competitions`
+    : `${count(last.leagueApps, 'league game')}, ${last.apps} in all competitions`;
+}
+
+/** Under the games line on a cut row: what the league figure really is. */
+export function lastWorthLine(last: LastSeason): string | null {
+  if (!last.cut) return null;
+  const worth = `your place was worth ${count(last.leagueApps, 'league game')}`;
+  return last.injuryWeeks > 0 ? `An injury took games off that total. Before it, ${worth}.` : `Going in, ${worth}.`;
+}
+
+/** The one number on the sheet's Last season tile. */
+export function lastTileValue(last: LastSeason): string {
+  return last.cut ? count(last.apps, 'game') : count(last.leagueApps, 'league game');
 }
 
 /**
@@ -121,9 +166,11 @@ export function lastSeason(c: CareerState): LastSeason | null {
   if (!row || row.type !== 'playing' || row.leagueApps === undefined) return null;
   const centre = squadCentre(row.clubTier);
   const thin = row.leagueApps < 20;
+  const cut = (row.injuryWeeks ?? 0) > 0 || row.apps < row.leagueApps;
   const before = c.seasons.filter(s => s !== row && s.club === row.club && s.type === 'playing').length;
   const lines: string[] = [];
-  if ((row.injuryWeeks ?? 0) >= 4) {
+  const injured = (row.injuryWeeks ?? 0) >= 4;
+  if (injured) {
     lines.push(row.injury ? `${row.injuryWeeks} weeks out injured (${row.injury}).` : `${row.injuryWeeks} weeks out injured.`);
   }
   let explained = false;
@@ -144,19 +191,28 @@ export function lastSeason(c: CareerState): LastSeason | null {
       explained = true;
     }
   }
-  if (thin && !explained && !lines.length) {
+  /* An injury never lowers the league figure, so on its own it explains
+     nothing about a thin one: the selection line is still owed. */
+  if (thin && !explained) {
     if (row.ovr !== undefined) {
       const band = projectLeagueApps(row.ovr, row.clubTier, row.club, before);
-      lines.push(`Nothing in your record explains it beyond selection: your range going in was ${band.min} to ${band.max} league games.`);
+      const range = `your range going in was ${band.min} to ${band.max} league games.`;
+      lines.push(injured
+        ? `${FALLBACK_AFTER_INJURY}: ${range}`
+        : `${FALLBACK_PLAIN}: ${range}`);
     } else {
       lines.push('This season was saved before the game kept the numbers that explain it.');
     }
   }
   return {
     club: row.club, year: row.year, loan: !!row.onLoanFrom,
-    leagueApps: row.leagueApps, apps: row.apps, thin, lines,
+    leagueApps: row.leagueApps, apps: row.apps, thin, cut, injuryWeeks: row.injuryWeeks ?? 0, lines,
   };
 }
+
+/* The two openings of the line a thin season gets when no reason was found. */
+const FALLBACK_PLAIN = 'Nothing in your record explains it beyond selection';
+const FALLBACK_AFTER_INJURY = 'The injury aside, nothing in your record explains the selection';
 
 /**
  * His place at a club that has made an offer, for the coming season. Not on
@@ -232,13 +288,13 @@ export function squadHelp(): SquadHelp {
     title: 'How the squad works',
     rules: [
       'This screen shows what the game already decided. Nothing here changes how many games you play.',
-      'Your rank is where your rating puts you among the players in your position group at the club. A teammate on the same rating stays ahead of you: he was here first.',
+      'Your rank is where your rating puts you among the players in your position group at the club. A teammate on the same rating counts as ahead of you: to pass him you have to be rated higher.',
       'The eleven is the highest rated keeper, four defenders, three midfielders and three forwards on our ratings. It is a picture of the squad, not the manager\'s team sheet.',
       'Trust is how much of the league season the manager plans to give you. It comes from your rating against the level the squad expects, how long you have been at the club, and how the dressing room feels about you. That last part is your phone.',
       'Real, roles or invented: from 2016 to 2026 you see the club\'s real squad where we have it. A real past season with no checked squad list shows roles, ages and ratings, and no names. From 2027 the world is your career\'s own: the last real squad carries on, players leave, and every new face is invented. Invented teammates get a year older every summer.',
     ],
     examples: [
-      `Rank. You are a ${n.mine} rated striker and the club's forwards are ${list}. ${n.atOrAbove} of them are rated ${n.mine} or more (the other ${n.mine} was here first), so on our ratings you are ${ordinal(n.rank)} of ${n.groupSize} forwards: the last one into the front three.`,
+      `Rank. You are a ${n.mine} rated striker and the club's forwards are ${list}. ${n.atOrAbove} of them are rated ${n.mine} or more (a tie goes to the other ${n.mine}), so on our ratings you are ${ordinal(n.rank)} of ${n.groupSize} forwards: the last one into the front three.`,
       `Trust. At a club whose squad level is ${n.centre}, a ${n.mine} is ${n.above} above it. The plan for that is ${n.band.min} to ${n.band.max} league games, and ${n.mid} of 38 is trust ${n.pct}%. A dressing room that has your back adds ${n.swing} games: ${n.pctWithSwing}%.`,
       `A thin season. At ${n.thinOvr} in that same squad you are ${n.under} under the level and ${ordinal(n.thinRank)} of ${n.groupSize} forwards on our ratings. The plan for that is ${n.thinBand.min} to ${n.thinBand.max} league games, and Last season tells you why.`,
     ],

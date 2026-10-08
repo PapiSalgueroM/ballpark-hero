@@ -80,13 +80,20 @@ export const FOREIGN_NATIONS: readonly string[] = [
 ];
 
 /** What a role is called on a sheet with no names: his place in his LINE on
- *  rating, the same order the eleven and his own rank are read in, so the
- *  "third choice forward" is in the eleven and the fourth is not. His exact
- *  position is printed beside it. */
+ *  rating. The squad built here does not hold the player, so these places
+ *  count the club's own men only. The reader that puts the player into his
+ *  line (squadView) numbers that line again with him counted, so the "third
+ *  choice forward" on his screen is in the eleven and the fourth is not,
+ *  wherever he ranks himself. His exact position is printed beside it. */
 export const ROLE_WORD: Record<SquadGroup, string> = {
   GK: 'keeper', DEF: 'defender', MID: 'midfielder', ATT: 'forward',
 };
-const CHOICE_WORD = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh'];
+const CHOICE_WORD = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh', 'Eighth'];
+
+/** The role of the man in place `place` (0 is the best) of a line. */
+export function roleName(place: number, group: SquadGroup): string {
+  return `${CHOICE_WORD[place] ?? `Number ${place + 1}`} choice ${ROLE_WORD[group]}`;
+}
 
 export function squadCentre(tier: number): number {
   return TIER_CENTRE[tier] ?? CENTRE_DEFAULT;
@@ -257,7 +264,7 @@ export function genClubSquad(q: GenQuery): SquadMan[] {
     for (const man of men) {
       const k = seen[man.group] ?? 0;
       seen[man.group] = k + 1;
-      const role = `${CHOICE_WORD[k] ?? `Number ${k + 1}`} choice ${ROLE_WORD[man.group]}`;
+      const role = roleName(k, man.group);
       man.name = role;
       man.role = role;
       delete man.nation;
