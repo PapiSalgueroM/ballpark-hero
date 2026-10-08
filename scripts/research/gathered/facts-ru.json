@@ -1,0 +1,190 @@
+{
+  "league": "Russian Premier League",
+  "season": "2026-27",
+  "read": "2026-10-08",
+  "ownSiteDefault": "unreadable: the league's own site (premierliga.ru) answered every request on 2026-10-08 with a redirect to itself that asks for a browser check (the home page, the clubs page, the table page and the English site were tried), and that check was not worked around. Club sites were tried for three clubs: Zenit's squad page answers but prints no birth date on the list, Spartak Moscow's answers with a script check, and CSKA Moscow's squad address was not found. So no club's own site is one of its lists, and every club stands on independent publishers that print the birth date (critic's correction 15 of the Round 1052 brief).",
+  "method": "Three squad lists were read for every club on 2026-10-08, each for the 2026-27 season with the season visible on the page or in the feed: Transfermarkt's 26/27 squad list in its detailed view, ESPN's roster feed for the 2026-2027 Russian Premier League, and FotMob's squad page (latest season 2026/2027). Transfermarkt's list is the spine: a man's shipped name is its spelling, his detailed position and his market value are its (the house convention of Round 1035). A man is a row only when Transfermarkt's list carries him AND at least one of the other two lists carries him too, matched by birth date with the shirt number or the spelling as a second witness, never by spelling alone. His birth date ships only where a second host prints the same date; his position group is the group at least two hosts put him in; his first nationality ships only where a second host names the same nation in Transfermarkt's spelling, and is null otherwise. His value is Transfermarkt's printed market value on that page, null where it prints none. Everybody else is in leftOut with the reason: on one list only; on two lists but not on Transfermarkt's (so there is no house spelling or value for him, and he is most often a man who has left); a birth date on one host; no group two hosts agree on; a name the game already holds somewhere else (decision 5 of the brief forbids moving him, so he is held out for the lead); a name the modern nationality map holds under another nationality; a second man of the same name inside the round. The lists were read once by scripts/research/gathered/fetch.mjs, which keeps each host's answer in a folder beside this file's working copy (three publishers' pages are not committed to a public repo), and scripts/research/gathered/build.mjs turns the kept answers into this file with no network, so the rows can be rebuilt and checked without asking the hosts again. Every man a host printed is either a row or in leftOut, with his id on that host in ids, and each list's size (listed) is counted a second way that does not go through the row parser; a squad row the parser cannot read stops the build. That rule is new on 2026-10-08: the first cut of the parser silently skipped every Transfermarkt row whose name carries an icon (captain, injured, suspended, not eligible), 50 of 437 rows, and filed 47 of those men as not on that list; they are rows now where they pass the rules. Wikipedia was not read. A club is partial when fewer than 8 men pass or more than half of the passing men have no value.",
+  "membership": {
+    "status": "verified: the same sixteen clubs on three independent tables and one publisher's list; Fakel Voronezh and Rodina Moscow came up, Pari Nizhny Novgorod and Sochi went down, Akron Tolyatti and Dynamo Makhachkala kept their places through the relegation playoffs",
+    "sources": [
+      {
+        "host": "site.web.api.espn.com",
+        "kind": "standings feed, 2026-27 Russian Premier League",
+        "url": "https://site.web.api.espn.com/apis/v2/sports/soccer/rus.1/standings?season=2026",
+        "read": "2026-10-08",
+        "note": "16 clubs, each on 9 games played"
+      },
+      {
+        "host": "transfermarkt.com",
+        "kind": "competition page, season 26/27",
+        "url": "https://www.transfermarkt.com/premier-liga/startseite/wettbewerb/RU1/saison_id/2026",
+        "read": "2026-10-08",
+        "note": "16 club links, the same clubs"
+      },
+      {
+        "host": "fotmob.com",
+        "kind": "league table, 2026/2027",
+        "url": "https://www.fotmob.com/leagues/63/table/premier-league",
+        "read": "2026-10-08",
+        "note": "16 clubs, the same clubs"
+      },
+      {
+        "host": "sport-express.ru",
+        "kind": "news article listing the participants, dated 2026-07-23",
+        "url": "https://www.sport-express.ru/football/rfpl/news/rpl-sezon-2026-27-polnyy-spisok-uchastnikov-chempionata-rossii-2441637/",
+        "read": "2026-10-08",
+        "note": "names all 16, the two promoted and the two relegated clubs"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "ru-members",
+      "fact": "The 2026-27 Russian Premier League has 16 clubs: Akhmat Grozny, Akron Tolyatti, Baltika, CSKA Moscow, Dynamo Makhachkala, Dynamo Moscow, Fakel Voronezh, Krasnodar, Krylia Sovetov, Lokomotiv Moscow, Orenburg, Rodina Moscow, Rostov, Rubin Kazan, Spartak Moscow and Zenit.",
+      "value": 16,
+      "thin": false,
+      "sources": [
+        {
+          "publisher": "ESPN",
+          "title": "2026-27 Russian Premier League standings feed",
+          "url": "https://site.web.api.espn.com/apis/v2/sports/soccer/rus.1/standings?season=2026",
+          "dated": "2026-10-08",
+          "read": "2026-10-08"
+        },
+        {
+          "publisher": "Sport-Express",
+          "title": "RPL season 2026/27: the full list of participants of the Russian championship (translated)",
+          "url": "https://www.sport-express.ru/football/rfpl/news/rpl-sezon-2026-27-polnyy-spisok-uchastnikov-chempionata-rossii-2441637/",
+          "dated": "2026-07-23",
+          "read": "2026-10-08"
+        },
+        {
+          "publisher": "Transfermarkt",
+          "title": "Premier Liga 26/27 competition page",
+          "url": "https://www.transfermarkt.com/premier-liga/startseite/wettbewerb/RU1/saison_id/2026",
+          "dated": "2026-10-08",
+          "read": "2026-10-08"
+        }
+      ]
+    },
+    {
+      "id": "ru-format",
+      "fact": "16 clubs play 30 rounds, each club meeting every other twice, home and away (240 matches).",
+      "value": 30,
+      "thin": false,
+      "sources": [
+        {
+          "publisher": "Sports.ru",
+          "title": "Russian Premier League 2026/2027: championship dates, schedule, teams, arenas (translated)",
+          "url": "https://www.sports.ru/football/blogs/3421868.html",
+          "dated": "2026-07-16",
+          "read": "2026-10-08"
+        },
+        {
+          "publisher": "Sport-Express",
+          "title": "RPL season 2026/27: the full list of participants of the Russian championship (translated)",
+          "url": "https://www.sport-express.ru/football/rfpl/news/rpl-sezon-2026-27-polnyy-spisok-uchastnikov-chempionata-rossii-2441637/",
+          "dated": "2026-07-23",
+          "read": "2026-10-08"
+        },
+        {
+          "publisher": "Rossiyskaya Gazeta",
+          "title": "RPL 2026/2027 schedule: the calendar of the Russian championship (translated)",
+          "url": "https://rg.ru/post/raspisanie-rpl-2026-2027.html",
+          "dated": "2026-07-24",
+          "read": "2026-10-08"
+        }
+      ]
+    },
+    {
+      "id": "ru-drop",
+      "fact": "The clubs that finish 15th and 16th go straight down to the First League; the clubs that finish 13th and 14th play two legged playoffs against the First League's 4th and 3rd.",
+      "value": 2,
+      "thin": false,
+      "sources": [
+        {
+          "publisher": "Sports.ru",
+          "title": "Russian Premier League 2026/2027: championship dates, schedule, teams, arenas (translated)",
+          "url": "https://www.sports.ru/football/blogs/3421868.html",
+          "dated": "2026-07-16",
+          "read": "2026-10-08"
+        },
+        {
+          "publisher": "Cybersport.ru",
+          "title": "Russian Premier League (RPL): match schedule, league table and results, 2026-2027 page (translated)",
+          "url": "https://www.cybersport.ru/tournaments/football/rpl-2026-2027-rossiiskaia-premer-liga",
+          "dated": "2026 (the page prints no day)",
+          "read": "2026-10-08"
+        },
+        {
+          "publisher": "Sport-Express",
+          "title": "RPL season 2026/27: the full list of participants of the Russian championship (translated)",
+          "url": "https://www.sport-express.ru/football/rfpl/news/rpl-sezon-2026-27-polnyy-spisok-uchastnikov-chempionata-rossii-2441637/",
+          "dated": "2026-07-23",
+          "read": "2026-10-08",
+          "note": "the same rule as it was applied in May 2026: 15th and 16th left, 13th and 14th kept their places through the playoffs"
+        }
+      ]
+    },
+    {
+      "id": "ru-uefa",
+      "fact": "Russian clubs are suspended from UEFA's club competitions in 2026-27: in June 2026 UEFA's Executive Committee set the 2026/27 list of participants to match the suspension of Russian national teams and clubs.",
+      "value": null,
+      "thin": false,
+      "sources": [
+        {
+          "publisher": "Euronews",
+          "title": "UEFA extends competition ban on Russian teams and clubs for 2026/27 season",
+          "url": "https://www.euronews.com/my-europe/2026/06/07/uefa-extends-ban-on-russian-national-teams-and-clubs-from-competitions-for-202627-season",
+          "dated": "2026-06-07",
+          "read": "2026-10-08"
+        },
+        {
+          "publisher": "Ukrainska Pravda",
+          "title": "UEFA extends suspension of Russian teams for 2026/27 season",
+          "url": "https://www.pravda.com.ua/eng/news/2026/06/07/8038150/",
+          "dated": "2026-06-07",
+          "read": "2026-10-08"
+        }
+      ]
+    },
+    {
+      "id": "ru-cup",
+      "fact": "The Russian Cup is played in 2026-27 and the Premier League clubs enter it through their own path: four groups of four playing home and away, the top two of each group into the playoffs and the third into the lower divisions' knockout path.",
+      "value": null,
+      "thin": false,
+      "sources": [
+        {
+          "publisher": "Sovetsky Sport",
+          "title": "The draw of the RPL Path of the Russian Cup of season 2026/2027 has taken place (translated)",
+          "url": "https://www.sovsport.ru/football/news/sostoyalas-zherebyovka-puti-rpl-kubka-rossii-sezona-2026-2027",
+          "dated": "2026-06-19",
+          "read": "2026-10-08"
+        },
+        {
+          "publisher": "Rossiyskaya Gazeta",
+          "title": "The Russian Cup has started with a three digit number of participants (translated)",
+          "url": "https://rg.ru/2026/07/29/sto-k-odnomu.html",
+          "dated": "2026-07-28",
+          "read": "2026-10-08"
+        }
+      ]
+    },
+    {
+      "id": "ru-tiebreak",
+      "fact": "Level on points, clubs are split by their head to head results first, then by wins, goal difference and goals scored.",
+      "value": null,
+      "thin": true,
+      "sources": [
+        {
+          "publisher": "Sports.ru",
+          "title": "Russian Premier League 2026/2027: championship dates, schedule, teams, arenas (translated)",
+          "url": "https://www.sports.ru/football/blogs/3421868.html",
+          "dated": "2026-07-16",
+          "read": "2026-10-08"
+        }
+      ],
+      "note": "one publisher read, so the rules row takes the default order and no copy states an order"
+    }
+  ]
+}
