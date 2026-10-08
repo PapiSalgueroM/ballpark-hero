@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+weight: node .rc/x/weightBytes.mjs
+sweep: ENGINES=chromium node scripts/sweepWeight.mjs
