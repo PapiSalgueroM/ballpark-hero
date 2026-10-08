@@ -64,10 +64,10 @@ const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace
 const CONTROL = process.env.SEASON_MOTION_SIM_CONTROL ?? '';
 const SHIFT_NEEDLE = '  return after.map((club, to) => ({ club, from: was.get(club) ?? -1, to }));';
 const FENCE_NEEDLE = "const EASE = 'cubic-bezier(.2,.8,.2,1)';";
-const RESUME_NEEDLE = "  return rows.findIndex(row => row.year === r.year && row.type === 'playing' && row.apps > 0 && keyOf(row) === r.key && (r.stable || liveYear === row.year));";
+const RESUME_NEEDLE = '  return rows.findIndex(row => row.year === r.year && keyOf(row) === r.key && (r.stable || liveYear === row.year));';
 const BUNDLE_CONTROLS = {
   shift: [{ file: 'src/lib/motion/rankShift.ts', from: SHIFT_NEEDLE, to: '  return after.map((club, to) => ({ club, from: to, to: was.get(club) ?? -1 }));' }],
-  resumetag: [{ file: 'src/lib/season/resume.ts', from: RESUME_NEEDLE, to: "  return rows.findIndex(row => row.year === r.year && row.type === 'playing' && row.apps > 0 && (r.stable || liveYear === row.year));" }],
+  resumetag: [{ file: 'src/lib/season/resume.ts', from: RESUME_NEEDLE, to: '  return rows.findIndex(row => row.year === r.year && (r.stable || liveYear === row.year));' }],
 };
 const PAGEKEY_NEEDLE = '|${r.assists}';
 if (CONTROL && !['shift', 'resumetag', 'pagekey', 'fence'].includes(CONTROL)) throw new Error(`unknown SEASON_MOTION_SIM_CONTROL ${CONTROL}`);
@@ -206,9 +206,9 @@ check(!fails.has('1 keys') && !fails.has('1 shift'), `1. every club's from and t
   check(own === rows && shared === 0, `2. every record finds its own row (${own} of ${rows}); rows of one career sharing a key: ${shared}`);
   check(foreign >= 5000 && foreignHit === 0, `2. a record finds nothing in another career (${foreignHit} of ${foreign} did; floor 5000 checks)`);
   check(heldBack === rows && heldBad === 0, `2. a record that is not stable is held to the league year of the save (${heldBad} of ${heldBack} were not)`);
-  /* the career page may not import the season code, so its Resume chip builds the season's key with one template
-     line of its own. Read that line out of the page and hold it to soccerSeasonKey on every played row. */
-  const pageLines = read('src/pages/SoccerCareer.tsx').split('\n').filter(l => l.includes('resumeRowIndex(resume, career.seasons, r => `'));
+  /* the Resume chip may not import the season code (it must stay a few hundred bytes), so it builds the season's key
+     with one template line of its own. Read that line out of its file and hold it to soccerSeasonKey on every played row. */
+  const pageLines = read('src/components/soccer-career/SeasonResumeChip.tsx').split('\n').filter(l => l.includes('resumeRowIndex(resume, career.seasons, r => `'));
   const tplMatch = pageLines.length === 1 ? /r => `([^`]+)`, career/.exec(pageLines[0]) : null;
   check(!!tplMatch, `2. the career page holds its key template on one line (${pageLines.length} lines found)`);
   if (tplMatch) {
@@ -252,13 +252,21 @@ function importsOf(code) {
   for (const m of code.matchAll(/\brequire\s*\(\s*['"]([^'"]+)['"]/g)) out.push({ spec: m[1], typeOnly: false });
   return out;
 }
+const CHIP = 'src/components/soccer-career/SeasonResumeChip.tsx';
 const listDir = rel => fs.readdirSync(path.join(ROOT, rel)).filter(f => /\.(ts|tsx)$/.test(f)).map(f => `${rel}/${f}`);
 const LIB_MOTION = listDir('src/lib/motion');
 const UI_MOTION = listDir('src/components/motion');
 /* files that may draw nothing at random (the list grows as the round's parts land) */
-const NO_DRAW = [...LIB_MOTION, ...UI_MOTION, 'src/lib/season/resume.ts', 'src/components/season-centre/resumeStore.ts', 'src/components/season-centre/SeasonPicker.tsx', 'src/components/season-centre/useBodyLock.ts'];
+const NO_DRAW = [...LIB_MOTION, ...UI_MOTION, 'src/lib/season/resume.ts', 'src/components/season-centre/resumeStore.ts', 'src/components/season-centre/SeasonPicker.tsx', 'src/components/season-centre/useBodyLock.ts', 'src/components/season-centre/MiniPitch.tsx', CHIP];
 const IMPORTS_NOTHING = [...LIB_MOTION, 'src/lib/season/resume.ts'];
 
+const MINI_PITCH = 'src/components/season-centre/MiniPitch.tsx';
+/* the pitch part, wherever it lives, and the one file of Club Manager's that MiniPitch may carry */
+const PITCH_PART = /(pitch-motion|club-manager\/LiveSim)/;
+const PITCH_FIGURES = '@/components/club-manager/LiveSimMotion';
+/* the chip is loaded on the career page for anybody with a place kept: it may carry the record's reader and nothing else of the Season Centre */
+const CHIP_MAY_IMPORT = ['react', '@/components/ui/button', '@/lib/season/resume'];
+const CENTRE_FILES = [...listDir('src/components/season-centre'), 'src/components/soccer-career/SoccerSeasonCentre.tsx'];
 function fenceFindings(textOf) {
   const out = [];
   for (const f of IMPORTS_NOTHING) for (const im of importsOf(strip(textOf(f)).code)) out.push(`${f} imports ${im.spec}: it must import nothing`);
@@ -273,6 +281,16 @@ function fenceFindings(textOf) {
     if (/Math\s*\.\s*random/.test(bare)) out.push(`${f} calls Math.random`);
     if (/new\s+Rng\s*\(/.test(bare)) out.push(`${f} makes an Rng`);
   }
+  /* The pitch part has one way into the Season Centre, MiniPitch.tsx. The part is Club Manager's figure file today
+     (LiveSimMotion.tsx: where everybody is in a goal, and the figure) and Round 1101's shared folder once that is on
+     main; either way no other file of the Centre may reach for it, not even for a type. And of Club Manager's own,
+     MiniPitch carries that one file and nothing else: the engine and the match viewer for their types at most, which
+     are erased at build (the browser half reads every file asked for and finds no engine in them). */
+  for (const f of CENTRE_FILES) for (const im of importsOf(strip(textOf(f)).code)) {
+    if (PITCH_PART.test(im.spec) && f !== MINI_PITCH) out.push(`${f} imports the pitch part (${im.spec}): MiniPitch.tsx is the one file that may`);
+    if (f === MINI_PITCH && /clubManager|club-manager\//.test(im.spec) && !im.typeOnly && im.spec !== PITCH_FIGURES) out.push(`${f} imports ${im.spec} for more than its types`);
+  }
+  for (const im of importsOf(strip(textOf(CHIP)).code)) if (!im.typeOnly && !CHIP_MAY_IMPORT.includes(im.spec)) out.push(`${CHIP} imports ${im.spec}: it may carry react, the button and the record's reader only`);
   return out;
 }
 
@@ -293,6 +311,17 @@ const asComment = f => (f === SHIFT_UI ? `${read(f)}\n// ${DRAW_LINE}\n/* ${DRAW
 const asCode = f => (f === SHIFT_UI ? `${read(f)}\n${DRAW_LINE}\n` : read(f));
 check(fenceFindings(asComment).length === 0, '3. the call written in a comment and in a string is not a finding');
 check(fenceFindings(asCode).length === 1, '3. the same call in code is exactly one finding');
+/* the pitch rules fire, each on the file as it is with one import line put first (in memory): another file of the Centre
+   reaching for the pitch part, even for a type, and MiniPitch carrying Club Manager's engine or its match viewer as code */
+const CLOCK_UI = 'src/components/season-centre/MatchClock.tsx';
+const withImport = (file, line) => f => (f === file ? `${line}\n${read(f)}` : read(f));
+const pitchRule = (file, line) => fenceFindings(withImport(file, line)).length;
+check(importsOf(strip(read(MINI_PITCH)).code).some(im => PITCH_PART.test(im.spec) && !im.typeOnly), '3. MiniPitch.tsx does bind the pitch part (the rules below are about a part that is really there)');
+check(pitchRule(CLOCK_UI, "import type { MotionFrame } from '@/components/club-manager/LiveSimMotion';") === 1, '3. the match clock reaching for the pitch part as Club Manager keeps it, for a type alone, is exactly one finding');
+check(pitchRule(CLOCK_UI, "import { PitchSurface } from '@/components/pitch-motion';") === 1, '3. the match clock reaching for the pitch part as Round 1101 keeps it is exactly one finding');
+check(pitchRule(MINI_PITCH, "import { simulateSeason } from '@/lib/clubManager';") === 1, '3. MiniPitch carrying Club Manager\'s engine as code is exactly one finding');
+check(pitchRule(MINI_PITCH, "import LiveSimScreen from '@/components/club-manager/LiveSimScreen';") === 1, '3. MiniPitch carrying Club Manager\'s match viewer is exactly one finding');
+check(pitchRule(MINI_PITCH, "import type { LiveMatchState } from '@/lib/clubManager';") === 0, '3. the engine\'s types, which are erased at build, are not a finding');
 
 console.log(`simSeasonCentreMotion: ${checks} checks, ${failed} failed${CONTROL ? ` (control ${CONTROL})` : ''}`);
 process.exit(failed ? 1 : 0);

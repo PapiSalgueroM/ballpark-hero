@@ -6,6 +6,7 @@
    The sport hands in the rows. A row with `locked` is not a button: it says,
    in the sport's own honest words, why that season cannot be replayed. */
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
+import { CelebrationStyles } from '@/components/club-manager/CelebrationStyles';
 import { useBodyLock } from './useBodyLock';
 
 export interface PickerRow {
@@ -32,6 +33,8 @@ export function SeasonPicker({ title, rows, exitLabel, onPick, onClose }: Props)
   useBodyLock();
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4 backdrop-blur-sm" data-season-centre data-season-picker>
+      {/* the shared kit's arrival (cm-rise), which stands still under reduced motion */}
+      <CelebrationStyles />
       <div role="dialog" aria-modal="true" aria-label={title} tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(onClose)} className="cm-rise w-full max-w-sm space-y-3 rounded-2xl border border-border bg-card p-4 outline-none">
         <div className="text-sm font-bold">{title}</div>
         <ul className="max-h-[60vh] space-y-2 overflow-y-auto overscroll-contain" data-picker-list>

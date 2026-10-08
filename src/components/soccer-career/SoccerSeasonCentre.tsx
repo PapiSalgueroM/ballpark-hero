@@ -19,8 +19,10 @@
    one small record goes to this browser's localStorage (src/lib/season/
    resume.ts, never the save), and opening the same season again starts on
    the kick off card at that matchday. The record carries the season's own
-   key, so a save that no longer holds that season simply ignores it. */
-import { Component, useCallback, useMemo, useState, type ReactNode } from 'react';
+   key, so a save that no longer holds that season simply ignores it.
+   With no season handed in it lists the seasons he can watch again; goals
+   play on a little pitch (MiniPitch, its own chunk) and the table slides. */
+import { Component, Suspense, lazy, useCallback, useMemo, useState, type ReactNode } from 'react';
 import type { CareerState, ClubData, SeasonRecord } from '@/lib/soccerCareerEngine';
 import { applyDecisions, deriveSeason, planMoments, tableAt } from '@/lib/season/core';
 import { SOCCER, buildSoccerSeasonCtx, soccerSeasonKey, type SoccerSeasonCtx } from '@/lib/season/soccer';
@@ -37,6 +39,25 @@ import { minuteLabel } from '@/lib/clubManagerClock';
 import { SOCCER_FULL_TIME } from '@/lib/season/soccerEvents';
 import type { HelpWords } from '@/components/season-centre/SeasonCentreHelp';
 import { SeasonPicker, type PickerRow } from '@/components/season-centre/SeasonPicker';
+import type { PitchRole } from '@/components/season-centre/MiniPitch';
+
+/* Round 1046: the little pitch is its own chunk, asked for when the first match kicks off */
+const MiniPitch = lazy(() => import('@/components/season-centre/MiniPitch'));
+/** The pitch's box: a fixed shape (the scoring third of a pitch), worn by the loading fallback too, so nothing under it ever moves.
+ *  `isolate` keeps the ball and the figures inside the box's own layer, under the score that stays at the top of a phone's stage. */
+const PITCH_BOX = 'relative isolate w-full overflow-hidden rounded-xl aspect-[25/12]';
+/** The pitch's place with nothing drawn in it: the box and the line under it, the same size as the pitch itself. */
+const PITCH_EMPTY = <div aria-hidden="true" data-pitch-empty><div className={PITCH_BOX} /><div className="h-5" /></div>;
+/* The little pitch is a picture beside the match, never the match. If its file does not arrive (a weak signal, or a
+   new build published while he watches) or it fails to draw, its place stays empty and the season carries on: the
+   score, the events and the table need none of it. Without this the whole Season Centre fell to its error tile, whose
+   Retry cannot help, because a browser keeps a file that failed as failed until the page is loaded again. */
+class PitchBoundary extends Component<{ children: ReactNode }, { gone: boolean }> {
+  state = { gone: false };
+  static getDerivedStateFromError() { return { gone: true }; }
+  render() { return this.state.gone ? PITCH_EMPTY : this.props.children; }
+}
+const roleOf = (position: string): Exclude<PitchRole, null> => (position === 'GK' ? 'GK' : position === 'CB' || position === 'LB' || position === 'RB' ? 'DEF' : 'ATT');
 import type { DerivedGame, DerivedSeason, SeasonEvent } from '@/lib/season/core';
 
 export interface SoccerSeasonCentreProps {
@@ -58,18 +79,21 @@ const HELP: HelpWords = {
   intro: [
     'Your season was played the moment you pressed Next Season. This is that same season, match by match: the final table and your season totals are settled, and nothing here can change them.',
     "When a season shows a table, who was in the league, how many clubs it had and how many points a win was worth are real (from 2026-27 on, the league is your career's own world). Every score, every other club's result and every minute are your career's own.",
+    'When the table changes, each club slides from where it was to where it is now. The little pitch shows who scored and when. The ring is you, whenever you are in the move: scoring it, setting it up, or up there with the attack if you play in midfield or up front, and at the back when one goes in past you as a keeper or a defender. ⚽ Yours or 🅰️ Your assist under the pitch tells you when the goal or the assist was yours. How the move looked is the game\'s own drawing.',
   ],
-  controls: '▶ plays the next matchday. ⏩ jumps to the next big game (a derby, halfway, the title or the final day). ⏭ goes straight to the end. 1x and 3x set the clock, Results shows each match at full time.',
+  controls: '▶ plays the next matchday. ⏩ jumps to the next big game (a derby, halfway, the title or the final day). ⏭ goes straight to the end. 1x and 3x set the clock, Results shows each match at full time. After a jump the table slides from the last matchday you saw; the ▲ and ▼ beside your place always compare with the matchday before. Close it whenever you like: the 📺 Resume chip on your career page takes you back to the same matchday. 📺 Season replays, next to Ratings, opens the season you just played, every season you won the league and every results only season; any other season with a table is locked, because the game did not keep who won the league that year.',
   moments: [
     'Up to three moments a season are yours to play, marked 🎯 on the fixtures of the season you just played. The clock stops a beat before one. 🎯 Take it yourself plays it on your training ground board, one go. ▶ Let it play leaves the match as it was. Once the board opens the go is used, so closing the tab counts as a miss.',
     'YOUR CALL: what you do is what happened in that match. Score a chance that was missed and the goal is yours; miss one that went in and it is gone. The return game against the same club takes the other side of it, so the final table and your season totals end exactly where your season summary has them.',
     'RECREATE: the record stands whatever you do. You play a goal, an assist or a clean sheet again, for stars only.',
     'A make earns one to three stars for how well you struck it. The stars bank once a season, at the season review: 60% of the stars on offer is +1 to the stat your position trains, 85% is +2, never past your ceiling (your training drill and your moments share that room), and it arrives with next season\'s growth. Step out before the review and your moments stay open while your season summary is up. Press Continue on the summary and the stars you have bank as they stand, with any moment you left counting as no stars. After the bank the season\'s moments are closed.',
+    'Once you have pressed Continue on the summary, coming back to a season from your career page is for watching: no moment is offered then. A moment you played is shown as you played it while that season is still the last one you played a moment in; after that the season replays as your record has it.',
   ],
   examples: [
     { head: 'A YOUR CALL', body: 'Matchday 9, 1-1 in the 82nd minute, and on your season this chance was missed. You take it and score: the match ends 2-1 and you climb the table that week. In the return game on matchday 28, a 2-1 win on your season, your goal there is not scored and it ends 1-1. You gain two points on matchday 9 and give two back on matchday 28, they lose one and get it back: the final table and your goals for the season end exactly where they were.' },
     { head: 'A RECREATE', body: 'Derby day, and on the record you scored in the 74th minute. You play it again on the Wall Shot: through the gap and into the top corner is three stars, a miss is none. Either way the derby ends as it did. Three moments worth 3, 2 and 1 stars are 6 of 9, which is 67%: +1 next season.' },
-    { head: 'A matchday', body: 'Matchday 12: you win 2-1 at home and score in the 67th minute, rated 7.6. The table moves you from 6th to 4th (▲2).' },
+    { head: 'A matchday', body: 'Matchday 12: you win 2-1 at home and score in the 67th minute, rated 7.6. The table moves you from 6th to 4th (▲2), and it slides to show it: the two clubs you passed drop below you.' },
+    { head: 'Coming back', body: 'You watch to matchday 13 and close the tab. Next visit the chip reads 📺 Resume 2031/32, matchday 14. The Season Centre opens with 13 of 38 played, you 4th, and the next five games. Your place is kept in this browser only, never in your career save: clear your browser data and the season simply starts from kick off.' },
     { head: 'An injury', body: 'Out for five weeks with a hamstring in a 38 game season: five weeks out of a 46 week year is four matchdays, so the club plays matchdays 14 to 17 without you. Your games played do not move. The table does.' },
     { head: 'Results only', body: 'A season the game has no verified table for (before 1995-96, a league outside the big five, or a season cut short) shows your league games with no table. If your season summary has a finish, the review still prints it.' },
   ],
@@ -91,8 +115,18 @@ function eventWords(e: SeasonEvent, us: string, them: string): string {
   return '🔁 You come off';
 }
 
-function soccerSport(keepsSheets: boolean): CentreSport {
+function soccerSport(keepsSheets: boolean, color: string, role: Exclude<PitchRole, null>, ratingRange: [number, number] | null): CentreSport {
   return {
+    form: ratingRange ? { head: 'Your season, game by game', label: 'Your match rating in each league game', range: ratingRange } : undefined,
+    /* the minutes he was on the pitch are the events file's own window (pitchWindow in soccerEvents.ts) */
+    pitch: (g, at) => (
+      <PitchBoundary>
+        <Suspense fallback={PITCH_EMPTY}>
+          <MiniPitch md={g.md} events={g.events} shown={at.shown} paused={at.paused} instant={at.instant} usColor={color}
+            role={g.played ? role : null} onFrom={g.onAt ?? 1} onTo={g.offAt ? g.offAt - 1 : SOCCER_FULL_TIME} boxClass={PITCH_BOX} />
+        </Suspense>
+      </PitchBoundary>
+    ),
     clock: { length: SOCCER_FULL_TIME, label: minute => minuteLabel({ minute }), words: eventWords },
     fixed: { badge: 'DERBY', poster: 'Derby day', recordSoFar: 'Your derby record so far', recordPlayed: 'Derbies you played' },
     missed: why => (why === 'injured' ? 'Not in the squad: injured' : why === 'suspended' ? 'Suspended' : 'Not in the matchday squad'),
@@ -107,6 +141,7 @@ function soccerSport(keepsSheets: boolean): CentreSport {
       return { bits, alarm: g.events.some(e => e.kind === 'injury') ? '🚑 Injured' : null };
     },
     markOf: g => g.line.rating ?? 0,
+    markWord: 'Rating',
     soFar: so => [
       ['Played', String(so.apps)],
       ['Goals', String(so.goals ?? 0)],
@@ -123,7 +158,7 @@ const RESUME_GAME = 'soccer';
 
 const RESULTS_WORDS = 'Results only: the game does not have a verified table for this league that season.';
 
-function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason, moments: CentreMoments | null): CentreModel {
+function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason, moments: CentreMoments | null, color: string): CentreModel {
   const occasion: Record<string, string> = {};
   for (const d of readSeasonDerbies(row)) occasion[d.rival] = d.name;
   const finish = ctx.finish;
@@ -139,6 +174,9 @@ function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason, m
   if (ctx.goldenBoot) notes.push(`👟 League Golden Boot: ${row.goals} goals in all competitions.`);
   if (ctx.keepsSheets && ctx.position !== 'GK') notes.push(`🧤 ${row.cleanSheets} clean sheets in all competitions.`);
   const last = ctx.lastSeason;
+  /* the match rating's own lowest and highest value: the two numbers the season was derived with, not a copy of them */
+  const rating = SOCCER.totals(row, ctx).find(t => t.key === 'rating');
+  const ratingRange: [number, number] | null = rating && rating.kind === 'mean' ? [rating.min, rating.max] : null;
   return {
     season: s,
     words: SOCCER.words,
@@ -159,7 +197,7 @@ function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason, m
       finishLine, championLine: ctx.champion ? `${ctx.champion} won it` : null,
       trophies, title: !!row.leagueTitle && !row.injurySevere, notes,
     },
-    sport: soccerSport(ctx.keepsSheets),
+    sport: soccerSport(ctx.keepsSheets, color, roleOf(ctx.position), ratingRange),
     help: HELP,
     momentKey: `centre|${s.key}`,
     moments,
@@ -190,8 +228,8 @@ export function Tile({ text, exitLabel, onClose, onRetry }: { text: string; exit
         <div className="text-sm font-bold">📺 Season Centre</div>
         <p className="text-sm text-muted-foreground">{text}</p>
         <div className="flex gap-2">
-          {onRetry && <button type="button" onClick={onRetry} className="h-10 flex-1 rounded-lg border border-border text-sm font-semibold">↻ Retry</button>}
-          <button type="button" onClick={onClose} className="h-10 flex-1 rounded-lg bg-primary text-sm font-bold text-primary-foreground">{exitLabel}</button>
+          {onRetry && <button type="button" onClick={onRetry} className="h-11 flex-1 rounded-lg border border-border text-sm font-semibold">↻ Retry</button>}
+          <button type="button" onClick={onClose} className="h-11 flex-1 rounded-lg bg-primary text-sm font-bold text-primary-foreground">{exitLabel}</button>
         </div>
       </div>
     </div>
@@ -255,7 +293,9 @@ function CentreBody({ career, clubs, row, mode, onClose, onCareer, offer }: Socc
   const entriesKey = JSON.stringify(ledgerOf(ledger, key ?? ''));
   const season = useMemo(() => (plan && offered.length ? applyDecisions(SOCCER, row, ctx, plan, offered, JSON.parse(entriesKey) as number[][]) : plan), [plan, offered, entriesKey, row, ctx]);
   const moments = useSoccerMoments({ career, row, ctx, plan, key, offered, entriesKey, banked: !!ledger?.banked && ledger.key === key, onCareer: canPlay ? onCareer : undefined });
-  const model = useMemo(() => (season ? buildModel(row, ctx, season, moments) : null), [season, row, ctx, moments]);
+  /* his club's flat colour, the one the career already wears; the other side is always the same pale one */
+  const color = clubs.find(c => c.name === row.club)?.color ?? '#10B981';
+  const model = useMemo(() => (season ? buildModel(row, ctx, season, moments, color) : null), [season, row, ctx, moments, color]);
   /* Round 1046: his place in this season. Read once when the season opens; a
      table season he did not win replays the same only while the save still
      holds that year's league (the record says so with `stable`). */
@@ -263,7 +303,7 @@ function CentreBody({ career, clubs, row, mode, onClose, onCareer, offer }: Socc
   const stable = seasonStable(ctx.mode, ctx.finish?.finish);
   const onProgress = useCallback((at: CentrePlace | null) => {
     if (!key) return;
-    if (at) writeResume(RESUME_GAME, { key, year: row.year, md: at.md, speed: at.speed, stable });
+    if (at) writeResume(RESUME_GAME, { key, year: row.year, md: at.md, speed: at.speed, stable, round: at.round });
     else if (readResume(RESUME_GAME)?.key === key) clearResume(RESUME_GAME);
   }, [key, row.year, stable]);
   if (!model) return <Tile text="This season cannot be shown match by match." exitLabel={exitLabel} onClose={onClose} />;
