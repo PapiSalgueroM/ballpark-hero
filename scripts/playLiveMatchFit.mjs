@@ -213,11 +213,14 @@ const stopSampler = page => page.evaluate(() => { if (window.__fit) window.__fit
 
 /**
  * Plays on until a goal that is not the last kick of its period has been watched from before its minute
- * to after its card, sampling every frame. Skips on through halves without one; gives up, with its
- * counts, when eight halves pass. Returns the samples around the goal, or null.
+ * to after its card, sampling every frame. Skips on through halves without one; gives up when
+ * sixteen halves pass. Returns the samples around the goal, or null.
  */
 async function watchAGoal(page, { tapCard, onTick }) {
-  for (let half = 0; half < 8; half++) {
+  /* Sixteen halves, counting only the ones looked through for a goal: the dressing room, the report and the
+     start of the next match are turns of this loop too, and with the goal it wants (inside the ninety, on its
+     own, with minutes in hand) eight turns were sometimes two matches with none. */
+  for (let turn = 0, halves = 0; turn < 80 && halves < 16; turn++) {
     const stage = await stageOf(page);
     if (stage === 'interval') { await tap(page, /^Second half$/i, 'second half'); await page.waitForTimeout(600); continue; }
     if (stage === 'done') {
@@ -235,7 +238,7 @@ async function watchAGoal(page, { tapCard, onTick }) {
     /* And never one in the board: the minute this walk reads off the page stops at 45 and at 90, so it would
        wait for a 47th minute that never comes and sample the dressing room instead (it did, once). */
     const target = goals.find(g => !g.plus && g.place >= now + 2 && g.place <= cap - 2 && !goals.some(o => o !== g && Math.abs(o.place - g.place) < 4));
-    if (!target) { await tap(page, /skip/i, 'skip a half with no goal to watch'); await page.waitForTimeout(700); continue; }
+    if (!target) { halves++; await tap(page, /skip/i, 'skip a half with no goal to watch'); await page.waitForTimeout(700); continue; }
     say(`a goal is coming at ${target.minute}${target.plus ? '+' + target.plus : ''}, the clock is at ${now}`);
     await speedTo(page, '4x');
     /* On to a minute and a half before it, then watch it at 2x, the speed the match opens at. */
@@ -594,7 +597,7 @@ try {
   const yBefore = await page.evaluate(() => window.scrollY);
   const watched = await watchAGoal(page, { tapCard: true, onTick: goalShots(page, 'phone') });
   let frames = [];
-  if (!watched) fail('eight halves passed without a goal that could be watched');
+  if (!watched) fail('sixteen halves passed without a goal that could be watched');
   else frames = judgeGoal(watched, { reduced: false }) ?? [];
 
   section = 4;
@@ -717,7 +720,7 @@ try {
     instants.push({ when: 'in open play', ...await moving() });
     const calmGoal = await watchAGoal(still, { tapCard: false, onTick: async () => { const now = await moving(); if (now.card && !instants.some(i => i.when === 'inside a goal')) instants.push({ when: 'inside a goal', ...now }); } });
     instants.push({ when: 'after the goal', ...await moving() });
-    if (!calmGoal) fail('eight halves passed without a goal to watch under reduced motion');
+    if (!calmGoal) fail('sixteen halves passed without a goal to watch under reduced motion');
     else {
       judgeGoal(calmGoal, { reduced: true });
       const busy = instants.filter(i => i.running > 0);
@@ -741,7 +744,7 @@ try {
     else {
       await wide.waitForTimeout(1200);
       const seen = await watchAGoal(wide, { tapCard: false, onTick: goalShots(wide, 'wide') });
-      if (!seen) fail('eight halves passed without a goal to watch at 1280 by 900');
+      if (!seen) fail('sixteen halves passed without a goal to watch at 1280 by 900');
       else judgeGoal(seen, { reduced: false, wide: true });
     }
     errors.push(...wide.errors);
