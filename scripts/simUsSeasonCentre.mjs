@@ -647,6 +647,8 @@ if (CONTROL) {
   const labels = failsBy.get(String(c.section)) ?? [];
   let ok = labels.length > 0;
   let note = '';
+  /* Round 1103: the engine back on 82 must fail the games windows and nothing else. */
+  if (CONTROL === 'short82') ok = ok && labels.some(l => l.includes("nba games played sit in the engine's ranges")) && red.length === 1;
   if (CONTROL === 'stage') {
     /* the season with the unknown string derives with no band and no path, and section 4 has nothing to say about it */
     const unk = seen.filter(r => r.slug === 'nba' && r.derived && r.teamResult !== OWN.nba.missed && !OWN.nba.results.includes(r.teamResult));
@@ -658,7 +660,6 @@ if (CONTROL) {
   if (CONTROL === 'window') { ok = ok && labels.some(l => l.includes("are exactly the game's list")) && !labels.some(l => l.includes('never names an opponent')); note = '; the binding still named no throwback opponent'; }
   if (CONTROL === 'formula') ok = ok && labels.some(l => l.includes('follows the formula'));
   if (CONTROL === 'record') ok = ok && labels.some(l => l.includes('independent checker'));
-  if (CONTROL === 'short82') ok = ok && labels.some(l => l.includes("nba games played sit in the engine's ranges")) && red.length === 1;
   console.log(ok
     ? `control ${CONTROL}: RED AT THE NAMED CHECK (section ${c.section}); sections red: ${red.join(', ')}${note}`
     : `control ${CONTROL}: DID NOT FIRE AT ITS NAMED CHECK (section ${c.section}); sections red: ${red.join(', ') || 'none'}${note}`);
