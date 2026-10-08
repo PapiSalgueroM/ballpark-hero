@@ -1,0 +1,19 @@
+# Round 1051 SECOND closing check (verifier, session F) on 312ba1b5: findings 1 and 4 reruns, read only
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vit-hall: node_modules/.bin/vitest run src/test/careerHall.test.tsx src/test/careerHallV1Replay.test.ts src/test/usCareerHallBoard.test.tsx src/test/usCareerActionConfirm.test.tsx --testTimeout=300000 --hookTimeout=120000
+full-nfl: TMPDIR=$(mktemp -d) node scripts/simCareerHall.mjs nfl
+full-nba: TMPDIR=$(mktemp -d) node scripts/simCareerHall.mjs nba
+full-mlb: TMPDIR=$(mktemp -d) node scripts/simCareerHall.mjs mlb
+full-nhl: TMPDIR=$(mktemp -d) node scripts/simCareerHall.mjs nhl
+big-nfl: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=standoutbig node scripts/simCareerHall.mjs nfl
+big-nba: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=standoutbig node scripts/simCareerHall.mjs nba
+big-mlb: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=standoutbig node scripts/simCareerHall.mjs mlb
+big-nhl: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=standoutbig node scripts/simCareerHall.mjs nhl
+base-nfl: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=basebig node scripts/simCareerHall.mjs nfl
+base-nba: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=basebig node scripts/simCareerHall.mjs nba
+base-mlb: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=basebig node scripts/simCareerHall.mjs mlb
+base-nhl: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=basebig node scripts/simCareerHall.mjs nhl
+gone-nfl: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=standoutgone node scripts/simCareerHall.mjs nfl
+gone-nhl: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=standoutgone node scripts/simCareerHall.mjs nhl
+back-nfl: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=decisionback node scripts/simCareerHall.mjs nfl
+back-mlb: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=decisionback node scripts/simCareerHall.mjs mlb
