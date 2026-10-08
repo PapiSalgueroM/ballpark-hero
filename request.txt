@@ -1,0 +1,2 @@
+#!serial
+table-1161: bash .rc/x/cm-table-keyboard-1161.sh
