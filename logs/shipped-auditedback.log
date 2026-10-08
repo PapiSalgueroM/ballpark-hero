@@ -1,0 +1,28 @@
+simCollegeGridShipped, control auditedback: the world is mutated in memory; sections 1 must go red
+
+1) None of the thirteen ships
+  FAIL: the key still holds Adam Dzierdzik at draft:1977-320, an audited row
+  FAIL: the generator's own rule would still drop 1 rows of the committed key
+  FAIL: the search file offers Adam Dzierdzik, an audited name no other key row carries
+
+2) The compact files are the key
+  FAIL: decodeCollegeKey refuses the two committed files
+
+3) Recorded before: nothing moved for anyone who stayed
+  FAIL: the edited lib over the filtered key judges differently from the untouched lib: {"yes":44919,"no":312753,"unknown":1671471} now, {"yes":44917,"no":312741,"unknown":1671428} recorded
+  FAIL: the shipped files do not decode, so their verdicts cannot be compared with the recorded matrix
+
+4) Not stale: both files are what the generator renders
+  FAIL: src/data/collegeGrid/collegeGridSearch.json is not what the generator renders from the committed key; run node scripts/genCollegeGridData.mjs --compact
+  FAIL: src/data/collegeGrid/collegeGridJudge.json is not what the generator renders from the committed key; run node scripts/genCollegeGridData.mjs --compact
+
+5) Every board keeps its answers
+  FAIL: the shipped files do not decode, so no cell can be read from them
+
+6) The budget
+   search 599,153 raw, 205,238 gzip; judge 542,050 raw, 133,308 gzip; pair 1,141,203 raw, 338,546 gzip in 2 requests (ceilings 1,313,000 and 390,000). Before: 36 table reads decoding 9,462,264 bytes (the key file is 6,233,432 raw, 1,241,950 gzip). CPU for parse, decode and index of 0 rows: median 6.2 ms of 7 [6, 6, 4, 4, 6, 6, 6], ceiling 1150 ms (measured medians: 312, 344, 374, 375, 407, 438, 469)
+
+7) The source stage drops the audited row and keeps another name at the same pick
+   5 draft rows and 2 careers in, 4 entries out (Probe Opener, Probe Passer, Probe Realpick, Probe Runner); 1 audited row left out at 1977 pick 320
+
+control "auditedback": fired in section 1 as expected, the check works (red sections in all: 1, 2, 3, 4, 5)

@@ -1,0 +1,10 @@
+ok   a table equal to the file: equal (only in table 0, only in file 0, changed 0)
+ok   the table holding exactly the thirteen audited rows more: audited (only in table 13, only in file 0, changed 0)
+ok   twelve of the thirteen: different (only in table 12, only in file 0, changed 0)
+ok   the thirteen ids under other names: different (only in table 13, only in file 0, changed 0)
+ok   one stray row in the table: different (only in table 1, only in file 0, changed 0)
+ok   the thirteen and one stray row: different (only in table 14, only in file 0, changed 0)
+ok   one row missing from the table: different (only in table 0, only in file 1, changed 0)
+ok   one changed column: different (only in table 0, only in file 0, changed 1)
+ok   the same id twice in the table: different (only in table 0, only in file 0, changed 0)
+collegeGridKeyVsTable --selftest: green, all 9 planted worlds gave the expected outcome. No request was made.
