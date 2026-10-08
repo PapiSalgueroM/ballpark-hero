@@ -138,6 +138,9 @@ import { getBootEvents } from "./soccerCareerBoot";
 /* Round 973: the academy focus. soccerCareerAcademy imports nothing from
    here, so this is a one way edge. */
 import { applyAcademyFocus } from "./soccerCareerAcademy";
+/* Round 1047: the Season Centre's moments ledger. momentsSave imports
+   nothing, so this is a one way edge too. */
+import { readSeasonMoments, type SeasonMomentsSave } from "./season/momentsSave";
 import {
   runInternationalSummer, tournamentForYear, offYearCaps, toHistoryEntry,
   nationStrength as intlNationStrength, confederationOf, pickSquad,
@@ -994,6 +997,8 @@ export interface CareerState {
   phone?: PhoneState;
   /** Round 81: last season-year a training mini game was played (one per season). */
   trainingSeasonYear?: number;
+  /** Round 1047: the Season Centre moments he took this season. Absent until he takes one. */
+  seasonMoments?: SeasonMomentsSave;
   peakOverall: number;
   retirementSuggested: boolean; // has the player been shown the retirement suggestion
   // Social media action system
@@ -2733,6 +2738,9 @@ export function repairCareer<T extends CareerState>(state: T): T {
       return rest;
     });
   }
+  /* Round 1047: a moments ledger its own reader refuses is dropped whole (no
+     draw); a save without one, every save that never took a moment, is untouched. */
+  if (s.seasonMoments !== undefined && !readSeasonMoments(s.seasonMoments)) delete s.seasonMoments;
   /* Round 974: a save from before the story starts it from the season it
      loads; a damaged story resets alone and never costs the career. */
   s.story = cleanCareerStory(s.story);
