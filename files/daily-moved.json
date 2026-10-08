@@ -1,0 +1,121 @@
+{
+ "TODAY": "2026-10-08",
+ "dealSame": 30,
+ "dealFirstMove": "2026-11-07: base [{\"club\":\"Bayer Leverkusen\",\"leagueName\":\"Bundesliga\",\"seed\":4101838109,\"daily\":\"2026-11-07\"},{\"club\":\"Botafogo\",\"leagueName\":\"Brasileirão Série A\",\"seed\":550034668,\"daily\":\"2026-11-07\"}] branch [{\"club\":\"Fenerbahçe\",\"leagueName\":\"Süper Lig\",\"seed\":4101838109,\"daily\":\"2026-11-07\"},{\"club\":\"Stoke City\",\"leagueName\":\"EFL Championship\",\"seed\":550034668,\"daily\":\"2026-11-07\"}]",
+ "hsSame": 0,
+ "ddSame": 0,
+ "moved": [
+  {
+   "day": "2026-10-08",
+   "club": "Portland Timbers",
+   "sameBrief": false,
+   "at": 274,
+   "base": "26,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":10.46,\"boardConfidence\":30,\"sacked\":false,\"squad\":[{\"id\":\"p-david-da-costa\",\"name\":\"David Da ",
+   "branch": "26,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":10.83,\"boardConfidence\":30,\"sacked\":false,\"squad\":[{\"id\":\"p-david-da-costa\",\"name\":\"David Da "
+  },
+  {
+   "day": "2026-10-09",
+   "club": "Newcastle",
+   "sameBrief": false,
+   "at": 166,
+   "base": "\"},\"state\":{\"saveVersion\":3,\"clubName\":\"Newcastle\",\"season\":1,\"week\":18,\"startYear\":2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":83.24,\"",
+   "branch": "\"},\"state\":{\"saveVersion\":3,\"clubName\":\"Newcastle\",\"season\":1,\"week\":15,\"startYear\":2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":81.21,\""
+  },
+  {
+   "day": "2026-10-10",
+   "club": "Athletic Club",
+   "sameBrief": false,
+   "at": 166,
+   "base": "state\":{\"saveVersion\":3,\"clubName\":\"Athletic Club\",\"season\":1,\"week\":18,\"startYear\":2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":41.51,\"",
+   "branch": "state\":{\"saveVersion\":3,\"clubName\":\"Athletic Club\",\"season\":1,\"week\":11,\"startYear\":2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":39.75,\""
+  },
+  {
+   "day": "2026-10-11",
+   "club": "Young Boys",
+   "sameBrief": false,
+   "at": 170,
+   "base": "\"},\"state\":{\"saveVersion\":3,\"clubName\":\"Young Boys\",\"season\":1,\"week\":23,\"startYear\":2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":11.24,",
+   "branch": "\"},\"state\":{\"saveVersion\":3,\"clubName\":\"Young Boys\",\"season\":1,\"week\":15,\"startYear\":2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":9.94,\""
+  },
+  {
+   "day": "2026-10-12",
+   "club": "Westerlo",
+   "sameBrief": false,
+   "at": 168,
+   "base": "2\"},\"state\":{\"saveVersion\":3,\"clubName\":\"Westerlo\",\"season\":1,\"week\":10,\"startYear\":2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":9.59,\"b",
+   "branch": "2\"},\"state\":{\"saveVersion\":3,\"clubName\":\"Westerlo\",\"season\":1,\"week\":11,\"startYear\":2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":9.91,\"b"
+  },
+  {
+   "day": "2026-10-13",
+   "club": "Celta Vigo",
+   "sameBrief": false,
+   "at": 244,
+   "base": "2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":19.03,\"boardConfidence\":30,\"sacked\":false,\"squad\":[{\"id\":\"p-javi-rodriguez\",\"name\":\"Javi Ro",
+   "branch": "2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":18.93,\"boardConfidence\":30,\"sacked\":false,\"squad\":[{\"id\":\"p-javi-rodriguez\",\"name\":\"Javi Ro"
+  },
+  {
+   "day": "2026-10-14",
+   "club": "Monza",
+   "sameBrief": false,
+   "at": 151,
+   "base": "0-14\"},\"state\":{\"saveVersion\":3,\"clubName\":\"Monza\",\"season\":1,\"week\":17,\"startYear\":2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":14.35,\"",
+   "branch": "0-14\"},\"state\":{\"saveVersion\":3,\"clubName\":\"Monza\",\"season\":1,\"week\":12,\"startYear\":2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":14.33,\""
+  },
+  {
+   "day": "2026-10-15",
+   "club": "Osasuna",
+   "sameBrief": false,
+   "at": 154,
+   "base": "-15\"},\"state\":{\"saveVersion\":3,\"clubName\":\"Osasuna\",\"season\":1,\"week\":12,\"startYear\":2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":11.79,",
+   "branch": "-15\"},\"state\":{\"saveVersion\":3,\"clubName\":\"Osasuna\",\"season\":1,\"week\":20,\"startYear\":2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":12.13,"
+  },
+  {
+   "day": "2026-10-16",
+   "club": "Cruz Azul",
+   "sameBrief": false,
+   "at": 159,
+   "base": "\"},\"state\":{\"saveVersion\":3,\"clubName\":\"Cruz Azul\",\"season\":1,\"week\":19,\"startYear\":2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":10.19,\"",
+   "branch": "\"},\"state\":{\"saveVersion\":3,\"clubName\":\"Cruz Azul\",\"season\":1,\"week\":12,\"startYear\":2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":9.41,\"b"
+  },
+  {
+   "day": "2026-10-17",
+   "club": "Trabzonspor",
+   "sameBrief": false,
+   "at": 164,
+   "base": "},\"state\":{\"saveVersion\":3,\"clubName\":\"Trabzonspor\",\"season\":1,\"week\":20,\"startYear\":2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":23.73,",
+   "branch": "},\"state\":{\"saveVersion\":3,\"clubName\":\"Trabzonspor\",\"season\":1,\"week\":19,\"startYear\":2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":23.4,\""
+  },
+  {
+   "day": "2026-10-18",
+   "club": "Al-Ahli",
+   "sameBrief": false,
+   "at": 163,
+   "base": "-18\"},\"state\":{\"saveVersion\":3,\"clubName\":\"Al-Ahli\",\"season\":1,\"week\":11,\"startYear\":2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":32.2,\"",
+   "branch": "-18\"},\"state\":{\"saveVersion\":3,\"clubName\":\"Al-Ahli\",\"season\":1,\"week\":8,\"startYear\":2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":30.53,\""
+  },
+  {
+   "day": "2026-10-19",
+   "club": "Hamburg",
+   "sameBrief": false,
+   "at": 157,
+   "base": "19\"},\"state\":{\"saveVersion\":3,\"clubName\":\"Hamburg\",\"season\":1,\"week\":19,\"startYear\":2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":19.64,\"",
+   "branch": "19\"},\"state\":{\"saveVersion\":3,\"clubName\":\"Hamburg\",\"season\":1,\"week\":16,\"startYear\":2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":19.34,\""
+  },
+  {
+   "day": "2026-10-20",
+   "club": "Toulouse",
+   "sameBrief": false,
+   "at": 241,
+   "base": "2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":14.26,\"boardConfidence\":30,\"sacked\":false,\"squad\":[{\"id\":\"p-guillaume-restes\",\"name\":\"Guill",
+   "branch": "2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":13.91,\"boardConfidence\":30,\"sacked\":false,\"squad\":[{\"id\":\"p-guillaume-restes\",\"name\":\"Guill"
+  },
+  {
+   "day": "2026-10-21",
+   "club": "Anderlecht",
+   "sameBrief": false,
+   "at": 171,
+   "base": "\"},\"state\":{\"saveVersion\":3,\"clubName\":\"Anderlecht\",\"season\":1,\"week\":16,\"startYear\":2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":10.15,",
+   "branch": "\"},\"state\":{\"saveVersion\":3,\"clubName\":\"Anderlecht\",\"season\":1,\"week\":20,\"startYear\":2026,\"eraId\":\"now\",\"retiredNames\":[],\"retiredLastSummer\":[],\"budget\":11.02,"
+  }
+ ]
+}

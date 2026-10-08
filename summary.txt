@@ -1,0 +1,1 @@
+daily exit=1 8s | rvDaily: 19 checks, 4 failed
