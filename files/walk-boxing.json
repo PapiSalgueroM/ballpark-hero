@@ -1,0 +1,1756 @@
+{
+  "seeds": [
+    {
+      "view": 390,
+      "name": "Seed Alpha",
+      "shows": [
+        {
+          "i": 0,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 60,
+          "bouts": 1,
+          "forecast": {
+            "att": 115,
+            "gate": 0.007,
+            "purses": 0.004,
+            "rent": 0.006,
+            "profit": -0.003,
+            "cashAfter": 0.117,
+            "texts": [
+              "115 of 1,200",
+              "0.007m",
+              "0.004m",
+              "0.006m",
+              "Loss 0.003m",
+              "0.117m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 115,
+            "gate": 0.007,
+            "purses": 0.004,
+            "rent": 0.006,
+            "profit": -0.003,
+            "headerMoney": 0.117,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.117,
+            "closed": false,
+            "lastProfit": -0.003,
+            "lastAtt": 115,
+            "rep": 1.9
+          },
+          "bad": []
+        },
+        {
+          "i": 1,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 120,
+          "bouts": 1,
+          "forecast": {
+            "att": 98,
+            "gate": 0.012,
+            "purses": 0.007,
+            "rent": 0.006,
+            "profit": -0.001,
+            "cashAfter": 0.116,
+            "texts": [
+              "98 of 1,200",
+              "0.012m",
+              "0.007m",
+              "0.006m",
+              "Loss 0.001m",
+              "0.116m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 98,
+            "gate": 0.012,
+            "purses": 0.007,
+            "rent": 0.006,
+            "profit": -0.001,
+            "headerMoney": 0.116,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.116,
+            "closed": false,
+            "lastProfit": -0.001,
+            "lastAtt": 98,
+            "rep": 1.5
+          },
+          "bad": []
+        },
+        {
+          "i": 2,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 220,
+          "bouts": 1,
+          "forecast": {
+            "att": 7,
+            "gate": 0.002,
+            "purses": 0.001,
+            "rent": 0.006,
+            "profit": -0.005,
+            "cashAfter": 0.111,
+            "texts": [
+              "7 of 1,200",
+              "0.002m",
+              "0.001m",
+              "0.006m",
+              "Loss 0.005m",
+              "0.111m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 7,
+            "gate": 0.002,
+            "purses": 0.001,
+            "rent": 0.006,
+            "profit": -0.005,
+            "headerMoney": 0.111,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.111,
+            "closed": false,
+            "lastProfit": -0.005,
+            "lastAtt": 7,
+            "rep": 2.6
+          },
+          "bad": []
+        },
+        {
+          "i": 3,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 350,
+          "bouts": 1,
+          "forecast": {
+            "att": 8,
+            "gate": 0.003,
+            "purses": 0.002,
+            "rent": 0.006,
+            "profit": -0.005,
+            "cashAfter": 0.106,
+            "texts": [
+              "8 of 1,200",
+              "0.003m",
+              "0.002m",
+              "0.006m",
+              "Loss 0.005m",
+              "0.106m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 8,
+            "gate": 0.003,
+            "purses": 0.002,
+            "rent": 0.006,
+            "profit": -0.005,
+            "headerMoney": 0.106,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.106,
+            "closed": false,
+            "lastProfit": -0.005,
+            "lastAtt": 8,
+            "rep": 3.7
+          },
+          "bad": []
+        },
+        {
+          "i": 4,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 600,
+          "bouts": 2,
+          "forecast": {
+            "att": 18,
+            "gate": 0.011,
+            "purses": 0.017,
+            "rent": 0.006,
+            "profit": -0.012,
+            "cashAfter": 0.094,
+            "texts": [
+              "18 of 1,200",
+              "0.011m",
+              "0.017m",
+              "0.006m",
+              "Loss 0.012m",
+              "0.094m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 18,
+            "gate": 0.011,
+            "purses": 0.017,
+            "rent": 0.006,
+            "profit": -0.012,
+            "headerMoney": 0.094,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.094,
+            "closed": false,
+            "lastProfit": -0.012,
+            "lastAtt": 18,
+            "rep": 4.6
+          },
+          "bad": []
+        },
+        {
+          "i": 5,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 90,
+          "bouts": 2,
+          "forecast": {
+            "att": 299,
+            "gate": 0.027,
+            "purses": 0.016,
+            "rent": 0.006,
+            "profit": 0.005,
+            "cashAfter": 0.099,
+            "texts": [
+              "299 of 1,200",
+              "0.027m",
+              "0.016m",
+              "0.006m",
+              "Profit 0.005m",
+              "0.099m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 299,
+            "gate": 0.027,
+            "purses": 0.016,
+            "rent": 0.006,
+            "profit": 0.005,
+            "headerMoney": 0.099,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.099,
+            "closed": false,
+            "lastProfit": 0.005,
+            "lastAtt": 299,
+            "rep": 4.2
+          },
+          "bad": []
+        },
+        {
+          "i": 6,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 180,
+          "bouts": 1,
+          "forecast": {
+            "att": 72,
+            "gate": 0.013,
+            "purses": 0.008,
+            "rent": 0.006,
+            "profit": -0.001,
+            "cashAfter": 0.098,
+            "texts": [
+              "72 of 1,200",
+              "0.013m",
+              "0.008m",
+              "0.006m",
+              "Loss 0.001m",
+              "0.098m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 72,
+            "gate": 0.013,
+            "purses": 0.008,
+            "rent": 0.006,
+            "profit": -0.001,
+            "headerMoney": 0.098,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.098,
+            "closed": false,
+            "lastProfit": -0.001,
+            "lastAtt": 72,
+            "rep": 10.3
+          },
+          "bad": []
+        },
+        {
+          "i": 7,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 480,
+          "bouts": 2,
+          "forecast": {
+            "att": 19,
+            "gate": 0.009,
+            "purses": 0.014,
+            "rent": 0.006,
+            "profit": -0.011,
+            "cashAfter": 0.087,
+            "texts": [
+              "19 of 1,200",
+              "0.009m",
+              "0.014m",
+              "0.006m",
+              "Loss 0.011m",
+              "0.087m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 19,
+            "gate": 0.009,
+            "purses": 0.014,
+            "rent": 0.006,
+            "profit": -0.011,
+            "headerMoney": 0.087,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.087,
+            "closed": false,
+            "lastProfit": -0.011,
+            "lastAtt": 19,
+            "rep": 10.6
+          },
+          "bad": []
+        },
+        {
+          "i": 8,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 60,
+          "bouts": 1,
+          "forecast": {
+            "att": 195,
+            "gate": 0.012,
+            "purses": 0.007,
+            "rent": 0.006,
+            "profit": -0.001,
+            "cashAfter": 0.086,
+            "texts": [
+              "195 of 1,200",
+              "0.012m",
+              "0.007m",
+              "0.006m",
+              "Loss 0.001m",
+              "0.086m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 195,
+            "gate": 0.012,
+            "purses": 0.007,
+            "rent": 0.006,
+            "profit": -0.001,
+            "headerMoney": 0.086,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.086,
+            "closed": false,
+            "lastProfit": -0.001,
+            "lastAtt": 195,
+            "rep": 11.5
+          },
+          "bad": []
+        }
+      ],
+      "errors": [],
+      "empty": {
+        "forecast": null,
+        "runDisabled": true
+      },
+      "help": {
+        "help": {
+          "text": "How show cash works Check the current card before you put the show on. All money figures are in millions. Your card, venue and ticket price set attendance and the gate. Fighters take the larger of their combined guarantees or 58% of the gate. Room hire is paid as well. For this card: 0.007m gate, less 0.004m fighter pay and 0.006m room hire, gives a loss 0.003m. Your cash goes from 0.120m to 0.117m. A cash balance below 0 ends the promotion. Exactly 0 keeps it open, with no cash buffer. A loss does not end it if you can still cover it. These figures follow your current choices. Fight results and reputation are decided when the show runs. Opening or closing this help does not run a show. Back to card Close",
+          "example": "For this card: 0.007m gate, less 0.004m fighter pay and 0.006m room hire, gives a loss 0.003m. Your cash goes from 0.120m to 0.117m.",
+          "rect": {
+            "x": 16,
+            "y": 164,
+            "w": 358,
+            "h": 517
+          },
+          "vw": 390,
+          "vh": 844,
+          "focusIn": true
+        },
+        "y0": 486,
+        "after": {
+          "y": 486,
+          "dialog": false,
+          "focusLabel": "Show cash rules"
+        },
+        "saveUnchanged": true,
+        "cardStill": true
+      }
+    },
+    {
+      "view": 390,
+      "name": "Corner Men",
+      "shows": [
+        {
+          "i": 0,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 120,
+          "bouts": 1,
+          "forecast": {
+            "att": 170,
+            "gate": 0.02,
+            "purses": 0.012,
+            "rent": 0.006,
+            "profit": 0.002,
+            "cashAfter": 0.122,
+            "texts": [
+              "170 of 1,200",
+              "0.020m",
+              "0.012m",
+              "0.006m",
+              "Profit 0.002m",
+              "0.122m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 170,
+            "gate": 0.02,
+            "purses": 0.012,
+            "rent": 0.006,
+            "profit": 0.002,
+            "headerMoney": 0.122,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.122,
+            "closed": false,
+            "lastProfit": 0.002,
+            "lastAtt": 170,
+            "rep": 3.2
+          },
+          "bad": []
+        },
+        {
+          "i": 1,
+          "skipped": "no card could be made",
+          "poolFree": 10
+        }
+      ],
+      "errors": [],
+      "empty": {
+        "forecast": null,
+        "runDisabled": true
+      }
+    },
+    {
+      "view": 390,
+      "name": "Tuesday Fights",
+      "shows": [
+        {
+          "i": 0,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 220,
+          "bouts": 1,
+          "forecast": {
+            "att": 8,
+            "gate": 0.002,
+            "purses": 0.004,
+            "rent": 0.006,
+            "profit": -0.008,
+            "cashAfter": 0.112,
+            "texts": [
+              "8 of 1,200",
+              "0.002m",
+              "0.004m",
+              "0.006m",
+              "Loss 0.008m",
+              "0.112m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 8,
+            "gate": 0.002,
+            "purses": 0.004,
+            "rent": 0.006,
+            "profit": -0.008,
+            "headerMoney": 0.112,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.112,
+            "closed": false,
+            "lastProfit": -0.008,
+            "lastAtt": 8,
+            "rep": 4.7
+          },
+          "bad": []
+        },
+        {
+          "i": 1,
+          "skipped": "no card could be made",
+          "poolFree": 10
+        }
+      ],
+      "errors": [],
+      "empty": {
+        "forecast": null,
+        "runDisabled": true
+      }
+    },
+    {
+      "view": 390,
+      "name": "",
+      "shows": [
+        {
+          "i": 0,
+          "skipped": "no card could be made",
+          "poolFree": 10
+        }
+      ],
+      "errors": [],
+      "empty": {
+        "forecast": null,
+        "runDisabled": true
+      }
+    },
+    {
+      "view": 390,
+      "name": "Northside Boxing",
+      "shows": [
+        {
+          "i": 0,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 600,
+          "bouts": 2,
+          "forecast": {
+            "att": 11,
+            "gate": 0.007,
+            "purses": 0.004,
+            "rent": 0.006,
+            "profit": -0.003,
+            "cashAfter": 0.117,
+            "texts": [
+              "11 of 1,200",
+              "0.007m",
+              "0.004m",
+              "0.006m",
+              "Loss 0.003m",
+              "0.117m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 11,
+            "gate": 0.007,
+            "purses": 0.004,
+            "rent": 0.006,
+            "profit": -0.003,
+            "headerMoney": 0.117,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.117,
+            "closed": false,
+            "lastProfit": -0.003,
+            "lastAtt": 11,
+            "rep": 6.1
+          },
+          "bad": []
+        },
+        {
+          "i": 1,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 90,
+          "bouts": 2,
+          "forecast": {
+            "att": 200,
+            "gate": 0.018,
+            "purses": 0.01,
+            "rent": 0.006,
+            "profit": 0.002,
+            "cashAfter": 0.119,
+            "texts": [
+              "200 of 1,200",
+              "0.018m",
+              "0.010m",
+              "0.006m",
+              "Profit 0.002m",
+              "0.119m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 200,
+            "gate": 0.018,
+            "purses": 0.01,
+            "rent": 0.006,
+            "profit": 0.002,
+            "headerMoney": 0.119,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.119,
+            "closed": false,
+            "lastProfit": 0.002,
+            "lastAtt": 200,
+            "rep": 11.1
+          },
+          "bad": []
+        },
+        {
+          "i": 2,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 180,
+          "bouts": 1,
+          "forecast": {
+            "att": 23,
+            "gate": 0.004,
+            "purses": 0.002,
+            "rent": 0.006,
+            "profit": -0.004,
+            "cashAfter": 0.115,
+            "texts": [
+              "23 of 1,200",
+              "0.004m",
+              "0.002m",
+              "0.006m",
+              "Loss 0.004m",
+              "0.115m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 23,
+            "gate": 0.004,
+            "purses": 0.002,
+            "rent": 0.006,
+            "profit": -0.004,
+            "headerMoney": 0.115,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.115,
+            "closed": false,
+            "lastProfit": -0.004,
+            "lastAtt": 23,
+            "rep": 17.3
+          },
+          "bad": []
+        },
+        {
+          "i": 3,
+          "venue": "Town Hall 3,000 · 0.018m",
+          "price": 480,
+          "bouts": 1,
+          "forecast": {
+            "att": 21,
+            "gate": 0.01,
+            "purses": 0.006,
+            "rent": 0.018,
+            "profit": -0.014,
+            "cashAfter": 0.101,
+            "texts": [
+              "21 of 3,000",
+              "0.010m",
+              "0.006m",
+              "0.018m",
+              "Loss 0.014m",
+              "0.101m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 21,
+            "gate": 0.01,
+            "purses": 0.006,
+            "rent": 0.018,
+            "profit": -0.014,
+            "headerMoney": 0.101,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.101,
+            "closed": false,
+            "lastProfit": -0.014,
+            "lastAtt": 21,
+            "rep": 19.8
+          },
+          "bad": []
+        },
+        {
+          "i": 4,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 60,
+          "bouts": 3,
+          "forecast": {
+            "att": 396,
+            "gate": 0.024,
+            "purses": 0.014,
+            "rent": 0.006,
+            "profit": 0.004,
+            "cashAfter": 0.105,
+            "texts": [
+              "396 of 1,200",
+              "0.024m",
+              "0.014m",
+              "0.006m",
+              "Profit 0.004m",
+              "0.105m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 396,
+            "gate": 0.024,
+            "purses": 0.014,
+            "rent": 0.006,
+            "profit": 0.004,
+            "headerMoney": 0.105,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.105,
+            "closed": false,
+            "lastProfit": 0.004,
+            "lastAtt": 396,
+            "rep": 20.8
+          },
+          "bad": []
+        },
+        {
+          "i": 5,
+          "venue": "Town Hall 3,000 · 0.018m",
+          "price": 120,
+          "bouts": 1,
+          "forecast": {
+            "att": 394,
+            "gate": 0.047,
+            "purses": 0.027,
+            "rent": 0.018,
+            "profit": 0.002,
+            "cashAfter": 0.107,
+            "texts": [
+              "394 of 3,000",
+              "0.047m",
+              "0.027m",
+              "0.018m",
+              "Profit 0.002m",
+              "0.107m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 394,
+            "gate": 0.047,
+            "purses": 0.027,
+            "rent": 0.018,
+            "profit": 0.002,
+            "headerMoney": 0.107,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.107,
+            "closed": false,
+            "lastProfit": 0.002,
+            "lastAtt": 394,
+            "rep": 21.7
+          },
+          "bad": []
+        },
+        {
+          "i": 6,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 220,
+          "bouts": 1,
+          "forecast": {
+            "att": 10,
+            "gate": 0.002,
+            "purses": 0.004,
+            "rent": 0.006,
+            "profit": -0.008,
+            "cashAfter": 0.099,
+            "texts": [
+              "10 of 1,200",
+              "0.002m",
+              "0.004m",
+              "0.006m",
+              "Loss 0.008m",
+              "0.099m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 10,
+            "gate": 0.002,
+            "purses": 0.004,
+            "rent": 0.006,
+            "profit": -0.008,
+            "headerMoney": 0.099,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.099,
+            "closed": false,
+            "lastProfit": -0.008,
+            "lastAtt": 10,
+            "rep": 22.9
+          },
+          "bad": []
+        },
+        {
+          "i": 7,
+          "venue": "Town Hall 3,000 · 0.018m",
+          "price": 350,
+          "bouts": 2,
+          "forecast": {
+            "att": 38,
+            "gate": 0.013,
+            "purses": 0.008,
+            "rent": 0.018,
+            "profit": -0.013,
+            "cashAfter": 0.086,
+            "texts": [
+              "38 of 3,000",
+              "0.013m",
+              "0.008m",
+              "0.018m",
+              "Loss 0.013m",
+              "0.086m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 38,
+            "gate": 0.013,
+            "purses": 0.008,
+            "rent": 0.018,
+            "profit": -0.013,
+            "headerMoney": 0.086,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.086,
+            "closed": false,
+            "lastProfit": -0.013,
+            "lastAtt": 38,
+            "rep": 24.6
+          },
+          "bad": []
+        },
+        {
+          "i": 8,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 600,
+          "bouts": 1,
+          "forecast": {
+            "att": 12,
+            "gate": 0.007,
+            "purses": 0.006,
+            "rent": 0.006,
+            "profit": -0.005,
+            "cashAfter": 0.081,
+            "texts": [
+              "12 of 1,200",
+              "0.007m",
+              "0.006m",
+              "0.006m",
+              "Loss 0.005m",
+              "0.081m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 12,
+            "gate": 0.007,
+            "purses": 0.006,
+            "rent": 0.006,
+            "profit": -0.005,
+            "headerMoney": 0.081,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.081,
+            "closed": false,
+            "lastProfit": -0.005,
+            "lastAtt": 12,
+            "rep": 21.6
+          },
+          "bad": []
+        }
+      ],
+      "errors": [],
+      "empty": {
+        "forecast": null,
+        "runDisabled": true
+      }
+    },
+    {
+      "view": 390,
+      "name": "Glove Up",
+      "shows": [
+        {
+          "i": 0,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 90,
+          "bouts": 2,
+          "forecast": {
+            "att": 314,
+            "gate": 0.028,
+            "purses": 0.016,
+            "rent": 0.006,
+            "profit": 0.006,
+            "cashAfter": 0.126,
+            "texts": [
+              "314 of 1,200",
+              "0.028m",
+              "0.016m",
+              "0.006m",
+              "Profit 0.006m",
+              "0.126m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 314,
+            "gate": 0.028,
+            "purses": 0.016,
+            "rent": 0.006,
+            "profit": 0.006,
+            "headerMoney": 0.126,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.126,
+            "closed": false,
+            "lastProfit": 0.006,
+            "lastAtt": 314,
+            "rep": 4.5
+          },
+          "bad": []
+        },
+        {
+          "i": 1,
+          "skipped": "no card could be made",
+          "poolFree": 10
+        }
+      ],
+      "errors": [],
+      "empty": {
+        "forecast": null,
+        "runDisabled": true
+      }
+    },
+    {
+      "view": 1280,
+      "name": "Seed Alpha",
+      "shows": [
+        {
+          "i": 0,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 220,
+          "bouts": 1,
+          "forecast": {
+            "att": 7,
+            "gate": 0.002,
+            "purses": 0.001,
+            "rent": 0.006,
+            "profit": -0.005,
+            "cashAfter": 0.115,
+            "texts": [
+              "7 of 1,200",
+              "0.002m",
+              "0.001m",
+              "0.006m",
+              "Loss 0.005m",
+              "0.115m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 7,
+            "gate": 0.002,
+            "purses": 0.001,
+            "rent": 0.006,
+            "profit": -0.005,
+            "headerMoney": 0.115,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.115,
+            "closed": false,
+            "lastProfit": -0.005,
+            "lastAtt": 7,
+            "rep": 7.6
+          },
+          "bad": []
+        },
+        {
+          "i": 1,
+          "skipped": "no card could be made",
+          "poolFree": 10
+        }
+      ],
+      "errors": [],
+      "empty": {
+        "forecast": null,
+        "runDisabled": true
+      },
+      "help": {
+        "help": {
+          "text": "How show cash works Check the current card before you put the show on. All money figures are in millions. Your card, venue and ticket price set attendance and the gate. Fighters take the larger of their combined guarantees or 58% of the gate. Room hire is paid as well. For this card: 0.002m gate, less 0.001m fighter pay and 0.006m room hire, gives a loss 0.005m. Your cash goes from 0.120m to 0.115m. A cash balance below 0 ends the promotion. Exactly 0 keeps it open, with no cash buffer. A loss does not end it if you can still cover it. These figures follow your current choices. Fight results and reputation are decided when the show runs. Opening or closing this help does not run a show. Back to card Close",
+          "example": "For this card: 0.002m gate, less 0.001m fighter pay and 0.006m room hire, gives a loss 0.005m. Your cash goes from 0.120m to 0.115m.",
+          "rect": {
+            "x": 416,
+            "y": 211,
+            "w": 448,
+            "h": 478
+          },
+          "vw": 1280,
+          "vh": 900,
+          "focusIn": true
+        },
+        "y0": 356,
+        "after": {
+          "y": 356,
+          "dialog": false,
+          "focusLabel": "Show cash rules"
+        },
+        "saveUnchanged": true,
+        "cardStill": true
+      }
+    },
+    {
+      "view": 1280,
+      "name": "Corner Men",
+      "shows": [
+        {
+          "i": 0,
+          "skipped": "no card could be made",
+          "poolFree": 10
+        }
+      ],
+      "errors": [],
+      "empty": {
+        "forecast": null,
+        "runDisabled": true
+      }
+    },
+    {
+      "view": 1280,
+      "name": "Tuesday Fights",
+      "shows": [
+        {
+          "i": 0,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 600,
+          "bouts": 2,
+          "forecast": {
+            "att": 12,
+            "gate": 0.007,
+            "purses": 0.006,
+            "rent": 0.006,
+            "profit": -0.005,
+            "cashAfter": 0.115,
+            "texts": [
+              "12 of 1,200",
+              "0.007m",
+              "0.006m",
+              "0.006m",
+              "Loss 0.005m",
+              "0.115m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 12,
+            "gate": 0.007,
+            "purses": 0.006,
+            "rent": 0.006,
+            "profit": -0.005,
+            "headerMoney": 0.115,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.115,
+            "closed": false,
+            "lastProfit": -0.005,
+            "lastAtt": 12,
+            "rep": 4.7
+          },
+          "bad": []
+        },
+        {
+          "i": 1,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 90,
+          "bouts": 3,
+          "forecast": {
+            "att": 227,
+            "gate": 0.02,
+            "purses": 0.012,
+            "rent": 0.006,
+            "profit": 0.002,
+            "cashAfter": 0.117,
+            "texts": [
+              "227 of 1,200",
+              "0.020m",
+              "0.012m",
+              "0.006m",
+              "Profit 0.002m",
+              "0.117m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 227,
+            "gate": 0.02,
+            "purses": 0.012,
+            "rent": 0.006,
+            "profit": 0.002,
+            "headerMoney": 0.117,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.117,
+            "closed": false,
+            "lastProfit": 0.002,
+            "lastAtt": 227,
+            "rep": 5.8
+          },
+          "bad": []
+        },
+        {
+          "i": 2,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 180,
+          "bouts": 1,
+          "forecast": {
+            "att": 8,
+            "gate": 0.001,
+            "purses": 0.001,
+            "rent": 0.006,
+            "profit": -0.006,
+            "cashAfter": 0.111,
+            "texts": [
+              "8 of 1,200",
+              "0.001m",
+              "0.001m",
+              "0.006m",
+              "Loss 0.006m",
+              "0.111m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 8,
+            "gate": 0.001,
+            "purses": 0.001,
+            "rent": 0.006,
+            "profit": -0.006,
+            "headerMoney": 0.111,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.111,
+            "closed": false,
+            "lastProfit": -0.006,
+            "lastAtt": 8,
+            "rep": 6.9
+          },
+          "bad": []
+        },
+        {
+          "i": 3,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 480,
+          "bouts": 1,
+          "forecast": {
+            "att": 6,
+            "gate": 0.003,
+            "purses": 0.002,
+            "rent": 0.006,
+            "profit": -0.005,
+            "cashAfter": 0.106,
+            "texts": [
+              "6 of 1,200",
+              "0.003m",
+              "0.002m",
+              "0.006m",
+              "Loss 0.005m",
+              "0.106m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 6,
+            "gate": 0.003,
+            "purses": 0.002,
+            "rent": 0.006,
+            "profit": -0.005,
+            "headerMoney": 0.106,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.106,
+            "closed": false,
+            "lastProfit": -0.005,
+            "lastAtt": 6,
+            "rep": 9.4
+          },
+          "bad": []
+        },
+        {
+          "i": 4,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 60,
+          "bouts": 2,
+          "forecast": {
+            "att": 395,
+            "gate": 0.024,
+            "purses": 0.014,
+            "rent": 0.006,
+            "profit": 0.004,
+            "cashAfter": 0.11,
+            "texts": [
+              "395 of 1,200",
+              "0.024m",
+              "0.014m",
+              "0.006m",
+              "Profit 0.004m",
+              "0.110m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 395,
+            "gate": 0.024,
+            "purses": 0.014,
+            "rent": 0.006,
+            "profit": 0.004,
+            "headerMoney": 0.11,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.11,
+            "closed": false,
+            "lastProfit": 0.004,
+            "lastAtt": 395,
+            "rep": 11.1
+          },
+          "bad": []
+        },
+        {
+          "i": 5,
+          "skipped": "no card could be made",
+          "poolFree": 10
+        }
+      ],
+      "errors": [],
+      "empty": {
+        "forecast": null,
+        "runDisabled": true
+      }
+    },
+    {
+      "view": 1280,
+      "name": "",
+      "shows": [
+        {
+          "i": 0,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 90,
+          "bouts": 2,
+          "forecast": {
+            "att": 283,
+            "gate": 0.025,
+            "purses": 0.015,
+            "rent": 0.006,
+            "profit": 0.004,
+            "cashAfter": 0.124,
+            "texts": [
+              "283 of 1,200",
+              "0.025m",
+              "0.015m",
+              "0.006m",
+              "Profit 0.004m",
+              "0.124m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 283,
+            "gate": 0.025,
+            "purses": 0.015,
+            "rent": 0.006,
+            "profit": 0.004,
+            "headerMoney": 0.124,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.124,
+            "closed": false,
+            "lastProfit": 0.004,
+            "lastAtt": 283,
+            "rep": 5.4
+          },
+          "bad": []
+        },
+        {
+          "i": 1,
+          "skipped": "no card could be made",
+          "poolFree": 10
+        }
+      ],
+      "errors": [],
+      "empty": {
+        "forecast": null,
+        "runDisabled": true
+      }
+    },
+    {
+      "view": 1280,
+      "name": "Northside Boxing",
+      "shows": [
+        {
+          "i": 0,
+          "skipped": "no card could be made",
+          "poolFree": 10
+        }
+      ],
+      "errors": [],
+      "empty": {
+        "forecast": null,
+        "runDisabled": true
+      }
+    },
+    {
+      "view": 1280,
+      "name": "Glove Up",
+      "shows": [
+        {
+          "i": 0,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 480,
+          "bouts": 1,
+          "forecast": {
+            "att": 7,
+            "gate": 0.003,
+            "purses": 0.004,
+            "rent": 0.006,
+            "profit": -0.007,
+            "cashAfter": 0.113,
+            "texts": [
+              "7 of 1,200",
+              "0.003m",
+              "0.004m",
+              "0.006m",
+              "Loss 0.007m",
+              "0.113m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 7,
+            "gate": 0.003,
+            "purses": 0.004,
+            "rent": 0.006,
+            "profit": -0.007,
+            "headerMoney": 0.113,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.113,
+            "closed": false,
+            "lastProfit": -0.007,
+            "lastAtt": 7,
+            "rep": 4.6
+          },
+          "bad": []
+        },
+        {
+          "i": 1,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 60,
+          "bouts": 2,
+          "forecast": {
+            "att": 359,
+            "gate": 0.022,
+            "purses": 0.018,
+            "rent": 0.006,
+            "profit": -0.002,
+            "cashAfter": 0.111,
+            "texts": [
+              "359 of 1,200",
+              "0.022m",
+              "0.018m",
+              "0.006m",
+              "Loss 0.002m",
+              "0.111m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 359,
+            "gate": 0.022,
+            "purses": 0.018,
+            "rent": 0.006,
+            "profit": -0.002,
+            "headerMoney": 0.111,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.111,
+            "closed": false,
+            "lastProfit": -0.002,
+            "lastAtt": 359,
+            "rep": 4.8
+          },
+          "bad": []
+        },
+        {
+          "i": 2,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 120,
+          "bouts": 1,
+          "forecast": {
+            "att": 129,
+            "gate": 0.015,
+            "purses": 0.009,
+            "rent": 0.006,
+            "profit": 0,
+            "cashAfter": 0.111,
+            "texts": [
+              "129 of 1,200",
+              "0.015m",
+              "0.009m",
+              "0.006m",
+              "Profit 0.000m",
+              "0.111m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 129,
+            "gate": 0.015,
+            "purses": 0.009,
+            "rent": 0.006,
+            "profit": 0,
+            "headerMoney": 0.111,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.111,
+            "closed": false,
+            "lastProfit": 0,
+            "lastAtt": 129,
+            "rep": 3.2
+          },
+          "bad": []
+        },
+        {
+          "i": 3,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 220,
+          "bouts": 1,
+          "forecast": {
+            "att": 16,
+            "gate": 0.004,
+            "purses": 0.006,
+            "rent": 0.006,
+            "profit": -0.008,
+            "cashAfter": 0.103,
+            "texts": [
+              "16 of 1,200",
+              "0.004m",
+              "0.006m",
+              "0.006m",
+              "Loss 0.008m",
+              "0.103m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 16,
+            "gate": 0.004,
+            "purses": 0.006,
+            "rent": 0.006,
+            "profit": -0.008,
+            "headerMoney": 0.103,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.103,
+            "closed": false,
+            "lastProfit": -0.008,
+            "lastAtt": 16,
+            "rep": 1.7
+          },
+          "bad": []
+        },
+        {
+          "i": 4,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 350,
+          "bouts": 1,
+          "forecast": {
+            "att": 6,
+            "gate": 0.002,
+            "purses": 0.001,
+            "rent": 0.006,
+            "profit": -0.005,
+            "cashAfter": 0.098,
+            "texts": [
+              "6 of 1,200",
+              "0.002m",
+              "0.001m",
+              "0.006m",
+              "Loss 0.005m",
+              "0.098m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 6,
+            "gate": 0.002,
+            "purses": 0.001,
+            "rent": 0.006,
+            "profit": -0.005,
+            "headerMoney": 0.098,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.098,
+            "closed": false,
+            "lastProfit": -0.005,
+            "lastAtt": 6,
+            "rep": 0
+          },
+          "bad": []
+        },
+        {
+          "i": 5,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 600,
+          "bouts": 1,
+          "forecast": {
+            "att": 11,
+            "gate": 0.007,
+            "purses": 0.011,
+            "rent": 0.006,
+            "profit": -0.01,
+            "cashAfter": 0.088,
+            "texts": [
+              "11 of 1,200",
+              "0.007m",
+              "0.011m",
+              "0.006m",
+              "Loss 0.010m",
+              "0.088m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 11,
+            "gate": 0.007,
+            "purses": 0.011,
+            "rent": 0.006,
+            "profit": -0.01,
+            "headerMoney": 0.088,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.088,
+            "closed": false,
+            "lastProfit": -0.01,
+            "lastAtt": 11,
+            "rep": 0.7
+          },
+          "bad": []
+        },
+        {
+          "i": 6,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 90,
+          "bouts": 1,
+          "forecast": {
+            "att": 141,
+            "gate": 0.013,
+            "purses": 0.008,
+            "rent": 0.006,
+            "profit": -0.001,
+            "cashAfter": 0.087,
+            "texts": [
+              "141 of 1,200",
+              "0.013m",
+              "0.008m",
+              "0.006m",
+              "Loss 0.001m",
+              "0.087m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 141,
+            "gate": 0.013,
+            "purses": 0.008,
+            "rent": 0.006,
+            "profit": -0.001,
+            "headerMoney": 0.087,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.087,
+            "closed": false,
+            "lastProfit": -0.001,
+            "lastAtt": 141,
+            "rep": 0.4
+          },
+          "bad": []
+        },
+        {
+          "i": 7,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 180,
+          "bouts": 2,
+          "forecast": {
+            "att": 160,
+            "gate": 0.029,
+            "purses": 0.017,
+            "rent": 0.006,
+            "profit": 0.006,
+            "cashAfter": 0.093,
+            "texts": [
+              "160 of 1,200",
+              "0.029m",
+              "0.017m",
+              "0.006m",
+              "Profit 0.006m",
+              "0.093m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 160,
+            "gate": 0.029,
+            "purses": 0.017,
+            "rent": 0.006,
+            "profit": 0.006,
+            "headerMoney": 0.093,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.093,
+            "closed": false,
+            "lastProfit": 0.006,
+            "lastAtt": 160,
+            "rep": 4.9
+          },
+          "bad": []
+        },
+        {
+          "i": 8,
+          "venue": "The Leisure Centre 1,200 · 0.006m",
+          "price": 480,
+          "bouts": 1,
+          "forecast": {
+            "att": 10,
+            "gate": 0.005,
+            "purses": 0.007,
+            "rent": 0.006,
+            "profit": -0.008,
+            "cashAfter": 0.085,
+            "texts": [
+              "10 of 1,200",
+              "0.005m",
+              "0.007m",
+              "0.006m",
+              "Loss 0.008m",
+              "0.085m"
+            ],
+            "status": []
+          },
+          "result": {
+            "attendance": 10,
+            "gate": 0.005,
+            "purses": 0.007,
+            "rent": 0.006,
+            "profit": -0.008,
+            "headerMoney": 0.085,
+            "closedButton": false,
+            "planNext": true
+          },
+          "saved": {
+            "money": 0.085,
+            "closed": false,
+            "lastProfit": -0.008,
+            "lastAtt": 10,
+            "rep": 11.3
+          },
+          "bad": []
+        }
+      ],
+      "errors": [],
+      "empty": {
+        "forecast": null,
+        "runDisabled": true
+      }
+    }
+  ],
+  "mismatches": [],
+  "shows": 37,
+  "notes": [],
+  "lockedRoom": {
+    "trail": [
+      {
+        "attempt": 0,
+        "note": "no one sided fight on offer"
+      }
+    ],
+    "outcome": null
+  }
+}

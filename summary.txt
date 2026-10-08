@@ -1,0 +1,4 @@
+build exit=0 19s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simHomeCopy exit=0 1s | simHomeCopy: green. The one page a crawler reads first says only true things.
+simSiteSearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+walk-boxing exit=0 104s | walk-boxing done: 37 shows, 0 mismatches, notes 0
