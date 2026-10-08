@@ -1,0 +1,18 @@
+# Round 1104 fixer: the re-pinned decision outcome test and the harnesses nobody ran
+vitest-board: node_modules/.bin/vitest run src/test/usBoardFixture.test.tsx src/test/careerDecisionOutcome.test.tsx --testTimeout=300000 --hookTimeout=120000
+simCareerDecisionOutcome: node scripts/simCareerDecisionOutcome.mjs
+simCareerDecisionOutcome-direction: CAREER_DECISION_OUTCOME_CONTROL=direction node scripts/simCareerDecisionOutcome.mjs
+simCareerDecisionOutcome-earnings: CAREER_DECISION_OUTCOME_CONTROL=earnings node scripts/simCareerDecisionOutcome.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simCareerEntryGuide: node scripts/simCareerEntryGuide.mjs
+simCareerSeasonReview: node scripts/simCareerSeasonReview.mjs
+simFrontOfficeRoster: node scripts/simFrontOfficeRoster.mjs
+simNbaSeasonStats: node scripts/simNbaSeasonStats.mjs
+simRelatedGames: node scripts/simRelatedGames.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simUsCareerActionConfirm: node scripts/simUsCareerActionConfirm.mjs
+simUsCareerPractice: node scripts/simUsCareerPractice.mjs
+simUsCareerRecovery: node scripts/simUsCareerRecovery.mjs
+simUsCoachPoaching: node scripts/simUsCoachPoaching.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
