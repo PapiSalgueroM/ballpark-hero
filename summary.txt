@@ -1,0 +1,11 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+notranslate exit=0 56s | playTranslatedPage: 121 checks, 0 failed
+bogus exit=2 0s | PLAY_TRANSLATED_CONTROL=bogus is not a control this harness knows (noguard, notranslate)
+noguard exit=1 84s | playTranslatedPage: 166 checks, 28 failed (control "noguard", red on purpose)
+vitest exit=0 1s |    Duration  889ms (transform 47ms, setup 41ms, collect 105ms, tests 105ms, environment 217ms, prepare 104ms)
+simNoRivalNames exit=0 8s | No rival product names found. 0 findings.
+tsc exit=0 50s | 
+simLiveScores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simSingleFooter exit=0 0s | simSingleFooter: green. One footer, rendered once, on every page.
+plain exit=0 110s | playTranslatedPage: 238 checks, 0 failed
+simHarnessAnchors exit=0 24s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
