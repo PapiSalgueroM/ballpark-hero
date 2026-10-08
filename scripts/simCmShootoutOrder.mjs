@@ -264,7 +264,7 @@ const CONTROL = process.env.CM_SHOOTOUT_CONTROL || '';
 const KNOWN = ['ignoreorder', 'noskip', 'nocap', 'unsetpath', 'ownkeeper', 'wrongkeeper', 'nooppkeeper', 'oppworst', 'thinside', 'nomakeup'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`CM_SHOOTOUT_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
-  process.exit(1);
+  process.exit(2); /* 2, like a runtime error below: a control that never ran must not read as one that fired (1) */
 }
 const WRITE_FIXTURE = process.env.CM_SHOOTOUT_WRITE_FIXTURE || '';
 const sourceBytes = WRITE_FIXTURE ? [] : [`${ROOT}/src/lib/clubManager.ts`, FIXTURE].map(file => ({ file, bytes: fs.readFileSync(file) }));
@@ -272,6 +272,9 @@ const runtimeErrors = [];
 const captureRuntime = error => { runtimeErrors.push({ name: error?.name, message: String(error?.message ?? error) }); process.exitCode = 2; };
 process.on('uncaughtExceptionMonitor', captureRuntime);
 process.on('unhandledRejection', captureRuntime);
+/* Release AN: a crash is not a failed check. Node ends an uncaught error with code 1, the code of a control
+   that fired, whatever exitCode says; a review saw section 7 crash under a mutation and read as a red. */
+process.on('uncaughtException', error => { console.error(error); process.exit(2); });
 
 const readLF = f => fs.readFileSync(f, 'utf8').split('\r\n').join('\n');
 const abort = m => { console.error(m); process.exit(1); };
@@ -281,7 +284,7 @@ const swap = (src, from, to, where) => {
   if (hits !== 1) {
     console.error(`control cannot run: ${where} is not in the shape CM_SHOOTOUT_CONTROL=${CONTROL} rewrites`);
     console.error(`  looked for: ${JSON.stringify(from)}`);
-    process.exit(1);
+    process.exit(2);
   }
   const changed = src.replace(from, to);
   mutation = { control: CONTROL, where, hits, beforeHash: createHash('sha256').update(src).digest('hex'),
@@ -993,7 +996,7 @@ section = 7;
   const fiveSides = shootoutSides(atCup, [], [], five, S).theirs;
   check(five.length === 11 && five.filter(p => p.p === 'GK').length === 1 && five.find(p => p.p === 'GK').g === true && five.find(p => p.p === 'GK').r === S,
     'five names and no keeper did not become eleven with one generated keeper at the club strength');
-  check(fiveSides.keeperRating === S && fiveSides.takers[10].gen === true && fiveSides.takers[0].name === 'A',
+  check(fiveSides.keeperRating === S && fiveSides.takers[10]?.gen === true && fiveSides.takers[0]?.name === 'A',
     `the keeperless five are read against ${fiveSides.keeperRating} with ${fiveSides.takers[0]?.name} first, not against a generated keeper at ${S} who kicks last, best real man first`);
   const ten = shootoutRosterSide([man('K', 'GK', 70), ...Array.from({ length: 9 }, (_, i) => man(`O${i}`, 'CM', 60 + i))], S);
   check(ten.length === 11 && madeUp(ten).length === 1 && madeUp(ten)[0].p !== 'GK', `ten names with a keeper got ${madeUp(ten).length} generated men, not one outfield taker`);
