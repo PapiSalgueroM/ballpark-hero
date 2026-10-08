@@ -1,0 +1,2859 @@
+{
+ "generatedBy": "docs/audits/ad-readiness-2026-10-08/copy-data-sources.mjs",
+ "howToReadIt": "perRoute: what each reskin page reaches by its imports. localData are files in the repo (countable now); tables, rpcs and edgeFunctions live in the database and were NOT queried by this audit. moduleFacts: each local module bundled, every exported list counted, with year ranges and the top of each number field.",
+ "perRoute": [
+  {
+   "family": "Daily clue guessers",
+   "route": "/footle",
+   "component": "Footle",
+   "pageFile": "pages/Footle.tsx",
+   "filesFollowed": 27,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/footleEnrichment.ts",
+    "data/players.ts",
+    "hooks/useDailyPuzzle.ts",
+    "lib/playerSearch.ts"
+   ],
+   "tables": [
+    "player_market_values",
+    "player_market_values_dedup"
+   ],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Daily clue guessers",
+   "route": "/ufc",
+   "component": "UfcGame",
+   "pageFile": "pages/UfcGame.tsx",
+   "filesFollowed": 24,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/ufcFighters.ts",
+    "hooks/useDailyPuzzle.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Daily clue guessers",
+   "route": "/olympics",
+   "component": "Olympics",
+   "pageFile": "pages/Olympics.tsx",
+   "filesFollowed": 19,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/olympicsAthletes.ts",
+    "hooks/useDailyPuzzle.ts"
+   ],
+   "tables": [
+    "medal_games_scores"
+   ],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Daily clue guessers",
+   "route": "/guess-the-college",
+   "component": "GuessTheCollege",
+   "pageFile": "pages/GuessTheCollege.tsx",
+   "filesFollowed": 14,
+   "localData": [
+    "data/colleges.ts",
+    "data/completionSlugs.ts",
+    "hooks/useDailyPuzzle.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Daily clue guessers",
+   "route": "/guess-the-year",
+   "component": "GuessTheYear",
+   "pageFile": "pages/GuessTheYear.tsx",
+   "filesFollowed": 11,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/guessTheYearPuzzles.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Daily clue guessers",
+   "route": "/guess-the-nation",
+   "component": "GuessTheNation",
+   "pageFile": "pages/GuessTheNation.tsx",
+   "filesFollowed": 15,
+   "localData": [
+    "data/completionSlugs.ts"
+   ],
+   "tables": [
+    "guess_nation_countries",
+    "guess_nation_scores"
+   ],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Daily clue guessers",
+   "route": "/f1-driver",
+   "component": "F1Driver",
+   "pageFile": "pages/F1Driver.tsx",
+   "filesFollowed": 18,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/f1Drivers.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Daily clue guessers",
+   "route": "/f1-constructor",
+   "component": "F1Constructor",
+   "pageFile": "pages/F1Constructor.tsx",
+   "filesFollowed": 16,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/f1Constructors.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Daily clue guessers",
+   "route": "/guess-cbb-team",
+   "component": "GuessCbbTeam",
+   "pageFile": "pages/GuessCbbTeam.tsx",
+   "filesFollowed": 17,
+   "localData": [
+    "data/completionSlugs.ts"
+   ],
+   "tables": [
+    "cbb_daily",
+    "cbb_programs",
+    "cbb_scores"
+   ],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Daily clue guessers",
+   "route": "/guess-tennis-player",
+   "component": "GuessTennisPlayer",
+   "pageFile": "pages/GuessTennisPlayer.tsx",
+   "filesFollowed": 17,
+   "localData": [
+    "data/completionSlugs.ts"
+   ],
+   "tables": [
+    "tennis_daily",
+    "tennis_players",
+    "tennis_scores"
+   ],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Daily clue guessers",
+   "route": "/guess-nascar-driver",
+   "component": "GuessNascarDriver",
+   "pageFile": "pages/GuessNascarDriver.tsx",
+   "filesFollowed": 18,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/nascarDrivers.json"
+   ],
+   "tables": [
+    "nascar_scores"
+   ],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Career Path guessers",
+   "route": "/career",
+   "component": "CareerGame",
+   "pageFile": "pages/CareerGame.tsx",
+   "filesFollowed": 17,
+   "localData": [
+    "data/careerPlayers.ts",
+    "data/completionSlugs.ts",
+    "hooks/useDailyPuzzle.ts"
+   ],
+   "tables": [
+    "career_players",
+    "career_seasons"
+   ],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Career Path guessers",
+   "route": "/baseball-career",
+   "component": "BaseballCareer",
+   "pageFile": "pages/BaseballCareer.tsx",
+   "filesFollowed": 14,
+   "localData": [
+    "data/baseballCareerPlayers.ts",
+    "data/completionSlugs.ts",
+    "hooks/useDailyPuzzle.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Career Path guessers",
+   "route": "/hockey-career",
+   "component": "HockeyCareer",
+   "pageFile": "pages/HockeyCareer.tsx",
+   "filesFollowed": 16,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/hockeyCareerPlayers.ts",
+    "hooks/useDailyPuzzle.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Career Path guessers",
+   "route": "/nfl-career",
+   "component": "NFLCareer",
+   "pageFile": "pages/NFLCareer.tsx",
+   "filesFollowed": 16,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/nflCareerPlayers.ts",
+    "lib/playerSearch.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Career Path guessers",
+   "route": "/nba-career",
+   "component": "NbaCareer",
+   "pageFile": "pages/NbaCareer.tsx",
+   "filesFollowed": 15,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/nbaCareerPlayers.ts",
+    "hooks/useDailyPuzzle.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Higher or Lower",
+   "route": "/higher-lower",
+   "component": "HigherLower",
+   "pageFile": "pages/HigherLower.tsx",
+   "filesFollowed": 14,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/higherLowerPlayers.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Higher or Lower",
+   "route": "/hockey-higher-lower",
+   "component": "HockeyHigherLower",
+   "pageFile": "pages/HockeyHigherLower.tsx",
+   "filesFollowed": 18,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/hockeyHLPlayers.ts",
+    "hooks/useDailyPuzzle.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Higher or Lower",
+   "route": "/nba-higher-lower",
+   "component": "NbaHigherLower",
+   "pageFile": "pages/NbaHigherLower.tsx",
+   "filesFollowed": 14,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/nbaHLPlayers.ts",
+    "hooks/useDailyPuzzle.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Higher or Lower",
+   "route": "/nfl-higher-lower",
+   "component": "NflHigherLower",
+   "pageFile": "pages/NflHigherLower.tsx",
+   "filesFollowed": 15,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/nflHLCategories.ts",
+    "data/nflHLPlayers.ts",
+    "hooks/useDailyPuzzle.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Higher or Lower",
+   "route": "/f1-higher-lower",
+   "component": "F1HigherLower",
+   "pageFile": "pages/F1HigherLower.tsx",
+   "filesFollowed": 14,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/f1HLDrivers.ts",
+    "hooks/useDailyPuzzle.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Higher or Lower",
+   "route": "/mlb-higher-lower",
+   "component": "MlbHigherLower",
+   "pageFile": "pages/MlbHigherLower.tsx",
+   "filesFollowed": 14,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/mlbHLPlayers.ts",
+    "hooks/useDailyPuzzle.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Higher or Lower",
+   "route": "/tennis-higher-lower",
+   "component": "TennisHigherLower",
+   "pageFile": "pages/TennisHigherLower.tsx",
+   "filesFollowed": 14,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/tennisHLPlayers.ts",
+    "hooks/useDailyPuzzle.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Higher or Lower",
+   "route": "/cfb-higher-lower",
+   "component": "CfbHigherLower",
+   "pageFile": "pages/CfbHigherLower.tsx",
+   "filesFollowed": 14,
+   "localData": [
+    "data/cfbHLPlayers.ts",
+    "data/completionSlugs.ts",
+    "hooks/useDailyPuzzle.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Higher or Lower",
+   "route": "/golf-higher-lower",
+   "component": "GolfHigherLower",
+   "pageFile": "pages/GolfHigherLower.tsx",
+   "filesFollowed": 16,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/golfLegends.ts",
+    "hooks/useDailyPuzzle.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Higher or Lower",
+   "route": "/afl-higher-lower",
+   "component": "AflHigherLower",
+   "pageFile": "pages/AflHigherLower.tsx",
+   "filesFollowed": 14,
+   "localData": [
+    "data/aflGoalKickers.ts",
+    "data/completionSlugs.ts",
+    "hooks/useDailyPuzzle.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Connections",
+   "route": "/connections",
+   "component": "Connections",
+   "pageFile": "pages/Connections.tsx",
+   "filesFollowed": 17,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/connectionsPuzzles.ts",
+    "hooks/useDailyPuzzle.ts"
+   ],
+   "tables": [
+    "connections_puzzles"
+   ],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Connections",
+   "route": "/baseball-connections",
+   "component": "BaseballConnections",
+   "pageFile": "pages/BaseballConnections.tsx",
+   "filesFollowed": 16,
+   "localData": [
+    "data/baseballConnectionsPuzzles.ts",
+    "data/completionSlugs.ts",
+    "hooks/useDailyPuzzle.ts"
+   ],
+   "tables": [
+    "baseball_connections_puzzles"
+   ],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Connections",
+   "route": "/nba-connections",
+   "component": "NbaConnections",
+   "pageFile": "pages/NbaConnections.tsx",
+   "filesFollowed": 17,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/nbaConnectionsPuzzles.ts",
+    "hooks/useDailyPuzzle.ts"
+   ],
+   "tables": [
+    "nba_connections_puzzles"
+   ],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Connections",
+   "route": "/nfl-connections",
+   "component": "NflConnections",
+   "pageFile": "pages/NflConnections.tsx",
+   "filesFollowed": 16,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/nflConnectionsPuzzles.ts",
+    "hooks/useDailyPuzzle.ts"
+   ],
+   "tables": [
+    "nfl_connections_puzzles"
+   ],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Connections",
+   "route": "/nhl-connections",
+   "component": "NhlConnections",
+   "pageFile": "pages/NhlConnections.tsx",
+   "filesFollowed": 17,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/nhlConnectionsPuzzles.ts",
+    "hooks/useDailyPuzzle.ts"
+   ],
+   "tables": [
+    "nhl_connections_puzzles"
+   ],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Connect 4",
+   "route": "/nba-connect-4",
+   "component": "NbaConnect4",
+   "pageFile": "pages/NbaConnect4.tsx",
+   "filesFollowed": 17,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/nbaConnect4Boards.ts",
+    "lib/playerSearch.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": [
+    "nba-connect4-validate"
+   ]
+  },
+  {
+   "family": "Connect 4",
+   "route": "/football-connect-4",
+   "component": "FootballConnect4",
+   "pageFile": "pages/FootballConnect4.tsx",
+   "filesFollowed": 21,
+   "localData": [
+    "data/completionSlugs.ts",
+    "hooks/useDailyPuzzle.ts",
+    "lib/playerSearch.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": [
+    "football-connect4-validate"
+   ]
+  },
+  {
+   "family": "Connect 4",
+   "route": "/mlb-connect-4",
+   "component": "MlbConnect4",
+   "pageFile": "pages/MlbConnect4.tsx",
+   "filesFollowed": 19,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/mlbConnect4Boards.ts",
+    "lib/playerSearch.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": [
+    "mlb-connect4-validate"
+   ]
+  },
+  {
+   "family": "Connect 4",
+   "route": "/nfl-connect-4",
+   "component": "NflConnect4",
+   "pageFile": "pages/NflConnect4.tsx",
+   "filesFollowed": 17,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/nflConnect4Boards.ts",
+    "lib/playerSearch.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": [
+    "nfl-connect4-validate"
+   ]
+  },
+  {
+   "family": "Connect 4",
+   "route": "/nhl-connect-4",
+   "component": "NhlConnect4",
+   "pageFile": "pages/NhlConnect4.tsx",
+   "filesFollowed": 19,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/nhlConnect4Boards.ts",
+    "lib/playerSearch.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": [
+    "nhl-connect4-validate"
+   ]
+  },
+  {
+   "family": "Chain",
+   "route": "/nba-chain",
+   "component": "NbaChain",
+   "pageFile": "pages/NbaChain.tsx",
+   "filesFollowed": 15,
+   "localData": [
+    "data/completionSlugs.ts",
+    "lib/playerSearch.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": [
+    "nba-chain-validate"
+   ]
+  },
+  {
+   "family": "Chain",
+   "route": "/ufc-chain",
+   "component": "UfcChain",
+   "pageFile": "pages/UfcChain.tsx",
+   "filesFollowed": 15,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/ufcChainData.ts"
+   ],
+   "tables": [
+    "ufc_chain_scores"
+   ],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Chain",
+   "route": "/tennis-chain",
+   "component": "TennisChain",
+   "pageFile": "pages/TennisChain.tsx",
+   "filesFollowed": 17,
+   "localData": [
+    "data/completionSlugs.ts",
+    "lib/playerSearch.ts"
+   ],
+   "tables": [
+    "tennis_chain_scores"
+   ],
+   "rpcs": [],
+   "edgeFunctions": [
+    "tennis-chain-validate"
+   ]
+  },
+  {
+   "family": "Chain",
+   "route": "/nascar-chain",
+   "component": "NascarChain",
+   "pageFile": "pages/NascarChain.tsx",
+   "filesFollowed": 17,
+   "localData": [
+    "data/completionSlugs.ts",
+    "lib/playerSearch.ts"
+   ],
+   "tables": [
+    "nascar_chain_scores"
+   ],
+   "rpcs": [],
+   "edgeFunctions": [
+    "nascar-chain-validate"
+   ]
+  },
+  {
+   "family": "Grid",
+   "route": "/football-grid",
+   "component": "FootballGrid",
+   "pageFile": "pages/FootballGrid.tsx",
+   "filesFollowed": 21,
+   "localData": [
+    "data/completionSlugs.ts",
+    "hooks/useDailyPuzzle.ts",
+    "lib/playerSearch.ts"
+   ],
+   "tables": [
+    "football_grid_selections"
+   ],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Grid",
+   "route": "/college-grid",
+   "component": "CollegeGrid",
+   "pageFile": "pages/CollegeGrid.tsx",
+   "filesFollowed": 22,
+   "localData": [
+    "data/collegeGridPuzzles.ts",
+    "data/completionSlugs.ts",
+    "hooks/useDailyPuzzle.ts",
+    "lib/playerSearch.ts"
+   ],
+   "tables": [
+    "college_grid_selections"
+   ],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Grid",
+   "route": "/soccer-grid",
+   "component": "SoccerGrid",
+   "pageFile": "pages/SoccerGrid.tsx",
+   "filesFollowed": 24,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/soccerGridPuzzles.ts",
+    "hooks/useDailyPuzzle.ts"
+   ],
+   "tables": [
+    "career_players",
+    "career_seasons",
+    "soccer_grid_puzzles",
+    "soccer_grid_selections"
+   ],
+   "rpcs": [],
+   "edgeFunctions": [
+    "soccer-grid-validate"
+   ]
+  },
+  {
+   "family": "Grid",
+   "route": "/hockey-grid",
+   "component": "HockeyGrid",
+   "pageFile": "pages/HockeyGrid.tsx",
+   "filesFollowed": 13,
+   "localData": [
+    "data/completionSlugs.ts",
+    "lib/playerSearch.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Grid",
+   "route": "/nba-grid",
+   "component": "NbaGrid",
+   "pageFile": "pages/NbaGrid.tsx",
+   "filesFollowed": 13,
+   "localData": [
+    "data/completionSlugs.ts",
+    "lib/playerSearch.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Grid",
+   "route": "/cbb-grid",
+   "component": "CbbGrid",
+   "pageFile": "pages/CbbGrid.tsx",
+   "filesFollowed": 13,
+   "localData": [
+    "data/completionSlugs.ts",
+    "lib/playerSearch.ts"
+   ],
+   "tables": [
+    "ncaa_player_stats"
+   ],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Grid",
+   "route": "/mlb-grid",
+   "component": "MlbGrid",
+   "pageFile": "pages/MlbGrid.tsx",
+   "filesFollowed": 13,
+   "localData": [
+    "data/completionSlugs.ts",
+    "lib/playerSearch.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Conquest",
+   "route": "/conquest",
+   "component": "Conquest",
+   "pageFile": "pages/Conquest.tsx",
+   "filesFollowed": 41,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/conquestData.ts",
+    "data/conquestDataMlb.ts",
+    "data/conquestDataNba.ts",
+    "data/conquestDataNhl.ts",
+    "data/conquestPowerups.ts",
+    "data/conquestSports.ts",
+    "data/usStatesPaths.ts",
+    "hooks/useConquest.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Conquest",
+   "route": "/conquest-nba",
+   "component": "ConquestNba",
+   "pageFile": "pages/ConquestNba.tsx",
+   "filesFollowed": 41,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/conquestData.ts",
+    "data/conquestDataMlb.ts",
+    "data/conquestDataNba.ts",
+    "data/conquestDataNhl.ts",
+    "data/conquestPowerups.ts",
+    "data/conquestSports.ts",
+    "data/usStatesPaths.ts",
+    "hooks/useConquestNba.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Conquest",
+   "route": "/conquest-nhl",
+   "component": "ConquestNhl",
+   "pageFile": "pages/ConquestNhl.tsx",
+   "filesFollowed": 32,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/conquestData.ts",
+    "data/conquestDataMlb.ts",
+    "data/conquestDataNba.ts",
+    "data/conquestDataNhl.ts",
+    "data/conquestPowerups.ts",
+    "data/conquestSports.ts",
+    "data/usStatesPaths.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Conquest",
+   "route": "/conquest-mlb",
+   "component": "ConquestMlb",
+   "pageFile": "pages/ConquestMlb.tsx",
+   "filesFollowed": 32,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/conquestData.ts",
+    "data/conquestDataMlb.ts",
+    "data/conquestDataNba.ts",
+    "data/conquestDataNhl.ts",
+    "data/conquestPowerups.ts",
+    "data/conquestSports.ts",
+    "data/usStatesPaths.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Conquest",
+   "route": "/soccer-conquest",
+   "component": "SoccerConquest",
+   "pageFile": "pages/SoccerConquest.tsx",
+   "filesFollowed": 27,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/conquestPowerups.ts",
+    "data/soccerConquest.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Perfect Lineup",
+   "route": "/perfect-lineup-nba",
+   "component": "PerfectLineupNba",
+   "pageFile": "pages/PerfectLineupNba.tsx",
+   "filesFollowed": 14,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/nbaPerfectLineupPool.ts",
+    "data/perfectLineup.ts",
+    "data/players.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Perfect Lineup",
+   "route": "/perfect-lineup-f1",
+   "component": "PerfectLineupF1",
+   "pageFile": "pages/PerfectLineupF1.tsx",
+   "filesFollowed": 14,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/f1PerfectLineupPool.ts",
+    "data/perfectLineup.ts",
+    "data/players.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Perfect Lineup",
+   "route": "/perfect-lineup-nhl",
+   "component": "PerfectLineupNhl",
+   "pageFile": "pages/PerfectLineupNhl.tsx",
+   "filesFollowed": 14,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/nhlPerfectLineupPool.ts",
+    "data/perfectLineup.ts",
+    "data/players.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Gauntlet Draft",
+   "route": "/gauntlet-draft",
+   "component": "GauntletDraft",
+   "pageFile": "pages/GauntletDraft.tsx",
+   "filesFollowed": 28,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/footleEnrichment.ts",
+    "data/lineupTeams.ts",
+    "data/notCurrentPlayers.ts",
+    "data/players.ts",
+    "lib/playerSearch.ts",
+    "lib/squadDeal.ts",
+    "lib/whoAmI.ts",
+    "lib/worldXi.ts"
+   ],
+   "tables": [
+    "player_market_values",
+    "player_verified_positions"
+   ],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Gauntlet Draft",
+   "route": "/nba-gauntlet-draft",
+   "component": "NbaGauntletDraft",
+   "pageFile": "pages/NbaGauntletDraft.tsx",
+   "filesFollowed": 14,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/nbaPerfectLineupPool.ts",
+    "data/perfectLineup.ts",
+    "data/players.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Gauntlet Draft",
+   "route": "/mlb-gauntlet-draft",
+   "component": "MlbGauntletDraft",
+   "pageFile": "pages/MlbGauntletDraft.tsx",
+   "filesFollowed": 12,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/mlbFoPlayers.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Gauntlet Draft",
+   "route": "/nfl-gauntlet-draft",
+   "component": "NflGauntletDraft",
+   "pageFile": "pages/NflGauntletDraft.tsx",
+   "filesFollowed": 12,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/frontOfficePlayers.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Gauntlet Draft",
+   "route": "/nhl-gauntlet-draft",
+   "component": "NhlGauntletDraft",
+   "pageFile": "pages/NhlGauntletDraft.tsx",
+   "filesFollowed": 12,
+   "localData": [
+    "data/completionSlugs.ts",
+    "data/nhlFoPlayers.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Perfect Season",
+   "route": "/perfect-season-mlb",
+   "component": "PerfectSeasonMlb",
+   "pageFile": "pages/PerfectSeasonMlb.tsx",
+   "filesFollowed": 15,
+   "localData": [],
+   "tables": [
+    "lahman_appearances",
+    "lahman_batting",
+    "lahman_people",
+    "lahman_pitching",
+    "lahman_teams"
+   ],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Perfect Season",
+   "route": "/perfect-season-nhl",
+   "component": "PerfectSeasonNhl",
+   "pageFile": "pages/PerfectSeasonNhl.tsx",
+   "filesFollowed": 15,
+   "localData": [],
+   "tables": [
+    "nhl_draft",
+    "nhl_player_stats"
+   ],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Perfect Season",
+   "route": "/perfect-season-nba",
+   "component": "PerfectSeasonNba",
+   "pageFile": "pages/PerfectSeasonNba.tsx",
+   "filesFollowed": 15,
+   "localData": [],
+   "tables": [
+    "bref_nba_player_seasons"
+   ],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Perfect Season",
+   "route": "/perfect-season-nfl",
+   "component": "PerfectSeasonNfl",
+   "pageFile": "pages/PerfectSeasonNfl.tsx",
+   "filesFollowed": 16,
+   "localData": [
+    "data/nflCoaches.ts"
+   ],
+   "tables": [
+    "nfl_team_defense",
+    "nfl_team_seasons",
+    "nflfastr_player_stats"
+   ],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Missing starter",
+   "route": "/missing-xi",
+   "component": "MissingXi",
+   "pageFile": "pages/MissingXi.tsx",
+   "filesFollowed": 16,
+   "localData": [
+    "data/completionSlugs.ts",
+    "hooks/useDailyPuzzle.ts",
+    "lib/careerLadder.ts",
+    "lib/missingXi.ts",
+    "lib/playerSearch.ts"
+   ],
+   "tables": [
+    "career_players",
+    "career_seasons"
+   ],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Missing starter",
+   "route": "/missing-five",
+   "component": "MissingFive",
+   "pageFile": "pages/MissingFive.tsx",
+   "filesFollowed": 11,
+   "localData": [
+    "data/completionSlugs.ts",
+    "hooks/useDailyPuzzle.ts",
+    "lib/missingFive.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Missing starter",
+   "route": "/missing-nine",
+   "component": "MissingNine",
+   "pageFile": "pages/MissingNine.tsx",
+   "filesFollowed": 12,
+   "localData": [
+    "data/completionSlugs.ts",
+    "hooks/useDailyPuzzle.ts",
+    "lib/missingNine.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  },
+  {
+   "family": "Missing starter",
+   "route": "/missing-eleven",
+   "component": "MissingEleven",
+   "pageFile": "pages/MissingEleven.tsx",
+   "filesFollowed": 13,
+   "localData": [
+    "data/completionSlugs.ts",
+    "hooks/useDailyPuzzle.ts",
+    "lib/missingEleven.ts",
+    "lib/playerSearch.ts"
+   ],
+   "tables": [],
+   "rpcs": [],
+   "edgeFunctions": []
+  }
+ ],
+ "moduleFacts": {
+  "data/aflGoalKickers.ts": {
+   "bytes": 7112,
+   "exports": {
+    "aflGoalKickers": {
+     "entries": 60,
+     "fields": [
+      "name",
+      "goals",
+      "clubs",
+      "firstYear",
+      "lastYear"
+     ],
+     "yearRanges": {
+      "firstYear": [
+       1906,
+       2007
+      ],
+      "lastYear": [
+       1922,
+       2024
+      ]
+     },
+     "numberFields": {
+      "goals": {
+       "min": 511,
+       "max": 1360,
+       "heldBy": "Tony Lockett"
+      }
+     }
+    }
+   }
+  },
+  "data/baseballCareerPlayers.ts": {
+   "bytes": 27573,
+   "exports": {
+    "baseballCareerPuzzles": {
+     "entries": 60,
+     "fields": [
+      "id",
+      "player"
+     ]
+    }
+   }
+  },
+  "data/baseballConnectionsPuzzles.ts": {
+   "bytes": 42713,
+   "exports": {
+    "baseballConnectionsPuzzles": {
+     "entries": 60,
+     "fields": [
+      "id",
+      "groups"
+     ]
+    }
+   }
+  },
+  "data/careerPlayers.ts": {
+   "bytes": 423995,
+   "exports": {
+    "CAREER_FALLBACK_META": {
+     "keys": 4
+    },
+    "careerPlayers": {
+     "entries": 253,
+     "fields": [
+      "name",
+      "nationality",
+      "position",
+      "career"
+     ]
+    }
+   }
+  },
+  "data/cfbHLPlayers.ts": {
+   "bytes": 8579,
+   "exports": {
+    "cfbHLPlayers": {
+     "entries": 65,
+     "fields": [
+      "name",
+      "schools",
+      "careerPassYds",
+      "firstYear",
+      "lastYear"
+     ],
+     "yearRanges": {
+      "firstYear": [
+       1981,
+       2021
+      ],
+      "lastYear": [
+       1983,
+       2024
+      ]
+     },
+     "numberFields": {
+      "careerPassYds": {
+       "min": 2908,
+       "max": 19217,
+       "heldBy": "Case Keenum"
+      }
+     }
+    }
+   }
+  },
+  "data/collegeGridPuzzles.ts": {
+   "bytes": 28713,
+   "exports": {
+    "collegeGridPuzzles": {
+     "entries": 75,
+     "fields": [
+      "id",
+      "rows",
+      "cols"
+     ]
+    }
+   }
+  },
+  "data/colleges.ts": {
+   "bytes": 80900,
+   "exports": {
+    "CFB_TITLE_SEASONS": {
+     "keys": 30,
+     "listsInside": 98,
+     "sample": {
+      "entries": 98,
+      "kind": "number"
+     }
+    },
+    "CFB_VACATED_TITLES": {
+     "entries": 1,
+     "fields": [
+      "school",
+      "season",
+      "reason"
+     ]
+    },
+    "COLLEGE_DATA_META": {
+     "keys": 7
+    },
+    "COLLEGE_THIN": {
+     "keys": 7
+    },
+    "NCAA_MBB_TITLE_SEASONS": {
+     "keys": 23,
+     "listsInside": 63,
+     "sample": {
+      "entries": 63,
+      "kind": "number"
+     }
+    },
+    "NCAA_MBB_VACATED_TITLES": {
+     "entries": 1,
+     "fields": [
+      "school",
+      "season",
+      "reason"
+     ]
+    },
+    "colleges": {
+     "entries": 70,
+     "fields": [
+      "name",
+      "nicknames",
+      "mascot",
+      "vibeWord",
+      "region",
+      "state",
+      "enrollment",
+      "enrollmentYear",
+      "ipedsUnitId",
+      "conference",
+      "conferenceType",
+      "basketballHistory",
+      "cfbHistory",
+      "olympicAthletes",
+      "nflDraftHistory",
+      "famousAlumniHint",
+      "colors",
+      "funFact",
+      "conferenceNote"
+     ],
+     "yearRanges": {
+      "enrollmentYear": [
+       2023,
+       2023
+      ]
+     },
+     "numberFields": {
+      "enrollment": {
+       "min": 7306,
+       "max": 103251,
+       "heldBy": "Liberty University"
+      }
+     }
+    }
+   }
+  },
+  "data/connectionsPuzzles.ts": {
+   "bytes": 177727,
+   "exports": {
+    "connectionsPuzzles": {
+     "entries": 250,
+     "fields": [
+      "id",
+      "groups"
+     ]
+    }
+   }
+  },
+  "data/conquestData.ts": {
+   "bytes": 45678,
+   "exports": {
+    "CONQUEST_FREE_AGENCY_POOL": {
+     "entries": 14,
+     "fields": [
+      "name",
+      "position",
+      "overall",
+      "blurb"
+     ]
+    },
+    "DIRECTIONS": {
+     "entries": 8,
+     "kind": "string"
+    },
+    "DIR_ANGLES": {
+     "keys": 8
+    },
+    "DIR_LABELS": {
+     "keys": 8
+    },
+    "INITIAL_TERRITORIES": {
+     "keys": 32
+    },
+    "NFL_CONQUEST_MAP": {
+     "keys": 6
+    },
+    "NFL_TEAMS": {
+     "entries": 32,
+     "fields": [
+      "id",
+      "name",
+      "city",
+      "rating",
+      "color",
+      "secondaryColor",
+      "offense",
+      "defense",
+      "overall",
+      "roster",
+      "players"
+     ],
+     "numberFields": {
+      "rating": {
+       "min": 75,
+       "max": 99,
+       "heldBy": "Chiefs"
+      },
+      "offense": {
+       "min": 65,
+       "max": 89,
+       "heldBy": "Bills"
+      },
+      "defense": {
+       "min": 69,
+       "max": 86,
+       "heldBy": "Broncos"
+      }
+     }
+    },
+    "POWER_UP_STATES": {
+     "entries": 6
+    },
+    "STATE_GEO_COORDS": {
+     "keys": 60
+    },
+    "STATE_POSITIONS": {
+     "entries": 60,
+     "fields": [
+      "id",
+      "name",
+      "x",
+      "y"
+     ],
+     "numberFields": {
+      "x": {
+       "min": 2,
+       "max": 516,
+       "heldBy": "Maine"
+      },
+      "y": {
+       "min": 10,
+       "max": 252,
+       "heldBy": "Central & South Texas"
+      }
+     }
+    },
+    "TEAM_MAP": {
+     "entries": 32
+    },
+    "TILE_H": {
+     "value": "28"
+    },
+    "TILE_W": {
+     "value": "42"
+    }
+   }
+  },
+  "data/conquestDataMlb.ts": {
+   "bytes": 6000,
+   "exports": {
+    "INITIAL_TERRITORIES_MLB": {
+     "keys": 58
+    },
+    "MLB_CONQUEST_MAP": {
+     "keys": 6
+    },
+    "MLB_INVADERS": {
+     "entries": 2,
+     "kind": "string"
+    },
+    "MLB_TEAMS": {
+     "entries": 30,
+     "fields": [
+      "id",
+      "city",
+      "name",
+      "color",
+      "overall"
+     ]
+    },
+    "MLB_TEAM_MAP": {
+     "entries": 30
+    }
+   }
+  },
+  "data/conquestDataNba.ts": {
+   "bytes": 48882,
+   "exports": {
+    "CONQUEST_FREE_AGENCY_POOL_NBA": {
+     "entries": 12,
+     "fields": [
+      "name",
+      "position",
+      "overall",
+      "blurb"
+     ]
+    },
+    "INITIAL_TERRITORIES_NBA": {
+     "keys": 58
+    },
+    "NBA_CONQUEST_MAP": {
+     "keys": 6
+    },
+    "NBA_TEAMS": {
+     "entries": 30,
+     "fields": [
+      "id",
+      "name",
+      "city",
+      "rating",
+      "color",
+      "secondaryColor",
+      "offense",
+      "defense",
+      "overall",
+      "roster",
+      "players"
+     ],
+     "numberFields": {
+      "rating": {
+       "min": 66,
+       "max": 96,
+       "heldBy": "Thunder"
+      },
+      "offense": {
+       "min": 72,
+       "max": 92,
+       "heldBy": "Nuggets"
+      },
+      "defense": {
+       "min": 66,
+       "max": 93,
+       "heldBy": "Thunder"
+      }
+     }
+    },
+    "NBA_TEAM_MAP": {
+     "entries": 30
+    },
+    "TEAM_LEGENDS_NBA": {
+     "keys": 30
+    }
+   }
+  },
+  "data/conquestDataNhl.ts": {
+   "bytes": 6446,
+   "exports": {
+    "INITIAL_TERRITORIES_NHL": {
+     "keys": 58
+    },
+    "NHL_CONQUEST_MAP": {
+     "keys": 6
+    },
+    "NHL_INVADERS": {
+     "entries": 5,
+     "kind": "string"
+    },
+    "NHL_TEAMS": {
+     "entries": 32,
+     "fields": [
+      "id",
+      "city",
+      "name",
+      "color",
+      "overall"
+     ]
+    },
+    "NHL_TEAM_MAP": {
+     "entries": 32
+    }
+   }
+  },
+  "data/conquestPowerups.ts": {
+   "bytes": 4556,
+   "exports": {
+    "FREE_AGENTS": {
+     "entries": 20,
+     "fields": [
+      "name",
+      "position",
+      "overall"
+     ]
+    },
+    "POWERUPS": {
+     "entries": 5,
+     "fields": [
+      "id",
+      "label",
+      "icon",
+      "description"
+     ]
+    },
+    "TEAM_LEGENDS": {
+     "keys": 32
+    }
+   }
+  },
+  "data/conquestSports.ts": {
+   "bytes": 10386,
+   "exports": {
+    "MLB_CONQUEST_GAME": {
+     "keys": 4
+    },
+    "MLB_IMPERIALISM": {
+     "keys": 14
+    },
+    "NBA_CONQUEST_GAME": {
+     "keys": 4
+    },
+    "NBA_IMPERIALISM": {
+     "keys": 14
+    },
+    "NFL_CONQUEST_GAME": {
+     "keys": 4
+    },
+    "NFL_IMPERIALISM": {
+     "keys": 14
+    },
+    "NHL_CONQUEST_GAME": {
+     "keys": 4
+    },
+    "NHL_IMPERIALISM": {
+     "keys": 14
+    },
+    "STADIUM_COORDS": {
+     "keys": 32
+    }
+   }
+  },
+  "data/f1Constructors.ts": {
+   "bytes": 16887,
+   "exports": {
+    "F1_CONSTRUCTORS": {
+     "entries": 31,
+     "fields": [
+      "id",
+      "constructorName",
+      "commonNames",
+      "clues"
+     ]
+    }
+   }
+  },
+  "data/f1Drivers.ts": {
+   "bytes": 14329,
+   "exports": {
+    "F1_DRIVERS": {
+     "entries": 20,
+     "fields": [
+      "id",
+      "driverName",
+      "commonNames",
+      "clues"
+     ]
+    }
+   }
+  },
+  "data/f1HLDrivers.ts": {
+   "bytes": 6732,
+   "exports": {
+    "f1HLDrivers": {
+     "entries": 42,
+     "fields": [
+      "name",
+      "careerWins",
+      "titles",
+      "constructors",
+      "firstSeason",
+      "lastSeason"
+     ],
+     "yearRanges": {
+      "firstSeason": [
+       1950,
+       2023
+      ],
+      "lastSeason": [
+       1955,
+       2025
+      ]
+     },
+     "numberFields": {
+      "careerWins": {
+       "min": 8,
+       "max": 105,
+       "heldBy": "Lewis Hamilton"
+      },
+      "titles": {
+       "min": 0,
+       "max": 7,
+       "heldBy": "Lewis Hamilton"
+      }
+     }
+    }
+   }
+  },
+  "data/f1PerfectLineupPool.ts": {
+   "bytes": 5953,
+   "exports": {
+    "F1_LINEUP_CONFIG": {
+     "keys": 13
+    },
+    "F1_POOL": {
+     "entries": 41,
+     "fields": [
+      "name",
+      "team",
+      "era",
+      "nationality",
+      "rating"
+     ],
+     "numberFields": {
+      "rating": {
+       "min": 76,
+       "max": 99,
+       "heldBy": "Michael Schumacher"
+      }
+     }
+    }
+   }
+  },
+  "data/footleEnrichment.ts": {
+   "bytes": 36329,
+   "exports": {
+    "footleEnrichment": {
+     "keys": 221
+    }
+   }
+  },
+  "data/frontOfficePlayers.ts": {
+   "bytes": 46039,
+   "exports": {
+    "FO_TEAMS": {
+     "entries": 32,
+     "fields": [
+      "abbr",
+      "city",
+      "name",
+      "color",
+      "division",
+      "defense",
+      "players"
+     ],
+     "numberFields": {
+      "defense": {
+       "min": 62,
+       "max": 93,
+       "heldBy": "Eagles"
+      }
+     }
+    },
+    "FO_TEAM_MAP": {
+     "entries": 32
+    }
+   }
+  },
+  "data/golfLegends.ts": {
+   "bytes": 9150,
+   "exports": {
+    "golfLegends": {
+     "entries": 61,
+     "fields": [
+      "name",
+      "majors",
+      "firstWin",
+      "lastWin",
+      "nationality",
+      "tournaments"
+     ],
+     "yearRanges": {
+      "firstWin": [
+       1861,
+       2024
+      ],
+      "lastWin": [
+       1867,
+       2026
+      ]
+     },
+     "numberFields": {
+      "majors": {
+       "min": 2,
+       "max": 18,
+       "heldBy": "Jack Nicklaus"
+      }
+     }
+    },
+    "guessableGolfers": {
+     "entries": 55,
+     "fields": [
+      "name",
+      "majors",
+      "firstWin",
+      "lastWin",
+      "nationality",
+      "tournaments"
+     ],
+     "yearRanges": {
+      "firstWin": [
+       1861,
+       2024
+      ],
+      "lastWin": [
+       1867,
+       2026
+      ]
+     },
+     "numberFields": {
+      "majors": {
+       "min": 2,
+       "max": 18,
+       "heldBy": "Jack Nicklaus"
+      }
+     }
+    }
+   }
+  },
+  "data/guessTheYearPuzzles.ts": {
+   "bytes": 27311,
+   "exports": {
+    "guessTheYearPuzzles": {
+     "entries": 50,
+     "fields": [
+      "year",
+      "clues"
+     ],
+     "yearRanges": {
+      "year": [
+       1972,
+       2025
+      ]
+     }
+    }
+   }
+  },
+  "data/higherLowerPlayers.ts": {
+   "bytes": 45501,
+   "exports": {
+    "HL_CAPS_MARKED": {
+     "keys": 129
+    },
+    "HL_CAPS_NOTE": {
+     "value": "This cap total comes from one publisher, not the two we want"
+    },
+    "HL_CAPS_VERIFIED": {
+     "entries": 70,
+     "kind": "string"
+    },
+    "HL_PRE1985_CLUB": {
+     "entries": 9,
+     "kind": "string"
+    },
+    "HL_PRE1985_CLUB_NOTE": {
+     "value": "Career ended before 1985, back when publishers never agreed "
+    },
+    "HL_UNVERIFIED_NOTE": {
+     "value": "Club totals here are not checked against a publisher on our "
+    },
+    "HL_UNVERIFIED_STATS": {
+     "entries": 2,
+     "kind": "string"
+    },
+    "HL_VERIFIED_ON": {
+     "value": "2026-09-12"
+    },
+    "higherLowerPlayers": {
+     "entries": 199,
+     "fields": [
+      "name",
+      "nationality",
+      "isIcon",
+      "stats"
+     ]
+    }
+   }
+  },
+  "data/hockeyCareerPlayers.ts": {
+   "bytes": 27816,
+   "exports": {
+    "hockeyCareerPuzzles": {
+     "entries": 60,
+     "fields": [
+      "id",
+      "player"
+     ]
+    }
+   }
+  },
+  "data/hockeyHLPlayers.ts": {
+   "bytes": 7981,
+   "exports": {
+    "hockeyHLPlayers": {
+     "entries": 45,
+     "fields": [
+      "name",
+      "position",
+      "country",
+      "countryFlag",
+      "careerPoints",
+      "teams",
+      "lastSeason"
+     ],
+     "numberFields": {
+      "careerPoints": {
+       "min": 18,
+       "max": 2857,
+       "heldBy": "Wayne Gretzky"
+      }
+     }
+    }
+   }
+  },
+  "data/lineupTeams.ts": {
+   "bytes": 7484,
+   "exports": {
+    "CLUB_TABLE_NAMES": {
+     "keys": 30,
+     "listsInside": 35,
+     "sample": {
+      "entries": 35,
+      "kind": "string"
+     }
+    },
+    "clubs": {
+     "entries": 30,
+     "kind": "string"
+    },
+    "nations": {
+     "entries": 25,
+     "kind": "string"
+    }
+   }
+  },
+  "data/mlbConnect4Boards.ts": {
+   "bytes": 2859,
+   "exports": {
+    "curatedBoards": {
+     "entries": 6,
+     "fields": [
+      "id",
+      "name",
+      "columnAttributes",
+      "rowAttributes"
+     ]
+    }
+   }
+  },
+  "data/mlbFoPlayers.ts": {
+   "bytes": 25201,
+   "exports": {
+    "MLB_FO_ROSTERS": {
+     "keys": 30,
+     "listsInside": 390,
+     "sample": {
+      "entries": 390,
+      "fields": [
+       "name",
+       "pos",
+       "age",
+       "ovr"
+      ],
+      "numberFields": {
+       "age": {
+        "min": 20,
+        "max": 43,
+        "heldBy": "Justin Verlander"
+       },
+       "ovr": {
+        "min": 68,
+        "max": 97,
+        "heldBy": "Nick Kurtz"
+       }
+      }
+     }
+    }
+   }
+  },
+  "data/mlbHLPlayers.ts": {
+   "bytes": 6258,
+   "exports": {
+    "mlbHLPlayers": {
+     "entries": 55,
+     "fields": [
+      "name",
+      "careerHrs",
+      "firstSeason",
+      "lastSeason",
+      "seasons"
+     ],
+     "yearRanges": {
+      "firstSeason": [
+       1914,
+       2003
+      ],
+      "lastSeason": [
+       1935,
+       2018
+      ]
+     },
+     "numberFields": {
+      "careerHrs": {
+       "min": 399,
+       "max": 762,
+       "heldBy": "Barry Bonds"
+      }
+     }
+    }
+   }
+  },
+  "data/nascarDrivers.json": {
+   "bytes": 31419,
+   "exports": {}
+  },
+  "data/nbaCareerPlayers.ts": {
+   "bytes": 25319,
+   "exports": {
+    "NBA_SAME_FRANCHISE": {
+     "keys": 3
+    },
+    "nbaCareerPuzzles": {
+     "entries": 50,
+     "fields": [
+      "id",
+      "player"
+     ]
+    }
+   }
+  },
+  "data/nbaConnect4Boards.ts": {
+   "bytes": 3623,
+   "exports": {
+    "curatedBoards": {
+     "entries": 9,
+     "fields": [
+      "id",
+      "name",
+      "columnAttributes",
+      "rowAttributes"
+     ]
+    }
+   }
+  },
+  "data/nbaConnectionsPuzzles.ts": {
+   "bytes": 4437,
+   "exports": {
+    "nbaConnectionsPuzzles": {
+     "entries": 4,
+     "fields": [
+      "id",
+      "groups"
+     ]
+    }
+   }
+  },
+  "data/nbaHLPlayers.ts": {
+   "bytes": 10347,
+   "exports": {
+    "nbaHLPlayers": {
+     "entries": 80,
+     "fields": [
+      "name",
+      "position",
+      "teams",
+      "careerPoints",
+      "lastSeason"
+     ],
+     "numberFields": {
+      "careerPoints": {
+       "min": 18327,
+       "max": 43394,
+       "heldBy": "LeBron James"
+      }
+     }
+    }
+   }
+  },
+  "data/nbaPerfectLineupPool.ts": {
+   "bytes": 7057,
+   "exports": {
+    "NBA_LINEUP_CONFIG": {
+     "keys": 13
+    },
+    "NBA_POOL": {
+     "entries": 66,
+     "fields": [
+      "name",
+      "pos",
+      "team",
+      "era",
+      "rating"
+     ],
+     "numberFields": {
+      "rating": {
+       "min": 84,
+       "max": 99,
+       "heldBy": "Michael Jordan"
+      }
+     }
+    }
+   }
+  },
+  "data/nflCareerPlayers.ts": {
+   "bytes": 18022,
+   "exports": {
+    "nflCareerPlayers": {
+     "entries": 78,
+     "fields": [
+      "name",
+      "draftRound",
+      "draftYear",
+      "college",
+      "firstTeam",
+      "careerStat",
+      "teams",
+      "jerseyNumbers"
+     ],
+     "yearRanges": {
+      "draftYear": [
+       1957,
+       2023
+      ]
+     },
+     "numberFields": {
+      "draftRound": {
+       "min": 1,
+       "max": 7,
+       "heldBy": "Brock Purdy"
+      }
+     }
+    }
+   }
+  },
+  "data/nflCoaches.ts": {
+   "bytes": 7355,
+   "exports": {
+    "NFL_COACH_STINTS": {
+     "entries": 78,
+     "fields": [
+      "coach",
+      "abbr",
+      "from",
+      "to",
+      "rating",
+      "note"
+     ],
+     "yearRanges": {
+      "from": [
+       1999,
+       2024
+      ],
+      "to": [
+       2000,
+       2024
+      ]
+     },
+     "numberFields": {
+      "rating": {
+       "min": 42,
+       "max": 97,
+       "heldBy": null
+      }
+     }
+    }
+   }
+  },
+  "data/nflConnect4Boards.ts": {
+   "bytes": 2991,
+   "exports": {
+    "curatedBoards": {
+     "entries": 6,
+     "fields": [
+      "id",
+      "name",
+      "columnAttributes",
+      "rowAttributes"
+     ]
+    }
+   }
+  },
+  "data/nflConnectionsPuzzles.ts": {
+   "bytes": 5024,
+   "exports": {
+    "nflConnectionsPuzzles": {
+     "entries": 4,
+     "fields": [
+      "id",
+      "groups"
+     ]
+    }
+   }
+  },
+  "data/nflHLCategories.ts": {
+   "bytes": 11325,
+   "exports": {
+    "NFL_HL_CATEGORIES": {
+     "entries": 6,
+     "fields": [
+      "key",
+      "label",
+      "question",
+      "unit",
+      "players"
+     ]
+    }
+   }
+  },
+  "data/nflHLPlayers.ts": {
+   "bytes": 7119,
+   "exports": {
+    "nflHLPlayers": {
+     "entries": 60,
+     "fields": [
+      "name",
+      "position",
+      "teams",
+      "careerTds",
+      "lastSeason"
+     ],
+     "yearRanges": {
+      "lastSeason": [
+       2008,
+       2024
+      ]
+     },
+     "numberFields": {
+      "careerTds": {
+       "min": 64,
+       "max": 162,
+       "heldBy": "LaDainian Tomlinson"
+      }
+     }
+    }
+   }
+  },
+  "data/nhlConnect4Boards.ts": {
+   "bytes": 3365,
+   "exports": {
+    "curatedBoards": {
+     "entries": 6,
+     "fields": [
+      "id",
+      "name",
+      "columnAttributes",
+      "rowAttributes"
+     ]
+    }
+   }
+  },
+  "data/nhlConnectionsPuzzles.ts": {
+   "bytes": 4786,
+   "exports": {
+    "nhlConnectionsPuzzles": {
+     "entries": 4,
+     "fields": [
+      "id",
+      "groups"
+     ]
+    }
+   }
+  },
+  "data/nhlFoPlayers.ts": {
+   "bytes": 26597,
+   "exports": {
+    "NHL_FO_ROSTERS": {
+     "keys": 32,
+     "listsInside": 416,
+     "sample": {
+      "entries": 416,
+      "fields": [
+       "name",
+       "pos",
+       "age",
+       "ovr"
+      ],
+      "numberFields": {
+       "age": {
+        "min": 18,
+        "max": 41,
+        "heldBy": "Brent Burns"
+       },
+       "ovr": {
+        "min": 68,
+        "max": 97,
+        "heldBy": "David Pastrnak"
+       }
+      }
+     }
+    }
+   }
+  },
+  "data/nhlPerfectLineupPool.ts": {
+   "bytes": 6403,
+   "exports": {
+    "NHL_LINEUP_CONFIG": {
+     "keys": 13
+    },
+    "NHL_POOL": {
+     "entries": 57,
+     "fields": [
+      "name",
+      "pos",
+      "team",
+      "era",
+      "rating"
+     ],
+     "numberFields": {
+      "rating": {
+       "min": 86,
+       "max": 99,
+       "heldBy": "Wayne Gretzky"
+      }
+     }
+    }
+   }
+  },
+  "data/notCurrentPlayers.ts": {
+   "bytes": 1889,
+   "exports": {
+    "NOT_CURRENT_PLAYERS": {
+     "entries": 1,
+     "fields": [
+      "name",
+      "reason"
+     ]
+    }
+   }
+  },
+  "data/olympicsAthletes.ts": {
+   "bytes": 21297,
+   "exports": {
+    "olympicAthletes": {
+     "entries": 43,
+     "fields": [
+      "id",
+      "sport",
+      "country",
+      "gamesYear",
+      "hostCity",
+      "achievement",
+      "careerContext",
+      "medalSummary",
+      "name",
+      "season"
+     ],
+     "yearRanges": {
+      "gamesYear": [
+       1924,
+       2026
+      ]
+     }
+    }
+   }
+  },
+  "data/perfectLineup.ts": {
+   "bytes": 6008,
+   "exports": {
+    "FORMATION_SIZE": {
+     "value": "11"
+    }
+   }
+  },
+  "data/players.ts": {
+   "bytes": 114553,
+   "exports": {
+    "players": {
+     "entries": 557,
+     "fields": [
+      "name",
+      "club",
+      "nationality",
+      "league",
+      "goals",
+      "assists",
+      "position",
+      "kitNumber",
+      "age",
+      "marketValue",
+      "difficulty"
+     ],
+     "numberFields": {
+      "goals": {
+       "min": 0,
+       "max": 28,
+       "heldBy": "Harry Kane"
+      },
+      "assists": {
+       "min": 0,
+       "max": 16,
+       "heldBy": "Michael Olise"
+      },
+      "age": {
+       "min": 18,
+       "max": 40,
+       "heldBy": "Cristiano Ronaldo"
+      },
+      "marketValue": {
+       "min": 1,
+       "max": 216,
+       "heldBy": "Erling Haaland"
+      }
+     }
+    }
+   }
+  },
+  "data/soccerConquest.ts": {
+   "bytes": 36731,
+   "exports": {
+    "HEX_R": {
+     "value": "12"
+    },
+    "INITIAL_TERRITORIES_SOCCER": {
+     "keys": 154
+    },
+    "OVERALL_MAX": {
+     "value": "95"
+    },
+    "OVERALL_MIN": {
+     "value": "55"
+    },
+    "PARTIAL_ROWS": {
+     "value": "8"
+    },
+    "SOCCER_ADJACENCY": {
+     "keys": 154,
+     "listsInside": 696,
+     "sample": {
+      "entries": 696,
+      "kind": "string"
+     }
+    },
+    "SOCCER_CLUBS": {
+     "entries": 96,
+     "fields": [
+      "id",
+      "name",
+      "country",
+      "league",
+      "home",
+      "color",
+      "secondaryColor",
+      "neutralColour",
+      "valueUsd",
+      "valueRows",
+      "partial",
+      "overall"
+     ],
+     "numberFields": {
+      "valueUsd": {
+       "min": 2000000,
+       "max": 1652000000,
+       "heldBy": "Real Madrid"
+      },
+      "valueRows": {
+       "min": 1,
+       "max": 33,
+       "heldBy": "Real Madrid"
+      }
+     }
+    },
+    "SOCCER_CLUB_COLOURS": {
+     "keys": 96
+    },
+    "SOCCER_CLUB_MAP": {
+     "entries": 96
+    },
+    "SOCCER_CONQUEST_GAME": {
+     "keys": 4
+    },
+    "SOCCER_CONQUEST_MAP": {
+     "keys": 7
+    },
+    "SOCCER_CONQUEST_PARTIAL": {
+     "entries": 9,
+     "kind": "string"
+    },
+    "SOCCER_IMPERIALISM": {
+     "keys": 13
+    },
+    "SOCCER_LEAGUE_OF": {
+     "keys": 5
+    },
+    "SOCCER_REGIONS": {
+     "entries": 154,
+     "fields": [
+      "id",
+      "name",
+      "path",
+      "labelX",
+      "labelY",
+      "country",
+      "col",
+      "row",
+      "club"
+     ],
+     "numberFields": {
+      "labelX": {
+       "min": 16.4,
+       "max": 390.5,
+       "heldBy": "Saxony"
+      },
+      "labelY": {
+       "min": 18,
+       "max": 342,
+       "heldBy": "Cádiz"
+      },
+      "col": {
+       "min": 0,
+       "max": 18,
+       "heldBy": "Saxony"
+      },
+      "row": {
+       "min": 0,
+       "max": 18,
+       "heldBy": "Cádiz"
+      }
+     }
+    },
+    "SOCCER_REGULAR_ROUNDS": {
+     "value": "10"
+    },
+    "VALUE_CAP_USD": {
+     "value": "1700000000"
+    },
+    "VALUE_FLOOR_USD": {
+     "value": "20000000"
+    }
+   }
+  },
+  "data/soccerGridPuzzles.ts": {
+   "bytes": 6343,
+   "exports": {
+    "soccerGridPuzzles": {
+     "entries": 15,
+     "fields": [
+      "id",
+      "rows",
+      "cols"
+     ]
+    }
+   }
+  },
+  "data/tennisHLPlayers.ts": {
+   "bytes": 6922,
+   "exports": {
+    "tennisHLPlayers": {
+     "entries": 44,
+     "fields": [
+      "name",
+      "slams",
+      "firstYear",
+      "lastYear",
+      "tour"
+     ],
+     "yearRanges": {
+      "firstYear": [
+       1920,
+       2024
+      ],
+      "lastYear": [
+       1929,
+       2026
+      ]
+     },
+     "numberFields": {
+      "slams": {
+       "min": 4,
+       "max": 24,
+       "heldBy": "Novak Djokovic"
+      }
+     }
+    }
+   }
+  },
+  "data/ufcChainData.ts": {
+   "bytes": 22816,
+   "exports": {
+    "FIGHT_RESULTS": {
+     "entries": 59,
+     "fields": [
+      "winner",
+      "loser",
+      "event",
+      "year",
+      "method",
+      "round",
+      "time",
+      "wasChampionshipFight"
+     ],
+     "yearRanges": {
+      "year": [
+       2003,
+       2024
+      ]
+     },
+     "numberFields": {
+      "round": {
+       "min": 1,
+       "max": 5,
+       "heldBy": null
+      }
+     }
+    },
+    "UFC_FIGHTERS": {
+     "entries": 62,
+     "fields": [
+      "name",
+      "weightClass",
+      "record",
+      "wins",
+      "losses",
+      "draws",
+      "isHallOfFamer"
+     ],
+     "numberFields": {
+      "wins": {
+       "min": 12,
+       "max": 45,
+       "heldBy": "Matt Hughes"
+      },
+      "losses": {
+       "min": 0,
+       "max": 17,
+       "heldBy": "Jorge Masvidal"
+      },
+      "draws": {
+       "min": 0,
+       "max": 2,
+       "heldBy": "Jan Blachowicz"
+      }
+     }
+    }
+   }
+  },
+  "data/ufcFighters.ts": {
+   "bytes": 24910,
+   "exports": {
+    "ufcFighters": {
+     "entries": 90,
+     "fields": [
+      "name",
+      "nationality",
+      "weightClass",
+      "yearsActive",
+      "yearsActiveStart",
+      "yearsActiveEnd",
+      "record",
+      "wins",
+      "losses",
+      "draws",
+      "birthDate",
+      "koTko",
+      "submissions"
+     ],
+     "yearRanges": {
+      "yearsActiveStart": [
+       1997,
+       2023
+      ],
+      "yearsActiveEnd": [
+       2007,
+       2026
+      ]
+     },
+     "numberFields": {
+      "wins": {
+       "min": 9,
+       "max": 47,
+       "heldBy": "Alistair Overeem"
+      },
+      "losses": {
+       "min": 0,
+       "max": 19,
+       "heldBy": "Alistair Overeem"
+      },
+      "draws": {
+       "min": 0,
+       "max": 2,
+       "heldBy": "BJ Penn"
+      },
+      "koTko": {
+       "min": 2,
+       "max": 28,
+       "heldBy": "Jiří Procházka"
+      },
+      "submissions": {
+       "min": 0,
+       "max": 22,
+       "heldBy": "Charles Oliveira"
+      }
+     }
+    },
+    "uniqueUfcFighters": {
+     "entries": 90,
+     "fields": [
+      "name",
+      "nationality",
+      "weightClass",
+      "yearsActive",
+      "yearsActiveStart",
+      "yearsActiveEnd",
+      "record",
+      "wins",
+      "losses",
+      "draws",
+      "birthDate",
+      "koTko",
+      "submissions"
+     ],
+     "yearRanges": {
+      "yearsActiveStart": [
+       1997,
+       2023
+      ],
+      "yearsActiveEnd": [
+       2007,
+       2026
+      ]
+     },
+     "numberFields": {
+      "wins": {
+       "min": 9,
+       "max": 47,
+       "heldBy": "Alistair Overeem"
+      },
+      "losses": {
+       "min": 0,
+       "max": 19,
+       "heldBy": "Alistair Overeem"
+      },
+      "draws": {
+       "min": 0,
+       "max": 2,
+       "heldBy": "BJ Penn"
+      },
+      "koTko": {
+       "min": 2,
+       "max": 28,
+       "heldBy": "Jiří Procházka"
+      },
+      "submissions": {
+       "min": 0,
+       "max": 22,
+       "heldBy": "Charles Oliveira"
+      }
+     }
+    }
+   }
+  },
+  "hooks/useConquest.ts": {
+   "bytes": 47215,
+   "exports": {},
+   "error": "Cannot find module 'react'"
+  },
+  "hooks/useConquestNba.ts": {
+   "bytes": 32708,
+   "exports": {},
+   "error": "Cannot find module 'react'"
+  },
+  "hooks/useDailyPuzzle.ts": {
+   "bytes": 25171,
+   "exports": {},
+   "error": "Cannot find module 'react'"
+  },
+  "lib/careerLadder.ts": {
+   "bytes": 43578,
+   "exports": {},
+   "error": "Cannot find module '@supabase/supabase-js'"
+  },
+  "lib/missingEleven.ts": {
+   "bytes": 69880,
+   "exports": {
+    "ALL_ELEVEN_NAMES": {
+     "entries": 370,
+     "kind": "string"
+    },
+    "ELEVEN_GROWN_DAILY_FROM": {
+     "value": "2026-10-12"
+    },
+    "ELEVEN_GROWN_POOL": {
+     "value": "40"
+    },
+    "ELEVEN_LINEUPS": {
+     "entries": 40,
+     "fields": [
+      "id",
+      "dateLabel",
+      "competition",
+      "matchDate",
+      "team",
+      "opponent",
+      "scoreLine",
+      "venue",
+      "slots",
+      "blankCandidates",
+      "source",
+      "unit"
+     ]
+    },
+    "ELEVEN_ORIGINAL_POOL": {
+     "value": "18"
+    },
+    "ELEVEN_SCORES": {
+     "entries": 3,
+     "kind": "number"
+    }
+   }
+  },
+  "lib/missingFive.ts": {
+   "bytes": 52985,
+   "exports": {
+    "ALL_FIVE_NAMES": {
+     "entries": 130,
+     "kind": "string"
+    },
+    "FIVE_LINEUPS": {
+     "entries": 40,
+     "fields": [
+      "id",
+      "dateLabel",
+      "competition",
+      "matchDate",
+      "team",
+      "opponent",
+      "scoreLine",
+      "venue",
+      "slots",
+      "blankCandidates",
+      "source"
+     ]
+    },
+    "FIVE_SCORES": {
+     "entries": 3,
+     "kind": "number"
+    }
+   }
+  },
+  "lib/missingNine.ts": {
+   "bytes": 51386,
+   "exports": {
+    "ALL_NINE_NAMES": {
+     "entries": 253,
+     "kind": "string"
+    },
+    "NINE_LINEUPS": {
+     "entries": 30,
+     "fields": [
+      "id",
+      "dateLabel",
+      "competition",
+      "matchDate",
+      "team",
+      "opponent",
+      "scoreLine",
+      "venue",
+      "slots",
+      "blankCandidates",
+      "source"
+     ]
+    },
+    "NINE_SCORES": {
+     "entries": 3,
+     "kind": "number"
+    }
+   }
+  },
+  "lib/missingXi.ts": {
+   "bytes": 380206,
+   "exports": {},
+   "error": "Cannot find module '@supabase/supabase-js'"
+  },
+  "lib/playerSearch.ts": {
+   "bytes": 40367,
+   "exports": {},
+   "error": "Cannot find module '@supabase/supabase-js'"
+  },
+  "lib/squadDeal.ts": {
+   "bytes": 41148,
+   "exports": {},
+   "error": "Cannot find module '@supabase/supabase-js'"
+  },
+  "lib/whoAmI.ts": {
+   "bytes": 40672,
+   "exports": {},
+   "error": "Cannot find module '@supabase/supabase-js'"
+  },
+  "lib/worldXi.ts": {
+   "bytes": 69155,
+   "exports": {},
+   "error": "Cannot find module '@supabase/supabase-js'"
+  }
+ }
+}

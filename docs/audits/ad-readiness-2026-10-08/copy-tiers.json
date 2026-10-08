@@ -1,0 +1,39 @@
+{
+  "about": "The copy auditor's PROPOSED tier for every game, by the owner's brief: A = career, manager, front office and dynasty sims and the flagship grids (full treatment); B = distinct standalone games; C = reskins of one shared mechanic (short, and about the data set). Families are the ones routes.json worked out from shared modules. A route listed under routes overrides its family. Nothing here is decided: it is a proposal for the owner.",
+  "families": {
+    "Soccer Career": { "tier": "A", "reason": "The flagship career sim and the brief's own standard." },
+    "My Career (US sports)": { "tier": "A", "reason": "Four career sims on one engine. Deep enough for full treatment, but the four guides share a block of sentences that has to be said once." },
+    "Club Manager engine": { "tier": "A", "reason": "Club Manager is the deepest manager sim on the site." },
+    "Front Office": { "tier": "A", "reason": "Four general manager sims: cap or tax rules, draft, trades, mandate. Each league's rules differ, which is real per page content." },
+    "College Dynasty": { "tier": "A", "reason": "Two dynasty sims: recruiting, portal, schedule and playoff format differ by sport." },
+    "Fight sims": { "tier": "A", "reason": "A fighter career sim, a gym manager and a promoter sim. All three are sims with rules of their own." },
+    "Tycoon and idle": { "tier": "B", "reason": "Idle builders. Distinct games, not career or manager sims." },
+    "Arcade shots": { "tier": "B", "reason": "Two skill games (a free kick, a jump shot) with different controls and scoring." },
+    "Soccer squad builders": { "tier": "B", "reason": "Different games that happen to draw from one soccer player pool. Each has its own rules." },
+    "Secret player games": { "tier": "B", "reason": "Different games on one mystery player helper. Each has its own rules." },
+    "Champions quizzes": { "tier": "B", "reason": "Two different quizzes on one champions list." },
+    "Standalone": { "tier": "B", "reason": "Code of its own, one page." },
+    "Higher or Lower": { "tier": "C", "reason": "One mechanic (pick the bigger number), ten data sets." },
+    "Connect 4": { "tier": "C", "reason": "One mechanic (answer a trivia question to drop a disc), five question pools." },
+    "Conquest": { "tier": "C", "reason": "One mechanic (pick an empire, call the games), five leagues." },
+    "Perfect Season": { "tier": "C", "reason": "One mechanic (draft a roster and try to go unbeaten), four leagues." },
+    "Perfect Lineup": { "tier": "C", "reason": "One hook (usePerfectLineupGeneric) drives all three." },
+    "Connections": { "tier": "C", "reason": "One mechanic (sort sixteen names into four groups), five puzzle sets." },
+    "Chain": { "tier": "C", "reason": "One mechanic (name someone linked to the last name), four link data sets." },
+    "Career Path guessers": { "tier": "C", "reason": "One mechanic (guess the player from a career revealed in steps), five sports." },
+    "Daily clue guessers": { "tier": "C", "reason": "One mechanic (guess the mystery entry from column feedback), eleven data sets with different columns." },
+    "Gauntlet Draft": { "tier": "C", "reason": "One mechanic (pick one of three cards five times, then run the gauntlet), five sports." },
+    "Missing starter": { "tier": "C", "reason": "One mechanic (name the missing starter from a real lineup), four sports." },
+    "Grid": { "tier": "C", "reason": "One grid engine, seven data sets. Which grids count as flagship (Tier A in the brief) is the owner's call; see the three overrides." }
+  },
+  "routes": {
+    "/manager-hot-seat": { "tier": "B", "reason": "A five game scenario on the Club Manager engine. Its own page can be short and point at Club Manager for the engine." },
+    "/deadline-day": { "tier": "B", "reason": "A one day transfer scenario on the Club Manager engine. Same as above." },
+    "/stadium-tycoon": { "tier": "A", "reason": "The deepest builder (2,082 guide words today) and one of the pages the brief says ranks in search." },
+    "/rebuild": { "tier": "A", "reason": "A club management game with a board, a wheel and up to four players; 2,339 guide words today." },
+    "/aussie-rules-manager": { "tier": "A", "reason": "A full season manager sim." },
+    "/college-grid": { "tier": "A", "reason": "Flagship grid: the brief names it as a page that ranks in search." },
+    "/football-grid": { "tier": "A", "reason": "Proposed flagship grid (the pro football original). Owner to confirm." },
+    "/soccer-grid": { "tier": "A", "reason": "Proposed flagship grid (soccer is the lead sport). Owner to confirm." }
+  }
+}

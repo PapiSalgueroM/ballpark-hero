@@ -1,0 +1,2535 @@
+{
+ "base": "http://localhost:4190",
+ "rows": {
+  "/": {
+   "route": "/",
+   "raw": {
+    "footerTags": 0,
+    "ownerDisclaimers": 0,
+    "bannerSentences": 0,
+    "snapshot": false,
+    "gtagInHtml": false,
+    "adScriptTag": false
+   },
+   "timeline": [
+    {
+     "ms": 6,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 0,
+     "bannerRegions": 0,
+     "h1": 1
+    },
+    {
+     "ms": 391,
+     "snapshot": false,
+     "footers": 1,
+     "ownerDisclaimers": 1,
+     "fanProject": 1,
+     "bannerSentences": 0,
+     "bannerRegions": 0,
+     "h1": 1
+    },
+    {
+     "ms": 449,
+     "snapshot": false,
+     "footers": 1,
+     "ownerDisclaimers": 1,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 1
+    }
+   ],
+   "maxima": {
+    "footers": 1,
+    "ownerDisclaimers": 1,
+    "bannerSentences": 1,
+    "bannerRegions": 1,
+    "snapshotAndFooterTogether": false,
+    "snapshotAndRegionTogether": false
+   },
+   "beforeChoice": {
+    "state": {
+     "title": "DoUKnowBall: Free Sports Trivia Games and Daily Quizzes",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 1,
+     "bannerInsideDialog": false,
+     "bannerText": "Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. Learn more Essential only Accept",
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 0,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": null,
+     "gameCountPhrases": [
+      "130+ free games",
+      "36 games",
+      "11 games",
+      "17 games",
+      "12 games",
+      "20 games",
+      "120+ free sports games"
+     ]
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "database": 3
+    }
+   },
+   "afterAccept": {
+    "state": {
+     "title": "DoUKnowBall: Free Sports Trivia Games and Daily Quizzes",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": [
+      "130+ free games",
+      "36 games",
+      "11 games",
+      "17 games",
+      "12 games",
+      "20 games",
+      "120+ free sports games"
+     ]
+    },
+    "requests": {
+     "analytics": 1
+    }
+   },
+   "reloadAccepted": {
+    "state": {
+     "title": "DoUKnowBall: Free Sports Trivia Games and Daily Quizzes",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": [
+      "130+ free games",
+      "36 games",
+      "11 games",
+      "17 games",
+      "12 games",
+      "20 games",
+      "120+ free sports games"
+     ]
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "analytics": 1,
+     "database": 3
+    }
+   },
+   "pageErrors": []
+  },
+  "/about": {
+   "route": "/about",
+   "raw": {
+    "footerTags": 0,
+    "ownerDisclaimers": 2,
+    "bannerSentences": 1,
+    "snapshot": true,
+    "gtagInHtml": false,
+    "adScriptTag": false
+   },
+   "timeline": [
+    {
+     "ms": 9,
+     "snapshot": true,
+     "footers": 0,
+     "ownerDisclaimers": 2,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 0,
+     "h1": 1
+    },
+    {
+     "ms": 96,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 0,
+     "bannerRegions": 0,
+     "h1": 0
+    },
+    {
+     "ms": 105,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 0
+    },
+    {
+     "ms": 166,
+     "snapshot": false,
+     "footers": 1,
+     "ownerDisclaimers": 2,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 1
+    }
+   ],
+   "maxima": {
+    "footers": 1,
+    "ownerDisclaimers": 2,
+    "bannerSentences": 1,
+    "bannerRegions": 1,
+    "snapshotAndFooterTogether": false,
+    "snapshotAndRegionTogether": false
+   },
+   "beforeChoice": {
+    "state": {
+     "title": "About DoUKnowBall | Free Daily Sports Trivia Games",
+     "footers": 1,
+     "ownerDisclaimersVisible": 2,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 2,
+     "copyrightLines": 2,
+     "bannerRegions": 1,
+     "bannerInsideDialog": false,
+     "bannerText": "Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. Learn more Essential only Accept",
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 0,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": null,
+     "gameCountPhrases": [
+      "Over 100 games"
+     ]
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "database": 1
+    }
+   },
+   "afterAccept": {
+    "state": {
+     "title": "About DoUKnowBall | Free Daily Sports Trivia Games",
+     "footers": 1,
+     "ownerDisclaimersVisible": 2,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 2,
+     "copyrightLines": 2,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": [
+      "Over 100 games"
+     ]
+    },
+    "requests": {
+     "analytics": 1
+    }
+   },
+   "reloadAccepted": {
+    "state": {
+     "title": "About DoUKnowBall | Free Daily Sports Trivia Games",
+     "footers": 1,
+     "ownerDisclaimersVisible": 2,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 2,
+     "copyrightLines": 2,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": [
+      "Over 100 games"
+     ]
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "analytics": 1,
+     "database": 1
+    }
+   },
+   "pageErrors": [],
+   "essentialOnly": {
+    "state": {
+     "title": "About DoUKnowBall | Free Daily Sports Trivia Games",
+     "footers": 1,
+     "ownerDisclaimersVisible": 2,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 2,
+     "copyrightLines": 2,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 0,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": "essential",
+     "gameCountPhrases": [
+      "Over 100 games"
+     ]
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "database": 1
+    }
+   }
+  },
+  "/contact": {
+   "route": "/contact",
+   "raw": {
+    "footerTags": 0,
+    "ownerDisclaimers": 2,
+    "bannerSentences": 1,
+    "snapshot": true,
+    "gtagInHtml": false,
+    "adScriptTag": false
+   },
+   "timeline": [
+    {
+     "ms": 10,
+     "snapshot": true,
+     "footers": 0,
+     "ownerDisclaimers": 2,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 0,
+     "h1": 1
+    },
+    {
+     "ms": 90,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 0,
+     "bannerRegions": 0,
+     "h1": 0
+    },
+    {
+     "ms": 97,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 0
+    },
+    {
+     "ms": 117,
+     "snapshot": false,
+     "footers": 1,
+     "ownerDisclaimers": 2,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 1
+    }
+   ],
+   "maxima": {
+    "footers": 1,
+    "ownerDisclaimers": 2,
+    "bannerSentences": 1,
+    "bannerRegions": 1,
+    "snapshotAndFooterTogether": false,
+    "snapshotAndRegionTogether": false
+   },
+   "beforeChoice": {
+    "state": {
+     "title": "Contact DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 2,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 2,
+     "copyrightLines": 2,
+     "bannerRegions": 1,
+     "bannerInsideDialog": false,
+     "bannerText": "Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. Learn more Essential only Accept",
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 0,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": null,
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "database": 1
+    }
+   },
+   "afterAccept": {
+    "state": {
+     "title": "Contact DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 2,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 2,
+     "copyrightLines": 2,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "analytics": 1
+    }
+   },
+   "reloadAccepted": {
+    "state": {
+     "title": "Contact DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 2,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 2,
+     "copyrightLines": 2,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "analytics": 1,
+     "database": 1
+    }
+   },
+   "pageErrors": []
+  },
+  "/privacy": {
+   "route": "/privacy",
+   "raw": {
+    "footerTags": 0,
+    "ownerDisclaimers": 2,
+    "bannerSentences": 1,
+    "snapshot": true,
+    "gtagInHtml": false,
+    "adScriptTag": false
+   },
+   "timeline": [
+    {
+     "ms": 6,
+     "snapshot": true,
+     "footers": 0,
+     "ownerDisclaimers": 2,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 0,
+     "h1": 1
+    },
+    {
+     "ms": 92,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 0,
+     "bannerRegions": 0,
+     "h1": 0
+    },
+    {
+     "ms": 101,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 0
+    },
+    {
+     "ms": 124,
+     "snapshot": false,
+     "footers": 1,
+     "ownerDisclaimers": 2,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 1
+    }
+   ],
+   "maxima": {
+    "footers": 1,
+    "ownerDisclaimers": 2,
+    "bannerSentences": 1,
+    "bannerRegions": 1,
+    "snapshotAndFooterTogether": false,
+    "snapshotAndRegionTogether": false
+   },
+   "beforeChoice": {
+    "state": {
+     "title": "Privacy Policy - DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 2,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 2,
+     "copyrightLines": 2,
+     "bannerRegions": 1,
+     "bannerInsideDialog": false,
+     "bannerText": "Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. Learn more Essential only Accept",
+     "otherCookieWords": 20,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 0,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": null,
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "database": 1
+    }
+   },
+   "afterAccept": {
+    "state": {
+     "title": "Privacy Policy - DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 2,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 2,
+     "copyrightLines": 2,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 20,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "analytics": 1
+    }
+   },
+   "reloadAccepted": {
+    "state": {
+     "title": "Privacy Policy - DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 2,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 2,
+     "copyrightLines": 2,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 20,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "analytics": 1,
+     "database": 1
+    }
+   },
+   "pageErrors": []
+  },
+  "/terms": {
+   "route": "/terms",
+   "raw": {
+    "footerTags": 0,
+    "ownerDisclaimers": 3,
+    "bannerSentences": 1,
+    "snapshot": true,
+    "gtagInHtml": false,
+    "adScriptTag": false
+   },
+   "timeline": [
+    {
+     "ms": 11,
+     "snapshot": true,
+     "footers": 0,
+     "ownerDisclaimers": 3,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 0,
+     "h1": 1
+    },
+    {
+     "ms": 98,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 0,
+     "bannerRegions": 0,
+     "h1": 0
+    },
+    {
+     "ms": 107,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 0
+    },
+    {
+     "ms": 129,
+     "snapshot": false,
+     "footers": 1,
+     "ownerDisclaimers": 3,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 1
+    }
+   ],
+   "maxima": {
+    "footers": 1,
+    "ownerDisclaimers": 3,
+    "bannerSentences": 1,
+    "bannerRegions": 1,
+    "snapshotAndFooterTogether": false,
+    "snapshotAndRegionTogether": false
+   },
+   "beforeChoice": {
+    "state": {
+     "title": "Terms of Service - DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 3,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 3,
+     "copyrightLines": 2,
+     "bannerRegions": 1,
+     "bannerInsideDialog": false,
+     "bannerText": "Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. Learn more Essential only Accept",
+     "otherCookieWords": 1,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 0,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": null,
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "database": 1
+    }
+   },
+   "afterAccept": {
+    "state": {
+     "title": "Terms of Service - DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 3,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 3,
+     "copyrightLines": 2,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 1,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "analytics": 1
+    }
+   },
+   "reloadAccepted": {
+    "state": {
+     "title": "Terms of Service - DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 3,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 3,
+     "copyrightLines": 2,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 1,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "analytics": 1,
+     "database": 1
+    }
+   },
+   "pageErrors": []
+  },
+  "/whats-new": {
+   "route": "/whats-new",
+   "raw": {
+    "footerTags": 0,
+    "ownerDisclaimers": 2,
+    "bannerSentences": 1,
+    "snapshot": true,
+    "gtagInHtml": false,
+    "adScriptTag": false
+   },
+   "timeline": [
+    {
+     "ms": 16,
+     "snapshot": true,
+     "footers": 0,
+     "ownerDisclaimers": 2,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 0,
+     "h1": 1
+    },
+    {
+     "ms": 152,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 0,
+     "bannerRegions": 0,
+     "h1": 0
+    },
+    {
+     "ms": 160,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 0
+    },
+    {
+     "ms": 290,
+     "snapshot": false,
+     "footers": 1,
+     "ownerDisclaimers": 2,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 1
+    }
+   ],
+   "maxima": {
+    "footers": 1,
+    "ownerDisclaimers": 2,
+    "bannerSentences": 1,
+    "bannerRegions": 1,
+    "snapshotAndFooterTogether": false,
+    "snapshotAndRegionTogether": false
+   },
+   "beforeChoice": {
+    "state": {
+     "title": "What's New | DoUKnowBall Updates",
+     "footers": 1,
+     "ownerDisclaimersVisible": 2,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 2,
+     "copyrightLines": 2,
+     "bannerRegions": 1,
+     "bannerInsideDialog": false,
+     "bannerText": "Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. Learn more Essential only Accept",
+     "otherCookieWords": 5,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 0,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": null,
+     "gameCountPhrases": [
+      "More than 90 of them",
+      "31 of them",
+      "13 of them",
+      "366 of them",
+      "all 126 of them",
+      "100+ free games",
+      "all 120 of them",
+      "all 127 games",
+      "113 games",
+      "all 87 of them",
+      "65 games",
+      "over 100 games"
+     ]
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "database": 1
+    }
+   },
+   "afterAccept": {
+    "state": {
+     "title": "What's New | DoUKnowBall Updates",
+     "footers": 1,
+     "ownerDisclaimersVisible": 2,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 2,
+     "copyrightLines": 2,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 5,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": [
+      "More than 90 of them",
+      "31 of them",
+      "13 of them",
+      "366 of them",
+      "all 126 of them",
+      "100+ free games",
+      "all 120 of them",
+      "all 127 games",
+      "113 games",
+      "all 87 of them",
+      "65 games",
+      "over 100 games"
+     ]
+    },
+    "requests": {
+     "analytics": 1
+    }
+   },
+   "reloadAccepted": {
+    "state": {
+     "title": "What's New | DoUKnowBall Updates",
+     "footers": 1,
+     "ownerDisclaimersVisible": 2,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 2,
+     "copyrightLines": 2,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 5,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": [
+      "More than 90 of them",
+      "31 of them",
+      "13 of them",
+      "366 of them",
+      "all 126 of them",
+      "100+ free games",
+      "all 120 of them",
+      "all 127 games",
+      "113 games",
+      "all 87 of them",
+      "65 games",
+      "over 100 games"
+     ]
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "analytics": 1,
+     "database": 1
+    }
+   },
+   "pageErrors": []
+  },
+  "/soccer-career": {
+   "route": "/soccer-career",
+   "raw": {
+    "footerTags": 0,
+    "ownerDisclaimers": 1,
+    "bannerSentences": 1,
+    "snapshot": true,
+    "gtagInHtml": false,
+    "adScriptTag": false
+   },
+   "timeline": [
+    {
+     "ms": 6,
+     "snapshot": true,
+     "footers": 0,
+     "ownerDisclaimers": 1,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 0,
+     "h1": 1
+    },
+    {
+     "ms": 109,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 0,
+     "bannerRegions": 0,
+     "h1": 0
+    },
+    {
+     "ms": 119,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 0
+    },
+    {
+     "ms": 1259,
+     "snapshot": false,
+     "footers": 1,
+     "ownerDisclaimers": 1,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 1
+    }
+   ],
+   "maxima": {
+    "footers": 1,
+    "ownerDisclaimers": 1,
+    "bannerSentences": 1,
+    "bannerRegions": 1,
+    "snapshotAndFooterTogether": false,
+    "snapshotAndRegionTogether": false
+   },
+   "beforeChoice": {
+    "state": {
+     "title": "Soccer Career: Free Football Career Simulator | DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 1,
+     "bannerInsideDialog": false,
+     "bannerText": "Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. Learn more Essential only Accept",
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 0,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": null,
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "database": 1
+    }
+   },
+   "afterAccept": {
+    "state": {
+     "title": "Soccer Career: Free Football Career Simulator | DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "analytics": 1
+    }
+   },
+   "reloadAccepted": {
+    "state": {
+     "title": "Soccer Career: Free Football Career Simulator | DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "analytics": 1,
+     "database": 1
+    }
+   },
+   "pageErrors": []
+  },
+  "/golf-higher-lower": {
+   "route": "/golf-higher-lower",
+   "raw": {
+    "footerTags": 0,
+    "ownerDisclaimers": 1,
+    "bannerSentences": 1,
+    "snapshot": true,
+    "gtagInHtml": false,
+    "adScriptTag": false
+   },
+   "timeline": [
+    {
+     "ms": 7,
+     "snapshot": true,
+     "footers": 0,
+     "ownerDisclaimers": 1,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 0,
+     "h1": 1
+    },
+    {
+     "ms": 115,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 0,
+     "bannerRegions": 0,
+     "h1": 0
+    },
+    {
+     "ms": 123,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 0
+    },
+    {
+     "ms": 586,
+     "snapshot": false,
+     "footers": 1,
+     "ownerDisclaimers": 1,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 1
+    }
+   ],
+   "maxima": {
+    "footers": 1,
+    "ownerDisclaimers": 1,
+    "bannerSentences": 1,
+    "bannerRegions": 1,
+    "snapshotAndFooterTogether": false,
+    "snapshotAndRegionTogether": false
+   },
+   "beforeChoice": {
+    "state": {
+     "title": "Golf Higher or Lower: Major Championships Quiz | DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 1,
+     "bannerInsideDialog": false,
+     "bannerText": "Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. Learn more Essential only Accept",
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 0,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": null,
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "database": 1,
+     "other:flagcdn.com": 1
+    }
+   },
+   "afterAccept": {
+    "state": {
+     "title": "Golf Higher or Lower: Major Championships Quiz | DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 1,
+     "adSlots": 1,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "analytics": 1,
+     "ads": 1
+    }
+   },
+   "reloadAccepted": {
+    "state": {
+     "title": "Golf Higher or Lower: Major Championships Quiz | DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 1,
+     "adSlots": 1,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "analytics": 1,
+     "database": 1,
+     "other:flagcdn.com": 2,
+     "ads": 1
+    }
+   },
+   "pageErrors": [],
+   "essentialOnly": {
+    "state": {
+     "title": "Golf Higher or Lower: Major Championships Quiz | DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 0,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": "essential",
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "database": 1,
+     "other:flagcdn.com": 2
+    }
+   }
+  },
+  "/footle": {
+   "route": "/footle",
+   "raw": {
+    "footerTags": 0,
+    "ownerDisclaimers": 1,
+    "bannerSentences": 0,
+    "snapshot": true,
+    "gtagInHtml": false,
+    "adScriptTag": false
+   },
+   "timeline": [
+    {
+     "ms": 10,
+     "snapshot": true,
+     "footers": 0,
+     "ownerDisclaimers": 1,
+     "fanProject": 1,
+     "bannerSentences": 0,
+     "bannerRegions": 0,
+     "h1": 1
+    },
+    {
+     "ms": 107,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 0,
+     "bannerRegions": 0,
+     "h1": 0
+    },
+    {
+     "ms": 116,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 0
+    },
+    {
+     "ms": 364,
+     "snapshot": false,
+     "footers": 1,
+     "ownerDisclaimers": 1,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 1
+    }
+   ],
+   "maxima": {
+    "footers": 1,
+    "ownerDisclaimers": 1,
+    "bannerSentences": 1,
+    "bannerRegions": 1,
+    "snapshotAndFooterTogether": false,
+    "snapshotAndRegionTogether": false
+   },
+   "beforeChoice": {
+    "state": {
+     "title": "Footle: Daily Soccer Player Guessing Game | DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 1,
+     "bannerInsideDialog": true,
+     "bannerText": "Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. Learn more Essential only Accept",
+     "otherCookieWords": 0,
+     "openDialogs": 1,
+     "h1": 1,
+     "gtagScript": 0,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": null,
+     "gameCountPhrases": [
+      "100+ free sports games"
+     ]
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "database": 4
+    }
+   },
+   "afterAccept": {
+    "state": {
+     "title": "Footle: Daily Soccer Player Guessing Game | DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 1,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 1,
+     "adSlots": 1,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": [
+      "100+ free sports games"
+     ]
+    },
+    "requests": {
+     "analytics": 1,
+     "ads": 1
+    }
+   },
+   "reloadAccepted": {
+    "state": {
+     "title": "Footle: Daily Soccer Player Guessing Game | DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 1,
+     "adSlots": 1,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": [
+      "100+ free sports games"
+     ]
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "analytics": 1,
+     "database": 4,
+     "ads": 1
+    }
+   },
+   "pageErrors": []
+  },
+  "/soccer": {
+   "route": "/soccer",
+   "raw": {
+    "footerTags": 0,
+    "ownerDisclaimers": 1,
+    "bannerSentences": 1,
+    "snapshot": true,
+    "gtagInHtml": false,
+    "adScriptTag": false
+   },
+   "timeline": [
+    {
+     "ms": 5,
+     "snapshot": true,
+     "footers": 0,
+     "ownerDisclaimers": 1,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 0,
+     "h1": 1
+    },
+    {
+     "ms": 113,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 0,
+     "bannerRegions": 0,
+     "h1": 0
+    },
+    {
+     "ms": 126,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 0
+    },
+    {
+     "ms": 232,
+     "snapshot": false,
+     "footers": 1,
+     "ownerDisclaimers": 1,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 1
+    }
+   ],
+   "maxima": {
+    "footers": 1,
+    "ownerDisclaimers": 1,
+    "bannerSentences": 1,
+    "bannerRegions": 1,
+    "snapshotAndFooterTogether": false,
+    "snapshotAndRegionTogether": false
+   },
+   "beforeChoice": {
+    "state": {
+     "title": "Free Soccer Games: Football Trivia, Puzzles and Career Sims",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 1,
+     "bannerInsideDialog": false,
+     "bannerText": "Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. Learn more Essential only Accept",
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 0,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": null,
+     "gameCountPhrases": [
+      "All 36 of them",
+      "36 games"
+     ]
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "database": 1
+    }
+   },
+   "afterAccept": {
+    "state": {
+     "title": "Free Soccer Games: Football Trivia, Puzzles and Career Sims",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": [
+      "All 36 of them",
+      "36 games"
+     ]
+    },
+    "requests": {
+     "analytics": 1
+    }
+   },
+   "reloadAccepted": {
+    "state": {
+     "title": "Free Soccer Games: Football Trivia, Puzzles and Career Sims",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": [
+      "All 36 of them",
+      "36 games"
+     ]
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "analytics": 1,
+     "database": 1
+    }
+   },
+   "pageErrors": []
+  },
+  "/records": {
+   "route": "/records",
+   "raw": {
+    "footerTags": 0,
+    "ownerDisclaimers": 1,
+    "bannerSentences": 1,
+    "snapshot": true,
+    "gtagInHtml": false,
+    "adScriptTag": false
+   },
+   "timeline": [
+    {
+     "ms": 12,
+     "snapshot": true,
+     "footers": 0,
+     "ownerDisclaimers": 1,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 0,
+     "h1": 1
+    },
+    {
+     "ms": 130,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 0,
+     "bannerRegions": 0,
+     "h1": 0
+    },
+    {
+     "ms": 138,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 0
+    },
+    {
+     "ms": 191,
+     "snapshot": false,
+     "footers": 1,
+     "ownerDisclaimers": 1,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 1
+    }
+   ],
+   "maxima": {
+    "footers": 1,
+    "ownerDisclaimers": 1,
+    "bannerSentences": 1,
+    "bannerRegions": 1,
+    "snapshotAndFooterTogether": false,
+    "snapshotAndRegionTogether": false
+   },
+   "beforeChoice": {
+    "state": {
+     "title": "The Record Books: Champions by Year in 13 Competitions",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 1,
+     "bannerInsideDialog": false,
+     "bannerText": "Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. Learn more Essential only Accept",
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 0,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": null,
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "database": 1
+    }
+   },
+   "afterAccept": {
+    "state": {
+     "title": "The Record Books: Champions by Year in 13 Competitions",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "analytics": 1
+    }
+   },
+   "reloadAccepted": {
+    "state": {
+     "title": "The Record Books: Champions by Year in 13 Competitions",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "analytics": 1,
+     "database": 1
+    }
+   },
+   "pageErrors": []
+  },
+  "/records/nba-champions": {
+   "route": "/records/nba-champions",
+   "raw": {
+    "footerTags": 0,
+    "ownerDisclaimers": 1,
+    "bannerSentences": 1,
+    "snapshot": true,
+    "gtagInHtml": false,
+    "adScriptTag": false
+   },
+   "timeline": [
+    {
+     "ms": 7,
+     "snapshot": true,
+     "footers": 0,
+     "ownerDisclaimers": 1,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 0,
+     "h1": 1
+    },
+    {
+     "ms": 93,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 0,
+     "bannerRegions": 0,
+     "h1": 0
+    },
+    {
+     "ms": 102,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 0
+    },
+    {
+     "ms": 139,
+     "snapshot": false,
+     "footers": 1,
+     "ownerDisclaimers": 1,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 1
+    }
+   ],
+   "maxima": {
+    "footers": 1,
+    "ownerDisclaimers": 1,
+    "bannerSentences": 1,
+    "bannerRegions": 1,
+    "snapshotAndFooterTogether": false,
+    "snapshotAndRegionTogether": false
+   },
+   "beforeChoice": {
+    "state": {
+     "title": "NBA Champions by Year Since 1947 | DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 1,
+     "bannerInsideDialog": false,
+     "bannerText": "Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. Learn more Essential only Accept",
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 0,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": null,
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "database": 1
+    }
+   },
+   "afterAccept": {
+    "state": {
+     "title": "NBA Champions by Year Since 1947 | DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "analytics": 1
+    }
+   },
+   "reloadAccepted": {
+    "state": {
+     "title": "NBA Champions by Year Since 1947 | DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "analytics": 1,
+     "database": 1
+    }
+   },
+   "pageErrors": []
+  },
+  "/search": {
+   "route": "/search",
+   "raw": {
+    "footerTags": 0,
+    "ownerDisclaimers": 1,
+    "bannerSentences": 1,
+    "snapshot": true,
+    "gtagInHtml": false,
+    "adScriptTag": false
+   },
+   "timeline": [
+    {
+     "ms": 11,
+     "snapshot": true,
+     "footers": 0,
+     "ownerDisclaimers": 1,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 0,
+     "h1": 1
+    },
+    {
+     "ms": 285,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 0,
+     "bannerRegions": 0,
+     "h1": 0
+    },
+    {
+     "ms": 294,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 0
+    },
+    {
+     "ms": 447,
+     "snapshot": false,
+     "footers": 1,
+     "ownerDisclaimers": 1,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 1
+    }
+   ],
+   "maxima": {
+    "footers": 1,
+    "ownerDisclaimers": 1,
+    "bannerSentences": 1,
+    "bannerRegions": 1,
+    "snapshotAndFooterTogether": false,
+    "snapshotAndRegionTogether": false
+   },
+   "beforeChoice": {
+    "state": {
+     "title": "Search Every Game - DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 1,
+     "bannerInsideDialog": false,
+     "bannerText": "Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. Learn more Essential only Accept",
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 0,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": "noindex, follow",
+     "storedConsent": null,
+     "gameCountPhrases": [
+      "All 133 of them",
+      "133 games"
+     ]
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "database": 1
+    }
+   },
+   "afterAccept": {
+    "state": {
+     "title": "Search Every Game - DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": "noindex, follow",
+     "storedConsent": "accepted",
+     "gameCountPhrases": [
+      "All 133 of them",
+      "133 games"
+     ]
+    },
+    "requests": {
+     "analytics": 1
+    }
+   },
+   "reloadAccepted": {
+    "state": {
+     "title": "Search Every Game - DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": "noindex, follow",
+     "storedConsent": "accepted",
+     "gameCountPhrases": [
+      "All 133 of them",
+      "133 games"
+     ]
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "analytics": 1,
+     "database": 1
+    }
+   },
+   "pageErrors": []
+  },
+  "/leaderboard": {
+   "route": "/leaderboard",
+   "raw": {
+    "footerTags": 0,
+    "ownerDisclaimers": 1,
+    "bannerSentences": 1,
+    "snapshot": true,
+    "gtagInHtml": false,
+    "adScriptTag": false
+   },
+   "timeline": [
+    {
+     "ms": 7,
+     "snapshot": true,
+     "footers": 0,
+     "ownerDisclaimers": 1,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 0,
+     "h1": 1
+    },
+    {
+     "ms": 125,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 0,
+     "bannerRegions": 0,
+     "h1": 0
+    },
+    {
+     "ms": 139,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 0
+    },
+    {
+     "ms": 228,
+     "snapshot": false,
+     "footers": 1,
+     "ownerDisclaimers": 1,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 1
+    }
+   ],
+   "maxima": {
+    "footers": 1,
+    "ownerDisclaimers": 1,
+    "bannerSentences": 1,
+    "bannerRegions": 1,
+    "snapshotAndFooterTogether": false,
+    "snapshotAndRegionTogether": false
+   },
+   "beforeChoice": {
+    "state": {
+     "title": "World Leaderboard: Total Points | DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 1,
+     "bannerInsideDialog": false,
+     "bannerText": "Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. Learn more Essential only Accept",
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 0,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": null,
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "database": 5
+    }
+   },
+   "afterAccept": {
+    "state": {
+     "title": "World Leaderboard: Total Points | DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "analytics": 1
+    }
+   },
+   "reloadAccepted": {
+    "state": {
+     "title": "World Leaderboard: Total Points | DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "analytics": 1,
+     "database": 5
+    }
+   },
+   "pageErrors": []
+  },
+  "/this-page-does-not-exist": {
+   "route": "/this-page-does-not-exist",
+   "raw": {
+    "footerTags": 0,
+    "ownerDisclaimers": 0,
+    "bannerSentences": 0,
+    "snapshot": false,
+    "gtagInHtml": false,
+    "adScriptTag": false
+   },
+   "timeline": [
+    {
+     "ms": 14,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 0,
+     "bannerRegions": 0,
+     "h1": 1
+    },
+    {
+     "ms": 140,
+     "snapshot": false,
+     "footers": 1,
+     "ownerDisclaimers": 1,
+     "fanProject": 1,
+     "bannerSentences": 0,
+     "bannerRegions": 0,
+     "h1": 1
+    },
+    {
+     "ms": 152,
+     "snapshot": false,
+     "footers": 1,
+     "ownerDisclaimers": 1,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 1
+    }
+   ],
+   "maxima": {
+    "footers": 1,
+    "ownerDisclaimers": 1,
+    "bannerSentences": 1,
+    "bannerRegions": 1,
+    "snapshotAndFooterTogether": false,
+    "snapshotAndRegionTogether": false
+   },
+   "beforeChoice": {
+    "state": {
+     "title": "Page Not Found | DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 1,
+     "bannerInsideDialog": false,
+     "bannerText": "Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. Learn more Essential only Accept",
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 0,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": "noindex",
+     "storedConsent": null,
+     "gameCountPhrases": [
+      "all 130+ games"
+     ]
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "database": 1
+    }
+   },
+   "afterAccept": {
+    "state": {
+     "title": "Page Not Found | DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": "noindex",
+     "storedConsent": "accepted",
+     "gameCountPhrases": [
+      "all 130+ games"
+     ]
+    },
+    "requests": {
+     "analytics": 1
+    }
+   },
+   "reloadAccepted": {
+    "state": {
+     "title": "Page Not Found | DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": "noindex",
+     "storedConsent": "accepted",
+     "gameCountPhrases": [
+      "all 130+ games"
+     ]
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "analytics": 1,
+     "database": 1
+    }
+   },
+   "pageErrors": []
+  },
+  "/club-manager": {
+   "route": "/club-manager",
+   "raw": {
+    "footerTags": 0,
+    "ownerDisclaimers": 1,
+    "bannerSentences": 1,
+    "snapshot": true,
+    "gtagInHtml": false,
+    "adScriptTag": false
+   },
+   "timeline": [
+    {
+     "ms": 9,
+     "snapshot": true,
+     "footers": 0,
+     "ownerDisclaimers": 1,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 0,
+     "h1": 1
+    },
+    {
+     "ms": 96,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 0,
+     "bannerRegions": 0,
+     "h1": 0
+    },
+    {
+     "ms": 104,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 0
+    },
+    {
+     "ms": 475,
+     "snapshot": false,
+     "footers": 1,
+     "ownerDisclaimers": 1,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 1
+    }
+   ],
+   "maxima": {
+    "footers": 1,
+    "ownerDisclaimers": 1,
+    "bannerSentences": 1,
+    "bannerRegions": 1,
+    "snapshotAndFooterTogether": false,
+    "snapshotAndRegionTogether": false
+   },
+   "beforeChoice": {
+    "state": {
+     "title": "Club Manager: Free Football Management Game | DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 1,
+     "bannerInsideDialog": false,
+     "bannerText": "Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. Learn more Essential only Accept",
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 0,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": null,
+     "gameCountPhrases": [
+      "26 games"
+     ]
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "database": 1
+    }
+   },
+   "afterAccept": {
+    "state": {
+     "title": "Club Manager: Free Football Management Game | DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 1,
+     "adSlots": 1,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": [
+      "26 games"
+     ]
+    },
+    "requests": {
+     "analytics": 1,
+     "ads": 1
+    }
+   },
+   "reloadAccepted": {
+    "state": {
+     "title": "Club Manager: Free Football Management Game | DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 1,
+     "adSlots": 1,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": [
+      "26 games"
+     ]
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "analytics": 1,
+     "database": 1,
+     "ads": 1
+    }
+   },
+   "pageErrors": []
+  },
+  "/college-grid": {
+   "route": "/college-grid",
+   "raw": {
+    "footerTags": 0,
+    "ownerDisclaimers": 1,
+    "bannerSentences": 1,
+    "snapshot": true,
+    "gtagInHtml": false,
+    "adScriptTag": false
+   },
+   "timeline": [
+    {
+     "ms": 6,
+     "snapshot": true,
+     "footers": 0,
+     "ownerDisclaimers": 1,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 0,
+     "h1": 1
+    },
+    {
+     "ms": 119,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 0,
+     "bannerRegions": 0,
+     "h1": 0
+    },
+    {
+     "ms": 132,
+     "snapshot": false,
+     "footers": 0,
+     "ownerDisclaimers": 0,
+     "fanProject": 0,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 0
+    },
+    {
+     "ms": 460,
+     "snapshot": false,
+     "footers": 1,
+     "ownerDisclaimers": 1,
+     "fanProject": 1,
+     "bannerSentences": 1,
+     "bannerRegions": 1,
+     "h1": 1
+    }
+   ],
+   "maxima": {
+    "footers": 1,
+    "ownerDisclaimers": 1,
+    "bannerSentences": 1,
+    "bannerRegions": 1,
+    "snapshotAndFooterTogether": false,
+    "snapshotAndRegionTogether": false
+   },
+   "beforeChoice": {
+    "state": {
+     "title": "College Grid: Daily College Football Trivia | DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 1,
+     "bannerInsideDialog": false,
+     "bannerText": "Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. Learn more Essential only Accept",
+     "otherCookieWords": 0,
+     "openDialogs": 1,
+     "h1": 1,
+     "gtagScript": 0,
+     "adScript": 0,
+     "adSlots": 0,
+     "robots": null,
+     "storedConsent": null,
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "database": 4
+    }
+   },
+   "afterAccept": {
+    "state": {
+     "title": "College Grid: Daily College Football Trivia | DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 1,
+     "adSlots": 1,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "analytics": 1,
+     "ads": 1
+    }
+   },
+   "reloadAccepted": {
+    "state": {
+     "title": "College Grid: Daily College Football Trivia | DoUKnowBall",
+     "footers": 1,
+     "ownerDisclaimersVisible": 1,
+     "fanProjectVisible": 1,
+     "notAffiliatedVisible": 1,
+     "copyrightLines": 1,
+     "bannerRegions": 0,
+     "bannerInsideDialog": null,
+     "bannerText": null,
+     "otherCookieWords": 0,
+     "openDialogs": 0,
+     "h1": 1,
+     "gtagScript": 1,
+     "adScript": 1,
+     "adSlots": 1,
+     "robots": null,
+     "storedConsent": "accepted",
+     "gameCountPhrases": []
+    },
+    "requests": {
+     "other:fonts.googleapis.com": 1,
+     "analytics": 1,
+     "database": 4,
+     "ads": 1
+    }
+   },
+   "pageErrors": []
+  }
+ }
+}

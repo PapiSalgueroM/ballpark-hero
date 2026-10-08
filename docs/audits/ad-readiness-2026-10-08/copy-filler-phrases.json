@@ -1,0 +1,22 @@
+{
+  "about": "Regular expressions (case insensitive) for the filler the owner's brief bans in Phase 1, plus near relations of the same kind. Read by copy-measure.mjs. The first three are the brief's own examples, word for word.",
+  "phrases": {
+    "test your knowledge (brief)": "test(s|ing)? your (\\w+ )?knowledge",
+    "fun for all fans (brief)": "fun for all( \\w+)? fans",
+    "whether you're a casual fan or a die-hard (brief)": "whether you(['’]re| are) a casual",
+    "casual fan": "casual fans?",
+    "die hard / diehard": "die[- ]?hards?",
+    "whether you are / whether you're": "whether you(['’]re| are)\\b",
+    "put your knowledge to the test": "(put|puts) your (\\w+ )?knowledge to the test",
+    "think you know": "think you know",
+    "how well do you know": "how well do you (really )?know",
+    "fans of all ages / all ages": "(fans of )?all ages",
+    "true fan / real fan": "\\b(true|real) fans?\\b",
+    "ultimate test / ultimate challenge": "ultimate (test|challenge|quiz|trivia)",
+    "challenge yourself": "challenge yourself",
+    "hours of fun": "hours of (fun|entertainment)",
+    "perfect for": "perfect for (fans|anyone|casual|all)",
+    "look no further": "look no further",
+    "sports knowledge": "sports knowledge"
+  }
+}

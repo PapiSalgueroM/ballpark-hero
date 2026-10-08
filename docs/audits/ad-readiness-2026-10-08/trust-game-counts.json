@@ -1,0 +1,1332 @@
+{
+ "generated": "2026-10-08",
+ "savedPagesScanned": 192,
+ "source": [
+  {
+   "file": "src/components/game/GameNav.tsx",
+   "line": 133,
+   "phrase": "113 games",
+   "text": "seeds across all 113 games: with the date in it this block leaves 27"
+  },
+  {
+   "file": "src/data/gameContent/baseball.ts",
+   "line": 443,
+   "phrase": "000 games",
+   "text": "\"Then Cleveland meets 300 home runs. Jim Thome, lock. The last cell, Twins plus 2,000 games played, eats two guesses before Harmon Killebrew completes the nine.\","
+  },
+  {
+   "file": "src/data/gameContent/basketball.ts",
+   "line": 1957,
+   "phrase": "over a hundred of them",
+   "text": "\"Each season prints a stat line shaped by your rating, archetype, health and team quality. Each summer drops up to three decisions on your desk, one card at a time, drawn from over a hundred of them: contracts, surgeries, trade demands, tunnel fits, a rookie w"
+  },
+  {
+   "file": "src/data/gameContent/basketball.ts",
+   "line": 2059,
+   "phrase": "62 games",
+   "text": "\"All-NBA needs 62 games played, and MVP talk starts at a 92 rating.\","
+  },
+  {
+   "file": "src/data/gameContent/college.ts",
+   "line": 7,
+   "phrase": "120 games",
+   "text": "\"The College Basketball Grid is a daily 3x3 puzzle about who suited up where. Rows are programs like Kentucky, Kansas or Indiana. Columns are career achievements: 1,500 career points, 700 rebounds, 350 assists, 120 games, a position, or an era. Each of the nin"
+  },
+  {
+   "file": "src/data/gameContent/football.ts",
+   "line": 313,
+   "phrase": "over a hundred of them",
+   "text": "\"Seasons produce realistic stat lines from your rating, health, and team. Between them come up to three crossroads, one at a time, drawn from over a hundred of them: contracts, trade requests, surgeries, rookie hazing, a mural in your name, and a podcast invit"
+  },
+  {
+   "file": "src/data/homeCopy.ts",
+   "line": 80,
+   "phrase": "120+ free sports games",
+   "text": "'120+ free sports games in the browser: sports trivia, daily quizzes, grid puzzles and career sims. Every game plays without an account, nothing to download or install. New games and content ship almost every week, and the daily quizzes and puzzles reset for e"
+  },
+  {
+   "file": "src/data/seoMeta.ts",
+   "line": 6,
+   "phrase": "127 titles",
+   "text": "* sits in the entry chunk every page loads, and these 127 titles and"
+  },
+  {
+   "file": "src/hooks/useGameNavbarStats.ts",
+   "line": 18,
+   "phrase": "70 games",
+   "text": "* It still says zero points and zero out of 70 games played. And don't say my"
+  },
+  {
+   "file": "src/lib/achievements.ts",
+   "line": 237,
+   "phrase": "A hundred games",
+   "text": "rung({ id: 'plays-100', title: 'A hundred games', description: 'Finish 100 games.', emoji: '💎', rarity: 'legendary', hidden: false },"
+  },
+  {
+   "file": "src/lib/badges.ts",
+   "line": 51,
+   "phrase": "100 games",
+   "text": "{ id: 'games-100', emoji: '🏆', name: 'Century Club', desc: '100 games played' },"
+  },
+  {
+   "file": "src/lib/badges.ts",
+   "line": 59,
+   "phrase": "250 games",
+   "text": "{ id: 'games-250', emoji: '💎', name: 'Superfan', desc: '250 games played' },"
+  },
+  {
+   "file": "src/lib/careerBadges.ts",
+   "line": 370,
+   "phrase": "A hundred games",
+   "text": "{ id: 'comeback', emoji: '🩹', label: 'Came back', blurb: 'A hundred games after the injury that was meant to finish you.', test: f => f.seriousInjuries >= 1 && f.appsAfterFirstSerious >= 100 },"
+  },
+  {
+   "file": "src/lib/cbbGrid.ts",
+   "line": 17,
+   "phrase": "120+ games",
+   "text": "* school and 120+ games runs 53 to 83. The board was designed around what the"
+  },
+  {
+   "file": "src/lib/cbbGrid.ts",
+   "line": 95,
+   "phrase": "120+ Games",
+   "text": "{ kind: 'achievement', id: 'gp120', label: '120+ Games Played' },"
+  },
+  {
+   "file": "src/lib/cfbDynasty.ts",
+   "line": 313,
+   "phrase": "000 games",
+   "text": "* lifted three clear), which simCfbStaff caught in 17 of 42,000 games."
+  },
+  {
+   "file": "src/lib/foSchedule.ts",
+   "line": 9,
+   "phrase": "101 games",
+   "text": "* 58 to 101 games a club against the 80 the board promises, MLB 136 to 204"
+  },
+  {
+   "file": "src/lib/gmCalendar.ts",
+   "line": 185,
+   "phrase": "84 games",
+   "text": "regularSources: [`${NHLCOM}: the season gets off to a start on Sept. 29, Carolina hosting Florida`, `${WIKI}: 2026-27 NHL season, began September 29, 2026 and will end on April 10, 2027 (84 games now)`, `${ESPN}: Florida at Carolina on 29 September, the season"
+  },
+  {
+   "file": "src/lib/mlbCareerLifeA.ts",
+   "line": 718,
+   "phrase": "60 more games",
+   "text": "if (r() < 0.4) { rate(cc, 1); hp(cc, -8); return `You gutted 60 more games on a shoulder nobody knew about. Fanbase +6, rating +1 to ${cc.ovr}, health -8.`; }"
+  },
+  {
+   "file": "src/lib/mlbGrid.ts",
+   "line": 92,
+   "phrase": "000+ Games",
+   "text": "{ kind: 'achievement', id: 'g2k', label: '2,000+ Games Played' },"
+  },
+  {
+   "file": "src/lib/nhlCareerWaivers.ts",
+   "line": 16,
+   "phrase": "160 games",
+   "text": "thehockeywriters.com/nhl-waiver-rules (160 games or five seasons at 18)"
+  },
+  {
+   "file": "src/lib/nhlFrontOffice.ts",
+   "line": 21,
+   "phrase": "80 games",
+   "text": "* Season model: 20 rounds of 4 games (80 games a club, booked by foSchedule since Round 851) with real NHL points"
+  },
+  {
+   "file": "src/lib/pageSchema.ts",
+   "line": 155,
+   "phrase": "all 126 of them",
+   "text": "* which is how all 126 of them end up carrying it."
+  },
+  {
+   "file": "src/lib/perfectSeasonThemes.ts",
+   "line": 58,
+   "phrase": "100+ games",
+   "text": "// Wheel index is every team season 1901+ with 100+ games played."
+  },
+  {
+   "file": "src/lib/playerStockMarket.ts",
+   "line": 145,
+   "phrase": "dozens of daily games",
+   "text": "dozens of daily games seed off it through generatorFrom, and reshuffling"
+  },
+  {
+   "file": "src/lib/siteSearch.ts",
+   "line": 318,
+   "phrase": "123 games",
+   "text": "0 times for 123 games. W.labelPrefix still does real work in the whole"
+  },
+  {
+   "file": "src/lib/siteSearch.ts",
+   "line": 377,
+   "phrase": "123 games",
+   "text": "* \"サッカー\" into the home page box got all 123 games rendered as though all"
+  },
+  {
+   "file": "src/lib/siteSearch.ts",
+   "line": 379,
+   "phrase": "123 games",
+   "text": "* read \"123 games, sport by sport\" with their own text visible in the box. The"
+  },
+  {
+   "file": "src/lib/sportHub.ts",
+   "line": 4,
+   "phrase": "113 games",
+   "text": "* WHY. The site has 113 games and, until this round, exactly one page that"
+  },
+  {
+   "file": "src/lib/sportHub.ts",
+   "line": 15,
+   "phrase": "113 games",
+   "text": "* same machinery. That covers 81 of the 113 games. The small categories"
+  },
+  {
+   "file": "src/pages/About.tsx",
+   "line": 10,
+   "phrase": "100 free sports trivia games",
+   "text": "description=\"The story behind DoUKnowBall: over 100 free sports trivia games, daily puzzles, and deep career sims built by one sports fan who wanted trivia that actually goes deep.\""
+  },
+  {
+   "file": "src/pages/About.tsx",
+   "line": 26,
+   "phrase": "100 games",
+   "text": "DoUKnowBall is a free sports trivia playground. Over 100 games covering soccer, pro football, basketball, baseball, hockey, college sports, Formula 1, tennis, golf, NASCAR, and combat sports. Some are quick daily puzzles you can knock out on the bus. Others ar"
+  },
+  {
+   "file": "src/pages/CbbGrid.tsx",
+   "line": 417,
+   "phrase": "120+ games",
+   "text": "'Rows are schools a player suited up for. Columns are career achievements like 1,500+ points or 120+ games.',"
+  },
+  {
+   "file": "src/pages/Footle.tsx",
+   "line": 484,
+   "phrase": "100+ free sports games",
+   "text": "description=\"Guess the mystery soccer player in 8 tries. Each guess reveals clues about the player's club, league, nationality, position, and age. One of 100+ free sports games on DoUKnowBall.\""
+  },
+  {
+   "file": "src/pages/Index.tsx",
+   "line": 222,
+   "phrase": "120+ free sports games",
+   "text": "description=\"120+ free sports games, from a Soccer Career sim and Club Manager to daily trivia and quizzes for the NFL, NBA, MLB, NHL, F1, UFC and more. No login needed.\""
+  },
+  {
+   "file": "src/pages/MlbGrid.tsx",
+   "line": 435,
+   "phrase": "000 games",
+   "text": "description=\"A 3x3 grid puzzle where each cell needs an MLB legend whose career satisfies both the row and column. Franchises count across relocations, and milestones include 2,000 hits, 300 home runs and 2,000 games.\""
+  },
+  {
+   "file": "src/pages/Search.tsx",
+   "line": 13,
+   "phrase": "121 games",
+   "text": "* WHY. There are 121 games and three ways to reach one: the home grid, a sport"
+  },
+  {
+   "file": "src/pages/WhatsNew.tsx",
+   "line": 61,
+   "phrase": "More than 90 of them",
+   "text": "<li><strong className=\"text-foreground\">Missing XI: all 207 lineups checked match by match, and a lot of them fixed.</strong> Every lineup was read against the official match data and an independent report. More than 90 of them had someone in the eleven who ne"
+  },
+  {
+   "file": "src/pages/WhatsNew.tsx",
+   "line": 205,
+   "phrase": "all 126 of them",
+   "text": "<li><strong className=\"text-foreground\">Every game guide now has proper sections.</strong> The guide at the bottom of every game page, all 126 of them, is now split into sections and subsections with headings that say what each part is about: how that game pla"
+  },
+  {
+   "file": "src/pages/WhatsNew.tsx",
+   "line": 224,
+   "phrase": "100+ free games",
+   "text": "<li><strong className=\"text-foreground\">Two games retired, and the front door got sharper.</strong> Overrated or Underrated and Tier List are gone, straight from the owner's full site review: two buttons is not a game, and a ranking screen you play once is not"
+  },
+  {
+   "file": "src/pages/WhatsNew.tsx",
+   "line": 238,
+   "phrase": "all 120 of them",
+   "text": "<li><strong className=\"text-foreground\">Signed in players get full credit everywhere now.</strong> Yesterday every game started counting; today the plumbing behind the counting became one pipe. There used to be three separate score pipelines, and which ones a "
+  },
+  {
+   "file": "src/pages/WhatsNew.tsx",
+   "line": 239,
+   "phrase": "127 games",
+   "text": "<li><strong className=\"text-foreground\">Every game counts now, and the leaderboard stops being one name.</strong> An audit of all 127 games found fourteen that never recorded a finished play: the World Cup bracket, both bingo boards, the transfer streak game, "
+  },
+  {
+   "file": "src/pages/WhatsNew.tsx",
+   "line": 239,
+   "phrase": "all 127 games",
+   "text": "<li><strong className=\"text-foreground\">Every game counts now, and the leaderboard stops being one name.</strong> An audit of all 127 games found fourteen that never recorded a finished play: the World Cup bracket, both bingo boards, the transfer streak game, "
+  },
+  {
+   "file": "src/pages/WhatsNew.tsx",
+   "line": 265,
+   "phrase": "113 games",
+   "text": "<li><strong className=\"text-foreground\">Every big sport has its own page now.</strong> There are 113 games here and, until this week, exactly one page that gathered any of them by sport, and that one had been shipping empty. Everything else lived on the home p"
+  },
+  {
+   "file": "src/pages/WhatsNew.tsx",
+   "line": 265,
+   "phrase": "113 games",
+   "text": "<li><strong className=\"text-foreground\">Every big sport has its own page now.</strong> There are 113 games here and, until this week, exactly one page that gathered any of them by sport, and that one had been shipping empty. Everything else lived on the home p"
+  },
+  {
+   "file": "src/pages/WhatsNew.tsx",
+   "line": 286,
+   "phrase": "all 87 of them",
+   "text": "<li><strong className=\"text-foreground\">Every NCAA title game, scored.</strong> The Record Books men's basketball table now shows who lost every championship game and the final score, all 87 of them back to Oregon over Ohio State in 1939: the triple overtime 5"
+  },
+  {
+   "file": "src/pages/WhatsNew.tsx",
+   "line": 348,
+   "phrase": "65 games",
+   "text": "<li><strong className=\"text-foreground\">All five career games are now done.</strong> NHL My Career got the last mega round, about 200 additions: five positions (C, LW, RW, D, G) with 17 archetypes, 90 new offseason crossroads, 49 things to buy, and your face o"
+  },
+  {
+   "file": "src/pages/WhatsNew.tsx",
+   "line": 390,
+   "phrase": "100 games",
+   "text": "<li>DoUKnowBall launched with the first wave of daily soccer games. It has grown to eleven sports and over 100 games since, and it is still growing.</li>"
+  },
+  {
+   "file": "src/pages/WhatsNew.tsx",
+   "line": 390,
+   "phrase": "over 100 games",
+   "text": "<li>DoUKnowBall launched with the first wave of daily soccer games. It has grown to eleven sports and over 100 games since, and it is still growing.</li>"
+  }
+ ],
+ "savedPageSummary": {
+  "meta | 120+ free sports games": {
+   "pages": 1,
+   "sample": [
+    "/"
+   ]
+  },
+  "body | 120+ free sports games": {
+   "pages": 1,
+   "sample": [
+    "/"
+   ]
+  },
+  "meta | 100 free sports trivia games": {
+   "pages": 1,
+   "sample": [
+    "/about"
+   ]
+  },
+  "json-ld | 100 free sports trivia games": {
+   "pages": 1,
+   "sample": [
+    "/about"
+   ]
+  },
+  "json-ld | over 100 free sports trivia games": {
+   "pages": 1,
+   "sample": [
+    "/about"
+   ]
+  },
+  "body | 100 games": {
+   "pages": 2,
+   "sample": [
+    "/about",
+    "/whats-new"
+   ]
+  },
+  "body | over 100 games": {
+   "pages": 2,
+   "sample": [
+    "/about",
+    "/whats-new"
+   ]
+  },
+  "body | 120+ games": {
+   "pages": 1,
+   "sample": [
+    "/cbb-grid/archive"
+   ]
+  },
+  "body | 120 games": {
+   "pages": 1,
+   "sample": [
+    "/cbb-grid"
+   ]
+  },
+  "body | 100+ free sports games": {
+   "pages": 1,
+   "sample": [
+    "/footle"
+   ]
+  },
+  "body | 000+ games": {
+   "pages": 1,
+   "sample": [
+    "/mlb-grid/archive"
+   ]
+  },
+  "body | 000 games": {
+   "pages": 1,
+   "sample": [
+    "/mlb-grid"
+   ]
+  },
+  "body | 62 games": {
+   "pages": 1,
+   "sample": [
+    "/nba-my-career"
+   ]
+  },
+  "body | over a hundred of them": {
+   "pages": 2,
+   "sample": [
+    "/nba-my-career",
+    "/nfl-my-career"
+   ]
+  },
+  "body | 133 games": {
+   "pages": 1,
+   "sample": [
+    "/search"
+   ]
+  },
+  "body | all 133 of them": {
+   "pages": 1,
+   "sample": [
+    "/search"
+   ]
+  },
+  "body | 100+ free games": {
+   "pages": 1,
+   "sample": [
+    "/whats-new"
+   ]
+  },
+  "body | 127 games": {
+   "pages": 1,
+   "sample": [
+    "/whats-new"
+   ]
+  },
+  "body | 113 games": {
+   "pages": 1,
+   "sample": [
+    "/whats-new"
+   ]
+  },
+  "body | 65 games": {
+   "pages": 1,
+   "sample": [
+    "/whats-new"
+   ]
+  },
+  "body | more than 90 of them": {
+   "pages": 1,
+   "sample": [
+    "/whats-new"
+   ]
+  },
+  "body | all 126 of them": {
+   "pages": 1,
+   "sample": [
+    "/whats-new"
+   ]
+  },
+  "body | all 120 of them": {
+   "pages": 1,
+   "sample": [
+    "/whats-new"
+   ]
+  },
+  "body | all 127 games": {
+   "pages": 1,
+   "sample": [
+    "/whats-new"
+   ]
+  },
+  "body | all 87 of them": {
+   "pages": 1,
+   "sample": [
+    "/whats-new"
+   ]
+  }
+ },
+ "savedPages": [
+  {
+   "route": "/",
+   "where": [
+    {
+     "where": "meta description",
+     "phrase": "120+ free sports games",
+     "context": "120+ free sports games, from a Soccer Career sim and Club Manager to daily trivia and quizzes for the NFL, NBA,"
+    },
+    {
+     "where": "meta og:description",
+     "phrase": "120+ free sports games",
+     "context": "120+ free sports games, from a Soccer Career sim and Club Manager to daily trivia and quizzes for the NFL, NBA,"
+    },
+    {
+     "where": "meta twitter:description",
+     "phrase": "120+ free sports games",
+     "context": "120+ free sports games, from a Soccer Career sim and Club Manager to daily trivia and quizzes for the NFL, NBA,"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ free sports games",
+     "context": "DoUKnowBall 120+ free sports games in the browser: sports trivia, daily quizzes, grid puzzles and career sims. Every game pl"
+    }
+   ]
+  },
+  {
+   "route": "/about",
+   "where": [
+    {
+     "where": "meta description",
+     "phrase": "100 free sports trivia games",
+     "context": "The story behind DoUKnowBall: over 100 free sports trivia games, daily puzzles, and deep career sims built by one sports fan who wanted trivia that actua"
+    },
+    {
+     "where": "meta og:description",
+     "phrase": "100 free sports trivia games",
+     "context": "The story behind DoUKnowBall: over 100 free sports trivia games, daily puzzles, and deep career sims built by one sports fan who wanted trivia that actua"
+    },
+    {
+     "where": "meta twitter:description",
+     "phrase": "100 free sports trivia games",
+     "context": "The story behind DoUKnowBall: over 100 free sports trivia games, daily puzzles, and deep career sims built by one sports fan who wanted trivia that actua"
+    },
+    {
+     "where": "json-ld",
+     "phrase": "100 free sports trivia games",
+     "context": "wBall | Free Daily Sports Trivia Games\",\"description\":\"The story behind DoUKnowBall: over 100 free sports trivia games, daily puzzles, and deep career sims built by one sports fan who wanted trivia that actua"
+    },
+    {
+     "where": "json-ld",
+     "phrase": "over 100 free sports trivia games",
+     "context": "oUKnowBall | Free Daily Sports Trivia Games\",\"description\":\"The story behind DoUKnowBall: over 100 free sports trivia games, daily puzzles, and deep career sims built by one sports fan who wanted trivia that actua"
+    },
+    {
+     "where": "body",
+     "phrase": "100 games",
+     "context": "About DoUKnowBall What this site is DoUKnowBall is a free sports trivia playground. Over 100 games covering soccer, pro football, basketball, baseball, hockey, college sports, Formula 1, t"
+    },
+    {
+     "where": "body",
+     "phrase": "Over 100 games",
+     "context": "games About DoUKnowBall What this site is DoUKnowBall is a free sports trivia playground. Over 100 games covering soccer, pro football, basketball, baseball, hockey, college sports, Formula 1, t"
+    }
+   ]
+  },
+  {
+   "route": "/cbb-grid/archive",
+   "where": [
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "isiana Tech, Southern Illinois, Iowa State. Columns: 350+ Career Assists, Played Forward, 120+ Games Played. Crossing Valid players Rarest answers Louisiana Tech and 350+ Career Assists 11 S"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "very Thomas II, Willie Bland, Larry Matthews, Duane Taylor, Ira Miller Louisiana Tech and 120+ Games Played 31 Anthony Duruji, Brett Guillory, Oliver Powell, Anthony Dade, Dayon Griffin, P.J"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "J.D. Muila, Rashad Tucker, Billy Ross, Doug Novsek, Jaratio Tucker Southern Illinois and 120+ Games Played 51 Joshua Cross, Shane Hawkins, Anthony Booker, Brad Korn, Dantiel Daniels, Bryan"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "rgil, Dominykas Pleta, Royce White, Kayden Fish, Tom Schafer, Cameron Lard Iowa State and 120+ Games Played 53 Anthony Booker, Cory Johnson, Wes Eikmeier, Jake Sullivan, Rahshon Clark, Justu"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "r 28, 2026 Rows: Virginia Tech, Georgetown, Saint Joseph's. Columns: 350+ Career Assists, 120+ Games Played, Played Guard. Crossing Valid players Rarest answers Virginia Tech and 350+ Career"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "mon Gordon, Wabissa Bede, Zabian Dowdell, Justin Robinson, Devin Wilson Virginia Tech and 120+ Games Played 49 Ginika Ojiako, Manny Atkins, Rolan Roberts, Zabian Dowdell, Ace Custis, Jarell"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "alen Harris, Chris Wright, Bobby Winston, Jeremiah Williams, David Edwards Georgetown and 120+ Games Played 64 Alonzo Mourning, Drew Hall, Duane Spencer, Henry Sims, Kevin Millen, Ray Reed,"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "ry, Tasheed Carr, Rashid Bey, Jameer Nelson, Jared Bynum, Jawan Carter Saint Joseph's and 120+ Games Played 32 Bill Phillips, Bryant Irwin, Chris Prescott, Dmitri Domani, Rashid Bey, Damian"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "io State, Saint Joseph's, Texas Tech. Columns: 350+ Career Assists, 700+ Career Rebounds, 120+ Games Played. Crossing Valid players Rarest answers Ohio State and 350+ Career Assists 21 Damon"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "k, Perry Carter, Ken Johnson, Jae'Sean Tate, Justice Sueing, Terence Dials Ohio State and 120+ Games Played 58 Joey Brunk, Nick Dials, Puff Johnson, Tony Stockman, Brent Darby, Jay Burson, J"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "rnard Blunt, Bill Phillips, Damian Reid, Ahmad Nivins, Halil Kanacevic Saint Joseph's and 120+ Games Played 32 Bill Phillips, Bryant Irwin, Chris Prescott, Dmitri Domani, Rashid Bey, Damian"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "mons, Chris Clarke, Josh Mballa, Daniel Batcho, Jason Sasser, Dior Lowhorn Texas Tech and 120+ Games Played 53 Mikey Marshall, Andrei Savrasov, D'maurian Williams, De'Vion Harmon, Dior Lowho"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "asketball grid answers for September 22, 2026 Rows: Tulsa, Oklahoma, Utah State. Columns: 120+ Games Played, Played Forward, Played in the 1990s. Crossing Valid players Rarest answers Tulsa"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "yed, Played Forward, Played in the 1990s. Crossing Valid players Rarest answers Tulsa and 120+ Games Played 47 Justin Hurtt, Brett McDade, Junior Etou, J.R. Rollo, Lou Dawkins, Brandon Swann"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "s, Reggie Shields, Jodie Huffman, Mark Morse, Marcell Gordon, Ray Poindexter Oklahoma and 120+ Games Played 64 Jamuni McNeace, Ryan Wright, Andrew Fitzgerald, Miles Reynolds, Austin Reaves,"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "is, Roland Ware, Angelo Hamilton, Bobby Joe Evans, Eric Martin, Ken Conley Utah State and 120+ Games Played 37 Diogo Brito, Marco Anthony, Spencer Nelson, Justin Jones, Jalen Moore, Zee Hamo"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "tember 21, 2026 Rows: Boston College, Georgetown, Rutgers. Columns: 1,500+ Career Points, 120+ Games Played, 350+ Career Assists. Crossing Valid players Rarest answers Boston College and 1,5"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "Xavier Singletary, Dana Barros, Danya Abrams, Eli Carter, Scoonie Penn Boston College and 120+ Games Played 55 Dion Brown, Roger McFarlane, A.J. Turner, Kenny Walls, Matt Milon, Danya Abrams"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": ", Primo Spears, Jayden Epps, Alonzo Mourning, Mark Tillmon, Brandon Bowman Georgetown and 120+ Games Played 64 Alonzo Mourning, Drew Hall, Duane Spencer, Henry Sims, Kevin Millen, Ray Reed,"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "ter Kiss, Luis Flores, Ricky Shields, Ron Harper Jr., Todd Billet, Eli Carter Rutgers and 120+ Games Played 49 Craig Carter, Derrick Randall, Earl Johnson, Jaron Griffin, Dan Waterstradt, Eu"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": ", 2026 Rows: Tulsa, Memphis, Clemson. Columns: Played in the 1990s, 1,500+ Career Points, 120+ Games Played. Crossing Valid players Rarest answers Tulsa and Played in the 1990s 49 Dominick B"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "Collier, Justin Hurtt, Shea Seals, James Woodard, Kevin Johnson, Jerome Jordan Tulsa and 120+ Games Played 47 Justin Hurtt, Brett McDade, Junior Etou, J.R. Rollo, Lou Dawkins, Brandon Swann"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "uglas-Roberts, Ricky Tarrant, Cedric Henderson, Dug McDaniel, Jeremiah Martin Memphis and 120+ Games Played 48 Wesley Witherspoon, Charles Carmouche, Cedric Henderson, Chris Garner, Duane Er"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "reg Buckner, Elden Campbell, Terrell McIntyre, Jaron Blossomgame, K.C. Rivers Clemson and 120+ Games Played 66 PJ Hall, Shawan Robinson, Tony Stockman, Dale Davis, Aamir Simms, David Skara,"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "etball grid answers for September 18, 2026 Rows: Hofstra, Connecticut, Virginia. Columns: 120+ Games Played, Played Forward, 1,500+ Career Points. Crossing Valid players Rarest answers Hofst"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": ", Played Forward, 1,500+ Career Points. Crossing Valid players Rarest answers Hofstra and 120+ Games Played 45 Jaquan Carlos, Rokas Gustys, Jason Hernandez, Mike Moore, Norm Richardson, Anto"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "ore, Norm Richardson, Antoine Agudio, Loren Stokes, Justin Wright-Foreman Connecticut and 120+ Games Played 61 Antwoine Anderson, Donny Marshall, Shonn Miller, Souleymane Wane, Steven Enoch,"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "lton, Ben Gordon, Khalid El-Amin, Cliff Robinson, Kemba Walker, Jerome Dyson Virginia and 120+ Games Played 63 Donald Hand, J.R. Reynolds, Jeff Jones, Jontel Evans, Malachi Poindexter, Marco"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "tball grid answers for September 17, 2026 Rows: Saint Louis, Drexel, Cincinnati. Columns: 120+ Games Played, Started 2010 or Later, 350+ Career Assists. Crossing Valid players Rarest answers"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "2010 or Later, 350+ Career Assists. Crossing Valid players Rarest answers Saint Louis and 120+ Games Played 44 Dion Brown, Ash Yacoubou, Chris Braun, Mike Crawford, Miles Reynolds, Chris Slo"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "Newberry, Cian Medley, Jordan Goodwin, Yuri Collins, H Waldman, Jamall Walker Drexel and 120+ Games Played 23 Bashir Mason, Chaz Crawford, Malik Rose, Sammy Mojica, Kobe MaGee, Gerald Colds"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "eremiah King, Leland Redmond, Clarence Armstrong, Brian Holden, Jeff Myers Cincinnati and 120+ Games Played 64 Melvin Levett, Trevor Moore, Keith LeGree, Keith Williams, Tarrance Gibson, Gab"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "ptember 15, 2026 Rows: Kentucky, Mississippi State, Baylor. Columns: 350+ Career Assists, 120+ Games Played, 1,500+ Career Points. Crossing Valid players Rarest answers Kentucky and 350+ Car"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "Woods, Ed Davender, Sean Sutton, Ryan Harrow, Rodrick Rhodes, Cliff Hawkins Kentucky and 120+ Games Played 60 Bobby Perry, Jaxson Robinson, Sean Sutton, Daimion Collins, Dominique Hawkins,"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "r Peters, Jamont Gordon, I.J. Ready, Doug Hartsfield, Andrew Taylor Mississippi State and 120+ Games Played 46 Dee Bost, Marckell Patterson, Marcus Campbell, Alden Applewhite, Craig Sword, J"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "Akinjo, Nelson Haggerty, JJ White, L.J. Rose, Curtis Jerrells, John Lucas III Baylor and 120+ Games Played 34 Logan Kosmalski, Kevin Henry, Deuce Bello, MaCio Teague, Caden Powell, John Luc"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "ketball grid answers for September 10, 2026 Rows: Kentucky, Notre Dame, Rutgers. Columns: 120+ Games Played, 1,500+ Career Points, Played Forward. Crossing Valid players Rarest answers Kentu"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "1,500+ Career Points, Played Forward. Crossing Valid players Rarest answers Kentucky and 120+ Games Played 60 Bobby Perry, Jaxson Robinson, Sean Sutton, Daimion Collins, Dominique Hawkins,"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "lin Sims, Andrija Jelavic, Chris Livingston, Kenny Walker, Skal Labissiere Notre Dame and 120+ Games Played 45 Austin Torres, Colin Falls, Daimon Sweet, Jimmy Dillon, Chris Quinn, Jack Coole"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "an, Brady Koehler, Cam Biedscheid, Dom Campbell, Eric Katenda, Garrett Sundra Rutgers and 120+ Games Played 49 Craig Carter, Derrick Randall, Earl Johnson, Jaron Griffin, Dan Waterstradt, Eu"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "isiana State, Florida, Massachusetts. Columns: Played in the 1990s, 700+ Career Rebounds, 120+ Games Played. Crossing Valid players Rarest answers Louisiana State and Played in the 1990s 56"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "anton, Misha Mutavdzic, Duane Spencer, Jeremy Combs, Vernel Singleton Louisiana State and 120+ Games Played 44 Darnell Lazare, Duane Spencer, Jeremy Combs, Jermaine Williams, Daimion Collins"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "Dwayne Schintzius, Rueben Chinyelu, Micah Handlogten, Dwayne Davis, David Lee Florida and 120+ Games Played 64 Anthony Duruji, Sam Alexis, Brian Hogan, Colin Castleton, Craig Brown, DeVon Wa"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "Harper Williams, Kitwana Rhymer, Tyrone Weeks, Isaac Kante, Sean Carter Massachusetts and 120+ Games Played 54 Derek Kellogg, Leonardo Bettiol, Mike Babul, Sean East II, Seth Berger, Javorn"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "r 4, 2026 Rows: Iowa State, Siena, Illinois. Columns: 700+ Career Rebounds, Played Guard, 120+ Games Played. Crossing Valid players Rarest answers Iowa State and 700+ Career Rebounds 14 Crai"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "Mike Taylor, Tim Barnes, Jeff Hornacek, Talen Horton-Tucker, Anthony Davis Iowa State and 120+ Games Played 53 Anthony Booker, Cory Johnson, Wes Eikmeier, Jake Sullivan, Rahshon Clark, Justu"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "Mason Courtney, Gary Harris Jr., Jordan Kellier, Jonathan Breeden, Kyle Griffin Siena and 120+ Games Played 40 Jim Cantamessa, Mike Brown, Bruce Schroeder, Marquis Wright, Isaiah Stewart, Le"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "Keaton Wagler, Brandin Podziemski, Alex Legion, Arias Davis, Halim Abdullah Illinois and 120+ Games Played 66 Myke Henry, Victor Chukwudebe, Brian Randle, Bryant Notree, Calvin Brock, Jaylo"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "Basketball grid answers for September 2, 2026 Rows: Indiana, Ohio State, Texas. Columns: 120+ Games Played, Played Guard, 350+ Career Assists. Crossing Valid players Rarest answers Indiana"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "yed, Played Guard, 350+ Career Assists. Crossing Valid players Rarest answers Indiana and 120+ Games Played 66 Chris Lawson, Devonte Green, Joey Brunk, Marco Killingsworth, Andrae Patterson,"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "ght, Michael Lewis, A.J. Guyton, Chris Reynolds, Jamal Meeks, Damon Bailey Ohio State and 120+ Games Played 58 Joey Brunk, Nick Dials, Puff Johnson, Tony Stockman, Brent Darby, Jay Burson, J"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "m Jackson, JaQuan Lyle, Curtis Wilson, Evan Turner, Shaun Stonerook, Nick Dials Texas and 120+ Games Played 63 Jaylen Bond, Kris Clack, Ze'Rik Onyema, Elijah Mitrou-Long, Teyon McCoy, Brandy"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "Basketball grid answers for August 31, 2026 Rows: Syracuse, Baylor, Wake Forest. Columns: 120+ Games Played, Played Guard, Played in the 1990s. Crossing Valid players Rarest answers Syracuse"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "ed, Played Guard, Played in the 1990s. Crossing Valid players Rarest answers Syracuse and 120+ Games Played 55 James Thues, Jaquan Carlos, Michael Gbinije, Adrian Autry, Buddy Boeheim, Lawre"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "n Cipolla, Billy Celuck, Anthony Harris, Ethan Cole, Dave Siock, David Patrick Baylor and 120+ Games Played 34 Logan Kosmalski, Kevin Henry, Deuce Bello, MaCio Teague, Caden Powell, John Luc"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "s, Eric Dortch, Tevis Stukes, Herbert Baker, Rodney Smith, Donnell Hayden Wake Forest and 120+ Games Played 53 Aaron Rountree III, Davion Bradford, Ervin Murray, Ikenna Smart, Justin Gray, R"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "e Basketball grid answers for August 30, 2026 Rows: Rutgers, Georgia Tech, Rice. Columns: 120+ Games Played, Played in the 1990s, Started 2010 or Later. Crossing Valid players Rarest answers"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "ed in the 1990s, Started 2010 or Later. Crossing Valid players Rarest answers Rutgers and 120+ Games Played 49 Craig Carter, Derrick Randall, Earl Johnson, Jaron Griffin, Dan Waterstradt, Eu"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "Angelino Mark, Harun Zrno, Vincent Garrett, Antonio Chol, D'Von Campbell Georgia Tech and 120+ Games Played 47 Brandon Alston, Matt Geiger, Jason Floyd, Luke O'Brien, B.J. Elder, Ed Nelson,"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "ton, Tristan Maxwell, Jaeden Mustaf, Josh Okogie, Travis Jorgenson, Ryan Mutombo Rice and 120+ Games Played 42 Brock Gillespie, Jeremy Jones, Lawrence Ghoram, Patrick Britton, Mike Harris, M"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "ows: Virginia Tech, Texas A&M, Washington. Columns: Played Forward, 1,500+ Career Points, 120+ Games Played. Crossing Valid players Rarest answers Virginia Tech and Played Forward 66 Bobby B"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "mbo Coles, Rolan Roberts, Zabian Dowdell, Ace Custis, Landers Nolley II Virginia Tech and 120+ Games Played 49 Ginika Ojiako, Manny Atkins, Rolan Roberts, Zabian Dowdell, Ace Custis, Jarell"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "IV, Brooks Thompson, Jalen Jones, Zhuric Phelps, Joseph Jones, Rashaun Agee Texas A&M and 120+ Games Played 53 Andre Gordon, Jace Carter, Jaxson Robinson, Acie Law IV, Solomon Washington, Br"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "rsen, Todd MacCulloch, Adrian Oliver, Eldridge Recasner, Terrell Brown Jr. Washington and 120+ Games Played 46 Terrell Brown Jr., Luis Kortright, Rich Manning, Will Conroy, Desmond Simmons,"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "id answers for August 26, 2026 Rows: Rice, Xavier, Oregon. Columns: 1,500+ Career Points, 120+ Games Played, 700+ Career Rebounds. Crossing Valid players Rarest answers Rice and 1,500+ Caree"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "Andrews, Mike Harris, Morris Almond, Marcus Evans, Trae Broadnax, Egor Koulechov Rice and 120+ Games Played 42 Brock Gillespie, Jeremy Jones, Lawrence Ghoram, Patrick Britton, Mike Harris, M"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "Darnell Williams, Jamie Gladden, Lenny Brown, Gary Lumpkin, Lionel Chalmers Jr Xavier and 120+ Games Played 64 Andre Walker, Jamal Walker, Rashid Gaston, Isaiah Philmore, Dedrick Finn, Jamie"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "illiams, Aaron Brooks, Malik Hairston, Fred Jones, Luke Jackson, Tajuan Porter Oregon and 120+ Games Played 48 Chamberlain Oguchi, Lok Wur, Eugene Omoruyi, De'Vion Harmon, Amauri Hardy, Abu"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "6 Rows: New Mexico State, Rider, Gonzaga. Columns: Played Forward, Started 2010 or Later, 120+ Games Played. Crossing Valid players Rarest answers New Mexico State and Played Forward 78 Gilb"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "k, Christian Kabongo, Mohamed Thiam, Levar Williams, Shakiru Odunewu New Mexico State and 120+ Games Played 34 Billy Keys, C.J. Bobbitt, Ian Baker, Mikko Noopila, Tyrone Watson, Johnny Rober"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "n Lindsey, Devean Williams, Jaelen McGlone, Jeremiah Pope, Rodney Henderson Jr. Rider and 120+ Games Played 35 Harris Mansell, Jeff Jones, Stevie Jordan, Khalil Alford, Devine Eke, Jason Tho"
+    },
+    {
+     "where": "body",
+     "phrase": "120+ Games",
+     "context": "Mario Saint-Supery, Zach Collins, Mathis Monninghoff, Guy Edi, Filip Petrusev Gonzaga and 120+ Games Played 54 Jeremy Jones, Kyle Bankhead, Geno Crandall, Ryan Woolridge, Grant Gibbs, Manny"
+    }
+   ]
+  },
+  {
+   "route": "/cbb-grid",
+   "where": [
+    {
+     "where": "body",
+     "phrase": "120 games",
+     "context": "Indiana. Columns are career achievements: 1,500 career points, 700 rebounds, 350 assists, 120 games, a position, or an era. Each of the nine cells needs one player who satisfies both. It is"
+    }
+   ]
+  },
+  {
+   "route": "/footle",
+   "where": [
+    {
+     "where": "body",
+     "phrase": "100+ free sports games",
+     "context": "ess reveals clues about the player's club, league, nationality, position, and age. One of 100+ free sports games on DoUKnowBall. Footle gives you 8 guesses to name a mystery soccer player. Each guess is"
+    }
+   ]
+  },
+  {
+   "route": "/mlb-grid/archive",
+   "where": [
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "grid answers for September 29, 2026 Rows: Braves, Yankees, Tigers. Columns: Athletics, 2,000+ Games Played, Dodgers. Crossing Valid players Rarest answers Braves and Athletics 66 Joe Boever"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "Ron Mahay, Charlie Lau, Tom Zachary, Dick Burrus, Bartolo Colon, Jay Howell Braves and 2,000+ Games Played 42 Gary Matthews (1972-1987), Wally Joyner, Dusty Baker, George Sisler, A. J. Pier"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "il Trucks, Bump Hadley, Jimmy Walsh (1912-1917), Luis Vizcaino, Tom Zachary Yankees and 2,000+ Games Played 47 Roger Peckinpaugh, Aurelio Rodriguez, Tino Martinez, George Scott, Paul O'Neill"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "inigan, Joe Boever, Virgil Trucks, Paul Richards, Charlie Lau, Dick Kryhoski Tigers and 2,000+ Games Played 29 Heinie Manush, Dick Bartell, Aurelio Rodriguez, Willie Horton, Curtis Granderso"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "Metzler MLB grid answers for September 26, 2026 Rows: Braves, Giants, Tigers. Columns: 2,000+ Games Played, Pirates, Yankees. Crossing Valid players Rarest answers Braves and 2,000+ Games P"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "2,000+ Games Played, Pirates, Yankees. Crossing Valid players Rarest answers Braves and 2,000+ Games Played 42 Gary Matthews (1972-1987), Wally Joyner, Dusty Baker, George Sisler, A. J. Pier"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "ke Fischlin, Mark Wohlers, Luis Ayala, Pat Collins, Tom Zachary, Wes Ferrell Giants and 2,000+ Games Played 41 Ellis Burks, Dick Bartell, Jose Cardenal, Gary Matthews (1972-1987), Dusty Bake"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": ", Doyle Alexander, Felix Rodriguez, Kiddo Davis, Rick Reuschel, Mickey Witek Tigers and 2,000+ Games Played 29 Heinie Manush, Dick Bartell, Aurelio Rodriguez, Willie Horton, Curtis Granderso"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "B grid answers for September 20, 2026 Rows: Athletics, Reds, Orioles. Columns: Yankees, 2,000+ Games Played, Pirates. Crossing Valid players Rarest answers Athletics and Yankees 140 Gene Nel"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "Trucks, Bump Hadley, Jimmy Walsh (1912-1917), Luis Vizcaino, Tom Zachary Athletics and 2,000+ Games Played 44 Adam Dunn, Wally Moses, Sal Bando, Willie Horton, Dusty Baker, George Hendrick,"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "treet, Jesse Tannehill, Felix Heredia, Dale Murray, Bert Daniels, Mark Wohlers Reds and 2,000+ Games Played 36 Adam Dunn, Cesar Cedeno, Jim Edmonds, Jake Daubert, Jeff Conine, Scott Rolen, P"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": ", Bump Hadley, Luis Ayala, Rudy May, Mike Mussina, Pat Collins, Tom Zachary Orioles and 2,000+ Games Played 34 Bobby Grich, Heinie Manush, Mark Belanger, Aurelio Rodriguez, Jeff Conine, Boog"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "brera MLB grid answers for September 15, 2026 Rows: Cardinals, Braves, Tigers. Columns: 2,000+ Games Played, Red Sox, Phillies. Crossing Valid players Rarest answers Cardinals and 2,000+ Gam"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "0+ Games Played, Red Sox, Phillies. Crossing Valid players Rarest answers Cardinals and 2,000+ Games Played 42 Cesar Cedeno, Jim Edmonds, Jose Cardenal, Tino Martinez, Ken Boyer, Scott Rolen"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "ck Wise, Frank Linzy, Joe Boever, Dick Buckley, Harvey Haddix, Ryan Franklin Braves and 2,000+ Games Played 42 Gary Matthews (1972-1987), Wally Joyner, Dusty Baker, George Sisler, A. J. Pier"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "Simon, Rudy Seanez, Tom Zachary, Lena Blackburne, Doc Miller, Ernie Courtney Tigers and 2,000+ Games Played 29 Heinie Manush, Dick Bartell, Aurelio Rodriguez, Willie Horton, Curtis Granderso"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "tney MLB grid answers for September 14, 2026 Rows: Braves, Orioles, Cardinals. Columns: 2,000+ Games Played, Cleveland, Athletics. Crossing Valid players Rarest answers Braves and 2,000+ Gam"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "0+ Games Played, Cleveland, Athletics. Crossing Valid players Rarest answers Braves and 2,000+ Games Played 42 Gary Matthews (1972-1987), Wally Joyner, Dusty Baker, George Sisler, A. J. Pier"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "Ron Mahay, Charlie Lau, Tom Zachary, Dick Burrus, Bartolo Colon, Jay Howell Orioles and 2,000+ Games Played 34 Bobby Grich, Heinie Manush, Mark Belanger, Aurelio Rodriguez, Jeff Conine, Boog"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "lie Lau, Bump Hadley, Paul Lehner, Tom Zachary, Ray Coleman, Alex Metzler Cardinals and 2,000+ Games Played 42 Cesar Cedeno, Jim Edmonds, Jose Cardenal, Tino Martinez, Ken Boyer, Scott Rolen"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "e, Bullet Joe Bush, Elias Sosa MLB grid answers for September 10, 2026 Rows: White Sox, 2,000+ Games Played, Yankees. Columns: Phillies, Dodgers, Cleveland. Crossing Valid players Rarest ans"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "field, Dave Altizer, Gary Bell, Herbert Perry, Paul Lehner, Luis Vizcaino, Oris Hockett 2,000+ Games Played and Phillies 30 Cy Williams, Dick Bartell, Jose Cardenal, Jeff Conine, Gary Matthe"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "ardenal, Jeff Conine, Gary Matthews (1972-1987), Scott Rolen, Ed Konetchy, Sherry Magee 2,000+ Games Played and Dodgers 54 Cesar Cedeno, Heinie Manush, Jake Daubert, Mark Belanger, Ken Boyer"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "sh, Jake Daubert, Mark Belanger, Ken Boyer, Dusty Baker, Boog Powell, Curtis Granderson 2,000+ Games Played and Cleveland 35 Ellis Burks, Roger Peckinpaugh, Jose Cardenal, Willie Horton, Boo"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "t, Jack Russell, Kosuke Fukudome MLB grid answers for September 8, 2026 Rows: Phillies, 2,000+ Games Played, Pirates. Columns: Yankees, Red Sox, Athletics. Crossing Valid players Rarest answ"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "Giambi, Joe Boever, Dave Stewart, Pat Neshek, Tom Zachary, Morgan Murphy, Stan Bahnsen 2,000+ Games Played and Yankees 47 Roger Peckinpaugh, Aurelio Rodriguez, Tino Martinez, George Scott,"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "Martinez, George Scott, Paul O'Neill, Curtis Granderson, Bernie Williams, Robin Ventura 2,000+ Games Played and Red Sox 38 Ellis Burks, Heinie Manush, Wally Moses, George Scott, A. J. Pierzy"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "sh, Wally Moses, George Scott, A. J. Pierzynski, Jesse Burkett, Jim Rice, Royce Clayton 2,000+ Games Played and Athletics 44 Adam Dunn, Wally Moses, Sal Bando, Willie Horton, Dusty Baker, Ge"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "on, Jim Gott, Ray Berres MLB grid answers for September 5, 2026 Rows: Yankees, Dodgers, 2,000+ Games Played. Columns: Twins, Cardinals, Cleveland. Crossing Valid players Rarest answers Yanke"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "hiser, Bill Sudakis, Danys Baez, Camilo Pascual, Rudy Seanez, Wes Ferrell, Oris Hockett 2,000+ Games Played and Twins 29 Heinie Manush, Roger Peckinpaugh, Jimmy Ryan, George Sisler, A. J. Pi"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "inpaugh, Jimmy Ryan, George Sisler, A. J. Pierzynski, Joe Kuhel, Eddie Yost, Joe Cronin 2,000+ Games Played and Cardinals 42 Cesar Cedeno, Jim Edmonds, Jose Cardenal, Tino Martinez, Ken Boye"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "Jose Cardenal, Tino Martinez, Ken Boyer, Scott Rolen, George Hendrick, A. J. Pierzynski 2,000+ Games Played and Cleveland 35 Ellis Burks, Roger Peckinpaugh, Jose Cardenal, Willie Horton, Boo"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "y, Harvey Haddix, Fritz Mollwitz, Guy Bush MLB grid answers for September 2, 2026 Rows: 2,000+ Games Played, Braves, Red Sox. Columns: Tigers, Athletics, Pirates. Crossing Valid players Rare"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "es, Red Sox. Columns: Tigers, Athletics, Pirates. Crossing Valid players Rarest answers 2,000+ Games Played and Tigers 29 Heinie Manush, Dick Bartell, Aurelio Rodriguez, Willie Horton, Curti"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "elio Rodriguez, Willie Horton, Curtis Granderson, Norm Cash, Eddie Yost, Harry Heilmann 2,000+ Games Played and Athletics 44 Adam Dunn, Wally Moses, Sal Bando, Willie Horton, Dusty Baker, Ge"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "lly Moses, Sal Bando, Willie Horton, Dusty Baker, George Hendrick, Ron Cey, Felipe Alou 2,000+ Games Played and Pirates 27 Heinie Manush, Dick Bartell, George Hendrick, Jay Bell, Ed Konetchy"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "n, Jody Gerut, Jack Russell, Kosuke Fukudome MLB grid answers for August 31, 2026 Rows: 2,000+ Games Played, Pirates, Cleveland. Columns: Giants, Dodgers, Red Sox. Crossing Valid players Rar"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "es, Cleveland. Columns: Giants, Dodgers, Red Sox. Crossing Valid players Rarest answers 2,000+ Games Played and Giants 41 Ellis Burks, Dick Bartell, Jose Cardenal, Gary Matthews (1972-1987),"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "l, Gary Matthews (1972-1987), Dusty Baker, A. J. Pierzynski, Jesse Burkett, Felipe Alou 2,000+ Games Played and Dodgers 54 Cesar Cedeno, Heinie Manush, Jake Daubert, Mark Belanger, Ken Boyer"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "sh, Jake Daubert, Mark Belanger, Ken Boyer, Dusty Baker, Boog Powell, Curtis Granderson 2,000+ Games Played and Red Sox 38 Ellis Burks, Heinie Manush, Wally Moses, George Scott, A. J. Pierzy"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "es Ferrell MLB grid answers for August 30, 2026 Rows: Twins, Pirates, Dodgers. Columns: 2,000+ Games Played, Reds, Red Sox. Crossing Valid players Rarest answers Twins and 2,000+ Games Playe"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "ns: 2,000+ Games Played, Reds, Red Sox. Crossing Valid players Rarest answers Twins and 2,000+ Games Played 29 Heinie Manush, Roger Peckinpaugh, Jimmy Ryan, George Sisler, A. J. Pierzynski,"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "les, Dustan Mohr, Jesse Tannehill, Ron Mahay, Faye Throneberry, Wes Ferrell Pirates and 2,000+ Games Played 27 Heinie Manush, Dick Bartell, George Hendrick, Jay Bell, Ed Konetchy, Jason Kend"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "ehill, Bill Henry, Eddie Pellagrini, Alex Cole, Luis Tiant, Bullet Joe Bush Dodgers and 2,000+ Games Played 54 Cesar Cedeno, Heinie Manush, Jake Daubert, Mark Belanger, Ken Boyer, Dusty Bake"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "Radinsky, Cal Abrams, Claude Osteen MLB grid answers for August 28, 2026 Rows: Yankees, 2,000+ Games Played, Reds. Columns: Cardinals, Red Sox, Tigers. Crossing Valid players Rarest answers"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "h, Virgil Trucks, Ernie Courtney, Doyle Alexander, Dick Kryhoski, Joe Yeager, Ron Woods 2,000+ Games Played and Cardinals 42 Cesar Cedeno, Jim Edmonds, Jose Cardenal, Tino Martinez, Ken Boye"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "Jose Cardenal, Tino Martinez, Ken Boyer, Scott Rolen, George Hendrick, A. J. Pierzynski 2,000+ Games Played and Red Sox 38 Ellis Burks, Heinie Manush, Wally Moses, George Scott, A. J. Pierzy"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "sh, Wally Moses, George Scott, A. J. Pierzynski, Jesse Burkett, Jim Rice, Royce Clayton 2,000+ Games Played and Tigers 29 Heinie Manush, Dick Bartell, Aurelio Rodriguez, Willie Horton, Curti"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": ", Fritz Mollwitz, Guy Bush MLB grid answers for August 25, 2026 Rows: White Sox, Twins, 2,000+ Games Played. Columns: Tigers, Cleveland, Cubs. Crossing Valid players Rarest answers White Sox"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "dan Harris, Earl Whitehill, Matt Guerrier, Mickey Livingston, Bennie Tate, Jack Russell 2,000+ Games Played and Tigers 29 Heinie Manush, Dick Bartell, Aurelio Rodriguez, Willie Horton, Curti"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "elio Rodriguez, Willie Horton, Curtis Granderson, Norm Cash, Eddie Yost, Harry Heilmann 2,000+ Games Played and Cleveland 35 Ellis Burks, Roger Peckinpaugh, Jose Cardenal, Willie Horton, Boo"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": ", Jose Cardenal, Willie Horton, Boog Powell, George Hendrick, Jay Bell, Keith Hernandez 2,000+ Games Played and Cubs 40 Cy Williams, Jim Edmonds, Jimmy Ryan, Dick Bartell, Jose Cardenal, Phi"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "Matthews (1972-1987), Ron Cey MLB grid answers for August 24, 2026 Rows: Red Sox, Cubs, 2,000+ Games Played. Columns: Orioles, Braves, White Sox. Crossing Valid players Rarest answers Red So"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "k Lown, George Magoon, Luis Vizcaino, Phil Regan, Alex Metzler, Bennie Tate, Bob Locker 2,000+ Games Played and Orioles 34 Bobby Grich, Heinie Manush, Mark Belanger, Aurelio Rodriguez, Jeff"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "ark Belanger, Aurelio Rodriguez, Jeff Conine, Boog Powell, George Sisler, Jesse Burkett 2,000+ Games Played and Braves 42 Gary Matthews (1972-1987), Wally Joyner, Dusty Baker, George Sisler,"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "r, Dusty Baker, George Sisler, A. J. Pierzynski, Felipe Alou, Ed Konetchy, Sherry Magee 2,000+ Games Played and White Sox 42 Ellis Burks, Adam Dunn, Roger Peckinpaugh, Wally Moses, Aurelio R"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "nce Parrish MLB grid answers for August 20, 2026 Rows: Cubs, Cardinals, Twins. Columns: 2,000+ Games Played, Phillies, Dodgers. Crossing Valid players Rarest answers Cubs and 2,000+ Games Pl"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "2,000+ Games Played, Phillies, Dodgers. Crossing Valid players Rarest answers Cubs and 2,000+ Games Played 40 Cy Williams, Jim Edmonds, Jimmy Ryan, Dick Bartell, Jose Cardenal, Phil Cavarre"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "s Marmol, George Magoon, Mel Rojas, Carl Warwick, Jim Canavan, Phil Regan Cardinals and 2,000+ Games Played 42 Cesar Cedeno, Jim Edmonds, Jose Cardenal, Tino Martinez, Ken Boyer, Scott Rolen"
+    },
+    {
+     "where": "body",
+     "phrase": "000+ Games",
+     "context": "Warwick, Lew McCarty, Gus Weyhing, Jim Bucher, Darren Holmes, Scott Radinsky Twins and 2,000+ Games Played 29 Heinie Manush, Roger Peckinpaugh, Jimmy Ryan, George Sisler, A. J. Pierzynski,"
+    }
+   ]
+  },
+  {
+   "route": "/mlb-grid",
+   "where": [
+    {
+     "where": "body",
+     "phrase": "000 games",
+     "context": "anchises count across relocations, and milestones include 2,000 hits, 300 home runs and 2,000 games. Nine cells, nine legends. Every cell crosses two categories, and you need a player whose"
+    },
+    {
+     "where": "body",
+     "phrase": "000 games",
+     "context": "illebrew Then Cleveland meets 300 home runs. Jim Thome, lock. The last cell, Twins plus 2,000 games played, eats two guesses before Harmon Killebrew completes the nine. MLB Franchise Grid t"
+    }
+   ]
+  },
+  {
+   "route": "/nba-my-career",
+   "where": [
+    {
+     "where": "body",
+     "phrase": "62 games",
+     "context": "sists, Paint Beasts eat rebounds, Bucket Getters score but break down more. All-NBA needs 62 games played, and MVP talk starts at a 92 rating. How growth and decline unfold Growth runs to"
+    },
+    {
+     "where": "body",
+     "phrase": "over a hundred of them",
+     "context": "ity. Each summer drops up to three decisions on your desk, one card at a time, drawn from over a hundred of them: contracts, surgeries, trade demands, tunnel fits, a rookie who idolises you, a mural in"
+    }
+   ]
+  },
+  {
+   "route": "/nfl-my-career",
+   "where": [
+    {
+     "where": "body",
+     "phrase": "over a hundred of them",
+     "context": "ng, health, and team. Between them come up to three crossroads, one at a time, drawn from over a hundred of them: contracts, trade requests, surgeries, rookie hazing, a mural in your name, and a podcast"
+    }
+   ]
+  },
+  {
+   "route": "/search",
+   "where": [
+    {
+     "where": "body",
+     "phrase": "133 games",
+     "context": "kind of game you are after. Close enough spelling is fine. Pin a game to keep it on Home. 133 games, sport by sport. Start typing to narrow it down. Soccer (36) 💵 $1B Budget Builder One bi"
+    },
+    {
+     "where": "body",
+     "phrase": "All 133 of them",
+     "context": "Search every game All 133 of them. Type a name, a sport, or the kind of game you are after. Close enough spelling is fine."
+    }
+   ]
+  },
+  {
+   "route": "/whats-new",
+   "where": [
+    {
+     "where": "body",
+     "phrase": "100+ free games",
+     "context": "ge brings you home. And the home page greeting is now seven words instead of a paragraph: 100+ free games across every sport, all playable without an account, which has the added virtue of being"
+    },
+    {
+     "where": "body",
+     "phrase": "127 games",
+     "context": "no less. Every game counts now, and the leaderboard stops being one name. An audit of all 127 games found fourteen that never recorded a finished play: the World Cup bracket, both bingo boa"
+    },
+    {
+     "where": "body",
+     "phrase": "113 games",
+     "context": "Log In and Sign Up buttons off the edge. Every big sport has its own page now. There are 113 games here and, until this week, exactly one page that gathered any of them by sport, and that"
+    },
+    {
+     "where": "body",
+     "phrase": "113 games",
+     "context": "zles, with the daily ones flagged, and each links on to the others. That covers 81 of the 113 games. Two things worth saying about how it was done. The smaller sections, Formula 1, tennis,"
+    },
+    {
+     "where": "body",
+     "phrase": "65 games",
+     "context": "to left and right, the blue line got a puck mover, and goalies got a workhorse who starts 65 games. NHL My Career has a dirty side too: an envelope on the bench with a bounty in it, a twel"
+    },
+    {
+     "where": "body",
+     "phrase": "100 games",
+     "context": "aunched with the first wave of daily soccer games. It has grown to eleven sports and over 100 games since, and it is still growing. Want something added or changed? Tell us . A lot of what"
+    },
+    {
+     "where": "body",
+     "phrase": "More than 90 of them",
+     "context": "m fixed. Every lineup was read against the official match data and an independent report. More than 90 of them had someone in the eleven who never actually started (usually a famous sub remembered as"
+    },
+    {
+     "where": "body",
+     "phrase": "all 126 of them",
+     "context": "b . Every game guide now has proper sections. The guide at the bottom of every game page, all 126 of them, is now split into sections and subsections with headings that say what each part is abou"
+    },
+    {
+     "where": "body",
+     "phrase": "all 120 of them",
+     "context": "flame streak, their points and their world rank not move at all. Now every finished game, all 120 of them, feeds the same recorder, which updates your streak, your daily count, your points and yo"
+    },
+    {
+     "where": "body",
+     "phrase": "all 127 games",
+     "context": "and no less. Every game counts now, and the leaderboard stops being one name. An audit of all 127 games found fourteen that never recorded a finished play: the World Cup bracket, both bingo boa"
+    },
+    {
+     "where": "body",
+     "phrase": "all 87 of them",
+     "context": "ks men's basketball table now shows who lost every championship game and the final score, all 87 of them back to Oregon over Ohio State in 1939: the triple overtime 54-53 of 1957, Texas Western'"
+    },
+    {
+     "where": "body",
+     "phrase": "over 100 games",
+     "context": "all launched with the first wave of daily soccer games. It has grown to eleven sports and over 100 games since, and it is still growing. Want something added or changed? Tell us . A lot of what"
+    }
+   ]
+  }
+ ]
+}
