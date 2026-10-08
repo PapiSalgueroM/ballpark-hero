@@ -1,0 +1,17 @@
+g-invented exit=1 1s | simClubManagerGathered: 1 failure(s) under control invented (A 1)
+simClubManagerGathered exit=0 1s | simClubManagerGathered: all checks passed (1 gathered league(s), 357 men, 82 addresses, 5 cited facts, the old save)
+g-onehost exit=1 1s | simClubManagerGathered: 1 failure(s) under control onehost (A 1)
+g-wiki exit=1 1s | simClubManagerGathered: 1 failure(s) under control wiki (A 1)
+g-stale exit=1 1s | simClubManagerGathered: 1 failure(s) under control stale (A 1)
+g-offcurve exit=1 1s | simClubManagerGathered: 1 failure(s) under control offcurve (B 1)
+g-noflag exit=1 1s | simClubManagerGathered: 2 failure(s) under control noflag (C 2)
+g-twice exit=1 1s | simClubManagerGathered: 2 failure(s) under control twice (C 2)
+g-trap exit=1 1s | simClubManagerGathered: 3 failure(s) under control trap (D 3)
+g-keeper exit=1 1s | simClubManagerGathered: 1 failure(s) under control keeper (C 1)
+g-oldsave exit=1 0s | simClubManagerGathered: 1 failure(s) under control oldsave (G 1)
+simInventedNames exit=0 4s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simCmDataOnDemand exit=0 11s | simCmDataOnDemand: green. No page downloads data it never reads, and a past season brings its own.
+simNoRivalNames exit=0 9s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 24s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 47s | 
+simCmLeagueRules exit=1 24s | simCmLeagueRules: 36 failure(s)
