@@ -102,6 +102,13 @@ export function reloadOnceForStaleChunk(): boolean {
      waiting on a document that was just replaced. The flag is the one the
      404 marker in index.html already honours. */
   if ((window as unknown as { __DUKB_PRERENDER__?: boolean }).__DUKB_PRERENDER__) return false;
+  /* Release AM: never when the browser says it is offline. A reload then lands
+     on the browser's own offline page and the site is gone, where staying put
+     lets the page say so itself (the route boundary, or the home search notice
+     of Round 1088, which a first failure in a tab used to reload away). The
+     once flag is left alone, so the first stale chunk after the connection
+     comes back still gets its reload. */
+  if (navigator.onLine === false) return false;
   try {
     if (sessionStorage.getItem(STALE_KEY) === '1') return false;
     sessionStorage.setItem(STALE_KEY, '1');
