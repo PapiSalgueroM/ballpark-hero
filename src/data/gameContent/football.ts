@@ -294,7 +294,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
     faqs: [
       {
         q: "Are the players real?",
-        a: "The opening names and roster places come from a dated 2026 snapshot. New franchise OVRs are original simulation estimates, not official ratings or historical statistics. One position-specific method covers starters, backups and practice players using 2023 to 2025 evidence, recent seasons weighted more heavily. Passing efficiency, receiving and rushing production, playing time and limited defensive measures inform the estimate; small samples have less weight and missing metrics are not zeros. Linemen use participation and draft priors, which cannot measure blocking. An e marks limited evidence, and a player's row explains his opening basis. Later development belongs to your saved simulation. Existing franchises keep their own ratings and contracts. Salaries, trades, future prospects and game outcomes are fictional.",
+        a: "The opening names and roster places come from a dated 2026 snapshot. New franchise OVRs are original simulation estimates, not official ratings or historical statistics. One position-specific method covers starters, backups and practice players using 2023 to 2025 evidence, recent seasons weighted more heavily. Passing efficiency, receiving and rushing production, playing time and limited defensive measures inform the estimate; small samples have less weight and missing metrics are not zeros. A quarterback, back, receiver or tight end is read on three things: how well he played, how much of the work he carried and what he produced a game in 2025, off two published stat sources. A fullback is not rated as a ball carrier, so he sits low on the running back shelf with the e. Linemen use participation and draft priors, which cannot measure blocking. An e marks limited evidence, and a player's row explains his opening basis. Later development belongs to your saved simulation. Existing franchises keep their own ratings and contracts. Salaries, trades, future prospects and game outcomes are fictional.",
       },
       {
         q: "Can I get fired?",
@@ -1316,7 +1316,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
   '/nfl-gauntlet-draft': {
     intro: [
       "The draft mode, NFL style: seven picks, one per starting offense slot, five real players a pick from a genuine star to a bargain, and you keep exactly one.",
-      "Then the cup begins. Your finished offense runs five knockout rounds against ever stronger invented opposition, rated 78 up to 99, and overtime when the game is level.",
+      "Then the cup begins. Your finished offense runs five knockout rounds against ever stronger invented opposition, rated 79 up to 97, and overtime when the game is level.",
       "The run is decided entirely by the offense you drafted: the same seven always runs the same gauntlet, so every pick is the game.",
     ],
     headings: {
@@ -1362,7 +1362,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Why the draft covers four skill positions",
         items: [
-          "The draft is scoped to the four skill positions (QB, RB, WR, TE) on purpose: their ratings are built from real production, the way the position data's own generator describes it, and every slot deals a genuine star-to-bargain spread. Offensive line and defense lean on draft position and years played instead, so they stay out of the draft rather than padding it with picks that are not a real choice.",
+          "The draft is scoped to the four skill positions (QB, RB, WR, TE) on purpose: their ratings are built from real production, the way the position data's own generator describes it, and every slot deals a genuine star-to-bargain spread. Offensive linemen and defenders are rated on thinner evidence (playing time, draft position and limited defensive measures, most of it marked e in NFL Front Office), so they stay out of the draft rather than padding it with picks that are not a real choice.",
         ],
       },
       {
@@ -1388,7 +1388,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Opposition ratings climbing round by round",
         items: [
-          "Opposition ratings climb 78, 85, 90, 95, 99. A bargain offense usually falls in the first round, an elite one reaches the final as a slight underdog, and even a perfect draft lifts the trophy roughly one run in nine.",
+          "Opposition ratings climb 79, 83, 88, 92, 97. A bargain offense usually falls in the first round, an elite one reaches the final as a slight underdog, and even a perfect draft lifts the trophy roughly one run in nine.",
         ],
       },
     ],
@@ -1396,13 +1396,13 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Five cards at the quarterback slot",
         paragraphs: [
-          "The quarterback slot deals a 97 rated MVP season next to an 88, an 82, a 76 and a 68. There is no cost to any of them, so the 97 is the pick unless you are chasing a specific team on the card.",
+          "The quarterback slot deals a 93 next to an 88, an 82, a 76 and a 71. There is no cost to any of them, so the 93 is the pick unless you are chasing a specific team on the card.",
         ],
       },
       {
         heading: "Two rounds survived and one regret",
         paragraphs: [
-          "Your finished offense rates 94. The Qualifier wins big, the Last Sixteen is tight, the Quarter Final needs overtime, and the Semi Final ends the run. Two rounds survived, 32 points, and the card you would redo is the 76 you took at the third receiver spot.",
+          "Your finished offense rates 90. The Qualifier wins big, the Last Sixteen is tight, the Quarter Final needs overtime, and the Semi Final ends the run. Two rounds survived, 32 points, and the card you would redo is the 76 you took at the third receiver spot.",
         ],
       },
     ],
