@@ -1,0 +1,43 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/cmWorldIdentity1052.test.ts [2m([22m[2m6 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 4111[2mms[22m[39m
+   [32m✓[39m Round 1052: the world before the round is still there, untouched[2m > [22mhas a fixture, recorded on the base[32m 2[2mms[22m[39m
+   [32m✓[39m Round 1052: the world before the round is still there, untouched[2m > [22mkeeps the 26 leagues, their order, names, cups and clubs, as the first leagues of the world[32m 4[2mms[22m[39m
+   [32m✓[39m Round 1052: the world before the round is still there, untouched[2m > [22mkeeps the 20 nations as the first nations, the pyramids and every rules row[32m 2[2mms[22m[39m
+[31m   [31m×[31m Round 1052: the world before the round is still there, untouched[2m > [22mkeeps every one of the 438 clubs: squad, club row, ratings, partial mark and flags[39m[32m 14[2mms[22m[39m
+[31m     → clubs whose digest moved: Sevilla: expected [ 'Sevilla' ] to deeply equal [][39m
+   [32m✓[39m Round 1052: the world before the round is still there, untouched[2m > [22mkeeps the free agent pool[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1052: the world before the round is still there, untouched[2m > [22mkeeps the past seasons own Russian clubs at the strength their season gave them[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/cmWorldIdentity1052.test.ts[2m > [22mRound 1052: the world before the round is still there, untouched[2m > [22mkeeps every one of the 438 clubs: squad, club row, ratings, partial mark and flags
+[31m[1mAssertionError[22m: clubs whose digest moved: Sevilla: expected [ 'Sevilla' ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "Sevilla",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/cmWorldIdentity1052.test.ts:[2m135:68[22m[39m
+    [90m133| [39m    [35mconst[39m names [33m=[39m [33mObject[39m[33m.[39m[34mkeys[39m(fixture[33m.[39mclubs)[33m;[39m
+    [90m134| [39m    [35mconst[39m moved [33m=[39m names[33m.[39m[34mfilter[39m(n [33m=>[39m got[33m.[39mclubs[n] [33m!==[39m fixture[33m.[39mclubs[n])[33m;[39m
+    [90m135| [39m    expect(moved, `clubs whose digest moved: ${moved.join(', ')}`).toE…
+    [90m   | [39m                                                                   [31m^[39m
+    [90m136| [39m    [34mexpect[39m([33mObject[39m[33m.[39m[34mkeys[39m(got[33m.[39mclubs)[33m.[39mlength)[33m.[39m[34mtoBe[39m(names[33m.[39mlength)[33m;[39m
+    [90m137| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 16:19:07
+[2m   Duration [22m 6.03s[2m (transform 5.20s, setup 80ms, collect 105ms, tests 4.11s, environment 810ms, prepare 492ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmWorldIdentity1052.test.ts,title=src/test/cmWorldIdentity1052.test.ts > Round 1052%3A the world before the round is still there%2C untouched > keeps every one of the 438 clubs%3A squad%2C club row%2C ratings%2C partial mark and flags,line=135,column=68::AssertionError: clubs whose digest moved: Sevilla: expected [ 'Sevilla' ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "Sevilla",%0A+ ]%0A%0A ❯ src/test/cmWorldIdentity1052.test.ts:135:68%0A%0A

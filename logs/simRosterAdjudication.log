@@ -1,0 +1,36 @@
+Roster: 426 clubs, 4401 players. Ledger measured 2026-09-11, population 564.
+
+1) Every adjudicated move is at its new club and gone from the old one
+   174 moves all landed
+2) Players whose real club the game does not model are in no squad
+   60 correctly absent
+2b) No removedClubNotModelled row names a club the game models now
+   Serie B: 10 movedTo rows land at its clubs (Round 1040 moved 10 there)
+   Ligue 2: 5 movedTo rows land at its clubs (Round 1040 moved 5 there)
+   Segunda División: 7 movedTo rows land at its clubs (Round 1040 moved 7 there)
+   none of 60 names a modelled club
+3) Every not-current name is in no squad at all
+   18 correctly absent
+4) Players two sources confirmed are still in their squad
+   124 confirmed players still present
+5) Every pending player is still at exactly the club the ledger records, and every withheld one is in no squad
+   149 withheld pending rows are in no squad
+   all 39 pending rows that are not withheld still describe the shipped file
+6) The five categories are disjoint and still add up
+   564 names across five categories, none repeated
+7) Every club left under 8 players is marked CM_PARTIAL
+   195 clubs marked, none missing
+8) The file metadata matches the file
+   4401 players, 426 clubs, metadata agrees
+9) Julio Enciso is at Ipswich Town and in no Strasbourg block
+   at Ipswich Town, not Strasbourg
+10) David Alaba is in no squad
+   in no squad
+11) Mykhaylo Mudryk is at Tottenham and not at Chelsea
+   at Tottenham, not Chelsea
+12) Juan Cuadrado is in no squad
+   in no squad
+13) Dennis Johnsen is at Palermo and not at Cremonese
+   at Palermo, not Cremonese
+
+simRosterAdjudication: all green

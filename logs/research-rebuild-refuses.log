@@ -1,0 +1,13 @@
+file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/research/gathered/clubs-ru.mjs:9
+  raw: process.env.GATHERED_RAW || (() => { throw new Error('set GATHERED_RAW to the folder that holds the saved host answers'); })(),
+                                                  ^
+
+Error: set GATHERED_RAW to the folder that holds the saved host answers
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/research/gathered/clubs-ru.mjs:9:51
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/research/gathered/clubs-ru.mjs:9:132
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/research/gathered/build.mjs:13:13
+
+Node.js v24.21.0
+REFUSED-WITHOUT-THE-SAVED-ANSWERS

@@ -1,0 +1,1204 @@
+THIN facts
+   THIN (one 2026-27 source, marked in the ligue1 row): Ligue 1's 2026-27 drop of two and the barrage
+   THIN (one 2026-27 source, marked in the serieb row): Serie B's 2026-27 promotion playoff rung (third to eighth)
+   THIN (one 2026-27 source, marked in the ligue2 row): Ligue 2's 2026-27 drop of two
+A) brasileirao: the rows
+   20 clubs, drop 4, cup Copa do Brasil; weakest Remo (62) is asked: Stay up. Avoid relegation (16)
+B) brasileirao: 6 seeded seasons
+   6 seasons ended, 0 sacked, 24 cup weeks scheduled, 6 cup finals won, cup named on 6 saves, 0 clubs moved in the summers, 273 headlines read
+C) brasileirao: strength orders the table
+   Flamengo 72.7 pts (rated 79) against Remo 25.3 (rated 62): gap 47.3
+   Palmeiras 72.7 pts (rated 79) against Chapecoense 19.5 (rated 66): gap 53.2
+   rank correlation, preview rating against mean points, 14 clubs: 0.942
+D) brasileirao: no invented men
+   274 real men and 93 flagged pads on day one, 4 partial clubs
+A) ligamx: the rows
+   18 clubs, drop 0, cup null; weakest Puebla (61) is asked: Finish mid-table or better (14)
+   every board of 18 asks one of: Win the Liga MX | Make the Liguilla | Finish mid-table or better
+B) ligamx: 6 seeded seasons
+   6 seasons ended, 1 sacked, 0 cup weeks scheduled, 0 cup finals won, cup named on 7 saves, 0 clubs moved in the summers, 259 headlines read
+C) ligamx: strength orders the table
+   América 59.8 pts (rated 74) against Necaxa 47.2 (rated 69): gap 12.7
+   Guadalajara 57.3 pts (rated 74) against FC Juárez 41.5 (rated 68): gap 15.8
+   rank correlation, preview rating against mean points, 12 clubs: 0.951
+D) ligamx: no invented men
+   167 real men and 132 flagged pads on day one, 6 partial clubs
+A) aleague: the rows
+   12 clubs, drop 0, cup Australia Cup; weakest Central Coast Mariners (58) is asked: Finish mid-table or better (9)
+   every board of 12 asks one of: Win the A-League Men | Make the finals | Finish mid-table or better
+B) aleague: 96 seeded seasons
+   96 seasons ended, 5 sacked, 404 cup weeks scheduled, 96 cup finals won, cup named on 101 saves, 0 clubs moved in the summers, 2990 headlines read
+C) aleague: strength orders the table
+   Adelaide United 31.2 pts (rated 61) against Central Coast Mariners 26.2 (rated 58): gap 5.0
+   rank correlation, preview rating against mean points, 6 clubs: 0.618
+D) aleague: no invented men
+   296 real men and 1 flagged pads on day one, 1 partial clubs
+A) serieb: the rows
+   20 clubs, drop 3, cup Coppa Italia; weakest Ascoli (60) is asked: Stay up. Avoid relegation (17)
+B) serieb: 48 seeded seasons
+   48 seasons ended, 4 sacked, 208 cup weeks scheduled, 48 cup finals won, cup named on 52 saves, 144 clubs moved in the summers, 2244 headlines read
+C) serieb: strength orders the table
+   2 unmanaged clubs with no baked man left out of the correlation: Juve Stabia, Arezzo
+   rank correlation, preview rating against mean points, 12 clubs: 0.955
+D) serieb: no invented men
+   78 real men and 244 flagged pads on day one, 18 partial clubs
+A) ligue2: the rows
+   18 clubs, drop 2, cup Coupe de France; weakest Dunkerque (60) is asked: Stay up. Avoid relegation (16)
+B) ligue2: 48 seeded seasons
+   48 seasons ended, 2 sacked, 200 cup weeks scheduled, 48 cup finals won, cup named on 50 saves, 96 clubs moved in the summers, 2037 headlines read
+C) ligue2: strength orders the table
+   Nantes 72.9 pts (rated 73) against Reims 60.8 (rated 68): gap 12.2
+   5 unmanaged clubs with no baked man left out of the correlation: Sochaux, Dijon, Pau, Grenoble, Rodez
+   rank correlation, preview rating against mean points, 7 clubs: 0.741
+D) ligue2: no invented men
+   49 real men and 240 flagged pads on day one, 15 partial clubs
+A) segunda: the rows
+  FAIL: segunda has 21 clubs, the real league has 20
+   21 clubs, drop 4, cup Copa del Rey; weakest Albacete (61) is asked: Stay up. Avoid relegation (17)
+  FAIL: Albacete's board asks Stay up. Avoid relegation (target 17), not to finish 16th or better
+B) segunda: 48 seeded seasons
+  FAIL: segunda seed 0: the table has 21 rows
+  FAIL: segunda seed 0: Cádiz played 40, not 38
+  FAIL: segunda seed 0: Albacete played 40, not 38
+  FAIL: segunda seed 0: Valladolid played 40, not 38
+  FAIL: segunda seed 0: Córdoba played 40, not 38
+  FAIL: segunda seed 0: Leganés played 40, not 38
+  FAIL: segunda seed 0: Burgos played 40, not 38
+  FAIL: segunda seed 0: Las Palmas played 40, not 38
+  FAIL: segunda seed 0: Tenerife played 40, not 38
+  FAIL: segunda seed 0: Girona played 40, not 38
+  FAIL: segunda seed 0: Almería played 40, not 38
+  FAIL: segunda seed 0: Real Oviedo played 40, not 38
+  FAIL: segunda seed 0: Granada played 40, not 38
+  FAIL: segunda seed 0: Mallorca played 40, not 38
+  FAIL: segunda seed 0: Ceuta played 40, not 38
+  FAIL: segunda seed 0: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 0: Eldense played 40, not 38
+  FAIL: segunda seed 0: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 0: FC Andorra played 40, not 38
+  FAIL: segunda seed 0: Castellón played 40, not 38
+  FAIL: segunda seed 0: Eibar played 40, not 38
+  FAIL: segunda seed 0: Sabadell played 40, not 38
+  FAIL: segunda seed 0: 21 clubs next season
+  FAIL: segunda seed 1: the table has 21 rows
+  FAIL: segunda seed 1: Eibar played 40, not 38
+  FAIL: segunda seed 1: Mallorca played 40, not 38
+  FAIL: segunda seed 1: Las Palmas played 40, not 38
+  FAIL: segunda seed 1: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 1: Albacete played 40, not 38
+  FAIL: segunda seed 1: Burgos played 40, not 38
+  FAIL: segunda seed 1: Castellón played 40, not 38
+  FAIL: segunda seed 1: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 1: FC Andorra played 40, not 38
+  FAIL: segunda seed 1: Tenerife played 40, not 38
+  FAIL: segunda seed 1: Almería played 40, not 38
+  FAIL: segunda seed 1: Real Oviedo played 40, not 38
+  FAIL: segunda seed 1: Leganés played 40, not 38
+  FAIL: segunda seed 1: Córdoba played 40, not 38
+  FAIL: segunda seed 1: Sabadell played 40, not 38
+  FAIL: segunda seed 1: Eldense played 40, not 38
+  FAIL: segunda seed 1: Granada played 40, not 38
+  FAIL: segunda seed 1: Girona played 40, not 38
+  FAIL: segunda seed 1: Ceuta played 40, not 38
+  FAIL: segunda seed 1: Cádiz played 40, not 38
+  FAIL: segunda seed 1: Valladolid played 40, not 38
+  FAIL: segunda seed 1: 21 clubs next season
+  FAIL: segunda seed 2: the table has 21 rows
+  FAIL: segunda seed 2: Castellón played 40, not 38
+  FAIL: segunda seed 2: Tenerife played 40, not 38
+  FAIL: segunda seed 2: Eibar played 40, not 38
+  FAIL: segunda seed 2: Granada played 40, not 38
+  FAIL: segunda seed 2: Cádiz played 40, not 38
+  FAIL: segunda seed 2: Sabadell played 40, not 38
+  FAIL: segunda seed 2: Real Oviedo played 40, not 38
+  FAIL: segunda seed 2: Valladolid played 40, not 38
+  FAIL: segunda seed 2: Burgos played 40, not 38
+  FAIL: segunda seed 2: Almería played 40, not 38
+  FAIL: segunda seed 2: Albacete played 40, not 38
+  FAIL: segunda seed 2: Las Palmas played 40, not 38
+  FAIL: segunda seed 2: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 2: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 2: Córdoba played 40, not 38
+  FAIL: segunda seed 2: Leganés played 40, not 38
+  FAIL: segunda seed 2: FC Andorra played 40, not 38
+  FAIL: segunda seed 2: Ceuta played 40, not 38
+  FAIL: segunda seed 2: Girona played 40, not 38
+  FAIL: segunda seed 2: Eldense played 40, not 38
+  FAIL: segunda seed 2: Mallorca played 40, not 38
+  FAIL: segunda seed 2: 21 clubs next season
+  FAIL: segunda seed 3: the table has 21 rows
+  FAIL: segunda seed 3: Ceuta played 40, not 38
+  FAIL: segunda seed 3: Granada played 40, not 38
+  FAIL: segunda seed 3: Las Palmas played 40, not 38
+  FAIL: segunda seed 3: FC Andorra played 40, not 38
+  FAIL: segunda seed 3: Córdoba played 40, not 38
+  FAIL: segunda seed 3: Leganés played 40, not 38
+  FAIL: segunda seed 3: Burgos played 40, not 38
+  FAIL: segunda seed 3: Girona played 40, not 38
+  FAIL: segunda seed 3: Almería played 40, not 38
+  FAIL: segunda seed 3: Eldense played 40, not 38
+  FAIL: segunda seed 3: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 3: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 3: Cádiz played 40, not 38
+  FAIL: segunda seed 3: Tenerife played 40, not 38
+  FAIL: segunda seed 3: Real Oviedo played 40, not 38
+  FAIL: segunda seed 3: Castellón played 40, not 38
+  FAIL: segunda seed 3: Mallorca played 40, not 38
+  FAIL: segunda seed 3: Valladolid played 40, not 38
+  FAIL: segunda seed 3: Albacete played 40, not 38
+  FAIL: segunda seed 3: Sabadell played 40, not 38
+  FAIL: segunda seed 3: Eibar played 40, not 38
+  FAIL: segunda seed 3: 21 clubs next season
+  FAIL: segunda seed 4: the table has 21 rows
+  FAIL: segunda seed 4: FC Andorra played 40, not 38
+  FAIL: segunda seed 4: Girona played 40, not 38
+  FAIL: segunda seed 4: Leganés played 40, not 38
+  FAIL: segunda seed 4: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 4: Albacete played 40, not 38
+  FAIL: segunda seed 4: Eibar played 40, not 38
+  FAIL: segunda seed 4: Real Oviedo played 40, not 38
+  FAIL: segunda seed 4: Eldense played 40, not 38
+  FAIL: segunda seed 4: Córdoba played 40, not 38
+  FAIL: segunda seed 4: Granada played 40, not 38
+  FAIL: segunda seed 4: Valladolid played 40, not 38
+  FAIL: segunda seed 4: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 4: Mallorca played 40, not 38
+  FAIL: segunda seed 4: Almería played 40, not 38
+  FAIL: segunda seed 4: Tenerife played 40, not 38
+  FAIL: segunda seed 4: Ceuta played 40, not 38
+  FAIL: segunda seed 4: Las Palmas played 40, not 38
+  FAIL: segunda seed 4: Sabadell played 40, not 38
+  FAIL: segunda seed 4: Cádiz played 40, not 38
+  FAIL: segunda seed 4: Burgos played 40, not 38
+  FAIL: segunda seed 4: Castellón played 40, not 38
+  FAIL: segunda seed 4: 21 clubs next season
+  FAIL: segunda seed 5: the table has 21 rows
+  FAIL: segunda seed 5: FC Andorra played 40, not 38
+  FAIL: segunda seed 5: Albacete played 40, not 38
+  FAIL: segunda seed 5: Eldense played 40, not 38
+  FAIL: segunda seed 5: Tenerife played 40, not 38
+  FAIL: segunda seed 5: Las Palmas played 40, not 38
+  FAIL: segunda seed 5: Eibar played 40, not 38
+  FAIL: segunda seed 5: Valladolid played 40, not 38
+  FAIL: segunda seed 5: Burgos played 40, not 38
+  FAIL: segunda seed 5: Castellón played 40, not 38
+  FAIL: segunda seed 5: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 5: Mallorca played 40, not 38
+  FAIL: segunda seed 5: Almería played 40, not 38
+  FAIL: segunda seed 5: Leganés played 40, not 38
+  FAIL: segunda seed 5: Real Oviedo played 40, not 38
+  FAIL: segunda seed 5: Ceuta played 40, not 38
+  FAIL: segunda seed 5: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 5: Granada played 40, not 38
+  FAIL: segunda seed 5: Córdoba played 40, not 38
+  FAIL: segunda seed 5: Cádiz played 40, not 38
+  FAIL: segunda seed 5: Sabadell played 40, not 38
+  FAIL: segunda seed 5: Girona played 40, not 38
+  FAIL: segunda seed 5: 21 clubs next season
+  FAIL: segunda seed 6: the table has 21 rows
+  FAIL: segunda seed 6: Córdoba played 40, not 38
+  FAIL: segunda seed 6: Ceuta played 40, not 38
+  FAIL: segunda seed 6: Real Oviedo played 40, not 38
+  FAIL: segunda seed 6: Cádiz played 40, not 38
+  FAIL: segunda seed 6: Castellón played 40, not 38
+  FAIL: segunda seed 6: Eldense played 40, not 38
+  FAIL: segunda seed 6: Granada played 40, not 38
+  FAIL: segunda seed 6: Sabadell played 40, not 38
+  FAIL: segunda seed 6: Las Palmas played 40, not 38
+  FAIL: segunda seed 6: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 6: Almería played 40, not 38
+  FAIL: segunda seed 6: Valladolid played 40, not 38
+  FAIL: segunda seed 6: Burgos played 40, not 38
+  FAIL: segunda seed 6: Mallorca played 40, not 38
+  FAIL: segunda seed 6: Girona played 40, not 38
+  FAIL: segunda seed 6: Leganés played 40, not 38
+  FAIL: segunda seed 6: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 6: FC Andorra played 40, not 38
+  FAIL: segunda seed 6: Tenerife played 40, not 38
+  FAIL: segunda seed 6: Albacete played 40, not 38
+  FAIL: segunda seed 6: Eibar played 40, not 38
+  FAIL: segunda seed 6: 21 clubs next season
+  FAIL: segunda seed 8: the table has 21 rows
+  FAIL: segunda seed 8: Castellón played 40, not 38
+  FAIL: segunda seed 8: Eldense played 40, not 38
+  FAIL: segunda seed 8: Valladolid played 40, not 38
+  FAIL: segunda seed 8: FC Andorra played 40, not 38
+  FAIL: segunda seed 8: Mallorca played 40, not 38
+  FAIL: segunda seed 8: Tenerife played 40, not 38
+  FAIL: segunda seed 8: Eibar played 40, not 38
+  FAIL: segunda seed 8: Granada played 40, not 38
+  FAIL: segunda seed 8: Córdoba played 40, not 38
+  FAIL: segunda seed 8: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 8: Albacete played 40, not 38
+  FAIL: segunda seed 8: Real Oviedo played 40, not 38
+  FAIL: segunda seed 8: Girona played 40, not 38
+  FAIL: segunda seed 8: Cádiz played 40, not 38
+  FAIL: segunda seed 8: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 8: Almería played 40, not 38
+  FAIL: segunda seed 8: Las Palmas played 40, not 38
+  FAIL: segunda seed 8: Burgos played 40, not 38
+  FAIL: segunda seed 8: Sabadell played 40, not 38
+  FAIL: segunda seed 8: Ceuta played 40, not 38
+  FAIL: segunda seed 8: Leganés played 40, not 38
+  FAIL: segunda seed 8: 21 clubs next season
+  FAIL: segunda seed 9: the table has 21 rows
+  FAIL: segunda seed 9: Mallorca played 40, not 38
+  FAIL: segunda seed 9: Albacete played 40, not 38
+  FAIL: segunda seed 9: Tenerife played 40, not 38
+  FAIL: segunda seed 9: Eibar played 40, not 38
+  FAIL: segunda seed 9: Ceuta played 40, not 38
+  FAIL: segunda seed 9: Valladolid played 40, not 38
+  FAIL: segunda seed 9: Las Palmas played 40, not 38
+  FAIL: segunda seed 9: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 9: Real Oviedo played 40, not 38
+  FAIL: segunda seed 9: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 9: Girona played 40, not 38
+  FAIL: segunda seed 9: FC Andorra played 40, not 38
+  FAIL: segunda seed 9: Castellón played 40, not 38
+  FAIL: segunda seed 9: Cádiz played 40, not 38
+  FAIL: segunda seed 9: Córdoba played 40, not 38
+  FAIL: segunda seed 9: Eldense played 40, not 38
+  FAIL: segunda seed 9: Burgos played 40, not 38
+  FAIL: segunda seed 9: Granada played 40, not 38
+  FAIL: segunda seed 9: Sabadell played 40, not 38
+  FAIL: segunda seed 9: Leganés played 40, not 38
+  FAIL: segunda seed 9: Almería played 40, not 38
+  FAIL: segunda seed 9: 21 clubs next season
+  FAIL: segunda seed 10: the table has 21 rows
+  FAIL: segunda seed 10: Valladolid played 40, not 38
+  FAIL: segunda seed 10: Córdoba played 40, not 38
+  FAIL: segunda seed 10: FC Andorra played 40, not 38
+  FAIL: segunda seed 10: Tenerife played 40, not 38
+  FAIL: segunda seed 10: Almería played 40, not 38
+  FAIL: segunda seed 10: Eibar played 40, not 38
+  FAIL: segunda seed 10: Burgos played 40, not 38
+  FAIL: segunda seed 10: Mallorca played 40, not 38
+  FAIL: segunda seed 10: Ceuta played 40, not 38
+  FAIL: segunda seed 10: Castellón played 40, not 38
+  FAIL: segunda seed 10: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 10: Real Oviedo played 40, not 38
+  FAIL: segunda seed 10: Granada played 40, not 38
+  FAIL: segunda seed 10: Eldense played 40, not 38
+  FAIL: segunda seed 10: Las Palmas played 40, not 38
+  FAIL: segunda seed 10: Sabadell played 40, not 38
+  FAIL: segunda seed 10: Girona played 40, not 38
+  FAIL: segunda seed 10: Cádiz played 40, not 38
+  FAIL: segunda seed 10: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 10: Leganés played 40, not 38
+  FAIL: segunda seed 10: Albacete played 40, not 38
+  FAIL: segunda seed 10: 21 clubs next season
+  FAIL: segunda seed 11: the table has 21 rows
+  FAIL: segunda seed 11: Almería played 40, not 38
+  FAIL: segunda seed 11: FC Andorra played 40, not 38
+  FAIL: segunda seed 11: Córdoba played 40, not 38
+  FAIL: segunda seed 11: Granada played 40, not 38
+  FAIL: segunda seed 11: Eibar played 40, not 38
+  FAIL: segunda seed 11: Las Palmas played 40, not 38
+  FAIL: segunda seed 11: Burgos played 40, not 38
+  FAIL: segunda seed 11: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 11: Albacete played 40, not 38
+  FAIL: segunda seed 11: Ceuta played 40, not 38
+  FAIL: segunda seed 11: Cádiz played 40, not 38
+  FAIL: segunda seed 11: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 11: Eldense played 40, not 38
+  FAIL: segunda seed 11: Girona played 40, not 38
+  FAIL: segunda seed 11: Valladolid played 40, not 38
+  FAIL: segunda seed 11: Castellón played 40, not 38
+  FAIL: segunda seed 11: Leganés played 40, not 38
+  FAIL: segunda seed 11: Mallorca played 40, not 38
+  FAIL: segunda seed 11: Sabadell played 40, not 38
+  FAIL: segunda seed 11: Real Oviedo played 40, not 38
+  FAIL: segunda seed 11: Tenerife played 40, not 38
+  FAIL: segunda seed 11: 21 clubs next season
+  FAIL: segunda seed 12: the table has 21 rows
+  FAIL: segunda seed 12: Real Oviedo played 40, not 38
+  FAIL: segunda seed 12: Mallorca played 40, not 38
+  FAIL: segunda seed 12: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 12: Cádiz played 40, not 38
+  FAIL: segunda seed 12: Sabadell played 40, not 38
+  FAIL: segunda seed 12: Las Palmas played 40, not 38
+  FAIL: segunda seed 12: Granada played 40, not 38
+  FAIL: segunda seed 12: Eldense played 40, not 38
+  FAIL: segunda seed 12: FC Andorra played 40, not 38
+  FAIL: segunda seed 12: Córdoba played 40, not 38
+  FAIL: segunda seed 12: Leganés played 40, not 38
+  FAIL: segunda seed 12: Ceuta played 40, not 38
+  FAIL: segunda seed 12: Burgos played 40, not 38
+  FAIL: segunda seed 12: Valladolid played 40, not 38
+  FAIL: segunda seed 12: Eibar played 40, not 38
+  FAIL: segunda seed 12: Castellón played 40, not 38
+  FAIL: segunda seed 12: Almería played 40, not 38
+  FAIL: segunda seed 12: Albacete played 40, not 38
+  FAIL: segunda seed 12: Tenerife played 40, not 38
+  FAIL: segunda seed 12: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 12: Girona played 40, not 38
+  FAIL: segunda seed 12: 21 clubs next season
+  FAIL: segunda seed 13: the table has 21 rows
+  FAIL: segunda seed 13: Albacete played 40, not 38
+  FAIL: segunda seed 13: Real Oviedo played 40, not 38
+  FAIL: segunda seed 13: Valladolid played 40, not 38
+  FAIL: segunda seed 13: Cádiz played 40, not 38
+  FAIL: segunda seed 13: Tenerife played 40, not 38
+  FAIL: segunda seed 13: Burgos played 40, not 38
+  FAIL: segunda seed 13: Granada played 40, not 38
+  FAIL: segunda seed 13: Leganés played 40, not 38
+  FAIL: segunda seed 13: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 13: Sabadell played 40, not 38
+  FAIL: segunda seed 13: Ceuta played 40, not 38
+  FAIL: segunda seed 13: Las Palmas played 40, not 38
+  FAIL: segunda seed 13: Mallorca played 40, not 38
+  FAIL: segunda seed 13: Eldense played 40, not 38
+  FAIL: segunda seed 13: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 13: Córdoba played 40, not 38
+  FAIL: segunda seed 13: Castellón played 40, not 38
+  FAIL: segunda seed 13: Eibar played 40, not 38
+  FAIL: segunda seed 13: Almería played 40, not 38
+  FAIL: segunda seed 13: Girona played 40, not 38
+  FAIL: segunda seed 13: FC Andorra played 40, not 38
+  FAIL: segunda seed 13: 21 clubs next season
+  FAIL: segunda seed 14: the table has 21 rows
+  FAIL: segunda seed 14: Albacete played 40, not 38
+  FAIL: segunda seed 14: Mallorca played 40, not 38
+  FAIL: segunda seed 14: Cádiz played 40, not 38
+  FAIL: segunda seed 14: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 14: Eldense played 40, not 38
+  FAIL: segunda seed 14: Valladolid played 40, not 38
+  FAIL: segunda seed 14: Granada played 40, not 38
+  FAIL: segunda seed 14: Ceuta played 40, not 38
+  FAIL: segunda seed 14: Sabadell played 40, not 38
+  FAIL: segunda seed 14: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 14: Burgos played 40, not 38
+  FAIL: segunda seed 14: Leganés played 40, not 38
+  FAIL: segunda seed 14: Tenerife played 40, not 38
+  FAIL: segunda seed 14: Girona played 40, not 38
+  FAIL: segunda seed 14: FC Andorra played 40, not 38
+  FAIL: segunda seed 14: Almería played 40, not 38
+  FAIL: segunda seed 14: Real Oviedo played 40, not 38
+  FAIL: segunda seed 14: Eibar played 40, not 38
+  FAIL: segunda seed 14: Las Palmas played 40, not 38
+  FAIL: segunda seed 14: Córdoba played 40, not 38
+  FAIL: segunda seed 14: Castellón played 40, not 38
+  FAIL: segunda seed 14: 21 clubs next season
+  FAIL: segunda seed 15: the table has 21 rows
+  FAIL: segunda seed 15: Girona played 40, not 38
+  FAIL: segunda seed 15: Burgos played 40, not 38
+  FAIL: segunda seed 15: Córdoba played 40, not 38
+  FAIL: segunda seed 15: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 15: Leganés played 40, not 38
+  FAIL: segunda seed 15: Granada played 40, not 38
+  FAIL: segunda seed 15: Cádiz played 40, not 38
+  FAIL: segunda seed 15: Castellón played 40, not 38
+  FAIL: segunda seed 15: Almería played 40, not 38
+  FAIL: segunda seed 15: Las Palmas played 40, not 38
+  FAIL: segunda seed 15: FC Andorra played 40, not 38
+  FAIL: segunda seed 15: Eldense played 40, not 38
+  FAIL: segunda seed 15: Tenerife played 40, not 38
+  FAIL: segunda seed 15: Real Oviedo played 40, not 38
+  FAIL: segunda seed 15: Eibar played 40, not 38
+  FAIL: segunda seed 15: Albacete played 40, not 38
+  FAIL: segunda seed 15: Mallorca played 40, not 38
+  FAIL: segunda seed 15: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 15: Sabadell played 40, not 38
+  FAIL: segunda seed 15: Valladolid played 40, not 38
+  FAIL: segunda seed 15: Ceuta played 40, not 38
+  FAIL: segunda seed 15: 21 clubs next season
+  FAIL: segunda seed 16: the table has 21 rows
+  FAIL: segunda seed 16: Eibar played 40, not 38
+  FAIL: segunda seed 16: Cádiz played 40, not 38
+  FAIL: segunda seed 16: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 16: Eldense played 40, not 38
+  FAIL: segunda seed 16: Córdoba played 40, not 38
+  FAIL: segunda seed 16: Ceuta played 40, not 38
+  FAIL: segunda seed 16: Granada played 40, not 38
+  FAIL: segunda seed 16: Burgos played 40, not 38
+  FAIL: segunda seed 16: Sabadell played 40, not 38
+  FAIL: segunda seed 16: Leganés played 40, not 38
+  FAIL: segunda seed 16: Real Oviedo played 40, not 38
+  FAIL: segunda seed 16: FC Andorra played 40, not 38
+  FAIL: segunda seed 16: Castellón played 40, not 38
+  FAIL: segunda seed 16: Tenerife played 40, not 38
+  FAIL: segunda seed 16: Las Palmas played 40, not 38
+  FAIL: segunda seed 16: Valladolid played 40, not 38
+  FAIL: segunda seed 16: Girona played 40, not 38
+  FAIL: segunda seed 16: Albacete played 40, not 38
+  FAIL: segunda seed 16: Almería played 40, not 38
+  FAIL: segunda seed 16: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 16: Mallorca played 40, not 38
+  FAIL: segunda seed 16: 21 clubs next season
+  FAIL: segunda seed 17: the table has 21 rows
+  FAIL: segunda seed 17: Córdoba played 40, not 38
+  FAIL: segunda seed 17: Real Oviedo played 40, not 38
+  FAIL: segunda seed 17: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 17: Granada played 40, not 38
+  FAIL: segunda seed 17: Mallorca played 40, not 38
+  FAIL: segunda seed 17: Tenerife played 40, not 38
+  FAIL: segunda seed 17: Las Palmas played 40, not 38
+  FAIL: segunda seed 17: Ceuta played 40, not 38
+  FAIL: segunda seed 17: Cádiz played 40, not 38
+  FAIL: segunda seed 17: Burgos played 40, not 38
+  FAIL: segunda seed 17: Eibar played 40, not 38
+  FAIL: segunda seed 17: Leganés played 40, not 38
+  FAIL: segunda seed 17: Albacete played 40, not 38
+  FAIL: segunda seed 17: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 17: Valladolid played 40, not 38
+  FAIL: segunda seed 17: FC Andorra played 40, not 38
+  FAIL: segunda seed 17: Girona played 40, not 38
+  FAIL: segunda seed 17: Eldense played 40, not 38
+  FAIL: segunda seed 17: Almería played 40, not 38
+  FAIL: segunda seed 17: Sabadell played 40, not 38
+  FAIL: segunda seed 17: Castellón played 40, not 38
+  FAIL: segunda seed 17: 21 clubs next season
+  FAIL: segunda seed 18: the table has 21 rows
+  FAIL: segunda seed 18: Cádiz played 40, not 38
+  FAIL: segunda seed 18: FC Andorra played 40, not 38
+  FAIL: segunda seed 18: Albacete played 40, not 38
+  FAIL: segunda seed 18: Granada played 40, not 38
+  FAIL: segunda seed 18: Ceuta played 40, not 38
+  FAIL: segunda seed 18: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 18: Córdoba played 40, not 38
+  FAIL: segunda seed 18: Valladolid played 40, not 38
+  FAIL: segunda seed 18: Eibar played 40, not 38
+  FAIL: segunda seed 18: Castellón played 40, not 38
+  FAIL: segunda seed 18: Eldense played 40, not 38
+  FAIL: segunda seed 18: Sabadell played 40, not 38
+  FAIL: segunda seed 18: Girona played 40, not 38
+  FAIL: segunda seed 18: Burgos played 40, not 38
+  FAIL: segunda seed 18: Leganés played 40, not 38
+  FAIL: segunda seed 18: Tenerife played 40, not 38
+  FAIL: segunda seed 18: Las Palmas played 40, not 38
+  FAIL: segunda seed 18: Almería played 40, not 38
+  FAIL: segunda seed 18: Mallorca played 40, not 38
+  FAIL: segunda seed 18: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 18: Real Oviedo played 40, not 38
+  FAIL: segunda seed 18: 21 clubs next season
+  FAIL: segunda seed 19: the table has 21 rows
+  FAIL: segunda seed 19: FC Andorra played 40, not 38
+  FAIL: segunda seed 19: Eldense played 40, not 38
+  FAIL: segunda seed 19: Almería played 40, not 38
+  FAIL: segunda seed 19: Tenerife played 40, not 38
+  FAIL: segunda seed 19: Ceuta played 40, not 38
+  FAIL: segunda seed 19: Castellón played 40, not 38
+  FAIL: segunda seed 19: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 19: Real Oviedo played 40, not 38
+  FAIL: segunda seed 19: Sabadell played 40, not 38
+  FAIL: segunda seed 19: Cádiz played 40, not 38
+  FAIL: segunda seed 19: Valladolid played 40, not 38
+  FAIL: segunda seed 19: Leganés played 40, not 38
+  FAIL: segunda seed 19: Burgos played 40, not 38
+  FAIL: segunda seed 19: Las Palmas played 40, not 38
+  FAIL: segunda seed 19: Girona played 40, not 38
+  FAIL: segunda seed 19: Mallorca played 40, not 38
+  FAIL: segunda seed 19: Granada played 40, not 38
+  FAIL: segunda seed 19: Córdoba played 40, not 38
+  FAIL: segunda seed 19: Eibar played 40, not 38
+  FAIL: segunda seed 19: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 19: Albacete played 40, not 38
+  FAIL: segunda seed 19: 21 clubs next season
+  FAIL: segunda seed 20: the table has 21 rows
+  FAIL: segunda seed 20: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 20: Leganés played 40, not 38
+  FAIL: segunda seed 20: Las Palmas played 40, not 38
+  FAIL: segunda seed 20: Eldense played 40, not 38
+  FAIL: segunda seed 20: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 20: Granada played 40, not 38
+  FAIL: segunda seed 20: Eibar played 40, not 38
+  FAIL: segunda seed 20: Ceuta played 40, not 38
+  FAIL: segunda seed 20: Albacete played 40, not 38
+  FAIL: segunda seed 20: Valladolid played 40, not 38
+  FAIL: segunda seed 20: Castellón played 40, not 38
+  FAIL: segunda seed 20: Almería played 40, not 38
+  FAIL: segunda seed 20: Real Oviedo played 40, not 38
+  FAIL: segunda seed 20: Burgos played 40, not 38
+  FAIL: segunda seed 20: Córdoba played 40, not 38
+  FAIL: segunda seed 20: Mallorca played 40, not 38
+  FAIL: segunda seed 20: Cádiz played 40, not 38
+  FAIL: segunda seed 20: Sabadell played 40, not 38
+  FAIL: segunda seed 20: Girona played 40, not 38
+  FAIL: segunda seed 20: FC Andorra played 40, not 38
+  FAIL: segunda seed 20: Tenerife played 40, not 38
+  FAIL: segunda seed 20: 21 clubs next season
+  FAIL: segunda seed 23: the table has 21 rows
+  FAIL: segunda seed 23: Burgos played 40, not 38
+  FAIL: segunda seed 23: Córdoba played 40, not 38
+  FAIL: segunda seed 23: Eibar played 40, not 38
+  FAIL: segunda seed 23: Leganés played 40, not 38
+  FAIL: segunda seed 23: Girona played 40, not 38
+  FAIL: segunda seed 23: Castellón played 40, not 38
+  FAIL: segunda seed 23: Valladolid played 40, not 38
+  FAIL: segunda seed 23: Las Palmas played 40, not 38
+  FAIL: segunda seed 23: Granada played 40, not 38
+  FAIL: segunda seed 23: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 23: Mallorca played 40, not 38
+  FAIL: segunda seed 23: Albacete played 40, not 38
+  FAIL: segunda seed 23: Ceuta played 40, not 38
+  FAIL: segunda seed 23: Almería played 40, not 38
+  FAIL: segunda seed 23: Tenerife played 40, not 38
+  FAIL: segunda seed 23: FC Andorra played 40, not 38
+  FAIL: segunda seed 23: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 23: Sabadell played 40, not 38
+  FAIL: segunda seed 23: Real Oviedo played 40, not 38
+  FAIL: segunda seed 23: Cádiz played 40, not 38
+  FAIL: segunda seed 23: Eldense played 40, not 38
+  FAIL: segunda seed 23: 21 clubs next season
+  FAIL: segunda seed 24: the table has 21 rows
+  FAIL: segunda seed 24: Mallorca played 40, not 38
+  FAIL: segunda seed 24: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 24: Córdoba played 40, not 38
+  FAIL: segunda seed 24: Tenerife played 40, not 38
+  FAIL: segunda seed 24: Castellón played 40, not 38
+  FAIL: segunda seed 24: Almería played 40, not 38
+  FAIL: segunda seed 24: Sabadell played 40, not 38
+  FAIL: segunda seed 24: Las Palmas played 40, not 38
+  FAIL: segunda seed 24: Ceuta played 40, not 38
+  FAIL: segunda seed 24: Albacete played 40, not 38
+  FAIL: segunda seed 24: FC Andorra played 40, not 38
+  FAIL: segunda seed 24: Real Oviedo played 40, not 38
+  FAIL: segunda seed 24: Eldense played 40, not 38
+  FAIL: segunda seed 24: Burgos played 40, not 38
+  FAIL: segunda seed 24: Valladolid played 40, not 38
+  FAIL: segunda seed 24: Eibar played 40, not 38
+  FAIL: segunda seed 24: Leganés played 40, not 38
+  FAIL: segunda seed 24: Cádiz played 40, not 38
+  FAIL: segunda seed 24: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 24: Girona played 40, not 38
+  FAIL: segunda seed 24: Granada played 40, not 38
+  FAIL: segunda seed 24: 21 clubs next season
+  FAIL: segunda seed 25: the table has 21 rows
+  FAIL: segunda seed 25: Girona played 40, not 38
+  FAIL: segunda seed 25: Real Oviedo played 40, not 38
+  FAIL: segunda seed 25: Cádiz played 40, not 38
+  FAIL: segunda seed 25: Las Palmas played 40, not 38
+  FAIL: segunda seed 25: Ceuta played 40, not 38
+  FAIL: segunda seed 25: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 25: Eibar played 40, not 38
+  FAIL: segunda seed 25: Leganés played 40, not 38
+  FAIL: segunda seed 25: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 25: Almería played 40, not 38
+  FAIL: segunda seed 25: Eldense played 40, not 38
+  FAIL: segunda seed 25: Tenerife played 40, not 38
+  FAIL: segunda seed 25: Córdoba played 40, not 38
+  FAIL: segunda seed 25: Mallorca played 40, not 38
+  FAIL: segunda seed 25: Sabadell played 40, not 38
+  FAIL: segunda seed 25: Granada played 40, not 38
+  FAIL: segunda seed 25: Burgos played 40, not 38
+  FAIL: segunda seed 25: Castellón played 40, not 38
+  FAIL: segunda seed 25: Albacete played 40, not 38
+  FAIL: segunda seed 25: FC Andorra played 40, not 38
+  FAIL: segunda seed 25: Valladolid played 40, not 38
+  FAIL: segunda seed 25: 21 clubs next season
+  FAIL: segunda seed 26: the table has 21 rows
+  FAIL: segunda seed 26: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 26: FC Andorra played 40, not 38
+  FAIL: segunda seed 26: Eibar played 40, not 38
+  FAIL: segunda seed 26: Córdoba played 40, not 38
+  FAIL: segunda seed 26: Burgos played 40, not 38
+  FAIL: segunda seed 26: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 26: Granada played 40, not 38
+  FAIL: segunda seed 26: Ceuta played 40, not 38
+  FAIL: segunda seed 26: Valladolid played 40, not 38
+  FAIL: segunda seed 26: Almería played 40, not 38
+  FAIL: segunda seed 26: Castellón played 40, not 38
+  FAIL: segunda seed 26: Real Oviedo played 40, not 38
+  FAIL: segunda seed 26: Eldense played 40, not 38
+  FAIL: segunda seed 26: Leganés played 40, not 38
+  FAIL: segunda seed 26: Albacete played 40, not 38
+  FAIL: segunda seed 26: Las Palmas played 40, not 38
+  FAIL: segunda seed 26: Tenerife played 40, not 38
+  FAIL: segunda seed 26: Cádiz played 40, not 38
+  FAIL: segunda seed 26: Girona played 40, not 38
+  FAIL: segunda seed 26: Sabadell played 40, not 38
+  FAIL: segunda seed 26: Mallorca played 40, not 38
+  FAIL: segunda seed 26: 21 clubs next season
+  FAIL: segunda seed 27: the table has 21 rows
+  FAIL: segunda seed 27: Valladolid played 40, not 38
+  FAIL: segunda seed 27: Almería played 40, not 38
+  FAIL: segunda seed 27: FC Andorra played 40, not 38
+  FAIL: segunda seed 27: Real Oviedo played 40, not 38
+  FAIL: segunda seed 27: Eibar played 40, not 38
+  FAIL: segunda seed 27: Leganés played 40, not 38
+  FAIL: segunda seed 27: Castellón played 40, not 38
+  FAIL: segunda seed 27: Burgos played 40, not 38
+  FAIL: segunda seed 27: Eldense played 40, not 38
+  FAIL: segunda seed 27: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 27: Ceuta played 40, not 38
+  FAIL: segunda seed 27: Granada played 40, not 38
+  FAIL: segunda seed 27: Tenerife played 40, not 38
+  FAIL: segunda seed 27: Albacete played 40, not 38
+  FAIL: segunda seed 27: Mallorca played 40, not 38
+  FAIL: segunda seed 27: Las Palmas played 40, not 38
+  FAIL: segunda seed 27: Sabadell played 40, not 38
+  FAIL: segunda seed 27: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 27: Girona played 40, not 38
+  FAIL: segunda seed 27: Cádiz played 40, not 38
+  FAIL: segunda seed 27: Córdoba played 40, not 38
+  FAIL: segunda seed 27: 21 clubs next season
+  FAIL: segunda seed 28: the table has 21 rows
+  FAIL: segunda seed 28: Granada played 40, not 38
+  FAIL: segunda seed 28: Cádiz played 40, not 38
+  FAIL: segunda seed 28: Real Oviedo played 40, not 38
+  FAIL: segunda seed 28: Almería played 40, not 38
+  FAIL: segunda seed 28: Castellón played 40, not 38
+  FAIL: segunda seed 28: Albacete played 40, not 38
+  FAIL: segunda seed 28: Ceuta played 40, not 38
+  FAIL: segunda seed 28: Eldense played 40, not 38
+  FAIL: segunda seed 28: Las Palmas played 40, not 38
+  FAIL: segunda seed 28: Mallorca played 40, not 38
+  FAIL: segunda seed 28: Leganés played 40, not 38
+  FAIL: segunda seed 28: Tenerife played 40, not 38
+  FAIL: segunda seed 28: Eibar played 40, not 38
+  FAIL: segunda seed 28: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 28: Girona played 40, not 38
+  FAIL: segunda seed 28: Córdoba played 40, not 38
+  FAIL: segunda seed 28: Sabadell played 40, not 38
+  FAIL: segunda seed 28: Valladolid played 40, not 38
+  FAIL: segunda seed 28: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 28: FC Andorra played 40, not 38
+  FAIL: segunda seed 28: Burgos played 40, not 38
+  FAIL: segunda seed 28: 21 clubs next season
+  FAIL: segunda seed 29: the table has 21 rows
+  FAIL: segunda seed 29: Castellón played 40, not 38
+  FAIL: segunda seed 29: Albacete played 40, not 38
+  FAIL: segunda seed 29: Leganés played 40, not 38
+  FAIL: segunda seed 29: Granada played 40, not 38
+  FAIL: segunda seed 29: Real Oviedo played 40, not 38
+  FAIL: segunda seed 29: Cádiz played 40, not 38
+  FAIL: segunda seed 29: Ceuta played 40, not 38
+  FAIL: segunda seed 29: Valladolid played 40, not 38
+  FAIL: segunda seed 29: FC Andorra played 40, not 38
+  FAIL: segunda seed 29: Las Palmas played 40, not 38
+  FAIL: segunda seed 29: Sabadell played 40, not 38
+  FAIL: segunda seed 29: Tenerife played 40, not 38
+  FAIL: segunda seed 29: Girona played 40, not 38
+  FAIL: segunda seed 29: Eldense played 40, not 38
+  FAIL: segunda seed 29: Burgos played 40, not 38
+  FAIL: segunda seed 29: Mallorca played 40, not 38
+  FAIL: segunda seed 29: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 29: Almería played 40, not 38
+  FAIL: segunda seed 29: Eibar played 40, not 38
+  FAIL: segunda seed 29: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 29: Córdoba played 40, not 38
+  FAIL: segunda seed 29: 21 clubs next season
+  FAIL: segunda seed 30: the table has 21 rows
+  FAIL: segunda seed 30: Córdoba played 40, not 38
+  FAIL: segunda seed 30: Cádiz played 40, not 38
+  FAIL: segunda seed 30: Las Palmas played 40, not 38
+  FAIL: segunda seed 30: Albacete played 40, not 38
+  FAIL: segunda seed 30: Real Oviedo played 40, not 38
+  FAIL: segunda seed 30: Almería played 40, not 38
+  FAIL: segunda seed 30: Eibar played 40, not 38
+  FAIL: segunda seed 30: Burgos played 40, not 38
+  FAIL: segunda seed 30: Eldense played 40, not 38
+  FAIL: segunda seed 30: Girona played 40, not 38
+  FAIL: segunda seed 30: Mallorca played 40, not 38
+  FAIL: segunda seed 30: Granada played 40, not 38
+  FAIL: segunda seed 30: FC Andorra played 40, not 38
+  FAIL: segunda seed 30: Castellón played 40, not 38
+  FAIL: segunda seed 30: Valladolid played 40, not 38
+  FAIL: segunda seed 30: Tenerife played 40, not 38
+  FAIL: segunda seed 30: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 30: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 30: Sabadell played 40, not 38
+  FAIL: segunda seed 30: Leganés played 40, not 38
+  FAIL: segunda seed 30: Ceuta played 40, not 38
+  FAIL: segunda seed 30: 21 clubs next season
+  FAIL: segunda seed 32: the table has 21 rows
+  FAIL: segunda seed 32: Eldense played 40, not 38
+  FAIL: segunda seed 32: Córdoba played 40, not 38
+  FAIL: segunda seed 32: Valladolid played 40, not 38
+  FAIL: segunda seed 32: Almería played 40, not 38
+  FAIL: segunda seed 32: FC Andorra played 40, not 38
+  FAIL: segunda seed 32: Girona played 40, not 38
+  FAIL: segunda seed 32: Real Oviedo played 40, not 38
+  FAIL: segunda seed 32: Mallorca played 40, not 38
+  FAIL: segunda seed 32: Granada played 40, not 38
+  FAIL: segunda seed 32: Las Palmas played 40, not 38
+  FAIL: segunda seed 32: Eibar played 40, not 38
+  FAIL: segunda seed 32: Castellón played 40, not 38
+  FAIL: segunda seed 32: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 32: Cádiz played 40, not 38
+  FAIL: segunda seed 32: Burgos played 40, not 38
+  FAIL: segunda seed 32: Albacete played 40, not 38
+  FAIL: segunda seed 32: Leganés played 40, not 38
+  FAIL: segunda seed 32: Ceuta played 40, not 38
+  FAIL: segunda seed 32: Tenerife played 40, not 38
+  FAIL: segunda seed 32: Sabadell played 40, not 38
+  FAIL: segunda seed 32: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 32: 21 clubs next season
+  FAIL: segunda seed 33: the table has 21 rows
+  FAIL: segunda seed 33: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 33: Las Palmas played 40, not 38
+  FAIL: segunda seed 33: Eldense played 40, not 38
+  FAIL: segunda seed 33: FC Andorra played 40, not 38
+  FAIL: segunda seed 33: Valladolid played 40, not 38
+  FAIL: segunda seed 33: Albacete played 40, not 38
+  FAIL: segunda seed 33: Ceuta played 40, not 38
+  FAIL: segunda seed 33: Eibar played 40, not 38
+  FAIL: segunda seed 33: Girona played 40, not 38
+  FAIL: segunda seed 33: Leganés played 40, not 38
+  FAIL: segunda seed 33: Tenerife played 40, not 38
+  FAIL: segunda seed 33: Mallorca played 40, not 38
+  FAIL: segunda seed 33: Castellón played 40, not 38
+  FAIL: segunda seed 33: Burgos played 40, not 38
+  FAIL: segunda seed 33: Almería played 40, not 38
+  FAIL: segunda seed 33: Sabadell played 40, not 38
+  FAIL: segunda seed 33: Granada played 40, not 38
+  FAIL: segunda seed 33: Cádiz played 40, not 38
+  FAIL: segunda seed 33: Real Oviedo played 40, not 38
+  FAIL: segunda seed 33: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 33: Córdoba played 40, not 38
+  FAIL: segunda seed 33: 21 clubs next season
+  FAIL: segunda seed 34: the table has 21 rows
+  FAIL: segunda seed 34: Real Oviedo played 40, not 38
+  FAIL: segunda seed 34: Eldense played 40, not 38
+  FAIL: segunda seed 34: Tenerife played 40, not 38
+  FAIL: segunda seed 34: Córdoba played 40, not 38
+  FAIL: segunda seed 34: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 34: Leganés played 40, not 38
+  FAIL: segunda seed 34: Cádiz played 40, not 38
+  FAIL: segunda seed 34: Girona played 40, not 38
+  FAIL: segunda seed 34: Granada played 40, not 38
+  FAIL: segunda seed 34: Eibar played 40, not 38
+  FAIL: segunda seed 34: Valladolid played 40, not 38
+  FAIL: segunda seed 34: Sabadell played 40, not 38
+  FAIL: segunda seed 34: Burgos played 40, not 38
+  FAIL: segunda seed 34: Albacete played 40, not 38
+  FAIL: segunda seed 34: FC Andorra played 40, not 38
+  FAIL: segunda seed 34: Ceuta played 40, not 38
+  FAIL: segunda seed 34: Almería played 40, not 38
+  FAIL: segunda seed 34: Castellón played 40, not 38
+  FAIL: segunda seed 34: Mallorca played 40, not 38
+  FAIL: segunda seed 34: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 34: Las Palmas played 40, not 38
+  FAIL: segunda seed 34: 21 clubs next season
+  FAIL: segunda seed 35: the table has 21 rows
+  FAIL: segunda seed 35: Girona played 40, not 38
+  FAIL: segunda seed 35: Albacete played 40, not 38
+  FAIL: segunda seed 35: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 35: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 35: Tenerife played 40, not 38
+  FAIL: segunda seed 35: Almería played 40, not 38
+  FAIL: segunda seed 35: Real Oviedo played 40, not 38
+  FAIL: segunda seed 35: Granada played 40, not 38
+  FAIL: segunda seed 35: Las Palmas played 40, not 38
+  FAIL: segunda seed 35: Leganés played 40, not 38
+  FAIL: segunda seed 35: Burgos played 40, not 38
+  FAIL: segunda seed 35: Mallorca played 40, not 38
+  FAIL: segunda seed 35: Córdoba played 40, not 38
+  FAIL: segunda seed 35: Valladolid played 40, not 38
+  FAIL: segunda seed 35: Ceuta played 40, not 38
+  FAIL: segunda seed 35: Sabadell played 40, not 38
+  FAIL: segunda seed 35: Castellón played 40, not 38
+  FAIL: segunda seed 35: Eibar played 40, not 38
+  FAIL: segunda seed 35: Cádiz played 40, not 38
+  FAIL: segunda seed 35: Eldense played 40, not 38
+  FAIL: segunda seed 35: FC Andorra played 40, not 38
+  FAIL: segunda seed 35: 21 clubs next season
+  FAIL: segunda seed 36: the table has 21 rows
+  FAIL: segunda seed 36: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 36: Tenerife played 40, not 38
+  FAIL: segunda seed 36: Eibar played 40, not 38
+  FAIL: segunda seed 36: Córdoba played 40, not 38
+  FAIL: segunda seed 36: Almería played 40, not 38
+  FAIL: segunda seed 36: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 36: Albacete played 40, not 38
+  FAIL: segunda seed 36: FC Andorra played 40, not 38
+  FAIL: segunda seed 36: Las Palmas played 40, not 38
+  FAIL: segunda seed 36: Valladolid played 40, not 38
+  FAIL: segunda seed 36: Sabadell played 40, not 38
+  FAIL: segunda seed 36: Mallorca played 40, not 38
+  FAIL: segunda seed 36: Real Oviedo played 40, not 38
+  FAIL: segunda seed 36: Girona played 40, not 38
+  FAIL: segunda seed 36: Castellón played 40, not 38
+  FAIL: segunda seed 36: Leganés played 40, not 38
+  FAIL: segunda seed 36: Ceuta played 40, not 38
+  FAIL: segunda seed 36: Granada played 40, not 38
+  FAIL: segunda seed 36: Burgos played 40, not 38
+  FAIL: segunda seed 36: Cádiz played 40, not 38
+  FAIL: segunda seed 36: Eldense played 40, not 38
+  FAIL: segunda seed 36: 21 clubs next season
+  FAIL: segunda seed 37: the table has 21 rows
+  FAIL: segunda seed 37: Las Palmas played 40, not 38
+  FAIL: segunda seed 37: Burgos played 40, not 38
+  FAIL: segunda seed 37: Sabadell played 40, not 38
+  FAIL: segunda seed 37: Tenerife played 40, not 38
+  FAIL: segunda seed 37: FC Andorra played 40, not 38
+  FAIL: segunda seed 37: Albacete played 40, not 38
+  FAIL: segunda seed 37: Córdoba played 40, not 38
+  FAIL: segunda seed 37: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 37: Eibar played 40, not 38
+  FAIL: segunda seed 37: Castellón played 40, not 38
+  FAIL: segunda seed 37: Girona played 40, not 38
+  FAIL: segunda seed 37: Valladolid played 40, not 38
+  FAIL: segunda seed 37: Eldense played 40, not 38
+  FAIL: segunda seed 37: Real Oviedo played 40, not 38
+  FAIL: segunda seed 37: Ceuta played 40, not 38
+  FAIL: segunda seed 37: Leganés played 40, not 38
+  FAIL: segunda seed 37: Cádiz played 40, not 38
+  FAIL: segunda seed 37: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 37: Mallorca played 40, not 38
+  FAIL: segunda seed 37: Almería played 40, not 38
+  FAIL: segunda seed 37: Granada played 40, not 38
+  FAIL: segunda seed 37: 21 clubs next season
+  FAIL: segunda seed 38: the table has 21 rows
+  FAIL: segunda seed 38: Ceuta played 40, not 38
+  FAIL: segunda seed 38: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 38: FC Andorra played 40, not 38
+  FAIL: segunda seed 38: Burgos played 40, not 38
+  FAIL: segunda seed 38: Eibar played 40, not 38
+  FAIL: segunda seed 38: Albacete played 40, not 38
+  FAIL: segunda seed 38: Las Palmas played 40, not 38
+  FAIL: segunda seed 38: Tenerife played 40, not 38
+  FAIL: segunda seed 38: Valladolid played 40, not 38
+  FAIL: segunda seed 38: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 38: Córdoba played 40, not 38
+  FAIL: segunda seed 38: Mallorca played 40, not 38
+  FAIL: segunda seed 38: Girona played 40, not 38
+  FAIL: segunda seed 38: Sabadell played 40, not 38
+  FAIL: segunda seed 38: Almería played 40, not 38
+  FAIL: segunda seed 38: Leganés played 40, not 38
+  FAIL: segunda seed 38: Granada played 40, not 38
+  FAIL: segunda seed 38: Cádiz played 40, not 38
+  FAIL: segunda seed 38: Castellón played 40, not 38
+  FAIL: segunda seed 38: Real Oviedo played 40, not 38
+  FAIL: segunda seed 38: Eldense played 40, not 38
+  FAIL: segunda seed 38: 21 clubs next season
+  FAIL: segunda seed 39: the table has 21 rows
+  FAIL: segunda seed 39: Castellón played 40, not 38
+  FAIL: segunda seed 39: Córdoba played 40, not 38
+  FAIL: segunda seed 39: Leganés played 40, not 38
+  FAIL: segunda seed 39: Sabadell played 40, not 38
+  FAIL: segunda seed 39: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 39: Tenerife played 40, not 38
+  FAIL: segunda seed 39: Mallorca played 40, not 38
+  FAIL: segunda seed 39: Cádiz played 40, not 38
+  FAIL: segunda seed 39: FC Andorra played 40, not 38
+  FAIL: segunda seed 39: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 39: Ceuta played 40, not 38
+  FAIL: segunda seed 39: Girona played 40, not 38
+  FAIL: segunda seed 39: Burgos played 40, not 38
+  FAIL: segunda seed 39: Granada played 40, not 38
+  FAIL: segunda seed 39: Albacete played 40, not 38
+  FAIL: segunda seed 39: Valladolid played 40, not 38
+  FAIL: segunda seed 39: Real Oviedo played 40, not 38
+  FAIL: segunda seed 39: Las Palmas played 40, not 38
+  FAIL: segunda seed 39: Eibar played 40, not 38
+  FAIL: segunda seed 39: Eldense played 40, not 38
+  FAIL: segunda seed 39: Almería played 40, not 38
+  FAIL: segunda seed 39: 21 clubs next season
+  FAIL: segunda seed 40: the table has 21 rows
+  FAIL: segunda seed 40: Girona played 40, not 38
+  FAIL: segunda seed 40: Ceuta played 40, not 38
+  FAIL: segunda seed 40: Almería played 40, not 38
+  FAIL: segunda seed 40: Las Palmas played 40, not 38
+  FAIL: segunda seed 40: Leganés played 40, not 38
+  FAIL: segunda seed 40: Córdoba played 40, not 38
+  FAIL: segunda seed 40: Valladolid played 40, not 38
+  FAIL: segunda seed 40: Tenerife played 40, not 38
+  FAIL: segunda seed 40: Granada played 40, not 38
+  FAIL: segunda seed 40: Sabadell played 40, not 38
+  FAIL: segunda seed 40: Castellón played 40, not 38
+  FAIL: segunda seed 40: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 40: Albacete played 40, not 38
+  FAIL: segunda seed 40: Mallorca played 40, not 38
+  FAIL: segunda seed 40: Real Oviedo played 40, not 38
+  FAIL: segunda seed 40: Eldense played 40, not 38
+  FAIL: segunda seed 40: FC Andorra played 40, not 38
+  FAIL: segunda seed 40: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 40: Eibar played 40, not 38
+  FAIL: segunda seed 40: Cádiz played 40, not 38
+  FAIL: segunda seed 40: Burgos played 40, not 38
+  FAIL: segunda seed 40: 21 clubs next season
+  FAIL: segunda seed 41: the table has 21 rows
+  FAIL: segunda seed 41: Tenerife played 40, not 38
+  FAIL: segunda seed 41: Córdoba played 40, not 38
+  FAIL: segunda seed 41: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 41: Leganés played 40, not 38
+  FAIL: segunda seed 41: Sabadell played 40, not 38
+  FAIL: segunda seed 41: Las Palmas played 40, not 38
+  FAIL: segunda seed 41: Almería played 40, not 38
+  FAIL: segunda seed 41: Ceuta played 40, not 38
+  FAIL: segunda seed 41: Granada played 40, not 38
+  FAIL: segunda seed 41: FC Andorra played 40, not 38
+  FAIL: segunda seed 41: Burgos played 40, not 38
+  FAIL: segunda seed 41: Albacete played 40, not 38
+  FAIL: segunda seed 41: Eldense played 40, not 38
+  FAIL: segunda seed 41: Castellón played 40, not 38
+  FAIL: segunda seed 41: Eibar played 40, not 38
+  FAIL: segunda seed 41: Mallorca played 40, not 38
+  FAIL: segunda seed 41: Valladolid played 40, not 38
+  FAIL: segunda seed 41: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 41: Cádiz played 40, not 38
+  FAIL: segunda seed 41: Girona played 40, not 38
+  FAIL: segunda seed 41: Real Oviedo played 40, not 38
+  FAIL: segunda seed 41: 21 clubs next season
+  FAIL: segunda seed 42: the table has 21 rows
+  FAIL: segunda seed 42: Sabadell played 40, not 38
+  FAIL: segunda seed 42: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 42: Valladolid played 40, not 38
+  FAIL: segunda seed 42: Castellón played 40, not 38
+  FAIL: segunda seed 42: Albacete played 40, not 38
+  FAIL: segunda seed 42: Cádiz played 40, not 38
+  FAIL: segunda seed 42: Almería played 40, not 38
+  FAIL: segunda seed 42: Eibar played 40, not 38
+  FAIL: segunda seed 42: Las Palmas played 40, not 38
+  FAIL: segunda seed 42: Girona played 40, not 38
+  FAIL: segunda seed 42: Real Oviedo played 40, not 38
+  FAIL: segunda seed 42: FC Andorra played 40, not 38
+  FAIL: segunda seed 42: Leganés played 40, not 38
+  FAIL: segunda seed 42: Mallorca played 40, not 38
+  FAIL: segunda seed 42: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 42: Burgos played 40, not 38
+  FAIL: segunda seed 42: Granada played 40, not 38
+  FAIL: segunda seed 42: Tenerife played 40, not 38
+  FAIL: segunda seed 42: Córdoba played 40, not 38
+  FAIL: segunda seed 42: Eldense played 40, not 38
+  FAIL: segunda seed 42: Ceuta played 40, not 38
+  FAIL: segunda seed 42: 21 clubs next season
+  FAIL: segunda seed 43: the table has 21 rows
+  FAIL: segunda seed 43: Cádiz played 40, not 38
+  FAIL: segunda seed 43: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 43: Eldense played 40, not 38
+  FAIL: segunda seed 43: Castellón played 40, not 38
+  FAIL: segunda seed 43: Mallorca played 40, not 38
+  FAIL: segunda seed 43: Burgos played 40, not 38
+  FAIL: segunda seed 43: Tenerife played 40, not 38
+  FAIL: segunda seed 43: Sabadell played 40, not 38
+  FAIL: segunda seed 43: Granada played 40, not 38
+  FAIL: segunda seed 43: Girona played 40, not 38
+  FAIL: segunda seed 43: Real Oviedo played 40, not 38
+  FAIL: segunda seed 43: Eibar played 40, not 38
+  FAIL: segunda seed 43: FC Andorra played 40, not 38
+  FAIL: segunda seed 43: Almería played 40, not 38
+  FAIL: segunda seed 43: Albacete played 40, not 38
+  FAIL: segunda seed 43: Valladolid played 40, not 38
+  FAIL: segunda seed 43: Ceuta played 40, not 38
+  FAIL: segunda seed 43: Córdoba played 40, not 38
+  FAIL: segunda seed 43: Leganés played 40, not 38
+  FAIL: segunda seed 43: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 43: Las Palmas played 40, not 38
+  FAIL: segunda seed 43: 21 clubs next season
+  FAIL: segunda seed 44: the table has 21 rows
+  FAIL: segunda seed 44: Cádiz played 40, not 38
+  FAIL: segunda seed 44: Almería played 40, not 38
+  FAIL: segunda seed 44: Ceuta played 40, not 38
+  FAIL: segunda seed 44: Mallorca played 40, not 38
+  FAIL: segunda seed 44: Córdoba played 40, not 38
+  FAIL: segunda seed 44: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 44: Las Palmas played 40, not 38
+  FAIL: segunda seed 44: Valladolid played 40, not 38
+  FAIL: segunda seed 44: Leganés played 40, not 38
+  FAIL: segunda seed 44: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 44: FC Andorra played 40, not 38
+  FAIL: segunda seed 44: Real Oviedo played 40, not 38
+  FAIL: segunda seed 44: Eldense played 40, not 38
+  FAIL: segunda seed 44: Burgos played 40, not 38
+  FAIL: segunda seed 44: Albacete played 40, not 38
+  FAIL: segunda seed 44: Sabadell played 40, not 38
+  FAIL: segunda seed 44: Girona played 40, not 38
+  FAIL: segunda seed 44: Castellón played 40, not 38
+  FAIL: segunda seed 44: Tenerife played 40, not 38
+  FAIL: segunda seed 44: Eibar played 40, not 38
+  FAIL: segunda seed 44: Granada played 40, not 38
+  FAIL: segunda seed 44: 21 clubs next season
+  FAIL: segunda seed 45: the table has 21 rows
+  FAIL: segunda seed 45: Sabadell played 40, not 38
+  FAIL: segunda seed 45: Real Oviedo played 40, not 38
+  FAIL: segunda seed 45: Girona played 40, not 38
+  FAIL: segunda seed 45: Eldense played 40, not 38
+  FAIL: segunda seed 45: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 45: Leganés played 40, not 38
+  FAIL: segunda seed 45: Cádiz played 40, not 38
+  FAIL: segunda seed 45: Las Palmas played 40, not 38
+  FAIL: segunda seed 45: Valladolid played 40, not 38
+  FAIL: segunda seed 45: Córdoba played 40, not 38
+  FAIL: segunda seed 45: FC Andorra played 40, not 38
+  FAIL: segunda seed 45: Burgos played 40, not 38
+  FAIL: segunda seed 45: Granada played 40, not 38
+  FAIL: segunda seed 45: Almería played 40, not 38
+  FAIL: segunda seed 45: Eibar played 40, not 38
+  FAIL: segunda seed 45: Ceuta played 40, not 38
+  FAIL: segunda seed 45: Mallorca played 40, not 38
+  FAIL: segunda seed 45: Albacete played 40, not 38
+  FAIL: segunda seed 45: Castellón played 40, not 38
+  FAIL: segunda seed 45: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 45: Tenerife played 40, not 38
+  FAIL: segunda seed 45: 21 clubs next season
+  FAIL: segunda seed 46: the table has 21 rows
+  FAIL: segunda seed 46: Ceuta played 40, not 38
+  FAIL: segunda seed 46: Almería played 40, not 38
+  FAIL: segunda seed 46: Sabadell played 40, not 38
+  FAIL: segunda seed 46: Real Oviedo played 40, not 38
+  FAIL: segunda seed 46: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 46: Eibar played 40, not 38
+  FAIL: segunda seed 46: Córdoba played 40, not 38
+  FAIL: segunda seed 46: Girona played 40, not 38
+  FAIL: segunda seed 46: Castellón played 40, not 38
+  FAIL: segunda seed 46: Mallorca played 40, not 38
+  FAIL: segunda seed 46: Cádiz played 40, not 38
+  FAIL: segunda seed 46: Las Palmas played 40, not 38
+  FAIL: segunda seed 46: Tenerife played 40, not 38
+  FAIL: segunda seed 46: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 46: Granada played 40, not 38
+  FAIL: segunda seed 46: Valladolid played 40, not 38
+  FAIL: segunda seed 46: Eldense played 40, not 38
+  FAIL: segunda seed 46: Leganés played 40, not 38
+  FAIL: segunda seed 46: FC Andorra played 40, not 38
+  FAIL: segunda seed 46: Burgos played 40, not 38
+  FAIL: segunda seed 46: Albacete played 40, not 38
+  FAIL: segunda seed 46: 21 clubs next season
+  FAIL: segunda seed 47: the table has 21 rows
+  FAIL: segunda seed 47: Ceuta played 40, not 38
+  FAIL: segunda seed 47: Cádiz played 40, not 38
+  FAIL: segunda seed 47: Granada played 40, not 38
+  FAIL: segunda seed 47: Eldense played 40, not 38
+  FAIL: segunda seed 47: Real Oviedo played 40, not 38
+  FAIL: segunda seed 47: Eibar played 40, not 38
+  FAIL: segunda seed 47: Valladolid played 40, not 38
+  FAIL: segunda seed 47: Almería played 40, not 38
+  FAIL: segunda seed 47: Girona played 40, not 38
+  FAIL: segunda seed 47: Castellón played 40, not 38
+  FAIL: segunda seed 47: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 47: Mallorca played 40, not 38
+  FAIL: segunda seed 47: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 47: FC Andorra played 40, not 38
+  FAIL: segunda seed 47: Córdoba played 40, not 38
+  FAIL: segunda seed 47: Tenerife played 40, not 38
+  FAIL: segunda seed 47: Las Palmas played 40, not 38
+  FAIL: segunda seed 47: Sabadell played 40, not 38
+  FAIL: segunda seed 47: Albacete played 40, not 38
+  FAIL: segunda seed 47: Burgos played 40, not 38
+  FAIL: segunda seed 47: Leganés played 40, not 38
+  FAIL: segunda seed 47: 21 clubs next season
+  FAIL: segunda seed 48: the table has 21 rows
+  FAIL: segunda seed 48: Albacete played 40, not 38
+  FAIL: segunda seed 48: Las Palmas played 40, not 38
+  FAIL: segunda seed 48: Castellón played 40, not 38
+  FAIL: segunda seed 48: Valladolid played 40, not 38
+  FAIL: segunda seed 48: Real Oviedo played 40, not 38
+  FAIL: segunda seed 48: Mallorca played 40, not 38
+  FAIL: segunda seed 48: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 48: Eibar played 40, not 38
+  FAIL: segunda seed 48: Almería played 40, not 38
+  FAIL: segunda seed 48: Ceuta played 40, not 38
+  FAIL: segunda seed 48: FC Andorra played 40, not 38
+  FAIL: segunda seed 48: Córdoba played 40, not 38
+  FAIL: segunda seed 48: Sabadell played 40, not 38
+  FAIL: segunda seed 48: Girona played 40, not 38
+  FAIL: segunda seed 48: Cádiz played 40, not 38
+  FAIL: segunda seed 48: Granada played 40, not 38
+  FAIL: segunda seed 48: Eldense played 40, not 38
+  FAIL: segunda seed 48: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 48: Burgos played 40, not 38
+  FAIL: segunda seed 48: Leganés played 40, not 38
+  FAIL: segunda seed 48: Tenerife played 40, not 38
+  FAIL: segunda seed 48: 21 clubs next season
+  FAIL: segunda seed 49: the table has 21 rows
+  FAIL: segunda seed 49: Mallorca played 40, not 38
+  FAIL: segunda seed 49: Girona played 40, not 38
+  FAIL: segunda seed 49: Burgos played 40, not 38
+  FAIL: segunda seed 49: Eibar played 40, not 38
+  FAIL: segunda seed 49: Sabadell played 40, not 38
+  FAIL: segunda seed 49: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 49: Almería played 40, not 38
+  FAIL: segunda seed 49: Cádiz played 40, not 38
+  FAIL: segunda seed 49: Ceuta played 40, not 38
+  FAIL: segunda seed 49: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 49: Valladolid played 40, not 38
+  FAIL: segunda seed 49: Albacete played 40, not 38
+  FAIL: segunda seed 49: Tenerife played 40, not 38
+  FAIL: segunda seed 49: Granada played 40, not 38
+  FAIL: segunda seed 49: Las Palmas played 40, not 38
+  FAIL: segunda seed 49: Córdoba played 40, not 38
+  FAIL: segunda seed 49: Real Oviedo played 40, not 38
+  FAIL: segunda seed 49: Leganés played 40, not 38
+  FAIL: segunda seed 49: Castellón played 40, not 38
+  FAIL: segunda seed 49: FC Andorra played 40, not 38
+  FAIL: segunda seed 49: Eldense played 40, not 38
+  FAIL: segunda seed 49: 21 clubs next season
+  FAIL: segunda seed 50: the table has 21 rows
+  FAIL: segunda seed 50: Ceuta played 40, not 38
+  FAIL: segunda seed 50: Cádiz played 40, not 38
+  FAIL: segunda seed 50: Real Oviedo played 40, not 38
+  FAIL: segunda seed 50: Eibar played 40, not 38
+  FAIL: segunda seed 50: Sabadell played 40, not 38
+  FAIL: segunda seed 50: Eldense played 40, not 38
+  FAIL: segunda seed 50: FC Andorra played 40, not 38
+  FAIL: segunda seed 50: Almería played 40, not 38
+  FAIL: segunda seed 50: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 50: Tenerife played 40, not 38
+  FAIL: segunda seed 50: Girona played 40, not 38
+  FAIL: segunda seed 50: Leganés played 40, not 38
+  FAIL: segunda seed 50: Córdoba played 40, not 38
+  FAIL: segunda seed 50: Albacete played 40, not 38
+  FAIL: segunda seed 50: Las Palmas played 40, not 38
+  FAIL: segunda seed 50: Valladolid played 40, not 38
+  FAIL: segunda seed 50: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 50: Granada played 40, not 38
+  FAIL: segunda seed 50: Castellón played 40, not 38
+  FAIL: segunda seed 50: Burgos played 40, not 38
+  FAIL: segunda seed 50: Mallorca played 40, not 38
+  FAIL: segunda seed 50: 21 clubs next season
+  FAIL: segunda seed 51: the table has 21 rows
+  FAIL: segunda seed 51: Valladolid played 40, not 38
+  FAIL: segunda seed 51: Córdoba played 40, not 38
+  FAIL: segunda seed 51: Cádiz played 40, not 38
+  FAIL: segunda seed 51: Burgos played 40, not 38
+  FAIL: segunda seed 51: Sporting Gijón played 40, not 38
+  FAIL: segunda seed 51: Tenerife played 40, not 38
+  FAIL: segunda seed 51: Eibar played 40, not 38
+  FAIL: segunda seed 51: Girona played 40, not 38
+  FAIL: segunda seed 51: Real Oviedo played 40, not 38
+  FAIL: segunda seed 51: Eldense played 40, not 38
+  FAIL: segunda seed 51: FC Andorra played 40, not 38
+  FAIL: segunda seed 51: Las Palmas played 40, not 38
+  FAIL: segunda seed 51: Castellón played 40, not 38
+  FAIL: segunda seed 51: Ceuta played 40, not 38
+  FAIL: segunda seed 51: Real Sociedad B played 40, not 38
+  FAIL: segunda seed 51: Sabadell played 40, not 38
+  FAIL: segunda seed 51: Mallorca played 40, not 38
+  FAIL: segunda seed 51: Granada played 40, not 38
+  FAIL: segunda seed 51: Albacete played 40, not 38
+  FAIL: segunda seed 51: Almería played 40, not 38
+  FAIL: segunda seed 51: Leganés played 40, not 38
+  FAIL: segunda seed 51: 21 clubs next season
+   48 seasons ended, 4 sacked, 208 cup weeks scheduled, 48 cup finals won, cup named on 52 saves, 144 clubs moved in the summers, 2315 headlines read
+C) segunda: strength orders the table
+   Girona 84.2 pts (rated 72) against Mallorca 71.9 (rated 68): gap 12.4
+   7 unmanaged clubs with no baked man left out of the correlation: Sabadell, Tenerife, Córdoba, Eldense, FC Andorra, Ceuta, Real Sociedad B
+   rank correlation, preview rating against mean points, 8 clubs: 0.939
+D) segunda: no invented men
+  FAIL: Real Sociedad B has 0 real players, and CM_PARTIAL says false
+   48 real men and 290 flagged pads on day one, 18 partial clubs
+A) russia: the rows
+   16 clubs, drop 2, cup Russian Cup; weakest Fakel Voronezh (63) is asked: Stay up. Avoid relegation (14)
+B) russia: 6 seeded seasons
+   6 seasons ended, 0 sacked, 24 cup weeks scheduled, 6 cup finals won, cup named on 6 saves, 0 clubs moved in the summers, 233 headlines read
+C) russia: strength orders the table
+   Zenit 51.0 pts (rated 77) against Fakel Voronezh 25.7 (rated 63): gap 25.3
+   Krasnodar 52.5 pts (rated 75) against Dynamo Makhachkala 33.2 (rated 66): gap 19.3
+   rank correlation, preview rating against mean points, 10 clubs: 0.900
+D) russia: no invented men
+   390 real men and 2 flagged pads on day one, 0 partial clubs
+E) pyramids: premier/championship 3, bundesliga/bundesliga2 2, seriea/serieb 3, ligue1/ligue2 2, laliga/segunda 3
+   30 finished seasons filed their own league and its size on the record; 156 mover lines read for the league's name
+   30 summers checked (0 careers sacked on the way); clubs moved into each league per summer: premier 3, championship 3, bundesliga 2, bundesliga2 2, seriea 3, serieb 3, ligue1 2, ligue2 2, laliga 3, segunda 3
+   relegation career: Frosinone (rated 73) finishes 20; starts in serieb, the board asks "Make the promotion playoffs"
+   wentDown: the first drop place reads relegated and the place above it does not, in premier, bundesliga, seriea, ligue1, laliga
+F) cup underdogs and the upset flag
+  FAIL: F: Real Sociedad B, a reserve side, is a club of the game
+   premier: championship clubs in the last sixteen 2 2 2 2; over 128 pairings a top flight winner was flagged an upset 0 times and a championship winner went unflagged 0 times
+   bundesliga: bundesliga2 clubs in the last sixteen 3 2 3 2; over 64 pairings a top flight winner was flagged an upset 0 times and a bundesliga2 winner went unflagged 0 times
+   seriea: serieb clubs in the last sixteen 3 2 2 3; over 128 pairings a top flight winner was flagged an upset 0 times and a serieb winner went unflagged 0 times
+   ligue1: ligue2 clubs in the last sixteen 2 3 2 2; over 128 pairings a top flight winner was flagged an upset 0 times and a ligue2 winner went unflagged 0 times
+   laliga: segunda clubs in the last sixteen 3 2 3 2; over 128 pairings a top flight winner was flagged an upset 0 times and a segunda winner went unflagged 0 times
+   MLS (Atlanta United): 8 cup ties in the last sixteen; over 128 East and West pairings 0 flagged an upset
+G) a save written before the round
+   loaded, finished, first summer: seriea, ligue1, laliga kept their clubs and the Premier League took 3 up; second summer traded 3, 2, 3
+H) the countries of Round 1052
+   H1: Zenit won the league in 3 of 4 seasons played; 0 of those started the next season in a Champions League group
+   H2: 12 Russian Cup brackets read, each the sixteen Russian clubs
+   H3: a manager's table at Spartak Moscow under "Russian Premier League": 16 places, size verified true, names Zenit
+   H3: 16 Russian clubs on the job market under Russian Premier League; dugout size 16, playing career size null
+   H4: 7 past season Russian clubs read, each at its own season's strength
+   H4: 7 past season Russian sides read, 0 men fielded, 0 of them from today's squads
+simClubManagerNewLeagues: 1108 failure(s) under control reserve

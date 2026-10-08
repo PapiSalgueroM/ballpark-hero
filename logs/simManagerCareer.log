@@ -1,0 +1,34 @@
+0) an unloaded job market says so, and never pretends to be an empty one
+   unloaded: 0 offers and the note is "Still getting the phone lines up. Give it a se"
+1) A sack no longer hands you another job on the same line
+   184 sackings across 250 careers, 184 left the manager unemployed, 0 were instant rehires
+2) A decorated player gets more interest than a nobody when sacked
+   Ballon d'Or winner sacked: 1.83 offers, 1% empty (183 spells)
+   journeyman sacked:         1.11 offers, 25% empty (169 spells)
+3) Sitting out makes it worse, and you can accept a job
+   sacked with 0 offers ("No offers this window. Boards move slowly. See who..."), after another season out: seasonsOut 1
+4) Copy check
+   clean
+5) Round 1029: the final table is his own league
+   29435 seasons: 28916 at a club of the list, 519 at a market club, 15028 with a verified size, 10596 with no rival to name
+   55716 named rows checked, 62024 unnamed; wrong league 0, himself twice 0, "of N" wrong 0, size wrong 0
+   1412 market jobs taken (1156 in a league the list spells another way), 491 promotions to the Premier League, 134 relegations to the Championship, 13849 seasons in a named league of unknown size (0 knowing 20 or more clubs)
+   table not his league 0, known clubs wrong 0, a position in a league of unknown size 0, promotion or relegation words wrong 0
+   5744 seasons before 2026-27 in a league the list knows clubs of, 191 finishes in the English pair's move zones before 2004/05; a past season naming a rival or misflagged 0
+   6820 past seasons in a league the game holds, 41 of them with a move line; naming a league 0; 22057 later seasons, header without his league 0
+   Round 1037: 3334 past seasons in a league the ledgers hold, headed wrong 0; 223 jobs placed in the league their club was in that year; 558 past seasons unplaced (the ledgers put the club in none of the six while its label names one)
+   2011 to 2018 in the English pair: 883 seasons, 48 moves between the two, 99 lines saying promoted or relegated
+   the field of unknown size knowing 24 clubs: 24 with his own, 25 for a club outside the list, before and after 2026-27
+   Arsenal met 14 named clubs, 0 from outside the Premier League
+   a Manchester City job met 14 named clubs; Man City among them: false
+   an RB Salzburg job named nobody
+   a club nothing names met 0 named clubs
+   whole fields: Arsenal 19 named of 20, Manchester City 19 of 20, RB Salzburg 0 of 20
+   took Nacional (Primeira Liga): table Primeira Liga, 5 known rivals
+   took Kasimpasa (Süper Lig): table Super Lig, 4 known rivals
+   took West Ham United (EFL Championship): table Championship, 22 known rivals
+   took Eintracht Braunschweig (2. Bundesliga): table 2. Bundesliga, 1 known rivals
+   an old save at Como (Serie A) with no league saved plays Serie A
+   rates: t1.title 0.1024, t1.sack 0.1082, t2.title 0.0930, t2.promo 0.1656, t2.sack 0.1230, t3.title 0.0818, t3.promo 0.1500, t3.sack 0.0574, t4.title 0.0650, t4.promo 0.1228
+
+ALL MANAGER CAREER CHECKS PASSED
