@@ -106,6 +106,39 @@
  *                AND count zero console lines and zero moved nodes: the guard
  *                does nothing on an ordinary page.
  *
+ * MEASURED 2026-10-08 on the Release AL tree with the guard in it, on a GitHub
+ * runner, three runs of the plain walk giving the same numbers each time:
+ *   plain        238 checks, 0 failed, 36 walks in 119 s three at a time (363 s
+ *                one at a time). The create walk is 22 steps and in every one
+ *                of its four walks 9 calls named a moved node, all of them
+ *                nodes the translator took: the three placeholders, the
+ *                position and era labels twice each (opening the build screen,
+ *                then Begin Career), the Latest Events line once and the
+ *                plural "s" of "events remaining" once. The guard printed its
+ *                line on those 4 page loads and on none of the other 32: the
+ *                eight other pages made no such call in eight presses each.
+ *                Stale text, most on screen at once: 6 on Soccer Career, 3 on
+ *                Front Office, 2 on Stadium Tycoon. The nationality box was
+ *                HIDDEN in 4 of 4, position and era readable in 4 of 4.
+ *   noguard      exit 1. 166 checks, 28 failed: seven on each of the four
+ *                create walks and nothing else. The boundary took the page at
+ *                "choose nationality Brazil" in 4 of 4, the retry broke at the
+ *                same step in 4 of 4, and asked directly both calls threw
+ *                NotFoundError on 36 of 36 pages. None of the other eight
+ *                pages reached the boundary.
+ *   notranslate  exit 0. 121 checks, 0 failed, 18 walks: 0 pages printed the
+ *                guard's line, 0 moved nodes, all three boxes readable.
+ *   deeper, once (PAGE_PRESSES=24 CAREER_PRESSES=30 MODES=keep): the create
+ *                walk went to age 20 in 40 steps with 12 such calls; the other
+ *                eight pages still made none in 24 presses each, and still did
+ *                not break without the guard. Stale text showed on five of the
+ *                nine pages by then (7 on Soccer Career, 3 each on NBA My
+ *                Career, NFL My Career, Stadium Tycoon and Front Office). So
+ *                in what these walks reach the crash is Soccer Career's, and
+ *                the stale text is everybody's. College Grid's walk is its two
+ *                dialogs only: its puzzle comes from the database, which no
+ *                walk here may reach.
+ *
  * Run: npm run build, then ENGINES=chromium node scripts/playTranslatedPage.mjs
  * (Chromium only: it is where page translation lives). BASE names the server,
  * default http://localhost:4173; when nothing answers there and dist/ exists
