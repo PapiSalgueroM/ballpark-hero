@@ -1,0 +1,41 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mpreserves the physical56356be9 no-depth league and draw sequence as an independent baseline[32m 191[2mms[22m[39m
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mkeeps explicit legacy depth and saved old grades unchanged as an independent baseline[32m 277[2mms[22m[39m
+[90mstdout[2m | src/lib/frontOfficeRatings.test.ts[2m > [22m[2mNFL opening rating checkpoint[2m > [22m[2mreproduces all2163 frozen candidate grades fictional prices and years without named overrides
+[22m[39mNFL_LAYER_MOVES {"linemenAndDefendersHeld":1456,"offenseMenMoved":423}
+
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mreproduces all2163 frozen candidate grades fictional prices and years without named overrides[32m 208[2mms[22m[39m
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mretains dated-role partial labels and their concrete limitation reasons[33m 304[2mms[22m[39m
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22minitializes every candidate tuple while retaining32 exact untrimmed budgets membership and terms[32m 196[2mms[22m[39m
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mrebakes the committed depth core and left-out files exactly without writing them[32m 196[2mms[22m[39m
+[90mstdout[2m | src/lib/frontOfficeRatings.test.ts[2m > [22m[2mNFL opening rating checkpoint[2m > [22m[2msaves only five original lineage fields below700KiB and reloads them without rerating
+[22m[39mNFL_RATING_SAVE_SIZE {"rawBytes":635466,"gzipBytes":67042,"players":2163}
+
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22msaves only five original lineage fields below700KiB and reloads them without rerating[33m 308[2mms[22m[39m
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mshrinks coverage on targets rather than unrelated defensive snaps[32m 2[2mms[22m[39m
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mkeeps missing defensive features absent instead of granting zero-valued evidence[32m 1[2mms[22m[39m
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mbounds the measured target before small-sample blending and requires dated normalizers[32m 19[2mms[22m[39m
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mkeeps source-stat observations and fitted models outside the browser data with a dated manifest[32m 299[2mms[22m[39m
+[90mstdout[2m | src/lib/frontOfficeRatings.test.ts[2m > [22m[2mNFL opening rating checkpoint[2m > [22m[2mplays four actual seasons playoffs drafts and summers with bounded saves and a nonnegative normal cap
+[22m[39mNFL_RATING_CAMPAIGN {"games":1088,"playoffs":52,"drafted":84,"saves":24,"maxSave":639964,"finalSeason":2030,"scope":"One seeded normal simulation; salary-matching trades are separately known to permit negative cap."}
+
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mcarries original player evidence through real trades cuts and practice promotion[32m 5[2mms[22m[39m
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mplays four actual seasons playoffs drafts and summers with bounded saves and a nonnegative normal cap[33m 672[2mms[22m[39m
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mrefuses stale identity or source records before the real generator CLI writes outputs[33m 6788[2mms[22m[39m
+[90mstdout[2m | src/lib/frontOfficeRatings.test.ts[2m > [22m[2mNFL opening rating checkpoint[2m > [22m[2mdeals the same board league for a seed as the tree recorded before the opening files were unified
+[22m[39mNFL_BOARD_LEAGUE_DIGESTS ["a43660e29ceec1925fd3771184c2878f4a7e918aae7458654e2b33f3c23c7a8d","7578b53a5edea40e60e1321df949bff0c3906e392a1c199b4369b6fee94acd46","9ec6dba554f8c1a25658282309589c2f4d7a500f69ee45e41d569de3ebe1f829"]
+
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mdeals the same board league for a seed as the tree recorded before the opening files were unified[33m 559[2mms[22m[39m
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mloads a Release AK franchise unchanged and plays its next week exactly as Release AK would[33m 575[2mms[22m[39m
+[90mstdout[2m | src/lib/frontOfficeRatings.test.ts[2m > [22m[2mNFL opening rating checkpoint[2m > [22m[2mprints one opening number per man in the starters and depth files with no override left
+[22m[39mNFL_ONE_NUMBER {"men":2163,"fifteenWhoseSeedDiffers":446}
+
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mprints one opening number per man in the starters and depth files with no override left[33m 376[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m17 passed[39m[22m[90m (17)[39m
+[2m   Start at [22m 14:44:35
+[2m   Duration [22m 15.95s[2m (transform 1.16s, setup 71ms, collect 1.29s, tests 13.51s, environment 457ms, prepare 216ms)[22m
+

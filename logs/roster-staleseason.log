@@ -1,0 +1,25 @@
+   parsed 32 teams and 480 players, and the same count from the seed bake
+   the shipped file carries the opening estimate: 446 of 480 rows print a number other than the seed's
+   QB: seed 66 to 97, interquartile range 16; shipped estimate 65 to 93, interquartile range 11
+   RB: seed 66 to 97, interquartile range 16; shipped estimate 63 to 95, interquartile range 10
+   WR: seed 66 to 97, interquartile range 15; shipped estimate 63 to 95, interquartile range 11
+   TE: seed 66 to 97, interquartile range 16; shipped estimate 70 to 95, interquartile range 10
+   OL: seed 80 to 90, interquartile range 5; shipped estimate 74 to 83, interquartile range 3
+   DL: seed 66 to 95, interquartile range 15; shipped estimate 70 to 95, interquartile range 12
+   LB: seed 66 to 95, interquartile range 15; shipped estimate 66 to 95, interquartile range 10
+   DB: seed 66 to 95, interquartile range 15; shipped estimate 71 to 95, interquartile range 8
+   control staleseason: the board copy describes the current roster as 2025
+   0. the parser read the whole file: 1 check
+   1. the file has a defence: 11 checks
+   2. the smell list, every shipped row: 5 checks
+   3. a rating is a spread, not a cluster: 16 checks
+   4. defenders are a real share: 33 checks
+   5. a top pick with a quiet season, on the real code: 4 checks
+   6. the header still describes the bake: 6 checks
+   7. the page copy agrees with the generator: 37 checks, 1 FAILED
+   8. the rules this round got wrong the first time: 16 checks
+   9. the defence survives the seasons: 5 checks
+   10. the defence is the defenders: 13 checks
+   11. every club plays seventeen games: 9 checks
+simFrontOfficeRoster: 1 of 156 checks FAILED
+  [7] src/components/front-office/FrontOfficeBoard.tsx states a roster year the bake agrees with: copy says 2025 in "ext-muted-foreground"> Real 2025 roster snapshot, with original simu"; the bake read the 2026 roster and the 2025 season

@@ -1,0 +1,5 @@
+Front Office save recovery: 36/36 actual component checks passed.
+Front Office save recovery: 12 current, older, draft, recap and ID-repair restore cases passed.
+Front Office save recovery: 20 nested-corruption cases retain raw bytes, reject before render and delete only their own save on request.
+Front Office save recovery: four malformed-JSON and fresh-club recovery cases passed; fresh replacements preserve other game saves.
+Front Office save recovery cleanup: disposable reader copies and result directory removed; the production reader was read only.
