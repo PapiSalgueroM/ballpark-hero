@@ -1,0 +1,2 @@
+#!serial
+facilities-1158: bash .rc/x/cm-facility-button-names-1158.sh
