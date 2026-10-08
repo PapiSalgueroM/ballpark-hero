@@ -1,0 +1,33 @@
+
+=== ROUND 57 NBA MY CAREER PLAYTEST ===
+careers            : 400  (100 in the 2003-04 era, 1856 second unit seasons)
+crashes            : 0
+NaN values         : 0
+empty stat lines   : 0  (must be 0, every position needs real stats)
+avg peak OVR       : 86.1  (min 77, median 86, max 94)
+peak 95+ rate      : 0%  (should be rare)
+suspensions served : 14
+distinct events    : 159
+  lifeA fired      : 45/45
+  lifeB fired      : 45/45
+  lifeC fired      : 36/36  (floor 34; rarest card drawn 4 times, median 15)
+    rarest three   : nbaC_rule_summer_league_return 4 (eligible in 658 offseasons), nbaC_rule_salary_match 7 (eligible in 669 offseasons), nbaC_rule_national_tv 7 (eligible in 1136 offseasons)
+  corruption fired : 25
+shop items usable  : 49/49
+C1e era leaks      : 0  (modern only cards offered or drawn in a 2003-04 career, must be 0)
+C1e service leaks  : 0  (a send down card offered or drawn after three seasons, must be 0)
+C2 words vs effect : 72000 draws (36000 on the fleet's own saves), 0 mismatches, 0 outcomes never seen, 0 cards with no eligible save
+   trades checked  : 1637 (282 in a 2003-04 career)
+R1 beat 318        : rolled 40 times, 0 of them with the rival on your own team (must be 0)
+R1 beat 320        : rolled 9 times, 0 of them with the rival on your own team (must be 0)
+R2 beat words      : 6 beats, 0 mismatches
+T  life cards drawn: 4888, without tags: 0
+
+sample stat lines by position:
+  PG  11 ppg, 2.1 rpg, 6.3 apg
+  SG  24 ppg, 4.8 rpg, 4.9 apg
+  SF  14 ppg, 5.8 rpg, 6.2 apg
+  PF  19 ppg, 7.1 rpg, 5.6 apg
+  C   21 ppg, 7.8 rpg, 4.5 apg
+
+PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest
