@@ -1,0 +1,9 @@
+mutation C applied to src/lib/nbaCareerAwards.ts
+restored
+mutC sense exit=0 | simNbaAwardsSense: 121 checks, 0 failed (full size), 93s
+mutC vitest exit=0 |    Duration  3.96s (transform 1.42s, setup 360ms, collect 3.29s, tests 1.47s, environment 2.88s, prepare 1.23s)
+ Test Files  3 passed (3)
+      Tests  48 passed (48)
+mutC career exit=0 | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest
+mutC awards exit=0 | PASS: ALL AWARD SCARCITY CHECKS PASSED
+mutation C: SURVIVED (a check went red: 0)

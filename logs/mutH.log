@@ -1,0 +1,18 @@
+mutation H applied to src/lib/nbaMyCareer.ts
+restored
+mutH sense exit=0 | simNbaAwardsSense: 121 checks, 0 failed (full size), 90s
+mutH vitest exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaOldSaveLines.test.ts,title=src/test/nbaOldSaveLines.test.ts > Round 1103%3A an old NBA save reads exactly as it did > open%3A11%3
+⎯⎯⎯⎯⎯⎯ Failed Tests 16 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/nbaOldSaveLines.test.ts > Round 1103: an old NBA save reads exactly as it did > board:mid: every line, the totals, the legacy, the ballot and the badges are what they were
+AssertionError: expected { lines: [ …(5) ], …(4) } to deeply equal { lines: [ …(5) ], …(4) }
+ FAIL  src/test/nbaOldSaveLines.test.ts > Round 1103: an old NBA save reads exactly as it did > board:beat: every line, the totals, the legacy, the ballot and the badges are what they were
+AssertionError: expected { lines: [ …(2) ], …(4) } to deeply equal { lines: [ …(2) ], …(4) }
+ FAIL  src/test/nbaOldSaveLines.test.ts > Round 1103: an old NBA save reads exactly as it did > board:choice: every line, the totals, the legacy, the ballot and the badges are what they were
+ FAIL  src/test/nbaOldSaveLines.test.ts > Round 1103: an old NBA save reads exactly as it did > open:2: every line, the totals, the legacy, the ballot and the badges are what they were
+ FAIL  src/test/nbaOldSaveLines.test.ts > Round 1103: an old NBA save reads exactly as it did > open:8: every line, the totals, the legacy, the ballot and the badges are what they were
+ FAIL  src/test/nbaOldSaveLines.test.ts > Round 1103: an old NBA save reads exactly as it did > open:11: every line, the totals, the legacy, the ballot and the badges are what they were
+AssertionError: expected { lines: [ …(6) ], …(4) } to deeply equal { lines: [ …(6) ], …(4) }
+ FAIL  src/test/nbaOldSaveLines.test.ts > Round 1103: an old NBA save reads exactly as it did > engine:1: every line, the totals, the legacy, the ballot and the badges are what they were
+ FAIL  src/test/nbaOldSaveLines.test.ts > Round 1103: an old NBA save reads exactly as it did > engine:7: every line, the totals, the legacy, the ballot and the badges are what they were
+cut: write error: Broken pipe
+mutation H: CAUGHT (a check went red: 1)

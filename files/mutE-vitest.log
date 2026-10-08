@@ -1,0 +1,97 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/nbaStatLineColumns.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 65[2mms[22m[39m
+ [31m❯[39m src/test/nbaAwardDecisionLift.test.ts [2m([22m[2m6 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[33m 446[2mms[22m[39m
+   [32m✓[39m Round 1103: the award scores lifted out of NBA Front Office[2m > [22mthe fixture holds four seasons with a real field each[32m 3[2mms[22m[39m
+[31m   [31m×[31m Round 1103: the award scores lifted out of NBA Front Office[2m > [22mseed 11: the awards and every man's three scores are what they were[39m[32m 116[2mms[22m[39m
+[31m     → expected 'c633525fb5fa5ce1efc9b625a6086472a6a84…' to be '8a2efebd7ed94dc0f65c2b090dd27bcce8dfa…' // Object.is equality[39m
+[31m   [31m×[31m Round 1103: the award scores lifted out of NBA Front Office[2m > [22mseed 23: the awards and every man's three scores are what they were[39m[32m 84[2mms[22m[39m
+[31m     → expected 'be300ff7adca00714dedd4c0c15d8edf51899…' to be '3fab06fe6c6e850e5834fa3723ec8ad12a666…' // Object.is equality[39m
+[31m   [31m×[31m Round 1103: the award scores lifted out of NBA Front Office[2m > [22mseed 37: the awards and every man's three scores are what they were[39m[32m 85[2mms[22m[39m
+[31m     → expected 'ef8e2a84dc8871b830c13179d69ac0a6eaacb…' to be 'de2446c7c0fab12dc55400b32363fc072a8f5…' // Object.is equality[39m
+[31m   [31m×[31m Round 1103: the award scores lifted out of NBA Front Office[2m > [22mseed 41: the awards and every man's three scores are what they were[39m[32m 42[2mms[22m[39m
+[31m     → expected 'b170bf229b99f81f4f4c6df9fe31e2a02e242…' to be '987c3039e4a5e5618432d267e3340a41f9c95…' // Object.is equality[39m
+   [32m✓[39m Round 1103: the award scores lifted out of NBA Front Office[2m > [22mthe same seed plays the same season twice (the hash is not noise)[32m 113[2mms[22m[39m
+ [32m✓[39m src/test/nbaOldSaveLines.test.ts [2m([22m[2m36 tests[22m[2m)[22m[32m 102[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/nbaAwardDecisionLift.test.ts[2m > [22mRound 1103: the award scores lifted out of NBA Front Office[2m > [22mseed 11: the awards and every man's three scores are what they were
+[31m[1mAssertionError[22m: expected 'c633525fb5fa5ce1efc9b625a6086472a6a84…' to be '8a2efebd7ed94dc0f65c2b090dd27bcce8dfa…' // Object.is equality[39m
+
+Expected: [32m"8a2efebd7ed94dc0f65c2b090dd27bcce8dfa98405d833482f65d9b289c61998"[39m
+Received: [31m"c633525fb5fa5ce1efc9b625a6086472a6a84f51d44fc19ea55fe9cd507ae70a"[39m
+
+[36m [2m❯[22m src/test/nbaAwardDecisionLift.test.ts:[2m104:24[22m[39m
+    [90m102| [39m      [34mexpect[39m(now[33m.[39mmen)[33m.[39m[34mtoBe[39m(fixture[33m.[39mseasons[[33mString[39m(seed)][33m.[39mmen)[33m;[39m
+    [90m103| [39m      [34mexpect[39m(now[33m.[39mmvp)[33m.[39m[34mtoBe[39m(fixture[33m.[39mseasons[[33mString[39m(seed)][33m.[39mmvp)[33m;[39m
+    [90m104| [39m      [34mexpect[39m(now[33m.[39mhash)[33m.[39m[34mtoBe[39m(fixture[33m.[39mseasons[[33mString[39m(seed)][33m.[39mhash)[33m;[39m
+    [90m   | [39m                       [31m^[39m
+    [90m105| [39m    })[33m;[39m
+    [90m106| [39m  }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/nbaAwardDecisionLift.test.ts[2m > [22mRound 1103: the award scores lifted out of NBA Front Office[2m > [22mseed 23: the awards and every man's three scores are what they were
+[31m[1mAssertionError[22m: expected 'be300ff7adca00714dedd4c0c15d8edf51899…' to be '3fab06fe6c6e850e5834fa3723ec8ad12a666…' // Object.is equality[39m
+
+Expected: [32m"3fab06fe6c6e850e5834fa3723ec8ad12a66673b7494804215fa4fdbc0556af0"[39m
+Received: [31m"be300ff7adca00714dedd4c0c15d8edf51899ce8a161631ad8be883ec226c9c8"[39m
+
+[36m [2m❯[22m src/test/nbaAwardDecisionLift.test.ts:[2m104:24[22m[39m
+    [90m102| [39m      [34mexpect[39m(now[33m.[39mmen)[33m.[39m[34mtoBe[39m(fixture[33m.[39mseasons[[33mString[39m(seed)][33m.[39mmen)[33m;[39m
+    [90m103| [39m      [34mexpect[39m(now[33m.[39mmvp)[33m.[39m[34mtoBe[39m(fixture[33m.[39mseasons[[33mString[39m(seed)][33m.[39mmvp)[33m;[39m
+    [90m104| [39m      [34mexpect[39m(now[33m.[39mhash)[33m.[39m[34mtoBe[39m(fixture[33m.[39mseasons[[33mString[39m(seed)][33m.[39mhash)[33m;[39m
+    [90m   | [39m                       [31m^[39m
+    [90m105| [39m    })[33m;[39m
+    [90m106| [39m  }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/nbaAwardDecisionLift.test.ts[2m > [22mRound 1103: the award scores lifted out of NBA Front Office[2m > [22mseed 37: the awards and every man's three scores are what they were
+[31m[1mAssertionError[22m: expected 'ef8e2a84dc8871b830c13179d69ac0a6eaacb…' to be 'de2446c7c0fab12dc55400b32363fc072a8f5…' // Object.is equality[39m
+
+Expected: [32m"de2446c7c0fab12dc55400b32363fc072a8f512ce50006105faae6851bae2056"[39m
+Received: [31m"ef8e2a84dc8871b830c13179d69ac0a6eaacb4ae1888b4160368555eaf4bd382"[39m
+
+[36m [2m❯[22m src/test/nbaAwardDecisionLift.test.ts:[2m104:24[22m[39m
+    [90m102| [39m      [34mexpect[39m(now[33m.[39mmen)[33m.[39m[34mtoBe[39m(fixture[33m.[39mseasons[[33mString[39m(seed)][33m.[39mmen)[33m;[39m
+    [90m103| [39m      [34mexpect[39m(now[33m.[39mmvp)[33m.[39m[34mtoBe[39m(fixture[33m.[39mseasons[[33mString[39m(seed)][33m.[39mmvp)[33m;[39m
+    [90m104| [39m      [34mexpect[39m(now[33m.[39mhash)[33m.[39m[34mtoBe[39m(fixture[33m.[39mseasons[[33mString[39m(seed)][33m.[39mhash)[33m;[39m
+    [90m   | [39m                       [31m^[39m
+    [90m105| [39m    })[33m;[39m
+    [90m106| [39m  }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/nbaAwardDecisionLift.test.ts[2m > [22mRound 1103: the award scores lifted out of NBA Front Office[2m > [22mseed 41: the awards and every man's three scores are what they were
+[31m[1mAssertionError[22m: expected 'b170bf229b99f81f4f4c6df9fe31e2a02e242…' to be '987c3039e4a5e5618432d267e3340a41f9c95…' // Object.is equality[39m
+
+Expected: [32m"987c3039e4a5e5618432d267e3340a41f9c9540c027d73700ab0807e40b26777"[39m
+Received: [31m"b170bf229b99f81f4f4c6df9fe31e2a02e242314247611796e1b7d420fcd4a7d"[39m
+
+[36m [2m❯[22m src/test/nbaAwardDecisionLift.test.ts:[2m104:24[22m[39m
+    [90m102| [39m      [34mexpect[39m(now[33m.[39mmen)[33m.[39m[34mtoBe[39m(fixture[33m.[39mseasons[[33mString[39m(seed)][33m.[39mmen)[33m;[39m
+    [90m103| [39m      [34mexpect[39m(now[33m.[39mmvp)[33m.[39m[34mtoBe[39m(fixture[33m.[39mseasons[[33mString[39m(seed)][33m.[39mmvp)[33m;[39m
+    [90m104| [39m      [34mexpect[39m(now[33m.[39mhash)[33m.[39m[34mtoBe[39m(fixture[33m.[39mseasons[[33mString[39m(seed)][33m.[39mhash)[33m;[39m
+    [90m   | [39m                       [31m^[39m
+    [90m105| [39m    })[33m;[39m
+    [90m106| [39m  }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m44 passed[39m[22m[90m (48)[39m
+[2m   Start at [22m 07:01:42
+[2m   Duration [22m 1.71s[2m (transform 668ms, setup 207ms, collect 1.56s, tests 613ms, environment 1.33s, prepare 450ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaAwardDecisionLift.test.ts,title=src/test/nbaAwardDecisionLift.test.ts > Round 1103%3A the award scores lifted out of NBA Front Office > seed 11%3A the awards and every man's three scores are what they were,line=104,column=24::AssertionError: expected 'c633525fb5fa5ce1efc9b625a6086472a6a84…' to be '8a2efebd7ed94dc0f65c2b090dd27bcce8dfa…' // Object.is equality%0A%0AExpected: "8a2efebd7ed94dc0f65c2b090dd27bcce8dfa98405d833482f65d9b289c61998"%0AReceived: "c633525fb5fa5ce1efc9b625a6086472a6a84f51d44fc19ea55fe9cd507ae70a"%0A%0A ❯ src/test/nbaAwardDecisionLift.test.ts:104:24%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaAwardDecisionLift.test.ts,title=src/test/nbaAwardDecisionLift.test.ts > Round 1103%3A the award scores lifted out of NBA Front Office > seed 23%3A the awards and every man's three scores are what they were,line=104,column=24::AssertionError: expected 'be300ff7adca00714dedd4c0c15d8edf51899…' to be '3fab06fe6c6e850e5834fa3723ec8ad12a666…' // Object.is equality%0A%0AExpected: "3fab06fe6c6e850e5834fa3723ec8ad12a66673b7494804215fa4fdbc0556af0"%0AReceived: "be300ff7adca00714dedd4c0c15d8edf51899ce8a161631ad8be883ec226c9c8"%0A%0A ❯ src/test/nbaAwardDecisionLift.test.ts:104:24%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaAwardDecisionLift.test.ts,title=src/test/nbaAwardDecisionLift.test.ts > Round 1103%3A the award scores lifted out of NBA Front Office > seed 37%3A the awards and every man's three scores are what they were,line=104,column=24::AssertionError: expected 'ef8e2a84dc8871b830c13179d69ac0a6eaacb…' to be 'de2446c7c0fab12dc55400b32363fc072a8f5…' // Object.is equality%0A%0AExpected: "de2446c7c0fab12dc55400b32363fc072a8f512ce50006105faae6851bae2056"%0AReceived: "ef8e2a84dc8871b830c13179d69ac0a6eaacb4ae1888b4160368555eaf4bd382"%0A%0A ❯ src/test/nbaAwardDecisionLift.test.ts:104:24%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaAwardDecisionLift.test.ts,title=src/test/nbaAwardDecisionLift.test.ts > Round 1103%3A the award scores lifted out of NBA Front Office > seed 41%3A the awards and every man's three scores are what they were,line=104,column=24::AssertionError: expected 'b170bf229b99f81f4f4c6df9fe31e2a02e242…' to be '987c3039e4a5e5618432d267e3340a41f9c95…' // Object.is equality%0A%0AExpected: "987c3039e4a5e5618432d267e3340a41f9c9540c027d73700ab0807e40b26777"%0AReceived: "b170bf229b99f81f4f4c6df9fe31e2a02e242314247611796e1b7d420fcd4a7d"%0A%0A ❯ src/test/nbaAwardDecisionLift.test.ts:104:24%0A%0A

@@ -1,0 +1,17 @@
+mutation F applied to src/lib/usCareerStatLine.ts
+restored
+mutF vitest exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaStatLineColumns.test.ts,title=src/test/nbaStatLineColumns.test.ts > Round 1103%3A the NBA season line%2C old and new > a season s
+⎯⎯⎯⎯⎯⎯ Failed Tests 33 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/nbaOldSaveLines.test.ts > Round 1103: an old NBA save reads exactly as it did > board:mid: every line, the totals, the legacy, the ballot and the badges are what they were
+AssertionError: expected { lines: [ …(5) ], …(4) } to deeply equal { lines: [ …(5) ], …(4) }
+ FAIL  src/test/nbaOldSaveLines.test.ts > Round 1103: an old NBA save reads exactly as it did > board:retired: every line, the totals, the legacy, the ballot and the badges are what they were
+ FAIL  src/test/nbaOldSaveLines.test.ts > Round 1103: an old NBA save reads exactly as it did > engine:2: every line, the totals, the legacy, the ballot and the badges are what they were
+ FAIL  src/test/nbaOldSaveLines.test.ts > Round 1103: an old NBA save reads exactly as it did > engine:3: every line, the totals, the legacy, the ballot and the badges are what they were
+ FAIL  src/test/nbaOldSaveLines.test.ts > Round 1103: an old NBA save reads exactly as it did > engine:8: every line, the totals, the legacy, the ballot and the badges are what they were
+ FAIL  src/test/nbaOldSaveLines.test.ts > Round 1103: an old NBA save reads exactly as it did > engine:16: every line, the totals, the legacy, the ballot and the badges are what they were
+ FAIL  src/test/nbaOldSaveLines.test.ts > Round 1103: an old NBA save reads exactly as it did > engine:20: every line, the totals, the legacy, the ballot and the badges are what they were
+AssertionError: expected { lines: [ …(17) ], …(4) } to deeply equal { lines: [ …(17) ], …(4) }
+ FAIL  src/test/nbaOldSaveLines.test.ts > Round 1103: an old NBA save reads exactly as it did > board:beat: every line, the totals, the legacy, the ballot and the badges are what they were
+AssertionError: expected { lines: [ …(2) ], …(4) } to deeply equal { lines: [ …(2) ], …(4) }
+cut: write error: Broken pipe
+mutation F: CAUGHT (a check went red: 1)

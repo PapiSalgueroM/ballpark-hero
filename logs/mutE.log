@@ -1,0 +1,16 @@
+mutation E applied to src/lib/nbaSeasonStats.ts
+restored
+mutE vitest exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaAwardDecisionLift.test.ts,title=src/test/nbaAwardDecisionLift.test.ts > Round 1103%3A the award scores lifted out of NBA Front Of
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/nbaAwardDecisionLift.test.ts > Round 1103: the award scores lifted out of NBA Front Office > seed 11: the awards and every man's three scores are what they were
+AssertionError: expected 'c633525fb5fa5ce1efc9b625a6086472a6a84…' to be '8a2efebd7ed94dc0f65c2b090dd27bcce8dfa…' // Object.is equality
+ FAIL  src/test/nbaAwardDecisionLift.test.ts > Round 1103: the award scores lifted out of NBA Front Office > seed 23: the awards and every man's three scores are what they were
+AssertionError: expected 'be300ff7adca00714dedd4c0c15d8edf51899…' to be '3fab06fe6c6e850e5834fa3723ec8ad12a666…' // Object.is equality
+ FAIL  src/test/nbaAwardDecisionLift.test.ts > Round 1103: the award scores lifted out of NBA Front Office > seed 37: the awards and every man's three scores are what they were
+AssertionError: expected 'ef8e2a84dc8871b830c13179d69ac0a6eaacb…' to be 'de2446c7c0fab12dc55400b32363fc072a8f5…' // Object.is equality
+ FAIL  src/test/nbaAwardDecisionLift.test.ts > Round 1103: the award scores lifted out of NBA Front Office > seed 41: the awards and every man's three scores are what they were
+AssertionError: expected 'b170bf229b99f81f4f4c6df9fe31e2a02e242…' to be '987c3039e4a5e5618432d267e3340a41f9c95…' // Object.is equality
+ Test Files  1 failed | 2 passed (3)
+      Tests  4 failed | 44 passed (48)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaAwardDecisionLift.test.ts,title=src/test/nbaAwardDecisionLift.test.ts > Round 1103%3A the award scores lifted out of NBA Front Office > seed 11%3A the awards and every m
+mutation E: CAUGHT (a check went red: 1)

@@ -1,0 +1,7 @@
+mutation G applied to src/data/nbaLeagueNorms.ts
+restored
+mutG sense exit=0 | simNbaAwardsSense: 121 checks, 0 failed (full size), 94s
+mutG vitest exit=0 |    Duration  2.31s (transform 898ms, setup 241ms, collect 2.18s, tests 771ms, environment 1.67s, prepare 600ms)
+ Test Files  3 passed (3)
+      Tests  48 passed (48)
+mutation G: SURVIVED (a check went red: 0)

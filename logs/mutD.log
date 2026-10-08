@@ -1,0 +1,9 @@
+mutation D applied to src/lib/nbaCareerAwards.ts
+restored
+mutD sense exit=0 | simNbaAwardsSense: 121 checks, 0 failed (full size), 96s
+mutD vitest exit=0 |    Duration  4.10s (transform 1.67s, setup 566ms, collect 4.41s, tests 1.64s, environment 2.41s, prepare 1.18s)
+ Test Files  3 passed (3)
+      Tests  48 passed (48)
+mutD career exit=0 | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest
+mutD awards exit=0 | PASS: ALL AWARD SCARCITY CHECKS PASSED
+mutation D: SURVIVED (a check went red: 0)

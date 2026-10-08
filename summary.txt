@@ -1,0 +1,9 @@
+mutA exit=0 98s | mutation A: SURVIVED (a check went red: 0)
+mutB exit=1 97s | mutation B: CAUGHT (a check went red: 1)
+mutC exit=0 94s | mutation C: SURVIVED (a check went red: 0)
+mutD exit=0 96s | mutation D: SURVIVED (a check went red: 0)
+mutG exit=0 94s | mutation G: SURVIVED (a check went red: 0)
+mutH exit=1 90s | mutation H: CAUGHT (a check went red: 1)
+mutE exit=1 2s | mutation E: CAUGHT (a check went red: 1)
+mutF exit=1 2s | mutation F: CAUGHT (a check went red: 1)
+clean exit=0 0s | tree clean check done

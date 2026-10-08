@@ -1,0 +1,9 @@
+mutation A applied to src/lib/awardDecision.ts
+restored
+mutA sense exit=0 | simNbaAwardsSense: 121 checks, 0 failed (full size), 97s
+mutA vitest exit=0 |    Duration  3.65s (transform 1.58s, setup 455ms, collect 3.46s, tests 1.37s, environment 2.42s, prepare 1.07s)
+ Test Files  3 passed (3)
+      Tests  48 passed (48)
+mutA career exit=0 | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest
+mutA awards exit=0 | PASS: ALL AWARD SCARCITY CHECKS PASSED
+mutation A: SURVIVED (a check went red: 0)

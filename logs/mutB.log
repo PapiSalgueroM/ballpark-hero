@@ -1,0 +1,17 @@
+mutation B applied to src/lib/nbaCareerAwards.ts
+restored
+mutB sense exit=1 | simNbaAwardsSense: 121 checks, 7 failed (full size), 96s
+  FAIL [H] Hall of Fame inducted, percent: mean 29.858 (30.95, 29, 30.08, 29.78, 29.48) against main's 31.732 (31.7, 31.88, 31.78, 31.75, 31.55), 1.874 apart, allowed 1.14 (three standard errors at 6000 careers a seed)
+  FAIL [H] first ballot, percent: mean 26 (27.3, 25.1, 26.35, 25.68, 25.57) against main's 27.562 (27.03, 27.93, 27.83, 27.57, 27.45), 1.562 apart, allowed 1.239 (three standard errors at 6000 careers a seed)
+  FAIL [B6] MVPs a career (sd over careers 0.773): mean 0.269 (0.267, 0.273, 0.266, 0.268, 0.269) against main's 0.315 (0.316, 0.323, 0.31, 0.313, 0.311), 0.046 apart, allowed 0.019 (three standard errors at 6000 careers a seed)
+  FAIL [B6] All-NBA a career (sd over careers 2.283): mean 1.811 (1.814, 1.785, 1.822, 1.827, 1.805) against main's 1.986 (1.972, 2.006, 1.981, 1.987, 1.986), 0.176 apart, allowed 0.056 (three standard errors at 6000 careers a seed)
+  FAIL [B6] careers with an MVP, percent (main 16.22, 16.85, 16.27, 16.75, 16.68: the same awards a career, spread over more careers): mean 15.676 (15.82, 16.1, 15.75, 15.23, 15.48) against what Round 1103 shipped, 17.442 (17.18, 17.07, 17.73, 17.7, 17.53), 1.766 apart, allowed 0.93 (three standard errors at 6000 careers a seed)
+  FAIL [B6] careers with an All-NBA, percent (main 59.07, 58.88, 58.6, 58.68, 58.93: the same awards a career, spread over more careers): mean 58.882 (59.03, 58.17, 58.98, 59.43, 58.8) against what Round 1103 shipped, 61.94 (61.7, 60.98, 62.35, 62.47, 62.2), 3.058 apart, allowed 1.189 (three standard errors at 6000 careers a see
+  FAIL [B3] before 2023-24 the rule did not exist: 343, 294, 306, 336, 325 seasons under 65 games hold one of those awards (at least 1750 in the run, so "none before" is seen to fire)
+red sections: H, B6, B3
+mutB vitest exit=0 |    Duration  3.34s (transform 1.34s, setup 390ms, collect 3.18s, tests 1.30s, environment 2.33s, prepare 984ms)
+ Test Files  3 passed (3)
+      Tests  48 passed (48)
+mutB career exit=0 | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest
+mutB awards exit=0 | PASS: ALL AWARD SCARCITY CHECKS PASSED
+mutation B: CAUGHT (a check went red: 1)
