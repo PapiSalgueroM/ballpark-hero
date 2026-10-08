@@ -1,0 +1,76 @@
+base c623e77d against the working tree
+seed 1130: draws 1199 base, 1199 head; men 2162 and 2162; offense numbers moved 422; other shelves moved 0; other fields moved on offense 16, elsewhere 24; offense men whose hidden ceiling sits another distance over the number 5; clubs with another payroll 0
+PASS  seed 1130: the same number of random draws
+PASS  seed 1130: the same schedule
+FAIL  seed 1130: the same opening free agent pool
+FAIL  seed 1130: the same men on the same clubs and tiers
+FAIL  seed 1130: the same row order on every club
+FAIL  seed 1130: no lineman or defender moved in any field but his price (CLE|Michael Burton|RB|active: {"name":"Michael Burton","pos":"RB","age":34,"years":1,"id":"#491","out":0,"noSeason":true,"l":{"modelVersion":0,"originKey":"CLE|Michael Burton|RB"," | {"name":"Michael Burton","pos":"RB","age":34,"years":1,"id":"#491","out":0,"noSeason":true,"l":{"modelVersion":0,"originKey":"CLE|Michael Burton|RB"," ; DAL|Hunter Luepke|RB|active: {"name":"Hunter Luepke","pos":"RB","age":26,"years":3,"id":"#558","out":0,"l":{"modelVersion":0,"originKey":"DAL|Hunter Luepke|RB","openingOvr":0,"bas | {"name":"Hunter Luepke","pos":"RB","age":26,"years":3,"id":"#558","out":0,"l":{"modelVersion":0,"originKey":"DAL|Hunter Luepke|RB","openingOvr":0,"bas ; DEN|Adam Prentice|RB|practice: {"name":"Adam Prentice","pos":"RB","age":29,"years":3,"id":"#659","out":0,"l":{"modelVersion":0,"originKey":"DEN|Adam Prentice|RB","openingOvr":0,"bas | {"name":"Adam Prentice","pos":"RB","age":29,"years":3,"id":"#659","out":0,"l":{"modelVersion":0,"originKey":"DEN|Adam Prentice|RB","openingOvr":0,"bas)
+FAIL  seed 1130: an offense man differs only in number, price, ceiling and lineage
+PASS  seed 1130: every club's active payroll is the same to the tenth ()
+   DETAIL men only in base: NYG|Patrick Ricard|RB|active 72; only in head: NYG|Jason Pinnock|DB|active 69
+   DETAIL free agents 21 base, 21 head; only in base: Jason Pinnock|DB 69; only in head: Patrick Ricard|RB 63
+   DETAIL free agents in both whose fields differ (id apart): 0
+   DETAIL clubs whose row order differs: NYG; sizes NYG 53->53
+   DETAIL fields that differ, id left out, count of men: {"offense.ovr":422,"offense.salary":216,"offense.pot":419,"offense.openingRatingEvidence":706,"other.salary":440,"other.openingRatingEvidence":1455}
+   DETAIL linemen and defenders whose lineage differs beyond the model version: 0
+   DETAIL computer clubs not at 53 in both arms: ARI 52/52, BAL 50/50, BUF 50/50, CHI 51/51, CIN 51/51, CLE 51/51, DAL 50/50, DEN 50/50, GB 52/52, IND 51/51, JAX 50/50, KC 50/50, LA 51/51, LAC 50/50, MIA 51/51, MIN 51/51, NE 50/50, NYJ 50/50, PHI 51/51, PIT 50/50, SEA 51/51, SF 52/52, TB 51/51, TEN 50/50, WAS 52/52; LV 51/51
+   Ashton Jeanty 65 (pot 68) -> 79 (pot 82), lineage {"modelVersion":"nfl-v2.3-2026-10-08","originKey":"LV|Ashton Jeanty|RB","openingOvr":79,"basis":"production","partial":false}
+   Connor Heyward 77 (pot 77) -> 63 (pot 63), lineage {"modelVersion":"nfl-v2.3-2026-10-08","originKey":"LV|Connor Heyward|RB","openingOvr":63,"basis":"unmeasured-prior","partial":true}
+seed 1131: draws 1199 base, 1199 head; men 2162 and 2162; offense numbers moved 422; other shelves moved 0; other fields moved on offense 16, elsewhere 24; offense men whose hidden ceiling sits another distance over the number 6; clubs with another payroll 0
+PASS  seed 1131: the same number of random draws
+PASS  seed 1131: the same schedule
+FAIL  seed 1131: the same opening free agent pool
+FAIL  seed 1131: the same men on the same clubs and tiers
+FAIL  seed 1131: the same row order on every club
+FAIL  seed 1131: no lineman or defender moved in any field but his price (CLE|Michael Burton|RB|active: {"name":"Michael Burton","pos":"RB","age":34,"years":1,"id":"#491","out":0,"noSeason":true,"l":{"modelVersion":0,"originKey":"CLE|Michael Burton|RB"," | {"name":"Michael Burton","pos":"RB","age":34,"years":1,"id":"#491","out":0,"noSeason":true,"l":{"modelVersion":0,"originKey":"CLE|Michael Burton|RB"," ; DAL|Hunter Luepke|RB|active: {"name":"Hunter Luepke","pos":"RB","age":26,"years":3,"id":"#558","out":0,"l":{"modelVersion":0,"originKey":"DAL|Hunter Luepke|RB","openingOvr":0,"bas | {"name":"Hunter Luepke","pos":"RB","age":26,"years":3,"id":"#558","out":0,"l":{"modelVersion":0,"originKey":"DAL|Hunter Luepke|RB","openingOvr":0,"bas ; DEN|Adam Prentice|RB|practice: {"name":"Adam Prentice","pos":"RB","age":29,"years":3,"id":"#659","out":0,"l":{"modelVersion":0,"originKey":"DEN|Adam Prentice|RB","openingOvr":0,"bas | {"name":"Adam Prentice","pos":"RB","age":29,"years":3,"id":"#659","out":0,"l":{"modelVersion":0,"originKey":"DEN|Adam Prentice|RB","openingOvr":0,"bas)
+FAIL  seed 1131: an offense man differs only in number, price, ceiling and lineage
+PASS  seed 1131: every club's active payroll is the same to the tenth ()
+seed 1132: draws 1199 base, 1199 head; men 2162 and 2162; offense numbers moved 422; other shelves moved 0; other fields moved on offense 16, elsewhere 24; offense men whose hidden ceiling sits another distance over the number 5; clubs with another payroll 0
+PASS  seed 1132: the same number of random draws
+PASS  seed 1132: the same schedule
+FAIL  seed 1132: the same opening free agent pool
+FAIL  seed 1132: the same men on the same clubs and tiers
+FAIL  seed 1132: the same row order on every club
+FAIL  seed 1132: no lineman or defender moved in any field but his price (CLE|Michael Burton|RB|active: {"name":"Michael Burton","pos":"RB","age":34,"years":1,"id":"#491","out":0,"noSeason":true,"l":{"modelVersion":0,"originKey":"CLE|Michael Burton|RB"," | {"name":"Michael Burton","pos":"RB","age":34,"years":1,"id":"#491","out":0,"noSeason":true,"l":{"modelVersion":0,"originKey":"CLE|Michael Burton|RB"," ; DAL|Hunter Luepke|RB|active: {"name":"Hunter Luepke","pos":"RB","age":26,"years":3,"id":"#558","out":0,"l":{"modelVersion":0,"originKey":"DAL|Hunter Luepke|RB","openingOvr":0,"bas | {"name":"Hunter Luepke","pos":"RB","age":26,"years":3,"id":"#558","out":0,"l":{"modelVersion":0,"originKey":"DAL|Hunter Luepke|RB","openingOvr":0,"bas ; DEN|Adam Prentice|RB|practice: {"name":"Adam Prentice","pos":"RB","age":29,"years":3,"id":"#659","out":0,"l":{"modelVersion":0,"originKey":"DEN|Adam Prentice|RB","openingOvr":0,"bas | {"name":"Adam Prentice","pos":"RB","age":29,"years":3,"id":"#659","out":0,"l":{"modelVersion":0,"originKey":"DEN|Adam Prentice|RB","openingOvr":0,"bas)
+FAIL  seed 1132: an offense man differs only in number, price, ceiling and lineage
+PASS  seed 1132: every club's active payroll is the same to the tenth ()
+seed 7: draws 1199 base, 1199 head; men 2162 and 2162; offense numbers moved 422; other shelves moved 0; other fields moved on offense 16, elsewhere 24; offense men whose hidden ceiling sits another distance over the number 2; clubs with another payroll 0
+PASS  seed 7: the same number of random draws
+PASS  seed 7: the same schedule
+FAIL  seed 7: the same opening free agent pool
+FAIL  seed 7: the same men on the same clubs and tiers
+FAIL  seed 7: the same row order on every club
+FAIL  seed 7: no lineman or defender moved in any field but his price (CLE|Michael Burton|RB|active: {"name":"Michael Burton","pos":"RB","age":34,"years":1,"id":"#491","out":0,"noSeason":true,"l":{"modelVersion":0,"originKey":"CLE|Michael Burton|RB"," | {"name":"Michael Burton","pos":"RB","age":34,"years":1,"id":"#491","out":0,"noSeason":true,"l":{"modelVersion":0,"originKey":"CLE|Michael Burton|RB"," ; DAL|Hunter Luepke|RB|active: {"name":"Hunter Luepke","pos":"RB","age":26,"years":3,"id":"#558","out":0,"l":{"modelVersion":0,"originKey":"DAL|Hunter Luepke|RB","openingOvr":0,"bas | {"name":"Hunter Luepke","pos":"RB","age":26,"years":3,"id":"#558","out":0,"l":{"modelVersion":0,"originKey":"DAL|Hunter Luepke|RB","openingOvr":0,"bas ; DEN|Adam Prentice|RB|practice: {"name":"Adam Prentice","pos":"RB","age":29,"years":3,"id":"#659","out":0,"l":{"modelVersion":0,"originKey":"DEN|Adam Prentice|RB","openingOvr":0,"bas | {"name":"Adam Prentice","pos":"RB","age":29,"years":3,"id":"#659","out":0,"l":{"modelVersion":0,"originKey":"DEN|Adam Prentice|RB","openingOvr":0,"bas)
+FAIL  seed 7: an offense man differs only in number, price, ceiling and lineage
+PASS  seed 7: every club's active payroll is the same to the tenth ()
+   DETAIL men only in base: NYG|Patrick Ricard|RB|active 72; only in head: NYG|Jason Pinnock|DB|active 69
+   DETAIL free agents 21 base, 21 head; only in base: Jason Pinnock|DB 69; only in head: Patrick Ricard|RB 63
+   DETAIL free agents in both whose fields differ (id apart): 0
+   DETAIL clubs whose row order differs: NYG; sizes NYG 53->53
+   DETAIL fields that differ, id left out, count of men: {"offense.ovr":422,"offense.salary":216,"offense.pot":421,"offense.openingRatingEvidence":706,"other.salary":440,"other.openingRatingEvidence":1455}
+   DETAIL linemen and defenders whose lineage differs beyond the model version: 0
+   DETAIL computer clubs not at 53 in both arms: ARI 52/52, BAL 50/50, BUF 50/50, CHI 51/51, CIN 51/51, CLE 51/51, DAL 50/50, DEN 50/50, GB 52/52, IND 51/51, JAX 50/50, KC 50/50, LA 51/51, LAC 50/50, MIA 51/51, MIN 51/51, NE 50/50, NYJ 50/50, PHI 51/51, PIT 50/50, SEA 51/51, SF 52/52, TB 51/51, TEN 50/50, WAS 52/52; LV 51/51
+seed 20261008: draws 1199 base, 1199 head; men 2162 and 2162; offense numbers moved 422; other shelves moved 0; other fields moved on offense 16, elsewhere 24; offense men whose hidden ceiling sits another distance over the number 4; clubs with another payroll 0
+PASS  seed 20261008: the same number of random draws
+PASS  seed 20261008: the same schedule
+FAIL  seed 20261008: the same opening free agent pool
+FAIL  seed 20261008: the same men on the same clubs and tiers
+FAIL  seed 20261008: the same row order on every club
+FAIL  seed 20261008: no lineman or defender moved in any field but his price (CLE|Michael Burton|RB|active: {"name":"Michael Burton","pos":"RB","age":34,"years":1,"id":"#491","out":0,"noSeason":true,"l":{"modelVersion":0,"originKey":"CLE|Michael Burton|RB"," | {"name":"Michael Burton","pos":"RB","age":34,"years":1,"id":"#491","out":0,"noSeason":true,"l":{"modelVersion":0,"originKey":"CLE|Michael Burton|RB"," ; DAL|Hunter Luepke|RB|active: {"name":"Hunter Luepke","pos":"RB","age":26,"years":3,"id":"#558","out":0,"l":{"modelVersion":0,"originKey":"DAL|Hunter Luepke|RB","openingOvr":0,"bas | {"name":"Hunter Luepke","pos":"RB","age":26,"years":3,"id":"#558","out":0,"l":{"modelVersion":0,"originKey":"DAL|Hunter Luepke|RB","openingOvr":0,"bas ; DEN|Adam Prentice|RB|practice: {"name":"Adam Prentice","pos":"RB","age":29,"years":3,"id":"#659","out":0,"l":{"modelVersion":0,"originKey":"DEN|Adam Prentice|RB","openingOvr":0,"bas | {"name":"Adam Prentice","pos":"RB","age":29,"years":3,"id":"#659","out":0,"l":{"modelVersion":0,"originKey":"DEN|Adam Prentice|RB","openingOvr":0,"bas)
+FAIL  seed 20261008: an offense man differs only in number, price, ceiling and lineage
+PASS  seed 20261008: every club's active payroll is the same to the tenth ()
+PASS  LV: this branch's validator accepts the base's save (623 KiB)
+PASS  LV: the id repair finds nothing to repair
+PASS  LV: the save is the same string after this branch opened it
+PASS  LV: week 1 of the saved league is the same on both engines
+PASS  LV: the whole 17 week season of the saved league is the same on both engines
+PASS  LV: the offseason after it is the same on both engines
+   the saved Ashton Jeanty: ovr 65, lineage {"modelVersion":"nfl-v2.2-2026-10-02","originKey":"LV|Ashton Jeanty|RB","openingOvr":65,"basis":"production","partial":false}
+PASS  KC: this branch's validator accepts the base's save (623 KiB)
+PASS  KC: the id repair finds nothing to repair
+PASS  KC: the save is the same string after this branch opened it
+PASS  KC: week 1 of the saved league is the same on both engines
+PASS  KC: the whole 17 week season of the saved league is the same on both engines
+PASS  KC: the offseason after it is the same on both engines
+rvwSaves: 25 FAILURE(S)
