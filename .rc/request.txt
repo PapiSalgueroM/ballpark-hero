@@ -1,0 +1,7 @@
+#!serial
+cadchamp: node .rc/x/rvmut.mjs cadchamp
+formatdrop: node .rc/x/rvmut.mjs formatdrop
+oddclubs: node .rc/x/rvmut.mjs oddclubs
+holdkey: node .rc/x/rvmut.mjs holdkey
+ladderstale: node .rc/x/rvmut.mjs ladderstale
+restgroup: node .rc/x/rvmut.mjs restgroup
