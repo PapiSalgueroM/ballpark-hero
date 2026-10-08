@@ -47,8 +47,14 @@
  *      served index.html holds the off switch __DUKB_NO_TRANSLATE_GUARD__ and
  *      the guard's console line. A control whose switch is not in the build
  *      proves nothing, so the noguard control refuses to run without it.
- *   1. The translator ran on every page (text nodes swapped, lang="pt").
- *   2. The create screen drew, and Brazil is on the page after choosing it.
+ *   1. The translator ran on every page (text nodes swapped, lang="pt"), and
+ *      the guard is installed there.
+ *   2. The create screen drew. All three picks registered: each select box
+ *      holds its pick in its text, Brazil among them. And each pick can be
+ *      READ in its box, which is not the same thing: the first line box of
+ *      the words has to lie inside everything that clips it. One pick is
+ *      known to fail that today and is on KNOWN_HIDDEN_PICKS, a ratchet (see
+ *      WHAT THE GUARD DOES NOT FIX below).
  *   3. The create flow REACHED the career: the hub's h1 holds the typed name,
  *      the create form is gone and the save in the browser is his.
  *   4. One season forward: the save is a year older and the hub still stands.
@@ -57,15 +63,31 @@
  *      the h1 "This page broke" in the box that also holds the Try this page
  *      again button and the link home, never as a loose string.
  *   7. No NotFoundError, as a page error or in the console.
+ *   8. Asked directly on every page, on a scratch element outside the
+ *      document: a node is swapped out the way a translator swaps it, and
+ *      removing it is quiet and inserting before it appends. This is the one
+ *      check that does not lean on the app's own copy, so it still means
+ *      something the day every string on the walk has a span of its own.
  *
  * WHAT IT COUNTS, as a record and not as a pass or fail: on how many pages
  * the guard printed its console line (it prints once a page), and, through a
  * recorder laid over removeChild and insertBefore that changes nothing and
  * only counts, how many calls on each page named a node its parent no longer
- * owns. Each of those is one crash the page would have had. It also counts
- * the cost the guard does not remove: text React has changed since the
- * translator took the node, which the screen therefore still shows the old
- * way.
+ * owns. Each of those is one crash the page would have had.
+ *
+ * WHAT THE GUARD DOES NOT FIX, measured here so nobody has to guess. The guard
+ * stops the crash. It does not put the page right, and two costs stay:
+ *   - A leftover. The translator's copy of a removed text stays where it was.
+ *     In the nationality box that copy is the placeholder, the box shows one
+ *     line, and the pick (drawn as a block, with its flag) lands on a second
+ *     line nobody sees: the box still READS "Choose national..." after Brazil
+ *     is chosen, at both sizes. The pick is taken and the flow goes on. The
+ *     position and era picks sit on the same line and can be read.
+ *   - Stale text. What React writes to a node the translator took never
+ *     reaches the screen: the age line still says 16 when he is 18. Counted
+ *     as "stale text" for every walk, the most on screen at once.
+ * Both end when a changing string gets a span of its own, which is the create
+ * path repair and not this round.
  *
  * CONTROLS (PLAY_TRANSLATED_CONTROL=):
  *   noguard      sets window.__DUKB_NO_TRANSLATE_GUARD__ before the app boots,
@@ -73,13 +95,49 @@
  *                reason this file exists: the boundary, with a NotFoundError
  *                behind it, on the create flow, at the nationality step. It
  *                then presses Try this page again and shows the same step
- *                break again. Exit 1 is the control firing. Exit 2 means it
- *                could not run or did not fire, and proves nothing. It also
- *                walks the other eight pages, which is the measurement of how
- *                wide the damage was without the guard.
+ *                break again. It also asks check 8's question on every page
+ *                and must get NotFoundError both times, which keeps this
+ *                control firing after the create flow's strings are wrapped.
+ *                Exit 1 is the control firing. Exit 2 means it could not run
+ *                or did not fire, and proves nothing. It also walks the other
+ *                eight pages, which is the measurement of how wide the damage
+ *                was without the guard.
  *   notranslate  the same walk with the translator off. It must stay green
  *                AND count zero console lines and zero moved nodes: the guard
  *                does nothing on an ordinary page.
+ *
+ * MEASURED 2026-10-08 on the Release AL tree with the guard in it, on a GitHub
+ * runner, three runs of the plain walk giving the same numbers each time:
+ *   plain        238 checks, 0 failed, 36 walks in 119 s three at a time (363 s
+ *                one at a time). The create walk is 22 steps and in every one
+ *                of its four walks 9 calls named a moved node, all of them
+ *                nodes the translator took: the three placeholders, the
+ *                position and era labels twice each (opening the build screen,
+ *                then Begin Career), the Latest Events line once and the
+ *                plural "s" of "events remaining" once. The guard printed its
+ *                line on those 4 page loads and on none of the other 32: the
+ *                eight other pages made no such call in eight presses each.
+ *                Stale text, most on screen at once: 6 on Soccer Career, 3 on
+ *                Front Office, 2 on Stadium Tycoon. The nationality box was
+ *                HIDDEN in 4 of 4, position and era readable in 4 of 4.
+ *   noguard      exit 1. 166 checks, 28 failed: seven on each of the four
+ *                create walks and nothing else. The boundary took the page at
+ *                "choose nationality Brazil" in 4 of 4, the retry broke at the
+ *                same step in 4 of 4, and asked directly both calls threw
+ *                NotFoundError on 36 of 36 pages. None of the other eight
+ *                pages reached the boundary.
+ *   notranslate  exit 0. 121 checks, 0 failed, 18 walks: 0 pages printed the
+ *                guard's line, 0 moved nodes, all three boxes readable.
+ *   deeper, once (PAGE_PRESSES=24 CAREER_PRESSES=30 MODES=keep): the create
+ *                walk went to age 20 in 40 steps with 12 such calls; the other
+ *                eight pages still made none in 24 presses each, and still did
+ *                not break without the guard. Stale text showed on five of the
+ *                nine pages by then (7 on Soccer Career, 3 each on NBA My
+ *                Career, NFL My Career, Stadium Tycoon and Front Office). So
+ *                in what these walks reach the crash is Soccer Career's, and
+ *                the stale text is everybody's. College Grid's walk is its two
+ *                dialogs only: its puzzle comes from the database, which no
+ *                walk here may reach.
  *
  * Run: npm run build, then ENGINES=chromium node scripts/playTranslatedPage.mjs
  * (Chromium only: it is where page translation lives). BASE names the server,
@@ -87,7 +145,11 @@
  * it serves dist/ itself through scripts/lib/hostLikeServer.mjs. ONLY=/route
  * (comma separated, MSYS_NO_PATHCONV=1 under Git Bash), VIEWS=phone,desktop
  * and MODES=keep,alter scope a run, VERBOSE=1 prints every step, SHOTS names a
- * folder for screenshots. Every request that is not the local server is
+ * folder for screenshots. Three walks run side by side (JOBS=1 for one at a
+ * time), each with its own context and its own seeded dice, and every wait is
+ * for something on the page (the translator has caught up, the button is
+ * back), so a slow machine is a slow run and not a red one. PAGE_PRESSES and
+ * CAREER_PRESSES deepen a walk. Every request that is not the local server is
  * aborted (the database host by its own rule, on every page) except the flag
  * images, which are answered with one local pixel.
  *
@@ -138,6 +200,13 @@ const PLAYER = 'Joao Teste';
 const NAT = env.NAT || 'Brazil';
 const POS = env.POS || 'Striker';
 const ERA = env.ERA || 'Current era';
+const PICKS = [['nationality', NAT], ['position', POS], ['era', ERA]];
+/* A RATCHET, not a clean sheet. With the guard alone the nationality box still READS "Choose
+   national..." after a pick on a translated page: the pick is taken, the flow goes on, the words
+   are hidden (see boxReads). The cure is a span around the placeholder, which is the create path
+   repair and not this round. The day that lands this check goes red and says so: take the name off
+   this list, and from then on every pick must be readable. Anything not listed fails today. */
+const KNOWN_HIDDEN_PICKS = ['nationality'];
 const BOUNDARY_WORDS = 'This page broke';
 const RETRY_WORDS = 'Try this page again';
 const SWITCH = '__DUKB_NO_TRANSLATE_GUARD__';
@@ -145,13 +214,13 @@ const GUARD_LINE = 'a node this page no longer owns';
 
 const failed = [];
 let checksRun = 0;
-const say = m => { if (V) console.log('        ' + m); };
-function check(name, ok, detail) {
+/* Walks run side by side, so each one keeps its own lines and prints them together when it ends. */
+function checkLine(name, ok, detail, out = console.log) {
   checksRun += 1;
   const line = `${name}${detail ? ': ' + detail : ''}`;
-  if (ok) { console.log(`  PASS  ${line}`); return true; }
+  if (ok) { out(`  PASS  ${line}`); return true; }
   failed.push(line);
-  console.log(`  FAIL  ${line}`);
+  out(`  FAIL  ${line}`);
   return false;
 }
 
@@ -196,8 +265,8 @@ const ENTRY = (entryTag.match(/\bsrc="([^"]+\.js)"/) || [])[1] || '';
 let entryText = '';
 if (ENTRY) { try { entryText = await served(ENTRY); } catch (e) { console.log(`  the entry ${ENTRY} could not be fetched: ${String(e).slice(0, 80)}`); } }
 const switchInBuild = entryText.includes(SWITCH);
-check(`0. the served entry chunk (${ENTRY || 'none named in index.html'}) holds the guard's off switch ${SWITCH}`, switchInBuild);
-check('0. the served entry chunk holds the guard\'s console line', entryText.includes(GUARD_LINE));
+checkLine(`0. the served entry chunk (${ENTRY || 'none named in index.html'}) holds the guard's off switch ${SWITCH}`, switchInBuild);
+checkLine('0. the served entry chunk holds the guard\'s console line', entryText.includes(GUARD_LINE));
 if (CONTROL === 'noguard' && !switchInBuild) {
   console.error('control "noguard" cannot run: its switch is not in the served build, so setting it would change nothing. NOT CHECKED.');
   await stop(2);
@@ -258,7 +327,7 @@ function pageInit(cfg) {
     return s;
   }
   const taken = new WeakSet();
-  const w = { origText, moved: [], simCount: 0, simStarted: false, counting: false };
+  const w = { origText, moved: [], simCount: 0, sweeps: 0, simStarted: false, counting: false };
   window.__walk = w;
 
   /* THE RECORDER. It changes nothing: it counts a call that names a node its parent no longer owns,
@@ -329,6 +398,7 @@ function pageInit(cfg) {
   }
   function sweep() {
     layRecorder();
+    w.sweeps += 1;
     if (!cfg.translate || !document.body) return;
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
     const todo = [];
@@ -336,6 +406,7 @@ function pageInit(cfg) {
     for (const n of todo) if (n.isConnected) swap(n);
   }
   let timer = null;
+  w.busy = () => timer !== null; // a change has been seen and its sweep has not run yet
   function schedule() {
     if (timer !== null) return;
     timer = setTimeout(() => { timer = null; sweep(); }, cfg.simDelay);
@@ -395,7 +466,17 @@ async function openWalk(view, mode) {
 }
 
 const sleep = (page, ms) => page.waitForTimeout(ms);
-const settle = (page, mode) => sleep(page, 380 + (mode === 'off' ? 0 : SIM_DELAY));
+/* After a press: a beat for React, then until the translator has caught up with what the press drew
+   (nothing waiting to be swept, or two sweeps gone by on a page that never sits still). A slow
+   machine makes this a slower walk, never a look at a page the translator has not reached yet. */
+async function settle(page) {
+  const before = await page.evaluate(() => (window.__walk ? window.__walk.sweeps : 0)).catch(() => 0);
+  await sleep(page, 380);
+  await page.waitForFunction(k => !window.__walk || !window.__walk.busy || !window.__walk.busy() || window.__walk.sweeps >= k + 2, before, { timeout: 4000 }).catch(() => {});
+  await sleep(page, 40);
+}
+/* The translator has started on this document (or, with it off, the recorder is down). */
+const started = page => page.waitForFunction(() => !!window.__walk && window.__walk.simStarted, null, { timeout: 20000 }).catch(() => {});
 
 /* What the page looks like right now. The boundary is matched as the element RouteErrorBoundary
    draws: its h1, in a box that also holds its retry button and its link home. */
@@ -495,6 +576,59 @@ async function pickCombo(page, mode, index, wanted) {
   return { ok: true, label: hit.label, shown: hit.shown };
 }
 
+/* What a select box says after a pick, two ways. "has": the pick is in the box's text, so the choice
+   registered. "visible": the first line box of those words lies inside everything that clips it, so
+   a person can actually read it. They differ, and that difference is the point: with the guard the
+   translator's copy of the placeholder stays in the box, the box shows one line, and a pick drawn
+   as a block (the nationality, with its flag) lands on a second line nobody can see. */
+async function boxReads(page, index, wanted) {
+  return page.evaluate(([i, want]) => {
+    const trig = document.querySelectorAll('[role="combobox"]')[i];
+    if (!trig) return null;
+    const shown = (trig.innerText || '').replace(/\s+/g, ' ').trim().slice(0, 80);
+    const tw = document.createTreeWalker(trig, NodeFilter.SHOW_TEXT);
+    let node = null;
+    for (let n = tw.nextNode(); n; n = tw.nextNode()) if ((n.nodeValue || '').includes(want)) { node = n; break; }
+    if (!node) return { shown, has: false, visible: false };
+    const range = document.createRange();
+    const from = node.nodeValue.indexOf(want);
+    range.setStart(node, from);
+    range.setEnd(node, from + want.length);
+    const r = range.getClientRects()[0];
+    let visible = !!r && r.width > 1 && r.height > 1;
+    for (let e = node.parentElement; e && visible; e = e.parentElement) {
+      const cs = getComputedStyle(e);
+      if (cs.overflowX !== 'visible' || cs.overflowY !== 'visible') {
+        const c = e.getBoundingClientRect();
+        if (r.top < c.top - 1 || r.bottom > c.bottom + 1 || r.left < c.left - 1 || r.right > c.right + 1) visible = false;
+      }
+      if (e === trig) break;
+    }
+    return { shown, has: true, visible };
+  }, [index, wanted]);
+}
+
+/* The two patched calls, tried directly in this browser on this build, on a scratch element that is
+   never in the document: a node is swapped out the way a translator swaps it, then the page asks
+   for it to be removed and for something to be put in front of it. With the guard both are quiet.
+   Without it both throw NotFoundError, whatever the app's own copy looks like by then, which is
+   what keeps the noguard control alive after the create flow's strings get spans of their own. */
+async function probeGuard(page) {
+  return page.evaluate(() => {
+    const out = { remove: '', insert: '' };
+    const box = document.createElement('div');
+    const held = document.createTextNode('held by the page');
+    box.appendChild(held);
+    const font = document.createElement('font');
+    font.textContent = 'moved by a translator';
+    box.replaceChild(font, held);
+    try { box.removeChild(held); out.remove = font.parentNode === box ? 'quiet' : 'lost'; } catch (e) { out.remove = e.name; }
+    const fresh = document.createElement('b');
+    try { box.insertBefore(fresh, held); out.insert = fresh.parentNode === box ? 'quiet' : 'lost'; } catch (e) { out.insert = e.name; }
+    return out;
+  }).catch(e => ({ remove: 'no answer', insert: String(e).slice(0, 60) }));
+}
+
 /* The next thing a player would press. An open dialog, list or menu comes first (the rules dialog a
    first visit opens, the list a select just opened). Then, in the career, the flagship walker's own
    advancing actions in its own order. Otherwise the control pressed least so far, in page order, so
@@ -528,13 +662,21 @@ async function advance(page, actions, skipSrc, counts) {
       else el = usable.find(b => /^(let's play|got it|start|play|continue|begin|ok|okay|done|next|close)/i.test(label(b))) || null;
     }
     if (!el) {
+      /* down the page from the control pressed last (a toggle that renames itself is still that
+         control), round to the top again, and among those the one pressed least */
+      const last = window.__walkTarget;
+      let pool = usable;
+      if (last && last.isConnected && scope.contains(last)) {
+        const below = usable.filter(b => b !== last && !last.contains(b) && (last.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING));
+        pool = below.concat(usable.filter(b => !below.includes(b)));
+      }
       let best = Infinity;
-      for (const b of usable) { const c = seen[label(b)] || 0; if (c < best) { best = c; el = b; } }
+      for (const b of pool) { const c = seen[label(b)] || 0; if (c < best) { best = c; el = b; } }
     }
     if (!el) return { found: false, overlay: overlay ? overlay.getAttribute('role') : '' };
     el.scrollIntoView({ block: 'center', inline: 'nearest' });
     window.__walkTarget = el;
-    return { found: true, label: label(el).slice(0, 60), overlay: overlay ? overlay.getAttribute('role') : '', options: usable.slice(0, 8).map(b => label(b).slice(0, 22)) };
+    return { found: true, key: label(el), label: label(el).slice(0, 60), overlay: overlay ? overlay.getAttribute('role') : '', options: usable.slice(0, 8).map(b => label(b).slice(0, 22)) };
   }, [actions, skipSrc, NEVER, counts]);
   if (!pick.found) {
     if (pick.overlay) { await page.keyboard.press('Escape'); return { ok: true, label: `Escape (an open ${pick.overlay} with nothing to press)`, by: 'keyboard' }; }
@@ -551,7 +693,7 @@ async function advance(page, actions, skipSrc, counts) {
     return { x, y, covered: !(top && (top === el || el.contains(top))) };
   });
   if (!at) return { ok: false, why: `"${pick.label}" was gone after the scroll` };
-  counts[pick.label] = (counts[pick.label] || 0) + 1;
+  counts[pick.key] = (counts[pick.key] || 0) + 1;
   if (at.covered) {
     await page.evaluate(() => { if (window.__walkTarget) window.__walkTarget.click(); });
     return { ok: true, label: pick.label, by: 'its own click (covered)', options: pick.options };
@@ -564,8 +706,8 @@ async function advance(page, actions, skipSrc, counts) {
  * One walk. Every step is followed by a look at the page; the walk stops
  * at the boundary, or where it could not find what it came to press.
  * ------------------------------------------------------------------ */
-function newRecord(route, view, mode, pass) {
-  return { route, view, mode, pass, steps: [], boundaryAt: null, stuckAt: null, pressed: [], state: null, first: null, maxStale: 0, staleSample: [] };
+function newRecord(route, view, mode, pass, out) {
+  return { route, view, mode, pass, out, steps: [], boundaryAt: null, stuckAt: null, pressed: [], state: null, first: null, maxStale: 0, staleSample: [] };
 }
 let shotCount = 0;
 async function shot(page, rec, name) {
@@ -592,7 +734,7 @@ async function step(W, rec, name, fn) {
   const did = action && (action.label || action.why) ? String(action.label || action.why) : '';
   if (action && action.ok && action.label) rec.pressed.push(action.label);
   rec.steps.push({ name, ok: !(action && action.ok === false), did: did.slice(0, 70), by: (action && action.by) || '', boundary: !!(state && state.boundary), moved: state ? state.moved : null, stale: state ? state.stale : null, phase: state && state.save ? state.save.phase : '', age: state && state.save ? state.save.age : null });
-  say(`${state && state.boundary ? 'XX' : action && action.ok === false ? '??' : 'ok'} ${name}${did ? ' [' + did.slice(0, 40) + ']' : ''}${state ? ` moved=${state.moved} stale=${state.stale} fonts=${state.fonts}${state.save ? ` ${state.save.phase} ${state.save.age}` : ''}` : ' (no look at the page)'}`);
+  if (V) rec.out(`        ${state && state.boundary ? 'XX' : action && action.ok === false ? '??' : 'ok'} ${name}${did ? ' [' + did.slice(0, 40) + ']' : ''}${state ? ` moved=${state.moved} stale=${state.stale} fonts=${state.fonts}${state.save ? ` ${state.save.phase} ${state.save.age}` : ''}` : ' (no look at the page)'}`);
   if (state && state.boundary) { rec.boundaryAt = name; await shot(W.page, rec, 'BOUNDARY'); return false; }
   if (action && action.ok === false) { rec.stuckAt = `${name}: ${action.why}`; return false; }
   return true;
@@ -603,31 +745,36 @@ async function walkCreate(W, rec) {
   const mode = rec.mode;
   await step(W, rec, 'the create screen draws', async () => {
     await page.waitForSelector('#pname', { timeout: 30000 });
-    await sleep(page, 700 + SIM_START + SIM_DELAY);
+    await started(page);
+    await sleep(page, 500);
     return { ok: true };
   });
   rec.createDrawn = !!(rec.first && rec.first.creation);
   await step(W, rec, 'type the name', async () => { await page.fill('#pname', PLAYER); return { ok: true }; });
-  await step(W, rec, `choose nationality ${NAT}`, async () => {
-    const r = await pickCombo(page, mode, 0, NAT);
-    if (!r.ok) return r;
-    await settle(page, mode);
-    rec.natOnPage = await page.evaluate(([nat]) => {
-      const trig = document.querySelectorAll('[role="combobox"]')[0];
-      if (!trig) return null;
-      const shown = (trig.innerText || '').replace(/\s+/g, ' ').trim();
-      return { shown: shown.slice(0, 80), has: shown.includes(nat) };
-    }, [NAT]).catch(() => null);
+  rec.boxes = {};
+  for (let i = 0; i < PICKS.length; i += 1) {
+    const [what, want] = PICKS[i];
+    await step(W, rec, `choose ${what} ${want}`, async () => {
+      const r = await pickCombo(page, mode, i, want);
+      if (!r.ok) return r;
+      await settle(page, mode);
+      rec.boxes[what] = await boxReads(page, i, want).catch(() => null);
+      return r;
+    });
+  }
+  await shot(page, rec, '1-picks');
+  /* The roll runs for about two seconds and the button is disabled meanwhile. Each of these waits for
+     what the next step needs, by its original words, so a slow machine is a slow walk and not a red. */
+  const ready = (words, ms) => page.waitForFunction(([t]) => [...document.querySelectorAll('button')].some(b => !b.disabled && window.__walk.origText(b).includes(t)), [words], { timeout: ms }).catch(() => {});
+  await step(W, rec, 'Generate Starting Potential', async () => { const r = await press(page, 'button', 'Generate Starting Potential'); if (r.ok) await ready('Roll again', 15000); return r; });
+  await step(W, rec, 'Roll again', async () => { const r = await press(page, 'button', 'Roll again'); if (r.ok) { await sleep(page, 600); await ready('Customize your build', 15000); } return r; });
+  await step(W, rec, 'Customize your build', async () => { const r = await press(page, 'button', 'Customize your build'); if (r.ok) await ready('Lock in', 10000); return r; });
+  await step(W, rec, 'Lock in build', async () => { const r = await press(page, 'button', 'Lock in'); if (r.ok) await ready('Begin Career', 10000); return r; });
+  await step(W, rec, 'Begin Career', async () => {
+    const r = await press(page, 'button', 'Begin Career');
+    if (r.ok) { await page.waitForFunction(() => !document.getElementById('pname'), null, { timeout: 15000 }).catch(() => {}); await sleep(page, 1200); }
     return r;
   });
-  await shot(page, rec, '1-nationality');
-  await step(W, rec, `choose position ${POS}`, () => pickCombo(page, mode, 1, POS));
-  await step(W, rec, `choose era ${ERA}`, () => pickCombo(page, mode, 2, ERA));
-  await step(W, rec, 'Generate Starting Potential', async () => { const r = await press(page, 'button', 'Generate Starting Potential'); await sleep(page, 2500); return r; });
-  await step(W, rec, 'Roll again', async () => { const r = await press(page, 'button', 'Roll again'); await sleep(page, 2200); return r; });
-  await step(W, rec, 'Customize your build', async () => { const r = await press(page, 'button', 'Customize your build'); await sleep(page, 800); return r; });
-  await step(W, rec, 'Lock in build', async () => { const r = await press(page, 'button', 'Lock in'); await sleep(page, 800); return r; });
-  await step(W, rec, 'Begin Career', async () => { const r = await press(page, 'button', 'Begin Career'); await sleep(page, 2500); return r; });
   const s = rec.state;
   const begun = !rec.boundaryAt && !rec.stuckAt && !!s;
   rec.reached = begun && !s.creation && s.h1.some(h => h.includes(PLAYER)) && !!s.save && s.save.name === PLAYER;
@@ -646,6 +793,8 @@ async function walkCreate(W, rec) {
     }
     if (!ok) break;
   }
+  const end = rec.state;
+  if (rec.seasonDetail && end && end.save) rec.seasonDetail += `; the walk went on to age ${end.save.age}, phase ${end.save.phase}`;
   await shot(page, rec, '3-career');
 }
 
@@ -657,7 +806,8 @@ async function walkPage(W, rec) {
       const root = document.getElementById('root');
       return !!root && [...root.querySelectorAll('button,a[href]')].some(b => { const r = b.getBoundingClientRect(); return r.width > 2 && r.height > 2; });
     }, null, { timeout: 30000 });
-    await sleep(page, 900 + SIM_START + SIM_DELAY);
+    await started(page);
+    await sleep(page, 700);
     return { ok: true };
   });
   const counts = {};
@@ -675,7 +825,7 @@ async function retryAfterBoundary(W, rec) {
   const loaded = page.waitForEvent('load', { timeout: 20000 }).then(() => true).catch(() => false);
   const r = await press(page, 'button', RETRY_WORDS, 'exact');
   const reloaded = r.ok ? await loaded : false;
-  const again = newRecord(rec.route, rec.view, rec.mode, 'retry');
+  const again = newRecord(rec.route, rec.view, rec.mode, 'retry', rec.out);
   if (reloaded) await walkCreate(W, again);
   return { pressed: r.ok, reloaded, boundaryAt: again.boundaryAt, stuckAt: again.stuckAt, reached: !!again.reached };
 }
@@ -683,56 +833,94 @@ async function retryAfterBoundary(W, rec) {
 /* ------------------------------------------------------------------ *
  * The walks, and the checks on each.
  * ------------------------------------------------------------------ */
-const rows = [];
-for (const mode of MODES) {
-  for (const view of VIEWS) {
-    for (const route of ROUTES) {
-      const tag = `${route} ${view} ${mode}`;
-      console.log(`\n${tag}`);
-      const W = await openWalk(view, mode);
-      const rec = newRecord(route, view, mode, '');
-      let retry = null;
-      try {
-        await W.page.goto(BASE + route, { waitUntil: 'load', timeout: 45000 });
-        if (route === CREATE_ROUTE) await walkCreate(W, rec); else await walkPage(W, rec);
-        rec.movedList = await W.page.evaluate(() => (window.__walk ? window.__walk.moved.slice(0, 60) : [])).catch(() => []);
-        if (route === CREATE_ROUTE && rec.boundaryAt) retry = await retryAfterBoundary(W, rec);
-      } catch (e) {
-        if (!rec.stuckAt && !rec.boundaryAt) rec.stuckAt = 'the walk threw: ' + String(e).split('\n')[0].slice(0, 140);
-      }
-      if (rec.stuckAt) { await shot(W.page, rec, 'STUCK'); console.log(`        stuck at ${rec.stuckAt}`); }
-      const last = rec.state || {};
-      const first = rec.first || {};
-      const row = {
-        route, view, mode, steps: rec.steps.length, boundaryAt: rec.boundaryAt, stuckAt: rec.stuckAt,
-        notFound: W.notFound.length, notFoundSample: W.notFound[0] || '',
-        guardLines: W.guardLines, guardOn: first.guardOn === true,
-        moved: (rec.movedList || []).length, movedByTranslator: (rec.movedList || []).filter(m => m.byTranslator).length, movedList: rec.movedList || [],
-        swapped: last.swapped || 0, maxStale: rec.maxStale, staleSample: rec.staleSample,
-        pressed: rec.pressed, dbBlocked: W.dbBlocked, blocked: [...W.blocked], retry,
-        create: route === CREATE_ROUTE ? { drawn: !!rec.createDrawn, natOnPage: rec.natOnPage || null, reached: !!rec.reached, reachedDetail: rec.reachedDetail || '', seasonAt: rec.seasonAt ?? null, seasonDetail: rec.seasonDetail || '' } : null,
-        stepList: rec.steps,
-      };
-      rows.push(row);
-      await W.ctx.close();
+async function runWalk({ mode, view, route }, out) {
+  const tag = `${route} ${view} ${mode}`;
+  const check = (name, ok, detail) => checkLine(name, ok, detail, out);
+  out(`\n${tag}`);
+  const W = await openWalk(view, mode);
+  const rec = newRecord(route, view, mode, '', out);
+  let retry = null;
+  try {
+    await W.page.goto(BASE + route, { waitUntil: 'load', timeout: 45000 });
+    if (route === CREATE_ROUTE) await walkCreate(W, rec); else await walkPage(W, rec);
+    rec.movedList = await W.page.evaluate(() => (window.__walk ? window.__walk.moved.slice(0, 60) : [])).catch(() => []);
+    /* Both counts are closed BEFORE the direct question: the recorder would count its two calls, and
+       the guard prints its once a page line for them on a page that never needed it. */
+    rec.guardLines = W.guardLines;
+    rec.direct = await probeGuard(W.page);
+    if (route === CREATE_ROUTE && rec.boundaryAt) retry = await retryAfterBoundary(W, rec);
+  } catch (e) {
+    if (!rec.stuckAt && !rec.boundaryAt) rec.stuckAt = 'the walk threw: ' + String(e).split('\n')[0].slice(0, 140);
+  }
+  if (rec.stuckAt) { await shot(W.page, rec, 'STUCK'); out(`        stuck at ${rec.stuckAt}`); }
+  const last = rec.state || {};
+  const first = rec.first || {};
+  const row = {
+    route, view, mode, steps: rec.steps.length, boundaryAt: rec.boundaryAt, stuckAt: rec.stuckAt,
+    notFound: W.notFound.length, notFoundSample: W.notFound[0] || '',
+    guardLines: rec.guardLines ?? W.guardLines, guardOn: first.guardOn === true,
+    moved: (rec.movedList || []).length, movedByTranslator: (rec.movedList || []).filter(m => m.byTranslator).length, movedList: rec.movedList || [],
+    swapped: last.swapped || 0, maxStale: rec.maxStale, staleSample: rec.staleSample,
+    pressed: rec.pressed, dbBlocked: W.dbBlocked, blocked: [...W.blocked], retry, direct: rec.direct || null,
+    create: route === CREATE_ROUTE ? { drawn: !!rec.createDrawn, boxes: rec.boxes || {}, reached: !!rec.reached, reachedDetail: rec.reachedDetail || '', seasonAt: rec.seasonAt ?? null, seasonDetail: rec.seasonDetail || '' } : null,
+    stepList: rec.steps,
+  };
+  await W.ctx.close();
 
-      if (mode === 'off') check(`1. ${tag}: the translator is off`, last.fonts === 0 && last.marked === false && first.counting === true, `${last.fonts} font element(s)`);
-      else check(`1. ${tag}: the translator ran`, row.swapped > 0 && last.lang === 'pt' && last.marked === true, `${row.swapped} text node(s) swapped, lang="${last.lang || ''}"`);
-      if (CONTROL !== 'noguard') check(`1. ${tag}: the guard is installed on the page`, row.guardOn);
-      if (route === CREATE_ROUTE) {
-        const gone = rec.boundaryAt ? `the boundary took the page at "${rec.boundaryAt}"` : rec.stuckAt ? `stuck at ${rec.stuckAt}` : '';
-        check(`2. ${tag}: the create screen drew`, !!rec.createDrawn, rec.createDrawn ? '' : gone);
-        check(`2. ${tag}: ${NAT} is on the page after choosing it`, !!(rec.natOnPage && rec.natOnPage.has), rec.natOnPage ? `the select reads "${rec.natOnPage.shown}"` : gone || 'the select was not there to read');
-        check(`3. ${tag}: the create flow reached the career`, !!rec.reached, rec.reachedDetail || gone);
-        check(`4. ${tag}: one season forward and the hub still stands`, rec.seasonAt !== undefined && rec.hubStands === true, rec.seasonDetail || (rec.reached ? `the save never got a year older in ${CAREER_PRESSES} presses` : 'the career was never reached'));
-      }
-      check(`5. ${tag}: the walk pressed at least two controls`, rec.pressed.length >= 2, `${rec.pressed.length}${rec.pressed.length ? ': ' + rec.pressed.slice(0, 9).map(p => p.slice(0, 22)).join(' > ') : ''}`);
-      check(`6. ${tag}: the route error boundary never appeared`, !rec.boundaryAt, rec.boundaryAt ? `it took the page at "${rec.boundaryAt}"` : '');
-      check(`7. ${tag}: no NotFoundError`, row.notFound === 0, row.notFoundSample.slice(0, 150));
-      if (retry) console.log(`        ${RETRY_WORDS}: ${!retry.pressed ? 'the button could not be pressed' : !retry.reloaded ? 'pressed, but the page did not reload' : retry.boundaryAt ? `reloaded, translated again, and broke again at "${retry.boundaryAt}"` : `reloaded and did not break again (${retry.reached ? 'reached the career' : 'stuck at ' + retry.stuckAt})`}`);
+  if (mode === 'off') check(`1. ${tag}: the translator is off`, last.fonts === 0 && last.marked === false && first.counting === true, `${last.fonts} font element(s)`);
+  else check(`1. ${tag}: the translator ran`, row.swapped > 0 && last.lang === 'pt' && last.marked === true, `${row.swapped} text node(s) swapped, lang="${last.lang || ''}"`);
+  if (CONTROL !== 'noguard') {
+    check(`1. ${tag}: the guard is installed on the page`, row.guardOn);
+    const d = rec.direct || {};
+    check(`8. ${tag}: asked directly, removing a moved node is quiet and inserting before one appends`, d.remove === 'quiet' && d.insert === 'quiet', `removeChild ${d.remove || 'not asked'}, insertBefore ${d.insert || 'not asked'}`);
+  }
+  if (route === CREATE_ROUTE) {
+    const gone = rec.boundaryAt ? `the boundary took the page at "${rec.boundaryAt}"` : rec.stuckAt ? `stuck at ${rec.stuckAt}` : '';
+    const boxes = rec.boxes || {};
+    const names = PICKS.map(p => p[0]);
+    const held = names.filter(n => boxes[n] && boxes[n].has);
+    const readable = names.filter(n => boxes[n] && boxes[n].visible);
+    const hiddenToday = mode === 'off' ? [] : KNOWN_HIDDEN_PICKS;
+    const expected = names.filter(n => !hiddenToday.includes(n));
+    const better = hiddenToday.filter(n => readable.includes(n));
+    check(`2. ${tag}: the create screen drew`, !!rec.createDrawn, rec.createDrawn ? '' : gone);
+    check(`2. ${tag}: all three picks registered, ${NAT} among them`, held.length === 3, gone || names.map(n => `${n} box "${boxes[n] ? boxes[n].shown : 'not there'}"`).join(', '));
+    check(`2. ${tag}: each pick can be READ in its box${hiddenToday.length ? `, bar the known hidden one (${hiddenToday.join(', ')})` : ''}`,
+      held.length === 3 && readable.length === expected.length && expected.every(n => readable.includes(n)),
+      better.length ? `${better.join(', ')} can be read now: take it off KNOWN_HIDDEN_PICKS in this file and correct its header` : gone || `readable: ${readable.join(', ') || 'none'}; hidden: ${names.filter(n => !readable.includes(n)).join(', ') || 'none'}`);
+    check(`3. ${tag}: the create flow reached the career`, !!rec.reached, rec.reachedDetail || gone);
+    check(`4. ${tag}: one season forward and the hub still stands`, rec.seasonAt !== undefined && rec.hubStands === true, rec.seasonDetail || (rec.reached ? `the save never got a year older in ${CAREER_PRESSES} presses` : 'the career was never reached'));
+  }
+  check(`5. ${tag}: the walk pressed at least two controls`, rec.pressed.length >= 2, `${rec.pressed.length}${rec.pressed.length ? ': ' + rec.pressed.slice(0, 9).map(p => p.slice(0, 22)).join(' > ') : ''}`);
+  check(`6. ${tag}: the route error boundary never appeared`, !rec.boundaryAt, rec.boundaryAt ? `it took the page at "${rec.boundaryAt}"` : '');
+  check(`7. ${tag}: no NotFoundError`, row.notFound === 0, row.notFoundSample.slice(0, 150));
+  if (retry) out(`        ${RETRY_WORDS}: ${!retry.pressed ? 'the button could not be pressed' : !retry.reloaded ? 'pressed, but the page did not reload' : retry.boundaryAt ? `reloaded, translated again, and broke again at "${retry.boundaryAt}"` : `reloaded and did not break again (${retry.reached ? 'reached the career' : 'stuck at ' + retry.stuckAt})`}`);
+  return row;
+}
+
+/* JOBS walks at a time (three by default), each in its own context with its own seeded dice, so the
+   order they finish in changes nothing but the order of the lines. The tables below are in the
+   fixed order of the list. */
+const todo = [];
+for (const mode of MODES) for (const view of VIEWS) for (const route of ROUTES) todo.push({ mode, view, route });
+const JOBS = Math.max(1, Math.min(Number(env.JOBS || 3) || 1, todo.length));
+const done = new Array(todo.length).fill(null);
+let nextJob = 0;
+async function worker() {
+  for (;;) {
+    const i = nextJob;
+    nextJob += 1;
+    if (i >= todo.length) return;
+    const lines = [];
+    const out = l => lines.push(l);
+    try { done[i] = await runWalk(todo[i], out); } catch (e) {
+      checkLine(`${todo[i].route} ${todo[i].view} ${todo[i].mode}: the walk ran`, false, String(e).split('\n')[0].slice(0, 160), out);
     }
+    console.log(lines.join('\n'));
   }
 }
+await Promise.all(Array.from({ length: JOBS }, () => worker()));
+const rows = done.filter(Boolean);
 
 /* ------------------------------------------------------------------ *
  * The record: what every walk needed, page by page.
@@ -750,6 +938,13 @@ for (const route of ROUTES) {
   const where = [...new Set(broke.map(r => r.boundaryAt))];
   const moved = mine.map(r => r.moved);
   console.log(`  ${pad(route, 17)}broke in ${broke.length} of ${mine.length} walk(s)${where.length ? ' (' + where.map(s => '"' + s + '"').join(', ') + ')' : ''}; the guard printed its line in ${mine.filter(r => r.guardLines > 0).length}; moved nodes per walk ${moved.join(', ')}; stale text at most ${Math.max(0, ...mine.map(r => r.maxStale))}`);
+}
+const creates = rows.filter(r => r.create);
+if (creates.length) {
+  console.log('\nWHAT THE THREE BOXES READ after the picks');
+  for (const r of creates) {
+    console.log(`  ${pad(r.view, 9)}${pad(r.mode, 7)}${PICKS.map(([n]) => { const b = r.create.boxes[n]; return `${n} "${b ? b.shown : ''}" ${!b ? '(no box)' : b.visible ? '(readable)' : b.has ? '(HIDDEN)' : '(not in the box)'}`; }).join(' | ')}`);
+  }
 }
 const shapes = new Map();
 for (const r of rows) for (const m of r.movedList) {
@@ -769,7 +964,7 @@ console.log(`\nnothing left this machine: ${dbBlocked} request(s) to the databas
 const guardPages = rows.filter(r => r.guardLines > 0).length;
 const movedAll = rows.reduce((a, r) => a + r.moved, 0);
 if (CONTROL === 'notranslate') {
-  check('8. with the translator off the guard printed nothing and no call named a moved node', guardPages === 0 && movedAll === 0, `${guardPages} of ${rows.length} page(s) printed the guard's line, ${movedAll} moved node(s)`);
+  checkLine('9. with the translator off the guard printed nothing and no call named a moved node', guardPages === 0 && movedAll === 0, `${guardPages} of ${rows.length} page(s) printed the guard's line, ${movedAll} moved node(s)`);
 } else if (CONTROL !== 'noguard') {
   console.log(`THE GUARD WAS NEEDED on ${guardPages} of ${rows.length} page load(s): ${movedAll} call(s) in all named a node its parent no longer owned.`);
 }
@@ -794,11 +989,13 @@ if (CONTROL === 'noguard') {
   const createBroke = createRows.filter(r => r.boundaryAt && r.notFound > 0);
   const atNationality = createBroke.filter(r => r.boundaryAt.startsWith('choose nationality'));
   const retried = createBroke.filter(r => r.retry && r.retry.reloaded && r.retry.boundaryAt);
+  const threw = rows.filter(r => r.direct && r.direct.remove === 'NotFoundError' && r.direct.insert === 'NotFoundError');
   console.log(`${checksRun} checks, ${failed.length} failed`);
-  if (!broke.length) {
-    console.error('control "noguard": nothing broke without the guard, so this walk does not provoke the crash the guard is there for. THE CONTROL DID NOT FIRE.');
+  if (!broke.length && !threw.length) {
+    console.error('control "noguard": nothing broke without the guard and the two calls did not throw when asked directly. THE CONTROL DID NOT FIRE.');
     await stop(2);
   }
+  console.log(`control "noguard": asked directly, removeChild and insertBefore of a moved node both threw NotFoundError on ${threw.length} of ${rows.length} page(s).`);
   console.log(`control "noguard": without the guard ${broke.length} of ${rows.length} walk(s) ended in the error boundary with a NotFoundError behind it.`);
   if (createRows.length) {
     if (createBroke.length === createRows.length && atNationality.length === createRows.length) {
