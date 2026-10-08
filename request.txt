@@ -1,0 +1,37 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCareerSquad: node scripts/simCareerSquad.mjs
+play: ENGINES=chromium REQUIRE_PAGE=1 PORT=4810 SHOTS=$RC_OUT/shots node scripts/playCareerSquad.mjs
+vitest-lib: node_modules/.bin/vitest run src/lib/soccerClubSquad.test.ts src/lib/soccerCareerAcademy.test.ts src/lib/soccerCareerContinental.test.ts src/lib/soccerCareerLeague.test.ts src/lib/soccerCareerLeagueSeasons.test.ts --testTimeout=300000 --hookTimeout=120000
+vitest-page: node_modules/.bin/vitest run src/test/careerAwardsNightCard.test.tsx src/test/careerDerbies.test.tsx src/test/careerDilemmaReach.test.tsx src/test/careerDilemmaSaves.test.tsx src/test/careerKeepPlaying.test.tsx src/test/careerRecordedStats.test.tsx src/test/careerSeasonRatings.test.tsx src/test/careerStory.test.tsx src/test/defenderCleanSheets.test.tsx src/test/scoreShown.test.tsx src/test/soccerCareerDebutLegacy.test.tsx src/test/soccerCareerDugoutTable.test.tsx src/test/soccerCareerSaveRecovery.test.tsx src/test/soccerCareerSaveRetry.test.tsx src/test/soccerPracticeLifecycle.test.tsx --testTimeout=300000 --hookTimeout=120000
+simCareerSquad-quick: node scripts/simCareerSquad.mjs 40
+simCareerSquad-bogus: CAREER_SQUAD_CONTROL=nosuchcontrol node scripts/simCareerSquad.mjs 40
+simCareerSquad-noshift: CAREER_SQUAD_CONTROL=noshift node scripts/simCareerSquad.mjs 40
+simClubSquads: node scripts/simClubSquads.mjs
+simSoccerOfferReview: node scripts/simSoccerOfferReview.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simStartingXi: node scripts/simStartingXi.mjs
+sweepWeight: ENGINES=chromium node scripts/sweepWeight.mjs
+play-rank: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=rank PORT=4820 SHOTS=/tmp/shots-rank node scripts/playCareerSquad.mjs
+play-write: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=write PORT=4830 SHOTS=/tmp/shots-write node scripts/playCareerSquad.mjs
+play-still: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=still PORT=4840 SHOTS=/tmp/shots-still node scripts/playCareerSquad.mjs
+play-nofill: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=nofill PORT=4850 SHOTS=/tmp/shots-nofill node scripts/playCareerSquad.mjs
+play-clip: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=clip PORT=4860 SHOTS=/tmp/shots-clip node scripts/playCareerSquad.mjs
+play-shift: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=shift PORT=4870 SHOTS=/tmp/shots-shift node scripts/playCareerSquad.mjs
+play-static: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=static PORT=4880 SHOTS=/tmp/shots-static node scripts/playCareerSquad.mjs
+play-label: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=label PORT=4890 SHOTS=/tmp/shots-label node scripts/playCareerSquad.mjs
+play-noscroll: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=noscroll PORT=4900 SHOTS=/tmp/shots-noscroll node scripts/playCareerSquad.mjs
+play-notrap: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=notrap PORT=4910 SHOTS=/tmp/shots-notrap node scripts/playCareerSquad.mjs
+play-ellipsis: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=ellipsis PORT=4920 SHOTS=/tmp/shots-ellipsis node scripts/playCareerSquad.mjs
+playSeasonCentre: ENGINES=chromium node scripts/playSeasonCentre.mjs
+playSeasonMoments: ENGINES=chromium node scripts/playSeasonMoments.mjs
+playReducedMotion: ENGINES=chromium node scripts/playReducedMotion.mjs
+playSoccerCareer: ENGINES=chromium node scripts/playSoccerCareer.mjs
