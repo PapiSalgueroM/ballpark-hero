@@ -14,17 +14,32 @@
       back button returns to the nations. Into the league: one tile a club,
       every club of the league and no other.
    3. A career at the league's first club (the manager builder skipped): the
-      hub opens on that club in Season 1, with no horizontal overflow.
+      hub opens on that club in Season 1, with no horizontal overflow. The
+      Table tab's card holds one row a club of the league.
    5. The ? button: the help names the league and closes.
+   7. A live match at that club: Play Live opens the pitch and the match is
+      driven to FULL TIME; back at the club the table still holds one row a
+      club. This step also runs a third time at 390 by 844 with the browser
+      asking for reduced motion (the walk only asks that the match plays to
+      full time there with no error; what reduced motion must look like is
+      held by playReducedMotion and src/test/liveSimMotion.test.tsx).
    6. The old save: scripts/data/cmOldSave1052Fixture.json, written by the
       engine before the round, is put under the save key before the page
-      loads, and the hub opens on Sevilla with no error.
-   (Step 4 is Argentina's and joins with that country. The live match and
-   its reduced motion form are walked for every league by playClubManager
-   and playReducedMotion, which run beside this.)
+      loads. The page opens on the save slots, the walk presses Resume
+      Career, and the HUB must open on Sevilla: the tabs are there and the
+      slots screen is gone. (The first cut of this step passed on the slot
+      tile's own words, "Sevilla" and "Season 1", without ever opening the
+      save.) Then the Table tab, Browse leagues, and each new league's tile:
+      the card must draw one row a club of that league with no error, in a
+      save that holds no table for it yet. The sentence the card prints is
+      put in the output and a screenshot is saved when PLAY_SHOTS (or the
+      remote runner's RC_OUT) names a folder.
+   (Step 4 is Argentina's and joins with that country.)
 
-   Negative control: PLAY_NEWCOUNTRIES_CONTROL=nonation looks for a nation
-   the game does not have, and the walk must fail at step 1.
+   Negative controls (PLAY_NEWCOUNTRIES_CONTROL):
+     nonation  looks for a nation the game does not have: red at step 1.
+     noresume  step 6 does not press Resume Career: red at step 6, because
+               the slots screen is not the hub.
 
    MEASURED 2026-10-08 on a GitHub runner at a0b6c5f3, a plain build served
    like the host: green, exit 0. At 390x844 and at 1280x800: the Russia
@@ -51,10 +66,12 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_FWD = ROOT.replaceAll('\\', '/');
 const BASE = process.env.SWEEP_BASE || 'http://127.0.0.1:4173';
 const CONTROL = process.env.PLAY_NEWCOUNTRIES_CONTROL || '';
-if (CONTROL && CONTROL !== 'nonation') { console.error(`PLAY_NEWCOUNTRIES_CONTROL=${CONTROL} is not a control this walk knows (nonation)`); process.exit(2); }
+if (CONTROL && !['nonation', 'noresume'].includes(CONTROL)) { console.error(`PLAY_NEWCOUNTRIES_CONTROL=${CONTROL} is not a control this walk knows (nonation, noresume)`); process.exit(2); }
+const SHOTS = process.env.PLAY_SHOTS || process.env.RC_OUT || '';
 /* The countries the round added, by nation id. Everything else is read from the engine. */
 const COUNTRIES = (process.env.PLAY_NEWCOUNTRIES || 'russia').split(',');
-const VIEWPORTS = [[390, 844], [1280, 800]];
+/* width, height, reduced motion asked for */
+const VIEWPORTS = [[390, 844, false], [1280, 800, false], [390, 844, true]];
 const SAVE_KEY = 'dukb-club-manager-save';
 
 let failures = 0;
@@ -76,15 +93,18 @@ const expected = COUNTRIES.map(id => {
   const leagues = nation.leagueIds.map(lid => { const l = cm.REAL_LEAGUES.find(x => x.id === lid); const r = cm.leagueRulesOf(lid); return { id: lid, name: l.name, clubs: l.clubs, cup: r.cup, europe: r.europe !== null }; });
   return { id, name: CONTROL === 'nonation' ? 'Atlantis' : nation.name, leagues, clubs: leagues.reduce((s, l) => s + l.clubs.length, 0) };
 });
+/* the old save's club and its league, from the fixture and the engine */
+const OLD_CLUB = 'Sevilla';
+const OLD_LEAGUE = cm.REAL_LEAGUES.find(l => l.clubs.includes(OLD_CLUB));
 const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const browser = await chromium.launch();
 let aborted = 0;
 const counts = [];
-for (const [w, h] of VIEWPORTS) {
-  const tag = `${w}x${h}`;
+for (const [w, h, reduced] of VIEWPORTS) {
+  const tag = `${w}x${h}${reduced ? ' reduced motion' : ''}`;
   const newPage = async init => {
-    const ctx = await browser.newContext({ viewport: { width: w, height: h } });
+    const ctx = await browser.newContext({ viewport: { width: w, height: h }, reducedMotion: reduced ? 'reduce' : 'no-preference' });
     if (init) await ctx.addInitScript(init.fn, init.arg);
     const page = await ctx.newPage();
     await page.route(/supabase\.co/, r => { aborted += 1; return r.abort(); });
@@ -96,9 +116,13 @@ for (const [w, h] of VIEWPORTS) {
   const text = async page => (await page.locator('body').innerText().catch(() => '')).replace(/\s+/g, ' ').trim();
   const overflow = async (page, where) => { const o = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth); if (o > 1) fail(`${tag}: ${where} overflows sideways by ${o}px`); };
   const tile = (page, rx) => page.locator('button:visible').filter({ hasText: rx }).first();
+  const press = (page, rx, ms = 800) => page.locator('button:visible').filter({ hasText: rx }).first().click({ timeout: ms }).then(() => true).catch(() => false);
+  /* the Table tab's card: its heading and how many club rows it draws */
+  const tableCard = page => page.evaluate(() => { const root = document.querySelector('[data-world-tables]'); return root ? { rows: root.querySelectorAll('tbody tr').length, title: (root.querySelector('h3')?.innerText || '').replace(/\s+/g, ' ').trim() } : null; });
+  const openTable = async page => { await page.getByRole('tab', { name: /^Table$/ }).first().click({ timeout: 5000 }).catch(() => {}); await page.waitForTimeout(800); return tableCard(page); };
   const clearRoom = async page => { await page.getByRole('button', { name: /^essential only$/i }).first().click({ timeout: 1500 }).catch(() => {}); };
 
-  for (const c of expected) {
+  for (const c of CONTROL === 'noresume' ? [] : expected) {
     const { ctx, page } = await newPage();
     await page.goto(BASE + '/club-manager', { waitUntil: 'domcontentloaded', timeout: 30000 });
     await page.waitForLoadState('networkidle', { timeout: 8000 }).catch(() => {});
@@ -151,6 +175,8 @@ for (const [w, h] of VIEWPORTS) {
     const hub = await text(page);
     if (!/Season 1/i.test(hub) || !hub.includes(club)) fail(`${tag}: step 3: the hub did not open on ${club} in Season 1 (the page reads: ${hub.slice(0, 200)})`);
     await overflow(page, `the ${club} hub`);
+    const card0 = await openTable(page);
+    if (!card0 || card0.rows !== first.clubs.length) fail(`${tag}: step 3: the table card draws ${card0 ? card0.rows : 'no'} rows for ${first.name}, the league has ${first.clubs.length} clubs`);
     /* 5. the ? button */
     const opener = page.locator('button:visible[aria-label="How to play"]').first();
     if (!(await opener.count())) fail(`${tag}: step 5: no ? button on the hub`);
@@ -161,23 +187,73 @@ for (const [w, h] of VIEWPORTS) {
       for (const l of c.leagues) if (!helpText.includes(l.name)) fail(`${tag}: step 5: the help does not name ${l.name}`);
       await page.keyboard.press('Escape');
     }
-    counts.push(`${tag} ${c.name}: ${c.leagues.length} league(s), ${seen.length} club tiles, hub on ${club}`);
+    /* 7. a live match at the club, to full time */
+    await page.getByRole('tab', { name: /^Home$/ }).first().click({ timeout: 5000 }).catch(() => {});
+    await page.waitForTimeout(500);
+    let liveNote = 'not started';
+    if (!(await press(page, /Play Live/i, 6000))) fail(`${tag}: step 7: no Play Live button on the ${club} hub`);
+    else if (!(await page.locator('[data-cm-live-pitch]').first().waitFor({ timeout: 10000 }).then(() => true).catch(() => false))) fail(`${tag}: step 7: Play Live did not open the pitch`);
+    else {
+      const fixture = (await text(page)).slice(0, 400);
+      if (!fixture.includes(club)) fail(`${tag}: step 7: the live match does not name ${club}`);
+      const heading = async () => ((await page.locator('h1').first().innerText({ timeout: 700 }).catch(() => '')) || '').trim().toUpperCase();
+      let finished = false;
+      const deadline = Date.now() + 120000;
+      while (!finished && Date.now() < deadline) {
+        if ((await heading()) === 'FULL TIME') { finished = true; break; }
+        await press(page, /^\s*4x\s*$/, 600);
+        if (await press(page, /second half/i, 600)) { await page.waitForTimeout(500); continue; }
+        if (await press(page, /skip/i, 600)) { await page.waitForTimeout(600); continue; }
+        if (await press(page, /take the pens|penalt|continue|carry on|next/i, 600)) { await page.waitForTimeout(500); continue; }
+        await page.waitForTimeout(1200);
+      }
+      if (!finished) fail(`${tag}: step 7: the live match at ${club} did not reach FULL TIME in two minutes (the page reads: ${(await text(page)).slice(0, 160)})`);
+      else {
+        for (let i = 0; i < 6; i++) { if (await page.getByRole('tab', { name: /^Table$/ }).count()) break; if (!(await press(page, /continue|next|carry on|club home|back to club|^ok$/i, 1500))) break; await page.waitForTimeout(700); }
+        const card1 = await openTable(page);
+        if (!card1 || card1.rows !== first.clubs.length) fail(`${tag}: step 7: after the match the table card draws ${card1 ? card1.rows : 'no'} rows, the league has ${first.clubs.length} clubs`);
+        liveNote = `full time, table then "${card1?.title ?? 'none'}"`;
+      }
+    }
+    counts.push(`${tag} ${c.name}: ${c.leagues.length} league(s), ${seen.length} club tiles, hub on ${club}, ${card0?.rows ?? 0} table rows, live match ${liveNote}`);
     await ctx.close();
   }
 
-  /* 6. the old save */
-  if (!CONTROL) {
+  /* 6. the old save: resumed, then every new league in the world browser */
+  if (CONTROL !== 'nonation' && !reduced) {
     const raw = fs.readFileSync(path.join(ROOT, 'scripts', 'data', 'cmOldSave1052Fixture.json'), 'utf8');
     const { ctx, page } = await newPage({ fn: ([k, v]) => { try { if (!localStorage.getItem(k)) localStorage.setItem(k, v); } catch { /* storage blocked */ } }, arg: [SAVE_KEY, raw] });
     await page.goto(BASE + '/club-manager', { waitUntil: 'domcontentloaded', timeout: 30000 });
     await page.waitForLoadState('networkidle', { timeout: 8000 }).catch(() => {});
     await clearRoom(page);
     await page.waitForTimeout(1500);
-    let t = await text(page);
-    if (!/Sevilla/.test(t)) { await tile(page, /continue|resume|Sevilla/i).click({ timeout: 4000 }).catch(() => {}); await page.waitForTimeout(1200); t = await text(page); }
-    if (!/Sevilla/.test(t) || !/Season 1/i.test(t)) fail(`${tag}: step 6: the old save did not open on Sevilla in Season 1 (the page reads: ${t.slice(0, 200)})`);
-    await overflow(page, 'the old save\'s hub');
-    counts.push(`${tag} old save: Sevilla`);
+    const slots = await text(page);
+    if (!/Resume Career/i.test(slots) || !/Sevilla/.test(slots)) fail(`${tag}: step 6: the page did not open on the save slots with the Sevilla save (it reads: ${slots.slice(0, 200)})`);
+    if (CONTROL !== 'noresume') { await press(page, /Resume Career/i, 5000); await page.waitForTimeout(1800); }
+    /* the hub, not the slot tile: the tabs are there and the slots screen is gone */
+    const tabs = await page.getByRole('tab').count();
+    const hubText = await text(page);
+    const onHub = tabs > 0 && !/Resume Career/i.test(hubText) && /Sevilla/.test(hubText);
+    if (!onHub) fail(`${tag}: step 6: the old save's hub did not open on Sevilla (${tabs} tabs; the page reads: ${hubText.slice(0, 200)})`);
+    else {
+      await overflow(page, 'the old save\'s hub');
+      const mine = await openTable(page);
+      if (!mine || mine.rows !== OLD_LEAGUE.clubs.length) fail(`${tag}: step 6: the old save's own table draws ${mine ? mine.rows : 'no'} rows, ${OLD_LEAGUE.name} has ${OLD_LEAGUE.clubs.length} clubs`);
+      for (const c of expected) for (const l of c.leagues) {
+        if (!(await press(page, /Browse leagues/i, 5000))) { fail(`${tag}: step 6: no Browse leagues button in the old save`); continue; }
+        await page.waitForTimeout(500);
+        const said = ((await page.locator('[data-world-tables]').innerText().catch(() => '')).match(/\d+ leagues in this save/) || [''])[0];
+        const lt = page.locator(`[data-world-league="${l.id}"]`).first();
+        if (!(await lt.count())) { fail(`${tag}: step 6: the old save's world browser has no tile for ${l.name}`); continue; }
+        await lt.scrollIntoViewIfNeeded().catch(() => {});
+        await lt.click({ timeout: 4000 }).catch(() => fail(`${tag}: step 6: the ${l.name} tile could not be pressed`));
+        await page.waitForTimeout(700);
+        const card = await tableCard(page);
+        if (!card || card.rows !== l.clubs.length) fail(`${tag}: step 6: in the old save the ${l.name} table draws ${card ? card.rows : 'no'} rows, the league has ${l.clubs.length} clubs`);
+        if (SHOTS) { fs.mkdirSync(SHOTS, { recursive: true }); await page.screenshot({ path: path.join(SHOTS, `newcountries-oldsave-${l.id}-${w}.png`) }).catch(() => {}); }
+        counts.push(`${tag} old save, resumed on Sevilla: browser says "${said}"; ${l.name} draws ${card?.rows ?? 0} rows under "${card?.title ?? 'no heading'}"`);
+      }
+    }
     await ctx.close();
   }
 }
@@ -186,4 +262,4 @@ console.log(counts.map(c => '   ' + c).join('\n'));
 console.log(`   ${aborted} requests to the database host aborted`);
 if (CONTROL) { console.log(`playClubManagerNewCountries: ${failures} failure(s) under control ${CONTROL}${failures ? '' : ': THE CONTROL DID NOT FIRE'}`); process.exit(failures ? 1 : 3); }
 if (failures) { console.log(`playClubManagerNewCountries: ${failures} failure(s)`); process.exit(1); }
-console.log(`playClubManagerNewCountries: green. ${expected.map(c => c.name).join(' and ')} can be picked, started and reopened at ${VIEWPORTS.map(v => v.join('x')).join(' and ')}.`);
+console.log(`playClubManagerNewCountries: green. ${expected.map(c => c.name).join(' and ')} can be picked, started, played live and found in an old save's world (${VIEWPORTS.length} runs: ${VIEWPORTS.map(v => `${v[0]}x${v[1]}${v[2] ? ' reduced motion' : ''}`).join(', ')}).`);

@@ -3035,12 +3035,19 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
        third into the lower divisions' knockout path: Sovetsky Sport
        (2026-06-19, https://www.sovsport.ru/football/news/sostoyalas-zherebyovka-puti-rpl-kubka-rossii-sezona-2026-2027)
        and Rossiyskaya Gazeta (2026-07-28, https://rg.ru/2026/07/29/sto-k-odnomu.html).
-     - ru-tiebreak is THIN for 2026-27: head to head first, then wins, on one
-       publisher (Sports.ru's guide), so the row takes the gdGfOnly default
-       and no sentence states an order. */
+     - ru-tiebreak, clubs level on points are split by head to head first,
+       then by wins: Sports.ru's season guide and Cybersport.ru's 2026-2027
+       page (both above, both read again 2026-10-08); the steps after
+       those two (goal difference, then goals scored) are on Sports.ru
+       alone. The row still takes the gdGfOnly default, for two reasons
+       written down so nobody takes it for an oversight: TiebreakRule has
+       no wins step (the Brazil row's reason), and a head to head rule
+       makes notePair keep a ledger of every Russian league result in
+       every save, about 240 pairs a season, which the save size budget
+       has no room for today. `simplified` says what the game does. */
   russia: {
     nationId: 'russia', flag: 'Russia', cup: 'Russian Cup', europe: null, drop: 2, ladder: 'top', season: 'autumnSpring',
-    simplified: 'The relegation playoffs (thirteenth and fourteenth against the fourth and third of the division below) are not played, so two go straight down. Russian clubs are suspended from UEFA competitions, so the table hands out no European places. The Russian Cup, which really starts with groups for the top flight, is played as a straight knockout.',
+    simplified: 'The relegation playoffs (thirteenth and fourteenth against the fourth and third of the division below) are not played: finishing in the bottom two is the relegation, and since the division below is not in the game the league keeps its sixteen clubs. Russian clubs are suspended from UEFA competitions, so the table hands out no European places. The Russian Cup, which really starts with groups for the top flight, is played as a straight knockout. Clubs level on points split by goal difference then goals scored, where the real table reads head to head first.',
   },
   /* The era leagues. No Conference League existed before 2021, so uecl is 0
      and the board's ladder skips that band; 2005-06 still called the second

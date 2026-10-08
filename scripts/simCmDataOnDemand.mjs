@@ -249,6 +249,7 @@ let pastPairs = 0;
     `export * as nat from '${R}/${F.nat}';`,
     `export * as all from '${R}/${F.allWorlds}';`,
     `export { CM_ALEAGUE_NATIONALITIES } from '${R}/src/data/clubManagerALeague2026.ts';`,
+    ...GATHERED_LEAGUES.map(l => `export { CM_${l.prefix}_NATIONALITIES } from '${R}/${l.out}';`),
     '',
   ].join('\n'));
   const norm = p => path.normalize(p);
@@ -267,7 +268,14 @@ let pastPairs = 0;
     logLevel: 'error', jsx: 'automatic', alias: { '@': `${R}/src` }, plugins: [swap],
   });
   if (patched && !patched.loaded) refuse(`control ${CONTROL}: the rewritten file never reached the bundle`);
-  const { cm, eras, nat, all, CM_ALEAGUE_NATIONALITIES } = await import(pathToFileURL(bundle).href);
+  const bundled = await import(pathToFileURL(bundle).href);
+  const { cm, eras, nat, all, CM_ALEAGUE_NATIONALITIES } = bundled;
+  /* Today's maps beyond the baked one, in the order nationalityOf reads them: the A-League's, then one a
+     gathered league (scripts/lib/gatheredLeagues.mjs). Round 1052 gave nationalityOf the Russian map and left
+     this model at the A-League's alone, so the eager control stopped firing as predicted (1109 answered early,
+     1101 expected: eight past names only the Russian map answers). The list is derived now. */
+  const TODAY_EXTRA = [CM_ALEAGUE_NATIONALITIES, ...GATHERED_LEAGUES.map(l => bundled[`CM_${l.prefix}_NATIONALITIES`])];
+  if (TODAY_EXTRA.some(m => !m || typeof m !== 'object')) refuse('a generated nationality map did not reach the bundle');
   void cm;
   const worlds = all.NATIONALITY_BY_WORLD;
   const past = Object.keys(worlds).filter(w => w !== 'now');
@@ -292,7 +300,8 @@ let pastPairs = 0;
   /* What the same question would answer if today's maps were read instead: derived, for the eager control. */
   let sharedWithToday = 0, sharedDifferent = 0;
   for (const w of past) for (const name of Object.keys(worlds[w])) {
-    const today = worlds.now[name] ?? CM_ALEAGUE_NATIONALITIES[name] ?? null;
+    let today = worlds.now[name] ?? null;
+    for (const m of TODAY_EXTRA) today = today ?? m[name] ?? null;
     if (today !== null) { sharedWithToday += 1; if (today !== worlds[w][name]) sharedDifferent += 1; }
   }
   const unknown = nat.nationalityOf('era1990', 'Erling Haaland');

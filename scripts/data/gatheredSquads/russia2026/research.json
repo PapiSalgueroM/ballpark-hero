@@ -172,9 +172,9 @@
     },
     {
       "id": "ru-tiebreak",
-      "fact": "Level on points, clubs are split by their head to head results first, then by wins, goal difference and goals scored.",
+      "fact": "Level on points, clubs are split by their head to head results first, then by the number of wins.",
       "value": null,
-      "thin": true,
+      "thin": false,
       "sources": [
         {
           "publisher": "Sports.ru",
@@ -182,9 +182,17 @@
           "url": "https://www.sports.ru/football/blogs/3421868.html",
           "dated": "2026-07-16",
           "read": "2026-10-08"
+        },
+        {
+          "publisher": "Cybersport.ru",
+          "title": "Russian Premier League (RPL): match schedule, league table and results, 2026-2027 page (translated)",
+          "url": "https://www.cybersport.ru/tournaments/football/rpl-2026-2027-rossiiskaia-premer-liga",
+          "dated": "2026 (the page prints no day)",
+          "read": "2026-10-08",
+          "note": "says the main criteria for clubs level on points are the head to head results and the number of wins"
         }
       ],
-      "note": "one publisher read, so the rules row takes the default order and no copy states an order"
+      "note": "two publishers for the first two steps; Sports.ru alone goes on (goal difference, then goals scored). The rules row still takes the default order (goal difference, then goals scored): the engine has no rule with a wins step, and its head to head rule would add a ledger of every league result to every save. The row's simplified text and the guide say what the game does."
     }
   ],
   "clubs": [

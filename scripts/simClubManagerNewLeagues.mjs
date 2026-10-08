@@ -230,7 +230,7 @@ const ROOT_FWD = ROOT.replaceAll('\\', '/');
 const SEEDS_ALL = Number(process.env.SIM_SEEDS || 6);
 const SEED_SET = process.env.SIM_SEED || "";
 const CONTROL = process.env.CM_NEW_CONTROL || '';
-const CONTROLS = ['dropcount', 'nocup', 'swap', 'invented', 'cupon', 'dropcount2', 'alpartial', 'nopyramid', 'emptypair', 'crowd', 'cupold', 'ligue1drop3', 'reserve', 'nohistleague', 'article', 'thin', 'rudrop', 'rueuro', 'ruswap', 'ruflavour'];
+const CONTROLS = ['dropcount', 'nocup', 'swap', 'invented', 'cupon', 'dropcount2', 'alpartial', 'nopyramid', 'emptypair', 'crowd', 'cupold', 'ligue1drop3', 'reserve', 'nohistleague', 'article', 'thin', 'rudrop', 'rueuro', 'ruswap', 'ruflavour', 'rulabel', 'rumen'];
 /* Round 1040: parts E to G can be run alone (CM_NEW_PARTS=EFG), the A to D
    league rows alone (CM_NEW_PARTS=AD), or every part (unset). */
 const PARTS = process.env.CM_NEW_PARTS || 'ADEFGH';
@@ -348,8 +348,8 @@ const NEW_LEAGUES = [
      part H is not read. */
   {
     id: 'russia', size: 16, drop: 2, cup: 'Russian Cup', pairGap: 6, rhoMin: 0.7,
-    pairs: [['Zenit', 'Fakel Voronezh'], ['Spartak Moscow', 'Dynamo Makhachkala']],
-    managed: ['Lokomotiv Moscow', 'Rubin Kazan', 'Rostov', 'Baltika', 'Akhmat Grozny', 'Akron Tolyatti'],
+    pairs: [['Zenit', 'Fakel Voronezh'], ['Krasnodar', 'Dynamo Makhachkala']],
+    managed: ['Lokomotiv Moscow', 'Rubin Kazan', 'Rostov', 'Akhmat Grozny', 'Baltika', 'Akron Tolyatti'],
   },
 ];
 /* Round 1040: a pair is only evidence when both clubs field real men, so a
@@ -372,8 +372,9 @@ const THIN_FACTS = [
   { id: 'ligue1', fact: "Ligue 1's 2026-27 drop of two and the barrage" },
   { id: 'serieb', fact: "Serie B's 2026-27 promotion playoff rung (third to eighth)" },
   { id: 'ligue2', fact: "Ligue 2's 2026-27 drop of two" },
-  /* Round 1052: one publisher read, so the row takes the default order and no copy states one. */
-  { id: 'russia', fact: "the Russian Premier League's 2026-27 order for clubs level on points (head to head first)" },
+  /* Round 1052's Russian row has no THIN fact any more: its order for clubs level on points (head to head first,
+     then wins) gained a second 2026-27 publisher in the round's review, and scripts/simClubManagerGathered.mjs
+     holds every fact that row's comment cites to two publishers. */
 ];
 function partThin() {
   let src = fs.readFileSync(path.join(ROOT, 'src', 'lib', 'clubManager.ts'), 'utf8').split('\r\n').join('\n');
@@ -464,7 +465,7 @@ function transformEngine(src) {
 async function bundleEngine() {
   const entry = path.join(TMP, 'entry.mjs');
   const out = path.join(TMP, 'engine.mjs');
-  fs.writeFileSync(entry, `export * from '${ROOT_FWD}/src/lib/clubManager.ts';\nexport * as __aleague from '${ROOT_FWD}/src/data/clubManagerALeague2026.ts';\nexport * as __jobs from '${ROOT_FWD}/src/lib/managerJobMarket.ts';\nexport * as __scl from '${ROOT_FWD}/src/lib/soccerCareerLeague.ts';\nexport { ensureAllEraRosters as __ensureAllEraRosters } from '${ROOT_FWD}/src/lib/clubManagerEras.ts';\n${GATHERED_LEAGUES.map(l => `export * as __g_${l.id} from '${ROOT_FWD}/${l.out}';`).join('\n')}\n`);
+  fs.writeFileSync(entry, `export * from '${ROOT_FWD}/src/lib/clubManager.ts';\nexport * as __aleague from '${ROOT_FWD}/src/data/clubManagerALeague2026.ts';\nexport * as __jobs from '${ROOT_FWD}/src/lib/managerJobMarket.ts';\nexport * as __scl from '${ROOT_FWD}/src/lib/soccerCareerLeague.ts';\nexport { FALLBACK_CLUBS as __careerClubs } from '${ROOT_FWD}/src/lib/soccerCareerEngine.ts';\nexport { ensureAllEraRosters as __ensureAllEraRosters } from '${ROOT_FWD}/src/lib/clubManagerEras.ts';\n${GATHERED_LEAGUES.map(l => `export * as __g_${l.id} from '${ROOT_FWD}/${l.out}';`).join('\n')}\n`);
   const enginePath = path.join(ROOT, 'src', 'lib', 'clubManager.ts');
   await build({
     entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: out,
@@ -1083,7 +1084,9 @@ if (CONTROL === 'ruswap') {
        season's Champions League field names is rated, in a fresh career of
        that season seeded 1052, at exactly the value the engine gave BEFORE
        the round (src/test/fixtures/cmWorldIdentity1052.json, eraFlavour),
-       never off the 2026 squad that now carries the same club name. */
+       never off the 2026 squad that now carries the same club name; and
+       the side the engine would line up for that club in that season
+       (oppRosterFor) holds no man of today's Russian squads. */
 async function partCountries(cm) {
   console.log('H) the countries of Round 1052');
   /* ruswap hands Zenit the weakest squad of the league, so no title is won and H1 has nothing to read:
@@ -1134,6 +1137,19 @@ async function partCountries(cm) {
   for (const o of offers) if (o.league !== ru.name) fail(`H3: the job market files ${o.name ?? o.club} under ${o.league}`);
   if (cm.__scl.leagueSizeFor(ru.name, 2026, true) !== 16) fail(`H3: the dugout's table says ${cm.__scl.leagueSizeFor(ru.name, 2026, true)} for ${ru.name}, not 16`);
   if (cm.__scl.leagueSizeFor(ru.name, 2026) !== null) fail(`H3: the playing career's table now sizes ${ru.name} (${cm.__scl.leagueSizeFor(ru.name, 2026)}); that table did not change`);
+  /* The table a manager's season is played in, as the career builds it (soccerCareerEngine calls this with the
+     career's club list and the job's league label): a job at Spartak Moscow under the label the market gives it.
+     Control rulabel: the job's league label respelled, so the table finds no league under it and this goes red. */
+  const spartak = offers.find(o => (o.name ?? o.club) === 'Spartak Moscow');
+  if (!spartak) fail('H3: the job market offers no Spartak Moscow');
+  else {
+    const field = cm.__scl.managerLeagueField({ clubs: cm.__careerClubs, club: 'Spartak Moscow', league: CONTROL === 'rulabel' ? `${spartak.league} Of The Control` : spartak.league, year: 2026 }, seeded(hashKey('newleagues|H3|field')));
+    if (field.size !== ru.clubs.length || field.sizeVerified !== true) fail(`H3: a manager's table at Spartak Moscow has ${field.size} places (verified ${field.sizeVerified}), the league has ${ru.clubs.length}`);
+    if (!field.named.includes('Zenit')) fail(`H3: a manager's table at Spartak Moscow names ${field.named.join(', ') || 'nobody'}, not Zenit`);
+    const strangers = field.named.filter(n => !ru.clubs.includes(n));
+    if (strangers.length) fail(`H3: a manager's table at Spartak Moscow names ${strangers.join(', ')}, no member of ${ru.name}`);
+    console.log(`   H3: a manager's table at Spartak Moscow under "${spartak.league}": ${field.size} places, size verified ${field.sizeVerified}, names ${field.named.join(', ') || 'nobody'}`);
+  }
   console.log(`   H3: ${offers.length} Russian clubs on the job market under ${ru.name}; dugout size ${cm.__scl.leagueSizeFor(ru.name, 2026, true)}, playing career size ${cm.__scl.leagueSizeFor(ru.name, 2026)}`);
   /* H4 */
   await cm.__ensureAllEraRosters();
@@ -1149,6 +1165,22 @@ async function partCountries(cm) {
     if (!ru.clubs.includes(row.club)) fail(`H4: ${row.club} is a past season's Russian club and no member of today's league, so this check reads nothing`);
   }
   console.log(`   H4: ${read} past season Russian clubs read, each at its own season's strength`);
+  /* Second half: the MEN. A past season's Russian opponent is fielded from that season's own world, never from
+     the 2026 squad that now carries the same club name: for every fixture row, the side the engine would line
+     up against the manager (oppRosterFor, what the match text, the scorers and a shootout read) holds no man
+     of today's generated Russian squads. Control rumen: the past season's career is handed today's squad for
+     that club the way a missing era gate would, and this goes red. */
+  const todays = new Set(ru.clubs.flatMap(c => (cm.CM_ROSTERS[c] ?? []).map(p => p.n)));
+  if (todays.size < 300) fail(`H4: only ${todays.size} men in today's Russian squads, so the second half reads nothing`);
+  let sides = 0, fielded = 0, leaked = 0;
+  for (const row of fixture.eraFlavour) {
+    const career = careers.get(row.season);
+    const side = CONTROL === 'rumen' ? (cm.CM_ROSTERS[row.club] ?? []).map(p => ({ n: p.n })) : cm.oppRosterFor(career, row.club);
+    sides += 1; fielded += side.length;
+    const here = side.filter(p => todays.has(p.n ?? p.name)).map(p => p.n ?? p.name);
+    if (here.length) { leaked += here.length; fail(`H4: ${row.club} in ${row.season} would field ${here.length} men of 2026 (${here.slice(0, 3).join(', ')})`); }
+  }
+  console.log(`   H4: ${sides} past season Russian sides read, ${fielded} men fielded, ${leaked} of them from today's squads`);
   if (read < 7) fail(`H4: only ${read} past season rows read, the fixture held 7`);
 }
 

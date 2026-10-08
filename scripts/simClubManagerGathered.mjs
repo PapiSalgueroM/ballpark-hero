@@ -17,7 +17,15 @@
       or more on different hosts; every shipped row names at least two of its
       club's hosts; no address anywhere in the file is on a wiki host. Every
       fact the league's rules row comment cites exists in `facts`: two sources
-      and not thin, or thin where the comment says THIN.
+      and not thin, or thin where the comment says THIN. And every man a host
+      PRINTED is accounted for once: for each club and each of its squad
+      lists, the rows that name the host plus the left out men seen on it, by
+      the man's id on that host, are exactly the list's size. (Added after the
+      review: the research's first parser skipped fifty printed men, eleven
+      club captains among them, and no check asked where a list's men went.
+      The list's size is counted by scripts/research/gathered/build.mjs a
+      second way that does not go through its row parser, and that script
+      stops on a row it cannot read.)
    B. VALUES (hard). Every rating is the shared curve's rating of the row's
       EUR value, every value is the curve's pounds at two decimals and above
       zero, every man with no value is at the floor and in the NO_VALUE
@@ -36,6 +44,17 @@
       there; no trap spelling is an engine name; DB_TO_ENGINE_GATHERED holds
       no trap, no key of DB_TO_ENGINE, and only clubs of a gathered league.
       The library's name fold is the engine's.
+   E. THE JOIN AND THE LIST (hard). Every generated club is in the joined
+      world the engine plays with (CM_WORLD_ROSTERS), holding exactly its
+      generated men, and a generated partial club is partial in the world.
+      CM_GENERATED_LEAGUES, the hand typed list the picker's date line and
+      the count under it print from, holds the A-League first and then one
+      entry a row of scripts/lib/gatheredLeagues.mjs, in the table's order,
+      each with its own file's label, player count and read dates; the read
+      dates are the first and last day the research's squad lists were read;
+      and both printed clauses name the league. (Added after the review: with
+      the Russian entry deleted from that list every harness stayed green,
+      and with the squads cut out of the join this one did.)
    G. OLD SAVE (hard). scripts/data/cmOldSave1052Fixture.json, one real save
       written by the engine BEFORE the round (5ba57826: Sevilla, seed 1052,
       four league weeks left in season one, 135,548 bytes, tables for the 25
@@ -53,11 +72,15 @@
      onehost   one research row's hosts cut to one                       A
      wiki      one squad list's address moved to a wiki host             A
      stale     one research value changed, so the file is not fresh      A
+     unlisted  one left out man dropped from the research                A
      offcurve  one rating plus one                                       B
+     samehost  one row's two age hosts made the same host twice          C
      noflag    one generated nationality given a spelling with no code   C
      twice     a baked man's name given to a generated man               C
      keeper    one keeper's position set to ST                           C
      trap      one engine name replaced by a trap spelling               D
+     nojoin    one generated club taken out of the joined world          E
+     genlist   the league's entry taken out of CM_GENERATED_LEAGUES      E
      oldsave   the fixture's club renamed                                G
 
    MEASURED 2026-10-08 on a GitHub runner at 1fa0a7a7, one gathered league
@@ -89,7 +112,7 @@ import { DB_TO_ENGINE, DB_TO_ENGINE_GATHERED } from './lib/dbClubNames.mjs';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_FWD = ROOT.replaceAll('\\', '/');
 const CONTROL = process.env.GATHERED_CONTROL || '';
-const CONTROLS = ['invented', 'onehost', 'wiki', 'stale', 'offcurve', 'noflag', 'twice', 'keeper', 'trap', 'oldsave'];
+const CONTROLS = ['invented', 'onehost', 'wiki', 'stale', 'unlisted', 'offcurve', 'samehost', 'noflag', 'twice', 'keeper', 'trap', 'nojoin', 'genlist', 'oldsave'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`GATHERED_CONTROL=${CONTROL} is not one of ${CONTROLS.join(', ')}`); process.exit(1); }
 
 let failures = 0;
@@ -126,7 +149,8 @@ async function bundleEngine() {
   const out = path.join(TMP, 'engine.mjs');
   fs.writeFileSync(entry, [
     `export * from '${ROOT_FWD}/src/lib/clubManager.ts';`,
-    `export { CM_WORLD_ROSTERS, CM_WORLD_PARTIAL, CM_GENERATED_LEAGUES } from '${ROOT_FWD}/src/data/clubManagerWorldRosters.ts';`,
+    `export { CM_WORLD_ROSTERS, CM_WORLD_PARTIAL, CM_GENERATED_LEAGUES, generatedLeagueDateClauses, generatedLeagueCountClauses } from '${ROOT_FWD}/src/data/clubManagerWorldRosters.ts';`,
+    `export { CM_ALEAGUE_META } from '${ROOT_FWD}/src/data/clubManagerALeague2026.ts';`,
     `export { nationalityOf } from '${ROOT_FWD}/src/data/playerNationalities.ts';`,
     `export { FLAG_CODES } from '${ROOT_FWD}/src/components/FlagImg.tsx';`,
     `export { CM_REAL_FREE_AGENTS } from '${ROOT_FWD}/src/data/clubManagerFreeAgents2026.ts';`,
@@ -165,6 +189,9 @@ function loadLeague(row) {
   return { row, research, forGen: clone(research), gen, members };
 }
 const leagues = GATHERED_LEAGUES.map(loadLeague);
+/* What the engine plays with and what the picker prints from, as copies a control may change. */
+const world = { ...cm.CM_WORLD_ROSTERS };
+const genList = clone(cm.CM_GENERATED_LEAGUES);
 
 /* The controls, on the first gathered league's in memory copies only. */
 if (CONTROL) {
@@ -176,6 +203,10 @@ if (CONTROL) {
   if (CONTROL === 'onehost') { if ((club.rows[0].hosts ?? []).length < 2) refuse('the first row is not on two hosts'); club.rows[0].hosts = [club.rows[0].hosts[0]]; }
   if (CONTROL === 'wiki') { if (WIKI.test(club.sources[0].host)) refuse('the first squad list is already on a wiki'); club.sources[0].url = 'https://en.wikipedia.org/wiki/A_squad_list'; }
   if (CONTROL === 'stale') { const r = L.forGen.clubs[0].rows[0]; if (!(r.valueEur > 0)) refuse('the first row has no value to change'); r.valueEur += 1000000; }
+  if (CONTROL === 'unlisted') { if (!club.leftOut.length) refuse(`${club.engine} has nobody left out`); club.leftOut.shift(); }
+  if (CONTROL === 'samehost') { const r = club.rows[0]; if (new Set(r.ageHosts ?? []).size < 2) refuse('the first row has no two host age'); r.ageHosts = [r.ageHosts[0], r.ageHosts[0]]; }
+  if (CONTROL === 'nojoin') { if (!world[club.engine]) refuse(`${club.engine} is not in the world`); delete world[club.engine]; }
+  if (CONTROL === 'genlist') { const at = genList.findIndex(g => g.label === L.row.label); if (at < 0) refuse(`the list has no ${L.row.label} entry`); genList.splice(at, 1); }
   if (CONTROL === 'offcurve') { if (!Number.isInteger(list[0].r)) refuse('the first man has no rating'); list[0].r += 1; }
   if (CONTROL === 'noflag') { const n = Object.keys(L.gen.nationalities)[0]; if (!n || !cm.FLAG_CODES[L.gen.nationalities[n]] || cm.FLAG_CODES.Atlantis) refuse('no flagged nationality to respell'); L.gen.nationalities[n] = 'Atlantis'; }
   if (CONTROL === 'twice') {
@@ -191,7 +222,9 @@ if (CONTROL) {
   if (CONTROL === 'trap') { const id = L.row.leagueIds[0]; if (!L.members[id].length || L.members[id].includes(TRAPS[0])) refuse('no league member to respell'); L.members[id][L.members[id].length - 1] = TRAPS[0]; }
 }
 
-let totalMen = 0; let totalUrls = 0; let totalCited = 0;
+let totalMen = 0; let totalUrls = 0; let totalCited = 0; let accounted = 0;
+/* A man's id on each host, as the research rows and the left out lists carry it. */
+const HOST_ID_KEY = { 'transfermarkt.com': 'tm', 'site.api.espn.com': 'espn', 'fotmob.com': 'fotmob' };
 for (const L of leagues) {
   const { row, research, gen } = L;
   const engines = research.clubs.map(c => c.engine);
@@ -221,6 +254,19 @@ for (const L of leagues) {
     }
   }
   for (const [club, list] of Object.entries(gen.rosters)) for (const p of list) if (!rowKeys.has(`${club}|${p.n}`)) fail(`${p.n} (${club}) is in the generated file and in no research row of that club`);
+  /* Every man a host printed is a row or is left out with a reason, once: a list's size (counted by the research
+   * build a second way, not through its row parser) is the rows that name the host plus the left out men seen on
+   * it, by the man's id on that host. The first cut of the research dropped fifty printed men and nothing here
+   * could see it, because nothing asked where a list's men went. */
+  for (const c of research.clubs) for (const s of c.sources) {
+    const key = HOST_ID_KEY[s.host];
+    if (!key) { fail(`${c.engine}: no id key is known for the squad list on ${s.host}`); continue; }
+    const ids = [...c.rows.filter(r => (r.hosts ?? []).includes(s.host)).map(r => r.ids?.[key]), ...c.leftOut.filter(l => (l.seenOn ?? []).includes(s.host)).map(l => l.ids?.[key])];
+    if (ids.some(x => x == null)) fail(`${c.engine}: a man seen on ${s.host} carries no id on it`);
+    else if (new Set(ids).size !== ids.length) fail(`${c.engine}: one ${s.host} id is accounted for twice`);
+    else if (!Number.isInteger(s.listed) || ids.length !== s.listed) fail(`${c.engine}: ${s.host} printed ${s.listed} men and the research accounts for ${ids.length} of them (rows plus left out)`);
+    accounted += ids.length;
+  }
   let urls = 0;
   (function walk(v) {
     if (typeof v === 'string') { if (/^https?:\/\//.test(v)) { urls += 1; if (WIKI.test(new URL(v).host)) fail(`${row.id}: an address in the research is on a wiki host: ${v}`); } }
@@ -270,11 +316,11 @@ for (const L of leagues) {
   for (const c of research.clubs) for (const r of c.rows) {
     const p = (gen.rosters[c.engine] ?? []).find(x => x.n === r.name);
     if (!p) continue;
-    if ((r.ageHosts ?? []).length < 2 || !Number.isInteger(r.age) || r.age < 15 || r.age > 45 || p.a !== r.age) fail(`${r.name} (${c.engine}): age ${p.a} is not two sourced, not 15 to 45, or not the research's ${r.age}`);
+    if (new Set(r.ageHosts ?? []).size < 2 || !Number.isInteger(r.age) || r.age < 15 || r.age > 45 || p.a !== r.age) fail(`${r.name} (${c.engine}): age ${p.a} is not two sourced, not 15 to 45, or not the research's ${r.age}`);
     const nat = gen.nationalities[r.name] ?? null;
     if (r.nationality) {
       flagged += 1;
-      if ((r.nationalityHosts ?? []).length < 2) fail(`${r.name}: nationality on fewer than two hosts`);
+      if (new Set(r.nationalityHosts ?? []).size < 2) fail(`${r.name}: nationality on fewer than two hosts`);
       if (nat !== r.nationality) fail(`${r.name}: the generated nationality is ${nat}, the research says ${r.nationality}`);
       else if (!cm.FLAG_CODES[nat]) fail(`${r.name}: ${nat} has no FlagImg code, so it would render as bare text`);
       else if (cm.nationalityOf(undefined, r.name) !== nat) fail(`${r.name}: nationalityOf answers ${cm.nationalityOf(undefined, r.name)}, the research says ${nat}`);
@@ -328,6 +374,42 @@ section = 'D';
   console.log(`D) ${all.length} engine clubs fold to ${folded.size} names; ${Object.keys(DB_TO_ENGINE_GATHERED).length} gathered table spellings`);
 }
 
+section = 'E';
+{
+  /* The squads reach the engine: every generated club is in the joined world with exactly its generated men. */
+  let joined = 0;
+  for (const L of leagues) {
+    const pristine = cm[`__g_${L.row.id}`][`CM_${L.row.prefix}_ROSTERS`];
+    for (const [club, list] of Object.entries(pristine)) {
+      if (JSON.stringify(world[club] ?? null) !== JSON.stringify(list)) fail(`${club}: the joined world holds ${world[club] ? world[club].length + ' men who are not' : 'no squad, not'} the ${list.length} of ${L.row.out}`);
+      else joined += 1;
+    }
+    for (const c of cm[`__g_${L.row.id}`][`CM_${L.row.prefix}_PARTIAL`]) if (!cm.CM_WORLD_PARTIAL.includes(c)) fail(`${c} is partial in ${L.row.out} and the joined world does not say so`);
+  }
+  /* The picker's date line and the count under it print from CM_GENERATED_LEAGUES, a list typed by hand in
+   * src/data/clubManagerWorldRosters.ts: the A-League first, then one entry a gathered league, in the table's
+   * order, each saying what its own generated file says. A league missing here is a league whose squads are
+   * dated and counted nowhere on the page. */
+  if (genList.length !== 1 + leagues.length) fail(`CM_GENERATED_LEAGUES holds ${genList.length} entries: the A-League and ${leagues.length} gathered league(s) make ${1 + leagues.length}`);
+  const a = genList[0];
+  if (!a || a.label !== 'A-League Men' || a.players !== cm.CM_ALEAGUE_META.players || a.read !== cm.CM_ALEAGUE_META.read || a.readTo !== cm.CM_ALEAGUE_META.read) fail('the first entry of CM_GENERATED_LEAGUES is not what the A-League file says of itself (label, count, read date)');
+  leagues.forEach((L, i) => {
+    const meta = cm[`__g_${L.row.id}`][`CM_${L.row.prefix}_META`];
+    const men = Object.values(cm[`__g_${L.row.id}`][`CM_${L.row.prefix}_ROSTERS`]).reduce((s, l) => s + l.length, 0);
+    const g = genList.find(x => x.label === L.row.label);
+    if (!g) { fail(`CM_GENERATED_LEAGUES has no entry for ${L.row.label}: its squads are dated and counted nowhere on the picker`); return; }
+    if (genList[i + 1] !== g) fail(`${L.row.label} is not entry ${i + 1} of CM_GENERATED_LEAGUES (the table's order after the A-League)`);
+    if (meta.label !== L.row.label) fail(`${L.row.out} calls itself ${meta.label}, the table says ${L.row.label}`);
+    if (g.players !== meta.players || meta.players !== men) fail(`${L.row.label}: the list says ${g.players} players, the file's META ${meta.players}, the file holds ${men}`);
+    if (g.read !== meta.read || g.readTo !== meta.readTo) fail(`${L.row.label}: the list's read dates (${g.read}, ${g.readTo}) are not the file's (${meta.read}, ${meta.readTo})`);
+    const reads = L.research.clubs.flatMap(c => c.sources.map(s => s.read)).sort();
+    if (meta.read !== reads[0] || meta.readTo !== reads[reads.length - 1]) fail(`${L.row.label}: the file's read dates (${meta.read}, ${meta.readTo}) are not the first and last day its squad lists were read (${reads[0]}, ${reads[reads.length - 1]})`);
+    if (!cm.generatedLeagueDateClauses().some(s => s.startsWith(`${L.row.label} squads as of `))) fail(`the picker's date line has no clause for ${L.row.label}`);
+    if (!cm.generatedLeagueCountClauses().some(s => s.startsWith(`the ${L.row.label}'s ${men}, read `))) fail(`the count under the picker does not give ${L.row.label}'s ${men}`);
+  });
+  console.log(`E) ${joined} generated clubs are in the joined world with their own men; CM_GENERATED_LEAGUES: ${genList.map(g => `${g.label} ${g.players}`).join(', ')}`);
+}
+
 section = 'G';
 {
   let raw = fs.readFileSync(path.join(ROOT, OLD_SAVE.file), 'utf8');
@@ -357,7 +439,7 @@ section = 'G';
   }
 }
 
-const OWN = { invented: 'A', onehost: 'A', wiki: 'A', stale: 'A', offcurve: 'B', noflag: 'C', twice: 'C', keeper: 'C', trap: 'D', oldsave: 'G' };
+const OWN = { invented: 'A', onehost: 'A', wiki: 'A', stale: 'A', unlisted: 'A', offcurve: 'B', samehost: 'C', noflag: 'C', twice: 'C', keeper: 'C', trap: 'D', nojoin: 'E', genlist: 'E', oldsave: 'G' };
 const sections = Object.entries(bySection).map(([k, v]) => `${k} ${v}`).join(', ');
 if (CONTROL) {
   const own = bySection[OWN[CONTROL]] || 0;
@@ -366,4 +448,4 @@ if (CONTROL) {
   process.exit(own && !other ? 1 : 3);
 }
 if (failures) { console.log(`simClubManagerGathered: ${failures} failure(s) (${sections})`); process.exit(1); }
-console.log(`simClubManagerGathered: all checks passed (${leagues.length} gathered league(s), ${totalMen} men, ${totalUrls} addresses, ${totalCited} cited facts, the old save)`);
+console.log(`simClubManagerGathered: all checks passed (${leagues.length} gathered league(s), ${totalMen} men, ${accounted} printed squad entries accounted for, ${totalUrls} addresses, ${totalCited} cited facts, the old save)`);
