@@ -1,0 +1,30 @@
+# AN2 fixer FINAL c: the browser walks my fixes touch, each with every control
+#!serve
+#!playwright
+seam: PORT=4601 SHOTS=$RC_OUT node scripts/playUsCareerSaveSeam.mjs
+seam-hidden: PORT=4602 US_SAVE_SEAM_CONTROL=hidden node scripts/playUsCareerSaveSeam.mjs
+seam-keeptoast: PORT=4603 US_SAVE_SEAM_CONTROL=keeptoast node scripts/playUsCareerSaveSeam.mjs
+seam-raw: PORT=4604 US_SAVE_SEAM_CONTROL=raw node scripts/playUsCareerSaveSeam.mjs
+seam-open: PORT=4605 US_SAVE_SEAM_CONTROL=open node scripts/playUsCareerSaveSeam.mjs
+seam-bogus: PORT=4606 US_SAVE_SEAM_CONTROL=bogus node scripts/playUsCareerSaveSeam.mjs
+usplay: PORT=4401 node scripts/playUsSeasonCentre.mjs
+usplay-nohandover: PORT=4402 US_SEASON_PLAY_CONTROL=nohandover node scripts/playUsSeasonCentre.mjs
+usplay-playfirst: PORT=4403 US_SEASON_PLAY_CONTROL=playfirst node scripts/playUsSeasonCentre.mjs
+usplay-cover: PORT=4404 US_SEASON_PLAY_CONTROL=cover node scripts/playUsSeasonCentre.mjs
+usplay-static: PORT=4405 US_SEASON_PLAY_CONTROL=static node scripts/playUsSeasonCentre.mjs
+usplay-write: PORT=4406 US_SEASON_PLAY_CONTROL=write node scripts/playUsSeasonCentre.mjs
+usplay-count: PORT=4407 US_SEASON_PLAY_CONTROL=count node scripts/playUsSeasonCentre.mjs
+squadplay: ENGINES=chromium REQUIRE_PAGE=1 PORT=4810 SHOTS=/tmp/shots-plain node scripts/playCareerSquad.mjs
+squadplay-rank: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=rank PORT=4820 SHOTS=/tmp/shots-rank node scripts/playCareerSquad.mjs
+squadplay-write: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=write PORT=4830 SHOTS=/tmp/shots-write node scripts/playCareerSquad.mjs
+squadplay-still: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=still PORT=4840 SHOTS=/tmp/shots-still node scripts/playCareerSquad.mjs
+squadplay-nofill: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=nofill PORT=4850 SHOTS=/tmp/shots-nofill node scripts/playCareerSquad.mjs
+squadplay-clip: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=clip PORT=4860 SHOTS=/tmp/shots-clip node scripts/playCareerSquad.mjs
+squadplay-shift: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=shift PORT=4870 SHOTS=/tmp/shots-shift node scripts/playCareerSquad.mjs
+squadplay-static: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=static PORT=4880 SHOTS=/tmp/shots-static node scripts/playCareerSquad.mjs
+squadplay-label: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=label PORT=4890 SHOTS=/tmp/shots-label node scripts/playCareerSquad.mjs
+squadplay-noscroll: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=noscroll PORT=4900 SHOTS=/tmp/shots-noscroll node scripts/playCareerSquad.mjs
+squadplay-notrap: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=notrap PORT=4910 SHOTS=/tmp/shots-notrap node scripts/playCareerSquad.mjs
+squadplay-ellipsis: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=ellipsis PORT=4920 SHOTS=/tmp/shots-ellipsis node scripts/playCareerSquad.mjs
+squadplay-timeline: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=timeline PORT=4930 SHOTS=/tmp/shots-timeline node scripts/playCareerSquad.mjs
+sweepWeight: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs
