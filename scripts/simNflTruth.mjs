@@ -21,6 +21,11 @@
  *       and printed), every quick start is paid its slot in both eras, and no
  *       kicker is drafted before round four on either path to the draft.
  *   3   Sacks come in halves on every new LB and EDGE season line.
+ *   4   No receiver passes the record book: a 99 rated wide receiver's season
+ *       is at or under 1,950 yards and 145 catches (the records are 1,964 and
+ *       149) and a 99 rated tight end's is at or under 1,400 yards (the
+ *       record is 1,416). The engine as found is printed beside it and must
+ *       have passed a record, or the check proves nothing.
  *   5   MEASURED, asserted on nothing: numbers other rounds asked for.
  *
  * TWO ARMS, ONE BUNDLE. The engine is bundled once. The BASE arm is that
@@ -37,6 +42,7 @@
  *   kicker     kickers are drafted anywhere again               -> 2
  *   swap       two first round rows of the table trade places   -> 2
  *   tenths     sacks are rounded to tenths again                -> 3
+ *   nocap      the three receiver caps are lifted               -> 4
  *
  * Seeds: SIM_SEED (default 1) starts the five seeds 1b reads. Sizes:
  * TRUTH_CAREERS careers a position and seed (default 300). Nothing here
@@ -52,7 +58,7 @@ import { pathToFileURL, fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.TRUTH_CONTROL || '';
-const CONTROLS = { seventeen: ['1'], nopace: ['1b'], oldpay: ['2'], kicker: ['2'], swap: ['2'], tenths: ['3'] };
+const CONTROLS = { seventeen: ['1'], nopace: ['1b'], oldpay: ['2'], kicker: ['2'], swap: ['2'], tenths: ['3'], nocap: ['4'] };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`TRUTH_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
   process.exit(1);
@@ -114,6 +120,7 @@ const P = {
   oldpay: t => patch(t, N_PAY, OLD_PAY, 'oldpay'),
   kicker: t => patch(t, N_OFFSET, `${N_OFFSET}\n  return 0;`, 'kicker'),
   tenths: t => patch(patch(patch(t, N_SACK_LB, N_SACK_LB.replace('* 2) / 2', '* 10) / 10'), 'tenths LB'), N_SACK_EDGE, N_SACK_EDGE.replace('* 2) / 2', '* 10) / 10'), 'tenths EDGE'), N_SACK_PO, N_SACK_PO.replace('* 2) / 2', '* 10) / 10'), 'tenths playoffs'),
+  nocap: t => patch(patch(patch(t, 'var NFL_WR_REC_CAP = 145;', 'var NFL_WR_REC_CAP = 1e9;', 'nocap catches'), 'var NFL_WR_YDS_CAP = 1950;', 'var NFL_WR_YDS_CAP = 1e9;', 'nocap WR yards'), 'var NFL_TE_YDS_CAP = 1400;', 'var NFL_TE_YDS_CAP = 1e9;', 'nocap TE yards'),
   swap: t => patch(patch(t, N_ROW1, 'row(1, 54675584, 55550396)', 'swap row 1'), N_ROW2, 'row(2, 57271500, 58191906)', 'swap row 2'),
 };
 /* Every needle is proved present on a plain run too, so a rename in src
@@ -127,8 +134,8 @@ async function loadArm(name, patches) {
   return import(pathToFileURL(file).href);
 }
 const NEW = await loadArm('new', CONTROL ? [CONTROL] : []);
-/* The engine as the round found it: 17 games every year, the old pay, kickers anywhere, tenths. */
-const BASE = await loadArm('base', ['seventeen', 'oldpay', 'kicker', 'tenths']);
+/* The engine as the round found it: 17 games every year, the old pay, kickers anywhere, tenths, no receiver cap. */
+const BASE = await loadArm('base', ['seventeen', 'oldpay', 'kicker', 'tenths', 'nocap']);
 
 /* ── one career off the engine: quick start, no summer deck ── */
 function career(arm, pos, era, seed, i, startYear, see) {
@@ -187,12 +194,13 @@ console.log('1) seasons are as long as they really were');
 /* ── 1b: the awards on a 16 game schedule, five seeds, against the 17 game arm ── */
 console.log('1b) a 16 game schedule does not cost a throwback career its awards (five seeds, by position)');
 const awardsOf = (arm, pos, seed) => {
-  let allPro = 0, big = 0, hall = 0;
+  let allPro = 0, big = 0, hall = 0, mine = 0, his = 0;
   for (let i = 0; i < CAREERS; i += 1) {
     const c = career(arm, pos, 'y2005', seed, i, 0, null);
     allPro += c.allPros; big += c.mvps; if (arm.E.legacyOf(c).hof) hall += 1;
+    mine += c.rival?.myYears ?? 0; his += c.rival?.hisYears ?? 0;
   }
-  return { allPro: allPro / CAREERS, big: big / CAREERS, hall: 100 * hall / CAREERS };
+  return { allPro: allPro / CAREERS, big: big / CAREERS, hall: 100 * hall / CAREERS, h2h: 100 * mine / Math.max(1, mine + his) };
 };
 /* The band is the 17 game arm's five seed mean plus or minus three seed
    standard deviations, and never narrower than FLOOR: with a few hundred
@@ -210,6 +218,7 @@ for (const pos of POSITIONS) {
     const b = base.map(x => x[k]); const n = next.map(x => x[k]);
     const width = Math.max(3 * sd(b), FLOOR[k]);
     measured1b[pos][k] = { base: mean(b), sd: sd(b), now: mean(n) };
+    measured1b[pos].h2h = { base: mean(base.map(x => x.h2h)), now: mean(next.map(x => x.h2h)) };
     if (Math.abs(mean(n) - mean(b)) > width) fail('1b', `${pos} ${k}: the throwback reads ${mean(n).toFixed(3)} against the 17 game arm's ${mean(b).toFixed(3)} (band plus or minus ${width.toFixed(3)})`);
   }
   const m = measured1b[pos];
@@ -303,6 +312,51 @@ console.log('3) sacks come in halves');
   console.log(`   ${now.lines} LB and EDGE season lines, ${now.off} not in halves; the engine as found: ${base.off} of ${base.lines} (${(100 * base.off / Math.max(1, base.lines)).toFixed(1)} percent)`);
 }
 
+/* ── a forced season: a starter of a given rating on an average team, healthy, 27 ── */
+function forced(arm, pos, ovr, n, era, see) {
+  const E = arm.E;
+  const seedRng = mulberry(SEED * 977 + ovr * 13 + pos.charCodeAt(0));
+  const c = E.startCareer('Forced', pos, E.ARCHETYPES[pos][0], seedRng, null, era);
+  Object.assign(c, { ovr, pot: Math.max(c.pot, ovr), morale: 80, age: 27, health: 100, role: 'starter', rival: null });
+  if (era === 'now') c.year = 2026;
+  const snap = JSON.stringify(c);
+  for (let i = 0; i < n; i += 1) {
+    const cc = JSON.parse(snap);
+    const { line, notes } = E.simSeason(cc, 78, seedRng);
+    if (!notes.some(x => x.startsWith('🚑'))) see(line);
+  }
+}
+
+/* ── 4: the record book ── */
+console.log('4) no receiver passes the record book');
+{
+  const over = (arm, pos, test) => { let n = 0, bad = 0, top = 0; forced(arm, pos, 99, 4000, 'now', line => { n += 1; if (test(line)) bad += 1; top = Math.max(top, line.recYds ?? 0); }); return { n, bad, top }; };
+  const wrNew = over(NEW, 'WR', l => (l.recYds ?? 0) > 1950 || (l.rec ?? 0) > 145);
+  const wrOld = over(BASE, 'WR', l => (l.recYds ?? 0) > 1964 || (l.rec ?? 0) > 149);
+  const teNew = over(NEW, 'TE', l => (l.recYds ?? 0) > 1400);
+  const teOld = over(BASE, 'TE', l => (l.recYds ?? 0) > 1416);
+  if (wrNew.n < 2000 || teNew.n < 2000) fail('4', `only ${wrNew.n} WR and ${teNew.n} TE healthy seasons at 99 were seen`);
+  if (wrNew.bad > 0) fail('4', `${wrNew.bad} of ${wrNew.n} seasons by a 99 rated wide receiver passed 1,950 yards or 145 catches`);
+  if (teNew.bad > 0) fail('4', `${teNew.bad} of ${teNew.n} seasons by a 99 rated tight end passed 1,400 yards`);
+  if (wrOld.bad === 0) fail('4', 'the engine as found never passed the wide receiver records either, so this check proves nothing');
+  console.log(`   WR at 99: ${wrNew.n} healthy seasons, ${wrNew.bad} over the cap; the engine as found passed a record (1,964 yards or 149 catches) in ${wrOld.bad} of ${wrOld.n} (${(100 * wrOld.bad / Math.max(1, wrOld.n)).toFixed(1)} percent)`);
+  console.log(`   TE at 99: ${teNew.n} healthy seasons, ${teNew.bad} over the cap; the engine as found passed the record (1,416 yards) in ${teOld.bad} of ${teOld.n} (${(100 * teOld.bad / Math.max(1, teOld.n)).toFixed(1)} percent)`);
+}
+
+/* ── 5: MEASURED, asserted on nothing ── */
+console.log('5) MEASURED, asserted on nothing');
+{
+  const meanOf = (pos, ovr, key) => { let s = 0, n = 0; forced(NEW, pos, ovr, 3000, 'now', line => { s += line[key] ?? 0; n += 1; }); return s / Math.max(1, n); };
+  console.log(`   for a later round (not fixed here): a 95 rated linebacker averages ${meanOf('LB', 95, 'tackles').toFixed(0)} tackles a full season; a 95 rated tight end ${meanOf('TE', 95, 'recYds').toFixed(0)} yards`);
+  console.log(`   a 95 rated starter's mean full season today (Round 1104 did not ship the means by rating band): QB ${meanOf('QB', 95, 'passYds').toFixed(0)} pass yards and ${meanOf('QB', 95, 'passTd').toFixed(1)} touchdowns; RB ${meanOf('RB', 95, 'rushYds').toFixed(0)} rush yards; EDGE ${meanOf('EDGE', 95, 'sacks').toFixed(1)} sacks; WR ${meanOf('WR', 95, 'recYds').toFixed(0)} yards`);
+  for (const era of ['now', 'y2005']) {
+    const row = POSITIONS.map(pos => { const c = NEW.E.startCareer('Pay', pos, NEW.E.ARCHETYPES[pos][0], mulberry(5), null, era); return `${pos} ${[75, 85, 95].map(o => NEW.E.marketSalary({ ...c, ovr: o })).join('/')}`; });
+    console.log(`   for Round 1123, open market pay at 75/85/95 in ${era} (M a year): ${row.join(', ')}`);
+  }
+  console.log(`   for Round 1112, the head to head share of decided years in the throwback, 17 game arm -> now (the rival keeps a 17 game line against a 16 game player): ${POSITIONS.map(pos => `${pos} ${measured1b[pos].h2h.base.toFixed(1)} -> ${measured1b[pos].h2h.now.toFixed(1)}`).join(', ')}`);
+  console.log(`   for Round 1051's owner, the Hall percent by position in the throwback, 17 game arm -> now: ${POSITIONS.map(pos => `${pos} ${measured1b[pos].hall.base.toFixed(1)} -> ${measured1b[pos].hall.now.toFixed(1)}`).join(', ')}`);
+}
+
 /* ── the verdict ── */
 const tags = [...failed.keys()].sort();
 console.log('');
@@ -321,4 +375,4 @@ if (tags.length) {
   console.error(`simNflTruth: ${tags.length} section${tags.length === 1 ? '' : 's'} failed (${tags.map(t => `${t}: ${failed.get(t)}`).join(', ')})`);
   process.exit(1);
 }
-console.log('simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, and sacks come in halves.');
+console.log('simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves, and no receiver passes the record book.');

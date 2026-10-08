@@ -469,6 +469,25 @@ export function nflSeasonLength(year: number): number {
   return usSeasonLength('nfl', year) ?? NFL_RATE_GAMES;
 }
 
+/* Round 1104: the receiving lines never had the cap the passing, rushing and
+   sack lines have, and a 99 rated receiver passed the record book. Each cap
+   sits just under its record, so a career year scrapes it and never beats
+   it. The records (read 2026-10-07, each from two sources, each still
+   standing after the 2025 season):
+   receiving yards 1,964 in 2012 (NFL.com, "Calvin Johnson: single-season
+   receiving record 'bound to fall at some point'"; CBS Sports, "Calvin Johnson
+   can't believe his NFL single-season receiving yards record hasn't been
+   broken yet");
+   receptions 149 in 2019 (The Analyst, "Who has the most receptions in an NFL
+   season?"; CBS Sports, "NFL Honors: Michael Thomas wins Offensive Player of
+   the Year after record-setting year for Saints");
+   receiving yards by a tight end 1,416 in 2020 (NFL.com, "Chiefs TE Travis
+   Kelce sets single-season TE receiving yardage record"; Guinness World
+   Records, "Most yards receiving by a tight end in an NFL season"). */
+const NFL_WR_REC_CAP = 145;
+const NFL_WR_YDS_CAP = 1950;
+const NFL_TE_YDS_CAP = 1400;
+
 function seasonGames(c: CareerState, rng: () => number): { games: number; injuryNote: string | null } {
   const len = nflSeasonLength(c.year);
   const risk = careerRecoveryRisk('nfl', c.purchased, (1 - c.archetype.durability) * 0.5 + (100 - c.health) / 260 + (c.pos === 'RB' ? 0.07 : 0));
@@ -544,13 +563,13 @@ export function simSeason(
     line.rec = Math.round((14 + (form - 62) * 1.1 + rng() * 12) * g);
     line.recYds = Math.round((line.rec ?? 0) * (6.5 + rng() * 3));
   } else if (c.pos === 'WR') {
-    line.rec = Math.round((28 + (form - 62) * 2.5 + rng() * 14) * g);
-    line.recYds = Math.round((line.rec ?? 0) * (10.5 + rng() * 4));
+    line.rec = Math.min(NFL_WR_REC_CAP, Math.round((28 + (form - 62) * 2.5 + rng() * 14) * g));
+    line.recYds = Math.min(NFL_WR_YDS_CAP, Math.round((line.rec ?? 0) * (10.5 + rng() * 4)));
     line.recTd = Math.max(0, Math.round((1 + (form - 62) * 0.32 + rng() * 3) * g));
   } else if (c.pos === 'TE') {
     // Tight ends catch fewer, shorter, but score near the goal line.
     line.rec = Math.round((22 + (form - 62) * 1.9 + rng() * 12) * g);
-    line.recYds = Math.round((line.rec ?? 0) * (9 + rng() * 3.5));
+    line.recYds = Math.min(NFL_TE_YDS_CAP, Math.round((line.rec ?? 0) * (9 + rng() * 3.5)));
     line.recTd = Math.max(0, Math.round((2 + (form - 62) * 0.3 + rng() * 3) * g));
   } else if (c.pos === 'LB') {
     /* Round 144: same treatment the EDGE sack line got in Round 123 (see the
