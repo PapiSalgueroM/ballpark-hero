@@ -29,8 +29,13 @@
      (src/data/clubManagerEraNNNN.ts) and its nationalities (src/data/nationalities/eraNNNN.ts),
      through ensureEraRosters in src/lib/clubManagerEras.ts. A league added to a past season is
      written by that season's bake (scripts/bakeEraNNNN.mjs), which rewrites both files, so it
-     lands in the right chunk with nobody remembering. A NEW SEASON is one row in ERA_BAKES, one
-     in WORLDS in scripts/bakeNationalities.mjs, and node scripts/bakeNationalities.mjs --rewrite.
+     lands in the right chunk with nobody remembering. A NEW SEASON is four steps, in this order:
+     one row in ERA_BAKES (src/lib/clubManagerEras.ts); one row in WORLDS in
+     scripts/bakeNationalities.mjs; node scripts/bakeNationalities.mjs --rewrite, which writes
+     that world's file with an EMPTY block, its row in the table below and its line in
+     allWorlds.ts; then that season's own bake (scripts/bakeEraNNNN.mjs), which fills the block
+     from the rows it bakes. Between the last two steps scripts/simCmDataOnDemand.mjs section 3
+     is red on the empty block, on purpose: a season with no nationalities must not ship.
    - nationalityOf and the table of files below are written from the TEMPLATE in
      scripts/bakeNationalities.mjs (writeOut). A new generated map that nationalityOf should read
      is added there, and the files are remade with --rewrite, never by editing this file.
