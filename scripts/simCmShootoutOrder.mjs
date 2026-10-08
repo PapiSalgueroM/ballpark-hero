@@ -21,7 +21,9 @@
  *
  * Sections, each against the real engine bundled with esbuild:
  *   1) The walk, through the whole match. One base career (Real Madrid,
- *      BASE_SEED) is simmed to its first cup week once; then N seeds play
+ *      NAMED_BASE_SEED since Release AL, whose first cup tie is against a
+ *      side that names an eleven; the note under MEASURED says why it is not
+ *      BASE_SEED any more) is simmed to its first cup week once; then N seeds play
  *      that cup match with a seven man order set (five men of the eleven
  *      and two bench men, listed second and fifth). For every match that
  *      reached a shootout, my first five kicks (or as many as were taken)
@@ -101,6 +103,21 @@
  *      their ten best first with the keeper last, a side with nobody to name
  *      kicks eleven generated men at its strength against a keeper of that
  *      strength, and a side whose keeper has gone is read against nobody.
+ *   7) A thin side is made up to eleven (Release AL). A side with no named
+ *      eleven tonight kicks off its projected roster, and a thin club's
+ *      roster can be two names. a) shootoutRosterSide, exactly: two names
+ *      become eleven different men (the two kept, nine generated takers at
+ *      the club's strength, their own keeper last), five names without a
+ *      keeper get a generated one who kicks last and is the keeper my kicks
+ *      are read against, ten get one more, a full roster is its best eleven
+ *      as before, and nobody stays nobody. b) Through the whole match: the
+ *      first career from BASE_SEED on whose first cup tie is against a side
+ *      with names but no eleven (found by search, so a data round that fills
+ *      one roster moves the walk on instead of emptying it), an order set,
+ *      450 seeds. In every shootout no man of theirs comes up again inside
+ *      their first eleven kicks and every taker who is not on their roster
+ *      carries the generated mark, with a floor on the shootouts reached
+ *      and a check that generated men kicked at all.
  *
  * Negative controls (house rule: prove the checks can fail), each a rewrite
  * of a copy of src/lib/clubManager.ts that refuses to run if its anchor is
@@ -118,9 +135,16 @@
  *   CM_SHOOTOUT_CONTROL=wrongkeeper  shootoutSides takes the last man who
  *     finished as my keeper. Section 6b must go red.
  *   CM_SHOOTOUT_CONTROL=nooppkeeper  shootoutSides never reads their keeper.
- *     Section 6b must go red.
+ *     Section 6b must go red (and 7a with it since Release AL, which reads
+ *     a made up side's keeper through shootoutSides).
  *   CM_SHOOTOUT_CONTROL=oppworst     shootoutSides sends their worst first.
- *     Sections 1 and 6b must go red.
+ *     Sections 1 and 6b must go red (and 7a, the same way).
+ *   CM_SHOOTOUT_CONTROL=thinside     settleShootout hands a side with no
+ *     named eleven its bare roster again, the expression it had before
+ *     Release AL. Section 7b must go red (7a reads the function, which this
+ *     leaves alone).
+ *   CM_SHOOTOUT_CONTROL=nomakeup     shootoutRosterSide stops making a thin
+ *     roster up. Sections 7a and 7b must go red.
  *
  * MEASURED, 2026-10-01, on the default seed and SIM_SEED=1 to 5 (six runs,
  * section 2 is 4000 paired shootouts an arm, 7 to 9 seconds a run):
@@ -147,6 +171,58 @@
  *     (seed 0: 85.8 against 74.1; the two edges allow 12)
  *   shootoutSides checks wrong                 0 of 6                               3 (wrongkeeper), 2           0
  *                                                                                   (nooppkeeper), 1 (oppworst)
+ *
+ * RELEASE AL, 2026-10-07: section 1 moved to its own base, and why. Round
+ * 1040 (on main before this release) put the second divisions in the cup draw,
+ * and the BASE_SEED career's first tie turned from Valencia into Eibar, whose
+ * projected roster is two men. The harness went red on main's own tree with
+ * three failures, all in section 1 (7 shootouts in 150, under each floor of
+ * 12), and the reason it could not simply walk more matches is the second
+ * thing measured: with 900 matches it reached 68 shootouts and passed, but
+ * oppworst then left section 1 green (68 of 68 "best first"), because a side
+ * that names no eleven kicks off its roster and Eibar's is a left back and a
+ * keeper. Their order was being read off two names. So section 1 walks the
+ * first cup tie of the career started on NAMED_BASE_SEED (Valencia again,
+ * 22 on the roster), aborts if that tie is ever against a side that cannot
+ * name an eleven with a keeper, fails a shootout whose report has no eleven
+ * for them, and counts their order only when three or more different men
+ * kicked. Sections 4 and 5 stay on BASE_SEED (the fixture and the pin are
+ * written on it), where only 9 of the 150 live rows end on penalties now, so
+ * section 4 also walks 300 seeds of the named base against the same pinned
+ * main with its own floor, and section 5 probes a row main settles on
+ * penalties in this run (the fixture's first shootout row, seed 782109, is
+ * not one on the Eibar tie, and under unsetpath section 5 had stopped going
+ * red with section 4).
+ * MEASURED on the release tree, default seed and SIM_SEED=1 to 5. A run
+ * plays about 1,500 cup matches now: 63 seconds with five other runs beside
+ * it before section 7 was added, 263 and 279 seconds with section 7 on a
+ * machine twenty agents had left short of memory, so start it detached:
+ *   metric                                     fixed                                control                      floor / band
+ *   shootouts reached in section 1             26, 23, 22, 25, 23, 21 of 150                                     floor 12
+ *   first five kicks in listed order           all of them in every run             0 of 26 (ignoreorder, noskip) all
+ *   the skip decided who took the first five   26, 23, 22, 25, 23, 21 (every one)                                floor 12
+ *   their first time round, best first         26, 23, 22, 25, 23, 21 (every one)  1 of 26 (oppworst)           all, floor 12
+ *   scored share, all kicks                    77.1, 80.5, 76.4, 75.4, 78.2, 79.6 %                              band 62 to 90
+ *   rows equal main, fixture base              150 of 150 (9 on penalties)          141 of 150 (unsetpath)       150
+ *   rows equal main, named base                300 of 300 (37 on penalties)         263 of 300 (unsetpath)       300, floor 12
+ *   loaded old save equal main                 seed 782113, a shootout              differs (unsetpath)          equal
+ *   the other four controls                    as above: 2355 past the cap (nocap), 27.6 against 71.7 (ownkeeper),
+ *                                              3 wrong (wrongkeeper), 2 wrong (nooppkeeper)
+ * And the thing the Eibar tie showed, fixed in the same release (section 7):
+ * with an order set, a side with no named eleven kicked off its bare roster,
+ * so Eibar's two names took every kick between them, the left back first,
+ * the keeper second, the left back third. settleShootout now reads that
+ * side through shootoutRosterSide, which keeps the names a thin roster has
+ * and makes it up to eleven with generated, marked takers at the club's
+ * strength. No save without an order walks that line (sections 4 and 5 hold
+ * the one draw path equal to main on 450 rows), and a named eleven and a
+ * full roster kick exactly as before.
+ *   metric (section 7b, 450 matches a run)     fixed                                control                      floor
+ *   shootouts reached against the thin side    27, 35, 33, 41, 31, 37                                            floor 12
+ *   nobody twice inside eleven, all marked     all of them in every run             0 of 27 (thinside, nomakeup) all
+ *   their kicks by generated men               112 of 141, 134 of 171, 157 of 194,  0 of 142 (thinside)          more than 0
+ *                                              176 of 219, 137 of 169, 146 of 185
+ *   shootoutRosterSide checks wrong (7a)       0 of 10                              8 (nomakeup), 0 (thinside)   0
  *
  * Measured once and not asserted, because it is a design fact rather than
  * a check: on the same shootouts (1500 seeds of that cup match, the order
@@ -185,7 +261,7 @@ const BUNDLE = `${TMP}/${TAG}.bundle.mjs`;
 const FIXTURE = `${ROOT}/scripts/data/cmShootoutUnset782.json`;
 
 const CONTROL = process.env.CM_SHOOTOUT_CONTROL || '';
-const KNOWN = ['ignoreorder', 'noskip', 'nocap', 'unsetpath', 'ownkeeper', 'wrongkeeper', 'nooppkeeper', 'oppworst'];
+const KNOWN = ['ignoreorder', 'noskip', 'nocap', 'unsetpath', 'ownkeeper', 'wrongkeeper', 'nooppkeeper', 'oppworst', 'thinside', 'nomakeup'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`CM_SHOOTOUT_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -257,6 +333,16 @@ if (CONTROL) {
       '  const oppTakers = [...theirs.filter(p => p !== oppKeeper)].sort((a, b) => b.r - a.r);\n',
       '  const oppTakers = [...theirs.filter(p => p !== oppKeeper)].sort((a, b) => a.r - b.r);\n',
       'shootoutSides (their order, best first)');
+  } else if (CONTROL === 'thinside') {
+    engine = swap(engine,
+      '    : shootoutRosterSide(oppRosterFor(state, fx.opponent), oppS);\n',
+      '    : [...oppRosterFor(state, fx.opponent)].sort((a, b) => b.r - a.r).slice(0, SHOOTOUT_MAX_ORDER);\n',
+      'settleShootout (the side with no named eleven)');
+  } else if (CONTROL === 'nomakeup') {
+    engine = swap(engine,
+      '  if (!side.length) return side;\n',
+      '  if (side.length) return side;\n',
+      'shootoutRosterSide (a thin roster made up to eleven)');
   }
   const copy = `${TMP}/${TAG}.control.engine.ts`;
   fs.writeFileSync(copy, engine);
@@ -300,13 +386,13 @@ buildSync({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node',
 const { cm, historical, baseline } = await import(pathToFileURL(BUNDLE).href);
 const {
   startCareer, playNextEntry, saveCareer, loadCareer, resolveXI, effectiveXIWithSlots, oppRosterFor,
-  setShootoutOrder, shootoutOrderOf, runShootout, shootoutTakerOrder, shootoutSides,
+  setShootoutOrder, shootoutOrderOf, runShootout, shootoutTakerOrder, shootoutSides, shootoutRosterSide,
   shootoutKickChance, shootoutTakerEdge, shootoutKeeperEdge,
   SHOOTOUT_TAKER_EDGE_CAP, SHOOTOUT_BASE_RATE,
 } = cm;
 const needed = WRITE_FIXTURE
   ? { startCareer, playNextEntry }
-  : { startCareer, playNextEntry, saveCareer, loadCareer, resolveXI, effectiveXIWithSlots, oppRosterFor, setShootoutOrder, shootoutOrderOf, runShootout, shootoutTakerOrder, shootoutSides, shootoutKickChance, shootoutTakerEdge, shootoutKeeperEdge };
+  : { startCareer, playNextEntry, saveCareer, loadCareer, resolveXI, effectiveXIWithSlots, oppRosterFor, setShootoutOrder, shootoutOrderOf, runShootout, shootoutTakerOrder, shootoutSides, shootoutRosterSide, shootoutKickChance, shootoutTakerEdge, shootoutKeeperEdge };
 for (const [name, fn] of Object.entries(needed)) {
   if (typeof fn !== 'function') abort(`the harness could not reach ${name}; the bundle is not the shape it expects`);
 }
@@ -355,7 +441,7 @@ const fail = m => { failures += 1; (failedSections[section] ??= []).push(m); con
 const pct = x => `${(x * 100).toFixed(1)}%`;
 
 /* ---------- the base career, simmed to its first cup week ---------- */
-const reachCup = engine => withSeed(BASE_SEED, () => {
+const reachCup = (engine, baseSeed = BASE_SEED) => withSeed(baseSeed, () => {
   const start = engine.startCareer(CLUB);
   const cupIdx = start.calendar.findIndex(e => e.type === 'cup');
   if (cupIdx < 0) abort(`${CLUB} has no cup entry in its calendar`);
@@ -431,23 +517,46 @@ if (WRITE_FIXTURE) {
   process.exit(0);
 }
 
-const nameOf = new Map(atCup.squad.map(p => [p.id, p.name]));
-/** A club's projected roster by name (rating and position), as the base career sees it. */
+/* Section 1's own base, since Release AL (2026-10-07). Round 1040 put the
+   second divisions in the cup, and BASE_SEED's first tie turned from Real
+   Madrid v Valencia into Real Madrid v Eibar. Eibar's projected roster is two
+   men, so they name no eleven, a level 120 minutes went from about one match
+   in six to about one in sixteen (7 shootouts in the 150, under the floor of
+   12; 348 in 5,400 over six seeds), and "their order" was being read off two
+   names, which oppworst could not turn red (68 of 68 still "best first").
+   Sections 4 and 5 stay on BASE_SEED, because the fixture and the comparison
+   with main are written on it. Section 1 walks the first cup tie of the
+   career started on NAMED_BASE_SEED, which is Valencia again (22 on the
+   roster), and refuses to run if that ever stops being a side that names an
+   eleven with a keeper. */
+const NAMED_BASE_SEED = 782_002;
+const atNamedCup = reachCup(cm, NAMED_BASE_SEED);
+const namedOpp = atNamedCup.cupDraw?.[atNamedCup.calendar[atNamedCup.week].cupRound];
+{
+  const r = namedOpp ? oppRosterFor(atNamedCup, namedOpp) : [];
+  const keepers = r.filter(p => p.p === 'GK').length;
+  if (!namedOpp || keepers < 1 || r.length - keepers < 10) {
+    abort(`section 1's base (seed ${NAMED_BASE_SEED}) drew ${namedOpp ?? 'nobody'}, whose roster of ${r.length} (${keepers} keepers) cannot name an eleven, so their order would be read off nobody; pick a base seed whose first cup tie is against a full roster`);
+  }
+  console.log(`   section 1 base: seed ${NAMED_BASE_SEED}, cup ${atNamedCup.calendar[atNamedCup.week].cupRound} against ${namedOpp} (${r.length} on their roster, ${keepers} keepers); the fixture base's tie is against ${atCup.cupDraw?.[cupEntry.cupRound] ?? 'unknown'} (${oppRosterFor(atCup, atCup.cupDraw?.[cupEntry.cupRound] ?? '').length} on theirs)`);
+}
+const nameOf = new Map(atNamedCup.squad.map(p => [p.id, p.name]));
+/** A club's projected roster by name (rating and position), as section 1's base career sees it. */
 const rosters = new Map();
 const rosterOf = club => {
-  if (!rosters.has(club)) rosters.set(club, new Map(oppRosterFor(atCup, club).map(p => [p.n, p])));
+  if (!rosters.has(club)) rosters.set(club, new Map(oppRosterFor(atNamedCup, club).map(p => [p.n, p])));
   return rosters.get(club);
 };
 const idsOfName = new Map();
-for (const p of atCup.squad) idsOfName.set(p.name, [...(idsOfName.get(p.name) ?? []), p.id]);
+for (const p of atNamedCup.squad) idsOfName.set(p.name, [...(idsOfName.get(p.name) ?? []), p.id]);
 
 /* ================================================================== */
 console.log('1) The walk, through the whole match: my first five kicks are the first five listed men who finished');
 section = 1;
 /* ================================================================== */
 {
-  const xi = resolveXI(atCup).filter(Boolean);
-  const bench = atCup.squad.filter(p => !p.onLoan && !xi.some(x => x.id === p.id)).sort((a, b) => b.rating - a.rating);
+  const xi = resolveXI(atNamedCup).filter(Boolean);
+  const bench = atNamedCup.squad.filter(p => !p.onLoan && !xi.some(x => x.id === p.id)).sort((a, b) => b.rating - a.rating);
   /* Five of the eleven (not the keeper, a mix of lines so the walk is not
      the rating order by accident) and two bench men who are off the pitch
      unless a change brings one on. The bench men sit second and fifth, so
@@ -455,7 +564,7 @@ section = 1;
   const outfield = xi.filter(p => p.position !== 'GK');
   const picks = [outfield[outfield.length - 1], outfield[0], outfield[Math.floor(outfield.length / 2)], outfield[1], outfield[outfield.length - 2]];
   const order = [picks[0].id, bench[0].id, picks[1].id, picks[2].id, bench[1].id, picks[3].id, picks[4].id];
-  const ordered = setShootoutOrder(atCup, order);
+  const ordered = setShootoutOrder(atNamedCup, order);
   if (!ordered) abort('setShootoutOrder refused a list of seven men from the squad');
   if (JSON.stringify(ordered.shootoutOrder) !== JSON.stringify(order)) fail(`the order was not kept as given: ${JSON.stringify(ordered.shootoutOrder)}`);
   console.log(`   order: ${order.map(id => nameOf.get(id)).join(', ')}`);
@@ -513,9 +622,14 @@ section = 1;
        and the bench that came on are drawn from (the starters' lines match
        the report's own oppXi; checked below). Best first, so never a man
        rated above the one before him, and their keeper, if he got that far,
-       last. Counted when two or more of them kicked. */
+       last. Counted when three or more different men kicked before a name
+       came up again (no shootout is over before three each, so every one
+       against a named eleven counts; it was two until Release AL, and a
+       side with two names on its roster then counted with nothing to read). */
     const oppClub = [rep.home, rep.away].find(c => c !== CLUB);
+    if (oppClub !== namedOpp) abort(`seed ${seed}: the tie was against ${oppClub}, not the ${namedOpp} the base drew`);
     const oppBy = rosterOf(oppClub);
+    if ((det.oppXi ?? []).length !== 11) fail(`seed ${seed}: ${oppClub} went to penalties with ${(det.oppXi ?? []).length} men on their sheet, so there is no named eleven to read their order off`);
     for (const p of det.oppXi ?? []) {
       const q = oppBy.get(p.n);
       if (!q || q.r !== p.r || q.p !== p.p) { fail(`seed ${seed}: ${p.n} (${p.p} ${p.r}) on their sheet is not on their roster that way, so the roster cannot stand in for the ratings`); break; }
@@ -523,7 +637,7 @@ section = 1;
     const theirKicks = d.kicks.filter(k => k.side === 'opp').map(k => k.taker);
     const again = theirKicks.findIndex((t, j) => theirKicks.indexOf(t) !== j);
     const round1 = again < 0 ? theirKicks : theirKicks.slice(0, again);
-    if (round1.length >= 2 && round1.every(t => oppBy.has(t))) {
+    if (round1.length >= 3 && round1.every(t => oppBy.has(t))) {
       oppChecked += 1;
       const lines = round1.map(t => oppBy.get(t));
       const outfield = lines.filter(p => p.p !== 'GK').map(p => p.r);
@@ -676,6 +790,36 @@ const baselineEvidence = { baselineRef: '5b70b05f', baselineSourceHash, rows: []
   if (same !== baselineGolden) fail(`ancient golden matching counts differ: candidate ${same}, actual pre-1072 main ${baselineGolden}`);
   if (withKicks) fail(`${withKicks} reports carried shootout kicks with no order set`);
   if (pens < 12) fail(`the fixture holds only ${pens} shootouts, under the floor of 12`);
+
+  /* Release AL (2026-10-07): the same comparison on section 1's base. The
+     floor above counts the ancient fixture's own rows, and since Round 1040
+     turned the BASE_SEED tie into Eibar only 9 of the 150 live rows end on
+     penalties, so the one draw path the comparison is here for was walked 9
+     times. Valencia's tie walks it 14 times in the same 150 seeds and 37
+     times in 300, so this walk takes 300 (the fixture's 150 and the next
+     150), and the floor below is on the rows main's engine settles on
+     penalties in THIS run. */
+  const NAMED_SEEDS = Array.from({ length: 300 }, (_, i) => FIXTURE_SEEDS[0] + i);
+  const namedHistorical = reachCup(historical, NAMED_BASE_SEED);
+  const namedBaseline = reachCup(baseline, NAMED_BASE_SEED);
+  let namedSame = 0;
+  let namedPens = 0;
+  let namedKicks = 0;
+  for (const seed of NAMED_SEEDS) {
+    const out = playCup(namedHistorical, seed, historical);
+    const baselineOut = playCup(namedBaseline, seed, baseline);
+    const content = compareContent(out, baselineOut);
+    if (content.paired) namedSame += 1;
+    else if (shown++ < 3) console.error(`  differs from actual pre-1072 main on section 1's base, seed ${seed}: got ${JSON.stringify(row(out))}, baseline ${JSON.stringify(row(baselineOut))}`);
+    if (baselineOut.decidedBy === 'pens') namedPens += 1;
+    if (out.report.shootout) namedKicks += 1;
+  }
+  const livePens = baselineEvidence.rows.filter(r => r.baseline.decidedBy === 'pens').length;
+  console.log(`   on section 1's base: ${namedSame} of ${NAMED_SEEDS.length} rows equal actual pre-1072 main in result, next draw and full content, ${namedPens} of them settled on penalties by main (${livePens} on the fixture's base)`);
+  baselineEvidence.namedBase = { seed: NAMED_BASE_SEED, rows: NAMED_SEEDS.length, paired: namedSame, pens: namedPens };
+  if (namedSame !== NAMED_SEEDS.length) fail(`${NAMED_SEEDS.length - namedSame} rows on section 1's base differ from the actual pre-1072 engine with no order set`);
+  if (namedKicks) fail(`${namedKicks} reports on section 1's base carried shootout kicks with no order set`);
+  if (namedPens < 12) fail(`main settles only ${namedPens} of the rows on section 1's base on penalties, under the floor of 12, so the one draw path is barely walked`);
 }
 
 /* ================================================================== */
@@ -691,7 +835,14 @@ section = 5;
   if (!back) abort('loadCareer returned null for a save without the field');
   if ('shootoutOrder' in back) fail('a save written without the field came back with one');
   if (shootoutOrderOf(back) !== null) fail('shootoutOrderOf reads an order off a save that has none');
-  const probe = fixture?.rows?.find(r => r.decidedBy === 'pens') ?? fixture?.rows?.[0];
+  /* The probe is a row main's engine settled on penalties in THIS run
+     (section 4 just played all of them), so the old save walks the one draw
+     path. The fixture's own first shootout row stopped being one when the
+     base tie changed (Release AL note in the header), and the comparison
+     then never reached the draw it is here for. */
+  const pensNow = new Set(baselineEvidence.rows.filter(r => r.baseline.decidedBy === 'pens').map(r => r.seed));
+  const probe = fixture?.rows?.find(r => pensNow.has(r.seed));
+  if (!probe) fail(`none of the ${fixture?.rows?.length ?? 0} rows is a shootout on main's engine, so the old save never walks the one draw path`);
   if (probe) {
     const out = playCup(back, probe.seed, historical);
     const got = row(out);
@@ -709,7 +860,7 @@ section = 5;
     baselineEvidence.oldLoad = { seed: probe.seed, candidate: got, baseline: base, goldenCandidate, goldenBaseline, rawPaired, ...content };
     if (!content.paired) fail(`the loaded old save differs from actual pre-1072 main at seed ${probe.seed}: ${JSON.stringify(got)} vs ${JSON.stringify(base)}`);
     if (goldenCandidate !== goldenBaseline) fail('The loaded old save has a different ancient golden mismatch from actual pre-1072 main');
-    console.log(`   loaded old save, seed ${probe.seed}: equal actual pre-1072 main ${content.paired}; ancient golden matches candidate ${goldenCandidate}, baseline ${goldenBaseline}`);
+    console.log(`   loaded old save, seed ${probe.seed} (one of ${pensNow.size} rows main settles on penalties, decided ${base.decidedBy}): equal actual pre-1072 main ${content.paired}; ancient golden matches candidate ${goldenCandidate}, baseline ${goldenBaseline}`);
   }
   const ids = back.squad.filter(p => !p.onLoan).slice(0, 4).map(p => p.id);
   const set = setShootoutOrder(back, ids);
@@ -820,7 +971,97 @@ section = 6;
 }
 
 /* ================================================================== */
-const evidenceDir = process.env.CM_SHOOTOUT_ARTIFACTS || path.join(ROOT, 'cm-shootout-artifacts');
+console.log('7) A thin side is made up to eleven: nobody of theirs kicks twice before the eleventh');
+section = 7;
+/* ================================================================== */
+{
+  /* a) shootoutRosterSide, exactly. */
+  let wrong = 0;
+  const check = (ok, m) => { if (!ok) { wrong += 1; fail(m); } };
+  const S = 70;
+  const man = (n, p, r) => ({ n, p, r });
+  const madeUp = side => side.filter(p => p.g);
+  const two = shootoutRosterSide([man('Left Back', 'LB', 68), man('Keeper', 'GK', 64)], S);
+  check(two.length === 11 && new Set(two.map(p => p.n)).size === 11, `two names became ${two.length} men (${new Set(two.map(p => p.n)).size} different), not eleven different men`);
+  check(madeUp(two).length === 9 && madeUp(two).every(p => p.r === S && p.p !== 'GK'), `two names got ${madeUp(two).length} generated men, not nine outfield takers at ${S}`);
+  check(two.filter(p => !p.g).map(p => p.n).join('|') === 'Left Back|Keeper', 'the two real names were not both kept, unmarked');
+  const twoSides = shootoutSides(atCup, [], [], two, S).theirs;
+  check(twoSides.takers.length === 11 && twoSides.takers[10].name === 'Keeper' && twoSides.keeperRating === 64,
+    `the two name side kicks ${twoSides.takers.length} with ${twoSides.takers[10]?.name} last against keeper ${twoSides.keeperRating}, not eleven with its own keeper (64) last`);
+  check(twoSides.takers.filter(t => t.gen).length === 9, `${twoSides.takers.filter(t => t.gen).length} of the two name side's takers carry the generated mark, not nine`);
+  const five = shootoutRosterSide([man('A', 'ST', 71), man('B', 'CM', 69), man('C', 'CB', 66), man('D', 'RB', 65), man('E', 'LW', 60)], S);
+  const fiveSides = shootoutSides(atCup, [], [], five, S).theirs;
+  check(five.length === 11 && five.filter(p => p.p === 'GK').length === 1 && five.find(p => p.p === 'GK').g === true && five.find(p => p.p === 'GK').r === S,
+    'five names and no keeper did not become eleven with one generated keeper at the club strength');
+  check(fiveSides.keeperRating === S && fiveSides.takers[10].gen === true && fiveSides.takers[0].name === 'A',
+    `the keeperless five are read against ${fiveSides.keeperRating} with ${fiveSides.takers[0]?.name} first, not against a generated keeper at ${S} who kicks last, best real man first`);
+  const ten = shootoutRosterSide([man('K', 'GK', 70), ...Array.from({ length: 9 }, (_, i) => man(`O${i}`, 'CM', 60 + i))], S);
+  check(ten.length === 11 && madeUp(ten).length === 1 && madeUp(ten)[0].p !== 'GK', `ten names with a keeper got ${madeUp(ten).length} generated men, not one outfield taker`);
+  const full = Array.from({ length: 14 }, (_, i) => man(`F${i}`, i === 3 ? 'GK' : 'CM', 60 + ((i * 7) % 14)));
+  const fullSide = shootoutRosterSide(full, S);
+  check(JSON.stringify(fullSide) === JSON.stringify([...full].sort((a, b) => b.r - a.r).slice(0, 11)), 'a full roster is not simply its best eleven by rating, as it was before');
+  check(shootoutRosterSide([], S).length === 0, 'a roster with nobody did not stay empty for shootoutSides to make up');
+  console.log(`   shootoutRosterSide: two names, five without a keeper, ten, a full fourteen and nobody: ${wrong} wrong`);
+
+  /* b) Through the whole match. The first career from BASE_SEED on whose
+     first cup tie is against a side with names but no eleven (today that is
+     BASE_SEED itself, Eibar with two), an order set, and every shootout
+     read off the report: no man of theirs comes up again inside their first
+     eleven kicks, and every taker who is not on their roster carries the
+     generated mark. Found by search rather than named, so a data round that
+     fills one club's roster moves this to the next thin tie instead of
+     turning it into a walk that reads nothing. */
+  const thinOf = s => {
+    const opp = s.cupDraw?.[s.calendar.find(e => e.type === 'cup')?.cupRound];
+    const r = opp ? oppRosterFor(s, opp) : [];
+    const keepers = r.filter(p => p.p === 'GK').length;
+    return r.length >= 1 && (keepers < 1 || r.length - keepers < 10) ? { opp, size: r.length } : null;
+  };
+  let thinSeed = null;
+  for (let k = 0; k < 40 && thinSeed === null; k++) {
+    if (thinOf(withSeed(BASE_SEED + k, () => startCareer(CLUB)))) thinSeed = BASE_SEED + k;
+  }
+  if (thinSeed === null) abort(`none of the 40 careers from seed ${BASE_SEED} draws a first cup tie against a side with names but no eleven, so the thin side's shootout cannot be walked; if no such club is left in the cup, retire section 7b`);
+  const thinBase = thinSeed === BASE_SEED ? atCup : reachCup(cm, thinSeed);
+  const thin = thinOf(thinBase);
+  if (!thin) abort(`seed ${thinSeed}: the tie was thin at the start of the career and is not at the cup week`);
+  const roster = new Map(oppRosterFor(thinBase, thin.opp).map(p => [p.n, p]));
+  const listed = resolveXI(thinBase).filter(Boolean).filter(p => p.position !== 'GK').slice(0, 5).map(p => p.id);
+  const ordered = setShootoutOrder(thinBase, listed);
+  if (!ordered) abort('setShootoutOrder refused five men of the eleven on the thin base');
+  let reached = 0;
+  let clean = 0;
+  let generatedKicks = 0;
+  let theirKicksAll = 0;
+  let longest = 0;
+  const N = 450;
+  for (let i = 0; i < N; i++) {
+    const seed = 782_970_000 + SIM_SEED * 10_000 + i;
+    const rep = playCup(ordered, seed).report;
+    if (rep.decidedBy !== 'pens') continue;
+    reached += 1;
+    if ((rep.detail?.oppXi ?? []).length) abort(`seed ${seed}: ${thin.opp} named an eleven, so this is not a thin side's shootout`);
+    const theirs = (rep.shootout?.kicks ?? []).filter(k => k.side === 'opp');
+    if (!theirs.length) { fail(`seed ${seed}: a shootout with an order set carries no kicks of theirs`); continue; }
+    const names = theirs.map(k => k.taker);
+    const again = names.findIndex((t, j) => names.indexOf(t) !== j);
+    const unmarked = theirs.filter(k => (roster.has(k.taker) ? !!k.gen !== !!roster.get(k.taker).g : !k.gen));
+    theirKicksAll += theirs.length;
+    generatedKicks += theirs.filter(k => k.gen).length;
+    longest = Math.max(longest, theirs.length);
+    if (again >= 0 && again < 11) fail(`seed ${seed}: ${names[again]} kicked again as their ${again + 1}${['st', 'nd', 'rd'][again] ?? 'th'} taker (${names.slice(0, again + 1).join(', ')})`);
+    else if (unmarked.length) fail(`seed ${seed}: ${unmarked.map(k => k.taker).join(', ')} kicked for ${thin.opp} with the wrong generated mark`);
+    else clean += 1;
+  }
+  console.log(`   thin tie: seed ${thinSeed}, ${thin.opp} with ${thin.size} on their roster; ${N} cup matches, ${reached} shootouts, ${clean} where nobody of theirs kicked twice before the eleventh and every made up man was marked`);
+  console.log(`   ${theirKicksAll} kicks of theirs, ${generatedKicks} by generated men, the longest shootout ${longest} of theirs (printed, not asserted)`);
+  if (reached < 12) fail(`only ${reached} shootouts in ${N} matches against the thin side, below the floor of 12`);
+  if (clean !== reached) fail(`${reached - clean} of ${reached} shootouts against the thin side had a man kick twice early or a made up man unmarked`);
+  if (!generatedKicks) fail('no generated man kicked in any shootout against the thin side, so the making up was never walked');
+}
+
+/* ================================================================== */
+const evidenceDir =process.env.CM_SHOOTOUT_ARTIFACTS || path.join(ROOT, 'cm-shootout-artifacts');
 fs.mkdirSync(evidenceDir, { recursive: true });
 await new Promise(resolve => setImmediate(resolve));
 baselineEvidence.runtimeErrors = runtimeErrors;

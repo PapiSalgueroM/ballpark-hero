@@ -13947,9 +13947,33 @@ function settleShootout(
   const onPitch = oppAt(live, end);
   const theirs: { n: string; p: Position; r: number; g?: boolean }[] = onPitch && onPitch.length
     ? onPitch
-    : [...oppRosterFor(state, fx.opponent)].sort((a, b) => b.r - a.r).slice(0, SHOOTOUT_MAX_ORDER);
+    : shootoutRosterSide(oppRosterFor(state, fx.opponent), oppS);
   const detail = runShootout({ ...shootoutSides(state, order, finished, theirs, oppS), myFirst: Math.random() < 0.5 });
   return { won: detail.mine > detail.theirs, detail };
+}
+
+/**
+ * Release AL: the other side of a kick by kick shootout when they have no
+ * named eleven tonight, read off their projected roster. A full roster gives
+ * its best eleven by rating, as it always did. A thin club (CM_PARTIAL) with
+ * fewer than eleven names keeps the names it has and is made up to eleven
+ * with generated takers at the club's strength, a generated keeper among
+ * them when the roster has none, each marked generated so the kick carries
+ * the made up tag. Before this the list was only the names it had and
+ * runShootout went round it: since Round 1040 a second tier side can come
+ * out of the cup draw with two men on its roster, and its left back and its
+ * keeper took every kick between them. A roster with nobody stays empty and
+ * shootoutSides gives that side its generated eleven, the way it always has.
+ * Pure, no draws, and exported for scripts/simCmShootoutOrder.mjs section 7.
+ */
+export function shootoutRosterSide(
+  roster: readonly { n: string; p: Position; r: number; g?: boolean }[], oppS: number,
+): { n: string; p: Position; r: number; g?: boolean }[] {
+  const side = [...roster].sort((a, b) => b.r - a.r).slice(0, SHOOTOUT_MAX_ORDER);
+  if (!side.length) return side;
+  if (side.length < SHOOTOUT_MAX_ORDER && !side.some(p => p.p === 'GK')) side.push({ n: 'Their keeper', p: 'GK', r: oppS, g: true });
+  for (let i = 1; side.length < SHOOTOUT_MAX_ORDER; i++) side.push({ n: `Their taker ${i}`, p: 'CM', r: oppS, g: true });
+  return side;
 }
 
 /**
