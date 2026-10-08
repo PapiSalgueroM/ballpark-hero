@@ -245,6 +245,22 @@
       name sets read every modern squad), and pure adds now|russia and
       moves the views, which list the leagues and nations; no league's own
       pure key moved.
+      The close of Release AO (2026-10-08) re-took modern once more, for ten
+      positions and nothing else. Ten Russian men had shipped their group's
+      default (two wide men as CB, eight wingers as CM), a position none of
+      their three hosts states, and now ship the one their research row
+      carries. Attribution on a GitHub runner at 5ff656ad: with only
+      src/data/clubManagerRussia2026.ts put back to its parent's (423e6360)
+      the file as it stood matched (modern 27/0, the round's change is the
+      whole cause); on the tree itself all 27 modern saves moved in
+      wholeNext and the ten pyramid saves in s2_whole as well, 37 hashes,
+      and nothing else did: start, table, results, world, cup, europe,
+      trophies, objectives, whole, summary, promotions, every other next
+      season view and every other second season view held in all 27, eras
+      stayed 20/0 and pure was untouched. So every match, table, cup and
+      board objective is the one it was, and what moved is only the hash of
+      the whole state after a summer. Written with --part=modern --write
+      there, then run green whole and green again on modern alone.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
