@@ -1,0 +1,7 @@
+#!build
+#!playwright
+#!serial
+reduced: node scripts/playReducedMotion.mjs
+reduced-noguard: REDUCED_MOTION_CONTROL=noguard node scripts/playReducedMotion.mjs
+reduced-noblanket: REDUCED_MOTION_CONTROL=noblanket node scripts/playReducedMotion.mjs
+playSoccerCareer: node scripts/playSoccerCareer.mjs
