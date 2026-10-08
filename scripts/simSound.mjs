@@ -388,7 +388,7 @@ async function section4() {
   check('4.mark', mark.length === 1 && mark[0] === `${KIT_FILE} (1)`, `the quoted kit mark is in ${KIT_FILE} alone, once: ${mark.join(', ') || 'none found'}`);
   check('4.key', key.length === 1 && key[0] === `${SWITCH_FILE} (1)`, `the quoted storage key is in ${SWITCH_FILE} alone, once: ${key.join(', ') || 'none found'}`);
   const own = files.filter(([rel]) => [KIT_FILE, SWITCH_FILE, HOOK_FILE].includes(rel));
-  check('4.random', own.length >= 2 && !found(own, /Math\s*\.\s*random/g).length, `Math.random in ${own.map(([rel]) => rel.split('/').pop()).join(', ')}: ${none(found(own, /Math\s*\.\s*random/g))}`);
+  check('4.random', own.length === 3 && !found(own, /Math\s*\.\s*random/g).length, `Math.random in ${own.map(([rel]) => rel.split('/').pop()).join(', ')}: ${none(found(own, /Math\s*\.\s*random/g))}`);
   check('4.react', switchText.length > 0 && !/^\s*import\s/m.test(switchText) && !/['"]react['"]/.test(switchText),
     `${SWITCH_FILE} has no import statement at all (it reaches the kit's type through typeof import), so no React`);
 }
@@ -533,6 +533,47 @@ async function section5b(fresh, len) {
   }
 }
 
+/* ---------- 6. the always loaded part is small and the kit is not in it ----------
+   Two bundles as a page would get them, minified. A is what a page that shows the switch and binds a plan
+   carries whether or not he ever turns sound on: the switch, the toggle and the hook, with the kit left out.
+   K is the kit alone, the chunk nobody fetches until the switch is on. A cap is its own measurement plus 15
+   percent, never raised to fit: when one goes red, find what grew. */
+let leakKit = false;
+async function minified(entryText, external) {
+  const entry = path.join(TMP, `size-${serial += 1}.tsx`);
+  fs.writeFileSync(entry, entryText);
+  const r = await esbuild.build({
+    entryPoints: [entry], bundle: true, minify: true, format: 'esm', write: false, jsx: 'automatic', target: 'es2020',
+    alias: { '@': path.join(ROOT, 'src') }, external, logLevel: 'error',
+  });
+  return r.outputFiles[0].text;
+}
+const gz = s => zlib.gzipSync(Buffer.from(s)).length;
+/* MEASURED 2026-10-08: the always loaded part 2,825 bytes minified, 1,318 gzipped; the kit 5,153 and 2,382.
+   The design's prototype measured 1,132 and 2,294. The always loaded part grew 186 bytes past it, and every
+   one of them is a correction the design's review asked for: the stamp a moment carries so a cold kit cannot
+   play it late, primeSound and the effect that calls it, a scope per plan so one screen's hush leaves another
+   screen's whistle alone, a kit that resolved to nothing counted as a failed load, the text switch's fixed
+   box, and the icon shape's real 44 px box. Each cap is the measurement plus 15 percent. */
+const SIZE_CAP = { always: 1515, kit: 2739 };
+async function section6() {
+  head('6) The always loaded part is small and the kit is not in it');
+  const always = await minified(
+    `export { SoundToggle } from '${R}/src/components/game/SoundToggle.tsx';\nexport { useSoundPlan, stillMotion } from '${R}/${HOOK_FILE}';\nexport { sound, hush, soundOn, setSoundOn } from '${R}/${SWITCH_FILE}';\n`,
+    ['react', 'react/jsx-runtime', ...(leakKit ? [] : ['./soundKit'])],
+  );
+  const kit = await minified(`export * from '${R}/${KIT_FILE}';\n`, ['./sound']);
+  check('6.always.size', gz(always) <= SIZE_CAP.always, `the always loaded part (switch, toggle, hook): ${always.length} bytes minified, ${gz(always)} gzipped (at most ${SIZE_CAP.always})`);
+  const leaked = ['AudioContext', 'createBufferSource', 'vibrate', 'dukb-synth-kit-1'].filter(w => always.includes(w));
+  check('6.always.clean', !leaked.length, `no line of the audio graph in it: ${leaked.length ? `FOUND ${leaked.join(', ')}` : 'none of AudioContext, createBufferSource, vibrate or the kit mark'}`);
+  check('6.always.import', (always.match(/import\(\s*["']\.\/soundKit["']\s*\)/g) ?? []).length === (leakKit ? 0 : 1), 'it reaches the kit through exactly one dynamic import');
+  const once = always.match(/\.current\.playedKey===\w+/g) ?? [];
+  check('6.always.once', once.length === 1, `the once guard is one comparison in the built code, ${once.length} found${once[0] ? ` (${once[0]})` : ''}: playSoundGate's everytick control breaks exactly that`);
+  check('6.kit.size', gz(kit) <= SIZE_CAP.kit, `the kit: ${kit.length} bytes minified, ${gz(kit)} gzipped (at most ${SIZE_CAP.kit})`);
+  const gate = kit.match(/(\w+)\?\1\.hasBeenActive:\w+/g) ?? [];
+  check('6.kit.marks', kit.includes('dukb-synth-kit-1') && gate.length === 1, `the kit carries its mark and one activation guard${gate[0] ? ` (${gate[0]})` : ''}: playSoundGate finds the chunk and plants nowait by them`);
+}
+
 /* ---------- negative controls ----------
    A control plants one fault, runs the sections it is aimed at, and FIRES only when a check it names went red.
    `text` replaces one exact string of the bundle (the needle must be there exactly once, and the text must
@@ -581,6 +622,8 @@ const CONTROLS = {
   coldlate: { sections: [section5], red: /^5\.r\./, text: ['const due = (opts?.delay ?? 0) - (performance.now() - at) / 1e3;', 'const due = opts?.delay ?? 0;'] },
   noprime: { sections: [section5], red: /^5\.prime\.arm$/, text: ['void kit().then((k) => k.arm()).catch(quiet2);', 'void kit().catch(quiet2);'] },
   globalhush: { sections: [section5], red: /^5\.k\.scope$/, text: ['k.stopAll(scope)', 'k.stopAll()'] },
+  /* section 6: the always loaded part built with the kit folded in */
+  leak: { sections: [section6], red: /^6\.always\.(size|clean)$/, flag: on => { leakKit = on; } },
 };
 async function runControl(name) {
   const c = CONTROLS[name];
@@ -597,12 +640,14 @@ async function runControl(name) {
     if (text === BASE_TEXT) { console.log(`control ${name}: CANNOT BE PLANTED, the replacement changed nothing`); return false; }
   }
   checks = 0; failed = 0; reds = []; quietRun = true; scanPatch = c.scan ?? null;
+  if (c.flag) c.flag(true);
   let broke = null;
   try {
     const fresh = loaderFor(text, c.memory);
     for (const section of c.sections) await section(fresh);
   } catch (e) { broke = e; }
   quietRun = false; scanPatch = null;
+  if (c.flag) c.flag(false);
   if (broke) { console.log(`control ${name}: CANNOT BE PLANTED, ${broke.message}`); return false; }
   const aimed = reds.filter(id => c.red.test(id));
   if (!aimed.length) { console.log(`control ${name}: DID NOT FIRE (${reds.length} checks red, none of them aimed)`); return false; }
@@ -632,7 +677,7 @@ async function writeWavs(fresh) {
 }
 
 /* ---------- main ---------- */
-const SECTIONS = [section1, section2, section3, section4, section5];
+const SECTIONS = [section1, section2, section3, section4, section5, section6];
 if (process.env.SIM_SOUND_MEASURE) {
   /* For whoever adds a cue or retunes one: the numbers a band or a floor is set from. */
   const { kit } = await loaderFor(BASE_TEXT)();
