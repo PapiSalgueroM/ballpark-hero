@@ -58,6 +58,15 @@ let eras: any;
 let intl: any;
 let nat: any;
 
+/* The hook cold loads allWorlds and then the whole Club Manager engine in a fresh module instance,
+   once per test. Vitest's default hook timeout is 10 seconds and that load does not fit in it on a
+   busy machine: measured 2026-10-07 with about 136 node processes running (which is what a release
+   gate looks like), the first hook took 28,354 ms and all three tests failed with "Hook timed out
+   in 10000ms" while the logic was right. So the hook and every test carry their own ceiling, six
+   times the slowest load measured. A ceiling is not an assertion: nothing here passes or fails on
+   how long a load took. */
+const LOAD_MS = 180_000;
+
 beforeEach(async () => {
   lone = await loneNames();
   vi.resetModules();
@@ -65,7 +74,7 @@ beforeEach(async () => {
   eras = await import('@/lib/clubManagerEras');
   intl = await import('@/lib/clubManagerInternationals');
   nat = await import('@/data/playerNationalities');
-});
+}, LOAD_MS);
 
 describe('Club Manager: a past season brings its own nationalities', () => {
   it('before its season is asked for, a past world answers nobody', () => {
@@ -75,7 +84,7 @@ describe('Club Manager: a past season brings its own nationalities', () => {
     /* today's world is here from the first line */
     expect(nat.nationalityOf(undefined, 'Erling Haaland')).toBe('Norway');
     expect(nat.nationalityOf('now', 'Erling Haaland')).toBe('Norway');
-  });
+  }, LOAD_MS);
 
   it('once the 2005 season has loaded its men have their countries, and 2010 still has none', async () => {
     expect(intl.nationBars('era2005').size).toBe(0);
@@ -92,7 +101,7 @@ describe('Club Manager: a past season brings its own nationalities', () => {
     /* a sealed world answers only for its own men */
     expect(nat.nationalityOf('era2005', 'Erling Haaland')).toBe(null);
     console.log(`  2005: ${lone.era2005.name} is ${lone.era2005.nationality}, ${bars.size} call up bars; 2010: ${lone.era2010.name} waits`);
-  }, 60000);
+  }, LOAD_MS);
 
   it('a world with no file cannot be loaded or sealed, and an unknown id reads today', async () => {
     await expect(nat.loadNationalityWorld('era1990')).rejects.toThrow(/era1990/);
@@ -101,5 +110,5 @@ describe('Club Manager: a past season brings its own nationalities', () => {
     expect(nat.nationalityOf('era1990', 'Erling Haaland')).toBe('Norway');
     /* every era the engine can open has a file to load, and nothing else does */
     expect(Object.keys(nat.NATIONALITY_WORLD_LOADERS).sort()).toEqual([...eras.historicEraIds()].sort());
-  });
+  }, LOAD_MS);
 });
