@@ -1,0 +1,231 @@
+
+=== A-phone-motion
+   guard line: [dukb] Skipped removing a node this page no longer owns. A page translator moved it, carry
+   box 0 reads on screen: "Choose nationality Brazil" after picking Brazil
+   box 1 reads on screen: "Choose positionStriker (ST)" after picking Striker
+   box 2 reads on screen: "Choose eraCurrent era (2025 start)" after picking Current era
+   !! A-phone-motion: nationality box reads "Choose nationality Brazil" after picking Brazil
+   !! A-phone-motion: position box reads "Choose positionStriker (ST)" after picking Striker
+   !! A-phone-motion: era box reads "Choose eraCurrent era (2025 start)" after picking Current era
+   after Begin Career: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Brazil/age 16/youth agesOnScreen=[16,17,30] stale=0 swapped=828 scrollW=390/390
+   8-career press 4 (Next Season): the screen says age 16,17,30 and the save says 18
+   8-career press 5 (Continue to Season Summary →): the screen says age 16,17,30 and the save says 18
+   8-career press 6 (Continue →): the screen says age 16,17,30 and the save says 18
+   8-career press 7 (Continue →): the screen says age 16,17,30 and the save says 18
+   8-career press 8: nothing to press
+   8-career end: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Brazil/age 18/social_media_action agesOnScreen=[16,17,30] stale=2 swapped=1220 scrollW=390/390
+   8-career stale now: screen "16" vs React "18" | screen "📋 Joined Chapecoense Youth Ac" vs React "🚑 Injury: Dislocated shoulder"
+   !! A-phone-motion: 8-career: at the end the screen shows age 16,17,30 while the save is age 18
+   !! A-phone-motion: 4 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+
+=== A-phone-reduce
+   guard line: [dukb] Skipped removing a node this page no longer owns. A page translator moved it, carry
+   box 0 reads on screen: "Choose nationality Brazil" after picking Brazil
+   box 1 reads on screen: "Choose positionStriker (ST)" after picking Striker
+   box 2 reads on screen: "Choose eraCurrent era (2025 start)" after picking Current era
+   !! A-phone-reduce: nationality box reads "Choose nationality Brazil" after picking Brazil
+   !! A-phone-reduce: position box reads "Choose positionStriker (ST)" after picking Striker
+   !! A-phone-reduce: era box reads "Choose eraCurrent era (2025 start)" after picking Current era
+   after Begin Career: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Brazil/age 16/youth agesOnScreen=[16,17,30] stale=0 swapped=828 scrollW=390/390
+   8-career press 4 (Next Season): the screen says age 16,17,30 and the save says 18
+   8-career press 5 (Continue to Season Summary →): the screen says age 16,17,30 and the save says 18
+   8-career press 6 (Continue →): the screen says age 16,17,30 and the save says 18
+   8-career press 7 (Continue →): the screen says age 16,17,30 and the save says 18
+   8-career press 8: nothing to press
+   8-career end: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Brazil/age 18/social_media_action agesOnScreen=[16,17,30] stale=3 swapped=1240 scrollW=390/390
+   8-career stale now: screen "16" vs React "18" | screen "📋 Joined Botafogo Youth Acade" vs React "🔥 Classico da Rivalidade agai" | screen "🏠 One of our own! The Botafog" vs React "🏆 Won Player of the Month (Au"
+   !! A-phone-reduce: 8-career: at the end the screen shows age 16,17,30 while the save is age 18
+   !! A-phone-reduce: 4 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+
+=== A-desktop-motion
+   guard line: [dukb] Skipped removing a node this page no longer owns. A page translator moved it, carry
+   box 0 reads on screen: "Choose nationality Brazil" after picking Brazil
+   box 1 reads on screen: "Choose positionStriker (ST)" after picking Striker
+   box 2 reads on screen: "Choose eraCurrent era (2025 start)" after picking Current era
+   !! A-desktop-motion: nationality box reads "Choose nationality Brazil" after picking Brazil
+   !! A-desktop-motion: position box reads "Choose positionStriker (ST)" after picking Striker
+   !! A-desktop-motion: era box reads "Choose eraCurrent era (2025 start)" after picking Current era
+   after Begin Career: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Brazil/age 16/youth agesOnScreen=[16,17,30] stale=0 swapped=828 scrollW=1280/1280
+   8-career press 4 (Next Season): the screen says age 16,17,30 and the save says 18
+   8-career press 5 (Continue to Season Summary →): the screen says age 16,17,30 and the save says 18
+   8-career press 6 (Continue →): the screen says age 16,17,30 and the save says 18
+   8-career press 7 (Continue →): the screen says age 16,17,30 and the save says 18
+   8-career press 8: nothing to press
+   8-career end: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Brazil/age 18/social_media_action agesOnScreen=[16,17,30] stale=3 swapped=1243 scrollW=1280/1280
+   8-career stale now: screen "16" vs React "18" | screen "📋 Joined Santos Youth Academy" vs React "🔥 Classico Alvinegro against " | screen "🏠 One of our own! The Santos " vs React "🏆 Won Player of the Month (Ma"
+   !! A-desktop-motion: 8-career: at the end the screen shows age 16,17,30 while the save is age 18
+   !! A-desktop-motion: 4 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+
+=== A-desktop-reduce
+   guard line: [dukb] Skipped removing a node this page no longer owns. A page translator moved it, carry
+   box 0 reads on screen: "Choose nationality Brazil" after picking Brazil
+   box 1 reads on screen: "Choose positionStriker (ST)" after picking Striker
+   box 2 reads on screen: "Choose eraCurrent era (2025 start)" after picking Current era
+   !! A-desktop-reduce: nationality box reads "Choose nationality Brazil" after picking Brazil
+   !! A-desktop-reduce: position box reads "Choose positionStriker (ST)" after picking Striker
+   !! A-desktop-reduce: era box reads "Choose eraCurrent era (2025 start)" after picking Current era
+   after Begin Career: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Brazil/age 16/youth agesOnScreen=[16,17,30] stale=0 swapped=828 scrollW=1280/1280
+   8-career press 4 (Next Season): the screen says age 16,17,30 and the save says 18
+   8-career press 5 (Continue to Season Summary →): the screen says age 16,17,30 and the save says 18
+   8-career press 6 (Continue →): the screen says age 16,17,30 and the save says 18
+   8-career press 7 (Continue →): the screen says age 16,17,30 and the save says 18
+   8-career press 8: nothing to press
+   8-career end: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Brazil/age 18/social_media_action agesOnScreen=[16,17,30] stale=3 swapped=1245 scrollW=1280/1280
+   8-career stale now: screen "16" vs React "18" | screen "📋 Joined Palmeiras Youth Acad" vs React "🔥 Derby Paulista against Cori" | screen "🏠 One of our own! The Palmeir" vs React "🔥 Classico da Saudade against"
+   !! A-desktop-reduce: 8-career: at the end the screen shows age 16,17,30 while the save is age 18
+   !! A-desktop-reduce: 4 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+
+=== B-phone
+   box 0 reads on screen: "Brazil" after picking Brazil
+   box 1 reads on screen: "Striker (ST)" after picking Striker
+   box 2 reads on screen: "Current era (2025 start)" after picking Current era
+   after Begin Career: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Brazil/age 16/youth agesOnScreen=[16,17,30] stale=0 swapped=0 scrollW=390/390
+   plain end: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Brazil/age 17/playing agesOnScreen=[17,30] stale=0 swapped=0 scrollW=390/390
+   !! B-phone: plain page error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+   save carried over: 6 key(s), soccerCareerSave 6456 chars, age 17
+   old save on a translated page: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Brazil/age 17/playing agesOnScreen=[17,30] stale=0 swapped=312 scrollW=390/390
+   2-career press 1 (Next Season): the screen says age 17,30 and the save says 18
+   2-career press 2 (Continue to Season Summary →): the screen says age 17,30 and the save says 18
+   2-career press 3 (Continue →): the screen says age 17,30 and the save says 18
+   2-career press 4 (Continue →): the screen says age 17,30 and the save says 18
+   2-career press 5: nothing to press
+   2-career end: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Brazil/age 18/social_media_action agesOnScreen=[17,30] stale=3 swapped=520 scrollW=390/390
+   2-career stale now: screen "17" vs React "18" | screen "📩 Professional contract offer" vs React "🚑 Injury: Ankle knock, out 3 " | screen "🏠 One of our own! The Mirasso" vs React "🏆 Won Player of the Month (Ma"
+   !! B-phone: 2-career: at the end the screen shows age 17,30 while the save is age 18
+   !! B-phone: 3 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+
+=== B-desktop
+   box 0 reads on screen: "Brazil" after picking Brazil
+   box 1 reads on screen: "Striker (ST)" after picking Striker
+   box 2 reads on screen: "Current era (2025 start)" after picking Current era
+   after Begin Career: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Brazil/age 16/youth agesOnScreen=[16,17,30] stale=0 swapped=0 scrollW=1280/1280
+   plain end: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Brazil/age 17/playing agesOnScreen=[17,30] stale=0 swapped=0 scrollW=1280/1280
+   !! B-desktop: plain page error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+   save carried over: 6 key(s), soccerCareerSave 6368 chars, age 17
+   old save on a translated page: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Brazil/age 17/playing agesOnScreen=[17,30] stale=0 swapped=312 scrollW=1280/1280
+   2-career press 1 (Next Season): the screen says age 17,30 and the save says 18
+   2-career press 2 (Continue to Season Summary →): the screen says age 17,30 and the save says 18
+   2-career press 3 (Continue →): the screen says age 17,30 and the save says 18
+   2-career press 4 (Continue →): the screen says age 17,30 and the save says 18
+   2-career press 5: nothing to press
+   2-career end: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Brazil/age 18/social_media_action agesOnScreen=[17,30] stale=3 swapped=538 scrollW=1280/1280
+   2-career stale now: screen "17" vs React "18" | screen "📩 Professional contract offer" vs React "🔥 Classico Vovo against Flumi" | screen "🏠 One of our own! The Botafog" vs React "🏆 Won Player of the Month (Fe"
+   !! B-desktop: 2-career: at the end the screen shows age 17,30 while the save is age 18
+   !! B-desktop: 3 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+
+=== C-phone-home
+   loaded: broke=false h1="DoUKnowBall" create=false save=none agesOnScreen=[] stale=0 swapped=1102 scrollW=390/390
+   !! C-phone-home: 3 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+
+=== C-phone-club-manager
+   loaded: broke=false h1="CLUB MANAGER" create=false save=none agesOnScreen=[] stale=0 swapped=277 scrollW=390/390
+   !! C-phone-club-manager: 2 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+
+=== C-phone-whats-new
+   loaded: broke=false h1="What's New" create=false save=none agesOnScreen=[20] stale=0 swapped=1026 scrollW=390/390
+   the What's New entry is on the page: true
+   !! C-phone-whats-new: 2 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+
+=== C-phone-nba-my-career
+   loaded: broke=false h1="NBA My Career" create=false save=none agesOnScreen=[25] stale=0 swapped=260 scrollW=390/390
+   !! C-phone-nba-my-career: 2 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+
+=== C-desktop-home
+   loaded: broke=false h1="DoUKnowBall" create=false save=none agesOnScreen=[] stale=0 swapped=1108 scrollW=1280/1280
+   !! C-desktop-home: 4 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+
+=== C-desktop-club-manager
+   loaded: broke=false h1="CLUB MANAGER" create=false save=none agesOnScreen=[] stale=0 swapped=277 scrollW=1280/1280
+   !! C-desktop-club-manager: 2 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+
+=== C-desktop-whats-new
+   loaded: broke=false h1="What's New" create=false save=none agesOnScreen=[20] stale=0 swapped=1026 scrollW=1280/1280
+   the What's New entry is on the page: true
+   !! C-desktop-whats-new: 2 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+
+=== C-desktop-nba-my-career
+   loaded: broke=false h1="NBA My Career" create=false save=none agesOnScreen=[25] stale=0 swapped=260 scrollW=1280/1280
+   !! C-desktop-nba-my-career: 2 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+
+=== E-phone-early
+   guard line: [dukb] Skipped removing a node this page no longer owns. A page translator moved it, carry
+   box 0 reads on screen: "Choose nationality Brazil" after picking Brazil
+   box 1 reads on screen: "Choose positionStriker (ST)" after picking Striker
+   box 2 reads on screen: "Choose eraCurrent era (2025 start)" after picking Current era
+   !! E-phone-early: nationality box reads "Choose nationality Brazil" after picking Brazil
+   !! E-phone-early: position box reads "Choose positionStriker (ST)" after picking Striker
+   !! E-phone-early: era box reads "Choose eraCurrent era (2025 start)" after picking Current era
+   after Begin Career: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Brazil/age 16/youth agesOnScreen=[16,17,30] stale=0 swapped=956 scrollW=390/390
+   8-career press 4 (Next Season): the screen says age 16,17,30 and the save says 18
+   8-career press 5 (Continue to Season Summary →): the screen says age 16,17,30 and the save says 18
+   8-career press 6 (Continue →): the screen says age 16,17,30 and the save says 18
+   8-career press 7 (Continue →): the screen says age 16,17,30 and the save says 18
+   8-career press 8: nothing to press
+   8-career end: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Brazil/age 18/social_media_action agesOnScreen=[16,17,30] stale=2 swapped=1370 scrollW=390/390
+   8-career stale now: screen "16" vs React "18" | screen "📋 Joined Cruzeiro Youth Acade" vs React "🚑 Injury: Dislocated shoulder"
+   !! E-phone-early: 8-career: at the end the screen shows age 16,17,30 while the save is age 18
+   !! E-phone-early: 4 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+
+=== G-phone-viahome
+   guard line: [dukb] Skipped removing a node this page no longer owns. A page translator moved it, carry
+   box 0 reads on screen: "Choose nationality Brazil" after picking Brazil
+   box 1 reads on screen: "Choose positionStriker (ST)" after picking Striker
+   box 2 reads on screen: "Choose eraCurrent era (2025 start)" after picking Current era
+   !! G-phone-viahome: nationality box reads "Choose nationality Brazil" after picking Brazil
+   !! G-phone-viahome: position box reads "Choose positionStriker (ST)" after picking Striker
+   !! G-phone-viahome: era box reads "Choose eraCurrent era (2025 start)" after picking Current era
+   after Begin Career: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Brazil/age 16/youth agesOnScreen=[16,17,30] stale=0 swapped=1896 scrollW=390/390
+   8-career press 4 (Next Season): the screen says age 16,17,30 and the save says 18
+   8-career press 5 (Continue to Season Summary →): the screen says age 16,17,30 and the save says 18
+   8-career press 6 (Continue →): the screen says age 16,17,30 and the save says 18
+   8-career end: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Brazil/age 18/ballon_dor agesOnScreen=[16,17,30] stale=3 swapped=2274 scrollW=390/390
+   8-career stale now: screen "16" vs React "18" | screen "📋 Joined Corinthians Youth Ac" vs React "🔥 Classico Alvinegro against " | screen "🏠 One of our own! The Corinth" vs React "🏆 Won Player of the Month (Fe"
+   !! G-phone-viahome: 8-career: at the end the screen shows age 16,17,30 while the save is age 18
+   !! G-phone-viahome: 5 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+
+REVIEW WALK: 44 thing(s) noted
+  - A-phone-motion: nationality box reads "Choose nationality Brazil" after picking Brazil
+  - A-phone-motion: position box reads "Choose positionStriker (ST)" after picking Striker
+  - A-phone-motion: era box reads "Choose eraCurrent era (2025 start)" after picking Current era
+  - A-phone-motion: 8-career: at the end the screen shows age 16,17,30 while the save is age 18
+  - A-phone-motion: 4 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+  - A-phone-reduce: nationality box reads "Choose nationality Brazil" after picking Brazil
+  - A-phone-reduce: position box reads "Choose positionStriker (ST)" after picking Striker
+  - A-phone-reduce: era box reads "Choose eraCurrent era (2025 start)" after picking Current era
+  - A-phone-reduce: 8-career: at the end the screen shows age 16,17,30 while the save is age 18
+  - A-phone-reduce: 4 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+  - A-desktop-motion: nationality box reads "Choose nationality Brazil" after picking Brazil
+  - A-desktop-motion: position box reads "Choose positionStriker (ST)" after picking Striker
+  - A-desktop-motion: era box reads "Choose eraCurrent era (2025 start)" after picking Current era
+  - A-desktop-motion: 8-career: at the end the screen shows age 16,17,30 while the save is age 18
+  - A-desktop-motion: 4 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+  - A-desktop-reduce: nationality box reads "Choose nationality Brazil" after picking Brazil
+  - A-desktop-reduce: position box reads "Choose positionStriker (ST)" after picking Striker
+  - A-desktop-reduce: era box reads "Choose eraCurrent era (2025 start)" after picking Current era
+  - A-desktop-reduce: 8-career: at the end the screen shows age 16,17,30 while the save is age 18
+  - A-desktop-reduce: 4 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+  - B-phone: plain page error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+  - B-phone: 2-career: at the end the screen shows age 17,30 while the save is age 18
+  - B-phone: 3 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+  - B-desktop: plain page error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+  - B-desktop: 2-career: at the end the screen shows age 17,30 while the save is age 18
+  - B-desktop: 3 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+  - C-phone-home: 3 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+  - C-phone-club-manager: 2 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+  - C-phone-whats-new: 2 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+  - C-phone-nba-my-career: 2 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+  - C-desktop-home: 4 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+  - C-desktop-club-manager: 2 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+  - C-desktop-whats-new: 2 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+  - C-desktop-nba-my-career: 2 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+  - E-phone-early: nationality box reads "Choose nationality Brazil" after picking Brazil
+  - E-phone-early: position box reads "Choose positionStriker (ST)" after picking Striker
+  - E-phone-early: era box reads "Choose eraCurrent era (2025 start)" after picking Current era
+  - E-phone-early: 8-career: at the end the screen shows age 16,17,30 while the save is age 18
+  - E-phone-early: 4 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+  - G-phone-viahome: nationality box reads "Choose nationality Brazil" after picking Brazil
+  - G-phone-viahome: position box reads "Choose positionStriker (ST)" after picking Striker
+  - G-phone-viahome: era box reads "Choose eraCurrent era (2025 start)" after picking Current era
+  - G-phone-viahome: 8-career: at the end the screen shows age 16,17,30 while the save is age 18
+  - G-phone-viahome: 5 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+review-walk done, 44 noted

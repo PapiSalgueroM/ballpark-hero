@@ -1,0 +1,44 @@
+A-phone-motion: nationality box reads "Choose nationality Brazil" after picking Brazil
+A-phone-motion: position box reads "Choose positionStriker (ST)" after picking Striker
+A-phone-motion: era box reads "Choose eraCurrent era (2025 start)" after picking Current era
+A-phone-motion: 8-career: at the end the screen shows age 16,17,30 while the save is age 18
+A-phone-motion: 4 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+A-phone-reduce: nationality box reads "Choose nationality Brazil" after picking Brazil
+A-phone-reduce: position box reads "Choose positionStriker (ST)" after picking Striker
+A-phone-reduce: era box reads "Choose eraCurrent era (2025 start)" after picking Current era
+A-phone-reduce: 8-career: at the end the screen shows age 16,17,30 while the save is age 18
+A-phone-reduce: 4 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+A-desktop-motion: nationality box reads "Choose nationality Brazil" after picking Brazil
+A-desktop-motion: position box reads "Choose positionStriker (ST)" after picking Striker
+A-desktop-motion: era box reads "Choose eraCurrent era (2025 start)" after picking Current era
+A-desktop-motion: 8-career: at the end the screen shows age 16,17,30 while the save is age 18
+A-desktop-motion: 4 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+A-desktop-reduce: nationality box reads "Choose nationality Brazil" after picking Brazil
+A-desktop-reduce: position box reads "Choose positionStriker (ST)" after picking Striker
+A-desktop-reduce: era box reads "Choose eraCurrent era (2025 start)" after picking Current era
+A-desktop-reduce: 8-career: at the end the screen shows age 16,17,30 while the save is age 18
+A-desktop-reduce: 4 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+B-phone: plain page error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+B-phone: 2-career: at the end the screen shows age 17,30 while the save is age 18
+B-phone: 3 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+B-desktop: plain page error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+B-desktop: 2-career: at the end the screen shows age 17,30 while the save is age 18
+B-desktop: 3 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+C-phone-home: 3 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+C-phone-club-manager: 2 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+C-phone-whats-new: 2 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+C-phone-nba-my-career: 2 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+C-desktop-home: 4 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+C-desktop-club-manager: 2 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+C-desktop-whats-new: 2 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+C-desktop-nba-my-career: 2 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+E-phone-early: nationality box reads "Choose nationality Brazil" after picking Brazil
+E-phone-early: position box reads "Choose positionStriker (ST)" after picking Striker
+E-phone-early: era box reads "Choose eraCurrent era (2025 start)" after picking Current era
+E-phone-early: 8-career: at the end the screen shows age 16,17,30 while the save is age 18
+E-phone-early: 4 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
+G-phone-viahome: nationality box reads "Choose nationality Brazil" after picking Brazil
+G-phone-viahome: position box reads "Choose positionStriker (ST)" after picking Striker
+G-phone-viahome: era box reads "Choose eraCurrent era (2025 start)" after picking Current era
+G-phone-viahome: 8-career: at the end the screen shows age 16,17,30 while the save is age 18
+G-phone-viahome: 5 error(s): console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED || console: Failed to load resource: net::ERR_FAILED
