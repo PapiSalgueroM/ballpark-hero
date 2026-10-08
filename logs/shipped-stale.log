@@ -1,0 +1,24 @@
+simCollegeGridShipped, control stale: the world is mutated in memory; sections 4 must go red
+
+1) None of the thirteen ships
+   35,598 key rows and 35,598 search names read; 13 names read out of the migration's DELETE statement; 1,163 distinct schools in the key (1,165 before the thirteen left, measured 2026-10-07)
+
+2) The compact files are the key
+  FAIL: 1 decoded rows differ from the key in a judged column (first: Tom Brody is in the files and not in the key)
+
+3) Recorded before: nothing moved for anyone who stayed
+  FAIL: the shipped files judge differently from the untouched lib over the untouched key: {"yes":44917,"no":312741,"unknown":1671428} now, {"yes":44917,"no":312741,"unknown":1671428} recorded
+
+4) Not stale: both files are what the generator renders
+  FAIL: src/data/collegeGrid/collegeGridSearch.json is not what the generator renders from the committed key; run node scripts/genCollegeGridData.mjs --compact
+
+5) Every board keeps its answers
+   675 cells read from the shipped files, each with exactly its recorded answers; the answers that left: Elliot Ecke on cg611-022, Adam Dzierdzik on cg611-065. Floor: every dealt cell holds at least 3 two-source answers (thinnest Michigan x Heisman Winner, 3), all 75 boards fillable, and the boards file is what the generator deals
+
+6) The budget
+   search 599,136 raw, 205,229 gzip; judge 542,050 raw, 133,308 gzip; pair 1,141,186 raw, 338,537 gzip in 2 requests (ceilings 1,313,000 and 390,000). Before: 36 table reads decoding 9,462,264 bytes (the key file is 6,233,432 raw, 1,241,950 gzip). CPU for parse, decode and index of 35,598 rows: median 177.0 ms of 7 [191, 464, 136, 135, 177, 157, 254], ceiling 1150 ms (measured medians: 312, 344, 374, 375, 407, 438, 469)
+
+7) The source stage drops the audited row and keeps another name at the same pick
+   5 draft rows and 2 careers in, 4 entries out (Probe Opener, Probe Passer, Probe Realpick, Probe Runner); 1 audited row left out at 1977 pick 320
+
+control "stale": fired in section 4 as expected, the check works (red sections in all: 2, 3, 4)

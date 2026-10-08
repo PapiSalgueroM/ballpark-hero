@@ -1,0 +1,38 @@
+1) the placeholder rule, both copies, over a table of names
+   ok: 48 names (22 refused, 26 kept), both copies test /^\s*_/, the archive prints none of the 22
+2) cbb_programs: dedupePrograms against the migration
+   ok: 8 fixture rows, 3 hidden (58952bad, 996c65ec, aa3cc051), 3 arrays rewritten as the SQL writes them, the generic pair stays two programs
+3) nfl_draft_picks: the draft cleaner
+   ok: 7 shapes judged, 5 of 10 rows kept, 2017 pick 128 goes to the player over the lower id placeholder
+4) the five migrations: one block each, constants that add up, read backs that match the record
+   nfl_draft_picks: rows_before 28015, exact_copies 1000, placeholders 71, invented 13, rounds_derived 1653, rounds_unknown 270, rows_after 26931
+   ncaa_player_stats: rows_before 43800, twin_rows 1600, placeholders 3, rows_after 42197
+   cfb_qb_stats: rows_before 5800, placeholders 3, rows_after 5797
+   cfb_rb_stats: rows_before 14800, placeholders 13, rows_after 14787
+   cbb_programs: rows_before 281, rows_after 278
+   ok: 5 files, one DO block each; 15 record pins (3 parsed, 12 on derived rounds, every one read back), 13 read backs, 12 compared
+5) the College Grid key builder refuses a placeholder
+   ok: 3 entries; cfb rows 2, joined 1; colleges ["Probe State"]
+6) the call sites: the College Basketball Grid search and the Guess the CBB Program hook
+   ok: the search offers 4 names over 3 queries and no placeholder; the hook offers 5 of 8 rows, deals 16 dailies by slot (6 on a twin's slot), deals the kept row for all 3 cbb_daily twins (11 typable twin names win), and an early Daily click waits for the load
+7) the live tables, read only: one count header per table and the cbb_programs rows
+   skipped: offline (SIM_COLLEGE_TABLES_LIVE=off)
+controls (each applied to a copy of its inputs; the section it targets must go red)
+   fired: placeholder -> app copy keeps "_ Johnston", expected refused (ncaa_player_stats 21867)
+   fired: archive -> the grid archive's malformedName would print "_ Johnston", a placeholder (ncaa_player_stats 21867)
+   fired: twin -> dedupePrograms hides 2 rows (996c65ec, aa3cc051), the SQL deletes 3 (996c65ec, 58952bad, aa3cc051)
+   fired: names -> Seattle (c8187d90) ends with ["Seattle","Redhawks","SU","Seattle U","Seattle University"], the SQL leaves ["Seattle","Redhawks","SU","Seattle University"]
+   fired: generic -> two programs in one city with a generic mascot hint were folded into one (generic-2)
+   fired: cleaner -> "Selection moved down 12 spots" is kept, expected refused (no position and no college)
+   fired: constants -> nfl: 28015 - 1000 - 71 - 13 is not 26932
+   fired: pins -> nfl: the block reads back 1976 pick 472 as round 17, the record pins round 16
+   fired: unread -> nfl: the record pins 1976 pick 404 at round 15 and the block never reads it back
+   fired: keyguard -> 2 cfb rows joined the career, expected 1: the "_ Probe Passer" placeholder must join nobody
+   fired: searchcall -> the College Basketball Grid search for "johnston" offers ["_ Johnston","Probe Johnston"], expected ["Probe Johnston"]
+   fired: offered -> the hook offers 8 programs (La Salle, Temple, Loyola (LA), Loyola Marymount, Loyola–Chicago, Seattle University, Seattle, Loyola Chicago), the cbb migration leaves 5 (La Salle, Temple, Loyola Marymount, Seattle, Loyola Chicago)
+   fired: pool -> 2026-10-03: the daily deals Seattle (c8187d90); slot 3 of the 8 rows is Loyola Marymount (5a1ce2ab), so the day's program is Loyola Marymount (5a1ce2ab)
+   fired: slot -> 2026-10-02: the daily deals Loyola (LA) (58952bad); slot 2 of the 8 rows is Loyola (LA) (58952bad), so the day's program is Loyola Marymount (5a1ce2ab)
+   fired: dailytwin -> cbb_daily names Loyola–Chicago (996c65ec) and the hook deals Loyola–Chicago (996c65ec), expected the kept Loyola Chicago (fc98aa58)
+   fired: early -> a Daily click before the programs load deals Loyola–Chicago (996c65ec) for a cbb_daily row naming Loyola–Chicago (996c65ec), expected the kept Loyola Chicago (fc98aa58)
+
+simCollegeTables: green. Both placeholder copies agree on 48 names, dedupePrograms hides what the cbb migration deletes and writes what it writes, the draft cleaner refuses the three placeholder shapes, the five migrations are one block each with constants that add up, the key builder skips a placeholder, the search and the hook the games run apply both rules, and all 16 controls fired. Section 7 skipped: offline (SIM_COLLEGE_TABLES_LIVE=off).

@@ -1,0 +1,10 @@
+1) The validators say which: exhausted on a second 429, a blip otherwise
+   3 validators read
+2) The hooks listen: data.exhausted sets checkingDown and shows the allowance message
+   2 hooks read
+3) The pages stop inviting: the notice replaces the search box
+   2 pages read
+4) The NFL grid is not in this: no edge function call at all
+   useFootballGrid read
+
+simQuotaHonesty: green. When the allowance is gone, Soccer Grid and Build Your XI say so and stop asking for retries.
