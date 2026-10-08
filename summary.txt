@@ -1,0 +1,4 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+press-ten exit=0 163s | run 10 exit=0 |   PASS  the accountability scrum arrived within the losing stretch (2 seasons played, 1 rival choice cards answered)
+press-noscrum exit=0 36s | playCareerPress control noscrum: all 1 guarded checks fired (mutations landed: {"scrumTrigger":2})
+simHarnessAnchors exit=0 29s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
