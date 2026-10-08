@@ -7,7 +7,7 @@ import {
 } from '@/lib/clubManager';
 import type {
   CareerState, CMPlayer, LiveMatch, MatchWeekReport, MatchStats, Mentality, TalkTone,
-  LiveChange, LiveFeedEvent, FormationSlot, PitchLine,
+  LiveChange, LiveFeedEvent, FormationSlot,
 } from '@/lib/clubManager';
 /* Round 781: the clock label, the board aware "has it happened", and the tie on a second leg. */
 import { minuteLabel, playedBy, secondLegContext } from '@/lib/clubManager';
@@ -23,6 +23,8 @@ import type { MotionEvent } from '@/components/club-manager/LiveSimMotion';
    above are anchors a harness swaps by exact text. */
 import { BEAT_SPAN } from '@/components/pitch-motion/contract';
 import type { PitchFigure, PitchInput, PitchSide } from '@/components/pitch-motion/contract';
+import { PitchSurface } from '@/components/pitch-motion/PitchSurface';
+import { pitchPlan, pitchScene, pitchSceneKey } from '@/components/pitch-motion/scene';
 
 /**
  * Round 158: the Live Sim. His words, the ones he said to really pay
@@ -67,11 +69,14 @@ import type { PitchFigure, PitchInput, PitchSide } from '@/components/pitch-moti
  * the board is filed at the period's last minute with its plus, and the
  * engine draws the rest of that board again off it (recutBoard).
  *
- * The choreography between events (who is carrying the ball, the shape
- * pushing up and dropping back, the drift) is theatre, drawn only inside the
- * beat effect, never in a state initialiser. The score, the scorers and every
- * event minute are the sim's own. The screen never lies about the sim; it is
- * allowed to dance around it.
+ * Round 1101: the choreography between events (who is carrying the ball, both
+ * sides holding their shape around it, the walk back for a kick off, the
+ * corner swung in) is theatre, and it is no longer drawn in this file. It is
+ * the shared pitch in src/components/pitch-motion: stagePitchInput hands it
+ * this period's feed, pitchPlan and pitchScene say where everybody stands at
+ * the clock, off a generator keyed on the match, and this file draws no
+ * random number at all. The score, the scorers and every event minute are the
+ * sim's own. The screen never lies about the sim; it is allowed to dance around it.
  */
 
 type Stage = 'first' | 'interval' | 'second' | 'extra' | 'done';
@@ -91,9 +96,6 @@ interface Man {
   /** Theirs only: a man the game made up, tagged the way the ratings sheet tags him. */
   gen?: boolean;
 }
-interface Placed extends Man { x: number; y: number; keeper: boolean; }
-interface Carrier { side: Side; index: number; }
-interface Beat { n: number; carrier: Carrier; drift: number[]; }
 /** A run of banner or event line text; `gen` hangs the MADE UP tag after it. */
 interface Seg { t: string; gen?: boolean; }
 interface Banner { segs: Seg[]; club: string; tone: Side | 'none'; }
@@ -131,15 +133,7 @@ const BASE_RATE = 0.5;
 /** The shape a nameless opposition lines up in: 4-4-2. */
 const DEFAULT_OPP_FORMATION = 1;
 
-/** How far each line steps up when its side has the ball, in percent of the pitch. */
-const PUSH: Record<PitchLine, number> = { attack: 20, midfield: 17, defence: 14, keeper: 4 };
-/** How far each line drops toward its own goal when the other side has it. */
-const BACK: Record<PitchLine, number> = { attack: 9, midfield: 8, defence: 5, keeper: 0 };
-/** Who gets the ball: the front men most, the keeper hardly ever. */
-const CARRY: Record<PitchLine, number> = { attack: 3, midfield: 2.6, defence: 1.2, keeper: 0.25 };
-
 const lastName = (n: string) => n.replace(' (Youth)', '').split(' ').slice(-1)[0];
-const clampPct = (v: number) => Math.max(3, Math.min(97, v));
 
 function initialStage(live: LiveMatch | null, report: MatchWeekReport | null): Stage {
   if (report) return 'done';
@@ -216,53 +210,7 @@ function menAt(career: CareerState, live: LiveMatch | null, report: MatchWeekRep
   return { mine, theirs };
 }
 
-/**
- * Where a side stands this beat. My goal is the bottom of the screen (engine
- * y 90 is my keeper), theirs is the top, so their shape is the engine's
- * mirrored. The side with the ball pushes up toward the goal it attacks,
- * graded by line, the keeper never past his own third; the other side drops
- * back and narrows; the wide men lean toward the ball; a little drift on top.
- */
-function placeSide(men: Man[], hasBall: boolean, mentality: Mentality, drift: number[], offset: number, ballX: number | null): Placed[] {
-  return men.map((m, i) => {
-    const base = slotPosition(m.slot, m.side === 'me' ? mentality : 'balanced');
-    let x = m.side === 'me' ? base.x : 100 - base.x;
-    let y = m.side === 'me' ? base.y : 100 - base.y;
-    const line = pitchLineOf(m.slot);
-    const dir = m.side === 'me' ? -1 : 1;
-    if (hasBall) {
-      y += dir * PUSH[line];
-      if (line === 'keeper') y = m.side === 'me' ? Math.max(y, 68) : Math.min(y, 32);
-      else y = m.side === 'me' ? Math.max(y, 7) : Math.min(y, 93);
-    } else {
-      y -= dir * BACK[line];
-      x = 50 + (x - 50) * 0.86;
-    }
-    if (ballX !== null && line !== 'keeper' && Math.abs(m.slot.x - 50) >= 22) x += (ballX - x) * 0.18;
-    const k = (offset + i) * 2;
-    x += drift[k] ?? 0;
-    y += drift[k + 1] ?? 0;
-    return { ...m, x: clampPct(x), y: clampPct(y), keeper: line === 'keeper' };
-  });
-}
-
-/** Who has the ball this beat: the side by the share of the ball, the man by his line, never the same man twice running. */
-function pickCarrier(men: { mine: Man[]; theirs: Man[] }, possMine: number, prev: Carrier | null): Carrier {
-  let side: Side = Math.random() < possMine ? 'me' : 'opp';
-  let list = side === 'me' ? men.mine : men.theirs;
-  if (!list.length) { side = side === 'me' ? 'opp' : 'me'; list = side === 'me' ? men.mine : men.theirs; }
-  if (!list.length) return { side: 'me', index: 0 };
-  const weights = list.map((m, i) => (prev && prev.side === side && prev.index === i && list.length > 1 ? 0 : CARRY[pitchLineOf(m.slot)]));
-  const total = weights.reduce((s, w) => s + w, 0);
-  let roll = Math.random() * total;
-  for (let i = 0; i < list.length; i++) {
-    roll -= weights[i];
-    if (roll <= 0) return { side, index: i };
-  }
-  return { side, index: list.length - 1 };
-}
-
-/** Round 1101: a 32 bit hash of a string, the pitch's seed. Nothing here ever draws from Math.random. */
+/** Round 1101: a 32 bit hash of a string, the pitch's seed. Nothing in this file draws a random number. */
 function seedOf(text: string): number {
   let h = 0x811c9dc5;
   for (let i = 0; i < text.length; i++) { h ^= text.charCodeAt(i); h = Math.imul(h, 0x01000193); }
@@ -395,9 +343,7 @@ export function LiveSimScreen({
   const [showSquad, setShowSquad] = useState(false);
   const [banner, setBanner] = useState<Banner | null>(null);
   const [eventLine, setEventLine] = useState<Seg[] | null>(null);
-  const [eventBall, setEventBall] = useState<{ x: number; y: number } | null>(null);
   const [motionEvent, setMotionEvent] = useState<MotionEvent | null>(null);
-  const [beat, setBeat] = useState<Beat>(() => ({ n: 0, carrier: { side: 'me', index: 9 }, drift: [] }));
   const [picking, setPicking] = useState<string | null>(null);
   /* Round 670 review: the clock reached 90 and the engine has been asked
      about extra time; the next render reads its answer off the live match. */
@@ -407,9 +353,6 @@ export function LiveSimScreen({
   const bannerTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const finishedRef = useRef(false);
   const pausedBefore = useRef(false);
-  const holdRef = useRef(0);
-  const ballRef = useRef({ x: 50, y: 50 });
-  const carrierRef = useRef<Carrier | null>(null);
   /* The whistle takes the live match off the save in the same tick the report
      lands, so the last one seen keeps the pitch drawn at the whistle until then. */
   const lastLive = useRef<LiveMatch | null>(live);
@@ -516,7 +459,6 @@ export function LiveSimScreen({
     if (liveNow) return liveStatsAt(liveNow, minute, plus);
     return report?.detail?.stats ?? null;
   }, [stage, report, liveNow, minute, plus]);
-  const possMine = (stats?.possession ?? 50) / 100;
   /* Round 714: bookings and changes at this minute, off the committed lines. */
   const counts: CardsAndSubs | null = useMemo(() => {
     if (stage === 'done' && report?.detail) {
@@ -666,10 +608,6 @@ export function LiveSimScreen({
 
   /* ---- who is on the grass at this minute ---- */
   const men = useMemo(() => menAt(career, liveNow, report, minute, plus), [career, liveNow, report, minute, plus]);
-  const menRef = useRef(men);
-  useEffect(() => { menRef.current = men; }, [men]);
-  const possRef = useRef(possMine);
-  useEffect(() => { possRef.current = possMine; }, [possMine]);
 
   /* The keeper of a side at a minute, for the save line. */
   const keeperOf = (side: Side, m: number): Seg => {
@@ -699,7 +637,6 @@ export function LiveSimScreen({
     const hi = stageEnd;
     let big: Banner | null = null;
     let small: Seg[] | null = null;
-    let ballAt: { x: number; y: number } | null = null;
     for (const e of feed) {
       /* Round 781: a line in the board fires when the clock reaches its plus. */
       if (e.kind === 'halftime' || e.minute < lo || e.minute > hi || e.minute + (e.plus ?? 0) > clock) continue;
@@ -711,7 +648,6 @@ export function LiveSimScreen({
       const club = e.side === 'me' ? career.clubName : opponent;
       const side: Side = e.side === 'me' ? 'me' : 'opp';
       const who: Seg = e.text ? named(side, e.text) : { t: club };
-      const m = Math.round(e.minute);
       /* Round 505 review: the event's own flank and spot flags first. Two
          corners can share kind, side, minute and taker with different
          flanks, and the keyed lookup below cannot tell them apart; it stays
@@ -726,7 +662,6 @@ export function LiveSimScreen({
             club,
             tone: e.side === 'me' ? 'me' : 'opp',
           };
-          ballAt = { x: 50, y: e.side === 'me' ? 1.5 : 98.5 };
           break;
         case 'yellow': big = { segs: [{ t: 'Booked: ' }, who, { t: ` ${minuteLabel(e)}` }], club, tone: 'none' }; break;
         case 'red': big = { segs: [{ t: 'RED CARD! ' }, who, { t: ` ${minuteLabel(e)}` }], club, tone: 'none' }; break;
@@ -741,20 +676,16 @@ export function LiveSimScreen({
         }
         case 'shot':
           small = [{ t: 'Shot: ' }, who];
-          ballAt = { x: 38 + (m % 5) * 6, y: e.side === 'me' ? 6 : 94 };
           break;
         case 'save':
           small = [{ t: x?.penalty ? 'Penalty saved! ' : 'Save! ' }, keeperOf(e.side === 'me' ? 'opp' : 'me', e.minute)];
-          ballAt = { x: 50, y: e.side === 'me' ? 9.5 : 90.5 };
           break;
         case 'corner':
           /* Round 505: the flank and the taker, "Corner, left, Saka"; the club when nobody is named. */
           small = [{ t: x?.flank ? `Corner, ${x.flank}, ` : 'Corner, ' }, who];
-          ballAt = { x: x?.flank ? (x.flank === 'left' ? 2.5 : 97.5) : (ballRef.current.x < 50 ? 2.5 : 97.5), y: e.side === 'me' ? 2.5 : 97.5 };
           break;
         case 'throwin':
           small = [{ t: `Throw in, ${club}` }];
-          ballAt = { x: ballRef.current.x < 50 ? 2 : 98, y: Math.max(6, Math.min(94, ballRef.current.y)) };
           break;
         case 'foul': small = [{ t: 'Foul by ' }, who]; break;
         default: break;
@@ -766,54 +697,30 @@ export function LiveSimScreen({
       bannerTimer.current = setTimeout(() => setBanner(null), 2600);
     }
     if (small) setEventLine(small);
-    if (ballAt) {
-      setEventBall(ballAt);
-      holdRef.current = 2;
-    }
     // The feed, its extras and the clock are the inputs; the rest are stable per render.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clock, stage, stageEnd, board, feed, extras, running, finished, terminalWindup]);
   useEffect(() => () => { if (bannerTimer.current) clearTimeout(bannerTimer.current); }, []);
 
-  /* ---- the beat: who has the ball, and the drift. The only place this file draws. ---- */
-  useEffect(() => {
-    if (paused || !running || finished) return;
-    const tick = () => {
-      const drift = Array.from({ length: 44 }, () => (Math.random() - 0.5) * 5);
-      const carrier = pickCarrier(menRef.current, possRef.current, carrierRef.current);
-      carrierRef.current = carrier;
-      setBeat(b => ({ n: b.n + 1, carrier, drift }));
-      if (holdRef.current > 0) {
-        holdRef.current -= 1;
-        if (holdRef.current === 0) setEventBall(null);
-      }
-    };
-    const id = setInterval(tick, Math.max(240, 760 / speed));
-    return () => clearInterval(id);
-  }, [paused, running, finished, speed]);
-
-  /* ---- the dots and the ball, placed for this beat ---- */
-  const scene = useMemo(() => {
-    const mineHasIt = beat.carrier.side === 'me';
-    const first = {
-      mine: placeSide(men.mine, mineHasIt, mentality, beat.drift, 0, null),
-      theirs: placeSide(men.theirs, !mineHasIt, mentality, beat.drift, 11, null),
-    };
-    const holderOf = (s: { mine: Placed[]; theirs: Placed[] }): Placed | null => {
-      const list = mineHasIt ? s.mine : s.theirs;
-      return list.length ? list[beat.carrier.index % list.length] : null;
-    };
-    const ballFrom = (h: Placed | null) => (h
-      ? { x: clampPct(h.x + 1.6), y: clampPct(h.y + (mineHasIt ? -2.2 : 2.2)) }
-      : { x: 50, y: 50 });
-    const lean = eventBall ?? ballFrom(holderOf(first));
-    const mine = placeSide(men.mine, mineHasIt, mentality, beat.drift, 0, lean.x);
-    const theirs = placeSide(men.theirs, !mineHasIt, mentality, beat.drift, 11, lean.x);
-    const holder = holderOf({ mine, theirs });
-    const ball = eventBall ?? ballFrom(holder);
-    return { mine, theirs, ball, holderKey: holder?.key ?? null };
-  }, [men, beat, eventBall, mentality]);
-  useEffect(() => { ballRef.current = scene.ball; }, [scene.ball]);
+  /* ---- the dots and the ball, off the shared pitch (Round 1101) ----
+     The plan is this period's feed staged once: open play on a keyed generator, and every chance, kick
+     off and dead ball of the feed at its own place. It is rebuilt only when what it reads changes (a
+     sub, a red card, a redraw), never on a tick, and the scene only when the clock crosses into the
+     plan's next stretch. */
+  const pitchInput = useMemo(
+    () => stagePitchInput(career, liveNow, report, stage, minute, plus, stageStop),
+    [career, liveNow, report, stage, minute, plus, stageStop],
+  );
+  const pitchKey = useMemo(() => JSON.stringify(pitchInput), [pitchInput]);
+  // The key is the input's whole content, so the plan survives a minute tick that changed nothing.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const plan = useMemo(() => pitchPlan(pitchInput), [pitchKey]);
+  const sceneKey = pitchSceneKey(plan, clock);
+  // The key changes exactly when the scene does, so the clock itself is deliberately not a dependency.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const scene = useMemo(() => pitchScene(plan, clock), [plan, sceneKey]);
+  /* The part places roles; who each one is (his name, number, id, armband) is this screen's own. */
+  const manOf = useMemo(() => new Map([...men.mine, ...men.theirs].map(m => [m.key, m])), [men]);
   // A tactics change can replace a future terminal chance during its wind-up.
   // Round 781: "already happened" reads the board too, so a chance at 45+3 is still future at 45+2.
   const motionStillCommitted = !motionEvent || motionEvent.event.minute + (motionEvent.event.plus ?? 0) <= clock || feed.includes(motionEvent.event);
@@ -933,7 +840,7 @@ export function LiveSimScreen({
     );
   }
 
-  const onPitchPlayers = scene.mine
+  const onPitchPlayers = men.mine
     .map(d => (d.id ? career.squad.find(p => p.id === d.id) : undefined))
     .filter((p): p is CMPlayer => !!p)
     .sort((a, b) => a.fitness - b.fitness);
@@ -979,63 +886,57 @@ export function LiveSimScreen({
         </div>
       </div>
 
-      {/* The pitch */}
-      <div data-cm-live-pitch="1" data-cm-motion={motion.action} data-cm-motion-phase={motion.phase} className="relative w-full rounded-2xl overflow-hidden border border-border select-none" style={{ aspectRatio: '3 / 4', background: 'linear-gradient(180deg, #14532d 0%, #166534 50%, #14532d 100%)' }}>
-        {/* markings */}
-        <div className="absolute inset-x-0 top-1/2 h-px bg-white/25" />
-        <div className="absolute left-1/2 top-1/2 w-16 h-16 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/25" />
-        <div className="absolute left-1/4 right-1/4 top-0 h-10 border-b border-x border-white/25" />
-        <div className="absolute left-1/4 right-1/4 bottom-0 h-10 border-t border-x border-white/25" />
-        <div className="cm-live-net cm-live-net--top" data-cm-net={motion.net === 'opp' ? 'goal' : undefined} style={{ transform: `scaleY(${1 + (motion.net === 'opp' ? motion.netPulse : 0) * .7})` }} />
-        <div className="cm-live-net cm-live-net--bottom" data-cm-net={motion.net === 'me' ? 'goal' : undefined} style={{ transform: `scaleY(${1 + (motion.net === 'me' ? motion.netPulse : 0) * .7})` }} />
-
+      {/* The pitch: the shared surface (grass, markings, nets, ball), with this screen's own dots on it. */}
+      <PitchSurface frame={motion} className="w-full rounded-2xl border border-border">
         {/* their dots: numbers, and names when the engine has an eleven for them */}
-        {motion.theirs.map(d => (
-          <div
-            key={d.key}
-            data-cm-dot-opp={d.number}
-            className="absolute flex flex-col items-center pointer-events-none"
-            style={{ left: `${d.x}%`, top: `${d.y}%`, transform: 'translate(-50%, -24px)' }}
-          >
-            <LivePitchPlayer color="#d6e6ed" keeper={d.keeper} pose={motion.poses[d.key]} />
-            <span className="text-[7px] text-white/80 leading-none mt-0.5 max-w-[48px] truncate tabular-nums">
-              {d.number}{d.label ? ` ${d.label}` : ''}{d.gen ? '*' : ''}
-            </span>
-          </div>
-        ))}
+        {motion.theirs.map(d => {
+          const m = manOf.get(d.key);
+          if (!m) return null;
+          return (
+            <div
+              key={d.key}
+              data-cm-dot-opp={m.number}
+              className="absolute flex flex-col items-center pointer-events-none"
+              style={{ left: `${d.x}%`, top: `${d.y}%`, transform: 'translate(-50%, -24px)' }}
+            >
+              <LivePitchPlayer color="#d6e6ed" keeper={d.keeper} pose={motion.poses[d.key]} />
+              <span className="text-[7px] text-white/80 leading-none mt-0.5 max-w-[48px] truncate tabular-nums">
+                {m.number}{m.label ? ` ${m.label}` : ''}{m.gen ? '*' : ''}
+              </span>
+            </div>
+          );
+        })}
 
         {/* my dots: a tap area a thumb can hit around a dot that stays small */}
-        {motion.mine.map(d => (
-          <button
-            key={d.key}
-            type="button"
-            data-cm-dot={d.id ?? ''}
-            data-cm-captain={d.id && d.id === captainId ? '1' : undefined}
-            aria-label={`${d.label}, number ${d.number}${d.id && d.id === captainId ? ', captain' : ''}. Tap to bring somebody on or change the shape.`}
-            disabled={!canChange || !d.id}
-            onClick={() => { if (d.id) openSheet(d.id); }}
-            className={cn(
-              'absolute flex flex-col items-center w-9 min-h-[28px] bg-transparent border-0 p-0 rounded-md',
-              canChange ? 'cursor-pointer' : 'cursor-default',
-            )}
-            style={{ left: `${d.x}%`, top: `${d.y}%`, transform: 'translate(-50%, -24px)' }}
-          >
-            <LivePitchPlayer color={clubColor} keeper={d.keeper} pose={motion.poses[d.key]} selected={picking === d.id} />
-            <span className="text-[7px] text-white/90 leading-none mt-0.5 max-w-[48px] truncate tabular-nums">
-              {d.number} {d.label}
-              {d.id && d.id === captainId && (
-                <span className="ml-0.5 inline-block px-[2px] rounded-sm bg-yellow-400 text-black font-black leading-[8px] align-middle">C</span>
+        {motion.mine.map(d => {
+          const m = manOf.get(d.key);
+          if (!m) return null;
+          const captain = !!m.id && m.id === captainId;
+          return (
+            <button
+              key={d.key}
+              type="button"
+              data-cm-dot={m.id ?? ''}
+              data-cm-captain={captain ? '1' : undefined}
+              aria-label={`${m.label}, number ${m.number}${captain ? ', captain' : ''}. Tap to bring somebody on or change the shape.`}
+              disabled={!canChange || !m.id}
+              onClick={() => { if (m.id) openSheet(m.id); }}
+              className={cn(
+                'absolute flex flex-col items-center w-9 min-h-[28px] bg-transparent border-0 p-0 rounded-md',
+                canChange ? 'cursor-pointer' : 'cursor-default',
               )}
-            </span>
-          </button>
-        ))}
-
-        {/* ball, at somebody's feet */}
-        <div
-          data-cm-ball="1"
-          className="cm-live-ball"
-          style={{ left: `${motion.ball.x}%`, top: `${motion.ball.y}%` }}
-        />
+              style={{ left: `${d.x}%`, top: `${d.y}%`, transform: 'translate(-50%, -24px)' }}
+            >
+              <LivePitchPlayer color={clubColor} keeper={d.keeper} pose={motion.poses[d.key]} selected={picking === m.id} />
+              <span className="text-[7px] text-white/90 leading-none mt-0.5 max-w-[48px] truncate tabular-nums">
+                {m.number} {m.label}
+                {captain && (
+                  <span className="ml-0.5 inline-block px-[2px] rounded-sm bg-yellow-400 text-black font-black leading-[8px] align-middle">C</span>
+                )}
+              </span>
+            </button>
+          );
+        })}
 
         {/* event banner */}
         {banner && (
@@ -1068,10 +969,10 @@ export function LiveSimScreen({
             </div>
           </div>
         )}
-      </div>
+      </PitchSurface>
 
       {/* The asterisk on a dot is the ratings sheet's MADE UP, at dot size. */}
-      {scene.theirs.some(d => d.gen) && (
+      {men.theirs.some(d => d.gen) && (
         <p className="text-[9px] text-muted-foreground text-center flex items-center justify-center gap-1">
           * on a dot is <MadeUpTag />
         </p>
