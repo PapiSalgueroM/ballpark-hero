@@ -230,22 +230,26 @@
                     halved, then dropped) and the file records each decision
                     with its counts. A SPORT WHOSE ANCHORS ARE NOT BUILT
                     ASSERTS NOTHING HERE and says so on its closing line.
-                    Built: baseball (2026-10-07), basketball and hockey
-                    (2026-10-08). FOOTBALL IS NOT BUILT: its awards group
-                    cannot be two sourced (the ledger says why), so nothing
-                    real has judged the kicker or the four football bases.
-                    A row is a man on a family list; a man on two lists is
-                    two rows and is counted once in the shape check (8 men a
-                    sport, two of each ballot). Controls: anchorwiki (the
-                    ledger's shape), and for the agreement the one that can
-                    fire in the sport: standoutbig where the books reading
-                    holds a real never or later (baseball, basketball: the
-                    push tripled puts him in), standoutgone where it holds
-                    only men who went straight in and some are in on the
-                    push alone (hockey: the push switched off puts three of
-                    them out, more than the two the band allows). Each
-                    refuses, exit 2, in a sport where it cannot fire, and
-                    says why.
+                    Built: baseball (2026-10-07), basketball, hockey and
+                    football (2026-10-08). A row is a man on a family list;
+                    a man on two lists is two rows and is counted once in
+                    the shape check (8 men a sport, two of each ballot).
+                    Controls: anchorwiki (the ledger's shape), and for the
+                    agreement the one that can fire in the sport, which the
+                    harness works out exactly (the band asked of today's
+                    table with every push tripled, and with every push off)
+                    and records in the ledger: standoutbig where tripling
+                    the push sends a real never or later man in (baseball,
+                    basketball), standoutgone where switching it off puts
+                    out more men than the band allows (hockey), and
+                    decisionback where the anchors took a push out or cut
+                    it (football: the kicker's field goals planted again;
+                    baseball: the left fielder's steals back to full size).
+                    Each refuses, exit 2, in a sport where it cannot fire,
+                    and says why. In football only decisionback fires: with
+                    the push tripled or off no counted call moves past the
+                    band, because the real later men of the books reading
+                    are already sent in on the first ballot.
      19. base, words (a) the base terms are the ledger's and the median
                     career of a base position earns what was measured. (b)
                     the Hall share on 2 is at or over 1 and under its
@@ -296,10 +300,23 @@
        raw 12 > 14 and 11 > 12 of 17, books 7 > 10 and 7 > 9 of 10. No
        decision. Every list man went straight in, so hockey cannot say the
        push is too big.
-     anchors, football: NOT BUILT (the ledger's sportsNotBuilt says why).
+     anchors, football (22 men in 25 rows, built 2026-10-08; one of them a
+       seniors committee choice, printed apart): raw 21 > 23 and 15 > 17 of
+       24, books 11 > 14 and 7 > 7 of 14, after two decisions (a receiver's
+       touchdown catches and a kicker's field goals, both dropped: halved,
+       each still sent a real later or never man in or first). Before
+       them: raw 21 > 22 and 15 > 16, books 21 > 22 and 14 > 11 of 24.
+     football, re-measured 2026-10-08 after those two decisions (the six
+       seeds again; the lines above this block give the first measurement,
+       and for football these replace them): Hall share on 2 25.3 to 26.8
+       (ceiling 28.2); pooled at or over from 9.77 to 10.57, at or over to
+       0.46 to 1.14; top 5 percent pooled gain 33.6 to 43.6 points (needs
+       16.8), the standout's own part 11.0 to 19.2 (5.5); points paid,
+       median on 2, 348 to 371.
    Controls run 2026-10-08, board skipped: standoutbig FIRED in baseball
    and basketball and refuses in hockey and football; standoutgone FIRED in
-   hockey and refuses in the other three; plantbase FIRED in all four;
+   hockey and refuses in the other three; decisionback FIRED in football
+   and baseball and refuses in the other two; plantbase FIRED in all four;
    anchorwiki FIRED.
    Controls of sections 15 to 19, run 2026-10-07 with the board skipped
    (which is enough: none of them reads a board career): on 109b6ce8 all
@@ -447,6 +464,8 @@ const CONTROLS = {
   standoutbig: { file: 'careerHallOfFame.ts', from: 'const credit = (s.top ?? LEGACY_GAME_RULES.standoutTop) * share;', to: 'const credit = (s.top ?? LEGACY_GAME_RULES.standoutTop) * 3 * share;' },
   // Section 18, the other side of the band: the push switched off, so an anchor who is in on the push alone falls out (the same edit as nostandout, aimed at the anchors).
   standoutgone: { file: 'careerHallOfFame.ts', from: 'LEGACY_GAME_RULES = { standoutTop: 300,', to: 'LEGACY_GAME_RULES = { standoutTop: 0,' },
+  // Section 18, the decisions themselves: one push the real anchors took out or cut is put back whole (football: the kicker's field goals planted again; baseball: the left fielder's steals back to the full size). It refuses in a sport whose anchors decided nothing.
+  decisionback: { file: `${SPORT}MyCareer.ts`, re: { nfl: /(\n    K: \{\s+terms: \[\],)/, mlb: /(\{ stat: 'sb', from: [\d.]+, to: [\d.]+, label: 'steals'), top: \d+( \})/ }[SPORT] ?? /a string that is in no file, so this control refuses to run here/, to: (m, a, b) => (SPORT === 'nfl' ? `${a} standout: [{ stat: 'fgMade', from: 512, to: 564, label: 'field goals' }],` : `${a}${b}`) },
   // Section 19 (a), for every sport: a base term planted at a position the ledger gives none (a point guard's assists, a kicker's field goals, the reliever's saves back, a defenceman's assists).
   plantbase: { file: `${SPORT}MyCareer.ts`, re: { nba: /(\n    PG: \{\s+terms: \[\{ stat: 'pts', per: 430 \})(\],)/, nfl: /(\n    K: \{\s+terms: \[)(\],)/, mlb: /(\n    RP: \{ terms: \[\{ stat: 'hr', per: 4 \}, \{ stat: 'rbi', per: 60 \})(\] \},)/, nhl: /(\n    D: \{\s+terms: \[\{ stat: 'points', per: 18 \})(\],)/ }[SPORT], to: (m, a, b) => `${a}${SPORT === 'nfl' ? '' : ', '}{ stat: '${{ nba: 'ast', nfl: 'fgMade', mlb: 'saves', nhl: 'assists' }[SPORT]}', per: 8 }${b}` },
   // The ledger with one source host swapped for a wiki (done in memory where the ledger is read).
@@ -1564,7 +1583,7 @@ for (const a of mine) {
     const factor = cell.to / totals[a.family];
     books = { pos: a.pos, seasons: Math.min(a.seasons, HARD_STOP), awards: a.awards, totals: Object.fromEntries(Object.entries(totals).map(([k, v]) => [k, k === a.family ? cell.to : Math.round(v * factor)])) };
   }
-  const row = { a, books, raw1: readAnchor(a, W1, raw, 'raw1'), raw2: readAnchor(a, W2, raw, 'raw2'), books1: books && readAnchor(a, W1, books, 'books1'), books2: books && readAnchor(a, W2, books, 'books2') };
+  const row = { a, books, raw, raw1: readAnchor(a, W1, raw, 'raw1'), raw2: readAnchor(a, W2, raw, 'raw2'), books1: books && readAnchor(a, W1, books, 'books1'), books2: books && readAnchor(a, W2, books, 'books2') };
   for (const k of ['raw1', 'raw2', 'books1', 'books2']) {
     const r = row[k];
     if (!r || !r.hof) continue;
@@ -1581,37 +1600,58 @@ const agree = (list, key) => ({
 const inCount = anchorRows.filter(r => r.a.hall.route === 'main');
 const AG = { raw1: agree(inCount, 'raw1'), raw2: agree(inCount, 'raw2'), books1: agree(inCount, 'books1'), books2: agree(inCount, 'books2') };
 const fmt = r => (r ? `${r.score} ${r.call}` : 'none');
-// What each agreement control can reach in this sport. standoutbig needs a real never or later in the books
-// reading (the push tripled puts him in or sends him first). standoutgone needs more than two men who agree
-// on 2 by the push alone (the band allows two under the recorded count), read off today's table with its
-// standouts taken out. Both numbers are recorded in the ledger and held to it on a run with no control.
+// What each agreement control can reach in this sport. Two counts for the reader: the real never or later
+// men with a books reading (standoutbig needs one the push has not already sent in on the first ballot), and
+// the men who agree on 2 by the push alone (standoutgone needs more than two: the band allows two under the
+// recorded count). And the exact answer, which is what a control's refusal rests on: the band itself, asked of
+// today's table with every push tripled and with every push switched off (the two tables those controls
+// build, restated here). All four are recorded in the ledger and held to it on a run with no control.
 const realNotFirst = inCount.filter(r => r.books2 && r.a.hall.ballot !== 'first').length;
 const pushAlone = inCount.filter(r => {
   if (!r.books2 || !r.books) return false;
   const realIn = r.a.hall.ballot !== 'never';
   return realIn === r.books2.hof && realIn !== (eng.legacyRead(NO_STANDOUT, r.books).score >= lines.hofLine);
 }).length;
+const pushedTable = topOf => ({ ...W2, positions: Object.fromEntries(Object.entries(W2.positions).map(([pos, p]) => [pos, p.standout ? { ...p, standout: p.standout.map(s => ({ ...s, top: topOf(s) })) } : p])) });
+const agreeOnTable = W => {
+  const list = inCount.map(r => ({ a: r.a, raw2: readAnchor(r.a, W, r.raw, 'raw2'), books2: r.books && readAnchor(r.a, W, r.books, 'books2') }));
+  return { raw2: agree(list, 'raw2'), books2: agree(list, 'books2') };
+};
+const measuredAg = ANCHORS.measured?.[SPORT];
+const notFewer = (now, was) => now.inOut >= was.inOut && now.exact >= was.exact;
+const nearMeasured = (now, m) => m && now.inOut >= m.inOut - 2 && now.exact >= m.exact - 2;
+// The band the anchors check holds, as a question that can be asked of any table's agreement.
+const bandHolds = ag => Boolean(notFewer(ag.books2, AG.books1) && notFewer(ag.raw2, AG.raw1) && nearMeasured(ag.books2, measuredAg?.books2) && nearMeasured(ag.raw2, measuredAg?.raw2));
+const bigFires = anchorsBuilt && !CONTROL ? !bandHolds(agreeOnTable(pushedTable(s => (s.top ?? TOP) * 3))) : null;
+const goneFires = anchorsBuilt && !CONTROL ? !bandHolds(agreeOnTable(pushedTable(s => s.top ?? 0))) : null;
 if (anchorsBuilt) {
   console.log(`  18 anchors: ${menOf(mine)} men in ${mine.length} rows (${JSON.stringify(byBallot)} men on the main ballot, ${mine.length - counted.length} by a committee, printed apart); the majority call is first from a score of ${firstFrom}`);
-  console.log(`     what the agreement's controls can reach here: a real never or later in the books reading ${realNotFirst} (standoutbig ${realNotFirst > 0 ? 'can' : 'CANNOT'} fire); agreeing on 2 by the push alone ${pushAlone} (standoutgone ${pushAlone > 2 ? 'can' : 'CANNOT'} fire)${realNotFirst > 0 ? '' : '. EVERY REAL TOP OF THE BOOKS CAREER HERE WENT STRAIGHT IN, so these anchors cannot say the push is too big in this sport: a green here is no proof that 300 is right'}`);
+  if (!CONTROL) {
+    const whyNotBig = realNotFirst === 0
+      ? 'EVERY REAL TOP OF THE BOOKS CAREER HERE WENT STRAIGHT IN, so these anchors cannot say the push is too big in this sport: a green here is no proof that 300 is right'
+      : 'THE REAL NEVER AND LATER MEN IN THE BOOKS READING GET THE SAME CALL WITH THE PUSH TRIPLED (the push at its present size already sends them in on the first ballot, or they are in on hardware), so tripling it cannot turn this red: a green here is no proof that 300 is not too big';
+    console.log(`     what the agreement's controls can reach here: a real never or later in the books reading ${realNotFirst}, and the band with every push tripled ${bigFires ? 'breaks (standoutbig can fire)' : 'holds (standoutbig CANNOT fire)'}; agreeing on 2 by the push alone ${pushAlone}, and the band with every push switched off ${goneFires ? 'breaks (standoutgone can fire)' : 'holds (standoutgone CANNOT fire)'}${bigFires ? '' : `. ${whyNotBig}`}`);
+  }
   for (const r of anchorRows) console.log(`     ${r.a.id} ${r.a.pos} ${r.a.family} real ${r.a.hall.ballot}${r.a.hall.route === 'committee' ? ' (committee later, outside the count)' : ''}: raw ${fmt(r.raw1)} > ${fmt(r.raw2)}; books ${fmt(r.books1)} > ${fmt(r.books2)}${r.books2 ? '' : ' (raw only: his position does not carry the family, or he is not off a list)'}`);
   console.log(`     agreement, in or out and exact ballot, calibration 1 > 2: raw ${AG.raw1.inOut} > ${AG.raw2.inOut} and ${AG.raw1.exact} > ${AG.raw2.exact} of ${AG.raw1.n}; books ${AG.books1.inOut} > ${AG.books2.inOut} and ${AG.books1.exact} > ${AG.books2.exact} of ${AG.books1.n}; decisions the anchors made: ${JSON.stringify((ANCHORS.decisions ?? []).filter(d => d.sport === SPORT).map(d => `${d.pos} ${d.what} ${d.action}`))}`);
 } else {
   console.log(`  18 anchors: NOT BUILT FOR ${SPORT.toUpperCase()} (${ANCHORS.selection?.sportsNotBuilt?.[SPORT] ?? 'no reason recorded'}). Nothing here says the standout or the base agrees with real careers in this sport.`);
 }
-const measuredAg = ANCHORS.measured?.[SPORT];
-const notFewer = (now, was) => now.inOut >= was.inOut && now.exact >= was.exact;
-const nearMeasured = (now, m) => m && now.inOut >= m.inOut - 2 && now.exact >= m.exact - 2;
 // A control aimed at the agreement refuses where it cannot fire, so a run that could not go red is never read as a green.
+// The refusal rests on what a run with no control recorded (the band asked of the very table the control builds).
 if (CONTROL === 'standoutbig' || CONTROL === 'standoutgone') {
-  const can = !anchorsBuilt ? null : CONTROL === 'standoutbig' ? measuredAg?.realNotFirstInBooks > 0 : measuredAg?.pushAlone > 2;
+  const can = !anchorsBuilt ? null : CONTROL === 'standoutbig' ? measuredAg?.standoutbigFires === true : measuredAg?.standoutgoneFires === true;
   if (!can) {
-    console.error(`simCareerHall ${SPORT} CONTROL ${CONTROL}: REFUSED, it cannot fire in this sport (${!anchorsBuilt ? 'its real anchors are not built' : CONTROL === 'standoutbig' ? 'the books reading holds no real never or later: every real top of the books career went straight in' : `only ${measuredAg?.pushAlone ?? 0} anchors agree on 2 by the push alone and the band allows two`})`);
+    console.error(`simCareerHall ${SPORT} CONTROL ${CONTROL}: REFUSED, it cannot fire in this sport (${!anchorsBuilt ? 'its real anchors are not built' : CONTROL === 'standoutbig' ? `the band holds with every push tripled: the books reading holds ${measuredAg?.realNotFirstInBooks ?? 0} real never or later men, and no call of theirs moves past the band` : `the band holds with every push switched off: ${measuredAg?.pushAlone ?? 0} anchors agree on 2 by the push alone and the band allows two`})`);
     process.exit(2);
   }
 }
-// On a run with no control the two recorded reach numbers must be today's, or a refusal above would rest on a stale file.
-const reachOk = Boolean(CONTROL) || (measuredAg?.realNotFirstInBooks === realNotFirst && measuredAg?.pushAlone === pushAlone);
+if (CONTROL === 'decisionback' && !DECISIONS.some(d => d.kind === 'standout')) {
+  console.error(`simCareerHall ${SPORT} CONTROL decisionback: REFUSED, the anchors took no standout back in this sport`);
+  process.exit(2);
+}
+// On a run with no control the recorded reach must be today's, or a refusal above would rest on a stale file.
+const reachOk = Boolean(CONTROL) || (measuredAg?.realNotFirstInBooks === realNotFirst && measuredAg?.pushAlone === pushAlone && measuredAg?.standoutbigFires === bigFires && measuredAg?.standoutgoneFires === goneFires);
 const anchorsOk = !anchorsBuilt || (AG.books1.n > 0 && reachOk && notFewer(AG.books2, AG.books1) && notFewer(AG.raw2, AG.raw1) && nearMeasured(AG.books2, measuredAg?.books2) && nearMeasured(AG.raw2, measuredAg?.raw2));
 const HALL_STOP = 0.45; // the brief's hard stop: a sport over 45 percent in is the lead's call, never a band to widen
 const hallShareOk = hall2 >= hall1 && hall2 / 100 <= Math.min(ML.outcome.hallCeiling, HALL_STOP);
@@ -1677,7 +1717,7 @@ const checks = [
   ['base', baseMiss.length === 0, `${baseMiss.length} base misses [${baseMiss.join('; ')}]`],
   ['words', wordMiss.length === 0 && lineMiss === 0 && linesWithStandout > 0 && exampleSeen.length === WORDS.example.positions.length, `${wordMiss.length} misses in the rule, the example or the card [${wordMiss.slice(0, 3).join('; ')}]; ${lineMiss} card lines off`],
   ['anchorshape', shapeMiss.length === 0 && ANCHORS.anchors.length > 0, `${shapeMiss.length} misses in the ledger's shape [${shapeMiss.slice(0, 3).join('; ')}]; ${ANCHORS.anchors.length} anchors in the file, sports built [${builtSports.join(', ')}]`],
-  ['anchors', anchorsOk, anchorsBuilt ? `agreement on 2 against 1: raw in or out ${AG.raw1.inOut} > ${AG.raw2.inOut}, exact ${AG.raw1.exact} > ${AG.raw2.exact}; books in or out ${AG.books1.inOut} > ${AG.books2.inOut}, exact ${AG.books1.exact} > ${AG.books2.exact} (must not fall, and must stay within two of the measured ${JSON.stringify(measuredAg ?? null)}); a real never or later in the books reading ${realNotFirst}, agreeing by the push alone ${pushAlone} (both as recorded: ${reachOk})` : 'NOT BUILT for this sport: nothing asserted'],
+  ['anchors', anchorsOk, anchorsBuilt ? `agreement on 2 against 1: raw in or out ${AG.raw1.inOut} > ${AG.raw2.inOut}, exact ${AG.raw1.exact} > ${AG.raw2.exact}; books in or out ${AG.books1.inOut} > ${AG.books2.inOut}, exact ${AG.books1.exact} > ${AG.books2.exact} (must not fall, and must stay within two of the measured ${JSON.stringify(measuredAg ?? null)}); a real never or later in the books reading ${realNotFirst}, agreeing by the push alone ${pushAlone}, the band breaks with every push tripled ${bigFires}, with every push off ${goneFires} (all four as recorded: ${reachOk})` : 'NOT BUILT for this sport: nothing asserted'],
   ['anchorcalls', callMiss.length === 0, `${callMiss.length} anchor readings whose majority call is not the one firstBallotChance gives [${callMiss.slice(0, 4).join(', ')}]`],
   ['hallshare', hallShareOk, `Hall share ${hall1.toFixed(1)} -> ${hall2.toFixed(1)} percent (ceiling ${(100 * Math.min(ML.outcome.hallCeiling, HALL_STOP)).toFixed(1)})`],
   ...(balance ? [['balance', balance.cases >= BAND.balanceCases && balance.ovrNow - balance.ovrOld >= BAND.farewellOvrGain && Math.abs(balance.hallNow - balance.hallOld) <= BAND.hallShift && Math.abs(balance.legacyNow - balance.legacyOld) <= BAND.legacyShift, `${balance.cases} walk away farewells (needs ${BAND.balanceCases}); farewell OVR gain ${(balance.ovrNow - balance.ovrOld).toFixed(1)} (needs ${BAND.farewellOvrGain}); Hall share shift ${(100 * (balance.hallNow - balance.hallOld)).toFixed(2)} points (band ${100 * BAND.hallShift}); median legacy shift ${balance.legacyNow - balance.legacyOld} (band ${BAND.legacyShift})`]] : []),
@@ -1690,7 +1730,7 @@ if (CONTROL) {
   const WANT = { everyonein: 'iff', bindhof: 'iff', outcomeswap: 'outcome', nominationgone: 'outcome', oldcurve: 'outcome', waitoff: 'table', shownraw: 'sides', flatfirst: 'rises', nopromise: 'promise', mathrandom: 'keyed', sharesides: 'sides', notalk: 'talk', farewelloff: 'answers', retireoff: 'answers', jerseyfirst: 'jersey', jerseyraw: 'jersey', talkdraws: 'identity', deckfarewelloff: 'ends', twice: 'once', seekexclude: 'seek', jerseyignore: 'deckJersey', eraunguarded: 'era',
     // Round 1051. An array wants every one of its checks red.
     v1drift: ['v1replay', 'v1formula'], calflip: ['v1replay', 'calrule'],
-    examplelie: 'words', nocardline: 'words', clausealways: 'words', wholesheet: 'words', standoutbig: 'anchors', standoutgone: 'anchors', anchorwiki: 'anchorshape', plantbase: 'base',
+    examplelie: 'words', nocardline: 'words', clausealways: 'words', wholesheet: 'words', standoutbig: 'anchors', standoutgone: 'anchors', decisionback: 'anchors', anchorwiki: 'anchorshape', plantbase: 'base',
     below: 'neverbelow', markdrift: 'marks', todrift: 'marks', noramp: 'halfrule', catchersteals: 'halfrule', nobase: 'base',
     // An object also names checks that must stay green: the standout switched off moves the outcome, never the marks.
     nostandout: { red: ['standoutgain'], green: ['marks'] } }[CONTROL];

@@ -22,7 +22,7 @@ export const MLB_HALL_WORDS: HallVoterWords = {
   reads: { wins: "wins", so: "strikeouts", hr: "home runs", rbi: "RBI" },
   readsBy: { RP: "Then your seasons. A reliever's saves do not move them." },
   hardware: "rings, the major awards, All-Star years",
-  families: "home runs, RBI, steals, wins or strikeouts",
+  families: "home runs, RBI, steals, wins or strikeouts, though a reliever gets none",
   example: { positions: ["CF"], stat: "sb", one: "center fielder", who: "center fielders", family: "steals" },
 };
 

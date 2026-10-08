@@ -1062,7 +1062,14 @@ const NFL_LEGACY_V1: LegacyWeights = {
    Every from and to mark, the list itself (the half rule) and the measured
    base terms come from scripts/data/careerHallMarks.json, which
    scripts/genCareerHallMarks.mjs derives from measured careers; section 17 of
-   scripts/simCareerHall.mjs fails if this table and that ledger disagree. */
+   scripts/simCareerHall.mjs fails if this table and that ledger disagree.
+   Two families the marks would give are not here, because real careers said
+   no (section 18 of the harness; each decision is recorded with its counts in
+   scripts/data/careerHallAnchors.json): a receiver's touchdown catches and a
+   kicker's field goals. With the push, whole and then halved, the engine sent
+   a real long wait straight in on the first ballot and inducted real kickers
+   the Hall never called. So a kicker is read on his hardware and his seasons,
+   exactly as calibration 1 read him. */
 const NFL_LEGACY_V2: LegacyWeights = {
   awards: { rings: 80, mvps: 230, allPros: 150 },
   season: 11,
@@ -1086,7 +1093,6 @@ const NFL_LEGACY_V2: LegacyWeights = {
       standout: [
         { stat: 'rec', from: 1470, to: 1660, label: 'catches' },
         { stat: 'recYds', from: 18500, to: 21000, label: 'receiving yards' },
-        { stat: 'recTd', from: 154, to: 179, label: 'touchdown catches' },
       ],
     },
     TE: {
@@ -1119,9 +1125,6 @@ const NFL_LEGACY_V2: LegacyWeights = {
     },
     K: {
       terms: [],
-      standout: [
-        { stat: 'fgMade', from: 512, to: 564, label: 'field goals' },
-      ],
     },
     '*': { terms: [] },
   },
