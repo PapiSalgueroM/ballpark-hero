@@ -4000,7 +4000,6 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           <div className="px-3 py-2 border-b border-border bg-muted/20">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Career Timeline</span>
           </div>
-          </div>
 
           <div ref={timelineRef} className="max-h-[280px] md:max-h-[480px] overflow-y-auto p-2 space-y-0.5 scrollbar-thin">
             {career.seasons.map((s, i) => (
@@ -4550,6 +4549,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {career.retired && career.rivalrySummary && (
             <RivalrySummaryCard summary={career.rivalrySummary} career={career} />
           )}
+          </div>
         </div>
       </div>
 
