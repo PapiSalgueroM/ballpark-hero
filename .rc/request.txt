@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+appeal: node scripts/simManagerAppealIsolation.mjs
+shootout: node scripts/simCmShootoutOrder.mjs
+rules: node scripts/simCmLeagueRules.mjs
+nolive: PLAY_TRANSLATED_CONTROL=nolive ENGINES=chromium node scripts/playTranslatedPage.mjs
