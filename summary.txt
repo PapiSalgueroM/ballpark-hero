@@ -1,0 +1,15 @@
+size-0 exit=0 44s | simClubManagerSaveSize: all sections green
+size-1 exit=0 45s | simClubManagerSaveSize: all sections green
+size-3 exit=0 43s | simClubManagerSaveSize: all sections green
+size-2 exit=0 46s | simClubManagerSaveSize: all sections green
+ladder exit=1 106s |    + Fakel Voronezh: "Dynamo Makhachkala"
+size-4 exit=0 44s | simClubManagerSaveSize: all sections green
+size-5 exit=0 44s | simClubManagerSaveSize: all sections green
+size-uncapped exit=1 50s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=uncapped turned section 1 red (33 failures) and nothing else
+slots-1 exit=1 44s | simClubManagerSlots: RED, sections 2 (1 failures)
+slots-0 exit=0 54s | simClubManagerSlots: all sections green
+slots-2 exit=0 52s | simClubManagerSlots: all sections green
+slots-3 exit=0 50s | simClubManagerSlots: all sections green
+slots-4 exit=0 50s | simClubManagerSlots: all sections green
+slots-5 exit=0 41s | simClubManagerSlots: all sections green
+slots-dupe exit=1 38s | CONTROL FIRED: SLOTS_CONTROL=dupe turned section 2 red through its budget check (red sections: 2, 3), as it must

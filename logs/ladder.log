@@ -1,0 +1,30 @@
+leg3: the harness exited 1: 3) digest, the pure rules: drop zones, European places, board demands, the exported views /    drop counts: premier 3, championship 3, laliga 3, seriea 3, bundesliga 2, ligue1 2, eredivisie 2, saudi 3, mlsEast 0, mlsWest 0, primeira 2, scottish 1, superlig 3, bundesliga2 2, proleague 1, austria 1, greece 2, denmark 2, switzerland 1, croatia 1, brasileirao 4, ligamx 0, aleague 0, serieb 3, ligue2 2, segunda 4, russia 2, premier2010 3, laliga2010 3, seriea2010 3, bundesliga2010 2, ligue12010 3, premier2015 3, laliga2015 3, seriea2015 3, bundesliga2015 2, ligue12015 3, premier2005 3, laliga2005 3, seriea2005 3, bundesliga2005 3, ligue12005 3, premier2020 3, laliga2020 3, seriea2020 3, bundesliga2020 2, ligue12020 2 / baseline written for modern, eras, pure from /home/runner/work/ballpark-hero/ballpark-hero /   / simCmLeagueRules: 1 failure(s) / 
+leg 1  (round out of the world, bank edits undone) against the committed baseline: modern 26 keys, 0 moved, +0 -0 | eras 20 keys, 0 moved, +0 -0 | pure 47 keys, 0 moved, +0 -0
+leg 1 file byte identical to the baseline: true
+leg 1b (the two name bank edits in) against leg 1: modern 26 keys, 3 moved, +0 -0 | eras 20 keys, 1 moved, +0 -0 | pure 47 keys, 0 moved, +0 -0
+leg 2  (the join in, the rows out) against leg 1b: modern 26 keys, 21 moved, +0 -0 | eras 20 keys, 0 moved, +0 -0 | pure 47 keys, 0 moved, +0 -0
+leg 3  (the tree as it is) against leg 2: modern 27 keys, 26 moved, +1 -0 (added now|russia) | eras 20 keys, 6 moved, +0 -0 | pure 48 keys, 1 moved, +1 -0 (added now|russia)
+whole  (the tree as it is) against the committed baseline: modern 27 keys, 26 moved, +1 -0 (added now|russia) | eras 20 keys, 6 moved, +0 -0 | pure 48 keys, 1 moved, +1 -0 (added now|russia)
+  leg 1b modern moved: now|premier, now|mlsEast, now|superlig
+  leg 1b eras moved: era2005|seriea2005
+  leg 2 modern moved: now|ligue1, now|eredivisie, now|saudi, now|mlsEast, now|mlsWest, now|primeira, now|scottish, now|superlig, now|bundesliga2, now|proleague, now|austria, now|greece, now|denmark, now|switzerland, now|croatia, now|brasileirao, now|ligamx, now|aleague, now|serieb, now|ligue2, now|segunda
+  PURE KEYS MOVED (a rule changed): views
+derby board, the round out of the world: PRIMARY_RIVAL 115 565e14623c2fe3607eec8864303d001fce77c4308c1a408c6c49114ea9b679d6 | board rivals 438 c37dbeb1ca09ccdfe49770579b3f8cbe0b2bf4ab7a61e72c558092cae0a08230
+derby board, the tree as it is:          PRIMARY_RIVAL 115 565e14623c2fe3607eec8864303d001fce77c4308c1a408c6c49114ea9b679d6 | board rivals 454 cc107f7ec08a555fbf74c2ad1cf3cb15280bafd65c50c0ce77613956df17a55c
+derby board: 438 clubs before, 454 now; changed 0 ; dropped 0; added 16
+   + Zenit: "Spartak Moscow"
+   + Krasnodar: "Dynamo Moscow"
+   + Spartak Moscow: "Krasnodar"
+   + CSKA Moscow: "Dynamo Moscow"
+   + Lokomotiv Moscow: "Rubin Kazan"
+   + Rubin Kazan: "Lokomotiv Moscow"
+   + Dynamo Moscow: "Krasnodar"
+   + Rostov: "Baltika"
+   + Akhmat Grozny: "Rostov"
+   + Krylia Sovetov: "Akron Tolyatti"
+   + Baltika: "Rostov"
+   + Orenburg: "Rodina Moscow"
+   + Akron Tolyatti: "Krylia Sovetov"
+   + Dynamo Makhachkala: "Orenburg"
+   + Rodina Moscow: "Orenburg"
+   + Fakel Voronezh: "Dynamo Makhachkala"

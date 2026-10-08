@@ -1,0 +1,225 @@
+{
+ "d1": {
+  "modern": {
+   "keys": 26,
+   "moved": 0,
+   "added": [],
+   "gone": [],
+   "movedKeys": []
+  },
+  "eras": {
+   "keys": 20,
+   "moved": 0,
+   "added": [],
+   "gone": [],
+   "movedKeys": []
+  },
+  "pure": {
+   "keys": 47,
+   "moved": 0,
+   "added": [],
+   "gone": [],
+   "movedKeys": []
+  }
+ },
+ "d1b": {
+  "modern": {
+   "keys": 26,
+   "moved": 3,
+   "added": [],
+   "gone": [],
+   "movedKeys": [
+    "now|premier",
+    "now|mlsEast",
+    "now|superlig"
+   ]
+  },
+  "eras": {
+   "keys": 20,
+   "moved": 1,
+   "added": [],
+   "gone": [],
+   "movedKeys": [
+    "era2005|seriea2005"
+   ]
+  },
+  "pure": {
+   "keys": 47,
+   "moved": 0,
+   "added": [],
+   "gone": [],
+   "movedKeys": []
+  }
+ },
+ "d2": {
+  "modern": {
+   "keys": 26,
+   "moved": 21,
+   "added": [],
+   "gone": [],
+   "movedKeys": [
+    "now|ligue1",
+    "now|eredivisie",
+    "now|saudi",
+    "now|mlsEast",
+    "now|mlsWest",
+    "now|primeira",
+    "now|scottish",
+    "now|superlig",
+    "now|bundesliga2",
+    "now|proleague",
+    "now|austria",
+    "now|greece",
+    "now|denmark",
+    "now|switzerland",
+    "now|croatia",
+    "now|brasileirao",
+    "now|ligamx",
+    "now|aleague",
+    "now|serieb",
+    "now|ligue2",
+    "now|segunda"
+   ]
+  },
+  "eras": {
+   "keys": 20,
+   "moved": 0,
+   "added": [],
+   "gone": [],
+   "movedKeys": []
+  },
+  "pure": {
+   "keys": 47,
+   "moved": 0,
+   "added": [],
+   "gone": [],
+   "movedKeys": []
+  }
+ },
+ "d3": {
+  "modern": {
+   "keys": 27,
+   "moved": 26,
+   "added": [
+    "now|russia"
+   ],
+   "gone": [],
+   "movedKeys": [
+    "now|premier",
+    "now|championship",
+    "now|laliga",
+    "now|seriea",
+    "now|bundesliga",
+    "now|ligue1",
+    "now|eredivisie",
+    "now|saudi",
+    "now|mlsEast",
+    "now|mlsWest",
+    "now|primeira",
+    "now|scottish",
+    "now|superlig",
+    "now|bundesliga2",
+    "now|proleague",
+    "now|austria",
+    "now|greece",
+    "now|denmark",
+    "now|switzerland",
+    "now|croatia",
+    "now|brasileirao",
+    "now|ligamx",
+    "now|aleague",
+    "now|serieb",
+    "now|ligue2",
+    "now|segunda"
+   ]
+  },
+  "eras": {
+   "keys": 20,
+   "moved": 6,
+   "added": [],
+   "gone": [],
+   "movedKeys": [
+    "era2015|premier2015",
+    "era2005|premier2005",
+    "era2005|laliga2005",
+    "era2005|seriea2005",
+    "era2005|bundesliga2005",
+    "era2005|ligue12005"
+   ]
+  },
+  "pure": {
+   "keys": 48,
+   "moved": 1,
+   "added": [
+    "now|russia"
+   ],
+   "gone": [],
+   "movedKeys": [
+    "views"
+   ]
+  }
+ },
+ "dAll": {
+  "modern": {
+   "keys": 27,
+   "moved": 26,
+   "added": [
+    "now|russia"
+   ],
+   "gone": [],
+   "movedKeys": [
+    "now|premier",
+    "now|championship",
+    "now|laliga",
+    "now|seriea",
+    "now|bundesliga",
+    "now|ligue1",
+    "now|eredivisie",
+    "now|saudi",
+    "now|mlsEast",
+    "now|mlsWest",
+    "now|primeira",
+    "now|scottish",
+    "now|superlig",
+    "now|bundesliga2",
+    "now|proleague",
+    "now|austria",
+    "now|greece",
+    "now|denmark",
+    "now|switzerland",
+    "now|croatia",
+    "now|brasileirao",
+    "now|ligamx",
+    "now|aleague",
+    "now|serieb",
+    "now|ligue2",
+    "now|segunda"
+   ]
+  },
+  "eras": {
+   "keys": 20,
+   "moved": 6,
+   "added": [],
+   "gone": [],
+   "movedKeys": [
+    "era2015|premier2015",
+    "era2005|premier2005",
+    "era2005|laliga2005",
+    "era2005|seriea2005",
+    "era2005|bundesliga2005",
+    "era2005|ligue12005"
+   ]
+  },
+  "pure": {
+   "keys": 48,
+   "moved": 1,
+   "added": [
+    "now|russia"
+   ],
+   "gone": [],
+   "movedKeys": [
+    "views"
+   ]
+  }
+ }
+}
