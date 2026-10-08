@@ -1,3 +1,13 @@
+## Round1158 source preparation: Club Manager facility button names
+
+One accessible label names the facility and preserves its existing Upgrade
+price or Maxed wording. Upgrade helpers, callbacks, budgets, facility levels,
+effects and visible layout stay held. Intended remote checks cover named
+keyboard upgrades and zero-budget/max-level disabled cases against actual
+helper outcomes, plus an effective parent-name comparison. Source review,
+proper app types, build, readers and finite rendered proof are pending.
+No local runtime execution, whole-route save or live acceptance is claimed.
+
 ## Release AL LIVE, 2026-10-08 05:38 EDT: ten Codex rounds, playable moments, and a translated page no longer crashes
 
 Claude lane (session F: session E died when the PC was restarted at 00:03 EDT with this release's gate running).
