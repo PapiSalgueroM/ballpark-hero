@@ -1,0 +1,1 @@
+vitest: node_modules/.bin/vitest run src/test/translateGuard.test.tsx --testTimeout=300000 --hookTimeout=120000
