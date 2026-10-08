@@ -1,0 +1,65 @@
+uspatch: measure applied to scripts/qa/usCareerSaveRecovery1084.mjs
+usdiag measure at f20b9762d: driver exit 1 after 300 s
+complete false | cases 12 done 12 | deletions 2 done 1 | transportErrors 0
+row 320-nba-latest-write complete true phase closed | local 102 pending 0 errors 0 slowest ms 1029 span ms 5218 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 320-nfl-latest-write complete true phase closed | local 102 pending 0 errors 0 slowest ms 1804 span ms 6884 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 320-mlb-latest-write complete true phase closed | local 102 pending 0 errors 0 slowest ms 2667 span ms 9091 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 320-nhl-latest-write complete true phase closed | local 102 pending 0 errors 0 slowest ms 3350 span ms 10851 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 390-nba-latest-write complete true phase closed | local 102 pending 0 errors 0 slowest ms 4338 span ms 14397 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 390-nfl-latest-write complete true phase closed | local 102 pending 0 errors 0 slowest ms 5019 span ms 16040 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 390-mlb-latest-write complete true phase closed | local 102 pending 0 errors 0 slowest ms 5690 span ms 17776 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 390-nhl-latest-write complete true phase closed | local 102 pending 0 errors 0 slowest ms 6398 span ms 19566 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 1280-nba-latest-write complete true phase closed | local 102 pending 0 errors 0 slowest ms 7627 span ms 22700 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 1280-nfl-latest-write complete true phase closed | local 102 pending 0 errors 0 slowest ms 8493 span ms 24747 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 1280-mlb-latest-write complete true phase closed | local 102 pending 0 errors 0 slowest ms 9145 span ms 26647 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 1280-nhl-latest-write complete true phase closed | local 102 pending 0 errors 0 slowest ms 9958 span ms 28843 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 320-nba-delete-and-replace complete true phase closed | local 105 pending 0 errors 0 slowest ms 10496 span ms 29983 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 390-nfl-delete-and-replace complete false phase reloading | local 105 pending 0 errors 0 slowest ms 12862 span ms 35518 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+=== NOT COMPLETE 390-nfl-delete-and-replace
+  local tail 98 assets/HubTiles-CcALHEr3.js 200 14:16:02.614 14:16:12.781
+  local tail 99 assets/crown-BVn-X39F.js 200 14:16:02.692 14:16:12.857
+  local tail 100 assets/dumbbell-EUk7__W1.js 200 14:16:02.770 14:16:12.932
+  local tail 101 assets/usCareerSeasonReview-CstHycFO.css 200 14:16:02.846 14:16:13.008
+  local tail 102 assets/GameNav-d7jeK_v7.js 200 14:16:02.924 14:16:13.086
+  local tail 103 assets/GameSeoContent-Bq6Cc3UB.js 200 14:16:03.002 14:16:13.163
+  local tail 104 assets/seoMetaPart00-CuVEcdvG.js 200 14:16:13.337 14:16:13.834
+  local tail 105 assets/football-BrKZz2fy.js 200 14:16:13.414 14:16:13.915
+  other 2 GET https://fonts.googleapis.com/css2 [actual cached asset]
+  other 2 GET https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf [actual cached asset]
+  other 2 GET https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf [actual cached asset]
+  other 2 GET https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf [actual cached asset]
+  other 2 GET https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores [explicit local empty live-board read]
+  other 2 GET https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf [actual cached asset]
+  other 2 GET https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf [actual cached asset]
+  other 2 GET https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf [actual cached asset]
+  other 2 GET https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf [actual cached asset]
+  other 2 GET https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf [actual cached asset]
+  lifecycle [{"phase":"active","at":"2026-10-08T14:15:54.073Z","pending":0},{"phase":"before-reload","at":"2026-10-08T14:15:57.896Z","pending":0},{"phase":"before-reload-drained","at":"2026-10-08T14:15:57.971Z","pending":0},{"phase":"reloading","at":"2026-10-08T14:15:58.047Z","pending":0}]
+REPORT ERROR TimeoutError page.reload: Timeout 15000ms exceeded.
+Call log:
+  - waiting for navigation until "networkidle"
+    - navigated to "http://127.0.0.1:40375/nfl-my-career"
+
+SAVE STATS mode=measure calls=6300 totalMs=225684 maxMs=96 reportBytes=13108506
+--- native.log (tail)
+SAVE STATS mode=measure calls=6300 totalMs=225684 maxMs=96 reportBytes=13108506
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.reload: Timeout 15000ms exceeded.
+Call log:
+  - waiting for navigation until "networkidle"
+    - navigated to "http://127.0.0.1:40375/nfl-my-career"
+
+    at recover (/home/runner/work/_temp/wt-measure/scripts/qa/usCareerSaveRecovery1084.mjs:422:14)
+    at async file:///home/runner/work/_temp/wt-measure/scripts/qa/usCareerSaveRecovery1084.mjs:552:5 {
+  log: [
+    '  - waiting for navigation until "networkidle"',
+    '    - navigated to "http://127.0.0.1:40375/nfl-my-career"'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0
+usdiag measure exit code 1 | page.reload: Timeout 15000ms exceeded.

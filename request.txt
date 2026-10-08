@@ -1,0 +1,8 @@
+#!build
+#!playwright
+#!serial
+# Release AM fixer pass 2: why the Round 1084 native driver times out on this runner, on Codex's own head too.
+# Same branch head twice, each in a throwaway checkout with a scratch probe applied to the driver copy:
+# throttle = the four per request report writes share one write per 250 ms; measure = only time the writes.
+us-throttle: bash .rc/x/uspatched.sh throttle throttle
+us-measure: bash .rc/x/uspatched.sh measure measure

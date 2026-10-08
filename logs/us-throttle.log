@@ -1,0 +1,24 @@
+uspatch: throttle applied to scripts/qa/usCareerSaveRecovery1084.mjs
+usdiag throttle at f20b9762d: driver exit 0 after 118 s
+complete true | cases 12 done 12 | deletions 4 done 4 | transportErrors 0
+row 320-nba-latest-write complete true phase closed | local 102 pending 0 errors 0 slowest ms 116 span ms 3806 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 320-nfl-latest-write complete true phase closed | local 102 pending 0 errors 0 slowest ms 95 span ms 3460 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 320-mlb-latest-write complete true phase closed | local 102 pending 0 errors 0 slowest ms 94 span ms 3526 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 320-nhl-latest-write complete true phase closed | local 102 pending 0 errors 0 slowest ms 106 span ms 3641 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 390-nba-latest-write complete true phase closed | local 102 pending 0 errors 0 slowest ms 85 span ms 5180 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 390-nfl-latest-write complete true phase closed | local 102 pending 0 errors 0 slowest ms 92 span ms 4730 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 390-mlb-latest-write complete true phase closed | local 102 pending 0 errors 0 slowest ms 73 span ms 4814 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 390-nhl-latest-write complete true phase closed | local 102 pending 0 errors 0 slowest ms 77 span ms 4906 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 1280-nba-latest-write complete true phase closed | local 102 pending 0 errors 0 slowest ms 125 span ms 5700 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 1280-nfl-latest-write complete true phase closed | local 102 pending 0 errors 0 slowest ms 83 span ms 5027 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 1280-mlb-latest-write complete true phase closed | local 102 pending 0 errors 0 slowest ms 106 span ms 5246 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 1280-nhl-latest-write complete true phase closed | local 102 pending 0 errors 0 slowest ms 181 span ms 5227 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 320-nba-delete-and-replace complete true phase closed | local 105 pending 0 errors 0 slowest ms 146 span ms 4336 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 390-nfl-delete-and-replace complete true phase closed | local 105 pending 0 errors 0 slowest ms 97 span ms 7028 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 1280-mlb-delete-and-replace complete true phase closed | local 105 pending 0 errors 0 slowest ms 103 span ms 7106 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+row 320-nhl-delete-and-replace complete true phase closed | local 105 pending 0 errors 0 slowest ms 183 span ms 4783 | blocked 20 unexpected 0 sockets 0 pageErrors 0 console 0
+SAVE STATS mode=throttle calls=702 totalMs=28928 maxMs=98 reportBytes=14701646
+--- native.log (tail)
+US career recovery: 12 actual-route latest-write journeys, 4 deletion/replacement cases, 9 effective restored DOM controls, no forwarded writes.
+SAVE STATS mode=throttle calls=702 totalMs=28928 maxMs=98 reportBytes=14701646
+usdiag throttle exit code 0 | 
