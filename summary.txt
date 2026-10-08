@@ -1,0 +1,12 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+rec exit=0 4s |  1 file changed, 1 insertion(+), 1 deletion(-)
+weight exit=0 8s | weightBytes done (2)
+vitest exit=0 6s |    Duration  5.11s (transform 2.27s, setup 393ms, collect 3.11s, tests 608ms, environment 2.77s, prepare 1.28s)
+play-floor exit=1 63s | playSeasonCentreMotion: 52 checks, 1 failed (control floor) (only C)
+tsc exit=0 83s | 
+play exit=0 127s | playSeasonCentreMotion: 68 checks, 0 failed
+play-lock exit=1 62s | playSeasonCentreMotion: 52 checks, 2 failed (control lock) (only C)
+play-tableview exit=1 62s | playSeasonCentreMotion: 52 checks, 1 failed (control tableview) (only C)
+playSeasonMoments exit=0 42s | playSeasonMoments: 117 checks, 0 failed
+playReducedMotion exit=0 35s | playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone e
+playSeasonCentre exit=0 99s | playSeasonCentre: 40 checks, 0 failed
