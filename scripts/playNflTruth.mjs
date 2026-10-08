@@ -16,7 +16,9 @@
  *      summers existed) is rebuilt the way Round 422 promised: $4.2M.
  *   3  An edge rusher in today's league: every sack total on a played season
  *      is a whole or a half, and every season the curtain called neither
- *      hurt nor a bench year is exactly 17 games.
+ *      hurt nor a bench year is exactly 17 games. Then the reader itself is
+ *      proved: one season doctored to be hurt for certain must be told as
+ *      hurt and set aside.
  *   4  No sideways scroll on the hub at either width, and no page error.
  *
  * Assertions read the save the board wrote (the engine's own words) and the
@@ -256,6 +258,24 @@ for (const [w, h] of WIDTHS) {
   say(full.length > 0 && full.every(s => s.games === 17), `every season today the engine did not call hurt or a bench year is exactly 17 games, and there is one (${tellOf(lines, told)})`);
   say(sacks.length > 0 && sacks.every(v => typeof v === 'number' && Number.isInteger(v * 2)), `every sack total is a whole or a half (${sacks.join(', ')})`);
   say(sacks.some(v => v > 0), 'and at least one season had a sack, so the check read something');
+  /* THE READER, PROVED. Six plain runs of this walk saw 72 seasons and not one injury, so nothing above shows
+     that the walk can tell a hurt season when it meets one. Here it meets one for certain: the body is
+     doctored so far gone that the engine's injury risk passes 1 (the risk is not capped), and that season
+     must come back told as hurt on the curtain and short of 17 games. If the curtain ever stops saying it in
+     these words, this fails here by name, instead of a schedule check going red once in a while. */
+  await page.evaluate(k => {
+    const s = JSON.parse(localStorage.getItem(k));
+    s.c.health = -400;
+    localStorage.setItem(k, JSON.stringify(s));
+  }, KEY);
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForTimeout(1200);
+  const more = await playSeasons(page, 1, told);
+  const after = (await readSave(page))?.c?.seasons ?? [];
+  const lastLine = after[after.length - 1];
+  const said = cutShort(told[after.length - 1]);
+  say(more === 1 && after.length === lines.length + 1 && said === 'hurt' && lastLine.games < 17 && !fullSeasons(after, told).includes(lastLine),
+    `a season certain to be cut short is told as hurt on the curtain and set aside (${lastLine?.games} games, the curtain said: ${said || 'nothing'})`);
   await context.close();
 }
 

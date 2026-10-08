@@ -355,6 +355,96 @@ console.log('5) MEASURED, asserted on nothing');
   }
   console.log(`   for Round 1112, the head to head share of decided years in the throwback, 17 game arm -> now (the rival keeps a 17 game line against a 16 game player): ${POSITIONS.map(pos => `${pos} ${measured1b[pos].h2h.base.toFixed(1)} -> ${measured1b[pos].h2h.now.toFixed(1)}`).join(', ')}`);
   console.log(`   for Round 1051's owner, the Hall percent by position in the throwback, 17 game arm -> now: ${POSITIONS.map(pos => `${pos} ${measured1b[pos].hall.base.toFixed(1)} -> ${measured1b[pos].hall.now.toFixed(1)}`).join(', ')}`);
+
+  /* The 2026 top of the market by position, millions a year, beside what the engine's open market pays a 95.
+     For Round 1123; nothing here enters src and nothing is asserted. Two sources a position, read 2026-10-08:
+     A = ESPN, "2026 NFL contracts: Next to get a big deal at every position", 11 June 2026, as carried by ABC7
+         Los Angeles (it prints the top deal at each position).
+     B = CBS Sports as summarised by Fantasy Nerds, "NFL's Highest-Paid Players by Position for 2026: A
+         Financial Snapshot", 9 September 2026.
+     QB 63.4 in A, 63 in B. WR 42.2 in A, 42.15 in B. TE 19.1 in both. LB 21 in both. EDGE 50 in both.
+     RB: A's figure (20.6) is older than two August deals; B gives three years and 67.5M, and theScore, "Lions
+         make Gibbs highest-paid RB with 3-year deal worth up to $75.75M" (worth 67.5M before incentives), the
+         same: 22.5 a year.
+     CB: A's figure (31) is older than a September deal; B gives 33.75 and NESN's list of the highest paid
+         cornerbacks of 2026 gives four years, 135M, 33.75 a year.
+     K: B gives 7; the Associated Press, 21 April 2026, as carried by KSAT, "the first kicker with a $7 million
+         annual average". */
+  const TOP_OF_MARKET_2026 = { QB: 63, RB: 22.5, WR: 42.15, TE: 19.1, LB: 21, CB: 33.75, EDGE: 50, K: 7 };
+  {
+    const cells = POSITIONS.map(pos => {
+      const c = NEW.E.startCareer('Pay', pos, NEW.E.ARCHETYPES[pos][0], mulberry(5), null, 'now');
+      const at95 = NEW.E.marketSalary({ ...c, ovr: 95 });
+      return `${pos} ${at95} against ${TOP_OF_MARKET_2026[pos]} (${(at95 / TOP_OF_MARKET_2026[pos]).toFixed(2)}x)`;
+    });
+    console.log(`   for Round 1123, the engine's open market pay for a 95 against the real 2026 top of the market, two sourced (M a year): ${cells.join(', ')}`);
+  }
+
+  /* The MLB (2004) and NHL (2006-07) throwbacks, for Round 1137: which season years a throwback career reaches
+     and how long a season the engine plays in each. Measured off the two bindings, the way the board drives
+     them. THE CANDIDATE LISTS BELOW ARE UNVERIFIED: written from memory as places for Round 1137 to look, two
+     sourced by nobody, and they never leave this file. A candidate season is one whose real schedule may not
+     have been the full one; a candidate club is one in the era's list that may have moved or been renamed
+     inside the years a throwback career reaches. */
+  const CANDIDATES_UNVERIFIED = {
+    mlb: {
+      seasons: [2020],
+      clubs: [/Expos/, /Devil Rays/, /Florida/, /Anaheim/, /Indians/, /Oakland/],
+    },
+    nhl: {
+      seasons: [2012, 2019, 2020],
+      clubs: [/Thrashers/, /Phoenix/, /Mighty Ducks/],
+    },
+  };
+  const out2 = path.join(tmpDir, 'others.mjs');
+  await build({
+    stdin: { contents: [`export { MLB_CAREER_SPORT } from './src/lib/mlbCareerSport.ts';`, `export { NHL_CAREER_SPORT } from './src/lib/nhlCareerSport.ts';`, `export { MLB_ERAS } from './src/lib/mlbMyCareer.ts';`, `export { NHL_ERAS } from './src/lib/nhlMyCareer.ts';`].join('\n'), resolveDir: ROOT, loader: 'ts' },
+    bundle: true, format: 'esm', platform: 'node', outfile: out2, absWorkingDir: ROOT, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') },
+  });
+  const O = await import(pathToFileURL(out2).href);
+  for (const [slug, sport, eras] of [['mlb', O.MLB_CAREER_SPORT, O.MLB_ERAS], ['nhl', O.NHL_CAREER_SPORT, O.NHL_ERAS]]) {
+    const era = eras.find(e => e.id !== 'now');
+    const rng = mulberry(SEED * 4099 + slug.charCodeAt(0));
+    const keep = Math.random; Math.random = rng;
+    const byYear = new Map();
+    let careers = 0;
+    try {
+      for (let i = 0; i < 160; i += 1) {
+        const pos = sport.create.positions[i % sport.create.positions.length];
+        const archs = sport.create.archetypes[pos];
+        const c = sport.startCareer(`Era ${i}`, pos, archs[i % archs.length], rng, null, era.id);
+        let tq = sport.rollTeamQuality(null, rng);
+        sport.assignRole(c, tq, rng);
+        for (let n = 0; n < 30; n += 1) {
+          sport.campBattle(c, tq, rng);
+          sport.simSeason(c, tq, rng);
+          sport.progress(c, rng);
+          if (sport.shouldRetire(c)) break;
+          tq = sport.rollTeamQuality(tq, rng);
+        }
+        careers += 1;
+        for (const s of c.seasons) {
+          const y = byYear.get(s.year) ?? { lines: 0, longest: 0 };
+          y.lines += 1; y.longest = Math.max(y.longest, s.games); byYear.set(s.year, y);
+        }
+      }
+    } finally { Math.random = keep; }
+    const years = [...byYear.keys()].sort((a, b) => a - b);
+    if (!years.length) { fail('5', `${slug}: the throwback probe saw no season at all`); continue; }
+    /* The longest line of a year is what a healthy everyday player was given: the schedule the engine plays.
+       A late year only a few old careers reach can show less (nobody healthy was left to play it all), so
+       each year that differs from the longest of all is printed with how many lines it rests on. */
+    const longest = years.reduce((m, y) => (byYear.get(y).longest > m ? byYear.get(y).longest : m), 0);
+    const odd = years.filter(y => byYear.get(y).longest !== longest).map(y => `${y} ${byYear.get(y).longest} games on ${byYear.get(y).lines} lines`);
+    const spans = [{ from: years[0], to: years[years.length - 1], games: longest }];
+    if (odd.length) console.log(`   (the ${slug.toUpperCase()} years whose longest line is shorter than ${longest}: ${odd.join(', ')})`);
+    const cand = CANDIDATES_UNVERIFIED[slug];
+    const hit = cand.seasons.map(y => `${y}: ${byYear.get(y)?.lines ?? 0} season lines, the engine played ${byYear.get(y)?.longest ?? 'no'} games`);
+    const clubs = era.teams.filter(t => cand.clubs.some(rx => rx.test(`${t.city} ${t.name}`))).map(t => `${t.city} ${t.name} (${t.id})`);
+    console.log(`   for Round 1137, the ${slug.toUpperCase()} throwback (${era.label}): ${careers} careers reach season years ${spans[0].from} to ${spans[0].to}, and the engine plays a ${spans[0].games} game season in ${years.length - odd.length} of those ${years.length} years (the rest are listed above, each on a handful of lines)`);
+    console.log(`      UNVERIFIED candidate seasons (from memory, for Round 1137 to check): ${hit.join('; ')}`);
+    console.log(`      UNVERIFIED candidate clubs in the era's list of ${era.teams.length} that may have moved or been renamed in those years: ${clubs.length ? clubs.join(', ') : 'none matched'}`);
+  }
 }
 
 /* ── the verdict ── */
