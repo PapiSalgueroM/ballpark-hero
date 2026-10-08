@@ -1,0 +1,3 @@
+p1-stamponlymanual exit=0 16s |  Tests 4 failed | 157 passed (161)); sim-nba exit=3 (simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 25 checks that ran are green));
+p2-tsc-after exit=0 32s | 
+p9-clean exit=0 0s | 0

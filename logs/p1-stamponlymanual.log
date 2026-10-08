@@ -1,0 +1,12 @@
+MUTATED stamponlymanual: src/components/us-career/UsCareerBoard.tsx
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+   × nfl: the retirement talk on the board > Retire now in the middle of an offseason drops the dealt card unapplied 56ms
+   × nba: the retirement talk on the board > Retire now in the middle of an offseason drops the dealt card unapplied 35ms
+   × mlb: the retirement talk on the board > Retire now in the middle of an offseason drops the dealt card unapplied 34ms
+   × nhl: the retirement talk on the board > Retire now in the middle of an offseason drops the dealt card unapplied 30ms
+ FAIL  src/test/usCareerHallBoard.test.tsx > nfl: the retirement talk on the board > Retire now in the middle of an offseason drops the dealt card unapplied
+ FAIL  src/test/usCareerHallBoard.test.tsx > nba: the retirement talk on the board > Retire now in the middle of an offseason drops the dealt card unapplied
+ FAIL  src/test/usCareerHallBoard.test.tsx > mlb: the retirement talk on the board > Retire now in the middle of an offseason drops the dealt card unapplied
+ FAIL  src/test/usCareerHallBoard.test.tsx > nhl: the retirement talk on the board > Retire now in the middle of an offseason drops the dealt card unapplied
+MUT stamponlymanual: CAUGHT, 0 files left changed: vit exit=1 (⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+ Tests 4 failed | 157 passed (161)); sim-nba exit=3 (simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 25 checks that ran are green));
