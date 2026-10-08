@@ -1,0 +1,7 @@
+# AN2: the first half own browser walks outside decision 3, once on the merged tree
+#!serve
+#!playwright
+cmplay: node scripts/playCmDataOnDemand.mjs
+cmplay-abort: CM_PLAY_CONTROL=abort node scripts/playCmDataOnDemand.mjs
+playFlagshipLazy: node scripts/playFlagshipLazy.mjs
+inbox: node scripts/playInboxCard.mjs
