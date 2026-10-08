@@ -1,0 +1,5 @@
+mp-simCareerLeagueFinish exit=1 9s | simCareerLeagueFinish: 1 failure(s) in section(s) 4
+mp-simCareerSocialBrands exit=1 10s | 1 FAILURE
+mp-simCareerAwardsNight exit=1 11s | simCareerAwardsNight: 4 FAILURES
+mp-simManagerCareer exit=0 7s | ALL MANAGER CAREER CHECKS PASSED
+mp-simCareerDerbies exit=1 11s | simCareerDerbies: 19 failures, sections 1, 3 red

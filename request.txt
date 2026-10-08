@@ -1,0 +1,5 @@
+mp-simCareerLeagueFinish: mv_pool() { cp .rc/x/poolmain.ts src/data/pm.$$.tmp && mv src/data/pm.$$.tmp src/data/soccerCareerClubPool.ts; }; mv_pool && node scripts/simCareerLeagueFinish.mjs
+mp-simCareerAwardsNight: mv_pool() { cp .rc/x/poolmain.ts src/data/pm.$$.tmp && mv src/data/pm.$$.tmp src/data/soccerCareerClubPool.ts; }; mv_pool && node scripts/simCareerAwardsNight.mjs
+mp-simCareerSocialBrands: mv_pool() { cp .rc/x/poolmain.ts src/data/pm.$$.tmp && mv src/data/pm.$$.tmp src/data/soccerCareerClubPool.ts; }; mv_pool && node scripts/simCareerSocialBrands.mjs
+mp-simManagerCareer: mv_pool() { cp .rc/x/poolmain.ts src/data/pm.$$.tmp && mv src/data/pm.$$.tmp src/data/soccerCareerClubPool.ts; }; mv_pool && node scripts/simManagerCareer.mjs
+mp-simCareerDerbies: mv_pool() { cp .rc/x/poolmain.ts src/data/pm.$$.tmp && mv src/data/pm.$$.tmp src/data/soccerCareerClubPool.ts; }; mv_pool && node scripts/simCareerDerbies.mjs
