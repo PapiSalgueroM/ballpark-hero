@@ -1,0 +1,26 @@
+{
+ "note": "Recorded once, before the lift. Never re-recorded.",
+ "baseCommit": "4e1d2fb726d02626383159fe3741193c9f2ace5f",
+ "seasons": {
+  "11": {
+   "hash": "8a2efebd7ed94dc0f65c2b090dd27bcce8dfa98405d833482f65d9b289c61998",
+   "mvp": 50,
+   "men": 294
+  },
+  "23": {
+   "hash": "3fab06fe6c6e850e5834fa3723ec8ad12a66673b7494804215fa4fdbc0556af0",
+   "mvp": 0,
+   "men": 276
+  },
+  "37": {
+   "hash": "de2446c7c0fab12dc55400b32363fc072a8f512ce50006105faae6851bae2056",
+   "mvp": 40,
+   "men": 291
+  },
+  "41": {
+   "hash": "987c3039e4a5e5618432d267e3340a41f9c9540c027d73700ab0807e40b26777",
+   "mvp": 40,
+   "men": 282
+  }
+ }
+}
