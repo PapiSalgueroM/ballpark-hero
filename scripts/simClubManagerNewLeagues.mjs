@@ -317,37 +317,47 @@ const NEW_LEAGUES = [
   },
   /* Round 1052: the Russian Premier League, the Brazil shape (a drop count
      with no second tier in the game). The pairs are set by rule and not by
-     taste: strong is the two highest preview ratings of the league (Zenit
-     76, Spartak Moscow 74), weak the two lowest among clubs that are not
-     partial (Fakel Voronezh 62, Dynamo Makhachkala 65; no club of the
-     league is partial). The managed clubs are the six in the middle by
-     rating.
-     MEASURED 2026-10-08 on a GitHub runner at b199f9b5, six seasons a run,
-     SIM_SEED unset and 1 to 5. Zenit over Fakel Voronezh: 33.7, 38.3, 33.2,
-     30.5, 36.7 and 40.5 points a season. Spartak Moscow over Dynamo
-     Makhachkala: 27.5, 13.3, 17.3, 19.8, 17.5 and 25.7. The band is 6: at
-     most half the smallest of those twelve means (13.3), rounded down. The
-     rank correlation over the ten unmanaged clubs: 0.948, 0.886, 0.899,
-     0.911, 0.911 and 0.948; the smallest is over 0.85, so it is banded at
-     the house 0.7. 353 real men and 4 flagged pads take the field on day
-     one, no partial club. The old world still plays the same in a bigger
-     one: on this tree, default stream, brasileirao measured 46.5 and 51.8
-     with rho 0.945, ligamx 16.0 and 8.0 with rho 0.944, both green on their
-     own unchanged bands.
-     Part H on the same six streams: Zenit won the league in 3 of 4, 7, 8, 5,
-     7 and 7 seasons played and none of the 18 title winners started the
+     taste: strong is the two highest preview ratings of the league, weak
+     the two lowest among clubs that are not partial, a tie going to the
+     engine's own order (its best eleven's average); no club of the league
+     is partial. The managed clubs are the six in the middle by that order.
+     The row was first measured at b199f9b5 on squads the round's review
+     then found fifty men short (a research parser had skipped every man
+     with an icon after his name, eleven club captains among them). With
+     the 46 who pass the rules back in (403 men, was 357) the ratings
+     moved, and by the same rule the strong pair is Zenit 77 and Krasnodar
+     75 (Spartak Moscow, CSKA Moscow and Dynamo Moscow are 75 too and come
+     after it in the engine's order), the weak pair Fakel Voronezh 63 and
+     Dynamo Makhachkala 66 (Orenburg and Rodina Moscow are 66 too and come
+     before it).
+     MEASURED 2026-10-08 on a GitHub runner at 183690a7, six seasons a run,
+     SIM_SEED unset and 1 to 5. Zenit over Fakel Voronezh: 26.3, 31.3, 31.0,
+     31.0, 31.8 and 32.0 points a season. Krasnodar over Dynamo
+     Makhachkala: 23.0, 22.7, 20.3, 23.8, 23.2 and 27.5. The band is 10: at
+     most half the smallest of those twelve means (20.3), rounded down. The
+     rank correlation over the ten unmanaged clubs: 0.906, 0.864, 0.906,
+     0.928, 0.934 and 0.868; the smallest is over 0.85, so it is banded at
+     the house 0.7. 390 real men and 2 flagged pads take the field on day
+     one, no partial club.
+     Part H on the same six streams: Zenit won the league in 3 of 3, 3, 7,
+     7, 4 and 6 seasons played and none of the 18 title winners started the
      next season in a Champions League group; 12 Russian Cup brackets a run,
      each the sixteen Russian clubs; 16 clubs on the job market, dugout size
-     16, playing career size null; 7 past season rows at their own strength.
-     Controls, default stream: rudrop 3 failures (part A: the row, the
-     engine's count, Fakel's ask); rueuro 1 (H1, three title winners in the
-     Champions League); ruflavour 7 (H4, every past season Russian club
-     rated off the 2026 squad: Zenit 2015-16 at 76 where the engine gave
-     83.5); ruswap turned both pairs negative (minus 26.7 and minus 20.3),
-     part C red; under it Zenit carries Fakel's squad and wins no title, so
-     part H is not read. */
+     16, playing career size null; a manager's table at Spartak Moscow has
+     16 places, size verified, and names Zenit; 7 past season rows at their
+     own strength, and the 7 past season Russian sides field no man of
+     today's squads (the engine holds no squad for them, so it fields none
+     at all: 0 men).
+     Controls: rudrop 3 failures (part A: the row, the engine's count,
+     Fakel's ask); rueuro 1 (H1, three title winners in the Champions
+     League); ruflavour 7 (H4, every past season Russian club rated off the
+     2026 squad); rulabel 2 (H3: under a respelled league label the
+     manager's table has 20 places, unverified, and names nobody); rumen 7
+     (H4: handed today's squad, Rubin Kazan of 2010-11 would field 27 men
+     of 2026); ruswap turns both pairs negative, part C red, and under it
+     Zenit carries Fakel's squad and wins no title, so part H is not read. */
   {
-    id: 'russia', size: 16, drop: 2, cup: 'Russian Cup', pairGap: 6, rhoMin: 0.7,
+    id: 'russia', size: 16, drop: 2, cup: 'Russian Cup', pairGap: 10, rhoMin: 0.7,
     pairs: [['Zenit', 'Fakel Voronezh'], ['Krasnodar', 'Dynamo Makhachkala']],
     managed: ['Lokomotiv Moscow', 'Rubin Kazan', 'Rostov', 'Akhmat Grozny', 'Baltika', 'Akron Tolyatti'],
   },

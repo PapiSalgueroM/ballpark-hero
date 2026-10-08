@@ -51,7 +51,8 @@
  * All six, run 2026-10-07 on this checkout (which stores src as CRLF): pools exit 1 (four pages:
  * ClubManager, DeadlineDay, ManagerHotSeat, TransferPath), eranat exit 1 (three), squad exit 1
  * (three, each for the loader and for Footle's data), noregister exit 1 (all 6910 past names
- * unanswered), eager exit 1 (1101 answered early, 23 with the wrong country), reformat exit 1
+ * unanswered), eager exit 1 (1101 answered early, 23 with the wrong country; 1109 since Round 1052,
+ * see TODAY_EXTRA below: eight past names only the Russian map answers), reformat exit 1
  * (era2010.ts:11). The first run of eranat did NOT fire, and it was right not to be trusted: the
  * walker dropped a module that one file imports both statically and with import(), which is
  * exactly what the control plants. scripts/lib/staticClosure.mjs gained its bothWays repair for

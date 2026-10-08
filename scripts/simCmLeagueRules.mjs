@@ -214,28 +214,37 @@
       Round 1052 (2026-10-08) re-took modern, eras and pure for the Russian
       Premier League, league 27 in nation 21, after a ladder of throwaway
       copies of src taken with this harness's root override on a GitHub
-      runner at 1fa0a7a7 (the Round 1035 ladder, one leg longer because the
-      round also edited two name banks). Leg 1, the whole round out of the
-      world (the league row, its rules row, its nation and both spreads of
-      the join) with the two bank edits undone: the committed file byte for
-      byte (modern 26/0, eras 20/0, pure 47/0), so everything else of the
-      round is inert. Leg 1b, the two bank edits back in (no scout may be
-      named Stefan Kovac, the era filler may not build Ismael Silva, both
-      real men of the new league): now|premier, now|mlsEast and now|superlig
-      move in modern and era2005|seriea2005 in eras, pure 0. Leg 2, the join
-      back in with the rows still out: 21 more modern saves move and no era
-      save, pure 0; that is the real name sets (357 new real names a made
-      up player may no longer roll) and the call up bars, which read every
-      squad of the world (16 nations' bars moved or appeared: Russia 68 to
-      72, and Albania, Angola, Armenia, Bolivia, Burkina Faso, Costa Rica,
-      Iran, Kazakhstan, Peru, Romania, Slovenia and Uzbekistan down as
-      their short lists grew, Belarus, Tajikistan and Turkmenistan new).
-      Leg 3, the rows in: all 26 older modern saves have moved and
-      now|russia is added (the world every save simulates gained a league),
-      6 era saves move (the bidding war rival and the headline buyers read
-      every modern league with no era gate, a gap older than this round),
-      and pure adds now|russia and moves the views, which list the leagues
-      and nations; no league's own pure key moved.
+      runner (the Round 1035 ladder, one leg longer because the round also
+      edited two name banks). It was taken twice: at 1fa0a7a7, and again at
+      183690a7 after the round's review found the squads fifty men short
+      (a research parser had skipped every man with an icon after his
+      name; the league went from 357 men to 403). The second ladder is the
+      one this file holds, and both read the same way. Leg 1, the whole
+      round out of the world (the league row, its rules row, its nation and
+      both spreads of the join) with the two bank edits undone: the file as
+      it stood before the round, byte for byte (modern 26/0, eras 20/0,
+      pure 47/0), so everything else of the round is inert. Leg 1b, the two
+      bank edits back in (no scout may be named Stefan Kovac, the era
+      filler may not build Ismael Silva, both real men of the new league):
+      now|premier, now|mlsEast and now|superlig move in modern and
+      era2005|seriea2005 in eras, pure 0. Leg 2, the join back in with the
+      rows still out: 21 more modern saves move and no era save, pure 0;
+      that is the real name sets (403 new real names a made up player may
+      no longer roll) and the call up bars, which read every squad of the
+      world. 16 nations' bars moved or appeared, before to after: Russia 68
+      to 75; down as their short lists grew, Albania 68 to 64, Angola 68 to
+      63, Armenia 72 to 62, Bolivia 73 to 64, Burkina Faso 68 to 64, Costa
+      Rica 72 to 62, Iran 73 to 67, Kazakhstan 70 to 62, Peru 71 to 60,
+      Romania 68 to 67, Slovenia 68 to 64 and Uzbekistan 76 to 60; new,
+      Belarus 60, Tajikistan 68 and Turkmenistan 60. Leg 3, the rows in:
+      all 26 older modern saves have moved and now|russia is added (the
+      world every save simulates gained a league), 7 era saves move
+      (era2010|laliga2010, era2015|premier2015 and all five 2005 leagues:
+      the bidding war rival and the headline buyers read every modern
+      league with no era gate, a gap older than this round, and the real
+      name sets read every modern squad), and pure adds now|russia and
+      moves the views, which list the leagues and nations; no league's own
+      pure key moved.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,

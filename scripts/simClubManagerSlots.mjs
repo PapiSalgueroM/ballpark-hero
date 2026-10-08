@@ -81,6 +81,17 @@
  *   control on that tree leaves 528,801 across five keys and fired through
  *   the budget check. 495,000 sits 24,981 over the largest healthy total and
  *   33,801 under the control's, the margins the old number was set with.
+ *   Measured again at 183690a7 after the round's review added 46 men to
+ *   the Russian squads, default stream and SIM_SEED 1 to 5: 467,493 /
+ *   468,823 / 466,605 / 466,736 / 467,591 / 469,185; the dupe control
+ *   leaves 526,831 across five keys and fired through the budget check.
+ *   495,000 sits 25,815 over the largest healthy total and 31,831 under
+ *   the control's, so it stays. On that tree SIM_SEED 3 and 4 are red in
+ *   section 4 by its own guard and nowhere else: the lived in Everton
+ *   save they draw (191 and 189 h2h rows) has met no opponent more than
+ *   six times, so the park cuts nothing and the section says the stream
+ *   reads nothing rather than passing on it. The default stream and
+ *   SIM_SEED 1, 2 and 5 exercise the cut (188, 185, 180 and 190 rows).
  *   section 4 (2026-10-03, default, SIM_SEED 1, 2): the lived in save stands
  *     at season 5, week 19 with 190 / 196 / 191 h2h rows (115,179 / 116,726 /
  *     115,876 characters); the park cuts 1 / 2 / 2 of them, so the lean cut

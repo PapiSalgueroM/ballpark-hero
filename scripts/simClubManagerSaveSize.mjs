@@ -146,6 +146,14 @@
  * 3,043 to 4,386 (the control fired, 33 failures in section 1 and nothing
  * else). 196,000 sits 8,419 over the healthy top and 11,690 under the
  * defect's bottom. The slope fence did not move.
+ * Measured again at 183690a7 after the round's review added 46 men to the
+ * Russian squads (403, was 357), default stream and SIM_SEED 1 to 5:
+ * healthy 179,049 to 186,760 (Real Madrid 179,049 to 182,801, Everton
+ * 183,892 to 185,957, Lincoln City 184,687 to 186,760), slope 192 to
+ * 1,159. Uncapped, default stream: Real Madrid 206,936, Everton 218,267,
+ * Lincoln City 219,554, slope 3,098 to 4,435 (the control fired, 33
+ * failures in section 1 and nothing else). 196,000 now sits 9,240 over the
+ * healthy top and 10,936 under the defect's bottom, so it stays.
  * The first cut of this file set 5,000 and 240,000 by feel, and both passed
  * the uncapped engine, which is exactly the mistake the house rule names.
  *
