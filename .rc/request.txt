@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+#!serial
+nav: bash .rc/x/basenav.sh
