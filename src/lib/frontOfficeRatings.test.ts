@@ -63,11 +63,22 @@ function canonical(value: any) {
 }
 const everyone = (lg: engine.LeagueState) => Object.values(lg.teams).flatMap(t => [...t.players, ...(t.practice ?? [])]);
 /* Round 1130, recorded on origin/main at 6f57ce78 BEFORE the opening files were unified: the league the board
-   deals (depth passed, the GM on Kansas City) for three seeds. Unifying the files must not move one byte of it. */
-const boardLeagueDigests = [
+   deals (depth passed, the GM on Kansas City) for three seeds. Unifying the files did not move one byte of it
+   (step 3 of the round passed these unedited on the committed files), and the frozen arm of the generator,
+   { ratingModel: 'v2.2' }, must go on dealing exactly this league: it is what "main" means in every comparison
+   scripts/simFoRatingOrder.mjs makes. */
+const boardLeagueDigestsV22 = [
   'a68d25af1fdd8cd4a2904cc13bab51ec89225f0955c7a54e631f73b71d7b4c17',
   'd45c32c5a14b6353330426e3df369ef42a4033b77b59a1c09b475b5e0d7367ff',
   '4823ec09ec20e5b1ade41182e3e3f8e989b9b4994b9a60ce921dc8a6c6f33cf0',
+];
+/* Re-recorded once, 2026-10-08, when the offense layer became the default (model nfl-v2.3-2026-10-08): the same
+   three seeds on the committed files. 423 of the 2,163 men carry another number than in the league above, every
+   one a quarterback, back, receiver or tight end; every lineman and defender is the same man with the same number. */
+const boardLeagueDigests = [
+  'a43660e29ceec1925fd3771184c2878f4a7e918aae7458654e2b33f3c23c7a8d',
+  '7578b53a5edea40e60e1321df949bff0c3906e392a1c199b4369b6fee94acd46',
+  '9ec6dba554f8c1a25658282309589c2f4d7a500f69ee45e41d569de3ebe1f829',
 ];
 /** A physical old tree, built the way the 56356be9 baseline below is: the engine and both data files as that commit held them. */
 function physical(commit: string) {
@@ -179,7 +190,7 @@ describe('NFL opening rating checkpoint', () => {
       if (['OL', 'DL', 'LB', 'DB'].includes(p.pos)) { expect([p.ovr, p.years], p.key).toEqual([was.ovr, was.years]); held++; }
       else if (p.ovr !== was.ovr) moved++;
     }
-    expect(held).toBeGreaterThan(1500); expect(moved).toBe(423);
+    expect(held).toBe(1456); expect(moved).toBe(423);
     console.log('NFL_LAYER_MOVES', JSON.stringify({ linemenAndDefendersHeld: held, offenseMenMoved: moved }));
   });
 
@@ -394,6 +405,16 @@ describe('NFL opening rating checkpoint', () => {
     const digests = [1130, 1131, 1132].map(seed => hash(JSON.stringify(canonical(engine.initLeague(seeded(seed).draw, { depth: FO_DEPTH, userTeam: 'KC' })))));
     console.log('NFL_BOARD_LEAGUE_DIGESTS', JSON.stringify(digests));
     expect(digests).toEqual(boardLeagueDigests);
+    /* and the frozen arm still deals the league main dealt: today's engine over the files { ratingModel: 'v2.2' } bakes */
+    const frozen = bakeFromRecord(record, meta, spot.heldOut ?? [], { ratingModel: 'v2.2' });
+    expect(frozen.ratingProblem).toBeNull(); expect(frozen.ratingVersion).toBe(inputs.version);
+    const dir = path.join(folder, 'frozen-arm'); mkdirSync(dir);
+    writeFileSync(path.join(dir, 'frontOfficePlayers.ts'), frozen.text); writeFileSync(path.join(dir, 'frontOfficeDepth.ts'), frozen.depthText);
+    const swapped = JSON.parse(process.env.NO_DOUBLE_SWAP || '{}')['@/lib/frontOffice'], output = path.join(dir, 'frozen.cjs');
+    build({ stdin: { contents: 'export * as engine from ' + JSON.stringify((swapped ?? path.join(root, 'src/lib/frontOffice.ts')).replace(/\\/g, '/')) + "; export {FO_DEPTH} from './frontOfficeDepth.ts';", resolveDir: dir }, outfile: output, bundle: true, platform: 'node', format: 'cjs', logLevel: 'silent', alias: { '@/data/frontOfficePlayers': path.join(dir, 'frontOfficePlayers.ts'), '@/data/frontOfficeDepth': path.join(dir, 'frontOfficeDepth.ts'), '@': path.join(root, 'src') } });
+    const arm = createRequire(import.meta.url)(output);
+    const frozenDigests = [1130, 1131, 1132].map(seed => hash(JSON.stringify(canonical(arm.engine.initLeague(seeded(seed).draw, { depth: arm.FO_DEPTH, userTeam: 'KC' })))));
+    expect(frozenDigests).toEqual(boardLeagueDigestsV22); expect(frozenDigests).not.toEqual(digests);
   }, 60000);
 
   it('loads a Release AK franchise unchanged and plays its next week exactly as Release AK would', () => {

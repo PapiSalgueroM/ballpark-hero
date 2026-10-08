@@ -93,6 +93,8 @@ try {
   for (const title of [titles.core, titles.legacy, titles.manifest]) assert.equal(rows.find(row => row.title === title)?.status, 'passed', 'Independent physical old-state/source-data baselines held');
   if (control) {
     const failed = rows.filter(row => row.status === 'failed'), expected = controls[control][3];
+    /* Round 1130: say WHICH cases went red before the count is judged, so a list can be re-established from one run */
+    if (failed.map(row => row.title).sort().join('|') !== [...expected].sort().join('|')) console.error(`NFL_RATING_CONTROL_MISMATCH: ${JSON.stringify({ control, failed: failed.map(row => row.title), expected, messages: failed.map(row => row.failureMessages[0].split('\n')[0].slice(0, 160)) })}`);
     assert.equal(run.status, 1); assert.equal(report.numFailedTests, expected.length); assert.equal(report.numPassedTests, 17 - expected.length);
     assert.deepEqual(failed.map(row => row.title).sort(), [...expected].sort());
     for (const row of failed) assert.match(row.failureMessages.join('\n'), /AssertionError:|AssertionError \[/);
