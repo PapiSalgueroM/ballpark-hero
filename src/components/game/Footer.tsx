@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ReportSiteIssue } from '@/components/game/ReportSiteIssue';
+import { SoundToggle } from '@/components/game/SoundToggle';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { HUB_NAV } from '@/lib/sportHubNav';
 
@@ -106,6 +107,8 @@ export function Footer() {
         </button>
         <span>·</span>
         <ThemeToggle variant="footer" />
+        <span>·</span>
+        <SoundToggle variant="text" />
         <span>·</span>
         <ReportSiteIssue />
       </div>
