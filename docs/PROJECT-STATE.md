@@ -1,3 +1,12 @@
+## October 8: Round 1154 browser harness discovery prepared, proof pending
+
+Runner classification reads actual import/require syntax, including dynamic
+loader calls, while comment and copied-source prose stays outside discovery.
+A focused copied-runner harness stages the four actual missed drivers and
+the actual rival-name guard, plus static/dynamic/require/comment fixtures.
+Default omission, explicit browser selection and an effective dynamic-import
+control await remote proof. No local runtime or full-suite/live claim.
+
 ## Release AL LIVE, 2026-10-08 05:38 EDT: ten Codex rounds, playable moments, and a translated page no longer crashes
 
 Claude lane (session F: session E died when the PC was restarted at 00:03 EDT with this release's gate running).

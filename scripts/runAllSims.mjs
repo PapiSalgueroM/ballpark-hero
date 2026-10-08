@@ -33,6 +33,7 @@ import { tmpdir } from 'node:os';
 import { randomUUID } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import ts from 'typescript';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..');
@@ -74,7 +75,15 @@ function needsBrowser(file) {
      the suite still printed "all green" while skipping the newest check in it.
      What actually makes a harness need a browser is IMPORTING playwright, so
      that is what gets asked now. */
-  return /(?:import|require)\s*(?:[\w{},*\s]*from\s*)?['"][^'"]*playwright/i.test(src);
+  const syntax = ts.createSourceFile(file, src, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const visit = (node) => {
+    const module = ts.isImportDeclaration(node) ? node.moduleSpecifier
+      : ts.isCallExpression(node) && (node.expression.kind === ts.SyntaxKind.ImportKeyword
+        || ts.isIdentifier(node.expression) && node.expression.text === 'require') ? node.arguments[0] : null;
+    if (module && ts.isStringLiteral(module) && /playwright/i.test(module.text)) return true;
+    return ts.forEachChild(node, visit);
+  };
+  return Boolean(visit(syntax));
 }
 
 const all = readdirSync(HERE)
