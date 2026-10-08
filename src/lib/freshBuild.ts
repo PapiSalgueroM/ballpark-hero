@@ -129,8 +129,24 @@ export function reloadToRetryChunk(): boolean {
   return true;
 }
 
+/* Round 1132: a chunk the page works without. The sound kit is fetched only
+   for a visitor who switched sound on, and its file name changes with every
+   deploy. Reloading the page because it failed to load would restart a live
+   match, or land an offline player on the browser's offline page, for a
+   tick. So the listener leaves it alone: no reload, and no cancel either,
+   so the import rejects and src/lib/sound.ts goes quiet for the tab.
+   The build names the chunk after its file, src/lib/soundKit.ts, and
+   scripts/simSound.mjs holds the file there. Known limit: WebKit's message
+   for a failed import names no file, so there this chunk is still treated
+   like any other and the tab reloads once. */
+export function isOptionalChunkError(payload: unknown): boolean {
+  const msg = payload instanceof Error ? payload.message : typeof payload === 'string' ? payload : '';
+  return /\/soundKit-[\w-]+\.js/.test(msg);
+}
+
 function reloadOnStaleChunk(): void {
   window.addEventListener('vite:preloadError', (event: Event) => {
+    if (isOptionalChunkError((event as Event & { payload?: unknown }).payload)) return;
     if (reloadOnceForStaleChunk()) event.preventDefault();
   });
 }
