@@ -56,10 +56,14 @@ export function ShootoutKicks({ shootout, clubName, opponent, className }: { sho
                   {k.gen && <MadeUpTag title={FILL_IN.test(k.taker) ? MADE_UP_TAKER : undefined} />}
                 </span>
               </span>
-              <span className={cn('shrink-0 font-semibold', k.result === 'scored' ? 'text-correct' : 'text-destructive')}>
-                <span aria-hidden="true">{r.icon}</span> {r.word}
+              {/* The result and the count stack the same way on a phone, which
+                  is what leaves a 360 wide screen room for the name and its tag. */}
+              <span className="flex shrink-0 flex-col items-end sm:flex-row sm:items-center sm:gap-2">
+                <span className={cn('font-semibold', k.result === 'scored' ? 'text-correct' : 'text-destructive')}>
+                  <span aria-hidden="true">{r.icon}</span> {r.word}
+                </span>
+                <span className="whitespace-nowrap text-right font-bold tabular-nums text-foreground sm:w-10">{k.mine}-{k.theirs}</span>
               </span>
-              <span className="w-10 shrink-0 whitespace-nowrap text-right font-bold tabular-nums text-foreground">{k.mine}-{k.theirs}</span>
             </li>
           );
         })}
