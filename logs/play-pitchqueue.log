@@ -1,0 +1,9 @@
+CONTROL pitchqueue: rewritten in the bundled source or in what is served, never a file on disk
+tables from node: 356 table seasons in the probe, five used: Probe 0 2001 AC Milan (34); Probe 9 2013 Atletico Madrid (38); Probe 16 2006 Chelsea (38); Probe 33 1997 Fiorentina (34); Probe 38 2034 Real Madrid (38)
+ok   B5. the bare page carries the pitch part's own stylesheet (nets, ball and figures are placed)
+   B5: 320: two goals crossed in one step were not both seen, the first landed and the second played (1|69|us|0:plant 1|69|us|0:flight 1|69|us|0:net)
+   B5: 320: three goals crossed in one step did not each land in turn (1|67|us|0:plant 1|67|us|0:flight 1|67|us|0:net)
+   B5: 390: two goals crossed in one step were not both seen, the first landed and the second played (1|69|us|0:plant 1|69|us|0:flight 1|69|us|0:net)
+   B5: 390: three goals crossed in one step did not each land in turn (1|67|us|0:plant 1|67|us|0:flight 1|67|us|0:net)
+FAIL B5. the pitch plays the goal that happened: side, net, ring, words, order, pause, a goal already past, Results speed (4 of 46 held checks failed)
+playSeasonCentreMotion: 2 checks, 1 failed (control pitchqueue) (only B5)
