@@ -17,6 +17,10 @@ import {
   clampLines, flatColour, isMomentSettled, momentBeats, resetCareerMomentsForTest, settleMoments,
   type CareerMomentSpec, type MomentKind,
 } from '@/components/career-moments';
+import { SignedSlip, signingSpec, type SignedNote } from '@/components/soccer-career/SignedSlip';
+import { formatWage, type CareerState } from '@/lib/soccerCareerEngine';
+import { defaultAppearance } from '@/lib/soccerCareerAppearance';
+import { localizeMoney } from '@/lib/soccerCurrency';
 
 const spec = (over: Partial<CareerMomentSpec> = {}): CareerMomentSpec => ({
   kind: 'milestone', key: 'k|test', title: 'Up to 71 overall', tone: 'good',
@@ -305,5 +309,91 @@ describe('Round 1107: the card with the once per key rule', () => {
       set.mockRestore();
       random.mockRestore();
     }
+  });
+});
+
+describe('Round 1107: the signing scene (SignedSlip binds the kit)', () => {
+  const note = (over: Partial<SignedNote> = {}): SignedNote => ({
+    kind: 'transfer', club: 'Rivertown FC', years: 3, wage: 45000, forCareer: {} as CareerState, ...over,
+  });
+
+  it('a transfer keeps the slip\'s two strings, shows the wage as its number and has no fee line of its own', () => {
+    const s = signingSpec(note());
+    expect(s.kind).toBe('signing');
+    expect(s.tone).toBe('good');
+    expect(s.title).toBe('✍️ Signed with Rivertown FC');
+    expect(s.lines).toEqual([`3 years at ${formatWage(45000)}`]);
+    expect(s.count).toEqual({ text: formatWage(45000), label: 'your wage' });
+    expect(s.key).toContain('signing|');
+    expect(s.key).toContain('|transfer|Rivertown FC|3|45000');
+    expect(s.colour).toBeUndefined();
+  });
+
+  it('a fee above zero prints the offer card\'s line, zero is a free transfer, anything else is no line', () => {
+    expect(signingSpec(note({ fee: 12.5 })).lines).toEqual([`3 years at ${formatWage(45000)}`, `${localizeMoney('€12.5M')} fee`]);
+    expect(signingSpec(note({ fee: 0 })).lines?.[1]).toBe('Free transfer');
+    for (const fee of [undefined, Number.NaN, Number.POSITIVE_INFINITY, -3]) expect(signingSpec(note({ fee })).lines?.length, String(fee)).toBe(1);
+    /* Only a transfer has a fee. */
+    expect(signingSpec(note({ kind: 'extension', fee: 12.5 })).lines?.length).toBe(1);
+    expect(signingSpec(note({ kind: 'loan', from: 'Harbour City', fee: 0 })).lines?.length).toBe(1);
+  });
+
+  it('the wage before shows only when it is a real wage that prints differently', () => {
+    expect(signingSpec(note({ prevWage: 20000 })).count).toEqual({ text: formatWage(45000), label: 'your wage', from: formatWage(20000) });
+    /* 45,400 prints as the same string as 45,000, so there is nothing to turn from. */
+    expect(formatWage(45400)).toBe(formatWage(45000));
+    for (const prevWage of [45000, 45400, 0, -5, Number.NaN, undefined]) expect(signingSpec(note({ prevWage })).count?.from, String(prevWage)).toBeUndefined();
+    expect(signingSpec(note({ kind: 'extension', prevWage: 900, wage: 1500 })).count?.from).toBe(formatWage(900));
+  });
+
+  it('a loan keeps its one line and has no number, an extension counts one year as one year', () => {
+    const loan = signingSpec(note({ kind: 'loan', from: 'Harbour City', years: 1, wage: 30000, prevWage: 20000 }));
+    expect(loan.title).toBe('🛫 Loan agreed: Rivertown FC');
+    expect(loan.lines).toEqual([`One season. Your contract and ${formatWage(30000)} stay with Harbour City`]);
+    expect(loan.count).toBeUndefined();
+    const ext = signingSpec(note({ kind: 'extension', years: 1, wage: 900 }));
+    expect(ext.title).toBe('📝 Extended at Rivertown FC');
+    expect(ext.lines).toEqual([`1 year at ${formatWage(900)}`]);
+  });
+
+  it('a different deal is a different key, the same deal the same one', () => {
+    expect(signingSpec(note()).key).toBe(signingSpec(note()).key);
+    for (const other of [{ wage: 46000 }, { years: 4 }, { club: 'Harbour City' }, { kind: 'extension' as const }]) {
+      expect(signingSpec(note(other)).key, JSON.stringify(other)).not.toBe(signingSpec(note()).key);
+    }
+    const mine = { playerName: 'A', nationality: 'B', position: 'ST', seasons: [] } as unknown as CareerState;
+    expect(signingSpec(note({ forCareer: mine })).key).not.toBe(signingSpec(note()).key);
+  });
+
+  it('the slip is the scene: one signing card under data-signed-slip, no avatar for a bare career', () => {
+    const { container } = render(<SignedSlip note={note({ fee: 12.5, prevWage: 20000 })} />);
+    const slip = container.querySelector<HTMLElement>('[data-signed-slip]')!;
+    expect(slip.querySelectorAll('[data-career-moment="signing"][data-cmo-bind="sc-signing"]').length).toBe(1);
+    expect(container.querySelectorAll('[data-career-moment]').length).toBe(1);
+    expect(slip.querySelector('svg[aria-label="Player avatar"]')).toBeNull();
+    expect(slip.querySelector('h3')?.textContent).toBe('✍️ Signed with Rivertown FC');
+    expect(printed(scene(container))).toBe(`✍️ Signed with Rivertown FC3 years at ${formatWage(45000)}${localizeMoney('€12.5M')} fee${formatWage(45000)}your wage`);
+    expect(slip.querySelector('[data-cmo-number-old]')?.textContent).toBe(formatWage(20000));
+    expect(slip.querySelector('button')).toBeNull();
+    expect(confetti(container)).toBe(0);
+  });
+
+  it('with a look and a club colour, his avatar wears that one flat colour and the scene carries it', () => {
+    const career = { appearance: defaultAppearance(), currentClubColor: '#1D4ED8' } as unknown as CareerState;
+    const { container } = render(<SignedSlip note={note({ forCareer: career })} />);
+    const avatars = container.querySelectorAll('[data-signed-slip] svg[aria-label="Player avatar"]');
+    expect(avatars.length).toBe(1);
+    expect(avatars[0].querySelector('path')?.getAttribute('fill')).toBe('#1D4ED8');
+    expect(avatars[0].closest('[data-cmo-beat="art"]')?.getAttribute('aria-hidden')).toBe('true');
+    expect(scene(container).style.getPropertyValue('--cmo-ink')).toBe('#1d4ed8');
+  });
+
+  it('plays once per deal: a second mount of the same note is still, a new deal plays', () => {
+    const first = render(<SignedSlip note={note()} />);
+    expect(scene(first.container).dataset.cmoState).toBe('live');
+    cleanup();
+    expect(scene(render(<SignedSlip note={note()} />).container).dataset.cmoState).toBe('still');
+    cleanup();
+    expect(scene(render(<SignedSlip note={note({ wage: 60000 })} />).container).dataset.cmoState).toBe('live');
   });
 });

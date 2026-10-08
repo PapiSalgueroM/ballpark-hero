@@ -16,8 +16,9 @@
      2. Confetti through the CareerFx path, 12 pieces plain and gold. Two.
         These do not change at the lift.
      3. VictoryMoment, default and compact. Two. Never change.
-     4. SignedSlip for its three kinds. Three. Replaced ON PURPOSE at step 5
-        of the round (the slip becomes the signing scene).
+     4. SignedSlip for its three kinds. Three. RE-RECORDED ON PURPOSE at
+        step 5 of the round: the slip became the signing scene, so these
+        three hold the scene's markup now, not the old slip's.
      5. The winner TournamentCard, fresh and settled. Two. Replaced ON
         PURPOSE at step 6 (the cup replaces the emoji in the head).
 
@@ -67,9 +68,9 @@ const DIGESTS: Record<string, string> = {
   'card:winner:settled': '2db2f72ded75a693eee799829f0ccbe406ffcd9839fd745aeb2dae9a5a34baf5',
   'confetti:gold': 'd3403833fee8df9af309e8ab1060386858a276f8b5fb0d1ce259678f1e6bbee7',
   'confetti:plain': '468f02f1cd47a8022d9d0d85d640a763b15c2d2a1b29d84efe6093577c3274de',
-  'slip:extension': 'b751e807e0266d39c2091c2e4b20d76fe8668604ae0cc118fcf48d5bc0fbd396',
-  'slip:loan': '9efcc4464bd25c3c21b2b27401d50763c95c1524f60370c5ded9999c1c62f604',
-  'slip:transfer': 'c860356b2e2114fa48919e66c9ea17d8a601958d8244f768205cdf692f3258e7',
+  'slip:extension': '49ec79f9c2db0b308e81358c39faed46900a4fa0a7759e63af8a5d3755d27fa2',
+  'slip:loan': '1318e03714f3c9a91802c2142cea8becbd4146852f363301dace887a23d29a8a',
+  'slip:transfer': '95be5ba8652255ba5b1162d78ff060a0cac171efb2510e92bfedabc02c81ab4e',
   'victory:compact': 'd7813d8b227d6562844677b36ed82a8d1a514bac488784142674a3db05a57324',
   'victory:default': 'b2d8105cd9aa741f528df90f3995ffa5bacf39affefdbea0fe1d11600531d55c',
 };

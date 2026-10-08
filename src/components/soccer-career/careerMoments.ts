@@ -1,5 +1,6 @@
 import { settleMoments } from "@/components/career-moments/useCareerMoment";
 import type { CareerState, IntlTournament } from "@/lib/soccerCareerEngine";
+import type { SignedNote } from "./SignedSlip";
 
 /* Round 1107: the rule itself (the hook, the set it remembers in, the beat
    helper) moved word for word to src/components/career-moments/useCareerMoment.ts,
@@ -95,6 +96,13 @@ export function tournamentMomentKey(t: IntlTournament): string {
     (t.bracket ?? []).map(b => [b.round, b.slot, b.home, b.away, b.homeGoals, b.awayGoals]),
   ]);
   return `tournament|${t.nation}|${t.name}|${t.year}|${t.myResult}|${shortHash(run)}`;
+}
+
+/** The signing scene's moment (Round 1107): this run, and this deal's own
+    terms. The slip is page memory, never in the save, so nothing settles it
+    on load: after a reload there is no slip to draw. */
+export function signingMomentKey(note: SignedNote): string {
+  return `signing|${runTag(note.forCareer)}|${note.kind}|${note.club}|${note.years}|${note.wage}`;
 }
 
 /** Every moment the restored save already holds is settled: it was seen. */

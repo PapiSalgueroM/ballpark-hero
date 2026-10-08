@@ -26,6 +26,11 @@
                     anywhere in the folder's code.
      S3 flat colour the scene's colour never sits inside a gradient and no
                     repeating pattern exists in the folder.
+     S4 bindings    read off the TypeScript tree: SignedSlip.tsx holds exactly
+                    one SigningMoment element, and the hook and the confetti
+                    are each defined once in src, in the kit folder.
+     S5 bind ids    each id the browser walk finds a binding by is written in
+                    src exactly once outside src/test.
      S6 seams       careerMoments.ts imports only types (bar react and the
                     kit's hook file), and the two soccer re-exporters import
                     the kit by FILE, never through its index.
@@ -38,8 +43,14 @@
        F3 an award     one line, gold, a button
        F4 a milestone  a count with a before, eight ticks, good, a button
        F5 a milestone  two lines, a count with a before, QUIET, a button
+       F6slip          the REAL SignedSlip: a transfer with a fee and a wage
+                       before, for a career with a look and a club colour.
+                       Its words are the engine's own formatting, read off
+                       the page. K1 also wants one avatar whose shirt is the
+                       club colour and a scene that carries the same colour.
      Tailwind is handed the raw source of everything the rig mounts: the six
-     kit files, VictoryMoment.tsx, Celebration.tsx and CelebrationStyles.tsx.
+     kit files, SignedSlip.tsx, PlayerAvatar.tsx, VictoryMoment.tsx,
+     Celebration.tsx and CelebrationStyles.tsx.
      RIG  every fixture draws, a first mount in view goes fresh then live,
           and the page reports no error.
      K1 facts       the settled words (style blocks, drawings and the old
@@ -95,6 +106,8 @@
      import       CareerMomentCard.tsx also imports the soccer engine      S1
      clock        useCareerMoment.ts reads Date.now()                       S2
      stripe       the bar is painted with a repeating gradient              S3
+     unbind       SignedSlip.tsx draws the plain card, not SigningMoment   S4
+     dupbind      the slip's bind id is written a second time              S5
      enginevalue  careerMoments.ts imports a VALUE from the soccer engine   S6
      stray        the view prints 9041, which no fixture carries            K1
      grow         cmoInk animates height instead of a transform             K2
@@ -128,6 +141,10 @@ const SOCCER_FX = 'src/components/soccer-career/CareerFx.tsx';
 const VICTORY = 'src/components/game/VictoryMoment.tsx';
 const CELEBRATION_STYLES = 'src/components/club-manager/CelebrationStyles.tsx';
 const INDEX_CSS = 'src/index.css';
+const SLIP = 'src/components/soccer-career/SignedSlip.tsx';
+const AVATAR = 'src/components/soccer-career/PlayerAvatar.tsx';
+/* The ids the browser walk finds the two bindings by. */
+const BIND_IDS = ['sc-signing'];
 
 /* Each control and the checks it must turn red. */
 const CONTROLS = {
@@ -135,6 +152,8 @@ const CONTROLS = {
   clock: ['S2'],
   stripe: ['S3'],
   enginevalue: ['S6'],
+  unbind: ['S4'],
+  dupbind: ['S5'],
   stray: ['K1'],
   grow: ['K2'],
   third: ['K3'],
@@ -175,7 +194,7 @@ const swapped = new Map();
 const abs = rel => path.join(ROOT, rel);
 const raw = rel => fs.readFileSync(abs(rel), 'utf8');
 const read = rel => swapped.get(rel) ?? raw(rel);
-const SOURCE_CONTROLS = new Set(['import', 'clock', 'stripe', 'enginevalue']);
+const SOURCE_CONTROLS = new Set(['import', 'clock', 'stripe', 'enginevalue', 'unbind', 'dupbind']);
 const scanRead = rel => (SOURCE_CONTROLS.has(CONTROL) ? read(rel) : raw(rel));
 const bundleRead = rel => (SOURCE_CONTROLS.has(CONTROL) ? raw(rel) : read(rel));
 /** Rewrite `from` (which must be in the file exactly `times` times) in a copy. */
@@ -225,6 +244,8 @@ if (CONTROL === 'import') prepend(CARD, "import { formatWage } from '@/lib/socce
 if (CONTROL === 'clock') mutate(HOOK, 'if (key && live) settled.add(key);', 'if (key && live && Date.now() > 0) settled.add(key);');
 if (CONTROL === 'stripe') mutate(STYLES, 'width: 4px; background-color: var(--cmo-ink); }', 'width: 4px; background: repeating-linear-gradient(45deg, var(--cmo-ink) 0 4px, transparent 4px 8px); }');
 if (CONTROL === 'enginevalue') prepend(SOCCER_KEYS, "import { formatWage } from '@/lib/soccerCareerEngine';");
+if (CONTROL === 'unbind') mutate(SLIP, '<SigningMoment spec=', '<CareerMomentCard spec=');
+if (CONTROL === 'dupbind') prepend(SLIP, 'const twin = "sc-signing";');
 if (CONTROL === 'stray') mutate(CARD, '{children}', "{children}<span>{' 9041'}</span>");
 if (CONTROL === 'grow') mutate(STYLES, '@keyframes cmoInk { 0% { transform: scaleX(0); } 100% { transform: scaleX(1); } }', '@keyframes cmoInk { 0% { height: 0px; } 100% { height: 24px; } }');
 if (CONTROL === 'third') mutate(CARD, 'className="cmo-num-old" style={at(beats.count ?? 0)}>{from}</span>', 'className="cmo-num-old" style={at(beats.count ?? 0)}>{from}0</span>');
@@ -317,6 +338,48 @@ console.log(`1) Source: ${kitFiles.length} files in ${KIT}`);
   }
   console.log(`   S6 ${read} imports read on the two soccer re-exporters`);
 }
+/* Every .ts and .tsx file under src, as repo paths. */
+function walkSrc(dir = 'src', out = []) {
+  for (const entry of fs.readdirSync(abs(dir), { withFileTypes: true })) {
+    const rel = `${dir}/${entry.name}`;
+    if (entry.isDirectory()) walkSrc(rel, out);
+    else if (/\.tsx?$/.test(entry.name)) out.push(rel);
+  }
+  return out;
+}
+const srcFiles = walkSrc();
+/** How many JSX elements named `tag` a file holds, and the ancestors of each. */
+function elementsOf(rel, tag) {
+  const tree = treeOf(rel);
+  const found = [];
+  const visit = node => {
+    if ((ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) && node.tagName.getText(tree) === tag) found.push(node);
+    ts.forEachChild(node, visit);
+  };
+  visit(tree);
+  return { tree, found };
+}
+{
+  /* S4. The bindings, read off the TypeScript tree (never off a comment), and
+     one definition each of the hook and the confetti, both in the kit. */
+  const slip = elementsOf(SLIP, 'SigningMoment');
+  check('S4', slip.found.length === 1, `${SLIP} holds ${slip.found.length} SigningMoment element(s), expected exactly one: the slip is the signing scene`);
+  for (const [name, shape] of [['useCareerMoment', /(?:function\s+useCareerMoment\s*\(|(?:const|let|var)\s+useCareerMoment\s*=)/], ['Confetti', /(?:function\s+Confetti\s*\(|(?:const|let|var)\s+Confetti\s*=)/]]) {
+    const defs = srcFiles.filter(rel => shape.test(scanRead(rel)) && shape.test(codeOf(rel)));
+    check('S4', defs.length === 1 && defs[0].startsWith(`${KIT}/`), `${name} must be defined exactly once, in ${KIT}; found ${defs.join(', ') || 'no definition'}`);
+  }
+  console.log(`   S4 ${slip.found.length} SigningMoment in the slip; ${srcFiles.length} source files read for a second definition of the hook or the confetti`);
+}
+{
+  /* S5. Each bind id is in src exactly once outside src/test, raw text and
+     comments included: the browser walk's controls rewrite the id in the
+     served files and need it to be the only one. */
+  for (const id of BIND_IDS) {
+    const hits = srcFiles.filter(rel => !rel.startsWith('src/test/')).flatMap(rel => Array(scanRead(rel).split(id).length - 1).fill(rel));
+    check('S5', hits.length === 1, `the bind id "${id}" is written ${hits.length} time(s) in src outside src/test (${[...new Set(hits)].join(', ') || 'nowhere'}), expected exactly once`);
+  }
+  console.log(`   S5 ${BIND_IDS.length} bind id(s) counted across ${srcFiles.filter(rel => !rel.startsWith('src/test/')).length} files`);
+}
 
 /* ---------- 2. In Chromium: the rig ---------- */
 /* The fixtures. Every word and number is a test value; the kit is handed
@@ -343,20 +406,31 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { flushSync } from 'react-dom';
 import { CareerMomentCard, settleMoments, isMomentSettled } from '@/components/career-moments';
+import { SignedSlip } from '@/components/soccer-career/SignedSlip';
+import { formatWage } from '@/lib/soccerCareerEngine';
+import { localizeMoney } from '@/lib/soccerCurrency';
+import { defaultAppearance } from '@/lib/soccerCareerAppearance';
 
 const root = createRoot(document.getElementById('root'));
+/* F6's career: a look and one flat club colour, nothing else the slip reads. */
+const CAREER = { playerName: 'Rig Player', nationality: 'Portugal', position: 'ST', seasons: [], appearance: defaultAppearance(), currentClubColor: '#1D4ED8' };
+const real = fx => (fx.real === 'slip' ? <SignedSlip key={fx.mount ?? fx.name} note={{ ...fx.note, forCareer: CAREER }} /> : null);
 window.rig = {
   done: 0,
   states: [],
+  /* The engine's own formatting of F6's numbers, so the harness never formats one. */
+  words: { wage: formatWage(45000), before: formatWage(20000), fee: localizeMoney('€12.5M'), colour: CAREER.currentClubColor },
   mount(fx) {
     window.rig.states = [];
     flushSync(() => root.render(
       <div id="stage" style={{ padding: 12 }}>
         {fx.top ? <div style={{ height: fx.top }} /> : null}
-        <CareerMomentCard key={fx.mount ?? fx.name} spec={fx.spec} bind={fx.id}
-          art={fx.art ? <span className="rig-art" /> : undefined}
-          onDone={fx.done ? () => { window.rig.done += 1; } : undefined}
-          ticks={fx.ticks} embedded={fx.embedded} stacked={fx.stacked} />
+        {fx.real ? real(fx) : (
+          <CareerMomentCard key={fx.mount ?? fx.name} spec={fx.spec} bind={fx.id}
+            art={fx.art ? <span className="rig-art" /> : undefined}
+            onDone={fx.done ? () => { window.rig.done += 1; } : undefined}
+            ticks={fx.ticks} embedded={fx.embedded} stacked={fx.stacked} />
+        )}
       </div>));
   },
   clear() { flushSync(() => root.render(null)); },
@@ -372,7 +446,7 @@ new MutationObserver(() => {
 `;
 /* The files the rig mounts, handed to Tailwind raw so every utility class
    they use exists in the rig's stylesheet. */
-const MOUNTED = [...kitFiles, 'src/components/game/VictoryMoment.tsx', 'src/components/club-manager/Celebration.tsx', 'src/components/club-manager/CelebrationStyles.tsx'];
+const MOUNTED = [...kitFiles, SLIP, AVATAR, 'src/components/game/VictoryMoment.tsx', 'src/components/club-manager/Celebration.tsx', 'src/components/club-manager/CelebrationStyles.tsx'];
 const copies = { name: 'control-copies', setup(b) {
   b.onLoad({ filter: /\.(tsx?|css)$/ }, args => {
     const rel = path.relative(ROOT, args.path).split(path.sep).join('/');
@@ -608,6 +682,17 @@ async function mount(page, fx) {
 const waitState = (page, state) => page.locator(`[data-career-moment][data-cmo-state="${state}"]`).waitFor({ timeout: 20000 });
 
 try {
+  /* F6, the REAL signing slip: a transfer with a fee and a wage before, for a
+     career with a look and a club colour. Its words are the engine's own
+     formatting, read off the page, so the harness never formats a number. */
+  {
+    const { page } = await openRig(390, 'no-preference');
+    const words = await page.evaluate(() => window.rig.words);
+    await page.close();
+    FIXTURES.push({ name: 'F6slip', real: 'slip', id: 'sc-signing', art: true, done: false, colour: words.colour,
+      note: { kind: 'transfer', club: 'Rivertown FC', years: 3, wage: 45000, fee: 12.5, prevWage: 20000 },
+      spec: { kind: 'signing', tone: 'good', colour: words.colour, title: '✍️ Signed with Rivertown FC', lines: [`3 years at ${words.wage}`, `${words.fee} fee`], count: { text: words.wage, from: words.before, label: 'your wage' } } });
+  }
   for (const width of WIDTHS) for (const reducedMotion of ['no-preference', 'reduce']) {
     const { page, trouble } = await openRig(width, reducedMotion);
     const where = `${width}px ${reducedMotion === 'reduce' ? 'reduced' : 'motion'}`;
@@ -621,6 +706,15 @@ try {
       });
       check('RIG', drawn.kind === fx.spec.kind && drawn.title === fx.spec.title, `${at}: the scene drew as ${drawn.kind} "${drawn.title}", expected ${fx.spec.kind} "${fx.spec.title}"`);
       check('RIG', drawn.state === 'live' && drawn.states.join('>') === 'fresh>live', `${at}: a first mount in view must go fresh then live, saw ${drawn.states.join('>') || 'nothing'} and ended ${drawn.state}`);
+      if (fx.real === 'slip') {
+        /* His avatar in the new colour is what the signing scene is for. */
+        const worn = await page.evaluate(() => {
+          const scenes = document.querySelectorAll('[data-signed-slip] [data-career-moment="signing"][data-cmo-bind="sc-signing"]');
+          const avatars = scenes[0] ? scenes[0].querySelectorAll('svg[aria-label="Player avatar"]') : [];
+          return { scenes: scenes.length, avatars: avatars.length, shirt: avatars[0]?.querySelector('path')?.getAttribute('fill') ?? '', ink: scenes[0] ? scenes[0].style.getPropertyValue('--cmo-ink') : '' };
+        });
+        check('K1', worn.scenes === 1 && worn.avatars === 1 && worn.shirt === fx.colour && worn.ink === fx.colour.toLowerCase(), `${at}: the slip must hold one signing scene with one avatar whose shirt is ${fx.colour} and whose colour is ${fx.colour.toLowerCase()}; found ${worn.scenes} scene(s), ${worn.avatars} avatar(s), shirt ${worn.shirt || 'none'}, colour ${worn.ink || 'none'}`);
+      }
       if (reducedMotion === 'reduce') {
         checkReduced(at, fx, await page.evaluate(measureReduced, SLOW_MS));
       } else {
