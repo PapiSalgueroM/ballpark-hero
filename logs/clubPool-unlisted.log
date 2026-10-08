@@ -1,0 +1,5 @@
+
+1. FRESH: the committed pool equals a fresh derive from Club Manager
+  FAIL [2]: the derive refused: Club Manager has no league proleague
+
+control unlisted: section 2 went red as it must (red: 2)

@@ -1,0 +1,31 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-seams: node_modules/.bin/vitest run src/test/seasonCentreWords.test.tsx src/test/seasonCentreSlots.test.tsx src/test/usCareerHallBoard.test.tsx src/test/liveSimMotion.test.tsx src/test/cmWorldIdentity1052.test.ts src/lib/frontOfficeRatings.test.ts --testTimeout=300000 --hookTimeout=120000
+shootout: node scripts/simCmShootoutOrder.mjs
+shootout-keepleague: CM_SHOOTOUT_CONTROL=keepleague node scripts/simCmShootoutOrder.mjs
+shootout-bogus: CM_SHOOTOUT_CONTROL=nosuchcontrol node scripts/simCmShootoutOrder.mjs
+clubPool: node scripts/simCareerClubPool.mjs
+clubPool-relabel: SIM_CLUB_POOL_CONTROL=relabel node scripts/simCareerClubPool.mjs
+clubPool-unlisted: SIM_CLUB_POOL_CONTROL=unlisted node scripts/simCareerClubPool.mjs
+clubPool-nopool: SIM_CLUB_POOL_CONTROL=nopool node scripts/simCareerClubPool.mjs
+leagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+leagueSeasons-unheld: SIM_LEAGUE_SEASONS_CONTROL=unheld node scripts/simCareerLeagueSeasons.mjs
+leagueSeasons-oldsize: SIM_LEAGUE_SEASONS_CONTROL=oldsize node scripts/simCareerLeagueSeasons.mjs
+dailyPool: node scripts/simDailyClubPool.mjs
+dailyPool-today: DAILY_POOL_CONTROL=today node scripts/simDailyClubPool.mjs
+dailyPool-live: DAILY_POOL_CONTROL=live node scripts/simDailyClubPool.mjs
+dailyPool-edited: DAILY_POOL_CONTROL=edited node scripts/simDailyClubPool.mjs
+dailyPool-ghost: DAILY_POOL_CONTROL=ghost node scripts/simDailyClubPool.mjs
+appeal: node scripts/simManagerAppealIsolation.mjs
+psf: node scripts/simPlayerSearchFailure.mjs
+psf-abort: PLAYER_SEARCH_FAILURE_CONTROL=abort node scripts/simPlayerSearchFailure.mjs
+homeCopy: node scripts/simHomeCopy.mjs
+siteSearch: node scripts/simSiteSearch.mjs
+guideHeadings: node scripts/simGuideHeadings.mjs
+rival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storagewrites: node scripts/simStorageWrites.mjs
+cmRules: node scripts/simCmLeagueRules.mjs
+cmOnDemand: node scripts/simCmDataOnDemand.mjs
+clubList: node scripts/simClubManagerClubList.mjs
+inventedQuotes: node scripts/simNoInventedQuotes.mjs
+inventedNames: node scripts/simInventedNames.mjs
