@@ -1,0 +1,164 @@
+playTranslatedPage: http://localhost:4173 (dist/ served by this run), 2 page(s), views phone and desktop, text keep and alter
+  PASS  0. the served entry chunk (/assets/index-Cgp43PYG.js) holds the guard's off switch __DUKB_NO_TRANSLATE_GUARD__
+  PASS  0. the served entry chunk holds the guard's console line
+
+/club-manager phone keep
+  PASS  1. /club-manager phone keep: the translator ran: 697 text node(s) swapped, lang="pt"
+  PASS  1. /club-manager phone keep: the guard is installed on the page
+  FAIL  8. /club-manager phone keep: asked directly, removing a moved node is quiet and inserting before one appends: removeChild NotFoundError, insertBefore quiet
+  PASS  5. /club-manager phone keep: the walk pressed at least two controls: 8: How to play > Let's Play! > 📅2026-27Today. Real s > 📅 Starting 2026-27 > 🏟️2020-21Haaland and  > 🏟️ Starting 2020-21 > 🦊2015-16The Leicester > 🦊 Starting 2015-16
+  PASS  6. /club-manager phone keep: the route error boundary never appeared
+  PASS  7. /club-manager phone keep: no NotFoundError
+
+/soccer-career desktop keep
+  PASS  1. /soccer-career desktop keep: the translator ran: 471 text node(s) swapped, lang="pt"
+  PASS  1. /soccer-career desktop keep: the guard is installed on the page
+  FAIL  8. /soccer-career desktop keep: asked directly, removing a moved node is quiet and inserting before one appends: removeChild NotFoundError, insertBefore quiet
+  PASS  2. /soccer-career desktop keep: the create screen drew
+  FAIL  2. /soccer-career desktop keep: all three picks registered, Brazil among them: the boundary took the page at "choose nationality Brazil"
+  FAIL  2. /soccer-career desktop keep: each pick can be READ in its box, bar the known hidden one (nationality): the boundary took the page at "choose nationality Brazil"
+  FAIL  3. /soccer-career desktop keep: the create flow reached the career: the boundary took the page at "choose nationality Brazil"
+  FAIL  4. /soccer-career desktop keep: one season forward and the hub still stands: the career was never reached
+  FAIL  5. /soccer-career desktop keep: the walk pressed at least two controls: 1: Brazil🇧🇷
+  FAIL  6. /soccer-career desktop keep: the route error boundary never appeared: it took the page at "choose nationality Brazil"
+  FAIL  7. /soccer-career desktop keep: no NotFoundError: console: NotFoundError: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.
+    at J8.r.removeChild (http:/
+        Try this page again: reloaded, translated again, and broke again at "choose nationality Brazil"
+
+/soccer-career phone keep
+  PASS  1. /soccer-career phone keep: the translator ran: 466 text node(s) swapped, lang="pt"
+  PASS  1. /soccer-career phone keep: the guard is installed on the page
+  FAIL  8. /soccer-career phone keep: asked directly, removing a moved node is quiet and inserting before one appends: removeChild NotFoundError, insertBefore quiet
+  PASS  2. /soccer-career phone keep: the create screen drew
+  FAIL  2. /soccer-career phone keep: all three picks registered, Brazil among them: the boundary took the page at "choose nationality Brazil"
+  FAIL  2. /soccer-career phone keep: each pick can be READ in its box, bar the known hidden one (nationality): the boundary took the page at "choose nationality Brazil"
+  FAIL  3. /soccer-career phone keep: the create flow reached the career: the boundary took the page at "choose nationality Brazil"
+  FAIL  4. /soccer-career phone keep: one season forward and the hub still stands: the career was never reached
+  FAIL  5. /soccer-career phone keep: the walk pressed at least two controls: 1: Brazil🇧🇷
+  FAIL  6. /soccer-career phone keep: the route error boundary never appeared: it took the page at "choose nationality Brazil"
+  FAIL  7. /soccer-career phone keep: no NotFoundError: console: NotFoundError: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.
+    at J8.r.removeChild (http:/
+        Try this page again: reloaded, translated again, and broke again at "choose nationality Brazil"
+
+/club-manager desktop keep
+  PASS  1. /club-manager desktop keep: the translator ran: 696 text node(s) swapped, lang="pt"
+  PASS  1. /club-manager desktop keep: the guard is installed on the page
+  FAIL  8. /club-manager desktop keep: asked directly, removing a moved node is quiet and inserting before one appends: removeChild NotFoundError, insertBefore quiet
+  PASS  5. /club-manager desktop keep: the walk pressed at least two controls: 8: How to play > Let's Play! > 📅2026-27Today. Real s > 📅 Starting 2026-27 > 🏟️2020-21Haaland and  > 🏟️ Starting 2020-21 > 🦊2015-16The Leicester > 🦊 Starting 2015-16
+  PASS  6. /club-manager desktop keep: the route error boundary never appeared
+  PASS  7. /club-manager desktop keep: no NotFoundError
+
+/club-manager phone alter
+  PASS  1. /club-manager phone alter: the translator ran: 696 text node(s) swapped, lang="pt"
+  PASS  1. /club-manager phone alter: the guard is installed on the page
+  FAIL  8. /club-manager phone alter: asked directly, removing a moved node is quiet and inserting before one appends: removeChild NotFoundError, insertBefore quiet
+  PASS  5. /club-manager phone alter: the walk pressed at least two controls: 8: How to play > Let's Play! > 📅2026-27Today. Real s > 📅 Starting 2026-27 > 🏟️2020-21Haaland and  > 🏟️ Starting 2020-21 > 🦊2015-16The Leicester > 🦊 Starting 2015-16
+  PASS  6. /club-manager phone alter: the route error boundary never appeared
+  PASS  7. /club-manager phone alter: no NotFoundError
+
+/soccer-career phone alter
+  PASS  1. /soccer-career phone alter: the translator ran: 466 text node(s) swapped, lang="pt"
+  PASS  1. /soccer-career phone alter: the guard is installed on the page
+  FAIL  8. /soccer-career phone alter: asked directly, removing a moved node is quiet and inserting before one appends: removeChild NotFoundError, insertBefore quiet
+  PASS  2. /soccer-career phone alter: the create screen drew
+  FAIL  2. /soccer-career phone alter: all three picks registered, Brazil among them: the boundary took the page at "choose nationality Brazil"
+  FAIL  2. /soccer-career phone alter: each pick can be READ in its box, bar the known hidden one (nationality): the boundary took the page at "choose nationality Brazil"
+  FAIL  3. /soccer-career phone alter: the create flow reached the career: the boundary took the page at "choose nationality Brazil"
+  FAIL  4. /soccer-career phone alter: one season forward and the hub still stands: the career was never reached
+  FAIL  5. /soccer-career phone alter: the walk pressed at least two controls: 1: Brazil🇧🇷
+  FAIL  6. /soccer-career phone alter: the route error boundary never appeared: it took the page at "choose nationality Brazil"
+  FAIL  7. /soccer-career phone alter: no NotFoundError: console: NotFoundError: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.
+    at J8.r.removeChild (http:/
+        Try this page again: reloaded, translated again, and broke again at "choose nationality Brazil"
+
+/soccer-career desktop alter
+  PASS  1. /soccer-career desktop alter: the translator ran: 466 text node(s) swapped, lang="pt"
+  PASS  1. /soccer-career desktop alter: the guard is installed on the page
+  FAIL  8. /soccer-career desktop alter: asked directly, removing a moved node is quiet and inserting before one appends: removeChild NotFoundError, insertBefore quiet
+  PASS  2. /soccer-career desktop alter: the create screen drew
+  FAIL  2. /soccer-career desktop alter: all three picks registered, Brazil among them: the boundary took the page at "choose nationality Brazil"
+  FAIL  2. /soccer-career desktop alter: each pick can be READ in its box, bar the known hidden one (nationality): the boundary took the page at "choose nationality Brazil"
+  FAIL  3. /soccer-career desktop alter: the create flow reached the career: the boundary took the page at "choose nationality Brazil"
+  FAIL  4. /soccer-career desktop alter: one season forward and the hub still stands: the career was never reached
+  FAIL  5. /soccer-career desktop alter: the walk pressed at least two controls: 1: Brazil🇧🇷
+  FAIL  6. /soccer-career desktop alter: the route error boundary never appeared: it took the page at "choose nationality Brazil"
+  FAIL  7. /soccer-career desktop alter: no NotFoundError: console: NotFoundError: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.
+    at J8.r.removeChild (http:/
+        Try this page again: reloaded, translated again, and broke again at "choose nationality Brazil"
+
+/club-manager desktop alter
+  PASS  1. /club-manager desktop alter: the translator ran: 696 text node(s) swapped, lang="pt"
+  PASS  1. /club-manager desktop alter: the guard is installed on the page
+  FAIL  8. /club-manager desktop alter: asked directly, removing a moved node is quiet and inserting before one appends: removeChild NotFoundError, insertBefore quiet
+  PASS  5. /club-manager desktop alter: the walk pressed at least two controls: 8: How to play > Let's Play! > 📅2026-27Today. Real s > 📅 Starting 2026-27 > 🏟️2020-21Haaland and  > 🏟️ Starting 2020-21 > 🦊2015-16The Leicester > 🦊 Starting 2015-16
+  PASS  6. /club-manager desktop alter: the route error boundary never appeared
+  PASS  7. /club-manager desktop alter: no NotFoundError
+
+EVERY WALK
+  page             view     text   boundary                          NotFound  guard line  moved nodes  stale text  steps
+  /soccer-career   phone    keep   at "choose nationality Brazil"    4         0           1 (1 taken)  0           3
+  /club-manager    phone    keep   none                              0         0           0            0           9
+  /soccer-career   desktop  keep   at "choose nationality Brazil"    4         0           1 (1 taken)  0           3
+  /club-manager    desktop  keep   none                              0         0           0            0           9
+  /soccer-career   phone    alter  at "choose nationality Brazil"    4         0           1 (1 taken)  0           3
+  /club-manager    phone    alter  none                              0         0           0            0           9
+  /soccer-career   desktop  alter  at "choose nationality Brazil"    4         0           1 (1 taken)  0           3
+  /club-manager    desktop  alter  none                              0         0           0            0           9
+
+BY PAGE
+  /soccer-career   broke in 4 of 4 walk(s) ("choose nationality Brazil"); the guard printed its line in 0; moved nodes per walk 1, 1, 1, 1; stale text at most 0
+  /club-manager    broke in 0 of 4 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0, 0, 0; stale text at most 0
+
+WHAT THE THREE BOXES READ after the picks
+  phone    keep   nationality "" (no box) | position "" (no box) | era "" (no box)
+  desktop  keep   nationality "" (no box) | position "" (no box) | era "" (no box)
+  phone    alter  nationality "" (no box) | position "" (no box) | era "" (no box)
+  desktop  alter  nationality "" (no box) | position "" (no box) | era "" (no box)
+
+THE CALLS THAT NAMED A MOVED NODE (1 different, each one a crash without the guard)
+  4x /soccer-career: removeChild under <span> of "Choose nationality"
+
+nothing left this machine: 12 request(s) to the database host aborted, other hosts aborted [fonts.googleapis.com]
+THE GUARD WAS NEEDED on 0 of 8 page load(s): 4 call(s) in all named a node its parent no longer owned.
+
+  - 8. /club-manager phone keep: asked directly, removing a moved node is quiet and inserting before one appends: removeChild NotFoundError, insertBefore quiet
+  - 8. /soccer-career desktop keep: asked directly, removing a moved node is quiet and inserting before one appends: removeChild NotFoundError, insertBefore quiet
+  - 2. /soccer-career desktop keep: all three picks registered, Brazil among them: the boundary took the page at "choose nationality Brazil"
+  - 2. /soccer-career desktop keep: each pick can be READ in its box, bar the known hidden one (nationality): the boundary took the page at "choose nationality Brazil"
+  - 3. /soccer-career desktop keep: the create flow reached the career: the boundary took the page at "choose nationality Brazil"
+  - 4. /soccer-career desktop keep: one season forward and the hub still stands: the career was never reached
+  - 5. /soccer-career desktop keep: the walk pressed at least two controls: 1: Brazil🇧🇷
+  - 6. /soccer-career desktop keep: the route error boundary never appeared: it took the page at "choose nationality Brazil"
+  - 7. /soccer-career desktop keep: no NotFoundError: console: NotFoundError: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.
+    at J8.r.removeChild (http:/
+  - 8. /soccer-career phone keep: asked directly, removing a moved node is quiet and inserting before one appends: removeChild NotFoundError, insertBefore quiet
+  - 2. /soccer-career phone keep: all three picks registered, Brazil among them: the boundary took the page at "choose nationality Brazil"
+  - 2. /soccer-career phone keep: each pick can be READ in its box, bar the known hidden one (nationality): the boundary took the page at "choose nationality Brazil"
+  - 3. /soccer-career phone keep: the create flow reached the career: the boundary took the page at "choose nationality Brazil"
+  - 4. /soccer-career phone keep: one season forward and the hub still stands: the career was never reached
+  - 5. /soccer-career phone keep: the walk pressed at least two controls: 1: Brazil🇧🇷
+  - 6. /soccer-career phone keep: the route error boundary never appeared: it took the page at "choose nationality Brazil"
+  - 7. /soccer-career phone keep: no NotFoundError: console: NotFoundError: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.
+    at J8.r.removeChild (http:/
+  - 8. /club-manager desktop keep: asked directly, removing a moved node is quiet and inserting before one appends: removeChild NotFoundError, insertBefore quiet
+  - 8. /club-manager phone alter: asked directly, removing a moved node is quiet and inserting before one appends: removeChild NotFoundError, insertBefore quiet
+  - 8. /soccer-career phone alter: asked directly, removing a moved node is quiet and inserting before one appends: removeChild NotFoundError, insertBefore quiet
+  - 2. /soccer-career phone alter: all three picks registered, Brazil among them: the boundary took the page at "choose nationality Brazil"
+  - 2. /soccer-career phone alter: each pick can be READ in its box, bar the known hidden one (nationality): the boundary took the page at "choose nationality Brazil"
+  - 3. /soccer-career phone alter: the create flow reached the career: the boundary took the page at "choose nationality Brazil"
+  - 4. /soccer-career phone alter: one season forward and the hub still stands: the career was never reached
+  - 5. /soccer-career phone alter: the walk pressed at least two controls: 1: Brazil🇧🇷
+  - 6. /soccer-career phone alter: the route error boundary never appeared: it took the page at "choose nationality Brazil"
+  - 7. /soccer-career phone alter: no NotFoundError: console: NotFoundError: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.
+    at J8.r.removeChild (http:/
+  - 8. /soccer-career desktop alter: asked directly, removing a moved node is quiet and inserting before one appends: removeChild NotFoundError, insertBefore quiet
+  - 2. /soccer-career desktop alter: all three picks registered, Brazil among them: the boundary took the page at "choose nationality Brazil"
+  - 2. /soccer-career desktop alter: each pick can be READ in its box, bar the known hidden one (nationality): the boundary took the page at "choose nationality Brazil"
+  - 3. /soccer-career desktop alter: the create flow reached the career: the boundary took the page at "choose nationality Brazil"
+  - 4. /soccer-career desktop alter: one season forward and the hub still stands: the career was never reached
+  - 5. /soccer-career desktop alter: the walk pressed at least two controls: 1: Brazil🇧🇷
+  - 6. /soccer-career desktop alter: the route error boundary never appeared: it took the page at "choose nationality Brazil"
+  - 7. /soccer-career desktop alter: no NotFoundError: console: NotFoundError: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.
+    at J8.r.removeChild (http:/
+  - 8. /club-manager desktop alter: asked directly, removing a moved node is quiet and inserting before one appends: removeChild NotFoundError, insertBefore quiet
+playTranslatedPage: 70 checks, 36 failed

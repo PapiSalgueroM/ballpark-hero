@@ -1,0 +1,70 @@
+playTranslatedPage: http://localhost:4173 (dist/ served by this run), 2 page(s), views phone and desktop, text off, CONTROL=notranslate
+  PASS  0. the served entry chunk (/assets/index-B9SMPdEO.js) holds the guard's off switch __DUKB_NO_TRANSLATE_GUARD__
+  PASS  0. the served entry chunk holds the guard's console line
+
+/club-manager phone off
+  PASS  1. /club-manager phone off: the translator is off: 0 font element(s)
+  PASS  1. /club-manager phone off: the guard is installed on the page
+  FAIL  8. /club-manager phone off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore lost
+  PASS  5. /club-manager phone off: the walk pressed at least two controls: 8: How to play > Let's Play! > 📅2026-27Today. Real s > 📅 Starting 2026-27 > 🏟️2020-21Haaland and  > 🏟️ Starting 2020-21 > 🦊2015-16The Leicester > 🦊 Starting 2015-16
+  PASS  6. /club-manager phone off: the route error boundary never appeared
+  PASS  7. /club-manager phone off: no NotFoundError
+
+/club-manager desktop off
+  PASS  1. /club-manager desktop off: the translator is off: 0 font element(s)
+  PASS  1. /club-manager desktop off: the guard is installed on the page
+  FAIL  8. /club-manager desktop off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore lost
+  PASS  5. /club-manager desktop off: the walk pressed at least two controls: 8: How to play > Let's Play! > 📅2026-27Today. Real s > 📅 Starting 2026-27 > 🏟️2020-21Haaland and  > 🏟️ Starting 2020-21 > 🦊2015-16The Leicester > 🦊 Starting 2015-16
+  PASS  6. /club-manager desktop off: the route error boundary never appeared
+  PASS  7. /club-manager desktop off: no NotFoundError
+
+/soccer-career phone off
+  PASS  1. /soccer-career phone off: the translator is off: 0 font element(s)
+  PASS  1. /soccer-career phone off: the guard is installed on the page
+  FAIL  8. /soccer-career phone off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore lost
+  PASS  2. /soccer-career phone off: the create screen drew
+  PASS  2. /soccer-career phone off: all three picks registered, Brazil among them: nationality box "Brazil", position box "Striker (ST)", era box "Current era (2025 start)"
+  PASS  2. /soccer-career phone off: each pick can be READ in its box: readable: nationality, position, era; hidden: none
+  PASS  3. /soccer-career phone off: the create flow reached the career: h1 "🇧🇷Joao Teste", create form gone, save Joao Teste, Brazil, youth, age 16
+  PASS  4. /soccer-career phone off: one season forward and the hub still stands: age 16 to 17 on press 1, h1 "🇧🇷Joao Teste", phase contract_offer; the walk went on to age 18, phase random_events
+  PASS  5. /soccer-career phone off: the walk pressed at least two controls: 20: Brazil🇧🇷 > Striker (ST) > Current era (2025 star > 🎲 Generate Starting P > 🎲 Roll again > 🎮 Customize your buil > ✅ Lock in build > ⚽ Begin Career > Next Year
+  PASS  6. /soccer-career phone off: the route error boundary never appeared
+  PASS  7. /soccer-career phone off: no NotFoundError
+
+/soccer-career desktop off
+  PASS  1. /soccer-career desktop off: the translator is off: 0 font element(s)
+  PASS  1. /soccer-career desktop off: the guard is installed on the page
+  FAIL  8. /soccer-career desktop off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore lost
+  PASS  2. /soccer-career desktop off: the create screen drew
+  PASS  2. /soccer-career desktop off: all three picks registered, Brazil among them: nationality box "Brazil", position box "Striker (ST)", era box "Current era (2025 start)"
+  PASS  2. /soccer-career desktop off: each pick can be READ in its box: readable: nationality, position, era; hidden: none
+  PASS  3. /soccer-career desktop off: the create flow reached the career: h1 "🇧🇷Joao Teste", create form gone, save Joao Teste, Brazil, youth, age 16
+  PASS  4. /soccer-career desktop off: one season forward and the hub still stands: age 16 to 17 on press 1, h1 "🇧🇷Joao Teste", phase contract_offer; the walk went on to age 18, phase random_events
+  PASS  5. /soccer-career desktop off: the walk pressed at least two controls: 20: Brazil🇧🇷 > Striker (ST) > Current era (2025 star > 🎲 Generate Starting P > 🎲 Roll again > 🎮 Customize your buil > ✅ Lock in build > ⚽ Begin Career > Next Year
+  PASS  6. /soccer-career desktop off: the route error boundary never appeared
+  PASS  7. /soccer-career desktop off: no NotFoundError
+
+EVERY WALK
+  page             view     text   boundary                          NotFound  guard line  moved nodes  stale text  steps
+  /soccer-career   phone    off    none                              0         0           0            0           22
+  /club-manager    phone    off    none                              0         0           0            0           9
+  /soccer-career   desktop  off    none                              0         0           0            0           22
+  /club-manager    desktop  off    none                              0         0           0            0           9
+
+BY PAGE
+  /soccer-career   broke in 0 of 2 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0; stale text at most 0
+  /club-manager    broke in 0 of 2 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0; stale text at most 0
+
+WHAT THE THREE BOXES READ after the picks
+  phone    off    nationality "Brazil" (readable) | position "Striker (ST)" (readable) | era "Current era (2025 start)" (readable)
+  desktop  off    nationality "Brazil" (readable) | position "Striker (ST)" (readable) | era "Current era (2025 start)" (readable)
+
+nothing left this machine: 8 request(s) to the database host aborted, other hosts aborted [fonts.googleapis.com]
+  PASS  9. with the translator off the guard printed nothing and no call named a moved node: 0 of 4 page(s) printed the guard's line, 0 moved node(s)
+
+  - 8. /club-manager phone off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore lost
+  - 8. /club-manager desktop off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore lost
+  - 8. /soccer-career phone off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore lost
+  - 8. /soccer-career desktop off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore lost
+control "notranslate": RED, and it must be green.
+playTranslatedPage: 37 checks, 4 failed

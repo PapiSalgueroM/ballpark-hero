@@ -1,0 +1,76 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstderr[2m | src/test/translateGuard.test.tsx[2m > [22m[2mwith the guard[2m > [22m[2ma placeholder gives way to a value on a translated page
+[22m[39mError: Uncaught [NotFoundError: The node to be removed is not a child of this node.]
+    at reportException (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+    at innerInvokeEventListeners (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+    at invokeEventListeners (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+    at HTMLUnknownElementImpl._dispatch (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+    at HTMLUnknownElementImpl.dispatchEvent (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+    at HTMLUnknownElement.dispatchEvent (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)
+    at Object.invokeGuardedCallbackDev (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:4213:16)
+    at invokeGuardedCallback (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:4277:31)
+    at reportUncaughtErrorInDEV (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:22877:5)
+    at captureCommitPhaseError (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:27165:5) DOMException {}
+The above error occurred in the <Text> component:
+
+    at span
+    at div
+    at captureCommitPhaseError (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:27191:25)
+    at Boundary (/home/runner/work/ballpark-hero/ballpark-hero/src/test/translateGuard.test.tsx:154:9)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, Boundary.
+
+ [31m❯[39m src/test/translateGuard.test.tsx [2m([22m[2m11 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 90[2mms[22m[39m
+   [32m✓[39m before the guard: the crash is real here[2m > [22mremoveChild throws for a node that is not a child[32m 2[2mms[22m[39m
+   [32m✓[39m before the guard: the crash is real here[2m > [22minsertBefore throws when the reference node is gone[32m 1[2mms[22m[39m
+   [32m✓[39m before the guard: the crash is real here[2m > [22ma React update over translated text lands in the error boundary[32m 53[2mms[22m[39m
+   [32m✓[39m before the guard: the crash is real here[2m > [22mso does a new element that goes before a translated string[32m 8[2mms[22m[39m
+   [32m✓[39m with the guard[2m > [22minstalls once and says so[32m 0[2mms[22m[39m
+[31m   [31m×[31m with the guard[2m > [22mremoving a node that is not a child is a no-op[39m[32m 1[2mms[22m[39m
+[31m     → The node to be removed is not a child of this node.[39m
+   [32m✓[39m with the guard[2m > [22minserting before a gone reference appends, so the new node still arrives[32m 1[2mms[22m[39m
+[31m   [31m×[31m with the guard[2m > [22ma placeholder gives way to a value on a translated page[39m[32m 13[2mms[22m[39m
+[31m     → expected <p role="alert"></p> to be null[39m
+   [32m✓[39m with the guard[2m > [22ma new element still shows up when the string it goes before was translated[32m 5[2mms[22m[39m
+   [32m✓[39m with the guard[2m > [22man untranslated page behaves exactly as before[32m 5[2mms[22m[39m
+   [32m✓[39m with the guard[2m > [22mthe off switch leaves a window alone[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/translateGuard.test.tsx[2m > [22mwith the guard[2m > [22mremoving a node that is not a child is a no-op
+[31m[1mNotFoundError[22m: The node to be removed is not a child of this node.[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/translateGuard.test.tsx[2m > [22mwith the guard[2m > [22ma placeholder gives way to a value on a translated page
+[31m[1mAssertionError[22m: expected <p role="alert"></p> to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+<p
+  role="alert"
+>
+  This page broke
+</p>
+
+[36m [2m❯[22m src/test/translateGuard.test.tsx:[2m158:41[22m[39m
+    [90m156| [39m      fireEvent[33m.[39m[34mclick[39m(screen[33m.[39m[34mgetByRole[39m([32m'button'[39m))[33m;[39m
+    [90m157| [39m    })[33m;[39m
+    [90m158| [39m    [34mexpect[39m(screen[33m.[39m[34mqueryByRole[39m([32m'alert'[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m   | [39m                                        [31m^[39m
+    [90m159| [39m    expect(screen.getByTestId('trigger').querySelector('b')?.textConte…
+    [90m160| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m9 passed[39m[22m[90m (11)[39m
+[2m   Start at [22m 06:33:35
+[2m   Duration [22m 758ms[2m (transform 42ms, setup 41ms, collect 98ms, tests 90ms, environment 236ms, prepare 107ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/translateGuard.test.tsx,title=src/test/translateGuard.test.tsx > with the guard > a placeholder gives way to a value on a translated page,line=158,column=41::AssertionError: expected <p role="alert"></p> to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A<p%0A  role="alert"%0A>%0A  This page broke%0A</p>%0A%0A ❯ src/test/translateGuard.test.tsx:158:41%0A%0A
