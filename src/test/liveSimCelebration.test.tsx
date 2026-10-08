@@ -1,4 +1,5 @@
 import { cleanup, render, renderHook } from '@testing-library/react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { actionFrame, LivePitchPlayer, useLiveSimMotion } from '@/components/club-manager/LiveSimMotion';
 import type { MotionEvent } from '@/components/club-manager/LiveSimMotion';
@@ -84,5 +85,63 @@ describe('Committed Club Manager goal celebrations', () => {
     expect(frozen.poses.m9.hop).toBeCloseTo(0);
     rerender({ clock: 5.9 });
     expect(result.current).toEqual(frozen);
+  });
+});
+
+/* Round 1101, the record. Written on the untouched base BEFORE any code moved into
+   src/components/pitch-motion, so the lift can be proven to draw the same frames.
+   A small FNV-1a hash over JSON with numbers rounded to four places. It reads a NAMED
+   list of today's frame fields, so an optional field added later can never move it. */
+const fnv = (text: string) => {
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < text.length; i++) { hash ^= text.charCodeAt(i); hash = Math.imul(hash, 0x01000193); }
+  return (hash >>> 0).toString(16).padStart(8, '0');
+};
+const FRAME_FIELDS = ['mine', 'theirs', 'ball', 'holderKey', 'poses', 'action', 'net', 'netPulse', 'phase'] as const;
+const digest = (value: unknown) => fnv(JSON.stringify(value, (_key, v) => typeof v === 'number' ? Math.round(v * 1e4) / 1e4 : v));
+const SAMPLES = Array.from({ length: 22 }, (_unused, i) => i * .05);
+type Flags = Partial<Pick<MotionEvent['event'], 'penalty' | 'freeKick' | 'flank'>>;
+function grid(flags: Flags) {
+  const frames: unknown[] = [];
+  for (const side of ['me', 'opp'] as const) for (const kind of ['goal', 'save', 'shot'] as const) for (const elapsed of SAMPLES) {
+    const base = event(side, kind);
+    const frame = actionFrame(scene, { ...base, event: { ...base.event, ...flags } }, elapsed) as unknown as Record<string, unknown>;
+    frames.push(Object.fromEntries(FRAME_FIELDS.map(field => [field, frame[field]])));
+  }
+  return frames;
+}
+/* Recorded on origin/release-al-int at 8fe82a4d, 2026-10-07. PLAIN and FIGURE must never
+   change in Round 1101. FLAGGED is re-recorded once, in the commit that moves the penalty
+   spot and stands the free kick wall, and that commit's message says so. */
+const PLAIN_DIGEST = '2e5a23e4';
+const FLAGGED_DIGEST = '41b9e02c';
+const FIGURE_DIGEST = '443c524e';
+
+describe('The lift keeps every frame', () => {
+  it('PLAIN: every goal, save and miss frame with no flags is the recorded one', () => {
+    const frames = grid({});
+    expect(frames).toHaveLength(2 * 3 * 22);
+    expect(digest(frames)).toBe(PLAIN_DIGEST);
+  });
+
+  it('FLAGGED: penalty, free kick and both flanks draw the recorded frames', () => {
+    const variants: Flags[] = [{ penalty: true }, { freeKick: true }, { flank: 'left' }, { flank: 'right' }];
+    const frames = variants.flatMap(flags => grid(flags));
+    expect(frames).toHaveLength(4 * 2 * 3 * 22);
+    expect(digest(frames)).toBe(FLAGGED_DIGEST);
+  });
+
+  it('FIGURE: the drawn figure is the recorded one in every pose', () => {
+    const poses = [
+      { keeper: false, pose: undefined, selected: false },
+      { keeper: false, pose: { kick: 1 }, selected: false },
+      { keeper: true, pose: { dive: 68 }, selected: false },
+      { keeper: true, pose: { dive: -68, catching: 1 }, selected: false },
+      { keeper: false, pose: { celebrate: 1, hop: 4 }, selected: false },
+      { keeper: false, pose: undefined, selected: true },
+    ];
+    const markup = poses.map(p => renderToStaticMarkup(<LivePitchPlayer color="#85bcf0" keeper={p.keeper} pose={p.pose} selected={p.selected} />));
+    expect(new Set(markup).size).toBe(poses.length);
+    expect(fnv(markup.join('\n'))).toBe(FIGURE_DIGEST);
   });
 });

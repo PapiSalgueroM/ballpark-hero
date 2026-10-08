@@ -23,7 +23,9 @@ const folder = await mkdtemp(path.join(root, '.sim-control/live-celebration-'));
 const reportPath = path.join(folder, 'result.json');
 const owned = [reportPath];
 try {
-  const env = { ...process.env, FORCE_COLOR: '0' };
+  /* NO_COLOR as well: on Windows this vitest colours a matcher's message whatever FORCE_COLOR says, and the
+     control's own regex below then misses 'Error: expect(' (Round 1101 found the figure control red for that alone). */
+  const env = { ...process.env, FORCE_COLOR: '0', NO_COLOR: '1' };
   delete env.NO_DOUBLE_SWAP;
   const args = [path.join(root, 'node_modules/vitest/vitest.mjs'), 'run', 'src/test/liveSimCelebration.test.tsx', '--maxWorkers=1', '--no-file-parallelism', '--reporter=json', '--outputFile.json=' + reportPath];
   if (control) {
@@ -45,7 +47,7 @@ try {
   const report = JSON.parse(await readFile(reportPath, 'utf8'));
   assert.equal(Number(report.numUnhandledErrors ?? 0), 0);
   const rows = report.testResults.flatMap(suite => suite.assertionResults);
-  assert.equal(rows.length, 5);
+  assert.equal(rows.length, 8);
   if (control) {
     assert.equal(run.status, 1);
     assert.equal(report.numFailedTests, 1);
@@ -57,8 +59,8 @@ try {
     console.log(`simLiveSimCelebration: ${control} changed source, intended assertion failed, independent destinations stayed green.`);
   } else {
     assert.equal(run.status, 0);
-    assert.equal(report.numPassedTests, 5);
-    console.log('simLiveSimCelebration: 5 outcome checks passed, correct side, net-first, real figure, freeze/expiry and reduced motion.');
+    assert.equal(report.numPassedTests, 8);
+    console.log('simLiveSimCelebration: 8 outcome checks passed, correct side, net-first, real figure, freeze/expiry, reduced motion and the three recorded digests of the lift.');
   }
 } finally {
   for (const file of owned) await rm(file, { force: true });
