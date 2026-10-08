@@ -29,6 +29,17 @@
  * localStorage byte for byte, and arm 2's flags go red. That is the proof this walk depends on
  * the on demand file. Exit 1 when all of that happens, 2 when it does not.
  *
+ * EXIT CODES, all four: 0 green, 1 red (or, under the control, FIRED), 2 refused to run (or the
+ * control did not fire), 3 THE WALK ITSELF CRASHED (a navigation timed out, the server was not
+ * there, the browser died). Until the fix of 2026-10-08 a crash left through node's own exit 1,
+ * the code the control uses for FIRED: the review's first abort run timed out in page.goto on a
+ * loaded machine, printed no FIRED line and still exited 1, so a gate script reading only the
+ * exit code would have counted a crash as a control that fired. A crash now says CRASHED and
+ * exits 3. Proved 2026-10-08 by pointing the walk at a port nothing listens on, once plain and
+ * once under the control: exit 3 both times, the CRASHED line, no FIRED line. The same day on a
+ * build of the merged tree: plain exit 0 (all four arms, both widths, 0 page errors), the control
+ * exit 1 with its FIRED line.
+ *
  * Run 2026-10-07 on a build of the branch: exit 0 (eight fresh visits with no pool and no past
  * season among 36 to 42 files each; Barcelona 2010-11 with 27 squad rows and a flag on exactly
  * the 26 men who have a country); the control exit 1.
@@ -82,6 +93,15 @@ if (HOLD !== 'nat' && HOLD !== 'squads') { console.error(`CM_PLAY_HOLD=${HOLD} i
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const refuse = m => { console.error(`playCmDataOnDemand: REFUSING TO RUN. ${m}`); process.exit(2); };
+/* A crash is not a verdict (see EXIT CODES in the header). Everything below runs at the top level
+   of this module, so an error nobody caught, a rejected await included, lands in one of these two
+   and leaves with its own code instead of node's exit 1. */
+const crashed = err => {
+  console.error(`playCmDataOnDemand: CRASHED, which is neither green nor red nor a control that fired. ${String(err?.message ?? err).split('\n')[0].slice(0, 240)}`);
+  process.exit(3);
+};
+process.on('uncaughtException', crashed);
+process.on('unhandledRejection', crashed);
 
 /* ---------- which built file holds what ---------- */
 const ASSETS = path.join(DIST, 'assets');
@@ -134,6 +154,15 @@ console.log(`   ${CLUB}, ${career.squad.length} players, ${flagged.size} of them
 fs.rmSync(TMP, { recursive: true, force: true });
 
 /* ---------- the browser ---------- */
+/* A failed fetch to the blocked database is this walk's own doing, not the page's. A chunk of the
+   page that failed to load is the page's, and it is exactly what this walk exists to see: until
+   2026-10-08 the filter read /supabase|Failed to fetch|CORS/ alone, and Chromium words a failed
+   import() as "Failed to fetch dynamically imported module", so arms 1, 2 and 4 could not have
+   reported one. The two sample lines below are checked before any page opens, so the filter
+   cannot drift back to swallowing it. */
+const ownDoing = e => /supabase|Failed to fetch|CORS/i.test(e) && !/dynamically imported module|module script/i.test(e);
+if (ownDoing('TypeError: Failed to fetch dynamically imported module: http://localhost:4173/assets/x.js')) refuse('the page error filter would swallow a chunk that failed to load');
+if (!ownDoing('TypeError: Failed to fetch')) refuse('the page error filter no longer forgives a fetch to the blocked database host');
 const browser = await pw.chromium.launch({ executablePath: process.env.CHROME_PATH || undefined, args: ['--no-sandbox'] });
 
 /** One visit. `hold` names a built file whose request waits until release() is called;
@@ -156,8 +185,7 @@ async function open({ route, size, save = null, hold = null, abort = null }) {
   if (abort) await page.route(u => u.pathname.endsWith('/' + abort), r => r.abort());
   if (save) await page.addInitScript(s => { try { for (const [k, v] of Object.entries(s)) localStorage.setItem(k, v); } catch { /* private mode */ } }, save);
   await page.goto(`${BASE}${route}`, { waitUntil: 'domcontentloaded', timeout: 60000 });
-  /* a failed fetch to the blocked database is this walk's own doing, not the page's */
-  const pageErrors = () => errors.filter(e => !/supabase|Failed to fetch|CORS/i.test(e));
+  const pageErrors = () => errors.filter(e => !ownDoing(e));
   return { ctx, page, chunks, pageErrors, release: () => release(), heldSeen: () => seen };
 }
 const drawn = page => page.waitForFunction(() => (document.getElementById('root')?.innerText ?? '').length > 200, { timeout: 45000 }).then(() => true, () => false);

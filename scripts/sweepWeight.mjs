@@ -167,6 +167,7 @@
  *   /soccer-career      779.6K to 780.4K   (0.8K MORE: the pools ride in the page's
  *                       own chunk now, with the squad picker, and no longer
  *                       share a compression stream with the tournament engine)
+ *   /footle             338.9K to 339.4K   (0.5K MORE, 39 files where it was 38)
  *   clubManager chunk   886.2K raw 292.1K gz  to  708.5K raw 234.5K gz
  *   nationality chunks  2020 15.7K, 2015 14.5K, 2010 15.0K, 2005 14.8K gz, on demand
  *
@@ -176,6 +177,57 @@
  * release-al-int at 8fe82a4d (faaf358a): the five figures above the same to
  * the tenth, so the budgets stand. The release gate measures the release
  * build once more, and the ceilings follow that figure.
+ *
+ * THE TWO PAGES THIS ROUND MADE HEAVIER, said plainly (added 2026-10-08, the
+ * review found the second one missing from this header):
+ * - /soccer-career, 0.8K. More than the 0.5K the round was allowed, and it
+ *   has a second cost the figure does not show: the 65.6K of pools used to sit
+ *   in a chunk that changed only with the tournament engine, and now sit in
+ *   the page's own chunk (SoccerCareer, 354.6K to 422.5K gz), which changes in
+ *   most releases, so a returning player downloads them again each time. The
+ *   fix is the follow up this round names and does not build: the pools behind
+ *   the season gate in Soccer Career, a chunk of their own again.
+ * - /footle, 0.5K. With the engine no longer importing Footle's data the
+ *   bundler regroups it: the player list that rode inside the footleEnrichment
+ *   chunk (19.1K gz) is a chunk of its own now (players, 14.1K, beside a 5.4K
+ *   footleEnrichment), and two streams compress about 0.4K worse than one
+ *   (read off the two builds: the static closure of the Footle chunk is 36
+ *   files and 302.4K on the base, 37 and 302.8K on the branch). /footle's 339
+ *   row holds BY ROUNDING ALONE: 339.4 rounds to 339, 0.1K is left.
+ * And the whole sweep does not exit 0 on this round's tree: /soccer-career
+ * (776), /stadium-tycoon (287) and /soccer-grid (307) are over on the base
+ * build too (779.6, 288.8, 307.5), so those three rows are the release's to
+ * set from its own build, and this round adds its 0.8K to the first.
+ *
+ * SECTION 4 READS ITS OWN LIST (2026-10-08). Section 1 weighs what a route
+ * asked for inside load plus 1.5 seconds, as every budget here was measured.
+ * On a busy machine that window closes early and says nothing: the review
+ * measured /club-manager at 695.8K over 35 files twice and then at 704.6K
+ * over 37 on one build, and /soccer-career 36K short. A file that came late
+ * was not weighed, and section 4, reading the same list, never looked inside
+ * it either. So for its five routes the page is now kept open until it has
+ * drawn and the network is quiet, section 4 reads THAT list, refuses with
+ * "cannot tell" for a route that never drew, and prints a NOTE with what
+ * section 1 missed and how many K. Section 1's own verdict is unchanged: a
+ * short figure can still pass a budget there, and what the window should be
+ * is the release's decision (it moves every figure in this file).
+ * Negative control, SWEEP_WEIGHT_CONTROL=late: once section 1 has stopped
+ * looking at /club-manager, the page is made to ask for a built file that
+ * holds the national team pools. Section 4 must name that file for that
+ * route (it is in the late list and not in the weighed one) and find nothing
+ * else. Exit 1 when it does, 2 when it does not.
+ * Run 2026-10-08 on a build of the branch merged with release-al-int at
+ * c2a96ebc and main at 17597b95 (d9f95a58), a quiet machine, the database host
+ * blocked, two plain sweeps the same to the tenth: /club-manager 561.9K,
+ * /manager-hot-seat 580.2K, /deadline-day 590.3K (each 0.1K up on the figures
+ * above: the merge brought the thin side shootout fix into the engine chunk),
+ * /transfer-path 367.5K, /soccer-career 780.3K, /footle 339.3K. Section 4: 0
+ * findings and no NOTE line (nothing arrived late). Control late exit 1: the
+ * pools file, asked for after the window, named for /club-manager, 1 finding
+ * and none elsewhere. Control planted exit 1, its three findings. The sweep
+ * as a whole exit 1 on /soccer-career (776) and /stadium-tycoon (287), the
+ * release's rows, as said above; /soccer-grid sat at 307.5K against 307 and
+ * passed by rounding on both sweeps.
  *
  * Run: npm run build && npx serve -s dist -l 4173, then
  *      ENGINES=chromium node scripts/sweepWeight.mjs
@@ -228,12 +280,30 @@ function gzSize(file) {
   return n;
 }
 
+/* Round 1042, section 4's routes and controls, named here because section 1 gathers for them. */
+const CONTROL = process.env.SWEEP_WEIGHT_CONTROL ?? '';
+if (CONTROL && CONTROL !== 'planted' && CONTROL !== 'late') { console.error(`SWEEP_WEIGHT_CONTROL=${CONTROL} is not a control this harness knows (planted, late)`); process.exit(2); }
+const ENGINE_ROUTES = ['/club-manager', '/manager-hot-seat', '/deadline-day'];
+const WATCHED = [...ENGINE_ROUTES, '/transfer-path', '/soccer-career'];
+/* Control late: a built file holding the national team pools, picked before any page opens. */
+let latePlant = null;
+if (CONTROL === 'late') {
+  const pools = dataProbes(ROOT).pools;
+  let js = [];
+  try { js = fs.readdirSync(path.join(ROOT, 'dist/assets')).filter(f => f.endsWith('.js')).sort(); } catch { js = []; }
+  latePlant = js.find(f => findProbes(fs.readFileSync(path.join(ROOT, 'dist/assets', f), 'utf-8'), pools) > 0) ?? null;
+  if (!latePlant) { console.error('control late cannot run: no built file holds a national team pool probe'); process.exit(2); }
+}
+
 const browser = await chromium.launch();
 
 console.log('1) Every page is inside its download budget');
 const measured = [];
 /* Round 1042: the files each route asked for, kept for section 4. */
 const fetched = new Map();
+/* Section 4's own list for its five routes (2026-10-08): everything asked for until the page has
+   DRAWN and the network has gone quiet, and which of those came after section 1 stopped looking. */
+const settled = new Map();
 for (const [route, budget] of BUDGETS) {
   const ctx = await browser.newContext({ ...devices['iPhone 13'] });
   if (process.env.SWEEP_OFFLINE === '1') await ctx.route(/supabase\.co/, r => r.abort());
@@ -261,6 +331,26 @@ for (const [route, budget] of BUDGETS) {
      in under half its ceiling the ceiling is stale and should come down. */
   if (kb > 0 && kb < budget * 0.5) {
     fail(`${route}: ${kb}K against a ${budget}K budget, so the budget is stale and should be lowered in this round`);
+  }
+  if (WATCHED.includes(route)) {
+    /* Section 4 must not inherit a short list. The window above (load plus 1.5 seconds) is what
+       the budgets were always measured in, so it is left alone, but on a busy machine it closes
+       before the page's own chunks have all been asked for: the review of this round measured
+       /club-manager at 35 files and then at 37 on the same build, no failure either time. A file
+       that arrives after the window was neither weighed nor read for probes. So for these routes
+       the page is kept open until it has drawn (the route's chunk cannot draw before everything
+       it imports statically is here) and the network has gone quiet, and section 4 reads that
+       list. What came late is counted and printed there. */
+    const weighed = new Set(files);
+    const drew = await page.waitForFunction(() => (document.getElementById('root')?.innerText ?? '').length > 200, null, { timeout: 45000 }).then(() => true, () => false);
+    await page.waitForLoadState('networkidle', { timeout: 15000 }).catch(() => {});
+    if (CONTROL === 'late' && route === '/club-manager') {
+      /* the page asks for a pools file once section 1 has stopped looking */
+      if (weighed.has(latePlant)) { console.error(`control late cannot run: /club-manager already fetched ${latePlant} inside the measuring window`); process.exit(2); }
+      await page.evaluate(u => fetch(u).then(r => r.text()).then(() => true), `${BASE}/assets/${latePlant}`);
+    }
+    const all = [...files].sort();
+    settled.set(route, { drew, all, late: all.filter(f => !weighed.has(f)) });
   }
   await ctx.close();
 }
@@ -369,13 +459,12 @@ console.log('4) The data these pages never read is in none of the files they fet
 
   /* SWEEP_WEIGHT_CONTROL=planted: three probes appended, in memory, to the largest file that
      /club-manager fetched and no other route of this section did. */
-  const CONTROL = process.env.SWEEP_WEIGHT_CONTROL ?? '';
-  const ENGINE_ROUTES = ['/club-manager', '/manager-hot-seat', '/deadline-day'];
-  const WATCHED = [...ENGINE_ROUTES, '/transfer-path', '/soccer-career'];
-  if (CONTROL && CONTROL !== 'planted') { console.error(`SWEEP_WEIGHT_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(2); }
+  /* The list section 4 reads for a route: everything it asked for until it had drawn and gone
+     quiet (see section 1), never only what the measuring window caught. */
+  const listOf = route => settled.get(route)?.all ?? fetched.get(route);
   if (CONTROL === 'planted') {
-    const mine = fetched.get('/club-manager') ?? [];
-    const others = new Set(WATCHED.filter(r => r !== '/club-manager').flatMap(r => fetched.get(r) ?? []));
+    const mine = listOf('/club-manager') ?? [];
+    const others = new Set(WATCHED.filter(r => r !== '/club-manager').flatMap(r => listOf(r) ?? []));
     const own = mine.filter(f => !others.has(f)).sort((a, b) => gzSize(path.join(ASSETS, b)) - gzSize(path.join(ASSETS, a)));
     if (!own.length) { console.error('control planted cannot run: /club-manager fetched no file of its own'); process.exit(2); }
     const plant = [probes.pools[0], probes.eras.era2010[0], probes.footle[0]];
@@ -386,8 +475,9 @@ console.log('4) The data these pages never read is in none of the files they fet
 
   const found = [];
   const mustNotFetch = (route, keys) => {
-    const files = fetched.get(route);
+    const files = listOf(route);
     if (!files) { fail(`section 4 cannot tell: ${route} was not measured in section 1 (it needs a row in BUDGETS)`); return; }
+    if (!settled.get(route)?.drew) { fail(`section 4 cannot tell: ${route} had not drawn 45 seconds after it loaded, so the list of files it asked for may be short and a file never listed is a file never read for probes`); return; }
     for (const [what, list, key] of sets) {
       if (!keys(key)) continue;
       for (const f of files) {
@@ -400,11 +490,33 @@ console.log('4) The data these pages never read is in none of the files they fet
   mustNotFetch('/transfer-path', key => key !== 'footle');
   /* The other half: the one page that reads the pools still gets them. The follow up that makes
      them load with the season there will turn this line around on purpose. */
-  const sc = fetched.get('/soccer-career') ?? [];
+  const sc = listOf('/soccer-career') ?? [];
   const scPools = sc.filter(f => findProbes(textOf(f), probes.pools) > 0);
   if (!scPools.length) fail('/soccer-career fetches no file with the national team pools, and it is the page that reads them: either they moved or the probes cannot see them');
   console.log(`   ${sets.length} probe sets (${sets.reduce((n, x) => n + x[1].length, 0)} probes) all found in the build; ${ENGINE_ROUTES.length + 1} routes checked, ${found.length} findings; /soccer-career still fetches the pools (${scPools.join(', ') || 'no file'})`);
+  /* What section 1's window missed. Section 4 has read these files all the same; the line is here
+     so a short measurement is never a silent one. It is not a failure: the window is what every
+     budget in this file was measured in, and changing what it weighs is the release's call. */
+  for (const route of WATCHED) {
+    const s = settled.get(route);
+    if (!s || !s.late.length) continue;
+    const kb = (s.late.reduce((n, f) => n + gzSize(path.join(ASSETS, f)), 0) / 1024).toFixed(1);
+    console.log(`   NOTE: ${route} asked for ${s.late.length} more file${s.late.length === 1 ? '' : 's'} (${kb}K gz) after section 1 stopped looking, so its figure in section 1 is short by that much on this run (${s.late.slice(0, 3).join(', ')}). Read for probes here all the same.`);
+  }
 
+  if (CONTROL === 'late') {
+    await browser.close();
+    /* The pools file reached /club-manager only after the measuring window. Section 4 must name
+       it for that route, and nothing else may be found. */
+    const s = settled.get('/club-manager');
+    const mineFound = found.filter(f => f.route === '/club-manager' && f.file === latePlant);
+    const ok = !!s && s.late.includes(latePlant) && !(fetched.get('/club-manager') ?? []).includes(latePlant)
+      && mineFound.some(f => f.key === 'pools') && found.length === mineFound.length;
+    console.log(ok
+      ? `CONTROL late FIRED: ${latePlant} arrived after the measuring window (section 1 never weighed it) and section 4 still named it for /club-manager, ${mineFound.length} finding${mineFound.length === 1 ? '' : 's'} and none elsewhere`
+      : `CONTROL late DID NOT FIRE as predicted: ${found.length} findings, ${mineFound.length} of them for ${latePlant} on /club-manager; listed late: ${s ? s.late.includes(latePlant) : 'route not settled'}`);
+    process.exit(ok ? 1 : 2);
+  }
   if (CONTROL === 'planted') {
     await browser.close();
     const mineFound = found.filter(f => f.route === '/club-manager');
