@@ -1,0 +1,11 @@
+1) allocOverall === engine calcOverall (2000 random stat lines x 10 positions)
+   zero drift
+2) allocRowsFor per position
+3) normalizeAllocation lands exactly on target (10 positions x 21 targets)
+4) Redistribution: outfield overall pinned, GK drift bounded
+   GK worst drift after wild redistribution: 3
+5) initCareer potential clamp
+6) playsLike: coverage, extremes, flat build
+   speedy ST -> Kylian Mbappé (92%), QB RB -> Trent Alexander-Arnold (91%), wall GK -> Gianluigi Donnarumma (98%)
+
+ALL ALLOCATION CHECKS PASSED
