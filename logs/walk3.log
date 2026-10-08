@@ -1,0 +1,6 @@
+rapid-2: {"text":"Sound: off","pressed":"false","stored":"off","ctxState":"suspended","contexts":1,"starts":1,"startStates":["running"],"suspends":1,"resumes":2,"consistent":true,"errors":[]}
+rapid-3: {"text":"Sound: on","pressed":"true","stored":"on","ctxState":"running","contexts":1,"starts":2,"startStates":["running","running"],"suspends":1,"resumes":4,"consistent":true,"errors":[]}
+rapid-5: {"text":"Sound: on","pressed":"true","stored":"on","ctxState":"running","contexts":1,"starts":3,"startStates":["running","running","running"],"suspends":2,"resumes":6,"consistent":true,"errors":[]}
+rapid-6: {"text":"Sound: off","pressed":"false","stored":"off","ctxState":"suspended","contexts":1,"starts":3,"startStates":["running","running","running"],"suspends":3,"resumes":6,"consistent":true,"errors":[]}
+twoTabs: {"aBefore":{"text":"Sound: on","ctx":"running","contexts":1},"bAfterPress":{"text":"Sound: off","stored":"off"},"aAfter":{"text":"Sound: off","pressed":"false","ctx":"running","suspends":0},"errors":[]}
+walk3 done: 5 scenes
