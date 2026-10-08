@@ -1,0 +1,11 @@
+== uscareer at 390x844
+  audit uscareer@390 create your player: dashes 0, footers 1, help 1, overflowX 0, small 0, cut 0, scrollY 0
+  audit uscareer@390 save refused, as the page stands: dashes 0, footers 1, help 1, overflowX 0, small 0, cut 0, scrollY 1262
+  audit uscareer@390 save refused, top of page, toast gone: dashes 0, footers 1, help 1, overflowX 0, small 0, cut 0, scrollY 0
+== uscareer at 1280x900
+  audit uscareer@1280 create your player: dashes 0, footers 1, help 1, overflowX 0, small 0, cut 0, scrollY 0
+  audit uscareer@1280 save refused, as the page stands: dashes 0, footers 1, help 1, overflowX 0, small 0, cut 0, scrollY 1081
+  audit uscareer@1280 save refused, top of page, toast gone: dashes 0, footers 1, help 1, overflowX 0, small 0, cut 0, scrollY 0
+walk-fences: 2 runs, 0 problem(s), 0 page error(s)
+  uscareer@390: hosts tried {"fonts.googleapis.com":1,"flawuiqbvjobmkfkauhw.supabase.co":1}; page errors 0; console errors 0
+  uscareer@1280: hosts tried {"fonts.googleapis.com":1,"flawuiqbvjobmkfkauhw.supabase.co":1}; page errors 0; console errors 0

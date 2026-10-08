@@ -1,0 +1,162 @@
+{
+  "base": "http://localhost:4173",
+  "runs": [
+    {
+      "name": "uscareer",
+      "view": 390,
+      "audits": [
+        {
+          "url": "/nfl-my-career",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 1,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": null,
+          "scopeText": null,
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 16873,
+          "tag": "create your player"
+        },
+        {
+          "url": "/nfl-my-career",
+          "scrollY": 1262,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 1,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": true,
+          "scopeText": "Your latest progress has not been saved. Keep this tab open and try again. Retry save",
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 16833,
+          "tag": "save refused, as the page stands"
+        },
+        {
+          "url": "/nfl-my-career",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 1,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": true,
+          "scopeText": "Your latest progress has not been saved. Keep this tab open and try again. Retry save",
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 16754,
+          "tag": "save refused, top of page, toast gone"
+        }
+      ],
+      "notes": [
+        "first visit rules gate open: How to play The steps Create your player: name, one of 8 positions (QB",
+        "rules gate closed with Escape: true",
+        "toasts still up after 5s: [] | on disk while refused: nothing",
+        "after Retry save: {\"notice\":false,\"saved\":1383,\"y\":0}"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "hosts": {
+        "fonts.googleapis.com": 1,
+        "flawuiqbvjobmkfkauhw.supabase.co": 1
+      }
+    },
+    {
+      "name": "uscareer",
+      "view": 1280,
+      "audits": [
+        {
+          "url": "/nfl-my-career",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 1,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": null,
+          "scopeText": null,
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 16930,
+          "tag": "create your player"
+        },
+        {
+          "url": "/nfl-my-career",
+          "scrollY": 1081,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 1,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": true,
+          "scopeText": "Your latest progress has not been saved. Keep this tab open and try again. Retry save",
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 16872,
+          "tag": "save refused, as the page stands"
+        },
+        {
+          "url": "/nfl-my-career",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 1,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": true,
+          "scopeText": "Your latest progress has not been saved. Keep this tab open and try again. Retry save",
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 16793,
+          "tag": "save refused, top of page, toast gone"
+        }
+      ],
+      "notes": [
+        "first visit rules gate open: How to play The steps Create your player: name, one of 8 positions (QB",
+        "rules gate closed with Escape: true",
+        "toasts still up after 5s: [] | on disk while refused: nothing",
+        "after Retry save: {\"notice\":false,\"saved\":1387,\"y\":0}"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "hosts": {
+        "fonts.googleapis.com": 1,
+        "flawuiqbvjobmkfkauhw.supabase.co": 1
+      }
+    }
+  ],
+  "problems": []
+}

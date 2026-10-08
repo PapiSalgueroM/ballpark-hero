@@ -1,0 +1,2 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 18s |   uscareer@1280: hosts tried {"fonts.googleapis.com":1,"flawuiqbvjobmkfkauhw.supabase.co":1}; page errors 0; console errors 0
