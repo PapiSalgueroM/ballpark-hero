@@ -15,8 +15,9 @@
  *         All-Pros a career within 25 percent of the 17 game arm's;
  *         MVP or DPOY a career within 0.008 of it;
  *         the Hall of Fame rate at least 0.75 of it.
- *       MEASURED 2026-10-08 on GitHub runners (requests r1104-fc and
- *       r1104-fd), five seed sets (SIM_SEED 1, 6, 11, 16, 21), so 40 position
+ *       MEASURED 2026-10-08 on GitHub runners (requests r1104-fd and
+ *       r1104-fz, the second on the tree with Round 1051's head 46229f9c
+ *       merged), five seed sets (SIM_SEED 1, 6, 11, 16, 21), so 40 position
  *       cells of 10,000 careers an arm, 17 game arm -> now:
  *         All-Pros a career: 39 of the 40 cells within 3.0 percent, and one
  *           at 8.5 under (CB on seed 21, about 0.090 -> 0.082). Seed 1: QB
@@ -32,17 +33,21 @@
  *         MVP or DPOY a career: every one of the 40 cells within 0.003 (EDGE
  *           on seed 1, 0.060 -> 0.057). nopace: QB 0.019 -> 0.004, LB 0.014 ->
  *           0.001, EDGE 0.060 -> 0.016. The band sits at 0.008.
- *         Hall percent: LOWER in every position on every seed set, and that
+ *         Hall percent: LOWER in seven positions on every seed set, and that
  *           is real, not noise: a throwback career's totals are a seventeenth
  *           short for sixteen years and the ballot reads totals. QB 27.0 ->
  *           23.8, 26.5 -> 22.9, 26.0 -> 22.7. Seed 1: RB 2.2 -> 1.9, WR 7.0 ->
- *           6.5, TE 5.7 -> 5.5, LB 6.3 -> 5.6, CB 4.7 -> 4.2, EDGE 12.2 -> 11.6,
- *           K 5.5 -> 4.7. The lowest ratio of the 40 cells is 0.842 (CB, seed
- *           21; then K 0.850 on seed 16). So this line is a FLOOR that catches a collapse, never "no
- *           difference": nopace reads QB 0.80 of the 17 game arm (caught by
- *           his awards), RB 0.32, WR 0.53, TE 0.67, LB 0.48, CB 0.47, EDGE
- *           0.54, K 0.33. The drop itself is printed in section 5 for Round
- *           1051's owner and is not this round's to fix (the lead's ruling).
+ *           6.5, TE 5.7 -> 5.5, LB 6.3 -> 5.6, CB 4.7 -> 4.2, EDGE 12.2 -> 11.6.
+ *           The kicker is the eighth: before Round 1051 took a kicker's field
+ *           goals out of the ballot's pushes he read 5.5 -> 4.7, and since
+ *           then 4.8 -> 4.7 (0.97 to 1.02 of the 17 game arm on the five
+ *           sets). The lowest ratio of the 40 cells is 0.842 (CB, seed 21),
+ *           then RB 0.860 (seed 1). So this line is a FLOOR that catches a
+ *           collapse, never "no difference": nopace reads QB 0.80 of the 17
+ *           game arm (caught by his awards), RB 0.33, WR 0.53, TE 0.66, LB
+ *           0.48, CB 0.47, EDGE 0.54, K 0.37. The drop itself is printed in
+ *           section 5 for Round 1051's owner and is not this round's to fix
+ *           (the lead's ruling).
  *       The first cut drew its band from the run's own seed deviation at 300
  *       careers, which passed the quarterback's 3.3 point Hall drop inside a
  *       band about 3.4 wide. A band here is a fixed number now.
