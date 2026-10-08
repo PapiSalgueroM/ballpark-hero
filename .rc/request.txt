@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+play-main: PLAY_STORAGE_NATIVE=require node scripts/playStorageBlocked.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
