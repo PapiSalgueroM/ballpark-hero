@@ -1,0 +1,3 @@
+#!serial
+appeal-asis: node scripts/simManagerAppealIsolation.mjs
+appeal-repinned: node .rc/x/pins1081.mjs --write && git diff --stat -- scripts/fixtures/managerAppealIsolation1081/manifest.json | tail -1 && node scripts/simManagerAppealIsolation.mjs
