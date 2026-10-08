@@ -1,0 +1,2 @@
+#!serial
+purchase-1151: bash .rc/x/tycoon-purchase-names-1151.sh
