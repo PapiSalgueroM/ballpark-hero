@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+weight-head: node scripts/sweepWeight.mjs 2>&1 | grep -E "stadium-tycoon|sweepWeight:|FAIL" | cut -c1-200; node .rc/x/weightOne.mjs http://localhost:4173 . head
+weight-pre1083: bash .rc/x/weightAt.sh e55a20c4cb5b76fd168dd34cda3f27bea05c1a7a 4175 pre1083
+weight-base: bash .rc/x/weightAt.sh 1e966da6 4176 base
