@@ -1,0 +1,34 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 30s | playCollegeGridFirstTap: green. The board is up before the key, the key is two requests and never the table, the search and the judge read memory with the network gone, a
+walk-2 exit=0 29s | playCollegeGridFirstTap: green. The board is up before the key, the key is two requests and never the table, the search and the judge read memory with the network gone, a
+walk-3 exit=0 29s | playCollegeGridFirstTap: green. The board is up before the key, the key is two requests and never the table, the search and the judge read memory with the network gone, a
+walk-4 exit=0 29s | playCollegeGridFirstTap: green. The board is up before the key, the key is two requests and never the table, the search and the judge read memory with the network gone, a
+walk-5 exit=0 29s | playCollegeGridFirstTap: green. The board is up before the key, the key is two requests and never the table, the search and the judge read memory with the network gone, a
+walk-6 exit=0 29s | playCollegeGridFirstTap: green. The board is up before the key, the key is two requests and never the table, the search and the judge read memory with the network gone, a
+walk-nosurname exit=0 13s | control "nosurname": fired in section 4 as expected, the check works
+walk-latecells exit=0 34s | control "latecells": fired in section 1 and 7 as expected, the check works
+walk-paged exit=0 3s | control "paged": fired in section 2 as expected, the check works
+walk-slow exit=0 23s | control "slow": fired in section 3 as expected, the check works
+walk-nolist exit=0 55s | control "nolist": fired in section 4 as expected, the check works
+walk-nojudge exit=0 30s | control "nojudge": fired in section 5 as expected, the check works
+walk-accepted exit=0 26s | control "accepted": fired in section 6 as expected, the check works
+walk-unknown-control exit=1 0s | CGFIRST_CONTROL=nosuchcontrol is not a control this walk knows (latecells, paged, slow, nolist, nosurname, nojudge, accepted)
+fxprobe exit=0 46s | FXPROBE: 0 findings, 47 notes
+M8 exit=0 3s | MUT M8: fc=1 every named gate went red
+M12 exit=0 13s | MUT M12: search=1 shipped=1 every named gate went red
+M13 exit=0 13s | MUT M13: search=1 shipped=1 every named gate went red
+M23 exit=0 1s | MUT M23: search=1 every named gate went red
+M24 exit=0 1s | MUT M24: search=1 every named gate went red
+N1 exit=0 1s | MUT N1: engine=1 every named gate went red
+N2 exit=0 1s | MUT N2: engine=1 every named gate went red
+N3 exit=0 1s | MUT N3: engine=1 every named gate went red
+N4 exit=0 3s | MUT N4: fc=1 every named gate went red
+N5 exit=0 2s | MUT N5: fc=1 every named gate went red
+N6 exit=0 3s | MUT N6: fc=1 every named gate went red
+N7 exit=0 3s | MUT N7: fc=1 every named gate went red
+N8 exit=0 3s | MUT N8: fc=1 every named gate went red
+N9 exit=0 1s | MUT N9: engine=1 every named gate went red
+N10 exit=0 1s | MUT N10: engine=1 every named gate went red
+N11 exit=0 1s | MUT N11: engine=1 every named gate went red
+M12-walk exit=0 61s | MUT M12: walk=1 every named gate went red
+clean exit=0 0s | 0

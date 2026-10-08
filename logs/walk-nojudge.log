@@ -1,0 +1,9 @@
+playCollegeGridFirstTap, control nojudge: section 5 must go red
+
+5) A pick judged offline
+  FAIL: a definite no (Darrell Green) left "Guesses left" at 15, expected 14
+  FAIL: an unknown pick (Jeff Feagles) did not get the "No guess used" toast; toasts: []
+  FAIL: a true answer (Jason Witten) did not turn its cell correct offline; toasts: []
+   390 by 844, offline, board Tennessee / Oklahoma / Texas x Tight End / Quarterback / Top 5 Pick: no Darrell Green took the count 15 to 15; unknown Jeff Feagles cost nothing; yes Jason Witten did not fill its cell
+
+control "nojudge": fired in section 5 as expected, the check works

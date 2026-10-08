@@ -1,0 +1,4 @@
+applied N3 to src/lib/gridEngine.ts: the stall limit is 10 seconds, so a slow body with 15 second gaps is cut
+restored src/lib/gridEngine.ts
+dirty tracked files after restore: 0
+MUT N3: engine=1 every named gate went red

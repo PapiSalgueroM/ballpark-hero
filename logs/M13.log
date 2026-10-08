@@ -1,0 +1,4 @@
+applied M13 to src/lib/collegeGrid.ts: the memory search ranks the least prominent player first
+restored src/lib/collegeGrid.ts
+dirty tracked files after restore: 0
+MUT M13: search=1 shipped=1 every named gate went red

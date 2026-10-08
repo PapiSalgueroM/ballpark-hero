@@ -1,0 +1,10 @@
+CGFAILCLOSED| board cg611-033: yes Jason Witten, no Darrell Green
+CGFAILCLOSED| fail closed: 5 of 5 failure worlds left the pick unverified and judged it after the network healed
+CGFAILCLOSED| decoder: 44 of 44 damaged pairs refused
+   × decodeCollegeKey: null on any doubt, never a row from a damaged file > the last good value on each boundary still decodes: the floor itself, the last school, the last row 12ms
+     → exactly the floor is enough: expected null not to be null
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/collegeGridFailClosed.test.tsx > decodeCollegeKey: null on any doubt, never a row from a damaged file > the last good value on each boundary still decodes: the floor itself, the last school, the last row
+AssertionError: exactly the floor is enough: expected null not to be null
+      Tests  1 failed | 7 passed (8)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridFailClosed.test.tsx,title=src/test/collegeGridFailClosed.test.tsx > decodeCollegeKey%3A null on any doubt%2C never a row from a damaged file > the last good value on each boundary still decodes%3A the floor itself%2C the 
