@@ -1,0 +1,80 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads an HTTP 429 with an error body 1ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads a failed response that claims valid 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads null 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads an array 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads a string 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads an empty object 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads an error body with a 200 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads valid as the string true 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads valid as the number 1 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads both flags at once 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads an allowance answer 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads a plain unverified answer 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads a refusal with a reason 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads a refusal with an object for a reason 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads valid 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads valid with a stored name 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > says valid for the boolean true on an ok response and for nothing else 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door opens for a club row at the slot club 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door opens for the club under its second stored name 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door opens for a split season that includes the club 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a row at another club 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a nation slot whatever the row says 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a row with no club 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a row with no position 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a row with a position spelling the map does not know 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a club label with no stored names 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for no row at all 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a club pick on file at the club lands with no request to the validator 14ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a club pick whose row is at another club goes to the validator 2ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a club pick whose row has no known position goes to the validator 3ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a nation pick always goes to the validator 1ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > an HTTP 429 with an error body is not counted 2ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > an HTTP 500 is not counted 1ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a 200 that is not JSON is not counted 1ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a 200 with an empty object is not counted 1ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a 200 with valid as a string is not counted 1ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a 200 with both flags is not counted 1ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a 200 unverified answer is not counted 1ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a rejected fetch is not counted 1ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > an allowance answer blocks only that pick 2ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a check that never answers is given up and cancelled 3ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a reroll cancels the check in flight 6ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a real refusal reads as a refusal 1ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a valid answer is accepted 1ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a club row the position gate refuses is still refused 1ms
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > a pick given up while its history is read is dropped 7ms
+   → expected 1 to be +0 // Object.is equality
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 45 passed (46)
+   Start at  07:10:50
+   Duration  941ms (transform 182ms, setup 40ms, collect 281ms, tests 56ms, environment 234ms, prepare 53ms)
+
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > a pick given up while its history is read is dropped
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/test/lineupValidatorClient.test.tsx:332:43
+    330|     expect(game.current.isValidating).toBe(false);
+    331|     await act(async () => { release({ ok: true, status: 200, json: asy…
+    332|     expect(game.current.filledSlots.size).toBe(0);
+       |                                           ^
+    333|     expect(game.current.filledCount).toBe(0);
+    334|     expect(game.current.validationError).toBeNull();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+simLineupValidatorClient nogiveup control: 1 named check rejected the changed hook and 5 named checks stayed green.

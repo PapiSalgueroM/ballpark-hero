@@ -1,0 +1,26 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > reports each failed empty request leg including a skipped long-query fallback 17ms
+ ✓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > keeps useful partial request results in the exact original ranking 6ms
+ ✓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > shows a generic retry message for an actual failed empty lookup 59ms
+ ✓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > keeps a successful empty lookup as no players found 15ms
+ ✓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > clears failed search feedback on typing and successful results 82ms
+ ✓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > keeps useful local matches selectable during remote failure 18ms
+ ✓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > ignores an old failure after a newer request succeeds 70ms
+ ✓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > keeps a cleared in-flight search quiet without stale failure feedback 59ms
+ ✓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > suppresses an intentionally aborted request even when its transport resolves an error 53ms
+ ✓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > preserves enabled free-text submission after a failed lookup 13ms
+ ✓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > holds the independent original ranking filters exact selection and quiet storage 23ms
+
+ Test Files  1 passed (1)
+      Tests  11 passed (11)
+   Start at  07:10:58
+   Duration  1.19s (transform 82ms, setup 39ms, collect 231ms, tests 417ms, environment 236ms, prepare 54ms)
+
+
+simPlayerSearchFailure: eleven actual helper and component outcomes passed.
+simPlayerSearchFailure: empty direct/fallback/both failures and the skipped long-query fallback are distinguished from successful empty search.
+simPlayerSearchFailure: useful partial/local matches, exact original ranking/filters and native selection callbacks are retained.
+simPlayerSearchFailure: success clearing, stale/cleared requests, explicit abort and free-text paths exercised without RNG/storage or outward writes.
+simPlayerSearchFailure: original source/client/folding bytes held; only owned copied controls change, native pixels remain separate.

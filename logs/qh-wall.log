@@ -1,0 +1,14 @@
+1) The validators say which: exhausted on a second 429, a blip otherwise
+   3 validators read
+2) The hooks listen: data.exhausted sets checkingDown and shows the allowance message
+   1 hooks read
+3) The pages stop inviting: the notice replaces the search box
+   2 pages read
+4) The NFL grid is not in this: no edge function call at all
+   useFootballGrid read
+5) Build Your XI: an allowance answer blocks only that pick
+   NEGATIVE CONTROL ON: setCheckingDown(true) planted on the unverified branch of the Build Your XI hook, in memory
+  FAIL: src/hooks/useLineupBuilder.ts: checkingDown is set again, so one allowance answer takes the search box away for the session
+   useLineupBuilder read
+
+control "wall": 1 failure(s) fired in section 5 as expected, the check works

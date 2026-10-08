@@ -1,0 +1,90 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+stdout | src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > never offers the last query under new text, across 200 seeded timings
+STALE_SWEEP seed=1138 trials=200 staleVisible=67 stalePicked=67 currentPicked=133 stuckFinding=0
+
+ × src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > never offers the last query under new text, across 200 seeded timings 563ms
+   → expected { staleVisible: 67, …(2) } to deeply equal { staleVisible: +0, …(2) }
+ × src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops the list in the same render the text changes 34ms
+   → expected [ …(1) ] to have a length of +0 but got 1
+ × src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops the list when the search options change under the same text 9ms
+   → expected [ …(1) ] to have a length of +0 but got 1
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops the list when the player leaves the box and searches again on return 66ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > Enter picks the only name showing when the page asks for a pick from the list 26ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > Enter still sends the typed text on a free text page with one name showing 8ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > offers a settled list for the text in the box exactly as before 8ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > never shows Finding players with nothing in flight 47ms
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 5 passed (8)
+   Start at  07:10:18
+   Duration  1.55s (transform 93ms, setup 38ms, collect 242ms, tests 763ms, environment 220ms, prepare 97ms)
+
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > never offers the last query under new text, across 200 seeded timings
+AssertionError: expected { staleVisible: 67, …(2) } to deeply equal { staleVisible: +0, …(2) }
+
+- Expected
++ Received
+
+  {
+-   "stalePicked": 0,
+-   "staleVisible": 0,
++   "stalePicked": 67,
++   "staleVisible": 67,
+    "stuckFinding": 0,
+  }
+
+ ❯ src/test/playerAutocompleteStale.test.tsx:113:57
+    111|     }
+    112|     console.log(`STALE_SWEEP seed=${seed} trials=${TRIALS} staleVisibl…
+    113|     expect({ staleVisible, stalePicked, stuckFinding }).toEqual({ stal…
+       |                                                         ^
+    114|     expect(currentPicked).toBe(TRIALS);
+    115|   }, 120_000);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops the list in the same render the text changes
+AssertionError: expected [ …(1) ] to have a length of +0 but got 1
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/test/playerAutocompleteStale.test.tsx:122:43
+    120|     expect((await view.findAllByRole('option')).map(o => o.textContent…
+    121|     view.rerender(<PlayerAutocomplete {...p} value="Bravo" />);
+    122|     expect(view.queryAllByRole('option')).toHaveLength(0);
+       |                                           ^
+    123|     expect(view.getByText(FINDING)).toBeVisible();
+    124|     expect(view.queryByText('No players found')).toBeNull();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops the list when the search options change under the same text
+AssertionError: expected [ …(1) ] to have a length of +0 but got 1
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/test/playerAutocompleteStale.test.tsx:134:43
+    132|     const scoped = { ...searchOptions, source: { ...searchOptions.sour…
+    133|     view.rerender(<PlayerAutocomplete {...p} searchOptions={scoped} />…
+    134|     expect(view.queryAllByRole('option')).toHaveLength(0);
+       |                                           ^
+    135|     expect(view.getByText(FINDING)).toBeVisible();
+    136|     expect(view.queryByText('No players found')).toBeNull();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+simPlayerAutocompleteInteraction notag control: stale list tests 1, 2, 3 rejected the changed component and test 7 stayed green. The sweep (seed 1138) was offered 67 stale names and picked 67, floor 34.

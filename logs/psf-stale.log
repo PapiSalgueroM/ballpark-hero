@@ -1,0 +1,49 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ↓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > reports each failed empty request leg including a skipped long-query fallback
+ ↓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > keeps useful partial request results in the exact original ranking
+ ↓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > shows a generic retry message for an actual failed empty lookup
+ ↓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > keeps a successful empty lookup as no players found
+ ↓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > clears failed search feedback on typing and successful results
+ ↓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > keeps useful local matches selectable during remote failure
+ × src/test/playerSearchFailure.test.tsx > truthful player-search failures > ignores an old failure after a newer request succeeds 135ms
+   → expected [] to have a length of 1 but got +0
+ ↓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > keeps a cleared in-flight search quiet without stale failure feedback
+ ↓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > suppresses an intentionally aborted request even when its transport resolves an error
+ ↓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > preserves enabled free-text submission after a failed lookup
+ ✓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > holds the independent original ranking filters exact selection and quiet storage 28ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed | 9 skipped (11)
+   Start at  07:11:05
+   Duration  907ms (transform 78ms, setup 39ms, collect 233ms, tests 165ms, environment 229ms, prepare 92ms)
+
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/playerSearchFailure.test.tsx > truthful player-search failures > ignores an old failure after a newer request succeeds
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/test/playerSearchFailure.test.tsx:143:43
+    141|     await view.findByRole('option', { name: /Fixture Vega/ });
+    142|     await act(async () => release('fixture'));
+    143|     expect(view.queryAllByRole('option')).toHaveLength(1);
+       |                                           ^
+    144|     expect(view.queryByText(failureText)).toBeNull();
+    145|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+simPlayerSearchFailure stale: changed copied statement fails its named outcome; independent original ranking/selection baseline passes.
+simPlayerSearchFailure: empty direct/fallback/both failures and the skipped long-query fallback are distinguished from successful empty search.
+simPlayerSearchFailure: useful partial/local matches, exact original ranking/filters and native selection callbacks are retained.
+simPlayerSearchFailure: success clearing, stale/cleared requests, explicit abort and free-text paths exercised without RNG/storage or outward writes.
+simPlayerSearchFailure: original source/client/folding bytes held; only owned copied controls change, native pixels remain separate.
