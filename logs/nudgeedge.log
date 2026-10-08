@@ -1,0 +1,19 @@
+MUT nudgeedge: src/lib/soccerCareerLeague.ts patched (occurrence 1 of 2)
+  vitest exit=1 2s | [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+      [31m   [31m×[31m the leagues that are not one plain table (Round 1100)[2m > [22mbands a club by its place in its own league, and reads the club out of the engine's key[39m[32m 20[2mms[22m[39m
+      ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerCareerLeague.test.ts,title=src/lib/soccerCareerLeague.test.ts > the leagues that are not one plain table (Round 1100) > bands a club by its place in its own league%2C and reads the club o
+      [41m[1m FAIL [22m[49m src/lib/soccerCareerLeague.test.ts[2m > [22mthe leagues that are not one plain table (Round 1100)[2m > [22mbands a club by its place in its own league, and reads the club out of the engine's key
+      [31m[1mAssertionError[22m: expected [ 2, 7 ] to deeply equal [ 2, 5 ][39m
+  world exit=1 75s |   FAIL [C2]: ladderBand(12, 24, 24, 7.5) = 8 to 16, 6 to 14 expected
+      FAIL [C2]: ladderBand(4, 18, 18, 7.5) = 2 to 7, 2 to 5 expected
+      FAIL [C2]: ladderBand(12, 24, 24, 7.5) = 8 to 16, 6 to 14 expected
+  clubPool exit=0 6s | simCareerClubPool: all sections green
+  facts exit=0 2s | simCareerFacts: all sections green
+  leagueFinish exit=0 7s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4840 in a verified league; finish and title agree, the ladder holds, main's stream is untouched and the elite boost reads the era.
+  leagueSeasons exit=0 11s | simCareerLeagueSeasons: all sections green
+  manager exit=0 8s | ALL MANAGER CAREER CHECKS PASSED
+  centreTable exit=0 7s | simSeasonCentreTable: 6 checks, 0 failed
+  agree0 exit=0 9s | simSeasonCentreAgreement: 24 checks, 0 failed
+  derbies exit=0 12s | simCareerDerbies: all 8 sections green
+  restored (tree clean)
+MUT nudgeedge: CAUGHT by vitest, world
