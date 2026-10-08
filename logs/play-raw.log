@@ -1,0 +1,847 @@
+playStorageBlocked against http://localhost:4173, CONTROL raw, arms blocked and full
+  the switch __DUKB_RAW_STORAGE__ is in /assets/index-DMjbAGAv.js
+
+/ on a phone
+  PASS  / phone OPEN: baseline mounted, 171 buttons and 329 links in #root
+  PASS  / phone OPEN: no storage notice with ordinary storage
+  PASS  / phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  / phone OPEN: no storage error with ordinary storage
+  FAIL  / phone BLOCKED: mounted, 0 buttons and 68 links (untouched 171 and 329, floor 497)
+  PASS  / phone BLOCKED: no "This page broke" screen
+  FAIL  / phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  / phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  / phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  / phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  PASS  / phone BLOCKED: no notice on a page that is not a game
+  PASS  / phone BLOCKED: first game tile at y=338 (ceiling 430, untouched 315), /soccer-career
+  PASS  / phone FULL: mounted, 171 buttons and 329 links (untouched 171 and 329, floor 497)
+  PASS  / phone FULL: no "This page broke" screen
+  PASS  / phone FULL: no error naming storage
+  PASS  / phone FULL: 0 uncaught errors (untouched 0)
+  PASS  / phone FULL: 0 analytics or ad requests without Accept
+  PASS  / phone FULL: no notice on a page that is not a game
+  PASS  / phone FULL: first game tile at y=315 (ceiling 430, untouched 315), /soccer-career
+
+/ on a desktop
+  PASS  / desktop OPEN: baseline mounted, 175 buttons and 329 links in #root
+  PASS  / desktop OPEN: no storage notice with ordinary storage
+  PASS  / desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  / desktop OPEN: no storage error with ordinary storage
+  FAIL  / desktop BLOCKED: mounted, 0 buttons and 68 links (untouched 175 and 329, floor 501)
+  PASS  / desktop BLOCKED: no "This page broke" screen
+  FAIL  / desktop BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  / desktop BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  / desktop BLOCKED: 0 analytics or ad requests without Accept
+  PASS  / desktop BLOCKED: nothing reached the browser's real storage (0 keys)
+  PASS  / desktop BLOCKED: no notice on a page that is not a game
+  PASS  / desktop FULL: mounted, 175 buttons and 329 links (untouched 175 and 329, floor 501)
+  PASS  / desktop FULL: no "This page broke" screen
+  PASS  / desktop FULL: no error naming storage
+  PASS  / desktop FULL: 0 uncaught errors (untouched 0)
+  PASS  / desktop FULL: 0 analytics or ad requests without Accept
+  PASS  / desktop FULL: no notice on a page that is not a game
+
+/soccer on a phone
+  PASS  /soccer phone OPEN: baseline mounted, 9 buttons and 75 links in #root
+  PASS  /soccer phone OPEN: no storage notice with ordinary storage
+  PASS  /soccer phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /soccer phone OPEN: no storage error with ordinary storage
+  FAIL  /soccer phone BLOCKED: mounted, 0 buttons and 69 links (untouched 9 and 75, floor 81), THE SAVED COPY IS STILL THERE
+  PASS  /soccer phone BLOCKED: no "This page broke" screen
+  FAIL  /soccer phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /soccer phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /soccer phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /soccer phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  PASS  /soccer phone BLOCKED: no notice on a page that is not a game
+  PASS  /soccer phone FULL: mounted, 9 buttons and 75 links (untouched 9 and 75, floor 81)
+  PASS  /soccer phone FULL: no "This page broke" screen
+  PASS  /soccer phone FULL: no error naming storage
+  PASS  /soccer phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /soccer phone FULL: 0 analytics or ad requests without Accept
+  PASS  /soccer phone FULL: no notice on a page that is not a game
+
+/soccer on a desktop
+  PASS  /soccer desktop OPEN: baseline mounted, 9 buttons and 75 links in #root
+  PASS  /soccer desktop OPEN: no storage notice with ordinary storage
+  PASS  /soccer desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /soccer desktop OPEN: no storage error with ordinary storage
+  FAIL  /soccer desktop BLOCKED: mounted, 0 buttons and 69 links (untouched 9 and 75, floor 81), THE SAVED COPY IS STILL THERE
+  PASS  /soccer desktop BLOCKED: no "This page broke" screen
+  FAIL  /soccer desktop BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /soccer desktop BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /soccer desktop BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /soccer desktop BLOCKED: nothing reached the browser's real storage (0 keys)
+  PASS  /soccer desktop BLOCKED: no notice on a page that is not a game
+  PASS  /soccer desktop FULL: mounted, 9 buttons and 75 links (untouched 9 and 75, floor 81)
+  PASS  /soccer desktop FULL: no "This page broke" screen
+  PASS  /soccer desktop FULL: no error naming storage
+  PASS  /soccer desktop FULL: 0 uncaught errors (untouched 0)
+  PASS  /soccer desktop FULL: 0 analytics or ad requests without Accept
+  PASS  /soccer desktop FULL: no notice on a page that is not a game
+
+/whats-new on a phone
+  PASS  /whats-new phone OPEN: baseline mounted, 3 buttons and 178 links in #root
+  PASS  /whats-new phone OPEN: no storage notice with ordinary storage
+  PASS  /whats-new phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /whats-new phone OPEN: no storage error with ordinary storage
+  FAIL  /whats-new phone BLOCKED: mounted, 0 buttons and 167 links (untouched 3 and 178, floor 178), THE SAVED COPY IS STILL THERE
+  PASS  /whats-new phone BLOCKED: no "This page broke" screen
+  FAIL  /whats-new phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /whats-new phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /whats-new phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /whats-new phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  PASS  /whats-new phone BLOCKED: no notice on a page that is not a game
+  PASS  /whats-new phone FULL: mounted, 3 buttons and 178 links (untouched 3 and 178, floor 178)
+  PASS  /whats-new phone FULL: no "This page broke" screen
+  PASS  /whats-new phone FULL: no error naming storage
+  PASS  /whats-new phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /whats-new phone FULL: 0 analytics or ad requests without Accept
+  PASS  /whats-new phone FULL: no notice on a page that is not a game
+
+/whats-new on a desktop
+  PASS  /whats-new desktop OPEN: baseline mounted, 3 buttons and 178 links in #root
+  PASS  /whats-new desktop OPEN: no storage notice with ordinary storage
+  PASS  /whats-new desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /whats-new desktop OPEN: no storage error with ordinary storage
+  FAIL  /whats-new desktop BLOCKED: mounted, 0 buttons and 167 links (untouched 3 and 178, floor 178), THE SAVED COPY IS STILL THERE
+  PASS  /whats-new desktop BLOCKED: no "This page broke" screen
+  FAIL  /whats-new desktop BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /whats-new desktop BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /whats-new desktop BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /whats-new desktop BLOCKED: nothing reached the browser's real storage (0 keys)
+  PASS  /whats-new desktop BLOCKED: no notice on a page that is not a game
+  PASS  /whats-new desktop FULL: mounted, 3 buttons and 178 links (untouched 3 and 178, floor 178)
+  PASS  /whats-new desktop FULL: no "This page broke" screen
+  PASS  /whats-new desktop FULL: no error naming storage
+  PASS  /whats-new desktop FULL: 0 uncaught errors (untouched 0)
+  PASS  /whats-new desktop FULL: 0 analytics or ad requests without Accept
+  PASS  /whats-new desktop FULL: no notice on a page that is not a game
+
+/soccer-career on a phone
+  PASS  /soccer-career phone OPEN: baseline mounted, 29 buttons and 23 links in #root
+  PASS  /soccer-career phone OPEN: no storage notice with ordinary storage
+  PASS  /soccer-career phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /soccer-career phone OPEN: no storage error with ordinary storage
+  FAIL  /soccer-career phone BLOCKED: mounted, 0 buttons and 23 links (untouched 29 and 23, floor 49), THE SAVED COPY IS STILL THERE
+  PASS  /soccer-career phone BLOCKED: no "This page broke" screen
+  FAIL  /soccer-career phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /soccer-career phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /soccer-career phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /soccer-career phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /soccer-career phone BLOCKED: 0 presses went through, 0 changed the page (untouched 4 and 4): nothing to press
+  FAIL  /soccer-career phone BLOCKED: the notice is on the page
+  PASS  /soccer-career phone FULL: mounted, 29 buttons and 23 links (untouched 29 and 23, floor 49)
+  PASS  /soccer-career phone FULL: no "This page broke" screen
+  PASS  /soccer-career phone FULL: no error naming storage
+  PASS  /soccer-career phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /soccer-career phone FULL: 0 analytics or ad requests without Accept
+  PASS  /soccer-career phone FULL: 4 presses went through, 4 changed the page (untouched 4 and 4): Choose nationality > Choose position > Choose era > 🎲 Surprise me
+  FAIL  /soccer-career phone FULL: the notice is on the page
+
+/soccer-career on a desktop
+  PASS  /soccer-career desktop OPEN: baseline mounted, 29 buttons and 23 links in #root
+  PASS  /soccer-career desktop OPEN: no storage notice with ordinary storage
+  PASS  /soccer-career desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /soccer-career desktop OPEN: no storage error with ordinary storage
+  FAIL  /soccer-career desktop BLOCKED: mounted, 0 buttons and 23 links (untouched 29 and 23, floor 49), THE SAVED COPY IS STILL THERE
+  PASS  /soccer-career desktop BLOCKED: no "This page broke" screen
+  FAIL  /soccer-career desktop BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /soccer-career desktop BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /soccer-career desktop BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /soccer-career desktop BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /soccer-career desktop BLOCKED: 0 presses went through, 0 changed the page (untouched 4 and 4): nothing to press
+  FAIL  /soccer-career desktop BLOCKED: the notice is on the page
+  PASS  /soccer-career desktop FULL: mounted, 29 buttons and 23 links (untouched 29 and 23, floor 49)
+  PASS  /soccer-career desktop FULL: no "This page broke" screen
+  PASS  /soccer-career desktop FULL: no error naming storage
+  PASS  /soccer-career desktop FULL: 0 uncaught errors (untouched 0)
+  PASS  /soccer-career desktop FULL: 0 analytics or ad requests without Accept
+  PASS  /soccer-career desktop FULL: 4 presses went through, 4 changed the page (untouched 4 and 4): Choose nationality > Choose position > Choose era > 🎲 Surprise me
+  FAIL  /soccer-career desktop FULL: the notice is on the page
+
+/club-manager on a phone
+  PASS  /club-manager phone OPEN: baseline mounted, 12 buttons and 28 links in #root
+  PASS  /club-manager phone OPEN: no storage notice with ordinary storage
+  PASS  /club-manager phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /club-manager phone OPEN: no storage error with ordinary storage
+  FAIL  /club-manager phone BLOCKED: mounted, 0 buttons and 24 links (untouched 12 and 28, floor 37), THE SAVED COPY IS STILL THERE
+  PASS  /club-manager phone BLOCKED: no "This page broke" screen
+  FAIL  /club-manager phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /club-manager phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /club-manager phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /club-manager phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /club-manager phone BLOCKED: 0 presses went through, 0 changed the page (untouched 4 and 4): nothing to press
+  FAIL  /club-manager phone BLOCKED: the notice is on the page
+  PASS  /club-manager phone FULL: mounted, 12 buttons and 28 links (untouched 12 and 28, floor 37)
+  PASS  /club-manager phone FULL: no "This page broke" screen
+  PASS  /club-manager phone FULL: no error naming storage
+  PASS  /club-manager phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /club-manager phone FULL: 0 analytics or ad requests without Accept
+  PASS  /club-manager phone FULL: 4 presses went through, 4 changed the page (untouched 4 and 4): 📅 2026-27 Today. Real squads as of Augu > 📅 Starting 2026-27 > 📅 2026-27 Today. Real squads as of Augu > 📅 Starting 2026-27
+  FAIL  /club-manager phone FULL: the notice is on the page
+
+/club-manager on a desktop
+  PASS  /club-manager desktop OPEN: baseline mounted, 12 buttons and 28 links in #root
+  PASS  /club-manager desktop OPEN: no storage notice with ordinary storage
+  PASS  /club-manager desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /club-manager desktop OPEN: no storage error with ordinary storage
+  FAIL  /club-manager desktop BLOCKED: mounted, 0 buttons and 24 links (untouched 12 and 28, floor 37), THE SAVED COPY IS STILL THERE
+  PASS  /club-manager desktop BLOCKED: no "This page broke" screen
+  FAIL  /club-manager desktop BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /club-manager desktop BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /club-manager desktop BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /club-manager desktop BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /club-manager desktop BLOCKED: 0 presses went through, 0 changed the page (untouched 4 and 4): nothing to press
+  FAIL  /club-manager desktop BLOCKED: the notice is on the page
+  PASS  /club-manager desktop FULL: mounted, 12 buttons and 28 links (untouched 12 and 28, floor 37)
+  PASS  /club-manager desktop FULL: no "This page broke" screen
+  PASS  /club-manager desktop FULL: no error naming storage
+  PASS  /club-manager desktop FULL: 0 uncaught errors (untouched 0)
+  PASS  /club-manager desktop FULL: 0 analytics or ad requests without Accept
+  PASS  /club-manager desktop FULL: 4 presses went through, 4 changed the page (untouched 4 and 4): 📅 2026-27 Today. Real squads as of Augu > 📅 Starting 2026-27 > 📅 2026-27 Today. Real squads as of Augu > 📅 Starting 2026-27
+  FAIL  /club-manager desktop FULL: the notice is on the page
+
+/nba-my-career on a phone
+  PASS  /nba-my-career phone OPEN: baseline mounted, 37 buttons and 27 links in #root
+  PASS  /nba-my-career phone OPEN: no storage notice with ordinary storage
+  PASS  /nba-my-career phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /nba-my-career phone OPEN: no storage error with ordinary storage
+  FAIL  /nba-my-career phone BLOCKED: mounted, 0 buttons and 23 links (untouched 37 and 27, floor 61), THE SAVED COPY IS STILL THERE
+  PASS  /nba-my-career phone BLOCKED: no "This page broke" screen
+  FAIL  /nba-my-career phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /nba-my-career phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /nba-my-career phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /nba-my-career phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /nba-my-career phone BLOCKED: 0 presses went through, 0 changed the page (untouched 4 and 3): nothing to press
+  FAIL  /nba-my-career phone BLOCKED: the notice is on the page
+  PASS  /nba-my-career phone FULL: mounted, 37 buttons and 27 links (untouched 37 and 27, floor 61)
+  PASS  /nba-my-career phone FULL: no "This page broke" screen
+  PASS  /nba-my-career phone FULL: no error naming storage
+  PASS  /nba-my-career phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /nba-my-career phone FULL: 0 analytics or ad requests without Accept
+  PASS  /nba-my-career phone FULL: 4 presses went through, 3 changed the page (untouched 4 and 3): Let's Play! > The Pest Picks pockets, gets under skin > Play your road to the draft > Got it
+  FAIL  /nba-my-career phone FULL: the notice is on the page
+
+/nba-my-career on a desktop
+  PASS  /nba-my-career desktop OPEN: baseline mounted, 37 buttons and 27 links in #root
+  PASS  /nba-my-career desktop OPEN: no storage notice with ordinary storage
+  PASS  /nba-my-career desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /nba-my-career desktop OPEN: no storage error with ordinary storage
+  FAIL  /nba-my-career desktop BLOCKED: mounted, 0 buttons and 23 links (untouched 37 and 27, floor 61), THE SAVED COPY IS STILL THERE
+  PASS  /nba-my-career desktop BLOCKED: no "This page broke" screen
+  FAIL  /nba-my-career desktop BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /nba-my-career desktop BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /nba-my-career desktop BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /nba-my-career desktop BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /nba-my-career desktop BLOCKED: 0 presses went through, 0 changed the page (untouched 4 and 3): nothing to press
+  FAIL  /nba-my-career desktop BLOCKED: the notice is on the page
+  PASS  /nba-my-career desktop FULL: mounted, 37 buttons and 27 links (untouched 37 and 27, floor 61)
+  PASS  /nba-my-career desktop FULL: no "This page broke" screen
+  PASS  /nba-my-career desktop FULL: no error naming storage
+  PASS  /nba-my-career desktop FULL: 0 uncaught errors (untouched 0)
+  PASS  /nba-my-career desktop FULL: 0 analytics or ad requests without Accept
+  PASS  /nba-my-career desktop FULL: 4 presses went through, 3 changed the page (untouched 4 and 3): Let's Play! > The Pest Picks pockets, gets under skin > Play your road to the draft > Got it
+  FAIL  /nba-my-career desktop FULL: the notice is on the page
+
+/nfl-my-career on a phone
+  PASS  /nfl-my-career phone OPEN: baseline mounted, 40 buttons and 27 links in #root
+  PASS  /nfl-my-career phone OPEN: no storage notice with ordinary storage
+  PASS  /nfl-my-career phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /nfl-my-career phone OPEN: no storage error with ordinary storage
+  FAIL  /nfl-my-career phone BLOCKED: mounted, 0 buttons and 23 links (untouched 40 and 27, floor 64), THE SAVED COPY IS STILL THERE
+  PASS  /nfl-my-career phone BLOCKED: no "This page broke" screen
+  FAIL  /nfl-my-career phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /nfl-my-career phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /nfl-my-career phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /nfl-my-career phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /nfl-my-career phone BLOCKED: 0 presses went through, 0 changed the page (untouched 4 and 4): nothing to press
+  FAIL  /nfl-my-career phone BLOCKED: the notice is on the page
+  PASS  /nfl-my-career phone FULL: mounted, 40 buttons and 27 links (untouched 40 and 27, floor 64)
+  PASS  /nfl-my-career phone FULL: no "This page broke" screen
+  PASS  /nfl-my-career phone FULL: no error naming storage
+  PASS  /nfl-my-career phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /nfl-my-career phone FULL: 0 analytics or ad requests without Accept
+  PASS  /nfl-my-career phone FULL: 4 presses went through, 4 changed the page (untouched 4 and 4): Let's Play! > Play your road to the draft > Got it > 3 seasons Big college program Every game
+  FAIL  /nfl-my-career phone FULL: the notice is on the page
+
+/nfl-my-career on a desktop
+  PASS  /nfl-my-career desktop OPEN: baseline mounted, 40 buttons and 27 links in #root
+  PASS  /nfl-my-career desktop OPEN: no storage notice with ordinary storage
+  PASS  /nfl-my-career desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /nfl-my-career desktop OPEN: no storage error with ordinary storage
+  FAIL  /nfl-my-career desktop BLOCKED: mounted, 0 buttons and 23 links (untouched 40 and 27, floor 64), THE SAVED COPY IS STILL THERE
+  PASS  /nfl-my-career desktop BLOCKED: no "This page broke" screen
+  FAIL  /nfl-my-career desktop BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /nfl-my-career desktop BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /nfl-my-career desktop BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /nfl-my-career desktop BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /nfl-my-career desktop BLOCKED: 0 presses went through, 0 changed the page (untouched 4 and 4): nothing to press
+  FAIL  /nfl-my-career desktop BLOCKED: the notice is on the page
+  PASS  /nfl-my-career desktop FULL: mounted, 40 buttons and 27 links (untouched 40 and 27, floor 64)
+  PASS  /nfl-my-career desktop FULL: no "This page broke" screen
+  PASS  /nfl-my-career desktop FULL: no error naming storage
+  PASS  /nfl-my-career desktop FULL: 0 uncaught errors (untouched 0)
+  PASS  /nfl-my-career desktop FULL: 0 analytics or ad requests without Accept
+  PASS  /nfl-my-career desktop FULL: 4 presses went through, 4 changed the page (untouched 4 and 4): Let's Play! > Play your road to the draft > Got it > 3 seasons Big college program Every game
+  FAIL  /nfl-my-career desktop FULL: the notice is on the page
+
+/stadium-tycoon on a phone
+  PASS  /stadium-tycoon phone OPEN: baseline mounted, 28 buttons and 23 links in #root
+  PASS  /stadium-tycoon phone OPEN: no storage notice with ordinary storage
+  PASS  /stadium-tycoon phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /stadium-tycoon phone OPEN: no storage error with ordinary storage
+  FAIL  /stadium-tycoon phone BLOCKED: mounted, 0 buttons and 23 links (untouched 28 and 23, floor 48), THE SAVED COPY IS STILL THERE
+  PASS  /stadium-tycoon phone BLOCKED: no "This page broke" screen
+  FAIL  /stadium-tycoon phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /stadium-tycoon phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /stadium-tycoon phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /stadium-tycoon phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /stadium-tycoon phone BLOCKED: 0 presses went through, 0 changed the page (untouched 4 and 3): nothing to press
+  FAIL  /stadium-tycoon phone BLOCKED: the notice is on the page
+  PASS  /stadium-tycoon phone FULL: mounted, 28 buttons and 23 links (untouched 28 and 23, floor 48)
+  PASS  /stadium-tycoon phone FULL: no "This page broke" screen
+  PASS  /stadium-tycoon phone FULL: no error naming storage
+  PASS  /stadium-tycoon phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /stadium-tycoon phone FULL: 0 analytics or ad requests without Accept
+  PASS  /stadium-tycoon phone FULL: 4 presses went through, 3 changed the page (untouched 4 and 3): Let's go > 🏗️ Upgrades 3 ready > 🧑‍🤝‍🧑 Payroll 0 hired > 🏟️ Stadium
+  FAIL  /stadium-tycoon phone FULL: the notice is on the page
+
+/stadium-tycoon on a desktop
+  PASS  /stadium-tycoon desktop OPEN: baseline mounted, 28 buttons and 23 links in #root
+  PASS  /stadium-tycoon desktop OPEN: no storage notice with ordinary storage
+  PASS  /stadium-tycoon desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /stadium-tycoon desktop OPEN: no storage error with ordinary storage
+  FAIL  /stadium-tycoon desktop BLOCKED: mounted, 0 buttons and 23 links (untouched 28 and 23, floor 48), THE SAVED COPY IS STILL THERE
+  PASS  /stadium-tycoon desktop BLOCKED: no "This page broke" screen
+  FAIL  /stadium-tycoon desktop BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /stadium-tycoon desktop BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /stadium-tycoon desktop BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /stadium-tycoon desktop BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /stadium-tycoon desktop BLOCKED: 0 presses went through, 0 changed the page (untouched 4 and 2): nothing to press
+  FAIL  /stadium-tycoon desktop BLOCKED: the notice is on the page
+  PASS  /stadium-tycoon desktop FULL: mounted, 28 buttons and 23 links (untouched 28 and 23, floor 48)
+  PASS  /stadium-tycoon desktop FULL: no "This page broke" screen
+  PASS  /stadium-tycoon desktop FULL: no error naming storage
+  PASS  /stadium-tycoon desktop FULL: 0 uncaught errors (untouched 0)
+  PASS  /stadium-tycoon desktop FULL: 0 analytics or ad requests without Accept
+  PASS  /stadium-tycoon desktop FULL: 4 presses went through, 2 changed the page (untouched 4 and 2): Let's go > 🏗️ Upgrades 3 ready > 🧑‍🤝‍🧑 Payroll 0 hired > 🏟️ Stadium
+  FAIL  /stadium-tycoon desktop FULL: the notice is on the page
+
+/college-grid on a phone
+  PASS  /college-grid phone OPEN: baseline mounted, 8 buttons and 27 links in #root
+  PASS  /college-grid phone OPEN: no storage notice with ordinary storage
+  PASS  /college-grid phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /college-grid phone OPEN: no storage error with ordinary storage
+  FAIL  /college-grid phone BLOCKED: mounted, 0 buttons and 23 links (untouched 8 and 27, floor 32), THE SAVED COPY IS STILL THERE
+  PASS  /college-grid phone BLOCKED: no "This page broke" screen
+  FAIL  /college-grid phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /college-grid phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /college-grid phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /college-grid phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /college-grid phone BLOCKED: 0 presses went through, 0 changed the page (untouched 1 and 1): nothing to press
+  FAIL  /college-grid phone BLOCKED: the notice is on the page
+  PASS  /college-grid phone FULL: mounted, 8 buttons and 27 links (untouched 8 and 27, floor 32)
+  PASS  /college-grid phone FULL: no "This page broke" screen
+  PASS  /college-grid phone FULL: no error naming storage
+  PASS  /college-grid phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /college-grid phone FULL: 0 analytics or ad requests without Accept
+  PASS  /college-grid phone FULL: 1 presses went through, 1 changed the page (untouched 1 and 1): Close
+  FAIL  /college-grid phone FULL: the notice is on the page
+
+/college-grid on a desktop
+  PASS  /college-grid desktop OPEN: baseline mounted, 8 buttons and 27 links in #root
+  PASS  /college-grid desktop OPEN: no storage notice with ordinary storage
+  PASS  /college-grid desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /college-grid desktop OPEN: no storage error with ordinary storage
+  FAIL  /college-grid desktop BLOCKED: mounted, 0 buttons and 23 links (untouched 8 and 27, floor 32), THE SAVED COPY IS STILL THERE
+  PASS  /college-grid desktop BLOCKED: no "This page broke" screen
+  FAIL  /college-grid desktop BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /college-grid desktop BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /college-grid desktop BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /college-grid desktop BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /college-grid desktop BLOCKED: 0 presses went through, 0 changed the page (untouched 1 and 1): nothing to press
+  FAIL  /college-grid desktop BLOCKED: the notice is on the page
+  PASS  /college-grid desktop FULL: mounted, 8 buttons and 27 links (untouched 8 and 27, floor 32)
+  PASS  /college-grid desktop FULL: no "This page broke" screen
+  PASS  /college-grid desktop FULL: no error naming storage
+  PASS  /college-grid desktop FULL: 0 uncaught errors (untouched 0)
+  PASS  /college-grid desktop FULL: 0 analytics or ad requests without Accept
+  PASS  /college-grid desktop FULL: 1 presses went through, 1 changed the page (untouched 1 and 1): Close
+  FAIL  /college-grid desktop FULL: the notice is on the page
+
+/front-office on a phone
+  PASS  /front-office phone OPEN: baseline mounted, 38 buttons and 28 links in #root
+  PASS  /front-office phone OPEN: no storage notice with ordinary storage
+  PASS  /front-office phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /front-office phone OPEN: no storage error with ordinary storage
+  FAIL  /front-office phone BLOCKED: mounted, 0 buttons and 24 links (untouched 38 and 28, floor 63), THE SAVED COPY IS STILL THERE
+  PASS  /front-office phone BLOCKED: no "This page broke" screen
+  FAIL  /front-office phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /front-office phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /front-office phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /front-office phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /front-office phone BLOCKED: 0 presses went through, 0 changed the page (untouched 4 and 4): nothing to press
+  FAIL  /front-office phone BLOCKED: the notice is on the page
+  PASS  /front-office phone FULL: mounted, 38 buttons and 28 links (untouched 38 and 28, floor 63)
+  PASS  /front-office phone FULL: no "This page broke" screen
+  PASS  /front-office phone FULL: no error naming storage
+  PASS  /front-office phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /front-office phone FULL: 0 analytics or ad requests without Accept
+  PASS  /front-office phone FULL: 4 presses went through, 4 changed the page (untouched 4 and 4): Chicago Bears NFC North > ✍️ RE-SIGN DESK 6 deals end this spring  > Abandon franchise and restart > Chicago Bears NFC North
+  FAIL  /front-office phone FULL: the notice is on the page
+
+/front-office on a desktop
+  PASS  /front-office desktop OPEN: baseline mounted, 38 buttons and 28 links in #root
+  PASS  /front-office desktop OPEN: no storage notice with ordinary storage
+  PASS  /front-office desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /front-office desktop OPEN: no storage error with ordinary storage
+  FAIL  /front-office desktop BLOCKED: mounted, 0 buttons and 24 links (untouched 38 and 28, floor 63), THE SAVED COPY IS STILL THERE
+  PASS  /front-office desktop BLOCKED: no "This page broke" screen
+  FAIL  /front-office desktop BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /front-office desktop BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /front-office desktop BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /front-office desktop BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /front-office desktop BLOCKED: 0 presses went through, 0 changed the page (untouched 4 and 4): nothing to press
+  FAIL  /front-office desktop BLOCKED: the notice is on the page
+  PASS  /front-office desktop FULL: mounted, 38 buttons and 28 links (untouched 38 and 28, floor 63)
+  PASS  /front-office desktop FULL: no "This page broke" screen
+  PASS  /front-office desktop FULL: no error naming storage
+  PASS  /front-office desktop FULL: 0 uncaught errors (untouched 0)
+  PASS  /front-office desktop FULL: 0 analytics or ad requests without Accept
+  PASS  /front-office desktop FULL: 4 presses went through, 4 changed the page (untouched 4 and 4): Chicago Bears NFC North > ✍️ RE-SIGN DESK 6 deals end this spring  > Abandon franchise and restart > Chicago Bears NFC North
+  FAIL  /front-office desktop FULL: the notice is on the page
+
+/build-your-xi on a phone
+  PASS  /build-your-xi phone OPEN: baseline mounted, 14 buttons and 27 links in #root
+  PASS  /build-your-xi phone OPEN: no storage notice with ordinary storage
+  PASS  /build-your-xi phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /build-your-xi phone OPEN: no storage error with ordinary storage
+  FAIL  /build-your-xi phone BLOCKED: mounted, 0 buttons and 23 links (untouched 14 and 27, floor 38), THE SAVED COPY IS STILL THERE
+  PASS  /build-your-xi phone BLOCKED: no "This page broke" screen
+  FAIL  /build-your-xi phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /build-your-xi phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /build-your-xi phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /build-your-xi phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /build-your-xi phone BLOCKED: 0 presses went through, 0 changed the page (untouched 4 and 3): nothing to press
+  FAIL  /build-your-xi phone BLOCKED: the notice is on the page
+  FAIL  /build-your-xi phone FULL: mounted, 4 buttons and 17 links (untouched 14 and 27, floor 38)
+  FAIL  /build-your-xi phone FULL: no "This page broke" screen
+  FAIL  /build-your-xi phone FULL: no error naming storage: QuotaExceededError: The quota has been exceeded.
+  PASS  /build-your-xi phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /build-your-xi phone FULL: 0 analytics or ad requests without Accept
+  FAIL  /build-your-xi phone FULL: 4 presses went through, 0 changed the page (untouched 4 and 3): Try this page again > Try this page again > Try this page again > Try this page again
+  FAIL  /build-your-xi phone FULL: the notice is on the page
+
+/build-your-xi on a desktop
+  PASS  /build-your-xi desktop OPEN: baseline mounted, 14 buttons and 27 links in #root
+  PASS  /build-your-xi desktop OPEN: no storage notice with ordinary storage
+  PASS  /build-your-xi desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /build-your-xi desktop OPEN: no storage error with ordinary storage
+  FAIL  /build-your-xi desktop BLOCKED: mounted, 0 buttons and 23 links (untouched 14 and 27, floor 38), THE SAVED COPY IS STILL THERE
+  PASS  /build-your-xi desktop BLOCKED: no "This page broke" screen
+  FAIL  /build-your-xi desktop BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /build-your-xi desktop BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /build-your-xi desktop BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /build-your-xi desktop BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /build-your-xi desktop BLOCKED: 0 presses went through, 0 changed the page (untouched 4 and 4): nothing to press
+  FAIL  /build-your-xi desktop BLOCKED: the notice is on the page
+  FAIL  /build-your-xi desktop FULL: mounted, 4 buttons and 17 links (untouched 14 and 27, floor 38)
+  FAIL  /build-your-xi desktop FULL: no "This page broke" screen
+  FAIL  /build-your-xi desktop FULL: no error naming storage: QuotaExceededError: The quota has been exceeded.
+  PASS  /build-your-xi desktop FULL: 0 uncaught errors (untouched 0)
+  PASS  /build-your-xi desktop FULL: 0 analytics or ad requests without Accept
+  FAIL  /build-your-xi desktop FULL: 4 presses went through, 0 changed the page (untouched 4 and 4): Try this page again > Try this page again > Try this page again > Try this page again
+  FAIL  /build-your-xi desktop FULL: the notice is on the page
+
+/footle on a phone
+  PASS  /footle phone OPEN: baseline mounted, 11 buttons and 27 links in #root
+  PASS  /footle phone OPEN: no storage notice with ordinary storage
+  PASS  /footle phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /footle phone OPEN: no storage error with ordinary storage
+  FAIL  /footle phone BLOCKED: mounted, 0 buttons and 22 links (untouched 11 and 27, floor 35), THE SAVED COPY IS STILL THERE
+  PASS  /footle phone BLOCKED: no "This page broke" screen
+  FAIL  /footle phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /footle phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /footle phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /footle phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /footle phone BLOCKED: 0 presses went through, 0 changed the page (untouched 1 and 1): nothing to press
+  FAIL  /footle phone BLOCKED: the notice is on the page
+  FAIL  /footle phone FULL: mounted, 4 buttons and 17 links (untouched 11 and 27, floor 35)
+  FAIL  /footle phone FULL: no "This page broke" screen
+  FAIL  /footle phone FULL: no error naming storage: QuotaExceededError: The quota has been exceeded.
+  PASS  /footle phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /footle phone FULL: 0 analytics or ad requests without Accept
+  FAIL  /footle phone FULL: 4 presses went through, 0 changed the page (untouched 1 and 1): Try this page again > Try this page again > Try this page again > Try this page again
+  FAIL  /footle phone FULL: the notice is on the page
+
+/footle on a desktop
+  PASS  /footle desktop OPEN: baseline mounted, 11 buttons and 27 links in #root
+  PASS  /footle desktop OPEN: no storage notice with ordinary storage
+  PASS  /footle desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /footle desktop OPEN: no storage error with ordinary storage
+  FAIL  /footle desktop BLOCKED: mounted, 0 buttons and 22 links (untouched 11 and 27, floor 35), THE SAVED COPY IS STILL THERE
+  PASS  /footle desktop BLOCKED: no "This page broke" screen
+  FAIL  /footle desktop BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /footle desktop BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /footle desktop BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /footle desktop BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /footle desktop BLOCKED: 0 presses went through, 0 changed the page (untouched 1 and 1): nothing to press
+  FAIL  /footle desktop BLOCKED: the notice is on the page
+  FAIL  /footle desktop FULL: mounted, 4 buttons and 17 links (untouched 11 and 27, floor 35)
+  FAIL  /footle desktop FULL: no "This page broke" screen
+  FAIL  /footle desktop FULL: no error naming storage: QuotaExceededError: The quota has been exceeded.
+  PASS  /footle desktop FULL: 0 uncaught errors (untouched 0)
+  PASS  /footle desktop FULL: 0 analytics or ad requests without Accept
+  FAIL  /footle desktop FULL: 4 presses went through, 0 changed the page (untouched 1 and 1): Try this page again > Try this page again > Try this page again > Try this page again
+  FAIL  /footle desktop FULL: the notice is on the page
+
+/free-kick on a phone
+  PASS  /free-kick phone OPEN: baseline mounted, 10 buttons and 23 links in #root
+  PASS  /free-kick phone OPEN: no storage notice with ordinary storage
+  PASS  /free-kick phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /free-kick phone OPEN: no storage error with ordinary storage
+  FAIL  /free-kick phone BLOCKED: mounted, 0 buttons and 23 links (untouched 10 and 23, floor 30), THE SAVED COPY IS STILL THERE
+  PASS  /free-kick phone BLOCKED: no "This page broke" screen
+  FAIL  /free-kick phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /free-kick phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /free-kick phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /free-kick phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /free-kick phone BLOCKED: 0 presses went through, 0 changed the page (untouched 2 and 1): nothing to press
+  FAIL  /free-kick phone BLOCKED: the notice is on the page
+  PASS  /free-kick phone FULL: mounted, 10 buttons and 23 links (untouched 10 and 23, floor 30)
+  PASS  /free-kick phone FULL: no "This page broke" screen
+  PASS  /free-kick phone FULL: no error naming storage
+  PASS  /free-kick phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /free-kick phone FULL: 0 analytics or ad requests without Accept
+  PASS  /free-kick phone FULL: 2 presses went through, 1 changed the page (untouched 2 and 1): Today's ten > Hold to strike
+  FAIL  /free-kick phone FULL: the notice is on the page
+
+/free-kick on a desktop
+  PASS  /free-kick desktop OPEN: baseline mounted, 10 buttons and 23 links in #root
+  PASS  /free-kick desktop OPEN: no storage notice with ordinary storage
+  PASS  /free-kick desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /free-kick desktop OPEN: no storage error with ordinary storage
+  FAIL  /free-kick desktop BLOCKED: mounted, 0 buttons and 23 links (untouched 10 and 23, floor 30), THE SAVED COPY IS STILL THERE
+  PASS  /free-kick desktop BLOCKED: no "This page broke" screen
+  FAIL  /free-kick desktop BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /free-kick desktop BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /free-kick desktop BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /free-kick desktop BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /free-kick desktop BLOCKED: 0 presses went through, 0 changed the page (untouched 2 and 1): nothing to press
+  FAIL  /free-kick desktop BLOCKED: the notice is on the page
+  PASS  /free-kick desktop FULL: mounted, 10 buttons and 23 links (untouched 10 and 23, floor 30)
+  PASS  /free-kick desktop FULL: no "This page broke" screen
+  PASS  /free-kick desktop FULL: no error naming storage
+  PASS  /free-kick desktop FULL: 0 uncaught errors (untouched 0)
+  PASS  /free-kick desktop FULL: 0 analytics or ad requests without Accept
+  PASS  /free-kick desktop FULL: 2 presses went through, 1 changed the page (untouched 2 and 1): Today's ten > Hold to strike
+  FAIL  /free-kick desktop FULL: the notice is on the page
+
+/connections on a phone (mount only)
+  PASS  /connections phone OPEN: baseline mounted, 10 buttons and 27 links in #root
+  PASS  /connections phone OPEN: no storage notice with ordinary storage
+  PASS  /connections phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /connections phone OPEN: no storage error with ordinary storage
+  FAIL  /connections phone BLOCKED: mounted, 0 buttons and 23 links (untouched 10 and 27, floor 34), THE SAVED COPY IS STILL THERE
+  PASS  /connections phone BLOCKED: no "This page broke" screen
+  FAIL  /connections phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /connections phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /connections phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /connections phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /connections phone FULL: mounted, 4 buttons and 17 links (untouched 10 and 27, floor 34)
+  FAIL  /connections phone FULL: no "This page broke" screen
+  FAIL  /connections phone FULL: no error naming storage: QuotaExceededError: The quota has been exceeded.
+  PASS  /connections phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /connections phone FULL: 0 analytics or ad requests without Accept
+
+/ufc on a phone (mount only)
+  PASS  /ufc phone OPEN: baseline mounted, 11 buttons and 27 links in #root
+  PASS  /ufc phone OPEN: no storage notice with ordinary storage
+  PASS  /ufc phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /ufc phone OPEN: no storage error with ordinary storage
+  FAIL  /ufc phone BLOCKED: mounted, 0 buttons and 23 links (untouched 11 and 27, floor 35), THE SAVED COPY IS STILL THERE
+  PASS  /ufc phone BLOCKED: no "This page broke" screen
+  FAIL  /ufc phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /ufc phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /ufc phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /ufc phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /ufc phone FULL: mounted, 4 buttons and 17 links (untouched 11 and 27, floor 35)
+  FAIL  /ufc phone FULL: no "This page broke" screen
+  FAIL  /ufc phone FULL: no error naming storage: QuotaExceededError: The quota has been exceeded.
+  PASS  /ufc phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /ufc phone FULL: 0 analytics or ad requests without Accept
+
+/football-grid on a phone (mount only)
+  PASS  /football-grid phone OPEN: baseline mounted, 9 buttons and 27 links in #root
+  PASS  /football-grid phone OPEN: no storage notice with ordinary storage
+  PASS  /football-grid phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /football-grid phone OPEN: no storage error with ordinary storage
+  FAIL  /football-grid phone BLOCKED: mounted, 0 buttons and 23 links (untouched 9 and 27, floor 33), THE SAVED COPY IS STILL THERE
+  PASS  /football-grid phone BLOCKED: no "This page broke" screen
+  FAIL  /football-grid phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /football-grid phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /football-grid phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /football-grid phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /football-grid phone FULL: mounted, 4 buttons and 17 links (untouched 9 and 27, floor 33)
+  FAIL  /football-grid phone FULL: no "This page broke" screen
+  FAIL  /football-grid phone FULL: no error naming storage: QuotaExceededError: The quota has been exceeded.
+  PASS  /football-grid phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /football-grid phone FULL: 0 analytics or ad requests without Accept
+
+/baseball-career on a phone (mount only)
+  PASS  /baseball-career phone OPEN: baseline mounted, 13 buttons and 27 links in #root
+  PASS  /baseball-career phone OPEN: no storage notice with ordinary storage
+  PASS  /baseball-career phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /baseball-career phone OPEN: no storage error with ordinary storage
+  FAIL  /baseball-career phone BLOCKED: mounted, 0 buttons and 23 links (untouched 13 and 27, floor 37), THE SAVED COPY IS STILL THERE
+  PASS  /baseball-career phone BLOCKED: no "This page broke" screen
+  FAIL  /baseball-career phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /baseball-career phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /baseball-career phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /baseball-career phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /baseball-career phone FULL: mounted, 4 buttons and 17 links (untouched 13 and 27, floor 37)
+  FAIL  /baseball-career phone FULL: no "This page broke" screen
+  FAIL  /baseball-career phone FULL: no error naming storage: QuotaExceededError: The quota has been exceeded.
+  PASS  /baseball-career phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /baseball-career phone FULL: 0 analytics or ad requests without Accept
+
+/baseball-connections on a phone (mount only)
+  PASS  /baseball-connections phone OPEN: baseline mounted, 32 buttons and 27 links in #root
+  PASS  /baseball-connections phone OPEN: no storage notice with ordinary storage
+  PASS  /baseball-connections phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /baseball-connections phone OPEN: no storage error with ordinary storage
+  FAIL  /baseball-connections phone BLOCKED: mounted, 0 buttons and 23 links (untouched 32 and 27, floor 56), THE SAVED COPY IS STILL THERE
+  PASS  /baseball-connections phone BLOCKED: no "This page broke" screen
+  FAIL  /baseball-connections phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /baseball-connections phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /baseball-connections phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /baseball-connections phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /baseball-connections phone FULL: mounted, 4 buttons and 17 links (untouched 32 and 27, floor 56)
+  FAIL  /baseball-connections phone FULL: no "This page broke" screen
+  FAIL  /baseball-connections phone FULL: no error naming storage: QuotaExceededError: The quota has been exceeded.
+  PASS  /baseball-connections phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /baseball-connections phone FULL: 0 analytics or ad requests without Accept
+
+/hockey-career on a phone (mount only)
+  PASS  /hockey-career phone OPEN: baseline mounted, 13 buttons and 27 links in #root
+  PASS  /hockey-career phone OPEN: no storage notice with ordinary storage
+  PASS  /hockey-career phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /hockey-career phone OPEN: no storage error with ordinary storage
+  FAIL  /hockey-career phone BLOCKED: mounted, 0 buttons and 23 links (untouched 13 and 27, floor 37), THE SAVED COPY IS STILL THERE
+  PASS  /hockey-career phone BLOCKED: no "This page broke" screen
+  FAIL  /hockey-career phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /hockey-career phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /hockey-career phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /hockey-career phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /hockey-career phone FULL: mounted, 4 buttons and 17 links (untouched 13 and 27, floor 37)
+  FAIL  /hockey-career phone FULL: no "This page broke" screen
+  FAIL  /hockey-career phone FULL: no error naming storage: QuotaExceededError: The quota has been exceeded.
+  PASS  /hockey-career phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /hockey-career phone FULL: 0 analytics or ad requests without Accept
+
+/hockey-higher-lower on a phone (mount only)
+  PASS  /hockey-higher-lower phone OPEN: baseline mounted, 13 buttons and 27 links in #root
+  PASS  /hockey-higher-lower phone OPEN: no storage notice with ordinary storage
+  PASS  /hockey-higher-lower phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /hockey-higher-lower phone OPEN: no storage error with ordinary storage
+  FAIL  /hockey-higher-lower phone BLOCKED: mounted, 0 buttons and 23 links (untouched 13 and 27, floor 37), THE SAVED COPY IS STILL THERE
+  PASS  /hockey-higher-lower phone BLOCKED: no "This page broke" screen
+  FAIL  /hockey-higher-lower phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /hockey-higher-lower phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /hockey-higher-lower phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /hockey-higher-lower phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /hockey-higher-lower phone FULL: mounted, 4 buttons and 17 links (untouched 13 and 27, floor 37)
+  FAIL  /hockey-higher-lower phone FULL: no "This page broke" screen
+  FAIL  /hockey-higher-lower phone FULL: no error naming storage: QuotaExceededError: The quota has been exceeded.
+  PASS  /hockey-higher-lower phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /hockey-higher-lower phone FULL: 0 analytics or ad requests without Accept
+
+/soccer-grid on a phone (mount only)
+  PASS  /soccer-grid phone OPEN: baseline mounted, 23 buttons and 27 links in #root
+  PASS  /soccer-grid phone OPEN: no storage notice with ordinary storage
+  PASS  /soccer-grid phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /soccer-grid phone OPEN: no storage error with ordinary storage
+  FAIL  /soccer-grid phone BLOCKED: mounted, 0 buttons and 22 links (untouched 23 and 27, floor 47), THE SAVED COPY IS STILL THERE
+  PASS  /soccer-grid phone BLOCKED: no "This page broke" screen
+  FAIL  /soccer-grid phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /soccer-grid phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /soccer-grid phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /soccer-grid phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /soccer-grid phone FULL: mounted, 4 buttons and 17 links (untouched 23 and 27, floor 47)
+  FAIL  /soccer-grid phone FULL: no "This page broke" screen
+  FAIL  /soccer-grid phone FULL: no error naming storage: QuotaExceededError: The quota has been exceeded.
+  PASS  /soccer-grid phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /soccer-grid phone FULL: 0 analytics or ad requests without Accept
+
+/conquest on a phone (mount only)
+  PASS  /conquest phone OPEN: baseline mounted, 8 buttons and 27 links in #root
+  PASS  /conquest phone OPEN: no storage notice with ordinary storage
+  PASS  /conquest phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /conquest phone OPEN: no storage error with ordinary storage
+  FAIL  /conquest phone BLOCKED: mounted, 0 buttons and 23 links (untouched 8 and 27, floor 32), THE SAVED COPY IS STILL THERE
+  PASS  /conquest phone BLOCKED: no "This page broke" screen
+  FAIL  /conquest phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /conquest phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /conquest phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /conquest phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  PASS  /conquest phone FULL: mounted, 8 buttons and 27 links (untouched 8 and 27, floor 32)
+  PASS  /conquest phone FULL: no "This page broke" screen
+  PASS  /conquest phone FULL: no error naming storage
+  PASS  /conquest phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /conquest phone FULL: 0 analytics or ad requests without Accept
+
+/conquest-nba on a phone (mount only)
+  PASS  /conquest-nba phone OPEN: baseline mounted, 8 buttons and 27 links in #root
+  PASS  /conquest-nba phone OPEN: no storage notice with ordinary storage
+  PASS  /conquest-nba phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /conquest-nba phone OPEN: no storage error with ordinary storage
+  FAIL  /conquest-nba phone BLOCKED: mounted, 0 buttons and 23 links (untouched 8 and 27, floor 32), THE SAVED COPY IS STILL THERE
+  PASS  /conquest-nba phone BLOCKED: no "This page broke" screen
+  FAIL  /conquest-nba phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /conquest-nba phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /conquest-nba phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /conquest-nba phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  PASS  /conquest-nba phone FULL: mounted, 8 buttons and 27 links (untouched 8 and 27, floor 32)
+  PASS  /conquest-nba phone FULL: no "This page broke" screen
+  PASS  /conquest-nba phone FULL: no error naming storage
+  PASS  /conquest-nba phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /conquest-nba phone FULL: 0 analytics or ad requests without Accept
+
+/world-cup-bracket on a phone (mount only)
+  PASS  /world-cup-bracket phone OPEN: baseline mounted, 39 buttons and 28 links in #root
+  PASS  /world-cup-bracket phone OPEN: no storage notice with ordinary storage
+  PASS  /world-cup-bracket phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /world-cup-bracket phone OPEN: no storage error with ordinary storage
+  FAIL  /world-cup-bracket phone BLOCKED: mounted, 0 buttons and 24 links (untouched 39 and 28, floor 64), THE SAVED COPY IS STILL THERE
+  PASS  /world-cup-bracket phone BLOCKED: no "This page broke" screen
+  FAIL  /world-cup-bracket phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /world-cup-bracket phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /world-cup-bracket phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /world-cup-bracket phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /world-cup-bracket phone FULL: mounted, 4 buttons and 17 links (untouched 39 and 28, floor 64)
+  FAIL  /world-cup-bracket phone FULL: no "This page broke" screen
+  FAIL  /world-cup-bracket phone FULL: no error naming storage: QuotaExceededError: The quota has been exceeded.
+  PASS  /world-cup-bracket phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /world-cup-bracket phone FULL: 0 analytics or ad requests without Accept
+
+/nfl-connections on a phone (mount only)
+  PASS  /nfl-connections phone OPEN: baseline mounted, 32 buttons and 27 links in #root
+  PASS  /nfl-connections phone OPEN: no storage notice with ordinary storage
+  PASS  /nfl-connections phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /nfl-connections phone OPEN: no storage error with ordinary storage
+  FAIL  /nfl-connections phone BLOCKED: mounted, 0 buttons and 23 links (untouched 32 and 27, floor 56), THE SAVED COPY IS STILL THERE
+  PASS  /nfl-connections phone BLOCKED: no "This page broke" screen
+  FAIL  /nfl-connections phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /nfl-connections phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /nfl-connections phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /nfl-connections phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /nfl-connections phone FULL: mounted, 4 buttons and 17 links (untouched 32 and 27, floor 56)
+  FAIL  /nfl-connections phone FULL: no "This page broke" screen
+  FAIL  /nfl-connections phone FULL: no error naming storage: QuotaExceededError: The quota has been exceeded.
+  PASS  /nfl-connections phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /nfl-connections phone FULL: 0 analytics or ad requests without Accept
+
+/nba-career on a phone (mount only)
+  PASS  /nba-career phone OPEN: baseline mounted, 13 buttons and 27 links in #root
+  PASS  /nba-career phone OPEN: no storage notice with ordinary storage
+  PASS  /nba-career phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /nba-career phone OPEN: no storage error with ordinary storage
+  FAIL  /nba-career phone BLOCKED: mounted, 0 buttons and 23 links (untouched 13 and 27, floor 37), THE SAVED COPY IS STILL THERE
+  PASS  /nba-career phone BLOCKED: no "This page broke" screen
+  FAIL  /nba-career phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /nba-career phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /nba-career phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /nba-career phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  FAIL  /nba-career phone FULL: mounted, 4 buttons and 17 links (untouched 13 and 27, floor 37)
+  FAIL  /nba-career phone FULL: no "This page broke" screen
+  FAIL  /nba-career phone FULL: no error naming storage: QuotaExceededError: The quota has been exceeded.
+  PASS  /nba-career phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /nba-career phone FULL: 0 analytics or ad requests without Accept
+
+/hof-or-bust on a phone (mount only)
+  PASS  /hof-or-bust phone OPEN: baseline mounted, 12 buttons and 24 links in #root
+  PASS  /hof-or-bust phone OPEN: no storage notice with ordinary storage
+  PASS  /hof-or-bust phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /hof-or-bust phone OPEN: no storage error with ordinary storage
+  FAIL  /hof-or-bust phone BLOCKED: mounted, 0 buttons and 23 links (untouched 12 and 24, floor 33), THE SAVED COPY IS STILL THERE
+  PASS  /hof-or-bust phone BLOCKED: no "This page broke" screen
+  FAIL  /hof-or-bust phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /hof-or-bust phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /hof-or-bust phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /hof-or-bust phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  PASS  /hof-or-bust phone FULL: mounted, 12 buttons and 24 links (untouched 12 and 24, floor 33)
+  PASS  /hof-or-bust phone FULL: no "This page broke" screen
+  PASS  /hof-or-bust phone FULL: no error naming storage
+  PASS  /hof-or-bust phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /hof-or-bust phone FULL: 0 analytics or ad requests without Accept
+
+/score-predictor on a phone (mount only)
+  PASS  /score-predictor phone OPEN: baseline mounted, 10 buttons and 24 links in #root
+  PASS  /score-predictor phone OPEN: no storage notice with ordinary storage
+  PASS  /score-predictor phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /score-predictor phone OPEN: no storage error with ordinary storage
+  FAIL  /score-predictor phone BLOCKED: mounted, 0 buttons and 23 links (untouched 10 and 24, floor 31), THE SAVED COPY IS STILL THERE
+  PASS  /score-predictor phone BLOCKED: no "This page broke" screen
+  FAIL  /score-predictor phone BLOCKED: no error naming storage: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /score-predictor phone BLOCKED: 1 uncaught errors (untouched 0): Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  /score-predictor phone BLOCKED: 0 analytics or ad requests without Accept
+  PASS  /score-predictor phone BLOCKED: nothing reached the browser's real storage (0 keys)
+  PASS  /score-predictor phone FULL: mounted, 10 buttons and 24 links (untouched 10 and 24, floor 31)
+  PASS  /score-predictor phone FULL: no "This page broke" screen
+  PASS  /score-predictor phone FULL: no error naming storage
+  PASS  /score-predictor phone FULL: 0 uncaught errors (untouched 0)
+  PASS  /score-predictor phone FULL: 0 analytics or ad requests without Accept
+
+the cookie banner
+  FAIL  cookie banner BLOCKED "Essential only": the banner is up on a first visit
+  PASS  cookie banner BLOCKED "Essential only": 0 analytics or ad requests before any choice
+  PASS  cookie banner BLOCKED "Essential only": the banner left
+  PASS  cookie banner BLOCKED "Essential only": still gone on the next page of the visit (/whats-new)
+  PASS  cookie banner BLOCKED "Essential only": 0 analytics or ad requests after Essential only
+  FAIL  cookie banner BLOCKED "Essential only": no uncaught error: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  cookie banner BLOCKED "Essential only": nothing was written to the browser's real storage (null)
+  FAIL  cookie banner BLOCKED "Accept": the banner is up on a first visit
+  PASS  cookie banner BLOCKED "Accept": 0 analytics or ad requests before any choice
+  PASS  cookie banner BLOCKED "Accept": the banner left
+  PASS  cookie banner BLOCKED "Accept": still gone on the next page of the visit (/whats-new)
+  FAIL  cookie banner BLOCKED "Accept": 0 analytics requests after Accept
+  FAIL  cookie banner BLOCKED "Accept": no uncaught error: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  cookie banner BLOCKED "Accept": nothing was written to the browser's real storage (null)
+  PASS  cookie banner FULL "Essential only": the banner is up on a first visit
+  PASS  cookie banner FULL "Essential only": 0 analytics or ad requests before any choice
+  PASS  cookie banner FULL "Essential only": the banner left
+  PASS  cookie banner FULL "Essential only": still gone on the next page of the visit (/whats-new)
+  PASS  cookie banner FULL "Essential only": 0 analytics or ad requests after Essential only
+  PASS  cookie banner FULL "Essential only": no uncaught error
+  PASS  cookie banner FULL "Essential only": nothing was written to the browser's real storage (null)
+  PASS  cookie banner FULL "Accept": the banner is up on a first visit
+  PASS  cookie banner FULL "Accept": 0 analytics or ad requests before any choice
+  PASS  cookie banner FULL "Accept": the banner left
+  PASS  cookie banner FULL "Accept": still gone on the next page of the visit (/whats-new)
+  PASS  cookie banner FULL "Accept": 1 analytics requests after Accept
+  PASS  cookie banner FULL "Accept": no uncaught error
+  PASS  cookie banner FULL "Accept": nothing was written to the browser's real storage (null)
+
+NATIVE: a real Chromium profile with the cookie setting on block
+  FAIL  / phone NATIVE: mounted, 0 buttons and 68 links (untouched 171 and 329, floor 497); the browser said "SecurityError: Failed to read the 'localStorage' property fr"
+  PASS  / phone NATIVE: no "This page broke" screen
+  FAIL  / phone NATIVE: 1 uncaught errors: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  PASS  / phone NATIVE: no notice on a page that is not a game
+  FAIL  / phone NATIVE: the cookie banner came up and "Essential only" dismissed it
+  FAIL  /soccer-career phone NATIVE: mounted, 0 buttons and 23 links (untouched 29 and 23, floor 49); the browser said "SecurityError: Failed to read the 'localStorage' property fr"
+  PASS  /soccer-career phone NATIVE: no "This page broke" screen
+  FAIL  /soccer-career phone NATIVE: 1 uncaught errors: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /soccer-career phone NATIVE: the notice is on the page
+  FAIL  /club-manager phone NATIVE: mounted, 0 buttons and 24 links (untouched 12 and 28, floor 37); the browser said "SecurityError: Failed to read the 'localStorage' property fr"
+  PASS  /club-manager phone NATIVE: no "This page broke" screen
+  FAIL  /club-manager phone NATIVE: 1 uncaught errors: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /club-manager phone NATIVE: the notice is on the page
+  FAIL  /footle phone NATIVE: mounted, 0 buttons and 22 links (untouched 11 and 27, floor 35); the browser said "SecurityError: Failed to read the 'localStorage' property fr"
+  PASS  /footle phone NATIVE: no "This page broke" screen
+  FAIL  /footle phone NATIVE: 1 uncaught errors: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  /footle phone NATIVE: the notice is on the page
+
+the browser's own localStorage accessor: own property of window true, configurable true
+measurements written to /home/runner/work/_temp/rc-out/files/playStorageBlocked-raw.json
+
+playStorageBlocked (control raw): 754 checks, 249 failed

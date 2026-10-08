@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-round: node_modules/.bin/vitest run src/test/safeStorage.test.ts src/test/supabaseClientBlockedStorage.test.ts src/test/cookieConsentStorage.test.tsx src/test/storageBlockedBoot.test.tsx src/test/freshBuildBlockedStorage.test.ts --testTimeout=300000 --hookTimeout=120000
+play-main: PLAY_STORAGE_NATIVE=require node scripts/playStorageBlocked.mjs
+play-raw: PLAY_STORAGE_NATIVE=require PLAY_STORAGE_CONTROL=raw node scripts/playStorageBlocked.mjs
+play-open: PLAY_STORAGE_CONTROL=open node scripts/playStorageBlocked.mjs
+native-probe: node .rc/x/nativeBlocked.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs

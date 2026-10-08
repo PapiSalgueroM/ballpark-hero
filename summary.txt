@@ -1,0 +1,10 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 54s | 
+vitest-round exit=0 3s |    Duration  2.28s (transform 491ms, setup 281ms, collect 1.11s, tests 887ms, environment 2.25s, prepare 575ms)
+play-main exit=0 207s | playStorageBlocked: 794 checks, 0 failed
+play-raw exit=1 471s | playStorageBlocked (control raw): 754 checks, 249 failed
+play-open exit=0 180s | playStorageBlocked (control open): 682 checks, 0 failed
+native-probe exit=0 77s | nativeBlocked: 12 loads, the real accessor threw SecurityError in 6
+simStorageWrites exit=0 1s | simStorageWrites: all green
+simHarnessAnchors exit=0 29s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 11s | No rival product names found. 0 findings.
