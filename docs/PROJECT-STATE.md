@@ -1,3 +1,12 @@
+## Round1156 source preparation: batch routine native report writes
+
+Only the US career recovery driver changes: its four routine request receipt
+updates share a250ms write. Every existing synchronous save cancels a pending
+write and flushes the full report, including error and final closing paths.
+All twelve latest-write journeys, four deletion/replacement cases, nine DOM
+controls, engine fixtures, waits and timeouts remain unchanged. Remote type,
+build, fifteen readers, native outcomes and effective batching/flush controls
+are pending. Incoming AN base783049d4, no main or live-site acceptance yet.
 ## Release AL LIVE, 2026-10-08 05:38 EDT: ten Codex rounds, playable moments, and a translated page no longer crashes
 
 Claude lane (session F: session E died when the PC was restarted at 00:03 EDT with this release's gate running).
