@@ -1,0 +1,22 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-round: node_modules/.bin/vitest run src/test/safeStorage.test.ts src/test/supabaseClientBlockedStorage.test.ts src/test/cookieConsentStorage.test.tsx src/test/storageBlockedBoot.test.tsx src/test/freshBuildBlockedStorage.test.ts src/test/champOrNotReveal.test.tsx src/test/dailySaveParity.test.tsx src/test/footleClueDesk.test.tsx src/test/footlePractice.test.tsx src/test/footleResultCurrency.test.tsx src/test/footleUnlimitedSession.test.tsx src/test/helpConsentFocus.test.tsx src/test/rulesGateConsentFocus.test.tsx src/test/routeErrorRecovery.test.tsx src/test/clubManagerEraLoad.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-two-reds-not-mine: node_modules/.bin/vitest run src/test/guessFinishMoment.test.tsx src/lib/frontOfficeRatings.test.ts --testTimeout=300000 --hookTimeout=120000
+simStorageWrites: node scripts/simStorageWrites.mjs
+simStorageWrites-unguard: SIM_STORAGE_WRITES_CONTROL=unguard node scripts/simStorageWrites.mjs
+simStorageWrites-order: SIM_STORAGE_WRITES_CONTROL=order node scripts/simStorageWrites.mjs
+simStorageWrites-client: SIM_STORAGE_WRITES_CONTROL=client node scripts/simStorageWrites.mjs
+simStorageWrites-caller: SIM_STORAGE_WRITES_CONTROL=caller node scripts/simStorageWrites.mjs
+simStaleChunk: node scripts/simStaleChunk.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simResultPillComparison: node scripts/simResultPillComparison.mjs
+simAdsense: node scripts/simAdsense.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simLegalPages: node scripts/simLegalPages.mjs
