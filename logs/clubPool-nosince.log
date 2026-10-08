@@ -1,0 +1,302 @@
+
+1. FRESH: the committed pool equals a fresh derive from Club Manager
+  270 generated rows, the file matches a fresh derive line for line
+
+2. MEMBERSHIP: each label carries Club Manager's lineup in the 2026 view
+  22 labels, each carrying Club Manager's lineup and the facts file's members in the 2026 view: Premier League 20, Championship 24, La Liga 20, Brasileirao 20, Serie A 20, Bundesliga 18, Ligue 1 18, Eredivisie 18, Saudi Pro League 18, MLS 30, Primeira Liga 18, Scottish Premiership 12, Super Lig 18, 2. Bundesliga 18, Belgian Pro League 18, Austrian Bundesliga 12, Super League Greece 14, Danish Superliga 12, Swiss Super League 12, HNL 10, Liga MX 18, A-League 12
+  held, none of their clubs generated: Serie B, Ligue 2, Segunda Division
+  a two league fixture (a top flight with a hand club and two thin squads, a second flight) derives rows and ladders from its table rows alone; with no rankable it ranks nobody
+
+3. IDENTITY: names, ids, careerEras strings, colours, countries, labels
+  95 careerEras contender names, 91 of them in the pool, all byte identical
+  540 colours checked (derived and bundled rows), none is the fallback grey
+  1 colour(s) supplied where Club Manager is grey (Macarthur FC), each in the facts file
+  270 generated countries checked, 5 of them not their league's (Cardiff City Wales, Swansea City Wales, Wrexham Wales, CF Montreal Canada, Vaduz Liechtenstein)
+  FAIL [3]: Cagliari: present in 1980, the game offers it from 2026
+  FAIL [3]: Como: present in 1980, the game offers it from 2026
+  FAIL [3]: Frosinone: present in 1980, the game offers it from 2026
+  FAIL [3]: Genoa: present in 1980, the game offers it from 2026
+  FAIL [3]: Lazio: present in 1980, the game offers it from 2026
+  FAIL [3]: Lecce: present in 1980, the game offers it from 2026
+  FAIL [3]: Monza: present in 1980, the game offers it from 2026
+  FAIL [3]: Parma: present in 1980, the game offers it from 2026
+  FAIL [3]: Sassuolo: present in 1980, the game offers it from 2026
+  FAIL [3]: Udinese: present in 1980, the game offers it from 2026
+  FAIL [3]: Venezia: present in 1980, the game offers it from 2026
+  FAIL [3]: Augsburg: present in 1980, the game offers it from 2026
+  FAIL [3]: Gladbach: present in 1980, the game offers it from 2026
+  FAIL [3]: Freiburg: present in 1980, the game offers it from 2026
+  FAIL [3]: Hamburg: present in 1980, the game offers it from 2026
+  FAIL [3]: Hoffenheim: present in 1980, the game offers it from 2026
+  FAIL [3]: Koln: present in 1980, the game offers it from 2026
+  FAIL [3]: Mainz: present in 1980, the game offers it from 2026
+  FAIL [3]: Schalke 04: present in 1980, the game offers it from 2026
+  FAIL [3]: Elversberg: present in 1980, the game offers it from 2026
+  FAIL [3]: Paderborn: present in 1980, the game offers it from 2026
+  FAIL [3]: Union Berlin: present in 1980, the game offers it from 2026
+  FAIL [3]: Angers: present in 1980, the game offers it from 2026
+  FAIL [3]: Auxerre: present in 1980, the game offers it from 2026
+  FAIL [3]: Brest: present in 1980, the game offers it from 2026
+  FAIL [3]: Le Havre: present in 1980, the game offers it from 2026
+  FAIL [3]: Le Mans: present in 1980, the game offers it from 2026
+  FAIL [3]: Lens: present in 1980, the game offers it from 2026
+  FAIL [3]: Lorient: present in 1980, the game offers it from 2026
+  FAIL [3]: Paris FC: present in 1980, the game offers it from 2026
+  FAIL [3]: Rennes: present in 1980, the game offers it from 2026
+  FAIL [3]: Toulouse: present in 1980, the game offers it from 2026
+  FAIL [3]: Troyes: present in 1980, the game offers it from 2026
+  FAIL [3]: ADO Den Haag: present in 1980, the game offers it from 2026
+  FAIL [3]: Cambuur: present in 1980, the game offers it from 2026
+  FAIL [3]: Excelsior: present in 1980, the game offers it from 2026
+  FAIL [3]: Fortuna Sittard: present in 1980, the game offers it from 2026
+  FAIL [3]: Go Ahead Eagles: present in 1980, the game offers it from 2026
+  FAIL [3]: Groningen: present in 1980, the game offers it from 2026
+  FAIL [3]: Heerenveen: present in 1980, the game offers it from 2026
+  FAIL [3]: NEC Nijmegen: present in 1980, the game offers it from 2026
+  FAIL [3]: PEC Zwolle: present in 1980, the game offers it from 2026
+  FAIL [3]: Sparta Rotterdam: present in 1980, the game offers it from 2026
+  FAIL [3]: Telstar: present in 1980, the game offers it from 2026
+  FAIL [3]: Willem II: present in 1980, the game offers it from 2026
+  FAIL [3]: Abha: present in 1980, the game offers it from 2026
+  FAIL [3]: Al Diriyah: present in 1980, the game offers it from 2026
+  FAIL [3]: Al Ettifaq: present in 1980, the game offers it from 2026
+  FAIL [3]: Al Faisaly: present in 1980, the game offers it from 2026
+  FAIL [3]: Al Fateh: present in 1980, the game offers it from 2026
+  FAIL [3]: Al Fayha: present in 1980, the game offers it from 2026
+  FAIL [3]: Al Hazem: present in 1980, the game offers it from 2026
+  FAIL [3]: Al Khaleej: present in 1980, the game offers it from 2026
+  FAIL [3]: Al Kholood: present in 1980, the game offers it from 2026
+  FAIL [3]: Al Qadsiah: present in 1980, the game offers it from 2026
+  FAIL [3]: Al Riyadh: present in 1980, the game offers it from 2026
+  FAIL [3]: Al Taawoun: present in 1980, the game offers it from 2026
+  FAIL [3]: NEOM SC: present in 1980, the game offers it from 2026
+  FAIL [3]: Chicago Fire: present in 1980, the game offers it from 2026
+  FAIL [3]: FC Cincinnati: present in 1980, the game offers it from 2026
+  FAIL [3]: DC United: present in 1980, the game offers it from 2026
+  FAIL [3]: CF Montreal: present in 1980, the game offers it from 2026
+  FAIL [3]: Nashville SC: present in 1980, the game offers it from 2026
+  FAIL [3]: New England Revolution: present in 1980, the game offers it from 2026
+  FAIL [3]: New York Red Bulls: present in 1980, the game offers it from 2026
+  FAIL [3]: Orlando City: present in 1980, the game offers it from 2026
+  FAIL [3]: Philadelphia Union: present in 1980, the game offers it from 2026
+  FAIL [3]: Colorado Rapids: present in 1980, the game offers it from 2026
+  FAIL [3]: FC Dallas: present in 1980, the game offers it from 2026
+  FAIL [3]: Houston Dynamo: present in 1980, the game offers it from 2026
+  FAIL [3]: Minnesota United: present in 1980, the game offers it from 2026
+  FAIL [3]: Portland Timbers: present in 1980, the game offers it from 2026
+  FAIL [3]: Real Salt Lake: present in 1980, the game offers it from 2026
+  FAIL [3]: San Diego FC: present in 1980, the game offers it from 2026
+  FAIL [3]: San Jose Earthquakes: present in 1980, the game offers it from 2026
+  FAIL [3]: Sporting Kansas City: present in 1980, the game offers it from 2026
+  FAIL [3]: St. Louis City: present in 1980, the game offers it from 2026
+  FAIL [3]: Famalicao: present in 1980, the game offers it from 2026
+  FAIL [3]: Rio Ave: present in 1980, the game offers it from 2026
+  FAIL [3]: Casa Pia: present in 1980, the game offers it from 2026
+  FAIL [3]: Estoril: present in 1980, the game offers it from 2026
+  FAIL [3]: Moreirense: present in 1980, the game offers it from 2026
+  FAIL [3]: Arouca: present in 1980, the game offers it from 2026
+  FAIL [3]: Gil Vicente: present in 1980, the game offers it from 2026
+  FAIL [3]: Santa Clara: present in 1980, the game offers it from 2026
+  FAIL [3]: CD Nacional: present in 1980, the game offers it from 2026
+  FAIL [3]: Estrela Amadora: present in 1980, the game offers it from 2026
+  FAIL [3]: Alverca: present in 1980, the game offers it from 2026
+  FAIL [3]: Maritimo: present in 1980, the game offers it from 2026
+  FAIL [3]: Academico de Viseu: present in 1980, the game offers it from 2026
+  FAIL [3]: Dundee United: present in 1980, the game offers it from 2026
+  FAIL [3]: Dundee: present in 1980, the game offers it from 2026
+  FAIL [3]: Motherwell: present in 1980, the game offers it from 2026
+  FAIL [3]: St Mirren: present in 1980, the game offers it from 2026
+  FAIL [3]: Kilmarnock: present in 1980, the game offers it from 2026
+  FAIL [3]: Falkirk: present in 1980, the game offers it from 2026
+  FAIL [3]: St Johnstone: present in 1980, the game offers it from 2026
+  FAIL [3]: Basaksehir: present in 1980, the game offers it from 2026
+  FAIL [3]: Samsunspor: present in 1980, the game offers it from 2026
+  FAIL [3]: Eyupspor: present in 1980, the game offers it from 2026
+  FAIL [3]: Goztepe: present in 1980, the game offers it from 2026
+  FAIL [3]: Kasimpasa: present in 1980, the game offers it from 2026
+  FAIL [3]: Alanyaspor: present in 1980, the game offers it from 2026
+  FAIL [3]: Konyaspor: present in 1980, the game offers it from 2026
+  FAIL [3]: Gaziantep FK: present in 1980, the game offers it from 2026
+  FAIL [3]: Genclerbirligi: present in 1980, the game offers it from 2026
+  FAIL [3]: Kocaelispor: present in 1980, the game offers it from 2026
+  FAIL [3]: Rizespor: present in 1980, the game offers it from 2026
+  FAIL [3]: Erzurumspor: present in 1980, the game offers it from 2026
+  FAIL [3]: Amedspor: present in 1980, the game offers it from 2026
+  FAIL [3]: Corum FK: present in 1980, the game offers it from 2026
+  FAIL [3]: Wolfsburg: present in 1980, the game offers it from 2026
+  FAIL [3]: Heidenheim: present in 1980, the game offers it from 2026
+  FAIL [3]: St. Pauli: present in 1980, the game offers it from 2026
+  FAIL [3]: Bochum: present in 1980, the game offers it from 2026
+  FAIL [3]: Magdeburg: present in 1980, the game offers it from 2026
+  FAIL [3]: Kaiserslautern: present in 1980, the game offers it from 2026
+  FAIL [3]: Holstein Kiel: present in 1980, the game offers it from 2026
+  FAIL [3]: Hannover 96: present in 1980, the game offers it from 2026
+  FAIL [3]: Dynamo Dresden: present in 1980, the game offers it from 2026
+  FAIL [3]: Braunschweig: present in 1980, the game offers it from 2026
+  FAIL [3]: Greuther Furth: present in 1980, the game offers it from 2026
+  FAIL [3]: Nurnberg: present in 1980, the game offers it from 2026
+  FAIL [3]: Darmstadt: present in 1980, the game offers it from 2026
+  FAIL [3]: Arminia Bielefeld: present in 1980, the game offers it from 2026
+  FAIL [3]: Karlsruhe: present in 1980, the game offers it from 2026
+  FAIL [3]: Osnabruck: present in 1980, the game offers it from 2026
+  FAIL [3]: Energie Cottbus: present in 1980, the game offers it from 2026
+  FAIL [3]: Union Saint-Gilloise: present in 1980, the game offers it from 2026
+  FAIL [3]: Gent: present in 1980, the game offers it from 2026
+  FAIL [3]: Antwerp: present in 1980, the game offers it from 2026
+  FAIL [3]: Standard Liege: present in 1980, the game offers it from 2026
+  FAIL [3]: Mechelen: present in 1980, the game offers it from 2026
+  FAIL [3]: Charleroi: present in 1980, the game offers it from 2026
+  FAIL [3]: Westerlo: present in 1980, the game offers it from 2026
+  FAIL [3]: Sint-Truiden: present in 1980, the game offers it from 2026
+  FAIL [3]: OH Leuven: present in 1980, the game offers it from 2026
+  FAIL [3]: Cercle Brugge: present in 1980, the game offers it from 2026
+  FAIL [3]: La Louviere: present in 1980, the game offers it from 2026
+  FAIL [3]: Zulte Waregem: present in 1980, the game offers it from 2026
+  FAIL [3]: Beveren: present in 1980, the game offers it from 2026
+  FAIL [3]: Kortrijk: present in 1980, the game offers it from 2026
+  FAIL [3]: Lommel: present in 1980, the game offers it from 2026
+  FAIL [3]: Sturm Graz: present in 1980, the game offers it from 2026
+  FAIL [3]: Rapid Wien: present in 1980, the game offers it from 2026
+  FAIL [3]: LASK: present in 1980, the game offers it from 2026
+  FAIL [3]: Wolfsberger AC: present in 1980, the game offers it from 2026
+  FAIL [3]: Austria Wien: present in 1980, the game offers it from 2026
+  FAIL [3]: Grazer AK: present in 1980, the game offers it from 2026
+  FAIL [3]: Hartberg: present in 1980, the game offers it from 2026
+  FAIL [3]: Ried: present in 1980, the game offers it from 2026
+  FAIL [3]: Altach: present in 1980, the game offers it from 2026
+  FAIL [3]: WSG Tirol: present in 1980, the game offers it from 2026
+  FAIL [3]: Austria Lustenau: present in 1980, the game offers it from 2026
+  FAIL [3]: AEK Athens: present in 1980, the game offers it from 2026
+  FAIL [3]: Aris: present in 1980, the game offers it from 2026
+  FAIL [3]: Asteras Tripolis: present in 1980, the game offers it from 2026
+  FAIL [3]: Atromitos: present in 1980, the game offers it from 2026
+  FAIL [3]: Iraklis: present in 1980, the game offers it from 2026
+  FAIL [3]: Kalamata: present in 1980, the game offers it from 2026
+  FAIL [3]: Kifisia: present in 1980, the game offers it from 2026
+  FAIL [3]: Levadiakos: present in 1980, the game offers it from 2026
+  FAIL [3]: OFI: present in 1980, the game offers it from 2026
+  FAIL [3]: Panetolikos: present in 1980, the game offers it from 2026
+  FAIL [3]: Volos: present in 1980, the game offers it from 2026
+  FAIL [3]: FC Midtjylland: present in 1980, the game offers it from 2026
+  FAIL [3]: Brondby IF: present in 1980, the game offers it from 2026
+  FAIL [3]: AGF: present in 1980, the game offers it from 2026
+  FAIL [3]: FC Nordsjaelland: present in 1980, the game offers it from 2026
+  FAIL [3]: Viborg FF: present in 1980, the game offers it from 2026
+  FAIL [3]: Randers FC: present in 1980, the game offers it from 2026
+  FAIL [3]: OB: present in 1980, the game offers it from 2026
+  FAIL [3]: Silkeborg IF: present in 1980, the game offers it from 2026
+  FAIL [3]: Lyngby: present in 1980, the game offers it from 2026
+  FAIL [3]: AC Horsens: present in 1980, the game offers it from 2026
+  FAIL [3]: SonderjyskE: present in 1980, the game offers it from 2026
+  FAIL [3]: Young Boys: present in 1980, the game offers it from 2026
+  FAIL [3]: Thun: present in 1980, the game offers it from 2026
+  FAIL [3]: St. Gallen: present in 1980, the game offers it from 2026
+  FAIL [3]: Lugano: present in 1980, the game offers it from 2026
+  FAIL [3]: Servette: present in 1980, the game offers it from 2026
+  FAIL [3]: Luzern: present in 1980, the game offers it from 2026
+  FAIL [3]: Lausanne-Sport: present in 1980, the game offers it from 2026
+  FAIL [3]: FC Zurich: present in 1980, the game offers it from 2026
+  FAIL [3]: Grasshopper: present in 1980, the game offers it from 2026
+  FAIL [3]: Sion: present in 1980, the game offers it from 2026
+  FAIL [3]: Vaduz: present in 1980, the game offers it from 2026
+  FAIL [3]: Rijeka: present in 1980, the game offers it from 2026
+  FAIL [3]: Osijek: present in 1980, the game offers it from 2026
+  FAIL [3]: Varazdin: present in 1980, the game offers it from 2026
+  FAIL [3]: Slaven Belupo: present in 1980, the game offers it from 2026
+  FAIL [3]: Istra 1961: present in 1980, the game offers it from 2026
+  FAIL [3]: Lokomotiva Zagreb: present in 1980, the game offers it from 2026
+  FAIL [3]: Gorica: present in 1980, the game offers it from 2026
+  FAIL [3]: Rudes: present in 1980, the game offers it from 2026
+  FAIL [3]: Toluca: present in 1980, the game offers it from 2026
+  FAIL [3]: Pachuca: present in 1980, the game offers it from 2026
+  FAIL [3]: Leon: present in 1980, the game offers it from 2026
+  FAIL [3]: Santos Laguna: present in 1980, the game offers it from 2026
+  FAIL [3]: Atlas: present in 1980, the game offers it from 2026
+  FAIL [3]: Necaxa: present in 1980, the game offers it from 2026
+  FAIL [3]: Puebla: present in 1980, the game offers it from 2026
+  FAIL [3]: Queretaro: present in 1980, the game offers it from 2026
+  FAIL [3]: Tijuana: present in 1980, the game offers it from 2026
+  FAIL [3]: FC Juarez: present in 1980, the game offers it from 2026
+  FAIL [3]: Atletico San Luis: present in 1980, the game offers it from 2026
+  FAIL [3]: Atlante: present in 1980, the game offers it from 2026
+  FAIL [3]: Adelaide United: present in 1980, the game offers it from 2026
+  FAIL [3]: Brisbane Roar: present in 1980, the game offers it from 2026
+  FAIL [3]: Central Coast Mariners: present in 1980, the game offers it from 2026
+  FAIL [3]: Macarthur FC: present in 1980, the game offers it from 2026
+  FAIL [3]: Melbourne City: present in 1980, the game offers it from 2026
+  FAIL [3]: Newcastle Jets: present in 1980, the game offers it from 2026
+  FAIL [3]: Perth Glory: present in 1980, the game offers it from 2026
+  FAIL [3]: Sydney FC: present in 1980, the game offers it from 2026
+  FAIL [3]: Western Sydney Wanderers: present in 1980, the game offers it from 2026
+  since: 50 shipped clubs in every list 1980 to 2060, 216 held out of every list before 2026, 0 from a two sourced first season, 4 under a typed row (Red Bull Bragantino 2020, New York City FC 2015, Austin FC 2021, Charlotte FC 2022)
+
+4. TIERS: the rule worked again, hand rows frozen, Forest across eras
+  22 leagues re-derived club by club, 34 generated clubs above tier 4 (POOL_TABLE=1 prints every club with its XI and tier)
+  Forest XI 83.8 vs Aston Villa (t3) 83.7: margin 0.1. At or below 0 Forest drops to tier 3 on the next regenerate.
+  HAND_CLUBS 190 rows, fingerprint e12e673153af2568; Forest t2, t4 in 1993, 1997 and 1999 to 2021, checked every season 1988 to 2060
+
+4L. LADDER: thin squads share one unranked group a tier, ranked clubs stand alone by XI
+  22 ladders equal the rule worked from Club Manager's data: 236 clubs ranked on their own, 144 thin squads in 19 shared groups
+  ranked clubs a league: Premier League 20 of 20, Championship 19 of 24, La Liga 19 of 20, Brasileirao 16 of 20, Serie A 20 of 20, Bundesliga 18 of 18, Ligue 1 16 of 18, Eredivisie 7 of 18, Saudi Pro League 7 of 18, MLS 21 of 30, Primeira Liga 8 of 18, Scottish Premiership 2 of 12, Super Lig 9 of 18, 2. Bundesliga 5 of 18, Belgian Pro League 10 of 18, Austrian Bundesliga 3 of 12, Super League Greece 4 of 14, Danish Superliga 4 of 12, Swiss Super League 2 of 12, HNL 2 of 10, Liga MX 12 of 18, A-League 12 of 12
+
+5. WEIGHTS: exact odds from leagueDrawGroups, as rationals
+  HAND_CLUBS tier 1: 18 clubs, 9 league groups (largest 5), every club exactly 1/18; the sampler matched it on a 192 draw grid
+  HAND_CLUBS tier 2: 36 clubs, 19 league groups (largest 3), every club exactly 1/36; the sampler matched it on a 320 draw grid
+  HAND_CLUBS tier 3: 49 clubs, 33 league groups (largest 3), every club exactly 1/49; the sampler matched it on a 340 draw grid
+  HAND_CLUBS tier 4: 87 clubs, 70 league groups (largest 3), every club exactly 1/87; the sampler matched it on a 508 draw grid
+  HAND_CLUBS tier 1+2: 54 clubs, 28 league groups (largest 5), every club exactly 1/54; the sampler matched it on a 512 draw grid
+  HAND_CLUBS tier 2+3: 85 clubs, 52 league groups (largest 3), every club exactly 1/85; the sampler matched it on a 660 draw grid
+  HAND_CLUBS tier 3+4: 136 clubs, 103 league groups (largest 3), every club exactly 1/136; the sampler matched it on a 848 draw grid
+  HAND_CLUBS by season 1980 to 2060: 81 seasons every club exactly 1/n; Premier League tier 3 over the cap in 0 seasons, as pinned
+  pickAcrossLeagues over tier 4: 76 league groups, both Math.random calls on a 5548 draw grid, every club drawn exactly weight/167 x 1/size
+  full pool tier 4: four leagues 20/167 capped; a plain pick would give them 57/323
+  hand tier 4 clubs before: each 1/87; now 1/167 outside the four leagues, Norwich 5/3674, Brentford 5/1336, Betis 5/2171, Cruzeiro 5/2338
+
+6. OFFERS: 6 seeds x 48 careers from 2020 through the real loop
+  seed 65850: 1183 draws (four leagues 290 vs 288.9), 510 where the cap bites (four leagues 71 vs 66.8, ratio 1.063, z 0.55); 1227 offers; distinct generated clubs offered: Premier League 2, Championship 6, La Liga 5, Brasileirao 3; uncovered 0
+    9 careers started at a worldwide academy fallback, uncovered 0
+  seed 73769: 1223 draws (four leagues 256 vs 272.7), 620 where the cap bites (four leagues 87 vs 81.8, ratio 1.064, z 0.62); 1269 offers; distinct generated clubs offered: Premier League 4, Championship 4, La Liga 5, Brasileirao 6; uncovered 0
+    9 careers started at a worldwide academy fallback, uncovered 0
+  seed 81688: 1179 draws (four leagues 258 vs 260.7), 610 where the cap bites (four leagues 74 vs 79.5, ratio 0.930, z -0.67); 1225 offers; distinct generated clubs offered: Premier League 3, Championship 6, La Liga 5, Brasileirao 4; uncovered 0
+    9 careers started at a worldwide academy fallback, uncovered 0
+  seed 89607: 1142 draws (four leagues 283 vs 264.0), 532 where the cap bites (four leagues 62 vs 70.1, ratio 0.884, z -1.04); 1187 offers; distinct generated clubs offered: Premier League 3, Championship 7, La Liga 3, Brasileirao 4; uncovered 0
+    9 careers started at a worldwide academy fallback, uncovered 0
+  seed 97526: 1151 draws (four leagues 263 vs 249.2), 573 where the cap bites (four leagues 67 vs 75.2, ratio 0.892, z -1.01); 1198 offers; distinct generated clubs offered: Premier League 3, Championship 7, La Liga 5, Brasileirao 4; uncovered 0
+    9 careers started at a worldwide academy fallback, uncovered 0
+  seed 105445: 1167 draws (four leagues 286 vs 283.0), 538 where the cap bites (four leagues 83 vs 70.8, ratio 1.172, z 1.55); 1214 offers; distinct generated clubs offered: Premier League 5, Championship 12, La Liga 5, Brasileirao 6; uncovered 0
+    9 careers started at a worldwide academy fallback, uncovered 0
+  over all 6 seeds, where the cap bites: four leagues won 444 against 444.2 expected (ratio 1.000, z -0.01)
+  Premier League: 3.33 distinct generated clubs offered per seed over 6 seeds (floor 2)
+  Championship: 7.00 distinct generated clubs offered per seed over 6 seeds (floor 4)
+  La Liga: 4.67 distinct generated clubs offered per seed over 6 seeds (floor 2.5)
+  Brasileirao: 4.50 distinct generated clubs offered per seed over 6 seeds (floor 2)
+  ratio range 0.884 to 1.172; per league minimum distinct generated clubs: Premier League 2, Championship 4, La Liga 3, Brasileirao 3; 7 s
+  (printed, not gated) market offers from the four leagues 1622/6991; rivals 79/285
+  (printed, not gated) manager and owner clubs are a plain pick over tier 3 and 4: four leagues 66/403 (before this round 16/136)
+  (printed, not gated) a 1995 start: four leagues won 92 of 411 draws (82.4 expected); market offers 89/407; uncovered 0
+  academies, youths rated 40 to 54, 2020 pool:
+    before England: home list 10, tier 3 7/10 (70.0%), generated 0.0%; largest seed deviation 0.0143
+    before Spain: home list 5, tier 3 2/5 (40.0%), generated 0.0%; largest seed deviation 0.0190
+    before Brazil: home list 4, tier 3 2/4 (50.0%), generated 0.0%; largest seed deviation 0.0140
+    before Wales: no home club at tier 3 or 4
+    after  England: home list 35, tier 3 7/35 (20.0%), generated 71.4%; largest seed deviation 0.0230
+    after  Spain: home list 16, tier 3 2/16 (12.5%), generated 68.8%; largest seed deviation 0.0185
+    after  Brazil: home list 16, tier 3 2/16 (12.5%), generated 75.0%; largest seed deviation 0.0160
+    after  Wales: home list 3, tier 3 0/3 (0.0%), generated 100.0%; largest seed deviation 0.0000
+  worldwide academy fallbacks (exact grid):
+    Nigeria 70 on the 2020 pool: 51 candidates, 516 grid draws; four leagues 15/51 capped, 15/51 by a plain pick
+    Nigeria 60 on the 2020 pool: 114 candidates, 1384 grid draws; four leagues 17/103 capped, 17/114 by a plain pick
+    Montenegro 47 on the 2020 pool: 406 candidates, 6632 grid draws; four leagues 31/238 capped, 69/406 by a plain pick
+    Montenegro 30 on the 2020 pool: 325 candidates, 5572 grid draws; four leagues 20/168 capped, 58/325 by a plain pick
+    Montenegro 80 on a pool with no elite club: 12 candidates, 104 grid draws; four leagues 5/12 capped, 5/12 by a plain pick
+    Montenegro 30 on a pool with no tier 4 club: 81 candidates, 1060 grid draws; four leagues 11/70 capped, 11/81 by a plain pick
+
+7. OLD SAVES: careers signed on the pre-round pool load and play on
+  West Ham: 3 seasons on the new pool, still West Ham|Championship|3
+  Wolves: 3 seasons on the new pool, still Wolves|Championship|3
+  Girona: 3 seasons on the new pool, still Girona|Segunda Division|2
+  Norwich City: 3 seasons on the new pool, still Norwich City|Championship|4
+  Flamengo: 3 seasons on the new pool, still Flamengo|Brasileirao|1
+  Real Madrid: 3 seasons on the new pool, still Real Madrid|La Liga|1
+
+control nosince: section 3 went red as it must (red: 3)

@@ -1,0 +1,44 @@
+CONTROL scotrow: lib/soccerCareerLeague.ts patched in the bundle only; section A must go red
+bundled in 487 ms; 460 clubs (190 hand rows)
+
+B1. POOL: the rows main shipped are still the first rows, in order
+  51 of 51 recorded rows found in place (id, name, country, league); the pool has 270 generated rows
+
+B4. POOL: the dugout's key finds every pool club under Club Manager's spelling
+  380 Club Manager clubs of 23 leagues, 380 matched by the key (1 pinned apart: Nacional and CD Nacional)
+
+C1. BAND: main's recorded cross, the five big leagues and every season before 2026 byte for byte
+  held: 8100 rows in the five big leagues, 87480 rows before 2026 outside them; free to move: 43740 rows, 2457 moved over 27 pairs that gained a size
+
+C2. BAND: the worked examples, exact, and every ladder club banded at its own place
+  15 worked bands and 7 seed keys exact; 284 clubs of 17 ladder leagues each banded at their own place
+
+C3. BAND: every ladder club, five ratings, 200 engine shaped keys
+  284000 bands, every one from the ladder and inside 2 to the league's size; 16 groups the ladder cannot order, each sharing one band at every rating
+
+A. LEDGERS: every league the pool reads is sized, odd or waiting with its reason
+  FAIL [A]: Scottish Premiership: both a size row and an odd format row
+  FAIL [A]: Scottish Premiership: a size but no LEAGUE_FORMAT window over the same seasons
+  FAIL [A]: Scottish Premiership: a size but its derby cadence is not two meetings from 2026
+  FAIL [A]: Scottish Premiership: the facts file says split, 12 clubs, 33 games; a size row needs plain, 12 and 22
+  sized (a finish, a table): Championship 24, Brasileirao 20, Eredivisie 18, Saudi Pro League 18, Primeira Liga 18, Scottish Premiership 12, Super Lig 18, 2. Bundesliga 18, Belgian Pro League 18
+  odd (their real row count, no table): MLS 30, Austrian Bundesliga 12
+  waiting, results only as on main: Super League Greece (format from 1 host), Danish Superliga (format from 1 host), Swiss Super League (format from 0 hosts), HNL (format from 0 hosts), Liga MX (format from 1 host), A-League (format from 1 host)
+  held by the generator: Serie B, Ligue 2, Segunda Division; the ledgers hold the Championship in 22 of 22 seasons from 2004
+
+E. OLD SAVES: seven saves recorded on main read the same, and play on
+  7 saves: repairCareer byte equal, every saved row reads the finish, league and mode main read; matchdays moved to the league's real count on 8 rows (ere 2027 Twente: 38 to 34; ere 2028 Twente: 38 to 34; cha 2027 Norwich City: 38 to 46; cha 2028 Norwich City: 38 to 46; sco 2027 Hearts: 38 to 22; sco 2028 Hearts: 38 to 22; her 2027 Hertha Berlin: 38 to 34; her 2028 Hertha Berlin: 38 to 34); each played three more seasons
+
+C4. BAND: a higher place on the ladder finishes higher, tier 4 clubs included
+  Championship: 19 of 24 ordered, rho 1.000 to 1.000; tier 4 17, rho 1.000 to 1.000
+  Brasileirao: 16 of 20 ordered, rho 1.000 to 1.000; tier 4 10, rho 1.000 to 1.000
+  Eredivisie: 7 of 18 ordered, rho 1.000 to 1.000; tier 4 3 (too few to measure)
+  Saudi Pro League: 7 of 18 ordered, rho 1.000 to 1.000; tier 4 1 (too few to measure)
+  Primeira Liga: 8 of 18 ordered, rho 1.000 to 1.000; tier 4 5, rho 1.000 to 1.000
+  Scottish Premiership: 2 of 12 ordered (too few to measure); tier 4 0 (too few to measure)
+  Super Lig: 9 of 18 ordered, rho 1.000 to 1.000; tier 4 0 (too few to measure)
+  2. Bundesliga: 5 of 18 ordered, rho 1.000 to 1.000; tier 4 5, rho 1.000 to 1.000
+  Belgian Pro League: 10 of 18 ordered, rho 1.000 to 1.000; tier 4 0 (too few to measure)
+  8 leagues measured over three key sets: lowest 1.000, highest 1.000 (floor 0.97); tier 4 alone in 4: lowest 1.000, highest 1.000 (floor 0.97)
+
+simCareerLeagueWorld control scotrow: section A went red as it must (4 failures)
