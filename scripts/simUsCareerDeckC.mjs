@@ -29,6 +29,17 @@
    whose first answer now reads "Next season is your last"), MLB save 829
    (mlbB_numberRetired, which now records the club) and NHL save 1074
    (nhlB_walkAwayHealthy, which now writes the farewell). The NBA did not move.
+   Re-recorded on purpose in Round 1104 (NFL truth and the one bank). Deck C's
+   own cards did not change. Measured by running this harness on each of the
+   round's commits in turn: the shared bank moved nothing in any sport; the
+   commit that made throwback seasons 16 games (it also reworded three NFL
+   receipts) changed the NFL draw on 21 of 1,920 saves; paying a rookie his
+   draft slot took that to 43 and changed what lifeC_restructure pays (dealt
+   480 times before and after: the same deals, other money); the small items
+   (no trade card for a man with no contract, the founder only when the bank
+   covers him, the franchise record card's new words, Brand work reaching the
+   bank) took the NFL to 274 and moved 5 of 1,200 NBA draws and 3 of 1,200 NHL
+   draws. MLB did not move at all.
 
    Section 2, WORDS AGAINST EFFECTS (see its own comment below): the log,
    the button, the gamble's odds, the era's money, the trade's league and
