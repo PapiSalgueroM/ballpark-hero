@@ -1,0 +1,6 @@
+vitest exit=0 4s |    Duration  2.86s (transform 852ms, setup 187ms, collect 1.26s, tests 521ms, environment 1.27s, prepare 703ms)
+simRevealMoments exit=0 13s | simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's 
+simSeasonMoments exit=0 17s | simSeasonMoments: 54 checks, 0 failed
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+simSeasonCentreNeutral exit=0 16s | simSeasonCentreNeutral: 24 checks, 0 failed
+tsc exit=0 66s | 
