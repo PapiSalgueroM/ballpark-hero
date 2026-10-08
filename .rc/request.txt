@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-e: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx src/test/cmWorldIdentity1052.test.ts src/lib/soccerCareerLeague.test.ts src/lib/soccerCareerLeagueBand.test.ts src/lib/soccerCareerLeagueSeasons.test.ts src/lib/soccerCareerContinental.test.ts src/test/soccerCareerDugoutTable.test.tsx --testTimeout=300000 --hookTimeout=120000
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerLeagueSeasons-seed2: SIM_LEAGUE_SEASONS_SEED=2 node scripts/simCareerLeagueSeasons.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simCareerLeagueWorld: node scripts/simCareerLeagueWorld.mjs
