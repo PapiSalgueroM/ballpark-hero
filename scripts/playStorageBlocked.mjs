@@ -50,7 +50,9 @@
  *   NARROWER PHONES. The notice at 320, 344 and 360 wide. The first copy was
  *     56 characters and wrapped to a second line (48px) at 360 and below.
  *   THE PRESSES. As many presses must change the page as do untouched, less
- *     one (the idle game moves on its own). One working press used to pass.
+ *     a measured margin, and at least one of them has to come after the
+ *     first wherever one does untouched. One working press used to pass, so
+ *     a game that stopped answering after its rules closed went through.
  * Two families of checks were taken out because they could not fail: "nothing
  * reached the browser's real storage" in the simulated BLOCKED arm (the only
  * road to it is the accessor this harness replaced) and the same for the
@@ -98,12 +100,40 @@
  *   home page at 169 buttons against 171 untouched. Now: 171, 29, 12 and 11
  *   buttons on /, /soccer-career, /club-manager and /footle, the same as
  *   untouched, 0 uncaught errors, the notice on the three game routes.
- *   The presses, identical in every arm: four on /soccer-career (nationality,
- *   position, era, surprise me), /club-manager, /nfl-my-career, /front-office
- *   and /build-your-xi, four with three that change the page on
- *   /nba-my-career, four with two or three on /stadium-tycoon (an idle game,
- *   the page moves on its own), two with one on /free-kick, and one on
- *   /footle and /college-grid, whose next move is typing a name.
+ *   The presses: four on /soccer-career (nationality, position, era,
+ *   surprise me), /club-manager, /nfl-my-career, /front-office and
+ *   /build-your-xi, four with three that change the page on /nba-my-career,
+ *   four with two or three on /stadium-tycoon (an idle game, the page moves
+ *   on its own), two with one on /free-kick, and one on /footle and
+ *   /college-grid, whose next move is typing a name.
+ *
+ * MEASURED AFTER THE REVIEW, same runner, same day, two full runs (this one
+ * and the open control: 120 walked runs of a game route).
+ *   Presses. Which presses change the page, as a row of 1s and 0s, is the
+ *   same in every run on eight of the ten game routes: 1111 on five, 1011 on
+ *   /nba-my-career, 10 on /free-kick, 1 on /footle and /college-grid.
+ *   /stadium-tycoon gave 1010, 1011 and 1110 and /build-your-xi 1111, 1101
+ *   and 1110 with storage untouched both times, so the count moves by one
+ *   between two runs of the same thing. CHANGED_MARGIN is 2, one step past
+ *   that. And on every route where a press after the first changes the page
+ *   untouched, one did in all 120 runs (the third press never missed).
+ *   Leaving. The next page's heading was on the screen 106 to 203 ms after
+ *   the link, on all 36 runs (12 routes, three modes). LEAVE_CAP_MS is
+ *   10,000. Writes refused in one idle second with storage full: 0 on all 12
+ *   routes; IDLE_REFUSED_CEILING is 50. The first cut of getGuestHandle,
+ *   built into the same site: 7,655 and 7,934 a second on /footle and
+ *   /soccer-career, and /footle's next page never drew inside the cap.
+ *   The daily. One community vote sent untouched and in BLOCKED, with the
+ *   verdict still up on the way back. FULL offered the vote again and sent 0
+ *   for 2 cast; with the "was it remembered" line taken out of the hook, 2.
+ *   Narrower phones. 28px at 320, 344 and 360 wide in both arms. The first
+ *   copy put back: 48px at all three.
+ *   The banner's answer. After Accept, /footle mounted its ad slot and asked
+ *   for the ad script once, in BLOCKED and in FULL; after Essential only, no
+ *   slot and no request. With the ad slot reading the bare localStorage
+ *   again: no slot and 0 requests in FULL after Accept.
+ *   Each "put back" above is a build of the site with that one change, run
+ *   through this harness, which went red on that line and nothing else.
  *
  * CONTROLS.
  *   PLAY_STORAGE_CONTROL=raw   sets window.__DUKB_RAW_STORAGE__ before the app
@@ -179,7 +209,8 @@ const COUNT_MARGIN = 3;
 const NOTICE_MAX_HEIGHT = 30;
 const GAME_SHIFT_MAX = 30;
 const PRESSES = 4;
-const CHANGED_MARGIN = 1;
+/** Presses that change the page, against the untouched run: see the numbers block. */
+const CHANGED_MARGIN = 2;
 /** Leaving a game through a link: the next page has to be drawn inside this. */
 const LEAVE_CAP_MS = 10000;
 /** Writes refused in one idle second with storage full. */
@@ -428,12 +459,16 @@ function judgeArm(arm, open, { isGame, expectNotice, mountOnly }) {
   if (isGame) {
     const pressedOk = arm.presses.filter(p => !p.threw && !p.failed).length;
     const basePressed = open.presses.filter(p => !p.threw && !p.failed).length;
-    /* as many presses have to change the page as do untouched, less the one
-       press of run to run noise measured on the idle game. One press that
-       works is no longer enough on a page where four do. */
+    /* Two floors, both against the untouched run of the same route. The
+       count of presses that changed the page, less CHANGED_MARGIN. And at
+       least one press AFTER the first has to change the page wherever one
+       does untouched: that is the game still answering, which one working
+       press (closing the rules, say) used to stand in for. */
+    const later = r => r.presses.slice(1).filter(p => p.changed).length;
     const changedFloor = Math.max(Math.min(1, open.changed), open.changed - CHANGED_MARGIN);
-    say(pressedOk >= basePressed && arm.changed >= changedFloor,
-      `${tag(arm)}: ${pressedOk} presses went through, ${arm.changed} changed the page (untouched ${basePressed} and ${open.changed}, floor ${changedFloor}): ${arm.presses.map(p => p.label).join(' > ') || 'nothing to press'}`);
+    const laterFloor = Math.min(1, later(open));
+    say(pressedOk >= basePressed && arm.changed >= changedFloor && later(arm) >= laterFloor,
+      `${tag(arm)}: ${pressedOk} presses went through, ${arm.changed} changed the page, ${later(arm)} of them after the first (untouched ${basePressed}, ${open.changed} and ${later(open)}; floors ${changedFloor} and ${laterFloor}): ${arm.presses.map(p => p.label).join(' > ') || 'nothing to press'}`);
     if (expectNotice) {
       say(!!s.notice && s.notice.shown && s.notice.kind === arm.mode,
         `${tag(arm)}: the notice is on the page${s.notice ? ` ("${s.notice.text}")` : ''}`);
