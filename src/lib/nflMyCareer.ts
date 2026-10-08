@@ -1113,7 +1113,7 @@ const NFL_LEGACY_V2: LegacyWeights = {
       terms: [{ stat: 'picks', per: 0.75 }, { stat: 'passDef', per: 8.2 }, { stat: 'tackles', per: 33 }],
       standout: [
         { stat: 'picks', from: 48, to: 59, label: 'interceptions' },
-        { stat: 'passDef', from: 341, to: 394, label: 'passes defensed' },
+        { stat: 'passDef', from: 341, to: 394, label: 'passes defended' },
       ],
     },
     EDGE: {

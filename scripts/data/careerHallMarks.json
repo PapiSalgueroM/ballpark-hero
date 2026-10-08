@@ -44,7 +44,7 @@
    "tackles": "tackles",
    "sacks": "sacks",
    "picks": "interceptions",
-   "passDef": "passes defensed",
+   "passDef": "passes defended",
    "fgMade": "field goals"
   },
   "mlb": {

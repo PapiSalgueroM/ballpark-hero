@@ -6,14 +6,21 @@
 import { legacyOf, NFL_LEGACY_WEIGHTS, shouldRetire, teamLabelOf, type CareerState } from "./nflMyCareer";
 import { HALL_CALIBRATION, hallVoterRulesFor, usCareerHall, type HallVoterWords } from "./careerHallOfFame";
 
-/* Round 1051: what the voters weigh, in words. The card prints the sentence;
-   the "?" builds its rule and its worked example from the rest. "The major
-   awards" on purpose: the engine counts a different trophy by position under
-   one name, and a sentence that names none cannot mislabel one. The example
-   names a standout family of the calibration 2 table, and section 19 of
+/* Round 1051: what the voters weigh, in words. The card prints the hardware
+   sentence and then names what the table reads for the position, from the
+   table itself (reads is the noun for each stat a term can read), so a kicker
+   is told "your seasons" and nothing he is not read on. The "?" builds its
+   rule and its worked example from the rest. "The major awards" on purpose:
+   the engine counts a different trophy by position under one name, and a
+   sentence that names none cannot mislabel one. The example names a standout
+   family of the calibration 2 table, and section 19 of
    scripts/simCareerHall.mjs holds it against the engine. */
 export const NFL_HALL_WORDS: HallVoterWords = {
-  weighs: "The voters weigh the hardware first: rings, the major awards, All-Pro years. Then the whole stat sheet, whatever you played.",
+  weighs: "The voters weigh the hardware first: rings, the major awards, All-Pro years.",
+  reads: {
+    passYds: "passing yards", passTd: "touchdown passes", rushYds: "rushing yards", recYds: "receiving yards", rec: "catches",
+    recTd: "touchdown catches", tackles: "tackles", sacks: "sacks", picks: "interceptions", forcedFum: "forced fumbles", passDef: "passes defended",
+  },
   hardware: "rings, the major awards, All-Pro years",
   families: "passing yards for a quarterback, interceptions for a corner, sacks for an edge rusher, field goals for a kicker and so on",
   example: { positions: ["CB"], stat: "picks", one: "corner", who: "corners", family: "interceptions" },
@@ -43,7 +50,8 @@ export const NFL_CAREER_HALL = usCareerHall<CareerState>({
   // Game tuning. The hard stop (shouldRetire) is untouched.
   retirement: { minAge: 30, dropFromPeak: 8, floor: 70 },
   legacy: legacyOf,
-  weighs: NFL_HALL_WORDS.weighs,
+  words: NFL_HALL_WORDS,
+  weights: NFL_LEGACY_WEIGHTS,
   shouldRetire,
   teamLabel: teamLabelOf,
   deckJerseyFlag: "b_jersey",
