@@ -1,0 +1,12 @@
+# Release AN fix pass 2, the final pushed head (354437cf plus main's two board notes): the type gate and the two
+# fences, one at a time; then a look at what the flaky /olympics check of simDailySaveHardening actually sees
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+shootout: node scripts/simCmShootoutOrder.mjs
+prep-probe: node .rc/x/mkprobe.mjs .
+oly-1: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000 > $TMP/o.txt 2>&1; c=$?; grep -a "R848_SHAPES" $TMP/o.txt | grep -a olympics | cut -c1-2400; tail -5 $TMP/o.txt | cut -c1-160; exit $c
+oly-2: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000 > $TMP/o.txt 2>&1; c=$?; grep -a "R848_SHAPES" $TMP/o.txt | grep -a olympics | cut -c1-2400; tail -5 $TMP/o.txt | cut -c1-160; exit $c
+oly-3: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000 > $TMP/o.txt 2>&1; c=$?; grep -a "R848_SHAPES" $TMP/o.txt | grep -a olympics | cut -c1-2400; tail -5 $TMP/o.txt | cut -c1-160; exit $c
+oly-4: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000 > $TMP/o.txt 2>&1; c=$?; grep -a "R848_SHAPES" $TMP/o.txt | grep -a olympics | cut -c1-2400; tail -5 $TMP/o.txt | cut -c1-160; exit $c
