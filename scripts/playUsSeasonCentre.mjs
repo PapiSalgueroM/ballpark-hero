@@ -18,7 +18,9 @@
  *  load first the viewer's chunks are in memory BEFORE the season is played:
  *             two frames after the press (the viewer chunk slowed) nothing
  *             is played and the button says it is loading; a viewer chunk
- *             that fails once reloads the page with NO season played, and
+ *             that is gone (for as long as that page lives, which is what a
+ *             release does to an open tab) reloads the page with NO season
+ *             played, and
  *             the next press plays the season Play saves on a page loaded
  *             twice (a second load is not a first visit: the page's
  *             generator has been drawn a different number of times, which
@@ -298,15 +300,24 @@ async function staleWalks(slug, vp, save, afterPlay, firstDraws, tag) {
   const afterReloadPlay = await savedString(R.page, save.key);
   await R.ctx.close();
 
-  /* 1: the site's one reload for a stale chunk is still there */
-  const S = await open(slug, save, vp, { failViewer: 1 });
+  /* 1: the site's one reload for a stale chunk is still there. The chunk is gone for as long as that page
+     lives, which is what a release does to an open tab, and it is served again to the page the reload
+     brings. Until the merge of 2026-10-08 this walk failed ONE request, which stopped being a failed
+     import on the runner's Chromium once Round 1047 put a stylesheet among the viewer's imports: the
+     page's import() waits for that stylesheet, by then the failed preload of the chunk is forgotten, and
+     the import asks the network a second time and gets it (measured there: the season was played with
+     the viewer open and nothing reloaded, which is right for one lost request and is not this case). */
+  const S = await open(slug, save, vp, { failViewer: Infinity });
   await pressEntry(S.page);
   const reloaded = await waitFor(async () => S.state.loads >= 2);
+  const askedOnThePress = S.state.viewerAsked;
+  S.state.fail = 0;
   await hubBack(S.page);
   const s1 = await hubState(S.page, save.key).catch(() => ({}));
   check('load first', reloaded && s1.saved === save.value && s1.hub && s1.entry && !s1.curtain && !s1.failed && !s1.viewer,
-    `${tag}: a viewer chunk that fails once reloads the page with no season played (page loads ${S.state.loads}, save untouched ${s1.saved === save.value}, hub ${s1.hub}, entry ${s1.entry}, curtain ${s1.curtain}, failed tile ${s1.failed})`);
+    `${tag}: a viewer chunk that is gone reloads the page with no season played (page loads ${S.state.loads}, save untouched ${s1.saved === save.value}, hub ${s1.hub}, entry ${s1.entry}, curtain ${s1.curtain}, failed tile ${s1.failed})`);
   const staleDraws = await drawsOf(S.page);
+  console.log(`     the gone chunk was asked for ${askedOnThePress} time(s) on that press before the page reloaded (1: the preload and the import are one fetch; 2: the import asked again)`);
   console.log(`     the generator had been drawn ${firstDraws} times at the press on a first visit, ${reloadDraws} on a page loaded twice, ${staleDraws} after the stale chunk reload`);
   await pressEntry(S.page);
   await S.page.waitForSelector('[data-season-centre] [data-kickoff]', { timeout: 20000 }).catch(() => {});
@@ -319,7 +330,8 @@ async function staleWalks(slug, vp, save, afterPlay, firstDraws, tag) {
   /* 2: that one reload is already spent, so the page has to say so itself. The chunk stays gone until this
      walk says the host serves it again, so the walk reads the same whether the browser keeps a failed
      import failed for the life of the page (the Chromium of the 2026-10-07 review did: asked for once) or
-     asks the network again on the next import (the runner's Chromium on 2026-10-08 did: asked for twice). */
+     asks the network again on the next import (the runner's Chromium on 2026-10-08 did: asked for twice
+     before Round 1047 was merged in and three times after it, the first press asking twice). */
   const T = await open(slug, save, vp, { failViewer: Infinity, staleSpent: true });
   await pressEntry(T.page);
   await T.page.waitForSelector('[data-season-centre-failed]', { timeout: 15000 }).catch(() => {});
@@ -345,7 +357,7 @@ async function staleWalks(slug, vp, save, afterPlay, firstDraws, tag) {
   await pressEntry(T.page);
   await T.page.waitForSelector('[data-season-centre] [data-kickoff]', { timeout: 20000 }).catch(() => {});
   const t4 = await hubState(T.page, save.key).catch(() => ({}));
-  console.log(`     the viewer chunk was asked for ${asked} time(s) over two presses before the Reload (1: this browser keeps a failed import failed; 2: it asks again), ${T.state.viewerAsked} with the press after it`);
+  console.log(`     the viewer chunk was asked for ${asked} time(s) over two presses before the Reload (1: this browser keeps a failed import failed; 2 or 3: it asks again), ${T.state.viewerAsked} with the press after it`);
   check('load first', again && t3.saved === save.value && t3.hub && t4.viewer && t4.saved === afterReloadPlay,
     `${tag}: Reload gets a new page with no season played, and its next press opens the viewer on the season Play saves on a page loaded twice (page loads ${T.state.loads}, save untouched ${t3.saved === save.value}, viewer ${t4.viewer}, same bytes ${t4.saved === afterReloadPlay})`);
   check('errors', T.errors.length === 0, `${tag}: the spent reload walk, no page error and no console error${T.errors.length ? `: ${T.errors.slice(0, 2).join(' | ')}` : ''}`);
