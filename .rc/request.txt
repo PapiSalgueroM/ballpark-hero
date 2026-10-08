@@ -1,0 +1,49 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/soundToggle.test.tsx src/test/awardsNightSound.test.tsx src/test/freshBuildOptionalChunk.test.ts --testTimeout=300000 --hookTimeout=120000
+simSound: node scripts/simSound.mjs
+gate: ENGINES=chromium node scripts/playSoundGate.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+c-silent: SIM_SOUND_CONTROL=silent node scripts/simSound.mjs
+c-nan: SIM_SOUND_CONTROL=nan node scripts/simSound.mjs
+c-long: SIM_SOUND_CONTROL=long node scripts/simSound.mjs
+c-random: SIM_SOUND_CONTROL=random node scripts/simSound.mjs
+c-swap: SIM_SOUND_CONTROL=swap node scripts/simSound.mjs
+c-flatcrowd: SIM_SOUND_CONTROL=flatcrowd node scripts/simSound.mjs
+c-subthud: SIM_SOUND_CONTROL=subthud node scripts/simSound.mjs
+c-hot: SIM_SOUND_CONTROL=hot node scripts/simSound.mjs
+c-ghoststep: SIM_SOUND_CONTROL=ghoststep node scripts/simSound.mjs
+c-audiotag: SIM_SOUND_CONTROL=audiotag node scripts/simSound.mjs
+c-secondhome: SIM_SOUND_CONTROL=secondhome node scripts/simSound.mjs
+c-staticimport: SIM_SOUND_CONTROL=staticimport node scripts/simSound.mjs
+c-eager: SIM_SOUND_CONTROL=eager node scripts/simSound.mjs
+c-nogate: SIM_SOUND_CONTROL=nogate node scripts/simSound.mjs
+c-nohide: SIM_SOUND_CONTROL=nohide node scripts/simSound.mjs
+c-noprerender: SIM_SOUND_CONTROL=noprerender node scripts/simSound.mjs
+c-nowait: SIM_SOUND_CONTROL=nowait node scripts/simSound.mjs
+c-late: SIM_SOUND_CONTROL=late node scripts/simSound.mjs
+c-nohush: SIM_SOUND_CONTROL=nohush node scripts/simSound.mjs
+c-twocontexts: SIM_SOUND_CONTROL=twocontexts node scripts/simSound.mjs
+c-buzzstill: SIM_SOUND_CONTROL=buzzstill node scripts/simSound.mjs
+c-keepplaying: SIM_SOUND_CONTROL=keepplaying node scripts/simSound.mjs
+c-coldlate: SIM_SOUND_CONTROL=coldlate node scripts/simSound.mjs
+c-noprime: SIM_SOUND_CONTROL=noprime node scripts/simSound.mjs
+c-globalhush: SIM_SOUND_CONTROL=globalhush node scripts/simSound.mjs
+c-leak: SIM_SOUND_CONTROL=leak node scripts/simSound.mjs
+g-eager: SOUND_GATE_CONTROL=eager PORT=4601 ENGINES=chromium node scripts/playSoundGate.mjs
+g-everytick: SOUND_GATE_CONTROL=everytick PORT=4602 ENGINES=chromium node scripts/playSoundGate.mjs
+g-nowait: SOUND_GATE_CONTROL=nowait PORT=4603 ENGINES=chromium node scripts/playSoundGate.mjs
+g-nohide: SOUND_GATE_CONTROL=nohide PORT=4604 ENGINES=chromium node scripts/playSoundGate.mjs
+g-reloadkit: SOUND_GATE_CONTROL=reloadkit PORT=4605 ENGINES=chromium node scripts/playSoundGate.mjs
+g-slowkit: SOUND_GATE_CONTROL=slowkit PORT=4606 ENGINES=chromium node scripts/playSoundGate.mjs
+simStaleChunk: node scripts/simStaleChunk.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simMobileChrome: ENGINES=chromium node scripts/simMobileChrome.mjs
+playHomeFold: ENGINES=chromium node scripts/playHomeFold.mjs
+playLightMode: ENGINES=chromium node scripts/playLightMode.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+sweepWeight: node scripts/sweepWeight.mjs
