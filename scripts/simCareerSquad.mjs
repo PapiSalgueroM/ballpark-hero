@@ -273,6 +273,8 @@ function record(mods, size, seed) {
 /* ── one pass over the recording with a given copy of the code ──────────── */
 /* The harness's OWN copy of the verified window: the data file must agree. */
 const WINDOW = { first: 2016, last: 2026 };
+/* The last season a real squad is shown for, as the readers count seasons. */
+const LAST_REAL_SEASON = 2026;
 
 function realNameSet(mods) {
   const set = new Set();
@@ -297,6 +299,9 @@ function scan(mods, R) {
     familyBad: 0, familyChecked: 0,
     pairs: 0, carriedOver: 0, brokeMan: 0, arrivedBad: 0, arrivals: [], noArrival: 0,
     moves: 0, sameSlotName: 0, anyShared: 0, randomDraws: 0, examples: [],
+    yearBad: 0, keepsChecked: 0, keepsBad: 0, justOutside: 0,
+    roleSheets: 0, roleOrderBad: 0, roleFresh: 0, roleArrival: 0,
+    frozenSaves: 0, frozenBad: 0, carryLate: 0, carryLateBad: 0, carryGrew: 0,
   };
   const note = (kind, text) => { if (C.examples.length < 12) C.examples.push(`${kind}: ${text}`); };
   const out = [];
@@ -316,6 +321,40 @@ function scan(mods, R) {
     if (v.eleven.GK.length !== 1 || v.eleven.DEF.length !== 4 || v.eleven.MID.length !== 3 || v.eleven.ATT.length !== 3) { C.shapeBad += 1; note('shape', `${v.club} ${v.year}`); }
     if (all.filter(m => m.me).length !== 1) C.onceBad += 1;
     if (new Set(men.map(m => m.name)).size !== men.length) { C.twice += 1; note('twice', `${v.club} ${v.year}`); }
+    /* 4: the squad shown is the coming season's: the year after his last row */
+    const lastRow = s.seasons[s.seasons.length - 1];
+    if (v.year !== (lastRow ? lastRow.year : 0) + 1) { C.yearBad += 1; note('year', `${v.club}: the view is ${v.year}, his last row is ${lastRow && lastRow.year}`); }
+    /* 4: the man named as keeping him out is never himself: he is the lowest
+       rated man of his line inside the eleven, and the last one in on rating */
+    if (!v.inElevenOnRating) {
+      C.keepsChecked += 1;
+      const line = v.eleven[v.group];
+      const k = v.keepsMeOut;
+      if (v.rank === line.length + 1) C.justOutside += 1;
+      if (!k || k.me || k.name === s.playerName || !line.includes(k) || line.some(m => m.ovr < k.ovr) || v.queue.indexOf(k) !== line.length - 1) {
+        C.keepsBad += 1; note('keeps', `${v.club} ${v.year}: ranked ${v.rank}, kept out by ${k ? k.name : 'nobody'}`);
+      }
+    } else if (v.keepsMeOut) { C.keepsBad += 1; note('keeps', `${v.club} ${v.year}: in the eleven and still kept out`); }
+    /* 5: on a sheet by role his own line is numbered with him counted, the
+       roles inside the eleven are the first places and nobody has arrived */
+    if (v.source === 'roles') {
+      C.roleSheets += 1;
+      const shape = v.eleven[v.group].length;
+      let bad = false;
+      v.queue.forEach((m, i) => {
+        if (m.me) { if (i !== v.rank - 1) bad = true; return; }
+        if (m.name !== gen.roleName(i, v.group) || m.role !== m.name) bad = true;
+        if (v.eleven[v.group].includes(m) !== (i < shape)) bad = true;
+      });
+      if (bad) { C.roleOrderBad += 1; note('role order', `${v.club} ${v.year}: ranked ${v.rank}, line ${v.queue.map(m => (m.me ? 'HIM' : m.name.split(' ')[0])).join(' ')}`); }
+      if (men.some(m => m.group === v.group && m.since === v.year)) C.roleFresh += 1;
+      if (v.arrivals.length) { C.roleArrival += 1; note('role arrival', `${v.club} ${v.year}`); }
+    }
+    /* 9: a save the club has frozen out reads as frozen, with a plan of 8 at most */
+    if ((s.frozenOut ?? 0) > 0) {
+      C.frozenSaves += 1;
+      if (!v.trust.frozen || v.trust.expected > 8 || v.trust.inPlans || v.trust.label !== 'Frozen out') { C.frozenBad += 1; note('frozen', `${v.club} ${v.year}: plan ${v.trust.expected}, ${v.trust.label}`); }
+    }
     /* 5: real, by role or invented, and never one passed off as another */
     const baked = lib.clubSquad(v.club, v.year);
     const inWindow = v.year >= WINDOW.first && v.year <= WINDOW.last;
@@ -329,6 +368,11 @@ function scan(mods, R) {
       C.squads += 1;
       if (men.length < 22 || (v.carried === 0 && men.length !== 22)) { C.sizeBad += 1; note('size', `${v.club} ${v.year} has ${men.length}`); }
       const lastReal = v.source === 'invented' ? new Set((lib.clubSquad(v.club, WINDOW.last) || []).map(m => m.name)) : null;
+      /* a real man is gone within CARRY_SEASONS summers of the last real squad */
+      if (lastReal && lastReal.size && v.year >= LAST_REAL_SEASON + gen.CARRY_SEASONS) {
+        C.carryLate += 1;
+        if (v.carried > 0) { C.carryLateBad += 1; note('carry', `${v.carried} real men still at ${v.club} in ${v.year}`); }
+      }
       for (const m of men) {
         if (m.ovr < 40 || m.ovr > 94) C.ratingBad += 1;
         if (m.id !== undefined && (m.age < 16 || m.age > 40)) { C.ageBad += 1; note('age', `${m.age} at ${v.club} ${v.year}`); }
@@ -350,6 +394,7 @@ function scan(mods, R) {
     if (prev && gens && prev.id === rec.id && prev.gens && prev.year + 1 === v.year) {
       if (prev.club === v.club) {
         C.pairs += 1;
+        if (prev.source === 'invented' && v.source === 'invented' && v.carried > prev.carried) { C.carryGrew += 1; note('carry', `${v.club} ${v.year}: ${prev.carried} real men then ${v.carried}`); }
         let arrived = 0;
         for (const [id, m] of gens) {
           const was = prev.gens.get(id);
@@ -382,7 +427,15 @@ function scan(mods, R) {
       source: v.source, carried: v.carried, group: v.group, rank: v.rank, groupSize: v.groupSize,
       inXi: v.inElevenOnRating, inPlans: v.trust.inPlans, expected: v.trust.expected, pct: v.trust.pct,
       label: v.trust.label, swing: v.trust.swing, frozen: v.trust.frozen,
-      last: last ? { thin: last.thin, lines: last.lines, leagueApps: last.leagueApps } : null,
+      /* a man on the bench arrived this summer in the squad underneath (on a sheet by role he must not be marked) */
+      fresh: v.bench.some(m => !m.me && m.id !== undefined && m.since === v.year),
+      last: last ? {
+        thin: last.thin, lines: last.lines, leagueApps: last.leagueApps, apps: last.apps, cut: last.cut,
+        games: sheet.lastGamesLine(last), worth: sheet.lastWorthLine(last), tile: sheet.lastTileValue(last),
+        /* the harness's own copy of the band's edge: more than five under the level */
+        under: lastRow && lastRow.ovr !== undefined ? gen.squadCentre(lastRow.clubTier) - lastRow.ovr : null,
+        hurt: lastRow ? (lastRow.injuryWeeks ?? 0) : 0,
+      } : null,
     });
   }
   Math.random = seeded;
@@ -430,6 +483,8 @@ const FLOORS = {
   underGap: 8.3,                          // 10: seasons with the "under the level" line play this many fewer
   sameSlotMax: 0.027,                     // 7: share of moves that meet a namesake in the same slot
   age30Min: 5500,                         // 3: rows played at 30 or over
+  frozenMin: null,                        // 9: seasons read from a save the club has frozen out
+  cutUnderMin: null,                      // 10: last seasons that hold fewer games than league games
 };
 /* FLOORS-END */
 const floor = (section, name, value, ok, text) => {
@@ -511,9 +566,13 @@ function sec4(C) {
   check('4', C.sizeBad === 0, `${C.sizeBad} squads are the wrong size`);
   check('4', C.twice === 0, `${C.twice} squads hold a name twice`);
   check('4', C.ratingBad === 0 && C.ageBad === 0, `${C.ratingBad} ratings and ${C.ageBad} ages out of range`);
+  say(`   ${C.keepsChecked} seasons outside the eleven on rating (${C.justOutside} of them the first man outside): the man named as keeping him out is wrong in ${C.keepsBad}; the view is not the coming season in ${C.yearBad}`);
+  check('4', C.keepsChecked >= SIZE * 5 && C.justOutside >= SIZE, `too few seasons outside the eleven to judge who keeps him out (${C.keepsChecked}, ${C.justOutside} just outside)`);
+  check('4', C.keepsBad === 0, `${C.keepsBad} seasons name the wrong man (or the player himself) as the last one in ahead of him`);
+  check('4', C.yearBad === 0, `${C.yearBad} views are not the season after his last row`);
 }
 
-function sec5(C) {
+function sec5(C, mods) {
   say('5. Real, by role or invented, never one passed off as another');
   say(`   ${C.realChecked} real squads, ${C.realExact} exactly the baked one; wrong source ${C.srcBad}; a role sheet with a name on it ${C.rolesNamed}; an invented man with a real name ${C.inventedReal}; a real man who was not in the club's last real squad ${C.carriedStranger}; ${C.familyChecked} invented men checked against their name family, ${C.familyBad} outside it`);
   check('5', C.realChecked >= 50 && C.familyChecked >= 1000, 'too few real squads or invented men were read to mean anything');
@@ -523,6 +582,13 @@ function sec5(C) {
   check('5', C.inventedReal === 0, `${C.inventedReal} invented men carry a real player's name`);
   check('5', C.carriedStranger === 0, `${C.carriedStranger} real men appear at a club whose last real squad they were not in`);
   check('5', C.familyBad === 0, `${C.familyBad} invented names are not from the man's own name family`);
+  say(`   ${C.roleSheets} sheets by role: his own line numbered wrongly in ${C.roleOrderBad}; ${C.roleFresh} have a new man in his line underneath, an arrival is shown on ${C.roleArrival}`);
+  check('5', C.roleSheets >= SIZE * 10 && C.roleFresh >= SIZE, `too few sheets by role (${C.roleSheets}, ${C.roleFresh} with a new man underneath) to mean anything`);
+  check('5', C.roleOrderBad === 0, `${C.roleOrderBad} sheets by role do not count him in his own line, so a role and his rank share a place`);
+  check('5', C.roleArrival === 0, `${C.roleArrival} sheets by role show an arrival at a real club in a real past year`);
+  say(`   ${C.carryLate} squads read ${mods.gen.CARRY_SEASONS} or more seasons after the last real one: real men still there in ${C.carryLateBad}; their number grew from one summer to the next ${C.carryGrew} times`);
+  check('5', C.carryLate >= SIZE, `only ${C.carryLate} squads were read after the last real man should have gone`);
+  check('5', C.carryLateBad === 0 && C.carryGrew === 0, `real men outstay their ${mods.gen.CARRY_SEASONS} seasons in ${C.carryLateBad} squads, or come back (${C.carryGrew})`);
 }
 
 /** The club years the recording visited, each once, for the checks that ask a squad directly. */
@@ -647,7 +713,7 @@ function sec8b(R, S) {
   }
 }
 
-function sec9(R, S) {
+function sec9(R, S, C) {
   say('9. Trust is the engine\'s own expectation');
   const all = rows(R, S, () => true);
   const off = mean(all.map(r => r.apps - r.s.expected));
@@ -665,21 +731,57 @@ function sec9(R, S) {
   const swings = {};
   for (const r of all) swings[r.s.swing] = (swings[r.s.swing] || 0) + 1;
   say(`   dressing room swings the fleet saw: ${JSON.stringify(swings)}`);
+  say(`   ${C.frozenSaves} seasons read from a save the club has frozen out: ${C.frozenBad} not read as frozen with a plan of 8 at most`);
+  floor('9', 'frozenMin', C.frozenSaves, (line, v) => v >= line, `${C.frozenSaves} frozen out seasons read`);
+  check('9', C.frozenBad === 0, `${C.frozenBad} frozen out saves read as if the club still planned to play him`);
 }
 
 const UNDER = 'rating points under the level that squad expects';
-const FALLBACK = 'Nothing in your record explains it beyond selection';
+/* The line a thin season gets when no selection reason was found, in either
+   of its two openings (plain, and after an injury line). */
+const FALLBACK = /^(Nothing in your record explains it beyond selection|The injury aside, nothing in your record explains the selection)/;
+const INJURY = /weeks out injured/;
 function sec10(R, S) {
   say('10. The reasons for a thin season');
   const seen = S.filter(s => s && s.last).map(s => s.last);
   const thin = seen.filter(l => l.thin);
   const none = thin.filter(l => l.lines.length === 0).length;
-  const only = thin.filter(l => l.lines.length === 1 && l.lines[0].startsWith(FALLBACK)).length;
+  /* "only the fallback": no selection reason was found. An injury line beside
+     it does not count as one, because an injury never lowers the league figure. */
+  const only = thin.filter(l => l.lines.some(x => FALLBACK.test(x))).length;
+  const hurtOnly = thin.filter(l => l.lines.length === 1 && INJURY.test(l.lines[0])).length;
+  /* the games line: only numbers that were played */
+  const cut = seen.filter(l => l.cut);
+  const under = seen.filter(l => l.apps < l.leagueApps);
+  let impossible = 0; let cutWrong = 0;
+  for (const l of seen) {
+    const both = /^(\d+) league games?, (\d+) in all competitions$/.exec(l.games);
+    const total = /^(\d+) games? in all competitions$/.exec(l.games);
+    if (both ? Number(both[1]) > Number(both[2]) || Number(both[1]) !== l.leagueApps || Number(both[2]) !== l.apps : !total || Number(total[1]) !== l.apps) impossible += 1;
+    const tile = /^(\d+) (league )?games?$/.exec(l.tile);
+    if (!tile || Number(tile[1]) > l.apps) impossible += 1;
+    const wantCut = l.hurt > 0 || l.apps < l.leagueApps;
+    if (l.cut !== wantCut || !!both === wantCut || (wantCut ? !(l.worth || '').includes(`worth ${l.leagueApps} league game`) : l.worth !== null) || (wantCut && /league/.test(l.tile))) cutWrong += 1;
+  }
+  say(`   the games line: ${seen.length} last seasons, ${cut.length} lost games after selection (${under.length} of them hold fewer games than league games): ${impossible} print a number that was not played, ${cutWrong} treat a cut row as whole or a whole row as cut`);
+  check('10', cut.length >= SIZE && under.length >= 1, `too few injured seasons to judge the games line (${cut.length}, ${under.length} with fewer games than league games)`);
+  floor('10', 'cutUnderMin', under.length, (line, v) => v >= line, `${under.length} last seasons hold fewer games than league games`);
+  check('10', impossible === 0, `${impossible} last seasons print more league games than games, or a figure the row does not hold`);
+  check('10', cutWrong === 0, `${cutWrong} last seasons print the league figure of an injured season as games played`);
+  /* the "under the level" line sits exactly on the band's edge: more than five under */
+  const known = seen.filter(l => l.under !== null);
+  const edgeBad = known.filter(l => l.lines.some(x => x.includes(UNDER)) !== (l.under > 5)).length;
+  const at5 = known.filter(l => l.under === 5).length;
+  const at6 = known.filter(l => l.under === 6).length;
+  say(`   the edge of the "under the level" line: ${known.length} rows with a rating, ${at5} exactly five under (no line), ${at6} exactly six under (the line): ${edgeBad} on the wrong side`);
+  check('10', at5 >= SIZE / 4 && at6 >= SIZE / 4, `too few rows on the edge to judge it (${at5} five under, ${at6} six under)`);
+  check('10', edgeBad === 0, `${edgeBad} rows draw the "under the level" line on the wrong side of five under`);
   const withLine = seen.filter(l => l.lines.some(x => x.includes(UNDER)));
   const without = seen.filter(l => !l.lines.some(x => x.includes(UNDER)));
   const gap = mean(without.map(l => l.leagueApps)) - mean(withLine.map(l => l.leagueApps));
   const shirtFull = seen.filter(l => !l.thin && l.lines.some(x => x.includes('last one in ahead of you'))).length;
-  say(`   ${seen.length} last seasons read, ${thin.length} under 20 league games: ${none} with no line, ${only} (${f1(100 * only / Math.max(1, thin.length))}%) with only the fallback`);
+  say(`   ${seen.length} last seasons read, ${thin.length} under 20 league games: ${none} with no line, ${only} (${f1(100 * only / Math.max(1, thin.length))}%) with no selection reason (the fallback line), ${hurtOnly} with an injury line and nothing else`);
+  check('10', hurtOnly === 0, `${hurtOnly} thin seasons are explained by an injury alone, which never lowers the league figure`);
   say(`   "under the level" line: ${f1(mean(withLine.map(l => l.leagueApps)))} league games with it (n ${withLine.length}), ${f1(mean(without.map(l => l.leagueApps)))} without (n ${without.length}), gap ${f1(gap)}`);
   check('10', thin.length >= SIZE * 4, `only ${thin.length} thin seasons were read`);
   check('10', none === 0, `${none} thin seasons got no line at all`);
@@ -749,9 +851,22 @@ function sec13(mods, R, S) {
   const saves = {
     invented: firstOf(s => s.source === 'invented' && s.carried === 0 && s.last),
     real: firstOf(s => s.source === 'real' && s.last),
-    roles: firstOf(s => s.source === 'roles' && s.last),
+    /* a sheet by role whose squad underneath has a man who arrived this summer: he must not be marked */
+    roles: firstOf(s => s.source === 'roles' && s.last && s.fresh),
     mixed: firstOf(s => s.source === 'invented' && s.carried > 0),
   };
+  /* the season an injury cut: fewer games than league games on the row */
+  const cutSave = (() => { const i = S.findIndex(s => s && s.last && s.last.apps < s.last.leagueApps); return i < 0 ? null : rebuild(R.seasons[i], R); })();
+  if (check('13', !!cutSave, 'the fleet has no injured last season with fewer games than league games to render')) {
+    const view = lib.squadView(cutSave);
+    const last = sheet.lastSeason(cutSave);
+    const lastTxt = textOf(render(sheetUi.default, { career: cutSave, view, onClose: () => {}, initialScreen: 'last' }));
+    const homeTxt = textOf(render(sheetUi.default, { career: cutSave, view, onClose: () => {}, initialScreen: 'home' }));
+    check('13', lastTxt.includes(`${last.apps} game`) && lastTxt.includes(`worth ${last.leagueApps} league game`) && !/\d+ league games?, \d+ in all competitions/.test(lastTxt),
+      `an injured season (${last.leagueApps} league games drawn, ${last.apps} games played) prints both as games played: "${lastTxt.slice(0, 160)}"`);
+    check('13', homeTxt.includes(`Last season ${last.apps} game`) && !homeTxt.includes(`Last season ${last.leagueApps} league game`),
+      `the Last season tile prints the league figure of an injured season (${last.leagueApps}) and not the ${last.apps} games played`);
+  }
   const youth = engine.initCareer('Squad Youth', 'England', 'ST', '2025', stats(55), 55, 2025, engine.FALLBACK_CLUBS, null);
   check('13', render(tile.SquadTile, { career: youth }) === '', 'an academy save renders a tile');
   const pool = intl.allIntlNames();
@@ -763,7 +878,11 @@ function sec13(mods, R, S) {
     check('13', html.includes(`data-squad-rank="${view.rank}"`) && html.includes(`data-squad-trust="${view.trust.pct}"`) && html.includes('data-squad-tile'),
       `${kind}: the tile does not print the rank ${view.rank} and trust ${view.trust.pct} the lib gives`);
     check('13', !/text-\[(?:9|10|11)px\]/.test(html), `${kind}: the tile has text under 12 px`);
+    /* the rank beside the plan label: the tile says which picture the number is */
+    check('13', /On our ratings\s*\d+(st|nd|rd|th)\s*of \d+/.test(textOf(html)) && textOf(html).includes(`The plan: ${view.trust.label}`),
+      `${kind}: the tile prints the rank without "On our ratings", or the plan label without "The plan": "${textOf(html)}"`);
     let all = '';
+    let reals = 0;
     for (const screen of SCREENS) {
       const out = render(sheetUi.default, { career: save, view, onClose: () => {}, initialScreen: screen });
       all += out;
@@ -772,7 +891,10 @@ function sec13(mods, R, S) {
       check('13', !/text-\[(?:9|10|11)px\]/.test(out), `${kind}: the ${screen} screen has text under 12 px`);
       if (screen === 'eleven') check('13', (out.match(/data-squad-man=/g) || []).length === 11 && (out.match(/data-squad-man="me"/g) || []).length === (view.inElevenOnRating ? 1 : 0), `${kind}: the eleven is not 11 cells with him in it exactly when his rank says so`);
       if (screen === 'bench') check('13', (out.match(/data-squad-man=/g) || []).length === view.bench.length, `${kind}: the bench does not list its ${view.bench.length} men`);
+      if (screen === 'eleven' || screen === 'bench') reals += (out.match(/data-squad-real/g) || []).length;
     }
+    /* every real man still at the club is marked once where he is listed, and nobody else is */
+    check('13', reals === view.carried, `${kind}: ${reals} men are marked REAL across the eleven and the bench, the squad carries ${view.carried}`);
     const txt = textOf(all);
     if (kind === 'real') {
       check('13', !all.includes('data-squad-age') && !all.includes('data-squad-new') && !all.includes('data-squad-arrival') && !all.includes('flagcdn'), 'a real squad prints an age, a NEW chip, a flag or an arrival line');
@@ -782,9 +904,13 @@ function sec13(mods, R, S) {
       const named = pool.filter(n => txt.includes(n)).length + [...real].filter(n => n.length > 5 && txt.includes(n)).length;
       check('13', named === 0, `a sheet by role prints ${named} names`);
       check('13', all.includes('ROLES ONLY') && all.includes('data-squad-age') && txt.includes('no checked squad list'), 'a sheet by role does not say so, or prints no ages');
+      check('13', !all.includes('data-squad-new') && !all.includes('data-squad-arrival'), 'a sheet by role marks a man NEW or prints an arrival: nobody signs for a real club in a real past year here');
     }
     if (kind === 'invented') check('13', all.includes('INVENTED TEAMMATES') && all.includes('data-squad-age'), 'an invented squad is not labelled, or prints no ages');
-    if (kind === 'mixed') check('13', txt.includes('of the real 2026 squad are still here'), 'a squad that carries real men on does not say so');
+    if (kind === 'mixed') {
+      check('13', txt.includes('of the real 2026 squad are still here'), 'a squad that carries real men on does not say so');
+      check('13', all.includes('REAL AND INVENTED') && !all.includes('INVENTED TEAMMATES') && view.carried > 0, 'a squad that still holds real men wears the INVENTED TEAMMATES chip');
+    }
     const help = sheet.squadHelp();
     for (const line of [...help.rules, ...help.examples]) check('13', txt.includes(line), `${kind}: the help does not print "${line.slice(0, 50)}..."`);
   }
@@ -847,6 +973,32 @@ const CONTROLS = [
   { name: 'bare', red: ['13'], what: 'the headline drops the words "on our ratings"',
     needle: 'const place = `On our ratings you are ${ordinal(view.rank)} of ${view.groupSize} ${label}`;',
     swap: 'const place = `You are ${ordinal(view.rank)} of ${view.groupSize} ${label}`;' },
+  /* added after review: one per mutation the reviewers found the harness blind to */
+  { name: 'keeps', red: ['4'], what: 'the man named as keeping him out is one place too low (the player himself when he is the first man outside)',
+    needle: 'chart.men[ELEVEN_SHAPE[chart.group] - 1] ?? null', swap: 'chart.men[ELEVEN_SHAPE[chart.group]] ?? null' },
+  { name: 'lastyear', red: ['4'], what: 'the squad shown is last season\'s',
+    needle: 'const comingYear = (last?.year ?? 0) + 1;', swap: 'const comingYear = last?.year ?? 0;' },
+  { name: 'rolecount', red: ['5'], what: 'a sheet by role numbers his line without counting him',
+    needle: 'const role = roleName(k < ahead ? k : k + 1, group);', swap: 'const role = roleName(k, group);' },
+  { name: 'rolearrive', red: ['5'], what: 'a sheet by role lists arrivals',
+    needle: 'arrivals: squad.source === "invented" ? men.filter(', swap: 'arrivals: true ? men.filter(' },
+  { name: 'stay', red: ['5'], what: 'the real men of the last real squad never leave',
+    needle: 'const left = base.year + 1 + Math.floor(stream(`${seed}|r|${real.name}`)() * CARRY_SEASONS);', swap: 'const left = 9999;' },
+  { name: 'thaw', red: ['9'], what: 'a frozen out save reads as if the club still planned to play him',
+    needle: 'const frozen = at.club === c.currentClub && (c.frozenOut ?? 0) > 0;', swap: 'const frozen = false;' },
+  { name: 'nocut', red: ['10'], what: 'an injured season prints its league figure as games played',
+    needle: 'const cut = (row.injuryWeeks ?? 0) > 0 || row.apps < row.leagueApps;', swap: 'const cut = false;' },
+  { name: 'edge', red: ['10'], what: 'the "under the level" line is drawn at five under as well',
+    needle: 'if (row.ovr < centre - 5) {', swap: 'if (row.ovr <= centre - 5) {' },
+  { name: 'hurtonly', red: ['10'], what: 'a thin season with an injury line gets no selection line',
+    needle: 'if (thin && !explained) {', swap: 'if (thin && !explained && !lines.length) {' },
+  { name: 'rolenew', red: ['13'], what: 'a sheet by role marks a man NEW',
+    needle: 'const fresh = view.source === "invented" && !m.me && m.id !== void 0 && m.since === view.year;',
+    swap: 'const fresh = !m.me && m.id !== void 0 && m.since === view.year;' },
+  { name: 'unmarked', red: ['13'], what: 'a real man in a squad of invented ones is not marked',
+    needle: 'return isMixed(view) && !m.me && m.id === void 0;', swap: 'return false;' },
+  { name: 'tilebare', red: ['13'], what: 'the tile prints the rank without saying it is on our ratings',
+    needle: '"data-squad-rank-basis": true, children: "On our ratings"', swap: '"data-squad-rank-basis": true, children: ""' },
 ];
 
 async function sec14(R, text) {
@@ -867,7 +1019,7 @@ async function sec14(R, text) {
     const mods = await load(patched);
     sink = new Set();
     const { S, C } = scan(mods, R);
-    sec2(mods); sec4(C); sec5(C); await sec6(mods, R, C, patched); sec7(C); sec8(R, S); sec8b(R, S); sec9(R, S); sec10(R, S);
+    sec2(mods); sec4(C); sec5(C, mods); await sec6(mods, R, C, patched); sec7(C); sec8(R, S); sec8b(R, S); sec9(R, S, C); sec10(R, S);
     if (c.red.includes('13')) sec13(mods, R, S);
     const red = [...sink];
     sink = null;
@@ -878,6 +1030,15 @@ async function sec14(R, text) {
 }
 
 /* ── run ────────────────────────────────────────────────────────────────── */
+/* A control that was asked for must run and be judged. A name this file does
+   not know, or a control the quick loop cannot judge, stops the run before it
+   starts: it used to finish green with nothing tested. */
+if (ONLY_CONTROL) {
+  const asked = CONTROLS.find(c => c.name === ONLY_CONTROL);
+  if (!asked) { console.log(`control cannot run: there is no control named "${ONLY_CONTROL}" (the controls: ${CONTROLS.map(c => c.name).join(', ')})`); process.exit(2); }
+  if (asked.floors && (QUICK || Object.values(FLOORS).some(v => v === null))) { console.log(`control cannot run: ${ONLY_CONTROL} is judged on a measured line, which this run does not assert (run the full size)`); process.exit(2); }
+  if (process.env.CAREER_SQUAD_NO_CONTROLS === '1') { console.log(`control cannot run: ${ONLY_CONTROL} was asked for with CAREER_SQUAD_NO_CONTROLS=1`); process.exit(2); }
+}
 const t0 = Date.now();
 console.log(`simCareerSquad: ${SIZE} careers an era, seed ${SEED}${QUICK ? ' (QUICK: floors printed, not asserted)' : ''}`);
 sec1(MAIN);
@@ -888,12 +1049,12 @@ const { S, C } = scan(MAIN, R);
 sec3(R, S);
 sec4(C);
 if (C.examples.length) console.log(`   examples: ${C.examples.join(' | ')}`);
-sec5(C);
+sec5(C, MAIN);
 await sec6(MAIN, R, C, BUNDLE);
 sec7(C);
 sec8(R, S);
 sec8b(R, S);
-sec9(R, S);
+sec9(R, S, C);
 sec10(R, S);
 sec11(R);
 sec12(MAIN);

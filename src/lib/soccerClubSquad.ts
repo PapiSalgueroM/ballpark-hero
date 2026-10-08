@@ -232,10 +232,9 @@ export function squadNow(c: CareerState): SquadAt | null {
   const first = c.seasons[0];
   if (first && first.type === 'youth' && c.currentClub === first.club) return null;
   const last = c.seasons[c.seasons.length - 1];
-  return {
-    club: c.currentClub, country: c.currentClubCountry, tier: c.currentClubTier,
-    year: (last?.year ?? 0) + 1,
-  };
+  /* the season he is about to play starts the year after his last row */
+  const comingYear = (last?.year ?? 0) + 1;
+  return { club: c.currentClub, country: c.currentClubCountry, tier: c.currentClubTier, year: comingYear };
 }
 
 export function livingSquad(saveKey: string, at: SquadAt): LivingSquad | null {
