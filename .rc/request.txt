@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+plain: VERBOSE=1 ENGINES=chromium node scripts/playTranslatedPage.mjs
+noguard: VERBOSE=1 PLAY_TRANSLATED_CONTROL=noguard ENGINES=chromium node scripts/playTranslatedPage.mjs
+notranslate: VERBOSE=1 PLAY_TRANSLATED_CONTROL=notranslate ENGINES=chromium node scripts/playTranslatedPage.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
