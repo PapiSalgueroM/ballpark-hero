@@ -1,0 +1,22 @@
+# Release AN review (runner lens): type gate, baselines, then mutations one at a time (serial, one checkout)
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+base-vitest: node_modules/.bin/vitest run src/test/translateGuard.test.tsx src/test/safeStorage.test.ts src/test/storageBlockedBoot.test.tsx src/test/supabaseClientBlockedStorage.test.ts src/test/resultScorePillComparison.test.tsx src/test/rankEmCircuit.test.tsx src/test/rankEmOrder.test.tsx src/test/faceOffDeadline.test.tsx src/test/numberFormatting.test.tsx src/test/guessFinishMoment.test.tsx src/test/hofOrBustVoteOnce.test.tsx src/test/noDoubleRecord.test.tsx src/test/usSeason.test.ts src/test/usSeasonCentre.test.tsx src/test/collegeGridOffline.test.tsx src/test/collegeGridFailClosed.test.tsx --testTimeout=300000 --hookTimeout=120000
+base-shootout: node scripts/simCmShootoutOrder.mjs
+base-cgshipped: node scripts/simCollegeGridShipped.mjs
+base-ussc: SEEDSET=0 node scripts/simUsSeasonCentre.mjs
+mut-shoot10: node .rc/x/rvmut.mjs shoot10 && node scripts/simCmShootoutOrder.mjs; rc=$?; git checkout -q -- src; exit $rc
+mut-shootmark: node .rc/x/rvmut.mjs shootmark && node scripts/simCmShootoutOrder.mjs; rc=$?; git checkout -q -- src; exit $rc
+mut-nohandover: node .rc/x/rvmut.mjs nohandover && node_modules/.bin/vitest run src/test/translateGuard.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -q -- src; exit $rc
+mut-flatwaits: node .rc/x/rvmut.mjs flatwaits && node_modules/.bin/vitest run src/test/translateGuard.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -q -- src; exit $rc
+mut-keptstale: node .rc/x/rvmut.mjs keptstale && node_modules/.bin/vitest run src/test/safeStorage.test.ts src/test/storageBlockedBoot.test.tsx src/test/supabaseClientBlockedStorage.test.ts src/test/cookieConsentStorage.test.tsx src/test/freshBuildBlockedStorage.test.ts --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -q -- src; exit $rc
+mut-rankbare: node .rc/x/rvmut.mjs rankbare && node_modules/.bin/vitest run src/test/resultScorePillComparison.test.tsx src/test/rankEmCircuit.test.tsx src/test/rankEmOrder.test.tsx src/test/numberFormatting.test.tsx src/test/noDoubleRecord.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -q -- src; exit $rc
+mut-rankbare-sim: node .rc/x/rvmut.mjs rankbare && node scripts/simNumberFormatting.mjs; rc=$?; git checkout -q -- src; exit $rc
+mut-facebare: node .rc/x/rvmut.mjs facebare && node_modules/.bin/vitest run src/test/resultScorePillComparison.test.tsx src/test/faceOffDeadline.test.tsx src/test/numberFormatting.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -q -- src; exit $rc
+mut-facepill: node .rc/x/rvmut.mjs facepill && node_modules/.bin/vitest run src/test/resultScorePillComparison.test.tsx src/test/faceOffDeadline.test.tsx src/test/numberFormatting.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -q -- src; exit $rc
+mut-hofbare: node .rc/x/rvmut.mjs hofbare && node_modules/.bin/vitest run src/test/resultScorePillComparison.test.tsx src/test/guessFinishMoment.test.tsx src/test/hofOrBustVoteOnce.test.tsx src/test/numberFormatting.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -q -- src; exit $rc
+mut-cgpick0: node .rc/x/rvmut.mjs cgpick0 && node scripts/simCollegeGridShipped.mjs; rc=$?; git checkout -q -- src; exit $rc
+mut-cgpick0-vitest: node .rc/x/rvmut.mjs cgpick0 && node_modules/.bin/vitest run src/test/collegeGridOffline.test.tsx src/test/collegeGridFailClosed.test.tsx src/test/collegeGridSearchMemory.test.ts src/test/gridEngineSource.test.ts --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -q -- src; exit $rc
+mut-nbastages: node .rc/x/rvmut.mjs nbastages && SEEDSET=0 node scripts/simUsSeasonCentre.mjs; rc=$?; git checkout -q -- src; exit $rc
+mut-nbastages-vitest: node .rc/x/rvmut.mjs nbastages && node_modules/.bin/vitest run src/test/usSeason.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -q -- src; exit $rc
+tree-clean: git status --porcelain -- src scripts | head -5; test -z "$(git status --porcelain -- src scripts)"
