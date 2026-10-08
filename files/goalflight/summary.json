@@ -1,0 +1,694 @@
+{
+  "complete": true,
+  "normalCases": 8,
+  "controls": [
+    {
+      "name": "no-restart",
+      "from": "key={replay ? `ball-${replay.id}` : 'ball-play'}",
+      "to": "key='ball-play'",
+      "allowed": [
+        "flight:origin",
+        "flight:travel"
+      ],
+      "required": "flight:origin",
+      "originalHash": "a07fd3ae089b0561cf4ab36fb88952f71b47763c9e37b4ed9caef757826b1f07",
+      "copiedHash": "a838e5356b9143b034536eeb54b5a6fcabea5c87a20e7587eb5187dcbddb09bf",
+      "path": "tycoon-goal-flight-artifacts/copies/no-restart.tsx",
+      "assertionFailures": [
+        {
+          "case": "390-full",
+          "name": "flight:origin",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 2 starts a fresh field-center flight",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 2 starts a fresh field-center flight\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:travel",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 2 physically travels between field and net",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 2 physically travels between field and net\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:origin",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 3 starts a fresh field-center flight",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 3 starts a fresh field-center flight\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:travel",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 3 physically travels between field and net",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 3 physically travels between field and net\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:origin",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 4 starts a fresh field-center flight",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 4 starts a fresh field-center flight\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:travel",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 4 physically travels between field and net",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 4 physically travels between field and net\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:13"
+        }
+      ],
+      "proved": true
+    },
+    {
+      "name": "endpoint-only",
+      "from": ".st-ball-shot { transition: none; animation: stShot 0.7s ease-in both; }",
+      "to": ".st-ball-shot { transition: none; animation: none; }",
+      "allowed": [
+        "flight:origin",
+        "flight:travel",
+        "flight:duration"
+      ],
+      "required": "flight:travel",
+      "originalHash": "a07fd3ae089b0561cf4ab36fb88952f71b47763c9e37b4ed9caef757826b1f07",
+      "copiedHash": "438cb2f3b75be764dfca7a713f7e0e259aefbdab6351243cbfec82d9826b7731",
+      "path": "tycoon-goal-flight-artifacts/copies/endpoint-only.tsx",
+      "assertionFailures": [
+        {
+          "case": "390-full",
+          "name": "flight:origin",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 1 starts a fresh field-center flight",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 1 starts a fresh field-center flight\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:travel",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 1 physically travels between field and net",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 1 physically travels between field and net\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:duration",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Actual browser flight has the unchanged 700ms duration",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Actual browser flight has the unchanged 700ms duration\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:214:49\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:214:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:origin",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 2 starts a fresh field-center flight",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 2 starts a fresh field-center flight\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:travel",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 2 physically travels between field and net",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 2 physically travels between field and net\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:duration",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Actual browser flight has the unchanged 700ms duration",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Actual browser flight has the unchanged 700ms duration\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:214:49\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:214:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:origin",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 2 starts a fresh field-center flight",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 2 starts a fresh field-center flight\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:travel",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 2 physically travels between field and net",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 2 physically travels between field and net\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:duration",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Actual browser flight has the unchanged 700ms duration",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Actual browser flight has the unchanged 700ms duration\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:214:49\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:214:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:origin",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 3 starts a fresh field-center flight",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 3 starts a fresh field-center flight\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:travel",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 3 physically travels between field and net",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 3 physically travels between field and net\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:duration",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Actual browser flight has the unchanged 700ms duration",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Actual browser flight has the unchanged 700ms duration\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:214:49\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:214:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:origin",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 3 starts a fresh field-center flight",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 3 starts a fresh field-center flight\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:travel",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 3 physically travels between field and net",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 3 physically travels between field and net\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:duration",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Actual browser flight has the unchanged 700ms duration",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Actual browser flight has the unchanged 700ms duration\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:214:49\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:214:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:origin",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 4 starts a fresh field-center flight",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 4 starts a fresh field-center flight\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:travel",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 4 physically travels between field and net",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 4 physically travels between field and net\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:duration",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Actual browser flight has the unchanged 700ms duration",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Actual browser flight has the unchanged 700ms duration\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:214:49\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:214:13"
+        }
+      ],
+      "proved": true
+    },
+    {
+      "name": "wrong-side",
+      "from": "const ball = ballAt === 'for' ? { x: 97, y: lane } : ballAt === 'against' ? { x: 3, y: lane } : idle;",
+      "to": "const ball = ballAt === 'for' ? { x: 3, y: lane } : ballAt === 'against' ? { x: 97, y: lane } : idle;",
+      "allowed": [
+        "flight:travel",
+        "flight:destination",
+        "landing:immediate"
+      ],
+      "required": "flight:destination",
+      "originalHash": "a07fd3ae089b0561cf4ab36fb88952f71b47763c9e37b4ed9caef757826b1f07",
+      "copiedHash": "03a873106b7cbbfe9e2d3e4e1c7326f3e97dfd11a7d47e9e6c326b869321284a",
+      "path": "tycoon-goal-flight-artifacts/copies/wrong-side.tsx",
+      "assertionFailures": [
+        {
+          "case": "390-full",
+          "name": "flight:travel",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 1 physically travels between field and net",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 1 physically travels between field and net\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:destination",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 1 reaches the correct net",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 1 reaches the correct net\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:213:52\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:213:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:travel",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 2 physically travels between field and net",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 2 physically travels between field and net\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:destination",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 2 reaches the correct net",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 2 reaches the correct net\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:213:52\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:213:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:travel",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 2 physically travels between field and net",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 2 physically travels between field and net\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:destination",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 2 reaches the correct net",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 2 reaches the correct net\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:213:52\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:213:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:travel",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 3 physically travels between field and net",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 3 physically travels between field and net\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:destination",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 3 reaches the correct net",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 3 reaches the correct net\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:213:52\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:213:13"
+        },
+        {
+          "case": "390-full",
+          "name": "landing:immediate",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Compressed replay lands immediately at its actual net",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Compressed replay lands immediately at its actual net\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:209:62\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:209:24"
+        },
+        {
+          "case": "390-full",
+          "name": "landing:immediate",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Compressed replay lands immediately at its actual net",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Compressed replay lands immediately at its actual net\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:209:62\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:209:24"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:travel",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 3 physically travels between field and net",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 3 physically travels between field and net\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:destination",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 3 reaches the correct net",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 3 reaches the correct net\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:213:52\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:213:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:travel",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 4 physically travels between field and net",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 4 physically travels between field and net\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:13"
+        },
+        {
+          "case": "390-full",
+          "name": "flight:destination",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Replay 4 reaches the correct net",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Replay 4 reaches the correct net\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:213:52\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:213:13"
+        }
+      ],
+      "proved": true
+    },
+    {
+      "name": "reduced-motion",
+      "from": "const replay = reduce ? null : head;",
+      "to": "const replay = head;",
+      "allowed": [
+        "reduced:no-flight"
+      ],
+      "required": "reduced:no-flight",
+      "originalHash": "a07fd3ae089b0561cf4ab36fb88952f71b47763c9e37b4ed9caef757826b1f07",
+      "copiedHash": "d30f13f2623138bf32be4f9bb4a7270c367c2bb2f57bf82208d4445b7c39b976",
+      "path": "tycoon-goal-flight-artifacts/copies/reduced-motion.tsx",
+      "assertionFailures": [
+        {
+          "case": "390-reduced",
+          "name": "reduced:no-flight",
+          "pass": false,
+          "type": "AssertionError",
+          "message": "Reduced motion never shows a goal flight",
+          "actual": false,
+          "expected": true,
+          "stack": "AssertionError [ERR_ASSERTION]: Reduced motion never shows a goal flight\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:203:60\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:203:22"
+        }
+      ],
+      "proved": true
+    }
+  ],
+  "runs": [
+    {
+      "arm": "normal",
+      "status": 0,
+      "signal": null,
+      "error": null,
+      "stdoutHash": "816a6eae5a65c0917483729f152b8c9ae942e34a7d557b2f933f531b0a2994d5",
+      "stderrHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "reportHash": "12bbd2cfaf835616eb2c8aa07580416fa207b715a53b255cf211cabac9649268"
+    },
+    {
+      "arm": "no-restart",
+      "status": 1,
+      "signal": null,
+      "error": null,
+      "stdoutHash": "498e224681136df7db5e029924d8f29a6e2bd68be13c6700fc761711054c64ce",
+      "stderrHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "reportHash": "0629bae883d7d9590619c406ba66c4052889ce85be6c3e17f5d55afbe20b36e4"
+    },
+    {
+      "arm": "endpoint-only",
+      "status": 1,
+      "signal": null,
+      "error": null,
+      "stdoutHash": "bc023bd5391002e326995f6ee62537462ead1115adec485f548b550a93a4e95e",
+      "stderrHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "reportHash": "308ae36389c84b9769fbc1a2a58c1172470a5d17a1c1453cc16ab05d9973695f"
+    },
+    {
+      "arm": "wrong-side",
+      "status": 1,
+      "signal": null,
+      "error": null,
+      "stdoutHash": "1493652a44a02ea69b38ba0a17acd79a55c5b1a52de4575ec72bd613ed933992",
+      "stderrHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "reportHash": "f3b107acaa3f9c436fdcd94f37f1d2690ffa084c6f8fcb58f9806742f6126b55"
+    },
+    {
+      "arm": "reduced-motion",
+      "status": 1,
+      "signal": null,
+      "error": null,
+      "stdoutHash": "be81631961f6b996de9fe6b1ad2286e629600d448a33ac383de0ef4a7fb77c63",
+      "stderrHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "reportHash": "72d15cf5fe3ace6ee343f27975e8b360d6bdd2c3e1bc669323acd8aef8935bbd"
+    },
+    {
+      "arm": "historical",
+      "status": 1,
+      "signal": null,
+      "error": null,
+      "stdoutHash": "170969bea590e1dc1cde3f78041ea9d53d4478cfde2517a96f620decd00552cb",
+      "stderrHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "reportHash": "3258d6e88a77bc4b42fb49e7181163a2c421eed4b491faeeeae75f469b8e83ac"
+    }
+  ],
+  "sourceBefore": {
+    "src/components/tycoon/TycoonPitch.tsx": "a07fd3ae089b0561cf4ab36fb88952f71b47763c9e37b4ed9caef757826b1f07",
+    "scripts/qa/tycoonGoalFlight1087.mjs": "4289786dce76b71406b945e60f50517a9e624f236dc539fcc9edfb36346c40e7",
+    "scripts/simTycoonGoalFlight.mjs": "77fc185fd1f6dabe0edcf949c915c04b0addfd1a9b303b070bd97dd4c96e60a0",
+    "scripts/simTycoonPitch.mjs": "1dc0b43332e0c2356dc36a619beabcb73985ccb9f111a835c4fd3be76e104090",
+    "scripts/simTycoonPitchRunner.mjs": "91227a72a214d86bc41960d330840e9f2ba00b576f41b83129e7463a0bc44dcb",
+    "src/test/tycoonPitch.test.tsx": "1b051066144da4e7c5b2f60138349f87bbfdd3a7c43e2aea15bf9879eed21274",
+    "src/lib/stadiumTycoon.ts": "812d7dee058f6afec4842b4c63df603dd72090756c4a09eb2106945eaf352c03",
+    "src/lib/leagueCore.ts": "9c37a88f13585def063097e69db2cdc94a90aab24b470f3b564bda9c1f7d57f9",
+    "src/hooks/useStadiumTycoon.ts": "54bc0428de91f60fefcfeba7e748b252a47cff9ab43e34dcd4de908b22bfe0c8",
+    "package.json": "9adfa72b65f9c08b94e3dfccf4fe8f7fc5ea571f18e6cc9f9686d83d69d283fc",
+    "package-lock.json": "ebb4fa47b6fa258ac5a4458160c37299caecba098b71ce60b4c0b2a65a26e953"
+  },
+  "scope": "Finite actual React component and unchanged-engine fixtures. The pinned old component remains a deliberately failing historical physical-flight reference.",
+  "normalReportHash": "12bbd2cfaf835616eb2c8aa07580416fa207b715a53b255cf211cabac9649268",
+  "historical": {
+    "commit": "5b70b05f6df7b15f64b8c5ddf1f4b7d0c7cd4c7f",
+    "originalBlob": "a7e11b047d3e53783349b2c7b14c7d8d50e4aabc",
+    "sha256": "5eab1cdf7b71638ad09b6189908786cb67cfc3b46a9684df28a6978129157769",
+    "path": "tycoon-goal-flight-artifacts/copies/historical.tsx",
+    "assertionFailures": [
+      {
+        "case": "390-full",
+        "name": "flight:origin",
+        "pass": false,
+        "type": "AssertionError",
+        "message": "Replay 1 starts a fresh field-center flight",
+        "actual": false,
+        "expected": true,
+        "stack": "AssertionError [ERR_ASSERTION]: Replay 1 starts a fresh field-center flight\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:13"
+      },
+      {
+        "case": "390-full",
+        "name": "flight:duration",
+        "pass": false,
+        "type": "AssertionError",
+        "message": "Actual browser flight has the unchanged 700ms duration",
+        "actual": false,
+        "expected": true,
+        "stack": "AssertionError [ERR_ASSERTION]: Actual browser flight has the unchanged 700ms duration\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:214:49\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:214:13"
+      },
+      {
+        "case": "390-full",
+        "name": "flight:origin",
+        "pass": false,
+        "type": "AssertionError",
+        "message": "Replay 2 starts a fresh field-center flight",
+        "actual": false,
+        "expected": true,
+        "stack": "AssertionError [ERR_ASSERTION]: Replay 2 starts a fresh field-center flight\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:13"
+      },
+      {
+        "case": "390-full",
+        "name": "flight:travel",
+        "pass": false,
+        "type": "AssertionError",
+        "message": "Replay 2 physically travels between field and net",
+        "actual": false,
+        "expected": true,
+        "stack": "AssertionError [ERR_ASSERTION]: Replay 2 physically travels between field and net\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:13"
+      },
+      {
+        "case": "390-full",
+        "name": "flight:duration",
+        "pass": false,
+        "type": "AssertionError",
+        "message": "Actual browser flight has the unchanged 700ms duration",
+        "actual": false,
+        "expected": true,
+        "stack": "AssertionError [ERR_ASSERTION]: Actual browser flight has the unchanged 700ms duration\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:214:49\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:214:13"
+      },
+      {
+        "case": "390-full",
+        "name": "flight:origin",
+        "pass": false,
+        "type": "AssertionError",
+        "message": "Replay 2 starts a fresh field-center flight",
+        "actual": false,
+        "expected": true,
+        "stack": "AssertionError [ERR_ASSERTION]: Replay 2 starts a fresh field-center flight\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:13"
+      },
+      {
+        "case": "390-full",
+        "name": "flight:travel",
+        "pass": false,
+        "type": "AssertionError",
+        "message": "Replay 2 physically travels between field and net",
+        "actual": false,
+        "expected": true,
+        "stack": "AssertionError [ERR_ASSERTION]: Replay 2 physically travels between field and net\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:212:13"
+      },
+      {
+        "case": "390-full",
+        "name": "flight:duration",
+        "pass": false,
+        "type": "AssertionError",
+        "message": "Actual browser flight has the unchanged 700ms duration",
+        "actual": false,
+        "expected": true,
+        "stack": "AssertionError [ERR_ASSERTION]: Actual browser flight has the unchanged 700ms duration\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:214:49\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:214:13"
+      },
+      {
+        "case": "390-full",
+        "name": "flight:origin",
+        "pass": false,
+        "type": "AssertionError",
+        "message": "Replay 3 starts a fresh field-center flight",
+        "actual": false,
+        "expected": true,
+        "stack": "AssertionError [ERR_ASSERTION]: Replay 3 starts a fresh field-center flight\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:13"
+      },
+      {
+        "case": "390-full",
+        "name": "flight:duration",
+        "pass": false,
+        "type": "AssertionError",
+        "message": "Actual browser flight has the unchanged 700ms duration",
+        "actual": false,
+        "expected": true,
+        "stack": "AssertionError [ERR_ASSERTION]: Actual browser flight has the unchanged 700ms duration\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:214:49\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:214:13"
+      },
+      {
+        "case": "390-full",
+        "name": "flight:origin",
+        "pass": false,
+        "type": "AssertionError",
+        "message": "Replay 3 starts a fresh field-center flight",
+        "actual": false,
+        "expected": true,
+        "stack": "AssertionError [ERR_ASSERTION]: Replay 3 starts a fresh field-center flight\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:13"
+      },
+      {
+        "case": "390-full",
+        "name": "flight:duration",
+        "pass": false,
+        "type": "AssertionError",
+        "message": "Actual browser flight has the unchanged 700ms duration",
+        "actual": false,
+        "expected": true,
+        "stack": "AssertionError [ERR_ASSERTION]: Actual browser flight has the unchanged 700ms duration\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:214:49\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:214:13"
+      },
+      {
+        "case": "390-full",
+        "name": "flight:origin",
+        "pass": false,
+        "type": "AssertionError",
+        "message": "Replay 4 starts a fresh field-center flight",
+        "actual": false,
+        "expected": true,
+        "stack": "AssertionError [ERR_ASSERTION]: Replay 4 starts a fresh field-center flight\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:47\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:211:13"
+      },
+      {
+        "case": "390-full",
+        "name": "flight:duration",
+        "pass": false,
+        "type": "AssertionError",
+        "message": "Actual browser flight has the unchanged 700ms duration",
+        "actual": false,
+        "expected": true,
+        "stack": "AssertionError [ERR_ASSERTION]: Actual browser flight has the unchanged 700ms duration\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:214:49\n    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:66:9)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/tycoonGoalFlight1087.mjs:214:13"
+      }
+    ],
+    "expectedFailureProved": true
+  },
+  "sourceAfter": {
+    "src/components/tycoon/TycoonPitch.tsx": "a07fd3ae089b0561cf4ab36fb88952f71b47763c9e37b4ed9caef757826b1f07",
+    "scripts/qa/tycoonGoalFlight1087.mjs": "4289786dce76b71406b945e60f50517a9e624f236dc539fcc9edfb36346c40e7",
+    "scripts/simTycoonGoalFlight.mjs": "77fc185fd1f6dabe0edcf949c915c04b0addfd1a9b303b070bd97dd4c96e60a0",
+    "scripts/simTycoonPitch.mjs": "1dc0b43332e0c2356dc36a619beabcb73985ccb9f111a835c4fd3be76e104090",
+    "scripts/simTycoonPitchRunner.mjs": "91227a72a214d86bc41960d330840e9f2ba00b576f41b83129e7463a0bc44dcb",
+    "src/test/tycoonPitch.test.tsx": "1b051066144da4e7c5b2f60138349f87bbfdd3a7c43e2aea15bf9879eed21274",
+    "src/lib/stadiumTycoon.ts": "812d7dee058f6afec4842b4c63df603dd72090756c4a09eb2106945eaf352c03",
+    "src/lib/leagueCore.ts": "9c37a88f13585def063097e69db2cdc94a90aab24b470f3b564bda9c1f7d57f9",
+    "src/hooks/useStadiumTycoon.ts": "54bc0428de91f60fefcfeba7e748b252a47cff9ab43e34dcd4de908b22bfe0c8",
+    "package.json": "9adfa72b65f9c08b94e3dfccf4fe8f7fc5ea571f18e6cc9f9686d83d69d283fc",
+    "package-lock.json": "ebb4fa47b6fa258ac5a4458160c37299caecba098b71ce60b4c0b2a65a26e953"
+  }
+}

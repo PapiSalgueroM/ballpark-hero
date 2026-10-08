@@ -1,0 +1,6 @@
+#!build
+#!playwright
+#!serial
+pwversion: node -e "console.log('playwright', require('./node_modules/playwright/package.json').version, 'node', process.version)"
+goalflight: node scripts/qa/tycoonGoalFlight1087.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/simTycoonGoalFlight.mjs; rc=$?; mkdir -p "$RC_OUT/goalflight"; cp tycoon-goal-flight-artifacts/summary.json tycoon-goal-flight-artifacts/normal.stdout.log tycoon-goal-flight-artifacts/normal.stderr.log "$RC_OUT/goalflight/" 2>/dev/null; node .rc/x/gfreport.cjs; exit $rc
+salenative: node scripts/playTycoonSaleReview1083.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/playTycoonSaleReview1083.mjs; rc=$?; ls tycoon-sale-review-artifacts/native 2>/dev/null | head -40; exit $rc

@@ -1,0 +1,427 @@
+Goal flight: prefetched 9 actual template font assets.
+simTycoonGoalFlight: PASS, 4/4 effective copied controls; historical expected failure=true.
+Normal component case inventory: 8; completed subprocess receipts: 6.
+Original-source holds: 11; hold error retained: false.
+Scope: finite component proof; headed browser requires xvfb and prefetched actual font cache. Evidence: /home/runner/work/ballpark-hero/ballpark-hero/tycoon-goal-flight-artifacts
+GFREPORT {
+ "arm": "endpoint-only",
+ "complete": true,
+ "runtimeError": null,
+ "sourceHoldError": null,
+ "failures": [
+  {
+   "name": "flight:origin",
+   "type": "AssertionError",
+   "message": "Replay 1 starts a fresh field-center flight"
+  },
+  {
+   "name": "flight:travel",
+   "type": "AssertionError",
+   "message": "Replay 1 physically travels between field and net"
+  },
+  {
+   "name": "flight:duration",
+   "type": "AssertionError",
+   "message": "Actual browser flight has the unchanged 700ms duration"
+  },
+  {
+   "name": "flight:origin",
+   "type": "AssertionError",
+   "message": "Replay 2 starts a fresh field-center flight"
+  },
+  {
+   "name": "flight:travel",
+   "type": "AssertionError",
+   "message": "Replay 2 physically travels between field and net"
+  },
+  {
+   "name": "flight:duration",
+   "type": "AssertionError",
+   "message": "Actual browser flight has the unchanged 700ms duration"
+  },
+  {
+   "name": "flight:origin",
+   "type": "AssertionError",
+   "message": "Replay 2 starts a fresh field-center flight"
+  },
+  {
+   "name": "flight:travel",
+   "type": "AssertionError",
+   "message": "Replay 2 physically travels between field and net"
+  },
+  {
+   "name": "flight:duration",
+   "type": "AssertionError",
+   "message": "Actual browser flight has the unchanged 700ms duration"
+  },
+  {
+   "name": "flight:origin",
+   "type": "AssertionError",
+   "message": "Replay 3 starts a fresh field-center flight"
+  },
+  {
+   "name": "flight:travel",
+   "type": "AssertionError",
+   "message": "Replay 3 physically travels between field and net"
+  },
+  {
+   "name": "flight:duration",
+   "type": "AssertionError",
+   "message": "Actual browser flight has the unchanged 700ms duration"
+  }
+ ],
+ "cases": [
+  {
+   "id": "390-full",
+   "checks": 56,
+   "failed": [
+    "flight:origin",
+    "flight:travel",
+    "flight:duration",
+    "flight:origin",
+    "flight:travel",
+    "flight:duration",
+    "flight:origin",
+    "flight:travel",
+    "flight:duration",
+    "flight:origin",
+    "flight:travel",
+    "flight:duration",
+    "flight:origin",
+    "flight:travel",
+    "flight:duration",
+    "flight:origin",
+    "flight:travel",
+    "flight:duration"
+   ]
+  },
+  {
+   "id": "390-reduced",
+   "checks": 11,
+   "failed": []
+  }
+ ]
+}
+GFREPORT {
+ "arm": "historical",
+ "complete": true,
+ "runtimeError": null,
+ "sourceHoldError": null,
+ "failures": [
+  {
+   "name": "flight:origin",
+   "type": "AssertionError",
+   "message": "Replay 1 starts a fresh field-center flight"
+  },
+  {
+   "name": "flight:duration",
+   "type": "AssertionError",
+   "message": "Actual browser flight has the unchanged 700ms duration"
+  },
+  {
+   "name": "flight:origin",
+   "type": "AssertionError",
+   "message": "Replay 2 starts a fresh field-center flight"
+  },
+  {
+   "name": "flight:travel",
+   "type": "AssertionError",
+   "message": "Replay 2 physically travels between field and net"
+  },
+  {
+   "name": "flight:duration",
+   "type": "AssertionError",
+   "message": "Actual browser flight has the unchanged 700ms duration"
+  },
+  {
+   "name": "flight:origin",
+   "type": "AssertionError",
+   "message": "Replay 2 starts a fresh field-center flight"
+  },
+  {
+   "name": "flight:travel",
+   "type": "AssertionError",
+   "message": "Replay 2 physically travels between field and net"
+  },
+  {
+   "name": "flight:duration",
+   "type": "AssertionError",
+   "message": "Actual browser flight has the unchanged 700ms duration"
+  },
+  {
+   "name": "flight:origin",
+   "type": "AssertionError",
+   "message": "Replay 3 starts a fresh field-center flight"
+  },
+  {
+   "name": "flight:duration",
+   "type": "AssertionError",
+   "message": "Actual browser flight has the unchanged 700ms duration"
+  },
+  {
+   "name": "flight:origin",
+   "type": "AssertionError",
+   "message": "Replay 3 starts a fresh field-center flight"
+  },
+  {
+   "name": "flight:duration",
+   "type": "AssertionError",
+   "message": "Actual browser flight has the unchanged 700ms duration"
+  }
+ ],
+ "cases": [
+  {
+   "id": "390-full",
+   "checks": 56,
+   "failed": [
+    "flight:origin",
+    "flight:duration",
+    "flight:origin",
+    "flight:travel",
+    "flight:duration",
+    "flight:origin",
+    "flight:travel",
+    "flight:duration",
+    "flight:origin",
+    "flight:duration",
+    "flight:origin",
+    "flight:duration",
+    "flight:origin",
+    "flight:duration"
+   ]
+  },
+  {
+   "id": "390-reduced",
+   "checks": 11,
+   "failed": []
+  }
+ ]
+}
+GFREPORT {
+ "arm": "no-restart",
+ "complete": true,
+ "runtimeError": null,
+ "sourceHoldError": null,
+ "failures": [
+  {
+   "name": "flight:origin",
+   "type": "AssertionError",
+   "message": "Replay 2 starts a fresh field-center flight"
+  },
+  {
+   "name": "flight:travel",
+   "type": "AssertionError",
+   "message": "Replay 2 physically travels between field and net"
+  },
+  {
+   "name": "flight:origin",
+   "type": "AssertionError",
+   "message": "Replay 3 starts a fresh field-center flight"
+  },
+  {
+   "name": "flight:travel",
+   "type": "AssertionError",
+   "message": "Replay 3 physically travels between field and net"
+  },
+  {
+   "name": "flight:origin",
+   "type": "AssertionError",
+   "message": "Replay 4 starts a fresh field-center flight"
+  },
+  {
+   "name": "flight:travel",
+   "type": "AssertionError",
+   "message": "Replay 4 physically travels between field and net"
+  }
+ ],
+ "cases": [
+  {
+   "id": "390-full",
+   "checks": 56,
+   "failed": [
+    "flight:origin",
+    "flight:travel",
+    "flight:origin",
+    "flight:travel",
+    "flight:origin",
+    "flight:travel"
+   ]
+  },
+  {
+   "id": "390-reduced",
+   "checks": 11,
+   "failed": []
+  }
+ ]
+}
+GFREPORT {
+ "arm": "normal",
+ "complete": true,
+ "runtimeError": null,
+ "sourceHoldError": null,
+ "failures": [],
+ "cases": [
+  {
+   "id": "320-full",
+   "checks": 56,
+   "failed": []
+  },
+  {
+   "id": "320-reduced",
+   "checks": 11,
+   "failed": []
+  },
+  {
+   "id": "390-full",
+   "checks": 56,
+   "failed": []
+  },
+  {
+   "id": "390-reduced",
+   "checks": 11,
+   "failed": []
+  },
+  {
+   "id": "430-full",
+   "checks": 56,
+   "failed": []
+  },
+  {
+   "id": "430-reduced",
+   "checks": 11,
+   "failed": []
+  },
+  {
+   "id": "1440-full",
+   "checks": 56,
+   "failed": []
+  },
+  {
+   "id": "1440-reduced",
+   "checks": 11,
+   "failed": []
+  }
+ ]
+}
+GFREPORT {
+ "arm": "reduced-motion",
+ "complete": true,
+ "runtimeError": null,
+ "sourceHoldError": null,
+ "failures": [
+  {
+   "name": "reduced:no-flight",
+   "type": "AssertionError",
+   "message": "Reduced motion never shows a goal flight"
+  }
+ ],
+ "cases": [
+  {
+   "id": "390-full",
+   "checks": 56,
+   "failed": []
+  },
+  {
+   "id": "390-reduced",
+   "checks": 11,
+   "failed": [
+    "reduced:no-flight"
+   ]
+  }
+ ]
+}
+GFREPORT {
+ "arm": "wrong-side",
+ "complete": true,
+ "runtimeError": null,
+ "sourceHoldError": null,
+ "failures": [
+  {
+   "name": "flight:travel",
+   "type": "AssertionError",
+   "message": "Replay 1 physically travels between field and net"
+  },
+  {
+   "name": "flight:destination",
+   "type": "AssertionError",
+   "message": "Replay 1 reaches the correct net"
+  },
+  {
+   "name": "flight:travel",
+   "type": "AssertionError",
+   "message": "Replay 2 physically travels between field and net"
+  },
+  {
+   "name": "flight:destination",
+   "type": "AssertionError",
+   "message": "Replay 2 reaches the correct net"
+  },
+  {
+   "name": "flight:travel",
+   "type": "AssertionError",
+   "message": "Replay 2 physically travels between field and net"
+  },
+  {
+   "name": "flight:destination",
+   "type": "AssertionError",
+   "message": "Replay 2 reaches the correct net"
+  },
+  {
+   "name": "flight:travel",
+   "type": "AssertionError",
+   "message": "Replay 3 physically travels between field and net"
+  },
+  {
+   "name": "flight:destination",
+   "type": "AssertionError",
+   "message": "Replay 3 reaches the correct net"
+  },
+  {
+   "name": "landing:immediate",
+   "type": "AssertionError",
+   "message": "Compressed replay lands immediately at its actual net"
+  },
+  {
+   "name": "landing:immediate",
+   "type": "AssertionError",
+   "message": "Compressed replay lands immediately at its actual net"
+  },
+  {
+   "name": "flight:travel",
+   "type": "AssertionError",
+   "message": "Replay 3 physically travels between field and net"
+  },
+  {
+   "name": "flight:destination",
+   "type": "AssertionError",
+   "message": "Replay 3 reaches the correct net"
+  }
+ ],
+ "cases": [
+  {
+   "id": "390-full",
+   "checks": 56,
+   "failed": [
+    "flight:travel",
+    "flight:destination",
+    "flight:travel",
+    "flight:destination",
+    "flight:travel",
+    "flight:destination",
+    "flight:travel",
+    "flight:destination",
+    "landing:immediate",
+    "landing:immediate",
+    "flight:travel",
+    "flight:destination",
+    "flight:travel",
+    "flight:destination"
+   ]
+  },
+  {
+   "id": "390-reduced",
+   "checks": 11,
+   "failed": []
+  }
+ ]
+}
