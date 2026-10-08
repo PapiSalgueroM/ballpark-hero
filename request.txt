@@ -1,0 +1,2 @@
+# Round 1104 closing check, second request: the board fixture replay (the vitest file alone is skipped without its mode)
+boardparity: node scripts/simUsBoardParity.mjs
