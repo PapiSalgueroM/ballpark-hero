@@ -24,7 +24,7 @@ import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } fro
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { cn } from '@/lib/utils';
 import { HelpCircle, Star, X } from 'lucide-react';
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
@@ -40,9 +40,9 @@ import {
   STAFF, staffLevelOf, staffCostOf, canHire, totalStaffLevels,
   ACHIEVEMENTS, ACH_BONUS, achMult, goldenActive, GOLDEN_INFO,
   LEGACY_PERKS, perkLevelOf, perkCostOf, canBuyPerk, legacyPointsOf,
-  totalPerkLevels, pointsForSale, HYPE_MULT, AWAY_MATCHDAY_SEC, SET_PIECE_WINDOW_SEC,
+  totalPerkLevels, pointsForSale, HYPE_MULT, AWAY_MATCHDAY_SEC, SET_PIECE_WINDOW_SEC, type TycoonLeague,
 } from '@/lib/stadiumTycoon';
-import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
+import { useStadiumTycoon, type LastSeason } from '@/hooks/useStadiumTycoon';
 import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
 import VictoryMoment from '@/components/tycoon/TycoonVictoryMoment';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
@@ -254,6 +254,57 @@ function helpFacts() {
   };
 }
 
+function LatestSeasonReview({ last, league }: { last: LastSeason; league: TycoonLeague }) {
+  const [open, setOpen] = useState(false);
+  const [snapshot, setSnapshot] = useState(last);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const heading = useRef<HTMLHeadingElement>(null);
+  const changeOpen = (next: boolean) => {
+    if (next) setSnapshot({ ...last, table: last.table.map(club => ({ ...club })) });
+    setOpen(next);
+  };
+  const formatSeasonCount = (value: number) => value.toLocaleString('en-US');
+  const own = snapshot.table[0];
+  const rows = leagueStandings({ ...league, clubs: snapshot.table });
+  return (
+    <Dialog open={open} onOpenChange={changeOpen}>
+      <DialogTrigger asChild>
+        <button ref={trigger} type="button" data-last-season className="min-h-11 min-w-11 w-full rounded-xl border border-border bg-card px-3 py-2 text-left text-xs hover:border-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+          <span className="block font-bold">Latest season</span>
+          <span className="text-muted-foreground">{ordinal(last.position)} of {formatSeasonCount(last.table.length)} · Review this visit's result</span>
+        </button>
+      </DialogTrigger>
+      <DialogContent data-latest-season-review className="flex max-h-[calc(100dvh_-_2rem)] w-[calc(100vw_-_2rem)] max-w-md flex-col gap-3 rounded-xl p-4 text-xs [&>button:last-child]:h-11 [&>button:last-child]:w-11"
+        onOpenAutoFocus={event => { event.preventDefault(); heading.current?.focus({ preventScroll: true }); }}
+        onCloseAutoFocus={event => { event.preventDefault(); trigger.current?.focus({ preventScroll: true }); }}>
+        <DialogTitle ref={heading} tabIndex={-1} className="pr-12 text-base">Latest season</DialogTitle>
+        <DialogDescription className="text-xs">Available for this visit only. The match keeps running while you read.</DialogDescription>
+        <div className="min-h-0 space-y-3 overflow-y-auto text-xs">
+          <p data-season-headline className="break-words font-bold text-primary">{snapshot.label}</p>
+          <dl className="grid grid-cols-2 gap-3 rounded-lg border border-border p-3">
+            <div><dt className="text-muted-foreground">Finished</dt><dd data-season-position className="font-bold">{ordinal(snapshot.position)} of {formatSeasonCount(snapshot.table.length)}</dd></div>
+            <div><dt className="text-muted-foreground">Points</dt><dd data-season-points className="break-words font-bold">{formatSeasonCount(own.pts)}</dd></div>
+            <div><dt className="text-muted-foreground">Wins / draws / losses</dt><dd data-season-record className="break-words font-bold">{formatSeasonCount(own.w)} / {formatSeasonCount(own.d)} / {formatSeasonCount(own.l)}</dd></div>
+            <div><dt className="text-muted-foreground">Goals for / against</dt><dd data-season-goals className="break-words font-bold">{formatSeasonCount(own.gf)} / {formatSeasonCount(own.ga)}</dd></div>
+          </dl>
+          <table data-latest-season-table className="w-full table-fixed text-left text-xs">
+            <caption className="pb-2 text-left font-bold">Final table</caption>
+            <thead><tr className="border-b border-border text-muted-foreground"><th scope="col" className="w-1/2 pb-2 font-normal">Club</th><th scope="col" className="w-1/3 pb-2 font-normal">W / D / L</th><th scope="col" className="pb-2 text-right font-normal">Pts</th></tr></thead>
+            <tbody>{rows.map((club, index) => (
+              <tr key={club.name} data-season-club={club.name} className={cn('border-b border-border/40 align-top', club === own && 'bg-primary/10')}>
+                <th scope="row" className="py-2 pr-2 text-left font-normal"><div className="flex gap-2"><span className="shrink-0 font-bold">{formatSeasonCount(index + 1)}</span><span className="min-w-0 break-words">{club.name}</span></div></th>
+                <td className="break-words py-2 pr-2"><div>{formatSeasonCount(club.w)} / {formatSeasonCount(club.d)} / {formatSeasonCount(club.l)}</div><div className="text-muted-foreground">GF {formatSeasonCount(club.gf)}<br />GA {formatSeasonCount(club.ga)}</div></td>
+                <td className="break-words py-2 text-right font-bold">{formatSeasonCount(club.pts)}</td>
+              </tr>
+            ))}</tbody>
+          </table>
+        </div>
+        <button type="button" onClick={() => changeOpen(false)} className="min-h-11 min-w-11 w-full shrink-0 rounded-lg border border-border px-3 text-xs font-bold hover:bg-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Back</button>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 /* Round 582: the league. The table through Club Manager's own card, today's
    fixture, and the club name picked from the generated banks. Never the
    default tab, so none of it reaches a snapshot. */
@@ -282,17 +333,7 @@ function LeagueRoom({ g, visible }: { g: ReturnType<typeof useStadiumTycoon>; vi
         {(s.leagueTitles ?? 0) > 0 && <div className="mt-0.5 text-gold font-bold">🏆 {s.leagueTitles} league title{s.leagueTitles === 1 ? '' : 's'} in your career</div>}
       </div>
       <LeagueTableCard rows={rows} myClub={lg.clubs[0].name} title={`Season ${lg.season + 1} at this ground`} preseason={preseason} zoneTop={1} />
-      {last && (
-        <div data-last-season>
-          <LeagueTableCard
-            rows={leagueStandings({ ...lg, clubs: last.table }).map(c => ({ club: c.name, w: c.w, d: c.d, l: c.l, gf: c.gf, ga: c.ga, pts: c.pts }))}
-            myClub={last.table[0].name}
-            title={`Last season: ${ordinal(last.position)}`}
-            zoneTop={1}
-            compact
-          />
-        </div>
-      )}
+      {last && <LatestSeasonReview last={last} league={lg} />}
       {options.length > 0 && (
         <div data-club-name-pick className="rounded-xl border border-border bg-card p-3">
           <div className="text-xs font-bold text-foreground mb-2">Name your club</div>

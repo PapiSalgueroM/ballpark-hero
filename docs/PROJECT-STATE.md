@@ -1,3 +1,28 @@
+## Latest season review preparation, October 8, 2026
+
+1095 is a scoped page change on accepted sale parent23a540a8, not a release.
+Manual Latest season replaces the stacked previous table. Each open captures the
+actual current-visit result label/position/table; subsequent results cannot replace
+that open snapshot. Back/Close/Escape restore focus, matches keep running, and all
+new count fields use explicit en-US grouping. No permanent archive is promised.
+Parent has no shared formatNumber module, so grouping stays numeric-only and local.
+Page rawaf6576c9/LF5470794c, five unique edits reverse to parentblob5eab62a3.
+Independent product peer40c557cb/root9805ba20 holds engine/hook/sale/pitch/dialog.
+No inferred year, division, promotion, bonus or earned stress statistics are added.
+
+Remote proof is authored: four paired natural/staged-count journeys at320/1280,
+real hook season finishes and continued matching clocks, stable open and fresh reopen,
+eight mapped source faults/two restored clipping faults, separate import/clock controls.
+Staged equal GF/GA additions above1000 are explicit serializer-valid display stress,
+not normally earned totals. Result-family and full-campaign breadth remain unclaimed.
+New workflow captures exact source/dist/clock implementation/manifests/raw reports,
+proper application types/build, original12 and all20 readers with strict verdicts.
+Final independent static peers bind page af6576c9, worker3352fcfb, wrapperfa3c1f60
+and workflowed9c3048. Their source and output contract is clear. All runtime,
+native layout and effective-control proof remains pending the first remote run.
+Root owns this attached tree; E owns release integration/save-engine contracts and
+publication. No held1092/1094 source is integrated and protected root stays untouched.
+
 ## Codex1083 PREPARATION7, October7: drain deferred close focus
 
 Preparation6 HEADf5a919eba4e25bae80b841eb0c2d5a33bd2c7904,
