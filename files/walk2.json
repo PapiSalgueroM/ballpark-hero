@@ -1,0 +1,681 @@
+{
+ "real-win-390": {
+  "phaseBefore": "season_summary",
+  "pressed": [
+   "Continue →"
+  ],
+  "errors": [],
+  "there": true,
+  "saved": {
+   "phase": "ballon_dor",
+   "rank": 1,
+   "n": 10
+  },
+  "made": 1,
+  "starts": [
+   "tick@0.597",
+   "tick@0.812",
+   "tick@1.032",
+   "tick@1.252",
+   "tick@1.472",
+   "tick@1.692",
+   "tick@1.912",
+   "tick@2.132",
+   "tick@2.352",
+   "tick@2.571",
+   "sting@3.152",
+   "crowd@3.432"
+  ],
+  "firstStartAfterMountMs": 602,
+  "buzz": [
+   [
+    30,
+    40,
+    30
+   ]
+  ],
+  "geo": [
+   {
+    "label": "+0",
+    "t": 71,
+    "scrollY": 1029,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 7,
+    "rowsFullyInView": 6,
+    "firstRowTop": -160,
+    "lastRowBottom": 280,
+    "slamTop": -293,
+    "slamBottom": -174
+   },
+   {
+    "label": "+300",
+    "t": 300,
+    "scrollY": 670,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 186,
+    "lastRowBottom": 651,
+    "slamTop": 45,
+    "slamBottom": 171
+   },
+   {
+    "label": "+700",
+    "t": 700,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 198,
+    "lastRowBottom": 686,
+    "slamTop": 51,
+    "slamBottom": 182
+   },
+   {
+    "label": "+1300",
+    "t": 1300,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 198,
+    "lastRowBottom": 686,
+    "slamTop": 50,
+    "slamBottom": 182
+   },
+   {
+    "label": "+2000",
+    "t": 2000,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 198,
+    "lastRowBottom": 686,
+    "slamTop": 50,
+    "slamBottom": 182
+   },
+   {
+    "label": "+2700",
+    "t": 2700,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 198,
+    "lastRowBottom": 686,
+    "slamTop": 50,
+    "slamBottom": 182
+   },
+   {
+    "label": "+3400",
+    "t": 3400,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 198,
+    "lastRowBottom": 686,
+    "slamTop": 50,
+    "slamBottom": 182
+   },
+   {
+    "label": "+4500",
+    "t": 4500,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 198,
+    "lastRowBottom": 686,
+    "slamTop": 50,
+    "slamBottom": 182
+   }
+  ]
+ },
+ "real-win-1280": {
+  "phaseBefore": "season_summary",
+  "pressed": [
+   "Continue →"
+  ],
+  "errors": [],
+  "there": true,
+  "saved": {
+   "phase": "ballon_dor",
+   "rank": 1,
+   "n": 10
+  },
+  "made": 1,
+  "starts": [
+   "tick@0.586",
+   "tick@0.816",
+   "tick@1.036",
+   "tick@1.256",
+   "tick@1.476",
+   "tick@1.696",
+   "tick@1.916",
+   "tick@2.136",
+   "tick@2.356",
+   "tick@2.575",
+   "sting@3.165",
+   "crowd@3.445"
+  ],
+  "firstStartAfterMountMs": 589,
+  "buzz": [
+   [
+    30,
+    40,
+    30
+   ]
+  ],
+  "geo": [
+   {
+    "label": "+0",
+    "t": 67,
+    "scrollY": 1045,
+    "vh": 900,
+    "rows": 10,
+    "rowsInView": 8,
+    "rowsFullyInView": 7,
+    "firstRowTop": -100,
+    "lastRowBottom": 339,
+    "slamTop": -215,
+    "slamBottom": -114
+   },
+   {
+    "label": "+300",
+    "t": 301,
+    "scrollY": 753,
+    "vh": 900,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 178,
+    "lastRowBottom": 645,
+    "slamTop": 55,
+    "slamBottom": 163
+   },
+   {
+    "label": "+700",
+    "t": 701,
+    "scrollY": 743,
+    "vh": 900,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 178,
+    "lastRowBottom": 665,
+    "slamTop": 50,
+    "slamBottom": 162
+   },
+   {
+    "label": "+1300",
+    "t": 1302,
+    "scrollY": 743,
+    "vh": 900,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 178,
+    "lastRowBottom": 666,
+    "slamTop": 50,
+    "slamBottom": 162
+   },
+   {
+    "label": "+2000",
+    "t": 2001,
+    "scrollY": 743,
+    "vh": 900,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 178,
+    "lastRowBottom": 666,
+    "slamTop": 50,
+    "slamBottom": 162
+   },
+   {
+    "label": "+2700",
+    "t": 2701,
+    "scrollY": 743,
+    "vh": 900,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 178,
+    "lastRowBottom": 666,
+    "slamTop": 50,
+    "slamBottom": 162
+   },
+   {
+    "label": "+3400",
+    "t": 3403,
+    "scrollY": 743,
+    "vh": 900,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 178,
+    "lastRowBottom": 666,
+    "slamTop": 49,
+    "slamBottom": 162
+   },
+   {
+    "label": "+4500",
+    "t": 4502,
+    "scrollY": 743,
+    "vh": 900,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 178,
+    "lastRowBottom": 666,
+    "slamTop": 50,
+    "slamBottom": 162
+   }
+  ]
+ },
+ "real-win-390-rm": {
+  "phaseBefore": "season_summary",
+  "pressed": [
+   "Continue →"
+  ],
+  "errors": [],
+  "there": true,
+  "saved": {
+   "phase": "ballon_dor",
+   "rank": 1,
+   "n": 10
+  },
+  "made": 1,
+  "starts": [
+   "sting@-0.032",
+   "crowd@0.259"
+  ],
+  "firstStartAfterMountMs": -3,
+  "buzz": [],
+  "geo": [
+   {
+    "label": "+0",
+    "t": 59,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 670,
+    "slamTop": 34,
+    "slamBottom": 166
+   },
+   {
+    "label": "+300",
+    "t": 300,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 670,
+    "slamTop": 34,
+    "slamBottom": 166
+   },
+   {
+    "label": "+700",
+    "t": 700,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 670,
+    "slamTop": 34,
+    "slamBottom": 166
+   },
+   {
+    "label": "+1300",
+    "t": 1300,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 670,
+    "slamTop": 34,
+    "slamBottom": 166
+   },
+   {
+    "label": "+2000",
+    "t": 2000,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 670,
+    "slamTop": 34,
+    "slamBottom": 166
+   },
+   {
+    "label": "+2700",
+    "t": 2700,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 670,
+    "slamTop": 34,
+    "slamBottom": 166
+   },
+   {
+    "label": "+3400",
+    "t": 3400,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 670,
+    "slamTop": 34,
+    "slamBottom": 166
+   },
+   {
+    "label": "+4500",
+    "t": 4500,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 670,
+    "slamTop": 34,
+    "slamBottom": 166
+   }
+  ]
+ },
+ "real-out-390": {
+  "phaseBefore": "season_summary",
+  "pressed": [
+   "Continue →"
+  ],
+  "errors": [],
+  "there": true,
+  "saved": {
+   "phase": "ballon_dor",
+   "rank": 22,
+   "n": 10
+  },
+  "made": 1,
+  "starts": [
+   "tick@0.587",
+   "tick@0.816",
+   "tick@1.036",
+   "tick@1.256",
+   "tick@1.476",
+   "tick@1.696",
+   "tick@1.916",
+   "tick@2.136",
+   "tick@2.356",
+   "tick@2.576"
+  ],
+  "firstStartAfterMountMs": 590,
+  "buzz": [],
+  "geo": [
+   {
+    "label": "+0",
+    "t": 21,
+    "scrollY": 794,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 9,
+    "firstRowTop": -40,
+    "lastRowBottom": 397,
+    "slamTop": -173,
+    "slamBottom": -54
+   },
+   {
+    "label": "+300",
+    "t": 301,
+    "scrollY": 552,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 188,
+    "lastRowBottom": 659,
+    "slamTop": 45,
+    "slamBottom": 173
+   },
+   {
+    "label": "+700",
+    "t": 701,
+    "scrollY": 552,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 668,
+    "slamTop": 34,
+    "slamBottom": 166
+   },
+   {
+    "label": "+1300",
+    "t": 1300,
+    "scrollY": 552,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 668,
+    "slamTop": 34,
+    "slamBottom": 166
+   },
+   {
+    "label": "+2000",
+    "t": 2000,
+    "scrollY": 552,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 668,
+    "slamTop": 34,
+    "slamBottom": 166
+   },
+   {
+    "label": "+2700",
+    "t": 2700,
+    "scrollY": 552,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 668,
+    "slamTop": 34,
+    "slamBottom": 166
+   },
+   {
+    "label": "+3400",
+    "t": 3400,
+    "scrollY": 552,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 668,
+    "slamTop": 34,
+    "slamBottom": 166
+   },
+   {
+    "label": "+4500",
+    "t": 4500,
+    "scrollY": 552,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 668,
+    "slamTop": 34,
+    "slamBottom": 166
+   }
+  ]
+ },
+ "real-podium-390": {
+  "phaseBefore": "season_summary",
+  "pressed": [
+   "Continue →"
+  ],
+  "errors": [],
+  "there": true,
+  "saved": {
+   "phase": "ballon_dor",
+   "rank": 3,
+   "n": 10
+  },
+  "made": 1,
+  "starts": [
+   "tick@0.586",
+   "tick@0.816",
+   "tick@1.036",
+   "tick@1.256",
+   "tick@1.476",
+   "tick@1.696",
+   "tick@1.916",
+   "tick@2.136",
+   "tick@2.356",
+   "tick@2.576",
+   "sting@3.166"
+  ],
+  "firstStartAfterMountMs": 589,
+  "buzz": [],
+  "geo": [
+   {
+    "label": "+0",
+    "t": 45,
+    "scrollY": 890,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 9,
+    "rowsFullyInView": 9,
+    "firstRowTop": -42,
+    "lastRowBottom": 397,
+    "slamTop": -175,
+    "slamBottom": -56
+   },
+   {
+    "label": "+300",
+    "t": 300,
+    "scrollY": 649,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 187,
+    "lastRowBottom": 656,
+    "slamTop": 44,
+    "slamBottom": 171
+   },
+   {
+    "label": "+700",
+    "t": 700,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 670,
+    "slamTop": 34,
+    "slamBottom": 166
+   },
+   {
+    "label": "+1300",
+    "t": 1300,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 670,
+    "slamTop": 34,
+    "slamBottom": 166
+   },
+   {
+    "label": "+2000",
+    "t": 2000,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 670,
+    "slamTop": 34,
+    "slamBottom": 166
+   },
+   {
+    "label": "+2700",
+    "t": 2700,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 670,
+    "slamTop": 34,
+    "slamBottom": 166
+   },
+   {
+    "label": "+3400",
+    "t": 3400,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 670,
+    "slamTop": 34,
+    "slamBottom": 166
+   },
+   {
+    "label": "+4500",
+    "t": 4500,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 670,
+    "slamTop": 34,
+    "slamBottom": 166
+   }
+  ]
+ }
+}
