@@ -1,0 +1,10 @@
+S-phone: the build screen shows 1 stale text(s) after four stepper presses: screen "(78% match)" vs React "(28% match)"
+S-phone: no button "Lock in" on screen or in React
+S-phone: button "Begin Career" never became pressable in 10000 ms
+S-phone: no button "Begin Career" on screen or in React
+S-phone: the Season Centre never opened
+S-desktop: the build screen shows 1 stale text(s) after four stepper presses: screen "(78% match)" vs React "(28% match)"
+S-desktop: no button "Lock in" on screen or in React
+S-desktop: button "Begin Career" never became pressable in 10000 ms
+S-desktop: no button "Begin Career" on screen or in React
+S-desktop: the Season Centre never opened

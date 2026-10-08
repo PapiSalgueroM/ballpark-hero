@@ -1,0 +1,147 @@
+
+=== S-phone
+   guard line: [dukb] Skipped removing a node this page no longer owns. A page translator moved it, carry
+   box 0 reads on screen: "Choose nationality Brazil" after picking Brazil
+   box 0 reads on screen: "Choose nationality Argentina" after picking Argentina
+   box 1 reads on screen: "Choose positionStriker (ST)" after picking Striker
+   box 1 reads on screen: "Choose positionStriker (ST)Striker (ST)Goalkeeper (GK)" after picking Goalkeeper
+   box 2 reads on screen: "Choose eraCurrent era (2025 start)" after picking Current era
+   after 2 rerolls, stale on screen: none
+   build before: {"screen":"Skip to main content DOUKNOWBALL Back Track stats ← Back 🎮 Build Your Player STARTING OVERALL 47 ROOM TO GROW 33 -5 -1 +1 +5 Scouts have you at a 80 ceiling, so there are 33 points left in you. Start low and the climb is the game. POINTS TO SPEND 0 Reflexes Shot Reflexes 49 -5 -1 +1 +5 Shot Stopping One On Ones 34 -5 -1 +1 +5 Positioning Angles 49 -5 -1 +1 +5 Aerial Command Claiming Crosses 55 -5 -1 +1 +5 Distributi","react":"Skip to main contentLiveLive scores temporarily unavailableDoUKnowBallBackSign up to track your statsTrack stats← Back🎮 Build Your PlayerStarting overall47Room to grow33-5-1+1+5Scouts have you at a 80 ceiling, so there are 33 points left in you. Start low and the climb is the game.Points to spend0ReflexesShot Reflexes 49-5-1+1+5Shot StoppingOne On Ones 34-5-1+1+5PositioningAngles 49-5-1+1+5Aerial CommandClaiming Cro"}
+   Pace -5: pressed
+   Pace -5 again: pressed
+   Shooting +1: pressed
+   Shooting +5: pressed
+   build after: {"screen":"Skip to main content DOUKNOWBALL Back Track stats ← Back 🎮 Build Your Player STARTING OVERALL 45 ROOM TO GROW 35 -5 -1 +1 +5 Scouts have you at a 80 ceiling, so there are 35 points left in you. Start low and the climb is the game. POINTS TO SPEND 4 Reflexes Shot Reflexes 39 -5 -1 +1 +5 Shot Stopping One On Ones 40 -5 -1 +1 +5 Positioning Angles 49 -5 -1 +1 +5 Aerial Command Claiming Crosses 55 -5 -1 +1 +5 Distributi","react":"Skip to main contentLiveLive scores temporarily unavailableDoUKnowBallBackSign up to track your statsTrack stats← Back🎮 Build Your PlayerStarting overall45Room to grow35-5-1+1+5Scouts have you at a 80 ceiling, so there are 35 points left in you. Start low and the climb is the game.Points to spend4ReflexesShot Reflexes 39-5-1+1+5Shot StoppingOne On Ones 40-5-1+1+5PositioningAngles 49-5-1+1+5Aerial CommandClaiming Cro"}
+   build steppers, stale on screen (1): screen "(78% match)" vs React "(28% match)"
+   !! S-phone: the build screen shows 1 stale text(s) after four stepper presses: screen "(78% match)" vs React "(28% match)"
+   !! S-phone: no button "Lock in" on screen or in React
+   !! S-phone: button "Begin Career" never became pressable in 10000 ms
+   !! S-phone: no button "Begin Career" on screen or in React
+   after Begin Career: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1027 scrollW=390/390
+   to-centre-0 press 1: nothing to press
+   to-centre-0 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1027 scrollW=390/390
+   to-centre-0 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-1 press 1: nothing to press
+   to-centre-1 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1027 scrollW=390/390
+   to-centre-1 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-2 press 1: nothing to press
+   to-centre-2 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1027 scrollW=390/390
+   to-centre-2 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-3 press 1: nothing to press
+   to-centre-3 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1027 scrollW=390/390
+   to-centre-3 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-4 press 1: nothing to press
+   to-centre-4 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1027 scrollW=390/390
+   to-centre-4 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-5 press 1: nothing to press
+   to-centre-5 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1027 scrollW=390/390
+   to-centre-5 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-6 press 1: nothing to press
+   to-centre-6 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1027 scrollW=390/390
+   to-centre-6 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-7 press 1: nothing to press
+   to-centre-7 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1027 scrollW=390/390
+   to-centre-7 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-8 press 1: nothing to press
+   to-centre-8 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1027 scrollW=390/390
+   to-centre-8 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-9 press 1: nothing to press
+   to-centre-9 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1027 scrollW=390/390
+   to-centre-9 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-10 press 1: nothing to press
+   to-centre-10 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1027 scrollW=390/390
+   to-centre-10 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-11 press 1: nothing to press
+   to-centre-11 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1027 scrollW=390/390
+   to-centre-11 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-12 press 1: nothing to press
+   to-centre-12 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1027 scrollW=390/390
+   to-centre-12 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-13 press 1: nothing to press
+   to-centre-13 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1027 scrollW=390/390
+   to-centre-13 stale now: screen "(78% match)" vs React "(28% match)"
+   Season Centre: NOT OPEN
+   !! S-phone: the Season Centre never opened
+   Season Centre, stale on screen (1): screen "(78% match)" vs React "(28% match)"
+   Season Centre now: null
+
+=== S-desktop
+   guard line: [dukb] Skipped removing a node this page no longer owns. A page translator moved it, carry
+   box 0 reads on screen: "Choose nationality Brazil" after picking Brazil
+   box 0 reads on screen: "Choose nationality Argentina" after picking Argentina
+   box 1 reads on screen: "Choose positionStriker (ST)" after picking Striker
+   box 1 reads on screen: "Choose positionStriker (ST)Striker (ST)Goalkeeper (GK)" after picking Goalkeeper
+   box 2 reads on screen: "Choose eraCurrent era (2025 start)" after picking Current era
+   after 2 rerolls, stale on screen: none
+   build before: {"screen":"Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats ← Back 🎮 Build Your Player STARTING OVERALL 47 ROOM TO GROW 37 -5 -1 +1 +5 Scouts have you at a 84 ceiling, so there are 37 points left in you. Start low and the climb is the game. POINTS TO SPEND 0 Reflexes Shot Reflexes 49 -5 -1 +1 +5 Shot Stopping One On Ones 34 -5 -1 +1 +5 Positioning Angles 49 -5 -1 +1 +5 ","react":"Skip to main contentLiveLive scores temporarily unavailableDoUKnowBallBackSign up to track your statsTrack stats← Back🎮 Build Your PlayerStarting overall47Room to grow37-5-1+1+5Scouts have you at a 84 ceiling, so there are 37 points left in you. Start low and the climb is the game.Points to spend0ReflexesShot Reflexes 49-5-1+1+5Shot StoppingOne On Ones 34-5-1+1+5PositioningAngles 49-5-1+1+5Aerial CommandClaiming Cro"}
+   Pace -5: pressed
+   Pace -5 again: pressed
+   Shooting +1: pressed
+   Shooting +5: pressed
+   build after: {"screen":"Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats ← Back 🎮 Build Your Player STARTING OVERALL 45 ROOM TO GROW 39 -5 -1 +1 +5 Scouts have you at a 84 ceiling, so there are 39 points left in you. Start low and the climb is the game. POINTS TO SPEND 4 Reflexes Shot Reflexes 39 -5 -1 +1 +5 Shot Stopping One On Ones 40 -5 -1 +1 +5 Positioning Angles 49 -5 -1 +1 +5 ","react":"Skip to main contentLiveLive scores temporarily unavailableDoUKnowBallBackSign up to track your statsTrack stats← Back🎮 Build Your PlayerStarting overall45Room to grow39-5-1+1+5Scouts have you at a 84 ceiling, so there are 39 points left in you. Start low and the climb is the game.Points to spend4ReflexesShot Reflexes 39-5-1+1+5Shot StoppingOne On Ones 40-5-1+1+5PositioningAngles 49-5-1+1+5Aerial CommandClaiming Cro"}
+   build steppers, stale on screen (1): screen "(78% match)" vs React "(28% match)"
+   !! S-desktop: the build screen shows 1 stale text(s) after four stepper presses: screen "(78% match)" vs React "(28% match)"
+   !! S-desktop: no button "Lock in" on screen or in React
+   !! S-desktop: button "Begin Career" never became pressable in 10000 ms
+   !! S-desktop: no button "Begin Career" on screen or in React
+   after Begin Career: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1026 scrollW=1280/1280
+   to-centre-0 press 1: nothing to press
+   to-centre-0 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1026 scrollW=1280/1280
+   to-centre-0 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-1 press 1: nothing to press
+   to-centre-1 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1026 scrollW=1280/1280
+   to-centre-1 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-2 press 1: nothing to press
+   to-centre-2 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1026 scrollW=1280/1280
+   to-centre-2 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-3 press 1: nothing to press
+   to-centre-3 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1026 scrollW=1280/1280
+   to-centre-3 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-4 press 1: nothing to press
+   to-centre-4 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1026 scrollW=1280/1280
+   to-centre-4 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-5 press 1: nothing to press
+   to-centre-5 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1026 scrollW=1280/1280
+   to-centre-5 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-6 press 1: nothing to press
+   to-centre-6 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1026 scrollW=1280/1280
+   to-centre-6 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-7 press 1: nothing to press
+   to-centre-7 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1026 scrollW=1280/1280
+   to-centre-7 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-8 press 1: nothing to press
+   to-centre-8 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1026 scrollW=1280/1280
+   to-centre-8 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-9 press 1: nothing to press
+   to-centre-9 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1026 scrollW=1280/1280
+   to-centre-9 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-10 press 1: nothing to press
+   to-centre-10 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1026 scrollW=1280/1280
+   to-centre-10 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-11 press 1: nothing to press
+   to-centre-11 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1026 scrollW=1280/1280
+   to-centre-11 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-12 press 1: nothing to press
+   to-centre-12 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1026 scrollW=1280/1280
+   to-centre-12 stale now: screen "(78% match)" vs React "(28% match)"
+   to-centre-13 press 1: nothing to press
+   to-centre-13 end: broke=false h1="🎮 Build Your Player" create=false save=none agesOnScreen=[17,30] stale=1 swapped=1026 scrollW=1280/1280
+   to-centre-13 stale now: screen "(78% match)" vs React "(28% match)"
+   Season Centre: NOT OPEN
+   !! S-desktop: the Season Centre never opened
+   Season Centre, stale on screen (1): screen "(78% match)" vs React "(28% match)"
+   Season Centre now: null
+
+REVIEW WALK: 10 thing(s) noted
+  - S-phone: the build screen shows 1 stale text(s) after four stepper presses: screen "(78% match)" vs React "(28% match)"
+  - S-phone: no button "Lock in" on screen or in React
+  - S-phone: button "Begin Career" never became pressable in 10000 ms
+  - S-phone: no button "Begin Career" on screen or in React
+  - S-phone: the Season Centre never opened
+  - S-desktop: the build screen shows 1 stale text(s) after four stepper presses: screen "(78% match)" vs React "(28% match)"
+  - S-desktop: no button "Lock in" on screen or in React
+  - S-desktop: button "Begin Career" never became pressable in 10000 ms
+  - S-desktop: no button "Begin Career" on screen or in React
+  - S-desktop: the Season Centre never opened
+review-walk done, 10 noted
