@@ -26,7 +26,17 @@
    Negative control: PLAY_NEWCOUNTRIES_CONTROL=nonation looks for a nation
    the game does not have, and the walk must fail at step 1.
 
-   MEASURED: written from the first green run, below the code's summary.
+   MEASURED 2026-10-08 on a GitHub runner at a0b6c5f3, a plain build served
+   like the host: green, exit 0. At 390x844 and at 1280x800: the Russia
+   tile with the engine's 1 league and 16 clubs, the league tile with its
+   16 clubs and the Russian Cup and no Champions League, All nations back
+   to the nations, 16 club tiles, the hub on Zenit in Season 1, the help
+   naming the league, the old save on Sevilla in Season 1; no sideways
+   overflow anywhere; 4 requests to the database host aborted, no console
+   or page error. Control nonation: 2 failures (step 1 at each size), exit 1.
+   NOT in this walk: the table card's sixteen rows and a live match at a
+   Russian club (the league step, the hub and the old save are read; the
+   live match is walked at an English club by playClubManager).
 
    Run: SWEEP_BASE=http://localhost:4173 node scripts/playClubManagerNewCountries.mjs */
 import fs from 'node:fs';
