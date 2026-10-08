@@ -1,0 +1,2 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-centre: node_modules/.bin/vitest run src/test/seasonCentreWords.test.tsx src/test/seasonCore.test.ts src/test/usSeason.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000

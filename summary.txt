@@ -1,0 +1,2 @@
+vitest-centre exit=0 9s |    Duration  8.88s (transform 3.97s, setup 664ms, collect 9.00s, tests 6.36s, environment 3.59s, prepare 989ms)
+tsc exit=0 57s | 
