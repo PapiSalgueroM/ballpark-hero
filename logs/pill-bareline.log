@@ -1,0 +1,47 @@
+bundled the sixteen pages (3.5 MB of script, 1694 bytes of module CSS)
+1) 34 finished states on a 390 by 844 phone, each game at its widest score and its narrowest
+   /nba-higher-lower all ten right                      pill 325           121px wide, slack 97.4px, win
+   /nba-higher-lower none right                         pill 0             88px wide, slack 114.0px, loss
+   /nfl-higher-lower all ten right                      pill 325           121px wide, slack 97.4px, win
+   /nfl-higher-lower none right                         pill 0             88px wide, slack 114.0px, loss
+   /mlb-higher-lower all ten right                      pill 325           121px wide, slack 97.4px, win
+   /mlb-higher-lower none right                         pill 0             88px wide, slack 114.0px, loss
+   /hockey-higher-lower all ten right                   pill 325           121px wide, slack 97.4px, win
+   /hockey-higher-lower none right                      pill 0             88px wide, slack 114.0px, loss
+   /cfb-higher-lower all ten right                      pill 325           121px wide, slack 97.4px, win
+   /cfb-higher-lower none right                         pill 0             88px wide, slack 114.0px, loss
+   /f1-higher-lower all ten right                       pill 325           121px wide, slack 97.4px, win
+   /f1-higher-lower none right                          pill 0             88px wide, slack 114.0px, loss
+   /tennis-higher-lower all ten right                   pill 325           121px wide, slack 97.4px, win
+   /tennis-higher-lower none right                      pill 0             88px wide, slack 114.0px, loss
+   /golf-higher-lower all ten right                     pill 325           121px wide, slack 97.4px, win
+   /golf-higher-lower none right                        pill 0             88px wide, slack 114.0px, loss
+   /afl-higher-lower all ten right                      pill 325           121px wide, slack 97.4px, win
+   /afl-higher-lower none right                         pill 0             88px wide, slack 114.0px, loss
+   /higher-lower a three figure streak                  pill 143           121px wide, slack 97.4px, loss
+   /higher-lower out on the first pick                  pill 0             88px wide, slack 114.0px, loss
+  FAIL [under] /face-off a duel tied to the last extra round: the line under the pill reads "2600 to 2600, 0 rounds to 0", it must start "2,600 to 2,600, "
+  FAIL [under] /face-off a duel tied to the last extra round: the emoji block reads "⚡ Face Off, two players: 2600 to 2600\n🟢 ✅✅✅✅✅✅✅✅✅✅✅✅✅\n🔵 ✅✅", it must hold ": 2,600 to 2,600\n"
+   /face-off a duel tied to the last extra round        pill 2,600 to 2,600 210px wide, slack 53.1px, close
+  FAIL [under] /face-off a full speed win over The Legend: the line under the pill reads "2000 to 1800, 1 rounds to 0", it must start "2,000 to 1,800, "
+  FAIL [under] /face-off a full speed win over The Legend: the emoji block reads "⚡ Face Off v The Legend: 2000 to 1800\n✅✅✅✅✅✅✅✅✅✅", it must hold ": 2,000 to 1,800\n"
+   /face-off a full speed win over The Legend           pill 2,000 to 1,800 210px wide, slack 53.1px, win
+  FAIL [under] /face-off shut out by The Rookie: the line under the pill reads "0 to 1900, 0 rounds to 10", it must start "0 to 1,900, "
+  FAIL [under] /face-off shut out by The Rookie: the emoji block reads "⚡ Face Off v The Rookie: 0 to 1900\n❌❌❌❌❌❌❌❌❌❌", it must hold ": 0 to 1,900\n"
+   /face-off shut out by The Rookie                     pill 0 to 1,900    160px wide, slack 77.8px, loss
+   /champ-or-not 10 right                               pill 10/10         140px wide, slack 87.8px, win
+   /whod-they-beat 10 right                             pill 10/10         140px wide, slack 87.8px, win
+   /champ-or-not 0 right                                pill 0/10          120px wide, slack 98.2px, loss
+   /whod-they-beat 0 right                              pill 0/10          120px wide, slack 98.2px, loss
+   /silverware-sort every rung right                    pill 15/15         140px wide, slack 87.8px, win
+   /silverware-sort one rung right                      pill 1/15          120px wide, slack 98.2px, loss
+  FAIL [under] /rank-em 5 in place: the Score cell under the pill reads "1000", the pill's score there is "1,000"
+   /rank-em 5 in place                                  pill 1,000         141px wide, slack 87.5px, win
+   /rank-em 3 in place                                  pill 600           121px wide, slack 97.4px, loss
+   /rank-em 0 in place                                  pill 0             88px wide, slack 114.0px, loss
+  FAIL [under] /hof-or-bust the right call, no hints: the Score cell under the pill reads "1000 pts", the pill's score there is "1,000 pts"
+   /hof-or-bust the right call, no hints                pill 1,000         141px wide, slack 87.5px, close
+   /hof-or-bust the wrong call                          pill 0             88px wide, slack 114.0px, close
+   narrowest slack beside a pill: 53.1px, at /face-off a duel tied to the last extra round (2,600 to 2,600)
+
+simResultPillComparison: control bareline turned [under] red, as it must (8 findings).
