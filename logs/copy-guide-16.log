@@ -1,0 +1,20 @@
+--- the change
+-          "The Ticket offer tile sets your matchday price, and switching is free at any time. Community takes 15 percent off the gate money each fan pays and grows your supporters 50 percent faster. Premium adds 25 perc
++          "The Ticket offer tile sets your matchday price, and switching is free at any time. Community takes 16 percent off the gate money each fan pays and grows your supporters 50 percent faster. Premium adds 25 perc
+--- the plain section, by section
+   RED  G1: the stadium text no longer says "Community takes 15 percent off the gate money each fan pays and grows your supporters 50 percent faster"
+   ok   G2
+   RED  G3: "1" in "...nd switching is free at any time. Community takes 16 percent off the gate money each fan p..."
+   ok   M1
+   ok   M2
+   ok   L1
+--- every FAIL line of the plain section (the control cascades are left out)
+  FAIL: G1: the stadium text no longer says "Community takes 15 percent off the gate money each fan pays and grows your supporters 50 percent faster"
+  FAIL: G3: "1" in "...nd switching is free at any time. Community takes 16 percent off the gate money each fan p..."
+  FAIL: G3: "6" in "...d switching is free at any time. Community takes 16 percent off the gate money each fan pa..."
+  FAIL: G3: "5" in "...ate money each fan pays and grows your supporters 50 percent faster.  | .  | .  | ...."
+  FAIL: G3: "0" in "...te money each fan pays and grows your supporters 50 percent faster.  | .  | .  | ...."
+--- how the run ended
+B.ticketcopy) negative control: the guide says Community takes 16 percent off the gate while the engine takes 15
+  control: the stadium guide does not carry exactly one "Community takes 15 percent", so this control would prove nothing
+harness exit on the mutated source: 1

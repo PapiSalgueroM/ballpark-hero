@@ -1,0 +1,16 @@
+--- the change
+-  { id: 'premium', label: 'Premium', gate: 1.25, demand: 0.75, growth: 0.75 },
++  { id: 'premium', label: 'Premium', gate: 1.2, demand: 0.75, growth: 0.75 },
+--- the plain section, by section
+   ok   G1
+   RED  G2: "Premium adds 25 percent to the gate money each fan pays, draws 75 percent of your supporters and grows them 25 percent slower": the engine measures 20, 75, 25 where the words print 25, 75, 25
+   ok   G3
+   ok   M1
+   ok   M2
+   ok   L1
+--- every FAIL line of the plain section (the control cascades are left out)
+  FAIL: G2: "Premium adds 25 percent to the gate money each fan pays, draws 75 percent of your supporters and grows them 25 percent slower": the engine measures 20, 75, 25 where the words print 25, 75, 25
+--- how the run ended
+B.ticketturnout) negative control: the engine's Premium draws half the supporters instead of three quarters
+  control: stadiumTycoon.ts does not carry exactly one "{ id: 'premium', label: 'Premium', gate: 1.25, demand: 0.75, growth: 0", so this control would prove nothing
+harness exit on the mutated source: 1

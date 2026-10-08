@@ -1,0 +1,13 @@
+#!serial
+# Release AL close, job 1. Serial on purpose: the last six lines edit the runner's checkout and put it back.
+# The harness as shipped: must exit 0 with its closing green line. Its 25 controls run inside this one run.
+simTycoonHelp: node scripts/simTycoonHelp.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+# One ticket number changed in the real source, the claims half run on it: each must exit 1 with the ticket claims red.
+rate-premium-turnout: bash .rc/x/mutate.sh src/lib/stadiumTycoon.ts "s/gate: 1.25, demand: 0.75, growth: 0.75/gate: 1.25, demand: 0.5, growth: 0.75/"
+rate-premium-gate: bash .rc/x/mutate.sh src/lib/stadiumTycoon.ts "s/gate: 1.25, demand: 0.75, growth: 0.75/gate: 1.2, demand: 0.75, growth: 0.75/"
+rate-premium-growth: bash .rc/x/mutate.sh src/lib/stadiumTycoon.ts "s/gate: 1.25, demand: 0.75, growth: 0.75/gate: 1.25, demand: 0.75, growth: 0.7/"
+rate-community-gate: bash .rc/x/mutate.sh src/lib/stadiumTycoon.ts "s/gate: 0.85, demand: 1, growth: 1.5/gate: 0.8, demand: 1, growth: 1.5/"
+rate-community-growth: bash .rc/x/mutate.sh src/lib/stadiumTycoon.ts "s/gate: 0.85, demand: 1, growth: 1.5/gate: 0.85, demand: 1, growth: 1.4/"
+copy-guide-16: bash .rc/x/mutate.sh src/data/gameContent/stadiumManagement.ts "s/Community takes 15 percent/Community takes 16 percent/"

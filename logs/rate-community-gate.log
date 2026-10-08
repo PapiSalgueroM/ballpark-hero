@@ -1,0 +1,16 @@
+--- the change
+-  { id: 'community', label: 'Community', gate: 0.85, demand: 1, growth: 1.5 },
++  { id: 'community', label: 'Community', gate: 0.8, demand: 1, growth: 1.5 },
+--- the plain section, by section
+   ok   G1
+   RED  G2: "Community takes 15 percent off the gate money each fan pays and grows your supporters 50 percent faster": the engine measures 20, 50 where the words print 15, 50
+   ok   G3
+   ok   M1
+   ok   M2
+   ok   L1
+--- every FAIL line of the plain section (the control cascades are left out)
+  FAIL: G2: "Community takes 15 percent off the gate money each fan pays and grows your supporters 50 percent faster": the engine measures 20, 50 where the words print 15, 50
+--- how the run ended
+B.ticketwhole) negative control: the engine's Community stops drawing the whole fanbase
+  control: stadiumTycoon.ts does not carry exactly one "{ id: 'community', label: 'Community', gate: 0.85, demand: 1, growth: ", so this control would prove nothing
+harness exit on the mutated source: 1

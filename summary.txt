@@ -1,0 +1,9 @@
+simTycoonHelp exit=0 18s |    All 25 controls fired exactly where they should.
+simHarnessAnchors exit=0 29s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 11s | No rival product names found. 0 findings.
+rate-premium-turnout exit=1 3s | harness exit on the mutated source: 1
+rate-premium-gate exit=1 3s | harness exit on the mutated source: 1
+rate-premium-growth exit=1 3s | harness exit on the mutated source: 1
+rate-community-gate exit=1 4s | harness exit on the mutated source: 1
+rate-community-growth exit=1 4s | harness exit on the mutated source: 1
+copy-guide-16 exit=1 3s | harness exit on the mutated source: 1
