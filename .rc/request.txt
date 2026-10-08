@@ -1,0 +1,2 @@
+#!serial
+retrain-1160: bash .rc/x/cm-retrain-focus-1160.sh
