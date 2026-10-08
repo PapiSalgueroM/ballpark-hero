@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vt-seasonCore: node_modules/.bin/vitest run src/test/seasonCore.test.ts --testTimeout=300000 --hookTimeout=120000
+vt-words: node_modules/.bin/vitest run src/test/seasonCentreWords.test.tsx --testTimeout=300000 --hookTimeout=120000
+vt-us3: node_modules/.bin/vitest run src/test/usSeason.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000 --hookTimeout=120000
+vt-1047: node_modules/.bin/vitest run src/test/momentHost.test.tsx src/test/drillBoardMatch.test.tsx src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000

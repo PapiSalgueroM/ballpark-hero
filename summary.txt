@@ -1,0 +1,5 @@
+vt-seasonCore exit=0 3s |    Duration  1.90s (transform 228ms, setup 98ms, collect 261ms, tests 122ms, environment 501ms, prepare 231ms)
+vt-words exit=1 6s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/seasonCentreWords.test.tsx,title=src/test/seasonCentreWords.test.tsx > Season Centre%3A soccer markup%
+vt-us3 exit=0 11s |    Duration  9.82s (transform 4.75s, setup 308ms, collect 8.78s, tests 4.42s, environment 1.97s, prepare 763ms)
+vt-1047 exit=0 7s |    Duration  6.51s (transform 5.56s, setup 372ms, collect 9.64s, tests 724ms, environment 2.45s, prepare 688ms)
+tsc exit=0 60s | 
