@@ -1,4 +1,6 @@
-/* Actual pitch poses and clock ownership. Controls mutate disposable copies. */
+/* Actual pitch poses and clock ownership. Controls mutate disposable copies.
+   LIVE_CELEBRATION_CONTROL=missing|figure|expiry|reduced|window: each must fail exactly its own row and leave
+   the independent destinations row green (window, Round 1101: goalWindow's net contact read as 0). */
 import assert from 'node:assert/strict';
 import { readFile, writeFile, mkdir, mkdtemp, rm, rmdir } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
@@ -17,6 +19,8 @@ const controls = {
   figure: { anchor: "data-cm-actor-pose={celebrate ? 'celebrate' : dive ? 'dive' : kick ? 'strike' : 'stand'}", replacement: "data-cm-actor-pose={dive ? 'dive' : kick ? 'strike' : 'stand'}", test: 'draws raised arms on the actual scorer figure' },
   expiry: { anchor: 'clock - action.event.at <= 1.05', replacement: 'clock - action.event.at <= 100', test: 'freezes with the viewer clock and expires at the existing action boundary' },
   reduced: { anchor: 'reduced ? 1.05 : clock - action.event.at', replacement: 'clock - action.event.at', test: 'uses a static raised-arm finish under reduced motion' },
+  /* Round 1101: goalWindow reads net contact as the instant the line fires, so a binder's score would change before the ball is in. */
+  window: { anchor: "if (since < (reduced ? 0 : NET_AT)) return 'windup';", replacement: "if (since < 0) return 'windup';", test: "goalWindow says windup, net and over at the contract's instants" },
 };
 assert.ok(!control || Object.hasOwn(controls, control), 'Known celebration control');
 await mkdir(path.join(root, '.sim-control'), { recursive: true });

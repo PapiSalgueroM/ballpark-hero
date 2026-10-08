@@ -17,9 +17,10 @@
 .cm-strip-score{order:5;flex:0 0 100%;display:flex;align-items:center;justify-content:center;gap:10px;min-width:0;height:32px}
 .cm-strip-leg{order:6;flex:0 0 100%;line-height:16px}
 
-/* The pitch takes what is left. On a phone it fills the box edge to edge. */
+/* The pitch takes what is left. On a phone it fills the box edge to edge, and it is never drawn more than
+   one and three quarter times as tall as it is wide (a narrow column on a tall screen would stretch it). */
 .cm-pitchbox{position:relative;flex:1 1 0%;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;container-type:size}
-.cm-pitchbox>.pm-surface{width:100%;height:100%}
+.cm-pitchbox>.pm-surface{width:100%;height:100%;max-height:calc(100cqw * 1.75)}
 
 .cm-statline{display:flex;align-items:center;justify-content:space-around;gap:8px;height:22px;flex:0 0 auto;padding:0 4px;white-space:nowrap;overflow:hidden}
 .cm-eventline{height:24px;line-height:24px;flex:0 0 auto;padding:0 6px}
@@ -40,12 +41,9 @@
 @media(min-width:768px){
   .cm-stage{display:grid;grid-template-columns:minmax(0,1fr) 360px;grid-template-rows:minmax(0,1fr);gap:12px;max-width:1120px;margin:0 auto;padding:12px;box-sizing:border-box}
   .cm-stage-main{gap:6px}
-  .cm-strip{gap:6px;padding:0;min-height:56px}
-  .cm-strip-comp{flex:0 1 auto;max-width:150px;padding:0}
-  .cm-strip-score{order:0;flex:1 1 0%;height:auto}
+  .cm-strip{gap:4px 6px;padding:0}
   .cm-strip-stats{display:none}
-  /* The pitch keeps 3 by 4 inside its box. A browser without container units keeps the phone's fill. */
-  .cm-pitchbox>.pm-surface{width:min(100cqw,calc(100cqh * 3 / 4));height:min(100cqh,calc(100cqw * 4 / 3));border-radius:12px}
+  .cm-pitchbox>.pm-surface{border-radius:12px}
   .cm-statline{display:none}
   .cm-controls{gap:6px;height:56px;padding:6px 0}
   /* The side is a column that is always there: the match line by line and the stats, or the open panel
@@ -54,4 +52,13 @@
   .cm-stage-side[data-cm-live-side="none"]{display:flex}
   .cm-stage-side[data-cm-live-side="none"] .cm-side-log,.cm-stage-side[data-cm-live-side="stats"] .cm-side-log{display:block}
   .cm-stage-side[data-cm-live-side="none"] [data-cm-live-stats]{display:block}
+}
+/* From 1024 px the column beside the panel is wide enough for the strip in one row (at 768 it is 372 px,
+   a phone's width, and keeps the phone's two rows) and for the pitch at its own 3 by 4. */
+@media(min-width:1024px){
+  .cm-strip{min-height:56px}
+  .cm-strip-comp{flex:0 1 auto;max-width:160px;padding:0}
+  .cm-strip-score{order:0;flex:1 1 0%;height:auto}
+  /* A browser without container units keeps the fill. */
+  .cm-pitchbox>.pm-surface{width:min(100cqw,calc(100cqh * 3 / 4));height:min(100cqh,calc(100cqw * 4 / 3));max-height:none}
 }

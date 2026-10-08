@@ -62,7 +62,7 @@ if (CONTROL && CONTROL !== 'bar') { console.error(`unknown LIVE_FIT_CONTROL ${CO
 const V = !!process.env.VERBOSE;
 /* A folder for screenshots of the fit at each size (LIVE_FIT_SHOTS, or a remote check's RC_OUT). Optional. */
 const SHOTS = process.env.LIVE_FIT_SHOTS || process.env.RC_OUT || '';
-const shoot = async (page, name) => { if (SHOTS) await page.screenshot({ path: path.join(SHOTS, name + '.png') }).catch(() => {}); };
+const shoot = async (page, name) => { if (SHOTS) await page.screenshot({ path: path.join(SHOTS, (CONTROL ? CONTROL + '-' : '') + name + '.png') }).catch(() => {}); };
 
 let failures = 0;
 const failed = new Set();
@@ -289,10 +289,17 @@ function judgeGoal(watched, { reduced }) {
   return frames;
 }
 
-function judgeScroll(frames, extra) {
-  const ys = [...new Set([...frames.map(f => Math.round(f.y)), ...extra.map(e => Math.round(e.y))])];
-  if (ys.length !== 1) fail(`window.scrollY moved: ${ys.join(', ')} (${extra.filter(e => Math.round(e.y) !== ys[0]).map(e => e.what).join(', ') || 'during the goal'})`);
-  else ok(`window.scrollY stayed at ${ys[0]} through ${frames.length} frames of a goal${extra.length ? ' and with ' + extra.map(e => e.what).join(', ') + ' open' : ''}`);
+/** Section 4. The frames of the watched goal are one stretch of one period: scrollY is one number through it.
+ *  The panels are opened later, perhaps a period later (the interval between is the page's own screen, where
+ *  the page may scroll), so they are held to a reading taken just before the first of them opened. */
+function judgeScroll(frames, base, panels) {
+  const during = [...new Set(frames.map(f => Math.round(f.y)))];
+  if (during.length !== 1) fail(`window.scrollY moved during the goal: ${during.join(', ')}`);
+  else ok(`window.scrollY stayed at ${during[0]} through ${frames.length} frames before, during and after a goal`);
+  const moved = panels.filter(p => Math.round(p.y) !== Math.round(base));
+  if (!panels.length) fail('no panel could be opened to read scrollY with');
+  else if (moved.length) fail(`window.scrollY was ${Math.round(base)} and moved with ${moved.map(p => `${p.what} (${Math.round(p.y)})`).join(', ')} open`);
+  else ok(`window.scrollY stayed at ${Math.round(base)} with ${panels.map(p => p.what).join(', ')} open`);
 }
 
 /** Opens each panel the viewer has, and the change sheet, and reads scrollY with each one open. */
@@ -304,7 +311,8 @@ async function openEachPanel(page) {
     await dot.click({ timeout: 3000, force: true }).catch(() => {});
     await page.waitForTimeout(350);
     if (await page.locator('[data-cm-live-sheet]').count().catch(() => 0)) await read('the change sheet');
-    await dot.click({ timeout: 3000, force: true }).catch(() => {});
+    /* Closed with its own Close: a second tap at the dot's spot would land on the sheet now lying over it. */
+    await page.locator('[data-cm-live-sheet] button[aria-label="Close"]').first().click({ timeout: 3000 }).catch(() => {});
     await page.waitForTimeout(250);
   }
   for (const [name, what] of [[/squad and stamina/i, 'the squad panel'], [/how watching a match works/i, 'the help panel'], [/^stats$/i, 'the stats panel']]) {
@@ -496,7 +504,10 @@ try {
 
   section = 4;
   console.log('4) Nothing moves the page');
-  if (await runningMatch(page)) judgeScroll(frames.length ? frames : [{ y: yBefore }], [{ what: 'the match just opened', y: yBefore }, ...await openEachPanel(page)]);
+  if (await runningMatch(page)) {
+    const base = await page.evaluate(() => window.scrollY);
+    judgeScroll(frames.length ? frames : [{ y: yBefore }], base, await openEachPanel(page));
+  }
   else fail('no running match to open the panels on');
 
   section = 3;

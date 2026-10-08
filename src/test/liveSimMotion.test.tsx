@@ -13,7 +13,7 @@ const motionPath = process.env.LIVE_MOTION_COMPONENT;
 const { actionFrame, between } = motionPath ? await import(/* @vite-ignore */ motionPath) : await import('@/components/pitch-motion/motion');
 
 const viewerPath = process.env.LIVE_MOTION_VIEWER;
-const { LiveSimScreen, stagePitchInput, goalCardCount } = viewerPath ? await import(/* @vite-ignore */ viewerPath) : await import('@/components/club-manager/LiveSimScreen');
+const { LiveSimScreen, stagePitchInput, goalCardCount, labelsAbove } = viewerPath ? await import(/* @vite-ignore */ viewerPath) : await import('@/components/club-manager/LiveSimScreen');
 const seeded = (seed: number) => () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
 const scene = {
   mine: [{ key: 'm0', name: 'Home keeper', keeper: true, x: 50, y: 90 }, { key: 'm9', name: 'Home striker', keeper: false, x: 40, y: 40 }],
@@ -1037,4 +1037,110 @@ describe('The goal sequence', () => {
       await step(100);
     }
   }, 120000);
+});
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * Round 1101, step 5: match mode. The running match is its own screen (one box the size of the window),
+ * with one panel at a time, a Back that pauses and folds it to a card in the page, and names that get
+ * out of each other's way. What a browser alone can see (the fit, the page not scrolling) is
+ * scripts/playLiveMatchFit.mjs; this is the behaviour.
+ * ───────────────────────────────────────────────────────────────────────────── */
+describe('Match mode', () => {
+  const quiet = () => {
+    const career = structuredClone(fixtures.get('goal')!.career);
+    career.live!.minute = 1;
+    return career;
+  };
+  const minuteOf = (container: HTMLElement) => Number(container.querySelector('[data-cm-live-stage]')!.getAttribute('data-cm-live-minute'));
+  const sideOf = (container: HTMLElement) => container.querySelector('[data-cm-live-side]')?.getAttribute('data-cm-live-side') ?? null;
+
+  it('a name goes above its figure when another man stands just under him', () => {
+    /* One man in front of another: the front man's name goes up, the other keeps his under. */
+    expect([...labelsAbove([{ key: 'm1', x: 50, y: 40 }, { key: 'o1', x: 53, y: 43 }])]).toEqual(['m1']);
+    /* Level with each other: one each, and the later key keeps his under. */
+    expect([...labelsAbove([{ key: 'm1', x: 50, y: 40 }, { key: 'm2', x: 58, y: 40 }])]).toEqual(['m1']);
+    /* Too far across, or too far below, for a name to be in the way: nobody moves. */
+    expect(labelsAbove([{ key: 'm1', x: 50, y: 40 }, { key: 'm2', x: 63, y: 41 }]).size).toBe(0);
+    expect(labelsAbove([{ key: 'm1', x: 50, y: 40 }, { key: 'm2', x: 51, y: 47 }]).size).toBe(0);
+    /* A line of three, each just under the last: the two in front go up. */
+    expect([...labelsAbove([{ key: 'a', x: 50, y: 30 }, { key: 'b', x: 51, y: 34 }, { key: 'c', x: 52, y: 38 }])].sort()).toEqual(['a', 'b']);
+  });
+
+  it('Back folds the match to a card and pauses it, and the card puts it back', async () => {
+    const mounted = mount(quiet());
+    await step(500);
+    expect(mounted.container.querySelector('[data-cm-live-stagebox]')).not.toBeNull();
+    expect(document.body.style.overflow).toBe('hidden');
+    fireEvent.click(mounted.getByRole('button', { name: 'Back to the club page' }));
+    await step(32);
+    const held = minuteOf(mounted.container);
+    expect(mounted.container.querySelector('[data-cm-live-stagebox]')).toBeNull();
+    const card = mounted.container.querySelector('[data-cm-live-compact]')!;
+    expect(card.textContent).toContain(`Paused at ${held}'`);
+    expect(document.body.style.overflow).not.toBe('hidden');
+    /* Three real seconds are three minutes of the match at this speed. Folded away, not one passes. */
+    await step(3000);
+    expect(minuteOf(mounted.container)).toBe(held);
+    fireEvent.click(mounted.getByRole('button', { name: 'Back to the match' }));
+    await step(3000);
+    expect(mounted.container.querySelector('[data-cm-live-compact]')).toBeNull();
+    expect(mounted.container.querySelector('[data-cm-live-stagebox]')).not.toBeNull();
+    /* (a goal inside these three seconds holds the clock for part of them, so one minute is the floor) */
+    expect(minuteOf(mounted.container)).toBeGreaterThanOrEqual(held + 1);
+    /* A match that was paused before Back comes back paused. */
+    fireEvent.click(mounted.getByRole('button', { name: 'Pause' }));
+    await step(32);
+    fireEvent.click(mounted.getByRole('button', { name: 'Back to the club page' }));
+    await step(32);
+    fireEvent.click(mounted.getByRole('button', { name: 'Back to the match' }));
+    await step(32);
+    const stopped = minuteOf(mounted.container);
+    await step(2000);
+    expect(minuteOf(mounted.container)).toBe(stopped);
+    expect(mounted.getByRole('button', { name: 'Resume' })).not.toBeNull();
+  }, 60000);
+
+  it('one panel at a time, and Escape closes what is open before it is Back', async () => {
+    const mounted = mount(quiet());
+    await step(300);
+    expect(sideOf(mounted.container)).toBe('none');
+    fireEvent.click(mounted.getByRole('button', { name: 'Squad and stamina' }));
+    await step(32);
+    expect(sideOf(mounted.container)).toBe('squad');
+    fireEvent.click(mounted.getByRole('button', { name: 'How watching a match works' }));
+    await step(32);
+    expect(sideOf(mounted.container)).toBe('help');
+    expect(mounted.container.querySelector('[data-cm-live-help]')).not.toBeNull();
+    /* A tap on one of my players opens the change sheet in the panel's place, not on top of it. */
+    const dot = [...mounted.container.querySelectorAll<HTMLButtonElement>('[data-cm-dot]')].find(b => !b.disabled && b.dataset.cmDot)!;
+    fireEvent.click(dot);
+    await step(32);
+    expect(sideOf(mounted.container)).toBe('change');
+    expect(mounted.container.querySelector('[data-cm-live-help]')).toBeNull();
+    expect(mounted.container.querySelector('[data-cm-live-sheet]')).not.toBeNull();
+    /* Escape closes the sheet and nothing comes back under it. A second Escape is Back. */
+    fireEvent.keyDown(window, { key: 'Escape' });
+    await step(32);
+    expect(sideOf(mounted.container)).toBe('none');
+    expect(mounted.container.querySelector('[data-cm-live-stagebox]')).not.toBeNull();
+    fireEvent.keyDown(window, { key: 'Escape' });
+    await step(32);
+    expect(mounted.container.querySelector('[data-cm-live-stagebox]')).toBeNull();
+    expect(mounted.container.querySelector('[data-cm-live-compact]')).not.toBeNull();
+  }, 60000);
+
+  it('the stats line a phone keeps in view reads the same count as the full stats', async () => {
+    const mounted = mount(quiet());
+    await step(4000);
+    const line = mounted.container.querySelector('[data-cm-live-statline]')!.textContent!;
+    const full = mounted.container.querySelector('[data-cm-live-stats]')!;
+    const cell = (label: string) => [...full.querySelectorAll(`[data-cm-live-stat="${label}"] span`)].map(s => s.textContent);
+    const [shotsMine, , shotsTheirs] = cell('Shots (on target)');
+    const [xgMine, , xgTheirs] = cell('xG');
+    expect(line).toContain(`Poss ${full.querySelector('[data-cm-live-poss="mine"]')!.textContent} ${full.querySelector('[data-cm-live-poss="theirs"]')!.textContent}`);
+    expect(line).toContain(`Shots ${shotsMine} ${shotsTheirs}`);
+    expect(line).toContain(`xG ${xgMine} ${xgTheirs}`);
+    /* And the full stats are in the markup the whole time, panel or no panel. */
+    expect(mounted.container.querySelectorAll('[data-cm-live-stats]').length).toBe(1);
+  }, 60000);
 });

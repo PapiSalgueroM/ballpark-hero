@@ -1210,7 +1210,8 @@ export function LiveSimScreen({
                   {/* event banner */}
                   {banner && (
                     <div className={cn(
-                      'absolute left-1/2 top-3 -translate-x-1/2 px-3 py-1.5 rounded-full text-[11px] font-bold shadow-lg animate-in fade-in slide-in-from-top-2 pointer-events-none text-center max-w-[92%]',
+                      /* Round 1101: under the six yard box, so the pill is never over a goal mouth. */
+                      'absolute left-1/2 top-[8%] -translate-x-1/2 px-3 py-1.5 rounded-full text-[11px] font-bold shadow-lg animate-in fade-in slide-in-from-top-2 pointer-events-none text-center max-w-[92%]',
                       banner.tone === 'me' ? 'bg-emerald-500 text-black' : banner.tone === 'opp' ? 'bg-red-500 text-black' : 'bg-background/90 text-foreground border border-border',
                     )}>
                       <div className="truncate">
@@ -1287,7 +1288,9 @@ export function LiveSimScreen({
               {/* Round 1101: on a phone the full stats are a panel, so the three numbers that tell the match
                   stay in view the whole time, off the same count the panel reads. */}
               <div data-cm-live-statline="1" className="cm-statline text-[11px] text-muted-foreground tabular-nums">
-                <span>Poss <b className="text-foreground">{poss === null ? '-' : `${poss}%`}</b> {poss === null ? '-' : `${100 - poss}%`}</span>
+                {/* Its name, for a screen reader: the full stats, where the words are printed, are a panel away on a phone. */}
+                <span className="sr-only">Balance of play: </span>
+                <span>Poss<b className="text-foreground">{poss === null ? '-' : `${poss}%`}</b> {poss === null ? '-' : `${100 - poss}%`}</span>
                 <span>Shots <b className="text-foreground">{stats ? `${stats.shots} (${stats.onTarget})` : '-'}</b> {stats ? `${stats.oppShots} (${stats.oppOnTarget})` : '-'}</span>
                 <span>xG <b className="text-foreground">{stats ? stats.xg.toFixed(2) : '-'}</b> {stats ? stats.oppXg.toFixed(2) : '-'}</span>
               </div>
