@@ -1,0 +1,49 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-motion: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-celeb: node_modules/.bin/vitest run src/test/liveSimCelebration.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-save: node_modules/.bin/vitest run src/test/clubManagerSave.test.tsx --testTimeout=300000 --hookTimeout=120000
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+simLiveSimCelebration: node scripts/simLiveSimCelebration.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simExtraTime: node scripts/simExtraTime.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simCmStoppageTime: node scripts/simCmStoppageTime.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+cm-livestale: CM_CENTRE_CONTROL=livestale node scripts/simCmMatchCentre.mjs
+m-trigger: LIVE_MOTION_CONTROL=trigger node scripts/simLiveSimMotion.mjs
+m-save: LIVE_MOTION_CONTROL=save node scripts/simLiveSimMotion.mjs
+m-pause: LIVE_MOTION_CONTROL=pause node scripts/simLiveSimMotion.mjs
+m-mutation: LIVE_MOTION_CONTROL=mutation node scripts/simLiveSimMotion.mjs
+m-lineup: LIVE_MOTION_CONTROL=lineup node scripts/simLiveSimMotion.mjs
+m-speed: LIVE_MOTION_CONTROL=speed node scripts/simLiveSimMotion.mjs
+m-reduced: LIVE_MOTION_CONTROL=reduced node scripts/simLiveSimMotion.mjs
+m-terminal: LIVE_MOTION_CONTROL=terminal node scripts/simLiveSimMotion.mjs
+m-redraw: LIVE_MOTION_CONTROL=redraw node scripts/simLiveSimMotion.mjs
+m-whistle: LIVE_MOTION_CONTROL=whistle node scripts/simLiveSimMotion.mjs
+m-banner: LIVE_MOTION_CONTROL=banner node scripts/simLiveSimMotion.mjs
+m-boardgoal: LIVE_MOTION_CONTROL=boardgoal node scripts/simLiveSimMotion.mjs
+m-etclock: LIVE_MOTION_CONTROL=etclock node scripts/simLiveSimMotion.mjs
+m-block: LIVE_MOTION_CONTROL=block node scripts/simLiveSimMotion.mjs
+m-kickoff: LIVE_MOTION_CONTROL=kickoff node scripts/simLiveSimMotion.mjs
+m-overlap: LIVE_MOTION_CONTROL=overlap node scripts/simLiveSimMotion.mjs
+m-mouth: LIVE_MOTION_CONTROL=mouth node scripts/simLiveSimMotion.mjs
+m-draw: LIVE_MOTION_CONTROL=draw node scripts/simLiveSimMotion.mjs
+m-approach: LIVE_MOTION_CONTROL=approach node scripts/simLiveSimMotion.mjs
+m-lag: LIVE_MOTION_CONTROL=lag node scripts/simLiveSimMotion.mjs
+m-hold: LIVE_MOTION_CONTROL=hold node scripts/simLiveSimMotion.mjs
+m-skipmoment: LIVE_MOTION_CONTROL=skipmoment node scripts/simLiveSimMotion.mjs
+m-back: LIVE_MOTION_CONTROL=back node scripts/simLiveSimMotion.mjs
+m-onepanel: LIVE_MOTION_CONTROL=onepanel node scripts/simLiveSimMotion.mjs
+m-labels: LIVE_MOTION_CONTROL=labels node scripts/simLiveSimMotion.mjs
+m-stalejoin: LIVE_MOTION_CONTROL=stalejoin node scripts/simLiveSimMotion.mjs
+m-takenback: LIVE_MOTION_CONTROL=takenback node scripts/simLiveSimMotion.mjs
+m-cmimport: LIVE_MOTION_CONTROL=cmimport node scripts/simLiveSimMotion.mjs
+c-missing: LIVE_CELEBRATION_CONTROL=missing node scripts/simLiveSimCelebration.mjs
+c-figure: LIVE_CELEBRATION_CONTROL=figure node scripts/simLiveSimCelebration.mjs
+c-expiry: LIVE_CELEBRATION_CONTROL=expiry node scripts/simLiveSimCelebration.mjs
+c-reduced: LIVE_CELEBRATION_CONTROL=reduced node scripts/simLiveSimCelebration.mjs
+c-window: LIVE_CELEBRATION_CONTROL=window node scripts/simLiveSimCelebration.mjs
+c-deadball: LIVE_CELEBRATION_CONTROL=deadball node scripts/simLiveSimCelebration.mjs
