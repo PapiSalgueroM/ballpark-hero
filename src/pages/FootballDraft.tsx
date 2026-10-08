@@ -10,6 +10,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { HelpCircle, Eye, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { FootballDraftHowToPlay } from '@/components/football-draft/FootballDraftHowToPlay';
+import { safeSetItem } from '@/lib/safeStorage';
 
 const ROUND_LABELS: Record<number, string> = {
   1: '1st Round',
@@ -48,7 +49,7 @@ const FootballDraft = () => {
     const seen = localStorage.getItem('fd-rules-seen');
     if (!seen) {
       setShowRules(true);
-      localStorage.setItem('fd-rules-seen', '1');
+      safeSetItem('fd-rules-seen', '1');
     }
   }, []);
 

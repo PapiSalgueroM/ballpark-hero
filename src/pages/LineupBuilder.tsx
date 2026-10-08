@@ -24,6 +24,7 @@ import { ordinal, simulateWorldXiSeason, type WxPlayer } from '@/lib/worldXi';
 import { SeasonReportTabs } from '@/components/world-xi/SeasonReportTabs';
 import { lineupFitSlots, seasonAdjust, xiFitBreakdown, type XiFitSlot } from '@/lib/xiFit';
 import { XiFitBreakdown, XiFitWorth } from '@/components/lineup/XiFitBreakdown';
+import { safeSetItem } from '@/lib/safeStorage';
 
 const formationOptions: Formation[] = ['4-3-3', '4-4-2', '3-5-2', '4-2-3-1', '3-4-3', '5-3-2'];
 
@@ -60,7 +61,7 @@ const LineupBuilder = () => {
     const seen = localStorage.getItem('lineup-rules-seen');
     if (!seen) {
       setShowRules(true);
-      localStorage.setItem('lineup-rules-seen', '1');
+      safeSetItem('lineup-rules-seen', '1');
     }
   }, []);
 

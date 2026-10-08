@@ -18,6 +18,7 @@ import PostGameStats from '@/components/game/PostGameStats';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { fmtCompactUsd } from '@/lib/dealPlayers';
+import { safeSetItem } from '@/lib/safeStorage';
 
 const Index = () => {
   const {
@@ -98,7 +99,7 @@ const Index = () => {
     const seen = localStorage.getItem('footle-rules-seen');
     if (!seen) {
       setShowRules(true);
-      localStorage.setItem('footle-rules-seen', '1');
+      safeSetItem('footle-rules-seen', '1');
     }
   }, []);
 

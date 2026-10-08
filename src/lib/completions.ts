@@ -79,6 +79,10 @@ const HANDLE_RIGHT = [
    the dash), so this test can only ever catch a pre-Round-299 handle. */
 const LEGACY_HANDLE = /^Baller-\d+$/;
 
+/* The guest handle this visit runs on when the browser would not keep one.
+   Null while storage is doing its job, which is every ordinary browser. */
+let visitHandle: string | null = null;
+
 export function getGuestHandle(): string {
   const mint = () => {
     const left = HANDLE_LEFT[Math.floor(Math.random() * HANDLE_LEFT.length)];
@@ -91,15 +95,22 @@ export function getGuestHandle(): string {
   try {
     const existing = localStorage.getItem(GUEST_HANDLE_KEY);
     if (existing && !LEGACY_HANDLE.test(existing)) return existing;
-    const handle = mint();
+  } catch { /* it cannot be read: the handle below is all there is */ }
+  /* Round 1142 review: a handle that could not be stored is kept for the
+     visit, never minted again. It used to be a new random name on every call,
+     and useGameNavbarStats reads it on every render and lists it as an effect
+     dependency, so with storage full (or a legacy handle that could not be
+     replaced) every game page rendered for ever: about five thousand refused
+     writes a second, and a link changed the address without the next page
+     ever being drawn. One name a visit also keeps a guest's rows together. */
+  if (visitHandle !== null) return visitHandle;
+  const handle = mint();
+  try {
     localStorage.setItem(GUEST_HANDLE_KEY, handle);
-    return handle;
   } catch {
-    // localStorage unavailable, fall back to a per-call random handle.
-    // Not persisted, so it won't match across renders, but it still lets an
-    // insert carry a name rather than null.
-    return mint();
+    visitHandle = handle;
   }
+  return handle;
 }
 
 /**

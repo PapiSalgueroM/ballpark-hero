@@ -3,6 +3,7 @@ import { Trophy, Zap, Loader2 } from "lucide-react";
 import { FlagImg, getFifaRank, rankWinner } from "@/pages/WorldCupPredictor";
 import { buildKnockoutRounds, buildRound32, validPick } from "@/lib/wc2026Bracket";
 import { clearWc2026ChildStorage, WC2026_STORAGE_KEYS, wc2026SeedSignature } from "@/lib/wc2026Lifecycle";
+import { safeSetItem } from '@/lib/safeStorage';
 
 /* ───── types ───── */
 
@@ -85,8 +86,8 @@ const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, onRoundsChange, 
       clearWc2026ChildStorage(localStorage, false);
       return;
     }
-    localStorage.setItem(WC2026_STORAGE_KEYS.knockout, JSON.stringify(picks));
-    localStorage.setItem(WC2026_STORAGE_KEYS.knockoutSignature, signature);
+    safeSetItem(WC2026_STORAGE_KEYS.knockout, JSON.stringify(picks));
+    safeSetItem(WC2026_STORAGE_KEYS.knockoutSignature, signature);
   }, [picks, signature]);
 
   useEffect(() => {
