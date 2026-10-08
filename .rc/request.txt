@@ -1,0 +1,2 @@
+# AN2 final proof: the whole vitest suite on the final head
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
