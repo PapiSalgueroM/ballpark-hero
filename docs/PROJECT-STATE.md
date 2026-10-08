@@ -1,3 +1,17 @@
+Preparation 1 at 95804eab/run 37712341472 completed red. Types/build passed.
+The focused worker passed 3/4; its actual computed prospect price was 797,
+so the deliberately greater-than-1,000 fixture assertion stopped before hook
+mount. No copied controls ran. The next QA-only preparation stages the legal
+agent office at level 10 (maximum 20), with an explicit annotation, keeping
+the actual price assertion and all sale/save/RNG/three control checks strict.
+This changes shared staged fixture bytes, including the purchase baseline;
+the unchanged actual operation and exact current/original comparison remain.
+Product files and economic behavior are held. Remote confirmation is pending.
+Full artifact 11522518591 has 589 files, ZIP 695a8a9d. Early 11522606056 has
+34 files, ZIP fc5544a5. Original Tycoon Help and three built readers remain red;
+these gates are not waived or declared inherited without an actual baseline.
+Independent static proposal peer 78338be9 and reverse 4e03a649 are retained.
+
 ## Round 1092 preparation, 2026-10-07, tycoon money labels
 
 Unverified preparation in the attached tycoon-money-display-1092 checkout,

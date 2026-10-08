@@ -57,7 +57,7 @@ function check(id, actual, expected, extra = {}) { console.log('TYCOON_MONEY_REC
 const flush = async () => { await act(async () => { for (let i = 0; i < 20; i++) await Promise.resolve(); }); };
 function restore(s) { localStorage.clear(); sessionStorage.clear(); for (const [k,v] of Object.entries(s.local)) localStorage.setItem(k,v); for (const [k,v] of Object.entries(s.session)) sessionStorage.setItem(k,v); writes = []; requests = []; errors = []; draws = 0; }
 function fixture(senior = false) {
-  const s = O.newFactory(NOW, 1701); s.cash = 9876; s.levels.agents = 1;
+  const s = O.newFactory(NOW, 1701); s.cash = 9876; s.levels.agents = 10;
   let seed = 8021; const random = () => { seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0; return seed / 4294967296; };
   const p = O.makeProspectInBand(s, 92, 96, random); p.age = O.PROMOTE_AGE; p.rating = 85; s.prospects.push(p);
   if (senior) expect(O.promote(s, p.id), 'Actual legal promotion built the senior fixture').toBe(true);
@@ -131,7 +131,7 @@ it('Actual prospect and senior sales', async () => {
     const price = senior ? O.sellSenior(expected, player.id) : O.sellProspect(expected, player.id);
     expect(price).toBeGreaterThan(1000);
     const hook = renderHook(() => useFactory());
-    check('loaded-' + senior, clone(hook.result.current.state), loaded, { staged: input, stageNote: 'Actual generated prospect, age 18 and rating 85 explicitly staged; senior uses actual promote.' });
+    check('loaded-' + senior, clone(hook.result.current.state), loaded, { staged: input, stageNote: 'Actual generated prospect, age 18, rating 85 and agent office level 10 explicitly staged; senior uses actual promote.' });
     const drawStart = draws;
     await act(async () => { if (senior) hook.result.current.doSellSenior(player.id); else hook.result.current.doSell(player.id); }); await flush();
     const immediate = localStorage.getItem(E.SAVE_KEY), bytes = O.serialize(expected);
