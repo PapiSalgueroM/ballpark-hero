@@ -10,6 +10,7 @@ import { formatNumber } from './formatNumber';
  */
 
 import { NBA_TEAMS } from '@/data/conquestDataNba';
+import { nbaEraScale } from '@/data/nbaLeagueNorms';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
 import { nbaSeasonScore, wonAward } from './careerAwards';
 import { draftRival, judgeRivalSeason } from './careerRival';
@@ -121,7 +122,13 @@ export interface NbaSeasonLine {
   awards: string[];
   teamResult: string;
   salary: number;
+  /** Round 1103: minutes, steals and blocks a game. An absent key is a season saved before Round 1103, whose
+   *  whole number points and three part line stay exactly as saved. */
+  mpg?: number; spg?: number; bpg?: number;
 }
+
+/** Round 1103: the one test of "a season on the new line" (minutes were never recorded before it). */
+export const isNbaNewLine = (s: Pick<NbaSeasonLine, 'mpg'>): boolean => typeof s.mpg === 'number';
 
 export interface NbaCareerState {
   name: string;
@@ -503,6 +510,78 @@ export function nbaMarketSalary(c: NbaCareerState): number {
   /* Round 172: era money. A 2003 deal pays 2003 money, about a third. */
   const scale = nbaEraById(c.eraId).moneyScale;
   return Math.max(0.8, Math.round(((c.ovr - 66) * 2.3 - 6) * posMult * scale * 10) / 10);
+}
+
+/* ─── Round 1103: the line ───────────────────────────────────────────────────
+   One season's averages from a form, a job and a role: minutes, times what he produces a minute, times the
+   league's level that year. Pure: it reads nothing but its input, mutates nothing, and always takes exactly
+   NBA_LINE_DRAWS draws in the same order (bench share, minutes, points, rebounds, assists, steals, blocks),
+   used or not, so a seeded career replays and another caller can hand it a rival's season.
+
+   The noise is a multiplier. The line it replaces added up to two assists and two rebounds to everybody, which
+   is what had a centre passing like a guard. */
+export interface NbaLineInput {
+  /** Exactly the form simNbaSeason computes: rating, morale, club and the season's swing. */
+  form: number;
+  pos: NbaCareerPos;
+  archetype: NbaArchetype;
+  /** An absent role on the save is a starter, as it always was. */
+  role: 'starter' | 'backup';
+  /** Seasons on the save before this one: 0 is a rookie, who earns his minutes. */
+  seasonsPlayed: number;
+  /** The season's start year, for the league's level that year. */
+  year: number;
+  playoffs?: boolean;
+}
+export interface NbaLineNumbers { mpg: number; ppg: number; rpg: number; apg: number; spg: number; bpg: number }
+export const NBA_LINE_DRAWS = 7;
+
+/** What a position passes, steals and blocks, a 36 minute starter of average hands. */
+const NBA_POS_AST: Record<NbaCareerPos, number> = { PG: 1.0, SG: 0.8, SF: 0.75, PF: 0.7, C: 0.8 };
+const NBA_POS_REB: Record<NbaCareerPos, number> = { PG: 1, SG: 1, SF: 0.92, PF: 0.75, C: 1 };
+const NBA_POS_STL: Record<NbaCareerPos, number> = { PG: 1.25, SG: 1.3, SF: 1.2, PF: 1.0, C: 1.2 };
+const NBA_POS_BLK: Record<NbaCareerPos, number> = { PG: 0.3, SG: 0.55, SF: 0.55, PF: 0.8, C: 0.9 };
+
+/** Steals and blocks by the kind of player, keyed by archetype ID because the archetype object is saved by
+ *  value (an old save's archetype has no new field; an id this table has never heard of reads as average).
+ *  `rep` is the awards' thumb for defence, in standard deviations: negative means voters rate his defence.
+ *  It is an estimate and is named as one. */
+export const NBA_ARCH_DEFENSE: Record<string, { stl: number; blk: number; rep: number }> = {
+  pointgod: { stl: 1.15, blk: 0.6, rep: 0 }, scoringpg: { stl: 0.95, blk: 0.6, rep: 0.5 }, pest: { stl: 1.6, blk: 0.7, rep: -0.6 },
+  bucket: { stl: 0.9, blk: 0.7, rep: 0.5 }, sniper: { stl: 0.8, blk: 0.6, rep: 0.3 }, twoway: { stl: 1.45, blk: 1.1, rep: -0.6 },
+  alpha: { stl: 0.9, blk: 0.8, rep: 0.4 }, threed: { stl: 1.5, blk: 1.3, rep: -0.6 }, pointforward: { stl: 1.0, blk: 0.8, rep: 0 },
+  stretch4: { stl: 0.8, blk: 0.9, rep: 0.3 }, bruiser: { stl: 0.8, blk: 1.0, rep: 0 }, swiss: { stl: 1.05, blk: 1.1, rep: -0.2 },
+  paintbeast: { stl: 0.7, blk: 1.35, rep: -0.2 }, stretch: { stl: 0.7, blk: 1.0, rep: 0.3 }, anchor: { stl: 0.9, blk: 1.7, rep: -0.7 },
+};
+const NBA_DEFENSE_UNKNOWN = { stl: 1, blk: 1, rep: 0 };
+
+const clampTo = (x: number, lo: number, hi: number): number => Math.min(hi, Math.max(lo, x));
+const tenth = (x: number): number => Math.round(x * 10) / 10;
+
+export function nbaStatLineFor(input: NbaLineInput, rng: () => number): NbaLineNumbers {
+  const u1 = rng(); const u2 = rng(); const u3 = rng(); const u4 = rng(); const u5 = rng(); const u6 = rng(); const u7 = rng();
+  const a = input.archetype;
+  const d = input.form - 64;
+  const era = nbaEraScale(input.year);
+  const def = NBA_ARCH_DEFENSE[a.id] ?? NBA_DEFENSE_UNKNOWN;
+  const po = input.playoffs === true;
+  const bench = input.role === 'backup';
+  /* Round 182's bench share, unchanged: a second unit season is about three fifths of a starter's minutes. */
+  let minutes = clampTo(28 + (input.form - 76.5) * 0.42, 20, 38)
+    * (bench ? 0.55 + u1 * 0.1 : 1)
+    * (input.seasonsPlayed === 0 ? 0.86 : input.seasonsPlayed === 1 ? 0.94 : 1)
+    * (0.95 + u2 * 0.1);
+  /* Rotations shorten in the playoffs: a starter plays a couple more. */
+  if (po && !bench) minutes += 2;
+  minutes = clampTo(minutes, 8, 42);
+  const pointsRate = Math.max(0.20 + d * 0.011, 0.0811 + d * 0.0212) * (1 + (a.scoring - 1) * 0.6);
+  const ppg = clampTo(pointsRate * minutes * era.pts * (0.92 + u3 * 0.16), 1, po ? 42 : 38);
+  const rpg = clampTo((0.12 + d * 0.0048) * a.rebounding * NBA_POS_REB[input.pos] * minutes * era.reb * (0.92 + u4 * 0.16), 0.5, po ? 18 : 16);
+  const apg = clampTo((0.045 + d * 0.0052) * a.playmaking * NBA_POS_AST[input.pos] * minutes * era.ast * (0.92 + u5 * 0.16), 0.3, po ? 14 : 13);
+  const hands = (0.75 + d * 0.012) * minutes / 36;
+  const spg = clampTo(NBA_POS_STL[input.pos] * def.stl * hands * era.stl * (0.8 + u6 * 0.4), 0.1, 3);
+  const bpg = clampTo(NBA_POS_BLK[input.pos] * def.blk * hands * era.blk * (0.8 + u7 * 0.4), 0, 4);
+  return { mpg: tenth(minutes), ppg: tenth(ppg), rpg: tenth(rpg), apg: tenth(apg), spg: tenth(spg), bpg: tenth(bpg) };
 }
 
 function gamesFor(c: NbaCareerState, rng: () => number): { games: number; note: string | null } {

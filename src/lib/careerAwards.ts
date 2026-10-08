@@ -57,6 +57,8 @@ export interface AwardSeasonLine {
   games: number;
   // basketball
   ppg?: number; rpg?: number; apg?: number;
+  // basketball, Round 1103: absent on a season saved before it
+  mpg?: number; spg?: number; bpg?: number;
   // football
   passYds?: number; passTd?: number; ints?: number;
   rushYds?: number; rushTd?: number;

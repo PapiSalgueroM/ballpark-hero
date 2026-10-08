@@ -84,6 +84,8 @@ await build({
       "export { NBA_CAREER_HALL } from './src/lib/nbaCareerHall.ts';",
       "export { hallRecordFor } from './src/lib/careerHallOfFame.ts';",
       "export * as loop from './src/lib/nbaCareerLoop.ts';",
+      "export * as norms from './src/data/nbaLeagueNorms.ts';",
+      "export { seasonSwing } from './src/lib/careerVariance.ts';",
     ].join('\n'),
     resolveDir: ROOT, loader: 'ts',
   },
@@ -230,6 +232,72 @@ function measure(f) {
 }
 
 /* ------------------------------------------------------------------ */
+/* Section A's numbers: the line against the real league               */
+/* ------------------------------------------------------------------ */
+const ARCH = Object.fromEntries(POS.flatMap(p => nba.NBA_ARCHETYPES[p].map(a => [a.id, a])));
+const STATS = [['mpg', 'mpg'], ['pts', 'ppg'], ['reb', 'rpg'], ['ast', 'apg'], ['stl', 'spg'], ['blk', 'bpg']];
+const median = a => pctl(a, 0.5);
+/** The form simNbaSeason gave a recorded season, its swing drawn again from the same law on the harness's own
+ *  stream (the engine keeps the swing to itself; the distribution is what a fit needs, not the pairing). */
+const formOf = (s, rnd) => s.ovr + (s.morale - 60) / 12 + (s.tq - 78) / 8 + E.seasonSwing(rnd, s.age);
+
+/** One seed's section A numbers. Modern careers only. When the engine does not write the new line yet (step 3b)
+ *  every season is REPLAYED through nbaStatLineFor from what the engine knew going in; once it does, the saved
+ *  line is read. The 2003 arm is always a replay of the same modern seasons with the year set to 2003. */
+function lineStats(f, seed) {
+  const rnd = mulberry32(seed * 9973 + 5);
+  const live = f.seasons.some(s => nba.isNbaNewLine(s.line));
+  const rows = f.seasons.filter(s => s.era === 'now').map(s => {
+    const input = { form: formOf(s, rnd), pos: s.pos, archetype: ARCH[s.arch], role: s.role, seasonsPlayed: s.n };
+    const replay = nba.nbaStatLineFor({ ...input, year: 2026 }, rnd);
+    return { pos: s.pos, arch: s.arch, ovr: s.ovr, role: s.role, n: s.n, games: s.line.games, now: live ? s.line : replay, old: nba.nbaStatLineFor({ ...input, year: 2003 }, rnd) };
+  });
+  const starters = rows.filter(r => r.role !== 'backup' && r.games >= 58);
+  const out = { live, rows: rows.length, starters: starters.length, med: { now: {}, y2004: {} }, n: {}, p99: {}, bands: {} };
+  for (const p of POS) {
+    const mine = starters.filter(r => r.pos === p);
+    out.n[p] = mine.length;
+    out.med.now[p] = Object.fromEntries(STATS.map(([k, key]) => [k, median(mine.map(r => r.now[key]))]));
+    out.med.y2004[p] = Object.fromEntries(STATS.map(([k, key]) => [k, median(mine.map(r => r.old[key]))]));
+    out.bands[p] = ['72-75', '76-79', '80-83', '84-87', '88-91', '92-95'].map(b => { const v = mine.filter(r => band(r.ovr) === b); return { b, n: v.length, pts: mean(v.map(r => r.now.ppg)), reb: mean(v.map(r => r.now.rpg)), ast: mean(v.map(r => r.now.apg)), mpg: mean(v.map(r => r.now.mpg ?? 0)) }; });
+  }
+  for (const [k, key] of [['pts', 'ppg'], ['reb', 'rpg'], ['ast', 'apg']]) out.p99[k] = pctl(starters.map(r => r.now[key]), 0.99);
+  const rook = rows.filter(r => r.n === 0 && r.games >= 58 && r.ovr >= 75 && r.ovr <= 79);
+  out.rookies = { n: rook.length, ppg: mean(rook.map(r => r.now.ppg)), starters: mean(rook.filter(r => r.role !== 'backup').map(r => r.now.ppg)), bench: mean(rook.filter(r => r.role === 'backup').map(r => r.now.ppg)) };
+  const wings = starters.filter(r => r.pos === 'SG' || r.pos === 'SF');
+  out.wing8 = { n: wings.length, share: share(wings.filter(r => r.now.apg >= 8).length, wings.length) };
+  const bench = rows.filter(r => r.role === 'backup' && r.games >= 58);
+  out.bench = { n: bench.length, ppg: mean(bench.map(r => r.now.ppg)), mpg: mean(bench.map(r => r.now.mpg ?? 0)), ratio: mean(bench.map(r => r.now.ppg)) / mean(starters.map(r => r.now.ppg)) };
+  out.thirty = share(starters.filter(r => r.now.ppg >= 30).length, starters.length);
+  out.tenAst = share(starters.filter(r => r.now.apg >= 10).length, starters.length);
+  out.tripleDouble = rows.filter(r => r.now.ppg >= 10 && r.now.rpg >= 10 && r.now.apg >= 10).length;
+  out.decimals = { n: rows.length, oneDecimal: rows.every(r => Math.abs(r.now.ppg * 10 - Math.round(r.now.ppg * 10)) < 1e-9), nonZero: share(rows.filter(r => Math.round(r.now.ppg * 10) % 10 !== 0).length, rows.length) };
+  out.allMed = Object.fromEntries(POS.map(p => { const v = rows.filter(r => r.pos === p && r.games >= 41); return [p, [r1(median(v.map(r => r.now.ppg))), r1(median(v.map(r => r.now.rpg))), r1(median(v.map(r => r.now.apg)))]]; }));
+  return out;
+}
+
+/** The elite sweep scripts/simCareerParity.mjs runs for its badge check (rating 93, ceiling 99, a 90 club), here
+ *  for one thing: can anyone still reach 10, 10 and 10. Returns triple double seasons over `n` careers. */
+function eliteTripleDoubles(seed, n) {
+  const rnd = mulberry32(seed * 31337 + 7);
+  Math.random = rnd;
+  let hits = 0;
+  for (let i = 0; i < n; i++) {
+    const pos = POS[i % 5];
+    const c = nba.startNbaCareer(`Elite ${i}`, pos, nba.NBA_ARCHETYPES[pos][i % 3], rnd, null);
+    c.ovr = 93; c.pot = 99;
+    let guard = 0;
+    while (guard++ < 30) {
+      const { line } = nba.simNbaSeason(c, 90, rnd);
+      if (line.ppg >= 10 && line.rpg >= 10 && line.apg >= 10) hits++;
+      nba.nbaProgress(c, rnd);
+      if (nba.nbaShouldRetire(c)) break;
+    }
+  }
+  return hits;
+}
+
+/* ------------------------------------------------------------------ */
 /* The other three sports: a hash of every career, and two printed rates */
 /* ------------------------------------------------------------------ */
 const OTHER = {
@@ -319,10 +387,13 @@ function heldAtMain(section, base, per, key, label) {
 const t0 = Date.now();
 console.log(`simNbaAwardsSense: ${CAREERS} careers a seed, seeds ${SEEDS.join(', ')}${CONTROL ? `, control ${CONTROL}` : ''}${FULL ? '' : ' (quick run, bands not judged)'}`);
 const per = [];
+const aStats = [];
+const HAS_LINE = typeof nba.nbaStatLineFor === 'function';
 for (const seed of SEEDS) {
   const f = playFleet(seed, CAREERS);
   const m = measure(f);
   per.push(m);
+  if (HAS_LINE) aStats.push(lineStats(f, seed));
   console.log(`  seed ${seed}: ${m.seasons} seasons, Hall ${m.inducted}% (first ballot ${m.firstBallot}%), MVPs ${m.perCareer.MVP} a career, All-NBA ${m.perCareer['All-NBA']}, my share ${m.myShare}%, ${((Date.now() - t0) / 1000).toFixed(0)}s`);
 }
 const others = {};
@@ -373,6 +444,78 @@ console.log(`  the field as the fleet lives it (mean, sd): ${POS.map(p => `${p} 
 /* Sections                                                            */
 /* ------------------------------------------------------------------ */
 console.log('\nSections:');
+
+/* A, the line against the norms. */
+if (HAS_LINE) {
+  const N = E.norms;
+  const live = aStats[0].live;
+  const f1 = x => (Math.round(x * 10) / 10).toFixed(1);
+  console.log(`  A reads ${live ? 'the lines the engine saved' : 'a REPLAY of the recorded seasons through nbaStatLineFor (the engine does not call it yet)'}; healthy starters of modern careers: ${aStats.map(a => a.starters).join(', ')}`);
+  const normBand = (era, pos, k) => { const q = N.NBA_STARTER_NORMS[era][pos][k]; const pad = N.NBA_NORMS_PARTIAL.includes(`${era}.${pos}.${k}`) ? 0.15 * q.p50 : 0; return { lo: q.p25 - pad, hi: q.p75 + pad, q }; };
+  /* A1: the median healthy starter sits inside the real starters' quartiles, stat by stat, position by position. */
+  for (const era of ['now', 'y2004']) {
+    let outside = 0; let cells = 0; const thin = [];
+    for (const p of POS) {
+      const parts = [];
+      for (const [k] of STATS) {
+        const b = normBand(era, p, k);
+        const meds = aStats.map(a => a.med[era][p][k]);
+        const m = mean(meds);
+        const inside = meds.every(x => x >= b.lo - 1e-9 && x <= b.hi + 1e-9);
+        const edge = Math.min(m - b.lo, b.hi - m) / (b.hi - b.lo);
+        cells++; if (!inside) outside++;
+        if (inside && edge < 0.1) thin.push(`${p} ${k} ${(edge * 100).toFixed(0)}%`);
+        parts.push(`${k} ${f1(m)} in ${f1(b.lo)}..${f1(b.hi)} (${inside ? `${(edge * 100).toFixed(0)}% in` : 'OUT'})`);
+        if (era === 'now') {
+          if (aStats.some(a => a.n[p] < 1000) && FULL) exact('A1', false, `${p}: fewer than 1,000 healthy starter seasons a seed (${aStats.map(a => a.n[p]).join(', ')}): the check is empty`);
+          banded('A1', inside, `${p} ${k}: median ${meds.map(f1).join(', ')} inside the real starters' ${f1(b.lo)} to ${f1(b.hi)} (p25 ${b.q.p25}, p75 ${b.q.p75}${b.lo < b.q.p25 ? ', partial key, 15 percent of the median wider' : ''}); ${(edge * 100).toFixed(0)} percent of the band from the nearer edge`);
+        }
+      }
+      if (era === 'y2004') console.log(`  note [A1 2003, printed] ${p}: ${parts.join('; ')}`);
+    }
+    if (era === 'y2004') console.log(`  note [A1 2003, printed] ${outside} of ${cells} cells outside the 2003-04 quartiles (not judged: the lead sets how many may miss)`);
+    else if (thin.length) console.log(`  note [A1] under a tenth of the band from an edge (refit, do not accept): ${thin.join(', ')}`);
+  }
+  /* The unit check that IS judged for 2003: the same input drawn 2,000 times at each year gives the league rows' ratio. */
+  {
+    const rnd = mulberry32(77);
+    const input = { form: 84, pos: 'SF', archetype: ARCH.pointforward, role: 'starter', seasonsPlayed: 5 };
+    const draw = year => { const acc = { ppg: 0, rpg: 0, apg: 0, spg: 0, bpg: 0 }; for (let i = 0; i < 2000; i++) { const l = nba.nbaStatLineFor({ ...input, year }, rnd); for (const k of Object.keys(acc)) acc[k] += l[k]; } return acc; };
+    const then = draw(2003); const today = draw(2026);
+    const rows = [['ppg', 'pts'], ['rpg', 'reb'], ['apg', 'ast'], ['spg', 'stl'], ['bpg', 'blk']].map(([k, n]) => ({ k, got: then[k] / today[k], want: N.NBA_LEAGUE_PER_GAME.y2004[n] / N.NBA_LEAGUE_PER_GAME.now[n] }));
+    exact('A1', rows.every(r => Math.abs(r.got / r.want - 1) <= 0.02), `the 2003 line over the 2026 line is the league rows' ratio within 2 percent: ${rows.map(r => `${r.k} ${r.got.toFixed(3)} against ${r.want.toFixed(3)}`).join(', ')}`);
+  }
+  /* A2: the p99 starter season (never the max) is at or under the leaders' mean plus one sd. */
+  for (const k of ['pts', 'reb', 'ast']) {
+    const bar = N.nbaLeaderBar(k, 2026);
+    const v = aStats.map(a => a.p99[k]);
+    banded('A2', v.every(x => x <= bar.mean + bar.sd), `the p99 starter season in ${k}: ${v.map(f1).join(', ')} at or under the league leaders' mean plus one sd (${f1(bar.mean)} + ${f1(bar.sd)})`);
+  }
+  /* A3: the promises. */
+  banded('A3', aStats.every(a => a.rookies.ppg >= 7.5 && a.rookies.ppg <= 11.5), `rookies rated 75 to 79 average ${aStats.map(a => f1(a.rookies.ppg)).join(', ')} points (7.5 to 11.5); starters ${aStats.map(a => f1(a.rookies.starters)).join(', ')}, bench ${aStats.map(a => f1(a.rookies.bench)).join(', ')}; ${aStats.map(a => a.rookies.n).join(', ')} seasons`);
+  banded('A3', aStats.every(a => a.wing8.share < 1), `SG and SF starter seasons at 8 assists or more: ${aStats.map(a => a.wing8.share.toFixed(2)).join(', ')} percent of theirs (under 1; main about 19)`);
+  banded('A3', aStats.every(a => a.bench.ratio >= 0.5 && a.bench.ratio <= 0.72), `bench seasons score ${aStats.map(a => (a.bench.ratio * 100).toFixed(0)).join(', ')} percent of starters' (50 to 72): ${aStats.map(a => f1(a.bench.ppg)).join(', ')} points in ${aStats.map(a => f1(a.bench.mpg)).join(', ')} minutes`);
+  exact('A3', aStats.every(a => a.decimals.oneDecimal && a.decimals.nonZero >= 10), `every new season's points have one decimal, and ${aStats.map(a => a.decimals.nonZero.toFixed(0)).join(', ')} percent of them a non zero one (at least 10)`);
+  if (live) banded('A3', per.every(m => m.bothTitles * 2000 < m.careers), `seasons holding both the scoring and the assists title: ${per.map(m => m.bothTitles).join(', ')} (under 1 in 2,000 careers; main ${base.nba ? base.nba.seeds.map(s => s.m.bothTitles).join(', ') : '?'})`);
+  console.log(`  note [A3] 30 points a game: ${aStats.map(a => a.thirty.toFixed(2)).join(', ')} percent of starter seasons; 10 assists: ${aStats.map(a => a.tenAst.toFixed(2)).join(', ')}; triple double seasons in the fleet: ${aStats.map(a => a.tripleDouble).join(', ')}`);
+  console.log(`  note [A] medians, every role, half a season or more (points/rebounds/assists): ${POS.map(p => `${p} ${aStats[0].allMed[p].join('/')}`).join('  ')}`);
+  /* A4: points rise with the rating at every position (bands of 200 seasons or more). */
+  for (const p of POS) {
+    const rising = aStats.every(a => { const b = a.bands[p].filter(x => x.n >= 200); return b.every((x, i) => i === 0 || x.pts > b[i - 1].pts); });
+    exact('A4', rising, `${p}: mean points rise with every rating band (seed ${SEEDS[0]}: ${aStats[0].bands[p].filter(x => x.n >= 200).map(x => `${x.b} ${f1(x.pts)}/${f1(x.reb)}/${f1(x.ast)} in ${f1(x.mpg)}`).join(', ')})`);
+  }
+  /* A5: the function is pure and always draws the same number of times. */
+  {
+    const counted = input => { let n = 0; const r = mulberry32(5); nba.nbaStatLineFor(input, () => { n++; return r(); }); return n; };
+    const base5 = { form: 82, pos: 'C', archetype: ARCH.anchor, role: 'starter', seasonsPlayed: 4, year: 2026 };
+    const cases = [base5, { ...base5, role: 'backup' }, { ...base5, seasonsPlayed: 0 }, { ...base5, playoffs: true }];
+    exact('A5', cases.every(c => counted(c) === nba.NBA_LINE_DRAWS), `nbaStatLineFor draws exactly ${nba.NBA_LINE_DRAWS} times for a starter, a backup, a rookie and a playoff line (${cases.map(counted).join(', ')})`);
+    const frozen = JSON.stringify(base5);
+    const one = nba.nbaStatLineFor(base5, mulberry32(9)); const two = nba.nbaStatLineFor(base5, mulberry32(9));
+    exact('A5', JSON.stringify(one) === JSON.stringify(two) && JSON.stringify(base5) === frozen, 'the same input and seed give the same line, and the input is left untouched');
+  }
+}
+
 if (!base.nba) exact('baseline', false, 'scripts/data/nbaAwardsSenseBaseline.json has no nba key: record it once with --record-nba-baseline');
 else {
   /* R, the rival: my share of the head to head years stays where main had it. */
