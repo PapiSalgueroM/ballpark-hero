@@ -183,9 +183,16 @@ console.log('5) The whole invented name space, against every real player');
   if (all.length < 4000) fail(`only ${all.length} invented names enumerated`);
   const hits = all.filter(n => real.has(n));
   if (hits.length) fail(`invented names that belong to real players: ${hits.slice(0, 10).join(' | ')}`);
-  /* And against the real contenders the career engine ships by name. */
+  /* And against the real contenders the career engine ships by name. Release AN: they left the engine for
+     the era tables (src/lib/careerEras.ts, one S("Name", "Nation", "POS", ...) row a star), and this read
+     went on asking the engine alone: it parsed nobody, so the harness was red on main and this half of
+     the check was blind. Both shapes are read now. */
   const engine = fs.readFileSync(path.join(ROOT, 'src/lib/soccerCareerEngine.ts'), 'utf-8');
-  const contenders = new Set([...engine.matchAll(/\{ name: "([^"]+)", nationality:/g)].map(m => m[1]));
+  const eras = fs.readFileSync(path.join(ROOT, 'src/lib/careerEras.ts'), 'utf-8');
+  const contenders = new Set([
+    ...[...engine.matchAll(/\{ name: "([^"]+)", nationality:/g)].map(m => m[1]),
+    ...[...eras.matchAll(/\bS\("([^"]+)", "[^"]+", "[A-Z]{2,3}",/g)].map(m => m[1]),
+  ]);
   if (contenders.size < 20) fail(`only ${contenders.size} real contenders parsed`);
   const clash = all.filter(n => contenders.has(n));
   if (clash.length) fail(`invented names that clash with the engine's real contenders: ${clash.join(' | ')}`);
