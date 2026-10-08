@@ -1,0 +1,2 @@
+vit-hall exit=0 18s |    Duration  17.93s (transform 3.03s, setup 360ms, collect 8.66s, tests 23.19s, environment 2.52s, prepare 892ms)
+tsc exit=0 62s | 
