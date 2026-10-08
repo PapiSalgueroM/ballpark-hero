@@ -40,13 +40,36 @@ import {
  * from the drawn frame, so timing is exact either way.
  */
 
-type Mode = 'daily' | 'unlimited';
+type Mode = 'daily' | 'unlimited' | 'match';
 type Phase = 'intro' | 'ready' | 'playing' | 'flying' | 'roundEnd' | 'done';
 type AnySetup = WallShotSetup | TackleSetup | GloveSetup;
 type AnyInput = WallShotInput | TackleInput | GloveInput;
 type AnyResult = WallShotResult | TackleResult | GloveResult;
 
 interface DrillRecord { score: number; count: number; banked: boolean; rounds: number }
+
+/** Round 1047: one round of a drill played inside a match (a Season Centre
+ *  moment). The board plays round `round` of the run `seed` deals, draws from
+ *  a generator made fresh for its one resolve, reads and writes no daily
+ *  record, and reports once when the round has been played and drawn. With
+ *  no `match` nothing about the training ground changes
+ *  (src/test/drillBoardMarkup.test.tsx holds its markup to the record). */
+export interface DrillMatch {
+  kind: 'wallshot' | 'tackle' | 'gloves';
+  seed: number;
+  round: number;
+  rng: () => () => number;
+  onResult: (r: { won: boolean; points: number; verdict: string; input: number[] }) => void;
+}
+/* A match input is kept to four places, the precision the save holds, so
+   the round replays from its entry to exactly the result drawn here. */
+const r4 = (v: number) => Math.round(v * 10000) / 10000;
+function matchInput(kind: DrillKind, inp: AnyInput): { inp: AnyInput; packed: number[] } {
+  if (kind === 'wallshot') { const w = inp as WallShotInput; const o = { x: r4(w.x), y: r4(w.y), power: r4(w.power), press: r4(w.press) }; return { inp: o, packed: [o.x, o.y, o.power, o.press] }; }
+  if (kind === 'tackle') { const t = inp as TackleInput; const o = { x: r4(t.x), y: r4(t.y), press: r4(t.press) }; return { inp: o, packed: [o.x, o.y, o.press] }; }
+  const g = inp as GloveInput; const o = { dx: r4(g.dx), dy: r4(g.dy), release: r4(g.release) };
+  return { inp: o, packed: [o.dx, o.dy, o.release] };
+}
 
 /* How long the resolve is drawn for, in milliseconds. */
 const FLIGHT_MS = 700;
@@ -123,7 +146,9 @@ function wallShotBall(result: WallShotResult, progress: number): { x: number; y:
   return { x: toViewX(sample.x), y: contact.y + (toViewY(sample.y) - contact.y) * afterWall };
 }
 
-export default function DrillBoard({ career, canBank, onBank, onBack }: {
+export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
+  /** Round 1047: play one round inside a match instead of the training ground's ten. */
+  match?: DrillMatch;
   career: CareerState;
   /** Whether the training ground still has this season's session to give. */
   canBank: boolean;
@@ -133,14 +158,15 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
   /* Round 428's rule: the day is pinned at mount and every read, write and
      deal uses it. */
   const todayStr = useRef(getTodayET()).current;
-  const kind = drillForPosition(career.position);
+  const kind = match ? match.kind : drillForPosition(career.position);
   const meta = DRILL_META[kind];
-  const [record, setRecord] = useState<DrillRecord | null>(() => readRecord(meta.slug, todayStr));
+  const [record, setRecord] = useState<DrillRecord | null>(() => (match ? null : readRecord(meta.slug, todayStr)));
 
-  const [mode, setMode] = useState<Mode>('daily');
-  const [phase, setPhase] = useState<Phase>('intro');
-  const [setups, setSetups] = useState<AnySetup[]>([]);
-  const [idx, setIdx] = useState(0);
+  const [mode, setMode] = useState<Mode>(match ? 'match' : 'daily');
+  const [phase, setPhase] = useState<Phase>(match ? 'ready' : 'intro');
+  const [setups, setSetups] = useState<AnySetup[]>(() => (match ? buildRun(match.kind, match.seed) : []));
+  const [idx, setIdx] = useState(match ? match.round : 0);
+  const toldRef = useRef(false);
   const [score, setScore] = useState(0);
   const [count, setCount] = useState(0);
   const [fouls, setFouls] = useState(0);
@@ -240,12 +266,15 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
     setPhase('playing');
   }, [phase]);
 
-  const resolve = useCallback((inp: AnyInput) => {
+  const resolve = useCallback((raw: AnyInput) => {
     if (phase !== 'playing' || !setup) return;
+    const held = match ? matchInput(kind, raw) : null;
+    const inp = held ? held.inp : raw;
+    const rng = match ? match.rng() : rngRef.current;
     let r: AnyResult;
     let won: boolean;
     let foul = false;
-    if (kind === 'wallshot') { const w = takeWallShot(inp as WallShotInput, setup as WallShotSetup, rngRef.current); r = w; won = w.won; }
+    if (kind === 'wallshot') { const w = takeWallShot(inp as WallShotInput, setup as WallShotSetup, rng); r = w; won = w.won; }
     else if (kind === 'tackle') { const tk = makeTackle(inp as TackleInput, setup as TackleSetup); r = tk; won = tk.won; foul = tk.foul; }
     else { const g = makeSave(inp as GloveInput, setup as GloveSetup); r = g; won = g.saved; }
     setInput(inp);
@@ -257,8 +286,9 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
       if (won) setCount(c => c + 1);
       if (foul) setFouls(f => f + 1);
       setPhase('roundEnd');
+      if (match && held && !toldRef.current) { toldRef.current = true; match.onResult({ won, points: r.points, verdict: r.verdict, input: held.packed }); }
     });
-  }, [phase, setup, kind, launch]);
+  }, [phase, setup, kind, launch, match]);
 
   /* The chance can run out without a press: the attacker leaves the screen,
      the ball crosses the line. */
@@ -440,12 +470,16 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
 
   return (
     <div className="p-4 space-y-3">
+      {match ? (
+        <div className="text-center text-xs font-bold" data-drill-match={kind}>{meta.emoji} {meta.name}: one go</div>
+      ) : (
       <div className="flex items-center justify-between text-xs font-bold">
         <button onClick={() => { resetFlight(); setPhase('intro'); }} className="text-muted-foreground hover:text-foreground">‹ {meta.name}</button>
         <span>Round {Math.min(idx + 1, ROUNDS_PER_RUN)}/{ROUNDS_PER_RUN}</span>
         <span className="text-emerald-400">{count} {meta.verb}</span>
         <span className="text-amber-300 tabular-nums">{score} pts</span>
       </div>
+      )}
       {setup && <p className="text-center text-[11px] text-muted-foreground">{setup.label}</p>}
 
       <svg
@@ -628,7 +662,7 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
               {kind === 'tackle' && 'Tap the ball while it is off his feet. Arrow keys move the marker, space goes in.'}
               {kind === 'gloves' && 'Hold and drag to set the dive, let go to go. Arrow keys set it, space dives.'}
             </p>
-            <Button className="mt-2" onClick={beginRound}>{idx === 0 ? 'Start' : 'Next one'}</Button>
+            <Button className="mt-2" onClick={beginRound}>{idx === 0 || match ? 'Start' : 'Next one'}</Button>
           </div>
         )}
 
@@ -660,8 +694,8 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
         {phase === 'roundEnd' && result && (
           <div className="rounded-2xl border border-border bg-card p-4 text-center">
             <p className={cn('font-display text-lg font-black', result.points > 0 ? 'text-primary' : 'text-muted-foreground')}>{result.verdict}</p>
-            {result.points > 0 && <p className="mt-1 text-sm text-muted-foreground">{result.points} points.</p>}
-            <Button className="mt-3" onClick={next}>{idx + 1 >= ROUNDS_PER_RUN ? 'See the session' : 'Next'}</Button>
+            {!match && result.points > 0 && <p className="mt-1 text-sm text-muted-foreground">{result.points} points.</p>}
+            {!match && <Button className="mt-3" onClick={next}>{idx + 1 >= ROUNDS_PER_RUN ? 'See the session' : 'Next'}</Button>}
           </div>
         )}
 
