@@ -1,0 +1,44 @@
+1) the name gate holds
+   refused: "Christian Pulisic", "Erling Haaland", blocked word, digits, one letter; accepted the invented names
+2) the spec lands and the style sets day one tactics, nothing else
+   spec stored, Gegenpress day one shape applied, plain career byte compatible
+3) a real name cannot be smuggled past the form
+   startCareer refused the real name even when handed it directly
+4) the homeland flows into the federation call and the job market
+   Spain called the created manager, England called the classic one, the wilderness knows both
+5) a pre round 303 save still reads and plays
+   an old save advanced a week with no manager and grew none
+6) every background starts the manager with one point in its own tree
+   7 backgrounds, each one point in its own tree on day one; the classic career holds none
+7) a Round 303 save, no face and no gift, loads unchanged and gets its point once
+   manager byte equal after two loads and a week, no face invented, Recruitment 1 and never 2
+   Recruitment still exactly 1 after 2 of 2 season rollovers, each saved and loaded
+8) the face is stored, travels through a save, and a broken one drops alone
+   face stored and reloaded byte equal; a spacesuit or an off palette accent drops the face and keeps the manager
+9) every style lands on a real shape, no two styles play the same, unknown reads Balanced
+   11 styles, 11 distinct shape and mentality pairs, each a real formation with a full eleven; an unknown style starts Balanced
+10) a homeland outside the league nations still gets the federation call
+   146 homelands on the picker, 125 outside the league nations, 125 of them called by their own federation; 21 of 21 league nations matched at their own clubs; US offers to an American 74 against a Ghanaian 5
+11) the Edit manager sheet: what can change, what cannot, and a Skip career naming its man
+   the late manager's style read back at 11 of 11 styles, and Balanced off any style's shape
+   rename, homeland and face change; real names, unknown countries, broken faces and a new background refused; a Skip career names its man with his point
+12) a Skip career plays a byte identical season to the engine without this round
+   3 of 3 Skip seasons byte identical (138 matches, 462192 bytes of save compared)
+13) every style changes what the match engine plays, against Balanced on the same seeds
+   Balanced: 1.647 for, 0.959 against a game over 468 games
+   gegenpress     2.017 for, 1.165 against, shift 0.575 (468 games); day one eleven moved at 4 of 4 clubs, fit adjusted rating gap 0.00
+   tikitaka       1.842 for, 0.912 against, shift 0.241 (468 games); day one eleven moved at 4 of 4 clubs, fit adjusted rating gap 0.25
+   lowblock       1.310 for, 0.611 against, shift 0.686 (468 games); day one eleven moved at 4 of 4 clubs, fit adjusted rating gap 0.25
+   counter        1.353 for, 0.588 against, shift 0.667 (468 games); day one eleven moved at 0 of 4 clubs, fit adjusted rating gap 0.00
+   wingplay       2.143 for, 1.192 against, shift 0.729 (468 games); day one eleven moved at 4 of 4 clubs, fit adjusted rating gap 0.25
+   direct         2.100 for, 1.235 against, shift 0.729 (468 games); day one eleven moved at 0 of 4 clubs, fit adjusted rating gap 0.00
+   wingbacks      2.132 for, 1.271 against, shift 0.797 (468 games); day one eleven moved at 4 of 4 clubs, fit adjusted rating gap 0.25
+   totalfootball  2.081 for, 1.226 against, shift 0.701 (468 games); day one eleven moved at 4 of 4 clubs, fit adjusted rating gap 1.00
+   catenaccio     1.365 for, 0.609 against, shift 0.632 (468 games); day one eleven moved at 4 of 4 clubs, fit adjusted rating gap 1.00
+   shield         1.378 for, 0.622 against, shift 0.607 (468 games); day one eleven moved at 4 of 4 clubs, fit adjusted rating gap 0.25
+   9 of 9 styles with their own mentality past the 0.25 floor (smallest 0.575), 0 twin styles
+14) the weeks before a mid season takeover are the previous manager's, whatever our background
+   14 of 14 takeovers inherited the same table and money at week 27, each manager holding his own point
+   teeth: real names pulled from the live bakes, tactics compared against the identity table, defaults pinned
+
+simManagerSpec: all green

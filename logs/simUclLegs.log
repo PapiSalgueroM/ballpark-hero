@@ -1,0 +1,15 @@
+1) Every era plays the legs its own season played
+   4 eras read: 2005, 2010 and 2015 split a level tie on away goals, the modern season does not
+2) The tie is read the way the competition reads it
+   14 outcomes checked, including the same two legs giving a different winner in the two eras
+3) A round of 16 tie is two weeks at opposite grounds, and half of it settles nothing
+   3 era season(s) reached both round of 16 legs, 3 of my ties settled over two, 3 aggregates checked against their legs
+5) A calendar written before Round 507 still plays its whole knockout
+   2005 legacy calendar: R16 8/8, QF 4/4, SF 2/2, F 1/1, exit out
+   2010 legacy calendar: R16 8/8, QF 4/4, SF 2/2, F 1/1, exit out
+   2015 legacy calendar: R16 8/8, QF 4/4, SF 2/2, F 1/1, exit out
+   3 era draws compared two legged against one legged: the seeded club swaps ends
+6) The final is one match, and a legless tie still settles
+   the final is one match in every era, and a tie with no legs or one leg still reads without throwing
+
+simUclLegs: green. Two legs, the right ground each week, and each season judged by its own rule for a level tie.

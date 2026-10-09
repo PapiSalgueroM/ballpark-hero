@@ -1,0 +1,26 @@
+
+Base: origin/main as this branch left it (f57b4f6f) already carries Round 612, so sections 6 to 9 compare against this engine with season one switched off, and section 8 holds the rollover to the rule written out here
+1) The data file the engine ships is well formed
+   15 leagues, 145 verified places, every one a real club string; holders PSG; partial list [] matches
+2) A new 2026-27 career's field is the rule applied to the data file
+   32 clubs in the rule's order for five different managers; fill: Hoffenheim (bundesliga 5, fill)
+3) Your club is in Europe exactly when it earned a place, never through the fill
+   Chelsea out, Aston Villa in with 8 groups of qualifiers; fill Hoffenheim kept out; 240 clubs across 15 leagues, 31 in Europe, each exactly when it earned a place
+4) PSG are in as the holders, and the holders' route really runs
+   PSG in; moved to last in Ligue 1 they stay in as holders (a PSG career too) and Lens, Lille and Lyon take the places
+5) Every European league's verified qualifiers are in
+   31 league places across 15 leagues, all in; Chelsea not
+6) A historic era's season one is byte identical to this engine with season one switched off
+   4 historic starts identical in full, 3 of them with a Champions League group
+7) A custom club starts outside Europe, byte identical to this engine with season one switched off
+   custom clubs in premier and switzerland start outside Europe, identical in full
+8) The rollover's field follows the rule, and it and season two are byte identical to this engine with season one switched off
+   3 rollover fields of 32 follow the rule over their final tables; 3 fields and 3 whole season twos identical to the reference
+9) A season one save from before this round loads and plays unchanged
+   Chelsea's pre Round 612 group (Juventus, Bayer Leverkusen, Inter Milan) loads and plays 54 entries identical to the reference
+10) A league with no verified table falls back to the old day one, and only that league
+   Premier League marked partial: none of its clubs in the field, 14 in Europe by squad tier, La Liga still by its table
+11) Liverpool and Real Betis start outside Europe, a decision on the game's place count
+   both 5th, one below the game's 4 places, both start outside Europe and outside the field (decision owed: the 2025-26 European Performance Spots)
+
+simUclSeasonOne: all green

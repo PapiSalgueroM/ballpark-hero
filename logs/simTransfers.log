@@ -1,0 +1,24 @@
+1) A blocked player never gets a bid
+   120 windows rolled, 0 bids for a blocked player
+2) Listing brings the market to you
+   squad player unlisted: 0/120 careers ever saw a bid for him
+   squad player listed:   117/120 careers saw a bid inside two windows
+3) Loan out, then home developed
+   33 loans completed, 33 came home with a higher rating
+   average loan fee banked 4.24m
+   7 loans ended with the borrowing club taking up its option
+4) Squad rules hold on sell, loan and accept
+   stripped to 14 players, keepers left 1
+5) Shopping a happy star costs you, so does blocking an unhappy one
+   listing a 91 rated starter: morale 70 -> 62
+   blocking an unsettled player: morale 30 -> 24
+6) Full seasons with the controls hammered
+   Manchester City: 4 sold, 2 loaned out, squad 19 next season
+   Burnley: 2 sold, 5 loaned out, squad 23 next season
+   Real Madrid: 1 sold, 4 loaned out, squad 23 next season
+   Ajax: 5 sold, 3 loaned out, squad 21 next season
+   Inter Miami: 2 sold, 0 loaned out, squad 19 next season
+7) Copy check
+   3 files checked
+
+ALL TRANSFER CHECKS PASSED

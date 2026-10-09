@@ -1,0 +1,52 @@
+1) Five rungs, ordered, and each one a real promise
+   Star man 88% · Key first teamer 74% · Rotation option 32% · Backup 12% · One for the future 5%
+2) Nobody starts a save already furious
+   159 players across seven clubs: 21 star, 56 key, 28 rotation, 46 backup, 8 prospect
+   0 of them start two or more rungs below what they think they have earned
+3) His last ten counts games he could have played, and only those
+   Jarrad Branthwaite (played): window 10 long, 10.00 involved, share 1.000
+   Tyler Dibling (benched): window 10 long, 2.09 involved, share 0.209
+   Tyrique George (injured throughout): window 0 long, gap 0.00
+3b) A benched man reads as benched, measured over a run of them
+   25 scenarios: benched share mean 0.294, 12% of them over a half, starters never below 1.000
+3c) A start is a game, and coming on is worth the minutes he got
+   87 quick sims: 957 starts each worth 1, 147 men came on and their match is worth 0.36 on average
+4) A backup who plays is content, a star who does not is finished
+   after 14 weeks, morale relative to the rest of the XI (80 paired seasons):
+     benched man told he was a backup:          -16.9
+     the SAME benched man told he was a star:   -41.4   (paired cost 24.44, 2se 1.06)
+     playing man told he was a key first teamer: 3.6
+     the SAME playing man told he was a backup: -6.3   (paired cost 9.93, 2se 2.18)
+5) Two managers, the same rotation, one of them keeps his word
+   Everton, 300 seasons an arm:
+     KEEPS HIS WORD:  44.7 pts (#13.7), board 39, squad morale 52.5, best XI morale 51.7, 0.36 transfer requests, sacked 129/300
+     EVERYONE A STAR: 40.8 pts (#15.4), board 30, squad morale 14.5, best XI morale 16.5, 10.16 transfer requests, sacked 150/300
+   Aston Villa, 300 seasons an arm:
+     KEEPS HIS WORD:  49.1 pts (#12.0), board 35, squad morale 54.5, best XI morale 57.1, 0.45 transfer requests, sacked 143/300
+     EVERYONE A STAR: 45.0 pts (#13.8), board 24, squad morale 12.8, best XI morale 18.5, 17.96 transfer requests, sacked 186/300
+   Manchester City, 300 seasons an arm:
+     KEEPS HIS WORD:  68.5 pts (#3.8), board 67, squad morale 89.8, best XI morale 90.6, 0.05 transfer requests, sacked 54/300
+     EVERYONE A STAR: 65.6 pts (#4.7), board 55, squad morale 47.3, best XI morale 64.5, 8.34 transfer requests, sacked 85/300
+   league points from keeping your word, averaged over the three clubs: 3.61 (3.9, 4.1, 2.8)
+   board confidence from keeping your word, same average: 10.80
+6) A transfer request is a real thing, not a notification
+   Jarrad Branthwaite is worth 33.1m settled and 27.2m once he has asked to leave
+   over 200 January windows: 141 bids for him once he wants out, 22 while he was settled
+7) Renegotiating: it works, it costs, and it is not a way out of everything
+   Marc Guéhi on 62k a week, star down to rotation: 0.7m settlement, budget 160m to 159.3m, morale 70 to 21, request withdrawn true
+   Rayan Aït-Nouri promoted backup to key first teamer: cost 0.0m, morale 70 to 77
+   dropping a 300k a week man two rungs costs 3.6m, a 12k a week man 0.1m
+8) One unhappy man is felt by the rest, and the inbox can fix him
+   200 paired seasons: the XI sits on 84.4 morale with a settled bench and 77.5 with three men on it who were promised the earth
+   paired difference 6.91 morale (2se 2.27)
+   one season of benching a man you called a star: 5 corridor conversations, 2 written requests, 5 of them settled by telling him the truth for 0.6m
+9) Old saves repair themselves, twice over
+   repaired 22 players: 0 without a role, 0 without a window
+   a pre-round Ajax save played a full season: 0 players still without a role afterwards
+   after the summer: 22/22 still carry a role, 0 carry last season's window, 0 carry last season's transfer request
+10) A manager who never opens the screen is where he always was
+   60 do nothing Everton seasons: 47.5 pts (2se 2.9), 1.67 transfer requests, sacked 23/60
+11) Copy check
+   12 files clean
+
+ALL ROLE CHECKS PASSED

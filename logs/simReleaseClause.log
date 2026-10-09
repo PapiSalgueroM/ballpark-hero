@@ -1,0 +1,13 @@
+1) The clause renewal: 88 percent of the wage, exit at 1.5x value
+2) The clause renewal writes the door; a plain renewal deletes it
+3) Fresh clause rare, caught clause a third of windows, bargain hunted (n=400 each)
+   ratio 0.67: 4.5 percent of window opens
+   ratio 1: 34.3 percent of window opens
+   ratio 1.5: 76.8 percent of window opens
+4) A squad with no clauses never sees a clauseMet bid (60 windows)
+5) A met clause cannot be rejected or blocked, and pays to the decimal
+6) Ignore the phone and the door opens itself on deadline day
+7) The one thing that stops a clause is the squad floor, and it makes the news
+8) No em or en dash in any clause string
+
+simReleaseClause: green. The exit door is real, priced, hunted, and honestly escapable only at full wage.
