@@ -1,0 +1,7 @@
+truth-onesource exit=0 53s | simNflTruth control onesource: green. Section 2s, 2t went red (1 findings) and nothing else did, so this harness works.
+truth exit=0 53s | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves
+tsc exit=0 61s | 
+vitest-rookie exit=0 36s |    Duration  35.25s (transform 1.48s, setup 127ms, collect 2.47s, tests 32.49s, environment 869ms, prepare 282ms)
+truth-nosecond exit=0 53s | simNflTruth control nosecond: green. Section 2s went red (1 findings) and nothing else did, so this harness works.
+deckc exit=0 49s | simUsCareerDeckC: all checks passed
+hall exit=0 657s | simCareerHall: all four sports green
