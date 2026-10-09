@@ -1,0 +1,326 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerSeasonCompetitions.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[33m 1244[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career competition navigation keeps the actual league view[2m > [22mfreezes and resumes the same live clock, pause state and completed review across cup tabs [33m 812[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m16 passed[39m[22m[90m (16)[39m
+[2m   Start at [22m 18:04:32
+[2m   Duration [22m 5.59s[2m (transform 2.51s, setup 80ms, collect 3.25s, tests 1.24s, environment 486ms, prepare 207ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/competition-navigation-tests.json
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ok 16 saved competition and actual navigation outcomes
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerSeasonCompetitions.test.tsx [2m([22m[2m16 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 651[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mcopies the named cup, known scores and penalties without inventing early fixtures or grounds[32m 4[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mkeeps European legs and the deciding aggregate on their saved scores[32m 1[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mshows both saved continental final legs, grounds and aggregate in the existing panel[32m 199[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mkeeps a neutral single-match Champions League final without a leg or away label[32m 27[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mrefuses an unanchored result and a different year or club[32m 0[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mkeeps the actual saved group or league-phase nights when there were no knockouts[32m 1[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mreads a season-owned snapshot after the latest club campaign has changed[32m 1[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mdoes not add a competition to an old row without participation evidence[32m 1[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mshows missing cup final scores instead of borrowing a score from another stage[32m 0[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mopens the recorded score tile, returns to the compact grid and writes no save[32m 41[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mthe switcher names recorded competitions and identifies the squad as current[32m 42[2mms[22m[39m
+[31m   [31m×[31m Soccer Career competition navigation keeps the actual league view[2m > [22mfreezes and resumes the same live clock, pause state and completed review across cup tabs[39m[32m 203[2mms[22m[39m
+[31m     → expected null to be <div data-match-clock="true" …(2)>…(4)</div> // Object.is equality[39m
+   [32m✓[39m Soccer Career competition navigation keeps the actual league view[2m > [22ma hidden instant clock does not deliver full time or a moment hold (null)[32m 12[2mms[22m[39m
+   [32m✓[39m Soccer Career competition navigation keeps the actual league view[2m > [22ma hidden instant clock does not deliver full time or a moment hold (70)[32m 8[2mms[22m[39m
+   [32m✓[39m Soccer Career competition navigation keeps the actual league view[2m > [22mopens an old saved campaign without drawing a league table against a later world[32m 62[2mms[22m[39m
+   [32m✓[39m Soccer Career competition navigation keeps the actual league view[2m > [22mlabels the current squad with its current club and upcoming year on an old replay[32m 43[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m15 passed[39m[22m[90m (16)[39m
+[2m   Start at [22m 18:04:38
+[2m   Duration [22m 3.88s[2m (transform 1.79s, setup 55ms, collect 2.28s, tests 651ms, environment 335ms, prepare 75ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/competition-navigation-tests.json
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSeasonCompetitions.test.tsx[2m > [22mSoccer Career competition navigation keeps the actual league view[2m > [22mfreezes and resumes the same live clock, pause state and completed review across cup tabs
+[31m[1mAssertionError[22m: expected null to be <div data-match-clock="true" …(2)>…(4)</div> // Object.is equality[39m
+
+[32m- Expected:[39m 
+<div
+  data-match-clock="true"
+  data-minute="12"
+  data-score="0-0"
+>
+  <div
+    class="sticky top-0 z-10 bg-background md:static"
+    data-score-bar="true"
+  >
+    <div
+      class="flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2"
+    >
+      <span
+        class="min-w-0 flex-1 truncate text-sm font-bold"
+      >
+        Arsenal
+      </span>
+      <span
+        class="cm-slam shrink-0 text-xl font-black tabular-nums"
+        data-score-bug="true"
+      >
+        0
+        -
+        0
+      </span>
+      <span
+        class="min-w-0 flex-1 truncate text-right text-sm font-bold"
+      >
+        Brentford
+      </span>
+    </div>
+  </div>
+  <div
+    class="mt-1 flex items-center justify-between text-xs text-muted-foreground"
+  >
+    <span
+      class="tabular-nums"
+      data-clock-minute="true"
+    >
+      12'
+    </span>
+  </div>
+  <div
+    class="mt-2"
+    data-clock-stage="true"
+  >
+    <div
+      aria-hidden="true"
+      data-pitch-empty="true"
+    >
+      <div
+        class="relative isolate w-full overflow-hidden rounded-xl aspect-[25/12]"
+      />
+      <div
+        class="h-5"
+      />
+    </div>
+  </div>
+  <ol
+    aria-live="polite"
+    class="mt-2 h-14 overflow-y-auto space-y-1 text-xs md:h-28"
+    data-clock-events="true"
+  >
+    <li
+      class="text-muted-foreground"
+    >
+      Kick off.
+    </li>
+  </ol>
+</div>
+
+[31m+ Received:[39m 
+null
+
+[36m [2m❯[22m src/test/soccerSeasonCompetitions.test.tsx:[2m175:64[22m[39m
+    [90m173| [39m    [34mexpect[39m(minute)[33m.[39m[34mtoBeGreaterThan[39m([34m0[39m)[33m;[39m
+    [90m174| [39m    fireEvent[33m.[39m[34mclick[39m(screen[33m.[39m[34mgetByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m [32m'FA Cup'[39m }))[33m;[39m
+    [90m175| [39m    expect(view.container.querySelector('[data-match-clock]')).toBe(cl…
+    [90m   | [39m                                                               [31m^[39m
+    [90m176| [39m    expect(clock.closest('[data-season-centre]')).toHaveAttribute('ari…
+    [90m177| [39m    [35mfor[39m ([35mlet[39m i [33m=[39m [34m0[39m[33m;[39m i [33m<[39m [34m8[39m[33m;[39m i[33m++[39m) [34mtick[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok effective freezes and resumes defect caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerSeasonCompetitions.test.tsx [2m([22m[2m16 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 889[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mcopies the named cup, known scores and penalties without inventing early fixtures or grounds[32m 3[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mkeeps European legs and the deciding aggregate on their saved scores[32m 1[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mshows both saved continental final legs, grounds and aggregate in the existing panel[32m 136[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mkeeps a neutral single-match Champions League final without a leg or away label[32m 24[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mrefuses an unanchored result and a different year or club[32m 1[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mkeeps the actual saved group or league-phase nights when there were no knockouts[32m 1[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mreads a season-owned snapshot after the latest club campaign has changed[32m 1[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mdoes not add a competition to an old row without participation evidence[32m 1[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mshows missing cup final scores instead of borrowing a score from another stage[32m 0[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mopens the recorded score tile, returns to the compact grid and writes no save[32m 30[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mthe switcher names recorded competitions and identifies the squad as current[32m 38[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career competition navigation keeps the actual league view[2m > [22mfreezes and resumes the same live clock, pause state and completed review across cup tabs [33m 558[2mms[22m[39m
+[31m   [31m×[31m Soccer Career competition navigation keeps the actual league view[2m > [22ma hidden instant clock does not deliver full time or a moment hold (null)[39m[32m 21[2mms[22m[39m
+[31m     → expected "spy" to not be called at all, but actually been called 1 times[90m
+
+Received: 
+
+[1m  1st spy call:
+
+[22m    Array []
+[31m[90m
+
+Number of calls: [1m1[22m
+[31m[39m
+   [32m✓[39m Soccer Career competition navigation keeps the actual league view[2m > [22ma hidden instant clock does not deliver full time or a moment hold (70)[32m 5[2mms[22m[39m
+   [32m✓[39m Soccer Career competition navigation keeps the actual league view[2m > [22mopens an old saved campaign without drawing a league table against a later world[32m 46[2mms[22m[39m
+   [32m✓[39m Soccer Career competition navigation keeps the actual league view[2m > [22mlabels the current squad with its current club and upcoming year on an old replay[32m 21[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m15 passed[39m[22m[90m (16)[39m
+[2m   Start at [22m 18:04:42
+[2m   Duration [22m 3.98s[2m (transform 1.77s, setup 55ms, collect 2.16s, tests 889ms, environment 393ms, prepare 142ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/competition-navigation-tests.json
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSeasonCompetitions.test.tsx[2m > [22mSoccer Career competition navigation keeps the actual league view[2m > [22ma hidden instant clock does not deliver full time or a moment hold (null)
+[31m[1mAssertionError[22m: expected "spy" to not be called at all, but actually been called 1 times[90m
+
+Received: 
+
+[1m  1st spy call:
+
+[22m    Array []
+[31m[90m
+
+Number of calls: [1m1[22m
+[31m[39m
+[36m [2m❯[22m src/test/soccerSeasonCompetitions.test.tsx:[2m213:26[22m[39m
+    [90m211| [39m      speed: 'results' as const, paused: false, reduced: true, onFullT…
+    [90m212| [39m    [35mconst[39m view [33m=[39m [34mrender[39m([33m<[39m[33mMatchClock[39m [33m{[39m[33m...[39mprops[33m}[39m [33mactive[39m[33m=[39m[33m{[39m[35mfalse[39m[33m}[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m213| [39m    [34mexpect[39m(fullTime)[33m.[39mnot[33m.[39m[34mtoHaveBeenCalled[39m()[33m;[39m
+    [90m   | [39m                         [31m^[39m
+    [90m214| [39m    [34mexpect[39m(hold)[33m.[39mnot[33m.[39m[34mtoHaveBeenCalled[39m()[33m;[39m
+    [90m215| [39m    view[33m.[39m[34mrerender[39m([33m<[39m[33mMatchClock[39m [33m{[39m[33m...[39mprops[33m}[39m [33mactive[39m [33m/[39m[33m>[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok effective a hidden instant clock defect caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerSeasonCompetitions.test.tsx [2m([22m[2m16 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1287[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mcopies the named cup, known scores and penalties without inventing early fixtures or grounds[32m 4[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mkeeps European legs and the deciding aggregate on their saved scores[32m 1[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mshows both saved continental final legs, grounds and aggregate in the existing panel[32m 207[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mkeeps a neutral single-match Champions League final without a leg or away label[32m 32[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mrefuses an unanchored result and a different year or club[32m 0[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mkeeps the actual saved group or league-phase nights when there were no knockouts[32m 1[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mreads a season-owned snapshot after the latest club campaign has changed[32m 1[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mdoes not add a competition to an old row without participation evidence[32m 1[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mshows missing cup final scores instead of borrowing a score from another stage[32m 1[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mopens the recorded score tile, returns to the compact grid and writes no save[32m 45[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mthe switcher names recorded competitions and identifies the squad as current[32m 47[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career competition navigation keeps the actual league view[2m > [22mfreezes and resumes the same live clock, pause state and completed review across cup tabs [33m 855[2mms[22m[39m
+   [32m✓[39m Soccer Career competition navigation keeps the actual league view[2m > [22ma hidden instant clock does not deliver full time or a moment hold (null)[32m 19[2mms[22m[39m
+   [32m✓[39m Soccer Career competition navigation keeps the actual league view[2m > [22ma hidden instant clock does not deliver full time or a moment hold (70)[32m 10[2mms[22m[39m
+[31m   [31m×[31m Soccer Career competition navigation keeps the actual league view[2m > [22mopens an old saved campaign without drawing a league table against a later world[39m[32m 26[2mms[22m[39m
+[31m     → expected <div …(2)>…(2)</div> to be null[39m
+   [32m✓[39m Soccer Career competition navigation keeps the actual league view[2m > [22mlabels the current squad with its current club and upcoming year on an old replay[32m 32[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m15 passed[39m[22m[90m (16)[39m
+[2m   Start at [22m 18:04:47
+[2m   Duration [22m 5.60s[2m (transform 2.53s, setup 153ms, collect 3.14s, tests 1.29s, environment 475ms, prepare 165ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/competition-navigation-tests.json
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSeasonCompetitions.test.tsx[2m > [22mSoccer Career competition navigation keeps the actual league view[2m > [22mopens an old saved campaign without drawing a league table against a later world
+[31m[1mAssertionError[22m: expected <div …(2)>…(2)</div> to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+<div
+  class="flex min-h-14 flex-col justify-center rounded-lg border border-border/50 px-3 py-2 text-muted-foreground"
+  data-replay-locked="0"
+>
+  <span
+    class="text-sm font-semibold"
+  >
+    2027/28 · Arsenal
+  </span>
+  <span
+    class="text-xs"
+  >
+    The game did not keep who won the league that season, so it cannot be replayed week by week yet.
+  </span>
+</div>
+
+[36m [2m❯[22m src/test/soccerSeasonCompetitions.test.tsx:[2m229:70[22m[39m
+    [90m227| [39m    [35mconst[39m bytes [33m=[39m [33mJSON[39m[33m.[39m[34mstringify[39m(career)[33m;[39m
+    [90m228| [39m    const view = render(<MemoryRouter><SoccerSeasonCentre career={care…
+    [90m229| [39m    expect(view.container.querySelector('[data-replay-locked="0"]')).t…
+    [90m   | [39m                                                                     [31m^[39m
+    [90m230| [39m    fireEvent.click(view.container.querySelector('[data-replay-row="0"…
+    [90m231| [39m    expect(view.container.querySelector('[data-centre-league-unavailab…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok effective opens an old saved campaign defect caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerSeasonCompetitions.test.tsx [2m([22m[2m16 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1311[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mcopies the named cup, known scores and penalties without inventing early fixtures or grounds[32m 5[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mkeeps European legs and the deciding aggregate on their saved scores[32m 1[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mshows both saved continental final legs, grounds and aggregate in the existing panel[32m 182[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mkeeps a neutral single-match Champions League final without a leg or away label[32m 29[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mrefuses an unanchored result and a different year or club[32m 1[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mkeeps the actual saved group or league-phase nights when there were no knockouts[32m 1[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mreads a season-owned snapshot after the latest club campaign has changed[32m 1[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mdoes not add a competition to an old row without participation evidence[32m 1[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mshows missing cup final scores instead of borrowing a score from another stage[32m 0[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mopens the recorded score tile, returns to the compact grid and writes no save[32m 52[2mms[22m[39m
+   [32m✓[39m saved Soccer Career competitions[2m > [22mthe switcher names recorded competitions and identifies the squad as current[32m 50[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career competition navigation keeps the actual league view[2m > [22mfreezes and resumes the same live clock, pause state and completed review across cup tabs [33m 871[2mms[22m[39m
+   [32m✓[39m Soccer Career competition navigation keeps the actual league view[2m > [22ma hidden instant clock does not deliver full time or a moment hold (null)[32m 12[2mms[22m[39m
+   [32m✓[39m Soccer Career competition navigation keeps the actual league view[2m > [22ma hidden instant clock does not deliver full time or a moment hold (70)[32m 5[2mms[22m[39m
+   [32m✓[39m Soccer Career competition navigation keeps the actual league view[2m > [22mopens an old saved campaign without drawing a league table against a later world[32m 47[2mms[22m[39m
+[31m   [31m×[31m Soccer Career competition navigation keeps the actual league view[2m > [22mlabels the current squad with its current club and upcoming year on an old replay[39m[32m 47[2mms[22m[39m
+[31m     → expected 'Arsenal · Current squad · 2027/28' to be 'Chelsea · Current squad · 2030/31' // Object.is equality[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m15 passed[39m[22m[90m (16)[39m
+[2m   Start at [22m 18:04:53
+[2m   Duration [22m 5.58s[2m (transform 2.57s, setup 72ms, collect 3.33s, tests 1.31s, environment 338ms, prepare 181ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/competition-navigation-tests.json
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSeasonCompetitions.test.tsx[2m > [22mSoccer Career competition navigation keeps the actual league view[2m > [22mlabels the current squad with its current club and upcoming year on an old replay
+[31m[1mAssertionError[22m: expected 'Arsenal · Current squad · 2027/28' to be 'Chelsea · Current squad · 2030/31' // Object.is equality[39m
+
+Expected: [32m"[7mChelsea[27m · Current squad · 20[7m30/31[27m"[39m
+Received: [31m"[7mArsenal[27m · Current squad · 20[7m27/28[27m"[39m
+
+[36m [2m❯[22m src/test/soccerSeasonCompetitions.test.tsx:[2m244:92[22m[39m
+    [90m242| [39m    const career = centreCareer(cupSeason, { currentClub: 'Chelsea', s…
+    [90m243| [39m    const view = render(<SeasonCompetitionPanel career={career} row={c…
+    [90m244| [39m    expect(view.container.querySelector('[data-centre-competition-cont…
+    [90m   | [39m                                                                                           [31m^[39m
+    [90m245| [39m    expect(view.container.querySelector('[data-centre-competition-cont…
+    [90m246| [39m    expect(view.container.querySelector('[data-squad-tile]')).not.toBe…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok effective labels the current squad defect caught
+simSoccerCompetitionNavigation: outcomes green, 4 effective copied defects caught

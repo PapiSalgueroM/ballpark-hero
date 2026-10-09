@@ -1,0 +1,190 @@
+Round 581: tycoon loads, writes and away time, over the REAL hooks
+   suites: src/test/academyAway.test.tsx, src/test/tycoonLoads.test.tsx
+
+A) the shipped code
+   pass  1 watched: a minute of callbacks ages every kid a minute and keeps no absence open
+   pass  2 hidden for three hours: exactly the away rule, nobody ages, no Deadline Day
+   pass  3 hidden for twenty hours leaves the same academy as closed for twenty hours
+   pass  4 closed for twenty hours pays the capped eight on load
+   pass  5 coming back ends the absence and the calendar turns again
+   pass  6 a save with duplicate kid ids loads with every id unique and nextId above them
+   pass  10 a showcase does not multiply away time, and waits for you
+   pass  11 a hidden tab whose wakes jitter never opens a fresh eight hours
+   pass  13 fifteen minutes hidden leaves the same academy as fifteen minutes closed, while kids are still growing
+   pass  12 a watched tab on a slow device keeps the calendar turning
+   pass  7 a doctored save loads as a working game and its match clock runs
+   pass  8 a pagehide in the same instant as Sell up saves the sold ground
+   pass  9 a tap in the same frame as a match tick keeps both
+   what it measured:
+     watched: 60s of 250ms callbacks aged the first kid 60.000s, absence meter 0
+     doctored save: every level a whole number inside its track, minute 89, streak 0, goal chance 0.0280; 30s of frames moved the clock 29.952s
+     sell up then pagehide in one task: the save holds 2 stars and a fresh ground (lifetime 0)
+     same frame: the tap counted and the tick moved the clock 0.208s
+     hidden 3h: meter 3.000h, credited 1.500h of training, first kid +10.36 rating, ages unchanged, matches applyAway exactly
+     cap: 20h hidden and 20h closed both credited 8.00h and left identical academies (12 kids)
+     closed 20h: the load credited 8.00h of absence, nobody aged
+     return: absence closed, ten watched seconds aged the first kid 10.00s
+     ids: 12,36,32,33,34,35 with nextId 37; the first holder kept 12
+     showcase: 10 hidden minutes with x3 lit trained exactly as without it; 25.00s of showcase still waiting
+     jitter: 20h hidden with a 700ms gap after every wake credited 8.00h, nobody aged
+     15 minutes: hidden and closed left identical ratings with 2 kid(s) still below their ceiling
+     slow device: 60s of 800ms callbacks on a visible page aged the first kid 60.000s, no absence
+
+A.fixeddt) negative control: the academy hook ticks a fixed quarter second per callback again
+   ok   passed 1 watched: a minute of callbacks ages every kid a minute and keeps no absence open
+   ok   failed 2 hidden for three hours: exactly the away rule, nobody ages, no Deadline Day
+         measured: AssertionError: three hidden hours left the absence meter at 0ms: expected +0 to be 10800000 // Object.is equality
+   ok   failed 3 hidden for twenty hours leaves the same academy as closed for twenty hours
+         measured: AssertionError: twenty hidden hours credited 0ms of absence against 28800000ms closed: expected +0 to be 28800000 // Object.is equality
+   ok   passed 4 closed for twenty hours pays the capped eight on load
+   --   passed 5 coming back ends the absence and the calendar turns again
+   ok   passed 6 a save with duplicate kid ids loads with every id unique and nextId above them
+   --   failed 10 a showcase does not multiply away time, and waits for you
+   ok   failed 11 a hidden tab whose wakes jitter never opens a fresh eight hours
+         measured: AssertionError: twenty hidden hours with short gaps left the absence meter at 0.00h: expected +0 to be 28800000 // Object.is equality
+   ok   failed 13 fifteen minutes hidden leaves the same academy as fifteen minutes closed, while kids are still growing
+         measured: AssertionError: fifteen hidden minutes and fifteen closed minutes trained the academy differently: expected '[[30,69.90776524720705],[31,62.412233…' to be '[[30,80],[31,71],[32,77],[33,69],[34,…' // Object.is equality
+   ok   failed 12 a watched tab on a slow device keeps the calendar turning
+         measured: AssertionError: sixty watched seconds of 800ms callbacks aged the first kid 18.75s: expected 18.75 to be close to 60, received difference is 41.25, but expected 5e-7
+   ok   passed 7 a doctored save loads as a working game and its match clock runs
+   ok   passed 8 a pagehide in the same instant as Sell up saves the sold ground
+   ok   passed 9 a tap in the same frame as a match tick keeps both
+
+A.showcaseaway) negative control: a showcase multiplies away training again (the review's real finding)
+   ok   passed 1 watched: a minute of callbacks ages every kid a minute and keeps no absence open
+   ok   passed 2 hidden for three hours: exactly the away rule, nobody ages, no Deadline Day
+   ok   passed 3 hidden for twenty hours leaves the same academy as closed for twenty hours
+   ok   passed 4 closed for twenty hours pays the capped eight on load
+   ok   passed 5 coming back ends the absence and the calendar turns again
+   ok   passed 6 a save with duplicate kid ids loads with every id unique and nextId above them
+   ok   failed 10 a showcase does not multiply away time, and waits for you
+         measured: AssertionError: ten hidden minutes with a showcase lit trained differently from ten hidden minutes without one: expected '[{"id":30,"age":15,"ageClock":11,"rat…' to be '[{"id":30,"age":15,"ageClock":11,"rat…' // Object.is equality
+   ok   passed 11 a hidden tab whose wakes jitter never opens a fresh eight hours
+   ok   passed 13 fifteen minutes hidden leaves the same academy as fifteen minutes closed, while kids are still growing
+   ok   passed 12 a watched tab on a slow device keeps the calendar turning
+   ok   passed 7 a doctored save loads as a working game and its match clock runs
+   ok   passed 8 a pagehide in the same instant as Sell up saves the sold ground
+   ok   passed 9 a tap in the same frame as a match tick keeps both
+
+A.gaponly) negative control: the academy hook stops telling the clock whether the page is visible
+   ok   passed 1 watched: a minute of callbacks ages every kid a minute and keeps no absence open
+   ok   passed 2 hidden for three hours: exactly the away rule, nobody ages, no Deadline Day
+   ok   passed 3 hidden for twenty hours leaves the same academy as closed for twenty hours
+   ok   passed 4 closed for twenty hours pays the capped eight on load
+   --   passed 5 coming back ends the absence and the calendar turns again
+   ok   passed 6 a save with duplicate kid ids loads with every id unique and nextId above them
+   --   passed 10 a showcase does not multiply away time, and waits for you
+   ok   failed 11 a hidden tab whose wakes jitter never opens a fresh eight hours
+         measured: AssertionError: twenty hidden hours with short gaps left the absence meter at 0.00h: expected +0 to be 28800000 // Object.is equality
+   ok   passed 13 fifteen minutes hidden leaves the same academy as fifteen minutes closed, while kids are still growing
+   ok   passed 12 a watched tab on a slow device keeps the calendar turning
+   --   passed 7 a doctored save loads as a working game and its match clock runs
+   --   passed 8 a pagehide in the same instant as Sell up saves the sold ground
+   --   passed 9 a tap in the same frame as a match tick keeps both
+
+A.quickaway) negative control: a visible page counts any gap over 750ms as away again
+   ok   passed 1 watched: a minute of callbacks ages every kid a minute and keeps no absence open
+   ok   passed 2 hidden for three hours: exactly the away rule, nobody ages, no Deadline Day
+   ok   passed 3 hidden for twenty hours leaves the same academy as closed for twenty hours
+   ok   passed 4 closed for twenty hours pays the capped eight on load
+   ok   passed 5 coming back ends the absence and the calendar turns again
+   ok   passed 6 a save with duplicate kid ids loads with every id unique and nextId above them
+   ok   passed 10 a showcase does not multiply away time, and waits for you
+   ok   passed 11 a hidden tab whose wakes jitter never opens a fresh eight hours
+   ok   passed 13 fifteen minutes hidden leaves the same academy as fifteen minutes closed, while kids are still growing
+   ok   failed 12 a watched tab on a slow device keeps the calendar turning
+         measured: AssertionError: sixty watched seconds of 800ms callbacks aged the first kid 0s: expected +0 to be close to 60, received difference is 60, but expected 5e-7
+   --   passed 7 a doctored save loads as a working game and its match clock runs
+   --   passed 8 a pagehide in the same instant as Sell up saves the sold ground
+   --   passed 9 a tap in the same frame as a match tick keeps both
+
+A.bigstep) negative control: away time trains in one giant step again, which overpays a closed tab
+   ok   passed 1 watched: a minute of callbacks ages every kid a minute and keeps no absence open
+   ok   passed 2 hidden for three hours: exactly the away rule, nobody ages, no Deadline Day
+   ok   passed 3 hidden for twenty hours leaves the same academy as closed for twenty hours
+   ok   passed 4 closed for twenty hours pays the capped eight on load
+   ok   passed 5 coming back ends the absence and the calendar turns again
+   ok   passed 6 a save with duplicate kid ids loads with every id unique and nextId above them
+   --   passed 10 a showcase does not multiply away time, and waits for you
+   ok   passed 11 a hidden tab whose wakes jitter never opens a fresh eight hours
+   ok   failed 13 fifteen minutes hidden leaves the same academy as fifteen minutes closed, while kids are still growing
+         measured: AssertionError: every kid had already reached his ceiling, so this cannot tell step sizes apart: expected 0 to be greater than 0
+   ok   passed 12 a watched tab on a slow device keeps the calendar turning
+   --   passed 7 a doctored save loads as a working game and its match clock runs
+   --   passed 8 a pagehide in the same instant as Sell up saves the sold ground
+   --   passed 9 a tap in the same frame as a match tick keeps both
+
+A.rawlevels) negative control: the stadium loader merges the stored levels in raw again
+   ok   passed 1 watched: a minute of callbacks ages every kid a minute and keeps no absence open
+   ok   passed 2 hidden for three hours: exactly the away rule, nobody ages, no Deadline Day
+   ok   passed 3 hidden for twenty hours leaves the same academy as closed for twenty hours
+   ok   passed 4 closed for twenty hours pays the capped eight on load
+   ok   passed 5 coming back ends the absence and the calendar turns again
+   ok   passed 6 a save with duplicate kid ids loads with every id unique and nextId above them
+   --   passed 10 a showcase does not multiply away time, and waits for you
+   --   passed 11 a hidden tab whose wakes jitter never opens a fresh eight hours
+   --   passed 13 fifteen minutes hidden leaves the same academy as fifteen minutes closed, while kids are still growing
+   --   passed 12 a watched tab on a slow device keeps the calendar turning
+   ok   failed 7 a doctored save loads as a working game and its match clock runs
+         measured: AssertionError: the doctored save loaded broken: stands at -4; squad at "abc"; unknown track bogus; goal chance NaN: expected [ 'stands at -4', …(3) ] to deeply equal []
+   ok   passed 8 a pagehide in the same instant as Sell up saves the sold ground
+   ok   passed 9 a tap in the same frame as a match tick keeps both
+
+A.updater) negative control: Sell up computes and saves inside a setState updater again
+   --   passed 1 watched: a minute of callbacks ages every kid a minute and keeps no absence open
+   --   passed 2 hidden for three hours: exactly the away rule, nobody ages, no Deadline Day
+   --   passed 3 hidden for twenty hours leaves the same academy as closed for twenty hours
+   --   passed 4 closed for twenty hours pays the capped eight on load
+   --   passed 5 coming back ends the absence and the calendar turns again
+   --   passed 6 a save with duplicate kid ids loads with every id unique and nextId above them
+   --   passed 10 a showcase does not multiply away time, and waits for you
+   --   passed 11 a hidden tab whose wakes jitter never opens a fresh eight hours
+   --   passed 13 fifteen minutes hidden leaves the same academy as fifteen minutes closed, while kids are still growing
+   --   passed 12 a watched tab on a slow device keeps the calendar turning
+   ok   passed 7 a doctored save loads as a working game and its match clock runs
+   ok   failed 8 a pagehide in the same instant as Sell up saves the sold ground
+         measured: AssertionError: Sell up took the club to 2 stars but the page going away saved 1: expected 1 to be 2 // Object.is equality
+   ok   passed 9 a tap in the same frame as a match tick keeps both
+
+A.renderref) negative control: the stadium ref is assigned during render and actions stop writing it first
+   --   passed 1 watched: a minute of callbacks ages every kid a minute and keeps no absence open
+   --   passed 2 hidden for three hours: exactly the away rule, nobody ages, no Deadline Day
+   --   passed 3 hidden for twenty hours leaves the same academy as closed for twenty hours
+   --   passed 4 closed for twenty hours pays the capped eight on load
+   --   passed 5 coming back ends the absence and the calendar turns again
+   --   passed 6 a save with duplicate kid ids loads with every id unique and nextId above them
+   --   passed 10 a showcase does not multiply away time, and waits for you
+   --   passed 11 a hidden tab whose wakes jitter never opens a fresh eight hours
+   --   passed 13 fifteen minutes hidden leaves the same academy as fifteen minutes closed, while kids are still growing
+   --   passed 12 a watched tab on a slow device keeps the calendar turning
+   ok   passed 7 a doctored save loads as a working game and its match clock runs
+   ok   passed 8 a pagehide in the same instant as Sell up saves the sold ground
+   ok   failed 9 a tap in the same frame as a match tick keeps both
+         measured: AssertionError: the tap landed in the frame that ticked and the tick's 0.216s of match clock was erased (moved 0.000s): expected 0 to be greater than 0.19
+
+B) the saves
+   ok   C0
+   ok   C1
+   ok   C2
+   9 saves: every one this build writes loads unchanged in the V1 build; repaired on load: stadium/doctored, academy/duplicateIds
+
+B.unabsorbable) negative control: the repaired stadium save comes out with rep 51, which the V1 build rewrites to 0
+   RED  C0: stadium/doctored: today's loader no longer gives the committed answer; regenerate the corpus on purpose or find what moved
+   RED  C1: stadium/doctored: the V1 build changes rep on the way in
+   ok   C2
+
+B.strayrepair) negative control: today's loader quietly changes a valid save (midGame minute 12)
+   RED  C0: stadium/midGame: today's loader no longer gives the committed answer; regenerate the corpus on purpose or find what moved
+   ok   C1
+   RED  C2: today's loader changes stadium/midGame, which this round never meant to touch
+
+B.stalecorpus) negative control: the committed answer for a valid save is edited by hand
+   RED  C0: stadium/midGame: today's loader no longer gives the committed answer; regenerate the corpus on purpose or find what moved
+   ok   C1
+   ok   C2
+
+simTycoonLoads: green.
+   A hidden academy is paid by the same away rule as a closed one, to the millisecond, and nobody ages.
+   A doctored stadium save loads as a working game whose clock runs; Sell up and a same-frame tap survive.
+   Every save this build writes loads unchanged in the V1 build, and only the two broken saves change on load.
+   All eleven controls fired exactly where they should.

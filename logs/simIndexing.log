@@ -1,0 +1,17 @@
+1) The pages that must never be indexed say so
+   7 routes noindexed, admin and 404 covered
+2) Every live page is either in the sitemap or deliberately out
+   171 URLs submitted, 181 live routes, 0 unexplained
+3) A sitemap entry with no inbound link is not a page
+   6 hubs, each submitted, kept by the generator and linked from the static home page
+4) Unique titles, unique descriptions, sane lengths
+   153 indexable pages, 0 duplicate titles, 0 duplicate descriptions (14 titles and 40 descriptions run past the display width, which only truncates)
+5) No indexable page ships without title, description and canonical
+6) One h1 per page: the SEO block fills in only where a page has none
+   145 pages carry the block, 137 have a headline of their own, 8 rely on it for their h1
+6b) Every submitted snapshot carries exactly one real h1
+   171 submitted documents checked at the bytes a crawler receives
+7) robots.txt reads the way a crawler parses it
+8) No em or en dash in the files this round touched
+
+simIndexing: green. Every page is either worth finding or honestly hidden.

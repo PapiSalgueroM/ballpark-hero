@@ -1,0 +1,11 @@
+1) The moment names exactly the ties the engine settled and drew
+   921 steps, 1713 steps per competition with nothing settled (all silent), 306 ladder rungs, 18 season keys
+   moments by round: cup {"R16":18,"QF":18,"SF":18,"F":18}, Champions League {"QF":17,"SF":17,"F":17,"R16":6}; finals the club won: 9; steps that settled two rounds: 0
+2) The cards in a DOM: classes only on the new ties, a remount plays nothing
+   vitest exit 0, 9 passed
+3) The page must not jump while the moment plays (chromium, the site's Tailwind)
+   4 moments (cup, ucl, cupFinal, uclFinal) at 390 and 1440, 40 samples against the plain table
+4) Coverage floors
+   cup 18 a round, Champions League {"QF":17,"SF":17,"F":17,"R16":6}, 306 rungs, 1713 silent steps over 3 seed(s)
+
+ALL BRACKET MOMENT CHECKS PASSED
