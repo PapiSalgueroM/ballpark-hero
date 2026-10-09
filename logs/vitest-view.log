@@ -1,0 +1,23 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/seasonCore.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 162[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/seasonCentreWords.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 1172[2mms[22m[39m
+   [33m[2m✓[22m[39m Season Centre: soccer markup, recorded on the base (Round 1048)[2m > [22mprints the soccer shaped season exactly as the base viewer did, with no new field set [33m 616[2mms[22m[39m
+   [33m[2m✓[22m[39m Season Centre: a sport that brings its own words (Round 1048)[2m > [22mprints the US words, the record panel and the playoff path on the true layout (desktop) [33m 339[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonCentre.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 1247[2mms[22m[39m
+   [33m[2m✓[22m[39m the US Season Center, mounted by itself[2m > [22mwalks an NBA season from the tip off card to the review and closes [33m 585[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonCentreEntry.test.tsx [2m([22m[2m31 tests[22m[2m)[22m[33m 6599[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 2597[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 644[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 1648[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 506[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m64 passed[39m[22m[90m (64)[39m
+[2m   Start at [22m 09:43:16
+[2m   Duration [22m 13.91s[2m (transform 5.55s, setup 675ms, collect 10.71s, tests 9.18s, environment 3.43s, prepare 1.22s)[22m
+

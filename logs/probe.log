@@ -1,0 +1,103 @@
+careers 480; open seasons 7314; games 124338; refused 0; seasons with a tie 126
+PLAYOFFS: seasons with a playoff result 3466; a path 3466; no path 0
+  QB: paths 464; line read 0; the path's scores CANNOT hold his saved playoff line 0 (0.0%); hold it only with odd drives 0 (0.0%)
+  RB: paths 364; line read 0; the path's scores CANNOT hold his saved playoff line 0 (0.0%); hold it only with odd drives 0 (0.0%)
+  WR: paths 436; line read 0; the path's scores CANNOT hold his saved playoff line 0 (0.0%); hold it only with odd drives 0 (0.0%)
+  TE: paths 460; line read 0; the path's scores CANNOT hold his saved playoff line 0 (0.0%); hold it only with odd drives 0 (0.0%)
+  LB: paths 441; line read 0; the path's scores CANNOT hold his saved playoff line 0 (0.0%); hold it only with odd drives 0 (0.0%)
+  CB: paths 428; line read 0; the path's scores CANNOT hold his saved playoff line 0 (0.0%); hold it only with odd drives 0 (0.0%)
+  EDGE: paths 456; line read 0; the path's scores CANNOT hold his saved playoff line 0 (0.0%); hold it only with odd drives 0 (0.0%)
+  K: paths 417; line read 0; the path's scores CANNOT hold his saved playoff line 0 (0.0%); hold it only with odd drives 0 (0.0%)
+ODDITIES (games):
+  K five or more makes (count only): 257
+  K a long over 66 yards: 204
+     K 2030 game 14 (24-27): {"fgMade":1,"fgAtt":1,"longFg":67}
+     K 2034 game 2 (28-27): {"fgMade":3,"fgAtt":3,"longFg":70}
+     K 2030 game 14 (27-14): {"fgMade":2,"fgAtt":2,"longFg":67}
+  starting pass catcher with no catch (count only): 116
+  18 or more tackles (count only): 1
+  over 4 sacks in a game: 1
+     EDGE 2034 game 1 (28-12): {"passDef":1,"forcedFum":0,"tackles":2,"sacks":4.4}
+HIS BIG DAYS (full seasons, 14 or more games played): share of games, and share of seasons with at least one
+  QB pass yds >= 400: 90 of 11600 games (0.78%); in 73 of 685 seasons (10.7%)
+  QB pass yds >= 450: 6 of 11600 games (0.05%); in 6 of 685 seasons (0.9%)
+  QB pass yds >= 500: 0 of 11600 games (0.00%); in 0 of 685 seasons (0.0%)
+  QB pass yds == 520 (the cap): 0 of 11600 games (0.00%); in 0 of 685 seasons (0.0%)
+  QB pass yds < 100: 181 of 11600 games (1.56%); in 115 of 685 seasons (16.8%)
+  QB pass TD >= 5: 388 of 11600 games (3.34%); in 288 of 685 seasons (42.0%)
+  QB pass TD == 6 (the cap): 94 of 11600 games (0.81%); in 83 of 685 seasons (12.1%)
+  QB INT >= 4: 137 of 11600 games (1.18%); in 124 of 685 seasons (18.1%)
+  RB rush yds >= 200: 2 of 6579 games (0.03%); in 2 of 390 seasons (0.5%)
+  RB rush yds >= 250: 0 of 6579 games (0.00%); in 0 of 390 seasons (0.0%)
+  RB rush yds == 290 (the cap): 0 of 6579 games (0.00%); in 0 of 390 seasons (0.0%)
+  RB rush TD >= 3: 171 of 6579 games (2.60%); in 139 of 390 seasons (35.6%)
+  RB rush TD == 4 (the cap): 26 of 6579 games (0.40%); in 26 of 390 seasons (6.7%)
+  RB rush yds < 20: 49 of 6579 games (0.74%); in 31 of 390 seasons (7.9%)
+  WR rec yds >= 200: 14 of 10878 games (0.13%); in 12 of 642 seasons (1.9%)
+  WR rec yds >= 250: 0 of 10878 games (0.00%); in 0 of 642 seasons (0.0%)
+  WR catches >= 13: 16 of 10878 games (0.15%); in 15 of 642 seasons (2.3%)
+  WR catches == 15 (the cap): 0 of 10878 games (0.00%); in 0 of 642 seasons (0.0%)
+  WR rec TD >= 3: 143 of 10878 games (1.31%); in 138 of 642 seasons (21.5%)
+  WR no catch: 6 of 10878 games (0.06%); in 5 of 642 seasons (0.8%)
+  TE rec yds >= 200: 0 of 10423 games (0.00%); in 0 of 616 seasons (0.0%)
+  TE rec yds >= 250: 0 of 10423 games (0.00%); in 0 of 616 seasons (0.0%)
+  TE catches >= 13: 1 of 10423 games (0.01%); in 1 of 616 seasons (0.2%)
+  TE catches == 15 (the cap): 0 of 10423 games (0.00%); in 0 of 616 seasons (0.0%)
+  TE rec TD >= 3: 179 of 10423 games (1.72%); in 156 of 616 seasons (25.3%)
+  TE no catch: 110 of 10423 games (1.06%); in 67 of 616 seasons (10.9%)
+  LB tackles >= 15: 86 of 11015 games (0.78%); in 55 of 651 seasons (8.4%)
+  LB tackles == 20 (the cap): 0 of 11015 games (0.00%); in 0 of 651 seasons (0.0%)
+  LB tackles == 0: 0 of 11015 games (0.00%); in 0 of 651 seasons (0.0%)
+  LB sacks >= 3: 0 of 11015 games (0.00%); in 0 of 651 seasons (0.0%)
+  LB picks >= 2: 34 of 11015 games (0.31%); in 34 of 651 seasons (5.2%)
+  LB picks == 3: 0 of 11015 games (0.00%); in 0 of 651 seasons (0.0%)
+  CB tackles >= 15: 0 of 10337 games (0.00%); in 0 of 611 seasons (0.0%)
+  CB tackles == 20 (the cap): 0 of 10337 games (0.00%); in 0 of 611 seasons (0.0%)
+  CB tackles == 0: 0 of 10337 games (0.00%); in 0 of 611 seasons (0.0%)
+  CB sacks >= 3: 0 of 10337 games (0.00%); in 0 of 611 seasons (0.0%)
+  CB picks >= 2: 125 of 10337 games (1.21%); in 118 of 611 seasons (19.3%)
+  CB picks == 3: 4 of 10337 games (0.04%); in 4 of 611 seasons (0.7%)
+  EDGE tackles >= 15: 0 of 11176 games (0.00%); in 0 of 660 seasons (0.0%)
+  EDGE tackles == 20 (the cap): 0 of 11176 games (0.00%); in 0 of 660 seasons (0.0%)
+  EDGE tackles == 0: 1 of 11176 games (0.01%); in 1 of 660 seasons (0.2%)
+  EDGE sacks >= 3: 18 of 11176 games (0.16%); in 11 of 660 seasons (1.7%)
+  EDGE picks >= 2: 0 of 11176 games (0.00%); in 0 of 660 seasons (0.0%)
+  EDGE picks == 3: 0 of 11176 games (0.00%); in 0 of 660 seasons (0.0%)
+  K makes >= 4: 951 of 16033 games (5.93%); in 629 of 944 seasons (66.6%)
+  K makes >= 5: 254 of 16033 games (1.58%); in 223 of 944 seasons (23.6%)
+  K long >= 60: 694 of 16033 games (4.33%); in 694 of 944 seasons (73.5%)
+  K two misses: 3 of 16033 games (0.02%); in 1 of 944 seasons (0.1%)
+longest run of straight home or straight away games in a season: 1: 0.0%, 2: 16.2%, 3: 83.8%
+the same opponent in back to back games: 0 of 117024 (0.0%)
+  wins for "Missed the playoffs": min 2, median 6, max 9 over 3848
+  wins for "Lost in the Wild Card round": min 9, median 11, max 12 over 1722
+  wins for "Lost in the Divisional round": min 10, median 12, max 13 over 834
+  wins for "Lost the Conference Championship": min 11, median 13, max 14 over 441
+  wins for "WON THE SUPER BOWL": min 11, median 13, max 15 over 257
+  wins for "Lost the Super Bowl": min 11, median 13, max 15 over 212
+SAMPLES (chip | bits | text | feed):
+  QB: 164 YDS | 1 TD / 1 INT | 164 yards, 1 touchdown, 1 interception | feed: [Q1 14:00] You are picked off. [Q1 4:00] 🏈 Touchdown, Washington Commanders. [Q1 2:00] 🏈 Touchdown! You throw it. [Q2 11:00] 🏈 Touchdown, Washington Commanders. [Q2 9:00] 🏈 Touchdown, Dallas Cowboys. [Q3 12:00] 🏈 Touchdown, Dallas Cowboys. [Q4 10:00] 🏈 Touchdown, Dallas Cowboys. [Q4 7:00] 🥅 Field goal, Washington Commanders. [Q4 0:00] 🥅 Field goal, Washington Commanders.
+  QB: 78 YDS | 0 TD / 1 INT | 78 yards, 1 interception | feed: [Q1 14:00] 🥅 Field goal, Dallas Cowboys. [Q1 3:00] 🏈 Touchdown, New Orleans Saints. [Q2 4:00] 🏈 Touchdown, Dallas Cowboys. [Q2 2:00] 🏈 Touchdown, New Orleans Saints. [Q3 11:00] 🥅 Field goal, New Orleans Saints. [Q3 4:00] You are picked off.
+  QB: 185 YDS | 0 TD / 4 INT | 185 yards, 4 interceptions | feed: [Q1 11:00] 🥅 Field goal, Philadelphia Eagles. [Q1 9:00] 🏈 Touchdown, Dallas Cowboys. [Q1 3:00] 🏈 Touchdown, Philadelphia Eagles. [Q2 11:00] You are picked off. [Q3 11:00] You are picked off. [Q3 6:00] You are picked off. [Q3 3:00] You are picked off. [Q4 10:00] 🏈 Touchdown, Philadelphia Eagles. [Q4 4:00] 🏈 Touchdown, Philadelphia Eagles. [Q4 2:00] 🏈 Touchdown, Dallas Cowboys.
+  RB: 38 YDS | 1 TD / 0-0 REC | 38 rushing yards, 1 touchdown | feed: [Q2 14:00] 🏈 Touchdown, Denver Broncos. [Q2 7:00] 🥅 Field goal, Denver Broncos. [Q3 11:00] 🏈 Touchdown, Kansas City Chiefs. [Q3 8:00] 🏈 Touchdown, Denver Broncos. [Q4 14:00] 🏈 Touchdown, Denver Broncos. [Q4 10:00] 🏈 Touchdown! You run it in. [Q4 7:00] 🏈 Touchdown, Denver Broncos. [Q4 4:00] 🏈 Touchdown, Kansas City Chiefs.
+  RB: 50 YDS | 1 TD / 2-14 REC | 50 rushing yards, 1 touchdown | feed: [Q1 12:00] 🥅 Field goal, Kansas City Chiefs. [Q1 10:00] 🏈 Touchdown, Miami Dolphins. [Q1 7:00] 🥅 Field goal, Kansas City Chiefs. [Q2 12:00] 🏈 Touchdown, Kansas City Chiefs. [Q2 9:00] 🏈 Touchdown, Miami Dolphins. [Q3 10:00] 🏈 Touchdown, Miami Dolphins. [Q3 4:00] 🏈 Touchdown! You run it in. [Q4 11:00] 🏈 Touchdown, Miami Dolphins. [Q4 3:00] 🏈 Touchdown, Kansas City Chiefs.
+  RB: 42 YDS | 0 TD / 2-15 REC | 42 rushing yards | feed: [Q1 0:00] 🏈 Touchdown, Los Angeles Chargers. [Q3 13:00] 🥅 Field goal, Kansas City Chiefs. [Q3 11:00] 🥅 Field goal, Los Angeles Chargers. [Q3 1:00] 🏈 Touchdown, Los Angeles Chargers. [Q4 10:00] 🏈 Touchdown, Kansas City Chiefs. [Q4 7:00] 🏈 Touchdown, Los Angeles Chargers. [Q4 5:00] 🏈 Touchdown, Kansas City Chiefs. [Q4 3:00] 🥅 Field goal, Los Angeles Chargers.
+  WR: 50 YDS | 3 REC / 0 TD | 3 catches for 50 yards | feed: [Q1 9:00] 🥅 Field goal, Cleveland Browns. [Q3 13:00] 🥅 Field goal, Pittsburgh Steelers. [Q3 9:00] 🥅 Field goal, Cleveland Browns. [Q4 12:00] 🥅 Field goal, Pittsburgh Steelers. [Q4 1:00] 🥅 Field goal, Pittsburgh Steelers.
+  WR: 46 YDS | 5 REC / 1 TD | 5 catches for 46 yards, 1 touchdown | feed: [Q1 14:00] 🥅 Field goal, Green Bay Packers. [Q1 9:00] 🏈 Touchdown, Green Bay Packers. [Q2 11:00] 🥅 Field goal, Cleveland Browns. [Q2 8:00] 🥅 Field goal, Cleveland Browns. [Q3 6:00] 🥅 Field goal, Green Bay Packers. [Q3 0:00] 🏈 Touchdown! You catch it. [Q4 12:00] 🥅 Field goal, Cleveland Browns.
+  WR: 80 YDS | 6 REC / 0 TD | 6 catches for 80 yards | feed: [Q1 12:00] 🏈 Touchdown, Cleveland Browns. [Q1 8:00] 🏈 Touchdown, Pittsburgh Steelers. [Q1 2:00] 🏈 Touchdown, Cleveland Browns. [Q1 0:00] 🏈 Touchdown, Pittsburgh Steelers. [Q2 8:00] 🥅 Field goal, Cleveland Browns. [Q2 5:00] 🏈 Touchdown, Cleveland Browns. [Q2 1:00] 🏈 Touchdown, Pittsburgh Steelers. [Q3 12:00] 🥅 Field goal, Cleveland Browns. [Q3 9:00] 🏈 Touchdown, Pittsburgh Steelers. [Q3 1:00] 🥅 Field goal, Cleveland Browns. [Q4 13:00] 🏈 Touchdown, Pittsburgh Steelers. [Q4 1:00] 🥅 Field goal, Pittsburgh Steelers.
+  TE: 17 YDS | 2 REC / 0 TD | 2 catches for 17 yards | feed: [Q2 11:00] 🏈 Touchdown, Los Angeles Rams. [Q2 1:00] 🏈 Touchdown, San Francisco 49ers. [Q4 11:00] 🥅 Field goal, Los Angeles Rams.
+  TE: 7 YDS | 1 REC / 0 TD | 1 catch for 7 yards | feed: [Q1 6:00] 🏈 Touchdown, Arizona Cardinals. [Q1 0:00] 🏈 Touchdown, Los Angeles Rams. [Q2 5:00] 🏈 Touchdown, Los Angeles Rams. [Q2 2:00] 🏈 Touchdown, Los Angeles Rams. [Q2 0:00] 🥅 Field goal, Arizona Cardinals. [Q4 12:00] 🥅 Field goal, Los Angeles Rams. [Q4 6:00] 🥅 Field goal, Arizona Cardinals.
+  TE: 33 YDS | 3 REC / 0 TD | 3 catches for 33 yards | feed: [Q1 7:00] 🏈 Touchdown, New England Patriots. [Q1 4:00] 🏈 Touchdown, Los Angeles Rams. [Q2 12:00] 🏈 Touchdown, Los Angeles Rams. [Q2 0:00] 🏈 Touchdown, Los Angeles Rams. [Q3 10:00] 🏈 Touchdown, New England Patriots. [Q3 4:00] 🥅 Field goal, New England Patriots. [Q4 10:00] 🥅 Field goal, Los Angeles Rams. [Q4 8:00] 🏈 Touchdown, New England Patriots. [Q4 6:00] 🥅 Field goal, Los Angeles Rams.
+  LB: 7 TKL |  | 7 tackles | feed: [Q1 6:00] 🏈 Touchdown, Cleveland Browns. [Q2 14:00] 🏈 Touchdown, Tampa Bay Buccaneers. [Q2 12:00] 🏈 Touchdown, Cleveland Browns. [Q3 6:00] 🏈 Touchdown, Tampa Bay Buccaneers. [Q3 3:00] 🏈 Touchdown, Tampa Bay Buccaneers. [Q3 0:00] 🥅 Field goal, Cleveland Browns. [Q4 11:00] 🏈 Touchdown, Cleveland Browns. [Q4 2:00] 🏈 Touchdown, Tampa Bay Buccaneers.
+  LB: 5 TKL |  | 5 tackles | feed: [Q1 12:00] 🥅 Field goal, Cleveland Browns. [Q1 7:00] 🏈 Touchdown, Cleveland Browns. [Q2 1:00] 🏈 Touchdown, Pittsburgh Steelers. [Q3 12:00] 🥅 Field goal, Cleveland Browns. [Q4 14:00] 🥅 Field goal, Pittsburgh Steelers.
+  LB: 7 TKL |  | 7 tackles | feed: [Q1 6:00] 🏈 Touchdown, Cleveland Browns. [Q1 0:00] 🏈 Touchdown, Philadelphia Eagles. [Q2 3:00] 🥅 Field goal, Cleveland Browns. [Q3 12:00] 🏈 Touchdown, Philadelphia Eagles. [Q3 5:00] 🏈 Touchdown, Philadelphia Eagles. [Q4 5:00] 🏈 Touchdown, Philadelphia Eagles.
+  CB: 3 TKL | 1 FF | 3 tackles | feed: [Q1 6:00] 🥅 Field goal, Los Angeles Rams. [Q3 12:00] 🥅 Field goal, Los Angeles Rams. [Q3 4:00] 🏈 Touchdown, Seattle Seahawks. [Q3 1:00] 🥅 Field goal, Seattle Seahawks. [Q4 12:00] You force a fumble. [Q4 4:00] 🏈 Touchdown, Los Angeles Rams.
+  CB: 2 TKL | 2 PD | 2 tackles | feed: [Q1 8:00] 🏈 Touchdown, San Francisco 49ers. [Q1 3:00] 🥅 Field goal, Seattle Seahawks. [Q2 10:00] 🏈 Touchdown, San Francisco 49ers. [Q2 2:00] 🥅 Field goal, San Francisco 49ers. [Q3 12:00] 🥅 Field goal, Seattle Seahawks. [Q3 4:00] 🏈 Touchdown, Seattle Seahawks. [Q3 0:00] 🏈 Touchdown, San Francisco 49ers. [Q4 10:00] 🏈 Touchdown, San Francisco 49ers. [Q4 7:00] 🥅 Field goal, Seattle Seahawks.
+  CB: 5 TKL |  | 5 tackles | feed: [Q1 12:00] 🏈 Touchdown, Detroit Lions. [Q1 5:00] 🥅 Field goal, Seattle Seahawks. [Q2 14:00] 🏈 Touchdown, Seattle Seahawks. [Q2 11:00] 🏈 Touchdown, Detroit Lions. [Q2 1:00] 🏈 Touchdown, Seattle Seahawks. [Q3 12:00] 🏈 Touchdown, Seattle Seahawks. [Q3 9:00] 🥅 Field goal, Seattle Seahawks. [Q3 6:00] 🏈 Touchdown, Detroit Lions. [Q4 14:00] 🥅 Field goal, Detroit Lions. [Q4 4:00] 🥅 Field goal, Seattle Seahawks.
+  EDGE: 2 TKL |  | 2 tackles | feed: [Q1 9:00] 🏈 Touchdown, Tampa Bay Buccaneers. [Q1 6:00] 🥅 Field goal, Tampa Bay Buccaneers. [Q3 11:00] 🏈 Touchdown, Tampa Bay Buccaneers. [Q3 8:00] 🏈 Touchdown, Tampa Bay Buccaneers.
+  EDGE: 2 TKL |  | 2 tackles | feed: [Q1 11:00] 🥅 Field goal, Atlanta Falcons. [Q1 9:00] 🥅 Field goal, Baltimore Ravens. [Q2 7:00] 🏈 Touchdown, Atlanta Falcons. [Q2 0:00] 🏈 Touchdown, Baltimore Ravens. [Q3 8:00] 🏈 Touchdown, Atlanta Falcons. [Q3 4:00] 🏈 Touchdown, Atlanta Falcons. [Q4 7:00] 🥅 Field goal, Baltimore Ravens. [Q4 5:00] 🥅 Field goal, Atlanta Falcons. [Q4 0:00] 🏈 Touchdown, Baltimore Ravens.
+  EDGE: 5 TKL |  | 5 tackles | feed: [Q1 8:00] 🏈 Touchdown, Cincinnati Bengals. [Q2 6:00] 🏈 Touchdown, Cincinnati Bengals. [Q2 1:00] 🏈 Touchdown, Cincinnati Bengals. [Q3 11:00] 🏈 Touchdown, Atlanta Falcons. [Q3 0:00] 🥅 Field goal, Atlanta Falcons. [Q4 6:00] 🥅 Field goal, Atlanta Falcons.
+  K: 4/5 FG | LONG 52 | 4 of 5 on field goals, long of 52 | feed: [Q1 9:00] Your field goal try is no good. [Q1 6:00] 🥅 Field goal, Denver Broncos. [Q1 2:00] 🥅 Field goal, Denver Broncos. [Q2 12:00] 🏈 Touchdown, Cleveland Browns. The two point try is good. [Q2 9:00] 🏈 Touchdown, Denver Broncos. [Q2 3:00] 🥅 Field goal! You hit it. [Q2 1:00] 🏈 Touchdown, Denver Broncos. [Q3 7:00] 🥅 Field goal! You hit it. [Q3 4:00] 🥅 Field goal! You hit it. [Q3 1:00] 🥅 Field goal! You hit it. [Q4 11:00] 🥅 Field goal, Denver Broncos.
+  K: 1/2 FG | LONG 31 | 1 of 2 on field goals, long of 31 | feed: [Q1 12:00] Your field goal try is no good. [Q2 11:00] 🏈 Touchdown, Cleveland Browns. The two point try is no good. [Q2 4:00] 🥅 Field goal! You hit it. [Q3 12:00] 🥅 Field goal, Kansas City Chiefs. [Q3 7:00] 🏈 Touchdown, Kansas City Chiefs. [Q3 3:00] 🏈 Touchdown, Kansas City Chiefs. [Q3 1:00] 🏈 Touchdown, Cleveland Browns. [Q4 13:00] 🥅 Field goal, Kansas City Chiefs. [Q4 8:00] 🏈 Touchdown, Kansas City Chiefs. [Q4 0:00] 🥅 Field goal, Kansas City Chiefs.
+  K: 2/2 FG | LONG 58 | 2 of 2 on field goals, long of 58 | feed: [Q2 10:00] 🥅 Field goal! You hit it. [Q2 5:00] 🏈 Touchdown, Pittsburgh Steelers. [Q2 3:00] 🥅 Field goal! You hit it. [Q4 10:00] 🏈 Touchdown, Pittsburgh Steelers.
+rv-probe: done

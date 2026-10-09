@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-nfl: node_modules/.bin/vitest run src/test/usSeasonNfl.test.ts src/test/usSeason.test.ts --testTimeout=300000 --hookTimeout=120000
+vitest-view: node_modules/.bin/vitest run src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/seasonCentreWords.test.tsx src/test/seasonCore.test.ts --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simUsSeasonCentre.mjs
+probe: node .rc/x/rv-probe.mjs
+neutral: node scripts/simSeasonCentreNeutral.mjs
+parity: node scripts/simUsBoardParity.mjs
+agreement: node scripts/simSeasonCentreAgreement.mjs

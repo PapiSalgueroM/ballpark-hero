@@ -1,0 +1,8 @@
+vitest-nfl exit=1 6s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonNfl.test.ts,title=src/test/usSeasonNfl.test.ts > the NFL playoff path > is one game a round fo
+vitest-view exit=0 15s |    Duration  13.91s (transform 5.55s, setup 675ms, collect 10.71s, tests 9.18s, environment 3.43s, prepare 1.22s)
+probe exit=0 6s | rv-probe: done
+sim exit=1 28s | simUsSeasonCentre: 86 checks, 1 failed
+neutral exit=0 22s | simSeasonCentreNeutral: 34 checks, 0 failed
+agreement exit=0 14s | simSeasonCentreAgreement: 24 checks, 0 failed
+tsc exit=0 78s | 
+parity exit=0 47s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
