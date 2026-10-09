@@ -1,0 +1,39 @@
+rvmut l4: applied in src/lib/clubManager.ts
+=== RUN simCmQuickLegs :: node scripts/simCmQuickLegs.mjs
+  MEASURED with the round: 1666 matches, 1.76 changes a match (0.24 for an injury, 0.49 at the break, 1.04 for legs after it), bench used in 91.5% of matches; W 54.6% D 20.5% L 24.8%, 1.73 for and 0.96 against a match, 70.19 league points a season; 590.64 appearances a season shared by 21.75 men
+  MEASURED without it: 1659 matches, 0.70 changes a match (0.24 for an injury, 0.46 at the break, 0.00 for legs after it), bench used in 46.1% of matches; W 53.9% D 20.3% L 25.9%, 1.73 for and 0.99 against a match, 69.11 league points a season; 539.17 appearances a season shared by 20.89 men
+  MEASURED his rule, on 249 matches played again by hand (111 with a change for legs): 169 changes for legs, 113 with the match within a goal (mean strength +0.114) and 56 with my side two or more up (mean -0.501)
+  FAIL rule: 4 finding(s) on 169 checks. Tyrique George came on and was taken off again at 79' | Tyrique George came on and was taken off again at 59' | Tyler Dibling came on and was taken off again at 63'
+simCmQuickLegs: FAILED, 1 of 5 sections red
+--- tail
+  ok gap (1 checks)
+  FAIL rule: 4 finding(s) on 169 checks. Tyrique George came on and was taken off again at 79' | Tyrique George came on and was taken off again at 59' | Tyler Dibling came on and was taken off again at 63'
+  ok reserve (169 checks)
+  ok manual (249 checks)
+  ok report (1666 checks)
+simCmQuickLegs: FAILED, 1 of 5 sections red
+=== EXIT 1 :: simCmQuickLegs
+=== RUN simCmQuickSubs :: node scripts/simCmQuickSubs.mjs
+--- tail
+simCmQuickSubs normal: real coaching outcomes and independent unmanaged baseline passed.
+=== EXIT 0 :: simCmQuickSubs
+=== RUN simClubManager :: node scripts/simClubManager.mjs
+   105 messages answered across 4 seasons (6 promises made)
+--- tail
+6) Negotiations and the deadline-day machinery
+   300 negotiations: 65 agreed, 109 collapsed, 12 hijacked, 114 walked
+   summer window survived 4 match weeks, then the deadline hit
+7) Stat lines, fixture log and player DMs
+   105 messages answered across 4 seasons (6 promises made)
+ALL CLUB MANAGER SIMS PASSED
+=== EXIT 0 :: simClubManager
+=== RUN vitest :: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 src/test/managerQuickSimLegs.test.tsx
+--- tail
+ ✓ src/test/managerQuickSimLegs.test.tsx (2 tests) 428ms
+   ✓ Club Manager: a quick sim makes its subs (Round 1146) > brings fresh legs on after the break, and the report the player lands on lists the change  371ms
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  16:47:01
+   Duration  3.93s (transform 1.93s, setup 59ms, collect 2.50s, tests 428ms, environment 349ms, prepare 196ms)
+=== EXIT 0 :: vitest
+MUTANT l4 KILLED by: simCmQuickLegs

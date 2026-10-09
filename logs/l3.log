@@ -1,0 +1,39 @@
+rvmut l3: applied in src/lib/clubManager.ts
+=== RUN simCmQuickLegs :: node scripts/simCmQuickLegs.mjs
+  MEASURED with the round: 1631 matches, 1.76 changes a match (0.23 for an injury, 0.39 at the break, 1.14 for legs after it), bench used in 92.7% of matches; W 55.2% D 20.4% L 24.4%, 1.65 for and 0.93 against a match, 69.61 league points a season; 578.08 appearances a season shared by 21.58 men
+  MEASURED without it: 1659 matches, 0.70 changes a match (0.24 for an injury, 0.46 at the break, 0.00 for legs after it), bench used in 46.1% of matches; W 53.9% D 20.3% L 25.9%, 1.73 for and 0.99 against a match, 69.11 league points a season; 539.17 appearances a season shared by 20.89 men
+  MEASURED his rule, on 251 matches played again by hand (159 with a change for legs): 237 changes for legs, 164 with the match within a goal (mean strength -0.101) and 73 with my side two or more up (mean -0.484)
+  FAIL rule: 46 finding(s) on 237 checks. Vitaliy Mykolenko off at 64' left the eleven weaker (85.04 from 85.06) with my side 2 down | James Garner off at 58' left the eleven weaker (82.75 from 83.17) with my side 2 down | Vitaliy Mykolenko off at 59' left the eleven weaker (80.02 from 80.31) with m
+simCmQuickLegs: FAILED, 1 of 5 sections red
+--- tail
+  ok gap (1 checks)
+  FAIL rule: 46 finding(s) on 237 checks. Vitaliy Mykolenko off at 64' left the eleven weaker (85.04 from 85.06) with my side 2 down | James Garner off at 58' left the eleven weaker (82.75 from 83.17) with my side 2 down | Vitaliy Mykolenko off at 59' left the eleven weaker (80.02 from 80.31) with m
+  ok reserve (237 checks)
+  ok manual (251 checks)
+  ok report (1631 checks)
+simCmQuickLegs: FAILED, 1 of 5 sections red
+=== EXIT 1 :: simCmQuickLegs
+=== RUN simCmQuickSubs :: node scripts/simCmQuickSubs.mjs
+--- tail
+simCmQuickSubs normal: real coaching outcomes and independent unmanaged baseline passed.
+=== EXIT 0 :: simCmQuickSubs
+=== RUN simClubManager :: node scripts/simClubManager.mjs
+   124 messages answered across 4 seasons (10 promises made)
+--- tail
+6) Negotiations and the deadline-day machinery
+   300 negotiations: 69 agreed, 110 collapsed, 21 hijacked, 100 walked
+   summer window survived 4 match weeks, then the deadline hit
+7) Stat lines, fixture log and player DMs
+   124 messages answered across 4 seasons (10 promises made)
+ALL CLUB MANAGER SIMS PASSED
+=== EXIT 0 :: simClubManager
+=== RUN vitest :: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 src/test/managerQuickSimLegs.test.tsx
+--- tail
+ ✓ src/test/managerQuickSimLegs.test.tsx (2 tests) 442ms
+   ✓ Club Manager: a quick sim makes its subs (Round 1146) > brings fresh legs on after the break, and the report the player lands on lists the change  383ms
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  16:46:47
+   Duration  4.11s (transform 2.08s, setup 55ms, collect 2.72s, tests 442ms, environment 360ms, prepare 113ms)
+=== EXIT 0 :: vitest
+MUTANT l3 KILLED by: simCmQuickLegs

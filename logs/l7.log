@@ -1,0 +1,39 @@
+rvmut l7: applied in src/lib/clubManager.ts
+=== RUN simCmQuickLegs :: node scripts/simCmQuickLegs.mjs
+  MEASURED with the round: 1653 matches, 2.02 changes a match (0.23 for an injury, 0.48 at the break, 1.31 for legs after it), bench used in 98.7% of matches; W 54.0% D 21.9% L 24.1%, 1.71 for and 0.92 against a match, 69.11 league points a season; 597.89 appearances a season shared by 21.86 men
+  MEASURED without it: 1659 matches, 0.70 changes a match (0.24 for an injury, 0.46 at the break, 0.00 for legs after it), bench used in 46.1% of matches; W 53.9% D 20.3% L 25.9%, 1.73 for and 0.99 against a match, 69.11 league points a season; 539.17 appearances a season shared by 20.89 men
+  MEASURED his rule, on 252 matches played again by hand (165 with a change for legs): 287 changes for legs, 237 with the match within a goal (mean strength -0.381) and 50 with my side two or more up (mean -0.589)
+  FAIL rule: 220 finding(s) on 287 checks. Hayden Hackney off at 72' left the eleven weaker (78.01 from 78.13) with my side 0 up | Kiernan Dewsbury-Hall off at 66' left the eleven weaker (81.45 from 81.94) with my side 1 down | Hayden Hackney off at 73' left the eleven weaker (80.50 from 81.45) with
+simCmQuickLegs: FAILED, 1 of 5 sections red
+--- tail
+  ok gap (1 checks)
+  FAIL rule: 220 finding(s) on 287 checks. Hayden Hackney off at 72' left the eleven weaker (78.01 from 78.13) with my side 0 up | Kiernan Dewsbury-Hall off at 66' left the eleven weaker (81.45 from 81.94) with my side 1 down | Hayden Hackney off at 73' left the eleven weaker (80.50 from 81.45) with
+  ok reserve (287 checks)
+  ok manual (252 checks)
+  ok report (1653 checks)
+simCmQuickLegs: FAILED, 1 of 5 sections red
+=== EXIT 1 :: simCmQuickLegs
+=== RUN simCmQuickSubs :: node scripts/simCmQuickSubs.mjs
+--- tail
+simCmQuickSubs normal: real coaching outcomes and independent unmanaged baseline passed.
+=== EXIT 0 :: simCmQuickSubs
+=== RUN simClubManager :: node scripts/simClubManager.mjs
+   114 messages answered across 4 seasons (7 promises made)
+--- tail
+6) Negotiations and the deadline-day machinery
+   300 negotiations: 68 agreed, 118 collapsed, 15 hijacked, 99 walked
+   summer window survived 4 match weeks, then the deadline hit
+7) Stat lines, fixture log and player DMs
+   114 messages answered across 4 seasons (7 promises made)
+ALL CLUB MANAGER SIMS PASSED
+=== EXIT 0 :: simClubManager
+=== RUN vitest :: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 src/test/managerQuickSimLegs.test.tsx
+--- tail
+ RUN  v3.2.7 /home/runner/work/_temp/t-l7/w-l7
+ ✓ src/test/managerQuickSimLegs.test.tsx (2 tests) 298ms
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  16:48:20
+   Duration  2.62s (transform 1.16s, setup 51ms, collect 1.57s, tests 298ms, environment 298ms, prepare 142ms)
+=== EXIT 0 :: vitest
+MUTANT l7 KILLED by: simCmQuickLegs

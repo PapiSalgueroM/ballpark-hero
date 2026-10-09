@@ -1,0 +1,37 @@
+rvmut l1: applied in src/lib/clubManager.ts
+=== RUN simCmQuickLegs :: node scripts/simCmQuickLegs.mjs
+  MEASURED with the round: 1673 matches, 1.76 changes a match (0.23 for an injury, 0.44 at the break, 1.08 for legs after it), bench used in 92.2% of matches; W 55.6% D 20.1% L 24.3%, 1.72 for and 0.97 against a match, 70.36 league points a season; 592.81 appearances a season shared by 21.64 men
+  MEASURED without it: 1659 matches, 0.70 changes a match (0.24 for an injury, 0.46 at the break, 0.00 for legs after it), bench used in 46.1% of matches; W 53.9% D 20.3% L 25.9%, 1.73 for and 0.99 against a match, 69.11 league points a season; 539.17 appearances a season shared by 20.89 men
+  MEASURED his rule, on 250 matches played again by hand (119 with a change for legs): 184 changes for legs, 120 with the match within a goal (mean strength +0.099) and 64 with my side two or more up (mean -0.373)
+--- tail
+  ok gap (1 checks)
+  ok rule (184 checks)
+  ok reserve (184 checks)
+  ok manual (250 checks)
+  ok report (1673 checks)
+simCmQuickLegs: PASS, 5 sections green
+=== EXIT 0 :: simCmQuickLegs
+=== RUN simCmQuickSubs :: node scripts/simCmQuickSubs.mjs
+--- tail
+simCmQuickSubs normal: real coaching outcomes and independent unmanaged baseline passed.
+=== EXIT 0 :: simCmQuickSubs
+=== RUN simClubManager :: node scripts/simClubManager.mjs
+   117 messages answered across 4 seasons (12 promises made)
+--- tail
+6) Negotiations and the deadline-day machinery
+   300 negotiations: 75 agreed, 107 collapsed, 13 hijacked, 105 walked
+   summer window survived 4 match weeks, then the deadline hit
+7) Stat lines, fixture log and player DMs
+   117 messages answered across 4 seasons (12 promises made)
+ALL CLUB MANAGER SIMS PASSED
+=== EXIT 0 :: simClubManager
+=== RUN vitest :: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 src/test/managerQuickSimLegs.test.tsx
+--- tail
+ ✓ src/test/managerQuickSimLegs.test.tsx (2 tests) 356ms
+   ✓ Club Manager: a quick sim makes its subs (Round 1146) > brings fresh legs on after the break, and the report the player lands on lists the change  303ms
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  16:45:10
+   Duration  3.69s (transform 1.86s, setup 56ms, collect 2.41s, tests 356ms, environment 341ms, prepare 128ms)
+=== EXIT 0 :: vitest
+MUTANT l1 SURVIVED

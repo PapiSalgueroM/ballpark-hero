@@ -1,0 +1,92 @@
+rvmut m6: applied in src/lib/clubManager.ts
+=== RUN simCmOwnGoals :: node scripts/simCmOwnGoals.mjs
+  MEASURED own goals: 92 of 4312 goals (2.13%), 49 for me and 43 against; 3218 eligible, expected 100.6, z -0.87; 8 by a keeper; 90 of 1624 matches had one; 2.56 a season in my matches
+  MEASURED penalties: 378 of 4312 goals (8.77%) carry the flag every listing marks (P); direct free kicks 182 (4.22%); 0 own goals by a sub of theirs with no sheet to read his position from
+  MEASURED awards over the 36 seasons both careers agree on: my squad 49 goals and 30 assists down (1.36 and 0.83 a season); my top scorer 0.31 goals down a season on a mean of 21.72, a different man in 0; golden boot a different man in 0, player of the season in 0, world award in 0
+  FAIL marks: 92 finding(s) on 4312 checks. Everton seed 11460000 season 1, match 9 of the fleet: the timeline row of Jérémy Jacquet 90' carries other flags than his scorer line | Everton seed 11460000 season 1, match 30 of the fleet: the timeline row of Jarrad Branthwaite 25' carries other flags 
+  ok credit (1660 checks)
+simCmOwnGoals: FAILED, 1 of 6 sections red
+--- tail
+  ok share (1 checks)
+  FAIL marks: 92 finding(s) on 4312 checks. Everton seed 11460000 season 1, match 9 of the fleet: the timeline row of Jérémy Jacquet 90' carries other flags than his scorer line | Everton seed 11460000 season 1, match 30 of the fleet: the timeline row of Jarrad Branthwaite 25' carries other flags 
+  ok man (92 checks)
+  ok credit (1660 checks)
+  ok inflight (1 checks)
+simCmOwnGoals: FAILED, 1 of 6 sections red
+=== EXIT 1 :: simCmOwnGoals
+=== RUN simMatchDetail :: node scripts/simMatchDetail.mjs
+   39 matches, mean |xG - goals| = 0.52, 51 goals scored
+   12 sheets checked: eleven starters plus their subs (11 sheets with men who came on, floor 1), 8 scorers all on the pitch, 5 clean-sheet keepers floored right
+7) Two yellows is a red, and nobody leaves before his own last goal
+   240 matches: 7 second yellows (2.9%), 12 straight reds, 7.9% of matches ended a man short
+--- tail
+6) Their eleven get rated too, honestly
+   12 sheets checked: eleven starters plus their subs (11 sheets with men who came on, floor 1), 8 scorers all on the pitch, 5 clean-sheet keepers floored right
+   thin-world control: 2 Lustenau meetings, all sheetless as designed
+7) Two yellows is a red, and nobody leaves before his own last goal
+   240 matches: 7 second yellows (2.9%), 12 straight reds, 7.9% of matches ended a man short
+simMatchDetail: all green
+=== EXIT 0 :: simMatchDetail
+=== RUN simLiveMatch :: node scripts/simLiveMatch.mjs
+   42 kick offs: h1Play 31 to 55 events (mean 42.5), 43 first half goals mirrored shot for shot, 45 bookings each a foul by the booked man, stats counted by hand agree at 45
+   0 of 33 matches list a man on the ball after he came off (0 events, floor 0); 0 bookings for a man after he came off (floor 0); 0 opposition scorers scored after a red (floor 0)
+4) A change keeps the past and redraws the future
+   42 subs at 70 and 42 at 20: the past byte identical, the future in range, the pitch through the sub's minute holds the man who went off and from the next minute the man who came on, the man who went off never on the ball again, the report the stream the viewer walked; the stream after the change 
+simLiveMatch: PASS. Each half is committed as one stream, the report is counted off it, a change keeps the past and redraws the future, and the other dugout fields eleven named men who come and go on the same clock.
+--- tail
+   14 paused saves: picked back up with the same first half, quick simmed with 11 first half goals and every first half event carried verbatim
+9) A save paused before this round still resolves
+   10 old shape saves resolved with a full report: play per half 27 to 59 events, stats shots >= on target >= goals both sides, first half scorer counts kept
+10) A man in my squad never turns out for the club he left, real or generated
+   41 fixtures with the next opponent's top man in my squad (21 real, 20 generated; 1 opponents with no roster to take from), 33 named elevens, 41 previews: his name never on their eleven, bench, subs, scorers, ratings sheet, play or cards, never a danger man for them, never theirs in the scorer rac
+simLiveMatch: PASS. Each half is committed as one stream, the report is counted off it, a change keeps the past and redraws the future, and the other dugout fields eleven named men who come and go on the same clock.
+=== EXIT 0 :: simLiveMatch
+=== RUN simLiveSim :: node scripts/simLiveSim.mjs
+   8 watched matches: first halves reused verbatim, stats credited once
+--- tail
+1) Kick off commits the first half scorers
+   8 watched matches: first halves reused verbatim, stats credited once
+2) A paused save from before the h1 lines existed
+simLiveSim: all green
+=== EXIT 0 :: simLiveSim
+=== RUN simCmMatchCentre :: node scripts/simCmMatchCentre.mjs
+   16 stat labels on the two screens (Possession, Shots, On target, Expected goals, Corners, Fouls, Keeper saves, Yellow cards, Red cards, Substitutions, Shots (on target), xG, Saves, Yellow, Red, Subs), none of them a number the sim does not draw
+--- tail
+   2813 rows on 144 cards, every one the report's own row, the clock rows off the report's own board
+4) The live strip prints the saves, bookings and changes so far, never the whole match
+   60 live strips (at 20, at 70, at the whistle), 29 of them with bookings or changes still to come, every one the engine's count at its minute
+5) Nothing the sim does not model is on either screen
+   16 stat labels on the two screens (Possession, Shots, On target, Expected goals, Corners, Fouls, Keeper saves, Yellow cards, Red cards, Substitutions, Shots (on target), xG, Saves, Yellow, Red, Subs), none of them a number the sim does not draw
+simCmMatchCentre: PASS. Every stat on the report and the live strip is counted off the committed play and lines, and every timeline row is an event the engine drew.
+=== EXIT 0 :: simCmMatchCentre
+=== RUN simAwardRaces :: node scripts/simAwardRaces.mjs
+--- tail
+   38 tracked 2010 scorers, e.g. Javad Nekounam (Osasuna)
+6) A race-less save mid season reconstructs sanely
+   rebuilt with 19 clubs already on the board
+7) A new season starts a new race
+   zeroed board, quiet watch, ready for round one
+ALL AWARD RACE CHECKS PASSED
+=== EXIT 0 :: simAwardRaces
+=== RUN vitest :: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 src/test/managerPenaltyMarkers.test.tsx src/test/managerScorerMarks.test.tsx src/test/liveSimMotion.test.tsx
+stdout | src/test/liveSimMotion.test.tsx > The goal sequence > a line fired late by Skip is not played again when extra time starts
+   ✓ Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (45 'goal' reduced=false)  4944ms
+   ✓ Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (45 'goal' reduced=true)  1380ms
+   ✓ Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (45 'save' reduced=false)  1629ms
+   ✓ Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (45 'save' reduced=true)  1478ms
+   ✓ Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (90 'goal' reduced=false)  2835ms
+   ✓ Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (90 'goal' reduced=true)  2254ms
+   ✓ Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (90 'save' reduced=false)  2103ms
+   ✓ Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (90 'save' reduced=true)  1551ms
+   ✓ Live simcast motion > a tactics redraw cancels a terminal action that is no longer committed  723ms
+   ✓ The goal sequence > a line fired late by Skip is not played again when extra time starts  449ms
+   ✓ The goal sequence > under reduced motion the card is held for its first stretch only, and then the match runs on  807ms
+--- tail
+   ✓ Match mode > one panel at a time, and Escape closes what is open before it is Back  367ms
+   ✓ Match mode > the stats line a phone keeps in view reads the same count as the full stats  1293ms
+ Test Files  3 passed (3)
+      Tests  69 passed (69)
+   Start at  16:37:43
+   Duration  70.48s (transform 3.27s, setup 313ms, collect 10.51s, tests 65.65s, environment 2.27s, prepare 677ms)
+=== EXIT 0 :: vitest
+MUTANT m6 KILLED by: simCmOwnGoals
