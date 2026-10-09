@@ -1,0 +1,68 @@
+1) The Club Manager staff history replays identically
+  FAIL: Arsenal natural: line 5 of 81 differs
+      was: S0 list attack: Joris Ilving L6/P9 w16 fee1.9 O st-1ui73df "Ten years in an academy, wants the first team" ; Domen Merrion L9/P10 w22 fee2.7 O st-1083e0p "Out of work since the summer" ; Bram Quennell L8/P8 w20 fee2.4 O st-1fhetyf "Coached abroad, back for a job at home" ; Kaspars Bertelsen L3/P6 w9 fee0 A st-2eijpj "On the academy staff already"
+      now: S0 list attack: Joris Ilving L6/P9 w16 fee1.9 O st-1ui73df "Ten years in an academy, wants the first team" ; Domen Merrion L9/P10 w22 fee2.7 O st-1083e0p "Out of work since the summer" ; Bram Quennell L8/P8 w20 fee2.4 O st-1fhetyf "Coached abroad, back for a job at home" ; Kaspars Bertelsen L4/P7 w11 fee0 A st-2eijpj "On the academy staff already"
+  FAIL: Bayern Munich nines: line 5 of 63 differs
+      was: S0 list attack: Torvald Threlfall L6/P8 w16 fee1.9 O st-29i7z9 "Coached abroad, back for a job at home" ; Radek Drenthe L5/P5 w14 fee1.6 O st-qyel97 "Number two at a club in the division below" ; Osian Grimsby L8/P10 w20 fee2.4 O st-qeova1 "Out of work since the summer" ; Emrys Ilving L4/P9 w11 fee0 A st-1jnjj4b "On the academy staff already"
+      now: S0 list attack: Torvald Threlfall L6/P8 w16 fee1.9 O st-29i7z9 "Coached abroad, back for a job at home" ; Radek Drenthe L5/P5 w14 fee1.6 O st-qyel97 "Number two at a club in the division below" ; Osian Grimsby L8/P10 w20 fee2.4 O st-qeova1 "Out of work since the summer" ; Emrys Ilving L3/P8 w9 fee0 A st-1jnjj4b "On the academy staff already"
+  FAIL: PSG nines: line 5 of 74 differs
+      was: S0 list attack: Idris Vandeley L8/P10 w20 fee2.4 O st-14j4550 "Ten years in an academy, wants the first team" ; Emrys Rasmusson L10/P10 w24 fee3 O st-1eh2uy4 "Ten years in an academy, wants the first team" ; Ulrich Ilving L8/P10 w20 fee2.4 O st-1pauf80 "Number two at a club in the division below" ; Joris Praeger L3/P7 w9 fee0 A st-16t11fa "On the academy staff already"
+      now: S0 list attack: Idris Vandeley L8/P10 w20 fee2.4 O st-14j4550 "Ten years in an academy, wants the first team" ; Emrys Rasmusson L10/P10 w24 fee3 O st-1eh2uy4 "Ten years in an academy, wants the first team" ; Ulrich Ilving L8/P10 w20 fee2.4 O st-1pauf80 "Number two at a club in the division below" ; Joris Praeger L4/P8 w11 fee0 A st-16t11fa "On the academy staff already"
+  FAIL: AC Milan natural: line 4 of 55 differs
+      was: S0 desk: payroll 54 poach none matches 2 hires 0 spend 0 budget 57 valid false
+      now: S0 desk: payroll 54 poach none matches 2 hires 0 spend 0 budget 56 valid false
+  FAIL: AC Milan nines: line 4 of 70 differs
+      was: S0 desk: payroll 88 poach none matches 2 hires 0 spend 0 budget 57 valid true
+      now: S0 desk: payroll 88 poach none matches 2 hires 0 spend 0 budget 56 valid true
+  FAIL: Coventry City natural: line 5 of 53 differs
+      was: S0 list attack: Lorcan Hollander L7/P8 w18 fee2.2 O st-74hgzb "Out of work since the summer" ; Ulrich Lammert L3/P3 w9 fee1 O st-9chhr7 "Runs his own coaching business, would take this" ; Matteus Threlfall L5/P5 w14 fee1.6 O st-o8s567 "Runs his own coaching business, would take this" ; Osian Ilving L3/P7 w9 fee0 A st-wx9e08 "On the academy staff already"
+      now: S0 list attack: Lorcan Hollander L7/P8 w18 fee2.2 O st-74hgzb "Out of work since the summer" ; Ulrich Lammert L3/P3 w9 fee1 O st-9chhr7 "Runs his own coaching business, would take this" ; Matteus Threlfall L5/P5 w14 fee1.6 O st-o8s567 "Runs his own coaching business, would take this" ; Osian Ilving L2/P6 w7 fee0 A st-wx9e08 "On the academy staff already"
+  FAIL: Ipswich Town natural: line 5 of 55 differs
+      was: S0 list attack: Matteus Rasmusson L5/P5 w14 fee1.6 O st-1bvigxk "Out of work since the summer" ; Piet Quennell L4/P6 w11 fee1.3 O st-iwu7ao "Out of work since the summer" ; Bram Caradec L6/P6 w16 fee1.9 O st-ze48zo "Runs his own coaching business, would take this" ; Joris Praeger L3/P9 w9 fee0 A st-1sffkbs "On the academy staff already"
+      now: S0 list attack: Matteus Rasmusson L5/P5 w14 fee1.6 O st-1bvigxk "Out of work since the summer" ; Piet Quennell L4/P6 w11 fee1.3 O st-iwu7ao "Out of work since the summer" ; Bram Caradec L6/P6 w16 fee1.9 O st-ze48zo "Runs his own coaching business, would take this" ; Joris Praeger L2/P8 w7 fee0 A st-1sffkbs "On the academy staff already"
+  FAIL: Ipswich Town nines: line 5 of 68 differs
+      was: S0 list attack: Matteus Rasmusson L5/P5 w14 fee1.6 O st-1bvigxk "Out of work since the summer" ; Piet Quennell L4/P6 w11 fee1.3 O st-iwu7ao "Out of work since the summer" ; Bram Caradec L6/P6 w16 fee1.9 O st-ze48zo "Runs his own coaching business, would take this" ; Joris Praeger L2/P8 w7 fee0 A st-1sffkbs "On the academy staff already"
+      now: S0 list attack: Matteus Rasmusson L5/P5 w14 fee1.6 O st-1bvigxk "Out of work since the summer" ; Piet Quennell L4/P6 w11 fee1.3 O st-iwu7ao "Out of work since the summer" ; Bram Caradec L6/P6 w16 fee1.9 O st-ze48zo "Runs his own coaching business, would take this" ; Joris Praeger L3/P9 w9 fee0 A st-1sffkbs "On the academy staff already"
+  FAIL: run 26 is Clermont  natural, the fixture has Club Brugge  natural
+  FAIL: run 27 is Clermont  nines, the fixture has Club Brugge  nines
+  FAIL: run 28 is Krasnodar  natural, the fixture has Konyaspor  natural
+  FAIL: run 29 is Krasnodar  nines, the fixture has Konyaspor  nines
+  FAIL: run 30 is Real Oviedo  natural, the fixture has Rayo Vallecano  natural
+  FAIL: run 31 is Real Oviedo  nines, the fixture has Rayo Vallecano  nines
+  FAIL: table startsSample: row 2 was "Monza: 1,2,2,2", now "Lecce: 2,2,1,1"
+  FAIL: day one levels: 846 clubs hash 07703bf4bf47a880, the fixture has 760 at e67d11c154e316d0
+   40 runs, 2539 lines, 609 desk events, 846 clubs' day one levels (recorded at 7a6ed8d3)
+2) Every pack is well formed: its posts, its keys and its bounds agree
+   8 packs, 34 posts, 42 effects
+3) Every level from 1 to 10 moves every effect its post declares, on the ladder and on the desk
+   1134 level steps read, the thinnest 1.000 of an even ninth (floor 0.5; the flat control reads 0)
+4) A corrupt level cannot push a unit past its cap
+   705 corrupt readings, every one inside its two ends
+5) Draft grade noise shrinks at every level of scouting director, from 4 down to 1
+   mean error 2.22 > 2.04 > 1.85 > 1.67 > 1.48 > 1.30 > 1.11 > 0.93 > 0.74 > 0.56; thinnest step 0.185 (floor 0.09)
+6) A full desk fits inside each game's season purse, and still costs something
+   nfl top 59% day1 34% floor 13% fees 48% payoffs 30%
+   nba top 53% day1 30% floor 11% fees 39% payoffs 24%
+   mlb top 65% day1 35% floor 14% fees 35% payoffs 22%
+   nhl top 60% day1 32% floor 13% fees 43% payoffs 27%
+   cfb top 23% day1 15% floor 6% fees 13% payoffs 23%
+   cbb top 26% day1 13% floor 7% fees 15% payoffs 26%
+   fightGym top 30% day1 15% floor 6% fees 8% payoffs 5%
+   afl top 54% day1 33% floor 12% fees 42% payoffs 27%
+7) Six seasons of every desk: approaches arrive at a measured rate, never for the head coach, and the books add up
+   47835 pay offs with an approach on the desk; left unanswered then walked (of them at the summer): nfl 428/428 (44), nba 381/381 (48), mlb 543/543 (45), nhl 431/431 (48), cfb 47/47 (47), cbb 38/38 (38), fightGym 487/487 (29), afl 430/430 (97)
+   214560 ticks, 6035 appointments, 10772 summer steps up; approaches a season (as the desk opens, then all on level 8, three owner sets):
+   nfl 0.59/0.76/0.70 then 1.30/1.40/1.33
+   nba 0.58/0.62/0.53 then 1.24/1.33/1.24
+   mlb 0.75/0.88/0.91 then 1.63/1.74/1.78
+   nhl 0.73/0.70/0.64 then 1.39/1.39/1.35
+   cfb 0.13/0.13/0.11 then 0.31/0.35/0.32
+   cbb 0.12/0.11/0.08 then 0.32/0.33/0.29
+   fightGym 0.73/0.82/0.81 then 1.47/1.60/1.47
+   afl 0.64/0.71/0.69 then 1.40/1.45/1.40
+8) Every effect line, at every level, says the number the game applies
+   420 lines read back against the ladder; 150 matched wages read back against the card
+9) A trainer shortens a layoff by what his tile says, on average, never under a week and never longer than it was
+   560000 layoffs read; the thinnest average step over six weeks or more is 0.133 weeks (floor 0.066)
+
+GM STAFF: 16 failure(s)

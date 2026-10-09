@@ -1,0 +1,49 @@
+1) The moment names exactly the ties the engine settled and drew
+   921 steps, 1713 steps per competition with nothing settled (all silent), 306 ladder rungs, 18 season keys
+   moments by round: cup {"R16":18,"QF":18,"SF":18,"F":18}, Champions League {"QF":17,"SF":17,"F":17,"R16":6}; finals the club won: 9; steps that settled two rounds: 0
+2) The cards in a DOM: classes only on the new ties, a remount plays nothing
+   vitest exit 0, 9 passed
+3) The page must not jump while the moment plays (chromium, the site's Tailwind)
+✘ [ERROR] Could not resolve "react"
+
+    ../../_temp/t-simBracketMoment/bracketMoment-z8ZPCc/browser.jsx:2:30:
+      2 │ import { createElement } from 'react';
+        ╵                               ~~~~~~~
+
+  You can mark the path "react" as external to exclude it from the bundle, which will remove this error and leave the unresolved path in the bundle.
+
+✘ [ERROR] Could not resolve "react-dom/client"
+
+    ../../_temp/t-simBracketMoment/bracketMoment-z8ZPCc/browser.jsx:3:27:
+      3 │ import { createRoot } from 'react-dom/client';
+        ╵                            ~~~~~~~~~~~~~~~~~~
+
+  You can mark the path "react-dom/client" as external to exclude it from the bundle, which will remove this error and leave the unresolved path in the bundle.
+
+✘ [ERROR] Could not resolve "react-dom"
+
+    ../../_temp/t-simBracketMoment/bracketMoment-z8ZPCc/browser.jsx:4:26:
+      4 │ import { flushSync } from 'react-dom';
+        ╵                           ~~~~~~~~~~~
+
+  You can mark the path "react-dom" as external to exclude it from the bundle, which will remove this error and leave the unresolved path in the bundle.
+
+node:internal/errors:986
+  const err = new Error(message);
+              ^
+
+Error: Command failed: "/home/runner/work/ballpark-hero/ballpark-hero/node_modules/.bin/esbuild" "/home/runner/work/_temp/t-simBracketMoment/bracketMoment-z8ZPCc/browser.jsx" --bundle --format=iife --platform=browser --jsx=automatic --define:process.env.NODE_ENV=\"production\" --outfile="/home/runner/work/_temp/t-simBracketMoment/bracketMoment-z8ZPCc/browser.js" --log-level=error
+    at genericNodeError (node:internal/errors:986:15)
+    at wrappedFn (node:internal/errors:540:14)
+    at checkExecSyncError (node:child_process:942:11)
+    at execSync (node:child_process:1014:15)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simBracketMoment.mjs:325:3 {
+  status: 1,
+  signal: null,
+  output: [ null, null, null ],
+  pid: 2803,
+  stdout: null,
+  stderr: null
+}
+
+Node.js v24.21.0

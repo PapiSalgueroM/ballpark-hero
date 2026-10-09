@@ -1,0 +1,21 @@
+A) identical: 573 lines, sha256 cd990b30454f73b8
+  FAIL: section B no longer replays (720 lines recorded, 720 now)
+    recorded: Aston Villa|L1|Kenan Yıldız|58.6|74.6|0.3|false|worth £58.6m to £74.6m
+    now:      Aston Villa|L1|Morgan Rogers|46.1|65.3|0.3|false|worth £46.1m to £65.3m
+    recorded: Aston Villa|L4|João Neves|81.3|104|0.19499999999999998|false|worth £81.3m to £104m
+    now:      Aston Villa|L4|Alexander Isak|75.6|89.1|0.19499999999999998|false|worth £75.6m to £89.1m
+    recorded: Aston Villa|L4|Alessandro Bastoni|52.3|60.8|0.19499999999999998|false|worth £52.3m to £60.8m
+    now:      Aston Villa|L4|Cody Gakpo|48.3|56.1|0.19499999999999998|false|worth £48.3m to £56.1m
+    recorded: Aston Villa|L7|Achraf Hakimi|61.7|65.5|0.08999999999999997|false|worth £61.7m to £65.5m
+    now:      Aston Villa|L7|Aurélien Tchouaméni|57.2|65.3|0.08999999999999997|false|worth £57.2m to £65.3m
+  FAIL: section C no longer replays (101 lines recorded, 126 now)
+    recorded: Aston Villa|0.5|open|Álex Baena|ask=41.9|pat=5
+    now:      Aston Villa|0.5|open|Álex Baena|ask=42.2|pat=5
+    recorded: Aston Villa|0.5|1|ask=41.9|pat=5|meter=0|collapsed|fee|stage=1|rival=-|They ended the conversation. £21m for Álex Baena was not worth answering.
+    now:      Aston Villa|0.5|1|ask=42.2|pat=5|meter=0|collapsed|fee|stage=1|rival=-|They ended the conversation. £21.1m for Álex Baena was not worth answering.
+    recorded: Aston Villa|0.62|open|Álex Baena|ask=42.4|pat=5
+    now:      Aston Villa|0.62|open|Álex Baena|ask=45.2|pat=5
+    recorded: Aston Villa|0.62|1|ask=44.1|pat=3|meter=17|open|fee|stage=1|rival=-|The fax machine allegedly "broke". The ask just went up.
+    now:      Aston Villa|0.62|1|ask=47|pat=3|meter=17|open|fee|stage=1|rival=-|The fax machine allegedly "broke". The ask just went up.
+
+simGmDealTableFixture: FAIL, 2 section(s) differ from the recording

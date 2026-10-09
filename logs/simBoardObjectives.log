@@ -1,0 +1,165 @@
+1) The demand ladder over all playable clubs
+   Premier League: 6 bands over 20 clubs
+      5x Win the Premier League
+      1x Qualify for the Champions League
+      2x Qualify for the Europa League
+      2x Qualify for the Conference League
+      3x Finish in the top half
+      7x Stay up. Avoid relegation
+   EFL Championship: 5 bands over 24 clubs
+      1x Win the EFL Championship
+      1x Win automatic promotion
+      6x Make the promotion playoffs
+      8x Finish in the top half
+      8x Stay up. Avoid relegation
+   La Liga: 6 bands over 20 clubs
+      3x Win the La Liga
+      2x Qualify for the Champions League
+      2x Qualify for the Europa League
+      2x Qualify for the Conference League
+      4x Finish in the top half
+      7x Stay up. Avoid relegation
+   Serie A: 6 bands over 20 clubs
+      5x Win the Serie A
+      1x Qualify for the Champions League
+      2x Qualify for the Europa League
+      2x Qualify for the Conference League
+      3x Finish in the top half
+      7x Stay up. Avoid relegation
+   Bundesliga: 6 bands over 18 clubs
+      3x Win the Bundesliga
+      2x Qualify for the Champions League
+      2x Qualify for the Europa League
+      2x Qualify for the Conference League
+      3x Finish in the top half
+      6x Stay up. Avoid relegation
+   Ligue 1: 6 bands over 18 clubs
+      3x Win the Ligue N
+      2x Qualify for the Champions League
+      2x Qualify for the Europa League
+      1x Qualify for the Conference League
+      4x Finish in the top half
+      6x Stay up. Avoid relegation
+   Eredivisie: 6 bands over 18 clubs
+      3x Win the Eredivisie
+      1x Qualify for the Champions League
+      2x Qualify for the Europa League
+      2x Qualify for the Conference League
+      4x Finish in the top half
+      6x Stay up. Avoid relegation
+   Saudi Pro League: 4 bands over 18 clubs
+      2x Win the Saudi Pro League
+      3x Qualify for the AFC Champions League Elite
+      7x Finish in the top half
+      6x Stay up. Avoid relegation
+   MLS Eastern Conference: 3 bands over 15 clubs
+      2x Win the MLS Eastern Conference
+      7x Make the playoffs
+      6x Finish mid-table or better
+   MLS Western Conference: 3 bands over 15 clubs
+      2x Win the MLS Western Conference
+      7x Make the playoffs
+      6x Finish mid-table or better
+   Primeira Liga: 6 bands over 18 clubs
+      3x Win the Primeira Liga
+      1x Qualify for the Champions League
+      2x Qualify for the Europa League
+      2x Qualify for the Conference League
+      4x Finish in the top half
+      6x Stay up. Avoid relegation
+   Scottish Premiership: 5 bands over 12 clubs
+      2x Win the Scottish Premiership
+      3x Qualify for the Europa League
+      2x Qualify for the Conference League
+      1x Finish in the top half
+      4x Stay up. Avoid relegation
+   Süper Lig: 5 bands over 18 clubs
+      3x Win the Süper Lig
+      3x Qualify for the Europa League
+      2x Qualify for the Conference League
+      4x Finish in the top half
+      6x Stay up. Avoid relegation
+   2. Bundesliga: 5 bands over 18 clubs
+      1x Win the N. Bundesliga
+      1x Win automatic promotion
+      4x Reach the promotion playoff
+      6x Finish in the top half
+      6x Stay up. Avoid relegation
+   Belgian Pro League: 5 bands over 18 clubs
+      3x Win the Belgian Pro League
+      3x Qualify for the Europa League
+      2x Qualify for the Conference League
+      4x Finish in the top half
+      6x Stay up. Avoid relegation
+   Austrian Bundesliga: 5 bands over 12 clubs
+      2x Win the Austrian Bundesliga
+      3x Qualify for the Europa League
+      2x Qualify for the Conference League
+      1x Finish in the top half
+      4x Stay up. Avoid relegation
+   Super League Greece: 4 bands over 14 clubs
+      4x Win the Super League Greece
+      3x Qualify for the Europa League
+      2x Qualify for the Conference League
+      5x Stay up. Avoid relegation
+   Danish Superliga: 5 bands over 12 clubs
+      2x Win the Danish Superliga
+      3x Qualify for the Europa League
+      2x Qualify for the Conference League
+      1x Finish in the top half
+      4x Stay up. Avoid relegation
+   Swiss Super League: 5 bands over 12 clubs
+      2x Win the Swiss Super League
+      3x Qualify for the Europa League
+      2x Qualify for the Conference League
+      1x Finish in the top half
+      4x Stay up. Avoid relegation
+   SuperSport HNL: 3 bands over 10 clubs
+      4x Win the SuperSport HNL
+      3x Qualify for the Europa League
+      3x Stay up. Avoid relegation
+   Brasileirão Série A: 3 bands over 20 clubs
+      4x Win the Brasileirão Série A
+      9x Finish in the top half
+      7x Stay up. Avoid relegation
+   Liga MX: 3 bands over 18 clubs
+      2x Win the Liga MX
+      8x Make the Liguilla
+      8x Finish mid-table or better
+   A-League Men: 3 bands over 12 clubs
+      2x Win the A-League Men
+      5x Make the finals
+      5x Finish mid-table or better
+   Serie B: 5 bands over 20 clubs
+      1x Win the Serie B
+      1x Win automatic promotion
+      8x Make the promotion playoffs
+      3x Finish in the top half
+      7x Stay up. Avoid relegation
+   Ligue 2: 5 bands over 18 clubs
+      1x Win the Ligue N
+      1x Win automatic promotion
+      5x Make the promotion playoffs
+      5x Finish in the top half
+      6x Stay up. Avoid relegation
+   Segunda División: 5 bands over 20 clubs
+      1x Win the Segunda División
+      1x Win automatic promotion
+      6x Make the promotion playoffs
+      5x Finish in the top half
+      7x Stay up. Avoid relegation
+   Russian Premier League: 3 bands over 16 clubs
+      5x Win the Russian Premier League
+      5x Finish in the top half
+      6x Stay up. Avoid relegation
+   454 clubs graded, 39 distinct demand shapes
+1b) Every league-relative giant is told to win it
+   26 giants all demand the title, 10 outsiders correctly do not
+2) Boards want more than a league position
+   shapes in use: cup, defence, double, goals, league, netSpend, points, rival, youth
+   454/454 clubs carry 4+ objectives
+3) The new shapes grade correctly
+4) Copy rules hold in every label
+   3087 labels checked
+
+simBoardObjectives: green. Every board talks like a board.
