@@ -1,0 +1,16 @@
+simAcademy: node scripts/simAcademy.mjs
+simApproaches: node scripts/simApproaches.mjs
+simAwardRaces: node scripts/simAwardRaces.mjs
+simBoard: node scripts/simBoard.mjs
+simBoardAsks: node scripts/simBoardAsks.mjs
+simBooks: node scripts/simBooks.mjs
+simBracketMoment: node scripts/simBracketMoment.mjs
+simClubManager: node scripts/simClubManager.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simClubManagerBudget: node scripts/simClubManagerBudget.mjs
+simClubManagerCalendar: node scripts/simClubManagerCalendar.mjs
+simClubManagerDeals: node scripts/simClubManagerDeals.mjs
+simClubManagerDecisions: node scripts/simClubManagerDecisions.mjs
+simClubManagerEraMidSeason: node scripts/simClubManagerEraMidSeason.mjs
+simClubManagerEraUcl: node scripts/simClubManagerEraUcl.mjs
+simClubManagerFacilities: node scripts/simClubManagerFacilities.mjs
