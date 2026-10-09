@@ -1,0 +1,8 @@
+base exit=0 17s | simUsSeasonCentre: 86 checks, 0 failed
+mutA exit=0 26s | MUT A: sim exit=1 vitest exit=1 (left dirty: 0)
+mutB exit=0 25s | MUT B: sim exit=1 vitest exit=1 (left dirty: 0)
+mutE exit=0 25s | MUT E: sim exit=0 vitest exit=0 (left dirty: 0)
+mutF exit=0 25s | MUT F: sim exit=0 vitest exit=1 (left dirty: 0)
+mutH exit=0 25s | MUT H: sim exit=0 vitest exit=0 (left dirty: 0)
+mutW exit=0 24s | MUT W: sim exit=1 vitest exit=1 (left dirty: 0)
+clean exit=0 17s | simUsSeasonCentre: 86 checks, 0 failed

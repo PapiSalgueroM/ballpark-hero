@@ -1,0 +1,14 @@
+mutation A applied to src/lib/season/nfl.ts
+ src/lib/season/nfl.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+FAIL 3 nfl seasons that cannot be laid out stay under 1.0% (12.5%)
+simUsSeasonCentre: 86 checks, 1 failed
+ [31m❯[39m src/test/usSeasonNfl.test.ts [2m([22m[2m23 tests[22m[2m | [22m[31m5 failed[39m[2m)[22m[33m 865[2mms[22m[39m
+[31m   [31m×[31m an NFL season, derived from its saved line[2m > [22mlands every total of every position, game by game, with drives that make each score[39m[32m 25[2mms[22m[39m
+[31m   [31m×[31m an NFL season, derived from its saved line[2m > [22mholds every throwback year that was not 17 games, and never names a throwback opponent[39m[32m 2[2mms[22m[39m
+[31m   [31m×[31m the NFL words[2m > [22msays every kind of drive, and a touchdown that is not a seven says why[39m[32m 2[2mms[22m[39m
+[31m   [31m×[31m the NFL words[2m > [22mprints the headline once: the chip is the headline, the bits are the rest, no two bits alike[39m[32m 2[2mms[22m[39m
+[31m   [31m×[31m his touchdown days[2m > [22mis a permutation that only puts a line in a game whose score holds its touchdowns, and leans his big days to the big scores[39m[32m 5[2mms[22m[39m
+ [31m❯[39m src/test/usSeasonCentre.test.tsx [2m([22m[2m8 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1527[2mms[22m[39m
+[31m   [31m×[31m the US Season Center with the NFL bound[2m > [22mwalks a QB season from the kick off card to the review: drives on the clock, his line, the record and his totals[39m[33m 1017[2mms[22m[39m
+MUT A: sim exit=1 vitest exit=1 (left dirty: 0)

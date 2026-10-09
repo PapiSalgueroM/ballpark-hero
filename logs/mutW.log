@@ -1,0 +1,14 @@
+mutation W applied to src/lib/season/nfl.ts
+ src/lib/season/nfl.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+FAIL 3 nfl the season shown is the season saved (independent checker): 16 of 2508; 2041 EDGE: wins 16 outside 11 to 15 for "WON THE SUPER BOWL" || 2034 K: wins 16 outside 11 to 15 for "WON THE SUPER BOWL" || 2037 EDGE: wins 16 outside 11 to
+simUsSeasonCentre: 86 checks, 1 failed
+ [31m❯[39m src/test/usSeasonCentre.test.tsx [2m([22m[2m8 tests[22m[2m | [22m[31m3 failed[39m[2m)[22m[33m 562[2mms[22m[39m
+[31m   [31m×[31m the US Season Center with the NFL bound[2m > [22mwalks a QB season from the kick off card to the review: drives on the clock, his line, the record and his totals[39m[32m 48[2mms[22m[39m
+[31m   [31m×[31m the US Season Center with the NFL bound[2m > [22mwalks a K season from the kick off card to the review: drives on the clock, his line, the record and his totals[39m[32m 27[2mms[22m[39m
+[31m   [31m×[31m the US Season Center with the NFL bound[2m > [22mwalks a LB season from the kick off card to the review: drives on the clock, his line, the record and his totals[39m[32m 44[2mms[22m[39m
+ [31m❯[39m src/test/usSeasonNfl.test.ts [2m([22m[2m23 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1193[2mms[22m[39m
+[31m   [31m×[31m the NFL words[2m > [22mreads the record bands off the bind in the "?", names a team that is not his, and nobody when unnamed[39m[32m 15[2mms[22m[39m
+[41m[1m FAIL [22m[49m src/test/usSeasonCentre.test.tsx[2m > [22mthe US Season Center with the NFL bound[2m > [22mwalks a QB season from the kick off card to the review: drives on the clock, his line, the record and his totals
+[41m[1m FAIL [22m[49m src/test/usSeasonCentre.test.tsx[2m > [22mthe US Season Center with the NFL bound[2m > [22mwalks a K season from the kick off card to the review: drives on the clock, his line, the record and his totals
+MUT W: sim exit=1 vitest exit=1 (left dirty: 0)

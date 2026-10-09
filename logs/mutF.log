@@ -1,0 +1,13 @@
+mutation F applied to src/lib/nflCareerSport.ts
+ src/lib/nflCareerSport.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+simUsSeasonCentre: 86 checks, 0 failed
+ [31m❯[39m src/test/usSeasonCentreEntry.test.tsx [2m([22m[2m31 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 3906[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mplays nothing when the viewer cannot be loaded: a failed chunk costs no season[32m 40[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: the old order (play, then load) loses a season to the same failed chunk[32m 17[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mplays nothing when the viewer cannot be loaded: a failed chunk costs no season[32m 37[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: the old order (play, then load) loses a season to the same failed chunk[32m 17[2mms[22m[39m
+[31m   [31m×[31m a held year, a banned year, and the sports with no Season Center[2m > [22mholds an NFL throwback career until 2021: the held line and no button in 2005[39m[32m 12[2mms[22m[39m
+[41m[1m FAIL [22m[49m src/test/usSeasonCentreEntry.test.tsx[2m > [22ma held year, a banned year, and the sports with no Season Center[2m > [22mholds an NFL throwback career until 2021: the held line and no button in 2005
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+MUT F: sim exit=0 vitest exit=1 (left dirty: 0)
