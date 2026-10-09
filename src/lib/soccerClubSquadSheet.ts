@@ -292,7 +292,7 @@ export function squadHelpExamples(): SquadHelpNumbers {
 
 export interface SquadHelp { title: string; rules: string[]; examples: string[] }
 
-/** The ? button: the rules and three worked examples, in the words shown. */
+/** The ? button: the rules and four worked examples, in the words shown. */
 export function squadHelp(): SquadHelp {
   const n = squadHelpExamples();
   const list = `${n.forwards.slice(0, -1).join(', ')} and ${n.forwards[n.forwards.length - 1]}`;
@@ -304,14 +304,14 @@ export function squadHelp(): SquadHelp {
       'Your rank is where your rating puts you among the players in your position group at the club. A teammate on the same rating counts as ahead of you: to pass him you have to be rated higher.',
       'The eleven is the highest rated keeper, four defenders, three midfielders and three forwards on our ratings. It is a picture of the squad, not the manager\'s team sheet.',
       'Trust is how much of the league season the manager plans to give you. It comes from your rating against the level the squad expects, how long you have been at the club, your form in the previous club season, and how the dressing room feels about you. The dressing room part is your phone.',
-      'Form is a small simulation adjustment: at least 10 recorded league games at this club last season, with a rating of 7.6 or more, adds up to 2 league games to the plan. A rating of 6.4 or less takes away up to 2. Other ratings leave it alone. A move, a gap or an unplayed season carries no form adjustment. The frozen-out limit still applies.',
       `Real, roles or invented: from ${seasonLabel(real.first)} to ${seasonLabel(real.last)} you see the club's real squad of that season where we have it. A real past season with no checked squad list shows roles, ages and ratings, and no names. From ${seasonLabel(real.last + 1)} the world is your career's own: the last real squad carries on, players leave, and every new face is invented. Invented teammates get a year older every summer.`,
+      'Form is a small simulation adjustment: at least 10 recorded league games at this club last season, with a rating of 7.6 or more, adds up to 2 league games to the plan. A rating of 6.4 or less takes away up to 2. Other ratings leave it alone. A move, a gap or an unplayed season carries no form adjustment. The frozen-out limit still applies.',
     ],
     examples: [
       `Rank. You are a ${n.mine} rated striker and the club's forwards are ${list}. ${n.atOrAbove} of them are rated ${n.mine} or more (a tie goes to the other ${n.mine}), so on our ratings you are ${ordinal(n.rank)} of ${n.groupSize} forwards: the last one into the front three.`,
       `Trust. At a club whose squad level is ${n.centre}, a ${n.mine} is ${n.above} above it. The plan for that is ${n.band.min} to ${n.band.max} league games, and ${n.mid} of 38 is trust ${n.pct}%. A dressing room that has your back adds ${n.swing} games: ${n.pctWithSwing}%.`,
-      'Form. Last season at this club you played 24 league games and rated 7.8. A plan of 20 to 30 games becomes 22 to 32 before dressing room effects, injuries or a freeze. The same appearances with a 6.2 rating make it 18 to 28. At a new club neither result carries over.',
       `A thin season. At ${n.thinOvr} in that same squad you are ${n.under} under the level and ${ordinal(n.thinRank)} of ${n.groupSize} forwards on our ratings. The plan for that is ${n.thinBand.min} to ${n.thinBand.max} league games, and Last season tells you why.`,
+      'Form. Last season at this club you played 24 league games and rated 7.8. A plan of 20 to 30 games becomes 22 to 32 before dressing room effects, injuries or a freeze. The same appearances with a 6.2 rating make it 18 to 28. At a new club neither result carries over.',
     ],
   };
 }

@@ -52,7 +52,7 @@ const saveEqual = (expected, actual) => JSON.stringify(expected) === JSON.string
 const restorationFailures = ({ expected, actual }) => [!actual.activeMatches && 'focus', actual.inline !== expected.inline && 'inline-overflow', actual.computed !== expected.computed && 'computed-overflow', actual.y !== expected.y && 'page-position'].filter(Boolean);
 const layoutFailures = value => [value.stable < 4 && 'stable-frames', !(value.width > 0 && value.height > 0) && 'dimensions',
   !(value.x >= 0 && value.x + value.width <= value.viewport[0] + 1 && value.y >= 0 && value.bottom <= value.viewport[1] + 1) && 'viewport',
-  !value.painted && 'painted-center', Number(value.opacity) !== 1 && 'opacity', value.finite !== 0 && 'animations', value.overflow && 'horizontal-overflow'].filter(Boolean);
+  !value.painted && 'painted-center', Number(value.opacity) !== 1 && 'opacity', value.finite !== 0 && 'animations', value.overflow && 'horizontal-overflow', value.controls?.some(control => !control.insideViewport || control.points.some(point => !point.painted)) && 'painted-controls'].filter(Boolean);
 function copiedControl(name, before, mutate, detector, expectedFailures) {
   assert.deepEqual(detector(before), [], `${name}: unchanged actual outcome must pass`);
   const copy = clone(before), undo = mutate(copy); assert.notDeepEqual(copy, before, `${name}: copied defect must change the actual outcome`);
@@ -77,7 +77,7 @@ try {
   await ready; browser = await pw.chromium.launch({ headless: true });
   for (const profile of [{ width: 390, height: 844, touch: true }, { width: 1280, height: 900, touch: false }]) {
     for (const kind of ['push', 'recovery', 'mentor']) {
-      const id = `${profile.width}-${kind}`, row = { id, kind, ...profile, checks: [], errors: [], assetErrors: [], writes: [], intercepted: [], layouts: [], restorations: [], actions: [] };
+      const id = `${profile.width}-${kind}`, row = { id, kind, ...profile, checks: [], errors: [], assetErrors: [], writes: [], intercepted: [], layouts: [], restorations: [], reloads: [], actions: [] };
       report.cases.push(row);
       const check = (ok, label) => { report.checks++; if (!ok) report.failed++; row.checks.push({ label, ok: !!ok }); console.log(`${ok ? 'ok  ' : 'FAIL'} ${id}: ${label}`); assert(ok, `${id}: ${label}`); };
       let fixture = clone(developmentFixture(B));
@@ -135,7 +135,12 @@ try {
         check(JSON.stringify(draws) === JSON.stringify(expected.draws), `${name}: the actual click consumes exactly the unchanged engine random draws`);
         row.actions.push({ method, seed, phase: actual.phase, draws: draws.length }); return actual;
       };
-      const reload = async name => { const before = await bytes(); await page.reload({ waitUntil: 'domcontentloaded' }); await page.getByRole('button', { name: 'How to play', exact: true }).waitFor({ timeout: 45000 }); check(await bytes() === before, `${name}: reload preserves the complete saved bytes`); await resetOracle(); };
+      const reload = async name => {
+        const before = await bytes(); await page.reload({ waitUntil: 'domcontentloaded' }); await page.getByRole('button', { name: 'How to play', exact: true }).waitFor({ timeout: 45000 }); const after = await bytes();
+        const receipt = { name, beforeHash: hash(before), afterHash: hash(after), beforeBytes: Buffer.byteLength(before), afterBytes: Buffer.byteLength(after), equal: after === before };
+        fs.writeFileSync(path.join(OUT, `${id}-${name}-reload-before.json`), before); fs.writeFileSync(path.join(OUT, `${id}-${name}-reload-after.json`), after);
+        row.reloads.push(receipt); write(`${id}-${name}-reload-receipt`, receipt); check(after === before, `${name}: reload preserves the complete saved bytes`); await resetOracle();
+      };
       const dialogReady = async dialog => { await dialog.waitFor(); await dialog.evaluate(panel => document.fonts.ready); await page.waitForFunction(selector => document.querySelector(selector)?.contains(document.activeElement), await dialog.getAttribute('data-preseason-dialog') !== null ? '[data-preseason-dialog]' : '[data-career-mentor-dialog]', { timeout: 2000 }); };
       const restored = async (tileSelector, before, name) => {
         const ok = await page.waitForFunction(({ tileSelector, before }) => document.activeElement?.matches(tileSelector) && document.body.style.overflow === before.inline && getComputedStyle(document.body).overflow === before.computed && scrollY === before.y, { tileSelector, before }, { timeout: 2000 }).then(() => true, () => false);
@@ -143,19 +148,33 @@ try {
         row.restorations.push({ name, ...observation }); write(`${id}-${name}-restoration`, observation); check(ok && restorationFailures(observation).length === 0, `${name}: exact tile focus, body scrolling and page position restore`);
       };
       const capture = async (target, name) => {
-        await target.scrollIntoViewIfNeeded();
+        await page.bringToFront();
+        const toastObserved = await page.locator('[data-sonner-toast]').count(), started = performance.now();
+        await page.waitForFunction(() => !document.querySelector('[data-sonner-toast]'), undefined, { timeout: 10000 });
+        const toastWaitMs = performance.now() - started; await target.scrollIntoViewIfNeeded();
         const layout = await target.evaluate(async element => {
           let prior = '', stable = 0, last; const start = performance.now();
           while (performance.now() - start < 2000) {
             await new Promise(resolve => requestAnimationFrame(resolve)); const r = element.getBoundingClientRect(), style = getComputedStyle(element), center = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
             const finite = document.getAnimations().filter(a => a.playState === 'running' && a.effect?.getTiming().iterations !== Infinity).length;
-            last = { x: r.x, y: r.y, width: r.width, height: r.height, bottom: r.bottom, viewport: [innerWidth, innerHeight], yScroll: scrollY, ownScroll: [element.scrollLeft, element.scrollTop], opacity: style.opacity, painted: !!center && element.contains(center), finite, overflow: document.documentElement.scrollWidth > innerWidth + 1 };
+            const dialog = element.closest('[role="dialog"]'), controls = dialog ? [...dialog.querySelectorAll('button')].flatMap(button => {
+              const box = button.getBoundingClientRect(), css = getComputedStyle(button);
+              if (!button.getClientRects().length || css.visibility === 'hidden' || css.display === 'none' || Number(css.opacity) === 0) return [];
+              const points = [[0.5, 0.5], [0.25, 0.25], [0.75, 0.25], [0.25, 0.75], [0.75, 0.75]].map(([x, y]) => {
+                const px = box.x + box.width * x, py = box.y + box.height * y, hit = document.elementFromPoint(px, py); return { x: px, y: py, painted: !!hit && button.contains(hit) };
+              });
+              return [{ label: button.getAttribute('aria-label') || button.innerText, x: box.x, y: box.y, width: box.width, height: box.height,
+                insideViewport: box.x >= 0 && box.right <= innerWidth + 1 && box.y >= 0 && box.bottom <= innerHeight + 1, points }];
+            }) : [];
+            last = { x: r.x, y: r.y, width: r.width, height: r.height, bottom: r.bottom, viewport: [innerWidth, innerHeight], yScroll: scrollY, ownScroll: [element.scrollLeft, element.scrollTop], opacity: style.opacity, painted: !!center && element.contains(center), finite, overflow: document.documentElement.scrollWidth > innerWidth + 1, dialog: !!dialog, controls };
             const signature = JSON.stringify(last); stable = signature === prior ? stable + 1 : 1; prior = signature;
-            if (stable >= 4 && r.width > 0 && r.height > 0 && r.x >= 0 && r.right <= innerWidth + 1 && r.y >= 0 && r.bottom <= innerHeight + 1 && last.painted && Number(style.opacity) === 1 && finite === 0 && !last.overflow) return { ...last, stable, readable: true };
+            if (stable >= 4 && r.width > 0 && r.height > 0 && r.x >= 0 && r.right <= innerWidth + 1 && r.y >= 0 && r.bottom <= innerHeight + 1 && last.painted && Number(style.opacity) === 1 && finite === 0 && !last.overflow && controls.every(control => control.insideViewport && control.points.every(point => point.painted))) return { ...last, stable, readable: true };
           }
           return { ...last, stable, readable: false };
         });
-        row.layouts.push({ name, ...layout }); write(`${id}-${name}-layout`, layout); check(layout.readable && layoutFailures(layout).length === 0, `${name}: screenshot target is visible, painted and stable with no horizontal overflow`);
+        layout.toastObserved = toastObserved; layout.toastWaitMs = toastWaitMs; layout.toastRemaining = await page.locator('[data-sonner-toast]').count();
+        row.layouts.push({ name, ...layout }); write(`${id}-${name}-layout`, layout); check(layout.readable && layoutFailures(layout).length === 0 && layout.toastRemaining === 0, `${name}: screenshot target is visible, painted and stable with no horizontal overflow`);
+        if (layout.dialog) check(layout.controls.length > 0 && layout.controls.every(control => control.insideViewport && control.points.every(point => point.painted)), `${name}: every actual visible dialog control is painted without an overlapping toast`);
         await page.screenshot({ path: path.join(OUT, `${id}-${name}.png`) });
       };
       const openMentor = async name => {
@@ -246,7 +265,7 @@ try {
         if (id === '390-push') {
           const heldBytes = await bytes(), actualSave = await saved();
           copiedControl('full-save', actualSave, copy => { const held = copy.netWorth; assert(Number.isFinite(held)); copy.netWorth += 0.01; return () => { copy.netWorth = held; }; }, copy => saveEqual(actualSave, copy) ? [] : ['full-save'], ['full-save']);
-          copiedControl('readable-capture', row.layouts[0], copy => { const held = copy.opacity; copy.opacity = '0'; return () => { copy.opacity = held; }; }, layoutFailures, ['opacity']);
+          copiedControl('readable-capture', row.layouts[0], copy => { const held = { opacity: copy.opacity, controls: clone(copy.controls) }; assert(copy.controls.length > 0 && copy.controls[0].points.length === 5); copy.opacity = '0'; copy.controls[0].points[0].painted = false; return () => { copy.opacity = held.opacity; copy.controls = held.controls; }; }, layoutFailures, ['opacity', 'painted-controls']);
           copiedControl('focus-body', row.restorations[0], copy => { const held = clone(copy.actual); copy.actual.activeMatches = false; copy.actual.computed = copy.expected.computed === 'hidden' ? 'visible' : 'hidden'; return () => { copy.actual = held; }; }, restorationFailures, ['focus', 'computed-overflow']);
           check(await bytes() === heldBytes, 'Native copied detector controls preserve the entire actual saved career');
         }

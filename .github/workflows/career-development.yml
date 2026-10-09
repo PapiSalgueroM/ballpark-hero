@@ -7,12 +7,14 @@ on:
       - src/lib/soccerCareerEngine.ts
       - src/lib/soccerCareerSelection.ts
       - src/lib/soccerClubSquad.ts
+      - src/lib/soccerClubSquad.test.ts
       - src/lib/soccerClubSquadSheet.ts
       - src/lib/soccerCareerPreparation.ts
       - src/lib/soccerCareerMentor.ts
       - src/components/soccer-career/**
       - src/pages/SoccerCareer.tsx
       - src/test/soccerCareerDevelopment*
+      - scripts/simCareerLeagueSeasons.mjs
       - scripts/simSoccerCareerDevelopment.mjs
       - scripts/playSoccerCareerDevelopment.mjs
 
@@ -74,6 +76,45 @@ jobs:
           failed=0
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/lib/soccerClubSquad.test.ts src/test/soccerCareerDevelopment.test.ts src/test/soccerCareerAmbitions.test.ts src/test/soccerCareerRecords.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile.json=career-development-artifacts/focused-unit.json 2>&1 | tee career-development-artifacts/focused-unit.log || failed=1
           CAREER_DEVELOPMENT_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerDevelopment.mjs 2>&1 | tee career-development-artifacts/simSoccerCareerDevelopment.log || failed=1
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simHarnessAnchors.mjs 2>&1 | tee career-development-artifacts/simHarnessAnchors.log || failed=1
+          SIM_LEAGUE_SEASONS_ARTIFACTS=career-development-artifacts/league-replay/healthy NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerLeagueSeasons.mjs 2>&1 | tee career-development-artifacts/simCareerLeagueSeasons.log || failed=1
+          SIM_LEAGUE_SEASONS_ARTIFACTS=career-development-artifacts/league-replay/future SIM_LEAGUE_SEASONS_CONTROL=future NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerLeagueSeasons.mjs 2>&1 | tee career-development-artifacts/simCareerLeagueSeasons-future.log || failed=1
+          grep -Fq "CONTROL future: section c went red as it should" career-development-artifacts/simCareerLeagueSeasons-future.log || failed=1
+          if grep -Eq "FAIL \[[abd]\]:" career-development-artifacts/simCareerLeagueSeasons-future.log; then failed=1; fi
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE' || failed=1
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const read = arm => JSON.parse(fs.readFileSync(`career-development-artifacts/league-replay/${arm}/report.json`, 'utf8'));
+          const healthy = read('healthy'), future = read('future');
+          for (const receipt of [healthy, future]) {
+            assert.match(receipt.baseCommit, /^[a-f0-9]{40}$/);
+            assert.match(receipt.baseTree, /^[a-f0-9]{40}$/);
+            assert.equal(receipt.cases.length, 12, 'All twelve historical careers must execute');
+            assert.equal(receipt.baseline.careers, 12);
+            assert(receipt.baseline.rows >= 300, 'The original twenty-five-row floor per career stays held');
+            assert.equal(Object.keys(receipt.sourceBefore).length, 14);
+            assert.deepEqual(receipt.sourceAfter, receipt.sourceBefore, 'Historical replay holds every original source byte hash');
+          }
+          assert.equal(healthy.status, 'passed');
+          assert.equal(healthy.baseline.same, 12);
+          assert.equal(healthy.baseline.differ, 0);
+          assert.equal(healthy.failures, 0);
+          assert.deepEqual(healthy.failedSections, []);
+          assert.equal(future.base, healthy.base);
+          assert.equal(future.baseCommit, healthy.baseCommit);
+          assert.equal(future.baseTree, healthy.baseTree);
+          assert.equal(future.seed, healthy.seed);
+          assert.equal(future.control, 'future');
+          assert.equal(future.status, 'expected-fault');
+          assert.equal(future.controlFired, true);
+          assert.equal(future.baseline.same, 0);
+          assert.equal(future.baseline.differ, 12);
+          assert.equal(future.failures, 12);
+          assert.deepEqual(future.failedSections, ['c']);
+          assert.deepEqual(future.failureCounts, { c: 12 });
+          assert(future.futureEdits.length > 0 && future.futureEdits.every(edit => edit.effective && edit.beforeSha256 !== edit.afterSha256), 'Every future copied edit changes actual source');
+          console.log('Historical replay receipt: twelve full healthy careers passed; future defect failed exactly all twelve c cases; original row floors and source bytes held.');
+          NODE
           SIM_CAREER_AMBITION_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerAmbitions.mjs 2>&1 | tee career-development-artifacts/simSoccerCareerAmbitions.log || failed=1
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerRecords.mjs 2>&1 | tee career-development-artifacts/simSoccerCareerRecords.log || failed=1
           exit "$failed"

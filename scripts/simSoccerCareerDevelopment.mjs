@@ -19,7 +19,14 @@ const normalize = source => source.replaceAll('\r\n', '\n');
 const hash = value => createHash('sha256').update(value).digest('hex');
 const files = ['src/lib/soccerCareerEngine.ts', 'src/lib/soccerCareerSelection.ts', 'src/lib/soccerClubSquad.ts',
   'src/lib/soccerClubSquadSheet.ts', 'src/lib/soccerCareerPreparation.ts', 'src/lib/soccerCareerMentor.ts', 'scripts/simSoccerCareerDevelopment.mjs'];
-const hashes = () => Object.fromEntries(files.map(file => [file, hash(fs.readFileSync(path.join(ROOT, file)))]));
+const hashes = () => {
+  const held = {};
+  for (const file of files) {
+    const bytes = fs.readFileSync(path.join(ROOT, file));
+    held[file] = hash(bytes);
+  }
+  return held;
+};
 
 export async function developmentBundle({ baseline = false, patches = [] } = {}) {
   const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'career-development-'));
@@ -27,7 +34,7 @@ export async function developmentBundle({ baseline = false, patches = [] } = {})
   const source = relative => {
     if (!originals.has(relative)) originals.set(relative, normalize(baseline
       ? execFileSync('git', ['show', `${BASE}:${relative}`], { cwd: ROOT, encoding: 'utf8' })
-      : fs.readFileSync(path.join(ROOT, relative), 'utf8')));
+      : fs.readFileSync(path.join(ROOT, relative), 'utf8').replaceAll('\r\n', '\n')));
     return originals.get(relative);
   };
   try {

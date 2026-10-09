@@ -51,6 +51,9 @@
                Round 1100 moves 2026-27 on purpose (the pool, the rows, the
                band): a career that differs is replayed with that round's
                seven source files read from the base, and must then be equal.
+               Round 1185's same-club form selection is removed only in
+               copied attribution arms, including combinations of earlier
+               arms. Equality still compares every original returned field.
    d WIRING    the page prints no raw label where a past season can show:
                the offer, loan, academy, dugout market and club cards and the
                season summary all go through the lookup (read from the page
@@ -76,9 +79,12 @@
      unheld       (Round 1100 review) Hertha Berlin dropped from
                   RELABELLED_1037, so its finish is placed in a league
                   the size of the one it left                         -> a
+     future       a future season rating altered in every candidate
+                  arm, including all copied attribution bundles      -> c
    (unheld measured red on 2026-10-08: the table is not the seven released
    clubs, and a saved Hertha finish is placed in the 2. Bundesliga.)
-   Each measured red on 2026-10-06 (seed 1, base origin/release-ah): the
+   The new future control awaits remote proof. Original controls were
+   measured red on 2026-10-06 (seed 1, base origin/release-ah): the
    file differs from the ledgers and the lookup has West Ham in two leagues
    in 2011 (wrongseason); Fiorentina meets Bologna in seasons Bologna was a
    division down (crossdiv); a Malaga 2015-16 table names Osasuna, who were
@@ -102,7 +108,8 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { execSync } from 'node:child_process';
+import { execFileSync, execSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
@@ -163,12 +170,21 @@ const CONTROLS = {
   /* Round 1100 review: Hertha Berlin dropped from the table finishLeague reads */
   unheld: ['a', 'src/lib/soccerCareerLeague.ts', swap('"Hertha Berlin": "Bundesliga", ', '')],
   phonemine: ['b', 'src/lib/soccerPhone.ts', swap('const mine = name === myLeague;', 'const mine = name === s.currentLeague;')],
+  future: ['c', 'src/lib/soccerCareerEngine.ts', s => {
+    const from = 'apps, leagueApps, goals, assists, cleanSheets, yellowCards, redCards, rating,';
+    const to = 'apps, leagueApps, goals, assists, cleanSheets, yellowCards, redCards, rating: lastYear + 1 >= 2026 ? rating + 0.125 : rating,';
+    if (s.split(from).length !== 2) { console.error('control future: the actual season row anchor is not unique'); process.exit(2); }
+    const changed = s.replace(from, to);
+    if (changed === s) { console.error('control future: the copied source did not change'); process.exit(2); }
+    replayReceipt.futureEdits.push({ beforeSha256: sha(s), afterSha256: sha(changed), effective: true });
+    return changed;
+  }],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 const [controlSection, controlFile, controlEdit] = CONTROLS[CONTROL] || [];
 let controlFired = false;
 const readSrc = rel => {
-  let s = fs.readFileSync(path.join(ROOT, rel), 'utf8');
+  let s = fs.readFileSync(path.join(ROOT, rel), 'utf8').replaceAll('\r\n', '\n');
   if (controlFile === rel) { s = controlEdit(s); controlFired = true; }
   return s;
 };
@@ -182,6 +198,30 @@ const controlPlugin = { name: 'control', setup(b) {
 } };
 
 const tmp = fs.mkdtempSync(path.join(process.env.TEMP || process.env.TMP || os.tmpdir(), 'simLeagueSeasons-'));
+const replayOut = process.env.SIM_LEAGUE_SEASONS_ARTIFACTS ? path.resolve(process.env.SIM_LEAGUE_SEASONS_ARTIFACTS) : null;
+if (replayOut) fs.mkdirSync(replayOut, { recursive: true });
+const sha = value => createHash('sha256').update(value).digest('hex');
+const heldSources = ['scripts/simCareerLeagueSeasons.mjs', 'src/lib/soccerCareerEngine.ts', 'src/lib/soccerCareerSelection.ts',
+  'src/lib/soccerCareerPreparation.ts', 'src/lib/soccerCareerMentor.ts', 'src/lib/soccerPhone.ts', 'src/lib/clubManager.ts',
+  'src/data/careerLeagueSeasons.ts', 'src/data/clubRivalries.ts', 'src/data/leagueFormat.ts', 'src/data/soccerCareerClubPool.ts',
+  'src/lib/careerEras.ts', 'src/lib/soccerCareerDerby.ts', 'src/lib/soccerCareerLeague.ts'];
+const sourceHashes = () => {
+  const held = {};
+  for (const file of heldSources) {
+    const bytes = fs.readFileSync(path.join(ROOT, file));
+    held[file] = sha(bytes);
+  }
+  return held;
+};
+const replayReceipt = { base: BASE,
+  baseCommit: execFileSync('git', ['rev-parse', '--verify', `${BASE}^{commit}`], { cwd: ROOT, encoding: 'utf8' }).trim(),
+  baseTree: execFileSync('git', ['rev-parse', '--verify', `${BASE}^{tree}`], { cwd: ROOT, encoding: 'utf8' }).trim(),
+  seed: SEED, control: CONTROL || null, cases: [], inverses: [], futureEdits: [], sourceBefore: sourceHashes() };
+const retainReplay = (seed, arm, value) => {
+  const file = `${seed}-${arm}.json`;
+  if (replayOut) fs.writeFileSync(path.join(replayOut, file), value);
+  return { file, sha256: sha(value) };
+};
 process.on('exit', () => { try { fs.rmSync(tmp, { recursive: true, force: true }); } catch { /* best effort */ } });
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {}, clear: () => {} };
 const realRandom = Math.random;
@@ -694,6 +734,7 @@ const r1041Out = { name: 'r1041out', setup(b) {
   b.onLoad({ filter: /(soccerCareerEngine|soccerPhone)\.ts$/ }, args => {
     if (!path.resolve(args.path).toLowerCase().startsWith(path.resolve(ROOT, 'src').toLowerCase())) return undefined;
     let src = fs.readFileSync(args.path, 'utf8').replace(/\r\n/g, '\n');
+    if (CONTROL === 'future' && args.path.endsWith('soccerCareerEngine.ts')) { src = controlEdit(src); controlFired = true; }
     for (const [file, from, to] of R1041_OUT) {
       if (!args.path.endsWith(file)) continue;
       if (src.split(from).length !== 2) { console.error(`Round 1041 arm: the anchor is not in ${file} exactly once`); process.exit(2); }
@@ -748,25 +789,76 @@ const r1052Out = { name: 'r1052out', setup(b) {
     return { contents: src, loader: 'ts' };
   });
 } };
+/* Round 1185 intentionally lets the last eligible same-club season affect
+   selection by two games. Remove only that adjustment in copied candidate
+   bundles; every returned season and dugout field must still match the base. */
+const r1185Out = with1041 => ({ name: with1041 ? 'r1185and1041out' : 'r1185out', setup(b) {
+  b.onLoad({ filter: /soccerCareerEngine\.ts$/ }, args => {
+    if (!path.resolve(args.path).toLowerCase().startsWith(path.resolve(ROOT, 'src').toLowerCase())) return undefined;
+    let src = fs.readFileSync(args.path, 'utf8').replaceAll('\r\n', '\n');
+    if (CONTROL === 'future') { src = controlEdit(src); controlFired = true; }
+    const before = src;
+    const from = ' + recentClubForm(state).swing';
+    if (src.split(from).length !== 2) { console.error('Round 1185 arm: the selection adjustment is not present exactly once'); process.exit(2); }
+    src = src.replace(from, '');
+    if (src === before) { console.error('Round 1185 arm: the copied source did not change'); process.exit(2); }
+    replayReceipt.inverses.push({ arm: with1041 ? '1185+1041' : '1185', beforeSha256: sha(before), afterFormSha256: sha(src), effective: true });
+    if (with1041) {
+      for (const [file, old, replacement] of R1041_OUT) {
+        if (!args.path.endsWith(file)) continue;
+        if (src.split(old).length !== 2) { console.error(`Round 1041 combined arm: the anchor is not in ${file} exactly once`); process.exit(2); }
+        src = src.replace(old, replacement);
+      }
+    }
+    return { contents: src, loader: 'ts' };
+  });
+} });
+const futurePlugins = CONTROL === 'future' ? [controlPlugin] : [];
 if (baseRoot) {
   const B = await bundle(baseRoot, 'base', [releasePins(true)], false);
   const Bkeep = await bundle(baseRoot, 'basekeep', [releasePins(false)], false);
-  let same = 0; let differ = 0; let pinsMove = 0; let rows = 0; let by1041 = 0; let by1100 = 0; let by1052 = 0; let byBoth = 0;
+  let same = 0; let differ = 0; let pinsMove = 0; let rows = 0; let by1041 = 0; let by1100 = 0; let by1052 = 0; let byBoth = 0; let by1185 = 0;
   let Mout = null; let Mout1100 = null; let Mout1052 = null; let MoutBoth = null;
+  const formBundles = new Map();
+  const formArms = [[], ['1041'], ['1100'], ['1052'], ['1041', '1100'], ['1041', '1052'], ['1100', '1052'], ['1041', '1100', '1052']];
   for (let i = 0; i < BASELINE_CAREERS; i++) {
     const seed = SEED * 7777 + i * 104729;
     const mine = await replay(M, seed);
     const base = await replay(B, seed);
     const kept = await replay(Bkeep, seed);
+    const receipt = { seed, current: retainReplay(seed, 'current', mine), baseReleased: retainReplay(seed, 'base-released', base), baseKept: retainReplay(seed, 'base-kept', kept), attempts: [], acceptedArm: null };
+    replayReceipt.cases.push(receipt);
+    const tryArm = async (name, T) => {
+      const value = await replay(T, seed);
+      const equal = value === base;
+      receipt.attempts.push({ arm: name, ...retainReplay(seed, name, value), equal });
+      if (equal) receipt.acceptedArm = name;
+      return equal;
+    };
+    const tryFormArms = async () => {
+      for (const others of formArms) {
+        const name = ['1185', ...others].join('+');
+        if (!formBundles.has(name)) {
+          const plugins = [r1185Out(others.includes('1041'))];
+          if (others.includes('1041')) plugins.push(r1041Out);
+          if (others.includes('1100')) plugins.push(r1100Out);
+          if (others.includes('1052')) plugins.push(r1052Out);
+          formBundles.set(name, await bundle(ROOT, `tree-${name}`, plugins));
+        }
+        if (await tryArm(name, formBundles.get(name))) return true;
+      }
+      return false;
+    };
     rows += JSON.parse(mine).seasons.length + JSON.parse(mine).dug.length;
-    if (mine === base) same += 1;
-    else if (await replay(Mout ??= await bundle(ROOT, 'tree1041out', [r1041Out]), seed) === base) { same += 1; by1041 += 1; console.log(`  career ${seed}: moved by Round 1041's two truth fixes (equal to the base with them taken out)`); }
-    else if (await replay(Mout1100 ??= await bundle(ROOT, 'tree1100out', [r1100Out]), seed) === base) { same += 1; by1100 += 1; }
-    else if (await replay(Mout1052 ??= await bundle(ROOT, 'tree1052out', [r1052Out]), seed) === base) { same += 1; by1052 += 1; console.log(`  career ${seed}: moved by Round 1052's new league in the dugout's job market (equal to the base with the league taken out)`); }
+    if (mine === base) { same += 1; receipt.acceptedArm = 'raw'; }
+    else if (await tryArm('1041', Mout ??= await bundle(ROOT, 'tree1041out', [r1041Out]))) { same += 1; by1041 += 1; console.log(`  career ${seed}: moved by Round 1041's two truth fixes (equal to the base with them taken out)`); }
+    else if (await tryArm('1100', Mout1100 ??= await bundle(ROOT, 'tree1100out', [r1100Out, ...futurePlugins]))) { same += 1; by1100 += 1; }
+    else if (await tryArm('1052', Mout1052 ??= await bundle(ROOT, 'tree1052out', [r1052Out, ...futurePlugins]))) { same += 1; by1052 += 1; console.log(`  career ${seed}: moved by Round 1052's new league in the dugout's job market (equal to the base with the league taken out)`); }
     /* Release AO: a tree that holds both rounds over a base that holds neither. A career whose playing years met
        Round 1100's bigger pool AND whose dugout years met Round 1052's league equals the base only with both taken
        out at once (the two arms read different files: clubManager.ts is not one of Round 1100's seven). */
-    else if (await replay(MoutBoth ??= await bundle(ROOT, 'tree1100and1052out', [r1100Out, r1052Out]), seed) === base) { same += 1; byBoth += 1; console.log(`  career ${seed}: moved by Rounds 1100 and 1052 together (equal to the base only with both taken out)`); }
+    else if (await tryArm('1100+1052', MoutBoth ??= await bundle(ROOT, 'tree1100and1052out', [r1100Out, r1052Out, ...futurePlugins]))) { same += 1; byBoth += 1; console.log(`  career ${seed}: moved by Rounds 1100 and 1052 together (equal to the base only with both taken out)`); }
+    else if (await tryFormArms()) { same += 1; by1185 += 1; console.log(`  career ${seed}: moved by Round 1185's same-club form selection (${receipt.acceptedArm}; complete replay equals the base only after the declared copied inverses)`); }
     else {
       differ += 1;
       const a = JSON.parse(mine); const b = JSON.parse(base);
@@ -778,6 +870,8 @@ if (baseRoot) {
   console.log(`  ${same} of ${BASELINE_CAREERS} careers from 2025 identical from 2026-27 on (${rows} seasons and dugout rows compared); releasing the seven pins alone moves ${pinsMove} of them (attributed to the release, not the binds); ${by1041} of the identical ones only once Round 1041's two truth fixes are taken out, ${by1100} only once Round 1100's seven files are read from the base (the pool, the rows and the band moved them, on purpose)`);
   if (by1052) console.log(`  ${by1052} of the identical careers are identical only with Round 1052's league taken out of the dugout's job market`);
   if (byBoth) console.log(`  ${byBoth} of the identical careers are identical only with Round 1100's seven files read from the base and Round 1052's league taken out, both at once`);
+  if (by1185) console.log(`  ${by1185} complete replays equal the historical base only with Round 1185's form adjustment removed, plus any explicitly named earlier inverse arms`);
+  replayReceipt.baseline = { careers: BASELINE_CAREERS, same, differ, rows, pinsMove, by1041, by1100, by1052, byBoth, by1185 };
   /* 430, 428 and 431 rows over seeds 1 to 3 */
   ok(rows >= BASELINE_CAREERS * 25, `only ${rows} rows compared over ${BASELINE_CAREERS} careers (floor ${BASELINE_CAREERS * 25})`);
 }
@@ -810,10 +904,18 @@ ok(loanUses === 2, `the loan line is used ${loanUses} times, 2 expected (both lo
 console.log(`  ${RAW.length} raw label prints absent, ${NEED.length} lookups present, both loan screens wired`);
 
 /* ─── Summary ─── */
+replayReceipt.sourceAfter = sourceHashes();
+ok(JSON.stringify(replayReceipt.sourceAfter) === JSON.stringify(replayReceipt.sourceBefore), 'candidate replay source bytes changed during verification');
+replayReceipt.failures = failures;
+replayReceipt.failedSections = [...red];
+replayReceipt.failureCounts = shown;
+replayReceipt.controlFired = controlFired;
+replayReceipt.status = CONTROL ? (red.has(controlSection) && (CONTROL !== 'future' || red.size === 1) ? 'expected-fault' : 'failed') : failures ? 'failed' : 'passed';
+if (replayOut) fs.writeFileSync(path.join(replayOut, 'report.json'), JSON.stringify(replayReceipt, null, 2));
 if (CONTROL) {
   const fired = red.has(controlSection);
   console.log(`\nCONTROL ${CONTROL}: section ${controlSection} ${fired ? `went red as it should (${shown[controlSection]} failures there, ${failures} in all)` : 'stayed green: the check does not work'}`);
-  process.exit(fired ? 0 : 1);
+  process.exit(fired && (CONTROL !== 'future' || red.size === 1) ? 0 : 1);
 }
 console.log(failures ? `\nsimCareerLeagueSeasons: ${failures} failures (sections ${[...red].join(', ')})` : '\nsimCareerLeagueSeasons: all sections green');
 process.exit(failures ? 1 : 0);
