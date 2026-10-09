@@ -1,0 +1,11 @@
+#!serial
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+finish-attribution: SIM_LEAGUE_FINISH_ATTRIBUTION=train1178 node scripts/simCareerLeagueFinish.mjs
+finish-record-a: node scripts/simCareerLeagueFinish.mjs --record
+finish-record-b: node scripts/simCareerLeagueFinish.mjs --record
+brands-attribution: SECTIONS=1 SOCIAL_BRANDS_ATTRIBUTION=train1178 node scripts/simCareerSocialBrands.mjs
+brands-record: node scripts/recordSoccerBrandFixture835.mjs . a2a999a17437695eb2f609d8166bc3f71588e3ea && cp scripts/data/soccerBrandFixture835.json $RC_OUT/brand-a.json && node scripts/recordSoccerBrandFixture835.mjs . a2a999a17437695eb2f609d8166bc3f71588e3ea && cmp scripts/data/soccerBrandFixture835.json $RC_OUT/brand-a.json && cp scripts/data/soccerBrandFixture835.json $RC_OUT/soccerBrandFixture835.json && echo RECORDED-TWICE-IDENTICAL
+brands-after: node scripts/simCareerSocialBrands.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simSeasonCentreAgreement: node scripts/simSeasonCentreAgreement.mjs
