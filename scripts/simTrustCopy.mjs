@@ -215,11 +215,13 @@ function outsideTheClause(text) {
   const next = text.indexOf('<h2', start);
   return text.slice(0, start) + (next < 0 ? '' : text.slice(next));
 }
-let clauseKept = 0;
+let clauseKept = 0, footerSays = 0;
+if (!code.has(FOOTER)) fail(`${FOOTER} is not among the files read, so nothing here counted the one disclaimer every page shows`);
 for (const [file, text] of code) {
   const [aff, own] = disclaimersIn(file === TERMS ? outsideTheClause(text) : text);
   if (file === TERMS) clauseKept = disclaimersIn(text)[0] - aff;
   if (file === FOOTER) {
+    footerSays = aff;
     if (aff !== 1 || own !== 1) fail(`the footer says DoUKnowBall is "not affiliated with" ${aff} times and "property of their respective owners" ${own} times; once each is the one disclaimer every page shows`);
     continue;
   }
@@ -227,7 +229,7 @@ for (const [file, text] of code) {
   if (HELD.has(file)) { held(file, 'a trademark disclaimer of its own'); continue; }
   fail(`${file} prints a trademark disclaimer of its own. The footer is under every page (src/App.tsx) and already says it in full, so this one shows as a second footer: take it out`);
 }
-console.log(`   ${sources.length} source files read with comments stripped; the footer says it once, section 6 of the Terms keeps its clause (${clauseKept})`);
+console.log(`   ${sources.length} source files read with comments stripped; the footer says it ${footerSays} time(s), section 6 of the Terms keeps its clause (${clauseKept})`);
 
 /* ── rule 2: one count ────────────────────────────────────────────────── */
 console.log('2) one game count');
