@@ -1,0 +1,86 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/usSeasonCentre.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 363[2mms[22m[39m
+ [31m❯[39m src/test/usSeasonCentreEntry.test.tsx [2m([22m[2m40 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 2891[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 956[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ[32m 248[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mkeeps Play the first button, and the entry never says "Play the"[32m 7[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mplays and opens nothing on the bare board, with no host around it[32m 28[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mopens a season already played from Watch again, after a contract talk was answered with "play it out"[32m 48[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mplays nothing when the viewer cannot be loaded: a failed chunk costs no season[32m 28[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mthe tile stays and says why when its Reload would lose a save the device refused[32m 20[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22msays a save is waiting from the first moment, before Reload is pressed[32m 17[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22moffline, the tile asks for the viewer again and does not say a reload was held[32m 12[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: the old order (play, then load) loses a season to the same failed chunk[32m 14[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mopens the season he just played when storage is full and the save was refused[32m 27[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mwith the viewer open over a refused save, the toast carries a Retry that saves the season from there[32m 30[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: without the board handing its career over, the same press plays the season and opens nothing[32m 11[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mnever opens a line another tab saved: with his own write refused he watches the season this tab played[32m 30[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: before the hand over, that press with another tab's line on the save opened nothing at all[32m 11[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mopens the viewer or the plain tile, never a throw, for a last line from an older build[32m 40[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 729[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ[32m 289[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mkeeps Play the first button, and the entry never says "Play the"[32m 6[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mplays and opens nothing on the bare board, with no host around it[32m 23[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mopens a season already played from Watch again, after a contract talk was answered with "play it out"[32m 39[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mplays nothing when the viewer cannot be loaded: a failed chunk costs no season[32m 28[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mthe tile stays and says why when its Reload would lose a save the device refused[32m 19[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22msays a save is waiting from the first moment, before Reload is pressed[32m 9[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22moffline, the tile asks for the viewer again and does not say a reload was held[32m 10[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: the old order (play, then load) loses a season to the same failed chunk[32m 11[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mopens the season he just played when storage is full and the save was refused[32m 22[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mwith the viewer open over a refused save, the toast carries a Retry that saves the season from there[32m 20[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: without the board handing its career over, the same press plays the season and opens nothing[32m 12[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mnever opens a line another tab saved: with his own write refused he watches the season this tab played[32m 28[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: before the hand over, that press with another tab's line on the save opened nothing at all[32m 13[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mopens the viewer or the plain tile, never a throw, for a last line from an older build[32m 38[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mshows the held line and no button in a year whose real length is not the one the career plays[32m 5[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mholds an NFL throwback career until 2021: the held line and no button in 2005[32m 6[2mms[22m[39m
+[31m   [31m×[31m a held year, a banned year, and the sports with no Season Center[2m > [22mnever offers Watch again for a held season, and offers it for the open one after it[39m[32m 28[2mms[22m[39m
+[31m     → expected <button type="button" …(2)></button> to be null[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mhas the NBA and the NFL both bound, so neither arm above can drop out through its own filter[32m 0[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22msays there is nothing to watch in a banned year[32m 6[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mMLB My Career renders no entry at all[32m 7[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mNHL My Career renders no entry at all[32m 13[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mstill has MLB and the NHL unbound (they are number files for a later round)[32m 0[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m48 passed[39m[22m[90m (49)[39m
+[2m   Start at [22m 12:39:03
+[2m   Duration [22m 5.19s[2m (transform 1.81s, setup 57ms, collect 3.08s, tests 3.25s, environment 377ms, prepare 94ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonCentreEntry.test.tsx,title=src/test/usSeasonCentreEntry.test.tsx > a held year%2C a banned year%2C and the sports with no Season Center > never offers Watch again for a held season%2C and offers it for the open one after it,line=669,column=38::AssertionError: expected <button type="button" …(2)></button> to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A<button%0A  class="ml-1 inline-flex min-h-11 items-center px-3 text-xs font-semibold text-muted-foreground underline-offset-2 hover:underline"%0A  data-watch-last="true"%0A  type="button"%0A>%0A  ↺ Watch the 2020 season again%0A</button>%0A%0A ❯ src/test/usSeasonCentreEntry.test.tsx:669:38%0A%0A
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonCentreEntry.test.tsx[2m > [22ma held year, a banned year, and the sports with no Season Center[2m > [22mnever offers Watch again for a held season, and offers it for the open one after it
+[31m[1mAssertionError[22m: expected <button type="button" …(2)></button> to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+<button
+  class="ml-1 inline-flex min-h-11 items-center px-3 text-xs font-semibold text-muted-foreground underline-offset-2 hover:underline"
+  data-watch-last="true"
+  type="button"
+>
+  ↺ Watch the 2020 season again
+</button>
+
+[36m [2m❯[22m src/test/usSeasonCentreEntry.test.tsx:[2m669:38[22m[39m
+    [90m667| [39m      [34mexpect[39m([34mq[39m([32m'[data-week-by-week]'[39m))[33m.[39mnot[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m668| [39m      [34mexpect[39m([34mq[39m([32m'[data-season-centre-held]'[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m669| [39m      [34mexpect[39m([34mq[39m([32m'[data-watch-last]'[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m   | [39m                                     [31m^[39m
+    [90m670| [39m      [35mif[39m ([33m![39m([35mawait[39m [34mplayOn[39m([34m2021[39m))) [35mcontinue[39m[33m;[39m
+    [90m671| [39m      /* the hub of 2022: this year is held, and the open 2021 season …
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+

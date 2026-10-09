@@ -1,0 +1,142 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/usSeasonNfl.test.ts [2m([22m[2m35 tests[22m[2m | [22m[31m6 failed[39m[2m)[22m[33m 566[2mms[22m[39m
+   [32m✓[39m nflDrives[2m > [22mmakes every score from 0 to 70, with 0 to 5 touchdowns of his and every exact field goal count[32m 142[2mms[22m[39m
+   [32m✓[39m nflDrives[2m > [22mhas a list for every whole number but 1 and 4 when nothing is asked of it[32m 1[2mms[22m[39m
+   [32m✓[39m nflDrives[2m > [22mdraws the same list from the same key, and always takes one number from its stream first[32m 0[2mms[22m[39m
+   [32m✓[39m the NFL score law[2m > [22mnever returns a level game, a 1, a 3 or a 4, and stays under the cap[32m 18[2mms[22m[39m
+   [32m✓[39m the NFL score law[2m > [22mgives the stronger side more wins, and the same side more at home[32m 9[2mms[22m[39m
+   [32m✓[39m the NFL clock[2m > [22mreads the quarter and the minutes left in it at every minute[32m 1[2mms[22m[39m
+   [32m✓[39m the NFL schedule formula, dealt for every team[2m > [22mmeets every kind of opponent as the formula says, 8 or 9 at home, whoever he plays for and whichever year[32m 39[2mms[22m[39m
+   [32m✓[39m the NFL schedule formula, dealt for every team[2m > [22mis caught when a division rival is met three times, a whole division is one short, or the 17th game is on the wrong side[32m 1[2mms[22m[39m
+   [32m✓[39m a kicker and his makes[2m > [22mlays out every total a list of scores can hold, each game a count its score can hold[32m 51[2mms[22m[39m
+   [32m✓[39m a kicker and his makes[2m > [22mrefuses a total no score can hold[32m 0[2mms[22m[39m
+[31m   [31m×[31m an NFL season, derived from its saved line[2m > [22mlands every total of every position, game by game, with drives that make each score[39m[32m 75[2mms[22m[39m
+[31m     → LB DAL 12: expected null not to be null[39m
+   [32m✓[39m an NFL season, derived from its saved line[2m > [22mholds every throwback year that was not 17 games, and never names a throwback opponent[32m 2[2mms[22m[39m
+   [32m✓[39m an NFL season, derived from its saved line[2m > [22mgives no view to a banned year, a season with no games, or a line whose numbers cannot be laid out[32m 2[2mms[22m[39m
+   [32m✓[39m the NFL playoff path[2m > [22mis one game a round for every depth, won or lost as the save says, and prints no score the save does not hold[32m 6[2mms[22m[39m
+   [32m✓[39m the NFL playoff path[2m > [22mmeets his own conference before the Super Bowl, and the other conference only in it[32m 7[2mms[22m[39m
+   [32m✓[39m the NFL playoff path[2m > [22mhas no path for a missed postseason or a result the engine never wrote[32m 0[2mms[22m[39m
+[31m   [31m×[31m the NFL words[2m > [22msays every kind of drive, and a touchdown that is not a seven says why[39m[32m 10[2mms[22m[39m
+[31m     → Cannot read properties of null (reading 'games')[39m
+[31m   [31m×[31m the NFL words[2m > [22mprints the headline once: the chip is the headline, the bits are the rest, no two bits alike[39m[32m 6[2mms[22m[39m
+[31m     → Cannot read properties of null (reading 'games')[39m
+   [32m✓[39m the NFL words[2m > [22mnever prints the sum of a per game long, and says an empty first half plainly[32m 1[2mms[22m[39m
+   [32m✓[39m the NFL words[2m > [22mprints no zero for a number the saved line does not hold (an older line): a dash, "Played", or nothing[32m 1[2mms[22m[39m
+   [32m✓[39m the NFL words[2m > [22mreads the record bands off the bind in the "?", names a team that is not his, and nobody when unnamed[32m 0[2mms[22m[39m
+   [32m✓[39m his touchdown days[2m > [22mis a permutation that only puts a line in a game whose score holds its touchdowns, and leans his big days to the big scores[32m 8[2mms[22m[39m
+   [32m✓[39m his touchdown days[2m > [22mkeeps the lay out it was given when nothing else fits, and draws the same days from the same key[32m 0[2mms[22m[39m
+[31m   [31m×[31m his line, game by game[2m > [22mkeeps an everyday season off the per game caps and near his average, while his games still differ[39m[32m 50[2mms[22m[39m
+[31m     → usSeasonNfl.test: EDGE 0 has no season[39m
+[31m   [31m×[31m his line, game by game[2m > [22mlays out his tackles exactly, and a game he scored in holds at least a yard a touchdown[39m[32m 1[2mms[22m[39m
+[31m     → usSeasonNfl.test: EDGE 0 has no season[39m
+[31m   [31m×[31m the feed, minute by minute[2m > [22mnever puts two lines in back to back minutes, or two scoring drives of one side under three minutes apart, where the hour has room[39m[32m 108[2mms[22m[39m
+[31m     → usSeasonNfl.test: EDGE 0 has no season[39m
+   [32m✓[39m the order of the games[2m > [22mcounts what reads oddly: the same opponent twice running, and every game past the third in a row at home or away[32m 0[2mms[22m[39m
+   [32m✓[39m the order of the games[2m > [22mdeals no team a rival twice running or four straight at home or away, whoever he plays for[32m 12[2mms[22m[39m
+   [32m✓[39m the order of the games[2m > [22morders a throwback season with no names the same way, and leaves the NBA's unnamed deal as it was[32m 9[2mms[22m[39m
+   [32m✓[39m the tiles above the record, position by position[2m > [22mprints each position its own three numbers, every one from its own field[32m 0[2mms[22m[39m
+   [32m✓[39m the tiles above the record, position by position[2m > [22msays the first half in each position's own numbers[32m 0[2mms[22m[39m
+   [32m✓[39m what the ledger holds and the number file reads[2m > [22mscores a drive with the ledger's values: a touchdown is 6, 7 with the kick, 8 with the try, a field goal 3, a safety 2[32m 0[2mms[22m[39m
+   [32m✓[39m what the ledger holds and the number file reads[2m > [22mruns the clock the ledger holds: four quarters of 15 minutes[32m 0[2mms[22m[39m
+   [32m✓[39m what the ledger holds and the number file reads[2m > [22mdraws the playoff path on the ledger's format, for both sports[32m 0[2mms[22m[39m
+   [32m✓[39m what the ledger holds and the number file reads[2m > [22msays football's own words in the "?": games, not nights, and what the playoff path leaves out[32m 0[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m6 failed[39m[22m[2m | [22m[1m[32m29 passed[39m[22m[90m (35)[39m
+[2m   Start at [22m 12:38:58
+[2m   Duration [22m 1.61s[2m (transform 428ms, setup 31ms, collect 557ms, tests 566ms, environment 192ms, prepare 90ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonNfl.test.ts,title=src/test/usSeasonNfl.test.ts > an NFL season%2C derived from its saved line > lands every total of every position%2C game by game%2C with drives that make each score,line=246,column=28::AssertionError: LB DAL 12: expected null not to be null%0A ❯ src/test/usSeasonNfl.test.ts:246:28%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonNfl.test.ts,title=src/test/usSeasonNfl.test.ts > the NFL words > says every kind of drive%2C and a touchdown that is not a seven says why,line=407,column=25::TypeError: Cannot read properties of null (reading 'games')%0A ❯ src/test/usSeasonNfl.test.ts:407:25%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonNfl.test.ts,title=src/test/usSeasonNfl.test.ts > the NFL words > prints the headline once%3A the chip is the headline%2C the bits are the rest%2C no two bits alike,line=423,column=58::TypeError: Cannot read properties of null (reading 'games')%0A ❯ src/test/usSeasonNfl.test.ts:423:58%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonNfl.test.ts,title=src/test/usSeasonNfl.test.ts > his line%2C game by game > keeps an everyday season off the per game caps and near his average%2C while his games still differ,line=513,column=17::Error: usSeasonNfl.test: EDGE 0 has no season%0A ❯ seasonOf src/test/usSeasonNfl.test.ts:513:17%0A ❯ src/test/usSeasonNfl.test.ts:530:20%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonNfl.test.ts,title=src/test/usSeasonNfl.test.ts > his line%2C game by game > lays out his tackles exactly%2C and a game he scored in holds at least a yard a touchdown,line=513,column=17::Error: usSeasonNfl.test: EDGE 0 has no season%0A ❯ seasonOf src/test/usSeasonNfl.test.ts:513:17%0A ❯ src/test/usSeasonNfl.test.ts:549:20%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonNfl.test.ts,title=src/test/usSeasonNfl.test.ts > the feed%2C minute by minute > never puts two lines in back to back minutes%2C or two scoring drives of one side under three minutes apart%2C where the hour has room,line=513,column=17::Error: usSeasonNfl.test: EDGE 0 has no season%0A ❯ seasonOf src/test/usSeasonNfl.test.ts:513:17%0A ❯ src/test/usSeasonNfl.test.ts:567:26%0A%0A
+
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 6 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonNfl.test.ts[2m > [22man NFL season, derived from its saved line[2m > [22mlands every total of every position, game by game, with drives that make each score
+[31m[1mAssertionError[22m: LB DAL 12: expected null not to be null[39m
+[36m [2m❯[22m src/test/usSeasonNfl.test.ts:[2m246:28[22m[39m
+    [90m244| [39m      [35mconst[39m s [33m=[39m [34mderiveSeason[39m(b[33m.[39msport[33m,[39m row[33m,[39m b[33m.[39mctx)[33m![39m[33m;[39m
+    [90m245| [39m      [35mconst[39m label [33m=[39m [32m`[39m[36m${[39mpos[36m}[39m[32m [39m[36m${[39mteam[36m}[39m[32m [39m[36m${[39mgames[36m}[39m[32m`[39m[33m;[39m
+    [90m246| [39m      [34mexpect[39m(s[33m,[39m label)[33m.[39mnot[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m   | [39m                           [31m^[39m
+    [90m247| [39m      [34mexpect[39m(s[33m.[39mgames[33m,[39m label)[33m.[39m[34mtoHaveLength[39m([34m17[39m)[33m;[39m
+    [90m248| [39m      [35mconst[39m on [33m=[39m s[33m.[39mgames[33m.[39m[34mfilter[39m(g [33m=>[39m g[33m.[39mplayed)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonNfl.test.ts[2m > [22mthe NFL words[2m > [22msays every kind of drive, and a touchdown that is not a seven says why
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'games')[39m
+[36m [2m❯[22m src/test/usSeasonNfl.test.ts:[2m407:25[22m[39m
+    [90m405| [39m      [35mconst[39m b [33m=[39m [34mbuilt[39m(row[33m,[39m pos)[33m;[39m
+    [90m406| [39m      [35mconst[39m s [33m=[39m [34mderiveSeason[39m(b[33m.[39msport[33m,[39m row[33m,[39m b[33m.[39mctx)[33m![39m[33m;[39m
+    [90m407| [39m      for (const g of s.games) for (const e of g.events) expect(NFL_SE…
+    [90m   | [39m                        [31m^[39m
+    [90m408| [39m    }
+    [90m409| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonNfl.test.ts[2m > [22mthe NFL words[2m > [22mprints the headline once: the chip is the headline, the bits are the rest, no two bits alike
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'games')[39m
+[36m [2m❯[22m src/test/usSeasonNfl.test.ts:[2m423:58[22m[39m
+    [90m421| [39m      [35mconst[39m row [33m=[39m [33mNFL_ROW[39m(pos)[33m;[39m
+    [90m422| [39m      [35mconst[39m b [33m=[39m [34mbuilt[39m(row[33m,[39m pos)[33m;[39m
+    [90m423| [39m      for (const game of deriveSeason(b.sport, row, b.ctx)!.games.filt…
+    [90m   | [39m                                                         [31m^[39m
+    [90m424| [39m        [35mconst[39m bits [33m=[39m v[33m.[39m[34mlineOf[39m(game[33m,[39m pos)[33m;[39m
+    [90m425| [39m        expect(new Set(bits).size, `${pos} game ${game.md}`).toBe(bits…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonNfl.test.ts[2m > [22mhis line, game by game[2m > [22mkeeps an everyday season off the per game caps and near his average, while his games still differ
+[31m[1mError[22m: usSeasonNfl.test: EDGE 0 has no season[39m
+[36m [2m❯[22m seasonOf src/test/usSeasonNfl.test.ts:[2m513:17[22m[39m
+    [90m511| [39m  [35mif[39m (b[33m.[39mok [33m===[39m [35mfalse[39m) [35mthrow[39m [35mnew[39m [33mError[39m([32m`usSeasonNfl.test: [39m[36m${[39mb[33m.[39mwhy[36m}[39m[32m`[39m)[33m;[39m
+    [90m512| [39m  [35mconst[39m s [33m=[39m [34mderiveSeason[39m(b[33m.[39msport[33m,[39m row[33m,[39m b[33m.[39mctx)[33m;[39m
+    [90m513| [39m  if (!s) throw new Error(`usSeasonNfl.test: ${pos} ${i} has no season…
+    [90m   | [39m                [31m^[39m
+    [90m514| [39m  [35mreturn[39m s[33m;[39m
+    [90m515| [39m}[33m;[39m
+[90m [2m❯[22m src/test/usSeasonNfl.test.ts:[2m530:20[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonNfl.test.ts[2m > [22mhis line, game by game[2m > [22mlays out his tackles exactly, and a game he scored in holds at least a yard a touchdown
+[31m[1mError[22m: usSeasonNfl.test: EDGE 0 has no season[39m
+[36m [2m❯[22m seasonOf src/test/usSeasonNfl.test.ts:[2m513:17[22m[39m
+    [90m511| [39m  [35mif[39m (b[33m.[39mok [33m===[39m [35mfalse[39m) [35mthrow[39m [35mnew[39m [33mError[39m([32m`usSeasonNfl.test: [39m[36m${[39mb[33m.[39mwhy[36m}[39m[32m`[39m)[33m;[39m
+    [90m512| [39m  [35mconst[39m s [33m=[39m [34mderiveSeason[39m(b[33m.[39msport[33m,[39m row[33m,[39m b[33m.[39mctx)[33m;[39m
+    [90m513| [39m  if (!s) throw new Error(`usSeasonNfl.test: ${pos} ${i} has no season…
+    [90m   | [39m                [31m^[39m
+    [90m514| [39m  [35mreturn[39m s[33m;[39m
+    [90m515| [39m}[33m;[39m
+[90m [2m❯[22m src/test/usSeasonNfl.test.ts:[2m549:20[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonNfl.test.ts[2m > [22mthe feed, minute by minute[2m > [22mnever puts two lines in back to back minutes, or two scoring drives of one side under three minutes apart, where the hour has room
+[31m[1mError[22m: usSeasonNfl.test: EDGE 0 has no season[39m
+[36m [2m❯[22m seasonOf src/test/usSeasonNfl.test.ts:[2m513:17[22m[39m
+    [90m511| [39m  [35mif[39m (b[33m.[39mok [33m===[39m [35mfalse[39m) [35mthrow[39m [35mnew[39m [33mError[39m([32m`usSeasonNfl.test: [39m[36m${[39mb[33m.[39mwhy[36m}[39m[32m`[39m)[33m;[39m
+    [90m512| [39m  [35mconst[39m s [33m=[39m [34mderiveSeason[39m(b[33m.[39msport[33m,[39m row[33m,[39m b[33m.[39mctx)[33m;[39m
+    [90m513| [39m  if (!s) throw new Error(`usSeasonNfl.test: ${pos} ${i} has no season…
+    [90m   | [39m                [31m^[39m
+    [90m514| [39m  [35mreturn[39m s[33m;[39m
+    [90m515| [39m}[33m;[39m
+[90m [2m❯[22m src/test/usSeasonNfl.test.ts:[2m567:26[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯[22m[39m
+
