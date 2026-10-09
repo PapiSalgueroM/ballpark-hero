@@ -1,0 +1,5 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+drv-tycoonSeasonReview1095 exit=1 2s | Node.js v24.21.0
+drv-soccerHubGrid1089 exit=0 61s | Evidence: soccer-hub-grid-artifacts/native
+drv-soccerOfferReview1082 exit=0 91s | Soccer offer review: 9 actual-route journeys, 12 effective restored DOM controls, no forwarded writes.
+drv-usCareerSaveRecovery1084 exit=0 130s | US career recovery: 12 actual-route latest-write journeys, 4 deletion/replacement cases, 9 effective restored DOM controls, no forwarded writes.
