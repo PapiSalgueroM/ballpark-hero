@@ -10,6 +10,9 @@
  * player (scripts/bakeClubManagerRosters.mjs, ratingOf and gbpM), so a real
  * free agent sits on the same scale as the men he would play beside.
  * simFreeAgents section 18 holds the two curves to each other.
+ * Round 1102: that rating is the value curve read with the man's age (the
+ * ledger's age on its checked day, used as it stands), and the file carries
+ * the curve's version.
  *
  * FAILS CLOSED, writing nothing, when:
  *   - a shipped man has fewer than two sources, or two from one publisher;
@@ -30,6 +33,9 @@ import { fileURLToPath } from 'node:url';
    them into scripts/lib/cmValueCurve.mjs, so this imports that module as the
    bake does instead of keeping a copy beside it. */
 import { POS_MAP, ratingOf, gbpM } from './lib/cmValueCurve.mjs';
+/* Round 1102: the line above is an anchor scripts/simFreeAgents.mjs reads
+   byte for byte, so the curve's version comes in on a line of its own. */
+import { CURVE_VERSION } from './lib/cmValueCurve.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const LEDGER = path.join(ROOT, 'scripts/data/cmFreeAgents2026.json');
@@ -53,10 +59,15 @@ export function buildFreeAgents(ledger, rosterSrc) {
     if (srcs.some(s => /wikipedia/i.test(`${s.publisher} ${s.url}`))) problems.push(`${u.name} cites Wikipedia, which is a spot check and never a source`);
     if (baked.has(u.name)) problems.push(`${u.name} is in a baked 2026 squad, so he cannot also be a free agent`);
     const position = POS_MAP[u.tablePosition];
+    const before = problems.length;
     if (!position) problems.push(`${u.name}: no engine position for '${u.tablePosition}'`);
-    if (!(u.age >= 16 && u.age <= 45)) problems.push(`${u.name}: age ${u.age} is not a footballer's`);
+    if (!(Number.isInteger(u.age) && u.age >= 16 && u.age <= 45)) problems.push(`${u.name}: age ${u.age} is not a footballer's`);
     if (!(u.valueUsd > 0)) problems.push(`${u.name}: no value in the table`);
-    rows.push({ name: u.name, position, age: u.age, value: gbpM(u.valueUsd), rating: ratingOf(u.valueUsd) });
+    /* Round 1102: the rating reads the man's age and position, and the curve
+       fails closed on a bad one, so a man one of the three guards above
+       refused never reaches it: his problem line is already written. */
+    if (problems.length > before) continue;
+    rows.push({ name: u.name, position, age: u.age, value: gbpM(u.valueUsd), rating: ratingOf(u.valueUsd, u.age, position) });
   }
   rows.sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name));
   return { rows, problems };
@@ -82,11 +93,14 @@ export function renderFile(ledger, rows) {
     `  age: number;`,
     `  /** Market value in pounds, millions. */`,
     `  value: number;`,
-    `  /** Game rating off the value curve the squads use. */`,
+    `  /** Game rating off the curve the squads use: the value curve plus points for age. */`,
     `  rating: number;`,
     `}`,
     ``,
     `export const CM_REAL_FREE_AGENTS_CHECKED_ON = '${ledger.checkedOn}';`,
+    ``,
+    `/** The curve these ratings are on (CURVE_VERSION in scripts/lib/cmValueCurve.mjs). */`,
+    `export const CM_REAL_FREE_AGENTS_CURVE = ${CURVE_VERSION};`,
     ``,
     `export const CM_REAL_FREE_AGENTS: RealFreeAgent[] = [`,
     ...lines,

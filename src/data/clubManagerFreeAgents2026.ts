@@ -14,18 +14,21 @@ export interface RealFreeAgent {
   age: number;
   /** Market value in pounds, millions. */
   value: number;
-  /** Game rating off the value curve the squads use. */
+  /** Game rating off the curve the squads use: the value curve plus points for age. */
   rating: number;
 }
 
 export const CM_REAL_FREE_AGENTS_CHECKED_ON = '2026-10-06';
 
+/** The curve these ratings are on (CURVE_VERSION in scripts/lib/cmValueCurve.mjs). */
+export const CM_REAL_FREE_AGENTS_CURVE = 2;
+
 export const CM_REAL_FREE_AGENTS: RealFreeAgent[] = [
-  { name: 'Dani Parejo', position: 'CM', age: 37, value: 0.8, rating: 65 },
-  { name: 'Dele Alli', position: 'CAM', age: 30, value: 0.8, rating: 65 },
-  { name: 'Sergio Ramos', position: 'CB', age: 40, value: 0.7, rating: 63 },
-  { name: 'Edinson Cavani', position: 'ST', age: 39, value: 0.4, rating: 60 },
-  { name: 'Tiemoué Bakayoko', position: 'CDM', age: 32, value: 0.4, rating: 60 },
-  { name: 'Wissam Ben Yedder', position: 'ST', age: 36, value: 0.4, rating: 60 },
-  { name: 'Willian', position: 'LW', age: 38, value: 0.3, rating: 59 },
+  { name: 'Dani Parejo', position: 'CM', age: 37, value: 0.8, rating: 72 },
+  { name: 'Sergio Ramos', position: 'CB', age: 40, value: 0.7, rating: 71 },
+  { name: 'Edinson Cavani', position: 'ST', age: 39, value: 0.4, rating: 68 },
+  { name: 'Willian', position: 'LW', age: 38, value: 0.3, rating: 67 },
+  { name: 'Dele Alli', position: 'CAM', age: 30, value: 0.8, rating: 66 },
+  { name: 'Wissam Ben Yedder', position: 'ST', age: 36, value: 0.4, rating: 66 },
+  { name: 'Tiemoué Bakayoko', position: 'CDM', age: 32, value: 0.4, rating: 62 },
 ];
