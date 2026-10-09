@@ -1,0 +1,18 @@
+#!build
+#!playwright
+seam: SHOTS=$RC_OUT node scripts/playUsCareerSaveSeam.mjs
+seam-stale: US_SAVE_SEAM_CONTROL=stale PORT=4411 node scripts/playUsCareerSaveSeam.mjs
+seam-sitover: US_SAVE_SEAM_CONTROL=sitover PORT=4412 node scripts/playUsCareerSaveSeam.mjs
+seam-hidden: US_SAVE_SEAM_CONTROL=hidden PORT=4413 node scripts/playUsCareerSaveSeam.mjs
+seam-keeptoast: US_SAVE_SEAM_CONTROL=keeptoast PORT=4414 node scripts/playUsCareerSaveSeam.mjs
+seam-open: US_SAVE_SEAM_CONTROL=open PORT=4415 node scripts/playUsCareerSaveSeam.mjs
+seam-raw: US_SAVE_SEAM_CONTROL=raw PORT=4416 node scripts/playUsCareerSaveSeam.mjs
+centre: PORT=4421 node scripts/playUsSeasonCentre.mjs
+centre-noaction: US_SEASON_PLAY_CONTROL=noaction PORT=4422 node scripts/playUsSeasonCentre.mjs
+centre-raw: US_SEASON_PLAY_CONTROL=raw PORT=4423 node scripts/playUsSeasonCentre.mjs
+centre-cover: US_SEASON_PLAY_CONTROL=cover PORT=4424 node scripts/playUsSeasonCentre.mjs
+centre-playfirst: US_SEASON_PLAY_CONTROL=playfirst PORT=4425 node scripts/playUsSeasonCentre.mjs
+centre-nohandover: US_SEASON_PLAY_CONTROL=nohandover PORT=4426 node scripts/playUsSeasonCentre.mjs
+centre-static: US_SEASON_PLAY_CONTROL=static PORT=4427 node scripts/playUsSeasonCentre.mjs
+centre-write: US_SEASON_PLAY_CONTROL=write PORT=4428 node scripts/playUsSeasonCentre.mjs
+centre-count: US_SEASON_PLAY_CONTROL=count PORT=4429 node scripts/playUsSeasonCentre.mjs
