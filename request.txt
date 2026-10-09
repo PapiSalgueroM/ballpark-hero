@@ -1,0 +1,2 @@
+screen-probe: cp scripts/simMatchScreen.mjs scripts/zzScreenProbe.mjs && node .rc/x/patchprobe.mjs screen scripts/zzScreenProbe.mjs && (SIM_SEED=2 node scripts/zzScreenProbe.mjs | grep -E "DUMP|FAIL" | cut -c1-6000)
+erauc-probe: cp scripts/simClubManagerEraUcl.mjs scripts/zzEraProbe.mjs && node .rc/x/patchprobe.mjs erauc scripts/zzEraProbe.mjs && (SIM_SEED=1 node scripts/zzEraProbe.mjs 2>&1 | grep -E "DUMP|FAIL" | cut -c1-6000)

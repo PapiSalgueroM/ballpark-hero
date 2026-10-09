@@ -1,0 +1,2 @@
+screen-probe exit=0 4s | simMatchScreen: 2 FAILURES
+erauc-probe exit=0 23s | simClubManagerEraUcl: 2 FAILURE(S)

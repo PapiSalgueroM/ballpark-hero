@@ -1,0 +1,5 @@
+probe added to scripts/zzEraProbe.mjs
+DUMP {"sacked":true,"week":12,"calendar":56,"matchday":2,"hasGroup":true,"confidence":0,"form":["D","L","L","L","L"],"log":[[0,"La Liga · Round 1","Celta Vigo","0-1","L"],[1,"La Liga · Round 2","Real Betis","0-0","D"],[2,"La Liga · Round 3","Málaga","2-2","D"],[3,"Champions League · Group MD1","Rangers","1-1","D"],[4,"La Liga · Round 4","Osasuna","3-2","W"],[5,"La Liga · Round 5","Racing Santander","1-3","L"],[6,"La Liga · Round 6","Athletic Club","1-2","L"],[7,"Champions League · Group MD2","Liverpool","0-0","D"],[8,"La Liga · Round 7","Zaragoza","0-3","L"],[9,"Copa del Rey · Round of 16","Deportivo La Coruña","0-1","L"],[10,"La Liga · Round 8","Getafe","1-2","L"],[11,"La Liga · Round 9","Deportivo La Coruña","1-2","L"]],"squadMorale":38,"xiCount":11,"fit":25,"squad":26}
+  FAIL: could not reach the fourth group night for the pre-478 save
+  FAIL: the pre-478 group ledger migration never ran
+simClubManagerEraUcl: 2 FAILURE(S)
