@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+playSeasonCentreMotion: PORT=4559 node scripts/playSeasonCentreMotion.mjs
+playCareerMoments: PORT=4601 node scripts/playCareerMoments.mjs
+playTranslatedPage: node scripts/playTranslatedPage.mjs
+playLiveMatchFit: PORT=4191 node scripts/playLiveMatchFit.mjs
+playFlagshipLazy: node scripts/playFlagshipLazy.mjs
+playCareerHub: node scripts/playCareerHub.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
