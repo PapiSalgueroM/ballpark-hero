@@ -1,0 +1,11 @@
+seed 69741: 24 careers, story 479 bytes a season, 23.1 seasons a career, save mean 66349 bytes
+moves the log check saw: 297 signings, 12 loans
+careers 24 (1 seeds x 24), story seasons 554, lines written 4098, kept in the story 4070 plus 28 live
+baseline before Round 974: a finished career could read 28 of 4098 lines (0.7%); now 4098 (100.0%)
+size: story 479 bytes a season, save mean 66349 bytes, median 68024
+check completeness: ok
+check draws: ok
+check size: FAIL (1)
+  mean save bytes 66349 outside 28000,50000
+check log: ok
+simCareerStory: RED, size

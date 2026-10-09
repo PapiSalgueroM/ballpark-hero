@@ -1,0 +1,14 @@
+story-9741 exit=1 14s | simCareerStory: RED, size
+story-19741 exit=1 15s | simCareerStory: RED, size
+story-29741 exit=1 14s | simCareerStory: RED, size
+story-39741 exit=1 17s | simCareerStory: RED, size
+story-49741 exit=1 18s | simCareerStory: RED, size
+story-59741 exit=1 19s | simCareerStory: RED, size
+story-69741 exit=1 20s | simCareerStory: RED, size
+simSoccerCareerLeagueWorld exit=0 128s | simSoccerCareerLeagueWorld: seventeen outcome tests green, all eleven effective negative controls caught
+world-ctl-snapshotmoves exit=0 1s | simCareerLeagueWorld control snapshotmoves: section D1 went red as it must (3 failures)
+world-ctl-snapshotcrown exit=0 1s | simCareerLeagueWorld control snapshotcrown: section D1 went red as it must (12 failures)
+world-ctl-snapshotfield exit=0 1s | simCareerLeagueWorld control snapshotfield: section D1 went red as it must (6 failures)
+world-probe-only exit=0 1s | simCareerLeagueWorld: all sections green (1.2 s)
+story-79741 exit=1 16s | simCareerStory: RED, size
+vitest-whole exit=1 573s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerStory.test.tsx,title=src/test/careerStory.test.tsx > Soccer Career%3A the story keeps the save s

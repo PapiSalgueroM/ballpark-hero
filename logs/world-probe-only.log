@@ -1,0 +1,9 @@
+bundled in 824 ms; 460 clubs (190 hand rows)
+
+D1. SAVED RIVAL CHAMPION: context roles overlap, table clubs do not
+  rival champion probe: actual context and table checked; old double-count defect reproduced; missing, foreign and duplicate club copies caught
+
+D1. SNAPSHOT PROBE: three actual future seasons from the captured old save
+  snapshot probe: 4 actual seasons played (1 severe-injury seasons), 3 playable snapshots, 3 drawn tables, 3 changed fields, 6 recorded league movements
+
+simCareerLeagueWorld: all sections green (1.2 s)
