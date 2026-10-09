@@ -1,0 +1,10 @@
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/usSeasonCentreEntry.test.tsx src/test/usCareerSaveRetry.test.tsx --testTimeout=300000 --hookTimeout=120000
+minified: grep -o 'use Retry save.\{0,300\}' dist/assets/*.js | head -3 | cut -c1-420 > $RC_OUT/toast-min.txt; cat $RC_OUT/toast-min.txt | head -3
+seam: SHOTS=$RC_OUT node scripts/playUsCareerSaveSeam.mjs
+seam-keeptoast: US_SAVE_SEAM_CONTROL=keeptoast PORT=4414 node scripts/playUsCareerSaveSeam.mjs
+centre: SHOTS=$RC_OUT PORT=4421 node scripts/playUsSeasonCentre.mjs
+centre-noaction: US_SEASON_PLAY_CONTROL=noaction PORT=4422 node scripts/playUsSeasonCentre.mjs
+usSaveRetry: node scripts/simUsCareerSaveRetry.mjs
