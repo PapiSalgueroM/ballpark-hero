@@ -1,0 +1,70 @@
+# Release AP, the lane's four rounds on the train (1143, 1144, 1104, 1147 on release-ap-int): the merged tree's proof
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+hall: node scripts/simCareerHall.mjs
+truth: node scripts/simNflTruth.mjs
+truth-s6: SIM_SEED=6 node scripts/simNflTruth.mjs
+truth-onesource: TRUTH_CONTROL=onesource node scripts/simNflTruth.mjs
+truth-seventeen: TRUTH_CONTROL=seventeen node scripts/simNflTruth.mjs
+bank: node scripts/simUsCareerBank.mjs
+banking: node scripts/simCareerBanking.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+simNflCareer: node scripts/simNflCareer.mjs
+simNbaCareer: node scripts/simNbaCareer.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+simCareerRealism: node scripts/simCareerRealism.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simAwards: node scripts/simAwards.mjs
+usc: node scripts/simUsSeasonCentre.mjs
+usc-set0: SEEDSET=0 node scripts/simUsSeasonCentre.mjs
+usc-set1: SEEDSET=1 node scripts/simUsSeasonCentre.mjs
+usc-set2: SEEDSET=2 node scripts/simUsSeasonCentre.mjs
+usc-nflheld-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=nflheld node scripts/simUsSeasonCentre.mjs
+usc-length-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=length node scripts/simUsSeasonCentre.mjs
+usc-nflformula-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=nflformula node scripts/simUsSeasonCentre.mjs
+neutral: node scripts/simSeasonCentreNeutral.mjs
+law: node scripts/simSeasonLaw.mjs
+agreement: node scripts/simSeasonCentreAgreement.mjs
+moments: node scripts/simSeasonMoments.mjs
+play: MSYS_NO_PATHCONV=1 ENGINES=chromium PORT=4397 node scripts/playUsSeasonCentre.mjs
+play-noaction-must-exit-1: MSYS_NO_PATHCONV=1 ENGINES=chromium PORT=4401 US_SEASON_PLAY_CONTROL=noaction node scripts/playUsSeasonCentre.mjs
+play-raw-must-exit-1: MSYS_NO_PATHCONV=1 ENGINES=chromium PORT=4402 US_SEASON_PLAY_CONTROL=raw node scripts/playUsSeasonCentre.mjs
+play-column-must-exit-1: MSYS_NO_PATHCONV=1 ENGINES=chromium PORT=4403 US_SEASON_PLAY_CONTROL=column node scripts/playUsSeasonCentre.mjs
+play-nohandover-must-exit-1: MSYS_NO_PATHCONV=1 ENGINES=chromium PORT=4404 US_SEASON_PLAY_CONTROL=nohandover node scripts/playUsSeasonCentre.mjs
+walk-truth: ENGINES=chromium node scripts/playNflTruth.mjs
+seam: PORT=4410 node scripts/playUsCareerSaveSeam.mjs
+seam-sitover-must-exit-1: US_SAVE_SEAM_CONTROL=sitover PORT=4412 node scripts/playUsCareerSaveSeam.mjs
+seam-quotafree-must-exit-1: US_SAVE_SEAM_CONTROL=quotafree PORT=4417 node scripts/playUsCareerSaveSeam.mjs
+psb: BASE=http://localhost:4173 node scripts/playStorageBlocked.mjs
+homeFold: BASE=http://localhost:4173 node scripts/playHomeFold.mjs
+translated: BASE=http://localhost:4173 node scripts/playTranslatedPage.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simStaleChunk: node scripts/simStaleChunk.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simHomeCopy: node scripts/simHomeCopy.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+ownGoals: CAREERS=120 SEEDSET=0 node scripts/simSoccerOwnGoals.mjs
+simTycoonHelp: node scripts/simTycoonHelp.mjs
+sweepWeight: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs
+playgames-nfl: ONLY=/nfl-my-career ENGINES=chromium WIDTH=390 node scripts/playGames.mjs
+dashes: bash -c "git diff origin/main HEAD -- src index.html scripts | grep -c -P '^\+.*[\x{2013}\x{2014}]'; true"
