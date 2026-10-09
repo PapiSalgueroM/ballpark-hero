@@ -1,0 +1,12 @@
+main rule: lifted from origin/main
+harnesses 759; browser group: main rule 103, head rule 105
+moved 4:
+  playSoccerHubGrid1089.mjs: main node -> head browser
+  playSoccerOfferReview1082.mjs: main node -> head browser
+  playTycoonSaleReview1083.mjs: main node -> head browser
+  simBrowserHarnessDiscovery.mjs: main browser -> head node
+simLoginReturn.mjs: node group on head
+simBracketMoment.mjs: node group on head
+simBrowserHarnessDiscovery.mjs: node group on head
+simSoccerOwnGoals.mjs: node group on head
+classify: simLoginReturn and simBracketMoment are in the node group

@@ -1,0 +1,9 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  FAIL  simBracketMoment.mjs           21.1s
+
+----- simBracketMoment.mjs (FAIL) -----
+  FAIL: the browser did not load, so the page was never measured: Cannot find module '/home/claude/.npm-global/lib/node_modules/playwright/index.js' imported from /home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/playwrightLoader.mjs
+1 FAILURES (by section {"3":1})
+
+1 harness not green.
