@@ -14,7 +14,7 @@
 // Values in £m. Ratings 48-94: the market value curve plus points for age
 // (curve 2, scripts/lib/cmValueCurve.mjs): a point off for each year under 24,
 // points back from 30.
-// Ages are for 1 August 2026: 351 from a birth date on file, 4024 moved from the
+// Ages are for 1 August 2026: 362 from a birth date on file, 4013 moved from the
 // table's 1 January age (plus one for a 2026 row, plus two for a 2025 row;
 // right for about seven men in ten, a year over for the rest), 26 as written
 // by hand in 2026, 0 unknown.
@@ -45,7 +45,7 @@ export const CM_ROSTER_META = {
   curve: 2,
   /** How each man's age is known: from a birth date on file, moved on from the table's 1 January
    *  age, as written by hand in 2026, or unknown. */
-  ages: { asOf: '2026-08-01', born: 351, moved: 4024, written: 26, unknown: 0 },
+  ages: { asOf: '2026-08-01', born: 362, moved: 4013, written: 26, unknown: 0 },
 };
 
 /** Clubs where the dataset runs thin (under 8 real players); the game pads
@@ -443,14 +443,14 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Ignacio de Arruabarrena', p: 'GK', a: 29, v: 0.8, r: 64 },
   ],
   'Arsenal': [
-    { n: 'Bukayo Saka', p: 'RW', a: 25, v: 97.5, r: 91 },
+    { n: 'Bukayo Saka', p: 'RW', a: 24, v: 97.5, r: 91 },
     { n: 'Declan Rice', p: 'CM', a: 27, v: 97.5, r: 91 },
     { n: 'William Saliba', p: 'CB', a: 25, v: 72.8, r: 90 },
     { n: 'Bruno Guimarães', p: 'CM', a: 29, v: 60.8, r: 89 },
     { n: 'Gabriel', p: 'CB', a: 29, v: 60.8, r: 89 },
     { n: 'Martín Zubimendi', p: 'CDM', a: 27, v: 60.8, r: 89 },
     { n: 'Jurriën Timber', p: 'RB', a: 25, v: 57, r: 88 },
-    { n: 'Martin Ødegaard', p: 'CAM', a: 28, v: 52.5, r: 88 },
+    { n: 'Martin Ødegaard', p: 'CAM', a: 27, v: 52.5, r: 88 },
     { n: 'Viktor Gyökeres', p: 'ST', a: 28, v: 52.5, r: 88 },
     { n: 'Eberechi Eze', p: 'CAM', a: 28, v: 48.8, r: 87 },
     { n: 'Kai Havertz', p: 'ST', a: 27, v: 40.5, r: 86 },
@@ -2906,12 +2906,12 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
   ],
   'Liverpool': [
     { n: 'Florian Wirtz', p: 'CAM', a: 23, v: 89.3, r: 90 },
-    { n: 'Alexander Isak', p: 'ST', a: 27, v: 81, r: 90 },
-    { n: 'Dominik Szoboszlai', p: 'CAM', a: 26, v: 81, r: 90 },
+    { n: 'Alexander Isak', p: 'ST', a: 26, v: 81, r: 90 },
+    { n: 'Dominik Szoboszlai', p: 'CAM', a: 25, v: 81, r: 90 },
     { n: 'Hugo Ekitiké', p: 'ST', a: 24, v: 72.8, r: 90 },
     { n: 'Ryan Gravenberch', p: 'CDM', a: 24, v: 64.8, r: 89 },
-    { n: 'Alexis Mac Allister', p: 'CM', a: 28, v: 64.5, r: 89 },
-    { n: 'Bradley Barcola', p: 'LW', a: 24, v: 57, r: 88 },
+    { n: 'Alexis Mac Allister', p: 'CM', a: 27, v: 64.5, r: 89 },
+    { n: 'Bradley Barcola', p: 'LW', a: 23, v: 57, r: 87 },
     { n: 'Cody Gakpo', p: 'LW', a: 27, v: 52.5, r: 88 },
     { n: 'Jérémy Jacquet', p: 'CB', a: 21, v: 44.3, r: 84 },
     { n: 'Milos Kerkez', p: 'LB', a: 23, v: 32.3, r: 84 },
