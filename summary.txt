@@ -1,0 +1,3 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+drv-LeagueWorld exit=0 11s | playSoccerCareerLeagueWorld: 249 checks, 0 failed; screenshots /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/shots
+playFlagshipLazy exit=0 7s | playFlagshipLazy: green. The dugout costs nothing until you walk into it, and it still works when you do.
