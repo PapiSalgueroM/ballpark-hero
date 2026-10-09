@@ -1,0 +1,108 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/zzRvWorld.test.ts[2m > [22m[2mreviewer probe: the simulated league world a player reads[2m > [22m[2mholds its own promises over real careers
+[22m[39m[rv world] 300 careers, 3124 league world seasons (3012 with a final table, 2272 with derbies), his club went down 65 times (tier 3: 63, tier 4: 2) and up 48; largest save 179886 bytes
+[rv world] 78416 listed moves; relegated clubs by their pool tier: tier 1: 122, tier 2: 313, tier 3: 3720, tier 4: 35053
+[rv world] big clubs in HIS top flight table, by whether they are his derby rival: other tier 1: 5006 club seasons, mean place 2.9, bottom half 0.0%, relegated 0 (0.0%) | other tier 2: 6930 club seasons, mean place 5.4, bottom half 2.8%, relegated 0 (0.0%) | rival tier 1: 1201 club seasons, mean place 8.1, bottom half 36.7%, relegated 118 (9.8%) | rival tier 2: 799 club seasons, mean place 9.4, bottom half 47.8%, relegated 91 (11.4%)
+[rv world] a big rival sent down 209 times: back in his league before he left it 173 times (mean 1.6 seasons away), not back 36 times (mean 1.0 more seasons watched)
+[rv world]    EXAMPLE 52000 2027 West Ham: Tottenham (pool tier 2) placed 20 of 20 and went down; back after 1 seasons away
+[rv world]    EXAMPLE 52000 2029 West Ham: Tottenham (pool tier 2) placed 19 of 20 and went down; still down 5 seasons later when his time in that league ended
+[rv world]    EXAMPLE 52000 2040 West Ham: Tottenham (pool tier 2) placed 19 of 20 and went down; still down 2 seasons later when his time in that league ended
+[rv world]    EXAMPLE 52004 2034 PSG: Marseille (pool tier 2) placed 17 of 18 and went down; back after 1 seasons away
+[rv world]    EXAMPLE 52004 2037 PSG: Marseille (pool tier 2) placed 17 of 18 and went down; back after 1 seasons away
+[rv world]    EXAMPLE 52004 2042 PSG: Marseille (pool tier 2) placed 17 of 18 and went down; back after 1 seasons away
+[rv world]    EXAMPLE 52008 2032 Inter Milan: Juventus (pool tier 1) placed 19 of 20 and went down; back after 1 seasons away
+[rv world]    EXAMPLE 52008 2034 Inter Milan: AC Milan (pool tier 2) placed 20 of 20 and went down; back after 1 seasons away
+[rv world]    EXAMPLE 52008 2035 Inter Milan: Juventus (pool tier 1) placed 19 of 20 and went down; back after 1 seasons away
+[rv world]    EXAMPLE 52008 2038 Inter Milan: Juventus (pool tier 1) placed 19 of 20 and went down; back after 1 seasons away
+[rv world] tier 1 clubs (not his) sent down: Man United x30, Inter Milan x27, Chelsea x15, Liverpool x12, PSG x11, Arsenal x8, Juventus x7, Bayern Munich x6, Real Madrid x4, Man City x2
+[rv world] events: 22553 cards answered, 94 appeal results shown, 51 of them with cards still queued behind
+[rv world] stability: 3016 finished seasons derived at their summary and again at the end of the career, 5 drew a different final table; seasons without a world: 4045, 1377 different
+[rv world] BROKEN S0 the final table of a finished season WITHOUT a world is not the one he was shown at the summary: 1377 times
+[rv world]    52000 2022 West Ham: row fields changed since []; ctx then table//Tottenham/Man United now table//Tottenham/; then West Ham>Bournemouth>Southampton>Leeds United now West Ham>Bournemouth>Leeds United>Brentford
+[rv world]    52000 2023 West Ham: row fields changed since []; ctx then table//Tottenham/Chelsea now table//Tottenham/; then Wolves>Burnley>Sheffield United>Crystal Palace now Sheffield United>Fulham>Burnley>Crystal Palace
+[rv world]    52000 2024 West Ham: row fields changed since []; ctx then table//Tottenham/Man City now table//Tottenham/; then West Ham>Bournemouth>Crystal Palace>Ipswich Town now West Ham>Crystal Palace>Aston Villa>Brentford
+[rv world]    52000 2025 West Ham: row fields changed since []; ctx then table//Tottenham/Liverpool now table//Tottenham/; then Burnley>Crystal Palace>Bournemouth>Sunderland now Leeds United>Crystal Palace>Sunderland>Bournemouth
+[rv world]    52001 2026 Fenerbahce: row fields changed since []; ctx then table/// now table///; then Amedspor>Gaziantep FK>Konyaspor>Corum FK now Eyupspor>Amedspor>Gaziantep FK>Konyaspor
+[rv world]    52001 2027 Fenerbahce: row fields changed since []; ctx then table/// now table///; then Eyupspor>Gaziantep FK>Konyaspor>Corum FK now Kasimpasa>Eyupspor>Gaziantep FK>Konyaspor
+[rv world] BROKEN I2 next season's field is not this field after the listed moves: 102 times
+[rv world]    52000 2041 West Ham (Premier League): next club West Ham, severe true, loan no, 0 moves listed (0 out, 0 in), in the next field but not expected [ipswich town,charlton athletic,sunderland], expected but gone [aston villa,fulham,stoke city]
+[rv world]    52004 2030 PSG (Ligue 1): next club PSG, severe true, loan no, 0 moves listed (0 out, 0 in), in the next field but not expected [pau,toulouse], expected but gone [metz,nancy]
+[rv world]    52012 2044 Chelsea (Premier League): next club Chelsea, severe true, loan no, 0 moves listed (0 out, 0 in), in the next field but not expected [stoke city,coventry city,qpr], expected but gone [bolton wanderers,preston north end,wrexham]
+[rv world]    52014 2026 Sevilla (La Liga): next club Sevilla, severe true, loan no, 0 moves listed (0 out, 0 in), in the next field but not expected [eldense,fc andorra,tenerife], expected but gone [celta vigo,elche,rayo vallecano]
+[rv world]    52014 2037 Sevilla (La Liga): next club Sevilla, severe true, loan no, 0 moves listed (0 out, 0 in), in the next field but not expected [tenerife,valladolid,sabadell], expected but gone [albacete,mallorca,osasuna]
+[rv world]    52014 2040 Sevilla (La Liga): next club Sevilla, severe true, loan no, 0 moves listed (0 out, 0 in), in the next field but not expected [real betis,las palmas,ceuta], expected but gone [real oviedo,real sociedad,tenerife]
+[rv world] BROKEN I2 next season he is not in the division the movement named: 4 times
+[rv world]    52030 2034 Wolves (Premier League): next Championship, want Premier League
+[rv world]    52176 2039 Fiorentina (Serie A): next Serie B, want Serie A
+[rv world]    52263 2043 Everton (Premier League): next Championship, want Premier League
+[rv world]    52291 2038 Villarreal (La Liga): next Segunda Division, want La Liga
+[rv world] BROKEN S1 the final table of a finished WORLD season is not the one he was shown at the summary: 5 times
+[rv world]    52106 2031 AC Milan: row fields changed since [goals]; ctx then table//Inter Milan/Juventus now table//Inter Milan/Juventus; then Verona>Udinese>Torino>Genoa now Torino>Cagliari>Genoa>Udinese
+[rv world]    52108 2036 Liverpool: row fields changed since [goals]; ctx then table//Man United/ now table//Man United/; then QPR>Blackburn Rovers>Wrexham>Charlton Athletic now Blackburn Rovers>Cardiff City>QPR>Charlton Athletic
+[rv world]    52126 2032 Atletico Madrid: row fields changed since [goals]; ctx then table//Real Madrid/Girona now table//Real Madrid/Girona; then Real Sociedad>Sabadell>Elche>Getafe now Sabadell>Eldense>Elche>Getafe
+[rv world]    52256 2028 Marseille: row fields changed since [goals]; ctx then table//PSG,Lyon/PSG now table//PSG,Lyon/PSG; then Le Havre>Nantes>Rennes>Lens now Paris FC>Le Mans>Rennes>Auxerre
+[rv world]    52262 2030 Leipzig: row fields changed since [goals]; ctx then table///Bayern Munich now table///Bayern Munich; then Werder Bremen>Greuther Furth>Heidenheim>Schalke 04 now Hamburg>Werder Bremen>Schalke 04>Greuther Furth
+[rv world] BROKEN I3 the clubs that left his division are not the ones the final table shows: 5 times
+[rv world]    52106 2031 AC Milan (Serie A): moved genoa|torino|udinese want cagliari|genoa|udinese
+[rv world]    52108 2036 Liverpool (Premier League): moved blackburn rovers|charlton athletic|wrexham want cardiff city|charlton athletic|qpr
+[rv world]    52126 2032 Atletico Madrid (La Liga): moved elche|getafe|sabadell want elche|eldense|getafe
+[rv world]    52256 2028 Marseille (Ligue 1): moved lens|rennes want auxerre|rennes
+[rv world]    52262 2030 Leipzig (Bundesliga): moved heidenheim|schalke 04 want greuther furth|schalke 04
+[rv world] 5 kinds of broken promise
+
+ [31m❯[39m src/test/zzRvWorld.test.ts [2m([22m[2m1 test[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 62597[2mms[22m[39m
+[31m   [31m×[31m reviewer probe: the simulated league world a player reads[2m > [22mholds its own promises over real careers[39m[33m 62595[2mms[22m[39m
+[31m     → expected [ …(5) ] to deeply equal [][39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/zzRvWorld.test.ts[2m > [22mreviewer probe: the simulated league world a player reads[2m > [22mholds its own promises over real careers
+[31m[1mAssertionError[22m: expected [ …(5) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "S0 the final table of a finished season WITHOUT a world is not the one he was shown at the summary",[39m
+[31m+   "I2 next season's field is not this field after the listed moves",[39m
+[31m+   "I2 next season he is not in the division the movement named",[39m
+[31m+   "S1 the final table of a finished WORLD season is not the one he was shown at the summary",[39m
+[31m+   "I3 the clubs that left his division are not the ones the final table shows",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/zzRvWorld.test.ts:[2m212:19[22m[39m
+    [90m210| [39m    for (const k of kinds) { console.log(`[rv world] BROKEN ${k}: ${ba…
+    [90m211| [39m    console[33m.[39m[34mlog[39m([32m`[rv world] [39m[36m${[39mkinds[33m.[39mlength[36m}[39m[32m kinds of broken promise`[39m)[33m;[39m
+    [90m212| [39m    [34mexpect[39m(kinds)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m213| [39m  })[33m;[39m
+    [90m214| [39m})[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Unhandled Errors [49m[22m[31m⎯⎯⎯⎯⎯⎯[39m
+[31m[1m
+Vitest caught 1 unhandled error during the test run.
+This might cause false positive tests. Resolve unhandled errors to make sure your tests are not affected.[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Unhandled Error [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[31m[1mError[22m: [vitest-worker]: Timeout calling "onTaskUpdate"[39m
+[90m [2m❯[22m Object.onTimeoutError node_modules/vitest/dist/chunks/rpc.-pEldfrD.js:[2m53:10[22m[39m
+[90m [2m❯[22m Timeout._onTimeout node_modules/vitest/dist/chunks/index.B521nVV-.js:[2m59:62[22m[39m
+[90m [2m❯[22m listOnTimeout node:internal/timers:[2m685:17[22m[39m
+[90m [2m❯[22m processTimers node:internal/timers:[2m618:7[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m     Errors [22m [1m[31m1 error[39m[22m
+[2m   Start at [22m 14:16:18
+[2m   Duration [22m 64.62s[2m (transform 1.01s, setup 55ms, collect 1.22s, tests 62.60s, environment 309ms, prepare 156ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/zzRvWorld.test.ts,title=src/test/zzRvWorld.test.ts > reviewer probe%3A the simulated league world a player reads > holds its own promises over real careers,line=212,column=19::AssertionError: expected [ …(5) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "S0 the final table of a finished season WITHOUT a world is not the one he was shown at the summary",%0A+   "I2 next season's field is not this field after the listed moves",%0A+   "I2 next season he is not in the division the movement named",%0A+   "S1 the final table of a finished WORLD season is not the one he was shown at the summary",%0A+   "I3 the clubs that left his division are not the ones the final table shows",%0A+ ]%0A%0A ❯ src/test/zzRvWorld.test.ts:212:19%0A%0A
