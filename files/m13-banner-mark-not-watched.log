@@ -1,0 +1,113 @@
+side a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/sonner/dist/index.mjs:2:8406
+    at Toaster (/home/runner/work/ballpark-hero/ballpark-hero/src/components/ui/sonner.tsx:54:23)
+Warning: An update to ForwardRef inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/sonner/dist/index.mjs:2:8406
+    at Toaster (/home/runner/work/ballpark-hero/ballpark-hero/src/components/ui/sonner.tsx:54:23)
+
+stderr | src/test/toastClearsCookieBanner.test.tsx > the toasts and the cookie banner > the mark alone, with no banner on the page, lifts nothing
+Warning: An update to ForwardRef inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/sonner/dist/index.mjs:2:8406
+    at Toaster (/home/runner/work/ballpark-hero/ballpark-hero/src/components/ui/sonner.tsx:54:23)
+Warning: An update to ForwardRef inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/sonner/dist/index.mjs:2:8406
+    at Toaster (/home/runner/work/ballpark-hero/ballpark-hero/src/components/ui/sonner.tsx:54:23)
+Warning: An update to ForwardRef inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/sonner/dist/index.mjs:2:8406
+    at Toaster (/home/runner/work/ballpark-hero/ballpark-hero/src/components/ui/sonner.tsx:54:23)
+Warning: An update to ForwardRef inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/sonner/dist/index.mjs:2:8406
+    at Toaster (/home/runner/work/ballpark-hero/ballpark-hero/src/components/ui/sonner.tsx:54:23)
+Warning: An update to ForwardRef inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/sonner/dist/index.mjs:2:8406
+    at Toaster (/home/runner/work/ballpark-hero/ballpark-hero/src/components/ui/sonner.tsx:54:23)
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stderr | src/test/storageBlockedBoot.test.tsx > the storage notice > storage full: the line is there on the first render of a game page, and the home page asks nothing
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/toastClearsCookieBanner.test.tsx > the toasts and the cookie banner > anchor above the banner while it is up, by its measured height and a gap, and go back when it is answered
+AssertionError: expected 'calc(6rem + env(safe-area-inset-botto…' to be 'max(calc(6rem + env(safe-area-inset-b…' // Object.is equality
+
+Expected: "max(calc(6rem + env(safe-area-inset-bottom, 0px)), 155px)"
+Received: "calc(6rem + env(safe-area-inset-bottom, 0px))"
+
+ ❯ src/test/toastClearsCookieBanner.test.tsx:64:28
+     62|     await act(async () => { document.body.dataset.consentPending = '1'…
+     63|     await settle();
+     64|     expect(anchor().phone).toBe(`max(${RESTING}, 155px)`);
+       |                            ^
+     65|     expect(anchor().wide).toBe('155px');
+     66|     /* answered: the mark goes and so does the lift */
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

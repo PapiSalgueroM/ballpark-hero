@@ -1,0 +1,340 @@
+[
+ {
+  "name": "baseline",
+  "file": null,
+  "vitest": 0,
+  "failedFiles": [],
+  "failedTests": [],
+  "summary": "Tests  151 passed (151)",
+  "ssw": 0,
+  "stale": 0,
+  "caught": false
+ },
+ {
+  "name": "m01-seam-accept-does-not-unlearn",
+  "file": "src/lib/safeStorage.ts",
+  "vitest": 1,
+  "failedFiles": [
+   "src/test/safeStorage.test.ts"
+  ],
+  "failedTests": [
+   "× safeStorage: a refusal is taken back when the browser takes a write again > a write through the seam that the browser takes unlearns full, a session write does not 14ms",
+   "FAIL  src/test/safeStorage.test.ts > safeStorage: a refusal is taken back when the browser takes a write again > a write through the seam that the browser takes unlearns full, a session write does not"
+  ],
+  "summary": "Tests  1 failed | 150 passed (151)",
+  "ssw": 0,
+  "stale": 0,
+  "caught": true
+ },
+ {
+  "name": "m02-safeSetItem-does-not-unlearn",
+  "file": "src/lib/safeStorage.ts",
+  "vitest": 1,
+  "failedFiles": [
+   "src/test/safeStorage.test.ts"
+  ],
+  "failedTests": [
+   "× safeStorage: a refusal is taken back when the browser takes a write again > a safeSetItem the browser takes unlearns full 20ms",
+   "FAIL  src/test/safeStorage.test.ts > safeStorage: a refusal is taken back when the browser takes a write again > a safeSetItem the browser takes unlearns full"
+  ],
+  "summary": "Tests  1 failed | 150 passed (151)",
+  "ssw": 0,
+  "stale": 0,
+  "caught": true
+ },
+ {
+  "name": "m03-recheck-unlearns-on-refusal",
+  "file": "src/lib/safeStorage.ts",
+  "vitest": 1,
+  "failedFiles": [
+   "src/test/safeStorage.test.ts",
+   "src/test/storageNoticeFollows.test.tsx"
+  ],
+  "failedTests": [
+   "× safeStorage: a refusal is taken back when the browser takes a write again > recheckStorageWrites unlearns full with one write and one remove of the probe key 14ms",
+   "× safeStorage: a refusal is taken back when the browser takes a write again > tells a listener once when the answer changes, a moment later, and not after it has left 3ms",
+   "× the storage line follows the seam > leaves on the same page once the browser takes writes again, and its place stays 67ms",
+   "FAIL  src/test/safeStorage.test.ts > safeStorage: a refusal is taken back when the browser takes a write again > recheckStorageWrites unlearns full with one write and one remove of the probe key",
+   "FAIL  src/test/safeStorage.test.ts > safeStorage: a refusal is taken back when the browser takes a write again > tells a listener once when the answer changes, a moment later, and not after it has lef",
+   "FAIL  src/test/storageNoticeFollows.test.tsx > the storage line follows the seam > leaves on the same page once the browser takes writes again, and its place stays"
+  ],
+  "summary": "Tests  3 failed | 148 passed (151)",
+  "ssw": 0,
+  "stale": 0,
+  "caught": true
+ },
+ {
+  "name": "m04-settle-counts-last-only",
+  "file": "src/lib/safeStorage.ts",
+  "vitest": 1,
+  "failedFiles": [
+   "src/test/safeStorage.test.ts"
+  ],
+  "failedTests": [
+   "× safeStorage: a refused save is held against a reload > retries each waiting save once, and holds the reload while one is still refused 13ms",
+   "× safeStorage: a refused save is held against a reload > a retry that throws counts as still refused, and does not stop the next one being tried 5ms",
+   "FAIL  src/test/safeStorage.test.ts > safeStorage: a refused save is held against a reload > retries each waiting save once, and holds the reload while one is still refused",
+   "FAIL  src/test/safeStorage.test.ts > safeStorage: a refused save is held against a reload > a retry that throws counts as still refused, and does not stop the next one being tried"
+  ],
+  "summary": "Tests  2 failed | 149 passed (151)",
+  "ssw": 0,
+  "stale": 0,
+  "caught": true
+ },
+ {
+  "name": "m05-settle-throw-counts-saved",
+  "file": "src/lib/safeStorage.ts",
+  "vitest": 1,
+  "failedFiles": [
+   "src/test/safeStorage.test.ts"
+  ],
+  "failedTests": [
+   "× safeStorage: a refused save is held against a reload > a retry that throws counts as still refused, and does not stop the next one being tried 9ms",
+   "FAIL  src/test/safeStorage.test.ts > safeStorage: a refused save is held against a reload > a retry that throws counts as still refused, and does not stop the next one being tried"
+  ],
+  "summary": "Tests  1 failed | 150 passed (151)",
+  "ssw": 0,
+  "stale": 0,
+  "caught": true
+ },
+ {
+  "name": "m06-newbuild-check-not-held",
+  "file": "src/lib/freshBuild.ts",
+  "vitest": 1,
+  "failedFiles": [
+   "src/test/freshBuildBlockedStorage.test.ts"
+  ],
+  "failedTests": [
+   "× the new build reload on focus > a save the browser still refuses: sees the new build and stays, then reloads once the save has gone through 16ms",
+   "FAIL  src/test/freshBuildBlockedStorage.test.ts > the new build reload on focus > a save the browser still refuses: sees the new build and stays, then reloads once the save has gone through"
+  ],
+  "summary": "Tests  1 failed | 150 passed (151)",
+  "ssw": 0,
+  "stale": 1,
+  "caught": true
+ },
+ {
+  "name": "m07-tile-reload-not-held-in-lib",
+  "file": "src/lib/freshBuild.ts",
+  "vitest": 1,
+  "failedFiles": [
+   "src/test/freshBuildBlockedStorage.test.ts"
+  ],
+  "failedTests": [
+   "× the stale chunk reload > a save the browser still refuses: retried once, no reload, and the once flag is not spent 10ms",
+   "× the stale chunk reload > a save that goes through on that one retry: the reload the player asked for goes ahead 4ms",
+   "FAIL  src/test/freshBuildBlockedStorage.test.ts > the stale chunk reload > a save the browser still refuses: retried once, no reload, and the once flag is not spent",
+   "FAIL  src/test/freshBuildBlockedStorage.test.ts > the stale chunk reload > a save that goes through on that one retry: the reload the player asked for goes ahead"
+  ],
+  "summary": "Tests  2 failed | 149 passed (151)",
+  "ssw": 0,
+  "stale": 1,
+  "caught": true
+ },
+ {
+  "name": "m08-no-recheck-after-click",
+  "file": "src/components/StorageNotice.tsx",
+  "vitest": 1,
+  "failedFiles": [
+   "src/test/storageNoticeFollows.test.tsx"
+  ],
+  "failedTests": [
+   "× the storage line follows the seam > leaves on the same page once the browser takes writes again, and its place stays 73ms",
+   "× the storage line follows the seam > comes back in the same place when a write is refused again, and the place is given up on the next page 16ms",
+   "× the storage line follows the seam > presses close together share one check, and nothing is asked without a press 10ms",
+   "FAIL  src/test/storageNoticeFollows.test.tsx > the storage line follows the seam > leaves on the same page once the browser takes writes again, and its place stays",
+   "FAIL  src/test/storageNoticeFollows.test.tsx > the storage line follows the seam > comes back in the same place when a write is refused again, and the place is given up on the next page",
+   "FAIL  src/test/storageNoticeFollows.test.tsx > the storage line follows the seam > presses close together share one check, and nothing is asked without a press"
+  ],
+  "summary": "Tests  3 failed | 148 passed (151)",
+  "ssw": 0,
+  "stale": 0,
+  "caught": true
+ },
+ {
+  "name": "m09-no-recheck-on-tab-return",
+  "file": "src/components/StorageNotice.tsx",
+  "vitest": 1,
+  "failedFiles": [
+   "src/test/storageNoticeFollows.test.tsx"
+  ],
+  "failedTests": [
+   "× the storage line follows the seam > asks again when the tab comes back 24ms",
+   "FAIL  src/test/storageNoticeFollows.test.tsx > the storage line follows the seam > asks again when the tab comes back"
+  ],
+  "summary": "Tests  1 failed | 150 passed (151)",
+  "ssw": 0,
+  "stale": 0,
+  "caught": true
+ },
+ {
+  "name": "m10-no-spacer-page-jumps",
+  "file": "src/components/StorageNotice.tsx",
+  "vitest": 1,
+  "failedFiles": [
+   "src/test/storageNoticeFollows.test.tsx"
+  ],
+  "failedTests": [
+   "× the storage line follows the seam > leaves on the same page once the browser takes writes again, and its place stays 111ms",
+   "× the storage line follows the seam > comes back in the same place when a write is refused again, and the place is given up on the next page 56ms",
+   "FAIL  src/test/storageNoticeFollows.test.tsx > the storage line follows the seam > leaves on the same page once the browser takes writes again, and its place stays",
+   "FAIL  src/test/storageNoticeFollows.test.tsx > the storage line follows the seam > comes back in the same place when a write is refused again, and the place is given up on the next page"
+  ],
+  "summary": "Tests  2 failed | 149 passed (151)",
+  "ssw": 0,
+  "stale": 0,
+  "caught": true
+ },
+ {
+  "name": "m11-toast-gap-sign",
+  "file": "src/components/ui/sonner.tsx",
+  "vitest": 1,
+  "failedFiles": [
+   "src/test/toastClearsCookieBanner.test.tsx"
+  ],
+  "failedTests": [
+   "× the toasts and the cookie banner > anchor above the banner while it is up, by its measured height and a gap, and go back when it is answered 57ms",
+   "× the toasts and the cookie banner > a banner that is already up when the page mounts is cleared from the first toast 31ms",
+   "FAIL  src/test/toastClearsCookieBanner.test.tsx > the toasts and the cookie banner > anchor above the banner while it is up, by its measured height and a gap, and go back when it is answered",
+   "FAIL  src/test/toastClearsCookieBanner.test.tsx > the toasts and the cookie banner > a banner that is already up when the page mounts is cleared from the first toast"
+  ],
+  "summary": "Tests  2 failed | 149 passed (151)",
+  "ssw": 0,
+  "stale": 0,
+  "caught": true
+ },
+ {
+  "name": "m12-no-desktop-offset",
+  "file": "src/components/ui/sonner.tsx",
+  "vitest": 1,
+  "failedFiles": [
+   "src/test/toastClearsCookieBanner.test.tsx"
+  ],
+  "failedTests": [
+   "× the toasts and the cookie banner > anchor above the banner while it is up, by its measured height and a gap, and go back when it is answered 35ms",
+   "× the toasts and the cookie banner > a banner that is already up when the page mounts is cleared from the first toast 17ms",
+   "FAIL  src/test/toastClearsCookieBanner.test.tsx > the toasts and the cookie banner > anchor above the banner while it is up, by its measured height and a gap, and go back when it is answered",
+   "FAIL  src/test/toastClearsCookieBanner.test.tsx > the toasts and the cookie banner > a banner that is already up when the page mounts is cleared from the first toast"
+  ],
+  "summary": "Tests  2 failed | 149 passed (151)",
+  "ssw": 0,
+  "stale": 0,
+  "caught": true
+ },
+ {
+  "name": "m13-banner-mark-not-watched",
+  "file": "src/components/ui/sonner.tsx",
+  "vitest": 1,
+  "failedFiles": [
+   "src/test/toastClearsCookieBanner.test.tsx"
+  ],
+  "failedTests": [
+   "× the toasts and the cookie banner > anchor above the banner while it is up, by its measured height and a gap, and go back when it is answered 33ms",
+   "FAIL  src/test/toastClearsCookieBanner.test.tsx > the toasts and the cookie banner > anchor above the banner while it is up, by its measured height and a gap, and go back when it is answered"
+  ],
+  "summary": "Tests  1 failed | 150 passed (151)",
+  "ssw": 0,
+  "stale": 0,
+  "caught": true
+ },
+ {
+  "name": "m14-board-hold-always-settled",
+  "file": "src/components/us-career/UsCareerBoard.tsx",
+  "vitest": 1,
+  "failedFiles": [
+   "src/test/usSeasonCentreEntry.test.tsx"
+  ],
+  "failedTests": [
+   "× 'NBA' My Career: watching changes nothing > the tile stays and says why when its Reload would lose a save the device refused 54ms",
+   "FAIL  src/test/usSeasonCentreEntry.test.tsx > 'NBA' My Career: watching changes nothing > the tile stays and says why when its Reload would lose a save the device refused"
+  ],
+  "summary": "Tests  1 failed | 150 passed (151)",
+  "ssw": 0,
+  "stale": 0,
+  "caught": true
+ },
+ {
+  "name": "m15-toast-press-closes-toast",
+  "file": "src/components/us-career/UsCareerBoard.tsx",
+  "vitest": 1,
+  "failedFiles": [
+   "src/test/usSeasonCentreEntry.test.tsx"
+  ],
+  "failedTests": [
+   "× 'NBA' My Career: watching changes nothing > with the viewer open over a refused save, the toast carries a Retry that saves the season from there 76ms",
+   "FAIL  src/test/usSeasonCentreEntry.test.tsx > 'NBA' My Career: watching changes nothing > with the viewer open over a refused save, the toast carries a Retry that saves the season from there"
+  ],
+  "summary": "Tests  1 failed | 150 passed (151)",
+  "ssw": 0,
+  "stale": 0,
+  "caught": true
+ },
+ {
+  "name": "m16-toast-four-seconds",
+  "file": "src/components/us-career/UsCareerBoard.tsx",
+  "vitest": 1,
+  "failedFiles": [
+   "src/test/usSeasonCentreEntry.test.tsx"
+  ],
+  "failedTests": [
+   "× 'NBA' My Career: watching changes nothing > with the viewer open over a refused save, the toast carries a Retry that saves the season from there 71ms",
+   "FAIL  src/test/usSeasonCentreEntry.test.tsx > 'NBA' My Career: watching changes nothing > with the viewer open over a refused save, the toast carries a Retry that saves the season from there"
+  ],
+  "summary": "Tests  1 failed | 150 passed (151)",
+  "ssw": 0,
+  "stale": 0,
+  "caught": true
+ },
+ {
+  "name": "m17-tile-does-not-ask",
+  "file": "src/components/us-career/season/UsSeasonCentreHost.tsx",
+  "vitest": 1,
+  "failedFiles": [
+   "src/test/usSeasonCentreEntry.test.tsx"
+  ],
+  "failedTests": [
+   "× 'NBA' My Career: watching changes nothing > the tile stays and says why when its Reload would lose a save the device refused 57ms",
+   "FAIL  src/test/usSeasonCentreEntry.test.tsx > 'NBA' My Career: watching changes nothing > the tile stays and says why when its Reload would lose a save the device refused"
+  ],
+  "summary": "Tests  1 failed | 150 passed (151)",
+  "ssw": 0,
+  "stale": 0,
+  "caught": true
+ },
+ {
+  "name": "m18-recheck-in-ordinary-browser",
+  "file": "src/lib/safeStorage.ts",
+  "vitest": 1,
+  "failedFiles": [
+   "src/test/safeStorage.test.ts"
+  ],
+  "failedTests": [
+   "× safeStorage: a refusal is taken back when the browser takes a write again > in a browser that stores normally a recheck writes nothing, however often it is asked 11ms",
+   "× safeStorage: a refusal is taken back when the browser takes a write again > a recheck before anything was refused does not stand in for the probe 12ms",
+   "FAIL  src/test/safeStorage.test.ts > safeStorage: a refusal is taken back when the browser takes a write again > in a browser that stores normally a recheck writes nothing, however often it is asked",
+   "FAIL  src/test/safeStorage.test.ts > safeStorage: a refusal is taken back when the browser takes a write again > a recheck before anything was refused does not stand in for the probe"
+  ],
+  "summary": "Tests  2 failed | 149 passed (151)",
+  "ssw": 1,
+  "stale": 0,
+  "caught": true
+ },
+ {
+  "name": "m19-mobile-offset-ignores-banner",
+  "file": "src/components/ui/sonner.tsx",
+  "vitest": 1,
+  "failedFiles": [
+   "src/test/toastClearsCookieBanner.test.tsx"
+  ],
+  "failedTests": [
+   "× the toasts and the cookie banner > anchor above the banner while it is up, by its measured height and a gap, and go back when it is answered 48ms",
+   "× the toasts and the cookie banner > a banner that is already up when the page mounts is cleared from the first toast 24ms",
+   "FAIL  src/test/toastClearsCookieBanner.test.tsx > the toasts and the cookie banner > anchor above the banner while it is up, by its measured height and a gap, and go back when it is answered",
+   "FAIL  src/test/toastClearsCookieBanner.test.tsx > the toasts and the cookie banner > a banner that is already up when the page mounts is cleared from the first toast"
+  ],
+  "summary": "Tests  2 failed | 149 passed (151)",
+  "ssw": 0,
+  "stale": 0,
+  "caught": true
+ }
+]

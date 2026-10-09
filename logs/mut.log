@@ -1,0 +1,22 @@
+baseline: vitest=0 ssw=0 stale=0  | Tests  151 passed (151) | 
+m01-seam-accept-does-not-unlearn: vitest=1 ssw=0 stale=0 CAUGHT | Tests  1 failed | 150 passed (151) | src/test/safeStorage.test.ts
+m02-safeSetItem-does-not-unlearn: vitest=1 ssw=0 stale=0 CAUGHT | Tests  1 failed | 150 passed (151) | src/test/safeStorage.test.ts
+m03-recheck-unlearns-on-refusal: vitest=1 ssw=0 stale=0 CAUGHT | Tests  3 failed | 148 passed (151) | src/test/safeStorage.test.ts, src/test/storageNoticeFollows.test.tsx
+m04-settle-counts-last-only: vitest=1 ssw=0 stale=0 CAUGHT | Tests  2 failed | 149 passed (151) | src/test/safeStorage.test.ts
+m05-settle-throw-counts-saved: vitest=1 ssw=0 stale=0 CAUGHT | Tests  1 failed | 150 passed (151) | src/test/safeStorage.test.ts
+m06-newbuild-check-not-held: vitest=1 ssw=0 stale=1 CAUGHT | Tests  1 failed | 150 passed (151) | src/test/freshBuildBlockedStorage.test.ts
+m07-tile-reload-not-held-in-lib: vitest=1 ssw=0 stale=1 CAUGHT | Tests  2 failed | 149 passed (151) | src/test/freshBuildBlockedStorage.test.ts
+m08-no-recheck-after-click: vitest=1 ssw=0 stale=0 CAUGHT | Tests  3 failed | 148 passed (151) | src/test/storageNoticeFollows.test.tsx
+m09-no-recheck-on-tab-return: vitest=1 ssw=0 stale=0 CAUGHT | Tests  1 failed | 150 passed (151) | src/test/storageNoticeFollows.test.tsx
+m10-no-spacer-page-jumps: vitest=1 ssw=0 stale=0 CAUGHT | Tests  2 failed | 149 passed (151) | src/test/storageNoticeFollows.test.tsx
+m11-toast-gap-sign: vitest=1 ssw=0 stale=0 CAUGHT | Tests  2 failed | 149 passed (151) | src/test/toastClearsCookieBanner.test.tsx
+m12-no-desktop-offset: vitest=1 ssw=0 stale=0 CAUGHT | Tests  2 failed | 149 passed (151) | src/test/toastClearsCookieBanner.test.tsx
+m13-banner-mark-not-watched: vitest=1 ssw=0 stale=0 CAUGHT | Tests  1 failed | 150 passed (151) | src/test/toastClearsCookieBanner.test.tsx
+m14-board-hold-always-settled: vitest=1 ssw=0 stale=0 CAUGHT | Tests  1 failed | 150 passed (151) | src/test/usSeasonCentreEntry.test.tsx
+m15-toast-press-closes-toast: vitest=1 ssw=0 stale=0 CAUGHT | Tests  1 failed | 150 passed (151) | src/test/usSeasonCentreEntry.test.tsx
+m16-toast-four-seconds: vitest=1 ssw=0 stale=0 CAUGHT | Tests  1 failed | 150 passed (151) | src/test/usSeasonCentreEntry.test.tsx
+m17-tile-does-not-ask: vitest=1 ssw=0 stale=0 CAUGHT | Tests  1 failed | 150 passed (151) | src/test/usSeasonCentreEntry.test.tsx
+m18-recheck-in-ordinary-browser: vitest=1 ssw=1 stale=0 CAUGHT | Tests  2 failed | 149 passed (151) | src/test/safeStorage.test.ts
+m19-mobile-offset-ignores-banner: vitest=1 ssw=0 stale=0 CAUGHT | Tests  2 failed | 149 passed (151) | src/test/toastClearsCookieBanner.test.tsx
+tree after: clean
+rr-mut: 19 mutations, 0 survived the unit tests and static sims

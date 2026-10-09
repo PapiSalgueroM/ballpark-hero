@@ -1,0 +1,157 @@
+tjs.org/link/wrap-tests-with-act
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/sonner/dist/index.mjs:2:8406
+    at Toaster (/home/runner/work/ballpark-hero/ballpark-hero/src/components/ui/sonner.tsx:60:23)
+
+stderr | src/test/toastClearsCookieBanner.test.tsx > the toasts and the cookie banner > the mark alone, with no banner on the page, lifts nothing
+Warning: An update to ForwardRef inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/sonner/dist/index.mjs:2:8406
+    at Toaster (/home/runner/work/ballpark-hero/ballpark-hero/src/components/ui/sonner.tsx:60:23)
+Warning: An update to ForwardRef inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/sonner/dist/index.mjs:2:8406
+    at Toaster (/home/runner/work/ballpark-hero/ballpark-hero/src/components/ui/sonner.tsx:60:23)
+Warning: An update to ForwardRef inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/sonner/dist/index.mjs:2:8406
+    at Toaster (/home/runner/work/ballpark-hero/ballpark-hero/src/components/ui/sonner.tsx:60:23)
+Warning: An update to ForwardRef inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/sonner/dist/index.mjs:2:8406
+    at Toaster (/home/runner/work/ballpark-hero/ballpark-hero/src/components/ui/sonner.tsx:60:23)
+Warning: An update to ForwardRef inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/sonner/dist/index.mjs:2:8406
+    at Toaster (/home/runner/work/ballpark-hero/ballpark-hero/src/components/ui/sonner.tsx:60:23)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/storageNoticeFollows.test.tsx > the storage line follows the seam > leaves on the same page once the browser takes writes again, and its place stays
+AssertionError: expected <p role="status" …(4)>…(2)</p> to be null
+
+- Expected: 
+null
+
++ Received: 
+<p
+  class="mx-auto max-w-3xl px-3 py-1 text-center text-xs leading-5 text-muted-foreground"
+  data-dukb-storage-notice="full"
+  data-no-prerender=""
+  data-site-chrome=""
+  role="status"
+>
+  <span
+    class="sm:hidden"
+  >
+    Storage is full, so progress won't save.
+  </span>
+  <span
+    class="hidden sm:inline"
+  >
+    This browser's storage is full, so progress won't be saved.
+     
+    You can still play everything.
+  </span>
+</p>
+
+ ❯ src/test/storageNoticeFollows.test.tsx:71:20
+     69|     full.mockRestore();
+     70|     await pressAndWait(wait);
+     71|     expect(line()).toBeNull();
+       |                    ^
+     72|     /* the page must not jump: the same words keep the line's place, u…
+     73|     const kept = place();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/test/storageNoticeFollows.test.tsx > the storage line follows the seam > comes back in the same place when a write is refused again, and the place is given up on the next page
+AssertionError: expected <p role="status" …(4)>…(2)</p> to be null
+
+- Expected: 
+null
+
++ Received: 
+<p
+  class="mx-auto max-w-3xl px-3 py-1 text-center text-xs leading-5 text-muted-foreground"
+  data-dukb-storage-notice="full"
+  data-no-prerender=""
+  data-site-chrome=""
+  role="status"
+>
+  <span
+    class="sm:hidden"
+  >
+    Storage is full, so progress won't save.
+  </span>
+  <span
+    class="hidden sm:inline"
+  >
+    This browser's storage is full, so progress won't be saved.
+     
+    You can still play everything.
+  </span>
+</p>
+
+ ❯ src/test/storageNoticeFollows.test.tsx:88:20
+     86|     full.mockRestore();
+     87|     await pressAndWait(wait);
+     88|     expect(line()).toBeNull();
+       |                    ^
+     89|     expect(place()).not.toBeNull();
+     90|     /* a write refused later on the same page: the seam says so and th…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/test/storageNoticeFollows.test.tsx > the storage line follows the seam > presses close together share one check, and nothing is asked without a press
+AssertionError: expected "setItem" to be called 2 times, but got 1 times
+ ❯ src/test/storageNoticeFollows.test.tsx:125:18
+    123|       await Promise.resolve();
+    124|     });
+    125|     expect(full).toHaveBeenCalledTimes(2);
+       |                  ^
+    126|     expect(full.mock.calls.every(c => c[0] === PROBE)).toBe(true);
+    127|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
