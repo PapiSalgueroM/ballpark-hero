@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simSingleFooter: node scripts/simSingleFooter.mjs
+simHomeCopy: node scripts/simHomeCopy.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simAdsense: node scripts/simAdsense.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+vitest: node_modules/.bin/vitest run src/data/gameRegistry.test.ts src/pages/NotFound.test.tsx src/test/footleClueDesk.test.tsx src/test/footlePractice.test.tsx --testTimeout=300000 --hookTimeout=120000
