@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import PageSeo from '@/components/seo/PageSeo';
+import { GAME_COUNT_LABEL } from '@/data/gameRegistry';
 
 const WhatsNew = () => {
   return (
@@ -413,7 +414,7 @@ const WhatsNew = () => {
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">Spring 2026</h2>
           <ul className="list-disc pl-5 space-y-2">
-            <li>DoUKnowBall launched with the first wave of daily soccer games. It has grown to eleven sports and over 100 games since, and it is still growing.</li>
+            <li>DoUKnowBall launched with the first wave of daily soccer games. It has grown to eleven sports and {GAME_COUNT_LABEL} games since, and it is still growing.</li>
           </ul>
         </div>
 
@@ -423,15 +424,6 @@ const WhatsNew = () => {
           </p>
         </div>
       </section>
-
-      <div className="mt-16 pt-8 border-t border-border text-center text-xs text-muted-foreground space-y-2">
-        <p>All team names, logos and trademarks are property of their respective owners. DoUKnowBall is not affiliated with the NFL, NBA, UFC, NHL, MLB, FIFA, IOC, NCAA, F1, PGA Tour, NASCAR, ATP or WTA. © 2026 DoUKnowBall</p>
-        <div className="flex items-center justify-center gap-3">
-          <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link>
-          <span>·</span>
-          <Link to="/terms" className="underline hover:text-foreground transition-colors">Terms of Service</Link>
-        </div>
-      </div>
     </div>
   );
 };

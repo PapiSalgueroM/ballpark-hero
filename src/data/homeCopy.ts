@@ -21,14 +21,22 @@
  * is missing any of it.
  *
  * RULES, the same ones the template block always had. Nothing here may be a
- * figure that goes stale: counts are FLOORS ("120+", "more than thirty"), and
+ * figure that goes stale: counts are FLOORS ("more than thirty"), and
  * simHomeCopy checks each one against the registry. Every link is a real route
  * in src/App.tsx. No dates, no results, nothing picked at random, nothing
  * computed from a clock: this is plain data.
  *
+ * Round 1143: the one count of the whole site is not typed here any more. It
+ * is GAME_COUNT_LABEL, the registry's own rounded floor, the same one the hero
+ * line above the tiles prints, so the two can never disagree on one screen
+ * again (they did: "130+" at the top and "120+" down here). The template gets
+ * the number as a literal when the generator runs, so the day the label moves
+ * up a ten, simHomeCopy part 6 goes red until the generator is rerun.
+ *
  * EDITING. Change the words here, then run node scripts/genHomeCopy.mjs and
  * commit index.html with it. Never hand edit the generated block.
  */
+import { GAME_COUNT_LABEL } from '@/data/gameRegistry';
 
 /** A link inside a line of copy. Always an internal route. */
 export interface HomeCopyLink {
@@ -77,7 +85,7 @@ export const HOME_COPY: HomeCopy = {
   h1: 'DoUKnowBall',
   aboutHeading: 'About DoUKnowBall',
   intro: [
-    '120+ free sports games in the browser: sports trivia, daily quizzes, grid puzzles and career sims. Every game plays without an account, nothing to download or install. New games and content ship almost every week, and the daily quizzes and puzzles reset for everyone at the same time, so you and everyone else get the same board.',
+    `${GAME_COUNT_LABEL} free sports games in the browser: sports trivia, daily quizzes, grid puzzles and career sims. Every game plays without an account, nothing to download or install. New games and content ship almost every week, and the daily quizzes and puzzles reset for everyone at the same time, so you and everyone else get the same board.`,
   ],
   sections: [
     {
