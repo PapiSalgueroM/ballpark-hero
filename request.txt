@@ -1,0 +1,4 @@
+simUsCareerSummer: node scripts/simUsCareerSummer.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+anchors: node scripts/simHarnessAnchors.mjs
+norival: node scripts/simNoRivalNames.mjs
