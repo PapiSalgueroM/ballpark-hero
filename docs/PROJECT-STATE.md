@@ -1,3 +1,55 @@
+## Release AO LIVE, 2026-10-09 02:01 EDT: whole leagues and a moving Season Centre in Soccer Career, a match that moves and Russia in Club Manager, sound, nine rounds
+
+Claude lane (session F). main 23bde474, deployment 4b5ab6cb-16b7-4d42-9f12-c66e91ac8178, entry index-Du6HhEY3.js (was
+index-D7bFwkA9.js, Release AN, published 16:57 on 2026-10-08). Proof at 02:02: x-deployment-id carries 4b5ab6cb;
+/club-manager's saved page lists Zenit and Spartak Moscow; /whats-new carries the Russian Premier League, the match
+day, the sound and the whole league lines. Third publish in 21 hours (AL 05:38, AN 16:57, AO 02:01).
+
+What shipped (nine rounds of this lane, integrated on origin/release-ao-int, two adversarial reviewers: ship):
+- Round 1100: every league a real league in Soccer Career (whole leagues to sign for, a league position in every
+  plain league, a real table in Week by week).
+- Round 1046: the Season Centre moves (the table slides, goals play on a pitch, past seasons replay).
+- Round 1107: the career moment kit, part A (the signing scene and the cup lift).
+- Round 1101: Club Manager match day in motion (a shared pitch part in src/components/pitch-motion/, both teams
+  hold their shape around the ball, goals play out before the score changes, the match fills a phone's screen).
+- Round 1052: the Russian Premier League in Club Manager: 16 clubs, 403 players, 27 leagues and 454 clubs now.
+  RUSSIA ONLY: Argentina was never started. Ten rows ship the one detailed position a source states and are marked
+  thin (CM_RUSSIA_POSITION_THIN); 18 real men are held out; the clubs join the dailies on 2026-11-07.
+- Round 1132: sound, one shared kit and a switch that is off until he turns it on (header on desktop, footer link
+  on a phone).
+- Round 1130: NFL Front Office, one rating per man.
+- Round 1051: the Hall of Fame ballot weighs the whole career (calibration 2, an old retired save keeps its ballot).
+- Round 1138: search and validator safety, with a committed check for the instant search row on College Grid.
+
+Gates in dukb-gate on 012fd956. The first run stopped at "build red": the prerender timed out on ONE route of 177
+(/fight-promoter, a page load under load); it was redrawn alone (green) and the build finished by hand. Run a2:
+lane A 70 green, lane B 44 of 44, lane C 28 of 28, 34 of 37 browser lines, the WHOLE vitest suite 350 files 4,931
+tests. Rerun alone and green: playSeasonReveal, simTactics, simPlayerSearchFailure, sweepWeight after thirteen
+budgets were set from the measurement (the home page 239K; /soccer-career 778K, up 11K with the club pool, the
+moving Season Centre and the moment kit; /club-manager 576K; /manager-hot-seat 593K, /deadline-day 603K,
+/transfer-path 374K with Russia). simMobileChrome: 114 of 114 scroll stops green, one page load timeout in its top
+bar section (green on a runner on the same code). Live pass once: simReportRelay and simScoringCoverage green.
+Build output 23bde474's parent: fourteen saved pages (every page that names Club Manager's size), the sitemap, the
+ledger.
+
+Known and left for follow ups: every daily of Manager Hot Seat and Deadline Day keeps its club, league and seed but
+simulates in a bigger world after this release (as with Round 1040); the live match's own help line states the goal
+rule absolutely (LiveSimScreen.tsx line 374, three cases differ); a phone has no header sound switch; Round 1107
+ships scene code that nothing calls yet (part B); /soccer-career's club pool should load on demand (11K heavier).
+
+### For Codex
+1. Release AO is on main at 23bde474 and live. Open follow up branches from main.
+2. Owed to your held files, exact places: src/lib/sportHub.ts line 134 says "hundreds of real clubs across twenty
+   leagues" and the engine has 27 leagues and 454 clubs; src/data/gameContent/soccer2.ts line 1224, the Build Your
+   XI answer, is stale for club picks since Round 1138; the NBA guide sentences for Round 1048 (shipped in AN) and
+   the four Hall of Fame sentences for Round 1051 (shipped now; .claude/worktrees/r1051/.tmp-fx/sentences.txt).
+3. LiveSimScreen.tsx carries Round 1101's layout around the shared pitch as agreed; your 1072 and 1079 hunks and
+   their tests are as merged. The pitch part's contract is src/components/pitch-motion/contract.ts.
+4. Your 1095, 1097, 1098 and 1099 are next as a train: say READY for each and I integrate, review, gate and
+   publish. 1097's score cap migration is mine to verify and apply before it ships.
+5. This lane's usage for the week is at about 77 percent with five and a half days to its reset, so after this it
+   slows down: releases first, few new builds.
+
 ## Release AN LIVE, 2026-10-08 16:57 EDT: the site opens with storage blocked, translated pages stay live, six Codex rounds, five rounds of this lane
 
 Claude lane (session F). main 7ead9eb4, deployment aa7da32f-e499-418f-bd14-ec0201673437, entry index-D7bFwkA9.js (was
