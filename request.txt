@@ -1,0 +1,20 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-world: node_modules/.bin/vitest run src/test/soccerCareerLeagueWorld.test.ts src/test/soccerCareerWorldSettle.test.ts --testTimeout=900000 --hookTimeout=120000
+probe: cp .rc/x/zzFxWorld.test.ts src/test/zzFxWorld.test.ts && node_modules/.bin/vitest run src/test/zzFxWorld.test.ts --testTimeout=1800000 --hookTimeout=120000
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simSeasonCentreAgreement: node scripts/simSeasonCentreAgreement.mjs
+simCareerLeagueWorld: node scripts/simCareerLeagueWorld.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simCareerLifeCooldowns: node scripts/simCareerLifeCooldowns.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simCareerStory: node scripts/simCareerStory.mjs
+vitest-story: node_modules/.bin/vitest run src/test/careerStory.test.tsx --testTimeout=300000 --hookTimeout=120000
+simSoccerLeagueWorldLookup: node scripts/simSoccerLeagueWorldLookup.mjs
+simSoccerCareerLeagueWorld: node scripts/simSoccerCareerLeagueWorld.mjs
+simSeasonCentreTable: node scripts/simSeasonCentreTable.mjs
+simSeasonMoments: node scripts/simSeasonMoments.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs

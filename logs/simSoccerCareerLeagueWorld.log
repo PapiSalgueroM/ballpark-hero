@@ -1,0 +1,24 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerCareerLeagueWorld.test.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 2943[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career simulated promotion and relegation[2m > [22msettles the season a severe injury cut short and writes his club's move on the row [33m 373[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career simulated promotion and relegation[2m > [22mholds each division's count and each second division's clubs to Club Manager's own rows [33m 1737[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m17 passed[39m[22m[90m (17)[39m
+[2m   Start at [22m 14:58:57
+[2m   Duration [22m 5.89s[2m (transform 3.16s, setup 70ms, collect 2.03s, tests 2.94s, environment 396ms, prepare 120ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/league-world-tests.json
+file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerLeagueWorld.mjs:28
+  if (result.status !== 0 || result.assertions.length !== 11 || result.assertions.some(a => a.status !== 'passed')) throw new Error('future league world outcome tests failed or were skipped');
+                                                                                                                          ^
+
+Error: future league world outcome tests failed or were skipped
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerLeagueWorld.mjs:28:123
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.21.0

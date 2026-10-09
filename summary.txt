@@ -1,0 +1,20 @@
+vitest-world exit=0 21s |    Duration  19.91s (transform 4.49s, setup 186ms, collect 4.88s, tests 20.43s, environment 1.17s, prepare 813ms)
+simFlagshipWeight exit=0 1s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+simHarnessAnchors exit=0 43s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simSeasonCentreAgreement exit=0 24s | simSeasonCentreAgreement: 24 checks, 0 failed
+tsc exit=0 94s | 
+probe exit=1 102s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/zzFxWorld.test.ts,title=src/test/zzFxWorld.test.ts > reviewer probe%3A the simulated league world a pl
+simCareerAwardsNight exit=0 22s | simCareerAwardsNight: ALL 175 CHECKS PASSED
+simCareerDerbies exit=1 40s | simCareerDerbies: 4 failures, sections 3, 4 red
+simCareerLifeCooldowns exit=0 66s | simCareerLifeCooldowns: green. No event repeats inside its cooldown, every new event fires, the rate held, and the catalog has two real choices everywhere.
+simCareerLeagueFinish exit=1 14s | simCareerLeagueFinish: 2 failure(s) in section(s) 2, 4
+simCareerSocialBrands exit=1 14s | 1 FAILURE
+simCareerLeagueSeasons exit=1 34s | simCareerLeagueSeasons: 12 failures (sections c)
+vitest-story exit=1 9s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerStory.test.tsx,title=src/test/careerStory.test.tsx > Soccer Career%3A the story keeps the save s
+simCareerStory exit=1 35s | simCareerStory: RED, size
+simSoccerCareerLeagueWorld exit=1 7s | Node.js v24.21.0
+simSoccerLeagueWorldLookup exit=0 20s | simSoccerLeagueWorldLookup: identical full outcomes, deterministic lookup reduction, both effective controls caught
+simSeasonCentreTable exit=0 13s | simSeasonCentreTable: 7 checks, 0 failed
+simSeasonMoments exit=0 18s | simSeasonMoments: 54 checks, 0 failed
+simNoRivalNames exit=0 14s | No rival product names found. 0 findings.
+simCareerLeagueWorld exit=0 529s | simCareerLeagueWorld: all sections green (527.9 s)
