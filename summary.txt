@@ -1,0 +1,5 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simSoccerCareerLeagueWorld exit=0 47s | simSoccerCareerLeagueWorld: seventeen outcome tests and two engine career tests green, all twelve effective negative controls caught
+worldtests exit=0 8s |    Duration  6.93s (transform 1.49s, setup 63ms, collect 1.82s, tests 7.01s, environment 381ms, prepare 151ms)
+fxworld exit=1 40s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/zzFxWorld.test.ts,title=src/test/zzFxWorld.test.ts > reviewer probe%3A the simulated league world a pl
+rvworld exit=1 38s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/zzRvWorld.test.ts,title=src/test/zzRvWorld.test.ts > reviewer probe%3A the simulated league world a pl

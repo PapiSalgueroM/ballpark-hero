@@ -1,0 +1,72 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/zzRvWorld.test.ts[2m > [22m[2mreviewer probe: the simulated league world a player reads[2m > [22m[2mholds its own promises over real careers
+[22m[39m[rv world] 300 careers, 3113 league world seasons (2995 with a final table, 2448 with derbies), his club went down 68 times (tier 3: 66, tier 4: 2) and up 48; largest save 142454 bytes
+[rv world] 8235 listed moves; relegated clubs by their pool tier: tier 1: 5, tier 2: 70, tier 3: 690, tier 4: 6810
+[rv world] big clubs in HIS top flight table, by whether they are his derby rival: other tier 1: 4989 club seasons, mean place 3.0, bottom half 0.1%, relegated 4 (0.1%) | other tier 2: 6803 club seasons, mean place 5.5, bottom half 2.3%, relegated 63 (0.9%) | rival tier 1: 1339 club seasons, mean place 3.3, bottom half 0.7%, relegated 1 (0.1%) | rival tier 2: 952 club seasons, mean place 6.9, bottom half 16.6%, relegated 2 (0.2%)
+[rv world] a big rival sent down 3 times: back in his league before he left it 3 times (mean 1.7 seasons away), not back 0 times (mean 0.0 more seasons watched)
+[rv world]    EXAMPLE 52132 2028 Chelsea: Tottenham (pool tier 2) placed 20 of 20 and went down; back after 3 seasons away
+[rv world]    EXAMPLE 52132 2039 Chelsea: Tottenham (pool tier 2) placed 20 of 20 and went down; back after 1 seasons away
+[rv world]    EXAMPLE 52192 2031 Man United: Man City (pool tier 1) placed 19 of 20 and went down; back after 1 seasons away
+[rv world] tier 1 clubs (not his) sent down: Arsenal x2, Man City x2, Chelsea x1
+[rv world] events: 22514 cards answered, 93 appeal results shown, 52 of them with cards still queued behind
+[rv world] stability: 3001 finished seasons derived at their summary and again at the end of the career, 4 drew a different final table; seasons without a world: 4048, 1377 different
+[rv world] BROKEN S0 the final table of a finished season WITHOUT a world is not the one he was shown at the summary: 1377 times
+[rv world]    52000 2022 West Ham: row fields changed since []; ctx then table//Tottenham/Man United now table//Tottenham/; then West Ham>Bournemouth>Southampton>Leeds United now West Ham>Bournemouth>Leeds United>Brentford
+[rv world]    52000 2023 West Ham: row fields changed since []; ctx then table//Tottenham/Chelsea now table//Tottenham/; then Wolves>Burnley>Sheffield United>Crystal Palace now Sheffield United>Fulham>Burnley>Crystal Palace
+[rv world]    52000 2024 West Ham: row fields changed since []; ctx then table//Tottenham/Man City now table//Tottenham/; then West Ham>Bournemouth>Crystal Palace>Ipswich Town now West Ham>Crystal Palace>Aston Villa>Brentford
+[rv world]    52000 2025 West Ham: row fields changed since []; ctx then table//Tottenham/Liverpool now table//Tottenham/; then Burnley>Crystal Palace>Bournemouth>Sunderland now Leeds United>Crystal Palace>Sunderland>Bournemouth
+[rv world]    52001 2026 Fenerbahce: row fields changed since []; ctx then table/// now table///; then Amedspor>Gaziantep FK>Konyaspor>Corum FK now Eyupspor>Amedspor>Gaziantep FK>Konyaspor
+[rv world]    52001 2027 Fenerbahce: row fields changed since []; ctx then table/// now table///; then Eyupspor>Gaziantep FK>Konyaspor>Corum FK now Kasimpasa>Eyupspor>Gaziantep FK>Konyaspor
+[rv world] BROKEN I2 next season's field is not this field after the listed moves: 2814 times
+[rv world]    52000 2027 West Ham (Premier League): next club West Ham, severe false, loan no, 3 moves listed (3 out, 0 in), in the next field but not expected [wolves,blackburn rovers,burnley], expected but gone []
+[rv world]    52000 2028 West Ham (Premier League): next club West Ham, severe false, loan no, 3 moves listed (3 out, 0 in), in the next field but not expected [brentford,swansea city,wrexham], expected but gone []
+[rv world]    52000 2029 West Ham (Premier League): next club West Ham, severe false, loan no, 3 moves listed (3 out, 0 in), in the next field but not expected [millwall,crystal palace,charlton athletic], expected but gone []
+[rv world]    52000 2030 West Ham (Premier League): next club West Ham, severe false, loan no, 3 moves listed (3 out, 0 in), in the next field but not expected [stoke city,sheffield united,qpr], expected but gone []
+[rv world]    52000 2031 West Ham (Premier League): next club West Ham, severe false, loan no, 3 moves listed (3 out, 0 in), in the next field but not expected [aston villa,bolton wanderers,southampton], expected but gone []
+[rv world]    52000 2032 West Ham (Premier League): next club West Ham, severe false, loan no, 3 moves listed (3 out, 0 in), in the next field but not expected [hull city,bristol city,coventry city], expected but gone []
+[rv world] BROKEN S1 the final table of a finished WORLD season is not the one he was shown at the summary: 4 times
+[rv world]    52108 2036 Liverpool: row fields changed since [goals]; ctx then table//Everton,Man United/ now table//Everton,Man United/; then Blackburn Rovers>Wolves>Cardiff City>Charlton Athletic now Ipswich Town>Wolves>Cardiff City>Charlton Athletic
+[rv world]    52126 2032 Atletico Madrid: row fields changed since [goals]; ctx then table//Real Madrid/Girona now table//Real Madrid/Girona; then Celta Vigo>Almería>Albacete>Leganés now Celta Vigo>Albacete>Leganés>Almería
+[rv world]    52256 2028 Marseille: row fields changed since [goals]; ctx then table//PSG,Lyon/PSG now table//PSG,Lyon/PSG; then Rennes>Lorient>Clermont>Toulouse now Le Mans>Rennes>Clermont>Toulouse
+[rv world]    52262 2030 Leipzig: row fields changed since [goals]; ctx then table///Bayern Munich now table///Bayern Munich; then Hertha Berlin>Paderborn>Heidenheim>Schalke 04 now Greuther Furth>St. Pauli>Schalke 04>Heidenheim
+[rv world] 3 kinds of broken promise
+
+ [31m❯[39m src/test/zzRvWorld.test.ts [2m([22m[2m1 test[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 36323[2mms[22m[39m
+[31m   [31m×[31m reviewer probe: the simulated league world a player reads[2m > [22mholds its own promises over real careers[39m[33m 36322[2mms[22m[39m
+[31m     → expected [ …(3) ] to deeply equal [][39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/zzRvWorld.test.ts[2m > [22mreviewer probe: the simulated league world a player reads[2m > [22mholds its own promises over real careers
+[31m[1mAssertionError[22m: expected [ …(3) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "S0 the final table of a finished season WITHOUT a world is not the one he was shown at the summary",[39m
+[31m+   "I2 next season's field is not this field after the listed moves",[39m
+[31m+   "S1 the final table of a finished WORLD season is not the one he was shown at the summary",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/zzRvWorld.test.ts:[2m212:19[22m[39m
+    [90m210| [39m    for (const k of kinds) { console.log(`[rv world] BROKEN ${k}: ${ba…
+    [90m211| [39m    console[33m.[39m[34mlog[39m([32m`[rv world] [39m[36m${[39mkinds[33m.[39mlength[36m}[39m[32m kinds of broken promise`[39m)[33m;[39m
+    [90m212| [39m    [34mexpect[39m(kinds)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m213| [39m  })[33m;[39m
+    [90m214| [39m})[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m   Start at [22m 16:29:45
+[2m   Duration [22m 37.81s[2m (transform 729ms, setup 31ms, collect 939ms, tests 36.32s, environment 223ms, prepare 44ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/zzRvWorld.test.ts,title=src/test/zzRvWorld.test.ts > reviewer probe%3A the simulated league world a player reads > holds its own promises over real careers,line=212,column=19::AssertionError: expected [ …(3) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "S0 the final table of a finished season WITHOUT a world is not the one he was shown at the summary",%0A+   "I2 next season's field is not this field after the listed moves",%0A+   "S1 the final table of a finished WORLD season is not the one he was shown at the summary",%0A+ ]%0A%0A ❯ src/test/zzRvWorld.test.ts:212:19%0A%0A
