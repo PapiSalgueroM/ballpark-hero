@@ -1,0 +1,28 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/zzProbeSaveSize.test.ts[2m > [22m[2mprobe: the save by field[2m > [22m[2mseed 9748
+[22m[39m[save probe] seed 9748: 28 rows, save 149900 B | top: seasons=102463 story=15424 lastTournament=6366 managerState=4718 leagueWorld=4491 phone=4117 lastUCLResult=1535 intlHistory=1487
+[save probe] seed 9748: season rows by field: leagueWorld=41991 clubCupRun=37630 derbies=4905 cupRun=3777 tournamentResult=788 clubCountry=672 championsLeague=672 tournament=667
+[save probe] seed 9748: rows with leagueWorld 21, their movements 34309 B, members 5349 B; clubCupRun 37336 B; career.leagueWorld 4491 B; lastUCLResult 1535 B
+
+[90mstdout[2m | src/test/zzProbeSaveSize.test.ts[2m > [22m[2mprobe: the save by field[2m > [22m[2mseed 9749
+[22m[39m[save probe] seed 9749: 28 rows, save 147263 B | top: seasons=95500 story=19585 lastTournament=6347 managerState=4874 leagueWorld=4503 phone=4189 lastUCLResult=1528 intlHistory=1515
+[save probe] seed 9749: season rows by field: leagueWorld=47976 clubCupRun=16313 derbies=12286 cupRun=4599 tournamentResult=792 clubCountry=672 championsLeague=672 tournament=667
+[save probe] seed 9749: rows with leagueWorld 21, their movements 40326 B, members 5287 B; clubCupRun 16173 B; career.leagueWorld 4503 B; lastUCLResult 1528 B
+
+[90mstdout[2m | src/test/zzProbeSaveSize.test.ts[2m > [22m[2mprobe: the save by field[2m > [22m[2mseed 9750
+[22m[39m[save probe] seed 9750: 28 rows, save 162178 B | top: seasons=112616 story=17495 lastTournament=6312 managerState=4788 leagueWorld=4494 phone=4159 lastUCLResult=1531 intlHistory=1495
+[save probe] seed 9750: season rows by field: leagueWorld=45309 clubCupRun=40371 derbies=7581 cupRun=5328 tournamentResult=777 championsLeague=672 tournament=667 clubCountry=658
+[save probe] seed 9750: rows with leagueWorld 19, their movements 38289 B, members 4857 B; clubCupRun 40049 B; career.leagueWorld 4494 B; lastUCLResult 1531 B
+
+ [32m✓[39m src/test/zzProbeSaveSize.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 1993[2mms[22m[39m
+   [33m[2m✓[22m[39m probe: the save by field[2m > [22mseed 9748 [33m 859[2mms[22m[39m
+   [33m[2m✓[22m[39m probe: the save by field[2m > [22mseed 9749 [33m 619[2mms[22m[39m
+   [33m[2m✓[22m[39m probe: the save by field[2m > [22mseed 9750 [33m 512[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m   Start at [22m 12:17:59
+[2m   Duration [22m 7.28s[2m (transform 2.71s, setup 144ms, collect 3.50s, tests 1.99s, environment 585ms, prepare 330ms)[22m
+

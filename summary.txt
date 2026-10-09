@@ -1,0 +1,6 @@
+saveprobe exit=0 9s |    Duration  7.28s (transform 2.71s, setup 144ms, collect 3.50s, tests 1.99s, environment 585ms, prepare 330ms)
+drillrecord exit=0 8s |    Duration  6.68s (transform 2.81s, setup 142ms, collect 3.96s, tests 985ms, environment 670ms, prepare 338ms)
+simAvailability exit=0 6s | simSoccerSeasonAvailability: three outcomes green and effective old-capacity defect caught
+simResultMoment exit=0 7s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+walkers exit=0 38s |    Duration  37.18s (transform 4.68s, setup 216ms, collect 13.09s, tests 37.46s, environment 1.58s, prepare 656ms)
+anchors exit=0 47s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

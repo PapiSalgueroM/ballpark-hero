@@ -1,0 +1,7 @@
+#!playwright
+anchors: node scripts/simHarnessAnchors.mjs
+walkers: node_modules/.bin/vitest run src/test/careerDilemmaReach.test.tsx src/test/careerKeepPlaying.test.tsx --testTimeout=300000 --hookTimeout=120000
+saveprobe: cp .rc/x/zzProbeSaveSize.test.ts src/test/zzProbeSaveSize.test.ts && node_modules/.bin/vitest run src/test/zzProbeSaveSize.test.ts --testTimeout=300000
+drillrecord: cp src/test/fixtures/drillBoardMarkup.recorded.json $RC_OUT/drill.before.json && RECORD_DRILL_MARKUP=1 node_modules/.bin/vitest run src/test/drillBoardMarkup.test.tsx --testTimeout=300000 ; cp src/test/fixtures/drillBoardMarkup.recorded.json $RC_OUT/drill.after.json
+simAvailability: node scripts/simSoccerSeasonAvailability.mjs
+simResultMoment: node scripts/simResultMoment.mjs

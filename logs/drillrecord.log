@@ -1,0 +1,14 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/drillBoardMarkup.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 985[2mms[22m[39m
+   [33m[2m✓[22m[39m the training boards with no match prop[2m > [22mdraws the Wall Shot as recorded [33m 544[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m   Start at [22m 12:18:08
+[2m   Duration [22m 6.68s[2m (transform 2.81s, setup 142ms, collect 3.96s, tests 985ms, environment 670ms, prepare 338ms)[22m
+
