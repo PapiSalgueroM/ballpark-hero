@@ -816,7 +816,9 @@ export function LiveSimScreen({
   // Round 781: "already happened" reads the board too, so a chance at 45+3 is still future at 45+2.
   const motionStillCommitted = !motionEvent || motionEvent.event.minute + (motionEvent.event.plus ?? 0) <= clock || feed.includes(motionEvent.event);
   const liveAction = running && !finished && motionStillCommitted ? motionEvent : null;
-  const castFrom = liveAction && clock >= liveAction.at && clock - liveAction.at <= ACTION_SPAN ? liveAction.at : null;
+  /* Never from before the viewer opened: a last kick's wind up starts 1.05 before the whistle whenever the
+     screen opens, and a match opened again inside it shows the men of the minute it opened at. */
+  const castFrom = liveAction && clock >= liveAction.at && clock - liveAction.at <= ACTION_SPAN ? Math.max(liveAction.at, openedAt.current) : null;
   const castMinute = castFrom === null ? minute : Math.min(stageEnd, Math.floor(castFrom));
   const castPlus = castFrom === null ? plus : Math.max(0, Math.min(stageStop, Math.floor(castFrom)) - stageEnd);
   const men = useMemo(() => menAt(career, liveNow, report, castMinute, castPlus, minute), [career, liveNow, report, castMinute, castPlus, minute]);

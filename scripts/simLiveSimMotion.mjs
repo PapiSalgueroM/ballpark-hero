@@ -184,7 +184,7 @@ try {
     if (control === 'cardside') viewer = replace(viewer, "const player = goal.side === 'me' ? career.squad.find(p => p.name === goal.text) : undefined;", 'const player = career.squad.find(p => p.name === goal.text);');
     if (control === 'stalejoin') viewer = replace(viewer, 'const manOf = useMemo(() => new Map([...men.mine, ...men.theirs].map(m => [m.key, m])), [men]);', 'const manOf = useMemo(() => new Map([...men.mine, ...men.theirs].map(m => [m.key, m])), []);');
     /* ---- Release AR ---- */
-    if (control === 'castnow') viewer = replace(viewer, 'const castFrom = liveAction && clock >= liveAction.at && clock - liveAction.at <= ACTION_SPAN ? liveAction.at : null;', 'const castFrom = null as number | null;');
+    if (control === 'castnow') viewer = replace(viewer, 'const castFrom = liveAction && clock >= liveAction.at && clock - liveAction.at <= ACTION_SPAN ? Math.max(liveAction.at, openedAt.current) : null;', 'const castFrom = null as number | null;');
     const componentPath = path.join(folder, 'LiveSimMotion.tsx').replaceAll('\\', '/');
     viewer = replace(viewer, "import { LivePitchPlayer, useLiveSimMotion } from '@/components/club-manager/LiveSimMotion';", "import { LivePitchPlayer, useLiveSimMotion } from './LiveSimMotion';");
     viewer = replace(viewer, "import type { MotionEvent } from '@/components/club-manager/LiveSimMotion';", "import type { MotionEvent } from './LiveSimMotion';");

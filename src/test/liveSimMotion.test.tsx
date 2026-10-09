@@ -89,7 +89,10 @@ function findTerminalFixtures() {
          half the viewer shows pass, pass through the last minute and the whistle at 3-3; on the next three 90
          goals the seeds find (no change of cast in the last minute) it shows plant, flight and net before the
          whistle, as asserted. So such a half is skipped here, the same way a chance still in the air is skipped
-         above, and the gap is reported to the viewer's owner rather than hidden. */
+         above, and the gap is reported to the viewer's owner rather than hidden.
+         Release AR: that gap is closed in the viewer (a change off the clock waits for the action in flight,
+         see 'a goal still on its way when the line up changes off the clock' below, which holds it on a goal in
+         open play). The skip stays, so the four halves these tests were written against do not move. */
       if (feed.some(e => ['injury', 'red', 'sub'].includes(e.kind) && clockPos(e) > cap + board - 2 && clockPos(e) < cap + board)) continue;
       const key = `${cap}:${event.kind}`;
       if (terminalFixtures.has(key)) continue;
