@@ -1,0 +1,6 @@
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simTacticsEngine: node scripts/simTacticsEngine.mjs
+simTransfers: node scripts/simTransfers.mjs
+simManagerXp: node scripts/simManagerXp.mjs
+simManagerSpec: node scripts/simManagerSpec.mjs
+simReleaseClause: node scripts/simReleaseClause.mjs

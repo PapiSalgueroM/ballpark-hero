@@ -1,0 +1,6 @@
+simManagerHotSeat exit=0 71s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+simTransfers exit=0 74s | ALL TRANSFER CHECKS PASSED
+simTacticsEngine exit=0 94s | simTacticsEngine: PASS. A man is read in his slot, a second position is earned over counted weeks, the armband and the takers reach the stream, a duty moves the football 
+simReleaseClause exit=0 2s | simReleaseClause: green. The exit door is real, priced, hunted, and honestly escapable only at full wage.
+simManagerXp exit=0 57s | simManagerXp: green. Nothing spent is the game that shipped, every point moves something, and nothing can be conjured.
+simManagerSpec exit=0 84s | simManagerSpec: all green
