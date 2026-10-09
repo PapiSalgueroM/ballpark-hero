@@ -32,6 +32,13 @@
       and the Season Center tile's Reload. Section 2 also holds the order in
       reloadOnceForStaleChunk: the ask comes before the once flag is set, so
       a reload that was held does not spend the tab's one reload.
+   6. (Round 1144 review) the two reloads that sit on every page, a career's
+      included, do the same: the update toast's Refresh goes through
+      reloadToRetryChunk, and the footer's Cookie choices retries a waiting
+      save before it reloads. Section 3 also holds that the boundary lets
+      go of held saves before it asks for its reload: by then the game
+      that held them is unmounted, and a reload refused for their sake
+      protected nothing and left the player on the broken page.
 
    Negative controls (SIM_STALE_CHUNK_CONTROL): nolistener deletes the
    addEventListener call from an in memory copy (section 1 red), noguard
@@ -39,15 +46,18 @@
    red), noprerender deletes the prerender stand down (section 2 red),
    nooffline (Release AM) deletes the offline stand down (section 2 red),
    nosave (Round 1144) deletes the ask for waiting saves from
-   reloadOnceForStaleChunk (sections 2 and 5 red). Each asserts its anchor
-   exists exactly once first. */
+   reloadOnceForStaleChunk (sections 2 and 5 red), norelease (Round 1144
+   review) stops the boundary letting go of held saves before it asks for
+   the reload (section 3 red), barenudge (Round 1144 review) puts the bare
+   reload back on the update toast's Refresh (section 6 red). Each asserts
+   its anchor exists exactly once first. */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_STALE_CHUNK_CONTROL || '';
-const EXPECT = { nolistener: [1], noguard: [2], noprerender: [2], nooffline: [2], nosave: [2, 5] };
+const EXPECT = { nolistener: [1], noguard: [2], noprerender: [2], nooffline: [2], nosave: [2, 5], norelease: [3], barenudge: [6] };
 /* Exit 2, never 1: 1 is a control that fired, and a mistyped name must not read as one. */
 if (CONTROL && !(CONTROL in EXPECT)) { console.error('unknown control ' + CONTROL); process.exit(2); }
 
@@ -60,7 +70,9 @@ function rewrite(src, anchor, replacement, why) {
 }
 
 let fresh = fs.readFileSync(path.join(ROOT, 'src/lib/freshBuild.ts'), 'utf8').replaceAll('\r\n', '\n');
-const boundary = code(fs.readFileSync(path.join(ROOT, 'src/components/RouteErrorBoundary.tsx'), 'utf8').replaceAll('\r\n', '\n'));
+let boundaryRaw = fs.readFileSync(path.join(ROOT, 'src/components/RouteErrorBoundary.tsx'), 'utf8').replaceAll('\r\n', '\n');
+let nudgeRaw = fs.readFileSync(path.join(ROOT, 'src/components/layout/UpdateNudge.tsx'), 'utf8').replaceAll('\r\n', '\n');
+const footer = code(fs.readFileSync(path.join(ROOT, 'src/components/game/Footer.tsx'), 'utf8').replaceAll('\r\n', '\n'));
 const main = code(fs.readFileSync(path.join(ROOT, 'src/main.tsx'), 'utf8').replaceAll('\r\n', '\n'));
 if (CONTROL === 'nolistener') fresh = rewrite(fresh, "window.addEventListener('vite:preloadError', (event: Event) => {", "((event: Event) => {", 'nolistener');
 if (CONTROL === 'noguard') fresh = rewrite(fresh, "sessionStorage.setItem(STALE_KEY, '1');", '', 'noguard');
@@ -88,6 +100,11 @@ function cutFromStaleReload(LINE, why) {
 if (CONTROL === 'noprerender') cutFromStaleReload("  if ((window as unknown as { __DUKB_PRERENDER__?: boolean }).__DUKB_PRERENDER__) return false;\n", 'noprerender');
 if (CONTROL === 'nosave') cutFromStaleReload('  if (!settlePendingSaves()) return false;\n', 'nosave');
 if (CONTROL === 'nooffline') fresh = rewrite(fresh, '  if (navigator.onLine === false) return false;', '', 'nooffline');
+/* Round 1144 review: the two controls below edit the boundary and the update toast, in memory like the rest. */
+if (CONTROL === 'norelease') boundaryRaw = rewrite(boundaryRaw, 'const unsaved = !releasePendingSaves();', 'const unsaved = false;', 'norelease');
+if (CONTROL === 'barenudge') nudgeRaw = rewrite(nudgeRaw, 'if (reloadToRetryChunk() || !hasPendingSaves()) return;', 'window.location.reload();', 'barenudge');
+const boundary = code(boundaryRaw);
+const nudge = code(nudgeRaw);
 const freshCode = code(fresh);
 
 let failures = 0; const red = new Set(); let section = 0;
@@ -151,7 +168,15 @@ console.log('3) RouteErrorBoundary reloads once on a chunk load error through th
   if (!uses) fail('componentDidCatch does not classify the error and call the shared reload');
   if (!imports) fail('the boundary does not import from freshBuild, so it cannot share the once guard');
   if (ownGuard) fail('the boundary keeps its own sessionStorage guard, two guards can reload twice');
-  if (catches && uses && imports && !ownGuard) ok('chunk errors reload once through the shared guard');
+  /* Round 1144 review: when an error reaches this boundary the game under it is unmounted, and a save
+     it was holding went with it. The boundary has to let go of the hold (after one last retry) BEFORE
+     it asks for the reload, or the reload is refused for the sake of a save that is already gone and
+     the player gets "This page broke" where one reload would have given him a working page. */
+  const didCatch = (boundary.match(/componentDidCatch\s*\([\s\S]*?\n  \}/) ?? [''])[0];
+  const lets = didCatch.indexOf('releasePendingSaves()');
+  const releases = lets >= 0 && lets < didCatch.indexOf('reloadOnceForStaleChunk(');
+  if (!releases) fail('componentDidCatch does not let go of held saves before it asks for the reload, so a chunk that fails inside a game with a refused save paints the broken page instead of reloading once');
+  if (catches && uses && imports && !ownGuard && releases) ok('chunk errors reload once through the shared guard, after the held saves of the game that just went are let go');
 }
 
 section = 4;
@@ -173,6 +198,24 @@ console.log('5) every reload freshBuild makes asks for waiting saves first');
   if (reloaders.length < 3 || total !== reloaders.length) fail(`${total} reload call(s) in ${reloaders.length} function(s) of freshBuild.ts, expected one each in at least three (check, reloadOnceForStaleChunk, reloadToRetryChunk): this check is not reading the file it thinks it is`);
   else if (bare.length) fail(`${bare.map(nameOf).join(', ')} reload${bare.length === 1 ? 's' : ''} without asking for waiting saves first, so a save the browser refused is thrown away`);
   else ok(`${reloaders.map(nameOf).join(', ')}: each asks for waiting saves before it reloads`);
+}
+
+section = 6;
+console.log('6) the reloads on every page (the update toast, the footer) ask for waiting saves first');
+{
+  /* Round 1144 review: these two are mounted on every page, a career's included, and both reloaded
+     bare. The update toast shows at the very moment check() above declines to reload over a refused
+     save, so its Refresh goes through the same guard. The footer's Cookie choices has to work every
+     time (it is how a choice is taken back), so it is not held: the save gets its retry first. */
+  const nudgeBare = /location\.reload\(/.test(nudge);
+  const nudgeGuarded = /reloadToRetryChunk\(\)/.test(nudge) && /from ['"]@\/lib\/freshBuild['"]/.test(nudge);
+  const ask = footer.indexOf('settlePendingSaves()');
+  const footerReloads = (footer.match(/location\.reload\(/g) ?? []).length;
+  const footerAsks = footerReloads === 1 && ask >= 0 && ask < footer.indexOf('location.reload(');
+  if (nudgeBare) fail('UpdateNudge reloads the page itself: its Refresh would go over a save the browser refused');
+  if (!nudgeGuarded) fail('UpdateNudge does not reload through reloadToRetryChunk from freshBuild');
+  if (!footerAsks) fail(`the footer has ${footerReloads} reload call(s) and ${ask < 0 ? 'never asks' : 'asks'} for waiting saves before the first: a refused save would not get its retry`);
+  if (!nudgeBare && nudgeGuarded && footerAsks) ok('the update toast reloads through the shared guard, and the footer retries a waiting save before its reload');
 }
 
 console.log('');

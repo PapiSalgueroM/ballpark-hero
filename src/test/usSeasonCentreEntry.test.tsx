@@ -88,6 +88,7 @@ import { NFL_CAREER_SPORT } from '@/lib/nflCareerSport';
 import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
 import { NHL_CAREER_SPORT } from '@/lib/nhlCareerSport';
 import { keyedRng } from '@/lib/keyedRng';
+import { holdPendingSave } from '@/lib/safeStorage';
 import { usSeasonHeldLine } from '@/data/usSeasonLengths';
 import { resetCareerMomentsForTest } from '@/components/soccer-career/careerMoments';
 import type { UsCareerCore, UsCareerSport } from '@/lib/usCareerSport';
@@ -345,6 +346,45 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
       expect(savedCareer(sport).seasons).toHaveLength(1);
       expect(reload).toHaveBeenCalledTimes(1);
     } finally {
+      vi.unstubAllGlobals();
+    }
+  }, 60000);
+
+  /* Round 1144 review: the order a player really meets. He played, the save was refused, and THEN he
+     opened the viewer. The tile opened on "Your career is safe. Reload the page" and only told the truth
+     after Reload had been pressed. (The waiting save is named to the seam here directly, standing in
+     for the board's own: what the tile reads is the seam.) */
+  it('says a save is waiting from the first moment, before Reload is pressed', async () => {
+    const release = holdPendingSave(() => false);
+    try {
+      await pressWithAFailedChunk('waiting');
+      const tile = q('[data-season-centre-failed]')!;
+      expect(q('[data-season-centre-save-waiting]')).not.toBeNull();
+      expect(tile.textContent).toContain('has not been saved yet');
+      expect(tile.textContent).not.toContain('Your career is safe');
+      expect(q('[data-season-centre-held-reload]')).toBeNull();
+    } finally {
+      release();
+    }
+  }, 60000);
+
+  /* and offline nothing reloads, so nothing is held: the import is asked again and no line says the
+     page "was not reloaded" */
+  it('offline, the tile asks for the viewer again and does not say a reload was held', async () => {
+    const reload = vi.fn();
+    vi.stubGlobal('location', { ...window.location, reload });
+    const retry = vi.fn(() => false);
+    const release = holdPendingSave(retry);
+    try {
+      await pressWithAFailedChunk('offline');
+      const online = vi.spyOn(window.navigator, 'onLine', 'get').mockReturnValue(false);
+      await click([...q('[data-season-centre-failed]')!.querySelectorAll('button')].find(b => /Reload/.test(b.textContent ?? '')));
+      online.mockRestore();
+      expect(reload).not.toHaveBeenCalled();
+      expect(retry).not.toHaveBeenCalled();
+      expect(q('[data-season-centre-held-reload]')).toBeNull();
+    } finally {
+      release();
       vi.unstubAllGlobals();
     }
   }, 60000);

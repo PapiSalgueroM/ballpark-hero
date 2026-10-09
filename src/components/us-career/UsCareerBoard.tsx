@@ -122,8 +122,12 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
        not reach until he closed the viewer. It says Retry, not Retry save, so
        the page never has two buttons of one name. The press keeps the toast
        (the cleanup below takes it back the moment the save goes through), and
-       ten seconds instead of four gives him time to read it and press. */
+       ten seconds instead of four gives him time to read it and press.
+       The first sentence is kept word for word (the other lane's driver for
+       Round 1084 reads it), so the second line is what makes the words match
+       the button they sit next to. */
     const said = toast.error('Your latest changes could not be saved. Stay on this page and use Retry save.', {
+      description: 'Retry here does the same thing.',
       duration: SAVE_TOAST_MS,
       action: { label: 'Retry', onClick: event => { event.preventDefault(); retrySave(); } },
       actionButtonStyle: SAVE_TOAST_BUTTON,

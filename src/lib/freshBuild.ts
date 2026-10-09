@@ -132,10 +132,15 @@ export function reloadOnceForStaleChunk(): boolean {
      comes back still gets its reload. */
   if (navigator.onLine === false) return false;
   /* Round 1144: never over a save the browser refused (see check() above).
-     The save is retried once; while it is still refused there is no reload,
-     the once flag is left alone like it is offline, and the chunk's own
-     failure shows instead (the Season Center's "could not be loaded" tile,
-     or the route boundary), with the game and its Retry save still there. */
+     The save is retried once; while it is still refused there is no reload
+     here and the once flag is left alone, like it is offline. What happens
+     next depends on who catches the failed chunk. A part of the page that
+     catches its own (the Season Center's "could not be loaded" tile) keeps
+     the game on screen with its Retry save, which is what the hold is for.
+     A chunk nobody catches takes the route down to RouteErrorBoundary: the
+     game is unmounted there and its waiting save with it, so the boundary
+     gives each save one last retry, lets go of the hold (nothing is left to
+     protect) and asks for this reload again. */
   if (!settlePendingSaves()) return false;
   try {
     if (sessionStorage.getItem(STALE_KEY) === '1') return false;

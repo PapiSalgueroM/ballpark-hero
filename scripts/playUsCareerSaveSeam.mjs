@@ -68,6 +68,22 @@
  *   The controls: stale leaves the line up on all four (4 failed), sitover
  *   puts the toast back at 656..748 and 47 px into the banner (4 failed).
  *
+ * MEASURED for the review of Round 1144, same runner, the three real quota
+ * journeys on nba (Chromium took 55 fillers before it refused one; the
+ * prospect's save is 369 characters):
+ *   Before (the round's first cut, where any write the browser took had
+ *   taken "full" back): 5 of the 11 quota checks failed. returning: the line
+ *   went none at 46 ms, full at 139, left at 299 on the bracket page, said
+ *   nothing on the career and nothing over the refused save (3). little:
+ *   with 204 characters of room Retry save was refused and the line had left
+ *   (1). kept: the cookie choice was not on the store after the line left
+ *   (1).
+ *   After: 0 failed. returning: none at 88 ms, full at 205, and it stays
+ *   through all three steps. little: refused again with the line still up,
+ *   then saved and the line gone on the same page. kept: "essential" on the
+ *   store. 6 journeys with SPORTS=nba, 25 checks.
+ *   The control quotafree: 8 of its 11 checks failed, quota and kept both.
+ *
  * Controls (US_SAVE_SEAM_CONTROL=), each expected to go red at its own check
  * (a control run exits 1 and says so; 2 when it could not run or did not
  * fire where it should):

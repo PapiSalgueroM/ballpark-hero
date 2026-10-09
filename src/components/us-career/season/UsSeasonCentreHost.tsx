@@ -24,7 +24,7 @@ import { createContext, useCallback, useEffect, useMemo, useRef, useState, type 
 import type { UsCareerCore, UsCareerSeason, UsCareerSport } from '@/lib/usCareerSport';
 import type { UsSeasonCentreProps } from '@/components/us-career/season/UsSeasonCentre';
 import { reloadToRetryChunk } from '@/lib/freshBuild';
-import { settlePendingSaves } from '@/lib/safeStorage';
+import { hasPendingSaves, settlePendingSaves } from '@/lib/safeStorage';
 
 export interface UsSeasonCentreRequest {
   career: UsCareerCore;
@@ -102,8 +102,11 @@ export function UsSeasonCentreHost({ sport, children }: { sport: UsCareerSport; 
        had refused still waiting in the board under this tile: the reload
        threw it away. The save is retried once first (the same call a reload
        makes itself); while it is still refused the page stays and the tile
-       says why. */
-    if (!settlePendingSaves()) { setHeld(true); return; }
+       says why. Not when the browser is offline: nothing reloads then, the
+       import is simply asked again below, so there is nothing to hold and
+       "the page was not reloaded" would be the wrong thing to say. */
+    const offline = typeof navigator !== 'undefined' && navigator.onLine === false;
+    if (!offline && !settlePendingSaves()) { setHeld(true); return; }
     setHeld(false);
     if (reloadToRetryChunk()) return;
     const asker = from.current;
@@ -142,6 +145,9 @@ export function UsSeasonCentreHost({ sport, children }: { sport: UsCareerSport; 
             <div className="text-sm font-bold">📺 Season Center</div>
             {held ? (
               <p role="status" data-season-centre-held-reload className="text-sm text-muted-foreground">Your latest progress has not been saved yet, so the page was not reloaded: a reload would lose it. Go back to your season and use Retry save first.</p>
+            ) : hasPendingSaves() ? (
+              /* the same truth before Reload is pressed: he played, the save was refused, and then he opened the viewer */
+              <p role="status" data-season-centre-save-waiting className="text-sm text-muted-foreground">The game by game view could not be loaded, so your season has not been played. Your latest progress has not been saved yet, and a reload would lose it: go back to your season and use Retry save first.</p>
             ) : (
               <p className="text-sm text-muted-foreground">The game by game view could not be loaded, so your season has not been played. Your career is safe. Reload the page and press Week by week again, or go back and press Play.</p>
             )}

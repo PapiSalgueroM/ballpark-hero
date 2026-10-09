@@ -377,6 +377,24 @@ export function settlePendingSaves(): boolean {
   return settled;
 }
 
+/** True while a game holds a save the browser refused. */
+export function hasPendingSaves(): boolean {
+  return !raw && pendingSaves.size > 0;
+}
+
+/**
+ * The games that were holding saves are gone: the route's error boundary
+ * caught, and everything under it was unmounted. Each waiting save gets one
+ * last retry, and then nothing is held, because a page with no game left on
+ * it has nothing for a reload to lose. True when every one of them was
+ * written, false when the latest changes of a game did not make it.
+ */
+export function releasePendingSaves(): boolean {
+  const settled = settlePendingSaves();
+  pendingSaves.clear();
+  return settled;
+}
+
 /**
  * True when sessionStorage will not outlive a reload of this page, which is
  * the blocked case: the stand in dies with the page. A "reload once" marker
