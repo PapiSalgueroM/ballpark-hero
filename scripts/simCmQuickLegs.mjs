@@ -181,7 +181,7 @@ function playCareer(cm, club, seed, a, keep, section5) {
         s = r.state;
         if (r.kind === 'match') {
           count(a, r.report, section5);
-          if (keep) kept.push({ report: r.report, reportJson: JSON.stringify(r.report), stateJson: JSON.stringify(s) });
+          if (keep) kept.push({ report: r.report, reportJson: JSON.stringify(r.report), stateJson: JSON.stringify(s), place: stream.place() });
         }
         if (r.kind === 'seasonOver') break;
       }
@@ -231,7 +231,10 @@ function finishByHand(cm, paused, report) {
   let legs = 0;
   const make = line => {
     const next = cm.changeLive(st, line.minute, { kind: 'sub', outId: line.offId, inId: line.onId }, line.plus);
-    if (!next) throw new Error(`the engine refused a change of his made by hand at ${line.minute}'`);
+    if (!next) {
+      const live = st.live;
+      throw new Error(`the engine refused a change of his made by hand at ${line.minute}' (clock ${live.minute}, ${live.subsUsed} made, going off on the pitch: ${live.onPitch.includes(line.offId)}, coming on already on it: ${live.onPitch.includes(line.onId)}, second half drawn: ${!!live.h2Drawn}, his list: ${plan.map(x => `${x.minute}${x.plus ? `+${x.plus}` : ''}`).join(' ')})`);
+    }
     st = next;
   };
   for (const line of plan.filter(x => x.minute <= 45)) make(line);
@@ -282,6 +285,7 @@ function careerByHand(cm, club, seed, plays) {
             fail('manual', `${club} seed ${seed}, match ${i + 1}: the save after the quick sim differs from the same changes made by hand in ${parted.slice(0, 6).join(', ')}`);
             return;
           }
+          if (stream.place() !== want.place) { fail('manual', `${club} seed ${seed}, match ${i + 1} (${want.report.detail.subs.length} changes): the same report and save, but the seeded stream stands somewhere else after it`); return; }
           i += 1;
         }
         if (r.kind === 'seasonOver') break;
