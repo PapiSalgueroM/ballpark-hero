@@ -1,0 +1,2 @@
+#!playwright
+simBracketMoment: node scripts/simBracketMoment.mjs
