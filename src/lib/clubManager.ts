@@ -1079,7 +1079,8 @@ export interface ScorerLine {
    *  the goal reads the match it read before own goals existed. */
   drawn?: string;
   /** Round 1146, own goals on MY list only: the man who put it in is one the
-   *  game made up (a projected world), tagged the way their sheet tags him. */
+   *  game made up (a projected world). The report card's scorer list prints
+   *  his MADE UP tag off this; the timeline tags him off their eleven. */
   gen?: boolean;
 }
 
@@ -14662,9 +14663,10 @@ function foldBoard(to: number, ...lists: { minute: number; plus?: number }[][]):
  *    over five fleets of 36 seasons; the numbers are in its header;
  *  - the man. Both sides have real squads, so he is a NAMED defender or the
  *    keeper of the side that conceded, out of the men on the pitch at that
- *    minute, a defender twice as likely as the keeper. A goal of mine
- *    against a side with no named eleven has nobody to name and stays the
- *    goal it was;
+ *    minute, a defender twice as likely as the keeper. One of mine is read
+ *    in the slot he is standing in (the back line or in goal by pitchLineOf),
+ *    one of theirs off the position on their line. A goal of mine against a
+ *    side with no named eleven has nobody to name and stays the goal it was;
  *  - the key: the club, the season, the week, the opponent, the half, the
  *    goal's place on the clock, the side and the man it was drawn for. A
  *    match is never played twice in one save, and no two goals of a match
@@ -14678,8 +14680,9 @@ function foldBoard(to: number, ...lists: { minute: number; plus?: number }[][]):
  */
 export const CM_OWN_GOAL_ONE_IN = 32;
 
-/** The man who put it in: every defender holds two places and the keeper one. Null when there is nobody to name. */
-function ownGoalMan<T>(key: string, defenders: T[], keeper: T | null): T | null {
+/** The man who put it in: every defender holds two places and the keeper one. Null when there is nobody to name.
+ *  Exported for scripts/simCmOwnGoals.mjs, which holds the two places to one on its own keys. */
+export function ownGoalMan<T>(key: string, defenders: T[], keeper: T | null): T | null {
   const places = [...defenders, ...defenders, ...(keeper ? [keeper] : [])];
   return places.length ? places[ownGoalRole(key, places.length)] : null;
 }
@@ -14706,8 +14709,15 @@ function tagOwnGoals(state: CareerState, live: LiveMatch, fx: MyFixture, half: 1
     /* Mine on the pitch when it went in: nobody taken off, sent off or down
        injured before it. In a board that is "before this point of the board". */
     const gone = g.plus ? liveGoneIds(live, g.minute, g.plus - 1) : liveGoneIds(live, g.minute - 1);
+    /* Each man is read in the slot he is standing in, the way the engine reads
+       him everywhere else, not by the position on his card: a centre back sent
+       up front is not at the back today, and a midfielder filling in at full
+       back is. Theirs are read the same way (p.p is the slot of their line). */
+    const shape = liveFormationOf(state, live);
+    const lineAt = new Map<string, PitchLine>();
+    myOnPitchAt(live, g.minute).forEach((id, i) => { const slot = shape.slots[i]; if (slot) lineAt.set(id, pitchLineOf(slot)); });
     const there = squadByIds(state, myOnPitchAt(live, g.minute)).filter(p => !gone.has(p.id));
-    const who = ownGoalMan(key, there.filter(p => groupOf(p.position) === 'DEF'), there.find(p => p.position === 'GK') ?? null);
+    const who = ownGoalMan(key, there.filter(p => lineAt.get(p.id) === 'defence'), there.find(p => lineAt.get(p.id) === 'keeper') ?? null);
     if (who) {
       g.drawn = g.name;
       g.name = who.name;
@@ -18013,9 +18023,9 @@ export function setHalftimeMentality(career: CareerState, mentality: Mentality):
  *    same family) and is fresher, the break's own test;
  *  - and only if the eleven is NO WEAKER for it by the engine's own strength
  *    (myMatchStrength, the number the rest of the half is drawn from), or
- *    the match is won, two goals clear, when legs are rested and minutes
- *    handed out whatever it costs. Two behind is not settled: he still only
- *    makes a change that keeps the side as strong;
+ *    the match is won, two goals clear, when the bench gets its minutes
+ *    whatever it costs. Two behind is not settled: he still only makes a
+ *    change that keeps the side as strong;
  *  - one change is always kept back for an injury, as at the break, and one
  *    fit man stays on the bench with it.
  *
@@ -18026,6 +18036,14 @@ export function setHalftimeMentality(career: CareerState, mentality: Mentality):
  * of the half is drawn again off the new eleven, and the report lists it with
  * the others. Manager Hot Seat plays without the coach (`noCoach`) and is
  * untouched.
+ *
+ * What a change does NOT do, said plainly because the first draft of this
+ * comment claimed otherwise: it saves nobody's legs for next week. By the
+ * engine's existing rule (tickWeek) every man who played pays the match's
+ * fitness cost, ninety minutes or ten, so the man taken off and the man who
+ * replaced him both pay it. And since this round a man who came on holds only
+ * the share of the match he played in his last ten (windowEntry), so a late
+ * cameo is not a game to a man who was promised football.
  */
 export const QUICK_LEGS_WINDOWS: readonly (readonly [number, number])[] = [[58, 68], [72, 82]];
 /** The lead at which the coach rests legs whatever it costs. */

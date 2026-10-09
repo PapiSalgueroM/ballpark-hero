@@ -11,11 +11,11 @@
  * goal cannot be marked on one screen and bare on another.
  *
  * The shape is the one Round 1163 chose: the name, the minute, then the
- * mark ("Saka 45+2' (P)"). A shootout kick is not a goal: it has no scorer
+ * mark ("Spot taker 45+2' (P)"). A shootout kick is not a goal: it has no scorer
  * line, so it can never carry one.
  *
  * The same round gave the game own goals (tagOwnGoals in clubManager.ts),
- * and they are marked here too: "Dias 63' (O.G)", under the club that got
+ * and they are marked here too: "Their centre back 63' (O.G)", under the club that got
  * the goal. The line is the name and the mark, as a match report prints it,
  * and no screen adds a word about the man.
  *
@@ -43,7 +43,7 @@ export function scorerMark(g: GoalMarks): string {
   return g.og ? ' (O.G)' : g.penalty ? ' (P)' : '';
 }
 
-/** A scorer as a match report prints him: "Saka 45+2' (P)", "Dias 63' (O.G)". */
+/** A scorer as a match report prints him: "Spot taker 45+2' (P)", "Their centre back 63' (O.G)". */
 export function scorerLine(g: { name: string } & ClockPoint & GoalMarks): string {
   return `${g.name} ${minuteLabel(g)}${scorerMark(g)}`;
 }

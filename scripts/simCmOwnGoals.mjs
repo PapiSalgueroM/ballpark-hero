@@ -29,7 +29,14 @@
  *              timeline row of every goal carries the flags of its scorer line
  *   4 man      the man behind an own goal is a defender or the keeper of the
  *              side that conceded it and was on its pitch at that minute
- *   5 credit   every one of my players' season goals and assists moved by
+ *              (mine is read in the slot he was STANDING in, the engine's
+ *              rule everywhere else, theirs off their line)
+ *     weights  a defender is twice as likely as the keeper: two places to
+ *              one in the engine's ownGoalMan, read on 18,000 keys
+ *     gone     a man of mine who has left the pitch is never named: real
+ *              matches played again with two backs sent off before the
+ *              break, on an engine where every eligible goal is an own goal
+ *   5 credit  every one of my players' season goals and assists moved by
  *              exactly the lines that name him, and the candidate's tallies
  *              are the baseline's minus the own goals, never above them
  *   6 inflight a first half recorded by the baseline engine and finished by
@@ -73,6 +80,13 @@
  *   digest    the scorer's lift is taken off an own goal -> digest
  *   ambient   the tag roll reads Math.random             -> digest
  *   striker   the man is picked from their forwards      -> man
+ *   mystriker mine is picked from the men standing up front -> man
+ *   evens     a defender holds one place, like the keeper -> weights
+ *   ungone    a man of mine who has left can be named    -> gone
+ * weights and gone were added after the round's review deleted the two
+ * places to one and the "has he gone" filter with this harness green: the
+ * fleet printed "0 by a keeper" and asserted nothing on it, and none of its
+ * own goals fell after a red or an injury to one of my backs.
  *
  * Run: node scripts/simCmOwnGoals.mjs        (SEEDSET=n for another set of seeds)
  * Offline: bundles the engine from src, reads no network and no database.
@@ -107,7 +121,14 @@ const CONTROLS = {
   digest: { patch: [{ file: ENGINE, from: '      sq.morale = clamp(sq.morale + 3, 5, 99);', to: '      if (!own) sq.morale = clamp(sq.morale + 3, 5, 99);' }], red: 'digest' },
   ambient: { patch: [{ file: RULE, from: 'if (keyedRng(`${key}|tag`)() >= 1 / oneIn) return false;', to: 'if (Math.random() >= 1 / oneIn) return false;' }], red: 'digest' },
   striker: { patch: [{ file: ENGINE, from: "there.filter(p => groupOf(p.p) === 'DEF'), there.find(p => p.p === 'GK') ?? null", to: "there.filter(p => groupOf(p.p) === 'ATT'), null" }], red: 'man' },
+  mystriker: { patch: [{ file: ENGINE, from: "there.filter(p => lineAt.get(p.id) === 'defence'), there.find(p => lineAt.get(p.id) === 'keeper') ?? null", to: "there.filter(p => lineAt.get(p.id) === 'attack'), null" }], red: 'man' },
+  evens: { patch: [{ file: ENGINE, from: 'const places = [...defenders, ...defenders, ...(keeper ? [keeper] : [])];', to: 'const places = [...defenders, ...(keeper ? [keeper] : [])];' }], red: 'weights' },
+  ungone: { patch: [{ file: ENGINE, from: 'const there = squadByIds(state, myOnPitchAt(live, g.minute)).filter(p => !gone.has(p.id));', to: 'const there = squadByIds(state, myOnPitchAt(live, g.minute));' }], red: 'gone' },
 };
+/** The dense engine of section gone: every eligible goal with a man to name is an own goal. */
+const DENSE = { file: ENGINE, from: 'export const CM_OWN_GOAL_ONE_IN = 32;', to: 'export const CM_OWN_GOAL_ONE_IN = 1;' };
+/** How many careers of the fleet have every match of theirs played again for section gone. */
+const PROBE = Number(process.env.PROBE ?? 2);
 if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) { console.error(`simCmOwnGoals: unknown control "${CONTROL}"`); process.exit(2); }
 
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'cm-og-'));
@@ -176,7 +197,7 @@ function resultFace(s, calls) {
 }
 
 /** One career: SEASONS seasons, every match paused at the break and finished by the quick sim. */
-function playCareer(cm, club, seed, inflight) {
+function playCareer(cm, club, seed, inflight, onHalf) {
   const draw = seeded(seed);
   const realRandom = Math.random;
   const realNow = Date.now;
@@ -192,14 +213,20 @@ function playCareer(cm, club, seed, inflight) {
         const before = tallies(s);
         let r = cm.playNextEntry(s);
         let startXi = null;
+        let lines = null;
         if (r.kind === 'halftime') {
           startXi = r.state.live.startXi.slice();
+          /* the band of the shape each starting slot belongs to (keeper, defence, midfield, attack), by the engine's own reading */
+          const shape = cm.FORMATIONS[r.state.live.formationIndex ?? r.state.formationIndex] ?? cm.FORMATIONS[0];
+          lines = startXi.map((_, i) => (shape.slots[i] ? cm.pitchLineOf(shape.slots[i]) : null));
+          /* a save built off this break, played on another engine and another stream: the career's own stream is put back */
+          if (onHalf) { const keep = Math.random; try { onHalf(r.state, out.matches.length); } finally { Math.random = keep; } }
           if (inflight) out.halves.push({ state: JSON.parse(JSON.stringify(r.state)), calls: draw.calls(), seed, at: out.matches.length });
           r = cm.playNextEntry(r.state, { skipHalftime: true });
         }
         s = r.state;
         if (r.kind === 'match') {
-          out.matches.push({ season, report: r.report, startXi, before, after: tallies(s), squad: new Map(s.squad.map(p => [p.id, p.position])), names: new Map(s.squad.map(p => [p.name, p.position])) });
+          out.matches.push({ season, report: r.report, startXi, lines, before, after: tallies(s), squad: new Map(s.squad.map(p => [p.id, p.position])), names: new Map(s.squad.map(p => [p.name, p.position])) });
           seasonRow.matches += 1;
           seasonRow.ownFor += r.report.myScorers.filter(l => l.og).length;
           seasonRow.ownAgainst += r.report.oppScorers.filter(l => l.og).length;
@@ -222,13 +249,76 @@ function playCareer(cm, club, seed, inflight) {
 }
 
 /* ---------- the sections ---------- */
-const SECTIONS = ['digest', 'share', 'marks', 'man', 'credit', 'inflight'];
+const SECTIONS = ['digest', 'share', 'marks', 'man', 'weights', 'gone', 'credit', 'inflight'];
 const red = new Map(SECTIONS.map(s => [s, []]));
 const checked = new Map(SECTIONS.map(s => [s, 0]));
 const fail = (section, message) => { const xs = red.get(section); xs.push(message); };
 const tick = section => checked.set(section, checked.get(section) + 1);
 
-const tot = { goals: 0, pens: 0, fks: 0, eligible: 0, og: { me: 0, opp: 0 }, ogKeeper: 0, manUnknown: 0, matches: 0, ogMatches: 0 };
+const tot = { goals: 0, pens: 0, fks: 0, eligible: 0, og: { me: 0, opp: 0 }, ogKeeper: 0, ogOffCard: 0, manUnknown: 0, matches: 0, ogMatches: 0 };
+/** Section gone: the matches played again on the dense engine, and the own goals against me read in them. */
+const dense = { matches: 0, sentOff: 0, og: 0 };
+
+/**
+ * Section gone: a man of mine who has LEFT the pitch is never named. A fleet of whole careers never tests it (no
+ * own goal of the five measured fleets fell after a red or an injury to one of my backs, so the filter could be
+ * deleted with every section green), so the save is built: at the break of a real match two men standing at the
+ * back are sent off in the 40th minute, and the match is finished on an engine where EVERY eligible goal is an
+ * own goal (CM_OWN_GOAL_ONE_IN patched to 1). Each one against me after the break must name somebody else.
+ */
+function probeGone(cm, paused, seed) {
+  const st = JSON.parse(JSON.stringify(paused));
+  const live = st.live;
+  const shape = cm.FORMATIONS[live.formationIndex ?? st.formationIndex] ?? cm.FORMATIONS[0];
+  const out = cm.liveGoneIds(live, 45);
+  const sentOff = [];
+  for (let i = 0; i < live.onPitch.length && sentOff.length < 2; i++) {
+    const man = st.squad.find(p => p.id === live.onPitch[i]);
+    if (!man || out.has(man.id) || !shape.slots[i] || cm.pitchLineOf(shape.slots[i]) !== 'defence') continue;
+    live.h1Cards = [...(live.h1Cards ?? []), { name: man.name, minute: 40, kind: 'red', id: man.id }];
+    sentOff.push(man.name);
+  }
+  if (!sentOff.length) return;
+  Math.random = seeded(seed);
+  const done = cm.playNextEntry(st, { skipHalftime: true });
+  if (done.kind !== 'match') return;
+  dense.matches += 1;
+  dense.sentOff += sentOff.length;
+  for (const line of done.report.oppScorers) {
+    if (!line.og || line.minute <= 45) continue;
+    dense.og += 1;
+    tick('gone');
+    if (sentOff.includes(line.name)) fail('gone', `${line.name} was sent off in the 40th minute and is named for an own goal at ${line.minute}'`);
+  }
+}
+
+/**
+ * Section weights: "a defender twice as likely as the keeper" is two places to one in ownGoalMan, read here on
+ * 18,000 keys of the harness's own with four at the back and a keeper. The rolls are keyed, so the counts are the
+ * same on every run: the keeper holds one place in nine (2,000 of 18,000, measured 2,0xx) and each back two.
+ * With one place each the keeper reads 3,600, with none 0; the band is four binomial standard deviations.
+ */
+function weights(cm) {
+  const N = 18000;
+  const backs = ['left back', 'left centre back', 'right centre back', 'right back'];
+  const hits = new Map([...backs, 'keeper'].map(k => [k, 0]));
+  for (let i = 0; i < N; i++) {
+    const who = cm.ownGoalMan(`simCmOwnGoals|weights|${i}`, backs, 'keeper');
+    hits.set(who, (hits.get(who) ?? 0) + 1);
+  }
+  const band = (share) => 4 * Math.sqrt(N * share * (1 - share));
+  tick('weights');
+  if (Math.abs(hits.get('keeper') - N / 9) > band(1 / 9)) fail('weights', `the keeper was named ${hits.get('keeper')} times in ${N} with four at the back, and one place in nine is ${N / 9}`);
+  for (const b of backs) {
+    tick('weights');
+    if (Math.abs(hits.get(b) - 2 * N / 9) > band(2 / 9)) fail('weights', `the ${b} was named ${hits.get(b)} times in ${N}, and two places in nine is ${2 * N / 9}`);
+  }
+  tick('weights');
+  if (cm.ownGoalMan('simCmOwnGoals|weights|nobody', [], null) !== null) fail('weights', 'with nobody at the back and no keeper somebody was still named');
+  if (cm.ownGoalMan('simCmOwnGoals|weights|keeper', [], 'keeper') !== 'keeper') fail('weights', 'with only a keeper to name he was not named');
+  if (!backs.includes(cm.ownGoalMan('simCmOwnGoals|weights|backs', backs, null))) fail('weights', 'with no keeper a back was not named');
+  return hits;
+}
 
 /** Sections 3, 4 and 5 on one finished match of the candidate. */
 function inspectMatch(cm, career, m) {
@@ -280,11 +370,23 @@ function inspectMatch(cm, career, m) {
           || d.cards.some(c => c.kind === 'red' && c.name === line.name && place(c) < at)
           || d.injuries.some(x => x.name === line.name && place(x) < at);
         const there = m.startXi === null || ((ids.some(id => m.startXi.includes(id)) || (!!on && place(on) < at)) && !gone);
+        /* Where he was STANDING: his own slot at kick off, or the slot of the man he came on for. The engine reads
+           each of mine in his slot, so a centre back sent up front is not at the back and a midfielder at full back is. */
+        let idx = m.startXi === null ? -1 : m.startXi.findIndex(id => m.before.get(id)?.name === line.name);
+        for (let cur = line.name, hop = 0; m.startXi !== null && idx < 0 && hop < 3; hop++) {
+          const came = d.subs.find(s => s.on === cur && place(s) < at);
+          if (!came) break;
+          cur = came.off;
+          idx = m.startXi.findIndex(id => m.before.get(id)?.name === cur);
+        }
+        const stood = idx >= 0 ? m.lines[idx] : null;
+        const atTheBack = stood === null ? (pos === 'GK' || (pos !== null && cm.groupOf(pos) === 'DEF')) : (stood === 'defence' || stood === 'keeper');
         if (!ids.length || pos === null) fail('man', `${where}: ${line.name} (O.G) at ${line.minute}' is not in my squad`);
         else if (!there) fail('man', `${where}: ${line.name} (O.G) at ${line.minute}' was not on my pitch then`);
-        else if (pos !== 'GK' && cm.groupOf(pos) !== 'DEF') fail('man', `${where}: ${line.name} (O.G) plays ${pos}, not at the back or in goal`);
+        else if (!atTheBack) fail('man', `${where}: ${line.name} (O.G) was standing in ${stood ?? pos}, not at the back or in goal`);
         if (!line.drawn) fail('man', `${where}: the own goal at ${line.minute}' does not keep the man it was drawn for`);
-        if (pos === 'GK') tot.ogKeeper += 1;
+        if (stood === 'keeper' || (stood === null && pos === 'GK')) tot.ogKeeper += 1;
+        if (stood !== null && pos !== null && (stood === 'defence') !== (cm.groupOf(pos) === 'DEF') && stood !== 'keeper') tot.ogOffCard += 1;
       }
     }
   }
@@ -365,11 +467,14 @@ function inflight(candidate, fixture) {
 async function main() {
   const candidate = await engine('candidate', CONTROL ? CONTROLS[CONTROL].patch : []);
   const baseline = await engine('baseline', OFF);
+  /* the dense engine carries the control too (section gone is read on it), unless the control is the odds line itself */
+  const denseEngine = await engine('dense', [DENSE, ...(CONTROL ? CONTROLS[CONTROL].patch.filter(p => p.from !== DENSE.from && p.from !== TAG_CALL) : [])]);
+  const keeperHits = weights(candidate).get('keeper');
   const pairs = [];
   for (let c = 0; c < CLUBS.length; c++) for (let k = 0; k < SEEDS; k++) pairs.push({ club: CLUBS[c], seed: 11460000 + SEEDSET * 100003 + c * 7919 + k * 104729 });
   let fixture = null;
   for (const [n, pair] of pairs.entries()) {
-    const on = playCareer(candidate, pair.club, pair.seed, false);
+    const on = playCareer(candidate, pair.club, pair.seed, false, n < PROBE ? (state, i) => probeGone(denseEngine, state, (pair.seed + 7919 * (i + 1)) >>> 0) : null);
     const off = playCareer(baseline, pair.club, pair.seed, n < 2 && !fixture);
     /* Section 1: the same results, tables, squads, rival tallies and draw count, at every season's end and after every summer. */
     tick('digest');
@@ -386,6 +491,8 @@ async function main() {
     }
   }
   inflight(candidate, fixture);
+  /* a section that read nothing is not green: the floor is far under what the two probed careers give (measured in the header) */
+  if (!CONTROL && dense.og < 20) fail('gone', `only ${dense.og} own goals against me in the ${dense.matches} matches played again on the dense engine`);
 
   /* Section 2: the share, against the binomial the rule is. */
   const own = tot.og.me + tot.og.opp;
@@ -400,6 +507,7 @@ async function main() {
   const per = n => (n / Math.max(1, shift.seasons)).toFixed(2);
   console.log(`simCmOwnGoals${CONTROL ? ` (control ${CONTROL})` : ''}: ${pairs.length} careers (${CLUBS.length} clubs x ${SEEDS} seeds, seedset ${SEEDSET}) x ${SEASONS} seasons, ${tot.matches} matches, ${tot.goals} goals`);
   console.log(`  MEASURED own goals: ${own} of ${tot.goals} goals (${pct(own, tot.goals)}%), ${tot.og.me} for me and ${tot.og.opp} against; ${tot.eligible} eligible, expected ${expected.toFixed(1)}, z ${z.toFixed(2)}; ${tot.ogKeeper} by a keeper; ${tot.ogMatches} of ${tot.matches} matches had one; ${(own / (pairs.length * SEASONS)).toFixed(2)} a season in my matches`);
+  console.log(`  MEASURED the man: ${tot.ogOffCard} of the ${tot.og.opp} against me were by a man standing at the back whose card says otherwise; the keeper holds ${keeperHits} places in 18000 keyed picks with four at the back (one in nine is 2000); section gone: ${dense.matches} matches played again with ${dense.sentOff} men at the back sent off, ${dense.og} own goals against me after it`);
   console.log(`  MEASURED penalties: ${tot.pens} of ${tot.goals} goals (${pct(tot.pens, tot.goals)}%) carry the flag every listing marks (P); direct free kicks ${tot.fks} (${pct(tot.fks, tot.goals)}%); ${tot.manUnknown} own goals by a sub of theirs with no sheet to read his position from`);
   console.log(`  MEASURED awards over the ${shift.seasons} seasons both careers agree on: my squad ${shift.lost} goals and ${shift.assistsLost} assists down (${per(shift.lost)} and ${per(shift.assistsLost)} a season); my top scorer ${per(shift.topLost)} goals down a season on a mean of ${per(shift.topGoals)}, a different man in ${shift.topChanged}; golden boot a different man in ${shift.bootChanged}, player of the season in ${shift.potyChanged}, world award in ${shift.ballonChanged}`);
   let failed = 0;

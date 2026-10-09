@@ -149,7 +149,10 @@ export function timelineRows(d: MatchDetail, view: TimelineView): TimelineRow[] 
         const name = m ? m[1] : e.text;
         out.push({
           ...base, clock: at,
-          label: e.og ? 'Own goal' : e.penalty ? 'Goal, penalty' : e.freeKick ? 'Goal, free kick' : 'Goal',
+          /* Round 1146: a goal that wears a mark is just "Goal" here; the mark after the name says the rest.
+             The row used to say it twice ("Goal, penalty: X (P)", "Own goal: X (O.G)") in a column 119 px wide
+             on a phone, and the second copy, the mark, was what the ellipsis ate. */
+          label: e.og || e.penalty ? 'Goal' : e.freeKick ? 'Goal, free kick' : 'Goal',
           /* Round 1146: the man behind an own goal plays for the other side, so that is the side his MADE UP tag is read on. */
           name, gen: genOf(e.og ? (e.side === 'me' ? 'opp' : 'me') : e.side, name),
           /* Round 1146: the same mark the scorer lists print, from the same function. */

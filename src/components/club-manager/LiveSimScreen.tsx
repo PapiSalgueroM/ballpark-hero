@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Pause, Play, FastForward, Users, ArrowLeft, ArrowLeftRight, Gauge, X } from 'lucide-react';
 import {
@@ -160,6 +160,23 @@ const lineKey = (e: { kind: string; side: string; minute: number; plus?: number;
 export function goalSegs(lead: string, who: Seg, at: { minute: number; plus?: number }, marks: GoalMarks): Seg[] {
   const mark = scorerMark(marks);
   return [{ t: lead }, who, { t: ` ${minuteLabel(at)}` }, ...(mark ? [{ t: mark }] : [])];
+}
+/**
+ * Round 1146: the goal card's own line. The card holds 296 px of text at every width, and "GOAL! Own goal, "
+ * or "GOAL! Penalty, " in front of an ordinary name with its minute and its mark ran to 320 to 355, so the
+ * ellipsis ate the mark and often the minute. On the card a goal that wears a mark therefore drops the words
+ * the mark already says. The pill and the list beside the pitch have the room and keep the long form.
+ */
+export function cardSegs(segs: Seg[]): Seg[] {
+  return segs.length > 3 ? [{ t: 'GOAL! ' }, ...segs.slice(1)] : segs;
+}
+/**
+ * Round 1146: who a goal line names. An own goal names the man who put it in, and he plays for the OTHER
+ * side, so that is the side his name is looked up on (`named` tags a made up man of the opposition). Kept
+ * out of the component so a test can hold which side is asked: nothing else on the screen would notice.
+ */
+export function goalScorerSeg(e: { og?: boolean; text: string }, side: Side, who: Seg, named: (side: Side, name: string) => Seg): Seg {
+  return e.og && e.text ? named(side === 'me' ? 'opp' : 'me', e.text) : who;
 }
 const ordinal = (n: number) => `${n}${n % 10 === 1 && n % 100 !== 11 ? 'st' : n % 10 === 2 && n % 100 !== 12 ? 'nd' : n % 10 === 3 && n % 100 !== 13 ? 'rd' : 'th'}`;
 /** The shape a nameless opposition lines up in: 4-4-2. */
@@ -866,7 +883,7 @@ export function LiveSimScreen({
         case 'goal': {
           /* Round 1146: an own goal names the man who put it in. He plays for the other side, so that is
              the side his MADE UP tag is read on; the club under the line is still the club that got the goal. */
-          const scorer: Seg = e.og && e.text ? named(side === 'me' ? 'opp' : 'me', e.text) : who;
+          const scorer: Seg = goalScorerSeg(e, side, who, named);
           big = {
             /* Round 1146: the mark the report prints, from the same function, after the minute as the report has it. */
             segs: goalSegs(e.og ? 'GOAL! Own goal, ' : x?.penalty ? 'GOAL! Penalty, ' : x?.freeKick ? 'GOAL! Free kick, ' : 'GOAL! ', scorer, e, { penalty: x?.penalty, og: e.og }),
@@ -1383,9 +1400,14 @@ export function LiveSimScreen({
                         gm.side === 'me' ? 'bg-emerald-500 text-black' : 'bg-red-500 text-black',
                       )}
                     >
-                      <div className="truncate text-sm font-bold">
-                        {gm.segs.map((sg, i) => (
-                          <span key={i}>{sg.t}{sg.gen && <MadeUpTag className="ml-1" />}</span>
+                      {/* Round 1146: only the name gives way on a narrow card. The words before it and the
+                          minute and mark after it are never clipped (whitespace-pre keeps their spaces). */}
+                      <div className="flex min-w-0 items-baseline justify-center truncate text-sm font-bold" data-cm-goal-card-line="1">
+                        {cardSegs(gm.segs).map((sg, i) => (
+                          <Fragment key={i}>
+                            <span className={i === 1 ? 'min-w-0 truncate' : 'shrink-0 whitespace-pre'}>{sg.t}</span>
+                            {sg.gen && <MadeUpTag className="ml-1 shrink-0" />}
+                          </Fragment>
                         ))}
                       </div>
                       <div className="truncate text-[11px] leading-tight text-black/75">

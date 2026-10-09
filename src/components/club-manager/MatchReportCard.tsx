@@ -308,6 +308,8 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
               {r.myScorers.map((sc, i) => (
                 <p key={i} className="text-[11px] text-foreground cm-rise" style={{ animationDelay: revealDelay(i, 0.35, 0.14) }}>
                   ⚽ {scorerLine(sc)}
+                  {/* Round 1146: an own goal names one of theirs, and a man the game made up wears his tag here as on every other screen. */}
+                  {sc.gen && <MadeUpTag className="ml-1" />}
                   {sc.assist && <span className="text-[9px] text-muted-foreground"> · 🅰️ {sc.assist}</span>}
                 </p>
               ))}

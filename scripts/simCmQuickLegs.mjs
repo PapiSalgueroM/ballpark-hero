@@ -29,12 +29,31 @@
  *              keeper or a man who came on off, and either leaves the eleven
  *              no weaker by the engine's own strength or comes with my side
  *              two goals clear
+ *     order    the man going off is a man on a yellow before anyone else,
+ *              then the one with the least left in his legs: nobody he
+ *              should have looked at first had a change open to him
+ *     fresher  the man coming on is fresher than the man going off (more
+ *              fitness, or the same and better morale), the break's own test
+ *     fit      and he plays there: natural in that slot or the same family
  *   3 reserve  when he makes one, at most one change had been made before it
  *              and two fit men were on the bench
+ *     thin     with ONE fit man on the bench he makes no change for legs
+ *              (a save built for it: a fleet's benches are never that thin)
+ *     clock    with the clock already past his first look he does not go
+ *              back to it (a save built for it too)
  *   4 manual   a manager making the same changes by hand at the same minutes
  *              gets the same match, report and save, byte for byte
  *   5 report   the full time report lists every change he made, and its
  *              timeline has a row for each
+ *
+ * order, fresher and fit are the three clauses the help and What's New
+ * promise ("a booked man first, then the least fit, for a fresher man who
+ * plays there"). The round's first review deleted each of them in turn with
+ * every gate green, because sections 2 and 3 read the minute, the keeper, the
+ * strength and the reserve and never a yellow card, the incoming man's legs
+ * or his fit. They are read off the save just before each change by the
+ * harness's own code (the card list, the two men's fitness and morale, the
+ * engine's fitGrade for the slot), not by asking the coach's.
  *
  * MEASURED on a GitHub runner, 2026-10-09, the default fleet (6 clubs x 3
  * seeds x 2 seasons, 36 seasons an arm) on five seed sets, with the round
@@ -74,7 +93,12 @@
  * run exits 0 only if the NAMED section went red:
  *   off      the restLegs call removed                          -> gap
  *   anyone   the "no weaker, or settled" test removed           -> rule
+ *   unbooked "a man on a yellow first" dropped from the order   -> order
+ *   stale    the fresher test dropped                           -> fresher
+ *   anywhere the "plays there" test dropped                     -> fit
  *   nokeep   he may spend his last change on legs               -> reserve
+ *   lastman  he may spend his last fit bench man on legs        -> thin
+ *   noclock  he ignores where the saved clock stands            -> clock
  *   ambient  his two minutes are drawn from Math.random         -> manual
  *
  * Run: node scripts/simCmQuickLegs.mjs        (SEEDSET=n for another set of seeds)
@@ -99,10 +123,16 @@ const CLUBS = (process.env.CLUBS ?? 'Everton,Real Madrid,Ajax,Aston Villa,Barcel
 const GAP = Number(process.env.GAP ?? 0.2);
 
 const OFF = [{ file: ENGINE, from: '    restLegs(at);', to: '    void restLegs;' }];
+const GUARD = 'if (live.subsUsed >= MAX_SUBS - 1 || (live.minute ?? 0) > at || benchFor(state).length < 2) return;';
 const CONTROLS = {
+  unbooked: { patch: [{ file: ENGINE, from: '.sort((a, b) => Number(booked.has(b.p.id)) - Number(booked.has(a.p.id)) || a.p.fitness - b.p.fitness);', to: '.sort((a, b) => a.p.fitness - b.p.fitness);' }], red: 'order' },
+  stale: { patch: [{ file: ENGINE, from: '&& (p.fitness > out.p.fitness || (p.fitness === out.p.fitness && p.morale > out.p.morale)));', to: ');' }], red: 'fresher' },
+  anywhere: { patch: [{ file: ENGINE, from: "benchFor(state, out.p.id).filter(p => (outFit(p) === 'natural' || outFit(p) === 'family')", to: 'benchFor(state, out.p.id).filter(p => (true)' }], red: 'fit' },
+  lastman: { patch: [{ file: ENGINE, from: GUARD, to: GUARD.replace('benchFor(state).length < 2', 'benchFor(state).length < 1') }], red: 'thin' },
+  noclock: { patch: [{ file: ENGINE, from: GUARD, to: GUARD.replace(' || (live.minute ?? 0) > at', '') }], red: 'clock' },
   off: { patch: OFF, red: 'gap' },
   anyone: { patch: [{ file: ENGINE, from: 'const coming = options.find(p => settled || noWeaker(p));', to: 'const coming = options[0];' }], red: 'rule' },
-  nokeep: { patch: [{ file: ENGINE, from: 'if (live.subsUsed >= MAX_SUBS - 1 || (live.minute ?? 0) > at || benchFor(state).length < 2) return;', to: 'if (live.subsUsed >= MAX_SUBS || (live.minute ?? 0) > at || benchFor(state).length < 2) return;' }], red: 'reserve' },
+  nokeep: { patch: [{ file: ENGINE, from: GUARD, to: GUARD.replace('live.subsUsed >= MAX_SUBS - 1', 'live.subsUsed >= MAX_SUBS') }], red: 'reserve' },
   ambient: { patch: [{ file: ENGINE, from: 'lo + Math.floor(keyedRng(`${key}|${i}`)() * (hi - lo + 1))', to: 'lo + Math.floor(Math.random() * (hi - lo + 1))' }], red: 'manual' },
 };
 if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) { console.error(`simCmQuickLegs: unknown control "${CONTROL}"`); process.exit(2); }
@@ -161,7 +191,7 @@ function under(stream, fn) {
 }
 
 /* ---------- the sections ---------- */
-const SECTIONS = ['gap', 'rule', 'reserve', 'manual', 'report'];
+const SECTIONS = ['gap', 'rule', 'order', 'fresher', 'fit', 'reserve', 'thin', 'clock', 'manual', 'report'];
 const red = new Map(SECTIONS.map(s => [s, []]));
 const checked = new Map(SECTIONS.map(s => [s, 0]));
 const fail = (section, message) => red.get(section).push(message);
@@ -228,7 +258,7 @@ function playCareer(cm, club, seed, a, keep, section5) {
 }
 
 /* ---------- the replay: his changes made by hand, his rule read before each one ---------- */
-const legsTally = { changes: 0, live: 0, liveGain: 0, settled: 0, settledGain: 0, replayed: 0, withLegs: 0 };
+const legsTally = { changes: 0, live: 0, liveGain: 0, settled: 0, settledGain: 0, replayed: 0, withLegs: 0, bookedOff: 0, thin: 0, clock: 0 };
 
 /** Sections 2 and 3 on one change of his that is not for an injury, read off the save just before it. */
 function judge(cm, st, line) {
@@ -248,6 +278,31 @@ function judge(cm, st, line) {
   if (then < now && !settled) fail('rule', `${out.name} off at ${line.minute}' left the eleven weaker (${then.toFixed(2)} from ${now.toFixed(2)}) with my side ${lead >= 0 ? `${lead} up` : `${-lead} down`}`);
   legsTally.changes += 1;
   if (settled) { legsTally.settled += 1; legsTally.settledGain += then - now; } else { legsTally.live += 1; legsTally.liveGain += then - now; }
+  /* The three clauses the help promises, each read off the save and never off his own code: who comes on is
+     fresher (sections fresher) and plays there (fit), and who goes off is a man on a yellow before anyone else,
+     then the one with the least left in his legs (order). */
+  const coming = st.squad.find(p => p.id === line.onId);
+  const formation = cm.FORMATIONS[live.formationIndex ?? st.formationIndex] ?? cm.FORMATIONS[0];
+  const slotOf = id => formation.slots[live.onPitch.indexOf(id)] ?? null;
+  const fresherThan = (a, b) => a.fitness > b.fitness || (a.fitness === b.fitness && a.morale > b.morale);
+  const playsThere = (p, id) => { const slot = slotOf(id); const g = slot ? cm.fitGrade(p, slot) : 'wrong'; return g === 'natural' || g === 'family'; };
+  tick('fresher');
+  if (!coming || !fresherThan(coming, out)) fail('fresher', `${coming?.name ?? line.on} (fitness ${coming?.fitness}, morale ${coming?.morale}) came on at ${line.minute}' for ${out.name} (${out.fitness}, ${out.morale}) and is no fresher`);
+  tick('fit');
+  if (!coming || !playsThere(coming, out.id)) fail('fit', `${coming?.name ?? line.on} (${coming?.position}) came on at ${line.minute}' in ${out.name}'s place (${(slotOf(out.id)?.allowed ?? []).join('/')}), which he does not play`);
+  tick('order');
+  const gone = cm.liveGoneIds(live, line.minute);
+  const cameOn = new Set((live.subs ?? []).map(s => s.onId));
+  const booked = new Set([...(live.h1Cards ?? []), ...(live.h2Cards ?? [])].filter(c => c.kind === 'yellow' && c.minute <= line.minute).map(c => c.id));
+  legsTally.bookedOff += booked.has(out.id) ? 1 : 0;
+  /* a change was open to a man when somebody on the bench plays his place, is fresher, and keeps the side as strong (or the match is won) */
+  const open = p => cm.benchFor(st, p.id).some(b => playsThere(b, p.id) && fresherThan(b, p)
+    && (settled || (cm.liveElevenStrength(st, line.minute, { outId: p.id, inId: b.id }) ?? 0) >= now));
+  const first = live.onPitch.map(id => st.squad.find(p => p.id === id))
+    .filter(p => p && p.id !== out.id && !gone.has(p.id) && !cameOn.has(p.id) && p.position !== 'GK' && !(slotOf(p.id)?.allowed ?? []).includes('GK'))
+    .filter(p => (booked.has(p.id) && !booked.has(out.id)) || (booked.has(p.id) === booked.has(out.id) && p.fitness < out.fitness))
+    .find(open);
+  if (first) fail('order', `${out.name} (fitness ${out.fitness}${booked.has(out.id) ? ', on a yellow' : ''}) went off at ${line.minute}' while ${first.name} (${first.fitness}${booked.has(first.id) ? ', on a yellow' : ''}) should have been looked at first and had a change open to him`);
   tick('reserve');
   if (live.subsUsed > 1) fail('reserve', `a change for legs at ${line.minute}' was his change number ${live.subsUsed + 1} of the match`);
   if (cm.benchFor(st).length < 2) fail('reserve', `a change for legs at ${line.minute}' took the last fit man off his bench`);
@@ -290,6 +345,44 @@ function finishByHand(cm, paused, report) {
 }
 
 /**
+ * Sections thin and clock: two saves a fleet of whole careers never meets, built off a match of his that had a
+ * change for legs, so a change is known to be open in it. Played on a third copy of the engine and under a stream
+ * of their own, so the career by hand is not disturbed by them.
+ *   thin   the bench is cut to ONE fit man, the very man he brought on for legs. He never spends his last fit man.
+ *   clock  the second half is sent out by hand and the clock already stands past his first look. He does not go
+ *          back to it: any change for legs he still makes sits on a keyed minute the clock has not passed.
+ */
+function probeGuards(cm, paused, report, seed) {
+  const d = report.detail;
+  const forLegs = d.subs.filter(s => s.minute > 46 && s.minute <= 90 && !d.injuries.some(x => x.name === s.off && place(x) <= place(s)));
+  if (!forLegs.length) return;
+  const legsMade = st => {
+    const live = st.live;
+    const hurt = [...(live.h1Injuries ?? []), ...(live.h2Injuries ?? [])];
+    return (live.subs ?? []).filter(s => s.minute > 46 && s.minute <= 90 && !hurt.some(x => (x.id ? x.id === s.offId : x.name === s.off) && place(x) <= place(s)));
+  };
+  const thin = JSON.parse(JSON.stringify(paused));
+  const on = new Set(thin.live.onPitch);
+  for (const p of thin.squad) if (!on.has(p.id) && p.name !== forLegs[0].on) p.injuryWeeks = Math.max(p.injuryWeeks ?? 0, 3);
+  if (cm.benchFor(thin).length === 1) {
+    const after = under(seeded(seed), () => cm.coachQuickMatch(thin));
+    tick('thin');
+    legsTally.thin += 1;
+    const made = legsMade(after);
+    if (made.length) fail('thin', `with one fit man left on the bench he still made a change for legs at ${made[0].minute}' (${made[0].on} for ${made[0].off})`);
+  }
+  const started = under(seeded(seed + 1), () => cm.startSecondHalf(paused));
+  if (!started) return;
+  const minutes = cm.quickLegsMinutes(started, started.live);
+  const clock = minutes[0] + 1;
+  const after = under(seeded(seed + 2), () => cm.coachQuickMatch(cm.markLiveMinute(started, clock)));
+  tick('clock');
+  legsTally.clock += 1;
+  const late = legsMade(after).filter(s => !minutes.includes(s.minute) || s.minute < clock);
+  if (late.length) fail('clock', `with the clock on ${clock}' he made a change for legs at ${late[0].minute}', which is not a look of his still to come (${minutes.join(' and ')})`);
+}
+
+/**
  * Section 4, and where sections 2 and 3 are read: the same career again, on a second copy of the same engine and
  * the same seed, with every match of mine finished BY HAND (stopped at the break, the quick sim's own list of
  * changes made one at a time). A second copy, because the engine fills a few tables the first time it needs them
@@ -297,7 +390,7 @@ function finishByHand(cm, paused, report) {
  * is a manager making those changes by hand, the two careers never part: the same report and the same save after
  * every match, which also means the same place in the seeded stream.
  */
-function careerByHand(cm, club, seed, plays) {
+function careerByHand(cm, club, seed, plays, probe) {
   const stream = seeded(seed);
   under(stream, () => {
     let st = cm.startCareer(club);
@@ -309,6 +402,7 @@ function careerByHand(cm, club, seed, plays) {
         if (r.kind === 'halftime') {
           const want = plays[i];
           if (!want) { fail('manual', `${club} seed ${seed}: the career by hand reached a match the quick sim career never played`); return; }
+          probeGuards(probe, r.state, want.report, (seed + 7919 * (i + 1)) >>> 0);
           try { r = finishByHand(cm, r.state, want.report); } catch (error) { tick('manual'); fail('manual', `${club} seed ${seed}, match ${i + 1}: ${error.message}`); return; }
         }
         st = r.state;
@@ -339,6 +433,8 @@ async function main() {
   const candidate = built.mod;
   /* the same bundle loaded a second time: its own tables, its own counters */
   const second = await import(`${built.href}?by-hand`);
+  /* and a third time, for the two built saves of probeGuards */
+  const probe = await import(`${built.href}?probe`);
   const baseline = (await engine('baseline', OFF)).mod;
   const pairs = [];
   for (let c = 0; c < CLUBS.length; c++) for (let k = 0; k < SEEDS; k++) pairs.push({ club: CLUBS[c], seed: 11461000 + SEEDSET * 100003 + c * 7919 + k * 104729 });
@@ -346,7 +442,7 @@ async function main() {
   const off = arm();
   for (const [n, pair] of pairs.entries()) {
     const kept = playCareer(candidate, pair.club, pair.seed, on, n < REPLAY, true);
-    if (kept.length) careerByHand(second, pair.club, pair.seed, kept);
+    if (kept.length) careerByHand(second, pair.club, pair.seed, kept, probe);
     playCareer(baseline, pair.club, pair.seed, off, false, false);
   }
 
@@ -355,6 +451,12 @@ async function main() {
   tick('gap');
   if (share(on) - share(off) < GAP) fail('gap', `the bench is used in ${(100 * share(on)).toFixed(1)}% of quick sims with the round and ${(100 * share(off)).toFixed(1)}% without it, under the ${(100 * GAP).toFixed(0)} points the round must add`);
   if (!legsTally.changes && !CONTROL) fail('rule', `none of the ${legsTally.replayed} replayed matches had a change for legs to judge`);
+  /* a section that looked at nothing is not green */
+  if (!CONTROL) {
+    if (!legsTally.bookedOff) fail('order', `none of the ${legsTally.changes} changes for legs took a man on a yellow off, so "booked first" was never read`);
+    if (!legsTally.thin) fail('thin', 'no match was played again with one fit man on the bench');
+    if (!legsTally.clock) fail('clock', 'no match was played again with the clock past his first look');
+  }
 
   const per = (n, d) => (d ? (n / d).toFixed(2) : '0.00');
   const pc = (n, d) => (d ? (100 * n / d).toFixed(1) : '0.0');
@@ -363,7 +465,7 @@ async function main() {
   console.log(`simCmQuickLegs${CONTROL ? ` (control ${CONTROL})` : ''}: ${pairs.length} careers (${CLUBS.length} clubs x ${SEEDS} seeds, seedset ${SEEDSET}) x ${SEASONS} seasons, each by quick sim, with and without the round`);
   console.log(line('with the round', on));
   console.log(line('without it', off));
-  console.log(`  MEASURED his rule, on ${legsTally.replayed} matches played again by hand (${legsTally.withLegs} with a change for legs): ${legsTally.changes} changes for legs, ${legsTally.live} with the match within a goal (mean strength ${legsTally.live ? (legsTally.liveGain / legsTally.live >= 0 ? '+' : '') + (legsTally.liveGain / legsTally.live).toFixed(3) : 'n/a'}) and ${legsTally.settled} with my side two or more up (mean ${legsTally.settled ? (legsTally.settledGain / legsTally.settled >= 0 ? '+' : '') + (legsTally.settledGain / legsTally.settled).toFixed(3) : 'n/a'})`);
+  console.log(`  MEASURED his rule, on ${legsTally.replayed} matches played again by hand (${legsTally.withLegs} with a change for legs): ${legsTally.changes} changes for legs, ${legsTally.live} with the match within a goal (mean strength ${legsTally.live ? (legsTally.liveGain / legsTally.live >= 0 ? '+' : '') + (legsTally.liveGain / legsTally.live).toFixed(3) : 'n/a'}) and ${legsTally.settled} with my side two or more up (mean ${legsTally.settled ? (legsTally.settledGain / legsTally.settled >= 0 ? '+' : '') + (legsTally.settledGain / legsTally.settled).toFixed(3) : 'n/a'}); ${legsTally.bookedOff} of them took a man on a yellow off; ${legsTally.thin} matches played again with one fit man on the bench and ${legsTally.clock} with the clock past his first look`);
   let failed = 0;
   for (const s of SECTIONS) {
     const xs = red.get(s);

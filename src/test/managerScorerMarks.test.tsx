@@ -11,7 +11,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { scorerLine, scorerMark } from '@/lib/clubManagerScorerLine';
 import { timelineRows } from '@/lib/clubManagerMatchCentre';
 import { MatchTimeline } from '@/components/club-manager/MatchTimeline';
-import { goalCardCount, goalSegs } from '@/components/club-manager/LiveSimScreen';
+import { cardSegs, goalCardCount, goalScorerSeg, goalSegs } from '@/components/club-manager/LiveSimScreen';
 import { MatchReportCard } from '@/components/club-manager/MatchReportCard';
 import { liveFeed } from '@/lib/clubManager';
 import type { CareerState, LiveMatch, MatchDetail, MatchWeekReport, TimelineEvent } from '@/lib/clubManager';
@@ -68,7 +68,7 @@ describe('an own goal, on every listing (Round 1146)', () => {
     expect(container.textContent).not.toContain('Their striker');
   });
 
-  it('reads Own goal on the timeline, with the mark, and tags a made up man off the side he plays for', () => {
+  it('wears the mark on the timeline, outside the clipped name, and tags a made up man off the side he plays for', () => {
     const d = detail([
       { minute: 10, side: 'me', kind: 'goal', text: 'Made up back', og: true },
       { minute: 50, side: 'opp', kind: 'goal', text: 'My left back', og: true },
@@ -76,13 +76,22 @@ describe('an own goal, on every listing (Round 1146)', () => {
     d.oppXi = [{ n: 'Made up back', p: 'CB', r: 70, g: true }];
     const rows = timelineRows(d, 'key');
     expect(rows.map(r => [r.side, r.label, r.name, r.mark, !!r.gen])).toEqual([
-      ['me', 'Own goal', 'Made up back', ' (O.G)', true],
-      ['opp', 'Own goal', 'My left back', ' (O.G)', false],
+      ['me', 'Goal', 'Made up back', ' (O.G)', true],
+      ['opp', 'Goal', 'My left back', ' (O.G)', false],
     ]);
     const { container } = render(<MatchTimeline detail={d} clubName="Home Club" opponent="Away Club" />);
     const entries = [...container.querySelectorAll('[data-cm-tl="goal"] [data-cm-tl-entry]')].map(n => n.textContent ?? '');
-    expect(entries[0].startsWith('⚽ Own goal: Made up back (O.G)')).toBe(true);
-    expect(entries[1]).toBe('⚽ Own goal: My left back (O.G)');
+    expect(entries[0].startsWith('⚽ Goal: Made up back (O.G)')).toBe(true);
+    expect(entries[1]).toBe('⚽ Goal: My left back (O.G)');
+    /* The mark is its own piece, beside the span that clips, never inside it: on a phone the column is 119 px and
+       the ellipsis has to eat the name, not the mark (the round's review saw a row end in a dangling "(..."). */
+    const marks = [...container.querySelectorAll('[data-cm-tl="goal"] [data-cm-tl-mark]')];
+    expect(marks.map(n => n.textContent)).toEqual([' (O.G)', ' (O.G)']);
+    for (const mark of marks) {
+      expect(mark.closest('.truncate')).toBeNull();
+      expect(mark.className).toContain('shrink-0');
+      expect(mark.parentElement!.querySelector('.truncate')!.textContent).not.toContain('(O.G)');
+    }
   });
 
   it('is fed to the live screen as the man who put it in, for the side that got the goal', () => {
@@ -134,7 +143,7 @@ describe('the report timeline', () => {
   it('prints it after the name on the screen, in both views', () => {
     const { container, getByRole } = render(<MatchTimeline detail={detail(timeline)} clubName="Home Club" opponent="Away Club" />);
     const goalsOnScreen = () => [...container.querySelectorAll('[data-cm-tl="goal"] [data-cm-tl-entry]')].map(n => n.textContent);
-    const want = ['⚽ Goal, penalty: Spot taker (P)', '⚽ Goal: Open play scorer 🅰️ Pass maker', '⚽ Goal, free kick: Their free kick man', '⚽ Goal, penalty: Their spot taker (P)'];
+    const want = ['⚽ Goal: Spot taker (P)', '⚽ Goal: Open play scorer 🅰️ Pass maker', '⚽ Goal, free kick: Their free kick man', '⚽ Goal: Their spot taker (P)'];
     expect(goalsOnScreen()).toEqual(want);
     const toggle = container.querySelector('[data-cm-tl-toggle]');
     if (toggle) { (toggle as HTMLButtonElement).click(); }
@@ -169,5 +178,54 @@ describe('the live screen goal line', () => {
     expect(text(segs.filter(sg => sg.t !== " 53'"))).toBe('GOAL! Penalty, Spot taker (P)');
     /* a made up opponent keeps his tag on his own run */
     expect(goalSegs('GOAL! ', { t: 'Made up man', gen: true }, { minute: 9 }, {})[1]).toEqual({ t: 'Made up man', gen: true });
+  });
+});
+
+/* Round 1146, the review's fixes: the goal card holds 296 px of text at every width, and the long form of a
+   marked goal did not fit an ordinary name with its minute and mark, so the ellipsis ate the mark. */
+describe('the goal card line', () => {
+  const text = (segs: { t: string }[]) => segs.map(s => s.t).join('');
+
+  it('drops the words the mark already says, and only for a goal that wears a mark', () => {
+    expect(text(cardSegs(goalSegs('GOAL! Own goal, ', { t: 'Their centre back' }, { minute: 12 }, { og: true })))).toBe("GOAL! Their centre back 12' (O.G)");
+    expect(text(cardSegs(goalSegs('GOAL! Penalty, ', { t: 'Spot taker' }, { minute: 45, plus: 3 }, { penalty: true })))).toBe("GOAL! Spot taker 45+3' (P)");
+    /* no mark, nothing dropped: a free kick still says so in words, an open play goal reads as it did */
+    expect(text(cardSegs(goalSegs('GOAL! Free kick, ', { t: 'Free kick man' }, { minute: 70 }, {})))).toBe("GOAL! Free kick, Free kick man 70'");
+    expect(text(cardSegs(goalSegs('GOAL! ', { t: 'Open play scorer' }, { minute: 12 }, {})))).toBe("GOAL! Open play scorer 12'");
+  });
+
+  it('keeps the scorer as the second run with his tag, so the card can let the name alone give way', () => {
+    const segs = cardSegs(goalSegs('GOAL! Own goal, ', { t: 'Made up back', gen: true }, { minute: 5 }, { og: true }));
+    expect(segs.map(sg => sg.t)).toEqual(['GOAL! ', 'Made up back', " 5'", ' (O.G)']);
+    expect(segs[1]).toEqual({ t: 'Made up back', gen: true });
+  });
+
+  it('looks the man behind an own goal up on the side he plays for, which is the other one', () => {
+    const asked: [string, string][] = [];
+    const named = (side: 'me' | 'opp', name: string) => { asked.push([side, name]); return { t: name, ...(side === 'opp' ? { gen: true } : {}) }; };
+    const who = { t: 'The man it was drawn for' };
+    /* a goal for me that one of theirs put in: he is looked up among THEIRS, where a made up man is tagged */
+    expect(goalScorerSeg({ og: true, text: 'Their made up back' }, 'me', who, named)).toEqual({ t: 'Their made up back', gen: true });
+    /* a goal for them that one of mine put in: looked up among mine */
+    expect(goalScorerSeg({ og: true, text: 'My left back' }, 'opp', who, named)).toEqual({ t: 'My left back' });
+    expect(asked).toEqual([['opp', 'Their made up back'], ['me', 'My left back']]);
+    /* an ordinary goal is not looked up again: the line keeps the scorer it had */
+    expect(goalScorerSeg({ text: 'Open play scorer' }, 'me', who, named)).toBe(who);
+    expect(asked.length).toBe(2);
+  });
+});
+
+describe('a made up man behind an own goal', () => {
+  it('wears MADE UP on the report card, beside his line, and a real man does not', () => {
+    const report: MatchWeekReport = {
+      competition: 'league', compLabel: 'League', home: 'Home Club', away: 'Away Club',
+      homeGoals: 2, awayGoals: 0, won: true, drawn: false, decidedBy: 'regular',
+      myScorers: [{ name: 'Made up back', minute: 12, og: true, gen: true }, { name: 'Their centre back', minute: 63, og: true }],
+      oppScorers: [],
+      events: [], trophyWon: null, myPosition: 4, confidence: 60, confidenceDelta: 0, otherResults: [],
+    };
+    const { container } = render(<MatchReportCard report={report} clubName="Home Club" onContinue={() => {}} />);
+    const rows = [...container.querySelectorAll('p')].filter(p => (p.textContent ?? '').startsWith('⚽'));
+    expect(rows.map(p => p.textContent)).toEqual(["⚽ Made up back 12' (O.G)MADE UP", "⚽ Their centre back 63' (O.G)"]);
   });
 });
