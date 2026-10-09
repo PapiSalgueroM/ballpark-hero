@@ -1,56 +1,40 @@
-## Rounds 1179 to 1183 authored, 2026-10-09: career targets, records, VAR and player reports
+## Rounds1179 to1183 READY for F integration, 2026-10-09
 
-Codex follow-up on codex/career-next-batch, based on main c33d0139. Source is
-being finished and independently reviewed. Runtime acceptance is pending on
-GitHub runners. This is not merged or published, and PR207 stays frozen for F.
+Draft PR208: https://github.com/PapiSalgueroM/ballpark-hero/pull/208
+Branch codex/career-next-batch includes released AP mainbfc6197f.
+Accepted source3b166563a4a7a6dd398cb266aee8913139db3429,
+treeeef98ec7d32987aaddfbf1e13716611ec8c453bc.
+GitHub run37952755987/job113895492226 completed SUCCESS. Artifact11626618664,
+SHA256603254e4161ba0e72d35b629f405dfc068dcc98116a515ca01e75e5a934af979,
+was downloaded, hash verified and reviewed on phone and desktop. Full receipt:
+docs/ROUND1179-1183-RECEIPT.md. No local runtime, merge or publication.
 
-- 1179: Club Manager stores VAR goal reviews before score/scorer credit, and a
-  missed defensive foul can award a penalty whose actual kick can score or miss.
-  Only new non-historical 2026+ matches opt in; old saved live matches keep their
-  outcomes. Review frequencies are gameplay choices, not real league statistics.
-- 1180: optional Soccer Career targets chase a saved personal best for the next
-  year and club. Actual season stats settle them once. An earned +1 training
-  reward joins the next year's growth; transfers cancel an unplayed target.
-- 1181: a small record book tile opens actual best seasons and chronological
-  club spells, with loan parents, saved totals and a ten-appearance rating floor.
-  Academy/post-retirement rows and year-out markers stay out. No awards leak.
-- 1182: Dart Draft pages the existing 2026 roster completely. Eligible choice
-  lists keep the best three and sample five others without duplicate names.
-  No new real-player data or database write is introduced.
-- 1183: Stat Detective labels its 500+ minute filtered profiles Recorded seasons
-  and Recorded franchises, explains that scope before play and in help, and
-  includes the exact mystery player/season/profile scope in future reports.
-  The report with only a date did not identify a player, so no retirement year
-  was guessed. Transfer Path tpa-767's report says only Other; its held data lane
-  was not changed.
+- 1179: stored Manager VAR settles goal reviews before score/scorer credit;
+  missed defensive fouls can award real simulated penalty kicks. New modern
+  matches opt in; saved/historical matches preserve outcomes.
+- 1180: optional Soccer Career personal targets use actual saved seasons,
+  settle once and reward next year's growth. Interruptions and moves cannot
+  earn an unplayed target. Rules and worked example precede the choice.
+- 1181: actual best seasons and chronological club spells, including loan
+  parents and saved totals. Ratings require ten appearances. No award reveal.
+  Loading/error dialogs restore focus; full saved careers remain unchanged.
+- 1182: complete existing2026 Dart pool pagination and compact choice variety,
+  without duplicate names or invented real-player data.
+- 1183: accurate filtered profile scope and exact case/player/season/mode in
+  Stat Detective reports. No unidentified retirement date was guessed.
 
-Manager own goals, penalty markers, first-season fixtures and routine Quick Sim
-subs remain F/recovery's existing lane. Soccer own goals are in PR206/Release AP.
-The new branch is a follow-up, not a replacement for those pending integrations.
-Remote workflow career-next-batch.yml checks exact app types, a complete build,
-new outcomes/effective controls, related existing outcomes, all built readers,
-and native route journeys on phone and desktop. No local site runtime was used.
+F1145 owns whole-career Stat Detective spans and Dart Draft2000. These scope/
+context and complete-pagination/variety changes are companions; retain F's
+complete-career span fix when integrating. F1146 owns Manager penalty/own-goal
+labels and routine Quick Sim substitutions. Soccer own goals1167 are live in
+AP. Transfer Path1010b/1017 stays held; tpa-767 only says Other. PR207 remains
+frozen for F's AQ integration. Existing historical workflow/source-hold gates
+are outside this focused acceptance; final integration still needs release gates.
 
-Integration update, 2026-10-09 10:36 EDT: Release AP is now live, and its main
-bfc6197f is merged into this branch before the remote gate. Soccer own goals
-1167 are live. F's new1145 claim owns whole-career Stat Detective spans and the
-Dart Draft 2000 pool increase. Our1183 scope wording/report context and1182
-complete pagination/variety are companion proposals for F to reconcile with
-1145, not a second release of that data work. F should retain its complete
-career spans when combining the wording and exact-case report context. Manager
-first-season real fixtures are still an unclaimed data task in F's latest board;
-our1179 claims VAR. Existing1146 owns Manager own goals, penalties and quick subs.
-Remote gate correction, 2026-10-09: first run37945439743 on fcaa54532
-failed and is not acceptance evidence. Types, build, all15 built readers,
-all48 focused tests except help-focus timing, the career ambition/record
-outcomes and40 Dart/Stat native checks passed. Repairs retain every original
-outcome: load real historical squads per isolated VAR bundle, pair attached
-stage metadata with the visible match screen, wait for actual help focus,
-compare second yellow cards by their full added-time clock, count both
-valid kickOff signatures, and require each report control's exact failure
-set. Career browser checks now capture whole-save/RNG differences and follow
-the actual one-time stale-chunk reload before testing the error dialog.
-Remote rerun is required. Manager first-season fixtures remain unclaimed.
+Separate1184 CLAIM: codex/cm-real-fixtures fromAPbfc6197f. All3802026/27
+Premier League round/opponent/venue pairs agree between two retained sources.
+No dates/results imported. Eligible fresh careers only; other contexts keep
+generated schedules. Product and remote proof in progress, not ready/published.
 
 ## Release AP LIVE, 2026-10-09 10:21 EDT: NFL My Career week by week and NFL truth, the storage line that leaves, one disclaimer a page, and 18 Codex rounds (own goals in Soccer Career, the Tycoon season review, Club Manager access)
 

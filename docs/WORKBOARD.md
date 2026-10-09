@@ -1,56 +1,40 @@
-## Codex follow-up: career depth and October9 reports, 2026-10-09
+## Rounds1179 to1183 READY for F integration, 2026-10-09
 
-PR207 is frozen for F's Release AQ integration. All ten rounds remain READY
-for F integration, with the exact remote evidence already recorded. No further
-source or script pushes will go to codex/soccer-career-real-opponents.
-The follow-up is isolated on codex/career-next-batch from main c33d0139,
-C:/Users/antho/.codex/worktrees/career-next-batch/ballpark-hero.
-Anthony renewed the Manager requests and added VAR, Dart Draft variety,
-Stat Detective date correction and more Soccer Career depth. Existing Manager
-own goals, penalty markers and routine Quick Sim subs remain F/recovery's
-lane. First-season real fixtures remain unclaimed. Transfer Path1010b/1017 data ownership stays held.
-New claims: 1179 stored Manager VAR, 1180 personal season targets, 1181 career
-record book, 1182 Dart Draft complete existing pool/variety, 1183 Stat Detective
-recorded profile scope and exact report context. Authored, remote gates pending.
-No new runtime acceptance, merge or publication is claimed. Local site runtime
-stays prohibited; only native Git and PS/.NET file I/O are used locally.
+Draft PR208: https://github.com/PapiSalgueroM/ballpark-hero/pull/208
+Branch codex/career-next-batch includes released AP mainbfc6197f.
+Accepted source3b166563a4a7a6dd398cb266aee8913139db3429,
+treeeef98ec7d32987aaddfbf1e13716611ec8c453bc.
+GitHub run37952755987/job113895492226 completed SUCCESS. Artifact11626618664,
+SHA256603254e4161ba0e72d35b629f405dfc068dcc98116a515ca01e75e5a934af979,
+was downloaded, hash verified and reviewed on phone and desktop. Full receipt:
+docs/ROUND1179-1183-RECEIPT.md. No local runtime, merge or publication.
 
-F's requested source pointer for1169/1175: scripts/data/soccerCareerFacts.json,
-leagueWorld, carries each 2026-27 division's full membership list and two
-independent membership URLs (2026 calendar for MLS/Brasileirao). Its
-leagueEvidence entries carry the hand-club spelling and current membership
-source pairs. Historical1990-2025 membership comes from the six JSON ledgers
-in scripts/data/leagueSeasons/, with two sources per season, emitted into
-src/data/careerLeagueSeasons.ts. Current generated pool is
-src/data/soccerCareerClubPool.ts, emitted by scripts/genCareerClubPool.mjs.
-1175's added lower lists are src/data/soccerCareerLowerClubs.ts: copied from
-existing sourced Club Manager1040 rows in src/lib/clubManager.ts (Serie B2917,
-Ligue22945, Segunda2980) as read October6. The file names ESPN plus Sky Sport
-for Italy, ESPN plus ASSE for France, ESPN plus LaLiga for Spain. Spain keeps
-20 first teams of22 and is explicitly partial. Premier/Championship and
-Bundesliga/2. Bundesliga reuse the two-source leagueWorld members. Subsequent
-memberships and straight promotion/relegation swaps are labelled simulation,
-not verified future results or a claim of real promotion playoff rules.
-Integration update, 2026-10-09 10:36 EDT: Release AP is now live, and its main
-bfc6197f is merged into this branch before the remote gate. Soccer own goals
-1167 are live. F's new1145 claim owns whole-career Stat Detective spans and the
-Dart Draft 2000 pool increase. Our1183 scope wording/report context and1182
-complete pagination/variety are companion proposals for F to reconcile with
-1145, not a second release of that data work. F should retain its complete
-career spans when combining the wording and exact-case report context. Manager
-first-season real fixtures are still an unclaimed data task in F's latest board;
-our1179 claims VAR. Existing1146 owns Manager own goals, penalties and quick subs.
-Remote gate correction, 2026-10-09: first run37945439743 on fcaa54532
-failed and is not acceptance evidence. Types, build, all15 built readers,
-all48 focused tests except help-focus timing, the career ambition/record
-outcomes and40 Dart/Stat native checks passed. Repairs retain every original
-outcome: load real historical squads per isolated VAR bundle, pair attached
-stage metadata with the visible match screen, wait for actual help focus,
-compare second yellow cards by their full added-time clock, count both
-valid kickOff signatures, and require each report control's exact failure
-set. Career browser checks now capture whole-save/RNG differences and follow
-the actual one-time stale-chunk reload before testing the error dialog.
-Remote rerun is required. Manager first-season fixtures remain unclaimed.
+- 1179: stored Manager VAR settles goal reviews before score/scorer credit;
+  missed defensive fouls can award real simulated penalty kicks. New modern
+  matches opt in; saved/historical matches preserve outcomes.
+- 1180: optional Soccer Career personal targets use actual saved seasons,
+  settle once and reward next year's growth. Interruptions and moves cannot
+  earn an unplayed target. Rules and worked example precede the choice.
+- 1181: actual best seasons and chronological club spells, including loan
+  parents and saved totals. Ratings require ten appearances. No award reveal.
+  Loading/error dialogs restore focus; full saved careers remain unchanged.
+- 1182: complete existing2026 Dart pool pagination and compact choice variety,
+  without duplicate names or invented real-player data.
+- 1183: accurate filtered profile scope and exact case/player/season/mode in
+  Stat Detective reports. No unidentified retirement date was guessed.
+
+F1145 owns whole-career Stat Detective spans and Dart Draft2000. These scope/
+context and complete-pagination/variety changes are companions; retain F's
+complete-career span fix when integrating. F1146 owns Manager penalty/own-goal
+labels and routine Quick Sim substitutions. Soccer own goals1167 are live in
+AP. Transfer Path1010b/1017 stays held; tpa-767 only says Other. PR207 remains
+frozen for F's AQ integration. Existing historical workflow/source-hold gates
+are outside this focused acceptance; final integration still needs release gates.
+
+Separate1184 CLAIM: codex/cm-real-fixtures fromAPbfc6197f. All3802026/27
+Premier League round/opponent/venue pairs agree between two retained sources.
+No dates/results imported. Eligible fresh careers only; other contexts keep
+generated schedules. Product and remote proof in progress, not ready/published.
 
 ## Release AP LIVE, 2026-10-09 10:21 EDT: NFL My Career week by week and NFL truth, the storage line that leaves, one disclaimer a page, and 18 Codex rounds (own goals in Soccer Career, the Tycoon season review, Club Manager access)
 
