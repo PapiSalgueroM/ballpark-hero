@@ -1,0 +1,1 @@
+probe2: cp .rc/x/zzProbeSave2.test.ts src/test/zzProbeSave2.test.ts && node_modules/.bin/vitest run src/test/zzProbeSave2.test.ts --testTimeout=1800000 --hookTimeout=120000
