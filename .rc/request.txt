@@ -1,0 +1,9 @@
+# Release AP review fixes, second pass: the dressing room test against the faults it was written for.
+# One at a time: each ctl line changes RolesScreen.tsx on the runner's checkout, runs the test, puts the file back.
+# Exit 0 on a ctl line = the control FIRED.
+#!serial
+base-roles: node_modules/.bin/vitest run src/test/rolesBrokenPromises.test.tsx --testTimeout=300000 --hookTimeout=300000
+ctl-r1: node .rc/x/fx-mut.mjs r1
+ctl-r2: node .rc/x/fx-mut.mjs r2
+ctl-r3: node .rc/x/fx-mut.mjs r3
+clean-after: git status --short -uno | wc -l
