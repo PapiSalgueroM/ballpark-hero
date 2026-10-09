@@ -1,0 +1,22 @@
+1) Every other league plays a full, correct season
+   26 other leagues tracked (26 expected)
+   sample champions: EFL Championship: West Ham | La Liga: Real Madrid | Serie A: AC Milan | Bundesliga: Bayern Munich
+2) The big clubs win more than the small ones
+   La Liga winners over 12 seasons: Real Madrid x7, Barcelona x5
+3) The Champions League bracket holds together
+   25 seasons, 24 with my club in the bracket, 25 crowned a champion
+   15 ties went to penalties
+4) Europe finishes without me
+   4 group stage exits, 4 still crowned a champion
+5) Rollover and save size
+   after rollover: 26 leagues, rounds reset to 0
+   save is 79 KB
+6) An existing save with no world is caught up mid-season
+   my league had played 18 rounds, La Liga caught up to 19
+7) Copy check
+   3 files checked
+8) All eight UCL groups play, and the bracket is earned
+   fresh career: 7 AI groups alongside mine
+   groups lockstep, projection honest, bracket earned, old saves caught up, flags mapped
+
+ALL WORLD CHECKS PASSED
