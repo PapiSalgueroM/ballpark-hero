@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+drv-LeagueWorld: PORT=4585 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerLeagueWorld.mjs
+playFlagshipLazy: node scripts/playFlagshipLazy.mjs
