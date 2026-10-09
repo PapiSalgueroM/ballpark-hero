@@ -1,0 +1,14 @@
+1) freshBuild listens for vite:preloadError and cancels it
+   ok   listener registered from watchForNewBuild, event cancelled
+2) the reload happens once per tab, through a sessionStorage flag
+   FAIL the guard does not stand down under the prerenderer (window.__DUKB_PRERENDER__), so a capture could reload mid page
+3) RouteErrorBoundary reloads once on a chunk load error through the same guard
+   ok   chunk errors reload once through the shared guard, after the held saves of the game that just went are let go
+4) main.tsx still boots the watcher
+   ok   watchForNewBuild() called at boot
+5) every reload freshBuild makes asks for waiting saves first
+   ok   check, reloadOnceForStaleChunk, reloadToRetryChunk: each asks for waiting saves before it reloads
+6) the reloads on every page (the update toast, the footer) ask for waiting saves first
+   ok   the update toast reloads through the shared guard, and the footer retries a waiting save before its reload
+
+simStaleChunk: control noprerender turned section(s) 2 red and nothing else. The check works.
