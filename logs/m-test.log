@@ -1,0 +1,24 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/zzCareerStoryM.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9748 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9748: 28 season rows, 27 story seasons, story 15786 bytes, save 120662 bytes, save without story 104876
+[save parts] seed 9748: rest 65922 bytes, cup games 36723 bytes over 21 seasons, division 12902 bytes over 21 seasons, ten divisions 4491 bytes
+
+[90mstdout[2m | src/test/zzCareerStoryM.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9749 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9749: 28 season rows, 27 story seasons, story 16863 bytes, save 110158 bytes, save without story 93295
+[save parts] seed 9749: rest 72165 bytes, cup games 20184 bytes over 12 seasons, division 12810 bytes over 21 seasons, ten divisions 4501 bytes
+
+[90mstdout[2m | src/test/zzCareerStoryM.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9750 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9750: 28 season rows, 27 story seasons, story 17737 bytes, save 129978 bytes, save without story 112241
+[save parts] seed 9750: rest 73150 bytes, cup games 40056 bytes over 23 seasons, division 11655 bytes over 19 seasons, ten divisions 4495 bytes
+
+ [32m✓[39m src/test/zzCareerStoryM.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 3485[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story on the real page[2m > [22mLatest Events opens the story, a season opens, Back returns, Close shuts it [33m 321[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story on the real page[2m > [22mthe retired screen carries the same story, the last chapter included [33m 476[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m13 passed[39m[22m[90m (13)[39m
+[2m   Start at [22m 17:29:36
+[2m   Duration [22m 7.28s[2m (transform 2.10s, setup 56ms, collect 2.83s, tests 3.48s, environment 370ms, prepare 219ms)[22m
+

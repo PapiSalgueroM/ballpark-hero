@@ -1,0 +1,13 @@
+seed 39741: 24 careers, story 480 bytes a season, 22.0 seasons a career, save mean 60420 bytes
+seed 39741 parts: rest mean 44376 bytes, cup games 1416 bytes a season over 133 seasons, division 563 bytes a season over 150 seasons, ten divisions mean 4491 bytes
+moves the log check saw: 298 signings, 6 loans
+careers 24 (1 seeds x 24), story seasons 528, lines written 3886, kept in the story 3852 plus 34 live
+baseline before Round 974: a finished career could read 34 of 3886 lines (0.9%); now 3886 (100.0%)
+size: story 480 bytes a season, save mean 60420 bytes, median 61852
+parts: rest mean 44376 bytes (the save before the train's parts), cup games 1416 bytes a season over 133 seasons, division 563 bytes a season over 150 seasons, ten divisions mean 4491 bytes
+check completeness: ok
+check draws: ok
+check size: ok
+check log: ok
+check parts: ok
+simCareerStory: GREEN, 24 careers keep every season's lines in order, draw nothing and stay inside the size bands

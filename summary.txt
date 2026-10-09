@@ -1,0 +1,14 @@
+m-test exit=0 8s |    Duration  7.28s (transform 2.10s, setup 56ms, collect 2.83s, tests 3.48s, environment 370ms, prepare 219ms)
+m-default exit=0 25s | simCareerStory: GREEN, 96 careers keep every season's lines in order, draw nothing and stay inside the size bands
+m-worldmoves exit=0 28s | simCareerStory control worldmoves: fired, check parts failed as it must (failed: parts)
+m-9741 exit=0 8s | simCareerStory: GREEN, 24 careers keep every season's lines in order, draw nothing and stay inside the size bands
+m-19741 exit=0 6s | simCareerStory: GREEN, 24 careers keep every season's lines in order, draw nothing and stay inside the size bands
+m-cuptwice exit=0 27s | simCareerStory control cuptwice: fired, check parts failed as it must (failed: parts)
+m-39741 exit=0 7s | simCareerStory: GREEN, 24 careers keep every season's lines in order, draw nothing and stay inside the size bands
+m-29741 exit=0 8s | simCareerStory: GREEN, 24 careers keep every season's lines in order, draw nothing and stay inside the size bands
+m-49741 exit=0 7s | simCareerStory: GREEN, 24 careers keep every season's lines in order, draw nothing and stay inside the size bands
+m-59741 exit=0 7s | simCareerStory: GREEN, 24 careers keep every season's lines in order, draw nothing and stay inside the size bands
+m-79741 exit=0 8s | simCareerStory: GREEN, 24 careers keep every season's lines in order, draw nothing and stay inside the size bands
+m-69741 exit=0 8s | simCareerStory: GREEN, 24 careers keep every season's lines in order, draw nothing and stay inside the size bands
+m-reset exit=0 19s | simCareerStory control reset: fired, check completeness failed as it must (failed: completeness, size)
+m-wipe exit=0 19s | simCareerStory control wipe: fired, check log failed as it must (failed: size, log)
