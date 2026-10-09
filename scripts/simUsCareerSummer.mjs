@@ -126,6 +126,22 @@
      plus or minus 5 and 7.5 points wide, so either can come up red on a
      seed with no real change. More NFL careers, not a wider bound, is the
      cure if it does.
+     IT DID, at Release AP (2026-10-09, the tree with Round 1104's football
+     truth: 16 game seasons to 2020, rookie pay off the slot, one bank). The
+     NFL's median legacy, on minus off, all on GitHub runners:
+       2000 a seed, default seed   +3.2% [-2.5, 7.5]   red by the edge
+       2000 a seed, SIM_SEED=7     +2.0% [-3.6, 6.8]   inside
+       4000 a seed                 +4.6% [0.7, 8.6]    red
+       8000 a seed                 +3.9% [0.3, 6.8]    inside
+       main before it, 4000        +2.1% [-1.7, 5.8]   inside
+     So the lift is real, near 4 percent where it was near 2, and inside the
+     7.5 percent the design allows; the check at 2000 could not tell that
+     from 8. The NFL now runs 8000 a seed by default (BAL_DEFAULT below, the
+     cure this header named before the fact; the bound is untouched; about
+     29 minutes for that child on a runner). STILL CLOSE: 0.7 points inside
+     at 8000. The next round that moves the NFL engine should expect this
+     line to speak first, and the honest answers are a smaller lift from the
+     deck's later cards or more careers again, never a wider bound.
      6b on the summer loop: median career majors 0 in all four, a major
      ever won by 4.5, 16.9, 7.6 and 15.5 percent, Hall 15.1, 30.1, 32.0 and
      27.9 percent (floors: median 0, at most 25 percent, Hall at least 5).
@@ -619,7 +635,14 @@ if (want('5')) {
 
 /* ─── 6. balance: an equivalence bound ──────────────────────────────────── */
 const TOL = { peak: 1.0, legacyRel: 0.075, hofPts: 3, headlineRel: 0.15 };
-const BAL_CAREERS = Number(process.env.SIM_BALANCE_CAREERS || 2000);
+/* Careers a seed, by sport. The NFL runs four times the others since Release
+   AP (2026-10-09): at 2000 its legacy interval is about plus or minus 5 points
+   wide against a tolerance of 7.5, so a real lift near 4 percent came up red
+   on two runs of four (the header has the measurement). SIM_BALANCE_CAREERS
+   still sets one size for every sport. */
+const BAL_DEFAULT = { nfl: 8000 };
+const balCareers = slug => Number(process.env.SIM_BALANCE_CAREERS || BAL_DEFAULT[slug] || 2000);
+const BAL_SIZES = Object.keys(SPORTS).map(slug => `${slug} ${balCareers(slug)}`).join(', ');
 const BAL_SEEDS = 3;
 function bootstrap(a, b, stat, n = 300) {
   let s = 0x2545f491;
@@ -636,7 +659,7 @@ function bootstrap(a, b, stat, n = 300) {
    control, when the control fired), which is red here. */
 const balanceInChildren = want('6') && Object.keys(SPORTS).length > 1 && !process.env.SIM_CHILD;
 if (balanceInChildren) {
-  console.log(`6) balance: one child per sport, ${BAL_CAREERS} careers a sport a seed, ${BAL_SEEDS} seeds`);
+  console.log(`6) balance: one child per sport, careers a seed ${BAL_SIZES}, ${BAL_SEEDS} seeds`);
   const t6 = Date.now();
   const { spawn } = await import('node:child_process');
   const runs = Object.keys(SPORTS).map(slug => new Promise(resolve => {
@@ -657,13 +680,13 @@ if (balanceInChildren) {
   console.log(`   balance ran in ${((Date.now() - t6) / 1000).toFixed(1)} s`);
 }
 if (want('6') && !balanceInChildren) {
-  console.log(`6) balance: on against off, ${BAL_CAREERS} careers a sport a seed, ${BAL_SEEDS} seeds`);
+  console.log(`6) balance: on against off, careers a seed ${BAL_SIZES}, ${BAL_SEEDS} seeds`);
   const t6 = Date.now();
   for (const [slug, sport] of Object.entries(SPORTS)) {
     const off = { ...sport, summer: OFF };
     const rows = { on: [], off: [] };
     for (let s = 0; s < BAL_SEEDS; s += 1) {
-      for (let i = 0; i < BAL_CAREERS; i += 1) {
+      for (let i = 0; i < balCareers(slug); i += 1) {
         const ci = 100000 * (s + 1) + i;
         for (const [side, sp] of [['on', sport], ['off', off]]) {
           const r = playCareer(slug, sp, ci);
