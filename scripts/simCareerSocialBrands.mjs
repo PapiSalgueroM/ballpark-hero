@@ -127,6 +127,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadSoccerBrand, probeSoccerBrand, driveToPlaying, POST_IDS, LEGACY_TIERS } from './lib/soccerBrandProbe835.mjs';
+import { soccerTrainOut } from './lib/soccerTrain1178.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FIXTURE = path.join(ROOT, 'scripts', 'data', 'soccerBrandFixture835.json');
@@ -201,7 +202,17 @@ function rewrite(rel, src) {
   return text.replace(c.from, c.to);
 }
 
-const B = await loadSoccerBrand(ROOT, CONTROL ? rewrite : null, {
+/* Release AQ. SOCIAL_BRANDS_ATTRIBUTION=train1178 bundles this tree with the
+   Soccer Career train (Rounds 1169 to 1178) taken out in memory, the four
+   lists the other lane wrote for simCareerAwardsNight
+   (scripts/lib/soccerTrain1178.mjs). It is how a re-record of the fixture
+   is earned: run against the fixture from BEFORE the train, section 1 has
+   to replay it whole, which says the train and nothing else moved it. It
+   is not a control and cannot be combined with one. */
+const ATTRIBUTION = process.env.SOCIAL_BRANDS_ATTRIBUTION || '';
+if (ATTRIBUTION && (ATTRIBUTION !== 'train1178' || CONTROL)) { console.error('SOCIAL_BRANDS_ATTRIBUTION knows train1178 only, and no control beside it'); process.exit(1); }
+const trainOut = ATTRIBUTION ? soccerTrainOut() : null;
+const B = await loadSoccerBrand(ROOT, CONTROL ? rewrite : trainOut ? trainOut.rewrite : null, {
   social: 'src/lib/careerSocial.ts',
   brand: 'src/lib/careerBrand.ts',
   identity: 'src/lib/careerIdentity.ts',
@@ -211,6 +222,7 @@ if (CONTROL) {
   if (controlFired !== 1) { console.error(`control ${CONTROL} rewrote ${controlFired} files, expected 1`); process.exit(1); }
   console.log(`CONTROL ${CONTROL}: ${CONTROLS[CONTROL].file} rewritten in the bundle`);
 }
+if (trainOut) console.log(`ATTRIBUTION ${ATTRIBUTION}: ${trainOut.seen().join(', ')} bundled with the train taken out; section 1 must replay the fixture from before it`);
 const { soccer: E, life: L, social: SO, brand: BR, identity: ID, binding: SB } = B;
 
 const mulberry32 = a => () => {

@@ -58,12 +58,23 @@ import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
+import { soccerTrainOutPlugin, withoutTrainFields } from './lib/soccerTrain1178.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_LEAGUE_FINISH_CONTROL || '';
 const CONTROLS = { notitle: [1], eliteblind: [3, 5], stream: [4] };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error('unknown control ' + CONTROL + ' (known: ' + Object.keys(CONTROLS).join(', ') + ')'); process.exit(2); }
 const RECORD = process.argv.includes('--record');
+/* Release AQ. SIM_LEAGUE_FINISH_ATTRIBUTION=train1178 bundles this tree with
+   the Soccer Career train (Rounds 1169 to 1178) taken out in memory (the
+   four lists the other lane wrote for simCareerAwardsNight,
+   scripts/lib/soccerTrain1178.mjs), records the 16 digests with the kept
+   continental run left out, and holds them to BEFORE_TRAIN_1178, the list
+   the train replaced. It is how that re-record was earned and how it can be
+   checked again; it runs section 4 alone and no control beside it. */
+const ATTRIBUTION = process.env.SIM_LEAGUE_FINISH_ATTRIBUTION || '';
+if (ATTRIBUTION && (ATTRIBUTION !== 'train1178' || CONTROL || RECORD)) { console.error('SIM_LEAGUE_FINISH_ATTRIBUTION knows train1178 only, with no control and no --record beside it'); process.exit(2); }
+const trainOut = ATTRIBUTION ? soccerTrainOutPlugin(ROOT, path, fs) : null;
 const TMP = process.env.TEMP || process.env.TMP || os.tmpdir();
 const WORK = path.join(TMP, `sc-leaguefinish-${process.pid}`);
 fs.mkdirSync(WORK, { recursive: true });
@@ -109,7 +120,7 @@ export const league = await import('${lib}soccerCareerLeague.ts');
 export const eras = await import('${lib}careerEras.ts');
 export const world = await import('${lib}soccerCareerLeagueWorld.ts');
 `);
-await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: OUT, logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT });
+await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: OUT, logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT, plugins: trainOut ? [trainOut.plugin] : [] });
 const { engine, league, eras, world } = await import(pathToFileURL(OUT).href);
 try { fs.rmSync(WORK, { recursive: true, force: true }); } catch { /* temp only */ }
 const NEED = ['initCareer', 'advanceYouthYear', 'acceptOffer', 'advanceProSeason', 'dismissSummary', 'dismissNewspaper', 'dismissDebut', 'dismissWorldCup', 'dismissRivalryEvent', 'dismissBallonDor', 'applyEventChoice', 'dismissMoralDilemma', 'dismissSocialMediaPhase', 'dismissAppealResult', 'applyBdorSpeech', 'applyWorldCupSpeech', 'acceptRetirementSuggestion', 'stayAtClub', 'applyRehabChoice', 'FALLBACK_CLUBS'];
@@ -205,7 +216,9 @@ const LATER_FIELDS = ['story'];
    every row field but cupRun equal. It leaves the digest the same way. */
 const SEASON_ROW_FIELDS = ['ovr', 'cupRun'];
 const isSeasonRow = o => o && typeof o === 'object' && 'rating' in o && 'leagueTitle' in o;
-function digest(s) {
+function digest(state) {
+  /* with the train out, the two things it writes that no patch takes back (they draw nothing) leave the hash too */
+  const s = ATTRIBUTION ? JSON.parse(JSON.stringify(state, withoutTrainFields)) : state;
   const json = JSON.stringify(s, function (k, v) { return NEW_FIELDS.includes(k) || (this === s && LATER_FIELDS.includes(k)) || (SEASON_ROW_FIELDS.includes(k) && isSeasonRow(this)) ? undefined : v; });
   return crypto.createHash('sha256').update(json).digest('hex').slice(0, 16);
 }
@@ -324,7 +337,17 @@ const DIGEST_SEEDS = 16;
    '120dd615a6cd5dc1', '01b2d4b82109c7c6', '63a6b8575832dc54',
    'f47e78ff107bf228', 'e3e83a57c9b96439', '8ae2cceb487c0598',
    '7498856a14c25cc2']. */
+/* The list before the Soccer Career train (Release AP, 2026-10-09). Kept for
+   SIM_LEAGUE_FINISH_ATTRIBUTION=train1178, which must record it again. */
+const BEFORE_TRAIN_1178 = ['8cf1c83794b5292c', 'fcb98e5a6f7c482c', '5bf2fb10985c3c57', '777fb5fac5b6035b', 'd22dfbc0a3673f01', 'ef0fa7c25d6b1287', '9e04cfcf7ce6fa60', 'd9879baa033424cf', 'de3f258b856b5094', 'b4a01376c0a3f518', '16493c48f4e1d265', '63a6b8575832dc54', 'f47e78ff107bf228', 'e3e83a57c9b96439', '083646089db0b478', '9b739fcf66c4063e'];
 const BASELINE = ['8cf1c83794b5292c', 'fcb98e5a6f7c482c', '5bf2fb10985c3c57', '777fb5fac5b6035b', 'd22dfbc0a3673f01', 'ef0fa7c25d6b1287', '9e04cfcf7ce6fa60', 'd9879baa033424cf', 'de3f258b856b5094', 'b4a01376c0a3f518', '16493c48f4e1d265', '63a6b8575832dc54', 'f47e78ff107bf228', 'e3e83a57c9b96439', '083646089db0b478', '9b739fcf66c4063e'];
+if (ATTRIBUTION) {
+  let same = 0;
+  const moved = [];
+  for (let i = 1; i <= DIGEST_SEEDS; i++) { if (digest(runCareer(i)) === BEFORE_TRAIN_1178[i - 1]) same += 1; else moved.push(i); }
+  console.log(`ATTRIBUTION ${ATTRIBUTION}: ${trainOut.seen().join(', ')} bundled with the train taken out; ${same} of ${DIGEST_SEEDS} careers record the digest the list held before the train${moved.length ? ` (moved: ${moved.join(', ')})` : ''}`);
+  process.exit(same === DIGEST_SEEDS ? 0 : 1);
+}
 if (RECORD) {
   const out = [];
   for (let i = 1; i <= DIGEST_SEEDS; i++) out.push(digest(runCareer(i)));

@@ -107,17 +107,26 @@ ${Object.entries(extra).map(([name, rel]) => `export const ${name} = await impor
  *  every season row before the hash, the way the awards night probe drops it,
  *  so a fixture recorded from main still proves the rest of the save. A save
  *  with no run is hashed exactly as before. */
+/* Release AQ: Round 1173 keeps the season's continental run on the row
+   (clubCupRun, a plain copy of the last run) and stamps the last run with
+   its season and club. Neither draws, and no tree before the train writes
+   them, so they leave the hash the same way and for the same reason, as
+   scripts/lib/careerAwardsNightProbe.mjs already does. A save without
+   them is hashed exactly as before. */
+const hasRun = r => r && typeof r === 'object' && ('cupRun' in r || 'clubCupRun' in r);
 const withoutRun = r => {
-  if (!r || typeof r !== 'object' || !('cupRun' in r)) return r;
-  const { cupRun: _run, ...rest } = r;
+  if (!hasRun(r)) return r;
+  const { cupRun: _run, clubCupRun: _clubRun, ...rest } = r;
   return rest;
 };
 const withoutRuns = v => {
   if (!v || typeof v !== 'object') return v;
-  const runs = Array.isArray(v.seasons) && v.seasons.some(r => r && typeof r === 'object' && 'cupRun' in r);
-  const pending = v.pendingSummary && typeof v.pendingSummary === 'object' && 'cupRun' in v.pendingSummary;
-  if (!runs && !pending) return v;
-  return { ...v, ...(runs ? { seasons: v.seasons.map(withoutRun) } : {}), ...(pending ? { pendingSummary: withoutRun(v.pendingSummary) } : {}) };
+  const runs = Array.isArray(v.seasons) && v.seasons.some(hasRun);
+  const pending = hasRun(v.pendingSummary);
+  const last = v.lastUCLResult && typeof v.lastUCLResult === 'object' && ('seasonYear' in v.lastUCLResult || 'club' in v.lastUCLResult);
+  if (!runs && !pending && !last) return v;
+  const { seasonYear: _year, club: _club, ...legacyResult } = last ? v.lastUCLResult : {};
+  return { ...v, ...(runs ? { seasons: v.seasons.map(withoutRun) } : {}), ...(pending ? { pendingSummary: withoutRun(v.pendingSummary) } : {}), ...(last ? { lastUCLResult: legacyResult } : {}) };
 };
 const hashOf = v => createHash('sha256').update(JSON.stringify(withoutRuns(v))).digest('hex').slice(0, 16);
 
