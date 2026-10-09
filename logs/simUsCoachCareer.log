@@ -1,0 +1,48 @@
+1) Retirement lands on a job board, 400 careers a sport
+   NFL rep 47 avg | 96% got an offer on retirement day, 4% of those boards had a head coaching job on it
+        4.2 seasons as a head coach, 13.9 on a staff, 1.9 out of work, of 20 | 64% ever ran a team | 95% fired at least once | 89% worked again after a firing | 0.93 poached by a bigger job
+   NBA rep 42 avg | 92% got an offer on retirement day, 10% of those boards had a head coaching job on it
+        5.7 seasons as a head coach, 11.3 on a staff, 3.0 out of work, of 20 | 70% ever ran a team | 91% fired at least once | 82% worked again after a firing | 1.21 poached by a bigger job
+   MLB rep 40 avg | 92% got an offer on retirement day, 1% of those boards had a head coaching job on it
+        2.3 seasons as a head coach, 13.7 on a staff, 4.0 out of work, of 20 | 38% ever ran a team | 98% fired at least once | 87% worked again after a firing | 0.57 poached by a bigger job
+   NHL rep 53 avg | 96% got an offer on retirement day, 13% of those boards had a head coaching job on it
+        4.5 seasons as a head coach, 13.1 on a staff, 2.3 out of work, of 20 | 60% ever ran a team | 96% fired at least once | 88% worked again after a firing | 0.86 poached by a bigger job
+2) The playing career you had decides the coaching career you get
+   NFL best 20%   rep  65 | first offers 1.85 | starts at T3.4 | 100% hired | 19.4 seasons | 0.53 titles
+   NFL worst 20%  rep  36 | first offers 1.41 | starts at T4.0 | 100% hired | 17.0 seasons | 0.20 titles
+   NBA best 20%   rep  77 | first offers 2.19 | starts at T2.8 | 100% hired | 19.5 seasons | 1.26 titles
+   NBA worst 20%  rep  25 | first offers 1.07 | starts at T4.0 | 96% hired | 14.9 seasons | 0.40 titles
+   MLB best 20%   rep  57 | first offers 1.76 | starts at T3.7 | 100% hired | 18.2 seasons | 0.29 titles
+   MLB worst 20%  rep  29 | first offers 1.15 | starts at T4.0 | 98% hired | 15.1 seasons | 0.10 titles
+   NHL best 20%   rep  83 | first offers 2.38 | starts at T2.5 | 100% hired | 19.1 seasons | 0.91 titles
+   NHL worst 20%  rep  36 | first offers 1.50 | starts at T4.0 | 98% hired | 16.0 seasons | 0.25 titles
+3) An empty offer board happens, and it is not what a strong candidate sees
+   NFL 766 empty boards out of 2281 job hunts (34%) | best 20% 12% | worst 20% 45%
+   NBA 1183 empty boards out of 2504 job hunts (47%) | best 20% 12% | worst 20% 63%
+   MLB 1617 empty boards out of 3103 job hunts (52%) | best 20% 30% | worst 20% 59%
+   NHL 935 empty boards out of 2361 job hunts (40%) | best 20% 20% | worst 20% 55%
+4) Getting fired ends the job and does not hand you another one
+   2135 firings across the four sports, 0 of them handed the coach another job on the same line
+   14 percent of firings left the coach with nothing on the board that day
+5) Results move the standing, in the right direction
+   NFL standing 54.3 before | title 80.3 (n=62) | deep run 63.9 (n=194) | missed 49.2 (n=676)
+   NBA standing 54.3 before | title 80.3 (n=49) | deep run 63.9 (n=226) | missed 48.8 (n=473)
+   MLB standing 54.3 before | title 80.3 (n=34) | deep run 63.8 (n=164) | missed 48.9 (n=897)
+   NHL standing 54.3 before | title 80.3 (n=43) | deep run 63.7 (n=164) | missed 49.2 (n=892)
+   NFL coaches who won a title end on 95 standing, coaches who never did on 78
+   NBA coaches who won a title end on 97 standing, coaches who never did on 79
+   MLB coaches who won a title end on 94 standing, coaches who never did on 66
+   NHL coaches who won a title end on 96 standing, coaches who never did on 74
+6) A coaching career survives a round trip through localStorage
+   repaired a half written save: sport nhl, tier T4, 2 log rows, standing 62
+   a save carrying tier 0 repaired to T1, not T4
+7) Records, ceilings and copy read like American sport
+   NFL 17 games, 4 rounds to win it, W-L
+   NBA 82 games, 4 rounds to win it, W-L
+   MLB 162 games, 4 rounds to win it, W-L
+   NHL 82 games, 4 rounds to win it, W-L-OTL
+8) Copy check
+   133623 player facing strings collected while the careers ran above
+   all four careers reach the coaching career through the one board
+
+PASS: ALL US COACHING CAREER CHECKS PASSED

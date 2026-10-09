@@ -1,0 +1,26 @@
+1) Every game adds up: 2400 box scores, then every club's season
+   2400 box scores, 900 club seasons over 30 closes
+2) The box takes nothing from the league generator: the same seed with and without lines
+   5 seeds played twice, two seasons each
+3) The award rules pick who the lines say: fixtures, then every simulated season against a typed copy of the rules
+   fixtures plus 30 simulated seasons; rookie of the year named in 20; 238 first year lines, 238 marked rookie
+4) The leaders tables are a recount
+5) The lines read like basketball and like this sim
+   club ppg 112.9 to 113.4 (mean 113.25); tenth scorer median 25.81 (24.6 to 26.8)
+   rating vs ppg Spearman 0.877 to 0.959; differential vs winning share 0.893 to 0.981
+   rebounds C 9.26 F 6.47 G 3.51; assists G 4.71 F 2.46 C 1.35
+6) The close happens once and is kept
+7) A save from before the round: no lines this season, lines from the summer
+   vitest NbaSeasonStats.test.tsx: exit 0, 4 passed of 4
+   vitest FrontOfficeSeasonClose.test.tsx: exit 0, 25 passed of 25
+8) The copy says what the engine does
+   Sixth Man winners, points a game over 30 seasons: 10th percentile 12.2, median 12.8, 90th 13.3; the page promises 13
+   1. every game adds up: 3 checks
+   2. the box takes nothing from the league generator: 20 checks
+   3. the award rules pick who the lines say: 16 checks
+   4. the leaders tables are a recount: 1 check
+   5. the lines read like basketball and like this sim: 6 checks
+   6. the close happens once and is kept: 6 checks
+   7. an old save: 8 checks
+   8. the copy says what the engine does: 12 checks
+simNbaSeasonStats: 72 checks passed over 10 seeded franchises and 3 seasons each. Every game adds up, the box takes nothing from the league, the awards follow their rules, and the season closes once.
