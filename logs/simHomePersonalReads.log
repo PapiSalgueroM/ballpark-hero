@@ -1,0 +1,7 @@
+Homepage personal reads: 14/14 real homepage cases passed, none skipped; inert Supabase boundary, zero fetch calls.
+Homepage personal reads: guests make zero personal reads; public trending queries and rendered links stay useful.
+Homepage personal reads: one visible account batch preserves two hero reads and the existing tile-best read, without background polling.
+Homepage personal reads: matching profiles, in-flight coalescing, stable identities, account/handle ownership and abort cleanup hold.
+Homepage personal reads: failed reads keep local facts until a foreground retry; invisible traffic counts and lifetime-history reads are gone.
+Homepage personal reads: healthy tile bests appear before a hung rank settles, within the same owned request batch.
+Homepage personal reads: CRLF bindings proved, original bytes held, owned copies cleaned; no live DB/browser/AdSense acceptance claimed.

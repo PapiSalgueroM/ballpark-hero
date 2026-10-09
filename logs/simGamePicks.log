@@ -1,0 +1,22 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/gamePicks.test.tsx[2m > [22mbrowser-local game picks[2m > [22mpins Footle from Home without opening a game or touching saves and scores[33m 1726[2mms[22m[39m
+ [32m✓[39m src/test/gamePicks.test.tsx[2m > [22mbrowser-local game picks[2m > [22mpins NHL Connections from Search and restores both exact Home destinations after remount[33m 457[2mms[22m[39m
+ [32m✓[39m src/test/gamePicks.test.tsx[2m > [22mbrowser-local game picks[2m > [22mremoves only the chosen pick and launches the retained game through its real link[33m 1220[2mms[22m[39m
+ [32m✓[39m src/test/gamePicks.test.tsx[2m > [22mbrowser-local game picks[2m > [22mfilters hostile saved paths and duplicates without rewriting storage while reading[33m 1630[2mms[22m[39m
+ [32m✓[39m src/test/gamePicks.test.tsx[2m > [22mbrowser-local game picks[2m > [22mkeeps failed writes useful across page changes and labels them as this-visit picks[33m 1582[2mms[22m[39m
+ [32m✓[39m src/test/gamePicks.test.tsx[2m > [22mbrowser-local game picks[2m > [22mshows an honest warning when the browser cannot read saved picks[33m 824[2mms[22m[39m
+ [32m✓[39m src/test/gamePicks.test.tsx[2m > [22mbrowser-local game picks[2m > [22madopts cross-tab updates removals and clear without echoing a storage write[33m 617[2mms[22m[39m
+ [32m✓[39m src/test/gamePicks.test.tsx[2m > [22mbrowser-local game picks[2m > [22mmerges a stale tab toggle with the current stored picks[33m 1366[2mms[22m[39m
+ [32m✓[39m src/test/gamePicks.test.tsx[2m > [22mbrowser-local game picks[2m > [22mkeeps keyboard focus on a useful control when shelf picks are removed[33m 2767[2mms[22m[39m
+ [32m✓[39m src/test/gamePicks.test.tsx[2m > [22mbrowser-local game picks[2m > [22mkeeps the original Search result link and arrow-key launch flow with no picks[32m 29[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m10 passed[39m[22m[90m (10)[39m
+[2m   Start at [22m 07:31:58
+[2m   Duration [22m 14.19s[2m (transform 424ms, setup 57ms, collect 835ms, tests 12.22s, environment 430ms, prepare 205ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/game-picks-artifacts/mounted/normal-report.json
+
+simGamePicks normal: exact expected outcomes and independent original Search behavior passed.

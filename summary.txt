@@ -1,0 +1,10 @@
+simFootleCurrency exit=0 4s | simFootleCurrency: owned copies cleaned, actual page held, no production data changed.
+simFootleClueDesk exit=0 6s | simFootleClueDesk normal: 8 passed, 0 expected failures, 0 intentional skips; 9 raw inputs held.
+simFootlePractice995 exit=0 10s | Footle practice: 3 modes completed, every expected case executed and exact controls verified.
+simFootleUnlimited exit=0 5s | simFootleUnlimited normal: 10 passed, 0 intended failures, 0 intentional skips; 10 source inputs held.
+simGamePicks exit=0 15s | simGamePicks normal: exact expected outcomes and independent original Search behavior passed.
+simHomePersonalReads exit=0 15s | Homepage personal reads: CRLF bindings proved, original bytes held, owned copies cleaned; no live DB/browser/AdSense acceptance claimed.
+simPlayerSearchKeyboard exit=0 2s | Footle search: CRLF bindings proved, original bytes held and owned copies cleaned. Native and full-game acceptance are separate.
+simScoreShown exit=0 25s | simScoreShown: all sections green
+vitest2 exit=1 35s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/dailySaveShapes.test.tsx,title=src/test/dailySaveShapes.test.tsx > a damaged daily save resets itself 
+simHomeSearchRecovery exit=0 73s | Home search recovery: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/home-search-recovery-artifacts/outcomes

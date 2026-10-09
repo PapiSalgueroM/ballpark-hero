@@ -1,0 +1,5 @@
+Footle search:12/12 actual-component cases pass, no skips or diagnostic faults.
+Footle search: Escape cannot submit a hidden guess; either arrow deliberately reopens existing choices.
+Footle search: visible pointer/keyboard commit the exact Player once, preserving matching, ranking, exclusions, limit, query reset and search focus.
+Footle search: combobox visibility, current option identity and selected state match the actual list.
+Footle search: CRLF bindings proved, original bytes held and owned copies cleaned. Native and full-game acceptance are separate.
