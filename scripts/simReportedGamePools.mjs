@@ -75,7 +75,7 @@ try {
   console.log(`Assertion outcomes ${mode || 'healthy'}: ${JSON.stringify(assertions.map(({ title, status }) => ({ title, status })))}`);
   if (mode) {
     assert.equal(run.status, 1, 'Copied defect must fail its outcome normally');
-    assert.ok(failures.every(test => /AssertionError|TestingLibraryElementError|expect\(element\)|expected .* to/i.test((test.failureMessages || []).join('\n'))), 'Each intended failure must be an assertion, not a setup error');
+    assert.ok(failures.every(test => /AssertionError|TestingLibraryElementError|expect\(element\)|expect\(received\)\.toHaveTextContent\(\)|expected .* to/i.test((test.failureMessages || []).join('\n'))), 'Each intended failure must be an assertion, not a setup error');
     console.log(`simReportedGamePools ${mode}: ${expected.length} exact intended outcomes failed, all ${10 - expected.length} unrelated outcomes passed.`);
   } else {
     assert.equal(run.status, 0, output.slice(-6000));

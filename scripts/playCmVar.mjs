@@ -54,6 +54,9 @@ function reviewRows(rows, expected, cm) {
     assert.equal(rows.filter(row => row.clock === cm.minuteLabel(e) && row.side === e.side && row.title.includes(`${label}: ${e.who}`)).length, 1, 'Review result, side, taker and clock match the committed engine');
   }
 }
+function decidedState(actual, expected, cm) {
+  assert.deepEqual(actual, clone(cm.trimCareer(expected)), 'Review presentation never rewrites saved state or decided play');
+}
 function settlement(actual, before, expected, cm) {
   assert.equal(actual.week, before.week + 1, 'Exactly one fixture advances');
   assert.equal(actual.resultLog.length, before.resultLog.length + 1, 'Exactly one result is credited');
@@ -90,17 +93,20 @@ try {
       });
       await context.routeWebSocket('**/*', socket => socket.close());
       const page = await context.newPage(); page.setDefaultTimeout(15000);
-      await page.addInitScript(({ now, seed, second, finish }) => {
+      await page.addInitScript(({ now, seed, second, finish, key }) => {
         const OldDate = Date; window.Date = class extends OldDate { constructor(...args) { super(...(args.length ? args : [now])); } static now() { return now; } };
         const seedRandom = seed => { let a = seed >>> 0; Math.random = () => { a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; };
-        window.__varInputs = { kickoff: 0, second: 0, finish: 0 };
+        window.__varInputs = { kickoff: 0, resume: 0, second: 0, finish: 0 };
         document.addEventListener('click', event => {
           const button = event.target.closest?.('button'); if (!button) return;
-          if (button.matches('[data-cm-way="live"], [data-cm-way="quick"]')) { window.__varInputs.kickoff++; seedRandom(seed); }
+          if (button.matches('[data-cm-way="live"], [data-cm-way="quick"]')) {
+            if (button.matches('[data-cm-way="live"]') && JSON.parse(localStorage.getItem(key) || 'null')?.live) window.__varInputs.resume++;
+            else { window.__varInputs.kickoff++; seedRandom(seed); }
+          }
           if (button.textContent.trim() === 'Second half') { window.__varInputs.second++; seedRandom(second); }
           if (button.textContent.trim() === 'Skip' && document.querySelector('[data-cm-live-stage="second"]')) { window.__varInputs.finish++; seedRandom(finish); }
         }, true);
-      }, { now: NOW, seed: fixture.seed, second: SECOND_SEED, finish: FINISH_SEED });
+      }, { now: NOW, seed: fixture.seed, second: SECOND_SEED, finish: FINISH_SEED, key: KEY });
       page.on('pageerror', error => row.errors.push(String(error))); page.on('console', message => { if (message.type() === 'error') row.errors.push(message.text()); });
       page.on('requestfailed', request => { if (request.url().startsWith(BASE)) row.assetErrors.push(request.url() + ': ' + request.failure()?.errorText); });
       page.on('response', response => { if (response.url().startsWith(BASE) && response.status() >= 400) row.assetErrors.push(response.url() + ': ' + response.status()); });
@@ -129,7 +135,7 @@ try {
           const after = await saved(); settlement(after, before, expected.state, cm);
           row.rows = await page.locator('[data-cm-tl="var"]').evaluateAll(elements => elements.map(el => ({ clock: el.dataset.cmTlClock, side: el.dataset.cmTlSide, title: el.querySelector('[title]')?.getAttribute('title') ?? '' })));
           reviewRows(row.rows, incidents, cm); row.inputs = await page.evaluate(() => window.__varInputs);
-          assert.deepEqual(row.inputs, { kickoff: 1, second: 0, finish: 0 }, 'One actual VAR-enabled Quick Sim input settles once');
+          assert.deepEqual(row.inputs, { kickoff: 1, resume: 0, second: 0, finish: 0 }, 'One actual VAR-enabled Quick Sim input settles once');
           row.savedHash = hash(JSON.stringify(after));
           await page.screenshot({ path: path.join(OUT, `${id}-quick-report.png`) }); row.snapshots.push(`${id}-quick-report.png`);
           await activate(page.getByRole('button', { name: 'Continue', exact: true }).first());
@@ -149,7 +155,14 @@ try {
         assert.match(await checking.innerText(), /checking/); assert.match(await checking.innerText(), /game simulation/);
         const priorGoals = { me: expectedHalf.state.live.h1My.filter(g => g.minute < incident.minute).length, opp: expectedHalf.state.live.h1Opp.filter(g => g.minute < incident.minute).length };
         row.pendingScore = await readScore(); assert.deepEqual(row.pendingScore, priorGoals, 'Pending review never credits its unconfirmed goal');
-        const storedDuringReview = await saved(); assert.deepEqual(storedDuringReview.live.h1Play, expectedHalf.state.live.h1Play, 'Review presentation never rewrites decided play');
+        const storedDuringReview = await saved(); decidedState(storedDuringReview, expectedHalf.state, cm);
+        row.reviewStateHash = hash(JSON.stringify(storedDuringReview));
+        if (!report.controls.includes('saved-review-decision')) {
+          const defect = clone(storedDuringReview), review = defect.live.h1Play.find(e => e.review?.id === incident.review.id).review;
+          const old = review.decision; review.decision = old === 'confirmed' ? 'disallowed' : 'confirmed'; assert.notEqual(review.decision, old);
+          assert.throws(() => decidedState(defect, expectedHalf.state, cm), /Review presentation never rewrites saved state or decided play/);
+          report.controls.push('saved-review-decision');
+        }
         row.layout = await checking.evaluate(el => { const box = el.getBoundingClientRect(); return { x: box.x, right: box.right, width: innerWidth, scrollWidth: document.documentElement.scrollWidth, font: parseFloat(getComputedStyle(el.querySelector('p')).fontSize) }; });
         assert(row.layout.scrollWidth <= profile.width + 2 && row.layout.x >= 0 && row.layout.right <= profile.width + 1 && row.layout.font >= 11, 'Review card remains readable inside the viewport');
         await page.screenshot({ path: path.join(OUT, `${id}-checking.png`) }); row.snapshots.push(`${id}-checking.png`);
@@ -172,13 +185,20 @@ try {
           await activate(page.locator('[data-cm-live-controls]').getByRole('button', { name: 'Pause', exact: true }));
           row.inputsBeforeReload = await page.evaluate(() => window.__varInputs);
           row.scoreBeforeReload = await readScore();
+          await page.locator('[data-cm-live-controls]').getByRole('button', { name: 'Resume', exact: true }).waitFor();
+          row.reloadMinute = Number(await page.locator('[data-cm-live-stage="second"]').getAttribute('data-cm-live-minute'));
+          assert(row.reloadMinute >= 46 && row.reloadMinute < 90, 'Reload exercises an actual unfinished second half');
           const beforeReload = await saved(), savedReview = clone(beforeReload.live.h1Play);
           await page.reload({ waitUntil: 'domcontentloaded' });
           await activate(page.locator('[data-testid="cm-slot-1"]').getByRole('button', { name: 'Resume Career', exact: true }));
+          const resumeBaseline = await saved();
+          assert.deepEqual(resumeBaseline, clone(cm.trimCareer(cm.markLiveMinute(beforeReload, row.reloadMinute))), 'Reload records only the actual presentation clock, preserving every decided field');
+          await activate(page.getByRole('button', { name: 'Resume match', exact: true }));
           await waitForStage('second');
           await activate(page.locator('[data-cm-live-controls]').getByRole('button', { name: 'Pause', exact: true }));
           assert.deepEqual(await readScore(), row.scoreBeforeReload, 'Reopening a later period retains already played reviewed goals on the scoreboard');
-          const afterReload = await saved(); assert.deepEqual(afterReload.live.h1Play, savedReview, 'Reopening never rerolls the earlier review stream');
+          const afterReload = await saved(); decidedState(afterReload, resumeBaseline, cm);
+          assert.deepEqual(afterReload.live.h1Play, savedReview, 'Reopening never rerolls the earlier review stream');
           assert.deepEqual(afterReload.live.h1My, beforeReload.live.h1My);
           assert.equal(afterReload.week, beforeReload.week); assert.deepEqual(afterReload.resultLog, beforeReload.resultLog);
           row.midMatchReload = true;
@@ -194,7 +214,7 @@ try {
         await page.locator('[data-cm-timeline]').waitFor();
         const readRows = () => page.locator('[data-cm-tl="var"]').evaluateAll(elements => elements.map(el => ({ clock: el.dataset.cmTlClock, side: el.dataset.cmTlSide, title: el.querySelector('[title]')?.getAttribute('title') ?? '', text: el.textContent })));
         row.rows = await readRows(); const incidents = expected.report.detail.play.filter(e => e.kind === 'var'); reviewRows(row.rows, incidents, cm);
-        if (!report.controls.length) {
+        if (!report.controls.includes('visible-review-clock')) {
           const first = page.locator('[data-cm-tl="var"]').first();
           const old = await first.getAttribute('data-cm-tl-clock'); await first.evaluate(el => el.dataset.cmTlClock = "999'");
           assert.notEqual(await first.getAttribute('data-cm-tl-clock'), old); assert.throws(() => reviewRows(row.rows.map((r, i) => i ? r : { ...r, clock: "999'" }), incidents, cm), /Review result, side, taker and clock/);
@@ -207,20 +227,21 @@ try {
         row.inputsBeforeLeaving = await page.evaluate(() => window.__varInputs);
         assert.equal((row.inputsBeforeReload?.kickoff ?? 0) + row.inputsBeforeLeaving.kickoff, 1);
         assert.equal((row.inputsBeforeReload?.second ?? 0) + row.inputsBeforeLeaving.second, 1);
+        assert.equal((row.inputsBeforeReload?.resume ?? 0) + row.inputsBeforeLeaving.resume, fixture.kind === 'confirmed' ? 1 : 0, 'Only the confirmed case resumes its already decided match once');
         assert.equal(row.inputsBeforeLeaving.finish, 1, 'The actual final live input settles once');
         row.savedHash = hash(JSON.stringify(after)); fs.writeFileSync(path.join(OUT, `${id}-actual.json`), JSON.stringify(after, null, 2));
         await activate(page.getByRole('button', { name: 'Continue', exact: true }).first());
         await page.locator('[data-cm-timeline]').waitFor({ state: 'hidden' }); await page.reload({ waitUntil: 'domcontentloaded' });
         await page.locator('[data-testid="cm-slot-1"]').waitFor(); assert.equal(hash(JSON.stringify(await saved())), row.savedHash, 'Reload never rerolls reviews or settles a fixture twice');
         row.reloadInputs = await page.evaluate(() => window.__varInputs);
-        assert.deepEqual(row.reloadInputs, { kickoff: 0, second: 0, finish: 0 });
+        assert.deepEqual(row.reloadInputs, { kickoff: 0, resume: 0, second: 0, finish: 0 });
         assert.deepEqual(row.errors, [], 'No console or unhandled page errors'); assert.deepEqual(row.assetErrors, [], 'No missing local assets or fonts');
         row.passed = true;
       } catch (error) { row.error = String(error.stack || error); await page.screenshot({ path: path.join(OUT, `${id}-failure.png`), fullPage: true }).catch(() => {}); }
       finally { await context.close(); save(); }
     }
   }
-  assert.equal(report.cases.length, 10); assert(report.cases.every(row => row.passed), 'Every actual live and quick VAR journey passes'); assert.equal(report.controls.length, 2);
+  assert.equal(report.cases.length, 10); assert(report.cases.every(row => row.passed), 'Every actual live and quick VAR journey passes'); assert.equal(report.controls.length, 3);
 } finally { await browser?.close(); server.kill(); report.sourceAfter = sourceHashes(); report.sourceHeld = JSON.stringify(report.sourceBefore) === JSON.stringify(report.sourceAfter); save(); }
 assert(report.sourceHeld, 'Native proof never changes product source');
-console.log('playCmVar: 2 viewports, 4 actual review outcomes, 8 settled live reports, 2 actual quick reports, 2 mid-match reloads, 2 effective controls; zero external forwarding and source held.');
+console.log('playCmVar: 2 viewports, 4 actual review outcomes, 8 settled live reports, 2 actual quick reports, 2 mid-match reloads, 3 effective controls; zero external forwarding and source held.');

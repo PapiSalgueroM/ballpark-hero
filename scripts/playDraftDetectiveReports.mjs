@@ -125,11 +125,28 @@ async function walk(width, height) {
     check(await page.locator('[data-stat-clue="Recorded franchises"]').innerText() === 'Recorded franchises: 2' && await page.locator('[data-stat-profile-scope]').innerText() === scope, `${tag}: profile franchise count retains its stated scope`);
     check(await page.locator('[data-stat-clue="Career span"], [data-stat-clue="Career franchises"]').count() === 0 && await page.getByText('Fixture Case Anchor', { exact: true }).count() === 0, `${tag}: no full-career claim or visible answer spoiler`);
     await page.screenshot({ path: path.join(SHOTS, `detective-${tag}.png`) });
-    const help = page.getByRole('button', { name: 'How to play' }); await help.focus(); await page.keyboard.press('Enter');
+    const help = page.getByRole('button', { name: 'How to play' });
+    const helpTrigger = await help.elementHandle({ timeout: 2000 });
+    await help.focus(); await page.keyboard.press('Enter');
     const dialog = page.getByRole('dialog', { name: 'Stat Detective rules' });
     check(await dialog.getByText(scope, { exact: true }).isVisible(), `${tag}: reopened help repeats accurate recorded scope`);
-    await page.keyboard.press('Escape');
-    check(await help.evaluate(button => document.activeElement === button), `${tag}: Escape returns native help focus`);
+    record.help = { phase: 'focus readiness' };
+    try {
+      await dialog.waitFor({ state: 'visible', timeout: 2000 });
+      await page.waitForFunction(panel => panel.isConnected && panel.contains(document.activeElement), await dialog.elementHandle({ timeout: 2000 }), { timeout: 2000 });
+      record.help.phase = 'Escape restoration';
+      await page.keyboard.press('Escape');
+      await dialog.waitFor({ state: 'hidden', timeout: 2000 });
+      await page.waitForFunction(button => button.isConnected && document.activeElement === button, helpTrigger, { timeout: 2000 });
+      check(await helpTrigger.evaluate(button => document.activeElement === button), `${tag}: Escape returns native help focus`);
+      record.help.phase = 'restored';
+    } catch (error) {
+      record.help.error = String(error.stack || error);
+      record.help.diagnostic = await helpTrigger.evaluate(button => ({ triggerConnected: button.isConnected, triggerFocused: document.activeElement === button,
+        triggerHidden: !!button.closest('[aria-hidden="true"]'), active: document.activeElement?.outerHTML ?? null,
+        dialogs: Array.from(document.querySelectorAll('[role="dialog"]')).map(panel => ({ state: panel.getAttribute('data-state'), focused: panel.contains(document.activeElement), text: panel.textContent.slice(0, 300) })) }));
+      throw error;
+    }
     await page.getByRole('button', { name: 'Report', exact: true }).click();
     await page.getByRole('button', { name: 'Other', exact: true }).click();
     await page.getByRole('textbox', { name: 'Describe what is wrong with this question' }).fill('Fictional offline fixture report');

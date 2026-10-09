@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { build } from 'esbuild';
 import pw from './lib/playwrightLoader.mjs';
 import { bundleAwardsNight } from './lib/careerAwardsNightBundle.mjs';
 import { mulberry32 } from './lib/careerAwardsNightProbe.mjs';
@@ -13,6 +14,12 @@ const BASE = process.env.BASE || `http://127.0.0.1:${PORT}`;
 const SHOTS = path.resolve(ROOT, process.env.SHOTS || '.tmp-fx/career-depth-shots');
 const NOW = 1791547200000;
 const B = await bundleAwardsNight(ROOT, { extra: { records: 'src/lib/soccerCareerRecords.ts', ambitions: 'src/lib/soccerCareerAmbitions.ts' } });
+const oracleBundle = await build({
+  stdin: { contents: "export { advanceProSeason, FALLBACK_CLUBS } from './src/lib/soccerCareerEngine';", resolveDir: ROOT, loader: 'ts' },
+  bundle: true, platform: 'browser', format: 'iife', globalName: '__careerDepthEngine', write: false,
+  alias: { '@': path.join(ROOT, 'src') }, define: { 'import.meta.env': '{"DEV":false,"PROD":true,"MODE":"production"}' },
+  loader: { '.css': 'empty', '.png': 'empty', '.svg': 'empty', '.jpg': 'empty', '.webp': 'empty' }, logLevel: 'error',
+});
 if (!/^\s+setClubs\(FALLBACK_CLUBS\);$/m.test(fs.readFileSync(path.join(ROOT, 'src/pages/SoccerCareer.tsx'), 'utf8'))) {
   throw new Error('fixture refused: the actual career route no longer uses the expected static club pool');
 }
@@ -32,7 +39,7 @@ const book = B.records.careerRecordBook(fixture);
 const options = B.ambitions.ambitionOptions(fixture);
 const choice = options.find(o => o.id === 'goals') || options[0];
 if (!choice || !book.bests.length) throw new Error('fixture refused: no real choice or saved record');
-let checks = 0, failed = 0, browser, server;
+let checks = 0, failed = 0, browser, server, oracleContext, oraclePage;
 const check = (ok, label) => { checks++; if (!ok) failed++; console.log(`${ok ? 'ok  ' : 'FAIL'} ${label}`); };
 const state = page => page.evaluate(() => JSON.parse(localStorage.getItem('soccerCareerSave')));
 const savedBytes = page => page.evaluate(() => localStorage.getItem('soccerCareerSave'));
@@ -66,21 +73,40 @@ function normalSeason(career) {
   globalThis.Date = class extends OriginalDate { constructor(...args) { super(...(args.length ? args : [NOW])); } static now() { return NOW; } };
   try {
     for (let seed = 118400; seed < 118464; seed++) {
-      const rng = mulberry32(seed), draws = [];
-      Math.random = () => { const value = rng(); draws.push(value); return value; };
+      const rng = mulberry32(seed), draws = [], sortDraws = [];
+      Math.random = () => { const value = rng(); if (new Error().stack.includes('Array.sort')) sortDraws.push(draws.length); draws.push(value); return value; };
       const next = B.soccer.advanceProSeason(structuredClone(career), B.soccer.FALLBACK_CLUBS);
       const row = next.seasons.at(-1);
-      if (['newspaper', 'season_summary'].includes(next.phase) && next.pendingSummary?.year === row?.year && row?.apps > 0 && !row.injurySevere && row.ambition) return { seed, next, draws };
+      if (['newspaper', 'season_summary'].includes(next.phase) && next.pendingSummary?.year === row?.year && row?.apps > 0 && !row.injurySevere && row.ambition) return { seed, next, draws, sortDraws };
     }
     throw new Error('fixture refused: real engine produced no normal summary season in 64 seeds');
   } finally { Math.random = real; globalThis.Date = OriginalDate; }
 }
+async function chromiumSeason(career, seed) {
+  return oraclePage.evaluate(({ career, seed, now }) => {
+    const originalRandom = Math.random, OriginalDate = Date, draws = [], sortDraws = []; let t = seed >>> 0;
+    window.Date = class extends OriginalDate { constructor(...args) { super(...(args.length ? args : [now])); } static now() { return now; } };
+    Math.random = () => { t = (t + 0x6D2B79F5) >>> 0; let x = Math.imul(t ^ (t >>> 15), 1 | t); x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x;
+      const value = ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+      if (new Error().stack.includes('Array.sort')) sortDraws.push(draws.length); draws.push(value); return value; };
+    try {
+      const engine = window.__careerDepthEngine, next = engine.advanceProSeason(structuredClone(career), engine.FALLBACK_CLUBS);
+      const row = next.seasons.at(-1);
+      if (!['newspaper', 'season_summary'].includes(next.phase) || next.pendingSummary?.year !== row?.year || !(row?.apps > 0) || row.injurySevere || !row.ambition) {
+        throw new Error('same seeded Chromium engine did not produce the selected normal summary');
+      }
+      return { seed, next, draws, sortDraws };
+    } finally { Math.random = originalRandom; window.Date = OriginalDate; }
+  }, { career, seed, now: NOW });
+}
 async function seedSeasonClick(page, seed) {
   await page.getByRole('button', { name: 'Next Season', exact: true }).evaluate((button, initial) => {
     button.addEventListener('click', () => {
-      window.__careerDepthRealRandom = Math.random; window.__careerDepthDraws = []; let t = initial >>> 0;
+      window.__careerDepthRealRandom = Math.random; window.__careerDepthDraws = []; window.__careerDepthSortDraws = []; let t = initial >>> 0;
       Math.random = () => { t = (t + 0x6D2B79F5) >>> 0; let x = Math.imul(t ^ (t >>> 15), 1 | t); x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x;
-        const value = ((x ^ (x >>> 14)) >>> 0) / 4294967296; window.__careerDepthDraws.push(value); return value; };
+        const value = ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+        if (new Error().stack.includes('Array.sort')) window.__careerDepthSortDraws.push(window.__careerDepthDraws.length);
+        window.__careerDepthDraws.push(value); return value; };
     }, { capture: true, once: true });
   }, seed);
 }
@@ -90,6 +116,16 @@ async function trapped(page, dialog) {
     if (!await dialog.evaluate(panel => panel.contains(document.activeElement))) return false;
   }
   return true;
+}
+async function restored(page, expected, name) {
+  const ok = await page.waitForFunction(body => document.activeElement?.hasAttribute('data-career-records-tile')
+    && document.body.style.overflow === body.inline && getComputedStyle(document.body).overflow === body.computed
+    && scrollY === body.y, expected, { timeout: 2000 }).then(() => true, () => false);
+  const actual = await page.evaluate(() => ({ inline: document.body.style.overflow, computed: getComputedStyle(document.body).overflow,
+    y: scrollY, active: document.activeElement?.outerHTML ?? null }));
+  fs.writeFileSync(path.join(SHOTS, `${name}-restoration.json`), JSON.stringify({ expected, actual, ok }, null, 2));
+  if (!ok) console.log(`${name}: exact focus/body restoration failed\n${JSON.stringify({ expected, actual }, null, 2)}`);
+  return ok;
 }
 async function prepare(context) {
   await context.addInitScript(now => {
@@ -175,18 +211,22 @@ async function walk(width, height) {
     await page.waitForFunction(() => !!JSON.parse(localStorage.getItem('soccerCareerSave')).seasonAmbition);
     const beforeSeason = await state(page);
     fs.writeFileSync(path.join(SHOTS, `career-season-${width}-input.json`), JSON.stringify({ save: beforeSeason, clubs: B.soccer.FALLBACK_CLUBS, now: NOW }, null, 2));
-    const proof = normalSeason(beforeSeason);
+    const nodeProof = normalSeason(beforeSeason), proof = await chromiumSeason(beforeSeason, nodeProof.seed);
+    fs.writeFileSync(path.join(SHOTS, `career-season-${width}-node-expected.json`), JSON.stringify(nodeProof.next, null, 2));
+    const runtimeDiff = fieldDifferences(JSON.parse(JSON.stringify(nodeProof.next)), proof.next);
+    fs.writeFileSync(path.join(SHOTS, `career-season-${width}-node-chromium-diff.json`), JSON.stringify(runtimeDiff, null, 2));
     console.log(`${label}: normal engine seed ${proof.seed}, phase ${proof.next.phase}, apps ${proof.next.seasons.at(-1).apps}, target ${proof.next.seasons.at(-1).ambition.outcome}`);
     await seedSeasonClick(page, proof.seed);
     await page.getByRole('button', { name: 'Next Season', exact: true }).click();
     await page.waitForFunction(count => JSON.parse(localStorage.getItem('soccerCareerSave')).seasons.length > count, beforeSeason.seasons.length, { timeout: 45000 });
-    const observedDraws = await page.evaluate(() => {
+    const observed = await page.evaluate(() => {
       if (typeof window.__careerDepthRealRandom !== 'function') throw new Error('seed listener did not run on the actual Next Season click');
       Math.random = window.__careerDepthRealRandom; delete window.__careerDepthRealRandom;
-      const draws = window.__careerDepthDraws; delete window.__careerDepthDraws; return draws;
+      const draws = window.__careerDepthDraws, sortDraws = window.__careerDepthSortDraws;
+      delete window.__careerDepthDraws; delete window.__careerDepthSortDraws; return { draws, sortDraws };
     });
-    fs.writeFileSync(path.join(SHOTS, `career-season-${width}-rng.json`), JSON.stringify({ seed: proof.seed, expected: proof.draws, observed: observedDraws }, null, 2));
-    console.log(`${label}: expected engine RNG calls ${proof.draws.length}, observed click/render RNG calls ${observedDraws.length}, traces saved for full-save diagnosis`);
+    fs.writeFileSync(path.join(SHOTS, `career-season-${width}-rng.json`), JSON.stringify({ seed: proof.seed, node: nodeProof, chromium: proof, observed }, null, 2));
+    console.log(`${label}: Node/Chromium/actual RNG calls ${nodeProof.draws.length}/${proof.draws.length}/${observed.draws.length}, sort draws ${nodeProof.sortDraws.length}/${proof.sortDraws.length}/${observed.sortDraws.length}, full runtime differences ${runtimeDiff.length}`);
     const finished = await state(page), row = finished.seasons.at(-1), result = row.ambition;
     check(result && result.actual === row[choice.stat] && result.target === beforeSeason.seasonAmbition.target && !finished.seasonAmbition, `${label}: playing a real season seals target against its actual stats and consumes the choice`);
     check(compareSave(proof.next, finished, `career-season-${width}`), `${label}: actual Next Season writes the unchanged real engine's complete seeded save`);
@@ -241,12 +281,12 @@ async function failedChunk(width, height) {
     await dialog.screenshot({ path: path.join(SHOTS, `career-records-failure-${width}.png`) });
     await page.keyboard.press('Escape'); await dialog.waitFor({ state: 'hidden' });
     await page.waitForFunction(() => !document.querySelector('[data-scroll-locked]'));
-    check(await page.evaluate(() => document.activeElement?.hasAttribute('data-career-records-tile')) && JSON.stringify(await bodyState(page)) === JSON.stringify(body), `${label}: Escape restores the tile focus and original body scrolling`);
+    check(await restored(page, body, `career-records-failure-${width}-escape`), `${label}: Escape restores the tile focus and original body scrolling`);
     check(await savedBytes(page) === before, `${label}: Escape preserves the whole save`);
     await tile.click(); await dialog.waitFor();
     await dialog.getByRole('button', { name: 'Back to your career', exact: true }).focus(); await page.keyboard.press('Enter');
     await dialog.waitFor({ state: 'hidden' }); await page.waitForFunction(() => !document.querySelector('[data-scroll-locked]'));
-    check(await page.evaluate(() => document.activeElement?.hasAttribute('data-career-records-tile')) && JSON.stringify(await bodyState(page)) === JSON.stringify(body), `${label}: keyboard Back restores tile focus and body scrolling after reopening`);
+    check(await restored(page, body, `career-records-failure-${width}-back`), `${label}: keyboard Back restores tile focus and body scrolling after reopening`);
     check(await savedBytes(page) === before, `${label}: keyboard Back preserves the whole save`);
     check(errors.length === 0, `${label}: caught lazy failure causes no uncaught page error (${errors.join('; ')})`);
     rejectSheet = false;
@@ -274,10 +314,14 @@ try {
     await new Promise(r => setTimeout(r, 1200));
   }
   browser = await pw.chromium.launch({ args: ['--no-sandbox', '--no-proxy-server'] });
+  oracleContext = await browser.newContext(); oraclePage = await oracleContext.newPage();
+  const oracleUrl = `${BASE}/__career-depth-oracle`;
+  await oraclePage.route(oracleUrl, route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><html><body></body></html>' }));
+  await oraclePage.goto(oracleUrl); await oraclePage.addScriptTag({ content: oracleBundle.outputFiles[0].text });
   for (const [w, h] of [[390, 844], [1280, 900]]) {
     try { await walk(w, h); } catch (e) { check(false, `${w}x${h} journey threw: ${String(e.stack || e).slice(0, 700)}`); }
     try { await failedChunk(w, h); } catch (e) { check(false, `${w}x${h} failed chunk journey threw: ${String(e.stack || e).slice(0, 700)}`); }
   }
-} finally { await browser?.close(); server?.kill(); }
+} finally { await oracleContext?.close(); await browser?.close(); server?.kill(); }
 console.log(`playSoccerCareerDepth: ${checks} checks, ${failed} failed`);
 process.exit(failed ? 1 : 0);
