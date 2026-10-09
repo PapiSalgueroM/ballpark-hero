@@ -85,7 +85,14 @@ const report = {
   sourceBefore: sourceHashes(), buildBefore: buildHashes(), assetManifestSha256: digest(fs.readFileSync(CACHE)), assetPayloadBefore: assetPayloadHashes(), cases: [], deletions: [], controls: [], forwardedWrites: 0,
   transportErrors: [], serverEvents: [],
 };
-const save = () => writeJSON('report.json', report);
+let saveTimer = null;
+const save = () => {
+  if (saveTimer !== null) { clearTimeout(saveTimer); saveTimer = null; }
+  writeJSON('report.json', report);
+};
+const saveSoon = () => {
+  if (saveTimer === null) saveTimer = setTimeout(save, 250);
+};
 save();
 
 function oracleEnvironment(initial = { seed: SEED, draws: 0 }) {
@@ -288,13 +295,13 @@ async function openCase(slug, profile, kind, initial) {
     const request = route.request(), url = new URL(request.url());
     if (url.origin === BASE && ['GET', 'HEAD'].includes(request.method())) {
       const receipt = { id: row.localRequests.length + 1, rowId: id, phase: row.routePhase, url: url.href, method: request.method(), started: new Date().toISOString(), connection: 'close', maxRedirects: 0, maxRetries: 0 };
-      row.localRequests.push(receipt); save();
+      row.localRequests.push(receipt); saveSoon();
       const task = (async () => {
         try {
           // Avoid pooled loopback socket reuse; the previous socket failure's cause remains unconfirmed.
           const response = await route.fetch({ headers: { ...request.headers(), connection: 'close' }, maxRedirects: 0, maxRetries: 0 });
-          receipt.status = response.status(); receipt.responseUrl = response.url(); receipt.headers = response.headers(); save();
-          const body = await response.body(); receipt.bodyBytes = body.length; receipt.bodySha256 = digest(body); save();
+          receipt.status = response.status(); receipt.responseUrl = response.url(); receipt.headers = response.headers(); saveSoon();
+          const body = await response.body(); receipt.bodyBytes = body.length; receipt.bodySha256 = digest(body); saveSoon();
           assert.equal(new URL(response.url()).origin, BASE, 'Owned response stays on the original local server');
           assert(response.status() >= 200 && response.status() < 300, 'Owned application response succeeds without a redirect');
           await route.fulfill({ response, body }); receipt.fulfilled = true;
@@ -304,7 +311,7 @@ async function openCase(slug, profile, kind, initial) {
           row.assetErrors.push(`${url.href}: ${error.message}`); save();
           try { await route.abort('failed'); receipt.aborted = true; }
           catch (abortError) { receipt.abortError = String(abortError); }
-        } finally { receipt.ended = new Date().toISOString(); receipt.endPhase = row.routePhase; save(); }
+        } finally { receipt.ended = new Date().toISOString(); receipt.endPhase = row.routePhase; saveSoon(); }
       })();
       localPending.add(task); pendingRoutes.add(task);
       const release = () => { localPending.delete(task); pendingRoutes.delete(task); };
