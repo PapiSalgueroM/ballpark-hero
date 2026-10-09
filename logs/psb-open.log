@@ -1,0 +1,839 @@
+playStorageBlocked against http://localhost:4173, CONTROL open, arms blocked and full
+
+/ on a phone
+  PASS  / phone OPEN: baseline mounted, 173 buttons and 329 links in #root
+  PASS  / phone OPEN: no storage notice with ordinary storage
+  PASS  / phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  / phone OPEN: no storage error with ordinary storage
+  PASS  / phone OPEN AGAIN (BLOCKED ARM): mounted, 173 buttons and 329 links (untouched 173 and 329, floor 499)
+  PASS  / phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  / phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  / phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  / phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  / phone OPEN AGAIN (BLOCKED ARM): no notice on a page that is not a game
+  PASS  / phone OPEN AGAIN (BLOCKED ARM): first game tile at y=315 (ceiling 430, untouched 315), /soccer-career
+  PASS  / phone OPEN AGAIN (FULL ARM): mounted, 173 buttons and 329 links (untouched 173 and 329, floor 499)
+  PASS  / phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  / phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  / phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  / phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  / phone OPEN AGAIN (FULL ARM): no notice on a page that is not a game
+  PASS  / phone OPEN AGAIN (FULL ARM): first game tile at y=315 (ceiling 430, untouched 315), /soccer-career
+
+/ on a desktop
+  PASS  / desktop OPEN: baseline mounted, 177 buttons and 329 links in #root
+  PASS  / desktop OPEN: no storage notice with ordinary storage
+  PASS  / desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  / desktop OPEN: no storage error with ordinary storage
+  PASS  / desktop OPEN AGAIN (BLOCKED ARM): mounted, 177 buttons and 329 links (untouched 177 and 329, floor 503)
+  PASS  / desktop OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  / desktop OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  / desktop OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  / desktop OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  / desktop OPEN AGAIN (BLOCKED ARM): no notice on a page that is not a game
+  PASS  / desktop OPEN AGAIN (FULL ARM): mounted, 177 buttons and 329 links (untouched 177 and 329, floor 503)
+  PASS  / desktop OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  / desktop OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  / desktop OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  / desktop OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  / desktop OPEN AGAIN (FULL ARM): no notice on a page that is not a game
+
+/soccer on a phone
+  PASS  /soccer phone OPEN: baseline mounted, 10 buttons and 75 links in #root
+  PASS  /soccer phone OPEN: no storage notice with ordinary storage
+  PASS  /soccer phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /soccer phone OPEN: no storage error with ordinary storage
+  PASS  /soccer phone OPEN AGAIN (BLOCKED ARM): mounted, 10 buttons and 75 links (untouched 10 and 75, floor 82)
+  PASS  /soccer phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /soccer phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /soccer phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /soccer phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /soccer phone OPEN AGAIN (BLOCKED ARM): no notice on a page that is not a game
+  PASS  /soccer phone OPEN AGAIN (FULL ARM): mounted, 10 buttons and 75 links (untouched 10 and 75, floor 82)
+  PASS  /soccer phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /soccer phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /soccer phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /soccer phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  /soccer phone OPEN AGAIN (FULL ARM): no notice on a page that is not a game
+
+/soccer on a desktop
+  PASS  /soccer desktop OPEN: baseline mounted, 10 buttons and 75 links in #root
+  PASS  /soccer desktop OPEN: no storage notice with ordinary storage
+  PASS  /soccer desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /soccer desktop OPEN: no storage error with ordinary storage
+  PASS  /soccer desktop OPEN AGAIN (BLOCKED ARM): mounted, 10 buttons and 75 links (untouched 10 and 75, floor 82)
+  PASS  /soccer desktop OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /soccer desktop OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /soccer desktop OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /soccer desktop OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /soccer desktop OPEN AGAIN (BLOCKED ARM): no notice on a page that is not a game
+  PASS  /soccer desktop OPEN AGAIN (FULL ARM): mounted, 10 buttons and 75 links (untouched 10 and 75, floor 82)
+  PASS  /soccer desktop OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /soccer desktop OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /soccer desktop OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /soccer desktop OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  /soccer desktop OPEN AGAIN (FULL ARM): no notice on a page that is not a game
+
+/whats-new on a phone
+  PASS  /whats-new phone OPEN: baseline mounted, 4 buttons and 184 links in #root
+  PASS  /whats-new phone OPEN: no storage notice with ordinary storage
+  PASS  /whats-new phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /whats-new phone OPEN: no storage error with ordinary storage
+  PASS  /whats-new phone OPEN AGAIN (BLOCKED ARM): mounted, 4 buttons and 184 links (untouched 4 and 184, floor 185)
+  PASS  /whats-new phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /whats-new phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /whats-new phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /whats-new phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /whats-new phone OPEN AGAIN (BLOCKED ARM): no notice on a page that is not a game
+  PASS  /whats-new phone OPEN AGAIN (FULL ARM): mounted, 4 buttons and 184 links (untouched 4 and 184, floor 185)
+  PASS  /whats-new phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /whats-new phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /whats-new phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /whats-new phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  /whats-new phone OPEN AGAIN (FULL ARM): no notice on a page that is not a game
+
+/whats-new on a desktop
+  PASS  /whats-new desktop OPEN: baseline mounted, 4 buttons and 184 links in #root
+  PASS  /whats-new desktop OPEN: no storage notice with ordinary storage
+  PASS  /whats-new desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /whats-new desktop OPEN: no storage error with ordinary storage
+  PASS  /whats-new desktop OPEN AGAIN (BLOCKED ARM): mounted, 4 buttons and 184 links (untouched 4 and 184, floor 185)
+  PASS  /whats-new desktop OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /whats-new desktop OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /whats-new desktop OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /whats-new desktop OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /whats-new desktop OPEN AGAIN (BLOCKED ARM): no notice on a page that is not a game
+  PASS  /whats-new desktop OPEN AGAIN (FULL ARM): mounted, 4 buttons and 184 links (untouched 4 and 184, floor 185)
+  PASS  /whats-new desktop OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /whats-new desktop OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /whats-new desktop OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /whats-new desktop OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  /whats-new desktop OPEN AGAIN (FULL ARM): no notice on a page that is not a game
+
+/soccer-career on a phone
+  PASS  /soccer-career phone OPEN: baseline mounted, 30 buttons and 23 links in #root
+  PASS  /soccer-career phone OPEN: no storage notice with ordinary storage
+  PASS  /soccer-career phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /soccer-career phone OPEN: no storage error with ordinary storage
+  PASS  /soccer-career phone OPEN AGAIN (BLOCKED ARM): mounted, 30 buttons and 23 links (untouched 30 and 23, floor 50)
+  PASS  /soccer-career phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /soccer-career phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /soccer-career phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /soccer-career phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /soccer-career phone OPEN AGAIN (BLOCKED ARM): 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 4 and 3; floors 2 and 1): Choose nationality > Choose position > Choose era > 🎲 Surprise me
+  PASS  /soccer-career phone OPEN AGAIN (BLOCKED ARM): no notice (storage was left alone)
+  PASS  /soccer-career phone OPEN AGAIN (FULL ARM): mounted, 30 buttons and 23 links (untouched 30 and 23, floor 50)
+  PASS  /soccer-career phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /soccer-career phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /soccer-career phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /soccer-career phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  /soccer-career phone OPEN AGAIN (FULL ARM): 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 4 and 3; floors 2 and 1): Choose nationality > Choose position > Choose era > 🎲 Surprise me
+  PASS  /soccer-career phone OPEN AGAIN (FULL ARM): no notice (storage was left alone)
+
+/soccer-career on a desktop
+  PASS  /soccer-career desktop OPEN: baseline mounted, 30 buttons and 23 links in #root
+  PASS  /soccer-career desktop OPEN: no storage notice with ordinary storage
+  PASS  /soccer-career desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /soccer-career desktop OPEN: no storage error with ordinary storage
+  PASS  /soccer-career desktop OPEN AGAIN (BLOCKED ARM): mounted, 30 buttons and 23 links (untouched 30 and 23, floor 50)
+  PASS  /soccer-career desktop OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /soccer-career desktop OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /soccer-career desktop OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /soccer-career desktop OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /soccer-career desktop OPEN AGAIN (BLOCKED ARM): 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 4 and 3; floors 2 and 1): Choose nationality > Choose position > Choose era > 🎲 Surprise me
+  PASS  /soccer-career desktop OPEN AGAIN (BLOCKED ARM): no notice (storage was left alone)
+  PASS  /soccer-career desktop OPEN AGAIN (FULL ARM): mounted, 30 buttons and 23 links (untouched 30 and 23, floor 50)
+  PASS  /soccer-career desktop OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /soccer-career desktop OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /soccer-career desktop OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /soccer-career desktop OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  /soccer-career desktop OPEN AGAIN (FULL ARM): 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 4 and 3; floors 2 and 1): Choose nationality > Choose position > Choose era > 🎲 Surprise me
+  PASS  /soccer-career desktop OPEN AGAIN (FULL ARM): no notice (storage was left alone)
+
+/club-manager on a phone
+  PASS  /club-manager phone OPEN: baseline mounted, 13 buttons and 28 links in #root
+  PASS  /club-manager phone OPEN: no storage notice with ordinary storage
+  PASS  /club-manager phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /club-manager phone OPEN: no storage error with ordinary storage
+  PASS  /club-manager phone OPEN AGAIN (BLOCKED ARM): mounted, 13 buttons and 28 links (untouched 13 and 28, floor 38)
+  PASS  /club-manager phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /club-manager phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /club-manager phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /club-manager phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /club-manager phone OPEN AGAIN (BLOCKED ARM): 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 4 and 3; floors 2 and 1): 📅 2026-27 Today. Real squads as of Augu > 📅 Starting 2026-27 > 📅 2026-27 Today. Real squads as of Augu > 📅 Starting 2026-27
+  PASS  /club-manager phone OPEN AGAIN (BLOCKED ARM): no notice (storage was left alone)
+  PASS  /club-manager phone OPEN AGAIN (FULL ARM): mounted, 13 buttons and 28 links (untouched 13 and 28, floor 38)
+  PASS  /club-manager phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /club-manager phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /club-manager phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /club-manager phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  /club-manager phone OPEN AGAIN (FULL ARM): 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 4 and 3; floors 2 and 1): 📅 2026-27 Today. Real squads as of Augu > 📅 Starting 2026-27 > 📅 2026-27 Today. Real squads as of Augu > 📅 Starting 2026-27
+  PASS  /club-manager phone OPEN AGAIN (FULL ARM): no notice (storage was left alone)
+
+/club-manager on a desktop
+  PASS  /club-manager desktop OPEN: baseline mounted, 13 buttons and 28 links in #root
+  PASS  /club-manager desktop OPEN: no storage notice with ordinary storage
+  PASS  /club-manager desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /club-manager desktop OPEN: no storage error with ordinary storage
+  PASS  /club-manager desktop OPEN AGAIN (BLOCKED ARM): mounted, 13 buttons and 28 links (untouched 13 and 28, floor 38)
+  PASS  /club-manager desktop OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /club-manager desktop OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /club-manager desktop OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /club-manager desktop OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /club-manager desktop OPEN AGAIN (BLOCKED ARM): 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 4 and 3; floors 2 and 1): 📅 2026-27 Today. Real squads as of Augu > 📅 Starting 2026-27 > 📅 2026-27 Today. Real squads as of Augu > 📅 Starting 2026-27
+  PASS  /club-manager desktop OPEN AGAIN (BLOCKED ARM): no notice (storage was left alone)
+  PASS  /club-manager desktop OPEN AGAIN (FULL ARM): mounted, 13 buttons and 28 links (untouched 13 and 28, floor 38)
+  PASS  /club-manager desktop OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /club-manager desktop OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /club-manager desktop OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /club-manager desktop OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  /club-manager desktop OPEN AGAIN (FULL ARM): 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 4 and 3; floors 2 and 1): 📅 2026-27 Today. Real squads as of Augu > 📅 Starting 2026-27 > 📅 2026-27 Today. Real squads as of Augu > 📅 Starting 2026-27
+  PASS  /club-manager desktop OPEN AGAIN (FULL ARM): no notice (storage was left alone)
+
+/nba-my-career on a phone
+  PASS  /nba-my-career phone OPEN: baseline mounted, 38 buttons and 27 links in #root
+  PASS  /nba-my-career phone OPEN: no storage notice with ordinary storage
+  PASS  /nba-my-career phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /nba-my-career phone OPEN: no storage error with ordinary storage
+  PASS  /nba-my-career phone OPEN AGAIN (BLOCKED ARM): mounted, 38 buttons and 27 links (untouched 38 and 27, floor 62)
+  PASS  /nba-my-career phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /nba-my-career phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /nba-my-career phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /nba-my-career phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /nba-my-career phone OPEN AGAIN (BLOCKED ARM): 4 presses went through, 3 changed the page, 2 of them after the first (untouched 4, 3 and 2; floors 1 and 1): Let's Play! > The Pest Picks pockets, gets under skin > Play your road to the draft > Got it
+  PASS  /nba-my-career phone OPEN AGAIN (BLOCKED ARM): no notice (storage was left alone)
+  PASS  /nba-my-career phone OPEN AGAIN (FULL ARM): mounted, 38 buttons and 27 links (untouched 38 and 27, floor 62)
+  PASS  /nba-my-career phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /nba-my-career phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /nba-my-career phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /nba-my-career phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  /nba-my-career phone OPEN AGAIN (FULL ARM): 4 presses went through, 3 changed the page, 2 of them after the first (untouched 4, 3 and 2; floors 1 and 1): Let's Play! > The Pest Picks pockets, gets under skin > Play your road to the draft > Got it
+  PASS  /nba-my-career phone OPEN AGAIN (FULL ARM): no notice (storage was left alone)
+
+/nba-my-career on a desktop
+  PASS  /nba-my-career desktop OPEN: baseline mounted, 38 buttons and 27 links in #root
+  PASS  /nba-my-career desktop OPEN: no storage notice with ordinary storage
+  PASS  /nba-my-career desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /nba-my-career desktop OPEN: no storage error with ordinary storage
+  PASS  /nba-my-career desktop OPEN AGAIN (BLOCKED ARM): mounted, 38 buttons and 27 links (untouched 38 and 27, floor 62)
+  PASS  /nba-my-career desktop OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /nba-my-career desktop OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /nba-my-career desktop OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /nba-my-career desktop OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /nba-my-career desktop OPEN AGAIN (BLOCKED ARM): 4 presses went through, 3 changed the page, 2 of them after the first (untouched 4, 3 and 2; floors 1 and 1): Let's Play! > The Pest Picks pockets, gets under skin > Play your road to the draft > Got it
+  PASS  /nba-my-career desktop OPEN AGAIN (BLOCKED ARM): no notice (storage was left alone)
+  PASS  /nba-my-career desktop OPEN AGAIN (FULL ARM): mounted, 38 buttons and 27 links (untouched 38 and 27, floor 62)
+  PASS  /nba-my-career desktop OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /nba-my-career desktop OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /nba-my-career desktop OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /nba-my-career desktop OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  /nba-my-career desktop OPEN AGAIN (FULL ARM): 4 presses went through, 3 changed the page, 2 of them after the first (untouched 4, 3 and 2; floors 1 and 1): Let's Play! > The Pest Picks pockets, gets under skin > Play your road to the draft > Got it
+  PASS  /nba-my-career desktop OPEN AGAIN (FULL ARM): no notice (storage was left alone)
+
+/nfl-my-career on a phone
+  PASS  /nfl-my-career phone OPEN: baseline mounted, 41 buttons and 27 links in #root
+  PASS  /nfl-my-career phone OPEN: no storage notice with ordinary storage
+  PASS  /nfl-my-career phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /nfl-my-career phone OPEN: no storage error with ordinary storage
+  PASS  /nfl-my-career phone OPEN AGAIN (BLOCKED ARM): mounted, 41 buttons and 27 links (untouched 41 and 27, floor 65)
+  PASS  /nfl-my-career phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /nfl-my-career phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /nfl-my-career phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /nfl-my-career phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /nfl-my-career phone OPEN AGAIN (BLOCKED ARM): 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 4 and 3; floors 2 and 1): Let's Play! > Play your road to the draft > Got it > 3 seasons Big college program Every game
+  PASS  /nfl-my-career phone OPEN AGAIN (BLOCKED ARM): no notice (storage was left alone)
+  PASS  /nfl-my-career phone OPEN AGAIN (FULL ARM): mounted, 41 buttons and 27 links (untouched 41 and 27, floor 65)
+  PASS  /nfl-my-career phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /nfl-my-career phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /nfl-my-career phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /nfl-my-career phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  /nfl-my-career phone OPEN AGAIN (FULL ARM): 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 4 and 3; floors 2 and 1): Let's Play! > Play your road to the draft > Got it > 3 seasons Big college program Every game
+  PASS  /nfl-my-career phone OPEN AGAIN (FULL ARM): no notice (storage was left alone)
+
+/nfl-my-career on a desktop
+  PASS  /nfl-my-career desktop OPEN: baseline mounted, 41 buttons and 27 links in #root
+  PASS  /nfl-my-career desktop OPEN: no storage notice with ordinary storage
+  PASS  /nfl-my-career desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /nfl-my-career desktop OPEN: no storage error with ordinary storage
+  PASS  /nfl-my-career desktop OPEN AGAIN (BLOCKED ARM): mounted, 41 buttons and 27 links (untouched 41 and 27, floor 65)
+  PASS  /nfl-my-career desktop OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /nfl-my-career desktop OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /nfl-my-career desktop OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /nfl-my-career desktop OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /nfl-my-career desktop OPEN AGAIN (BLOCKED ARM): 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 4 and 3; floors 2 and 1): Let's Play! > Play your road to the draft > Got it > 3 seasons Big college program Every game
+  PASS  /nfl-my-career desktop OPEN AGAIN (BLOCKED ARM): no notice (storage was left alone)
+  PASS  /nfl-my-career desktop OPEN AGAIN (FULL ARM): mounted, 41 buttons and 27 links (untouched 41 and 27, floor 65)
+  PASS  /nfl-my-career desktop OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /nfl-my-career desktop OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /nfl-my-career desktop OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /nfl-my-career desktop OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  /nfl-my-career desktop OPEN AGAIN (FULL ARM): 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 4 and 3; floors 2 and 1): Let's Play! > Play your road to the draft > Got it > 3 seasons Big college program Every game
+  PASS  /nfl-my-career desktop OPEN AGAIN (FULL ARM): no notice (storage was left alone)
+
+/stadium-tycoon on a phone
+  PASS  /stadium-tycoon phone OPEN: baseline mounted, 29 buttons and 23 links in #root
+  PASS  /stadium-tycoon phone OPEN: no storage notice with ordinary storage
+  PASS  /stadium-tycoon phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /stadium-tycoon phone OPEN: no storage error with ordinary storage
+  PASS  /stadium-tycoon phone OPEN AGAIN (BLOCKED ARM): mounted, 29 buttons and 23 links (untouched 29 and 23, floor 49)
+  PASS  /stadium-tycoon phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /stadium-tycoon phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /stadium-tycoon phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /stadium-tycoon phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /stadium-tycoon phone OPEN AGAIN (BLOCKED ARM): 4 presses went through, 3 changed the page, 2 of them after the first (untouched 4, 2 and 1; floors 1 and 1): Let's go > 🏗️ Upgrades 4 ready > 🧑‍🤝‍🧑 Payroll 0 hired > 🏟️ Stadium
+  PASS  /stadium-tycoon phone OPEN AGAIN (BLOCKED ARM): no notice (storage was left alone)
+  PASS  /stadium-tycoon phone OPEN AGAIN (FULL ARM): mounted, 29 buttons and 23 links (untouched 29 and 23, floor 49)
+  PASS  /stadium-tycoon phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /stadium-tycoon phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /stadium-tycoon phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /stadium-tycoon phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  /stadium-tycoon phone OPEN AGAIN (FULL ARM): 4 presses went through, 3 changed the page, 2 of them after the first (untouched 4, 2 and 1; floors 1 and 1): Let's go > 🏗️ Upgrades 3 ready > 🧑‍🤝‍🧑 Payroll 0 hired > 🏟️ Stadium
+  PASS  /stadium-tycoon phone OPEN AGAIN (FULL ARM): no notice (storage was left alone)
+
+/stadium-tycoon on a desktop
+  PASS  /stadium-tycoon desktop OPEN: baseline mounted, 29 buttons and 23 links in #root
+  PASS  /stadium-tycoon desktop OPEN: no storage notice with ordinary storage
+  PASS  /stadium-tycoon desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /stadium-tycoon desktop OPEN: no storage error with ordinary storage
+  PASS  /stadium-tycoon desktop OPEN AGAIN (BLOCKED ARM): mounted, 29 buttons and 23 links (untouched 29 and 23, floor 49)
+  PASS  /stadium-tycoon desktop OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /stadium-tycoon desktop OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /stadium-tycoon desktop OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /stadium-tycoon desktop OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /stadium-tycoon desktop OPEN AGAIN (BLOCKED ARM): 4 presses went through, 2 changed the page, 1 of them after the first (untouched 4, 2 and 1; floors 1 and 1): Let's go > 🏗️ Upgrades 3 ready > 🧑‍🤝‍🧑 Payroll 0 hired > 🏟️ Stadium
+  PASS  /stadium-tycoon desktop OPEN AGAIN (BLOCKED ARM): no notice (storage was left alone)
+  PASS  /stadium-tycoon desktop OPEN AGAIN (FULL ARM): mounted, 29 buttons and 23 links (untouched 29 and 23, floor 49)
+  PASS  /stadium-tycoon desktop OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /stadium-tycoon desktop OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /stadium-tycoon desktop OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /stadium-tycoon desktop OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  /stadium-tycoon desktop OPEN AGAIN (FULL ARM): 4 presses went through, 3 changed the page, 2 of them after the first (untouched 4, 2 and 1; floors 1 and 1): Let's go > 🏗️ Upgrades 3 ready > 🧑‍🤝‍🧑 Payroll 0 hired > 🏟️ Stadium
+  PASS  /stadium-tycoon desktop OPEN AGAIN (FULL ARM): no notice (storage was left alone)
+
+/college-grid on a phone
+  PASS  /college-grid phone OPEN: baseline mounted, 18 buttons and 27 links in #root
+  PASS  /college-grid phone OPEN: no storage notice with ordinary storage
+  PASS  /college-grid phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /college-grid phone OPEN: no storage error with ordinary storage
+  PASS  /college-grid phone OPEN AGAIN (BLOCKED ARM): mounted, 18 buttons and 27 links (untouched 18 and 27, floor 42)
+  PASS  /college-grid phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /college-grid phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /college-grid phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /college-grid phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /college-grid phone OPEN AGAIN (BLOCKED ARM): 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 4 and 3; floors 2 and 1): Close > + > + > +
+  PASS  /college-grid phone OPEN AGAIN (BLOCKED ARM): no notice (storage was left alone)
+  PASS  /college-grid phone OPEN AGAIN (FULL ARM): mounted, 18 buttons and 27 links (untouched 18 and 27, floor 42)
+  PASS  /college-grid phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /college-grid phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /college-grid phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /college-grid phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  /college-grid phone OPEN AGAIN (FULL ARM): 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 4 and 3; floors 2 and 1): Close > + > + > +
+  PASS  /college-grid phone OPEN AGAIN (FULL ARM): no notice (storage was left alone)
+
+/college-grid on a desktop
+  PASS  /college-grid desktop OPEN: baseline mounted, 18 buttons and 27 links in #root
+  PASS  /college-grid desktop OPEN: no storage notice with ordinary storage
+  PASS  /college-grid desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /college-grid desktop OPEN: no storage error with ordinary storage
+  PASS  /college-grid desktop OPEN AGAIN (BLOCKED ARM): mounted, 18 buttons and 27 links (untouched 18 and 27, floor 42)
+  PASS  /college-grid desktop OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /college-grid desktop OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /college-grid desktop OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /college-grid desktop OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /college-grid desktop OPEN AGAIN (BLOCKED ARM): 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 4 and 3; floors 2 and 1): Close > + > + > +
+  PASS  /college-grid desktop OPEN AGAIN (BLOCKED ARM): no notice (storage was left alone)
+  PASS  /college-grid desktop OPEN AGAIN (FULL ARM): mounted, 18 buttons and 27 links (untouched 18 and 27, floor 42)
+  PASS  /college-grid desktop OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /college-grid desktop OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /college-grid desktop OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /college-grid desktop OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  /college-grid desktop OPEN AGAIN (FULL ARM): 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 4 and 3; floors 2 and 1): Close > + > + > +
+  PASS  /college-grid desktop OPEN AGAIN (FULL ARM): no notice (storage was left alone)
+
+/front-office on a phone
+  PASS  /front-office phone OPEN: baseline mounted, 39 buttons and 28 links in #root
+  PASS  /front-office phone OPEN: no storage notice with ordinary storage
+  PASS  /front-office phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /front-office phone OPEN: no storage error with ordinary storage
+  PASS  /front-office phone OPEN AGAIN (BLOCKED ARM): mounted, 39 buttons and 28 links (untouched 39 and 28, floor 64)
+  PASS  /front-office phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /front-office phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /front-office phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /front-office phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /front-office phone OPEN AGAIN (BLOCKED ARM): 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 4 and 3; floors 2 and 1): Chicago Bears NFC North > ✍️ RE-SIGN DESK 6 deals end this spring  > Process, patience, all the safe words ME > Hub
+  PASS  /front-office phone OPEN AGAIN (BLOCKED ARM): no notice (storage was left alone)
+  PASS  /front-office phone OPEN AGAIN (FULL ARM): mounted, 39 buttons and 28 links (untouched 39 and 28, floor 64)
+  PASS  /front-office phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /front-office phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /front-office phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /front-office phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  /front-office phone OPEN AGAIN (FULL ARM): 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 4 and 3; floors 2 and 1): Chicago Bears NFC North > ✍️ RE-SIGN DESK 6 deals end this spring  > Process, patience, all the safe words ME > Hub
+  PASS  /front-office phone OPEN AGAIN (FULL ARM): no notice (storage was left alone)
+
+/front-office on a desktop
+  PASS  /front-office desktop OPEN: baseline mounted, 39 buttons and 28 links in #root
+  PASS  /front-office desktop OPEN: no storage notice with ordinary storage
+  PASS  /front-office desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /front-office desktop OPEN: no storage error with ordinary storage
+  PASS  /front-office desktop OPEN AGAIN (BLOCKED ARM): mounted, 39 buttons and 28 links (untouched 39 and 28, floor 64)
+  PASS  /front-office desktop OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /front-office desktop OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /front-office desktop OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /front-office desktop OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /front-office desktop OPEN AGAIN (BLOCKED ARM): 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 4 and 3; floors 2 and 1): Chicago Bears NFC North > ✍️ RE-SIGN DESK 6 deals end this spring  > Process, patience, all the safe words ME > Hub
+  PASS  /front-office desktop OPEN AGAIN (BLOCKED ARM): no notice (storage was left alone)
+  PASS  /front-office desktop OPEN AGAIN (FULL ARM): mounted, 39 buttons and 28 links (untouched 39 and 28, floor 64)
+  PASS  /front-office desktop OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /front-office desktop OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /front-office desktop OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /front-office desktop OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  /front-office desktop OPEN AGAIN (FULL ARM): 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 4 and 3; floors 2 and 1): Chicago Bears NFC North > ✍️ RE-SIGN DESK 6 deals end this spring  > Process, patience, all the safe words ME > Hub
+  PASS  /front-office desktop OPEN AGAIN (FULL ARM): no notice (storage was left alone)
+
+/build-your-xi on a phone
+  PASS  /build-your-xi phone OPEN: baseline mounted, 15 buttons and 27 links in #root
+  PASS  /build-your-xi phone OPEN: no storage notice with ordinary storage
+  PASS  /build-your-xi phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /build-your-xi phone OPEN: no storage error with ordinary storage
+  PASS  /build-your-xi phone OPEN AGAIN (BLOCKED ARM): mounted, 15 buttons and 27 links (untouched 15 and 27, floor 39)
+  PASS  /build-your-xi phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /build-your-xi phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /build-your-xi phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /build-your-xi phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /build-your-xi phone OPEN AGAIN (BLOCKED ARM): 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 3 and 2; floors 1 and 1): Got it! > 4-3-3 11 players > Reroll: get a different team > Reroll: get a different team
+  PASS  /build-your-xi phone OPEN AGAIN (BLOCKED ARM): no notice (storage was left alone)
+  PASS  /build-your-xi phone OPEN AGAIN (FULL ARM): mounted, 15 buttons and 27 links (untouched 15 and 27, floor 39)
+  PASS  /build-your-xi phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /build-your-xi phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /build-your-xi phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /build-your-xi phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  /build-your-xi phone OPEN AGAIN (FULL ARM): 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 3 and 2; floors 1 and 1): Got it! > 4-3-3 11 players > Reroll: get a different team > Reroll: get a different team
+  PASS  /build-your-xi phone OPEN AGAIN (FULL ARM): no notice (storage was left alone)
+
+/build-your-xi on a desktop
+  PASS  /build-your-xi desktop OPEN: baseline mounted, 15 buttons and 27 links in #root
+  PASS  /build-your-xi desktop OPEN: no storage notice with ordinary storage
+  PASS  /build-your-xi desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /build-your-xi desktop OPEN: no storage error with ordinary storage
+  PASS  /build-your-xi desktop OPEN AGAIN (BLOCKED ARM): mounted, 15 buttons and 27 links (untouched 15 and 27, floor 39)
+  PASS  /build-your-xi desktop OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /build-your-xi desktop OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /build-your-xi desktop OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /build-your-xi desktop OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /build-your-xi desktop OPEN AGAIN (BLOCKED ARM): 4 presses went through, 4 changed the page, 3 of them after the first (untouched 4, 4 and 3; floors 2 and 1): Got it! > 4-3-3 11 players > Reroll: get a different team > Reroll: get a different team
+  PASS  /build-your-xi desktop OPEN AGAIN (BLOCKED ARM): no notice (storage was left alone)
+  PASS  /build-your-xi desktop OPEN AGAIN (FULL ARM): mounted, 15 buttons and 27 links (untouched 15 and 27, floor 39)
+  PASS  /build-your-xi desktop OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /build-your-xi desktop OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /build-your-xi desktop OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /build-your-xi desktop OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  /build-your-xi desktop OPEN AGAIN (FULL ARM): 4 presses went through, 3 changed the page, 2 of them after the first (untouched 4, 4 and 3; floors 2 and 1): Got it! > 4-3-3 11 players > Reroll: get a different team > Reroll: get a different team
+  PASS  /build-your-xi desktop OPEN AGAIN (FULL ARM): no notice (storage was left alone)
+
+/footle on a phone
+  PASS  /footle phone OPEN: baseline mounted, 12 buttons and 27 links in #root
+  PASS  /footle phone OPEN: no storage notice with ordinary storage
+  PASS  /footle phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /footle phone OPEN: no storage error with ordinary storage
+  PASS  /footle phone OPEN AGAIN (BLOCKED ARM): mounted, 12 buttons and 27 links (untouched 12 and 27, floor 36)
+  PASS  /footle phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /footle phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /footle phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /footle phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /footle phone OPEN AGAIN (BLOCKED ARM): 1 presses went through, 1 changed the page, 0 of them after the first (untouched 1, 1 and 0; floors 1 and 0): Let's Play!
+  PASS  /footle phone OPEN AGAIN (BLOCKED ARM): no notice (storage was left alone)
+  PASS  /footle phone OPEN AGAIN (FULL ARM): mounted, 12 buttons and 27 links (untouched 12 and 27, floor 36)
+  PASS  /footle phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /footle phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /footle phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /footle phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  /footle phone OPEN AGAIN (FULL ARM): 1 presses went through, 1 changed the page, 0 of them after the first (untouched 1, 1 and 0; floors 1 and 0): Let's Play!
+  PASS  /footle phone OPEN AGAIN (FULL ARM): no notice (storage was left alone)
+
+/footle on a desktop
+  PASS  /footle desktop OPEN: baseline mounted, 12 buttons and 27 links in #root
+  PASS  /footle desktop OPEN: no storage notice with ordinary storage
+  PASS  /footle desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /footle desktop OPEN: no storage error with ordinary storage
+  PASS  /footle desktop OPEN AGAIN (BLOCKED ARM): mounted, 12 buttons and 27 links (untouched 12 and 27, floor 36)
+  PASS  /footle desktop OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /footle desktop OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /footle desktop OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /footle desktop OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /footle desktop OPEN AGAIN (BLOCKED ARM): 1 presses went through, 1 changed the page, 0 of them after the first (untouched 1, 1 and 0; floors 1 and 0): Let's Play!
+  PASS  /footle desktop OPEN AGAIN (BLOCKED ARM): no notice (storage was left alone)
+  PASS  /footle desktop OPEN AGAIN (FULL ARM): mounted, 12 buttons and 27 links (untouched 12 and 27, floor 36)
+  PASS  /footle desktop OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /footle desktop OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /footle desktop OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /footle desktop OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  /footle desktop OPEN AGAIN (FULL ARM): 1 presses went through, 1 changed the page, 0 of them after the first (untouched 1, 1 and 0; floors 1 and 0): Let's Play!
+  PASS  /footle desktop OPEN AGAIN (FULL ARM): no notice (storage was left alone)
+
+/free-kick on a phone
+  PASS  /free-kick phone OPEN: baseline mounted, 11 buttons and 23 links in #root
+  PASS  /free-kick phone OPEN: no storage notice with ordinary storage
+  PASS  /free-kick phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /free-kick phone OPEN: no storage error with ordinary storage
+  PASS  /free-kick phone OPEN AGAIN (BLOCKED ARM): mounted, 11 buttons and 23 links (untouched 11 and 23, floor 31)
+  PASS  /free-kick phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /free-kick phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /free-kick phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /free-kick phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /free-kick phone OPEN AGAIN (BLOCKED ARM): 2 presses went through, 1 changed the page, 0 of them after the first (untouched 2, 1 and 0; floors 1 and 0): Today's ten > Hold to strike
+  PASS  /free-kick phone OPEN AGAIN (BLOCKED ARM): no notice (storage was left alone)
+  PASS  /free-kick phone OPEN AGAIN (FULL ARM): mounted, 11 buttons and 23 links (untouched 11 and 23, floor 31)
+  PASS  /free-kick phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /free-kick phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /free-kick phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /free-kick phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  /free-kick phone OPEN AGAIN (FULL ARM): 2 presses went through, 1 changed the page, 0 of them after the first (untouched 2, 1 and 0; floors 1 and 0): Today's ten > Hold to strike
+  PASS  /free-kick phone OPEN AGAIN (FULL ARM): no notice (storage was left alone)
+
+/free-kick on a desktop
+  PASS  /free-kick desktop OPEN: baseline mounted, 11 buttons and 23 links in #root
+  PASS  /free-kick desktop OPEN: no storage notice with ordinary storage
+  PASS  /free-kick desktop OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /free-kick desktop OPEN: no storage error with ordinary storage
+  PASS  /free-kick desktop OPEN AGAIN (BLOCKED ARM): mounted, 11 buttons and 23 links (untouched 11 and 23, floor 31)
+  PASS  /free-kick desktop OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /free-kick desktop OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /free-kick desktop OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /free-kick desktop OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /free-kick desktop OPEN AGAIN (BLOCKED ARM): 2 presses went through, 1 changed the page, 0 of them after the first (untouched 2, 1 and 0; floors 1 and 0): Today's ten > Hold to strike
+  PASS  /free-kick desktop OPEN AGAIN (BLOCKED ARM): no notice (storage was left alone)
+  PASS  /free-kick desktop OPEN AGAIN (FULL ARM): mounted, 11 buttons and 23 links (untouched 11 and 23, floor 31)
+  PASS  /free-kick desktop OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /free-kick desktop OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /free-kick desktop OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /free-kick desktop OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+  PASS  /free-kick desktop OPEN AGAIN (FULL ARM): 2 presses went through, 1 changed the page, 0 of them after the first (untouched 2, 1 and 0; floors 1 and 0): Today's ten > Hold to strike
+  PASS  /free-kick desktop OPEN AGAIN (FULL ARM): no notice (storage was left alone)
+
+/connections on a phone (mount only)
+  PASS  /connections phone OPEN: baseline mounted, 11 buttons and 27 links in #root
+  PASS  /connections phone OPEN: no storage notice with ordinary storage
+  PASS  /connections phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /connections phone OPEN: no storage error with ordinary storage
+  PASS  /connections phone OPEN AGAIN (BLOCKED ARM): mounted, 11 buttons and 27 links (untouched 11 and 27, floor 35)
+  PASS  /connections phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /connections phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /connections phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /connections phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /connections phone OPEN AGAIN (FULL ARM): mounted, 11 buttons and 27 links (untouched 11 and 27, floor 35)
+  PASS  /connections phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /connections phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /connections phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /connections phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+
+/ufc on a phone (mount only)
+  PASS  /ufc phone OPEN: baseline mounted, 12 buttons and 27 links in #root
+  PASS  /ufc phone OPEN: no storage notice with ordinary storage
+  PASS  /ufc phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /ufc phone OPEN: no storage error with ordinary storage
+  PASS  /ufc phone OPEN AGAIN (BLOCKED ARM): mounted, 12 buttons and 27 links (untouched 12 and 27, floor 36)
+  PASS  /ufc phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /ufc phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /ufc phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /ufc phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /ufc phone OPEN AGAIN (FULL ARM): mounted, 12 buttons and 27 links (untouched 12 and 27, floor 36)
+  PASS  /ufc phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /ufc phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /ufc phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /ufc phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+
+/football-grid on a phone (mount only)
+  PASS  /football-grid phone OPEN: baseline mounted, 10 buttons and 27 links in #root
+  PASS  /football-grid phone OPEN: no storage notice with ordinary storage
+  PASS  /football-grid phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /football-grid phone OPEN: no storage error with ordinary storage
+  PASS  /football-grid phone OPEN AGAIN (BLOCKED ARM): mounted, 10 buttons and 27 links (untouched 10 and 27, floor 34)
+  PASS  /football-grid phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /football-grid phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /football-grid phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /football-grid phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /football-grid phone OPEN AGAIN (FULL ARM): mounted, 10 buttons and 27 links (untouched 10 and 27, floor 34)
+  PASS  /football-grid phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /football-grid phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /football-grid phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /football-grid phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+
+/baseball-career on a phone (mount only)
+  PASS  /baseball-career phone OPEN: baseline mounted, 14 buttons and 27 links in #root
+  PASS  /baseball-career phone OPEN: no storage notice with ordinary storage
+  PASS  /baseball-career phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /baseball-career phone OPEN: no storage error with ordinary storage
+  PASS  /baseball-career phone OPEN AGAIN (BLOCKED ARM): mounted, 14 buttons and 27 links (untouched 14 and 27, floor 38)
+  PASS  /baseball-career phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /baseball-career phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /baseball-career phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /baseball-career phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /baseball-career phone OPEN AGAIN (FULL ARM): mounted, 14 buttons and 27 links (untouched 14 and 27, floor 38)
+  PASS  /baseball-career phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /baseball-career phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /baseball-career phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /baseball-career phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+
+/baseball-connections on a phone (mount only)
+  PASS  /baseball-connections phone OPEN: baseline mounted, 33 buttons and 27 links in #root
+  PASS  /baseball-connections phone OPEN: no storage notice with ordinary storage
+  PASS  /baseball-connections phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /baseball-connections phone OPEN: no storage error with ordinary storage
+  PASS  /baseball-connections phone OPEN AGAIN (BLOCKED ARM): mounted, 33 buttons and 27 links (untouched 33 and 27, floor 57)
+  PASS  /baseball-connections phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /baseball-connections phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /baseball-connections phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /baseball-connections phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /baseball-connections phone OPEN AGAIN (FULL ARM): mounted, 33 buttons and 27 links (untouched 33 and 27, floor 57)
+  PASS  /baseball-connections phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /baseball-connections phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /baseball-connections phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /baseball-connections phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+
+/hockey-career on a phone (mount only)
+  PASS  /hockey-career phone OPEN: baseline mounted, 14 buttons and 27 links in #root
+  PASS  /hockey-career phone OPEN: no storage notice with ordinary storage
+  PASS  /hockey-career phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /hockey-career phone OPEN: no storage error with ordinary storage
+  PASS  /hockey-career phone OPEN AGAIN (BLOCKED ARM): mounted, 14 buttons and 27 links (untouched 14 and 27, floor 38)
+  PASS  /hockey-career phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /hockey-career phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /hockey-career phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /hockey-career phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /hockey-career phone OPEN AGAIN (FULL ARM): mounted, 14 buttons and 27 links (untouched 14 and 27, floor 38)
+  PASS  /hockey-career phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /hockey-career phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /hockey-career phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /hockey-career phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+
+/hockey-higher-lower on a phone (mount only)
+  PASS  /hockey-higher-lower phone OPEN: baseline mounted, 14 buttons and 27 links in #root
+  PASS  /hockey-higher-lower phone OPEN: no storage notice with ordinary storage
+  PASS  /hockey-higher-lower phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /hockey-higher-lower phone OPEN: no storage error with ordinary storage
+  PASS  /hockey-higher-lower phone OPEN AGAIN (BLOCKED ARM): mounted, 14 buttons and 27 links (untouched 14 and 27, floor 38)
+  PASS  /hockey-higher-lower phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /hockey-higher-lower phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /hockey-higher-lower phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /hockey-higher-lower phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /hockey-higher-lower phone OPEN AGAIN (FULL ARM): mounted, 14 buttons and 27 links (untouched 14 and 27, floor 38)
+  PASS  /hockey-higher-lower phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /hockey-higher-lower phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /hockey-higher-lower phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /hockey-higher-lower phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+
+/soccer-grid on a phone (mount only)
+  PASS  /soccer-grid phone OPEN: baseline mounted, 24 buttons and 27 links in #root
+  PASS  /soccer-grid phone OPEN: no storage notice with ordinary storage
+  PASS  /soccer-grid phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /soccer-grid phone OPEN: no storage error with ordinary storage
+  PASS  /soccer-grid phone OPEN AGAIN (BLOCKED ARM): mounted, 24 buttons and 27 links (untouched 24 and 27, floor 48)
+  PASS  /soccer-grid phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /soccer-grid phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /soccer-grid phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /soccer-grid phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /soccer-grid phone OPEN AGAIN (FULL ARM): mounted, 24 buttons and 27 links (untouched 24 and 27, floor 48)
+  PASS  /soccer-grid phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /soccer-grid phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /soccer-grid phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /soccer-grid phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+
+/conquest on a phone (mount only)
+  PASS  /conquest phone OPEN: baseline mounted, 9 buttons and 27 links in #root
+  PASS  /conquest phone OPEN: no storage notice with ordinary storage
+  PASS  /conquest phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /conquest phone OPEN: no storage error with ordinary storage
+  PASS  /conquest phone OPEN AGAIN (BLOCKED ARM): mounted, 9 buttons and 27 links (untouched 9 and 27, floor 33)
+  PASS  /conquest phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /conquest phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /conquest phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /conquest phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /conquest phone OPEN AGAIN (FULL ARM): mounted, 9 buttons and 27 links (untouched 9 and 27, floor 33)
+  PASS  /conquest phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /conquest phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /conquest phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /conquest phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+
+/conquest-nba on a phone (mount only)
+  PASS  /conquest-nba phone OPEN: baseline mounted, 9 buttons and 27 links in #root
+  PASS  /conquest-nba phone OPEN: no storage notice with ordinary storage
+  PASS  /conquest-nba phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /conquest-nba phone OPEN: no storage error with ordinary storage
+  PASS  /conquest-nba phone OPEN AGAIN (BLOCKED ARM): mounted, 9 buttons and 27 links (untouched 9 and 27, floor 33)
+  PASS  /conquest-nba phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /conquest-nba phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /conquest-nba phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /conquest-nba phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /conquest-nba phone OPEN AGAIN (FULL ARM): mounted, 9 buttons and 27 links (untouched 9 and 27, floor 33)
+  PASS  /conquest-nba phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /conquest-nba phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /conquest-nba phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /conquest-nba phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+
+/world-cup-bracket on a phone (mount only)
+  PASS  /world-cup-bracket phone OPEN: baseline mounted, 40 buttons and 28 links in #root
+  PASS  /world-cup-bracket phone OPEN: no storage notice with ordinary storage
+  PASS  /world-cup-bracket phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /world-cup-bracket phone OPEN: no storage error with ordinary storage
+  PASS  /world-cup-bracket phone OPEN AGAIN (BLOCKED ARM): mounted, 40 buttons and 28 links (untouched 40 and 28, floor 65)
+  PASS  /world-cup-bracket phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /world-cup-bracket phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /world-cup-bracket phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /world-cup-bracket phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /world-cup-bracket phone OPEN AGAIN (FULL ARM): mounted, 40 buttons and 28 links (untouched 40 and 28, floor 65)
+  PASS  /world-cup-bracket phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /world-cup-bracket phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /world-cup-bracket phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /world-cup-bracket phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+
+/nfl-connections on a phone (mount only)
+  PASS  /nfl-connections phone OPEN: baseline mounted, 33 buttons and 27 links in #root
+  PASS  /nfl-connections phone OPEN: no storage notice with ordinary storage
+  PASS  /nfl-connections phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /nfl-connections phone OPEN: no storage error with ordinary storage
+  PASS  /nfl-connections phone OPEN AGAIN (BLOCKED ARM): mounted, 33 buttons and 27 links (untouched 33 and 27, floor 57)
+  PASS  /nfl-connections phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /nfl-connections phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /nfl-connections phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /nfl-connections phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /nfl-connections phone OPEN AGAIN (FULL ARM): mounted, 33 buttons and 27 links (untouched 33 and 27, floor 57)
+  PASS  /nfl-connections phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /nfl-connections phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /nfl-connections phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /nfl-connections phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+
+/nba-career on a phone (mount only)
+  PASS  /nba-career phone OPEN: baseline mounted, 14 buttons and 27 links in #root
+  PASS  /nba-career phone OPEN: no storage notice with ordinary storage
+  PASS  /nba-career phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /nba-career phone OPEN: no storage error with ordinary storage
+  PASS  /nba-career phone OPEN AGAIN (BLOCKED ARM): mounted, 14 buttons and 27 links (untouched 14 and 27, floor 38)
+  PASS  /nba-career phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /nba-career phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /nba-career phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /nba-career phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /nba-career phone OPEN AGAIN (FULL ARM): mounted, 14 buttons and 27 links (untouched 14 and 27, floor 38)
+  PASS  /nba-career phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /nba-career phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /nba-career phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /nba-career phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+
+/hof-or-bust on a phone (mount only)
+  PASS  /hof-or-bust phone OPEN: baseline mounted, 13 buttons and 24 links in #root
+  PASS  /hof-or-bust phone OPEN: no storage notice with ordinary storage
+  PASS  /hof-or-bust phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /hof-or-bust phone OPEN: no storage error with ordinary storage
+  PASS  /hof-or-bust phone OPEN AGAIN (BLOCKED ARM): mounted, 13 buttons and 24 links (untouched 13 and 24, floor 34)
+  PASS  /hof-or-bust phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /hof-or-bust phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /hof-or-bust phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /hof-or-bust phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /hof-or-bust phone OPEN AGAIN (FULL ARM): mounted, 13 buttons and 24 links (untouched 13 and 24, floor 34)
+  PASS  /hof-or-bust phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /hof-or-bust phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /hof-or-bust phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /hof-or-bust phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+
+/score-predictor on a phone (mount only)
+  PASS  /score-predictor phone OPEN: baseline mounted, 11 buttons and 24 links in #root
+  PASS  /score-predictor phone OPEN: no storage notice with ordinary storage
+  PASS  /score-predictor phone OPEN: window.localStorage is the browser's own ([object Storage])
+  PASS  /score-predictor phone OPEN: no storage error with ordinary storage
+  PASS  /score-predictor phone OPEN AGAIN (BLOCKED ARM): mounted, 11 buttons and 24 links (untouched 11 and 24, floor 32)
+  PASS  /score-predictor phone OPEN AGAIN (BLOCKED ARM): no "This page broke" screen
+  PASS  /score-predictor phone OPEN AGAIN (BLOCKED ARM): no error naming storage
+  PASS  /score-predictor phone OPEN AGAIN (BLOCKED ARM): 0 uncaught errors (untouched 0)
+  PASS  /score-predictor phone OPEN AGAIN (BLOCKED ARM): 0 analytics or ad requests without Accept
+  PASS  /score-predictor phone OPEN AGAIN (FULL ARM): mounted, 11 buttons and 24 links (untouched 11 and 24, floor 32)
+  PASS  /score-predictor phone OPEN AGAIN (FULL ARM): no "This page broke" screen
+  PASS  /score-predictor phone OPEN AGAIN (FULL ARM): no error naming storage
+  PASS  /score-predictor phone OPEN AGAIN (FULL ARM): 0 uncaught errors (untouched 0)
+  PASS  /score-predictor phone OPEN AGAIN (FULL ARM): 0 analytics or ad requests without Accept
+
+the cookie banner
+  PASS  cookie banner OPEN "Essential only": the banner is up on a first visit
+  PASS  cookie banner OPEN "Essential only": 0 analytics or ad requests before any choice
+  PASS  cookie banner OPEN "Essential only": the banner left
+  PASS  cookie banner OPEN "Essential only": still gone on the next page of the visit, and that page drew (/whats-new, "What's New" in 113 ms)
+  PASS  cookie banner OPEN "Essential only": on to /footle inside the same page load, drawn ("FOOTLE"), banner still gone
+  PASS  cookie banner OPEN "Essential only": the answer held, no ad slot (false) and 0 requests for the ad script on /footle
+  PASS  cookie banner OPEN "Essential only": 0 analytics or ad requests after Essential only
+  PASS  cookie banner OPEN "Essential only": no uncaught error
+  PASS  cookie banner OPEN "Essential only": the answer is in the browser's real storage (essential)
+  PASS  cookie banner OPEN "Accept": the banner is up on a first visit
+  PASS  cookie banner OPEN "Accept": 0 analytics or ad requests before any choice
+  PASS  cookie banner OPEN "Accept": the banner left
+  PASS  cookie banner OPEN "Accept": still gone on the next page of the visit, and that page drew (/whats-new, "What's New" in 112 ms)
+  PASS  cookie banner OPEN "Accept": on to /footle inside the same page load, drawn ("FOOTLE"), banner still gone
+  PASS  cookie banner OPEN "Accept": the answer held, /footle mounted its ad slot (true) and asked for the ad script 1 time(s)
+  PASS  cookie banner OPEN "Accept": 2 analytics or ad requests after Accept
+  PASS  cookie banner OPEN "Accept": no uncaught error
+  PASS  cookie banner OPEN "Accept": the answer is in the browser's real storage (accepted)
+
+leaving a page through a link
+  PASS  /soccer-career phone OPEN leaving: baseline, "What's New" drew in 181 ms
+  PASS  /soccer-career phone OPEN AGAIN (BLOCKED ARM) leaving: the link was pressed, "What's New" drew in 122 ms (untouched 181 ms)
+  PASS  /soccer-career phone OPEN AGAIN (FULL ARM) leaving: the link was pressed, "What's New" drew in 115 ms (untouched 181 ms)
+  PASS  /club-manager phone OPEN leaving: baseline, "What's New" drew in 107 ms
+  PASS  /club-manager phone OPEN AGAIN (BLOCKED ARM) leaving: the link was pressed, "What's New" drew in 108 ms (untouched 107 ms)
+  PASS  /club-manager phone OPEN AGAIN (FULL ARM) leaving: the link was pressed, "What's New" drew in 107 ms (untouched 107 ms)
+  PASS  /nba-my-career phone OPEN leaving: baseline, "What's New" drew in 180 ms
+  PASS  /nba-my-career phone OPEN AGAIN (BLOCKED ARM) leaving: the link was pressed, "What's New" drew in 239 ms (untouched 180 ms)
+  PASS  /nba-my-career phone OPEN AGAIN (FULL ARM) leaving: the link was pressed, "What's New" drew in 153 ms (untouched 180 ms)
+  PASS  /nfl-my-career phone OPEN leaving: baseline, "What's New" drew in 106 ms
+  PASS  /nfl-my-career phone OPEN AGAIN (BLOCKED ARM) leaving: the link was pressed, "What's New" drew in 107 ms (untouched 106 ms)
+  PASS  /nfl-my-career phone OPEN AGAIN (FULL ARM) leaving: the link was pressed, "What's New" drew in 107 ms (untouched 106 ms)
+  PASS  /stadium-tycoon phone OPEN leaving: baseline, "What's New" drew in 110 ms
+  PASS  /stadium-tycoon phone OPEN AGAIN (BLOCKED ARM) leaving: the link was pressed, "What's New" drew in 106 ms (untouched 110 ms)
+  PASS  /stadium-tycoon phone OPEN AGAIN (FULL ARM) leaving: the link was pressed, "What's New" drew in 107 ms (untouched 110 ms)
+  PASS  /college-grid phone OPEN leaving: baseline, "What's New" drew in 115 ms
+  PASS  /college-grid phone OPEN AGAIN (BLOCKED ARM) leaving: the link was pressed, "What's New" drew in 115 ms (untouched 115 ms)
+  PASS  /college-grid phone OPEN AGAIN (FULL ARM) leaving: the link was pressed, "What's New" drew in 111 ms (untouched 115 ms)
+  PASS  /front-office phone OPEN leaving: baseline, "What's New" drew in 106 ms
+  PASS  /front-office phone OPEN AGAIN (BLOCKED ARM) leaving: the link was pressed, "What's New" drew in 106 ms (untouched 106 ms)
+  PASS  /front-office phone OPEN AGAIN (FULL ARM) leaving: the link was pressed, "What's New" drew in 107 ms (untouched 106 ms)
+  PASS  /build-your-xi phone OPEN leaving: baseline, "What's New" drew in 107 ms
+  PASS  /build-your-xi phone OPEN AGAIN (BLOCKED ARM) leaving: the link was pressed, "What's New" drew in 107 ms (untouched 107 ms)
+  PASS  /build-your-xi phone OPEN AGAIN (FULL ARM) leaving: the link was pressed, "What's New" drew in 107 ms (untouched 107 ms)
+  PASS  /footle phone OPEN leaving: baseline, "What's New" drew in 108 ms
+  PASS  /footle phone OPEN AGAIN (BLOCKED ARM) leaving: the link was pressed, "What's New" drew in 113 ms (untouched 108 ms)
+  PASS  /footle phone OPEN AGAIN (FULL ARM) leaving: the link was pressed, "What's New" drew in 106 ms (untouched 108 ms)
+  PASS  /free-kick phone OPEN leaving: baseline, "What's New" drew in 107 ms
+  PASS  /free-kick phone OPEN AGAIN (BLOCKED ARM) leaving: the link was pressed, "What's New" drew in 106 ms (untouched 107 ms)
+  PASS  /free-kick phone OPEN AGAIN (FULL ARM) leaving: the link was pressed, "What's New" drew in 106 ms (untouched 107 ms)
+  PASS  /hof-or-bust phone OPEN leaving: baseline, "What's New" drew in 107 ms
+  PASS  /hof-or-bust phone OPEN AGAIN (BLOCKED ARM) leaving: the link was pressed, "What's New" drew in 114 ms (untouched 107 ms)
+  PASS  /hof-or-bust phone OPEN AGAIN (FULL ARM) leaving: the link was pressed, "What's New" drew in 106 ms (untouched 107 ms)
+  PASS  /soccer phone OPEN leaving: baseline, "What's New" drew in 108 ms
+  PASS  /soccer phone OPEN AGAIN (BLOCKED ARM) leaving: the link was pressed, "What's New" drew in 109 ms (untouched 108 ms)
+  PASS  /soccer phone OPEN AGAIN (FULL ARM) leaving: the link was pressed, "What's New" drew in 106 ms (untouched 108 ms)
+
+a daily, played: the vote on /hof-or-bust
+  PASS  /hof-or-bust phone OPEN played: the vote was offered (true), cast (true) and the verdict came up (true)
+  PASS  /hof-or-bust phone OPEN played: left through a link and the next page drew
+  PASS  /hof-or-bust phone OPEN played: 0 uncaught errors
+  PASS  /hof-or-bust phone OPEN played: the verdict is still up on the way back (true) and the vote is not offered again
+  PASS  /hof-or-bust phone OPEN played: 1 community vote sent in the visit (1 at the vote)
+  PASS  /hof-or-bust phone OPEN AGAIN (BLOCKED ARM) played: the vote was offered (true), cast (true) and the verdict came up (true)
+  PASS  /hof-or-bust phone OPEN AGAIN (BLOCKED ARM) played: left through a link and the next page drew
+  PASS  /hof-or-bust phone OPEN AGAIN (BLOCKED ARM) played: 0 uncaught errors
+  PASS  /hof-or-bust phone OPEN AGAIN (BLOCKED ARM) played: the verdict is still up on the way back (true) and the vote is not offered again
+  PASS  /hof-or-bust phone OPEN AGAIN (BLOCKED ARM) played: 1 community vote sent in the visit (1 at the vote)
+  PASS  /hof-or-bust phone OPEN AGAIN (FULL ARM) played: the vote was offered (true), cast (true) and the verdict came up (true)
+  PASS  /hof-or-bust phone OPEN AGAIN (FULL ARM) played: left through a link and the next page drew
+  PASS  /hof-or-bust phone OPEN AGAIN (FULL ARM) played: 0 uncaught errors
+  PASS  /hof-or-bust phone OPEN AGAIN (FULL ARM) played: the verdict is still up on the way back (true) and the vote is not offered again
+  PASS  /hof-or-bust phone OPEN AGAIN (FULL ARM) played: 1 community vote sent in the visit (1 at the vote)
+
+the notice on narrower phones
+  PASS  /soccer-career 320 wide OPEN: no notice (storage was left alone)
+  PASS  /soccer-career 344 wide OPEN: no notice (storage was left alone)
+  PASS  /soccer-career 360 wide OPEN: no notice (storage was left alone)
+  PASS  /soccer-career 320 wide OPEN: no notice (storage was left alone)
+  PASS  /soccer-career 344 wide OPEN: no notice (storage was left alone)
+  PASS  /soccer-career 360 wide OPEN: no notice (storage was left alone)
+
+the browser's own localStorage accessor: own property of window true, configurable true
+measurements written to /home/runner/work/_temp/rc-out/files/playStorageBlocked-open.json
+
+playStorageBlocked (control open): 743 checks, 0 failed
