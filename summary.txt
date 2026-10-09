@@ -1,0 +1,26 @@
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+trust-seconddisclaimer exit=0 1s | simTrustCopy control seconddisclaimer: green. The planted line was reported and nothing else was.
+trust-barecount exit=0 1s | simTrustCopy control barecount: green. The planted line was reported and nothing else was.
+trust-typedcount exit=0 1s | simTrustCopy control typedcount: green. The planted line was reported and nothing else was.
+trust-staleliteral exit=0 1s | simTrustCopy control staleliteral: green. The planted line was reported and nothing else was.
+trust-exactcount exit=0 1s | simTrustCopy control exactcount: green. The planted line was reported and nothing else was.
+trust-bogus exit=1 0s | TRUST_CONTROL=bogus is not a control this harness knows (seconddisclaimer, typedcount, barecount, exactcount, staleliteral)
+simHomeCopy exit=0 1s | simHomeCopy: green. The one page a crawler reads first says only true things.
+home-moduledrift exit=0 1s | simHomeCopy control moduledrift: green. The planted break was reported by part 6 and nothing else failed.
+home-templatedrift exit=0 1s | simHomeCopy control templatedrift: green. The planted break was reported by part 6 and nothing else failed.
+home-retiredlink exit=0 1s | simHomeCopy control retiredlink: green. The planted break was reported by part 3 and nothing else failed.
+home-descdrift exit=0 1s | simHomeCopy control descdrift: green. The planted break was reported by part 4b and nothing else failed.
+simLegalPages exit=0 0s | simLegalPages: all green
+simSingleFooter exit=0 0s | simSingleFooter: green. One footer, rendered once, on every page.
+simAdsense exit=0 1s | simAdsense: green. Verification, ads.txt, the policy pages and the ad component are all review ready.
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simSiteSearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simGoogleIdentity exit=0 3s | Privacy, terms, and game copy follow the same Google release gate
+simHarnessAnchors exit=0 34s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simReportContext exit=0 0s | simReportContext: all green
+simNewBadge exit=0 31s | simNewBadge: green. New means shipped in the last two weeks, and the date is the one git remembers.
+simStorageWrites exit=0 2s | simStorageWrites: all green
+simNoInventedQuotes exit=0 18s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+tsc exit=0 63s | 
+vitest exit=0 11s |    Duration  10.43s (transform 1.19s, setup 390ms, collect 2.44s, tests 19.43s, environment 2.31s, prepare 711ms)

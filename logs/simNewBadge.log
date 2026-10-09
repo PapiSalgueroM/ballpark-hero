@@ -1,0 +1,13 @@
+live registry entries: 133 (of 133 before any control)
+1) no live entry carries the isNew flag
+   the flag is gone from every live entry
+2) every live entry records addedOn, and git agrees with the date
+   133 dates checked against git, all agree
+3) the window is short enough to mean something
+   NEW_BADGE_DAYS = 14
+4) across the last 60 days the badge never covers more than half of the tiles
+   worst day in the window: 18 of 133 tiles badged (14%) on 2026-08-24
+5) the home page derives the badge rather than reading a flag
+   Index.tsx renders the badge from isNewGame
+
+simNewBadge: green. New means shipped in the last two weeks, and the date is the one git remembers.

@@ -1,0 +1,5 @@
+Google popup sign in: 4 of 4 rendered checks green
+Google uses GIS plus signInWithIdToken, and no client secret ships
+Nonce pairing, phone width, retries, timeouts, and announcements are covered
+Production release gate: Google stays hidden until its public branding is approved
+Privacy, terms, and game copy follow the same Google release gate
