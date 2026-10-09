@@ -1,0 +1,38 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-cm: node_modules/.bin/vitest run src/test/cmValueCurve.test.ts src/test/clubManager*.test.* src/test/cm*.test.* src/hooks/useClubManager.test.ts --testTimeout=300000 --hookTimeout=120000
+simCmRatingShape: node scripts/simCmRatingShape.mjs
+shape-oldcurve: SIM_CM_SHAPE_CONTROL=oldcurve node scripts/simCmRatingShape.mjs
+shape-flip: SIM_CM_SHAPE_CONTROL=flip node scripts/simCmRatingShape.mjs
+shape-eraold: SIM_CM_SHAPE_CONTROL=eraold node scripts/simCmRatingShape.mjs
+shape-erashift: SIM_CM_SHAPE_CONTROL=erashift node scripts/simCmRatingShape.mjs
+shape-offcurve: SIM_CM_SHAPE_CONTROL=offcurve node scripts/simCmRatingShape.mjs
+shape-nostamp: SIM_CM_SHAPE_CONTROL=nostamp node scripts/simCmRatingShape.mjs
+shape-unlisted: SIM_CM_SHAPE_CONTROL=unlisted node scripts/simCmRatingShape.mjs
+shape-flat: SIM_CM_SHAPE_CONTROL=flat node scripts/simCmRatingShape.mjs
+shape-stretch: SIM_CM_SHAPE_CONTROL=stretch node scripts/simCmRatingShape.mjs
+shape-tableswap: SIM_CM_SHAPE_CONTROL=tableswap node scripts/simCmRatingShape.mjs
+shape-agesasis: SIM_CM_SHAPE_CONTROL=agesasis node scripts/simCmRatingShape.mjs
+shape-nomove: SIM_CM_SHAPE_CONTROL=nomove node scripts/simCmRatingShape.mjs
+shape-tableyear: SIM_CM_SHAPE_CONTROL=tableyear node scripts/simCmRatingShape.mjs
+shape-emptysample: SIM_CM_SHAPE_CONTROL=emptysample node scripts/simCmRatingShape.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+aleague-offcurve: SIM_ALEAGUE_CONTROL=offcurve node scripts/simClubManagerALeague.mjs
+simClubManagerGathered: node scripts/simClubManagerGathered.mjs
+gathered-offcurve: GATHERED_CONTROL=offcurve node scripts/simClubManagerGathered.mjs
+simEraBakeExtend: node scripts/simEraBakeExtend.mjs
+eraextend-noprove: SIM_ERA_EXTEND_CONTROL=noprove node scripts/simEraBakeExtend.mjs
+eraextend-nostillin: SIM_ERA_EXTEND_CONTROL=nostillin node scripts/simEraBakeExtend.mjs
+eraextend-nodupe: SIM_ERA_EXTEND_CONTROL=nodupe node scripts/simEraBakeExtend.mjs
+eraextend-nosplit: SIM_ERA_EXTEND_CONTROL=nosplit node scripts/simEraBakeExtend.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simRosterAdjudication: node scripts/simRosterAdjudication.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs
+simClubManager: node scripts/simClubManager.mjs
+simManagerSpec: node scripts/simManagerSpec.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simBoardAsks: node scripts/simBoardAsks.mjs
+simTransfers: node scripts/simTransfers.mjs
+genDailyClubPool-check: node scripts/genDailyClubPool.mjs --check
+simDailyClubPool: node scripts/simDailyClubPool.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
