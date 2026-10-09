@@ -1,6 +1,6 @@
 # Round 1184: real first-season league fixtures
 
-Status: implementation authored and static review completed. Remote validation is pending. This document records retained data and source checks, not release acceptance.
+Status: READY for F integration. Exact source0641a2ada04d8e4b7cbfaf4dffc8f27104c03115 passed run37962892064. Final acceptance is recorded in [ROUND1184-RECEIPT.md](ROUND1184-RECEIPT.md). The earlier run sections below retain diagnostic history.
 
 ## Verified scope
 
@@ -83,12 +83,17 @@ These verification corrections require a new exact-head remote run, including al
 
 The third run's desktop calendar images were captured before the existing parent/selected-strip two-frame reveal completed and showed mostly blank space. Passing saved-state assertions do not establish visual acceptance. The driver now reaches the overview and source links with actual focus actions, waits for readable geometry, a painted centre, settled finite animations and four stable frames, then records full scroll/style/layout diagnostics before each image. Selected-day reveal is checked without forced scrolling, styles or state. Help is captured after real dialog focus. All six journeys and complete save/oracle/control assertions remain intact. A fresh exact-head native run and visual inspection are required.
 
-## Validation still required
+## Final acceptance and integration
 
-Remote types/build, focused outcomes, effective copied defects, unchanged old-save/future/custom baselines, existing fixture and world harnesses, native phone/desktop journeys, and output-reader gates are pending. Authored proof includes 11 real fixture outcome groups, all 760 player fixture readings, all 760 calendar readings, a full 380-match simulated campaign and nine copied outcome controls. The independent old/generated comparison uses the pre-change engine and calendar card, with whole-save and random-draw equality across three seeds and current, historical, edited and custom contexts. The balance harness retains its three original controls and adds five controls for natural version binding, fallback flag/count and engine/calendar resolver bypasses. These counts describe the required remote proof, not passing results.
+Run37962892064/job113929913878 passed all owned steps on source0641a2ada04d8e4b7cbfaf4dffc8f27104c03115,
+treeae72558353e1ff554d00f9577fa2de24c0d58b85. Final artifact11633727416 has
+SHA256685ac63daa89b77edb1002c0d8c58af6598fba0e0b65c4e72043060c26f959bb.
+The archive was downloaded, hash/head/tree checked and independently reviewed.
+All 67 scoped runners, types/build/source hold, 11 focused groups, nine copied
+faults, six native journeys and 20 settled layout captures passed. Complete
+saved-state pairs match byte for byte. Full counts, causal receipts and scope
+are in [ROUND1184-RECEIPT.md](ROUND1184-RECEIPT.md).
 
-Native journeys cover real, old-key-absent and actually rolled future saves at 390 and 1280 pixels, with calendar source copy, actual Quick Sim settlement, whole saved state equality and reload preservation. Their outcome and screenshot artifacts remain pending.
-
-No local site runtime, compiler, build, test or browser was executed for this audit. No database write or deployment is part of this round.
-
-A passing focused gate will not imply all-repository, live database, prerender, release or publication acceptance. Merge and publication remain with the release integrator.
+The source is frozen for F integration. No local runtime or database write was
+used. No all-repository release, live database, prerender, merge or publication
+acceptance is claimed. F owns integration, final release gates and publication.

@@ -1,3 +1,41 @@
+## Round 1184 READY for F integration, 2026-10-09
+
+Draft PR209 is frozen, open, unmerged and unpublished:
+https://github.com/PapiSalgueroM/ballpark-hero/pull/209
+Branch: codex/cm-real-fixtures. Released AP base: bfc6197f40418b8cd181b43a554652ef0bda8a54.
+Accepted source: 0641a2ada04d8e4b7cbfaf4dffc8f27104c03115.
+Accepted tree: ae72558353e1ff554d00f9577fa2de24c0d58b85.
+Run 37962892064, job 113929913878: SUCCESS. Artifact 11633727416.
+SHA256: 685ac63daa89b77edb1002c0d8c58af6598fba0e0b65c4e72043060c26f959bb.
+Archive downloaded, hashed and exact head/tree verified. The final docs-only
+skip-ci commit preserves tested source, scripts and workflow bytes. No further
+source pushes.
+
+Only fresh, original 2026/27 Premier League careers bind real round/opponent
+order and home/away venues. All 380 fixtures are two-source verified. Dates
+and results are simulated and explicitly labelled. Other, edited, custom and
+future careers and key-absent existing saves retain generated fixtures. Five
+consumers share the saved resolver; the key clears at rollover. Provenance:
+docs/ROUND1184.md. Acceptance: docs/ROUND1184-RECEIPT.md.
+
+Types, build, source hold and all 67 scoped runners passed (48 Manager/related,
+19 built/search readers). Real outcomes: 11 groups, 9 faults, 760 fixture and
+760 Calendar readings, 380 settlements. Quick Subs: 10 outcomes, 13 faults.
+All six Live, six Slots, three exact edited-observer failures and eight fixture
+controls were accepted. Six native real/legacy/future journeys at 390/1280
+passed, with 18 neutral results, two effective controls, 18 byte-identical
+complete save pairs and 20 stable readable captures. Independent screenshot
+and causal-receipt review passed. Runner FAIL/SKIP/EMPTY/offline-block counts
+are zero. One original Live thin-roster case omission remains separate from
+41 eligible original fixtures and two additional sourced real openers. All
+original coverage floors hold.
+
+PR207 and PR208 remain frozen companion batches. F1145 retains complete-career
+Stat Detective spans and Dart expansion; F1146 owns Manager markers and routine
+Quick Sim subs. Round 1184 stays separate from 1179 VAR. Transfer Path's Other
+report has no specific failed player/link. No local runtime, DB write or
+publication. F owns integrated full gates, merge and publication.
+
 ## Release AP LIVE, 2026-10-09 10:21 EDT: NFL My Career week by week and NFL truth, the storage line that leaves, one disclaimer a page, and 18 Codex rounds (own goals in Soccer Career, the Tycoon season review, Club Manager access)
 
 Claude lane (session F). main cbff760c, deployment 2299c2a8-45a2-42d8-983e-a2254cfe48b4, entry index-vp6JkBHV.js (was index-Du6HhEY3.js, Release AO,
