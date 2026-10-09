@@ -1,0 +1,8 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playCareerMoments exit=1 63s | playCareerMoments: 34 checks, 1 failed
+playTranslatedPage exit=0 135s | playTranslatedPage: 447 checks, 0 failed
+playFlagshipLazy exit=0 8s | playFlagshipLazy: green. The dugout costs nothing until you walk into it, and it still works when you do.
+playSeasonCentreMotion exit=0 144s | playSeasonCentreMotion: 77 checks, 0 failed
+playLiveMatchFit exit=0 114s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+simHarnessAnchors exit=0 36s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+playCareerHub exit=1 39s | Node.js v24.21.0
