@@ -36,7 +36,7 @@ import { leagueWithArticle, ordinal, readLeagueFinish } from '@/lib/soccerCareer
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { SeasonCentre, type CentreModel, type CentrePlace, type CentreSport } from '@/components/season-centre/SeasonCentre';
 import { minuteLabel } from '@/lib/clubManagerClock';
-import { SOCCER_FULL_TIME } from '@/lib/season/soccerEvents';
+import { SOCCER_FULL_TIME, soccerOwnGoals } from '@/lib/season/soccerEvents';
 import type { HelpWords } from '@/components/season-centre/SeasonCentreHelp';
 import { SeasonPicker, type PickerRow } from '@/components/season-centre/SeasonPicker';
 import type { PitchRole } from '@/components/season-centre/MiniPitch';
@@ -80,6 +80,7 @@ const HELP: HelpWords = {
     'Your season was played the moment you pressed Next Season. This is that same season, match by match: the final table and your season totals are settled, and nothing here can change them.',
     "When a season shows a table, who was in the league, how many clubs it had and how many points a win was worth are real (from 2026-27 on, the league is your career's own world). Every score, every other club's result and every minute are your career's own.",
     'When the table changes, each club slides from where it was to where it is now. The little pitch shows who scored and when. The ring is you, whenever you are in the move: scoring it, setting it up, or up there with the attack if you play in midfield or up front, and at the back when one goes in past you as a keeper or a defender. ⚽ Yours or 🅰️ Your assist under the pitch tells you when the goal or the assist was yours. How the move looked is the game\'s own drawing.',
+    'Own goals are fictional details of goals already in your season. You, a teammate or an opponent can cause one; (O.G) marks it without adding to your goals or assists.',
   ],
   controls: '▶ plays the next matchday. ⏩ jumps to the next big game (a derby, halfway, the title or the final day). ⏭ goes straight to the end. 1x and 3x set the clock, Results shows each match at full time. After a jump the table slides from the last matchday you saw; the ▲ and ▼ beside your place always compare with the matchday before. Close it whenever you like: the 📺 Resume chip on your career page takes you back to the same matchday. 📺 Season replays, next to Ratings, opens the season you just played, every season you won the league and every results only season; any other season with a table is locked, because the game did not keep who won the league that year.',
   moments: [
@@ -90,6 +91,7 @@ const HELP: HelpWords = {
     'Once you have pressed Continue on the summary, coming back to a season from your career page is for watching: no moment is offered then. A moment you played is shown as you played it while that season is still the last one you played a moment in; after that the season replays as your record has it.',
   ],
   examples: [
+    { head: 'An own goal', body: 'You turn the ball into your own net at 55 minutes. The opposition get the goal, marked (O.G), and your goals and assists stay the same. The final score and your season totals still match the season summary.' },
     { head: 'A YOUR CALL', body: 'Matchday 9, 1-1 in the 82nd minute, and on your season this chance was missed. You take it and score: the match ends 2-1 and you climb the table that week. In the return game on matchday 28, a 2-1 win on your season, your goal there is not scored and it ends 1-1. You gain two points on matchday 9 and give two back on matchday 28, they lose one and get it back: the final table and your goals for the season end exactly where they were.' },
     { head: 'A RECREATE', body: 'Derby day, and on the record you scored in the 74th minute. You play it again on the Wall Shot: through the gap and into the top corner is three stars, a miss is none. Either way the derby ends as it did. Three moments worth 3, 2 and 1 stars are 6 of 9, which is 67%: +1 next season.' },
     { head: 'A matchday', body: 'Matchday 12: you win 2-1 at home and score in the 67th minute, rated 7.6. The table moves you from 6th to 4th (▲2), and it slides to show it: the two clubs you passed drop below you.' },
@@ -107,6 +109,10 @@ const exitLabelOf = (mode: 'live' | 'watch', phase: string) => (mode === 'live' 
 
 /** Soccer's side of the shared viewer: the clock, the derby, his line. */
 function eventWords(e: SeasonEvent, us: string, them: string): string {
+  if (e.kind === 'goal' && e.ownGoalBy) {
+    const who = e.ownGoalBy === 'you' ? 'You' : e.ownGoalBy === 'teammate' ? 'A teammate' : 'An opponent';
+    return `⚽ ${who} (O.G), goal for ${e.side === 'us' ? us : them}`;
+  }
   if (e.kind === 'goal') return e.side === 'us' ? (e.mine ? '⚽ You score!' : `⚽ Goal, ${us}`) : `⚽ Goal, ${them}`;
   if (e.kind === 'assist') return '🅰️ You set it up';
   if (e.kind === 'yellow') return '🟨 You go in the book';
@@ -287,12 +293,16 @@ function CentreBody({ career, clubs, row, mode, onClose, onCareer, offer }: Socc
   /* moments are the latest season's only: its key is the one the ledger and the bank answer to */
   const latest = career.seasons[career.seasons.length - 1];
   const canPlay = offer !== false && !!onCareer && !!plan && !!key && !!latest && soccerSeasonKey(career.playerName, latest) === key;
+  /* Round 1167: the season's moments are planned whether or not one is offered, so the own goal pass
+     leaves the same goals alone in a live season, a held one and a replay */
+  const planned = useMemo(() => (plan ? planMoments(SOCCER, row, ctx, plan) : []), [plan, row, ctx]);
   const ledger = readSeasonMoments(career.seasonMoments);
   /* Round 1046: the season the ledger belongs to is always shown with what he did in it, offered or not */
   const held = !!plan && !!key && ledger?.key === key;
-  const offered = useMemo(() => ((canPlay || held) && plan ? planMoments(SOCCER, row, ctx, plan) : []), [canPlay, held, plan, row, ctx]);
+  const offered = useMemo(() => (canPlay || held ? planned : []), [canPlay, held, planned]);
   const entriesKey = JSON.stringify(ledgerOf(ledger, key ?? ''));
-  const season = useMemo(() => (plan && offered.length ? applyDecisions(SOCCER, row, ctx, plan, offered, JSON.parse(entriesKey) as number[][]) : plan), [plan, offered, entriesKey, row, ctx]);
+  const decided = useMemo(() => (plan && offered.length ? applyDecisions(SOCCER, row, ctx, plan, offered, JSON.parse(entriesKey) as number[][]) : plan), [plan, offered, entriesKey, row, ctx]);
+  const season = useMemo(() => (decided ? soccerOwnGoals(decided, planned) : null), [decided, planned]);
   const moments = useSoccerMoments({ career, row, ctx, plan, key, offered, entriesKey, banked: !!ledger?.banked && ledger.key === key, onCareer: canPlay ? onCareer : undefined });
   /* his club's flat colour, the one the career already wears; the other side is always the same pale one */
   const color = clubs.find(c => c.name === row.club)?.color ?? '#10B981';

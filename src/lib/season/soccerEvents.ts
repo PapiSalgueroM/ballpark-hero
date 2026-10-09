@@ -12,8 +12,9 @@
    `soccerEventDisagreements` is the matching self check, run by the soccer
    binding's `check`: the goal events make the score, his goal and assist
    events make his line, the decisive goal sits where the save says, and
-   none of his events comes after he went off. Imports only from ./core. */
-import { shuffled, type DerivedGame, type DerivedSeason, type FixedGame, type GameContext, type MomentDelta, type MomentSpot, type Rng, type SeasonEvent } from './core';
+   none of his events comes after he went off. Imports only from ./core and ../keyedRng. */
+import { shuffled, type DerivedGame, type DerivedSeason, type FixedGame, type GameContext, type Moment, type MomentDelta, type MomentSpot, type Rng, type SeasonEvent } from './core';
+import { keyedRng } from '../keyedRng';
 
 /** Minutes in a soccer match (the clock's full time). */
 export const SOCCER_FULL_TIME = 90;
@@ -58,6 +59,31 @@ export function soccerEvents(g: DerivedGame, f: FixedGame | null, game: GameCont
     if ((g.line.yellow ?? 0) > 0) ev.push({ min: Math.min(SOCCER_FULL_TIME, lastMine + Math.floor(rng() * Math.max(1, offAt - lastMine))), kind: 'yellow', side: 'us', mine: true });
   }
   g.events = ev.sort((x, y) => x.min - y.min || (RANK[x.kind] ?? 5) - (RANK[y.kind] ?? 5));
+}
+
+/** Fictional own-goal roles on existing, uncredited goals. The 1/64 tag and
+ *  one-of-11 active-player role are provisional game odds, not real data.
+ *  Planned moments and their return matches stay outside this pass. */
+export function soccerOwnGoals(s: DerivedSeason, moments: readonly Pick<Moment, 'md' | 'minute' | 'mirrorMd'>[]): DerivedSeason {
+  const minutes = new Set(moments.map(m => `${m.md}|${m.minute}`));
+  const mirrors = new Set(moments.flatMap(m => m.mirrorMd === null ? [] : [m.mirrorMd]));
+  return { ...s, games: s.games.map(g => {
+    const assists = new Set(g.events.filter(e => e.kind === 'assist' && e.mine).map(e => e.min));
+    const ordinals = new Map<string, number>();
+    const win = pitchWindow(g);
+    return { ...g, events: g.events.map((e): SeasonEvent => {
+      if (e.kind !== 'goal') return e;
+      const group = `${e.min}|${e.side}`;
+      const ordinal = ordinals.get(group) ?? 0;
+      ordinals.set(group, ordinal + 1);
+      if (e.pts !== 1 || e.mine || mirrors.has(g.md) || minutes.has(`${g.md}|${e.min}`) || (e.side === 'us' && assists.has(e.min))) return e;
+      const key = `${s.key}|og|${g.md}|${e.min}|${e.side}|${ordinal}`;
+      if (keyedRng(`${key}|tag`)() >= 1 / 64) return e;
+      const role = Math.floor(keyedRng(`${key}|role`)() * 11);
+      const ownGoalBy = e.side === 'us' ? 'opponent' : win && e.min >= win[0] && e.min <= win[1] && role === 0 ? 'you' : 'teammate';
+      return { ...e, ownGoalBy };
+    }) };
+  }) };
 }
 
 /** Every way the soccer events of a derived season disagree with its scores and his line. */
