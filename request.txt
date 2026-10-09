@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk-cm2: node .rc/x/rr-walk-cm2.mjs

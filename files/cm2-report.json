@@ -1,0 +1,1146 @@
+{
+ "cases": [
+  {
+   "tag": "390",
+   "rooms": {
+    "cups": {
+     "opened": true,
+     "sideways": 0,
+     "tableButtons": 4,
+     "tableGeometries": [
+      "9|9|340|29|false",
+      "9|9|340|28|false"
+     ],
+     "tableClubs": [
+      "Arsenal",
+      "Dinamo Zagreb",
+      "Galatasaray",
+      "Villarreal"
+     ],
+     "bracketButtons": 16,
+     "bracketGeometries": [
+      "330|332|-1|false"
+     ],
+     "bracketSample": [
+      "Arsenal",
+      "Ipswich Town",
+      "Aston Villa",
+      "Preston North End"
+     ],
+     "labelled": [
+      [
+       "Go back",
+       "Back",
+       false
+      ],
+      [
+       "How to play",
+       "",
+       false
+      ],
+      [
+       "Board: 60 out of 100, Safe. Tap to swap the words and the number.",
+       "BoardSafe",
+       false
+      ],
+      [
+       "Fans: 55 out of 100, Hopeful. Tap to swap the words and the number.",
+       "FansHopeful",
+       false
+      ]
+     ],
+     "pressed": [
+      [
+       "BoardSafe",
+       "false"
+      ],
+      [
+       "FansHopeful",
+       "false"
+      ],
+      [
+       "Sound: off",
+       "false"
+      ]
+     ],
+     "text": "DOUKNOWBALL Back Track stats Arsenal 2026-27 · Season 1 Season not started £167m No matches yet Managers Board Safe Fans Hopeful Home Squad Tactics Table Market ☀️ Transfer window open. Tap to do business before your next match PREMIER LEAGUE · ROUND 1 Arsenal",
+     "back": true
+    },
+    "facilities": {
+     "opened": true,
+     "sideways": 0,
+     "tableButtons": 0,
+     "tableGeometries": [],
+     "tableClubs": [],
+     "bracketButtons": 0,
+     "bracketGeometries": [],
+     "bracketSample": [],
+     "labelled": [
+      [
+       "Go back",
+       "Back",
+       false
+      ],
+      [
+       "How to play",
+       "",
+       false
+      ],
+      [
+       "Board: 60 out of 100, Safe. Tap to swap the words and the number.",
+       "BoardSafe",
+       false
+      ],
+      [
+       "Fans: 55 out of 100, Hopeful. Tap to swap the words and the number.",
+       "FansHopeful",
+       false
+      ],
+      [
+       "Stadium: Maxed",
+       "Maxed",
+       true
+      ],
+      [
+       "Training ground: Upgrade £75m",
+       "Upgrade £75m",
+       false
+      ],
+      [
+       "Medical: Upgrade £60m",
+       "Upgrade £60m",
+       false
+      ],
+      [
+       "Dressing room: Upgrade £45m",
+       "Upgrade £45m",
+       false
+      ]
+     ],
+     "pressed": [
+      [
+       "BoardSafe",
+       "false"
+      ],
+      [
+       "FansHopeful",
+       "false"
+      ],
+      [
+       "Sound: off",
+       "false"
+      ]
+     ],
+     "text": "DOUKNOWBALL Back Track stats Arsenal 2026-27 · Season 1 Season not started £167m No matches yet Managers Board Safe Fans Hopeful Home Squad Tactics Table Market ☀️ Transfer window open. Tap to do business before your next match PREMIER LEAGUE · ROUND 1 Arsenal",
+     "back": true
+    },
+    "options": {
+     "opened": true,
+     "sideways": 0,
+     "tableButtons": 0,
+     "tableGeometries": [],
+     "tableClubs": [],
+     "bracketButtons": 0,
+     "bracketGeometries": [],
+     "bracketSample": [],
+     "labelled": [
+      [
+       "Go back",
+       "Back",
+       false
+      ],
+      [
+       "How to play",
+       "",
+       false
+      ],
+      [
+       "Board: 60 out of 100, Safe. Tap to swap the words and the number.",
+       "BoardSafe",
+       false
+      ],
+      [
+       "Fans: 55 out of 100, Hopeful. Tap to swap the words and the number.",
+       "FansHopeful",
+       false
+      ],
+      [
+       "Strictness 1, Generous",
+       "1",
+       false
+      ],
+      [
+       "Strictness 2, Relaxed",
+       "2",
+       false
+      ],
+      [
+       "Strictness 3, Normal",
+       "3",
+       false
+      ],
+      [
+       "Strictness 4, Firm",
+       "4",
+       false
+      ],
+      [
+       "Strictness 5, Ruthless",
+       "5",
+       false
+      ]
+     ],
+     "pressed": [
+      [
+       "BoardSafe",
+       "false"
+      ],
+      [
+       "FansHopeful",
+       "false"
+      ],
+      [
+       "£ Pounds",
+       "true"
+      ],
+      [
+       "€ Euros",
+       "false"
+      ],
+      [
+       "$ Dollars",
+       "false"
+      ],
+      [
+       "R$ Reais",
+       "false"
+      ],
+      [
+       "¥ Yen",
+       "false"
+      ],
+      [
+       "On",
+       "true"
+      ],
+      [
+       "Off",
+       "false"
+      ],
+      [
+       "1",
+       "false"
+      ],
+      [
+       "2",
+       "false"
+      ],
+      [
+       "3",
+       "true"
+      ],
+      [
+       "4",
+       "false"
+      ],
+      [
+       "5",
+       "false"
+      ],
+      [
+       "Sound: off",
+       "false"
+      ]
+     ],
+     "text": "DOUKNOWBALL Back Track stats Arsenal 2026-27 · Season 1 Season not started £167m No matches yet Managers Board Safe Fans Hopeful Home Squad Tactics Table Market ☀️ Transfer window open. Tap to do business before your next match PREMIER LEAGUE · ROUND 1 Arsenal",
+     "negotiation": "This changes the seller's opening price. Firm and Ruthless can give you less time to negotiate. Easier settings never add patience. Repeating one lowball runs him out of patience at every setting, which is the decision the transfer desk is built around and is not something a slider is allowed to switch off.",
+     "back": true
+    },
+    "finances": {
+     "opened": true,
+     "sideways": 0,
+     "tableButtons": 0,
+     "tableGeometries": [],
+     "tableClubs": [],
+     "bracketButtons": 0,
+     "bracketGeometries": [],
+     "bracketSample": [],
+     "labelled": [
+      [
+       "Go back",
+       "Back",
+       false
+      ],
+      [
+       "How to play",
+       "",
+       false
+      ],
+      [
+       "Board: 60 out of 100, Safe. Tap to swap the words and the number.",
+       "BoardSafe",
+       false
+      ],
+      [
+       "Fans: 55 out of 100, Hopeful. Tap to swap the words and the number.",
+       "FansHopeful",
+       false
+      ]
+     ],
+     "pressed": [
+      [
+       "BoardSafe",
+       "false"
+      ],
+      [
+       "FansHopeful",
+       "false"
+      ],
+      [
+       "🎟️ Fair pricesCheaper seats, ",
+       "false"
+      ],
+      [
+       "🎫 StandardThe going rate. Nob",
+       "true"
+      ],
+      [
+       "💼 PremiumMore per seat, a few",
+       "false"
+      ],
+      [
+       "🍟 Cheap foodPies at cost. The",
+       "false"
+      ],
+      [
+       "🥤 StandardGround prices. Nobo",
+       "true"
+      ],
+      [
+       "🍾 PremiumHospitality margins.",
+       "false"
+      ],
+      [
+       "Sound: off",
+       "false"
+      ]
+     ],
+     "text": "DOUKNOWBALL Back Track stats Arsenal 2026-27 · Season 1 Season not started £167m No matches yet Managers Board Safe Fans Hopeful Home Squad Tactics Table Market ☀️ Transfer window open. Tap to do business before your next match PREMIER LEAGUE · ROUND 1 Arsenal",
+     "back": true
+    },
+    "skills": {
+     "opened": true,
+     "sideways": 0,
+     "tableButtons": 0,
+     "tableGeometries": [],
+     "tableClubs": [],
+     "bracketButtons": 0,
+     "bracketGeometries": [],
+     "bracketSample": [],
+     "labelled": [
+      [
+       "Go back",
+       "Back",
+       false
+      ],
+      [
+       "How to play",
+       "",
+       false
+      ],
+      [
+       "Board: 60 out of 100, Safe. Tap to swap the words and the number.",
+       "BoardSafe",
+       false
+      ],
+      [
+       "Fans: 55 out of 100, Hopeful. Tap to swap the words and the number.",
+       "FansHopeful",
+       false
+      ],
+      [
+       "Spend a point (0/5): Tactics",
+       "Spend a point (0/5)",
+       true
+      ],
+      [
+       "Spend a point (0/5): Recruitment",
+       "Spend a point (0/5)",
+       true
+      ],
+      [
+       "Spend a point (0/5): Negotiation",
+       "Spend a point (0/5)",
+       true
+      ],
+      [
+       "Spend a point (0/5): Youth",
+       "Spend a point (0/5)",
+       true
+      ],
+      [
+       "Spend a point (0/5): Man Management",
+       "Spend a point (0/5)",
+       true
+      ],
+      [
+       "Spend a point (0/5): Finance",
+       "Spend a point (0/5)",
+       true
+      ],
+      [
+       "Spend a point (0/5): Media",
+       "Spend a point (0/5)",
+       true
+      ]
+     ],
+     "pressed": [
+      [
+       "BoardSafe",
+       "false"
+      ],
+      [
+       "FansHopeful",
+       "false"
+      ],
+      [
+       "Sound: off",
+       "false"
+      ]
+     ],
+     "text": "DOUKNOWBALL Back Track stats Arsenal 2026-27 · Season 1 Season not started £167m No matches yet Managers Board Safe Fans Hopeful Home Squad Tactics Table Market ☀️ Transfer window open. Tap to do business before your next match PREMIER LEAGUE · ROUND 1 Arsenal",
+     "back": true
+    },
+    "academy": {
+     "opened": true,
+     "sideways": 0,
+     "tableButtons": 0,
+     "tableGeometries": [],
+     "tableClubs": [],
+     "bracketButtons": 0,
+     "bracketGeometries": [],
+     "bracketSample": [],
+     "labelled": [
+      [
+       "Go back",
+       "Back",
+       false
+      ],
+      [
+       "How to play",
+       "",
+       false
+      ],
+      [
+       "Board: 60 out of 100, Safe. Tap to swap the words and the number.",
+       "BoardSafe",
+       false
+      ],
+      [
+       "Fans: 55 out of 100, Hopeful. Tap to swap the words and the number.",
+       "FansHopeful",
+       false
+      ]
+     ],
+     "pressed": [
+      [
+       "BoardSafe",
+       "false"
+      ],
+      [
+       "FansHopeful",
+       "false"
+      ],
+      [
+       "Sound: off",
+       "false"
+      ]
+     ],
+     "text": "DOUKNOWBALL Back Track stats Arsenal 2026-27 · Season 1 Season not started £167m No matches yet Managers Board Safe Fans Hopeful Home Squad Tactics Table Market ☀️ Transfer window open. Tap to do business before your next match PREMIER LEAGUE · ROUND 1 Arsenal",
+     "back": true
+    },
+    "dressing": {
+     "opened": true,
+     "sideways": 0,
+     "tableButtons": 0,
+     "tableGeometries": [],
+     "tableClubs": [],
+     "bracketButtons": 0,
+     "bracketGeometries": [],
+     "bracketSample": [],
+     "labelled": [
+      [
+       "Go back",
+       "Back",
+       false
+      ],
+      [
+       "How to play",
+       "",
+       false
+      ],
+      [
+       "Board: 60 out of 100, Safe. Tap to swap the words and the number.",
+       "BoardSafe",
+       false
+      ],
+      [
+       "Fans: 55 out of 100, Hopeful. Tap to swap the words and the number.",
+       "FansHopeful",
+       false
+      ]
+     ],
+     "pressed": [
+      [
+       "BoardSafe",
+       "false"
+      ],
+      [
+       "FansHopeful",
+       "false"
+      ],
+      [
+       "Sound: off",
+       "false"
+      ]
+     ],
+     "text": "DOUKNOWBALL Back Track stats Arsenal 2026-27 · Season 1 Season not started £167m No matches yet Managers Board Safe Fans Hopeful Home Squad Tactics Table Market ☀️ Transfer window open. Tap to do business before your next match PREMIER LEAGUE · ROUND 1 Arsenal",
+     "back": true
+    },
+    "training": {
+     "opened": true,
+     "sideways": 0,
+     "tableButtons": 0,
+     "tableGeometries": [],
+     "tableClubs": [],
+     "bracketButtons": 0,
+     "bracketGeometries": [],
+     "bracketSample": [],
+     "labelled": [
+      [
+       "Go back",
+       "Back",
+       false
+      ],
+      [
+       "How to play",
+       "",
+       false
+      ],
+      [
+       "Board: 60 out of 100, Safe. Tap to swap the words and the number.",
+       "BoardSafe",
+       false
+      ],
+      [
+       "Fans: 55 out of 100, Hopeful. Tap to swap the words and the number.",
+       "FansHopeful",
+       false
+      ]
+     ],
+     "pressed": [
+      [
+       "BoardSafe",
+       "false"
+      ],
+      [
+       "FansHopeful",
+       "false"
+      ],
+      [
+       "Sound: off",
+       "false"
+      ]
+     ],
+     "text": "DOUKNOWBALL Back Track stats Arsenal 2026-27 · Season 1 Season not started £167m No matches yet Managers Board Safe Fans Hopeful Home Squad Tactics Table Market ☀️ Transfer window open. Tap to do business before your next match PREMIER LEAGUE · ROUND 1 Arsenal",
+     "retrain": {
+      "before": {
+       "y": 505,
+       "top": 407
+      },
+      "after": {
+       "y": 505,
+       "top": 435,
+       "focusOnPicker": true,
+       "learning": 1,
+       "refusal": null
+      }
+     },
+     "back": true
+    }
+   },
+   "pageErrors": []
+  },
+  {
+   "tag": "1280",
+   "rooms": {
+    "cups": {
+     "opened": true,
+     "sideways": 0,
+     "tableButtons": 4,
+     "tableGeometries": [
+      "13|13|838|29|false",
+      "13|13|838|28|false"
+     ],
+     "tableClubs": [
+      "Arsenal",
+      "Dinamo Zagreb",
+      "Lens",
+      "PSV"
+     ],
+     "bracketButtons": 16,
+     "bracketGeometries": [
+      "410|412|-1|false"
+     ],
+     "bracketSample": [
+      "Arsenal",
+      "Tottenham",
+      "Crystal Palace",
+      "Fulham"
+     ],
+     "labelled": [
+      [
+       "Go back",
+       "Back",
+       false
+      ],
+      [
+       "How to play",
+       "",
+       false
+      ],
+      [
+       "Board: 60 out of 100, Safe. Tap to swap the words and the number.",
+       "BoardSafe",
+       false
+      ],
+      [
+       "Fans: 55 out of 100, Hopeful. Tap to swap the words and the number.",
+       "FansHopeful",
+       false
+      ]
+     ],
+     "pressed": [
+      [
+       "BoardSafe",
+       "false"
+      ],
+      [
+       "FansHopeful",
+       "false"
+      ],
+      [
+       "Sound: off",
+       "false"
+      ]
+     ],
+     "text": "DOUKNOWBALL Back Sign up to track your stats Arsenal 2026-27 · Season 1 Season not started £167m No matches yet Managers Board Safe Fans Hopeful Home Squad Tactics Table Market ☀️ Transfer window open. Tap to do business before your next match PREMIER LEAGUE ·",
+     "back": true
+    },
+    "facilities": {
+     "opened": true,
+     "sideways": 0,
+     "tableButtons": 0,
+     "tableGeometries": [],
+     "tableClubs": [],
+     "bracketButtons": 0,
+     "bracketGeometries": [],
+     "bracketSample": [],
+     "labelled": [
+      [
+       "Go back",
+       "Back",
+       false
+      ],
+      [
+       "How to play",
+       "",
+       false
+      ],
+      [
+       "Board: 60 out of 100, Safe. Tap to swap the words and the number.",
+       "BoardSafe",
+       false
+      ],
+      [
+       "Fans: 55 out of 100, Hopeful. Tap to swap the words and the number.",
+       "FansHopeful",
+       false
+      ],
+      [
+       "Stadium: Maxed",
+       "Maxed",
+       true
+      ],
+      [
+       "Training ground: Upgrade £75m",
+       "Upgrade £75m",
+       false
+      ],
+      [
+       "Medical: Upgrade £60m",
+       "Upgrade £60m",
+       false
+      ],
+      [
+       "Dressing room: Upgrade £45m",
+       "Upgrade £45m",
+       false
+      ]
+     ],
+     "pressed": [
+      [
+       "BoardSafe",
+       "false"
+      ],
+      [
+       "FansHopeful",
+       "false"
+      ],
+      [
+       "Sound: off",
+       "false"
+      ]
+     ],
+     "text": "DOUKNOWBALL Back Sign up to track your stats Arsenal 2026-27 · Season 1 Season not started £167m No matches yet Managers Board Safe Fans Hopeful Home Squad Tactics Table Market ☀️ Transfer window open. Tap to do business before your next match PREMIER LEAGUE ·",
+     "back": true
+    },
+    "options": {
+     "opened": true,
+     "sideways": 0,
+     "tableButtons": 0,
+     "tableGeometries": [],
+     "tableClubs": [],
+     "bracketButtons": 0,
+     "bracketGeometries": [],
+     "bracketSample": [],
+     "labelled": [
+      [
+       "Go back",
+       "Back",
+       false
+      ],
+      [
+       "How to play",
+       "",
+       false
+      ],
+      [
+       "Board: 60 out of 100, Safe. Tap to swap the words and the number.",
+       "BoardSafe",
+       false
+      ],
+      [
+       "Fans: 55 out of 100, Hopeful. Tap to swap the words and the number.",
+       "FansHopeful",
+       false
+      ],
+      [
+       "Strictness 1, Generous",
+       "1",
+       false
+      ],
+      [
+       "Strictness 2, Relaxed",
+       "2",
+       false
+      ],
+      [
+       "Strictness 3, Normal",
+       "3",
+       false
+      ],
+      [
+       "Strictness 4, Firm",
+       "4",
+       false
+      ],
+      [
+       "Strictness 5, Ruthless",
+       "5",
+       false
+      ]
+     ],
+     "pressed": [
+      [
+       "BoardSafe",
+       "false"
+      ],
+      [
+       "FansHopeful",
+       "false"
+      ],
+      [
+       "£ Pounds",
+       "true"
+      ],
+      [
+       "€ Euros",
+       "false"
+      ],
+      [
+       "$ Dollars",
+       "false"
+      ],
+      [
+       "R$ Reais",
+       "false"
+      ],
+      [
+       "¥ Yen",
+       "false"
+      ],
+      [
+       "On",
+       "true"
+      ],
+      [
+       "Off",
+       "false"
+      ],
+      [
+       "1",
+       "false"
+      ],
+      [
+       "2",
+       "false"
+      ],
+      [
+       "3",
+       "true"
+      ],
+      [
+       "4",
+       "false"
+      ],
+      [
+       "5",
+       "false"
+      ],
+      [
+       "Sound: off",
+       "false"
+      ]
+     ],
+     "text": "DOUKNOWBALL Back Sign up to track your stats Arsenal 2026-27 · Season 1 Season not started £167m No matches yet Managers Board Safe Fans Hopeful Home Squad Tactics Table Market ☀️ Transfer window open. Tap to do business before your next match PREMIER LEAGUE ·",
+     "negotiation": "This changes the seller's opening price. Firm and Ruthless can give you less time to negotiate. Easier settings never add patience. Repeating one lowball runs him out of patience at every setting, which is the decision the transfer desk is built around and is not something a slider is allowed to switch off.",
+     "back": true
+    },
+    "finances": {
+     "opened": true,
+     "sideways": 0,
+     "tableButtons": 0,
+     "tableGeometries": [],
+     "tableClubs": [],
+     "bracketButtons": 0,
+     "bracketGeometries": [],
+     "bracketSample": [],
+     "labelled": [
+      [
+       "Go back",
+       "Back",
+       false
+      ],
+      [
+       "How to play",
+       "",
+       false
+      ],
+      [
+       "Board: 60 out of 100, Safe. Tap to swap the words and the number.",
+       "BoardSafe",
+       false
+      ],
+      [
+       "Fans: 55 out of 100, Hopeful. Tap to swap the words and the number.",
+       "FansHopeful",
+       false
+      ]
+     ],
+     "pressed": [
+      [
+       "BoardSafe",
+       "false"
+      ],
+      [
+       "FansHopeful",
+       "false"
+      ],
+      [
+       "🎟️ Fair pricesCheaper seats, ",
+       "false"
+      ],
+      [
+       "🎫 StandardThe going rate. Nob",
+       "true"
+      ],
+      [
+       "💼 PremiumMore per seat, a few",
+       "false"
+      ],
+      [
+       "🍟 Cheap foodPies at cost. The",
+       "false"
+      ],
+      [
+       "🥤 StandardGround prices. Nobo",
+       "true"
+      ],
+      [
+       "🍾 PremiumHospitality margins.",
+       "false"
+      ],
+      [
+       "Sound: off",
+       "false"
+      ]
+     ],
+     "text": "DOUKNOWBALL Back Sign up to track your stats Arsenal 2026-27 · Season 1 Season not started £167m No matches yet Managers Board Safe Fans Hopeful Home Squad Tactics Table Market ☀️ Transfer window open. Tap to do business before your next match PREMIER LEAGUE ·",
+     "back": true
+    },
+    "skills": {
+     "opened": true,
+     "sideways": 0,
+     "tableButtons": 0,
+     "tableGeometries": [],
+     "tableClubs": [],
+     "bracketButtons": 0,
+     "bracketGeometries": [],
+     "bracketSample": [],
+     "labelled": [
+      [
+       "Go back",
+       "Back",
+       false
+      ],
+      [
+       "How to play",
+       "",
+       false
+      ],
+      [
+       "Board: 60 out of 100, Safe. Tap to swap the words and the number.",
+       "BoardSafe",
+       false
+      ],
+      [
+       "Fans: 55 out of 100, Hopeful. Tap to swap the words and the number.",
+       "FansHopeful",
+       false
+      ],
+      [
+       "Spend a point (0/5): Tactics",
+       "Spend a point (0/5)",
+       true
+      ],
+      [
+       "Spend a point (0/5): Recruitment",
+       "Spend a point (0/5)",
+       true
+      ],
+      [
+       "Spend a point (0/5): Negotiation",
+       "Spend a point (0/5)",
+       true
+      ],
+      [
+       "Spend a point (0/5): Youth",
+       "Spend a point (0/5)",
+       true
+      ],
+      [
+       "Spend a point (0/5): Man Management",
+       "Spend a point (0/5)",
+       true
+      ],
+      [
+       "Spend a point (0/5): Finance",
+       "Spend a point (0/5)",
+       true
+      ],
+      [
+       "Spend a point (0/5): Media",
+       "Spend a point (0/5)",
+       true
+      ]
+     ],
+     "pressed": [
+      [
+       "BoardSafe",
+       "false"
+      ],
+      [
+       "FansHopeful",
+       "false"
+      ],
+      [
+       "Sound: off",
+       "false"
+      ]
+     ],
+     "text": "DOUKNOWBALL Back Sign up to track your stats Arsenal 2026-27 · Season 1 Season not started £167m No matches yet Managers Board Safe Fans Hopeful Home Squad Tactics Table Market ☀️ Transfer window open. Tap to do business before your next match PREMIER LEAGUE ·",
+     "back": true
+    },
+    "academy": {
+     "opened": true,
+     "sideways": 0,
+     "tableButtons": 0,
+     "tableGeometries": [],
+     "tableClubs": [],
+     "bracketButtons": 0,
+     "bracketGeometries": [],
+     "bracketSample": [],
+     "labelled": [
+      [
+       "Go back",
+       "Back",
+       false
+      ],
+      [
+       "How to play",
+       "",
+       false
+      ],
+      [
+       "Board: 60 out of 100, Safe. Tap to swap the words and the number.",
+       "BoardSafe",
+       false
+      ],
+      [
+       "Fans: 55 out of 100, Hopeful. Tap to swap the words and the number.",
+       "FansHopeful",
+       false
+      ]
+     ],
+     "pressed": [
+      [
+       "BoardSafe",
+       "false"
+      ],
+      [
+       "FansHopeful",
+       "false"
+      ],
+      [
+       "Sound: off",
+       "false"
+      ]
+     ],
+     "text": "DOUKNOWBALL Back Sign up to track your stats Arsenal 2026-27 · Season 1 Season not started £167m No matches yet Managers Board Safe Fans Hopeful Home Squad Tactics Table Market ☀️ Transfer window open. Tap to do business before your next match PREMIER LEAGUE ·",
+     "back": true
+    },
+    "dressing": {
+     "opened": true,
+     "sideways": 0,
+     "tableButtons": 0,
+     "tableGeometries": [],
+     "tableClubs": [],
+     "bracketButtons": 0,
+     "bracketGeometries": [],
+     "bracketSample": [],
+     "labelled": [
+      [
+       "Go back",
+       "Back",
+       false
+      ],
+      [
+       "How to play",
+       "",
+       false
+      ],
+      [
+       "Board: 60 out of 100, Safe. Tap to swap the words and the number.",
+       "BoardSafe",
+       false
+      ],
+      [
+       "Fans: 55 out of 100, Hopeful. Tap to swap the words and the number.",
+       "FansHopeful",
+       false
+      ]
+     ],
+     "pressed": [
+      [
+       "BoardSafe",
+       "false"
+      ],
+      [
+       "FansHopeful",
+       "false"
+      ],
+      [
+       "Sound: off",
+       "false"
+      ]
+     ],
+     "text": "DOUKNOWBALL Back Sign up to track your stats Arsenal 2026-27 · Season 1 Season not started £167m No matches yet Managers Board Safe Fans Hopeful Home Squad Tactics Table Market ☀️ Transfer window open. Tap to do business before your next match PREMIER LEAGUE ·",
+     "back": true
+    },
+    "training": {
+     "opened": true,
+     "sideways": 0,
+     "tableButtons": 0,
+     "tableGeometries": [],
+     "tableClubs": [],
+     "bracketButtons": 0,
+     "bracketGeometries": [],
+     "bracketSample": [],
+     "labelled": [
+      [
+       "Go back",
+       "Back",
+       false
+      ],
+      [
+       "How to play",
+       "",
+       false
+      ],
+      [
+       "Board: 60 out of 100, Safe. Tap to swap the words and the number.",
+       "BoardSafe",
+       false
+      ],
+      [
+       "Fans: 55 out of 100, Hopeful. Tap to swap the words and the number.",
+       "FansHopeful",
+       false
+      ]
+     ],
+     "pressed": [
+      [
+       "BoardSafe",
+       "false"
+      ],
+      [
+       "FansHopeful",
+       "false"
+      ],
+      [
+       "Sound: off",
+       "false"
+      ]
+     ],
+     "text": "DOUKNOWBALL Back Sign up to track your stats Arsenal 2026-27 · Season 1 Season not started £167m No matches yet Managers Board Safe Fans Hopeful Home Squad Tactics Table Market ☀️ Transfer window open. Tap to do business before your next match PREMIER LEAGUE ·",
+     "retrain": {
+      "before": {
+       "y": 477,
+       "top": 435
+      },
+      "after": {
+       "y": 477,
+       "top": 463,
+       "focusOnPicker": true,
+       "learning": 1,
+       "refusal": null
+      }
+     },
+     "back": true
+    }
+   },
+   "pageErrors": []
+  }
+ ]
+}
