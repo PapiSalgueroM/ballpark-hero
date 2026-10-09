@@ -1,0 +1,5 @@
+sack-head exit=0 99s | SACK head Real Madrid era2015: 300 careers to week 14: sacked 0 (0.0%), points a match 2.313 (se 0.018), squad morale 95.1, eleven 98.0, the rest 92.0, board 85.5
+co-490 exit=0 0s | 41
+sack-490 exit=0 99s | SACK builder490 Real Madrid era2015: 300 careers to week 14: sacked 0 (0.0%), points a match 2.317 (se 0.019), squad morale 96.0, eleven 98.1, the rest 93.7, board 85.5
+co-main exit=0 0s | 16
+sack-main exit=0 79s | SACK main Real Madrid era2015: 300 careers to week 14: sacked 0 (0.0%), points a match 2.317 (se 0.019), squad morale 95.1, eleven 97.9, the rest 92.1, board 85.5
