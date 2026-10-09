@@ -1,0 +1,22 @@
+390x844 /: footers 1, "not affiliated with" 1, "respective owners" 1, floors ["130+ free games","130+ free sports games"], other []
+   home: 2 floors on screen, distinct ["130+"], description opens 130+
+390x844 /privacy: footers 1, "not affiliated with" 1, "respective owners" 1, floors [], other []
+390x844 /terms: footers 1, "not affiliated with" 2, "respective owners" 2, floors [], other []
+390x844 /whats-new: footers 1, "not affiliated with" 1, "respective owners" 1, floors ["100+ free games","130+ games"], other ["all 126 of them","all 120 of them","all 127 games"]
+390x844 /footle: footers 1, "not affiliated with" 1, "respective owners" 1, floors ["130+ free sports games"], other []
+390x844 /search: footers 1, "not affiliated with" 1, "respective owners" 1, floors [], other ["All 133 of them"]
+390x844 /about: footers 1, "not affiliated with" 2, "respective owners" 2, floors [], other ["Over 100 games"]
+390x844 /contact: footers 1, "not affiliated with" 2, "respective owners" 2, floors [], other []
+390x844 /this-address-is-dead-1143: footers 1, "not affiliated with" 1, "respective owners" 1, floors ["130+ games"], other []
+1280x800 /: footers 1, "not affiliated with" 1, "respective owners" 1, floors ["130+ free games","130+ free sports games"], other []
+   home: 2 floors on screen, distinct ["130+"], description opens 130+
+1280x800 /privacy: footers 1, "not affiliated with" 1, "respective owners" 1, floors [], other []
+1280x800 /terms: footers 1, "not affiliated with" 2, "respective owners" 2, floors [], other []
+1280x800 /whats-new: footers 1, "not affiliated with" 1, "respective owners" 1, floors ["100+ free games","130+ games"], other ["all 126 of them","all 120 of them","all 127 games"]
+1280x800 /footle: footers 1, "not affiliated with" 1, "respective owners" 1, floors ["130+ free sports games"], other []
+1280x800 /search: footers 1, "not affiliated with" 1, "respective owners" 1, floors [], other ["All 133 of them"]
+1280x800 /about: footers 1, "not affiliated with" 2, "respective owners" 2, floors [], other ["Over 100 games"]
+1280x800 /contact: footers 1, "not affiliated with" 2, "respective owners" 2, floors [], other []
+1280x800 /this-address-is-dead-1143: footers 1, "not affiliated with" 1, "respective owners" 1, floors ["130+ games"], other []
+
+walk1143: green. 18 page draws, one footer and one disclaimer each (two on /terms with its clause), one count on the home page.

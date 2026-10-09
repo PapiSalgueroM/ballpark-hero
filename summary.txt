@@ -1,0 +1,14 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+trust-seconddisclaimer exit=0 1s | simTrustCopy control seconddisclaimer: green. The planted line was reported and nothing else was.
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+trust-typedcount exit=0 1s | simTrustCopy control typedcount: green. The planted line was reported and nothing else was.
+trust-barecount exit=0 1s | simTrustCopy control barecount: green. The planted line was reported and nothing else was.
+trust-exactcount exit=0 1s | simTrustCopy control exactcount: green. The planted line was reported and nothing else was.
+trust-staleliteral exit=0 1s | simTrustCopy control staleliteral: green. The planted line was reported and nothing else was.
+simNoRivalNames exit=0 23s | No rival product names found. 0 findings.
+simSingleFooter exit=0 0s | simSingleFooter: green. One footer, rendered once, on every page.
+simHomeCopy exit=0 0s | simHomeCopy: green. The one page a crawler reads first says only true things.
+simLegalPages exit=0 0s | simLegalPages: all green
+simHarnessAnchors exit=0 42s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 71s | 
+walk exit=0 41s | walk1143: green. 18 page draws, one footer and one disclaimer each (two on /terms with its clause), one count on the home page.

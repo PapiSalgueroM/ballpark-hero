@@ -1,0 +1,15 @@
+simTrustCopy: the registry holds 133 games and prints them as 130+
+   NEGATIVE CONTROL ON (barecount): in memory, src/pages/NotFound.tsx now reads "See all 100+ games"
+1) one disclaimer a page
+   1344 source files read with comments stripped; the footer says it once, section 6 of the Terms keeps its clause (1)
+2) one game count
+   the shapes catch 9 of 9 site counts and leave 10 of 10 sport ones alone
+  FAIL: src/pages/NotFound.tsx types a count of the site's games: "100+ games". Print GAME_COUNT_LABEL (or TOTAL_GAMES for the exact number) from src/data/gameRegistry.ts instead. If the number is not about this site, add the file and the words to NOT_THE_SITE with the reason
+   owed, not failed: public/llms.txt still types "100+ games" (public/ was outside Round 1143; the lead retypes it at release)
+   typed counts read and held to 130+: index.html 4, src/pages/Index.tsx 1, public/llms.txt 1
+   allowed as written: 1 in the What's New log, 1 on NOT_THE_SITE
+3) held by the other lane, listed and not failed (9 files, 2 with something to show)
+   src/pages/About.tsx: a trademark disclaimer of its own; types "over 100 free sports trivia games"; types "Over 100 games"
+   src/pages/Contact.tsx: a trademark disclaimer of its own
+
+simTrustCopy control barecount: green. The planted line was reported and nothing else was.

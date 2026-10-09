@@ -1,0 +1,218 @@
+[
+ {
+  "route": "/",
+  "viewport": "390x844",
+  "footers": 1,
+  "notAffiliated": 1,
+  "respectiveOwners": 1,
+  "floors": [
+   "130+ free games",
+   "130+ free sports games"
+  ],
+  "otherCounts": [],
+  "description": "130+ free sports games, from a Soccer Career sim and Club Manager to daily trivia and quizzes for the NFL, NBA, MLB, NHL, F1, UFC and more. No login needed."
+ },
+ {
+  "route": "/privacy",
+  "viewport": "390x844",
+  "footers": 1,
+  "notAffiliated": 1,
+  "respectiveOwners": 1,
+  "floors": [],
+  "otherCounts": [],
+  "description": "Privacy policy for DoUKnowBall sports trivia games."
+ },
+ {
+  "route": "/terms",
+  "viewport": "390x844",
+  "footers": 1,
+  "notAffiliated": 2,
+  "respectiveOwners": 2,
+  "floors": [],
+  "otherCounts": [],
+  "description": "Terms of service for DoUKnowBall sports trivia games."
+ },
+ {
+  "route": "/whats-new",
+  "viewport": "390x844",
+  "footers": 1,
+  "notAffiliated": 1,
+  "respectiveOwners": 1,
+  "floors": [
+   "100+ free games",
+   "130+ games"
+  ],
+  "otherCounts": [
+   "all 126 of them",
+   "all 120 of them",
+   "all 127 games"
+  ],
+  "description": "The running log of everything new on DoUKnowBall: fresh games, features, fixes, and content drops, newest first."
+ },
+ {
+  "route": "/footle",
+  "viewport": "390x844",
+  "footers": 1,
+  "notAffiliated": 1,
+  "respectiveOwners": 1,
+  "floors": [
+   "130+ free sports games"
+  ],
+  "otherCounts": [],
+  "description": "Guess the mystery soccer player in eight tries. Colored tiles and arrows compare every guess on club, age, number and more. Free daily football puzzle."
+ },
+ {
+  "route": "/search",
+  "viewport": "390x844",
+  "footers": 1,
+  "notAffiliated": 1,
+  "respectiveOwners": 1,
+  "floors": [],
+  "otherCounts": [
+   "All 133 of them"
+  ],
+  "description": "Search all of the free sports games on DoUKnowBall by name, sport or the kind of game it is."
+ },
+ {
+  "route": "/about",
+  "viewport": "390x844",
+  "footers": 1,
+  "notAffiliated": 2,
+  "respectiveOwners": 2,
+  "floors": [],
+  "otherCounts": [
+   "Over 100 games"
+  ],
+  "description": "The story behind DoUKnowBall: over 100 free sports trivia games, daily puzzles, and deep career sims built by one sports fan who wanted trivia that actually goes deep."
+ },
+ {
+  "route": "/contact",
+  "viewport": "390x844",
+  "footers": 1,
+  "notAffiliated": 2,
+  "respectiveOwners": 2,
+  "floors": [],
+  "otherCounts": [],
+  "description": "Get in touch with DoUKnowBall: report a bug, flag a wrong answer, pitch a game idea, or reach out about anything else."
+ },
+ {
+  "route": "/this-address-is-dead-1143",
+  "viewport": "390x844",
+  "footers": 1,
+  "notAffiliated": 1,
+  "respectiveOwners": 1,
+  "floors": [
+   "130+ games"
+  ],
+  "otherCounts": [],
+  "description": "There is no page at this address on DoUKnowBall. Browse the free sports games instead."
+ },
+ {
+  "route": "/",
+  "viewport": "1280x800",
+  "footers": 1,
+  "notAffiliated": 1,
+  "respectiveOwners": 1,
+  "floors": [
+   "130+ free games",
+   "130+ free sports games"
+  ],
+  "otherCounts": [],
+  "description": "130+ free sports games, from a Soccer Career sim and Club Manager to daily trivia and quizzes for the NFL, NBA, MLB, NHL, F1, UFC and more. No login needed."
+ },
+ {
+  "route": "/privacy",
+  "viewport": "1280x800",
+  "footers": 1,
+  "notAffiliated": 1,
+  "respectiveOwners": 1,
+  "floors": [],
+  "otherCounts": [],
+  "description": "Privacy policy for DoUKnowBall sports trivia games."
+ },
+ {
+  "route": "/terms",
+  "viewport": "1280x800",
+  "footers": 1,
+  "notAffiliated": 2,
+  "respectiveOwners": 2,
+  "floors": [],
+  "otherCounts": [],
+  "description": "Terms of service for DoUKnowBall sports trivia games."
+ },
+ {
+  "route": "/whats-new",
+  "viewport": "1280x800",
+  "footers": 1,
+  "notAffiliated": 1,
+  "respectiveOwners": 1,
+  "floors": [
+   "100+ free games",
+   "130+ games"
+  ],
+  "otherCounts": [
+   "all 126 of them",
+   "all 120 of them",
+   "all 127 games"
+  ],
+  "description": "The running log of everything new on DoUKnowBall: fresh games, features, fixes, and content drops, newest first."
+ },
+ {
+  "route": "/footle",
+  "viewport": "1280x800",
+  "footers": 1,
+  "notAffiliated": 1,
+  "respectiveOwners": 1,
+  "floors": [
+   "130+ free sports games"
+  ],
+  "otherCounts": [],
+  "description": "Guess the mystery soccer player in eight tries. Colored tiles and arrows compare every guess on club, age, number and more. Free daily football puzzle."
+ },
+ {
+  "route": "/search",
+  "viewport": "1280x800",
+  "footers": 1,
+  "notAffiliated": 1,
+  "respectiveOwners": 1,
+  "floors": [],
+  "otherCounts": [
+   "All 133 of them"
+  ],
+  "description": "Search all of the free sports games on DoUKnowBall by name, sport or the kind of game it is."
+ },
+ {
+  "route": "/about",
+  "viewport": "1280x800",
+  "footers": 1,
+  "notAffiliated": 2,
+  "respectiveOwners": 2,
+  "floors": [],
+  "otherCounts": [
+   "Over 100 games"
+  ],
+  "description": "The story behind DoUKnowBall: over 100 free sports trivia games, daily puzzles, and deep career sims built by one sports fan who wanted trivia that actually goes deep."
+ },
+ {
+  "route": "/contact",
+  "viewport": "1280x800",
+  "footers": 1,
+  "notAffiliated": 2,
+  "respectiveOwners": 2,
+  "floors": [],
+  "otherCounts": [],
+  "description": "Get in touch with DoUKnowBall: report a bug, flag a wrong answer, pitch a game idea, or reach out about anything else."
+ },
+ {
+  "route": "/this-address-is-dead-1143",
+  "viewport": "1280x800",
+  "footers": 1,
+  "notAffiliated": 1,
+  "respectiveOwners": 1,
+  "floors": [
+   "130+ games"
+  ],
+  "otherCounts": [],
+  "description": "There is no page at this address on DoUKnowBall. Browse the free sports games instead."
+ }
+]
