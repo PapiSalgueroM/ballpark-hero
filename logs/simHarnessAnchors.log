@@ -1,0 +1,8 @@
+1) every harness parses
+   ok   782 harnesses pass node --check
+2) no harness carries an anchor it can never match
+   782 harnesses, 211 carry a multi line anchor into src, 241 normalised reads guard one
+   ok   211 harnesses are in scope, so the check is looking at something
+   FAIL simSoccerSeasonAvailability.mjs reads src/lib/season/soccer.ts raw at line 26 and searches it with a multi line anchor (line 27), so on a CRLF checkout it matches nothing
+
+simHarnessAnchors: 1 failure(s)
