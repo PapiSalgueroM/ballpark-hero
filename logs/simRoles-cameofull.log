@@ -1,0 +1,15 @@
+1) Five rungs, ordered, and each one a real promise
+   Star man 88% · Key first teamer 74% · Rotation option 32% · Backup 12% · One for the future 5%
+2) Nobody starts a save already furious
+   159 players across seven clubs: 21 star, 56 key, 28 rotation, 46 backup, 8 prospect
+   0 of them start two or more rungs below what they think they have earned
+3) His last ten counts games he could have played, and only those
+   Jarrad Branthwaite (played): window 10 long, 10 involved, share 1
+   Tyler Dibling (benched): window 10 long, 6 involved, share 0.6
+   Tyrique George (injured throughout): window 0 long, gap 0.00
+3b) A benched man reads as benched, measured over a run of them
+   25 scenarios: benched share mean 0.508, 36% of them over a half, starters never below 1.000
+3c) A start is a game, and coming on is worth the minutes he got
+   87 quick sims: 957 starts each worth 1, 143 men came on and their match is worth 1.00 on average
+  FAIL: 142 of 143 men who came on hold something other than the share of the match they played
+simRoles control: green. With a cameo worth a whole game again, section 3c went red.

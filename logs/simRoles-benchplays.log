@@ -1,0 +1,14 @@
+1) Five rungs, ordered, and each one a real promise
+   Star man 88% · Key first teamer 74% · Rotation option 32% · Backup 12% · One for the future 5%
+2) Nobody starts a save already furious
+   159 players across seven clubs: 21 star, 56 key, 28 rotation, 46 backup, 8 prospect
+   0 of them start two or more rungs below what they think they have earned
+3) His last ten counts games he could have played, and only those
+   Jarrad Branthwaite (played): window 10 long, 10 involved, share 1
+   Tyler Dibling (benched): window 10 long, 4.37 involved, share 0.437
+   Tyrique George (injured throughout): window 0 long, gap 0.00
+3b) A benched man reads as benched, measured over a run of them
+   25 scenarios: benched share mean 1.000, 100% of them over a half, starters never below 1.000
+  FAIL: benched men average 1.000 of the football, so being dropped barely shows
+  FAIL: 100% of benched men played more than half, so the window is not reading the team sheet
+simRoles control: green. Feeding the starter through the bench check turned it red, so the ceilings can see a regression.

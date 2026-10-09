@@ -1,0 +1,7 @@
+tsc exit=0 73s | 
+simRoles-a exit=0 1413s | ALL ROLE CHECKS PASSED
+simRoles-cameofull exit=0 7s | simRoles control: green. With a cameo worth a whole game again, section 3c went red.
+simRoles-benchplays exit=0 6s | simRoles control: green. Feeding the starter through the bench check turned it red, so the ceilings can see a regression.
+vitest-roles exit=0 5s |    Duration  3.84s (transform 1.90s, setup 72ms, collect 2.61s, tests 131ms, environment 445ms, prepare 187ms)
+simRoles-b exit=0 1437s | ALL ROLE CHECKS PASSED
+simRoles-c exit=0 1390s | ALL ROLE CHECKS PASSED
