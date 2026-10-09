@@ -1,0 +1,11 @@
+ M public/club-manager/index.html
+ M public/conquest-nba/index.html
+ M public/conquest/index.html
+ M public/dart-draft/index.html
+ M public/f1-constructor/index.html
+ M public/nba-connect-4/index.html
+ M public/nfl-gauntlet-draft/index.html
+ M public/nhl-connect-4/index.html
+ M public/perfect-lineup-f1/index.html
+ M public/whats-new/index.html
+ M scripts/data/lastmod.json

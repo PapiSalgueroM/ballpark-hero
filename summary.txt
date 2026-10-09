@@ -1,0 +1,15 @@
+buildseo exit=0 2485s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+sweepWeight exit=0 26s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+playHomeFold exit=0 28s | playHomeFold: green. The first thing on the page is something to play.
+playSoftFourOhFour exit=0 7s | playSoftFourOhFour: green. A dead address says it is dead before a line of app code runs, and no real page is touched.
+simFaqSchema exit=0 41s | simFaqSchema: green. One block per type per page, written once and never rewritten.
+playGames-soccer-career exit=0 53s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-club-manager exit=0 47s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-stadium-tycoon exit=0 104s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-nba-my-career exit=0 63s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-nfl-my-career exit=0 51s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-buzzer-beater exit=0 45s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-cage-clash exit=0 47s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-stat-detective exit=0 42s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-dart-draft exit=0 44s | Played 1 games. 0 findings, 0 the harness could not drive.
+sweepGames exit=0 587s | Swept 183 routes across 1 engines and 2 viewports (366 checks). 0 findings.
