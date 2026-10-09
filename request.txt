@@ -1,0 +1,18 @@
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+ss-seed1: SIM_SEED=1 node scripts/simClubManagerSaveSize.mjs
+ss-seed2: SIM_SEED=2 node scripts/simClubManagerSaveSize.mjs
+ss-seed3: SIM_SEED=3 node scripts/simClubManagerSaveSize.mjs
+ss-seed4: SIM_SEED=4 node scripts/simClubManagerSaveSize.mjs
+ss-seed5: SIM_SEED=5 node scripts/simClubManagerSaveSize.mjs
+ss-exactage: SAVE_SIZE_CONTROL=exactage node scripts/simClubManagerSaveSize.mjs
+ss-namekey: SAVE_SIZE_CONTROL=namekey node scripts/simClubManagerSaveSize.mjs
+ss-norepair: SAVE_SIZE_CONTROL=norepair node scripts/simClubManagerSaveSize.mjs
+ss-pump: SAVE_SIZE_CONTROL=pump node scripts/simClubManagerSaveSize.mjs
+ss-deaddoor: SAVE_SIZE_CONTROL=deaddoor node scripts/simClubManagerSaveSize.mjs
+ss-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
+ss-unbounded: SAVE_SIZE_CONTROL=unbounded node scripts/simClubManagerSaveSize.mjs
+ss-silent: SAVE_SIZE_CONTROL=silent node scripts/simClubManagerSaveSize.mjs
+ss-noleave: SAVE_SIZE_CONTROL=noleave node scripts/simClubManagerSaveSize.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json

@@ -1,0 +1,18 @@
+simClubManagerSaveSize exit=0 25s | simClubManagerSaveSize: all sections green
+ss-seed2 exit=0 27s | simClubManagerSaveSize: all sections green
+ss-seed1 exit=0 28s | simClubManagerSaveSize: all sections green
+ss-seed3 exit=0 24s | simClubManagerSaveSize: all sections green
+ss-seed5 exit=0 27s | simClubManagerSaveSize: all sections green
+ss-seed4 exit=0 27s | simClubManagerSaveSize: all sections green
+ss-exactage exit=1 29s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=exactage turned section 9 red (10 failures) and nothing else
+ss-norepair exit=1 27s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=norepair turned section 6 red (5 failures) and nothing else
+ss-namekey exit=1 27s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=namekey turned section 5 red (6 failures) and nothing else
+ss-pump exit=1 26s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=pump turned section 7 red (6 failures) and nothing else
+ss-deaddoor exit=1 27s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=deaddoor turned section 8 red (10 failures) and nothing else
+ss-uncapped exit=1 27s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=uncapped turned section 1 red (33 failures) and nothing else
+ss-silent exit=1 24s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=silent turned section 3 red (1 failure) and nothing else
+ss-unbounded exit=1 28s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=unbounded turned section 2 red (5 failures) and nothing else
+ss-noleave exit=1 31s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=noleave turned section 4 red (1 failure) and nothing else
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 27s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 36s | 
