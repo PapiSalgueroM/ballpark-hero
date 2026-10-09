@@ -314,6 +314,41 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     expect(savedCareer(sport).seasons).toHaveLength(1);
   }, 60000);
 
+  /* Round 1144. A review of Release AN: the tile's Reload threw away a save the device had refused, under
+     a line that said "Your career is safe". The save is retried once first; while it is still refused
+     the page stays and the tile says why. (The season is played here with the tile up, which a script
+     can do and a finger cannot: a player gets to this state by playing first and opening the viewer
+     second, and what is held is the same either way, a tile over a board with a save waiting.) */
+  it('the tile stays and says why when its Reload would lose a save the device refused', async () => {
+    const reload = vi.fn();
+    vi.stubGlobal('location', { ...window.location, reload });
+    try {
+      await pressWithAFailedChunk('held');
+      const refusing = refuseTheSave();
+      await click(playButton());
+      expect(refusedNotice()).not.toBeNull();
+      const tile = () => q('[data-season-centre-failed]')!;
+      const pressReload = () => click([...tile().querySelectorAll('button')].find(b => /Reload/.test(b.textContent ?? '')));
+      const tries = () => refusing.mock.calls.filter(c => c[0] === sport.saveKey).length;
+      const before = tries();
+      await pressReload();
+      /* the save was tried once more, it is still refused, and the page was not reloaded */
+      expect(tries()).toBe(before + 1);
+      expect(reload).not.toHaveBeenCalled();
+      expect(tile().textContent).toContain('has not been saved yet');
+      expect(tile().textContent).not.toContain('Your career is safe');
+      expect(refusedNotice()).not.toBeNull();
+      expect(savedCareer(sport).seasons).toHaveLength(0);
+      /* the device takes writes again: the same press saves first and reloads second */
+      refusing.mockRestore();
+      await pressReload();
+      expect(savedCareer(sport).seasons).toHaveLength(1);
+      expect(reload).toHaveBeenCalledTimes(1);
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  }, 60000);
+
   it('CONTROL: the old order (play, then load) loses a season to the same failed chunk', async () => {
     /* the needle: the entry asks for the viewer before its one call of Play */
     const src = fs.readFileSync(path.resolve(process.cwd(), 'src/components/us-career/season/UsSeasonCentreEntry.tsx'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');

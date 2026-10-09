@@ -24,6 +24,7 @@ import ExtensionCard from '@/components/us-career/ExtensionCard';
 import { buildSeasonReveal, draftPressureLine, type SeasonReveal } from '@/lib/usCareerReveal';
 import { SeasonRevealCard } from '@/components/us-career/SeasonRevealCard';
 import { UsSeasonCentreEntry } from '@/components/us-career/season/UsSeasonCentreEntry';
+import { holdPendingSave } from '@/lib/safeStorage';
 /* Round 530: draft day as a moment, and the retirement card on the same
    celebration kit the season curtain uses. */
 import DraftDayCard, { type DraftDayFacts } from '@/components/us-career/DraftDayCard';
@@ -354,6 +355,15 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
       setSaveFailure(pending.value === null ? 'remove' : 'write');
     }
   }, [sport.saveKey]);
+  /* Round 1144: while a save is refused the storage seam knows one is
+     waiting here, so a reload the app makes on its own account (a new build,
+     a stale chunk, the Season Center tile's Reload) retries it once first and
+     stays on the page while it is still refused. The retry is the one above,
+     untouched; the answer is whether anything is still waiting after it. */
+  useEffect(() => {
+    if (!saveFailed) return;
+    return holdPendingSave(() => { retrySave(); return pendingSave.current === null; });
+  }, [saveFailed, retrySave]);
   const saveValue = useCallback((value: string | null) => {
     pendingSave.current = { key: sport.saveKey, value };
     retrySave();

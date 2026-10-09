@@ -24,21 +24,30 @@
    3. RouteErrorBoundary catches a chunk load error and reloads once before
       painting, through the same guard rather than a second one;
    4. src/main.tsx still calls watchForNewBuild at boot, so the listener is
-      live on every page.
+      live on every page;
+   5. (Round 1144) every reload freshBuild.ts makes on the app's own account
+      asks the storage seam for waiting saves first. A game whose save the
+      browser refused keeps it in the open page for the player's Retry, and a
+      reload throws it away: a review of Release AN saw a stale chunk do that,
+      and the Season Center tile's Reload. Section 2 also holds the order in
+      reloadOnceForStaleChunk: the ask comes before the once flag is set, so
+      a reload that was held does not spend the tab's one reload.
 
    Negative controls (SIM_STALE_CHUNK_CONTROL): nolistener deletes the
    addEventListener call from an in memory copy (section 1 red), noguard
    removes the sessionStorage set so the once flag never lands (section 2
    red), noprerender deletes the prerender stand down (section 2 red),
-   nooffline (Release AM) deletes the offline stand down (section 2 red). Each
-   asserts its anchor exists exactly once first. */
+   nooffline (Release AM) deletes the offline stand down (section 2 red),
+   nosave (Round 1144) deletes the ask for waiting saves from
+   reloadOnceForStaleChunk (sections 2 and 5 red). Each asserts its anchor
+   exists exactly once first. */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_STALE_CHUNK_CONTROL || '';
-const EXPECT = { nolistener: [1], noguard: [2], noprerender: [2], nooffline: [2] };
+const EXPECT = { nolistener: [1], noguard: [2], noprerender: [2], nooffline: [2], nosave: [2, 5] };
 /* Exit 2, never 1: 1 is a control that fired, and a mistyped name must not read as one. */
 if (CONTROL && !(CONTROL in EXPECT)) { console.error('unknown control ' + CONTROL); process.exit(2); }
 
@@ -68,14 +77,16 @@ if (CONTROL === 'noguard') fresh = rewrite(fresh, "sessionStorage.setItem(STALE_
    names one: it cuts reloadOnceForStaleChunk out by its own declaration and
    deletes the prerender line inside that function only, wherever it sits.
    Both steps still refuse to run on anything but exactly one match. */
-if (CONTROL === 'noprerender') {
+/* Round 1144: nosave is cut the same way, for the same reason (reloadToRetryChunk carries the same line). */
+function cutFromStaleReload(LINE, why) {
   const HEAD = 'export function reloadOnceForStaleChunk(): boolean {\n';
-  const LINE = "  if ((window as unknown as { __DUKB_PRERENDER__?: boolean }).__DUKB_PRERENDER__) return false;\n";
   const from = fresh.indexOf(HEAD);
   const to = from < 0 ? -1 : fresh.indexOf('\n}\n', from);
-  if (fresh.split(HEAD).length - 1 !== 1 || to < 0) { console.error('noprerender: reloadOnceForStaleChunk is not declared exactly once, refusing to run a dead control'); process.exit(2); }
-  fresh = fresh.slice(0, from) + rewrite(fresh.slice(from, to), LINE, '', 'noprerender') + fresh.slice(to);
+  if (fresh.split(HEAD).length - 1 !== 1 || to < 0) { console.error(why + ': reloadOnceForStaleChunk is not declared exactly once, refusing to run a dead control'); process.exit(2); }
+  fresh = fresh.slice(0, from) + rewrite(fresh.slice(from, to), LINE, '', why) + fresh.slice(to);
 }
+if (CONTROL === 'noprerender') cutFromStaleReload("  if ((window as unknown as { __DUKB_PRERENDER__?: boolean }).__DUKB_PRERENDER__) return false;\n", 'noprerender');
+if (CONTROL === 'nosave') cutFromStaleReload('  if (!settlePendingSaves()) return false;\n', 'nosave');
 if (CONTROL === 'nooffline') fresh = rewrite(fresh, '  if (navigator.onLine === false) return false;', '', 'nooffline');
 const freshCode = code(fresh);
 
@@ -112,6 +123,12 @@ console.log('2) the reload happens once per tab, through a sessionStorage flag')
        failure spends the tab's one reload. */
     const offline = /navigator\.onLine === false[^\n]*return false/.test(body);
     const offlineFirst = offline && sets && body.indexOf('navigator.onLine') < body.indexOf('sessionStorage.setItem');
+    /* Round 1144: a save the browser refused is retried once before the reload, and while it is
+       still refused there is none. Before the flag, like offline, or a held reload spends the one. */
+    const saves = /!settlePendingSaves\(\)\)\s*return false/.test(body);
+    const savesFirst = saves && sets && body.indexOf('settlePendingSaves') < body.indexOf('sessionStorage.setItem');
+    if (!saves) fail('the guard does not ask for waiting saves, so a stale chunk reloads over a save the browser refused and the player loses it');
+    else if (sets && !savesFirst) fail('the ask for waiting saves comes after the once flag is set, so a held reload spends the one reload');
     if (!offline) fail('the guard does not stand down offline, so a failed chunk reloads onto the browser\'s own offline page');
     else if (sets && !offlineFirst) fail('the offline stand down comes after the once flag is set, so an offline failure spends the one reload');
     if (!standsDown) fail('the guard does not stand down under the prerenderer (window.__DUKB_PRERENDER__), so a capture could reload mid page');
@@ -119,7 +136,7 @@ console.log('2) the reload happens once per tab, through a sessionStorage flag')
     if (!sets) fail('the guard never sets the flag, so it would reload on every failure');
     if (!reloads) fail('the guard never reloads');
     if (sets && reloads && !setBeforeReload) fail('the flag is set after the reload call, so a fast reload could skip it');
-    if (standsDown && offlineFirst && reads && sets && reloads && setBeforeReload) ok('stands down under the prerenderer and offline, then flag read, set, then reload, in that order');
+    if (standsDown && offlineFirst && savesFirst && reads && sets && reloads && setBeforeReload) ok('stands down under the prerenderer, offline and over a refused save, then flag read, set, then reload, in that order');
   }
 }
 
@@ -142,6 +159,20 @@ console.log('4) main.tsx still boots the watcher');
 {
   if (!/watchForNewBuild\(\)/.test(main)) fail('main.tsx no longer calls watchForNewBuild, so the listener is never registered');
   else ok('watchForNewBuild() called at boot');
+}
+
+section = 5;
+console.log('5) every reload freshBuild makes asks for waiting saves first');
+{
+  /* each top level function, by its own text: a reload has to follow an ask in the SAME function */
+  const fns = freshCode.match(/(?:async )?function \w+\([^)]*\)[^{]*\{[\s\S]*?\n\}/g) ?? [];
+  const reloaders = fns.filter(fn => /window\.location\.reload\(\)/.test(fn));
+  const nameOf = fn => (fn.match(/function (\w+)/) ?? [])[1] ?? '?';
+  const bare = reloaders.filter(fn => { const ask = fn.indexOf('settlePendingSaves()'); return ask < 0 || ask > fn.indexOf('window.location.reload()'); });
+  const total = (freshCode.match(/window\.location\.reload\(\)/g) ?? []).length;
+  if (reloaders.length < 3 || total !== reloaders.length) fail(`${total} reload call(s) in ${reloaders.length} function(s) of freshBuild.ts, expected one each in at least three (check, reloadOnceForStaleChunk, reloadToRetryChunk): this check is not reading the file it thinks it is`);
+  else if (bare.length) fail(`${bare.map(nameOf).join(', ')} reload${bare.length === 1 ? 's' : ''} without asking for waiting saves first, so a save the browser refused is thrown away`);
+  else ok(`${reloaders.map(nameOf).join(', ')}: each asks for waiting saves before it reloads`);
 }
 
 console.log('');
