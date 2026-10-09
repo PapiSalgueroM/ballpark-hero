@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerLifeCooldowns: node scripts/simCareerLifeCooldowns.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simCareerStory: node scripts/simCareerStory.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+playCareerHub: BASE=http://localhost:4173 node scripts/playCareerHub.mjs
