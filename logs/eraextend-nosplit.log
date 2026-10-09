@@ -1,0 +1,18 @@
+CONTROL nosplit applied: the lib copy has "if (undeclaredSplit.length) die(" cut out
+A) a synthetic extension with every kind of correction lands exactly
+   2 moved, 3 removed, 1 arrived, 1 folded, 1 namesakes; 12 players in 4 clubs
+B) every guard dies on its own bad correction
+  FAIL: one string at two new clubs, undeclared: it died, but with "Cannot read properties of undefined (reading 'keep')" where "two clubs of the new leagues" was expected
+   29 of 30 bad corrections died with their own message
+R) re rating a shipped file moves its ratings and its stamp and nothing else
+   6 rows read, 1 moved, the stamp added (curve 2, rated at a + 1); a second run changes nothing; a bad row and an unknown stamp both stop it
+C) the 2015-16 bake rebuilds from its 60 club base byte for byte
+   SKIPPED: a control run checks A and B only (c2drift also runs the 2005-06 rebuild, stale2020 the 2020-21 one)
+C) the 2010-11 bake rebuilds from its 40 club base byte for byte
+   SKIPPED: a control run checks A and B only (c2drift also runs the 2005-06 rebuild, stale2020 the 2020-21 one)
+C) the 2005-06 bake rebuilds from its 40 club base byte for byte
+   SKIPPED: a control run checks A and B only (c2drift also runs the 2005-06 rebuild, stale2020 the 2020-21 one)
+C) the 2020-21 bake rebuilds from its 0 club base byte for byte
+   SKIPPED: a control run checks A and B only (c2drift also runs the 2005-06 rebuild, stale2020 the 2020-21 one)
+
+simEraBakeExtend: 1 failure
