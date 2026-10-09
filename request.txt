@@ -1,0 +1,2 @@
+boards: node .rc/x/boardsProbe.mjs
+derbies-record: node scripts/simCareerDerbies.mjs --record
