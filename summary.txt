@@ -1,0 +1,10 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simSchemaNames exit=0 15s | simSchemaNames: all green
+simLeaderboardCaps exit=0 21s | simLeaderboardCaps: green. Every shipped game can score, nothing else can, and the allowlist is not writable.
+simReportRelay exit=0 1s | simReportRelay: green. Both buttons ask the same questions, every report records whether it reached him, and the queue has a real workflow.
+simScoringCoverage exit=0 0s | simScoringCoverage: all green
+simWritesAreSent exit=0 16s | simWritesAreSent: green. Every write is sent, and a finished round proves it on the wire.
+playSoccerCareer exit=0 478s | ALL SOCCER CAREER WALK CHECKS PASSED
+playGames-club-manager exit=0 47s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-manager-hot-seat exit=0 47s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-deadline-day exit=0 48s | Played 1 games. 0 findings, 0 the harness could not drive.
