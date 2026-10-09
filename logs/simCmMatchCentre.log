@@ -1,0 +1,14 @@
+material: 144 reports (20 of them played live) at Arsenal, Barcelona, Brentford, Bayern Munich
+1) Stats equal the committed play: keeper saves off the play list, bookings and changes off their lines
+   144 reports and 20 live matches at 20 and 70: 1067 saves (7.41 a match), every one a shot on target that was not a goal, and every booking and change counted off its line
+2) The timeline equals the committed play: every chance, save, corner and penalty once, and nothing else
+   144 timelines: 1067 saves, 1879 shots off target, 1836 corners and 75 penalties, each one a committed event and none missing
+3a) The report card prints the report's own numbers on every stat bar
+   1440 stat bars on 144 cards, every one the report's own number both sides
+3b) The timeline on the card is the report's own timeline, row for row
+   2877 rows on 144 cards, every one the report's own row, the clock rows off the report's own board
+4) The live strip prints the saves, bookings and changes so far, never the whole match
+   60 live strips (at 20, at 70, at the whistle), 27 of them with bookings or changes still to come, every one the engine's count at its minute
+5) Nothing the sim does not model is on either screen
+   16 stat labels on the two screens (Possession, Shots, On target, Expected goals, Corners, Fouls, Keeper saves, Yellow cards, Red cards, Substitutions, Shots (on target), xG, Saves, Yellow, Red, Subs), none of them a number the sim does not draw
+simCmMatchCentre: PASS. Every stat on the report and the live strip is counted off the committed play and lines, and every timeline row is an event the engine drew.
