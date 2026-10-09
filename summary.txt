@@ -1,0 +1,19 @@
+vitest exit=0 7s |    Duration  5.98s (transform 2.64s, setup 341ms, collect 5.55s, tests 3.50s, environment 2.39s, prepare 767ms)
+dartpool exit=0 16s | simDartDraftPool: green. The pool is the top 2,000, the gold zones and the storm give what they gave, a country hit keeps its best four and shows more names, and whole dr
+dartpool-pool900 exit=1 13s | simDartDraftPool control pool900: fired, 1 failure(s) above. Exit 1 is the expected result.
+dartpool-nofloor exit=1 14s | simDartDraftPool control nofloor: fired, 22 failure(s) above. Exit 1 is the expected result.
+dartpool-nobest exit=1 14s | simDartDraftPool control nobest: fired, 3 failure(s) above. Exit 1 is the expected result.
+dartpool-onepage exit=1 11s | simDartDraftPool control onepage: fired, 2 failure(s) above. Exit 1 is the expected result.
+statdet exit=0 7s | simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.
+dartpool-pagefloor exit=1 15s | simDartDraftPool control pagefloor: fired, 1 failure(s) above. Exit 1 is the expected result.
+guideheadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+sitesearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+norival exit=0 21s | No rival product names found. 0 findings.
+invented exit=0 9s | simInventedNames: green. Every invented man on this site is invented all the way down.
+storage exit=0 2s | simStorageWrites: all green
+flags exit=2 1s | simNationalityFlags: REFUSING TO RUN. src/pages/SportsBingo.tsx does not carry its Round 453 flag (/<FlagImg name=\{p\.nationality\}[^>]*showLabel/), so the rewrite is no
+trust exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+tsc exit=0 89s | 
+a11y exit=0 1s | simAccessibility: all green
+anchors exit=0 45s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+quotes exit=0 16s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.

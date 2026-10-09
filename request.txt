@@ -1,0 +1,19 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/dartDraftPool.test.ts src/test/statDetectiveSpans.test.tsx src/test/statDetectiveMotion.test.tsx --testTimeout=300000 --hookTimeout=120000
+dartpool: node scripts/simDartDraftPool.mjs
+dartpool-pool900: DART_POOL_CONTROL=pool900 node scripts/simDartDraftPool.mjs
+dartpool-nofloor: DART_POOL_CONTROL=nofloor node scripts/simDartDraftPool.mjs
+dartpool-nobest: DART_POOL_CONTROL=nobest node scripts/simDartDraftPool.mjs
+dartpool-onepage: DART_POOL_CONTROL=onepage node scripts/simDartDraftPool.mjs
+dartpool-pagefloor: DART_POOL_CONTROL=pagefloor node scripts/simDartDraftPool.mjs
+statdet: node scripts/simStatDetectiveMotion.mjs
+guideheadings: node scripts/simGuideHeadings.mjs
+sitesearch: node scripts/simSiteSearch.mjs
+norival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+invented: node scripts/simInventedNames.mjs
+storage: node scripts/simStorageWrites.mjs
+flags: node scripts/simNationalityFlags.mjs
+trust: node scripts/simTrustCopy.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+a11y: node scripts/simAccessibility.mjs

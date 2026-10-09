@@ -1,0 +1,46 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > reveals each real profile-backed clue and only the newest guess without remounting older rows 488ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > keeps the non-first native option mounted during focus transfer and preserves input Enter-first matching 125ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > cues a committed win once with exact helper feedback, share truth and undefined completion score 116ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > ends exactly eight misses, then starts a quiet different case and rearms one completion per difficulty 357ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > derives the real sparse-profile unlock gaps without inventing career clues 238ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > keeps short and duplicate queries quiet and clears owned feedback timers on unmount 134ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > shows accurate rules and example before play and reopens the same native help door 133ms
+
+ Test Files  1 passed (1)
+      Tests  7 passed (7)
+   Start at  14:45:47
+   Duration  3.54s (transform 555ms, setup 56ms, collect 917ms, tests 1.59s, environment 407ms, prepare 230ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stderr | src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > shows accurate rules and example before play and reopens the same native help door
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+simStatDetectiveMotion: seven actual-page outcomes passed with the real matcher, hints, stat line, share and once-only undefined-score completion.
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > reads the true first and last season for a man whose career ran past his 500 minute seasons 35ms
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > judges the era of a guess on the true span 23ms
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > fails the whole load when the spans cannot be read, and never falls back to the 500 minute span 156ms
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > gives a name the view lacks no span at all and says so, rather than guessing one 17ms
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective mysteries do not move with the span > builds byte identical mystery pools, and they do not depend on what the view says 45ms
+ ✓ src/test/statDetectiveSpans.test.tsx > the Stat Detective page over the same table > opens its retry state when the spans cannot be read, and recovers when they can 196ms
+ ✓ src/test/statDetectiveSpans.test.tsx > the Stat Detective page over the same table > prints the true years beside a name in the guess box 145ms
+
+ Test Files  1 passed (1)
+      Tests  7 passed (7)
+   Start at  14:45:51
+   Duration  2.48s (transform 448ms, setup 74ms, collect 758ms, tests 620ms, environment 442ms, prepare 261ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+simStatDetectiveMotion: seven span outcomes passed: true first and last season, era on the true span, all or nothing spans read, no guessed span, byte identical mystery pools, page retry state and guess box years.
+simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.
