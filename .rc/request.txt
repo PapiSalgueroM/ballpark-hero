@@ -1,0 +1,5 @@
+# Release AQ: the page weights on the assembled head, to set budgets before the gate
+#!serve
+#!playwright
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
