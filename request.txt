@@ -1,0 +1,7 @@
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/safeStorage.test.ts src/test/safeStorageQuota.test.ts src/test/storageNoticeFollows.test.tsx src/test/freshBuildBlockedStorage.test.ts --testTimeout=300000 --hookTimeout=120000
+seam-quota: SPORTS=nba SHOTS=$RC_OUT node scripts/playUsCareerSaveSeam.mjs
+seam-quotafree: US_SAVE_SEAM_CONTROL=quotafree SPORTS=nba PORT=4411 node scripts/playUsCareerSaveSeam.mjs
+seam-stale: US_SAVE_SEAM_CONTROL=stale SPORTS=nba PORT=4412 node scripts/playUsCareerSaveSeam.mjs

@@ -1,0 +1,6 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest exit=0 3s |    Duration  3.01s (transform 256ms, setup 332ms, collect 489ms, tests 672ms, environment 2.51s, prepare 810ms)
+seam-quotafree exit=1 12s | playUsCareerSaveSeam: 3 journeys, 11 checks, 8 failed (control quotafree)
+seam-quota exit=0 20s | playUsCareerSaveSeam: 6 journeys, 25 checks, 0 failed
+seam-stale exit=1 7s | playUsCareerSaveSeam: 1 journeys, 9 checks, 1 failed (control stale)
+tsc exit=0 59s | 

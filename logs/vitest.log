@@ -1,0 +1,13 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/safeStorageQuota.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 48[2mms[22m[39m
+ [32m✓[39m src/test/safeStorage.test.ts [2m([22m[2m40 tests[22m[2m)[22m[32m 145[2mms[22m[39m
+ [32m✓[39m src/test/freshBuildBlockedStorage.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 341[2mms[22m[39m
+ [32m✓[39m src/test/storageNoticeFollows.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 139[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m63 passed[39m[22m[90m (63)[39m
+[2m   Start at [22m 08:57:00
+[2m   Duration [22m 3.01s[2m (transform 256ms, setup 332ms, collect 489ms, tests 672ms, environment 2.51s, prepare 810ms)[22m
+
