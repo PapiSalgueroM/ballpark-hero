@@ -1,0 +1,14 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-legs: node_modules/.bin/vitest run src/test/managerQuickSimLegs.test.tsx src/test/managerScorerMarks.test.tsx src/test/managerPenaltyMarkers.test.tsx --testTimeout=300000 --hookTimeout=120000
+legs-smoke: CLUBS=Everton SEEDS=1 SEASONS=1 REPLAY=1 node scripts/simCmQuickLegs.mjs
+legs-s0: SEEDSET=0 node scripts/simCmQuickLegs.mjs
+legs-s1: SEEDSET=1 node scripts/simCmQuickLegs.mjs
+legs-s2: SEEDSET=2 node scripts/simCmQuickLegs.mjs
+legs-off: CM_QUICK_LEGS_CONTROL=off node scripts/simCmQuickLegs.mjs
+legs-anyone: CM_QUICK_LEGS_CONTROL=anyone node scripts/simCmQuickLegs.mjs
+legs-nokeep: CM_QUICK_LEGS_CONTROL=nokeep node scripts/simCmQuickLegs.mjs
+legs-ambient: CM_QUICK_LEGS_CONTROL=ambient node scripts/simCmQuickLegs.mjs
+simCmQuickSubs: node scripts/simCmQuickSubs.mjs
+simCmQuickSubs-all: CM_QUICK_SUBS_CONTROL=all node scripts/simCmQuickSubs.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
