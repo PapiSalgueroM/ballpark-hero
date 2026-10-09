@@ -89,19 +89,23 @@
  *      5ba57826, before Round 1052 (simClubManagerGathered section G owns the
  *      file and says how it was made), and a career keeps the squad it was
  *      saved with, so its men sit a year off the world's rows for them.
- *      MEASURED on it: 18 of its 20 men have a row in the world, all 18 a year
- *      older there; the summer after, 15 of 22, all 15 still a year older,
- *      because the summer ages both sides together. With the guard reading
- *      the exact age, every one of them sent out on loan was still listed
- *      (at Sevilla, his own club) and could be bought straight back: 18 of 18
- *      as saved, 15 of 15 the summer after. With a year either side: 0 and 0,
- *      and each stale card is refused with the out on loan reason. The floor
- *      of 8 men a year off sits ten under the 18 and seven under the 15, room
- *      for Round 1108's moves and for birth dates still to land; a fixture
- *      re-recorded on today's rosters would hold nobody a year off and this
- *      section says so instead of passing on nothing. The width is pinned
- *      from both sides on a fresh career: a loan record a year either side of
- *      a card hides it, one two years off does not.
+ *      MEASURED on it, the same on the default stream and SIM_SEED 1 to 5: 18
+ *      of its 20 men have a row in the world, all 18 a year older there; the
+ *      summer after, 15 of 21 or 22, all 15 still a year older, because the
+ *      summer ages both sides together. With the guard reading the exact
+ *      age, every one of them sent out on loan was still listed (at Sevilla,
+ *      his own club), could be bought straight back and could be talked to:
+ *      18 of 18 as saved, 15 of 15 the summer after. With a year either side:
+ *      0, 0 and 0, and each stale card is refused with the out on loan reason
+ *      at the buy and at the talks door. The floor of 8 men a year off sits
+ *      ten under the 18 and seven under the 15, room for Round 1108's moves
+ *      and for birth dates still to land; a fixture re-recorded on today's
+ *      rosters would hold nobody a year off and this section says so instead
+ *      of passing on nothing. The width is pinned from both sides on a fresh
+ *      career: a loan record a year either side of a card hides it, one two
+ *      years off does not. Under the deaddoor control the talks door is not
+ *      read here (that control removes every door reason and is section 8's
+ *      to catch); the listing and the buy still are.
  *
  * Negative controls (house rule: prove the checks can fail), each one rewrites
  * a copy of the source in memory, refuses to run unless its anchor appears
@@ -948,6 +952,10 @@ section = 9;
      a time. The world's row for one of MY men only shows with the squad and
      the loan desk out of sight, and that row is also the stale card an older
      screen could still be holding when the press comes. */
+  /* The talks door runs through doorRefusal, which the deaddoor control guts
+     on purpose. That control is section 8's to catch, so under it this
+     section reads the listing and the buy and leaves the talks door alone. */
+  const DOORS_GUTTED = CONTROL === 'deaddoor';
   const sweep = (st, label) => {
     const world = buildMarket({ ...st, squad: [], loanedOut: [] });
     const n = { sent: 0, yearOff: 0, listed: 0, bought: 0, talked: 0, unexplained: 0 };
@@ -961,9 +969,9 @@ section = 9;
       const rich = { ...out, budget: Math.max(out.budget, card.price + 1) };
       const listed = buildMarket(out).some(m => m.name === p.name && m.position === p.position);
       const bought = buyPlayer(rich, card) !== null;
-      const talked = startNegotiation(rich, card) !== null;
+      const talked = !DOORS_GUTTED && startNegotiation(rich, card) !== null;
       const explained = /out on loan/.test(signingRefusal(rich, card, card.price) ?? '')
-        && /out on loan/.test(doorRefusal(rich, card, 'talk') ?? '');
+        && (DOORS_GUTTED || /out on loan/.test(doorRefusal(rich, card, 'talk') ?? ''));
       if (listed) n.listed += 1;
       if (bought) n.bought += 1;
       if (talked) n.talked += 1;
