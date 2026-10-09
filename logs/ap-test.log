@@ -1,0 +1,23 @@
+Preparing worktree (detached HEAD cbff760c9)
+HEAD is now at cbff760c9 Release AP: build output (four saved pages, the sitemap and the lastmod ledger from the runner's build:seo on a2597024)
+cbff760c9245267fb64bb59ae5037f441b2d0395
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/tmp/ap[39m
+
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9748 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9748: 26 season rows, 25 story seasons, story 13832 bytes, save 61560 bytes, save without story 47728
+
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9749 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9749: 29 season rows, 28 story seasons, story 17290 bytes, save 70636 bytes, save without story 53346
+
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9750 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9750: 29 season rows, 28 story seasons, story 19693 bytes, save 78058 bytes, save without story 58365
+
+ [32m✓[39m src/test/careerStory.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 2515[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story on the real page[2m > [22mLatest Events opens the story, a season opens, Back returns, Close shuts it [33m 312[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m13 passed[39m[22m[90m (13)[39m
+[2m   Start at [22m 17:35:06
+[2m   Duration [22m 5.42s[2m (transform 2.52s, setup 54ms, collect 2.13s, tests 2.52s, environment 321ms, prepare 152ms)[22m
+

@@ -1,0 +1,1 @@
+ap-test exit=0 7s |    Duration  5.42s (transform 2.52s, setup 54ms, collect 2.13s, tests 2.52s, environment 321ms, prepare 152ms)

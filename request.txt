@@ -1,0 +1,1 @@
+ap-test: git fetch -q --depth 1 origin release-ap-int && git worktree add -f /tmp/ap FETCH_HEAD && ln -s $PWD/node_modules /tmp/ap/node_modules && cd /tmp/ap && git log -1 --format=%H && node_modules/.bin/vitest run src/test/careerStory.test.tsx --testTimeout=900000 --hookTimeout=120000
