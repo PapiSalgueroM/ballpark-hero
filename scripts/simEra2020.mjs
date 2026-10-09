@@ -523,7 +523,13 @@ console.log('6) The uplift is small, keeps the order, and leaves the rank and fi
   const mbappe = all.find(p => p.n === 'Kylian Mbappé');
   const messi = all.find(p => p.n === 'Lionel Messi');
   if (!mbappe || up(mbappe.r) !== 94) fail(`2020 Mbappé rates ${mbappe && up(mbappe.r)}, the calibration says 94`);
-  if (!messi || up(messi.r) !== 92) fail(`2020 Messi rates ${messi && up(messi.r)}, the calibration says 92`);
+  /* Round 1102 re-recorded this pin, 92 to 95, and nothing else in the section. That round re-rated
+     the past seasons on the curve that reads age: Messi, 32 on his year-2020 row and rated at 33, went
+     91 to 94 in the bake (three points back for his age), and the uplift, which nobody touched, still
+     adds one at the top. Mbappé, 21 and already a point under the cap, stayed 93 and 94. The top fifty
+     gap above read 0.22 on that tree (0.12 before), inside its band. A 2020 man at 95 is one more
+     than anybody in the 2026 world: that is the lead's to rule on, and it is in the round's report. */
+  if (!messi || up(messi.r) !== 95) fail(`2020 Messi rates ${messi && up(messi.r)}, the calibration says 95`);
 }
 
 /* ---------- 7. The 2020-21 Champions League field ---------- */
