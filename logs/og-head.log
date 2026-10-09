@@ -1,0 +1,21 @@
+probe written: src/test/arProbe-og-head.test.tsx (variant og)
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/arProbe-og-head.test.tsx[2m > [22m[2mThe goal sequence[2m > [22m[2ma goal still on its way when the line up changes off the clock keeps its net, its card and its men
+[22m[39m[AR probe og] og=true penalty=false freeKick=false; the half found on attempt 5501: a goal at 80 for opp, its action staged at 80.300 behind shot at 79, the ball in at 81.056, and the line up changes at 81
+
+[90mstdout[2m | src/test/arProbe-og-head.test.tsx[2m > [22m[2mThe goal sequence[2m > [22m[2ma goal still on its way when the line up changes off the clock keeps its net, its card and its men
+[22m[39m[AR probe trace] pass/pass 2 - 2 78' cast0 x14 | shot/plant 2 - 2 79' cast0 x16 | shot/flight 2 - 2 79' cast0 x32 | shot/wide 2 - 2 79' cast0 x14 | shot/wide 2 - 2 80' cast0 x4 | pass/pass 2 - 2 80' cast0 x15 | goal/plant 2 - 2 80' cast0 x16 | goal/flight 2 - 2 80' cast0 x28 | goal/flight 2 - 2 81' cast0 x4 | goal/net 2 - 3 card 81' cast0 x108 | pass/pass 2 - 3 81' cast1 x41 | pass/pass 2 - 3 82' cast1 x1
+
+ [32m✓[39m src/test/arProbe-og-head.test.tsx [2m([22m[2m55 tests[22m[2m | [22m[33m54 skipped[39m[2m)[22m[33m 29759[2mms[22m[39m
+   [33m[2m✓[22m[39m The goal sequence[2m > [22ma goal still on its way when the line up changes off the clock keeps its net, its card and its men [33m 29757[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[2m | [22m[33m54 skipped[39m[90m (55)[39m
+[2m   Start at [22m 22:46:20
+[2m   Duration [22m 34.60s[2m (transform 2.50s, setup 73ms, collect 3.25s, tests 29.76s, environment 431ms, prepare 505ms)[22m
+

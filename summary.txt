@@ -1,0 +1,8 @@
+pen-head exit=0 28s |    Duration  26.93s (transform 2.68s, setup 83ms, collect 3.40s, tests 22.12s, environment 413ms, prepare 160ms)
+og-head exit=0 35s |    Duration  34.60s (transform 2.50s, setup 73ms, collect 3.25s, tests 29.76s, environment 431ms, prepare 505ms)
+pen-before exit=1 25s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/arProbe-pen-before.test.tsx,title=src/test/arProbe-pen-before.test.tsx > The goal sequence > a goal st
+og-before exit=1 36s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/arProbe-og-before.test.tsx,title=src/test/arProbe-og-before.test.tsx > The goal sequence > a goal stil
+pen-main exit=1 23s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/arProbe-pen-main.test.tsx,title=src/test/arProbe-pen-main.test.tsx > The goal sequence > a goal still 
+noguard exit=0 59s |    Duration  57.84s (transform 2.69s, setup 54ms, collect 3.44s, tests 53.41s, environment 328ms, prepare 162ms)
+lk-head exit=1 153s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/arProbe-lk-head.test.tsx,title=src/test/arProbe-lk-head.test.tsx > Live simcast motion > terminal goal
+lk-before exit=1 131s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/arProbe-lk-before.test.tsx,title=src/test/arProbe-lk-before.test.tsx > Live simcast motion > terminal 

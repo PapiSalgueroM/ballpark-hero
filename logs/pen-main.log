@@ -1,0 +1,105 @@
+probe written: src/test/arProbe-pen-main.test.tsx (variant pen)
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/arProbe-pen-main.test.tsx[2m > [22m[2mThe goal sequence[2m > [22m[2ma goal still on its way when the line up changes off the clock keeps its net, its card and its men
+[22m[39m[AR probe pen] og=false penalty=true freeKick=false; the half found on attempt 3388: a goal at 85 for opp, its action staged at 85.300 behind shot at 84, the ball in at 86.056, and the line up changes at 86
+
+[90mstdout[2m | src/test/arProbe-pen-main.test.tsx[2m > [22m[2mThe goal sequence[2m > [22m[2ma goal still on its way when the line up changes off the clock keeps its net, its card and its men
+[22m[39m[AR probe trace] pass/pass 1 - 1 83' cast0 x14 | shot/plant 1 - 1 84' cast0 x16 | shot/flight 1 - 1 84' cast0 x32 | shot/wide 1 - 1 84' cast0 x14 | shot/wide 1 - 1 85' cast0 x4 | pass/pass 1 - 1 85' cast0 x15 | goal/plant 1 - 1 85' cast0 x16 | goal/flight 1 - 1 85' cast0 x28 | pass/pass 1 - 2 86' cast1 x62 | pass/pass 1 - 2 87' cast1 x1
+
+ [31m❯[39m src/test/arProbe-pen-main.test.tsx [2m([22m[2m55 tests[22m[2m | [22m[31m1 failed[39m[2m | [22m[33m54 skipped[39m[2m)[22m[33m 17889[2mms[22m[39m
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22msettlement ID comparison rejects changed payloads, retained IDs and allocator prefixes
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mthe committed action puts goals in the correct net and saves at the keeper
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mactual feed triggers player strikes, ball flight, saves and net contact
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mpause freezes the ball and player pose, and the same player still opens changes
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mmotion leaves committed state and settled results identical
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22ma substitution during a paused action replaces the clickable player immediately
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mspeed changes scale action time with the match clock
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mreduced motion shows the committed catch immediately without animated poses
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'goal' reduced=false)
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'goal' reduced=true)
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'save' reduced=false)
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'save' reduced=true)
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'goal' reduced=false)
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'goal' reduced=true)
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'save' reduced=false)
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'save' reduced=true)
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mterminal resume shows contact and Skip keeps immediate exactly-once whistle callbacks
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22ma tactics redraw cancels a terminal action that is no longer committed
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mthe ninetieth minute asks the latest save: refused means full time, never thirty empty minutes
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mthe ninetieth minute asks the latest save: extra time drawn there is played, whatever this render was given
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mthe extra time banner says what is true: a second leg is level on aggregate
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mthe clock runs into the board as 90 plus, with the running aggregate under the score
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22ma goal in the board is announced with its plus, GOAL! ... 90+N
+   [2m[90m↓[39m[22m Live simcast motion[2m > [22mthe extra time clock runs into its own board as ET 120 plus
+   [2m[90m↓[39m[22m The pitch part on real feeds[2m > [22mthe material is 200 half feeds from five clubs in five leagues
+   [2m[90m↓[39m[22m The pitch part on real feeds[2m > [22mR1: the ball is in the goal mouth on goals only
+   [2m[90m↓[39m[22m The pitch part on real feeds[2m > [22mR2: nobody stands on a team mate
+   [2m[90m↓[39m[22m The pitch part on real feeds[2m > [22mR3: at a kick off each side is in its own half, far from the other keeper
+   [2m[90m↓[39m[22m The pitch part on real feeds[2m > [22mR4: the block follows the ball
+   [2m[90m↓[39m[22m The pitch part on real feeds[2m > [22mR5: nothing is decided here
+   [2m[90m↓[39m[22m The pitch part on real feeds[2m > [22mR6: a chance starts with the ball at the shooter and ends in its follow up
+   [2m[90m↓[39m[22m The pitch part on real feeds[2m > [22mR7: every dead ball is taken by the right side from the right place
+   [2m[90m↓[39m[22m The pitch part on real feeds[2m > [22mR8: the pitch is handed the right kick off and the right share of the ball
+   [2m[90m↓[39m[22m The pitch part on real feeds[2m > [22mR9: a goal gets its kick off before the next chance is led in
+   [2m[90m↓[39m[22m The goal sequence[2m > [22mthe score waits for the ball and the card lands at net contact
+   [2m[90m↓[39m[22m The goal sequence[2m > [22mthe card's season count is the settled count
+   [2m[90m↓[39m[22m The goal sequence[2m > [22mafter Skip the second half opens on the right score, with no card and nothing replayed
+   [2m[90m↓[39m[22m The goal sequence[2m > [22mnothing says GOAL before the ball is in: not the list beside the pitch, not the line under it
+   [2m[90m↓[39m[22m The goal sequence[2m > [22mno frame draws the new score before the ball is in
+   [2m[90m↓[39m[22m The goal sequence[2m > [22ma goal with the last kick of a period takes nothing off the score while it winds up
+   [2m[90m↓[39m[22m The goal sequence[2m > [22ma line fired late by Skip is not played again when extra time starts
+   [2m[90m↓[39m[22m The goal sequence[2m > [22munder reduced motion the card is held for its first stretch only, and then the match runs on
+   [2m[90m↓[39m[22m The goal sequence[2m > [22ma substitution in a goal's wind up takes the card with the action, and the score stops waiting
+[31m   [31m×[31m The goal sequence[2m > [22ma goal still on its way when the line up changes off the clock keeps its net, its card and its men[39m[33m 17887[2mms[22m[39m
+[31m     → expected { Object (score, motion, ...) } to deeply equal { Object (score, motion, ...) }[39m
+   [2m[90m↓[39m[22m The goal sequence[2m > [22ma scorer card counts his goals up to this one, and gives a season count only to one of mine
+   [2m[90m↓[39m[22m Match mode[2m > [22ma name goes above its figure when another man stands just under him
+   [2m[90m↓[39m[22m Match mode[2m > [22mBack folds the match to a card and pauses it, and the card puts it back
+   [2m[90m↓[39m[22m Match mode[2m > [22mone panel at a time, and Escape closes what is open before it is Back
+   [2m[90m↓[39m[22m Match mode[2m > [22mthe stats line a phone keeps in view reads the same count as the full stats
+   [2m[90m↓[39m[22m Match mode[2m > [22mlevel neighbours take a row each, and a wall shows numbers
+   [2m[90m↓[39m[22m Match mode[2m > [22mat full time the folded card offers the report as well as the way back
+   [2m[90m↓[39m[22m Match mode[2m > [22ma phone on its side gets the pitch on its side
+   [2m[90m↓[39m[22m The part and a change of line up[2m > [22mthe part drops an action when the line up under it changes
+   [2m[90m↓[39m[22m The part and a change of line up[2m > [22ma chance whose line fires in the very commit the line up changes is still played, by the new eleven
+   [2m[90m↓[39m[22m The part and an action taken back[2m > [22mthe part drops an action the binder has taken back, even with the clock set back before its start
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/arProbe-pen-main.test.tsx[2m > [22mThe goal sequence[2m > [22ma goal still on its way when the line up changes off the clock keeps its net, its card and its men
+[31m[1mAssertionError[22m: expected { Object (score, motion, ...) } to deeply equal { Object (score, motion, ...) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[32m-   "motion": "goal",[39m
+[32m-   "phase": "net",[39m
+[31m+   "motion": "pass",[39m
+[31m+   "phase": "pass",[39m
+[2m    "score": "1 - 2",[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/arProbe-pen-main.test.tsx:[2m1659:95[22m[39m
+    [90m1657| [39m    /* and the first frame that reads the new score is the ball in the…
+    [90m1658| [39m    const changed = frames.find(f => f.score !== before);
+    [90m1659| [39m    expect(changed && { score: changed.score, motion: changed.motion, …
+    [90m   | [39m                                                                                              [31m^[39m
+    [90m1660| [39m    /* The stretch watched is the one the search promised: the next mi…
+    [90m1661| [39m    expect(windup.some(f => f.minute === m + 1)).toBe(true);
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[33m54 skipped[39m[90m (55)[39m
+[2m   Start at [22m 22:47:25
+[2m   Duration [22m 22.21s[2m (transform 2.55s, setup 78ms, collect 3.20s, tests 17.89s, environment 450ms, prepare 199ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/arProbe-pen-main.test.tsx,title=src/test/arProbe-pen-main.test.tsx > The goal sequence > a goal still on its way when the line up changes off the clock keeps its net%2C its card and its men,line=1659,column=95::AssertionError: expected { Object (score, motion, ...) } to deeply equal { Object (score, motion, ...) }%0A%0A- Expected%0A+ Received%0A%0A  {%0A-   "motion": "goal",%0A-   "phase": "net",%0A+   "motion": "pass",%0A+   "phase": "pass",%0A    "score": "1 - 2",%0A  }%0A%0A ❯ src/test/arProbe-pen-main.test.tsx:1659:95%0A%0A
