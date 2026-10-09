@@ -243,19 +243,27 @@ async function main() {
         assert.ok(sampledOverturns / candidates > 0.025 && sampledOverturns / candidates < 0.09);
         Object.assign(metrics, { matches: 256, reviews, overturned, penalty, awarded, awardedGoals, enabledGoals, disabledGoals, sampledReviews, sampledOverturns, candidates, gameRates: cm.CM_VAR_GAME_RATES });
       },
-      baseline() {
+      async baseline() {
         const pre = fresh(original);
         for (const seed of [7110, 7111, 7112]) {
           const current = withCmVarSeed(seed, () => candidateFactory().playNextEntry(pre, { skipHalftime: true, noCoach: true }));
           const prior = withCmVarSeed(seed, () => oldFactory().playNextEntry(pre, { skipHalftime: true, noCoach: true }));
           assert.deepEqual(current, prior, 'Default callers retain every prior report, stat, player credit and save byte');
         }
-        for (const config of [{ startYear: 2025 }, { eraId: 'era2010', startYear: 2026 }]) {
-          const historic = { ...clone(pre), ...config };
-          const plain = withCmVarSeed(7113, () => originalFactory().playNextEntry(historic));
-          const enabled = withCmVarSeed(7113, () => candidateFactory().playNextEntry(historic, { varReviews: true }));
-          assert.deepEqual(enabled, plain, 'Historic eras and pre-2026 clocks ignore review opt-in');
-        }
+        const before2026 = { ...clone(pre), startYear: 2025 };
+        const plainBefore2026 = withCmVarSeed(7113, () => originalFactory().playNextEntry(before2026));
+        const enabledBefore2026 = withCmVarSeed(7113, () => candidateFactory().playNextEntry(before2026, { varReviews: true }));
+        assert.deepEqual(enabledBefore2026, plainBefore2026, 'Pre-2026 clocks ignore review opt-in');
+        const historicalPlain = originalFactory(), historicalCandidate = candidateFactory(), historicalPrior = oldFactory();
+        await Promise.all([historicalPlain, historicalCandidate, historicalPrior].map(engine => engine.ensureEraRosters('era2010')));
+        const historical = withCmVarSeed(4107, () => historicalPlain.startCareer('Everton', 'era2010'));
+        // Override only this simulation's clock so the historic-era guard is tested independently of the year guard.
+        historical.startYear = 2026;
+        const plainHistoric = withCmVarSeed(7113, () => historicalPlain.playNextEntry(historical));
+        const enabledHistoric = withCmVarSeed(7113, () => historicalCandidate.playNextEntry(historical, { varReviews: true }));
+        const priorHistoric = withCmVarSeed(7113, () => historicalPrior.playNextEntry(historical));
+        assert.deepEqual(enabledHistoric, plainHistoric, 'Actual loaded historic squads ignore review opt-in even on a 2026 simulation clock');
+        assert.deepEqual(plainHistoric, priorHistoric, 'Loaded historic squads retain the entire prior default match');
         const oldLive = withCmVarSeed(7114, () => originalFactory().playNextEntry(pre));
         const before = clone(oldLive.state.live);
         const plain = withCmVarSeed(7115, () => candidateFactory().playNextEntry(oldLive.state, { skipHalftime: true }));
@@ -266,7 +274,7 @@ async function main() {
     };
     for (const [name, title] of Object.entries(titles)) {
       if (control && name !== controls[control].test && name !== 'baseline') { rows.push({ title, status: 'skipped' }); continue; }
-      try { outcomes[name](); rows.push({ title, status: 'passed' }); }
+      try { await outcomes[name](); rows.push({ title, status: 'passed' }); }
       catch (error) { rows.push({ title, status: 'failed', errorName: error.name, message: error.message, stack: error.stack }); }
     }
     await new Promise(resolve => setImmediate(resolve));

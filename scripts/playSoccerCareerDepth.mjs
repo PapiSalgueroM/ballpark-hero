@@ -11,7 +11,11 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PORT = Number(process.env.PORT || 4591);
 const BASE = process.env.BASE || `http://127.0.0.1:${PORT}`;
 const SHOTS = path.resolve(ROOT, process.env.SHOTS || '.tmp-fx/career-depth-shots');
+const NOW = 1791547200000;
 const B = await bundleAwardsNight(ROOT, { extra: { records: 'src/lib/soccerCareerRecords.ts', ambitions: 'src/lib/soccerCareerAmbitions.ts' } });
+if (!/^\s+setClubs\(FALLBACK_CLUBS\);$/m.test(fs.readFileSync(path.join(ROOT, 'src/pages/SoccerCareer.tsx'), 'utf8'))) {
+  throw new Error('fixture refused: the actual career route no longer uses the expected static club pool');
+}
 const captured = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/careerLeagueWorldSaves1100.json'), 'utf8')).saves.find(s => s.kind === 'player')?.state;
 if (!captured) throw new Error('fixture refused: recorded save missing');
 const fixture = B.soccer.repairCareer(structuredClone(captured));
@@ -34,23 +38,49 @@ const state = page => page.evaluate(() => JSON.parse(localStorage.getItem('socce
 const savedBytes = page => page.evaluate(() => localStorage.getItem('soccerCareerSave'));
 const bodyState = page => page.evaluate(() => ({ inline: document.body.style.overflow, computed: getComputedStyle(document.body).overflow, y: scrollY }));
 const sheetChunk = /\/assets\/CareerRecordsSheet-[^/?]+\.js(?:\?|$)/;
+function fieldDifferences(expected, actual, at = '$', rows = []) {
+  if (Object.is(expected, actual)) return rows;
+  if (!expected || !actual || typeof expected !== 'object' || typeof actual !== 'object' || Array.isArray(expected) !== Array.isArray(actual)) {
+    rows.push({ at, expected, actual }); return rows;
+  }
+  const left = Object.keys(expected), right = Object.keys(actual);
+  if (JSON.stringify(left) !== JSON.stringify(right)) rows.push({ at: `${at}.[keys]`, expected: left, actual: right });
+  for (const key of new Set([...left, ...right])) {
+    if (!Object.hasOwn(expected, key) || !Object.hasOwn(actual, key)) rows.push({ at: `${at}.${key}`,
+      expected: Object.hasOwn(expected, key) ? expected[key] : '<absent>', actual: Object.hasOwn(actual, key) ? actual[key] : '<absent>' });
+    else fieldDifferences(expected[key], actual[key], `${at}.${key}`, rows);
+  }
+  return rows;
+}
+function compareSave(expected, actual, name) {
+  const normalized = JSON.parse(JSON.stringify(expected)), diff = fieldDifferences(normalized, actual);
+  for (const [suffix, value] of [['expected', normalized], ['actual', actual], ['diff', diff]]) {
+    fs.writeFileSync(path.join(SHOTS, `${name}-${suffix}.json`), JSON.stringify(value, null, 2));
+  }
+  const same = JSON.stringify(actual) === JSON.stringify(expected);
+  if (!same) console.log(`${name}: full save mismatch, ${diff.length} recursive differences\n${JSON.stringify(diff, null, 2)}`);
+  return same;
+}
 function normalSeason(career) {
-  const real = Math.random;
+  const real = Math.random, OriginalDate = Date;
+  globalThis.Date = class extends OriginalDate { constructor(...args) { super(...(args.length ? args : [NOW])); } static now() { return NOW; } };
   try {
     for (let seed = 118400; seed < 118464; seed++) {
-      Math.random = mulberry32(seed);
+      const rng = mulberry32(seed), draws = [];
+      Math.random = () => { const value = rng(); draws.push(value); return value; };
       const next = B.soccer.advanceProSeason(structuredClone(career), B.soccer.FALLBACK_CLUBS);
       const row = next.seasons.at(-1);
-      if (['newspaper', 'season_summary'].includes(next.phase) && next.pendingSummary?.year === row?.year && row?.apps > 0 && !row.injurySevere && row.ambition) return { seed, next };
+      if (['newspaper', 'season_summary'].includes(next.phase) && next.pendingSummary?.year === row?.year && row?.apps > 0 && !row.injurySevere && row.ambition) return { seed, next, draws };
     }
     throw new Error('fixture refused: real engine produced no normal summary season in 64 seeds');
-  } finally { Math.random = real; }
+  } finally { Math.random = real; globalThis.Date = OriginalDate; }
 }
 async function seedSeasonClick(page, seed) {
   await page.getByRole('button', { name: 'Next Season', exact: true }).evaluate((button, initial) => {
     button.addEventListener('click', () => {
-      window.__careerDepthRealRandom = Math.random; let t = initial >>> 0;
-      Math.random = () => { t = (t + 0x6D2B79F5) >>> 0; let x = Math.imul(t ^ (t >>> 15), 1 | t); x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x; return ((x ^ (x >>> 14)) >>> 0) / 4294967296; };
+      window.__careerDepthRealRandom = Math.random; window.__careerDepthDraws = []; let t = initial >>> 0;
+      Math.random = () => { t = (t + 0x6D2B79F5) >>> 0; let x = Math.imul(t ^ (t >>> 15), 1 | t); x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x;
+        const value = ((x ^ (x >>> 14)) >>> 0) / 4294967296; window.__careerDepthDraws.push(value); return value; };
     }, { capture: true, once: true });
   }, seed);
 }
@@ -62,6 +92,10 @@ async function trapped(page, dialog) {
   return true;
 }
 async function prepare(context) {
+  await context.addInitScript(now => {
+    const OriginalDate = Date;
+    window.Date = class extends OriginalDate { constructor(...args) { super(...(args.length ? args : [now])); } static now() { return now; } };
+  }, NOW);
   await context.addInitScript(save => {
     if (!sessionStorage.getItem('career-depth-started')) {
       sessionStorage.setItem('career-depth-started', '1');
@@ -140,18 +174,22 @@ async function walk(width, height) {
     await target.click(); await dialog.locator(`[data-ambition-option="${choice.id}"]`).click();
     await page.waitForFunction(() => !!JSON.parse(localStorage.getItem('soccerCareerSave')).seasonAmbition);
     const beforeSeason = await state(page);
+    fs.writeFileSync(path.join(SHOTS, `career-season-${width}-input.json`), JSON.stringify({ save: beforeSeason, clubs: B.soccer.FALLBACK_CLUBS, now: NOW }, null, 2));
     const proof = normalSeason(beforeSeason);
     console.log(`${label}: normal engine seed ${proof.seed}, phase ${proof.next.phase}, apps ${proof.next.seasons.at(-1).apps}, target ${proof.next.seasons.at(-1).ambition.outcome}`);
     await seedSeasonClick(page, proof.seed);
     await page.getByRole('button', { name: 'Next Season', exact: true }).click();
     await page.waitForFunction(count => JSON.parse(localStorage.getItem('soccerCareerSave')).seasons.length > count, beforeSeason.seasons.length, { timeout: 45000 });
-    await page.evaluate(() => {
+    const observedDraws = await page.evaluate(() => {
       if (typeof window.__careerDepthRealRandom !== 'function') throw new Error('seed listener did not run on the actual Next Season click');
       Math.random = window.__careerDepthRealRandom; delete window.__careerDepthRealRandom;
+      const draws = window.__careerDepthDraws; delete window.__careerDepthDraws; return draws;
     });
+    fs.writeFileSync(path.join(SHOTS, `career-season-${width}-rng.json`), JSON.stringify({ seed: proof.seed, expected: proof.draws, observed: observedDraws }, null, 2));
+    console.log(`${label}: expected engine RNG calls ${proof.draws.length}, observed click/render RNG calls ${observedDraws.length}, traces saved for full-save diagnosis`);
     const finished = await state(page), row = finished.seasons.at(-1), result = row.ambition;
     check(result && result.actual === row[choice.stat] && result.target === beforeSeason.seasonAmbition.target && !finished.seasonAmbition, `${label}: playing a real season seals target against its actual stats and consumes the choice`);
-    check(JSON.stringify(finished) === JSON.stringify(proof.next), `${label}: actual Next Season writes the unchanged real engine's complete seeded save`);
+    check(compareSave(proof.next, finished, `career-season-${width}`), `${label}: actual Next Season writes the unchanged real engine's complete seeded save`);
     if (!result || !['newspaper', 'season_summary'].includes(finished.phase)) throw new Error(`normal summary fixture did not reach its expected phase: ${finished.phase}`);
     const finishedBytes = await savedBytes(page);
     await page.reload({ waitUntil: 'domcontentloaded' });
@@ -175,19 +213,28 @@ async function walk(width, height) {
 }
 async function failedChunk(width, height) {
   const context = await browser.newContext({ viewport: { width, height }, reducedMotion: 'reduce' });
-  let aborted = 0;
+  let aborted = 0, rejectSheet = true;
   try {
     await prepare(context);
-    await context.route(sheetChunk, route => { aborted++; return route.abort('failed'); });
+    await context.route(sheetChunk, route => { if (!rejectSheet) return route.continue(); aborted++; return route.abort('failed'); });
     const page = await context.newPage(); const errors = [];
     page.on('pageerror', e => errors.push(String(e)));
+    let navigations = 0;
+    page.on('framenavigated', frame => { if (frame === page.mainFrame()) navigations++; });
     await page.goto(`${BASE}/soccer-career`, { waitUntil: 'domcontentloaded', timeout: 60000 });
     const tile = page.locator('[data-career-records-tile]:visible'); await tile.waitFor({ timeout: 45000 });
     await tile.scrollIntoViewIfNeeded(); await tile.focus();
-    const before = await savedBytes(page), body = await bodyState(page), label = `${width}x${height} failed chunk`;
+    const before = await savedBytes(page), label = `${width}x${height} failed chunk`, opened = navigations;
+    const recovered = page.waitForEvent('framenavigated', { predicate: frame => frame === page.mainFrame(), timeout: 15000 });
+    await tile.click(); await recovered;
+    await tile.waitFor({ timeout: 45000 });
+    check(aborted > 0 && navigations === opened + 1 && await page.evaluate(() => sessionStorage.getItem('dukb-reloaded-stale-chunk')) === '1', `${label}: the first real chunk failure performs exactly one global stale-chunk reload`);
+    check(await savedBytes(page) === before && new URL(page.url()).pathname === '/soccer-career', `${label}: automatic recovery returns to the actual career with every saved byte intact`);
+    await tile.scrollIntoViewIfNeeded(); await tile.focus();
+    const body = await bodyState(page), afterRecovery = navigations;
     await tile.click();
-    const dialog = page.getByRole('dialog', { name: 'Record book unavailable' }); await dialog.waitFor({ timeout: 45000 });
-    check(aborted > 0 && await dialog.getByText('The record book could not open. Your career is safe.').isVisible(), `${label}: actual aborted sheet chunk shows the accessible failure`);
+    const dialog = page.getByRole('dialog', { name: 'Record book unavailable' }); await dialog.waitFor({ timeout: 15000 });
+    check(aborted >= 2 && navigations === afterRecovery && await dialog.getByText('The record book could not open. Your career is safe.').isVisible(), `${label}: a second real failed import reaches the accessible error without a reload loop`);
     check(await dialog.evaluate(panel => panel.contains(document.activeElement)) && await trapped(page, dialog), `${label}: error dialog contains focus through forward and reverse Tab`);
     check((await bodyState(page)).computed === 'hidden' && (await bodyState(page)).y === body.y, `${label}: error locks body scrolling without moving the page`);
     check(await savedBytes(page) === before && await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${label}: failure preserves every saved byte and fits the viewport`);
@@ -202,8 +249,22 @@ async function failedChunk(width, height) {
     check(await page.evaluate(() => document.activeElement?.hasAttribute('data-career-records-tile')) && JSON.stringify(await bodyState(page)) === JSON.stringify(body), `${label}: keyboard Back restores tile focus and body scrolling after reopening`);
     check(await savedBytes(page) === before, `${label}: keyboard Back preserves the whole save`);
     check(errors.length === 0, `${label}: caught lazy failure causes no uncaught page error (${errors.join('; ')})`);
+    rejectSheet = false;
     await page.reload({ waitUntil: 'domcontentloaded' }); await tile.waitFor({ timeout: 45000 });
     check(await savedBytes(page) === before, `${label}: failure and close survive reload without changing the career`);
+    await tile.click();
+    const records = page.getByRole('dialog', { name: 'Your career record book' }); await records.waitFor({ timeout: 15000 });
+    check(await savedBytes(page) === before && await records.locator('[data-record-totals]').isVisible(), `${label}: restoring the real chunk after a reload opens the saved record book`);
+    await page.keyboard.press('Escape'); await records.waitFor({ state: 'hidden' });
+    check(await savedBytes(page) === before, `${label}: closing the recovered book preserves the complete career`);
+  } catch (error) {
+    for (const page of context.pages()) {
+      if (page.isClosed()) continue;
+      fs.writeFileSync(path.join(SHOTS, `career-records-failure-${width}-diagnostic.json`), JSON.stringify({ aborted,
+        url: page.url(), body: await bodyState(page), save: await state(page), text: await page.locator('body').innerText() }, null, 2));
+      await page.screenshot({ path: path.join(SHOTS, `career-records-failure-${width}-diagnostic.png`), fullPage: true });
+    }
+    throw error;
   } finally { await context.close(); }
 }
 try {

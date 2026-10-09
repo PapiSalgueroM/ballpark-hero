@@ -40,6 +40,17 @@ complete pagination/variety are companion proposals for F to reconcile with
 career spans when combining the wording and exact-case report context. Manager
 first-season real fixtures are still an unclaimed data task in F's latest board;
 our1179 claims VAR. Existing1146 owns Manager own goals, penalties and quick subs.
+Remote gate correction, 2026-10-09: first run37945439743 on fcaa54532
+failed and is not acceptance evidence. Types, build, all15 built readers,
+all48 focused tests except help-focus timing, the career ambition/record
+outcomes and40 Dart/Stat native checks passed. Repairs retain every original
+outcome: load real historical squads per isolated VAR bundle, pair attached
+stage metadata with the visible match screen, wait for actual help focus,
+compare second yellow cards by their full added-time clock, count both
+valid kickOff signatures, and require each report control's exact failure
+set. Career browser checks now capture whole-save/RNG differences and follow
+the actual one-time stale-chunk reload before testing the error dialog.
+Remote rerun is required. Manager first-season fixtures remain unclaimed.
 
 ## Release AP LIVE, 2026-10-09 10:21 EDT: NFL My Career week by week and NFL truth, the storage line that leaves, one disclaimer a page, and 18 Codex rounds (own goals in Soccer Career, the Tycoon season review, Club Manager access)
 

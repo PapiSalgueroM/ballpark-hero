@@ -107,6 +107,10 @@ try {
       const activate = async button => { if (profile.touch) await button.tap(); else { await button.focus(); await button.press('Enter'); } };
       const saved = () => page.evaluate(key => JSON.parse(localStorage.getItem(key)), KEY);
       const readScore = () => page.locator('[data-cm-live-stagebox] [data-cm-score-of]').evaluateAll(elements => Object.fromEntries(elements.map(el => [el.dataset.cmScoreOf, Number(el.textContent)])));
+      const waitForStage = async stage => {
+        await page.locator(`[data-cm-live-stage="${stage}"]`).waitFor({ state: 'attached' });
+        await page.locator('[data-cm-live-stagebox]').waitFor({ state: 'visible' });
+      };
       try {
         await page.goto(`${BASE}/club-manager`, { waitUntil: 'domcontentloaded' });
         await activate(page.locator('[data-testid="cm-slot-1"]').getByRole('button', { name: 'Resume Career', exact: true }));
@@ -137,7 +141,7 @@ try {
         assert.equal(expectedHalf.kind, 'halftime');
         const incident = expectedHalf.state.live.h1Play.find(e => e.review?.id === fixture.event.review.id); assert(incident, 'The actual seeded route starts the intended engine review');
         await activate(page.locator('[data-cm-way="live"]'));
-        await page.locator('[data-cm-live-stage="first"]').waitFor();
+        await waitForStage('first');
         await activate(page.locator('[data-cm-live-controls]').getByRole('button', { name: '4x', exact: true }));
         await page.waitForFunction(id => { const el = document.querySelector('[data-cm-var]'); return el?.dataset.cmVarId === id && el.dataset.cmVar === 'checking'; }, incident.review.id, { timeout: 60000 });
         const checking = page.locator('[data-cm-var="checking"]');
@@ -163,7 +167,7 @@ try {
         await activate(page.locator('[data-cm-live-controls]').getByRole('button', { name: 'Skip', exact: true }));
         await page.locator('[data-cm-live-stage="interval"]').waitFor();
         await activate(page.getByRole('button', { name: 'Second half', exact: true }));
-        await page.locator('[data-cm-live-stage="second"]').waitFor();
+        await waitForStage('second');
         if (fixture.kind === 'confirmed') {
           await activate(page.locator('[data-cm-live-controls]').getByRole('button', { name: 'Pause', exact: true }));
           row.inputsBeforeReload = await page.evaluate(() => window.__varInputs);
@@ -171,7 +175,7 @@ try {
           const beforeReload = await saved(), savedReview = clone(beforeReload.live.h1Play);
           await page.reload({ waitUntil: 'domcontentloaded' });
           await activate(page.locator('[data-testid="cm-slot-1"]').getByRole('button', { name: 'Resume Career', exact: true }));
-          await page.locator('[data-cm-live-stage="second"]').waitFor();
+          await waitForStage('second');
           await activate(page.locator('[data-cm-live-controls]').getByRole('button', { name: 'Pause', exact: true }));
           assert.deepEqual(await readScore(), row.scoreBeforeReload, 'Reopening a later period retains already played reviewed goals on the scoreboard');
           const afterReload = await saved(); assert.deepEqual(afterReload.live.h1Play, savedReview, 'Reopening never rerolls the earlier review stream');
@@ -184,7 +188,7 @@ try {
         assert.equal(expected.kind, 'match');
         await activate(page.locator('[data-cm-live-controls]').getByRole('button', { name: 'Skip', exact: true }));
         await page.waitForFunction(({ key, week }) => JSON.parse(localStorage.getItem(key)).week === week, { key: KEY, week: before.week + 1 });
-        await page.locator('[data-cm-live-stage="done"]').waitFor();
+        await waitForStage('done');
         const after = await saved(); settlement(after, before, expected.state, cm);
         await activate(page.locator('[data-cm-live-controls]').getByRole('button', { name: 'Full report', exact: true }));
         await page.locator('[data-cm-timeline]').waitFor();

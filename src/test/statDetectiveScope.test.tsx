@@ -1,4 +1,4 @@
-import { act, cleanup, fireEvent, render, within } from '@testing-library/react';
+import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import StatDetective from '@/pages/StatDetective';
 import { hintsFor, normalizeName, type MysterySeason, type PlayerProfile, type StatDetectiveData } from '@/lib/statDetective';
@@ -45,8 +45,10 @@ describe('Stat Detective recorded profile scope', () => {
     const dialog = view.getByRole('dialog', { name: 'Stat Detective rules' });
     expect(within(dialog).getByText(scope)).toBeVisible();
     fireEvent.keyDown(document.activeElement!, { key: 'Escape' });
-    await act(async () => {});
-    expect(view.queryByRole('dialog')).toBeNull(); expect(help).toHaveFocus();
+    await waitFor(() => {
+      expect(view.queryByRole('dialog')).toBeNull();
+      expect(help).toHaveFocus();
+    });
   });
 
   it('shows recorded seasons and franchises without claiming complete career dates', async () => {

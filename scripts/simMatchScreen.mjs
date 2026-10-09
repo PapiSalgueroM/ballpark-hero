@@ -533,7 +533,7 @@ console.log(`   ${pairs} fixtures replayed both ways, ${scorelines.size} distinc
    stripped, because prose about a rule is the one place its words are
    guaranteed to appear. */
 {
-  const engineSrc = stripComments(lf(fs.readFileSync(ENGINE, 'utf8')));
+  const engineSrc = stripComments(lf(fs.readFileSync(enginePath, 'utf8')));
   const calls = engineSrc.match(/(?<!function )playMyMatch\(/g) ?? [];
   if (calls.length !== 1) fail(`the engine holds ${calls.length} calls to playMyMatch, and both paths share one settlement`);
   const withLive = engineSrc.match(/playMyMatch\(state, entry, [a-zA-Z]/g) ?? [];
@@ -545,7 +545,7 @@ console.log(`   ${pairs} fixtures replayed both ways, ${scorelines.size} distinc
   if (coached.length !== 2) fail(`${coached.length} Quick paths use the same coach and settlement; both must`);
   const coachSwitch = engineSrc.match(/const coached = \(s: CareerState\): CareerState => \(opts\?\.noCoach \? s : coachQuickMatch\(s\)\);/g) ?? [];
   if (coachSwitch.length !== 1) fail(`${coachSwitch.length} switches decide whether the quick sim coach runs; there is one, and it calls the coach unless noCoach is passed`);
-  const kickOffs = engineSrc.match(/[^n] kickOff\(state, entry\)/g) ?? [];
+  const kickOffs = engineSrc.match(/\bkickOff\(state, entry(?:, opts\?\.varReviews)?\)/g) ?? [];
   if (kickOffs.length !== 1) fail(`${kickOffs.length} places kick a match off, and there is one`);
   /* And the two screens that start a match. The hub is counted in the source
      because it only draws with a save; the Match Centre is rendered and every
