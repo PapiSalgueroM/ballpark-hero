@@ -1,0 +1,6 @@
+#!serial
+leg1-both-out: mkdir -p .rc/leg1 && cp -r src .rc/leg1/src && node .rc/x/patchround.mjs .rc/leg1/src/lib/clubManager.ts og legs && CM_RULES_ROOT=.rc/leg1 node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+leg2-own-goals-in: mkdir -p .rc/leg2 && cp -r src .rc/leg2/src && node .rc/x/patchround.mjs .rc/leg2/src/lib/clubManager.ts legs && CM_RULES_ROOT=.rc/leg2 node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+leg3-legs-in: mkdir -p .rc/leg3 && cp -r src .rc/leg3/src && node .rc/x/patchround.mjs .rc/leg3/src/lib/clubManager.ts og && CM_RULES_ROOT=.rc/leg3 node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+write: node scripts/simCmLeagueRules.mjs --write --part=modern,eras,pure && cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/cmLeagueRulesDigest.json"
+after-write: node scripts/simCmLeagueRules.mjs
