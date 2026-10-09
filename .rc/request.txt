@@ -1,0 +1,7 @@
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueFinish-notitle: SIM_LEAGUE_FINISH_CONTROL=notitle node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueFinish-eliteblind: SIM_LEAGUE_FINISH_CONTROL=eliteblind node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueFinish-stream: SIM_LEAGUE_FINISH_CONTROL=stream node scripts/simCareerLeagueFinish.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
