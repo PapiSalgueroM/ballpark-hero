@@ -1,0 +1,3 @@
+vitest-three: node_modules/.bin/vitest run src/test/academyFilters.test.tsx src/test/clubManagerDeskCues.test.tsx src/test/facilitiesPreview.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-whole: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
