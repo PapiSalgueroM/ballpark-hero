@@ -1,0 +1,15 @@
+ M public/ball-iq/index.html
+ M public/cbb-dynasty/index.html
+ M public/cfb-higher-lower/index.html
+ M public/club-manager/index.html
+ M public/f1-constructor/index.html
+ M public/fight-gym/index.html
+ M public/gauntlet-draft/index.html
+ M public/guess-the-nation/index.html
+ M public/nascar-chain/index.html
+ M public/nfl-gauntlet-draft/index.html
+ M public/perfect-lineup-f1/index.html
+ M public/rebuild/index.html
+ M public/tennis-higher-lower/index.html
+ M public/whats-new/index.html
+ M scripts/data/lastmod.json

@@ -1,0 +1,49 @@
+ok   served:sc-signing the bind id "sc-signing" is in the served JavaScript 1 time(s), in SoccerCareer-xOr-m80o.js (the walk finds its scene by it, so it must be there exactly once)
+ok   served:sc-intl-trophy the bind id "sc-intl-trophy" is in the served JavaScript 1 time(s), in SoccerCareer-xOr-m80o.js (the walk finds its scene by it, so it must be there exactly once)
+saves: signing seed 1107, first offer Liverpool (3 years at €98k/wk); won tournament seed 3 of 3 tried, Copa América 2016 with Brazil, award rank 19
+walk S (signing) at 390 by 844 with touch
+ok   S390:P1 the scene is on the page as [data-signed-slip] [data-career-moment="signing"][data-cmo-bind="sc-signing"] and went live; the slip is the signing scene
+ok   S390:P6 no jump: 2.5 s after the page settled (frame 10) scrollY 0 then 0, page height 11599 then 11599, scene 12,320.5,366,166.5 then 12,320.5,366,166.5; its size over 192 frames of play: 366.00x166.50; the page was at most 0 px wider than its window
+     S390:boxes at rest, x y w h: card 12,321,366,167, art 29,334,56,56, pill 125,398,144,48
+ok   S390:P2 the facts are the save's: "✍️ Signed with Liverpool", "3 years at €98k/wk", the number €98k/wk (the save: Liverpool, 3 years at €98k/wk, €98k/wk); 1 avatar(s), shirt #C8102E, scene colour #c8102e (the save: #C8102E)
+ok   S390:P3 it holds: six seconds on the scene is there with 0 animation(s) running, the same words and rect 12,320.5,366,166.5 then 12,320.5,366,166.5
+ok   S390:P4 once: after the attributes screen and Back the scene is still with 0 confetti piece(s) on the page
+ok   S390:P5 the save is byte equal: 0 write(s) to soccerCareerSave in the window, the same string of 6424 characters
+ok   S390:P4 once: after a reload the page holds 0 slip(s) and 0 scene(s), expected none
+ok   S390:P7 clean: 0 console or page error(s)
+     S390:info 2 resource(s) did not load (refused requests, not counted)
+walk S (signing) at 1280 by 900
+ok   S1280:P1 the scene is on the page as [data-signed-slip] [data-career-moment="signing"][data-cmo-bind="sc-signing"] and went live; the slip is the signing scene
+ok   S1280:P6 no jump: 2.5 s after the page settled (frame 10) scrollY 0 then 0, page height 8160 then 8160, scene 416,262.5,720,166.5 then 416,262.5,720,166.5; its size over 192 frames of play: 720.00x166.50; the page was at most 0 px wider than its window
+     S1280:boxes at rest, x y w h: card 416,263,720,167, art 433,276,56,56, pill 706,340,144,48
+ok   S1280:P2 the facts are the save's: "✍️ Signed with Liverpool", "3 years at €98k/wk", the number €98k/wk (the save: Liverpool, 3 years at €98k/wk, €98k/wk); 1 avatar(s), shirt #C8102E, scene colour #c8102e (the save: #C8102E)
+ok   S1280:P3 it holds: six seconds on the scene is there with 0 animation(s) running, the same words and rect 416,262.5,720,166.5 then 416,262.5,720,166.5
+ok   S1280:P4 once: after the attributes screen and Back the scene is still with 0 confetti piece(s) on the page
+ok   S1280:P5 the save is byte equal: 0 write(s) to soccerCareerSave in the window, the same string of 6424 characters
+ok   S1280:P4 once: after a reload the page holds 0 slip(s) and 0 scene(s), expected none
+ok   S1280:P7 clean: 0 console or page error(s)
+     S1280:info 2 resource(s) did not load (refused requests, not counted)
+walk T (trophy) at 390 by 844 with touch
+ok   T390:P1 the scene is on the page as [data-intl-moment] [data-career-moment="trophy"][data-cmo-bind="sc-intl-trophy"] and went live; 1 cup(s), its lift 0.9s long and running at 33 ms 3 frame(s) after it went live
+ok   T390:P6 no jump: 2.5 s after the page settled (frame 10) scrollY 309 then 309, page height 12938 then 12938, scene 30,29.5,330,145.5 then 30,29.5,330,145.5; its size over 192 frames of play: 330.00x145.50; the page was at most 0 px wider than its window
+     T390:boxes at rest, x y w h: card 30,30,330,146, art 163,30,64,64, pill null
+ok   T390:P2 the facts are the save's: the title "Copa América 2016" (the save: Copa América 2016, Winner, phase world_cup)
+ok   T390:P3 it holds: six seconds on the scene is there with 0 animation(s) running, the same words and rect 30,29.5,330,145.5 then 30,29.5,330,145.5
+ok   T390:P4 once: after the Your Games tile and Back the scene is still with 0 confetti piece(s) on the page
+ok   T390:P5 the save is byte equal: 0 write(s) to soccerCareerSave in the window, the same string of 31908 characters
+ok   T390:P4 once: after a reload the save sits on the card: 1 card(s), the scene still with 0 confetti piece(s) and 0 animation(s) running
+ok   T390:P7 clean: 0 console or page error(s)
+     T390:info 2 resource(s) did not load (refused requests, not counted)
+walk T (trophy) at 1280 by 900
+ok   T1280:P1 the scene is on the page as [data-intl-moment] [data-career-moment="trophy"][data-cmo-bind="sc-intl-trophy"] and went live; 1 cup(s), its lift 0.9s long and running at 33 ms 3 frame(s) after it went live
+ok   T1280:P6 no jump: 2.5 s after the page settled (frame 10) scrollY 251 then 251, page height 9175 then 9175, scene 434,29.5,684,145.5 then 434,29.5,684,145.5; its size over 192 frames of play: 684.00x145.50; the page was at most 0 px wider than its window
+     T1280:boxes at rest, x y w h: card 434,30,684,146, art 744,30,64,64, pill null
+ok   T1280:P2 the facts are the save's: the title "Copa América 2016" (the save: Copa América 2016, Winner, phase world_cup)
+ok   T1280:P3 it holds: six seconds on the scene is there with 0 animation(s) running, the same words and rect 434,29.5,684,145.5 then 434,29.5,684,145.5
+ok   T1280:P4 once: after the Your Games tile and Back the scene is still with 0 confetti piece(s) on the page
+ok   T1280:P5 the save is byte equal: 0 write(s) to soccerCareerSave in the window, the same string of 31908 characters
+ok   T1280:P4 once: after a reload the save sits on the card: 1 card(s), the scene still with 0 confetti piece(s) and 0 animation(s) running
+ok   T1280:P7 clean: 0 console or page error(s)
+     T1280:info 2 resource(s) did not load (refused requests, not counted)
+requests to supabase.co refused: 8
+playCareerMoments: 34 checks, 0 failed
