@@ -1,0 +1,18 @@
+{
+  "stat": {
+    "option": "Fixture Pivot Elm1990-2001",
+    "clue": "Career span: 1991-1994",
+    "spanRequests": 8,
+    "retry": true
+  },
+  "dart": {
+    "poolAsked": [
+      "0+1000",
+      "1000+1000"
+    ],
+    "tiles": [],
+    "water": 11,
+    "countryRequests": 0
+  },
+  "errors": []
+}

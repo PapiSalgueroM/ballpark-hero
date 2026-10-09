@@ -1,0 +1,11 @@
+A) Stat Detective, spans readable
+  FAIL: the guess box prints "Fixture Pivot Elm1990-2001", wanted "Fixture Pivot Elm 1990-2001"
+  ok: after one miss the clue reads "Career span: 1991-1994", the mystery's first and last season
+  ok: the spans view was read in 8 requests beside the seasons
+B) Stat Detective, the view is not there yet
+  ok: with the spans view missing the page shows its retry state and no case files
+  ok: Try again opens the case files once the view answers
+C) Dart Draft, a whole draft
+  ok: the pool was asked for as two pages: 0+1000 and 1000+1000
+  ok: eleven throws: 11 in the water, tile counts on the others none; 0 country requests; the result screen came up
+walk1145: 1 FAILURE(S)

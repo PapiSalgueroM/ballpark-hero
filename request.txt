@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+walk: node .rc/x/walk1145.mjs
+play-stat: ONLY=/stat-detective ENGINES=chromium node scripts/playGames.mjs
+play-dart: ONLY=/dart-draft ENGINES=chromium node scripts/playGames.mjs
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
