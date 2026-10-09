@@ -1,0 +1,8 @@
+simBoardObjectives exit=1 1s | simBoardObjectives: 1 failure
+simCreateClub exit=1 9s | simCreateClub: 1 failure
+simClubManagerCalendar exit=1 34s | simClubManagerCalendar: 1 FAILURES
+simCareerClubPool exit=1 9s | simCareerClubPool: 14 failure(s) in section(s) 1, 4, 4L
+simCareerLeagueSeasons exit=1 20s | simCareerLeagueSeasons: 1 failures (sections c)
+simCareerDerbies exit=0 19s | simCareerDerbies: all 8 sections green
+simCustomClubValues exit=1 84s | simCustomClubValues: 25 checks, 1 failure (sections 1)
+simEras exit=1 628s | 5 FAILURES

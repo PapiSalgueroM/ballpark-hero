@@ -1,0 +1,8 @@
+simBoardObjectives: node scripts/simBoardObjectives.mjs
+simClubManagerCalendar: node scripts/simClubManagerCalendar.mjs
+simCreateClub: node scripts/simCreateClub.mjs
+simCustomClubValues: node scripts/simCustomClubValues.mjs
+simEras: node scripts/simEras.mjs
+simCareerClubPool: node scripts/simCareerClubPool.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
