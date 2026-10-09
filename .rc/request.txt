@@ -1,0 +1,12 @@
+# Release AP closing check on a6844e71: the major findings' own commands, no browser installed (the environment of rAP-rr4 and rAP-q1)
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-new: node_modules/.bin/vitest run src/test/seasonCentreOwnGoals.test.tsx src/test/miniPitchScene.test.ts src/test/clubManagerRowButtons.test.tsx src/test/tycoonLatestSeason.test.tsx src/test/academyFilters.test.tsx src/test/facilitiesPreview.test.tsx src/test/rolesBrokenPromises.test.tsx --testTimeout=300000 --hookTimeout=300000
+runAll-loginReturn: ONLY=simLoginReturn node scripts/runAllSims.mjs
+runAll-bracketMoment: ONLY=simBracketMoment node scripts/runAllSims.mjs
+runAll-ownGoals: ONLY=simSoccerOwnGoals node scripts/runAllSims.mjs
+ownGoals: CAREERS=120 SEEDSET=0 node scripts/simSoccerOwnGoals.mjs
+simBrowserHarnessDiscovery: node scripts/simBrowserHarnessDiscovery.mjs
+runAll-discovery: ONLY=simBrowserHarnessDiscovery node scripts/runAllSims.mjs
+runAll-browserOnly-must-exit-1: ONLY=playHomeFold node scripts/runAllSims.mjs
+classify: node .rc/x/v-classify.mjs
+symlink-count-must-be-0: grep -c symlinkSync scripts/simBrowserHarnessDiscovery.mjs; test "$(grep -c symlinkSync scripts/simBrowserHarnessDiscovery.mjs)" = 0
