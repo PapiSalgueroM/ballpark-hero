@@ -1,0 +1,1 @@
+rvworld: cp .rc/x/zzRvWorld.test.ts src/test/zzRvWorld.test.ts && node_modules/.bin/vitest run src/test/zzRvWorld.test.ts --testTimeout=900000 --hookTimeout=120000
