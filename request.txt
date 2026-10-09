@@ -1,0 +1,65 @@
+#!playwright
+#!build
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-whole: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simHomeCopy: node scripts/simHomeCopy.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simFlagshipWeight-static: FLAGSHIP_LAZY_CONTROL=static node scripts/simFlagshipWeight.mjs
+simFlagshipWeight-training: FLAGSHIP_LAZY_CONTROL=training node scripts/simFlagshipWeight.mjs
+simFlagshipWeight-eagerimport: FLAGSHIP_LAZY_CONTROL=eagerimport node scripts/simFlagshipWeight.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simCareerDerbies-nodetect: SIM_DERBY_CONTROL=nodetect node scripts/simCareerDerbies.mjs
+simCareerDerbies-cadence1: SIM_DERBY_CONTROL=cadence1 node scripts/simCareerDerbies.mjs
+simCareerDerbies-noalias: SIM_DERBY_CONTROL=noalias node scripts/simCareerDerbies.mjs
+simCareerDerbies-stream: SIM_DERBY_CONTROL=stream node scripts/simCareerDerbies.mjs
+simCareerDerbies-uncapped: SIM_DERBY_CONTROL=uncapped node scripts/simCareerDerbies.mjs
+simCareerDerbies-homealt: SIM_DERBY_CONTROL=homealt node scripts/simCareerDerbies.mjs
+simCareerDerbies-cadhold: SIM_DERBY_CONTROL=cadhold node scripts/simCareerDerbies.mjs
+simCareerDerbies-aliasdrop: SIM_DERBY_CONTROL=aliasdrop node scripts/simCareerDerbies.mjs
+simCareerDerbies-winner: SIM_DERBY_CONTROL=winner node scripts/simCareerDerbies.mjs
+simCareerDerbies-eliteoff: SIM_DERBY_CONTROL=eliteoff node scripts/simCareerDerbies.mjs
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueFinish-notitle: SIM_LEAGUE_FINISH_CONTROL=notitle node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueFinish-eliteblind: SIM_LEAGUE_FINISH_CONTROL=eliteblind node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueFinish-stream: SIM_LEAGUE_FINISH_CONTROL=stream node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueFinish-attribution: SIM_LEAGUE_FINISH_ATTRIBUTION=train1178 node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerLeagueSeasons-wrongseason: SIM_LEAGUE_SEASONS_CONTROL=wrongseason node scripts/simCareerLeagueSeasons.mjs
+simCareerLeagueSeasons-crossdiv: SIM_LEAGUE_SEASONS_CONTROL=crossdiv node scripts/simCareerLeagueSeasons.mjs
+simCareerLeagueSeasons-finishwrong: SIM_LEAGUE_SEASONS_CONTROL=finishwrong node scripts/simCareerLeagueSeasons.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simCareerSocialBrands-reorder: SOCIAL_BRANDS_CONTROL=reorder node scripts/simCareerSocialBrands.mjs
+simCareerSocialBrands-paytwice: SOCIAL_BRANDS_CONTROL=paytwice node scripts/simCareerSocialBrands.mjs
+simCareerSocialBrands-resign: SOCIAL_BRANDS_CONTROL=resign node scripts/simCareerSocialBrands.mjs
+simCareerSocialBrands-leak: SOCIAL_BRANDS_CONTROL=leak node scripts/simCareerSocialBrands.mjs
+simCareerLifeCooldowns: node scripts/simCareerLifeCooldowns.mjs
+simCareerLifeCooldowns-nocooldown: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=nocooldown node scripts/simCareerLifeCooldowns.mjs
+simCareerLifeCooldowns-oneoption: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=oneoption node scripts/simCareerLifeCooldowns.mjs
+simCareerLifeCooldowns-sharedbatch: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=sharedbatch node scripts/simCareerLifeCooldowns.mjs
+simCareerStory: node scripts/simCareerStory.mjs
+simCareerStory-reset: CAREER_STORY_CONTROL=reset node scripts/simCareerStory.mjs
+simCareerStory-cap: CAREER_STORY_CONTROL=cap node scripts/simCareerStory.mjs
+simCareerStory-draw: CAREER_STORY_CONTROL=draw node scripts/simCareerStory.mjs
+simCareerStory-wipe: CAREER_STORY_CONTROL=wipe node scripts/simCareerStory.mjs
+simCareerLeagueWorld: node scripts/simCareerLeagueWorld.mjs
+simCareerLeagueWorld-probe: SNAPSHOT_PROBE_ONLY=1 node scripts/simCareerLeagueWorld.mjs
+simCareerLeagueWorld-probe-snapshotfield: SNAPSHOT_PROBE_ONLY=1 SIM_LEAGUE_WORLD_CONTROL=snapshotfield node scripts/simCareerLeagueWorld.mjs
+simCareerLeagueWorld-probe-snapshotcrown: SNAPSHOT_PROBE_ONLY=1 SIM_LEAGUE_WORLD_CONTROL=snapshotcrown node scripts/simCareerLeagueWorld.mjs
+simCareerLeagueWorld-probe-snapshotmoves: SNAPSHOT_PROBE_ONLY=1 SIM_LEAGUE_WORLD_CONTROL=snapshotmoves node scripts/simCareerLeagueWorld.mjs
+simCareerLeagueWorld-crownnobody: SIM_LEAGUE_WORLD_CONTROL=crownnobody node scripts/simCareerLeagueWorld.mjs
