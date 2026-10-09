@@ -1,0 +1,8 @@
+AssertionError [ERR_ASSERTION]: control fails the intended check
++ actual - expected
+
++ undefined
+- 'parent-derived'
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOwnGoals.mjs:390:12
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
