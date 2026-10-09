@@ -1,0 +1,228 @@
+[search] banned: seed 31000, Wolves, year 2023, age 19
+[search] lower: seed 31000, Wolves, year 2026, age 22
+[search] promoted: seed 31000, Wolves, year 2028, age 24
+[search] relegated: seed 31000, Wolves, year 2032, age 28
+[search] expiry30: seed 31000, Wolves, year 2034, age 30
+[search] expiryvet: seed 31000, Wolves, year 2038, age 34
+[search] appeal: seed 31001, Celtic, year 2022, age 18
+[search] bdor: seed 31001, Celtic, year 2034, age 30
+[search] cabinet: seed 31001, Celtic, year 2041, age 37
+[search] bdorwin: seed 31004, PSG, year 2032, age 28
+[search] segunda: seed 31051, Real Sociedad, year 2030, age 26
+[search] moveloan: seed 31096, Napoli, year 2026, age 22
+[search] movesale: seed 31312, Hoffenheim, year 2037, age 33
+[search] 313 careers, 3064 league world seasons, his club moved in 92 (52 down, 40 up), 4 club arranged moves, 151 seasons with a served ban
+[search] found: banned, lower, promoted, relegated, expiry30, expiryvet, appeal, bdor, cabinet, bdorwin, segunda, moveloan, movesale; missing: none
+[walk] relegated-390-still: page at most 0 px wider than the window; 0 page errors
+[walk]   summary world line: Your career's simulated league world. Promotion and relegation use a simplified two-division model.
+[walk]   summary movement line: 🔻 Wolves relegated to Championship for next season.
+[walk]   review text: Season reviewFinished 18th of 20 in the Premier League · 38 ptsChelsea won it33Apps18Goals8Assists9.0Avg ratingAll competitions, the same as your season summary.⭐ Best match: Matchday 12, W 2-0 vs Fulham, rated 10.0Last five:LDDWLYour season, game by gameDerbies you played: 1W 1D 0LCups and other games: 3 apps, 0 goals, 1 assists, 🟥 1 red cardSimulated league world: direct promotion and relegation between two divisi
+[walk]   table rows shown: 5
+[walk]   competition tabs: league, domestic, squad
+[walk]   domestic game: ‹ All gamesEarly roundsWolves vs Opponent not recordedScore not recordedThroughOpponents and scores were not kept for these rounds.‹ Previous game› Next game
+[walk] bdor-390-still: page at most 0 px wider than the window; 0 page errors
+[walk]   350 ms: Continue shown; winner line "⭐Ballon d'Or 2034Outside the top 10, but you ranked #15 in the world's Top 30"
+[walk]   1800 ms: Continue shown; winner line "⭐Ballon d'Or 2034Outside the top 10, but you ranked #15 in the world's Top 30"
+[walk]   4200 ms: Continue shown; winner line "⭐Ballon d'Or 2034Outside the top 10, but you ranked #15 in the world's Top 30"
+[walk]   8000 ms: Continue shown; winner line "⭐Ballon d'Or 2034Outside the top 10, but you ranked #15 in the world's Top 30"
+[walk] bdorwin-390-still: page at most 0 px wider than the window; 0 page errors
+[walk]   350 ms: Continue not shown; winner line "🏅BALLON D'OR WINNER!The best player in the world! Market Value +€15M"
+[walk]   1800 ms: Continue not shown; winner line "🏅BALLON D'OR WINNER!The best player in the world! Market Value +€15M"
+[walk]   4200 ms: Continue not shown; winner line "🏅BALLON D'OR WINNER!The best player in the world! Market Value +€15M"
+[walk]   8000 ms: Continue not shown; winner line "🏅BALLON D'OR WINNER!The best player in the world! Market Value +€15M"
+[walk] cabinet-390-still: page at most 0 px wider than the window; 0 page errors
+[walk]   trophy tiles: league=🏆1Leagues; domestic=🏆4Scottish Cup; ucl=⭐0UCL; world=🌍0World Cup; continental=🌐1Continental; ballon=🏅0Ballon d'Or
+[walk]   cabinet league: ‹ BackLeague titles?1 win. Pick a season to see what you did.2041/42CelticLeague title
+[walk]   cabinet league win: ‹ All winsLeague title2041/42 · CelticClub season totalsApps39Goals5Assists8Rating6.6These are the saved season totals, across all competitions.
+[walk]   cabinet help: Pick a trophy, then a winning season. Back returns to your career.Only wins in your saved seasons count. An award listed elsewhere does not add a second trophy.The numbers are season totals, not just the cup games. International totals stay separate from your club totals. A dash means the save did n
+[walk]   cabinet domestic: ‹ BackDomestic cups?4 wins. Pick a season to see what you did.2041/42CelticScottish Cup2034/35CelticScottish Cup2027/28CelticScottish Cup2024/25CelticScottish Cup
+[walk]   cabinet domestic win: ‹ All winsScottish Cup2041/42 · CelticClub season totalsApps39Goals5Assists8Rating6.6These are the saved season totals, across all competitions.🏆 Scottish Cup winnersThrough the early roundsQuarter-final: beat Hibernian 2-0Semi-final: beat Dundee United 2-0Final: beat Rangers 3-2Rounds before the f
+[walk]   cabinet ucl: ‹ BackEuropean club titles?0 wins. Pick a season to see what you did.No wins recorded here yet.
+[walk]   picker: 18 rows, 0 locked
+[walk] movesale-390-still: page at most 0 px wider than the window; 0 page errors
+[walk]   card: 📤 Your club sold youArsenal → HoffenheimThe club chose this move. Your next season is at Hoffenheim.€11k/wk · 4-year contractTransfer fee: €3.9M5 league games all season, and the projection here was 8 to 18You averaged 5.4 across the seasonYou are 9 rating points under what this squad expectsContinue at Hoffenheim →
+[walk]   after Continue: phase playing, club Hoffenheim, league Bundesliga, tier 3, loan none, contract 4y
+[walk] promoted-390-still: page at most 0 px wider than the window; 0 page errors
+[walk]   summary world line: Your career's simulated league world. Promotion and relegation use a simplified two-division model.
+[walk]   summary movement line: 🟢 Wolves promoted to Premier League for next season.
+[walk]   review text: Season reviewFinished 3rd of 24 in the Championship · 93 ptsPreston North End won it33Apps10Goals8Assists7.9Avg ratingAll competitions, the same as your season summary.⭐ Best match: Matchday 23, W 3-0 vs Swansea City, rated 10.0Last five:WLDLWYour season, game by gameCups and other games: 2 apps, 0 goals, 0 assistsSimulated league world: direct promotion and relegation between two divisions.Wolves promoted to Premier
+[walk]   table rows shown: 5
+[walk]   competition tabs: league, domestic, squad
+[walk]   domestic game: ‹ All gamesEarly roundsWolves vs Opponent not recordedScore not recordedThroughOpponents and scores were not kept for these rounds.‹ Previous game› Next game
+[walk] segunda-390-still: page at most 0 px wider than the window; 0 page errors
+[walk]   summary world line: Your career's simulated league world. The lower division uses a partial club pool.
+[walk]   summary movement line: 
+[walk]   review text: Season reviewFinished 13th of 20 in the Segunda Division · 51 ptsAthletic Bilbao won it37Apps15Clean sheets0Assists9.3Avg ratingAll competitions, the same as your season summary.⭐ Best match: Matchday 15, W 1-0 vs Athletic Bilbao, rated 10.0Last five:DWWDLYour season, game by gameCups and other games: 5 apps, 0 goals, 0 assistsSimulated league world: direct promotion and relegation between two divisions.The Spanish l
+[walk]   table rows shown: 5
+[walk]   competition tabs: league, domestic, squad
+[walk]   domestic game: ‹ All gamesEarly roundsReal Sociedad vs Opponent not recordedScore not recordedThroughOpponents and scores were not kept for these rounds.‹ Previous game› Next game
+[walk] lower-390-still: page at most 0 px wider than the window; 0 page errors
+[walk]   summary world line: Your career's simulated league world. Promotion and relegation use a simplified two-division model.
+[walk]   summary movement line: 
+[walk]   review text: Season reviewFinished 6th of 24 in the Championship · 80 ptsWest Ham won it29Apps6Goals7Assists7.3Avg ratingAll competitions, the same as your season summary.⭐ Best match: Matchday 31, W 2-0 vs QPR, rated 8.9Last five:LDLWWYour season, game by gameDerbies you played: 0W 0D 1LSimulated league world: direct promotion and relegation between two divisions.Discipline: 🟨 6 yellow cards in all competitions.
+[walk]   table rows shown: 5
+[walk]   competition tabs: league, domestic, squad
+[walk]   domestic game: ‹ All gamesEarly roundsWolves vs Opponent not recordedScore not recordedOutOpponents and scores were not kept for these rounds.‹ Previous game› Next game
+[walk] moveloan-390-still: page at most 0 px wider than the window; 0 page errors
+[walk]   card: 🛫 Your club arranged a loanMan United → NapoliThe club chose this move. Your next season is at Napoli.€76k/wk · Season-long loan. Your parent contract stays in place.6 league games all season, and the projection here was 20 to 30You averaged 5.3 across the seasonYou are 4 rating points under what this squad expectsContinue at Napoli →
+[walk]   after Continue: phase playing, club Napoli, league Serie A, tier 2, loan from Man United, contract 2y
+[walk] expiryvet-390-still: page at most 0 px wider than the window; 0 page errors
+[walk]   extension line: Your club offers €6k/wk for 1 year.; age 34
+[walk] expiry30-390-still: page at most 0 px wider than the window; 0 page errors
+[walk]   extension line: Your club offers €8k/wk for 2 years.; age 34
+[walk] banned-390-still: page at most 0 px wider than the window; 0 page errors
+[walk]   screen text: Skip to main content DOUKNOWBALL Back Track stats Walk 31000 ST · Age 19 · England 🚪 Retire 🔄 New Career 66 OVR POT 88 €510k Net Worth €5k/wk Wage €12M Value CAREER TIMELINE A 16y Wolves Youth Youth Academy A 17y Wolves Youth Youth Academy 22 18y Wolves 6.0 OVR 64 26A · 2G · 4As 14th 🔥 0-1-0 23 19y Wolves 6.4 OVR 65 28A · 7G · 3As 18th 🔥 0-0-1 Season Summary Wolves · 2023/24 Finished 18th of 20 in the Premier League · Man United won it 28 Apps 7 Goals 3 Assists Avg Rating: 6.4 · Played at OV
+[walk] appeal-390-still: page at most 0 px wider than the window; 0 page errors
+[walk]   screen text: Skip to main content DOUKNOWBALL Back Track stats Walk 31001 CM · Age 18 · Spain 🚪 Retire 🔄 New Career 71 OVR POT 88 €410k Net Worth €10k/wk Wage €23M Value CAREER TIMELINE A 16y Atletico Madrid Youth Youth Academy A 17y Atletico Madrid Youth Youth Academy 22 18y Celtic 6.0 OVR 71 29A · 6G · 3As ✅ APPEAL SUCCESSFUL 🎉 Ban Overturned. You are free to play! The disciplinary committee reviewed the footage and decided the red card was unjust. No further action will be taken. Result delivered after
+[walk] relegated-390-motion: page at most 0 px wider than the window; 0 page errors
+[walk]   summary world line: Your career's simulated league world. Promotion and relegation use a simplified two-division model.
+[walk]   summary movement line: 🔻 Wolves relegated to Championship for next season.
+[walk]   review text: Season reviewFinished 18th of 20 in the Premier League · 38 ptsChelsea won it33Apps18Goals8Assists9.0Avg ratingAll competitions, the same as your season summary.⭐ Best match: Matchday 12, W 2-0 vs Fulham, rated 10.0Last five:LDDWLYour season, game by gameDerbies you played: 1W 1D 0LCups and other games: 3 apps, 0 goals, 1 assists, 🟥 1 red cardSimulated league world: direct promotion and relegation between two divisi
+[walk]   table rows shown: 5
+[walk]   competition tabs: league, domestic, squad
+[walk]   domestic game: ‹ All gamesEarly roundsWolves vs Opponent not recordedScore not recordedThroughOpponents and scores were not kept for these rounds.‹ Previous game› Next game
+[walk] bdor-390-motion: page at most 0 px wider than the window; 0 page errors
+[walk]   350 ms: Continue not shown; winner line "🏅Ballon d'Or 2034"
+[walk]   1800 ms: Continue not shown; winner line "🏅Ballon d'Or 2034"
+[walk]   4200 ms: Continue shown; winner line "⭐Ballon d'Or 2034Outside the top 10, but you ranked #15 in the world's Top 30"
+[walk]   8000 ms: Continue shown; winner line "⭐Ballon d'Or 2034Outside the top 10, but you ranked #15 in the world's Top 30"
+[walk] bdorwin-390-motion: page at most 0 px wider than the window; 0 page errors
+[walk]   350 ms: Continue not shown; winner line "🏅Ballon d'Or 2032"
+[walk]   1800 ms: Continue not shown; winner line "🏅Ballon d'Or 2032"
+[walk]   4200 ms: Continue not shown; winner line "🏅BALLON D'OR WINNER!The best player in the world! Market Value +€15M"
+[walk]   8000 ms: Continue not shown; winner line "🏅BALLON D'OR WINNER!The best player in the world! Market Value +€15M"
+[walk] cabinet-390-motion: page at most 0 px wider than the window; 0 page errors
+[walk]   trophy tiles: league=🏆1Leagues; domestic=🏆4Scottish Cup; ucl=⭐0UCL; world=🌍0World Cup; continental=🌐1Continental; ballon=🏅0Ballon d'Or
+[walk]   cabinet league: ‹ BackLeague titles?1 win. Pick a season to see what you did.2041/42CelticLeague title
+[walk]   cabinet league win: ‹ All winsLeague title2041/42 · CelticClub season totalsApps39Goals5Assists8Rating6.6These are the saved season totals, across all competitions.
+[walk]   cabinet help: Pick a trophy, then a winning season. Back returns to your career.Only wins in your saved seasons count. An award listed elsewhere does not add a second trophy.The numbers are season totals, not just the cup games. International totals stay separate from your club totals. A dash means the save did n
+[walk]   cabinet domestic: ‹ BackDomestic cups?4 wins. Pick a season to see what you did.2041/42CelticScottish Cup2034/35CelticScottish Cup2027/28CelticScottish Cup2024/25CelticScottish Cup
+[walk]   cabinet domestic win: ‹ All winsScottish Cup2041/42 · CelticClub season totalsApps39Goals5Assists8Rating6.6These are the saved season totals, across all competitions.🏆 Scottish Cup winnersThrough the early roundsQuarter-final: beat Hibernian 2-0Semi-final: beat Dundee United 2-0Final: beat Rangers 3-2Rounds before the f
+[walk]   cabinet ucl: ‹ BackEuropean club titles?0 wins. Pick a season to see what you did.No wins recorded here yet.
+[walk]   picker: 18 rows, 0 locked
+[walk] movesale-390-motion: page at most 0 px wider than the window; 0 page errors
+[walk]   card: 📤 Your club sold youArsenal → HoffenheimThe club chose this move. Your next season is at Hoffenheim.€11k/wk · 4-year contractTransfer fee: €3.9M5 league games all season, and the projection here was 8 to 18You averaged 5.4 across the seasonYou are 9 rating points under what this squad expectsContinue at Hoffenheim →
+[walk]   after Continue: phase playing, club Hoffenheim, league Bundesliga, tier 3, loan none, contract 4y
+[walk] promoted-390-motion: page at most 0 px wider than the window; 0 page errors
+[walk]   summary world line: Your career's simulated league world. Promotion and relegation use a simplified two-division model.
+[walk]   summary movement line: 🟢 Wolves promoted to Premier League for next season.
+[walk]   review text: Season reviewFinished 3rd of 24 in the Championship · 93 ptsPreston North End won it33Apps10Goals8Assists7.9Avg ratingAll competitions, the same as your season summary.⭐ Best match: Matchday 23, W 3-0 vs Swansea City, rated 10.0Last five:WLDLWYour season, game by gameCups and other games: 2 apps, 0 goals, 0 assistsSimulated league world: direct promotion and relegation between two divisions.Wolves promoted to Premier
+[walk]   table rows shown: 5
+[walk]   competition tabs: league, domestic, squad
+[walk]   domestic game: ‹ All gamesEarly roundsWolves vs Opponent not recordedScore not recordedThroughOpponents and scores were not kept for these rounds.‹ Previous game› Next game
+[walk] segunda-390-motion: page at most 0 px wider than the window; 0 page errors
+[walk]   summary world line: Your career's simulated league world. The lower division uses a partial club pool.
+[walk]   summary movement line: 
+[walk]   review text: Season reviewFinished 13th of 20 in the Segunda Division · 51 ptsAthletic Bilbao won it37Apps15Clean sheets0Assists9.3Avg ratingAll competitions, the same as your season summary.⭐ Best match: Matchday 15, W 1-0 vs Athletic Bilbao, rated 10.0Last five:DWWDLYour season, game by gameCups and other games: 5 apps, 0 goals, 0 assistsSimulated league world: direct promotion and relegation between two divisions.The Spanish l
+[walk]   table rows shown: 5
+[walk]   competition tabs: league, domestic, squad
+[walk]   domestic game: ‹ All gamesEarly roundsReal Sociedad vs Opponent not recordedScore not recordedThroughOpponents and scores were not kept for these rounds.‹ Previous game› Next game
+[walk] lower-390-motion: page at most 0 px wider than the window; 0 page errors
+[walk]   summary world line: Your career's simulated league world. Promotion and relegation use a simplified two-division model.
+[walk]   summary movement line: 
+[walk]   review text: Season reviewFinished 6th of 24 in the Championship · 80 ptsWest Ham won it29Apps6Goals7Assists7.3Avg ratingAll competitions, the same as your season summary.⭐ Best match: Matchday 31, W 2-0 vs QPR, rated 8.9Last five:LDLWWYour season, game by gameDerbies you played: 0W 0D 1LSimulated league world: direct promotion and relegation between two divisions.Discipline: 🟨 6 yellow cards in all competitions.
+[walk]   table rows shown: 5
+[walk]   competition tabs: league, domestic, squad
+[walk]   domestic game: ‹ All gamesEarly roundsWolves vs Opponent not recordedScore not recordedOutOpponents and scores were not kept for these rounds.‹ Previous game› Next game
+[walk] moveloan-390-motion: page at most 0 px wider than the window; 0 page errors
+[walk]   card: 🛫 Your club arranged a loanMan United → NapoliThe club chose this move. Your next season is at Napoli.€76k/wk · Season-long loan. Your parent contract stays in place.6 league games all season, and the projection here was 20 to 30You averaged 5.3 across the seasonYou are 4 rating points under what this squad expectsContinue at Napoli →
+[walk]   after Continue: phase playing, club Napoli, league Serie A, tier 2, loan from Man United, contract 2y
+[walk] expiryvet-390-motion: page at most 0 px wider than the window; 0 page errors
+[walk]   extension line: Your club offers €6k/wk for 1 year.; age 34
+[walk] expiry30-390-motion: page at most 0 px wider than the window; 0 page errors
+[walk]   extension line: Your club offers €8k/wk for 2 years.; age 34
+[walk] banned-390-motion: page at most 0 px wider than the window; 0 page errors
+[walk]   screen text: Skip to main content DOUKNOWBALL Back Track stats Walk 31000 ST · Age 19 · England 🚪 Retire 🔄 New Career 66 OVR POT 88 €510k Net Worth €5k/wk Wage €12M Value CAREER TIMELINE A 16y Wolves Youth Youth Academy A 17y Wolves Youth Youth Academy 22 18y Wolves 6.0 OVR 64 26A · 2G · 4As 14th 🔥 0-1-0 23 19y Wolves 6.4 OVR 65 28A · 7G · 3As 18th 🔥 0-0-1 Season Summary Wolves · 2023/24 Finished 18th of 20 in the Premier League · Man United won it 28 Apps 7 Goals 3 Assists Avg Rating: 6.4 · Played at OV
+[walk] appeal-390-motion: page at most 0 px wider than the window; 0 page errors
+[walk]   screen text: Skip to main content DOUKNOWBALL Back Track stats Walk 31001 CM · Age 18 · Spain 🚪 Retire 🔄 New Career 71 OVR POT 88 €410k Net Worth €10k/wk Wage €23M Value CAREER TIMELINE A 16y Atletico Madrid Youth Youth Academy A 17y Atletico Madrid Youth Youth Academy 22 18y Celtic 6.0 OVR 71 29A · 6G · 3As ✅ APPEAL SUCCESSFUL 🎉 Ban Overturned. You are free to play! The disciplinary committee reviewed the footage and decided the red card was unjust. No further action will be taken. Result delivered after
+[walk] relegated-1280-still: page at most 0 px wider than the window; 0 page errors
+[walk]   summary world line: Your career's simulated league world. Promotion and relegation use a simplified two-division model.
+[walk]   summary movement line: 🔻 Wolves relegated to Championship for next season.
+[walk]   review text: Season reviewFinished 18th of 20 in the Premier League · 38 ptsChelsea won it33Apps18Goals8Assists9.0Avg ratingAll competitions, the same as your season summary.⭐ Best match: Matchday 12, W 2-0 vs Fulham, rated 10.0Last five:LDDWLYour season, game by gameDerbies you played: 1W 1D 0LCups and other games: 3 apps, 0 goals, 1 assists, 🟥 1 red cardSimulated league world: direct promotion and relegation between two divisi
+[walk]   table rows shown: 20
+[walk]   competition tabs: league, domestic, squad
+[walk]   domestic game: ‹ All gamesEarly roundsWolves vs Opponent not recordedScore not recordedThroughOpponents and scores were not kept for these rounds.‹ Previous game› Next game
+[walk] bdor-1280-still: page at most 0 px wider than the window; 0 page errors
+[walk]   350 ms: Continue shown; winner line "⭐Ballon d'Or 2034Outside the top 10, but you ranked #15 in the world's Top 30"
+[walk]   1800 ms: Continue shown; winner line "⭐Ballon d'Or 2034Outside the top 10, but you ranked #15 in the world's Top 30"
+[walk]   4200 ms: Continue shown; winner line "⭐Ballon d'Or 2034Outside the top 10, but you ranked #15 in the world's Top 30"
+[walk]   8000 ms: Continue shown; winner line "⭐Ballon d'Or 2034Outside the top 10, but you ranked #15 in the world's Top 30"
+[walk] bdorwin-1280-still: page at most 0 px wider than the window; 0 page errors
+[walk]   350 ms: Continue not shown; winner line "🏅BALLON D'OR WINNER!The best player in the world! Market Value +€15M"
+[walk]   1800 ms: Continue not shown; winner line "🏅BALLON D'OR WINNER!The best player in the world! Market Value +€15M"
+[walk]   4200 ms: Continue not shown; winner line "🏅BALLON D'OR WINNER!The best player in the world! Market Value +€15M"
+[walk]   8000 ms: Continue not shown; winner line "🏅BALLON D'OR WINNER!The best player in the world! Market Value +€15M"
+[walk] cabinet-1280-still: page at most 0 px wider than the window; 0 page errors
+[walk]   trophy tiles: league=🏆1Leagues; domestic=🏆4Scottish Cup; ucl=⭐0UCL; world=🌍0World Cup; continental=🌐1Continental; ballon=🏅0Ballon d'Or
+[walk]   cabinet league: ‹ BackLeague titles?1 win. Pick a season to see what you did.2041/42CelticLeague title
+[walk]   cabinet league win: ‹ All winsLeague title2041/42 · CelticClub season totalsApps39Goals5Assists8Rating6.6These are the saved season totals, across all competitions.
+[walk]   cabinet help: Pick a trophy, then a winning season. Back returns to your career.Only wins in your saved seasons count. An award listed elsewhere does not add a second trophy.The numbers are season totals, not just the cup games. International totals stay separate from your club totals. A dash means the save did n
+[walk]   cabinet domestic: ‹ BackDomestic cups?4 wins. Pick a season to see what you did.2041/42CelticScottish Cup2034/35CelticScottish Cup2027/28CelticScottish Cup2024/25CelticScottish Cup
+[walk]   cabinet domestic win: ‹ All winsScottish Cup2041/42 · CelticClub season totalsApps39Goals5Assists8Rating6.6These are the saved season totals, across all competitions.🏆 Scottish Cup winnersThrough the early roundsQuarter-final: beat Hibernian 2-0Semi-final: beat Dundee United 2-0Final: beat Rangers 3-2Rounds before the f
+[walk]   cabinet ucl: ‹ BackEuropean club titles?0 wins. Pick a season to see what you did.No wins recorded here yet.
+[walk]   picker: 18 rows, 0 locked
+[walk] movesale-1280-still: page at most 0 px wider than the window; 0 page errors
+[walk]   card: 📤 Your club sold youArsenal → HoffenheimThe club chose this move. Your next season is at Hoffenheim.€11k/wk · 4-year contractTransfer fee: €3.9M5 league games all season, and the projection here was 8 to 18You averaged 5.4 across the seasonYou are 9 rating points under what this squad expectsContinue at Hoffenheim →
+[walk]   after Continue: phase playing, club Hoffenheim, league Bundesliga, tier 3, loan none, contract 4y
+[walk] promoted-1280-still: page at most 0 px wider than the window; 0 page errors
+[walk]   summary world line: Your career's simulated league world. Promotion and relegation use a simplified two-division model.
+[walk]   summary movement line: 🟢 Wolves promoted to Premier League for next season.
+[walk]   review text: Season reviewFinished 3rd of 24 in the Championship · 93 ptsPreston North End won it33Apps10Goals8Assists7.9Avg ratingAll competitions, the same as your season summary.⭐ Best match: Matchday 23, W 3-0 vs Swansea City, rated 10.0Last five:WLDLWYour season, game by gameCups and other games: 2 apps, 0 goals, 0 assistsSimulated league world: direct promotion and relegation between two divisions.Wolves promoted to Premier
+[walk]   table rows shown: 24
+[walk]   competition tabs: league, domestic, squad
+[walk]   domestic game: ‹ All gamesEarly roundsWolves vs Opponent not recordedScore not recordedThroughOpponents and scores were not kept for these rounds.‹ Previous game› Next game
+[walk] segunda-1280-still: page at most 0 px wider than the window; 0 page errors
+[walk]   summary world line: Your career's simulated league world. The lower division uses a partial club pool.
+[walk]   summary movement line: 
+[walk]   review text: Season reviewFinished 13th of 20 in the Segunda Division · 51 ptsAthletic Bilbao won it37Apps15Clean sheets0Assists9.3Avg ratingAll competitions, the same as your season summary.⭐ Best match: Matchday 15, W 1-0 vs Athletic Bilbao, rated 10.0Last five:DWWDLYour season, game by gameCups and other games: 5 apps, 0 goals, 0 assistsSimulated league world: direct promotion and relegation between two divisions.The Spanish l
+[walk]   table rows shown: 20
+[walk]   competition tabs: league, domestic, squad
+[walk]   domestic game: ‹ All gamesEarly roundsReal Sociedad vs Opponent not recordedScore not recordedThroughOpponents and scores were not kept for these rounds.‹ Previous game› Next game
+[walk] lower-1280-still: page at most 0 px wider than the window; 0 page errors
+[walk]   summary world line: Your career's simulated league world. Promotion and relegation use a simplified two-division model.
+[walk]   summary movement line: 
+[walk]   review text: Season reviewFinished 6th of 24 in the Championship · 80 ptsWest Ham won it29Apps6Goals7Assists7.3Avg ratingAll competitions, the same as your season summary.⭐ Best match: Matchday 31, W 2-0 vs QPR, rated 8.9Last five:LDLWWYour season, game by gameDerbies you played: 0W 0D 1LSimulated league world: direct promotion and relegation between two divisions.Discipline: 🟨 6 yellow cards in all competitions.
+[walk]   table rows shown: 24
+[walk]   competition tabs: league, domestic, squad
+[walk]   domestic game: ‹ All gamesEarly roundsWolves vs Opponent not recordedScore not recordedOutOpponents and scores were not kept for these rounds.‹ Previous game› Next game
+[walk] moveloan-1280-still: page at most 0 px wider than the window; 0 page errors
+[walk]   card: 🛫 Your club arranged a loanMan United → NapoliThe club chose this move. Your next season is at Napoli.€76k/wk · Season-long loan. Your parent contract stays in place.6 league games all season, and the projection here was 20 to 30You averaged 5.3 across the seasonYou are 4 rating points under what this squad expectsContinue at Napoli →
+[walk]   after Continue: phase playing, club Napoli, league Serie A, tier 2, loan from Man United, contract 2y
+[walk] expiryvet-1280-still: page at most 0 px wider than the window; 0 page errors
+[walk]   extension line: Your club offers €6k/wk for 1 year.; age 34
+[walk] expiry30-1280-still: page at most 0 px wider than the window; 0 page errors
+[walk]   extension line: Your club offers €8k/wk for 2 years.; age 34
+[walk] banned-1280-still: page at most 0 px wider than the window; 0 page errors
+[walk]   screen text: Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats Walk 31000 ST · Age 19 · England 🚪 Retire 🔄 New Career 66 OVR POT 88 €510k Net Worth €5k/wk Wage €12M Value CAREER TIMELINE A 16y Wolves Youth Youth Academy A 17y Wolves Youth Youth Academy 22 18y Wolves 6.0 OVR 64 26A · 2G · 4As 14th 🔥 0-1-0 23 19y Wolves 6.4 OVR 65 28A · 7G · 3As 18th 🔥 0-0-1 Season Summary Wolves · 2023/24 Finished 18th of 20 in the Premier League · Man United won it
+[walk] appeal-1280-still: page at most 0 px wider than the window; 0 page errors
+[walk]   screen text: Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats Walk 31001 CM · Age 18 · Spain 🚪 Retire 🔄 New Career 71 OVR POT 88 €410k Net Worth €10k/wk Wage €23M Value CAREER TIMELINE A 16y Atletico Madrid Youth Youth Academy A 17y Atletico Madrid Youth Youth Academy 22 18y Celtic 6.0 OVR 71 29A · 6G · 3As ✅ APPEAL SUCCESSFUL 🎉 Ban Overturned. You are free to play! The disciplinary committee reviewed the footage and decided the red card was unjust
+[walk] relegated-1280-motion: page at most 0 px wider than the window; 0 page errors
+[walk]   summary world line: Your career's simulated league world. Promotion and relegation use a simplified two-division model.
+[walk]   summary movement line: 🔻 Wolves relegated to Championship for next season.
+[walk]   review text: Season reviewFinished 18th of 20 in the Premier League · 38 ptsChelsea won it33Apps18Goals8Assists9.0Avg ratingAll competitions, the same as your season summary.⭐ Best match: Matchday 12, W 2-0 vs Fulham, rated 10.0Last five:LDDWLYour season, game by gameDerbies you played: 1W 1D 0LCups and other games: 3 apps, 0 goals, 1 assists, 🟥 1 red cardSimulated league world: direct promotion and relegation between two divisi
+[walk]   table rows shown: 20
+[walk]   competition tabs: league, domestic, squad
+[walk]   domestic game: ‹ All gamesEarly roundsWolves vs Opponent not recordedScore not recordedThroughOpponents and scores were not kept for these rounds.‹ Previous game› Next game
+[walk] bdor-1280-motion: page at most 0 px wider than the window; 0 page errors
+[walk]   350 ms: Continue not shown; winner line "🏅Ballon d'Or 2034"
+[walk]   1800 ms: Continue not shown; winner line "🏅Ballon d'Or 2034"
+[walk]   4200 ms: Continue shown; winner line "⭐Ballon d'Or 2034Outside the top 10, but you ranked #15 in the world's Top 30"
+[walk]   8000 ms: Continue shown; winner line "⭐Ballon d'Or 2034Outside the top 10, but you ranked #15 in the world's Top 30"
+[walk] bdorwin-1280-motion: page at most 0 px wider than the window; 0 page errors
+[walk]   350 ms: Continue not shown; winner line "🏅Ballon d'Or 2032"
+[walk]   1800 ms: Continue not shown; winner line "🏅Ballon d'Or 2032"
+[walk]   4200 ms: Continue not shown; winner line "🏅BALLON D'OR WINNER!The best player in the world! Market Value +€15M"
+[walk]   8000 ms: Continue not shown; winner line "🏅BALLON D'OR WINNER!The best player in the world! Market Value +€15M"
+[walk] cabinet-1280-motion: page at most 0 px wider than the window; 0 page errors
+[walk]   trophy tiles: league=🏆1Leagues; domestic=🏆4Scottish Cup; ucl=⭐0UCL; world=🌍0World Cup; continental=🌐1Continental; ballon=🏅0Ballon d'Or
+[walk]   cabinet league: ‹ BackLeague titles?1 win. Pick a season to see what you did.2041/42CelticLeague title
+[walk]   cabinet league win: ‹ All winsLeague title2041/42 · CelticClub season totalsApps39Goals5Assists8Rating6.6These are the saved season totals, across all competitions.
+[walk]   cabinet help: Pick a trophy, then a winning season. Back returns to your career.Only wins in your saved seasons count. An award listed elsewhere does not add a second trophy.The numbers are season totals, not just the cup games. International totals stay separate from your club totals. A dash means the save did n
+[walk]   cabinet domestic: ‹ BackDomestic cups?4 wins. Pick a season to see what you did.2041/42CelticScottish Cup2034/35CelticScottish Cup2027/28CelticScottish Cup2024/25CelticScottish Cup
+[walk]   cabinet domestic win: ‹ All winsScottish Cup2041/42 · CelticClub season totalsApps39Goals5Assists8Rating6.6These are the saved season totals, across all competitions.🏆 Scottish Cup winnersThrough the early roundsQuarter-final: beat Hibernian 2-0Semi-final: beat Dundee United 2-0Final: beat Rangers 3-2Rounds before the f
+[walk]   cabinet ucl: ‹ BackEuropean club titles?0 wins. Pick a season to see what you did.No wins recorded here yet.
+[walk]   picker: 18 rows, 0 locked
+[walk] movesale-1280-motion: page at most 0 px wider than the window; 0 page errors
+[walk]   card: 📤 Your club sold youArsenal → HoffenheimThe club chose this move. Your next season is at Hoffenheim.€11k/wk · 4-year contractTransfer fee: €3.9M5 league games all season, and the projection here was 8 to 18You averaged 5.4 across the seasonYou are 9 rating points under what this squad expectsContinue at Hoffenheim →
+[walk]   after Continue: phase playing, club Hoffenheim, league Bundesliga, tier 3, loan none, contract 4y
+rvWalk: 44 visits, 0 with overflow, a page error or a walk error
