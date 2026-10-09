@@ -1,0 +1,6 @@
+#!serial
+#!build
+simSoccerCareerLeagueWorld: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerLeagueWorld.mjs
+worldtests: node_modules/.bin/vitest run src/test/soccerCareerLeagueWorld.test.ts src/test/soccerCareerWorldSettle.test.ts --testTimeout=300000 --hookTimeout=120000
+fxworld: cp .rc/x/zzFxWorld.test.ts src/test/zzFxWorld.test.ts && node_modules/.bin/vitest run src/test/zzFxWorld.test.ts --testTimeout=900000 --hookTimeout=120000
+rvworld: cp .rc/x/zzRvWorld.test.ts src/test/zzRvWorld.test.ts && node_modules/.bin/vitest run src/test/zzRvWorld.test.ts --testTimeout=900000 --hookTimeout=120000
