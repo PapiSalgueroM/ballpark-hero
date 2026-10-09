@@ -48,6 +48,10 @@ const DartDraft = () => {
   const [loadError, setLoadError] = useState(false);
   const [topic, setTopic] = useState<MapTopic>('current');
   const [pool, setPool] = useState<Player[]>([]);
+  /* Round 1145: the pool is 2,000 deep now and the storm zone must not get
+     crueller for it, so the storm stops at what the old pool's last man was
+     worth. The fetch knows that number; it rides here beside the pool. */
+  const [stormFloor, setStormFloor] = useState(0);
   const [xi, setXi] = useState<(Player | null)[]>(Array(XI_SIZE).fill(null));
   const [oop, setOop] = useState<boolean[]>(Array(XI_SIZE).fill(false));
   const [slotIdx, setSlotIdx] = useState<number | null>(null);
@@ -127,12 +131,13 @@ const DartDraft = () => {
     setTopic(t);
     setLoadError(false);
     setPhase('loading');
-    const { current } = await fetchDartDraftPool();
+    const { current, stormFloor: floor } = await fetchDartDraftPool();
     /* Round 170: an empty pool means the database was unreachable. Failing
        closed is right (never invent players), but failing SILENTLY left the
        tile looking dead, so now the screen says what happened. */
     if (!current.length) { setLoadError(true); setPhase('intro'); return; }
     setPool(current);
+    setStormFloor(floor);
     setXi(Array(XI_SIZE).fill(null));
     setOop(Array(XI_SIZE).fill(false));
     setDraftedIsos(new Set());
@@ -191,7 +196,7 @@ const DartDraft = () => {
           case 'legend':    c = legendChoices(slot, usedNames); break;
           case 'wonderkid': c = wonderkidChoices(topicPool, slot, usedNames); break;
           case 'mystery':   c = mysteryChoices(topicPool, slot, usedNames); break;
-          case 'storm':     c = stormChoices(topicPool, slot, usedNames); break;
+          case 'storm':     c = stormChoices(topicPool, slot, usedNames, stormFloor); break;
           case 'shark':     c = [{ player: oceanTrialist(slot, 'shark'), outOfPosition: false }]; break;
           default:          c = wildcardChoices(topicPool, slot, usedNames);
         }
@@ -206,7 +211,7 @@ const DartDraft = () => {
       setChoices(c.length ? c : [{ player: oceanTrialist(slot), outOfPosition: false }]);
       setChoicesLoading(false);
     }, 850);
-  }, [zones, slotIdx, topic, usedNames, topicPool]);
+  }, [zones, slotIdx, topic, usedNames, topicPool, stormFloor]);
 
   const lockIn = useCallback(() => {
     if (phase !== 'aim') return;

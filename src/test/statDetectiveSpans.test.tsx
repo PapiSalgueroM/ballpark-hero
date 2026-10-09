@@ -164,7 +164,8 @@ describe('Stat Detective career spans come from every season, not the 500 minute
     db[SPANS] = { rows, pageCap: 400 }; // every page cut short: most names never arrive
     expect(await fetchStatDetectiveData()).toBeNull();
     // More names than the page budget asks for: the last page comes back full, so the read is not known to be whole.
-    const many = Array.from({ length: 8200 }, (_, i) => ({ player_name: `Fixture Crowd ${String(i).padStart(5, '0')}`, first_season: '1990-91', last_season: '1991-92', rows: 2 }));
+    // They sort after every real name, so each profile still gets its span and only the full last page can fail this.
+    const many = Array.from({ length: 8200 }, (_, i) => ({ player_name: `Fixture Zed ${String(i).padStart(5, '0')}`, first_season: '1990-91', last_season: '1991-92', rows: 2 }));
     db[SPANS] = { rows: [...rows, ...many] };
     expect(await fetchStatDetectiveData()).toBeNull();
     db[SPANS] = { rows }; // and it loads again once the view answers
