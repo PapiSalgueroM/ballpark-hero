@@ -169,7 +169,7 @@ const notes = [];
 const note = (id, msg) => { if (notes.filter(n => n.startsWith(id)).length < 4) notes.push(`${id}: ${msg}`); };
 
 /* ---- the tables, from node ---- */
-const B = await bundleAwardsNight(ROOT, { extra: { season: 'src/lib/season/soccer.ts', core: 'src/lib/season/core.ts', moments: 'src/lib/season/soccerMoments.ts', ledger: 'src/lib/season/momentsSave.ts' } });
+const B = await bundleAwardsNight(ROOT, { extra: { season: 'src/lib/season/soccer.ts', core: 'src/lib/season/core.ts', moments: 'src/lib/season/soccerMoments.ts', ledger: 'src/lib/season/momentsSave.ts', comps: 'src/lib/soccerSeasonCompetitions.ts', world: 'src/lib/soccerCareerLeagueWorld.ts' } });
 const CLUBS = B.soccer.FALLBACK_CLUBS;
 const found = [];
 const seen = new Set();
@@ -722,8 +722,8 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
   const WALK_SKIP = skipLine.slice(skipLine.indexOf('/') + 1, skipLine.lastIndexOf('/'));
 
   /* ---- a save the game itself would write: on the hub, twelve or more played seasons, the last one a table he did not win ---- */
-  const { soccer, season: S, core: C } = B;
-  const abil = o => ({ pace: o, shooting: o, passing: o, dribbling: o, defending: o, physical: o, reflexes: o });
+  const { soccer, season: S, core: C, comps: K, world: W } = B;
+  const abil =o => ({ pace: o, shooting: o, passing: o, dribbling: o, defending: o, physical: o, reflexes: o });
   const stepOf = s => {
     switch (s.phase) {
       case 'youth': return soccer.advanceYouthYear(s, CLUBS);
@@ -746,12 +746,17 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
     }
   };
   const playedRow = r => r.type === 'playing' && r.apps > 0;
-  /* node's own reading of which seasons can be watched again (the rule, written out a second time on purpose) */
+  /* node's own reading of which seasons can be watched again (the rule, written out a second time on purpose).
+     Release AQ (Rounds 1173 and 1175): the list is also a way in to a season whose league cannot be replayed
+     when the save kept that season's league world or any of its cup games. So `replays` is the older question
+     (does the league play week by week) and `open` is what the list offers as a button. */
   const facts = save => save.seasons.map((row, at) => {
     if (!playedRow(row)) return null;
     const ctx = S.buildSoccerSeasonCtx(save, CLUBS, row);
     const stable = ctx.mode !== 'table' || (ctx.finish && ctx.finish.finish === 1);
-    return { at, row, ctx, stable: !!stable, open: !!stable || (save.phone && save.phone.world && save.phone.world.year === row.year) };
+    const replays = !!stable || !!(save.phone && save.phone.world && save.phone.world.year === row.year);
+    const kept = !!W.readLeagueWorldSeason(row) || K.savedSeasonCompetitions(save, row).length > 0;
+    return { at, row, ctx, stable: !!stable, replays, kept, open: replays || kept };
   }).filter(Boolean);
   let HUB = null;
   for (let c = 0; c < 120 && !HUB; c += 1) {
@@ -761,12 +766,23 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
       let s = soccer.initCareer(`Motion ${c}`, 'England', 'ST', '2010-14', abil(72 + (c % 10)), 72 + (c % 10), 2010, CLUBS, null, 92);
       for (let g = 0; g < 900 && s && !s.retired && !HUB; g += 1) {
         if (s.phase === 'playing' && s.seasons.filter(playedRow).length >= 12) {
-          const f = facts(s);
-          const last = f[f.length - 1];
-          if (last && last.at === s.seasons.length - 1 && last.ctx.mode === 'table' && !last.stable && last.open && f.some(x => x.open && x !== last) && f.some(x => !x.open)) {
-            const d = C.deriveSeason(S.SOCCER, last.row, last.ctx);
-            const md = d ? d.games.findIndex((x, i) => i >= 1 && i < 14 && x.events.some(e => e.kind === 'goal' && e.mine) && x.events.some(e => e.kind === 'goal' && e.side === 'them')) + 1 : 0;
-            if (d && d.mode === 'table' && md > 0) HUB = { save: JSON.stringify(s), state: s, facts: f, last, d, goalMd: md };
+          const f0 = facts(s);
+          const last0 = f0[f0.length - 1];
+          if (last0 && last0.at === s.seasons.length - 1 && last0.ctx.mode === 'table' && !last0.stable && last0.replays && f0.some(x => x.replays && x !== last0) && f0.some(x => !x.replays)) {
+            /* Release AQ: a season the engine plays today keeps its cup games, so every season would be a way
+               in and no row would be locked. An older save kept none. The save used here is that older save for
+               every season the league cannot replay, bar the newest of them, which keeps its cup games: the
+               list then holds all three kinds (replays, open for its cups only, locked). Trophies stay. */
+            const t = JSON.parse(JSON.stringify(s));
+            const cupsOnly = [...f0].reverse().find(x => !x.replays && x.kept);
+            for (const x of f0) if (!x.replays && x !== cupsOnly) { delete t.seasons[x.at].cupRun; delete t.seasons[x.at].clubCupRun; }
+            const f = facts(t);
+            const last = f[f.length - 1];
+            if (last && last.at === t.seasons.length - 1 && last.ctx.mode === 'table' && !last.stable && last.replays && f.some(x => x.replays && x !== last) && f.some(x => !x.open)) {
+              const d = C.deriveSeason(S.SOCCER, last.row, last.ctx);
+              const md = d ? d.games.findIndex((x, i) => i >= 1 && i < 14 && x.events.some(e => e.kind === 'goal' && e.mine) && x.events.some(e => e.kind === 'goal' && e.side === 'them')) + 1 : 0;
+              if (d && d.mode === 'table' && md > 0) HUB = { save: JSON.stringify(t), state: t, facts: f, last, d, goalMd: md };
+            }
           }
         }
         s = stepOf(s);
@@ -783,8 +799,9 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
   const SEASON_KEY = S.soccerSeasonKey(HUB.state.playerName, HUB.last.row);
   const OPEN_IDS = HUB.facts.filter(x => x.open).map(x => String(x.at)).reverse();
   const LOCKED_IDS = HUB.facts.filter(x => !x.open).map(x => String(x.at)).reverse();
-  console.log(`C) save: ${HUB.state.playerName}, ${HUB.facts.length} played seasons (${OPEN_IDS.length} replay, ${LOCKED_IDS.length} locked), the last ${LABEL} ${HUB.last.row.club} with ${M} matchdays; his goal and a goal against on matchday ${HUB.goalMd}`);
-  check(OPEN_IDS.length >= 2 && LOCKED_IDS.length >= 1, `C. the save has seasons that replay and seasons that do not (${OPEN_IDS.length} and ${LOCKED_IDS.length}; floors 2 and 1)`);
+  const REPLAY_IDS = HUB.facts.filter(x => x.replays).map(x => String(x.at)).reverse();
+  console.log(`C) save: ${HUB.state.playerName}, ${HUB.facts.length} played seasons (${REPLAY_IDS.length} replay, ${OPEN_IDS.length - REPLAY_IDS.length} open for the cup games they kept, ${LOCKED_IDS.length} locked), the last ${LABEL} ${HUB.last.row.club} with ${M} matchdays; his goal and a goal against on matchday ${HUB.goalMd}`);
+  check(REPLAY_IDS.length >= 2 && LOCKED_IDS.length >= 1, `C. the save has seasons that replay and seasons that are locked (${REPLAY_IDS.length} and ${LOCKED_IDS.length}; floors 2 and 1)`);
 
   /* ---- a second save, for C8: on the career page, the last season a table he did not win and still the league year the
      save holds, with a ledger made here: one YOUR CALL taken AGAINST the record (so the match and the table that week
@@ -1110,7 +1127,7 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
       })();
       check(pageLong && scroll.can && scroll.listTop > 0 && scroll.moved === 0, `C4. ${tag}: the picker's list scrolls inside its tile (${scroll.listTop} px) and the page behind does not (${scroll.moved} px)`);
       /* the oldest season that replays opens to watch, with no moments */
-      const oldest = OPEN_IDS[OPEN_IDS.length - 1];
+      const oldest = REPLAY_IDS[REPLAY_IDS.length - 1];
       await p.evaluate(id => document.querySelector(`[data-replay-row="${id}"]`).click(), oldest);
       const oldOpen = await Promise.race([p.waitForSelector('[data-kickoff]', { timeout: 30000 }).then(() => 'centre'), p.waitForSelector('[data-centre-tile]', { timeout: 30000 }).then(() => 'tile')]).catch(() => 'nothing');
       const exitWord = await p.evaluate(() => document.querySelector('[data-centre-exit]')?.textContent.trim() ?? document.querySelector('[data-centre-tile] button:last-child')?.textContent.trim() ?? '');
@@ -1209,8 +1226,11 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
         const gone = await noChip(JSON.stringify(good), 'the league year moved on');
         await p.click('[data-open-season-replays]');
         await p.waitForSelector('[data-season-picker]', { timeout: 30000 });
-        const locked = (await p.$(`[data-replay-locked="${HUB.last.at}"]`)) !== null && (await p.$(`[data-replay-row="${HUB.last.at}"]`)) === null;
-        check(gone === null && locked, 'C3. once the save\'s league year has moved on, a table season he did not win shows no chip and is locked in the list');
+        /* Release AQ: with the league year moved on the league no longer replays. The season is then locked,
+           unless the save kept its cup games, in which case the list still opens it for those (node's reading). */
+        const after = facts(moved).find(x => x.at === HUB.last.at);
+        const listedAs = (await p.$(`[data-replay-locked="${HUB.last.at}"]`)) !== null ? 'locked' : (await p.$(`[data-replay-row="${HUB.last.at}"]`)) !== null ? 'open' : 'missing';
+        check(gone === null && !!after && !after.replays && listedAs === (after.open ? 'open' : 'locked'), `C3. once the save's league year has moved on, a table season he did not win shows no chip and is ${after && after.open ? 'listed only for the cup games it kept' : 'locked in the list'} (the page lists it as ${listedAs})`);
       }
       errorsSeen.push(...P.errors);
       await P.ctx.close();
@@ -1288,7 +1308,7 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
     /* ---------- C3: a place kept in one season is not wiped by another season's review ---------- */
     {
       const kept = JSON.stringify({ key: SEASON_KEY, year: HUB.last.row.year, md: 3, speed: 1, stable: false, round: 'Matchday' });
-      const other = OPEN_IDS.find(id => Number(id) !== HUB.last.at);
+      const other = REPLAY_IDS.find(id => Number(id) !== HUB.last.at);
       const O = await openSite(HUB.save, { width: 1280, height: 900, storage: { [RESUME_SLOT]: kept } });
       const op = O.page;
       const chipFirst = await op.waitForSelector('[data-season-resume]', { timeout: 30000 }).then(() => true).catch(() => false);

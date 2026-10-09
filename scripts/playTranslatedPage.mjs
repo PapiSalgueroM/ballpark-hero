@@ -1233,6 +1233,11 @@ async function probeLive(page) {
    advancing actions in its own order. Otherwise the control pressed least so far, in page order, so
    eight presses are eight different controls wherever the page has them. */
 async function advance(page, actions, skipSrc, counts) {
+  /* Release AQ (Round 1172): the Ballon d'Or night in Soccer Career draws Continue only after its ranked list
+     has come in, about three seconds. A press made while it waits moves the career nowhere, and the undo walk
+     then ran out of presses before a birthday (check 19 measured nothing). Wait for the list first. A page
+     with no such night answers at once. */
+  await page.waitForFunction(() => !document.querySelector('[data-award-result="waiting"]'), null, { timeout: 8000 }).catch(() => undefined);
   const pick = await page.evaluate(([acts, skipS, neverS, seen]) => {
     const w = window.__walk;
     const label = el => w.origText(el).replace(/\s+/g, ' ').trim() || (el.getAttribute('aria-label') || '').trim();
