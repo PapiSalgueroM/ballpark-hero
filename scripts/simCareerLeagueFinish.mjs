@@ -90,7 +90,8 @@ function mutate(file, anchor, replacement) {
   if (n !== 1) { console.error(`control ${CONTROL}: the anchor appears ${n} times in ${file}, refusing to run a dead control`); process.exit(2); }
   return src.replace(anchor, replacement);
 }
-const relocate = (src, keep = '') => src.replace(/from (['"])\.\/([A-Za-z0-9_]+)\1/g, (m, q, name) => name === keep ? m : `from ${q}${lib}${name}${q}`);
+const relocate = (src, keep = '') => src.replace(/from (['"])(\.{1,2}\/[^'"]+)\1/g, (m, q, relative) =>
+  keep && relative === `./${keep}` ? m : `from ${q}${path.resolve(ROOT, 'src/lib', relative).replaceAll('\\', '/')}${q}`);
 let enginePath = `${ROOT}/src/lib/soccerCareerEngine.ts`;
 if (CONTROL === 'notitle') {
   const league = mutate('soccerCareerLeague.ts', 'if (input.leagueTitle) return { leagueFinish: 1', 'if (false) return { leagueFinish: 1');
