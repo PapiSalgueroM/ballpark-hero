@@ -1,0 +1,13 @@
+ATTRIBUTION train1178: src/lib/soccerCareerEngine.ts, src/lib/soccerPhone.ts bundled with the train taken out; section 1 must replay the fixture from before it
+
+1. Soccer Career replays the pre lift fixture byte for byte
+  ok   the fixture names the main it was recorded from (9899d951)
+     probe ran in 6.9s
+  ok   all 48 careers (10550 hashed steps), 35 old saves and every unit probe match
+  ok   every post was made at least 50 times (102, 128, 119, 118, 112, 123, 118)
+  ok   every personality was chosen in at least 3 careers (7, 12, 10, 9, 10)
+  ok   every agent was signed in at least 3 careers (4, 8, 13, 23)
+  ok   the cover offer was taken 3 times and turned down 8
+  ok   old saves carried the stored boot deal id, the renamed cover value and no tier at all
+
+ALL SOCIAL AND BRAND CHECKS PASSED

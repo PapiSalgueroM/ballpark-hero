@@ -1,0 +1,10 @@
+simCareerDerbies exit=0 38s | simCareerDerbies: all 8 sections green
+finish-attribution exit=0 1s | ATTRIBUTION train1178: src/lib/soccerCareerEngine.ts, src/lib/soccerPhone.ts bundled with the train taken out; 16 of 16 careers record the digest the list held before the
+finish-record-a exit=0 1s | ["6426d16cbf9ba999","3306c9fe9aa5342a","a3fe5aa3598f0c39","c023471be22bf543","9d4b42b5fdfeda8a","2cddcac6f2c00050","7f91286e11eda2ba","da376f05543b07dc","961ae0e31447de8e
+finish-record-b exit=0 1s | ["6426d16cbf9ba999","3306c9fe9aa5342a","a3fe5aa3598f0c39","c023471be22bf543","9d4b42b5fdfeda8a","2cddcac6f2c00050","7f91286e11eda2ba","da376f05543b07dc","961ae0e31447de8e
+brands-attribution exit=0 7s | ALL SOCIAL AND BRAND CHECKS PASSED
+brands-record exit=0 18s | RECORDED-TWICE-IDENTICAL
+brands-after exit=0 9s | ALL SOCIAL AND BRAND CHECKS PASSED
+simCareerLeagueSeasons exit=0 25s | simCareerLeagueSeasons: all sections green
+simCareerAwardsNight exit=0 16s | simCareerAwardsNight: ALL 175 CHECKS PASSED
+simSeasonCentreAgreement exit=0 16s | simSeasonCentreAgreement: 24 checks, 0 failed
