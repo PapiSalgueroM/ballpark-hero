@@ -1,0 +1,3 @@
+CONTROL gate: effective copied source, intended local-policy AssertionError
+CHECKS by name: {"ambient-rng":1,"input-immutable":1,"metadata-inverse":1,"eligibility":1,"beneficiary":1,"self-pitch":1,"local-policy":1}
+simSoccerOwnGoals: 7 checks, 0 failed (control gate)

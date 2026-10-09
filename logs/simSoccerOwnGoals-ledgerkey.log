@@ -1,0 +1,3 @@
+CONTROL ledgerkey: effective copied source, intended ledger-reader AssertionError
+CHECKS by name: {"ledger-reader":3}
+simSoccerOwnGoals: 3 checks, 0 failed (control ledgerkey)
