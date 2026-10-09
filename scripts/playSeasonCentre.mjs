@@ -411,7 +411,13 @@ try {
       if (kinds.includes('title') && !clinchShot) { await shot(P.page, `${tag}-4-title-clinch`); clinchShot = true; }
       await walkerAt(P.page, `${tag} tour ${i}`);
       if (kinds) { await clickText(P.page, '▶ Matchday'); continue; }
-      if (!(await clickText(P.page, '⏩ To the next big game'))) break;
+      /* Release AQ: the jump is not offered when the very next matchday is the
+         big one (the Season Centre hides it: there is nothing to jump over),
+         and the tour used to stop there. The title season the engine picks
+         now has a derby on matchday 19 and the halfway mark on 20, so it
+         stopped five matchdays in and never saw the clinch on 36. A player
+         presses the next matchday; so does the tour. */
+      if (!(await clickText(P.page, '⏩ To the next big game')) && !(await clickText(P.page, '▶ Matchday'))) break;
     }
     check(derbyShot && clinchShot, `the ${tag} tour reached a derby day and the title clinch`);
     if (!(derbyShot && clinchShot)) {
