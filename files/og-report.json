@@ -1,0 +1,699 @@
+{
+ "cases": [
+  {
+   "tag": "you-390",
+   "kind": "you",
+   "width": 390,
+   "reduced": false,
+   "live": true,
+   "found": true,
+   "lines": [
+    {
+     "t": "47'⚽ You (O.G), goal for Fulham",
+     "h": 16
+    }
+   ],
+   "steps": 1,
+   "liveMinute": 48,
+   "liveList": {
+    "olW": 366,
+    "olH": 56,
+    "scrollH": 56,
+    "wordsRoom": 326,
+    "rows": [
+     {
+      "t": "43'⚽ You score!",
+      "h": 16
+     },
+     {
+      "t": "47'⚽ You (O.G), goal for Fulham",
+      "h": 16
+     }
+    ],
+    "sideways": 0
+   },
+   "list": {
+    "olW": 366,
+    "olH": 56,
+    "scrollH": 56,
+    "wordsRoom": 326,
+    "rows": [
+     {
+      "t": "43'⚽ You score!",
+      "h": 16
+     },
+     {
+      "t": "47'⚽ You (O.G), goal for Fulham",
+      "h": 16
+     },
+     {
+      "t": "90'⚽ You score!",
+      "h": 16
+     }
+    ],
+    "sideways": 0
+   },
+   "room": 326,
+   "measured": 20,
+   "wouldWrap": [],
+   "widest": [
+    {
+     "x": "⚽ A teammate (O.G), goal for Crystal Palace",
+     "w": 252
+    },
+    {
+     "x": "⚽ A teammate (O.G), goal for Bournemouth",
+     "w": 246
+    },
+    {
+     "x": "⚽ A teammate (O.G), goal for Southampton",
+     "w": 245
+    }
+   ],
+   "help": {
+    "intro": true,
+    "example": true
+   },
+   "pageErrors": []
+  },
+  {
+   "tag": "you-1280",
+   "kind": "you",
+   "width": 1280,
+   "reduced": false,
+   "live": true,
+   "found": true,
+   "lines": [
+    {
+     "t": "47'⚽ You (O.G), goal for Fulham",
+     "h": 16
+    }
+   ],
+   "steps": 1,
+   "liveMinute": 49,
+   "liveList": {
+    "olW": 426,
+    "olH": 112,
+    "scrollH": 112,
+    "wordsRoom": 386,
+    "rows": [
+     {
+      "t": "43'⚽ You score!",
+      "h": 16
+     },
+     {
+      "t": "47'⚽ You (O.G), goal for Fulham",
+      "h": 16
+     }
+    ],
+    "sideways": 0
+   },
+   "list": {
+    "olW": 426,
+    "olH": 112,
+    "scrollH": 112,
+    "wordsRoom": 386,
+    "rows": [
+     {
+      "t": "43'⚽ You score!",
+      "h": 16
+     },
+     {
+      "t": "47'⚽ You (O.G), goal for Fulham",
+      "h": 16
+     },
+     {
+      "t": "90'⚽ You score!",
+      "h": 16
+     }
+    ],
+    "sideways": 0
+   },
+   "room": 386,
+   "measured": 20,
+   "wouldWrap": [],
+   "widest": [
+    {
+     "x": "⚽ A teammate (O.G), goal for Crystal Palace",
+     "w": 252
+    },
+    {
+     "x": "⚽ A teammate (O.G), goal for Bournemouth",
+     "w": 246
+    },
+    {
+     "x": "⚽ A teammate (O.G), goal for Southampton",
+     "w": 245
+    }
+   ],
+   "help": {
+    "intro": true,
+    "example": true
+   },
+   "pageErrors": []
+  },
+  {
+   "tag": "you-390-reduced",
+   "kind": "you",
+   "width": 390,
+   "reduced": true,
+   "live": true,
+   "found": true,
+   "lines": [
+    {
+     "t": "47'⚽ You (O.G), goal for Fulham",
+     "h": 16
+    }
+   ],
+   "steps": 1,
+   "liveMinute": 90,
+   "liveList": {
+    "olW": 366,
+    "olH": 56,
+    "scrollH": 56,
+    "wordsRoom": 326,
+    "rows": [
+     {
+      "t": "43'⚽ You score!",
+      "h": 16
+     },
+     {
+      "t": "47'⚽ You (O.G), goal for Fulham",
+      "h": 16
+     },
+     {
+      "t": "90'⚽ You score!",
+      "h": 16
+     }
+    ],
+    "sideways": 0
+   },
+   "list": {
+    "olW": 366,
+    "olH": 56,
+    "scrollH": 56,
+    "wordsRoom": 326,
+    "rows": [
+     {
+      "t": "43'⚽ You score!",
+      "h": 16
+     },
+     {
+      "t": "47'⚽ You (O.G), goal for Fulham",
+      "h": 16
+     },
+     {
+      "t": "90'⚽ You score!",
+      "h": 16
+     }
+    ],
+    "sideways": 0
+   },
+   "room": 326,
+   "measured": 20,
+   "wouldWrap": [],
+   "widest": [
+    {
+     "x": "⚽ A teammate (O.G), goal for Crystal Palace",
+     "w": 252
+    },
+    {
+     "x": "⚽ A teammate (O.G), goal for Bournemouth",
+     "w": 246
+    },
+    {
+     "x": "⚽ A teammate (O.G), goal for Southampton",
+     "w": 245
+    }
+   ],
+   "help": {
+    "intro": true,
+    "example": true
+   },
+   "pageErrors": []
+  },
+  {
+   "tag": "teammate-390",
+   "kind": "teammate",
+   "width": 390,
+   "reduced": false,
+   "live": false,
+   "found": true,
+   "lines": [
+    {
+     "t": "57'⚽ A teammate (O.G), goal for Nottingham Forest",
+     "h": 16
+    }
+   ],
+   "steps": 2,
+   "list": {
+    "olW": 366,
+    "olH": 56,
+    "scrollH": 136,
+    "wordsRoom": 326,
+    "rows": [
+     {
+      "t": "57'⚽ A teammate (O.G), goal for Nottingham Forest",
+      "h": 16
+     },
+     {
+      "t": "65'⚽ Goal, Liverpool",
+      "h": 16
+     },
+     {
+      "t": "65'🅰️ You set it up",
+      "h": 16
+     },
+     {
+      "t": "68'⚽ You score!",
+      "h": 16
+     },
+     {
+      "t": "70'⚽ Goal, Nottingham Forest",
+      "h": 16
+     },
+     {
+      "t": "89'⚽ Goal, Liverpool",
+      "h": 16
+     },
+     {
+      "t": "89'🅰️ You set it up",
+      "h": 16
+     }
+    ],
+    "sideways": 0
+   },
+   "room": 326,
+   "measured": 21,
+   "wouldWrap": [],
+   "widest": [
+    {
+     "x": "⚽ A teammate (O.G), goal for Nottingham Forest",
+     "w": 274
+    },
+    {
+     "x": "⚽ A teammate (O.G), goal for Crystal Palace",
+     "w": 252
+    },
+    {
+     "x": "⚽ A teammate (O.G), goal for Bournemouth",
+     "w": 246
+    }
+   ],
+   "help": {
+    "intro": true,
+    "example": true
+   },
+   "pageErrors": []
+  },
+  {
+   "tag": "teammate-1280",
+   "kind": "teammate",
+   "width": 1280,
+   "reduced": false,
+   "live": false,
+   "found": true,
+   "lines": [
+    {
+     "t": "57'⚽ A teammate (O.G), goal for Nottingham Forest",
+     "h": 16
+    }
+   ],
+   "steps": 2,
+   "list": {
+    "olW": 426,
+    "olH": 112,
+    "scrollH": 136,
+    "wordsRoom": 386,
+    "rows": [
+     {
+      "t": "57'⚽ A teammate (O.G), goal for Nottingham Forest",
+      "h": 16
+     },
+     {
+      "t": "65'⚽ Goal, Liverpool",
+      "h": 16
+     },
+     {
+      "t": "65'🅰️ You set it up",
+      "h": 16
+     },
+     {
+      "t": "68'⚽ You score!",
+      "h": 16
+     },
+     {
+      "t": "70'⚽ Goal, Nottingham Forest",
+      "h": 16
+     },
+     {
+      "t": "89'⚽ Goal, Liverpool",
+      "h": 16
+     },
+     {
+      "t": "89'🅰️ You set it up",
+      "h": 16
+     }
+    ],
+    "sideways": 0
+   },
+   "room": 386,
+   "measured": 21,
+   "wouldWrap": [],
+   "widest": [
+    {
+     "x": "⚽ A teammate (O.G), goal for Nottingham Forest",
+     "w": 274
+    },
+    {
+     "x": "⚽ A teammate (O.G), goal for Crystal Palace",
+     "w": 252
+    },
+    {
+     "x": "⚽ A teammate (O.G), goal for Bournemouth",
+     "w": 246
+    }
+   ],
+   "help": {
+    "intro": true,
+    "example": true
+   },
+   "pageErrors": []
+  },
+  {
+   "tag": "opponent-390",
+   "kind": "opponent",
+   "width": 390,
+   "reduced": false,
+   "live": false,
+   "found": true,
+   "lines": [
+    {
+     "t": "29'⚽ An opponent (O.G), goal for Bayern Munich",
+     "h": 16
+    }
+   ],
+   "steps": 0,
+   "list": {
+    "olW": 366,
+    "olH": 56,
+    "scrollH": 156,
+    "wordsRoom": 326,
+    "rows": [
+     {
+      "t": "20'⚽ Goal, Bayern Munich",
+      "h": 16
+     },
+     {
+      "t": "27'⚽ You score!",
+      "h": 16
+     },
+     {
+      "t": "27'⚽ Goal, Bayern Munich",
+      "h": 16
+     },
+     {
+      "t": "29'⚽ An opponent (O.G), goal for Bayern Munich",
+      "h": 16
+     },
+     {
+      "t": "51'⚽ Goal, Bayern Munich",
+      "h": 16
+     },
+     {
+      "t": "62'⚽ Goal, Bayern Munich",
+      "h": 16
+     },
+     {
+      "t": "62'🅰️ You set it up",
+      "h": 16
+     },
+     {
+      "t": "65'⚽ You score!",
+      "h": 16
+     }
+    ],
+    "sideways": 0
+   },
+   "room": 326,
+   "measured": 19,
+   "wouldWrap": [],
+   "widest": [
+    {
+     "x": "⚽ A teammate (O.G), goal for Werder Bremen",
+     "w": 259
+    },
+    {
+     "x": "⚽ An opponent (O.G), goal for Bayern Munich",
+     "w": 257
+    },
+    {
+     "x": "⚽ A teammate (O.G), goal for Bayern Munich",
+     "w": 255
+    }
+   ],
+   "help": {
+    "intro": true,
+    "example": true
+   },
+   "pageErrors": []
+  },
+  {
+   "tag": "opponent-1280",
+   "kind": "opponent",
+   "width": 1280,
+   "reduced": false,
+   "live": false,
+   "found": true,
+   "lines": [
+    {
+     "t": "29'⚽ An opponent (O.G), goal for Bayern Munich",
+     "h": 16
+    }
+   ],
+   "steps": 0,
+   "list": {
+    "olW": 426,
+    "olH": 112,
+    "scrollH": 156,
+    "wordsRoom": 386,
+    "rows": [
+     {
+      "t": "20'⚽ Goal, Bayern Munich",
+      "h": 16
+     },
+     {
+      "t": "27'⚽ You score!",
+      "h": 16
+     },
+     {
+      "t": "27'⚽ Goal, Bayern Munich",
+      "h": 16
+     },
+     {
+      "t": "29'⚽ An opponent (O.G), goal for Bayern Munich",
+      "h": 16
+     },
+     {
+      "t": "51'⚽ Goal, Bayern Munich",
+      "h": 16
+     },
+     {
+      "t": "62'⚽ Goal, Bayern Munich",
+      "h": 16
+     },
+     {
+      "t": "62'🅰️ You set it up",
+      "h": 16
+     },
+     {
+      "t": "65'⚽ You score!",
+      "h": 16
+     }
+    ],
+    "sideways": 0
+   },
+   "room": 386,
+   "measured": 19,
+   "wouldWrap": [],
+   "widest": [
+    {
+     "x": "⚽ A teammate (O.G), goal for Werder Bremen",
+     "w": 259
+    },
+    {
+     "x": "⚽ An opponent (O.G), goal for Bayern Munich",
+     "w": 257
+    },
+    {
+     "x": "⚽ A teammate (O.G), goal for Bayern Munich",
+     "w": 255
+    }
+   ],
+   "help": {
+    "intro": true,
+    "example": true
+   },
+   "pageErrors": []
+  }
+ ],
+ "targets": {
+  "you": {
+   "club": "Liverpool",
+   "year": 2018,
+   "position": "LW",
+   "target": {
+    "md": 2,
+    "min": 47,
+    "by": "you",
+    "side": "them",
+    "played": true,
+    "words": "⚽ You (O.G), goal for Fulham"
+   },
+   "tags": [
+    {
+     "md": 2,
+     "min": 47,
+     "by": "you",
+     "side": "them",
+     "played": true,
+     "words": "⚽ You (O.G), goal for Fulham"
+    },
+    {
+     "md": 7,
+     "min": 36,
+     "by": "opponent",
+     "side": "us",
+     "played": true,
+     "words": "⚽ An opponent (O.G), goal for Liverpool"
+    },
+    {
+     "md": 16,
+     "min": 69,
+     "by": "teammate",
+     "side": "them",
+     "played": true,
+     "words": "⚽ A teammate (O.G), goal for Burnley"
+    }
+   ],
+   "names": [
+    "Liverpool",
+    "Chelsea",
+    "Tottenham",
+    "Cardiff City",
+    "Burnley",
+    "West Ham",
+    "Bournemouth",
+    "Crystal Palace",
+    "Southampton",
+    "Man United",
+    "Arsenal",
+    "Man City",
+    "Wolves",
+    "Watford",
+    "Brighton",
+    "another club",
+    "Everton",
+    "another club",
+    "Fulham",
+    "Newcastle"
+   ]
+  },
+  "teammate": {
+   "club": "Liverpool",
+   "year": 2022,
+   "position": "ST",
+   "target": {
+    "md": 3,
+    "min": 57,
+    "by": "teammate",
+    "side": "them",
+    "played": true,
+    "words": "⚽ A teammate (O.G), goal for Nottingham Forest"
+   },
+   "tags": [
+    {
+     "md": 3,
+     "min": 57,
+     "by": "teammate",
+     "side": "them",
+     "played": true,
+     "words": "⚽ A teammate (O.G), goal for Nottingham Forest"
+    },
+    {
+     "md": 4,
+     "min": 18,
+     "by": "you",
+     "side": "them",
+     "played": true,
+     "words": "⚽ You (O.G), goal for Tottenham"
+    }
+   ],
+   "names": [
+    "Liverpool",
+    "Brighton",
+    "Bournemouth",
+    "Crystal Palace",
+    "West Ham",
+    "Man United",
+    "Chelsea",
+    "Southampton",
+    "Man City",
+    "Fulham",
+    "Arsenal",
+    "Everton",
+    "Leeds United",
+    "Aston Villa",
+    "another club",
+    "Wolves",
+    "Tottenham",
+    "Nottingham Forest",
+    "Newcastle",
+    "Brentford"
+   ]
+  },
+  "opponent": {
+   "club": "Bayern Munich",
+   "year": 2024,
+   "position": "ST",
+   "target": {
+    "md": 1,
+    "min": 29,
+    "by": "opponent",
+    "side": "us",
+    "played": true,
+    "words": "⚽ An opponent (O.G), goal for Bayern Munich"
+   },
+   "tags": [
+    {
+     "md": 1,
+     "min": 29,
+     "by": "opponent",
+     "side": "us",
+     "played": true,
+     "words": "⚽ An opponent (O.G), goal for Bayern Munich"
+    }
+   ],
+   "names": [
+    "Bayern Munich",
+    "Frankfurt",
+    "Leipzig",
+    "Mainz",
+    "Leverkusen",
+    "Werder Bremen",
+    "St. Pauli",
+    "Holstein Kiel",
+    "Wolfsburg",
+    "Augsburg",
+    "Stuttgart",
+    "Bochum",
+    "Gladbach",
+    "Heidenheim",
+    "Union Berlin",
+    "Dortmund",
+    "Hoffenheim",
+    "Freiburg"
+   ]
+  }
+ }
+}

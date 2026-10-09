@@ -1,0 +1,7 @@
+engine: division 0, 6 clubs, matchday 4 of 5, minute 89, position 3
+engine: division 0, 6 clubs, matchday 4 of 5, minute 89, position 3
+engine: division 0, 6 clubs, matchday 4 of 5, minute 89, position 3
+tycoon 390: trigger={"text":"Latest season4th of 6 · Review this visit's result","w":358,"h":50,"tagName":"BUTTON"} problems=[] error=none pageErrors=[]
+tycoon 1280: trigger={"text":"Latest season4th of 6 · Review this visit's result","w":640,"h":50,"tagName":"BUTTON"} problems=[] error=none pageErrors=[]
+tycoon 390-reduced: trigger={"text":"Latest season4th of 6 · Review this visit's result","w":358,"h":50,"tagName":"BUTTON"} problems=[] error=none pageErrors=[]
+rr-walk-tycoon: 3 walks, 3 opened the review

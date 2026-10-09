@@ -1,0 +1,310 @@
+{
+ "cases": [
+  {
+   "tag": "390",
+   "problems": [],
+   "trigger": {
+    "text": "Latest season4th of 6 · Review this visit's result",
+    "w": 358,
+    "h": 50,
+    "tagName": "BUTTON"
+   },
+   "facts": {
+    "box": {
+     "l": 16,
+     "t": 46,
+     "r": 374,
+     "b": 798
+    },
+    "vw": 390,
+    "vh": 844,
+    "headline": "Season over: 4th of 6 in the Muddy Meadows League",
+    "position": "4th of 6",
+    "points": "7",
+    "record": "2 / 1 / 2",
+    "goals": "14 / 16",
+    "rows": [
+     {
+      "club": "Pinecrest Swifts",
+      "cells": [
+       "1Pinecrest Swifts",
+       "4 / 0 / 1GF 24GA 9",
+       "12"
+      ],
+      "mine": false
+     },
+     {
+      "club": "Pinecrest Rangers",
+      "cells": [
+       "2Pinecrest Rangers",
+       "3 / 0 / 2GF 11GA 9",
+       "9"
+      ],
+      "mine": false
+     },
+     {
+      "club": "Oldmarket Rangers",
+      "cells": [
+       "3Oldmarket Rangers",
+       "2 / 2 / 1GF 13GA 10",
+       "8"
+      ],
+      "mine": false
+     },
+     {
+      "club": "Your club",
+      "cells": [
+       "4Your club",
+       "2 / 1 / 2GF 14GA 16",
+       "7"
+      ],
+      "mine": true
+     },
+     {
+      "club": "Oldmarket Olympic",
+      "cells": [
+       "5Oldmarket Olympic",
+       "1 / 2 / 2GF 10GA 10",
+       "5"
+      ],
+      "mine": false
+     },
+     {
+      "club": "Oldmarket County",
+      "cells": [
+       "6Oldmarket County",
+       "0 / 1 / 4GF 4GA 22",
+       "1"
+      ],
+      "mine": false
+     }
+    ],
+    "sideways": 0,
+    "paneX": 0,
+    "scrollerX": 0,
+    "scrollerY": 0,
+    "back": {
+     "t": 737,
+     "b": 781,
+     "h": 44
+    },
+    "focus": "H2:Latest season",
+    "animating": 0
+   },
+   "shape": {
+    "clubs": 6,
+    "matchdays": 5,
+    "perMatchday": 3
+   },
+   "afterClose": {
+    "open": false,
+    "focusOnTrigger": true
+   },
+   "pageErrors": []
+  },
+  {
+   "tag": "1280",
+   "problems": [],
+   "trigger": {
+    "text": "Latest season4th of 6 · Review this visit's result",
+    "w": 640,
+    "h": 50,
+    "tagName": "BUTTON"
+   },
+   "facts": {
+    "box": {
+     "l": 416,
+     "t": 82,
+     "r": 864,
+     "b": 818
+    },
+    "vw": 1280,
+    "vh": 900,
+    "headline": "Season over: 4th of 6 in the Muddy Meadows League",
+    "position": "4th of 6",
+    "points": "7",
+    "record": "2 / 1 / 2",
+    "goals": "14 / 16",
+    "rows": [
+     {
+      "club": "Pinecrest Swifts",
+      "cells": [
+       "1Pinecrest Swifts",
+       "4 / 0 / 1GF 24GA 9",
+       "12"
+      ],
+      "mine": false
+     },
+     {
+      "club": "Pinecrest Rangers",
+      "cells": [
+       "2Pinecrest Rangers",
+       "3 / 0 / 2GF 11GA 9",
+       "9"
+      ],
+      "mine": false
+     },
+     {
+      "club": "Oldmarket Rangers",
+      "cells": [
+       "3Oldmarket Rangers",
+       "2 / 2 / 1GF 13GA 10",
+       "8"
+      ],
+      "mine": false
+     },
+     {
+      "club": "Your club",
+      "cells": [
+       "4Your club",
+       "2 / 1 / 2GF 14GA 16",
+       "7"
+      ],
+      "mine": true
+     },
+     {
+      "club": "Oldmarket Olympic",
+      "cells": [
+       "5Oldmarket Olympic",
+       "1 / 2 / 2GF 10GA 10",
+       "5"
+      ],
+      "mine": false
+     },
+     {
+      "club": "Oldmarket County",
+      "cells": [
+       "6Oldmarket County",
+       "0 / 1 / 4GF 4GA 22",
+       "1"
+      ],
+      "mine": false
+     }
+    ],
+    "sideways": 0,
+    "paneX": 0,
+    "scrollerX": 0,
+    "scrollerY": 0,
+    "back": {
+     "t": 757,
+     "b": 801,
+     "h": 44
+    },
+    "focus": "H2:Latest season",
+    "animating": 0
+   },
+   "shape": {
+    "clubs": 6,
+    "matchdays": 5,
+    "perMatchday": 3
+   },
+   "afterClose": {
+    "open": false,
+    "focusOnTrigger": true
+   },
+   "pageErrors": []
+  },
+  {
+   "tag": "390-reduced",
+   "problems": [],
+   "trigger": {
+    "text": "Latest season4th of 6 · Review this visit's result",
+    "w": 358,
+    "h": 50,
+    "tagName": "BUTTON"
+   },
+   "facts": {
+    "box": {
+     "l": 16,
+     "t": 46,
+     "r": 374,
+     "b": 798
+    },
+    "vw": 390,
+    "vh": 844,
+    "headline": "Season over: 4th of 6 in the Muddy Meadows League",
+    "position": "4th of 6",
+    "points": "7",
+    "record": "2 / 1 / 2",
+    "goals": "14 / 16",
+    "rows": [
+     {
+      "club": "Pinecrest Swifts",
+      "cells": [
+       "1Pinecrest Swifts",
+       "4 / 0 / 1GF 24GA 9",
+       "12"
+      ],
+      "mine": false
+     },
+     {
+      "club": "Pinecrest Rangers",
+      "cells": [
+       "2Pinecrest Rangers",
+       "3 / 0 / 2GF 11GA 9",
+       "9"
+      ],
+      "mine": false
+     },
+     {
+      "club": "Oldmarket Rangers",
+      "cells": [
+       "3Oldmarket Rangers",
+       "2 / 2 / 1GF 13GA 10",
+       "8"
+      ],
+      "mine": false
+     },
+     {
+      "club": "Your club",
+      "cells": [
+       "4Your club",
+       "2 / 1 / 2GF 14GA 16",
+       "7"
+      ],
+      "mine": true
+     },
+     {
+      "club": "Oldmarket Olympic",
+      "cells": [
+       "5Oldmarket Olympic",
+       "1 / 2 / 2GF 10GA 10",
+       "5"
+      ],
+      "mine": false
+     },
+     {
+      "club": "Oldmarket County",
+      "cells": [
+       "6Oldmarket County",
+       "0 / 1 / 4GF 4GA 22",
+       "1"
+      ],
+      "mine": false
+     }
+    ],
+    "sideways": 0,
+    "paneX": 0,
+    "scrollerX": 0,
+    "scrollerY": 0,
+    "back": {
+     "t": 737,
+     "b": 781,
+     "h": 44
+    },
+    "focus": "H2:Latest season",
+    "animating": 0
+   },
+   "shape": {
+    "clubs": 6,
+    "matchdays": 5,
+    "perMatchday": 3
+   },
+   "afterClose": {
+    "open": false,
+    "focusOnTrigger": true
+   },
+   "pageErrors": []
+  }
+ ]
+}

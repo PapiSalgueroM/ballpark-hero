@@ -1,0 +1,12 @@
+engine: 3678 table seasons looked at, 2701 with at least one own goal
+target you: Liverpool 2018, LW, matchday 2 of 38, 47', "⚽ You (O.G), goal for Fulham" (28 chars), 3 own goals that season
+target teammate: Liverpool 2022, ST, matchday 3 of 38, 57', "⚽ A teammate (O.G), goal for Nottingham Forest" (46 chars), 2 own goals that season
+target opponent: Bayern Munich 2024, ST, matchday 1 of 34, 29', "⚽ An opponent (O.G), goal for Bayern Munich" (43 chars), 1 own goals that season
+walk you-390: found=true steps=1 lines=[{"t":"47'⚽ You (O.G), goal for Fulham","h":16}] room=326 wouldWrap=0 of 20 sideways=0 help={"intro":true,"example":true} errors=[]
+walk you-1280: found=true steps=1 lines=[{"t":"47'⚽ You (O.G), goal for Fulham","h":16}] room=386 wouldWrap=0 of 20 sideways=0 help={"intro":true,"example":true} errors=[]
+walk you-390-reduced: found=true steps=1 lines=[{"t":"47'⚽ You (O.G), goal for Fulham","h":16}] room=326 wouldWrap=0 of 20 sideways=0 help={"intro":true,"example":true} errors=[]
+walk teammate-390: found=true steps=2 lines=[{"t":"57'⚽ A teammate (O.G), goal for Nottingham Forest","h":16}] room=326 wouldWrap=0 of 21 sideways=0 help={"intro":true,"example":true} errors=[]
+walk teammate-1280: found=true steps=2 lines=[{"t":"57'⚽ A teammate (O.G), goal for Nottingham Forest","h":16}] room=386 wouldWrap=0 of 21 sideways=0 help={"intro":true,"example":true} errors=[]
+walk opponent-390: found=true steps=0 lines=[{"t":"29'⚽ An opponent (O.G), goal for Bayern Munich","h":16}] room=326 wouldWrap=0 of 19 sideways=0 help={"intro":true,"example":true} errors=[]
+walk opponent-1280: found=true steps=0 lines=[{"t":"29'⚽ An opponent (O.G), goal for Bayern Munich","h":16}] room=386 wouldWrap=0 of 19 sideways=0 help={"intro":true,"example":true} errors=[]
+rr-walk-og: 7 walks, 7 found their own goal line

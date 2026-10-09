@@ -1,0 +1,768 @@
+{
+ "cases": [
+  {
+   "tag": "390",
+   "notes": [],
+   "club": "Arsenal👑 EliteSquad89Budget£167mBoard w",
+   "tabs": [
+    "Home",
+    "Squad",
+    "Tactics",
+    "Table",
+    "Market"
+   ],
+   "table": {
+    "buttons": 20,
+    "divRows": 0,
+    "sideways": 0,
+    "rows": [
+     {
+      "club": "Arsenal",
+      "left": 9,
+      "right": 9,
+      "w": 340,
+      "h": 29,
+      "ptsRight": 361,
+      "headPtsRight": 361,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Aston Villa",
+      "left": 9,
+      "right": 9,
+      "w": 340,
+      "h": 29,
+      "ptsRight": 361,
+      "headPtsRight": 361,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Bournemouth",
+      "left": 9,
+      "right": 9,
+      "w": 340,
+      "h": 29,
+      "ptsRight": 361,
+      "headPtsRight": 361,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Brentford",
+      "left": 9,
+      "right": 9,
+      "w": 340,
+      "h": 29,
+      "ptsRight": 361,
+      "headPtsRight": 361,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Brighton",
+      "left": 9,
+      "right": 9,
+      "w": 340,
+      "h": 29,
+      "ptsRight": 361,
+      "headPtsRight": 361,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Chelsea",
+      "left": 9,
+      "right": 9,
+      "w": 340,
+      "h": 29,
+      "ptsRight": 361,
+      "headPtsRight": 361,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Coventry City",
+      "left": 9,
+      "right": 9,
+      "w": 340,
+      "h": 29,
+      "ptsRight": 361,
+      "headPtsRight": 361,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Crystal Palace",
+      "left": 9,
+      "right": 9,
+      "w": 340,
+      "h": 29,
+      "ptsRight": 361,
+      "headPtsRight": 361,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Everton",
+      "left": 9,
+      "right": 9,
+      "w": 340,
+      "h": 29,
+      "ptsRight": 361,
+      "headPtsRight": 361,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Fulham",
+      "left": 9,
+      "right": 9,
+      "w": 340,
+      "h": 29,
+      "ptsRight": 361,
+      "headPtsRight": 361,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Hull City",
+      "left": 9,
+      "right": 9,
+      "w": 340,
+      "h": 29,
+      "ptsRight": 361,
+      "headPtsRight": 361,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Ipswich Town",
+      "left": 9,
+      "right": 9,
+      "w": 340,
+      "h": 29,
+      "ptsRight": 361,
+      "headPtsRight": 361,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Leeds United",
+      "left": 9,
+      "right": 9,
+      "w": 340,
+      "h": 29,
+      "ptsRight": 361,
+      "headPtsRight": 361,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Liverpool",
+      "left": 9,
+      "right": 9,
+      "w": 340,
+      "h": 29,
+      "ptsRight": 361,
+      "headPtsRight": 361,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Manchester City",
+      "left": 9,
+      "right": 9,
+      "w": 340,
+      "h": 29,
+      "ptsRight": 361,
+      "headPtsRight": 361,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Manchester United",
+      "left": 9,
+      "right": 9,
+      "w": 340,
+      "h": 29,
+      "ptsRight": 361,
+      "headPtsRight": 361,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Newcastle",
+      "left": 9,
+      "right": 9,
+      "w": 340,
+      "h": 29,
+      "ptsRight": 361,
+      "headPtsRight": 361,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Nottingham Forest",
+      "left": 9,
+      "right": 9,
+      "w": 340,
+      "h": 29,
+      "ptsRight": 361,
+      "headPtsRight": 361,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Sunderland",
+      "left": 9,
+      "right": 9,
+      "w": 340,
+      "h": 29,
+      "ptsRight": 361,
+      "headPtsRight": 361,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Tottenham",
+      "left": 9,
+      "right": 9,
+      "w": 340,
+      "h": 28,
+      "ptsRight": 361,
+      "headPtsRight": 361,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     }
+    ]
+   },
+   "keyboardReached": true,
+   "focused": {
+    "club": "Arsenal",
+    "ring": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(43, 171, 111) 0px 0px 0px 2px, rgba(0, 0",
+    "outline": "solid"
+   },
+   "afterEnter": {
+    "h1": null,
+    "dialogs": [],
+    "text": "Skip to main content DOUKNOWBALL Back Track stats Back Arsenal Premier League · 👑 Elite · your club 89 Best XI £0k Squad value #1 Position 0-0-0 W-D-L 0 scored 0 conceded 0 points Board wants: win th"
+   },
+   "cupsOpened": false,
+   "cupsTables": {
+    "buttons": 0,
+    "divRows": 0,
+    "sideways": 0,
+    "rows": []
+   },
+   "brackets": {
+    "buttons": 0,
+    "rows": []
+   },
+   "facilities": {
+    "opened": false,
+    "labelled": [
+     [
+      "Go back",
+      "Back"
+     ],
+     [
+      "How to play",
+      ""
+     ]
+    ],
+    "pressed": [
+     [
+      "Sound: off",
+      "false"
+     ]
+    ],
+    "sideways": 0
+   },
+   "options": {
+    "opened": false,
+    "labelled": [
+     [
+      "Go back",
+      "Back"
+     ],
+     [
+      "How to play",
+      ""
+     ]
+    ],
+    "pressed": [
+     [
+      "Sound: off",
+      "false"
+     ]
+    ],
+    "sideways": 0
+   },
+   "finance": {
+    "opened": false,
+    "labelled": [
+     [
+      "Go back",
+      "Back"
+     ],
+     [
+      "How to play",
+      ""
+     ]
+    ],
+    "pressed": [
+     [
+      "Sound: off",
+      "false"
+     ]
+    ],
+    "sideways": 0
+   },
+   "academy": {
+    "opened": false,
+    "labelled": [
+     [
+      "Go back",
+      "Back"
+     ],
+     [
+      "How to play",
+      ""
+     ]
+    ],
+    "pressed": [
+     [
+      "Sound: off",
+      "false"
+     ]
+    ],
+    "sideways": 0
+   },
+   "training": {
+    "opened": false,
+    "labelled": [
+     [
+      "Go back",
+      "Back"
+     ],
+     [
+      "How to play",
+      ""
+     ]
+    ],
+    "pressed": [
+     [
+      "Sound: off",
+      "false"
+     ]
+    ],
+    "sideways": 0
+   },
+   "pageErrors": []
+  },
+  {
+   "tag": "1280",
+   "notes": [],
+   "club": "Arsenal👑 EliteSquad89Budget£167mBoard w",
+   "tabs": [
+    "Home",
+    "Squad",
+    "Tactics",
+    "Table",
+    "Market"
+   ],
+   "table": {
+    "buttons": 20,
+    "divRows": 0,
+    "sideways": 0,
+    "rows": [
+     {
+      "club": "Arsenal",
+      "left": 13,
+      "right": 13,
+      "w": 838,
+      "h": 29,
+      "ptsRight": 1055,
+      "headPtsRight": 1055,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Aston Villa",
+      "left": 13,
+      "right": 13,
+      "w": 838,
+      "h": 29,
+      "ptsRight": 1055,
+      "headPtsRight": 1055,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Bournemouth",
+      "left": 13,
+      "right": 13,
+      "w": 838,
+      "h": 29,
+      "ptsRight": 1055,
+      "headPtsRight": 1055,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Brentford",
+      "left": 13,
+      "right": 13,
+      "w": 838,
+      "h": 29,
+      "ptsRight": 1055,
+      "headPtsRight": 1055,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Brighton",
+      "left": 13,
+      "right": 13,
+      "w": 838,
+      "h": 29,
+      "ptsRight": 1055,
+      "headPtsRight": 1055,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Chelsea",
+      "left": 13,
+      "right": 13,
+      "w": 838,
+      "h": 29,
+      "ptsRight": 1055,
+      "headPtsRight": 1055,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Coventry City",
+      "left": 13,
+      "right": 13,
+      "w": 838,
+      "h": 29,
+      "ptsRight": 1055,
+      "headPtsRight": 1055,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Crystal Palace",
+      "left": 13,
+      "right": 13,
+      "w": 838,
+      "h": 29,
+      "ptsRight": 1055,
+      "headPtsRight": 1055,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Everton",
+      "left": 13,
+      "right": 13,
+      "w": 838,
+      "h": 29,
+      "ptsRight": 1055,
+      "headPtsRight": 1055,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Fulham",
+      "left": 13,
+      "right": 13,
+      "w": 838,
+      "h": 29,
+      "ptsRight": 1055,
+      "headPtsRight": 1055,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Hull City",
+      "left": 13,
+      "right": 13,
+      "w": 838,
+      "h": 29,
+      "ptsRight": 1055,
+      "headPtsRight": 1055,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Ipswich Town",
+      "left": 13,
+      "right": 13,
+      "w": 838,
+      "h": 29,
+      "ptsRight": 1055,
+      "headPtsRight": 1055,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Leeds United",
+      "left": 13,
+      "right": 13,
+      "w": 838,
+      "h": 29,
+      "ptsRight": 1055,
+      "headPtsRight": 1055,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Liverpool",
+      "left": 13,
+      "right": 13,
+      "w": 838,
+      "h": 29,
+      "ptsRight": 1055,
+      "headPtsRight": 1055,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Manchester City",
+      "left": 13,
+      "right": 13,
+      "w": 838,
+      "h": 29,
+      "ptsRight": 1055,
+      "headPtsRight": 1055,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Manchester United",
+      "left": 13,
+      "right": 13,
+      "w": 838,
+      "h": 29,
+      "ptsRight": 1055,
+      "headPtsRight": 1055,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Newcastle",
+      "left": 13,
+      "right": 13,
+      "w": 838,
+      "h": 29,
+      "ptsRight": 1055,
+      "headPtsRight": 1055,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Nottingham Forest",
+      "left": 13,
+      "right": 13,
+      "w": 838,
+      "h": 29,
+      "ptsRight": 1055,
+      "headPtsRight": 1055,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Sunderland",
+      "left": 13,
+      "right": 13,
+      "w": 838,
+      "h": 29,
+      "ptsRight": 1055,
+      "headPtsRight": 1055,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     },
+     {
+      "club": "Tottenham",
+      "left": 13,
+      "right": 13,
+      "w": 838,
+      "h": 28,
+      "ptsRight": 1055,
+      "headPtsRight": 1055,
+      "clipped": false,
+      "display": "grid",
+      "font": "12px"
+     }
+    ]
+   },
+   "keyboardReached": true,
+   "focused": {
+    "club": "Arsenal",
+    "ring": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(43, 171, 111) 0px 0px 0px 2px, rgba(0, 0",
+    "outline": "solid"
+   },
+   "afterEnter": {
+    "h1": null,
+    "dialogs": [],
+    "text": "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats Back Arsenal Premier League · 👑 Elite · your club 89 Best XI £0k Squad value #1 Position 0-0"
+   },
+   "cupsOpened": false,
+   "cupsTables": {
+    "buttons": 0,
+    "divRows": 0,
+    "sideways": 0,
+    "rows": []
+   },
+   "brackets": {
+    "buttons": 0,
+    "rows": []
+   },
+   "facilities": {
+    "opened": false,
+    "labelled": [
+     [
+      "Go back",
+      "Back"
+     ],
+     [
+      "How to play",
+      ""
+     ]
+    ],
+    "pressed": [
+     [
+      "Sound: off",
+      "false"
+     ]
+    ],
+    "sideways": 0
+   },
+   "options": {
+    "opened": false,
+    "labelled": [
+     [
+      "Go back",
+      "Back"
+     ],
+     [
+      "How to play",
+      ""
+     ]
+    ],
+    "pressed": [
+     [
+      "Sound: off",
+      "false"
+     ]
+    ],
+    "sideways": 0
+   },
+   "finance": {
+    "opened": false,
+    "labelled": [
+     [
+      "Go back",
+      "Back"
+     ],
+     [
+      "How to play",
+      ""
+     ]
+    ],
+    "pressed": [
+     [
+      "Sound: off",
+      "false"
+     ]
+    ],
+    "sideways": 0
+   },
+   "academy": {
+    "opened": false,
+    "labelled": [
+     [
+      "Go back",
+      "Back"
+     ],
+     [
+      "How to play",
+      ""
+     ]
+    ],
+    "pressed": [
+     [
+      "Sound: off",
+      "false"
+     ]
+    ],
+    "sideways": 0
+   },
+   "training": {
+    "opened": false,
+    "labelled": [
+     [
+      "Go back",
+      "Back"
+     ],
+     [
+      "How to play",
+      ""
+     ]
+    ],
+    "pressed": [
+     [
+      "Sound: off",
+      "false"
+     ]
+    ],
+    "sideways": 0
+   },
+   "pageErrors": []
+  }
+ ]
+}
