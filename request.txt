@@ -1,0 +1,14 @@
+#!build
+#!playwright
+seam: SHOTS=$RC_OUT node scripts/playUsCareerSaveSeam.mjs
+seam-stale: US_SAVE_SEAM_CONTROL=stale PORT=4411 node scripts/playUsCareerSaveSeam.mjs
+seam-sitover: US_SAVE_SEAM_CONTROL=sitover PORT=4412 node scripts/playUsCareerSaveSeam.mjs
+seam-hidden: US_SAVE_SEAM_CONTROL=hidden PORT=4413 node scripts/playUsCareerSaveSeam.mjs
+seam-keeptoast: US_SAVE_SEAM_CONTROL=keeptoast PORT=4414 node scripts/playUsCareerSaveSeam.mjs
+seam-open: US_SAVE_SEAM_CONTROL=open PORT=4415 node scripts/playUsCareerSaveSeam.mjs
+seam-raw: US_SAVE_SEAM_CONTROL=raw PORT=4416 node scripts/playUsCareerSaveSeam.mjs
+centre: PORT=4421 node scripts/playUsSeasonCentre.mjs
+centre-noaction: US_SEASON_PLAY_CONTROL=noaction PORT=4422 node scripts/playUsSeasonCentre.mjs
+centre-raw: US_SEASON_PLAY_CONTROL=raw PORT=4423 node scripts/playUsSeasonCentre.mjs
+noDoubleRecord: node scripts/simNoDoubleRecord.mjs
+completionOnce: node scripts/simCompletionOnce.mjs

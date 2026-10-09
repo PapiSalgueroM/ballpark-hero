@@ -1,0 +1,13 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+seam-sitover exit=1 10s | playUsCareerSaveSeam: 4 journeys, 36 checks, 4 failed (control sitover)
+seam-hidden exit=1 10s | playUsCareerSaveSeam: 4 journeys, 36 checks, 4 failed (control hidden)
+seam-stale exit=1 22s | playUsCareerSaveSeam: 4 journeys, 36 checks, 4 failed (control stale)
+seam-keeptoast exit=2 1s | control keeptoast refused: the toast's cleanup is in 0 chunks ( times), expected once in one
+seam exit=0 24s | playUsCareerSaveSeam: 12 journeys, 56 checks, 0 failed
+seam-open exit=1 15s | playUsCareerSaveSeam: 8 journeys, 48 checks, 36 failed (control open)
+centre exit=0 68s | playUsSeasonCentre: 62 checks, 0 failed
+centre-noaction exit=1 68s | playUsSeasonCentre: 62 checks, 2 failed (control noaction)
+noDoubleRecord exit=0 29s | simNoDoubleRecord: all green (67 rows and checks, each recorded once across the finish, the toggles, the coaching, the reveals and the reloads; 115 recorders read)
+completionOnce exit=0 4s | simCompletionOnce: all green
+seam-raw exit=1 123s | playUsCareerSaveSeam: 4 journeys, 4 checks, 4 failed (control raw)
+centre-raw exit=1 84s | playUsSeasonCentre: 62 checks, 4 failed (control raw)
