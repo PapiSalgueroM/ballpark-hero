@@ -18,7 +18,9 @@ import { describe, it, expect } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
 import {
-  POS_MAP, RATING_FLOOR, RATING_CEIL, ratingOf, gbpM, EUR_USD_RATE, usdOfEur, FLOOR_USD,
+  POS_MAP, RATING_FLOOR, RATING_CEIL, valueRatingOf, gbpM, EUR_USD_RATE, usdOfEur, FLOOR_USD,
+  CURVE_VERSION, YOUTH_FROM, YOUTH_MAX, VETERAN_CAP, VETERAN_POINTS, ENGINE_POSITIONS,
+  agePoints, rateFrom, ratingOf,
 } from '../../scripts/lib/cmValueCurve.mjs';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -51,16 +53,16 @@ describe('Club Manager value curve (recorded before Round 1102)', () => {
   it('every recorded dollar value still gets its recorded value rating', () => {
     const moved: string[] = [];
     for (const [usd, want] of fixture.rating) {
-      const got = ratingOf(usd);
+      const got = valueRatingOf(usd);
       if (got !== want) moved.push(`${usd}: ${want} became ${got}`);
     }
     expect(moved).toEqual([]);
   });
 
   it('the two anchors read as the header says', () => {
-    expect(ratingOf(216_000_000)).toBe(94);
-    expect(ratingOf(1_000_000)).toBe(64);
-    expect(ratingOf(FLOOR_USD)).toBe(48);
+    expect(valueRatingOf(216_000_000)).toBe(94);
+    expect(valueRatingOf(1_000_000)).toBe(64);
+    expect(valueRatingOf(FLOOR_USD)).toBe(48);
   });
 
   it('pounds, at one and at two decimals, are the recorded ones', () => {
@@ -74,5 +76,86 @@ describe('Club Manager value curve (recorded before Round 1102)', () => {
     const moved: string[] = [];
     for (const [eur, want] of fixture.eurUsd) if (usdOfEur(eur) !== want) moved.push(`${eur}: ${want} became ${usdOfEur(eur)}`);
     expect(moved).toEqual([]);
+  });
+});
+
+/* The age points as LITERAL cases, typed out by hand from the round's table and never computed from
+   the module: every age from 14 to 45 at seven value ratings. Reading across one row: five ages 14
+   to 18, five 19 to 23, six 24 to 29, eight 30 to 37, eight 38 to 45. */
+const AGES = Array.from({ length: 32 }, (_, i) => 14 + i);
+const TABLE: Record<number, number[]> = {
+  48: [48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 49, 50, 50, 51, 52, 53, 54, 55, 56, 56, 56, 56, 56, 56, 56, 56],
+  64: [58, 58, 58, 58, 58, 59, 60, 61, 62, 63, 64, 64, 64, 64, 64, 64, 65, 66, 66, 67, 68, 69, 70, 71, 72, 72, 72, 72, 72, 72, 72, 72],
+  80: [74, 74, 74, 74, 74, 75, 76, 77, 78, 79, 80, 80, 80, 80, 80, 80, 81, 82, 82, 83, 84, 85, 86, 87, 88, 88, 88, 88, 88, 88, 88, 88],
+  85: [81, 81, 81, 81, 81, 81, 81, 82, 83, 84, 85, 85, 85, 85, 85, 85, 86, 87, 87, 88, 89, 90, 91, 92, 93, 93, 93, 93, 93, 93, 93, 93],
+  89: [87, 87, 87, 87, 87, 87, 87, 87, 87, 88, 89, 89, 89, 89, 89, 89, 90, 91, 91, 92, 93, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94],
+  92: [91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 92, 92, 92, 92, 92, 92, 93, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94],
+  94: [94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94],
+};
+
+describe('Club Manager rating: the value rating plus points for age (Round 1102)', () => {
+  it('is on curve 2 and holds thirteen positions', () => {
+    expect(CURVE_VERSION).toBe(2);
+    expect(ENGINE_POSITIONS.size).toBe(13);
+    expect([...ENGINE_POSITIONS].sort()).toEqual(['CAM', 'CB', 'CDM', 'CF', 'CM', 'GK', 'LB', 'LM', 'LW', 'RB', 'RM', 'RW', 'ST']);
+    expect([YOUTH_FROM, YOUTH_MAX, VETERAN_CAP]).toEqual([24, 6, 8]);
+    expect(VETERAN_POINTS).toEqual({ 30: 1, 31: 2, 32: 2, 33: 3, 34: 4, 35: 5, 36: 6, 37: 7 });
+  });
+
+  it('every age from 14 to 45 at seven value ratings is the table typed out by hand', () => {
+    const wrong: string[] = [];
+    let checked = 0;
+    for (const [vr, row] of Object.entries(TABLE)) {
+      expect(row.length).toBe(32);
+      AGES.forEach((age, i) => {
+        checked += 1;
+        const got = rateFrom(Number(vr), age, 'CB');
+        if (got !== row[i]) wrong.push(`value rating ${vr} at ${age}: wanted ${row[i]}, got ${got}`);
+      });
+    }
+    expect(checked).toBe(224);
+    expect(wrong).toEqual([]);
+  });
+
+  it('the age points alone: a point a year under 24, nothing to 29, one at 30 rising to eight', () => {
+    expect([14, 18, 19, 20, 21, 22, 23].map(a => agePoints(70, a))).toEqual([-6, -6, -5, -4, -3, -2, -1]);
+    expect([24, 25, 26, 27, 28, 29].map(a => agePoints(70, a))).toEqual([0, 0, 0, 0, 0, 0]);
+    expect([30, 31, 32, 33, 34, 35, 36, 37, 38, 41, 45].map(a => agePoints(70, a))).toEqual([1, 2, 2, 3, 4, 5, 6, 7, 8, 8, 8]);
+    /* the half distance limit: at 90 a boy gives two back, at 93 nothing, at the cap nothing */
+    expect([agePoints(90, 17), agePoints(91, 17), agePoints(93, 17), agePoints(94, 17)]).toEqual([-2, -1, 0, 0]);
+  });
+
+  it('position is checked and changes nothing', () => {
+    for (const pos of ENGINE_POSITIONS) {
+      expect(rateFrom(80, 35, pos)).toBe(85);
+      expect(rateFrom(84, 22, pos)).toBe(82);
+    }
+  });
+
+  it('ratingOf is the value rating read with the age', () => {
+    /* one million dollars is a 64 on value; 216 million is the cap at any age */
+    expect(ratingOf(1_000_000, 26, 'CM')).toBe(64);
+    expect(ratingOf(1_000_000, 35, 'CM')).toBe(69);
+    expect(ratingOf(1_000_000, 19, 'CM')).toBe(59);
+    for (const age of AGES) expect(ratingOf(216_000_000, age, 'RW')).toBe(94);
+    expect(ratingOf(0, 26, 'GK')).toBe(48);
+    expect(ratingOf(null, 40, 'GK')).toBe(56);
+  });
+
+  it('fails closed on a bad value rating, age or position, naming the inputs', () => {
+    expect(() => rateFrom(80.5, 26, 'CB')).toThrow(/value rating/);
+    expect(() => rateFrom(47, 26, 'CB')).toThrow(/value rating/);
+    expect(() => rateFrom(95, 26, 'CB')).toThrow(/value rating/);
+    expect(() => rateFrom(80, 13, 'CB')).toThrow(/age/);
+    expect(() => rateFrom(80, 46, 'CB')).toThrow(/age/);
+    expect(() => rateFrom(80, 26.5, 'CB')).toThrow(/age/);
+    expect(() => rateFrom(80, undefined, 'CB')).toThrow(/age/);
+    expect(() => rateFrom(80, '26' as any, 'CB')).toThrow(/age/);
+    expect(() => rateFrom(80, 26, 'SW')).toThrow(/position/);
+    expect(() => rateFrom(80, 26, undefined)).toThrow(/position/);
+    expect(() => rateFrom(80, 26, 'Centre-Back')).toThrow(/position/);
+    expect(() => rateFrom(80, 13, 'SW')).toThrow(/valueRating 80, age 13, pos SW/);
+    expect(() => ratingOf(5_000_000, 26)).toThrow(/position/);
+    expect(() => ratingOf(5_000_000, undefined, 'CB')).toThrow(/age/);
   });
 });
