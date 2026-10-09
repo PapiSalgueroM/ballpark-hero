@@ -611,6 +611,10 @@ export interface CMPlayer {
    * means he was involved, a 0 means he watched it. Newest last. Matches he
    * was injured, banned or out on loan for never go in, because a player does
    * not sulk about a game he could not have played in.
+   * Round 1146: a 1 is a START. A man who came on holds the share of the
+   * match he was out there for (windowEntry), a number between 0 and 1, so a
+   * late cameo is not a game. Saves from before the round hold only 0 and 1
+   * and read the way they always did.
    */
   lastTen?: number[];
   /** Round 127: he has asked to leave, and the papers know about it. */
@@ -7394,6 +7398,41 @@ export function playingShare(p: CMPlayer): number | null {
 }
 
 /**
+ * Round 1146: what one match is worth in his last ten. A start is a game,
+ * whatever minute he came off. A man who came on is worth the share of the
+ * match he was out there for: on at the break is half a game, on for the last
+ * quarter of an hour is about a sixth of one.
+ *
+ * Before this the window held a 1 for anyone who set foot on the pitch. That
+ * was honest while a bench man only came on for an injury, and it stopped
+ * being honest the day the quick sim's coach started using his bench: a man
+ * the manager had dropped came on late in nine quick sims in ten and read as
+ * playing every week, so being dropped stopped showing (scripts/simRoles.mjs
+ * section 3b went from about 0.3 of the football to 0.58).
+ */
+export function windowEntry(started: boolean, cameOnAt: number | null, lastMinute = 90): number {
+  if (started) return 1;
+  if (cameOnAt === null) return 0;
+  return Math.round(clamp((lastMinute - cameOnAt + 1) / lastMinute, 0, 1) * 100) / 100;
+}
+
+/**
+ * Round 1146: his last ten in the words a screen prints. `starts` is the
+ * matches he started, `offBench` the ones he came on in, `of` how many the
+ * window holds. playingShare stays the number his mood is judged on.
+ */
+export function windowCounts(p: CMPlayer): { starts: number; offBench: number; of: number } {
+  const w = p.lastTen ?? [];
+  return { starts: w.filter(x => x >= 1).length, offBench: w.filter(x => x > 0 && x < 1).length, of: w.length };
+}
+
+/** "3 starts, 2 off the bench", the count every squad screen prints. */
+export function windowWords(p: CMPlayer): string {
+  const { starts, offBench } = windowCounts(p);
+  return `${starts} ${starts === 1 ? 'start' : 'starts'}${offBench ? `, ${offBench} off the bench` : ''}`;
+}
+
+/**
  * Promise minus reality. Positive means he is playing more than he was
  * told he would, negative means you are not keeping your end of it.
  */
@@ -8375,8 +8414,7 @@ function buildPressQuestion(state: CareerState): PressQuestion | null {
     .filter(p => isAvailable(p) && (p.lastTen ?? []).length >= 5 && promiseGap(p) <= -0.25)
     .sort((a, b) => promiseGap(a) - promiseGap(b))[0];
   if (dropped) {
-    const played = (dropped.lastTen ?? []).reduce((s, x) => s + x, 0);
-    const of = (dropped.lastTen ?? []).length;
+    const { starts: played, of } = windowCounts(dropped);
     return mk({
       kind: 'dropped', playerId: dropped.id, playerName: dropped.name,
       text: `${dropped.name} has started ${played} of the last ${of}. Is he finished at this club?`,
@@ -9084,8 +9122,7 @@ function generatePlayerMessage(state: CareerState, xi: CMPlayer[], won: boolean,
     if (letDown) {
       const rung = ROLE_LADDER.indexOf(roleOf(letDown));
       const honest = ROLE_LADDER[Math.min(rung + 1, ROLE_LADDER.length - 1)];
-      const played = (letDown.lastTen ?? []).reduce((s, x) => s + x, 0);
-      const of = (letDown.lastTen ?? []).length;
+      const { starts: played, of } = windowCounts(letDown);
       const options: { label: string; effect: MessageEffect }[] = [
         { label: 'Promise him a start', effect: 'promise' },
         { label: 'Hear him out', effect: 'listen' },
@@ -16262,9 +16299,18 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     return ROLE_LADDER.indexOf(roleOf(p))
       - ROLE_LADDER.indexOf(deservedFromRank(rank === undefined ? 99 : rank, p));
   };
+  /* Round 1146: a start is a game and a man who came on gets the share of the
+     match he played (windowEntry). A man on the pitch with no line saying when
+     he came on is a match from before the list existed, changed at the break. */
+  const startedIds = new Set(live.startXi);
+  const cameOnAt = new Map<string, number>();
+  for (const sb of live.subs ?? []) if (sb.onId && !cameOnAt.has(sb.onId)) cameOnAt.set(sb.onId, sb.minute);
+  const windowOf = (id: string): number => (xiIdSet.has(id)
+    ? windowEntry(startedIds.has(id), cameOnAt.get(id) ?? 46, lastMinute)
+    : 0);
   state.squad = state.squad.map(p => {
     const lastTen = fitAtKickoff.has(p.id)
-      ? [...(p.lastTen ?? []), xiIdSet.has(p.id) ? 1 : 0].slice(-PROMISE_WINDOW)
+      ? [...(p.lastTen ?? []), windowOf(p.id)].slice(-PROMISE_WINDOW)
       : (p.lastTen ?? []);
     const withWindow = { ...p, lastTen };
     return {
@@ -16351,7 +16397,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
         /* Round 137: the request is a real squad event and keeps his name.
            The reasoning behind it is narrated from his minutes instead of
            being written as something he said. */
-        ? `${p.name} put it in writing. He is down as a ${ROLE_INFO[roleOf(p)].label.toLowerCase()} and he has started ${(p.lastTen ?? []).reduce((s, x) => s + x, 0)} of the last ${(p.lastTen ?? []).length}, so he wants to leave.`
+        ? `${p.name} put it in writing. He is down as a ${ROLE_INFO[roleOf(p)].label.toLowerCase()} and he has started ${windowCounts(p).starts} of the last ${windowCounts(p).of}, so he wants to leave.`
         : `${p.name} put it in writing. Being listed as a ${ROLE_INFO[roleOf(p)].label.toLowerCase()} is the part he cannot get past, and he reckons somewhere else rates him higher.`,
       options: [
         { label: 'You are going nowhere', effect: 'refuse' },

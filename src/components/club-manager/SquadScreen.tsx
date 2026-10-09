@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { nationalityOf } from '@/data/playerNationalities';
 import { FlagImg } from '@/components/FlagImg';
 import {
-  ROLE_INFO, roleOf, promiseMood, playingShare, deservedRole, standingGap,
+  ROLE_INFO, roleOf, promiseMood, playingShare, windowWords, deservedRole, standingGap,
   sellValue, renewalTerms, moneyIn,
 } from '@/lib/clubManager';
 import type { CMPlayer, CareerState, IncomingBid } from '@/lib/clubManager';
@@ -279,7 +279,7 @@ export function SquadRowDetail({ p, career, scoutLevel, money }: { p: CMPlayer; 
   const band = scoutBand(p, scoutLevel);
   const mood = promiseMood(p);
   const share = playingShare(p);
-  const played = (p.lastTen ?? []).reduce((s, x) => s + x, 0);
+  const played = windowWords(p);
   const of = (p.lastTen ?? []).length;
   const role = roleOf(p);
   const gap = standingGap(career, p);
@@ -325,7 +325,7 @@ export function SquadRowDetail({ p, career, scoutLevel, money }: { p: CMPlayer; 
         cell="gametime"
         label="Game time"
         value={share === null ? 'Too early to say' : mood.text}
-        sub={of ? `Played ${played} of his last ${of}` : 'No games yet'}
+        sub={of ? `${played} in his last ${of}` : 'No games yet'}
         tone={share === null ? undefined : mood.tone === 'bad' ? 'bad' : mood.tone === 'ok' ? 'warn' : 'good'}
       />
       <Tile
