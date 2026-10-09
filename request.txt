@@ -1,0 +1,2 @@
+#!serial
+native-soccer-own-goals-1167: bash .rc/x/soccer-own-goals-1167.sh

@@ -1,0 +1,172 @@
+identity exit=0
+src/components/soccer-career/SoccerSeasonCentre.tsx: OK
+scripts/simSoccerOwnGoals.mjs: OK
+/usr/bin/xz
+xz (XZ Utils) 5.4.5
+liblzma 5.4.5
+locked-packages exit=0
+Verified 521 actual installed locked package versions.
+runtime exit=0
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 120 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 120 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 120 MiB
+Chrome Headless Shell 156.0.8078.4 (playwright chromium-headless-shell v1248) downloaded to /home/runner/work/_temp/own-goals-1167.sj5mbQ/pw-browsers/chromium_headless_shell-1248
+Version 1.64.0
+brand-runtime exit=0
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.4/5.4 MB 29.2 MB/s eta 0:00:00
+Downloading pillow-12.3.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (6.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.9/6.9 MB 61.0 MB/s eta 0:00:00
+Installing collected packages: pillow, fonttools
+Successfully installed fonttools-4.66.1 pillow-12.3.0
+syntax exit=0
+/home/runner/work/_temp/own-goals-1167.sj5mbQ/evidence/native-worker.mjs: OK
+fonts exit=0
+Fonts1167 PASS: actual template CSS and all referenced declared-family woff2 bodies retained and mapped to local serving.
+font-hold exit=0
+base-prepare exit=0
+types exit=0
+base-types exit=0
+build exit=0
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[32m✓ built in 30.06s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+build-hold exit=0
+cohorts exit=0
+MEASURED exposure: 2738 tagged matches/78818, 1526 tagged seasons/2091, 44 self seasons/2091; 10450/16620 distinct changed mixtures
+simSoccerOwnGoals: 4794848 checks, 0 failed
+MEASURED seed 2: 2120 seasons, 213640 goals, 28932 excluded; eligible {"us":108711,"them":75997,"onPitchThem":44812,"offPitchThem":6707,"missedThem":24478}; tags {"opponent":1704,"teammate":1162,"you":77}; role draws [77,59,66,60,70,78,64,61,59,60,57]
+MEASURED exposure: 2874 tagged matches/79880, 1585 tagged seasons/2120, 75 self seasons/2120; 10428/16850 distinct changed mixtures
+simSoccerOwnGoals: 4858680 checks, 0 failed
+own-controls exit=0
+simSoccerOwnGoals: 2 checks, 0 failed (control ledgerdata)
+CONTROL ledgerkey: effective copied source, intended ledger-reader AssertionError
+simSoccerOwnGoals: 3 checks, 0 failed (control ledgerkey)
+CONTROL stream: effective copied source, intended parent-derived AssertionError
+simSoccerOwnGoals: 1 checks, 0 failed (control stream)
+agreement-baseline exit=0
+finish fifth 5: goal difference a game, table p1 -1.34 p50 -0.84 p99 -0.18 over 45; results only mean -1.05 over 1, 1 inside
+ok   results only seasons with a saved finish: 35, 34 inside their fifth's table goal difference band
+champions' points a game in table mode: p2 1.97 p50 2.21 p98 2.55 over 1053; results title band 1.9 to 2.65
+ok   independent checker: every derived season agrees with its row
+simSeasonCentreAgreement: 24 checks, 0 failed
+moments-baseline exit=0
+ok   5 moments a season 2.983 (floor 2.9)
+ok   5 YOUR CALL share 0.539 (floor 0.48)
+ok   5 seasons with a YOUR CALL 0.894 (floor 0.84)
+MEASURED planning 0.9 ms a season (information only)
+simSeasonMoments: 54 checks, 0 failed
+moments-controls exit=0
+MEASURED planning 0.9 ms a season (information only)
+simSeasonMoments: 54 checks, 1 failed (control closeshort)
+ok   5 seasons with a YOUR CALL 0.894 (floor 0.84)
+MEASURED planning 0.9 ms a season (information only)
+simSeasonMoments: 54 checks, 2 failed (control double)
+sim-receipts exit=0
+OwnGoal1167 sim receipt PASS: three actual 120-career cohorts, 18 effective copied-source assertions, unchanged regressions and three natural viewer roles.
+bundle-provenance exit=0
+OwnGoal1167 provenance PASS: all25 actual new node bundles, every input and emitted source/provider byte retained.
+native exit=0
+Viewer1167 PASS: 6 actual candidate journeys and6 effective actual-parent missing-marker controls; all goal roles, scores, player lines, tables, full input saves held.
+native-hold exit=0
+native-receipts exit=0
+OwnGoal1167 viewer receipt PASS: six candidate/six effective actual-parent rows, 12 captures, actual source providers/fonts/served bodies and held Vite cores.
+reader-simAdsense exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simAdsense.mjs                  0.5s
+
+All 1 harnesses green.
+reader-simBrand exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simBrand.mjs                    0.4s
+
+All 1 harnesses green.
+reader-simHeadTags exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simHeadTags.mjs                 0.4s
+
+All 1 harnesses green.
+reader-simHiddenPages exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simHiddenPages.mjs              0.4s
+
+All 1 harnesses green.
+reader-simHubs exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simHubs.mjs                     0.4s
+
+All 1 harnesses green.
+reader-simIndexNow exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simIndexNow.mjs                 0.3s
+
+All 1 harnesses green.
+reader-simIndexing exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simIndexing.mjs                 0.4s
+
+All 1 harnesses green.
+reader-simInternalLinks exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simInternalLinks.mjs            0.4s
+
+All 1 harnesses green.
+reader-simNoRivalNames exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simNoRivalNames.mjs            11.4s
+
+All 1 harnesses green.
+reader-simPrerender exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simPrerender.mjs                0.8s
+
+All 1 harnesses green.
+reader-simPrerenderBoot exit=0
+
+Serving dist on 4173 for 1 browser harnesses
+  PASS  simPrerenderBoot.mjs           13.1s
+
+All 1 harnesses green.
+reader-simRetiredRoutes exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simRetiredRoutes.mjs            0.4s
+
+All 1 harnesses green.
+reader-simSchema exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simSchema.mjs                   0.4s
+
+All 1 harnesses green.
+reader-simSitemap exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simSitemap.mjs                  0.4s
+
+All 1 harnesses green.
+reader-simSnapshotAssets exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simSnapshotAssets.mjs           0.4s
+
+All 1 harnesses green.
+reader-receipts exit=0
+All15 actual named dist/public readers printed their passing outcomes.
+closing exit=0
+dependency-cache-hold exit=0
+Every original application package byte is held; only ordinary new cache files are allowed. The complete held template-font cache is checked separately at closing.
+strict-gates exit=0
+Every actual tailored own-goal preparation/cohort/source-control/viewer/reader/source/dependency/build gate succeeded.
+Soccer own-goals1167 strict label: failed=0, complete=1, source=e5d9cdc7b7544e02a4002182556c01c5bfebf6c4, request=9b7ded9a713a0a80aa789cd01de77d490ffb7bc5.
