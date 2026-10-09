@@ -1,0 +1,22 @@
+ok   full old-save loading and younger deals unchanged; exact older extension and renewal quotes
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: the actual window completes the club decision without an accept action
++ actual - expected
+
++ 'frozen_out'
+- 'club_move'
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerContractMoves.mjs:90:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'frozen_out',
+  expected: 'club_move',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
