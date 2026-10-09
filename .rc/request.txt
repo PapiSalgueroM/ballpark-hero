@@ -1,0 +1,5 @@
+#!serial
+# Round 1104 third pass, re-records on 92dd4f75 (the thin rule moves rookie pay in rounds three to seven, both eras)
+dig-gate: DIGEST_RECORD=1 DIGEST_ALLOW='nfl|*|*' node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=300000 --hookTimeout=120000; rc=$?; cp src/test/fixtures/usCareerTruthDigest.json "$RC_OUT/usCareerTruthDigest.json"; exit $rc
+board-record: US_BOARD_FIXTURE=record US_BOARD_FIXTURE_OUT="$RC_OUT/usBoardFixture.json" US_BOARD_FIXTURE_SHA="$(git rev-parse HEAD^) (not main: Round 1104 on r1104-nfl-truth, recorded on a GitHub runner)" CI=1 FORCE_COLOR=0 NO_COLOR=1 node_modules/.bin/vitest run src/test/usBoardFixture.test.tsx --reporter=default
+deckc-record: DECKC_RECORD=1 node scripts/simUsCareerDeckC.mjs; rc=$?; cp scripts/data/usCareerDeckCDigest.json "$RC_OUT/usCareerDeckCDigest.json"; exit $rc
