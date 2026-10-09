@@ -495,7 +495,9 @@ export async function countryChoices(
   country: GeoCountry,
   slot: FormationSlot,
   usedNames: Set<string>,
-  opts: { alltime?: boolean } = {},
+  /* keepBest is how many of the best at the slot are always among the tiles. The page never sets
+     it; scripts/simDartDraftPool.mjs passes COUNTRY_TILES to measure the old "best eight" rule. */
+  opts: { alltime?: boolean; keepBest?: number } = {},
 ): Promise<DraftChoice[]> {
   const pool = await fetchCountryPool(country);
   const fresh = pool.filter(p => !usedNames.has(p.name));
@@ -507,7 +509,7 @@ export async function countryChoices(
   }
   if (legends.length > 0 || atPos.length > 0) {
     const ranked = [...legends, ...atPos].sort((a, b) => playerRating(b) - playerRating(a));
-    return countryTiles(ranked).map(player => ({ player, outOfPosition: false }));
+    return countryTiles(ranked, opts.keepBest).map(player => ({ player, outOfPosition: false }));
   }
   const prospect: DraftChoice = { player: academyProspect(country, slot, pool.length), outOfPosition: false };
   const backups = fresh.slice(0, 4).map(player => ({ player, outOfPosition: true }));
