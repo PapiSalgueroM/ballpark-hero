@@ -287,6 +287,28 @@
       its fleets can see, every seeded match is a different match). Pure
       held 48/0 on every leg. Written with --part=modern,eras,pure --write
       on the tree itself, then run green whole.
+      The round's review then re-took it once more (2026-10-09, at 1cb6fdc1)
+      for one fix: what a substitute's match is worth in a player's last
+      ten. The window held a 1 for anyone who set foot on the pitch, so the
+      coach's late cameos made a man the manager had dropped read as playing
+      every week (scripts/simRoles.mjs section 3b went red at 0.576 of the
+      football). A start is still a game; coming on is now the share of the
+      match he played (windowEntry). That moves morale, and morale moves
+      results. A second ladder on a GitHub runner: leg A, the window back to
+      a 1 for anyone who played AND my own goal man read off his card again
+      (the review's other engine fix reads him in the slot he stands in):
+      the file as it stood, byte for byte, so nothing else in the fix pass
+      or in the merge of Release AQ moved a hash. Leg B, the slot read in and
+      the window out: the file as it stood again, so none of the 47 saves
+      holds an own goal by a man standing off his card's line. Leg C, the
+      window in: all 47 saves move (whole in 47, wholeNext in 46, table,
+      results, world and summary in 39, cupDrawNext in 38, cup in 37,
+      europeNext in 28, start in 27, objectivesNext in 22, promotions in 21,
+      europe in 17, trophies in 13, and the second season views of the ten
+      pyramid saves); eight move in nothing but the hash of the whole state,
+      which holds the windows themselves. Pure held 48/0. Written with
+      --part=modern,eras,pure --write on the tree itself, then run green
+      whole.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
