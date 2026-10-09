@@ -1,34 +1,49 @@
 /* Round 1145: a career span is the first and last season a man has ANY row for.
    The page reads only 500+ minute seasons, so the span comes from the view
-   bref_nba_career_spans and never from those rows. Everything here runs the
-   real fetchStatDetectiveData and the real page over a fake database client
+   bref_nba_career_spans and never from those rows. A span belongs to a man,
+   not to a name: two men can share one, and a namesake who never reached 500
+   minutes must not stretch a famous career. Everything here runs the real
+   fetchStatDetectiveData and the real page over a fake database client
    holding a small table: no network, no production. */
+import fs from 'node:fs';
+import path from 'node:path';
 import { cleanup, fireEvent, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 type Row = Record<string, unknown>;
-interface FakeTable { rows: Row[]; failPage?: number; pageCap?: number }
+interface FakeTable { rows: Row[]; failPage?: number; failOnce?: Set<number>; pageCap?: number }
 const db: Record<string, FakeTable> = {};
 const asked: string[] = [];
 
 /* Just enough of the query builder for the two reads this page makes:
-   from(t).select(cols).gte(col, n).order(col, { ascending }).range(a, b). */
+   from(t).select(cols).gte(col, n).order(col, { ascending })[.order(...)].range(a, b).
+   Orders apply in the order they were asked for and a null sorts last, as the
+   API does it. */
 vi.mock('@/integrations/supabase/client', () => ({
   supabase: {
     from: (table: string) => {
       const source = db[table];
       let rows = source ? [...source.rows] : [];
+      const orders: [string, number][] = [];
       const q = {
         select: () => q,
         gte: (col: string, min: number) => { rows = rows.filter(r => r[col] != null && Number(r[col]) >= min); return q; },
-        order: (col: string, opts: { ascending: boolean }) => {
-          rows.sort((a, b) => (a[col]! < b[col]! ? -1 : a[col]! > b[col]! ? 1 : 0) * (opts.ascending ? 1 : -1));
-          return q;
-        },
+        order: (col: string, opts: { ascending: boolean }) => { orders.push([col, opts.ascending ? 1 : -1]); return q; },
         range: (from: number, to: number) => {
           asked.push(`${table}:${from}`);
           if (!source) return Promise.resolve({ data: null, error: { message: 'relation does not exist' } });
           if (source.failPage === from / 1000) return Promise.resolve({ data: null, error: { message: 'fixture failure' } });
+          if (source.failOnce?.delete(from / 1000)) return Promise.resolve({ data: null, error: { message: 'fixture hiccup' } });
+          rows.sort((a, b) => {
+            for (const [col, dir] of orders) {
+              const x = a[col] as string | number | null | undefined, y = b[col] as string | number | null | undefined;
+              if (x === y) continue;
+              if (x == null) return 1;
+              if (y == null) return -1;
+              return (x < y ? -1 : 1) * dir;
+            }
+            return 0;
+          });
           const page = rows.slice(from, to + 1);
           return Promise.resolve({ data: source.pageCap ? page.slice(0, source.pageCap) : page, error: null });
         },
@@ -48,8 +63,9 @@ vi.mock('@/components/game/ShareButtons', () => ({ default: () => null }));
 
 import StatDetective from '@/pages/StatDetective';
 import {
-  SPAN_NOT_ON_FILE, buildShareGrid, careerSpan, evaluateGuess, fetchStatDetectiveData, hintsFor, normalizeName,
-  type MysterySeason,
+  COHORT_GAP, MIN_MINUTES, SPAN_NOT_ON_FILE, buildShareGrid, careerSpan, careersFromSpanRows, evaluateGuess,
+  fetchStatDetectiveData, hintsFor, normalizeName,
+  type MysterySeason, type SpanRow,
 } from '@/lib/statDetective';
 
 const SEASONS = 'bref_nba_player_seasons';
@@ -61,24 +77,37 @@ const line = (kind: 'star' | 'solid' | 'bench', minutes: number) =>
   kind === 'star' ? { minutes, pts: 2100, trb: 400, ast: 200, stl: 90, blk: 40 }
     : kind === 'solid' ? { minutes, pts: 1200, trb: 300, ast: 150, stl: 60, blk: 30 }
       : { minutes, pts: 90, trb: 40, ast: 20, stl: 5, blk: 3 };
-const row = (name: string, endYear: number, kind: 'star' | 'solid' | 'bench', minutes: number, team = 'CHI', position = 'PF'): Row =>
-  ({ id: nextId++, season: seasonOf(endYear), player_name: name, position, team, ...line(kind, minutes) });
+/* cohort is the season's start year minus the listed age, so a man keeps one
+   cohort for life. Everybody here is one man of cohort 1968 unless a test says
+   otherwise; null is a row the source has no age for. */
+const row = (name: string, endYear: number, kind: 'star' | 'solid' | 'bench', minutes: number, team = 'CHI', position = 'PF', cohort: number | null = 1968): Row =>
+  ({ id: nextId++, season: seasonOf(endYear), player_name: name, position, team, age: cohort === null ? null : endYear - 1 - cohort, ...line(kind, minutes) });
 
-/* The view's SQL, in JS: min and max of the season text per player_name. */
+/* The view's SQL, in JS. One row per player_name and cohort over the rows that
+   have a name and a season shaped like '1989-90': min and max of the season
+   text, a count, how many reach 500 minutes, and the distinct team codes.
+   The first describe block below holds this copy to the same expected rows
+   the migration's real SQL is held to by scripts/qa/rehearseCareerSpansView.mjs. */
 const spansOf = (rows: Row[]): Row[] => {
-  const by = new Map<string, Row>();
+  const by = new Map<string, { out: Row; teams: Set<string> }>();
   for (const r of rows) {
+    if (r.player_name == null || typeof r.season !== 'string' || !/^[0-9]{4}-[0-9]{2}$/.test(r.season)) continue;
     const name = String(r.player_name);
-    const season = String(r.season);
-    const have = by.get(name);
-    if (!have) by.set(name, { player_name: name, first_season: season, last_season: season, rows: 1 });
-    else {
-      if (season < String(have.first_season)) have.first_season = season;
-      if (season > String(have.last_season)) have.last_season = season;
-      have.rows = Number(have.rows) + 1;
+    const season = r.season;
+    const cohort = r.age == null ? null : Number(season.slice(0, 4)) - Number(r.age);
+    const key = `${name}|${cohort}`;
+    let have = by.get(key);
+    if (!have) {
+      have = { out: { player_name: name, first_season: season, last_season: season, rows: 0, cohort, rows_500: 0, teams: null }, teams: new Set() };
+      by.set(key, have);
     }
+    if (season < String(have.out.first_season)) have.out.first_season = season;
+    if (season > String(have.out.last_season)) have.out.last_season = season;
+    have.out.rows = Number(have.out.rows) + 1;
+    if (r.minutes != null && Number(r.minutes) >= 500) have.out.rows_500 = Number(have.out.rows_500) + 1;
+    if (r.team != null) have.teams.add(String(r.team));
   }
-  return [...by.values()];
+  return [...by.values()].map(({ out, teams }) => ({ ...out, teams: teams.size ? [...teams].sort().join(',') : null }));
 };
 
 /* The reported shape: 500+ minute seasons 1990 to 1996, then five seasons on the end of the bench to 2001. */
@@ -119,7 +148,115 @@ const mystery2000s: MysterySeason = {
   team: 'BOS', teamName: 'Boston Celtics', franchise: 'celtics', minutes: 2500, pts: 1200, trb: 300, ast: 150, stl: 60, blk: 30, rating: 72,
 };
 
+/* Rows of the view for names nobody plays as, to make it deeper than the pages the page asks for at once. */
+const extraSpans = (prefix: string): Row[] => Array.from({ length: 8200 }, (_, i) => ({
+  player_name: `${prefix} ${String(i).padStart(5, '0')}`, first_season: '1990-91', last_season: '1991-92', rows: 2, cohort: 1968, rows_500: 2, teams: 'BOS',
+}));
+
+/* Two men, one name. The famous one (cohort 1969) has 500+ minute seasons from 1992 to 2001 and is a Stars mystery;
+   the other (cohort 1954) played 38 minutes in 1978 and never reached the floor. Read by name alone the rows run
+   1977-78 to 2000-01. This is the shape the review of this round found among real names. */
+const NAMESAKE = 'Fixture Forward Larch';
+/* Two men, one name, and both reached the floor: one generous profile, as it always was. */
+const SHARED = 'Fixture Guard Alder';
+function namesakeRows(): Row[] {
+  const rows: Row[] = [row(NAMESAKE, 1978, 'bench', 38, 'BUF', 'SF', 1954)];
+  for (let y = 1992; y <= 2001; y++) rows.push(row(NAMESAKE, y, y === 1993 ? 'star' : 'solid', 2600, y <= 1996 ? 'CHH' : 'NYK', 'PF', 1969));
+  for (let y = 1978; y <= 1987; y++) rows.push(row(SHARED, y, 'solid', 1900, 'KCK', 'SG', 1955));
+  for (let y = 1982; y <= 1999; y++) rows.push(row(SHARED, y, 'solid', 1800, 'PHO', 'SF', 1959));
+  return rows;
+}
+/* The main table is left exactly as it was recorded (the pools digest below depends on it); the namesakes join it
+   only in the tests that ask for them. */
+function useNamesakeTable() {
+  const rows = buildTable();
+  rows.push(...namesakeRows());
+  db[SEASONS] = { rows };
+  db[SPANS] = { rows: spansOf(rows) };
+}
+
+interface ViewCases { rows: Row[]; expected: SpanRow[]; careers: Record<string, { first: number; last: number; franchises: string[] }> }
+const CASES = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), 'src/test/fixtures/careerSpansViewCases.json'), 'utf8')) as ViewCases;
+const MIGRATION = fs.readFileSync(path.resolve(process.cwd(), 'supabase/migrations/20261009_round_1145_bref_nba_career_spans.sql'), 'utf8').replace(/\r\n/g, '\n');
+const byNameThenCohort = (a: Row, b: Row) => {
+  const x = String(a.player_name), y = String(b.player_name);
+  if (x !== y) return x < y ? -1 : 1;
+  return Number(a.cohort ?? Infinity) - Number(b.cohort ?? Infinity);
+};
+
+describe('the spans view and what the page makes of its rows', () => {
+  it("holds this file's copy of the view to the rows the migration's SQL is held to", () => {
+    expect(spansOf(CASES.rows).sort(byNameThenCohort)).toEqual([...(CASES.expected as unknown as Row[])].sort(byNameThenCohort));
+  });
+
+  it('makes one career per name, out of the men who reached the floor and nobody else', () => {
+    const careers = careersFromSpanRows(CASES.expected);
+    const got = Object.fromEntries([...careers].map(([key, c]) => [key, { first: c.first, last: c.last, franchises: [...c.franchises].sort() }]));
+    const want = Object.fromEntries(Object.entries(CASES.careers).map(([name, c]) => [normalizeName(name), c]));
+    expect(got).toEqual(want);
+  });
+
+  it('cuts two men apart only past the cohort gap', () => {
+    const man = (cohort: number, first: string, last: string, rows_500: number): SpanRow =>
+      ({ player_name: 'Fixture Gap', first_season: first, last_season: last, cohort, rows_500, teams: 'BOS' });
+    // At the gap they are one man, so the bench years count.
+    expect(careersFromSpanRows([man(1970, '1992-93', '1995-96', 3), man(1970 + COHORT_GAP, '1996-97', '1998-99', 0)]).get('fixture gap'))
+      .toMatchObject({ first: 1993, last: 1999 });
+    // One year past it they are two, and the one under the floor is not him.
+    expect(careersFromSpanRows([man(1970, '1992-93', '1995-96', 3), man(1970 + COHORT_GAP + 1, '1996-97', '1998-99', 0)]).get('fixture gap'))
+      .toMatchObject({ first: 1993, last: 1996 });
+  });
+
+  it('counts the floor in the view at the number the page uses, and keeps the first draft columns first', () => {
+    const sql = MIGRATION.split('\n').filter(l => !l.trim().startsWith('--')).join('\n');
+    expect([...sql.matchAll(/minutes\s*>=\s*(\d+)/g)].map(m => Number(m[1]))).toEqual([MIN_MINUTES]);
+    expect(sql).toMatch(/select player_name,\s+min\(season\) as first_season,\s+max\(season\) as last_season,\s+count\(\*\)::int as rows,\s+cohort,/);
+    expect(sql).toMatch(/group by player_name, cohort;/);
+  });
+});
+
+describe('a career span belongs to a man, not to a name', () => {
+  it('does not let a namesake who never reached 500 minutes stretch a famous career', async () => {
+    useNamesakeTable();
+    const data = await fetchStatDetectiveData();
+    expect(data).not.toBeNull();
+    const larch = data!.byName.get(normalizeName(NAMESAKE))!;
+    // The fixture really has the shape: read by name alone his rows run 1977-78 to 2000-01.
+    const all = db[SEASONS].rows.filter(r => r.player_name === NAMESAKE).map(r => String(r.season)).sort();
+    expect([all[0], all[all.length - 1]]).toEqual(['1977-78', '2000-01']);
+    expect(careerSpan(larch)).toBe('1992-2001');
+    // He is a Stars mystery, and the first clue he gives is his own career.
+    const asMystery = data!.pools.stars.find(m => m.player === NAMESAKE)!;
+    expect(hintsFor(asMystery, 1, larch)).toEqual([{ label: 'Career span', value: '1992-2001' }]);
+    // The other man's team is not his either.
+    expect([...larch.franchises].sort()).toEqual(['hornets', 'knicks']);
+    // Against a 1970s mystery he is later. Read by name he would have matched the era.
+    expect(evaluateGuess(larch, { ...mystery2000s, decade: 1970 }).era).toBe('later');
+  });
+
+  it('keeps two men who both reached the floor as the one generous profile they always were', async () => {
+    useNamesakeTable();
+    const data = await fetchStatDetectiveData();
+    const alder = data!.byName.get(normalizeName(SHARED))!;
+    expect(careerSpan(alder)).toBe('1978-1999');
+    expect([...alder.franchises].sort()).toEqual(['kings', 'suns']);
+  });
+});
+
 describe('Stat Detective career spans come from every season, not the 500 minute ones', () => {
+  it('counts every team he has a row for as a franchise he played for', async () => {
+    const data = await fetchStatDetectiveData();
+    const faded = data!.byName.get(normalizeName(FADED))!;
+    // Washington for his 500 minute seasons, Boston for the bench years after. The 500 minute rows alone say one.
+    const qualifying = new Set(db[SEASONS].rows.filter(r => r.player_name === FADED && Number(r.minutes) >= 500).map(r => String(r.team)));
+    expect([...qualifying]).toEqual(['WSB']);
+    expect([...faded.franchises].sort()).toEqual(['celtics', 'wizards']);
+    const asMystery = data!.pools.stars.find(m => m.player === FADED)!;
+    expect(hintsFor(asMystery, 3, faded)[2]).toEqual({ label: 'Career franchises', value: '2' });
+    // A guess of his is told it shares a franchise with a Celtics mystery, which is true: he played there.
+    expect(evaluateGuess(faded, mystery2000s).sharedFranchise).toBe(true);
+  });
+
   it('reads the true first and last season for a man whose career ran past his 500 minute seasons', async () => {
     const data = await fetchStatDetectiveData();
     expect(data).not.toBeNull();
@@ -155,22 +292,30 @@ describe('Stat Detective career spans come from every season, not the 500 minute
     const rows = db[SPANS].rows;
     db[SPANS] = { rows, failPage: 0 };
     expect(await fetchStatDetectiveData()).toBeNull();
-    db[SPANS] = { rows, failPage: 3 };
-    expect(await fetchStatDetectiveData()).toBeNull();
     delete db[SPANS]; // the view does not exist yet
     expect(await fetchStatDetectiveData()).toBeNull();
     db[SPANS] = { rows: [] }; // readable but empty
     expect(await fetchStatDetectiveData()).toBeNull();
-    db[SPANS] = { rows, pageCap: 400 }; // every page cut short: most names never arrive
+    db[SPANS] = { rows, pageCap: 400 }; // a server that cuts pages short: the read stops early and most names never arrive
     expect(await fetchStatDetectiveData()).toBeNull();
-    // More names than the page budget asks for: the last page comes back full, so the read is not known to be whole.
-    // They sort after every real name, so each profile still gets its span and only the full last page can fail this.
-    const many = Array.from({ length: 8200 }, (_, i) => ({ player_name: `Fixture Zed ${String(i).padStart(5, '0')}`, first_season: '1990-91', last_season: '1991-92', rows: 2 }));
-    db[SPANS] = { rows: [...rows, ...many] };
+    // A later page that keeps failing. The extra names sort after every real one, so each profile already has its
+    // span by then and only the failed page can fail this: half a read is not a read.
+    db[SPANS] = { rows: [...rows, ...extraSpans('Fixture Zed')], failPage: 7 };
     expect(await fetchStatDetectiveData()).toBeNull();
     db[SPANS] = { rows }; // and it loads again once the view answers
     expect(await fetchStatDetectiveData()).not.toBeNull();
-  });
+  }, 30000);
+
+  it('reads a view deeper than the pages it asks for at once to the end, and asks again for a page that failed once', async () => {
+    // 8,200 extra names that sort BEFORE every real one push the real names onto the ninth and tenth pages, past the
+    // six asked for together. Two pages hiccup once on the way.
+    db[SPANS] = { rows: [...extraSpans('Fixture Aaa'), ...db[SPANS].rows], failOnce: new Set([2, 8]) };
+    const data = await fetchStatDetectiveData();
+    expect(data).not.toBeNull();
+    expect(careerSpan(data!.byName.get(normalizeName(FADED))!)).toBe('1990-2001');
+    expect(data!.profiles.filter(p => p.firstYear === null)).toEqual([]);
+    expect(asked).toContain(`${SPANS}:9000`);
+  }, 30000);
 
   it('gives a name the view lacks no span at all and says so, rather than guessing one', async () => {
     db[SPANS] = { rows: db[SPANS].rows.filter(r => r.player_name !== UNFILED) };
@@ -184,6 +329,8 @@ describe('Stat Detective career spans come from every season, not the 500 minute
     expect(buildShareGrid([feedback])).toBe('⬜⬜⬜');
     const asMystery = data!.pools.deep.find(m => m.player === UNFILED)!;
     expect(hintsFor(asMystery, 1, unfiled)).toEqual([{ label: 'Career span', value: SPAN_NOT_ON_FILE }]);
+    // Only his 500 minute seasons are known, so a franchise count would be passed off as his career: not on file either.
+    expect(hintsFor(asMystery, 3, unfiled)[2]).toEqual({ label: 'Career franchises', value: SPAN_NOT_ON_FILE });
     // Everyone else kept a real span.
     expect(data!.profiles.filter(p => p.firstYear === null).map(p => p.name)).toEqual([UNFILED]);
   });
@@ -218,9 +365,10 @@ describe('Stat Detective mysteries do not move with the span', () => {
 describe('the Stat Detective page over the same table', () => {
   it('opens its retry state when the spans cannot be read, and recovers when they can', async () => {
     const rows = db[SPANS].rows;
-    db[SPANS] = { rows, failPage: 1 };
+    db[SPANS] = { rows, failPage: 0 };
     const view = render(<StatDetective />);
-    expect(await view.findByText("Couldn't open the case files right now.")).toBeTruthy();
+    // The reader asks twice more for a failed page (0.4 s, then 0.8 s) before it gives up, so the wait is longer than the default second.
+    expect(await view.findByText("Couldn't open the case files right now.", {}, { timeout: 8000 })).toBeTruthy();
     expect(view.queryByRole('button', { name: /^Stars/ })).toBeNull();
     db[SPANS] = { rows };
     fireEvent.click(view.getByRole('button', { name: 'Try again' }));
@@ -238,5 +386,17 @@ describe('the Stat Detective page over the same table', () => {
     expect(view.queryByRole('button', { name: `${FADED} 1990-1996` })).toBeNull();
     fireEvent.change(box, { target: { value: 'Fixture Wing' } });
     expect(view.getByRole('button', { name: `${LATE} 1984-1990` })).toBeTruthy();
+  });
+
+  it('prints the famous man his own years beside a name he shares', async () => {
+    useNamesakeTable();
+    vi.spyOn(Math, 'random').mockReturnValue(0);
+    const view = render(<StatDetective />);
+    fireEvent.click(await view.findByRole('button', { name: /^Stars/ }));
+    const box = view.getByRole('textbox', { name: 'Guess the mystery player' });
+    fireEvent.focus(box);
+    fireEvent.change(box, { target: { value: 'Fixture Forward' } });
+    expect(view.getByRole('button', { name: `${NAMESAKE} 1992-2001` })).toBeTruthy();
+    expect(view.queryByRole('button', { name: `${NAMESAKE} 1978-2001` })).toBeNull();
   });
 });
