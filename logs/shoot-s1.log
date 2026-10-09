@@ -1,0 +1,33 @@
+   base: Real Madrid, cup R16 in week 9, squad 26, no order set: true
+   section 1 base: seed 782002, cup R16 against Athletic Club (21 on their roster, 2 keepers); the fixture base's tie is against Mallorca (8 on theirs)
+1) The walk, through the whole match: my first five kicks are the first five listed men who finished
+   order: Vinicius Junior, Aurélien Tchouaméni, Dean Huijsen, Federico Valverde, Yan Diomande, Ibrahima Konaté, Kylian Mbappé
+   150 cup matches, 29 shootouts, 29 with my first kicks in the listed order, 29 where skipping a listed man off the pitch changed who took the first five
+   330 kicks, scored share 78.5% (base rate 0.76)
+   their first time round the list read off their roster in 29 shootouts, best first with the keeper last in 29
+2) The order is worth something: five best first beats five worst first, on common random numbers
+   synthetic eleven 90..62 vs itself, 4000 shootouts an arm: best five first 48.6%, worst five first 39.2%, gap 9.4 points
+   Real Madrid's eleven (outfield 82 to 94): best first 50.9%, worst first 48.6%, gap 2.3 points (printed, not asserted)
+3) The cap: no edge and no kick moves past it, either way
+   3600 taker and keeper pairs 40 to 99: 0 past the cap, the biggest move off the base rate 0.120 (twice the cap is 0.120)
+4) Historical unmanaged play equals actual pre-1072 main, with ancient golden drift recorded
+   0 of 150 rows reproduced (15 of them shootouts, written from clubManager.r781-premerge-71df177e.ts on 2026-10-01); 0 carried kicks
+   150 of 150 rows equal actual pre-1072 main in result, next draw and full content (0 raw hashes); ancient golden mismatches candidate 150, baseline 150
+   150 of those rows equal it only with Round 1052's league taken out of this tree's world in memory (the move is that round's)
+   on section 1's base: 300 of 300 rows equal actual pre-1072 main in result, next draw and full content, 37 of them settled on penalties by main (9 on the fixture's base)
+   300 of those rows equal it only with Round 1052's league taken out of this tree's world in memory
+5) An old save loads with no order, holds its historical unmanaged play, and keeps a chosen order
+   the old save equals actual pre-1072 main only with Round 1052's league taken out of this tree's world in memory
+   loaded old save, seed 782113 (one of 9 rows main settles on penalties, decided pens): equal actual pre-1072 main true; ancient golden matches candidate false, baseline false
+   order of 4 kept through save and load, a stranger refused, a loan signing listed, an empty list takes the field off
+6) The keeper facing each kick, and the other side's order
+   keeper 95 behind me and 55 behind them: won 72.5%, my kicks in 85.6%, theirs 73.2%
+   the same two keepers swapped: won 28.8%, my kicks in 74.3%, theirs 85.6%
+   4000 shootouts an arm: win share gap 43.8 points, my kicks minus theirs with the strong man behind me 12.4 points (the edges allow 2 x 6 = 12)
+   shootoutSides: my keeper off the slot (50, then 51 with an outfielder in goal), their keeper (66), their ten best first then the keeper, a blank side and a keeperless side: 0 wrong
+7) A thin side is made up to eleven: nobody of theirs kicks twice before the eleventh
+   shootoutRosterSide: two names, five without a keeper, ten, a full fourteen, a keeperless thirteen and nobody: 0 wrong
+   thin tie: seed 782001, Mallorca with 8 on their roster; 450 cup matches, 48 shootouts, 48 where nobody of theirs kicked twice before the eleventh and every made up man was marked
+   270 kicks of theirs, 33 by generated men, the longest shootout 12 of theirs (printed, not asserted)
+
+simCmShootoutOrder: all sections passed
