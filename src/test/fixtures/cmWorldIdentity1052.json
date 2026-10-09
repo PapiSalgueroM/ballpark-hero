@@ -1,4 +1,5 @@
 {
+ "note1102": "Round 1102 (2026-10-09) deleted the test this fixture was recorded for (src/test/cmWorldIdentity1052.test.ts), as that test ordered for the first round to re-bake the modern rosters. The file stays because scripts/simClubManagerNewLeagues.mjs section H4 reads eraFlavour. Round 1102 re-rated the past seasons on the game's new curve, which moved two of the seven rows and only those: era2015 Zenit 83.5 to 83.2 and era2015 CSKA Moscow 81 to 80.7 (read on a GitHub runner at 67c35c84; the other five rows held, and no man of today's Russian squads was fielded for any of the seven). Every other block here is the world as it stood before Round 1052 and is no longer held to anything.",
  "base": "5ba578262a84df7ace8a12a58e2c439302b1373d",
  "recorded": "2026-10-08",
  "eraClub": "Arsenal",
@@ -1331,12 +1332,12 @@
   {
    "season": "era2015",
    "club": "Zenit",
-   "value": 83.5
+   "value": 83.2
   },
   {
    "season": "era2015",
    "club": "CSKA Moscow",
-   "value": 81
+   "value": 80.7
   },
   {
    "season": "era2020",
