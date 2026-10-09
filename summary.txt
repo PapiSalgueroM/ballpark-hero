@@ -1,0 +1,5 @@
+s1 exit=0 75s | MUTANT s1 KILLED by: simSoccerOwnGoals
+s2 exit=0 105s | MUTANT s2 KILLED by: simSoccerOwnGoals
+s3 exit=0 76s | MUTANT s3 KILLED by: simSoccerOwnGoals
+none-shared exit=0 181s | MUTANT none SURVIVED
+l10 exit=0 80s | MUTANT l10 SURVIVED

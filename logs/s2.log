@@ -1,0 +1,34 @@
+rvmut s2: applied in src/lib/ownGoalRule.ts
+=== RUN simSoccerOwnGoals :: CAREERS=120 SEEDSET=0 node scripts/simSoccerOwnGoals.mjs
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+--- tail
+    at check (file:///home/runner/work/_temp/t-s2/w-s2/scripts/simSoccerOwnGoals.mjs:61:9)
+    at verify (file:///home/runner/work/_temp/t-s2/w-s2/scripts/simSoccerOwnGoals.mjs:157:5)
+    at onSeason (file:///home/runner/work/_temp/t-s2/w-s2/scripts/simSoccerOwnGoals.mjs:321:18)
+    at cohort (file:///home/runner/work/_temp/t-s2/w-s2/scripts/simSoccerOwnGoals.mjs:371:19)
+    at file:///home/runner/work/_temp/t-s2/w-s2/scripts/simSoccerOwnGoals.mjs:403:5
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+=== EXIT 1 :: simSoccerOwnGoals
+=== RUN simCmOwnGoals :: node scripts/simCmOwnGoals.mjs
+  MEASURED own goals: 92 of 4312 goals (2.13%), 49 for me and 43 against; 3218 eligible, expected 100.6, z -0.87; 0 by a keeper; 90 of 1624 matches had one; 2.56 a season in my matches
+  MEASURED penalties: 378 of 4312 goals (8.77%) carry the flag every listing marks (P); direct free kicks 182 (4.22%); 0 own goals by a sub of theirs with no sheet to read his position from
+  MEASURED awards over the 36 seasons both careers agree on: my squad 49 goals and 30 assists down (1.36 and 0.83 a season); my top scorer 0.31 goals down a season on a mean of 21.72, a different man in 0; golden boot a different man in 0, player of the season in 0, world award in 0
+  ok credit (1660 checks)
+--- tail
+  ok share (1 checks)
+  ok marks (4312 checks)
+  ok man (92 checks)
+  ok credit (1660 checks)
+  ok inflight (1 checks)
+simCmOwnGoals: PASS, 6 sections green
+=== EXIT 0 :: simCmOwnGoals
+=== RUN vitest :: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 src/test/seasonCentreOwnGoals.test.tsx src/test/seasonCore.test.ts src/test/managerScorerMarks.test.tsx
+--- tail
+ ✓ src/test/seasonCentreOwnGoals.test.tsx (7 tests) 1389ms
+   ✓ Season Centre: own goals on the page (Round 1167, read after the Release AP merge) > prints an own goal for side "us" with who did it and the club that got it, the same live, held and replayed  468ms
+ Test Files  3 passed (3)
+      Tests  40 passed (40)
+   Start at  17:34:47
+   Duration  7.07s (transform 4.95s, setup 284ms, collect 8.81s, tests 1.74s, environment 1.97s, prepare 670ms)
+=== EXIT 0 :: vitest
+MUTANT s2 KILLED by: simSoccerOwnGoals

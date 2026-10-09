@@ -1,0 +1,35 @@
+=== RUN simSoccerOwnGoals :: CAREERS=120 SEEDSET=0 node scripts/simSoccerOwnGoals.mjs
+MEASURED seed 0: 2172 seasons, 219681 goals, 30177 excluded; eligible {"us":110141,"them":79363,"onPitchThem":47573,"offPitchThem":6838,"missedThem":24952}; tags {"opponent":1752,"teammate":1211,"you":64}; role draws [64,76,58,53,71,82,70,70,75,58,72]
+MEASURED exposure: 2966 tagged matches/81704, 1658 tagged seasons/2172, 63 self seasons/2172; 10840/17266 distinct changed mixtures
+CHECKS by name: {"ambient-rng":30320,"input-immutable":30320,"metadata-inverse":30320,"eligibility":42224,"beneficiary":42224,"self-pitch":42224,"local-policy":3064460,"repeat-json":30320,"ledger-reader":5,"insertion-stability":2,"moment-stability":1633416,"old-save":4344,"ledger-roundtrip":10860,"l
+simSoccerOwnGoals: 4974192 checks, 0 failed
+--- tail
+MEASURED seed 0: 2172 seasons, 219681 goals, 30177 excluded; eligible {"us":110141,"them":79363,"onPitchThem":47573,"offPitchThem":6838,"missedThem":24952}; tags {"opponent":1752,"teammate":1211,"you":64}; role draws [64,76,58,53,71,82,70,70,75,58,72]
+MEASURED exposure: 2966 tagged matches/81704, 1658 tagged seasons/2172, 63 self seasons/2172; 10840/17266 distinct changed mixtures
+CHECKS by name: {"ambient-rng":30320,"input-immutable":30320,"metadata-inverse":30320,"eligibility":42224,"beneficiary":42224,"self-pitch":42224,"local-policy":3064460,"repeat-json":30320,"ledger-reader":5,"insertion-stability":2,"moment-stability":1633416,"old-save":4344,"ledger-roundtrip":10860,"l
+simSoccerOwnGoals: 4974192 checks, 0 failed
+=== EXIT 0 :: simSoccerOwnGoals
+=== RUN simCmOwnGoals :: node scripts/simCmOwnGoals.mjs
+  MEASURED own goals: 92 of 4312 goals (2.13%), 49 for me and 43 against; 3218 eligible, expected 100.6, z -0.87; 8 by a keeper; 90 of 1624 matches had one; 2.56 a season in my matches
+  MEASURED penalties: 378 of 4312 goals (8.77%) carry the flag every listing marks (P); direct free kicks 182 (4.22%); 0 own goals by a sub of theirs with no sheet to read his position from
+  MEASURED awards over the 36 seasons both careers agree on: my squad 49 goals and 30 assists down (1.36 and 0.83 a season); my top scorer 0.31 goals down a season on a mean of 21.72, a different man in 0; golden boot a different man in 0, player of the season in 0, world award in 0
+  ok credit (1660 checks)
+--- tail
+  ok share (1 checks)
+  ok marks (4312 checks)
+  ok man (92 checks)
+  ok credit (1660 checks)
+  ok inflight (1 checks)
+simCmOwnGoals: PASS, 6 sections green
+=== EXIT 0 :: simCmOwnGoals
+=== RUN vitest :: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 src/test/seasonCentreOwnGoals.test.tsx src/test/seasonCore.test.ts src/test/managerScorerMarks.test.tsx
+ RUN  v3.2.7 /home/runner/work/_temp/t-none-shared/w-none
+--- tail
+ ✓ src/test/seasonCentreOwnGoals.test.tsx (7 tests) 1108ms
+   ✓ Season Centre: own goals on the page (Round 1167, read after the Release AP merge) > prints an own goal for side "us" with who did it and the club that got it, the same live, held and replayed  385ms
+ Test Files  3 passed (3)
+      Tests  40 passed (40)
+   Start at  17:36:06
+   Duration  5.54s (transform 4.46s, setup 219ms, collect 6.55s, tests 1.36s, environment 1.55s, prepare 356ms)
+=== EXIT 0 :: vitest
+MUTANT none SURVIVED
