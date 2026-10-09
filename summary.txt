@@ -1,0 +1,6 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+psb exit=0 271s | playStorageBlocked: 826 checks, 0 failed
+psb-open exit=0 244s | playStorageBlocked (control open): 743 checks, 0 failed
+psb-raw exit=1 632s | playStorageBlocked (control raw): 786 checks, 266 failed
+homeFold exit=0 30s | playHomeFold: green. The first thing on the page is something to play.
+weight exit=1 27s | sweepWeight: 11 failures
