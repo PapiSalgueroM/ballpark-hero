@@ -1,0 +1,6 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+rules-before exit=1 15s | simCmLeagueRules: 27 failure(s)
+rules-retake exit=0 15s | simCmLeagueRules: all checks passed (modern, eras, pure)
+rules-after exit=0 27s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+derbies-before exit=0 9s | simCareerDerbies: all 8 sections green
+derbies-record exit=0 0s | board rivals 454 16913237804e2108486c8097ab8d23e295d241c879884487e1f4481f3bdc0dd2
