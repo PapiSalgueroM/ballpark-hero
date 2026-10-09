@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { fetchAllRowsParallel } from '@/lib/fetchAllRows';
 import { Player, Position } from '@/types/game';
 import { getEnrichment } from '@/data/footleEnrichment';
 import { FORMATIONS, LEGENDS, normalizePosition, playerRating, type Formation, type FormationSlot } from '@/lib/squadDeal';
@@ -103,22 +104,54 @@ interface MarketRow {
   assists: number | null;
 }
 
-/** Top-450 current players by 2026 market value + the all-time LEGENDS pool. */
-export async function fetchDartDraftPool(): Promise<{ current: Player[]; legends: Player[] }> {
+/* Round 1145, a player's report: "do u plan to expand the player roster in dart
+   draft?". The pool was the first 900 rows of 2026 by value. It is now the
+   first 2,000, read as two pages of 1000 by the same order because the API
+   hands back at most 1000 rows a request. The 900 it used to be are still its
+   first 900, in the same order. */
+export const POOL_ROWS = 2000;
+const POOL_PAGE = 1000;
+/** The pool before Round 1145. Its last row sets the storm floor below. */
+export const OLD_POOL_ROWS = 900;
+
+export interface DartDraftPool {
+  current: Player[];
+  legends: Player[];
+  /* What the 900th row is worth, in the pool's own millions. The storm zone
+     hands out the cheap end of the pool, and a deeper pool has a cheaper cheap
+     end, so the storm stops here: nobody it offers is worth less than the
+     worst man the 900 row pool held. 0 when the pool is not that deep. */
+  stormFloor: number;
+}
+
+/** The 2,000 most valuable current players of 2026 + the all-time LEGENDS pool. */
+export async function fetchDartDraftPool(): Promise<DartDraftPool> {
+  const empty: DartDraftPool = { current: [], legends: LEGENDS, stormFloor: 0 };
   try {
-    const { data, error } = await supabase
-      .from('player_market_values')
-      .select('player_name, position, age, nationality, club, market_value_usd, goals, assists')
-      .eq('year', 2026)
-      .not('age', 'is', null)
-      .order('market_value_usd', { ascending: false })
-      .order('player_name', { ascending: true })
-      .limit(900);
-    if (error || !data || data.length === 0) return { current: [], legends: LEGENDS };
+    /* The site's shared paged read: both pages asked for together, a failed
+       page asked for again, and nothing past the 2,000th row. Both pages or
+       nothing: half a pool would quietly be the old shallow one. */
+    const { data, error } = await fetchAllRowsParallel<MarketRow>(
+      (from, to) =>
+        supabase
+          .from('player_market_values')
+          .select('player_name, position, age, nationality, club, market_value_usd, goals, assists')
+          .eq('year', 2026)
+          .not('age', 'is', null)
+          .order('market_value_usd', { ascending: false })
+          .order('player_name', { ascending: true })
+          .range(from, to),
+      POOL_ROWS / POOL_PAGE,
+      POOL_ROWS,
+    );
+    if (error || data.length === 0) return empty;
+
+    const millions = (usd: number) => Math.round(usd / 1_000_000);
+    const stormFloor = data.length >= OLD_POOL_ROWS ? millions(data[OLD_POOL_ROWS - 1].market_value_usd) : 0;
 
     const seen = new Set<string>();
     const current: Player[] = [];
-    for (const row of data as MarketRow[]) {
+    for (const row of data) {
       const position = normalizePosition(row.position ?? '');
       if (!position) continue;
       const key = row.player_name.toLowerCase();
@@ -135,13 +168,13 @@ export async function fetchDartDraftPool(): Promise<{ current: Player[]; legends
         position,
         kitNumber: enrichment.kitNumber,
         age: row.age,
-        marketValue: Math.round(row.market_value_usd / 1_000_000),
+        marketValue: millions(row.market_value_usd),
         difficulty: 'easy',
       });
     }
-    return { current, legends: LEGENDS };
+    return { current, legends: LEGENDS, stormFloor };
   } catch {
-    return { current: [], legends: LEGENDS };
+    return empty;
   }
 }
 

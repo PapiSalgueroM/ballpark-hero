@@ -63,10 +63,16 @@ export async function fetchAllRows<T>(
  * guess is right and still complete when the table outgrows it. Same rules as
  * fetchAllRows: a deterministic .order(), the same retries on a failed page,
  * and an error (with the rows before it) when a page fails every attempt.
+ *
+ * ROUND 1145: `maxRows`, as fetchAllRows has it, for a caller that wants the
+ * top N of an ordered table rather than all of it (Dart Draft's pool is the
+ * top 2,000 of 5,865). The read stops once it holds that many and never asks
+ * for a page past them.
  */
 export async function fetchAllRowsParallel<T>(
   page: (from: number, to: number) => PromiseLike<{ data: T[] | null; error: unknown }>,
   firstPages: number,
+  maxRows?: number,
 ): Promise<{ data: T[]; error: unknown }> {
   const fetchPage = async (i: number) => {
     const from = i * PAGE_SIZE;
@@ -85,6 +91,8 @@ export async function fetchAllRowsParallel<T>(
     if (!data || data.length === 0) break;
     all.push(...data);
     if (data.length < PAGE_SIZE) break;
+    if (maxRows !== undefined && all.length >= maxRows) break;
   }
+  if (maxRows !== undefined && all.length > maxRows) all.length = maxRows;
   return { data: all, error: null };
 }

@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { fetchAllRowsParallel } from '@/lib/fetchAllRows';
 import { normalizeName } from '@/lib/whoAmI';
 
 export { normalizeName };
@@ -33,6 +34,30 @@ export { normalizeName };
  * - Deep Cuts, rating 60-84: 12,711 seasons across 2,571 players
  * - Guessable names: 2,956 players (19,938 rows incl. combined = 20 pages
  *   today, 25 budgeted below).
+ *
+ * Round 1145, the career span. The span used to be built from the rows this
+ * page fetches, which are the 500+ minute ones, so a season on the end of the
+ * bench did not exist for it. A player reported a man shown as 1990-1996 whose
+ * rows run 1989-90 to 2000-01, and he was one of 1,845 (of 2,973 profiles,
+ * measured read only on 2026-10-09: 1,432 ended too early, 816 started too
+ * late). The span now comes from the view bref_nba_career_spans, the first
+ * and last season a name has ANY row for. The 500 minute floor still decides
+ * who can be a mystery and who can be guessed; it no longer decides when a
+ * career started or ended. There is no fallback to the old span: if the view
+ * cannot be read the whole load fails into the retry state.
+ *
+ * Same round, after review: a span belongs to a MAN, not to a name. The table
+ * has no person key, and two men can share a name. Read by name alone, a
+ * namesake who played 38 minutes in 1977-78 stretched a famous 1992-2001
+ * career back to 1978, which the old 500 minute span never did. So the view
+ * hands back one row per name and COHORT (season start year minus listed age,
+ * constant for one man) with how many of those rows reach 500 minutes, and
+ * careersFromSpanRows below keeps only the men a profile is actually built
+ * from: the ones with a 500+ minute season. Two men who both have one are
+ * still one generous profile, as they always were. The same rows carry every
+ * team a man has a row for, so "Career franchises" and the shared franchise
+ * chip count a nine game stint too, where they used to see only the 500
+ * minute seasons.
  */
 
 export type Difficulty = 'stars' | 'deep';
@@ -42,9 +67,29 @@ export const STARS_MIN_RATING = 85;
 export const DEEP_MIN_RATING = 60;
 export const DEEP_MAX_RATING = 84;
 
-const MIN_MINUTES = 500;   // same floor perfectSeasonNba uses for draftable players
+/* Same floor perfectSeasonNba uses for draftable players. The spans view counts
+   rows against the same number (rows_500 in its SQL); the spans test reads the
+   migration and fails if the two differ. */
+export const MIN_MINUTES = 500;
 const PAGE_SIZE = 1000;    // PostgREST caps rows per request
 const PAGES = 25;          // ~19.9k qualifying rows today, headroom for new seasons
+/* The spans view holds one row per name and cohort: 4,774 names on 2026-10-09
+   and a little more than that in rows. Six pages are asked for at once and the
+   shared reader keeps going if the sixth comes back full, so a table that
+   outgrows the guess costs a round trip, never a name. */
+const SPAN_FIRST_PAGES = 6;
+const SPAN_VIEW = 'bref_nba_career_spans';
+/* Two cohorts of one name are the same man when they sit this close. A man's
+   cohort is constant in a clean source; the slack is for a season listed a
+   year out. Namesakes a generation apart are nowhere near it. */
+export const COHORT_GAP = 2;
+/* Share of profiles allowed to come back without a span before the spans read
+   counts as failed. The view groups the same table the profiles come from, so
+   a healthy read leaves none without one. The broken read this catches is one
+   that stops early without an error (the reader stops at the first short
+   page, so a server that caps pages under 1000 hands back a sixth of the
+   names or fewer), and one in twenty sits well clear of both ends. */
+const SPAN_MISSING_LIMIT = 0.05;
 
 const COMBINED_ROWS = new Set(['2TM', '3TM', '4TM', '5TM']);
 
@@ -226,10 +271,16 @@ export interface MysterySeason {
 
 export interface PlayerProfile {
   name: string;
-  firstYear: number;    // end year of earliest 500+ minute season
-  lastYear: number;
-  positions: string[];  // distinct codes across the career
-  franchises: string[]; // distinct franchise keys (combined rows excluded)
+  /* End years of the first and last season he has ANY row for, from the spans
+     view (Round 1145). null only when the view has no row for his name: then
+     the page says the span is not on file instead of guessing one. */
+  firstYear: number | null;
+  lastYear: number | null;
+  positions: string[];  // distinct codes across his 500+ minute seasons
+  /* Distinct franchise keys (combined rows excluded) across every season he
+     has a row for, from the spans view. When the view has no row for his name
+     only his 500+ minute seasons are known, and the clue says so. */
+  franchises: string[];
   peak: number;         // best season rating, orders suggestions famous-first
 }
 
@@ -239,8 +290,9 @@ export interface StatDetectiveData {
   byName: Map<string, PlayerProfile>; // normalizeName(name) -> profile
 }
 
-/** The guess's career era measured against the mystery decade. */
-export type EraVerdict = 'match' | 'earlier' | 'later';
+/** The guess's career era measured against the mystery decade. 'unknown' is a
+ *  guess whose span is not on file: no direction is claimed for him. */
+export type EraVerdict = 'match' | 'earlier' | 'later' | 'unknown';
 export type PosVerdict = 'exact' | 'group' | 'none';
 
 export interface GuessFeedback {
@@ -269,26 +321,135 @@ interface SeasonRow {
   blk: number | null;
 }
 
+export interface SpanRow {
+  player_name: string | null;
+  first_season: string | null;
+  last_season: string | null;
+  cohort: number | null;   // season start year minus listed age; null with no age
+  rows_500: number | null; // rows of this name and cohort with 500+ minutes
+  teams: string | null;    // every team code he has a row for, comma separated
+}
+
+/** What the file holds on the men a profile is built from. */
+export interface CareerOnFile {
+  first: number;         // end year of the first season with any row
+  last: number;          // end year of the last
+  franchises: string[];  // distinct franchise keys, combined rows excluded
+}
+
+interface Man { lo: number | null; hi: number | null; first: number; last: number; rows500: number; teams: Set<string> }
+
+/**
+ * The spans view's rows, turned into one career per normalised name.
+ *
+ * Rows of one name are sorted by cohort and cut into men wherever two
+ * neighbours sit more than COHORT_GAP apart. Rows with no cohort (no age in
+ * the source) join the one man the name has when it has exactly one, since
+ * nothing then says there is a second; beside two or more men they stand
+ * alone, because nobody can say whose they are. The career is the union of
+ * the men who have a 500+ minute row, and only those: they are the men the
+ * page's profile is made from, and a namesake who never reached the floor is
+ * a different person the profile says nothing about. A name with no such man
+ * gets no entry, and its profile then reads "not on file" rather than a guess.
+ */
+export function careersFromSpanRows(rows: SpanRow[]): Map<string, CareerOnFile> {
+  const byKey = new Map<string, Man[]>();
+  for (const raw of rows) {
+    const key = normalizeName(String(raw.player_name ?? '').trim());
+    const first = endYearOf(typeof raw.first_season === 'string' ? raw.first_season : '');
+    const last = endYearOf(typeof raw.last_season === 'string' ? raw.last_season : '');
+    if (!key || !first || !last) continue;
+    const cohort = raw.cohort == null || !Number.isFinite(Number(raw.cohort)) ? null : Number(raw.cohort);
+    const teams = new Set(String(raw.teams ?? '').split(',').map(t => t.trim()).filter(Boolean));
+    const man: Man = { lo: cohort, hi: cohort, first, last, rows500: Number(raw.rows_500) || 0, teams };
+    const list = byKey.get(key);
+    if (list) list.push(man); else byKey.set(key, [man]);
+  }
+
+  const join = (into: Man, from: Man) => {
+    if (from.first < into.first) into.first = from.first;
+    if (from.last > into.last) into.last = from.last;
+    if (from.hi !== null && (into.hi === null || from.hi > into.hi)) into.hi = from.hi;
+    if (from.lo !== null && (into.lo === null || from.lo < into.lo)) into.lo = from.lo;
+    into.rows500 += from.rows500;
+    for (const t of from.teams) into.teams.add(t);
+  };
+
+  const careers = new Map<string, CareerOnFile>();
+  for (const [key, list] of byKey) {
+    const known = list.filter(m => m.lo !== null).sort((a, b) => (a.lo as number) - (b.lo as number));
+    const men: Man[] = [];
+    for (const m of known) {
+      const prev = men[men.length - 1];
+      if (prev && (m.lo as number) - (prev.hi as number) <= COHORT_GAP) join(prev, m);
+      else men.push(m);
+    }
+    const ageless = list.filter(m => m.lo === null);
+    if (ageless.length > 0) {
+      const one = ageless[0];
+      for (const m of ageless.slice(1)) join(one, m);
+      if (men.length === 1) join(men[0], one);
+      else men.push(one);
+    }
+    const mine = men.filter(m => m.rows500 > 0);
+    if (mine.length === 0) continue;
+    const whole = mine[0];
+    for (const m of mine.slice(1)) join(whole, m);
+    const franchises: string[] = [];
+    for (const code of whole.teams) {
+      const f = franchiseOf(code);
+      if (f && !franchises.includes(f)) franchises.push(f);
+    }
+    careers.set(key, { first: whole.first, last: whole.last, franchises });
+  }
+  return careers;
+}
+
 /**
  * Boot fetch: every 500+ minute player-season, paged in parallel under the
  * PostgREST 1000-row cap (same pattern as fetchTeamSeasonIndex in
  * perfectSeasonNba.ts, including the id-descending order so a future data
- * refresh overflows the oldest rows first). Builds the two mystery pools and
- * a career profile per player name for suggestions and feedback. Returns
- * null on failure so the page can show an error state with retry.
+ * refresh overflows the oldest rows first), and beside them the career spans
+ * view, one row per name and cohort. Builds the two mystery pools and a career profile
+ * per player name for suggestions and feedback. Returns null on failure so
+ * the page can show an error state with retry.
  */
 export async function fetchStatDetectiveData(): Promise<StatDetectiveData | null> {
   try {
-    const pages = await Promise.all(
-      Array.from({ length: PAGES }, (_, i) =>
-        supabase
-          .from('bref_nba_player_seasons' as any)
-          .select('season, player_name, position, team, minutes, pts, trb, ast, stl, blk')
-          .gte('minutes', MIN_MINUTES)
-          .order('id', { ascending: false })
-          .range(i * PAGE_SIZE, (i + 1) * PAGE_SIZE - 1)
-      )
-    );
+    const [pages, spanRead] = await Promise.all([
+      Promise.all(
+        Array.from({ length: PAGES }, (_, i) =>
+          supabase
+            .from('bref_nba_player_seasons' as any)
+            .select('season, player_name, position, team, minutes, pts, trb, ast, stl, blk')
+            .gte('minutes', MIN_MINUTES)
+            .order('id', { ascending: false })
+            .range(i * PAGE_SIZE, (i + 1) * PAGE_SIZE - 1)
+        )
+      ),
+      /* The site's shared paged read: the first pages together, a failed page
+         asked for again, and on past the guess while pages come back full.
+         (player_name, cohort) is the view's key, so the order is total. */
+      fetchAllRowsParallel<SpanRow>(
+        (from, to) =>
+          supabase
+            .from(SPAN_VIEW as any)
+            .select('player_name, first_season, last_season, cohort, rows_500, teams')
+            .order('player_name', { ascending: true })
+            .order('cohort', { ascending: true })
+            .range(from, to) as unknown as PromiseLike<{ data: SpanRow[] | null; error: unknown }>,
+        SPAN_FIRST_PAGES,
+      ),
+    ]);
+
+    /* The spans are all or nothing. A page that still errors after its
+       retries or an empty read fails the load: a span that is merely missing
+       would otherwise be filled by nothing, and the old 500 minute span is
+       the false claim this read replaces, so there is nothing honest to fall
+       back to. */
+    if (spanRead.error || spanRead.data.length === 0) return null;
+    const careers = careersFromSpanRows(spanRead.data);
+    if (careers.size === 0) return null;
 
     const stars: MysterySeason[] = [];
     const deep: MysterySeason[] = [];
@@ -313,11 +474,20 @@ export async function fetchStatDetectiveData(): Promise<StatDetectiveData | null
         const nameKey = normalizeName(name);
         let prof = byName.get(nameKey);
         if (!prof) {
-          prof = { name, firstYear: year, lastYear: year, positions: [], franchises: [], peak: 40 };
+          // The span is never read off these rows: they are only his 500+
+          // minute seasons. It comes from the spans view, or stays null. His
+          // franchises start from the view too, every team he has a row for.
+          const career = careers.get(nameKey);
+          prof = {
+            name,
+            firstYear: career ? career.first : null,
+            lastYear: career ? career.last : null,
+            positions: [],
+            franchises: career ? [...career.franchises] : [],
+            peak: 40,
+          };
           byName.set(nameKey, prof);
         }
-        if (year < prof.firstYear) prof.firstYear = year;
-        if (year > prof.lastYear) prof.lastYear = year;
         for (const c of codes) {
           if (!prof.positions.includes(c)) prof.positions.push(c);
         }
@@ -359,6 +529,12 @@ export async function fetchStatDetectiveData(): Promise<StatDetectiveData | null
     // far below that means pages went missing and feedback would lie.
     if (stars.length < 500 || deep.length < 2000 || byName.size < 800) return null;
 
+    // One name the view lacks is told so on the page. Many of them is a
+    // spans read that did not really come back (see SPAN_MISSING_LIMIT).
+    let spanless = 0;
+    for (const prof of byName.values()) if (prof.firstYear === null) spanless++;
+    if (spanless > byName.size * SPAN_MISSING_LIMIT) return null;
+
     const profiles = [...byName.values()].sort((a, b) => b.peak - a.peak);
     return { pools: { stars, deep }, profiles, byName };
   } catch {
@@ -379,7 +555,8 @@ export function evaluateGuess(profile: PlayerProfile, mystery: MysterySeason): G
   const isCorrect = normalizeName(profile.name) === normalizeName(mystery.player);
 
   let era: EraVerdict = 'match';
-  if (profile.lastYear < mystery.decade) era = 'earlier';
+  if (profile.firstYear === null || profile.lastYear === null) era = 'unknown';
+  else if (profile.lastYear < mystery.decade) era = 'earlier';
   else if (profile.firstYear > mystery.decade + 9) era = 'later';
 
   let pos: PosVerdict = 'none';
@@ -424,8 +601,14 @@ export function suggestProfiles(
   return [...starts, ...wordStarts, ...contains].slice(0, limit);
 }
 
-/** 'Michael Jordan' active 1985-2003 -> '1985-2003' for the dropdown. */
+/** What the page prints where a span would go for a name the view lacks. */
+export const SPAN_NOT_ON_FILE = 'not on file';
+
+/** 'Michael Jordan' active 1985-2003 -> '1985-2003' for the dropdown. An
+ *  empty string when his span is not on file, so the dropdown prints no years
+ *  rather than invented ones. */
 export function careerSpan(profile: PlayerProfile): string {
+  if (profile.firstYear === null || profile.lastYear === null) return '';
   return profile.firstYear === profile.lastYear
     ? String(profile.firstYear)
     : `${profile.firstYear}-${profile.lastYear}`;
@@ -439,9 +622,13 @@ export function careerSpan(profile: PlayerProfile): string {
  */
 export function hintsFor(mystery: MysterySeason, misses: number, profile?: PlayerProfile): Hint[] {
   const hints: Hint[] = [];
-  if (misses >= 1 && profile) hints.push({ label: 'Career span', value: careerSpan(profile) });
+  if (misses >= 1 && profile) hints.push({ label: 'Career span', value: careerSpan(profile) || SPAN_NOT_ON_FILE });
   if (misses >= 2) hints.push({ label: 'Surname starts with', value: surnameInitial(mystery.player) });
-  if (misses >= 3 && profile) hints.push({ label: 'Career franchises', value: String(profile.franchises.length) });
+  /* With no row in the spans view only his 500+ minute seasons are known, and
+     a count of those would be passed off as his career: say it is not on file. */
+  if (misses >= 3 && profile) {
+    hints.push({ label: 'Career franchises', value: profile.firstYear === null ? SPAN_NOT_ON_FILE : String(profile.franchises.length) });
+  }
   if (misses >= 4) hints.push({ label: 'Team', value: mystery.teamName });
   if (misses >= 5) hints.push({ label: 'First name starts with', value: mystery.player.trim().charAt(0).toUpperCase() });
   if (misses >= 6) hints.push({ label: 'Exact season', value: mystery.season });
@@ -473,7 +660,7 @@ export function statChips(m: MysterySeason): StatChip[] {
   return chips;
 }
 
-const ERA_SQUARE: Record<EraVerdict, string> = { match: '🟩', earlier: '⬅️', later: '➡️' };
+const ERA_SQUARE: Record<EraVerdict, string> = { match: '🟩', earlier: '⬅️', later: '➡️', unknown: '⬜' };
 const POS_SQUARE: Record<PosVerdict, string> = { exact: '🟩', group: '🟨', none: '⬜' };
 
 /** One era/position/team row per guess; the winning guess is all green. */
