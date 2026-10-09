@@ -38,6 +38,18 @@
  *           load), and the game under it has not moved up by more than that
  *           one line
  *  errors   no page error, no sideways scroll at 390
+ * And three journeys on a store that is REALLY full (Round 1144 review: the
+ * arms above patch setItem so that every write throws, and a real browser
+ * does not behave like that; see quotaJourney below), once, on nba:
+ *  quota    returning: the bracket page saves what it loaded as it opens,
+ *           which a full store takes; the line says full there and stays,
+ *           still says full on the next game with no page load, and the
+ *           career's first save is refused under it.
+ *           little: with room for a probe and not for the save, Retry save
+ *           is refused again and the line still says full; with real room
+ *           it goes through and the line leaves on the same page
+ *  kept     a cookie choice made under the line is on the device once there
+ *           is room and the line has left
  * Every request that leaves the origin is aborted (supabase.co first, and
  * counted), so nothing here can reach the live database.
  *
@@ -74,6 +86,9 @@
  *   sitover   (Round 1144) a style rule pins the toasts at the
  *             six rem they sat at before that round, whatever
  *             the banner's height                               -> banner
+ *   quotafree (Round 1144 review) the real quota journeys run on
+ *             a store that was seeded and never filled, so
+ *             nothing is refused and no line is owed            -> quota, kept
  *
  * Run: npm run build, then
  *   MSYS_NO_PATHCONV=1 node scripts/playUsCareerSaveSeam.mjs
@@ -93,14 +108,17 @@ const PORT = Number(process.env.PORT ?? 4398);
 const BASE = `http://localhost:${PORT}`;
 const SHOTS = process.env.SHOTS ? path.resolve(ROOT, process.env.SHOTS) : '';
 const CONTROL = process.env.US_SAVE_SEAM_CONTROL ?? '';
-const NAMED = { hidden: ['full'], keeptoast: ['toast'], raw: ['blocked'], open: ['blocked', 'full'], stale: ['line'], sitover: ['banner'] };
+const NAMED = { hidden: ['full'], keeptoast: ['toast'], raw: ['blocked'], open: ['blocked', 'full'], stale: ['line'], sitover: ['banner'], quotafree: ['quota', 'kept'] };
 /* the seam's own probe key (src/lib/safeStorage.ts), which the stale control keeps refusing */
 const PROBE_KEY = '__dukb_storage_probe__';
 if (CONTROL && !(CONTROL in NAMED)) { console.error(`unknown US_SAVE_SEAM_CONTROL ${CONTROL}`); process.exit(2); }
 const ALL = { nba: 'nba-my-career-save-v1', nfl: 'nfl-my-career-save-v1', mlb: 'mlb-my-career-save-v1', nhl: 'nhl-my-career-save-v1' };
 const ASKED = (process.env.SPORTS ?? 'nba,nfl,mlb,nhl').split(',').map(s => s.trim()).filter(s => s in ALL);
 /* a control walks only the arms its check lives in */
-const MODES = CONTROL === 'raw' ? ['blocked'] : CONTROL === 'open' ? ['blocked', 'full'] : CONTROL ? ['full'] : ['open', 'blocked', 'full'];
+const MODES = CONTROL === 'quotafree' ? [] : CONTROL === 'raw' ? ['blocked'] : CONTROL === 'open' ? ['blocked', 'full'] : CONTROL ? ['full'] : ['open', 'blocked', 'full'];
+/* The real quota journeys (see quotaJourneys below) run once, on one sport: the seam is the same file
+   for all four, and filling a store to the last character is the slow part. QUOTA=0 leaves them out. */
+const QUOTA = (!CONTROL || CONTROL === 'quotafree') && process.env.QUOTA !== '0';
 const TOAST_WORDS = 'could not be saved. Stay on this page and use Retry save.';
 if (!ASKED.length) { console.error('playUsCareerSaveSeam: no sport to walk'); process.exit(1); }
 if (!fs.existsSync(path.join(DIST, 'index.html'))) { console.error(`playUsCareerSaveSeam: no build at ${DIST} (run npm run build first)`); process.exit(1); }
@@ -145,6 +163,7 @@ if (CONTROL === 'stale') {
   console.log(`CONTROL stale: when writes come back the browser still refuses ${PROBE_KEY}`);
 }
 if (CONTROL === 'sitover') console.log('CONTROL sitover: a style rule pins the toasts six rem off the bottom, where they sat before Round 1144');
+if (CONTROL === 'quotafree') console.log('CONTROL quotafree: the real quota journeys run on a store that was seeded and never filled, so nothing is refused');
 
 const server = spawn(process.execPath, [path.join(ROOT, 'scripts/lib/hostLikeServer.mjs'), DIST, String(PORT)], { stdio: 'ignore' });
 const stop = code => { try { server.kill(); } catch { /* gone */ } process.exit(code); };
@@ -331,16 +350,195 @@ async function journey(sport, arm) {
   await ctx.close();
 }
 
+/* ─── Round 1144 review: a store that is REALLY full ───
+   Every arm above models full as "every write throws". Chromium is kinder, and the difference is where
+   the first cut of that round went wrong: a full store still takes a write that needs no room (a page
+   saving what it loaded), and with a little room it takes a probe while a save still does not fit. So
+   these three journeys patch nothing: the store is filled to its last characters before the app loads,
+   and room is made by removing fillers, the way a player makes it. */
+function fillStore({ seeds, fill }) {
+  try {
+    if (!sessionStorage.getItem('__seamFilled')) {
+      sessionStorage.setItem('__seamFilled', '1');
+      for (const [k, v] of seeds) localStorage.setItem(k, v);
+      let n = 0;
+      if (fill) {
+        for (const size of [1048576, 65536, 4096, 256, 16, 1]) {
+          const s = 'x'.repeat(size);
+          for (;;) { try { localStorage.setItem(`__f${size}_${n}`, s); n += 1; } catch { break; } }
+        }
+      }
+      window.__seamFilled = n;
+    }
+  } catch (e) { window.__seamFillError = String(e); }
+  /* what the line says, every 40 ms: a line that shows and leaves inside a second is still seen */
+  window.__seamLine = [];
+  const t0 = performance.now();
+  setInterval(() => {
+    const on = document.querySelector('[data-dukb-storage-notice]');
+    const left = document.querySelector('[data-dukb-storage-notice-left]');
+    const s = on ? on.getAttribute('data-dukb-storage-notice') : left ? 'left' : 'none';
+    const last = window.__seamLine[window.__seamLine.length - 1];
+    if (!last || last[1] !== s) window.__seamLine.push([Math.round(performance.now() - t0), s]);
+  }, 40);
+}
+const quotaState = (page, key) => page.evaluate(k => {
+  const on = document.querySelector('[data-dukb-storage-notice]');
+  const left = document.querySelector('[data-dukb-storage-notice-left]');
+  /* is the store still full: a key it does not hold, 40 characters, taken or refused */
+  let room = 'taken';
+  try { localStorage.setItem('__seamNewKey', 'x'.repeat(40)); localStorage.removeItem('__seamNewKey'); } catch { room = 'refused'; }
+  const disk = localStorage.getItem(k);
+  let phase = null;
+  try { phase = disk ? JSON.parse(disk).phase : null; } catch { phase = 'UNREADABLE'; }
+  return {
+    line: on ? on.getAttribute('data-dukb-storage-notice') : left ? 'left' : 'none',
+    history: (window.__seamLine ?? []).map(h => `${h[1]}@${h[0]}`).join(' '),
+    room, phase, saveSize: disk ? disk.length : 0,
+    notice: !!document.querySelector('[data-us-career-save-error]'),
+    banner: !!document.querySelector('[aria-label="Cookie choices"]'),
+    consent: localStorage.getItem('cookie-consent'),
+    filled: window.__seamFilled ?? null, fillError: window.__seamFillError ?? null,
+    stayed: window.__seamStayed === 1,
+    broke: (document.body.textContent ?? '').includes('This page broke'),
+  };
+}, key);
+/* frees one filler and puts all but about 200 characters of it back: room for a probe, not for a save */
+const leaveLittle = page => page.evaluate(() => {
+  for (let i = 0; i < localStorage.length; i += 1) {
+    const k = localStorage.key(i);
+    if (!k || !k.startsWith('__f')) continue;
+    const size = (localStorage.getItem(k) ?? '').length;
+    if (size < 256) continue;
+    localStorage.removeItem(k);
+    try { localStorage.setItem('__fPad', 'x'.repeat(size - 200)); } catch { return -1; }
+    return 200 + k.length - '__fPad'.length;
+  }
+  return 0;
+});
+const freeAll = page => page.evaluate(() => {
+  const ks = [];
+  for (let i = 0; i < localStorage.length; i += 1) { const k = localStorage.key(i); if (k && k.startsWith('__f')) ks.push(k); }
+  ks.forEach(k => localStorage.removeItem(k));
+  return ks.length;
+});
+const lineLeaves = page => page.waitForFunction(() => !document.querySelector('[data-dukb-storage-notice]'), null, { timeout: 3000 }).then(() => true, () => false);
+const sayQuota = s => `line ${s.line} (${s.history || 'no history'}), a new key is ${s.room}, Retry notice ${s.notice ? 'up' : 'none'}, on the store: ${s.phase ?? 'nothing'}`;
+
+async function quotaJourney(name, sport, seeds, walk) {
+  const tag = `${sport} quota ${name}${CONTROL === 'quotafree' ? ' (store never filled)' : ''}`;
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  await ctx.addInitScript(fillStore, { seeds, fill: CONTROL !== 'quotafree' });
+  await ctx.route('**/*', r => {
+    const url = r.request().url();
+    let same = true;
+    try { same = new URL(url).origin === origin; } catch { same = true; }
+    if (!same) { if (url.includes('supabase.co')) aborted += 1; return r.abort(); }
+    return r.continue();
+  });
+  const page = await ctx.newPage();
+  const errors = [];
+  page.on('pageerror', e => errors.push(String(e?.message ?? e).split('\n')[0].slice(0, 160)));
+  const toBoard = async () => {
+    const [draft, draftFn] = hasButton('^Play your road to the draft$');
+    await page.waitForFunction(draftFn, draft, { timeout: 30000 });
+    const [rules, rulesFn] = hasButton("Let.s Play");
+    await page.waitForFunction(rulesFn, rules, { timeout: 8000 }).catch(() => {});
+    for (let i = 0; i < 3 && await clickButton(page, rules); i += 1) await page.waitForTimeout(350);
+    await page.waitForTimeout(600);
+  };
+  try {
+    const last = await walk({ page, tag, key: ALL[sport], toBoard });
+    check('errors', !last.broke && !last.fillError && errors.length === 0, `${tag}: no page error${errors.length ? ` (${errors.slice(0, 2).join(' | ')})` : ''}${last.fillError ? ` (the fill said: ${last.fillError})` : ''}${last.broke ? ' (This page broke)' : ''}`);
+    if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `save-seam-${sport}-quota-${name}.png`) });
+  } catch (e) {
+    const seen = await page.evaluate(() => (document.body.innerText || '').replace(/\s+/g, ' ').slice(0, 200)).catch(() => 'nothing readable');
+    check(name === 'kept' ? 'kept' : 'quota', false, `${tag}: the walk stopped: ${String(e).split('\n')[0].slice(0, 200)}; the page reads "${seen}"${errors.length ? `; it said: ${errors.slice(0, 2).join(' | ')}` : ''}`);
+  }
+  await ctx.close();
+}
+const WC_KEYS = [['wc2026-predictions', '{}'], ['wc2026-show-bracket', 'false'], ['wc2026-selected-thirds', '[]'], ['wc2026-playoff-picks', '{}']];
+const CHOSEN = [['cookie-consent', 'essential']];
+
+/* a returning player: the bracket page first, which saves what it loaded as it opens (four writes the
+   full store takes, because none needs room), then a career with no page load in between */
+const returning = sport => quotaJourney('returning', sport, [...CHOSEN, ...WC_KEYS], async ({ page, tag, key, toBoard }) => {
+  await page.goto(`${BASE}/world-cup-bracket`, { waitUntil: 'load', timeout: 45000 });
+  await page.waitForTimeout(2500);
+  const a = await quotaState(page, key);
+  const leftOnce = /full@\d+ (left|none)/.test(a.history);
+  check('quota', a.room === 'refused' && a.line === 'full' && !leftOnce, `${tag}: on a page that saves what it loaded the line says full and stays (${sayQuota(a)}, ${a.filled} fillers)`);
+  await page.evaluate(p => { window.__seamStayed = 1; window.history.pushState({}, '', p); window.dispatchEvent(new PopStateEvent('popstate')); }, `/${sport}-my-career`);
+  await toBoard();
+  const b = await quotaState(page, key);
+  check('quota', b.stayed && b.room === 'refused' && b.line === 'full', `${tag}: on the next game the line still says full (${sayQuota(b)}, ${b.stayed ? 'no page load' : 'THE PAGE LOADED AGAIN'})`);
+  const pressed = await clickButton(page, '^Play your road to the draft$');
+  await page.waitForTimeout(900);
+  const c = await quotaState(page, key);
+  check('quota', pressed && c.notice && c.phase === null && c.line === 'full', `${tag}: the career's first save is refused and the line at the top says why (${sayQuota(c)})`);
+  return c;
+});
+
+/* room for a probe and not for the save: Retry save is refused again and the line must not leave; then
+   real room, and it does */
+const little = sport => quotaJourney('little', sport, CHOSEN, async ({ page, tag, key, toBoard }) => {
+  await page.goto(`${BASE}/${sport}-my-career`, { waitUntil: 'load', timeout: 45000 });
+  await toBoard();
+  await page.evaluate(() => { window.__seamStayed = 1; });
+  const pressed = await clickButton(page, '^Play your road to the draft$');
+  await page.waitForTimeout(900);
+  const a = await quotaState(page, key);
+  check('quota', pressed && a.notice && a.phase === null && a.line === 'full', `${tag}: the first save is refused and the line says full (${sayQuota(a)})`);
+  const freed = await leaveLittle(page);
+  const again = await clickButton(page, '^Retry save$');
+  await page.waitForTimeout(900);
+  const b = await quotaState(page, key);
+  check('quota', freed > 0 && again && b.room === 'taken' && b.notice && b.phase === null && b.line === 'full',
+    `${tag}: with about ${freed} characters of room Retry save is refused again and the line still says full (${sayQuota(b)})`);
+  const all = await freeAll(page);
+  const third = await clickButton(page, '^Retry save$');
+  const gone = await page.waitForFunction(() => !document.querySelector('[data-us-career-save-error]'), null, { timeout: 3000 }).then(() => true, () => false);
+  const left = await lineLeaves(page);
+  const c = await quotaState(page, key);
+  check('quota', all > 0 && third && gone && left && c.phase === 'prospect' && c.line === 'left' && c.stayed,
+    `${tag}: with real room Retry save goes through (${c.saveSize} characters) and the line leaves on the same page (${sayQuota(c)}, ${c.stayed ? 'no page load' : 'THE PAGE LOADED AGAIN'})`);
+  return c;
+});
+
+/* a choice made under the line (the cookie banner's, through the seam) is kept for the visit, and it
+   has to be on the device once there is room: before, the line left and the choice was gone at the
+   next page load */
+const kept = sport => quotaJourney('kept', sport, [], async ({ page, tag, key, toBoard }) => {
+  await page.goto(`${BASE}/${sport}-my-career`, { waitUntil: 'load', timeout: 45000 });
+  await toBoard();
+  const a = await quotaState(page, key);
+  const pressed = await clickButton(page, '^Essential only$');
+  await page.waitForTimeout(700);
+  const b = await quotaState(page, key);
+  check('kept', a.banner && a.line === 'full' && pressed && !b.banner && b.consent === null && b.line === 'full',
+    `${tag}: the cookie choice is taken while the store is full and the line still says full (banner ${a.banner ? 'up' : 'none'} then ${b.banner ? 'STILL UP' : 'gone'}, on the store: ${b.consent ?? 'nothing'}, ${sayQuota(b)})`);
+  await freeAll(page);
+  await page.evaluate(() => document.body.click());
+  const left = await lineLeaves(page);
+  const c = await quotaState(page, key);
+  check('kept', left && c.line === 'left' && c.consent === 'essential' && !c.banner,
+    `${tag}: once there is room the line leaves and the choice made under it is on the device (on the store: ${c.consent ?? 'NOTHING'}, ${sayQuota(c)})`);
+  return c;
+});
+
 for (const sport of ASKED) for (const arm of MODES) await journey(sport, arm);
+const QUOTA_WALKS = QUOTA ? [returning, little, kept] : [];
+for (const walk of QUOTA_WALKS) await walk(ASKED.includes('nba') ? 'nba' : ASKED[0]);
 await browser.close();
+const JOURNEYS = ASKED.length * MODES.length + QUOTA_WALKS.length;
 console.log(`requests to supabase.co aborted: ${aborted}`);
 const failed = [...fails.values()].reduce((a, l) => a + l.length, 0);
 if (CONTROL) {
   const want = NAMED[CONTROL];
   const ok = want.every(n => fails.has(n));
   console.log(`${ok ? `control ${CONTROL}: RED AT THE NAMED CHECK (${want.join(', ')})` : `control ${CONTROL}: DID NOT FIRE AT ITS NAMED CHECK (${want.join(', ')})`}; checks red: ${[...fails.keys()].join(', ') || 'none'}`);
-  console.log(`playUsCareerSaveSeam: ${ASKED.length * MODES.length} journeys, ${checks} checks, ${failed} failed (control ${CONTROL})`);
+  console.log(`playUsCareerSaveSeam: ${JOURNEYS} journeys, ${checks} checks, ${failed} failed (control ${CONTROL})`);
   stop(ok ? 1 : 2);
 }
-console.log(`playUsCareerSaveSeam: ${ASKED.length * MODES.length} journeys, ${checks} checks, ${failed} failed`);
+console.log(`playUsCareerSaveSeam: ${JOURNEYS} journeys, ${checks} checks, ${failed} failed`);
 stop(failed ? 1 : 0);
