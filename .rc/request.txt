@@ -1,0 +1,5 @@
+simEras: node scripts/simEras.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simCareerClubPool: node scripts/simCareerClubPool.mjs
