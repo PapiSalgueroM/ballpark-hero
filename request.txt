@@ -1,0 +1,64 @@
+# Release AP review fixes, the proof on the pushed head (served build, Chromium)
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simBrowserHarnessDiscovery: node scripts/simBrowserHarnessDiscovery.mjs
+runAll-ownGoals: ONLY=simSoccerOwnGoals node scripts/runAllSims.mjs
+runAll-loginReturn: ONLY=simLoginReturn node scripts/runAllSims.mjs
+runAll-discovery: ONLY=simBrowserHarnessDiscovery node scripts/runAllSims.mjs
+runAll-browserOnly-must-exit-1: ONLY=playHomeFold node scripts/runAllSims.mjs
+simLoginReturn: node scripts/simLoginReturn.mjs
+simBracketMoment: node scripts/simBracketMoment.mjs
+simBracketMoment-layout-must-exit-1: BRACKET_MOMENT_CONTROL=layout node scripts/simBracketMoment.mjs
+simClubManagerStart: node scripts/simClubManagerStart.mjs
+simRoles: node scripts/simRoles.mjs
+ownGoals: CAREERS=120 SEEDSET=0 node scripts/simSoccerOwnGoals.mjs
+ownGoals-seed2: CAREERS=120 SEEDSET=2 node scripts/simSoccerOwnGoals.mjs
+og-points: CAREERS=120 OWN_GOAL_CONTROL=points node scripts/simSoccerOwnGoals.mjs
+og-mine: CAREERS=120 OWN_GOAL_CONTROL=mine node scripts/simSoccerOwnGoals.mjs
+og-assist: CAREERS=120 OWN_GOAL_CONTROL=assist node scripts/simSoccerOwnGoals.mjs
+og-origin: CAREERS=120 OWN_GOAL_CONTROL=origin node scripts/simSoccerOwnGoals.mjs
+og-mirror: CAREERS=120 OWN_GOAL_CONTROL=mirror node scripts/simSoccerOwnGoals.mjs
+og-kind: CAREERS=120 OWN_GOAL_CONTROL=kind node scripts/simSoccerOwnGoals.mjs
+og-pitch: CAREERS=120 OWN_GOAL_CONTROL=pitch node scripts/simSoccerOwnGoals.mjs
+og-beneficiary: CAREERS=120 OWN_GOAL_CONTROL=beneficiary node scripts/simSoccerOwnGoals.mjs
+og-role: CAREERS=120 OWN_GOAL_CONTROL=role node scripts/simSoccerOwnGoals.mjs
+og-gate: CAREERS=120 OWN_GOAL_CONTROL=gate node scripts/simSoccerOwnGoals.mjs
+og-score: CAREERS=120 OWN_GOAL_CONTROL=score node scripts/simSoccerOwnGoals.mjs
+og-filteredordinal: CAREERS=120 OWN_GOAL_CONTROL=filteredordinal node scripts/simSoccerOwnGoals.mjs
+og-input: CAREERS=120 OWN_GOAL_CONTROL=input node scripts/simSoccerOwnGoals.mjs
+og-ordinal: CAREERS=120 OWN_GOAL_CONTROL=ordinal node scripts/simSoccerOwnGoals.mjs
+og-rng: CAREERS=120 OWN_GOAL_CONTROL=rng node scripts/simSoccerOwnGoals.mjs
+og-ledgerdata: CAREERS=120 OWN_GOAL_CONTROL=ledgerdata node scripts/simSoccerOwnGoals.mjs
+og-ledgerkey: CAREERS=120 OWN_GOAL_CONTROL=ledgerkey node scripts/simSoccerOwnGoals.mjs
+og-stream: CAREERS=120 OWN_GOAL_CONTROL=stream node scripts/simSoccerOwnGoals.mjs
+simSeasonMoments: node scripts/simSeasonMoments.mjs
+simSeasonCentreAgreement: node scripts/simSeasonCentreAgreement.mjs
+simSeasonCentreNeutral: node scripts/simSeasonCentreNeutral.mjs
+simSeasonCentreTable: node scripts/simSeasonCentreTable.mjs
+simSeasonCentreMotion: node scripts/simSeasonCentreMotion.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+simCareerLeagueWorld: node scripts/simCareerLeagueWorld.mjs
+simSeasonLaw: node scripts/simSeasonLaw.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simTycoonTicketPolicy: node scripts/simTycoonTicketPolicy.mjs
+simTycoonTicketPolicy-all-controls: TYCOON_TICKET_POLICY_CONTROL=all node scripts/simTycoonTicketPolicy.mjs
+simTycoonHelp: node scripts/simTycoonHelp.mjs
+simTycoonRooms: node scripts/simTycoonRooms.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simHomeCopy: node scripts/simHomeCopy.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+playLeagueTableFit: ENGINES=chromium node scripts/playLeagueTableFit.mjs
+playSeasonCentre: PORT=4411 ENGINES=chromium node scripts/playSeasonCentre.mjs
+playSeasonMoments: PORT=4412 ENGINES=chromium node scripts/playSeasonMoments.mjs
+playSeasonCentreMotion: ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+sweepWeight: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs
