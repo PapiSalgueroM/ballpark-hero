@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ownGoals: CAREERS=120 SEEDSET=0 node scripts/simSoccerOwnGoals.mjs
+ownGoals-mine: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=mine node scripts/simSoccerOwnGoals.mjs
+ownGoals-mirror: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=mirror node scripts/simSoccerOwnGoals.mjs
+vitest-touched: node_modules/.bin/vitest run src/test/seasonCentreSlots.test.tsx src/test/seasonCentreWords.test.tsx src/test/seasonCore.test.ts src/test/seasonReplays.test.tsx src/test/managerWorldBrowser.test.tsx src/test/clubManagerBracketMoment.test.tsx src/test/academyFilters.test.tsx src/test/facilitiesPreview.test.tsx src/test/clubManagerDeskCues.test.tsx src/test/tycoonTicketPolicy.test.tsx --testTimeout=300000 --hookTimeout=120000
+simClubManagerStart: node scripts/simClubManagerStart.mjs
