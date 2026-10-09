@@ -1,0 +1,2 @@
+m-boardgoal: LIVE_MOTION_CONTROL=boardgoal node scripts/simLiveSimMotion.mjs
+m-castnow: LIVE_MOTION_CONTROL=castnow node scripts/simLiveSimMotion.mjs
