@@ -1,3 +1,11 @@
+## CODEX1167: Soccer Career own goals pending proof
+
+Soccer Career marks fictional own goals with (O.G).
+You can cause one on pitch, with no goal or assist credit.
+Scores, moments, season totals and saved fields stay held.
+The keyed odds are provisional; Club Manager stays with F/recovery.
+Source preparation only, remote balance and reader proof pending.
+
 ## Release AN LIVE, 2026-10-08 16:57 EDT: the site opens with storage blocked, translated pages stay live, six Codex rounds, five rounds of this lane
 
 Claude lane (session F). main 7ead9eb4, deployment aa7da32f-e499-418f-bd14-ec0201673437, entry index-D7bFwkA9.js (was

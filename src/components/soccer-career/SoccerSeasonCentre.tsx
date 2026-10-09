@@ -26,7 +26,7 @@ import { leagueWithArticle, ordinal } from '@/lib/soccerCareerLeague';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { SeasonCentre, type CentreModel, type CentreSport } from '@/components/season-centre/SeasonCentre';
 import { minuteLabel } from '@/lib/clubManagerClock';
-import { SOCCER_FULL_TIME } from '@/lib/season/soccerEvents';
+import { SOCCER_FULL_TIME, soccerOwnGoals } from '@/lib/season/soccerEvents';
 import type { HelpWords } from '@/components/season-centre/SeasonCentreHelp';
 import type { DerivedGame, DerivedSeason, SeasonEvent } from '@/lib/season/core';
 
@@ -45,6 +45,7 @@ const HELP: HelpWords = {
   intro: [
     'Your season was played the moment you pressed Next Season. This is that same season, match by match: the final table and your season totals are settled, and nothing here can change them.',
     "When a season shows a table, who was in the league, how many clubs it had and how many points a win was worth are real (from 2026-27 on, the league is your career's own world). Every score, every other club's result and every minute are your career's own.",
+    'Own goals are fictional details of goals already in your season. You, a teammate or an opponent can cause one; (O.G) marks it without adding to your goals or assists.',
   ],
   controls: '▶ plays the next matchday. ⏩ jumps to the next big game (a derby, halfway, the title or the final day). ⏭ goes straight to the end. 1x and 3x set the clock, Results shows each match at full time.',
   moments: [
@@ -54,6 +55,7 @@ const HELP: HelpWords = {
     'A make earns one to three stars for how well you struck it. The stars bank once a season, at the season review: 60% of the stars on offer is +1 to the stat your position trains, 85% is +2, never past your ceiling (your training drill and your moments share that room), and it arrives with next season\'s growth. Step out before the review and your moments stay open while your season summary is up. Press Continue on the summary and the stars you have bank as they stand, with any moment you left counting as no stars. After the bank the season\'s moments are closed.',
   ],
   examples: [
+    { head: 'An own goal', body: 'You turn the ball into your own net at 55 minutes. The opposition get the goal, marked (O.G), and your goals and assists stay the same. The final score and your season totals still match the season summary.' },
     { head: 'A YOUR CALL', body: 'Matchday 9, 1-1 in the 82nd minute, and on your season this chance was missed. You take it and score: the match ends 2-1 and you climb the table that week. In the return game on matchday 28, a 2-1 win on your season, your goal there is not scored and it ends 1-1. You gain two points on matchday 9 and give two back on matchday 28, they lose one and get it back: the final table and your goals for the season end exactly where they were.' },
     { head: 'A RECREATE', body: 'Derby day, and on the record you scored in the 74th minute. You play it again on the Wall Shot: through the gap and into the top corner is three stars, a miss is none. Either way the derby ends as it did. Three moments worth 3, 2 and 1 stars are 6 of 9, which is 67%: +1 next season.' },
     { head: 'A matchday', body: 'Matchday 12: you win 2-1 at home and score in the 67th minute, rated 7.6. The table moves you from 6th to 4th (▲2).' },
@@ -69,6 +71,10 @@ const exitLabelOf = (mode: 'live' | 'watch', phase: string) => (mode === 'live' 
 
 /** Soccer's side of the shared viewer: the clock, the derby, his line. */
 function eventWords(e: SeasonEvent, us: string, them: string): string {
+  if (e.kind === 'goal' && e.ownGoalBy) {
+    const who = e.ownGoalBy === 'you' ? 'You' : e.ownGoalBy === 'teammate' ? 'A teammate' : 'An opponent';
+    return `⚽ ${who} (O.G), goal for ${e.side === 'us' ? us : them}`;
+  }
   if (e.kind === 'goal') return e.side === 'us' ? (e.mine ? '⚽ You score!' : `⚽ Goal, ${us}`) : `⚽ Goal, ${them}`;
   if (e.kind === 'assist') return '🅰️ You set it up';
   if (e.kind === 'yellow') return '🟨 You go in the book';
@@ -193,10 +199,12 @@ function CentreBody({ career, clubs, row, mode, onClose, onCareer }: SoccerSeaso
   /* moments are the latest season's only: its key is the one the ledger and the bank answer to */
   const latest = career.seasons[career.seasons.length - 1];
   const canPlay = !!onCareer && !!plan && !!key && !!latest && soccerSeasonKey(career.playerName, latest) === key;
-  const offered = useMemo(() => (canPlay && plan ? planMoments(SOCCER, row, ctx, plan) : []), [canPlay, plan, row, ctx]);
+  const planned = useMemo(() => (plan ? planMoments(SOCCER, row, ctx, plan) : []), [plan, row, ctx]);
+  const offered = useMemo(() => (canPlay ? planned : []), [canPlay, planned]);
   const ledger = readSeasonMoments(career.seasonMoments);
   const entriesKey = JSON.stringify(ledgerOf(ledger, key ?? ''));
-  const season = useMemo(() => (plan && offered.length ? applyDecisions(SOCCER, row, ctx, plan, offered, JSON.parse(entriesKey) as number[][]) : plan), [plan, offered, entriesKey, row, ctx]);
+  const decided = useMemo(() => (plan && offered.length ? applyDecisions(SOCCER, row, ctx, plan, offered, JSON.parse(entriesKey) as number[][]) : plan), [plan, offered, entriesKey, row, ctx]);
+  const season = useMemo(() => (decided ? soccerOwnGoals(decided, planned) : null), [decided, planned]);
   const moments = useSoccerMoments({ career, row, ctx, plan, key, offered, entriesKey, banked: !!ledger?.banked && ledger.key === key, onCareer });
   const model = useMemo(() => (season ? buildModel(row, ctx, season, moments) : null), [season, row, ctx, moments]);
   if (!model) return <Tile text="This season cannot be shown match by match." exitLabel={exitLabel} onClose={onClose} />;

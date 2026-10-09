@@ -201,7 +201,7 @@ export interface GameContext {
 /** A sport's event: the kind is the sport's own word ("goal", "touchdown");
  *  `pts` is what it put on the board, so a clock can show the score true at
  *  any minute without knowing the sport. */
-export interface SeasonEvent { min: number; kind: string; side: 'us' | 'them'; mine?: boolean; pts?: number }
+export interface SeasonEvent { min: number; kind: string; side: 'us' | 'them'; mine?: boolean; pts?: number; ownGoalBy?: 'you' | 'teammate' | 'opponent' }
 
 export interface DerivedGame {
   /** League round, 1 based. */
