@@ -75,12 +75,12 @@ describe('academy position and age filters', () => {
     expect(screen.getByRole('status')).toHaveTextContent('Showing 0 of 4 prospects');
     expect(screen.getByText(/No prospects match those filters/)).toBeInTheDocument();
     expect(screen.queryByText(/Nobody yet/)).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Sign him' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /^Sign him: / })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Reset filters' }));
     expect(screen.getByRole('combobox', { name: 'Position' })).toHaveValue('');
     expect(screen.getByRole('combobox', { name: 'Age' })).toHaveValue('');
     expect(screen.getByRole('status')).toHaveTextContent('Showing 4 of 4 prospects');
-    expect(screen.getAllByRole('button', { name: 'Sign him' })).toHaveLength(4);
+    expect(screen.getAllByRole('button', { name: /^Sign him: / })).toHaveLength(4);
     expect(screen.getByRole('button', { name: 'Reset filters' })).toBeDisabled();
   });
 
@@ -94,8 +94,8 @@ describe('academy position and age filters', () => {
   it('passes the actual visible prospect ID to sign and release callbacks', () => {
     const { callbacks } = mount();
     filter('ST', '16');
-    fireEvent.click(screen.getByRole('button', { name: 'Sign him' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Let go' }));
+    fireEvent.click(screen.getByRole('button', { name: /^Sign him: / }));
+    fireEvent.click(screen.getByRole('button', { name: /^Let go: / }));
     expect(callbacks.onPromote).toHaveBeenCalledExactlyOnceWith('younger-forward');
     expect(callbacks.onRelease).toHaveBeenCalledExactlyOnceWith('younger-forward');
   });
@@ -103,11 +103,11 @@ describe('academy position and age filters', () => {
   it.each([{ budget: 4, squadSize: 10 }, { budget: 10, squadSize: 30 }])('keeps signing disabled for budget $budget and squad size $squadSize', ({ budget, squadSize }) => {
     const { callbacks } = mount(career(kids, budget, squadSize));
     filter('GK', '16');
-    const sign = screen.getByRole('button', { name: 'Sign him' });
+    const sign = screen.getByRole('button', { name: /^Sign him: / });
     expect(sign).toBeDisabled();
     fireEvent.click(sign);
     expect(callbacks.onPromote).not.toHaveBeenCalled();
-    fireEvent.click(screen.getByRole('button', { name: 'Let go' }));
+    fireEvent.click(screen.getByRole('button', { name: /^Let go: / }));
     expect(callbacks.onRelease).toHaveBeenCalledExactlyOnceWith('young-keeper');
   });
 

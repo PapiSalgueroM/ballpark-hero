@@ -277,7 +277,7 @@ describe('Club Manager desk cues: academy', () => {
     const { after } = mountAcademy(career, id => c => promoteProspect(c, id));
     expect(said('cm-academy-cue')).toBe('');
     listening('cm-academy-cue');
-    fireEvent.click(screen.getByRole('button', { name: 'Sign him' }));
+    fireEvent.click(screen.getByRole('button', { name: /^Sign him: / }));
     const saved = after();
     const had = new Set(career.squad.map(x => x.id));
     const p = saved.squad.find(x => !had.has(x.id))!;
@@ -297,13 +297,13 @@ describe('Club Manager desk cues: academy', () => {
   it('a refused promotion and a save that moved some other way say nothing', () => {
     const career = academyFixture();
     const refused = mountAcademy(career, refuse);
-    fireEvent.click(screen.getByRole('button', { name: 'Sign him' }));
+    fireEvent.click(screen.getByRole('button', { name: /^Sign him: / }));
     expect(refused.after()).toBe(career);
     expect(said('cm-academy-cue')).toBe('');
     cleanup();
     /* He leaves the books but nobody joins the squad: no line claims he did. */
     const moved = mountAcademy(career, () => c => ({ ...c, academy: { ...c.academy!, prospects: [] } }));
-    fireEvent.click(screen.getByRole('button', { name: 'Sign him' }));
+    fireEvent.click(screen.getByRole('button', { name: /^Sign him: / }));
     expect(moved.after()).not.toBe(career);
     expect(said('cm-academy-cue')).toBe('');
     silent();
@@ -327,7 +327,7 @@ describe('Club Manager desk cues: academy', () => {
     const opened = academyFixture(0);
     act(() => open(opened));
     listening('cm-academy-cue');
-    fireEvent.click(screen.getByRole('button', { name: 'Sign him' }));
+    fireEvent.click(screen.getByRole('button', { name: /^Sign him: / }));
     const p = latest.squad.find(x => x.name === 'Fixture Academy Kid')!;
     expect(p).toBeDefined();
     expect(latest.budget).toBe(opened.budget);

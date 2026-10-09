@@ -107,7 +107,7 @@ describe('Club Manager facilities preview', () => {
     for (const id of FACILITY_IDS) {
       expect(preview(view.container, id)).toBeNull();
       expect(row(view.container, id)).toHaveTextContent('Maximum level reached.');
-      const button = within(row(view.container, id)).getByRole('button', { name: 'Maxed' });
+      const button = within(row(view.container, id)).getByRole('button', { name: /: Maxed$/ });
       expect(button).toBeDisabled();
       fireEvent.click(button);
     }
