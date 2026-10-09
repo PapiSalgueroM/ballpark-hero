@@ -1,0 +1,53 @@
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
+ssw: node scripts/simStorageWrites.mjs
+ssw-unguard: SIM_STORAGE_WRITES_CONTROL=unguard node scripts/simStorageWrites.mjs
+ssw-order: SIM_STORAGE_WRITES_CONTROL=order node scripts/simStorageWrites.mjs
+ssw-client: SIM_STORAGE_WRITES_CONTROL=client node scripts/simStorageWrites.mjs
+ssw-caller: SIM_STORAGE_WRITES_CONTROL=caller node scripts/simStorageWrites.mjs
+ssw-nocatch: SIM_STORAGE_WRITES_CONTROL=nocatch node scripts/simStorageWrites.mjs
+ssw-probe: SIM_STORAGE_WRITES_CONTROL=probe node scripts/simStorageWrites.mjs
+ssw-recheck: SIM_STORAGE_WRITES_CONTROL=recheck node scripts/simStorageWrites.mjs
+ssw-once: SIM_STORAGE_WRITES_CONTROL=once node scripts/simStorageWrites.mjs
+ssw-unlearn: SIM_STORAGE_WRITES_CONTROL=unlearn node scripts/simStorageWrites.mjs
+ssw-held: SIM_STORAGE_WRITES_CONTROL=held node scripts/simStorageWrites.mjs
+stale: node scripts/simStaleChunk.mjs
+stale-nosave: SIM_STALE_CHUNK_CONTROL=nosave node scripts/simStaleChunk.mjs
+stale-noprerender: SIM_STALE_CHUNK_CONTROL=noprerender node scripts/simStaleChunk.mjs
+stale-nooffline: SIM_STALE_CHUNK_CONTROL=nooffline node scripts/simStaleChunk.mjs
+stale-noguard: SIM_STALE_CHUNK_CONTROL=noguard node scripts/simStaleChunk.mjs
+stale-nolistener: SIM_STALE_CHUNK_CONTROL=nolistener node scripts/simStaleChunk.mjs
+stale-norelease: SIM_STALE_CHUNK_CONTROL=norelease node scripts/simStaleChunk.mjs
+stale-barenudge: SIM_STALE_CHUNK_CONTROL=barenudge node scripts/simStaleChunk.mjs
+usSaveRetry: node scripts/simUsCareerSaveRetry.mjs
+usSeasonCentre: node scripts/simUsSeasonCentre.mjs
+usBoardParity: node scripts/simUsBoardParity.mjs
+usCareerWeight: node scripts/simUsCareerWeight.mjs
+noRivalNames: node scripts/simNoRivalNames.mjs
+harnessAnchors: node scripts/simHarnessAnchors.mjs
+noDoubleRecord: node scripts/simNoDoubleRecord.mjs
+completionOnce: node scripts/simCompletionOnce.mjs
+errorBoundary: node scripts/simErrorBoundary.mjs
+accessibility: node scripts/simAccessibility.mjs
+legalPages: node scripts/simLegalPages.mjs
+singleFooter: node scripts/simSingleFooter.mjs
+siteSearch: node scripts/simSiteSearch.mjs
+seam: SHOTS=$RC_OUT node scripts/playUsCareerSaveSeam.mjs
+seam-stale: US_SAVE_SEAM_CONTROL=stale PORT=4411 node scripts/playUsCareerSaveSeam.mjs
+seam-sitover: US_SAVE_SEAM_CONTROL=sitover PORT=4412 node scripts/playUsCareerSaveSeam.mjs
+seam-hidden: US_SAVE_SEAM_CONTROL=hidden PORT=4413 node scripts/playUsCareerSaveSeam.mjs
+seam-keeptoast: US_SAVE_SEAM_CONTROL=keeptoast PORT=4414 node scripts/playUsCareerSaveSeam.mjs
+seam-open: US_SAVE_SEAM_CONTROL=open PORT=4415 node scripts/playUsCareerSaveSeam.mjs
+seam-raw: US_SAVE_SEAM_CONTROL=raw PORT=4416 node scripts/playUsCareerSaveSeam.mjs
+seam-quotafree: US_SAVE_SEAM_CONTROL=quotafree PORT=4417 node scripts/playUsCareerSaveSeam.mjs
+centre: PORT=4421 node scripts/playUsSeasonCentre.mjs
+centre-noaction: US_SEASON_PLAY_CONTROL=noaction PORT=4422 node scripts/playUsSeasonCentre.mjs
+centre-raw: US_SEASON_PLAY_CONTROL=raw PORT=4423 node scripts/playUsSeasonCentre.mjs
+centre-static: US_SEASON_PLAY_CONTROL=static PORT=4424 node scripts/playUsSeasonCentre.mjs
+centre-write: US_SEASON_PLAY_CONTROL=write PORT=4425 node scripts/playUsSeasonCentre.mjs
+centre-count: US_SEASON_PLAY_CONTROL=count PORT=4426 node scripts/playUsSeasonCentre.mjs
+centre-cover: US_SEASON_PLAY_CONTROL=cover PORT=4427 node scripts/playUsSeasonCentre.mjs
+centre-playfirst: US_SEASON_PLAY_CONTROL=playfirst PORT=4428 node scripts/playUsSeasonCentre.mjs
+centre-nohandover: US_SEASON_PLAY_CONTROL=nohandover PORT=4429 node scripts/playUsSeasonCentre.mjs
