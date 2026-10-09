@@ -621,7 +621,7 @@ describe('a held year, a banned year, and the sports with no Season Center', () 
     expect(playButton()).toBeDefined();
   });
   it('holds an NFL throwback career until 2021: the held line and no button in 2005', async () => {
-    /* Round 1147: the 2005 throwback plays 17 games in years the real league played 16 */
+    /* Round 1147 on Round 1104: the 2005 throwback plays the real 16 games, and the week by week view is built for 17 */
     seedSave(NFL_CAREER_SPORT, 'QB', 'held-nfl', 'y2005');
     render(<MemoryRouter><NflMyCareerBoard /></MemoryRouter>);
     await flush();
@@ -631,6 +631,52 @@ describe('a held year, a banned year, and the sports with no Season Center', () 
     expect(q('[data-week-by-week]')).toBeNull();
     expect(playButton()).toBeDefined();
   });
+  /* Release AP (Round 1104 meets Round 1147): since 1104 every throwback season before 2021 is a held year,
+     so "the last season he played is held" is the everyday case there, and nothing pinned what the hub
+     offers then. A throwback career set down in 2020 (by hand: a player gets there in sixteen seasons) is
+     played across the line: 2020 (held), 2021 (open), and the hub of 2022 (held). The 2022 hub is the
+     arm that proves the 2021 one could have shown the link: there it must be on screen. */
+  it('never offers Watch again for a held season, and offers it for the open one after it', async () => {
+    const sport = NFL_CAREER_SPORT;
+    /** One Play of the season on screen, back to the hub; false when that keyed career cannot carry the test. */
+    const playOn = async (year: number) => {
+      await click(playButton());
+      if ((await toHub(sport)) === 'retired') return false;
+      const c = savedCareer(sport);
+      const line = c.seasons[c.seasons.length - 1];
+      return line.year === year && line.games > 0 && line.teamResult !== 'SUSPENDED' && (c.suspendedSeasons ?? 0) === 0;
+    };
+    let walked = false;
+    for (let n = 0; n < 8 && !walked; n += 1) {
+      cleanup();
+      localStorage.clear();
+      resetCareerMomentsForTest();
+      vi.restoreAllMocks();
+      seedSave(sport, 'QB', `held-last|${n}`, 'y2005', c => { c.year = 2020; });
+      vi.spyOn(Math, 'random').mockImplementation(mulberry32(1104 + n));
+      render(<MemoryRouter><NflMyCareerBoard /></MemoryRouter>);
+      await flush();
+      /* 2020: held, and nothing played yet */
+      expect(q('[data-season-centre-held]')!.textContent).toBe(usSeasonHeldLine('nfl', 2020));
+      expect(q('[data-watch-last]')).toBeNull();
+      if (!(await playOn(2020))) continue;
+      /* the hub of 2021: this year opens, and the 16 game 2020 season is not offered again */
+      expect(savedCareer(sport).year).toBe(2021);
+      expect(savedCareer(sport).seasons[0].games).toBeLessThanOrEqual(16);
+      expect(usSeasonHeldLine('nfl', 2021)).toBeNull();
+      expect(q('[data-week-by-week]')).not.toBeNull();
+      expect(q('[data-season-centre-held]')).toBeNull();
+      expect(q('[data-watch-last]')).toBeNull();
+      if (!(await playOn(2021))) continue;
+      /* the hub of 2022: this year is held, and the open 2021 season IS offered again */
+      expect(savedCareer(sport).year).toBe(2022);
+      expect(q('[data-season-centre-held]')!.textContent).toBe(usSeasonHeldLine('nfl', 2022));
+      expect(q('[data-week-by-week]')).toBeNull();
+      expect(q('[data-watch-last]')!.textContent).toContain('Watch the 2021 season again');
+      walked = true;
+    }
+    expect(walked, 'no keyed career of eight played 2020 and 2021 in full view').toBe(true);
+  }, 60000);
   it('has the NBA and the NFL both bound, so neither arm above can drop out through its own filter', () => {
     expect(BOUND.map(b => b.name)).toEqual(['NBA', 'NFL']);
   });

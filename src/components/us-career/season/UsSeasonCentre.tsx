@@ -8,8 +8,8 @@
    derived from the saved line by src/lib/season (the core, the US binding
    and the sport's number file, which this file loads through the board's
    own descriptor, so no sport is imported here). A season it cannot lay out
-   game by game, or a year whose real length is not the one this career
-   plays, gets one honest tile instead of a guess. Its own error boundary
+   game by game, or a year whose real length is not the one the view is
+   built for, gets one honest tile instead of a guess. Its own error boundary
    keeps a render error inside the overlay; the host wraps the lazy mount in
    a second one, because a boundary inside this chunk cannot catch the chunk
    failing to load. */
