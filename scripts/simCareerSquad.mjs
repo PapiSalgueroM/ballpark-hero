@@ -71,6 +71,7 @@ export const sheet = await import('${ROOT_URL}/src/lib/soccerClubSquadSheet.ts')
 export const gen = await import('${ROOT_URL}/src/lib/soccerClubSquadGen.ts');
 export const data = await import('${ROOT_URL}/src/data/clubSquads.ts');
 export const engine = await import('${ROOT_URL}/src/lib/soccerCareerEngine.ts');
+export const world = await import('${ROOT_URL}/src/lib/soccerCareerLeagueWorld.ts');
 export const intl = await import('${ROOT_URL}/src/lib/intlNames.ts');
 export const phone = await import('${ROOT_URL}/src/lib/soccerPhone.ts');
 export const international = await import('${ROOT_URL}/src/lib/soccerInternational.ts');
@@ -536,7 +537,7 @@ const floor = (section, name, value, ok, text) => {
 
 function sec1(mods) {
   say('1. Names');
-  const { intl, gen, engine } = mods;
+  const { intl, gen, engine, world } = mods;
   const real = realNameSet(mods);
   const pool = intl.allIntlNames();
   const shared = pool.filter(n => real.has(n));
@@ -544,7 +545,15 @@ function sec1(mods) {
   check('1', pool.length >= 4000 && real.size >= 2000, 'the name pool or the real name set is smaller than it has ever been');
   check('1', shared.length === 0, `invented names that belong to real players: ${shared.slice(0, 5).join(', ')}`);
   check('1', new Set(pool).size === pool.length, 'the name pool holds the same name twice, so two families could put one name in a squad');
-  const countries = [...new Set(engine.FALLBACK_CLUBS.map(c => c.country))];
+  /* Release AQ: the league world (Round 1175) seats clubs the pool does not hold,
+     the second divisions' own, and one of them brings a country no pool club
+     has (FC Andorra, Andorra). A man the game makes up there is named by that
+     country, so the countries read here are the pool's and the world's: read
+     off the pool alone this said 0 with no name family while 11 men in section
+     5 had the fallback's names. */
+  const worldClubs = world.projectLeagueWorldClubs({ playerName: 'squad harness', currentClub: '' }, engine.FALLBACK_CLUBS, 2026);
+  check('1', worldClubs.length > engine.FALLBACK_CLUBS.length, 'the league world added no club to the pool, so its countries were not read');
+  const countries = [...new Set([...engine.FALLBACK_CLUBS, ...worldClubs].map(c => c.country))];
   const lost = countries.filter(c => gen.familyIdFor(c) === null);
   say(`   ${countries.length} club countries, ${countries.filter(c => gen.FAMILY_ALIAS[c]).length} by alias, ${lost.length} with no name family`);
   check('1', countries.length >= 50, 'fewer than 50 club countries were read');

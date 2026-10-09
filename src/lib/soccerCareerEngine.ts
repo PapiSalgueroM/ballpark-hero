@@ -5350,6 +5350,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
       s.seasons = [...s.seasons, injuryRow];
       simulateSeasonFinances(s, injuryRow);
       runTournamentSummer(s, injuryRow, injuryRow.year, true);
+      s.phase = "rehab_choice";
       /* Release AQ: the league went on without him, so its season is settled
          here like any other. Before this the injury year never reached the
          settle: the next season finished it on form with no record, clubs
@@ -5363,7 +5364,6 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
         if (movement) s.events.push(`${movement.kind === 'promoted' ? '⬆️' : '⬇️'} ${movement.club} ${movement.kind} to ${movement.to} in your simulated league world.`);
       }
       prepareLeagueWorld(s, clubs, injuryRow.year + 1);
-      s.phase = "rehab_choice";
       return s;
     }
   }
