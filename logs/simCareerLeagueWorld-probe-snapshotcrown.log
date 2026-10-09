@@ -1,0 +1,19 @@
+CONTROL snapshotcrown: lib/season/soccer.ts patched in the bundle only; section D1 must go red
+bundled in 561 ms; 460 clubs (190 hand rows)
+
+D1. SAVED RIVAL CHAMPION: context roles overlap, table clubs do not
+  FAIL [D1]: the copied old multiset predicate must reject this valid overlapping context
+  FAIL [D1]: saved rival champion: the context champion is Arsenal, saved Liverpool
+  FAIL [D1]: saved rival champion: the drawn champion is Arsenal, saved Liverpool
+  rival champion probe: actual context and table checked; old double-count defect reproduced; missing, foreign and duplicate club copies caught
+
+D1. SNAPSHOT PROBE: three actual future seasons from the captured old save
+  FAIL [D1]: Freiburg 2030 (2. Bundesliga): the context champion is Wolfsburg, saved Hannover 96
+  FAIL [D1]: Freiburg 2030 (2. Bundesliga): the drawn champion is Wolfsburg, saved Hannover 96
+  FAIL [D1]: Freiburg 2031 (2. Bundesliga): the context champion is St. Pauli, saved Kaiserslautern
+  FAIL [D1]: Freiburg 2031 (2. Bundesliga): the drawn champion is St. Pauli, saved Kaiserslautern
+  FAIL [D1]: Freiburg 2032 (2. Bundesliga): the context champion is Heidenheim, saved Energie Cottbus
+  FAIL [D1]: Freiburg 2032 (2. Bundesliga): the drawn champion is Heidenheim, saved Energie Cottbus
+  snapshot probe: 4 actual seasons played (1 severe-injury seasons), 3 playable snapshots, 3 drawn tables, 3 changed fields, 6 recorded league movements
+
+simCareerLeagueWorld control snapshotcrown: section D1 went red as it must (9 failures)

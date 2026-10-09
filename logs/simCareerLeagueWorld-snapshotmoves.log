@@ -1,0 +1,81 @@
+CONTROL snapshotmoves: lib/soccerCareerLeagueWorld.ts patched in the bundle only; section D1 must go red
+bundled in 468 ms; 460 clubs (190 hand rows)
+
+D1. SAVED RIVAL CHAMPION: context roles overlap, table clubs do not
+  rival champion probe: actual context and table checked; old double-count defect reproduced; missing, foreign and duplicate club copies caught
+
+B1. POOL: the rows main shipped are still the first rows, in order
+  51 of 51 recorded rows found in place (id, name, country, league); the pool has 270 generated rows
+
+B4. POOL: the dugout's key finds every pool club under Club Manager's spelling
+  380 Club Manager clubs of 23 leagues, 380 matched by the key (1 pinned apart: Nacional and CD Nacional)
+
+C1. BAND: main's recorded cross, the five big leagues and every season before 2026 byte for byte
+  held: 8100 rows in the five big leagues, 87480 rows before 2026 outside them; free to move: 43740 rows, 2184 moved over 24 pairs that gained a size
+
+C2. BAND: the worked examples, exact, and every ladder club banded at its own place
+  15 worked bands and 7 seed keys exact; 284 clubs of 17 ladder leagues each banded at their own place
+
+C3. BAND: every ladder club, five ratings, 200 engine shaped keys
+  284000 bands, every one from the ladder and inside 2 to the league's size; 16 groups the ladder cannot order, each sharing one band at every rating
+
+A. LEDGERS: every league the pool reads is sized, odd or waiting with its reason
+  sized (a finish, a table): Championship 24, Brasileirao 20, Eredivisie 18, Saudi Pro League 18, Primeira Liga 18, Super Lig 18, 2. Bundesliga 18, Belgian Pro League 18
+  odd (their real row count, no table): MLS 30, Scottish Premiership 12, Austrian Bundesliga 12
+  waiting, results only as on main: Super League Greece (format from 1 host), Danish Superliga (format from 1 host), Swiss Super League (format from 0 hosts), HNL (format from 0 hosts), Liga MX (format from 1 host), A-League (format from 1 host)
+  held by the generator: Serie B, Ligue 2, Segunda Division, Russian Premier League; the ledgers hold the Championship in 22 of 22 seasons from 2004
+
+E. OLD SAVES: seven saves recorded on main read the same, and play on
+  FAIL [E]: cha 2029: saved movement differs from the final displayed places
+  FAIL [E]: cha 2030: saved movement differs from the final displayed places
+  FAIL [E]: cha 2030: the saved player club movement differs from its final place
+  FAIL [E]: cha 2031: saved movement differs from the final displayed places
+  FAIL [E]: her 2029: saved movement differs from the final displayed places
+  FAIL [E]: her 2029: the saved player club movement differs from its final place
+  FAIL [E]: her 2030: saved movement differs from the final displayed places
+  FAIL [E]: her 2031: saved movement differs from the final displayed places
+  FAIL [E]: nan 2029: saved movement differs from the final displayed places
+  FAIL [E]: nan 2030: saved movement differs from the final displayed places
+  FAIL [E]: nan 2031: saved movement differs from the final displayed places
+  FAIL [E]: nan 2031: the saved player club movement differs from its final place
+  7 saves: repairCareer byte equal, every saved row reads the finish, league and mode main read; matchdays moved to the league's real count on 6 rows (ere 2027 Twente: 38 to 34; ere 2028 Twente: 38 to 34; cha 2027 Norwich City: 38 to 46; cha 2028 Norwich City: 38 to 46; her 2027 Hertha Berlin: 38 to 34; her 2028 Hertha Berlin: 38 to 34); each played three more seasons
+
+C4. BAND: a higher place on the ladder finishes higher, tier 4 clubs included
+  Championship: 19 of 24 ordered, rho 1.000 to 1.000; tier 4 17, rho 1.000 to 1.000
+  Brasileirao: 16 of 20 ordered, rho 1.000 to 1.000; tier 4 10, rho 1.000 to 1.000
+  Eredivisie: 7 of 18 ordered, rho 1.000 to 1.000; tier 4 3 (too few to measure)
+  Saudi Pro League: 7 of 18 ordered, rho 1.000 to 1.000; tier 4 1 (too few to measure)
+  Primeira Liga: 8 of 18 ordered, rho 1.000 to 1.000; tier 4 5, rho 1.000 to 1.000
+  Super Lig: 9 of 18 ordered, rho 1.000 to 1.000; tier 4 0 (too few to measure)
+  2. Bundesliga: 5 of 18 ordered, rho 1.000 to 1.000; tier 4 5, rho 1.000 to 1.000
+  Belgian Pro League: 10 of 18 ordered, rho 1.000 to 1.000; tier 4 0 (too few to measure)
+  8 leagues measured over three key sets: lowest 1.000, highest 1.000 (floor 0.97); tier 4 alone in 4: lowest 1.000, highest 1.000 (floor 0.97)
+
+D1. WORLD: a season in a sized league always has its finish, its matchdays and a whole table
+  FAIL [D1]: Preston North End 2027 (Championship): saved movement differs from the final displayed places
+  FAIL [D1]: Sheffield United 2027 (Championship): saved movement differs from the final displayed places
+  FAIL [D1]: Stuttgart 2039 (Bundesliga): saved movement differs from the final displayed places
+  FAIL [D1]: Bayern Munich 2040 (Bundesliga): saved movement differs from the final displayed places
+  FAIL [D1]: Bayern Munich 2041 (Bundesliga): saved movement differs from the final displayed places
+  FAIL [D1]: Middlesbrough 2027 (Championship): saved movement differs from the final displayed places
+  FAIL [D1]: Middlesbrough 2028 (Championship): saved movement differs from the final displayed places
+  FAIL [D1]: Middlesbrough 2029 (Championship): saved movement differs from the final displayed places
+  FAIL [D1]: 3249 seasons in a sized league broke a rule
+  seed set 0, 300 careers x 17 nations in 470 s: 64620 seasons, 42725 in a sized league (a finish from 1 to the size, 2 x (size - 1) matchdays), 22198 tables in a ladder league outside the five whose names cover every row
+  drawn as the page draws them (up to 300 a league): 4797 tables, every row named, 1st place named, no club of the league left off: Championship 300 of 791 (283 not his title); Brasileirao 300 of 4006 (242 not his title); Eredivisie 300 of 3136 (246 not his title); Saudi Pro League 300 of 3070 (278 not his title); Primeira Liga 298 of 3271 (215 not his title, 2 the Season Centre could not derive); Super Lig 300 of 2939 (268 not his title); 2. Bundesliga 300 of 631 (287 not his title); Belgian Pro League 300 of 2762 (284 not his title)
+
+D2. WORLD: more seasons end with a league position and a real table than on main
+  seasons holding a league position: main 41.0%, now 69.0%; with a table in Week by week: main 34.1%, now 66.1%; share of table rows carrying a name: main 24.0%, now 66.1%
+  Netherlands: 3803 seasons; position main 29.1%, now 80.9%; table main 20.7%, now 78.5% (floor 75.1%)
+  Portugal: 3809 seasons; position main 29.6%, now 82.8%; table main 20.7%, now 81.1% (floor 72.3%)
+  Turkey: 3805 seasons; position main 29.4%, now 81.8%; table main 21.6%, now 79.8% (floor 73.5%)
+  Belgium: 3805 seasons; position main 29.3%, now 81.1%; table main 21.4%, now 79.2% (floor 66.9%)
+  Brazil: 3817 seasons; position main 31.4%, now 80.5%; table main 23.0%, now 78.5% (floor 75.9%)
+  Saudi Arabia: 3773 seasons; position main 30.6%, now 80.2%; table main 23.0%, now 78.4% (floor 76.9%)
+  where the seasons are: big five 20527 (31.8%; position 100.0%, table 100.0%); plain and sized 22198 (34.4%; position 100.0%, table 100.0%); odd ledger 6758 (10.5%; position 8.4%, table 0.0%); a pool league waiting for its format 5514 (8.5%; position 6.6%, table 0.0%); not a Club Manager league 9623 (14.9%; position 9.7%, table 0.0%)
+  critic 12, printed and not asserted: a tier 4 pool club's finish as a share of the table, titles apart: in the five (the tier's band) mean 0.812 over 643, 0.0% in the top half; in a ladder league mean 0.630 over 2141, 34.5% in the top half
+
+B6. POOL: the engine's own seed key carries the club, and every ladder club is banded by its ladder
+  32878 finishes the engine drew from 2026 in a ladder league outside the five: 32162 banded by the ladder; 716 by the tier for a club the list does not place in that league (Championship: Coventry City x15, Championship: Everton x37, 2. Bundesliga: Frankfurt x135, Championship: Brighton x4, Championship: Fulham x35, 2. Bundesliga: Elversberg x10, Championship: Brentford x18, Championship: Aston Villa x72)
+
+simCareerLeagueWorld control snapshotmoves: section D1 went red as it must (21 failures)
