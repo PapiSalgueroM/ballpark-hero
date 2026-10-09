@@ -1,0 +1,4 @@
+#!playwright
+vitest-5: node_modules/.bin/vitest run src/test/usSeasonCentre.test.tsx src/test/careerStory.test.tsx src/test/careerDilemmaReach.test.tsx src/test/careerKeepPlaying.test.tsx src/test/drillBoardMarkup.test.tsx --testTimeout=300000 --hookTimeout=120000
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simResultMoment: node scripts/simResultMoment.mjs
