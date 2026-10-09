@@ -1,0 +1,33 @@
+#!playwright
+#!build
+simSoccerOwnGoals: CAREERS=120 SEEDSET=0 node scripts/simSoccerOwnGoals.mjs
+simSoccerOwnGoals-points: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=points node scripts/simSoccerOwnGoals.mjs
+simSoccerOwnGoals-mine: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=mine node scripts/simSoccerOwnGoals.mjs
+simSoccerOwnGoals-assist: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=assist node scripts/simSoccerOwnGoals.mjs
+simSoccerOwnGoals-origin: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=origin node scripts/simSoccerOwnGoals.mjs
+simSoccerOwnGoals-mirror: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=mirror node scripts/simSoccerOwnGoals.mjs
+simSoccerOwnGoals-kind: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=kind node scripts/simSoccerOwnGoals.mjs
+simSoccerOwnGoals-pitch: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=pitch node scripts/simSoccerOwnGoals.mjs
+simSoccerOwnGoals-beneficiary: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=beneficiary node scripts/simSoccerOwnGoals.mjs
+simSoccerOwnGoals-role: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=role node scripts/simSoccerOwnGoals.mjs
+simSoccerOwnGoals-gate: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=gate node scripts/simSoccerOwnGoals.mjs
+simSoccerOwnGoals-score: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=score node scripts/simSoccerOwnGoals.mjs
+simSoccerOwnGoals-filteredordinal: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=filteredordinal node scripts/simSoccerOwnGoals.mjs
+simSoccerOwnGoals-input: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=input node scripts/simSoccerOwnGoals.mjs
+simSoccerOwnGoals-ordinal: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=ordinal node scripts/simSoccerOwnGoals.mjs
+simSoccerOwnGoals-rng: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=rng node scripts/simSoccerOwnGoals.mjs
+simSoccerOwnGoals-ledgerdata: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=ledgerdata node scripts/simSoccerOwnGoals.mjs
+simSoccerOwnGoals-ledgerkey: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=ledgerkey node scripts/simSoccerOwnGoals.mjs
+simSoccerOwnGoals-stream: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=stream node scripts/simSoccerOwnGoals.mjs
+simSeasonCentreNeutral: node scripts/simSeasonCentreNeutral.mjs
+simSeasonCentreMotion: node scripts/simSeasonCentreMotion.mjs
+simSeasonMoments: node scripts/simSeasonMoments.mjs
+simSeasonLaw: node scripts/simSeasonLaw.mjs
+simCareerRealism: node scripts/simCareerRealism.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simAwards: node scripts/simAwards.mjs
+simCareerDrills: node scripts/simCareerDrills.mjs
+simCareerMoments: node scripts/simCareerMoments.mjs
+simBallonDor: node scripts/simBallonDor.mjs
+simBallonDorFairness: node scripts/simBallonDorFairness.mjs
+simBallonDorTruth: node scripts/simBallonDorTruth.mjs
