@@ -1,0 +1,27 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simTrustCopy: node scripts/simTrustCopy.mjs
+trust-seconddisclaimer: TRUST_CONTROL=seconddisclaimer node scripts/simTrustCopy.mjs
+trust-typedcount: TRUST_CONTROL=typedcount node scripts/simTrustCopy.mjs
+trust-barecount: TRUST_CONTROL=barecount node scripts/simTrustCopy.mjs
+trust-exactcount: TRUST_CONTROL=exactcount node scripts/simTrustCopy.mjs
+trust-staleliteral: TRUST_CONTROL=staleliteral node scripts/simTrustCopy.mjs
+trust-bogus: TRUST_CONTROL=bogus node scripts/simTrustCopy.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simHomeCopy: node scripts/simHomeCopy.mjs
+home-descdrift: HOME_COPY_CONTROL=descdrift node scripts/simHomeCopy.mjs
+home-commentapp: HOME_COPY_CONTROL=commentapp node scripts/simHomeCopy.mjs
+home-commenttpl: HOME_COPY_CONTROL=commenttpl node scripts/simHomeCopy.mjs
+home-moduledrift: HOME_COPY_CONTROL=moduledrift node scripts/simHomeCopy.mjs
+home-templatedrift: HOME_COPY_CONTROL=templatedrift node scripts/simHomeCopy.mjs
+home-retiredlink: HOME_COPY_CONTROL=retiredlink node scripts/simHomeCopy.mjs
+home-staticimport: HOME_COPY_CONTROL=staticimport node scripts/simHomeCopy.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simAdsense: node scripts/simAdsense.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simIndexing: node scripts/simIndexing.mjs
+simHomePersonalReads: node scripts/simHomePersonalReads.mjs
+simHomeSearchRecovery: node scripts/simHomeSearchRecovery.mjs
+vitest: node_modules/.bin/vitest run src/data/gameRegistry.test.ts src/pages/NotFound.test.tsx src/test/footleClueDesk.test.tsx src/test/footlePractice.test.tsx src/test/footleResultCurrency.test.tsx src/test/footleUnlimitedSession.test.tsx src/test/gamePicks.test.tsx src/test/homePersonalReads.test.tsx src/test/homeSearchRecovery.test.tsx src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000

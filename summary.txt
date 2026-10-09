@@ -1,0 +1,27 @@
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+trust-seconddisclaimer exit=0 1s | simTrustCopy control seconddisclaimer: green. The planted line was reported and nothing else was.
+trust-barecount exit=0 1s | simTrustCopy control barecount: green. The planted line was reported and nothing else was.
+trust-typedcount exit=0 1s | simTrustCopy control typedcount: green. The planted line was reported and nothing else was.
+trust-staleliteral exit=0 1s | simTrustCopy control staleliteral: green. The planted line was reported and nothing else was.
+trust-exactcount exit=0 1s | simTrustCopy control exactcount: green. The planted line was reported and nothing else was.
+trust-bogus exit=1 0s | TRUST_CONTROL=bogus is not a control this harness knows (seconddisclaimer, typedcount, barecount, exactcount, staleliteral)
+simSingleFooter exit=0 0s | simSingleFooter: green. One footer, rendered once, on every page.
+home-descdrift exit=0 1s | simHomeCopy control descdrift: green. The planted break was reported by part 4b and nothing else failed.
+simHomeCopy exit=0 1s | simHomeCopy: green. The one page a crawler reads first says only true things.
+home-commentapp exit=0 1s | simHomeCopy control commentapp: green. The planted break was reported by part 4b and nothing else failed.
+home-commenttpl exit=0 1s | simHomeCopy control commenttpl: green. The planted break was reported by part 4b and nothing else failed.
+home-templatedrift exit=0 1s | simHomeCopy control templatedrift: green. The planted break was reported by part 6 and nothing else failed.
+home-moduledrift exit=0 1s | simHomeCopy control moduledrift: green. The planted break was reported by part 6 and nothing else failed.
+home-retiredlink exit=0 1s | simHomeCopy control retiredlink: green. The planted break was reported by part 3 and nothing else failed.
+home-staticimport exit=0 1s | simHomeCopy control staticimport: green. The planted break was reported by part 9 and nothing else failed.
+simLegalPages exit=0 0s | simLegalPages: all green
+simAdsense exit=0 1s | simAdsense: green. Verification, ads.txt, the policy pages and the ad component are all review ready.
+simNoRivalNames exit=0 19s | No rival product names found. 0 findings.
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simSiteSearch exit=0 3s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simIndexing exit=0 0s | simIndexing: green. Every page is either worth finding or honestly hidden.
+simHomePersonalReads exit=0 12s | Homepage personal reads: CRLF bindings proved, original bytes held, owned copies cleaned; no live DB/browser/AdSense acceptance claimed.
+simHarnessAnchors exit=0 49s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 100s | 
+vitest exit=0 47s |    Duration  45.85s (transform 6.55s, setup 946ms, collect 7.60s, tests 88.90s, environment 6.04s, prepare 1.58s)
+simHomeSearchRecovery exit=0 82s | Home search recovery: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/home-search-recovery-artifacts/outcomes
