@@ -1,0 +1,7 @@
+simCareerLeagueFinish-eliteblind exit=1 14s | simCareerLeagueFinish: control eliteblind turned section 3, 5 red and nothing else. The check works.
+simCareerLeagueFinish exit=0 17s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4830 in a verified league; finish and title agree, the ladder holds, main's stream is untouched and the elite boo
+simCareerLeagueFinish-notitle exit=2 17s | simCareerLeagueFinish: control notitle should have reddened exactly section 1, got [1, 4]. The control proves nothing.
+simCareerLeagueFinish-attribution exit=0 1s | ATTRIBUTION train1178: src/lib/soccerCareerEngine.ts, src/lib/soccerPhone.ts bundled with the train taken out; 16 of 16 careers record the digest the list held before the
+simCareerLeagueFinish-stream exit=1 20s | simCareerLeagueFinish: control stream turned section 4 red and nothing else. The check works.
+simNoRivalNames exit=0 20s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 38s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
