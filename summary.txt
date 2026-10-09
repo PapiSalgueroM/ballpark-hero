@@ -1,0 +1,6 @@
+vitest exit=0 12s |    Duration  11.25s (transform 2.95s, setup 333ms, collect 6.14s, tests 13.12s, environment 2.37s, prepare 768ms)
+rehearse exit=0 27s | byname control exit=1 (1 is the expected result)
+statdet exit=0 16s | simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.
+statdet-namesake exit=0 10s | simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.
+statdet-cohortgap exit=0 9s | simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.
+tsc exit=0 71s | 

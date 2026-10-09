@@ -1,0 +1,206 @@
+rehearseCareerSpansView: 30 season rows in, 17 view rows expected
+   integer columns, fresh database: 17 rows, anon reads 17
+   integer columns, over the first draft: 17 rows, anon reads 17
+   numeric columns, fresh database: 17 rows, anon reads 17
+   numeric columns, over the first draft: 17 rows, anon reads 17
+   double precision columns, fresh database: 17 rows, anon reads 17
+   double precision columns, over the first draft: 17 rows, anon reads 17
+
+rehearseCareerSpansView: green. The migration runs fresh and over the first draft, on integer, numeric and double columns; the view hands back the expected rows; anon can read it; paging by (player_name, cohort) is whole.
+rehearse green run exit=0
+rehearseCareerSpansView: 30 season rows in, 17 view rows expected (NEGATIVE CONTROL ON: byname, the first draft's SQL runs in place of the migration)
+  FAIL: integer columns, fresh database: the view's columns are [player_name, first_season, last_season, rows]
+  FAIL: integer columns, fresh database: the view handed back 12 rows that are not the 17 expected
+     not expected: {"player_name":null,"first_season":"1988-89","last_season":"1988-89","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Center Birch","first_season":"1992-93","last_season":"1994-95","rows":5,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Center Ivy","first_season":"1949-50","last_season":"1951-52","rows":2,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Forward Larch","first_season":"1977-78","last_season":"2000-01","rows":5,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Guard Alder","first_season":"1977-78","last_season":"1998-99","rows":4,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Guard Hazel","first_season":"2001-02","last_season":"2002","rows":3,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Guard Juniper","first_season":"1970-71","last_season":"1970-71","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Pivot Fir","first_season":"1962-63","last_season":"1997-98","rows":3,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Wing Cedar","first_season":"1957-58","last_season":"1963-64","rows":3,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Wing Gum","first_season":"2010-11","last_season":"2010-11","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Wing Koa","first_season":"2003-04","last_season":"2003-04","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Wing Kóa","first_season":"1999-00","last_season":"1999-00","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     missing:      {"player_name":"Fixture Center Birch","first_season":"1992-93","last_season":"1993-94","rows":4,"cohort":1970,"rows_500":3,"teams":"2TM,DEN,MIA"}
+     missing:      {"player_name":"Fixture Center Birch","first_season":"1994-95","last_season":"1994-95","rows":1,"cohort":1971,"rows_500":0,"teams":"MIA"}
+     missing:      {"player_name":"Fixture Center Ivy","first_season":"1949-50","last_season":"1951-52","rows":2,"cohort":1924,"rows_500":1,"teams":"MNL"}
+     missing:      {"player_name":"Fixture Forward Larch","first_season":"1977-78","last_season":"1977-78","rows":1,"cohort":1954,"rows_500":0,"teams":"BUF"}
+     missing:      {"player_name":"Fixture Forward Larch","first_season":"1991-92","last_season":"2000-01","rows":4,"cohort":1969,"rows_500":4,"teams":"CHH,NYK"}
+     missing:      {"player_name":"Fixture Guard Alder","first_season":"1977-78","last_season":"1986-87","rows":2,"cohort":1955,"rows_500":2,"teams":"KCK,SEA"}
+     missing:      {"player_name":"Fixture Guard Alder","first_season":"1981-82","last_season":"1998-99","rows":2,"cohort":1959,"rows_500":1,"teams":"HOU,KCK"}
+     missing:      {"player_name":"Fixture Guard Hazel","first_season":"2001-02","last_season":"2001-02","rows":1,"cohort":1976,"rows_500":1,"teams":"ORL"}
+     missing:      {"player_name":"Fixture Guard Juniper","first_season":"1970-71","last_season":"1970-71","rows":1,"cohort":1948,"rows_500":1,"teams":null}
+     missing:      {"player_name":"Fixture Pivot Fir","first_season":"1962-63","last_season":"1962-63","rows":1,"cohort":1940,"rows_500":1,"teams":"BOS"}
+     missing:      {"player_name":"Fixture Pivot Fir","first_season":"1997-98","last_season":"1997-98","rows":1,"cohort":1975,"rows_500":0,"teams":"LAL"}
+     missing:      {"player_name":"Fixture Pivot Fir","first_season":"1980-81","last_season":"1980-81","rows":1,"cohort":null,"rows_500":0,"teams":"CHI"}
+     missing:      {"player_name":"Fixture Wing Cedar","first_season":"1959-60","last_season":"1963-64","rows":2,"cohort":1935,"rows_500":2,"teams":"PHI,SYR"}
+     missing:      {"player_name":"Fixture Wing Cedar","first_season":"1957-58","last_season":"1957-58","rows":1,"cohort":null,"rows_500":0,"teams":"SYR"}
+     missing:      {"player_name":"Fixture Wing Gum","first_season":"2010-11","last_season":"2010-11","rows":1,"cohort":1986,"rows_500":0,"teams":"MIL"}
+     missing:      {"player_name":"Fixture Wing Koa","first_season":"2003-04","last_season":"2003-04","rows":1,"cohort":1978,"rows_500":0,"teams":"VAN"}
+     missing:      {"player_name":"Fixture Wing Kóa","first_season":"1999-00","last_season":"1999-00","rows":1,"cohort":1978,"rows_500":1,"teams":"TOR"}
+   integer columns, fresh database: 12 rows, anon reads 12
+  FAIL: integer columns, over the first draft: the view's columns are [player_name, first_season, last_season, rows]
+  FAIL: integer columns, over the first draft: the view handed back 12 rows that are not the 17 expected
+     not expected: {"player_name":null,"first_season":"1988-89","last_season":"1988-89","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Center Birch","first_season":"1992-93","last_season":"1994-95","rows":5,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Center Ivy","first_season":"1949-50","last_season":"1951-52","rows":2,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Forward Larch","first_season":"1977-78","last_season":"2000-01","rows":5,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Guard Alder","first_season":"1977-78","last_season":"1998-99","rows":4,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Guard Hazel","first_season":"2001-02","last_season":"2002","rows":3,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Guard Juniper","first_season":"1970-71","last_season":"1970-71","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Pivot Fir","first_season":"1962-63","last_season":"1997-98","rows":3,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Wing Cedar","first_season":"1957-58","last_season":"1963-64","rows":3,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Wing Gum","first_season":"2010-11","last_season":"2010-11","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Wing Koa","first_season":"2003-04","last_season":"2003-04","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Wing Kóa","first_season":"1999-00","last_season":"1999-00","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     missing:      {"player_name":"Fixture Center Birch","first_season":"1992-93","last_season":"1993-94","rows":4,"cohort":1970,"rows_500":3,"teams":"2TM,DEN,MIA"}
+     missing:      {"player_name":"Fixture Center Birch","first_season":"1994-95","last_season":"1994-95","rows":1,"cohort":1971,"rows_500":0,"teams":"MIA"}
+     missing:      {"player_name":"Fixture Center Ivy","first_season":"1949-50","last_season":"1951-52","rows":2,"cohort":1924,"rows_500":1,"teams":"MNL"}
+     missing:      {"player_name":"Fixture Forward Larch","first_season":"1977-78","last_season":"1977-78","rows":1,"cohort":1954,"rows_500":0,"teams":"BUF"}
+     missing:      {"player_name":"Fixture Forward Larch","first_season":"1991-92","last_season":"2000-01","rows":4,"cohort":1969,"rows_500":4,"teams":"CHH,NYK"}
+     missing:      {"player_name":"Fixture Guard Alder","first_season":"1977-78","last_season":"1986-87","rows":2,"cohort":1955,"rows_500":2,"teams":"KCK,SEA"}
+     missing:      {"player_name":"Fixture Guard Alder","first_season":"1981-82","last_season":"1998-99","rows":2,"cohort":1959,"rows_500":1,"teams":"HOU,KCK"}
+     missing:      {"player_name":"Fixture Guard Hazel","first_season":"2001-02","last_season":"2001-02","rows":1,"cohort":1976,"rows_500":1,"teams":"ORL"}
+     missing:      {"player_name":"Fixture Guard Juniper","first_season":"1970-71","last_season":"1970-71","rows":1,"cohort":1948,"rows_500":1,"teams":null}
+     missing:      {"player_name":"Fixture Pivot Fir","first_season":"1962-63","last_season":"1962-63","rows":1,"cohort":1940,"rows_500":1,"teams":"BOS"}
+     missing:      {"player_name":"Fixture Pivot Fir","first_season":"1997-98","last_season":"1997-98","rows":1,"cohort":1975,"rows_500":0,"teams":"LAL"}
+     missing:      {"player_name":"Fixture Pivot Fir","first_season":"1980-81","last_season":"1980-81","rows":1,"cohort":null,"rows_500":0,"teams":"CHI"}
+     missing:      {"player_name":"Fixture Wing Cedar","first_season":"1959-60","last_season":"1963-64","rows":2,"cohort":1935,"rows_500":2,"teams":"PHI,SYR"}
+     missing:      {"player_name":"Fixture Wing Cedar","first_season":"1957-58","last_season":"1957-58","rows":1,"cohort":null,"rows_500":0,"teams":"SYR"}
+     missing:      {"player_name":"Fixture Wing Gum","first_season":"2010-11","last_season":"2010-11","rows":1,"cohort":1986,"rows_500":0,"teams":"MIL"}
+     missing:      {"player_name":"Fixture Wing Koa","first_season":"2003-04","last_season":"2003-04","rows":1,"cohort":1978,"rows_500":0,"teams":"VAN"}
+     missing:      {"player_name":"Fixture Wing Kóa","first_season":"1999-00","last_season":"1999-00","rows":1,"cohort":1978,"rows_500":1,"teams":"TOR"}
+   integer columns, over the first draft: 12 rows, anon reads 12
+  FAIL: numeric columns, fresh database: the view's columns are [player_name, first_season, last_season, rows]
+  FAIL: numeric columns, fresh database: the view handed back 12 rows that are not the 17 expected
+     not expected: {"player_name":null,"first_season":"1988-89","last_season":"1988-89","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Center Birch","first_season":"1992-93","last_season":"1994-95","rows":5,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Center Ivy","first_season":"1949-50","last_season":"1951-52","rows":2,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Forward Larch","first_season":"1977-78","last_season":"2000-01","rows":5,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Guard Alder","first_season":"1977-78","last_season":"1998-99","rows":4,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Guard Hazel","first_season":"2001-02","last_season":"2002","rows":3,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Guard Juniper","first_season":"1970-71","last_season":"1970-71","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Pivot Fir","first_season":"1962-63","last_season":"1997-98","rows":3,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Wing Cedar","first_season":"1957-58","last_season":"1963-64","rows":3,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Wing Gum","first_season":"2010-11","last_season":"2010-11","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Wing Koa","first_season":"2003-04","last_season":"2003-04","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Wing Kóa","first_season":"1999-00","last_season":"1999-00","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     missing:      {"player_name":"Fixture Center Birch","first_season":"1992-93","last_season":"1993-94","rows":4,"cohort":1970,"rows_500":3,"teams":"2TM,DEN,MIA"}
+     missing:      {"player_name":"Fixture Center Birch","first_season":"1994-95","last_season":"1994-95","rows":1,"cohort":1971,"rows_500":0,"teams":"MIA"}
+     missing:      {"player_name":"Fixture Center Ivy","first_season":"1949-50","last_season":"1951-52","rows":2,"cohort":1924,"rows_500":1,"teams":"MNL"}
+     missing:      {"player_name":"Fixture Forward Larch","first_season":"1977-78","last_season":"1977-78","rows":1,"cohort":1954,"rows_500":0,"teams":"BUF"}
+     missing:      {"player_name":"Fixture Forward Larch","first_season":"1991-92","last_season":"2000-01","rows":4,"cohort":1969,"rows_500":4,"teams":"CHH,NYK"}
+     missing:      {"player_name":"Fixture Guard Alder","first_season":"1977-78","last_season":"1986-87","rows":2,"cohort":1955,"rows_500":2,"teams":"KCK,SEA"}
+     missing:      {"player_name":"Fixture Guard Alder","first_season":"1981-82","last_season":"1998-99","rows":2,"cohort":1959,"rows_500":1,"teams":"HOU,KCK"}
+     missing:      {"player_name":"Fixture Guard Hazel","first_season":"2001-02","last_season":"2001-02","rows":1,"cohort":1976,"rows_500":1,"teams":"ORL"}
+     missing:      {"player_name":"Fixture Guard Juniper","first_season":"1970-71","last_season":"1970-71","rows":1,"cohort":1948,"rows_500":1,"teams":null}
+     missing:      {"player_name":"Fixture Pivot Fir","first_season":"1962-63","last_season":"1962-63","rows":1,"cohort":1940,"rows_500":1,"teams":"BOS"}
+     missing:      {"player_name":"Fixture Pivot Fir","first_season":"1997-98","last_season":"1997-98","rows":1,"cohort":1975,"rows_500":0,"teams":"LAL"}
+     missing:      {"player_name":"Fixture Pivot Fir","first_season":"1980-81","last_season":"1980-81","rows":1,"cohort":null,"rows_500":0,"teams":"CHI"}
+     missing:      {"player_name":"Fixture Wing Cedar","first_season":"1959-60","last_season":"1963-64","rows":2,"cohort":1935,"rows_500":2,"teams":"PHI,SYR"}
+     missing:      {"player_name":"Fixture Wing Cedar","first_season":"1957-58","last_season":"1957-58","rows":1,"cohort":null,"rows_500":0,"teams":"SYR"}
+     missing:      {"player_name":"Fixture Wing Gum","first_season":"2010-11","last_season":"2010-11","rows":1,"cohort":1986,"rows_500":0,"teams":"MIL"}
+     missing:      {"player_name":"Fixture Wing Koa","first_season":"2003-04","last_season":"2003-04","rows":1,"cohort":1978,"rows_500":0,"teams":"VAN"}
+     missing:      {"player_name":"Fixture Wing Kóa","first_season":"1999-00","last_season":"1999-00","rows":1,"cohort":1978,"rows_500":1,"teams":"TOR"}
+   numeric columns, fresh database: 12 rows, anon reads 12
+  FAIL: numeric columns, over the first draft: the view's columns are [player_name, first_season, last_season, rows]
+  FAIL: numeric columns, over the first draft: the view handed back 12 rows that are not the 17 expected
+     not expected: {"player_name":null,"first_season":"1988-89","last_season":"1988-89","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Center Birch","first_season":"1992-93","last_season":"1994-95","rows":5,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Center Ivy","first_season":"1949-50","last_season":"1951-52","rows":2,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Forward Larch","first_season":"1977-78","last_season":"2000-01","rows":5,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Guard Alder","first_season":"1977-78","last_season":"1998-99","rows":4,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Guard Hazel","first_season":"2001-02","last_season":"2002","rows":3,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Guard Juniper","first_season":"1970-71","last_season":"1970-71","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Pivot Fir","first_season":"1962-63","last_season":"1997-98","rows":3,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Wing Cedar","first_season":"1957-58","last_season":"1963-64","rows":3,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Wing Gum","first_season":"2010-11","last_season":"2010-11","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Wing Koa","first_season":"2003-04","last_season":"2003-04","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Wing Kóa","first_season":"1999-00","last_season":"1999-00","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     missing:      {"player_name":"Fixture Center Birch","first_season":"1992-93","last_season":"1993-94","rows":4,"cohort":1970,"rows_500":3,"teams":"2TM,DEN,MIA"}
+     missing:      {"player_name":"Fixture Center Birch","first_season":"1994-95","last_season":"1994-95","rows":1,"cohort":1971,"rows_500":0,"teams":"MIA"}
+     missing:      {"player_name":"Fixture Center Ivy","first_season":"1949-50","last_season":"1951-52","rows":2,"cohort":1924,"rows_500":1,"teams":"MNL"}
+     missing:      {"player_name":"Fixture Forward Larch","first_season":"1977-78","last_season":"1977-78","rows":1,"cohort":1954,"rows_500":0,"teams":"BUF"}
+     missing:      {"player_name":"Fixture Forward Larch","first_season":"1991-92","last_season":"2000-01","rows":4,"cohort":1969,"rows_500":4,"teams":"CHH,NYK"}
+     missing:      {"player_name":"Fixture Guard Alder","first_season":"1977-78","last_season":"1986-87","rows":2,"cohort":1955,"rows_500":2,"teams":"KCK,SEA"}
+     missing:      {"player_name":"Fixture Guard Alder","first_season":"1981-82","last_season":"1998-99","rows":2,"cohort":1959,"rows_500":1,"teams":"HOU,KCK"}
+     missing:      {"player_name":"Fixture Guard Hazel","first_season":"2001-02","last_season":"2001-02","rows":1,"cohort":1976,"rows_500":1,"teams":"ORL"}
+     missing:      {"player_name":"Fixture Guard Juniper","first_season":"1970-71","last_season":"1970-71","rows":1,"cohort":1948,"rows_500":1,"teams":null}
+     missing:      {"player_name":"Fixture Pivot Fir","first_season":"1962-63","last_season":"1962-63","rows":1,"cohort":1940,"rows_500":1,"teams":"BOS"}
+     missing:      {"player_name":"Fixture Pivot Fir","first_season":"1997-98","last_season":"1997-98","rows":1,"cohort":1975,"rows_500":0,"teams":"LAL"}
+     missing:      {"player_name":"Fixture Pivot Fir","first_season":"1980-81","last_season":"1980-81","rows":1,"cohort":null,"rows_500":0,"teams":"CHI"}
+     missing:      {"player_name":"Fixture Wing Cedar","first_season":"1959-60","last_season":"1963-64","rows":2,"cohort":1935,"rows_500":2,"teams":"PHI,SYR"}
+     missing:      {"player_name":"Fixture Wing Cedar","first_season":"1957-58","last_season":"1957-58","rows":1,"cohort":null,"rows_500":0,"teams":"SYR"}
+     missing:      {"player_name":"Fixture Wing Gum","first_season":"2010-11","last_season":"2010-11","rows":1,"cohort":1986,"rows_500":0,"teams":"MIL"}
+     missing:      {"player_name":"Fixture Wing Koa","first_season":"2003-04","last_season":"2003-04","rows":1,"cohort":1978,"rows_500":0,"teams":"VAN"}
+     missing:      {"player_name":"Fixture Wing Kóa","first_season":"1999-00","last_season":"1999-00","rows":1,"cohort":1978,"rows_500":1,"teams":"TOR"}
+   numeric columns, over the first draft: 12 rows, anon reads 12
+  FAIL: double precision columns, fresh database: the view's columns are [player_name, first_season, last_season, rows]
+  FAIL: double precision columns, fresh database: the view handed back 12 rows that are not the 17 expected
+     not expected: {"player_name":null,"first_season":"1988-89","last_season":"1988-89","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Center Birch","first_season":"1992-93","last_season":"1994-95","rows":5,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Center Ivy","first_season":"1949-50","last_season":"1951-52","rows":2,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Forward Larch","first_season":"1977-78","last_season":"2000-01","rows":5,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Guard Alder","first_season":"1977-78","last_season":"1998-99","rows":4,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Guard Hazel","first_season":"2001-02","last_season":"2002","rows":3,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Guard Juniper","first_season":"1970-71","last_season":"1970-71","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Pivot Fir","first_season":"1962-63","last_season":"1997-98","rows":3,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Wing Cedar","first_season":"1957-58","last_season":"1963-64","rows":3,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Wing Gum","first_season":"2010-11","last_season":"2010-11","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Wing Koa","first_season":"2003-04","last_season":"2003-04","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Wing Kóa","first_season":"1999-00","last_season":"1999-00","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     missing:      {"player_name":"Fixture Center Birch","first_season":"1992-93","last_season":"1993-94","rows":4,"cohort":1970,"rows_500":3,"teams":"2TM,DEN,MIA"}
+     missing:      {"player_name":"Fixture Center Birch","first_season":"1994-95","last_season":"1994-95","rows":1,"cohort":1971,"rows_500":0,"teams":"MIA"}
+     missing:      {"player_name":"Fixture Center Ivy","first_season":"1949-50","last_season":"1951-52","rows":2,"cohort":1924,"rows_500":1,"teams":"MNL"}
+     missing:      {"player_name":"Fixture Forward Larch","first_season":"1977-78","last_season":"1977-78","rows":1,"cohort":1954,"rows_500":0,"teams":"BUF"}
+     missing:      {"player_name":"Fixture Forward Larch","first_season":"1991-92","last_season":"2000-01","rows":4,"cohort":1969,"rows_500":4,"teams":"CHH,NYK"}
+     missing:      {"player_name":"Fixture Guard Alder","first_season":"1977-78","last_season":"1986-87","rows":2,"cohort":1955,"rows_500":2,"teams":"KCK,SEA"}
+     missing:      {"player_name":"Fixture Guard Alder","first_season":"1981-82","last_season":"1998-99","rows":2,"cohort":1959,"rows_500":1,"teams":"HOU,KCK"}
+     missing:      {"player_name":"Fixture Guard Hazel","first_season":"2001-02","last_season":"2001-02","rows":1,"cohort":1976,"rows_500":1,"teams":"ORL"}
+     missing:      {"player_name":"Fixture Guard Juniper","first_season":"1970-71","last_season":"1970-71","rows":1,"cohort":1948,"rows_500":1,"teams":null}
+     missing:      {"player_name":"Fixture Pivot Fir","first_season":"1962-63","last_season":"1962-63","rows":1,"cohort":1940,"rows_500":1,"teams":"BOS"}
+     missing:      {"player_name":"Fixture Pivot Fir","first_season":"1997-98","last_season":"1997-98","rows":1,"cohort":1975,"rows_500":0,"teams":"LAL"}
+     missing:      {"player_name":"Fixture Pivot Fir","first_season":"1980-81","last_season":"1980-81","rows":1,"cohort":null,"rows_500":0,"teams":"CHI"}
+     missing:      {"player_name":"Fixture Wing Cedar","first_season":"1959-60","last_season":"1963-64","rows":2,"cohort":1935,"rows_500":2,"teams":"PHI,SYR"}
+     missing:      {"player_name":"Fixture Wing Cedar","first_season":"1957-58","last_season":"1957-58","rows":1,"cohort":null,"rows_500":0,"teams":"SYR"}
+     missing:      {"player_name":"Fixture Wing Gum","first_season":"2010-11","last_season":"2010-11","rows":1,"cohort":1986,"rows_500":0,"teams":"MIL"}
+     missing:      {"player_name":"Fixture Wing Koa","first_season":"2003-04","last_season":"2003-04","rows":1,"cohort":1978,"rows_500":0,"teams":"VAN"}
+     missing:      {"player_name":"Fixture Wing Kóa","first_season":"1999-00","last_season":"1999-00","rows":1,"cohort":1978,"rows_500":1,"teams":"TOR"}
+   double precision columns, fresh database: 12 rows, anon reads 12
+  FAIL: double precision columns, over the first draft: the view's columns are [player_name, first_season, last_season, rows]
+  FAIL: double precision columns, over the first draft: the view handed back 12 rows that are not the 17 expected
+     not expected: {"player_name":null,"first_season":"1988-89","last_season":"1988-89","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Center Birch","first_season":"1992-93","last_season":"1994-95","rows":5,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Center Ivy","first_season":"1949-50","last_season":"1951-52","rows":2,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Forward Larch","first_season":"1977-78","last_season":"2000-01","rows":5,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Guard Alder","first_season":"1977-78","last_season":"1998-99","rows":4,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Guard Hazel","first_season":"2001-02","last_season":"2002","rows":3,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Guard Juniper","first_season":"1970-71","last_season":"1970-71","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Pivot Fir","first_season":"1962-63","last_season":"1997-98","rows":3,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Wing Cedar","first_season":"1957-58","last_season":"1963-64","rows":3,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Wing Gum","first_season":"2010-11","last_season":"2010-11","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Wing Koa","first_season":"2003-04","last_season":"2003-04","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     not expected: {"player_name":"Fixture Wing Kóa","first_season":"1999-00","last_season":"1999-00","rows":1,"cohort":null,"rows_500":null,"teams":null}
+     missing:      {"player_name":"Fixture Center Birch","first_season":"1992-93","last_season":"1993-94","rows":4,"cohort":1970,"rows_500":3,"teams":"2TM,DEN,MIA"}
+     missing:      {"player_name":"Fixture Center Birch","first_season":"1994-95","last_season":"1994-95","rows":1,"cohort":1971,"rows_500":0,"teams":"MIA"}
+     missing:      {"player_name":"Fixture Center Ivy","first_season":"1949-50","last_season":"1951-52","rows":2,"cohort":1924,"rows_500":1,"teams":"MNL"}
+     missing:      {"player_name":"Fixture Forward Larch","first_season":"1977-78","last_season":"1977-78","rows":1,"cohort":1954,"rows_500":0,"teams":"BUF"}
+     missing:      {"player_name":"Fixture Forward Larch","first_season":"1991-92","last_season":"2000-01","rows":4,"cohort":1969,"rows_500":4,"teams":"CHH,NYK"}
+     missing:      {"player_name":"Fixture Guard Alder","first_season":"1977-78","last_season":"1986-87","rows":2,"cohort":1955,"rows_500":2,"teams":"KCK,SEA"}
+     missing:      {"player_name":"Fixture Guard Alder","first_season":"1981-82","last_season":"1998-99","rows":2,"cohort":1959,"rows_500":1,"teams":"HOU,KCK"}
+     missing:      {"player_name":"Fixture Guard Hazel","first_season":"2001-02","last_season":"2001-02","rows":1,"cohort":1976,"rows_500":1,"teams":"ORL"}
+     missing:      {"player_name":"Fixture Guard Juniper","first_season":"1970-71","last_season":"1970-71","rows":1,"cohort":1948,"rows_500":1,"teams":null}
+     missing:      {"player_name":"Fixture Pivot Fir","first_season":"1962-63","last_season":"1962-63","rows":1,"cohort":1940,"rows_500":1,"teams":"BOS"}
+     missing:      {"player_name":"Fixture Pivot Fir","first_season":"1997-98","last_season":"1997-98","rows":1,"cohort":1975,"rows_500":0,"teams":"LAL"}
+     missing:      {"player_name":"Fixture Pivot Fir","first_season":"1980-81","last_season":"1980-81","rows":1,"cohort":null,"rows_500":0,"teams":"CHI"}
+     missing:      {"player_name":"Fixture Wing Cedar","first_season":"1959-60","last_season":"1963-64","rows":2,"cohort":1935,"rows_500":2,"teams":"PHI,SYR"}
+     missing:      {"player_name":"Fixture Wing Cedar","first_season":"1957-58","last_season":"1957-58","rows":1,"cohort":null,"rows_500":0,"teams":"SYR"}
+     missing:      {"player_name":"Fixture Wing Gum","first_season":"2010-11","last_season":"2010-11","rows":1,"cohort":1986,"rows_500":0,"teams":"MIL"}
+     missing:      {"player_name":"Fixture Wing Koa","first_season":"2003-04","last_season":"2003-04","rows":1,"cohort":1978,"rows_500":0,"teams":"VAN"}
+     missing:      {"player_name":"Fixture Wing Kóa","first_season":"1999-00","last_season":"1999-00","rows":1,"cohort":1978,"rows_500":1,"teams":"TOR"}
+   double precision columns, over the first draft: 12 rows, anon reads 12
+
+rehearseCareerSpansView control byname: fired, 12 failure(s) above. Exit 1 is the expected result.
+byname control exit=1 (1 is the expected result)

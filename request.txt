@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/statDetectiveSpans.test.tsx src/test/statDetectiveMotion.test.tsx src/test/dartDraftPool.test.ts --testTimeout=300000 --hookTimeout=120000
+rehearse: npm install --no-audit --no-fund --prefix /tmp/pgl-r1145 @electric-sql/pglite >/tmp/pgl-install.log 2>&1; PGLITE_DIR=/tmp/pgl-r1145 node scripts/qa/rehearseCareerSpansView.mjs; echo "rehearse green run exit=$?"; REHEARSE_CONTROL=byname PGLITE_DIR=/tmp/pgl-r1145 node scripts/qa/rehearseCareerSpansView.mjs; echo "byname control exit=$? (1 is the expected result)"
+statdet: node scripts/simStatDetectiveMotion.mjs
+statdet-namesake: STAT_DETECTIVE_CONTROL=namesake node scripts/simStatDetectiveMotion.mjs
+statdet-cohortgap: STAT_DETECTIVE_CONTROL=cohortgap node scripts/simStatDetectiveMotion.mjs
