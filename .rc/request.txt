@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: node .rc/x/rv-walk.mjs
+probe: node .rc/x/rv-probe.mjs
