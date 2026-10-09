@@ -1,0 +1,17 @@
+1) Stopping at halftime and changing nothing must not change the game
+   never sees halftime: 50.4 pts, 49.8 scored, 50.5 conceded
+   sees it, does nothing: 54.8 pts, 54.9 scored, 51.2 conceded
+   difference 4.43 points, 3 standard errors is 5.60
+   goals for gap 5.10 against 3se of 5.19, goals against gap 0.63 against 3se of 4.38
+2) A manager who works the break finishes ahead of one who does not
+   ignores the break: 53.2 pts, average finish 9.9
+   works the break:   55.6 pts, average finish 8.8
+   he made 7.6 subs and changed shape 21.3 times a season
+   gain 2.38 points, 2 standard errors is 1.14
+3) The break cannot be abused
+   tried six substitutions, 3 went through (cap 3)
+   halftime 0-0, full time 0-0, week 0 -> 1
+4) A save from before this existed, and Round 93 fast forward
+   ten fixtures fast forwarded, 0 stopped at halftime
+
+ALL HALFTIME CHECKS PASSED
