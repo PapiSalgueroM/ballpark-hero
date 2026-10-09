@@ -1,3 +1,38 @@
+## Rounds 1185-1187 CLAIM: Soccer Career development, 2026-10-09
+
+Anthony asked to keep going with Soccer Career as the focus. Branch
+codex/soccer-career-development starts at frozen PR208 head
+4ab80fa978cf362427bcd024c64c6691e7f83c2a. These three additions are authored,
+with exact-head remote verification still pending. No local runtime or publish.
+
+1185: last year's same-club senior form adjusts the next selection draw by
+plus/minus two, using an actual saved rating and 10-38 recorded league apps.
+The squad explanation reads the same adjustment. Year gaps, foreign clubs,
+legacy missing league apps and nonplaying/invalid rows add nothing.
+1186: optional next-season preparation, development versus recovery. Injury
+chance changes by +.03/-.04 within the existing .04-.42 limits. After natural
+growth one position skill changes by +1/-1 within 20-99; the saved row records
+the actual capped adjustment. Serious injury/no appearances interrupt it,
+moves/retirement cancel it, and balanced stores no new key or random draw.
+1187: the existing Youth Mentor choice creates one explicitly generated player,
+using the existing name families with private deterministic draws. Saved
+senior seasons at the shared club with ten appearances advance progress;
+interruptions pause it, three qualifying years complete it, moves/retirement
+end it, and chronological age/history remain. No invented first-team stats,
+ratings, trophies, real-player dialogue or new roster facts.
+
+Rules and worked examples appear in existing question-mark help and in the
+new compact dialogs. Strong full-save/actual-engine/native checks and copied
+fault controls run on GitHub only. Baseline is actual4ab source; intentional
+id6 description/consequence copy is separately declared with all other saved
+fields and random draws retained. No outcome or field may be silently omitted.
+
+PR207/208/209 remain frozen and READY for F integration. F owns the final
+merged release gates and publication. PR209 accepted source0641a2ada04d8e4b7cbfaf4dffc8f27104c03115,
+docs head881ef4c98d00a3d061f93bbb43803c1b0179e533, run37962892064 SUCCESS.
+Round1184 is READY, superseding the inherited in-progress claim below.
+Root app/index/stash are untouched. Root WORKBOARD recovery tail is preserved.
+
 ## Rounds1179 to1183 READY for F integration, 2026-10-09
 
 Draft PR208: https://github.com/PapiSalgueroM/ballpark-hero/pull/208

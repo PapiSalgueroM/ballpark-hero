@@ -2,6 +2,9 @@
 
 import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';
 import { settleCareerAmbition, type CareerSeasonAmbition, type SeasonAmbitionResult } from './soccerCareerAmbitions';
+import { recentClubForm } from './soccerCareerSelection';
+import { applyCareerPreparation, preparationInjuryDelta, settleCareerPreparation, type CareerPreparationPlan, type PreparationResult } from './soccerCareerPreparation';
+import { createCareerMentor, recordMentorSeason, endCareerMentorForMove, endCareerMentorForRetirement, type CareerMentor } from './soccerCareerMentor';
 /* Round 546: the competition's real format per season, two source verified and
    importing nothing, so the knockout ladder and the leg count are read rather
    than kept as a second hardcoded copy here. */
@@ -174,6 +177,7 @@ export interface ClubData {
 export interface SeasonRecord {
   /** Round 1180: the chosen personal target and its actual club season result. */
   ambition?: SeasonAmbitionResult;
+  preparation?: PreparationResult;
   year: number;
   age: number;
   club: string;
@@ -830,6 +834,8 @@ export interface CareerStorySeason {
 export interface CareerState {
   /** Round 1180: one optional personal target for the next club season. */
   seasonAmbition?: CareerSeasonAmbition;
+  seasonPreparation?: CareerPreparationPlan;
+  mentor?: CareerMentor;
   playerName: string;
   nationality: string;
   position: string;
@@ -1761,6 +1767,8 @@ export function applyRehabChoice(prev: CareerState, choiceIndex: number): Career
     simulateSeasonFinances(s, row);
     runTournamentSummer(s, row, row.year, true);
     settleCareerAmbition(s, row);
+    settleCareerPreparation(s, row);
+    Object.assign(s, recordMentorSeason(s, row));
   }
 
   const history = [...(s.seriousInjuries ?? [])];
@@ -3797,7 +3805,7 @@ export function calcAppearances(overall: number, clubTier: number, age: number, 
   /* Round 130: a happy dressing room gets you picked, a cold one does not.
      Two appearances out of thirty is on purpose. It is enough to measure and
      small enough that it cannot undo thirty rounds of balance work. */
-  if (state) leagueApps = clamp(leagueApps + phoneAppsSwing(state), 0, 38);
+  if (state) leagueApps = clamp(leagueApps + phoneAppsSwing(state) + recentClubForm(state).swing, 0, 38);
 
   /* Round 257: frozen out. You told the club you were staying, the club told
      you what that means. A quarter of the minutes you would otherwise have
@@ -3894,6 +3902,7 @@ export function calcAppearances(overall: number, clubTier: number, age: number, 
      fragile, capped at six points so a career of shortcuts is a real
      handicap rather than a death sentence. */
   injuryChance += state?.rehabFragility ?? 0;
+  if (state) injuryChance += preparationInjuryDelta(state);
   injuryChance = clamp(injuryChance, 0.04, 0.42);
   const injuryRoll = rollSeasonInjury(injuryChance);
   if (injuryRoll) {
@@ -4343,7 +4352,11 @@ export function acceptLoan(prev: CareerState, offer: ContractOffer): CareerState
     parentCountry: s.currentClubCountry, parentColor: s.currentClubColor,
   };
   s.currentClub = offer.club.name; s.currentClubCountry = offer.club.country;
-  if (s.currentClub !== prev.currentClub) delete s.seasonAmbition;
+  if (s.currentClub !== prev.currentClub) {
+    delete s.seasonAmbition;
+    delete s.seasonPreparation;
+    Object.assign(s, endCareerMentorForMove(s, s.currentClub));
+  }
   s.currentClubTier = offer.club.tier; s.currentClubColor = offer.club.color; s.currentLeague = offer.club.league;
   s.phase = "playing"; s.pendingOffers = []; s.transferSituation = null; s.pendingLoanOffers = null;
   /* Round 257: same rule as a transfer. The freeze out was the parent club's,
@@ -4770,7 +4783,11 @@ export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerSt
 export function acceptOffer(prev: CareerState, offer: ContractOffer): CareerState {
   const s = { ...prev };
   s.currentClub = offer.club.name; s.currentClubCountry = offer.club.country;
-  if (s.currentClub !== prev.currentClub) delete s.seasonAmbition;
+  if (s.currentClub !== prev.currentClub) {
+    delete s.seasonAmbition;
+    delete s.seasonPreparation;
+    Object.assign(s, endCareerMentorForMove(s, s.currentClub));
+  }
   s.currentClubTier = offer.club.tier; s.currentClubColor = offer.club.color; s.currentLeague = offer.club.league;
   s.contractYearsLeft = offer.contractYears;
   // Round 49: your agent's negotiating skill decides the final wage
@@ -5030,6 +5047,8 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       s.phase = "season_summary";
       simulateSeasonFinances(s, s.pendingSummary);
       settleCareerAmbition(s, s.pendingSummary);
+      settleCareerPreparation(s, s.pendingSummary);
+      Object.assign(s, recordMentorSeason(s, s.pendingSummary));
       return s;
     }
   }
@@ -5058,6 +5077,8 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     s.phase = "season_summary";
     simulateSeasonFinances(s, s.pendingSummary);
     settleCareerAmbition(s, s.pendingSummary);
+    settleCareerPreparation(s, s.pendingSummary);
+    Object.assign(s, recordMentorSeason(s, s.pendingSummary));
     return s;
   }
 
@@ -5117,6 +5138,8 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);
     runTournamentSummer(s, s.seasons[s.seasons.length - 1], s.seasons[s.seasons.length - 1].year, true);
     settleCareerAmbition(s, s.seasons[s.seasons.length - 1]);
+    settleCareerPreparation(s, s.seasons[s.seasons.length - 1]);
+    Object.assign(s, recordMentorSeason(s, s.seasons[s.seasons.length - 1]));
     s.phase = "newspaper";
     return s;
   } else if (heat >= 70 && Math.random() < 0.35) {
@@ -5159,6 +5182,8 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       s.phase = "season_summary";
       simulateSeasonFinances(s, s.pendingSummary);
       settleCareerAmbition(s, s.pendingSummary);
+      settleCareerPreparation(s, s.pendingSummary);
+      Object.assign(s, recordMentorSeason(s, s.pendingSummary));
       return s;
     }
     if (s.pedSeasonsRemaining === 0) {
@@ -5178,6 +5203,8 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   if ((s.overall < 50 && s.age >= 33) || s.age >= 45) {
     s.retired = true;
     delete s.seasonAmbition;
+    delete s.seasonPreparation;
+    Object.assign(s, endCareerMentorForRetirement(s));
     const reason = s.age >= 45 ? "👋 Hung up the boots at 45. An incredible career!" : "👋 Body can no longer keep up. Forced retirement";
     s.events.push(reason);
     const lastYr = s.seasons[s.seasons.length - 1].year;
@@ -5299,6 +5326,8 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
       simulateSeasonFinances(s, injuryRow);
       runTournamentSummer(s, injuryRow, injuryRow.year, true);
       settleCareerAmbition(s, injuryRow);
+      settleCareerPreparation(s, injuryRow);
+      Object.assign(s, recordMentorSeason(s, injuryRow));
       s.phase = "rehab_choice";
       return s;
     }
@@ -5325,6 +5354,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     s.physical = clamp(s.physical + 1, 20, 99);
   }
   s.reflexes = growStat(s.reflexes, s.age, false, false, s.primeType, potWall, s.overall, dev);
+  applyCareerPreparation(s, season);
   s.overall = calcOverall(s, s.position);
   s.contractYearsLeft = Math.max(0, s.contractYearsLeft - 1);
   s.marketValue = calcMarketValue(s.overall, s.age, s.position, s.socialMediaFollowers);
@@ -5666,6 +5696,8 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
 
   if (s.events.length === 0) s.events.push(`⚽ Solid season at ${s.currentClub}`);
   settleCareerAmbition(s, season);
+  settleCareerPreparation(s, season);
+  Object.assign(s, recordMentorSeason(s, season));
 
   /* ─── Round 217: the loan ends with the season ───
      One season, then home, the way nearly every real loan works. The verdict
@@ -5677,6 +5709,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     s.currentLeague = back.parentLeague; s.currentClubCountry = back.parentCountry;
     s.currentClubColor = back.parentColor;
     s.loan = null;
+    Object.assign(s, endCareerMentorForMove(s, s.currentClub));
     const backSeasons = s.seasons.filter(ss => ss.club === back.parentClub && ss.type === "playing").length;
     const nextHere = projectLeagueApps(s.overall, back.parentTier, back.parentClub, backSeasons);
     if (nextHere.min >= 20) {
@@ -6010,6 +6043,8 @@ export function dismissNewspaper(prev: CareerState): CareerState {
       simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);
       runTournamentSummer(s, s.seasons[s.seasons.length - 1], s.seasons[s.seasons.length - 1].year, true);
       settleCareerAmbition(s, s.seasons[s.seasons.length - 1]);
+      settleCareerPreparation(s, s.seasons[s.seasons.length - 1]);
+      Object.assign(s, recordMentorSeason(s, s.seasons[s.seasons.length - 1]));
     }
   }
   /* ROUND 502: THIS LINE ENDED CAREERS, PERMANENTLY, AND THE PLAYER WAS STILL
@@ -6073,10 +6108,12 @@ export function getAllEvents(state: CareerState): RandomEvent[] {
         { label: "Reject all offers", emoji: "✋", color: "bg-muted", consequence: "No deal, stay independent",
           apply: s => { s.events = [...s.events, "👟 Rejected sponsorship offers"]; return s; } },
       ] },
-    { id: 6, emoji: "👶", title: "Youth Mentor", description: "You mentor a 16-year-old youth player at your club who shows incredible promise.",
+    { id: 6, emoji: "👶", title: "Youth Mentor", description: state.mentor
+      ? `Your saved mentorship with generated academy player ${state.mentor.name}: ${state.mentor.status}. Its ${state.mentor.progress}/3 completed mentoring years and history stay in your career.`
+      : "A generated 16-year-old academy player needs a mentor. Each season at your shared club with 10+ appearances adds progress. Three mentoring years complete it; a move ends it and keeps its history.",
       category: "positive", choices: [
-        { label: "Take them under your wing", emoji: "🤝", color: "bg-emerald-600", consequence: "Legacy +5, Youth player may become rival later",
-          apply: s => { s.popularity = clamp(s.popularity + 5, 0, 100); s.morale = clamp(s.morale + 5, 0, 100); s.events = [...s.events, "👶 Mentored a promising youth player"]; return s; } },
+        { label: state.mentor ? "Remember your academy mentorship" : "Take them under your wing", emoji: "🤝", color: "bg-emerald-600", consequence: state.mentor ? "Popularity +5, morale +5. Keep your existing mentorship and its history" : "Popularity +5, morale +5. Begin your saved academy mentorship",
+          apply: s => { s.popularity = clamp(s.popularity + 5, 0, 100); s.morale = clamp(s.morale + 5, 0, 100); s.events = [...s.events, s.mentor ? "🤝 Remembered your saved academy mentorship" : "👶 Mentored a promising youth player"]; return createCareerMentor(s); } },
       ] },
     { id: 7, emoji: "🎯", title: "Puskas Nominee!", description: "You score a Puskas Award-nominated goal.",
       category: "positive", choices: [
@@ -8157,6 +8194,8 @@ export function calculateLegacy(state: CareerState): LegacyResult {
 export function manualRetire(prev: CareerState): CareerState {
   const s = { ...prev };
   delete s.seasonAmbition;
+  delete s.seasonPreparation;
+  Object.assign(s, endCareerMentorForRetirement(s));
   s.retired = true;
   s.events = [...s.events, "👋 Announced retirement from professional football"];
   endClubCaptaincy(s, "retirement");
@@ -8267,6 +8306,8 @@ function applyRetirementMoneySeason(s: CareerState, seasonsSinceRetiring: number
 export function acceptRetirementSuggestion(prev: CareerState): CareerState {
   const s = { ...prev };
   delete s.seasonAmbition;
+  delete s.seasonPreparation;
+  Object.assign(s, endCareerMentorForRetirement(s));
   s.retired = true;
   s.events = [...s.events, "👋 Announced retirement from professional football"];
   const lastYear = s.seasons[s.seasons.length - 1].year;

@@ -1,0 +1,118 @@
+name: Soccer Career development outcomes
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/career-development.yml
+      - src/lib/soccerCareerEngine.ts
+      - src/lib/soccerCareerSelection.ts
+      - src/lib/soccerClubSquad.ts
+      - src/lib/soccerClubSquadSheet.ts
+      - src/lib/soccerCareerPreparation.ts
+      - src/lib/soccerCareerMentor.ts
+      - src/components/soccer-career/**
+      - src/pages/SoccerCareer.tsx
+      - src/test/soccerCareerDevelopment*
+      - scripts/simSoccerCareerDevelopment.mjs
+      - scripts/playSoccerCareerDevelopment.mjs
+
+permissions:
+  contents: read
+concurrency:
+  group: career-development-${{ github.event.pull_request.head.sha }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      CAREER_DEVELOPMENT_ARTIFACTS: career-development-artifacts/outcomes
+      FREE_KICK_FONT_CACHE: career-development-artifacts/font-cache
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare exact source and remote checks
+        id: prepare
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          mkdir -p career-development-artifacts
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          git rev-parse HEAD > career-development-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > career-development-artifacts/source-tree.txt
+          git cat-file -e 4ab80fa978cf362427bcd024c64c6691e7f83c2a^{commit}
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee career-development-artifacts/fonts.log
+      - name: App types then build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-development-artifacts/types.log
+          npm run build 2>&1 | tee career-development-artifacts/build.log
+      - name: Development outcomes and effective copied defects
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/lib/soccerClubSquad.test.ts src/test/soccerCareerDevelopment.test.ts src/test/soccerCareerAmbitions.test.ts src/test/soccerCareerRecords.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile.json=career-development-artifacts/focused-unit.json 2>&1 | tee career-development-artifacts/focused-unit.log || failed=1
+          CAREER_DEVELOPMENT_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerDevelopment.mjs 2>&1 | tee career-development-artifacts/simSoccerCareerDevelopment.log || failed=1
+          SIM_CAREER_AMBITION_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerAmbitions.mjs 2>&1 | tee career-development-artifacts/simSoccerCareerAmbitions.log || failed=1
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerRecords.mjs 2>&1 | tee career-development-artifacts/simSoccerCareerRecords.log || failed=1
+          exit "$failed"
+      - name: Actual career journeys on phone and desktop
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for driver in playSoccerCareerDevelopment playSoccerCareerDepth; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SHOTS="$PWD/career-development-artifacts/native/$driver" node "scripts/$driver.mjs" 2>&1 | tee "career-development-artifacts/$driver.log" || failed=1
+          done
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-development-early-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-development-artifacts/
+          retention-days: 7
+      - name: Related existing career outcomes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simCareerSeasonTruth simCareerRecordedStats simCareerStory simClubVerdict simLoanSpell simCareerTraining simNoInventedQuotes simSeasonCentreTable simSeasonCentreNeutral simMatchDetail simMatchScreen; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-development-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: All fifteen built output readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-development-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Authored source unchanged
+        if: ${{ !cancelled() }}
+        run: git diff --exit-code HEAD -- src scripts .github/workflows
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-development-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-development-artifacts/
+          retention-days: 7
