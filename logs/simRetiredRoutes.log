@@ -1,0 +1,14 @@
+0) 11 retired routes in App.tsx, 181 live routes
+1) coverage
+   11 of 11 retired routes have their own document
+2) every stub names one destination, and it is a live page
+   refresh, canonical and visible link agree on all 11
+3) no retired route serves the home page document
+   11 documents: 0 identical to the shell, 0 sharing its title, 0 with no canonical, 0 with no declared redirect
+4) not in the sitemap, not linked from anywhere shipped
+   sitemap has 171 URLs and none of the 11 retired routes
+   0 internal links point at a retired route
+5) stubs are current with App.tsx
+   11 of 11 current
+
+simRetiredRoutes: all green

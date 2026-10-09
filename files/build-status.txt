@@ -1,0 +1,13 @@
+ M public/budget-builder/index.html
+ M public/club-manager/index.html
+ M public/conquest-nba/index.html
+ M public/dart-draft/index.html
+ M public/free-kick/index.html
+ M public/mlb-front-office/index.html
+ M public/nba-front-office/index.html
+ M public/nba-higher-lower/index.html
+ M public/nfl-gauntlet-draft/index.html
+ M public/perfect-lineup-f1/index.html
+ M public/perfect-season-mlb/index.html
+ M public/whats-new/index.html
+ M scripts/data/lastmod.json

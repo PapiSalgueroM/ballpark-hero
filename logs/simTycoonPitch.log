@@ -1,0 +1,88 @@
+Round 583: the pitch plays the engine's match
+   suite: src/test/tycoonPitch.test.tsx
+
+A) the shipped code
+   pass  1 over 30 matches every goal the engine commits is replayed once, at its end, stamped with its minute
+   pass  2 goals scored while you are in another room are on the scoreboard when you come back, and never replayed late
+   pass  3 under reduced motion no replay runs and no spark or pop is drawn, while the score and the floaters still land
+   pass  4 a tap pops the pitch and throws six sparks, and the taps chip counts and then clears
+   pass  5 the office is six tiles, one panel at a time, Upgrades first
+   pass  6 in a goal storm the older replays land on their final frame, so the pitch never falls behind the match
+   what it measured:
+     30 matches: 202 goals committed (107 yours, 95 theirs), 202 replayed one for one by end and minute; 197 on the frame they were scored, the longest wait 7 frames
+     16 goals while the League tab showed, 0 replayed on return; the scoreboard read YOU 0; the 4 goals after the return replayed one for one
+     reduced motion: 30 goals over 5 matches, the ball never left play, 0 sparks and no pop after 8 taps, up to 4 floaters on screen
+     12 taps: the chip read "12 taps", 6 sparks, the pitch popped, the chip cleared at 1.5s idle; 22 players on the pitch
+     six tiles: Upgrades open on arrival, and Ticket offer, Payroll, Legacy, Badges and Records each replaced it with their own panel
+     goal storm: 360 goals in 2 matches, all shown in order, 179 landed on their final frame, the longest wait 11 frames
+
+A.decor) negative control: the ball runs at a goal on a timer that knows nothing about the goals
+   ok   failed 1 over 30 matches every goal the engine commits is replayed once, at its end, stamped with its minute
+         measured: AssertionError: goal 1: the engine committed against 17' and the ball showed for 17': expected +0 to be -1 // Object.is equality
+   --   failed 2 goals scored while you are in another room are on the scoreboard when you come back, and never replayed late
+   --   failed 3 under reduced motion no replay runs and no spark or pop is drawn, while the score and the floaters still land
+   ok   passed 4 a tap pops the pitch and throws six sparks, and the taps chip counts and then clears
+   ok   passed 5 the office is six tiles, one panel at a time, Upgrades first
+   --   failed 6 in a goal storm the older replays land on their final frame, so the pitch never falls behind the match
+
+A.backlog) negative control: the hook keeps queueing replays while the pitch is off screen
+   ok   passed 1 over 30 matches every goal the engine commits is replayed once, at its end, stamped with its minute
+   ok   failed 2 goals scored while you are in another room are on the scoreboard when you come back, and never replayed late
+         measured: AssertionError: coming back replayed 20 goals for the 4 scored after the return: expected [ 'for 17\'', 'against 24\'', …(18) ] to deeply equal [ Array(4) ]
+   ok   passed 3 under reduced motion no replay runs and no spark or pop is drawn, while the score and the floaters still land
+   ok   passed 4 a tap pops the pitch and throws six sparks, and the taps chip counts and then clears
+   ok   passed 5 the office is six tiles, one panel at a time, Upgrades first
+   ok   passed 6 in a goal storm the older replays land on their final frame, so the pitch never falls behind the match
+
+A.motion) negative control: the pitch ignores reduced motion
+   ok   passed 1 over 30 matches every goal the engine commits is replayed once, at its end, stamped with its minute
+   ok   passed 2 goals scored while you are in another room are on the scoreboard when you come back, and never replayed late
+   ok   failed 3 under reduced motion no replay runs and no spark or pop is drawn, while the score and the floaters still land
+         measured: AssertionError: the ball left play on 30 frames under reduced motion: expected 30 to be +0 // Object.is equality
+   ok   passed 4 a tap pops the pitch and throws six sparks, and the taps chip counts and then clears
+   ok   passed 5 the office is six tiles, one panel at a time, Upgrades first
+   ok   passed 6 in a goal storm the older replays land on their final frame, so the pitch never falls behind the match
+
+A.xchip) negative control: the taps chip reads like a multiplier
+   ok   passed 1 over 30 matches every goal the engine commits is replayed once, at its end, stamped with its minute
+   ok   passed 2 goals scored while you are in another room are on the scoreboard when you come back, and never replayed late
+   ok   passed 3 under reduced motion no replay runs and no spark or pop is drawn, while the score and the floaters still land
+   ok   failed 4 a tap pops the pitch and throws six sparks, and the taps chip counts and then clears
+         measured: AssertionError: the chip does not read 12 taps after 12 taps: expected 'x12' to be '12 taps' // Object.is equality
+   ok   passed 5 the office is six tiles, one panel at a time, Upgrades first
+   ok   passed 6 in a goal storm the older replays land on their final frame, so the pitch never falls behind the match
+
+A.deadtiles) negative control: the office tiles open nothing
+   ok   passed 1 over 30 matches every goal the engine commits is replayed once, at its end, stamped with its minute
+   ok   passed 2 goals scored while you are in another room are on the scoreboard when you come back, and never replayed late
+   ok   passed 3 under reduced motion no replay runs and no spark or pop is drawn, while the score and the floaters still land
+   ok   passed 4 a tap pops the pitch and throws six sparks, and the taps chip counts and then clears
+   ok   failed 5 the office is six tiles, one panel at a time, Upgrades first
+         measured: AssertionError: the ticket offer did not open: expected null not to be null
+   ok   passed 6 in a goal storm the older replays land on their final frame, so the pitch never falls behind the match
+
+A.nolanding) negative control: a queue of replays never cuts the older ones short
+   ok   passed 1 over 30 matches every goal the engine commits is replayed once, at its end, stamped with its minute
+   ok   passed 2 goals scored while you are in another room are on the scoreboard when you come back, and never replayed late
+   ok   passed 3 under reduced motion no replay runs and no spark or pop is drawn, while the score and the floaters still land
+   ok   passed 4 a tap pops the pitch and throws six sparks, and the taps chip counts and then clears
+   ok   passed 5 the office is six tiles, one panel at a time, Upgrades first
+   ok   failed 6 in a goal storm the older replays land on their final frame, so the pitch never falls behind the match
+         measured: AssertionError: the storm lost or reordered a replay: expected [ 'for 1\'', 'against 1\'', …(181) ] to deeply equal [ 'for 1\'', 'against 1\'', …(358) ]
+
+B) the source
+   ok   S1
+   ok   S2
+
+B.interval) negative control: the old 1900ms decoration timer comes back on the pitch
+   RED  S1: TycoonPitch.tsx starts 1 interval, so something on the Stadium tab moves on a clock of its own
+   ok   S2
+
+B.random) negative control: the idle ball is placed with Math.random
+   ok   S1
+   RED  S2: the pitch draws from Math.random, so what it shows is not the engine's state
+
+simTycoonPitch: green.
+   Every goal the engine commits is replayed once, at its end, with its minute, and never late.
+   Reduced motion holds the pitch still; taps pop, spark and count without multiplying; the office is tiles.
+   All 8 controls fired exactly where they should.
