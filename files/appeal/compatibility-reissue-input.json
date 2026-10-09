@@ -1,0 +1,8 @@
+{
+  "historicalBundle": "/home/runner/work/_temp/rc-out/files/appeal/bundles/historical-alone.mjs",
+  "historicalRows": {
+    "alone": "/home/runner/work/_temp/rc-out/files/appeal/historical/alone/observations.json",
+    "interleaved": "/home/runner/work/_temp/rc-out/files/appeal/historical/interleaved/observations.json"
+  },
+  "only": "Issued key survives roster changes"
+}

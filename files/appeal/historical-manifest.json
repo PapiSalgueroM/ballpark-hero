@@ -1,0 +1,198 @@
+{
+  "schema": 1,
+  "description": "Immutable original decisions source and accepted diagnostic receipt, before the Round 1081 product correction.",
+  "run": "37617442468",
+  "job": "112779490242",
+  "artifact": "11479948309",
+  "artifactSha256": "a423e3ba86db41706fe6150784c0a09563e08c25e7b791a0ec5309c4fb562440",
+  "sourceHead": "f025ecbdf9cfb033476b37e723244701a577d357",
+  "sourceTree": "606f81d9a24bc63796133e174c72db8dcdf2bcea",
+  "originalSource": "src/lib/clubManagerDecisions.ts",
+  "frozenSource": "scripts/fixtures/managerAppealIsolation1081/clubManagerDecisions.historical.ts",
+  "sha256": "4929c9de26b1fc038cf64c5216e2f46d54c5948611b52c60883fb361f27ee48a",
+  "acceptedReportSha256": "adc4dddaf3cd353d875cf10e7be9775b70d6f6537a5bba8c16c4c26831359ccd",
+  "historicalParityFailures": [
+    {
+      "id": "pair-08",
+      "aloneCardId": "desk-1-0-appeal-youth-muorpc00-99-243",
+      "interleavedCardId": "desk-1-0-appeal-youth-muorpc00-211-243",
+      "differences": [
+        {
+          "option": 0,
+          "alone": {
+            "option": 0,
+            "outcome": "lost",
+            "resolved": "Appeal lost. The panel made it 3 matches.",
+            "ban": 3
+          },
+          "interleaved": {
+            "option": 0,
+            "outcome": "won",
+            "resolved": "Appeal won. The ban is wiped and Diego Lindholm (Youth) is available for the next match.",
+            "ban": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "pair-11",
+      "aloneCardId": "desk-1-0-appeal-youth-muorpc00-141-410",
+      "interleavedCardId": "desk-1-0-appeal-youth-muorpc00-295-410",
+      "differences": [
+        {
+          "option": 0,
+          "alone": {
+            "option": 0,
+            "outcome": "won",
+            "resolved": "Appeal won. The ban is wiped and Leo Dubois (Youth) is available for the next match.",
+            "ban": 0
+          },
+          "interleaved": {
+            "option": 0,
+            "outcome": "lost",
+            "resolved": "Appeal lost. The panel made it 3 matches.",
+            "ban": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "pair-13",
+      "aloneCardId": "desk-1-0-appeal-youth-muorpc00-169-593",
+      "interleavedCardId": "desk-1-0-appeal-youth-muorpc00-351-593",
+      "differences": [
+        {
+          "option": 0,
+          "alone": {
+            "option": 0,
+            "outcome": "won",
+            "resolved": "Appeal won. The ban is wiped and Zane Keane (Youth) is available for the next match.",
+            "ban": 0
+          },
+          "interleaved": {
+            "option": 0,
+            "outcome": "lost",
+            "resolved": "Appeal lost. The panel made it 3 matches.",
+            "ban": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "pair-20",
+      "aloneCardId": "desk-1-0-appeal-youth-muorpc00-267-216",
+      "interleavedCardId": "desk-1-0-appeal-youth-muorpc00-547-216",
+      "differences": [
+        {
+          "option": 0,
+          "alone": {
+            "option": 0,
+            "outcome": "won",
+            "resolved": "Appeal won. The ban is wiped and Jude Hallberg (Youth) is available for the next match.",
+            "ban": 0
+          },
+          "interleaved": {
+            "option": 0,
+            "outcome": "lost",
+            "resolved": "Appeal lost. The panel made it 3 matches.",
+            "ban": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "pair-22",
+      "aloneCardId": "desk-1-0-appeal-youth-muorpc00-295-330",
+      "interleavedCardId": "desk-1-0-appeal-youth-muorpc00-603-330",
+      "differences": [
+        {
+          "option": 0,
+          "alone": {
+            "option": 0,
+            "outcome": "lost",
+            "resolved": "Appeal lost. The panel made it 3 matches.",
+            "ban": 3
+          },
+          "interleaved": {
+            "option": 0,
+            "outcome": "won",
+            "resolved": "Appeal won. The ban is wiped and Jamie Voskuil (Youth) is available for the next match.",
+            "ban": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "pair-24",
+      "aloneCardId": "desk-1-0-appeal-youth-muorpc00-323-985",
+      "interleavedCardId": "desk-1-0-appeal-youth-muorpc00-659-985",
+      "differences": [
+        {
+          "option": 0,
+          "alone": {
+            "option": 0,
+            "outcome": "won",
+            "resolved": "Appeal won. The ban is wiped and Tyler Kimura (Youth) is available for the next match.",
+            "ban": 0
+          },
+          "interleaved": {
+            "option": 0,
+            "outcome": "lost",
+            "resolved": "Appeal lost. The panel made it 3 matches.",
+            "ban": 3
+          }
+        }
+      ]
+    }
+  ],
+  "raw": {
+    "normal/alone": {
+      "path": "normal/alone/observations.json",
+      "sha256": "5880ca8d21bd61c0716be20e641e7f7e51eb54cfe119f920030812e1c755d423",
+      "bundlePath": "bundles/alone.mjs",
+      "bundleSha256": "20f0ff889b7915967d9946272b3aa953a893fa8bdd4cf3272367c291b4850113",
+      "exit": 0
+    },
+    "normal/interleaved": {
+      "path": "normal/interleaved/observations.json",
+      "sha256": "44252fcd68a9f9d2f2647dbb23657e0675b776af3209c49dbfb1c243a4485987",
+      "bundlePath": "bundles/interleaved.mjs",
+      "bundleSha256": "20f0ff889b7915967d9946272b3aa953a893fa8bdd4cf3272367c291b4850113",
+      "exit": 0
+    },
+    "controls/mislink": {
+      "path": "controls/mislink/observations.json",
+      "sha256": "98b6de8afba5a4ab6dbb3418a402ab26f74aab77d5fb00d4163e95c0e8377a71",
+      "bundlePath": "bundles/mislink.mjs",
+      "bundleSha256": "0464ebf27290848ce1b927652001c3aa8872dd6c0ba6a732a68fef3d6e774f26",
+      "exit": 0
+    },
+    "controls/effect": {
+      "path": "controls/effect/observations.json",
+      "sha256": "cc3c10f6e5b406e1b288a934637b2e675ec604f4da63c31908f8e72bcb8b80f7",
+      "bundlePath": "bundles/effect.mjs",
+      "bundleSha256": "d04e836cb427eeef4a232e28310e44d48ba1f7569cb9b12d98052c9dc8894b63",
+      "exit": 0
+    },
+    "controls/story": {
+      "path": "controls/story/observations.json",
+      "sha256": "6b3ceb968fe3d8d7c35618011e0be40e8fb0b74fe32609d257d05589d0db4426",
+      "bundlePath": "bundles/story.mjs",
+      "bundleSha256": "849169816a347c20cb4fa84683e51768080c44f640caa1d15d0f9a11966f2ceb",
+      "exit": 0
+    },
+    "controls/verdict": {
+      "path": "controls/verdict/observations.json",
+      "sha256": "0ee1be5d4c5ef524cd83c80f5c039b9ebfd18c0a6a2f43a852f5b940fc18f526",
+      "bundlePath": "bundles/verdict.mjs",
+      "bundleSha256": "01b7b0773693a29caac712ac4ec54846b80d2c2e425c9b2885b7d77eae22ad99",
+      "exit": 0
+    }
+  },
+  "unchangedSource": {
+    "src/lib/clubManager.ts": "c842a822079f621d161800b9993685ab895404a8923aebf138ee584c42ff5f0b",
+    "src/lib/clubManagerSlots.ts": "953c366dbe5e56163c81ca2185a60625da9279e4de98f9e39cd0b1cb199fe051",
+    "scripts/simClubManagerSlots.mjs": "79ade2511fa3100d6990c895f877a0f1edd6ed712cee2afec98264add849ef77",
+    "scripts/simClubManagerDecisions.mjs": "fc0214ae9511c16188af0f437bd4cc7d0c0092a3b4cf9cebc2f8fb42a82a4231"
+  }
+}
