@@ -1,0 +1,1 @@
+oldsaves exit=0 10s |    Duration  10.21s (transform 1.36s, setup 46ms, collect 1.88s, tests 7.68s, environment 255ms, prepare 125ms)
