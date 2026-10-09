@@ -1,0 +1,1 @@
+control doubletraining cannot run: src/lib/usCareerSummer.ts holds "if (card && (s.at === 0 || !laterAnswerMovesRating(c, sport, card, s.at))) return card;" 0 times, not once, so it would prove nothing

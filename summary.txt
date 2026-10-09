@@ -1,0 +1,4 @@
+summer-doubletraining-must-exit-1 exit=1 0s | control doubletraining cannot run: src/lib/usCareerSummer.ts holds "if (card && (s.at === 0 || !laterAnswerMovesRating(c, sport, card, s.at))) return card;" 0 times, not 
+simNoRivalNames exit=0 20s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 39s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+summer exit=0 2639s | simUsCareerSummer: green. Sections 1, 2, 3, 3b, 4, 5, 6, 7, 8, 9, 10, 11, 12 held over 400 careers a sport.
