@@ -1,0 +1,1 @@
+rvworld exit=1 10s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/zzRvWorld.test.ts,title=src/test/zzRvWorld.test.ts > reviewer probe%3A the simulated league world a pl

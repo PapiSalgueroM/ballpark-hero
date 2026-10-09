@@ -1,0 +1,60 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/zzRvWorld.test.ts[2m > [22m[2mreviewer probe: the simulated league world a player reads[2m > [22m[2mholds its own promises over real careers
+[22m[39m[rv world] 150 careers, 0 league world seasons (0 with a final table, 0 with derbies), his club went down 0 times () and up 0; largest save 77698 bytes
+[rv world] 0 listed moves; relegated clubs by their pool tier: 
+[rv world] tier 1 clubs (not his) sent down: none
+[rv world] stability: 0 finished seasons derived at their summary and again at the end of the career, 0 drew a different final table; seasons without a world: 3502, 1723 different
+[rv world] BROKEN S0 the final table of a finished season WITHOUT a world is not the one he was shown at the summary: 1723 times
+[rv world]    52000 2022 West Ham: row fields changed since []; ctx then table//Tottenham/Man United now table//Tottenham/; then West Ham>Bournemouth>Southampton>Leeds United now West Ham>Bournemouth>Leeds United>Brentford
+[rv world]    52000 2023 West Ham: row fields changed since []; ctx then table//Tottenham/Chelsea now table//Tottenham/; then Wolves>Burnley>Sheffield United>Crystal Palace now Sheffield United>Fulham>Burnley>Crystal Palace
+[rv world]    52000 2024 West Ham: row fields changed since []; ctx then table//Tottenham/Man City now table//Tottenham/; then West Ham>Bournemouth>Crystal Palace>Ipswich Town now West Ham>Crystal Palace>Aston Villa>Brentford
+[rv world]    52000 2025 West Ham: row fields changed since []; ctx then table//Tottenham/Liverpool now table//Tottenham/; then Burnley>Crystal Palace>Bournemouth>Sunderland now Leeds United>Crystal Palace>Sunderland>Bournemouth
+[rv world]    52000 2026 West Ham: row fields changed since []; ctx then table//Millwall/ now table//Millwall/; then Bolton Wanderers>Watford>Sheffield United>Charlton Athletic now Southampton>Bolton Wanderers>Watford>Sheffield United
+[rv world]    52000 2027 West Ham: row fields changed since []; ctx then table//Millwall/ now table//Millwall/; then Cardiff City>Blackburn Rovers>Charlton Athletic>Burnley now Stoke City>Cardiff City>Blackburn Rovers>Charlton Athletic
+[rv world] BROKEN I0 a 2026+ season at a club of the five pyramids holds no league world: 1517 times
+[rv world]    52000 2026 West Ham
+[rv world]    52000 2027 West Ham
+[rv world]    52000 2028 West Ham
+[rv world]    52000 2029 West Ham
+[rv world]    52000 2030 West Ham
+[rv world]    52000 2031 West Ham
+[rv world] 2 kinds of broken promise
+
+ [31m❯[39m src/test/zzRvWorld.test.ts [2m([22m[2m1 test[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 8097[2mms[22m[39m
+[31m   [31m×[31m reviewer probe: the simulated league world a player reads[2m > [22mholds its own promises over real careers[39m[33m 8096[2mms[22m[39m
+[31m     → expected [ …(2) ] to deeply equal [][39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/zzRvWorld.test.ts[2m > [22mreviewer probe: the simulated league world a player reads[2m > [22mholds its own promises over real careers
+[31m[1mAssertionError[22m: expected [ …(2) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "S0 the final table of a finished season WITHOUT a world is not the one he was shown at the summary",[39m
+[31m+   "I0 a 2026+ season at a club of the five pyramids holds no league world",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/zzRvWorld.test.ts:[2m185:19[22m[39m
+    [90m183| [39m    for (const k of kinds) { console.log(`[rv world] BROKEN ${k}: ${ba…
+    [90m184| [39m    console[33m.[39m[34mlog[39m([32m`[rv world] [39m[36m${[39mkinds[33m.[39mlength[36m}[39m[32m kinds of broken promise`[39m)[33m;[39m
+    [90m185| [39m    [34mexpect[39m(kinds)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m186| [39m  })[33m;[39m
+    [90m187| [39m})[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m   Start at [22m 14:03:19
+[2m   Duration [22m 9.62s[2m (transform 790ms, setup 41ms, collect 944ms, tests 8.10s, environment 236ms, prepare 105ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/zzRvWorld.test.ts,title=src/test/zzRvWorld.test.ts > reviewer probe%3A the simulated league world a player reads > holds its own promises over real careers,line=185,column=19::AssertionError: expected [ …(2) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "S0 the final table of a finished season WITHOUT a world is not the one he was shown at the summary",%0A+   "I0 a 2026+ season at a club of the five pyramids holds no league world",%0A+ ]%0A%0A ❯ src/test/zzRvWorld.test.ts:185:19%0A%0A
