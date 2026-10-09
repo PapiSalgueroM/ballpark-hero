@@ -1,0 +1,71 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sense-full: SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+hall-nba: node scripts/simCareerHall.mjs nba
+vitest-list: node_modules/.bin/vitest run src/test/usCareerStatLines.test.tsx src/test/careerSeasonReview.test.tsx src/test/usCareerReveals.test.tsx src/test/careerHall.test.tsx src/test/usCareerHallBoard.test.tsx src/test/myCareerRestore.test.tsx src/test/noDoubleRecord.test.tsx src/test/usCareerPractice.test.tsx src/test/usCareerProspect.test.tsx src/test/rivalryChoiceBoard.test.tsx src/test/usCareerActionConfirm.test.tsx src/components/nba-front-office/NbaSeasonStats.test.tsx src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx --testTimeout=300000 --hookTimeout=120000
+anchors: node scripts/simHarnessAnchors.mjs
+norival: node scripts/simNoRivalNames.mjs
+noquotes: node scripts/simNoInventedQuotes.mjs
+simNbaCareer: node scripts/simNbaCareer.mjs
+simNbaCareer-tradehome: SIM_NBA_CONTROL=tradehome node scripts/simNbaCareer.mjs
+simNbaSeasonStats: node scripts/simNbaSeasonStats.mjs
+simAwards: node scripts/simAwards.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simCareerRealism: node scripts/simCareerRealism.mjs
+simDepthChart: node scripts/simDepthChart.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+hall-nfl: node scripts/simCareerHall.mjs nfl
+hall-mlb: node scripts/simCareerHall.mjs mlb
+hall-nhl: node scripts/simCareerHall.mjs nhl
+c-othersport: SIM_NBA_SENSE_CONTROL=othersport SENSE_PROVE_OTHERS=1 SENSE_CAREERS=40 node scripts/simNbaAwardsSense.mjs
+c-privatecopy: SIM_NBA_SENSE_CONTROL=privatecopy SENSE_CAREERS=400 SENSE_SEEDS=1 SENSE_OTHERS=20 node scripts/simNbaAwardsSense.mjs
+c-example: SIM_NBA_SENSE_CONTROL=example SENSE_CAREERS=400 SENSE_SEEDS=1 SENSE_OTHERS=20 node scripts/simNbaAwardsSense.mjs
+c-barfrom: SIM_NBA_SENSE_CONTROL=barfrom SENSE_CAREERS=400 SENSE_SEEDS=1 node scripts/simNbaAwardsSense.mjs
+c-titlebar: SIM_NBA_SENSE_CONTROL=titlebar SENSE_CAREERS=400 SENSE_SEEDS=1 node scripts/simNbaAwardsSense.mjs
+c-fanvoteera: SIM_NBA_SENSE_CONTROL=fanvoteera SENSE_CAREERS=400 SENSE_SEEDS=1 node scripts/simNbaAwardsSense.mjs
+c-shortseason: SIM_NBA_SENSE_CONTROL=shortseason SENSE_CAREERS=400 SENSE_SEEDS=1 node scripts/simNbaAwardsSense.mjs
+c-newbooksforold: SIM_NBA_SENSE_CONTROL=newbooksforold SENSE_CAREERS=400 SENSE_SEEDS=1 node scripts/simNbaAwardsSense.mjs
+c-firstteamreserve: SIM_NBA_SENSE_CONTROL=firstteamreserve node scripts/simNbaAwardsSense.mjs
+c-benchstarter: SIM_NBA_SENSE_CONTROL=benchstarter node scripts/simNbaAwardsSense.mjs
+c-oldassists: SIM_NBA_SENSE_CONTROL=oldassists node scripts/simNbaAwardsSense.mjs
+c-stalefield: SIM_NBA_SENSE_CONTROL=stalefield node scripts/simNbaAwardsSense.mjs
+c-staleawardfield: SIM_NBA_SENSE_CONTROL=staleawardfield node scripts/simNbaAwardsSense.mjs
+c-nobridge: SIM_NBA_SENSE_CONTROL=nobridge node scripts/simNbaAwardsSense.mjs
+c-noscale: SIM_NBA_SENSE_CONTROL=noscale node scripts/simNbaAwardsSense.mjs
+c-nomvpworth: SIM_NBA_SENSE_CONTROL=nomvpworth node scripts/simNbaAwardsSense.mjs
+c-independent: SIM_NBA_SENSE_CONTROL=independent node scripts/simNbaAwardsSense.mjs
+c-rookieage: SIM_NBA_SENSE_CONTROL=rookieage node scripts/simNbaAwardsSense.mjs
+c-bar62: SIM_NBA_SENSE_CONTROL=bar62 node scripts/simNbaAwardsSense.mjs
+c-bar62data: SIM_NBA_SENSE_CONTROL=bar62data node scripts/simNbaAwardsSense.mjs
+c-scorersdefend: SIM_NBA_SENSE_CONTROL=scorersdefend node scripts/simNbaAwardsSense.mjs
+c-weightdrift: SIM_NBA_SENSE_CONTROL=weightdrift node scripts/simNbaAwardsSense.mjs
+c-rookieflood: SIM_NBA_SENSE_CONTROL=rookieflood node scripts/simNbaAwardsSense.mjs
+c-oldgrades: SIM_NBA_SENSE_CONTROL=oldgrades node scripts/simNbaAwardsSense.mjs
+hall-nba-v2drift: SIM_CONTROL=v2drift SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nba
+vitest-own: node_modules/.bin/vitest run src/test/nbaAwardDecisionLift.test.ts src/test/nbaOldSaveLines.test.ts src/test/nbaStatLineColumns.test.ts src/test/nbaTrophyTile.test.ts src/lib/usCoachPoaching.test.ts src/test/usSeason.test.ts src/test/usSeasonCentre.test.tsx --testTimeout=300000 --hookTimeout=120000
+simUsCoachPoaching: node scripts/simUsCoachPoaching.mjs
+simUsCoachPoaching-phantom: US_COACH_POACHING_CONTROL=phantom node scripts/simUsCoachPoaching.mjs
+simUsCoachPoaching-credit: US_COACH_POACHING_CONTROL=credit node scripts/simUsCoachPoaching.mjs
+simUsCoachPoaching-rng: US_COACH_POACHING_CONTROL=rng node scripts/simUsCoachPoaching.mjs
+simUsCoachCareer: node scripts/simUsCoachCareer.mjs
+simCareerHub: node scripts/simCareerHub.mjs
+parity-deadbadge: PARITY_CONTROL=deadbadge node scripts/simCareerParity.mjs
+c-snubhonoured: SIM_NBA_SENSE_CONTROL=snubhonoured node scripts/simNbaAwardsSense.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simCareerPress: node scripts/simCareerPress.mjs
+simSeasonReveal: node scripts/simSeasonReveal.mjs
+simUsCareerDefects: node scripts/simUsCareerDefects.mjs
+simCareerInbox: node scripts/simCareerInbox.mjs
+simCareerInboxBeats: node scripts/simCareerInboxBeats.mjs
+simCareerRivalryEvents: node scripts/simCareerRivalryEvents.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+sc-short82: US_SEASON_CONTROL=short82 node scripts/simUsSeasonCentre.mjs
+sc-stage: US_SEASON_CONTROL=stage node scripts/simUsSeasonCentre.mjs
+sc-length: US_SEASON_CONTROL=length node scripts/simUsSeasonCentre.mjs
+sc-formula: US_SEASON_CONTROL=formula node scripts/simUsSeasonCentre.mjs
+vitest-digest: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts src/test/usSeason.test.ts src/test/usSeasonCentre.test.tsx --testTimeout=1800000 --hookTimeout=120000

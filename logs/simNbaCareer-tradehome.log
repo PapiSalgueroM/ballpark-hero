@@ -1,0 +1,35 @@
+
+=== ROUND 57 NBA MY CAREER PLAYTEST ===
+NEGATIVE CONTROL   : tradehome (this run is expected to FAIL)
+careers            : 400  (100 in the 2003-04 era, 1954 second unit seasons)
+crashes            : 0
+NaN values         : 0
+empty stat lines   : 0  (must be 0, every position needs real stats)
+avg peak OVR       : 86.0  (min 77, median 86, max 95)
+peak 95+ rate      : 0%  (should be rare)
+suspensions served : 16
+distinct events    : 157
+  lifeA fired      : 45/45
+  lifeB fired      : 44/45
+  lifeC fired      : 36/36  (floor 34; rarest card drawn 5 times, median 16)
+    rarest three   : nbaC_rule_summer_league_return 5 (eligible in 667 offseasons), nbaC_rule_g_league 6 (eligible in 633 offseasons), nbaC_rookie_hotel 9 (eligible in 400 offseasons)
+  corruption fired : 24
+shop items usable  : 49/49
+C1e era leaks      : 0  (modern only cards offered or drawn in a 2003-04 career, must be 0)
+C1e service leaks  : 0  (a send down card offered or drawn after three seasons, must be 0)
+C2 words vs effect : 72000 draws (36000 on the fleet's own saves), 0 mismatches, 0 outcomes never seen, 0 cards with no eligible save
+   trades checked  : 1655 (288 in a 2003-04 career)
+R1 beat 318        : rolled 34 times, 0 of them with the rival on your own team (must be 0)
+R1 beat 320        : rolled 17 times, 0 of them with the rival on your own team (must be 0)
+R2 beat words      : 6 beats, 0 mismatches
+T  life cards drawn: 5009, without tags: 0
+
+sample stat lines by position:
+  PG  5.7 ppg, 1.9 rpg, 2.7 apg, 0.8 spg, 0.1 bpg, 21.4 mpg
+  SG  14.5 ppg, 4 rpg, 2.3 apg, 1 spg, 0.3 bpg, 31.3 mpg
+  SF  8.6 ppg, 3.7 rpg, 3 apg, 0.6 spg, 0.3 bpg, 18.7 mpg
+  PF  4.8 ppg, 2.8 rpg, 0.7 apg, 0.5 spg, 0.3 bpg, 24.6 mpg
+  C   21.4 ppg, 9.4 rpg, 3.5 apg, 0.9 spg, 0.9 bpg, 33.7 mpg
+TR demand a trade  : 600 trades off the "The fit is broken" card, 21 landed on the club he asked out of (must be 0)
+
+FAIL: TR: 21 of 600 demanded trades landed on the club he asked out of
