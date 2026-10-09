@@ -1,0 +1,64 @@
+bundled in 756 ms; 40 careers, seed set 0
+seasons 704, derived 704 (table 370, results 334), with moments 704; 4898 outcome mixes, 4600 mirrored calls; planning 1.4 ms a season
+MEASURED moments a season 2.989 (1: 1, 2: 6, 3: 697); YOUR CALL share 0.547; seasons with a YOUR CALL 0.895
+kinds: finish made call 227; finish made recreate 271; finish missed call 91; pass made call 217; pass made recreate 308; pass missed call 62; save made call 78; save made recreate 100; save missed call 31; tackle made call 319; tackle made recreate 274; tackle missed call 126
+ok   1 final table: held over 704 seasons
+ok   1 totals: held over 704 seasons
+ok   2 prefix: held over 704 seasons
+ok   2 moment minute: held over 704 seasons
+ok   3 offer: held over 704 seasons
+ok   3 call: held over 704 seasons
+ok   3 recreate: held over 704 seasons
+ok   4 read only: held over 704 seasons
+ok   4 determinism: held over 704 seasons
+ok   8 bank: held over 704 seasons
+ok   9 default path: held over 704 seasons
+ok   population: 704 derived seasons from 40 careers (at least 320)
+ok   the mirror was exercised: 4600 mirrored calls over 704 seasons
+ok   8 leaving a season early was exercised: 704 seasons closed with one moment taken, 703 of them with more on offer (of 704)
+ok   2 every mirrored call was read event by event: 4600 of 4600 changed at the moment's minute and nowhere else in its game
+MEASURED wallshot: a careful input makes 120 of 120 rounds; stars 0/1/2/3 over the grid 1413/170/365/1292
+ok   6 wallshot: a careful input makes the round (120 of 120, floor 0.95)
+ok   6 wallshot: one, two and three stars are each reachable (170, 365, 1292)
+ok   6 wallshot: one shot is fair, the textbook strike scores (120 of 120, floor 0.95)
+ok   6 wallshot: a wild input is a miss with no stars (0 makes)
+ok   6 wallshot: the saved entry replays to the result the player saw (3240 replays, 0 differ)
+MEASURED tackle: a careful input makes 120 of 120 rounds; stars 0/1/2/3 over the grid 0/120/1080/1200
+ok   6 tackle: a careful input makes the round (120 of 120, floor 0.97)
+ok   6 tackle: one, two and three stars are each reachable (120, 1080, 1200)
+ok   6 tackle: a wild input is a miss with no stars (0 makes)
+ok   6 tackle: the saved entry replays to the result the player saw (2400 replays, 0 differ)
+MEASURED gloves: a careful input makes 120 of 120 rounds; stars 0/1/2/3 over the grid 0/120/120/240
+ok   6 gloves: a careful input makes the round (120 of 120, floor 0.97)
+ok   6 gloves: one, two and three stars are each reachable (120, 120, 240)
+ok   6 gloves: a wild input is a miss with no stars (0 makes)
+ok   6 gloves: the saved entry replays to the result the player saw (480 replays, 0 differ)
+MEASURED throughball: a careful input makes 120 of 120 rounds; stars 0/1/2/3 over the grid 220/362/583/995
+ok   6 throughball: a careful input makes the round (120 of 120, floor 0.97)
+ok   6 throughball: one, two and three stars are each reachable (362, 583, 995)
+ok   6 throughball: a wild input is a miss with no stars (0 makes)
+ok   6 throughball: the saved entry replays to the result the player saw (2160 replays, 0 differ)
+ok   6 the round follows the stakes at every step: 2 3 3 4 4 5 5 6 6 7 7
+ok   6 his own chances are on his training drill: ST:finish:wallshot:wallshot LW:finish:wallshot:wallshot CAM:pass:throughball:throughball RW:finish:wallshot:wallshot CM:pass:throughball:throughball CB:tackle:tackle:tackle GK:save:gloves:gloves CDM:tackle:tackle:tackle LB:tackle:tackle:tackle RB:tackle:tackle:tackle
+ok   7 the reader refuses every malformed ledger (37 of 37)
+ok   7 a good ledger reads back as written and a duplicate keeps the first
+ok   7 what a bank paid reads back for its own season, and a refused or unbanked ledger paid nothing
+ok   7 an attempt is used, then settled, and never taken again ([[4,0,2,0.1235,1]])
+ok   7 a ledger never outgrows its reader (12 entries)
+ok   7 a new season folds the old count and starts clean ({"seasons":1,"moments":2,"stars":5})
+ok   7 a ledger is only read for its own season, and the career count carries
+ok   8 every star count pays what its share earns: 84 mixes of 1 to 3 moments, 0 wrong, boosts seen 0 1 2
+ok   8 morale moves only when a moment was made, one event line, banked once (0 morale, 0 line errors)
+ok   8 a moment left to play still counts below the line: 24 ledgers with fewer taken than offered, 0 wrong, 0 wrong lines, 1 paid; one of three for 3 stars pays 0
+ok   8 a drill plus the moments never pass the ceiling, drill first: 200 cases over headroom 0 to 4, 0 over, 0 paid at the ceiling, 28 where both paid
+ok   8 a drill plus the moments never pass the ceiling, moments first: 200 cases over headroom 0 to 4, 0 over, 0 paid at the ceiling, 30 where both paid
+ok   8 the ledger keeps what it paid for its own season only: paid [1992,2], next season's drill pays 2 of 2
+ok   8 the bank pays once a season: a second call returns the same career
+ok   8 only the latest season banks: a ledger for another season is left alone
+ok   8 an attempt opened and left is a miss: it banks nothing
+ok   7 the repair keeps a good ledger, drops a refused one whole and adds nothing to a save without one
+ok   5 moments a season 2.989 (floor 2.9)
+ok   5 YOUR CALL share 0.547 (floor 0.48)
+ok   5 seasons with a YOUR CALL 0.895 (floor 0.84)
+MEASURED planning 1.4 ms a season (information only)
+simSeasonMoments: 54 checks, 0 failed
