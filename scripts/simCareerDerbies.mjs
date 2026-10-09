@@ -701,7 +701,10 @@ console.log('4) derby goals are a subset, keepers never score one, Derby Hero is
       seedKey: `${state.playerName}|${r.club}|${r.year}|${r.apps}|${r.goals}|${r.assists}|${r.rating}|derby`,
     });
     replayed += 1;
-    if (JSON.stringify(again) !== JSON.stringify(r.derbies)) replayOff += 1;
+    if (JSON.stringify(again) !== JSON.stringify(r.derbies)) {
+      replayOff += 1;
+      if (replayOff <= 4) console.log(`   REPLAY DIFFERS ${state.playerName} ${r.year} ${r.club} (${field.league}${field.members ? ', saved field' : ''}): apps ${r.apps}, leagueApps ${r.leagueApps}, goals ${r.goals}, title ${r.leagueTitle}, severe ${!!r.injurySevere}, ban ${r.suspensionMatches ?? 0}; stored ${JSON.stringify(r.derbies).slice(0, 260)}; drawn ${JSON.stringify(again).slice(0, 260)}`);
+    }
     const ms = ds.flatMap(d => d.meetings);
     const goals = ms.reduce((n, m) => n + m.goals, 0);
     if (goals > r.goals) overGoals += 1;
