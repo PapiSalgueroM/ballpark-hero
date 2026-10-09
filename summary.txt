@@ -1,0 +1,2 @@
+shapes1 exit=0 15s |    Duration  13.86s (transform 1.78s, setup 33ms, collect 188ms, tests 13.15s, environment 182ms, prepare 86ms)
+shapes2 exit=0 2s |    Duration  1.44s (transform 289ms, setup 30ms, collect 177ms, tests 793ms, environment 172ms, prepare 47ms)

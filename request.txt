@@ -1,0 +1,3 @@
+#!serial
+shapes1: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000
+shapes2: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx -t olympics --testTimeout=300000 --hookTimeout=120000
