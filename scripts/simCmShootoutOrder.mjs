@@ -588,16 +588,38 @@ if (WRITE_FIXTURE) {
    career started on NAMED_BASE_SEED, which is Valencia again (22 on the
    roster), and refuses to run if that ever stops being a side that names an
    eleven with a keeper. */
-const NAMED_BASE_SEED = 782_002;
-const atNamedCup = reachCup(cm, NAMED_BASE_SEED);
-const namedOpp = atNamedCup.cupDraw?.[atNamedCup.calendar[atNamedCup.week].cupRound];
+/* Round 1102 (2026-10-09): the base is FOUND, no longer typed. That round
+   re-rated every squad, the seeded career's cup draw moved with the ratings,
+   and seed 782002 drew Espanyol, whose projected roster is 14 men and no
+   keeper, so the harness stopped on its own precondition with nothing wrong in
+   the engine. A typed seed breaks again at the next re-bake (Round 1108 is in
+   the same release). So the seeds are walked from NAMED_FROM and the first one
+   whose first cup tie is against a side that names an eleven with a keeper is
+   the base; the seeds passed over are printed with why. The requirement is the
+   one the abort stated, met by construction, and the floors below still say
+   whether the tie found has enough shootouts to bite on. SIM_SHOOTOUT_NAMED_FROM
+   moves the start, for measuring another tie. */
+const NAMED_FROM = Number.isFinite(Number(process.env.SIM_SHOOTOUT_NAMED_FROM)) && process.env.SIM_SHOOTOUT_NAMED_FROM !== '' ? Number(process.env.SIM_SHOOTOUT_NAMED_FROM) : 782_002;
+const NAMED_TRIES = 40;
+let NAMED_BASE_SEED = null;
+let atNamedCup = null;
+let namedOpp = null;
 {
-  const r = namedOpp ? oppRosterFor(atNamedCup, namedOpp) : [];
-  const keepers = r.filter(p => p.p === 'GK').length;
-  if (!namedOpp || keepers < 1 || r.length - keepers < 10) {
-    abort(`section 1's base (seed ${NAMED_BASE_SEED}) drew ${namedOpp ?? 'nobody'}, whose roster of ${r.length} (${keepers} keepers) cannot name an eleven, so their order would be read off nobody; pick a base seed whose first cup tie is against a full roster`);
+  const passedOver = [];
+  for (let seed = NAMED_FROM; seed < NAMED_FROM + NAMED_TRIES; seed++) {
+    const st = reachCup(cm, seed);
+    const opp = st.cupDraw?.[st.calendar[st.week].cupRound];
+    const r = opp ? oppRosterFor(st, opp) : [];
+    const keepers = r.filter(p => p.p === 'GK').length;
+    if (opp && keepers >= 1 && r.length - keepers >= 10) {
+      NAMED_BASE_SEED = seed; atNamedCup = st; namedOpp = opp;
+      console.log(`   section 1 base: seed ${seed}, cup ${st.calendar[st.week].cupRound} against ${opp} (${r.length} on their roster, ${keepers} keepers); the fixture base's tie is against ${atCup.cupDraw?.[cupEntry.cupRound] ?? 'unknown'} (${oppRosterFor(atCup, atCup.cupDraw?.[cupEntry.cupRound] ?? '').length} on theirs)`);
+      break;
+    }
+    passedOver.push(`${seed} ${opp ?? 'nobody'} (${r.length} men, ${keepers} keepers)`);
   }
-  console.log(`   section 1 base: seed ${NAMED_BASE_SEED}, cup ${atNamedCup.calendar[atNamedCup.week].cupRound} against ${namedOpp} (${r.length} on their roster, ${keepers} keepers); the fixture base's tie is against ${atCup.cupDraw?.[cupEntry.cupRound] ?? 'unknown'} (${oppRosterFor(atCup, atCup.cupDraw?.[cupEntry.cupRound] ?? '').length} on theirs)`);
+  if (passedOver.length) console.log(`   section 1 base: passed over, no eleven with a keeper: ${passedOver.join('; ')}`);
+  if (NAMED_BASE_SEED === null) abort(`section 1's base: none of the ${NAMED_TRIES} seeds from ${NAMED_FROM} drew a first cup tie against a side that names an eleven with a keeper, so their order would be read off nobody`);
 }
 const nameOf = new Map(atNamedCup.squad.map(p => [p.id, p.name]));
 /** A club's projected roster by name (rating and position), as section 1's base career sees it. */

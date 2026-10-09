@@ -263,8 +263,19 @@ function seasonOn(edit, club, label) {
   ok(!!s.uclGroup === homeEurope, `${label}: season one Europe is ${!!s.uclGroup} on the edited world and ${homeEurope} in the real one`);
   ok(leagueRounds(s) === realCal, `${label}: ${leagueRounds(s)} league rounds, a real ${L} club plays ${realCal}`);
   const end = runSeason(cm, s);
+  /* The league matches played are counted off my own row of the final table.
+     They were counted in the result log until Round 1102, and a save keeps only
+     its last 60 results (SAVE_CAPS.resultLog): a club the edit puts in a 46
+     match league that also goes deep in two cups and Europe plays more than 60,
+     so the log read "45 of 46" for a season that was whole. The round's review
+     measured it on origin/main, this same swap over seeds 1 to 30: a league
+     match "short" in 6 of 30. It was a coin toss, never a missing fixture. The
+     log still answers who the opponents were. */
+  const myRow = end.table.find(r => r.club === club);
+  const leaguePlayed = myRow ? myRow.w + myRow.d + myRow.l : -1;
+  ok(leaguePlayed === realCal, `${label}: played ${leaguePlayed} league matches of ${realCal}`);
   const leagueOpps = (end.resultLog ?? []).filter(r => r.competition === 'league').map(r => r.opp);
-  ok(leagueOpps.length === realCal, `${label}: played ${leagueOpps.length} league matches of ${realCal}`);
+  ok(leagueOpps.length > 0 && leagueOpps.length <= realCal, `${label}: the result log holds ${leagueOpps.length} league matches, a season is ${realCal}`);
   const strangers = leagueOpps.filter(o => !lineup.includes(o));
   ok(strangers.length === 0, `${label}: league fixtures against clubs outside the edited ${L}: ${[...new Set(strangers)].slice(0, 4).join(', ')}`);
   ok(sameSet(end.table.map(r => r.club), lineup), `${label}: my final table is not the edited ${L} lineup`);
@@ -300,11 +311,21 @@ function seasonOn(edit, club, label) {
     league,
     clubs: (league.id === L ? cm.sortedWorldTable(end, L, end.table) : end.world?.[league.id] ? cm.sortedWorldTable(end, league.id, end.world[league.id].table) : []).map(r => r.club),
   }));
-  const earned = cm.uclFieldFromTables(played, end.uclBracket?.find(t => t.round === 'F')?.winner);
+  const holders = end.uclBracket?.find(t => t.round === 'F')?.winner ?? null;
+  const earned = cm.uclFieldFromTables(played, holders);
   const field = next.uclField ?? [];
   ok(field.length > 0 && JSON.stringify(field) === JSON.stringify(earned), `${label}: next season's Champions League is not the one the played tables earned (${field.slice(0, 4).join(', ')} against ${earned.slice(0, 4).join(', ')})`);
+  /* Everybody in the field played in one of Europe's leagues, but for the
+     holders: they go in whatever their league did (the engine's rule, in
+     uclDirectQualifiersFromTables, and the real one). The edit can put a
+     giant in a league outside Europe's top divisions, season one's Europe is
+     who really qualified, and when that giant then wins it he is next year's
+     holder from the Championship. Until Round 1102 this line called him an
+     outsider: the round's review measured that on origin/main, the swap this
+     harness makes did it in 11 of 30 seeds. Nobody else is excused. */
   const europeans = new Set(played.flatMap(t => t.clubs));
-  const outsiders = field.filter(c => !europeans.has(c));
+  const outsiders = field.filter(c => !europeans.has(c) && c !== holders);
+  if (holders && !europeans.has(holders)) ok(field.includes(holders), `${label}: ${holders} won the Champions League from outside Europe's leagues and is not in the next field as holders`);
   ok(outsiders.length === 0, `${label}: next season's Champions League has clubs that played outside Europe's leagues: ${outsiders.slice(0, 4).join(', ')}`);
   const myMove = cm.careerLeagueOf(next).id !== L ? ` (${club} moved ${L} to ${cm.careerLeagueOf(next).id})` : '';
   const ov = next.leagueOverrides ?? {};
