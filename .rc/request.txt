@@ -1,0 +1,56 @@
+# Release AP closing pass: the proof on the pushed head (served build, Chromium). A control line is green when it exits 0 with its own "fired" words, except the lines named must-exit-1.
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-round: node_modules/.bin/vitest run src/test/academyFilters.test.tsx src/test/clubManagerDeskCues.test.tsx src/test/clubManagerRowButtons.test.tsx src/test/facilitiesPreview.test.tsx src/test/miniPitchScene.test.ts src/test/rolesBrokenPromises.test.tsx src/test/seasonCentreOwnGoals.test.tsx src/test/tycoonLatestSeason.test.tsx src/test/tycoonTicketPolicy.test.tsx --testTimeout=300000 --hookTimeout=300000
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simBrowserHarnessDiscovery: node scripts/simBrowserHarnessDiscovery.mjs
+simClubManagerStart: node scripts/simClubManagerStart.mjs
+simClubManagerStart-notneutral: START_CONTROL=notneutral node scripts/simClubManagerStart.mjs
+simClubManagerStart-addpatience: START_CONTROL=addpatience node scripts/simClubManagerStart.mjs
+simClubManagerStart-jobsalwayson: START_CONTROL=jobsalwayson node scripts/simClubManagerStart.mjs
+simLoginReturn: node scripts/simLoginReturn.mjs
+simLoginReturn-wall: LOGIN_RETURN_CONTROL=wall node scripts/simLoginReturn.mjs
+simLoginReturn-stuck: LOGIN_RETURN_CONTROL=stuck node scripts/simLoginReturn.mjs
+simBracketMoment: node scripts/simBracketMoment.mjs
+simBracketMoment-layout-must-exit-1: BRACKET_MOMENT_CONTROL=layout node scripts/simBracketMoment.mjs
+simBracketMoment-layoutucl-must-exit-1: BRACKET_MOMENT_CONTROL=layoutucl node scripts/simBracketMoment.mjs
+simBracketMoment-reload-must-exit-1: BRACKET_MOMENT_CONTROL=reload node scripts/simBracketMoment.mjs
+simBracketMoment-allrounds-must-exit-1: BRACKET_MOMENT_CONTROL=allrounds node scripts/simBracketMoment.mjs
+runAll-loginReturn: ONLY=simLoginReturn node scripts/runAllSims.mjs
+runAll-bracketMoment: ONLY=simBracketMoment node scripts/runAllSims.mjs
+runAll-ownGoals: ONLY=simSoccerOwnGoals node scripts/runAllSims.mjs
+runAll-browserOnly-must-exit-1: ONLY=playHomeFold node scripts/runAllSims.mjs
+ownGoals: CAREERS=120 SEEDSET=0 node scripts/simSoccerOwnGoals.mjs
+og-points: CAREERS=120 OWN_GOAL_CONTROL=points node scripts/simSoccerOwnGoals.mjs
+og-mine: CAREERS=120 OWN_GOAL_CONTROL=mine node scripts/simSoccerOwnGoals.mjs
+og-assist: CAREERS=120 OWN_GOAL_CONTROL=assist node scripts/simSoccerOwnGoals.mjs
+og-origin: CAREERS=120 OWN_GOAL_CONTROL=origin node scripts/simSoccerOwnGoals.mjs
+og-mirror: CAREERS=120 OWN_GOAL_CONTROL=mirror node scripts/simSoccerOwnGoals.mjs
+og-kind: CAREERS=120 OWN_GOAL_CONTROL=kind node scripts/simSoccerOwnGoals.mjs
+og-pitch: CAREERS=120 OWN_GOAL_CONTROL=pitch node scripts/simSoccerOwnGoals.mjs
+og-beneficiary: CAREERS=120 OWN_GOAL_CONTROL=beneficiary node scripts/simSoccerOwnGoals.mjs
+og-role: CAREERS=120 OWN_GOAL_CONTROL=role node scripts/simSoccerOwnGoals.mjs
+og-gate: CAREERS=120 OWN_GOAL_CONTROL=gate node scripts/simSoccerOwnGoals.mjs
+og-score: CAREERS=120 OWN_GOAL_CONTROL=score node scripts/simSoccerOwnGoals.mjs
+og-filteredordinal: CAREERS=120 OWN_GOAL_CONTROL=filteredordinal node scripts/simSoccerOwnGoals.mjs
+og-input: CAREERS=120 OWN_GOAL_CONTROL=input node scripts/simSoccerOwnGoals.mjs
+og-ordinal: CAREERS=120 OWN_GOAL_CONTROL=ordinal node scripts/simSoccerOwnGoals.mjs
+og-rng: CAREERS=120 OWN_GOAL_CONTROL=rng node scripts/simSoccerOwnGoals.mjs
+og-ledgerdata: CAREERS=120 OWN_GOAL_CONTROL=ledgerdata node scripts/simSoccerOwnGoals.mjs
+og-ledgerkey: CAREERS=120 OWN_GOAL_CONTROL=ledgerkey node scripts/simSoccerOwnGoals.mjs
+og-parent: D=$PWD/.rc-main-c && mkdir -p $D && git archive origin/main | tar -x -C $D && OWN_GOAL_PARENT_ROOT=$D CAREERS=60 SEEDSET=4 node scripts/simSoccerOwnGoals.mjs
+og-stream: D=$PWD/.rc-main-d && mkdir -p $D && git archive origin/main | tar -x -C $D && OWN_GOAL_CONTROL=stream OWN_GOAL_PARENT_ROOT=$D CAREERS=12 node scripts/simSoccerOwnGoals.mjs
+simTycoonTicketPolicy: node scripts/simTycoonTicketPolicy.mjs
+simTycoonTicketPolicy-all-controls: TYCOON_TICKET_POLICY_CONTROL=all node scripts/simTycoonTicketPolicy.mjs
+simTycoonHelp: node scripts/simTycoonHelp.mjs
+simTycoonRooms: node scripts/simTycoonRooms.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+playLeagueTableFit: ENGINES=chromium node scripts/playLeagueTableFit.mjs
+playSeasonCentre: PORT=4411 ENGINES=chromium node scripts/playSeasonCentre.mjs
+sweepWeight: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs
