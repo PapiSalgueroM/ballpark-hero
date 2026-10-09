@@ -1,0 +1,3 @@
+vitest-all: node_modules/.bin/vitest run --testTimeout=1800000 --hookTimeout=120000
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
