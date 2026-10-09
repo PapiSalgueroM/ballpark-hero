@@ -14,7 +14,7 @@
 // Values in £m. Ratings 48-94: the market value curve plus points for age
 // (curve 2, scripts/lib/cmValueCurve.mjs): a point off for each year under 24,
 // points back from 30.
-// Ages are for 1 August 2026: 362 from a birth date on file, 4013 moved from the
+// Ages are for 1 August 2026: 382 from a birth date on file, 3993 moved from the
 // table's 1 January age (plus one for a 2026 row, plus two for a 2025 row;
 // right for about seven men in ten, a year over for the rest), 26 as written
 // by hand in 2026, 0 unknown.
@@ -45,7 +45,7 @@ export const CM_ROSTER_META = {
   curve: 2,
   /** How each man's age is known: from a birth date on file, moved on from the table's 1 January
    *  age, as written by hand in 2026, or unknown. */
-  ages: { asOf: '2026-08-01', born: 362, moved: 4013, written: 26, unknown: 0 },
+  ages: { asOf: '2026-08-01', born: 382, moved: 3993, written: 26, unknown: 0 },
 };
 
 /** Clubs where the dataset runs thin (under 8 real players); the game pads
@@ -446,8 +446,8 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Bukayo Saka', p: 'RW', a: 24, v: 97.5, r: 91 },
     { n: 'Declan Rice', p: 'CM', a: 27, v: 97.5, r: 91 },
     { n: 'William Saliba', p: 'CB', a: 25, v: 72.8, r: 90 },
-    { n: 'Bruno Guimarães', p: 'CM', a: 29, v: 60.8, r: 89 },
-    { n: 'Gabriel', p: 'CB', a: 29, v: 60.8, r: 89 },
+    { n: 'Bruno Guimarães', p: 'CM', a: 28, v: 60.8, r: 89 },
+    { n: 'Gabriel', p: 'CB', a: 28, v: 60.8, r: 89 },
     { n: 'Martín Zubimendi', p: 'CDM', a: 27, v: 60.8, r: 89 },
     { n: 'Jurriën Timber', p: 'RB', a: 25, v: 57, r: 88 },
     { n: 'Martin Ødegaard', p: 'CAM', a: 27, v: 52.5, r: 88 },
@@ -2507,7 +2507,7 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Preston Plambeck', p: 'LM', a: 21, v: 0.8, r: 61 },
   ],
   'Inter Milan': [
-    { n: 'Lautaro Martínez', p: 'ST', a: 29, v: 69, r: 89 },
+    { n: 'Lautaro Martínez', p: 'ST', a: 28, v: 69, r: 89 },
     { n: 'Alessandro Bastoni', p: 'CB', a: 27, v: 57, r: 88 },
     { n: 'Federico Dimarco', p: 'LB', a: 29, v: 40.5, r: 86 },
     { n: 'Marcus Thuram', p: 'ST', a: 29, v: 40.5, r: 86 },
@@ -3602,13 +3602,13 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
   ],
   'PSG': [
     { n: 'Vitinha', p: 'CDM', a: 26, v: 113.4, r: 92 },
-    { n: 'João Neves', p: 'CM', a: 22, v: 89.3, r: 90 },
+    { n: 'João Neves', p: 'CM', a: 21, v: 89.3, r: 90 },
     { n: 'Ousmane Dembélé', p: 'ST', a: 29, v: 81, r: 90 },
     { n: 'Désiré Doué', p: 'RW', a: 21, v: 72.8, r: 88 },
     { n: 'Khvicha Kvaratskhelia', p: 'LW', a: 25, v: 72.8, r: 90 },
-    { n: 'Achraf Hakimi', p: 'RB', a: 28, v: 64.5, r: 89 },
+    { n: 'Achraf Hakimi', p: 'RB', a: 27, v: 64.5, r: 89 },
     { n: 'Nuno Mendes', p: 'LB', a: 24, v: 60.8, r: 89 },
-    { n: 'Willian Pacho', p: 'CB', a: 25, v: 57, r: 88 },
+    { n: 'Willian Pacho', p: 'CB', a: 24, v: 57, r: 88 },
     { n: 'Warren Zaïre-Emery', p: 'CM', a: 20, v: 48.8, r: 84 },
     { n: 'Ferran Torres', p: 'ST', a: 26, v: 40.5, r: 86 },
     { n: 'Maghnes Akliouche', p: 'RW', a: 24, v: 40.5, r: 86 },
