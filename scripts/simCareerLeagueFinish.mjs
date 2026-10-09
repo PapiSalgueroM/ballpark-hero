@@ -337,10 +337,26 @@ const DIGEST_SEEDS = 16;
    '120dd615a6cd5dc1', '01b2d4b82109c7c6', '63a6b8575832dc54',
    'f47e78ff107bf228', 'e3e83a57c9b96439', '8ae2cceb487c0598',
    '7498856a14c25cc2']. */
+/* (the recording history, continued)
+   Re-recorded at Release AQ (2026-10-09, twice, identical), on purpose: the
+   Soccer Career train (the other lane's Rounds 1169 to 1178) moves a career
+   in every era: a red card ban is served the season after (1176), a deal
+   after 30 follows form (1177), a listed player's move completes itself
+   (1178), the award field turns over (1172, 1174) and from 2026-27 clubs
+   change division (1175). All 16 digests move. Attribution, on a GitHub
+   runner on the release branch (dd651c9d): SIM_LEAGUE_FINISH_ATTRIBUTION=
+   train1178 bundles the same tree with the train taken out in memory (the
+   four lists the other lane wrote for simCareerAwardsNight, as one:
+   scripts/lib/soccerTrain1178.mjs) and records the list it replaced 16 of
+   16, so nothing but the train moved them. That list stays below as
+   BEFORE_TRAIN_1178 and the mode can be run again while the anchors hold.
+   The same release made section 2 read a 2026 on season's size off the
+   field the row saves (seasonSize above). The stream control still turns
+   section 4 red. */
 /* The list before the Soccer Career train (Release AP, 2026-10-09). Kept for
    SIM_LEAGUE_FINISH_ATTRIBUTION=train1178, which must record it again. */
 const BEFORE_TRAIN_1178 = ['8cf1c83794b5292c', 'fcb98e5a6f7c482c', '5bf2fb10985c3c57', '777fb5fac5b6035b', 'd22dfbc0a3673f01', 'ef0fa7c25d6b1287', '9e04cfcf7ce6fa60', 'd9879baa033424cf', 'de3f258b856b5094', 'b4a01376c0a3f518', '16493c48f4e1d265', '63a6b8575832dc54', 'f47e78ff107bf228', 'e3e83a57c9b96439', '083646089db0b478', '9b739fcf66c4063e'];
-const BASELINE = ['8cf1c83794b5292c', 'fcb98e5a6f7c482c', '5bf2fb10985c3c57', '777fb5fac5b6035b', 'd22dfbc0a3673f01', 'ef0fa7c25d6b1287', '9e04cfcf7ce6fa60', 'd9879baa033424cf', 'de3f258b856b5094', 'b4a01376c0a3f518', '16493c48f4e1d265', '63a6b8575832dc54', 'f47e78ff107bf228', 'e3e83a57c9b96439', '083646089db0b478', '9b739fcf66c4063e'];
+const BASELINE = ['6426d16cbf9ba999', '3306c9fe9aa5342a', 'a3fe5aa3598f0c39', 'c023471be22bf543', '9d4b42b5fdfeda8a', '2cddcac6f2c00050', '7f91286e11eda2ba', 'da376f05543b07dc', '961ae0e31447de8e', '40149a1bee050088', '5ed3c74ce0481b01', 'e867cd9651716b7b', '62e945046c9d16cf', '094f3daa34552ccf', 'de9566531c5f5fec', '389df779dd2b1e8a'];
 if (ATTRIBUTION) {
   let same = 0;
   const moved = [];

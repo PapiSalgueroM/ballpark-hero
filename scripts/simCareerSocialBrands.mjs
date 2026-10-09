@@ -53,7 +53,18 @@
  *      pool grew from 241 to 460 clubs, and eight plain leagues got a size,
  *      a format and a derby cadence. Attribution: the same tree with the
  *      seven source files that round changed read from Release AL's gated
- *      tree replays the old fixture whole. Soccer calls Math.random
+ *      tree replays the old fixture whole. Release AQ (2026-10-09)
+ *      re-recorded it, twice and identical, from the release branch commit
+ *      on a CI runner (the header's sha): the Soccer Career train (the other
+ *      lane's Rounds 1169 to 1178) moves every career on purpose (a ban is
+ *      served, a deal after 30 follows form, a listed player's move
+ *      completes itself, the award field turns over, clubs change division
+ *      from 2026-27). Attribution, run first on the same commit against the
+ *      fixture it replaced: SOCIAL_BRANDS_ATTRIBUTION=train1178 bundles the
+ *      tree with the train taken out in memory (the other lane's four lists,
+ *      scripts/lib/soccerTrain1178.mjs) and section 1 replays that fixture
+ *      whole. The probe leaves Round 1173's kept continental run out of the
+ *      hash (it draws nothing; soccerBrandProbe835.mjs). Soccer calls Math.random
  *      in a fixed order, so a lift that moves one draw shows up here. The
  *      section also requires the fixture to have exercised what it claims
  *      (every post, every personality, every agent, the cover offer both
