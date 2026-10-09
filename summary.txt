@@ -1,0 +1,7 @@
+simWorldEditor exit=0 6s | simWorldEditor: 2473 checks, 0 failures
+simDeadlineDay exit=1 5s | simDeadlineDay: 3 failure(s)
+simCmRatingShape exit=0 1s | simCmRatingShape: green. One curve, every file on it, ages for August 2026, and the order inside a club is nearer to who was played.
+simCmShootoutOrder exit=0 21s | simCmShootoutOrder: all sections passed
+vitest exit=0 2s |    Duration  869ms (transform 77ms, setup 52ms, collect 76ms, tests 11ms, environment 287ms, prepare 235ms)
+simCmLeagueRules exit=0 29s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+tsc exit=0 46s | 

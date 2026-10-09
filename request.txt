@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simWorldEditor: node scripts/simWorldEditor.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simCmRatingShape: node scripts/simCmRatingShape.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+vitest: node_modules/.bin/vitest run src/test/cmValueCurve.test.ts --testTimeout=300000 --hookTimeout=120000
