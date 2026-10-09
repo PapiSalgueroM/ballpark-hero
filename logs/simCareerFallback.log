@@ -1,0 +1,5 @@
+1) the header names the bake, and its counts are the file's counts
+   generated 2026-10-01: 253 players, 3640 seasons, 201 null assists
+2) the file is its own render
+   418314 bytes, byte for byte
+Supabase unreachable, the live sections were not checked: career_players read failed: TypeError: fetch failed

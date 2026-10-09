@@ -1,0 +1,99 @@
+simCareerSquad: 200 careers an era, seed 1
+1. Names
+   4896 names the generator can show against 2819 real names: 0 shared
+   84 club countries, 3 by alias, 0 with no name family
+2. The two copies
+   squad level by tier, from the engine's own projection: 80, 72, 62, 55, 60
+   the national eleven: {"GK":1,"DEF":4,"MID":3,"ATT":3}
+   real seasons, as the readers count them: 2015 to 2025 (rows 2016 to 2026)
+   (fleet recorded in 132 s)
+3. The fleet
+   1990-94   4132 pro seasons: real 0, by role 4132, invented 0, invented with real men still there 0, none 0
+   1995-99   4167 pro seasons: real 297, by role 3870, invented 0, invented with real men still there 0, none 0
+   2000-04   4105 pro seasons: real 776, by role 3329, invented 0, invented with real men still there 0, none 0
+   2005-09   4114 pro seasons: real 1151, by role 2649, invented 159, invented with real men still there 155, none 0
+   2010-14   4128 pro seasons: real 923, by role 1877, invented 807, invented with real men still there 521, none 0
+   2015-19   4128 pro seasons: real 569, by role 1231, invented 1885, invented with real men still there 443, none 0
+   2020-24   4122 pro seasons: real 219, by role 581, invented 3018, invented with real men still there 304, none 0
+   2025      4144 pro seasons: real 0, by role 0, invented 3895, invented with real men still there 249, none 0
+   1600 careers, 33040 seasons, recording 14.5 MB, slim save proven on 1937; careers ended on an unknown phase: none
+   played rows by age going in: 16 to 21: 8000, 22 to 25: 6398, 26 to 29: 5726, 30 to 33: 5588, 34 to 40: 3768
+4. Shape
+   33040 seasons, 0 with no view, 29105 squads that are not real; bad shape 0, not once 0, wrong size 0, a name twice 0, rating out of range 0, age out of range 0
+   7588 seasons outside the eleven on rating (2587 of them the first man outside): the man named as keeping him out is wrong in 0; the view is not the coming season in 0
+5. Real, by role or invented, never one passed off as another
+   3935 real squads, 3935 exactly the baked one; wrong source 0; a role sheet with a name on it 0; an invented man with a real name 0; a real man who was not in the club's last real squad 0; 237640 invented men checked against their name family, 0 outside it
+   4 readings of 2 checked summer moves (the squad and the depth chart): 0 put the man in the wrong season
+   17669 sheets by role: his own line numbered wrongly in 0; 14182 have a new man in his line underneath, an arrival is shown on 0
+   3338 squads read 6 or more seasons after the last real one: real men still there in 0; their number grew from one summer to the next 0 times
+6. The same every time, and keyed to the save
+   6a 2500 club years asked of two separately loaded copies: 0 differ
+   6b 500 saves through JSON and back: 0 read differently
+   6c Math.random drawn 0 times inside the readers over 33040 seasons
+   6d 800 pairs of different saves at the same club and season: 0 got the same squad
+   6e 300 saves with the nation swapped: 0 read differently
+7. Ageing and turnover
+   23457 summers at one club, 377927 men carried over, 0 broke "same man, one year older", 0 arrivals dated wrong; arrivals a summer 5.52 over 22059 summers (33 with none)
+   1079 moves between two invented squads: 9 (0.83%) meet a man with the same name in the same slot, 172 share any name
+8. Rank tracks the games the engine hands out
+   1990-94  ranked 1st 27.76 (n 1597), 3rd 21.72 (n 754), gap 6.04
+   1995-99  ranked 1st 27.56 (n 1517), 3rd 22.03 (n 739), gap 5.53
+   2000-04  ranked 1st 27.73 (n 1476), 3rd 21.79 (n 622), gap 5.94
+   2005-09  ranked 1st 27.84 (n 1206), 3rd 21.80 (n 480), gap 6.03
+   2010-14  ranked 1st 27.88 (n 1114), 3rd 21.58 (n 427), gap 6.29
+   2015-19  ranked 1st 27.96 (n 1324), 3rd 21.73 (n 463), gap 6.23
+   2020-24  ranked 1st 27.83 (n 1486), 3rd 21.77 (n 569), gap 6.06
+   2025     ranked 1st 27.57 (n 1456), 3rd 21.58 (n 711), gap 5.99
+   pooled, squads the game made: in the eleven on rating 25.41 (n 21477), outside it 10.89 (n 3079), gap 14.52
+   real squads, pooled: ranked 1st 26.40 (n 625), 3rd 21.10 (n 406), gap 5.30
+8b. Two pictures: where rating puts him, and the plan
+   made  24556 seasons, the two disagree in 145 (0.59%); outside the eleven on rating but in the plans 142
+   mixed 1470 seasons, the two disagree in 468 (31.84%); outside the eleven on rating but in the plans 460
+   real  3454 seasons, the two disagree in 1605 (46.47%); outside the eleven on rating but in the plans 1567
+9. Trust is the engine's own expectation
+   29480 played seasons: league games minus the plan, mean -0.29
+   First name on the team sheet   n      6  mean -0.67  (printed only: under 200)
+   In and out of the side         n     48  mean -2.08  (printed only: under 200)
+   Nailed on starter              n  12599  mean -0.18
+   Squad player                   n   3944  mean -0.39
+   Starter most weeks             n  12883  mean -0.36
+   dressing room swings the fleet saw: {"0":1600,"-2":3200,"-3":24680}
+   3304 saves read with the club freezing him out (the freeze set by hand on every tenth season): 0 not read as frozen with a plan of 8 at most
+10. The reasons for a thin season
+   the games line: 30924 last seasons, 6225 lost games after selection (1223 of them hold fewer games than league games): 0 print a number that was not played, 0 treat a cut row as whole or a whole row as cut
+   the edge of the "under the level" line: 30924 rows with a rating, 906 exactly five under (no line), 860 exactly six under (the line): 0 on the wrong side
+   30924 last seasons read, 7845 under 20 league games: 0 with no line, 3132 (39.92%) with no selection reason (the fallback line), 0 with an injury line and nothing else
+   "under the level" line: 11.01 league games with it (n 4379), 25.15 without (n 26545), gap 14.14
+11. Offers
+   68364 offers shown to the fleet, 0 without a rank inside the group: {"roles":35250,"real":7717,"invented":25397}
+12. It changes nothing
+   480 careers played twice from one seed, 480 past four seasons: 0 final saves differ
+13. The screens
+   rendered 300 + 300 + 300 seasons (made, mixed, real): 2186 sentences about the eleven or the last shirt, 0 without "our ratings"
+14. Negative controls
+   widen     the last baked squad is served for every later year: red in 5 (must be red in 5)
+   names     a real past season with no checked squad gets invented names: red in 5 (must be red in 5)
+   unkey     the generator draws from Math.random: red in 4, 5, 6a, 6c, 7 (must be red in 6a and 6c)
+   shared    the squad is keyed to the club only: red in 6d (must be red in 6d)
+   nation    the nation is back in the key: red in 6e, 7 (must be red in 6e)
+   noage     nobody gets older: red in 7 (must be red in 7)
+   nokeeper  the eleven has no keeper: red in 2, 4, 8, 8b (must be red in 4)
+   invert    men rated at or below him count as ahead: red in 5, 8, 8b (must be red in 8)
+   jitter    the last starter is rated like any other starter: red in 8b (must be red in 8b)
+   noswing   trust ignores the dressing room: red in 9 (must be red in 9)
+   bare      the headline drops the words "on our ratings": red in 13 (must be red in 13)
+   keeps     the man named as keeping him out is one place too low (the player himself when he is the first man outside): red in 4 (must be red in 4)
+   lastyear  the squad shown is last season's: red in 4 (must be red in 4)
+   rolecount a sheet by role numbers his line without counting him: red in 5 (must be red in 5)
+   rolearrive a sheet by role lists arrivals: red in 5 (must be red in 5)
+   stay      the real men of the last real squad never leave: red in 5 (must be red in 5)
+   noshift   a season reads the row keyed by the year it starts in, which is last season's squad: red in 2, 5 (must be red in 5)
+   thaw      a frozen out save reads as if the club still planned to play him: red in 9 (must be red in 9)
+   nocut     an injured season prints its league figure as games played: red in 10 (must be red in 10)
+   edge      the "under the level" line is drawn at five under as well: red in 10 (must be red in 10)
+   hurtonly  a thin season with an injury line gets no selection line: red in 10 (must be red in 10)
+   rolenew   a sheet by role marks a man NEW: red in 13 (must be red in 13)
+   unmarked  a real man in a squad of invented ones is not marked: red in 13 (must be red in 13)
+   tilebare  the tile prints the rank without saying it is on our ratings: red in 13 (must be red in 13)
+   (371 s, work folder /home/runner/work/_temp/t-simCareerSquad/careersquad-eKh40o)
+simCareerSquad: 2204 checks, 0 failed

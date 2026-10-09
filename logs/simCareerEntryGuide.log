@@ -1,0 +1,74 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/careerEntryGuide.test.tsx[2m > [22mcareer entry guides[2m > [22mopens each opted-in career guide and remembers only its dismissal[33m 992[2mms[22m[39m
+ [32m✓[39m src/test/careerEntryGuide.test.tsx[2m > [22mcareer entry guides[2m > [22mreturns quietly and reopens the guide without changing career progress[33m 549[2mms[22m[39m
+ [32m✓[39m src/test/careerEntryGuide.test.tsx[2m > [22mcareer entry guides[2m > [22misolates route receipts and ignores a late guide from the previous route[32m 99[2mms[22m[39m
+ [32m✓[39m src/test/careerEntryGuide.test.tsx[2m > [22mcareer entry guides[2m > [22mwaits for usable instructions without recording an unseen guide[32m 46[2mms[22m[39m
+ [32m✓[39m src/test/careerEntryGuide.test.tsx[2m > [22mcareer entry guides[2m > [22mkeeps blocked-storage guides dismissible and reopenable without changing saves[32m 254[2mms[22m[39m
+ [32m✓[39m src/test/careerEntryGuide.test.tsx[2m > [22mcareer entry guides[2m > [22mkeeps first-visit state out of prerendered pages[32m 16[2mms[22m[39m
+ [32m✓[39m src/test/careerEntryGuide.test.tsx[2m > [22mcareer entry guides[2m > [22mreuses real instructions for saved season reviews and actual decision results[33m 335[2mms[22m[39m
+ [32m✓[39m src/test/careerEntryGuide.test.tsx[2m > [22mcareer entry guides[2m > [22mleaves default GameHelp manual and independent career bytes unchanged[32m 49[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 12:42:58
+[2m   Duration [22m 6.34s[2m (transform 2.29s, setup 82ms, collect 3.05s, tests 2.34s, environment 369ms, prepare 78ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/career-entry-guide-artifacts/mounted/normal-report.json
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mopens each opted-in career guide and remembers only its dismissal
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mopens each opted-in career guide and remembers only its dismissal
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mopens each opted-in career guide and remembers only its dismissal
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mopens each opted-in career guide and remembers only its dismissal
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mreturns quietly and reopens the guide without changing career progress
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mreturns quietly and reopens the guide without changing career progress
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2misolates route receipts and ignores a late guide from the previous route
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2misolates route receipts and ignores a late guide from the previous route
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mwaits for usable instructions without recording an unseen guide
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mkeeps blocked-storage guides dismissible and reopenable without changing saves
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mkeeps blocked-storage guides dismissible and reopenable without changing saves
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mkeeps blocked-storage guides dismissible and reopenable without changing saves
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mreuses real instructions for saved season reviews and actual decision results
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mreuses real instructions for saved season reviews and actual decision results
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mreuses real instructions for saved season reviews and actual decision results
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mreuses real instructions for saved season reviews and actual decision results
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mleaves default GameHelp manual and independent career bytes unchanged
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+simCareerEntryGuide normal: intended guide outcomes and independent baseline passed.
