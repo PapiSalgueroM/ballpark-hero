@@ -335,6 +335,7 @@ function shownIsSavedNfl(row, pos, s) {
     if (!g.played && Object.keys(g.line).length) out.push(`md ${g.md}: a line in a game he missed`);
     if (!g.played && g.events.some(e => e.mine)) out.push(`md ${g.md}: his event in a game he missed`);
     if (g.us === 1 || g.us === 4 || g.them === 1 || g.them === 4) out.push(`md ${g.md}: a score of ${g.us}-${g.them} no drive list makes`);
+    if (new Set(g.events.map(e => e.min)).size !== g.events.length) out.push(`md ${g.md}: two lines of the feed share a minute`);
     for (const e of g.events) {
       const isTd = e.kind === 'td' || e.kind in NFL_TD_EVENTS;
       const pts = e.pts ?? 0;
@@ -560,13 +561,14 @@ const NFL_POINTS = [21.0, 24.5];
 const NFL_LEVEL_MAX = 0.01;
 const NFL_ODD_TD_MAX = 0.05;
 const NFL_BIG_KICK_MAX = 0.08;
+const NFL_FORTY_MAX = 1;
 
 /* ─── Run B: every season observed right after it is played ─── */
 const seen = [];
 const points = {};   // slug|era -> { sum, n } his team's and the other side's points
 const shares = { nba: [] };
 /* the NFL's own section 7 numbers: level games, how plain the drives are, a kicker's makes a game */
-const nflSeen = { games: 0, level: 0, tds: 0, oddTds: 0, safeties: 0, makes: [], kickerGames: 0, floorSet: 0, played: 0 };
+const nflSeen = { games: 0, level: 0, tds: 0, oddTds: 0, safeties: 0, makes: [], kickerGames: 0, floorSet: 0, played: 0, forty: 0, fortyNine: 0, shutOut: 0 };
 const poRounds = {};  // slug -> named playoff rounds checked for their conference: { early, finals }
 function observe(c, line, who) {
   const d = SPORT_DEFS[who.slug];
@@ -624,6 +626,7 @@ function observe(c, line, who) {
     for (const g of s.games) {
       nflSeen.games += 1;
       if (g.us === g.them) nflSeen.level += 1;
+      for (const v of [g.us, g.them]) { if (v >= 40) nflSeen.forty += 1; if (v >= 49) nflSeen.fortyNine += 1; if (v === 0) nflSeen.shutOut += 1; }
       for (const e of g.events) {
         if (e.kind === 'td' || e.kind in NFL_TD_EVENTS) { nflSeen.tds += 1; if (e.pts !== 7) nflSeen.oddTds += 1; }
         if (e.kind === 'safety') nflSeen.safeties += 1;
@@ -759,6 +762,8 @@ for (const slug of SPORTS) {
     console.log(`     level games: ${nflSeen.level} of ${nflSeen.games} (${share(nflSeen.level, nflSeen.games)}); touchdowns not worth seven: ${share(nflSeen.oddTds, nflSeen.tds)} of ${nflSeen.tds}; safeties ${nflSeen.safeties}`);
     console.log(`     his touchdowns are his team's whole score in ${share(nflSeen.floorSet, nflSeen.played)} of the ${nflSeen.played} games he played`);
     console.log(`     a kicker's makes a game (0 to 6): ${Array.from({ length: 7 }, (_, f) => `${f}: ${share(nflSeen.makes[f] ?? 0, nflSeen.kickerGames)}`).join(', ')} over ${nflSeen.kickerGames} games`);
+    console.log(`     a side on 40 or more: ${share(nflSeen.forty, 2 * nflSeen.games)} of team games; on 49 or more: ${share(nflSeen.fortyNine, 2 * nflSeen.games)}; shut out: ${share(nflSeen.shutOut, 2 * nflSeen.games)}`);
+    check('7', nflSeen.games > 1000 && nflSeen.forty <= 2 * nflSeen.games * NFL_FORTY_MAX, `nfl a side scores 40 or more in under ${(100 * NFL_FORTY_MAX).toFixed(0)}% of team games (${share(nflSeen.forty, 2 * nflSeen.games)})`);
     check('7', nflSeen.games > 1000 && lv <= NFL_LEVEL_MAX, `nfl level games stay under ${(100 * NFL_LEVEL_MAX).toFixed(1)}% (${share(nflSeen.level, nflSeen.games)})`);
     check('7', nflSeen.tds > 1000 && odd <= NFL_ODD_TD_MAX, `nfl touchdowns not worth seven stay under ${(100 * NFL_ODD_TD_MAX).toFixed(0)}% (${share(nflSeen.oddTds, nflSeen.tds)})`);
     check('7', nflSeen.kickerGames > 100 && big <= NFL_BIG_KICK_MAX, `nfl a kicker makes five or six in under ${(100 * NFL_BIG_KICK_MAX).toFixed(0)}% of his games (${(100 * big).toFixed(1)}% of ${nflSeen.kickerGames})`);

@@ -22,7 +22,6 @@
    No React, no Math.random. The engine import is the two exported result
    words and the era's team list (the engine is already in the route's chunk). */
 import { shuffled, type DerivedGame, type DerivedSeason, type Rng, type SeasonEvent, type StatTotal } from './core';
-import { poissonDraw } from './law';
 import { splitTotal, usHelp, type UsRow, type UsSeasonBind, type UsSeasonCtx } from './us';
 import { NFL_MISSED_PLAYOFFS, NFL_PLAYOFF_RESULTS, nflEraById } from '../nflMyCareer';
 import { formatNumber } from '../formatNumber';
@@ -43,17 +42,32 @@ const TD_KEY: Record<string, string> = { QB: 'passTd', RB: 'rushTd', WR: 'recTd'
 
 const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
 
-/** [his side, the other side] for a side `edge` stronger. A side is touchdowns
- *  at seven and field goals at three; a lone field goal becomes two (so no
- *  repair of the core's can make a 4, which no drive list can), and the law
- *  itself never returns a level game. */
+/** The drives a side has in a game, and the most of them that may end in a
+ *  touchdown (nine sevens and a field goal are 66, and the three a level
+ *  game adds keeps a side at 69 or under: never past the cap). */
+const DRIVES = 10;
+const MAX_TD = 9;
+/** A drive ends in a touchdown 26 times in 100 at even strength (2.6 a game)
+ *  and in a field goal about 14 (1.445 a game): 22.5 points a team game. */
+const TD_A_GAME = 2.6;
+const FG_A_DRIVE = 0.1445;
+
+/** [his side, the other side] for a side `edge` stronger. Each side has ten
+ *  drives; a drive ends in a touchdown (seven), a field goal (three) or
+ *  nothing, so a side's score scatters like a football score does (a Poisson
+ *  count of touchdowns put 49 or more on the board far too often). A lone
+ *  field goal becomes two (so no repair of the core's can make a 4, which no
+ *  drive list can), and the law itself never returns a level game. */
 export function nflScore(edge: number, home: boolean, rng: Rng): [number, number] {
   const venue = home ? 1 : -1;
   const side = (e: number) => {
-    const td = poissonDraw(Math.max(0.6, 2.6 + 0.05 * e), rng);
-    const tries = poissonDraw(1.7, rng);
+    const p = Math.min(0.6, Math.max(0.06, (TD_A_GAME + 0.05 * e) / DRIVES));
+    let td = 0;
     let fg = 0;
-    for (let i = 0; i < tries; i += 1) if (rng() < 0.85) fg += 1;
+    for (let i = 0; i < DRIVES; i += 1) {
+      const u = rng();
+      if (u < p) { if (td < MAX_TD) td += 1; } else if (u < p + FG_A_DRIVE) fg += 1;
+    }
     const pts = 7 * td + 3 * fg;
     return pts === 3 ? 6 : pts;
   };
@@ -254,7 +268,7 @@ function finish(games: DerivedGame[], row: UsRow, _pos: string, rng: Rng): boole
   /* yards: more on a day he scored and on a day his team did, and at least a yard a touchdown where
      the total allows it */
   const day = (g: DerivedGame) => form() * (0.7 + g.us / 60);
-  if (!lay('passYds', on.map(g => day(g) * (1 + 0.15 * of(g, 'passTd'))), on.map(() => 520), on.map(g => of(g, 'passTd')), true)) return false;
+  if (!lay('passYds', on.map(g => day(g) * (1 + 0.25 * of(g, 'passTd'))), on.map(() => 520), on.map(g => of(g, 'passTd')), true)) return false;
   if (!lay('rushYds', on.map(g => day(g) * (1 + 0.5 * of(g, 'rushTd'))), on.map(() => 290), on.map(g => of(g, 'rushTd')), true)) return false;
   /* a touchdown catch is a catch, and yards need a catch */
   if (!lay('rec', on.map(g => day(g) * (1 + of(g, 'recTd'))), on.map(() => 15), on.map(g => of(g, 'recTd')), false)) return false;
@@ -287,14 +301,24 @@ function finish(games: DerivedGame[], row: UsRow, _pos: string, rng: Rng): boole
     if (long !== null) {
       const hit = on.filter(g => of(g, 'fgMade') > 0);
       if (hit.length === 0) return false;
+      /* one keyed game holds his season's long; every other game with a make holds an everyday
+         distance (24 to 57 yards, never past his long), so a long season best shows up once */
       const top = Math.floor(rng() * hit.length);
-      const lo = Math.min(long, Math.max(19, long - 28));
-      hit.forEach((g, i) => { g.line.longFg = i === top ? long : lo + Math.floor(rng() * (long - lo + 1)); });
+      const hi = Math.min(long, 57);
+      const lo = Math.min(hi, Math.max(19, Math.min(24, hi - 10)));
+      hit.forEach((g, i) => { g.line.longFg = i === top ? long : lo + Math.floor(rng() * (hi - lo + 1)); });
     }
   } else if (att !== null || long !== null) return false;
   /* the drives of both sides, and his own moments, at keyed whole minutes */
-  const minute = () => 1 + Math.floor(rng() * CLOCK);
   for (const g of games) {
+    /* no two lines of one game share a minute (a side cannot score twice in one) */
+    const used = new Set<number>();
+    const minute = () => {
+      let m = 1 + Math.floor(rng() * CLOCK);
+      for (let i = 0; i < CLOCK && used.has(m); i += 1) m = (m % CLOCK) + 1;
+      used.add(m);
+      return m;
+    };
     const kinds: string[] = [];
     if (g.played) for (const [kind, key] of TD_KINDS) for (let i = 0; i < of(g, key); i += 1) kinds.push(kind);
     const kicks = g.played && made !== null;
@@ -372,10 +396,13 @@ const tenth = (v: number) => (Math.round(v * 10) / 10).toFixed(1);
 type Family = 'qb' | 'rb' | 'catch' | 'kick' | 'def';
 const familyOf = (pos: string): Family => (pos === 'QB' ? 'qb' : pos === 'RB' ? 'rb' : pos === 'WR' || pos === 'TE' ? 'catch' : pos === 'K' ? 'kick' : 'def');
 
-/** One line of the feed. A touchdown reads as seven unless it says otherwise. */
-export function nflEventWords(e: SeasonEvent, us: string, them: string): string {
+/** One line of the feed. A touchdown reads as seven unless it says otherwise.
+ *  `kicker`: he is his team's kicker, and his line holds no extra points, so a
+ *  six on his own side is never told as a kick of his that missed. */
+export function nflEventWords(e: SeasonEvent, us: string, them: string, kicker = false): string {
   const team = e.side === 'us' ? us : them;
-  const after = e.pts === 6 ? ' The kick after is no good.' : e.pts === 8 ? ' The two point try is good.' : '';
+  const six = kicker && e.side === 'us' ? ' The two point try is no good.' : ' The kick after is no good.';
+  const after = e.pts === 6 ? six : e.pts === 8 ? ' The two point try is good.' : '';
   switch (e.kind) {
     case 'td-pass': return `🏈 Touchdown! You throw it.${after}`;
     case 'td-rush': return `🏈 Touchdown! You run it in.${after}`;
@@ -398,13 +425,17 @@ export function nflClockLabel(minute: number): string {
   return m === 0 ? 'Q1 15:00' : `Q${Math.ceil(m / 15)} ${(15 - (m % 15)) % 15}:00`;
 }
 
+/* A number is printed only when the saved line holds it: a line from an older
+   build that never held a stat shows no zero in its place (mark, never fill). */
 function lineOf(g: DerivedGame, pos: string): string[] {
   const of = (key: string) => g.line[key] ?? 0;
+  const has = (key: string) => g.line[key] !== undefined;
+  const bit = (key: string, label: string) => (has(key) ? [`${of(key)} ${label}`] : []);
   switch (familyOf(pos)) {
-    case 'qb': return [`${of('passTd')} TD`, `${of('ints')} INT`];
-    case 'rb': return [`${of('rushTd')} TD`, `${of('rec')}-${of('recYds')} REC`];
-    case 'catch': return [`${of('rec')} REC`, `${of('recTd')} TD`];
-    case 'kick': return of('fgMade') > 0 && g.line.longFg !== undefined ? [`LONG ${of('longFg')}`] : [];
+    case 'qb': return [...bit('passTd', 'TD'), ...bit('ints', 'INT')];
+    case 'rb': return [...bit('rushTd', 'TD'), ...(has('rec') ? [has('recYds') ? `${of('rec')}-${of('recYds')} REC` : `${of('rec')} REC`] : [])];
+    case 'catch': return [...bit('rec', 'REC'), ...bit('recTd', 'TD')];
+    case 'kick': return of('fgMade') > 0 && has('longFg') ? [`LONG ${of('longFg')}`] : [];
     default: return [
       ...(of('sacks') > 0 ? [`${of('sacks')} SCK`] : []), ...(of('picks') > 0 ? [`${of('picks')} INT`] : []),
       ...(of('passDef') > 0 ? [`${of('passDef')} PD`] : []), ...(of('forcedFum') > 0 ? [`${of('forcedFum')} FF`] : []),
@@ -412,14 +443,17 @@ function lineOf(g: DerivedGame, pos: string): string[] {
   }
 }
 
+/** His headline in a game; "Played" when the saved line does not hold it. */
 function markChip(g: DerivedGame, pos: string): string {
   const of = (key: string) => g.line[key] ?? 0;
+  const has = (key: string) => g.line[key] !== undefined;
+  const chip = (key: string, label: string) => (has(key) ? `${of(key)} ${label}` : 'Played');
   switch (familyOf(pos)) {
-    case 'qb': return `${of('passYds')} YDS`;
-    case 'rb': return `${of('rushYds')} YDS`;
-    case 'catch': return `${of('recYds')} YDS`;
-    case 'kick': return `${of('fgMade')}/${of('fgAtt')} FG`;
-    default: return `${of('tackles')} TKL`;
+    case 'qb': return chip('passYds', 'YDS');
+    case 'rb': return chip('rushYds', 'YDS');
+    case 'catch': return chip('recYds', 'YDS');
+    case 'kick': return has('fgMade') ? (has('fgAtt') ? `${of('fgMade')}/${of('fgAtt')} FG` : `${of('fgMade')} FG`) : 'Played';
+    default: return chip('tackles', 'TKL');
   }
 }
 
@@ -437,20 +471,34 @@ function markOf(g: DerivedGame, pos: string): number {
 
 function markText(g: DerivedGame, pos: string): string {
   const of = (key: string) => g.line[key] ?? 0;
-  const tds = (n: number) => (n > 0 ? `, ${plural(n, 'touchdown', 'touchdowns')}` : '');
+  const has = (key: string) => g.line[key] !== undefined;
+  const out: string[] = [];
+  const add = (key: string, one: string, many: string, always = true) => { if (has(key) && (always || of(key) > 0)) out.push(plural(of(key), one, many)); };
   switch (familyOf(pos)) {
-    case 'qb': return `${plural(of('passYds'), 'yard', 'yards')}${tds(of('passTd'))}${of('ints') > 0 ? `, ${plural(of('ints'), 'interception', 'interceptions')}` : ''}`;
-    case 'rb': return `${plural(of('rushYds'), 'rushing yard', 'rushing yards')}${tds(of('rushTd'))}`;
-    case 'catch': return `${plural(of('rec'), 'catch', 'catches')} for ${plural(of('recYds'), 'yard', 'yards')}${tds(of('recTd'))}`;
-    case 'kick': return `${of('fgMade')} of ${of('fgAtt')} on field goals${of('fgMade') > 0 && g.line.longFg !== undefined ? `, long of ${of('longFg')}` : ''}`;
-    default: return `${plural(of('tackles'), 'tackle', 'tackles')}${of('sacks') > 0 ? `, ${of('sacks')} ${of('sacks') === 1 ? 'sack' : 'sacks'}` : ''}${of('picks') > 0 ? `, ${plural(of('picks'), 'interception', 'interceptions')}` : ''}`;
+    case 'qb': add('passYds', 'yard', 'yards'); add('passTd', 'touchdown', 'touchdowns', false); add('ints', 'interception', 'interceptions', false); break;
+    case 'rb': add('rushYds', 'rushing yard', 'rushing yards'); add('rushTd', 'touchdown', 'touchdowns', false); break;
+    case 'catch':
+      if (has('rec')) out.push(has('recYds') ? `${plural(of('rec'), 'catch', 'catches')} for ${plural(of('recYds'), 'yard', 'yards')}` : plural(of('rec'), 'catch', 'catches'));
+      add('recTd', 'touchdown', 'touchdowns', false);
+      break;
+    case 'kick':
+      if (has('fgMade')) out.push(has('fgAtt') ? `${of('fgMade')} of ${of('fgAtt')} on field goals` : plural(of('fgMade'), 'field goal', 'field goals'));
+      if (of('fgMade') > 0 && has('longFg')) out.push(`long of ${of('longFg')}`);
+      break;
+    default:
+      add('tackles', 'tackle', 'tackles');
+      if (of('sacks') > 0) out.push(`${of('sacks')} ${of('sacks') === 1 ? 'sack' : 'sacks'}`);
+      add('picks', 'interception', 'interceptions', false);
   }
+  return out.length ? out.join(', ') : 'no line on the save for this game';
 }
 
-/** The tiles above the record: sums only. A kicker's long is a per game
- *  number, so its sum is never printed (his tiles are makes and tries). */
+/** The tiles above the record: sums only, and a dash for a number the saved
+ *  line does not hold. A kicker's long is a per game number, so its sum is
+ *  never printed (his tiles are makes and tries). */
 function soFarTiles(so: Record<string, number>, pos: string): [string, string][] {
-  const n = (key: string) => formatNumber(sum(so, key));
+  const n = (key: string) => (so[key] === undefined ? '-' : formatNumber(sum(so, key)));
+  const t = (key: string) => (so[key] === undefined ? '-' : tenth(sum(so, key)));
   const played: [string, string] = ['Played', String(so.apps ?? 0)];
   switch (pos) {
     case 'QB': return [played, ['Pass yds', n('passYds')], ['TD', n('passTd')], ['INT', n('ints')]];
@@ -458,21 +506,25 @@ function soFarTiles(so: Record<string, number>, pos: string): [string, string][]
     case 'WR': case 'TE': return [played, ['Rec', n('rec')], ['Rec yds', n('recYds')], ['TD', n('recTd')]];
     case 'K': return [played, ['FG made', n('fgMade')], ['FG tries', n('fgAtt')], ['FG %', sum(so, 'fgAtt') > 0 ? `${Math.round((100 * sum(so, 'fgMade')) / sum(so, 'fgAtt'))}%` : '-']];
     case 'CB': return [played, ['Tackles', n('tackles')], ['INT', n('picks')], ['PD', n('passDef')]];
-    case 'EDGE': return [played, ['Sacks', tenth(sum(so, 'sacks'))], ['Tackles', n('tackles')], ['FF', n('forcedFum')]];
-    default: return [played, ['Tackles', n('tackles')], ['Sacks', tenth(sum(so, 'sacks'))], ['INT', n('picks')]];
+    case 'EDGE': return [played, ['Sacks', t('sacks')], ['Tackles', n('tackles')], ['FF', n('forcedFum')]];
+    default: return [played, ['Tackles', n('tackles')], ['Sacks', t('sacks')], ['INT', n('picks')]];
   }
 }
 
 function halfLine(so: Record<string, number>, pos: string): string {
   if (!so.apps) return 'First half: you did not play a game.';
-  const head = `First half: ${plural(so.apps, 'game', 'games')}, `;
-  switch (familyOf(pos)) {
-    case 'qb': return `${head}${plural(sum(so, 'passYds'), 'passing yard', 'passing yards')} and ${plural(sum(so, 'passTd'), 'touchdown', 'touchdowns')}`;
-    case 'rb': return `${head}${plural(sum(so, 'rushYds'), 'rushing yard', 'rushing yards')} and ${plural(sum(so, 'rushTd'), 'touchdown', 'touchdowns')}`;
-    case 'catch': return `${head}${plural(sum(so, 'rec'), 'catch', 'catches')} for ${plural(sum(so, 'recYds'), 'yard', 'yards')}`;
-    case 'kick': return `${head}${formatNumber(sum(so, 'fgMade'))} of ${formatNumber(sum(so, 'fgAtt'))} on field goals`;
-    default: return `${head}${plural(sum(so, 'tackles'), 'tackle', 'tackles')}${pos === 'CB' ? '' : ` and ${tenth(sum(so, 'sacks'))} sacks`}`;
-  }
+  const games = `First half: ${plural(so.apps, 'game', 'games')}`;
+  const has = (key: string) => so[key] !== undefined;
+  const tail = (() => {
+    switch (familyOf(pos)) {
+      case 'qb': return has('passYds') ? `${plural(sum(so, 'passYds'), 'passing yard', 'passing yards')}${has('passTd') ? ` and ${plural(sum(so, 'passTd'), 'touchdown', 'touchdowns')}` : ''}` : '';
+      case 'rb': return has('rushYds') ? `${plural(sum(so, 'rushYds'), 'rushing yard', 'rushing yards')}${has('rushTd') ? ` and ${plural(sum(so, 'rushTd'), 'touchdown', 'touchdowns')}` : ''}` : '';
+      case 'catch': return has('rec') ? `${plural(sum(so, 'rec'), 'catch', 'catches')}${has('recYds') ? ` for ${plural(sum(so, 'recYds'), 'yard', 'yards')}` : ''}` : '';
+      case 'kick': return has('fgMade') && has('fgAtt') ? `${formatNumber(sum(so, 'fgMade'))} of ${formatNumber(sum(so, 'fgAtt'))} on field goals` : '';
+      default: return has('tackles') ? `${plural(sum(so, 'tackles'), 'tackle', 'tackles')}${has('sacks') ? ` and ${tenth(sum(so, 'sacks'))} sacks` : ''}` : '';
+    }
+  })();
+  return tail ? `${games}, ${tail}` : `${games}.`;
 }
 
 export const NFL_SEASON: UsSeasonBind = {
@@ -492,11 +544,12 @@ export const NFL_SEASON: UsSeasonBind = {
   statKeys: () => STAT_KEYS,
   teamIds: eraId => nflEraById(eraId).teams.map(t => t.abbr),
   score: (edge, home, rng) => nflScore(edge, home, rng),
-  /* a game's margin has a standard deviation of about 17 points here, so a
-     logistic of 14 a unit lands the share of wins (set from the repairs and
-     the median records scripts/simUsSeasonCentre.mjs measures) */
-  strengthFor: share => { const p = Math.min(0.98, Math.max(0.02, share)); return 14 * Math.log(p / (1 - p)); },
-  oppSpread: 8,
+  /* a game's margin has a standard deviation of about 13.4 points under the
+     ten drive law and a unit of edge is worth 0.7 of a point, so a logistic
+     of 11.3 a unit lands the share of wins (held by the repairs and the
+     median records scripts/simUsSeasonCentre.mjs measures) */
+  strengthFor: share => { const p = Math.min(0.98, Math.max(0.02, share)); return 11.3 * Math.log(p / (1 - p)); },
+  oppSpread: 6.5,
   totals: row => totals(row),
   /* the line does not say whether a missed game was an injury or a day on the
      bench, so nothing is claimed: a missed game reads "Did not play" */
@@ -515,7 +568,7 @@ export const NFL_SEASON: UsSeasonBind = {
     },
     /* "Q2 14:00" is eight characters: the feed's time column needs the wider class, as a whole literal */
     clock: { length: CLOCK, label: nflClockLabel, start: 'Kickoff.', end: 'Final', endShort: 'FINAL', labelClass: 'w-14' },
-    eventWords: (e, us, them) => nflEventWords(e, us, them),
+    eventWords: (e, us, them, pos) => nflEventWords(e, us, them, pos === 'K'),
     missed: () => 'Did not play',
     lineOf,
     markOf,

@@ -255,6 +255,9 @@ describe('an NFL season, derived from its saved line', () => {
         const us = g.events.filter(e => e.side === 'us').reduce((a, e) => a + (e.pts ?? 0), 0);
         const them = g.events.filter(e => e.side === 'them').reduce((a, e) => a + (e.pts ?? 0), 0);
         expect([us, them], `${label} game ${g.md}`).toEqual([g.us, g.them]);
+        /* no two lines of one game share a minute, and the feed is in time order */
+        expect(new Set(g.events.map(e => e.min)).size, `${label} game ${g.md}`).toBe(g.events.length);
+        expect(g.events.every((e, i) => i === 0 || g.events[i - 1].min < e.min), `${label} game ${g.md}`).toBe(true);
         for (const e of g.events) {
           expect(e.min).toBeGreaterThanOrEqual(1); expect(e.min).toBeLessThanOrEqual(60);
           if (e.kind === 'td' || e.kind in TD_OF) expect([6, 7, 8]).toContain(e.pts);
@@ -392,6 +395,11 @@ describe('the NFL words', () => {
     expect(nflEventWords(ev('fg', 'us', 3, true), 'Chiefs', 'Bills')).toBe('🥅 Field goal! You hit it.');
     expect(nflEventWords(ev('safety', 'us', 2), 'Chiefs', 'Bills')).toBe('Safety, Chiefs.');
     for (const kind of ['miss', 'int', 'sack', 'pick', 'ff']) expect(nflEventWords(ev(kind, 'us', undefined, true), 'Chiefs', 'Bills').length).toBeGreaterThan(10);
+    /* a kicker's line holds no extra points, so a six on his own side is never told as a kick of his that missed */
+    expect(nflEventWords(ev('td', 'us', 6), 'Chiefs', 'Bills', true)).toBe('🏈 Touchdown, Chiefs. The two point try is no good.');
+    expect(nflEventWords(ev('td', 'them', 6), 'Chiefs', 'Bills', true)).toBe('🏈 Touchdown, Bills. The kick after is no good.');
+    expect(NFL_SEASON.view.eventWords(ev('td', 'us', 6), 'Chiefs', 'Bills', 'K')).not.toContain('kick after');
+    expect(NFL_SEASON.view.eventWords(ev('td', 'us', 6), 'Chiefs', 'Bills', 'QB')).toContain('The kick after is no good.');
     /* every kind a season can hold has words: none prints an empty line */
     for (const pos of POSITIONS) {
       const row = NFL_ROW(pos);
@@ -433,6 +441,25 @@ describe('the NFL words', () => {
     expect(v.soFar({ apps: 8, sacks: 6.500000000000001, tackles: 22, forcedFum: 1 }, 'EDGE')).toEqual([['Played', '8'], ['Sacks', '6.5'], ['Tackles', '22'], ['FF', '1']]);
     for (const pos of POSITIONS) expect(v.soFar({ apps: 3 }, pos)).toHaveLength(4);
     expect(v.missed('rested')).toBe('Did not play');
+  });
+  it('prints no zero for a number the saved line does not hold (an older line): a dash, "Played", or nothing', () => {
+    const v = NFL_SEASON.view;
+    const bare = { line: {} } as unknown as DerivedGame;
+    for (const pos of POSITIONS) {
+      expect(v.markChip(bare, pos), pos).toBe('Played');
+      expect(v.lineOf(bare, pos), pos).toEqual([]);
+      expect(v.markText(bare, pos), pos).toBe('no line on the save for this game');
+      expect(v.soFar({ apps: 2 }, pos).slice(1).every(([, value]) => value === '-'), pos).toBe(true);
+      expect(v.half({ apps: 2 }, pos), pos).toBe('First half: 2 games.');
+    }
+    /* a line that holds part of it prints that part */
+    expect(v.lineOf({ line: { rushYds: 80, rushTd: 1, rec: 2 } } as unknown as DerivedGame, 'RB')).toEqual(['1 TD', '2 REC']);
+    expect(v.markChip({ line: { fgMade: 2 } } as unknown as DerivedGame, 'K')).toBe('2 FG');
+    expect(v.half({ apps: 2, passYds: 400 }, 'QB')).toBe('First half: 2 games, 400 passing yards');
+    /* and the derived season of such a line carries none of those keys */
+    const row = NFL_ROW('QB', { passYds: undefined, passTd: undefined, ints: undefined });
+    const b = built(row, 'QB');
+    for (const g of deriveSeason(b.sport, row, b.ctx)!.games.filter(x => x.played)) expect(v.markChip(g, 'QB')).toBe('Played');
   });
   it('reads the record bands off the bind in the "?", names a team that is not his, and nobody when unnamed', () => {
     const named = NFL_SEASON.view.help(true, 'Denver Broncos');
