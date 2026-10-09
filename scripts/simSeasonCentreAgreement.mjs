@@ -79,6 +79,7 @@ const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace
 const CAREERS = Number(process.env.CAREERS ?? 120);
 const SEEDSET = Number(process.env.SEEDSET ?? 0);
 const CONTROL = process.env.AGREEMENT_CONTROL ?? '';
+const DIAGNOSTICS = process.env.AGREEMENT_DIAGNOSTICS === '1';
 
 const SELF_OFF = { file: 'src/lib/season/core.ts', from: 'const bad = disagreements(sport, row, ctx, s);', to: 'const bad: string[] = [];' };
 const DROP_GOAL = { file: 'src/lib/season/core.ts', from: 'for (let u = 0; u < rem; u += 1) {', to: "for (let u = 0; u < rem - (t.key === 'goals' && rem > 0 ? 1 : 0); u += 1) {" };
@@ -101,9 +102,9 @@ if (CONTROL) console.log(`CONTROL ${CONTROL}: ${CONTROLS[CONTROL].map(p => p.fil
 const t0 = Date.now();
 const B = await bundleAwardsNight(ROOT, {
   patches: CONTROL ? CONTROLS[CONTROL] : [],
-  extra: { season: 'src/lib/season/soccer.ts', core: 'src/lib/season/core.ts', league: 'src/lib/soccerCareerLeague.ts', derby: 'src/lib/soccerCareerDerby.ts' },
+  extra: { season: 'src/lib/season/soccer.ts', core: 'src/lib/season/core.ts', league: 'src/lib/soccerCareerLeague.ts', derby: 'src/lib/soccerCareerDerby.ts', leagueWorld: 'src/lib/soccerCareerLeagueWorld.ts' },
 });
-const { soccer, season: S, core: C, league: LG, derby: DB } = B;
+const { soccer, season: S, core: C, league: LG, derby: DB, leagueWorld: LW } = B;
 const CLUBS = soccer.FALLBACK_CLUBS;
 console.log(`bundled in ${Date.now() - t0} ms; ${CAREERS} careers, seed set ${SEEDSET}`);
 
@@ -178,6 +179,8 @@ const keyOf = g => (g.fixedKey ?? null);
 /** The summary card's champion, re-read here from the card's own rule. */
 function cardChampion(career, row) {
   const finish = LG.readLeagueFinish(row);
+  const snapshot = LW.readLeagueWorldSeason(row);
+  if (snapshot) return finish && finish.finish !== 1 ? snapshot.champion : null;
   const today = CLUBS.find(c => c.name === row.club)?.league ?? '';
   const lo = LG.finishLeague({ name: row.club, league: today }, row.year, finish?.size ?? null);
   const w = career.phone?.world;
@@ -212,7 +215,8 @@ function checkSeason(career, row, ctx, s, tag) {
        leaves, apps), never fewer than the derbies he played */
     const wk = row.injuryWeeks ?? 0;
     const blk = wk > 0 ? Math.min(M, Math.max(1, Math.round((wk * M) / 46))) : 0;
-    const room = row.injurySevere && blk > 0 ? M : M - blk;
+    const missedDerbies = DB.readSeasonDerbies(row).reduce((a, d) => a + d.meetings.filter(m => !m.played).length, 0);
+    const room = Math.min(row.injurySevere && blk > 0 ? M : M - blk, M - missedDerbies);
     const derbiesPlayed = DB.readSeasonDerbies(row).reduce((a, d) => a + d.meetings.filter(m => m.played).length, 0);
     const want = Math.min(Math.max(Math.min(row.leagueApps ?? row.apps, room, row.apps), derbiesPlayed), room, row.apps);
     if (on.length !== want) fail('1 apps', `${tag}: ${on.length} league games shown for a target of ${want} (leagueApps ${row.leagueApps}, ${M} games, block ${blk})`);
@@ -224,6 +228,18 @@ function checkSeason(career, row, ctx, s, tag) {
     if (row.year < 1995) fail('3 points', `${tag}: a table in ${row.year} (three points for a win not verified before 1995-96)`);
     if (ctx.league?.key === 'Ligue 1' && row.year === 2019) fail('3 points', `${tag}: a table for the abandoned 2019-20 Ligue 1`);
     const t = replayTable(s.rounds, s.teams, s.rounds.length);
+    const snapshot = LW.readLeagueWorldSeason(row);
+    if (snapshot) {
+      const names = s.labels.map(l => l.name).sort();
+      if (JSON.stringify(names) !== JSON.stringify([...snapshot.members].sort())) fail('15 league world', `${tag}: displayed clubs differ from the saved season field`);
+      const count = { 'Premier League': 3, 'Championship': 3, 'Bundesliga': 2, '2. Bundesliga': 2, 'Ligue 1': 2, 'Ligue 2': 2, 'Serie A': 3, 'Serie B': 3, 'La Liga': 3, 'Segunda Division': 3 }[snapshot.league];
+      const lower = ['Championship', '2. Bundesliga', 'Ligue 2', 'Serie B', 'Segunda Division'].includes(snapshot.league);
+      const order = t.map(r => s.labels[r.slot].name);
+      const expected = lower ? order.slice(0, count) : order.slice(-count);
+      const moved = (snapshot.movements ?? []).filter(m => m.from === snapshot.league).map(m => m.club);
+      if (snapshot.movements && JSON.stringify([...expected].sort()) !== JSON.stringify([...moved].sort())) fail('15 league world', `${tag}: movement differs from the final displayed places`);
+      if (row.leagueApps > 2 * (snapshot.members.length - 1)) fail('15 league world', `${tag}: league apps exceed the simulated division calendar`);
+    }
     const at = t.findIndex(r => r.slot === 0);
     if (at + 1 !== row.leagueFinish) fail('2 position', `${tag}: ${at + 1} for a saved ${row.leagueFinish}`);
     if ((at === 0) !== !!row.leagueTitle) fail('2 position', `${tag}: 1st ${at === 0} with leagueTitle ${row.leagueTitle}`);
@@ -390,6 +406,7 @@ function onSeason(career, row, c) {
   if (typeof r === 'string') {
     bump(stats.nul, injured ? 'injured' : 'clean');
     bump(stats.why, `${ctx.mode}:${r}`);
+    if (DIAGNOSTICS) console.log(`REFUSED ${tag} at ${r}: ${JSON.stringify({ row, ctx })}`);
     return;
   }
   stats.ok[r.mode] += 1;
@@ -404,8 +421,10 @@ function onSeason(career, row, c) {
   /* key reconstruction: the finish key rebuilt from the row draws the row's finish */
   if (!row.injurySevere && typeof row.leagueFinish === 'number' && !row.leagueTitle) {
     stats.keyN += 1;
-    const drawn = LG.drawLeagueFinish({
-      league: LG.leagueKeyInYear({ name: row.club, league: career.currentLeague }, row.year), year: row.year, tier: row.clubTier,
+    const snapshot = LW.readLeagueWorldSeason(row);
+    const simulationOnly = snapshot && ['Ligue 2', 'Serie B', 'Segunda Division'].includes(snapshot.league);
+    const drawn = simulationOnly ? { leagueFinish: LW.drawLeagueWorldFinish(row, career.playerName, snapshot.members.length) } : LG.drawLeagueFinish({
+      league: snapshot?.league ?? LG.leagueKeyInYear({ name: row.club, league: career.currentLeague }, row.year), year: row.year, tier: row.clubTier,
       elite: LG.eliteInYear(soccer.ELITE_CLUBS, row.club, row.year), rating: row.rating, leagueTitle: false,
       seedKey: `${career.playerName}|${row.club}|${row.year}|${row.apps}|${row.goals}|${row.assists}|${row.rating}`,
     });

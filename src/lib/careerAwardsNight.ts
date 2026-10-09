@@ -67,6 +67,8 @@ export interface AwardsNight<C extends AwardsCandidate = AwardsCandidate> {
   playerPoints: number;
   /** Did the player make the ballot at all? */
   playerNominated: boolean;
+  /** Soccer keeps the result hidden until its ranked list has arrived. */
+  revealed?: boolean;
   /** What the night itself did for the player, measured after the sport's
    *  clamps and written the way describeSteps writes it ("" when the steps
    *  landed nothing, say popularity already at its cap). Set by the settle on

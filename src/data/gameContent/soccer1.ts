@@ -351,7 +351,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       {
         heading: "Hitting a country and picking a player at your position",
         items: [
-          "Hit a country and pick from up to 8 of its best players at your position.",
+          "Hit a country and pick from up to 8 of its players at your position: its best four every time, plus others from deeper in the squad that change from dart to dart.",
         ],
       },
       {

@@ -11,7 +11,7 @@ import type { CareerState } from '@/lib/soccerCareerEngine';
 import {
   DRILL_META, drillForPosition, drillSeed, lehmer, ROUNDS_PER_RUN,
   sessionScore, drillBoost, drillHeadroom,
-  buildWallShotRun, takeWallShot, wallGapAt, wallTravel, maxWallShotScore,
+  buildWallShotRun, takeWallShot, wallGapAt, wallOpenAt, wallTravel, maxWallShotScore,
   buildTackleRun, makeTackle, tackleFeetAt, tackleBallAt, tackleDeadline, maxTackleScore,
   buildGloveRun, makeSave, gloveAt, gloveBallProgress, gloveDeadline, maxGloveScore,
   GLOVE_MAX_REACH, GLOVE_ORIGIN, GLOVE_HALF_WIDTH, GLOVE_HEIGHT,
@@ -668,6 +668,11 @@ export default function DrillBoard({ career, canBank, onBank, onBack, match }: {
 
         {phase === 'playing' && kind === 'wallshot' && (
           <div className="space-y-2 rounded-2xl border border-border bg-card p-3">
+            <p className="text-xs text-muted-foreground">Aim high through the gap. Medium power gives you more control.</p>
+            {setup && (() => {
+              const opening = wallOpenAt(setup as WallShotSetup, now + wallTravel(power));
+              return <p data-wall-shot-window={opening >= 0.75 ? 'open' : 'wait'} className={cn('text-xs font-bold', opening >= 0.75 ? 'text-emerald-400' : 'text-muted-foreground')}>{opening >= 0.75 ? 'Good window. Shoot now.' : 'Wait for the gap to open.'}</p>;
+            })()}
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <span className="w-14 shrink-0">Power</span>
               <input type="range" min={0.3} max={1} step={0.05} value={power} onChange={e => setPower(Number(e.target.value))}

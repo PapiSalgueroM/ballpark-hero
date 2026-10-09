@@ -1,0 +1,75 @@
+{
+  "note": "Round 1145. A small bref_nba_player_seasons table and what the view bref_nba_career_spans must hand back for it. Every name is made up. Read by src/test/statDetectiveSpans.test.tsx (the test's own copy of the view in JS must give `expected`) and by scripts/qa/rehearseCareerSpansView.mjs (the migration's real SQL, run in an embedded Postgres, must give `expected`). `careers` is what careersFromSpanRows must make of `expected`.",
+  "rows": [
+    { "season": "1977-78", "player_name": "Fixture Forward Larch", "team": "BUF", "minutes": 38, "age": 23 },
+    { "season": "1991-92", "player_name": "Fixture Forward Larch", "team": "CHH", "minutes": 3047, "age": 22 },
+    { "season": "1995-96", "player_name": "Fixture Forward Larch", "team": "CHH", "minutes": 3274, "age": 26 },
+    { "season": "1996-97", "player_name": "Fixture Forward Larch", "team": "NYK", "minutes": 2613, "age": 27 },
+    { "season": "2000-01", "player_name": "Fixture Forward Larch", "team": "NYK", "minutes": 2105, "age": 31 },
+
+    { "season": "1977-78", "player_name": "Fixture Guard Alder", "team": "KCK", "minutes": 1900, "age": 22 },
+    { "season": "1986-87", "player_name": "Fixture Guard Alder", "team": "SEA", "minutes": 800, "age": 31 },
+    { "season": "1981-82", "player_name": "Fixture Guard Alder", "team": "KCK", "minutes": 1500, "age": 22 },
+    { "season": "1998-99", "player_name": "Fixture Guard Alder", "team": "HOU", "minutes": 300, "age": 39 },
+
+    { "season": "1992-93", "player_name": "Fixture Center Birch", "team": "DEN", "minutes": 2000, "age": 22 },
+    { "season": "1993-94", "player_name": "Fixture Center Birch", "team": "2TM", "minutes": 900, "age": 23 },
+    { "season": "1993-94", "player_name": "Fixture Center Birch", "team": "DEN", "minutes": 500, "age": 23 },
+    { "season": "1993-94", "player_name": "Fixture Center Birch", "team": "MIA", "minutes": 400, "age": 23 },
+    { "season": "1994-95", "player_name": "Fixture Center Birch", "team": "MIA", "minutes": 120, "age": 23 },
+
+    { "season": "1957-58", "player_name": "Fixture Wing Cedar", "team": "SYR", "minutes": 210, "age": null },
+    { "season": "1959-60", "player_name": "Fixture Wing Cedar", "team": "SYR", "minutes": 1800, "age": 24 },
+    { "season": "1963-64", "player_name": "Fixture Wing Cedar", "team": "PHI", "minutes": 1500, "age": 28 },
+
+    { "season": "1962-63", "player_name": "Fixture Pivot Fir", "team": "BOS", "minutes": 1500, "age": 22 },
+    { "season": "1997-98", "player_name": "Fixture Pivot Fir", "team": "LAL", "minutes": 90, "age": 22 },
+    { "season": "1980-81", "player_name": "Fixture Pivot Fir", "team": "CHI", "minutes": 60, "age": null },
+
+    { "season": "2010-11", "player_name": "Fixture Wing Gum", "team": "MIL", "minutes": 200, "age": 24 },
+
+    { "season": "2001-02", "player_name": "Fixture Guard Hazel", "team": "ORL", "minutes": 900, "age": 25 },
+    { "season": "2002", "player_name": "Fixture Guard Hazel", "team": "ORL", "minutes": 900, "age": 26 },
+    { "season": null, "player_name": "Fixture Guard Hazel", "team": "ORL", "minutes": 900, "age": 27 },
+
+    { "season": "1949-50", "player_name": "Fixture Center Ivy", "team": "MNL", "minutes": null, "age": 25 },
+    { "season": "1951-52", "player_name": "Fixture Center Ivy", "team": "MNL", "minutes": 2500, "age": 27 },
+
+    { "season": "1970-71", "player_name": "Fixture Guard Juniper", "team": null, "minutes": 700, "age": 22 },
+
+    { "season": "1988-89", "player_name": null, "team": "UTA", "minutes": 1000, "age": 30 },
+
+    { "season": "1999-00", "player_name": "Fixture Wing Kóa", "team": "TOR", "minutes": 1200, "age": 21 },
+    { "season": "2003-04", "player_name": "Fixture Wing Koa", "team": "VAN", "minutes": 100, "age": 25 }
+  ],
+  "expected": [
+    { "player_name": "Fixture Center Birch", "first_season": "1992-93", "last_season": "1993-94", "rows": 4, "cohort": 1970, "rows_500": 3, "teams": "2TM,DEN,MIA" },
+    { "player_name": "Fixture Center Birch", "first_season": "1994-95", "last_season": "1994-95", "rows": 1, "cohort": 1971, "rows_500": 0, "teams": "MIA" },
+    { "player_name": "Fixture Center Ivy", "first_season": "1949-50", "last_season": "1951-52", "rows": 2, "cohort": 1924, "rows_500": 1, "teams": "MNL" },
+    { "player_name": "Fixture Forward Larch", "first_season": "1977-78", "last_season": "1977-78", "rows": 1, "cohort": 1954, "rows_500": 0, "teams": "BUF" },
+    { "player_name": "Fixture Forward Larch", "first_season": "1991-92", "last_season": "2000-01", "rows": 4, "cohort": 1969, "rows_500": 4, "teams": "CHH,NYK" },
+    { "player_name": "Fixture Guard Alder", "first_season": "1977-78", "last_season": "1986-87", "rows": 2, "cohort": 1955, "rows_500": 2, "teams": "KCK,SEA" },
+    { "player_name": "Fixture Guard Alder", "first_season": "1981-82", "last_season": "1998-99", "rows": 2, "cohort": 1959, "rows_500": 1, "teams": "HOU,KCK" },
+    { "player_name": "Fixture Guard Hazel", "first_season": "2001-02", "last_season": "2001-02", "rows": 1, "cohort": 1976, "rows_500": 1, "teams": "ORL" },
+    { "player_name": "Fixture Guard Juniper", "first_season": "1970-71", "last_season": "1970-71", "rows": 1, "cohort": 1948, "rows_500": 1, "teams": null },
+    { "player_name": "Fixture Pivot Fir", "first_season": "1962-63", "last_season": "1962-63", "rows": 1, "cohort": 1940, "rows_500": 1, "teams": "BOS" },
+    { "player_name": "Fixture Pivot Fir", "first_season": "1997-98", "last_season": "1997-98", "rows": 1, "cohort": 1975, "rows_500": 0, "teams": "LAL" },
+    { "player_name": "Fixture Pivot Fir", "first_season": "1980-81", "last_season": "1980-81", "rows": 1, "cohort": null, "rows_500": 0, "teams": "CHI" },
+    { "player_name": "Fixture Wing Cedar", "first_season": "1959-60", "last_season": "1963-64", "rows": 2, "cohort": 1935, "rows_500": 2, "teams": "PHI,SYR" },
+    { "player_name": "Fixture Wing Cedar", "first_season": "1957-58", "last_season": "1957-58", "rows": 1, "cohort": null, "rows_500": 0, "teams": "SYR" },
+    { "player_name": "Fixture Wing Gum", "first_season": "2010-11", "last_season": "2010-11", "rows": 1, "cohort": 1986, "rows_500": 0, "teams": "MIL" },
+    { "player_name": "Fixture Wing Koa", "first_season": "2003-04", "last_season": "2003-04", "rows": 1, "cohort": 1978, "rows_500": 0, "teams": "VAN" },
+    { "player_name": "Fixture Wing Kóa", "first_season": "1999-00", "last_season": "1999-00", "rows": 1, "cohort": 1978, "rows_500": 1, "teams": "TOR" }
+  ],
+  "careers": {
+    "Fixture Forward Larch": { "first": 1992, "last": 2001, "franchises": ["hornets", "knicks"] },
+    "Fixture Guard Alder": { "first": 1978, "last": 1999, "franchises": ["kings", "rockets", "thunder"] },
+    "Fixture Center Birch": { "first": 1993, "last": 1995, "franchises": ["heat", "nuggets"] },
+    "Fixture Wing Cedar": { "first": 1958, "last": 1964, "franchises": ["sixers"] },
+    "Fixture Pivot Fir": { "first": 1963, "last": 1963, "franchises": ["celtics"] },
+    "Fixture Guard Hazel": { "first": 2002, "last": 2002, "franchises": ["magic"] },
+    "Fixture Center Ivy": { "first": 1950, "last": 1952, "franchises": ["lakers"] },
+    "Fixture Guard Juniper": { "first": 1971, "last": 1971, "franchises": [] },
+    "Fixture Wing Koa": { "first": 2000, "last": 2004, "franchises": ["grizzlies", "raptors"] }
+  }
+}

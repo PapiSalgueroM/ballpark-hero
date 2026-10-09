@@ -16,6 +16,8 @@
                      careerLeagueWorldSaves1100.json   seven old saves and what main reads from them
                      careerLeagueWorldBaseline1100.json  main's world shares (RECORD_PART=world, one SEEDSET a run)
      (default)     the checks, sections A to E.
+     SNAPSHOT_PROBE_ONLY=1  three new seasons from the captured player save,
+                   only the independent saved-future field and table checks.
 
    Nothing here touches the network or the database. Every control patches
    the BUNDLE in memory and first asserts its anchor exists.
@@ -55,6 +57,7 @@ const EXTRA = {
   core: 'lib/season/core.ts',
   rivalries: 'data/clubRivalries.ts',
   pool: 'data/soccerCareerClubPool.ts',
+  ...(fs.existsSync(path.join(ROOT, 'src/data/soccerCareerLowerClubs.ts')) ? { lower: 'data/soccerCareerLowerClubs.ts' } : {}),
 };
 /* ─── Negative controls and the tap ───
    SIM_LEAGUE_WORLD_CONTROL=<name>: each is a transform of one source file in
@@ -90,6 +93,9 @@ const CONTROLS = {
      champion alone, so a league the world crowns nobody in reads "another
      club" in 1st and loses one of its clubs. D1 reads the page's own labels. */
   crownnobody: { file: 'lib/season/soccer.ts', red: ['D1'], world: true, edit: swap("    else if (s.champion && ctx.titleOpen && ctx.mode === 'table') open.push(s);\n", '') },
+  snapshotfield: { file: 'lib/season/soccer.ts', red: ['D1'], world: true, edit: swap('const members = snapshot?.members ?? managerLeagueField(', 'const members = managerLeagueField(') },
+  snapshotcrown: { file: 'lib/season/soccer.ts', red: ['D1'], world: true, edit: swap('snapshot && finish && finish.finish !== 1 ? snapshot.champion :', 'snapshot && finish && finish.finish !== 1 ? snapshot.members.find(n => n !== snapshot.champion && n !== row.club)! :') },
+  snapshotmoves: { file: 'lib/soccerCareerLeagueWorld.ts', red: ['D1'], world: true, edit: swap('snapshot.movements = next.movements.map(', 'snapshot.movements = next.movements.slice(0, 0).map(') },
   /* the ladder band's own nudge, one edge each (C2's worked 7.5 and 6.3) */
   nudgeedge: { file: 'lib/soccerCareerLeague.ts', red: ['C2'], edit: swapLast(NUDGE, '  const nudge = rating > 7.5 ? -at(0.1) : rating < 6.3 ? at(0.1) : 0;\n') },
   nudgelow: { file: 'lib/soccerCareerLeague.ts', red: ['C2'], edit: swapLast(NUDGE, '  const nudge = rating >= 7.5 ? -at(0.1) : rating <= 6.3 ? at(0.1) : 0;\n') },
@@ -296,6 +302,54 @@ function readSave(state) {
 export const NATIONS = ['England', 'Spain', 'Germany', 'Italy', 'France', 'Netherlands', 'Portugal', 'Turkey', 'Belgium', 'Scotland', 'Brazil', 'Argentina', 'Mexico', 'USA', 'Saudi Arabia', 'Japan', 'Nigeria'];
 const POSITIONS = ['ST', 'CM', 'CB', 'GK'];
 const todayLeague = club => POOL.find(c => c.name === club)?.league ?? '';
+const SIM_PYRAMIDS = [
+  ['Premier League', 'Championship', 3], ['Bundesliga', '2. Bundesliga', 2],
+  ['Ligue 1', 'Ligue 2', 2], ['Serie A', 'Serie B', 3], ['La Liga', 'Segunda Division', 3],
+];
+const clubIdentity = name => (mod.rivalries.SC_CLUB_CANON[name] ?? name).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+const sameClubs = (a, b) => JSON.stringify(a.map(clubIdentity).sort()) === JSON.stringify(b.map(clubIdentity).sort());
+const initialSimField = league => mod.lower?.CAREER_LOWER_CLUBS[league] ?? mod.pool.CAREER_LEAGUE_LADDER[league]?.flat() ?? [];
+/* Expected future fields come from the saved row and its allowed club pool,
+   independently of the Season Centre context being checked. */
+function savedFutureSnapshot(row) {
+  const held = row.leagueWorld;
+  if (!held) return null;
+  const pyramid = SIM_PYRAMIDS.find(([upper, lower]) => upper === held.league || lower === held.league);
+  const members = held.members;
+  const allowed = pyramid ? [...initialSimField(pyramid[0]), ...initialSimField(pyramid[1])].map(clubIdentity) : [];
+  if (row.type !== 'playing' || row.year < 2026 || !pyramid || !Array.isArray(members)
+    || members.length !== initialSimField(held.league).length || members.some(n => typeof n !== 'string' || !n.trim() || !allowed.includes(clubIdentity(n)))
+    || new Set(members.map(clubIdentity)).size !== members.length || !members.some(n => clubIdentity(n) === clubIdentity(row.club))
+    || !members.includes(held.champion) || (row.leagueSize !== undefined && row.leagueSize !== members.length)
+    || !['simulated', 'simulated-partial'].includes(held.simulation)) throw new Error(`${row.club} ${row.year}: malformed saved simulated league field`);
+  return held;
+}
+function snapshotContextErrors(row, held, m) {
+  const errors = [];
+  const names = new Set([row.club, ...m.ctx.rivals, ...m.ctx.named, ...(m.ctx.champion ? [m.ctx.champion] : [])].map(clubIdentity));
+  if (m.ctx.league?.key !== held.league || names.size !== held.members.length || held.members.some(n => !names.has(clubIdentity(n)))) errors.push('the displayed division or field differs from its saved snapshot');
+  const champion = m.finish?.finish === 1 ? null : held.champion;
+  if (m.ctx.champion !== champion) errors.push(`the context champion is ${m.ctx.champion}, saved ${champion}`);
+  return errors;
+}
+function snapshotTableErrors(row, held, table) {
+  const errors = [];
+  if (!table.labels.every(l => l.named) || !sameClubs(table.labels.map(l => l.name), held.members)) errors.push('the drawn table differs from the saved field');
+  if (clubIdentity(table.top.name) !== clubIdentity(held.champion)) errors.push(`the drawn champion is ${table.top.name}, saved ${held.champion}`);
+  if (held.movements) {
+    const [upper, lower, count] = SIM_PYRAMIDS.find(([a, b]) => a === held.league || b === held.league);
+    const promoted = held.league === lower;
+    const expected = promoted ? table.order.slice(0, count) : table.order.slice(-count);
+    const moves = held.movements.filter(m => m.from === held.league);
+    const kind = promoted ? 'promoted' : 'relegated';
+    const to = promoted ? upper : lower;
+    if (!sameClubs(moves.map(m => m.club), expected) || moves.some(m => m.kind !== kind || m.to !== to)) errors.push('saved movement differs from the final displayed places');
+    const own = expected.some(n => clubIdentity(n) === clubIdentity(row.club));
+    const movement = held.movement;
+    if (own ? !movement || clubIdentity(movement.club) !== clubIdentity(row.club) || movement.from !== held.league || movement.to !== to || movement.kind !== kind : !!movement) errors.push('the saved player club movement differs from its final place');
+  }
+  return errors;
+}
 function measureSeason(career, row) {
   const keep = Math.random;
   Math.random = () => { throw new Error('Math.random called while reading a season'); };
@@ -335,7 +389,7 @@ function drawnTable(row, ctx) {
     const d = SC.deriveSeason(SE.SOCCER, row, ctx);
     if (!d || d.mode !== 'table') return null;
     const final = SC.tableAt(d, d.rounds.length);
-    return { labels: d.labels, top: d.labels[final[0].slot] };
+    return { labels: d.labels, top: d.labels[final[0].slot], order: final.map(r => d.labels[r.slot].name) };
   } finally { Math.random = keep; }
 }
 function playWorld(seedset, careers, onSeason, nations = NATIONS) {
@@ -495,6 +549,77 @@ const GENERATED = POOL.slice(HAND.length);
 const BIG_FIVE = new Set(['Premier League', 'La Liga', 'Serie A', 'Bundesliga', 'Ligue 1']);
 const LADDER = mod.pool.CAREER_LEAGUE_LADDER;
 const WORLD = readJson(path.join(DATA, 'soccerCareerFacts.json')).leagueWorld;
+
+/* A fictional saved season whose champion also has a fixed derby slot.
+   Context roles overlap; the actual table must still name each club once. */
+head('D1', 'SAVED RIVAL CHAMPION: context roles overlap, table clubs do not');
+{
+  const row = { ...seasonRow(2026, 3), club: 'Everton', leagueApps: 34, leagueFinish: 5, leagueSize: 20,
+    derbies: [{ rival: 'Liverpool', name: 'Merseyside derby', kind: 'derby', meetings: [
+      { home: true, gf: 0, ga: 0, played: true, goals: 0 }, { home: false, gf: 0, ga: 0, played: true, goals: 0 },
+    ] }], leagueWorld: { league: 'Premier League', members: [...initialSimField('Premier League')], champion: 'Liverpool', simulation: 'simulated' } };
+  const bytes = JSON.stringify(row);
+  const held = savedFutureSnapshot(row);
+  const m = measureSeason({ playerName: 'Saved rival champion probe', position: 'CM', seasons: [row], awards: [] }, row);
+  ok(m.ctx.rivals.includes(held.champion), 'the saved champion must actually share the fixed rival role');
+  const oldRoles = [row.club, ...m.ctx.rivals, ...m.ctx.named, ...(m.ctx.champion ? [m.ctx.champion] : [])];
+  ok(oldRoles.length === held.members.length + 1 && !sameClubs(oldRoles, held.members), 'the copied old multiset predicate must reject this valid overlapping context');
+  for (const error of snapshotContextErrors(row, held, m)) fail(`saved rival champion: ${error}`);
+  const table = m.table ? drawnTable(row, m.ctx) : null;
+  if (ok(!!table, 'the saved rival champion probe must derive an actual table')) {
+    for (const error of snapshotTableErrors(row, held, table)) fail(`saved rival champion: ${error}`);
+    ok(table.labels.filter(l => clubIdentity(l.name) === clubIdentity(held.champion)).length === 1, 'the champion rival must occupy exactly one displayed slot');
+    const duplicate = { ...table, labels: table.labels.map((label, index) => index === 1 ? { ...label, name: row.club } : label) };
+    ok(snapshotTableErrors(row, held, duplicate).includes('the drawn table differs from the saved field'), 'the copied duplicate table club must still be rejected');
+  }
+  ok(m.ctx.named.length > 0, 'the context omission controls need a named club');
+  const missing = { ...m, ctx: { ...m.ctx, named: m.ctx.named.slice(1) } };
+  ok(snapshotContextErrors(row, held, missing).some(error => error.includes('field differs')), 'the copied missing context club must still be rejected');
+  const foreign = initialSimField('Championship').find(n => !held.members.some(member => clubIdentity(member) === clubIdentity(n)));
+  ok(!!foreign, 'the foreign-club control needs an actual lower-division club outside this field');
+  if (foreign) {
+    const wrong = { ...m, ctx: { ...m.ctx, named: [foreign, ...m.ctx.named.slice(1)] } };
+    ok(snapshotContextErrors(row, held, wrong).some(error => error.includes('field differs')), 'the copied foreign context club must still be rejected');
+  }
+  ok(JSON.stringify(row) === bytes, 'the overlap probe must preserve its complete saved row');
+  console.log('  rival champion probe: actual context and table checked; old double-count defect reproduced; missing, foreign and duplicate club copies caught');
+}
+
+if (process.env.SNAPSHOT_PROBE_ONLY === '1') {
+  head('D1', 'SNAPSHOT PROBE: three actual future seasons from the captured old save');
+  seedRandom(0x1175e);
+  const captured = readJson(F.saves).saves.find(save => save.id === 'ere').state;
+  const bytes = JSON.stringify(captured);
+  let s = engine.repairCareer(clone(captured));
+  s = engine.acceptOffer(s, { club: clubRow('Freiburg'), contractYears: 5, wage: 20000, transferFee: 0 });
+  const before = s.seasons.length;
+  let guard = 0;
+  const playable = row => row.type === 'playing' && row.apps > 0 && !row.injurySevere && row.leagueWorld;
+  while (!s.retired && s.seasons.slice(before).filter(playable).length < 3 && guard++ < 200) s = stayStep(s);
+  const rows = s.seasons.slice(before).filter(playable);
+  ok(rows.length === 3, `only ${rows.length} playable simulated seasons were produced, three expected`);
+  let tables = 0; let changed = 0; let moves = 0;
+  for (const row of rows) {
+    const held = savedFutureSnapshot(row);
+    const m = measureSeason(s, row);
+    const tag = `${row.club} ${row.year} (${held.league})`;
+    if (!sameClubs(held.members, initialSimField(held.league))) changed += 1;
+    moves += (held.movements ?? []).filter(move => move.from === held.league).length;
+    ok(m.finish?.size === held.members.length && m.ctx.games === 2 * (held.members.length - 1), `${tag}: finish or calendar differs from the saved size`);
+    for (const error of snapshotContextErrors(row, held, m)) fail(`${tag}: ${error}`);
+    const table = m.table ? drawnTable(row, m.ctx) : null;
+    if (ok(!!table, `${tag}: no table was derived for the probe`)) {
+      tables += 1;
+      for (const error of snapshotTableErrors(row, held, table)) fail(`${tag}: ${error}`);
+    }
+  }
+  ok(changed > 0, 'the probe never reached a field changed by promotion or relegation');
+  ok(JSON.stringify(captured) === bytes, 'playing a cloned fixture changed the captured old save');
+  const played = s.seasons.slice(before).filter(row => row.type === 'playing');
+  const severe = played.filter(row => row.injurySevere).length;
+  console.log(`  snapshot probe: ${played.length} actual seasons played (${severe} severe-injury seasons), ${rows.length} playable snapshots, ${tables} drawn tables, ${changed} changed fields, ${moves} recorded league movements`);
+  finish();
+}
 
 /* ─── B. POOL ─── */
 head('B1', 'POOL: the rows main shipped are still the first rows, in order');
@@ -761,7 +886,16 @@ head('E', 'OLD SAVES: seven saves recorded on main read the same, and play on');
     const sized = LG.leagueSizeFor(league, 2030);
     for (const r of fresh) {
       const f = LG.readLeagueFinish(r);
-      ok(sized === null ? (f === null || f.finish === 1) : (f !== null && f.size === sized), `${save.id} ${r.year}: a new season in ${league} holds ${JSON.stringify(f)}, a league of ${sized ?? 'no verified size'}`);
+      const held = savedFutureSnapshot(r);
+      const expectedLeague = held?.league ?? league;
+      const expectedSize = held?.members.length ?? sized;
+      ok(expectedSize === null ? (f === null || f.finish === 1) : (f !== null && f.size === expectedSize), `${save.id} ${r.year}: a new season in ${expectedLeague} holds ${JSON.stringify(f)}, a league of ${expectedSize ?? 'no verified size'}`);
+      if (held) {
+        const m = measureSeason(s, r);
+        for (const error of snapshotContextErrors(r, held, m)) fail(`${save.id} ${r.year}: ${error}`);
+        const table = m.table ? drawnTable(r, m.ctx) : null;
+        if (table) for (const error of snapshotTableErrors(r, held, table)) fail(`${save.id} ${r.year}: ${error}`);
+      }
     }
     if (save.kind === 'manager') {
       const rows = s.managerState.seasonResults.slice(save.state.managerState.seasonResults.length);
@@ -885,18 +1019,20 @@ if (RUN_WORLD) {
   globalThis.__leagueFinishTap = [];
   const tw = Date.now();
   const run = worldRun(SEEDSET, CAREERS, NATIONS, (career, row, m, input) => {
-    const L = todayLeague(row.club);
-    const size = L ? LG.leagueSizeFor(L, row.year) : null;
+    const held = savedFutureSnapshot(row);
+    const L = held?.league ?? todayLeague(row.club);
+    const size = held?.members.length ?? (L ? LG.leagueSizeFor(L, row.year) : null);
     addSeason(shape[BIG_FIVE.has(L) ? 'five' : size !== null ? 'plain' : ODD[L] ? 'odd' : LADDER[L] ? 'waiting' : 'other'], m);
     /* D1 */
     if (size !== null) {
       d1.sized += 1;
       const f = m.finish;
+      if (held) for (const error of snapshotContextErrors(row, held, m)) d1.bad.push(`${row.club} ${row.year} (${L}): ${error}`);
       if (!(f && f.size === size && f.finish >= 1 && f.finish <= size)) d1.bad.push(`${row.club} ${row.year} (${L}, ${size} clubs) holds ${JSON.stringify(f)}`);
       else if (m.ctx.games !== 2 * (size - 1)) d1.bad.push(`${row.club} ${row.year} (${L}): ${m.ctx.games} matchdays, ${2 * (size - 1)} wanted`);
-      if (m.table && LADDER[L] && !BIG_FIVE.has(L)) {
-        d1.tables += 1;
-        const clubsOf = LADDER[L].flat();
+      if (m.table && (held || LADDER[L]) && (held || !BIG_FIVE.has(L))) {
+        if (!BIG_FIVE.has(L)) d1.tables += 1;
+        const clubsOf = held?.members ?? LADDER[L].flat();
         const want = Math.min(size, clubsOf.length);
         if (m.namedRows !== want) d1.bad.push(`${row.club} ${row.year} (${L}): its table names ${m.namedRows} rows, ${want} wanted`);
         /* the page's own labels (review fix): the count above is the names
@@ -909,6 +1045,7 @@ if (RUN_WORLD) {
           else {
             seen.n += 1;
             if (!row.leagueTitle) seen.open += 1;
+            if (held) for (const error of snapshotTableErrors(row, held, t)) d1.bad.push(`${row.club} ${row.year} (${L}): ${error}`);
             const shown = new Set(t.labels.filter(l => l.named).map(l => l.name));
             const unnamed = t.labels.length - shown.size;
             const missing = clubsOf.filter(n => !shown.has(n));

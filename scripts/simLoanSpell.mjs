@@ -211,6 +211,18 @@ console.log("3) the lifecycle and 4) the measured payoff");
         case "rivalry_event": s = dismissRivalryEvent(s, clubs); break;
         case "ballon_dor": s = dismissBallonDor(s, clubs); break;
         case "transfer_window": {
+          if (s.transferSituation?.type === "club_move") {
+            const move = s.transferSituation;
+            if (move.mode === "loan") {
+              loansTaken += 1;
+              if (!s.loan || s.loan.parentClub !== move.fromClub || s.currentClub !== move.toClub) fail("automatic club loan lost its parent or destination");
+              if (s.weeklyWage !== move.wage || s.contractYearsLeft !== move.contractYears) fail("automatic club loan notification changed the contract");
+            }
+            const fees = s.agentFeesPaid;
+            s = stayAtClub(s);
+            if (s.agentFeesPaid !== fees) fail("acknowledging the club move charged a second agent fee");
+            break;
+          }
           if (s.loan) windowLoanViolations += 1;
           const hereSeasons = s.seasons.filter(x => x.club === s.currentClub && x.type === "playing").length;
           const hereProj = projectLeagueApps(s.overall, s.currentClubTier, s.currentClub, hereSeasons);

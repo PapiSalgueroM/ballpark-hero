@@ -277,6 +277,11 @@ async function playOne(seed: number): Promise<Run | null> {
 beforeEach(() => {
   localStorage.clear();
   try { localStorage.setItem('cookie-consent', 'essential'); } catch { /* jsdom */ }
+  /* Release AQ (Round 1172): the Ballon d'Or night draws Continue only after its ranked list has come in,
+     about three seconds of real timers a ceremony. This walk plays as a visitor who asked for less motion,
+     the card's still form, where the list and Continue are drawn at once. The timed list has its own tests
+     (src/test/soccerAwardReveal.test.tsx). The same stub as src/test/careerAwardsNightCard.test.tsx. */
+  vi.stubGlobal('matchMedia', (query: string) => ({ matches: query.includes('prefers-reduced-motion'), media: query, addEventListener: () => undefined, removeEventListener: () => undefined }));
   vi.stubGlobal('requestAnimationFrame', () => 1);
   vi.stubGlobal('cancelAnimationFrame', () => undefined);
   if (!('IntersectionObserver' in window)) {

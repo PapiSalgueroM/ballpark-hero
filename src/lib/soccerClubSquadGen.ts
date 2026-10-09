@@ -50,6 +50,10 @@ const YEAR_CAP = 2400;
 /** A club country with no name family of its own borrows a neighbour's. */
 export const FAMILY_ALIAS: Record<string, string> = {
   Monaco: 'France', UAE: 'United Arab Emirates', Malaysia: 'Indonesia',
+  /* Release AQ: the league world (Round 1175) seats FC Andorra in Spain's second
+     division with its own country, which had no family, so a teammate the
+     game made up there got the fallback's English names. */
+  Andorra: 'Spain',
 };
 
 /** 22 slots: position, group, level against the club's centre, kind. Inside

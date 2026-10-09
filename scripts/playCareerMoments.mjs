@@ -477,6 +477,9 @@ const walkT = {
   reach: async page => {
     /* The loaded save sits on the awards night, one press before the card. */
     const next = page.getByRole('button', { name: 'Continue →', exact: true });
+    /* Release AQ (Round 1172): the night draws Continue only after its ranked list has come in, about three
+       seconds with motion on. Wait for it, then hold the same count as before. */
+    await next.first().waitFor({ timeout: 8000 }).catch(() => undefined);
     const n = await next.count();
     if (n !== 1) return `the awards card must show one "Continue →", the page shows ${n}`;
     await next.click();

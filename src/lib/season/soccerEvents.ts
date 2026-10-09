@@ -115,6 +115,9 @@ export function soccerEventDisagreements(s: DerivedSeason, fixed: readonly Fixed
     if (!g.played) continue;
     if (goals.filter(e => e.mine).length !== (g.line.goals ?? 0)) out.push(`md ${g.md}: his goal events`);
     if (g.events.filter(e => e.kind === 'assist').length !== (g.line.assists ?? 0)) out.push(`md ${g.md}: his assist events`);
+    for (const card of ['yellow', 'red']) {
+      if (g.events.filter(e => e.kind === card && e.mine).length !== (g.line[card] ?? 0)) out.push(`md ${g.md}: his ${card} card events`);
+    }
     if (g.offAt && g.events.some(e => e.mine && e.min > g.offAt!)) out.push(`md ${g.md}: an event of his after he went off`);
   }
   const keys = [...new Set(fixed.map(f => f.key))];

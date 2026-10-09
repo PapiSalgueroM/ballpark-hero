@@ -103,7 +103,13 @@ const PINS = [
   ['src/pages/SearchAndDiscard.tsx', /<FlagImg name=\{p\.nationality\}[^>]*showLabel/],
   ['src/pages/SoccerCareer.tsx', /<strong><FlagImg name=\{career\.nationality\}[^>]*showLabel/],
   ['src/pages/SoccerCareer.tsx', /Age \{career\.age\} · <FlagImg name=\{career\.nationality\}[^>]*showLabel/],
-  ['src/pages/SportsBingo.tsx', /<FlagImg name=\{p\.nationality\}[^>]*showLabel/],
+  /* Sports Bingo's pack rows, the one place that game prints a nationality,
+     left SportsBingo.tsx for this component in Round 727 (pass the device and
+     custom cards). The pin stayed on the page, which no longer mentions the
+     flag at all, so the whole harness refused to run from then until Round
+     1145 went looking for the reason. Same flag, same shape, the file it
+     lives in now. */
+  ['src/components/sports-bingo/BingoPackList.tsx', /<FlagImg name=\{p\.nationality\}[^>]*showLabel/],
   ['src/components/fantasy-draft/PlayerPool.tsx', /<FlagImg name=\{player\.nationality\}[^>]*showLabel/],
   ['src/components/soccer-grid/SoccerGridSearch.tsx', /<FlagImg name=\{p\.nationality\}[^>]*showLabel/],
   ['src/components/ufc/UfcFighterSearch.tsx', /<FlagImg name=\{fighter\.nationality\}[^>]*showLabel/],

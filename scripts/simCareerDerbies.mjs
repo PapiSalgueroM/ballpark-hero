@@ -167,6 +167,7 @@ export * as eras from '${ROOT_URL}/src/lib/careerEras.ts';
 ${withUi ? `
 export * as data from '${ROOT_URL}/src/data/clubRivalries.ts';
 export * as league from '${ROOT_URL}/src/lib/soccerCareerLeague.ts';
+export * as world from '${ROOT_URL}/src/lib/soccerCareerLeagueWorld.ts';
 export * as save from '${ROOT_URL}/src/lib/soccerCareerSave.ts';
 export * as social from '${ROOT_URL}/src/lib/careerSocial.ts';
 export * as cm from '${ROOT_URL}/src/lib/clubManager.ts';
@@ -198,7 +199,7 @@ const MAIN = await bundle('main', mainDerby, true, mainOverrides);
 const A = await bundle('a', aDerby, false);
 const B = await bundle('b', bDerby, false);
 try { fs.rmSync(WORK, { recursive: true, force: true }); } catch { /* temp only */ }
-const { engine, derby, data, league, save, social, cm, ui, render } = MAIN;
+const { engine, derby, data, league, world, save, social, cm, ui, render } = MAIN;
 const clubs = engine.FALLBACK_CLUBS;
 for (const [k, v] of Object.entries({ seasonDerbies: derby.seasonDerbies, resolveSeasonDerbies: derby.resolveSeasonDerbies, applySeasonDerbies: derby.applySeasonDerbies, CLUB_RIVALRIES: data.CLUB_RIVALRIES, REAL_LEAGUES: cm.REAL_LEAGUES, buildBoardObjectives: cm.buildBoardObjectives, isSoccerCareerSave: save.isSoccerCareerSave, DerbyChip: ui.DerbyChip, clubs })) {
   if (!v) { console.error(`missing export ${k}, so nothing below measures anything`); process.exit(2); }
@@ -281,6 +282,33 @@ const leagueOf = name => (clubs.find(c => c.name === name) || {}).league || '';
 /* Round 1037: before 2026-27 a derby is played in the league the club was
    really in that season (the league ledgers), from then on in its label */
 const yearLeague = (name, year) => league.leagueKeyInYear({ name, league: leagueOf(name) }, year) ?? '';
+/* Release AQ (Round 1175, the league world): from 2026-27 a season in one of
+   the five two division models is played in the CAREER'S field, which the
+   row saves (leagueWorld.members), and no longer in today's static league.
+   A club that went down plays no top flight derby that year, and a club in
+   the second division meets the rivals that are down there with it. The
+   engine detects and resolves the derbies on that field, so the checks
+   here have to as well: read against the static pool they called 148 right
+   rival sets wrong, 13 right derbies keys undue, 41 right meetings outside
+   the league and 89 right replays different, on a game that had none of it
+   (the reviewer's probe: 0 derbies against a club outside his division in
+   2272 derby seasons). The two divisions of a model are a closed set, so
+   the other division that season is every club of the pair that is not in
+   his, and the engine's own projection rebuilds the clubs from that. A row
+   with no saved field is read as before. */
+const worldKey = name => world.clubKeyOf(name);
+const worldStart = world.leagueWorldForYear({ playerName: 'derby harness' }, clubs, 2026)?.leagues ?? {};
+let worldSeasons = 0;
+function seasonField(r) {
+  const held = world.readLeagueWorldSeason(r);
+  const pair = held ? world.PYRAMIDS.find(x => x.upper === held.league || x.lower === held.league) : null;
+  if (!held || !pair) return { league: leagueOf(r.club), clubs, members: null, meetingsLeague: yearLeague(r.club, r.year) };
+  const other = pair.upper === held.league ? pair.lower : pair.upper;
+  const members = new Set(held.members.map(worldKey));
+  const rest = [...worldStart[pair.upper], ...worldStart[pair.lower]].filter(n => !members.has(worldKey(n)));
+  const career = { playerName: 'derby harness', currentClub: r.club, leagueWorld: { year: r.year, leagues: { ...worldStart, [held.league]: held.members, [other]: rest }, movements: [] } };
+  return { league: held.league, clubs: world.projectLeagueWorldClubs(career, clubs, r.year), members, meetingsLeague: held.league };
+}
 
 let failures = 0;
 const red = new Set();
@@ -544,9 +572,10 @@ console.log('3) the right derbies, the verified number of meetings, and nothing 
   let checked = 0, withDerbies = 0, wrongCount = 0, wrongSet = 0, keyWithout = 0;
   const meetingsCounted = {};
   const check = ({ r }) => {
-    const lg = leagueOf(r.club);
-    const want = derby.seasonDerbies({ club: r.club, league: lg, year: r.year, clubs });
-    const n = derby.derbyMeetings(yearLeague(r.club, r.year), r.year);
+    const field = seasonField(r);
+    if (field.members) worldSeasons += 1;
+    const want = derby.seasonDerbies({ club: r.club, league: field.league, year: r.year, clubs: field.clubs });
+    const n = derby.derbyMeetings(field.meetingsLeague, r.year);
     checked += 1;
     if (want.length === 0) { if ('derbies' in r) keyWithout += 1; return; }
     withDerbies += 1;
@@ -563,6 +592,8 @@ console.log('3) the right derbies, the verified number of meetings, and nothing 
   if (wrongSet) fail(`${wrongSet} seasons whose rivals differ from the detection`);
   if (keyWithout) fail(`${keyWithout} seasons carry a derbies key with no derby due`);
   if (withDerbies < 100) fail(`only ${withDerbies} pool seasons had a derby, too few to say anything`);
+  console.log(`   ${worldSeasons} of them were played in the career's own 2026 on field (read off the row)`);
+  if (worldSeasons < 100) fail(`only ${worldSeasons} pool seasons in a saved 2026 on field, too few to say the field is read`);
   for (const [club, year, wantRivals, why] of FORCED_CASES) {
     const rows = forcedSeasons(engine, club, year);
     forcedRows.push(...rows);
@@ -579,9 +610,11 @@ console.log('3) the right derbies, the verified number of meetings, and nothing 
   }
   let outside = 0;
   for (const { r } of [...poolRows, ...forcedRows]) {
-    const world = eras.adjustClubsForYear(clubs, r.year);
+    const field = seasonField(r);
+    const known = eras.adjustClubsForYear(field.clubs, r.year);
     for (const d of derby.readSeasonDerbies(r)) {
-      const c = world.find(x => x.name === d.rival);
+      const c = known.find(x => x.name === d.rival);
+      if (field.members) { if (!c || !field.members.has(worldKey(d.rival))) outside += 1; continue; }
       if (!c || yearLeague(c.name, r.year) !== yearLeague(r.club, r.year)) outside += 1;
     }
   }
@@ -661,13 +694,17 @@ console.log('4) derby goals are a subset, keepers never score one, Derby Hero is
     seasonsChecked += 1;
     /* A double round robin is one home and one away against each rival. */
     for (const d of ds) if (d.meetings.length === 2) { pairsOfTwo += 1; if (d.meetings.filter(m => m.home).length !== 1) sameGround += 1; }
+    const field = seasonField(r);
     const again = derby.resolveSeasonDerbies({
-      club: r.club, league: leagueOf(r.club), year: r.year, clubs, elite: engine.ELITE_CLUBS || [], position,
+      club: r.club, league: field.league, year: r.year, clubs: field.clubs, elite: engine.ELITE_CLUBS || [], position,
       apps: r.apps, leagueApps: r.leagueApps, goals: r.goals, leagueTitle: r.leagueTitle,
       seedKey: `${state.playerName}|${r.club}|${r.year}|${r.apps}|${r.goals}|${r.assists}|${r.rating}|derby`,
     });
     replayed += 1;
-    if (JSON.stringify(again) !== JSON.stringify(r.derbies)) replayOff += 1;
+    if (JSON.stringify(again) !== JSON.stringify(r.derbies)) {
+      replayOff += 1;
+      if (replayOff <= 4) console.log(`   REPLAY DIFFERS ${state.playerName} ${r.year} ${r.club} (${field.league}${field.members ? ', saved field' : ''}): apps ${r.apps}, leagueApps ${r.leagueApps}, goals ${r.goals}, title ${r.leagueTitle}, severe ${!!r.injurySevere}, ban ${r.suspensionMatches ?? 0}; stored ${JSON.stringify(r.derbies).slice(0, 260)}; drawn ${JSON.stringify(again).slice(0, 260)}`);
+    }
     const ms = ds.flatMap(d => d.meetings);
     const goals = ms.reduce((n, m) => n + m.goals, 0);
     if (goals > r.goals) overGoals += 1;

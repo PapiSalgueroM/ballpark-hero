@@ -62,19 +62,24 @@ const withoutMeasured = night => {
    simCareerDomesticCup.mjs holds the run itself. A save with no run is
    hashed exactly as before. */
 const withoutRun = r => {
-  if (!r || typeof r !== 'object' || !('cupRun' in r)) return r;
-  const { cupRun: _run, ...rest } = r;
+  if (!r || typeof r !== 'object' || !('cupRun' in r) && !('clubCupRun' in r)) return r;
+  const { cupRun: _run, clubCupRun: _clubRun, ...rest } = r;
   return rest;
 };
 const withoutRuns = s => {
   if (!s || typeof s !== 'object') return s;
-  const runs = Array.isArray(s.seasons) && s.seasons.some(r => r && typeof r === 'object' && 'cupRun' in r);
-  const pending = s.pendingSummary && typeof s.pendingSummary === 'object' && 'cupRun' in s.pendingSummary;
+  const runs = Array.isArray(s.seasons) && s.seasons.some(r => r && typeof r === 'object' && ('cupRun' in r || 'clubCupRun' in r));
+  const pending = s.pendingSummary && typeof s.pendingSummary === 'object' && ('cupRun' in s.pendingSummary || 'clubCupRun' in s.pendingSummary);
   if (!runs && !pending) return s;
   return { ...s, ...(runs ? { seasons: s.seasons.map(withoutRun) } : {}), ...(pending ? { pendingSummary: withoutRun(s.pendingSummary) } : {}) };
 };
 const saveHash = s0 => {
-  const s = withoutRuns(s0);
+  // Round 1172: the new immutable club campaign and its anchors are held by
+  // soccerSeasonCompetitions.test.tsx; no other old save field is omitted.
+  const rows = withoutRuns(s0);
+  const result = rows?.lastUCLResult;
+  const { seasonYear: _year, club: _club, ...legacyResult } = result ?? {};
+  const s = result && ('seasonYear' in result || 'club' in result) ? { ...rows, lastUCLResult: legacyResult } : rows;
   return hashOf(s && s.pendingBallonDor && 'moved' in s.pendingBallonDor
     ? { ...s, pendingBallonDor: withoutMeasured(s.pendingBallonDor) } : s);
 };

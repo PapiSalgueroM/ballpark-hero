@@ -58,12 +58,29 @@ import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
+import { soccerTrainOutPlugin, withoutTrainFields } from './lib/soccerTrain1178.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_LEAGUE_FINISH_CONTROL || '';
-const CONTROLS = { notitle: [1], eliteblind: [3, 5], stream: [4] };
+/* Release AQ: notitle reddens section 4 beside section 1 now, and has to.
+   Until the Soccer Career train the finish was a label and nothing read it
+   back. From 2026-27 it is the place that sends his club down or brings it
+   up (Round 1175), so a champion recorded somewhere else than first plays a
+   different career from there on and the digests move with him. Measured
+   when the release brought the controls back to life: sections 1 and 4. */
+const CONTROLS = { notitle: [1, 4], eliteblind: [3, 5], stream: [4] };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error('unknown control ' + CONTROL + ' (known: ' + Object.keys(CONTROLS).join(', ') + ')'); process.exit(2); }
 const RECORD = process.argv.includes('--record');
+/* Release AQ. SIM_LEAGUE_FINISH_ATTRIBUTION=train1178 bundles this tree with
+   the Soccer Career train (Rounds 1169 to 1178) taken out in memory (the
+   four lists the other lane wrote for simCareerAwardsNight,
+   scripts/lib/soccerTrain1178.mjs), records the 16 digests with the kept
+   continental run left out, and holds them to BEFORE_TRAIN_1178, the list
+   the train replaced. It is how that re-record was earned and how it can be
+   checked again; it runs section 4 alone and no control beside it. */
+const ATTRIBUTION = process.env.SIM_LEAGUE_FINISH_ATTRIBUTION || '';
+if (ATTRIBUTION && (ATTRIBUTION !== 'train1178' || CONTROL || RECORD)) { console.error('SIM_LEAGUE_FINISH_ATTRIBUTION knows train1178 only, with no control and no --record beside it'); process.exit(2); }
+const trainOut = ATTRIBUTION ? soccerTrainOutPlugin(ROOT, path, fs) : null;
 const TMP = process.env.TEMP || process.env.TMP || os.tmpdir();
 const WORK = path.join(TMP, `sc-leaguefinish-${process.pid}`);
 fs.mkdirSync(WORK, { recursive: true });
@@ -80,7 +97,16 @@ function mutate(file, anchor, replacement) {
   if (n !== 1) { console.error(`control ${CONTROL}: the anchor appears ${n} times in ${file}, refusing to run a dead control`); process.exit(2); }
   return src.replace(anchor, replacement);
 }
-const relocate = (src, keep = '') => src.replace(/from (['"])\.\/([A-Za-z0-9_]+)\1/g, (m, q, name) => name === keep ? m : `from ${q}${lib}${name}${q}`);
+/* Release AQ: every relative import is pointed back, not only a sibling's.
+   The engine has imported ./season/momentsSave since Round 1047 and the
+   league module ../data files since Round 1100, and a copy outside src/lib
+   could resolve neither, so all three controls died in the bundler
+   ("Could not resolve") instead of turning their section red. Found when
+   the release ran them; they fire again. */
+const backToSrc = rel => path.posix.join(lib, rel);
+const relocate = (src, keep = '') => src
+  .replace(/from (['"])(\.\.?\/[A-Za-z0-9_./-]+)\1/g, (m, q, rel) => rel === `./${keep}` ? m : `from ${q}${backToSrc(rel)}${q}`)
+  .replace(/import\((['"])(\.\.?\/[A-Za-z0-9_./-]+)\1\)/g, (m, q, rel) => rel === `./${keep}` ? m : `import(${q}${backToSrc(rel)}${q})`);
 let enginePath = `${ROOT}/src/lib/soccerCareerEngine.ts`;
 if (CONTROL === 'notitle') {
   const league = mutate('soccerCareerLeague.ts', 'if (input.leagueTitle) return { leagueFinish: 1', 'if (false) return { leagueFinish: 1');
@@ -107,9 +133,10 @@ const mod = await import('${enginePath.replaceAll('\\', '/')}');
 export const engine = mod;
 export const league = await import('${lib}soccerCareerLeague.ts');
 export const eras = await import('${lib}careerEras.ts');
+export const world = await import('${lib}soccerCareerLeagueWorld.ts');
 `);
-await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: OUT, logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT });
-const { engine, league, eras } = await import(pathToFileURL(OUT).href);
+await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: OUT, logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT, plugins: trainOut ? [trainOut.plugin] : [] });
+const { engine, league, eras, world } = await import(pathToFileURL(OUT).href);
 try { fs.rmSync(WORK, { recursive: true, force: true }); } catch { /* temp only */ }
 const NEED = ['initCareer', 'advanceYouthYear', 'acceptOffer', 'advanceProSeason', 'dismissSummary', 'dismissNewspaper', 'dismissDebut', 'dismissWorldCup', 'dismissRivalryEvent', 'dismissBallonDor', 'applyEventChoice', 'dismissMoralDilemma', 'dismissSocialMediaPhase', 'dismissAppealResult', 'applyBdorSpeech', 'applyWorldCupSpeech', 'acceptRetirementSuggestion', 'stayAtClub', 'applyRehabChoice', 'FALLBACK_CLUBS'];
 for (const k of NEED) if (!engine[k]) { console.error('engine export missing: ' + k + ', so nothing below measures anything'); process.exit(1); }
@@ -204,7 +231,9 @@ const LATER_FIELDS = ['story'];
    every row field but cupRun equal. It leaves the digest the same way. */
 const SEASON_ROW_FIELDS = ['ovr', 'cupRun'];
 const isSeasonRow = o => o && typeof o === 'object' && 'rating' in o && 'leagueTitle' in o;
-function digest(s) {
+function digest(state) {
+  /* with the train out, the two things it writes that no patch takes back (they draw nothing) leave the hash too */
+  const s = ATTRIBUTION ? JSON.parse(JSON.stringify(state, withoutTrainFields)) : state;
   const json = JSON.stringify(s, function (k, v) { return NEW_FIELDS.includes(k) || (this === s && LATER_FIELDS.includes(k)) || (SEASON_ROW_FIELDS.includes(k) && isSeasonRow(this)) ? undefined : v; });
   return crypto.createHash('sha256').update(json).digest('hex').slice(0, 16);
 }
@@ -323,7 +352,33 @@ const DIGEST_SEEDS = 16;
    '120dd615a6cd5dc1', '01b2d4b82109c7c6', '63a6b8575832dc54',
    'f47e78ff107bf228', 'e3e83a57c9b96439', '8ae2cceb487c0598',
    '7498856a14c25cc2']. */
-const BASELINE = ['8cf1c83794b5292c', 'fcb98e5a6f7c482c', '5bf2fb10985c3c57', '777fb5fac5b6035b', 'd22dfbc0a3673f01', 'ef0fa7c25d6b1287', '9e04cfcf7ce6fa60', 'd9879baa033424cf', 'de3f258b856b5094', 'b4a01376c0a3f518', '16493c48f4e1d265', '63a6b8575832dc54', 'f47e78ff107bf228', 'e3e83a57c9b96439', '083646089db0b478', '9b739fcf66c4063e'];
+/* (the recording history, continued)
+   Re-recorded at Release AQ (2026-10-09, twice, identical), on purpose: the
+   Soccer Career train (the other lane's Rounds 1169 to 1178) moves a career
+   in every era: a red card ban is served the season after (1176), a deal
+   after 30 follows form (1177), a listed player's move completes itself
+   (1178), the award field turns over (1172, 1174) and from 2026-27 clubs
+   change division (1175). All 16 digests move. Attribution, on a GitHub
+   runner on the release branch (dd651c9d): SIM_LEAGUE_FINISH_ATTRIBUTION=
+   train1178 bundles the same tree with the train taken out in memory (the
+   four lists the other lane wrote for simCareerAwardsNight, as one:
+   scripts/lib/soccerTrain1178.mjs) and records the list it replaced 16 of
+   16, so nothing but the train moved them. That list stays below as
+   BEFORE_TRAIN_1178 and the mode can be run again while the anchors hold.
+   The same release made section 2 read a 2026 on season's size off the
+   field the row saves (seasonSize above). The stream control still turns
+   section 4 red. */
+/* The list before the Soccer Career train (Release AP, 2026-10-09). Kept for
+   SIM_LEAGUE_FINISH_ATTRIBUTION=train1178, which must record it again. */
+const BEFORE_TRAIN_1178 = ['8cf1c83794b5292c', 'fcb98e5a6f7c482c', '5bf2fb10985c3c57', '777fb5fac5b6035b', 'd22dfbc0a3673f01', 'ef0fa7c25d6b1287', '9e04cfcf7ce6fa60', 'd9879baa033424cf', 'de3f258b856b5094', 'b4a01376c0a3f518', '16493c48f4e1d265', '63a6b8575832dc54', 'f47e78ff107bf228', 'e3e83a57c9b96439', '083646089db0b478', '9b739fcf66c4063e'];
+const BASELINE = ['6426d16cbf9ba999', '3306c9fe9aa5342a', 'a3fe5aa3598f0c39', 'c023471be22bf543', '9d4b42b5fdfeda8a', '2cddcac6f2c00050', '7f91286e11eda2ba', 'da376f05543b07dc', '961ae0e31447de8e', '40149a1bee050088', '5ed3c74ce0481b01', 'e867cd9651716b7b', '62e945046c9d16cf', '094f3daa34552ccf', 'de9566531c5f5fec', '389df779dd2b1e8a'];
+if (ATTRIBUTION) {
+  let same = 0;
+  const moved = [];
+  for (let i = 1; i <= DIGEST_SEEDS; i++) { if (digest(runCareer(i)) === BEFORE_TRAIN_1178[i - 1]) same += 1; else moved.push(i); }
+  console.log(`ATTRIBUTION ${ATTRIBUTION}: ${trainOut.seen().join(', ')} bundled with the train taken out; ${same} of ${DIGEST_SEEDS} careers record the digest the list held before the train${moved.length ? ` (moved: ${moved.join(', ')})` : ''}`);
+  process.exit(same === DIGEST_SEEDS ? 0 : 1);
+}
 if (RECORD) {
   const out = [];
   for (let i = 1; i <= DIGEST_SEEDS; i++) out.push(digest(runCareer(i)));
@@ -358,7 +413,16 @@ const leagueOf = name => (clubs.find(c => c.name === name) || {}).league || '';
 /* Round 1037: a season is played in the league the club was really in that
    year (the league ledgers before 2026-27), not today's label */
 const seasonLeague = r => league.leagueKeyInYear({ name: r.club, league: leagueOf(r.club) }, r.year) ?? '';
-const sized = seasons.filter(r => league.leagueSizeFor(seasonLeague(r), r.year));
+/* Release AQ (Round 1175, the league world): from 2026-27 a season in one of
+   the five two division models is played in the division the CAREER has the
+   club in, and the row saves that field (leagueWorld.members). A club that
+   went down from the Premier League plays a 24 club Championship season, so
+   its verified size is the saved field's and not its static label's: read
+   against the label, section 2 called 6 right sizes wrong. A row whose
+   saved field does not read (readLeagueWorldSeason refuses a size that
+   disagrees with its own field) falls back to the label and still fails. */
+const seasonSize = r => world.readLeagueWorldSeason(r)?.members.length ?? league.leagueSizeFor(seasonLeague(r), r.year);
+const sized = seasons.filter(r => seasonSize(r));
 console.log(`pool: ${careers} careers, ${seasons.length} playing seasons, ${sized.length} in a league with a verified size, ${seasons.filter(r => r.leagueTitle).length} titles`);
 if (seasons.length < careers * 4) { section = 1; fail(`only ${seasons.length} playing seasons over ${careers} careers, the walk is not reaching the season loop`); }
 
@@ -411,7 +475,7 @@ console.log('2) never above the league size, never below 1, and a verified leagu
 {
   let over = 0, under = 0, missing = 0, wrongSize = 0, unsizedClaim = 0, cutShort = 0;
   for (const r of seasons) {
-    const size = league.leagueSizeFor(seasonLeague(r), r.year);
+    const size = seasonSize(r);
     if (r.leagueFinish !== undefined && r.leagueFinish < 1) under += 1;
     if (r.leagueSize !== undefined && r.leagueFinish > r.leagueSize) over += 1;
     /* A severe injury stops the season at the rehab choice and drops the

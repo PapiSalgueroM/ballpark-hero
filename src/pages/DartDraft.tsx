@@ -48,6 +48,12 @@ const DartDraft = () => {
   const [loadError, setLoadError] = useState(false);
   const [topic, setTopic] = useState<MapTopic>('current');
   const [pool, setPool] = useState<Player[]>([]);
+  /* Round 1145: the pool is 2,000 deep now and the storm zone must not get
+     crueller for it, so the storm stops at what the old pool's last man was
+     worth. The fetch knows that number; it rides here beside the pool. The
+     mystery zone reads the same line: its three still come from above it and
+     its fourth tile, the long shot, from below. */
+  const [stormFloor, setStormFloor] = useState(0);
   const [xi, setXi] = useState<(Player | null)[]>(Array(XI_SIZE).fill(null));
   const [oop, setOop] = useState<boolean[]>(Array(XI_SIZE).fill(false));
   const [slotIdx, setSlotIdx] = useState<number | null>(null);
@@ -127,12 +133,13 @@ const DartDraft = () => {
     setTopic(t);
     setLoadError(false);
     setPhase('loading');
-    const { current } = await fetchDartDraftPool();
+    const { current, stormFloor: floor } = await fetchDartDraftPool();
     /* Round 170: an empty pool means the database was unreachable. Failing
        closed is right (never invent players), but failing SILENTLY left the
        tile looking dead, so now the screen says what happened. */
     if (!current.length) { setLoadError(true); setPhase('intro'); return; }
     setPool(current);
+    setStormFloor(floor);
     setXi(Array(XI_SIZE).fill(null));
     setOop(Array(XI_SIZE).fill(false));
     setDraftedIsos(new Set());
@@ -190,8 +197,8 @@ const DartDraft = () => {
         switch (landed.zone.kind) {
           case 'legend':    c = legendChoices(slot, usedNames); break;
           case 'wonderkid': c = wonderkidChoices(topicPool, slot, usedNames); break;
-          case 'mystery':   c = mysteryChoices(topicPool, slot, usedNames); break;
-          case 'storm':     c = stormChoices(topicPool, slot, usedNames); break;
+          case 'mystery':   c = mysteryChoices(topicPool, slot, usedNames, stormFloor); break;
+          case 'storm':     c = stormChoices(topicPool, slot, usedNames, stormFloor); break;
           case 'shark':     c = [{ player: oceanTrialist(slot, 'shark'), outOfPosition: false }]; break;
           default:          c = wildcardChoices(topicPool, slot, usedNames);
         }
@@ -206,7 +213,7 @@ const DartDraft = () => {
       setChoices(c.length ? c : [{ player: oceanTrialist(slot), outOfPosition: false }]);
       setChoicesLoading(false);
     }, 850);
-  }, [zones, slotIdx, topic, usedNames, topicPool]);
+  }, [zones, slotIdx, topic, usedNames, topicPool, stormFloor]);
 
   const lockIn = useCallback(() => {
     if (phase !== 'aim') return;
@@ -355,7 +362,7 @@ const DartDraft = () => {
           legend: 'All-time greats at your position. Pick one.',
           wonderkid: 'Under-21 gems only. The future is now.',
           wildcard: 'Free pick off the world top shelf.',
-          mystery: 'Three names from anywhere in the pool. Pure gamble.',
+          mystery: 'Three names from the top of the pool and one long shot from deep in it. Pure gamble.',
           storm: 'Blown into the bargain bin. Best of the cheap seats.',
           shark: 'It ate your dart. A 40-rated trialist swims out instead.',
         } as Record<string, string>)[hit.zone.kind]
@@ -623,7 +630,7 @@ const DartDraft = () => {
         <GameSeoContent
           pageHasOwnH1
           title="Dart Draft: throw darts at the world, draft who you hit"
-          description="A timed crosshair sweeps a real world map. Lock left to right, then top to bottom, and the dart lands with a wobble. Hit France and you choose from the best French players at the position you called before the throw. Hit a tiny island and its academy kid steps up. Continent rounds zoom the map for precision throws, gold zones over the ocean pay out legends, wonderkids, free picks and mystery gambles, red zones bite back with sharks and storms, and after 11 throws your XI plays a three match series against The Machine. All-Time mode adds the legends of every nation to their squads."
+          description="A timed crosshair sweeps a real world map. Lock left to right, then top to bottom, and the dart lands with a wobble. Hit France and you choose from French players at the position you called before the throw: the best four are always on offer, and the other tiles change from dart to dart. Hit a tiny island and its academy kid steps up. Continent rounds zoom the map for precision throws, gold zones over the ocean pay out legends, wonderkids, free picks and mystery gambles, red zones bite back with sharks and storms, and after 11 throws your XI plays a three match series against The Machine. All-Time mode adds the legends of every nation to their squads."
           howToPlay={[
             'Pick a topic: every nation, the 48 at the 2026 World Cup, or All-Time with legends.',
             'Choose which position you are throwing for from your empty XI slots.',
