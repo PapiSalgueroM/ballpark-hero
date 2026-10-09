@@ -1,8 +1,9 @@
 /* Round 1048: how long each real NBA and NFL regular season was, so a career's
    "week by week" is only offered for a season whose real length is the one the
-   game by game view is built for (82, 17: US_FULL_SEASON below). An NBA career
-   plays 82 every year; an NFL career plays the year's real length since Round
-   1104. `year` is the year a season STARTS in (NBA 2011 is 2011-12).
+   game by game view is built for (82, 17: US_FULL_SEASON below). An NFL career
+   plays the year's real length since Round 1104 and an NBA career since Round
+   1103 (66 in 2011-12, 72 in 2020-21; a year with no single length plays 82).
+   `year` is the year a season STARTS in (NBA 2011 is 2011-12).
 
    This file is eager (the hub reads it before a press) and imports nothing.
 
@@ -63,14 +64,17 @@ export interface UsLengthWindow {
   why?: string;
 }
 
-/** The season the game by game view is built for: 82, 17. An NBA career plays
- *  it every year. An NFL career plays the real length of the year since Round
- *  1104 (16 from 2005 to 2020), so there the view has less than it needs. */
+/** The season the game by game view is built for: 82, 17. An NFL career plays
+ *  the real length of the year since Round 1104 (16 from 2005 to 2020) and an
+ *  NBA career since Round 1103 (66 in 2011-12, 72 in 2020-21), so in those
+ *  years the view has less than it needs. */
 export const US_FULL_SEASON = { nba: 82, nfl: 17 } as const;
 
 /** Does the career's engine play the real length of a year the ledger holds?
- *  The held line must not say "this career plays 17" of a season that played 16. */
-const CAREER_PLAYS_REAL_LENGTH: Record<UsLengthSport, boolean> = { nba: false, nfl: true };
+ *  The held line must not say "this career plays 17" of a season that played 16.
+ *  The NBA is true since Round 1103: nbaSeasonGames reads this ledger, and
+ *  src/test/usSeason.test.ts plays a season in every ledger year to prove it. */
+const CAREER_PLAYS_REAL_LENGTH: Record<UsLengthSport, boolean> = { nba: true, nfl: true };
 
 export const US_SEASON_LENGTHS: Record<UsLengthSport, readonly UsLengthWindow[]> = {
   nba: [
@@ -108,7 +112,7 @@ export function usSeasonLabel(sport: UsLengthSport, year: number): string {
 }
 
 /** Why the season of `year` has no game by game view, in the site's voice,
- *  or null exactly when its real length is the one the career plays. */
+ *  or null exactly when its real length is the one the view is built for. */
 export function usSeasonHeldLine(sport: UsLengthSport, year: number): string | null {
   const full = US_FULL_SEASON[sport];
   const w = windowOf(sport, year);
