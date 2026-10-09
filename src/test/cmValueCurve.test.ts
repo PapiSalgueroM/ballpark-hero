@@ -158,6 +158,8 @@ describe('Club Manager rating: the value rating plus points for age (Round 1102)
     expect(() => rateFrom(80, 26, undefined)).toThrow(/position/);
     expect(() => rateFrom(80, 26, 'Centre-Back')).toThrow(/position/);
     expect(() => rateFrom(80, 13, 'SW')).toThrow(/valueRating 80, age 13, pos SW/);
+    /* a call site that was never converted: one argument has no default to fall back on */
+    expect(() => ratingOf(5_000_000)).toThrow(/age/);
     expect(() => ratingOf(5_000_000, 26)).toThrow(/position/);
     expect(() => ratingOf(5_000_000, undefined, 'CB')).toThrow(/age/);
   });

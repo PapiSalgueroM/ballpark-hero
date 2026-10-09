@@ -108,11 +108,9 @@ export function rateFrom(valueRating, age, pos) {
   return Math.max(RATING_FLOOR, Math.min(RATING_CEIL, valueRating + agePoints(valueRating, age)));
 }
 
-/** USD market value, age on 1 August and engine position -> the game rating. */
+/** USD market value, age on 1 August and engine position -> the game rating.
+ *  A call with no age or no position throws (rateFrom): there is no default. */
 export function ratingOf(usd, age, pos) {
-  /* STEP 2 ONLY, removed before the round closes: a call site that has not been converted yet still
-     gets the value rating, so the tree stays green while consumers move one at a time. */
-  if (age === undefined && pos === undefined) return valueRatingOf(usd);
   return rateFrom(valueRatingOf(usd), age, pos);
 }
 
