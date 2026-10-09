@@ -233,7 +233,7 @@ function finishByHand(cm, paused, report) {
     const next = cm.changeLive(st, line.minute, { kind: 'sub', outId: line.offId, inId: line.onId }, line.plus);
     if (!next) {
       const live = st.live;
-      throw new Error(`the engine refused a change of his made by hand at ${line.minute}' (clock ${live.minute}, ${live.subsUsed} made, going off on the pitch: ${live.onPitch.includes(line.offId)}, coming on already on it: ${live.onPitch.includes(line.onId)}, second half drawn: ${!!live.h2Drawn}, his list: ${plan.map(x => `${x.minute}${x.plus ? `+${x.plus}` : ''}`).join(' ')})`);
+      throw new Error(`the engine refused a change of his made by hand at ${line.minute}' (clock ${live.minute}, ${live.subsUsed} made, going off on the pitch: ${live.onPitch.includes(line.offId)}, coming on already on it: ${live.onPitch.includes(line.onId)}, second half drawn: ${!!live.h2Drawn}, by hand it is week ${live.week} against ${live.opponent} with ${live.startXi.length} starters of whom ${live.startXi.filter(id => report.detail.myRatings.some(p => p.name === (st.squad.find(q => q.id === id) ?? {}).name)).length} are on his report (${report.home} v ${report.away}), his list: ${plan.map(x => `${x.minute}${x.plus ? `+${x.plus}` : ''}`).join(' ')})`);
     }
     st = next;
   };
