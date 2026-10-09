@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { FALLBACK_CLUBS, determineTransferSituation, simulateUCL, type CareerState, type SeasonRecord } from '@/lib/soccerCareerEngine';
 import { deriveSeason, tableAt } from '@/lib/season/core';
 import { buildSoccerSeasonCtx, SOCCER } from '@/lib/season/soccer';
@@ -13,7 +14,7 @@ import {
 afterEach(() => vi.restoreAllMocks());
 const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 function career(club = 'PSG', league = 'Ligue 1'): CareerState {
-  const saved = JSON.parse(readFileSync(new URL('../../scripts/data/careerLeagueWorldSaves1100.json', import.meta.url), 'utf8')).saves.find((s: { id: string }) => s.id === 'ere').state;
+  const saved = JSON.parse(readFileSync(resolve(process.cwd(), 'scripts/data/careerLeagueWorldSaves1100.json'), 'utf8')).saves.find((s: { id: string }) => s.id === 'ere').state;
   return { ...saved, playerName: 'Future World Fixture', currentClub: club, currentLeague: league, currentClubCountry: 'France', currentClubTier: 1, position: 'CM', seasons: [], awards: [], events: [], story: [], phone: undefined, leagueWorld: undefined };
 }
 function season(s: CareerState, year: number, finish: number, size: number): SeasonRecord {

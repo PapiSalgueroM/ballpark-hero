@@ -48,6 +48,11 @@ jobs:
             NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node "scripts/$harness.mjs" 2>&1 | tee "career-focused-artifacts/$harness.log" || failed=1
           done
           exit "$failed"
+      - name: Earlier expansion outcomes and full saved award fixtures
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/seasonFamilySummary.test.ts src/test/soccerAwardReveal.test.tsx src/test/soccerSeasonCompetitions.test.tsx src/test/careerWallShotFriendly.test.ts src/test/careerAwardsNightCard.test.tsx --maxWorkers=1 --minWorkers=1 2>&1 | tee career-focused-artifacts/expansion-tests.log
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs 2>&1 | tee career-focused-artifacts/awards-fixtures.log
       - name: Source unchanged
         if: ${{ !cancelled() }}
         run: git diff --exit-code HEAD -- src scripts .github/workflows

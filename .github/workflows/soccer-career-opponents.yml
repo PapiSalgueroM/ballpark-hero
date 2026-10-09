@@ -123,6 +123,12 @@ jobs:
             ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-opponents-artifacts/$harness.log" || failed=1
           done
           exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-gates-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-opponents-artifacts/*.log
+          retention-days: 5
       - name: Actual career, named opponents and trophy journeys
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SHOTS="$PWD/career-opponents-artifacts/screenshots" node scripts/playSoccerCareerOpponents.mjs 2>&1 | tee career-opponents-artifacts/browser.log
