@@ -1,0 +1,15 @@
+#!serve
+#!playwright
+playSeasonCentre: PORT=4541 node scripts/playSeasonCentre.mjs
+playSeasonMoments: PORT=4547 node scripts/playSeasonMoments.mjs
+playSeasonCentreMotion: PORT=4559 node scripts/playSeasonCentreMotion.mjs
+playCareerLeagueWorld: PORT=4561 node scripts/playCareerLeagueWorld.mjs
+playCareerSquad: PORT=4577 REQUIRE_PAGE=1 node scripts/playCareerSquad.mjs
+playCareerMoments: PORT=4601 node scripts/playCareerMoments.mjs
+playSoccerCareer: PORT=4188 node scripts/playSoccerCareer.mjs
+playGames-soccer-career-390: SWEEP_BASE=http://localhost:4173 ONLY=/soccer-career WIDTH=390 ENGINES=chromium node scripts/playGames.mjs
+sweepWeight: BASE=http://localhost:4173 SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs
+drv-LeagueWorld: PORT=4585 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerLeagueWorld.mjs
+drv-LeagueWorld-missing: PORT=4586 PLAY_SOCCER_LEAGUE_WORLD_CONTROL=missing-snapshot NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerLeagueWorld.mjs
+drv-Contracts: PORT=4584 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerContracts.mjs
+drv-Competitions: PORT=4575 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerCompetitions.mjs

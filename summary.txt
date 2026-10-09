@@ -1,0 +1,14 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playSeasonMoments exit=0 43s | playSeasonMoments: 117 checks, 0 failed
+playCareerLeagueWorld exit=0 15s | playCareerLeagueWorld: 39 checks, 0 failed
+playSeasonCentre exit=0 93s | playSeasonCentre: 40 checks, 0 failed
+playSeasonCentreMotion exit=0 133s | playSeasonCentreMotion: 77 checks, 0 failed
+playCareerMoments exit=0 59s | playCareerMoments: 34 checks, 0 failed
+playGames-soccer-career-390 exit=0 54s | Played 1 games. 0 findings, 0 the harness could not drive.
+playCareerSquad exit=0 150s | playCareerSquad: 170 checks, 0 failed
+drv-LeagueWorld exit=0 13s | playSoccerCareerLeagueWorld: 249 checks, 0 failed; screenshots /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/shots
+sweepWeight exit=1 28s | sweepWeight: 1 failure
+drv-LeagueWorld-missing exit=1 13s | playSoccerCareerLeagueWorld: 232 checks, 4 failed; screenshots /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/shots
+drv-Competitions exit=0 11s | playSoccerCareerCompetitions: 50 checks, 0 failed
+drv-Contracts exit=0 26s | playSoccerCareerContracts: 201 checks, 0 failed
+playSoccerCareer exit=1 286s |   - 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to 
