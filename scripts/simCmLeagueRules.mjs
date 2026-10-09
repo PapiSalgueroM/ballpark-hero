@@ -261,6 +261,23 @@
       board objective is the one it was, and what moved is only the hash of
       the whole state after a summer. Written with --part=modern --write
       there, then run green whole and green again on modern alone.
+      Round 1102 (2026-10-09) re-took modern, eras AND pure, on purpose:
+      the round changed what a rating is (the value curve read with age)
+      and re-rated every squad file, and moved the 2026 ages to August, so
+      every seeded season plays different football and every board reads
+      a different squad. Attribution: origin/main 0054fd81 ran green whole
+      on a GitHub runner the same day, and the round changes no file under
+      src but the eight roster data files, a test and the What's New page
+      (git diff --name-only against main), so the data is the whole cause.
+      On the tree at c7201db7, on a runner, run one after another: before,
+      "27 entries compared, 27 differ" (modern), "20 entries compared, 20
+      differ" (eras), "48 entries compared, 47 differ" (pure), 94 failures;
+      --part=modern,eras,pure --write; then green whole (modern, eras,
+      pure, drop4, cupless, shapes, chunks) and green again on the three
+      parts alone, so the written file is what the tree gives twice. Unlike
+      every re-take above, this one moves results, tables, cups and board
+      objectives themselves, not only a whole state hash: that is the
+      round, and its balance is Round 1109's to retune.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
