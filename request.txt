@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-nfl: node_modules/.bin/vitest run src/test/usSeasonNfl.test.ts src/test/usSeason.test.ts --testTimeout=300000 --hookTimeout=120000
+vitest-view: node_modules/.bin/vitest run src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/seasonCentreWords.test.tsx src/test/seasonCore.test.ts --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simUsSeasonCentre.mjs
+c-lumpy: SEEDSET=0 US_SEASON_CONTROL=lumpy node scripts/simUsSeasonCentre.mjs
+c-flat: SEEDSET=0 US_SEASON_CONTROL=flat node scripts/simUsSeasonCentre.mjs
+c-tdform: US_SEASON_CONTROL=tdform node scripts/simUsSeasonCentre.mjs
+c-poscore: SEEDSET=0 US_SEASON_CONTROL=poscore node scripts/simUsSeasonCentre.mjs
+probe: node .rc/x/rv-probe.mjs

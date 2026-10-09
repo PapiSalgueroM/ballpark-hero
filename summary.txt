@@ -1,0 +1,9 @@
+vitest-nfl exit=0 7s |    Duration  6.09s (transform 1.83s, setup 227ms, collect 3.08s, tests 2.83s, environment 1.88s, prepare 974ms)
+vitest-view exit=0 15s |    Duration  14.13s (transform 6.13s, setup 1.02s, collect 11.56s, tests 9.30s, environment 3.00s, prepare 899ms)
+c-lumpy exit=1 7s | simUsSeasonCentre: 92 checks, 3 failed (control lumpy)
+c-flat exit=1 6s | simUsSeasonCentre: 92 checks, 1 failed (control flat)
+sim exit=0 28s | simUsSeasonCentre: 94 checks, 0 failed
+c-poscore exit=1 7s | simUsSeasonCentre: 92 checks, 1 failed (control poscore)
+probe exit=0 6s | rv-probe: done
+c-tdform exit=1 26s | simUsSeasonCentre: 94 checks, 1 failed (control tdform)
+tsc exit=0 73s | 
