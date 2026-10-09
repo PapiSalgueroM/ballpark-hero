@@ -1,0 +1,5 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+motion-castnow exit=1 6s | simLiveSimMotion: control castnow turned "a goal still on its way when the line up changes off the clock" red on an assertion (1 failed), as it must.
+vt-motion exit=0 36s |    Duration  35.33s (transform 2.18s, setup 64ms, collect 2.87s, tests 31.43s, environment 308ms, prepare 170ms)
+tsc exit=0 46s | 
+walk-1 exit=0 127s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
