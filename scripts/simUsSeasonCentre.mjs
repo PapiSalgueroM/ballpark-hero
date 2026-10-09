@@ -596,7 +596,8 @@ function scheduleProblems(slug, SB, row, eraId, s, named) {
                                                                 72 point floor lifts the old era a touch)
      his share of his team's
      points, 99th percentile    0.442, 0.437, 0.414, 0.416, 0.442   band: under 0.50
-     median wins by result, pooled (asserted only with 20 or more seasons): missed 29 (band 17 to 40),
+     median wins by result, pooled (asserted only on the five sets pooled, with 20 or more seasons; one set
+     alone prints them, see section 7): missed 29 (band 17 to 40),
      first round 46 (41 to 52), semis 49 (45 to 57), conference finals 54 (48 to 61), lost the Finals 56
      (50 to 64), champions 58 (52 to 67): every one inside the middle half of its band, so strengthFor's
      7.9 was kept as designed.
@@ -887,7 +888,14 @@ for (const slug of SPORTS) {
   const unknown = live.filter(r => r.teamResult !== o.missed && !o.results.includes(r.teamResult));
   tally('1', `${slug} every team result is the engine's missed word or one of its five`, unknown.slice(0, 5).map(r => JSON.stringify(r.teamResult)), live.length);
   tally('1', `${slug} games played sit in the engine's ranges`, live.filter(r => !d.gamesOk(r.games, r.year)).map(r => `${r.games} in ${r.year}`), live.length);
-  if (slug === 'nba') check('1', live.filter(r => nbaShortYear(r.year)).length >= 100, `nba short seasons (66 or 72 games) are in the population (${live.filter(r => nbaShortYear(r.year)).length}, floor 100: 220 measured on 2026-10-08)`);
+  if (slug === 'nba') {
+    /* The floor is a seed set's: 41 to 45 short seasons a seed set at 40 careers (seed sets 0 to 14 one at a
+       time, 2026-10-09; 220 over the first five on 2026-10-08), so 20 each. Typed as 100 for the run, it failed
+       every run of one seed set, which is how this harness is measured. */
+    const short = live.filter(r => nbaShortYear(r.year)).length;
+    const shortFloor = Math.ceil(20 * SEEDSETS.length * Math.min(1, CAREERS / 40));
+    check('1', short >= shortFloor, `nba short seasons (66 or 72 games) are in the population (${short}, floor ${shortFloor}: 20 a seed set, 41 to 45 measured)`);
+  }
   const depthN = o.results.map(t => live.filter(r => r.teamResult === t).length);
   console.log(`     by result: missed ${live.filter(r => r.teamResult === o.missed).length}, ${o.results.map((t, i) => `${depthN[i]}`).join(' / ')} (depth 0 to title)`);
   check('1', depthN.every(n => n > 0), `${slug} every playoff depth and a title are in the population`);
@@ -986,8 +994,16 @@ for (const slug of SPORTS) {
     const q1 = lo + (hi - lo) * 0.25; const q3 = lo + (hi - lo) * 0.75;
     const med = median(w);
     console.log(`     wins for "${t}": n ${w.length}, median ${med}, p10 ${pct(w, 0.1)}, p90 ${pct(w, 0.9)} (band ${lo} to ${hi}, middle half ${q1} to ${q3})`);
-    if (w.length >= 20) check('7', med >= q1 && med <= q3, `${slug} the median record for "${t}" sits in the middle half of its band`);
-    else console.log(`     (not asserted: ${w.length} seasons is too few for a median)`);
+    /* Round 1103, the lead's ruling pass: the NBA's medians are judged on the five seed sets pooled, which is
+       how the header measured them. One seed set alone holds 19 to 34 "Lost the NBA Finals" seasons, and over
+       twenty runs of one set (seed sets 0 to 14 on this round's tree, 0 to 4 on Release AP's) that median ran
+       53 to 57 against a middle half that starts at 53.5: under it once (seed set 0 here, 53), half a win over
+       it twice (54 and 54 on Release AP's), on trees whose pooled median was 56 every time. At that size the
+       check was a coin toss and said nothing about strengthFor. The NFL keeps its own rule (its header measured
+       a set at a time). */
+    const pooledEnough = slug !== 'nba' || SEEDSETS.length >= 5;
+    if (w.length >= 20 && pooledEnough) check('7', med >= q1 && med <= q3, `${slug} the median record for "${t}" sits in the middle half of its band`);
+    else console.log(`     (not asserted: ${w.length >= 20 ? `${SEEDSETS.length} seed set${SEEDSETS.length === 1 ? '' : 's'} of the five this median is judged on` : `${w.length} seasons is too few for a median`})`);
   });
   for (const era of d.eras) {
     const p = points[`${slug}|${era}`];
