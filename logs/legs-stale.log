@@ -1,0 +1,15 @@
+simCmQuickLegs (control stale): 18 careers (6 clubs x 3 seeds, seedset 0) x 2 seasons, each by quick sim, with and without the round
+  MEASURED with the round: 1635 matches, 1.68 changes a match (0.24 for an injury, 0.43 at the break, 1.00 for legs after it), bench used in 89.7% of matches; W 53.6% D 22.7% L 23.7%, 1.65 for and 0.93 against a match, 70.81 league points a season; 575.83 appearances a season shared by 21.56 men
+  MEASURED without it: 1657 matches, 0.73 changes a match (0.25 for an injury, 0.48 at the break, 0.00 for legs after it), bench used in 47.3% of matches; W 52.9% D 21.1% L 26.0%, 1.73 for and 0.99 against a match, 68.44 league points a season; 539.75 appearances a season shared by 21.03 men
+  MEASURED his rule, on 248 matches played again by hand (118 with a change for legs): 164 changes for legs, 111 with the match within a goal (mean strength +0.095) and 53 with my side two or more up (mean -0.526); 37 of them took a man on a yellow off; 118 matches played again with one fit man on the bench and 118 with the clock past his first look
+  ok gap (1 checks)
+  ok rule (164 checks)
+  ok order (164 checks)
+  FAIL fresher: 8 finding(s) on 164 checks. Tyrique George (fitness 100, morale 70) came on at 63' for Jack Grealish (100, 70) and is no fresher | Merlin Röhl (fitness 100, morale 70) came on at 68' for Hayden Hackney (100, 70) and is no fresher | Jake O'Brien (fitness 100, morale 70) came on at 74' for Jarrad Branthwaite (100, 70) and is no fresher
+  ok fit (164 checks)
+  ok reserve (164 checks)
+  ok thin (118 checks)
+  ok clock (118 checks)
+  ok manual (248 checks)
+  ok report (1635 checks)
+simCmQuickLegs: CONTROL stale FIRED, section fresher went red as it must (red in all: fresher)

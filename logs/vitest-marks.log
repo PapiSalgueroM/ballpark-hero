@@ -1,0 +1,18 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/rolesBrokenPromises.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 311[2mms[22m[39m
+ [32m✓[39m src/test/managerQuickSimLegs.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 755[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: a quick sim makes its subs (Round 1146)[2m > [22mbrings fresh legs on after the break, and the report the player lands on lists the change [33m 672[2mms[22m[39m
+ [32m✓[39m src/test/managerScorerMarks.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 396[2mms[22m[39m
+ [32m✓[39m src/test/cmMinuteLabel.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m src/test/managerPenaltyMarkers.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 249[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m37 passed[39m[22m[90m (37)[39m
+[2m   Start at [22m 18:58:16
+[2m   Duration [22m 8.39s[2m (transform 4.26s, setup 612ms, collect 12.28s, tests 1.72s, environment 4.14s, prepare 926ms)[22m
+

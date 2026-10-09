@@ -1,0 +1,107 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/clubManagerSlots.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 2850[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mtwo managers survive leaving the page, and either one opens [33m 311[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mthe screen asks before it deletes, and every tile says what it holds [33m 560[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: a parked era career[2m > [22mopens through the era boot, squads first [33m 529[2mms[22m[39m
+[90mstderr[2m | src/test/managerMatchPlans.test.tsx[2m > [22m[2mClub Manager saved match plans[2m > [22m[2mshows the worked example and current assignments then restores focus when the plan tile closes
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/clubManagerDeskCues.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 3627[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22ma plain renewal says who and the terms the save now holds, on the slam, once [33m 769[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22ma clause renewal names the exit clause the save wrote [33m 320[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22ma refused press and a save that moved some other way say nothing [33m 511[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22mwhile the cookie banner is unanswered the line sits above it, and drops back once it is answered [33m 322[2mms[22m[39m
+ [32m✓[39m src/test/managerMatchPlans.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 3578[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager saved match plans[2m > [22msaves applies and reloads the actual mounted tactics atomically through the real hook [33m 821[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager saved match plans[2m > [22mkeeps three named slots independent and replaces or deletes only the selected saved setup [33m 420[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager saved match plans[2m > [22mshows the worked example and current assignments then restores focus when the plan tile closes [33m 814[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerBracketMoment.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 680[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: one of him[2m > [22m[2mtwo real players whose names slug to one string stay two men
+[22m[39m  the pair: Éderson CM @Atalanta 35.5 | Ederson GK @Fenerbahçe 9.5
+  squad [33m26[39m -> [33m28[39m duplicate ids: []
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: one of him[2m > [22m[2mno club starts a career with two players under one id
+[22m[39m  Hertha BSC: 16 players, duplicate ids: []
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: one of him[2m > [22m[2mno club starts a career with two players under one id
+[22m[39m  AC Milan: 21 players, duplicate ids: []
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: one of him[2m > [22m[2mno club starts a career with two players under one id
+[22m[39m  Real Madrid: 26 players, duplicate ids: []
+
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 358[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mevery transition is on disk, and a reload loses nothing
+[22m[39m  a shape: on disk, 54251 bytes, week 0
+  a mentality: on disk, 54252 bytes, week 0
+  an XI change: on disk, 54254 bytes, week 0
+  a training plan: on disk, 54251 bytes, week 0
+  a squad role: on disk, 54258 bytes, week 0
+  a transfer status: on disk, 54284 bytes, week 0
+  a signing: on disk, 54721 bytes, week 0
+  kick off: on disk, 70543 bytes, week 0
+  the second half: on disk, 68321 bytes, week 1
+  leaving the report: on disk, 68321 bytes, week 1
+  a quick sim: on disk, 72312 bytes, week 2
+  leaving that report: on disk, 72312 bytes, week 2
+  a run of weeks: on disk, 85420 bytes, week 8
+  leaving that report too: on disk, 85420 bytes, week 8
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mevery transition is on disk, and a reload loses nothing
+[22m[39m  reloaded: identical, 85420 bytes
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mleaving the site mid match keeps the clock where it stood
+[22m[39m  on screen 19', save at 0'
+  after leaving, save at 19'
+
+ [32m✓[39m src/test/clubManagerDealMoment.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 3178[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the deal moment[2m > [22mslams DEAL DONE only after the flip, with the fee the save holds [33m 886[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the deal moment[2m > [22mplays nothing when the screen opens onto a deal that was already done [33m 640[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the deal moment[2m > [22mshakes once for a hijack and for a collapse, and never slams [33m 914[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the deal moment[2m > [22mplays once: a later render keeps the node and a new negotiation is clean [33m 440[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mleaving only the viewer, with the page still up, keeps it too
+[22m[39m  on screen 19', page still up, the match finished at week 1 and the save matches memory
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mStart Fresh is not undone by leaving straight afterwards
+[22m[39m  after Start Fresh and leaving, the slot is empty
+
+ [32m✓[39m src/test/clubManagerSave.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 2077[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the save[2m > [22mevery transition is on disk, and a reload loses nothing [33m 863[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the save[2m > [22mleaving the site mid match keeps the clock where it stood [33m 319[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the save[2m > [22mleaving only the viewer, with the page still up, keeps it too [33m 327[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerShootoutOrder.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerShootoutTile.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 1095[2mms[22m[39m
+   [33m[2m✓[22m[39m the shootout order tile[2m > [22mopens on request, adds on tap, removes on a second tap, and backs out [33m 656[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: the write when the page goes[2m > [22m[2mpagehide writes the career held in memory, with nothing else able to
+[22m[39m  after pagehide the disk holds 54125 bytes, memory 54125
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: the write when the page goes[2m > [22m[2mthe tab going hidden writes it too
+[22m[39m  after the tab went hidden the disk holds 53894 bytes, memory 53894
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: the write when the page goes[2m > [22m[2mtwo writes of one career are the same bytes
+[22m[39m  three writes, 54289 bytes each, identical
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: a refused write is said out loud[2m > [22m[2msaveFailed goes up when the store throws and comes down when a write lands
+[22m[39m  with a throwing store, saveFailed is true
+  with the store back, saveFailed is false and the disk matches memory: true
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: a refused write is said out loud[2m > [22m[2ma refused press on the transfer desk says why, and one that goes through clears it
+[22m[39m  second press on Serge Gnabry: "Serge Gnabry is already in your squad."
+  loan out again after the recall: "Christian Pulisic has already been out on loan once this season. One loan out a season."
+
+ [32m✓[39m src/test/clubManagerSaveSize.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 591[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerInternationals.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerSlots.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 647[2mms[22m[39m
+ [32m✓[39m src/test/managerHotSeatCarryOn.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 549[2mms[22m[39m
+ [32m✓[39m src/test/managerHotSeatCarryOnCard.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1602[2mms[22m[39m
+   [33m[2m✓[22m[39m Manager Hot Seat: the offer waits on the menu[2m > [22ma finished free run that kept the job reopens on its verdict with the offer [33m 337[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m14 passed[39m[22m[90m (14)[39m
+[2m      Tests [22m [1m[32m134 passed[39m[22m[90m (134)[39m
+[2m   Start at [22m 18:58:26
+[2m   Duration [22m 20.55s[2m (transform 4.81s, setup 1.59s, collect 18.05s, tests 20.89s, environment 9.45s, prepare 2.18s)[22m
+

@@ -1,0 +1,14 @@
+simCmOwnGoals (control double): 18 careers (6 clubs x 3 seeds, seedset 0) x 2 seasons, 1643 matches, 4398 goals
+  MEASURED own goals: 182 of 4398 goals (4.14%), 120 for me and 62 against; 3318 eligible, expected 103.7, z 7.81; 17 by a keeper; 171 of 1643 matches had one; 5.06 a season in my matches
+  MEASURED the man: 3 of the 62 against me were by a man standing at the back whose card says otherwise; the keeper holds 2045 places in 18000 keyed picks with four at the back (one in nine is 2000); section gone: 142 matches played again with 284 men at the back sent off, 94 own goals against me after it
+  MEASURED penalties: 379 of 4398 goals (8.62%) carry the flag every listing marks (P); direct free kicks 146 (3.32%); 0 own goals by a sub of theirs with no sheet to read his position from
+  MEASURED awards over the 36 seasons both careers agree on: my squad 120 goals and 75 assists down (3.33 and 2.08 a season); my top scorer 0.81 goals down a season on a mean of 22.47, a different man in 0; golden boot a different man in 0, player of the season in 0, world award in 0
+  ok digest (18 checks)
+  FAIL share: 1 finding(s) on 1 checks. 182 own goals on 3318 eligible goals, 7.81 standard deviations from the 103.7 a one in 32 draw gives
+  ok marks (4398 checks)
+  ok man (182 checks)
+  ok weights (6 checks)
+  ok gone (94 checks)
+  ok credit (1679 checks)
+  ok inflight (1 checks)
+simCmOwnGoals: CONTROL double FIRED, section share went red as it must (red in all: share)

@@ -1,0 +1,61 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-marks: node_modules/.bin/vitest run src/test/managerPenaltyMarkers.test.tsx src/test/managerScorerMarks.test.tsx src/test/managerQuickSimLegs.test.tsx src/test/cmMinuteLabel.test.ts src/test/rolesBrokenPromises.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-live: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx src/test/liveSimCelebration.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-cm: node_modules/.bin/vitest run src/test/clubManagerSave.test.tsx src/test/clubManagerSaveSize.test.tsx src/test/clubManagerShootoutOrder.test.ts src/test/clubManagerShootoutTile.test.tsx src/test/clubManagerBracketMoment.test.tsx src/test/clubManagerDecisions.test.tsx src/test/clubManagerSlots.test.tsx src/test/managerMatchPlans.test.tsx src/test/managerHotSeatCarryOn.test.ts src/test/managerHotSeatCarryOnCard.test.tsx src/lib/clubManagerInternationals.test.ts src/lib/clubManagerSlots.test.ts src/test/clubManagerDeskCues.test.tsx src/test/clubManagerDealMoment.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-season: node_modules/.bin/vitest run src/test/seasonCentreOwnGoals.test.tsx src/test/seasonCore.test.ts src/test/seasonCentreSlots.test.tsx src/test/miniPitchScene.test.ts --testTimeout=300000 --hookTimeout=120000
+og: node scripts/simCmOwnGoals.mjs
+og-off: CM_OWN_GOAL_CONTROL=off node scripts/simCmOwnGoals.mjs
+og-double: CM_OWN_GOAL_CONTROL=double node scripts/simCmOwnGoals.mjs
+og-attacker: CM_OWN_GOAL_CONTROL=attacker node scripts/simCmOwnGoals.mjs
+og-penalty: CM_OWN_GOAL_CONTROL=penalty node scripts/simCmOwnGoals.mjs
+og-digest: CM_OWN_GOAL_CONTROL=digest node scripts/simCmOwnGoals.mjs
+og-ambient: CM_OWN_GOAL_CONTROL=ambient node scripts/simCmOwnGoals.mjs
+og-striker: CM_OWN_GOAL_CONTROL=striker node scripts/simCmOwnGoals.mjs
+og-mystriker: CM_OWN_GOAL_CONTROL=mystriker node scripts/simCmOwnGoals.mjs
+og-evens: CM_OWN_GOAL_CONTROL=evens node scripts/simCmOwnGoals.mjs
+og-ungone: CM_OWN_GOAL_CONTROL=ungone node scripts/simCmOwnGoals.mjs
+legs: node scripts/simCmQuickLegs.mjs
+legs-off: CM_QUICK_LEGS_CONTROL=off node scripts/simCmQuickLegs.mjs
+legs-anyone: CM_QUICK_LEGS_CONTROL=anyone node scripts/simCmQuickLegs.mjs
+legs-unbooked: CM_QUICK_LEGS_CONTROL=unbooked node scripts/simCmQuickLegs.mjs
+legs-stale: CM_QUICK_LEGS_CONTROL=stale node scripts/simCmQuickLegs.mjs
+legs-anywhere: CM_QUICK_LEGS_CONTROL=anywhere node scripts/simCmQuickLegs.mjs
+legs-nokeep: CM_QUICK_LEGS_CONTROL=nokeep node scripts/simCmQuickLegs.mjs
+legs-lastman: CM_QUICK_LEGS_CONTROL=lastman node scripts/simCmQuickLegs.mjs
+legs-noclock: CM_QUICK_LEGS_CONTROL=noclock node scripts/simCmQuickLegs.mjs
+legs-ambient: CM_QUICK_LEGS_CONTROL=ambient node scripts/simCmQuickLegs.mjs
+soccer-og: CAREERS=120 SEEDSET=0 node scripts/simSoccerOwnGoals.mjs
+soccer-og-gate: OWN_GOAL_CONTROL=gate node scripts/simSoccerOwnGoals.mjs
+soccer-og-role: OWN_GOAL_CONTROL=role node scripts/simSoccerOwnGoals.mjs
+soccer-og-rng: OWN_GOAL_CONTROL=rng node scripts/simSoccerOwnGoals.mjs
+simCmQuickSubs-all: CM_QUICK_SUBS_CONTROL=all node scripts/simCmQuickSubs.mjs
+simRoles: TMPDIR=$(mktemp -d) node scripts/simRoles.mjs
+simRoles-cameofull: TMPDIR=$(mktemp -d) SIM_ROLES_CONTROL=cameofull node scripts/simRoles.mjs
+simRoles-benchplays: TMPDIR=$(mktemp -d) SIM_ROLES_CONTROL=benchplays node scripts/simRoles.mjs
+simStatsCentre: node scripts/simStatsCentre.mjs
+simLiveMatch: node scripts/simLiveMatch.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simClubManagerEraUcl: node scripts/simClubManagerEraUcl.mjs
+erauc-poolnames: CM_UCL_CONTROL=poolnames node scripts/simClubManagerEraUcl.mjs
+erauc-oldname: CM_UCL_CONTROL=oldname node scripts/simClubManagerEraUcl.mjs
+simMatchDetail: node scripts/simMatchDetail.mjs
+simLiveSim: node scripts/simLiveSim.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simClubManager: node scripts/simClubManager.mjs
+simClubManagerStaff: node scripts/simClubManagerStaff.mjs
+simCmStoppageTime: node scripts/simCmStoppageTime.mjs
+simHalftime: node scripts/simHalftime.mjs
+simAwardRaces: node scripts/simAwardRaces.mjs
+simAwards: node scripts/simAwards.mjs
+simPress: node scripts/simPress.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs

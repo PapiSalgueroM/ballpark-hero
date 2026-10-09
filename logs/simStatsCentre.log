@@ -1,0 +1,13 @@
+1) Every split sums back to the season line
+   26 players reconciled, worst rating drift 0.00
+   53 matches -> 691 appearances: 11 starters a match plus 108 men who came on, in every bucket
+2) The club record by competition reconciles
+   50 fixtures: 38 league, 1 cup, 11 Europe
+3) An old save grows splits without corrupting totals
+   14 stripped fixtures still bucket by label, 6 new ones carry the type
+4) The splits reset with the season
+   clean books on day one of season two
+5) Copy check
+   StatsScreen.tsx checked
+
+ALL STATS CENTRE CHECKS PASSED

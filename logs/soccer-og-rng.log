@@ -1,0 +1,3 @@
+CONTROL rng: effective copied source, intended ambient-rng AssertionError
+CHECKS by name: {"ambient-rng":1}
+simSoccerOwnGoals: 1 checks, 0 failed (control rng)

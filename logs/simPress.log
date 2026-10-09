@@ -1,0 +1,67 @@
+1) Four tones, ordered softest to hardest, in football words
+   🧊 Calm them · 🔥 Fire them up · 📣 Demand more · 💢 Hairdryer
+2) What the room is asking for changes week to week
+   3776 situations across five clubs and forty seasons:
+   calm 18.5% · rally 48.1% · demand 31.3% · blast 2.1%
+   the ask ranges 0.00 to 3.00 on a 0 to 3 line, mean 1.17, sd 0.76
+   8 different pre match reads were shown
+   pre match advantage across 1888 fixtures: mean 5.39, which is why a favourite is measured against 7 and not against 0
+3) Hammering one button all season is nothing like reading the room
+   Everton, 150 paired seasons an arm. Say nothing: 48.65 pts
+     best   : 52.85 pts, paired +4.21 (2se 2.22), squad morale 57.6
+     calm   : 47.81 pts, paired -0.84 (2se 2.02), squad morale 44.8
+     rally  : 49.25 pts, paired +0.61 (2se 1.98), squad morale 47.8
+     demand : 44.84 pts, paired -3.81 (2se 2.49), squad morale 35.3
+     blast  : 43.09 pts, paired -5.56 (2se 2.44), squad morale 30.3
+     3 of the four tones LOSE points when they are the only thing you ever say
+   Manchester City, 150 paired seasons an arm. Say nothing: 69.61 pts
+     best   : 70.70 pts, paired +1.09 (2se 1.74), squad morale 86.6
+     calm   : 67.24 pts, paired -2.37 (2se 1.80), squad morale 79.3
+     rally  : 70.01 pts, paired +0.41 (2se 1.42), squad morale 86.0
+     demand : 68.18 pts, paired -1.43 (2se 1.53), squad morale 82.5
+     blast  : 67.13 pts, paired -2.48 (2se 1.87), squad morale 78.3
+     3 of the four tones LOSE points when they are the only thing you ever say
+   pooled: reading the room is worth 2.65 points, the best single tone spammed 0.51, margin 2.14
+4) Two managers, the same football, one of them can read a room
+   Everton, 140 paired seasons an arm:
+     quiet  47.7 pts | board 47 | press 46 | morale 46.3 | sacked 49/140 | 0.0 talks, 31.8 questions
+     well   50.0 pts | board 60 | press 63 | morale 51.7 | sacked 30/140 | 80.1 talks, 16.0 questions
+     badly  41.9 pts | board 32 | press 40 | morale 28.4 | sacked 71/140 | 79.5 talks, 16.0 questions
+     reading it is worth 2.24 points against 2se of 2.35, getting it wrong costs 5.84 (2se 2.36)
+   Manchester City, 140 paired seasons an arm:
+     quiet  68.7 pts | board 69 | press 47 | morale 85.5 | sacked 19/140 | 0.0 talks, 40.9 questions
+     well   71.5 pts | board 84 | press 63 | morale 86.6 | sacked 6/140 | 99.9 talks, 17.6 questions
+     badly  65.6 pts | board 57 | press 39 | morale 76.3 | sacked 31/140 | 98.8 talks, 17.7 questions
+     reading it is worth 2.79 points against 2se of 1.99, getting it wrong costs 3.13 (2se 2.33)
+   best club effect 2.79 points (floor 2.00, measured 3.34 to 6.24 over four seed bases)
+   pooled over 280 paired seasons: reading it is worth 2.51 points (2se 1.54), getting it wrong costs 4.49 (2se 1.67)
+4b) The skip button and pretending the room does not exist are the same thing
+   Manchester City, 150 paired seasons: 0.00 points apart, -0.04 board confidence apart
+     no shows a season: 8.0 never looking, 8.8 ducking
+   Everton, 150 paired seasons: 0.00 points apart, -0.05 board confidence apart
+     no shows a season: 8.0 never looking, 9.0 ducking
+5) Every answer in the room is somebody's best answer
+   7 question types fired over thirty seasons: bid 34, bigGame 20, dropped 246, slump 42, request 156, roll 15, boardHeat 3
+   48 pairs of answers compared on dressing room, board, press and the pitch: 0 dominated
+   a promise made out loud was settled at the next final whistle and the boost was spent
+6) The board read about it in the morning
+   press patience: 0 -> 1.150 · 25 -> 1.075 · 50 -> 1.000 · 75 -> 0.925 · 100 -> 0.850
+   5: "They are after you" · 30: "Sharpening up" · 50: "Nobody has an opinion" · 70: "Onside" · 90: "They love you"
+   base 7000: 240 paired Everton seasons, paired difference 12.70 (2se 5.97)
+   base 9100: 240 paired Everton seasons, paired difference 6.23 (2se 6.52)
+   base 12400: 240 paired Everton seasons, paired difference 12.58 (2se 6.56)
+   720 paired Everton seasons over 3 seed bases: papers onside ends on 56.3 board confidence, papers against on 45.8
+   pooled paired difference 10.50 (2se 3.68)
+7) The same thing every week stops landing
+   49 identical team talks in a row: 46 of them landed on a squad that had heard it too often
+8) Old saves repair themselves, twice over, and play on
+   a pre round save repaired to a neutral press room, and running it again was a no op
+   a half migrated press room was clamped and filled in rather than thrown away
+   a pre round Ajax save played a full season and finished on press mood 47 with 7 questions gone by
+   after the summer: press mood 49, nothing pending, nothing said
+9) A manager who never says a word is where he always was
+   60 do nothing Everton seasons: 48.7 pts (2se 3.0), 1.35 transfer requests, sacked 19/60
+10) Copy check
+   12 files clean
+
+ALL PRESS AND TEAM TALK CHECKS PASSED
