@@ -1,0 +1,17 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+seam-sitover exit=1 10s | playUsCareerSaveSeam: 4 journeys, 36 checks, 4 failed (control sitover)
+seam-hidden exit=1 10s | playUsCareerSaveSeam: 4 journeys, 36 checks, 4 failed (control hidden)
+seam-stale exit=1 22s | playUsCareerSaveSeam: 4 journeys, 36 checks, 4 failed (control stale)
+seam exit=0 24s | playUsCareerSaveSeam: 12 journeys, 56 checks, 0 failed
+seam-keeptoast exit=1 15s | playUsCareerSaveSeam: 4 journeys, 36 checks, 4 failed (control keeptoast)
+seam-open exit=1 15s | playUsCareerSaveSeam: 8 journeys, 48 checks, 36 failed (control open)
+centre exit=0 69s | playUsSeasonCentre: 62 checks, 0 failed
+centre-noaction exit=1 69s | playUsSeasonCentre: 62 checks, 2 failed (control noaction)
+seam-raw exit=1 123s | playUsCareerSaveSeam: 4 journeys, 4 checks, 4 failed (control raw)
+centre-cover exit=1 69s | playUsSeasonCentre: 62 checks, 2 failed (control cover)
+centre-raw exit=1 85s | playUsSeasonCentre: 62 checks, 4 failed (control raw)
+centre-playfirst exit=1 64s | playUsSeasonCentre: 10 checks, 5 failed (control playfirst)
+centre-static exit=1 65s | playUsSeasonCentre: 62 checks, 6 failed (control static)
+centre-nohandover exit=1 88s | playUsSeasonCentre: 62 checks, 2 failed (control nohandover)
+centre-write exit=1 69s | playUsSeasonCentre: 62 checks, 6 failed (control write)
+centre-count exit=1 71s | playUsSeasonCentre: 62 checks, 2 failed (control count)
