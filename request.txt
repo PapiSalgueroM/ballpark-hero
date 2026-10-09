@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simWorldEditor: node scripts/simWorldEditor.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+aleague-offcurve: SIM_ALEAGUE_CONTROL=offcurve node scripts/simClubManagerALeague.mjs
+simClubManagerGathered: node scripts/simClubManagerGathered.mjs
+gathered-offcurve: GATHERED_CONTROL=offcurve node scripts/simClubManagerGathered.mjs
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs

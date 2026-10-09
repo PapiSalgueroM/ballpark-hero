@@ -1,0 +1,10 @@
+simCmShootoutOrder exit=1 2s | section 1's base (seed 782002) drew Espanyol, whose roster of 14 (0 keepers) cannot name an eleven, so their order would be read off nobody; pick a base seed whose first 
+simDeadlineDay exit=1 6s | simDeadlineDay: 3 failure(s)
+simWorldEditor exit=1 9s | simWorldEditor: 2469 checks, 2 failures
+aleague-offcurve exit=1 7s | simClubManagerALeague: 1 failure(s) under control offcurve
+simClubManagerALeague exit=0 7s | simClubManagerALeague: all checks passed
+simClubManagerGathered exit=0 2s | simClubManagerGathered: all checks passed (1 gathered league(s), 403 men, 1436 printed squad entries accounted for, 83 addresses, 5 cited facts, the old save)
+gathered-offcurve exit=1 2s | simClubManagerGathered: 1 failure(s) under control offcurve (B 1)
+simHarnessAnchors exit=0 43s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 82s | 
+simClubManagerNewLeagues exit=0 103s | simClubManagerNewLeagues: all checks passed
