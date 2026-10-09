@@ -1,0 +1,120 @@
+j1-real-quota-390 {
+ "name": "j1-real-quota-390",
+ "width": 390,
+ "height": 844,
+ "reduce": false,
+ "errors": [],
+ "steps": {
+  "loaded": "line=full notice=none toast=none banner=701..844 career=null consent=null gameTop=117",
+  "refused": "line=full notice=up toast=597..689 banner=701..844 career=null consent=null gameTop=117",
+  "afterRefusedRetry": "line=LEFT(spacer) notice=up toast=597..689 banner=701..844 career=null consent=null gameTop=117",
+  "later": "line=LEFT(spacer) notice=up toast=597..689 banner=701..844 career=null consent=null gameTop=117",
+  "afterRealRetry": "line=LEFT(spacer) notice=none toast=none banner=701..844 career=369 consent=null gameTop=117"
+ },
+ "filled": {
+  "keys": 49,
+  "err": null,
+  "len": 49
+ },
+ "freedKey": "__f256_42",
+ "toastRetryPressed": true,
+ "freedAll": 48,
+ "retrySavePressed": true
+}
+j2-sim-390-reduce {
+ "name": "j2-sim-390-reduce",
+ "width": 390,
+ "height": 844,
+ "reduce": true,
+ "errors": [],
+ "steps": {
+  "loaded": "line=full notice=none toast=none banner=701..844 career=null consent=null gameTop=117",
+  "refused": "line=full notice=up toast=597..689 banner=701..844 career=null consent=null gameTop=117",
+  "stillRefused": "line=full notice=up toast=597..689 banner=701..844 career=null consent=null gameTop=117",
+  "saved": "line=LEFT(spacer) notice=none toast=none banner=701..844 career=369 consent=null gameTop=117",
+  "answered": "line=LEFT(spacer) notice=none toast=none banner=none career=369 consent=essential gameTop=117"
+ },
+ "toastOverBanner": 0,
+ "toastOverNotice": 0,
+ "pressWhileRefused": true,
+ "pressWhenOpen": true,
+ "gameMoved": 0,
+ "essentialPressed": true
+}
+j3-sim-1280-motion {
+ "name": "j3-sim-1280-motion",
+ "width": 1280,
+ "height": 900,
+ "reduce": false,
+ "errors": [],
+ "steps": {
+  "loaded": "line=full notice=none toast=none banner=827..900 career=null consent=null gameTop=113",
+  "refused": "line=full notice=up toast=723..815 banner=827..900 career=null consent=null gameTop=113",
+  "stillRefused": "line=full notice=up toast=723..815 banner=827..900 career=null consent=null gameTop=113",
+  "saved": "line=LEFT(spacer) notice=none toast=none banner=827..900 career=369 consent=null gameTop=113",
+  "answered": "line=LEFT(spacer) notice=none toast=none banner=none career=369 consent=essential gameTop=113"
+ },
+ "toastOverBanner": 0,
+ "toastOverNotice": 0,
+ "pressWhileRefused": true,
+ "pressWhenOpen": true,
+ "gameMoved": 0,
+ "essentialPressed": true
+}
+j4-sim-390-motion {
+ "name": "j4-sim-390-motion",
+ "width": 390,
+ "height": 844,
+ "reduce": false,
+ "errors": [],
+ "steps": {
+  "loaded": "line=full notice=none toast=none banner=701..844 career=null consent=null gameTop=117",
+  "refused": "line=full notice=up toast=597..689 banner=701..844 career=null consent=null gameTop=117",
+  "stillRefused": "line=full notice=up toast=597..689 banner=701..844 career=null consent=null gameTop=117",
+  "saved": "line=LEFT(spacer) notice=none toast=none banner=701..844 career=370 consent=null gameTop=117",
+  "answered": "line=LEFT(spacer) notice=none toast=none banner=none career=370 consent=essential gameTop=117"
+ },
+ "toastOverBanner": 0,
+ "toastOverNotice": 0,
+ "pressWhileRefused": true,
+ "pressWhenOpen": true,
+ "gameMoved": 0,
+ "essentialPressed": true
+}
+j6-sim-1280-reduce {
+ "name": "j6-sim-1280-reduce",
+ "width": 1280,
+ "height": 900,
+ "reduce": true,
+ "errors": [],
+ "steps": {
+  "loaded": "line=full notice=none toast=none banner=827..900 career=null consent=null gameTop=113",
+  "refused": "line=full notice=up toast=723..815 banner=827..900 career=null consent=null gameTop=113",
+  "stillRefused": "line=full notice=up toast=723..815 banner=827..900 career=null consent=null gameTop=113",
+  "saved": "line=LEFT(spacer) notice=none toast=none banner=827..900 career=369 consent=null gameTop=113",
+  "answered": "line=LEFT(spacer) notice=none toast=none banner=none career=369 consent=essential gameTop=113"
+ },
+ "toastOverBanner": 0,
+ "toastOverNotice": 0,
+ "pressWhileRefused": true,
+ "pressWhenOpen": true,
+ "gameMoved": 0,
+ "essentialPressed": true
+}
+j5-kept-390 {
+ "name": "j5-kept-390",
+ "width": 390,
+ "height": 844,
+ "reduce": true,
+ "errors": [],
+ "steps": {
+  "loaded": "line=full notice=none toast=none banner=701..844 career=null consent=null gameTop=117",
+  "answered": "line=full notice=none toast=none banner=none career=null consent=null gameTop=117",
+  "lineLeft": "line=LEFT(spacer) notice=none toast=none banner=none career=null consent=null gameTop=117",
+  "reloaded": "line=none notice=none toast=none banner=136..272 career=null consent=null gameTop=89"
+ },
+ "essentialPressed": true,
+ "freedAll": 49,
+ "inertPress": true
+}
+rr-walk: 6 journeys walked, supabase.co aborted 7

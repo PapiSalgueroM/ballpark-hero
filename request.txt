@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: node .rc/x/rr-walk.mjs
+centre-shots: SHOTS=$RC_OUT PORT=4431 node scripts/playUsSeasonCentre.mjs
