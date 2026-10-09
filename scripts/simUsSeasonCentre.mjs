@@ -530,31 +530,45 @@ function scheduleProblems(slug, SB, row, eraId, s, named) {
    A refused season is not a wrong season (the player gets the plain tile), but more than 1 in 100 would
    be a hole a player meets, so that is where the band sits. */
 /* MEASURED 2026-10-09 (Round 1147, the NFL bound), SEEDSET 0 to 4 one at a time on a GitHub runner,
-   CAREERS 40 (plus 8 targeted) a sport. NFL, 490 to 510 open seasons a set, 2508 pooled:
+   CAREERS 40 (plus 8 targeted) a sport. NFL, 490 to 510 open seasons a set, 2508 pooled, on the ten
+   drive score law with his touchdown days matched to his team's scores:
      seasons refused            0, 0, 0, 0, 0 of about 500      band: at most 1%
-     no repair needed           84.3, 80.3, 81.0, 80.8, 81.2 %  band: at least 70% (headroom 10.3 points
+     no repair needed           80.0, 78.5, 81.0, 85.0, 81.8 %  band: at least 70% (headroom 8.5 points
                                                                 under the lowest set; the sets spread
-                                                                over 4.0). A football record band is
+                                                                over 6.5). A football record band is
                                                                 four or five wins wide and 17 games
                                                                 scatter by about two, so more seasons
                                                                 need a nudge than in the NBA.
-     points a team game, now    22.93, 22.91, 22.92, 22.80, 22.90
-     points a team game, y2005  22.54, 22.76, 23.00, 23.19, 22.86   band: 21.0 to 24.5 (the law's own
+     points a team game, now    22.82, 22.94, 22.83, 22.91, 22.85
+     points a team game, y2005  22.97, 22.88, 22.96, 22.79, 22.91   band: 21.0 to 24.5 (the law's own
                                                                 mean is 22.5: 2.6 touchdowns at seven
                                                                 and 1.445 field goals; his floor lifts
-                                                                it a little; headroom 1.3 each side)
-     level games                0.13, 0.10, 0.16, 0.15, 0.13 %  band: under 1%
-     touchdowns not worth seven 1.7, 1.6, 1.7, 1.6, 1.6 %       band: under 5% (sevens and threes first)
-     a kicker makes 5 or 6      2.0, 2.2, 2.1, 1.8, 2.9 % of    band: under 8% (his makes a game peak
-     in a game                  his games                       at 1 and 2: 0: 19 to 22%, 1: 27 to 30%,
-                                                                2: 27 to 31%, 3: 14 to 15%, 4: 4 to 6%)
-     his touchdowns are the whole of his team's score in 5.4 to 6.1% of the games he played (printed)
-     median wins by result, a set at a time: missed 6, 6, 6, 6, 6 (band 2 to 9); Wild Card 10, 11, 11, 10,
-     10 (9 to 12); Divisional 12, 11, 11, 11, 11 (10 to 13); Conference Championship 13, 12, 12, 12, 13
-     (11 to 14); lost the Super Bowl 14, 13, 12, 14, 13 (11 to 15); champions 12, 12, 13, 13, 14 (11 to
-     15): every one inside the middle half of its band, so strengthFor's 14 was kept as designed (a
-     game's margin has a standard deviation of about 16.8 points under this law, which gives 14.1).
-     The last two results have 12 to 23 seasons a set and are asserted only at 20 or more.
+                                                                it a little; headroom 1.5 each side)
+     a side on 40 or more       5.4, 5.5, 5.5, 5.5, 5.5 % of    band: under 7% (49 or more: 0.7 to 0.9%;
+                                team games                      shut out: 0.6 to 0.8%). The first draft
+                                                                drew touchdowns from a Poisson count;
+                                                                by arithmetic, not by measurement, that
+                                                                gives a side seven touchdowns 1.7% of
+                                                                the time at even strength against
+                                                                0.45% for ten drives.
+     level games                0.10, 0.14, 0.11, 0.11, 0.17 %  band: under 1%
+     touchdowns not worth seven 1.9, 1.6, 1.8, 1.6, 1.6 %       band: under 5% (sevens and threes first)
+     a kicker makes 5 or 6      1.9, 1.6, 1.8, 1.7, 1.1 % of    band: under 8% (his makes a game peak
+     in a game                  his games                       at 1 and 2: 0: 18 to 21%, 1: 29 to 30%,
+                                                                2: 28 to 31%, 3: 13 to 16%, 4: 4 to 5%)
+     his team's points a game on his two touchdown days, less his blank days (quarterbacks, backs and
+     receivers): 8.4, 8.3, 7.0, 7.6, 7.9 with the match; 1.3, 1.1, 0.5, 1.0, 1.8 with control `days`
+     (his lines left where the core dealt them)                 band: at least 4.5 (2.5 under the lowest
+                                                                set, 2.7 over the control's highest)
+     his touchdowns are the whole of his team's score in 1.1 to 1.6% of the games he played (4.3 to
+     4.9% under control `days`), printed
+     median wins by result, a set at a time: missed 6, 6, 6, 5, 6 (band 2 to 9); Wild Card 11, 10, 10, 11,
+     11 (9 to 12); Divisional 11, 11, 12, 11, 11 (10 to 13); Conference Championship 13, 12, 12, 13, 13
+     (11 to 14); lost the Super Bowl 14, 13, 13, 13, 14 (11 to 15); champions 13, 13, 13, 12, 14 (11 to
+     15): every one inside the middle half of its band, so strengthFor's 11.3 was kept as worked out (a
+     game's margin has a standard deviation of about 13.4 points under this law and a unit of edge is
+     worth 0.7 of a point). The last two results have 12 to 23 seasons a set and are asserted only at 20
+     or more.
      named playoff rounds, a set: 294 to 398 before the Super Bowl and 23 to 36 in it. */
 const REFUSED_MAX = { nba: 0.01, nfl: 0.01 };
 const NO_REPAIR_MIN = { nba: 0.8, nfl: 0.7 };
@@ -564,8 +578,8 @@ const NFL_POINTS = [21.0, 24.5];
 const NFL_LEVEL_MAX = 0.01;
 const NFL_ODD_TD_MAX = 0.05;
 const NFL_BIG_KICK_MAX = 0.08;
-const NFL_FORTY_MAX = 1;
-const NFL_TD_DAY_MIN = -99;
+const NFL_FORTY_MAX = 0.07;
+const NFL_TD_DAY_MIN = 4.5;
 
 /* ─── Run B: every season observed right after it is played ─── */
 const seen = [];

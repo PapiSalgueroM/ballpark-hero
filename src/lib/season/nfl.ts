@@ -55,7 +55,8 @@ const FG_A_DRIVE = 0.1445;
 /** [his side, the other side] for a side `edge` stronger. Each side has ten
  *  drives; a drive ends in a touchdown (seven), a field goal (three) or
  *  nothing, so a side's score scatters like a football score does (a Poisson
- *  count of touchdowns put 49 or more on the board far too often). A lone
+ *  count of touchdowns gives a side seven of them about four times as often
+ *  at even strength: 1.7% against 0.45%). A lone
  *  field goal becomes two (so no repair of the core's can make a 4, which no
  *  drive list can), and the law itself never returns a level game. */
 export function nflScore(edge: number, home: boolean, rng: Rng): [number, number] {
