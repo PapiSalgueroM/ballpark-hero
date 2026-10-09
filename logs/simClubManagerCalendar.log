@@ -1,0 +1,43 @@
+1) Sim to a day: the week pointer lands on the target, never past it, every league round on the way in the log
+   66 taps over 11 saves: 52 landed on the day, 14 halted (window 11, season over 0, sacked 0, approach 3)
+2) Fast forwards: each button equals the tap on its day, save for save, and Next match equals the engine's own single step
+   121 button/tap pairs, 187 save compares with id serials masked
+3) Windows: the grid's deadline day is the entry the engine shut the market on, January is drawn in January, and both sit near the real dates
+   Everton now summer strip: "The summer window is open. Deadline day is Sat 29 Aug, your 4th match of the season."
+   Everton now (20 clubs): summer deadline 2026-08-29 (real 2026-09-01), January opens 2027-01-02 (real 2027-01-01), deadline 2027-01-23 (real 2027-02-01)
+   Arsenal: sacked before January on 1 seed(s), re-run on the next; a sacking is the game working, not the calendar
+   Arsenal now (20 clubs): summer deadline 2026-08-26 (real 2026-09-01), January opens 2027-01-02 (real 2027-01-01), deadline 2027-01-23 (real 2027-02-01)
+   Augsburg now (18 clubs): summer deadline 2026-08-29 (real 2026-09-01), January opens 2027-01-02 (real 2027-01-01), deadline 2027-01-23 (real 2027-02-01)
+   Norwich City now (24 clubs): summer deadline 2026-08-29 (real 2026-09-01), January opens 2027-01-16 (real 2027-01-01), deadline 2027-02-06 (real 2027-02-01)
+   Barcelona era2015 (20 clubs): summer deadline 2015-08-26 (real 2015-09-01), January opens 2016-01-02 (real 2016-01-01), deadline 2016-01-16 (real 2016-02-01)
+   Juventus era2015 (20 clubs): summer deadline 2015-08-26 (real 2015-09-01), January opens 2016-01-02 (real 2016-01-01), deadline 2016-01-16 (real 2016-02-01)
+   Barcelona era2010 (20 clubs): summer deadline 2010-09-01 (real 2010-08-31), January opens 2011-01-01 (real 2011-01-01), deadline 2011-01-15 (real 2011-01-31)
+   Chelsea era2005 (20 clubs): summer deadline 2005-08-31 (real 2005-08-31), January opens 2006-01-07 (real 2006-01-01), deadline 2006-01-21 (real 2006-01-31)
+   Liverpool: sacked before January on 1 seed(s), re-run on the next; a sacking is the game working, not the calendar
+   Liverpool era2020 summer strip: "The summer window is open. Deadline day is Sat 3 Oct, your 7th match of the season."
+   Liverpool era2020 January strip: "The January window is open. Deadline day is Sat 23 Jan, your 3rd match after it opens."
+   Liverpool era2020 (20 clubs): summer deadline 2020-10-03 (real 2020-10-05), January opens 2021-01-02 (real 2021-01-01), deadline 2021-01-23 (real 2021-02-01)
+   Bayern Munich era2020 summer strip: "The summer window is open. Deadline day is Sat 3 Oct, your 5th match of the season."
+   Bayern Munich era2020 January strip: "The January window is open. Deadline day is Sat 23 Jan, your 3rd match after it opens."
+   Bayern Munich era2020 (18 clubs): summer deadline 2020-10-03 (real 2020-10-05), January opens 2021-01-09 (real 2021-01-01), deadline 2021-01-23 (real 2021-02-01)
+   Lille era2020 summer strip: "The summer window is open. Deadline day is Sat 3 Oct, your 9th match of the season."
+   Lille era2020 January strip: "The January window is open. Deadline day is Sat 23 Jan, your 3rd match after it opens."
+   Lille era2020 (20 clubs): summer deadline 2020-10-03 (real 2020-10-05), January opens 2021-01-02 (real 2021-01-01), deadline 2021-01-23 (real 2021-02-01)
+   22 of 22 deadline days matched the engine (6 of 11 August projections of January held); gaps to the real windows: summer up to 6 days, January open up to 8 (Championship 15), January deadline up to 16
+   22 window strips checked against the engine's deadline day and match count
+   1 long league save(s) checked for opening early enough in January: Norwich City now 2027-01-16
+4) Match days: the opponent and venue are the engine's own, rounds ahead are maybes, Europe is absent when I am not in it, played days carry the log
+   411 match days named, 0 draws to come, 87 rounds ahead drawn as maybes, 66 played days carry the log, 29 entries I am out of stay off the grid
+5) Grid: seven columns, at most six rows, every day of the season once, today once
+   10 months drawn, today once, no month over 42 cells
+6) Late season: 2020-21 opens on each league's real Saturday, crams rounds into midweek rather than drifting, ends by the real final weekend, and no other season moves a day
+   Liverpool (premier2020): opens 2020-09-12, 3 league rounds in midweek (2020-09-16, 2020-09-30, 2020-12-30), January window 2021-01-02, last league round 2021-05-15 (7 days before the real final weekend), summer window 7 matches to 2020-10-03 (four would shut it on 2020-09-23, 12 days early)
+   Barcelona (laliga2020): opens 2020-09-12, 3 league rounds in midweek (2020-09-16, 2020-09-30, 2020-12-30), January window 2021-01-02, last league round 2021-05-15 (7 days before the real final weekend), summer window 7 matches to 2020-10-03 (four would shut it on 2020-09-23, 12 days early)
+   Juventus (seriea2020): opens 2020-09-19, 3 league rounds in midweek (2020-09-23, 2020-10-07, 2021-01-06), January window 2021-01-09, last league round 2021-05-22 (0 days before the real final weekend), summer window 5 matches to 2020-10-03 (four would shut it on 2020-09-30, 5 days early)
+   Bayern Munich (bundesliga2020): opens 2020-09-19, 2 league rounds in midweek (2020-09-23, 2021-01-06), January window 2021-01-09, last league round 2021-05-08 (14 days before the real final weekend), summer window 5 matches to 2020-10-03 (four would shut it on 2020-09-30, 5 days early)
+   Lille (ligue12020): opens 2020-08-22, 0 league rounds in midweek (none), January window 2021-01-02, last league round 2021-05-15 (7 days before the real final weekend), summer window 9 matches to 2020-10-03 (four would shut it on 2020-09-09, 26 days early)
+   10 seasons outside 2020-21 checked: every one draws the plain rule's dates and a four match window
+   the plain rule over 4 calendar shapes and 28 world years: digest 61af451194fa4e13 (pinned 61af451194fa4e13, taken before this round)
+   joining Arsenal two entries in: in 2020-21 the summer window runs 7 matches (5 left), in 2021-22 4 (2 left, window summer)
+   a pre-round 2020-21 save migrated at week 9: 1 break(s) already played stay behind it, 4 of 4 played once each by the end, its four match window shut on entry 3 and the grid agrees
+simClubManagerCalendar: all green
