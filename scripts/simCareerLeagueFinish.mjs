@@ -107,9 +107,10 @@ const mod = await import('${enginePath.replaceAll('\\', '/')}');
 export const engine = mod;
 export const league = await import('${lib}soccerCareerLeague.ts');
 export const eras = await import('${lib}careerEras.ts');
+export const world = await import('${lib}soccerCareerLeagueWorld.ts');
 `);
 await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: OUT, logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT });
-const { engine, league, eras } = await import(pathToFileURL(OUT).href);
+const { engine, league, eras, world } = await import(pathToFileURL(OUT).href);
 try { fs.rmSync(WORK, { recursive: true, force: true }); } catch { /* temp only */ }
 const NEED = ['initCareer', 'advanceYouthYear', 'acceptOffer', 'advanceProSeason', 'dismissSummary', 'dismissNewspaper', 'dismissDebut', 'dismissWorldCup', 'dismissRivalryEvent', 'dismissBallonDor', 'applyEventChoice', 'dismissMoralDilemma', 'dismissSocialMediaPhase', 'dismissAppealResult', 'applyBdorSpeech', 'applyWorldCupSpeech', 'acceptRetirementSuggestion', 'stayAtClub', 'applyRehabChoice', 'FALLBACK_CLUBS'];
 for (const k of NEED) if (!engine[k]) { console.error('engine export missing: ' + k + ', so nothing below measures anything'); process.exit(1); }
@@ -358,7 +359,16 @@ const leagueOf = name => (clubs.find(c => c.name === name) || {}).league || '';
 /* Round 1037: a season is played in the league the club was really in that
    year (the league ledgers before 2026-27), not today's label */
 const seasonLeague = r => league.leagueKeyInYear({ name: r.club, league: leagueOf(r.club) }, r.year) ?? '';
-const sized = seasons.filter(r => league.leagueSizeFor(seasonLeague(r), r.year));
+/* Release AQ (Round 1175, the league world): from 2026-27 a season in one of
+   the five two division models is played in the division the CAREER has the
+   club in, and the row saves that field (leagueWorld.members). A club that
+   went down from the Premier League plays a 24 club Championship season, so
+   its verified size is the saved field's and not its static label's: read
+   against the label, section 2 called 6 right sizes wrong. A row whose
+   saved field does not read (readLeagueWorldSeason refuses a size that
+   disagrees with its own field) falls back to the label and still fails. */
+const seasonSize = r => world.readLeagueWorldSeason(r)?.members.length ?? league.leagueSizeFor(seasonLeague(r), r.year);
+const sized = seasons.filter(r => seasonSize(r));
 console.log(`pool: ${careers} careers, ${seasons.length} playing seasons, ${sized.length} in a league with a verified size, ${seasons.filter(r => r.leagueTitle).length} titles`);
 if (seasons.length < careers * 4) { section = 1; fail(`only ${seasons.length} playing seasons over ${careers} careers, the walk is not reaching the season loop`); }
 
@@ -411,7 +421,7 @@ console.log('2) never above the league size, never below 1, and a verified leagu
 {
   let over = 0, under = 0, missing = 0, wrongSize = 0, unsizedClaim = 0, cutShort = 0;
   for (const r of seasons) {
-    const size = league.leagueSizeFor(seasonLeague(r), r.year);
+    const size = seasonSize(r);
     if (r.leagueFinish !== undefined && r.leagueFinish < 1) under += 1;
     if (r.leagueSize !== undefined && r.leagueFinish > r.leagueSize) over += 1;
     /* A severe injury stops the season at the rehab choice and drops the

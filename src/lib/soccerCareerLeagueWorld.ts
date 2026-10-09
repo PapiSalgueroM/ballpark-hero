@@ -34,6 +34,8 @@ export const PYRAMIDS = [
 ];
 const clubKey = (name: string) => (SC_CLUB_CANON[name] ?? name).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
 const same = (a: string, b: string) => clubKey(a) === clubKey(b);
+/** The one spelling a club is compared by here (alias, accents and case gone). */
+export function clubKeyOf(name: string): string { return clubKey(name); }
 const initialMembers = (league: string) => [...(CAREER_LOWER_CLUBS[league] ?? CAREER_LEAGUE_LADDER[league]?.flat() ?? [])];
 const pyramidFor = (league: string) => PYRAMIDS.find(p => p.upper === league || p.lower === league);
 
