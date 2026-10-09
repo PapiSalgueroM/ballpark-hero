@@ -1,0 +1,44 @@
+# AP2 fix pass on release-ap-int after merging origin/main: the type gate, the WHOLE vitest suite, the viewer harness on every seed set and with every control (each must exit 1), the fences
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+usc: node scripts/simUsSeasonCentre.mjs
+usc-set0: SEEDSET=0 node scripts/simUsSeasonCentre.mjs
+usc-set1: SEEDSET=1 node scripts/simUsSeasonCentre.mjs
+usc-set2: SEEDSET=2 node scripts/simUsSeasonCentre.mjs
+usc-set3: SEEDSET=3 node scripts/simUsSeasonCentre.mjs
+usc-set4: SEEDSET=4 node scripts/simUsSeasonCentre.mjs
+c-oddsack-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=oddsack node scripts/simUsSeasonCentre.mjs
+c-oddsack-all-must-exit-1: US_SEASON_CONTROL=oddsack node scripts/simUsSeasonCentre.mjs
+c-stream-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=stream node scripts/simUsSeasonCentre.mjs
+c-record-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=record node scripts/simUsSeasonCentre.mjs
+c-length-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=length node scripts/simUsSeasonCentre.mjs
+c-stage-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=stage node scripts/simUsSeasonCentre.mjs
+c-names-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=names node scripts/simUsSeasonCentre.mjs
+c-window-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=window node scripts/simUsSeasonCentre.mjs
+c-formula-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=formula node scripts/simUsSeasonCentre.mjs
+c-conf-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=conf node scripts/simUsSeasonCentre.mjs
+c-hot-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=hot node scripts/simUsSeasonCentre.mjs
+c-static-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=static node scripts/simUsSeasonCentre.mjs
+c-sum-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=sum node scripts/simUsSeasonCentre.mjs
+c-kick-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=kick node scripts/simUsSeasonCentre.mjs
+c-nflstage-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=nflstage node scripts/simUsSeasonCentre.mjs
+c-nflformula-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=nflformula node scripts/simUsSeasonCentre.mjs
+c-days-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=days node scripts/simUsSeasonCentre.mjs
+c-poscore-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=poscore node scripts/simUsSeasonCentre.mjs
+c-nflheld-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=nflheld node scripts/simUsSeasonCentre.mjs
+c-lumpy-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=lumpy node scripts/simUsSeasonCentre.mjs
+c-flat-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=flat node scripts/simUsSeasonCentre.mjs
+c-tdform-must-exit-1: US_SEASON_CONTROL=tdform node scripts/simUsSeasonCentre.mjs
+c-minutes-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=minutes node scripts/simUsSeasonCentre.mjs
+c-order-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=order node scripts/simUsSeasonCentre.mjs
+c-points-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=points node scripts/simUsSeasonCentre.mjs
+c-forty-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=forty node scripts/simUsSeasonCentre.mjs
+c-level-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=level node scripts/simUsSeasonCentre.mjs
+c-oddtd-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=oddtd node scripts/simUsSeasonCentre.mjs
+c-bigkick-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=bigkick node scripts/simUsSeasonCentre.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+dashes: bash -c "git diff origin/main HEAD -- src index.html scripts | grep -c -P '^\+.*[\x{2013}\x{2014}]'; true"
