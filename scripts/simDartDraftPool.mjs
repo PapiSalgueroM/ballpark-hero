@@ -183,6 +183,8 @@ console.log('1) the pool is the top 2,000 in two pages, and the old 900 are stil
   if (after.stormFloor !== before.stormFloor || !(after.stormFloor > 0)) fail(`the storm floor is ${after.stormFloor}M after and ${before.stormFloor}M before; it must be the same, and above zero`);
   const cheapest = arm => arm.current[arm.current.length - 1].marketValue;
   console.log(`   the cheapest man: ${cheapest(before)}M before, ${cheapest(after)}M after; the storm floor is ${after.stormFloor}M in both`);
+  const wire = n => Buffer.byteLength(JSON.stringify(byValue.slice(0, n).map(({ player_name, position, age, nationality, club, market_value_usd, goals, assists }) => ({ player_name, position, age, nationality, club, market_value_usd, goals, assists }))));
+  console.log(`   what the pool costs to read, as JSON before compression: ${(wire(900) / 1024).toFixed(0)} KiB in one request before, ${(wire(2000) / 1024).toFixed(0)} KiB over two requests after`);
   const src = stripComments(read(LIB_FILE));
   if (/\.limit\(\s*900\s*\)/.test(src)) fail('dartDraft.ts still asks for limit(900)');
   if (/Top-450/.test(read(LIB_FILE))) fail('dartDraft.ts still calls the pool "Top-450"');
@@ -279,7 +281,6 @@ console.log('5) the mystery zone is where the deeper pool shows');
   console.log(`   names the three could be, summed over the 11 slots: ${reachBefore} before, ${reachAfter} after`);
   console.log(`   the best of the three is rated ${mean(best0).toFixed(1)} on average before (median ${median(best0)}), ${mean(best1).toFixed(1)} after (median ${median(best1)})`);
   if (reachAfter <= reachBefore && CONTROL !== 'pool900') fail('the mystery zone reaches no more names than before, so the bigger pool is not showing anywhere');
-  globalThis.__MYSTERY__ = { before: mean(best0), after: mean(best1) };
 }
 
 console.log('6) The Machine is the opponent it was');
