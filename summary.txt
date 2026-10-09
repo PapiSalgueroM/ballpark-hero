@@ -1,0 +1,10 @@
+simCmRatingShape exit=0 0s | simCmRatingShape: green. One curve, every file on it, ages for August 2026, and the order inside a club is nearer to who was played.
+simDeadlineDay exit=1 6s | simDeadlineDay: 3 failure(s)
+simBoardObjectives exit=1 1s | simBoardObjectives: 1 failure
+simCreateClub exit=1 8s | simCreateClub: 1 failure
+simClubManagerCalendar exit=1 29s | simClubManagerCalendar: 1 FAILURES
+tsc exit=0 75s | 
+simCustomClubValues exit=1 76s | simCustomClubValues: 25 checks, 1 failure (sections 1)
+simCareerClubPool exit=1 8s | simCareerClubPool: 14 failure(s) in section(s) 1, 4, 4L
+simCareerLeagueSeasons exit=1 12s | simCareerLeagueSeasons: 1 failures (sections c)
+simEras exit=1 553s | 5 FAILURES

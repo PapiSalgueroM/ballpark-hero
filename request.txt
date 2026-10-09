@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simCmRatingShape: node scripts/simCmRatingShape.mjs
+simCustomClubValues: node scripts/simCustomClubValues.mjs
+simBoardObjectives: node scripts/simBoardObjectives.mjs
+simCreateClub: node scripts/simCreateClub.mjs
+simClubManagerCalendar: node scripts/simClubManagerCalendar.mjs
+simEras: node scripts/simEras.mjs
+simCareerClubPool: node scripts/simCareerClubPool.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
