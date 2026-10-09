@@ -1,0 +1,10 @@
+simCmQuickLegs (control off): 18 careers (6 clubs x 3 seeds, seedset 0) x 2 seasons, each by quick sim, with and without the round
+  MEASURED with the round: 1659 matches, 0.70 changes a match (0.24 for an injury, 0.46 at the break, 0.00 for legs after it), bench used in 46.1% of matches; W 53.9% D 20.3% L 25.9%, 1.73 for and 0.99 against a match, 69.11 league points a season; 539.17 appearances a season shared by 20.89 men
+  MEASURED without it: 1659 matches, 0.70 changes a match (0.24 for an injury, 0.46 at the break, 0.00 for legs after it), bench used in 46.1% of matches; W 53.9% D 20.3% L 25.9%, 1.73 for and 0.99 against a match, 69.11 league points a season; 539.17 appearances a season shared by 20.89 men
+  MEASURED his rule, on 248 matches played again by hand (0 with a change for legs): 0 changes for legs, 0 with the match within a goal (mean strength n/a) and 0 with my side two or more up (mean n/a)
+  FAIL gap: 1 finding(s) on 1 checks. the bench is used in 46.1% of quick sims with the round and 46.1% without it, under the 20 points the round must add
+  ok rule (0 checks)
+  ok reserve (0 checks)
+  ok manual (248 checks)
+  ok report (1659 checks)
+simCmQuickLegs: CONTROL off FIRED, section gap went red as it must (red in all: gap)

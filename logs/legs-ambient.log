@@ -1,0 +1,10 @@
+simCmQuickLegs (control ambient): 18 careers (6 clubs x 3 seeds, seedset 0) x 2 seasons, each by quick sim, with and without the round
+  MEASURED with the round: 1637 matches, 1.74 changes a match (0.23 for an injury, 0.43 at the break, 1.08 for legs after it), bench used in 91.4% of matches; W 54.2% D 21.7% L 24.1%, 1.69 for and 0.93 against a match, 69.50 league points a season; 579.42 appearances a season shared by 21.69 men
+  MEASURED without it: 1659 matches, 0.70 changes a match (0.24 for an injury, 0.46 at the break, 0.00 for legs after it), bench used in 46.1% of matches; W 53.9% D 20.3% L 25.9%, 1.73 for and 0.99 against a match, 69.11 league points a season; 539.17 appearances a season shared by 20.89 men
+  MEASURED his rule, on 3 matches played again by hand (0 with a change for legs): 0 changes for legs, 0 with the match within a goal (mean strength n/a) and 0 with my side two or more up (mean n/a)
+  ok gap (1 checks)
+  ok rule (0 checks)
+  ok reserve (0 checks)
+  FAIL manual: 3 finding(s) on 3 checks. Everton seed 11461000, match 1 (Sunderland v Everton): the report of the quick sim is not the report of the same changes made by hand | Everton seed 11565729, match 1 (Everton v Crystal Palace): the report of the quick sim is not the report of the same changes made by hand | Everton seed 11670458, match 1 (Everton v Coventry City): the report of the quick sim is not the report of the same changes made by hand
+  ok report (1637 checks)
+simCmQuickLegs: CONTROL ambient FIRED, section manual went red as it must (red in all: manual)

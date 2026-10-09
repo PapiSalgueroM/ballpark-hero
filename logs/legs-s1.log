@@ -1,0 +1,10 @@
+simCmQuickLegs: 18 careers (6 clubs x 3 seeds, seedset 1) x 2 seasons, each by quick sim, with and without the round
+  MEASURED with the round: 1651 matches, 1.75 changes a match (0.23 for an injury, 0.42 at the break, 1.10 for legs after it), bench used in 92.2% of matches; W 53.9% D 21.7% L 24.4%, 1.65 for and 0.93 against a match, 69.28 league points a season; 584.67 appearances a season shared by 21.53 men
+  MEASURED without it: 1627 matches, 0.70 changes a match (0.24 for an injury, 0.46 at the break, 0.00 for legs after it), bench used in 46.7% of matches; W 54.5% D 19.9% L 25.6%, 1.79 for and 1.04 against a match, 69.19 league points a season; 528.97 appearances a season shared by 20.58 men
+  MEASURED his rule, on 240 matches played again by hand (105 with a change for legs): 146 changes for legs, 103 with the match within a goal (mean strength +0.087) and 43 with my side two or more up (mean -0.538)
+  ok gap (1 checks)
+  ok rule (146 checks)
+  ok reserve (146 checks)
+  ok manual (240 checks)
+  ok report (1651 checks)
+simCmQuickLegs: PASS, 5 sections green
