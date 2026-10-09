@@ -1,0 +1,101 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9748 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9748: 26 season rows, 25 story seasons, story 13832 bytes, save 61560 bytes, save without story 47728
+
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9749 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9749: 29 season rows, 28 story seasons, story 17290 bytes, save 70636 bytes, save without story 53346
+
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9750 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9750: 29 season rows, 28 story seasons, story 19693 bytes, save 78058 bytes, save without story 58365
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2mthe warning, Keep Playing, and the season that follows
+[22m[39mKEEP seed=850 problems=0
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2mthe warning, Keep Playing, and the season that follows
+[22m[39mKEEP seed=851 problems=0
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2mthe warning, Keep Playing, and the season that follows
+[22m[39mKEEP seed=852 problems=0
+
+ [32m✓[39m src/test/careerStory.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 4898[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps every season[2m > [22mtwelve seasons on seed 9741: every line kept, in order, once [33m 397[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps every season[2m > [22mthe story draws nothing: the same seed without it plays the same career [33m 346[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story on the real page[2m > [22mLatest Events opens the story, a season opens, Back returns, Close shuts it [33m 996[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story on the real page[2m > [22mthe retired screen carries the same story, the last chapter included [33m 763[2mms[22m[39m
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2ma save left on the rehab choice or the conviction paper gets that year once
+[22m[39mSTOP seed=900 conviction at 26
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2ma save left on the rehab choice or the conviction paper gets that year once
+[22m[39mSTOP seed=901 conviction at 24
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2ma save left on the rehab choice or the conviction paper gets that year once
+[22m[39mSTOP seed=906 rehab at 18
+
+[90mstdout[2m | src/test/careerKeepPlaying.test.tsx[2m > [22m[2mSoccer Career: Keep Playing plays the season through the page[2m > [22m[2ma save left on the rehab choice or the conviction paper gets that year once
+[22m[39mSTOP seed=909 rehab at 29
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/careerKeepPlaying.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 8128[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: Keep Playing plays the season through the page[2m > [22mthe warning, Keep Playing, and the season that follows [33m 4348[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: Keep Playing plays the season through the page[2m > [22ma save left on the rehab choice or the conviction paper gets that year once [33m 2270[2mms[22m[39m
+ [31m❯[39m src/test/usSeasonCentre.test.tsx [2m([22m[2m9 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 953[2mms[22m[39m
+   [33m[2m✓[22m[39m the US Season Center, mounted by itself[2m > [22mwalks an NBA season from the tip off card to the review and closes [33m 379[2mms[22m[39m
+   [32m✓[39m the US Season Center, mounted by itself[2m > [22mshows one honest tile for a year whose real length is not the one the career plays[32m 21[2mms[22m[39m
+   [32m✓[39m the US Season Center, mounted by itself[2m > [22moffers Retry when the numbers cannot be loaded, and loads on the second try[32m 154[2mms[22m[39m
+   [32m✓[39m the US Season Center, mounted by itself[2m > [22mshows the plain tile, never a throw, for a binding with no Season Center[32m 11[2mms[22m[39m
+   [32m✓[39m the US Season Center with the NFL bound[2m > [22mwalks a QB season from the kick off card to the review: drives on the clock, his line, the record and his totals[32m 156[2mms[22m[39m
+   [32m✓[39m the US Season Center with the NFL bound[2m > [22mwalks a K season from the kick off card to the review: drives on the clock, his line, the record and his totals[32m 106[2mms[22m[39m
+   [32m✓[39m the US Season Center with the NFL bound[2m > [22mwalks a LB season from the kick off card to the review: drives on the clock, his line, the record and his totals[32m 76[2mms[22m[39m
+   [32m✓[39m the US Season Center with the NFL bound[2m > [22mprints the NFL playoff sentence as the save holds it, one game as "1 game", and every round with no score[32m 16[2mms[22m[39m
+[31m   [31m×[31m the US Season Center with the NFL bound[2m > [22mshows the held line, never a guess, for a throwback season the real league played 16 games of[39m[32m 31[2mms[22m[39m
+[31m     → usSeasonCentre.test: no QB career of seed nfl-centre-held has a full season[39m
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: careers picked up at 17
+[22m[39mREACH start=17 careers=6 seasons=24 adultSeasons=12 offers=3 shows=3 adultShows=3
+
+ [32m✓[39m src/test/drillBoardMarkup.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 778[2mms[22m[39m
+   [33m[2m✓[22m[39m the training boards with no match prop[2m > [22mdraws the Wall Shot as recorded [33m 410[2mms[22m[39m
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: careers picked up at 19
+[22m[39mREACH start=19 careers=6 seasons=24 adultSeasons=24 offers=9 shows=9 adultShows=9
+
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: careers picked up at 24
+[22m[39mREACH start=24 careers=6 seasons=24 adultSeasons=24 offers=10 shows=10 adultShows=10
+
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: careers picked up at 30
+[22m[39mREACH start=30 careers=6 seasons=24 adultSeasons=24 offers=9 shows=9 adultShows=9
+
+[90mstdout[2m | src/test/careerDilemmaReach.test.tsx[2m > [22m[2mSoccer Career: the moral dilemmas reach the player through the page[2m > [22m[2mreach: a player from 20 up sees dilemmas on screen
+[22m[39mREACH total adultOffers=31 adultShows=31
+
+ [32m✓[39m src/test/careerDilemmaReach.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 26614[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 17 [33m 10682[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 19 [33m 4415[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 24 [33m 5038[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the moral dilemmas reach the player through the page[2m > [22mreach: careers picked up at 30 [33m 4972[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonCentre.test.tsx[2m > [22mthe US Season Center with the NFL bound[2m > [22mshows the held line, never a guess, for a throwback season the real league played 16 games of
+[31m[1mError[22m: usSeasonCentre.test: no QB career of seed nfl-centre-held has a full season[39m
+[36m [2m❯[22m playNfl src/test/usSeasonCentre.test.tsx:[2m141:9[22m[39m
+    [90m139| [39m    [35mreturn[39m career[33m;[39m
+    [90m140| [39m  }
+    [90m141| [39m  throw new Error(`usSeasonCentre.test: no ${pos} career of seed ${see…
+    [90m   | [39m        [31m^[39m
+    [90m142| [39m}
+    [90m143| [39m
+[90m [2m❯[22m src/test/usSeasonCentre.test.tsx:[2m230:20[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m33 passed[39m[22m[90m (34)[39m
+[2m   Start at [22m 12:12:30
+[2m   Duration [22m 35.41s[2m (transform 9.76s, setup 583ms, collect 22.05s, tests 41.37s, environment 4.57s, prepare 1.38s)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonCentre.test.tsx,title=src/test/usSeasonCentre.test.tsx > the US Season Center with the NFL bound > shows the held line%2C never a guess%2C for a throwback season the real league played 16 games of,line=141,column=9::Error: usSeasonCentre.test: no QB career of seed nfl-centre-held has a full season%0A ❯ playNfl src/test/usSeasonCentre.test.tsx:141:9%0A ❯ src/test/usSeasonCentre.test.tsx:230:20%0A%0A
