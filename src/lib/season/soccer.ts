@@ -280,7 +280,10 @@ export const SOCCER: SeasonSport<SeasonRecord, SoccerSeasonCtx> = {
       const title = ctx.finish.finish === 1;
       const championKey = ctx.champion && ctx.rivals.find(r => (ctx.fixedNames?.[r] ?? r) === ctx.champion);
       const champion = title ? 'mine' as const : championKey ? { key: championKey } : 'other' as const;
-      return { kind: 'finish', finish: ctx.finish.finish, title, champion, ...zoneTarget(ctx) };
+      /* Release AQ: a settled world season with a derby rival adds the saved zone (zoneTarget above) */
+      const zoned = zoneTarget(ctx);
+      if (zoned.zone) return { kind: 'finish', finish: ctx.finish.finish, title, champion, zone: zoned.zone };
+      return { kind: 'finish', finish: ctx.finish.finish, title, champion };
     }
     if (row.leagueTitle && !row.injurySevere) return { kind: 'band', ppgMin: CHAMPION_PPG.min, ppgMax: CHAMPION_PPG.max };
     if (ctx.finish && ctx.finish.size && !row.injurySevere) {

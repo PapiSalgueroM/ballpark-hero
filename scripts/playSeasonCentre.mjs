@@ -402,9 +402,11 @@ try {
     const y0 = await P.page.evaluate(() => window.scrollY);
     await clickText(P.page, 'Results');
     let derbyShot = false, clinchShot = false;
+    const tourSaw = [];
     for (let i = 0; i < 40 && !(derbyShot && clinchShot); i += 1) {
       await letPlay(P.page, `${tag} tour ${i}`);
       const kinds = await P.page.evaluate(() => document.querySelector('[data-poster]')?.getAttribute('data-poster') ?? '');
+      tourSaw.push(kinds || '.');
       if (kinds.includes('derby') && !derbyShot) { await shot(P.page, `${tag}-2-derby-day`); derbyShot = true; }
       if (kinds.includes('title') && !clinchShot) { await shot(P.page, `${tag}-4-title-clinch`); clinchShot = true; }
       await walkerAt(P.page, `${tag} tour ${i}`);
@@ -412,6 +414,10 @@ try {
       if (!(await clickText(P.page, '⏩ To the next big game'))) break;
     }
     check(derbyShot && clinchShot, `the ${tag} tour reached a derby day and the title clinch`);
+    if (!(derbyShot && clinchShot)) {
+      const t = JSON.parse(SAVES.title).pendingSummary;
+      console.log(`   the tour saw [${tourSaw.join(' | ')}]; the title season is ${t.year} ${t.club}, ${t.apps} apps (${t.leagueApps} league), saved field ${t.leagueWorld ? t.leagueWorld.league : 'none'}; derived at the pick: ${derived.title.games.length} matchdays, clinch after matchday ${derived.title.clinch?.md}, derbies on matchdays ${derived.title.games.filter(g => g.fixedKey).map(g => `${g.md}${g.played ? '' : ' (missed)'}`).join(', ')}`);
+    }
     const y1 = await P.page.evaluate(() => window.scrollY);
     check(y0 === y1, `6. ${tag}: the page did not move across the matchdays (${y0} then ${y1})`);
     await clickText(P.page, '⏭ Sim the rest');
