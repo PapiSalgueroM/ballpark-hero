@@ -1,8 +1,8 @@
 {
   "__version": 3,
   "/": {
-    "hash": "49724f1fefbb859f",
-    "date": "2026-10-02"
+    "hash": "0e51926cddcfabef",
+    "date": "2026-10-09"
   },
   "/about": {
     "hash": "74a425d771c0b5e1",
@@ -189,8 +189,8 @@
     "date": "2026-09-30"
   },
   "/footle": {
-    "hash": "0b2e5df2148e12dc",
-    "date": "2026-10-06"
+    "hash": "0bd38ccf55d0ae2e",
+    "date": "2026-10-09"
   },
   "/free-kick": {
     "hash": "3143ff78af2fe0f4",
@@ -489,8 +489,8 @@
     "date": "2026-09-30"
   },
   "/privacy": {
-    "hash": "f2c8213cdf602fa9",
-    "date": "2026-09-16"
+    "hash": "dd79769546ebc3a4",
+    "date": "2026-10-09"
   },
   "/pro-basketball": {
     "hash": "442114160c5d5786",
@@ -641,8 +641,8 @@
     "date": "2026-09-19"
   },
   "/terms": {
-    "hash": "d602c5e0b75cef5a",
-    "date": "2026-09-16"
+    "hash": "7a9efc95078bafd3",
+    "date": "2026-10-09"
   },
   "/transfer-path": {
     "hash": "27152604c9584ef0",
@@ -657,7 +657,7 @@
     "date": "2026-10-06"
   },
   "/whats-new": {
-    "hash": "af6618e0d77c60a0",
+    "hash": "1f5d323a399ce61e",
     "date": "2026-10-09"
   },
   "/who-am-i": {
