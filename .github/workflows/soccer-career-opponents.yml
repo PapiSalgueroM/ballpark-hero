@@ -69,6 +69,19 @@ jobs:
       - name: Actual career, named opponents and trophy journeys
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SHOTS="$PWD/career-opponents-artifacts/screenshots" node scripts/playSoccerCareerOpponents.mjs 2>&1 | tee career-opponents-artifacts/browser.log
+      - name: Prove the browser catches unnamed opponents
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set +e
+          PLAY_CAREER_OPPONENTS_CONTROL=unnamed NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SHOTS="$PWD/career-opponents-artifacts/control-screenshots" node scripts/playSoccerCareerOpponents.mjs > career-opponents-artifacts/browser-control.log 2>&1
+          control_exit=$?
+          set -e
+          cat career-opponents-artifacts/browser-control.log
+          test "$control_exit" = 1
+          grep -q 'FAIL 390x844 opponents: 34 fixtures' career-opponents-artifacts/browser-control.log
+          grep -q 'FAIL 1280x900 opponents: 34 fixtures' career-opponents-artifacts/browser-control.log
+          grep -q 'ok.*control changed the served Season Centre for both viewports' career-opponents-artifacts/browser-control.log
+          if grep -Eq 'walk threw|control refused|fixture refused' career-opponents-artifacts/browser-control.log; then exit 1; fi
       - name: Source unchanged after checks
         if: ${{ !cancelled() }}
         run: git diff --exit-code HEAD -- src scripts .github/workflows/soccer-career-opponents.yml

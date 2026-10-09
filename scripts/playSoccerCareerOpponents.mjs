@@ -40,7 +40,7 @@ const check = (ok, label) => {
   return ok;
 };
 
-const { soccer } = await bundleAwardsNight(ROOT);
+const { soccer, season: S, core: C } = await bundleAwardsNight(ROOT, { extra: { season: 'src/lib/season/soccer.ts', core: 'src/lib/season/core.ts' } });
 const clubs = soccer.FALLBACK_CLUBS;
 const own = clubs.find(c => c.name === 'Anderlecht');
 if (!own) throw new Error('fixture refused: FALLBACK_CLUBS has no Anderlecht');
@@ -56,6 +56,11 @@ Object.assign(last, { club: own.name, clubCountry: own.country, clubTier: own.ti
 delete last.leagueFinish;
 delete last.leagueSize;
 Object.assign(old, { currentClub: own.name, currentClubCountry: own.country, currentClubTier: own.tier, currentClubColor: own.color, currentLeague: own.league, phase: 'season_summary', pendingSummary: last });
+const derived = C.deriveSeason(S.SOCCER, last, S.buildSoccerSeasonCtx(old, clubs, last));
+const goalGame = derived?.games.find(g => g.events.some(e => e.kind === 'goal' && e.side === 'them'));
+if (!goalGame) throw new Error('fixture refused: recorded season has no opposition goal to witness');
+const goalOpponent = derived.labels[goalGame.opp].name;
+if (!allowed.includes(goalOpponent)) throw new Error('fixture refused: selected goal has no named league opponent');
 const winning = structuredClone(old);
 Object.assign(winning, { phase: 'playing', pendingSummary: null });
 const rows = winning.seasons.filter(r => r.type === 'playing' && r.apps > 0);
@@ -142,6 +147,21 @@ async function preserved(page, bytes, card, label) {
 async function recordedNumbers(section) {
   return section.locator('dl > div').evaluateAll(els => Object.fromEntries(els.map(el => [el.querySelector('dt')?.textContent.trim(), el.querySelector('dd')?.textContent.trim()])));
 }
+async function watchThrough(page, md) {
+  for (let game = 1; game <= md; game += 1) {
+    await page.waitForSelector('[data-matchday], [data-poster]', { timeout: 10000 });
+    if (await page.locator('[data-poster]').count()) await page.locator('[data-centre-bar]').getByRole('button').filter({ hasText: /^▶/ }).first().click();
+    await page.waitForSelector(`[data-matchday="${game}"]`, { timeout: 10000 });
+    for (let offers = 0; offers < 4; offers += 1) {
+      await page.waitForSelector('[data-full-time], [data-moment-offer]', { timeout: 10000 });
+      if (await page.locator('[data-full-time]').count()) break;
+      await page.locator('[data-moment-pass]').click();
+      await page.waitForTimeout(50);
+    }
+    await page.waitForSelector('[data-full-time]', { timeout: 10000 });
+    if (game < md) await page.locator('[data-centre-bar]').getByRole('button', { name: `▶ League game ${game + 1}`, exact: true }).click();
+  }
+}
 
 async function opponents(width, height) {
   const tag = `${width}x${height} opponents`;
@@ -155,7 +175,8 @@ async function opponents(width, height) {
     check(await scroll(page) === y && await withinViewport(page, '[data-season-centre] [role="dialog"]'), `${tag}: overlay fits and page scroll stays fixed`);
     await snapshot(page, `soccer-career-opponents-${width}-kickoff.png`);
     if (width < 768) await page.locator('[data-centre-fixtures]').click();
-    const fixtures = await page.locator('[data-fixture-name]').allTextContents();
+    const fixtureList = page.locator(width < 768 ? '[data-centre-stage] [data-fixtures]' : '[data-season-centre] aside[aria-label="Fixtures"] [data-fixtures]');
+    const fixtures = await fixtureList.locator('[data-fixture-name]').allTextContents();
     const counts = new Map();
     for (const name of fixtures) counts.set(name.trim(), (counts.get(name.trim()) || 0) + 1);
     check(fixtures.length === 34 && counts.size === 17 && allowed.every(name => counts.get(name) === 2), `${tag}: 34 fixtures name each of the 17 real league opponents twice`);
@@ -163,13 +184,14 @@ async function opponents(width, height) {
     await snapshot(page, `soccer-career-opponents-${width}-fixtures.png`);
     if (width < 768) await page.getByRole('button', { name: '← Back', exact: true }).click();
     await page.locator('[data-kickoff]').getByRole('button').filter({ hasText: /^▶/ }).first().click();
-    if (await page.locator('[data-poster]').count()) await page.locator('[data-centre-bar]').getByRole('button').filter({ hasText: /^▶/ }).first().click();
-    await page.waitForSelector('[data-matchday]', { timeout: 10000 });
-    await page.waitForSelector('[data-full-time]', { timeout: 10000 });
+    await watchThrough(page, goalGame.md);
     const names = await page.locator('[data-score-bug]').evaluate(el => [el.parentElement.firstElementChild.textContent.trim(), el.parentElement.lastElementChild.textContent.trim()]);
     check(names.includes('Anderlecht') && names.some(name => allowed.includes(name)) && !names.includes('another club'), `${tag}: match score names Anderlecht and a real opponent (${names.join(' v ')})`);
     const feed = await page.locator('[data-clock-events]').innerText();
-    check(!feed.includes('another club'), `${tag}: goal feed has no unnamed club`);
+    check(feed.includes(`Goal, ${goalOpponent}`) && !feed.includes('another club'), `${tag}: opposition goal names ${goalOpponent} in league game ${goalGame.md}`);
+    const score = await page.locator('[data-score-bug]').innerText();
+    const expectedScore = goalGame.home ? `${goalGame.us}-${goalGame.them}` : `${goalGame.them}-${goalGame.us}`;
+    check(score === expectedScore, `${tag}: named match keeps the derived score ${expectedScore}`);
     await snapshot(page, `soccer-career-opponents-${width}-match.png`);
     await page.locator('[data-centre-exit]').click();
     await page.waitForSelector('[data-season-centre]', { state: 'detached' });
