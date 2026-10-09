@@ -1,0 +1,33 @@
+# Release AP review fixes, second pass: the proof on the pushed head (served build, Chromium)
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simBrowserHarnessDiscovery: node scripts/simBrowserHarnessDiscovery.mjs
+simTycoonHelp: node scripts/simTycoonHelp.mjs
+simTycoonRooms: node scripts/simTycoonRooms.mjs
+simTycoonTicketPolicy: node scripts/simTycoonTicketPolicy.mjs
+simTycoonTicketPolicy-all-controls: TYCOON_TICKET_POLICY_CONTROL=all node scripts/simTycoonTicketPolicy.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simClubManagerStart: node scripts/simClubManagerStart.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simLoginReturn: node scripts/simLoginReturn.mjs
+simLoginReturn-wall-must-exit-1: LOGIN_RETURN_CONTROL=wall node scripts/simLoginReturn.mjs
+simLoginReturn-stuck-must-exit-1: LOGIN_RETURN_CONTROL=stuck node scripts/simLoginReturn.mjs
+runAll-loginReturn: ONLY=simLoginReturn node scripts/runAllSims.mjs
+runAll-bracketMoment: ONLY=simBracketMoment node scripts/runAllSims.mjs
+runAll-ownGoals: ONLY=simSoccerOwnGoals node scripts/runAllSims.mjs
+runAll-browserOnly-must-exit-1: ONLY=playHomeFold node scripts/runAllSims.mjs
+main-runAll-loginReturn-with-browser: D=$PWD/.rc-main-a && mkdir -p $D && git archive origin/main | tar -x -C $D && cd $D && ONLY=simLoginReturn node scripts/runAllSims.mjs
+simBracketMoment: node scripts/simBracketMoment.mjs
+simBracketMoment-layout-must-exit-1: BRACKET_MOMENT_CONTROL=layout node scripts/simBracketMoment.mjs
+main-simBracketMoment: D=$PWD/.rc-main-b && mkdir -p $D && git archive origin/main | tar -x -C $D && cd $D && node scripts/simBracketMoment.mjs
+og-parent: D=$PWD/.rc-main-c && mkdir -p $D && git archive origin/main | tar -x -C $D && OWN_GOAL_PARENT_ROOT=$D CAREERS=60 SEEDSET=4 node scripts/simSoccerOwnGoals.mjs
+og-stream: D=$PWD/.rc-main-d && mkdir -p $D && git archive origin/main | tar -x -C $D && OWN_GOAL_CONTROL=stream OWN_GOAL_PARENT_ROOT=$D CAREERS=12 node scripts/simSoccerOwnGoals.mjs
+ownGoals: CAREERS=120 SEEDSET=0 node scripts/simSoccerOwnGoals.mjs
+sweepWeight: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs
