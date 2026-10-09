@@ -1,0 +1,15 @@
+rehearse exit=0 8s | rehearseCareerSpansView: green. The migration runs fresh and over the first draft, on integer, numeric and double columns; the view hands back the expected rows; anon can
+vitest exit=0 9s |    Duration  7.86s (transform 484ms, setup 115ms, collect 1.36s, tests 8.06s, environment 728ms, prepare 248ms)
+rehearse-byname exit=1 10s | rehearseCareerSpansView control byname: fired, 12 failure(s) above. Exit 1 is the expected result.
+simStat exit=0 10s | simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.
+ctl-span exit=0 7s | simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.
+ctl-spanfail exit=0 8s | simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.
+ctl-spanend exit=0 7s | simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.
+ctl-spanshort exit=0 7s | simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.
+ctl-spanguess exit=0 6s | simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.
+tsc exit=0 39s | 
+ctl-spanera exit=0 7s | simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.
+ctl-cohortgap exit=0 7s | simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.
+ctl-namesake exit=0 7s | simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.
+ctl-franchise exit=0 7s | simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.
+ctl-franchiseguess exit=0 7s | simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.

@@ -1,0 +1,9 @@
+rehearseCareerSpansView: 30 season rows in, 17 view rows expected
+   integer columns, fresh database: 17 rows, anon reads 17
+   integer columns, over the first draft: 17 rows, anon reads 17
+   numeric columns, fresh database: 17 rows, anon reads 17
+   numeric columns, over the first draft: 17 rows, anon reads 17
+   double precision columns, fresh database: 17 rows, anon reads 17
+   double precision columns, over the first draft: 17 rows, anon reads 17
+
+rehearseCareerSpansView: green. The migration runs fresh and over the first draft, on integer, numeric and double columns; the view hands back the expected rows; anon can read it; paging by (player_name, cohort) is whole.
