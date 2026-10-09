@@ -1,0 +1,29 @@
+1) A fresh 2005 save is the real 2005 squad, untouched
+   26 in squad, 0 mismatches, 0 generated
+   Juventus: 22 in squad, 22 bake rows, 0 mismatches
+   Bayern Munich: 21 in squad, 21 bake rows, 0 mismatches
+   Lyon: 21 in squad, 21 bake rows, 0 mismatches
+2) Four worlds, and none of them leak
+  FAIL: 2005-only Ronaldo is on the 2026 market
+   1713 era-exclusive names checked against the 2026 market, 1 leaks
+   2005 vs 2026: 14 shared names, 12 allowlisted, 0 unexplained
+   2005 vs 2015: 139 shared names, 6 allowlisted, 0 unexplained
+   2005 vs 2010: 629 shared names, 5 allowlisted, 0 unexplained
+3) Boards talk 2005: the UEFA Cup is the UEFA Cup
+   98 club demands checked, 13 boards name the UEFA Cup
+   European places pinned for 3 new rules rows
+4) Full seasons play out plausibly in all five leagues
+   Chelsea finishes: 1,1,1,1,1,1 · Cadiz finishes: 20,19,20,17,20,20
+   Juventus finishes: 1,1,1,2,1,1 · Bayern finishes: 2,1,1,1,1,2 · Lyon finishes: 1,5,1,5,1,2 · Troyes finishes: 20,20,19,19,16,19
+   means: Juventus 1.17, Bayern 1.33, Lyon 2.50, Troyes 18.83
+5) The bake file tells the truth about itself
+   meta says 1727 players / 98 clubs; file holds 1727 / 98
+   nationalities: 1727 era2005 lines for 1727 men
+   big five accounting: Serie A, Bundesliga, Ligue 1 294,332,341, 0 names at two clubs
+6) Ronaldinho and Henry above the modern best; teenage Messi honest
+   2005 Ronaldinho 96, 2005 Henry 96, 17yo Messi 73, modern best 94
+7) A two league save from before Round 902 plays on and grows in the summer
+   the cut save rates Werder Bremen 80 and Ajax 80 (both out in the last sixteen)
+   season one world: premier2005 38 · season two world: bundesliga2005 34/18,ligue12005 38/20,premier2005 38/20,seriea2005 38/20
+
+simEra2005: 1 failure
