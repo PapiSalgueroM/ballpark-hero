@@ -48,7 +48,7 @@ console.log('1) Nations and leagues');
 /* Round 140 added Portugal, Scotland and Turkey. Every nation must map to
    real leagues and every league to a nation, so the count is derived rather
    than pinned, and a nation with no playable league is the failure mode. */
-if (NATIONS.length !== 20) fail(`expected 20 nations, got ${NATIONS.length}`);  // Round 177: Austria and Greece; Round 185: Denmark and Switzerland; Round 189: Croatia; Round 876: Brazil; Round 883: Mexico; Round 1035: Australia
+if (NATIONS.length !== 21) fail(`expected 21 nations, got ${NATIONS.length}`);  // Round 177: Austria and Greece; Round 185: Denmark and Switzerland; Round 189: Croatia; Round 876: Brazil; Round 883: Mexico; Round 1035: Australia; Round 1052: Russia
 const mappedLeagueIds = new Set(NATIONS.flatMap(n => n.leagueIds));
 for (const lg of REAL_LEAGUES) {
   if (!mappedLeagueIds.has(lg.id)) fail(`league ${lg.id} belongs to no nation, it is unreachable from the picker`);
@@ -70,7 +70,7 @@ for (const n of NATIONS) {
     }
   }
 }
-if (totalClubs !== 438) fail(`expected 438 playable clubs (186, plus 48 in Round 140, 18 in Round 142, 18 in Round 143, 12 plus 14 in Round 177, 12 plus 12 in Round 185, 10 in Round 189, 20 in Round 876, 18 in Round 883, 12 in Round 1035, 20 in Round 1040's Serie B, 18 in its Ligue 2, 20 in its Segunda División), got ${totalClubs}`);
+if (totalClubs !== 454) fail(`expected 454 playable clubs (186, plus 48 in Round 140, 18 in Round 142, 18 in Round 143, 12 plus 14 in Round 177, 12 plus 12 in Round 185, 10 in Round 189, 20 in Round 876, 18 in Round 883, 12 in Round 1035, 20 in Round 1040's Serie B, 18 in its Ligue 2, 20 in its Segunda División, 16 in Round 1052's Russian Premier League), got ${totalClubs}`);
 const ordering = [
   ['Real Madrid', 'Racing Santander'], ['Bayern Munich', 'Paderborn'], ['PSG', 'Le Havre'],
   ['Liverpool', 'Hull City'], ['Wolves', 'Lincoln City'], ['Al-Hilal', 'Al-Riyadh'],
@@ -92,6 +92,10 @@ if (rosterHas('Barcelona', 'Lewandowski')) fail('Lewandowski still at Barcelona 
   if (!rm.uclGroup) fail('Real Madrid did not start in the UCL');
   const hilal = startCareer('Al-Hilal');
   if (hilal.uclGroup) fail('Al-Hilal started in the UCL (non-euro league)');
+  /* Round 1052: the Russian Premier League hands out no European places (its clubs are suspended).
+     simClubManagerNewLeagues part H holds the title winner's next season too. */
+  const zenit = startCareer('Zenit');
+  if (zenit.uclGroup) fail('Zenit started in the UCL (the Russian league has no European places)');
   const miami = startCareer('Inter Miami');
   if (miami.uclGroup) fail('Inter Miami started in the UCL (non-euro league)');
   // Round 72: every league length now fits a full cup run.

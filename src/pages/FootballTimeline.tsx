@@ -9,6 +9,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { HelpCircle, Check, X, ArrowUp, ArrowDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { FootballTimelineHowToPlay } from '@/components/football-timeline/FootballTimelineHowToPlay';
+import { safeSetItem } from '@/lib/safeStorage';
 
 const FootballTimeline = () => {
   const {
@@ -28,7 +29,7 @@ const FootballTimeline = () => {
     const seen = localStorage.getItem('ft-rules-seen');
     if (!seen) {
       setShowRules(true);
-      localStorage.setItem('ft-rules-seen', '1');
+      safeSetItem('ft-rules-seen', '1');
     }
   }, []);
 

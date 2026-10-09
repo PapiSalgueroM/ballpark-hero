@@ -521,7 +521,17 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
   for (const s of US_CAREER_SPORTS) {
     if (!code(s.binding).includes('saveKey: SAVE_KEY,')) fail(7, `${s.binding} does not hand the board the key it declares`);
   }
-  if (!code(US_CAREER_BOARD).includes('localStorage.setItem(sport.saveKey, JSON.stringify({ c,')) fail(7, `${US_CAREER_BOARD} no longer writes the save under the binding's key`);
+  /* Round 1084: the board no longer writes in one line. The career goes to
+     saveValue, saveValue holds it under the binding's key, and retrySave is
+     the one place that writes what is held (so a refused write can be tried
+     again). All three links have to be there for the key to be the binding's. */
+  const boardCode = code(US_CAREER_BOARD);
+  const SAVE_CHAIN = [
+    'saveValue(JSON.stringify({ c,',
+    'pendingSave.current = { key: sport.saveKey, value };',
+    'else localStorage.setItem(pending.key, pending.value);',
+  ];
+  if (!SAVE_CHAIN.every(link => boardCode.includes(link))) fail(7, `${US_CAREER_BOARD} no longer writes the save under the binding's key`);
 
   /* a: live games, one card each */
   const paths = CONTINUE_SAVES.map(e => e.path);

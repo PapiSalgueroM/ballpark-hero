@@ -251,3 +251,22 @@ export const DB_TO_ENGINE = {
   // UCL flavor clubs outside the baked leagues
   'Club Brugge KV': 'Club Brugge',
 };
+
+/**
+ * Round 1052: the value table's spellings of clubs whose squads are NOT baked
+ * from that table but GATHERED (scripts/genClubManagerGathered.mjs), mapped to
+ * their engine names. It is a second table on purpose. DB_TO_ENGINE's values
+ * are the list of clubs the roster bake writes (scripts/bakeClubManagerRosters.mjs),
+ * so a gathered club added there would get a second squad in the baked file
+ * at the next re-bake. This table is read in ONE place, the players pool bake
+ * (resolveLeague in scripts/bakePlayers.mjs), so a man the pool already holds
+ * at one of these clubs keeps his 2026-27 league instead of being skipped.
+ * Every key is a spelling found in a committed file (src/data/players.ts or
+ * INSANE_CLUB_LEAGUE in src/lib/fetchFootlePlayerPool.ts), never a guess, and
+ * never a reserve side or a namesake club ('Rodina 2 Moscow' is not Rodina
+ * Moscow). scripts/simClubManagerGathered.mjs holds the table to that.
+ */
+export const DB_TO_ENGINE_GATHERED = {
+  'Zenit St. Petersburg': 'Zenit', 'Lokomotiv Moscow': 'Lokomotiv Moscow', 'Spartak Moscow': 'Spartak Moscow',
+  'Dynamo Moscow': 'Dynamo Moscow', 'CSKA Moscow': 'CSKA Moscow', 'FC Rostov': 'Rostov',
+};

@@ -29,7 +29,8 @@
    Negative controls (SIM_STALE_CHUNK_CONTROL): nolistener deletes the
    addEventListener call from an in memory copy (section 1 red), noguard
    removes the sessionStorage set so the once flag never lands (section 2
-   red), noprerender deletes the prerender stand down (section 2 red). Each
+   red), noprerender deletes the prerender stand down (section 2 red),
+   nooffline (Release AM) deletes the offline stand down (section 2 red). Each
    asserts its anchor exists exactly once first. */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -37,7 +38,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_STALE_CHUNK_CONTROL || '';
-const EXPECT = { nolistener: [1], noguard: [2], noprerender: [2] };
+const EXPECT = { nolistener: [1], noguard: [2], noprerender: [2], nooffline: [2] };
 /* Exit 2, never 1: 1 is a control that fired, and a mistyped name must not read as one. */
 if (CONTROL && !(CONTROL in EXPECT)) { console.error('unknown control ' + CONTROL); process.exit(2); }
 
@@ -54,7 +55,28 @@ const boundary = code(fs.readFileSync(path.join(ROOT, 'src/components/RouteError
 const main = code(fs.readFileSync(path.join(ROOT, 'src/main.tsx'), 'utf8').replaceAll('\r\n', '\n'));
 if (CONTROL === 'nolistener') fresh = rewrite(fresh, "window.addEventListener('vite:preloadError', (event: Event) => {", "((event: Event) => {", 'nolistener');
 if (CONTROL === 'noguard') fresh = rewrite(fresh, "sessionStorage.setItem(STALE_KEY, '1');", '', 'noguard');
-if (CONTROL === 'noprerender') fresh = rewrite(fresh, "if ((window as unknown as { __DUKB_PRERENDER__?: boolean }).__DUKB_PRERENDER__) return false;", '', 'noprerender');
+/* Release AM: this control had been dead since Round 832 gave reloadToRetryChunk
+   the same stand down line (two matches, so it refused to run). It now takes
+   the one inside reloadOnceForStaleChunk, found by the line that follows it
+   there and nowhere else.
+   Release AN: one release later the merge killed it again. Round 1142's stand
+   down (a session store that dies with the page) landed between the prerender
+   line and the offline comment this was anchored on, so the anchor matched
+   nothing and the control refused to run (exit 2, loudly, so nothing passed
+   falsely). An anchor that names its neighbour dies whenever a line lands
+   between the two, and it has now done that twice, so the control no longer
+   names one: it cuts reloadOnceForStaleChunk out by its own declaration and
+   deletes the prerender line inside that function only, wherever it sits.
+   Both steps still refuse to run on anything but exactly one match. */
+if (CONTROL === 'noprerender') {
+  const HEAD = 'export function reloadOnceForStaleChunk(): boolean {\n';
+  const LINE = "  if ((window as unknown as { __DUKB_PRERENDER__?: boolean }).__DUKB_PRERENDER__) return false;\n";
+  const from = fresh.indexOf(HEAD);
+  const to = from < 0 ? -1 : fresh.indexOf('\n}\n', from);
+  if (fresh.split(HEAD).length - 1 !== 1 || to < 0) { console.error('noprerender: reloadOnceForStaleChunk is not declared exactly once, refusing to run a dead control'); process.exit(2); }
+  fresh = fresh.slice(0, from) + rewrite(fresh.slice(from, to), LINE, '', 'noprerender') + fresh.slice(to);
+}
+if (CONTROL === 'nooffline') fresh = rewrite(fresh, '  if (navigator.onLine === false) return false;', '', 'nooffline');
 const freshCode = code(fresh);
 
 let failures = 0; const red = new Set(); let section = 0;
@@ -85,12 +107,19 @@ console.log('2) the reload happens once per tab, through a sessionStorage flag')
     const reloads = /window\.location\.reload\(\)/.test(body);
     const setBeforeReload = sets && reloads && body.indexOf('sessionStorage.setItem') < body.indexOf('window.location.reload');
     const standsDown = /__DUKB_PRERENDER__[^\n]*return false/.test(body);
+    /* Release AM: offline, a reload lands on the browser's own offline page.
+       The stand down has to come before the flag is set, or an offline
+       failure spends the tab's one reload. */
+    const offline = /navigator\.onLine === false[^\n]*return false/.test(body);
+    const offlineFirst = offline && sets && body.indexOf('navigator.onLine') < body.indexOf('sessionStorage.setItem');
+    if (!offline) fail('the guard does not stand down offline, so a failed chunk reloads onto the browser\'s own offline page');
+    else if (sets && !offlineFirst) fail('the offline stand down comes after the once flag is set, so an offline failure spends the one reload');
     if (!standsDown) fail('the guard does not stand down under the prerenderer (window.__DUKB_PRERENDER__), so a capture could reload mid page');
     if (!reads) fail('the guard never reads the flag');
     if (!sets) fail('the guard never sets the flag, so it would reload on every failure');
     if (!reloads) fail('the guard never reloads');
     if (sets && reloads && !setBeforeReload) fail('the flag is set after the reload call, so a fast reload could skip it');
-    if (standsDown && reads && sets && reloads && setBeforeReload) ok('stands down under the prerenderer, then flag read, set, then reload, in that order');
+    if (standsDown && offlineFirst && reads && sets && reloads && setBeforeReload) ok('stands down under the prerenderer and offline, then flag read, set, then reload, in that order');
   }
 }
 

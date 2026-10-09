@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { collegeGridPuzzles } from '@/data/collegeGridPuzzles';
 import { CellState, FootballGridGameStatus, GridAttribute, GridPuzzle } from '@/types/footballGrid';
 import { supabase } from '@/integrations/supabase/client';
@@ -14,8 +14,9 @@ import {
   judgeLabel,
   labelOf,
   type CollegeGridData,
-  type CollegeGridEntry,
+  type CollegeJudgeEntry,
 } from '@/lib/collegeGrid';
+import { COLLEGE_KEY_URLS } from '@/lib/collegeGridKey';
 
 /**
  * College Grid, judged in memory against its answer key (Round 611), in the
@@ -24,8 +25,9 @@ import {
  * Until this round every guess went to an AI validator that runs out of its
  * free allowance for most of the US day, and a guess it could not confirm
  * was never counted, so a board could be neither won nor lost. Now the key
- * (public.college_grid_players) is fetched once and every guess is judged
- * here by judgeCollegeCell, which answers yes, no or unknown:
+ * is loaded once (since Round 1105 from two files that ship with the page,
+ * not from the table, and the board is up before it lands) and every guess is
+ * judged here by judgeCollegeCell, which answers yes, no or unknown:
  *   yes      measure rarity, insert the selection, add the correct pick.
  *   no       add a miss. A no only comes from a complete fact in the key.
  *   unknown  a toast naming what the records hold, and no guess is spent.
@@ -47,13 +49,18 @@ type GridAction =
 
 const GUESS_LIMIT = 15;
 
+/** How long a pick made before the key landed waits for it before it is called unverified. */
+export const KEY_WAIT_MS = 8000;
+/** What the player is told when a pick could not be checked. It cost him nothing. */
+export const KEY_UNVERIFIED = "No guess used. The player records didn't load, so that pick wasn't checked. Try again, or refresh the page.";
+
 /** Group codes to the board's own position words, read off the vocabulary. */
 const GROUP_WORDS = new Map(
   CRITERIA_LABELS.filter((l) => l.kind === 'position').map((l) => [l.group as string, l.label]),
 );
 
 /** What the records hold on a player for the labels of a cell they could not settle. */
-function onRecord(entry: CollegeGridEntry, attrs: GridAttribute[]): string {
+function onRecord(entry: CollegeJudgeEntry, attrs: GridAttribute[]): string {
   const facts: string[] = [];
   let namesake = false;
   for (const attr of attrs) {
@@ -84,18 +91,37 @@ function onRecord(entry: CollegeGridEntry, attrs: GridAttribute[]): string {
 }
 
 export function useCollegeGrid() {
-  /* The answer key, fetched once. null while loading; an error card when it
-     cannot load, because a grid with no way to judge a guess is not a game. */
+  /* The answer key (Round 1105: two files that ship with the page). null
+     until it lands. The board does NOT wait for it: the nine labels are in the
+     bundle, so the board is up at once and the key loads behind it. A load
+     that fails is forgotten, so the next call starts a fresh one. */
   const [gridData, setGridData] = useState<CollegeGridData | null>(null);
-  const [dataError, setDataError] = useState(false);
-  useEffect(() => {
-    let cancelled = false;
-    fetchCollegeGridData().then((d) => {
-      if (cancelled) return;
-      if (d) setGridData(d); else setDataError(true);
-    });
-    return () => { cancelled = true; };
+  const keyLoad = useRef<Promise<CollegeGridData | null> | null>(null);
+  const mounted = useRef(true);
+  const loadKey = useCallback((): Promise<CollegeGridData | null> => {
+    if (keyLoad.current) return keyLoad.current;
+    const load: Promise<CollegeGridData | null> = fetchCollegeGridData(COLLEGE_KEY_URLS).then(
+      (d) => {
+        if (d) {
+          if (mounted.current) setGridData(d);
+        } else if (keyLoad.current === load) {
+          keyLoad.current = null;
+        }
+        return d;
+      },
+      () => {
+        if (keyLoad.current === load) keyLoad.current = null;
+        return null;
+      },
+    );
+    keyLoad.current = load;
+    return load;
   }, []);
+  useEffect(() => {
+    mounted.current = true;
+    void loadKey();
+    return () => { mounted.current = false; };
+  }, [loadKey]);
 
   const {
     puzzle: dailyPuzzle,
@@ -121,9 +147,17 @@ export function useCollegeGrid() {
     if (staleLog) reset();
   }, [staleLog, reset]);
 
-  const isLoading = dailyLoading || staleLog || (!gridData && !dataError);
+  const isLoading = dailyLoading || staleLog;
 
-  const [activeCell, setActiveCell] = useState<number | null>(null);
+  const [activeCell, setActiveCellNow] = useState<number | null>(null);
+  /* True while a pick waits for the key. The open cell does not move during
+     that wait: the pick is judged for the cell it was made on, so a tap on
+     another cell would only move the highlight and the prompt to a cell the
+     spinner is not about, and the box would then close on it. */
+  const pickWaits = useRef(false);
+  const setActiveCell = useCallback((cell: number | null) => {
+    if (!pickWaits.current) setActiveCellNow(cell);
+  }, []);
   const [validating, setValidating] = useState(false);
   const [wrongFlash, setWrongFlash] = useState<{ cellIndex: number; playerName: string } | null>(null);
 
@@ -187,17 +221,56 @@ export function useCollegeGrid() {
 
   const submitGuess = useCallback(
     async (playerName: string) => {
-      if (activeCell === null || gameStatus !== 'playing' || validating || !gridData || staleLog) return;
+      if (activeCell === null || gameStatus !== 'playing' || validating || staleLog) return;
       if (cells[activeCell].status === 'correct') return;
+
+      /* The cell and its two labels are captured before anything is awaited,
+         so a tap on another cell while the key is still coming cannot move
+         where this pick lands. */
+      const capturedCell = activeCell;
+      const { rowAttr, colAttr } = getRowCol(capturedCell);
+      const board = puzzle.id;
+
+      /* ROUND 1105: FAIL CLOSED WHILE THE KEY IS MISSING. Both key files are
+         asked for on mount and a player needs seconds to tap a cell and type a
+         name, so the key is almost always here already. When it is not, the
+         pick waits for it (the search box shows its spinner) and is judged the
+         moment it lands. A key that is still missing after KEY_WAIT_MS, that
+         failed to load or that failed its shape check is an UNVERIFIED pick:
+         nothing joins the guess log, no guess is spent, nothing is saved, and
+         the cell stays open so he can pick again. Never accept on a missing
+         key, and never fall back to the table. */
+      let data = gridData;
+      if (!data) {
+        setValidating(true);
+        pickWaits.current = true;
+        let waitTimer: ReturnType<typeof setTimeout> | undefined;
+        try {
+          data = await Promise.race([
+            loadKey(),
+            new Promise<null>((resolve) => { waitTimer = setTimeout(() => resolve(null), KEY_WAIT_MS); }),
+          ]);
+        } finally {
+          clearTimeout(waitTimer);
+          pickWaits.current = false;
+          if (mounted.current) setValidating(false);
+        }
+        /* He left the page while the pick waited: drop it. Nothing is written
+           and nothing is said. */
+        if (!mounted.current) return;
+        if (!data) {
+          toast(KEY_UNVERIFIED);
+          return;
+        }
+      }
 
       /* The search box offers the key's own display names, so a miss here is
          a typed name the key does not carry, and it costs nothing. Round 653:
          every player under the name is read, and the judge's kindest verdict
          among them stands (a yes over an unknown over a no), so a name two
          players share is never a no because of the wrong one. */
-      const { rowAttr, colAttr } = getRowCol(activeCell);
-      const namesakes = gridData.byNormalizedName.get(normalizeGridName(playerName)) ?? [];
-      const verdictOf = (p: CollegeGridEntry) => judgeCollegeCell(p, rowAttr, colAttr);
+      const namesakes = data.byNormalizedName.get(normalizeGridName(playerName)) ?? [];
+      const verdictOf = (p: CollegeJudgeEntry) => judgeCollegeCell(p, rowAttr, colAttr);
       const player = namesakes.find((p) => verdictOf(p) === 'yes')
         ?? namesakes.find((p) => verdictOf(p) === 'unknown')
         ?? namesakes[0];
@@ -220,8 +293,6 @@ export function useCollegeGrid() {
       }
 
       setValidating(true);
-      const capturedCell = activeCell;
-      const board = puzzle.id;
 
       try {
         if (verdict === 'yes') {
@@ -249,13 +320,17 @@ export function useCollegeGrid() {
         setActiveCell(null);
       }
     },
-    [activeCell, gameStatus, validating, gridData, staleLog, cells, puzzle, getRowCol, fetchRarity, addDailyGuess],
+    [activeCell, gameStatus, validating, gridData, staleLog, cells, puzzle, getRowCol, fetchRarity, addDailyGuess, loadKey],
   );
 
   useGameCompletion('college-grid', rawDailyStatus !== 'playing', correctCount * 100);
 
   return {
     puzzle, cells, activeCell, setActiveCell, submitGuess,
-    validating, gameStatus, guessesLeft, correctCount, rarityScore, getRowCol, isLoading, dataError,
+    validating, gameStatus, guessesLeft, correctCount, rarityScore, getRowCol, isLoading,
+    /* Round 1105: the board never waits for the key, so there is no error card
+       to show. The page still reads this, so it stays, always false. */
+    dataError: false,
+    keyReady: gridData !== null,
   };
 }

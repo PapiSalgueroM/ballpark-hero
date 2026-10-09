@@ -7,14 +7,18 @@
  * a saved manager career and read what a player sees:
  *   1. an Arsenal season heads its table with the Premier League, and every
  *      row is a Premier League club or "another club", never Boca;
- *   2. a job whose league the game barely knows (RB Salzburg) shows the
- *      sentence, with no table rows;
+ *   2. a job whose league the game barely knows (Malmo FF since Round 1100;
+ *      it was RB Salzburg until the pool took in the whole Austrian
+ *      Bundesliga) shows the sentence, with no table rows;
  *   3. a season saved before this round (no league, no unnamed rows) still
  *      draws its table exactly as it did;
  *   4. (review fix) a verified league whose five kept rows name nobody still
  *      draws the table, as the game knew clubs elsewhere in it;
  *   5. (review fix) a named league whose size is not verified shows the
- *      order only, with no position, points or record.
+ *      order only, with no position, points or record;
+ *   6. (Round 1100) a league in the odd ledger (the Austrian Bundesliga, MLS)
+ *      has its real number of rows and says why it prints no points, and a
+ *      league in neither ledger keeps the old sentence.
  * The mocks are careerStory.test.tsx's, so nothing reaches the network.
  */
 import { describe, it, expect, vi, beforeEach, afterEach, afterAll } from 'vitest';
@@ -136,15 +140,40 @@ describe('Soccer Career: the dugout table is his own league (Round 1029)', () =>
   });
 
   it('a league the game barely knows says where he finished instead of drawing rows', async () => {
-    const s = dugout('RB Salzburg', 3, 'Austrian Bundesliga');
+    /* Round 1100: this was RB Salzburg in the Austrian Bundesliga, a league
+       the game knew by one club. The pool now holds all twelve (the next
+       test), so the one club league here is the Allsvenskan: Malmo FF is the
+       only club the list has in it, and Club Manager does not carry it. */
+    expect(clubs.filter(c => c.league === 'Allsvenskan').map(c => c.name)).toEqual(['Malmo FF']);
+    const s = dugout('Malmo FF', 3);
     const row = s.managerState!.seasonResults[s.managerState!.seasonResults.length - 1];
     const t = await finalTable(s);
-    expect(t.label).toBe('Final table · Austrian Bundesliga');
+    expect(t.label).toBe('Final table · Allsvenskan');
     expect(t.rows).toEqual([]);
-    expect(t.text).toContain("We don't know enough Austrian Bundesliga clubs by name to draw the table.");
-    /* the Austrian Bundesliga's size is not verified, so no position at all */
+    expect(t.text).toContain("We don't know enough Allsvenskan clubs by name to draw the table.");
+    /* the Allsvenskan's size is not verified, so no position at all */
     expect(t.text).toContain(`You finished ${finishZone(row.playerPos!, row.leagueSize!)}.`);
     expect(t.text.split('Cup run')[0]).not.toMatch(/\d(st|nd|rd|th)\b| points|\d+W \d+D/);
+  });
+
+  it('Round 1100: the Austrian Bundesliga draws its own twelve rows and says why it has no points', async () => {
+    const s = dugout('Red Bull Salzburg', 3);
+    const row = s.managerState!.seasonResults[s.managerState!.seasonResults.length - 1];
+    expect(row.league).toBe('Austrian Bundesliga');
+    /* the odd ledger's number of rows, never a verified size: that would
+       print points over a 22 game season the league does not play */
+    expect(row.leagueSize).toBe(12);
+    expect(row.sizeVerified).toBeFalsy();
+    expect(row.knownRivals).toBe(11);
+    const t = await finalTable(s);
+    expect(t.label).toBe('Final table · Austrian Bundesliga');
+    expect(t.rows.length).toBe(5);
+    expect(t.rows).toContain('Red Bull Salzburg');
+    for (const name of t.rows) expect(leagueOf.get(name), name).toBe('Austrian Bundesliga');
+    expect(t.text).toContain('The order only: the Austrian Bundesliga splits in two after the regular season, so no points here.');
+    expect(t.text).not.toContain("We don't know");
+    expect(t.text.split('Cup run')[0]).not.toMatch(/\d+ pts|\d+W \d+D/);
+    expect(row.result).not.toMatch(/\d(st|nd|rd|th)\b|points/);
   });
 
   it('a verified league whose five rows happen to name nobody still draws its table', async () => {
@@ -168,7 +197,25 @@ describe('Soccer Career: the dugout table is his own league (Round 1029)', () =>
     const t = await finalTable(s);
     expect(t.label).toBe('Final table · MLS');
     expect(t.rows.length).toBe(5);
-    expect(t.text).toContain("The order only: we don't know how many clubs the MLS has.");
+    /* Round 1100: MLS is in the odd ledger, so the table says why it has no
+       points (it read "we don't know how many clubs the MLS has") and holds
+       the league's 30 rows */
+    expect(last.leagueSize).toBe(30);
+    expect(t.text).toContain('The order only: MLS plays in two conferences, so no points here.');
+    expect(t.text.split('Cup run')[0]).not.toMatch(/\d+ pts|\d+W \d+D/);
+    expect(last.result).not.toMatch(/\d(st|nd|rd|th)\b|points/);
+  });
+
+  it('a named league in neither ledger keeps the old line, which is still true there', async () => {
+    /* two clubs known, no size and no odd row: Zamalek's Egyptian Premier League */
+    const s = dugout('Zamalek', 3);
+    const last = s.managerState!.seasonResults[s.managerState!.seasonResults.length - 1];
+    expect(last.league).toBe('Egyptian Premier League');
+    expect(last.sizeVerified).toBeFalsy();
+    expect(last.knownRivals).toBe(1);
+    const t = await finalTable(s);
+    expect(t.label).toBe('Final table · Egyptian Premier League');
+    expect(t.text).toContain("The order only: we don't know how many clubs the Egyptian Premier League has.");
     expect(t.text.split('Cup run')[0]).not.toMatch(/\d+ pts|\d+W \d+D/);
     expect(last.result).not.toMatch(/\d(st|nd|rd|th)\b|points/);
   });

@@ -11,6 +11,7 @@ import { HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { BaseballConnectionsHowToPlay } from '@/components/baseball-connections/BaseballConnectionsHowToPlay';
 import { Skeleton } from '@/components/ui/skeleton';
+import { safeSetItem } from '@/lib/safeStorage';
 
 const DIFFICULTY_COLORS: Record<string, string> = {
   yellow: 'bg-yellow-500/20 border-yellow-500/40 text-yellow-200',
@@ -51,7 +52,7 @@ const BaseballConnections = () => {
     const seen = localStorage.getItem('bbconn-rules-seen');
     if (!seen) {
       setShowRules(true);
-      localStorage.setItem('bbconn-rules-seen', '1');
+      safeSetItem('bbconn-rules-seen', '1');
     }
   }, []);
 

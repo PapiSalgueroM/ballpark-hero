@@ -10,22 +10,26 @@ import { GauntletConfig, FormationLike } from '@/lib/gauntletEngine';
  * (the real, generated 2026 roster data NFL Front Office already plays,
  * see that file's own header for the generation rules) carries eight
  * position families: QB, RB, WR, TE, OL, DL, LB, DB. Measured on that data
- * (scripts/simGauntletEngine.mjs prints the numbers), the four skill
- * positions span a real 66 to 97 rating range each, the same order of
- * spread soccer's pool offers a slot. The data file's own header says every
- * one of the other four families leans on draft position and years played
- * rather than the counting stats the skill ratings are built on, and for OL
- * specifically that shows up as a visibly narrower band too (80 to 90, ten
- * points wide against the skill positions' thirty one); DL, LB and DB
- * measure a spread close to the skill positions' own (roughly 66 to 95
- * each), so the real reason those four sit out is the proxy rating itself,
+ * (Round 1130, 2026-10-08, when the file began to carry the one opening
+ * estimate this game and NFL Front Office both print; NFL Conquest still
+ * types its own): quarterbacks run 65 to 93, running backs and
+ * receivers 63 to 95, tight ends 70 to 95, the same order of spread
+ * soccer's pool offers a slot. Those four are the positions the estimate
+ * reads on how well a man played, how much of the work he carried and what
+ * he produced a game off two publishers. The other four families carry the
+ * frozen checkpoint's estimate alone, and the data files mark most of them
+ * as limited evidence (every lineman and every linebacker), and for OL
+ * specifically that shows up as a visibly narrower band too (74 to 83, nine
+ * points wide against the skill positions' twenty five and more); DL, LB
+ * and DB measure a spread close to the skill positions' own (roughly 66 to
+ * 95), so the real reason those four sit out is the thin evidence itself,
  * not a universally narrow band. A gauntlet pick that is not a real choice
  * is the exact failure mode CLAUDE.md's sim rules warn against ("never
  * assert on a max", "measure the strongest signal"), so this draft is
  * scoped to the four skill positions only: one quarterback, two running
  * backs, three receivers, one tight end, seven slots, not eleven. Extending
- * it to the other four families needs ratings built on something sturdier
- * than draft position and tenure first; today's OL field is also only the
+ * it to the other four families needs ratings built on sturdier evidence
+ * first (the defence is the next part of Round 1130); today's OL field is also only the
  * top two linemen a team, not a full five man front. Future scope, noted in
  * the round report rather than faked here.
  */
@@ -61,23 +65,29 @@ const NFL_FORMATION: FormationLike = {
 };
 
 /* Tuned against measured draft distributions (scripts/simGauntletEngine.mjs
-   section 4 prints the real numbers over 500 seeded drafts): an
-   always-best-card seven off this pool averages a squad rating around 96,
-   an always-worst-card seven around 69. That 27 point gap is much wider
-   than soccer's (roughly 14 to 17 between its own best and worst XIs),
-   because a skill-position-only NFL pool spans a real 66 to 97 rating range
-   at every one of the four positions instead of averaging across eleven
-   slots of mixed spread, so the worst-card squad is a genuinely weak seven
-   rather than a merely below-average one. Against this ladder the best
-   seven clears about 3.4 rounds and lifts the trophy about 1 run in 9, the
-   worst seven clears under 0.1 rounds and effectively never wins a single
+   section 4 prints the real numbers over 300 seeded drafts). Re-measured in
+   Round 1130 (2026-10-08, five seed streams of 300 drafts), when the pool
+   began to carry the one opening estimate instead of the selection rule's
+   rank scale: an always-best-card seven off this pool averages a squad
+   rating around 93 (it was 96), an always-worst-card seven around 71 (it
+   was 69). That 22 point gap is still wider than soccer's (roughly 14 to 17
+   between its own best and worst XIs), because a skill-position-only NFL
+   pool spans 63 to 95 across its four positions instead of averaging across
+   eleven slots of mixed spread, so the worst-card squad is a genuinely weak
+   seven rather than a merely below-average one. The ladder moved with the
+   pool, by the same method and to the same target (it was 78, 85, 90, 95,
+   99, and on the new numbers that ladder let the best seven lift the trophy
+   in only 5 to 14 runs of 300): against this one the best seven clears
+   3.34 to 3.40 rounds and lifts the trophy in 26 to 36 runs of 300, about 1
+   run in 9 or 10 (before the pool moved: 3.30 to 3.44 and 28 to 38), the
+   worst seven clears under 0.05 rounds and effectively never wins a single
    match, let alone the cup. */
 export const NFL_GAUNTLET_ROUNDS = [
-  { name: 'The Qualifier', opp: 'Ironbrook Marauders', rating: 78 },
-  { name: 'The Last Sixteen', opp: 'Port Callahan Voyagers', rating: 85 },
-  { name: 'The Quarter Final', opp: 'Westfall Miners', rating: 90 },
-  { name: 'The Semi Final', opp: 'Cross Timber Wardens', rating: 95 },
-  { name: 'The Final', opp: 'Sterling Vale Kings', rating: 99 },
+  { name: 'The Qualifier', opp: 'Ironbrook Marauders', rating: 79 },
+  { name: 'The Last Sixteen', opp: 'Port Callahan Voyagers', rating: 83 },
+  { name: 'The Quarter Final', opp: 'Westfall Miners', rating: 88 },
+  { name: 'The Semi Final', opp: 'Cross Timber Wardens', rating: 92 },
+  { name: 'The Final', opp: 'Sterling Vale Kings', rating: 97 },
 ] as const;
 
 /* Round 520: distinct from soccer's 0x47445231 and the NBA gauntlet's

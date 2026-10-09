@@ -14,6 +14,7 @@ import { HelpCircle, Eye, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { HockeyCareerHowToPlay } from '@/components/hockey-career/HockeyCareerHowToPlay';
 import { Skeleton } from '@/components/ui/skeleton';
+import { safeSetItem } from '@/lib/safeStorage';
 
 const HockeyCareer = () => {
   const {
@@ -39,7 +40,7 @@ const HockeyCareer = () => {
 
   useEffect(() => {
     const seen = localStorage.getItem('hkc-rules-seen');
-    if (!seen) { setShowRules(true); localStorage.setItem('hkc-rules-seen', '1'); }
+    if (!seen) { setShowRules(true); safeSetItem('hkc-rules-seen', '1'); }
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {

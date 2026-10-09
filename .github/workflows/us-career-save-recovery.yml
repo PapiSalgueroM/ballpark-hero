@@ -1,0 +1,238 @@
+name: US career save recovery
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - codex/us-career-save-recovery-1084
+  pull_request:
+    paths:
+      - .github/workflows/us-career-save-recovery.yml
+      - src/components/us-career/UsCareerBoard.tsx
+      - src/components/us-career/UsCareerSaveNotice.tsx
+      - src/test/usCareerSaveRetry.test.tsx
+      - scripts/simUsCareerSaveRetry.mjs
+      - scripts/qa/usCareerSaveRecovery1084.mjs
+      - scripts/simUsCareerActionConfirm.mjs
+      - scripts/simUsCareerPractice.mjs
+      - scripts/simUsCareerProspect.mjs
+
+permissions:
+  contents: read
+concurrency:
+  group: us-career-save-recovery-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+      SEO_SPLIT_BASE_REF: HEAD
+      TZ: UTC
+      SIM_OFFLINE_RECEIPT: us-career-save-recovery-artifacts/transport.log
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare remote verification
+        run: |
+          mkdir -p us-career-save-recovery-artifacts
+          git rev-parse HEAD > us-career-save-recovery-artifacts/source-head.txt
+          git rev-parse 'HEAD^{tree}' > us-career-save-recovery-artifacts/source-tree.txt
+          sha256sum package.json package-lock.json > us-career-save-recovery-artifacts/dependencies-before.txt
+          npm ci
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed = [];
+          for (const [path, entry] of Object.entries(lock.packages)) {
+            const file = path + '/package.json';
+            if (!path.startsWith('node_modules/') || !fs.existsSync(file)) continue;
+            const version = JSON.parse(fs.readFileSync(file)).version;
+            assert.equal(version, entry.version, `Locked installed version: ${path}`);
+            installed.push({ path, version });
+          }
+          assert(installed.length > 0);
+          fs.writeFileSync('us-career-save-recovery-artifacts/installed-before.json', JSON.stringify(installed, null, 2));
+          NODE
+          npm install --no-save playwright
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const before = JSON.parse(fs.readFileSync('us-career-save-recovery-artifacts/installed-before.json'));
+          const after = before.map(entry => ({ path: entry.path, version: JSON.parse(fs.readFileSync(entry.path + '/package.json')).version }));
+          fs.writeFileSync('us-career-save-recovery-artifacts/installed-after.json', JSON.stringify(after, null, 2));
+          assert.deepEqual(after, before);
+          console.log(`Held ${after.length} actual installed dependency versions.`);
+          NODE
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Actual application type gate and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee us-career-save-recovery-artifacts/types.log
+          npm run build 2>&1 | tee us-career-save-recovery-artifacts/build.log
+      - name: Actual board recovery outcomes and effective copied faults
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" US_CAREER_SAVE_RETRY_CONTROL=all node scripts/simUsCareerSaveRetry.mjs 2>&1 | tee us-career-save-recovery-artifacts/outcomes.log
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const report = JSON.parse(fs.readFileSync('us-career-save-recovery-artifacts/outcomes/summary.json'));
+          assert.equal(report.status, 'passed');
+          assert.equal(report.normal.passed, 33);
+          assert.equal(report.normal.failed, 0);
+          assert(report.normal.records > 0);
+          assert.equal(report.controls.length, 23);
+          assert(report.controls.every(row => row.status === 'assertion-failed' && row.passed === 1 && row.failed === 1));
+          assert.deepEqual(report.sourceAfter, report.sourceBefore);
+          console.log('Accepted32 actual-board cases, an independent baseline and23 effective copied faults.');
+          NODE
+      - name: Retain mounted outcome evidence promptly
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: us-career-save-outcomes-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            us-career-save-recovery-artifacts/outcomes/
+            us-career-save-recovery-artifacts/outcomes.log
+            us-career-save-recovery-artifacts/source-head.txt
+            us-career-save-recovery-artifacts/source-tree.txt
+          retention-days: 3
+          if-no-files-found: error
+      - name: Cache actual template font dependencies
+        id: assets
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/qa/usCareerSaveRecovery1084.mjs --prefetch-fonts-only 2>&1 | tee us-career-save-recovery-artifacts/assets.log
+      - name: Actual career routes retry and reload
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.assets.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/usCareerSaveRecovery1084.mjs 2>&1 | tee us-career-save-recovery-artifacts/native.log
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const report = JSON.parse(fs.readFileSync('us-career-save-recovery-artifacts/native/report.json'));
+          assert.equal(report.complete, true);
+          assert.equal(report.cases.length, 12);
+          assert.equal(report.deletions.length, 4);
+          assert(report.cases.concat(report.deletions).every(row => row.complete));
+          assert.equal(report.controls.length, 9);
+          assert.equal(report.forwardedWrites, 0);
+          assert.deepEqual(report.sourceAfter, report.sourceBefore);
+          assert.deepEqual(report.buildAfter, report.buildBefore);
+          assert.equal(report.assetManifestAfter, report.assetManifestSha256);
+          assert.deepEqual(report.assetPayloadAfter, report.assetPayloadBefore);
+          console.log('Accepted12 actual routes,4 deletion/replacement cases and9 effective restored DOM controls.');
+          NODE
+      - name: Retain native evidence promptly
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.assets.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: us-career-save-native-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            us-career-save-recovery-artifacts/native/
+            us-career-save-recovery-artifacts/native.log
+            us-career-save-recovery-artifacts/font-cache/manifest.json
+            us-career-save-recovery-artifacts/source-head.txt
+            us-career-save-recovery-artifacts/source-tree.txt
+          retention-days: 3
+          if-no-files-found: error
+      - name: Preserve existing career engine and board behavior
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simNflCareer simNbaCareer simMlbCareer simNhlCareer simUsCareerPractice simUsCareerProspect simUsCareerActionConfirm simUsCareerSummer simUsBoardParity simCareerHall simCareerSeasonReview simCareerPress simUsCareerDefects; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "us-career-save-recovery-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Preserve original summer and retired restore outcomes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/usCareerSummer.test.tsx src/test/myCareerRestore.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile.json=us-career-save-recovery-artifacts/original-summer-restore.json 2>&1 | tee us-career-save-recovery-artifacts/original-summer-restore.log
+      - name: Preserve rebound original storage defect controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export TMPDIR="$PWD/us-career-save-recovery-artifacts/original-controls"
+          mkdir -p "$TMPDIR"
+          failed=0
+          US_CAREER_ACTION_CONTROL=ownKey node scripts/simUsCareerActionConfirm.mjs 2>&1 | tee us-career-save-recovery-artifacts/action-ownKey.log || failed=1
+          US_CAREER_PRACTICE_CONTROL=reset node scripts/simUsCareerPractice.mjs 2>&1 | tee us-career-save-recovery-artifacts/practice-reset.log || failed=1
+          for control in save back; do
+            US_CAREER_PROSPECT_CONTROL="$control" node scripts/simUsCareerProspect.mjs 2>&1 | tee "us-career-save-recovery-artifacts/prospect-$control.log" || failed=1
+          done
+          exit "$failed"
+      - name: All source and built readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simSeoMetaSplit simHomeCopy simHarnessAnchors; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "us-career-save-recovery-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Hold original data engines tests fixtures anchors and dependencies
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --exit-code HEAD -- src scripts .github/workflows/us-career-save-recovery.yml
+          git diff --exit-code bde6b1c3797fd728dbd583a28623c34fe8452917 HEAD -- src/lib src/data src/integrations src/types src/hooks scripts/fixtures scripts/data
+          git diff --exit-code bde6b1c3797fd728dbd583a28623c34fe8452917 HEAD -- src/test ':!src/test/usCareerSaveRetry.test.tsx'
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { execFileSync } from 'node:child_process';
+          const sourcePairs = [
+            ['scripts/simUsCareerActionConfirm.mjs', [['localStorage.removeItem(sport.saveKey);', 'saveValue(null);']]],
+            ['scripts/simUsCareerPractice.mjs', [['localStorage.removeItem(sport.saveKey);', 'saveValue(null);']]],
+            ['scripts/simUsCareerProspect.mjs', [
+              ['localStorage.removeItem(sport.saveKey);', 'saveValue(null);'],
+              ["localStorage.setItem(sport.saveKey, JSON.stringify({ c: null, phase: 'prospect', teamQuality: null, coach: null, prospect: next } satisfies SaveShape));", "saveValue(JSON.stringify({ c: null, phase: 'prospect', teamQuality: null, coach: null, prospect: next } satisfies SaveShape));"],
+            ]],
+          ];
+          for (const [file, pairs] of sourcePairs) {
+            let expected = execFileSync('git', ['show', 'bde6b1c3797fd728dbd583a28623c34fe8452917:' + file], { encoding: 'utf8' }).replaceAll('\r\n', '\n');
+            for (const [before, after] of pairs) {
+              assert.equal(expected.split(before).length - 1, 1, 'Exactly one original executable storage anchor');
+              expected = expected.replace(before, after);
+            }
+            assert.equal(fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n'), expected, 'Only storage call-site anchors change; all original faults and assertions hold');
+          }
+          NODE
+          sha256sum package.json package-lock.json > us-career-save-recovery-artifacts/dependencies-after.txt
+          cmp us-career-save-recovery-artifacts/dependencies-before.txt us-career-save-recovery-artifacts/dependencies-after.txt
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const before = JSON.parse(fs.readFileSync('us-career-save-recovery-artifacts/installed-before.json'));
+          const final = before.map(entry => ({ path: entry.path, version: JSON.parse(fs.readFileSync(entry.path + '/package.json')).version }));
+          fs.writeFileSync('us-career-save-recovery-artifacts/installed-final.json', JSON.stringify(final, null, 2));
+          assert.deepEqual(final, before, 'All runners preserve actual locked installed versions');
+          NODE
+          if test -f us-career-save-recovery-artifacts/transport.log; then test ! -s us-career-save-recovery-artifacts/transport.log; fi
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: us-career-save-recovery-${{ github.run_id }}-${{ github.run_attempt }}
+          path: us-career-save-recovery-artifacts/
+          retention-days: 3
+          if-no-files-found: error
+

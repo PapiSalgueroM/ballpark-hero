@@ -12,9 +12,10 @@ import * as engine from '@/lib/frontOffice';
 import { deadCapUsed } from '@/lib/frontOfficeCuts';
 import { isFrontOfficeSave } from '@/lib/frontOfficeSave';
 import { leagueNames } from '@/lib/foNames';
-import { FO_DEPTH, FO_OPENING_RATING_VERSION, FO_OPENING_RATING_WINDOW } from '@/data/frontOfficeDepth';
-import { buildFullRatings, openingRatingEvidence } from '../../scripts/lib/nflFoRatingModel.mjs';
-import { bakeFromRecord, readTeamMeta } from '../../scripts/genFrontOfficeRoster.mjs';
+import { FO_DEPTH, FO_OPENING_RATING_BASE, FO_OPENING_RATING_VERSION, FO_OPENING_RATING_WINDOW } from '@/data/frontOfficeDepth';
+import { FO_TEAMS } from '@/data/frontOfficePlayers';
+import { buildFullRatings, openingRatingEvidence, OFFENSE_LAYER } from '../../scripts/lib/nflFoRatingModel.mjs';
+import { bakeFromRecord, readTeamMeta, readOffenseLayer } from '../../scripts/genFrontOfficeRoster.mjs';
 
 const root = process.cwd();
 const norm = (text: string) => text.replace(/\r\n/g, '\n');
@@ -27,6 +28,11 @@ const spot = JSON.parse(read('scripts/data/nflRosterSpotCheck.json').toString())
 const coreText = norm(read('src/data/frontOfficePlayers.ts').toString());
 const meta = readTeamMeta(coreText);
 const tupleHash = '731a2a67a5eb80099f4552f7ca0d45bfb8aee0c25c0abf7943dd53d09f065fd9';
+/* Round 1130, recorded 2026-10-08: the same 2,163 tuples with the offense layer (model nfl-v2.3-2026-10-08).
+   423 men carry another number than on v2.2, every one a quarterback, back, receiver or tight end. */
+const tupleHashV23 = 'b51b9d300a4433703f44bd8623b2976c2e3a0a8f13564058d5676cc790b15d9b';
+/** The layer with what it reads from the two committed files (the production lines and the fullback ledger). */
+const offenseLayer = () => readOffenseLayer(inputs);
 const partialHash = 'a706820eff365bab02e8339d0ef259113a4823c1cf03745e3a89402aa53a5fd6';
 const compact = (e: any) => ({ modelVersion: e.modelVersion, originKey: e.originKey, openingOvr: e.openingOvr, basis: e.basis, partial: e.partial });
 function build(options: object) {
@@ -56,7 +62,42 @@ function canonical(value: any) {
   return JSON.parse(JSON.stringify(value, (_key, v) => typeof v === 'string' && ids.has(v) ? ids.get(v) : v));
 }
 const everyone = (lg: engine.LeagueState) => Object.values(lg.teams).flatMap(t => [...t.players, ...(t.practice ?? [])]);
+/* Round 1130, recorded on origin/main at 6f57ce78 BEFORE the opening files were unified: the league the board
+   deals (depth passed, the GM on Kansas City) for three seeds. Unifying the files did not move one byte of it
+   (step 3 of the round passed these unedited on the committed files), and the frozen arm of the generator,
+   { ratingModel: 'v2.2' }, must go on dealing exactly this league: it is what "main" means in every comparison
+   scripts/simFoRatingOrder.mjs makes. */
+const boardLeagueDigestsV22 = [
+  'a68d25af1fdd8cd4a2904cc13bab51ec89225f0955c7a54e631f73b71d7b4c17',
+  'd45c32c5a14b6353330426e3df369ef42a4033b77b59a1c09b475b5e0d7367ff',
+  '4823ec09ec20e5b1ade41182e3e3f8e989b9b4994b9a60ce921dc8a6c6f33cf0',
+];
+/* Re-recorded once, 2026-10-08, when the offense layer became the default (model nfl-v2.3-2026-10-08): the same
+   three seeds on the committed files. 423 of the 2,163 men carry another number than in the league above, every
+   one a quarterback, back, receiver or tight end; every lineman and defender is the same man with the same number. */
+const boardLeagueDigests = [
+  'a43660e29ceec1925fd3771184c2878f4a7e918aae7458654e2b33f3c23c7a8d',
+  '7578b53a5edea40e60e1321df949bff0c3906e392a1c199b4369b6fee94acd46',
+  '9ec6dba554f8c1a25658282309589c2f4d7a500f69ee45e41d569de3ebe1f829',
+];
+/** A physical old tree, built the way the 56356be9 baseline below is: the engine and both data files as that commit held them. */
+function physical(commit: string) {
+  const dir = path.join(folder, 'physical-' + commit); mkdirSync(dir);
+  for (const file of ['src/lib/frontOffice.ts', 'src/data/frontOfficePlayers.ts', 'src/data/frontOfficeDepth.ts']) {
+    const shown = spawnSync('git', ['show', commit + ':' + file], { cwd: root, maxBuffer: 16 * 1024 * 1024 });
+    if (shown.status !== 0) throw new Error('Cannot read the physical ' + commit + ' tree: ' + shown.stderr.toString());
+    writeFileSync(path.join(dir, path.basename(file)), file.includes('/lib/') ? norm(shown.stdout.toString()).replace(/(from\s+['"])\.\/([^'"]+)(['"])/g, '$1@/lib/$2$3') : shown.stdout.toString());
+  }
+  const output = path.join(dir, 'physical.cjs');
+  const result = build({ stdin: { contents: "export * as engine from './frontOffice.ts'; export {FO_DEPTH} from './frontOfficeDepth.ts';", resolveDir: dir }, outfile: output, bundle: true, platform: 'node', format: 'cjs', metafile: true, logLevel: 'silent', alias: { '@/data/frontOfficePlayers': path.join(dir, 'frontOfficePlayers.ts'), '@/data/frontOfficeDepth': path.join(dir, 'frontOfficeDepth.ts'), '@': path.join(root, 'src') } });
+  expect(Object.keys(result.metafile!.inputs).some(file => /supabase|fetchPlayers|useAuth/.test(file))).toBe(false);
+  return createRequire(import.meta.url)(output);
+}
 let baseline: any;
+/* Round 1130: TODAY's engine dealt the physical 56356be9 starters file. The committed starters file now carries
+   the opening estimate, so "the engine did not move" is proved with the same old data on both sides. Under an
+   engine control of scripts/simNflOpeningRatings.mjs this bundles the engine under test, not the file on disk. */
+let todayOnOld: any;
 let folder: string;
 const heldBaseline: [string, Buffer][] = [];
 beforeAll(() => {
@@ -72,6 +113,12 @@ beforeAll(() => {
   const result = build({ stdin: { contents: "export * as engine from './frontOffice.ts'; export {FO_DEPTH} from './frontOfficeDepth.ts';", resolveDir: folder }, outfile: output, bundle: true, platform: 'node', format: 'cjs', metafile: true, logLevel: 'silent', alias: { '@/data/frontOfficePlayers': path.join(folder, 'frontOfficePlayers.ts'), '@': path.join(root, 'src') } });
   expect(Object.keys(result.metafile!.inputs).some(file => /supabase|fetchPlayers|useAuth/.test(file))).toBe(false);
   baseline = createRequire(import.meta.url)(output);
+  const swapped = JSON.parse(process.env.NO_DOUBLE_SWAP || '{}')['@/lib/frontOffice'];
+  const todayOutput = path.join(folder, 'today-on-old.cjs');
+  const today = build({ stdin: { contents: 'export * as engine from ' + JSON.stringify((swapped ?? path.join(root, 'src/lib/frontOffice.ts')).replace(/\\/g, '/')) + ';', resolveDir: root }, outfile: todayOutput, bundle: true, platform: 'node', format: 'cjs', metafile: true, logLevel: 'silent', alias: { '@/data/frontOfficePlayers': path.join(folder, 'frontOfficePlayers.ts'), '@': path.join(root, 'src') } });
+  expect(Object.keys(today.metafile!.inputs).some(file => /supabase|fetchPlayers|useAuth/.test(file))).toBe(false);
+  expect(Object.keys(today.metafile!.inputs).some(file => file.replace(/\\/g, '/').endsWith('src/data/frontOfficePlayers.ts'))).toBe(false);
+  todayOnOld = createRequire(import.meta.url)(todayOutput);
 });
 afterAll(() => {
   for (const [file, bytes] of heldBaseline) expect(readFileSync(file)).toEqual(bytes);
@@ -94,20 +141,29 @@ const outcome = (fixture: any) => buildFullRatings(fixture)[0];
 
 describe('NFL opening rating checkpoint', () => {
   it('preserves the physical56356be9 no-depth league and draw sequence as an independent baseline', () => {
-    const a = seeded(889), b = seeded(889), old = baseline.engine.initLeague(a.draw), next = engine.initLeague(b.draw);
+    /* Round 1130: today's engine against the old engine on the SAME physical 56356be9 starters file (todayOnOld).
+       The committed starters file carries the opening estimate now, so it is no longer the old league's data. */
+    const now = todayOnOld.engine;
+    const a = seeded(889), b = seeded(889), old = baseline.engine.initLeague(a.draw), next = now.initLeague(b.draw);
     expect(canonical(next)).toEqual(canonical(old)); expect(b.count()).toBe(a.count());
     for (let week = 0; week < 17; week++) for (let g = 0; g < 16; g++) {
-      expect(engine.simGame(next.schedule[week][g], next.teams, b.draw)).toEqual(baseline.engine.simGame(old.schedule[week][g], old.teams, a.draw));
+      expect(now.simGame(next.schedule[week][g], next.teams, b.draw)).toEqual(baseline.engine.simGame(old.schedule[week][g], old.teams, a.draw));
     }
-    engine.runOffseason(next, b.draw); baseline.engine.runOffseason(old, a.draw);
+    now.runOffseason(next, b.draw); baseline.engine.runOffseason(old, a.draw);
     expect(canonical(next)).toEqual(canonical(old)); expect(b.count()).toBe(a.count());
   });
 
   it('keeps explicit legacy depth and saved old grades unchanged as an independent baseline', () => {
     const legacy = bakeFromRecord(record, meta, spot.heldOut ?? [], { legacyDepth: true });
-    expect(legacy.ratingProblem).toBeNull(); expect(legacy.text).toBe(coreText);
+    /* Round 1130: the legacy bake is the SEED starters text, and it still equals the physical 56356be9 file byte
+       for byte (CRLF folded); the committed starters file now carries the opening estimate instead. The league
+       is dealt by today's engine on that old starters file, and the save it wrote loads on the engine vitest
+       imports (which reads no data file on load). */
+    expect(legacy.ratingProblem).toBeNull(); expect(legacy.text).toBe(norm(readFileSync(path.join(folder, 'frontOfficePlayers.ts')).toString()));
+    expect(legacy.text).not.toBe(coreText);
     for (const t of legacy.depth) { const { abbr, ...depth } = t; expect(depth).toEqual(baseline.FO_DEPTH[abbr]); }
-    const a = seeded(894), b = seeded(894), old = baseline.engine.initLeague(a.draw, { depth: baseline.FO_DEPTH }), next = engine.initLeague(b.draw, { depth: baseline.FO_DEPTH });
+    const now = todayOnOld.engine;
+    const a = seeded(894), b = seeded(894), old = baseline.engine.initLeague(a.draw, { depth: baseline.FO_DEPTH }), next = now.initLeague(b.draw, { depth: baseline.FO_DEPTH });
     expect(canonical(next)).toEqual(canonical(old)); expect(b.count()).toBe(a.count());
     const raw = JSON.stringify(next), restored = JSON.parse(raw);
     expect(engine.ensureFoLeagueIds(restored)).toBe(0); expect(JSON.stringify(restored)).toBe(raw);
@@ -122,6 +178,20 @@ describe('NFL opening rating checkpoint', () => {
     expect(rated).toHaveLength(2163); expect(new Set(rated.map(p => p.key)).size).toBe(2163);
     expect(hash(JSON.stringify(rated.map(p => [p.key, p.ovr, p.salary, p.years]).sort()))).toBe(tupleHash);
     expect(buildFullRatings({ ...inputs, records: [...inputs.records].reverse() }).map(p => [p.key, p.ovr, p.salary, p.years]).sort()).toEqual(rated.map(p => [p.key, p.ovr, p.salary, p.years]).sort());
+    /* Round 1130: the same three promises for the layer arm, and the layer moves no lineman and no defender. */
+    const layer = offenseLayer(), layered = buildFullRatings(inputs, layer);
+    expect(layered).toHaveLength(2163); expect(new Set(layered.map(p => p.key)).size).toBe(2163);
+    expect(hash(JSON.stringify(layered.map(p => [p.key, p.ovr, p.salary, p.years]).sort()))).toBe(tupleHashV23);
+    expect(buildFullRatings({ ...inputs, records: [...inputs.records].reverse() }, layer).map(p => [p.key, p.ovr, p.salary, p.years]).sort()).toEqual(layered.map(p => [p.key, p.ovr, p.salary, p.years]).sort());
+    const frozen = new Map(rated.map(p => [p.key, p]));
+    let held = 0, moved = 0;
+    for (const p of layered) {
+      const was: any = frozen.get(p.key);
+      if (['OL', 'DL', 'LB', 'DB'].includes(p.pos)) { expect([p.ovr, p.years], p.key).toEqual([was.ovr, was.years]); held++; }
+      else if (p.ovr !== was.ovr) moved++;
+    }
+    expect(held).toBe(1456); expect(moved).toBe(423);
+    console.log('NFL_LAYER_MOVES', JSON.stringify({ linemenAndDefendersHeld: held, offenseMenMoved: moved }));
   });
 
   it('retains dated-role partial labels and their concrete limitation reasons', () => {
@@ -136,11 +206,27 @@ describe('NFL opening rating checkpoint', () => {
       if (r.evidence.currentRole && !r.evidence.datedRoles.includes(r.evidence.currentRole)) { mismatches++; expect(e.partialReasons).toContain('current-role-unmeasured'); if (e.partialReasons.length === 1) onlyMismatch++; }
     }
     expect(mismatches).toBe(406); expect(onlyMismatch).toBe(42);
+    /* Round 1130, the layer arm: the mark only ever goes ON, and only for a fullback two publishers confirm.
+       1,323 marked on v2.2, 1,334 with the layer: eleven of the fifteen confirmed fullbacks were not marked
+       before (the other four held no opportunities and were). */
+    const layer = offenseLayer(), layered = buildFullRatings(inputs, layer);
+    const before = new Set(rated.filter(p => p.evidence.partial).map(p => p.key)), after = new Set(layered.filter(p => p.evidence.partial).map(p => p.key));
+    expect(after.size).toBe(1334); expect(layer.fullbacks.size).toBe(15);
+    expect([...before].filter(key => !after.has(key))).toEqual([]);
+    const gained = [...after].filter(key => !before.has(key));
+    expect(gained).toHaveLength(11); expect(gained.every(key => layer.fullbacks.has(key))).toBe(true);
+    for (let i = 0; i < layered.length; i++) {
+      const r = layered[i], e = openingRatingEvidence(inputs.records[i], r, layer.version, inputs.openingWindow);
+      expect(e.partial).toBe(r.evidence.partial); expect(e.modelVersion).toBe(OFFENSE_LAYER.version);
+      if (layer.fullbacks.has(r.key)) { expect(r.ovr).toBe(OFFENSE_LAYER.fullbackOvr); expect(e.partial).toBe(true); expect(e.partialReasons).toEqual(['fullback-role-unmeasured']); expect(['unmeasured-prior', 'draft-prior']).toContain(e.basis); }
+      else expect(e.partialReasons).not.toContain('fullback-role-unmeasured');
+    }
   });
 
   it('initializes every candidate tuple while retaining32 exact untrimmed budgets membership and terms', () => {
     const a = seeded(889), b = seeded(889), old = baseline.engine.initLeague(a.draw, { depth: baseline.FO_DEPTH }), lg = engine.initLeague(b.draw, { depth: FO_DEPTH });
-    const wanted = new Map(buildFullRatings(inputs).map(p => [p.key, p]));
+    /* Round 1130: the league a board deals is the layer arm, model nfl-v2.3 */
+    const wanted = new Map(buildFullRatings(inputs, offenseLayer()).map(p => [p.key, p]));
     expect(everyone(lg)).toHaveLength(2163); expect(lg.schedule).toEqual(old.schedule); expect(b.count()).toBe(a.count());
     expect(canonical(lg.freeAgents)).toEqual(canonical(old.freeAgents));
     const heldTerms = (p: any) => { const { id, ovr, salary, pot, openingRatingEvidence, ...held } = p; return held; };
@@ -173,7 +259,7 @@ describe('NFL opening rating checkpoint', () => {
     const raw = JSON.stringify(lg); expect(Buffer.byteLength(raw)).toBeLessThanOrEqual(700 * 1024);
     const restored = JSON.parse(raw); expect(engine.ensureFoLeagueIds(restored)).toBe(0); expect(JSON.stringify(restored)).toBe(raw);
     const p = everyone(restored)[0], opening = clone(p.openingRatingEvidence); p.ovr += 1;
-    expect(p.openingRatingEvidence).toEqual(opening); expect(FO_OPENING_RATING_VERSION).toBe(inputs.version);
+    expect(p.openingRatingEvidence).toEqual(opening); expect(FO_OPENING_RATING_VERSION).toBe(OFFENSE_LAYER.version); expect(OFFENSE_LAYER.base).toBe(inputs.version); expect(FO_OPENING_RATING_BASE).toBe(inputs.version);
     expect(FO_OPENING_RATING_WINDOW).toEqual(inputs.openingWindow);
     console.log('NFL_RATING_SAVE_SIZE', JSON.stringify({ rawBytes: Buffer.byteLength(raw), gzipBytes: gzipSync(raw).length, players: everyone(lg).length }));
   });
@@ -211,15 +297,22 @@ describe('NFL opening rating checkpoint', () => {
       expect(source.sha256).toMatch(/^[a-f0-9]{64}$/); expect(source.retrievedUtc).toMatch(/^2026-10-02T/);
       expect(source.lastIntegrityCheckDate).toBe('2026-10-02'); expect(source.validationStatus).toContain('not independent fact verification');
     }
-    expect(inputs.sourceManifest.checkpoint.version).toBe(FO_OPENING_RATING_VERSION);
+    expect(inputs.sourceManifest.checkpoint.version).toBe(FO_OPENING_RATING_BASE);
     expect(inputs.sourceManifest.checkpoint.extraction).toContain('not a raw-CSV refit pipeline');
-    expect(hash(read('scripts/data/nflRosters2026.json'))).toBe(inputs.sourceManifest.retainedOpeningSnapshot.sha256);
+    /* The pin is taken over LF text, which is what the repository stores and a runner checks out,
+       so the owner's CRLF checkout hashes the same (the rule simManagerAppealIsolation's textHash follows). */
+    expect(hash(norm(read('scripts/data/nflRosters2026.json').toString()))).toBe(inputs.sourceManifest.retainedOpeningSnapshot.sha256);
     expect(hash(JSON.stringify(record))).toBe(inputs.sourceManifest.retainedOpeningSnapshot.canonicalJsonSha256);
-    expect(hash(norm(read('src/data/frontOfficePlayers.ts').toString()))).toBe(hash(norm(readFileSync(path.join(folder, 'frontOfficePlayers.ts')).toString())));
+    /* Round 1130: this line pinned the committed starters file to the 56356be9 bytes, the pin the round exists
+       to break (the file carries the opening estimate now). What it really proved lives on: the legacy case
+       above compares the SEED bake with those bytes, and here the committed file must differ from them while
+       no source observation, production line or role ledger reaches either browser file. */
+    expect(hash(norm(read('src/data/frontOfficePlayers.ts').toString()))).not.toBe(hash(norm(readFileSync(path.join(folder, 'frontOfficePlayers.ts')).toString())));
     const browserDepth = read('src/data/frontOfficeDepth.ts');
     expect(JSON.stringify(FO_DEPTH)).not.toMatch(/gsisId|"observations"|"metrics"|"typicalExposure"|nflFoRatingInputs2026/);
-    const bundle = build({ entryPoints: [path.join(root, 'src/data/frontOfficeDepth.ts')], outfile: path.join(folder, 'browser.mjs'), bundle: true, platform: 'browser', format: 'esm', metafile: true, minify: true, logLevel: 'silent' });
-    expect(Object.keys(bundle.metafile.inputs).some(file => /scripts\/data|nflFoRatingModel|nflFoRatingInputs/.test(file.replace(/\\/g, '/')))).toBe(false);
+    expect(JSON.stringify(FO_TEAMS)).not.toMatch(/gsisId|"observations"|"metrics"|"typicalExposure"|nflFoRatingInputs2026|rushYds|recYds|passYds/);
+    const bundle = build({ entryPoints: [path.join(root, 'src/data/frontOfficeDepth.ts'), path.join(root, 'src/data/frontOfficePlayers.ts')], outdir: path.join(folder, 'browser'), bundle: true, platform: 'browser', format: 'esm', metafile: true, minify: true, logLevel: 'silent' });
+    expect(Object.keys(bundle.metafile.inputs).some(file => /scripts\/data|nflFoRatingModel|nflFoRatingInputs|nfl2025Production|nflFullbackRoles/.test(file.replace(/\\/g, '/')))).toBe(false);
     expect(gzipSync(browserDepth).length).toBeLessThan(80 * 1024);
   });
 
@@ -309,4 +402,68 @@ describe('NFL opening rating checkpoint', () => {
       for (const [file, bytes] of outputs) expect(readFileSync(path.join(project, file))).toEqual(bytes);
     } finally { removeOwnedTemp(project, 'dukb-rating889-cli-'); }
   }, 20000);
+
+  it('deals the same board league for a seed as the tree recorded before the opening files were unified', () => {
+    const digests = [1130, 1131, 1132].map(seed => hash(JSON.stringify(canonical(engine.initLeague(seeded(seed).draw, { depth: FO_DEPTH, userTeam: 'KC' })))));
+    console.log('NFL_BOARD_LEAGUE_DIGESTS', JSON.stringify(digests));
+    expect(digests).toEqual(boardLeagueDigests);
+    /* and the frozen arm still deals the league main dealt: today's engine over the files { ratingModel: 'v2.2' } bakes */
+    const frozen = bakeFromRecord(record, meta, spot.heldOut ?? [], { ratingModel: 'v2.2' });
+    expect(frozen.ratingProblem).toBeNull(); expect(frozen.ratingVersion).toBe(inputs.version);
+    const dir = path.join(folder, 'frozen-arm'); mkdirSync(dir);
+    writeFileSync(path.join(dir, 'frontOfficePlayers.ts'), frozen.text); writeFileSync(path.join(dir, 'frontOfficeDepth.ts'), frozen.depthText);
+    const swapped = JSON.parse(process.env.NO_DOUBLE_SWAP || '{}')['@/lib/frontOffice'], output = path.join(dir, 'frozen.cjs');
+    build({ stdin: { contents: 'export * as engine from ' + JSON.stringify((swapped ?? path.join(root, 'src/lib/frontOffice.ts')).replace(/\\/g, '/')) + "; export {FO_DEPTH} from './frontOfficeDepth.ts';", resolveDir: dir }, outfile: output, bundle: true, platform: 'node', format: 'cjs', logLevel: 'silent', alias: { '@/data/frontOfficePlayers': path.join(dir, 'frontOfficePlayers.ts'), '@/data/frontOfficeDepth': path.join(dir, 'frontOfficeDepth.ts'), '@': path.join(root, 'src') } });
+    const arm = createRequire(import.meta.url)(output);
+    const frozenDigests = [1130, 1131, 1132].map(seed => hash(JSON.stringify(canonical(arm.engine.initLeague(seeded(seed).draw, { depth: arm.FO_DEPTH, userTeam: 'KC' })))));
+    expect(frozenDigests).toEqual(boardLeagueDigestsV22); expect(frozenDigests).not.toEqual(digests);
+  }, 60000);
+
+  it('loads a Release AK franchise unchanged and plays its next week exactly as Release AK would', () => {
+    const ak = physical('0c66a559');
+    const a = seeded(1130), b = seeded(1130);
+    const old = ak.engine.initLeague(a.draw, { depth: ak.FO_DEPTH, userTeam: 'LV' }), twin = ak.engine.initLeague(b.draw, { depth: ak.FO_DEPTH, userTeam: 'LV' });
+    const save = { league: old, myTeam: 'LV', phase: 'hub', titles: 0, seasonsPlayed: 0, draftClass: null, picksLeft: 0 };
+    const raw = JSON.stringify(save), loaded = JSON.parse(raw);
+    expect(isFrontOfficeSave(loaded, 'NFL', 17)).toBe(true);
+    expect(engine.ensureFoLeagueIds(loaded.league, loaded.draftClass)).toBe(0); expect(JSON.stringify(loaded)).toBe(raw);
+    const terms = (lg: any) => everyone(lg).map((p: any) => [p.name, p.pos, p.ovr, p.salary, p.pot, p.years, p.openingRatingEvidence ?? null]);
+    expect(terms(loaded.league)).toEqual(terms(old)); expect(terms(loaded.league).length).toBeGreaterThan(2100);
+    expect(everyone(loaded.league).every((p: any) => p.openingRatingEvidence?.modelVersion === 'nfl-v2.2-2026-10-02' && p.openingRatingEvidence.openingOvr === p.ovr)).toBe(true);
+    engine.injuryPass(loaded.league.teams, a.draw); ak.engine.injuryPass(twin.teams, b.draw);
+    for (let g = 0; g < 16; g++) expect(engine.simGame(loaded.league.schedule[0][g], loaded.league.teams, a.draw)).toEqual(ak.engine.simGame(twin.schedule[0][g], twin.teams, b.draw));
+    expect(canonical(loaded.league)).toEqual(canonical(twin)); expect(a.count()).toBe(b.count());
+  }, 60000);
+
+  it('prints one opening number per man in the starters and depth files with no override left', () => {
+    /* Round 1130. Every man of the pool sits on exactly one row (a starters row, a bench row or a practice row),
+       that row's number is the one his lineage records, and the depth file holds no second number for anyone.
+       Checked twice: on the committed browser modules, and on what the generator bakes today. */
+    const depthSource = norm(read('src/data/frontOfficeDepth.ts').toString());
+    expect(depthSource).not.toMatch(/fullOpening/); expect(JSON.stringify(FO_DEPTH)).not.toMatch(/fullOpening/);
+    const baked = bakeFromRecord(record, meta, spot.heldOut ?? []);
+    expect(baked.ratingProblem).toBeNull();
+    const shipped = { teams: FO_TEAMS.map(t => ({ abbr: t.abbr, players: t.players })), depth: Object.entries(FO_DEPTH).map(([abbr, d]) => ({ abbr, ...d })) };
+    let moved = 0;
+    for (const side of [shipped, { teams: baked.teams, depth: baked.depth }]) {
+      const rows = new Map<string, number[]>();
+      const put = (abbr: string, p: any) => { const key = `${abbr}|${p.name}|${p.pos}`; rows.set(key, [...(rows.get(key) ?? []), p.ovr]); };
+      for (const t of side.teams) for (const p of t.players) put(t.abbr, p);
+      for (const d of side.depth as any[]) for (const p of [...d.bench, ...d.practice]) put(d.abbr, p);
+      expect(rows.size).toBe(2163); expect([...rows.keys()].sort()).toEqual(inputs.records.map((r: any) => r.key).sort());
+      for (const d of side.depth as any[]) {
+        expect(d.fullOpening).toBeUndefined();
+        for (const [nameAndPos, e] of Object.entries(d.ratingEvidence as Record<string, any>)) {
+          const numbers = rows.get(`${d.abbr}|${nameAndPos}`);
+          expect(numbers, `${d.abbr}|${nameAndPos}`).toEqual([e.openingOvr]); expect(e.originKey).toBe(`${d.abbr}|${nameAndPos}`);
+        }
+        expect(Object.keys(d.ratingEvidence).length).toBe([...rows.keys()].filter(key => key.startsWith(d.abbr + '|')).length);
+      }
+    }
+    /* Not vacuous: the selection rule's seed number is a different number for most of the fifteen. */
+    const shippedOvr = new Map<string, number>(FO_TEAMS.flatMap(t => t.players.map(p => [`${t.abbr}|${p.name}|${p.pos}`, p.ovr] as [string, number])));
+    for (const t of baked.seedTeams) for (const p of t.players) if (shippedOvr.get(`${t.abbr}|${p.name}|${p.pos}`) !== p.ovr) moved++;
+    expect(baked.seedTeams.flatMap((t: any) => t.players)).toHaveLength(480); expect(moved).toBeGreaterThan(240);
+    console.log('NFL_ONE_NUMBER', JSON.stringify({ men: 2163, fifteenWhoseSeedDiffers: moved }));
+  }, 60000);
 });

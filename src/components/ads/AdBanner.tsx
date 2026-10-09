@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { CONSENT_CHANGED_EVENT, loadAdSense } from '@/lib/consentedScripts';
+import { safeLocalStorage } from '@/lib/safeStorage';
 
 declare global {
   interface Window {
@@ -78,7 +79,7 @@ type AdState = 'unknown' | 'filled' | 'empty';
 
 function readStoredConsent(): string | null {
   try {
-    return localStorage.getItem('cookie-consent');
+    return safeLocalStorage.getItem('cookie-consent');
   } catch {
     return null;
   }

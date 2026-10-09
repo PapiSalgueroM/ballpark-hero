@@ -152,9 +152,10 @@ export function makeGmPlayer(p: FoPlayer, rng: () => number): GmPlayer {
    fifteen man league, and only then do the bench and the practice squad
    draw their growth ceilings. So for one seed a full league and a fifteen
    man league open on the same starters, the same market and the same
-   fixtures. Round889 overrides initial OVR and fictional salary only when
-   the supplied depth carries fullOpening. That intentionally changes new
-   full-roster results while preserving the initial draws and schedule.
+   fixtures. Since Round 1130 the starters file carries the opening estimate
+   itself, so nothing here overrides a starter's rating or price: one man has
+   one number in both roster files and in the two games that read them (NFL
+   Conquest still types its own until its own round).
    On the original-scale depth fixture, scripts/simNflFullRosters.mjs shows the
    bench changes no result while every starter is fit. The name book the
    pool is dealt against includes the bench and the practice squad, so no
@@ -181,10 +182,7 @@ export function initLeague(rng: () => number = Math.random, opts: InitLeagueOpti
   for (const t of FO_TEAMS) {
     teams[t.abbr] = {
       abbr: t.abbr,
-      players: t.players.map(p => {
-        const opening = depth?.[t.abbr]?.fullOpening?.[`${p.name}|${p.pos}`];
-        return makeGmPlayer(opening ? { ...p, ...opening } : p, rng);
-      }),
+      players: t.players.map(p => makeGmPlayer(p, rng)),
       defense: t.defense,
       wins: 0,
       losses: 0,

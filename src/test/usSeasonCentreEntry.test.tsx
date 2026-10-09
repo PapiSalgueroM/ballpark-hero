@@ -16,10 +16,25 @@
    is played, so a chunk that cannot be loaded costs no season (with an
    always on control that plays first and must then show a season lost to
    the failed load), and the press never opens a line another tab saved for
-   a different year. */
+   a different year.
+
+   Release AN added: with storage full (every write of the save refused) the
+   press still opens the season it played, handed over by the board, with an
+   always on control that withholds the hand over and must then show the
+   season played and no viewer, which is what a reviewer found where Rounds
+   1048 and 1142 met. Every season the host is asked to show is written
+   down, so "this tab's season, never the other tab's" is read off the
+   request and not off the screen.
+
+   Release AN, second half (Round 1084 joins): that same press must also SAY
+   the save was refused (the board's notice and one toast) while the viewer
+   opens, and Retry save, once the device takes writes again, must put the
+   season he watched on the save without playing it again. Before the device
+   refuses anything the notice is absent, so the check can fail. */
 import fs from 'node:fs';
 import path from 'node:path';
 import type { ComponentType } from 'react';
+import type { UsSeasonCentreRequest } from '@/components/us-career/season/UsSeasonCentreHost';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, waitFor } from '@testing-library/react';
@@ -27,9 +42,18 @@ import { act, cleanup, fireEvent, render, waitFor } from '@testing-library/react
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), recordActivity: vi.fn(), getCurrentPlayerName: () => 'Tester' }));
 vi.mock('@/lib/badges', () => ({ getNewlyEarnedBadges: () => Promise.resolve([]) }));
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile: null, refreshProfile: () => undefined }) }));
-vi.mock('sonner', () => ({ toast: { success: () => undefined } }));
+/* Release AN, second half: the board says a refused save out loud since Round 1084 (toast.error and a notice
+   with Retry save). This mock had no error on it, so the four storage full tests below died inside the board
+   the moment the two rounds met in one tree. The words it is called with are written down.
+   Release AN fix: error hands back the toast's number (its place in that list, from 1) and dismiss writes
+   down the number it was given, so a test can say WHICH words were taken back and when. */
+vi.mock('sonner', () => ({ toast: {
+  success: () => undefined,
+  error: (words: string) => ctl.toasts.push(words),
+  dismiss: (id?: number) => { ctl.dismissed.push(id ?? -1); },
+} }));
 /* The control's switch: the real entry, its press followed by one extra draw when the switch is on. */
-const ctl = vi.hoisted(() => ({ extraDraw: false, playFirst: false }));
+const ctl = vi.hoisted(() => ({ extraDraw: false, playFirst: false, noHandOver: false, opens: [] as { year: number; seasons: number }[], toasts: [] as string[], dismissed: [] as number[] }));
 vi.mock('@/components/us-career/season/UsSeasonCentreEntry', async importOriginal => {
   const original = await importOriginal<typeof import('@/components/us-career/season/UsSeasonCentreEntry')>();
   const host = await import('@/components/us-career/season/UsSeasonCentreHost');
@@ -39,10 +63,13 @@ vi.mock('@/components/us-career/season/UsSeasonCentreEntry', async importOrigina
   const Wrapped = (props: P) => {
     const centre = useContext(host.UsSeasonCentreOpen);
     /* the load first control: the OLD order, the season played before the viewer is asked for */
-    const api = ctl.playFirst && centre ? { ...centre, ready: (from?: HTMLElement | null) => { props.onPlay(); return centre.ready(from); } } : centre;
+    const first = ctl.playFirst && centre ? { ...centre, ready: (from?: HTMLElement | null) => { props.onPlay(); return centre.ready(from); } } : centre;
+    /* every season the host is asked to show is written down: its year and how many seasons its career holds */
+    const api = first ? { ...first, open: (r: UsSeasonCentreRequest) => { ctl.opens.push({ year: r.row.year, seasons: r.career.seasons.length }); first.open(r); } } : first;
     return (
       <host.UsSeasonCentreOpen.Provider value={api}>
-        <Entry {...props} onPlay={() => { props.onPlay(); if (ctl.extraDraw) Math.random(); }} />
+        {/* the hand over control: the board before Release AN, which gave the entry nothing but its Play */}
+        <Entry {...props} played={ctl.noHandOver ? undefined : props.played} onPlay={() => { props.onPlay(); if (ctl.extraDraw) Math.random(); }} />
       </host.UsSeasonCentreOpen.Provider>
     );
   };
@@ -149,6 +176,10 @@ async function runArm(Board: ComponentType, sport: UsCareerSport, pos: string, w
 beforeEach(() => {
   ctl.extraDraw = false;
   ctl.playFirst = false;
+  ctl.noHandOver = false;
+  ctl.opens.length = 0;
+  ctl.toasts.length = 0;
+  ctl.dismissed.length = 0;
   vi.useFakeTimers({ toFake: ['Date'] });
   vi.setSystemTime(new Date('2026-10-07T12:00:00Z'));
   localStorage.clear();
@@ -294,7 +325,86 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     expect(q('[data-season-centre]')).toBeNull();
   }, 60000);
 
-  it('never opens a line another tab saved: the saved line must be the year he pressed for', async () => {
+  /** From here on the browser refuses every write of this career's save, as a full storage does. */
+  function refuseTheSave() {
+    const real = Storage.prototype.setItem;
+    return vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, k: string, v: string) {
+      if (k === sport.saveKey) throw new Error('QuotaExceededError');
+      real.call(this, k, v);
+    });
+  }
+  /** Round 1084's notice for a save the device refused, with its Retry save button. */
+  const refusedNotice = () => q('[data-us-career-save-error][data-save-operation="write"]');
+
+  it('opens the season he just played when storage is full and the save was refused', async () => {
+    seedSave(sport, pos, `full|${sport.slug}`);
+    render(<MemoryRouter><Board /></MemoryRouter>);
+    await flush();
+    const stored = localStorage.getItem(sport.saveKey);
+    const year = savedCareer(sport).year;
+    /* while the device still takes the save nothing is said */
+    expect(refusedNotice()).toBeNull();
+    expect(ctl.toasts).toEqual([]);
+    const refusing = refuseTheSave();
+    await pressWatch();
+    /* the save is where it was (no season on it), and the viewer is open on the one season this press played */
+    expect(localStorage.getItem(sport.saveKey)).toBe(stored);
+    expect(savedCareer(sport).seasons).toHaveLength(0);
+    await waitFor(() => expect(q('[data-season-centre]')).not.toBeNull(), { timeout: 4000 });
+    expect(q('[data-us-centre-cover]')).not.toBeNull();
+    expect(ctl.opens).toEqual([{ year, seasons: 1 }]);
+    /* Release AN, second half, where Round 1084 meets this press: the refused save is SAID, once, while the
+       viewer opens over it. Neither round takes the other's promise away. */
+    expect(refusedNotice()).not.toBeNull();
+    expect(ctl.toasts).toHaveLength(1);
+    /* and the words stay up for as long as the save is still refused */
+    expect(ctl.dismissed).toEqual([]);
+    /* closing it leaves the curtain of that same season, as on any other press */
+    await click(q('[data-centre-exit]'));
+    expect(q('[data-us-centre-cover]')).toBeNull();
+    expect(q('[data-season-reveal]')).not.toBeNull();
+    expect(localStorage.getItem(sport.saveKey)).toBe(stored);
+    /* the notice is still up beside the curtain, and once the device takes writes again its Retry save puts
+       the season he watched on the save: the same year, one season, nothing played a second time.
+       DO NOT TRIM the next line: it is the only check anywhere that holds the notice on the season curtain,
+       the screen a refused Play lands on. A review took withSaveStatus off the curtain's return in
+       UsCareerBoard.tsx: the save retry tests and simUsCareerSaveRetry (all 23 controls) stayed green and
+       this test alone went red. */
+    expect(q('[data-season-reveal]')).not.toBeNull();
+    expect(refusedNotice()).not.toBeNull();
+    refusing.mockRestore();
+    await click([...refusedNotice()!.querySelectorAll('button')].find(b => squash(b.textContent ?? '') === 'Retry save'));
+    expect(refusedNotice()).toBeNull();
+    expect(savedCareer(sport).seasons).toHaveLength(1);
+    expect(savedCareer(sport).seasons[0].year).toBe(year);
+    expect(ctl.opens).toEqual([{ year, seasons: 1 }]);
+    expect(ctl.toasts).toHaveLength(1);
+    /* Release AN fix: the save went through, so the toast that said it had not is taken back there and then
+       (it used to stay up for the rest of its few seconds, beside a notice that had just gone), and it is
+       that one toast, by its number, never a blanket dismiss */
+    expect(ctl.dismissed).toEqual([1]);
+  }, 30000);
+
+  it('CONTROL: without the board handing its career over, the same press plays the season and opens nothing', async () => {
+    /* the needle: the entry asks the board for the played career exactly once, after its one call of Play */
+    const src = fs.readFileSync(path.resolve(process.cwd(), 'src/components/us-career/season/UsSeasonCentreEntry.tsx'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+    expect(src.split('at.played?.()')).toHaveLength(2);
+    expect(src.indexOf('onPlay();')).toBeLessThan(src.indexOf('at.played?.()'));
+    ctl.noHandOver = true;
+    seedSave(sport, pos, `full|${sport.slug}`);
+    render(<MemoryRouter><Board /></MemoryRouter>);
+    await flush();
+    refuseTheSave();
+    await pressWatch();
+    ctl.noHandOver = false;
+    /* the season was played (the curtain is up) and no viewer came: what a reviewer found on a phone with full storage */
+    expect(q('[data-season-reveal]')).not.toBeNull();
+    expect(q('[data-us-centre-cover]')).toBeNull();
+    expect(q('[data-season-centre]')).toBeNull();
+    expect(ctl.opens).toEqual([]);
+  }, 30000);
+
+  it('never opens a line another tab saved: with his own write refused he watches the season this tab played', async () => {
     seedSave(sport, pos, `tab|${sport.slug}`);
     render(<MemoryRouter><Board /></MemoryRouter>);
     await flush();
@@ -310,17 +420,42 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     expect(other.c.seasons[0].games).toBeGreaterThan(0);
     localStorage.setItem(sport.saveKey, JSON.stringify(other));
     const stored = localStorage.getItem(sport.saveKey);
-    const real = Storage.prototype.setItem;
-    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, k: string, v: string) {
-      if (k === sport.saveKey) throw new Error('QuotaExceededError');
-      real.call(this, k, v);
-    });
+    refuseTheSave();
     await pressWatch();
-    /* this tab played its own season in memory (the curtain is up), the stored line is the other tab's, and nothing opens */
+    /* this tab played its own season in memory (the curtain is up under the viewer) and the stored line is
+       still the other tab's. Since Release AN the viewer opens, on this tab's own season: the one line the
+       host was asked for is the year he pressed for, never the other tab's year */
     expect(localStorage.getItem(sport.saveKey)).toBe(stored);
     expect(q('[data-season-reveal]')).not.toBeNull();
+    await waitFor(() => expect(q('[data-season-centre]')).not.toBeNull(), { timeout: 4000 });
+    expect(ctl.opens).toEqual([{ year, seasons: 1 }]);
+    expect(ctl.opens.some(o => o.year === year + 3)).toBe(false);
+    /* Release AN fix: he leaves with the save still refused. The toast told him to use Retry save, and there
+       is no Retry save where he is going, so it leaves with the page (it used to follow him to Home and back) */
+    expect(ctl.toasts).toHaveLength(1);
+    expect(ctl.dismissed).toEqual([]);
+    cleanup();
+    expect(ctl.dismissed).toEqual([1]);
+  }, 30000);
+
+  it('CONTROL: before the hand over, that press with another tab\'s line on the save opened nothing at all', async () => {
+    ctl.noHandOver = true;
+    seedSave(sport, pos, `tab|${sport.slug}`);
+    render(<MemoryRouter><Board /></MemoryRouter>);
+    await flush();
+    const other = JSON.parse(localStorage.getItem(sport.saveKey)!) as { c: UsCareerCore; teamQuality: number };
+    other.c.year += 3;
+    const rng = keyedRng(`tab|other|${sport.slug}`);
+    sport.campBattle(other.c as never, other.teamQuality, rng);
+    sport.simSeason(other.c as never, other.teamQuality, rng);
+    localStorage.setItem(sport.saveKey, JSON.stringify(other));
+    refuseTheSave();
+    await pressWatch();
+    ctl.noHandOver = false;
+    /* the read back alone turns the other tab's line away (its year is not the year he pressed for) */
+    expect(q('[data-season-reveal]')).not.toBeNull();
     expect(q('[data-us-centre-cover]')).toBeNull();
-    expect(q('[data-season-centre]')).toBeNull();
+    expect(ctl.opens).toEqual([]);
   }, 30000);
 
   it('opens the viewer or the plain tile, never a throw, for a last line from an older build', async () => {

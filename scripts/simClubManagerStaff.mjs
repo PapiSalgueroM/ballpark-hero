@@ -205,7 +205,7 @@ globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: 
 export const engine = await import('${enginePath}');
 export const desk = await import('${deskPath}');
 export const books = await import('${booksPath}');
-export { NATIONALITY_BY_WORLD } from '${ROOT_URL}/src/data/playerNationalities.ts';
+export { NATIONALITY_BY_WORLD } from '${ROOT_URL}/src/data/nationalities/allWorlds.ts';
 export { ageDriftBand } from '${ROOT_URL}/src/lib/clubManagerEras.ts';
 `);
 /* Every module under test is aliased in by its import path, so the engine's

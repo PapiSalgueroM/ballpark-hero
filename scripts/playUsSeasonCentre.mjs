@@ -47,6 +47,9 @@
  *             game is listed at once
  *  held       a year whose real length is not the career's shows its line
  *             and no button
+ *  full storage (Release AN, phone) from the press on every write is refused:
+ *             the season is played in memory, the save is untouched, and the
+ *             viewer still opens on that season, under the cover
  *  errors     no page error and no console error
  *
  * Controls (US_SEASON_PLAY_CONTROL=), each served to the browser only, each
@@ -58,6 +61,8 @@
  *   cover   the cover is hidden                                -> cover
  *   playfirst the entry does not wait for the viewer (the order
  *           before the fix pass of 2026-10-08)                 -> load first
+ *   nohandover the board hands the entry no played career (the
+ *           board before Release AN)                           -> full storage
  *
  * Run: npm run build, then
  *   MSYS_NO_PATHCONV=1 ENGINES=chromium node scripts/playUsSeasonCentre.mjs
@@ -170,7 +175,20 @@ if (CONTROL === 'playfirst') {
   served.set(where[0], textOf(where[0]).replace(re, (m, c, f) => `(${c}.ready(${f}),!0)`));
   console.log(`CONTROL playfirst: the served entry plays the season without waiting for the viewer (${where[0]})`);
 }
-if (CONTROL && !['static', 'write', 'count', 'cover', 'playfirst'].includes(CONTROL)) { console.error(`unknown US_SEASON_PLAY_CONTROL ${CONTROL}`); process.exit(2); }
+if (CONTROL === 'nohandover') {
+  /* Release AN: the board hands the entry the career its last Play played. Served without it, the way
+     the board was before: the full storage press must then play the season and open nothing. Exit 2,
+     not a throw, when the needle is not there once: a control that never ran must not read as fired. */
+  const re = /played:\(\)=>[\w$]+\.current/g;
+  const where = assets.filter(f => (textOf(f).match(re) ?? []).length > 0);
+  if (where.length !== 1 || (textOf(where[0]).match(re) ?? []).length !== 1) {
+    console.error(`control nohandover refused: the board's hand over is in ${where.length} chunks (${where.map(f => (textOf(f).match(re) ?? []).length).join(', ')} times), expected once in one`);
+    process.exit(2);
+  }
+  served.set(where[0], textOf(where[0]).replace(re, 'played:void 0'));
+  console.log(`CONTROL nohandover: the served board hands the entry no played career (${where[0]})`);
+}
+if (CONTROL && !['static', 'write', 'count', 'cover', 'playfirst', 'nohandover'].includes(CONTROL)) { console.error(`unknown US_SEASON_PLAY_CONTROL ${CONTROL}`); process.exit(2); }
 
 const server = spawn(process.execPath, [path.join(ROOT, 'scripts/lib/hostLikeServer.mjs'), DIST, String(PORT)], { stdio: 'ignore' });
 await new Promise(r => setTimeout(r, 1200));
@@ -557,6 +575,24 @@ async function walk(slug, vp) {
     const held = await H.page.evaluate(() => ({ line: document.querySelector('[data-season-centre-held]')?.textContent ?? '', button: !!document.querySelector('[data-week-by-week]') }));
     check('held', held.line.startsWith('📺') && !held.button, `${tag}: the held year ${d.held.year} shows its line and no button ("${held.line.slice(0, 70)}")`);
     await H.ctx.close();
+
+    /* Release AN: storage is full. From the press on the browser refuses every write, the board plays
+       through the refused save, and the viewer must still open on the season that press played: the
+       entry used to find the season by reading the save back, so it played the season and opened
+       nothing (a review saw exactly that where Rounds 1048 and 1142 meet). */
+    const F = await open(slug, save, vp);
+    const kept = await savedString(F.page, save.key);
+    await F.page.evaluate(() => {
+      window.__usRefused = 0;
+      Storage.prototype.setItem = function refuse() { window.__usRefused += 1; throw new DOMException('The quota has been exceeded.', 'QuotaExceededError'); };
+    });
+    await pressEntry(F.page);
+    const fullOpened = await waitFor(async () => (await hubState(F.page, save.key)).viewer, 20000);
+    const full = await hubState(F.page, save.key);
+    const refused = await F.page.evaluate(() => window.__usRefused ?? 0);
+    check('full storage', refused > 0 && full.curtain && full.saved === kept, `${tag}: with storage full the press played its season in memory: ${refused} write(s) refused, the curtain is there and the save is untouched (curtain ${full.curtain}, save unchanged ${full.saved === kept})`);
+    check('full storage', fullOpened && full.cover, `${tag}: with storage full the press still opens the season it played, under the cover (viewer ${full.viewer}, cover ${full.cover}${F.errors.length ? `; the page said: ${F.errors.slice(0, 2).join(' | ')}` : ''})`);
+    await F.ctx.close();
     await staleWalks(slug, vp, save, afterPlay, firstDraws, tag);
   }
 }
@@ -569,7 +605,7 @@ try {
 await browser.close();
 console.log(`supabase requests aborted: ${aborted}`);
 const failed = [...fails.values()].reduce((a, l) => a + l.length, 0);
-const NAMED = { static: 'lazy', write: 'same press', count: 'clock', cover: 'cover', playfirst: 'load first' };
+const NAMED = { static: 'lazy', write: 'same press', count: 'clock', cover: 'cover', playfirst: 'load first', nohandover: 'full storage' };
 if (CONTROL) {
   const ok = fails.has(NAMED[CONTROL]);
   console.log(`${ok ? `control ${CONTROL}: RED AT THE NAMED CHECK (${NAMED[CONTROL]})` : `control ${CONTROL}: DID NOT FIRE AT ITS NAMED CHECK (${NAMED[CONTROL]})`}; checks red: ${[...fails.keys()].join(', ') || 'none'}`);

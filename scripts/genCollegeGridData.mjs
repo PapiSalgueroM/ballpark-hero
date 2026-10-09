@@ -103,12 +103,25 @@
    the columns of public.college_grid_players (so the file loads row for row)
    plus a proof block the board generator reads for two-source answers.
 
+   ROUND 1105: WHAT SHIPS. The page no longer reads the table. Two compact
+   files are written from the key into src/data/collegeGrid/ and ride in the
+   build: collegeGridSearch.json (the display names in prominence order) and
+   collegeGridJudge.json (the schools and only the facts the thirteen criteria
+   read). Row i of one is row i of the other and a shared stamp pairs them.
+   Thirteen rows a vandal typed into the 1977 draft list never ship: see
+   AUDITED_OUT.
+
    Run: node scripts/genCollegeGridData.mjs
         node scripts/genCollegeGridData.mjs --check   (rebuild in memory, compare, write nothing)
+   Both of those pull the source tables from the database. These two never do:
+        node scripts/genCollegeGridData.mjs --compact           (read the committed key, drop the audited rows, write the two compact files)
+        node scripts/genCollegeGridData.mjs --compact --check   (write nothing; exit 1 when the key or either compact file is stale)
 */
+import { createHash } from 'node:crypto';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { pullAll } from './genNflGridData.mjs';
 import { cleanDraftPicks, firstRoundEnds, inFirstRound } from './lib/draftRounds.mjs';
 import { isPlaceholderName } from './lib/placeholderName.mjs';
@@ -116,6 +129,45 @@ import { isPlaceholderName } from './lib/placeholderName.mjs';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const OUT = path.join(ROOT, 'scripts', 'data', 'collegeGridPlayers.json');
 export const NFL_KEY = path.join(ROOT, 'scripts', 'data', 'nflGridPlayers.json');
+export const SEARCH_OUT = path.join(ROOT, 'src', 'data', 'collegeGrid', 'collegeGridSearch.json');
+export const JUDGE_OUT = path.join(ROOT, 'src', 'data', 'collegeGrid', 'collegeGridJudge.json');
+
+/* ROUND 1105: THIRTEEN ROWS THAT NEVER SHIP.
+
+   docs/audits/college-tables-2026-09-30.md section 1 (Round 706) read every
+   1977 pick against two sources, drafthistory.com and profootballarchives.com
+   (both read 2026-09-30), and found thirteen rows of nfl_draft_picks that
+   neither source holds at those picks: names typed into the list by a vandal.
+   Step 2b of supabase/migrations/20260930120000_round_706_nfl_draft_picks.sql
+   deletes them from the table by id and name, but that migration is held, so
+   the key built from the table still carried all thirteen, the search offered
+   them and two were accepted answers.
+
+   The picks here come from the audit file and from the key's own ids
+   (draft:1977-<pick>); the migration lists table ids and names, no picks.
+   scripts/simCollegeGridShipped.mjs reads the thirteen names out of the
+   migration's own DELETE statement and fails if this list disagrees.
+
+   The match is year AND pick AND folded name, never the slot alone: the real
+   player drafted at one of these picks may be inserted later (the sources give
+   pick 320 as Dave Greenwood), and he must not be dropped with the row that
+   took his place. Nobody is added here. The real picks are a later round's,
+   with their own two sources. */
+export const AUDITED_OUT = [
+  { year: 1977, pick: 280, name: 'Sammy Strock' },
+  { year: 1977, pick: 281, name: 'John Bafia' },
+  { year: 1977, pick: 320, name: 'Adam Dzierdzik' },
+  { year: 1977, pick: 322, name: 'Kyle Ecke' },
+  { year: 1977, pick: 323, name: 'Stephen Aragon' },
+  { year: 1977, pick: 324, name: 'Ethan Ranney' },
+  { year: 1977, pick: 325, name: 'Anthony Dzierdzik' },
+  { year: 1977, pick: 326, name: 'Ethan Venderveen' },
+  { year: 1977, pick: 327, name: 'Justin Venderveen' },
+  { year: 1977, pick: 328, name: 'Elliot Ecke' },
+  { year: 1977, pick: 329, name: 'Charlie Kirk' },
+  { year: 1977, pick: 330, name: 'Benedict Fernzi' },
+  { year: 1977, pick: 331, name: 'Jakob Cepon' },
+];
 
 export const JOIN_WINDOW_YEARS = 3;
 export const ALIAS_MIN_ENTRIES = 3;
@@ -180,6 +232,28 @@ export function unmirrorName(s) {
 /** A draft table name as a person's name: entities decoded, a mirrored name read once, a Hall of Fame marker at the end ("Roger StaubachHOF", "Paul Warfield HOF") and a trailing lone number ("Matt Snell 3") dropped. */
 export function readDraftName(s) {
   return unmirrorName(decodeText(s)).trim().replace(/([a-z])HOF$/, '$1').replace(/\s+HOF$/, '').replace(/\s+\d+$/, '').trim();
+}
+
+/** True for a draft table row that is one of AUDITED_OUT: the year, the pick and the folded name all match. */
+export function isAuditedPick(p) {
+  const year = Number(p.year);
+  const pick = Number(p.pick);
+  const fold = foldName(readDraftName(p.player_name));
+  return AUDITED_OUT.some(a => a.year === year && a.pick === pick && foldName(a.name) === fold);
+}
+
+/** The same rule over the committed file's rows (COLUMNS order): id draft:<year>-<pick> and the folded name column. */
+export function dropAuditedRows(fileRows) {
+  const idAt = COLUMNS.indexOf('id');
+  const nameAt = COLUMNS.indexOf('name');
+  const listed = new Map(AUDITED_OUT.map(a => [`draft:${a.year}-${a.pick}`, foldName(a.name)]));
+  const dropped = [];
+  const rows = fileRows.filter(r => {
+    const hit = listed.has(r[idAt]) && listed.get(r[idAt]) === foldName(r[nameAt]);
+    if (hit) dropped.push(r);
+    return !hit;
+  });
+  return { rows, dropped };
 }
 
 const DASHES = new RegExp('[' + String.fromCharCode(0x2010, 0x2011, 0x2012, 0x2013, 0x2014, 0x2015, 0x2212) + ']', 'g');
@@ -283,11 +357,17 @@ export function deriveAliases(pairs) {
 export function buildCollegeKey(src, { control = {} } = {}) {
   const positionGroups = src.positionGroups ?? readPositionGroups();
   const careers = src.careers;
-  const picks = cleanDraftPicks(src.picks);
+  /* Round 1105: the audited rows leave BEFORE the cleaner, not after it. The
+     cleaner keeps one row per (year, pick), the lowest id, so with the real
+     pick inserted beside an audited row at the same slot it could keep the
+     audited one, and dropping that afterwards would lose the real player. */
+  const sourcePicks = control.noAuditExclusion ? src.picks : src.picks.filter(p => !isAuditedPick(p));
+  const picks = cleanDraftPicks(sourcePicks);
   const ends = firstRoundEnds(picks);
   const { splitYear, shares } = deriveSplitYear(picks, positionGroups);
   const decodeFirst = control.decodeFirst !== false;
   const stats = {};
+  stats.auditedOut = src.picks.length - sourcePicks.length;
 
   const draftGroupsOf = p => (Number(p.year) >= splitYear ? groupsOfListedPosition(p.position, positionGroups) : new Set());
   const rows = picks.map(p => ({
@@ -691,6 +771,7 @@ export async function pullSources(log = () => {}) {
 export const RULES = {
   names: 'foldName: accents stripped, lower case, apostrophes and periods dropped, other non alphanumerics a space, runs of single letters joined, a trailing jr, sr, ii, iii or iv dropped, a quoted nickname dropped; a draft name mirrored as "Last, FirstFirst Last" is read as "First Last" and a Hall of Fame marker at its end (StaubachHOF, Warfield HOF) and a trailing lone number (Snell 3) are dropped; every dash character read as a hyphen',
   draftRows: 'nfl_draft_picks with placeholder rows dropped (a forfeit sentence, or no position and no college), then one row per (year, pick), the lowest id (scripts/lib/draftRounds.mjs)',
+  excluded: `${AUDITED_OUT.length} rows of the 1977 draft list are left out before anything else is read: picks ${AUDITED_OUT.map(a => a.pick).join(', ')}, each matched on year, pick and folded name. Two sources (drafthistory.com and profootballarchives.com, read 2026-09-30) hold nobody of those names at those picks (docs/audits/college-tables-2026-09-30.md section 1); a different name at one of those picks is kept`,
   identity: `a draft row joins a career on folded name plus the key's equal draft year and pick, or a first season 0 to ${JOIN_WINDOW_YEARS} years after the draft with a compatible position group; tiers both, pick, then window after every equal-pick join, where a career already holding a row from that draft year is no candidate; two careers in the first non empty tier is ambiguous and the row joins and forms nothing; an undrafted career takes no window join; window joins leaving a career with rows sharing no college are dropped; a row that could be a career's but joined nobody turns that career's false first_round to null unless the row is past its boundary too, and its best_pick to null if the row's pick is smaller. A row still unjoined then joins the one career holding its slot (the NFL key draft year and pick, or the roster draft number in the year before or the year of the first season) whose surname folds alike and that holds no row from that year. Unjoined rows with one folded name, one college and years within ${JOIN_WINDOW_YEARS} of each other form a draft-only entry. A Heisman row joins the one entry of the same folded name whose colleges hold its school (a quoted nickname also tried as nickname plus surname; two such entries told apart by the winner's listed position group when exactly one holds it), else stands alone. A cfb stats row adds its schools when its folded name matches the entry's name or a name on one of its draft rows, its last season is in the ${JOIN_WINDOW_YEARS} seasons before one of the entry's draft years and its list holds that row's college; a row fitting two entries adds to neither`,
   colleges: `HTML entities decoded before splitting on semicolons; canonical spellings from a derived alias table (a roster spelling maps to a draft spelling on at least ${ALIAS_MIN_ENTRIES} joined careers and at least ${ALIAS_MIN_SHARE * 100} percent of that roster spelling's joined careers; on a career whose roster already spells one of its draft colleges exactly, its other roster spellings are transfer schools and not evidence), applied to every source; no alias typed by hand; a school held only inside a roster transfer list (a college string naming two or more schools) and by no other source is left out when the cfb stats tables cover it and a joined cfb row lists two or more schools without it`,
   collegesAgreed: 'a draft college also held by the roster, the joined Heisman row or a joined cfb stats row',
@@ -746,9 +827,135 @@ export function renderFile(players, sources, stats) {
   }, null, 0);
 }
 
+// ---------------------------------------------------------------------------
+// The two files that ship (Round 1105)
+// ---------------------------------------------------------------------------
+
+/** One letter per position group in the judge file. */
+export const GROUP_LETTERS = { QB: 'Q', RB: 'R', WR: 'W', TE: 'T', OL: 'O', DL: 'D', LB: 'L', DB: 'B' };
+/** The bits of the judge file's f column. */
+export const FLAG_BITS = { firstRoundTrue: 1, firstRoundFalse: 2, undrafted: 4, identityOpen: 8, heismanOpen: 16 };
+
+const byCodeUnit = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
+
+/** The page's own module (src/lib/collegeGrid.ts), bundled into a fresh folder so two runs can never read each other's bundle. */
+export async function loadCollegeLib() {
+  const { build } = await import('esbuild');
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'collegeGridLib-'));
+  const entry = path.join(dir, 'entry.mjs');
+  const outfile = path.join(dir, 'bundle.mjs');
+  /* The supabase client reads localStorage when the module loads, and a static
+     import is hoisted above the stub, so the lib is imported dynamically. */
+  fs.writeFileSync(entry, [
+    'globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };',
+    `export const lib = await import('${path.join(ROOT, 'src', 'lib', 'collegeGrid.ts').replaceAll('\\', '/')}');`,
+    '',
+  ].join('\n'));
+  await build({ entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') } });
+  return (await import(pathToFileURL(outfile).href)).lib;
+}
+
+/**
+ * The search file and the judge file as JSON text with no whitespace, from a
+ * parsed key file. lib is the page's module: identityOpen and heismanOpen are
+ * set by its own markCollegeNamesakes over the WHOLE key, so the browser needs
+ * no folded name, no first season and no id.
+ *
+ * Order, deterministic and never localeCompare: seasons descending, then the
+ * display name by code unit, then the id by code unit. That is the search's
+ * prominence order, so the list needs no seasons column.
+ */
+export function renderCompact(file, lib) {
+  const players = readKeyFile(file);
+  const entries = lib.indexCollegeEntries(players);
+  if (entries.length !== players.length) throw new Error(`the page's module read ${entries.length} of the key's ${players.length} rows`);
+  const order = players.map((_, i) => i).sort((a, b) => (
+    players[b].seasons - players[a].seasons
+    || byCodeUnit(players[a].display_name, players[b].display_name)
+    || byCodeUnit(players[a].id, players[b].id)
+  ));
+  const schools = [...new Set(players.flatMap(p => p.colleges))].sort(byCodeUnit);
+  const schoolAt = new Map(schools.map((s, i) => [s, i]));
+  const names = [];
+  const s = [];
+  const g = [];
+  const pk = [];
+  const f = [];
+  const h = [];
+  order.forEach((i, row) => {
+    const p = players[i];
+    const e = entries[i];
+    if (e.id !== p.id) throw new Error(`row ${i}: the page's module returned ${e.id} for ${p.id}`);
+    if (typeof p.display_name !== 'string' || !p.display_name) throw new Error(`${p.id} has no display name`);
+    names.push(p.display_name);
+    s.push(p.colleges.map(c => schoolAt.get(c)));
+    g.push(p.groups.map(code => {
+      if (!GROUP_LETTERS[code]) throw new Error(`${p.id} holds a position group this file cannot write: ${code}`);
+      return GROUP_LETTERS[code];
+    }).join(''));
+    if (p.best_pick === 0) throw new Error(`${p.id} holds a best_pick of 0, which the judge file reads as no pick`);
+    if (p.best_pick != null && (!Number.isInteger(p.best_pick) || p.best_pick < 0)) throw new Error(`${p.id} holds a best_pick that is not a pick: ${p.best_pick}`);
+    pk.push(p.best_pick ?? 0);
+    f.push(
+      (p.first_round === true ? FLAG_BITS.firstRoundTrue : 0)
+      | (p.first_round === false ? FLAG_BITS.firstRoundFalse : 0)
+      | (p.undrafted === true ? FLAG_BITS.undrafted : 0)
+      | (e.identityOpen ? FLAG_BITS.identityOpen : 0)
+      | (e.heismanOpen ? FLAG_BITS.heismanOpen : 0),
+    );
+    if (p.heisman_year != null) h.push([row, p.heisman_year]);
+  });
+  if (new Set(names).size !== names.length) throw new Error('two rows of the key share a display name, and the search file holds names only');
+  const stamp = createHash('sha256').update(JSON.stringify([names, schools, s, g, pk, f, h])).digest('hex').slice(0, 16);
+  const count = names.length;
+  return {
+    search: JSON.stringify({ v: 1, stamp, count, names }),
+    judge: JSON.stringify({ v: 1, stamp, count, schools, s, g, p: pk, f, h }),
+    stamp,
+    count,
+  };
+}
+
+/** Writes the two compact files (the folder is made when missing). */
+export function writeCompact(compact) {
+  fs.mkdirSync(path.dirname(SEARCH_OUT), { recursive: true });
+  fs.writeFileSync(SEARCH_OUT, compact.search);
+  fs.writeFileSync(JUDGE_OUT, compact.judge);
+}
+
+/** The offline branch: the committed key in, the two compact files out. Never pulls. Returns the exit code. */
+export async function runCompact({ check = false, log = console.log } = {}) {
+  const file = JSON.parse(fs.readFileSync(OUT, 'utf8'));
+  const { rows, dropped } = dropAuditedRows(file.rows);
+  const rulesSame = JSON.stringify(file.rules) === JSON.stringify(RULES);
+  /* The same header keys in the same order; generatedOn is untouched because
+     no source was pulled. */
+  const next = { ...file, rules: RULES, rows };
+  const compact = renderCompact(next, await loadCollegeLib());
+  const read = p => (fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : null);
+  const stale = [
+    dropped.length ? `the key still holds ${dropped.length} audited rows` : null,
+    rulesSame ? null : 'the key\'s rules block is not the generator\'s',
+    read(SEARCH_OUT) === compact.search ? null : `${path.relative(ROOT, SEARCH_OUT)} differs from the render`,
+    read(JUDGE_OUT) === compact.judge ? null : `${path.relative(ROOT, JUDGE_OUT)} differs from the render`,
+  ].filter(Boolean);
+  if (check) {
+    log(stale.length ? `STALE: ${stale.join('; ')}` : `up to date: ${compact.count} rows, stamp ${compact.stamp}, key and both compact files match`);
+    return stale.length ? 1 : 0;
+  }
+  if (dropped.length || !rulesSame) {
+    fs.writeFileSync(OUT, JSON.stringify(next, null, 0));
+    log(`rewrote ${path.relative(ROOT, OUT)}: ${dropped.length} audited rows out (${dropped.map(r => r[COLUMNS.indexOf('id')]).join(', ')}), ${rows.length} rows kept`);
+  }
+  writeCompact(compact);
+  log(`wrote ${path.relative(ROOT, SEARCH_OUT)} (${compact.search.length} chars) and ${path.relative(ROOT, JUDGE_OUT)} (${compact.judge.length} chars): ${compact.count} rows, stamp ${compact.stamp}`);
+  return 0;
+}
+
 function printStats(players, stats, log = console.log) {
   const pct = (a, b) => `${a} of ${b} (${b ? ((100 * a) / b).toFixed(1) : '0.0'} percent)`;
   log(`${players.length} entries: ${players.filter(p => p.id.startsWith('draft:')).length} draft-only, ${players.filter(p => p.id.startsWith('heisman:')).length} Heisman-only, ${players.filter(p => !p.id.includes(':') || p.id.startsWith('nb:')).length} careers`);
+  log(`audited 1977 rows left out before cleaning: ${stats.auditedOut} of ${AUDITED_OUT.length} listed`);
   log(`draft rows after cleaning ${stats.picks}; mirrored names read ${stats.mirroredNames}; Hall of Fame markers dropped ${stats.hofMarkers}; trailing numbers dropped ${stats.trailingNumbers}`);
   log(`joins: ${JSON.stringify(stats.joins)}; ambiguous rows: ${stats.ambiguousRowList.join(', ')}`);
   log(`draft-only entries sharing a folded name with a career: ${JSON.stringify(stats.draftOnlySharingCareerName)} (withCareerAtFloor: the career starts at the key's ${stats.floorSeason} floor and the draft is earlier)`);
@@ -769,6 +976,8 @@ function printStats(players, stats, log = console.log) {
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isMain) {
   const check = process.argv.includes('--check');
+  /* Round 1105: the offline branch runs BEFORE any pull and never reaches the database. */
+  if (process.argv.includes('--compact')) process.exit(await runCompact({ check }));
   const src = await pullSources(m => console.log('   ' + m));
   const { players, stats } = buildCollegeKey(src);
   const sources = { careers: src.careers.length, picks: src.picks.length, rosters: src.rosters.length, heisman: src.heisman.length, qb: src.qb.length, rb: src.rb.length };
@@ -784,6 +993,10 @@ if (isMain) {
   }
   fs.writeFileSync(OUT, renderFile(players, sources, stats));
   console.log(`wrote ${path.relative(ROOT, OUT)} (${fs.statSync(OUT).size} bytes)`);
+  /* Round 1105: the two files that ship are written from the key just written. */
+  const compact = renderCompact(JSON.parse(fs.readFileSync(OUT, 'utf8')), await loadCollegeLib());
+  writeCompact(compact);
+  console.log(`wrote the two compact files: ${compact.count} rows, stamp ${compact.stamp}`);
 }
 
 export { printStats };

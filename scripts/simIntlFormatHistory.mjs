@@ -266,10 +266,14 @@ async function bundle(mode, entryText) {
   fs.rmSync(entry, { force: true });
   return mod;
 }
+/* Round 1042: runInternationalSummer left the engine file for soccerInternationalSquads.ts. Each
+   entry spreads both modules into one `intl`, so every call below stands, the plugin still
+   rewrites soccerInternational.ts inside each bundle, and the main arm's summer still runs on
+   main's rebuilt engine. */
+const BOTH = `import * as a from '${posix}/src/lib/soccerInternational.ts';\nimport * as b from '${posix}/src/lib/soccerInternationalSquads.ts';\nexport const intl = { ...a, ...b };\n`;
 const { intl, hist } = await bundle('branch',
-  `export * as intl from '${posix}/src/lib/soccerInternational.ts';\nexport * as hist from '${posix}/src/lib/intlFormatHistory.ts';\n`);
-const { intl: mainIntl } = await bundle('main',
-  `export * as intl from '${posix}/src/lib/soccerInternational.ts';\n`);
+  `${BOTH}export * as hist from '${posix}/src/lib/intlFormatHistory.ts';\n`);
+const { intl: mainIntl } = await bundle('main', BOTH);
 
 /* The ledger. Typed from the sources named in intlFormatHistory.ts, on
    purpose separately from it: teams/groups x size/thirds/first round, by the

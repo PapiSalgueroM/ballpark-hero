@@ -50,6 +50,8 @@ export const FLAG_CODES: Record<string, string> = {
   // Round 1035: Transfermarkt's spelling, and ESPN's and FotMob's, for an
   // A-League Men player whose nationality two of them agree on.
   "Southern Sudan": "ss", "South Sudan": "ss",
+  // Round 1052: a Russian Premier League player whose nationality two hosts agree on.
+  "Turkmenistan": "tm",
   // Round 925: Tim Duncan's birth country on nba.com and basketball-reference.
   "US Virgin Islands": "vi",
   // July 2026 site-wide flag-image sweep: names used by pools that previously
@@ -246,9 +248,9 @@ export function FlagFromEmoji({ emoji, size = 20 }: { emoji: string; size?: numb
 export function TextWithFlags({ text, size = 16 }: { text: string; size?: number }) {
   const value = text ?? '';
   const segments = splitFlagSegments(value);
-  if (!segments.some(seg => 'flag' in seg)) return <>{value}</>;
+  if (!segments.some(seg => 'flag' in seg)) return <span key={value}>{value}</span>;
   return (
-    <>
+    <span key={value}>
       {segments.map((seg, i) =>
         'flag' in seg ? (
           <FlagFromEmoji key={i} emoji={seg.flag} size={size} />
@@ -256,6 +258,6 @@ export function TextWithFlags({ text, size = 16 }: { text: string; size?: number
           <span key={i}>{seg.text}</span>
         ),
       )}
-    </>
+    </span>
   );
 }

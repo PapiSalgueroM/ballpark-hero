@@ -1,4 +1,4 @@
-import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useMemo, type ReactNode } from "react";
+import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useMemo, type ComponentType, type ReactNode } from "react";
 import { formatNumber } from '@/lib/formatNumber';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { useGameCompletion } from "@/hooks/useGameCompletion";
@@ -64,7 +64,8 @@ import type { FirstStageStage } from "@/lib/soccerCareerContinental";
 import { localizeMoney as money, CURRENCIES, getCurrency, setCurrency, rateNote } from "@/lib/soccerCurrency";
 /* Round 262: the squad you are actually in. Display only, and it renders
    nothing at all when we have no honest answer for that club and season. */
-import { depthChart, GROUP_LABEL, type DepthChart, type SquadMan } from "@/lib/soccerClubSquad";
+import { depthChart, GROUP_LABEL } from "@/lib/soccerClubSquad";
+import { SquadTile } from "@/components/soccer-career/SquadTile";
 import type { MoneyAction } from "@/lib/soccerMoney";
 import { bankSummary } from "@/lib/soccerMoney";
 import PhonePanel from "@/components/soccer-career/PhonePanel";
@@ -2072,7 +2073,7 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
               off the top of the screen and cut off the first nations. Flag
               sits to the RIGHT of the name, exactly as he asked. */}
           <Select value={nationality} onValueChange={setNationality}>
-            <SelectTrigger className="bg-muted/30"><SelectValue placeholder="Choose nationality" /></SelectTrigger>
+            <SelectTrigger className="bg-muted/30"><SelectValue placeholder={<span>Choose nationality</span>} /></SelectTrigger>
             <SelectContent position="popper" className="max-h-72">
               {/* Round 453: over a hundred nations is a long scroll, so they
                   sit under their confederation, the way qualifying groups them. */}
@@ -2092,15 +2093,15 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
         <div className="space-y-1.5">
           <Label>Position</Label>
           <Select value={position} onValueChange={handlePositionChange}>
-            <SelectTrigger className="bg-muted/30"><SelectValue placeholder="Choose position" /></SelectTrigger>
-            <SelectContent>{POSITIONS.map(p => <SelectItem key={p.value} value={p.value}>{p.label}</SelectItem>)}</SelectContent>
+            <SelectTrigger className="bg-muted/30"><SelectValue placeholder={<span>Choose position</span>} /></SelectTrigger>
+            <SelectContent>{POSITIONS.map(p => <SelectItem key={p.value} value={p.value}><span>{p.label}</span></SelectItem>)}</SelectContent>
           </Select>
         </div>
         <div className="space-y-1.5">
           <Label>Starting Era</Label>
           <Select value={era} onValueChange={setEra}>
-            <SelectTrigger className="bg-muted/30"><SelectValue placeholder="Choose era" /></SelectTrigger>
-            <SelectContent>{ERAS.map(e => <SelectItem key={e.value} value={e.value}>{e.label}</SelectItem>)}</SelectContent>
+            <SelectTrigger className="bg-muted/30"><SelectValue placeholder={<span>Choose era</span>} /></SelectTrigger>
+            <SelectContent>{ERAS.map(e => <SelectItem key={e.value} value={e.value}><span>{e.label}</span></SelectItem>)}</SelectContent>
           </Select>
         </div>
       </div>
@@ -2834,83 +2835,17 @@ export function RivalrySummaryCard({ summary, career }: { summary: RivalrySummar
 /* ─── Round 262: your place in the squad ───
    Sign for Arsenal and the question that decides your whole season is who is
    ahead of you. The game used to answer it with a projected number of games
-   and no names. This is the real squad, in the real season, with you slotted
-   in at your rating, and a tile for the whole thing.
-
-   It renders NOTHING when there is no honest answer: a club outside the hand
-   written map, a season outside the baked window, or a squad the data cannot
-   fill. No generated teammates stand in, because there is no honest way to
-   invent the squad of a real club in a real season. */
+   and no names. Round 262 answered it with a card on this page, for the real
+   squads only. Since Round 1115 the answer is the Squad tile
+   (src/components/soccer-career/SquadTile.tsx): every club and every year,
+   and it always says whether the squad is real, shown by role, or invented.
+   The offer line and the verdict line on this page still read the real squads only,
+   so they print nothing where there is no checked squad. */
 /** 1st, 2nd, 3rd, 11th. Used by the verdict screen's squad line. */
 function ordinalPlace(n: number): string {
   const teen = n % 100 >= 11 && n % 100 <= 13;
   const suf = teen ? "th" : n % 10 === 1 ? "st" : n % 10 === 2 ? "nd" : n % 10 === 3 ? "rd" : "th";
   return `${n}${suf}`;
-}
-
-function SquadManRow({ man, rank }: { man: SquadMan; rank: number }) {
-  return (
-    <div
-      data-squad-man={man.me ? "me" : "other"}
-      className={`grid grid-cols-[auto_1fr_auto_auto] gap-x-2 items-center text-[11px] rounded-md px-2 py-1 ${
-        man.me ? "bg-gold/15 border border-gold/50 font-bold" : "bg-muted/20"
-      }`}
-    >
-      <span className="text-muted-foreground w-4 shrink-0 tabular-nums">{rank}</span>
-      <span className="truncate">{man.name}</span>
-      <span className="text-[9px] uppercase tracking-wide text-muted-foreground w-8 text-right">{man.pos}</span>
-      <span className="w-6 text-right tabular-nums font-black">{man.ovr}</span>
-    </div>
-  );
-}
-
-function SquadDepthCard({ chart }: { chart: DepthChart }) {
-  const [open, setOpen] = useState(false);
-  const revealRef = useRevealScroll<HTMLDivElement>(open);
-  const label = GROUP_LABEL[chart.group];
-
-  if (open) {
-    return (
-      <div ref={revealRef} className="rounded-xl border border-border bg-card p-3 space-y-2">
-        <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-          {chart.club}, {chart.year}/{(chart.year + 1).toString().slice(-2)}
-        </div>
-        <div className="space-y-1 max-h-[300px] overflow-y-auto scrollbar-thin">
-          {chart.squad.map((m, i) => <SquadManRow key={`${m.name}-${i}`} man={m} rank={i + 1} />)}
-        </div>
-        <p className="text-[10px] text-muted-foreground">
-          The real {chart.club} squad that season, rated on the same scale as the rest of the site.
-        </p>
-        <Button variant="outline" onClick={() => setOpen(false)} className="w-full h-8 text-xs font-bold">← Back</Button>
-      </div>
-    );
-  }
-
-  return (
-    <div ref={revealRef} className="rounded-xl border border-border bg-card p-3 space-y-2">
-      <div className="flex items-center justify-between gap-2">
-        <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-          Your place in the squad
-        </span>
-        <span className="text-[9px] text-muted-foreground">{chart.year}/{(chart.year + 1).toString().slice(-2)}</span>
-      </div>
-      <p className="text-[11px] text-muted-foreground">
-        {chart.ahead === 0
-          ? `Nobody at ${chart.club} is rated above you among the ${label}. The shirt is yours to lose.`
-          : `${chart.ahead} of ${chart.club}'s ${label} are rated above you${chart.aheadOfMe ? `, and ${chart.aheadOfMe.name} is the one directly in front` : ""}.`}
-      </p>
-      <div className="space-y-1">
-        {chart.men.slice(0, 6).map((m, i) => <SquadManRow key={`${m.name}-${i}`} man={m} rank={i + 1} />)}
-      </div>
-      <button
-        onClick={() => setOpen(true)}
-        className="w-full bg-muted/20 hover:bg-muted/40 border border-border rounded-lg p-2 text-left transition-colors"
-      >
-        <div className="text-[11px] font-bold">👥 The whole squad</div>
-        <div className="text-[9px] text-muted-foreground">{chart.squad.length} players at {chart.club}</div>
-      </button>
-    </div>
-  );
 }
 
 function FinancialPanel({ career, onCurrencyChange }: { career: CareerState; onCurrencyChange?: () => void }) {
@@ -3799,8 +3734,22 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
      watchRow is a season opened from the summary card. Page state only. */
   const [centreFor, setCentreFor] = useState<number | null>(null);
   const [watchRow, setWatchRow] = useState<SeasonRecord | null>(null);
+  /* Round 1046: the list of seasons he can watch again, opened from Latest Events */
+  const [replaysOpen, setReplaysOpen] = useState(false);
   const onWeekByWeek = () => { const at = career.seasons.length; onNextSeason(); setCentreFor(at); };
-  const closeCentre = () => { setCentreFor(null); setWatchRow(null); };
+  /* Round 1046: where he stopped watching a season is kept in this browser only, never in the save. The Resume chip
+     (and the rule for whose season a kept place is) loads only when a place is kept at all: one storage read here. */
+  const [Chip, setChip] = useState<ComponentType<{ career: CareerState; at: number; onOpen: (row: SeasonRecord) => void }> | null>(null);
+  const [chipAt, setChipAt] = useState(0);
+  const peekResume = () => {
+    setChipAt(n => n + 1);
+    try {
+      if (localStorage.getItem("seasonCentre:v1:soccer")) import("@/components/soccer-career/SeasonResumeChip").then(m => setChip(() => m.default), () => undefined);
+    } catch { /* storage refused: no chip */ }
+  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(peekResume, []);
+  const closeCentre = () => { setCentreFor(null); setWatchRow(null); setReplaysOpen(false); peekResume(); };
   useEffect(() => {
     /* a press that opened nothing (a ban year) is forgotten at the next
        season start, and a new career never inherits it */
@@ -3995,11 +3944,12 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
       {/* Main panels */}
       <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-3">
-        {/* LEFT, Timeline */}
-        <div className="bg-card border border-border rounded-xl overflow-hidden order-2 md:order-1">
+        {/* LEFT, Timeline. md:self-start (Release AM): the card ends where its
+            list ends, where it used to stretch the full height of the hub beside
+            it and stand mostly empty. */}
+        <div className="bg-card border border-border rounded-xl overflow-hidden order-2 md:order-1 md:self-start">
           <div className="px-3 py-2 border-b border-border bg-muted/20">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Career Timeline</span>
-          </div>
           </div>
 
           <div ref={timelineRef} className="max-h-[280px] md:max-h-[480px] overflow-y-auto p-2 space-y-0.5 scrollbar-thin">
@@ -4334,14 +4284,9 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           {/* Round 262: your place in the squad, above the money because on a
               given season it matters more. Renders only while you are actually
-              at a club, and only when there is a real squad to show. */}
-          {career.phase === "playing" && (() => {
-            /* the season about to be played, which is the one the depth chart
-               is describing: the last recorded season plus one. */
-            const year = (career.seasons[career.seasons.length - 1]?.year ?? 0) + 1;
-            const chart = depthChart(career.currentClub, year, career.position, career.overall, career.playerName);
-            return chart ? <SquadDepthCard chart={chart} /> : null;
-          })()}
+              at a club. Round 1115: the Squad tile, every club and every
+              year, and it says whether the squad is real, by role or invented. */}
+          {career.phase === "playing" && <SquadTile career={career} />}
 
           {/* Financial & Lifestyle Panel */}
           {(career.phase === "youth" || career.phase === "playing" || career.phase === "retired") && (
@@ -4550,6 +4495,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {career.retired && career.rivalrySummary && (
             <RivalrySummaryCard summary={career.rivalrySummary} career={career} />
           )}
+          </div>
         </div>
       </div>
 
@@ -4559,13 +4505,16 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {/* Round 974: the whole career, season by season, one tap away */}
           <div className="flex items-center justify-between gap-2">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Latest Events</span>
-            <div className="flex items-center gap-1">
+            <div className="flex flex-wrap items-center justify-end gap-1">
               <button type="button" onClick={() => setRatingsOpen(true)} data-open-season-ratings
                 className="text-[11px] font-bold text-emerald-400 px-2 py-1 rounded hover:bg-white/5">📈 Ratings</button>
               <button type="button" onClick={() => setStoryOpen(true)} data-open-career-story
                 className="text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5">📖 Career Story</button>
+              {career.seasons.some(r => r.type === "playing" && r.apps > 0) && <button type="button" onClick={() => setReplaysOpen(true)} data-open-season-replays
+                className="text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5 min-h-11">📺 Season replays</button>}
             </div>
           </div>
+          {Chip && <Chip career={career} at={chipAt} onOpen={setWatchRow} />}
           <div className="mt-2 space-y-1">
             {career.events.slice(-3).map((e, i) => (
               <div key={i} className="text-xs text-foreground/80 flex items-start gap-2">
@@ -4579,15 +4528,16 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
       {ratingsOpen && <CentreMountBoundary what="season ratings" onClose={() => setRatingsOpen(false)}><Suspense fallback={null}><SeasonRatings career={career} onClose={() => setRatingsOpen(false)} /></Suspense></CentreMountBoundary>}
       {(() => {
         const pressed = centreFor !== null && career.seasons.length === centreFor + 1 ? career.seasons[centreFor] : null;
-        const live = pressed && pressed.type === "playing" && pressed.apps > 0
-          && (career.phase === "newspaper" || career.phase === "season_summary" || career.phase === "rehab_choice") ? pressed : null;
-        const row = watchRow ?? live;
-        if (!row) return null;
+        /* Round 1046: moments are offered only while the season's own screens are up; a way back in later is a way to watch */
+        const offer = career.phase === "newspaper" || career.phase === "season_summary" || career.phase === "rehab_choice";
+        const live = pressed && pressed.type === "playing" && pressed.apps > 0 && offer ? pressed : null;
+        const row = watchRow ?? (replaysOpen ? null : live);
+        if (!row && !replaysOpen) return null;
         return (
           <div data-no-prerender>
             <CentreMountBoundary onClose={closeCentre}>
               <Suspense fallback={<div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80" data-season-centre-loading><div className="rounded-2xl border border-border bg-card px-5 py-4 text-sm">📺 Getting your season ready...</div></div>}>
-                <SoccerSeasonCentre career={career} clubs={clubs} row={row} mode={watchRow ? "watch" : "live"} onClose={closeCentre} onCareer={onCareerPatch} />
+                <SoccerSeasonCentre career={career} clubs={clubs} row={row} mode={watchRow || replaysOpen ? "watch" : "live"} onClose={closeCentre} onCareer={onCareerPatch} offer={offer} />
               </Suspense>
             </CentreMountBoundary>
           </div>

@@ -411,7 +411,8 @@ export function readPull(file) {
 }
 
 /**
- * Bring one world's block of src/data/playerNationalities.ts in line with an
+ * Bring one world's block, in that world's own file (src/data/nationalities/
+ * eraNNNN.ts since Round 1042, the file the caller names), in line with an
  * extended era: every new line gets the nationality of the row it was baked
  * from (which also re-points a name whose namesake won the one name, one
  * player rule), and an entry whose player left the world is dropped, so the

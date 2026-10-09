@@ -56,8 +56,8 @@ export function SeasonCentreHelp({ words, onClose }: { words: HelpWords; onClose
             </div>
           ))}
         </div>
-        <p className="text-[11px] text-muted-foreground">{words.footnote}</p>
-        <button type="button" onClick={onClose} className="h-10 w-full rounded-lg bg-primary text-sm font-bold text-primary-foreground">Got it</button>
+        <p className="text-xs text-muted-foreground">{words.footnote}</p>
+        <button type="button" onClick={onClose} className="h-11 w-full rounded-lg bg-primary text-sm font-bold text-primary-foreground">Got it</button>
       </div>
     </div>
   );

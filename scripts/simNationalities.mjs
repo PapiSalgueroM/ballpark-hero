@@ -28,11 +28,17 @@ const BUNDLE = path.join(os.tmpdir(), 'nat.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export { NATIONALITY_BY_WORLD, nationalityOf } from '${ROOT.replaceAll('\\', '/')}/src/data/playerNationalities.ts';
+export { NATIONALITY_BY_WORLD, registerAllNationalityWorlds } from '${ROOT.replaceAll('\\', '/')}/src/data/nationalities/allWorlds.ts';
+export { nationalityOf } from '${ROOT.replaceAll('\\', '/')}/src/data/playerNationalities.ts';
 export { FLAG_CODES } from '${ROOT.replaceAll('\\', '/')}/src/components/FlagImg.tsx';
 `);
 execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --loader:.tsx=tsx --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
-const { NATIONALITY_BY_WORLD, nationalityOf, FLAG_CODES } = await import(pathToFileURL(BUNDLE).href);
+const { NATIONALITY_BY_WORLD, registerAllNationalityWorlds, nationalityOf, FLAG_CODES } = await import(pathToFileURL(BUNDLE).href);
+/* Round 1042: a past world answers nationalityOf only once it has arrived. In the game it arrives
+   with its squads; this harness loads no era, so it registers every world itself, once, here.
+   The maps registered are the SAME objects NATIONALITY_BY_WORLD holds, so the two controls below
+   still write into what section 5 reads. */
+registerAllNationalityWorlds();
 
 let failures = 0;
 const fail = m => { failures += 1; failed.push(m); console.error('  FAIL: ' + m); };

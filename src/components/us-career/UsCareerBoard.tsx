@@ -1,4 +1,6 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { ReactNode } from 'react';
+import { toast } from 'sonner';
 import { Crown, Dumbbell, RotateCcw, Sparkles } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 /* Round 900: the one board. The NFL, NBA, MLB and NHL careers were four copies
@@ -26,6 +28,7 @@ import { UsSeasonCentreEntry } from '@/components/us-career/season/UsSeasonCentr
    celebration kit the season curtain uses. */
 import DraftDayCard, { type DraftDayFacts } from '@/components/us-career/DraftDayCard';
 import USCareerActionConfirm from '@/components/us-career/USCareerActionConfirm';
+import UsCareerSaveNotice from '@/components/us-career/UsCareerSaveNotice';
 import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { type PlayerAppearance, defaultAppearance } from '@/lib/soccerCareerAppearance';
 import PlayerAvatar from '@/components/soccer-career/PlayerAvatar';
@@ -101,6 +104,19 @@ type CareerEvent = UsCareerEvent<UsCareerCore>;
 interface SaveShape { c: CareerState | null; phase: Phase; teamQuality: number | null; coach?: CoachCareerState | null; prospect?: UsCareerProspect }
 
 export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
+  const pendingSave = useRef<{ key: string; value: string | null } | null>(null);
+  const [saveFailure, setSaveFailure] = useState<'write' | 'remove' | null>(null);
+  const saveFailed = saveFailure !== null;
+  useEffect(() => {
+    if (!saveFailed) return;
+    const said = toast.error('Your latest changes could not be saved. Stay on this page and use Retry save.');
+    /* Release AN: the words are taken back the moment they stop being true.
+       A Retry save that worked left them on screen for the rest of their few
+       seconds, saying the changes could not be saved, and they followed the
+       player to Home and back, where nothing is pending and there is no Retry
+       button to use. */
+    return () => { toast.dismiss(said); };
+  }, [saveFailed]);
   const [phase, setPhase] = useState<Phase>('create');
   const [prospect, setProspect] = useState<UsCareerProspect | null>(null);
   const prospectRef = useRef<UsCareerProspect | null>(null);
@@ -248,6 +264,8 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   useEffect(() => { setHallLanded(false); setHallFolded(false); }, [sport, career?.name, career?.retired]);
 
   useEffect(() => {
+    pendingSave.current = null;
+    setSaveFailure(null);
     setDecisionOutcome(null);
     consumedEvent.current = null;
     decisionReturn.current = false;
@@ -311,10 +329,28 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     } catch { /* fresh */ }
   }, [sport]);
 
+  const retrySave = useCallback(() => {
+    const pending = pendingSave.current;
+    if (!pending || pending.key !== sport.saveKey) return;
+    try {
+      if (pending.value === null) localStorage.removeItem(pending.key);
+      else localStorage.setItem(pending.key, pending.value);
+      pendingSave.current = null;
+      setSaveFailure(null);
+    } catch {
+      setSaveFailure(pending.value === null ? 'remove' : 'write');
+    }
+  }, [sport.saveKey]);
+  const saveValue = useCallback((value: string | null) => {
+    pendingSave.current = { key: sport.saveKey, value };
+    retrySave();
+  }, [sport.saveKey, retrySave]);
   const persist = useCallback((c: CareerState, ph: Phase, tq: number | null) => {
     if (sport.hall) stampOnRetirement(c, sport.saveKey); // Round 1051: the calibration stamp, on the write that retires a career
-    try { localStorage.setItem(sport.saveKey, JSON.stringify({ c, phase: ph, teamQuality: tq, coach: coachRef.current } satisfies SaveShape)); } catch { /* full */ }
-  }, [sport]);
+    /* Release AO: the stamp stays above the write. Round 1084's saveValue holds the write's try (and the retry
+       of a refused one), so the stamped career is what gets serialised, first time and on every retry. */
+    saveValue(JSON.stringify({ c, phase: ph, teamQuality: tq, coach: coachRef.current } satisfies SaveShape));
+  }, [sport, saveValue]);
 
   const openPractice = () => {
     if (!career || phase !== 'season') return;
@@ -346,7 +382,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     prospectRef.current = next;
     setProspect(next);
     setPhase('prospect');
-    try { localStorage.setItem(sport.saveKey, JSON.stringify({ c: null, phase: 'prospect', teamQuality: null, coach: null, prospect: next } satisfies SaveShape)); } catch { /* full */ }
+    saveValue(JSON.stringify({ c: null, phase: 'prospect', teamQuality: null, coach: null, prospect: next } satisfies SaveShape));
   };
   const beginProspect = () => {
     if (prospectRef.current) return;
@@ -415,7 +451,16 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     persist(c, 'season', tq);
   };
 
+  /* Release AN: the career the last press of Play left a played season on,
+     for the Week by week entry beside Play. The entry reads the season back
+     from the save, and a browser whose storage is full refused that write and
+     gave it nothing to open. This is the very object the save was asked to
+     keep. Null after a press that played no season (a talk, the market, a
+     banned year). */
+  const playedRef = useRef<CareerState | null>(null);
+
   const playSeason = () => {
+    playedRef.current = null;
     if (!career || teamQuality == null || practiceOpen) return;
     /* Round 195: a played season counts as playing TODAY, the Round 159
        soccer rule reaching the American careers. Unscored on purpose: the
@@ -487,6 +532,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     /* Round 182: every season starts with a camp, and camps have losers. */
     const campNote = sport.campBattle(c, teamQuality, Math.random);
     const { line, notes } = sport.simSeason(c, teamQuality, Math.random);
+    playedRef.current = c;
     const progressNotes = sport.progress(c, Math.random);
     /* Round 469: the paper writes the season up, position aware, and the
        lines stay on the save so the News screen survives a reload. */
@@ -757,7 +803,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   };
 
   const reset = () => {
-    localStorage.removeItem(sport.saveKey);
+    saveValue(null);
     setCareer(null);
     prospectRef.current = null;
     setProspect(null);
@@ -820,20 +866,24 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      TD" in all four places this prints. The line lives in usCareerStatLine.ts
      now, one branch per position the career deals. */
   const statLine: (s: SeasonLine, p: string) => string = sport.statLine;
+  const withSaveStatus = (content: ReactNode) => <>
+    {saveFailure && <UsCareerSaveNotice operation={saveFailure} onRetry={retrySave} />}
+    {content}
+  </>;
 
   if (phase === 'prospect' && prospect) {
-    return <ProspectJourney sport={sport} prospect={prospect} onChange={advanceProspect} onJoin={joinCareer} onBack={() => {
+    return withSaveStatus(<ProspectJourney sport={sport} prospect={prospect} onChange={advanceProspect} onJoin={joinCareer} onBack={() => {
       if (prospect.state) return;
       setNameInput(prospect.name); setPos(prospect.pos); setArchetypeId(prospect.archetypeId);
       setEraId(prospect.eraId); setAppearance(prospect.appearance);
       prospectRef.current = null; setProspect(null); setPhase('create');
-      localStorage.removeItem(sport.saveKey);
-    }} />;
+      saveValue(null);
+    }} />);
   }
 
   /* ------------------------------ create ------------------------------ */
   if (phase === 'create' || !career) {
-    return (
+    return withSaveStatus(
       <div className="space-y-4">
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
           <p className="font-display text-lg font-bold text-foreground">Create your player</p>
@@ -923,7 +973,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      before the crossroads, the market or the retirement card. Transient:
      a reload skips straight to whichever of those the save is really on. */
   if (reveal) {
-    return (
+    return withSaveStatus(
       <div ref={revealRef}>
         <SeasonRevealCard reveal={reveal} onContinue={() => setReveal(null)} />
       </div>
@@ -931,18 +981,18 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   }
 
   if (decisionOutcome && phase === 'season') {
-    return <CareerDecisionOutcome outcome={decisionOutcome} onContinue={() => {
+    return withSaveStatus(<CareerDecisionOutcome outcome={decisionOutcome} onContinue={() => {
       decisionReturn.current = true;
       setDecisionOutcome(null);
-    }} />;
+    }} />);
   }
   /* Round 1038: the same outcome between two cards of one summer; its
      Continue opens the next card. */
   if (decisionOutcome && phase === 'event' && career.summer) {
-    return <CareerDecisionOutcome outcome={decisionOutcome} onContinue={() => {
+    return withSaveStatus(<CareerDecisionOutcome outcome={decisionOutcome} onContinue={() => {
       setDecisionOutcome(null);
       openNextSummerCard();
-    }} />;
+    }} />);
   }
 
   /* ------------------- Round 521: a pending rivalry beat -------------------
@@ -951,7 +1001,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      Persisted on the save (unlike reveal), so a reload mid-beat still shows
      it rather than losing it. */
   if (career.pendingRivalryEvent) {
-    return (
+    return withSaveStatus(
       <div ref={revealRef}>
         <RivalryEventCard
           event={career.pendingRivalryEvent}
@@ -971,7 +1021,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      reload mid-choice still asks. */
   const rivalryChoice = career.pendingRivalryChoice ?? rivalryOutcome?.card ?? null;
   if (rivalryChoice) {
-    return (
+    return withSaveStatus(
       <div ref={revealRef}>
         <RivalryChoiceCard
           card={rivalryChoice}
@@ -994,7 +1044,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      load. With no Hall bound there is never a talk. */
   const talk = phase === 'season' || phase === 'event' ? pendingTalk(career, sport.hall) : null;
   if (talk) {
-    return (
+    return withSaveStatus(
       <div ref={revealRef}>
         <Suspense fallback={<p role="status" className="text-center text-xs text-muted-foreground">Loading...</p>}>
           <FarewellCard talk={talk} age={career.age} onChoose={answerRetirementTalk} />
@@ -1004,18 +1054,18 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   }
 
   if ((phase === 'retired' && retiredReview) || (phase !== 'retired' && phase !== 'coach' && phase !== 'freeagency' && panel === 'log')) {
-    return <Suspense fallback={<p role="status">Loading season review...</p>}>
+    return withSaveStatus(<Suspense fallback={<p role="status">Loading season review...</p>}>
       <CareerSeasonReview career={career} sport={sport} backLabel={phase === 'retired' ? 'Back to retirement' : 'Back to career'} onBack={() => {
         reviewReturn.current = phase === 'retired' ? 'retired' : 'log';
         if (phase === 'retired') setRetiredReview(false);
         else setPanel('none');
       }} />
-    </Suspense>;
+    </Suspense>);
   }
 
   /* ------------------- Round 126: the coaching career ------------------- */
   if (phase === 'coach' && coach) {
-    return (
+    return withSaveStatus(
       <CoachCareerPanel
         state={coach}
         playerName={career.name}
@@ -1028,7 +1078,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
 
   /* ------------------------------ retired ------------------------------ */
   if (phase === 'retired') {
-    return (
+    return withSaveStatus(
       <div className="space-y-4">
         {/* Round 530: the retirement is a reveal. The verdict slams, the
             bullets tick in one at a time, the badges rise after them, and
@@ -1120,7 +1170,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
        and the rival choice buttons now print it, so it has to be somewhere the
        player can see it move. A save that never answered a text reads 50. */
     const meters: [string, number][] = [['Morale', career.morale], ['Fanbase', career.fanbase], ['Health', career.health], ['Karma', career.karma ?? 50]];
-    return (
+    return withSaveStatus(
       <div ref={panelRef} className="space-y-3">
         <HubPanelHeader
           title={panel === 'bank' ? '\u{1F4B0} The Bank' : panel === 'stats' ? '\u{1F4CA} My Player' : panel === 'log' ? '\u{1F4DC} Career Log' : panel === 'trophies' ? '\u{1F3C6} Trophy Case' : panel === 'inbox' ? '\u{1F4F1} Inbox' : '\u{1F4F0} News Feed'}
@@ -1283,7 +1333,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const place = career.summer ? summerPlace(career.summer) : null;
 
   /* ------------------------------ season hub ------------------------------ */
-  return (
+  return withSaveStatus(
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
         {career.appearance && (
@@ -1394,7 +1444,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
           >
             <Dumbbell className="h-4 w-4" /> Play the {career.year} season
           </button>
-          <UsSeasonCentreEntry sport={sport} career={career} busy={practiceOpen} onPlay={playSeason} />
+          <UsSeasonCentreEntry sport={sport} career={career} busy={practiceOpen} onPlay={playSeason} played={() => playedRef.current} />
           <p className="mt-2 text-xs text-muted-foreground">
             Career so far: {sport.careerSoFar(career)}
           </p>

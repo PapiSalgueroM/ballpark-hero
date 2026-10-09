@@ -356,7 +356,9 @@ const byName = new Map(FB.map(c => [c.name, c]));
 /* Market leagues the list spells its own way, written out here and not read
    from the engine. */
 const ALIAS = { 'efl championship': 'Championship', 'brasileirao serie a': 'Brasileirao', 'supersport hnl': 'HNL',
-  'mls eastern conference': 'MLS', 'mls western conference': 'MLS' };
+  'mls eastern conference': 'MLS', 'mls western conference': 'MLS',
+  /* Round 1100: the job market's "A-League Men" is the list's "A-League" */
+  'a-league men': 'A-League' };
 const listLabel = lab => { const f = foldName(lab); const w = ALIAS[f]; return FB.find(c => (w ? c.league === w : foldName(c.league) === f))?.league ?? null; };
 /** The league a job's first table must be: the league the job came with, in
  *  the list's spelling (the card showed it), else his club found in the
@@ -491,7 +493,10 @@ function checkSeason(s, club0, want, lastYear, unplaced = false) {
     cover.headed += 1;
     if (tw.header !== `Final table · ${row.league}`) { bad.header += 1; note(`${club0} ${calYear}: header ${tw.header}`); }
   }
-  if (!row.sizeVerified && row.leagueSize !== Math.max(20, K + 1)) { bad.size += 1; note(`${want} ${calYear}: unverified size ${row.leagueSize} for ${K} known`); }
+  /* Round 1100: a league in the odd ledger (it splits, or plays in
+     conferences) has that league's real number of rows, still unverified */
+  const oddRows = row.league ? lg.oddFormatFor(row.league, calYear)?.clubs : undefined;
+  if (!row.sizeVerified && row.leagueSize !== (oddRows ?? Math.max(20, K + 1))) { bad.size += 1; note(`${want} ${calYear}: unverified size ${row.leagueSize} for ${K} known${oddRows ? `, the odd ledger says ${oddRows}` : ''}`); }
   if (!row.sizeVerified && K >= 20) cover.bigUnverified += 1;
   /* a named league of unknown size prints no position and no points */
   if (row.league && !row.sizeVerified) {
@@ -604,8 +609,19 @@ for (const f of firstBad.slice(0, 6)) console.log(`     e.g. ${f}`);
    in a league the list knows clubs of and 253 finishes in the English
    pair's move zones before 2004/05 (the quarter of careers that retire in 1996) */
 const PAST_FLOOR = 3000, EARLY_FLOOR = 120;
+/* Round 1100: the career club pool grew from 241 to 460 clubs (every Club
+   Manager league but three held second flights), so a job at a club outside
+   the list is rare now: 101 seasons at a market club where the tree before
+   it read 567 (the same run with main's pool file put back passes the old
+   floor of 250, so the pool moved it and nothing else). About half of 101.
+   The 101 is exact, not a sample: this harness plays its own eight fixed
+   seeds, so the count moves only when the pool or the engine does, and the
+   floor is a coverage floor (the path was walked), not a band against noise.
+   When Serie B, Ligue 2 and the Segunda Division are released every job
+   market club is a list club: this floor then reads 0 and the path is gone. */
+const MARKET_FLOOR = 50;
 const PAST_LEDGER_FLOOR = 1900, YEAR_JOBS_FLOOR = 100;
-if (cover.home < 14000 || cover.market < 250 || cover.verified < 4500 || cover.thin < 4000 || cover.named < 30000
+if (cover.home < 14000 || cover.market < MARKET_FLOOR || cover.verified < 4500 || cover.thin < 4000 || cover.named < 30000
   /* Round 1037: bigUnverified (fields of unknown size knowing 20 or more
      clubs) came from the Championship before 2004, which the league ledgers
      now size (24), so the loop reads 0 where its base read 1262; the size

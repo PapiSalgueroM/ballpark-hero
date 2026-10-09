@@ -79,7 +79,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import { TRANSFER_OVERLAY_2026 } from './transferOverlay2026.mjs';
-import { DB_TO_ENGINE } from './lib/dbClubNames.mjs';
+import { DB_TO_ENGINE, DB_TO_ENGINE_GATHERED } from './lib/dbClubNames.mjs';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const OUT_PATH = path.join(ROOT, 'src', 'data', 'players.ts');
@@ -128,6 +128,8 @@ const ENGINE_LEAGUE_TO_POOL = {
   // Release AI: Round 1035's A-League Men (league 23, Release AH) never got its
   // row, so the bake stopped on it; 'A-League' is already in the League union.
   'A-League Men': 'A-League',
+  // Round 1052: the Russian Premier League, already in the League union.
+  'Russian Premier League': 'Russian Premier League',
 };
 
 /* ------------------------------------------------------------------ */
@@ -268,7 +270,9 @@ export function buildLeagueResolver(app) {
 
   /** { league, source } or { league: null, reason }. */
   return function resolveLeague(club) {
-    const engine = DB_TO_ENGINE[club] ?? DB_TO_ENGINE[foldedKeys.get(app.normalizeName(club)) ?? ''];
+    /* Round 1052: a club whose squad is gathered, not baked, is known through its own
+       table (see DB_TO_ENGINE_GATHERED), by exact spelling only. */
+    const engine = DB_TO_ENGINE[club] ?? DB_TO_ENGINE[foldedKeys.get(app.normalizeName(club)) ?? ''] ?? DB_TO_ENGINE_GATHERED[club];
     if (engine) {
       const league = engineLeague.get(engine);
       if (league) return { league, source: 'clubManager 2026-27' };

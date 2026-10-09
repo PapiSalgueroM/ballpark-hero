@@ -23,6 +23,7 @@ import { toast } from "sonner";
 import { hslToRgb, readableL } from "@/lib/readableColor";
 import { recordCompletion, getCurrentPlayerName } from "@/lib/completions";
 import { WC2026_STORAGE_KEYS, clearWc2026ChildStorage, createAutoFillController, crownChampion, parseCrowned, wc2026SeedSignature } from "@/lib/wc2026Lifecycle";
+import { safeSetItem } from '@/lib/safeStorage';
 
 /* ───── types ───── */
 
@@ -899,19 +900,19 @@ const WorldCupPredictor = () => {
 
   // persist to localStorage
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(predictions));
+    safeSetItem(STORAGE_KEY, JSON.stringify(predictions));
   }, [predictions]);
 
   useEffect(() => {
-    localStorage.setItem("wc2026-show-bracket", String(showBracket));
+    safeSetItem("wc2026-show-bracket", String(showBracket));
   }, [showBracket]);
 
   useEffect(() => {
-    localStorage.setItem("wc2026-selected-thirds", JSON.stringify(selectedThirds));
+    safeSetItem("wc2026-selected-thirds", JSON.stringify(selectedThirds));
   }, [selectedThirds]);
 
   useEffect(() => {
-    localStorage.setItem("wc2026-playoff-picks", JSON.stringify(playoffPicks));
+    safeSetItem("wc2026-playoff-picks", JSON.stringify(playoffPicks));
   }, [playoffPicks]);
 
   const cancelAutoFillEverything = useCallback(() => {

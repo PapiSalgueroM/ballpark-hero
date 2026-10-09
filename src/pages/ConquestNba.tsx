@@ -11,6 +11,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { ConquestHowToPlayNba } from '@/components/conquest/ConquestHowToPlayNba';
 import { HelpCircle } from 'lucide-react';
 import { hasUnfinishedDaily } from '@/lib/conquestDaily';
+import { safeSetItem } from '@/lib/safeStorage';
 
 type ConquestMode = 'select' | 'imperialism' | 'arcade';
 
@@ -28,7 +29,7 @@ const ConquestNba = () => {
     const seen = localStorage.getItem('conquest-nba-how-to-play-seen');
     if (!seen) {
       setShowHelp(true);
-      localStorage.setItem('conquest-nba-how-to-play-seen', 'true');
+      safeSetItem('conquest-nba-how-to-play-seen', 'true');
     }
   }, [mode]);
 

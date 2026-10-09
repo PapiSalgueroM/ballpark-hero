@@ -3,6 +3,7 @@ import { getTodayET } from '@/lib/dateUtils';
 import hofPlayers, { type HofPlayer } from '@/data/hofPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { supabase } from '@/integrations/supabase/client';
+import { safeSetItem } from '@/lib/safeStorage';
 
 function getDateSeed(): number {
   const d = getTodayET();
@@ -50,10 +51,11 @@ function loadDailyState() {
   return null;
 }
 
-function saveDailyState(userVote: string, hintsRevealed: number, score: number) {
+/** False when the browser would not keep it (see vote below). */
+function saveDailyState(userVote: string, hintsRevealed: number, score: number): boolean {
   const today = getTodayET();
   const key = `${STORAGE_PREFIX}daily-${today}`;
-  localStorage.setItem(key, JSON.stringify({ userVote, hintsRevealed, score }));
+  return safeSetItem(key, JSON.stringify({ userVote, hintsRevealed, score }));
 }
 
 export function useHofOrBust(): HofState {
@@ -106,7 +108,14 @@ export function useHofOrBust(): HofState {
     const s = correctVote ? Math.max(0, BASE_SCORE - hintsRevealed * HINT_COST) : 0;
     setScore(s);
 
-    if (mode === 'daily') saveDailyState(v, hintsRevealed, s);
+    /* Round 1142 review: the daily save is the only thing that remembers this
+       vote was cast. When the browser will not keep it (storage full), the
+       page offers the same vote again on every visit, so the community vote
+       is not sent: one player must not be counted once a visit. That is what
+       a full browser did before this round too, by accident (the bare save
+       threw before the insert). The verdict and the score still show. */
+    const remembered = mode === 'daily' ? saveDailyState(v, hintsRevealed, s) : true;
+    if (!remembered) return;
 
     // Store community vote
     supabase.from('hof_votes').insert({ player_id: player.id, vote: v }).then();

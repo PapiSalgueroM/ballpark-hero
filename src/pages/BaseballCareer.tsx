@@ -12,6 +12,7 @@ import { HelpCircle, Eye, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { BaseballCareerHowToPlay } from '@/components/baseball-career/BaseballCareerHowToPlay';
 import { Skeleton } from '@/components/ui/skeleton';
+import { safeSetItem } from '@/lib/safeStorage';
 
 const BaseballCareer = () => {
   const {
@@ -53,7 +54,7 @@ const BaseballCareer = () => {
     const seen = localStorage.getItem('bbc-rules-seen');
     if (!seen) {
       setShowRules(true);
-      localStorage.setItem('bbc-rules-seen', '1');
+      safeSetItem('bbc-rules-seen', '1');
     }
   }, []);
 
