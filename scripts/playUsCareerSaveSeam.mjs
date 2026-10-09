@@ -30,13 +30,21 @@
  *           the store and the notice goes
  *  toast    and the toast that said the save had failed is gone with it
  *           (Release AN fix: it used to stay up for the rest of its seconds)
+ *  banner   (Round 1144) this is a first visit, so the cookie banner is up
+ *           under all of it: the save toast is on the screen, on top, and
+ *           does not overlap the banner
+ *  line     (Round 1144) after the Retry that worked, the line at the top
+ *           that said the storage is full leaves, on the same page (no
+ *           load), and the game under it has not moved up by more than that
+ *           one line
  *  errors   no page error, no sideways scroll at 390
  * Every request that leaves the origin is aborted (supabase.co first, and
  * counted), so nothing here can reach the live database.
  *
- * Printed and not judged: after a Retry that worked the line at the top still
- * says the storage is full until the page is loaded again (Round 1142 never
- * takes a refusal back within a visit). Known, reported, the lead's call.
+ * MEASURED BEFORE ROUND 1144, on main (Release AO), a Linux runner: see the
+ * numbers at the bottom of this header. Until that round the stale line was
+ * printed here as a note and not judged, and nothing measured the toast
+ * against the banner.
  *
  * Controls (US_SAVE_SEAM_CONTROL=), each expected to go red at its own check
  * (a control run exits 1 and says so; 2 when it could not run or did not
@@ -49,6 +57,13 @@
  *             seam at all"                                      -> blocked
  *   open      the blocked and full arms run with storage left
  *             alone                                             -> blocked, full
+ *   stale     (Round 1144) when the browser takes writes again it
+ *             still refuses the seam's own probe key, so the
+ *             career is saved and the seam cannot find out: the
+ *             line stays, which is the page before that round   -> line
+ *   sitover   (Round 1144) a style rule pins the toasts at the
+ *             six rem they sat at before that round, whatever
+ *             the banner's height                               -> banner
  *
  * Run: npm run build, then
  *   MSYS_NO_PATHCONV=1 node scripts/playUsCareerSaveSeam.mjs
@@ -68,7 +83,9 @@ const PORT = Number(process.env.PORT ?? 4398);
 const BASE = `http://localhost:${PORT}`;
 const SHOTS = process.env.SHOTS ? path.resolve(ROOT, process.env.SHOTS) : '';
 const CONTROL = process.env.US_SAVE_SEAM_CONTROL ?? '';
-const NAMED = { hidden: ['full'], keeptoast: ['toast'], raw: ['blocked'], open: ['blocked', 'full'] };
+const NAMED = { hidden: ['full'], keeptoast: ['toast'], raw: ['blocked'], open: ['blocked', 'full'], stale: ['line'], sitover: ['banner'] };
+/* the seam's own probe key (src/lib/safeStorage.ts), which the stale control keeps refusing */
+const PROBE_KEY = '__dukb_storage_probe__';
 if (CONTROL && !(CONTROL in NAMED)) { console.error(`unknown US_SAVE_SEAM_CONTROL ${CONTROL}`); process.exit(2); }
 const ALL = { nba: 'nba-my-career-save-v1', nfl: 'nfl-my-career-save-v1', mlb: 'mlb-my-career-save-v1', nhl: 'nhl-my-career-save-v1' };
 const ASKED = (process.env.SPORTS ?? 'nba,nfl,mlb,nhl').split(',').map(s => s.trim()).filter(s => s in ALL);
@@ -109,6 +126,12 @@ if (CONTROL === 'keeptoast') {
 }
 if (CONTROL === 'raw') console.log('CONTROL raw: window.__DUKB_RAW_STORAGE__ is set before the app loads, so there is no seam');
 if (CONTROL === 'open') console.log('CONTROL open: the blocked and full arms run with storage left alone');
+if (CONTROL === 'stale') {
+  /* a control that refuses a key the app never writes proves nothing: the key has to be in the build */
+  if (!assets.some(f => textOf(f).includes(PROBE_KEY))) refuse(`no built chunk holds the seam's probe key ${PROBE_KEY}`);
+  console.log(`CONTROL stale: when writes come back the browser still refuses ${PROBE_KEY}`);
+}
+if (CONTROL === 'sitover') console.log('CONTROL sitover: a style rule pins the toasts six rem off the bottom, where they sat before Round 1144');
 
 const server = spawn(process.execPath, [path.join(ROOT, 'scripts/lib/hostLikeServer.mjs'), DIST, String(PORT)], { stdio: 'ignore' });
 const stop = code => { try { server.kill(); } catch { /* gone */ } process.exit(code); };
@@ -128,7 +151,14 @@ await new Promise(r => setTimeout(r, 1200));
 /* Runs in the page before any of its code. `mode` is what the browser does
    with storage on this visit; the browser's own store is kept aside first so
    the walk can read what really reached it. */
-function breakStorage({ mode, raw }) {
+function breakStorage({ mode, raw, sitover }) {
+  if (sitover) {
+    document.addEventListener('DOMContentLoaded', () => {
+      const style = document.createElement('style');
+      style.textContent = '[data-sonner-toaster]{--mobile-offset-bottom:6rem !important}';
+      document.head.appendChild(style);
+    });
+  }
   let real = null;
   try { real = window.localStorage; } catch { /* none */ }
   Object.defineProperty(window, '__seamReal', { value: real, enumerable: false, configurable: true });
@@ -169,7 +199,22 @@ const read = (page, key) => page.evaluate(([k, words]) => {
   let phase = null;
   try { phase = disk ? JSON.parse(disk).phase : null; } catch { phase = 'UNREADABLE'; }
   const toasts = [...document.querySelectorAll('[data-sonner-toast]')].map(t => (t.textContent ?? '').trim());
+  /* Round 1144: the save toast and the cookie banner as boxes, and where the game starts on the page */
+  const rect = el => { if (!el) return null; const q = el.getBoundingClientRect(); return { t: Math.round(q.top), b: Math.round(q.bottom), l: Math.round(q.left), r: Math.round(q.right) }; };
+  const saveToast = [...document.querySelectorAll('[data-sonner-toast]')].find(t => (t.textContent ?? '').includes(words)) ?? null;
+  let toastSeen = false;
+  if (saveToast) {
+    const q = saveToast.getBoundingClientRect();
+    const top = q.height > 0 ? document.elementFromPoint(q.left + q.width / 2, q.top + q.height / 2) : null;
+    toastSeen = q.height > 0 && q.top >= 0 && q.bottom <= window.innerHeight && !!top && saveToast.contains(top);
+  }
+  const banner = document.querySelector('[aria-label="Cookie choices"]');
+  const game = document.getElementById('dukb-main') ?? document.querySelector('main');
   return {
+    toast: rect(saveToast), toastSeen,
+    banner: banner && getComputedStyle(banner).position === 'fixed' ? rect(banner) : null,
+    gameTop: game ? Math.round(game.getBoundingClientRect().top + window.scrollY) : null,
+    stayed: window.__seamStayed === 1,
     notice: notice ? { op: notice.getAttribute('data-save-operation'), box: box(notice), seen } : null,
     line: line ? { trouble: line.getAttribute('data-dukb-storage-notice'), box: box(line), words: (line.querySelector('span')?.textContent ?? line.textContent ?? '').trim() } : null,
     toasts: toasts.length, saveToasts: toasts.filter(t => t.includes(words)).length,
@@ -197,7 +242,7 @@ async function journey(sport, arm) {
   const mode = CONTROL === 'open' ? 'open' : arm;
   const tag = `${sport} ${arm}${CONTROL === 'open' ? ' (storage left alone)' : ''}`;
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
-  await ctx.addInitScript(breakStorage, { mode, raw: CONTROL === 'raw' });
+  await ctx.addInitScript(breakStorage, { mode, raw: CONTROL === 'raw', sitover: CONTROL === 'sitover' });
   await ctx.route('**/*', r => {
     const url = r.request().url();
     let same = true;
@@ -232,8 +277,20 @@ async function journey(sport, arm) {
       check('full', !!s.notice?.seen, `${tag}: the Retry notice is in view on the first screen with nothing over it (${say(s)})`);
       check('full', s.saveToasts === 1, `${tag}: the refused save is said in exactly one toast (${s.saveToasts} of ${s.toasts} on screen)`);
       check('full', !!s.notice && !!s.line && (s.notice.box.t >= s.line.box.b || s.line.box.t >= s.notice.box.b), `${tag}: the line and the Retry notice do not overlap (${say(s)})`);
-      /* the browser takes writes again */
-      await page.evaluate(() => { if (window.__seamRealSet) Storage.prototype.setItem = window.__seamRealSet; });
+      /* Round 1144: a first visit, so the cookie banner is up under the toast */
+      const over = s.toast && s.banner ? Math.min(Math.min(s.toast.b, s.banner.b) - Math.max(s.toast.t, s.banner.t), Math.min(s.toast.r, s.banner.r) - Math.max(s.toast.l, s.banner.l)) : null;
+      const boxes = `toast ${s.toast ? `${s.toast.t}..${s.toast.b}` : 'none'}${s.toastSeen ? ' seen' : ' NOT SEEN'}, banner ${s.banner ? `${s.banner.t}..${s.banner.b}` : 'none'}, shared ${over === null ? 'n/a' : `${Math.max(0, over)} px`}`;
+      check('banner', !!s.toast && !!s.banner && s.toastSeen && over !== null && over <= 0, `${tag}: the save toast is on the screen, on top, and clear of the cookie banner (${boxes})`);
+      /* the browser takes writes again (the stale control: all but the seam's own probe key) */
+      await page.evaluate(([stale, probe]) => {
+        window.__seamStayed = 1;
+        const set = window.__seamRealSet;
+        if (!set) return;
+        Storage.prototype.setItem = !stale ? set : function setItem(k, v) {
+          if (String(k) === probe) { window.__seamRefused.total += 1; throw new DOMException('The quota has been exceeded.', 'QuotaExceededError'); }
+          return set.call(this, k, v);
+        };
+      }, [CONTROL === 'stale', PROBE_KEY]);
       const retried = await clickButton(page, '^Retry save$');
       const age = Date.now() - pressedAt;
       const gone = await page.waitForFunction(() => !document.querySelector('[data-us-career-save-error]'), null, { timeout: 3000 }).then(() => true, () => false);
@@ -243,8 +300,14 @@ async function journey(sport, arm) {
       /* a toast lives about four seconds on its own: only a Retry pressed well inside that proves anything */
       if (age > 3000) console.log(`note ${tag}: Retry save was pressed ${age} ms after the refusal, too late for the toast check to mean anything on this run`);
       check('toast', taken, `${tag}: the toast that said the save had failed is gone with the notice (Retry pressed ${age} ms after the refusal)`);
+      /* Round 1144: the line that said the storage is full leaves once a save has gone through, on this
+         page, and the game under it does not move up by more than that one line */
+      const left = await page.waitForFunction(() => !document.querySelector('[data-dukb-storage-notice]'), null, { timeout: 3000 }).then(() => true, () => false);
       const last = await read(page, key);
-      if (last.line) console.log(`note ${tag}: after a Retry that worked the line at the top still says "${last.line.words}" (known: Round 1142 never takes a refusal back within a visit)`);
+      const lineTall = s.line?.box.h ?? 0;
+      const moved = s.gameTop !== null && last.gameTop !== null ? s.gameTop - last.gameTop : null;
+      check('line', left && last.stayed && lineTall > 0 && moved !== null && moved >= 0 && moved <= lineTall,
+        `${tag}: after the Retry that worked the line at the top leaves on the same page and the game moves up by no more than it (${last.line ? `still says "${last.line.words}"` : 'gone'}, ${last.stayed ? 'no page load' : 'THE PAGE LOADED AGAIN'}, the game moved ${moved === null ? 'n/a' : `${moved} px`}, the line was ${lineTall} px)`);
     }
     check('errors', !s.broke && errors.length === 0 && !s.sideways, `${tag}: no page error and no sideways scroll at 390${errors.length ? ` (${errors.slice(0, 2).join(' | ')})` : ''}${s.broke ? ' (This page broke)' : ''}`);
     if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `save-seam-${sport}-${arm}.png`) });
