@@ -1,0 +1,14 @@
+digest exit=0 43s |    Duration  42.70s (transform 1.31s, setup 89ms, collect 1.75s, tests 39.88s, environment 458ms, prepare 149ms)
+tsc exit=0 62s | 
+vitest-wide exit=0 48s |    Duration  47.00s (transform 8.90s, setup 1.31s, collect 22.86s, tests 97.83s, environment 9.37s, prepare 2.06s)
+truth exit=0 58s | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves
+banking exit=0 1s | simCareerBanking: green. Every career banks its pay, scales with it, and a broken save is repaired.
+simCareerParity exit=0 5s | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 39s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+bank exit=0 120s | simUsCareerBank: green. No call leaves a bank below zero in any of the four careers, savings pay a bill before anything is written off, and a reload never adds money.
+simUsBoardParity exit=0 40s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+vitest-round exit=0 17s |    Duration  16.01s (transform 4.78s, setup 833ms, collect 10.91s, tests 21.88s, environment 5.82s, prepare 1.20s)
+vitest-board exit=0 8s |    Duration  6.79s (transform 2.16s, setup 121ms, collect 5.44s, tests 3.16s, environment 787ms, prepare 250ms)
+simUsCareerDeckC exit=0 47s | simUsCareerDeckC: all checks passed
+hall exit=1 745s | simCareerHall: RED

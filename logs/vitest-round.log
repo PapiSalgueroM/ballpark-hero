@@ -1,0 +1,111 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/usSeason.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 290[2mms[22m[39m
+ [32m✓[39m src/test/careerPreDraft.test.tsx [2m([22m[2m26 tests[22m[2m)[22m[33m 357[2mms[22m[39m
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mopens each opted-in career guide and remembers only its dismissal
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mopens each opted-in career guide and remembers only its dismissal
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mopens each opted-in career guide and remembers only its dismissal
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mopens each opted-in career guide and remembers only its dismissal
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mreturns quietly and reopens the guide without changing career progress
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mreturns quietly and reopens the guide without changing career progress
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2misolates route receipts and ignores a late guide from the previous route
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2misolates route receipts and ignores a late guide from the previous route
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mwaits for usable instructions without recording an unseen guide
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mkeeps blocked-storage guides dismissible and reopenable without changing saves
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mkeeps blocked-storage guides dismissible and reopenable without changing saves
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mkeeps blocked-storage guides dismissible and reopenable without changing saves
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mreuses real instructions for saved season reviews and actual decision results
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mreuses real instructions for saved season reviews and actual decision results
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mreuses real instructions for saved season reviews and actual decision results
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mreuses real instructions for saved season reviews and actual decision results
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mleaves default GameHelp manual and independent career bytes unchanged
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/careerEntryGuide.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 3266[2mms[22m[39m
+   [33m[2m✓[22m[39m career entry guides[2m > [22mopens each opted-in career guide and remembers only its dismissal [33m 1305[2mms[22m[39m
+   [33m[2m✓[22m[39m career entry guides[2m > [22mreturns quietly and reopens the guide without changing career progress [33m 689[2mms[22m[39m
+   [33m[2m✓[22m[39m career entry guides[2m > [22mkeeps blocked-storage guides dismissible and reopenable without changing saves [33m 402[2mms[22m[39m
+   [33m[2m✓[22m[39m career entry guides[2m > [22mreuses real instructions for saved season reviews and actual decision results [33m 519[2mms[22m[39m
+ [32m✓[39m src/test/usCareerBank.test.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 3378[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: real careers never show a balance below zero[2m > [22mNFL: 6 seeded careers, 14 seasons, checked after every call [33m 835[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: real careers never show a balance below zero[2m > [22mNBA: 6 seeded careers, 14 seasons, checked after every call [33m 901[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: real careers never show a balance below zero[2m > [22mMLB: 6 seeded careers, 14 seasons, checked after every call [33m 906[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: real careers never show a balance below zero[2m > [22mNHL: 6 seeded careers, 14 seasons, checked after every call [33m 684[2mms[22m[39m
+ [32m✓[39m src/test/nflTruthRules1104.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 703[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: awards and injuries read the season length[2m > [22m2005: the gate is the schedule less two, and an injury is counted off the schedule [33m 363[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: awards and injuries read the season length[2m > [22m2026: the gate is the schedule less two, and an injury is counted off the schedule [33m 313[2mms[22m[39m
+ [32m✓[39m src/test/seasonCentreWords.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 1140[2mms[22m[39m
+   [33m[2m✓[22m[39m Season Centre: soccer markup, recorded on the base (Round 1048)[2m > [22mprints the soccer shaped season exactly as the base viewer did, with no new field set [33m 643[2mms[22m[39m
+   [33m[2m✓[22m[39m Season Centre: a sport that brings its own words (Round 1048)[2m > [22mprints the US words, the record panel and the playoff path on the true layout (desktop) [33m 309[2mms[22m[39m
+ [32m✓[39m src/test/usCareerRookieDeal.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 43[2mms[22m[39m
+ [32m✓[39m src/test/usCareerSmallItems1104.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 221[2mms[22m[39m
+ [32m✓[39m src/test/usFranchiseYears.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mNFL My Career shows slot pay, the kicker rule, the 16 game throwback and the bank, once each
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mthe NBA, MLB and NHL pages show the bank line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mthe NBA, MLB and NHL pages show the bank line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mthe NBA, MLB and NHL pages show the bank line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/usCareerHelpRules1104.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 573[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: the changed rules are on the "?" screen[2m > [22mthe NBA, MLB and NHL pages show the bank line once [33m 307[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProspect.test.tsx [2m([22m[2m36 tests[22m[2m)[22m[33m 11905[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' quiet legacy restore preserves the existing career unchanged [33m 488[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' plays every saved prospect stage into the earned career and first season [33m 992[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NBA' plays every saved prospect stage into the earned career and first season [33m 523[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' plays every saved prospect stage into the earned career and first season [33m 544[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' plays every saved prospect stage into the earned career and first season [33m 726[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' accepts each same-frame journey action only once [33m 334[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NBA' historical completed outcomes survive reload and remain the career archive [33m 373[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' historical completed outcomes survive reload and remain the career archive [33m 315[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' rejects corrupt nested journey saves without changing storage [33m 1163[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NBA' rejects corrupt nested journey saves without changing storage [33m 870[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' rejects corrupt nested journey saves without changing storage [33m 931[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' rejects corrupt nested journey saves without changing storage [33m 803[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m11 passed[39m[22m[90m (11)[39m
+[2m      Tests [22m [1m[32m151 passed[39m[22m[90m (151)[39m
+[2m   Start at [22m 06:17:08
+[2m   Duration [22m 16.01s[2m (transform 4.78s, setup 833ms, collect 10.91s, tests 21.88s, environment 5.82s, prepare 1.20s)[22m
+

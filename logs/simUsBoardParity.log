@@ -1,0 +1,10 @@
+A) the fixture is whole
+   recorded from e9d10a10e26f95a902e4a8d0d7a4c5649665d55f (not main: Round 1104 on r1104-nfl-truth, recorded on a GitHub runner)
+   nfl: 468 clicks, 24 seasons, 15 fixed saves, 685 screen steps
+   nba: 523 clicks, 24 seasons, 15 fixed saves, 705 screen steps
+   mlb: 449 clicks, 24 seasons, 15 fixed saves, 688 screen steps
+   nhl: 415 clicks, 24 seasons, 15 fixed saves, 688 screen steps
+B) the replay: every click, every save, every screen
+   Vitest exit 0, passed [nfl, nba, mlb, nhl], failed []
+
+simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
