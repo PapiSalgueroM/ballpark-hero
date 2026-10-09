@@ -1,0 +1,2 @@
+#!serial
+copy-1165: bash .rc/x/cm-start-options-copy-1165.sh
