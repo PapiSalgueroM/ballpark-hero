@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vt-motion: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx --testTimeout=300000
+motion-castnow: LIVE_MOTION_CONTROL=castnow node scripts/simLiveSimMotion.mjs
+walk-1: PORT=4193 node scripts/playLiveMatchFit.mjs
