@@ -1,0 +1,46 @@
+# Release AR, the FINAL run on the head with the gate fixes: a full build:seo (its output is what the lead commits), everything that reads dist or the saved pages, the weight, the three lines that were red, the live match walk twice, the whole vitest suite.
+#!buildseo
+#!export
+#!serve
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+simPrerender: node scripts/simPrerender.mjs
+simSitemap: node scripts/simSitemap.mjs
+simIndexNow: node scripts/simIndexNow.mjs
+simIndexing: node scripts/simIndexing.mjs
+simHubs: node scripts/simHubs.mjs
+simAdsense: node scripts/simAdsense.mjs
+simBrand: pip3 install --quiet fonttools pillow && node scripts/simBrand.mjs
+simHeadTags: node scripts/simHeadTags.mjs
+simHiddenPages: node scripts/simHiddenPages.mjs
+simInternalLinks: node scripts/simInternalLinks.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simPrerenderBoot: node scripts/simPrerenderBoot.mjs
+simRetiredRoutes: node scripts/simRetiredRoutes.mjs
+simSchema: node scripts/simSchema.mjs
+simSnapshotAssets: node scripts/simSnapshotAssets.mjs
+simSeoTitles: node scripts/simSeoTitles.mjs
+simHomeCopy: node scripts/simHomeCopy.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simMobileChrome: node scripts/simMobileChrome.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simFaqSchema: node scripts/simFaqSchema.mjs
+playSoftFourOhFour: node scripts/playSoftFourOhFour.mjs
+playHomeFold: node scripts/playHomeFold.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simCmQuickLegs: node scripts/simCmQuickLegs.mjs
+simCmQuickSubs: node scripts/simCmQuickSubs.mjs
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+simLiveMatch: node scripts/simLiveMatch.mjs
+playLiveMatchFit-1: node scripts/playLiveMatchFit.mjs
+playLiveMatchFit-2: node scripts/playLiveMatchFit.mjs
+playGames-club-manager: ONLY=/club-manager node scripts/playGames.mjs
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
