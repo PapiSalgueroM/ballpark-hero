@@ -1,0 +1,17 @@
+vitest exit=0 24s |    Duration  22.83s (transform 5.55s, setup 1.77s, collect 17.25s, tests 26.36s, environment 11.04s, prepare 3.55s)
+simClubManager exit=0 39s | ALL CLUB MANAGER SIMS PASSED
+tsc exit=0 94s | 
+simManagerSpec exit=0 81s | simManagerSpec: all green
+simClubManagerScore exit=0 68s | ALL SEASON SCORE CHECKS PASSED
+simRosterAdjudication exit=0 0s | simRosterAdjudication: all green
+simCareerClubPool exit=1 9s | simCareerClubPool: 14 failure(s) in section(s) 1, 4, 4L
+simBoardAsks exit=0 28s | simBoardAsks: green. Every ask a board makes can be met, and nobody real is quoted.
+simTransfers exit=0 67s | ALL TRANSFER CHECKS PASSED
+simCmLeagueRules exit=1 54s | simCmLeagueRules: 72 failure(s)
+simDailyClubPool exit=0 5s | simDailyClubPool: all sections green
+simDeadlineDay exit=1 5s | simDeadlineDay: 3 failure(s)
+simClubManagerNewLeagues exit=1 121s | simClubManagerNewLeagues: 1 failure(s)
+simFreeAgents exit=0 19s | simFreeAgents: all sections passed
+genDailyClubPool-check exit=0 1s | 0 lines to append, counting from 2026-11-08: 0 joining, 0 leaving
+simManagerHotSeat exit=0 78s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+simEras exit=1 628s | 5 FAILURES

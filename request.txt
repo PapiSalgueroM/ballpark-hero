@@ -1,0 +1,17 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/cmValueCurve.test.ts src/test/clubManager*.test.* src/hooks/useClubManager.test.ts --testTimeout=300000 --hookTimeout=120000
+simClubManager: node scripts/simClubManager.mjs
+simManagerSpec: node scripts/simManagerSpec.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simBoardAsks: node scripts/simBoardAsks.mjs
+simTransfers: node scripts/simTransfers.mjs
+simRosterAdjudication: node scripts/simRosterAdjudication.mjs
+simCareerClubPool: node scripts/simCareerClubPool.mjs
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simEras: node scripts/simEras.mjs
+simDailyClubPool: node scripts/simDailyClubPool.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs
+genDailyClubPool-check: node scripts/genDailyClubPool.mjs --check
