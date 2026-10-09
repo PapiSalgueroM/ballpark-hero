@@ -1,0 +1,4 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playCmRatings-bogus exit=2 1s | unknown control nosuch; the control is stale
+playCmRatings-stale exit=1 10s | playCmRatings: CONTROL stale fired, 4 failure(s)
+playCmRatings exit=0 10s | playCmRatings: green. At both widths the squad screen shows the rating and the age the file ships (2 database requests aborted).

@@ -1,0 +1,5 @@
+#!build
+#!playwright
+playCmRatings: node scripts/playCmRatings.mjs
+playCmRatings-stale: PLAY_CM_RATINGS_CONTROL=stale node scripts/playCmRatings.mjs
+playCmRatings-bogus: PLAY_CM_RATINGS_CONTROL=nosuch node scripts/playCmRatings.mjs
