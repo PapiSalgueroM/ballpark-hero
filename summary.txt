@@ -1,0 +1,6 @@
+intl exit=1 15s | simCmInternationals: 1 FAILURES
+intl-s2 exit=1 15s | simCmInternationals: 1 FAILURES
+intl-s1 exit=1 16s | simCmInternationals: 1 FAILURES
+intl-s5 exit=1 13s | simCmInternationals: 1 FAILURES
+intl-s3 exit=1 16s | simCmInternationals: 1 FAILURES
+intl-s4 exit=1 15s | simCmInternationals: 1 FAILURES

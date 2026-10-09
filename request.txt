@@ -1,0 +1,6 @@
+intl: node scripts/simCmInternationals.mjs
+intl-s1: SIM_SEED=1 node scripts/simCmInternationals.mjs
+intl-s2: SIM_SEED=2 node scripts/simCmInternationals.mjs
+intl-s3: SIM_SEED=3 node scripts/simCmInternationals.mjs
+intl-s4: SIM_SEED=4 node scripts/simCmInternationals.mjs
+intl-s5: SIM_SEED=5 node scripts/simCmInternationals.mjs
