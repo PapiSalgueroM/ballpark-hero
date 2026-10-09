@@ -1,0 +1,19 @@
+old, 390 wide
+  ok   old, 390 wide: wrote the recorded save (5 seasons, all saved before the round)
+  ok   old, 390 wide: the Career Log tile prints the last line as it was saved, "23 ppg, 4.4 rpg, 5.3 apg" (reads "23 ppg, 4.4 rpg, 5.3 apg")
+  ok   old, 390 wide: every season saved before the round is unchanged in the save
+  FAIL old, 390 wide: the newest row is on the new line (the tile reads "23 ppg, 4.4 rpg, 5.3 apg")
+  ok   old, 390 wide: the Career Log tile's second line is not cut off ("23 ppg, 4.4 rpg, 5.3 apg", needs 149 of 149 pixels)
+  ok   old, 390 wide: no page errors (clean)
+  ok   old, 390 wide: no request to the live database finished (0)
+old, 1280 wide, reduced motion
+  ok   old, 1280 wide, reduced motion: wrote the recorded save (5 seasons, all saved before the round)
+  ok   old, 1280 wide, reduced motion: the Career Log tile prints the last line as it was saved, "23 ppg, 4.4 rpg, 5.3 apg" (reads "23 ppg, 4.4 rpg, 5.3 apg")
+  ok   old, 1280 wide, reduced motion: every season saved before the round is unchanged in the save
+  FAIL old, 1280 wide, reduced motion: the newest row is on the new line (the tile reads "23 ppg, 4.4 rpg, 5.3 apg")
+  ok   old, 1280 wide, reduced motion: the Career Log tile's second line is not cut off ("23 ppg, 4.4 rpg, 5.3 apg", needs 182 of 182 pixels)
+  ok   old, 1280 wide, reduced motion: no page errors (clean)
+  ok   old, 1280 wide, reduced motion: no request to the live database finished (0)
+
+control oldrow: FIRED, its own check went red and no other
+playNbaNumbers: 14 checks, 2 failed (control oldrow)

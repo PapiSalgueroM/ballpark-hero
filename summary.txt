@@ -1,0 +1,9 @@
+build exit=0 19s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playUsSeasonCentre exit=0 145s | playUsSeasonCentre: 144 checks, 0 failed
+playGames-nba exit=0 62s | Played 1 games. 0 findings, 0 the harness could not drive.
+walk exit=0 58s | playNbaNumbers: 68 checks, 0 failed
+walk-oldrow exit=1 10s | playNbaNumbers: 14 checks, 2 failed (control oldrow)
+walk-wide exit=1 62s | playNbaNumbers: 68 checks, 8 failed (control wide)
+hallline-nba exit=0 16s | playCareerHallLine: 1 routes, 9 walks, 95 checks, all checks passed
+sweepWeight exit=0 25s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+weight-nba exit=0 28s |        3.7K  GameNavbar-*.js
