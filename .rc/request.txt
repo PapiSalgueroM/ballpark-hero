@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+head: TAG=head node .rc/x/weight-probe.mjs
+base: bash .rc/x/base-build.sh origin/main base 4188
+sweep: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
