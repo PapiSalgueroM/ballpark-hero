@@ -14657,10 +14657,11 @@ function foldBoard(to: number, ...lists: { minute: number; plus?: number }[][]):
  * Club Manager's own binding, and all of it:
  *  - the odds, one eligible goal in CM_OWN_GOAL_ONE_IN (32, against the
  *    Season Centre's provisional 64). Penalties (8 in 100 goals) and direct
- *    free kicks (4 in 100) are never own goals, so that comes to 2.2 to 2.7
- *    own goals in 100 goals, about three a season in my own matches, where
- *    the real game runs near 3 in 100. Measured by scripts/simCmOwnGoals.mjs
- *    over five fleets of 36 seasons; the numbers are in its header;
+ *    free kicks (4 in 100) are never own goals, so that comes to 2.0 to 2.7
+ *    own goals in 100 goals, two and a half to three a season in my own
+ *    matches, where the real game runs near 3 in 100. Measured by
+ *    scripts/simCmOwnGoals.mjs over ten fleets of 36 seasons; the numbers
+ *    are in its header;
  *  - the man. Both sides have real squads, so he is a NAMED defender or the
  *    keeper of the side that conceded, out of the men on the pitch at that
  *    minute, a defender twice as likely as the keeper. One of mine is read
@@ -18009,8 +18010,8 @@ export function setHalftimeMentality(career: CareerState, mentality: Mentality):
  * automatically make subs". Since Round 1072 the coach replaced an injured
  * man and, at the break, took off up to two who were already spent (fitness
  * under 68 or morale under 45). A fit eleven therefore played ninety minutes
- * unchanged: scripts/simCmQuickLegs.mjs measured the bench coming on in 46
- * in 100 quick sims before this round and 91 in 100 after it, about one
+ * unchanged: scripts/simCmQuickLegs.mjs measured the bench coming on in 47
+ * in 100 quick sims before this round and 89 in 100 after it, about one
  * change for legs a match (the numbers are in its header).
  *
  * So the same coach, with the same bench list (benchFor), the same fit rule

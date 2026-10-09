@@ -1449,8 +1449,18 @@ section('7) An era European night names only men of that era, at every club of e
      at the exposed clubs, 15 to 24 at the long names, and 80 danger men every
      run (two at each of the 40 clubs with an era roster). The exposed and long
      name floors are what keep the two controls able to fire: below them the
-     check is reading too few goals at the clubs it exists for. */
-  if (tally.exposedGoals < 40) note('eranames', `only ${tally.exposedGoals} goals at the exposed clubs (floor 40, measured 82 to 95)`);
+     check is reading too few goals at the clubs it exists for.
+     Round 1146: the exposed floor re-derived, because it had come to sit
+     INSIDE its own distribution. The 82 to 95 was Round 1028's, when more
+     clubs were exposed; later data rounds gave most of them era rosters and
+     the list this harness prints is down to five clubs, sixty nights. On
+     those five it read 48 on the tree before this round, 55 and 55 on the
+     round's first head, and 38, 54 and 47 (its own seed, SIM_SEED 1 and 2)
+     after the round's review moved every quick sim, so a floor of 40 was a
+     coin toss and it duly fired at 38 on healthy code. The floor is 20, about
+     half the lowest of those six, and both controls of this section
+     (poolnames, oldname) were run on the 38 goal sample and still fire. */
+  if (tally.exposedGoals < 20) note('eranames', `only ${tally.exposedGoals} goals at the exposed clubs (floor 20, measured 38 to 55 on the five clubs still exposed)`);
   if (tally.longNameGoals < 6) note('eranames', `only ${tally.longNameGoals} goals at the long names (floor 6, measured 15 to 24)`);
   if (tally.dangerMen < 40) note('eranames', `only ${tally.dangerMen} danger men read (floor 40, measured 80)`);
 });

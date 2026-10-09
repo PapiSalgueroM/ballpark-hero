@@ -43,32 +43,48 @@
  *              the candidate keeps the goals it had, unmarked
  *
  * MEASURED on a GitHub runner, 2026-10-09, the default fleet (6 clubs x 3
- * seeds x 2 seasons, 18 careers) on five seed sets:
+ * seeds x 2 seasons, 18 careers) on five seed sets. Re-taken at a0b1e0b7:
+ * the table this header first carried was taken before the quick sim's coach
+ * (the round's third step) and the review's last ten fix moved every quick
+ * sim, and it no longer reproduced.
  *   seedset  matches  goals  own goals     eligible  expected  z      for/against  keeper
- *   0        1627     4348    94 (2.16%)   3216      100.5     -0.66  59/35        11
- *   1        1662     4665   109 (2.34%)   3487      109.0      0.00  67/42        14
- *   2        1651     4558   116 (2.54%)   3409      106.5      0.93  69/47        13
- *   3        1651     4552   110 (2.42%)   3409      106.5      0.34  59/51        13
- *   4        1618     4559   124 (2.72%)   3410      106.6      1.72  66/58        18
+ *   0        1643     4398    92 (2.09%)   3318      103.7     -1.17  59/33         9
+ *   1        1644     4400    86 (1.95%)   3333      104.2     -1.81  43/43         8
+ *   2        1648     4393    92 (2.09%)   3291      102.8     -1.09  59/33        11
+ *   3        1616     4219    95 (2.25%)   3146       98.3     -0.34  55/40        18
+ *   4        1673     4538   107 (2.36%)   3444      107.6     -0.06  55/52        18
  * "Eligible" is every goal that is not from the spot or a direct free kick,
  * minus my goals against a side with no named eleven (nobody to name), which
- * is why the share of ALL goals lands under 1 in 32: 2.2 to 2.7 in a hundred,
- * 2.6 to 3.4 a season in my own matches. The real game runs near 3 in a
- * hundred. Penalties were 8.0 to 8.6 percent of goals (the engine deals 8)
- * and direct free kicks 3.9 to 4.3 (it deals 4).
+ * is why the share of ALL goals lands under 1 in 32: 2.0 to 2.4 in a hundred
+ * here, 2.4 to 3.0 a season in my own matches. The real game runs near 3 in a
+ * hundred. Penalties were 7.2 to 8.6 percent of goals (the engine deals 8)
+ * and direct free kicks 3.3 to 4.2 (it deals 4).
  * Section 2 holds the count to four standard deviations of the binomial the
- * rule IS (about 40 own goals either side on these fleets). Measured, |z| was
- * 0.00 to 1.72 on the five sets, and the two controls that move the rate
- * landed 10.19 (off) and 7.55 (double) away on seed set 0. Its floor of 2500
- * eligible goals sits under the smallest fleet measured (3216).
+ * rule IS (about 40 own goals either side on these fleets). All five sets
+ * read under the expectation this time (472 own goals against 516.6, 1.99
+ * standard deviations under together); the five sets of the first table read
+ * over it (553 against 529.1, 1.06 over), and the ten together are 0.65
+ * under. A goal's key holds its minute and its scorer, so every re-take of
+ * the fleet is a new sample of the same keyed draw. The two controls that
+ * move the rate landed 10.35 (off) and 7.81 (double) away on seed set 0. The
+ * floor of 2500 eligible goals sits under the smallest fleet measured (3146).
  * Section 1 agreed on all 90 careers, at the end of both seasons and after
  * both summers.
+ * The man. 64 of the 472 were by a keeper. Of the 201 against me, 11 were by
+ * a man standing at the back whose card says something else (he is read in
+ * his slot). Section weights reads the keeper on 2,045 of 18,000 keyed picks
+ * with four at the back (one place in nine is 2,000, the band is 169 either
+ * side); with a place each (control evens) he reads 3,556. Section gone
+ * played 142 to 156 matches a set again with two backs sent off in the 40th
+ * minute and read 77 to 94 own goals against me after it, none by a man who
+ * had gone; with the filter out (control ungone) 42 of 94 were. Its floor of
+ * 20 sits far under those.
  * Awards over those 180 seasons (section 5 prints them): with own goals on,
- * my squad is 1.6 to 1.9 goals and 1.1 to 1.4 assists a season down and my
- * top scorer 0.3 to 0.6 goals a season down on a mean of 22 to 25. A
- * different man was top scorer at my club in 7 seasons, the golden boot went
- * to a different man in 2, the player of the season in 1 and the world award
- * in 2 (all three on seed set 3).
+ * my squad is 1.2 to 1.6 goals and 0.6 to 1.2 assists a season down and my
+ * top scorer 0.3 to 0.4 goals a season down on a mean of 21 to 22.5. A
+ * different man was top scorer at my club in 3 seasons; the golden boot, the
+ * player of the season and the world award went to the same man in all 180
+ * (on the first table's fleets they moved in 2, 1 and 2).
  *
  * NEGATIVE CONTROLS. CM_OWN_GOAL_CONTROL=<name> patches the bundled copy of
  * the source (never a file on disk; the anchor must occur exactly once or the
@@ -300,7 +316,7 @@ function probeGone(cm, paused, seed) {
 /**
  * Section weights: "a defender twice as likely as the keeper" is two places to one in ownGoalMan, read here on
  * 18,000 keys of the harness's own with four at the back and a keeper. The rolls are keyed, so the counts are the
- * same on every run: the keeper holds one place in nine (2,000 of 18,000, measured 2,0xx) and each back two.
+ * same on every run: the keeper holds one place in nine (2,000 of 18,000, measured 2,045) and each back two.
  * With one place each the keeper reads 3,600, with none 0; the band is four binomial standard deviations.
  */
 function weights(cm) {

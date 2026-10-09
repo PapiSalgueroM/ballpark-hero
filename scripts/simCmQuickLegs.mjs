@@ -57,35 +57,41 @@
  *
  * MEASURED on a GitHub runner, 2026-10-09, the default fleet (6 clubs x 3
  * seeds x 2 seasons, 36 seasons an arm) on five seed sets, with the round
- * against without it:
+ * against without it. Re-taken at a0b1e0b7, after the round's review fixed
+ * what a substitute's match is worth in a player's last ten (windowEntry in
+ * the engine): that moves morale, so every number here moved a little.
  *   seedset  changes a match  of which legs  bench used in    W percent    points a season  goals for, against a match
- *   0        1.73 / 0.70      1.04           90.5% / 46.1%    53.8 / 53.9  69.28 / 69.11    1.71, 0.98 / 1.73, 0.99
- *   1        1.75 / 0.70      1.10           92.2% / 46.7%    53.9 / 54.5  69.28 / 69.19    1.65, 0.93 / 1.79, 1.04
- *   2        1.74 / 0.72      1.12           91.2% / 46.8%    54.8 / 56.4  68.25 / 71.11    1.66, 0.95 / 1.79, 0.98
- *   3        1.75 / 0.64      1.02           90.9% / 43.4%    53.4 / 54.0  66.72 / 68.44    1.66, 0.99 / 1.72, 0.99
- *   4        1.75 / 0.73      1.11           91.8% / 48.1%    55.1 / 51.4  71.72 / 65.58    1.74, 0.92 / 1.69, 1.02
+ *   0        1.64 / 0.73      0.97           88.3% / 47.3%    55.4 / 52.9  69.89 / 68.44    1.72, 0.95 / 1.73, 0.99
+ *   1        1.62 / 0.70      0.97           88.4% / 46.4%    54.8 / 53.2  70.19 / 67.81    1.63, 0.93 / 1.76, 1.02
+ *   2        1.71 / 0.74      0.99           90.4% / 47.9%    56.4 / 54.3  69.92 / 67.89    1.67, 0.95 / 1.73, 1.00
+ *   3        1.69 / 0.66      0.97           89.2% / 44.9%    53.8 / 54.5  66.69 / 69.14    1.64, 0.99 / 1.75, 0.97
+ *   4        1.70 / 0.73      1.05           91.0% / 47.2%    55.8 / 52.6  71.08 / 67.42    1.70, 0.91 / 1.71, 1.00
  * So before the round the bench came on in under half of all quick sims (an
- * injury in 0.24 of them, a spent man at the break in 0.45) and never after
+ * injury in 0.25 of them, a spent man at the break in 0.46) and never after
  * the break unless somebody was hurt; with it, in nine in ten, about one
  * change for legs a match, and a season's appearances go to 21.6 men instead
- * of 20.6 (584 against 533).
+ * of 20.5 (581 against 533).
  * Results. The two arms are separate samples of about 1,650 matches a seed
  * set, so one set reads a share of wins to about 1.7 points and a season's
  * points to about 2, and the five together to about 0.8 and 0.9. Wins are
- * 54.2 percent with the round and 54.0 without, points a season 69.1 and
- * 68.7: no difference this fleet can see. Goals do move a little: 1.68 for
- * and 0.95 against a match with the round, 1.74 and 1.00 without, about one
- * goal in thirty fewer at each end. That is the engine's existing rule for
- * ANY change, yours included: the rest of the half is drawn again off the
- * score as it stands at that minute (the other side's shape reads it), and
- * he now makes a change in most matches. Nothing here asserts on results;
- * the season balance harnesses do.
- * His rule, read on 1,231 matches played again by hand: 938 changes for
- * legs, 629 with the match within a goal or my side behind (the eleven no
- * weaker every time, mean +0.08 to +0.12 of the engine's strength a set) and
- * 309 with my side two or more up (mean -0.43 to -0.77, legs rested whatever
- * it costs).
- * Section 1's bar of 20 points of matches is under half the 43 to 48 the
+ * 55.2 percent with the round and 53.5 without, points a season 69.6 and
+ * 68.1: a point and a half of each, about two of those errors, so "a little
+ * better if anything" is all this fleet can say, and it asserts nothing on
+ * it. Goals do move a little: 1.67 for and 0.95 against a match with the
+ * round, 1.74 and 1.00 without, about one goal in twenty five fewer at each
+ * end. That is the engine's existing rule for ANY change, yours included: the
+ * rest of the half is drawn again off the score as it stands at that minute
+ * (the other side's shape reads it), and he now makes a change in most
+ * matches. Nothing here asserts on results; the season balance harnesses do.
+ * His rule, read on 1,229 matches played again by hand (527 of them with a
+ * change for legs): 725 changes for legs, 471 with the match within a goal
+ * or my side behind (the eleven no weaker every time, mean +0.09 to +0.10 of
+ * the engine's strength a set) and 254 with my side two or more up (mean
+ * -0.42 to -0.74, the bench given its minutes whatever it costs). 129 of the
+ * 725 took a man on a yellow off (13 to 44 a set), which is what section
+ * order needs to have something to read. Each of the 527 matches was played
+ * twice more for the two built saves, thin and clock.
+ * Section 1's bar of 20 points of matches is under half the 41 to 44 the
  * round adds; the control that takes the round out adds 0.
  *
  * NEGATIVE CONTROLS. CM_QUICK_LEGS_CONTROL=<name> patches the bundled copy of
