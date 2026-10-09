@@ -1,0 +1,1 @@
+probe exit=0 1s |   game 3 feed: [Q1 8:00] 🏈 Touchdown, THEM. / [Q1 7:00] 🏈 Touchdown, US. / [Q2 14:00] 🏈 Touchdown, US. / [Q2 10:00] 🏈 Touchdown, THEM. / [Q2 9:00] 🥅 Field 

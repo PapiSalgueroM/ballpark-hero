@@ -1,0 +1,94 @@
+games 36805, ties 55
+margins (points: share): 1: 5.2%, 2: 1.6%, 3: 9.8%, 4: 5.6%, 5: 1.6%, 6: 3.6%, 7: 7.2%, 8: 3.0%, 10: 5.7%, 14: 5.4%
+most common scores: 17 (7.8%), 24 (6.7%), 10 (6.5%), 20 (5.9%), 14 (5.8%), 27 (5.2%), 21 (5.0%), 7 (4.8%), 13 (4.8%), 6 (4.5%), 31 (4.5%), 28 (3.4%), 34 (3.4%), 23 (2.9%)
+rare scores seen: 0, 6, 7, 8, 9, 10, 11; highest 67
+QB: 3517 games; headline min 57, p10 121, median 214, p90 372, max 520; zero in 0.0%; second stat max 6, p90 4; his TD passes as a share of his team's points: median 0.50, p90 1.00; odd games 0
+RB: 3022 games; headline min 9, p10 31, median 60, p90 120, max 290; zero in 0.0%; yards a catch min 3.0, p10 5.0, median 8.0, p90 11.0, max 14.8; second stat max 10, p90 4; odd games 0
+WR: 3963 games; headline min 0, p10 13, median 43, p90 141, max 318; zero in 0.3%; yards a catch min 5.5, p10 8.3, median 12.0, p90 16.5, max 23.0; second stat max 15, p90 11; odd games 0
+TE: 3923 games; headline min 0, p10 8, median 27, p90 95, max 242; zero in 2.6%; yards a catch min 4.0, p10 7.0, median 10.3, p90 14.0, max 18.8; second stat max 15, p90 8; odd games 0
+LB: 3957 games; headline min 0, p10 3, median 7, p90 14, max 20; zero in 0.7%; second stat max 1.9, p90 1; odd games 0
+CB: 3602 games; headline min 0, p10 1, median 4, p90 8, max 16; zero in 4.0%; odd games 0
+EDGE: 3876 games; headline min 0, p10 1, median 3, p90 7, max 15; zero in 5.6%; second stat max 4.3, p90 1.8; odd games 0
+K: 4737 games; headline min 0, p10 0, median 1, p90 3, max 6; zero in 21.8%; a game's long: min 23, median 50, max 75; odd games 0
+
+--- a QB season (2027 CHI, Lost in the Wild Card round); record 10-7-0; repairs 0
+G1 vs NO 21-6 | 109 YDS 1 TD 0 INT
+G2 vs PIT 52-24 | 199 YDS 1 TD 0 INT
+G3 vs GB 40-21 | 180 YDS 0 TD 1 INT
+G4 at JAX 9-13 | 142 YDS 1 TD 2 INT
+G5 at MIN 28-17 | 146 YDS 4 TD 1 INT
+G6 vs DET 10-22 | 168 YDS 0 TD 1 INT
+G7 at SEA 17-10 | 127 YDS 0 TD 2 INT
+G8 at GB 27-28 | 211 YDS 0 TD 1 INT
+G9 at DET 37-27 | 317 YDS 3 TD 2 INT
+G10 vs DAL 27-10 | 215 YDS 2 TD 0 INT
+G11 at BAL 26-45 | 207 YDS 0 TD 2 INT
+G12 at CIN 14-34 | 114 YDS 2 TD 1 INT
+G13 vs CLE 41-21 | 202 YDS 0 TD 1 INT
+G14 at NYG 7-38 | 130 YDS 0 TD 1 INT
+G15 vs MIN 24-7 | 211 YDS 1 TD 0 INT
+G16 at PHI 21-30 | 263 YDS 3 TD 0 INT
+G17 vs WAS 21-16 | 166 YDS 0 TD 1 INT
+  game 3 feed: [Q1 5:00] 🏈 Touchdown, US. / [Q2 11:00] 🏈 Touchdown, US. / [Q2 10:00] 🥅 Field goal, US. / [Q2 2:00] 🏈 Touchdown, THEM. / [Q3 14:00] 🏈 Touchdown, US. / [Q3 14:00] 🥅 Field goal, US. / [Q3 10:00] 🥅 Field goal, US. / [Q3 8:00] 🏈 Touchdown, US. / [Q3 0:00] 🏈 Touchdown, THEM. / [Q4 13:00] You are picked off. / [Q4 12:00] 🥅 Field goal, US. / [Q4 12:00] 🏈 Touchdown, THEM.
+  playoffs: Wild Card: lost to New Orleans Saints 0-47 | saved: 1 games, 148 yds, 1 TD, 1 INT
+
+--- a WR season (2026 ARI, Missed the playoffs); record 5-12-0; repairs 0
+G1 vs CIN 22-31 | 22 YDS 3 REC 0 TD
+G2 vs SF 17-0 | 13 YDS 1 REC 0 TD
+G3 at GB 16-17 | 12 YDS 1 REC 0 TD
+G4 vs LAC 17-14 | 26 YDS 3 REC 0 TD
+G5 at SF 9-14 | 25 YDS 2 REC 0 TD
+G6 at LA 17-42 | 16 YDS 2 REC 0 TD
+G7 vs SEA 10-14 | 13 YDS 1 REC 0 TD
+G8 vs LA 28-31 | 66 YDS 9 REC 1 TD
+G9 vs DEN 24-37 | 25 YDS 2 REC 0 TD
+G10 at KC 20-30 | 58 YDS 4 REC 0 TD
+G11 at ATL 27-20 | 89 YDS 8 REC 1 TD
+G12 at TB 7-0 | 12 YDS 1 REC 0 TD
+G13 at SEA 19-35 | 39 YDS 5 REC 0 TD
+G14 vs CAR 7-10 | 86 YDS 8 REC 1 TD
+G15 vs DAL 27-35 | 72 YDS 5 REC 0 TD
+G16 at LV 7-35 | 46 YDS 3 REC 1 TD
+G17 vs NO 24-10 | 15 YDS 2 REC 0 TD
+  game 3 feed: [Q1 10:00] 🏈 Touchdown, THEM. / [Q2 13:00] 🥅 Field goal, THEM. / [Q2 9:00] 🥅 Field goal, US. / [Q3 9:00] 🥅 Field goal, US. / [Q4 9:00] 🥅 Field goal, US. / [Q4 1:00] 🏈 Touchdown, US. / [Q4 1:00] 🏈 Touchdown, THEM.
+
+--- a EDGE season (2030 MIA, Lost in the Wild Card round); record 12-5-0; repairs 0
+G1 at BUF 10-17 | 3 TKL 1 SCK
+G2 vs BAL 20-33 | 4 TKL
+G3 at NO 27-14 | 5 TKL 2.3 SCK
+G4 vs NE 23-41 | 7 TKL
+G5 vs IND 24-21 | 2 TKL 0.5 SCK 1 FF
+G6 at NE 20-10 | 2 TKL 1 SCK
+G7 vs HOU 34-21 | 7 TKL 2 SCK 2 FF
+G8 vs BUF 31-35 | 6 TKL
+G9 vs NYJ 0-27 | 6 TKL 1 SCK
+G10 at CHI 34-13 | 4 TKL 2 SCK
+G11 at NYJ 41-17 | 3 TKL 1 SCK
+G12 vs MIN 21-7 | 3 TKL
+G13 at DEN 28-17 | 4 TKL
+G14 at TEN 27-6 | 2 TKL
+G15 at DET 30-13 | 2 TKL 1 SCK
+G16 vs GB 34-0 | 2 TKL
+G17 at JAX 40-27 | 4 TKL 2 SCK
+  game 3 feed: [Q1 6:00] 💥 You get the sack. / [Q2 6:00] 🏈 Touchdown, US. / [Q2 3:00] 🥅 Field goal, US. / [Q2 3:00] 🥅 Field goal, US. / [Q3 11:00] 🏈 Touchdown, THEM. / [Q3 8:00] 🏈 Touchdown, US. / [Q3 6:00] 🏈 Touchdown, THEM. / [Q4 8:00] 💥 You get the sack. / [Q4 6:00] 🏈 Touchdown, US.
+  playoffs: Wild Card: lost to Houston Texans 10-23 | saved: 1 games, 8 tackles, 0.6 sacks
+
+--- a K season (2026 WAS, Missed the playoffs); record 9-8-0; repairs 1
+G1 at KC 17-27 | 1/2 FG LONG 34
+G2 at GB 58-31 | 3/3 FG LONG 45
+G3 vs DAL 35-24 | 0/0 FG
+G4 at PHI 20-6 | 2/2 FG LONG 33
+G5 vs NYG 13-14 | 0/0 FG
+G6 vs LAC 19-10 | 1/1 FG LONG 47
+G7 vs DEN 23-14 | 3/3 FG LONG 45
+G8 vs PHI 34-31 | 0/0 FG
+G9 vs MIN 13-17 | 2/2 FG LONG 33
+G10 at TB 17-16 | 1/1 FG LONG 32
+G11 at LV 17-20 | 1/2 FG LONG 30
+G12 at DET 38-39 | 0/0 FG
+G13 vs ARI 17-7 | 1/2 FG LONG 35
+G14 at DAL 13-31 | 2/2 FG LONG 36
+G15 at NYG 12-17 | 2/3 FG LONG 45
+G16 vs CHI 32-10 | 1/1 FG LONG 38
+G17 vs PIT 33-37 | 2/3 FG LONG 52
+  game 3 feed: [Q1 8:00] 🏈 Touchdown, THEM. / [Q1 7:00] 🏈 Touchdown, US. / [Q2 14:00] 🏈 Touchdown, US. / [Q2 10:00] 🏈 Touchdown, THEM. / [Q2 9:00] 🥅 Field goal, THEM. / [Q2 7:00] 🏈 Touchdown, US. / [Q2 0:00] 🏈 Touchdown, THEM. / [Q3 11:00] 🏈 Touchdown, US. / [Q3 4:00] 🏈 Touchdown, US.
