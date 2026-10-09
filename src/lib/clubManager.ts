@@ -17966,8 +17966,9 @@ export function setHalftimeMentality(career: CareerState, mentality: Mentality):
  *    same family) and is fresher, the break's own test;
  *  - and only if the eleven is NO WEAKER for it by the engine's own strength
  *    (myMatchStrength, the number the rest of the half is drawn from), or
- *    the match is settled, two goals clear either way, when legs are rested
- *    and minutes handed out whatever it costs;
+ *    the match is won, two goals clear, when legs are rested and minutes
+ *    handed out whatever it costs. Two behind is not settled: he still only
+ *    makes a change that keeps the side as strong;
  *  - one change is always kept back for an injury, as at the break, and one
  *    fit man stays on the bench with it.
  *
@@ -17980,7 +17981,7 @@ export function setHalftimeMentality(career: CareerState, mentality: Mentality):
  * untouched.
  */
 export const QUICK_LEGS_WINDOWS: readonly (readonly [number, number])[] = [[58, 68], [72, 82]];
-/** Goals clear, either way, at which the coach rests legs whatever it costs. */
+/** The lead at which the coach rests legs whatever it costs. */
 export const QUICK_LEGS_SETTLED = 2;
 
 /**
@@ -18063,7 +18064,7 @@ export function coachQuickMatch(career: CareerState): CareerState {
     const booked = new Set([...(live.h1Cards ?? []), ...(live.h2Cards ?? [])].filter(c => c.kind === 'yellow' && c.minute <= at).map(c => c.id));
     const pairs = livePairs(state, live).filter(x => !gone.has(x.p.id));
     const scored = (lines: { minute: number }[] | undefined): number => (lines ?? []).filter(g => g.minute <= at).length;
-    const settled = Math.abs(scored(live.h1My) + scored(live.h2My) - scored(live.h1Opp) - scored(live.h2Opp)) >= QUICK_LEGS_SETTLED;
+    const settled = scored(live.h1My) + scored(live.h2My) - scored(live.h1Opp) - scored(live.h2Opp) >= QUICK_LEGS_SETTLED;
     const now = liveElevenStrength(state, at) ?? 0;
     /* A man on a yellow first, then the legs with the least left in them.
        Never the keeper, never a man who has only just come on. */
@@ -18072,12 +18073,12 @@ export function coachQuickMatch(career: CareerState): CareerState {
       .sort((a, b) => Number(booked.has(b.p.id)) - Number(booked.has(a.p.id)) || a.p.fitness - b.p.fitness);
     for (const out of order) {
       const outFit = gradeFor(out.p.id);
-      const coming = benchFor(state, out.p.id).find(p => (outFit(p) === 'natural' || outFit(p) === 'family')
+      const options = benchFor(state, out.p.id).filter(p => (outFit(p) === 'natural' || outFit(p) === 'family')
         && (p.fitness > out.p.fitness || (p.fitness === out.p.fitness && p.morale > out.p.morale)));
+      /* The engine's own strength with him in that slot: no weaker, unless the match is won. */
+      const noWeaker = (p: CMPlayer): boolean => (liveElevenStrength(state, at, { outId: out.p.id, inId: p.id }) ?? 0) >= now;
+      const coming = options.find(p => settled || noWeaker(p));
       if (!coming) continue;
-      /* The engine's own strength, with him in that slot: no weaker, or the match is settled. */
-      const then = liveElevenStrength(state, at, { outId: out.p.id, inId: coming.id }) ?? 0;
-      if (then < now && !settled) continue;
       state = changeLive(state, at, { kind: 'sub', outId: out.p.id, inId: coming.id }) ?? state;
       return;
     }
