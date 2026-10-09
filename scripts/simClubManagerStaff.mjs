@@ -607,7 +607,11 @@ console.log('3) Each effect runs the right way, on every position, and stays bou
   const lowAll = [], highAll = [];
   const perWeek = [];
   let weeks = 0;
-  for (const [i, club] of scoutClubs.slice(0, 8).entries()) {
+  /* Round 1146: all twelve clubs on the list, not the first eight. That round moves every quick simmed
+     match's draws (the coach makes changes after the break), and on the default seed the eight club sample
+     then brought 50 boys home, under the floor of 60 below. Nothing about scouting changed; the floor is
+     about having enough boys to read the effect on, so the sample is half as big again. */
+  for (const [i, club] of scoutClubs.entries()) {
     const saved = Math.random;
     const stream = makeStream(70 + i + SEED_OFFSET);
     Math.random = stream;
@@ -645,7 +649,7 @@ console.log('3) Each effect runs the right way, on every position, and stays bou
   if (lowAll.length < 60) fail(`only ${lowAll.length} boys found on the road, the sample is too thin`);
   const lift = mean(perWeek);
   const worst = Math.min(...perWeek);
-  console.log(`   scouting: ${weeks} weeks played twice on the same draws over ${scoutClubs.slice(0, 8).length} clubs, ${perWeek.length} of them bringing a report home; mean ceiling ${mean(lowAll).toFixed(2)} at lead scout 1 against ${mean(highAll).toFixed(2)} at 10, mean paired lift +${lift.toFixed(2)}, thinnest week +${worst.toFixed(2)} (the desk adds ${scoutQualityBonus(onlyPost(base, 'scout', STAFF_MAX))} before the 93 cap)`);
+  console.log(`   scouting: ${weeks} weeks played twice on the same draws over ${scoutClubs.length} clubs, ${perWeek.length} of them bringing a report home; mean ceiling ${mean(lowAll).toFixed(2)} at lead scout 1 against ${mean(highAll).toFixed(2)} at 10, mean paired lift +${lift.toFixed(2)}, thinnest week +${worst.toFixed(2)} (the desk adds ${scoutQualityBonus(onlyPost(base, 'scout', STAFF_MAX))} before the 93 cap)`);
   if (!(lift >= 4)) fail(`the lead scout moved the ceiling of what came home by ${lift.toFixed(2)}, and he adds 6 before the cap`);
   if (!(lift <= 6.5)) fail(`the lead scout moved the ceiling by ${lift.toFixed(2)}, which is more than the 6 he is allowed to add`);
   if (!(worst > 0)) fail(`a week's reports came home no better with a level 10 lead scout (${worst.toFixed(2)})`);

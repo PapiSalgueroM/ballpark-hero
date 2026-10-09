@@ -1311,17 +1311,23 @@ function checkEraNights(tally) {
           break;
         }
         tally.eraNights += 1;
+        /* Round 1146: an own goal against me is listed under them and names one of MINE; the man the engine
+           first drew the goal for is kept beside it (`drawn`). The era rule this section holds is about him:
+           he is on their era roster, or is the neutral shirt number line. The man named must be in my squad. */
+        const mySquad = new Set(c.squad.map(p => p.name));
         for (const sc of rep.oppScorers) {
+          const who = sc.og ? String(sc.drawn ?? '') : sc.name;
+          if (sc.og && !mySquad.has(sc.name)) note('eranames', `${eraId} at ${opp}: ${sc.name} (O.G) is listed under them and is not in my ${eraId} squad`);
           tally.eraGoals += 1;
           if (exposed) tally.exposedGoals += 1;
           if (rosterKey !== opp) tally.longNameGoals += 1;
           if (roster.size) {
-            if (roster.has(sc.name)) tally.rosterGoals += 1;
-            else note('eranames', `${eraId} at ${opp}: ${sc.name} scored, and he is not in the ${eraId} ${rosterKey} roster`);
-          } else if (sc.name.startsWith(`${opp} No. `) && [7, 8, 9, 10, 11].includes(Number(sc.name.slice(opp.length + 5)))) {
+            if (roster.has(who)) tally.rosterGoals += 1;
+            else note('eranames', `${eraId} at ${opp}: ${who} scored, and he is not in the ${eraId} ${rosterKey} roster`);
+          } else if (who.startsWith(`${opp} No. `) && [7, 8, 9, 10, 11].includes(Number(who.slice(opp.length + 5)))) {
             tally.numberGoals += 1;
           } else {
-            note('eranames', `${eraId} at ${opp}: ${sc.name} scored for a club with no ${eraId} roster, where the neutral shirt number line belongs`);
+            note('eranames', `${eraId} at ${opp}: ${who} scored for a club with no ${eraId} roster, where the neutral shirt number line belongs`);
           }
         }
         const text = JSON.stringify(rep);
