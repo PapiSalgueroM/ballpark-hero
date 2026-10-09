@@ -1,0 +1,169 @@
+== walk2 on main
+{
+ "k1-bracket-first": {
+  "first": "/world-cup-bracket",
+  "errors": [],
+  "filled": {
+   "keys": 55,
+   "err": null
+  },
+  "onFirstPage": {
+   "path": "/world-cup-bracket",
+   "line": "full",
+   "lineHistory": [
+    [
+     76,
+     "none"
+    ],
+    [
+     174,
+     "full"
+    ]
+   ],
+   "probeKeyWrite": "refused (QuotaExceededError)",
+   "newKeyWrite": "refused (QuotaExceededError)",
+   "saveNotice": false,
+   "saveToast": false,
+   "nbaOnDisk": null,
+   "predictionsOnDisk": "{}",
+   "broke": false,
+   "loads": 1
+  },
+  "onNba": {
+   "path": "/nba-my-career",
+   "line": "full",
+   "lineHistory": [
+    [
+     76,
+     "none"
+    ],
+    [
+     174,
+     "full"
+    ]
+   ],
+   "probeKeyWrite": "refused (QuotaExceededError)",
+   "newKeyWrite": "refused (QuotaExceededError)",
+   "saveNotice": false,
+   "saveToast": false,
+   "nbaOnDisk": null,
+   "predictionsOnDisk": "{}",
+   "broke": false,
+   "loads": 1
+  },
+  "pressed": true,
+  "afterRefusedSave": {
+   "path": "/nba-my-career",
+   "line": "full",
+   "lineHistory": [
+    [
+     76,
+     "none"
+    ],
+    [
+     174,
+     "full"
+    ]
+   ],
+   "probeKeyWrite": "refused (QuotaExceededError)",
+   "newKeyWrite": "refused (QuotaExceededError)",
+   "saveNotice": true,
+   "saveToast": true,
+   "nbaOnDisk": null,
+   "predictionsOnDisk": "{}",
+   "broke": false,
+   "loads": 1
+  }
+ },
+ "k2-nba-direct": {
+  "first": "/nba-my-career",
+  "errors": [],
+  "filled": {
+   "keys": 55,
+   "err": null
+  },
+  "onFirstPage": {
+   "path": "/nba-my-career",
+   "line": "full",
+   "lineHistory": [
+    [
+     46,
+     "none"
+    ],
+    [
+     138,
+     "full"
+    ]
+   ],
+   "probeKeyWrite": "refused (QuotaExceededError)",
+   "newKeyWrite": "refused (QuotaExceededError)",
+   "saveNotice": false,
+   "saveToast": false,
+   "nbaOnDisk": null,
+   "predictionsOnDisk": "{}",
+   "broke": false,
+   "loads": 1
+  },
+  "onNba": {
+   "path": "/nba-my-career",
+   "line": "full",
+   "lineHistory": [
+    [
+     46,
+     "none"
+    ],
+    [
+     138,
+     "full"
+    ]
+   ],
+   "probeKeyWrite": "refused (QuotaExceededError)",
+   "newKeyWrite": "refused (QuotaExceededError)",
+   "saveNotice": false,
+   "saveToast": false,
+   "nbaOnDisk": null,
+   "predictionsOnDisk": "{}",
+   "broke": false,
+   "loads": 1
+  },
+  "pressed": true,
+  "afterRefusedSave": {
+   "path": "/nba-my-career",
+   "line": "full",
+   "lineHistory": [
+    [
+     46,
+     "none"
+    ],
+    [
+     138,
+     "full"
+    ]
+   ],
+   "probeKeyWrite": "refused (QuotaExceededError)",
+   "newKeyWrite": "refused (QuotaExceededError)",
+   "saveNotice": true,
+   "saveToast": true,
+   "nbaOnDisk": null,
+   "predictionsOnDisk": "{}",
+   "broke": false,
+   "loads": 1
+  }
+ }
+}
+rr-walk2: 2 journeys walked
+== walk1 on main
+j1-real-quota-390 {
+ "name": "j1-real-quota-390",
+ "width": 390,
+ "height": 844,
+ "reduce": false,
+ "errors": [],
+ "steps": {
+  "loaded": "line=full notice=none toast=none banner=701..844 career=null consent=null gameTop=117",
+  "refused": "line=full notice=up toast=675..748 banner=701..844 career=null consent=null gameTop=117",
+  "afterRefusedRetry": "line=full notice=up toast=none banner=701..844 career=null consent=null gameTop=117",
+  "later": "line=full notice=up toast=none banner=701..844 career=null consent=null gameTop=117",
+  "afterRealRetry": "line=full notice=none toast=none banner=701..844 career=370 consent=null gameTop=117"
+ },
+rr-main: both walks ran against main
