@@ -675,8 +675,8 @@ async function walk(slug, vp) {
   check('errors', B.errors.length === 0, `${tag}: no page error and no console error${B.errors.length ? `: ${B.errors.slice(0, 2).join(' | ')}` : ''}`);
   await B.ctx.close();
 
-  if (phone) {
-    /* reduced motion: everything at once, nothing moving */
+  {
+    /* reduced motion: everything at once, nothing moving (at both sizes since Round 1147) */
     const C = await open(slug, save, { ...vp, reduced: true });
     await C.page.evaluate(() => document.querySelector('[data-week-by-week]')?.click());
     await C.page.waitForSelector('[data-season-centre] [data-kickoff]', { timeout: 20000 }).catch(() => {});
@@ -688,7 +688,8 @@ async function walk(slug, vp) {
     check('motion', a1 === 0 && a2.n === 0 && a2.ft && a2.lines >= d.minLines, `${tag}: reduced motion shows the game at once with nothing animating (${a1} and ${a2.n} animations, ${a2.lines} lines)`);
     check('errors', C.errors.length === 0, `${tag}: reduced motion, no page error and no console error`);
     await C.ctx.close();
-
+  }
+  if (phone) {
     /* a held year */
     const H = await open(slug, makeSave(slug, 0, d.held.era, d.held.year), vp);
     const held = await H.page.evaluate(() => ({ line: document.querySelector('[data-season-centre-held]')?.textContent ?? '', button: !!document.querySelector('[data-week-by-week]') }));

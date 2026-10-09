@@ -189,8 +189,8 @@ export function nflDealProblems(ctx: UsSeasonCtx, games: readonly DerivedGame[])
 
 /** His whole number totals the core spreads over the games he played. A
  *  touchdown of his is a seven point drive on his team's board (a floor on
- *  the score), in this sim. The caps are this sim's own, set under what a
- *  real game has held; no record is quoted. */
+ *  the score), in this sim. The caps a game are this sim's own rule, not a
+ *  claim about any real game, and no record is quoted. */
 const SUMS: { key: string; cap: number; td?: boolean }[] = [
   { key: 'passTd', cap: 6, td: true }, { key: 'ints', cap: 5 }, { key: 'rushTd', cap: 4, td: true }, { key: 'recTd', cap: 4, td: true },
   { key: 'tackles', cap: 20 }, { key: 'picks', cap: 3 }, { key: 'passDef', cap: 6 }, { key: 'forcedFum', cap: 3 },
