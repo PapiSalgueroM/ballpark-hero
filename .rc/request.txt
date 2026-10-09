@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+weight: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs
