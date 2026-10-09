@@ -1,0 +1,43 @@
+NEGATIVE CONTROL ON: the draw can take two events of one story into the same batch (section 2 must fail)
+1) Driving careers through the real engine
+   500 careers, 8210 playing seasons, 7453 event batches, 24264 events shown, 0 crashes
+2) No event fires twice inside its cooldown
+   2083 repeat firings of the same event or story in the same career checked (2 of them a shared story), 2 inside the cooldown, 2 in the same or the next season, 2 duplicated inside one batch
+   story:squadChatLeak drawn twice in one batch in 2027 (loyal 40032)
+   story:squadChatLeak (ids 220 then 63) fired in 2027 and again in 2027 (cooldown 99, loyal 40032)
+   story:squadChatLeak drawn twice in one batch in 2030 (elite 90068)
+   story:squadChatLeak (ids 63 then 220) fired in 2030 and again in 2030 (cooldown 99, elite 90068)
+  FAIL (section 2): 2 firings landed inside the event's cooldown
+  FAIL (section 2): 2 events or stories fired again in the same or the next season
+  FAIL (section 2): 2 batches carried the same event or story twice
+   500 of 500 finished saves carry a ledger, 22181 ids stamped in all
+3) Every life event is reachable, every new one fired
+   68 ids in the life file, 68 of them offered to some career; 20 new ids
+   new id fire counts: 253:84 254:87 255:149 256:116 257:129 258:140 259:176 260:152 261:149 262:222 263:126 264:110 265:109 266:95 267:136 268:161 269:106 270:36 271:17 272:11
+   20 of the 20 new events had every option taken at least once
+3b) The comeback game only follows a recent serious injury
+   222 comeback games, seasons since the latest serious injury: 1:222
+4) The rate: not flooded, not starved
+   mean events per batch 3.26, batches per playing season 0.91, life catalog share of slots 0.26, life events per playing season 0.76
+5) Catalog shape: two real choices, a consequence each, an explicit cooldown
+   life events by category: international 1, life 47, negative 16, positive 4
+   68 life events: 0 with fewer than two options, 0 options without a consequence, 0 without an apply, 0 without a cooldown
+   249 distinct ids seen across every catalog, 0 ids used twice in one draw
+   0 pairs with identical consequence sets; closest text pair 226 and 227 at 0.15 word overlap
+   cooldown tables: 0 problems against the pinned values; 249 events, 0 where the engine's cooldown or story key disagrees with this harness
+   272 at 33 then 37, first option both times: yearly costs 0 then 0.15 then 0.15
+5b) Across the whole picker: no story told twice, no title shared
+   3 stories told by more than one catalog, 7 events carrying a story key, 0 problems
+   68 life events against 181 elsewhere: 0 identical titles, 31 pairs sharing a title word (4 of them one shared story, 27 read and judged different, 0 unread)
+6) Text: no dashes, no rival names, no real person speaking
+   462 strings checked: 0 with a dash, 0 rival name hits, 0 unvouched Capitalised Name pairs
+7) A save with no ledger loads and plays; a corrupt ledger is dropped
+   25 mid career saves stripped of their ledger: 0 threw, 25 had a ledger again after their next batch
+   corrupt ledgers dropped, a good one kept, and the hold out rule answers 2024 + 2 correctly
+   a reloaded card the catalog no longer carries: its 2024 stamp was handed back, an older stamp untouched
+8) A financial crisis sells what it sells and keeps every other yearly cost
+   48 careers played through a crisis (0 seasons without one, 0 purchases or events the probe could not make): physio 27, child 27, dog 27 standing costs tested, 120 items sold, 48 kept
+   bill before the crisis not the sum of its sources: 0; bill after not the kept items plus every standing cost: 0; item sold or kept wrongly: 0; physio gone: 0
+   pre 826 bills: 18 careers through a crisis (0 without one), 12 of them owing less than the upkeep sold; bill wrong or below zero after: 0
+
+CONTROL FIRED: section 2 failed with the defect back in, as it should, and nothing else did.
