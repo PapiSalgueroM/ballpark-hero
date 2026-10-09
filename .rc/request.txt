@@ -1,0 +1,11 @@
+#!serial
+#!build
+simCareerWallShotFriendly: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerWallShotFriendly.mjs
+simSeasonFamilySummary: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonFamilySummary.mjs
+simSoccerAwardReveal: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAwardReveal.mjs
+simSoccerCareerLeagueWorld: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerLeagueWorld.mjs
+simSoccerCareerOpponents: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerOpponents.mjs
+simSoccerCompetitionNavigation: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCompetitionNavigation.mjs
+simSoccerDiscipline: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerDiscipline.mjs
+simSoccerSeasonAvailability: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonAvailability.mjs
+simTrophyCabinet: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTrophyCabinet.mjs
