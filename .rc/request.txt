@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+sweepWeight: BASE=http://localhost:4173 SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs
+playLiveMatchFit: PORT=4191 node scripts/playLiveMatchFit.mjs
+playTranslatedPage: node scripts/playTranslatedPage.mjs
+playCareerMoments: PORT=4601 node scripts/playCareerMoments.mjs
+playSeasonCentreMotion: PORT=4559 node scripts/playSeasonCentreMotion.mjs
