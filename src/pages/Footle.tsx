@@ -19,6 +19,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { fmtCompactUsd } from '@/lib/dealPlayers';
 import { safeSetItem } from '@/lib/safeStorage';
+import { GAME_COUNT_LABEL } from '@/data/gameRegistry';
 
 const Index = () => {
   const {
@@ -482,7 +483,7 @@ const Index = () => {
         <GameSeoContent
           pageHasOwnH1
           title="Footle: Soccer Player Guessing Game"
-          description="Guess the mystery soccer player in 8 tries. Each guess reveals clues about the player's club, league, nationality, position, and age. One of 100+ free sports games on DoUKnowBall."
+          description={`Guess the mystery soccer player in 8 tries. Each guess reveals clues about the player's club, league, nationality, position, and age. One of ${GAME_COUNT_LABEL} free sports games on DoUKnowBall.`}
           howToPlay={[
             "Type a soccer player's name and submit your guess. You get 8 attempts.",
             "After each guess, colored tiles show how close you are: green means correct, yellow means close.",

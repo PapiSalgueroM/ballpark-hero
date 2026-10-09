@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import PageSeo from '@/components/seo/PageSeo';
+import { GAME_COUNT_LABEL } from '@/data/gameRegistry';
 
 const WhatsNew = () => {
   return (
@@ -409,7 +410,7 @@ const WhatsNew = () => {
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">Spring 2026</h2>
           <ul className="list-disc pl-5 space-y-2">
-            <li>DoUKnowBall launched with the first wave of daily soccer games. It has grown to eleven sports and over 100 games since, and it is still growing.</li>
+            <li>DoUKnowBall launched with the first wave of daily soccer games. It has grown to eleven sports and {GAME_COUNT_LABEL} games since, and it is still growing.</li>
           </ul>
         </div>
 

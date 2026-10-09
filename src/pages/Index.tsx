@@ -219,10 +219,14 @@ export default function Index() {
           and a plain string rather than a count computed at runtime, so the
           two cannot drift the day a game ships. It names the Soccer Career sim
           and Club Manager, which carry most of the site's traffic, and the
-          count is a floor simHomeCopy checks against the registry. */}
+          count is a floor simHomeCopy checks against the registry.
+          Round 1143: and it is the SAME floor the hero prints, typed here
+          and in the template's three tags because both have to be literals.
+          simTrustCopy fails the day the registry's label moves and these
+          do not, and names the four places to retype. */}
       <PageSeo
         title="DoUKnowBall: Free Sports Trivia Games and Daily Quizzes"
-        description="120+ free sports games, from a Soccer Career sim and Club Manager to daily trivia and quizzes for the NFL, NBA, MLB, NHL, F1, UFC and more. No login needed."
+        description="130+ free sports games, from a Soccer Career sim and Club Manager to daily trivia and quizzes for the NFL, NBA, MLB, NHL, F1, UFC and more. No login needed."
         path="/"
       />
       <HomeTileStyles />
