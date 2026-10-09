@@ -165,12 +165,14 @@ export function BracketSide({
   const through = settled && tie.winner === name;
   const mine = name === clubName;
   const lands = !!landing && through;
+  const Line = onClubClick ? 'button' : 'div';
   const line = (
-    <div
+    <Line
+      type={onClubClick ? 'button' : undefined}
       onClick={onClubClick ? () => onClubClick(name) : undefined}
       className={cn(
         'flex items-center gap-1.5 px-2 py-1 rounded-md transition-colors',
-        onClubClick && 'cursor-pointer hover:bg-secondary/50',
+        onClubClick && 'w-full text-left cursor-pointer hover:bg-secondary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
         settled && !through && 'opacity-45',
       )}
     >
@@ -191,7 +193,7 @@ export function BracketSide({
       >
         {goals === null ? '' : goals}
       </span>
-    </div>
+    </Line>
   );
   if (!lands) return line;
   return (
