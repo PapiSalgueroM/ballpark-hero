@@ -25,6 +25,7 @@ import {
   PlayerProfile,
   StatDetectiveData,
   GUESS_LIMIT,
+  RECORDED_PROFILE_SCOPE,
   STARS_MIN_RATING,
   DEEP_MIN_RATING,
   DEEP_MAX_RATING,
@@ -46,7 +47,7 @@ type Phase = 'boot' | 'error' | 'pick' | 'playing' | 'done';
 type Feedback = { name: string; correct: boolean; clues: string[]; terminal: boolean };
 
 const CLUE_RULES = 'Clues unlock after each of the first six misses when a career profile is available. Without that profile, they unlock after misses 2, 4, 5 and 6.';
-const WORKED_EXAMPLE = 'Example: a Shared franchise chip means your guess played for the mystery team at some point. After a miss, read the new clue and try another name.';
+const WORKED_EXAMPLE = 'Example: a Shared franchise chip means your guess has a recorded 500+ minute season with that franchise. After a miss, read the new clue and try another name.';
 
 const DIFF_META: Record<Difficulty, { label: string; blurb: string }> = {
   stars: {
@@ -206,8 +207,9 @@ const StatDetective = () => {
       <div className="relative z-10 mx-auto w-full max-w-4xl">
         <HowToPlayPopover title="Stat Detective rules" className="min-h-[44px] min-w-[44px]">
           <p>Study the era, position and per 36 minute stat line. Type at least two letters and pick a player. You have eight guesses.</p>
-          <p>A miss tells you whether your guess shares a franchise with the mystery player.</p>
+          <p>A miss compares the franchises in your guess's recorded profile with the mystery franchise.</p>
           <p>{CLUE_RULES}</p>
+          <p>{RECORDED_PROFILE_SCOPE}</p>
           <p>{WORKED_EXAMPLE}</p>
         </HowToPlayPopover>
       </div>
@@ -246,6 +248,7 @@ const StatDetective = () => {
           <div className="bg-card border border-border rounded-2xl p-4 mb-4 text-sm text-muted-foreground space-y-2">
             <p>Study the stat line, then type at least two letters and pick a player. You have eight guesses.</p>
             <p>{CLUE_RULES}</p>
+            <p>{RECORDED_PROFILE_SCOPE}</p>
             <p>{WORKED_EXAMPLE}</p>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -309,6 +312,7 @@ const StatDetective = () => {
                   <Lightbulb className="w-3.5 h-3.5" />
                   Clues
                 </div>
+                {mysteryProfile && <p data-stat-profile-scope className="text-xs text-muted-foreground mb-2">{RECORDED_PROFILE_SCOPE}</p>}
                 {hints.map(h => (
                   <p key={h.label} data-stat-clue={h.label} data-stat-feedback={feedback?.clues.includes(h.label) ? 'clue' : undefined}
                     className={cn('text-sm text-foreground', motion.text, feedback?.clues.includes(h.label) && motion.clue)}>
@@ -355,7 +359,7 @@ const StatDetective = () => {
                           className={cn('w-full text-left px-4 py-2.5 hover:bg-secondary transition-colors', motion.option)}
                         >
                           <span className="font-semibold text-foreground">{p.name}</span>
-                          <span className="text-xs text-muted-foreground ml-2">{careerSpan(p)}</span>
+                          <span title="Recorded season end years (500+ minutes)" className="text-xs text-muted-foreground ml-2">{careerSpan(p)}</span>
                         </button>
                       </li>
                     ))}
@@ -453,7 +457,13 @@ const StatDetective = () => {
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
         <div className="flex justify-center mt-6">
-          <ReportQuestion gameType="stat-detective" />
+          <ReportQuestion gameType="stat-detective" gameContext={{
+            puzzleId: mystery?.key ?? null, player: mystery?.player ?? null,
+            season: mystery?.season ?? null, team: mystery?.team ?? null,
+            difficulty, phase, guesses: guesses.map(guess => guess.name),
+            profileScope: 'recorded-500-minute-seasons',
+            recordedSeasons: mysteryProfile ? careerSpan(mysteryProfile) : null,
+          }} />
         </div>
 
         <GameSeoContent
@@ -466,10 +476,11 @@ const StatDetective = () => {
             'Type 2 or more letters and pick a player from the suggestions.',
             'Wrong guesses tell you whether the player shares a franchise with the mystery player.',
             CLUE_RULES,
+            RECORDED_PROFILE_SCOPE,
           ]}
           examples={[
             'A 1980s point guard with 11 assists per 36 narrows things down fast.',
-            'Shared franchise means your guess played for the mystery team at some point.',
+            'Shared franchise means a recorded 500+ minute season with that franchise.',
           ]}
         />
         <GameNav />

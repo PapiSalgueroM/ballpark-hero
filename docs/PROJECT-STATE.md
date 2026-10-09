@@ -1,3 +1,36 @@
+## Rounds 1179 to 1183 authored, 2026-10-09: career targets, records, VAR and player reports
+
+Codex follow-up on codex/career-next-batch, based on main c33d0139. Source is
+being finished and independently reviewed. Runtime acceptance is pending on
+GitHub runners. This is not merged or published, and PR207 stays frozen for F.
+
+- 1179: Club Manager stores VAR goal reviews before score/scorer credit, and a
+  missed defensive foul can award a penalty whose actual kick can score or miss.
+  Only new non-historical 2026+ matches opt in; old saved live matches keep their
+  outcomes. Review frequencies are gameplay choices, not real league statistics.
+- 1180: optional Soccer Career targets chase a saved personal best for the next
+  year and club. Actual season stats settle them once. An earned +1 training
+  reward joins the next year's growth; transfers cancel an unplayed target.
+- 1181: a small record book tile opens actual best seasons and chronological
+  club spells, with loan parents, saved totals and a ten-appearance rating floor.
+  Academy/post-retirement rows and year-out markers stay out. No awards leak.
+- 1182: Dart Draft pages the existing 2026 roster completely. Eligible choice
+  lists keep the best three and sample five others without duplicate names.
+  No new real-player data or database write is introduced.
+- 1183: Stat Detective labels its 500+ minute filtered profiles Recorded seasons
+  and Recorded franchises, explains that scope before play and in help, and
+  includes the exact mystery player/season/profile scope in future reports.
+  The report with only a date did not identify a player, so no retirement year
+  was guessed. Transfer Path tpa-767's report says only Other; its held data lane
+  was not changed.
+
+Manager own goals, penalty markers, first-season fixtures and routine Quick Sim
+subs remain F/recovery's existing lane. Soccer own goals are in PR206/Release AP.
+The new branch is a follow-up, not a replacement for those pending integrations.
+Remote workflow career-next-batch.yml checks exact app types, a complete build,
+new outcomes/effective controls, related existing outcomes, all built readers,
+and native route journeys on phone and desktop. No local site runtime was used.
+
 ## Release AO LIVE, 2026-10-09 02:01 EDT: whole leagues and a moving Season Centre in Soccer Career, a match that moves and Russia in Club Manager, sound, nine rounds
 
 Claude lane (session F). main 23bde474, deployment 4b5ab6cb-16b7-4d42-9f12-c66e91ac8178, entry index-Du6HhEY3.js (was

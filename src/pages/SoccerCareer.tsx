@@ -66,6 +66,8 @@ import { localizeMoney as money, CURRENCIES, getCurrency, setCurrency, rateNote 
    nothing at all when we have no honest answer for that club and season. */
 import { depthChart, GROUP_LABEL } from "@/lib/soccerClubSquad";
 import { SquadTile } from "@/components/soccer-career/SquadTile";
+import { CareerRecordsTile } from '@/components/soccer-career/CareerRecordsTile';
+import { SeasonAmbitionTile, SeasonAmbitionResult } from '@/components/soccer-career/SeasonAmbitionTile';
 import type { MoneyAction } from "@/lib/soccerMoney";
 import { bankSummary } from "@/lib/soccerMoney";
 import PhonePanel from "@/components/soccer-career/PhonePanel";
@@ -743,6 +745,7 @@ function SeasonSummaryCard({ season, position, onContinue, appearance, leagueOf,
       <SeasonDerbyLines season={season} />
       {/* Round 1041: a cup run that ended early, one line; nothing on old saves. */}
       <SeasonCupExitLine season={season} />
+      <SeasonAmbitionResult season={season} />
 
       {season.injury && (
         /* Round 530: one shake as it lands, nothing more. */
@@ -4287,6 +4290,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               at a club. Round 1115: the Squad tile, every club and every
               year, and it says whether the squad is real, by role or invented. */}
           {career.phase === "playing" && <SquadTile career={career} />}
+          {career.phase === "playing" && onCareerPatch && <SeasonAmbitionTile career={career} onCareer={onCareerPatch} />}
+          {(career.phase === "playing" || career.phase === "retired") && <CareerRecordsTile career={career} />}
 
           {/* Financial & Lifestyle Panel */}
           {(career.phase === "youth" || career.phase === "playing" || career.phase === "retired") && (

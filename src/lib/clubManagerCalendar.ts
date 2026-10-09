@@ -609,13 +609,13 @@ export interface SimRun {
  * always were, and since Round 1072 the quick sim coach makes the changes. A tap on a day and every fast forward button go through
  * here, so the two can never drift.
  */
-export function simToWeek(career: CareerState, targetWeek: number): SimRun {
+export function simToWeek(career: CareerState, targetWeek: number, opts?: { varReviews?: boolean }): SimRun {
   let state = career;
   let lastReport: MatchWeekReport | null = null;
   const target = Math.min(targetWeek, career.calendar.length);
   while (state.week < target) {
     const suitorBefore = state.approach?.club ?? null;
-    const res = playNextEntry(state, { skipHalftime: true, untilWeek: target });
+    const res = playNextEntry(state, { skipHalftime: true, untilWeek: target, ...(opts?.varReviews ? { varReviews: true } : {}) });
     state = res.state;
     if (res.kind === 'window') return { state, lastReport, halt: 'window' };
     if (res.kind === 'seasonOver') return { state, lastReport, halt: 'seasonOver' };

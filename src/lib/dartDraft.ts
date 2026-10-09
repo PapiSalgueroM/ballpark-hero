@@ -1,6 +1,7 @@
 import { supabase } from '@/integrations/supabase/client';
 import { Player, Position } from '@/types/game';
 import { getEnrichment } from '@/data/footleEnrichment';
+import { fetchAllRows } from '@/lib/fetchAllRows';
 import { FORMATIONS, LEGENDS, normalizePosition, playerRating, type Formation, type FormationSlot } from '@/lib/squadDeal';
 
 /**
@@ -103,17 +104,18 @@ interface MarketRow {
   assists: number | null;
 }
 
-/** Top-450 current players by 2026 market value + the all-time LEGENDS pool. */
+/** Existing 2026 market rows, paged completely, plus the shared all-time pool. */
 export async function fetchDartDraftPool(): Promise<{ current: Player[]; legends: Player[] }> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await fetchAllRows<MarketRow>((from, to) => supabase
       .from('player_market_values')
       .select('player_name, position, age, nationality, club, market_value_usd, goals, assists')
       .eq('year', 2026)
       .not('age', 'is', null)
       .order('market_value_usd', { ascending: false })
       .order('player_name', { ascending: true })
-      .limit(900);
+      .order('id', { ascending: true })
+      .range(from, to));
     if (error || !data || data.length === 0) return { current: [], legends: LEGENDS };
 
     const seen = new Set<string>();

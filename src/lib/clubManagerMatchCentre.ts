@@ -25,6 +25,7 @@
  */
 import type { CardLine, LiveMatch, MatchDetail, SubLine, TimelineKind } from './clubManager';
 import { minuteLabel, playedBy } from '@/lib/clubManagerClock';
+import { cmVarLabel } from '@/lib/clubManagerVar';
 
 export interface CardsAndSubs {
   yellows: number; oppYellows: number;
@@ -96,7 +97,7 @@ export interface TimelineRow {
 const ICON: Record<TimelineKind, string> = {
   kickoff: '⏱️', goal: '⚽', yellow: '🟨', red: '🟥', injury: '🩹', sub: '🔁',
   halftime: '⏸️', fulltime: '🏁', pens: '🥅', extratime: '⏱️',
-  shot: '💨', save: '🧤', corner: '🚩', penalty: '🎯',
+  shot: '💨', save: '🧤', corner: '🚩', penalty: '🎯', var: '📺',
 };
 
 /**
@@ -152,6 +153,9 @@ export function timelineRows(d: MatchDetail, view: TimelineView): TimelineRow[] 
         });
         return;
       }
+      case 'var':
+        out.push({ ...base, clock: at, label: e.review ? cmVarLabel(e.review) : 'VAR review', name: e.text, gen: genOf(e.side, e.text) });
+        return;
       case 'sub': {
         const cut = e.text.indexOf(' on for ');
         const on = cut > 0 ? e.text.slice(0, cut) : e.text;

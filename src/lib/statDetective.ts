@@ -42,6 +42,8 @@ export const STARS_MIN_RATING = 85;
 export const DEEP_MIN_RATING = 60;
 export const DEEP_MAX_RATING = 84;
 
+export const RECORDED_PROFILE_SCOPE = 'Recorded seasons and franchises cover NBA seasons with 500+ minutes in these case files. Years are season end years. Short stints and other seasons can be missing.';
+
 const MIN_MINUTES = 500;   // same floor perfectSeasonNba uses for draftable players
 const PAGE_SIZE = 1000;    // PostgREST caps rows per request
 const PAGES = 25;          // ~19.9k qualifying rows today, headroom for new seasons
@@ -424,7 +426,7 @@ export function suggestProfiles(
   return [...starts, ...wordStarts, ...contains].slice(0, limit);
 }
 
-/** 'Michael Jordan' active 1985-2003 -> '1985-2003' for the dropdown. */
+/** Season end years from the recorded 500+ minute profile, not full career dates. */
 export function careerSpan(profile: PlayerProfile): string {
   return profile.firstYear === profile.lastYear
     ? String(profile.firstYear)
@@ -434,14 +436,14 @@ export function careerSpan(profile: PlayerProfile): string {
 /**
  * Extra clues unlocked by miss count, denser ladder (owner 2026-07-10: the
  * old chips restated the case file; every unlock here is NEW information).
- * 1 miss: career span · 2: surname initial · 3: franchises played for
+ * 1 miss: recorded seasons · 2: surname initial · 3: recorded franchises
  * 4: team · 5: first-name initial · 6: exact season.
  */
 export function hintsFor(mystery: MysterySeason, misses: number, profile?: PlayerProfile): Hint[] {
   const hints: Hint[] = [];
-  if (misses >= 1 && profile) hints.push({ label: 'Career span', value: careerSpan(profile) });
+  if (misses >= 1 && profile) hints.push({ label: 'Recorded seasons', value: careerSpan(profile) });
   if (misses >= 2) hints.push({ label: 'Surname starts with', value: surnameInitial(mystery.player) });
-  if (misses >= 3 && profile) hints.push({ label: 'Career franchises', value: String(profile.franchises.length) });
+  if (misses >= 3 && profile) hints.push({ label: 'Recorded franchises', value: String(profile.franchises.length) });
   if (misses >= 4) hints.push({ label: 'Team', value: mystery.teamName });
   if (misses >= 5) hints.push({ label: 'First name starts with', value: mystery.player.trim().charAt(0).toUpperCase() });
   if (misses >= 6) hints.push({ label: 'Exact season', value: mystery.season });

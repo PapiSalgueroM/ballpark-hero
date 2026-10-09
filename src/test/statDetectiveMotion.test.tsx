@@ -151,8 +151,8 @@ describe('actual Stat Detective committed feedback and access', () => {
       else expect(view.getByText(`Next clue unlocks after miss ${pointers[misses]}`)).toBeVisible();
       if (misses < 6) choose(view, wrong[misses]);
     }
-    expect(view.container.querySelector('[data-stat-clue="Career span"]')).toBeNull();
-    expect(view.container.querySelector('[data-stat-clue="Career franchises"]')).toBeNull();
+    expect(view.container.querySelector('[data-stat-clue="Recorded seasons"]')).toBeNull();
+    expect(view.container.querySelector('[data-stat-clue="Recorded franchises"]')).toBeNull();
     expect(recordCompletion).not.toHaveBeenCalled();
   });
 

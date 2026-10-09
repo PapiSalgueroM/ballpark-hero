@@ -589,7 +589,7 @@ export function useClubManager() {
   /* ---------- season progression ---------- */
   const runEntry = useCallback((skipHalftime: boolean) => {
     if (!career) return;
-    const res = playNextEntry(career, skipHalftime ? { skipHalftime: true } : undefined);
+    const res = playNextEntry(career, { skipHalftime, varReviews: true });
     setCareer(res.state);
     /* Round 119: the match stops at the interval now. Everything this game has
        built for eleven rounds happens between fixtures; this is the one moment
@@ -640,7 +640,7 @@ export function useClubManager() {
      runs it to a week and does what the screens need with how it stopped. */
   const simToWeek = useCallback((targetWeek: number) => {
     if (!career) return;
-    const run = runSimToWeek(career, targetWeek);
+    const run = runSimToWeek(career, targetWeek, { varReviews: true });
     if (run.halt === 'window') {
       setCareer(run.state);
       setActiveTab('transfers');
