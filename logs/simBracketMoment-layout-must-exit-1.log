@@ -1,0 +1,72 @@
+NEGATIVE CONTROL ON: layout
+1) The moment names exactly the ties the engine settled and drew
+   921 steps, 1713 steps per competition with nothing settled (all silent), 306 ladder rungs, 18 season keys
+   moments by round: cup {"R16":18,"QF":18,"SF":18,"F":18}, Champions League {"QF":17,"SF":17,"F":17,"R16":6}; finals the club won: 9; steps that settled two rounds: 0
+2) The cards in a DOM: classes only on the new ties, a remount plays nothing
+   skipped: a control rewrites a copy, and this section reads the real tree
+3) The page must not jump while the moment plays (chromium, the site's Tailwind)
+  FAIL: cup 390px at 0ms: the line under the card moved 12.0px
+  FAIL: cup 390px at 0ms: the card is 12px taller than the plain table
+  FAIL: cup 390px at 0ms: tie 0 is not where the plain table has it
+  FAIL: cup 390px at 200ms: the line under the card moved 12.0px
+  FAIL: cup 390px at 200ms: the card is 12px taller than the plain table
+  FAIL: cup 390px at 200ms: tie 0 is not where the plain table has it
+  FAIL: cup 390px at 500ms: the line under the card moved 12.0px
+  FAIL: cup 390px at 500ms: the card is 12px taller than the plain table
+  FAIL: cup 390px at 500ms: tie 0 is not where the plain table has it
+  FAIL: cup 390px at 1000ms: the line under the card moved 12.0px
+  FAIL: cup 390px at 1000ms: the card is 12px taller than the plain table
+  FAIL: cup 390px at 1000ms: tie 0 is not where the plain table has it
+  FAIL: cup 390px at 2500ms: the line under the card moved 12.0px
+  FAIL: cup 390px at 2500ms: the card is 12px taller than the plain table
+  FAIL: cup 390px at 2500ms: tie 0 is not where the plain table has it
+  FAIL: cupFinal 390px at 0ms: the line under the card moved 12.0px
+  FAIL: cupFinal 390px at 0ms: the card is 12px taller than the plain table
+  FAIL: cupFinal 390px at 0ms: tie 0 is not where the plain table has it
+  FAIL: cupFinal 390px at 200ms: the line under the card moved 12.0px
+  FAIL: cupFinal 390px at 200ms: the card is 12px taller than the plain table
+  FAIL: cupFinal 390px at 200ms: tie 0 is not where the plain table has it
+  FAIL: cupFinal 390px at 500ms: the line under the card moved 12.0px
+  FAIL: cupFinal 390px at 500ms: the card is 12px taller than the plain table
+  FAIL: cupFinal 390px at 500ms: tie 0 is not where the plain table has it
+  FAIL: cupFinal 390px at 1000ms: the line under the card moved 12.0px
+  FAIL: cupFinal 390px at 1000ms: the card is 12px taller than the plain table
+  FAIL: cupFinal 390px at 1000ms: tie 0 is not where the plain table has it
+  FAIL: cupFinal 390px at 2500ms: the line under the card moved 12.0px
+  FAIL: cupFinal 390px at 2500ms: the card is 12px taller than the plain table
+  FAIL: cupFinal 390px at 2500ms: tie 0 is not where the plain table has it
+  FAIL: cup 1440px at 0ms: the line under the card moved 12.0px
+  FAIL: cup 1440px at 0ms: the card is 12px taller than the plain table
+  FAIL: cup 1440px at 0ms: tie 0 is not where the plain table has it
+  FAIL: cup 1440px at 200ms: the line under the card moved 12.0px
+  FAIL: cup 1440px at 200ms: the card is 12px taller than the plain table
+  FAIL: cup 1440px at 200ms: tie 0 is not where the plain table has it
+  FAIL: cup 1440px at 500ms: the line under the card moved 12.0px
+  FAIL: cup 1440px at 500ms: the card is 12px taller than the plain table
+  FAIL: cup 1440px at 500ms: tie 0 is not where the plain table has it
+  FAIL: cup 1440px at 1000ms: the line under the card moved 12.0px
+  FAIL: cup 1440px at 1000ms: the card is 12px taller than the plain table
+  FAIL: cup 1440px at 1000ms: tie 0 is not where the plain table has it
+  FAIL: cup 1440px at 2500ms: the line under the card moved 12.0px
+  FAIL: cup 1440px at 2500ms: the card is 12px taller than the plain table
+  FAIL: cup 1440px at 2500ms: tie 0 is not where the plain table has it
+  FAIL: cupFinal 1440px at 0ms: the line under the card moved 12.0px
+  FAIL: cupFinal 1440px at 0ms: the card is 12px taller than the plain table
+  FAIL: cupFinal 1440px at 0ms: tie 0 is not where the plain table has it
+  FAIL: cupFinal 1440px at 200ms: the line under the card moved 12.0px
+  FAIL: cupFinal 1440px at 200ms: the card is 12px taller than the plain table
+  FAIL: cupFinal 1440px at 200ms: tie 0 is not where the plain table has it
+  FAIL: cupFinal 1440px at 500ms: the line under the card moved 12.0px
+  FAIL: cupFinal 1440px at 500ms: the card is 12px taller than the plain table
+  FAIL: cupFinal 1440px at 500ms: tie 0 is not where the plain table has it
+  FAIL: cupFinal 1440px at 1000ms: the line under the card moved 12.0px
+  FAIL: cupFinal 1440px at 1000ms: the card is 12px taller than the plain table
+  FAIL: cupFinal 1440px at 1000ms: tie 0 is not where the plain table has it
+  FAIL: cupFinal 1440px at 2500ms: the line under the card moved 12.0px
+  FAIL: cupFinal 1440px at 2500ms: the card is 12px taller than the plain table
+  FAIL: cupFinal 1440px at 2500ms: tie 0 is not where the plain table has it
+   4 moments (cup, ucl, cupFinal, uclFinal) at 390 and 1440, 40 samples against the plain table
+4) Coverage floors
+   cup 18 a round, Champions League {"QF":17,"SF":17,"F":17,"R16":6}, 306 rungs, 1713 silent steps over 3 seed(s)
+
+60 FAILURES (by section {"3":60})

@@ -1,0 +1,31 @@
+1) The defaults are the game exactly as it played
+  FAIL: askPremiumScale is 1.2 with a fresh block, not 1
+  FAIL: askPremiumScale is 1.2 with no block at all, not 1
+  FAIL: a junk block ("garbage") did not read as the defaults
+  FAIL: a junk block (42) did not read as the defaults
+  FAIL: a junk block (null) did not read as the defaults
+  FAIL: a junk block ([]) did not read as the defaults
+  FAIL: a junk block ({"v":99}) did not read as the defaults
+  FAIL: a junk block ({"v":1,"currency":"XXX","nationJobs":true,"strictness":3}) did not read as the defaults
+   8 states checked, all reading as the shipped game
+2) A mangled block reads as a fresh one rather than poisoning the save
+   11 of 11 malformed blocks refused, a good one accepted, the repair is idempotent
+3) The currency changes the symbol and not one digit
+   45 amounts across 5 currencies, symbol differs and digits never do
+   the opening ask is 151.5 under every currency, so the engine never reads it
+4) Turned off, the country never calls
+   24 strong careers: 24 got an offer with the setting on, 0 with it off
+5) Strictness moves what he asks for, and can only shorten how long he will sit there, never lengthen it
+   1:ask x0.5 patience +0  2:ask x0.75 patience +0  3:ask x1.2 patience +0  4:ask x1.35 patience -1  5:ask x1.7 patience -1
+  FAIL: the middle notch is not the identity, so the default is not the shipped game
+   5 settings, all distinct, none adds a round, the middle is the identity
+6) Repeating a lowball runs the seller out of table at EVERY setting
+   strictness 1: 0 agreed, 9 ran out, 15 hijacked, of 24 opened
+   strictness 2: 0 agreed, 9 ran out, 15 hijacked, of 24 opened
+   strictness 3: 0 agreed, 9 ran out, 15 hijacked, of 24 opened
+   strictness 4: 0 agreed, 14 ran out, 10 hijacked, of 24 opened
+   strictness 5: 0 agreed, 16 ran out, 8 hijacked, of 24 opened
+7) Even at the top setting a fair offer still closes
+   at strictness 5, paying the ask closed 24 of 24 deals
+
+NEGATIVE CONTROL notneutral was on; 9 finding(s). A control run is expected to be red.
