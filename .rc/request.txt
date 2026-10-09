@@ -1,0 +1,5 @@
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+gh-lostline: GUIDE_HEADINGS_CONTROL=lostline node scripts/simGuideHeadings.mjs
+gh-nokeyword: GUIDE_HEADINGS_CONTROL=nokeyword node scripts/simGuideHeadings.mjs
+gh-careerline: GUIDE_HEADINGS_CONTROL=careerline node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
