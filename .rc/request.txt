@@ -1,0 +1,24 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-nfl: node_modules/.bin/vitest run src/test/usSeasonNfl.test.ts src/test/usSeason.test.ts --testTimeout=300000 --hookTimeout=120000
+vitest-view: node_modules/.bin/vitest run src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/seasonCentreWords.test.tsx src/test/seasonCore.test.ts --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simUsSeasonCentre.mjs
+set0: SEEDSET=0 node scripts/simUsSeasonCentre.mjs
+set1: SEEDSET=1 node scripts/simUsSeasonCentre.mjs
+set2: SEEDSET=2 node scripts/simUsSeasonCentre.mjs
+set3: SEEDSET=3 node scripts/simUsSeasonCentre.mjs
+set4: SEEDSET=4 node scripts/simUsSeasonCentre.mjs
+c-poscore: SEEDSET=0 US_SEASON_CONTROL=poscore node scripts/simUsSeasonCentre.mjs
+c-nflheld: SEEDSET=0 US_SEASON_CONTROL=nflheld node scripts/simUsSeasonCentre.mjs
+c-lumpy: SEEDSET=0 US_SEASON_CONTROL=lumpy node scripts/simUsSeasonCentre.mjs
+c-tdform: US_SEASON_CONTROL=tdform node scripts/simUsSeasonCentre.mjs
+c-minutes: SEEDSET=0 US_SEASON_CONTROL=minutes node scripts/simUsSeasonCentre.mjs
+c-order: SEEDSET=0 US_SEASON_CONTROL=order node scripts/simUsSeasonCentre.mjs
+c-points: SEEDSET=0 US_SEASON_CONTROL=points node scripts/simUsSeasonCentre.mjs
+c-forty: SEEDSET=0 US_SEASON_CONTROL=forty node scripts/simUsSeasonCentre.mjs
+c-level: SEEDSET=0 US_SEASON_CONTROL=level node scripts/simUsSeasonCentre.mjs
+c-oddtd: SEEDSET=0 US_SEASON_CONTROL=oddtd node scripts/simUsSeasonCentre.mjs
+c-bigkick: SEEDSET=0 US_SEASON_CONTROL=bigkick node scripts/simUsSeasonCentre.mjs
+c-days: SEEDSET=0 US_SEASON_CONTROL=days node scripts/simUsSeasonCentre.mjs
+c-lumpy4: SEEDSET=4 US_SEASON_CONTROL=lumpy node scripts/simUsSeasonCentre.mjs
+c-days3: SEEDSET=3 US_SEASON_CONTROL=days node scripts/simUsSeasonCentre.mjs
+probe: node .rc/x/rv-probe.mjs
