@@ -1,0 +1,21 @@
+1) play a career to the dugout in the engine, so the save is one the game could have written
+   15 seasons, retired at 30, now unemployed at Estoril, save 68 KB
+   Club Manager's code lives in: clubManager-kAUXkMYi.js
+2) a fresh visit does not pay for the dugout
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4197/soccer-career
+Call log:
+  - navigating to "http://127.0.0.1:4197/soccer-career", waiting until "domcontentloaded"
+
+    at visit (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playFlagshipLazy.mjs:142:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playFlagshipLazy.mjs:154:15 {
+  log: [
+    '  - navigating to "http://127.0.0.1:4197/soccer-career", waiting until "domcontentloaded"'
+  ],
+  name: 'Error'
+}
+
+Node.js v24.21.0
