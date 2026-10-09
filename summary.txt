@@ -1,0 +1,14 @@
+sc-seedset0 exit=0 8s | simUsSeasonCentre: 89 checks, 0 failed
+sc-seedset1 exit=0 8s | simUsSeasonCentre: 91 checks, 0 failed
+sc-seedset2 exit=0 7s | simUsSeasonCentre: 91 checks, 0 failed
+simUsSeasonCentre exit=0 30s | simUsSeasonCentre: 98 checks, 0 failed
+sc-seedset3 exit=0 7s | simUsSeasonCentre: 89 checks, 0 failed
+sc-seedset4 exit=0 8s | simUsSeasonCentre: 89 checks, 0 failed
+sc-short82 exit=1 30s | simUsSeasonCentre: 98 checks, 1 failed (control short82)
+sc-stage exit=1 27s | simUsSeasonCentre: 93 checks, 3 failed (control stage)
+tsc exit=0 80s | 
+sc-length exit=1 33s | simUsSeasonCentre: 98 checks, 11 failed (control length)
+sc-formula exit=1 28s | simUsSeasonCentre: 98 checks, 1 failed (control formula)
+norival exit=0 20s | No rival product names found. 0 findings.
+anchors exit=0 38s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+vitest-digest exit=0 52s |    Duration  51.69s (transform 3.74s, setup 337ms, collect 6.56s, tests 49.22s, environment 1.89s, prepare 525ms)
