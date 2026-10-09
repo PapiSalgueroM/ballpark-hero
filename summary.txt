@@ -1,0 +1,3 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simSoccerCareerLeagueWorld exit=0 49s | simSoccerCareerLeagueWorld: seventeen outcome tests and two engine career tests green, all twelve effective negative controls caught
+worldtests exit=0 9s |    Duration  8.46s (transform 2.78s, setup 145ms, collect 4.87s, tests 11.75s, environment 854ms, prepare 216ms)
