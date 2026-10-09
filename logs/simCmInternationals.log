@@ -1,0 +1,49 @@
+1) The window rule against the verified dates, and a played season firing each window once, in order
+   2 verified windows held to the rule
+   Arsenal 2026: fired 2026-sepoct, 2026-nov, 2027-mar
+   Inter Miami 2026: fired 2026-sepoct, 2026-nov, 2027-mar
+   LA Galaxy 2026: fired 2026-sepoct, 2026-nov, 2027-mar
+   Toronto FC 2026: fired 2026-sepoct, 2026-nov, 2027-mar
+   Seattle Sounders 2026: fired 2026-sepoct, 2026-nov, 2027-mar
+   Atlanta United 2026: fired 2026-sepoct, 2026-nov, 2027-mar
+   Columbus Crew 2026: fired 2026-sepoct, 2026-nov, 2027-mar
+   Liverpool 2020: fired 2020-sep, 2020-oct, 2020-nov, 2021-mar
+   Juventus 2020: fired 2020-sep, 2020-oct, 2020-nov, 2021-mar
+   Lille 2020: fired 2020-sep, 2020-oct, 2020-nov, 2021-mar
+   10 seasons on the live path: 33 breaks between the right two matches of mine, 33 notes naming everyone, 0 where the match they come back for kicked off in the same play as the note
+   2 late 2020-21 season(s) whose first window starts before the opener
+2) Harder: the match they come back for, against the same save with call ups off (6 squads x 3 seeds)
+   Arsenal           9 breaks, 17.44 called a break, gap 2.38
+   Manchester City   9 breaks, 16.89 called a break, gap 2.80
+   Real Madrid       9 breaks, 18.78 called a break, gap 1.86
+   Liverpool         9 breaks, 18.67 called a break, gap 1.77
+   Chelsea           9 breaks, 13.00 called a break, gap 1.22
+   Bayern Munich     9 breaks, 16.33 called a break, gap 2.83
+   54 breaks: the match after is 2.14 strength weaker on average (floor 1.5)
+   sepoct  18 breaks, gap 3.03 (floor 2)
+   nov     18 breaks, gap 2.17 (floor 1.4)
+   mar     18 breaks, gap 1.23 (floor 0.6)
+   0 breaks reached the match after in the same play as the note
+3) Resting the spent ones wins back the cost over the two matches the trip touches
+   Arsenal          cost 2.90, rest wins back 2.39 (0.82); now 0.89, next 1.50
+   Manchester City  cost 3.73, rest wins back 1.31 (0.35); now 0.07, next 1.24
+   Real Madrid      cost 2.27, rest wins back 1.32 (0.58); now -0.08, next 1.40
+   Liverpool        cost 2.12, rest wins back 0.99 (0.47); now 0.41, next 0.58
+   Chelsea          cost 1.57, rest wins back 0.35 (0.23); now -0.17, next 0.52
+   Bayern Munich    cost 3.34, rest wins back 1.80 (0.54); now 0.27, next 1.53
+   pooled: the break costs 2.66 over two matches and the rest wins back 1.36, a share of 0.51 (floor 0.5)
+6) A rest is what plays: the rested men are out of your picked eleven, nobody fills a gap with them, picking one back plays him, and they return after the match
+   264 men rested: 0 still played with cover on the bench, 0 still in the picked eleven; 253 of 253 picked back by hand played; 253 of 253 back in their slot after the match, 0 rests still standing after it
+4) Every man called up is known to the nationality map with that country, and no made up player goes
+   Barcelona era2015: 4 breaks (4 in the season's structure)
+   Chelsea era2005: 4 breaks (4 in the season's structure)
+   1364 call ups checked: 0 with a country the map does not give him, 0 made up men
+5) A save from before this round plays its season with no break, then gets windows from the next one
+   old save, season one: 0 plays carried a block, 0 notes, week 54 of 54
+   season two: first break 2027-sepoct fired
+   damaged block: dropped, the save played on to week 1
+7) A man who started for a country on another continent from his club comes back more tired than one who stayed on his own
+   four game window: far starters 70 cost 38.33, near starters 143 cost 28.12
+   two game windows: far starters 215 cost 28.11, near starters 447 cost 18.09
+   the long trip costs 10.12 more fitness on average (floor 5)
+simCmInternationals: all green
