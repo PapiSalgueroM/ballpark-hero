@@ -41,23 +41,27 @@
  *   0        1627     4348    94 (2.16%)   3216      100.5     -0.66  59/35        11
  *   1        1662     4665   109 (2.34%)   3487      109.0      0.00  67/42        14
  *   2        1651     4558   116 (2.54%)   3409      106.5      0.93  69/47        13
- *   3        SEEDSET3
- *   4        SEEDSET4
+ *   3        1651     4552   110 (2.42%)   3409      106.5      0.34  59/51        13
+ *   4        1618     4559   124 (2.72%)   3410      106.6      1.72  66/58        18
  * "Eligible" is every goal that is not from the spot or a direct free kick,
  * minus my goals against a side with no named eleven (nobody to name), which
- * is why the share of ALL goals lands under 1 in 32: 2.2 to 2.5 in a hundred,
- * about 2.6 to 3.2 a season in my own matches. The real game runs near 3 in
- * a hundred. Penalties were 8.03, 8.23 and 8.64 percent of goals (the engine
- * deals 8) and direct free kicks 4.23, 3.90 and 3.91 (it deals 4).
- * Section 2's bar is four standard deviations of the binomial the rule IS
- * (about 40 own goals either side on these fleets); the measured |z| tops out
- * under 1, and the two controls that move the rate land 9 and 10 away. Its
- * floor of 2500 eligible goals sits under the smallest fleet measured.
- * Awards (section 5 prints them): with own goals on my squad is 1.6 to 1.9
- * goals and 1.1 to 1.4 assists a season down, my top scorer 0.3 to 0.6 goals a
- * season down on 22 to 25, a different man top scorer at my club in 3, 0 and 1
- * of 36 seasons, and the golden boot, the player of the season and the world
- * award went to the same man in all 108.
+ * is why the share of ALL goals lands under 1 in 32: 2.2 to 2.7 in a hundred,
+ * 2.6 to 3.4 a season in my own matches. The real game runs near 3 in a
+ * hundred. Penalties were 8.0 to 8.6 percent of goals (the engine deals 8)
+ * and direct free kicks 3.9 to 4.3 (it deals 4).
+ * Section 2 holds the count to four standard deviations of the binomial the
+ * rule IS (about 40 own goals either side on these fleets). Measured, |z| was
+ * 0.00 to 1.72 on the five sets, and the two controls that move the rate
+ * landed 10.19 (off) and 7.55 (double) away on seed set 0. Its floor of 2500
+ * eligible goals sits under the smallest fleet measured (3216).
+ * Section 1 agreed on all 90 careers, at the end of both seasons and after
+ * both summers.
+ * Awards over those 180 seasons (section 5 prints them): with own goals on,
+ * my squad is 1.6 to 1.9 goals and 1.1 to 1.4 assists a season down and my
+ * top scorer 0.3 to 0.6 goals a season down on a mean of 22 to 25. A
+ * different man was top scorer at my club in 7 seasons, the golden boot went
+ * to a different man in 2, the player of the season in 1 and the world award
+ * in 2 (all three on seed set 3).
  *
  * NEGATIVE CONTROLS. CM_OWN_GOAL_CONTROL=<name> patches the bundled copy of
  * the source (never a file on disk; the anchor must occur exactly once or the

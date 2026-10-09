@@ -704,7 +704,8 @@ function checkChange(ctx, before, after, keys, m, half, outMan, inMan) {
          halves in order, the scorers by name and minute, and the subs the
          manager made. The whistle settles what was drawn; it draws nothing. */
       const al = after.live;
-      const lines = xs => xs.map(l => `${l.name}@${l.minute}`);
+      /* Round 1146: an own goal of theirs for me is committed under the man it was drawn for with the man who put it in beside him (og.n), and reported under the man who put it in. */
+      const lines = xs => xs.map(l => `${(l.og && l.og.n) || l.name}@${l.minute}`);
       const trio = xs => xs.map(s => ({ off: s.off, on: s.on, minute: s.minute }));
       if (J(d.play) !== J([...(al.h1Play ?? []), ...(al.h2Play ?? [])])) fail(`${ctx}: the report's play (${d.play.length} events) is not h1Play plus h2Play (${(al.h1Play ?? []).length} plus ${(al.h2Play ?? []).length}) the viewer walked`);
       if (J(lines(fin.report.myScorers)) !== J(lines([...(al.h1My ?? []), ...(al.h2My ?? [])]))) fail(`${ctx}: the report's scorers [${lines(fin.report.myScorers)}] are not h1My plus h2My [${lines([...(al.h1My ?? []), ...(al.h2My ?? [])])}]`);

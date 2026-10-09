@@ -416,13 +416,20 @@ console.log('6) Their eleven get rated too, honestly');
     }
     if (d.oppBest !== d.oppRatings[0].name) fail(`match ${seen}: oppBest "${d.oppBest}" is not the top of the sheet "${d.oppRatings[0].name}"`);
     // Every opposition scorer is ON the sheet with his goals counted.
+    // Round 1146: an own goal against me is listed under them and was put in by one of MINE, so he is
+    // not on their sheet and nobody on it is given the goal.
     for (const sc of res.report.oppScorers) {
       scorerChecks += 1;
+      if (sc.og) {
+        if (d.oppRatings.some(p => p.name === sc.name)) fail(`match ${seen}: ${sc.name} (O.G) plays for me and is on the opposition sheet`);
+        continue;
+      }
       const line = d.oppRatings.find(p => p.name === sc.name);
       if (!line) fail(`match ${seen}: scorer ${sc.name} is not on the opposition sheet`);
     }
     const sheetGoals = d.oppRatings.reduce((s, p) => s + p.goals, 0);
-    if (sheetGoals !== res.report.oppScorers.length) fail(`match ${seen}: sheet credits ${sheetGoals} goals, they scored ${res.report.oppScorers.length}`);
+    const theirOwn = res.report.oppScorers.filter(sc => !sc.og).length;
+    if (sheetGoals !== theirOwn) fail(`match ${seen}: sheet credits ${sheetGoals} goals, they scored ${theirOwn} themselves (${res.report.oppScorers.length} with own goals)`);
     // A clean sheet they kept must show on their keeper (base + 0.5 floor).
     const gk = d.oppRatings.find(p => p.pos === 'GK');
     const myGoals = res.report.myScorers.length;
