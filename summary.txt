@@ -1,0 +1,9 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simCareerLeagueFinish exit=0 11s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4840 in a verified league; finish and title agree, the ladder holds, main's stream is untouched and the elite boo
+simCareerLeagueSeasons exit=0 17s | simCareerLeagueSeasons: all sections green
+simCareerDerbies exit=0 17s | simCareerDerbies: all 8 sections green
+simCareerStory exit=0 7s | simCareerStory: GREEN, 96 careers keep every season's lines in order, draw nothing and stay inside the size bands
+simCareerLifeCooldowns exit=0 14s | simCareerLifeCooldowns: green. No event repeats inside its cooldown, every new event fires, the rate held, and the catalog has two real choices everywhere.
+simFlagshipWeight exit=0 0s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+simCareerSocialBrands exit=0 9s | ALL SOCIAL AND BRAND CHECKS PASSED
+playCareerHub exit=1 39s | Node.js v24.21.0
