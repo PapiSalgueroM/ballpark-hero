@@ -1,0 +1,1 @@
+mainweight exit=0 60s | main sweepWeight exit=0
