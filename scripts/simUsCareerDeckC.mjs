@@ -40,6 +40,13 @@
    covers him, the franchise record card's new words, Brand work reaching the
    bank) took the NFL to 274 and moved 5 of 1,200 NBA draws and 3 of 1,200 NHL
    draws. MLB did not move at all.
+   Re-recorded once more in the same round on 2026-10-09, for the lead's ruling
+   that a one sourced figure is never paid: seven later round ends of the 2026
+   rookie table lost their one source figure and are paid on the line between
+   two sourced picks, which moves rookie pay in rounds three to seven by 0.1M
+   a year (0.2M on four slots). Against the recording before it the NFL draw
+   changed on 13 of 1,920 saves and lifeC_restructure pays other money (dealt
+   480 times before and after). NBA, MLB and NHL are byte equal.
 
    Section 2, WORDS AGAINST EFFECTS (see its own comment below): the log,
    the button, the gamble's odds, the era's money, the trade's league and
