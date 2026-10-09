@@ -58,6 +58,28 @@ jobs:
         run: |
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/trophyCabinet.test.tsx src/test/seasonCore.test.ts src/test/seasonReplays.test.tsx src/test/seasonCentreSlots.test.tsx src/test/seasonCentreWords.test.tsx src/test/careerSeasonReview.test.tsx --maxWorkers=1 --minWorkers=1 2>&1 | tee career-opponents-artifacts/tests.log
           ONLY=simTrophyCabinet,simSeasonCentreTable,simSeasonCentreAgreement,simSeasonCentreNeutral,simCareerLeagueWorld,simCareerMoments,simNoInventedQuotes node scripts/runAllSims.mjs --browser 2>&1 | tee career-opponents-artifacts/career.log
+      - name: Family, award reveal, competitions and free kicks
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/seasonFamilySummary.test.ts src/test/soccerAwardReveal.test.tsx src/test/soccerSeasonCompetitions.test.tsx src/test/careerWallShotFriendly.test.ts src/test/careerAwardsNightCard.test.tsx --maxWorkers=1 --minWorkers=1 2>&1 | tee career-opponents-artifacts/career-expansion-tests.log
+          ONLY=simSeasonFamilySummary,simCareerWallShotFriendly,simSoccerSeasonCompetitions,simSoccerAwardReveal,simCareerDrills,simSeasonMoments,simBallonDorFairness,simBallonDorTruth,simBallonDor,simCareerAwardsNight node scripts/runAllSims.mjs --browser 2>&1 | tee career-opponents-artifacts/career-expansion-sims.log
+      - name: Effective competition defects
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          for control in anchor score name; do
+            set +e
+            SIM_SEASON_COMPETITION_CONTROL="$control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonCompetitions.mjs > "career-opponents-artifacts/competition-control-$control.log" 2>&1
+            control_exit=$?
+            set -e
+            cat "career-opponents-artifacts/competition-control-$control.log"
+            test "$control_exit" = 1
+            case "$control" in
+              anchor) grep -q 'a current campaign cannot leak into a historical season' "career-opponents-artifacts/competition-control-$control.log" ;;
+              score) grep -q 'each European leg keeps its recorded score' "career-opponents-artifacts/competition-control-$control.log" ;;
+              name) grep -q 'the named domestic cup stays named' "career-opponents-artifacts/competition-control-$control.log" ;;
+            esac
+            if grep -Eq 'control.*refus|Cannot find|SyntaxError|no patches applied' "career-opponents-artifacts/competition-control-$control.log"; then exit 1; fi
+          done
       - name: Every built reader
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
@@ -82,6 +104,14 @@ jobs:
           grep -q 'FAIL 1280x900 opponents: 34 fixtures' career-opponents-artifacts/browser-control.log
           grep -q 'ok.*control changed the served Season Centre for both viewports' career-opponents-artifacts/browser-control.log
           if grep -Eq 'walk threw|control refused|fixture refused' career-opponents-artifacts/browser-control.log; then exit 1; fi
+      - name: Actual family, award reveal, cup and squad journeys
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for journey in playSoccerCareerFamily playSoccerCareerAwardReveal playSoccerCareerCompetitions playSeasonMoments; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SHOTS="$PWD/career-opponents-artifacts/$journey-screenshots" node "scripts/$journey.mjs" 2>&1 | tee "career-opponents-artifacts/$journey.log" || failed=1
+          done
+          exit "$failed"
       - name: Source unchanged after checks
         if: ${{ !cancelled() }}
         run: git diff --exit-code HEAD -- src scripts .github/workflows/soccer-career-opponents.yml

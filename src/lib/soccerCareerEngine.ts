@@ -239,6 +239,8 @@ export interface SeasonRecord {
       season ("Copa Libertadores"). championsLeague stays the UEFA cup alone,
       so a Libertadores is never counted as a Champions League. */
   clubCupTitle?: string;
+  /** Round 1173: this season's recorded continental club campaign. */
+  clubCupRun?: UCLResult;
 }
 
 export interface ContractOffer {
@@ -376,6 +378,9 @@ export interface UCLKnockoutMatch {
 
 export interface UCLResult {
   qualified: boolean;
+  /** Round 1173: bind the saved campaign to its own season and club. */
+  seasonYear?: number;
+  club?: string;
   /** The knockout ties only; the first stage's nights are in firstStage. */
   matches: UCLKnockoutMatch[];
   /** "Winner", "Final", "Semi-final", "Quarter-final", "R16", "Play-off",
@@ -5400,7 +5405,8 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
 
   // UCL Simulation
   const uclResult = simulateUCL(s, season);
-  s.lastUCLResult = uclResult;
+  s.lastUCLResult = { ...uclResult, seasonYear: season.year, club: season.club };
+  if (uclResult.qualified) season.clubCupRun = structuredClone(s.lastUCLResult);
   if (uclResult.qualified) {
     /* Round 972: the cup is named by the club's confederation, and only the
        UEFA one is a Champions League. Any other is kept under its own name in
@@ -5822,8 +5828,8 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
         body: `${name}'s agent has reportedly demanded a staggering ${formatWage(Math.round(s.weeklyWage * 1.5))} weekly wage to extend their stay at ${club}. Board members are said to be "stunned" by the figures.` }) },
     { weight: 0.5, check: () => s.rival !== null && !s.rival.retired && s.rival.ballonDors > 0,
       gen: () => ({ newspaper: pick(NEWSPAPERS), type: "negative",
-        headline: `RIVALS TAUNT ${name.toUpperCase()} After ${s.rival!.name} Wins Ballon d'Or Again`,
-        body: `Social media erupted as ${s.rival!.name} claimed another Ballon d'Or, with fans of the ${s.rival!.nationality} star flooding ${name}'s channels with taunts. The rivalry shows no signs of cooling down.` }) },
+        headline: `${name} And ${s.rival!.name}: Another Season Of Rivalry`,
+        body: `${s.rival!.name} has golden balls from earlier seasons, and ${name} is still chasing the next one. This year's ranked list has not arrived. The rivalry keeps everyone watching.` }) },
     { weight: 0.7, check: () => s.marketValue >= 30,
       gen: () => {
         const bidders = ["Real Madrid", "Barcelona", "Manchester City", "PSG", "Chelsea", "Bayern Munich"];
@@ -5867,8 +5873,8 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
     // scandals, your shopping and your softest moments. ──
     { weight: 1.4, check: () => s.bdorSnubFuel === true && season.goals >= 25,
       gen: () => ({ newspaper: pick(NEWSPAPERS), type: "negative",
-        headline: `ROBBED! Fans Fume As ${name} Misses Out On Ballon d'Or AGAIN`,
-        body: `${season.goals} goals and still no golden ball. Social media has already produced 4,000 conspiracy charts, a petition, and one very angry podcast episode. "The voters watch highlights on mute," wrote one fan. Hard to argue.` }) },
+        headline: `All Eyes On The Ballon d'Or List After ${name}'s Season`,
+        body: `${season.goals} goals have put ${name} back in the conversation. After last year's disappointment, fans are waiting for this year's ranked list. Nothing has been announced yet.` }) },
     { weight: 1.2, check: () => (s.corruptionHeat ?? 0) >= 50,
       gen: () => ({ newspaper: pick(NEWSPAPERS), type: "negative",
         headline: `WHERE DOES THE MONEY COME FROM? Questions Mount Over ${name}'s Empire`,
@@ -6897,7 +6903,6 @@ let lastJudged: { year: number; names: string[] } | null = null;
 export function lastBallonDorJudged(): { year: number; names: string[] } | null { return lastJudged; }
 
 function calculateBallonDor(state: CareerState, season: SeasonRecord, year: number, world?: WorldSeason): BallonDorResult {
-  const yearOffset = year - 2024;
   const eraTopClubs = getEraTopClubs(year);
   const eraLeagues = getEraLeagueClubs(year);
 
@@ -6963,15 +6968,18 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   const playerNominated = playerCanContend && playerPoints > 45;
 
   // --- Generate contender nominees ---
-  // Era-correct star pools (1990-2029, clamped at both ends) until 2032,
-  // then fully fictional generated contenders for far-future seasons.
-  const useEraStars = year <= 2032;
+  // New careers blend the next generation into the last known era pool.
+  // Saved ballots are never regenerated, and no retirement is claimed for a real player.
+  const generation = Math.min(5, Math.max(0, year - 2027));
+  const eraStars = getEraStars(year);
+  const eraCount = Math.ceil(eraStars.length * (5 - generation) / 5);
+  const generatedCount = generation * 3;
   const usedNames = new Set<string>([state.playerName]);
   if (state.rival) usedNames.add(state.rival.name);
 
   const allNomineeData: BallonDorNominee[] = [];
-  if (useEraStars) {
-    for (const star of getEraStars(year)) {
+  if (eraCount > 0) {
+    for (const star of eraStars.slice(0, eraCount)) {
       if (usedNames.has(star.name)) continue;
       usedNames.add(star.name);
       const goals = rand(star.baseGoals[0], star.baseGoals[1]);
@@ -6992,10 +7000,11 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
         club: starClub, points: pts, goals, trophies, isPlayer: false,
       });
     }
-  } else {
-    // Generate 15 fictional contenders
-    for (let i = 0; i < 15; i++) {
-      const gen = generateContender(usedNames, yearOffset * 100 + i);
+  }
+  if (generatedCount > 0) {
+    // A stable guarded pool recurs across years as its simulated seasons change.
+    for (let i = 0; i < generatedCount; i++) {
+      const gen = generateContender(usedNames, 9900 + i);
       if (usedNames.has(gen.name)) continue;
       usedNames.add(gen.name);
       const goals = rand(gen.baseGoals[0], gen.baseGoals[1]);

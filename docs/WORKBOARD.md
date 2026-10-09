@@ -5,6 +5,14 @@ Soccer Career to be the sole product focus. Fresh work starts from origin/main
 0054fd819320a32884609562e2f4b882f2ecbf38 on
 codex/soccer-career-real-opponents, in the isolated managed worktree.
 
+Anthony then reported repeated newborn text, conflicting early award news,
+award-screen confetti and a result spoiled before the list. He also requested
+other Season Centre competitions, access to the current eleven/bench, easier
+career free kicks and gradual turnover of award contenders. Rounds 1171 to
+1174 address these in the same draft PR207. This extended source is pending
+remote acceptance. No existing saved award is recalculated and no missing
+old cup scores or lineups are invented.
+
 Round 1169 separates verified opponent membership from table eligibility.
 Old saves without a finish, injury seasons and known split/conference leagues
 can name their known opponents. Scores, stats, events, moments and save fields
@@ -21,7 +29,13 @@ cup-run details. Counts come from the same season flags as getCareerTotals,
 never an extra award-list count. Back, Escape, help and keyboard controls are
 included. The component loads only when a category is opened.
 
-Remote verification is pending: app types, build, focused regressions and
+Remote run37899142843 on eeace203 passed app types/build, opponent controls,
+79 season/trophy tests,7 career harnesses, all15 built readers and164 native
+browser assertions. The extra served unnamed control refused a missing
+compiled-code anchor, so the full run is red and is not acceptance. First
+run37897747076 is retained as red driver evidence. Updated source will rerun
+the gates plus the family, reveal, generation, competition, squad and free-kick
+checks. Remote verification is pending: app types, build, focused regressions and
 copied defects, existing season/league checks, all 15 built readers, and actual
 Anderlecht/save/trophy journeys at phone and desktop sizes. Local site runtime
 was not executed. A delegated node --check syntax-only command ran locally

@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Confetti } from "@/components/soccer-career/CareerFx";
 import { revealAfter, revealDelay } from "@/components/club-manager/Celebration";
@@ -18,7 +18,7 @@ const SLAM_LANDS = 0.24;
    countdown, and the headline lands after the last name. A sport supplies the
    night, its award, its copy, and how one candidate's row reads. */
 export function AwardsNightCard<C extends AwardsCandidate>({
-  night, award, copy, portrait, badge, detail, score, scoreDetail, onDismiss, speech,
+  night, award, copy, portrait, badge, detail, score, scoreDetail, onDismiss, speech, reveal, confetti = true,
 }: {
   night: AwardsNight<C>;
   award: AwardsDef;
@@ -31,6 +31,9 @@ export function AwardsNightCard<C extends AwardsCandidate>({
   score: (c: C) => string;
   scoreDetail: (c: C) => string;
   onDismiss: () => void;
+  /** When supplied, names and result enter the DOM only as the list arrives. */
+  reveal?: { complete: boolean; onComplete: () => void };
+  confetti?: boolean;
   /** Round 834: the winner's speech. While `open` the card offers the options
    *  in place of Continue; once the night carries a speech, the card shows
    *  what it did above Continue. Leave it out for a night with no speech. */
@@ -45,9 +48,23 @@ export function AwardsNightCard<C extends AwardsCandidate>({
   const isWinner = place === 1;
   const isPodium = place !== null && place <= award.podiumSize;
   const isNominated = night.playerNominated;
-  const borderColor = isWinner ? "border-amber-400/60" : isPodium ? "border-amber-500/30" : "border-border";
-  const bgGrad = isWinner ? "from-amber-500/20 to-transparent" : isPodium ? "from-amber-500/10 to-transparent" : "from-transparent to-transparent";
   const n = night.nominees.length;
+  const [arrived, setArrived] = useState(() => !reveal || reveal.complete ? n : 0);
+  const [finished, setFinished] = useState(() => !reveal || reveal.complete);
+  const complete = useRef(reveal?.onComplete);
+  complete.current = reveal?.onComplete;
+  useEffect(() => {
+    if (!reveal || reveal.complete) { setArrived(n); setFinished(true); return; }
+    setArrived(0);
+    setFinished(false);
+    if (stillMotion()) { setArrived(n); setFinished(true); complete.current?.(); return; }
+    const timers = Array.from({ length: n }, (_, i) => window.setTimeout(() => setArrived(i + 1), revealAfter(i) * 1000));
+    timers.push(window.setTimeout(() => { setFinished(true); complete.current?.(); }, (revealAfter(n, 0.75) + SLAM_LANDS) * 1000));
+    return () => timers.forEach(clearTimeout);
+  }, [night.year, n, reveal?.complete, !!reveal]);
+  const resultVisible = !reveal || reveal.complete || finished;
+  const borderColor = resultVisible && isWinner ? "border-amber-400/60" : resultVisible && isPodium ? "border-amber-500/30" : "border-border";
+  const bgGrad = resultVisible && isWinner ? "from-amber-500/20 to-transparent" : resultVisible && isPodium ? "from-amber-500/10 to-transparent" : "from-transparent to-transparent";
 
   /* Round 1132: the night out loud, for a player who switched sound on. One tick as each name arrives, the
      last name first, then the result as the headline lands: a sting on the podium, a sting and the crowd for
@@ -63,40 +80,40 @@ export function AwardsNightCard<C extends AwardsCandidate>({
   });
 
   return (
-    <div className={`relative rounded-xl border-2 ${borderColor} bg-gradient-to-b ${bgGrad} p-5 space-y-4 animate-in fade-in zoom-in-90 duration-700`}>
-      {isWinner && <Confetti pieces={70} gold />}
-      <div className="cm-slam text-center space-y-2" style={{ animationDelay: revealDelay(n, 0.75) }}>
+    <div data-award-night={reveal ? award.id : undefined} data-award-result={reveal ? resultVisible ? "revealed" : "waiting" : undefined} className={`relative rounded-xl border-2 ${borderColor} bg-gradient-to-b ${bgGrad} p-5 space-y-4 animate-in fade-in zoom-in-90 duration-700`}>
+      {resultVisible && isWinner && confetti && <Confetti pieces={70} gold />}
+      <div className="cm-slam text-center space-y-2" style={{ animationDelay: reveal ? "0s" : revealDelay(n, 0.75) }}>
         {portrait && (
           <div className="flex justify-center">
-            <div className={`rounded-xl overflow-hidden border-2 ${isWinner ? "border-amber-400/70 animate-trophy-glow" : "border-border"} bg-muted/20`}>
-              {portrait(isWinner)}
+            <div className={`rounded-xl overflow-hidden border-2 ${resultVisible && isWinner ? "border-amber-400/70 animate-trophy-glow" : "border-border"} bg-muted/20`}>
+              {portrait(resultVisible && isWinner)}
             </div>
           </div>
         )}
-        <div className={`text-5xl ${isWinner ? "animate-trophy-glow" : ""}`}>{isWinner ? award.emoji : "⭐"}</div>
-        <h3 className="text-xl font-black tracking-tight">
-          {isWinner ? copy.winnerTitle : copy.title(night.year)}
+        <div className={`text-5xl ${resultVisible && isWinner ? "animate-trophy-glow" : ""}`}>{!resultVisible || isWinner ? award.emoji : "⭐"}</div>
+        <h3 data-award-headline={reveal ? true : undefined} className="text-xl font-black tracking-tight">
+          {resultVisible && isWinner ? copy.winnerTitle : copy.title(night.year)}
         </h3>
-        {isWinner && (
+        {resultVisible && isWinner && (
           <p className="text-sm text-amber-300 font-bold">{copy.winnerLine(night.moved)}</p>
         )}
-        {!isWinner && isNominated && place !== null && place <= award.podiumSize && (
+        {resultVisible && !isWinner && isNominated && place !== null && place <= award.podiumSize && (
           <p className="text-sm text-muted-foreground">{copy.podiumLine(place, night.moved)}</p>
         )}
-        {!isWinner && isNominated && place !== null && place > award.podiumSize && (
+        {resultVisible && !isWinner && isNominated && place !== null && place > award.podiumSize && (
           <p className="text-sm text-muted-foreground">{copy.shortlistLine(place)}</p>
         )}
-        {!isNominated && place !== null && place > award.shortlistSize && (
+        {resultVisible && !isNominated && place !== null && place > award.shortlistSize && (
           <p className="text-sm text-muted-foreground">{copy.wider.before}<span className="font-bold text-foreground">#{place}</span>{copy.wider.after}</p>
         )}
-        {!isNominated && place === null && (
+        {resultVisible && !isNominated && place === null && (
           <p className="text-sm text-muted-foreground">{copy.notNominated}</p>
         )}
       </div>
 
       <div className="space-y-1">
-        {night.nominees.map((c, i) => (
-          <div key={`${night.year}-${i}`} style={{ animationDelay: revealDelay(countdownSlot(i, n)) }} className={`cm-tick-in flex items-center justify-between text-xs rounded-lg px-2.5 py-1.5 ${
+        {night.nominees.map((c, i) => reveal && i < n - arrived ? null : (
+          <div data-award-rank={reveal ? i + 1 : undefined} key={`${night.year}-${i}`} style={{ animationDelay: reveal ? "0s" : revealDelay(countdownSlot(i, n)) }} className={`cm-tick-in flex items-center justify-between text-xs rounded-lg px-2.5 py-1.5 ${
             c.isPlayer ? (i === 0 ? "bg-amber-500/20 border border-amber-500/30" : "bg-emerald-500/10 border border-emerald-500/20") : "bg-muted/20"
           }`}>
             <div className="flex items-center gap-1.5 flex-1 min-w-0">
@@ -116,12 +133,12 @@ export function AwardsNightCard<C extends AwardsCandidate>({
         ))}
       </div>
 
-      {isWinner && night.speech && <SpokenSpeech speech={night.speech} />}
+      {resultVisible && isWinner && night.speech && <SpokenSpeech speech={night.speech} />}
 
       {/* The speech is the result, so it arrives with the headline, never
           before it: hidden and unclickable until the countdown has landed. */}
-      {isWinner && speech?.open ? (
-        <div className="cm-rise-gated" style={{ animationDelay: revealDelay(n, 0.95) }}>
+      {!resultVisible ? <p className="text-center text-xs text-muted-foreground" data-award-waiting>The ranked list is coming in...</p> : isWinner && speech?.open ? (
+        <div className="cm-rise-gated" style={{ animationDelay: reveal ? "0s" : revealDelay(n, 0.95) }}>
           <SpeechChoices prompt={speech.prompt} options={speech.options} onChoose={speech.onChoose} />
         </div>
       ) : (

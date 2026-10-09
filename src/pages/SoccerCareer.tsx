@@ -56,6 +56,7 @@ import {
   nextSeasonYear, managerNextSeasonYear,
 } from "@/lib/soccerCareerEngine";
 import type { FirstStageStage } from "@/lib/soccerCareerContinental";
+import { careerBeforeBallonDorReveal, revealBallonDorResult } from "@/lib/soccerAwardReveal";
 /* Round 258, his ask alongside the net worth bug: "depending where u live
    ur currency will be diffrent". `money` rewrites the euro amounts inside
    any line the game draws, so a wage slip, an event consequence and a
@@ -91,6 +92,7 @@ import {
 import {
   type PlayerAppearance, defaultAppearance, getCelebration,
 } from "@/lib/soccerCareerAppearance";
+import { seasonFamilySummary, type SeasonFamilyContext } from "@/lib/seasonFamilySummary";
 import PlayerAvatar from "@/components/soccer-career/PlayerAvatar";
 import AppearanceBuilder from "@/components/soccer-career/AppearanceBuilder";
 import { Confetti } from "@/components/soccer-career/CareerFx";
@@ -674,7 +676,7 @@ function NewspaperCard({ articles, seasonKey, onContinue }: { articles: NewsArti
 }
 
 /* ─── Season Summary Card ─── */
-function SeasonSummaryCard({ season, position, onContinue, appearance, leagueOf, world }: { season: SeasonRecord; position: string; onContinue: () => void; appearance?: PlayerAppearance | null; leagueOf?: { key: string; name: string } | null; world?: WorldSeason | null }) {
+function SeasonSummaryCard({ season, position, onContinue, appearance, leagueOf, world, familyContext }: { season: SeasonRecord; position: string; onContinue: () => void; appearance?: PlayerAppearance | null; leagueOf?: { key: string; name: string } | null; world?: WorldSeason | null; familyContext?: SeasonFamilyContext }) {
   /* Round 1037: the finish is printed in the league the club was in that
      season (finishLeague), the phone's world is read by its key */
   const league = leagueOf?.key;
@@ -691,6 +693,7 @@ function SeasonSummaryCard({ season, position, onContinue, appearance, leagueOf,
      in the league that season */
   const champion = crowned && league && namedInLeague(crowned, league, season.year) ? crowned : null;
   const celebration = appearance ? getCelebration(appearance.celebration) : null;
+  const familySummary = appearance?.celebration === "cradle" ? seasonFamilySummary(season, familyContext) : null;
   const summaryRating = readMatchRating(season);
   const summaryOvr = summaryRating !== null ? readOvr(season.ovr) : null;
 
@@ -754,13 +757,13 @@ function SeasonSummaryCard({ season, position, onContinue, appearance, leagueOf,
       )}
 
       {celebration && !isGK && season.goals > 0 && (
-        <p className="text-[11px] text-muted-foreground text-center leading-snug animate-fade-in">
+        <p data-summary-celebration className="text-[11px] text-muted-foreground text-center leading-snug animate-fade-in">
           {/* Round 129: "7 times this season you rip off toward the corner flag"
               was the shape he flagged. Goals are the thing being counted, so
               count goals, and let the celebration finish the sentence. */}
-          {celebration.emoji} {season.goals === 1
+          {celebration.emoji} {familySummary ?? (season.goals === 1
             ? <>One goal this season, and you {celebration.line}.</>
-            : <>{season.goals} goals this season, and every one of them you {celebration.line}.</>}
+            : <>{season.goals} goals this season, and every one of them you {celebration.line}.</>)}
         </p>
       )}
 
@@ -3017,11 +3020,14 @@ function FinancialPanel({ career, onCurrencyChange }: { career: CareerState; onC
    The winner's speech had no buttons here from Round 54 until Round 834: now
    a win offers the speeches this save may give, one pick, and the card shows
    what it did before Continue. */
-function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech }: { bdor: BallonDorResult; career: CareerState; onDismiss: () => void; onSpeech: (choice: BdorSpeechChoice) => void }) {
+function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech, onReveal }: { bdor: BallonDorResult; career: CareerState; onDismiss: () => void; onSpeech: (choice: BdorSpeechChoice) => void; onReveal?: () => void }) {
   const copy = SOCCER_BALLON_DOR.copy;
   return (
     <AwardsNightCard<BallonDorNominee>
+      key={bdor.year}
       night={bdor}
+      reveal={{ complete: !!bdor.revealed || !!bdor.speech, onComplete: () => onReveal?.() }}
+      confetti={false}
       award={SOCCER_BALLON_DOR.award}
       copy={{ ...copy, winnerLine: moved => money(copy.winnerLine(moved)) }}
       portrait={career.appearance
@@ -3715,14 +3721,15 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onCurrencyChange?: () => void;
   timelineRef: React.RefObject<HTMLDivElement>;
 }) {
-  const totals = getCareerTotals(career.seasons);
+  const visibleCareer = careerBeforeBallonDorReveal(career);
+  const totals = getCareerTotals(visibleCareer.seasons);
   // Round 61: the owner's no scroll rule. Every overlay (event, newspaper,
   // season summary, transfer window, ceremony) pulls itself into view when it
   // appears, instead of rendering below the fold on a phone.
   const revealRef = useRevealScroll<HTMLDivElement>(
     `${career.phase}:${career.pendingEvents[0]?.id ?? ''}:${career.seasons.length}`,
   );
-  const currentSeason = career.seasons[career.seasons.length - 1];
+  const currentSeason = visibleCareer.seasons[visibleCareer.seasons.length - 1];
 
   const statBars = getPositionStatBars(career.position, career);
 
@@ -3956,7 +3963,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           </div>
 
           <div ref={timelineRef} className="max-h-[280px] md:max-h-[480px] overflow-y-auto p-2 space-y-0.5 scrollbar-thin">
-            {career.seasons.map((s, i) => (
+            {visibleCareer.seasons.map((s, i) => (
               <TimelineEntry key={s.year + s.club} season={s} position={career.position} isCurrent={i === career.seasons.length - 1} isLast={i === career.seasons.length - 1} />
             ))}
           </div>
@@ -3973,13 +3980,13 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           )}
           {/* OVERLAY: Newspaper Articles */}
           {career.phase === "newspaper" && career.pendingNews.length > 0 && (
-            <NewspaperCard articles={career.pendingNews} seasonKey={career.seasons.length} onContinue={onDismissNewspaper} />
+            <NewspaperCard articles={visibleCareer.pendingNews} seasonKey={career.seasons.length} onContinue={onDismissNewspaper} />
           )}
 
           {/* OVERLAY: Season Summary */}
           {career.phase === "season_summary" && career.pendingSummary && (
-            <SeasonSummaryCard season={career.pendingSummary} position={career.position} onContinue={onDismissSummary} appearance={career.appearance}
-              leagueOf={finishLeague({ name: career.pendingSummary.club, league: clubs.find(c => c.name === career.pendingSummary?.club)?.league ?? "" }, career.pendingSummary.year, readLeagueFinish(career.pendingSummary)?.size ?? null)} world={career.phone?.world} />
+            <SeasonSummaryCard season={visibleCareer.pendingSummary!} position={career.position} onContinue={onDismissSummary} appearance={career.appearance}
+              leagueOf={finishLeague({ name: career.pendingSummary.club, league: clubs.find(c => c.name === career.pendingSummary?.club)?.league ?? "" }, career.pendingSummary.year, readLeagueFinish(career.pendingSummary)?.size ?? null)} world={career.phone?.world} familyContext={career} />
           )}
 
           {/* Round 1045: the season just summed up, match by match. Only a
@@ -4244,7 +4251,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             </div>
           )}
           {career.phase === "ballon_dor" && career.pendingBallonDor && (
-            <BallonDorCeremonyCard bdor={career.pendingBallonDor} career={career} onDismiss={onDismissBallonDor} onSpeech={onBdorSpeech} />
+            <BallonDorCeremonyCard bdor={career.pendingBallonDor} career={career} onDismiss={onDismissBallonDor} onSpeech={onBdorSpeech} onReveal={() => onCareerPatch?.(revealBallonDorResult)} />
           )}
 
           {/* OVERLAY: Transfer Window */}
@@ -4372,7 +4379,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               const awardItems = [
                 ...individualAwards.map(a => ({
                   ...a,
-                  count: career.awards.filter(ca => ca.name === a.name).length,
+                  count: visibleCareer.awards.filter(ca => ca.name === a.name).length,
                 })),
                 { name: "Derby Hero", emoji: "🔥", count: derbyHeroSeasons(career.seasons) },
               ].filter(a => a.count > 0);
@@ -4465,14 +4472,14 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           )}
 
           {/* Awards */}
-          {(career.awards.length > 0 || derbyHeroSeasons(career.seasons) > 0) && (
+          {(visibleCareer.awards.length > 0 || derbyHeroSeasons(career.seasons) > 0) && (
             <div className="bg-card border border-border rounded-xl p-4 space-y-2">
               <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">🏆 Awards</span>
               <div className="flex flex-wrap gap-1.5">
                 {(() => {
                   // Group awards by name and count them
                   const awardCounts: Record<string, { emoji: string; count: number }> = {};
-                  career.awards.forEach(a => {
+                  visibleCareer.awards.forEach(a => {
                     if (!awardCounts[a.name]) awardCounts[a.name] = { emoji: a.emoji, count: 0 };
                     awardCounts[a.name].count += 1;
                   });
@@ -4493,7 +4500,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           <InternationalStatsPanel career={career} onRetire={onRetireInternational} />
 
           {/* Rival Comparison */}
-          <RivalComparisonPanel career={career} />
+          <RivalComparisonPanel career={visibleCareer} />
 
           {/* Rivalry Summary (on retirement) */}
           {career.retired && career.rivalrySummary && (
@@ -4504,7 +4511,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
       </div>
 
       {/* Events log */}
-      {(career.events.length > 0 || (career.story?.length ?? 0) > 0) && (
+      {(visibleCareer.events.length > 0 || (visibleCareer.story?.length ?? 0) > 0) && (
         <div className="bg-card border border-border rounded-xl p-3">
           {/* Round 974: the whole career, season by season, one tap away */}
           <div className="flex items-center justify-between gap-2">
@@ -4520,7 +4527,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           </div>
           {Chip && <Chip career={career} at={chipAt} onOpen={setWatchRow} />}
           <div className="mt-2 space-y-1">
-            {career.events.slice(-3).map((e, i) => (
+            {visibleCareer.events.slice(-3).map((e, i) => (
               <div key={i} className="text-xs text-foreground/80 flex items-start gap-2">
                 <span className="shrink-0">›</span><span><TextWithFlags text={money(e)} size={14} /></span>
               </div>
@@ -4528,8 +4535,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           </div>
         </div>
       )}
-      {storyOpen && <CareerStory career={career} onClose={() => setStoryOpen(false)} />}
-      {trophyCategory && <CentreMountBoundary what="trophy cabinet" onClose={() => setTrophyCategory(null)}><Suspense fallback={<div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80" data-trophy-loading><div className="rounded-2xl border border-border bg-card px-5 py-4 text-sm">Opening your trophies...</div></div>}><TrophyCabinet career={career} category={trophyCategory} onClose={() => setTrophyCategory(null)} /></Suspense></CentreMountBoundary>}
+      {storyOpen && <CareerStory career={visibleCareer} onClose={() => setStoryOpen(false)} />}
+      {trophyCategory && <CentreMountBoundary what="trophy cabinet" onClose={() => setTrophyCategory(null)}><Suspense fallback={<div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80" data-trophy-loading><div className="rounded-2xl border border-border bg-card px-5 py-4 text-sm">Opening your trophies...</div></div>}><TrophyCabinet career={visibleCareer} category={trophyCategory} onClose={() => setTrophyCategory(null)} /></Suspense></CentreMountBoundary>}
       {ratingsOpen && <CentreMountBoundary what="season ratings" onClose={() => setRatingsOpen(false)}><Suspense fallback={null}><SeasonRatings career={career} onClose={() => setRatingsOpen(false)} /></Suspense></CentreMountBoundary>}
       {(() => {
         const pressed = centreFor !== null && career.seasons.length === centreFor + 1 ? career.seasons[centreFor] : null;
@@ -4625,7 +4632,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         <LegacyCard career={career} totals={totals} onShare={onShare} />
       )}
       {/* Round 974: the same story on the retirement screen, every season a tile */}
-      {career.phase === "retired" && <CareerStory career={career} />}
+      {career.phase === "retired" && <CareerStory career={visibleCareer} />}
 
       {/* Retire Confirmation Dialog */}
       {showRetireConfirm && (

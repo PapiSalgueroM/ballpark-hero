@@ -80,12 +80,18 @@ const categories = {
 let patch = null;
 if (CONTROL) {
   const assets = path.join(DIST, 'assets');
-  const projection = /names:(\w+)\.labels\.map\((\w+)=>(?:\2\.named\?\2\.name:)(\w+)\.words\.unnamed\)/g;
+  const projection = /names:([$\w]+)\.labels\.map\(([$\w]+)=>\2\.named\?\2\.name:([$\w]+)\.words\.unnamed\)/g;
   const matches = fs.readdirSync(assets).filter(f => f.endsWith('.js')).flatMap(file => {
     const text = fs.readFileSync(path.join(assets, file), 'utf8');
     return [...text.matchAll(projection)].map(hit => ({ file, text, hit }));
   });
-  if (matches.length !== 1) throw new Error(`control refused: expected one names projection, found ${matches.length}`);
+  if (matches.length !== 1) {
+    const candidates = fs.readdirSync(assets).filter(f => f.endsWith('.js')).flatMap(file => {
+      const text = fs.readFileSync(path.join(assets, file), 'utf8');
+      return [...text.matchAll(/names:[^,}]{0,180}labels\.map[^}]{0,180}/g)].map(hit => `${file}: ${hit[0]}`);
+    });
+    throw new Error(`control refused: expected one names projection, found ${matches.length}. ${candidates.join('\n')}`);
+  }
   const m = matches[0];
   const changed = m.text.replace(m.hit[0], `names:${m.hit[1]}.labels.map((label,at)=>at?"another club":label.name)`);
   if (changed === m.text || changed.includes(m.hit[0])) throw new Error('control refused: served projection did not change');

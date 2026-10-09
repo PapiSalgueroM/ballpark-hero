@@ -499,9 +499,10 @@ interface SeasonCentreProps {
   resume?: CentrePlace | null;
   /** Round 1046: told where he is after every round, and null when nothing is left to resume. */
   onProgress?: (at: CentrePlace | null) => void;
+  navigation?: ReactNode;
 }
 
-export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress }: SeasonCentreProps) {
+export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress, navigation }: SeasonCentreProps) {
   const s = model.season;
   const M = s.games.length;
   const start = resume && Number.isInteger(resume.md) && resume.md >= 1 && resume.md <= M - 1 ? resume : null;
@@ -624,6 +625,7 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress }: 
           <button type="button" onClick={() => setHelpOpen(true)} className="h-11 w-11 shrink-0 rounded-lg border border-border text-sm font-bold" aria-label={model.help.title}>?</button>
           <button type="button" onClick={leave} className="h-11 shrink-0 rounded-lg border border-border px-3 text-xs font-semibold" data-centre-exit>{exitLabel}</button>
         </div>
+        {hosting === null && navigation}
         <div className="grid min-h-0 flex-1 grid-cols-1 md:grid-cols-[260px_1fr_380px]">
           <aside className="hidden min-h-0 overflow-y-auto border-r border-border p-2 md:block" aria-label={copy.list}>
             <FixtureList model={model} played={played} current={current} short={model.sport.clock.short} />

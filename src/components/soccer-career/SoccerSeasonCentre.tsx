@@ -22,7 +22,7 @@
    key, so a save that no longer holds that season simply ignores it.
    With no season handed in it lists the seasons he can watch again; goals
    play on a little pitch (MiniPitch, its own chunk) and the table slides. */
-import { Component, Suspense, lazy, useCallback, useMemo, useState, type ReactNode } from 'react';
+import { Component, Suspense, lazy, useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import type { CareerState, ClubData, SeasonRecord } from '@/lib/soccerCareerEngine';
 import { applyDecisions, deriveSeason, planMoments, tableAt } from '@/lib/season/core';
 import { SOCCER, buildSoccerSeasonCtx, soccerSeasonKey, type SoccerSeasonCtx } from '@/lib/season/soccer';
@@ -31,6 +31,9 @@ import { readResume } from '@/lib/season/resume';
 import { clearResume, writeResume } from '@/components/season-centre/resumeStore';
 import type { CentreMoments } from '@/components/season-centre/MomentHost';
 import { useSoccerMoments } from './useSoccerMoments';
+import SeasonCompetitionPanel, { CompetitionNavigation, type CentreScreen } from './SeasonCompetitionPanel';
+import { savedSeasonCompetitions } from '@/lib/soccerSeasonCompetitions';
+import { ballonDorSeasonForDisplay } from '@/lib/soccerAwardReveal';
 import { readSeasonDerbies } from '@/lib/soccerCareerDerby';
 import { leagueWithArticle, ordinal, readLeagueFinish } from '@/lib/soccerCareerLeague';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
@@ -98,7 +101,7 @@ const HELP: HelpWords = {
     { head: 'A whole league', body: 'Sign for Twente in 2027 and Week by week is the whole Eredivisie: 18 clubs, 34 matchdays, every club named. Sign for Hearts and you get your games with no table, because the Scottish Premiership splits in two late in the season and the game will not draw a table it cannot stand behind.' },
     { head: 'Results only', body: 'A season the game has no verified table for (before 1995-96, a league that is not one plain home and away table, a league the game does not know whole, or a season cut short) shows your league games with no table. If your season summary has a finish, the review still prints it.' },
   ],
-  footnote: 'Cup ties and European nights count in your totals as "Cups and other games" but are not shown match by match yet. Clubs level on points are split by goal difference, then goals scored: this game\'s rule.',
+  footnote: 'The competition buttons open the cup games your save kept, with their real competition names where recorded. Missing match details stay marked. Current squad opens your current eleven and bench on our ratings, not a past matchday lineup. Clubs level on points are split by goal difference, then goals scored: this game\'s rule.',
 };
 
 /* live mode opens over the newspaper, except on a season with no news (the
@@ -296,20 +299,31 @@ function CentreBody({ career, clubs, row, mode, onClose, onCareer, offer }: Socc
   const moments = useSoccerMoments({ career, row, ctx, plan, key, offered, entriesKey, banked: !!ledger?.banked && ledger.key === key, onCareer: canPlay ? onCareer : undefined });
   /* his club's flat colour, the one the career already wears; the other side is always the same pale one */
   const color = clubs.find(c => c.name === row.club)?.color ?? '#10B981';
-  const model = useMemo(() => (season ? buildModel(row, ctx, season, moments, color) : null), [season, row, ctx, moments, color]);
+  const model = useMemo(() => (season ? buildModel(ballonDorSeasonForDisplay(career, row), ctx, season, moments, color) : null), [season, career, row, ctx, moments, color]);
   /* Round 1046: his place in this season. Read once when the season opens; a
      table season he did not win replays the same only while the save still
      holds that year's league (the record says so with `stable`). */
-  const [stored] = useState(() => readResume(RESUME_GAME));
+  const [stored, setStored] = useState(() => readResume(RESUME_GAME));
+  const [screen, setScreen] = useState<CentreScreen>('league');
+  const competitions = useMemo(() => savedSeasonCompetitions(career, row), [career, row]);
+  useEffect(() => {
+    document.querySelector<HTMLButtonElement>('[data-centre-competition][aria-pressed="true"]')?.focus({ preventScroll: true });
+  }, [screen]);
+  const select = (next: CentreScreen) => {
+    if (next === 'league') setStored(readResume(RESUME_GAME));
+    setScreen(next);
+  };
   const stable = seasonStable(ctx.mode, ctx.finish?.finish);
   const onProgress = useCallback((at: CentrePlace | null) => {
     if (!key) return;
     if (at) writeResume(RESUME_GAME, { key, year: row.year, md: at.md, speed: at.speed, stable, round: at.round });
     else if (readResume(RESUME_GAME)?.key === key) clearResume(RESUME_GAME);
   }, [key, row.year, stable]);
+  const navigation = <CompetitionNavigation league={ctx.league?.name ?? 'League'} competitions={competitions} screen={screen} onSelect={select} />;
+  if (screen !== 'league') return <SeasonCompetitionPanel key={screen} career={career} row={row} competition={competitions.find(c => c.id === screen) ?? null} navigation={navigation} exitLabel={exitLabel} onClose={onClose} />;
   if (!model) return <Tile text="This season cannot be shown match by match." exitLabel={exitLabel} onClose={onClose} />;
   const resume = stored && stored.key === key && stored.year === row.year ? stored : null;
-  return <SeasonCentre model={model} exitLabel={exitLabel} onClose={onClose} resume={resume} onProgress={onProgress} />;
+  return <SeasonCentre model={model} exitLabel={exitLabel} onClose={onClose} resume={resume} onProgress={onProgress} navigation={navigation} />;
 }
 
 export default function SoccerSeasonCentre(props: SoccerSeasonCentreProps) {
