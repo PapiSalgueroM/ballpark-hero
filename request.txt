@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+walk2: node .rc/x/rr-walk2.mjs
+walk: node .rc/x/rr-walk.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/safeStorageQuota.test.ts src/test/safeStorage.test.ts src/test/storageNoticeFollows.test.tsx --testTimeout=300000 --hookTimeout=120000
+ssw: node scripts/simStorageWrites.mjs
+seam: SHOTS=$RC_OUT PORT=4441 node scripts/playUsCareerSaveSeam.mjs

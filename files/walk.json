@@ -1,0 +1,1523 @@
+{
+ "base": "http://localhost:4173",
+ "journeys": {
+  "j1-real-quota-390": {
+   "name": "j1-real-quota-390",
+   "width": 390,
+   "height": 844,
+   "reduce": false,
+   "errors": [],
+   "steps": {
+    "loaded": {
+     "line": {
+      "says": "full",
+      "box": {
+       "t": 0,
+       "b": 28,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 28
+      },
+      "text": "Storage is full, so progress won't save.This browser's storage is full, so progress won't "
+     },
+     "left": null,
+     "notice": null,
+     "toast": null,
+     "toastButton": null,
+     "toasts": 0,
+     "banner": {
+      "box": {
+       "t": 701,
+       "b": 844,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 143
+      },
+      "pos": "fixed"
+     },
+     "gameTop": 117,
+     "careerOnDisk": null,
+     "consentOnDisk": null,
+     "retryButtons": [],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    },
+    "refused": {
+     "line": {
+      "says": "full",
+      "box": {
+       "t": 0,
+       "b": 28,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 28
+      },
+      "text": "Storage is full, so progress won't save.This browser's storage is full, so progress won't "
+     },
+     "left": null,
+     "notice": {
+      "box": {
+       "t": 225,
+       "b": 342,
+       "l": 16,
+       "r": 374,
+       "w": 358,
+       "h": 117
+      },
+      "onTop": true,
+      "text": "Your latest progress has not been saved. Stay on this page and try again.Retry save"
+     },
+     "toast": {
+      "box": {
+       "t": 576,
+       "b": 689,
+       "l": 16,
+       "r": 374,
+       "w": 358,
+       "h": 113
+      },
+      "onTop": true,
+      "text": "Your latest changes could not be saved. Stay on this page and use Retry save.Retry here does the same thing.Retry"
+     },
+     "toastButton": {
+      "box": {
+       "t": 611,
+       "b": 655,
+       "l": 293,
+       "r": 357,
+       "w": 64,
+       "h": 44
+      },
+      "onTop": true,
+      "text": "Retry"
+     },
+     "toasts": 1,
+     "banner": {
+      "box": {
+       "t": 701,
+       "b": 844,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 143
+      },
+      "pos": "fixed"
+     },
+     "gameTop": 117,
+     "careerOnDisk": null,
+     "consentOnDisk": null,
+     "retryButtons": [
+      "Retry",
+      "Retry save"
+     ],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    },
+    "afterRefusedRetry": {
+     "line": {
+      "says": "full",
+      "box": {
+       "t": 0,
+       "b": 28,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 28
+      },
+      "text": "Storage is full, so progress won't save.This browser's storage is full, so progress won't "
+     },
+     "left": null,
+     "notice": {
+      "box": {
+       "t": 225,
+       "b": 342,
+       "l": 16,
+       "r": 374,
+       "w": 358,
+       "h": 117
+      },
+      "onTop": true,
+      "text": "Your latest progress has not been saved. Stay on this page and try again.Retry save"
+     },
+     "toast": {
+      "box": {
+       "t": 576,
+       "b": 689,
+       "l": 16,
+       "r": 374,
+       "w": 358,
+       "h": 113
+      },
+      "onTop": true,
+      "text": "Your latest changes could not be saved. Stay on this page and use Retry save.Retry here does the same thing.Retry"
+     },
+     "toastButton": {
+      "box": {
+       "t": 611,
+       "b": 655,
+       "l": 293,
+       "r": 357,
+       "w": 64,
+       "h": 44
+      },
+      "onTop": true,
+      "text": "Retry"
+     },
+     "toasts": 1,
+     "banner": {
+      "box": {
+       "t": 701,
+       "b": 844,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 143
+      },
+      "pos": "fixed"
+     },
+     "gameTop": 117,
+     "careerOnDisk": null,
+     "consentOnDisk": null,
+     "retryButtons": [
+      "Retry",
+      "Retry save"
+     ],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    },
+    "later": {
+     "line": {
+      "says": "full",
+      "box": {
+       "t": 0,
+       "b": 28,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 28
+      },
+      "text": "Storage is full, so progress won't save.This browser's storage is full, so progress won't "
+     },
+     "left": null,
+     "notice": {
+      "box": {
+       "t": 225,
+       "b": 342,
+       "l": 16,
+       "r": 374,
+       "w": 358,
+       "h": 117
+      },
+      "onTop": true,
+      "text": "Your latest progress has not been saved. Stay on this page and try again.Retry save"
+     },
+     "toast": {
+      "box": {
+       "t": 576,
+       "b": 689,
+       "l": 16,
+       "r": 374,
+       "w": 358,
+       "h": 113
+      },
+      "onTop": true,
+      "text": "Your latest changes could not be saved. Stay on this page and use Retry save.Retry here does the same thing.Retry"
+     },
+     "toastButton": {
+      "box": {
+       "t": 611,
+       "b": 655,
+       "l": 293,
+       "r": 357,
+       "w": 64,
+       "h": 44
+      },
+      "onTop": true,
+      "text": "Retry"
+     },
+     "toasts": 1,
+     "banner": {
+      "box": {
+       "t": 701,
+       "b": 844,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 143
+      },
+      "pos": "fixed"
+     },
+     "gameTop": 117,
+     "careerOnDisk": null,
+     "consentOnDisk": null,
+     "retryButtons": [
+      "Retry",
+      "Retry save"
+     ],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    },
+    "afterRealRetry": {
+     "line": null,
+     "left": {
+      "box": {
+       "t": 0,
+       "b": 28,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 28
+      },
+      "vis": "hidden",
+      "ariaHidden": "true",
+      "role": null
+     },
+     "notice": null,
+     "toast": null,
+     "toastButton": null,
+     "toasts": 0,
+     "banner": {
+      "box": {
+       "t": 701,
+       "b": 844,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 143
+      },
+      "pos": "fixed"
+     },
+     "gameTop": 117,
+     "careerOnDisk": 370,
+     "consentOnDisk": null,
+     "retryButtons": [],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    }
+   },
+   "filled": {
+    "keys": 49,
+    "err": null,
+    "len": 49
+   },
+   "freedKey": "__f256_42",
+   "toastRetryPressed": true,
+   "freedAll": 48,
+   "retrySavePressed": true
+  },
+  "j2-sim-390-reduce": {
+   "name": "j2-sim-390-reduce",
+   "width": 390,
+   "height": 844,
+   "reduce": true,
+   "errors": [],
+   "steps": {
+    "loaded": {
+     "line": {
+      "says": "full",
+      "box": {
+       "t": 0,
+       "b": 28,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 28
+      },
+      "text": "Storage is full, so progress won't save.This browser's storage is full, so progress won't "
+     },
+     "left": null,
+     "notice": null,
+     "toast": null,
+     "toastButton": null,
+     "toasts": 0,
+     "banner": {
+      "box": {
+       "t": 701,
+       "b": 844,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 143
+      },
+      "pos": "fixed"
+     },
+     "gameTop": 117,
+     "careerOnDisk": null,
+     "consentOnDisk": null,
+     "retryButtons": [],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    },
+    "refused": {
+     "line": {
+      "says": "full",
+      "box": {
+       "t": 0,
+       "b": 28,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 28
+      },
+      "text": "Storage is full, so progress won't save.This browser's storage is full, so progress won't "
+     },
+     "left": null,
+     "notice": {
+      "box": {
+       "t": 225,
+       "b": 342,
+       "l": 16,
+       "r": 374,
+       "w": 358,
+       "h": 117
+      },
+      "onTop": true,
+      "text": "Your latest progress has not been saved. Stay on this page and try again.Retry save"
+     },
+     "toast": {
+      "box": {
+       "t": 576,
+       "b": 689,
+       "l": 16,
+       "r": 374,
+       "w": 358,
+       "h": 113
+      },
+      "onTop": true,
+      "text": "Your latest changes could not be saved. Stay on this page and use Retry save.Retry here does the same thing.Retry"
+     },
+     "toastButton": {
+      "box": {
+       "t": 611,
+       "b": 655,
+       "l": 293,
+       "r": 357,
+       "w": 64,
+       "h": 44
+      },
+      "onTop": true,
+      "text": "Retry"
+     },
+     "toasts": 1,
+     "banner": {
+      "box": {
+       "t": 701,
+       "b": 844,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 143
+      },
+      "pos": "fixed"
+     },
+     "gameTop": 117,
+     "careerOnDisk": null,
+     "consentOnDisk": null,
+     "retryButtons": [
+      "Retry",
+      "Retry save"
+     ],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    },
+    "stillRefused": {
+     "line": {
+      "says": "full",
+      "box": {
+       "t": 0,
+       "b": 28,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 28
+      },
+      "text": "Storage is full, so progress won't save.This browser's storage is full, so progress won't "
+     },
+     "left": null,
+     "notice": {
+      "box": {
+       "t": 225,
+       "b": 342,
+       "l": 16,
+       "r": 374,
+       "w": 358,
+       "h": 117
+      },
+      "onTop": true,
+      "text": "Your latest progress has not been saved. Stay on this page and try again.Retry save"
+     },
+     "toast": {
+      "box": {
+       "t": 576,
+       "b": 689,
+       "l": 16,
+       "r": 374,
+       "w": 358,
+       "h": 113
+      },
+      "onTop": true,
+      "text": "Your latest changes could not be saved. Stay on this page and use Retry save.Retry here does the same thing.Retry"
+     },
+     "toastButton": {
+      "box": {
+       "t": 611,
+       "b": 655,
+       "l": 293,
+       "r": 357,
+       "w": 64,
+       "h": 44
+      },
+      "onTop": true,
+      "text": "Retry"
+     },
+     "toasts": 1,
+     "banner": {
+      "box": {
+       "t": 701,
+       "b": 844,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 143
+      },
+      "pos": "fixed"
+     },
+     "gameTop": 117,
+     "careerOnDisk": null,
+     "consentOnDisk": null,
+     "retryButtons": [
+      "Retry",
+      "Retry save"
+     ],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    },
+    "saved": {
+     "line": null,
+     "left": {
+      "box": {
+       "t": 0,
+       "b": 28,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 28
+      },
+      "vis": "hidden",
+      "ariaHidden": "true",
+      "role": null
+     },
+     "notice": null,
+     "toast": null,
+     "toastButton": null,
+     "toasts": 0,
+     "banner": {
+      "box": {
+       "t": 701,
+       "b": 844,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 143
+      },
+      "pos": "fixed"
+     },
+     "gameTop": 117,
+     "careerOnDisk": 370,
+     "consentOnDisk": null,
+     "retryButtons": [],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    },
+    "answered": {
+     "line": null,
+     "left": {
+      "box": {
+       "t": 0,
+       "b": 28,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 28
+      },
+      "vis": "hidden",
+      "ariaHidden": "true",
+      "role": null
+     },
+     "notice": null,
+     "toast": null,
+     "toastButton": null,
+     "toasts": 0,
+     "banner": null,
+     "gameTop": 117,
+     "careerOnDisk": 370,
+     "consentOnDisk": "essential",
+     "retryButtons": [],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    }
+   },
+   "toastOverBanner": 0,
+   "toastOverNotice": 0,
+   "pressWhileRefused": true,
+   "pressWhenOpen": true,
+   "gameMoved": 0,
+   "essentialPressed": true
+  },
+  "j3-sim-1280-motion": {
+   "name": "j3-sim-1280-motion",
+   "width": 1280,
+   "height": 900,
+   "reduce": false,
+   "errors": [],
+   "steps": {
+    "loaded": {
+     "line": {
+      "says": "full",
+      "box": {
+       "t": 32,
+       "b": 60,
+       "l": 256,
+       "r": 1024,
+       "w": 768,
+       "h": 28
+      },
+      "text": "Storage is full, so progress won't save.This browser's storage is full, so progress won't "
+     },
+     "left": null,
+     "notice": null,
+     "toast": null,
+     "toastButton": null,
+     "toasts": 0,
+     "banner": {
+      "box": {
+       "t": 827,
+       "b": 900,
+       "l": 0,
+       "r": 1280,
+       "w": 1280,
+       "h": 73
+      },
+      "pos": "fixed"
+     },
+     "gameTop": 113,
+     "careerOnDisk": null,
+     "consentOnDisk": null,
+     "retryButtons": [],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    },
+    "refused": {
+     "line": {
+      "says": "full",
+      "box": {
+       "t": 32,
+       "b": 60,
+       "l": 256,
+       "r": 1024,
+       "w": 768,
+       "h": 28
+      },
+      "text": "Storage is full, so progress won't save.This browser's storage is full, so progress won't "
+     },
+     "left": null,
+     "notice": {
+      "box": {
+       "t": 205,
+       "b": 303,
+       "l": 320,
+       "r": 960,
+       "w": 640,
+       "h": 98
+      },
+      "onTop": true,
+      "text": "Your latest progress has not been saved. Stay on this page and try again.Retry save"
+     },
+     "toast": {
+      "box": {
+       "t": 702,
+       "b": 815,
+       "l": 892,
+       "r": 1248,
+       "w": 356,
+       "h": 113
+      },
+      "onTop": true,
+      "text": "Your latest changes could not be saved. Stay on this page and use Retry save.Retry here does the same thing.Retry"
+     },
+     "toastButton": {
+      "box": {
+       "t": 737,
+       "b": 781,
+       "l": 1167,
+       "r": 1231,
+       "w": 64,
+       "h": 44
+      },
+      "onTop": true,
+      "text": "Retry"
+     },
+     "toasts": 1,
+     "banner": {
+      "box": {
+       "t": 827,
+       "b": 900,
+       "l": 0,
+       "r": 1280,
+       "w": 1280,
+       "h": 73
+      },
+      "pos": "fixed"
+     },
+     "gameTop": 113,
+     "careerOnDisk": null,
+     "consentOnDisk": null,
+     "retryButtons": [
+      "Retry",
+      "Retry save"
+     ],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    },
+    "stillRefused": {
+     "line": {
+      "says": "full",
+      "box": {
+       "t": 32,
+       "b": 60,
+       "l": 256,
+       "r": 1024,
+       "w": 768,
+       "h": 28
+      },
+      "text": "Storage is full, so progress won't save.This browser's storage is full, so progress won't "
+     },
+     "left": null,
+     "notice": {
+      "box": {
+       "t": 205,
+       "b": 303,
+       "l": 320,
+       "r": 960,
+       "w": 640,
+       "h": 98
+      },
+      "onTop": true,
+      "text": "Your latest progress has not been saved. Stay on this page and try again.Retry save"
+     },
+     "toast": {
+      "box": {
+       "t": 702,
+       "b": 815,
+       "l": 892,
+       "r": 1248,
+       "w": 356,
+       "h": 113
+      },
+      "onTop": true,
+      "text": "Your latest changes could not be saved. Stay on this page and use Retry save.Retry here does the same thing.Retry"
+     },
+     "toastButton": {
+      "box": {
+       "t": 737,
+       "b": 781,
+       "l": 1167,
+       "r": 1231,
+       "w": 64,
+       "h": 44
+      },
+      "onTop": true,
+      "text": "Retry"
+     },
+     "toasts": 1,
+     "banner": {
+      "box": {
+       "t": 827,
+       "b": 900,
+       "l": 0,
+       "r": 1280,
+       "w": 1280,
+       "h": 73
+      },
+      "pos": "fixed"
+     },
+     "gameTop": 113,
+     "careerOnDisk": null,
+     "consentOnDisk": null,
+     "retryButtons": [
+      "Retry",
+      "Retry save"
+     ],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    },
+    "saved": {
+     "line": null,
+     "left": {
+      "box": {
+       "t": 32,
+       "b": 60,
+       "l": 256,
+       "r": 1024,
+       "w": 768,
+       "h": 28
+      },
+      "vis": "hidden",
+      "ariaHidden": "true",
+      "role": null
+     },
+     "notice": null,
+     "toast": null,
+     "toastButton": null,
+     "toasts": 0,
+     "banner": {
+      "box": {
+       "t": 827,
+       "b": 900,
+       "l": 0,
+       "r": 1280,
+       "w": 1280,
+       "h": 73
+      },
+      "pos": "fixed"
+     },
+     "gameTop": 113,
+     "careerOnDisk": 369,
+     "consentOnDisk": null,
+     "retryButtons": [],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    },
+    "answered": {
+     "line": null,
+     "left": {
+      "box": {
+       "t": 32,
+       "b": 60,
+       "l": 256,
+       "r": 1024,
+       "w": 768,
+       "h": 28
+      },
+      "vis": "hidden",
+      "ariaHidden": "true",
+      "role": null
+     },
+     "notice": null,
+     "toast": null,
+     "toastButton": null,
+     "toasts": 0,
+     "banner": null,
+     "gameTop": 113,
+     "careerOnDisk": 369,
+     "consentOnDisk": "essential",
+     "retryButtons": [],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    }
+   },
+   "toastOverBanner": 0,
+   "toastOverNotice": 0,
+   "pressWhileRefused": true,
+   "pressWhenOpen": true,
+   "gameMoved": 0,
+   "essentialPressed": true
+  },
+  "j4-sim-390-motion": {
+   "name": "j4-sim-390-motion",
+   "width": 390,
+   "height": 844,
+   "reduce": false,
+   "errors": [],
+   "steps": {
+    "loaded": {
+     "line": {
+      "says": "full",
+      "box": {
+       "t": 0,
+       "b": 28,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 28
+      },
+      "text": "Storage is full, so progress won't save.This browser's storage is full, so progress won't "
+     },
+     "left": null,
+     "notice": null,
+     "toast": null,
+     "toastButton": null,
+     "toasts": 0,
+     "banner": {
+      "box": {
+       "t": 701,
+       "b": 844,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 143
+      },
+      "pos": "fixed"
+     },
+     "gameTop": 117,
+     "careerOnDisk": null,
+     "consentOnDisk": null,
+     "retryButtons": [],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    },
+    "refused": {
+     "line": {
+      "says": "full",
+      "box": {
+       "t": 0,
+       "b": 28,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 28
+      },
+      "text": "Storage is full, so progress won't save.This browser's storage is full, so progress won't "
+     },
+     "left": null,
+     "notice": {
+      "box": {
+       "t": 225,
+       "b": 342,
+       "l": 16,
+       "r": 374,
+       "w": 358,
+       "h": 117
+      },
+      "onTop": true,
+      "text": "Your latest progress has not been saved. Stay on this page and try again.Retry save"
+     },
+     "toast": {
+      "box": {
+       "t": 576,
+       "b": 689,
+       "l": 16,
+       "r": 374,
+       "w": 358,
+       "h": 113
+      },
+      "onTop": true,
+      "text": "Your latest changes could not be saved. Stay on this page and use Retry save.Retry here does the same thing.Retry"
+     },
+     "toastButton": {
+      "box": {
+       "t": 611,
+       "b": 655,
+       "l": 293,
+       "r": 357,
+       "w": 64,
+       "h": 44
+      },
+      "onTop": true,
+      "text": "Retry"
+     },
+     "toasts": 1,
+     "banner": {
+      "box": {
+       "t": 701,
+       "b": 844,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 143
+      },
+      "pos": "fixed"
+     },
+     "gameTop": 117,
+     "careerOnDisk": null,
+     "consentOnDisk": null,
+     "retryButtons": [
+      "Retry",
+      "Retry save"
+     ],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    },
+    "stillRefused": {
+     "line": {
+      "says": "full",
+      "box": {
+       "t": 0,
+       "b": 28,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 28
+      },
+      "text": "Storage is full, so progress won't save.This browser's storage is full, so progress won't "
+     },
+     "left": null,
+     "notice": {
+      "box": {
+       "t": 225,
+       "b": 342,
+       "l": 16,
+       "r": 374,
+       "w": 358,
+       "h": 117
+      },
+      "onTop": true,
+      "text": "Your latest progress has not been saved. Stay on this page and try again.Retry save"
+     },
+     "toast": {
+      "box": {
+       "t": 576,
+       "b": 689,
+       "l": 16,
+       "r": 374,
+       "w": 358,
+       "h": 113
+      },
+      "onTop": true,
+      "text": "Your latest changes could not be saved. Stay on this page and use Retry save.Retry here does the same thing.Retry"
+     },
+     "toastButton": {
+      "box": {
+       "t": 611,
+       "b": 655,
+       "l": 293,
+       "r": 357,
+       "w": 64,
+       "h": 44
+      },
+      "onTop": true,
+      "text": "Retry"
+     },
+     "toasts": 1,
+     "banner": {
+      "box": {
+       "t": 701,
+       "b": 844,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 143
+      },
+      "pos": "fixed"
+     },
+     "gameTop": 117,
+     "careerOnDisk": null,
+     "consentOnDisk": null,
+     "retryButtons": [
+      "Retry",
+      "Retry save"
+     ],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    },
+    "saved": {
+     "line": null,
+     "left": {
+      "box": {
+       "t": 0,
+       "b": 28,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 28
+      },
+      "vis": "hidden",
+      "ariaHidden": "true",
+      "role": null
+     },
+     "notice": null,
+     "toast": null,
+     "toastButton": null,
+     "toasts": 0,
+     "banner": {
+      "box": {
+       "t": 701,
+       "b": 844,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 143
+      },
+      "pos": "fixed"
+     },
+     "gameTop": 117,
+     "careerOnDisk": 370,
+     "consentOnDisk": null,
+     "retryButtons": [],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    },
+    "answered": {
+     "line": null,
+     "left": {
+      "box": {
+       "t": 0,
+       "b": 28,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 28
+      },
+      "vis": "hidden",
+      "ariaHidden": "true",
+      "role": null
+     },
+     "notice": null,
+     "toast": null,
+     "toastButton": null,
+     "toasts": 0,
+     "banner": null,
+     "gameTop": 117,
+     "careerOnDisk": 370,
+     "consentOnDisk": "essential",
+     "retryButtons": [],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    }
+   },
+   "toastOverBanner": 0,
+   "toastOverNotice": 0,
+   "pressWhileRefused": true,
+   "pressWhenOpen": true,
+   "gameMoved": 0,
+   "essentialPressed": true
+  },
+  "j6-sim-1280-reduce": {
+   "name": "j6-sim-1280-reduce",
+   "width": 1280,
+   "height": 900,
+   "reduce": true,
+   "errors": [],
+   "steps": {
+    "loaded": {
+     "line": {
+      "says": "full",
+      "box": {
+       "t": 32,
+       "b": 60,
+       "l": 256,
+       "r": 1024,
+       "w": 768,
+       "h": 28
+      },
+      "text": "Storage is full, so progress won't save.This browser's storage is full, so progress won't "
+     },
+     "left": null,
+     "notice": null,
+     "toast": null,
+     "toastButton": null,
+     "toasts": 0,
+     "banner": {
+      "box": {
+       "t": 827,
+       "b": 900,
+       "l": 0,
+       "r": 1280,
+       "w": 1280,
+       "h": 73
+      },
+      "pos": "fixed"
+     },
+     "gameTop": 113,
+     "careerOnDisk": null,
+     "consentOnDisk": null,
+     "retryButtons": [],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    },
+    "refused": {
+     "line": {
+      "says": "full",
+      "box": {
+       "t": 32,
+       "b": 60,
+       "l": 256,
+       "r": 1024,
+       "w": 768,
+       "h": 28
+      },
+      "text": "Storage is full, so progress won't save.This browser's storage is full, so progress won't "
+     },
+     "left": null,
+     "notice": {
+      "box": {
+       "t": 205,
+       "b": 303,
+       "l": 320,
+       "r": 960,
+       "w": 640,
+       "h": 98
+      },
+      "onTop": true,
+      "text": "Your latest progress has not been saved. Stay on this page and try again.Retry save"
+     },
+     "toast": {
+      "box": {
+       "t": 702,
+       "b": 815,
+       "l": 892,
+       "r": 1248,
+       "w": 356,
+       "h": 113
+      },
+      "onTop": true,
+      "text": "Your latest changes could not be saved. Stay on this page and use Retry save.Retry here does the same thing.Retry"
+     },
+     "toastButton": {
+      "box": {
+       "t": 737,
+       "b": 781,
+       "l": 1167,
+       "r": 1231,
+       "w": 64,
+       "h": 44
+      },
+      "onTop": true,
+      "text": "Retry"
+     },
+     "toasts": 1,
+     "banner": {
+      "box": {
+       "t": 827,
+       "b": 900,
+       "l": 0,
+       "r": 1280,
+       "w": 1280,
+       "h": 73
+      },
+      "pos": "fixed"
+     },
+     "gameTop": 113,
+     "careerOnDisk": null,
+     "consentOnDisk": null,
+     "retryButtons": [
+      "Retry",
+      "Retry save"
+     ],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    },
+    "stillRefused": {
+     "line": {
+      "says": "full",
+      "box": {
+       "t": 32,
+       "b": 60,
+       "l": 256,
+       "r": 1024,
+       "w": 768,
+       "h": 28
+      },
+      "text": "Storage is full, so progress won't save.This browser's storage is full, so progress won't "
+     },
+     "left": null,
+     "notice": {
+      "box": {
+       "t": 205,
+       "b": 303,
+       "l": 320,
+       "r": 960,
+       "w": 640,
+       "h": 98
+      },
+      "onTop": true,
+      "text": "Your latest progress has not been saved. Stay on this page and try again.Retry save"
+     },
+     "toast": {
+      "box": {
+       "t": 702,
+       "b": 815,
+       "l": 892,
+       "r": 1248,
+       "w": 356,
+       "h": 113
+      },
+      "onTop": true,
+      "text": "Your latest changes could not be saved. Stay on this page and use Retry save.Retry here does the same thing.Retry"
+     },
+     "toastButton": {
+      "box": {
+       "t": 737,
+       "b": 781,
+       "l": 1167,
+       "r": 1231,
+       "w": 64,
+       "h": 44
+      },
+      "onTop": true,
+      "text": "Retry"
+     },
+     "toasts": 1,
+     "banner": {
+      "box": {
+       "t": 827,
+       "b": 900,
+       "l": 0,
+       "r": 1280,
+       "w": 1280,
+       "h": 73
+      },
+      "pos": "fixed"
+     },
+     "gameTop": 113,
+     "careerOnDisk": null,
+     "consentOnDisk": null,
+     "retryButtons": [
+      "Retry",
+      "Retry save"
+     ],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    },
+    "saved": {
+     "line": null,
+     "left": {
+      "box": {
+       "t": 32,
+       "b": 60,
+       "l": 256,
+       "r": 1024,
+       "w": 768,
+       "h": 28
+      },
+      "vis": "hidden",
+      "ariaHidden": "true",
+      "role": null
+     },
+     "notice": null,
+     "toast": null,
+     "toastButton": null,
+     "toasts": 0,
+     "banner": {
+      "box": {
+       "t": 827,
+       "b": 900,
+       "l": 0,
+       "r": 1280,
+       "w": 1280,
+       "h": 73
+      },
+      "pos": "fixed"
+     },
+     "gameTop": 113,
+     "careerOnDisk": 369,
+     "consentOnDisk": null,
+     "retryButtons": [],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    },
+    "answered": {
+     "line": null,
+     "left": {
+      "box": {
+       "t": 32,
+       "b": 60,
+       "l": 256,
+       "r": 1024,
+       "w": 768,
+       "h": 28
+      },
+      "vis": "hidden",
+      "ariaHidden": "true",
+      "role": null
+     },
+     "notice": null,
+     "toast": null,
+     "toastButton": null,
+     "toasts": 0,
+     "banner": null,
+     "gameTop": 113,
+     "careerOnDisk": 369,
+     "consentOnDisk": "essential",
+     "retryButtons": [],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    }
+   },
+   "toastOverBanner": 0,
+   "toastOverNotice": 0,
+   "pressWhileRefused": true,
+   "pressWhenOpen": true,
+   "gameMoved": 0,
+   "essentialPressed": true
+  },
+  "j5-kept-390": {
+   "name": "j5-kept-390",
+   "width": 390,
+   "height": 844,
+   "reduce": true,
+   "errors": [],
+   "steps": {
+    "loaded": {
+     "line": {
+      "says": "full",
+      "box": {
+       "t": 0,
+       "b": 28,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 28
+      },
+      "text": "Storage is full, so progress won't save.This browser's storage is full, so progress won't "
+     },
+     "left": null,
+     "notice": null,
+     "toast": null,
+     "toastButton": null,
+     "toasts": 0,
+     "banner": {
+      "box": {
+       "t": 701,
+       "b": 844,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 143
+      },
+      "pos": "fixed"
+     },
+     "gameTop": 117,
+     "careerOnDisk": null,
+     "consentOnDisk": null,
+     "retryButtons": [],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    },
+    "answered": {
+     "line": {
+      "says": "full",
+      "box": {
+       "t": 0,
+       "b": 28,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 28
+      },
+      "text": "Storage is full, so progress won't save.This browser's storage is full, so progress won't "
+     },
+     "left": null,
+     "notice": null,
+     "toast": null,
+     "toastButton": null,
+     "toasts": 0,
+     "banner": null,
+     "gameTop": 117,
+     "careerOnDisk": null,
+     "consentOnDisk": null,
+     "retryButtons": [],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    },
+    "lineLeft": {
+     "line": null,
+     "left": {
+      "box": {
+       "t": 0,
+       "b": 28,
+       "l": 0,
+       "r": 390,
+       "w": 390,
+       "h": 28
+      },
+      "vis": "hidden",
+      "ariaHidden": "true",
+      "role": null
+     },
+     "notice": null,
+     "toast": null,
+     "toastButton": null,
+     "toasts": 0,
+     "banner": null,
+     "gameTop": 117,
+     "careerOnDisk": null,
+     "consentOnDisk": "essential",
+     "retryButtons": [],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    },
+    "reloaded": {
+     "line": null,
+     "left": null,
+     "notice": null,
+     "toast": null,
+     "toastButton": null,
+     "toasts": 0,
+     "banner": null,
+     "gameTop": 89,
+     "careerOnDisk": null,
+     "consentOnDisk": "essential",
+     "retryButtons": [],
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "free": null
+    }
+   },
+   "essentialPressed": true,
+   "freedAll": 49,
+   "inertPress": true
+  }
+ },
+ "aborted": 7
+}

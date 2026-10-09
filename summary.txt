@@ -1,0 +1,7 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk2 exit=0 13s | rr-walk2: 2 journeys walked
+vitest exit=0 1s |    Duration  1.31s (transform 190ms, setup 188ms, collect 342ms, tests 325ms, environment 1.26s, prepare 436ms)
+ssw exit=0 1s | simStorageWrites: all green
+walk exit=0 26s | rr-walk: 6 journeys walked, supabase.co aborted 7
+seam exit=0 33s | playUsCareerSaveSeam: 15 journeys, 67 checks, 0 failed
+tsc exit=0 49s | 
