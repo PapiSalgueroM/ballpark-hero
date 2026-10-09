@@ -1,0 +1,3 @@
+base-checkout exit=0 0s | 78
+b490-screen-s2 exit=0 3s | simMatchScreen: PASS. One match, two ways through it, and a report that names both clubs, shows the clock it ran to, splits the ball two ways and draws a graph that moves
+b490-erauc-s1 exit=0 23s | simClubManagerEraUcl: PASS. The era Champions League plays its round of 16, the group tables stay up, Spain and Italy split level points on head to head, and an era night
