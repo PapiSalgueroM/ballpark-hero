@@ -1,0 +1,9 @@
+#!serial
+base: node scripts/simUsSeasonCentre.mjs
+mutA: bash .rc/x/rv-mutrun.sh A
+mutB: bash .rc/x/rv-mutrun.sh B
+mutE: bash .rc/x/rv-mutrun.sh E
+mutF: bash .rc/x/rv-mutrun.sh F
+mutH: bash .rc/x/rv-mutrun.sh H
+mutW: bash .rc/x/rv-mutrun.sh W
+clean: bash -c "git status --porcelain --untracked-files=no | head -5; node scripts/simUsSeasonCentre.mjs | tail -1"
