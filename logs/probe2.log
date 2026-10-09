@@ -1,0 +1,44 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/zzProbeSave2.test.ts[2m > [22m[2mprobe 2: the save by key path[2m > [22m[2mseed 9748
+[22m[39m[p2] seed 9748: save 120662 B, 28 rows, 21 with leagueWorld, 21 with clubCupRun
+[p2] seed 9748 top: seasons=73070 story=15795 lastTournament=6344 managerState=4543 leagueWorld=4506 phone=4119 lastUCLResult=1538 intlHistory=1504 awards=1430 phoneInbox=883 events=770 eventLastFired=719 money=716 rivalrySummary=711
+[p2] seed 9748 rows: clubCupRun=37017 leagueWorld=13217 derbies=4888 cupRun=3792 tournamentResult=788 clubCountry=672 championsLeague=672 tournament=667 domesticCup=552 ballonDorRank=551 leagueTitle=544 injurySevere=521 club=516 ballonDor=504
+[p2] seed 9748 .seasons[].clubCupRun (37017 B): .firstStage.stages[].games[].opponent=3717 .firstStage.stages[].games[].goalsAgainst=2788 .firstStage.stages[].games[].playerGoals=2624 .firstStage.stages[].games[].matchday=2132 .firstStage.stages[].games[].goalsFor=2132 .firstStage.stages[].games[].home=2050 .firstStage.stages[].footnote=1749 .matches[].opponent=1622 .matches[].goalsAgainst=1190 .matches[].playerGoals=1120 .matches[].round=948 .matches[].goalsFor=910 .matches[].home=876 .matches[].decidedBy=864 .matches[].won=825 .competition=693
+[p2] seed 9748 .seasons[].leagueWorld (13217 B): .members[]=5358 .movements[].from=1512 .movements[].club=1339 .movements[].to=1260 .movements[].kind=1197 .league=546 .simulation=525 .champion=472 (self)=336 .movements=294 .members=252 .movements[]=126
+[p2] seed 9748 .leagueWorld (4506 B): .movements[].from=523 .movements[].club=488 .movements[].kind=481 .movements[].to=471 .leagues.Championship[]=350 .leagues.Premier League[]=248 .leagues.La Liga[]=243 .leagues.2. Bundesliga[]=239 .leagues.Bundesliga[]=230 .leagues.Segunda Division[]=227 .leagues.Serie A[]=202 .leagues.Serie B[]=200 .leagues.Ligue 2[]=175 .leagues.Ligue 1[]=173 .movements[]=52 .leagues.Segunda Division=21
+[p2] seed 9748 .lastUCLResult (1538 B): .firstStage.stages[].games[].opponent=173 .firstStage.stages[].games[].goalsAgainst=136 .firstStage.stages[].games[].playerGoals=128 .firstStage.stages[].games[].matchday=104 .firstStage.stages[].games[].goalsFor=104 .firstStage.stages[].games[].home=100 .firstStage.stages[].footnote=75 .matches[].opponent=44 .matches[].goalsAgainst=34 .competition=33 .matches[].playerGoals=32 .matches[].round=28 .matches[].goalsFor=26 .matches[].home=25 .matches[].won=24 .matches[].decidedBy=24
+[p2] seed 9748 .seasons[].cupRun (3792 B): .stages[].stage=744 .stages[].won=596 .stages[].opp=586 .cup=315 .stages[].against=288 (self)=231 .stages=231 .stages[].for=192 .stages[].home=163 .stages[]=106 .final.against=96 .final=80 .final.legs=72 .final.for=64 .final.scored=28
+[p2] seed 9748 .seasons[].leagueChampions (0 B): 
+
+[90mstdout[2m | src/test/zzProbeSave2.test.ts[2m > [22m[2mprobe 2: the save by key path[2m > [22m[2mseed 9749
+[22m[39m[p2] seed 9749: save 110158 B, 28 rows, 21 with leagueWorld, 12 with clubCupRun
+[p2] seed 9749 top: seasons=63196 story=16872 lastTournament=6400 leagueWorld=4516 managerState=4484 phone=4021 intlHistory=1525 awards=1435 phoneInbox=987 rivalrySummary=710 money=708 eventLastFired=686 events=578 legacy=467
+[p2] seed 9749 rows: clubCupRun=20351 leagueWorld=13125 derbies=11582 cupRun=3851 tournamentResult=803 clubCountry=672 championsLeague=672 tournament=667 ballonDorRank=578 domesticCup=557 leagueTitle=555 club=544 injurySevere=523 ballonDor=504
+[p2] seed 9749 .seasons[].clubCupRun (20351 B): .firstStage.stages[].games[].opponent=2155 .firstStage.stages[].games[].goalsAgainst=1598 .firstStage.stages[].games[].playerGoals=1504 .firstStage.stages[].games[].matchday=1222 .firstStage.stages[].games[].goalsFor=1222 .firstStage.stages[].games[].home=1175 .firstStage.stages[].footnote=987 .matches[].opponent=768 .matches[].goalsAgainst=578 .matches[].playerGoals=544 .matches[].round=462 .matches[].goalsFor=442 .matches[].home=425 .matches[].decidedBy=408 .matches[].won=402 .competition=396
+[p2] seed 9749 .seasons[].leagueWorld (13125 B): .members[]=5319 .movements[].from=1512 .movements[].club=1292 .movements[].to=1260 .movements[].kind=1197 .league=546 .simulation=525 .champion=466 (self)=336 .movements=294 .members=252 .movements[]=126
+[p2] seed 9749 .leagueWorld (4516 B): .movements[].from=523 .movements[].club=498 .movements[].kind=481 .movements[].to=471 .leagues.Championship[]=332 .leagues.Premier League[]=266 .leagues.La Liga[]=249 .leagues.2. Bundesliga[]=243 .leagues.Bundesliga[]=226 .leagues.Segunda Division[]=221 .leagues.Serie B[]=205 .leagues.Serie A[]=197 .leagues.Ligue 2[]=180 .leagues.Ligue 1[]=168 .movements[]=52 .leagues.Segunda Division=21
+[p2] seed 9749 .lastUCLResult (136 B): .isTopScorer=20 .club=19 (self)=18 .qualified=18 .seasonYear=18 .playerGoals=16 .result=15 .matches=12
+[p2] seed 9749 .seasons[].cupRun (3851 B): .stages[].stage=750 .stages[].won=603 .stages[].opp=562 .cup=345 .stages[].against=264 (self)=253 .stages=253 .stages[].for=176 .stages[].home=161 .stages[]=106 .final.against=96 .final=80 .final.legs=72 .final.for=64 .final.decidedBy=24 .final.pensAgainst=16
+[p2] seed 9749 .seasons[].leagueChampions (0 B): 
+
+[90mstdout[2m | src/test/zzProbeSave2.test.ts[2m > [22m[2mprobe 2: the save by key path[2m > [22m[2mseed 9750
+[22m[39m[p2] seed 9750: save 129978 B, 28 rows, 19 with leagueWorld, 23 with clubCupRun
+[p2] seed 9750 top: seasons=79952 story=17746 lastTournament=6410 managerState=4977 leagueWorld=4510 phone=4162 lastUCLResult=1553 awards=1545 intlHistory=1510 phoneInbox=936 events=801 rivalrySummary=713 money=710 eventLastFired=695
+[p2] seed 9750 rows: clubCupRun=40378 leagueWorld=11940 derbies=8316 cupRun=5256 tournamentResult=777 championsLeague=672 tournament=667 clubCountry=658 domesticCup=550 ballonDorRank=550 leagueTitle=547 club=541 ballonDor=504 injurySevere=483
+[p2] seed 9750 .seasons[].clubCupRun (40378 B): .firstStage.stages[].games[].opponent=4112 .firstStage.stages[].games[].goalsAgainst=3060 .firstStage.stages[].games[].playerGoals=2880 .firstStage.stages[].games[].matchday=2340 .firstStage.stages[].games[].goalsFor=2340 .firstStage.stages[].games[].home=2250 .firstStage.stages[].footnote=1899 .matches[].opponent=1687 .matches[].goalsAgainst=1275 .matches[].playerGoals=1200 .matches[].round=1022 .matches[].goalsFor=975 .matches[].home=938 .matches[].decidedBy=912 .matches[].won=885 .competition=759
+[p2] seed 9750 .seasons[].leagueWorld (11940 B): .members[]=4845 .movements[].from=1368 .movements[].club=1187 .movements[].to=1140 .movements[].kind=1083 .league=494 .simulation=475 .champion=436 (self)=304 .movements=266 .members=228 .movements[]=114
+[p2] seed 9750 .leagueWorld (4510 B): .movements[].from=523 .movements[].club=492 .movements[].kind=481 .movements[].to=471 .leagues.Championship[]=342 .leagues.Premier League[]=256 .leagues.2. Bundesliga[]=251 .leagues.Segunda Division[]=237 .leagues.La Liga[]=233 .leagues.Bundesliga[]=218 .leagues.Serie A[]=206 .leagues.Serie B[]=196 .leagues.Ligue 2[]=183 .leagues.Ligue 1[]=165 .movements[]=52 .leagues.Segunda Division=21
+[p2] seed 9750 .lastUCLResult (1553 B): .firstStage.stages[].games[].opponent=186 .firstStage.stages[].games[].goalsAgainst=136 .firstStage.stages[].games[].playerGoals=128 .firstStage.stages[].games[].matchday=104 .firstStage.stages[].games[].goalsFor=104 .firstStage.stages[].games[].home=100 .firstStage.stages[].footnote=75 .matches[].opponent=44 .matches[].goalsAgainst=34 .competition=33 .matches[].playerGoals=32 .matches[].round=28 .matches[].goalsFor=26 .matches[].home=25 .matches[].won=24 .matches[].decidedBy=24
+[p2] seed 9750 .seasons[].cupRun (5256 B): .stages[].stage=980 .stages[].opp=869 .stages[].won=794 .stages[].against=432 .cup=345 .stages[].for=288 .stages[].home=262 (self)=253 .stages=253 .final.against=144 .stages[]=142 .final=120 .final.legs=108 .final.for=96 .final.decidedBy=72 .final.pensAgainst=48
+[p2] seed 9750 .seasons[].leagueChampions (0 B): 
+
+ [32m✓[39m src/test/zzProbeSave2.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 759[2mms[22m[39m
+   [33m[2m✓[22m[39m probe 2: the save by key path[2m > [22mseed 9748 [33m 323[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m   Start at [22m 16:56:14
+[2m   Duration [22m 2.67s[2m (transform 964ms, setup 53ms, collect 1.14s, tests 759ms, environment 304ms, prepare 151ms)[22m
+
