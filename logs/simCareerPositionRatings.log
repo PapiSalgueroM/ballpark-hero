@@ -1,0 +1,35 @@
+fleet: 10 positions x 2 eras x 60 careers on each engine, seed offset 0, 76 s
+
+1) poor (rating 6.3 or under) and elite (7.5 or over) share of rated seasons, by position
+   attacking band (ST, LW, RW, CAM): poor 11.6 to 15.6%, elite 47.7 to 50.7%, widened by 4 and 4 points
+   ST    1750 seasons  poor 15.6%  elite 47.7%   (the rule does not touch this position)
+   LW    1742 seasons  poor 13.3%  elite 49.8%   (the rule does not touch this position)
+   RW    1742 seasons  poor 13.3%  elite 49.8%   (the rule does not touch this position)
+   CAM   1750 seasons  poor 11.6%  elite 50.7%   (the rule does not touch this position)
+   CM    1743 seasons  poor 12.7%  elite 48.0%   (the rule does not touch this position)
+   CB    1740 seasons  poor 12.9%  elite 49.0%   (rule before this round: poor 24.4%, elite 29.8%)
+   LB    1742 seasons  poor 12.5%  elite 50.7%   (rule before this round: poor 23.0%, elite 31.8%)
+   RB    1742 seasons  poor 12.5%  elite 50.7%   (rule before this round: poor 23.0%, elite 31.8%)
+   CDM   1734 seasons  poor 13.3%  elite 47.1%   (rule before this round: poor 20.2%, elite 34.8%)
+   GK    1744 seasons  poor  4.4%  elite 66.2%   (the rule does not touch this position)
+   2020-24 poor/elite: ST 14.2/48.6  LW 12.6/51.0  RW 12.6/51.0  CAM 11.5/51.1  CM 10.4/49.8  CB 13.4/48.7 (before 23.9/32.9)  LB 12.9/50.6 (before 22.7/32.7)  RB 12.9/50.6 (before 22.7/32.7)  CDM 12.7/49.5 (before 18.1/37.1)  GK 3.3/67.3
+   1990-94 poor/elite: ST 17.0/46.8  LW 14.1/48.5  RW 14.1/48.5  CAM 11.7/50.4  CM 14.9/46.1  CB 12.4/49.3 (before 24.9/26.8)  LB 12.0/50.7 (before 23.4/30.9)  RB 12.0/50.7 (before 23.4/30.9)  CDM 13.8/44.6 (before 22.3/32.5)  GK 5.5/65.1
+
+2) downstream, the same seeds on the engine before and after the rule
+   attackers, CM and GK: 120 of 120 careers byte identical on both engines
+   defenders, rule before     480 careers  peak overall 78.75  trophies 2.74  Ballon d'Or per 100 0.00  released 9.4%
+   defenders, this rule       480 careers  peak overall 79.21  trophies 3.11  Ballon d'Or per 100 0.00  released 8.5%
+   attackers (unchanged)      480 careers  peak overall 79.43  trophies 3.31  Ballon d'Or per 100 3.54  released 5.6%
+   peak moved +0.46 (band 0.13 to 0.83)
+   trophies moved +0.37 (band -0.19 to 0.55)
+   released moved -0.83 (band -2.65 to 1.75)
+
+3) calcSeasonRating over a grid of drawn numbers, with Math.random held to one value
+   19440 cells: 0 with other than one draw, 0 that did not repeat, 0 untouched positions that moved, 0 defenders off their credit
+   the back line's credit reads clean sheets only: true; the holding midfielder's reads appearances only: true
+   90 credit cells against the tuning the bands were measured with (0.035 a clean sheet, the holding midfielder 0.75 of it on 0.325 expected a game): 0 off it
+
+4) careers saved on the rule before this round, loaded and played on with this one
+   16 saves, 112 saved rows, 0 saves whose old rows changed, 48 rows played after loading
+
+all sections green: defenders and holding midfielders are rated on their defending

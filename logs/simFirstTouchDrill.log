@@ -1,0 +1,37 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/firstTouchDrill.test.ts > seeded First Touch rules > keeps the old position mappings and seeds while dealing a distinct daily ten 4ms
+ ✓ src/test/firstTouchDrill.test.ts > seeded First Touch rules > gives every sampled round a legal win and timing and direction losses with exact geometry 203ms
+stdout | src/test/firstTouchDrill.test.ts > seeded First Touch rules > measures skilled contact against every swept fixed-time and fixed-direction policy on paired seeds
+First Touch paired seeds: skilled mean 100.00/100; 117 fixed policies mean range 0.00 to 14.92/100 over 240 runs each.
+
+ ✓ src/test/firstTouchDrill.test.ts > seeded First Touch rules > measures skilled contact against every swept fixed-time and fixed-direction policy on paired seeds 38ms
+ ✓ src/test/firstTouchDrill.test.ts > seeded First Touch rules > rejects malformed checkpoints rather than granting saved wins or bank status 0ms
+ ✓ src/test/firstTouchDrill.test.ts > seeded First Touch rules > banks through the existing shared season and capped Dribbling pipeline only 1ms
+ ✓ src/test/firstTouchBoard.test.tsx > actual First Touch board > shows rules before play and offers optional First Touch outside the seasonal legacy gate 229ms
+ ✓ src/test/firstTouchBoard.test.tsx > actual First Touch board > uses pointer timing and exact engine geometry, checkpointing once before finite resolve 123ms
+ ✓ src/test/firstTouchBoard.test.tsx > actual First Touch board > records early, wrong-gate and deadline misses without a random success or a second checkpoint 114ms
+ ✓ src/test/firstTouchBoard.test.tsx > actual First Touch board > scopes arrows and Space to the pitch, leaving native button and dialog keys alone 39ms
+ ✓ src/test/firstTouchBoard.test.tsx > actual First Touch board > freezes active time on Pause and hidden tabs, requiring explicit Resume after return 85ms
+ ✓ src/test/firstTouchBoard.test.tsx > actual First Touch board > pauses for reopened help and resumes without accepting dialog or navigation keys as touches 91ms
+ ✓ src/test/firstTouchBoard.test.tsx > actual First Touch board > closes nested rules on Escape while keeping Training Ground open and restoring its question button 89ms
+ ✓ src/test/firstTouchBoard.test.tsx > actual First Touch board > resumes settled checkpoints after reload and pins the Eastern day through midnight 106ms
+ ✓ src/test/firstTouchBoard.test.tsx > actual First Touch board > completes ten exact outcomes, blocks daily replay and persists one bank before the callback 441ms
+ ✓ src/test/firstTouchBoard.test.tsx > actual First Touch board > keeps practice scores and repeated practice separate from saved daily progress and banking 311ms
+ ✓ src/test/firstTouchBoard.test.tsx > actual First Touch board > preserves a newer other-tab checkpoint with 10 settled rounds 72ms
+ ✓ src/test/firstTouchBoard.test.tsx > actual First Touch board > preserves a newer other-tab checkpoint with 5 settled rounds 48ms
+ ✓ src/test/firstTouchBoard.test.tsx > actual First Touch board > rejects invalid records, respects unavailable banking and uses the current day seed 19ms
+ ✓ src/test/firstTouchBoard.test.tsx > actual First Touch board > cancels stale active and resolve work when switching modes, returning or unmounting 77ms
+ ✓ src/test/firstTouchBoard.test.tsx > actual First Touch board > keeps a reduced-motion pitch static while the same input clock produces a clean touch 23ms
+
+ Test Files  2 passed (2)
+      Tests  20 passed (20)
+   Start at  15:32:53
+   Duration  4.15s (transform 1.31s, setup 92ms, collect 2.77s, tests 2.12s, environment 594ms, prepare 296ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+simFirstTouchDrill: twenty actual engine/board checks passed, including ten-ball input, exact geometry, daily/practice, pause/help, saved progress and one capped career bank.

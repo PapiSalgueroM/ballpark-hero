@@ -1,0 +1,11 @@
+1) the flagship carries no other game
+   143 modules, 3162 KB of source, 4 foreign engines checked, 0 present
+1b) the Season Centre and the training ground are not in the first download
+   14 paths that must stay lazy, 0 in the static closure
+2) the job market is loaded on demand, and something loads it
+   engine loads it dynamically, the page preloads it on both phases, the not-loaded state is honest
+3) the built weight of /soccer-career
+   77 lazy dependencies including the Club Manager chunk (42 are shared chunks the page already has, which is normal)
+   43 chunks, 2528 KB raw (ceiling 2600), 749 KB over the wire
+
+simFlagshipWeight: green. The flagship carries its own game and nobody else's.
