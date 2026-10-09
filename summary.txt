@@ -1,0 +1,8 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playSoccerCareer exit=1 79s |   - 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to 
+playSeasonCentre exit=0 100s | playSeasonCentre: 40 checks, 0 failed
+sweepWeight exit=1 29s | sweepWeight: 1 failure
+playCareerSquad exit=0 133s | playCareerSquad: 170 checks, 0 failed
+playSeasonMoments exit=0 41s | playSeasonMoments: 117 checks, 0 failed
+playLiveMatchFit exit=0 122s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+playSeasonCentreMotion exit=0 134s | playSeasonCentreMotion: 77 checks, 0 failed
