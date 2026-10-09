@@ -12,6 +12,7 @@ import { deriveSeason } from '@/lib/season/core';
 import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
 import { NBA_SEASON } from '@/lib/season/nba';
 import { NFL_CAREER_SPORT } from '@/lib/nflCareerSport';
+import { nflSeasonLength } from '@/lib/nflMyCareer';
 import { NFL_SEASON } from '@/lib/season/nfl';
 import { keyedRng } from '@/lib/keyedRng';
 import { usSeasonHeldLine } from '@/data/usSeasonLengths';
@@ -117,7 +118,8 @@ describe('the US Season Center, mounted by itself', () => {
 /* ─── Round 1147: the NFL, bound to the same viewer ─── */
 const NFL_WITH_LOADER: UsCareerSport = { ...NFL_CAREER_SPORT, loadSeasonCentre: () => Promise.resolve(NFL_SEASON) };
 
-/** An NFL career played with the binding's own calls, cut back to the last season he played all 17 games of. */
+/** An NFL career played with the binding's own calls, cut back to the last season he played every game of
+ *  (17 today, 16 in a throwback year from 2005 to 2020 since Round 1104). */
 function playNfl(pos: string, seed: string, eraId = 'now'): UsCareerCore {
   const SB = NFL_CAREER_SPORT;
   /* a rookie may sit for years: the first keyed career that has a full season is the one used */
@@ -133,7 +135,7 @@ function playNfl(pos: string, seed: string, eraId = 'now'): UsCareerCore {
       tq = SB.rollTeamQuality(tq, rng);
     }
     const career: UsCareerCore = JSON.parse(JSON.stringify(c));
-    const full = career.seasons.map(s => s.games).lastIndexOf(17);
+    const full = career.seasons.map(s => s.games === nflSeasonLength(s.year)).lastIndexOf(true);
     if (full < 0) continue;
     career.seasons = career.seasons.slice(0, full + 1);
     return career;
