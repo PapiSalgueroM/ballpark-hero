@@ -1,0 +1,15 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simTrustCopy: node scripts/simTrustCopy.mjs
+trust-seconddisclaimer: TRUST_CONTROL=seconddisclaimer node scripts/simTrustCopy.mjs
+trust-typedcount: TRUST_CONTROL=typedcount node scripts/simTrustCopy.mjs
+trust-barecount: TRUST_CONTROL=barecount node scripts/simTrustCopy.mjs
+trust-exactcount: TRUST_CONTROL=exactcount node scripts/simTrustCopy.mjs
+trust-staleliteral: TRUST_CONTROL=staleliteral node scripts/simTrustCopy.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simHomeCopy: node scripts/simHomeCopy.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+walk: node .rc/x/walk1143.mjs
