@@ -4505,6 +4505,42 @@ export function sameManKey(p: { name: string; position: Position; age: number })
 }
 
 /**
+ * Round 1102 review: a man of mine and the world's row for him, when the two
+ * were written by different bakes.
+ *
+ * sameManKey stands on one sentence above: a squad row and the projected row
+ * it was priced off always agree on the age. That held while the baked ages
+ * never moved. Round 1102 moved them to 1 August 2026 (measured against the
+ * file it replaced: 4,221 of the 4,401 shipped men a year up, 4 a year down,
+ * 176 unmoved, nobody by two), and a career keeps the squad it was saved
+ * with. So in every career started before that release the manager's own men
+ * sit a year off the world's row for them, and they stay a year off, because
+ * the summer ages both sides together.
+ *
+ * Read on the exact age, the loan guard missed all of them: a man sent out on
+ * loan from such a career was listed at the manager's own club, the buy went
+ * through, and the summer brought the loan copy home beside the bought one.
+ * The report of 2026-09-13 again, for every older save and every later loan.
+ *
+ * So the loan guard, and only the guard, reads the age with a year either
+ * side: buildMarket, signingRefusal and doorRefusal. Those hide a card or
+ * refuse a press and delete nothing, so the worst a wrong match costs is a
+ * namesake of the same position and nearly the same age staying off the
+ * market while that loan runs. ensureOneOfEach DROPS a man, so it keeps the
+ * exact key, and it needs no more: with the guard holding, a career can no
+ * longer manufacture the pair it would have to see.
+ *
+ * scripts/simClubManagerSaveSize.mjs section 9 holds this on a career really
+ * saved before the ages moved (control SAVE_SIZE_CONTROL=exactage).
+ */
+export function sameManNearAge(
+  a: { name: string; position: Position; age: number },
+  b: { name: string; position: Position; age: number },
+): boolean {
+  return a.name === b.name && a.position === b.position && Math.abs(a.age - b.age) <= 1;
+}
+
+/**
  * Money in millions: money(180) -> '£180m', money(0.6) -> '£600k'.
  *
  * Round 514: the symbol follows the start option when a career is handed in,
@@ -8633,11 +8669,13 @@ export function buildMarket(career: CareerState): MarketPlayer[] {
      the season but he is still mine, and the projected world still has him
      at my club, so without this he was on sale at my own club at his own
      price and the summer return made two of him. See ensureOneOfEach. */
-  /* Keyed on sameManKey, so a different man who happens to share his name is
-     still on the market. */
-  const onLoanOut = new Set((career.loanedOut ?? []).map(l => sameManKey(l.player)));
+  /* Read on name, position and age, so a different man who happens to share
+     his name is still on the market. Round 1102 review: the age with a year
+     either side, because a career saved before the baked ages moved holds its
+     own men a year off the world's rows. See sameManNearAge. */
+  const onLoanOut = (career.loanedOut ?? []).map(l => l.player);
   return marketBase(yearsOn(career), career.eraId)
-    .filter(p => !squadNames.has(p.name) && !gone.has(p.name) && !retired.has(p.name) && !released.has(p.name) && !onLoanOut.has(sameManKey(p)));
+    .filter(p => !squadNames.has(p.name) && !gone.has(p.name) && !retired.has(p.name) && !released.has(p.name) && !onLoanOut.some(mine => sameManNearAge(mine, p)));
 }
 
 /** Round 71: append a line to the Latest Transfers feed (capped at 80). */
@@ -8684,7 +8722,7 @@ export function signingRefusal(career: CareerState, mp: MarketPlayer, fee: numbe
   /* Round 634: nor a man you have out on loan, by any door. buildMarket no
      longer offers him, but a card drawn from an older career object can still
      be pressed, and the summer return would make two of him. */
-  const away = (career.loanedOut ?? []).find(l => sameManKey(l.player) === sameManKey(mp));
+  const away = (career.loanedOut ?? []).find(l => sameManNearAge(l.player, mp));
   if (away) return `${mp.name} is already yours, out on loan at ${away.club}. Bring him back from the loan desk instead.`;
   return null;
 }
@@ -8720,7 +8758,7 @@ export function doorRefusal(career: CareerState, mp: MarketPlayer, door: MarketD
      a man you released, or a man of yours out on loan, opened a fee table
      that only failed at the terms stage with a generic line. */
   if (releasedByYouNames(career).has(mp.name)) return `You released ${mp.name}. He will not sign for you again.`;
-  const away = (career.loanedOut ?? []).find(l => sameManKey(l.player) === sameManKey(mp));
+  const away = (career.loanedOut ?? []).find(l => sameManNearAge(l.player, mp));
   if (away) return `${mp.name} is already yours, out on loan at ${away.club}. Bring him back from the loan desk instead.`;
   return null;
 }

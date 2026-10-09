@@ -82,6 +82,27 @@
  *      a press it takes never does, and talks for a released man or a man on
  *      loan are refused at the door with the real reason.
  *
+ * Added by the Round 1102 review, which moved the baked ages to August 2026
+ * and found the loan guard of sections 5 and 6 blind in every older career:
+ *   9) A career really saved before the ages moved. scripts/data/
+ *      cmOldSave1052Fixture.json is a Sevilla career written by the engine at
+ *      5ba57826, before Round 1052 (simClubManagerGathered section G owns the
+ *      file and says how it was made), and a career keeps the squad it was
+ *      saved with, so its men sit a year off the world's rows for them.
+ *      MEASURED on it: 18 of its 20 men have a row in the world, all 18 a year
+ *      older there; the summer after, 15 of 22, all 15 still a year older,
+ *      because the summer ages both sides together. With the guard reading
+ *      the exact age, every one of them sent out on loan was still listed
+ *      (at Sevilla, his own club) and could be bought straight back: 18 of 18
+ *      as saved, 15 of 15 the summer after. With a year either side: 0 and 0,
+ *      and each stale card is refused with the out on loan reason. The floor
+ *      of 8 men a year off sits ten under the 18 and seven under the 15, room
+ *      for Round 1108's moves and for birth dates still to land; a fixture
+ *      re-recorded on today's rosters would hold nobody a year off and this
+ *      section says so instead of passing on nothing. The width is pinned
+ *      from both sides on a fresh career: a loan record a year either side of
+ *      a card hides it, one two years off does not.
+ *
  * Negative controls (house rule: prove the checks can fail), each one rewrites
  * a copy of the source in memory, refuses to run unless its anchor appears
  * exactly once, and must turn exactly its own section red:
@@ -103,6 +124,11 @@
  *                                 Section 7.
  *   SAVE_SIZE_CONTROL=deaddoor    doorRefusal never gives a reason, the dead
  *                                 button. Section 8.
+ *   SAVE_SIZE_CONTROL=exactage    sameManNearAge reads the exact age again,
+ *                                 the guard as it stood before the Round 1102
+ *                                 review. Section 9, and only 9: sections 5,
+ *                                 6 and 8 build their careers on today's
+ *                                 rosters, where both sides agree.
  *
  * Fences, from headroom measured over six streams (the default and SIM_SEED 1
  * to 5, three clubs each, 18 careers) on the healthy engine, against the
@@ -186,7 +212,7 @@ const SAVE_KEY = 'dukb-club-manager-save';
 
 const CONTROL = process.env.SAVE_SIZE_CONTROL || '';
 /* The section each control must turn red, and nothing else. */
-const OWN = { uncapped: 1, unbounded: 2, silent: 3, noleave: 4, namekey: 5, norepair: 6, pump: 7, deaddoor: 8 };
+const OWN = { uncapped: 1, unbounded: 2, silent: 3, noleave: 4, namekey: 5, norepair: 6, pump: 7, deaddoor: 8, exactage: 9 };
 if (CONTROL && !(CONTROL in OWN)) {
   console.error(`SAVE_SIZE_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(OWN).join(', ')})`);
   process.exit(1);
@@ -249,6 +275,11 @@ const ENGINE_SWAPS = {
     'export function doorRefusal(career: CareerState, mp: MarketPlayer, door: MarketDoor): string | null {\n  return null;\n',
     'the head of doorRefusal',
   ],
+  exactage: [
+    '  return a.name === b.name && a.position === b.position && Math.abs(a.age - b.age) <= 1;\n',
+    '  return a.name === b.name && a.position === b.position && a.age === b.age;\n',
+    'the body of sameManNearAge',
+  ],
 };
 if (CONTROL in ENGINE_SWAPS) {
   let engine = readLF(`${ROOT}/src/lib/clubManager.ts`);
@@ -280,19 +311,19 @@ const {
   trimCareer, leanCareer, SAVE_CAPS, sortedTable,
   buildMarket, buyPlayer, payClause, loanIn, startNegotiation, doorRefusal, signingRefusal,
   loanOutPlayer, recallLoanedPlayer, loanOutRefusal, loanOutFee, acceptBid,
-  releasePlayer, canLeaveSquad, sameManKey, releaseClauseOf, loanEligible,
+  releasePlayer, canLeaveSquad, sameManKey, sameManNearAge, releaseClauseOf, loanEligible,
 } = cm;
 for (const [name, fn] of Object.entries({
   startCareer, playNextEntry, finishSeason, startNextSeason, saveCareer, loadCareer, trimCareer, leanCareer, sortedTable,
   buildMarket, buyPlayer, payClause, loanIn, startNegotiation, doorRefusal, signingRefusal,
   loanOutPlayer, recallLoanedPlayer, loanOutRefusal, loanOutFee, acceptBid, releasePlayer, canLeaveSquad, sameManKey,
-  releaseClauseOf, loanEligible,
+  sameManNearAge, releaseClauseOf, loanEligible,
 })) {
   if (typeof fn !== 'function') abort(`the harness could not reach ${name}; the bundle is not the shape it expects`);
 }
 if (!SAVE_CAPS || typeof SAVE_CAPS.h2h !== 'number') abort('SAVE_CAPS is not exported in the shape this harness expects');
 
-const failures = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0 };
+const failures = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
 /* Which kind of check fired, per section, so a control can prove it was the
    numeric fence that caught it and not a neighbouring check. */
 const tags = {};
@@ -898,8 +929,91 @@ section = 8;
   if (!/out on loan/.test(awayWhy ?? '')) fail('talks for a man on loan are not refused with the on loan reason');
 }
 
+/* ================================================================== */
+console.log('9) A career saved before the baked ages moved: a man of mine out on loan is not for sale at my own club');
+/* ================================================================== */
+section = 9;
+{
+  const OLD_SAVE = 'scripts/data/cmOldSave1052Fixture.json';
+  /* Measured 18 as saved and 15 the summer after, see the header. */
+  const MIN_MEN = 8;
+  let old = null;
+  try {
+    localStorage.setItem(SAVE_KEY, fs.readFileSync(`${ROOT}/${OLD_SAVE}`, 'utf8'));
+    old = loadCareer();
+  } catch (e) {
+    fail(`${OLD_SAVE} could not be opened: ${e.message}`);
+  }
+  /* Every man the engine will send out and the world holds a row for, one at
+     a time. The world's row for one of MY men only shows with the squad and
+     the loan desk out of sight, and that row is also the stale card an older
+     screen could still be holding when the press comes. */
+  const sweep = (st, label) => {
+    const world = buildMarket({ ...st, squad: [], loanedOut: [] });
+    const n = { sent: 0, yearOff: 0, listed: 0, bought: 0, talked: 0, unexplained: 0 };
+    const named = [];
+    for (const p of st.squad) {
+      const card = world.find(m => m.name === p.name && m.position === p.position);
+      const out = card ? loanOutPlayer(st, p.id, 'Elsewhere', 1) : null;
+      if (!out) continue;
+      n.sent += 1;
+      if (Math.abs(card.age - p.age) === 1) n.yearOff += 1;
+      const rich = { ...out, budget: Math.max(out.budget, card.price + 1) };
+      const listed = buildMarket(out).some(m => m.name === p.name && m.position === p.position);
+      const bought = buyPlayer(rich, card) !== null;
+      const talked = startNegotiation(rich, card) !== null;
+      const explained = /out on loan/.test(signingRefusal(rich, card, card.price) ?? '')
+        && /out on loan/.test(doorRefusal(rich, card, 'talk') ?? '');
+      if (listed) n.listed += 1;
+      if (bought) n.bought += 1;
+      if (talked) n.talked += 1;
+      if (!explained) n.unexplained += 1;
+      if ((listed || bought || talked) && named.length < 3) named.push(`${p.name} (${p.position}, ${p.age} in the career and ${card.age} in the world, listed at ${card.club})`);
+    }
+    console.log(`   ${label}: ${st.squad.length} men, ${n.sent} sent out on loan one at a time, ${n.yearOff} of them a year off the world's row: ${n.listed} still listed, ${n.bought} bought back, ${n.talked} opened talks, ${n.unexplained} without the out on loan reason`);
+    if (n.sent < MIN_MEN) fail(`${label}: only ${n.sent} men could be sent out, so the sweep is not measuring the squad`);
+    if (n.yearOff < MIN_MEN) fail(`${label}: only ${n.yearOff} of the career's men sit a year off the world's row, so this is not a career from before the ages moved; the section needs a save written before Round 1102, never one re-recorded on today's rosters`);
+    if (n.listed) fail(`${label}: ${n.listed} of ${n.sent} men out on loan are still on the market, first ${named[0]}`);
+    if (n.bought) fail(`${label}: ${n.bought} of ${n.sent} men out on loan could be bought back, first ${named[0]}`);
+    if (n.talked) fail(`${label}: talks opened for ${n.talked} of ${n.sent} men out on loan, first ${named[0]}`);
+    if (n.unexplained) fail(`${label}: ${n.unexplained} of ${n.sent} stale cards are not refused with the out on loan reason at the buy and at the talks door`);
+  };
+  if (!old) fail(`${OLD_SAVE} did not load, so the career this section stands on is gone`);
+  else {
+    /* As it was saved, four league weeks from the end of season one. The
+       window is shut there, and a loan needs one, so it is opened on a copy:
+       the guard reads the loan desk and the world, not the calendar. */
+    sweep({ ...old, transferWindow: 'summer' }, `${old.clubName} as saved (season ${old.season}, week ${old.week})`);
+    /* And through its own summer, by the engine: the year the career gains
+       is a year the world gains too, so the two stay a year apart. */
+    const next = toSummer(old);
+    if (!next) fail('the old career never reached its summer, so the later loan is unmeasured');
+    else sweep(next, `${next.clubName} the summer after (season ${next.season})`);
+  }
+
+  /* The width, from both sides, on a career whose ages agree with the world:
+     a year either side of a card is the same man, two years is a namesake. */
+  const base = startCareer('Real Madrid');
+  const card = buildMarket(base).find(m => m.price <= base.budget && m.rating < 85);
+  const lend = gap => ({
+    ...base,
+    loanedOut: [{ player: { ...base.squad[0], id: 'near-age-probe', name: card.name, position: card.position, age: card.age + gap }, club: 'Elsewhere', fee: 1, season: base.season }],
+  });
+  const seen = gap => buildMarket(lend(gap)).some(m => m.name === card.name && m.position === card.position);
+  const hidden = [-1, 0, 1].filter(gap => !seen(gap));
+  const shown = [-2, 2].filter(gap => seen(gap));
+  const twoOffBought = buyPlayer(lend(2), card) !== null;
+  console.log(`   ${card.name} (${card.position} ${card.age}): hidden by a loan record ${hidden.join(', ') || 'never'} years off, still listed with one ${shown.join(', ') || 'never'} years off, and bought past the one two years off: ${twoOffBought}`);
+  if (hidden.length !== 3) fail(`a loan record a year either side of a card must hide it; it hid the card at ${hidden.join(', ') || 'no gap'} only`);
+  if (shown.length !== 2) fail(`a loan record two years off a card is a different man and must hide nothing; the card stayed listed at ${shown.join(', ') || 'no gap'} only`);
+  if (!twoOffBought) fail('a namesake two years off a loaned man could not be bought');
+  if (!sameManNearAge({ name: 'A', position: 'ST', age: 24 }, { name: 'A', position: 'ST', age: 25 }) || sameManNearAge({ name: 'A', position: 'ST', age: 24 }, { name: 'A', position: 'GK', age: 24 })) {
+    fail('sameManNearAge must hold for one name and position a year apart and never across positions');
+  }
+}
+
 /* ---------- the verdict ---------- */
-const SECTIONS = [1, 2, 3, 4, 5, 6, 7, 8];
+const SECTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const total = SECTIONS.reduce((n, k) => n + failures[k], 0);
 const redSections = SECTIONS.filter(k => failures[k] > 0);
 if (CONTROL) {
