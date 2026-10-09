@@ -13,10 +13,11 @@
  * disclaimer, and GAME_COUNT_LABEL in src/data/gameRegistry.ts.
  *
  * RULE 1, ONE DISCLAIMER. In src (code, comments stripped, tests left out) a
- * disclaimer sentence ("not affiliated with", "property of their respective
- * owners") lives in exactly two places: the footer, once, and section 6 of the
- * Terms, which is the legal clause itself and not a second footer. Any other
- * file that prints one fails, because the footer is under every page.
+ * disclaimer sentence (the site saying it is "not affiliated with" somebody,
+ * or "property of their respective owners") lives in exactly two places: the
+ * footer, once, and section 6 of the Terms, which is the legal clause itself
+ * and not a second footer. Any other file that prints one fails, because the
+ * footer is under every page.
  *
  * RULE 2, ONE COUNT. Nothing types a count of the site's games. A count is
  * read from the registry (GAME_COUNT_LABEL, or TOTAL_GAMES where the exact
@@ -200,7 +201,10 @@ const held = (file, what) => heldSeen.set(file, [...(heldSeen.get(file) ?? []), 
 
 /* ── rule 1: one disclaimer ───────────────────────────────────────────── */
 console.log('1) one disclaimer a page');
-const DISCLAIMER = [/\bnot affiliated with\b/gi, /\bpropert(?:y|ies) of their respective owners\b/gi];
+/* "not affiliated with" only counts when the site is the one saying it of
+   itself, in the same sentence: a club puzzle may say two clubs are not
+   affiliated with each other. */
+const DISCLAIMER = [/\bDoUKnowBall\b[^.]{0,80}?\bnot affiliated with\b/gi, /\bpropert(?:y|ies) of their respective owners\b/gi];
 const disclaimersIn = text => DISCLAIMER.map(re => (text.match(re) ?? []).length);
 /** Section 6 of the Terms is the clause itself, so it is cut out before the
     count. With no such heading nothing is cut and the clause fails as a stray,
@@ -216,7 +220,7 @@ for (const [file, text] of code) {
   const [aff, own] = disclaimersIn(file === TERMS ? outsideTheClause(text) : text);
   if (file === TERMS) clauseKept = disclaimersIn(text)[0] - aff;
   if (file === FOOTER) {
-    if (aff !== 1 || own !== 1) fail(`the footer says "not affiliated with" ${aff} times and "property of their respective owners" ${own} times; once each is the one disclaimer every page shows`);
+    if (aff !== 1 || own !== 1) fail(`the footer says DoUKnowBall is "not affiliated with" ${aff} times and "property of their respective owners" ${own} times; once each is the one disclaimer every page shows`);
     continue;
   }
   if (!aff && !own) continue;
