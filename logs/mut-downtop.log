@@ -1,0 +1,8 @@
+MUT downtop: the bottom club stays up, the three above it go down
+  vitest:soccerCareerLeagueWorld.test.ts exit=1 3s | [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯[22m[39m || first:  [31m❯[39m src/test/soccerCareerLeagueWorld.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m5 failed[39m[2m)[22m[32m 135[2mms[22m[39m
+  simSoccerLeagueWorldLookup exit=0 19s | simSoccerLeagueWorldLookup: identical full outcomes, deterministic lookup reduction, both effective controls caught
+  simCareerLeagueWorld:probe exit=1 1s |   FAIL [D1]: Freiburg 2032 (Bundesliga): saved movement differs from the final displayed places || first:   FAIL [D1]: Freiburg 2030 (Bundesliga): saved movement differs from the final displayed places
+  simSeasonCentreTable exit=0 10s | simSeasonCentreTable: 7 checks, 0 failed
+  simSeasonCentreAgreement exit=1 12s | simSeasonCentreAgreement: 24 checks, 431 failed || first: FAIL item 15 league world: c2 2026 PSG: movement differs from the final displayed places | c2 2028 PSG: movement differs from the final displayed places | c2 2029 PSG: movement differs from the final displayed places | c
+  simCareerLeagueWorld exit=1 348s |   FAIL [D2]: Saudi Arabia: table share 76.4%, floor 76.9% || first:   FAIL [E]: cha 2031: saved movement differs from the final displayed places
+MUT downtop: KILLED by vitest:soccerCareerLeagueWorld.test.ts, simCareerLeagueWorld:probe, simSeasonCentreAgreement, simCareerLeagueWorld (green: simSoccerLeagueWorldLookup, simSeasonCentreTable)

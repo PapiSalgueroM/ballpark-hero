@@ -1,0 +1,4 @@
+MUT cuprunyear: the saved cup run is bound to the wrong season
+  vitest:soccerSeasonCompetitions.test.tsx+trophyCabinet.test.tsx exit=0 4s |   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+  simSoccerSeasonCompetitions exit=1 1s | Node.js v24.21.0 || first: AssertionError [ERR_ASSERTION]: the engine records the campaign year
+MUT cuprunyear: KILLED by simSoccerSeasonCompetitions (green: vitest:soccerSeasonCompetitions.test.tsx+trophyCabinet.test.tsx)

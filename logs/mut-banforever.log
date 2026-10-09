@@ -1,0 +1,4 @@
+MUT banforever: a served ban is never cleared, so it is served again every season
+  vitest:soccerDiscipline.test.ts+soccerSeasonAvailability.test.ts exit=1 4s | [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m || first:  [31m❯[39m src/test/soccerDiscipline.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 163[2mms[22m[39m
+  simSeasonCentreAgreement exit=0 19s | simSeasonCentreAgreement: 24 checks, 0 failed
+MUT banforever: KILLED by vitest:soccerDiscipline.test.ts+soccerSeasonAvailability.test.ts (green: simSeasonCentreAgreement)

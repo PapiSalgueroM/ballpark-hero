@@ -1,0 +1,7 @@
+MUT wrongoffer: a sale listing completes through a loan offer and the other way round
+  vitest:soccerCareerContracts.test.ts exit=1 4s | [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m || first:  [31m❯[39m src/test/soccerCareerContracts.test.ts [2m([22m[2m10 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[32m 107[2mms[22m[39m
+  simSoccerContractMoves exit=1 2s | Node.js v24.21.0 || first: AssertionError [ERR_ASSERTION]: the actual window completes the club decision without an accept action
+  simClubVerdict exit=0 18s | simClubVerdict: green. The club has an opinion, it is earned, and it costs something.
+  simLoanSpell exit=0 7s | simLoanSpell: green. The bench has a door now, and the door does not lie.
+  simContracts exit=0 13s | ALL CONTRACT CHECKS PASSED
+MUT wrongoffer: KILLED by vitest:soccerCareerContracts.test.ts, simSoccerContractMoves (green: simClubVerdict, simLoanSpell, simContracts)

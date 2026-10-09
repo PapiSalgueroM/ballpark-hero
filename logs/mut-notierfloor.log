@@ -1,0 +1,8 @@
+MUT notierfloor: a relegated club keeps its top flight tier in the second division
+  vitest:soccerCareerLeagueWorld.test.ts exit=1 3s | [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m || first:  [31m❯[39m src/test/soccerCareerLeagueWorld.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 249[2mms[22m[39m
+  simSoccerLeagueWorldLookup exit=0 17s | simSoccerLeagueWorldLookup: identical full outcomes, deterministic lookup reduction, both effective controls caught
+  simCareerLeagueWorld:probe exit=0 1s | simCareerLeagueWorld: all sections green (0.6 s)
+  simSeasonCentreTable exit=0 12s | simSeasonCentreTable: 7 checks, 0 failed
+  simSeasonCentreAgreement exit=0 16s | simSeasonCentreAgreement: 24 checks, 0 failed
+  simCareerLeagueWorld exit=0 455s | simCareerLeagueWorld: all sections green (454.8 s)
+MUT notierfloor: KILLED by vitest:soccerCareerLeagueWorld.test.ts (green: simSoccerLeagueWorldLookup, simCareerLeagueWorld:probe, simSeasonCentreTable, simSeasonCentreAgreement, simCareerLeagueWorld)

@@ -1,0 +1,4 @@
+MUT appealnoban: a rejected appeal queues no ban
+  vitest:soccerDiscipline.test.ts+soccerSeasonAvailability.test.ts exit=1 4s | [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m || first:  [31m❯[39m src/test/soccerDiscipline.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 316[2mms[22m[39m
+  simSeasonCentreAgreement exit=0 15s | simSeasonCentreAgreement: 24 checks, 0 failed
+MUT appealnoban: KILLED by vitest:soccerDiscipline.test.ts+soccerSeasonAvailability.test.ts (green: simSeasonCentreAgreement)

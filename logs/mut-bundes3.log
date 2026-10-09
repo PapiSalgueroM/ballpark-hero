@@ -1,0 +1,8 @@
+MUT bundes3: three clubs swap in Germany instead of two
+  vitest:soccerCareerLeagueWorld.test.ts exit=1 3s | [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m || first:  [31m❯[39m src/test/soccerCareerLeagueWorld.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 157[2mms[22m[39m
+  simSoccerLeagueWorldLookup exit=0 18s | simSoccerLeagueWorldLookup: identical full outcomes, deterministic lookup reduction, both effective controls caught
+  simCareerLeagueWorld:probe exit=1 1s |   FAIL [D1]: Freiburg 2032 (2. Bundesliga): saved movement differs from the final displayed places || first:   FAIL [D1]: Freiburg 2030 (2. Bundesliga): saved movement differs from the final displayed places
+  simSeasonCentreTable exit=0 10s | simSeasonCentreTable: 7 checks, 0 failed
+  simSeasonCentreAgreement exit=1 17s | simSeasonCentreAgreement: 24 checks, 16 failed || first: FAIL item 15 league world: c109 2027 Leipzig: movement differs from the final displayed places | c109 2028 Leipzig: movement differs from the final displayed places | c109 2029 Leipzig: movement differs from the final di
+  simCareerLeagueWorld exit=1 502s |   FAIL [D1]: 607 seasons in a sized league broke a rule || first:   FAIL [E]: her 2029: saved movement differs from the final displayed places
+MUT bundes3: KILLED by vitest:soccerCareerLeagueWorld.test.ts, simCareerLeagueWorld:probe, simSeasonCentreAgreement, simCareerLeagueWorld (green: simSoccerLeagueWorldLookup, simSeasonCentreTable)

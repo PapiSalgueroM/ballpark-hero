@@ -1,0 +1,11 @@
+mut-appealnoban exit=0 20s | MUT appealnoban: KILLED by vitest:soccerDiscipline.test.ts+soccerSeasonAvailability.test.ts (green: simSeasonCentreAgreement)
+mut-banforever exit=0 23s | MUT banforever: KILLED by vitest:soccerDiscipline.test.ts+soccerSeasonAvailability.test.ts (green: simSeasonCentreAgreement)
+mut-acceptnoban exit=0 23s | MUT acceptnoban: KILLED by vitest:soccerDiscipline.test.ts+soccerSeasonAvailability.test.ts (green: simSeasonCentreAgreement)
+mut-wrongoffer exit=0 44s | MUT wrongoffer: KILLED by vitest:soccerCareerContracts.test.ts, simSoccerContractMoves (green: simClubVerdict, simLoanSpell, simContracts)
+mut-cuprunyear exit=0 6s | MUT cuprunyear: KILLED by simSoccerSeasonCompetitions (green: vitest:soccerSeasonCompetitions.test.tsx+trophyCabinet.test.tsx)
+mut-renewalwage exit=0 44s | MUT renewalwage: KILLED by vitest:soccerCareerContracts.test.ts, simSoccerContractMoves (green: simClubVerdict, simLoanSpell, simContracts)
+mut-none exit=0 104s | MUT none: SURVIVED (13 harnesses green: vitest:soccerCareerLeagueWorld.test.ts, simSoccerLeagueWorldLookup, simCareerLeagueWorld:probe, simSeasonCentreTable, simSeasonCen
+mut-notierfloor exit=0 505s | MUT notierfloor: KILLED by vitest:soccerCareerLeagueWorld.test.ts (green: simSoccerLeagueWorldLookup, simCareerLeagueWorld:probe, simSeasonCentreTable, simSeasonCentreAgr
+mut-bundes3 exit=0 552s | MUT bundes3: KILLED by vitest:soccerCareerLeagueWorld.test.ts, simCareerLeagueWorld:probe, simSeasonCentreAgreement, simCareerLeagueWorld (green: simSoccerLeagueWorldLook
+mut-upoff exit=0 582s | MUT upoff: KILLED by vitest:soccerCareerLeagueWorld.test.ts, simCareerLeagueWorld:probe, simSeasonCentreAgreement, simCareerLeagueWorld (green: simSoccerLeagueWorldLookup
+mut-downtop exit=0 394s | MUT downtop: KILLED by vitest:soccerCareerLeagueWorld.test.ts, simCareerLeagueWorld:probe, simSeasonCentreAgreement, simCareerLeagueWorld (green: simSoccerLeagueWorldLook

@@ -1,0 +1,15 @@
+MUT none: BASELINE, no change: every harness must be green in the copy
+  vitest:soccerCareerLeagueWorld.test.ts exit=0 4s | [2m   Duration [22m 3.25s[2m (transform 1.39s, setup 66ms, collect 1.73s, tests 280ms, environment 499ms, prepare 130ms)[22m
+  simSoccerLeagueWorldLookup exit=0 18s | simSoccerLeagueWorldLookup: identical full outcomes, deterministic lookup reduction, both effective controls caught
+  simCareerLeagueWorld:probe exit=0 1s | simCareerLeagueWorld: all sections green (0.5 s)
+  simSeasonCentreTable exit=0 12s | simSeasonCentreTable: 7 checks, 0 failed
+  simSeasonCentreAgreement exit=0 19s | simSeasonCentreAgreement: 24 checks, 0 failed
+  vitest:soccerDiscipline.test.ts+soccerSeasonAvailability.test.ts exit=0 3s | [2m   Duration [22m 2.61s[2m (transform 1.40s, setup 116ms, collect 3.25s, tests 245ms, environment 837ms, prepare 170ms)[22m
+  vitest:soccerCareerContracts.test.ts exit=0 3s | [2m   Duration [22m 2.41s[2m (transform 1.24s, setup 57ms, collect 1.48s, tests 44ms, environment 333ms, prepare 154ms)[22m
+  simSoccerContractMoves exit=0 2s | simSoccerContractMoves: all full-save contract and club-move checks passed
+  simClubVerdict exit=0 19s | simClubVerdict: green. The club has an opinion, it is earned, and it costs something.
+  simLoanSpell exit=0 6s | simLoanSpell: green. The bench has a door now, and the door does not lie.
+  simContracts exit=0 12s | ALL CONTRACT CHECKS PASSED
+  vitest:soccerSeasonCompetitions.test.tsx+trophyCabinet.test.tsx exit=0 5s |   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+  simSoccerSeasonCompetitions exit=0 1s | simSoccerSeasonCompetitions: saved names, exact outcomes, no historical leakage and independent engine snapshots passed
+MUT none: SURVIVED (13 harnesses green: vitest:soccerCareerLeagueWorld.test.ts, simSoccerLeagueWorldLookup, simCareerLeagueWorld:probe, simSeasonCentreTable, simSeasonCentreAgreement, vitest:soccerDiscipline.test.ts+soccerSeasonAvailability.test.ts, vitest:soccerCareerContracts.test.ts, simSoccerContractMoves, simClubVerdict, simLoanSpell, simContracts, vitest:soccerSeasonCompetitions.test.tsx+trophyCabinet.test.tsx, simSoccerSeasonCompetitions)

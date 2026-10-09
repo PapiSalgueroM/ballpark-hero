@@ -1,0 +1,8 @@
+MUT upoff: the lower division champion is NOT promoted, 2nd to (count+1)th go up
+  vitest:soccerCareerLeagueWorld.test.ts exit=1 3s | [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m || first:  [31m❯[39m src/test/soccerCareerLeagueWorld.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 119[2mms[22m[39m
+  simSoccerLeagueWorldLookup exit=0 17s | simSoccerLeagueWorldLookup: identical full outcomes, deterministic lookup reduction, both effective controls caught
+  simCareerLeagueWorld:probe exit=1 1s |   FAIL [D1]: Freiburg 2032 (2. Bundesliga): saved movement differs from the final displayed places || first:   FAIL [D1]: Freiburg 2030 (2. Bundesliga): saved movement differs from the final displayed places
+  simSeasonCentreTable exit=0 12s | simSeasonCentreTable: 7 checks, 0 failed
+  simSeasonCentreAgreement exit=1 18s | simSeasonCentreAgreement: 24 checks, 15 failed || first: FAIL item 15 league world: c7 2026 West Ham: movement differs from the final displayed places | c7 2033 West Ham: movement differs from the final displayed places | c19 2028 Real Sociedad: movement differs from the final
+  simCareerLeagueWorld exit=1 530s |   FAIL [D1]: 1639 seasons in a sized league broke a rule || first:   FAIL [E]: cha 2029: saved movement differs from the final displayed places
+MUT upoff: KILLED by vitest:soccerCareerLeagueWorld.test.ts, simCareerLeagueWorld:probe, simSeasonCentreAgreement, simCareerLeagueWorld (green: simSoccerLeagueWorldLookup, simSeasonCentreTable)

@@ -1,0 +1,7 @@
+MUT renewalwage: a veteran renewal keeps the old wage
+  vitest:soccerCareerContracts.test.ts exit=1 3s | [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m || first:  [31m❯[39m src/test/soccerCareerContracts.test.ts [2m([22m[2m10 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 70[2mms[22m[39m
+  simSoccerContractMoves exit=1 1s | Node.js v24.21.0 || first: Error: Build failed with 1 error:
+  simClubVerdict exit=0 20s | simClubVerdict: green. The club has an opinion, it is earned, and it costs something.
+  simLoanSpell exit=0 7s | simLoanSpell: green. The bench has a door now, and the door does not lie.
+  simContracts exit=0 13s | ALL CONTRACT CHECKS PASSED
+MUT renewalwage: KILLED by vitest:soccerCareerContracts.test.ts, simSoccerContractMoves (green: simClubVerdict, simLoanSpell, simContracts)
