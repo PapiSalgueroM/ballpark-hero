@@ -1,0 +1,5 @@
+base-roles exit=0 3s |    Duration  2.20s (transform 1.09s, setup 40ms, collect 1.47s, tests 82ms, environment 253ms, prepare 87ms)
+ctl-r1 exit=0 3s | CONTROL r1 (src/components/club-manager/RolesScreen.tsx): vitest exit 1, 2 tests failed, 4 passed: FIRED
+ctl-r2 exit=0 3s | CONTROL r2 (src/components/club-manager/RolesScreen.tsx): vitest exit 1, 2 tests failed, 4 passed: FIRED
+ctl-r3 exit=0 3s | CONTROL r3 (src/components/club-manager/RolesScreen.tsx): vitest exit 1, 2 tests failed, 4 passed: FIRED
+clean-after exit=0 1s | 0

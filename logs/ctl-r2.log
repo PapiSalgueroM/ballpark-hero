@@ -1,0 +1,11 @@
+   × Club Manager: the dressing room and its broken promises > counts all 8 of them, lists five and says the list stopped short 46ms
+   → expected undefined to be 'Showing 5 of 8. The rest are in their…' // Object.is equality
+   × Club Manager: the dressing room and its broken promises > counts all 6 of them, lists five and says the list stopped short 12ms
+   → expected undefined to be 'Showing 5 of 6. The rest are in their…' // Object.is equality
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/rolesBrokenPromises.test.tsx,title=src/test/rolesBrokenPromises.test.tsx > Club Manager%3A the dressing room and its broken promises > counts all 8 of t
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/rolesBrokenPromises.test.tsx,title=src/test/rolesBrokenPromises.test.tsx > Club Manager%3A the dressing room and its broken promises > counts all 6 of t
+   FAIL  src/test/rolesBrokenPromises.test.tsx > Club Manager: the dressing room and its broken promises > counts all 8 of them, lists five and says the list stopped short
+   AssertionError: expected undefined to be 'Showing 5 of 8. The rest are in their…' // Object.is equality
+   FAIL  src/test/rolesBrokenPromises.test.tsx > Club Manager: the dressing room and its broken promises > counts all 6 of them, lists five and says the list stopped short
+   AssertionError: expected undefined to be 'Showing 5 of 6. The rest are in their…' // Object.is equality
+CONTROL r2 (src/components/club-manager/RolesScreen.tsx): vitest exit 1, 2 tests failed, 4 passed: FIRED

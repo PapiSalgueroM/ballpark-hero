@@ -1,0 +1,11 @@
+   × Club Manager: the dressing room and its broken promises > counts all 8 of them, lists five and says the list stopped short 43ms
+   → expected ' The dressing room5 players are not g…' to contain '8 players are not getting what you to…'
+   × Club Manager: the dressing room and its broken promises > counts all 6 of them, lists five and says the list stopped short 13ms
+   → expected ' The dressing room5 players are not g…' to contain '6 players are not getting what you to…'
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/rolesBrokenPromises.test.tsx,title=src/test/rolesBrokenPromises.test.tsx > Club Manager%3A the dressing room and its broken promises > counts all 8 of t
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/rolesBrokenPromises.test.tsx,title=src/test/rolesBrokenPromises.test.tsx > Club Manager%3A the dressing room and its broken promises > counts all 6 of t
+   FAIL  src/test/rolesBrokenPromises.test.tsx > Club Manager: the dressing room and its broken promises > counts all 8 of them, lists five and says the list stopped short
+   AssertionError: expected ' The dressing room5 players are not g…' to contain '8 players are not getting what you to…'
+   FAIL  src/test/rolesBrokenPromises.test.tsx > Club Manager: the dressing room and its broken promises > counts all 6 of them, lists five and says the list stopped short
+   AssertionError: expected ' The dressing room5 players are not g…' to contain '6 players are not getting what you to…'
+CONTROL r1 (src/components/club-manager/RolesScreen.tsx): vitest exit 1, 2 tests failed, 4 passed: FIRED

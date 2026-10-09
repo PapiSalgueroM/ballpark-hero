@@ -1,0 +1,9 @@
+   × Club Manager: the dressing room and its broken promises > counts all 8 of them, lists five and says the list stopped short 51ms
+   × Club Manager: the dressing room and its broken promises > counts all 6 of them, lists five and says the list stopped short 12ms
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/rolesBrokenPromises.test.tsx,title=src/test/rolesBrokenPromises.test.tsx > Club Manager%3A the dressing room and its broken promises > counts all 8 of t
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/rolesBrokenPromises.test.tsx,title=src/test/rolesBrokenPromises.test.tsx > Club Manager%3A the dressing room and its broken promises > counts all 6 of t
+   FAIL  src/test/rolesBrokenPromises.test.tsx > Club Manager: the dressing room and its broken promises > counts all 8 of them, lists five and says the list stopped short
+   AssertionError: expected <button …(1)>…(3)</button>
+   FAIL  src/test/rolesBrokenPromises.test.tsx > Club Manager: the dressing room and its broken promises > counts all 6 of them, lists five and says the list stopped short
+   AssertionError: expected <button …(1)>…(3)</button>
+CONTROL r3 (src/components/club-manager/RolesScreen.tsx): vitest exit 1, 2 tests failed, 4 passed: FIRED
