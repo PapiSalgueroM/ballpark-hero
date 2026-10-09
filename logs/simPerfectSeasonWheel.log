@@ -1,0 +1,21 @@
+1) the wheel is the whole table
+   nba: 15 request(s), 14,722 rows received, table holds 14,722; 1616 stops
+        wheel 1951-52 to 2024-25, table 1951-52 to 2024-25
+   nhl: 6 request(s), 5,180 rows received, table holds 5,180; 222 stops
+        wheel 1960s to 2020s, table runs to 2025-26
+   mlb: 3 request(s), 2,602 rows received, table holds 2,602; 2572 stops
+        wheel 1901 to 2021, table 1901 to 2021
+   nfl: 1 request(s), 828 rows received, table holds 828; 828 stops
+        wheel 1999 to 2024, table 1999 to 2024
+2) a daily dated before the switch keeps the old wheel
+   SKIPPED: TODAY (2026-10-09) IS PAST THE SWITCH (2026-10-08). NO DAILY CAN BE DEALT FROM THE OLD WHEEL ANY MORE: DELETE THE oldWheel OPTION, THIS SECTION AND THE nopin CONTROL.
+3) the guide names only stops the wheel can land on
+   nba: the 1986-87 Lakers
+   nhl: the 1980s Oilers
+   mlb: the 1927 Yankees; the 1906 Cubs; the 2001 Mariners; the 1968 Cardinals; the 1997 Mariners
+        Lou Gehrig is on 1927 New York Yankees, rated 99, eligible at 1B
+        Bob Gibson is on 1968 St. Louis Cardinals, rated 99, eligible at SP
+        Ken Griffey is on 1997 Seattle Mariners, rated 88, eligible at CF
+   nfl: the 2007 Patriots; the 2013 Broncos
+
+simPerfectSeasonWheel: green. Every Perfect Season wheel reads its whole table, a daily already dealt keeps its wheel, and the guides name only stops the wheel can land on.

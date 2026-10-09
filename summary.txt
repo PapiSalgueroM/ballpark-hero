@@ -1,0 +1,15 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simSchemaNames exit=0 6s | simSchemaNames: all green
+simLeaderboardCaps exit=0 10s | simLeaderboardCaps: green. Every shipped game can score, nothing else can, and the allowlist is not writable.
+simReportRelay exit=0 0s | simReportRelay: green. Both buttons ask the same questions, every report records whether it reached him, and the queue has a real workflow.
+simScoringCoverage exit=0 0s | simScoringCoverage: all green
+simWritesAreSent exit=0 16s | simWritesAreSent: green. Every write is sent, and a finished round proves it on the wire.
+simDartDraftPool exit=0 9s | simDartDraftPool: green. The pool is the top 2,000, the gold zones and the storm give what they gave, the mystery zone pays what it paid and adds a long shot, a country h
+simPerfectSeasonWheel exit=0 5s | simPerfectSeasonWheel: green. Every Perfect Season wheel reads its whole table, a daily already dealt keeps its wheel, and the guides name only stops the wheel can land o
+simCareerFallback exit=0 5s | simCareerFallback: green. The fallback is a byte for byte bake of the live career tables and every row has the shape a real season has.
+simNbaChainNames exit=0 7s | simNbaChainNames: green. The accented players are in the table, folded, and answerable.
+playFlagshipLazy exit=0 8s | playFlagshipLazy: green. The dugout costs nothing until you walk into it, and it still works when you do.
+playCareerHub exit=1 38s | Node.js v24.21.0
+playSoccerCareer exit=0 480s | ALL SOCCER CAREER WALK CHECKS PASSED
+playGames-stat-detective exit=0 60s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-dart-draft exit=0 46s | Played 1 games. 0 findings, 0 the harness could not drive.

@@ -1,0 +1,14 @@
+1) the header names the bake, and its counts are the file's counts
+   generated 2026-10-01: 253 players, 3640 seasons, 201 null assists
+2) the file is its own render
+   418314 bytes, byte for byte
+3) the file equals a fresh bake of the live tables
+   253 players and 3640 seasons read fresh, identical
+4) a 30 player sample, each fetched on its own by name, season for season
+   30 players, 418 season rows compared
+5) the shape: no repeated season and club, no stat line under two clubs, seasons in order, nothing negative, clubs the table knows
+   116 real two club seasons, 280 distinct clubs in the table, every file club among them
+6) every correction a ledger records is in the file, and the bake refuses a table without them
+   scripts/data/careerFirstClubs.json: 28 added and 2 changed rows in the file; without them the bake's guard names 30 of 30
+
+simCareerFallback: green. The fallback is a byte for byte bake of the live career tables and every row has the shape a real season has.

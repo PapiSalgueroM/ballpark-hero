@@ -1,0 +1,18 @@
+# Release AQ, the lead's one live pass (the database host is reachable here): everything that READS the real database, and the two pages Round 1145 changed, walked against real data.
+#!serve
+#!playwright
+#!serial
+simSchemaNames: node scripts/simSchemaNames.mjs
+simLeaderboardCaps: node scripts/simLeaderboardCaps.mjs
+simReportRelay: node scripts/simReportRelay.mjs
+simScoringCoverage: node scripts/simScoringCoverage.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simDartDraftPool: node scripts/simDartDraftPool.mjs
+simPerfectSeasonWheel: node scripts/simPerfectSeasonWheel.mjs
+simCareerFallback: node scripts/simCareerFallback.mjs
+simNbaChainNames: node scripts/simNbaChainNames.mjs
+playFlagshipLazy: node scripts/playFlagshipLazy.mjs
+playCareerHub: node scripts/playCareerHub.mjs
+playSoccerCareer: node scripts/playSoccerCareer.mjs
+playGames-stat-detective: ONLY=/stat-detective node scripts/playGames.mjs
+playGames-dart-draft: ONLY=/dart-draft node scripts/playGames.mjs
