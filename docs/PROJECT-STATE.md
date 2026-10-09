@@ -3,41 +3,38 @@
 Anthony's active scope is Soccer Career only. Draft PR207 starts on
 origin/main0054fd819320a32884609562e2f4b882f2ecbf38, isolated branch
 codex/soccer-career-real-opponents. F owns integration and publication.
-This expanded source is NOT READY. The upcoming combined source still needs
-remote verification. Qualified interim proof is for source
-b8b63cab93461a208e04edc31cfea52a133ecd0c only.
-Full run 37917517593 is RED solely because the old league-world context
-verifier counted a club twice when it was both rival and champion. The actual
-derived table checks passed. All other steps were GREEN: build/types, 79 old
-tests, 39 expansion tests, all 15 built-file readers, and contract, discipline
-and league-world outcomes with their effective negative controls.
-Native journeys completed 1,057 checks with zero failed: 164 opponents,
-72 family, 26 awards, 50 competitions, 178 discipline, 201 contracts,
-249 league-world and 117 existing season moments. The served unnamed-opponent
-control produced eight expected failures. Root viewed the phone 320 veteran
-quote, phone 390 sale and card views, desktop 2040 table, awards, family and XI.
-Verified full artifact 11610388690 retains source head b8b63cab and SHA256
-4f9ae042003d7a8a632bbf627a5751ea40487f4fbbbfb753565df951d9baa0d1;
-local files are .tmp-fx/opponents-proof/run-final-b8/files.
-Earlier focused run 37917517584 succeeded on the same source: 10 contract
-tests, 39 expansion tests, 175 attributed award/full-save checks, league-world
-11 outcomes/five controls, competition navigation 14 outcomes/four controls,
-discipline 11 outcomes/nine controls, and availability three outcomes plus
-its copied old-capacity control. The lookup proof preserved 75 worlds and
-75 full tables, with 97.67 percent fewer lookups and both controls caught.
-Agreement kept 120 careers and 2,155 seasons: table yield 99.92 percent
-(1,216 of 1,217, floor 99.2), all 24 checks passed, one injured refusal,
-zero uninjured refusals and null rate 0.05 percent below the 0.6 percent cap.
-The next batch fixes only the context role comparison and adds an actual
-derived champion-as-rival probe with effective missing/foreign/duplicate
-club copies. Strict derived field, champion and movement checks stay intact.
-It also adds two saved continental final-label tests and two controls.
-The unchanged full league-world population of 300 careers across 17 nations
-moves to a separate parallel remote checkout. All historical save checks,
-sample floors and thresholds remain unchanged. These upcoming changes have
-no current-source acceptance yet. The API connector recovered at 10:34 UTC.
-No READY, merge or live acceptance is inferred. F owns integration and
-publication.
+This expanded source is READY FOR F INTEGRATION (Soccer Career only).
+Tested source: 459194ac5bd3073b0a771a54a77dc50feea96a1e.
+Tested tree: 520f99df61184c6bd85b7982fc81e2494c072c96.
+Full run 37920105325 succeeded: verification job 113785732962 and separate
+league-world job 113785733054. Focused run 37920105289, job 113785719753,
+also succeeded on this exact source. All steps and source guards were green:
+build/types, 79 old unit tests, 41 expansion tests, 10 contract tests, all
+15 built-file readers, six existing career harnesses, 10 expansion harnesses,
+old card/loan checks and effective controls, including both new saved
+continental final-label controls. The separate full league-world check kept
+300 careers across 17 nations and passed in 276.2 seconds. Historical save
+checks, strict derived fields/champions/movements and thresholds stayed intact.
+Native journeys passed all 1,057 checks: 164 opponents, 72 family, 26 awards,
+50 competitions, 178 discipline, 201 contracts, 249 league-world and 117
+existing season moments. Zero failed; the unnamed-opponent served control
+produced eight expected failures.
+Agreement passed all 24 checks on 120 careers and 2,155 seasons: 99.92 percent
+table yield (1,216 of 1,217, floor 99.2), one injured refusal, zero uninjured
+refusals and null rate 0.05 percent below the 0.6 percent cap. The direct
+champion-as-rival probe passed its actual table and rejected copied missing,
+foreign and duplicate clubs. All three saved-field bundle controls fired.
+Verified full artifact 11611976798, SHA256
+89d7998db73762773e0caa244484eef4ee8232f09c816791f5a681e85c718ba9.
+Verified league-world artifact 11611601387, SHA256
+dfc975b18ef25d7b4d02ba2ade1968bb857c780dc8cba4e56c0a0748b1de7c66.
+Verified focused artifact 11611811205, SHA256
+2f2f19993164614143f7fc4b5fe898dba4dcadb928504de7f83b354a74c0a7ea.
+This is offline Soccer Career verification, with no all-repo live suite,
+database, prerender, release or publication acceptance. F owns merge and
+publication; PR207 stays draft. The final docs-only commit will use skip-ci and
+preserve the exact tested src, scripts and workflow files. Remote-only
+execution and protected historical/source boundaries remain in force.
 1169 names verified opponents independently of table eligibility. 1170
 opens actual winning seasons in every Trophy Cabinet category. 1171 varies
 family summary text by year and children, with newborn text limited to the
