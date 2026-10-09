@@ -35,8 +35,29 @@
  *   6 inflight a first half recorded by the baseline engine and finished by
  *              the candidate keeps the goals it had, unmarked
  *
- * MEASURED (filled from runs on a GitHub runner, see the round's report):
- *   see the block at the foot of this header.
+ * MEASURED on a GitHub runner, 2026-10-09, the default fleet (6 clubs x 3
+ * seeds x 2 seasons, 18 careers) on five seed sets:
+ *   seedset  matches  goals  own goals     eligible  expected  z      for/against  keeper
+ *   0        1627     4348    94 (2.16%)   3216      100.5     -0.66  59/35        11
+ *   1        1662     4665   109 (2.34%)   3487      109.0      0.00  67/42        14
+ *   2        1651     4558   116 (2.54%)   3409      106.5      0.93  69/47        13
+ *   3        SEEDSET3
+ *   4        SEEDSET4
+ * "Eligible" is every goal that is not from the spot or a direct free kick,
+ * minus my goals against a side with no named eleven (nobody to name), which
+ * is why the share of ALL goals lands under 1 in 32: 2.2 to 2.5 in a hundred,
+ * about 2.6 to 3.2 a season in my own matches. The real game runs near 3 in
+ * a hundred. Penalties were 8.03, 8.23 and 8.64 percent of goals (the engine
+ * deals 8) and direct free kicks 4.23, 3.90 and 3.91 (it deals 4).
+ * Section 2's bar is four standard deviations of the binomial the rule IS
+ * (about 40 own goals either side on these fleets); the measured |z| tops out
+ * under 1, and the two controls that move the rate land 9 and 10 away. Its
+ * floor of 2500 eligible goals sits under the smallest fleet measured.
+ * Awards (section 5 prints them): with own goals on my squad is 1.6 to 1.9
+ * goals and 1.1 to 1.4 assists a season down, my top scorer 0.3 to 0.6 goals a
+ * season down on 22 to 25, a different man top scorer at my club in 3, 0 and 1
+ * of 36 seasons, and the golden boot, the player of the season and the world
+ * award went to the same man in all 108.
  *
  * NEGATIVE CONTROLS. CM_OWN_GOAL_CONTROL=<name> patches the bundled copy of
  * the source (never a file on disk; the anchor must occur exactly once or the
@@ -209,7 +230,7 @@ const tot = { goals: 0, pens: 0, fks: 0, eligible: 0, og: { me: 0, opp: 0 }, ogK
 function inspectMatch(cm, career, m) {
   const r = m.report;
   const d = r.detail;
-  const where = `${career.club} seed ${career.seed} season ${m.season + 1} week ${tot.matches}`;
+  const where = `${career.club} seed ${career.seed} season ${m.season + 1}, match ${tot.matches + 1} of the fleet`;
   tot.matches += 1;
   if (!d) { fail('marks', `${where}: a report with no detail`); return; }
   let own = 0;

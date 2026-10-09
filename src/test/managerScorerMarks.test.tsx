@@ -11,8 +11,10 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { scorerLine, scorerMark } from '@/lib/clubManagerScorerLine';
 import { timelineRows } from '@/lib/clubManagerMatchCentre';
 import { MatchTimeline } from '@/components/club-manager/MatchTimeline';
-import { goalSegs } from '@/components/club-manager/LiveSimScreen';
-import type { MatchDetail, TimelineEvent } from '@/lib/clubManager';
+import { goalCardCount, goalSegs } from '@/components/club-manager/LiveSimScreen';
+import { MatchReportCard } from '@/components/club-manager/MatchReportCard';
+import { liveFeed } from '@/lib/clubManager';
+import type { CareerState, LiveMatch, MatchDetail, MatchWeekReport, TimelineEvent } from '@/lib/clubManager';
 
 vi.mock('@/components/game/VictoryMoment', () => ({ default: () => null }));
 afterEach(cleanup);
@@ -35,6 +37,73 @@ describe('the one function every scorer listing reads', () => {
     expect(scorerLine({ name: 'Spot taker', minute: 45, plus: 2, penalty: true })).toBe("Spot taker 45+2' (P)");
     expect(scorerLine({ name: 'Open play scorer', minute: 63 })).toBe("Open play scorer 63'");
     expect(scorerLine({ name: 'Late one', minute: 90, plus: 5 })).toBe("Late one 90+5'");
+  });
+});
+
+describe('an own goal, on every listing (Round 1146)', () => {
+  const text = (segs: { t: string }[]) => segs.map(s => s.t).join('');
+
+  it('is marked (O.G) by the one function, and the own goal decides if a line ever said both', () => {
+    expect(scorerMark({ og: true })).toBe(' (O.G)');
+    expect(scorerMark({ og: true, penalty: true })).toBe(' (O.G)');
+    expect(scorerLine({ name: 'Their centre back', minute: 63, og: true })).toBe("Their centre back 63' (O.G)");
+    expect(scorerLine({ name: 'My left back', minute: 90, plus: 2, og: true })).toBe("My left back 90+2' (O.G)");
+  });
+
+  it('sits on the report card under the club that got the goal, with the man who put it in and nobody else', () => {
+    const report: MatchWeekReport = {
+      competition: 'league', compLabel: 'League', home: 'Home Club', away: 'Away Club',
+      homeGoals: 2, awayGoals: 1, won: true, drawn: false, decidedBy: 'regular',
+      myScorers: [{ name: 'Their centre back', minute: 63, og: true }, { name: 'My striker', minute: 70, assist: 'My winger' }],
+      oppScorers: [{ name: 'My left back', minute: 80, og: true, drawn: 'Their striker' }],
+      events: [], trophyWon: null, myPosition: 4, confidence: 60, confidenceDelta: 0, otherResults: [],
+    };
+    const { container } = render(<MatchReportCard report={report} clubName="Home Club" onContinue={() => {}} />);
+    const rows = [...container.querySelectorAll('p')].filter(p => (p.textContent ?? '').startsWith('⚽'));
+    expect(rows.map(p => p.textContent)).toEqual(["⚽ Their centre back 63' (O.G)", "⚽ My striker 70' · 🅰️ My winger", "⚽ My left back 80' (O.G)"]);
+    /* the column a line sits in is the club that got the goal */
+    expect(rows[0].parentElement!.firstElementChild!.textContent).toBe('Home Club');
+    expect(rows[2].parentElement!.firstElementChild!.textContent).toBe('Away Club');
+    /* the man the goal was first drawn for is kept for the engine and never printed */
+    expect(container.textContent).not.toContain('Their striker');
+  });
+
+  it('reads Own goal on the timeline, with the mark, and tags a made up man off the side he plays for', () => {
+    const d = detail([
+      { minute: 10, side: 'me', kind: 'goal', text: 'Made up back', og: true },
+      { minute: 50, side: 'opp', kind: 'goal', text: 'My left back', og: true },
+    ]);
+    d.oppXi = [{ n: 'Made up back', p: 'CB', r: 70, g: true }];
+    const rows = timelineRows(d, 'key');
+    expect(rows.map(r => [r.side, r.label, r.name, r.mark, !!r.gen])).toEqual([
+      ['me', 'Own goal', 'Made up back', ' (O.G)', true],
+      ['opp', 'Own goal', 'My left back', ' (O.G)', false],
+    ]);
+    const { container } = render(<MatchTimeline detail={d} clubName="Home Club" opponent="Away Club" />);
+    const entries = [...container.querySelectorAll('[data-cm-tl="goal"] [data-cm-tl-entry]')].map(n => n.textContent ?? '');
+    expect(entries[0].startsWith('⚽ Own goal: Made up back (O.G)')).toBe(true);
+    expect(entries[1]).toBe('⚽ Own goal: My left back (O.G)');
+  });
+
+  it('is fed to the live screen as the man who put it in, for the side that got the goal', () => {
+    const live = {
+      startXi: [], onPitch: [], subsUsed: 0, week: 0, myGoals: 1, oppGoals: 1,
+      h1My: [{ id: 'm9', name: 'My striker', minute: 10, og: { n: 'Their centre back' } }, { id: 'm9', name: 'My striker', minute: 30, penalty: true }],
+      h1Opp: [{ name: 'My left back', minute: 20, og: true, drawn: 'Their striker' }],
+    } as unknown as LiveMatch;
+    const goals = liveFeed(live).filter(e => e.kind === 'goal');
+    expect(goals.map(e => [e.side, e.text, e.minute, !!e.og, !!e.penalty])).toEqual([
+      ['me', 'Their centre back', 10, true, false],
+      ['opp', 'My left back', 20, true, false],
+      ['me', 'My striker', 30, false, true],
+    ]);
+    /* the line the pill, the card and the list print */
+    expect(text(goalSegs('GOAL! Own goal, ', { t: goals[0].text }, goals[0], { og: goals[0].og }))).toBe("GOAL! Own goal, Their centre back 10' (O.G)");
+    /* an own goal is nobody's goal: its card counts nothing, and it never counts toward another man's */
+    const career = { squad: [{ name: 'My striker', seasonGoals: 4 }, { name: 'My left back', seasonGoals: 0 }] } as unknown as CareerState;
+    expect(goalCardCount(career, goals, goals[0])).toEqual({ nth: 1, season: null });
+    expect(goalCardCount(career, goals, goals[1])).toEqual({ nth: 1, season: null });
+    expect(goalCardCount(career, goals, goals[2])).toEqual({ nth: 1, season: 5 });
   });
 });
 

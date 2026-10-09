@@ -386,6 +386,7 @@ function LiveMatchHelp({ onClose }: { onClose: () => void }) {
         <li>The half you are watching has already been played by the game. You are seeing it back minute by minute.</li>
         <li>Every goal, shot, save, corner, throw in, foul and card is the real one, at its real minute. The passing and running in between is drawn to fit them.</li>
         <li>The score changes when the ball is in the net, not before.</li>
+        <li>A goal marked (P) was a penalty. A goal marked (O.G) is an own goal: it counts for the club it is listed under, and the man named put it into his own net.</li>
         <li>Tap one of your players to make a sub or change shape. Everything up to that minute stays. The rest of the half is played again with your change.</li>
         <li>Pause, pick a speed, or Skip to the whistle. Tap a goal card to move on.</li>
       </ul>
