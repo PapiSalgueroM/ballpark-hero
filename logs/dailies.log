@@ -1,0 +1,73 @@
+{
+ "head": "be2d4b3fcace912d68d9fa4008d4996907a1c29a",
+ "dates": {
+  "2026-10-09": {
+   "deadline": {
+    "club": "Heerenveen",
+    "seed": 713128812,
+    "budget": 15,
+    "needs": [
+     "ST",
+     "CB",
+     "GK",
+     "LB"
+    ],
+    "targets": [
+     "Iker Losada|CF|24|68|1.5|need0",
+     "André Henrique|ST|24|70|2.5|need0",
+     "Gorka Carrera|ST|20|70|2.9|need0",
+     "Emmanuel Biumla|CB|20|71|3.6|need1",
+     "Léo Realpe|CB|24|72|3.3|need1",
+     "Ümit Akdağ|CB|22|72|3.8|need1",
+     "Juan Musso|GK|31|70|2.1|need2",
+     "Mycael|GK|21|70|2.9|need2",
+     "Walter Benítez|GK|32|73|3.4|need2",
+     "Eduardo Águila|CB|23|72|3.8|need3",
+     "Sergio Reguilón|LB|29|72|3.3|need3",
+     "Joaquim|CB|27|74|5|need3"
+    ],
+    "squadTop": [
+     "Mees Hilgers 75",
+     "Jacob Trenskow 75",
+     "Oliver Braude 73",
+     "Marcus Linday 72",
+     "Ringo Meerveld 72"
+    ]
+   },
+   "hotseat": {
+    "club": "Newcastle",
+    "seed": 2653580332,
+    "takeover": {
+     "position": 3,
+     "clubs": 20,
+     "expectation": 7,
+     "played": 11,
+     "points": 21,
+     "form": "LLLWD"
+    },
+    "target": 5,
+    "leash": 5,
+    "squadTop": [
+     "Malick Thiaw 86",
+     "Anthony Elanga 85",
+     "Tino Livramento 85",
+     "Bazoumana Touré 84",
+     "Jacob Ramsey 84"
+    ]
+   }
+  },
+  "2026-10-10": {
+   "deadline": {
+    "club": "Rangers",
+    "seed": 4104413705,
+    "budget": 21,
+    "needs": [
+     "GK",
+     "CB",
+     "LB"
+    ],
+    "targets": [
+     "James Beadle|GK|21|73|4.8|need0",
+
+... (15999 bytes)
+dailiesProbe: done
