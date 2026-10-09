@@ -1,0 +1,22 @@
+1) one publisher id, everywhere
+   publisher id pub-2929318086316376 in index.html, ads.txt, AdBanner and consentedScripts.ts
+2) site verification survives a visitor who never accepts cookies
+   meta tag in the template and on 170 of 170 shipped documents (21 redirect and noindex stubs excluded by design)
+3) ads.txt
+   1 record(s), all well formed
+4) the policy pages exist, are submitted, and have real content on them
+   4 required pages, all routed, all submitted, all with real prerendered text
+5) the advertising disclosures, as shipped
+   9 statements and 3 links, all present in the shipped document (13696 readable characters)
+5b) analytics loads only behind the same consent as the ads
+   measurement id G-KZQK2G68YC, analytics stays gated globally and ads load only beside a real slot
+6) the ad component never labels an empty box
+   collapses when ineligible or unfilled, labels only what filled
+6b) same-page consent reaches an already mounted ad
+   either choice notifies the current page, and an ad exists only after Accept
+6c) no global Auto Ads eligibility on non-content routes
+   the verification meta stays global, but the ad script is limited to pages with an AdBanner
+7) one production slot on every AdBanner caller
+   80 callers scanned against slot 7540487748, 0 mismatches
+
+simAdsense: green. Verification, ads.txt, the policy pages and the ad component are all review ready.
