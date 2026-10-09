@@ -1,0 +1,5 @@
+none-shared: bash .rc/x/rvmut.sh none shared
+s1: bash .rc/x/rvmut.sh s1 shared
+s2: bash .rc/x/rvmut.sh s2 shared
+s3: bash .rc/x/rvmut.sh s3 shared
+l10: bash .rc/x/rvmut.sh l10 legs
