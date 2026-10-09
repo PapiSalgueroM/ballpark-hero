@@ -78,6 +78,10 @@
  *   with 1 season on the store. The tile's Reload the same, and held it
  *   reads "Your latest progress has not been saved yet, so the page was not
  *   reloaded".
+ *   After the round's review the toast has a second line ("Retry here does
+ *   the same thing."), so it is taller: its "Retry" at 670..714, still 64 by
+ *   44 and on top, the toast at 635..748. 62 checks, 0 failed, and each of
+ *   the eight controls red at its named check.
  *   Two things the first cuts of these checks got wrong, kept here so they
  *   are not relearned: refusing sessionStorage along with localStorage made
  *   the stale chunk check pass on main (the reload stood down for want of

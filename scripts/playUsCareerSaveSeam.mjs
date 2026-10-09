@@ -81,8 +81,12 @@
  *   After: 0 failed. returning: none at 88 ms, full at 205, and it stays
  *   through all three steps. little: refused again with the line still up,
  *   then saved and the line gone on the same page. kept: "essential" on the
- *   store. 6 journeys with SPORTS=nba, 25 checks.
+ *   store. 6 journeys with SPORTS=nba, 25 checks; the whole walk is 15
+ *   journeys and 67 checks, 0 failed.
  *   The control quotafree: 8 of its 11 checks failed, quota and kept both.
+ *   The save toast has a second line since the same review ("Retry here
+ *   does the same thing."), so it stands at 576..689 now, still 12 px clear
+ *   of the banner at 701..844.
  *
  * Controls (US_SAVE_SEAM_CONTROL=), each expected to go red at its own check
  * (a control run exits 1 and says so; 2 when it could not run or did not
