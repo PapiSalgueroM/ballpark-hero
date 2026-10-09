@@ -98,6 +98,6 @@ describe('Round 1104: the changed rules are on the "?" screen', () => {
     expect(bank).toContain('savings first');
     expect(bank).toContain('sold at a bad price');
     /* No dash of either long kind in copy a player reads. */
-    for (const line of [pay, kicker, schedule, bank]) expect(/[–—]/.test(line)).toBe(false);
+    for (const line of [pay, kicker, schedule, bank]) expect([0x2013, 0x2014].some(code => line.includes(String.fromCharCode(code)))).toBe(false);
   });
 });
