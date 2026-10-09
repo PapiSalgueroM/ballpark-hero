@@ -51,10 +51,10 @@
  *   - HELD. Nine files the other lane is redrafting on 2026-10-09. Whatever
  *     they print is listed on every run and fails nothing. Take a file off
  *     HELD the day its draft lands, and fix what the list then shows.
- * And one is owed: public/llms.txt is a literal too, says 100+ and was outside
- * this round. It sits on OWED, which is a ratchet: the entry fails the moment
- * the file stops saying exactly that, so a fix has to delete the entry and the
- * file is held to the label from then on.
+ * OWED is a ratchet for a literal a round could not reach: the entry fails the
+ * moment the file stops saying exactly that, so a fix has to delete the entry
+ * and the file is held to the label from then on. It is empty since Release
+ * AP, when public/llms.txt (the one entry it ever held) was retyped.
  *
  * NEGATIVE CONTROLS, each an edit in memory that refuses to run if the text it
  * changes is not there, and each must produce its own failure and no other
@@ -116,9 +116,7 @@ const HELD = new Set([
 ]);
 /** A literal this round could not reach. The file must still say exactly
     this, so the fix deletes the line and the label rule takes the file over. */
-const OWED = [
-  { file: 'public/llms.txt', says: '100+ games', why: 'public/ was outside Round 1143; the lead retypes it at release' },
-];
+const OWED = [];
 /** A number in front of "games" that has the shape of a site count and is not
     one. The words must still be in the file, or the line is stale. */
 const NOT_THE_SITE = [
