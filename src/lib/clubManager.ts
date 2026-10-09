@@ -42,6 +42,8 @@ import { ALL_POSITIONS, eligiblePositions, FIT_PENALTY, gradeFit, type FitGrade 
 /* Round 1146: the own goal rule the Soccer Career Season Centre reads too.
    It imports only the keyed generator, so there is no cycle. */
 import { ownGoalRole, ownGoalTagged } from '@/lib/ownGoalRule';
+/* Round 1146: a roll keyed on a match (the quick sim coach's two minutes), never the seeded stream. */
+import { keyedRng } from '@/lib/keyedRng';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
 // from the Transfermarkt style market value data in Supabase. The bake file
@@ -14617,10 +14619,10 @@ function foldBoard(to: number, ...lists: { minute: number; plus?: number }[][]):
  * Club Manager's own binding, and all of it:
  *  - the odds, one eligible goal in CM_OWN_GOAL_ONE_IN (32, against the
  *    Season Centre's provisional 64). Penalties (8 in 100 goals) and direct
- *    free kicks (4 in 100) are never own goals, so that comes to 2.2 to 2.5
+ *    free kicks (4 in 100) are never own goals, so that comes to 2.2 to 2.7
  *    own goals in 100 goals, about three a season in my own matches, where
  *    the real game runs near 3 in 100. Measured by scripts/simCmOwnGoals.mjs
- *    over fleets of 36 seasons; the numbers are in its header;
+ *    over five fleets of 36 seasons; the numbers are in its header;
  *  - the man. Both sides have real squads, so he is a NAMED defender or the
  *    keeper of the side that conceded, out of the men on the pitch at that
  *    minute, a defender twice as likely as the keeper. A goal of mine
@@ -17945,6 +17947,68 @@ export function setHalftimeMentality(career: CareerState, mentality: Mentality):
   return state;
 }
 
+/* ---------- Round 1146: the quick sim's coach uses his bench after the break ---------- */
+/**
+ * A player's report, 2026-10-08: "if i quick sim a game then it should
+ * automatically make subs". Since Round 1072 the coach replaced an injured
+ * man and, at the break, took off up to two who were already spent (fitness
+ * under 68 or morale under 45). A fit eleven therefore played ninety minutes
+ * unchanged and a manager who quick sims never gave his bench a minute:
+ * scripts/simCmQuickLegs.mjs measured it (the numbers are in its header).
+ *
+ * So the same coach, with the same bench list (benchFor), the same fit rule
+ * and the same test for fresher legs he uses at the break, now looks at his
+ * bench twice more: once around the hour and once in the run in. Each look
+ * is at most one change:
+ *  - off comes a man on a yellow first, then whoever has the least left in
+ *    his legs. Never the keeper, never a man who has just come on;
+ *  - on comes the first man on the bench who plays there (natural or the
+ *    same family) and is fresher, the break's own test;
+ *  - and only if the eleven is NO WEAKER for it by the engine's own strength
+ *    (myMatchStrength, the number the rest of the half is drawn from), or
+ *    the match is settled, two goals clear either way, when legs are rested
+ *    and minutes handed out whatever it costs;
+ *  - one change is always kept back for an injury, as at the break, and one
+ *    fit man stays on the bench with it.
+ *
+ * The two minutes are keyed on the match (the fixture and how the first half
+ * went), never drawn from the seeded stream. That keeps the one property the
+ * coach has always had: he is exactly a manager making the same changes by
+ * hand at the same minutes. Each change goes through changeLive, so the rest
+ * of the half is drawn again off the new eleven, and the report lists it with
+ * the others. Manager Hot Seat plays without the coach (`noCoach`) and is
+ * untouched.
+ */
+export const QUICK_LEGS_WINDOWS: readonly (readonly [number, number])[] = [[58, 68], [72, 82]];
+/** Goals clear, either way, at which the coach rests legs whatever it costs. */
+export const QUICK_LEGS_SETTLED = 2;
+
+/**
+ * The strength the eleven on the pitch plays at, at a minute, by the engine's
+ * own rule (myMatchStrength, each man read in his slot), optionally with one
+ * of them swapped for a man off the bench. The coach asks it before a change
+ * and scripts/simCmQuickLegs.mjs asks it again to hold him to his rule. No
+ * draw, nothing changed. Null with no match on.
+ */
+export function liveElevenStrength(career: CareerState, at: number, swap?: { outId: string; inId: string }): number | null {
+  const live = career.live;
+  if (!live) return null;
+  const gone = liveGoneIds(live, at);
+  const coming = swap ? career.squad.find(p => p.id === swap.inId) : undefined;
+  const pairs = livePairs(career, live)
+    .filter(x => !gone.has(x.p.id))
+    .map(x => (coming && swap && x.p.id === swap.outId ? { ...x, p: coming } : x));
+  return myMatchStrength(career, pairs);
+}
+
+/** The two minutes he looks at, for this match. Exported for the harness. */
+export function quickLegsMinutes(state: CareerState, live: LiveMatch): number[] {
+  const entry = state.calendar[live.week];
+  const opponent = entry ? fixtureFor(state, entry)?.opponent ?? '' : '';
+  const key = `cm|legs|${state.clubName}|${state.season}|${live.week}|${opponent}|${live.myGoals}|${live.oppGoals}|${(live.h1Play ?? []).length}`;
+  return QUICK_LEGS_WINDOWS.map(([lo, hi], i) => lo + Math.floor(keyedRng(`${key}|${i}`)() * (hi - lo + 1)));
+}
+
 /** Quick sim coaching uses the real clock and changes, without settling the match. */
 export function coachQuickMatch(career: CareerState): CareerState {
   if (!career.live) return career;
@@ -17988,6 +18052,36 @@ export function coachQuickMatch(career: CareerState): CareerState {
       state = changeLive(state, minute, { kind: 'sub', outId: injury.id, inId: coming.id }, plus) ?? state;
     }
   };
+  /* Round 1146: legs, after the break. See QUICK_LEGS_WINDOWS for the rule. */
+  const restLegs = (at: number) => {
+    const live = state.live!;
+    /* One change stays back for an injury, as at the break, and so does one
+       man: he never spends his last fit bench player on legs. */
+    if (live.subsUsed >= MAX_SUBS - 1 || (live.minute ?? 0) > at || benchFor(state).length < 2) return;
+    const gone = liveGoneIds(live, at);
+    const cameOn = new Set((live.subs ?? []).map(s => s.onId));
+    const booked = new Set([...(live.h1Cards ?? []), ...(live.h2Cards ?? [])].filter(c => c.kind === 'yellow' && c.minute <= at).map(c => c.id));
+    const pairs = livePairs(state, live).filter(x => !gone.has(x.p.id));
+    const scored = (lines: { minute: number }[] | undefined): number => (lines ?? []).filter(g => g.minute <= at).length;
+    const settled = Math.abs(scored(live.h1My) + scored(live.h2My) - scored(live.h1Opp) - scored(live.h2Opp)) >= QUICK_LEGS_SETTLED;
+    const now = liveElevenStrength(state, at) ?? 0;
+    /* A man on a yellow first, then the legs with the least left in them.
+       Never the keeper, never a man who has only just come on. */
+    const order = pairs
+      .filter(x => !x.slot?.allowed.includes('GK') && x.p.position !== 'GK' && !cameOn.has(x.p.id))
+      .sort((a, b) => Number(booked.has(b.p.id)) - Number(booked.has(a.p.id)) || a.p.fitness - b.p.fitness);
+    for (const out of order) {
+      const outFit = gradeFor(out.p.id);
+      const coming = benchFor(state, out.p.id).find(p => (outFit(p) === 'natural' || outFit(p) === 'family')
+        && (p.fitness > out.p.fitness || (p.fitness === out.p.fitness && p.morale > out.p.morale)));
+      if (!coming) continue;
+      /* The engine's own strength, with him in that slot: no weaker, or the match is settled. */
+      const then = liveElevenStrength(state, at, { outId: out.p.id, inId: coming.id }) ?? 0;
+      if (then < now && !settled) continue;
+      state = changeLive(state, at, { kind: 'sub', outId: out.p.id, inId: coming.id }) ?? state;
+      return;
+    }
+  };
   ensureFirstHalf(state, entry, state.live!);
   injuriesThrough(45);
   if (!state.live!.h2Drawn) {
@@ -18001,6 +18095,12 @@ export function coachQuickMatch(career: CareerState): CareerState {
       if (coming) state = changeLive(state, Math.max(46, state.live!.minute ?? 46), { kind: 'sub', outId: out.id, inId: coming.id }) ?? state;
     }
     drawSecondHalf(state, entry, state.live!);
+  }
+  /* Round 1146: twice after the break he looks at his bench. Whatever happens
+     before each look (an injury) is dealt with first, in clock order. */
+  for (const at of quickLegsMinutes(state, state.live!)) {
+    injuriesThrough(at);
+    restLegs(at);
   }
   injuriesThrough(90);
   if (extraTimeDue(state, entry, state.live!)) drawExtraTime(state, entry, state.live!);
