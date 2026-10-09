@@ -168,8 +168,8 @@ console.log('3) His last ten counts games he could have played, and only those')
   const a = s.squad.find(p => p.id === starter.id);
   const b = s.squad.find(p => p.id === bench.id);
   const c = s.squad.find(p => p.id === crocked.id);
-  console.log(`   ${a.name} (played): window ${a.lastTen.length} long, ${a.lastTen.reduce((x, y) => x + y, 0)} involved, share ${playingShare(a)}`);
-  console.log(`   ${b.name} (benched): window ${b.lastTen.length} long, ${b.lastTen.reduce((x, y) => x + y, 0)} involved, share ${playingShare(b)}`);
+  console.log(`   ${a.name} (played): window ${a.lastTen.length} long, ${a.lastTen.reduce((x, y) => x + y, 0).toFixed(2)} involved, share ${playingShare(a).toFixed(3)}`);
+  console.log(`   ${b.name} (benched): window ${b.lastTen.length} long, ${b.lastTen.reduce((x, y) => x + y, 0).toFixed(2)} involved, share ${playingShare(b).toFixed(3)}`);
   console.log(`   ${c.name} (injured throughout): window ${c.lastTen.length} long, gap ${promiseGap(c).toFixed(2)}`);
   if (a.lastTen.length > PROMISE_WINDOW) fail(`the window grew past ${PROMISE_WINDOW}`);
   if (playingShare(a) < 0.9) fail('a man who started every match does not read as a starter');
@@ -236,6 +236,11 @@ console.log('3b) A benched man reads as benched, measured over a run of them');
    * near 1 and the healthy one near 0.32. The new ceilings sit above everything
    * ever measured and still leave the real failure a long way outside.
    */
+  /* Round 1146: re-read after the window stopped counting a cameo as a game (section 3c). With the quick sim's
+     coach using his bench in nine matches in ten and a cameo worth a whole game, this read 0.576 and 48% and went
+     red, rightly. With a man who came on holding the share of the match he played, three runs on a GitHub runner
+     (2026-10-09) read mean 0.311, 0.264 and 0.252 with 8%, 0% and 4% over a half: where it stood before the round
+     (seven earlier runs: 0.280 to 0.348, 4% to 16%). The ceilings are unchanged. */
   const MEAN_CEILING = 0.55;   // measured max 0.364 over 20 batches; a benched man playing like a starter reads 1.0
   const OVER_HALF_CEILING = 0.50; // measured max 20% over 20 batches; the broken shape is ~100%
   const shares = [];
