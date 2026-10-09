@@ -4136,16 +4136,26 @@ function generateSeasonStats(state: CareerState, clubs: ClubData[]): SeasonRecor
      injury season goes on the record without its title (playPendingProSeason
      drops it, the table was never finished for him), so its derbies are drawn
      without the title nudge too and the row never contradicts itself. */
+  /* Release AQ: a 2026 on world season holds its league games to his
+     appearances and to the division's own calendar (34 in an 18 club
+     division): recordLeagueWorldSeason writes the row that way. It did so
+     after the derbies had been drawn from the unheld number, so a row could
+     carry a derby he played in a league game its own count has no room for
+     (14 of 2854 derby seasons, replayed from their rows, drew another
+     answer). The same hold comes first now, so the row and its derbies are
+     one season. Outside a saved world nothing changes. */
+  const worldField = state.leagueWorld?.year === seasonYear ? state.leagueWorld.leagues[state.currentLeague] : undefined;
+  const leagueGames = worldField ? Math.min(leagueApps, apps, 2 * (worldField.length - 1)) : leagueApps;
   const derbies = resolveSeasonDerbies({
     club: state.currentClub, league: state.currentLeague, year: seasonYear, clubs, elite: ELITE_CLUBS,
-    position, apps, leagueApps, goals, leagueTitle: winLeague && !(injured && injurySevere),
+    position, apps, leagueApps: leagueGames, goals, leagueTitle: winLeague && !(injured && injurySevere),
     seedKey: `${state.playerName}|${state.currentClub}|${seasonYear}|${apps}|${goals}|${assists}|${rating}|derby`,
   });
 
   return {
     year: lastYear + 1, age,
     club: state.currentClub, clubCountry: state.currentClubCountry, clubTier: currentClubTier,
-    apps, leagueApps, goals, assists, cleanSheets, yellowCards, redCards, rating,
+    apps, leagueApps: leagueGames, goals, assists, cleanSheets, yellowCards, redCards, rating,
     ...(served > 0 ? { suspensionMatches: served } : {}),
     ovr: overall,
     injury: injured ? injuryName : null, injuryWeeks: injured ? injuryWeeks : 0, injurySevere: injured ? injurySevere : false,
