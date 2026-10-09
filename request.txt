@@ -1,0 +1,33 @@
+# AP2 runner lens: the controls the merged tree's proof did not run, and the other lane's save driver
+#!serve
+#!playwright
+play-static-must-exit-1: MSYS_NO_PATHCONV=1 ENGINES=chromium PORT=4421 US_SEASON_PLAY_CONTROL=static node scripts/playUsSeasonCentre.mjs
+play-write-must-exit-1: MSYS_NO_PATHCONV=1 ENGINES=chromium PORT=4422 US_SEASON_PLAY_CONTROL=write node scripts/playUsSeasonCentre.mjs
+play-count-must-exit-1: MSYS_NO_PATHCONV=1 ENGINES=chromium PORT=4423 US_SEASON_PLAY_CONTROL=count node scripts/playUsSeasonCentre.mjs
+play-cover-must-exit-1: MSYS_NO_PATHCONV=1 ENGINES=chromium PORT=4424 US_SEASON_PLAY_CONTROL=cover node scripts/playUsSeasonCentre.mjs
+play-playfirst-must-exit-1: MSYS_NO_PATHCONV=1 ENGINES=chromium PORT=4425 US_SEASON_PLAY_CONTROL=playfirst node scripts/playUsSeasonCentre.mjs
+usc-sum-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=sum node scripts/simUsSeasonCentre.mjs
+usc-kick-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=kick node scripts/simUsSeasonCentre.mjs
+usc-nflstage-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=nflstage node scripts/simUsSeasonCentre.mjs
+usc-days-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=days node scripts/simUsSeasonCentre.mjs
+usc-poscore-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=poscore node scripts/simUsSeasonCentre.mjs
+usc-lumpy-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=lumpy node scripts/simUsSeasonCentre.mjs
+usc-flat-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=flat node scripts/simUsSeasonCentre.mjs
+usc-minutes-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=minutes node scripts/simUsSeasonCentre.mjs
+usc-order-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=order node scripts/simUsSeasonCentre.mjs
+usc-points-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=points node scripts/simUsSeasonCentre.mjs
+usc-forty-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=forty node scripts/simUsSeasonCentre.mjs
+usc-level-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=level node scripts/simUsSeasonCentre.mjs
+usc-oddtd-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=oddtd node scripts/simUsSeasonCentre.mjs
+usc-bigkick-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=bigkick node scripts/simUsSeasonCentre.mjs
+usc-stream-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=stream node scripts/simUsSeasonCentre.mjs
+usc-record-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=record node scripts/simUsSeasonCentre.mjs
+usc-conf-must-exit-1: SEEDSET=0 US_SEASON_CONTROL=conf node scripts/simUsSeasonCentre.mjs
+usc-tdform-must-exit-1: US_SEASON_CONTROL=tdform node scripts/simUsSeasonCentre.mjs
+trust-seconddisclaimer-must-exit-1: TRUST_CONTROL=seconddisclaimer node scripts/simTrustCopy.mjs
+trust-typedcount-must-exit-1: TRUST_CONTROL=typedcount node scripts/simTrustCopy.mjs
+trust-barecount-must-exit-1: TRUST_CONTROL=barecount node scripts/simTrustCopy.mjs
+trust-exactcount-must-exit-1: TRUST_CONTROL=exactcount node scripts/simTrustCopy.mjs
+trust-staleliteral-must-exit-1: TRUST_CONTROL=staleliteral node scripts/simTrustCopy.mjs
+trust: node scripts/simTrustCopy.mjs
+qa1084: mkdir -p us-career-save-recovery-artifacts/font-cache && node scripts/qa/usCareerSaveRecovery1084.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/usCareerSaveRecovery1084.mjs
