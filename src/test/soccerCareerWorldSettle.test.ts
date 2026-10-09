@@ -83,6 +83,13 @@ describe('Soccer Career: every season of the league world is settled and shown a
         const own = zone!.clubs.some(c => canonClub(c) === canonClub(row.club));
         expect(!!w.movement, `${tag}: his own move is written exactly when his club is one of them`).toBe(own);
         if (own) { moved += 1; if (row.injurySevere) severeMoved += 1; }
+        /* a played season moves his club by the place the season saved, and by nothing else */
+        if (!row.injurySevere) {
+          const size = w.members.length;
+          const due = zone!.side === 'bottom' ? row.leagueFinish! > size - zone!.count : row.leagueFinish! <= zone!.count;
+          expect(own, `${tag}: finished ${row.leagueFinish} of ${size}`).toBe(due);
+          expect(w.movement?.kind ?? null).toBe(due ? (zone!.side === 'bottom' ? 'relegated' : 'promoted') : null);
+        }
         const next = played[i + 1];
         const nextWorld = next ? readLeagueWorldSeason(next) : null;
         if (!next || !nextWorld || next.year !== row.year + 1) continue;
