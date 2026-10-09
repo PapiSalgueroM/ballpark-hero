@@ -22,6 +22,9 @@ import {
   CURVE_VERSION, YOUTH_FROM, YOUTH_MAX, VETERAN_CAP, VETERAN_POINTS, ENGINE_POSITIONS,
   agePoints, rateFrom, ratingOf,
 } from '../../scripts/lib/cmValueCurve.mjs';
+import {
+  AGES_AS_OF, HAND_WRITTEN_FROM_ID, ERA_RATING_AGE_SHIFT, ageOn, buildBirths, tableAugustAge, augustAge2026,
+} from '../../scripts/lib/cmAges.mjs';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const fixture: any = JSON.parse(
@@ -157,5 +160,119 @@ describe('Club Manager rating: the value rating plus points for age (Round 1102)
     expect(() => rateFrom(80, 13, 'SW')).toThrow(/valueRating 80, age 13, pos SW/);
     expect(() => ratingOf(5_000_000, 26)).toThrow(/position/);
     expect(() => ratingOf(5_000_000, undefined, 'CB')).toThrow(/age/);
+  });
+});
+
+/* Ages for 1 August 2026 (scripts/lib/cmAges.mjs): the rule's four cases, its throws, and the
+   namesake guard, on literal rows. */
+describe('Club Manager ages for August 2026 (Round 1102)', () => {
+  const births = buildBirths({
+    ledgerRows: [
+      { name: 'Sepp van den Berg', club: 'Brentford', born: '2001-12-20' },
+      { name: 'Virgil van Dijk', club: 'Liverpool', born: '1991-07-08' },
+      { name: 'Moved By Overlay', club: 'Chelsea', born: '2000-03-03' },
+    ],
+    round669: {
+      write: [
+        { name: 'Allan', club: 'SC Corinthians', fotmob: { born: '1997-03-03' } },
+        { name: 'Table Club Man', club: 'Old Table FC', fotmob: { born: '1999-05-05' } },
+        { name: 'Unmodelled Man', club: 'A Club The Game Lacks', fotmob: { born: '1990-01-01' } },
+      ],
+      existingChecked: [{ name: 'Leander Dendoncker', stored: { club: 'HNK Hajduk Split' }, fotmob: { born: '1995-04-15' } }],
+      corrections: [{ name: 'Leander Dendoncker', field: 'age', fotmob: { born: '1995-04-15' } }],
+    },
+    missing: [{ name: 'Serge Gnabry', to: 'Bayern Munich', db: 'Bayern Munich', born: '1995-07-14' }],
+    dbToEngine: { 'SC Corinthians': 'Corinthians', 'Old Table FC': 'Old Table', 'HNK Hajduk Split': 'Hajduk Split', 'Bayern Munich': 'Bayern Munich' },
+  });
+
+  it('counts whole years to a day', () => {
+    expect(ageOn('1991-07-08', '2026-08-01')).toBe(35);
+    expect(ageOn('2001-12-20', '2026-08-01')).toBe(24);
+    expect(ageOn('2001-08-01', '2026-08-01')).toBe(25);
+    expect(ageOn('2001-08-02', '2026-08-01')).toBe(24);
+    expect(ageOn('2001-01-01', '2026-01-01')).toBe(25);
+    expect(() => ageOn('20 Dec 2001', '2026-08-01')).toThrow(/YYYY-MM-DD/);
+    expect(() => ageOn('2001-13-01', '2026-08-01')).toThrow(/calendar/);
+    expect(AGES_AS_OF).toBe('2026-08-01');
+    expect(HAND_WRITTEN_FROM_ID).toBe(170000);
+    expect(ERA_RATING_AGE_SHIFT).toBe(1);
+  });
+
+  it('case 1, a birth date on file: the exact age, whichever way the table rule would err', () => {
+    /* an autumn birthday: the table rule would say 25 */
+    expect(augustAge2026({ name: 'Sepp van den Berg', club: 'Brentford', tableClub: 'Brentford', age: 24, year: 2026, id: 23347 }, births))
+      .toEqual({ age: 24, basis: 'born', born: '2001-12-20' });
+    expect(augustAge2026({ name: 'Virgil van Dijk', club: 'Liverpool', tableClub: 'Liverpool', age: 34, year: 2026, id: 23441 }, births))
+      .toEqual({ age: 35, basis: 'born', born: '1991-07-08' });
+    /* the window ledger's date, found by the club he joined */
+    expect(augustAge2026({ name: 'Serge Gnabry', club: 'Bayern Munich', tableClub: 'Bayern Munich', age: 30, year: 2026, id: 177000 }, births))
+      .toEqual({ age: 31, basis: 'born', born: '1995-07-14' });
+  });
+
+  it('case 2, a bulk row: plus one for a 2026 row and plus two for a 2025 row', () => {
+    expect(augustAge2026({ name: 'Nobody Ledgered', club: 'Leeds United', tableClub: 'Leeds United', age: 27, year: 2026, id: 5000 }, births)).toEqual({ age: 28, basis: 'moved' });
+    expect(augustAge2026({ name: 'Nobody Ledgered', club: 'Leeds United', tableClub: 'Leeds United', age: 27, year: 2025, id: 166766 }, births)).toEqual({ age: 29, basis: 'moved' });
+  });
+
+  it('case 3, a hand written row: the age as written', () => {
+    expect(augustAge2026({ name: 'Written Man', club: 'Inter Miami', tableClub: 'Inter Miami', age: 39, year: 2026, id: 176416 }, births)).toEqual({ age: 39, basis: 'written' });
+  });
+
+  it('case 4, no table row: the age as typed, marked unknown', () => {
+    expect(augustAge2026({ name: 'Overlay Add', club: 'Hull City', age: 18 }, births)).toEqual({ age: 18, basis: 'unknown' });
+    expect(augustAge2026({ name: 'Overlay Add', club: 'Hull City', age: 18, id: null }, births)).toEqual({ age: 18, basis: 'unknown' });
+  });
+
+  it('Allan twice: the Corinthians man gets his date, the Palmeiras namesake keeps the table rule', () => {
+    expect(augustAge2026({ name: 'Allan', club: 'Corinthians', tableClub: 'Corinthians', age: 28, year: 2026, id: 177100 }, births))
+      .toEqual({ age: 29, basis: 'born', born: '1997-03-03' });
+    const other = augustAge2026({ name: 'Allan', club: 'Palmeiras', tableClub: 'Palmeiras', age: 20, year: 2025, id: 120000 }, births);
+    expect(other.age).toBe(22);
+    expect(other.basis).toBe('moved');
+    expect(other.note).toMatch(/Allan at Corinthians, not at Palmeiras/);
+  });
+
+  it('a moved man is found by his table club, and by his baked club', () => {
+    /* the Round 669 ledger knows him at his table club; the overlay baked him somewhere else */
+    expect(augustAge2026({ name: 'Table Club Man', club: 'New Club', tableClub: 'Old Table', age: 26, year: 2026, id: 177200 }, births))
+      .toEqual({ age: 27, basis: 'born', born: '1999-05-05' });
+    /* the birth date ledger knows him at the club he is baked at; his table row is elsewhere */
+    expect(augustAge2026({ name: 'Moved By Overlay', club: 'Chelsea', tableClub: 'Aston Villa', age: 25, year: 2026, id: 4000 }, births))
+      .toEqual({ age: 26, basis: 'born', born: '2000-03-03' });
+    /* a date tied to a club the game does not model matches nobody */
+    const loose = augustAge2026({ name: 'Unmodelled Man', club: 'Everton', tableClub: 'Everton', age: 35, year: 2026, id: 300 }, births);
+    expect(loose.basis).toBe('moved');
+    expect(loose.note).toMatch(/a club the game does not model/);
+  });
+
+  it('throws on a club matched date more than two years from the table, naming both ages', () => {
+    expect(() => augustAge2026({ name: 'Allan', club: 'Corinthians', tableClub: 'Corinthians', age: 20, year: 2025, id: 120000 }, births))
+      .toThrow(/Allan at Corinthians is 22 by his table row .* and 29 by the birth date 1997-03-03/);
+  });
+
+  it('throws on a row the rule was never measured on', () => {
+    expect(() => augustAge2026({ name: 'Gap Row', club: 'X', age: 25, year: 2026, id: 167000 }, births)).toThrow(/inside the gap/);
+    expect(() => augustAge2026({ name: 'Gap Row', club: 'X', age: 25, year: 2026, id: 176415 }, births)).toThrow(/inside the gap/);
+    expect(() => augustAge2026({ name: 'Old Year', club: 'X', age: 25, year: 2024, id: 900 }, births)).toThrow(/bulk row of year 2024/);
+    expect(() => augustAge2026({ name: 'Hand 2025', club: 'X', age: 25, year: 2025, id: 177500 }, births)).toThrow(/hand written row of year 2025/);
+    expect(() => augustAge2026({ name: 'No Age', club: 'X', age: undefined, year: 2026, id: 900 }, births)).toThrow(/whole number age/);
+    expect(tableAugustAge({ name: 'Edge', age: 25, year: 2026, id: 166999 })).toEqual({ age: 26, basis: 'moved' });
+    expect(tableAugustAge({ name: 'Edge', age: 25, year: 2026, id: 176416 })).toEqual({ age: 25, basis: 'written' });
+  });
+
+  it('two ledgers that disagree about one man are fatal, and a date with no club must have a twin', () => {
+    expect(() => buildBirths({
+      ledgerRows: [{ name: 'Serge Gnabry', club: 'Bayern Munich', born: '1995-07-15' }],
+      missing: [{ name: 'Serge Gnabry', to: 'Bayern Munich', db: 'Bayern Munich', born: '1995-07-14' }],
+    })).toThrow(/two birth dates for Serge Gnabry/);
+    expect(() => buildBirths({ round669: { corrections: [{ name: 'Loose Man', fotmob: { born: '1990-02-02' } }] } })).toThrow(/no club/);
+    expect(() => buildBirths({ ledgerRows: [{ name: 'Bad Date', club: 'X', born: '14.07.1995' }] })).toThrow(/YYYY-MM-DD/);
+    /* the same man on two ledgers with the same date is fine, and stays one answer */
+    const both = buildBirths({
+      ledgerRows: [{ name: 'Serge Gnabry', club: 'Bayern Munich', born: '1995-07-14' }],
+      missing: [{ name: 'Serge Gnabry', to: 'Bayern Munich', db: 'Bayern Munich', born: '1995-07-14' }],
+    });
+    expect(augustAge2026({ name: 'Serge Gnabry', club: 'Bayern Munich', age: 30, year: 2026, id: 177000 }, both).age).toBe(31);
+    expect(births.get('Leander Dendoncker')?.length).toBe(1);
   });
 });
