@@ -1,0 +1,7 @@
+simCareerLeagueFinish-notitle exit=1 17s | simCareerLeagueFinish: control notitle turned section 1, 4 red and nothing else. The check works.
+simCareerLeagueFinish-eliteblind exit=1 17s | simCareerLeagueFinish: control eliteblind turned section 3, 5 red and nothing else. The check works.
+simCareerLeagueFinish exit=0 17s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4830 in a verified league; finish and title agree, the ladder holds, main's stream is untouched and the elite boo
+simCareerLeagueFinish-stream exit=1 20s | simCareerLeagueFinish: control stream turned section 4 red and nothing else. The check works.
+simNoRivalNames exit=0 22s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 43s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 59s | 

@@ -1,0 +1,18 @@
+pool: 756 careers, 6048 playing seasons, 4830 in a league with a verified size, 891 titles
+1) finish is 1 exactly when leagueTitle is true
+   891 title seasons, 891 of them without a 1st; 0 seasons 1st without the title
+  FAIL: 891 seasons break the rule
+2) never above the league size, never below 1, and a verified league always carries both
+   over 0, under 0, verified without a finish 0, wrong size 0, a claim in an unverified league 0; 182 seasons cut short by a severe injury carry none, by design
+3) the tier ladder of mean finish, as a share of the table, every step
+   elite: 0.172 over 420, tier 1: 0.260 over 430, tier 2: 0.466 over 2106, tier 3: 0.682 over 1676, tier 4: 0.771 over 245
+4) a current era career is byte identical to main once the two new fields are out
+   12 of 16 careers match the main digest; 156 of their 160 playing seasons carry a finish
+  FAIL: 4 careers moved: the main Math.random stream or something else in the state changed
+5) the elite boost reads the era: forced first seasons over many seeds
+   Man City, first pro season 1992: title rate 3.8% over 240 seasons, expected the tier rate
+   Man City, first pro season 2022: title rate 67.9% over 240 seasons, expected the elite rate
+   Real Madrid, first pro season 1992: title rate 67.1% over 240 seasons, expected the elite rate
+   PSG, first pro season 2002: title rate 6.7% over 240 seasons, expected the tier rate
+
+simCareerLeagueFinish: control notitle turned section 1, 4 red and nothing else. The check works.
