@@ -1,0 +1,26 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/safeStorage.test.ts src/test/storageNoticeFollows.test.tsx src/test/storageBlockedBoot.test.tsx src/test/cookieConsentStorage.test.tsx src/test/freshBuildBlockedStorage.test.ts src/test/freshBuildOptionalChunk.test.ts src/test/toastClearsCookieBanner.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/usCareerSaveRetry.test.tsx src/test/usSeasonCentre.test.tsx src/test/usBoardFixture.test.tsx src/test/supabaseClientBlockedStorage.test.ts --testTimeout=300000 --hookTimeout=120000
+ssw: node scripts/simStorageWrites.mjs
+ssw-unguard: SIM_STORAGE_WRITES_CONTROL=unguard node scripts/simStorageWrites.mjs
+ssw-order: SIM_STORAGE_WRITES_CONTROL=order node scripts/simStorageWrites.mjs
+ssw-client: SIM_STORAGE_WRITES_CONTROL=client node scripts/simStorageWrites.mjs
+ssw-caller: SIM_STORAGE_WRITES_CONTROL=caller node scripts/simStorageWrites.mjs
+ssw-nocatch: SIM_STORAGE_WRITES_CONTROL=nocatch node scripts/simStorageWrites.mjs
+ssw-probe: SIM_STORAGE_WRITES_CONTROL=probe node scripts/simStorageWrites.mjs
+ssw-recheck: SIM_STORAGE_WRITES_CONTROL=recheck node scripts/simStorageWrites.mjs
+ssw-once: SIM_STORAGE_WRITES_CONTROL=once node scripts/simStorageWrites.mjs
+stale: node scripts/simStaleChunk.mjs
+stale-nosave: SIM_STALE_CHUNK_CONTROL=nosave node scripts/simStaleChunk.mjs
+stale-noprerender: SIM_STALE_CHUNK_CONTROL=noprerender node scripts/simStaleChunk.mjs
+stale-nooffline: SIM_STALE_CHUNK_CONTROL=nooffline node scripts/simStaleChunk.mjs
+stale-noguard: SIM_STALE_CHUNK_CONTROL=noguard node scripts/simStaleChunk.mjs
+stale-nolistener: SIM_STALE_CHUNK_CONTROL=nolistener node scripts/simStaleChunk.mjs
+usSaveRetry: node scripts/simUsCareerSaveRetry.mjs
+usSeasonCentre: node scripts/simUsSeasonCentre.mjs
+usBoardParity: node scripts/simUsBoardParity.mjs
+usCareerWeight: node scripts/simUsCareerWeight.mjs
+noRivalNames: node scripts/simNoRivalNames.mjs
+harnessAnchors: node scripts/simHarnessAnchors.mjs
+noDoubleRecord: node scripts/simNoDoubleRecord.mjs
+completionOnce: node scripts/simCompletionOnce.mjs
+accessibility: node scripts/simAccessibility.mjs
