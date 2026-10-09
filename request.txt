@@ -1,0 +1,10 @@
+# Release AP proof, part 3b (served build): the other browser walks and the page weights
+#!serve
+#!playwright
+playSoccerCareer: ENGINES=chromium node scripts/playSoccerCareer.mjs
+playSeasonCentre: PORT=4411 ENGINES=chromium node scripts/playSeasonCentre.mjs
+playCareerSquad: ENGINES=chromium REQUIRE_PAGE=1 PORT=4810 SHOTS=/tmp/shots-plain node scripts/playCareerSquad.mjs
+playLiveMatchFit: node scripts/playLiveMatchFit.mjs
+sweepWeight: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs
+playSeasonMoments: PORT=4412 ENGINES=chromium node scripts/playSeasonMoments.mjs
+playSeasonCentreMotion: ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
