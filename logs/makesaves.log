@@ -1,0 +1,15 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/zzMakeSaves.test.ts[2m > [22m[2mprobe: saves made by this tree[2m > [22m[2mwrites them
+[22m[39m[make saves] ap: 35 saves, phases: newspaper, season_summary, ballon_dor, rivalry_event, social_media_action, random_events, transfer_window, playing, world_cup, moral_dilemma, retirement_suggestion, rehab_choice
+[make saves] ap: 5101/newspaper/2025/6 5101/season_summary/2025/6 5101/ballon_dor/2025/6 5101/rivalry_event/2025/6 5101/social_media_action/2025/6 5101/random_events/2025/6 5101/transfer_window/2025/6 5101/playing/2025/6 5101/world_cup/2026/7 5101/moral_dilemma/2026/7 5101/playing/2027/8 5101/playing/2031/12 5101/retirement_suggestion/2039/20 5101/retirement_ceremony/2047/28 5102/playing/2025/6 5102/playing/2027/8 5102/playing/2031/12 5102/rehab_choice/2039/20 5102/retirement_ceremony/2047/28 5103/playing/2025/6 5103/playing/2027/8 5103/playing/2031/12 5103/retirement_ceremony/2048/29 5104/playing/2025/6 5104/playing/2027/8 5104/playing/2031/12 5104/retirement_ceremony/2048/29 5105/playing/2025/6 5105/playing/2027/8 5105/playing/2031/12 5105/retirement_ceremony/2046/27 5106/playing/2025/6 5106/playing/2027/8 5106/playing/2031/12 5106/retirement_ceremony/2045/26
+
+ [32m✓[39m src/test/zzMakeSaves.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 593[2mms[22m[39m
+   [33m[2m✓[22m[39m probe: saves made by this tree[2m > [22mwrites them [33m 592[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m   Start at [22m 12:31:04
+[2m   Duration [22m 1.94s[2m (transform 685ms, setup 31ms, collect 877ms, tests 593ms, environment 184ms, prepare 56ms)[22m
+
