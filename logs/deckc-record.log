@@ -1,0 +1,6 @@
+nfl: 1920 saves, 36 deck C cards dealt, 336 of 1920 draws were deck C, draw hash 26690da98dd544db
+nba: 1200 saves, 36 deck C cards dealt, 111 of 1200 draws were deck C, draw hash 93d32717e1308150
+mlb: 2640 saves, 36 deck C cards dealt, 226 of 2640 draws were deck C, draw hash f55b6c64ab857464
+nhl: 1200 saves, 36 deck C cards dealt, 109 of 1200 draws were deck C, draw hash 4cc8849b9ffe5e3c
+recorded nfl, nba, mlb, nhl into scripts/data/usCareerDeckCDigest.json
+simUsCareerDeckC: all checks passed
