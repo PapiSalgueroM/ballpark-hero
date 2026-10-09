@@ -1,0 +1,35 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-marks: node_modules/.bin/vitest run src/test/managerScorerMarks.test.tsx src/test/managerPenaltyMarkers.test.tsx src/test/managerQuickSimLegs.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-live: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx --testTimeout=300000 --hookTimeout=120000
+legs: node scripts/simCmQuickLegs.mjs
+legs-unbooked: CM_QUICK_LEGS_CONTROL=unbooked node scripts/simCmQuickLegs.mjs
+legs-stale: CM_QUICK_LEGS_CONTROL=stale node scripts/simCmQuickLegs.mjs
+legs-anywhere: CM_QUICK_LEGS_CONTROL=anywhere node scripts/simCmQuickLegs.mjs
+legs-lastman: CM_QUICK_LEGS_CONTROL=lastman node scripts/simCmQuickLegs.mjs
+legs-noclock: CM_QUICK_LEGS_CONTROL=noclock node scripts/simCmQuickLegs.mjs
+legs-off: CM_QUICK_LEGS_CONTROL=off node scripts/simCmQuickLegs.mjs
+legs-anyone: CM_QUICK_LEGS_CONTROL=anyone node scripts/simCmQuickLegs.mjs
+legs-nokeep: CM_QUICK_LEGS_CONTROL=nokeep node scripts/simCmQuickLegs.mjs
+legs-ambient: CM_QUICK_LEGS_CONTROL=ambient node scripts/simCmQuickLegs.mjs
+og: node scripts/simCmOwnGoals.mjs
+og-evens: CM_OWN_GOAL_CONTROL=evens node scripts/simCmOwnGoals.mjs
+og-ungone: CM_OWN_GOAL_CONTROL=ungone node scripts/simCmOwnGoals.mjs
+og-mystriker: CM_OWN_GOAL_CONTROL=mystriker node scripts/simCmOwnGoals.mjs
+og-striker: CM_OWN_GOAL_CONTROL=striker node scripts/simCmOwnGoals.mjs
+og-off: CM_OWN_GOAL_CONTROL=off node scripts/simCmOwnGoals.mjs
+og-double: CM_OWN_GOAL_CONTROL=double node scripts/simCmOwnGoals.mjs
+og-attacker: CM_OWN_GOAL_CONTROL=attacker node scripts/simCmOwnGoals.mjs
+og-penalty: CM_OWN_GOAL_CONTROL=penalty node scripts/simCmOwnGoals.mjs
+og-digest: CM_OWN_GOAL_CONTROL=digest node scripts/simCmOwnGoals.mjs
+og-ambient: CM_OWN_GOAL_CONTROL=ambient node scripts/simCmOwnGoals.mjs
+live-s0: node scripts/simLiveMatch.mjs
+live-s1: SIM_SEED=1 node scripts/simLiveMatch.mjs
+live-s2: SIM_SEED=2 node scripts/simLiveMatch.mjs
+live-s3: SIM_SEED=3 node scripts/simLiveMatch.mjs
+live-s4: SIM_SEED=4 node scripts/simLiveMatch.mjs
+live-s5: SIM_SEED=5 node scripts/simLiveMatch.mjs
+live-s6: SIM_SEED=6 node scripts/simLiveMatch.mjs
+live-s7: SIM_SEED=7 node scripts/simLiveMatch.mjs
+live-s8: SIM_SEED=8 node scripts/simLiveMatch.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
