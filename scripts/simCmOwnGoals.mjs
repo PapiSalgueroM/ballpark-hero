@@ -282,13 +282,18 @@ function probeGone(cm, paused, seed) {
   Math.random = seeded(seed);
   const done = cm.playNextEntry(st, { skipHalftime: true });
   if (done.kind !== 'match') return;
+  /* Only a man the finished match still has down as sent off in the 40th minute. When a man of mine was hurt
+     before that, the quick sim's coach replaces him at his minute and the rest of the first half is drawn again
+     from there, the built red with it (3 of the first 161 matches, and the man was then rightly on the pitch). */
+  const off = sentOff.filter(name => done.report.detail.cards.some(c => c.kind === 'red' && c.name === name && c.minute === 40));
+  if (!off.length) return;
   dense.matches += 1;
-  dense.sentOff += sentOff.length;
+  dense.sentOff += off.length;
   for (const line of done.report.oppScorers) {
     if (!line.og || line.minute <= 45) continue;
     dense.og += 1;
     tick('gone');
-    if (sentOff.includes(line.name)) fail('gone', `${line.name} was sent off in the 40th minute and is named for an own goal at ${line.minute}'`);
+    if (off.includes(line.name)) fail('gone', `${line.name} was sent off in the 40th minute and is named for an own goal at ${line.minute}'`);
   }
 }
 

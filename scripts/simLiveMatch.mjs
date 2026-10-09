@@ -910,7 +910,8 @@ begin(8, 'A paused save is picked back up, never kicked off a second time');
     else if (again.live !== again.state.live) fail(`${ctx}: the result's live is not the save's live`);
     const fin = withSeed(f.seed + 601, () => noCoach.playNextEntry(f.ht, { skipHalftime: true }));
     if (fin.kind !== 'match' || !fin.report?.detail) { fail(`${ctx}: the quick sim of a paused save came back "${fin.kind}"`); continue; }
-    const lines = xs => xs.map(l => `${l.name}@${l.minute}`);
+    /* Round 1146: as in section 5, an own goal for me is committed under the man it was drawn for with the man who put it in beside him (og.n), and reported under the man who put it in. SIM_SEED=2 holds one. */
+    const lines = xs => xs.map(l => `${(l.og && l.og.n) || l.name}@${l.minute}`);
     const gotMy = lines(fin.report.myScorers.filter(s => s.minute <= 45));
     const gotOpp = lines(fin.report.oppScorers.filter(s => s.minute <= 45));
     if (J(gotMy) !== J(lines(f.ht.live.h1My))) fail(`${ctx}: the report's first half [${gotMy}] is not the paused one [${lines(f.ht.live.h1My)}]`);
