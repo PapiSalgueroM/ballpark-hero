@@ -1,0 +1,97 @@
+playLineupValidator: build dist, the wait is 15000 ms
+
+S1 at 390: the validator says its day allowance is spent
+  PASS  the pitch still reads 0 of 11 (0)
+  PASS  exactly one request went to the validator (1)
+  PASS  the search box is still there and enabled (there true, enabled true)
+  PASS  the search box is inside the viewport
+  PASS  the page names the allowance
+  PASS  the page says the pick was not counted
+  PASS  the page never says the lineup is saved
+  PASS  an answer that was never judged is not called a refusal
+  PASS  the next pick counted: 1 of 11 (1)
+  PASS  the second pick was asked again, the wall is gone (2 requests)
+
+S2: the validator answers HTTP 500 at 390
+  PASS  the page says the answer could not be verified and invites a retry
+  PASS  exactly one request went to the validator (1)
+  PASS  nothing was filled (0 of 11)
+  PASS  the search box is still there and enabled (there true, enabled true)
+  PASS  an answer that was never judged is not called a refusal
+  PASS  the page never says the lineup is saved
+
+S3: the validator answers a 200 that is not JSON at 390
+  PASS  the page says the answer could not be verified and invites a retry
+  PASS  exactly one request went to the validator (1)
+  PASS  nothing was filled (0 of 11)
+  PASS  the search box is still there and enabled (there true, enabled true)
+  PASS  an answer that was never judged is not called a refusal
+  PASS  the page never says the lineup is saved
+
+S4: the validator answers {"valid":"true"}, a string at 390
+  PASS  the page says the answer could not be verified and invites a retry
+  PASS  exactly one request went to the validator (1)
+  PASS  nothing was filled (0 of 11)
+  PASS  the search box is still there and enabled (there true, enabled true)
+  PASS  an answer that was never judged is not called a refusal
+  PASS  the page never says the lineup is saved
+
+S5 at 390: the validator never answers (this takes the real 15000 ms wait)
+  PASS  while the check runs the box is there and busy (there true, enabled false)
+  PASS  the page does not give up before the wait is over
+  PASS  after the wait the page says the check took too long
+  PASS  exactly one request went to the validator (1)
+  PASS  the page itself gave up on the request (1 seen as failed)
+  PASS  nothing was filled (0 of 11)
+  PASS  the search box is live again (there true, enabled true)
+
+S6 at 390: a club pick our own row settles
+  PASS  a club slot was dealt within 12 rerolls (1 used)
+  PASS  the slot is filled: 1 of 11 (1), row at West Ham United
+  PASS  zero requests went to the validator (0)
+  PASS  the pitch prints the name as the row stores it, "Qzxpick van Fixture" (1)
+
+S1 at 1280: the validator says its day allowance is spent
+  PASS  the pitch still reads 0 of 11 (0)
+  PASS  exactly one request went to the validator (1)
+  PASS  the search box is still there and enabled (there true, enabled true)
+  PASS  the search box is inside the viewport
+  PASS  the page names the allowance
+  PASS  the page says the pick was not counted
+  PASS  the page never says the lineup is saved
+  PASS  an answer that was never judged is not called a refusal
+  PASS  the next pick counted: 1 of 11 (1)
+  PASS  the second pick was asked again, the wall is gone (2 requests)
+
+S2: the validator answers HTTP 500 at 1280
+  PASS  the page says the answer could not be verified and invites a retry
+  PASS  exactly one request went to the validator (1)
+  PASS  nothing was filled (0 of 11)
+  PASS  the search box is still there and enabled (there true, enabled true)
+  PASS  an answer that was never judged is not called a refusal
+  PASS  the page never says the lineup is saved
+
+S3: the validator answers a 200 that is not JSON at 1280
+  PASS  the page says the answer could not be verified and invites a retry
+  PASS  exactly one request went to the validator (1)
+  PASS  nothing was filled (0 of 11)
+  PASS  the search box is still there and enabled (there true, enabled true)
+  PASS  an answer that was never judged is not called a refusal
+  PASS  the page never says the lineup is saved
+
+S4: the validator answers {"valid":"true"}, a string at 1280
+  PASS  the page says the answer could not be verified and invites a retry
+  PASS  exactly one request went to the validator (1)
+  PASS  nothing was filled (0 of 11)
+  PASS  the search box is still there and enabled (there true, enabled true)
+  PASS  an answer that was never judged is not called a refusal
+  PASS  the page never says the lineup is saved
+
+S6 at 1280: a club pick our own row settles
+  PASS  a club slot was dealt within 12 rerolls (3 used)
+  PASS  the slot is filled: 1 of 11 (1), row at FC Porto
+  PASS  zero requests went to the validator (0)
+  PASS  the pitch prints the name as the row stores it, "Qzxpick van Fixture" (1)
+
+  PASS  no page error at either width
+playLineupValidator: green at 2 widths (390 and 1280). An allowance answer, an HTTP 500, a body that is not JSON, a string for valid and a validator that never answers each left the pick uncounted with the search box live; the next pick counted; a club pick our own row settles asked nobody.
