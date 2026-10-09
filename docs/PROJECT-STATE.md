@@ -1,3 +1,11 @@
+## CODEX1166: Finance price selection pending proof
+
+The finance screen exposes its selected ticket and concession tiers.
+Both aria-pressed values reuse the existing selected comparisons.
+Pricing callbacks, fan/board reactions and all gameplay bytes are held.
+This is component-only; prior source changes stay separate.
+Source preparation only, remote keyboard/identity/reader proof pending.
+
 ## Release AN LIVE, 2026-10-08 16:57 EDT: the site opens with storage blocked, translated pages stay live, six Codex rounds, five rounds of this lane
 
 Claude lane (session F). main 7ead9eb4, deployment aa7da32f-e499-418f-bd14-ec0201673437, entry index-D7bFwkA9.js (was
