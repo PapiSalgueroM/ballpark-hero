@@ -47,6 +47,13 @@
    a year (0.2M on four slots). Against the recording before it the NFL draw
    changed on 13 of 1,920 saves and lifeC_restructure pays other money (dealt
    480 times before and after). NBA, MLB and NHL are byte equal.
+   Re-recorded on purpose in Round 1103 (the NBA numbers), on 2026-10-09, on
+   its branch merged with Release AP (head 5320efca), on a GitHub runner.
+   Against Release AP's recording the NFL, the MLB and the NHL are byte equal
+   and no NBA card changed. One NBA draw of 1,200 moved, save 748: the round's
+   fix for a trade demand that could land a player on the club he was already
+   on (the same fix Round 1104 made in the NHL) changes which club that save
+   is dealt to.
 
    Section 2, WORDS AGAINST EFFECTS (see its own comment below): the log,
    the button, the gamble's odds, the era's money, the trade's league and
