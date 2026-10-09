@@ -96,6 +96,14 @@
            2015-16 and 0 in 2016-17); and a stat title asks for that season's real minimum of games (70 or
            the total before 2013-14, 56 or its own totals in the 66 game 2011-12 season, 58 of 82 since, 51
            of 72 in 2020-21).
+       B9  the All-Star snub card ("Left off the All Star team", src/lib/nbaCareerLifeB.ts) is never in the
+           summer deck after a season that holds an award. Round 1104 wrote the gate
+           (last.awards.length === 0) when no All-Star selection existed; this round's 'All-Star' in a
+           season's awards is what makes it spare an All-Star, so the two are proven together here: a fleet
+           of its own (SNUB_CAREERS a seed, the board's order, its own stream) builds every summer's deck
+           the way the game does. Exact: 0 decks hold the card after an honoured season. Floors, so the
+           check cannot pass empty: summers where only the gate keeps the card out, the same after an
+           All-Star season, and decks that do hold the card.
    D   One function scores an award for both games: NBA Front Office and NBA My Career import the same file,
        Front Office adds no sum of its own, the two win weights are one number, and cutting the winning term
        out of the shared score (a second bundle) changes BOTH Front Office's ranking and the career's MVPs.
@@ -118,7 +126,11 @@
    (PASS_A_SPREAD below, 2026-10-07). The one pass, which ties MVP to the First Team and a playoff club,
    took back about two fifths of that. A grade moves an award's count and its spread together, so one grade
    an award cannot hold both; holding the spread too would take a second constant with nothing real behind
-   it. The two are fenced at this round's own rate (SPREAD_1103) and the lead rules on them.
+   it. The two are fenced at this round's own rate (SPREAD_1103).
+   THE LEAD'S RULING, 2026-10-09 (session F), so nobody reopens it: ACCEPTED as this round's. Careers with
+   an MVP at 17.59 percent against main's 16.55, and with an All-NBA at 61.66 against 58.83, are what the
+   corrected rules produce (the games threshold and the fuller season line are real world corrections, not
+   tuning), the difference is small, and this harness already fences the round's own rate. No second lever.
 
    NEGATIVE CONTROLS, SIM_NBA_SENSE_CONTROL=<name>. Each swaps one line of SOURCE in memory (a plugin, never a
    file), refuses when its anchor is not there exactly once or the swap changed nothing, and must turn its own
@@ -146,6 +158,7 @@
      titlebar         the rebounding title judged on the assists leaders' bar   B8 red
      fanvoteera       the two eras of the All-Star fan vote swapped    B8 red (may: B4)
      shortseason      the 2011-12 season's own stat title minimum never handed over   B8 red
+     snubhonoured     the snub card's "no award last season" gate taken out    B9 red
      example          the worked example's winning club read as its losing one   F red
      othersport       one NFL All-Pro grade moved by a hundredth       C red (needs SENSE_PROVE_OTHERS=1)
    A control is run at full size where a full run is cheap (about two minutes on a CI runner), or shrunk and
@@ -181,8 +194,19 @@ const norm = s => s.replace(/\r\n/g, '\n');
 /* Section E's tolerances: how far a seed's measured field may sit from the committed row. */
 /* Triple double seasons the elite sweep must still find on every seed (set from five seeds, see the header). */
 const ELITE_TD_FLOOR = 2;
+/* B9's fleet and its floors, a seed of 300 careers. Measured 2026-10-09 on the tree merged with Release AP,
+   seeds 1 to 5: summers where only the award keeps the card out 1137, 1283, 1132, 1106, 1178; the same after
+   an All-Star season 860, 987, 828, 826, 883; decks that hold the card 1984, 1961, 2042, 2055, 2010 of about
+   5,740 summers a seed. Each floor sits near six tenths of its lowest seed. With the gate taken out (control
+   snubhonoured, 300 careers on seed 1) the card sat in 1,026 decks after an honoured season, 766 of them after
+   an All-Star season. */
+const SNUB_CAREERS = Number(process.env.SENSE_SNUB || 300);
+const SNUB_FLOOR = { gateOnly: 700, gateOnlyAllStar: 500, dealt: 1300 };
 /* Careers that win an MVP and an All-NBA at least once, percent, as Round 1103 shipped: its five full size
-   seeds (6,000 careers each), read on the tree of the round's last gate. Main has 16.6 and 58.8. */
+   seeds (6,000 careers each), read on the tree of the round's last gate. Main has 16.6 and 58.8.
+   The lead's ruling, 2026-10-09 (session F): ACCEPTED as this round's. The two shares are what the corrected
+   rules produce (the games threshold and the fuller season line are real world corrections, not tuning), the
+   difference from main is small, and the fence below holds the round's own rate. No second lever. */
 const SPREAD_1103 = { everMvp: [17.18, 17.07, 17.73, 17.7, 17.53], everAllNba: [61.7, 60.98, 62.35, 62.47, 62.2] };
 /* The same two shares in pass A: the new line under the OLD awards block (independent draws on the season
    score, the 62 game gate, no club wins anywhere), its grades already solved so the awards a career were
@@ -276,6 +300,9 @@ const CONTROLS = {
   fanvoteera: { file: 'src/lib/nbaCareerAwards.ts', find: '    const fanShare = x.year >= R.allStarFanShareFrom ? R.allStarFanShare : 1;', put: '    const fanShare = x.year >= R.allStarFanShareFrom ? 1 : R.allStarFanShare;', needs: 'B8', may: 'B4' },
   /* B8: the short 2011-12 season's own stat title minimum never handed over (the share stands in for it). */
   shortseason: { file: 'src/lib/nbaCareerAwards.ts', find: '    const short = x.seasonLength < R.gamesBarOf ? R.statTitleShortBefore[x.year] : undefined;', put: '    const short = undefined;', needs: 'B8' },
+  /* B9: Round 1104's gate on the snub card taken out (an All-Star, or a four time MVP, is told the coaches
+     left him off the team again). */
+  snubhonoured: { file: 'src/lib/nbaCareerLifeB.ts', find: "  if (yrs >= 3 && c.ovr >= 80 && last.awards.length === 0 && flag(c, 'nb_snub') === 0) {", put: "  if (yrs >= 3 && c.ovr >= 80 && flag(c, 'nb_snub') === 0) {", needs: 'B9' },
   /* B4: the First Team gate on the All-Star starters taken out (the League MVP reads "All-Star reserve" again). */
   firstteamreserve: { file: 'src/lib/nbaCareerAwards.ts', find: '    const firstTeam = out.allNbaTeam === 1;', put: '    const firstTeam = false;', needs: 'B4' },
   /* B4: the bench gate on the fan vote taken out (a backup with a following starts the All-Star Game again). */
@@ -726,6 +753,47 @@ function eliteTripleDoubles(seed, n) {
   return hits;
 }
 
+/** B9's fleet: `n` careers on one seed in the board's own order and on a stream of their own (the judged fleet
+ *  above is not touched). After every season the summer deck is built exactly as the game builds it
+ *  (nbaEventDeck, after nbaProgress) and read for the snub card before a card is drawn and answered. */
+const SNUB_CARD = 'nbaB_allStarSnub';
+function snubDecks(seed, n) {
+  const rnd = mulberry32(seed * 15485863 + 11);
+  Math.random = rnd;
+  const out = { summers: 0, dealt: 0, dealtHonoured: 0, gateOnly: 0, gateOnlyAllStar: 0 };
+  for (let i = 0; i < n; i++) {
+    const pos = POS[i % 5];
+    const c = nba.startNbaCareer(`Snub ${i}`, pos, nba.NBA_ARCHETYPES[pos][i % 3], rnd, null, i % 4 === 3 ? 'y2004' : undefined);
+    let tq = nba.nbaRollTeamQuality(null, rnd);
+    nba.nbaAssignRole(c, tq, rnd);
+    let guard = 0; let done = false;
+    while (!done && guard++ < 30) {
+      if ((c.suspendedSeasons ?? 0) > 0) {
+        c.suspendedSeasons -= 1;
+        c.seasons.push({ year: c.year, team: c.team, age: c.age, ovr: c.ovr, games: 0, ppg: 0, rpg: 0, apg: 0, awards: [], teamResult: 'SUSPENDED', salary: 0 });
+      } else {
+        nba.nbaCampBattle(c, tq, rnd);
+        nba.simNbaSeason(c, tq, rnd);
+      }
+      nba.nbaProgress(c, rnd);
+      const last = c.seasons[c.seasons.length - 1];
+      const has = nba.nbaEventDeck(c, rnd).some(e => e.id === SNUB_CARD);
+      out.summers++;
+      if (has) { out.dealt++; if (last.awards.length > 0) out.dealtHonoured++; }
+      /* Everything the card asks for but the gate: three seasons in, rated 80, never answered before. */
+      if (c.seasons.length >= 3 && c.ovr >= 80 && !(c.lifeFlags?.nb_snub) && last.awards.length > 0) {
+        out.gateOnly++;
+        if (last.awards.includes('All-Star')) out.gateOnlyAllStar++;
+      }
+      const ev = nba.drawNbaEvent(c, rnd);
+      if (ev) { const pick = ev.options[Math.floor(rnd() * ev.options.length)]; pick.apply(c, rnd); }
+      tq = nba.nbaRollTeamQuality(tq, rnd);
+      if (nba.nbaShouldRetire(c)) done = true;
+    }
+  }
+  return out;
+}
+
 /* ------------------------------------------------------------------ */
 /* The other three sports: a hash of every career, and two printed rates */
 /* ------------------------------------------------------------------ */
@@ -1093,7 +1161,7 @@ else {
     heldAt(B6, SPREAD_1103[key], per.map(m => m[key]), `${label}, a fence at this round's own rate`, key, 'what Round 1103 shipped,');
     const mainMean = mean(base.nba.seeds.map(s => s.m[key])); const nowMean = mean(per.map(m => m[key]));
     const passA = mean(PASS_A_SPREAD[key]);
-    console.log(`  note [${B6}] NOT held at main's: ${label} is ${nowMean.toFixed(2)} here against main's ${mainMean.toFixed(2)} (${base.nba.seeds.map(s => s.m[key]).join(', ')}), ${(nowMean - mainMean).toFixed(2)} points more careers for the same awards a career. The new line alone put it at ${passA.toFixed(2)} (pass A, the old awards block, ${PASS_A_SPREAD[key].join(', ')}); the one pass is ${(passA - nowMean).toFixed(2)} points back toward main from there. The brief's critic asked for main's band; one grade an award cannot give it, and the lead rules on it.`);
+    console.log(`  note [${B6}] NOT held at main's: ${label} is ${nowMean.toFixed(2)} here against main's ${mainMean.toFixed(2)} (${base.nba.seeds.map(s => s.m[key]).join(', ')}), ${(nowMean - mainMean).toFixed(2)} points more careers for the same awards a career. The new line alone put it at ${passA.toFixed(2)} (pass A, the old awards block, ${PASS_A_SPREAD[key].join(', ')}); the one pass is ${(passA - nowMean).toFixed(2)} points back toward main from there. The brief's critic asked for main's band; one grade an award cannot give it, and the lead ruled on 2026-10-09 that this is the round's own rate, accepted, with no second lever.`);
   }
 }
 
@@ -1174,6 +1242,14 @@ if (HAS_PASS()) {
     const scorer = { ...quiet, year: S11.year, seasonLength: S11.length, games: 40, ppg: Math.round((b11.mean + 1.73 * b11.sd + 0.5) * 10) / 10 };
     const led = draws(scorer, o => o.awards.includes('Scoring Champion'));
     exact('B8', scorer.ppg * scorer.games >= S11.pts && led === 300, `2011-12, ${scorer.ppg} points a game over 40 of 66 games (${Math.round(scorer.ppg * scorer.games)} points, over the ${S11.pts} the season asked for): Scoring Champion in ${led} of 300 draws (must be 300)`); }
+  /* B9, the snub card against this round's awards (the header says why it is proven here). */
+  { const runs = SEEDS.map(seed => snubDecks(seed, SNUB_CAREERS));
+    const sum = k => runs.reduce((t, r) => t + r[k], 0); const each = k => runs.map(r => r[k]).join(', ');
+    const scale = (SNUB_CAREERS / 300) * SEEDS.length;
+    exact('B9', sum('dealtHonoured') === 0, `the snub card in the summer deck after a season that holds an award: ${each('dealtHonoured')} of ${each('dealt')} decks that hold it (must be 0)`);
+    banded('B9', sum('gateOnly') >= Math.ceil(SNUB_FLOOR.gateOnly * scale), `summers where only the award keeps the card out (three seasons in, rated 80, never answered): ${each('gateOnly')} (at least ${Math.ceil(SNUB_FLOOR.gateOnly * scale)} in the run, or the gate was never asked)`);
+    banded('B9', sum('gateOnlyAllStar') >= Math.ceil(SNUB_FLOOR.gateOnlyAllStar * scale), `the same after an All-Star season: ${each('gateOnlyAllStar')} (at least ${Math.ceil(SNUB_FLOOR.gateOnlyAllStar * scale)})`);
+    banded('B9', sum('dealt') >= Math.ceil(SNUB_FLOOR.dealt * scale), `decks that do hold the card, after a season with no award: ${each('dealt')} of ${each('summers')} summers (at least ${Math.ceil(SNUB_FLOOR.dealt * scale)}, so the card is still in the game)`); }
   exact('B4', tot('allNbaNoAllStar') === 0, `All-NBA seasons without an All-Star selection: ${list('allNbaNoAllStar')}`);
   exact('B4', tot('firstTeam') > 0 && tot('firstTeamNotStarter') === 0 && tot('mvpNotStarter') === 0, `All-NBA First Team seasons that did not start the All-Star Game: ${list('firstTeamNotStarter')} of ${list('firstTeam')}; MVP seasons that did not: ${list('mvpNotStarter')} (before the gate the League MVP read "All-Star reserve" in 43 percent of MVP seasons); starters are ${(100 * tot('starters') / Math.max(1, tot('allStars'))).toFixed(0)} percent of All-Stars (the real game starts 10 of 24, 42 percent)`);
   exact('B4', tot('benchStarters') === 0 && tot('benchAllStars') > 0, `All-Star starters who spent the season on their own club's bench (and were not on the All-NBA First Team): ${list('benchStarters')} (must be 0; before the gate one starter in 30); bench men picked for the game at all: ${list('benchAllStars')} (must be above zero: the gate is on the vote, not on the selection)`);
