@@ -456,9 +456,20 @@ console.log('2) Club Manager reads exactly what it read before the lift');
      names Krasnodar, Krasnodar names Spartak Moscow, CSKA Moscow still
      names Dynamo Moscow). The same two snapshots again: the round out of
      the world is c37dbeb1ca09 over 438 clubs, the tree adds exactly 16
-     and changes and drops none of the 438. */
+     and changes and drops none of the 438.
+     BOARD_HASH re-taken in Round 1102 (2026-10-09), on purpose: that round
+     changed what a rating is (the value curve read with age) and re-rated
+     every squad, and nearestRival picks by starting XI strength. Attribution,
+     full snapshots of every board dumped by the --record logic on a GitHub
+     runner: origin/main 0054fd81 gives the Round 1052 hash, 8093c57e7481,
+     over 454 clubs; the tree at c7201db7 holds the same 454 clubs, none
+     added and none dropped, and 132 of them name a different nearest club.
+     None of the 132 changed a hand mapped rival: two of them have one
+     (Strasbourg's is Metz, Nantes's is Rennes) and in this world it plays in
+     another division, so their board named a nearest pick before and after.
+     RIVALS_HASH did not move: the round touches no rivalry row. */
   const RIVALS_HASH = '565e14623c2fe3607eec8864303d001fce77c4308c1a408c6c49114ea9b679d6';
-  const BOARD_HASH = '8093c57e74818a8fae9742121e2d4e6e2d650e400f9680cbdc2735360e7595bf';
+  const BOARD_HASH = '16913237804e2108486c8097ab8d23e295d241c879884487e1f4481f3bdc0dd2';
   const h = sha(sortedJson(data.PRIMARY_RIVAL));
   const snap = boardSnapshot();
   const b = sha(sortedJson(snap));
