@@ -1,0 +1,6 @@
+c-snubhonoured exit=1 5s | simNbaAwardsSense: 48 checks, 1 failed (quick run, bands not judged, control snubhonoured), 5s
+anchors exit=0 39s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+norival exit=0 13s | No rival product names found. 0 findings.
+vitest-own exit=0 6s |    Duration  5.07s (transform 2.47s, setup 551ms, collect 5.08s, tests 2.37s, environment 3.23s, prepare 959ms)
+tsc exit=0 64s | 
+sense-full exit=0 99s | simNbaAwardsSense: 143 checks, 0 failed (full size), 99s

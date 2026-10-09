@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sense-full: SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+c-snubhonoured: SIM_NBA_SENSE_CONTROL=snubhonoured SENSE_CAREERS=400 SENSE_SEEDS=1 SENSE_OTHERS=20 node scripts/simNbaAwardsSense.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+norival: node scripts/simNoRivalNames.mjs
+vitest-own: node_modules/.bin/vitest run src/test/nbaAwardDecisionLift.test.ts src/test/nbaOldSaveLines.test.ts src/test/nbaStatLineColumns.test.ts src/test/nbaTrophyTile.test.ts src/lib/usCoachPoaching.test.ts src/test/usSeason.test.ts src/test/usSeasonCentre.test.tsx --testTimeout=300000 --hookTimeout=120000
