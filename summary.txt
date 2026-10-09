@@ -1,0 +1,3 @@
+vitest-three exit=0 7s |    Duration  5.96s (transform 2.46s, setup 237ms, collect 6.01s, tests 3.74s, environment 1.80s, prepare 591ms)
+tsc exit=0 55s | 
+vitest-whole exit=0 271s |    Duration  270.07s (transform 23.34s, setup 10.92s, collect 87.28s, tests 557.26s, environment 86.92s, prepare 18.52s)

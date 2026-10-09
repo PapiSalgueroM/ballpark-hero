@@ -1,0 +1,15 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/academyFilters.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 815[2mms[22m[39m
+   [33m[2m✓[22m[39m academy position and age filters[2m > [22mcombines both filters while keeping the original reported-ceiling order and source list [33m 303[2mms[22m[39m
+ [32m✓[39m src/test/facilitiesPreview.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 860[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDeskCues.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 2063[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22ma plain renewal says who and the terms the save now holds, on the slam, once [33m 379[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22ma refused press and a save that moved some other way say nothing [33m 359[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m33 passed[39m[22m[90m (33)[39m
+[2m   Start at [22m 06:58:52
+[2m   Duration [22m 5.96s[2m (transform 2.46s, setup 237ms, collect 6.01s, tests 3.74s, environment 1.80s, prepare 591ms)[22m
+
