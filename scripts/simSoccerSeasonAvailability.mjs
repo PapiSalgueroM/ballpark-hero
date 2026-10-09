@@ -23,7 +23,9 @@ try {
   const healthy = run();
   if (healthy.status !== 0 || healthy.assertions.length !== 3 || healthy.assertions.some(a => a.status !== 'passed')) throw new Error('saved calendar outcomes failed or were skipped');
   console.log('ok saved missed derby, complete totals and feasible calendars passed');
-  const original = fs.readFileSync(source, 'utf8');
+  /* Release AQ: the anchor below spans two lines, and this checkout stores src with CRLF, so the read is
+     normalised or the control can never run here (scripts/simHarnessAnchors.mjs holds that rule). */
+  const original = fs.readFileSync(source, 'utf8').replace(/\r\n/g, '\n');
   const anchor = '    const fixedMissed = fixedOf(row, ctx).filter(f => !f.played).length;\n    const room = Math.min(severe ? M : M - block, M - fixedMissed);';
   if (original.split(anchor).length !== 2) throw new Error('old physical-capacity control anchor must occur once');
   const changed = original.replace(anchor, '    const room = severe ? M : M - block;');
