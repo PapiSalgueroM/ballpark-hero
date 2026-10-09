@@ -8,7 +8,7 @@ import { canonClub, resolveSeasonDerbies } from '@/lib/soccerCareerDerby';
 import {
   drawLeagueWorldFinish, finishLeagueWorld, leagueWorldForYear, leagueWorldOrder,
   prepareLeagueWorld, projectLeagueWorldClubs, readLeagueWorldSeason,
-  recordLeagueWorldSeason, settleLeagueWorld,
+  recordLeagueWorldSeason, settleLeagueWorld, settledLeagueOrder, PYRAMIDS,
 } from '@/lib/soccerCareerLeagueWorld';
 
 afterEach(() => vi.restoreAllMocks());
@@ -276,4 +276,144 @@ describe('Soccer Career simulated promotion and relegation', () => {
     expect(buildSoccerSeasonCtx(s, FALLBACK_CLUBS, row).named).not.toContain('Marseille');
     expect(world.leagues['Ligue 2']).toContain('Marseille');
   });
+
+  /* Release AQ. A season a severe injury cut short never reached the settle:
+     the next season finished it on form with no record, and his own club
+     could change division with nothing written anywhere (4 times in 300
+     careers on the reviewed head). */
+  it('settles the season a severe injury cut short and writes his club\'s move on the row', () => {
+    const field = leagueWorldForYear(career(), FALLBACK_CLUBS, 2026)!.leagues['Ligue 1'];
+    let s: CareerState | null = null;
+    search: for (const club of field) for (let i = 0; i < 40; i++) {
+      const candidate = { ...career(club, 'Ligue 1'), playerName: `Injury Fixture ${i}` };
+      const world = leagueWorldForYear(candidate, FALLBACK_CLUBS, 2026)!;
+      if (leagueWorldOrder(world, 'Ligue 1', candidate.playerName, FALLBACK_CLUBS).slice(-2).includes(club)) { s = candidate; break search; }
+    }
+    expect(s, 'a club the world\'s form sends down').not.toBeNull();
+    const c = s!;
+    prepareLeagueWorld(c, FALLBACK_CLUBS, 2026);
+    const row = { ...season(c, 2026, 6, 18), leagueFinish: undefined, leagueSize: undefined, injurySevere: true, injuryWeeks: 20 };
+    recordLeagueWorldSeason(c, FALLBACK_CLUBS, row);
+    const before = clone(c.leagueWorld!.leagues);
+    settleLeagueWorld(c, FALLBACK_CLUBS, row);
+    expect(c.leagueWorld!.year).toBe(2027);
+    expect(row.leagueWorld!.movement).toEqual({ club: c.currentClub, from: 'Ligue 1', to: 'Ligue 2', kind: 'relegated' });
+    expect(row.leagueWorld!.champion).not.toBe(c.currentClub);
+    const left = row.leagueWorld!.movements!;
+    expect(left.length).toBe(2);
+    expect(left.every(m => m.from === 'Ligue 1' && m.kind === 'relegated')).toBe(true);
+    expect(c.leagueWorld!.leagues['Ligue 2']).toContain(c.currentClub);
+    for (const name of before['Ligue 1']) expect(c.leagueWorld!.leagues['Ligue 1'].includes(name)).toBe(!left.some(m => m.club === name));
+    prepareLeagueWorld(c, FALLBACK_CLUBS, 2027);
+    expect(c.currentLeague).toBe('Ligue 2');
+    expect(c.events).toEqual([]);
+  });
+
+  it('never puts his club first in a season a severe injury cut short', () => {
+    const field = leagueWorldForYear(career(), FALLBACK_CLUBS, 2026)!.leagues['Ligue 1'];
+    let seen = 0;
+    for (let i = 0; i < 60 && seen < 3; i++) {
+      const name = `Top Fixture ${i}`;
+      const base = { ...career(), playerName: name };
+      const world = leagueWorldForYear(base, FALLBACK_CLUBS, 2026)!;
+      const form = leagueWorldOrder(world, 'Ligue 1', name, FALLBACK_CLUBS);
+      const c = { ...career(form[0], 'Ligue 1'), playerName: name };
+      expect(field).toContain(form[0]);
+      prepareLeagueWorld(c, FALLBACK_CLUBS, 2026);
+      const row = { ...season(c, 2026, 6, 18), leagueFinish: undefined, leagueSize: undefined, injurySevere: true, injuryWeeks: 20 };
+      recordLeagueWorldSeason(c, FALLBACK_CLUBS, row);
+      const order = settledLeagueOrder(c.leagueWorld!, 'Ligue 1', name, FALLBACK_CLUBS, row);
+      expect(order[0]).toBe(row.leagueWorld!.champion);
+      expect(order[1]).toBe(form[0]);
+      expect([...order].sort()).toEqual([...form].sort());
+      seen += 1;
+    }
+    expect(seen).toBe(3);
+  });
+
+  it('opens the season after a year out with the line when his club moved without him', () => {
+    const field = leagueWorldForYear(career(), FALLBACK_CLUBS, 2026)!.leagues['Ligue 1'];
+    let s: CareerState | null = null;
+    search: for (const club of field) for (let i = 0; i < 40; i++) {
+      const candidate = { ...career(club, 'Ligue 1'), playerName: `Away Fixture ${i}` };
+      const world = leagueWorldForYear(candidate, FALLBACK_CLUBS, 2026)!;
+      if (leagueWorldOrder(world, 'Ligue 1', candidate.playerName, FALLBACK_CLUBS).slice(-2).includes(club)) { s = candidate; break search; }
+    }
+    const c = s!;
+    prepareLeagueWorld(c, FALLBACK_CLUBS, 2026);
+    expect(c.events).toEqual([]);
+    /* 2026 goes by with no played season (a ban year writes no league row) */
+    prepareLeagueWorld(c, FALLBACK_CLUBS, 2027);
+    expect(c.currentLeague).toBe('Ligue 2');
+    expect(c.events).toEqual([`⬇️ ${c.currentClub} relegated to Ligue 2 in your simulated league world while you were away.`]);
+    prepareLeagueWorld(c, FALLBACK_CLUBS, 2027);
+    expect(c.events.length).toBe(1);
+  });
+
+  it('starts a damaged world again instead of throwing on the next season', () => {
+    const c = career();
+    prepareLeagueWorld(c, FALLBACK_CLUBS, 2027);
+    const whole = clone(c.leagueWorld!);
+    for (const damaged of [
+      { year: 2028 },
+      { ...clone(whole), year: 2028, leagues: { ...clone(whole.leagues), 'Ligue 2': undefined } },
+      { ...clone(whole), year: 2028, leagues: { ...clone(whole.leagues), 'Serie A': whole.leagues['Serie A'].slice(1) } },
+      { ...clone(whole), year: 'soon' },
+    ]) {
+      const hurt = { ...career(), leagueWorld: damaged as unknown as CareerState['leagueWorld'] };
+      expect(() => prepareLeagueWorld(hurt, FALLBACK_CLUBS, 2028)).not.toThrow();
+      expect(hurt.leagueWorld!.year).toBe(2028);
+      expect(hurt.leagueWorld!.leagues['Ligue 2'].length).toBe(18);
+      expect(hurt.leagueWorld!.leagues['Serie A'].length).toBe(20);
+      expect(hurt.currentLeague).toBe('Ligue 1');
+    }
+  });
+
+  /* Release AQ: the engine settles from the saved season alone, and the table
+     the Season Centre draws afterwards holds the saved clubs in the places
+     that changed hands, a derby rival included. */
+  it('draws a settled season\'s table with the saved clubs in the places that changed hands', () => {
+    let rivalsIn = 0; let rivalsOut = 0; let tables = 0;
+    for (let i = 0; i < 24; i++) {
+      const s = { ...career('Man City', 'Premier League'), playerName: `Zone Fixture ${i}`, currentClubCountry: 'England' };
+      prepareLeagueWorld(s, FALLBACK_CLUBS, 2026);
+      const row = season(s, 2026, 3 + (i % 15), 20);
+      const projected = projectLeagueWorldClubs(s, FALLBACK_CLUBS, 2026);
+      row.derbies = resolveSeasonDerbies({ club: row.club, league: 'Premier League', year: 2026, clubs: projected, elite: [], position: 'CM', apps: row.apps, leagueApps: row.leagueApps!, goals: row.goals, leagueTitle: false, seedKey: `zone-fixture-${i}` });
+      recordLeagueWorldSeason(s, FALLBACK_CLUBS, row);
+      s.seasons = [row];
+      /* the saved zone is forced onto a derby rival on every other pass, so both sides of the hold are met */
+      const rival = row.derbies.length > 0 ? row.leagueWorld!.members.find(n => canonClub(n) === canonClub(row.derbies![0].rival))! : null;
+      if (i % 2 === 1 && rival && rival !== row.leagueWorld!.champion) {
+        const world = s.leagueWorld!;
+        const order = leagueWorldOrder(world, 'Premier League', s.playerName, FALLBACK_CLUBS, row).filter(n => n !== rival && n !== row.club);
+        order.push(rival);
+        order.splice(row.leagueFinish! - 1, 0, row.club);
+        settleLeagueWorld(s, FALLBACK_CLUBS, row, order);
+      } else settleLeagueWorld(s, FALLBACK_CLUBS, row);
+      const saved = row.leagueWorld!.movements!.map(m => canonClub(m.club)).sort();
+      expect(saved.length).toBe(3);
+      const derived = deriveSeason(SOCCER, row, buildSoccerSeasonCtx(s, FALLBACK_CLUBS, row));
+      if (derived?.mode !== 'table') continue;
+      tables += 1;
+      const names = tableAt(derived, derived.rounds.length).map(t => derived.labels[t.slot].name);
+      expect(names.indexOf(row.club) + 1).toBe(row.leagueFinish);
+      expect(names.slice(-3).map(canonClub).sort()).toEqual(saved);
+      for (const d of row.derbies) { if (saved.includes(canonClub(d.rival))) rivalsIn += 1; else rivalsOut += 1; }
+    }
+    expect(tables).toBeGreaterThanOrEqual(20);
+    expect(rivalsIn).toBeGreaterThanOrEqual(6);
+    expect(rivalsOut).toBeGreaterThanOrEqual(12);
+  }, 120000);
+
+  it('holds each division\'s count and each second division\'s clubs to Club Manager\'s own rows', async () => {
+    const { LEAGUE_RULES, REAL_LEAGUES } = await import('@/lib/clubManager');
+    const { CAREER_LOWER_CLUBS } = await import('@/data/soccerCareerLowerClubs');
+    const upperId: Record<string, string> = { 'Premier League': 'premier', Bundesliga: 'bundesliga', 'Ligue 1': 'ligue1', 'Serie A': 'seriea', 'La Liga': 'laliga' };
+    const lowerId: Record<string, string> = { 'Serie B': 'serieb', 'Ligue 2': 'ligue2', 'Segunda Division': 'segunda' };
+    expect(PYRAMIDS.length).toBe(5);
+    for (const p of PYRAMIDS) expect(LEAGUE_RULES[upperId[p.upper]].drop, p.upper).toBe(p.count);
+    expect(Object.keys(CAREER_LOWER_CLUBS).sort()).toEqual(Object.keys(lowerId).sort());
+    for (const [league, names] of Object.entries(CAREER_LOWER_CLUBS)) expect(names, league).toEqual(REAL_LEAGUES.find(l => l.id === lowerId[league])!.clubs);
+  }, 60000);
 });

@@ -37,7 +37,7 @@ import type { WorldSeason } from '../soccerPhone';
 import { LAW, goalLambda, poissonDraw } from './law';
 import {
   ownRowRounds, roundRobinRounds,
-  type DerivedGame, type FixedGame, type Frame, type SeasonSport, type SlotFacts, type SlotLabel, type StatTotal, type TeamTarget,
+  type DerivedGame, type FixedGame, type Frame, type SeasonSport, type SlotFacts, type SlotLabel, type StatTotal, type TableZone, type TeamTarget,
 } from './core';
 import { finishLeague, leagueKeyInYear, leagueSizeFor, managerLeagueField, namedInLeague, readLeagueFinish } from '../soccerCareerLeague';
 import { careerDerbyRecord, derbyMeetings, readSeasonDerbies, type DerbyRecord } from '../soccerCareerDerby';
@@ -47,7 +47,7 @@ import { leagueFormatFor } from '../../data/leagueFormat';
 import { SC_CLUB_CANON } from '../../data/clubRivalries';
 import { soccerApplyDelta, soccerEventDisagreements, soccerEvents, soccerMomentSpots, type SoccerMomentKind } from './soccerEvents';
 import { drillForPosition, type PositionDrillKind } from '../careerDrills';
-import { readLeagueWorldSeason } from '../soccerCareerLeagueWorld';
+import { leagueWorldZone, readLeagueWorldSeason, type LeagueWorldSeason } from '../soccerCareerLeagueWorld';
 
 /** Why a season shows results only (null: it shows a table). */
 export type ResultsReason = 'nofinish' | 'nosize' | 'league' | 'format' | 'cadence' | 'severe' | 'rival';
@@ -78,6 +78,12 @@ export interface SoccerSeasonCtx {
   rivals: string[];
   /** Held future field spellings, indexed by the unchanged saved derby key. */
   fixedNames?: Record<string, string>;
+  /** Release AQ: the places of this table that changed hands at the end of
+   *  the season and the clubs the save put in them (their canon keys). Set
+   *  for a settled 2026 on world season only: the engine decides promotion
+   *  and relegation from the saved season alone (settledLeagueOrder), and
+   *  the table drawn here holds those clubs in those places. */
+  zone?: { side: 'top' | 'bottom'; count: number; keys: string[] };
   /** Clubs that may be named as opponents besides his, the rivals and the champion. */
   named: string[];
   /** The game's era tier of every club it knows, that season. */
@@ -189,6 +195,7 @@ export function buildSoccerSeasonCtx(career: CareerState, clubs: ClubData[], row
     titleOpen,
     rivals,
     ...(snapshot ? { fixedNames: Object.fromEntries(rivals.map(r => [r, snapshot.members.find(n => clubKey(n) === clubKey(r)) ?? r])) } : {}),
+    ...(snapshot ? worldZoneOf(snapshot) : {}),
     named,
     tiers,
     goldenBoot: (career.awards ?? []).some(a => a.year === row.year && a.name === 'Golden Boot'),
@@ -196,6 +203,29 @@ export function buildSoccerSeasonCtx(career: CareerState, clubs: ClubData[], row
     derbyBefore: careerDerbyRecord(earlier),
     lastSeason: prev && prevFinish ? { finish: prevFinish.finish, club: prev.club } : null,
   };
+}
+
+/** Release AQ: the saved zone of a settled world season, as the ctx holds it. */
+function worldZoneOf(held: LeagueWorldSeason): Pick<SoccerSeasonCtx, 'zone'> {
+  const z = leagueWorldZone(held);
+  return z ? { zone: { side: z.side, count: z.count, keys: z.clubs.map(clubKey) } } : {};
+}
+/** Release AQ: what the table has to hold about the derby rivals. Their
+ *  clubs sit on fixed slots (the derbies are saved games), so their places
+ *  come out of the scores and not out of the naming; the core moves a
+ *  goal at a time until each is on the side of the zone the save put it. */
+function zoneTarget(ctx: SoccerSeasonCtx): { zone?: TableZone } {
+  const z = ctx.zone;
+  if (!z || ctx.mode !== 'table' || ctx.rivals.length === 0) return {};
+  const n = ctx.games / 2 + 1;
+  const [from, to] = z.side === 'bottom' ? [n - z.count + 1, n] : [1, z.count];
+  return { zone: { from, to, fixed: ctx.rivals.map((r): [string, boolean] => [r, z.keys.includes(clubKey(ctx.fixedNames?.[r] ?? r))]) } };
+}
+/** The game's tier of a club by any of its spellings (3 when it knows none). */
+function tierOfClub(ctx: SoccerSeasonCtx, name: string): number {
+  const k = clubKey(name);
+  for (const [n, t] of Object.entries(ctx.tiers)) if (clubKey(n) === k) return t;
+  return 3;
 }
 
 const RULE3 = { win: 3, draw: 1, loss: 0 };
@@ -250,7 +280,7 @@ export const SOCCER: SeasonSport<SeasonRecord, SoccerSeasonCtx> = {
       const title = ctx.finish.finish === 1;
       const championKey = ctx.champion && ctx.rivals.find(r => (ctx.fixedNames?.[r] ?? r) === ctx.champion);
       const champion = title ? 'mine' as const : championKey ? { key: championKey } : 'other' as const;
-      return { kind: 'finish', finish: ctx.finish.finish, title, champion };
+      return { kind: 'finish', finish: ctx.finish.finish, title, champion, ...zoneTarget(ctx) };
     }
     if (row.leagueTitle && !row.injurySevere) return { kind: 'band', ppgMin: CHAMPION_PPG.min, ppgMax: CHAMPION_PPG.max };
     if (ctx.finish && ctx.finish.size && !row.injurySevere) {
@@ -303,7 +333,32 @@ export const SOCCER: SeasonSport<SeasonRecord, SoccerSeasonCtx> = {
     const rest = ladder.filter((_, i) => i !== mine - 1);
     const champ = target.kind === 'finish' && typeof target.champion === 'object' ? slotOf.get(target.champion.key) : undefined;
     if (champ !== undefined) out[champ] = rest.shift()!;
-    const slots = Array.from({ length: n - 1 }, (_, i) => i + 1).filter(s => s !== champ);
+    let slots = Array.from({ length: n - 1 }, (_, i) => i + 1).filter(s => s !== champ);
+    /* Release AQ: in a 2026 on world season the final table decides who is
+       seen going down, so a derby rival is seated like the club it is. Its
+       slot is fixed by the calendar and used to take any rung of the ladder
+       at random: over 300 careers a tier 1 rival finished 8.1th on average
+       and went down in 9.8% of its seasons (Inter Milan 27 times), against
+       2.9th and never for the same clubs when they were not his rival. A
+       rival the save sent down or up takes a rung at that end; every other
+       rival takes one by its tier, kept clear of the places that change
+       hands. Earlier seasons hold no world and are drawn as they were. */
+    if (ctx.fixedNames) {
+      for (const key of ctx.rivals) {
+        const slot = slotOf.get(key);
+        if (slot === undefined || slot === champ || rest.length === 0) continue;
+        const name = ctx.fixedNames[key] ?? key;
+        const last = rest.length - 1;
+        let at: number;
+        if (ctx.zone && ctx.zone.keys.includes(clubKey(name))) at = ctx.zone.side === 'bottom' ? last : 0;
+        else {
+          at = Math.round(clamp((tierOfClub(ctx, name) - 1) / 4 + rng() * 0.2, 0, 1) * last);
+          if (ctx.zone) at = ctx.zone.side === 'bottom' ? Math.min(at, Math.max(0, last - ctx.zone.count - 2)) : Math.max(at, Math.min(last, ctx.zone.count + 2));
+        }
+        out[slot] = rest.splice(at, 1)[0] + (rng() - 0.5) * 2;
+        slots = slots.filter(s => s !== slot);
+      }
+    }
     for (let i = slots.length - 1; i > 0; i -= 1) { const j = Math.floor(rng() * (i + 1)); [slots[i], slots[j]] = [slots[j], slots[i]]; }
     slots.forEach((s, i) => { out[s] = rest[i] + (rng() - 0.5) * 2; });
     return out;
@@ -347,6 +402,16 @@ function soccerLabels(slots: SlotFacts[], ctx: SoccerSeasonCtx, rng: () => numbe
   const entries = ctx.named.map(name => ({ name: name as string | null, at: (ctx.tiers[name] ?? 3) + rng() * 1.5 }));
   for (let i = entries.length; i < open.length; i += 1) entries.push({ name: null, at: 1 + rng() * 3.5 });
   entries.sort((a, b) => a.at - b.at);
+  /* Release AQ: the clubs the save moved take the places that changed hands.
+     His club and the rivals are already there or not (the finish and the
+     core's zone hold them); the open places of the zone go to the rest of
+     the saved clubs, in the order the draw above gave them. */
+  if (ctx.zone && ctx.mode === 'table') {
+    const z = ctx.zone;
+    const moved = entries.filter(e => e.name !== null && z.keys.includes(clubKey(e.name)));
+    const stay = entries.filter(e => !moved.includes(e));
+    entries.splice(0, entries.length, ...(z.side === 'top' ? [...moved, ...stay] : [...stay, ...moved]));
+  }
   /* Round 1100: with nobody crowned the top place is a club the game can
      name whenever it knows one, so a league it knows all but two clubs of
      never reads "another club" in 1st. A league known whole has it there

@@ -14,11 +14,18 @@ export interface LeagueWorldSeason {
   champion: string;
   simulation: 'simulated' | 'simulated-partial';
   movement?: LeagueMovement;
+  /** Release AQ: the clubs that LEFT his division at the end of this season
+   *  (two or three), and nothing else. Present once the season is settled.
+   *  The whole world's moves, about 26 a season, were written on every row
+   *  and read by nothing, which alone added 34 to 40 KB to a long save. */
   movements?: LeagueMovement[];
 }
 export interface CareerLeagueWorld { year: number; leagues: Record<string, string[]>; movements: LeagueMovement[] }
 
-const PYRAMIDS = [
+/** Each count is also Club Manager's LEAGUE_RULES drop for the same league
+ *  (src/lib/clubManager.ts); src/test/soccerCareerLeagueWorld.test.ts holds
+ *  the two together. */
+export const PYRAMIDS = [
   { upper: 'Premier League', lower: 'Championship', count: 3 },
   { upper: 'Bundesliga', lower: '2. Bundesliga', count: 2 },
   { upper: 'Ligue 1', lower: 'Ligue 2', count: 2 },
@@ -98,10 +105,33 @@ export function finishLeagueWorld(world: CareerLeagueWorld, playerName: string, 
 /** Old future saves start their own world at the next unplayed season.
  *  Historical seasons keep their existing ledgers and have no world field. */
 export function leagueWorldForYear(career: CareerState, clubs: ClubData[], year: number): CareerLeagueWorld | null {
+  return catchUpLeagueWorld(career, clubs, year);
+}
+
+/** Release AQ: a held world is read only when every division is whole. A
+ *  damaged one used to be indexed as it stood and threw on every Next Season
+ *  with no repair; now the career starts its world again from the real
+ *  2026-27 field, the way a save from before the world does. */
+function wholeWorld(world: CareerLeagueWorld | undefined): world is CareerLeagueWorld {
+  if (!world || typeof world !== 'object' || !Number.isInteger(world.year) || !world.leagues || typeof world.leagues !== 'object') return false;
+  return PYRAMIDS.every(p => [p.upper, p.lower].every(league => {
+    const names = world.leagues[league];
+    return Array.isArray(names) && names.length === initialMembers(league).length && names.every(n => typeof n === 'string' && !!n.trim());
+  }));
+}
+
+/** A year with no played season behind it (a ban, a prison year) is finished
+ *  on the world's own form. `onOwnMove` hears it when that moved his club,
+ *  so the season that follows can say so (prepareLeagueWorld). */
+function catchUpLeagueWorld(career: CareerState, clubs: ClubData[], year: number, onOwnMove?: (m: LeagueMovement) => void): CareerLeagueWorld | null {
   if (year < 2026) return null;
-  let world = career.leagueWorld ?? initialWorld(year);
+  let world = wholeWorld(career.leagueWorld) ? career.leagueWorld : initialWorld(year);
   if (world.year > year) return null;
-  while (world.year < year) world = finishLeagueWorld(world, career.playerName, clubs);
+  while (world.year < year) {
+    world = finishLeagueWorld(world, career.playerName, clubs);
+    const own = world.movements.find(m => same(m.club, career.currentClub));
+    if (own && onOwnMove) onOwnMove(own);
+  }
   return world;
 }
 
@@ -139,7 +169,12 @@ export function projectLeagueWorldClubs(career: CareerState, clubs: ClubData[], 
 
 /** Write only at a season transition, never while a saved page is viewed. */
 export function prepareLeagueWorld(career: CareerState, clubs: ClubData[], year: number): ClubData[] {
-  const world = leagueWorldForYear(career, clubs, year);
+  /* Release AQ: a year he did not play (a ban, a prison year) has no season
+     row to carry the news, so his club could change division with nothing on
+     screen saying so. The season that follows now opens with the line. */
+  const world = catchUpLeagueWorld(career, clubs, year, m => {
+    if (Array.isArray(career.events)) career.events.push(`${m.kind === 'promoted' ? '⬆️' : '⬇️'} ${career.currentClub} ${m.kind} to ${m.to} in your simulated league world while you were away.`);
+  });
   if (world) career.leagueWorld = world;
   const pool = projectLeagueWorldClubs(career, clubs, year);
   const own = pool.find(c => same(c.name, career.currentClub));
@@ -178,16 +213,48 @@ export function leagueWorldChampions(career: CareerState, clubs: ClubData[], row
   return Object.fromEntries(Object.keys(world.leagues).map(league => [league, row.leagueWorld?.league === league ? row.leagueWorld.champion : leagueWorldOrder(world, league, career.playerName, clubs)[0]]));
 }
 
+/** Release AQ: the order his own division finished in, for the settle. It is
+ *  the world's form order with his club at the place the season saved, the
+ *  rule every other division already moves by. Before this the engine drew
+ *  the whole Season Centre season here to read its final table, which put
+ *  that code in the page's first download (scripts/simFlagshipWeight.mjs)
+ *  and let a derby rival, whose place in that table was a random draw, go
+ *  down about one season in ten however big the club. The Season Centre now
+ *  draws its table to agree with what is saved here (leagueWorldZone below,
+ *  read by src/lib/season/soccer.ts).
+ *
+ *  A season cut short by a severe injury has no finish: his club is placed
+ *  on form like any other, and never first, because the champion recorded
+ *  for that season is never his club (recordLeagueWorldSeason). */
+export function settledLeagueOrder(world: CareerLeagueWorld, league: string, playerName: string, clubs: ClubData[], row: SeasonRecord): string[] {
+  const order = leagueWorldOrder(world, league, playerName, clubs, row);
+  if (row.injurySevere && order.length > 1 && same(order[0], row.club)) [order[0], order[1]] = [order[1], order[0]];
+  return order;
+}
+
 export function settleLeagueWorld(career: CareerState, clubs: ClubData[], row: SeasonRecord, tableOrder?: string[]): void {
   const world = career.leagueWorld;
   if (!world || world.year !== row.year) return;
   const snapshot = readLeagueWorldSeason(row);
-  const order = snapshot ? tableOrder ?? leagueWorldOrder(world, snapshot.league, career.playerName, clubs, row) : undefined;
+  const order = snapshot ? tableOrder ?? settledLeagueOrder(world, snapshot.league, career.playerName, clubs, row) : undefined;
   const next = finishLeagueWorld(world, career.playerName, clubs, snapshot && order ? { league: snapshot.league, order } : undefined);
   if (snapshot) {
-    snapshot.movements = next.movements.map(m => ({ ...m, club: snapshot.members.find(n => same(n, m.club)) ?? m.club }));
+    snapshot.movements = next.movements.map(m => ({ ...m, club: snapshot.members.find(n => same(n, m.club)) ?? m.club })).filter(m => m.from === snapshot.league);
     const movement = snapshot.movements.find(m => same(m.club, row.club));
     if (movement) snapshot.movement = { ...movement };
   }
   career.leagueWorld = next;
+}
+
+/** Release AQ: the places of his division that change hands, and the clubs a
+ *  settled season saved in them: the bottom two or three of a top flight,
+ *  the top two or three of a second division. Null before the settle and for
+ *  a saved list that is not exactly that many clubs. The Season Centre's
+ *  table is drawn to hold these clubs in these places. */
+export function leagueWorldZone(held: LeagueWorldSeason): { side: 'top' | 'bottom'; count: number; clubs: string[] } | null {
+  const pyramid = pyramidFor(held.league);
+  if (!pyramid || !Array.isArray(held.movements)) return null;
+  const clubs = held.movements.filter(m => m.from === held.league).map(m => m.club);
+  if (clubs.length !== pyramid.count || clubs.some(n => !held.members.some(m => same(m, n)))) return null;
+  return { side: pyramid.upper === held.league ? 'bottom' : 'top', count: pyramid.count, clubs };
 }

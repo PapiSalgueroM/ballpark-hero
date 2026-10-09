@@ -8,7 +8,7 @@ export const careerLeagueWorld1175Attribution = [
   { file: 'src/lib/season/soccer.ts',
     from: '    const fixedMissed = fixedOf(row, ctx).filter(f => !f.played).length;\n    const room = Math.min(severe ? M : M - block, M - fixedMissed);',
     to: '    const room = severe ? M : M - block;' },
-  { file: engine, from: "import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';\nimport { deriveSeason, tableAt } from './season/core';\nimport { buildSoccerSeasonCtx, SOCCER } from './season/soccer';\n", to: '' },
+  { file: engine, from: "import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';\n", to: '' },
   { file: engine, from: '  /** The career\'s simulated field and champion, held for this season only. */\n  leagueWorld?: LeagueWorldSeason;\n', to: '' },
   { file: engine, from: '  /** Membership for the next unplayed future season. Absent on older saves. */\n  leagueWorld?: CareerLeagueWorld;\n', to: '' },
   { file: engine, from: '  const pool = projectLeagueWorldClubs(state, adjustClubsForYear(clubs, (lastSeason?.year ?? 2024) + 1), (lastSeason?.year ?? 2024) + 1);', to: '  const pool = adjustClubsForYear(clubs, (lastSeason?.year ?? 2024) + 1);' },
@@ -17,22 +17,32 @@ export const careerLeagueWorld1175Attribution = [
   { file: engine, from: '  prepareLeagueWorld(s, clubs, (s.seasons[s.seasons.length - 1]?.year ?? 2024) + 1);\n', to: '' },
   { file: engine, from: '  const worldClubs = prepareLeagueWorld(s, clubs, (s.seasons[s.seasons.length - 1]?.year ?? 2024) + 1);\n  const season = generateSeasonStats(s, worldClubs);\n  recordLeagueWorldSeason(s, clubs, season);', to: '  \n  const season = generateSeasonStats(s, clubs);' },
   { file: engine, from: '    leagueChampions: leagueWorldChampions(s, clubs, season),\n', to: '' },
-  { file: engine, from: `
-  if (season.leagueWorld) {
-    const derived = deriveSeason(SOCCER, season, buildSoccerSeasonCtx(s, clubs, season));
-    const order = derived?.mode === 'table' ? tableAt(derived, derived.rounds.length).map(t => derived.labels[t.slot].name) : undefined;
-    settleLeagueWorld(s, clubs, season, order);
-    const movement = season.leagueWorld.movement;
+  /* Release AQ: the settle no longer draws the Season Centre's season, and it
+     runs in two places (the season's end and the severe injury year). Both
+     calls and their log lines come out; the comments above them stay. */
+  { file: engine, from: `  settleLeagueWorld(s, clubs, season);
+  {
+    const movement = season.leagueWorld?.movement;
     if (movement) s.events.push(\`\${movement.kind === 'promoted' ? '⬆️' : '⬇️'} \${movement.club} \${movement.kind} to \${movement.to} in your simulated league world.\`);
-  } else settleLeagueWorld(s, clubs, season);
+  }
+`, to: '' },
+  { file: engine, from: `      settleLeagueWorld(s, clubs, injuryRow);
+      {
+        const movement = injuryRow.leagueWorld?.movement;
+        if (movement) s.events.push(\`\${movement.kind === 'promoted' ? '⬆️' : '⬇️'} \${movement.club} \${movement.kind} to \${movement.to} in your simulated league world.\`);
+      }
+      prepareLeagueWorld(s, clubs, injuryRow.year + 1);
 `, to: '' },
   { file: engine, from: '\n  prepareLeagueWorld(s, clubs, season.year + 1);\n', to: '\n' },
   { file: engine, from: '\n    prepareLeagueWorld(s, clubs, season.year + 1);\n', to: '\n' },
   { file: engine, from: '    const nextHere = projectLeagueApps(s.overall, s.currentClubTier, back.parentClub, backSeasons);', to: '    const nextHere = projectLeagueApps(s.overall, back.parentTier, back.parentClub, backSeasons);' },
   { file: phone, from: '    /** Saved simulated league champions. Existing world RNG draws stay put. */\n    leagueChampions?: Record<string, string>;\n', to: '' },
   { file: phone, from: '  if (opts.leagueChampions) Object.assign(leagueWinners, opts.leagueChampions);\n', to: '' },
-  { file: binding, from: "import { readLeagueWorldSeason } from '../soccerCareerLeagueWorld';\n", to: '' },
+  { file: binding, from: "import { leagueWorldZone, readLeagueWorldSeason, type LeagueWorldSeason } from '../soccerCareerLeagueWorld';\n", to: '' },
   { file: binding, from: '  const snapshot = readLeagueWorldSeason(row);\n', to: '' },
+  /* Release AQ: the saved zone is read off the snapshot, so it goes with it;
+     everything that reads ctx.zone then never runs. */
+  { file: binding, from: '    ...(snapshot ? worldZoneOf(snapshot) : {}),\n', to: '' },
   { file: binding, from: '  const league = snapshot ? { key: snapshot.league, name: snapshot.league } : finishLeague({ name: row.club, league: today }, row.year, finish?.size ?? null);', to: '  const league = finishLeague({ name: row.club, league: today }, row.year, finish?.size ?? null);' },
   { file: binding, from: '  const champion = snapshot && finish && finish.finish !== 1 ? snapshot.champion : crowned && key && namedInLeague(crowned, key, row.year) ? crowned : null;', to: '  const champion = crowned && key && namedInLeague(crowned, key, row.year) ? crowned : null;' },
   { file: binding, from: "  const titleOpen = !snapshot && !!(finish && finish.finish !== 1 && key && world && !world.leagues?.[key]);", to: "  const titleOpen = !!(finish && finish.finish !== 1 && key && world && !world.leagues?.[key]);" },

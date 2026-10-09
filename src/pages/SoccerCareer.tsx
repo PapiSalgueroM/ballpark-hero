@@ -1092,7 +1092,11 @@ export default function SoccerCareer() {
   const handleStay = () => {
     if (!career) return;
     setCareer(stayAtClub(career));
-    toast("Staying at " + career.currentClub);
+    /* Release AQ: on the card for a move the club arranged he is already at
+       the new club and Continue is the only button, so "Staying at" plus the
+       new club's name read as if nothing had happened. That card says where
+       he went; it gets no toast. */
+    if (career.transferSituation?.type !== "club_move") toast("Staying at " + career.currentClub);
   };
 
   const onAcceptLoan = (offer: ContractOffer) => {

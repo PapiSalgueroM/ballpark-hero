@@ -144,7 +144,7 @@ export default function TrophyCabinet({ career, category, onClose }: {
             </div>
           ) : (
             <div className="space-y-3">
-              <p className="text-xs text-muted-foreground">{wins.length} {wins.length === 1 ? 'win' : 'wins'}. Pick a season to see what you did.</p>
+              {wins.length > 0 && <p className="text-xs text-muted-foreground">{wins.length} {wins.length === 1 ? 'win' : 'wins'}. Pick a season to see what you did.</p>}
               {wins.length === 0 ? <p className="text-sm">No wins recorded here yet.</p> : (
                 <div className="grid grid-cols-2 gap-2" data-trophy-wins>
                   {wins.map((row, index) => (

@@ -4,8 +4,6 @@ import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';
 import { serveClubSuspension } from '@/lib/soccerDiscipline';
 import { soccerExtensionQuote } from '@/lib/soccerCareerContracts';
 import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';
-import { deriveSeason, tableAt } from './season/core';
-import { buildSoccerSeasonCtx, SOCCER } from './season/soccer';
 /* Round 546: the competition's real format per season, two source verified and
    importing nothing, so the knockout ladder and the leg count are read rather
    than kept as a second hardcoded copy here. */
@@ -5342,6 +5340,19 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
       s.seasons = [...s.seasons, injuryRow];
       simulateSeasonFinances(s, injuryRow);
       runTournamentSummer(s, injuryRow, injuryRow.year, true);
+      /* Release AQ: the league went on without him, so its season is settled
+         here like any other. Before this the injury year never reached the
+         settle: the next season finished it on form with no record, clubs
+         changed division unseen, and his own club could go down or come up
+         with no line, no card and nothing in the Season Centre. His club is
+         placed on the world's form (it has no saved finish), the move is
+         written on this row, and the log says it. */
+      settleLeagueWorld(s, clubs, injuryRow);
+      {
+        const movement = injuryRow.leagueWorld?.movement;
+        if (movement) s.events.push(`${movement.kind === 'promoted' ? '⬆️' : '⬇️'} ${movement.club} ${movement.kind} to ${movement.to} in your simulated league world.`);
+      }
+      prepareLeagueWorld(s, clubs, injuryRow.year + 1);
       s.phase = "rehab_choice";
       return s;
     }
@@ -5458,7 +5469,11 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   // UCL Simulation
   const uclResult = simulateUCL(s, season);
   s.lastUCLResult = { ...uclResult, seasonYear: season.year, club: season.club };
-  if (uclResult.qualified) season.clubCupRun = structuredClone(s.lastUCLResult);
+  /* Release AQ: a plain copy. structuredClone is not in the browsers this
+     build still serves (it arrived in Chrome 98 and Safari 15.4, the build
+     targets Chrome 87 and Safari 14), and there Next Season threw in every
+     season the club played a continental cup. The run is plain data. */
+  if (uclResult.qualified) season.clubCupRun = JSON.parse(JSON.stringify(s.lastUCLResult)) as UCLResult;
   if (uclResult.qualified) {
     /* Round 972: the cup is named by the club's confederation, and only the
        UEFA one is a Champions League. Any other is kept under its own name in
@@ -5711,13 +5726,15 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
 
   if (s.events.length === 0) s.events.push(`⚽ Solid season at ${s.currentClub}`);
 
-  if (season.leagueWorld) {
-    const derived = deriveSeason(SOCCER, season, buildSoccerSeasonCtx(s, clubs, season));
-    const order = derived?.mode === 'table' ? tableAt(derived, derived.rounds.length).map(t => derived.labels[t.slot].name) : undefined;
-    settleLeagueWorld(s, clubs, season, order);
-    const movement = season.leagueWorld.movement;
+  /* Release AQ: the settle reads the saved season and nothing else
+     (settledLeagueOrder), so the engine no longer imports the Season Centre's
+     season, and the Season Centre draws its table to agree with what is
+     saved here. */
+  settleLeagueWorld(s, clubs, season);
+  {
+    const movement = season.leagueWorld?.movement;
     if (movement) s.events.push(`${movement.kind === 'promoted' ? '⬆️' : '⬇️'} ${movement.club} ${movement.kind} to ${movement.to} in your simulated league world.`);
-  } else settleLeagueWorld(s, clubs, season);
+  }
 
   /* ─── Round 217: the loan ends with the season ───
      One season, then home, the way nearly every real loan works. The verdict

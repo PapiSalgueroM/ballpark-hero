@@ -63,8 +63,15 @@ export interface FixedGame {
   decisive?: boolean;
 }
 
+/** Release AQ: places `from` to `to` of the final table (1 based, both ends
+ *  in) and, for each fixed opponent named, whether its club ends inside them.
+ *  Soccer hands this over for a season whose promotion and relegation are
+ *  already saved, so a derby rival can never be drawn into, or out of, the
+ *  places the save says changed hands. Absent everywhere else. */
+export interface TableZone { from: number; to: number; fixed: [key: string, inside: boolean][] }
+
 export type TeamTarget =
-  | { kind: 'finish'; finish: number; title: boolean; champion: 'mine' | 'other' | { key: string } }
+  | { kind: 'finish'; finish: number; title: boolean; champion: 'mine' | 'other' | { key: string }; zone?: TableZone }
   | { kind: 'record'; winsMin: number; winsMax: number }
   | { kind: 'band'; ppgMin: number; ppgMax: number }
   | { kind: 'none' };
@@ -607,7 +614,7 @@ function violation(board: Board, frame: Frame, target: TeamTarget, slotOf: Map<s
   if (pos < f) return { slot: 0, dir: -1, alt: { slot: rows[pos].slot, dir: 1 } };
   if (f > 1 && rows[f - 2].pts === rows[f - 1].pts) return { slot: rows[f - 2].slot, dir: 1 };
   if (f < rows.length && rows[f].pts === rows[f - 1].pts) return { slot: rows[f].slot, dir: -1 };
-  if (f === 1) return null;
+  if (f === 1) return zoneViolation(rows, target.zone, slotOf);
   if (rows[0].pts === rows[1].pts) return { slot: rows[0].slot, dir: 1, alt: rows[1].slot !== 0 ? { slot: rows[1].slot, dir: -1 } : undefined };
   const fixedSlots = new Set(slotOf.values());
   const ch = target.champion;
@@ -617,6 +624,29 @@ function violation(board: Board, frame: Frame, target: TeamTarget, slotOf: Map<s
     if (rows[0].slot !== ks) return { slot: ks, dir: 1, alt: { slot: rows[0].slot, dir: -1 } };
   } else if (ch === 'other' && fixedSlots.has(rows[0].slot)) {
     return { slot: rows[0].slot, dir: -1 };
+  }
+  return zoneViolation(rows, target.zone, slotOf);
+}
+
+/** Release AQ: the first fixed opponent on the wrong side of a saved zone,
+ *  and which way its club has to move. The other club of the fix is the one
+ *  standing at the zone's edge, when that club is free to move (not his, not
+ *  another fixed opponent). Null with no zone, which is every season that
+ *  saved no promotion or relegation. */
+function zoneViolation(rows: StandingRow[], zone: TableZone | undefined, slotOf: Map<string, number>): Fix | null {
+  if (!zone) return null;
+  const fixedSlots = new Set(slotOf.values());
+  const free = (slot: number | undefined) => slot !== undefined && slot !== 0 && !fixedSlots.has(slot);
+  for (const [key, inside] of zone.fixed) {
+    const ks = slotOf.get(key);
+    if (ks === undefined) continue;
+    const at = rows.findIndex(x => x.slot === ks) + 1;
+    if ((at >= zone.from && at <= zone.to) === inside) continue;
+    /* a zone at the foot of the table is left by climbing, one at the head by dropping */
+    const foot = zone.from > 1;
+    const dir: 1 | -1 = inside === foot ? -1 : 1;
+    const edge = foot ? (inside ? rows[zone.from - 1]?.slot : rows[zone.from - 2]?.slot) : (inside ? rows[zone.to - 1]?.slot : rows[zone.to]?.slot);
+    return { slot: ks, dir, ...(free(edge) ? { alt: { slot: edge as number, dir: (dir === 1 ? -1 : 1) as 1 | -1 } } : {}) };
   }
   return null;
 }
