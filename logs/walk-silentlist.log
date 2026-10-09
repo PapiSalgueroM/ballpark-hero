@@ -1,0 +1,34 @@
+In the job at Crystal Palace.
+1) The goal in order
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 1 - 0 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the scorer card was inside the pitch on all 30 frames it was up
+  ok    a tap on the card ended the hold (44 frames after it, none with the card)
+4) Nothing moves the page
+  ok    window.scrollY stayed at 0 through 238 frames before, during and after a goal
+  ok    window.scrollY stayed at 0 with the change sheet, the squad panel, the help panel, the stats panel open
+3) The fit
+  ok    320 by 568: the stage is the window, strip at 0, pitch 320 by 392 (69 percent of the height), control row ends at 568 of 568, 7 controls all 44 px and none covered
+  ok    390 by 844: the stage is the window, strip at 0, pitch 390 by 668 (79.1 percent of the height), control row ends at 844 of 844, 7 controls all 44 px and none covered
+  [labels 390] mean overlapping name labels a frame 0.29 over 24 frames of 22 labels; before match mode 1.63 at 6b1caa20, ratio 0.18
+  ok    768 by 1024: the stage is the window, strip at 12, pitch 372 by 651 (63.6 percent of the height), control row ends at 1012 of 1024, 7 controls all 44 px and none covered
+  ok    1280 by 900: the stage is the window, strip at 12, pitch 541.5 by 722 (80.2 percent of the height), control row ends at 888 of 900, 7 controls all 44 px and none covered
+  ok    844 by 390: the stage is the window, strip at 0, pitch 518 by 388.5 (99.6 percent of the height), control row ends at 390 of 390, 7 controls all 44 px and none covered
+6) Back folds the match away
+  ok    Back folds the match to a card reading "Premier League · Round 1Crystal Palace1 - 0BournemouthPaused at 23'Bac", and the clock held at 23' for 2.6 seconds
+  ok    Back to the match puts the stage back and the clock runs on (23' to 24')
+5) The reload
+  (skipped under a control)
+2) Reduced motion
+  ok    under reduced motion the score reads 1 - 0 on a frame in phase net
+  ok    the scorer card was inside the pitch on all 155 frames it was up
+  ok    nothing under the pitch or the card was animating in open play, inside a goal, after the goal
+7) A wide screen
+  Negative control: every GOAL! in the list beside the pitch is rewritten as it is drawn.
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 1 - 0 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  FAIL: the list beside the pitch never said this goal (0 GOAL! lines all through 322 frames)
+  ok    the scorer card was inside the pitch on all 105 frames it was up
+      what was drawn: pass/pass 0 - 0 8' e136 x51 | shot/plant 0 - 0 9' e136 x16 | shot/flight 0 - 0 9' e136 x12 | shot/flight 0 - 0 9' e957 x18 | shot/wide 0 - 0 9' e957 x14 | shot/wide 0 - 0 10' e957 x4 | pass/pass 0 - 0 10' e957 x4 | pass/pass 0 - 0 10' e136 x7 | pass/pass 0 - 0 10' e957 x3 | goal/plant 0 - 0 10' e136 x16 | goal/flight 0 - 0 10' e136 x26 | goal/flight 0 - 0 11' e136 x4 | goal/net 1 - 0 card 11' e136 x105 | pass/pass 1 - 0 11' e136 x7 | pass/pass 1 - 0 11' e938 x1 | pass/pass 1 - 0 11' e136 x30 | pass/pass 1 - 0 12' e136 x4
+      the goal watched: 10' Jørgen Strand Larsen; the list at the end: 12'Corner, right, Ismaïla Sarr / 12'Foul by Ryan Gravenberch / 12'Foul by Jaydee Canvot / 10'Scored. Jørgen Strand Larsen / 11'Throw in, Liverpool
+playLiveMatchFit: control silentlist turned section 7 red on the line it must (the list never said this goal, 2 GOAL! rewritten) and left the rest green.

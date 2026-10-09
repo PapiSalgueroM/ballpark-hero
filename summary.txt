@@ -1,0 +1,10 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-2 exit=0 105s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+walk-1 exit=0 112s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+walk-3 exit=0 117s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+walk-bar exit=1 53s | playLiveMatchFit: control bar turned section 3 red and left sections 1, 2 and 4 green, as it must.
+walk-silentlist exit=1 67s | playLiveMatchFit: control silentlist turned section 7 red on the line it must (the list never said this goal, 2 GOAL! rewritten) and left the rest green.
+walk-earlyscore exit=1 81s | playLiveMatchFit: control earlyscore turned section 7 red on the line it must (the score changed before the ball was in, 1 node touched) and left the rest green.
+playGames exit=0 47s | Played 1 games. 0 findings, 0 the harness could not drive.
+walk-nocard exit=1 78s | playLiveMatchFit: control nocard turned section 7 red on the line it must (no scorer card was ever on screen, 1 node touched) and left the rest green.
+playGames-1280 exit=0 49s | Played 1 games. 0 findings, 0 the harness could not drive.
