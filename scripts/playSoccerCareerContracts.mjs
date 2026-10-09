@@ -120,14 +120,14 @@ async function extension(career, width, height, label) {
     check((await page.locator('[data-signed-slip]:visible').innerText()).includes(B.soccer.formatWage(quote.weeklyWage)), `${tag}: signed slip uses the saved wage`);
     await page.locator('[data-signed-slip]:visible').screenshot({ path: path.join(SHOTS, `soccer-career-contract-${width}-${label}-signed.png`) });
     await page.reload({ waitUntil: 'domcontentloaded' });
-    await page.locator('[data-watch-week-by-week]:visible').waitFor({ timeout: 45000 });
+    await page.locator('[data-week-by-week]:visible').waitFor({ timeout: 45000 });
     check(await bytes(page) === signedBytes && await page.locator('[data-contract-extension-wage]').count() === 0, `${tag}: reload retains the exact terms and one event without opening another negotiation`);
     await healthy(page, errors, `${tag} signed reload`);
   } finally { await context.close(); }
 }
 async function renewal(career, width, height, label) {
   const expired = { ...structuredClone(career), contractYearsLeft: 0, transferSituation: { type: 'no_interest' } };
-  const { context, page, errors } = await open(expired, width, height, 'button');
+  const { context, page, errors } = await open(expired, width, height, 'button:has-text("Stay and fight for place 💪")');
   const tag = `${width}x${height} ${label} expired renewal`;
   try {
     const stay = page.getByRole('button', { name: 'Stay and fight for place 💪', exact: true });
@@ -136,7 +136,7 @@ async function renewal(career, width, height, label) {
     const expected = JSON.stringify(B.soccer.stayAtClub(structuredClone(expired)));
     await stay.click();
     await page.waitForFunction(() => JSON.parse(localStorage.getItem('soccerCareerSave')).phase === 'playing');
-    await page.locator('[data-watch-week-by-week]:visible').waitFor({ timeout: 45000 });
+    await page.locator('[data-week-by-week]:visible').waitFor({ timeout: 45000 });
     const renewedBytes = await bytes(page), renewed = JSON.parse(renewedBytes);
     const lines = renewed.events.slice(expired.events.length);
     const quote = B.contracts.soccerExtensionQuote(expired, 'renewal');
@@ -144,7 +144,7 @@ async function renewal(career, width, height, label) {
       && lines.length === 1 && lines[0].startsWith('📝 Renewed contract'), `${tag}: actual stay action renews at the veteran wage for one year and logs once`);
     await page.screenshot({ path: path.join(SHOTS, `soccer-career-contract-${width}-${label}-renewed.png`), fullPage: false });
     await page.reload({ waitUntil: 'domcontentloaded' });
-    await page.locator('[data-watch-week-by-week]:visible').waitFor({ timeout: 45000 });
+    await page.locator('[data-week-by-week]:visible').waitFor({ timeout: 45000 });
     check(await bytes(page) === renewedBytes, `${tag}: reload never repeats the renewal or changes its terms`);
     await healthy(page, errors, tag);
   } finally { await context.close(); }
@@ -176,14 +176,14 @@ async function acknowledge(move, width, height) {
     const expected = JSON.stringify(B.soccer.stayAtClub(structuredClone(move.moved)));
     await panel.locator('[data-club-move-continue]').click();
     await page.waitForFunction(() => JSON.parse(localStorage.getItem('soccerCareerSave')).phase === 'playing');
-    await page.locator('[data-watch-week-by-week]:visible').waitFor({ timeout: 45000 });
+    await page.locator('[data-week-by-week]:visible').waitFor({ timeout: 45000 });
     const continuedBytes = await bytes(page), continued = JSON.parse(continuedBytes);
     check(continuedBytes === expected && terms(continued) === terms(move.moved)
       && continued.transferSituation === null && await page.locator('[data-club-move]').count() === 0,
       `${tag}: Continue clears the notice with no second fee, signing, contract change or loan change`);
     await page.screenshot({ path: path.join(SHOTS, `soccer-career-contract-${width}-${mode}-playing.png`), fullPage: false });
     await page.reload({ waitUntil: 'domcontentloaded' });
-    await page.locator('[data-watch-week-by-week]:visible').waitFor({ timeout: 45000 });
+    await page.locator('[data-week-by-week]:visible').waitFor({ timeout: 45000 });
     check(await bytes(page) === continuedBytes && await page.locator('[data-club-move]').count() === 0, `${tag}: acknowledged move stays consumed after reload`);
     await healthy(page, errors, `${tag} playing reload`);
   } finally { await context.close(); }

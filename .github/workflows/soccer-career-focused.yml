@@ -48,11 +48,31 @@ jobs:
             NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node "scripts/$harness.mjs" 2>&1 | tee "career-focused-artifacts/$harness.log" || failed=1
           done
           exit "$failed"
+      - name: Saved future fields and effective snapshot defects
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          failed=0
+          for control in healthy snapshotfield snapshotcrown snapshotmoves; do
+            value="$control"
+            if test "$control" = healthy; then value=""; fi
+            SNAPSHOT_PROBE_ONLY=1 SIM_LEAGUE_WORLD_CONTROL="$value" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerLeagueWorld.mjs 2>&1 | tee "career-focused-artifacts/snapshot-$control.log" || failed=1
+          done
+          grep -q 'simCareerLeagueWorld: all sections green' career-focused-artifacts/snapshot-healthy.log || failed=1
+          for control in snapshotfield snapshotcrown snapshotmoves; do
+            grep -q "control $control: section D1 went red as it must" "career-focused-artifacts/snapshot-$control.log" || failed=1
+          done
+          grep -q 'the displayed division or field differs from its saved snapshot' career-focused-artifacts/snapshot-snapshotfield.log || failed=1
+          grep -q 'the context champion is' career-focused-artifacts/snapshot-snapshotcrown.log || failed=1
+          grep -q 'saved movement differs from the final displayed places' career-focused-artifacts/snapshot-snapshotmoves.log || failed=1
+          exit "$failed"
       - name: Earlier expansion outcomes and full saved award fixtures
         if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
         run: |
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/seasonFamilySummary.test.ts src/test/soccerAwardReveal.test.tsx src/test/soccerSeasonCompetitions.test.tsx src/test/careerWallShotFriendly.test.ts src/test/careerAwardsNightCard.test.tsx --maxWorkers=1 --minWorkers=1 2>&1 | tee career-focused-artifacts/expansion-tests.log
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs 2>&1 | tee career-focused-artifacts/awards-fixtures.log
+      - name: Full season agreement and refused-row diagnostics
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: AGREEMENT_DIAGNOSTICS=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreAgreement.mjs 2>&1 | tee career-focused-artifacts/agreement.log
       - name: Source unchanged
         if: ${{ !cancelled() }}
         run: git diff --exit-code HEAD -- src scripts .github/workflows

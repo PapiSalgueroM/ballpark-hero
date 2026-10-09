@@ -63,6 +63,23 @@ jobs:
           done
           ONLY=simClubVerdict,simLoanSpell node scripts/runAllSims.mjs 2>&1 | tee career-opponents-artifacts/existing-club-and-loan-sims.log || failed=1
           exit "$failed"
+      - name: Saved future fields and effective snapshot defects
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for control in healthy snapshotfield snapshotcrown snapshotmoves; do
+            value="$control"
+            if test "$control" = healthy; then value=""; fi
+            SNAPSHOT_PROBE_ONLY=1 SIM_LEAGUE_WORLD_CONTROL="$value" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerLeagueWorld.mjs 2>&1 | tee "career-opponents-artifacts/snapshot-$control.log" || failed=1
+          done
+          grep -q 'simCareerLeagueWorld: all sections green' career-opponents-artifacts/snapshot-healthy.log || failed=1
+          for control in snapshotfield snapshotcrown snapshotmoves; do
+            grep -q "control $control: section D1 went red as it must" "career-opponents-artifacts/snapshot-$control.log" || failed=1
+          done
+          grep -q 'the displayed division or field differs from its saved snapshot' career-opponents-artifacts/snapshot-snapshotfield.log || failed=1
+          grep -q 'the context champion is' career-opponents-artifacts/snapshot-snapshotcrown.log || failed=1
+          grep -q 'saved movement differs from the final displayed places' career-opponents-artifacts/snapshot-snapshotmoves.log || failed=1
+          exit "$failed"
       - name: Trophy history and existing season contracts
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |

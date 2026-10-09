@@ -33,7 +33,7 @@ for (let key = 0; key < 32 && !redGame; key += 1) {
   for (const field of ['leagueFinish', 'leagueSize', 'leagueWorld', 'derbies', 'cupRun', 'clubCupRun', 'clubCupTitle']) delete row[field];
   Object.assign(candidate, { playerName: `Discipline Fixture ${key}`, position: 'ST',
     currentClub: club.name, currentClubCountry: club.country, currentClubTier: club.tier,
-    currentClubColor: club.color, currentLeague: club.league, phase: 'playing', pendingSummary: null,
+    currentClubColor: club.color, currentLeague: club.league, phase: 'season_summary', pendingSummary: row,
     pendingBallonDor: null, pendingEvents: [], pendingAppealResult: null });
   delete candidate.seasonMoments;
   delete candidate.pendingSuspensionMatches;
