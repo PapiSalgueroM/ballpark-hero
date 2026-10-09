@@ -34,6 +34,7 @@ assert.deepEqual(competitions[1].matches.map(m => [m.opponent, m.goalsFor, m.goa
   ['Barcelona', 2, 1], ['Barcelona', 0, 2],
 ], 'each European leg keeps its recorded score');
 assert.equal(competitions[1].matches[1].note, '2-3 on aggregate');
+console.log('ok   saved domestic and club cup names, opponents, leg scores and decisions');
 assert.equal(B.competitions.savedClubCampaign(career, { ...row, year: 2026 }), null, 'a current campaign cannot leak into a historical season');
 assert.equal(B.competitions.savedClubCampaign(career, { ...row, club: 'Chelsea' }), null, 'a different club cannot inherit this campaign');
 assert.equal(B.competitions.savedClubCampaign({ lastUCLResult: { ...clubCampaign, seasonYear: undefined, club: undefined } }, row), null, 'an old unanchored campaign is not guessed');
@@ -41,6 +42,7 @@ assert.deepEqual(B.competitions.savedSeasonCompetitions({ lastUCLResult: firstSt
   ['Juventus', 0, 1], ['Dortmund', 1, 1],
 ], 'a first-stage exit still shows its recorded games');
 assert.equal(JSON.stringify({ row, career }), before, 'reading cup games must not write the save');
+console.log('ok   historical bindings, unknown old campaigns, first-stage exits and read-only saves');
 
 const captured = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/careerLeagueWorldSaves1100.json'), 'utf8')).saves.find(s => s.id === 'ere').state;
 const club = B.soccer.FALLBACK_CLUBS.find(c => c.name === 'Arsenal');

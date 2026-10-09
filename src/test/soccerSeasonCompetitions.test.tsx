@@ -1,11 +1,18 @@
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, describe, expect, it } from 'vitest';
-import type { CareerState } from '@/lib/soccerCareerEngine';
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { MemoryRouter } from 'react-router-dom';
+import { FALLBACK_CLUBS, type CareerState, type SeasonRecord } from '@/lib/soccerCareerEngine';
 import { savedClubCampaign, savedSeasonCompetitions } from '@/lib/soccerSeasonCompetitions';
 import SeasonCompetitionPanel, { CompetitionNavigation } from '@/components/soccer-career/SeasonCompetitionPanel';
+import SoccerSeasonCentre from '@/components/soccer-career/SoccerSeasonCentre';
+import { MatchClock } from '@/components/season-centre/MatchClock';
+import { deriveSeason } from '@/lib/season/core';
+import { buildSoccerSeasonCtx, SOCCER } from '@/lib/season/soccer';
+import { soccerCardLine } from '@/lib/soccerDiscipline';
+import { RESULTS_ROW, SOCCER_SHAPED, toySeason } from './fixtures/seasonCentreToy';
 import { clubCampaign, competitionCareer, cupSeason, firstStageCampaign } from './fixtures/soccerSeasonCompetitions1173';
 
-afterEach(cleanup);
+afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.restoreAllMocks(); });
 describe('saved Soccer Career competitions', () => {
   it('copies the named cup, known scores and penalties without inventing early fixtures or grounds', () => {
     const before = JSON.stringify(cupSeason);
@@ -16,6 +23,7 @@ describe('saved Soccer Career competitions', () => {
     expect(cup.matches.map(m => [m.goalsFor, m.goalsAgainst])).toEqual([[null, null], [2, 1], [1, 0], [1, 1]]);
     expect(cup.matches.every(m => m.home === undefined)).toBe(true);
     expect(cup.matches[3].note).toBe('5-4 on penalties');
+    expect(cup.matches[3].result).toBe('Winners');
     expect(JSON.stringify(cupSeason)).toBe(before);
   });
 
@@ -85,5 +93,115 @@ describe('saved Soccer Career competitions', () => {
     expect(screen.getByRole('button', { name: 'FA Cup' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Champions League' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Current squad' })).toBeInTheDocument();
+  });
+});
+
+function centreCareer(row: SeasonRecord, extra: Partial<CareerState> = {}): CareerState {
+  return {
+    playerName: 'Competition fixture', position: 'ST', seasons: [row], awards: [], events: [],
+    overall: 85, age: row.age, currentClub: row.club, currentClubCountry: row.clubCountry,
+    currentClubTier: row.clubTier, currentClubColor: '#ef4444', phase: 'season_summary',
+    pendingSummary: row, pendingBallonDor: null, lastUCLResult: clubCampaign,
+    phone: { world: { year: row.year, leagues: {}, ucl: '' } }, ...extra,
+  } as unknown as CareerState;
+}
+
+describe('Soccer Career competition navigation keeps the actual league view', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    localStorage.setItem('seasonCentre:help', '1');
+    vi.stubGlobal('matchMedia', (query: string) => ({ matches: false, media: query, addEventListener() {}, removeEventListener() {} }));
+  });
+
+  it('freezes and resumes the same live clock, pause state and completed review across cup tabs', () => {
+    let now = 0, nextFrame = 0;
+    const frames = new Map<number, FrameRequestCallback>();
+    vi.spyOn(performance, 'now').mockImplementation(() => now);
+    vi.spyOn(document, 'hidden', 'get').mockReturnValue(false);
+    vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => { frames.set(++nextFrame, callback); return nextFrame; });
+    vi.stubGlobal('cancelAnimationFrame', (id: number) => frames.delete(id));
+    const tick = () => act(() => { now += 250; const work = [...frames.values()]; frames.clear(); work.forEach(callback => callback(now)); });
+    const row = { ...cupSeason, yellowCards: 4, redCards: 2, suspensionMatches: 1 };
+    const career = centreCareer(row);
+    const bytes = JSON.stringify(career);
+    const view = render(<MemoryRouter><SoccerSeasonCentre career={career} clubs={FALLBACK_CLUBS} row={row} mode="watch" offer={false} onClose={() => {}} /></MemoryRouter>);
+    fireEvent.click(screen.getByRole('button', { name: /Kick off/ }));
+    const clock = view.container.querySelector('[data-match-clock]')!;
+    for (let i = 0; i < 8; i++) tick();
+    const minute = Number(clock.getAttribute('data-minute'));
+    expect(minute).toBeGreaterThan(0);
+    fireEvent.click(screen.getByRole('button', { name: 'FA Cup' }));
+    expect(view.container.querySelector('[data-match-clock]')).toBe(clock);
+    expect(clock.closest('[data-season-centre]')).toHaveAttribute('aria-hidden', 'true');
+    for (let i = 0; i < 8; i++) tick();
+    expect(Number(clock.getAttribute('data-minute'))).toBe(minute);
+    fireEvent.click(screen.getByRole('button', { name: 'Premier League' }));
+    expect(view.container.querySelector('[data-match-clock]')).toBe(clock);
+    expect(Number(clock.getAttribute('data-minute'))).toBe(minute);
+    tick();
+    expect(Number(clock.getAttribute('data-minute'))).toBeGreaterThan(minute);
+    fireEvent.click(screen.getByRole('button', { name: /Pause/ }));
+    fireEvent.click(screen.getByRole('button', { name: 'FA Cup' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Premier League' }));
+    expect(screen.getByRole('button', { name: /Resume/ })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Results' }));
+    fireEvent.click(screen.getByRole('button', { name: /Sim the rest/ }));
+    const review = view.container.querySelector('[data-review]');
+    expect(review).not.toBeNull();
+    expect(review?.textContent).toContain('Discipline: 🟨 4 yellow cards · 🟥 2 red cards in all competitions.');
+    expect(review?.textContent).toContain('1 club match missed through suspension.');
+    const bucket = deriveSeason(SOCCER, row, buildSoccerSeasonCtx(career, FALLBACK_CLUBS, row))!.bucket!;
+    const bucketCards = soccerCardLine(bucket.line.yellow ?? 0, bucket.line.red ?? 0);
+    expect(bucketCards).not.toBe('');
+    expect(view.container.querySelector('[data-review-bucket]')?.textContent).toContain(bucketCards);
+    fireEvent.click(screen.getByRole('button', { name: 'FA Cup' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Premier League' }));
+    expect(view.container.querySelector('[data-kickoff]')).toBeNull();
+    expect(view.container.querySelector('[data-review]')).toBe(review);
+    expect(screen.getByRole('button', { name: 'Premier League' })).toHaveFocus();
+    expect(JSON.stringify(career)).toBe(bytes);
+    view.unmount();
+    expect(document.body.style.overflow).not.toBe('hidden');
+  });
+
+  it.each([null, 70])('a hidden instant clock does not deliver full time or a moment hold (%s)', holdAt => {
+    const fullTime = vi.fn(), hold = vi.fn();
+    const props = { game: toySeason(RESULTS_ROW).games[0], clock: SOCCER_SHAPED.clock, usName: 'Fixture club', themName: 'Fixture opponent',
+      speed: 'results' as const, paused: false, reduced: true, onFullTime: fullTime, onHold: hold, holdAt };
+    const view = render(<MatchClock {...props} active={false} />);
+    expect(fullTime).not.toHaveBeenCalled();
+    expect(hold).not.toHaveBeenCalled();
+    view.rerender(<MatchClock {...props} active />);
+    expect(holdAt === null ? fullTime : hold).toHaveBeenCalledTimes(1);
+    view.rerender(<MatchClock {...props} active={false} />);
+    view.rerender(<MatchClock {...props} active />);
+    expect(holdAt === null ? fullTime : hold).toHaveBeenCalledTimes(1);
+  });
+
+  it('opens an old saved campaign without drawing a league table against a later world', () => {
+    const row = { ...cupSeason, leagueFinish: 7, leagueSize: 20, clubCupRun: structuredClone(clubCampaign) };
+    const later = { ...row, year: 2028, club: 'Chelsea', cupRun: undefined, clubCupRun: undefined, domesticCup: false };
+    const career = centreCareer(row, { seasons: [row, later], currentClub: 'Chelsea',
+      phone: { world: { year: 2028, leagues: {}, ucl: '' } } as CareerState['phone'], lastUCLResult: null });
+    const bytes = JSON.stringify(career);
+    const view = render(<MemoryRouter><SoccerSeasonCentre career={career} clubs={FALLBACK_CLUBS} row={null} mode="watch" offer={false} onClose={() => {}} /></MemoryRouter>);
+    expect(view.container.querySelector('[data-replay-locked="0"]')).toBeNull();
+    fireEvent.click(view.container.querySelector('[data-replay-row="0"]')!);
+    expect(view.container.querySelector('[data-centre-league-unavailable]')).not.toBeNull();
+    expect(view.container.querySelector('[data-match-clock]')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Champions League' }));
+    fireEvent.click(view.container.querySelector('[data-centre-cup-open="1"]')!);
+    expect(screen.getByText('Arsenal vs Barcelona')).toBeInTheDocument();
+    expect(view.container.querySelector('[data-centre-cup-score]')?.textContent).toBe('0-2');
+    expect(screen.getByText('2-3 on aggregate')).toBeInTheDocument();
+    expect(JSON.stringify(career)).toBe(bytes);
+  });
+
+  it('labels the current squad with its current club and upcoming year on an old replay', () => {
+    const career = centreCareer(cupSeason, { currentClub: 'Chelsea', seasons: [cupSeason, { ...cupSeason, year: 2029, club: 'Chelsea' }], retired: false });
+    const view = render(<SeasonCompetitionPanel career={career} row={cupSeason} competition={null} navigation={null} exitLabel="Back to your career" onClose={() => {}} />);
+    expect(view.container.querySelector('[data-centre-competition-context]')?.textContent).toBe('Chelsea · Current squad · 2030/31');
+    expect(view.container.querySelector('[data-centre-competition-context]')?.textContent).not.toContain('2027');
+    expect(view.container.querySelector('[data-squad-tile]')).not.toBeNull();
   });
 });

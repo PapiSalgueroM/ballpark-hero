@@ -187,6 +187,9 @@ import { fileURLToPath } from 'node:url';
 import { probeAwardsNight, mulberry32 } from './lib/careerAwardsNightProbe.mjs';
 import { bundleAwardsNight } from './lib/careerAwardsNightBundle.mjs';
 import { awardsNight1172Attribution } from './lib/careerAwardsNight1172.mjs';
+import { careerLeagueWorld1175Attribution } from './lib/careerLeagueWorld1175.mjs';
+import { careerDiscipline1176Attribution } from './lib/careerDiscipline1176.mjs';
+import { SOCCER_CONTRACT_1177_BASELINE_PATCHES } from './lib/soccerContractBaseline1177.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_AWARDS_NIGHT_CONTROL ?? '';
@@ -369,7 +372,7 @@ console.log('1) Soccer Career replays the pre-lift fixture byte for byte');
     onTournament: (s, won) => { if (won) liveTournaments.push(JSON.parse(JSON.stringify(s))); },
   });
   check(currentReplay.careers.length === fixture.careers.length && currentReplay.nights.length > 500, 'the current new-ballot replay did not exercise the whole fixture population');
-  const baselineBundle = await bundleAwardsNight(ROOT, { patches: [...awardsNight1172Attribution, ...(CONTROLS[CONTROL]?.patches ?? [])] });
+  const baselineBundle = await bundleAwardsNight(ROOT, { patches: [...awardsNight1172Attribution, ...careerLeagueWorld1175Attribution, ...careerDiscipline1176Attribution, ...SOCCER_CONTRACT_1177_BASELINE_PATCHES, ...(CONTROLS[CONTROL]?.patches ?? [])] });
   const fresh = JSON.parse(JSON.stringify(probeAwardsNight(baselineBundle)));
   console.log('   Round 1172 attribution: exact copied new-generation, newspaper and ceremony changes restored for the old fixture; current outcomes still checked in sections 2 to 7 and simSoccerAwardReveal');
   /* Round 834 part 2 changed the winner's and the podium's ceremony cards on

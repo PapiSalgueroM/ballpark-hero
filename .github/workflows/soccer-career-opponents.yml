@@ -1,4 +1,4 @@
-name: Soccer Career opponents and trophy history
+name: Soccer Career expansion and save agreement
 
 on:
   push:
@@ -57,7 +57,14 @@ jobs:
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/trophyCabinet.test.tsx src/test/seasonCore.test.ts src/test/seasonReplays.test.tsx src/test/seasonCentreSlots.test.tsx src/test/seasonCentreWords.test.tsx src/test/careerSeasonReview.test.tsx --maxWorkers=1 --minWorkers=1 2>&1 | tee career-opponents-artifacts/tests.log
+          set +e
           ONLY=simTrophyCabinet,simSeasonCentreTable,simSeasonCentreAgreement,simSeasonCentreNeutral,simCareerLeagueWorld,simCareerMoments,simNoInventedQuotes node scripts/runAllSims.mjs --browser 2>&1 | tee career-opponents-artifacts/career.log
+          career_exit=${PIPESTATUS[0]}
+          set -e
+          if test "$career_exit" != 0; then
+            AGREEMENT_DIAGNOSTICS=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreAgreement.mjs 2>&1 | tee career-opponents-artifacts/agreement-diagnostics.log || true
+            exit "$career_exit"
+          fi
       - name: Family, award reveal, competitions and free kicks
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
@@ -79,6 +86,34 @@ jobs:
               name) grep -q 'the named domestic cup stays named' "career-opponents-artifacts/competition-control-$control.log" ;;
             esac
             if grep -Eq 'control.*refus|Cannot find|SyntaxError|no patches applied' "career-opponents-artifacts/competition-control-$control.log"; then exit 1; fi
+          done
+      - name: Changing leagues, discipline, navigation and contract outcomes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerCareerContracts.test.ts --maxWorkers=1 --minWorkers=1 2>&1 | tee career-opponents-artifacts/contracts-tests.log
+          failed=0
+          for harness in simSoccerCareerLeagueWorld simSoccerDiscipline simSoccerCompetitionNavigation simSoccerContractMoves; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node "scripts/$harness.mjs" 2>&1 | tee "career-opponents-artifacts/$harness.log" || failed=1
+          done
+          ONLY=simClubVerdict,simLoanSpell node scripts/runAllSims.mjs 2>&1 | tee career-opponents-artifacts/existing-club-and-loan-sims.log || failed=1
+          exit "$failed"
+      - name: Effective contract and club move defects
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          for control in age elite move repeat; do
+            set +e
+            SIM_SOCCER_CONTRACT_CONTROL="$control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerContractMoves.mjs > "career-opponents-artifacts/contract-control-$control.log" 2>&1
+            control_exit=$?
+            set -e
+            cat "career-opponents-artifacts/contract-control-$control.log"
+            test "$control_exit" = 1
+            case "$control" in
+              age) grep -q 'age and current level/form decide the exact quoted wage' "career-opponents-artifacts/contract-control-$control.log" ;;
+              elite) grep -q 'age and current level/form decide the exact quoted wage' "career-opponents-artifacts/contract-control-$control.log" ;;
+              move) grep -q 'the actual window completes the club decision without an accept action' "career-opponents-artifacts/contract-control-$control.log" ;;
+              repeat) grep -q 'Continue clears a completed move without repeating it' "career-opponents-artifacts/contract-control-$control.log" ;;
+            esac
+            if grep -Eq 'control.*refus|Cannot find|SyntaxError|no patches applied' "career-opponents-artifacts/contract-control-$control.log"; then exit 1; fi
           done
       - name: Every built reader
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
@@ -108,7 +143,7 @@ jobs:
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           failed=0
-          for journey in playSoccerCareerFamily playSoccerCareerAwardReveal playSoccerCareerCompetitions playSeasonMoments; do
+          for journey in playSoccerCareerFamily playSoccerCareerAwardReveal playSoccerCareerCompetitions playSoccerCareerDiscipline playSoccerCareerContracts playSoccerCareerLeagueWorld playSeasonMoments; do
             NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SHOTS="$PWD/career-opponents-artifacts/$journey-screenshots" node "scripts/$journey.mjs" 2>&1 | tee "career-opponents-artifacts/$journey.log" || failed=1
           done
           exit "$failed"

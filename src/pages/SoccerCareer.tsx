@@ -57,6 +57,8 @@ import {
 } from "@/lib/soccerCareerEngine";
 import type { FirstStageStage } from "@/lib/soccerCareerContinental";
 import { careerBeforeBallonDorReveal, revealBallonDorResult } from "@/lib/soccerAwardReveal";
+import { readLeagueWorldSeason } from "@/lib/soccerCareerLeagueWorld";
+import { soccerExtensionQuote } from "@/lib/soccerCareerContracts";
 /* Round 258, his ask alongside the net worth bug: "depending where u live
    ur currency will be diffrent". `money` rewrites the euro amounts inside
    any line the game draws, so a wage slip, an event consequence and a
@@ -679,19 +681,20 @@ function NewspaperCard({ articles, seasonKey, onContinue }: { articles: NewsArti
 function SeasonSummaryCard({ season, position, onContinue, appearance, leagueOf, world, familyContext }: { season: SeasonRecord; position: string; onContinue: () => void; appearance?: PlayerAppearance | null; leagueOf?: { key: string; name: string } | null; world?: WorldSeason | null; familyContext?: SeasonFamilyContext }) {
   /* Round 1037: the finish is printed in the league the club was in that
      season (finishLeague), the phone's world is read by its key */
-  const league = leagueOf?.key;
-  const leagueName = leagueOf?.name;
+  const playedWorld = readLeagueWorldSeason(season);
+  const league = playedWorld?.league ?? leagueOf?.key;
+  const leagueName = playedWorld?.league ?? leagueOf?.name;
   const isGK = position === "GK";
   const trophies = [season.leagueTitle && "🏆 League", season.domesticCup && `🏆 ${cupChipLabel(season)}`, season.championsLeague && "⭐ UCL", season.clubCupTitle && `⭐ ${season.clubCupTitle}`, season.worldCup && "🌍 World Cup", season.continentalCup && "🌐 Continental", season.ballonDor && "🏅 Ballon d'Or"].filter(Boolean);
   /* Round 929: the champion is the one the phone's world already crowned for
      this season, so the card and the feed can never name two winners. */
   const finish = readLeagueFinish(season);
-  const crowned = finish && finish.finish !== 1 && league && world && world.year === season.year
-    ? (world.leagues?.[league] && world.leagues[league] !== season.club ? world.leagues[league] : null)
+  const crowned = finish && finish.finish !== 1
+    ? playedWorld?.champion ?? (league && world && world.year === season.year && world.leagues?.[league] !== season.club ? world.leagues?.[league] : null)
     : null;
   /* Round 1037: the phone's champion is named only if that club really was
      in the league that season */
-  const champion = crowned && league && namedInLeague(crowned, league, season.year) ? crowned : null;
+  const champion = crowned && league && (playedWorld ? playedWorld.members.includes(crowned) : namedInLeague(crowned, league, season.year)) ? crowned : null;
   const celebration = appearance ? getCelebration(appearance.celebration) : null;
   const familySummary = appearance?.celebration === "cradle" ? seasonFamilySummary(season, familyContext) : null;
   const summaryRating = readMatchRating(season);
@@ -744,6 +747,10 @@ function SeasonSummaryCard({ season, position, onContinue, appearance, leagueOf,
         <span>🟨 {season.yellowCards} 🟥 {season.redCards}</span>
       </div>
 
+      {playedWorld && <p data-summary-league-world className="text-xs text-muted-foreground">{playedWorld.simulation === "simulated-partial" ? "Your career's simulated league world. The lower division uses a partial club pool." : "Your career's simulated league world. Promotion and relegation use a simplified two-division model."}</p>}
+      {playedWorld?.movement && <p data-summary-club-movement className="text-xs font-semibold">
+        {playedWorld.movement.kind === "relegated" ? "🔻" : "🟢"} {playedWorld.movement.club} {playedWorld.movement.kind} to {playedWorld.movement.to} for next season.
+      </p>}
       {/* Round 1012: how each derby went, at most three lines, nothing on old saves. */}
       <SeasonDerbyLines season={season} />
       {/* Round 1041: a cup run that ended early, one line; nothing on old saves. */}
@@ -2246,6 +2253,16 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
      the season simulation rolls from, so this line can never overpromise. */
   const seasonsHere = career.seasons.filter(ss => ss.club === career.currentClub && ss.type === "playing").length;
   const projHere = projectLeagueApps(career.overall, career.currentClubTier, career.currentClub, seasonsHere);
+  const extension = soccerExtensionQuote(career);
+  if (situation.type === "club_move") return <div data-club-move data-club-move-mode={situation.mode} className="space-y-3 rounded-xl border border-border bg-card p-4">
+    <h3 className="text-lg font-black">{situation.mode === "loan" ? "🛫 Your club arranged a loan" : "📤 Your club sold you"}</h3>
+    <p className="text-sm font-semibold">{situation.fromClub} → {situation.toClub}</p>
+    <p className="text-xs text-muted-foreground">The club chose this move. Your next season is at {situation.toClub}.</p>
+    <p className="text-sm">{formatWage(situation.wage)} · {situation.mode === "loan" ? "Season-long loan. Your parent contract stays in place." : `${situation.contractYears}-year contract`}</p>
+    {situation.mode === "sale" && <p className="text-xs text-muted-foreground">Transfer fee: {money(`€${situation.transferFee.toFixed(1)}M`)}</p>}
+    <ul className="space-y-1 text-xs text-muted-foreground">{situation.reasons.map(reason => <li key={reason}>{reason}</li>)}</ul>
+    <Button data-club-move-continue onClick={onStay} className="min-h-11 w-full whitespace-normal bg-emerald-600 text-sm font-bold text-black">Continue at {situation.toClub} →</Button>
+  </div>;
 
   return (
     <div className="space-y-3">
@@ -2469,6 +2486,10 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
           <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-3 text-center">
             <span className="text-sm font-bold">⚠️ Contract Expiring!</span>
             <p className="text-xs text-muted-foreground mt-1">You can sign an extension or leave on a free transfer</p>
+          </div>
+          <div className="rounded-xl border border-border bg-muted/20 p-3 text-sm">
+            <p data-contract-extension-wage className="font-bold">Your club offers {formatWage(extension.weeklyWage)}{extension.contractYears !== null ? ` for ${extension.contractYears} year${extension.contractYears === 1 ? "" : "s"}` : ""}.</p>
+            <p className="mt-1 text-xs text-muted-foreground">{extension.rationale}</p>
           </div>
           <Button onClick={onSignExtension} className="w-full h-9 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
             Sign Extension with {career.currentClub} 📝

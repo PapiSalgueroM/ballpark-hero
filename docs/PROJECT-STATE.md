@@ -1,47 +1,54 @@
-## Soccer Career only: opponent names and trophy history, 2026-10-09
+## Soccer Career only: rounds 1169 to 1178, 2026-10-09
 
-Anthony reported "another club" in Anderlecht's Week by week and asked for
-Soccer Career to be the sole product focus. Fresh work starts from origin/main
-0054fd819320a32884609562e2f4b882f2ecbf38 on
-codex/soccer-career-real-opponents, in the isolated managed worktree.
+Anthony's active scope is Soccer Career only. Draft PR207 starts on
+origin/main0054fd819320a32884609562e2f4b882f2ecbf38, isolated branch
+codex/soccer-career-real-opponents. F owns integration and publication.
+This expanded source is NOT READY pending remote verification.
 
-Anthony then reported repeated newborn text, conflicting early award news,
-award-screen confetti and a result spoiled before the list. He also requested
-other Season Centre competitions, access to the current eleven/bench, easier
-career free kicks and gradual turnover of award contenders. Rounds 1171 to
-1174 address these in the same draft PR207. This extended source is pending
-remote acceptance. No existing saved award is recalculated and no missing
-old cup scores or lineups are invented.
+1169 names verified opponents independently of table eligibility. 1170
+opens actual winning seasons in every Trophy Cabinet category. 1171 varies
+family summary text by year and children, with newborn text limited to the
+birth year. 1172 keeps award results hidden through news, summary, timeline
+and totals until the ranked list finishes, removes soccer award confetti,
+and replaces contradictory snub copy with waiting-for-the-list news.
+1173 adds saved domestic and continental cup results, current XI and bench,
+and preserves live/paused/review state across competition tabs. Old cup
+replays remain available when a historical league winner was not saved.
+1174 eases the career free-kick timing and opening. Award contenders now
+turn over gradually with recurring generated names; old ballots stay frozen.
 
-Round 1169 separates verified opponent membership from table eligibility.
-Old saves without a finish, injury seasons and known split/conference leagues
-can name their known opponents. Scores, stats, events, moments and save fields
-are unchanged for the same season frame. Club spellings use the existing alias
-map. Historical membership still follows the season's ledger; unknown history
-and surplus slots in unsupported split formats are not filled with invented
-clubs. Eight regression cases and two effective copied naming controls are
-prepared. No new real sports facts or data rows were added.
+1175 records future league membership and direct promotion/relegation in
+five sourced two-division models. A player's final displayed table selects
+moving clubs. Replays retain their own field and champion; transfer offers
+follow next year's divisions. This is labelled simulated. Spain's lower
+club pool is partial and excludes reserve sides. Historical rows and open
+leagues keep existing behavior. Injury rows retain known membership without
+inventing a finish. 1176 makes accepted/rejected red-card bans cost future
+club appearances, serves them once, keeps actual send-offs and missed
+matches visible, and shows appeal results before remaining event cards.
+1177 quotes shorter, age/form-sensitive veteran extensions and renewals;
+a raise after age30 requires overall90, season rating8 and20apps. Younger
+terms stay unchanged. 1178 automatically completes new club sale/loan
+verdicts using existing offers and accepted-contract behavior. One Continue
+acknowledges the move; reload cannot repeat fees or signing events.
 
-Round 1170 makes every Trophy Cabinet category open its actual winning seasons.
-A compact detail tile shows the recorded club, year, loan and season totals;
-international totals stay separate. Domestic cup wins use the existing saved
-cup-run details. Counts come from the same season flags as getCareerTotals,
-never an extra award-list count. Back, Escape, help and keyboard controls are
-included. The component loads only when a category is opened.
+Current pushed sourcecfee9e99/run37902572686 is RED, not acceptance: table
+yield99.18% versus99.2% bound, competition harness EMPTY output, and existing
+moments browser reload offline ECONNRESET. All types/build,8 opponent cases,
+2 controls,79 existing/trophy tests,34 expansion tests,9 expansion harnesses,
+15 built readers and164+72+26+38 browser checks passed. The served unnamed
+control proved both viewports. Artifact11603287409 SHA256
+260f6521b1072e1af048a26d6f90182dc319b45184350960b528854ae0d4fc61 verified.
+The output and reload drivers are fixed; no threshold is relaxed. Earlier
+red runs37897747076/37899142843 are retained. New combined gates add full-save
+attribution, effective world/card/navigation/contract controls, existing
+club/loan checks and actual phone/desktop movement, discipline and contract
+journeys. Final source evidence remains pending.
 
-Remote run37899142843 on eeace203 passed app types/build, opponent controls,
-79 season/trophy tests,7 career harnesses, all15 built readers and164 native
-browser assertions. The extra served unnamed control refused a missing
-compiled-code anchor, so the full run is red and is not acceptance. First
-run37897747076 is retained as red driver evidence. Updated source will rerun
-the gates plus the family, reveal, generation, competition, squad and free-kick
-checks. Remote verification is pending: app types, build, focused regressions and
-copied defects, existing season/league checks, all 15 built readers, and actual
-Anderlecht/save/trophy journeys at phone and desktop sizes. Local site runtime
-was not executed. A delegated node --check syntax-only command ran locally
-by mistake; that path was stopped and grants no test acceptance.
-No merge or live publication is claimed. Prior PR206 and
-source1168 remain separate. F retains integration and final publication.
+All app, helper, parser, compiler, dependency, build, test and browser runtime
+is remote only. A delegated local Node syntax check in an earlier round was
+stopped and grants no acceptance. Root app drafts/index/stash are preserved.
+No merge or live claim. PR206 and held1168 remain separate.
 
 ## Release AO LIVE, 2026-10-09 02:01 EDT: whole leagues and a moving Season Centre in Soccer Career, a match that moves and Russia in Club Manager, sound, nine rounds
 

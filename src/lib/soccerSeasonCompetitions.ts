@@ -48,7 +48,7 @@ export function savedSeasonCompetitions(career: Pick<CareerState, 'lastUCLResult
         return {
           round: { early: 'Early rounds', QF: 'Quarter-final', SF: 'Semi-final', F: 'Final' }[tie.stage],
           opponent: tie.opp ?? null, goalsFor: final?.for ?? tie.for ?? null, goalsAgainst: final?.against ?? tie.against ?? null,
-          result: tie.won ? 'Through' : 'Out',
+          result: tie.won ? tie.stage === 'F' ? 'Winners' : 'Through' : 'Out',
           note: final?.decidedBy === 'penalties' ? `${final.pensFor}-${final.pensAgainst} on penalties`
             : final?.legs === 2 ? 'Final score on aggregate' : tie.stage === 'early' ? 'Opponents and scores were not kept for these rounds.' : undefined,
         };

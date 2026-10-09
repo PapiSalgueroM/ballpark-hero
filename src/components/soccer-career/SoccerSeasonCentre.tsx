@@ -34,6 +34,8 @@ import { useSoccerMoments } from './useSoccerMoments';
 import SeasonCompetitionPanel, { CompetitionNavigation, type CentreScreen } from './SeasonCompetitionPanel';
 import { savedSeasonCompetitions } from '@/lib/soccerSeasonCompetitions';
 import { ballonDorSeasonForDisplay } from '@/lib/soccerAwardReveal';
+import { soccerCardLine } from '@/lib/soccerDiscipline';
+import { readLeagueWorldSeason } from '@/lib/soccerCareerLeagueWorld';
 import { readSeasonDerbies } from '@/lib/soccerCareerDerby';
 import { leagueWithArticle, ordinal, readLeagueFinish } from '@/lib/soccerCareerLeague';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
@@ -81,10 +83,10 @@ const HELP: HelpWords = {
   title: 'How the Season Centre works',
   intro: [
     'Your season was played the moment you pressed Next Season. This is that same season, match by match: the final table and your season totals are settled, and nothing here can change them.',
-    "When a season shows a table, who was in the league, how many clubs it had and how many points a win was worth are real (from 2026-27 on, the league is your career's own world). Every score, every other club's result and every minute are your career's own.",
+    "Earlier-season tables use verified league membership and competition rules. From 2026-27, saved league worlds use your career's simulated clubs and direct promotion and relegation between two divisions. The review marks the available Spanish lower-division club pool. Every score, every other club's result and every minute are your career's own.",
     'When the table changes, each club slides from where it was to where it is now. The little pitch shows who scored and when. The ring is you, whenever you are in the move: scoring it, setting it up, or up there with the attack if you play in midfield or up front, and at the back when one goes in past you as a keeper or a defender. ⚽ Yours or 🅰️ Your assist under the pitch tells you when the goal or the assist was yours. How the move looked is the game\'s own drawing.',
   ],
-  controls: '▶ plays the next matchday. ⏩ jumps to the next big game (a derby, halfway, the title or the final day). ⏭ goes straight to the end. 1x and 3x set the clock, Results shows each match at full time. After a jump the table slides from the last matchday you saw; the ▲ and ▼ beside your place always compare with the matchday before. Close it whenever you like: the 📺 Resume chip on your career page takes you back to the same matchday. 📺 Season replays, next to Ratings, opens the season you just played, every season you won the league and every results only season; any other season with a table is locked, because the game did not keep who won the league that year.',
+  controls: '▶ plays the next matchday. ⏩ jumps to the next big game (a derby, halfway, the title or the final day). ⏭ goes straight to the end. 1x and 3x set the clock, Results shows each match at full time. After a jump the table slides from the last matchday you saw; the ▲ and ▼ beside your place always compare with the matchday before. Close it whenever you like: the 📺 Resume chip on your career page takes you back to the same matchday. 📺 Season replays, next to Ratings, opens seasons with a saved league world, seasons you won and results only seasons. Older seasons without a saved league world can still open their recorded cups and the current squad; their league replay stays unavailable when the game did not keep who won it.',
   moments: [
     'Up to three moments a season are yours to play, marked 🎯 on the fixtures of the season you just played. The clock stops a beat before one. 🎯 Take it yourself plays it on your training ground board, one go. ▶ Let it play leaves the match as it was. Once the board opens the go is used, so closing the tab counts as a miss.',
     'YOUR CALL: what you do is what happened in that match. Score a chance that was missed and the goal is yours; miss one that went in and it is gone. The return game against the same club takes the other side of it, so the final table and your season totals end exactly where your season summary has them.',
@@ -153,7 +155,10 @@ function soccerSport(keepsSheets: boolean, color: string, role: Exclude<PitchRol
       ['Rating', so.apps ? ((so.rating ?? 0) / so.apps).toFixed(1) : '-'],
     ],
     half: so => `First half: ${so.apps} games, ${so.goals ?? 0} goals, ${so.assists ?? 0} assists`,
-    bucket: b => `Cups and other games: ${b.apps} apps, ${b.line.goals ?? 0} goals, ${b.line.assists ?? 0} assists`,
+    bucket: b => {
+      const cards = soccerCardLine(b.line.yellow ?? 0, b.line.red ?? 0);
+      return `Cups and other games: ${b.apps} apps, ${b.line.goals ?? 0} goals, ${b.line.assists ?? 0} assists${cards ? `, ${cards}` : ''}`;
+    },
   };
 }
 
@@ -175,8 +180,17 @@ function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason, m
     : row.injurySevere ? 'Your season ended early with an injury.' : null;
   const trophies = [row.leagueTitle && '🏆 League', row.domesticCup && '🏆 Cup', row.championsLeague && '⭐ UCL', row.clubCupTitle && `⭐ ${row.clubCupTitle}`, row.worldCup && '🌍 World Cup', row.continentalCup && '🌐 Continental', row.ballonDor && "🏅 Ballon d'Or"].filter((t): t is string => !!t);
   const notes: string[] = [];
+  const world = readLeagueWorldSeason(row);
+  if (world) {
+    notes.push('Simulated league world: direct promotion and relegation between two divisions.');
+    if (world.simulation === 'simulated-partial') notes.push('The Spanish lower division uses the available first-team club pool. Reserve sides are not included.');
+    if (world.movement) notes.push(`${world.movement.club} ${world.movement.kind} to ${world.movement.to}.`);
+  }
   if (ctx.goldenBoot) notes.push(`👟 League Golden Boot: ${row.goals} goals in all competitions.`);
   if (ctx.keepsSheets && ctx.position !== 'GK') notes.push(`🧤 ${row.cleanSheets} clean sheets in all competitions.`);
+  const cards = soccerCardLine(row.yellowCards, row.redCards);
+  if (cards) notes.push(`Discipline: ${cards} in all competitions.`);
+  if ((row.suspensionMatches ?? 0) > 0) notes.push(`${row.suspensionMatches} club ${row.suspensionMatches === 1 ? 'match' : 'matches'} missed through suspension.`);
   const last = ctx.lastSeason;
   /* the match rating's own lowest and highest value: the two numbers the season was derived with, not a copy of them */
   const rating = SOCCER.totals(row, ctx).find(t => t.key === 'rating');
@@ -273,7 +287,7 @@ function Replays({ career, clubs, onPick, onClose }: { career: CareerState; club
         label: `${row.year}/${String(row.year + 1).slice(-2)} · ${row.club}`,
         sub: [place, `${row.apps} apps`, tally].filter(Boolean).join(' · '),
         chip: row.leagueTitle ? '🏆' : undefined,
-        locked: seasonReplays(ctx.mode, ctx.finish?.finish, career.phone?.world?.year, row.year) ? undefined : LOCKED_WORDS,
+        locked: seasonReplays(ctx.mode, ctx.finish?.finish, career.phone?.world?.year, row.year) || !!readLeagueWorldSeason(row) || savedSeasonCompetitions(career, row).length > 0 ? undefined : LOCKED_WORDS,
       };
     }), [career, clubs]);
   return <SeasonPicker title="📺 Season replays" rows={rows} exitLabel="Back to your career" onPick={id => onPick(career.seasons[Number(id)])} onClose={onClose} />;
@@ -286,7 +300,8 @@ function CentreBody({ career, clubs, row, mode, onClose, onCareer, offer }: Socc
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const ctx = useMemo(() => buildSoccerSeasonCtx(career, clubs, row), [career.playerName, career.position, career.phone, career.awards, career.seasons, clubs, row]);
   const key = SOCCER.seasonKey(row, ctx);
-  const plan = useMemo(() => (key ? deriveSeason(SOCCER, row, ctx) : null), [key, row, ctx]);
+  const leagueAvailable = seasonReplays(ctx.mode, ctx.finish?.finish, career.phone?.world?.year, row.year) || !!readLeagueWorldSeason(row);
+  const plan = useMemo(() => (key && leagueAvailable ? deriveSeason(SOCCER, row, ctx) : null), [key, leagueAvailable, row, ctx]);
   /* moments are the latest season's only: its key is the one the ledger and the bank answer to */
   const latest = career.seasons[career.seasons.length - 1];
   const canPlay = offer !== false && !!onCareer && !!plan && !!key && !!latest && soccerSeasonKey(career.playerName, latest) === key;
@@ -303,16 +318,13 @@ function CentreBody({ career, clubs, row, mode, onClose, onCareer, offer }: Socc
   /* Round 1046: his place in this season. Read once when the season opens; a
      table season he did not win replays the same only while the save still
      holds that year's league (the record says so with `stable`). */
-  const [stored, setStored] = useState(() => readResume(RESUME_GAME));
+  const [stored] = useState(() => readResume(RESUME_GAME));
   const [screen, setScreen] = useState<CentreScreen>('league');
   const competitions = useMemo(() => savedSeasonCompetitions(career, row), [career, row]);
   useEffect(() => {
-    document.querySelector<HTMLButtonElement>('[data-centre-competition][aria-pressed="true"]')?.focus({ preventScroll: true });
+    document.querySelector<HTMLButtonElement>('[data-season-centre]:not([aria-hidden="true"]) [data-centre-competition][aria-pressed="true"]')?.focus({ preventScroll: true });
   }, [screen]);
-  const select = (next: CentreScreen) => {
-    if (next === 'league') setStored(readResume(RESUME_GAME));
-    setScreen(next);
-  };
+  const select = (next: CentreScreen) => setScreen(next);
   const stable = seasonStable(ctx.mode, ctx.finish?.finish);
   const onProgress = useCallback((at: CentrePlace | null) => {
     if (!key) return;
@@ -320,10 +332,14 @@ function CentreBody({ career, clubs, row, mode, onClose, onCareer, offer }: Socc
     else if (readResume(RESUME_GAME)?.key === key) clearResume(RESUME_GAME);
   }, [key, row.year, stable]);
   const navigation = <CompetitionNavigation league={ctx.league?.name ?? 'League'} competitions={competitions} screen={screen} onSelect={select} />;
-  if (screen !== 'league') return <SeasonCompetitionPanel key={screen} career={career} row={row} competition={competitions.find(c => c.id === screen) ?? null} navigation={navigation} exitLabel={exitLabel} onClose={onClose} />;
-  if (!model) return <Tile text="This season cannot be shown match by match." exitLabel={exitLabel} onClose={onClose} />;
+  const leave = () => { moments?.bank(false); onClose(); };
+  if (!model && screen === 'league') return <SeasonCompetitionPanel key="unavailable" career={career} row={row} competition={null} navigation={navigation} exitLabel={exitLabel} onClose={leave}
+    leagueUnavailable={leagueAvailable ? 'This season cannot be shown match by match.' : LOCKED_WORDS} />;
   const resume = stored && stored.key === key && stored.year === row.year ? stored : null;
-  return <SeasonCentre model={model} exitLabel={exitLabel} onClose={onClose} resume={resume} onProgress={onProgress} navigation={navigation} />;
+  return <>
+    {model && <SeasonCentre model={model} exitLabel={exitLabel} onClose={onClose} resume={resume} onProgress={onProgress} navigation={navigation} active={screen === 'league'} />}
+    {screen !== 'league' && <SeasonCompetitionPanel key={screen} career={career} row={row} competition={competitions.find(c => c.id === screen) ?? null} navigation={navigation} exitLabel={exitLabel} onClose={leave} />}
+  </>;
 }
 
 export default function SoccerSeasonCentre(props: SoccerSeasonCentreProps) {

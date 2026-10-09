@@ -47,6 +47,7 @@ import { leagueFormatFor } from '../../data/leagueFormat';
 import { SC_CLUB_CANON } from '../../data/clubRivalries';
 import { soccerApplyDelta, soccerEventDisagreements, soccerEvents, soccerMomentSpots, type SoccerMomentKind } from './soccerEvents';
 import { drillForPosition, type PositionDrillKind } from '../careerDrills';
+import { readLeagueWorldSeason } from '../soccerCareerLeagueWorld';
 
 /** Why a season shows results only (null: it shows a table). */
 export type ResultsReason = 'nofinish' | 'nosize' | 'league' | 'format' | 'cadence' | 'severe' | 'rival';
@@ -126,22 +127,23 @@ function worldFor(career: CareerState, year: number): WorldSeason | null {
  *  `career.seasons` or the pending summary. */
 export function buildSoccerSeasonCtx(career: CareerState, clubs: ClubData[], row: SeasonRecord): SoccerSeasonCtx {
   const finish = readLeagueFinish(row);
+  const snapshot = readLeagueWorldSeason(row);
   const today = clubs.find(c => clubKey(c.name) === clubKey(row.club))?.league ?? '';
-  const league = finishLeague({ name: row.club, league: today }, row.year, finish?.size ?? null);
+  const league = snapshot ? { key: snapshot.league, name: snapshot.league } : finishLeague({ name: row.club, league: today }, row.year, finish?.size ?? null);
   /* the summary card's champion, word for word (SeasonSummaryCard, Round 1037) */
   const world = worldFor(career, row.year);
   const key = league?.key;
   const crowned = finish && finish.finish !== 1 && key && world
     ? (world.leagues?.[key] && world.leagues[key] !== row.club ? world.leagues[key] : null)
     : null;
-  const champion = crowned && key && namedInLeague(crowned, key, row.year) ? crowned : null;
+  const champion = snapshot && finish?.finish !== 1 ? snapshot.champion : crowned && key && namedInLeague(crowned, key, row.year) ? crowned : null;
   /* Round 1100 (review fix): eight more leagues draw a table, and the world
      crowns a champion in four of them only. In the other four the top row
      read "another club" in every season he did not win, over a league whose
      every club is known, and one real club was left off the table to make
      room for it. Where this season's world names nobody for the league, the
      table's own top place goes to one of the league's clubs. */
-  const titleOpen = !!(finish && finish.finish !== 1 && key && world && !world.leagues?.[key]);
+  const titleOpen = !snapshot && !!(finish && finish.finish !== 1 && key && world && !world.leagues?.[key]);
   const derbies = readSeasonDerbies(row);
   const rivals = derbies.map(d => d.rival);
   let why: ResultsReason | null = null;
@@ -151,17 +153,17 @@ export function buildSoccerSeasonCtx(career: CareerState, clubs: ClubData[], row
   else if (!finish) why = 'nofinish';
   else if (finish.size === null) why = 'nosize';
   else if (!league) why = 'league';
-  else if (!leagueFormatFor(league.key, row.year)) why = 'format';
-  else if (derbyMeetings(league.key, row.year) !== 2) why = 'cadence';
-  else if (rivals.some(r => !namedInLeague(r, league.key, row.year))) why = 'rival';
+  else if (!snapshot && !leagueFormatFor(league.key, row.year)) why = 'format';
+  else if (!snapshot && derbyMeetings(league.key, row.year) !== 2) why = 'cadence';
+  else if (rivals.some(r => snapshot ? !snapshot.members.some(n => clubKey(n) === clubKey(r)) : !namedInLeague(r, league.key, row.year))) why = 'rival';
   const mode = why === null ? 'table' : 'results';
   const sizeKey = league?.key ?? leagueKeyInYear({ name: row.club, league: today }, row.year);
-  const size = mode === 'table' ? finish!.size! : (sizeKey ? leagueSizeFor(sizeKey, row.year) : null);
+  const size = snapshot?.members.length ?? (mode === 'table' ? finish!.size! : (sizeKey ? leagueSizeFor(sizeKey, row.year) : null));
   const games = size ? 2 * (size - 1) : 38;
   let named: string[] = [];
   if (sizeKey) {
-    const field = managerLeagueField({ clubs, club: row.club, league: sizeKey, year: row.year }, keyedRng(`${row.club}|${row.year}|centre|field`));
-    named = field.named.filter(n => n !== row.club && !rivals.includes(n) && n !== champion);
+    const members = snapshot?.members ?? managerLeagueField({ clubs, club: row.club, league: sizeKey, year: row.year }, keyedRng(`${row.club}|${row.year}|centre|field`)).named;
+    named = members.filter(n => n !== row.club && !rivals.includes(n) && n !== champion);
     const held = new Set([row.club, ...rivals, ...(champion ? [champion] : [])].map(clubKey));
     named = named.filter(n => !held.has(clubKey(n)));
   }
@@ -261,7 +263,9 @@ export const SOCCER: SeasonSport<SeasonRecord, SoccerSeasonCtx> = {
     const fixedPlayed = fixedOf(row, ctx).filter(f => f.played).length;
     const room = severe ? M : M - block;
     const want = Math.min(row.leagueApps ?? row.apps, room, row.apps);
-    return { played: Math.min(Math.max(want, fixedPlayed), room, row.apps), block, severe };
+    const played = Math.min(Math.max(want, fixedPlayed), room, row.apps);
+    const suspended = Math.min(row.suspensionMatches ?? 0, Math.max(0, M - played - (severe ? 0 : block)));
+    return { played, block, severe, ...(suspended > 0 ? { suspended } : {}) };
   },
   totals: (row, ctx): StatTotal[] => [
     { key: 'goals', kind: 'sum', total: row.goals, perGameCap: ctx.position === 'GK' ? 0 : 4, teamFor: true, ...(ctx.goldenBoot ? { noBucket: true } : {}) },

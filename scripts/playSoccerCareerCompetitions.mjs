@@ -29,8 +29,8 @@ fixture.seasons[lastIndex] = row;
 const olderIndex = fixture.seasons.findLastIndex((season, index) => index < lastIndex && season.type === 'playing');
 if (olderIndex < 0) throw new Error('fixture refused: no older playing row');
 const older = fixture.seasons[olderIndex];
-Object.assign(older, { championsLeague: true, domesticCup: false });
-for (const key of ['leagueFinish', 'leagueSize', 'clubCupRun', 'clubCupTitle', 'cupRun']) delete older[key];
+Object.assign(older, { championsLeague: true, domesticCup: false, leagueFinish: 7, leagueSize: 18 });
+for (const key of ['leagueWorld', 'clubCupRun', 'clubCupTitle', 'cupRun']) delete older[key];
 const club = B.soccer.FALLBACK_CLUBS.find(c => c.name === row.club);
 if (!club) throw new Error('fixture refused: the club is absent from the game pool');
 Object.assign(fixture, { currentClub: club.name, currentClubCountry: club.country, currentClubTier: club.tier,
@@ -40,7 +40,7 @@ const check = (ok, label) => { checks += 1; console.log(`${ok ? 'ok  ' : 'FAIL'}
 const saved = page => page.evaluate(() => localStorage.getItem('soccerCareerSave'));
 const y = page => page.evaluate(() => scrollY);
 async function keyClick(page, selector) {
-  await page.locator(selector).evaluate(el => el.focus({ preventScroll: true }));
+  await page.locator(`${selector}:visible`).evaluate(el => el.focus({ preventScroll: true }));
   await page.keyboard.press('Enter');
 }
 async function namedShot(page, label) { await page.screenshot({ path: path.join(SHOTS, label) }); }
@@ -82,6 +82,7 @@ async function walk(width, height) {
     }
     await page.waitForSelector('[data-full-time]');
     await page.waitForTimeout(100);
+    const leagueClock = await page.locator('[data-match-clock]').elementHandle();
     await keyClick(page, '[data-centre-competition="domestic"]');
     await page.waitForSelector('[data-centre-cup-games]');
     check(await page.locator('[data-centre-cup-open]').count() === 4, `${tag}: four recorded cup stages, no invented early fixtures`);
@@ -118,7 +119,7 @@ async function walk(width, height) {
     await namedShot(page, `career-competitions-${width}-eleven.png`);
     await page.keyboard.press('Escape');
     await page.waitForSelector('[data-squad-screen="home"]');
-    check(await page.locator('[data-season-centre]').count() === 1, `${tag}: leaving the eleven keeps the Season Centre open`);
+    check(await page.locator('[data-season-centre]:visible').count() === 1, `${tag}: leaving the eleven keeps the Season Centre open`);
     await keyClick(page, '[data-squad-open="bench"]');
     await page.waitForSelector('[data-squad-bench]');
     const bench = await page.locator('[data-squad-bench] [data-squad-name]').allTextContents();
@@ -129,19 +130,49 @@ async function walk(width, height) {
     await page.waitForSelector('[data-squad-sheet]', { state: 'detached' });
     check(await page.locator('[data-squad-tile]').evaluate(el => el === document.activeElement), `${tag}: squad Back restores tile focus`);
     await keyClick(page, '[data-centre-competition="league"]');
-    await page.waitForSelector('[data-kickoff]');
-    check((await page.locator('[data-kickoff-resumed]').innerText()).startsWith('1 of ') && await page.locator('[data-centre-competition="league"]').evaluate(el => el === document.activeElement), `${tag}: returning to league restores watched progress and selected-tab focus`);
+    await page.waitForSelector('[data-full-time]');
+    check(await page.locator('[data-match-clock]').evaluate((el, previous) => el === previous, leagueClock) && await page.locator('[data-centre-competition="league"]').evaluate(el => el === document.activeElement), `${tag}: returning to league keeps the exact watched match and selected-tab focus`);
+    await page.getByRole('button', { name: /Sim the rest/ }).click();
+    await page.waitForSelector('[data-review]');
+    const leagueReview = await page.locator('[data-review]').elementHandle();
+    await keyClick(page, '[data-centre-competition="domestic"]');
+    await keyClick(page, '[data-centre-competition="league"]');
+    check(await page.locator('[data-review]').evaluate((el, previous) => el === previous, leagueReview) && await page.locator('[data-kickoff]').count() === 0, `${tag}: completed league review survives competition changes without restarting`);
     await page.keyboard.press('Escape');
     await page.waitForSelector('[data-season-centre]', { state: 'detached' });
     check(await saved(page) === bytes && await y(page) === initialY, `${tag}: switching competitions and squads preserves save bytes and page scroll`);
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await keyClick(page, '[data-watch-week-by-week]');
+    await page.waitForSelector('[data-kickoff]');
+    await page.locator('[data-kickoff]').getByRole('button').filter({ hasText: /^▶/ }).first().click();
+    if (await page.locator('[data-poster]').count()) await page.locator('[data-centre-bar]').getByRole('button').filter({ hasText: /^▶/ }).first().click();
+    await page.waitForFunction(() => Number(document.querySelector('[data-match-clock]')?.getAttribute('data-minute')) >= 3);
+    const liveClock = await page.locator('[data-match-clock]').elementHandle();
+    await keyClick(page, '[data-centre-competition="domestic"]');
+    const frozenMinute = await page.locator('[data-match-clock]').getAttribute('data-minute');
+    await page.waitForTimeout(500);
+    check(await page.locator('[data-match-clock]').getAttribute('data-minute') === frozenMinute && await saved(page) === bytes, `${tag}: hidden live league clock and save stay frozen`);
+    await keyClick(page, '[data-centre-competition="league"]');
+    check(await page.locator('[data-match-clock]').evaluate((el, previous) => el === previous, liveClock) && Number(await page.locator('[data-match-clock]').getAttribute('data-minute')) >= Number(frozenMinute), `${tag}: returning resumes the same live clock without resetting its minute`);
+    await page.getByRole('button', { name: /Pause/ }).click();
+    const pausedMinute = await page.locator('[data-match-clock]').getAttribute('data-minute');
+    await keyClick(page, '[data-centre-competition="domestic"]');
+    await keyClick(page, '[data-centre-competition="league"]');
+    check(await page.locator('[data-match-clock]').getAttribute('data-minute') === pausedMinute && await page.getByRole('button', { name: /Resume/ }).isVisible(), `${tag}: a paused league retains its minute and paused state across tabs`);
+    await page.keyboard.press('Escape');
+    await page.waitForSelector('[data-season-centre]', { state: 'detached' });
+    await page.emulateMedia({ reducedMotion: 'reduce' });
     await keyClick(page, '[data-open-season-replays]');
     await page.waitForSelector('[data-season-picker]');
     await keyClick(page, `[data-replay-row="${olderIndex}"]`);
-    await page.waitForSelector('[data-kickoff]');
+    await page.waitForSelector('[data-centre-league-unavailable]');
+    check(await page.locator('[data-match-clock]').count() === 0, `${tag}: old trophy season is accessible without fabricating its unavailable league`);
     await keyClick(page, '[data-centre-competition="club"]');
     await page.waitForSelector('[data-centre-cup-missing]');
     const historical = await page.locator('[data-centre-saved-competition]').innerText();
     check(await page.locator('[data-centre-cup-open]').count() === 0 && historical.includes('not kept') && !historical.includes('Barcelona'), `${tag}: old replay marks missing games and never borrows the latest European opponents`);
+    await keyClick(page, '[data-centre-competition="squad"]');
+    check(await page.locator('[data-centre-competition-context]').innerText() === `${view.club} · Current squad · ${view.year}/${String(view.year + 1).slice(-2)}`, `${tag}: historical replay labels the actual current squad club and upcoming season`);
     await page.keyboard.press('Escape');
     await page.waitForSelector('[data-season-centre]', { state: 'detached' });
     await page.reload({ waitUntil: 'domcontentloaded' });

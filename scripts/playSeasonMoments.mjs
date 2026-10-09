@@ -234,6 +234,7 @@ async function open(save, { width, height, reduced }) {
   page.on('request', r => { const u = r.url(); if (u.includes('/assets/') && u.endsWith('.js')) js.push(u.split('/').pop()); });
   page.on('pageerror', e => errors.push(String(e).slice(0, 160)));
   const load = async () => {
+    await page.waitForLoadState('networkidle', { timeout: 15000 });
     await page.goto(`${BASE}/soccer-career`, { waitUntil: 'domcontentloaded', timeout: 60000 });
     await page.waitForFunction(() => document.querySelectorAll('#root [class]').length > 80, { timeout: 40000 }).catch(() => {});
     await page.waitForSelector('[data-watch-week-by-week]', { timeout: 30000 }).catch(() => {});

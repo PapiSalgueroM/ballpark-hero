@@ -3,6 +3,7 @@ import type { CareerState, SeasonRecord } from '@/lib/soccerCareerEngine';
 import type { SavedSeasonCompetition } from '@/lib/soccerSeasonCompetitions';
 import { focusDialogOnMount } from '@/lib/dialogA11y';
 import { useBodyLock } from '@/components/season-centre/useBodyLock';
+import { squadNow } from '@/lib/soccerClubSquad';
 import { SquadTile } from './SquadTile';
 
 export type CentreScreen = 'league' | 'domestic' | 'club' | 'squad';
@@ -18,9 +19,10 @@ export function CompetitionNavigation({ league, competitions, screen, onSelect }
   </nav>;
 }
 
-export default function SeasonCompetitionPanel({ career, row, competition, navigation, exitLabel, onClose }: {
+export default function SeasonCompetitionPanel({ career, row, competition, navigation, exitLabel, onClose, leagueUnavailable }: {
   career: CareerState; row: SeasonRecord; competition: SavedSeasonCompetition | null;
   navigation: ReactNode; exitLabel: string; onClose: () => void;
+  leagueUnavailable?: string;
 }) {
   const [picked, setPicked] = useState<number | null>(null);
   const [help, setHelp] = useState(false);
@@ -42,7 +44,11 @@ export default function SeasonCompetitionPanel({ career, row, competition, navig
     }
   };
   const match = picked === null ? null : competition?.matches[picked];
-  const title = competition?.name ?? 'Current squad';
+  const currentSquad = !competition && !leagueUnavailable ? squadNow(career) : null;
+  const title = leagueUnavailable ? 'League replay unavailable' : competition?.name ?? 'Current squad';
+  const context = !competition && !leagueUnavailable
+    ? currentSquad ? `${currentSquad.club} · Current squad · ${currentSquad.year}/${String(currentSquad.year + 1).slice(-2)}` : 'Current squad unavailable'
+    : `${row.club} · ${row.year}/${String(row.year + 1).slice(-2)}`;
   return <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-3 backdrop-blur-sm" data-season-centre data-centre-saved-competition>
     <div role="dialog" aria-modal="true" aria-label={title} tabIndex={-1} ref={focusDialogOnMount} onKeyDown={keyDown}
       className="flex max-h-[92dvh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-border bg-card outline-none">
@@ -50,7 +56,7 @@ export default function SeasonCompetitionPanel({ career, row, competition, navig
         <h2 className="min-w-0 flex-1 text-sm font-black">📺 {title}</h2>
         <button type="button" aria-label="How saved competitions work" onClick={() => setHelp(value => !value)} className="h-11 w-11 shrink-0 rounded-lg border border-border font-bold">?</button>
         <button type="button" onClick={onClose} className="min-h-11 rounded-lg border border-border px-3 text-xs font-semibold" data-centre-exit>{exitLabel}</button>
-        <p className="w-full text-xs text-muted-foreground">{row.club} · {row.year}/{String(row.year + 1).slice(-2)}</p>
+        <p className="w-full text-xs text-muted-foreground" data-centre-competition-context>{context}</p>
       </div>
       {navigation}
       <div ref={content} className="min-h-0 overflow-y-auto overscroll-contain p-4">
@@ -61,10 +67,14 @@ export default function SeasonCompetitionPanel({ career, row, competition, navig
           <p>Current squad opens the same eleven, bench and selection plan as the Squad tile on your career page. It is the current squad on our ratings, not a saved matchday lineup.</p>
           <p>Example: a saved first-leg win of 2-1 and second-leg draw of 1-1 stay separate games. The deciding leg shows 3-2 on aggregate when the save kept it.</p>
           <button type="button" onClick={() => setHelp(false)} className="min-h-11 rounded-lg border border-border px-3 text-xs font-bold">‹ Back</button>
+        </div> : leagueUnavailable ? <div className="space-y-3" data-centre-league-unavailable>
+          <h3 ref={heading} tabIndex={-1} className="text-sm font-bold outline-none">League replay unavailable</h3>
+          <p className="text-sm">{leagueUnavailable}</p>
+          <p className="text-xs text-muted-foreground">Use the competition buttons to open the cup games this season kept.</p>
         </div> : !competition ? <div className="space-y-3" data-centre-current-squad>
           <h3 ref={heading} tabIndex={-1} className="text-sm font-bold outline-none">Your current squad</h3>
           <p className="text-xs text-muted-foreground">The eleven and bench below belong to your current club and its next season. Past matchday lineups were not kept in your career save.</p>
-          {career.retired ? <p className="text-sm">Your playing career is over, so there is no current squad to show.</p> : <SquadTile career={career} />}
+          {career.retired ? <p className="text-sm">Your playing career is over, so there is no current squad to show.</p> : !currentSquad ? <p className="text-sm">No current squad is recorded for this stage of your career.</p> : <SquadTile career={career} />}
         </div> : match ? <div className="space-y-3" data-centre-cup-game={picked}>
           <button type="button" onClick={() => setPicked(null)} className="min-h-11 rounded-lg border border-border px-3 text-xs font-bold">‹ All games</button>
           <h3 ref={heading} tabIndex={-1} className="text-sm font-bold outline-none">{match.round}</h3>

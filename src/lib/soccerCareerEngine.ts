@@ -1,6 +1,11 @@
 // Soccer Career Simulation Engine v2, Youth Academy + Pro System
 
 import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';
+import { serveClubSuspension } from '@/lib/soccerDiscipline';
+import { soccerExtensionQuote } from '@/lib/soccerCareerContracts';
+import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';
+import { deriveSeason, tableAt } from './season/core';
+import { buildSoccerSeasonCtx, SOCCER } from './season/soccer';
 /* Round 546: the competition's real format per season, two source verified and
    importing nothing, so the knockout ladder and the leg count are read rather
    than kept as a second hardcoded copy here. */
@@ -183,6 +188,8 @@ export interface SeasonRecord {
       games plus a European run reads as 20. Optional, so a save from before
       this round loads untouched and simply cannot be judged on minutes. */
   leagueApps?: number;
+  /** Club matches actually missed for a ban queued before this season. */
+  suspensionMatches?: number;
   goals: number;
   assists: number;
   cleanSheets: number;
@@ -208,6 +215,8 @@ export interface SeasonRecord {
   leagueFinish?: number;
   /** Round 929: clubs in that league that season, only where verified. */
   leagueSize?: number;
+  /** The career's simulated field and champion, held for this season only. */
+  leagueWorld?: LeagueWorldSeason;
   /** Round 1012: the season's league derbies against real rivals. Present
       only on a playing season where one was on (soccerCareerDerby.ts), so a
       season without one, and every season from before that round, has no
@@ -265,6 +274,16 @@ export type TransferSituation =
   | { type: "dream_club"; offer: ContractOffer }
   | { type: "contract_expiry"; offers: ContractOffer[] }
   | { type: "request_result"; offer: ContractOffer | null }
+  | {
+      type: "club_move";
+      mode: "loan" | "sale";
+      fromClub: string;
+      toClub: string;
+      contractYears: number;
+      wage: number;
+      transferFee: number;
+      reasons: string[];
+    }
   /** Round 257: the club has made the decision for you. `reasons` are the
       measured facts the verdict was built from, printed to the player so a
       release never reads as the game being arbitrary. */
@@ -840,6 +859,8 @@ export interface CareerState {
   currentClubTier: number;
   currentClubColor: string;
   currentLeague: string;
+  /** Membership for the next unplayed future season. Absent on older saves. */
+  leagueWorld?: CareerLeagueWorld;
   contractYearsLeft: number;
   weeklyWage: number;
   marketValue: number;
@@ -882,6 +903,8 @@ export interface CareerState {
   badSeasonStreak?: number;
   phase: "youth" | "contract_offer" | "playing" | "newspaper" | "season_summary" | "transfer_window" | "random_events" | "international_debut" | "world_cup" | "rivalry_event" | "ballon_dor" | "retirement_ceremony" | "retirement_suggestion" | "post_retirement" | "manager_season" | "pundit_season" | "owner_season" | "social_media_action" | "moral_dilemma" | "red_card_appeal_result" | "rehab_choice" | "retired";
   pendingAppealResult: { success: boolean; banLength: number } | null;
+  /** Unserved club match bans. Absent on old saves and when no ban is pending. */
+  pendingSuspensionMatches?: number;
   pendingNews: NewsArticle[];
   pendingOffers: ContractOffer[];
   pendingSummary: SeasonRecord | null;
@@ -4057,10 +4080,12 @@ function generateSeasonStats(state: CareerState, clubs: ClubData[]): SeasonRecor
      numbers of games, goals, assists and a different rating. */
   const fx = careerBuildEffects(state);
 
-  const { apps, leagueApps, injured, injuryWeeks, injuryName, injurySevere } = calcAppearances(overall, currentClubTier, age, state, fx);
+  const appearance = calcAppearances(overall, currentClubTier, age, state, fx);
+  const { apps, leagueApps, served } = serveClubSuspension(appearance.apps, appearance.leagueApps, state.pendingSuspensionMatches);
+  const { injured, injuryWeeks, injuryName, injurySevere } = appearance;
   let goals = calcGoals(position, apps, overall, fx.goalMult);
   // Diving reputation: +2 goals from penalties
-  if (state.divingActive && !isGK) goals += 2;
+  if (apps > 0 && state.divingActive && !isGK) goals += 2;
   const assists = calcAssists(position, apps, overall, fx.assistMult);
   /* A clean sheet belongs to the whole back line, not the keeper alone. This
      was gated on GK, so a defender's Clean Sheets tile read 0 for an entire
@@ -4069,7 +4094,7 @@ function generateSeasonStats(state: CareerState, clubs: ClubData[]): SeasonRecor
   const keepsSheets = isGK || position === "CB" || position === "LB" || position === "RB";
   const cleanSheets = keepsSheets ? clamp(Math.round(apps * rand(20, 45) / 100 * fx.cleanSheetMult), 0, apps) : 0;
   const yellowCards = rand(0, Math.min(8, Math.round(apps * 0.25)));
-  const redCards = Math.random() < 0.08 ? 1 : 0;
+  const redCards = Math.random() < 0.08 && apps > 0 ? 1 : 0;
   const rating = calcSeasonRating(position, apps, goals, assists, cleanSheets, overall, currentClubTier, fx.ratingDelta);
 
   // --- Trophy realism ---
@@ -4123,6 +4148,7 @@ function generateSeasonStats(state: CareerState, clubs: ClubData[]): SeasonRecor
     year: lastYear + 1, age,
     club: state.currentClub, clubCountry: state.currentClubCountry, clubTier: currentClubTier,
     apps, leagueApps, goals, assists, cleanSheets, yellowCards, redCards, rating,
+    ...(served > 0 ? { suspensionMatches: served } : {}),
     ovr: overall,
     injury: injured ? injuryName : null, injuryWeeks: injured ? injuryWeeks : 0, injurySevere: injured ? injurySevere : false,
     leagueTitle: winLeague, ...finish, ...(derbies.length > 0 ? { derbies } : {}), domesticCup: winCup, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null,
@@ -4302,6 +4328,7 @@ function enterTransferWindow(s: CareerState, clubs: ClubData[]): void {
       ? null
       : determineLoanOffers(s, clubs);
     s.phase = "transfer_window";
+    Object.assign(s, completeClubVerdictMove(s));
   } else { s.phase = "playing"; }
 }
 
@@ -4314,7 +4341,7 @@ export function determineLoanOffers(state: CareerState, clubs: ClubData[]): Cont
   /* real minutes already on the table means no loan market */
   if (here.max >= 24) return null;
   const lastSeason = state.seasons[state.seasons.length - 1];
-  const pool = adjustClubsForYear(clubs, (lastSeason?.year ?? 2024) + 1);
+  const pool = projectLeagueWorldClubs(state, adjustClubsForYear(clubs, (lastSeason?.year ?? 2024) + 1), (lastSeason?.year ?? 2024) + 1);
   const exclude = new Set<string>([state.currentClub]);
   /* every tier below the parent is a candidate market, because the tier
      that can PROMISE a fringe kid real minutes depends on how good he
@@ -4357,6 +4384,23 @@ export function acceptLoan(prev: CareerState, offer: ContractOffer): CareerState
   // be earned back, it is never kept warm.
   endClubCaptaincy(s, "loan");
   return s;
+}
+
+/** Complete a new club listing using its existing offer, then show the move once. */
+export function completeClubVerdictMove(prev: CareerState): CareerState {
+  const verdict = prev.transferSituation;
+  if (verdict?.type !== "frozen_out" || verdict.mode === "released") return prev;
+  const loan = verdict.mode === "loan_listed";
+  const offer = verdict.offers.find(candidate => !!candidate.isLoan === loan);
+  if (!offer || (loan && prev.loan)) return prev;
+  const moved = loan ? acceptLoan(prev, offer) : acceptOffer(prev, offer);
+  moved.phase = "transfer_window";
+  moved.transferSituation = {
+    type: "club_move", mode: loan ? "loan" : "sale", fromClub: prev.currentClub,
+    toClub: moved.currentClub, contractYears: moved.contractYearsLeft, wage: moved.weeklyWage,
+    transferFee: loan ? 0 : offer.transferFee, reasons: [...verdict.reasons],
+  };
+  return moved;
 }
 
 function makeOffer(clubs: ClubData[], tier: number, overall: number, age: number, exclude: Set<string>, marketValue: number, isDream = false): ContractOffer | null {
@@ -4472,7 +4516,7 @@ export function clubVerdict(state: CareerState): ClubVerdict | null {
 export function determineTransferSituation(state: CareerState, clubs: ClubData[]): TransferSituation {
   const { overall, age, currentClub, currentClubTier, marketValue, contractYearsLeft } = state;
   const lastSeason = state.seasons[state.seasons.length - 1];
-  clubs = adjustClubsForYear(clubs, (lastSeason?.year ?? 2024) + 1);
+  clubs = projectLeagueWorldClubs(state, adjustClubsForYear(clubs, (lastSeason?.year ?? 2024) + 1), (lastSeason?.year ?? 2024) + 1);
   const exclude = new Set<string>([currentClub]);
   const interestedTiers = getInterestedTiers(overall, age);
 
@@ -4586,7 +4630,7 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
 
 /* ─── Request transfer, 50/50 ─── */
 export function requestTransfer(state: CareerState, clubs: ClubData[]): TransferSituation {
-  clubs = adjustClubsForYear(clubs, (state.seasons[state.seasons.length - 1]?.year ?? 2024) + 1);
+  clubs = projectLeagueWorldClubs(state, adjustClubsForYear(clubs, (state.seasons[state.seasons.length - 1]?.year ?? 2024) + 1), (state.seasons[state.seasons.length - 1]?.year ?? 2024) + 1);
   if (Math.random() < 0.5) {
     const exclude = new Set<string>([state.currentClub]);
     const offer = makeOffer(clubs, pick(getInterestedTiers(state.overall, state.age)), state.overall, state.age, exclude, state.marketValue);
@@ -5004,6 +5048,7 @@ function endClubCaptaincy(s: CareerState, reason: "transfer" | "loan" | "handove
 
 export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerState {
   const s = repairCareer({ ...prev }); s.age += 1; s.story = archiveSeasonStory(s); s.events = [];
+  prepareLeagueWorld(s, clubs, (s.seasons[s.seasons.length - 1]?.year ?? 2024) + 1);
   receivePhoneTexts(s, "pro");
   // Reset social media action for new season
   s.socialMediaActionUsedThisSeason = false;
@@ -5248,8 +5293,15 @@ export function awardAllTimeTopScorer(s: CareerState, thisYear: number): void {
    play was never played or recorded: one live career lost six seasons and
    finished six years behind its own calendar (audit QA847-14). */
 function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
-  
-  const season = generateSeasonStats(s, clubs);
+  const worldClubs = prepareLeagueWorld(s, clubs, (s.seasons[s.seasons.length - 1]?.year ?? 2024) + 1);
+  const season = generateSeasonStats(s, worldClubs);
+  recordLeagueWorldSeason(s, clubs, season);
+  if (season.suspensionMatches) {
+    const remaining = serveClubSuspension(season.suspensionMatches, 0, s.pendingSuspensionMatches).remaining;
+    if (remaining > 0) s.pendingSuspensionMatches = remaining;
+    else delete s.pendingSuspensionMatches;
+    s.events.push(`🟥 Served ${season.suspensionMatches} suspended club matches this season.`);
+  }
   // Injury report, named injuries that actually cost matches
   if (season.injury) s.events.push(`🚑 Injury: ${season.injury}, out ${season.injuryWeeks} weeks, missed matches`);
   /* Round 1012: the derbies' bounded swing and log lines, after the injury
@@ -5617,6 +5669,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   const cupAssoc = seasonCupAssociation(season, s);
   const world = worldSeasonTick(s, {
     year: thisYear,
+    leagueChampions: leagueWorldChampions(s, clubs, season),
     playerLeagueTitle: season.leagueTitle,
     playerUcl: season.championsLeague,
     playerCup: season.domesticCup,
@@ -5658,6 +5711,14 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
 
   if (s.events.length === 0) s.events.push(`⚽ Solid season at ${s.currentClub}`);
 
+  if (season.leagueWorld) {
+    const derived = deriveSeason(SOCCER, season, buildSoccerSeasonCtx(s, clubs, season));
+    const order = derived?.mode === 'table' ? tableAt(derived, derived.rounds.length).map(t => derived.labels[t.slot].name) : undefined;
+    settleLeagueWorld(s, clubs, season, order);
+    const movement = season.leagueWorld.movement;
+    if (movement) s.events.push(`${movement.kind === 'promoted' ? '⬆️' : '⬇️'} ${movement.club} ${movement.kind} to ${movement.to} in your simulated league world.`);
+  } else settleLeagueWorld(s, clubs, season);
+
   /* ─── Round 217: the loan ends with the season ───
      One season, then home, the way nearly every real loan works. The verdict
      line quotes the SAME projection the appearance model will draw from next
@@ -5668,8 +5729,9 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     s.currentLeague = back.parentLeague; s.currentClubCountry = back.parentCountry;
     s.currentClubColor = back.parentColor;
     s.loan = null;
+    prepareLeagueWorld(s, clubs, season.year + 1);
     const backSeasons = s.seasons.filter(ss => ss.club === back.parentClub && ss.type === "playing").length;
-    const nextHere = projectLeagueApps(s.overall, back.parentTier, back.parentClub, backSeasons);
+    const nextHere = projectLeagueApps(s.overall, s.currentClubTier, back.parentClub, backSeasons);
     if (nextHere.min >= 20) {
       s.morale = clamp(s.morale + 5, 0, 100);
       s.events.push(`🔙 Loan over. Back at ${back.parentClub}, and this time they are planning around you: about ${nextHere.min} to ${nextHere.max} league games on the table.`);
@@ -5677,6 +5739,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
       s.events.push(`🔙 Loan over. Back at ${back.parentClub}, and the pecking order has not moved much: about ${nextHere.min} to ${nextHere.max} league games unless something changes.`);
     }
   }
+  prepareLeagueWorld(s, clubs, season.year + 1);
   return s;
 }
 
@@ -5829,7 +5892,7 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
     { weight: 0.5, check: () => s.rival !== null && !s.rival.retired && s.rival.ballonDors > 0,
       gen: () => ({ newspaper: pick(NEWSPAPERS), type: "negative",
         headline: `${name} And ${s.rival!.name}: Another Season Of Rivalry`,
-        body: `${s.rival!.name} has golden balls from earlier seasons, and ${name} is still chasing the next one. This year's ranked list has not arrived. The rivalry keeps everyone watching.` }) },
+        body: `${name} and ${s.rival!.name} have given fans another season to compare. This year's ranked list has not arrived. The rivalry keeps everyone watching.` }) },
     { weight: 0.7, check: () => s.marketValue >= 30,
       gen: () => {
         const bidders = ["Real Madrid", "Barcelona", "Manchester City", "PSG", "Chelsea", "Bayern Munich"];
@@ -5874,7 +5937,7 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
     { weight: 1.4, check: () => s.bdorSnubFuel === true && season.goals >= 25,
       gen: () => ({ newspaper: pick(NEWSPAPERS), type: "negative",
         headline: `All Eyes On The Ballon d'Or List After ${name}'s Season`,
-        body: `${season.goals} goals have put ${name} back in the conversation. After last year's disappointment, fans are waiting for this year's ranked list. Nothing has been announced yet.` }) },
+        body: `${season.goals} goals have put ${name} back in the conversation. After a past disappointment, fans are waiting for this year's ranked list. Nothing has been announced yet.` }) },
     { weight: 1.2, check: () => (s.corruptionHeat ?? 0) >= 50,
       gen: () => ({ newspaper: pick(NEWSPAPERS), type: "negative",
         headline: `WHERE DOES THE MONEY COME FROM? Questions Mount Over ${name}'s Empire`,
@@ -6085,8 +6148,8 @@ export function getAllEvents(state: CareerState): RandomEvent[] {
       ] },
     { id: 9, emoji: "🟥", title: "Red Card Scandal!", description: "You are caught in a red card scandal after a violent foul. Banned for 3 matches.",
       category: "negative", choices: [
-        { label: "Accept the ban", emoji: "😔", color: "bg-red-600", consequence: "Red cards +1, Reputation -5",
-          apply: s => { s.popularity = clamp(s.popularity - 5, 0, 100); s.events = [...s.events, "🟥 Banned 3 matches for violent foul"]; return s; } },
+        { label: "Accept the ban", emoji: "😔", color: "bg-red-600", consequence: "3-match ban next season, Reputation -5",
+          apply: s => { s.pendingSuspensionMatches = serveClubSuspension(0, 0, s.pendingSuspensionMatches).remaining + 3; s.popularity = clamp(s.popularity - 5, 0, 100); s.events = [...s.events, "🟥 Banned 3 matches for violent foul"]; return s; } },
         { label: "Appeal the decision", emoji: "⚖️", color: "bg-amber-600", consequence: "Appeal submitted, result in 3-5 days",
           apply: s => {
             const success = Math.random() < 0.5;
@@ -7551,12 +7614,12 @@ export function applyEventChoice(prev: CareerState, choiceIndex: number, clubs: 
   s.lastEventId = event.id;
   s.pendingEvents = s.pendingEvents.slice(1);
   s.overall = calcOverall(s, s.position);
+  // Show the appeal result before any remaining event cards.
+  if (s.phase === "red_card_appeal_result" as any) return s;
   if (s.pendingEvents.length > 0) {
     s.phase = "random_events";
     return s;
   }
-  // If phase was set to red_card_appeal_result by the event, don't override
-  if (s.phase === "red_card_appeal_result" as any) return s;
   // All events processed → transfer window
   enterTransferWindow(s, clubs);
   return s;
@@ -7570,6 +7633,7 @@ export function dismissAppealResult(prev: CareerState, clubs: ClubData[]): Caree
     if (result.success) {
       s.events = [...s.events, "⚖️ Appeal Successful. Ban Overturned! Free to play."];
     } else {
+      s.pendingSuspensionMatches = serveClubSuspension(0, 0, s.pendingSuspensionMatches).remaining + result.banLength;
       s.popularity = clamp(s.popularity - 5, 0, 100);
       s.events = [...s.events, `⚖️ Appeal Rejected. Must serve ${result.banLength}-match ban.`];
     }
@@ -7597,8 +7661,10 @@ export function stayAtClub(prev: CareerState): CareerState {
     s.events = [...s.events, `🧊 Refused to leave ${s.currentClub} after being listed. You train with the group and travel with nobody.`];
   }
   if (s.contractYearsLeft <= 0) {
-    s.contractYearsLeft = rand(2, 4);
-    s.events = [...s.events, `📝 Renewed contract with ${s.currentClub} for ${s.contractYearsLeft} years`];
+    const quote = soccerExtensionQuote(s, 'renewal');
+    s.contractYearsLeft = quote.contractYears ?? rand(2, 4);
+    s.weeklyWage = quote.weeklyWage;
+    s.events = [...s.events, `📝 Renewed contract with ${s.currentClub} for ${s.contractYearsLeft} ${s.contractYearsLeft === 1 ? 'year' : 'years'}`];
   }
   return s;
 }
@@ -7606,9 +7672,10 @@ export function stayAtClub(prev: CareerState): CareerState {
 /* ─── Sign extension ─── */
 export function signExtension(prev: CareerState): CareerState {
   const s = { ...prev };
-  const extraYears = rand(2, 4);
+  const quote = soccerExtensionQuote(s);
+  const extraYears = quote.contractYears ?? rand(2, 4);
   s.contractYearsLeft = extraYears;
-  s.weeklyWage = Math.round(s.weeklyWage * 1.15);
+  s.weeklyWage = quote.weeklyWage;
   s.transferSituation = null; s.pendingLoanOffers = null; s.phase = "playing";
   s.events = [...s.events, `📝 Signed ${extraYears}-year extension with ${s.currentClub} (${formatWage(s.weeklyWage)})`];
   return s;
