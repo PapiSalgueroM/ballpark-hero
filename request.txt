@@ -1,0 +1,4 @@
+#!build
+#!playwright
+seam: SHOTS=$RC_OUT node scripts/playUsCareerSaveSeam.mjs
+centre: node scripts/playUsSeasonCentre.mjs
