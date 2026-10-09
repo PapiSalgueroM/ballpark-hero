@@ -1,0 +1,11 @@
+   × Stadium Tycoon: the Latest season review > prints your own line of the final table: place, points, record and goals 71ms
+   → expected '7' to be '25' // Object.is equality
+   × Stadium Tycoon: the Latest season review > keeps the season it opened on while the match runs, and shows the newer one when opened again 30ms
+   → expected '7' to be '25' // Object.is equality
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/tycoonLatestSeason.test.tsx,title=src/test/tycoonLatestSeason.test.tsx > Stadium Tycoon%3A the Latest season review > prints your own line of the final 
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/tycoonLatestSeason.test.tsx,title=src/test/tycoonLatestSeason.test.tsx > Stadium Tycoon%3A the Latest season review > keeps the season it opened on whil
+   FAIL  src/test/tycoonLatestSeason.test.tsx > Stadium Tycoon: the Latest season review > prints your own line of the final table: place, points, record and goals
+   AssertionError: expected '7' to be '25' // Object.is equality
+   FAIL  src/test/tycoonLatestSeason.test.tsx > Stadium Tycoon: the Latest season review > keeps the season it opened on while the match runs, and shows the newer one when opened again
+   AssertionError: expected '7' to be '25' // Object.is equality
+CONTROL m3b (src/pages/StadiumTycoon.tsx): vitest exit 1, 2 tests failed, 2 passed: FIRED

@@ -1,0 +1,11 @@
+   × an own goal on the pitch > rings him at the back when the own goal was his, whatever he plays 14ms
+   → expected [] to deeply equal [ 'd0' ]
+   × Season Centre: the little pitch and an own goal (Release AP) > says whose own goal it was under the pitch, and rings him when it was his 13ms
+   → expected { words: '⚽ Your own goal', …(2) } to deeply equal { words: '⚽ Your own goal', …(2) }
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/miniPitchScene.test.ts,title=src/test/miniPitchScene.test.ts > an own goal on the pitch > rings him at the back when the own goal was his%2C whatever he
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/seasonCentreOwnGoals.test.tsx,title=src/test/seasonCentreOwnGoals.test.tsx > Season Centre%3A the little pitch and an own goal (Release AP) > says whose
+   FAIL  src/test/miniPitchScene.test.ts > an own goal on the pitch > rings him at the back when the own goal was his, whatever he plays
+   AssertionError: expected [] to deeply equal [ 'd0' ]
+   FAIL  src/test/seasonCentreOwnGoals.test.tsx > Season Centre: the little pitch and an own goal (Release AP) > says whose own goal it was under the pitch, and rings him when it was his
+   AssertionError: expected { words: '⚽ Your own goal', …(2) } to deeply equal { words: '⚽ Your own goal', …(2) }
+CONTROL p1 (src/components/season-centre/MiniPitch.tsx): vitest exit 1, 2 tests failed, 28 passed: FIRED

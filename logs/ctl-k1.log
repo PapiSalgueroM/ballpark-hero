@@ -1,0 +1,6 @@
+   × Season Centre: own goals on the page (Round 1167, read after the Release AP merge) > hands back the same game for the same question, so the pitch does not take it for a changed match 9ms
+   → every game the decision did not touch is the same object: expected false to be true // Object.is equality
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/seasonCentreOwnGoals.test.tsx,title=src/test/seasonCentreOwnGoals.test.tsx > Season Centre%3A own goals on the page (Round 1167%2C read after the Releas
+   FAIL  src/test/seasonCentreOwnGoals.test.tsx > Season Centre: own goals on the page (Round 1167, read after the Release AP merge) > hands back the same game for the same question, so the pitch does not take it for a chan
+   AssertionError: every game the decision did not touch is the same object: expected false to be true // Object.is equality
+CONTROL k1 (src/lib/season/soccerEvents.ts): vitest exit 1, 1 tests failed, 6 passed: FIRED

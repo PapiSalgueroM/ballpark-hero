@@ -1,0 +1,6 @@
+   × Stadium Tycoon: the Latest season review > keeps the season it opened on while the match runs, and shows the newer one when opened again 62ms
+   → expected 'Season 3: second in the test division' to be 'Season 4: champions' // Object.is equality
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/tycoonLatestSeason.test.tsx,title=src/test/tycoonLatestSeason.test.tsx > Stadium Tycoon%3A the Latest season review > keeps the season it opened on whil
+   FAIL  src/test/tycoonLatestSeason.test.tsx > Stadium Tycoon: the Latest season review > keeps the season it opened on while the match runs, and shows the newer one when opened again
+   AssertionError: expected 'Season 3: second in the test division' to be 'Season 4: champions' // Object.is equality
+CONTROL m3c (src/pages/StadiumTycoon.tsx): vitest exit 1, 1 tests failed, 3 passed: FIRED

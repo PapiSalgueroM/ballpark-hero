@@ -1,0 +1,6 @@
+   × Season Centre: the little pitch and an own goal (Release AP) > says whose own goal it was under the pitch, and rings him when it was his 14ms
+   → expected { words: '', rings: [ 'me' ], …(1) } to deeply equal { words: '⚽ Your own goal', …(2) }
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/seasonCentreOwnGoals.test.tsx,title=src/test/seasonCentreOwnGoals.test.tsx > Season Centre%3A the little pitch and an own goal (Release AP) > says whose
+   FAIL  src/test/seasonCentreOwnGoals.test.tsx > Season Centre: the little pitch and an own goal (Release AP) > says whose own goal it was under the pitch, and rings him when it was his
+   AssertionError: expected { words: '', rings: [ 'me' ], …(1) } to deeply equal { words: '⚽ Your own goal', …(2) }
+CONTROL p2 (src/components/season-centre/MiniPitch.tsx): vitest exit 1, 1 tests failed, 6 passed: FIRED

@@ -1,0 +1,6 @@
+   × an own goal on the pitch > carries who put it in, and nothing extra on an ordinary goal 10ms
+   → expected [ { key: '3|12|them|0', …(4) }, …(3) ] to deeply equal [ { key: '3|12|them|0', …(5) }, …(3) ]
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/miniPitchScene.test.ts,title=src/test/miniPitchScene.test.ts > an own goal on the pitch > carries who put it in%2C and nothing extra on an ordinary goal
+   FAIL  src/test/miniPitchScene.test.ts > an own goal on the pitch > carries who put it in, and nothing extra on an ordinary goal
+   AssertionError: expected [ { key: '3|12|them|0', …(4) }, …(3) ] to deeply equal [ { key: '3|12|them|0', …(5) }, …(3) ]
+CONTROL p3 (src/components/season-centre/MiniPitch.tsx): vitest exit 1, 1 tests failed, 22 passed: FIRED

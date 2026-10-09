@@ -1,0 +1,6 @@
+   × Season Centre: own goals on the page (Round 1167, read after the Release AP merge) > leaves a return match alone in a replay exactly as it does live (the moments are planned, offered or not) 136ms
+   → replay: a goal in a return match is never an own goal: expected [ { minute: '27\'', …(1) } ] to deeply equal []
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/seasonCentreOwnGoals.test.tsx,title=src/test/seasonCentreOwnGoals.test.tsx > Season Centre%3A own goals on the page (Round 1167%2C read after the Releas
+   FAIL  src/test/seasonCentreOwnGoals.test.tsx > Season Centre: own goals on the page (Round 1167, read after the Release AP merge) > leaves a return match alone in a replay exactly as it does live (the moments are planned
+   AssertionError: replay: a goal in a return match is never an own goal: expected [ { minute: '27\'', …(1) } ] to deeply equal []
+CONTROL m1 (src/components/soccer-career/SoccerSeasonCentre.tsx): vitest exit 1, 1 tests failed, 6 passed: FIRED

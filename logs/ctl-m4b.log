@@ -1,0 +1,6 @@
+   × league table rows (Round 1161) > stay plain rows where nothing opens (the Season Centre table, the tycoon table) 13ms
+   → expected false to be true // Object.is equality
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerRowButtons.test.tsx,title=src/test/clubManagerRowButtons.test.tsx > league table rows (Round 1161) > stay plain rows where nothing opens (the
+   FAIL  src/test/clubManagerRowButtons.test.tsx > league table rows (Round 1161) > stay plain rows where nothing opens (the Season Centre table, the tycoon table)
+   AssertionError: expected false to be true // Object.is equality
+CONTROL m4b (src/components/club-manager/LeagueTableCard.tsx): vitest exit 1, 1 tests failed, 4 passed: FIRED

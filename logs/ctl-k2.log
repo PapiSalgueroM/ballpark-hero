@@ -1,0 +1,6 @@
+   × Season Centre: own goals on the page (Round 1167, read after the Release AP merge) > hands back the same game for the same question, so the pitch does not take it for a changed match 11ms
+   → expected { md: 1, opp: 19, home: true, …(8) } to be { md: 1, opp: 19, home: true, …(8) } // Object.is equality
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/seasonCentreOwnGoals.test.tsx,title=src/test/seasonCentreOwnGoals.test.tsx > Season Centre%3A own goals on the page (Round 1167%2C read after the Releas
+   FAIL  src/test/seasonCentreOwnGoals.test.tsx > Season Centre: own goals on the page (Round 1167, read after the Release AP merge) > hands back the same game for the same question, so the pitch does not take it for a chan
+   AssertionError: expected { md: 1, opp: 19, home: true, …(8) } to be { md: 1, opp: 19, home: true, …(8) } // Object.is equality
+CONTROL k2 (src/lib/season/soccerEvents.ts): vitest exit 1, 1 tests failed, 6 passed: FIRED

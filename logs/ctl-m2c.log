@@ -1,0 +1,11 @@
+   × Season Centre: own goals on the page (Round 1167, read after the Release AP merge) > prints an own goal for side "us" with who did it and the club that got it, the same live, held and replayed 176ms
+   → live: the own goal's line: expected { minute: '40\'', …(1) } to deeply equal { minute: '40\'', …(1) }
+   × Season Centre: own goals on the page (Round 1167, read after the Release AP merge) > prints an own goal for side "them" with who did it and the club that got it, the same live, held and replayed 58ms
+   → live: the own goal's line: expected { minute: '7\'', …(1) } to deeply equal { minute: '7\'', …(1) }
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/seasonCentreOwnGoals.test.tsx,title=src/test/seasonCentreOwnGoals.test.tsx > Season Centre%3A own goals on the page (Round 1167%2C read after the Releas
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/seasonCentreOwnGoals.test.tsx,title=src/test/seasonCentreOwnGoals.test.tsx > Season Centre%3A own goals on the page (Round 1167%2C read after the Releas
+   FAIL  src/test/seasonCentreOwnGoals.test.tsx > Season Centre: own goals on the page (Round 1167, read after the Release AP merge) > prints an own goal for side "us" with who did it and the club that got it, the same live
+   AssertionError: live: the own goal's line: expected { minute: '40\'', …(1) } to deeply equal { minute: '40\'', …(1) }
+   FAIL  src/test/seasonCentreOwnGoals.test.tsx > Season Centre: own goals on the page (Round 1167, read after the Release AP merge) > prints an own goal for side "them" with who did it and the club that got it, the same li
+   AssertionError: live: the own goal's line: expected { minute: '7\'', …(1) } to deeply equal { minute: '7\'', …(1) }
+CONTROL m2c (src/components/soccer-career/SoccerSeasonCentre.tsx): vitest exit 1, 2 tests failed, 5 passed: FIRED

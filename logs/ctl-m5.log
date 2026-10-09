@@ -1,0 +1,6 @@
+   × cup bracket lines (Round 1159) > are native buttons when a tap opens the club, two a tie, each opening the club it names 17ms
+   → expected [] to have a length of 16 but got +0
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerRowButtons.test.tsx,title=src/test/clubManagerRowButtons.test.tsx > cup bracket lines (Round 1159) > are native buttons when a tap opens the 
+   FAIL  src/test/clubManagerRowButtons.test.tsx > cup bracket lines (Round 1159) > are native buttons when a tap opens the club, two a tie, each opening the club it names
+   AssertionError: expected [] to have a length of 16 but got +0
+CONTROL m5 (src/components/club-manager/CupBracketCard.tsx): vitest exit 1, 1 tests failed, 4 passed: FIRED

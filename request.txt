@@ -1,0 +1,22 @@
+# Release AP review fixes: each new test against the fault it was written for. One at a time: each line changes one
+# source file on the runner's checkout, runs its vitest files, puts the file back. Exit 0 = the control FIRED.
+#!serial
+base-vitest: node_modules/.bin/vitest run src/test/seasonCentreOwnGoals.test.tsx src/test/miniPitchScene.test.ts src/test/clubManagerRowButtons.test.tsx src/test/tycoonLatestSeason.test.tsx src/test/academyFilters.test.tsx src/test/facilitiesPreview.test.tsx --testTimeout=300000 --hookTimeout=300000
+ctl-m1: node .rc/x/fx-mut.mjs m1
+ctl-m2: node .rc/x/fx-mut.mjs m2
+ctl-m2b: node .rc/x/fx-mut.mjs m2b
+ctl-m2c: node .rc/x/fx-mut.mjs m2c
+ctl-m3: node .rc/x/fx-mut.mjs m3
+ctl-m3b: node .rc/x/fx-mut.mjs m3b
+ctl-m3c: node .rc/x/fx-mut.mjs m3c
+ctl-m4: node .rc/x/fx-mut.mjs m4
+ctl-m4b: node .rc/x/fx-mut.mjs m4b
+ctl-m5: node .rc/x/fx-mut.mjs m5
+ctl-p1: node .rc/x/fx-mut.mjs p1
+ctl-p2: node .rc/x/fx-mut.mjs p2
+ctl-p3: node .rc/x/fx-mut.mjs p3
+ctl-k1: node .rc/x/fx-mut.mjs k1
+ctl-k2: node .rc/x/fx-mut.mjs k2
+ctl-a1: node .rc/x/fx-mut.mjs a1
+ctl-f1: node .rc/x/fx-mut.mjs f1
+clean-after: git status --short -uno | wc -l

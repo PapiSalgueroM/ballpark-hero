@@ -1,0 +1,6 @@
+   × league table rows (Round 1161) > are native buttons when a tap opens the club, one a club, each opening its own club 39ms
+   → Northfield: expected 'DIV' to be 'BUTTON' // Object.is equality
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerRowButtons.test.tsx,title=src/test/clubManagerRowButtons.test.tsx > league table rows (Round 1161) > are native buttons when a tap opens the 
+   FAIL  src/test/clubManagerRowButtons.test.tsx > league table rows (Round 1161) > are native buttons when a tap opens the club, one a club, each opening its own club
+   AssertionError: Northfield: expected 'DIV' to be 'BUTTON' // Object.is equality
+CONTROL m4 (src/components/club-manager/LeagueTableCard.tsx): vitest exit 1, 1 tests failed, 4 passed: FIRED

@@ -1,0 +1,6 @@
+   × academy position and age filters > names every Sign him and Let go button after its own prospect, and each one acts on him 34ms
+   → expected [ Array(4) ] to deeply equal [ 'Sign him: Older Forward', …(3) ]
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/academyFilters.test.tsx,title=src/test/academyFilters.test.tsx > academy position and age filters > names every Sign him and Let go button after its own
+   FAIL  src/test/academyFilters.test.tsx > academy position and age filters > names every Sign him and Let go button after its own prospect, and each one acts on him
+   AssertionError: expected [ Array(4) ] to deeply equal [ 'Sign him: Older Forward', …(3) ]
+CONTROL a1 (src/components/club-manager/AcademyScreen.tsx): vitest exit 1, 1 tests failed, 7 passed: FIRED

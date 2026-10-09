@@ -1,0 +1,4 @@
+   × Club Manager facilities preview > explains the reached cap without advertising or calling another upgrade 27ms
+   FAIL  src/test/facilitiesPreview.test.tsx > Club Manager facilities preview > explains the reached cap without advertising or calling another upgrade
+   Error: expect(element).toHaveAccessibleName()
+CONTROL f1 (src/components/club-manager/FacilitiesScreen.tsx): vitest exit 1, 1 tests failed, 11 passed: FIRED
