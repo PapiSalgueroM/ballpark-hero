@@ -131,6 +131,8 @@
    an MVP at 17.59 percent against main's 16.55, and with an All-NBA at 61.66 against 58.83, are what the
    corrected rules produce (the games threshold and the fuller season line are real world corrections, not
    tuning), the difference is small, and this harness already fences the round's own rate. No second lever.
+   (Those two numbers are the full size run the ruling read. The same run on the tree merged with Release
+   AP, 2026-10-09: 17.37 and 62.25, inside the same fence.)
 
    NEGATIVE CONTROLS, SIM_NBA_SENSE_CONTROL=<name>. Each swaps one line of SOURCE in memory (a plugin, never a
    file), refuses when its anchor is not there exactly once or the swap changed nothing, and must turn its own
