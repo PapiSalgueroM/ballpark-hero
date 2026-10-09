@@ -1,0 +1,2 @@
+#!serial
+native-finance-pressed-1166: bash .rc/x/cm-finance-pressed-1166.sh
