@@ -1,0 +1,5 @@
+leg1-both-out exit=0 19s | simCmLeagueRules: all checks passed (modern, eras, pure)
+leg2-own-goals-in exit=1 19s | simCmLeagueRules: 27 failure(s)
+leg3-legs-in exit=1 23s | simCmLeagueRules: 47 failure(s)
+write exit=0 23s | simCmLeagueRules: all checks passed (modern, eras, pure)
+after-write exit=0 40s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
