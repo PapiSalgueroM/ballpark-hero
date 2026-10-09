@@ -1,0 +1,16 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/seasonCore.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 81[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/seasonCentreSlots.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[32m 90[2mms[22m[39m
+ [32m✓[39m src/test/seasonReplays.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m src/test/seasonCentreWords.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 505[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m48 passed[39m[22m[90m (48)[39m
+[2m   Start at [22m 08:25:04
+[2m   Duration [22m 3.14s[2m (transform 2.20s, setup 227ms, collect 4.22s, tests 682ms, environment 1.52s, prepare 476ms)[22m
+

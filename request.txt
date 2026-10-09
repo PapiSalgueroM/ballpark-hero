@@ -1,0 +1,52 @@
+#!build
+#!playwright
+#!serial
+base-moments: node scripts/simSeasonMoments.mjs
+base-agree: node scripts/simSeasonCentreAgreement.mjs
+m2b-apply: node .rc/x/rr-mut.mjs m2b
+m2b-vitest: node_modules/.bin/vitest run src/test/seasonCentreSlots.test.tsx src/test/seasonCentreWords.test.tsx src/test/seasonCore.test.ts src/test/seasonReplays.test.tsx --testTimeout=300000 --hookTimeout=120000
+m2b-og: CAREERS=30 node scripts/simSoccerOwnGoals.mjs
+m2b-moments: node scripts/simSeasonMoments.mjs
+m2b-agree: node scripts/simSeasonCentreAgreement.mjs
+m2b-neutral: node scripts/simSeasonCentreNeutral.mjs
+m2b-build: npm run build
+m2b-playCentre: ENGINES=chromium node scripts/playSeasonCentre.mjs
+m2b-playMoments: ENGINES=chromium node scripts/playSeasonMoments.mjs
+m2b-restore: git checkout -- src/components/soccer-career/SoccerSeasonCentre.tsx && git status --short -uno | wc -l
+m1-apply: node .rc/x/rr-mut.mjs m1
+m1-vitest: node_modules/.bin/vitest run src/test/seasonCentreSlots.test.tsx src/test/seasonCentreWords.test.tsx src/test/seasonCore.test.ts src/test/seasonReplays.test.tsx --testTimeout=300000 --hookTimeout=120000
+m1-moments: node scripts/simSeasonMoments.mjs
+m1-agree: node scripts/simSeasonCentreAgreement.mjs
+m1-restore: git checkout -- src/components/soccer-career/SoccerSeasonCentre.tsx && git status --short -uno | wc -l
+m2-apply: node .rc/x/rr-mut.mjs m2
+m2-vitest: node_modules/.bin/vitest run src/test/seasonCentreSlots.test.tsx src/test/seasonCentreWords.test.tsx src/test/seasonCore.test.ts src/test/seasonReplays.test.tsx --testTimeout=300000 --hookTimeout=120000
+m2-restore: git checkout -- src/components/soccer-career/SoccerSeasonCentre.tsx && git status --short -uno | wc -l
+m3-apply: node .rc/x/rr-mut.mjs m3
+m3-vitest: node_modules/.bin/vitest run src/test/tycoonRooms.test.tsx src/test/tycoonHelp.test.tsx src/test/tycoonGear.test.tsx src/test/tycoonPitch.test.tsx src/test/tycoonSaleReview.test.tsx src/test/tycoonSetPiecePage.test.tsx src/test/tycoonTicketPolicy.test.tsx --testTimeout=300000 --hookTimeout=120000
+m3-rooms: node scripts/simTycoonRooms.mjs
+m3-help: node scripts/simTycoonHelp.mjs
+m3-restore: git checkout -- src/pages/StadiumTycoon.tsx && git status --short -uno | wc -l
+m3b-apply: node .rc/x/rr-mut.mjs m3b
+m3b-vitest: node_modules/.bin/vitest run src/test/tycoonRooms.test.tsx src/test/tycoonHelp.test.tsx src/test/tycoonGear.test.tsx src/test/tycoonPitch.test.tsx src/test/tycoonSaleReview.test.tsx src/test/tycoonSetPiecePage.test.tsx src/test/tycoonTicketPolicy.test.tsx --testTimeout=300000 --hookTimeout=120000
+m3b-restore: git checkout -- src/pages/StadiumTycoon.tsx && git status --short -uno | wc -l
+m4-apply: node .rc/x/rr-mut.mjs m4
+m4-vitest: node_modules/.bin/vitest run src/test/managerWorldBrowser.test.tsx src/test/firstTeam.test.tsx src/test/clubManagerDeskCues.test.tsx src/test/seasonCentreSlots.test.tsx --testTimeout=300000 --hookTimeout=120000
+m4-world: node scripts/simManagerWorldBrowser.mjs
+m4-firstTeam: node scripts/simFirstTeamPage.mjs
+m4-a11y: node scripts/simAccessibility.mjs
+m4-restore: git checkout -- src/components/club-manager/LeagueTableCard.tsx && git status --short -uno | wc -l
+m5-apply: node .rc/x/rr-mut.mjs m5
+m5-vitest: node_modules/.bin/vitest run src/test/clubManagerBracketMoment.test.tsx --testTimeout=300000 --hookTimeout=120000
+m5-cup: node scripts/simCup.mjs
+m5-a11y: node scripts/simAccessibility.mjs
+m5-restore: git checkout -- src/components/club-manager/CupBracketCard.tsx && git status --short -uno | wc -l
+m7-apply: node .rc/x/rr-mut.mjs m7
+m7-og: CAREERS=60 node scripts/simSoccerOwnGoals.mjs
+m7-restore: git checkout -- src/lib/season/soccerEvents.ts && git status --short -uno | wc -l
+m8-apply: node .rc/x/rr-mut.mjs m8
+m8-og: CAREERS=60 node scripts/simSoccerOwnGoals.mjs
+m8-restore: git checkout -- src/lib/season/soccerEvents.ts && git status --short -uno | wc -l
+m9-apply: node .rc/x/rr-mut.mjs m9
+m9-og: CAREERS=120 node scripts/simSoccerOwnGoals.mjs
+m9-restore: git checkout -- src/lib/season/soccerEvents.ts && git status --short -uno | wc -l
+bracketMoment-tmp: mkdir -p .tmp-bm && TMPDIR=$PWD/.tmp-bm TEMP=$PWD/.tmp-bm TMP=$PWD/.tmp-bm node scripts/simBracketMoment.mjs

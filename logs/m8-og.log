@@ -1,0 +1,10 @@
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+'teammate' !== 'you'
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOwnGoals.mjs:154:40
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOwnGoals.mjs:58:9)
+    at verify (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOwnGoals.mjs:154:5)
+    at boundaries (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOwnGoals.mjs:214:5)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOwnGoals.mjs:395:5
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)

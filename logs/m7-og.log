@@ -1,0 +1,13 @@
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ 'teammate'
+- undefined
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOwnGoals.mjs:154:40
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOwnGoals.mjs:58:9)
+    at verify (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOwnGoals.mjs:154:5)
+    at onSeason (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOwnGoals.mjs:318:18)
+    at cohort (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOwnGoals.mjs:368:19)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerOwnGoals.mjs:400:5
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
