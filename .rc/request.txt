@@ -1,0 +1,6 @@
+#!serial
+sack-head: node .rc/x/sackprobe.mjs head 300
+co-490: git checkout 490a099de0cf79670c005995f29fa827eb8c2619 -- src && git status --short | wc -l
+sack-490: node .rc/x/sackprobe.mjs builder490 300
+co-main: git checkout bc43f27a8d11c00b6d41085cb0f513457df7c719 -- src && git status --short | wc -l
+sack-main: node .rc/x/sackprobe.mjs main 300
