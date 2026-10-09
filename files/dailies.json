@@ -1,0 +1,731 @@
+{
+ "head": "8bae00b783398b78bf227f9a305c6f174daea580",
+ "dates": {
+  "2026-10-09": {
+   "deadline": {
+    "club": "Heerenveen",
+    "seed": 713128812,
+    "budget": 14,
+    "needs": [
+     "ST",
+     "CB",
+     "GK",
+     "LW"
+    ],
+    "targets": [
+     "Dastan Satpaev|ST|18|64|2.9|need0",
+     "Steve Ngoura|ST|21|67|2.9|need0",
+     "Dell|ST|18|66|3.8|need0",
+     "Dan-Axel Zagadou|CB|27|68|1.9|need1",
+     "Stephan Zagadou|CB|18|66|3.8|need1",
+     "Yasin Özcan|CB|20|69|4.8|need1",
+     "Ivan Zlobin|GK|29|68|1.7|need2",
+     "Matt Freese|GK|28|68|1.7|need2",
+     "Óscar García|GK|23|69|2.9|need2",
+     "Alfon González|LW|27|70|2.5|need3",
+     "Iván Angulo|LW|27|70|2.5|need3",
+     "Thiago Fernández|LW|22|71|4.8|need3"
+    ],
+    "squadTop": [
+     "Mees Hilgers 75",
+     "Jacob Trenskow 75",
+     "Ringo Meerveld 72",
+     "Oliver Braude 71",
+     "Marcus Linday 71"
+    ]
+   },
+   "hotseat": {
+    "club": "Newcastle",
+    "seed": 2653580332,
+    "takeover": {
+     "position": 3,
+     "clubs": 20,
+     "expectation": 8,
+     "played": 14,
+     "points": 24,
+     "form": "LWDLL"
+    },
+    "target": 6,
+    "leash": 5,
+    "squadTop": [
+     "Malick Thiaw 86",
+     "Anthony Elanga 85",
+     "Tino Livramento 85",
+     "Jacob Ramsey 84",
+     "Sven Botman 84"
+    ]
+   }
+  },
+  "2026-10-10": {
+   "deadline": {
+    "club": "Rangers",
+    "seed": 4104413705,
+    "budget": 14,
+    "needs": [
+     "GK",
+     "LB",
+     "CB"
+    ],
+    "targets": [
+     "Wladimiro Falcone|GK|31|74|2.7|need0",
+     "Rome-Jayden Owusu-Oduro|GK|22|74|7.5|need0",
+     "Dominik Greif|GK|29|76|7.5|need0",
+     "João Victor|CB|28|73|4|need1",
+     "Ramy Bensebaini|CB|31|78|5.4|need1",
+     "Abdoul Koné|CB|21|76|15|need1",
+     "Çağlar Söyüncü|CB|30|74|3.4|need2",
+     "Igor Zubeldia|CB|29|77|8.3|need2",
+     "Thomas Kristensen|CB|24|78|10.8|need2"
+    ],
+    "squadTop": [
+     "Nicolas Raskin 80",
+     "Emmanuel Fernandez 77",
+     "Badredine Bouanani 76",
+     "Mohamed Diomandé 76",
+     "Youssef Chermiti 75"
+    ]
+   },
+   "hotseat": {
+    "club": "Athletic Club",
+    "seed": 656411339,
+    "takeover": {
+     "position": 17,
+     "clubs": 20,
+     "expectation": 4,
+     "played": 8,
+     "points": 6,
+     "form": "LLDLL"
+    },
+    "target": 5,
+    "leash": 5,
+    "squadTop": [
+     "Nico Williams 86",
+     "Oihan Sancet 84",
+     "Mikel Jauregizar 83",
+     "Dani Vivian 82",
+     "Unai Simón 82"
+    ]
+   }
+  },
+  "2026-10-11": {
+   "deadline": {
+    "club": "Borussia Dortmund",
+    "seed": 4175249194,
+    "budget": 79.5,
+    "needs": [
+     "CB",
+     "CM",
+     "LB"
+    ],
+    "targets": [
+     "Josip Sutalo|CB|26|79|13.2|need0",
+     "Marcos Senesi|CB|29|82|19.8|need0",
+     "Wesley Fofana|CB|26|83|24.8|need0",
+     "Davide Frattesi|CM|27|82|19.8|need1",
+     "Oihan Sancet|CAM|26|84|31.4|need1",
+     "Dani Olmo|CAM|28|87|53.7|need1",
+     "Andrea Cambiaso|LB|26|83|26.4|need2",
+     "Castello Lukeba|CB|24|86|40.5|need2",
+     "Ousmane Diomande|CB|23|85|46|need2"
+    ],
+    "squadTop": [
+     "Nico Schlotterbeck 87",
+     "Felix Nmecha 86",
+     "Serhou Guirassy 86",
+     "Gregor Kobel 85",
+     "Maximilian Beier 85"
+    ]
+   },
+   "hotseat": {
+    "club": "Young Boys",
+    "seed": 534816550,
+    "takeover": {
+     "position": 2,
+     "clubs": 12,
+     "expectation": 2,
+     "played": 13,
+     "points": 24,
+     "form": "LWWDL"
+    },
+    "target": 8,
+    "leash": 5,
+    "squadTop": [
+     "Alvyn Sanches 76",
+     "Marvin Keller 76",
+     "Cédric Zesiger 73",
+     "Moritz Jenz 73",
+     "Samuel Essende 73"
+    ]
+   }
+  },
+  "2026-10-12": {
+   "deadline": {
+    "club": "Atalanta",
+    "seed": 1179524728,
+    "budget": 44.5,
+    "needs": [
+     "LB",
+     "CB",
+     "CM"
+    ],
+    "targets": [
+     "Philipp Lienhart|CB|30|79|8.8|need0",
+     "Matteo Gabbia|CB|27|81|18.2|need0",
+     "Marc Pubill|CB|23|82|28.1|need0",
+     "Fikayo Tomori|CB|29|81|18.2|need1",
+     "Jhon Lucumí|CB|28|82|22.3|need1",
+     "Piero Hincapié|CB|24|86|44.6|need1",
+     "Pierre-Emile Højbjerg|CDM|30|81|11|need2",
+     "Manuel Ugarte|CDM|25|82|22.3|need2",
+     "Ibrahim Maza|CAM|21|82|40.4|need2"
+    ],
+    "squadTop": [
+     "Éderson 85",
+     "Charles De Ketelaere 84",
+     "Giorgio Scalvini 82",
+     "Gianluca Scamacca 82",
+     "Marco Carnesecchi 82"
+    ]
+   },
+   "hotseat": {
+    "club": "Westerlo",
+    "seed": 3041765782,
+    "takeover": {
+     "position": 10,
+     "clubs": 18,
+     "expectation": 7,
+     "played": 8,
+     "points": 12,
+     "form": "LWWWL"
+    },
+    "target": 7,
+    "leash": 5,
+    "squadTop": [
+     "Doğucan Haspolat 73",
+     "Emin Bayram 71",
+     "Isa Sakamoto 71",
+     "Nacho Ferri 70",
+     "Andreas Jungdal 70"
+    ]
+   }
+  },
+  "2026-10-13": {
+   "deadline": {
+    "club": "Trabzonspor",
+    "seed": 3558095695,
+    "budget": 14.5,
+    "needs": [
+     "CB",
+     "LW",
+     "LB"
+    ],
+    "targets": [
+     "Joshua Quarshie|CB|22|70|3.8|need0",
+     "Willy Kambwala|CB|22|70|3.8|need0",
+     "Luca Reggiani|CB|18|67|4.8|need0",
+     "Bruma|LW|32|75|3.4|need1",
+     "Derry Scherhant|LW|24|74|5|need1",
+     "Anass Zaroury|LW|26|76|7.5|need1",
+     "Toni Borevković|CB|29|73|4|need2",
+     "Manu Sánchez|LB|26|74|5|need2",
+     "Daniele Ghilardi|CB|23|78|15|need2"
+    ],
+    "squadTop": [
+     "Mohamed Salah 87",
+     "Simon Banza 80",
+     "André Onana 79",
+     "Arseniy Batagov 78",
+     "Ernest Muci 78"
+    ]
+   },
+   "hotseat": {
+    "club": "Celta Vigo",
+    "seed": 1511709361,
+    "takeover": {
+     "position": 13,
+     "clubs": 20,
+     "expectation": 10,
+     "played": 6,
+     "points": 6,
+     "form": "LLLLW"
+    },
+    "target": 4,
+    "leash": 5,
+    "squadTop": [
+     "Miguel Román 79",
+     "Javi Rodríguez 78",
+     "Williot Swedberg 77",
+     "Ilaix Moriba 76",
+     "Ionuț Radu 76"
+    ]
+   }
+  },
+  "2026-10-14": {
+   "deadline": {
+    "club": "PAOK",
+    "seed": 559193876,
+    "budget": 13,
+    "needs": [
+     "CB",
+     "GK",
+     "RB"
+    ],
+    "targets": [
+     "Alan Matturro|CB|22|70|3.8|need0",
+     "Stephan Zagadou|CB|18|66|3.8|need0",
+     "Raphael Kofler|CB|21|70|4.8|need0",
+     "Devis Vásquez|GK|28|68|1.7|need1",
+     "Alexander Schlager|GK|30|71|2.1|need1",
+     "Stefano Turati|GK|25|70|2.5|need1",
+     "Gabriel Xavier|CB|25|72|3.3|need2",
+     "Paulo Henrique|RB|30|75|4.1|need2",
+     "Soumaïla Coulibaly|CB|23|75|7.5|need2"
+    ],
+    "squadTop": [
+     "Georgios Giakoumakis 78",
+     "Christos Zafeiris 77",
+     "Andrija Zivkovic 77",
+     "Fedor Chalov 75",
+     "Kiril Despodov 75"
+    ]
+   },
+   "hotseat": {
+    "club": "Monza",
+    "seed": 3732009447,
+    "takeover": {
+     "position": 20,
+     "clubs": 20,
+     "expectation": 19,
+     "played": 7,
+     "points": 1,
+     "form": "LDLLL"
+    },
+    "target": 3,
+    "leash": 5,
+    "squadTop": [
+     "Cyril Ngonge 76",
+     "Jan Ziolkowski 75",
+     "Idrissa Touré 74",
+     "Michael Folorunsho 74",
+     "Ebenezer Akinsanmiro 73"
+    ]
+   }
+  },
+  "2026-10-15": {
+   "deadline": {
+    "club": "St. Pauli",
+    "seed": 3944708014,
+    "budget": 8,
+    "needs": [
+     "CB",
+     "RW",
+     "CM"
+    ],
+    "targets": [
+     "Eric Bailly|CB|32|67|0.9|need0",
+     "David Odogu|CB|20|69|4.8|need0",
+     "Juan Rodríguez|CB|21|70|4.8|need0",
+     "Yusuf Demir|RW|23|67|1.8|need1",
+     "Theo Corbeanu|RW|24|68|1.7|need1",
+     "Luca Koleosho|RW|22|70|3.8|need1",
+     "Baralhas|CDM|27|70|2.2|need2",
+     "Djé D'Avilla|CDM|23|71|4|need2",
+     "Stanis Idumbo|CAM|21|70|4.8|need2"
+    ],
+    "squadTop": [
+     "Joel Chima Fujita 77",
+     "Nikola Vasilj 75",
+     "Eric Smith 73",
+     "Mathias Pereira Lage 73",
+     "Arkadiusz Pyrka 72"
+    ]
+   },
+   "hotseat": {
+    "club": "Osasuna",
+    "seed": 4080096211,
+    "takeover": {
+     "position": 16,
+     "clubs": 20,
+     "expectation": 14,
+     "played": 6,
+     "points": 4,
+     "form": "LDLLL"
+    },
+    "target": 3,
+    "leash": 5,
+    "squadTop": [
+     "Enzo Boyomo 81",
+     "Ante Budimir 78",
+     "Aimar Oroz 77",
+     "Romain Del Castillo 77",
+     "Jon Moncayola 76"
+    ]
+   }
+  },
+  "2026-10-16": {
+   "deadline": {
+    "club": "Nice",
+    "seed": 1257557864,
+    "budget": 33,
+    "needs": [
+     "CM",
+     "LB",
+     "RW",
+     "GK"
+    ],
+    "targets": [
+     "Patrizio Masini|CM|25|73|4.2|need0",
+     "Lorenzo Amatucci|CDM|22|74|8.1|need0",
+     "Dário Essugo|CDM|21|77|15.3|need0",
+     "Gustavo Gómez|CB|33|76|3.2|need1",
+     "Thomas Kristensen|CB|24|78|10.8|need1",
+     "Odilon Kossounou|CB|25|80|15.7|need1",
+     "Benjamín Rollheiser|RW|26|76|6.6|need2",
+     "Samuel Chukwueze|RW|27|79|13.2|need2",
+     "Anan Khalaili|RM|22|78|17.9|need2",
+     "Christos Mandas|GK|25|77|9.1|need3",
+     "Kamil Grabara|GK|27|78|10.8|need3",
+     "Robin Risser|GK|22|80|25.4|need3"
+    ],
+    "squadTop": [
+     "Mohamed Amoura 83",
+     "Hicham Boudaoui 78",
+     "Sofiane Diop 78",
+     "Elye Wahi 77",
+     "Jonathan Clauss 77"
+    ]
+   },
+   "hotseat": {
+    "club": "Cruz Azul",
+    "seed": 3983553250,
+    "takeover": {
+     "position": 17,
+     "clubs": 18,
+     "expectation": 4,
+     "played": 13,
+     "points": 8,
+     "form": "LDLLL"
+    },
+    "target": 5,
+    "leash": 5,
+    "squadTop": [
+     "José Paradela 77",
+     "Kevin Mier 75",
+     "Jeremy Márquez 74",
+     "Jesús Orozco Chiquete 74",
+     "Agustín Palavecino 74"
+    ]
+   }
+  },
+  "2026-10-17": {
+   "deadline": {
+    "club": "Valencia",
+    "seed": 2639406699,
+    "budget": 26,
+    "needs": [
+     "GK",
+     "CB",
+     "LB",
+     "CM"
+    ],
+    "targets": [
+     "Davy Roef|GK|32|72|2.1|need0",
+     "Antonio Sivera|GK|30|75|4.1|need0",
+     "Christos Mandas|GK|25|77|9.1|need0",
+     "Michael Keane|CB|33|76|3.2|need1",
+     "Robert Renan|CB|23|76|10.4|need1",
+     "Honest Ahanor|CB|18|76|25.4|need1",
+     "Arouna Sangante|CB|24|76|7.5|need2",
+     "Lilian Brassier|CB|27|78|10.8|need2",
+     "Renato Veiga|CB|23|81|25.4|need2",
+     "Stanislav Lobotka|CDM|31|79|7.3|need3",
+     "Andy Diouf|CM|23|79|17.9|need3",
+     "Rúben Neves|CDM|29|82|22.3|need3"
+    ],
+    "squadTop": [
+     "Javi Guerra 81",
+     "Harvey Elliott 81",
+     "César Tárrega 78",
+     "Diego López 78",
+     "Hugo Duro 78"
+    ]
+   },
+   "hotseat": {
+    "club": "Trabzonspor",
+    "seed": 2338547724,
+    "takeover": {
+     "position": 5,
+     "clubs": 18,
+     "expectation": 4,
+     "played": 11,
+     "points": 23,
+     "form": "DDLWW"
+    },
+    "target": 8,
+    "leash": 5,
+    "squadTop": [
+     "Mohamed Salah 87",
+     "Simon Banza 80",
+     "André Onana 79",
+     "Arseniy Batagov 78",
+     "Ernest Muci 78"
+    ]
+   }
+  },
+  "2026-10-18": {
+   "deadline": {
+    "club": "Nottingham Forest",
+    "seed": 2527577084,
+    "budget": 56,
+    "needs": [
+     "GK",
+     "CM",
+     "LB"
+    ],
+    "targets": [
+     "Mark Flekken|GK|33|79|6.1|need0",
+     "Mads Hermansen|GK|26|79|13.2|need0",
+     "James Trafford|GK|24|82|22.3|need0",
+     "Julian Brandt|CAM|30|82|14.9|need1",
+     "Mateus Fernandes|CM|22|82|35.6|need1",
+     "Eberechi Eze|CAM|28|87|53.7|need1",
+     "Jakub Kiwior|CB|26|83|24|need2",
+     "Trevoh Chalobah|CB|27|85|35.5|need2",
+     "Piero Hincapié|CB|24|86|44.6|need2"
+    ],
+    "squadTop": [
+     "Morgan Gibbs-White 87",
+     "Murillo 86",
+     "Ousmane Diomande 85",
+     "Dan Ndoye 84",
+     "Daniel Muñoz 84"
+    ]
+   },
+   "hotseat": {
+    "club": "Al-Ahli",
+    "seed": 2381485114,
+    "takeover": {
+     "position": 10,
+     "clubs": 18,
+     "expectation": 2,
+     "played": 6,
+     "points": 7,
+     "form": "DLWLW"
+    },
+    "target": 10,
+    "leash": 5,
+    "squadTop": [
+     "Francisco Trincão 84",
+     "Enzo Millot 83",
+     "Eduard Spertsyan 82",
+     "Galeno 82",
+     "Ivan Toney 82"
+    ]
+   }
+  },
+  "2026-10-19": {
+   "deadline": {
+    "club": "Cruzeiro",
+    "seed": 2771516306,
+    "budget": 21.5,
+    "needs": [
+     "CB",
+     "GK",
+     "RW"
+    ],
+    "targets": [
+     "Dan-Axel Zagadou|CB|27|68|1.9|need0",
+     "Stephan Zagadou|CB|18|66|3.8|need0",
+     "Matteo Palma|CB|18|67|4.8|need0",
+     "Álex Padilla|GK|23|69|2.9|need1",
+     "Jeffrey de Lange|GK|28|70|2.5|need1",
+     "Ewen Jaouen|GK|21|69|3.8|need1",
+     "Tetê|RW|26|78|9.9|need2",
+     "Nathan Tella|RW|27|79|13.2|need2",
+     "Dodi Lukébakio|RW|29|81|18.2|need2"
+    ],
+    "squadTop": [
+     "Kaio Jorge 83",
+     "Gerson 81",
+     "Matheus Pereira 80",
+     "Fabrício Bruno 79",
+     "Luis Sinisterra 78"
+    ]
+   },
+   "hotseat": {
+    "club": "Hamburg",
+    "seed": 173307562,
+    "takeover": {
+     "position": 16,
+     "clubs": 18,
+     "expectation": 9,
+     "played": 6,
+     "points": 3,
+     "form": "DLDLD"
+    },
+    "target": 4,
+    "leash": 5,
+    "squadTop": [
+     "Fábio Vieira 80",
+     "Zakaria El Ouahdi 79",
+     "Albert Sambi Lokonga 77",
+     "David Møller Wolfe 77",
+     "Terem Moffi 77"
+    ]
+   }
+  },
+  "2026-10-20": {
+   "deadline": {
+    "club": "Monterrey",
+    "seed": 2477118140,
+    "budget": 10.5,
+    "needs": [
+     "LB",
+     "CM",
+     "RW"
+    ],
+    "targets": [
+     "Christopher Operi|LB|29|72|3.3|need0",
+     "Nathan Silva|CB|29|74|4.7|need0",
+     "Luca Jaquez|CB|23|76|10.4|need0",
+     "Kalvin Phillips|CDM|30|71|1.8|need1",
+     "Gianluca Busio|CM|24|74|5|need1",
+     "Martín Ojeda|CAM|28|76|7.5|need1",
+     "Florian Thauvin|RW|33|76|3.4|need2",
+     "Tom Louchet|RM|23|75|7.5|need2",
+     "Ludovic Blas|RM|29|77|9.1|need2"
+    ],
+    "squadTop": [
+     "Luca Orellano 76",
+     "Anthony Martial 75",
+     "Lucas Ocampos 74",
+     "Óliver Torres 74",
+     "Víctor Guzmán 73"
+    ]
+   },
+   "hotseat": {
+    "club": "Toulouse",
+    "seed": 2940301443,
+    "takeover": {
+     "position": 9,
+     "clubs": 18,
+     "expectation": 13,
+     "played": 9,
+     "points": 12,
+     "form": "LLWLD"
+    },
+    "target": 5,
+    "leash": 5,
+    "squadTop": [
+     "Guillaume Restes 77",
+     "Cristian Cásseres Jr. 77",
+     "Pape Demba Diop 75",
+     "Mark McKenzie 74",
+     "Alexis Vossah 73"
+    ]
+   }
+  },
+  "2026-10-21": {
+   "deadline": {
+    "club": "Como",
+    "seed": 2591373932,
+    "budget": 40,
+    "needs": [
+     "CB",
+     "LB",
+     "LW"
+    ],
+    "targets": [
+     "Emin Bayram|CB|23|71|3.8|need0",
+     "Saba Goglichidze|CB|22|71|4.8|need0",
+     "Armel Bella-Kotchap|CB|25|76|6.6|need0",
+     "Marin Pongracic|CB|29|76|6.6|need1",
+     "Danilho Doekhi|CB|28|79|11.6|need1",
+     "Youri Baas|CB|23|80|20.6|need1",
+     "Kerem Aktürkoğlu|LW|28|82|19.8|need2",
+     "Abde Ezzalzouli|LW|25|83|26.4|need2",
+     "Álex Baena|LW|25|86|40.5|need2"
+    ],
+    "squadTop": [
+     "Nico Paz 86",
+     "Moise Kean 85",
+     "Trevoh Chalobah 85",
+     "Máximo Perrone 83",
+     "Robert Sánchez 82"
+    ]
+   },
+   "hotseat": {
+    "club": "Anderlecht",
+    "seed": 1583642686,
+    "takeover": {
+     "position": 3,
+     "clubs": 18,
+     "expectation": 4,
+     "played": 12,
+     "points": 22,
+     "form": "LWDWD"
+    },
+    "target": 8,
+    "leash": 5,
+    "squadTop": [
+     "Andrew Omobamidele 76",
+     "Adriano Bertaccini 73",
+     "Danylo Sikan 73",
+     "Mario Stroeykens 72",
+     "Lucas Hey 72"
+    ]
+   }
+  },
+  "2026-10-22": {
+   "deadline": {
+    "club": "Auxerre",
+    "seed": 40377364,
+    "budget": 13,
+    "needs": [
+     "CB",
+     "GK",
+     "CM"
+    ],
+    "targets": [
+     "Branimir Mlacic|CB|19|67|3.8|need0",
+     "Nidal Celik|CB|20|68|3.8|need0",
+     "Luca Reggiani|CB|18|67|4.8|need0",
+     "Christian Walton|GK|31|66|0.7|need1",
+     "Alejandro Iturbe|GK|23|67|1.9|need1",
+     "Maxime Delanghe|GK|25|68|1.7|need1",
+     "Besfort Zeneli|CM|24|73|4.2|need2",
+     "Caio Alexandre|CDM|27|75|6.3|need2",
+     "Joel Chima Fujita|CM|24|77|9.1|need2"
+    ],
+    "squadTop": [
+     "Clément Akpa 77",
+     "Kévin Danois 76",
+     "Lassine Sinayoko 76",
+     "Rudy Matondo 73",
+     "Danny Namaso 73"
+    ]
+   },
+   "hotseat": {
+    "club": "León",
+    "seed": 1708221461,
+    "takeover": {
+     "position": 12,
+     "clubs": 18,
+     "expectation": 8,
+     "played": 11,
+     "points": 13,
+     "form": "LLWDD"
+    },
+    "target": 6,
+    "leash": 5,
+    "squadTop": [
+     "Díber Cambindo 74",
+     "Fernando Beltrán 73",
+     "Juan Domínguez 70",
+     "Rodrigo Echeverría 70",
+     "Óscar García 69"
+    ]
+   }
+  }
+ }
+}

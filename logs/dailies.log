@@ -1,0 +1,72 @@
+{
+ "head": "8bae00b783398b78bf227f9a305c6f174daea580",
+ "dates": {
+  "2026-10-09": {
+   "deadline": {
+    "club": "Heerenveen",
+    "seed": 713128812,
+    "budget": 14,
+    "needs": [
+     "ST",
+     "CB",
+     "GK",
+     "LW"
+    ],
+    "targets": [
+     "Dastan Satpaev|ST|18|64|2.9|need0",
+     "Steve Ngoura|ST|21|67|2.9|need0",
+     "Dell|ST|18|66|3.8|need0",
+     "Dan-Axel Zagadou|CB|27|68|1.9|need1",
+     "Stephan Zagadou|CB|18|66|3.8|need1",
+     "Yasin Özcan|CB|20|69|4.8|need1",
+     "Ivan Zlobin|GK|29|68|1.7|need2",
+     "Matt Freese|GK|28|68|1.7|need2",
+     "Óscar García|GK|23|69|2.9|need2",
+     "Alfon González|LW|27|70|2.5|need3",
+     "Iván Angulo|LW|27|70|2.5|need3",
+     "Thiago Fernández|LW|22|71|4.8|need3"
+    ],
+    "squadTop": [
+     "Mees Hilgers 75",
+     "Jacob Trenskow 75",
+     "Ringo Meerveld 72",
+     "Oliver Braude 71",
+     "Marcus Linday 71"
+    ]
+   },
+   "hotseat": {
+    "club": "Newcastle",
+    "seed": 2653580332,
+    "takeover": {
+     "position": 3,
+     "clubs": 20,
+     "expectation": 8,
+     "played": 14,
+     "points": 24,
+     "form": "LWDLL"
+    },
+    "target": 6,
+    "leash": 5,
+    "squadTop": [
+     "Malick Thiaw 86",
+     "Anthony Elanga 85",
+     "Tino Livramento 85",
+     "Jacob Ramsey 84",
+     "Sven Botman 84"
+    ]
+   }
+  },
+  "2026-10-10": {
+   "deadline": {
+    "club": "Rangers",
+    "seed": 4104413705,
+    "budget": 14,
+    "needs": [
+     "GK",
+     "LB",
+     "CB"
+    ],
+    "targets": [
+     "Wladimiro Falcone|GK|31|74|2
+... (16110 bytes)
+dailiesProbe: done

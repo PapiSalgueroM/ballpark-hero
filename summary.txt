@@ -1,0 +1,1 @@
+dailies exit=0 1s | dailiesProbe: done
