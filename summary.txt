@@ -1,0 +1,9 @@
+tsc exit=0 76s | 
+simRoles-cameofull exit=0 7s | simRoles control: green. With a cameo worth a whole game again, section 3c went red.
+legs exit=0 49s | simCmQuickLegs: PASS, 10 sections green
+legs-unbooked exit=0 53s | simCmQuickLegs: CONTROL unbooked FIRED, section order went red as it must (red in all: order)
+legs-stale exit=0 59s | simCmQuickLegs: CONTROL stale FIRED, section fresher went red as it must (red in all: fresher)
+legs-anywhere exit=0 67s | simCmQuickLegs: CONTROL anywhere FIRED, section fit went red as it must (red in all: fit)
+vitest exit=0 5s |    Duration  4.41s (transform 2.25s, setup 149ms, collect 5.53s, tests 666ms, environment 955ms, prepare 435ms)
+simRoles-b exit=0 1159s | ALL ROLE CHECKS PASSED
+simRoles-a exit=0 1172s | ALL ROLE CHECKS PASSED
