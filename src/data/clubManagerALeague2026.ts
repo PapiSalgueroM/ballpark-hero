@@ -20,7 +20,7 @@ export const CM_ALEAGUE_META = {
 export const CM_ALEAGUE_PARTIAL: string[] = ["Central Coast Mariners"];
 
 /** Players with no value on their club's page, as "name|club": each one is
- *  rated from the curve's floor value at his age, never given an invented value. */
+ *  rated at the curve's floor at every age, never given an invented value. */
 export const CM_ALEAGUE_NO_VALUE: string[] = [
   'Israel Mbula-Monga|Adelaide United',
   'Malual Nichola|Adelaide United',
@@ -145,7 +145,7 @@ export const CM_ALEAGUE_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Ronan Wynne', p: 'CB', a: 25, v: 0.12, r: 54 },
     { n: 'Van Fitzharris', p: 'CAM', a: 18, v: 0.12, r: 48 },
     { n: 'Joseph Knowles', p: 'GK', a: 21, v: 0.08, r: 49 },
-    { n: 'Aaron Calver', p: 'CB', a: 30, v: 0.04, r: 49 },
+    { n: 'Aaron Calver', p: 'CB', a: 30, v: 0.04, r: 48 },
     { n: 'Aaron Cartwright', p: 'RW', a: 18, v: 0.04, r: 48 },
     { n: 'Marley Leuluai', p: 'CDM', a: 19, v: 0.04, r: 48 },
   ],
@@ -331,7 +331,7 @@ export const CM_ALEAGUE_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Andriano Lebib', p: 'CB', a: 20, v: 0.16, r: 51 },
     { n: 'Matt Ellis', p: 'CAM', a: 25, v: 0.12, r: 54 },
     { n: 'Anthony Didulica', p: 'CM', a: 18, v: 0.08, r: 48 },
-    { n: 'Brandon O\'Neill', p: 'CM', a: 32, v: 0.04, r: 50 },
+    { n: 'Brandon O\'Neill', p: 'CM', a: 32, v: 0.04, r: 48 },
     { n: 'Cher Deng', p: 'CB', a: 21, v: 0.04, r: 48 },
     { n: 'Daniel Solsky', p: 'GK', a: 23, v: 0.04, r: 48 },
     { n: 'Oliver Evans', p: 'ST', a: 18, v: 0.04, r: 48 },

@@ -22,7 +22,7 @@ export const CM_RUSSIA_META = {
 export const CM_RUSSIA_PARTIAL: string[] = [];
 
 /** Players with no value on their club's page, as "name|club": each one is
- *  rated from the curve's floor value at his age, never given an invented value. */
+ *  rated at the curve's floor at every age, never given an invented value. */
 export const CM_RUSSIA_NO_VALUE: string[] = [
   'Egor Besaev|CSKA Moscow',
   'Nikolay Barovskiy|CSKA Moscow',

@@ -132,7 +132,7 @@ const out = renderGatheredFile({
   docs: {
     partial: `/** Clubs where more than half of the club's ledger rows (Round 1034's gathered squad, the rows with no position group included) have no market value. */`,
     noValue: `/** Players with no value on their club's page, as "name|club": each one is
- *  rated from the curve's floor value at his age, never given an invented value. */`,
+ *  rated at the curve's floor at every age, never given an invented value. */`,
     supersedes: `/** Men the baked file still carries at an older club, by name: the join
  *  drops each from that club (proof in the generator's SUPERSEDES). */`,
     nationalities: `/** Nationality where two hosts agree (_people.json); a name missing here is

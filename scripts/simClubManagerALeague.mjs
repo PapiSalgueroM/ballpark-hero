@@ -21,9 +21,10 @@
       curve's rating of his EUR value at his age (scripts/lib/cmValueCurve.mjs,
       since Round 1102 the value curve plus points for age), every value is
       the curve's pounds at two decimals and above zero, and every man with
-      no value is rated from the floor value at his age and listed in
-      CM_ALEAGUE_NO_VALUE (and nobody else is). The count of no value men is
-      printed, with how many of them sit exactly on the floor.
+      no value is at the floor at every age (the age points give back what
+      the market took off a price, and the market never priced him) and
+      listed in CM_ALEAGUE_NO_VALUE (and nobody else is). The count of no
+      value men is printed.
    C. NATIONALITY (hard). Every shipped nationality has at least two hosts in
       _people.json whose own reading is that nationality, every one has a
       flag, nationalityOf answers it for the modern world, and a man with no
@@ -56,9 +57,10 @@
    seasons a run plus the two excluded clubs:
      A  310 grouped ledger rows, 310 shipped, 2 group-less rows held back
      B  310 players on 12 club pages, 61 with no value at the floor (48)
-        (Round 1102, measured 2026-10-09 on a GitHub runner: the same 61 are
-        rated from the floor value at their age, 59 of them still exactly on
-        48 and two veterans above it)
+        (Round 1102: the same 61, still at the floor at every age. The
+        round's first bake read two veterans among them with their age, 49
+        and 54; its review took that back, an unpriced man has no market
+        discount to give back)
      C  299 nationalities on two hosts, 11 unknown, every age on two hosts
      D  every run 10 seasons ended (0 to 3 sacked careers replaced by the
         next seed), 10 Australia Cup finals with a winner, won by 5 to 9
@@ -120,7 +122,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { POS_MAP, ratingOf, rateFrom, gbpM, usdOfEur, FLOOR_USD, RATING_FLOOR } from './lib/cmValueCurve.mjs';
+import { POS_MAP, ratingOf, gbpM, usdOfEur, FLOOR_USD, RATING_FLOOR } from './lib/cmValueCurve.mjs';
 import { ENGINE_NAME, GROUP_OF, GROUP_DEFAULT, NATIONALITY_ALIAS } from './lib/aleagueClubs.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -286,12 +288,13 @@ function partValues(cm, membership, values) {
       if (has && !row.tmId) fail(`${p.n} has a value but no Transfermarkt id to tie it to the page`);
       const usd = has ? usdOfEur(row.valueEur) : FLOOR_USD;
       if (!has) noValueFound.add(`${p.n}|${engine}`);
-      if (p.r !== ratingOf(usd, p.a, p.p)) fail(`${p.n} (${engine}) is rated ${p.r}; the curve gives ${ratingOf(usd, p.a, p.p)} for ${has ? `EUR ${row.valueEur}` : 'no value (the floor)'} at ${p.a}`);
+      if (has && p.r !== ratingOf(usd, p.a, p.p)) fail(`${p.n} (${engine}) is rated ${p.r}; the curve gives ${ratingOf(usd, p.a, p.p)} for EUR ${row.valueEur} at ${p.a}`);
       if (p.v !== gbpM(usd, 2)) fail(`${p.n} (${engine}) is valued ${p.v}, the curve's pounds are ${gbpM(usd, 2)}`);
       if (!(p.v > 0)) fail(`${p.n} (${engine}) has a value at or below zero`);
-      /* Round 1102: a man with no value is still valued at the floor, and is then read with his age like
-         anybody else, so a veteran among them sits above 48. */
-      if (!has && p.r !== rateFrom(RATING_FLOOR, p.a, p.p)) fail(`${p.n} has no value and is not rated from the floor value at his age`);
+      /* Round 1102: a man with no value is valued at the floor and stays ON the floor at every age.
+         The age points give back what the market took off a price for a birthday; he was never
+         priced, so a veteran among them is 48 like the rest. */
+      if (!has && p.r !== RATING_FLOOR) fail(`${p.n} (${engine}, ${p.a}) has no value and is rated ${p.r}, not the floor ${RATING_FLOOR}`);
       if (!has && p.r === RATING_FLOOR) noValueOnFloor += 1;
       const group = readJson(`${c.slug}.json`).rows.find(r => r.name === p.n)?.group;
       if (group && GROUP_OF[p.p] !== group) fail(`${p.n} plays ${p.p}, outside his ledger group ${group}`);
@@ -302,7 +305,7 @@ function partValues(cm, membership, values) {
   }
   for (const k of noValueFound) if (!noValueListed.has(k)) fail(`${k} has no value and is missing from CM_ALEAGUE_NO_VALUE`);
   for (const k of noValueListed) if (!noValueFound.has(k)) fail(`${k} is listed with no value but has one`);
-  console.log(`   ${checked} players checked against ${values.clubs.length} club pages, ${noValueFound.size} with no value rated from the floor value at their age (${noValueOnFloor} of them exactly on the floor, ${RATING_FLOOR})`);
+  console.log(`   ${checked} players checked against ${values.clubs.length} club pages, ${noValueFound.size} with no value, ${noValueOnFloor} of them on the floor (${RATING_FLOOR})`);
   /* The partial rule (Release AH, Round 1035 review F10): a club where more
      than half its LEDGER rows, the group-less ones held back included, have
      no value on its page. Read from the ledgers and the page, never from the

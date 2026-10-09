@@ -29,7 +29,7 @@
    B. VALUES (hard). Every rating is the shared curve's rating of the row's
       EUR value at the row's age (since Round 1102 the value curve plus points
       for age), every value is the curve's pounds at two decimals and above
-      zero, every man with no value is rated from the floor value and in the
+      zero, every man with no value is at the floor at every age and in the
       NO_VALUE export, and nobody else is.
    C. PEOPLE (hard, the data guardian's smell list). Every age is on two
       hosts and between 15 and 45. Every shipped nationality has two hosts,
@@ -120,7 +120,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
-import { POS_MAP, ratingOf, gbpM, usdOfEur, FLOOR_USD } from './lib/cmValueCurve.mjs';
+import { POS_MAP, ratingOf, gbpM, usdOfEur, FLOOR_USD, RATING_FLOOR } from './lib/cmValueCurve.mjs';
 import { GROUP_OF, GROUP_DEFAULT, foldName } from './lib/gatheredLeague.mjs';
 import { GATHERED_LEAGUES } from './lib/gatheredLeagues.mjs';
 import { generateGathered } from './genClubManagerGathered.mjs';
@@ -329,7 +329,10 @@ for (const L of leagues) {
     const has = Number.isFinite(r.valueEur) && r.valueEur > 0;
     const usd = has ? usdOfEur(r.valueEur) : FLOOR_USD;
     if (!has) wantNoValue.push(`${r.name}|${c.engine}`);
-    if (p.r !== ratingOf(usd, p.a, p.p)) fail(`${r.name} (${c.engine}) is rated ${p.r}, the curve says ${ratingOf(usd, p.a, p.p)} at ${p.a}`);
+    /* A man with no value is on the floor at every age (the age points give back a market discount,
+       and the market never priced him); everybody else is the curve's rating at his age. */
+    const wantR = has ? ratingOf(usd, p.a, p.p) : RATING_FLOOR;
+    if (p.r !== wantR) fail(`${r.name} (${c.engine}) is rated ${p.r}, ${has ? `the curve says ${wantR} at ${p.a}` : `a man with no value is ${RATING_FLOOR} at every age`}`);
     if (p.v !== gbpM(usd, 2) || !(p.v > 0)) fail(`${r.name} (${c.engine}) is valued ${p.v}, the curve says ${gbpM(usd, 2)}`);
   }
   if (JSON.stringify([...gen.noValue].sort()) !== JSON.stringify(wantNoValue.sort())) fail(`${row.id}: the NO_VALUE export is not exactly the men with no value (${gen.noValue.length} listed, ${wantNoValue.length} expected)`);

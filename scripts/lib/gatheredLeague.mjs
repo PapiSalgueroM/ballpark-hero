@@ -43,7 +43,7 @@
  *                       default. Both are returned in `positionThin` and
  *                       written as the POSITION_THIN export, as "name|club"
  */
-import { POS_MAP, ratingOf, gbpM, usdOfEur, FLOOR_USD, CURVE_VERSION } from './cmValueCurve.mjs';
+import { POS_MAP, ratingOf, gbpM, usdOfEur, FLOOR_USD, RATING_FLOOR, CURVE_VERSION } from './cmValueCurve.mjs';
 
 /** The ledger's group of each engine position, and each group's default. */
 export const GROUP_OF = { GK: 'GK', CB: 'DEF', LB: 'DEF', RB: 'DEF', CDM: 'MID', CM: 'MID', CAM: 'MID', LM: 'MID', RM: 'MID', LW: 'FWD', RW: 'FWD', ST: 'FWD', CF: 'FWD' };
@@ -136,12 +136,17 @@ export function buildGatheredLeague({ clubs, supersedes = {}, bakedText, nowBloc
         if (!p || !options.statedPosition) { p = GROUP_DEFAULT[row.group]; groupWon += 1; }
       }
       let usd;
+      let priced = true;
       if (Number.isFinite(row.valueEur) && row.valueEur > 0) usd = usdOfEur(row.valueEur);
-      else { usd = FLOOR_USD; noValue.push(`${row.name}|${engine}`); }
+      else { usd = FLOOR_USD; priced = false; noValue.push(`${row.name}|${engine}`); }
       /* Round 1102: the rating is the value curve read with the man's age (curve 2). A gathered
          league's age is the age its hosts printed on the read date, in the season the file is
-         for, so it is used as it stands. */
-      list.push({ n: row.name, p, a: row.age, v: gbpM(usd, 2), r: ratingOf(usd, row.age, p) });
+         for, so it is used as it stands. A man with no value stays on the floor of the scale at
+         every age: the age points give back what the market took off a price for a birthday, and
+         the market never priced him. The curve is still asked about him, so a bad age or position
+         stops the build here as it does for anybody else. */
+      const rated = ratingOf(usd, row.age, p);
+      list.push({ n: row.name, p, a: row.age, v: gbpM(usd, 2), r: priced ? rated : RATING_FLOOR });
       if (row.nationality) {
         if ((row.nationalityHosts ?? []).length < 2) errors.push(`${row.name}: nationality on one host`);
         else if (nationalities[row.name] && nationalities[row.name] !== row.nationality) errors.push(`${row.name}: two nationalities for one name`);

@@ -25,6 +25,13 @@
  *    src/data that holds rated rows and is not in the registry fails. Share of rows pinned to one
  *    value rating: 2026 squads 88.4 percent (4,401 rows), A-League 70.3 (310), Russia 86.8 (403),
  *    2005 72.1 (1,727), 2010 90.2 (1,751), 2015 91.6 (1,659), 2020 95.7 (1,774), free agents 0 (7).
+ *    Two things the round's review added. A man a gathered file lists with NO VALUE (61 in the
+ *    A-League, 3 in Russia) must sit on the floor, 48, at every age: the age points give back what
+ *    the market took off a price, and the market never priced him. (A man priced at the bottom of
+ *    the market, 50,000 euros, is priced, and keeps his points.) And the CODE of the era generators
+ *    is read: all six calls of the curve in the four era bakes and their lib pass the age plus
+ *    ERA_RATING_AGE_SHIFT, because no gate reruns those bakes and the rows cannot show what the
+ *    next row would be rated at.
  * 3. THE GATE: THE OUTCOME, MAN BY MAN, AGAINST THE VALUE RATING ALONE. Inside one club, does the
  *    rating order agree with who the manager actually played (the table's own matches column,
  *    which the curve never reads)? scripts/data/cmRatingShapeSample.json holds [value rating,
@@ -61,23 +68,36 @@
  *    0.055), and the game's Premier League, best eleven Arsenal 88.7 to worst Hull City 77.4, 11.4
  *    apart (10.1 on the value rating), standard deviation 3.00 (2.85).
  * 6. AGES. (a) every man a ledger ties to the club he is baked at ships his exact age on
- *    2026-08-01: 362 found, 300 or more required. (b) printed: 257 of the Round 669 ledger's 366
+ *    2026-08-01: 423 found, 300 or more required. (b) printed: 257 of the Round 669 ledger's 366
  *    written rows (0.702) are a year older by August than on their 1 January reference. (c) the
  *    rule's five literal cases and three throws. (d) CM_ROSTER_META.ages adds up to the players
- *    (362 born, 4,013 moved, 26 written, 0 unknown), moved is at least 3,500 and unknown is zero.
- *    (e) THE EVIDENCE THE RULE STANDS ON: of the 44 men on scripts/data/cmBirthDates2026.json
- *    (two publishers each), 43 have a bulk table row and all 43 hold the man's age on 1 January of
- *    the row's year; forty or more are required. 18 of the 43 have their birthday after 1 August,
- *    the men the rule alone would ship a year old.
+ *    (423 born, 3,974 moved, 4 written, 0 unknown), moved is at least 3,500 and unknown is zero.
+ *    (e) THE EVIDENCE THE RULE STANDS ON: of the 105 men on scripts/data/cmBirthDates2026.json
+ *    (two publishers each), 82 have a bulk table row and all 82 hold the man's age on 1 January of
+ *    the row's year; forty or more are required. NINE of them are 2025 rows, read for exactly this
+ *    (eight or more required): "plus two for a 2025 row" is its own claim and the first ledger
+ *    held no row for it. 29 of the 82 have their birthday after 1 August, the men the rule alone
+ *    would ship a year old. (f) EVERY SHIPPED AGE, ROW FOR ROW: the bake writes what each age
+ *    stands on (scripts/data/cmAgesBasis2026.json: the table's age, the row's year and id, the
+ *    basis, the birth date) and the rule is run again here for all 4,401 men, 0 off; 432 of the
+ *    3,974 moved ages come from a 2025 row (300 or more required); the file's counts equal
+ *    CM_ROSTER_META.ages; and all 105 ledger rows find their table row in it with the same age,
+ *    year and date, which ties it to the table as the lead pulled it. Before (f) the bake could
+ *    go back to the old "plus one more for a 2025 row" with this harness green: the review
+ *    planted exactly that.
  * Then, printed for Round 1109 and the review and never asserted: the veteran bargain (the
  * cheapest eleven rated 84 or more costs 288.1m on the value rating and 166.6m shipped; men rated
  * 82 or more at 15m or less: 0 and 19), the pool a board ask reads (men of 21 or under rated 86 or
- * more: 19 and 7), the top of the world, the free agents and the mean rating by age.
+ * more: 19 and 7), the top of the world, the free agents, the mean rating by age, and WHAT EACH
+ * PAST SEASON SHOWS ON SCREEN: the engine stretches an era's ratings over 80 (ERA_RATING_UPLIFT,
+ * read by pattern), which multiplies the age points, so the top fourteen of each season are
+ * printed as a player sees them, each beside what he showed on his value rating alone, with the
+ * furthest falls and rises. That is the list the lead rules on, not the files' numbers.
  *
  * NEGATIVE CONTROLS, SIM_CM_SHAPE_CONTROL=<name>. Each is applied to a copy in memory or in the
  * temp folder, refuses with exit 2 unless its target is found exactly once (or it changed a row),
  * and ends 1 only when exactly its own section(s) went red; 5 means it went red somewhere else, 0
- * that it turned nothing red. All fourteen were run on 2026-10-09 and ended 1:
+ * that it turned nothing red. All seventeen were run on 2026-10-09 and ended 1:
  *   oldcurve     agePoints answers zero, the curve before the round       1, 2, 3  gain 0.000 on both
  *                blocks; 2,051 rows of the 2026 squads off the curve and every other file with them
  *   flip         every age point changes sign                             1, 2, 3  gain minus 0.075
@@ -89,11 +109,18 @@
  *   unlisted     a file of rated men is not in the registry               2
  *   emptysample  the sample is cut to five clubs                          3        the count refuses it
  *   tableswap    two neighbours swap in the folded Premier League table   4        the Round 612 file disagrees
- *   flat         the shipped ratings at half their distance from 94       5        0.079, not under 0.079
- *   stretch      the same at one and a half times it                      5        0.066, not under 0.066
- *   agesasis     every ledgered man read a year younger, as before        6        362 of 362 wrong
+ *   novalue      one unpriced man of 30 gets his age points               2        exactly that row
+ *   eracall      the 2005 bake's call drops the year on                   2        that call is named
+ *   flat         the shipped ratings at 0.35 of their distance from 94    5        0.091, over the planted
+ *                half distance scale's 0.079 (the control is flatter than what it must lose to, so
+ *                the gate is beaten by a margin and not by a number compared with itself)
+ *   stretch      the same at 1.8 times it                                 5        0.100, over the planted
+ *                one and a half scale's 0.066
+ *   agesasis     every ledgered man read a year younger, as before        6        423 of 423 wrong
  *   nomove       a bulk row is no longer moved on a year                  6        the literal cases
- *   tableyear    every ledgered table year moved by one                   6        43 of 43 off
+ *                and every moved age of (f)
+ *   tableyear    every ledgered table year moved by one                   6        82 of 82 off
+ *   agerule      the 2025 fallback's old "plus one" on top of the rule    6        432 ages off in (f)
  *
  * WHAT THIS HARNESS DOES NOT HOLD. It cannot hold the file from before the round, so "re rating
  * from a shipped file equals a full re bake" is proved elsewhere: for the 2026 squads by the
@@ -117,7 +144,7 @@ const CONTROL = process.env.SIM_CM_SHAPE_CONTROL ?? '';
 const OWN = {
   oldcurve: ['1', '2', '3'], flip: ['1', '2', '3'], eraold: ['2'], erashift: ['2'], offcurve: ['2'], nostamp: ['2'],
   unlisted: ['2'], flat: ['5'], stretch: ['5'], tableswap: ['4'], agesasis: ['6'], nomove: ['6'], tableyear: ['6'],
-  emptysample: ['3'],
+  emptysample: ['3'], novalue: ['2'], agerule: ['6'], eracall: ['2'],
 };
 if (CONTROL && !OWN[CONTROL]) { console.error(`unknown control ${CONTROL}; the controls are ${Object.keys(OWN).join(', ')}`); process.exit(2); }
 
@@ -328,6 +355,20 @@ if (CONTROL === 'offcurve') {
   TEXT.set('2026', res.text);
   console.log(`[control offcurve: ${done.n} (valued ${done.v}m, ${done.r}) gains one rating point]`);
 }
+if (CONTROL === 'novalue') {
+  /* One listed man with no value, 30 or over, gets the veteran points the round first gave him. */
+  const listed = new Set([...stripComments(TEXT.get('aleague')).matchAll(/^ {2}'((?:[^'\\|]|\\.)+)\|[^'|]+',$/gm)].map(m => unq(m[1])));
+  if (!listed.size) refuse('the A-League file lists no man with no value');
+  let done = null;
+  const res = rerate(TEXT.get('aleague'), null, row => {
+    if (done || !listed.has(row.n) || row.a < 30 || row.r !== RATING_FLOOR) return row.r;
+    done = row;
+    return rateFrom(RATING_FLOOR, row.a, row.p);
+  });
+  if (res.changed !== 1) refuse(`one man with no value was to be read with his age, ${res.changed} were`);
+  TEXT.set('aleague', res.text);
+  console.log(`[control novalue: ${done.n} (${done.a}, no value) is read with his age, ${RATING_FLOOR} to ${rateFrom(RATING_FLOOR, done.a, done.p)}]`);
+}
 if (CONTROL === 'nostamp') {
   const stamp = `  curve: ${CURVE_VERSION},\n`;
   if (count(TEXT.get('aleague'), stamp) !== 1) refuse(`the A-League file carries its curve stamp ${count(TEXT.get('aleague'), stamp)} times`);
@@ -356,18 +397,37 @@ const offByFile = new Map();
     if (want !== null && parsed.rows.length !== want) fail(`${f.label}: ${parsed.rows.length} rows read, the file says it holds ${want} players`);
     if (f.minRows && parsed.rows.length < f.minRows) fail(`${f.label}: ${parsed.rows.length} rows read, at least ${f.minRows} are expected`);
     if (!parsed.rows.length) { fail(`${f.label}: no row read, so nothing below is checking this file`); continue; }
-    let off = 0, pinned = 0;
+    /* A gathered file lists the men its club pages give no value ("name|club"). The market never
+       priced them, so there is no age discount to give back: each is on the floor at every age,
+       and that is the one row shape the curve's age points do not touch. The list itself is held
+       to the research by the file's own harness (simClubManagerALeague, simClubManagerGathered). */
+    const unpriced = new Set();
+    if (f.prefix) {
+      const code = stripComments(text);
+      const at = code.indexOf(`export const CM_${f.prefix}_NO_VALUE: string[] = [`);
+      const end = at < 0 ? -1 : code.indexOf('\n];', at);
+      if (end < 0) fail(`${f.label}: no CM_${f.prefix}_NO_VALUE list to read`);
+      else for (const m of code.slice(at, end).matchAll(/^ {2}'((?:[^'\\]|\\.)+)',$/gm)) unpriced.add(unq(m[1]));
+    }
+    let off = 0, pinned = 0, onFloor = 0;
     const examples = [];
     for (const row of parsed.rows) {
       const cands = valueRatings(row.v, f.dp);
       if (cands.length === 1) pinned += 1;
       let ok = false;
+      if (unpriced.has(`${row.n}|${row.club}`)) {
+        ok = row.r === RATING_FLOOR;
+        onFloor += 1;
+        if (!ok) { off += 1; if (examples.length < 3) examples.push(`${row.n} (${row.p} ${row.a}) has no value and is ${row.r}, a man the market never priced is ${RATING_FLOOR} at every age`); }
+        continue;
+      }
       try { ok = cands.some(x => rateFrom(x, row.a + f.shift, row.p) === row.r); } catch (e) { examples.push(`${row.n}: ${e.message.slice(0, 70)}`); }
       if (!ok) { off += 1; if (examples.length < 3) examples.push(`${row.n} (${row.p} ${row.a}, valued ${row.v}) is ${row.r}, the curve allows ${[...new Set(cands.map(x => { try { return rateFrom(x, row.a + f.shift, row.p); } catch { return '?'; } }))].join(' or ')}`); }
     }
     offByFile.set(f.id, off);
+    if (unpriced.size && onFloor !== unpriced.size) fail(`${f.label}: ${unpriced.size} men are listed with no value and ${onFloor} of them were found in the squads`);
     if (off) fail(`${f.label}: ${off} of ${parsed.rows.length} rows are off the curve at their age${f.shift ? ` plus ${f.shift}` : ''}: ${examples.join('; ')}`);
-    say(`${f.label.padEnd(30)} curve ${stamp ?? 'none'}, ${String(parsed.rows.length).padStart(4)} rows, ${off} off the curve, ${(100 * pinned / parsed.rows.length).toFixed(1)}% pinned to one value rating${f.shift ? `, rated at age plus ${f.shift}` : ''}`);
+    say(`${f.label.padEnd(30)} curve ${stamp ?? 'none'}, ${String(parsed.rows.length).padStart(4)} rows, ${off} off the curve, ${(100 * pinned / parsed.rows.length).toFixed(1)}% pinned to one value rating${f.shift ? `, rated at age plus ${f.shift}` : ''}${unpriced.size ? `, ${unpriced.size} with no value held to the floor` : ''}`);
   }
   /* A file of rated men that nobody listed: a check written for the files somebody remembered
      cannot find the one they forgot. */
@@ -378,6 +438,34 @@ const offByFile = new Map();
     return lines.some(l => ROW.test(l) || FA_ROW.test(l));
   });
   if (strays.length) fail(`rated men ship in a file this harness does not list: ${strays.join(', ')}`);
+
+  /* EVERY ERA RATING CALL READS THE YEAR ON. The rows above prove the shipped past seasons sit at
+     age plus one. They cannot see a generator that would rate its NEXT rows at the shipped age: the
+     era bakes are not rerun by any gate, and two of their call sites were covered by nothing
+     (review finding). So the code is read: in the four era bakes and the lib they share, every call
+     of the curve must pass an age with ERA_RATING_AGE_SHIFT added. Comments are cut first. */
+  const ERA_SOURCES = ['scripts/bakeEra2005.mjs', 'scripts/bakeEra2010.mjs', 'scripts/bakeEra2015.mjs', 'scripts/bakeEra2020.mjs', 'scripts/lib/eraBakeExtend.mjs'];
+  const CALL = /\b(?:ratingOf|rateFrom)\(((?:[^()]|\((?:[^()]|\([^()]*\))*\))*)\)/g;
+  const SHIFTED = 'rec.age + ERA_RATING_AGE_SHIFT, p) });';
+  let eraCalls = 0;
+  const bare = [];
+  const perFile = new Map();
+  for (const rel of ERA_SOURCES) {
+    let code = stripComments(lf(rel));
+    if (CONTROL === 'eracall' && rel === 'scripts/bakeEra2005.mjs') {
+      if (count(code, SHIFTED) !== 1) refuse(`the 2005 bake holds its shifted rating call ${count(code, SHIFTED)} times, exactly one is needed`);
+      code = code.replace(SHIFTED, 'rec.age, p) });');
+      console.log('[control eracall: the 2005 bake rates a new row at the age it ships, the year on is dropped]');
+    }
+    const calls = [...code.matchAll(CALL)];
+    perFile.set(rel, calls.length);
+    eraCalls += calls.length;
+    for (const c of calls) if (!c[1].includes('ERA_RATING_AGE_SHIFT')) bare.push(`${rel}: ${c[0].slice(0, 70)}`);
+  }
+  const noCall = ERA_SOURCES.filter(rel => rel !== 'scripts/bakeEra2020.mjs' && !perFile.get(rel));
+  if (eraCalls < 6 || noCall.length) fail(`only ${eraCalls} calls of the curve were read in the era generators (six when written: one each in the 2005 and 2010 bakes, two in 2015, two in the lib; 2020 rates through the lib)${noCall.length ? `; none in ${noCall.join(', ')}` : ''}, so the code is not being read`);
+  if (bare.length) fail(`an era generator rates a row at the age it ships, with no year added: ${bare.join('; ')}`);
+  say(`the era generators: ${eraCalls} calls of the curve read, ${eraCalls - bare.length} pass the age plus ERA_RATING_AGE_SHIFT`);
   if (CONTROL === 'eraold' && (offByFile.get('era2015') ?? 0) < 500) refuse(`only ${offByFile.get('era2015') ?? 0} rows of the 2015 season went off the curve, at least 500 were measured`);
   if (CONTROL === 'erashift' && (offByFile.get('era2010') ?? 0) < 500) refuse(`only ${offByFile.get('era2010') ?? 0} rows of the 2010 season went off the curve, at least 500 were measured`);
   if (CONTROL === 'offcurve' && offByFile.get('2026') !== 1) refuse(`${offByFile.get('2026')} rows of the 2026 squads went off the curve, exactly one was planted`);
@@ -563,7 +651,12 @@ console.log('5) the spread: do the shipped elevens give a league about as wide a
     }
     const toTop = k => r => Math.max(RATING_FLOOR, Math.min(RATING_CEIL, Math.round(RATING_CEIL - k * (RATING_CEIL - r.r))));
     const SCALES = { shipped, 'value rating': onValue, flat: toTop(0.5), stretch: toTop(1.5) };
-    if (CONTROL === 'flat' || CONTROL === 'stretch') { SCALES.shipped = SCALES[CONTROL]; console.log(`[control ${CONTROL}: the shipped ratings are read ${CONTROL === 'flat' ? 'at half' : 'at one and a half times'} their distance from ${RATING_CEIL}]`); }
+    /* A control reads the shipped ratings on a scale FURTHER out than the planted one it must lose
+       to (0.35 of the distance against the flat 0.5, 1.8 against the stretched 1.5), so the gate
+       is beaten by a margin. Planting the very scale it is compared with would only prove that a
+       number is not under itself (review finding). */
+    const PLANT = { flat: 0.35, stretch: 1.8 };
+    if (PLANT[CONTROL]) { SCALES.shipped = toTop(PLANT[CONTROL]); console.log(`[control ${CONTROL}: the shipped ratings are read at ${PLANT[CONTROL]} times their distance from ${RATING_CEIL}; the planted scale it must lose to stands at ${CONTROL === 'flat' ? 0.5 : 1.5}]`); }
     const miss = { shipped: [], 'value rating': [], flat: [], stretch: [] };
     const slopes = [];
     for (const [id, lg] of Object.entries(tables)) {
@@ -675,9 +768,11 @@ console.log('6) ages: a man with a birth date on file ships his exact age, and t
   /* (d) the file's own count of how its ages are known */
   const meta = metaBlock(TEXT.get('2026'), 'CM_ROSTER_META');
   const am = meta && /^ {2}ages: \{ asOf: '([\d-]+)', born: (\d+), moved: (\d+), written: (\d+), unknown: (\d+) \},$/m.exec(meta);
+  let metaAges = null;
   if (!am) fail('CM_ROSTER_META carries no ages line');
   else {
     const [asOf, born, moved, writ, unknown] = [am[1], Number(am[2]), Number(am[3]), Number(am[4]), Number(am[5])];
+    metaAges = { born, moved, written: writ, unknown };
     const players = metaNumber(meta, 'players');
     if (asOf !== AGES_AS_OF) fail(`CM_ROSTER_META.ages is for ${asOf}, the ages module says ${AGES_AS_OF}`);
     if (born + moved + writ + unknown !== players) fail(`CM_ROSTER_META.ages adds up to ${born + moved + writ + unknown}, the file holds ${players} players`);
@@ -699,7 +794,68 @@ console.log('6) ages: a man with a birth date on file ships his exact age, and t
   if (bulk.length < 40) fail(`only ${bulk.length} ledgered men have a bulk table row, so "a bulk row holds the 1 January age" stands on too few: forty or more are needed`);
   if (offJan.length) fail(`${offJan.length} of ${bulk.length} ledgered bulk rows do not hold the man's age on 1 January of the row's year: ${offJan.slice(0, 4).map(r => `${r.name} born ${r.born}, row ${r.table.year} says ${r.table.age}`).join('; ')}`);
   const late = bulk.filter(r => ageOn(r.born, AGES_AS_OF) === r.table.age + (2026 - r.table.year)).length;
-  say(`(e) ${bulk.length} ledgered men with a bulk table row: ${bulk.length - offJan.length} hold the age on 1 January of the row's year; ${late} of them have their birthday after 1 August, the men the table rule alone would have a year old`);
+  /* "Plus two for a 2025 row" is its own claim (441 men shipped off a 2025 row when the round
+     began), so it needs its own rows: men whose table row is a 2025 bulk row, each holding his age
+     on 1 January 2025. The first ledger held none (review finding). */
+  const bulk2025 = bulk.filter(r => r.table.year === 2025);
+  if (bulk2025.length < 8) fail(`only ${bulk2025.length} ledgered men have a 2025 bulk row, so "plus two for a 2025 row" stands on too few: eight or more are needed (9 when written)`);
+  say(`(e) ${bulk.length} ledgered men with a bulk table row, ${bulk2025.length} of them a 2025 row: ${bulk.length - offJan.length} hold the age on 1 January of the row's year; ${late} of them have their birthday after 1 August, the men the table rule alone would have a year old`);
+
+  /* (f) EVERY SHIPPED AGE, ROW FOR ROW, AGAINST THE RULE. (a) holds the men with a birth date; the
+     other four thousand were held by three counts, so the bake could go back to the old "plus one
+     for a 2025 row" and nothing here went red (review finding, proved by planting it). The bake
+     now writes what each age stands on (scripts/data/cmAgesBasis2026.json: the table's own age,
+     the row's year and id, the basis, the birth date) and the rule in scripts/lib/cmAges.mjs is
+     run again here for every man. The basis file is tied to the table as the lead pulled it
+     through every row of the birth date ledger, which records the same three numbers. */
+  const basis = json('scripts/data/cmAgesBasis2026.json');
+  const squads = new Map([...(PARSED.get('2026')?.clubs ?? [])].filter(([, rows]) => rows.length));
+  if (basis.asOf !== AGES_AS_OF) fail(`the ages basis file is for ${basis.asOf}, the ages module says ${AGES_AS_OF}`);
+  const basisClubs = Object.keys(basis.clubs ?? {});
+  const misshapen = [...squads.keys()].filter(c => (basis.clubs?.[c] ?? []).length !== squads.get(c).length);
+  const strayClubs = basisClubs.filter(c => !squads.has(c));
+  if (misshapen.length || strayClubs.length) fail(`the ages basis file is not the squads file's shape: ${misshapen.length} clubs with another count of men (${misshapen.slice(0, 3).join(', ')}), ${strayClubs.length} clubs the squads do not hold. Re bake: the bake writes both`);
+  const NOBODY = new Map();
+  const planted2025 = [];
+  const offRule = [];
+  const byBasis = { born: 0, moved: 0, written: 0, unknown: 0 };
+  let moved2025 = 0;
+  const basisById = new Map();
+  for (const [club, rows] of squads) rows.forEach((row, i) => {
+    const b = basis.clubs?.[club]?.[i];
+    if (!Array.isArray(b)) return;
+    const [tableAge, year, id, how, born] = b;
+    if (byBasis[how] === undefined) { offRule.push(`${row.n} (${club}): unknown basis ${how}`); return; }
+    byBasis[how] += 1;
+    if (Number.isInteger(id)) basisById.set(id, { club, row, b });
+    let shippedAge = row.a;
+    if (how === 'moved' && year === 2025) { moved2025 += 1; if (CONTROL === 'agerule') { shippedAge += 1; planted2025.push(row.n); } }
+    try {
+      if (how === 'born') {
+        const want = ageOn(born, AGES_AS_OF);
+        const onFile = (births.get(row.n) ?? []).some(c => c.born === born);
+        if (!onFile) offRule.push(`${row.n} (${club}): born ${born} by the basis file, and no ledger holds that date for him`);
+        else if (shippedAge !== want) offRule.push(`${row.n} (${club}) ships ${shippedAge}, born ${born} is ${want}`);
+      } else {
+        const rule = augustAge2026({ name: row.n, club, age: tableAge, year, id: id ?? undefined }, NOBODY);
+        if (rule.basis !== how) offRule.push(`${row.n} (${club}): the basis file says ${how}, the rule says ${rule.basis} for table row ${id} of ${year}`);
+        else if (shippedAge !== rule.age) offRule.push(`${row.n} (${club}) ships ${shippedAge}; the table says ${tableAge} in its ${year} row (${how}), so the rule says ${rule.age}`);
+      }
+    } catch (e) { offRule.push(`${row.n} (${club}): ${String(e.message).slice(0, 90)}`); }
+  });
+  if (CONTROL === 'agerule') {
+    if (planted2025.length < 100) refuse(`only ${planted2025.length} men stand on a 2025 row, so the old rule could not be planted on a hundred`);
+    console.log(`[control agerule: ${planted2025.length} men whose age was moved on from a 2025 row are read a year older, the fallback's old "plus one" on top of the rule]`);
+  }
+  if (offRule.length) fail(`${offRule.length} shipped ages are not what the rule gives for the table row behind them: ${offRule.slice(0, 4).join('; ')}`);
+  if (metaAges && ['born', 'moved', 'written', 'unknown'].some(k => byBasis[k] !== metaAges[k])) fail(`the ages basis file counts ${byBasis.born} born, ${byBasis.moved} moved, ${byBasis.written} written, ${byBasis.unknown} unknown; CM_ROSTER_META.ages says ${metaAges.born}, ${metaAges.moved}, ${metaAges.written}, ${metaAges.unknown}`);
+  if (moved2025 < 300) fail(`only ${moved2025} shipped ages were moved on from a 2025 row, 300 or more were (432 when written), so "plus two for a 2025 row" is not being exercised`);
+  const untied = ledger.rows.filter(r => {
+    const hit = basisById.get(r.table?.id);
+    return !(hit && hit.b[0] === r.table.age && hit.b[1] === r.table.year && hit.b[3] === 'born' && hit.b[4] === r.born && hit.row.n === r.name);
+  });
+  if (untied.length) fail(`${untied.length} rows of the birth date ledger do not find their table row in the ages basis file with the same age, year and date: ${untied.slice(0, 4).map(r => `${r.name} (row ${r.table?.id})`).join(', ')}`);
+  say(`(f) ${byBasis.born + byBasis.moved + byBasis.written + byBasis.unknown} shipped ages run through the rule again, row for row: ${offRule.length} off; ${byBasis.moved} moved on from the table (${moved2025} of them from a 2025 row, plus two), ${byBasis.written} as written, ${byBasis.born} from a birth date; ${ledger.rows.length - untied.length} ledger rows tie the basis file to the table as pulled`);
 }
 
 /* ================================================================== */
@@ -728,6 +884,31 @@ console.log('What the curve does to the game around it (printed for Round 1109 a
   say(`the real free agents: ${fa.map(m => `${m.n} ${m.r} (a club of level ${m.r + 6} or more can sign him)`).join(', ')}`);
   const bands = [[14, 20], [21, 23], [24, 26], [27, 29], [30, 32], [33, 35], [36, 45]];
   say(`mean rating by age, value rating then shipped: ${bands.map(([lo, hi]) => { const l = men.filter(m => m.a >= lo && m.a <= hi); return `${lo} to ${hi}: ${mean(l.map(onValue)).toFixed(1)} then ${mean(l.map(shipped)).toFixed(1)} (${l.length})`; }).join('; ')}`);
+
+  /* WHAT A PAST SEASON SHOWS ON SCREEN. The numbers above this line are the files'. A past season
+     is not shown as baked: the engine stretches every rating over a pivot (ERA_RATING_UPLIFT in
+     src/lib/clubManagerEras.ts, read here by pattern, never copied), and that stretch multiplies
+     the age points, which were set in points of the 2026 scale. The lead ruled on the era tops
+     from the files' numbers; these are the ones a player sees. "was" is the same man on his value
+     rating alone, which is what the screen showed before the round. Printed for the lead's ruling
+     and for Round 1109 (accept it, or add the age points after the stretch): nothing asserted. */
+  const erasCode = stripComments(lf('src/lib/clubManagerEras.ts'));
+  const upliftRule = /return Math\.min\((\d+), Math\.round\(r \+ \(r - u\.pivot\) \* u\.gain\)\);/.exec(erasCode);
+  for (const y of [2005, 2010, 2015, 2020]) {
+    const u = new RegExp(`era${y}: \\{ pivot: (\\d+), gain: ([\\d.]+) \\}`).exec(erasCode);
+    const f = reg(`era${y}`);
+    const rows = PARSED.get(`era${y}`)?.rows ?? [];
+    if (!u || !upliftRule || !f || !rows.length) { say(`the ${y} season on screen: NOT READ (the uplift is not where this harness reads it)`); continue; }
+    const cap = Number(upliftRule[1]), pivot = Number(u[1]), gain = Number(u[2]);
+    const up = r => (r <= pivot ? r : Math.min(cap, Math.round(r + (r - pivot) * gain)));
+    const shown = rows.map(m => { const x = valueRatingOfRow(m, f.dp, f.shift); return x === null ? null : { ...m, was: up(x), now: up(m.r) }; }).filter(Boolean);
+    const top = shown.slice().sort((a, b) => b.now - a.now || b.v - a.v).slice(0, 14).map(m => `${m.n} ${m.now} (${m.a}, was ${m.was})`).join(', ');
+    const swing = shown.map(m => m.now - m.was).sort((a, b) => a - b);
+    const falls = shown.slice().sort((a, b) => (a.now - a.was) - (b.now - b.was)).slice(0, 4).map(m => `${m.n} (${m.a}) ${m.was} to ${m.now}`).join(', ');
+    const rises = shown.slice().sort((a, b) => (b.now - b.was) - (a.now - a.was)).slice(0, 4).map(m => `${m.n} (${m.a}) ${m.was} to ${m.now}`).join(', ');
+    say(`the ${y} season as its screens show it (the uplift: ${gain} a point over ${pivot}, capped at ${cap}): ${top}`);
+    say(`   on screen a man's age moves him by ${swing[0]} to +${swing[swing.length - 1]} there (the curve gives minus 6 to plus 8); furthest down: ${falls}; furthest up: ${rises}; shown at the cap of ${cap}: ${shown.filter(m => m.now >= cap).length}`);
+  }
 }
 
 /* ---------- the verdict ---------- */
