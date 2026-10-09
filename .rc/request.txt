@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk2: RV_ONLY=B,C-held-2,D node .rc/x/rv-walk.mjs
