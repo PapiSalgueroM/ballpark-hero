@@ -1,0 +1,6 @@
+#!serial
+legA-both-out: mkdir -p .rc/legA && cp -r src .rc/legA/src && node .rc/x/patchfix.mjs .rc/legA/src/lib/clubManager.ts window slot && CM_RULES_ROOT=.rc/legA node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+legB-slot-in: mkdir -p .rc/legB && cp -r src .rc/legB/src && node .rc/x/patchfix.mjs .rc/legB/src/lib/clubManager.ts window && CM_RULES_ROOT=.rc/legB node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+legC-window-in: mkdir -p .rc/legC && cp -r src .rc/legC/src && node .rc/x/patchfix.mjs .rc/legC/src/lib/clubManager.ts slot && CM_RULES_ROOT=.rc/legC node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+write: node scripts/simCmLeagueRules.mjs --write --part=modern,eras,pure && cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/cmLeagueRulesDigest.json"
+after-write: node scripts/simCmLeagueRules.mjs

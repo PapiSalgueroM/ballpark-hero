@@ -1,0 +1,5 @@
+legA-both-out exit=0 22s | simCmLeagueRules: all checks passed (modern, eras, pure)
+legB-slot-in exit=0 23s | simCmLeagueRules: all checks passed (modern, eras, pure)
+legC-window-in exit=1 23s | simCmLeagueRules: 47 failure(s)
+write exit=0 22s | simCmLeagueRules: all checks passed (modern, eras, pure)
+after-write exit=0 39s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
