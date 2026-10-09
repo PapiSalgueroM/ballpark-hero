@@ -229,7 +229,13 @@ function finishByHand(cm, paused, report) {
   const hurtAtRestart = line => line.minute === 46 && report.detail.injuries.some(x => x.name === line.off && x.minute === 46);
   let st = paused;
   let legs = 0;
-  const make = line => {
+  /* The report prints a change as two names and a minute. The man going off is the one of that name on the pitch, the man coming on the one who is not. */
+  const named = line => {
+    const find = (name, onPitch) => (st.squad.find(p => p.name === name && st.live.onPitch.includes(p.id) === onPitch) ?? st.squad.find(p => p.name === name))?.id ?? null;
+    return { ...line, offId: find(line.off, true), onId: find(line.on, false) };
+  };
+  const make = raw => {
+    const line = named(raw);
     const next = cm.changeLive(st, line.minute, { kind: 'sub', outId: line.offId, inId: line.onId }, line.plus);
     if (!next) {
       const live = st.live;
@@ -241,8 +247,8 @@ function finishByHand(cm, paused, report) {
   for (const line of plan.filter(x => x.minute === 46 && !hurtAtRestart(x))) make(line);
   st = cm.startSecondHalf(st);
   for (const line of plan.filter(x => (x.minute > 46 && x.minute <= 90) || hurtAtRestart(x))) {
-    const hurt = [...(st.live.h1Injuries ?? []), ...(st.live.h2Injuries ?? [])].some(x => x.id === line.offId && place(x) <= place(line));
-    if (!hurt) { legs += 1; judge(cm, st, line); }
+    const hurt = [...(st.live.h1Injuries ?? []), ...(st.live.h2Injuries ?? [])].some(x => x.name === line.off && place(x) <= place(line));
+    if (!hurt) { legs += 1; judge(cm, st, named(line)); }
     make(line);
   }
   if (cm.isExtraTimeDue(st)) st = cm.startExtraTime(st);
