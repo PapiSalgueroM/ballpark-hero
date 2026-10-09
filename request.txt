@@ -1,0 +1,11 @@
+# Release AP, lane B's three reds, each asked properly.
+# simUsCareerSummer section 6, NFL median legacy: interval [-2.5%, 7.5%] against a 7.5% tolerance at 2000 careers a
+# seed. Its own header says the NFL interval is about plus or minus 5 points wide at that size and that more careers,
+# not a wider bound, is the cure. So: the same question at 4000 and 8000 careers, a second seed at 2000, and main's
+# engine at 4000 for the comparison (did Round 1104 move the effect, or is it the seed).
+summer-nfl-4000: SIM_SPORTS=nfl SIM_SECTIONS=6 SIM_BALANCE_CAREERS=4000 node scripts/simUsCareerSummer.mjs
+summer-nfl-8000: SIM_SPORTS=nfl SIM_SECTIONS=6 SIM_BALANCE_CAREERS=8000 node scripts/simUsCareerSummer.mjs
+main-summer-nfl-4000: D=$PWD/.rc-main-s && mkdir -p $D && git archive origin/main | tar -x -C $D && cd $D && SIM_SPORTS=nfl SIM_SECTIONS=6 SIM_BALANCE_CAREERS=4000 node scripts/simUsCareerSummer.mjs
+summer-nfl-seed7: SIM_SEED=7 SIM_SPORTS=nfl SIM_SECTIONS=6 node scripts/simUsCareerSummer.mjs
+simBrowserHarnessDiscovery: node scripts/simBrowserHarnessDiscovery.mjs
+simBrand: pip3 install --quiet fonttools pillow && node scripts/simBrand.mjs

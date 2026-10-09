@@ -1,0 +1,6 @@
+main-summer-nfl-4000 exit=0 1043s | simUsCareerSummer: green. Sections 6 held.
+summer-nfl-4000 exit=1 1078s | simUsCareerSummer: 1 failure(s) in sections 6
+simBrowserHarnessDiscovery exit=0 4s | Retained actual child receipts: .sim-control/browser-discovery-MJAZ1F/report.json
+simBrand exit=0 4s | simBrand: green. One mark, drawn from one source, everywhere the site shows its face.
+summer-nfl-seed7 exit=0 397s | simUsCareerSummer: green. Sections 6 held.
+summer-nfl-8000 exit=0 1743s | simUsCareerSummer: green. Sections 6 held.
