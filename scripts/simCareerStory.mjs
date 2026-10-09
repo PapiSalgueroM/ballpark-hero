@@ -79,6 +79,21 @@
    RELEASE LEAD'S TO CONFIRM: the integration moved it, in a commit of its
    own, so the harness could be read on the release.
 
+   CONTROLS. CAREER_STORY_CONTROL=reset drops the archive at the pro season
+   reset, =cap keeps 5 lines a season, =draw makes the archive draw once,
+   =wipe puts the signing back to writing over the log. Each mutates the
+   engine source as it is bundled (the anchor is asserted to be there first)
+   and must fail its own check: reset and cap fail check 1, draw fails check
+   2, wipe fails check 4. A control run exits 0 only when its check failed and
+   prints which one; it exits 1 when the control did not fire.
+   Release AQ adds two for check 5. =worldmoves takes the filter out of the
+   settle in soccerCareerLeagueWorld.ts, so every row carries the whole
+   world's moves again: division 2,349 bytes a season, and a save mean of
+   70,728 that the save band does not see. =cuptwice writes a season's cup
+   games on its row twice: cup games 2,945 bytes a season, and a save mean of
+   67,892 that the save band does not see either. Both fail check 5 and
+   nothing else.
+
    THE PARTS, check 5 (Release AQ, 2026-10-09). A band that wide cannot see
    what the old one saw. The waste the train arrived with (the whole world's
    moves on every row) put the mean at 70,788, inside 42,000 to 85,000, so the
@@ -113,21 +128,6 @@
    three parts get the shape the save band has, about a quarter under the
    lowest seed and a quarter over the highest: cup games 1,050 to 1,950,
    division 380 to 710, ten divisions 3,350 to 5,650. Means only.
-
-   CONTROLS. CAREER_STORY_CONTROL=reset drops the archive at the pro season
-   reset, =cap keeps 5 lines a season, =draw makes the archive draw once,
-   =wipe puts the signing back to writing over the log. Each mutates the
-   engine source as it is bundled (the anchor is asserted to be there first)
-   and must fail its own check: reset and cap fail check 1, draw fails check
-   2, wipe fails check 4. A control run exits 0 only when its check failed and
-   prints which one; it exits 1 when the control did not fire.
-   Release AQ adds two for check 5. =worldmoves takes the filter out of the
-   settle in soccerCareerLeagueWorld.ts, so every row carries the whole
-   world's moves again: division 2,349 bytes a season, and a save mean of
-   70,728 that the save band does not see. =cuptwice writes a season's cup
-   games on its row twice: cup games 2,945 bytes a season, and a save mean of
-   67,892 that the save band does not see either. Both fail check 5 and
-   nothing else.
 
    Run: node scripts/simCareerStory.mjs [careersPerSeed]
    Reads no network: fetch is replaced with a thrower before the engine loads. */
@@ -291,7 +291,10 @@ function career(E, seed, c, walk) {
 const BANDS = {
   storyBytesPerSeason: [300, 650],
   saveBytesMean: [42000, 85000],
-  /* check 5, the parts (see THE PARTS in the header) */
+};
+/* Check 5, the parts (see THE PARTS in the header). The rest keeps the band
+   the whole save had before the train. */
+const PART_BANDS = {
   restBytesMean: [28000, 50000],
   cupBytesPerSeason: [1050, 1950],
   divisionBytesPerSeason: [380, 710],
@@ -375,7 +378,7 @@ const partMeans = {
   tenDivisionsBytesMean: part.ten / Math.max(1, careers),
 };
 for (const [name, value] of Object.entries(partMeans)) {
-  if (value < BANDS[name][0] || value > BANDS[name][1]) fails.parts.push(`${name} ${value.toFixed(0)} outside ${BANDS[name]}`);
+  if (value < PART_BANDS[name][0] || value > PART_BANDS[name][1]) fails.parts.push(`${name} ${value.toFixed(0)} outside ${PART_BANDS[name]}`);
 }
 if (part.cupRows < careers * PART_FLOORS.cupRows) fails.parts.push(`only ${part.cupRows} seasons with continental cup games over ${careers} careers: too few to measure`);
 if (part.divisionRows < careers * PART_FLOORS.divisionRows) fails.parts.push(`only ${part.divisionRows} seasons with a division over ${careers} careers: too few to measure`);
