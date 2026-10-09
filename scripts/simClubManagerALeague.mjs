@@ -56,6 +56,9 @@
    seasons a run plus the two excluded clubs:
      A  310 grouped ledger rows, 310 shipped, 2 group-less rows held back
      B  310 players on 12 club pages, 61 with no value at the floor (48)
+        (Round 1102, measured 2026-10-09 on a GitHub runner: the same 61 are
+        rated from the floor value at their age, 59 of them still exactly on
+        48 and two veterans above it)
      C  299 nationalities on two hosts, 11 unknown, every age on two hosts
      D  every run 10 seasons ended (0 to 3 sacked careers replaced by the
         next seed), 10 Australia Cup finals with a winner, won by 5 to 9
@@ -501,7 +504,13 @@ function partSeasons(cm) {
   const full = [];
   for (const l of cm.REAL_LEAGUES) {
     if (cm.leagueRulesOf(l.id).cup === null) continue;
-    const club = [...l.clubs].sort((a, b) => cm.clubPreviewRating(a) - cm.clubPreviewRating(b) || a.localeCompare(b))[Math.floor(l.clubs.length / 2)];
+    /* Round 1102: the median is taken over the clubs the cup admits (the rules row's own
+       cupExcluded). The re rate made Auckland FC the A-League's median club, a club that sits the
+       Australia Cup out, so the career had no cup to read and this part went red on a field of
+       nought: the sample had moved, not the game. */
+    const sitsOut = new Set(cm.leagueRulesOf(l.id).cupExcluded ?? []);
+    const entrants = l.clubs.filter(c => !sitsOut.has(c));
+    const club = [...entrants].sort((a, b) => cm.clubPreviewRating(a) - cm.clubPreviewRating(b) || a.localeCompare(b))[Math.floor(entrants.length / 2)];
     let start = null, played = null, size = 0;
     for (let t = 0; t < 6; t++) {
       Math.random = seeded(hashKey(`aleague${SEED_SET}|cup|${l.id}|${t}`));
