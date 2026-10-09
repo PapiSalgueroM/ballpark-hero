@@ -1,0 +1,9 @@
+# Release AP closing fix: what /stadium-tycoon weighs on the head, on main, with the review cut out, and with it lazy
+#!serve
+#!playwright
+#!serial
+w-head: node .rc/x/fx3-weigh.mjs head http://localhost:4173 "$PWD/dist"
+w-main: W="$PWD" && D="$RUNNER_TEMP/wmain" && mkdir -p "$D" && git fetch -q origin main && git archive FETCH_HEAD | tar -x -C "$D" && cd "$D" && ln -s "$W/node_modules" node_modules && npm run build 2>&1 | tail -1 && (nohup node scripts/lib/hostLikeServer.mjs dist 4199 > /dev/null 2>&1 &) && sleep 4 && cd "$W" && node .rc/x/fx3-weigh.mjs main http://localhost:4199 "$D/dist"
+w-nodialog: W="$PWD" && D="$RUNNER_TEMP/wnod" && mkdir -p "$D" && git archive HEAD | tar -x -C "$D" && cd "$D" && ln -s "$W/node_modules" node_modules && node "$W/.rc/x/fx3-variant.mjs" nodialog && npm run build 2>&1 | tail -1 && (nohup node scripts/lib/hostLikeServer.mjs dist 4198 > /dev/null 2>&1 &) && sleep 4 && cd "$W" && node .rc/x/fx3-weigh.mjs nodialog http://localhost:4198 "$D/dist"
+w-lazy: W="$PWD" && D="$RUNNER_TEMP/wlazy" && mkdir -p "$D" && git archive HEAD | tar -x -C "$D" && cd "$D" && ln -s "$W/node_modules" node_modules && node "$W/.rc/x/fx3-variant.mjs" lazy && npm run build 2>&1 | tail -1 && (nohup node scripts/lib/hostLikeServer.mjs dist 4197 > /dev/null 2>&1 &) && sleep 4 && cd "$W" && node .rc/x/fx3-weigh.mjs lazy http://localhost:4197 "$D/dist"
+w-head-again: node .rc/x/fx3-weigh.mjs head2 http://localhost:4173 "$PWD/dist"
