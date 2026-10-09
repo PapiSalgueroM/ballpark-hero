@@ -91,7 +91,16 @@ function mutate(file, anchor, replacement) {
   if (n !== 1) { console.error(`control ${CONTROL}: the anchor appears ${n} times in ${file}, refusing to run a dead control`); process.exit(2); }
   return src.replace(anchor, replacement);
 }
-const relocate = (src, keep = '') => src.replace(/from (['"])\.\/([A-Za-z0-9_]+)\1/g, (m, q, name) => name === keep ? m : `from ${q}${lib}${name}${q}`);
+/* Release AQ: every relative import is pointed back, not only a sibling's.
+   The engine has imported ./season/momentsSave since Round 1047 and the
+   league module ../data files since Round 1100, and a copy outside src/lib
+   could resolve neither, so all three controls died in the bundler
+   ("Could not resolve") instead of turning their section red. Found when
+   the release ran them; they fire again. */
+const backToSrc = rel => path.posix.join(lib, rel);
+const relocate = (src, keep = '') => src
+  .replace(/from (['"])(\.\.?\/[A-Za-z0-9_./-]+)\1/g, (m, q, rel) => rel === `./${keep}` ? m : `from ${q}${backToSrc(rel)}${q}`)
+  .replace(/import\((['"])(\.\.?\/[A-Za-z0-9_./-]+)\1\)/g, (m, q, rel) => rel === `./${keep}` ? m : `import(${q}${backToSrc(rel)}${q})`);
 let enginePath = `${ROOT}/src/lib/soccerCareerEngine.ts`;
 if (CONTROL === 'notitle') {
   const league = mutate('soccerCareerLeague.ts', 'if (input.leagueTitle) return { leagueFinish: 1', 'if (false) return { leagueFinish: 1');
