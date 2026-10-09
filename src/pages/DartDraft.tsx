@@ -50,7 +50,9 @@ const DartDraft = () => {
   const [pool, setPool] = useState<Player[]>([]);
   /* Round 1145: the pool is 2,000 deep now and the storm zone must not get
      crueller for it, so the storm stops at what the old pool's last man was
-     worth. The fetch knows that number; it rides here beside the pool. */
+     worth. The fetch knows that number; it rides here beside the pool. The
+     mystery zone reads the same line: its three still come from above it and
+     its fourth tile, the long shot, from below. */
   const [stormFloor, setStormFloor] = useState(0);
   const [xi, setXi] = useState<(Player | null)[]>(Array(XI_SIZE).fill(null));
   const [oop, setOop] = useState<boolean[]>(Array(XI_SIZE).fill(false));
@@ -195,7 +197,7 @@ const DartDraft = () => {
         switch (landed.zone.kind) {
           case 'legend':    c = legendChoices(slot, usedNames); break;
           case 'wonderkid': c = wonderkidChoices(topicPool, slot, usedNames); break;
-          case 'mystery':   c = mysteryChoices(topicPool, slot, usedNames); break;
+          case 'mystery':   c = mysteryChoices(topicPool, slot, usedNames, stormFloor); break;
           case 'storm':     c = stormChoices(topicPool, slot, usedNames, stormFloor); break;
           case 'shark':     c = [{ player: oceanTrialist(slot, 'shark'), outOfPosition: false }]; break;
           default:          c = wildcardChoices(topicPool, slot, usedNames);
@@ -360,7 +362,7 @@ const DartDraft = () => {
           legend: 'All-time greats at your position. Pick one.',
           wonderkid: 'Under-21 gems only. The future is now.',
           wildcard: 'Free pick off the world top shelf.',
-          mystery: 'Three names from anywhere in the pool. Pure gamble.',
+          mystery: 'Three names from the top of the pool and one long shot from deep in it. Pure gamble.',
           storm: 'Blown into the bargain bin. Best of the cheap seats.',
           shark: 'It ate your dart. A 40-rated trialist swims out instead.',
         } as Record<string, string>)[hit.zone.kind]

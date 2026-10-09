@@ -11,13 +11,17 @@ import './lib/seedRandom.mjs';
      wonderkid zone  the eight most valuable under 22 at the slot       (top of the pool: must not move)
      wildcard zone   the ten most valuable at the slot                  (top of the pool: must not move)
      storm zone      five from the cheap end of the pool at the slot    (a punishment: must not get worse)
-     mystery zone    three at random from anywhere in the pool          (this is where depth shows)
+     mystery zone    three at random from the old pool's range, and one  (a gold zone: must not pay less;
+                     long shot from deeper in the pool                  the long shot is where depth shows)
      The Machine     one at random from the top forty (or top half) at each slot
      country hit     eight tiles from the country's own rows at the slot
-   So a deeper pool alone changes little a player sees, and one thing for the worse: the storm's cheap
-   end gets cheaper. Hence the two rules this harness holds beside the pool size: the storm stops at
-   what the 900th row is worth, and a country hit keeps its best four and draws its other four tiles
-   from everyone else the country has at the slot (it used to show the same best eight every time).
+   So a deeper pool alone changes little a player sees, and two things for the worse: the storm's cheap
+   end gets cheaper, and three names at random from 2,000 pay less than three from 900 did (the review
+   of this round measured the best of the three falling from 83.3 to 81.2). Hence the three rules this
+   harness holds beside the pool size: the storm stops at what the 900th row is worth; the mystery zone
+   still draws its three from above that line and shows the deeper pool as a fourth tile; and a country
+   hit keeps its best four and draws its other four tiles from everyone else the country has at the
+   slot (it used to show the same best eight every time).
 
    THE FIXTURE is shaped like the real table because it is a saved copy of it: every 2026 row's name,
    nationality, club and value from scripts/data/alphabetSprintPool.json (5,496 rows pulled 2026-09-05
@@ -37,6 +41,10 @@ import './lib/seedRandom.mjs';
      DART_POOL_CONTROL=nobest     a country hit draws all eight tiles and keeps no best four
      DART_POOL_CONTROL=onepage    the lib copy asks for one page of the pool instead of two
      DART_POOL_CONTROL=pagefloor  the page copy stops handing the storm its floor
+     DART_POOL_CONTROL=nomysteryfloor  the mystery zone draws its three from anywhere, the rule the review caught
+     DART_POOL_CONTROL=pagemystery     the page copy stops handing the mystery zone its floor
+     DART_POOL_CONTROL=machinehalf     the map copy lets The Machine draw from the top half at a slot with no cap of forty
+     DART_POOL_CONTROL=lasttile        every hit in the after arm offers only its last tile: the grade check must see it
 */
 import fs from 'node:fs';
 import os from 'node:os';
@@ -45,7 +53,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.DART_POOL_CONTROL || '';
-const CONTROLS = ['pool900', 'nofloor', 'nobest', 'onepage', 'pagefloor'];
+const CONTROLS = ['pool900', 'nofloor', 'nobest', 'onepage', 'pagefloor', 'nomysteryfloor', 'pagemystery', 'machinehalf', 'lasttile'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`DART_POOL_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -131,7 +139,7 @@ const swap = (source, from, to, what) => {
   return source.replace(from, () => to);
 };
 if (CONTROL === 'onepage') {
-  const changed = swap(read(LIB_FILE), 'Array.from({ length: POOL_ROWS / POOL_PAGE }, (_, i) =>', 'Array.from({ length: 1 }, (_, i) =>', LIB_FILE);
+  const changed = swap(read(LIB_FILE), 'POOL_ROWS / POOL_PAGE,\n      POOL_ROWS,', '1,\n      POOL_PAGE,', LIB_FILE);
   libEntry = fwd(path.join(tmp, 'dartDraft.ts'));
   fs.writeFileSync(libEntry, changed);
   console.log('NEGATIVE CONTROL ON: the lib copy asks for one page of the pool');
@@ -140,8 +148,22 @@ if (CONTROL === 'pagefloor') {
   pageSource = swap(pageSource, 'stormChoices(topicPool, slot, usedNames, stormFloor)', 'stormChoices(topicPool, slot, usedNames)', PAGE_FILE);
   console.log('NEGATIVE CONTROL ON: the page copy no longer hands the storm its floor');
 }
+if (CONTROL === 'pagemystery') {
+  pageSource = swap(pageSource, 'mysteryChoices(topicPool, slot, usedNames, stormFloor)', 'mysteryChoices(topicPool, slot, usedNames)', PAGE_FILE);
+  console.log('NEGATIVE CONTROL ON: the page copy no longer hands the mystery zone its floor');
+}
+const MAP_FILE = 'src/lib/dartMap.ts';
+let mapEntry = fwd(path.join(ROOT, MAP_FILE));
+if (CONTROL === 'machinehalf') {
+  /* The copy imports only through the @ alias, so it bundles from the temp folder as the real file does. */
+  const changed = swap(read(MAP_FILE), 'const cut = Math.max(1, Math.min(40, Math.floor(fits.length * 0.5)));', 'const cut = Math.max(1, Math.floor(fits.length * 0.5));', MAP_FILE);
+  if (/from '\.\.?\//.test(changed)) { console.error('control cannot run: dartMap.ts imports by relative path, so a copy of it cannot be bundled'); process.exit(1); }
+  mapEntry = fwd(path.join(tmp, 'dartMap.ts'));
+  fs.writeFileSync(mapEntry, changed);
+  console.log('NEGATIVE CONTROL ON: the map copy lets The Machine draw from the top half at a slot, with no cap of forty');
+}
 const entry = path.join(tmp, 'entry.ts');
-fs.writeFileSync(entry, `export * as draft from '${libEntry}';\nexport * as map from '${fwd(path.join(ROOT, 'src/lib/dartMap.ts'))}';\nexport { getEnrichment } from '${fwd(path.join(ROOT, 'src/data/footleEnrichment.ts'))}';\nexport { playerRating, LEGENDS } from '${fwd(path.join(ROOT, 'src/lib/squadDeal.ts'))}';\nexport { GEO_COUNTRIES } from '${fwd(path.join(ROOT, 'src/data/worldMapGeo.ts'))}';\n`);
+fs.writeFileSync(entry, `export * as draft from '${libEntry}';\nexport * as map from '${mapEntry}';\nexport { getEnrichment } from '${fwd(path.join(ROOT, 'src/data/footleEnrichment.ts'))}';\nexport { playerRating, LEGENDS } from '${fwd(path.join(ROOT, 'src/lib/squadDeal.ts'))}';\nexport { GEO_COUNTRIES } from '${fwd(path.join(ROOT, 'src/data/worldMapGeo.ts'))}';\n`);
 const out = path.join(tmp, 'bundle.mjs');
 const { build } = await import('esbuild');
 await build({ entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: out, logLevel: 'error', absWorkingDir: ROOT,
@@ -167,13 +189,20 @@ const after = await loadPool(CONTROL === 'pool900' ? 900 : 0);
 if (CONTROL === 'pool900') console.log('NEGATIVE CONTROL ON: the client answers the pool with 900 rows, the old depth');
 const stormFloorFor = arm => (CONTROL === 'nofloor' && arm === after ? 0 : arm.stormFloor);
 if (CONTROL === 'nofloor') console.log('NEGATIVE CONTROL ON: the storm ignores the floor');
+/* Bands for the two random sections, set from four seeds each (the default and SIM_SEED 11, 222, 3333); the measured
+   numbers sit beside the checks at the foot of this file. */
+const MYSTERY_BAND = 0.5;
+const MACHINE_BAND = 0.5;
+/* The mystery zone before this round drew its three from anywhere in the pool it had: no floor. */
+const mysteryFloorFor = arm => (arm === before || CONTROL === 'nomysteryfloor' ? 0 : arm.stormFloor);
+if (CONTROL === 'nomysteryfloor') console.log('NEGATIVE CONTROL ON: the mystery zone draws its three from anywhere in the deeper pool');
 const keepBestFor = arm => (arm === before ? M.COUNTRY_TILES : CONTROL === 'nobest' ? 0 : undefined);
 if (CONTROL === 'nobest') console.log('NEGATIVE CONTROL ON: a country hit draws all eight tiles and keeps no best four');
 
 console.log('1) the pool is the top 2,000 in two pages, and the old 900 are still its first 900');
 {
   console.log(`   before: ${before.current.length} players from 900 rows; after: ${after.current.length} players from ${D.POOL_ROWS} rows, asked for as ${after.calls.join(' and ')}`);
-  if (after.calls.join(',') !== '0+1000,1000+1000') fail(`the pool was asked for as [${after.calls.join(', ')}]; it must be two pages of 1000: 0+1000 and 1000+1000`);
+  if (after.calls.join(',') !== '0+1000,1000+1000') fail(`the pool was asked for as [${after.calls.join(', ')}]; it must be two pages of 1000 and nothing past them: 0+1000 and 1000+1000`);
   /* Measured on the fixture: 900 players before, 2,000 after (the saved pull is one row a name with a position the
      game knows, so nothing is dropped; the live table drops a duplicate or an odd position here and there). The floor
      sits well under the measured count on purpose: it says "about twice the old pool", which is the round. */
@@ -199,16 +228,19 @@ console.log('2) the gold zones give what they gave: the top of the pool did not 
     if (w0.join('|') === w1.join('|')) wildSame += 1; else fail(`wildcard at ${slot.label} changed: ${w0.join(', ')} became ${w1.join(', ')}`);
     const k0 = names(M.wonderkidChoices(before.current, slot, none)), k1 = names(M.wonderkidChoices(after.current, slot, none));
     if (k0.every((n, i) => k1[i] === n)) { kidSame += 1; if (k1.length > k0.length) kidGrew += 1; } else fail(`wonderkids at ${slot.label} lost somebody: ${k0.join(', ')} became ${k1.join(', ')}`);
-    const l0 = names(M.legendChoices(slot, none)), l1 = names(M.legendChoices(slot, none));
-    if (l0.join('|') !== l1.join('|')) fail(`legends at ${slot.label} are not stable`);
   }
+  /* The legend zone is not compared between the arms because it cannot differ: it never reads the pool. What can be
+     checked is that this stays so, and that it still offers somebody at every slot. */
+  if (M.legendChoices.length !== 2) fail(`legendChoices takes ${M.legendChoices.length} arguments; it took (slot, usedNames) and no pool, which is why a deeper pool cannot move it`);
+  const legendless = SLOTS.filter(slot => M.legendChoices(slot, new Set()).length === 0).map(slot => slot.label);
+  if (legendless.length) fail(`the legend zone offers nobody at ${legendless.join(', ')}`);
   console.log(`   wildcard identical at ${wildSame} of ${SLOTS.length} slots; wonderkids keep every name at ${kidSame} of ${SLOTS.length} and gain names at ${kidGrew} where the old pool ran short of eight`);
 }
 
 console.log('3) the storm did not get worse');
 {
   let worse = 0, lines = [];
-  const drops = [];
+  const drops = [], noFloorDrops = [];
   for (const slot of SLOTS) {
     const none = new Set();
     const s0 = M.stormChoices(before.current, slot, none, stormFloorFor(before)), s1 = M.stormChoices(after.current, slot, none, stormFloorFor(after));
@@ -217,7 +249,14 @@ console.log('3) the storm did not get worse');
     if (!s0.length || !s1.length) { fail(`the storm offers nobody at ${slot.label}`); continue; }
     const avg = cs => mean(cs.map(c => rate(c.player)));
     drops.push(avg(s0) - avg(s1));
-    if (avg(s0) - avg(s1) > 1) { worse += 1; fail(`storm at ${slot.label}: its five tiles averaged ${avg(s0).toFixed(1)} and now average ${avg(s1).toFixed(1)}`); }
+    /* The storm is not random: one pool and one floor give the same five tiles every time, so there is no seed
+       spread to measure and the four seeds print the same line. On the fixture, with the floor, the five tiles'
+       average falls at no slot (it is level at seven and rises by 0.40 to 2.20 at four, where men tied at the
+       floor's value sit a few rows past the 900th); with no floor it falls by 2.80 to 6.20 at every slot. The line
+       is half a point: a tile is one of five, so that is two and a half tile points of drift, and the nearest no
+       floor slot is more than five times past it. */
+    if (avg(s0) - avg(s1) > 0.5) { worse += 1; fail(`storm at ${slot.label}: its five tiles averaged ${avg(s0).toFixed(1)} and now average ${avg(s1).toFixed(1)}`); }
+    noFloorDrops.push(avg(s0) - avg(unfloored));
     if (s1.some(c => c.player.marketValue < before.stormFloor)) fail(`storm at ${slot.label} offers a man under the ${before.stormFloor}M floor`);
     lines.push(`${slot.label} ${lo(s0)}M>${lo(s1)}M (${lo(unfloored)}M with no floor)`);
   }
@@ -229,7 +268,8 @@ console.log('3) the storm did not get worse');
   const page = stripComments(pageSource);
   if (!/stormChoices\(\s*topicPool\s*,\s*slot\s*,\s*usedNames\s*,\s*stormFloor\s*\)/.test(page)) fail('the page does not hand the storm zone its floor: stormChoices(topicPool, slot, usedNames, stormFloor)');
   if (!/const\s*\{\s*current\s*,\s*stormFloor:\s*floor\s*\}\s*=\s*await fetchDartDraftPool\(\)/.test(page) || !/setStormFloor\(floor\)/.test(page)) fail('the page does not keep the floor the fetch returns');
-  console.log(`   the five storm tiles' average rating fell by ${mean(drops).toFixed(2)} a slot on average (${Math.max(...drops).toFixed(2)} at the worst slot); ${worse} slots fell by more than a point`);
+  console.log(`   the five storm tiles' average rating fell by ${mean(drops).toFixed(2)} a slot on average (slot by slot: ${drops.map(d => d.toFixed(2)).join(', ')}); ${worse} slots fell by more than half a point`);
+  console.log(`   with no floor it would have fallen by ${mean(noFloorDrops).toFixed(2)} a slot on average (slot by slot: ${noFloorDrops.map(d => d.toFixed(2)).join(', ')})`);
 }
 
 console.log('4) a country hit keeps its best four and reaches deeper for the rest');
@@ -267,27 +307,44 @@ const HITS = 30;
   globalThis.__TILES__ = { namesBefore, namesAfter };
 }
 
-console.log('5) the mystery zone is where the deeper pool shows');
+console.log('5) the mystery zone pays what it paid, and the deeper pool shows as a fourth tile');
 {
-  let reachBefore = 0, reachAfter = 0; const best0 = [], best1 = [];
+  let reachBefore = 0, reachAfter = 0, hits = 0, withLongShot = 0, underLine = 0, threeUnder = 0; const best0 = [], best1 = [], bestAnywhere = [];
   for (const slot of SLOTS) {
     const fits = arm => arm.current.filter(p => slot.allowed.includes(p.position));
     reachBefore += fits(before).length; reachAfter += fits(after).length;
     for (let i = 0; i < 400; i++) {
-      best0.push(Math.max(...M.mysteryChoices(before.current, slot, new Set()).map(c => rate(c.player))));
-      best1.push(Math.max(...M.mysteryChoices(after.current, slot, new Set()).map(c => rate(c.player))));
+      best0.push(Math.max(...M.mysteryChoices(before.current, slot, new Set(), mysteryFloorFor(before)).map(c => rate(c.player))));
+      const now = M.mysteryChoices(after.current, slot, new Set(), mysteryFloorFor(after));
+      best1.push(Math.max(...now.map(c => rate(c.player))));
+      bestAnywhere.push(Math.max(...M.mysteryChoices(after.current, slot, new Set(), 0).map(c => rate(c.player))));
+      hits += 1;
+      const under = now.filter(c => c.player.marketValue < after.stormFloor).length;
+      if (now.length === M.MYSTERY_TILES + 1 && under >= 1) withLongShot += 1;
+      underLine += under;
+      /* The three are the first three tiles; the long shot, when there is one, comes last. */
+      if (now.slice(0, M.MYSTERY_TILES).some(c => c.player.marketValue < after.stormFloor)) threeUnder += 1;
     }
   }
-  console.log(`   names the three could be, summed over the 11 slots: ${reachBefore} before, ${reachAfter} after`);
-  console.log(`   the best of the three is rated ${mean(best0).toFixed(1)} on average before (median ${median(best0)}), ${mean(best1).toFixed(1)} after (median ${median(best1)})`);
+  globalThis.__MYSTERY__ = { before: mean(best0), after: mean(best1), anywhere: mean(bestAnywhere), hits, withLongShot, threeUnder };
+  console.log(`   names a mystery tile could be, summed over the 11 slots: ${reachBefore} before, ${reachAfter} after`);
+  console.log(`   the best tile is rated ${mean(best0).toFixed(2)} on average before (median ${median(best0)}), ${mean(best1).toFixed(2)} after (median ${median(best1)}); three from anywhere in the deeper pool would have given ${mean(bestAnywhere).toFixed(2)} (median ${median(bestAnywhere)})`);
+  console.log(`   ${withLongShot} of ${hits} hits carried a fourth tile from under the ${after.stormFloor}M line; ${threeUnder} hits had one of the three under it`);
   if (reachAfter <= reachBefore && CONTROL !== 'pool900') fail('the mystery zone reaches no more names than before, so the bigger pool is not showing anywhere');
+  const page = stripComments(pageSource);
+  if (!/mysteryChoices\(\s*topicPool\s*,\s*slot\s*,\s*usedNames\s*,\s*stormFloor\s*\)/.test(page)) fail('the page does not hand the mystery zone its floor: mysteryChoices(topicPool, slot, usedNames, stormFloor)');
+  /* The control has to be able to bite: three from anywhere must really pay less than three from above the line. */
+  if (CONTROL === 'nomysteryfloor' && !(mean(bestAnywhere) < mean(best0) - MYSTERY_BAND)) { console.error('control cannot run: three from anywhere pay no less here, so the floor changes nothing'); process.exit(1); }
 }
 
 console.log('6) The Machine is the opponent it was');
 {
   const xi = arm => D.squadRating(M.machineMapDraft(arm.current));
   const r0 = Array.from({ length: 1000 }, () => xi(before)), r1 = Array.from({ length: 1000 }, () => xi(after));
-  console.log(`   The Machine's XI is rated ${mean(r0).toFixed(2)} on average before (median ${median(r0)}), ${mean(r1).toFixed(2)} after (median ${median(r1)})`);
+  console.log(`   The Machine's XI is rated ${mean(r0).toFixed(2)} on average before (median ${median(r0)}), ${mean(r1).toFixed(2)} after (median ${median(r1)}): a move of ${(mean(r1) - mean(r0)).toFixed(2)}`);
+  /* How far the cap of forty is from the deeper pool's top half, so the reader can see what the cap is holding back. */
+  const fitsAt = (arm, slot) => arm.current.filter(p => slot.allowed.includes(p.position)).length;
+  console.log(`   players at a slot, fewest to most: ${Math.min(...SLOTS.map(s => fitsAt(before, s)))} to ${Math.max(...SLOTS.map(s => fitsAt(before, s)))} before, ${Math.min(...SLOTS.map(s => fitsAt(after, s)))} to ${Math.max(...SLOTS.map(s => fitsAt(after, s)))} after; The Machine draws from the top forty or the top half, whichever is fewer`);
   globalThis.__MACHINE__ = { before: mean(r0), after: mean(r1) };
 }
 
@@ -315,7 +372,7 @@ async function oneDraft(arm, thrower, picker, seed) {
       const k = hit.zone.kind;
       c = k === 'legend' ? M.legendChoices(slot, used)
         : k === 'wonderkid' ? M.wonderkidChoices(arm.current, slot, used)
-        : k === 'mystery' ? M.mysteryChoices(arm.current, slot, used)
+        : k === 'mystery' ? M.mysteryChoices(arm.current, slot, used, mysteryFloorFor(arm))
         : k === 'storm' ? M.stormChoices(arm.current, slot, used, stormFloorFor(arm))
         : k === 'shark' ? [{ player: M.oceanTrialist(slot, 'shark'), outOfPosition: false }]
         : M.wildcardChoices(arm.current, slot, used);
@@ -324,6 +381,8 @@ async function oneDraft(arm, thrower, picker, seed) {
       c = await M.countryChoices(hit.country, slot, used, { keepBest: keepBestFor(arm) });
     }
     if (!c.length) c = [{ player: M.oceanTrialist(slot), outOfPosition: false }];
+    /* The control: a round that lost the top of every hit. Tiles go out best first, so the last is the weakest. */
+    if (CONTROL === 'lasttile' && arm === after) c = c.slice(-1);
     const pick = picker === 'best' ? c.reduce((b, x) => (shown(x) > shown(b) ? x : b), c[0]) : c[Math.floor(Math.random() * c.length)];
     xi.push(pick.player); oop.push(pick.outOfPosition); used.add(pick.player.name);
   }
@@ -362,6 +421,12 @@ console.log('8) clubs the league lookup does not know');
      dropped or moved for it; the one place a league counts is the chemistry bonus in squadRating. */
   const share = players => players.filter(p => p.league === 'Other').length / Math.max(1, players.length);
   console.log(`   pool players at a club the lookup does not know: ${(100 * share(before.current)).toFixed(1)}% of the old ${before.current.length}, ${(100 * share(after.current)).toFixed(1)}% of the ${after.current.length}`);
+  /* Which clubs they are, so whoever extends the lookup knows where to start: the unknown clubs with the most pool
+     players, and what their dearest man is worth. Names as the saved pull spells them. */
+  const byClub = new Map();
+  for (const p of after.current) if (p.league === 'Other') { const c = byClub.get(p.club) || { n: 0, top: 0 }; c.n += 1; c.top = Math.max(c.top, p.marketValue); byClub.set(p.club, c); }
+  const worst = [...byClub].sort((x, y) => y[1].n - x[1].n || y[1].top - x[1].top || (x[0] < y[0] ? -1 : 1)).slice(0, 20);
+  console.log(`   ${byClub.size} clubs in the pool are unknown to the lookup; the twenty with the most players (players, dearest in M): ${worst.map(([club, c]) => `${club} (${c.n}, ${c.top})`).join('; ')}`);
   const tiles = [];
   for (const country of lib.GEO_COUNTRIES) tiles.push(...await M.fetchCountryPool(country));
   console.log(`   players a country hit reads (the top 120 of each nation): ${tiles.length}, ${(100 * share(tiles)).toFixed(1)}% at a club the lookup does not know`);
@@ -376,11 +441,16 @@ console.log('8) clubs the league lookup does not know');
 {
   const lb = results['land/best'], sb = results['sharp/best'];
   /* An aimed best pick is the player this round must not hurt. Measured over four seeds of 2,000 drafts (the default
-     and SIM_SEED 11, 222, 3333) the average XI moved by -0.20, +0.02, -0.05, -0.06 for the land thrower and by +0.01,
-     +0.06, -0.04, -0.08 for the sharp one, which is the noise of the draw: his best tile is the same tile. A grade band
-     is eight points wide, so a whole point of drift is the line, five times the largest move seen. The random picker
-     is printed and not held to it: he gives up 1.70 to 1.82 at the big nations (81.0 to 79.2, still an A) and 0.33 to
-     0.62 on open land, the price of tiles that reach past the best eight, and his median grade does not move. */
+     and SIM_SEED 11, 222, 3333) the average XI moved by +0.04, -0.11, +0.11, -0.04 for the land thrower and by +0.04,
+     -0.04, -0.03, -0.02 for the sharp one, which is the noise of the draw: his best tile is the same tile. (The
+     round's first measurement, before the mystery zone took its floor, saw moves up to 0.20.) A grade band is eight
+     points wide, so a whole point of drift is the line, five times the largest move seen. The random picker is
+     printed and NOT held to it, and the reader should know what he gives up: 1.74 to 1.89 at the big nations (81.0
+     to 79.1, still an A at the median, with about 400 of 2,000 drafts sliding from A to B), 0.38 to 0.56 on open
+     land and 0.21 to 0.34 for a blind thrower. That is the price of tiles that reach past the best eight. His
+     median grade does not move, and nobody who takes the best tile pays it. DART_POOL_CONTROL=lasttile is the proof
+     that the grade check below can go red: with only the last tile of every hit on offer the sharp thrower's median
+     falls from S to B. */
   for (const [name, row] of [['land thrower, best pick', lb], ['sharp thrower, best pick', sb]]) {
     if (row.after.mean < row.before.mean - 1) fail(`${name}: the average XI fell from ${row.before.mean.toFixed(2)} to ${row.after.mean.toFixed(2)}, more than a rating point`);
   }
@@ -389,7 +459,22 @@ console.log('8) clubs the league lookup does not know');
   /* Measured 1.58x on the fixture. The bar is "clearly more", with room: at 1.2x the draw would barely reach past the old eight. */
   if (CONTROL !== 'nobest' && T.namesAfter < T.namesBefore * 1.2) fail(`country hits show ${T.namesAfter} names against ${T.namesBefore} before: that is not more variety`);
   const machine = globalThis.__MACHINE__;
-  if (Math.abs(machine.after - machine.before) > 1) fail(`The Machine's average XI moved from ${machine.before.toFixed(2)} to ${machine.after.toFixed(2)}: the opponent changed`);
+  /* The Machine draws one man from the top forty at a slot, or from the top half when the slot has fewer than
+     eighty. The deeper pool makes its thinnest slots thicker (49 players before, 134 after), so there its cut grows
+     from the top 24 to the top 40 and it is a touch weaker for it: its average XI moved by -0.17, -0.12, -0.14 and
+     -0.07 over the four seeds, 1,000 drafts an arm. That is real and small, in the player's favour, and reported
+     as such. Half a point is the line, three times the largest move seen; DART_POOL_CONTROL=machinehalf (no cap of
+     forty, so the cut follows the pool's depth everywhere) moves it by 3.08. */
+  if (Math.abs(machine.after - machine.before) > MACHINE_BAND) fail(`The Machine's average XI moved from ${machine.before.toFixed(2)} to ${machine.after.toFixed(2)}: the opponent changed`);
+  const my = globalThis.__MYSTERY__;
+  /* The best tile of a mystery hit, 400 hits a slot: before to after it moved by -0.10, +0.04, +0.03 and -0.01 over
+     the four seeds (83.2 to 83.3 in both arms), and three from anywhere in the deeper pool would have paid 81.1 to
+     81.2, a fall of 2.0 to 2.2. Half a point is the line: five times the largest fall seen, a quarter of what the
+     rule prevents. The two counts under it are not random at all: with the floor none of the three can come from
+     under the line, and every hit has a long shot because every slot has men under it. */
+  if (my.after < my.before - MYSTERY_BAND) fail(`the mystery zone's best tile fell from ${my.before.toFixed(2)} to ${my.after.toFixed(2)} on average: a gold zone pays less than it did`);
+  if (my.threeUnder) fail(`${my.threeUnder} of ${my.hits} mystery hits drew one of the three from under the old pool's line`);
+  if (my.withLongShot !== my.hits) fail(`${my.withLongShot} of ${my.hits} mystery hits carried a fourth tile from deeper in the pool: the bigger roster is not showing there`);
 }
 
 try { fs.rmSync(tmp, { recursive: true, force: true }); } catch { /* a temp folder the OS will clear */ }
@@ -399,4 +484,4 @@ if (CONTROL) {
   process.exit(1);
 }
 if (failures) { console.error(`\nsimDartDraftPool: ${failures} FAILURE(S)`); process.exit(1); }
-console.log('\nsimDartDraftPool: green. The pool is the top 2,000, the gold zones and the storm give what they gave, a country hit keeps its best four and shows more names, and whole drafts grade where they did.');
+console.log('\nsimDartDraftPool: green. The pool is the top 2,000, the gold zones and the storm give what they gave, the mystery zone pays what it paid and adds a long shot, a country hit keeps its best four and shows more names, The Machine is the opponent it was, and whole drafts grade where they did.');

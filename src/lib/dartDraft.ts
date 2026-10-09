@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { fetchAllRowsParallel } from '@/lib/fetchAllRows';
 import { Player, Position } from '@/types/game';
 import { getEnrichment } from '@/data/footleEnrichment';
 import { FORMATIONS, LEGENDS, normalizePosition, playerRating, type Formation, type FormationSlot } from '@/lib/squadDeal';
@@ -127,8 +128,11 @@ export interface DartDraftPool {
 export async function fetchDartDraftPool(): Promise<DartDraftPool> {
   const empty: DartDraftPool = { current: [], legends: LEGENDS, stormFloor: 0 };
   try {
-    const pages = await Promise.all(
-      Array.from({ length: POOL_ROWS / POOL_PAGE }, (_, i) =>
+    /* The site's shared paged read: both pages asked for together, a failed
+       page asked for again, and nothing past the 2,000th row. Both pages or
+       nothing: half a pool would quietly be the old shallow one. */
+    const { data, error } = await fetchAllRowsParallel<MarketRow>(
+      (from, to) =>
         supabase
           .from('player_market_values')
           .select('player_name, position, age, nationality, club, market_value_usd, goals, assists')
@@ -136,13 +140,11 @@ export async function fetchDartDraftPool(): Promise<DartDraftPool> {
           .not('age', 'is', null)
           .order('market_value_usd', { ascending: false })
           .order('player_name', { ascending: true })
-          .range(i * POOL_PAGE, (i + 1) * POOL_PAGE - 1)
-      )
+          .range(from, to),
+      POOL_ROWS / POOL_PAGE,
+      POOL_ROWS,
     );
-    // Both pages or nothing: half a pool would quietly be the old shallow one.
-    if (pages.some(page => page.error || !page.data)) return empty;
-    const data = pages.flatMap(page => page.data as MarketRow[]);
-    if (data.length === 0) return empty;
+    if (error || data.length === 0) return empty;
 
     const millions = (usd: number) => Math.round(usd / 1_000_000);
     const stormFloor = data.length >= OLD_POOL_ROWS ? millions(data[OLD_POOL_ROWS - 1].market_value_usd) : 0;

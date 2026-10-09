@@ -552,13 +552,27 @@ export function stormChoices(prefetch: Player[], slot: FormationSlot, usedNames:
   return picks.map(player => ({ player, outOfPosition: false }));
 }
 
-/** Mystery zone: three random fitting players from anywhere in the pool. Could be anyone. */
-export function mysteryChoices(prefetch: Player[], slot: FormationSlot, usedNames: Set<string>): DraftChoice[] {
+/** Mystery zone: three random fitting players. Could be anyone.
+ *  Round 1145: the pool went from 900 rows to 2,000. Three at random from all of it paid less than
+ *  three from the old 900 did (the best of the three fell about two rating points on the saved
+ *  table), and a gold zone must not pay less because the roster grew. So the three still come from
+ *  the old pool's range, the men worth at least minValue (the pool's stormFloor, what the 900th row
+ *  is worth), and the deeper pool shows as a fourth tile: one long shot from below that line. The
+ *  best tile is never worse than it was and every mystery hit shows a name the old pool never held.
+ *  With no floor (a pool that is not 900 deep) it is the three from anywhere it always was. */
+export const MYSTERY_TILES = 3;
+export function mysteryChoices(prefetch: Player[], slot: FormationSlot, usedNames: Set<string>, minValue = 0): DraftChoice[] {
   const fits = prefetch.filter(p => !usedNames.has(p.name) && fitsSlot(p, slot));
   if (fits.length === 0) return [];
+  const top = fits.filter(p => p.marketValue >= minValue);
+  const deep = fits.filter(p => p.marketValue < minValue);
+  // Nobody left above the line at this slot: the gamble is whoever is left, as before.
+  const main = top.length > 0 ? top : fits;
   const picks = new Set<number>();
-  while (picks.size < Math.min(3, fits.length)) picks.add(Math.floor(Math.random() * fits.length));
-  return [...picks].map(i => ({ player: fits[i], outOfPosition: false }));
+  while (picks.size < Math.min(MYSTERY_TILES, main.length)) picks.add(Math.floor(Math.random() * main.length));
+  const tiles = [...picks].map(i => ({ player: main[i], outOfPosition: false }));
+  if (top.length > 0 && deep.length > 0) tiles.push({ player: deep[Math.floor(Math.random() * deep.length)], outOfPosition: false });
+  return tiles;
 }
 
 /** The Machine drafts its XI from the same prefetch pool, tier-random. */

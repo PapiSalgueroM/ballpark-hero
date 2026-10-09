@@ -1,11 +1,12 @@
 /* Round 1145: Dart Draft's pool is the top 2,000 of 2026 in two pages, both or nothing; the storm zone stops at
-   what the old 900 row pool's last man was worth; a country hit keeps its best four and draws the rest.
+   what the old 900 row pool's last man was worth; the mystery zone draws its three from above that line and adds
+   one long shot from below it; a country hit keeps its best four and draws the rest.
    scripts/simDartDraftPool.mjs measures the game over a saved copy of the table. This file holds the edges that
    copy never reaches: a page that fails, a pool too thin for a floor, and the tile draw itself. No network. */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 type Row = { player_name: string; position: string | null; age: number; nationality: string; club: string; market_value_usd: number; goals: number; assists: number };
-const db: { rows: Row[]; failOffset: number | null; asked: string[] } = { rows: [], failOffset: null, asked: [] };
+const db: { rows: Row[]; failOffset: number | null; failOnce: Set<number>; asked: string[] } = { rows: [], failOffset: null, failOnce: new Set(), asked: [] };
 
 vi.mock('@/integrations/supabase/client', () => ({
   supabase: {
@@ -15,6 +16,7 @@ vi.mock('@/integrations/supabase/client', () => ({
         range: (from: number, to: number) => {
           db.asked.push(`${from}-${to}`);
           if (db.failOffset === from) return Promise.resolve({ data: null, error: { message: 'fixture failure' } });
+          if (db.failOnce.delete(from)) return Promise.resolve({ data: null, error: { message: 'fixture hiccup' } });
           return Promise.resolve({ data: db.rows.slice(from, to + 1), error: null });
         },
       };
@@ -24,7 +26,8 @@ vi.mock('@/integrations/supabase/client', () => ({
 }));
 
 import { OLD_POOL_ROWS, POOL_ROWS, fetchDartDraftPool } from '@/lib/dartDraft';
-import { COUNTRY_KEEP_BEST, COUNTRY_TILES, DART_SLOTS, countryTiles, stormChoices } from '@/lib/dartMap';
+import { COUNTRY_KEEP_BEST, COUNTRY_TILES, DART_SLOTS, MYSTERY_TILES, countryTiles, mysteryChoices, stormChoices } from '@/lib/dartMap';
+import { fetchAllRowsParallel } from '@/lib/fetchAllRows';
 import { playerRating } from '@/lib/squadDeal';
 import type { Player } from '@/types/game';
 
@@ -34,7 +37,7 @@ const table = (count: number): Row[] => Array.from({ length: count }, (_, i) => 
   nationality: 'Fixtureland', club: 'Fixture FC', market_value_usd: (3000 - i) * 1_000_000, goals: 0, assists: 0,
 }));
 
-beforeEach(() => { db.rows = table(2600); db.failOffset = null; db.asked = []; });
+beforeEach(() => { db.rows = table(2600); db.failOffset = null; db.failOnce = new Set(); db.asked = []; });
 
 describe('the Dart Draft pool', () => {
   it('reads the top 2,000 as two pages of 1000 and keeps the old 900 at its head', async () => {
@@ -57,6 +60,13 @@ describe('the Dart Draft pool', () => {
     expect((await fetchDartDraftPool()).current).toEqual([]);
   });
 
+  it('asks again for a page that failed once, and still never asks past the 2,000th row', async () => {
+    db.failOnce = new Set([1000]);
+    const pool = await fetchDartDraftPool();
+    expect(pool.current.length).toBe(POOL_ROWS);
+    expect(db.asked).toEqual(['0-999', '1000-1999', '1000-1999']);
+  });
+
   it('claims no storm floor when the table is not 900 rows deep, and still loads', async () => {
     db.rows = table(640);
     const pool = await fetchDartDraftPool();
@@ -73,6 +83,71 @@ describe('the Dart Draft pool', () => {
     expect(Math.min(...floored)).toBeGreaterThanOrEqual(pool.stormFloor);
     // The fixture can tell the difference: with no floor the deeper pool hands out much cheaper men.
     expect(Math.max(...unfloored)).toBeLessThan(pool.stormFloor);
+  });
+});
+
+describe('the mystery zone', () => {
+  const cb = DART_SLOTS.find(s => s.allowed.includes('CB'))!;
+
+  it('draws its three from above the old pool line and adds one long shot from below it', async () => {
+    const pool = await fetchDartDraftPool();
+    const longShots = new Set<string>();
+    for (let i = 0; i < 60; i++) {
+      const tiles = mysteryChoices(pool.current, cb, new Set(), pool.stormFloor).map(c => c.player);
+      expect(tiles.length).toBe(MYSTERY_TILES + 1);
+      expect(new Set(tiles.map(p => p.name)).size).toBe(tiles.length);
+      expect(tiles.slice(0, MYSTERY_TILES).every(p => p.marketValue >= pool.stormFloor)).toBe(true);
+      expect(tiles[MYSTERY_TILES].marketValue).toBeLessThan(pool.stormFloor);
+      longShots.add(tiles[MYSTERY_TILES].name);
+    }
+    // The long shot is drawn, not fixed: sixty hits show many different men from the deeper pool.
+    expect(longShots.size).toBeGreaterThanOrEqual(20);
+  });
+
+  it('is the three from anywhere it always was when the pool has no floor', async () => {
+    db.rows = table(640);
+    const pool = await fetchDartDraftPool();
+    expect(pool.stormFloor).toBe(0);
+    expect(mysteryChoices(pool.current, cb, new Set(), pool.stormFloor).length).toBe(MYSTERY_TILES);
+    expect(mysteryChoices(pool.current, cb, new Set()).length).toBe(MYSTERY_TILES);
+  });
+
+  it('offers whoever is left when nobody above the line is', async () => {
+    const pool = await fetchDartDraftPool();
+    const used = new Set(pool.current.filter(p => p.marketValue >= pool.stormFloor).map(p => p.name));
+    const tiles = mysteryChoices(pool.current, cb, used, pool.stormFloor).map(c => c.player);
+    expect(tiles.length).toBe(MYSTERY_TILES);
+    expect(tiles.every(p => p.marketValue < pool.stormFloor)).toBe(true);
+  });
+});
+
+describe('the shared paged reader with a row limit', () => {
+  const pageOf = (total: number, asked: number[]) => (from: number, to: number) => {
+    asked.push(from);
+    return Promise.resolve({ data: Array.from({ length: Math.max(0, Math.min(total, to + 1) - from) }, (_, i) => from + i), error: null });
+  };
+
+  it('stops at the limit and never asks for a page past it', async () => {
+    const asked: number[] = [];
+    const { data, error } = await fetchAllRowsParallel<number>(pageOf(5865, asked), 2, 2000);
+    expect(error).toBeNull();
+    expect(data.length).toBe(2000);
+    expect(data[1999]).toBe(1999);
+    expect(asked).toEqual([0, 1000]);
+  });
+
+  it('cuts a last page that runs past the limit, and reads on to the limit when it was not asked for at once', async () => {
+    const asked: number[] = [];
+    const { data } = await fetchAllRowsParallel<number>(pageOf(5865, asked), 1, 2500);
+    expect(data.length).toBe(2500);
+    expect(asked).toEqual([0, 1000, 2000]);
+  });
+
+  it('reads everything when no limit is given, as it always did', async () => {
+    const asked: number[] = [];
+    const { data } = await fetchAllRowsParallel<number>(pageOf(2300, asked), 2);
+    expect(data.length).toBe(2300);
+    expect(asked).toEqual([0, 1000, 2000]);
   });
 });
 
