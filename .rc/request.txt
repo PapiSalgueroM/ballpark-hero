@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simRoles-a: node scripts/simRoles.mjs
+simRoles-b: node scripts/simRoles.mjs
+simRoles-cameofull: SIM_ROLES_CONTROL=cameofull node scripts/simRoles.mjs
+legs: node scripts/simCmQuickLegs.mjs
+legs-unbooked: CM_QUICK_LEGS_CONTROL=unbooked node scripts/simCmQuickLegs.mjs
+legs-stale: CM_QUICK_LEGS_CONTROL=stale node scripts/simCmQuickLegs.mjs
+legs-anywhere: CM_QUICK_LEGS_CONTROL=anywhere node scripts/simCmQuickLegs.mjs
+vitest: node_modules/.bin/vitest run src/test/managerQuickSimLegs.test.tsx src/test/rolesBrokenPromises.test.tsx --testTimeout=300000 --hookTimeout=120000
