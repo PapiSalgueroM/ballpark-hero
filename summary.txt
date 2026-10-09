@@ -1,0 +1,13 @@
+simUsBoardParity exit=0 89s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+simUsCareerDeckC exit=0 118s | simUsCareerDeckC: all checks passed
+simUsSeasonCentre exit=0 42s | simUsSeasonCentre: 98 checks, 0 failed
+sc-seedset0 exit=1 12s | simUsSeasonCentre: 95 checks, 2 failed
+sc-seedset1 exit=1 13s | simUsSeasonCentre: 96 checks, 1 failed
+sc-seedset2 exit=1 11s | simUsSeasonCentre: 96 checks, 1 failed
+sc-seedset3 exit=1 11s | simUsSeasonCentre: 95 checks, 1 failed
+sc-seedset4 exit=1 12s | simUsSeasonCentre: 95 checks, 1 failed
+sc-short82 exit=1 46s | simUsSeasonCentre: 98 checks, 1 failed (control short82)
+sc-stage exit=1 48s | simUsSeasonCentre: 93 checks, 3 failed (control stage)
+sc-length exit=1 55s | simUsSeasonCentre: 98 checks, 11 failed (control length)
+vitest-all exit=1 871s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career t
+simUsCareerSummer exit=1 3098s | simUsCareerSummer: 1 failure(s) in sections 6
