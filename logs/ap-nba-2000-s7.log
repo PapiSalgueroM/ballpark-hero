@@ -1,0 +1,11 @@
+on release-ap-int at cbff760c9245267fb64bb59ae5037f441b2d0395
+6) balance: on against off, careers a seed nba 2000, 3 seeds
+   nba: off peak 86.23, legacy median 358, Hall 29.7%; on peak 86.34, legacy median 363, Hall 31.0%
+      peak OVR: difference 0.11, interval [-0.01, 0.24], tolerance 1.00 either way: inside
+      median legacy: difference 1.4%, interval [-1.7%, 4.6%], tolerance 7.5% either way: inside
+      Hall share: difference 1.33 pts, interval [-0.31 pts, 2.98 pts], tolerance 3.00 pts either way: inside
+      headline awards a season: difference 2.8%, interval [-2.2%, 8.7%], tolerance 15.0% either way: inside
+      6b: on the summer loop, median career majors 0, 17.1% ever win one, Hall 31.0%
+   balance ran in 930.5 s
+simUsCareerSummer: green. Sections 6 held.
+on release-ap-int at cbff760c9245267fb64bb59ae5037f441b2d0395: exit 0

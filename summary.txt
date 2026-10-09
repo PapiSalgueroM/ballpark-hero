@@ -1,0 +1,5 @@
+ap-nba-2000 exit=0 850s | on release-ap-int at cbff760c9245267fb64bb59ae5037f441b2d0395: exit 0
+ap-nba-2000-s7 exit=0 932s | on release-ap-int at cbff760c9245267fb64bb59ae5037f441b2d0395: exit 0
+nba-2000-s7 exit=0 1001s | simUsCareerSummer: green. Sections 6 held.
+ap-nba-8000 exit=0 2470s | on release-ap-int at cbff760c9245267fb64bb59ae5037f441b2d0395: exit 0
+nba-8000 exit=0 2789s | simUsCareerSummer: green. Sections 6 held.
