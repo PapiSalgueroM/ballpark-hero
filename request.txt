@@ -1,0 +1,9 @@
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/usSeasonCentreEntry.test.tsx src/test/usSeasonCentre.test.tsx src/test/safeStorage.test.ts src/test/storageNoticeFollows.test.tsx src/test/freshBuildBlockedStorage.test.ts src/test/toastClearsCookieBanner.test.tsx src/test/usCareerSaveRetry.test.tsx --testTimeout=300000 --hookTimeout=120000
+centre: PORT=4421 node scripts/playUsSeasonCentre.mjs
+centre-raw: US_SEASON_PLAY_CONTROL=raw PORT=4423 node scripts/playUsSeasonCentre.mjs
+seam: node scripts/playUsCareerSaveSeam.mjs
+usSeasonCentre: node scripts/simUsSeasonCentre.mjs
+usCareerWeight: node scripts/simUsCareerWeight.mjs

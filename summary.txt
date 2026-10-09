@@ -1,0 +1,8 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest exit=0 18s |    Duration  17.32s (transform 4.13s, setup 760ms, collect 10.60s, tests 18.23s, environment 4.33s, prepare 1.35s)
+tsc exit=0 70s | 
+centre exit=0 72s | playUsSeasonCentre: 62 checks, 0 failed
+usSeasonCentre exit=0 17s | simUsSeasonCentre: 45 checks, 0 failed
+usCareerWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+seam exit=0 24s | playUsCareerSaveSeam: 12 journeys, 56 checks, 0 failed
+centre-raw exit=1 87s | playUsSeasonCentre: 62 checks, 4 failed (control raw)
