@@ -1,0 +1,594 @@
+{
+ "/nfl-my-career": {
+  "total": 474801,
+  "k": "463.67",
+  "files": 48,
+  "same": true,
+  "rows": [
+   {
+    "stem": "index",
+    "file": "index-DI4DabT6.js",
+    "gz": 238574,
+    "raw": 784654
+   },
+   {
+    "stem": "usCareerSeasonReview",
+    "file": "usCareerSeasonReview-qlUO-twX.js",
+    "gz": 135193,
+    "raw": 424164
+   },
+   {
+    "stem": "football",
+    "file": "football-DQMlnyDd.js",
+    "gz": 22481,
+    "raw": 63602
+   },
+   {
+    "stem": "AppearanceBuilder",
+    "file": "AppearanceBuilder-nTvuMjcx.js",
+    "gz": 14389,
+    "raw": 45815
+   },
+   {
+    "stem": "conquestDataNba",
+    "file": "conquestDataNba-BDN2iDyW.js",
+    "gz": 8519,
+    "raw": 32424
+   },
+   {
+    "stem": "NflMyCareer",
+    "file": "NflMyCareer-BeVwkOhW.js",
+    "gz": 6225,
+    "raw": 14252
+   },
+   {
+    "stem": "usStatesPaths",
+    "file": "usStatesPaths-DfX_GtuE.js",
+    "gz": 5350,
+    "raw": 15665
+   },
+   {
+    "stem": "ShareButtons",
+    "file": "ShareButtons-D-JRagFW.js",
+    "gz": 4533,
+    "raw": 11646
+   },
+   {
+    "stem": "PlayerAvatar",
+    "file": "PlayerAvatar-D675mU9y.js",
+    "gz": 3922,
+    "raw": 15162
+   },
+   {
+    "stem": "GameNavbar",
+    "file": "GameNavbar-BQhbW4Z0.js",
+    "gz": 3794,
+    "raw": 10360
+   },
+   {
+    "stem": "soccerCareerAppearance",
+    "file": "soccerCareerAppearance-BF4Z2JDW.js",
+    "gz": 2562,
+    "raw": 6180
+   },
+   {
+    "stem": "careerRivalryChoices",
+    "file": "careerRivalryChoices-CFxfmw-_.js",
+    "gz": 2412,
+    "raw": 5934
+   },
+   {
+    "stem": "badges",
+    "file": "badges-CIBrk4Kv.js",
+    "gz": 2292,
+    "raw": 5813
+   },
+   {
+    "stem": "GameSeoContent",
+    "file": "GameSeoContent-CTejcyx4.js",
+    "gz": 2282,
+    "raw": 6827
+   },
+   {
+    "stem": "usCareerFreeAgency",
+    "file": "usCareerFreeAgency-_7gDtE9W.js",
+    "gz": 1914,
+    "raw": 4112
+   },
+   {
+    "stem": "GameNav",
+    "file": "GameNav-DtYF_7_3.js",
+    "gz": 1720,
+    "raw": 3699
+   },
+   {
+    "stem": "guideShape",
+    "file": "guideShape-DQ_brKfp.js",
+    "gz": 1687,
+    "raw": 5398
+   },
+   {
+    "stem": "conquestMapGeometry",
+    "file": "conquestMapGeometry-DMIJk1yA.js",
+    "gz": 1421,
+    "raw": 3099
+   },
+   {
+    "stem": "conquestDataNhl",
+    "file": "conquestDataNhl-BBvewyKz.js",
+    "gz": 1259,
+    "raw": 3062
+   },
+   {
+    "stem": "conquestDataMlb",
+    "file": "conquestDataMlb-B4MKOeDm.js",
+    "gz": 1223,
+    "raw": 2926
+   },
+   {
+    "stem": "soccerBoots",
+    "file": "soccerBoots-BK_dXNrV.js",
+    "gz": 993,
+    "raw": 2017
+   },
+   {
+    "stem": "Celebration",
+    "file": "Celebration-CQp7kyb2.js",
+    "gz": 822,
+    "raw": 1527
+   },
+   {
+    "stem": "useRevealScroll",
+    "file": "useRevealScroll-DrE_uEDE.js",
+    "gz": 797,
+    "raw": 1935
+   },
+   {
+    "stem": "GameHelp",
+    "file": "GameHelp-n-aqlfyT.js",
+    "gz": 787,
+    "raw": 1649
+   },
+   {
+    "stem": "HowToPlayPopover",
+    "file": "HowToPlayPopover-DvjYSDvY.js",
+    "gz": 770,
+    "raw": 1367
+   },
+   {
+    "stem": "CelebrationStyles",
+    "file": "CelebrationStyles-B8TrIW2z.js",
+    "gz": 724,
+    "raw": 2126
+   },
+   {
+    "stem": "usSeasonLengths",
+    "file": "usSeasonLengths-BLuI6ac1.js",
+    "gz": 631,
+    "raw": 1465
+   },
+   {
+    "stem": "Confetti",
+    "file": "Confetti-Lc6CKJQy.js",
+    "gz": 607,
+    "raw": 904
+   },
+   {
+    "stem": "HubTiles",
+    "file": "HubTiles-Cqc-Y-wr.js",
+    "gz": 601,
+    "raw": 1388
+   },
+   {
+    "stem": "usCareerReveal",
+    "file": "usCareerReveal-BW47Ke0-.js",
+    "gz": 584,
+    "raw": 959
+   },
+   {
+    "stem": "useGameCompletion",
+    "file": "useGameCompletion-mg4Oxz2T.js",
+    "gz": 495,
+    "raw": 810
+   },
+   {
+    "stem": "seoMetaPart00",
+    "file": "seoMetaPart00-CuVEcdvG.js",
+    "gz": 457,
+    "raw": 746
+   },
+   {
+    "stem": "star",
+    "file": "star-DV10MhPc.js",
+    "gz": 401,
+    "raw": 641
+   },
+   {
+    "stem": "dumbbell",
+    "file": "dumbbell-D_5owk9P.js",
+    "gz": 396,
+    "raw": 728
+   },
+   {
+    "stem": "handshake",
+    "file": "handshake-33sF_Jr1.js",
+    "gz": 388,
+    "raw": 615
+   },
+   {
+    "stem": "medal",
+    "file": "medal-D-p-7o9K.js",
+    "gz": 387,
+    "raw": 604
+   },
+   {
+    "stem": "crown",
+    "file": "crown-CmWj1wnJ.js",
+    "gz": 359,
+    "raw": 531
+   },
+   {
+    "stem": "clipboard-list",
+    "file": "clipboard-list-YUyGOFKj.js",
+    "gz": 358,
+    "raw": 579
+   },
+   {
+    "stem": "copy",
+    "file": "copy-6-gWqfxX.js",
+    "gz": 308,
+    "raw": 405
+   },
+   {
+    "stem": "circle-help",
+    "file": "circle-help-CD8Nz6i4.js",
+    "gz": 303,
+    "raw": 407
+   },
+   {
+    "stem": "briefcase",
+    "file": "briefcase-BOlJ-gVU.js",
+    "gz": 298,
+    "raw": 389
+   },
+   {
+    "stem": "rotate-ccw",
+    "file": "rotate-ccw-D-dFdLDC.js",
+    "gz": 285,
+    "raw": 368
+   },
+   {
+    "stem": "trending-up",
+    "file": "trending-up-DHawGkXi.js",
+    "gz": 281,
+    "raw": 373
+   },
+   {
+    "stem": "arrow-left",
+    "file": "arrow-left-CpXjIedY.js",
+    "gz": 264,
+    "raw": 333
+   },
+   {
+    "stem": "keyedRng",
+    "file": "keyedRng-BKZQ2UGv.js",
+    "gz": 209,
+    "raw": 254
+   },
+   {
+    "stem": "soccerBootIds",
+    "file": "soccerBootIds-BWkyFIXk.js",
+    "gz": 200,
+    "raw": 293
+   },
+   {
+    "stem": "careerHeadroom",
+    "file": "careerHeadroom-B6hg86bq.js",
+    "gz": 190,
+    "raw": 258
+   },
+   {
+    "stem": "formatNumber",
+    "file": "formatNumber-CGuttX8h.js",
+    "gz": 154,
+    "raw": 152
+   }
+  ]
+ },
+ "/nba-my-career": {
+  "total": 557342,
+  "k": "544.28",
+  "files": 48,
+  "same": true,
+  "rows": [
+   {
+    "stem": "index",
+    "file": "index-DI4DabT6.js",
+    "gz": 238574,
+    "raw": 784654
+   },
+   {
+    "stem": "usCareerSeasonReview",
+    "file": "usCareerSeasonReview-qlUO-twX.js",
+    "gz": 135193,
+    "raw": 424164
+   },
+   {
+    "stem": "NbaMyCareer",
+    "file": "NbaMyCareer-BhwlK1Wz.js",
+    "gz": 82488,
+    "raw": 246379
+   },
+   {
+    "stem": "basketball",
+    "file": "basketball-CNtFtfjF.js",
+    "gz": 28746,
+    "raw": 84450
+   },
+   {
+    "stem": "AppearanceBuilder",
+    "file": "AppearanceBuilder-nTvuMjcx.js",
+    "gz": 14389,
+    "raw": 45815
+   },
+   {
+    "stem": "conquestDataNba",
+    "file": "conquestDataNba-BDN2iDyW.js",
+    "gz": 8519,
+    "raw": 32424
+   },
+   {
+    "stem": "usStatesPaths",
+    "file": "usStatesPaths-DfX_GtuE.js",
+    "gz": 5350,
+    "raw": 15665
+   },
+   {
+    "stem": "ShareButtons",
+    "file": "ShareButtons-D-JRagFW.js",
+    "gz": 4533,
+    "raw": 11646
+   },
+   {
+    "stem": "PlayerAvatar",
+    "file": "PlayerAvatar-D675mU9y.js",
+    "gz": 3922,
+    "raw": 15162
+   },
+   {
+    "stem": "GameNavbar",
+    "file": "GameNavbar-BQhbW4Z0.js",
+    "gz": 3794,
+    "raw": 10360
+   },
+   {
+    "stem": "soccerCareerAppearance",
+    "file": "soccerCareerAppearance-BF4Z2JDW.js",
+    "gz": 2562,
+    "raw": 6180
+   },
+   {
+    "stem": "careerRivalryChoices",
+    "file": "careerRivalryChoices-CFxfmw-_.js",
+    "gz": 2412,
+    "raw": 5934
+   },
+   {
+    "stem": "badges",
+    "file": "badges-CIBrk4Kv.js",
+    "gz": 2292,
+    "raw": 5813
+   },
+   {
+    "stem": "GameSeoContent",
+    "file": "GameSeoContent-CTejcyx4.js",
+    "gz": 2282,
+    "raw": 6827
+   },
+   {
+    "stem": "usCareerFreeAgency",
+    "file": "usCareerFreeAgency-_7gDtE9W.js",
+    "gz": 1914,
+    "raw": 4112
+   },
+   {
+    "stem": "GameNav",
+    "file": "GameNav-DtYF_7_3.js",
+    "gz": 1720,
+    "raw": 3699
+   },
+   {
+    "stem": "guideShape",
+    "file": "guideShape-DQ_brKfp.js",
+    "gz": 1687,
+    "raw": 5398
+   },
+   {
+    "stem": "conquestMapGeometry",
+    "file": "conquestMapGeometry-DMIJk1yA.js",
+    "gz": 1421,
+    "raw": 3099
+   },
+   {
+    "stem": "conquestDataNhl",
+    "file": "conquestDataNhl-BBvewyKz.js",
+    "gz": 1259,
+    "raw": 3062
+   },
+   {
+    "stem": "conquestDataMlb",
+    "file": "conquestDataMlb-B4MKOeDm.js",
+    "gz": 1223,
+    "raw": 2926
+   },
+   {
+    "stem": "soccerBoots",
+    "file": "soccerBoots-BK_dXNrV.js",
+    "gz": 993,
+    "raw": 2017
+   },
+   {
+    "stem": "Celebration",
+    "file": "Celebration-CQp7kyb2.js",
+    "gz": 822,
+    "raw": 1527
+   },
+   {
+    "stem": "useRevealScroll",
+    "file": "useRevealScroll-DrE_uEDE.js",
+    "gz": 797,
+    "raw": 1935
+   },
+   {
+    "stem": "GameHelp",
+    "file": "GameHelp-n-aqlfyT.js",
+    "gz": 787,
+    "raw": 1649
+   },
+   {
+    "stem": "HowToPlayPopover",
+    "file": "HowToPlayPopover-DvjYSDvY.js",
+    "gz": 770,
+    "raw": 1367
+   },
+   {
+    "stem": "CelebrationStyles",
+    "file": "CelebrationStyles-B8TrIW2z.js",
+    "gz": 724,
+    "raw": 2126
+   },
+   {
+    "stem": "usSeasonLengths",
+    "file": "usSeasonLengths-BLuI6ac1.js",
+    "gz": 631,
+    "raw": 1465
+   },
+   {
+    "stem": "Confetti",
+    "file": "Confetti-Lc6CKJQy.js",
+    "gz": 607,
+    "raw": 904
+   },
+   {
+    "stem": "HubTiles",
+    "file": "HubTiles-Cqc-Y-wr.js",
+    "gz": 601,
+    "raw": 1388
+   },
+   {
+    "stem": "usCareerReveal",
+    "file": "usCareerReveal-BW47Ke0-.js",
+    "gz": 584,
+    "raw": 959
+   },
+   {
+    "stem": "useGameCompletion",
+    "file": "useGameCompletion-mg4Oxz2T.js",
+    "gz": 495,
+    "raw": 810
+   },
+   {
+    "stem": "seoMetaPart03",
+    "file": "seoMetaPart03-BOxIFoUd.js",
+    "gz": 470,
+    "raw": 759
+   },
+   {
+    "stem": "star",
+    "file": "star-DV10MhPc.js",
+    "gz": 401,
+    "raw": 641
+   },
+   {
+    "stem": "dumbbell",
+    "file": "dumbbell-D_5owk9P.js",
+    "gz": 396,
+    "raw": 728
+   },
+   {
+    "stem": "handshake",
+    "file": "handshake-33sF_Jr1.js",
+    "gz": 388,
+    "raw": 615
+   },
+   {
+    "stem": "medal",
+    "file": "medal-D-p-7o9K.js",
+    "gz": 387,
+    "raw": 604
+   },
+   {
+    "stem": "crown",
+    "file": "crown-CmWj1wnJ.js",
+    "gz": 359,
+    "raw": 531
+   },
+   {
+    "stem": "clipboard-list",
+    "file": "clipboard-list-YUyGOFKj.js",
+    "gz": 358,
+    "raw": 579
+   },
+   {
+    "stem": "copy",
+    "file": "copy-6-gWqfxX.js",
+    "gz": 308,
+    "raw": 405
+   },
+   {
+    "stem": "circle-help",
+    "file": "circle-help-CD8Nz6i4.js",
+    "gz": 303,
+    "raw": 407
+   },
+   {
+    "stem": "briefcase",
+    "file": "briefcase-BOlJ-gVU.js",
+    "gz": 298,
+    "raw": 389
+   },
+   {
+    "stem": "rotate-ccw",
+    "file": "rotate-ccw-D-dFdLDC.js",
+    "gz": 285,
+    "raw": 368
+   },
+   {
+    "stem": "trending-up",
+    "file": "trending-up-DHawGkXi.js",
+    "gz": 281,
+    "raw": 373
+   },
+   {
+    "stem": "arrow-left",
+    "file": "arrow-left-CpXjIedY.js",
+    "gz": 264,
+    "raw": 333
+   },
+   {
+    "stem": "keyedRng",
+    "file": "keyedRng-BKZQ2UGv.js",
+    "gz": 209,
+    "raw": 254
+   },
+   {
+    "stem": "soccerBootIds",
+    "file": "soccerBootIds-BWkyFIXk.js",
+    "gz": 200,
+    "raw": 293
+   },
+   {
+    "stem": "careerHeadroom",
+    "file": "careerHeadroom-B6hg86bq.js",
+    "gz": 190,
+    "raw": 258
+   },
+   {
+    "stem": "formatNumber",
+    "file": "formatNumber-CGuttX8h.js",
+    "gz": 154,
+    "raw": 152
+   }
+  ]
+ }
+}
