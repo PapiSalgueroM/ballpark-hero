@@ -1,0 +1,28 @@
+simUsCareerBank: seed 1, 112 mid career states and 300 whole careers a sport, control mlb
+1) every option of every card in the deck, applied at a zero pocket
+   nfl: 22317 options applied; below zero after, old arm 3545, new arm 0; with 50M in savings 3545 bills collected in full, 0 forgiven, 0 pockets left below zero
+   nba: 21939 options applied; below zero after, old arm 3551, new arm 0; with 50M in savings 3551 bills collected in full, 0 forgiven, 0 pockets left below zero
+  FAIL [1a:mlb]: card mlbA_kangaroo_court option 0 left the bank on -0.01 from a zero balance
+  FAIL [1b:mlb]: card mlbA_kangaroo_court option 0 left the pocket on -0.01 with savings to pay from
+   mlb: 20435 options applied; below zero after, old arm 2697, new arm 2697; with 50M in savings 2697 bills collected in full, 0 forgiven, 2697 pockets left below zero
+   nhl: 21486 options applied; below zero after, old arm 2955, new arm 0; with 50M in savings 2955 bills collected in full, 0 forgiven, 0 pockets left below zero
+2) whole careers through the board loop, with shop and money app taps, read after every call
+   nfl: 300 careers, 5052 seasons, 43541 calls read, 0 below zero, lowest balance seen 0
+   nba: 300 careers, 6013 seasons, 50359 calls read, 0 below zero, lowest balance seen 0
+  FAIL [2:mlb]: 2301 of 49406 calls left the balance below zero (first: career 1 after progress: -0.2)
+   mlb: 300 careers, 6095 seasons, 49406 calls read, 2301 below zero, lowest balance seen -4.3
+   nhl: 300 careers, 6465 seasons, 54705 calls read, 0 below zero, lowest balance seen 0
+3) the reload: healthy untouched, an old save rebuilt as before, a played save stopped at zero
+   nfl: healthy same object, old save rebuilt to 90, the scout's save on 0, 2000 played saves swept, 0 refilled
+   nba: healthy same object, old save rebuilt to 90, the scout's save on 0, 2000 played saves swept, 0 refilled
+  FAIL [3:mlb]: a played save at -0.4 with 9.4 earned reloaded on 4.2, not 0 (the scout's reload gave 4.2)
+   mlb: healthy same object, old save rebuilt to 90, the scout's save on 4.2, 2000 played saves swept, 1999 refilled
+   nhl: healthy same object, old save rebuilt to 90, the scout's save on 0, 2000 played saves swept, 0 refilled
+4) MEASURED, asserted on nothing: what the floor touches at a zero balance with nothing in savings
+   nfl: 3545 of 22317 options (15.9 percent) cost more than an empty account held; the floor wrote off 2130.8M across them, 0.60M a time
+   nba: 3551 of 21939 options (16.2 percent) cost more than an empty account held; the floor wrote off 2405.95M across them, 0.68M a time
+   mlb: 2697 of 20435 options (13.2 percent) cost more than an empty account held; the floor wrote off 1205.32M across them, 0.45M a time
+   nhl: 2955 of 21486 options (13.8 percent) cost more than an empty account held; the floor wrote off 1730.76M across them, 0.59M a time
+   The floor is read at the end of a call, so a card that spends and then pays out is netted first: nobody is handed a ticket he could not pay for and also its winnings on top of a forgiven price.
+
+simUsCareerBank control mlb: green. The expected checks went red (1a:mlb, 1b:mlb, 2:mlb, 3:mlb) and nothing else did, so this harness works.
