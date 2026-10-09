@@ -44,6 +44,7 @@ import { careerDerbyRecord, derbyMeetings, readSeasonDerbies, type DerbyRecord }
 import { adjustClubsForYear } from '../careerEras';
 import { keyedRng } from '../keyedRng';
 import { leagueFormatFor } from '../../data/leagueFormat';
+import { SC_CLUB_CANON } from '../../data/clubRivalries';
 import { soccerApplyDelta, soccerEventDisagreements, soccerEvents, soccerMomentSpots, type SoccerMomentKind } from './soccerEvents';
 import { drillForPosition, type PositionDrillKind } from '../careerDrills';
 
@@ -74,7 +75,7 @@ export interface SoccerSeasonCtx {
    *  the table cannot name, and wherever this season's world is not held. */
   titleOpen?: boolean;
   rivals: string[];
-  /** Clubs that may be named in the table besides his, the rivals and the champion. */
+  /** Clubs that may be named as opponents besides his, the rivals and the champion. */
   named: string[];
   /** The game's era tier of every club it knows, that season. */
   tiers: Record<string, number>;
@@ -114,6 +115,8 @@ export function finishFifth(finish: number, size: number): number {
   return Math.min(4, Math.floor(((finish - 1) / Math.max(1, size - 1)) * 5));
 }
 
+const clubKey = (name: string) => (SC_CLUB_CANON[name] ?? name).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+
 function worldFor(career: CareerState, year: number): WorldSeason | null {
   const w = career.phone?.world;
   return w && w.year === year ? w : null;
@@ -123,7 +126,7 @@ function worldFor(career: CareerState, year: number): WorldSeason | null {
  *  `career.seasons` or the pending summary. */
 export function buildSoccerSeasonCtx(career: CareerState, clubs: ClubData[], row: SeasonRecord): SoccerSeasonCtx {
   const finish = readLeagueFinish(row);
-  const today = clubs.find(c => c.name === row.club)?.league ?? '';
+  const today = clubs.find(c => clubKey(c.name) === clubKey(row.club))?.league ?? '';
   const league = finishLeague({ name: row.club, league: today }, row.year, finish?.size ?? null);
   /* the summary card's champion, word for word (SeasonSummaryCard, Round 1037) */
   const world = worldFor(career, row.year);
@@ -156,9 +159,11 @@ export function buildSoccerSeasonCtx(career: CareerState, clubs: ClubData[], row
   const size = mode === 'table' ? finish!.size! : (sizeKey ? leagueSizeFor(sizeKey, row.year) : null);
   const games = size ? 2 * (size - 1) : 38;
   let named: string[] = [];
-  if (mode === 'table' && league) {
-    const field = managerLeagueField({ clubs, club: row.club, league: league.key, year: row.year }, keyedRng(`${row.club}|${row.year}|centre|field`));
+  if (sizeKey) {
+    const field = managerLeagueField({ clubs, club: row.club, league: sizeKey, year: row.year }, keyedRng(`${row.club}|${row.year}|centre|field`));
     named = field.named.filter(n => n !== row.club && !rivals.includes(n) && n !== champion);
+    const held = new Set([row.club, ...rivals, ...(champion ? [champion] : [])].map(clubKey));
+    named = named.filter(n => !held.has(clubKey(n)));
   }
   const tiers: Record<string, number> = {};
   for (const c of adjustClubsForYear([...clubs], row.year)) if (tiers[c.name] === undefined) tiers[c.name] = c.tier;
@@ -314,7 +319,7 @@ export const SOCCER: SeasonSport<SeasonRecord, SoccerSeasonCtx> = {
   words: { round: 'Matchday', title: 'Season Centre', unnamed: 'another club' },
 };
 
-/** Names on the table's places, after the season is accepted. */
+/** Names on the season's places, after the scores and player totals are accepted. */
 function soccerLabels(slots: SlotFacts[], ctx: SoccerSeasonCtx, rng: () => number): SlotLabel[] {
   const unnamed = (slot: number): SlotLabel => ({ name: 'another club', named: false, key: `u${slot}` });
   const out: SlotLabel[] = slots.map(s => unnamed(s.slot));
@@ -329,7 +334,6 @@ function soccerLabels(slots: SlotFacts[], ctx: SoccerSeasonCtx, rng: () => numbe
     else if (s.champion) out[s.slot] = ctx.champion ? { name: ctx.champion, named: true, key: ctx.champion } : unnamed(s.slot);
     else open.push(s);
   }
-  if (ctx.mode !== 'table') return out;
   open.sort((a, b) => a.pos - b.pos);
   const entries = ctx.named.map(name => ({ name: name as string | null, at: (ctx.tiers[name] ?? 3) + rng() * 1.5 }));
   for (let i = entries.length; i < open.length; i += 1) entries.push({ name: null, at: 1 + rng() * 3.5 });
