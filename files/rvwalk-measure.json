@@ -1,0 +1,4509 @@
+{
+ "runs": [
+  {
+   "tag": "now-390-motion",
+   "club": "Liverpool",
+   "era": "2026-27",
+   "rows": [
+    {
+     "name": "Alexander Isak",
+     "cut": false,
+     "rating": "90",
+     "age": "26",
+     "pot": null,
+     "phone": "90-92",
+     "w": 332,
+     "h": 45,
+     "nameW": 84
+    },
+    {
+     "name": "Dominik Szoboszlai",
+     "cut": true,
+     "rating": "90",
+     "age": "25",
+     "pot": null,
+     "phone": "90-93",
+     "w": 332,
+     "h": 45,
+     "nameW": 101
+    },
+    {
+     "name": "Florian Wirtz",
+     "cut": false,
+     "rating": "90",
+     "age": "23",
+     "pot": null,
+     "phone": "92-96",
+     "w": 332,
+     "h": 45,
+     "nameW": 73
+    },
+    {
+     "name": "Hugo Ekitiké",
+     "cut": false,
+     "rating": "90",
+     "age": "24",
+     "pot": null,
+     "phone": "90-92",
+     "w": 332,
+     "h": 45,
+     "nameW": 71
+    },
+    {
+     "name": "Alexis Mac Allister",
+     "cut": false,
+     "rating": "89",
+     "age": "27",
+     "pot": null,
+     "phone": "89-91",
+     "w": 332,
+     "h": 45,
+     "nameW": 104
+    },
+    {
+     "name": "Ryan Gravenberch",
+     "cut": true,
+     "rating": "89",
+     "age": "24",
+     "pot": null,
+     "phone": "89-91",
+     "w": 332,
+     "h": 45,
+     "nameW": 101
+    },
+    {
+     "name": "Cody Gakpo",
+     "cut": false,
+     "rating": "88",
+     "age": "27",
+     "pot": null,
+     "phone": "88-90",
+     "w": 332,
+     "h": 45,
+     "nameW": 70
+    },
+    {
+     "name": "Bradley Barcola",
+     "cut": false,
+     "rating": "87",
+     "age": "23",
+     "pot": null,
+     "phone": "89-93",
+     "w": 332,
+     "h": 45,
+     "nameW": 91
+    },
+    {
+     "name": "Virgil van Dijk",
+     "cut": false,
+     "rating": "85",
+     "age": "35",
+     "pot": null,
+     "phone": "85-87",
+     "w": 332,
+     "h": 45,
+     "nameW": 78
+    },
+    {
+     "name": "Alisson",
+     "cut": false,
+     "rating": "84",
+     "age": "34",
+     "pot": null,
+     "phone": "84-86",
+     "w": 332,
+     "h": 45,
+     "nameW": 40
+    },
+    {
+     "name": "Jeremie Frimpong",
+     "cut": false,
+     "rating": "84",
+     "age": "26",
+     "pot": null,
+     "phone": "85-87",
+     "w": 332,
+     "h": 45,
+     "nameW": 104
+    },
+    {
+     "name": "Jérémy Jacquet",
+     "cut": false,
+     "rating": "84",
+     "age": "21",
+     "pot": null,
+     "phone": "86-91",
+     "w": 332,
+     "h": 45,
+     "nameW": 93
+    },
+    {
+     "name": "Milos Kerkez",
+     "cut": false,
+     "rating": "84",
+     "age": "23",
+     "pot": null,
+     "phone": "84-87",
+     "w": 332,
+     "h": 45,
+     "nameW": 74
+    },
+    {
+     "name": "Giorgi Mamardashvili",
+     "cut": false,
+     "rating": "83",
+     "age": "26",
+     "pot": null,
+     "phone": "83-85",
+     "w": 332,
+     "h": 45,
+     "nameW": 121
+    },
+    {
+     "name": "Conor Bradley",
+     "cut": false,
+     "rating": "82",
+     "age": "23",
+     "pot": null,
+     "phone": "85-89",
+     "w": 332,
+     "h": 45,
+     "nameW": 82
+    },
+    {
+     "name": "Ronald Araujo",
+     "cut": false,
+     "rating": "81",
+     "age": "27",
+     "pot": null,
+     "phone": "81-83",
+     "w": 332,
+     "h": 45,
+     "nameW": 79
+    },
+    {
+     "name": "Víctor Muñoz",
+     "cut": false,
+     "rating": "80",
+     "age": "23",
+     "pot": null,
+     "phone": "80-84",
+     "w": 332,
+     "h": 45,
+     "nameW": 76
+    },
+    {
+     "name": "Federico Chiesa",
+     "cut": false,
+     "rating": "79",
+     "age": "29",
+     "pot": null,
+     "phone": "79-81",
+     "w": 332,
+     "h": 45,
+     "nameW": 92
+    },
+    {
+     "name": "Joe Gomez",
+     "cut": false,
+     "rating": "79",
+     "age": "29",
+     "pot": null,
+     "phone": "79-81",
+     "w": 332,
+     "h": 45,
+     "nameW": 65
+    },
+    {
+     "name": "Giovanni Leoni",
+     "cut": false,
+     "rating": "78",
+     "age": "20",
+     "pot": null,
+     "phone": "85-90",
+     "w": 332,
+     "h": 45,
+     "nameW": 84
+    },
+    {
+     "name": "Konstantinos Tsimikas",
+     "cut": false,
+     "rating": "77",
+     "age": "30",
+     "pot": null,
+     "phone": "77-79",
+     "w": 332,
+     "h": 45,
+     "nameW": 126
+    },
+    {
+     "name": "Rio Ngumoha",
+     "cut": false,
+     "rating": "75",
+     "age": "18",
+     "pot": null,
+     "phone": "86-91",
+     "w": 332,
+     "h": 45,
+     "nameW": 76
+    },
+    {
+     "name": "Wataru Endo",
+     "cut": false,
+     "rating": "75",
+     "age": "33",
+     "pot": null,
+     "phone": "75-77",
+     "w": 332,
+     "h": 45,
+     "nameW": 72
+    },
+    {
+     "name": "Freddie Woodman",
+     "cut": false,
+     "rating": "70",
+     "age": "29",
+     "pot": null,
+     "phone": "70-72",
+     "w": 332,
+     "h": 45,
+     "nameW": 103
+    },
+    {
+     "name": "Trey Nyoni",
+     "cut": false,
+     "rating": "69",
+     "age": "19",
+     "pot": null,
+     "phone": "74-79",
+     "w": 332,
+     "h": 45,
+     "nameW": 62
+    },
+    {
+     "name": "Lewis Koumas",
+     "cut": false,
+     "rating": "67",
+     "age": "21",
+     "pot": null,
+     "phone": "68-73",
+     "w": 332,
+     "h": 45,
+     "nameW": 82
+    }
+   ],
+   "mismatches": [],
+   "notes": [
+    "no free agent button on the market"
+   ],
+   "saved": {
+    "club": "Liverpool",
+    "eraId": "now",
+    "squad": [
+     {
+      "name": "Florian Wirtz",
+      "rating": 90,
+      "age": 23,
+      "potential": 93,
+      "pos": "CAM",
+      "value": 89.3
+     },
+     {
+      "name": "Alexander Isak",
+      "rating": 90,
+      "age": 26,
+      "potential": 90,
+      "pos": "ST",
+      "value": 81
+     },
+     {
+      "name": "Dominik Szoboszlai",
+      "rating": 90,
+      "age": 25,
+      "potential": 93,
+      "pos": "CAM",
+      "value": 81
+     },
+     {
+      "name": "Hugo Ekitiké",
+      "rating": 90,
+      "age": 24,
+      "potential": 91,
+      "pos": "ST",
+      "value": 72.8
+     },
+     {
+      "name": "Ryan Gravenberch",
+      "rating": 89,
+      "age": 24,
+      "potential": 90,
+      "pos": "CDM",
+      "value": 64.8
+     },
+     {
+      "name": "Alexis Mac Allister",
+      "rating": 89,
+      "age": 27,
+      "potential": 89,
+      "pos": "CM",
+      "value": 64.5
+     },
+     {
+      "name": "Bradley Barcola",
+      "rating": 87,
+      "age": 23,
+      "potential": 93,
+      "pos": "LW",
+      "value": 57
+     },
+     {
+      "name": "Cody Gakpo",
+      "rating": 88,
+      "age": 27,
+      "potential": 88,
+      "pos": "LW",
+      "value": 52.5
+     },
+     {
+      "name": "Jérémy Jacquet",
+      "rating": 84,
+      "age": 21,
+      "potential": 90,
+      "pos": "CB",
+      "value": 44.3
+     },
+     {
+      "name": "Milos Kerkez",
+      "rating": 84,
+      "age": 23,
+      "potential": 87,
+      "pos": "LB",
+      "value": 32.3
+     },
+     {
+      "name": "Jeremie Frimpong",
+      "rating": 84,
+      "age": 26,
+      "potential": 86,
+      "pos": "RB",
+      "value": 28.5
+     },
+     {
+      "name": "Conor Bradley",
+      "rating": 82,
+      "age": 23,
+      "potential": 88,
+      "pos": "RB",
+      "value": 24
+     },
+     {
+      "name": "Giorgi Mamardashvili",
+      "rating": 83,
+      "age": 26,
+      "potential": 83,
+      "pos": "GK",
+      "value": 22.5
+     },
+     {
+      "name": "Giovanni Leoni",
+      "rating": 78,
+      "age": 20,
+      "potential": 85,
+      "pos": "CB",
+      "value": 20.3
+     },
+     {
+      "name": "Rio Ngumoha",
+      "rating": 75,
+      "age": 18,
+      "potential": 87,
+      "pos": "LW",
+      "value": 16.5
+     },
+     {
+      "name": "Ronald Araujo",
+      "rating": 81,
+      "age": 27,
+      "potential": 82,
+      "pos": "CB",
+      "value": 16.5
+     },
+     {
+      "name": "Víctor Muñoz",
+      "rating": 80,
+      "age": 23,
+      "potential": 83,
+      "pos": "LW",
+      "value": 16.5
+     },
+     {
+      "name": "Virgil van Dijk",
+      "rating": 85,
+      "age": 35,
+      "potential": 85,
+      "pos": "CB",
+      "value": 14.3
+     },
+     {
+      "name": "Alisson",
+      "rating": 84,
+      "age": 34,
+      "potential": 84,
+      "pos": "GK",
+      "value": 13.5
+     },
+     {
+      "name": "Federico Chiesa",
+      "rating": 79,
+      "age": 29,
+      "potential": 79,
+      "pos": "RW",
+      "value": 12
+     },
+     {
+      "name": "Joe Gomez",
+      "rating": 79,
+      "age": 29,
+      "potential": 79,
+      "pos": "CB",
+      "value": 12
+     },
+     {
+      "name": "Konstantinos Tsimikas",
+      "rating": 77,
+      "age": 30,
+      "potential": 77,
+      "pos": "LB",
+      "value": 6.8
+     },
+     {
+      "name": "Trey Nyoni",
+      "rating": 69,
+      "age": 19,
+      "potential": 77,
+      "pos": "CM",
+      "value": 4.5
+     },
+     {
+      "name": "Wataru Endo",
+      "rating": 75,
+      "age": 33,
+      "potential": 75,
+      "pos": "CDM",
+      "value": 3.2
+     },
+     {
+      "name": "Freddie Woodman",
+      "rating": 70,
+      "age": 29,
+      "potential": 70,
+      "pos": "GK",
+      "value": 2.3
+     },
+     {
+      "name": "Lewis Koumas",
+      "rating": 67,
+      "age": 21,
+      "potential": 70,
+      "pos": "LW",
+      "value": 2.3
+     }
+    ]
+   },
+   "marketText": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nLiverpool\n2026-27 · Season 1\nSeason not started\n£137m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Summer window OPEN\n4 match weeks until the deadline · offers can arrive any week · loans used 0/2\nBUDGET\n£137m\nAROUND THE LEAGUE\n📰 Crystal Palace sign Nick Woltemade from Juventus for £54m.\n📰 Newcastle sign Tijjani Reijnders from Al-Qadsiah for £60m.\n📰 Chelsea sign Mohamed Salah from Trabzonspor for £22m.\n📰 💰 The window's biggest deal so far: Tijjani Reijnders to Newcastle for £60m.\nBuy\nSell\n2\nLatest\nALL\nGK\nDEF\nMID\nATT\nExact position…\nGK\nCB\nLB\nRB\nLWB\nRWB\nCDM\nCM\nCAM\nLM\nRM\nLW\nRW\nST\nCF\nAny age\nU21\nU24\nU28\n29 plus\nAny price\nUnder 10m\nUnder 25m\nUnder 60m\nAny league\n2. Bundesliga\nA-League Men\nAustrian Bundesliga\nBelgian Pro League\nBrasileirão Série A\nBundesliga\nDanish Superliga\nEFL Championship\nEredivisie\nLa Liga\nLiga MX\nLigue 1\nLigue 2\nMLS Eastern Conference\nMLS Western Conference\nPremier League\nPrimeira Liga\nRussian Premier League\nSaudi Pro League\nScottish Premiership\nSegunda División\nSerie A\nSerie B\nSuper League Greece\nSuperSport HNL\nSwiss Super League\nSüper Lig\nAny nation\nSpain (327)\nEngland (300)\nFrance (288)\nRussia (275)\nGermany (252)\nItaly (205)\nNetherlands (147)\nPortugal (144)\nBelgium (122)\nDenmark (111)\nSwitzerland (81)\nTürkiye (77)\nCroatia (71)\nAustria (67)\nSweden (61)\nSerbia (56)\nNorway (55)\nScotland (48)\nPoland (47)\nIreland (45)\nGreece (37)\nBosnia-Herzegovina (29)\nCzech Republic (25)\nAlbania (23)\nWales (23)\nKosovo (19)\nRomania (18)\nUkraine (18)\nIceland (17)\nSlovakia (17)\nFinland (14)\nSlovenia (13)\nHungary (12)\nGeorgia (11)\nIsrael (11)\nBulgaria (10)\nMontenegro (8)\nNorthern Ireland (7)\nBelarus (6)\nKazakhstan (6)\nArmenia (5)\nLuxembourg (5)\nMalta (5)\nNorth Macedonia (5)\nEstonia (1)\nLatvia (1)\nLithuania (1)\nMoldova (1)\nBrazil (349)\nArgentina (163)\nColombia (67)\nUruguay (67)\nEcuador (26)\nParaguay (23)\nChile (19)\nVenezuela (12)\nPeru (4)\nBolivia (2)\nMexico (115)\nUnited States (113)\nCanada (28)\nSuriname (11)\nJamaica (9)\nHaiti (6)\nPanama (6)\nCosta Rica (4)\nCuracao (4)\nHonduras (4)\nDominican Republic (2)\nEl Salvador (2)\nGuadeloupe (2)\nGuyana (2)\nMartinique (2)\nGuatemala (1)\nTrinidad and Tobago (1)\nMorocco (70)\nCote d'Ivoire (67)\nSenegal (56)\nNigeria (47)\nGhana (41)\nAlgeria (30)\nMali (29)\nCameroon (27)\nDR Congo (25)\nTunisia (12)\nAngola (11)\nGuinea (11)\nBurkina Faso (10)\nCape Verde (10)\nThe Gambia (7)\nGabon (5)\nGuinea-Bissau (5)\nTogo (5)\nZambia (5)\nComoros (3)\nCongo (3)\nEgypt (3)\nMauritania (3)\nSouth Africa (3)\nZimbabwe (3)\nBenin (2)\nBurundi (2)\nMozambique (2)\nSierra Leone (2)\nCentral African Republic (1)\nChad (1)\nEquatorial Guinea (1)\nKenya (1)\nMadagascar (1)\nTanzania (1)\nAustralia (222)\nJapan (63)\nKorea, South (15)\nSaudi Arabia (10)\nIndonesia (9)\nUzbekistan (5)\nIraq (3)\nIran (2)\nJordan (1)\nLebanon (1)\nPalestine (1)\nPhilippines (1)\nTajikistan (1)\nYemen (1)\nNew Zealand (43)\nNew Caledonia (1)\nVanuatu (1)\nNiger (2)\nSouthern Sudan (1)\nTurkmenistan (1)\nBest first\nPriciest first\nYoungest first\nCheapest first\nST\nErling Haaland\nManchester City · 26y · worth £162m\n94\nTalk · £178.2m\nST\nKylian Mbappé\nReal Madrid · 27y · worth £162m\n94\nTalk · £178.2m\nRW\nLamine Yamal\nBarcelona · 19y · worth £162m\n94\nTalk · £202.5m\n£377.5m\nRW\nMichael Olise\nBayern Munich · 24y · worth £113.3m\n92\nTalk · £124.6m\n£268.5m\nLW\nVinicius Junior\nReal Madrid · 26y · worth £121.5m\n92\nTalk · £133.7m\n£253.9m\nCDM\nVitinha\nPSG · 26y · worth £113.4m\n92\nTalk · £124.7m\nRW\nBukayo Saka\nArsenal · 24y · worth £97.5m\n91\nTalk · £107.3m\nCAM\nCole Palmer\nChelsea · 24y · worth £89.3m\n91\nTalk · £98.2m\nCM\nDeclan Rice\nArsenal · 27y · worth £97.5m\n91\nTalk · £107.3m\nCM\nFederico Valverde\nReal Madrid · 28y · worth £97.5m\n91\nTalk · £107.3m\nST\nHarry Kane\nBayern Munich · 33y · worth £52.5m\n91\nTalk · £47.3m\nCAM\nJude Bellingham\nReal Madrid · 23y · worth £113.3m\n91\nTalk · £141.6m\nCM\nPedri\nBarcelona · 23y · worth £121.5m\n91\nTalk · £151.9m\n£232.1m\nCM\nEnzo Fernández\nManchester City · 25y · worth £72.8m\n90\nTalk · £80.1m\nCAM\nJamal Musiala\nBayern Munich · 23y · worth £97.5m\n90\nTalk · £121.9m\nCM\nJoão Neves\nPSG · 22y · worth £89.3m\n90\nTalk · £111.6m\nST\nJulián Alvarez\nAtlético Madrid · 26y · worth £72.8m\n90\nTalk · £80.1m\nLW\nKhvicha Kvaratskhelia\nPSG · 25y · worth £72.8m\n90\nTalk · £80.1m\n£125.2m\nCDM\nMoisés Caicedo\nChelsea · 24y · worth £81m\n90\nTalk · £89.1m\nST\nOusmane Dembélé\nPSG · 29y · worth £81m\n90\nTalk · £89.1m\n£184.7m\nCDM\nRodri\nBarcelona · 30y · worth £67.5m\n90\nTalk · £60.8m\nCB\nWilliam Saliba\nArsenal · 25y · worth £72.8m\n90\nTalk · £80.1m\nRB\nAchraf Hakimi\nPSG · 28y · worth £64.5m\n89\nTalk · £71m\n£121.9m\nRW\nAntoine Semenyo\nManchester City · 26y · worth £60.8m\n89\nTalk · £66.9m\n£150.8m\nCDM\nAurélien Tchouaméni\nReal Madrid · 26y · worth £60.8m\n89\nTalk · £66.9m\nCM\nBruno Guimarães\nArsenal · 29y · worth £60.8m\n89\nTalk · £66.9m\n£127.7m\nRW\nBryan Mbeumo\nManchester United · 27y · worth £64.5m\n89\nTalk · £71m\nCAM\nFermín López\nBarcelona · 23y · worth £81m\n89\nTalk · £101.3m\n£199.3m\nCB\nGabriel\nArsenal · 29y · worth £60.8",
+   "marketButtons": [
+    "Back",
+    "Track stats",
+    "Managers",
+    "Board Safe",
+    "Fans Hopeful",
+    "Home",
+    "Squad",
+    "Tactics",
+    "Table",
+    "Market",
+    "Buy",
+    "Sell 2",
+    "Latest",
+    "ALL",
+    "GK",
+    "DEF",
+    "MID",
+    "ATT",
+    "Talk · £178.2m",
+    "Talk · £178.2m",
+    "Talk · £202.5m",
+    "£377.5m",
+    "Talk · £124.6m",
+    "£268.5m",
+    "Talk · £133.7m",
+    "£253.9m",
+    "Talk · £124.7m",
+    "Talk · £107.3m",
+    "Talk · £98.2m",
+    "Talk · £107.3m",
+    "Talk · £107.3m",
+    "Talk · £47.3m",
+    "Talk · £141.6m",
+    "Talk · £151.9m",
+    "£232.1m",
+    "Talk · £80.1m",
+    "Talk · £121.9m",
+    "Talk · £111.6m",
+    "Talk · £80.1m",
+    "Talk · £80.1m",
+    "£125.2m",
+    "Talk · £89.1m",
+    "Talk · £89.1m",
+    "£184.7m",
+    "Talk · £60.8m",
+    "Talk · £80.1m",
+    "Talk · £71m",
+    "£121.9m",
+    "Talk · £66.9m",
+    "£150.8m",
+    "Talk · £66.9m",
+    "Talk · £66.9m",
+    "£127.7m",
+    "Talk · £71m",
+    "Talk · £101.3m",
+    "£199.3m",
+    "Talk · £66.9m",
+    "£106.4m",
+    "Talk · £66.9m",
+    "Talk · £75.9m"
+   ],
+   "errors": []
+  },
+  {
+   "tag": "now-390-rm",
+   "club": "Liverpool",
+   "era": "2026-27",
+   "rows": [
+    {
+     "name": "Alexander Isak",
+     "cut": false,
+     "rating": "90",
+     "age": "26",
+     "pot": null,
+     "phone": "90-92",
+     "w": 332,
+     "h": 45,
+     "nameW": 84
+    },
+    {
+     "name": "Dominik Szoboszlai",
+     "cut": true,
+     "rating": "90",
+     "age": "25",
+     "pot": null,
+     "phone": "90-94",
+     "w": 332,
+     "h": 45,
+     "nameW": 101
+    },
+    {
+     "name": "Florian Wirtz",
+     "cut": false,
+     "rating": "90",
+     "age": "23",
+     "pot": null,
+     "phone": "94-98",
+     "w": 332,
+     "h": 45,
+     "nameW": 73
+    },
+    {
+     "name": "Hugo Ekitiké",
+     "cut": false,
+     "rating": "90",
+     "age": "24",
+     "pot": null,
+     "phone": "90-92",
+     "w": 332,
+     "h": 45,
+     "nameW": 71
+    },
+    {
+     "name": "Alexis Mac Allister",
+     "cut": false,
+     "rating": "89",
+     "age": "27",
+     "pot": null,
+     "phone": "89-91",
+     "w": 332,
+     "h": 45,
+     "nameW": 104
+    },
+    {
+     "name": "Ryan Gravenberch",
+     "cut": true,
+     "rating": "89",
+     "age": "24",
+     "pot": null,
+     "phone": "89-91",
+     "w": 332,
+     "h": 45,
+     "nameW": 101
+    },
+    {
+     "name": "Cody Gakpo",
+     "cut": false,
+     "rating": "88",
+     "age": "27",
+     "pot": null,
+     "phone": "90-92",
+     "w": 332,
+     "h": 45,
+     "nameW": 70
+    },
+    {
+     "name": "Bradley Barcola",
+     "cut": false,
+     "rating": "87",
+     "age": "23",
+     "pot": null,
+     "phone": "88-92",
+     "w": 332,
+     "h": 45,
+     "nameW": 91
+    },
+    {
+     "name": "Virgil van Dijk",
+     "cut": false,
+     "rating": "85",
+     "age": "35",
+     "pot": null,
+     "phone": "85-87",
+     "w": 332,
+     "h": 45,
+     "nameW": 78
+    },
+    {
+     "name": "Alisson",
+     "cut": false,
+     "rating": "84",
+     "age": "34",
+     "pot": null,
+     "phone": "84-86",
+     "w": 332,
+     "h": 45,
+     "nameW": 40
+    },
+    {
+     "name": "Jeremie Frimpong",
+     "cut": false,
+     "rating": "84",
+     "age": "26",
+     "pot": null,
+     "phone": "84-86",
+     "w": 332,
+     "h": 45,
+     "nameW": 104
+    },
+    {
+     "name": "Jérémy Jacquet",
+     "cut": false,
+     "rating": "84",
+     "age": "21",
+     "pot": null,
+     "phone": "87-92",
+     "w": 332,
+     "h": 45,
+     "nameW": 93
+    },
+    {
+     "name": "Milos Kerkez",
+     "cut": false,
+     "rating": "84",
+     "age": "23",
+     "pot": null,
+     "phone": "85-89",
+     "w": 332,
+     "h": 45,
+     "nameW": 74
+    },
+    {
+     "name": "Giorgi Mamardashvili",
+     "cut": false,
+     "rating": "83",
+     "age": "26",
+     "pot": null,
+     "phone": "84-86",
+     "w": 332,
+     "h": 45,
+     "nameW": 121
+    },
+    {
+     "name": "Conor Bradley",
+     "cut": false,
+     "rating": "82",
+     "age": "23",
+     "pot": null,
+     "phone": "82-86",
+     "w": 332,
+     "h": 45,
+     "nameW": 82
+    },
+    {
+     "name": "Ronald Araujo",
+     "cut": false,
+     "rating": "81",
+     "age": "27",
+     "pot": null,
+     "phone": "81-83",
+     "w": 332,
+     "h": 45,
+     "nameW": 79
+    },
+    {
+     "name": "Víctor Muñoz",
+     "cut": false,
+     "rating": "80",
+     "age": "23",
+     "pot": null,
+     "phone": "80-82",
+     "w": 332,
+     "h": 45,
+     "nameW": 76
+    },
+    {
+     "name": "Federico Chiesa",
+     "cut": false,
+     "rating": "79",
+     "age": "29",
+     "pot": null,
+     "phone": "79-81",
+     "w": 332,
+     "h": 45,
+     "nameW": 92
+    },
+    {
+     "name": "Joe Gomez",
+     "cut": false,
+     "rating": "79",
+     "age": "29",
+     "pot": null,
+     "phone": "79-81",
+     "w": 332,
+     "h": 45,
+     "nameW": 65
+    },
+    {
+     "name": "Giovanni Leoni",
+     "cut": false,
+     "rating": "78",
+     "age": "20",
+     "pot": null,
+     "phone": "82-87",
+     "w": 332,
+     "h": 45,
+     "nameW": 84
+    },
+    {
+     "name": "Konstantinos Tsimikas",
+     "cut": false,
+     "rating": "77",
+     "age": "30",
+     "pot": null,
+     "phone": "77-79",
+     "w": 332,
+     "h": 45,
+     "nameW": 126
+    },
+    {
+     "name": "Rio Ngumoha",
+     "cut": false,
+     "rating": "75",
+     "age": "18",
+     "pot": null,
+     "phone": "84-89",
+     "w": 332,
+     "h": 45,
+     "nameW": 76
+    },
+    {
+     "name": "Wataru Endo",
+     "cut": false,
+     "rating": "75",
+     "age": "33",
+     "pot": null,
+     "phone": "75-77",
+     "w": 332,
+     "h": 45,
+     "nameW": 72
+    },
+    {
+     "name": "Freddie Woodman",
+     "cut": false,
+     "rating": "70",
+     "age": "29",
+     "pot": null,
+     "phone": "70-72",
+     "w": 332,
+     "h": 45,
+     "nameW": 103
+    },
+    {
+     "name": "Trey Nyoni",
+     "cut": false,
+     "rating": "69",
+     "age": "19",
+     "pot": null,
+     "phone": "77-82",
+     "w": 332,
+     "h": 45,
+     "nameW": 62
+    },
+    {
+     "name": "Lewis Koumas",
+     "cut": false,
+     "rating": "67",
+     "age": "21",
+     "pot": null,
+     "phone": "74-79",
+     "w": 332,
+     "h": 45,
+     "nameW": 82
+    }
+   ],
+   "mismatches": [],
+   "notes": [
+    "no free agent button on the market"
+   ],
+   "saved": {
+    "club": "Liverpool",
+    "eraId": "now",
+    "squad": [
+     {
+      "name": "Florian Wirtz",
+      "rating": 90,
+      "age": 23,
+      "potential": 95,
+      "pos": "CAM",
+      "value": 89.3
+     },
+     {
+      "name": "Alexander Isak",
+      "rating": 90,
+      "age": 26,
+      "potential": 90,
+      "pos": "ST",
+      "value": 81
+     },
+     {
+      "name": "Dominik Szoboszlai",
+      "rating": 90,
+      "age": 25,
+      "potential": 94,
+      "pos": "CAM",
+      "value": 81
+     },
+     {
+      "name": "Hugo Ekitiké",
+      "rating": 90,
+      "age": 24,
+      "potential": 91,
+      "pos": "ST",
+      "value": 72.8
+     },
+     {
+      "name": "Ryan Gravenberch",
+      "rating": 89,
+      "age": 24,
+      "potential": 90,
+      "pos": "CDM",
+      "value": 64.8
+     },
+     {
+      "name": "Alexis Mac Allister",
+      "rating": 89,
+      "age": 27,
+      "potential": 89,
+      "pos": "CM",
+      "value": 64.5
+     },
+     {
+      "name": "Bradley Barcola",
+      "rating": 87,
+      "age": 23,
+      "potential": 92,
+      "pos": "LW",
+      "value": 57
+     },
+     {
+      "name": "Cody Gakpo",
+      "rating": 88,
+      "age": 27,
+      "potential": 90,
+      "pos": "LW",
+      "value": 52.5
+     },
+     {
+      "name": "Jérémy Jacquet",
+      "rating": 84,
+      "age": 21,
+      "potential": 91,
+      "pos": "CB",
+      "value": 44.3
+     },
+     {
+      "name": "Milos Kerkez",
+      "rating": 84,
+      "age": 23,
+      "potential": 89,
+      "pos": "LB",
+      "value": 32.3
+     },
+     {
+      "name": "Jeremie Frimpong",
+      "rating": 84,
+      "age": 26,
+      "potential": 84,
+      "pos": "RB",
+      "value": 28.5
+     },
+     {
+      "name": "Conor Bradley",
+      "rating": 82,
+      "age": 23,
+      "potential": 85,
+      "pos": "RB",
+      "value": 24
+     },
+     {
+      "name": "Giorgi Mamardashvili",
+      "rating": 83,
+      "age": 26,
+      "potential": 85,
+      "pos": "GK",
+      "value": 22.5
+     },
+     {
+      "name": "Giovanni Leoni",
+      "rating": 78,
+      "age": 20,
+      "potential": 82,
+      "pos": "CB",
+      "value": 20.3
+     },
+     {
+      "name": "Rio Ngumoha",
+      "rating": 75,
+      "age": 18,
+      "potential": 85,
+      "pos": "LW",
+      "value": 16.5
+     },
+     {
+      "name": "Ronald Araujo",
+      "rating": 81,
+      "age": 27,
+      "potential": 82,
+      "pos": "CB",
+      "value": 16.5
+     },
+     {
+      "name": "Víctor Muñoz",
+      "rating": 80,
+      "age": 23,
+      "potential": 81,
+      "pos": "LW",
+      "value": 16.5
+     },
+     {
+      "name": "Virgil van Dijk",
+      "rating": 85,
+      "age": 35,
+      "potential": 85,
+      "pos": "CB",
+      "value": 14.3
+     },
+     {
+      "name": "Alisson",
+      "rating": 84,
+      "age": 34,
+      "potential": 84,
+      "pos": "GK",
+      "value": 13.5
+     },
+     {
+      "name": "Federico Chiesa",
+      "rating": 79,
+      "age": 29,
+      "potential": 79,
+      "pos": "RW",
+      "value": 12
+     },
+     {
+      "name": "Joe Gomez",
+      "rating": 79,
+      "age": 29,
+      "potential": 80,
+      "pos": "CB",
+      "value": 12
+     },
+     {
+      "name": "Konstantinos Tsimikas",
+      "rating": 77,
+      "age": 30,
+      "potential": 77,
+      "pos": "LB",
+      "value": 6.8
+     },
+     {
+      "name": "Trey Nyoni",
+      "rating": 69,
+      "age": 19,
+      "potential": 80,
+      "pos": "CM",
+      "value": 4.5
+     },
+     {
+      "name": "Wataru Endo",
+      "rating": 75,
+      "age": 33,
+      "potential": 75,
+      "pos": "CDM",
+      "value": 3.2
+     },
+     {
+      "name": "Freddie Woodman",
+      "rating": 70,
+      "age": 29,
+      "potential": 71,
+      "pos": "GK",
+      "value": 2.3
+     },
+     {
+      "name": "Lewis Koumas",
+      "rating": 67,
+      "age": 21,
+      "potential": 76,
+      "pos": "LW",
+      "value": 2.3
+     }
+    ]
+   },
+   "marketText": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nLiverpool\n2026-27 · Season 1\nSeason not started\n£137m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Summer window OPEN\n4 match weeks until the deadline · offers can arrive any week · loans used 0/2\nBUDGET\n£137m\nAROUND THE LEAGUE\n📰 Chelsea sign Lautaro Martínez from Inter Milan for £74m.\n📰 Crystal Palace sign Martín Zubimendi from Arsenal for £62m.\n📰 Barcelona sign Omar Marmoush from Tottenham for £52m.\n📰 Borussia Dortmund sign Karim Adeyemi from Barcelona for £41m.\n📰 Real Madrid sign Lamine Yamal from Barcelona for £185m.\n📰 💰 The window's biggest deal so far: Lamine Yamal to Real Madrid for £185m.\nBuy\nSell\n1\nLatest\nALL\nGK\nDEF\nMID\nATT\nExact position…\nGK\nCB\nLB\nRB\nLWB\nRWB\nCDM\nCM\nCAM\nLM\nRM\nLW\nRW\nST\nCF\nAny age\nU21\nU24\nU28\n29 plus\nAny price\nUnder 10m\nUnder 25m\nUnder 60m\nAny league\n2. Bundesliga\nA-League Men\nAustrian Bundesliga\nBelgian Pro League\nBrasileirão Série A\nBundesliga\nDanish Superliga\nEFL Championship\nEredivisie\nLa Liga\nLiga MX\nLigue 1\nLigue 2\nMLS Eastern Conference\nMLS Western Conference\nPremier League\nPrimeira Liga\nRussian Premier League\nSaudi Pro League\nScottish Premiership\nSegunda División\nSerie A\nSerie B\nSuper League Greece\nSuperSport HNL\nSwiss Super League\nSüper Lig\nAny nation\nSpain (325)\nEngland (300)\nFrance (288)\nRussia (275)\nGermany (252)\nItaly (205)\nNetherlands (148)\nPortugal (144)\nBelgium (122)\nDenmark (111)\nSwitzerland (81)\nTürkiye (77)\nCroatia (71)\nAustria (67)\nSweden (61)\nSerbia (56)\nNorway (55)\nScotland (48)\nPoland (47)\nIreland (45)\nGreece (37)\nBosnia-Herzegovina (29)\nCzech Republic (25)\nAlbania (23)\nWales (23)\nKosovo (19)\nRomania (18)\nUkraine (18)\nIceland (17)\nSlovakia (17)\nFinland (14)\nSlovenia (13)\nHungary (12)\nGeorgia (11)\nIsrael (11)\nBulgaria (10)\nMontenegro (8)\nNorthern Ireland (7)\nBelarus (6)\nKazakhstan (6)\nArmenia (5)\nLuxembourg (5)\nMalta (5)\nNorth Macedonia (5)\nEstonia (1)\nLatvia (1)\nLithuania (1)\nMoldova (1)\nBrazil (349)\nArgentina (162)\nColombia (67)\nUruguay (67)\nEcuador (26)\nParaguay (23)\nChile (19)\nVenezuela (12)\nPeru (4)\nBolivia (2)\nMexico (115)\nUnited States (113)\nCanada (28)\nSuriname (11)\nJamaica (9)\nHaiti (6)\nPanama (6)\nCosta Rica (4)\nCuracao (4)\nHonduras (4)\nDominican Republic (2)\nEl Salvador (2)\nGuadeloupe (2)\nGuyana (2)\nMartinique (2)\nGuatemala (1)\nTrinidad and Tobago (1)\nMorocco (70)\nCote d'Ivoire (67)\nSenegal (56)\nNigeria (47)\nGhana (41)\nAlgeria (30)\nMali (29)\nCameroon (27)\nDR Congo (25)\nTunisia (12)\nAngola (11)\nGuinea (11)\nBurkina Faso (10)\nCape Verde (10)\nThe Gambia (7)\nGabon (5)\nGuinea-Bissau (5)\nTogo (5)\nZambia (5)\nComoros (3)\nCongo (3)\nEgypt (3)\nMauritania (3)\nSouth Africa (3)\nZimbabwe (3)\nBenin (2)\nBurundi (2)\nMozambique (2)\nSierra Leone (2)\nCentral African Republic (1)\nChad (1)\nEquatorial Guinea (1)\nKenya (1)\nMadagascar (1)\nTanzania (1)\nAustralia (222)\nJapan (63)\nKorea, South (15)\nSaudi Arabia (10)\nIndonesia (9)\nUzbekistan (5)\nIraq (3)\nIran (2)\nJordan (1)\nLebanon (1)\nPalestine (1)\nPhilippines (1)\nTajikistan (1)\nYemen (1)\nNew Zealand (43)\nNew Caledonia (1)\nVanuatu (1)\nNiger (2)\nSouthern Sudan (1)\nTurkmenistan (1)\nBest first\nPriciest first\nYoungest first\nCheapest first\nST\nErling Haaland\nManchester City · 26y · worth £162m\n94\nTalk · £178.2m\nST\nKylian Mbappé\nReal Madrid · 27y · worth £162m\n94\nTalk · £178.2m\nRW\nMichael Olise\nBayern Munich · 24y · worth £113.3m\n92\nTalk · £124.6m\n£268.5m\nLW\nVinicius Junior\nReal Madrid · 26y · worth £121.5m\n92\nTalk · £133.7m\n£253.9m\nCDM\nVitinha\nPSG · 26y · worth £113.4m\n92\nTalk · £124.7m\nRW\nBukayo Saka\nArsenal · 24y · worth £97.5m\n91\nTalk · £107.3m\nCAM\nCole Palmer\nChelsea · 24y · worth £89.3m\n91\nTalk · £98.2m\nCM\nDeclan Rice\nArsenal · 27y · worth £97.5m\n91\nTalk · £107.3m\nCM\nFederico Valverde\nReal Madrid · 28y · worth £97.5m\n91\nTalk · £107.3m\nST\nHarry Kane\nBayern Munich · 33y · worth £52.5m\n91\nTalk · £47.3m\nCAM\nJude Bellingham\nReal Madrid · 23y · worth £113.3m\n91\nTalk · £141.6m\nCM\nPedri\nBarcelona · 23y · worth £121.5m\n91\nTalk · £151.9m\n£232.1m\nCM\nEnzo Fernández\nManchester City · 25y · worth £72.8m\n90\nTalk · £80.1m\nCAM\nJamal Musiala\nBayern Munich · 23y · worth £97.5m\n90\nTalk · £121.9m\nCM\nJoão Neves\nPSG · 22y · worth £89.3m\n90\nTalk · £111.6m\nST\nJulián Alvarez\nAtlético Madrid · 26y · worth £72.8m\n90\nTalk · £80.1m\nLW\nKhvicha Kvaratskhelia\nPSG · 25y · worth £72.8m\n90\nTalk · £80.1m\n£125.2m\nCDM\nMoisés Caicedo\nChelsea · 24y · worth £81m\n90\nTalk · £89.1m\nST\nOusmane Dembélé\nPSG · 29y · worth £81m\n90\nTalk · £89.1m\n£184.7m\nCDM\nRodri\nBarcelona · 30y · worth £67.5m\n90\nTalk · £60.8m\nCB\nWilliam Saliba\nArsenal · 25y · worth £72.8m\n90\nTalk · £80.1m\nRB\nAchraf Hakimi\nPSG · 28y · worth £64.5m\n89\nTalk · £71m\n£121.9m\nRW\nAntoine Semenyo\nManchester City · 26y · worth £60.8m\n89\nTalk · £66.9m\n£150.8m\nCDM\nAurélien Tchouaméni\nReal Madrid · 26y · worth £60.8m\n89\nTalk · £66.9m\nCM\nBruno Guimarães\nArsenal · 29y · worth £60.8m\n89\nTalk · £66.9m\n£127.7m\nRW\nBryan Mbeumo\nManchester United · 27y · worth £64.5m\n89\nTalk · £71m\nCAM\nFermín López\nBarcelona · 23y · worth £81m\n89\nTalk · £101.",
+   "marketButtons": [
+    "Back",
+    "Track stats",
+    "Managers",
+    "Board Safe",
+    "Fans Hopeful",
+    "Home",
+    "Squad",
+    "Tactics",
+    "Table",
+    "Market",
+    "Buy",
+    "Sell 1",
+    "Latest",
+    "ALL",
+    "GK",
+    "DEF",
+    "MID",
+    "ATT",
+    "Talk · £178.2m",
+    "Talk · £178.2m",
+    "Talk · £124.6m",
+    "£268.5m",
+    "Talk · £133.7m",
+    "£253.9m",
+    "Talk · £124.7m",
+    "Talk · £107.3m",
+    "Talk · £98.2m",
+    "Talk · £107.3m",
+    "Talk · £107.3m",
+    "Talk · £47.3m",
+    "Talk · £141.6m",
+    "Talk · £151.9m",
+    "£232.1m",
+    "Talk · £80.1m",
+    "Talk · £121.9m",
+    "Talk · £111.6m",
+    "Talk · £80.1m",
+    "Talk · £80.1m",
+    "£125.2m",
+    "Talk · £89.1m",
+    "Talk · £89.1m",
+    "£184.7m",
+    "Talk · £60.8m",
+    "Talk · £80.1m",
+    "Talk · £71m",
+    "£121.9m",
+    "Talk · £66.9m",
+    "£150.8m",
+    "Talk · £66.9m",
+    "Talk · £66.9m",
+    "£127.7m",
+    "Talk · £71m",
+    "Talk · £101.3m",
+    "£199.3m",
+    "Talk · £66.9m",
+    "£106.4m",
+    "Talk · £66.9m",
+    "Talk · £71m",
+    "Talk · £66.9m",
+    "Talk · £71m"
+   ],
+   "errors": []
+  },
+  {
+   "tag": "now-1280-motion",
+   "club": "Liverpool",
+   "era": "2026-27",
+   "rows": [
+    {
+     "name": "Alexander Isak",
+     "cut": false,
+     "rating": "90",
+     "age": "26",
+     "pot": "91-93",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 84
+    },
+    {
+     "name": "Dominik Szoboszlai",
+     "cut": false,
+     "rating": "90",
+     "age": "25",
+     "pot": "90-94",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 112
+    },
+    {
+     "name": "Florian Wirtz",
+     "cut": false,
+     "rating": "90",
+     "age": "23",
+     "pot": "91-95",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 73
+    },
+    {
+     "name": "Hugo Ekitiké",
+     "cut": false,
+     "rating": "90",
+     "age": "24",
+     "pot": "90-93",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 71
+    },
+    {
+     "name": "Alexis Mac Allister",
+     "cut": false,
+     "rating": "89",
+     "age": "27",
+     "pot": "90-92",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 104
+    },
+    {
+     "name": "Ryan Gravenberch",
+     "cut": false,
+     "rating": "89",
+     "age": "24",
+     "pot": "89-92",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 107
+    },
+    {
+     "name": "Cody Gakpo",
+     "cut": false,
+     "rating": "88",
+     "age": "27",
+     "pot": "88-90",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 70
+    },
+    {
+     "name": "Bradley Barcola",
+     "cut": false,
+     "rating": "87",
+     "age": "23",
+     "pot": "87-90",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 91
+    },
+    {
+     "name": "Virgil van Dijk",
+     "cut": false,
+     "rating": "85",
+     "age": "35",
+     "pot": "85-87",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 78
+    },
+    {
+     "name": "Alisson",
+     "cut": false,
+     "rating": "84",
+     "age": "34",
+     "pot": "84-86",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 40
+    },
+    {
+     "name": "Jeremie Frimpong",
+     "cut": false,
+     "rating": "84",
+     "age": "26",
+     "pot": "84-86",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 104
+    },
+    {
+     "name": "Jérémy Jacquet",
+     "cut": false,
+     "rating": "84",
+     "age": "21",
+     "pot": "84-88",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 93
+    },
+    {
+     "name": "Milos Kerkez",
+     "cut": false,
+     "rating": "84",
+     "age": "23",
+     "pot": "85-89",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 74
+    },
+    {
+     "name": "Giorgi Mamardashvili",
+     "cut": false,
+     "rating": "83",
+     "age": "26",
+     "pot": "84-86",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 121
+    },
+    {
+     "name": "Conor Bradley",
+     "cut": false,
+     "rating": "82",
+     "age": "23",
+     "pot": "84-88",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 82
+    },
+    {
+     "name": "Ronald Araujo",
+     "cut": false,
+     "rating": "81",
+     "age": "27",
+     "pot": "82-84",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 79
+    },
+    {
+     "name": "Víctor Muñoz",
+     "cut": false,
+     "rating": "80",
+     "age": "23",
+     "pot": "82-86",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 76
+    },
+    {
+     "name": "Federico Chiesa",
+     "cut": false,
+     "rating": "79",
+     "age": "29",
+     "pot": "79-81",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 92
+    },
+    {
+     "name": "Joe Gomez",
+     "cut": false,
+     "rating": "79",
+     "age": "29",
+     "pot": "79-81",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 65
+    },
+    {
+     "name": "Giovanni Leoni",
+     "cut": false,
+     "rating": "78",
+     "age": "20",
+     "pot": "83-88",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 84
+    },
+    {
+     "name": "Konstantinos Tsimikas",
+     "cut": false,
+     "rating": "77",
+     "age": "30",
+     "pot": "77-79",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 126
+    },
+    {
+     "name": "Rio Ngumoha",
+     "cut": false,
+     "rating": "75",
+     "age": "18",
+     "pot": "78-83",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 76
+    },
+    {
+     "name": "Wataru Endo",
+     "cut": false,
+     "rating": "75",
+     "age": "33",
+     "pot": "75-77",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 72
+    },
+    {
+     "name": "Freddie Woodman",
+     "cut": false,
+     "rating": "70",
+     "age": "29",
+     "pot": "70-72",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 103
+    },
+    {
+     "name": "Trey Nyoni",
+     "cut": false,
+     "rating": "69",
+     "age": "19",
+     "pot": "86-91",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 62
+    },
+    {
+     "name": "Lewis Koumas",
+     "cut": false,
+     "rating": "67",
+     "age": "21",
+     "pot": "70-75",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 82
+    }
+   ],
+   "mismatches": [],
+   "notes": [
+    "no free agent button on the market"
+   ],
+   "saved": {
+    "club": "Liverpool",
+    "eraId": "now",
+    "squad": [
+     {
+      "name": "Florian Wirtz",
+      "rating": 90,
+      "age": 23,
+      "potential": 92,
+      "pos": "CAM",
+      "value": 89.3
+     },
+     {
+      "name": "Alexander Isak",
+      "rating": 90,
+      "age": 26,
+      "potential": 92,
+      "pos": "ST",
+      "value": 81
+     },
+     {
+      "name": "Dominik Szoboszlai",
+      "rating": 90,
+      "age": 25,
+      "potential": 94,
+      "pos": "CAM",
+      "value": 81
+     },
+     {
+      "name": "Hugo Ekitiké",
+      "rating": 90,
+      "age": 24,
+      "potential": 92,
+      "pos": "ST",
+      "value": 72.8
+     },
+     {
+      "name": "Ryan Gravenberch",
+      "rating": 89,
+      "age": 24,
+      "potential": 91,
+      "pos": "CDM",
+      "value": 64.8
+     },
+     {
+      "name": "Alexis Mac Allister",
+      "rating": 89,
+      "age": 27,
+      "potential": 90,
+      "pos": "CM",
+      "value": 64.5
+     },
+     {
+      "name": "Bradley Barcola",
+      "rating": 87,
+      "age": 23,
+      "potential": 90,
+      "pos": "LW",
+      "value": 57
+     },
+     {
+      "name": "Cody Gakpo",
+      "rating": 88,
+      "age": 27,
+      "potential": 88,
+      "pos": "LW",
+      "value": 52.5
+     },
+     {
+      "name": "Jérémy Jacquet",
+      "rating": 84,
+      "age": 21,
+      "potential": 87,
+      "pos": "CB",
+      "value": 44.3
+     },
+     {
+      "name": "Milos Kerkez",
+      "rating": 84,
+      "age": 23,
+      "potential": 89,
+      "pos": "LB",
+      "value": 32.3
+     },
+     {
+      "name": "Jeremie Frimpong",
+      "rating": 84,
+      "age": 26,
+      "potential": 85,
+      "pos": "RB",
+      "value": 28.5
+     },
+     {
+      "name": "Conor Bradley",
+      "rating": 82,
+      "age": 23,
+      "potential": 87,
+      "pos": "RB",
+      "value": 24
+     },
+     {
+      "name": "Giorgi Mamardashvili",
+      "rating": 83,
+      "age": 26,
+      "potential": 85,
+      "pos": "GK",
+      "value": 22.5
+     },
+     {
+      "name": "Giovanni Leoni",
+      "rating": 78,
+      "age": 20,
+      "potential": 83,
+      "pos": "CB",
+      "value": 20.3
+     },
+     {
+      "name": "Rio Ngumoha",
+      "rating": 75,
+      "age": 18,
+      "potential": 79,
+      "pos": "LW",
+      "value": 16.5
+     },
+     {
+      "name": "Ronald Araujo",
+      "rating": 81,
+      "age": 27,
+      "potential": 83,
+      "pos": "CB",
+      "value": 16.5
+     },
+     {
+      "name": "Víctor Muñoz",
+      "rating": 80,
+      "age": 23,
+      "potential": 85,
+      "pos": "LW",
+      "value": 16.5
+     },
+     {
+      "name": "Virgil van Dijk",
+      "rating": 85,
+      "age": 35,
+      "potential": 85,
+      "pos": "CB",
+      "value": 14.3
+     },
+     {
+      "name": "Alisson",
+      "rating": 84,
+      "age": 34,
+      "potential": 84,
+      "pos": "GK",
+      "value": 13.5
+     },
+     {
+      "name": "Federico Chiesa",
+      "rating": 79,
+      "age": 29,
+      "potential": 79,
+      "pos": "RW",
+      "value": 12
+     },
+     {
+      "name": "Joe Gomez",
+      "rating": 79,
+      "age": 29,
+      "potential": 80,
+      "pos": "CB",
+      "value": 12
+     },
+     {
+      "name": "Konstantinos Tsimikas",
+      "rating": 77,
+      "age": 30,
+      "potential": 77,
+      "pos": "LB",
+      "value": 6.8
+     },
+     {
+      "name": "Trey Nyoni",
+      "rating": 69,
+      "age": 19,
+      "potential": 89,
+      "pos": "CM",
+      "value": 4.5
+     },
+     {
+      "name": "Wataru Endo",
+      "rating": 75,
+      "age": 33,
+      "potential": 75,
+      "pos": "CDM",
+      "value": 3.2
+     },
+     {
+      "name": "Freddie Woodman",
+      "rating": 70,
+      "age": 29,
+      "potential": 71,
+      "pos": "GK",
+      "value": 2.3
+     },
+     {
+      "name": "Lewis Koumas",
+      "rating": 67,
+      "age": 21,
+      "potential": 72,
+      "pos": "LW",
+      "value": 2.3
+     }
+    ]
+   },
+   "marketText": "Skip to main content\nLIVE\nLive scores temporarily unavailable\nDOUKNOWBALL\nBack\nSign up to track your stats\nLiverpool\n2026-27 · Season 1\nSeason not started\n£137m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Summer window OPEN\n4 match weeks until the deadline · offers can arrive any week · loans used 0/2\nBUDGET\n£137m\nAROUND THE LEAGUE\n📰 Nottingham Forest sign Malick Thiaw from Newcastle for £39m.\n📰 Bournemouth sign Martin Ødegaard from Arsenal for £59m.\n📰 Arsenal sign Pedri from Barcelona for £165m.\n📰 Chelsea sign Raphinha from Barcelona for £72m.\n📰 Arsenal sign Enzo Fernández from Manchester City for £78m.\n📰 💰 The window's biggest deal so far: Pedri to Arsenal for £165m.\nBuy\nSell\nLatest\nALL\nGK\nDEF\nMID\nATT\nExact position…\nGK\nCB\nLB\nRB\nLWB\nRWB\nCDM\nCM\nCAM\nLM\nRM\nLW\nRW\nST\nCF\nAny age\nU21\nU24\nU28\n29 plus\nAny price\nUnder 10m\nUnder 25m\nUnder 60m\nAny league\n2. Bundesliga\nA-League Men\nAustrian Bundesliga\nBelgian Pro League\nBrasileirão Série A\nBundesliga\nDanish Superliga\nEFL Championship\nEredivisie\nLa Liga\nLiga MX\nLigue 1\nLigue 2\nMLS Eastern Conference\nMLS Western Conference\nPremier League\nPrimeira Liga\nRussian Premier League\nSaudi Pro League\nScottish Premiership\nSegunda División\nSerie A\nSerie B\nSuper League Greece\nSuperSport HNL\nSwiss Super League\nSüper Lig\nAny nation\nSpain (326)\nEngland (300)\nFrance (288)\nRussia (275)\nGermany (252)\nItaly (205)\nNetherlands (148)\nPortugal (144)\nBelgium (122)\nDenmark (111)\nSwitzerland (81)\nTürkiye (77)\nCroatia (71)\nAustria (67)\nSweden (61)\nSerbia (56)\nNorway (54)\nScotland (48)\nPoland (47)\nIreland (45)\nGreece (37)\nBosnia-Herzegovina (29)\nCzech Republic (25)\nAlbania (23)\nWales (23)\nKosovo (19)\nRomania (18)\nUkraine (18)\nIceland (17)\nSlovakia (17)\nFinland (14)\nSlovenia (13)\nHungary (12)\nGeorgia (11)\nIsrael (11)\nBulgaria (10)\nMontenegro (8)\nNorthern Ireland (7)\nBelarus (6)\nKazakhstan (6)\nArmenia (5)\nLuxembourg (5)\nMalta (5)\nNorth Macedonia (5)\nEstonia (1)\nLatvia (1)\nLithuania (1)\nMoldova (1)\nBrazil (348)\nArgentina (162)\nColombia (67)\nUruguay (67)\nEcuador (26)\nParaguay (23)\nChile (19)\nVenezuela (12)\nPeru (4)\nBolivia (2)\nMexico (115)\nUnited States (113)\nCanada (28)\nSuriname (11)\nJamaica (9)\nHaiti (6)\nPanama (6)\nCosta Rica (4)\nCuracao (4)\nHonduras (4)\nDominican Republic (2)\nEl Salvador (2)\nGuadeloupe (2)\nGuyana (2)\nMartinique (2)\nGuatemala (1)\nTrinidad and Tobago (1)\nMorocco (70)\nCote d'Ivoire (67)\nSenegal (56)\nNigeria (47)\nGhana (41)\nAlgeria (30)\nMali (29)\nCameroon (27)\nDR Congo (25)\nTunisia (12)\nAngola (11)\nGuinea (11)\nBurkina Faso (10)\nCape Verde (10)\nThe Gambia (7)\nGabon (5)\nGuinea-Bissau (5)\nTogo (5)\nZambia (5)\nEgypt (4)\nComoros (3)\nCongo (3)\nMauritania (3)\nSouth Africa (3)\nZimbabwe (3)\nBenin (2)\nBurundi (2)\nMozambique (2)\nSierra Leone (2)\nCentral African Republic (1)\nChad (1)\nEquatorial Guinea (1)\nKenya (1)\nMadagascar (1)\nTanzania (1)\nAustralia (222)\nJapan (63)\nKorea, South (15)\nSaudi Arabia (10)\nIndonesia (9)\nUzbekistan (5)\nIraq (3)\nIran (2)\nJordan (1)\nLebanon (1)\nPalestine (1)\nPhilippines (1)\nTajikistan (1)\nYemen (1)\nNew Zealand (43)\nNew Caledonia (1)\nVanuatu (1)\nNiger (2)\nSouthern Sudan (1)\nTurkmenistan (1)\nBest first\nPriciest first\nYoungest first\nCheapest first\nST\nErling Haaland\nManchester City · 26y · worth £162m\n94\nTalk · £178.2m\nST\nKylian Mbappé\nReal Madrid · 27y · worth £162m\n94\nTalk · £178.2m\nRW\nLamine Yamal\nBarcelona · 19y · worth £162m\n94\nTalk · £202.5m\n£377.5m\nRW\nMichael Olise\nBayern Munich · 24y · worth £113.3m\n92\nTalk · £124.6m\n£268.5m\nLW\nVinicius Junior\nReal Madrid · 26y · worth £121.5m\n92\nTalk · £133.7m\n£253.9m\nCDM\nVitinha\nPSG · 26y · worth £113.4m\n92\nTalk · £124.7m\nRW\nBukayo Saka\nArsenal · 24y · worth £97.5m\n91\nTalk · £107.3m\nCAM\nCole Palmer\nChelsea · 24y · worth £89.3m\n91\nTalk · £98.2m\nCM\nDeclan Rice\nArsenal · 27y · worth £97.5m\n91\nTalk · £107.3m\nCM\nFederico Valverde\nReal Madrid · 28y · worth £97.5m\n91\nTalk · £107.3m\nST\nHarry Kane\nBayern Munich · 33y · worth £52.5m\n91\nTalk · £47.3m\nCAM\nJude Bellingham\nReal Madrid · 23y · worth £113.3m\n91\nTalk · £141.6m\nCAM\nJamal Musiala\nBayern Munich · 23y · worth £97.5m\n90\nTalk · £121.9m\nCM\nJoão Neves\nPSG · 22y · worth £89.3m\n90\nTalk · £111.6m\nST\nJulián Alvarez\nAtlético Madrid · 26y · worth £72.8m\n90\nTalk · £80.1m\nLW\nKhvicha Kvaratskhelia\nPSG · 25y · worth £72.8m\n90\nTalk · £80.1m\n£125.2m\nCDM\nMoisés Caicedo\nChelsea · 24y · worth £81m\n90\nTalk · £89.1m\nST\nOusmane Dembélé\nPSG · 29y · worth £81m\n90\nTalk · £89.1m\n£184.7m\nCDM\nRodri\nBarcelona · 30y · worth £67.5m\n90\nTalk · £60.8m\nCB\nWilliam Saliba\nArsenal · 25y · worth £72.8m\n90\nTalk · £80.1m\nRB\nAchraf Hakimi\nPSG · 28y · worth £64.5m\n89\nTalk · £71m\n£121.9m\nRW\nAntoine Semenyo\nManchester City · 26y · worth £60.8m\n89\nTalk · £66.9m\n£150.8m\nCDM\nAurélien Tchouaméni\nReal Madrid · 26y · worth £60.8m\n89\nTalk · £66.9m\nCM\nBruno Guimarães\nArsenal · 29y · worth £60.8m\n89\nTalk · £66.9m\n£127.7m\nRW\nBryan Mbeumo\nManchester United · 27y · worth £64.5m\n89\nTalk · £71m\nCAM\nFermín López\nBarcelona · 23y · worth £81m\n89\nTalk · £101.3m\n£199.3m\nCB\nGabriel\nArsenal · 29y · worth ",
+   "marketButtons": [
+    "Back",
+    "Sign up to track your stats",
+    "Managers",
+    "Board Safe",
+    "Fans Hopeful",
+    "Home",
+    "Squad",
+    "Tactics",
+    "Table",
+    "Market",
+    "Buy",
+    "Sell",
+    "Latest",
+    "ALL",
+    "GK",
+    "DEF",
+    "MID",
+    "ATT",
+    "Talk · £178.2m",
+    "Talk · £178.2m",
+    "Talk · £202.5m",
+    "£377.5m",
+    "Talk · £124.6m",
+    "£268.5m",
+    "Talk · £133.7m",
+    "£253.9m",
+    "Talk · £124.7m",
+    "Talk · £107.3m",
+    "Talk · £98.2m",
+    "Talk · £107.3m",
+    "Talk · £107.3m",
+    "Talk · £47.3m",
+    "Talk · £141.6m",
+    "Talk · £121.9m",
+    "Talk · £111.6m",
+    "Talk · £80.1m",
+    "Talk · £80.1m",
+    "£125.2m",
+    "Talk · £89.1m",
+    "Talk · £89.1m",
+    "£184.7m",
+    "Talk · £60.8m",
+    "Talk · £80.1m",
+    "Talk · £71m",
+    "£121.9m",
+    "Talk · £66.9m",
+    "£150.8m",
+    "Talk · £66.9m",
+    "Talk · £66.9m",
+    "£127.7m",
+    "Talk · £71m",
+    "Talk · £101.3m",
+    "£199.3m",
+    "Talk · £66.9m",
+    "£106.4m",
+    "Talk · £66.9m",
+    "Talk · £75.9m",
+    "£120.1m",
+    "Talk · £66.9m",
+    "Talk · £71m"
+   ],
+   "errors": []
+  },
+  {
+   "tag": "now-1280-rm",
+   "club": "Liverpool",
+   "era": "2026-27",
+   "rows": [
+    {
+     "name": "Alexander Isak",
+     "cut": false,
+     "rating": "90",
+     "age": "26",
+     "pot": "91-93",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 84
+    },
+    {
+     "name": "Dominik Szoboszlai",
+     "cut": false,
+     "rating": "90",
+     "age": "25",
+     "pot": "90-94",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 112
+    },
+    {
+     "name": "Florian Wirtz",
+     "cut": false,
+     "rating": "90",
+     "age": "23",
+     "pot": "91-95",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 73
+    },
+    {
+     "name": "Hugo Ekitiké",
+     "cut": false,
+     "rating": "90",
+     "age": "24",
+     "pot": "91-95",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 71
+    },
+    {
+     "name": "Alexis Mac Allister",
+     "cut": false,
+     "rating": "89",
+     "age": "27",
+     "pot": "90-92",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 104
+    },
+    {
+     "name": "Ryan Gravenberch",
+     "cut": false,
+     "rating": "89",
+     "age": "24",
+     "pot": "90-94",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 107
+    },
+    {
+     "name": "Cody Gakpo",
+     "cut": false,
+     "rating": "88",
+     "age": "27",
+     "pot": "89-91",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 70
+    },
+    {
+     "name": "Bradley Barcola",
+     "cut": false,
+     "rating": "87",
+     "age": "23",
+     "pot": "87-89",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 91
+    },
+    {
+     "name": "Virgil van Dijk",
+     "cut": false,
+     "rating": "85",
+     "age": "35",
+     "pot": "85-87",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 78
+    },
+    {
+     "name": "Alisson",
+     "cut": false,
+     "rating": "84",
+     "age": "34",
+     "pot": "84-86",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 40
+    },
+    {
+     "name": "Jeremie Frimpong",
+     "cut": false,
+     "rating": "84",
+     "age": "26",
+     "pot": "84-86",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 104
+    },
+    {
+     "name": "Jérémy Jacquet",
+     "cut": false,
+     "rating": "84",
+     "age": "21",
+     "pot": "84-88",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 93
+    },
+    {
+     "name": "Milos Kerkez",
+     "cut": false,
+     "rating": "84",
+     "age": "23",
+     "pot": "84-86",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 74
+    },
+    {
+     "name": "Giorgi Mamardashvili",
+     "cut": false,
+     "rating": "83",
+     "age": "26",
+     "pot": "83-85",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 121
+    },
+    {
+     "name": "Conor Bradley",
+     "cut": false,
+     "rating": "82",
+     "age": "23",
+     "pot": "83-87",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 82
+    },
+    {
+     "name": "Ronald Araujo",
+     "cut": false,
+     "rating": "81",
+     "age": "27",
+     "pot": "81-83",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 79
+    },
+    {
+     "name": "Víctor Muñoz",
+     "cut": false,
+     "rating": "80",
+     "age": "23",
+     "pot": "80-84",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 76
+    },
+    {
+     "name": "Federico Chiesa",
+     "cut": false,
+     "rating": "79",
+     "age": "29",
+     "pot": "79-81",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 92
+    },
+    {
+     "name": "Joe Gomez",
+     "cut": false,
+     "rating": "79",
+     "age": "29",
+     "pot": "79-81",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 65
+    },
+    {
+     "name": "Giovanni Leoni",
+     "cut": false,
+     "rating": "78",
+     "age": "20",
+     "pot": "84-89",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 84
+    },
+    {
+     "name": "Konstantinos Tsimikas",
+     "cut": false,
+     "rating": "77",
+     "age": "30",
+     "pot": "77-79",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 126
+    },
+    {
+     "name": "Rio Ngumoha",
+     "cut": false,
+     "rating": "75",
+     "age": "18",
+     "pot": "85-90",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 76
+    },
+    {
+     "name": "Wataru Endo",
+     "cut": false,
+     "rating": "75",
+     "age": "33",
+     "pot": "75-77",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 72
+    },
+    {
+     "name": "Freddie Woodman",
+     "cut": false,
+     "rating": "70",
+     "age": "29",
+     "pot": "70-72",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 103
+    },
+    {
+     "name": "Trey Nyoni",
+     "cut": false,
+     "rating": "69",
+     "age": "19",
+     "pot": "76-81",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 62
+    },
+    {
+     "name": "Lewis Koumas",
+     "cut": false,
+     "rating": "67",
+     "age": "21",
+     "pot": "78-83",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 82
+    }
+   ],
+   "mismatches": [],
+   "notes": [
+    "no free agent button on the market"
+   ],
+   "saved": {
+    "club": "Liverpool",
+    "eraId": "now",
+    "squad": [
+     {
+      "name": "Florian Wirtz",
+      "rating": 90,
+      "age": 23,
+      "potential": 92,
+      "pos": "CAM",
+      "value": 89.3
+     },
+     {
+      "name": "Alexander Isak",
+      "rating": 90,
+      "age": 26,
+      "potential": 92,
+      "pos": "ST",
+      "value": 81
+     },
+     {
+      "name": "Dominik Szoboszlai",
+      "rating": 90,
+      "age": 25,
+      "potential": 94,
+      "pos": "CAM",
+      "value": 81
+     },
+     {
+      "name": "Hugo Ekitiké",
+      "rating": 90,
+      "age": 24,
+      "potential": 94,
+      "pos": "ST",
+      "value": 72.8
+     },
+     {
+      "name": "Ryan Gravenberch",
+      "rating": 89,
+      "age": 24,
+      "potential": 93,
+      "pos": "CDM",
+      "value": 64.8
+     },
+     {
+      "name": "Alexis Mac Allister",
+      "rating": 89,
+      "age": 27,
+      "potential": 90,
+      "pos": "CM",
+      "value": 64.5
+     },
+     {
+      "name": "Bradley Barcola",
+      "rating": 87,
+      "age": 23,
+      "potential": 89,
+      "pos": "LW",
+      "value": 57
+     },
+     {
+      "name": "Cody Gakpo",
+      "rating": 88,
+      "age": 27,
+      "potential": 89,
+      "pos": "LW",
+      "value": 52.5
+     },
+     {
+      "name": "Jérémy Jacquet",
+      "rating": 84,
+      "age": 21,
+      "potential": 87,
+      "pos": "CB",
+      "value": 44.3
+     },
+     {
+      "name": "Milos Kerkez",
+      "rating": 84,
+      "age": 23,
+      "potential": 86,
+      "pos": "LB",
+      "value": 32.3
+     },
+     {
+      "name": "Jeremie Frimpong",
+      "rating": 84,
+      "age": 26,
+      "potential": 85,
+      "pos": "RB",
+      "value": 28.5
+     },
+     {
+      "name": "Conor Bradley",
+      "rating": 82,
+      "age": 23,
+      "potential": 86,
+      "pos": "RB",
+      "value": 24
+     },
+     {
+      "name": "Giorgi Mamardashvili",
+      "rating": 83,
+      "age": 26,
+      "potential": 84,
+      "pos": "GK",
+      "value": 22.5
+     },
+     {
+      "name": "Giovanni Leoni",
+      "rating": 78,
+      "age": 20,
+      "potential": 84,
+      "pos": "CB",
+      "value": 20.3
+     },
+     {
+      "name": "Rio Ngumoha",
+      "rating": 75,
+      "age": 18,
+      "potential": 86,
+      "pos": "LW",
+      "value": 16.5
+     },
+     {
+      "name": "Ronald Araujo",
+      "rating": 81,
+      "age": 27,
+      "potential": 81,
+      "pos": "CB",
+      "value": 16.5
+     },
+     {
+      "name": "Víctor Muñoz",
+      "rating": 80,
+      "age": 23,
+      "potential": 83,
+      "pos": "LW",
+      "value": 16.5
+     },
+     {
+      "name": "Virgil van Dijk",
+      "rating": 85,
+      "age": 35,
+      "potential": 85,
+      "pos": "CB",
+      "value": 14.3
+     },
+     {
+      "name": "Alisson",
+      "rating": 84,
+      "age": 34,
+      "potential": 84,
+      "pos": "GK",
+      "value": 13.5
+     },
+     {
+      "name": "Federico Chiesa",
+      "rating": 79,
+      "age": 29,
+      "potential": 79,
+      "pos": "RW",
+      "value": 12
+     },
+     {
+      "name": "Joe Gomez",
+      "rating": 79,
+      "age": 29,
+      "potential": 79,
+      "pos": "CB",
+      "value": 12
+     },
+     {
+      "name": "Konstantinos Tsimikas",
+      "rating": 77,
+      "age": 30,
+      "potential": 77,
+      "pos": "LB",
+      "value": 6.8
+     },
+     {
+      "name": "Trey Nyoni",
+      "rating": 69,
+      "age": 19,
+      "potential": 79,
+      "pos": "CM",
+      "value": 4.5
+     },
+     {
+      "name": "Wataru Endo",
+      "rating": 75,
+      "age": 33,
+      "potential": 75,
+      "pos": "CDM",
+      "value": 3.2
+     },
+     {
+      "name": "Freddie Woodman",
+      "rating": 70,
+      "age": 29,
+      "potential": 71,
+      "pos": "GK",
+      "value": 2.3
+     },
+     {
+      "name": "Lewis Koumas",
+      "rating": 67,
+      "age": 21,
+      "potential": 80,
+      "pos": "LW",
+      "value": 2.3
+     }
+    ]
+   },
+   "marketText": "Skip to main content\nLIVE\nLive scores temporarily unavailable\nDOUKNOWBALL\nBack\nSign up to track your stats\nLiverpool\n2026-27 · Season 1\nSeason not started\n£137m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Summer window OPEN\n4 match weeks until the deadline · offers can arrive any week · loans used 0/2\nBUDGET\n£137m\nAROUND THE LEAGUE\n📰 Brentford sign Victor Osimhen from Galatasaray for £62m.\n📰 Everton sign Álex Baena from Atlético Madrid for £39m.\n📰 Chelsea sign Martin Ødegaard from Arsenal for £53m.\n📰 Fulham sign Kaishu Sano from Mainz for £51m.\n📰 Manchester United sign Bruno Guimarães from Arsenal for £74m.\n📰 💰 The window's biggest deal so far: Bruno Guimarães to Manchester United for £74m.\nBuy\nSell\n1\nLatest\nALL\nGK\nDEF\nMID\nATT\nExact position…\nGK\nCB\nLB\nRB\nLWB\nRWB\nCDM\nCM\nCAM\nLM\nRM\nLW\nRW\nST\nCF\nAny age\nU21\nU24\nU28\n29 plus\nAny price\nUnder 10m\nUnder 25m\nUnder 60m\nAny league\n2. Bundesliga\nA-League Men\nAustrian Bundesliga\nBelgian Pro League\nBrasileirão Série A\nBundesliga\nDanish Superliga\nEFL Championship\nEredivisie\nLa Liga\nLiga MX\nLigue 1\nLigue 2\nMLS Eastern Conference\nMLS Western Conference\nPremier League\nPrimeira Liga\nRussian Premier League\nSaudi Pro League\nScottish Premiership\nSegunda División\nSerie A\nSerie B\nSuper League Greece\nSuperSport HNL\nSwiss Super League\nSüper Lig\nAny nation\nSpain (326)\nEngland (300)\nFrance (288)\nRussia (275)\nGermany (253)\nItaly (205)\nNetherlands (148)\nPortugal (144)\nBelgium (122)\nDenmark (111)\nSwitzerland (81)\nTürkiye (77)\nCroatia (71)\nAustria (67)\nSweden (61)\nSerbia (56)\nNorway (54)\nScotland (48)\nPoland (47)\nIreland (45)\nGreece (37)\nBosnia-Herzegovina (29)\nCzech Republic (25)\nAlbania (23)\nWales (23)\nKosovo (19)\nRomania (18)\nUkraine (18)\nIceland (17)\nSlovakia (17)\nFinland (14)\nSlovenia (13)\nHungary (12)\nGeorgia (11)\nIsrael (11)\nBulgaria (10)\nMontenegro (8)\nNorthern Ireland (7)\nBelarus (6)\nKazakhstan (6)\nArmenia (5)\nLuxembourg (5)\nMalta (5)\nNorth Macedonia (5)\nEstonia (1)\nLatvia (1)\nLithuania (1)\nMoldova (1)\nBrazil (348)\nArgentina (163)\nColombia (67)\nUruguay (67)\nEcuador (26)\nParaguay (23)\nChile (19)\nVenezuela (12)\nPeru (4)\nBolivia (2)\nMexico (115)\nUnited States (113)\nCanada (28)\nSuriname (11)\nJamaica (9)\nHaiti (6)\nPanama (6)\nCosta Rica (4)\nCuracao (4)\nHonduras (4)\nDominican Republic (2)\nEl Salvador (2)\nGuadeloupe (2)\nGuyana (2)\nMartinique (2)\nGuatemala (1)\nTrinidad and Tobago (1)\nMorocco (70)\nCote d'Ivoire (67)\nSenegal (56)\nNigeria (46)\nGhana (41)\nAlgeria (30)\nMali (29)\nCameroon (27)\nDR Congo (25)\nTunisia (12)\nAngola (11)\nGuinea (11)\nBurkina Faso (10)\nCape Verde (10)\nThe Gambia (7)\nGabon (5)\nGuinea-Bissau (5)\nTogo (5)\nZambia (5)\nEgypt (4)\nComoros (3)\nCongo (3)\nMauritania (3)\nSouth Africa (3)\nZimbabwe (3)\nBenin (2)\nBurundi (2)\nMozambique (2)\nSierra Leone (2)\nCentral African Republic (1)\nChad (1)\nEquatorial Guinea (1)\nKenya (1)\nMadagascar (1)\nTanzania (1)\nAustralia (222)\nJapan (62)\nKorea, South (15)\nSaudi Arabia (10)\nIndonesia (9)\nUzbekistan (5)\nIraq (3)\nIran (2)\nJordan (1)\nLebanon (1)\nPalestine (1)\nPhilippines (1)\nTajikistan (1)\nYemen (1)\nNew Zealand (43)\nNew Caledonia (1)\nVanuatu (1)\nNiger (2)\nSouthern Sudan (1)\nTurkmenistan (1)\nBest first\nPriciest first\nYoungest first\nCheapest first\nST\nErling Haaland\nManchester City · 26y · worth £162m\n94\nTalk · £178.2m\nST\nKylian Mbappé\nReal Madrid · 27y · worth £162m\n94\nTalk · £178.2m\nRW\nLamine Yamal\nBarcelona · 19y · worth £162m\n94\nTalk · £202.5m\n£377.5m\nRW\nMichael Olise\nBayern Munich · 24y · worth £113.3m\n92\nTalk · £124.6m\n£268.5m\nLW\nVinicius Junior\nReal Madrid · 26y · worth £121.5m\n92\nTalk · £133.7m\n£253.9m\nCDM\nVitinha\nPSG · 26y · worth £113.4m\n92\nTalk · £124.7m\nRW\nBukayo Saka\nArsenal · 24y · worth £97.5m\n91\nTalk · £107.3m\nCAM\nCole Palmer\nChelsea · 24y · worth £89.3m\n91\nTalk · £98.2m\nCM\nDeclan Rice\nArsenal · 27y · worth £97.5m\n91\nTalk · £107.3m\nCM\nFederico Valverde\nReal Madrid · 28y · worth £97.5m\n91\nTalk · £107.3m\nST\nHarry Kane\nBayern Munich · 33y · worth £52.5m\n91\nTalk · £47.3m\nCAM\nJude Bellingham\nReal Madrid · 23y · worth £113.3m\n91\nTalk · £141.6m\nCM\nPedri\nBarcelona · 23y · worth £121.5m\n91\nTalk · £151.9m\n£232.1m\nCM\nEnzo Fernández\nManchester City · 25y · worth £72.8m\n90\nTalk · £80.1m\nCAM\nJamal Musiala\nBayern Munich · 23y · worth £97.5m\n90\nTalk · £121.9m\nCM\nJoão Neves\nPSG · 22y · worth £89.3m\n90\nTalk · £111.6m\nST\nJulián Alvarez\nAtlético Madrid · 26y · worth £72.8m\n90\nTalk · £80.1m\nLW\nKhvicha Kvaratskhelia\nPSG · 25y · worth £72.8m\n90\nTalk · £80.1m\n£125.2m\nCDM\nMoisés Caicedo\nChelsea · 24y · worth £81m\n90\nTalk · £89.1m\nST\nOusmane Dembélé\nPSG · 29y · worth £81m\n90\nTalk · £89.1m\n£184.7m\nCDM\nRodri\nBarcelona · 30y · worth £67.5m\n90\nTalk · £60.8m\nCB\nWilliam Saliba\nArsenal · 25y · worth £72.8m\n90\nTalk · £80.1m\nRB\nAchraf Hakimi\nPSG · 28y · worth £64.5m\n89\nTalk · £71m\n£121.9m\nRW\nAntoine Semenyo\nManchester City · 26y · worth £60.8m\n89\nTalk · £66.9m\n£150.8m\nCDM\nAurélien Tchouaméni\nReal Madrid · 26y · worth £60.8m\n89\nTalk · £66.9m\nRW\nBryan Mbeumo\nManchester United · 27y · worth £64.5m\n89\nTalk · £71m\nCAM\nFermín Lópe",
+   "marketButtons": [
+    "Back",
+    "Sign up to track your stats",
+    "Managers",
+    "Board Safe",
+    "Fans Hopeful",
+    "Home",
+    "Squad",
+    "Tactics",
+    "Table",
+    "Market",
+    "Buy",
+    "Sell 1",
+    "Latest",
+    "ALL",
+    "GK",
+    "DEF",
+    "MID",
+    "ATT",
+    "Talk · £178.2m",
+    "Talk · £178.2m",
+    "Talk · £202.5m",
+    "£377.5m",
+    "Talk · £124.6m",
+    "£268.5m",
+    "Talk · £133.7m",
+    "£253.9m",
+    "Talk · £124.7m",
+    "Talk · £107.3m",
+    "Talk · £98.2m",
+    "Talk · £107.3m",
+    "Talk · £107.3m",
+    "Talk · £47.3m",
+    "Talk · £141.6m",
+    "Talk · £151.9m",
+    "£232.1m",
+    "Talk · £80.1m",
+    "Talk · £121.9m",
+    "Talk · £111.6m",
+    "Talk · £80.1m",
+    "Talk · £80.1m",
+    "£125.2m",
+    "Talk · £89.1m",
+    "Talk · £89.1m",
+    "£184.7m",
+    "Talk · £60.8m",
+    "Talk · £80.1m",
+    "Talk · £71m",
+    "£121.9m",
+    "Talk · £66.9m",
+    "£150.8m",
+    "Talk · £66.9m",
+    "Talk · £71m",
+    "Talk · £101.3m",
+    "£199.3m",
+    "Talk · £66.9m",
+    "£106.4m",
+    "Talk · £66.9m",
+    "Talk · £75.9m",
+    "£120.1m",
+    "Talk · £66.9m"
+   ],
+   "errors": []
+  },
+  {
+   "tag": "era2020-390",
+   "club": "Barcelona",
+   "era": "2020-21",
+   "rows": [
+    {
+     "name": "Lionel Messi",
+     "cut": true,
+     "rating": "95",
+     "age": "32",
+     "pot": null,
+     "phone": "95-97",
+     "w": 332,
+     "h": 45,
+     "nameW": 23
+    },
+    {
+     "name": "Antoine Griezmann",
+     "cut": true,
+     "rating": "91",
+     "age": "28",
+     "pot": null,
+     "phone": "91-93",
+     "w": 332,
+     "h": 45,
+     "nameW": 46
+    },
+    {
+     "name": "Marc-André ter Stegen",
+     "cut": true,
+     "rating": "90",
+     "age": "27",
+     "pot": null,
+     "phone": "90-92",
+     "w": 332,
+     "h": 45,
+     "nameW": 46
+    },
+    {
+     "name": "Miralem Pjanić",
+     "cut": true,
+     "rating": "90",
+     "age": "29",
+     "pot": null,
+     "phone": "91-93",
+     "w": 332,
+     "h": 45,
+     "nameW": 46
+    },
+    {
+     "name": "Ansu Fati",
+     "cut": true,
+     "rating": "87",
+     "age": "17",
+     "pot": null,
+     "phone": "91-96",
+     "w": 332,
+     "h": 45,
+     "nameW": 46
+    },
+    {
+     "name": "Frenkie de Jong",
+     "cut": true,
+     "rating": "87",
+     "age": "22",
+     "pot": null,
+     "phone": "87-91",
+     "w": 332,
+     "h": 45,
+     "nameW": 46
+    },
+    {
+     "name": "Jordi Alba",
+     "cut": true,
+     "rating": "87",
+     "age": "30",
+     "pot": null,
+     "phone": "87-89",
+     "w": 332,
+     "h": 45,
+     "nameW": 46
+    },
+    {
+     "name": "Ousmane Dembélé",
+     "cut": true,
+     "rating": "87",
+     "age": "22",
+     "pot": null,
+     "phone": "90-94",
+     "w": 332,
+     "h": 45,
+     "nameW": 72
+    },
+    {
+     "name": "Philippe Coutinho",
+     "cut": true,
+     "rating": "87",
+     "age": "27",
+     "pot": null,
+     "phone": "87-89",
+     "w": 332,
+     "h": 45,
+     "nameW": 46
+    },
+    {
+     "name": "Clément Lenglet",
+     "cut": true,
+     "rating": "86",
+     "age": "24",
+     "pot": null,
+     "phone": "86-89",
+     "w": 332,
+     "h": 45,
+     "nameW": 46
+    },
+    {
+     "name": "Sergi Roberto",
+     "cut": true,
+     "rating": "85",
+     "age": "27",
+     "pot": null,
+     "phone": "85-87",
+     "w": 332,
+     "h": 45,
+     "nameW": 72
+    },
+    {
+     "name": "Sergio Busquets",
+     "cut": true,
+     "rating": "85",
+     "age": "31",
+     "pot": null,
+     "phone": "85-87",
+     "w": 332,
+     "h": 45,
+     "nameW": 72
+    },
+    {
+     "name": "Gerard Piqué",
+     "cut": false,
+     "rating": "84",
+     "age": "32",
+     "pot": null,
+     "phone": "84-86",
+     "w": 332,
+     "h": 45,
+     "nameW": 75
+    },
+    {
+     "name": "Samuel Umtiti",
+     "cut": true,
+     "rating": "84",
+     "age": "26",
+     "pot": null,
+     "phone": "84-86",
+     "w": 332,
+     "h": 45,
+     "nameW": 46
+    },
+    {
+     "name": "Junior Firpo",
+     "cut": false,
+     "rating": "81",
+     "age": "23",
+     "pot": null,
+     "phone": "83-87",
+     "w": 332,
+     "h": 45,
+     "nameW": 68
+    },
+    {
+     "name": "Neto",
+     "cut": false,
+     "rating": "81",
+     "age": "30",
+     "pot": null,
+     "phone": "81-83",
+     "w": 332,
+     "h": 45,
+     "nameW": 27
+    },
+    {
+     "name": "Riqui Puig",
+     "cut": false,
+     "rating": "79",
+     "age": "20",
+     "pot": null,
+     "phone": "85-90",
+     "w": 332,
+     "h": 45,
+     "nameW": 56
+    },
+    {
+     "name": "Martin Braithwaite",
+     "cut": true,
+     "rating": "78",
+     "age": "28",
+     "pot": null,
+     "phone": "78-80",
+     "w": 332,
+     "h": 45,
+     "nameW": 72
+    },
+    {
+     "name": "Pedri",
+     "cut": false,
+     "rating": "78",
+     "age": "17",
+     "pot": null,
+     "phone": "91-96",
+     "w": 332,
+     "h": 45,
+     "nameW": 30
+    },
+    {
+     "name": "Sergiño Dest",
+     "cut": false,
+     "rating": "77",
+     "age": "19",
+     "pot": null,
+     "phone": "81-86",
+     "w": 332,
+     "h": 45,
+     "nameW": 72
+    },
+    {
+     "name": "Ronald Araujo",
+     "cut": true,
+     "rating": "76",
+     "age": "20",
+     "pot": null,
+     "phone": "76-80",
+     "w": 332,
+     "h": 45,
+     "nameW": 72
+    },
+    {
+     "name": "Monchu",
+     "cut": false,
+     "rating": "70",
+     "age": "20",
+     "pot": null,
+     "phone": "73-78",
+     "w": 332,
+     "h": 45,
+     "nameW": 46
+    },
+    {
+     "name": "Konrad de la Fuente",
+     "cut": true,
+     "rating": "65",
+     "age": "18",
+     "pot": null,
+     "phone": "69-74",
+     "w": 332,
+     "h": 45,
+     "nameW": 72
+    },
+    {
+     "name": "Hiroki Abe",
+     "cut": false,
+     "rating": "61",
+     "age": "20",
+     "pot": null,
+     "phone": "61-66",
+     "w": 332,
+     "h": 45,
+     "nameW": 59
+    }
+   ],
+   "mismatches": [],
+   "notes": [
+    "no free agent button on the market"
+   ],
+   "saved": {
+    "club": "Barcelona",
+    "eraId": "era2020",
+    "squad": [
+     {
+      "name": "Lionel Messi",
+      "rating": 95,
+      "age": 32,
+      "potential": 95,
+      "pos": "RW",
+      "value": 90.8
+     },
+     {
+      "name": "Antoine Griezmann",
+      "rating": 91,
+      "age": 28,
+      "potential": 91,
+      "pos": "CF",
+      "value": 78
+     },
+     {
+      "name": "Ansu Fati",
+      "rating": 87,
+      "age": 17,
+      "potential": 94,
+      "pos": "LW",
+      "value": 64.5
+     },
+     {
+      "name": "Marc-André ter Stegen",
+      "rating": 90,
+      "age": 27,
+      "potential": 91,
+      "pos": "GK",
+      "value": 60.8
+     },
+     {
+      "name": "Frenkie de Jong",
+      "rating": 87,
+      "age": 22,
+      "potential": 90,
+      "pos": "CM",
+      "value": 58.5
+     },
+     {
+      "name": "Ousmane Dembélé",
+      "rating": 87,
+      "age": 22,
+      "potential": 91,
+      "pos": "ST",
+      "value": 57
+     },
+     {
+      "name": "Miralem Pjanić",
+      "rating": 90,
+      "age": 29,
+      "potential": 91,
+      "pos": "CM",
+      "value": 52.5
+     },
+     {
+      "name": "Philippe Coutinho",
+      "rating": 87,
+      "age": 27,
+      "potential": 89,
+      "pos": "CAM",
+      "value": 48.8
+     },
+     {
+      "name": "Clément Lenglet",
+      "rating": 86,
+      "age": 24,
+      "potential": 88,
+      "pos": "CB",
+      "value": 40.5
+     },
+     {
+      "name": "Jordi Alba",
+      "rating": 87,
+      "age": 30,
+      "potential": 87,
+      "pos": "LB",
+      "value": 32.3
+     },
+     {
+      "name": "Sergi Roberto",
+      "rating": 85,
+      "age": 27,
+      "potential": 86,
+      "pos": "CM",
+      "value": 32.3
+     },
+     {
+      "name": "Samuel Umtiti",
+      "rating": 84,
+      "age": 26,
+      "potential": 84,
+      "pos": "CB",
+      "value": 26.3
+     },
+     {
+      "name": "Pedri",
+      "rating": 78,
+      "age": 17,
+      "potential": 95,
+      "pos": "CM",
+      "value": 24
+     },
+     {
+      "name": "Sergio Busquets",
+      "rating": 85,
+      "age": 31,
+      "potential": 85,
+      "pos": "CDM",
+      "value": 22.5
+     },
+     {
+      "name": "Riqui Puig",
+      "rating": 79,
+      "age": 20,
+      "potential": 89,
+      "pos": "CM",
+      "value": 20.3
+     },
+     {
+      "name": "Gerard Piqué",
+      "rating": 84,
+      "age": 32,
+      "potential": 84,
+      "pos": "CB",
+      "value": 16.5
+     },
+     {
+      "name": "Junior Firpo",
+      "rating": 81,
+      "age": 23,
+      "potential": 84,
+      "pos": "LB",
+      "value": 16.5
+     },
+     {
+      "name": "Sergiño Dest",
+      "rating": 77,
+      "age": 19,
+      "potential": 83,
+      "pos": "RB",
+      "value": 16.5
+     },
+     {
+      "name": "Neto",
+      "rating": 81,
+      "age": 30,
+      "potential": 81,
+      "pos": "GK",
+      "value": 12
+     },
+     {
+      "name": "Ronald Araujo",
+      "rating": 76,
+      "age": 20,
+      "potential": 78,
+      "pos": "CB",
+      "value": 12
+     },
+     {
+      "name": "Martin Braithwaite",
+      "rating": 78,
+      "age": 28,
+      "potential": 78,
+      "pos": "ST",
+      "value": 9.8
+     },
+     {
+      "name": "Monchu",
+      "rating": 70,
+      "age": 20,
+      "potential": 75,
+      "pos": "CM",
+      "value": 3.8
+     },
+     {
+      "name": "Konrad de la Fuente",
+      "rating": 65,
+      "age": 18,
+      "potential": 73,
+      "pos": "LW",
+      "value": 2.3
+     },
+     {
+      "name": "Hiroki Abe",
+      "rating": 61,
+      "age": 20,
+      "potential": 63,
+      "pos": "LW",
+      "value": 0.8
+     }
+    ]
+   },
+   "marketText": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nBarcelona\n2020-21 · Season 1\nSeason not started\n£128m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Summer window OPEN\n7 match weeks until the deadline · offers can arrive any week · loans used 0/2\nBUDGET\n£128m\nAROUND THE LEAGUE\n📰 Atlético Madrid sign Paul Pogba from Manchester United for £76m.\n📰 Brentford sign İlkay Gündoğan from Manchester City for £41m.\n📰 Atlético Madrid sign Eden Hazard from Real Madrid for £86m.\n📰 💰 The window's biggest deal so far: Eden Hazard to Atlético Madrid for £86m.\nBuy\nSell\nLatest\nALL\nGK\nDEF\nMID\nATT\nExact position…\nGK\nCB\nLB\nRB\nLWB\nRWB\nCDM\nCM\nCAM\nLM\nRM\nLW\nRW\nST\nCF\nAny age\nU21\nU24\nU28\n29 plus\nAny price\nUnder 10m\nUnder 25m\nUnder 60m\nAny league\nBundesliga\nLa Liga\nLigue 1\nPremier League\nSerie A\nAny nation\nSpain (244)\nFrance (190)\nEngland (141)\nItaly (140)\nGermany (139)\nPortugal (44)\nNetherlands (37)\nBelgium (29)\nSerbia (28)\nSwitzerland (28)\nAustria (23)\nCroatia (21)\nDenmark (21)\nPoland (19)\nIreland (17)\nScotland (17)\nTürkiye (17)\nSweden (15)\nWales (15)\nCzech Republic (12)\nNorway (9)\nSlovakia (8)\nGreece (6)\nAlbania (5)\nBosnia-Herzegovina (5)\nSlovenia (5)\nIceland (4)\nKosovo (4)\nMontenegro (4)\nRussia (4)\nHungary (3)\nNorth Macedonia (3)\nNorthern Ireland (3)\nRomania (3)\nUkraine (3)\nArmenia (2)\nFinland (2)\nIsrael (1)\nLuxembourg (1)\nMalta (1)\nMoldova (1)\nBrazil (87)\nArgentina (46)\nUruguay (20)\nColombia (11)\nChile (6)\nEcuador (4)\nParaguay (4)\nVenezuela (4)\nPeru (1)\nUnited States (15)\nJamaica (7)\nMexico (6)\nGuadeloupe (5)\nSuriname (5)\nCanada (2)\nCuracao (2)\nMartinique (2)\nCosta Rica (1)\nDominican Republic (1)\nHaiti (1)\nSt. Kitts & Nevis (1)\nCote d'Ivoire (27)\nSenegal (24)\nAlgeria (23)\nMorocco (19)\nNigeria (18)\nMali (15)\nGhana (13)\nCameroon (12)\nDR Congo (10)\nGuinea (6)\nTunisia (6)\nEgypt (5)\nAngola (4)\nGabon (4)\nGuinea-Bissau (4)\nThe Gambia (4)\nComoros (3)\nTogo (3)\nBenin (2)\nBurkina Faso (2)\nEquatorial Guinea (2)\nMozambique (2)\nZimbabwe (2)\nCape Verde (1)\nCentral African Republic (1)\nLibya (1)\nMadagascar (1)\nSouth Africa (1)\nTanzania (1)\nJapan (10)\nKorea, South (5)\nAustralia (3)\nBangladesh (1)\nIndonesia (1)\nIran (1)\nSyria (1)\nUnited Arab Emirates (1)\nNew Zealand (2)\nNew Caledonia (1)\nBest first\nPriciest first\nYoungest first\nCheapest first\nST\nKylian Mbappé\nPSG · 21y · worth £139.7m to £148.8m\n94\nTalk · £181.9m\nST\nCristiano Ronaldo\nJuventus · 34y · worth £48.3m to £49.4m\n93\nTalk · £43.9m\nST\nHarry Kane\nTottenham · 26y · worth £93.9m to £98.7m\n92\nTalk · £107.3m\nLW\nJadon Sancho\nBorussia Dortmund · 19y · worth £100.4m to £107.1m\n92\nTalk · £131.3m\nCAM\nKevin De Bruyne\nManchester City · 28y · worth £92.7m to £98.5m\n92\nTalk · £107.3m\nRW\nMohamed Salah\nLiverpool · 27y · worth £93.8m to £102.2m\n92\nTalk · £107.3m\nCAM\nNeymar\nPSG · 27y · worth £98.1m to £105.5m\n92\nTalk · £113.9m\n£155.3m\nRW\nRaheem Sterling\nManchester City · 25y · worth £99.6m to £107.4m\n92\nTalk · £113.9m\n£167.7m\nLW\nSadio Mané\nLiverpool · 27y · worth £94.2m to £97.6m\n92\nTalk · £107.3m\n£160.9m\nCAM\nBruno Fernandes\nManchester United · 25y · worth £69.8m to £76.3m\n91\nTalk · £80.1m\nLW\nHeung-min Son\nTottenham · 27y · worth £72.1m to £75.5m\n91\nTalk · £80.1m\nGK\nJan Oblak\nAtlético Madrid · 26y · worth £70.5m to £73.7m\n91\nTalk · £80.1m\nCF\nPaulo Dybala\nJuventus · 26y · worth £72.7m to £75.5m\n91\nTalk · £80.1m\n£132.5m\nST\nRomelu Lukaku\nInter Milan · 26y · worth £69.3m to £74.1m\n91\nTalk · £80.1m\n£126.7m\nCF\nSerge Gnabry\nBayern Munich · 24y · worth £72.5m to £73.9m\n91\nTalk · £80.1m\nRB\nTrent Alexander-Arnold\nLiverpool · 21y · worth £84.7m to £90.2m\n91\nTalk · £111.6m\n£149.1m\nGK\nAlisson\nLiverpool · 27y · worth £61.8m to £66.2m\n90\nTalk · £71m\nLB\nAndrew Robertson\nLiverpool · 25y · worth £58.3m to £62.1m\n90\nTalk · £66.9m\nCAM\nBernardo Silva\nManchester City · 25y · worth £61.9m to £65.9m\n90\nTalk · £71m\nCDM\nCasemiro\nReal Madrid · 27y · worth £62.2m to £66.7m\n90\nTalk · £71m\n£100m\nCAM\nChristian Eriksen\nInter Milan · 27y · worth £65.7m to £69.1m\n90\nTalk · £75.9m\nCAM\nDele Alli\nTottenham · 23y · worth £63.4m to £67.1m\n90\nTalk · £80.6m\nCDM\nJoshua Kimmich\nBayern Munich · 24y · worth £67.4m to £71.8m\n90\nTalk · £75.9m\n£106.3m\nRW\nLeroy Sané\nBayern Munich · 23y · worth £63.9m to £66.6m\n90\nTalk · £80.6m\nCDM\nN'Golo Kanté\nChelsea · 28y · worth £63.5m to £67.9m\n90\nTalk · £71m\nST\nPierre-Emerick Aubameyang\nArsenal · 30y · worth £43.1m to £47.2m\n90\nTalk · £40.5m\nST\nRobert Lewandowski\nBayern Munich · 31y · worth £47.6m to £49.6m\n90\nTalk · £43.9m\n£107.8m\nCM\nSergej Milinković-Savić\nLazio · 24y · worth £61m to £65.5m\n90\nTalk · £71m\nGK\nThibaut Courtois\nReal Madrid · 27y · worth £59.6m to £62.6m\n90\nTalk · £66.9m\nST\nTimo Werner\nChelsea · 23y · worth £64.4m to £64.7m\n90\nTalk · £80.6m\n£109.7m\nCB\nVirgil van Dijk\nLiverpool · 28y · worth £61.5m to £67.9m\n90\nTalk · £71m\nCB\nDavid Alaba\nBayern Munich · 27y · worth £52.1m to £53.4m\n88\nTalk · £57.8m\n£106.1m\nST\nErling Haaland\nBorussia Dortmund · 19y · worth £77.6m to £83.2m\n88\nTalk · £101.3m\nCF\nJoão Félix\nAtlético Madrid · 20y · worth £78.2m to £81.4m\n88\nTalk · £1",
+   "marketButtons": [
+    "Back",
+    "Track stats",
+    "Managers",
+    "Board Safe",
+    "Fans Hopeful",
+    "Home",
+    "Squad",
+    "Tactics",
+    "Table",
+    "Market",
+    "Buy",
+    "Sell",
+    "Latest",
+    "ALL",
+    "GK",
+    "DEF",
+    "MID",
+    "ATT",
+    "Talk · £181.9m",
+    "Talk · £43.9m",
+    "Talk · £107.3m",
+    "Talk · £131.3m",
+    "Talk · £107.3m",
+    "Talk · £107.3m",
+    "Talk · £113.9m",
+    "£155.3m",
+    "Talk · £113.9m",
+    "£167.7m",
+    "Talk · £107.3m",
+    "£160.9m",
+    "Talk · £80.1m",
+    "Talk · £80.1m",
+    "Talk · £80.1m",
+    "Talk · £80.1m",
+    "£132.5m",
+    "Talk · £80.1m",
+    "£126.7m",
+    "Talk · £80.1m",
+    "Talk · £111.6m",
+    "£149.1m",
+    "Talk · £71m",
+    "Talk · £66.9m",
+    "Talk · £71m",
+    "Talk · £71m",
+    "£100m",
+    "Talk · £75.9m",
+    "Talk · £80.6m",
+    "Talk · £75.9m",
+    "£106.3m",
+    "Talk · £80.6m",
+    "Talk · £71m",
+    "Talk · £40.5m",
+    "Talk · £43.9m",
+    "£107.8m",
+    "Talk · £71m",
+    "Talk · £66.9m",
+    "Talk · £80.6m",
+    "£109.7m",
+    "Talk · £71m",
+    "Talk · £57.8m"
+   ],
+   "errors": []
+  },
+  {
+   "tag": "era2020-1280",
+   "club": "Barcelona",
+   "era": "2020-21",
+   "rows": [
+    {
+     "name": "Lionel Messi",
+     "cut": false,
+     "rating": "95",
+     "age": "32",
+     "pot": "95-97",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 70
+    },
+    {
+     "name": "Antoine Griezmann",
+     "cut": false,
+     "rating": "91",
+     "age": "28",
+     "pot": "92-94",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 109
+    },
+    {
+     "name": "Marc-André ter Stegen",
+     "cut": false,
+     "rating": "90",
+     "age": "27",
+     "pot": "90-92",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 132
+    },
+    {
+     "name": "Miralem Pjanić",
+     "cut": false,
+     "rating": "90",
+     "age": "29",
+     "pot": "91-93",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 85
+    },
+    {
+     "name": "Ansu Fati",
+     "cut": false,
+     "rating": "87",
+     "age": "17",
+     "pot": "92-97",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 52
+    },
+    {
+     "name": "Frenkie de Jong",
+     "cut": false,
+     "rating": "87",
+     "age": "22",
+     "pot": "88-92",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 91
+    },
+    {
+     "name": "Jordi Alba",
+     "cut": false,
+     "rating": "87",
+     "age": "30",
+     "pot": "87-89",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 57
+    },
+    {
+     "name": "Ousmane Dembélé",
+     "cut": false,
+     "rating": "87",
+     "age": "22",
+     "pot": "87-91",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 108
+    },
+    {
+     "name": "Philippe Coutinho",
+     "cut": false,
+     "rating": "87",
+     "age": "27",
+     "pot": "87-89",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 99
+    },
+    {
+     "name": "Clément Lenglet",
+     "cut": false,
+     "rating": "86",
+     "age": "24",
+     "pot": "86-90",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 93
+    },
+    {
+     "name": "Sergi Roberto",
+     "cut": false,
+     "rating": "85",
+     "age": "27",
+     "pot": "85-87",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 78
+    },
+    {
+     "name": "Sergio Busquets",
+     "cut": false,
+     "rating": "85",
+     "age": "31",
+     "pot": "85-87",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 92
+    },
+    {
+     "name": "Gerard Piqué",
+     "cut": false,
+     "rating": "84",
+     "age": "32",
+     "pot": "84-86",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 75
+    },
+    {
+     "name": "Samuel Umtiti",
+     "cut": false,
+     "rating": "84",
+     "age": "26",
+     "pot": "84-86",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 80
+    },
+    {
+     "name": "Junior Firpo",
+     "cut": false,
+     "rating": "81",
+     "age": "23",
+     "pot": "84-88",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 68
+    },
+    {
+     "name": "Neto",
+     "cut": false,
+     "rating": "81",
+     "age": "30",
+     "pot": "81-83",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 27
+    },
+    {
+     "name": "Riqui Puig",
+     "cut": false,
+     "rating": "79",
+     "age": "20",
+     "pot": "81-86",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 56
+    },
+    {
+     "name": "Martin Braithwaite",
+     "cut": false,
+     "rating": "78",
+     "age": "28",
+     "pot": "78-80",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 105
+    },
+    {
+     "name": "Pedri",
+     "cut": false,
+     "rating": "78",
+     "age": "17",
+     "pot": "78-83",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 30
+    },
+    {
+     "name": "Sergiño Dest",
+     "cut": false,
+     "rating": "77",
+     "age": "19",
+     "pot": "88-93",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 73
+    },
+    {
+     "name": "Ronald Araujo",
+     "cut": false,
+     "rating": "76",
+     "age": "20",
+     "pot": "76-81",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 79
+    },
+    {
+     "name": "Monchu",
+     "cut": false,
+     "rating": "70",
+     "age": "20",
+     "pot": "73-78",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 46
+    },
+    {
+     "name": "Konrad de la Fuente",
+     "cut": false,
+     "rating": "65",
+     "age": "18",
+     "pot": "65-69",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 113
+    },
+    {
+     "name": "Hiroki Abe",
+     "cut": false,
+     "rating": "61",
+     "age": "20",
+     "pot": "61-66",
+     "phone": null,
+     "w": 830,
+     "h": 45,
+     "nameW": 59
+    }
+   ],
+   "mismatches": [],
+   "notes": [
+    "no free agent button on the market"
+   ],
+   "saved": {
+    "club": "Barcelona",
+    "eraId": "era2020",
+    "squad": [
+     {
+      "name": "Lionel Messi",
+      "rating": 95,
+      "age": 32,
+      "potential": 95,
+      "pos": "RW",
+      "value": 90.8
+     },
+     {
+      "name": "Antoine Griezmann",
+      "rating": 91,
+      "age": 28,
+      "potential": 92,
+      "pos": "CF",
+      "value": 78
+     },
+     {
+      "name": "Ansu Fati",
+      "rating": 87,
+      "age": 17,
+      "potential": 95,
+      "pos": "LW",
+      "value": 64.5
+     },
+     {
+      "name": "Marc-André ter Stegen",
+      "rating": 90,
+      "age": 27,
+      "potential": 90,
+      "pos": "GK",
+      "value": 60.8
+     },
+     {
+      "name": "Frenkie de Jong",
+      "rating": 87,
+      "age": 22,
+      "potential": 91,
+      "pos": "CM",
+      "value": 58.5
+     },
+     {
+      "name": "Ousmane Dembélé",
+      "rating": 87,
+      "age": 22,
+      "potential": 88,
+      "pos": "ST",
+      "value": 57
+     },
+     {
+      "name": "Miralem Pjanić",
+      "rating": 90,
+      "age": 29,
+      "potential": 91,
+      "pos": "CM",
+      "value": 52.5
+     },
+     {
+      "name": "Philippe Coutinho",
+      "rating": 87,
+      "age": 27,
+      "potential": 87,
+      "pos": "CAM",
+      "value": 48.8
+     },
+     {
+      "name": "Clément Lenglet",
+      "rating": 86,
+      "age": 24,
+      "potential": 89,
+      "pos": "CB",
+      "value": 40.5
+     },
+     {
+      "name": "Jordi Alba",
+      "rating": 87,
+      "age": 30,
+      "potential": 87,
+      "pos": "LB",
+      "value": 32.3
+     },
+     {
+      "name": "Sergi Roberto",
+      "rating": 85,
+      "age": 27,
+      "potential": 85,
+      "pos": "CM",
+      "value": 32.3
+     },
+     {
+      "name": "Samuel Umtiti",
+      "rating": 84,
+      "age": 26,
+      "potential": 85,
+      "pos": "CB",
+      "value": 26.3
+     },
+     {
+      "name": "Pedri",
+      "rating": 78,
+      "age": 17,
+      "potential": 82,
+      "pos": "CM",
+      "value": 24
+     },
+     {
+      "name": "Sergio Busquets",
+      "rating": 85,
+      "age": 31,
+      "potential": 85,
+      "pos": "CDM",
+      "value": 22.5
+     },
+     {
+      "name": "Riqui Puig",
+      "rating": 79,
+      "age": 20,
+      "potential": 85,
+      "pos": "CM",
+      "value": 20.3
+     },
+     {
+      "name": "Gerard Piqué",
+      "rating": 84,
+      "age": 32,
+      "potential": 84,
+      "pos": "CB",
+      "value": 16.5
+     },
+     {
+      "name": "Junior Firpo",
+      "rating": 81,
+      "age": 23,
+      "potential": 85,
+      "pos": "LB",
+      "value": 16.5
+     },
+     {
+      "name": "Sergiño Dest",
+      "rating": 77,
+      "age": 19,
+      "potential": 90,
+      "pos": "RB",
+      "value": 16.5
+     },
+     {
+      "name": "Neto",
+      "rating": 81,
+      "age": 30,
+      "potential": 81,
+      "pos": "GK",
+      "value": 12
+     },
+     {
+      "name": "Ronald Araujo",
+      "rating": 76,
+      "age": 20,
+      "potential": 79,
+      "pos": "CB",
+      "value": 12
+     },
+     {
+      "name": "Martin Braithwaite",
+      "rating": 78,
+      "age": 28,
+      "potential": 79,
+      "pos": "ST",
+      "value": 9.8
+     },
+     {
+      "name": "Monchu",
+      "rating": 70,
+      "age": 20,
+      "potential": 75,
+      "pos": "CM",
+      "value": 3.8
+     },
+     {
+      "name": "Konrad de la Fuente",
+      "rating": 65,
+      "age": 18,
+      "potential": 68,
+      "pos": "LW",
+      "value": 2.3
+     },
+     {
+      "name": "Hiroki Abe",
+      "rating": 61,
+      "age": 20,
+      "potential": 63,
+      "pos": "LW",
+      "value": 0.8
+     }
+    ]
+   },
+   "marketText": "Skip to main content\nLIVE\nLive scores temporarily unavailable\nDOUKNOWBALL\nBack\nSign up to track your stats\nBarcelona\n2020-21 · Season 1\nSeason not started\n£128m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Summer window OPEN\n7 match weeks until the deadline · offers can arrive any week · loans used 0/2\nBUDGET\n£128m\nAROUND THE LEAGUE\n📰 Liverpool sign Ben Chilwell from Chelsea for £50m.\n📰 Newcastle sign Arthur Melo from Juventus for £63m.\n📰 Real Madrid sign Dele Alli from Tottenham for £78m.\n📰 Real Madrid sign Mikel Oyarzabal from Real Sociedad for £55m.\n📰 Real Madrid sign James Maddison from Leicester City for £57m.\n📰 Atlético Madrid sign Rúben Dias from Manchester City for £62m.\n📰 💰 The window's biggest deal so far: Dele Alli to Real Madrid for £78m.\nBuy\nSell\n1\nLatest\nALL\nGK\nDEF\nMID\nATT\nExact position…\nGK\nCB\nLB\nRB\nLWB\nRWB\nCDM\nCM\nCAM\nLM\nRM\nLW\nRW\nST\nCF\nAny age\nU21\nU24\nU28\n29 plus\nAny price\nUnder 10m\nUnder 25m\nUnder 60m\nAny league\nBundesliga\nLa Liga\nLigue 1\nPremier League\nSerie A\nAny nation\nSpain (243)\nFrance (191)\nGermany (140)\nItaly (140)\nEngland (138)\nPortugal (43)\nNetherlands (37)\nBelgium (30)\nSerbia (28)\nSwitzerland (28)\nAustria (23)\nCroatia (21)\nDenmark (21)\nPoland (19)\nIreland (17)\nScotland (17)\nTürkiye (17)\nSweden (15)\nWales (15)\nCzech Republic (12)\nNorway (9)\nSlovakia (8)\nGreece (6)\nAlbania (5)\nBosnia-Herzegovina (5)\nSlovenia (5)\nIceland (4)\nKosovo (4)\nMontenegro (4)\nRussia (4)\nHungary (3)\nNorth Macedonia (3)\nNorthern Ireland (3)\nRomania (3)\nUkraine (3)\nArmenia (2)\nFinland (2)\nIsrael (1)\nLuxembourg (1)\nMalta (1)\nMoldova (1)\nBrazil (86)\nArgentina (46)\nUruguay (20)\nColombia (11)\nChile (6)\nEcuador (4)\nParaguay (4)\nVenezuela (4)\nPeru (1)\nUnited States (15)\nJamaica (7)\nMexico (6)\nGuadeloupe (5)\nSuriname (5)\nCanada (2)\nCuracao (2)\nMartinique (2)\nCosta Rica (1)\nDominican Republic (1)\nHaiti (1)\nSt. Kitts & Nevis (1)\nCote d'Ivoire (27)\nSenegal (24)\nAlgeria (23)\nMorocco (19)\nNigeria (18)\nMali (15)\nGhana (13)\nCameroon (12)\nDR Congo (10)\nGuinea (6)\nTunisia (6)\nEgypt (5)\nAngola (4)\nGabon (4)\nGuinea-Bissau (4)\nThe Gambia (4)\nComoros (3)\nTogo (3)\nBenin (2)\nBurkina Faso (2)\nEquatorial Guinea (2)\nMozambique (2)\nZimbabwe (2)\nCape Verde (1)\nCentral African Republic (1)\nLibya (1)\nMadagascar (1)\nSouth Africa (1)\nTanzania (1)\nJapan (10)\nKorea, South (5)\nAustralia (3)\nBangladesh (1)\nIndonesia (1)\nIran (1)\nSyria (1)\nUnited Arab Emirates (1)\nNew Zealand (2)\nNew Caledonia (1)\nBest first\nPriciest first\nYoungest first\nCheapest first\nST\nKylian Mbappé\nPSG · 21y · worth £139.7m to £148.8m\n94\nTalk · £181.9m\nST\nCristiano Ronaldo\nJuventus · 34y · worth £48.3m to £49.4m\n93\nTalk · £43.9m\nST\nHarry Kane\nTottenham · 26y · worth £93.9m to £98.7m\n92\nTalk · £107.3m\nLW\nJadon Sancho\nBorussia Dortmund · 19y · worth £100.4m to £107.1m\n92\nTalk · £131.3m\nCAM\nKevin De Bruyne\nManchester City · 28y · worth £92.7m to £98.5m\n92\nTalk · £107.3m\nRW\nMohamed Salah\nLiverpool · 27y · worth £93.8m to £102.2m\n92\nTalk · £107.3m\nCAM\nNeymar\nPSG · 27y · worth £98.1m to £105.5m\n92\nTalk · £113.9m\n£155.3m\nRW\nRaheem Sterling\nManchester City · 25y · worth £99.6m to £107.4m\n92\nTalk · £113.9m\n£167.7m\nLW\nSadio Mané\nLiverpool · 27y · worth £94.2m to £97.6m\n92\nTalk · £107.3m\n£160.9m\nCAM\nBruno Fernandes\nManchester United · 25y · worth £69.8m to £76.3m\n91\nTalk · £80.1m\nLW\nEden Hazard\nReal Madrid · 28y · worth £80m to £83.1m\n91\nTalk · £89.1m\nLW\nHeung-min Son\nTottenham · 27y · worth £72.1m to £75.5m\n91\nTalk · £80.1m\nGK\nJan Oblak\nAtlético Madrid · 26y · worth £70.5m to £73.7m\n91\nTalk · £80.1m\nCF\nPaulo Dybala\nJuventus · 26y · worth £72.7m to £75.5m\n91\nTalk · £80.1m\n£132.5m\nST\nRomelu Lukaku\nInter Milan · 26y · worth £69.3m to £74.1m\n91\nTalk · £80.1m\n£126.7m\nCF\nSerge Gnabry\nBayern Munich · 24y · worth £72.5m to £73.9m\n91\nTalk · £80.1m\nRB\nTrent Alexander-Arnold\nLiverpool · 21y · worth £84.7m to £90.2m\n91\nTalk · £111.6m\n£149.1m\nGK\nAlisson\nLiverpool · 27y · worth £61.8m to £66.2m\n90\nTalk · £71m\nLB\nAndrew Robertson\nLiverpool · 25y · worth £58.3m to £62.1m\n90\nTalk · £66.9m\nCAM\nBernardo Silva\nManchester City · 25y · worth £61.9m to £65.9m\n90\nTalk · £71m\nCDM\nCasemiro\nReal Madrid · 27y · worth £62.2m to £66.7m\n90\nTalk · £71m\n£100m\nCAM\nChristian Eriksen\nInter Milan · 27y · worth £65.7m to £69.1m\n90\nTalk · £75.9m\nCDM\nJoshua Kimmich\nBayern Munich · 24y · worth £67.4m to £71.8m\n90\nTalk · £75.9m\n£106.3m\nRW\nLeroy Sané\nBayern Munich · 23y · worth £63.9m to £66.6m\n90\nTalk · £80.6m\nCDM\nN'Golo Kanté\nChelsea · 28y · worth £63.5m to £67.9m\n90\nTalk · £71m\nCM\nPaul Pogba\nManchester United · 26y · worth £62m to £65.9m\n90\nTalk · £71m\nST\nPierre-Emerick Aubameyang\nArsenal · 30y · worth £43.1m to £47.2m\n90\nTalk · £40.5m\nST\nRobert Lewandowski\nBayern Munich · 31y · worth £47.6m to £49.6m\n90\nTalk · £43.9m\n£107.8m\nCM\nSergej Milinković-Savić\nLazio · 24y · worth £61m to £65.5m\n90\nTalk · £71m\nGK\nThibaut Courtois\nReal Madrid · 27y · worth £59.6m to £62.6m\n90\nTalk · £66.9m\nST\nTimo Werner\nChelsea · 23y · worth £64.4m to £64.7m\n90\nTalk · £80.6m\n£109.7m\nCB\nVirgil van Dijk\nLiver",
+   "marketButtons": [
+    "Back",
+    "Sign up to track your stats",
+    "Managers",
+    "Board Safe",
+    "Fans Hopeful",
+    "Home",
+    "Squad",
+    "Tactics",
+    "Table",
+    "Market",
+    "Buy",
+    "Sell 1",
+    "Latest",
+    "ALL",
+    "GK",
+    "DEF",
+    "MID",
+    "ATT",
+    "Talk · £181.9m",
+    "Talk · £43.9m",
+    "Talk · £107.3m",
+    "Talk · £131.3m",
+    "Talk · £107.3m",
+    "Talk · £107.3m",
+    "Talk · £113.9m",
+    "£155.3m",
+    "Talk · £113.9m",
+    "£167.7m",
+    "Talk · £107.3m",
+    "£160.9m",
+    "Talk · £80.1m",
+    "Talk · £89.1m",
+    "Talk · £80.1m",
+    "Talk · £80.1m",
+    "Talk · £80.1m",
+    "£132.5m",
+    "Talk · £80.1m",
+    "£126.7m",
+    "Talk · £80.1m",
+    "Talk · £111.6m",
+    "£149.1m",
+    "Talk · £71m",
+    "Talk · £66.9m",
+    "Talk · £71m",
+    "Talk · £71m",
+    "£100m",
+    "Talk · £75.9m",
+    "Talk · £75.9m",
+    "£106.3m",
+    "Talk · £80.6m",
+    "Talk · £71m",
+    "Talk · £71m",
+    "Talk · £40.5m",
+    "Talk · £43.9m",
+    "£107.8m",
+    "Talk · £71m",
+    "Talk · £66.9m",
+    "Talk · £80.6m",
+    "£109.7m",
+    "Talk · £71m"
+   ],
+   "errors": []
+  },
+  {
+   "tag": "era2010-390",
+   "club": "Barcelona",
+   "era": "2010-11",
+   "rows": [
+    {
+     "name": "Lionel Messi",
+     "cut": false,
+     "rating": "95",
+     "age": "22",
+     "pot": null,
+     "phone": "95-98",
+     "w": 332,
+     "h": 45,
+     "nameW": 70
+    },
+    {
+     "name": "Xavi",
+     "cut": false,
+     "rating": "95",
+     "age": "29",
+     "pot": null,
+     "phone": "95-97",
+     "w": 332,
+     "h": 45,
+     "nameW": 24
+    },
+    {
+     "name": "Andrés Iniesta",
+     "cut": false,
+     "rating": "92",
+     "age": "25",
+     "pot": null,
+     "phone": "92-96",
+     "w": 332,
+     "h": 45,
+     "nameW": 80
+    },
+    {
+     "name": "David Villa",
+     "cut": false,
+     "rating": "90",
+     "age": "28",
+     "pot": null,
+     "phone": "91-93",
+     "w": 332,
+     "h": 45,
+     "nameW": 60
+    },
+    {
+     "name": "Carles Puyol",
+     "cut": false,
+     "rating": "87",
+     "age": "31",
+     "pot": null,
+     "phone": "87-89",
+     "w": 332,
+     "h": 45,
+     "nameW": 72
+    },
+    {
+     "name": "Dani Alves",
+     "cut": false,
+     "rating": "85",
+     "age": "26",
+     "pot": null,
+     "phone": "87-89",
+     "w": 332,
+     "h": 45,
+     "nameW": 60
+    },
+    {
+     "name": "Éric Abidal",
+     "cut": false,
+     "rating": "85",
+     "age": "30",
+     "pot": null,
+     "phone": "85-87",
+     "w": 332,
+     "h": 45,
+     "nameW": 60
+    },
+    {
+     "name": "Gerard Piqué",
+     "cut": false,
+     "rating": "85",
+     "age": "22",
+     "pot": null,
+     "phone": "86-90",
+     "w": 332,
+     "h": 45,
+     "nameW": 75
+    },
+    {
+     "name": "Javier Mascherano",
+     "cut": true,
+     "rating": "85",
+     "age": "25",
+     "pot": null,
+     "phone": "85-88",
+     "w": 332,
+     "h": 45,
+     "nameW": 101
+    },
+    {
+     "name": "Adriano",
+     "cut": false,
+     "rating": "82",
+     "age": "25",
+     "pot": null,
+     "phone": "82-84",
+     "w": 332,
+     "h": 45,
+     "nameW": 44
+    },
+    {
+     "name": "Pedro",
+     "cut": false,
+     "rating": "82",
+     "age": "22",
+     "pot": null,
+     "phone": "82-85",
+     "w": 332,
+     "h": 45,
+     "nameW": 34
+    },
+    {
+     "name": "Sergio Busquets",
+     "cut": false,
+     "rating": "82",
+     "age": "21",
+     "pot": null,
+     "phone": "82-84",
+     "w": 332,
+     "h": 45,
+     "nameW": 92
+    },
+    {
+     "name": "Seydou Keita",
+     "cut": false,
+     "rating": "82",
+     "age": "29",
+     "pot": null,
+     "phone": "82-84",
+     "w": 332,
+     "h": 45,
+     "nameW": 75
+    },
+    {
+     "name": "Thierry Henry",
+     "cut": false,
+     "rating": "82",
+     "age": "32",
+     "pot": null,
+     "phone": "82-84",
+     "w": 332,
+     "h": 45,
+     "nameW": 80
+    },
+    {
+     "name": "Víctor Valdés",
+     "cut": false,
+     "rating": "82",
+     "age": "27",
+     "pot": null,
+     "phone": "82-84",
+     "w": 332,
+     "h": 45,
+     "nameW": 74
+    },
+    {
+     "name": "Yaya Touré",
+     "cut": false,
+     "rating": "82",
+     "age": "26",
+     "pot": null,
+     "phone": "82-84",
+     "w": 332,
+     "h": 45,
+     "nameW": 64
+    },
+    {
+     "name": "Gabriel Milito",
+     "cut": false,
+     "rating": "80",
+     "age": "29",
+     "pot": null,
+     "phone": "80-82",
+     "w": 332,
+     "h": 45,
+     "nameW": 75
+    },
+    {
+     "name": "Rafa Márquez",
+     "cut": false,
+     "rating": "79",
+     "age": "30",
+     "pot": null,
+     "phone": "79-81",
+     "w": 332,
+     "h": 45,
+     "nameW": 80
+    },
+    {
+     "name": "Dmytro Chygrynskyi",
+     "cut": false,
+     "rating": "78",
+     "age": "23",
+     "pot": null,
+     "phone": "80-84",
+     "w": 332,
+     "h": 45,
+     "nameW": 118
+    },
+    {
+     "name": "Maxwell",
+     "cut": false,
+     "rating": "77",
+     "age": "28",
+     "pot": null,
+     "phone": "78-80",
+     "w": 332,
+     "h": 45,
+     "nameW": 48
+    },
+    {
+     "name": "Bojan Krkic",
+     "cut": false,
+     "rating": "75",
+     "age": "19",
+     "pot": null,
+     "phone": "89-94",
+     "w": 332,
+     "h": 45,
+     "nameW": 65
+    },
+    {
+     "name": "Nolito",
+     "cut": false,
+     "rating": "70",
+     "age": "23",
+     "pot": null,
+     "phone": "72-76",
+     "w": 332,
+     "h": 45,
+     "nameW": 33
+    },
+    {
+     "name": "Jeffrén",
+     "cut": false,
+     "rating": "68",
+     "age": "21",
+     "pot": null,
+     "phone": "75-80",
+     "w": 332,
+     "h": 45,
+     "nameW": 41
+    },
+    {
+     "name": "Thiago Alcántara",
+     "cut": false,
+     "rating": "68",
+     "age": "18",
+     "pot": null,
+     "phone": "70-75",
+     "w": 332,
+     "h": 45,
+     "nameW": 97
+    },
+    {
+     "name": "Jonathan dos Santos",
+     "cut": false,
+     "rating": "66",
+     "age": "19",
+     "pot": null,
+     "phone": "70-75",
+     "w": 332,
+     "h": 45,
+     "nameW": 118
+    },
+    {
+     "name": "Oriol Romeu",
+     "cut": false,
+     "rating": "65",
+     "age": "18",
+     "pot": null,
+     "phone": "68-73",
+     "w": 332,
+     "h": 45,
+     "nameW": 70
+    },
+    {
+     "name": "Kaan Hallberg (Youth)",
+     "cut": false,
+     "rating": "61",
+     "age": "17",
+     "pot": null,
+     "phone": "72-77",
+     "w": 332,
+     "h": 45,
+     "nameW": 123
+    }
+   ],
+   "mismatches": [],
+   "notes": [
+    "no free agent button on the market"
+   ],
+   "saved": {
+    "club": "Barcelona",
+    "eraId": "era2010",
+    "squad": [
+     {
+      "name": "Lionel Messi",
+      "rating": 95,
+      "age": 22,
+      "potential": 95,
+      "pos": "RW",
+      "value": 81
+     },
+     {
+      "name": "Xavi",
+      "rating": 95,
+      "age": 29,
+      "potential": 95,
+      "pos": "CM",
+      "value": 52.5
+     },
+     {
+      "name": "Andrés Iniesta",
+      "rating": 92,
+      "age": 25,
+      "potential": 94,
+      "pos": "CM",
+      "value": 48.8
+     },
+     {
+      "name": "David Villa",
+      "rating": 90,
+      "age": 28,
+      "potential": 91,
+      "pos": "ST",
+      "value": 40.5
+     },
+     {
+      "name": "Gerard Piqué",
+      "rating": 85,
+      "age": 22,
+      "potential": 89,
+      "pos": "CB",
+      "value": 28.5
+     },
+     {
+      "name": "Dani Alves",
+      "rating": 85,
+      "age": 26,
+      "potential": 87,
+      "pos": "RB",
+      "value": 24
+     },
+     {
+      "name": "Sergio Busquets",
+      "rating": 82,
+      "age": 21,
+      "potential": 84,
+      "pos": "CDM",
+      "value": 24
+     },
+     {
+      "name": "Javier Mascherano",
+      "rating": 85,
+      "age": 25,
+      "potential": 86,
+      "pos": "CDM",
+      "value": 21
+     },
+     {
+      "name": "Pedro",
+      "rating": 82,
+      "age": 22,
+      "potential": 84,
+      "pos": "RW",
+      "value": 20.3
+     },
+     {
+      "name": "Carles Puyol",
+      "rating": 87,
+      "age": 31,
+      "potential": 87,
+      "pos": "CB",
+      "value": 18.8
+     },
+     {
+      "name": "Yaya Touré",
+      "rating": 82,
+      "age": 26,
+      "potential": 84,
+      "pos": "CM",
+      "value": 17.3
+     },
+     {
+      "name": "Adriano",
+      "rating": 82,
+      "age": 25,
+      "potential": 83,
+      "pos": "LB",
+      "value": 16.5
+     },
+     {
+      "name": "Éric Abidal",
+      "rating": 85,
+      "age": 30,
+      "potential": 85,
+      "pos": "LB",
+      "value": 16.5
+     },
+     {
+      "name": "Víctor Valdés",
+      "rating": 82,
+      "age": 27,
+      "potential": 84,
+      "pos": "GK",
+      "value": 16.5
+     },
+     {
+      "name": "Seydou Keita",
+      "rating": 82,
+      "age": 29,
+      "potential": 83,
+      "pos": "CM",
+      "value": 12.8
+     },
+     {
+      "name": "Bojan Krkic",
+      "rating": 75,
+      "age": 19,
+      "potential": 90,
+      "pos": "CF",
+      "value": 12
+     },
+     {
+      "name": "Gabriel Milito",
+      "rating": 80,
+      "age": 29,
+      "potential": 80,
+      "pos": "CB",
+      "value": 11.3
+     },
+     {
+      "name": "Thierry Henry",
+      "rating": 82,
+      "age": 32,
+      "potential": 82,
+      "pos": "ST",
+      "value": 9.8
+     },
+     {
+      "name": "Dmytro Chygrynskyi",
+      "rating": 78,
+      "age": 23,
+      "potential": 83,
+      "pos": "CB",
+      "value": 9
+     },
+     {
+      "name": "Maxwell",
+      "rating": 77,
+      "age": 28,
+      "potential": 78,
+      "pos": "LB",
+      "value": 8.3
+     },
+     {
+      "name": "Rafa Márquez",
+      "rating": 79,
+      "age": 30,
+      "potential": 79,
+      "pos": "CB",
+      "value": 7.5
+     },
+     {
+      "name": "Thiago Alcántara",
+      "rating": 68,
+      "age": 18,
+      "potential": 74,
+      "pos": "CM",
+      "value": 3.8
+     },
+     {
+      "name": "Jeffrén",
+      "rating": 68,
+      "age": 21,
+      "potential": 77,
+      "pos": "RW",
+      "value": 2.3
+     },
+     {
+      "name": "Jonathan dos Santos",
+      "rating": 66,
+      "age": 19,
+      "potential": 72,
+      "pos": "CDM",
+      "value": 2.3
+     },
+     {
+      "name": "Nolito",
+      "rating": 70,
+      "age": 23,
+      "potential": 73,
+      "pos": "LW",
+      "value": 2.3
+     },
+     {
+      "name": "Oriol Romeu",
+      "rating": 65,
+      "age": 18,
+      "potential": 69,
+      "pos": "CDM",
+      "value": 2.3
+     },
+     {
+      "name": "Kaan Hallberg (Youth)",
+      "rating": 61,
+      "age": 17,
+      "potential": 74,
+      "pos": "GK",
+      "value": 0.6
+     }
+    ]
+   },
+   "marketText": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nBarcelona\n2010-11 · Season 1\nSeason not started\n£82m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Summer window OPEN\n4 match weeks until the deadline · offers can arrive any week · loans used 0/2\nBUDGET\n£82m\nAROUND THE LEAGUE\n📰 Hoffenheim sign Petr Cech from Chelsea for £25m.\n📰 Strasbourg sign Antonio Cassano from Sampdoria for £17m.\n📰 Manchester United sign Nilmar from Villarreal for £20m.\n📰 Monaco sign Philipp Lahm from Bayern Munich for £25m.\n📰 Feyenoord sign Giuseppe Rossi from Villarreal for £21m.\n📰 Coventry City sign Francesco Totti from Roma for £10m.\n📰 💰 The window's biggest deal so far: Petr Cech to Hoffenheim for £25m.\nBuy\nSell\nLatest\nALL\nGK\nDEF\nMID\nATT\nExact position…\nGK\nCB\nLB\nRB\nLWB\nRWB\nCDM\nCM\nCAM\nLM\nRM\nLW\nRW\nST\nCF\nAny age\nU21\nU24\nU28\n29 plus\nAny price\nUnder 10m\nUnder 25m\nUnder 60m\nAny league\nBundesliga\nLa Liga\nLigue 1\nPremier League\nSerie A\nAny nation\nSpain (236)\nFrance (199)\nItaly (173)\nGermany (135)\nEngland (134)\nNetherlands (28)\nPortugal (26)\nIreland (24)\nCroatia (21)\nSerbia (21)\nCzech Republic (17)\nSwitzerland (17)\nAustria (13)\nBelgium (13)\nPoland (13)\nDenmark (12)\nScotland (11)\nSlovenia (11)\nWales (11)\nBosnia-Herzegovina (9)\nRomania (9)\nSweden (9)\nTürkiye (9)\nNorway (8)\nGreece (7)\nSlovakia (7)\nRussia (6)\nFinland (5)\nNorthern Ireland (5)\nBulgaria (4)\nHungary (4)\nIsrael (3)\nNorth Macedonia (3)\nAlbania (2)\nIceland (2)\nMontenegro (2)\nArmenia (1)\nBelarus (1)\nGibraltar (1)\nKosovo (1)\nLithuania (1)\nUkraine (1)\nArgentina (93)\nBrazil (83)\nUruguay (23)\nColombia (13)\nChile (9)\nParaguay (5)\nPeru (5)\nVenezuela (5)\nEcuador (4)\nBolivia (1)\nUnited States (11)\nMartinique (9)\nJamaica (5)\nHonduras (4)\nMexico (3)\nGuadeloupe (2)\nTrinidad and Tobago (2)\nBarbados (1)\nCanada (1)\nGrenada (1)\nSt. Kitts & Nevis (1)\nSenegal (29)\nCote d'Ivoire (22)\nCameroon (21)\nNigeria (17)\nAlgeria (16)\nMorocco (16)\nMali (15)\nGhana (11)\nTunisia (11)\nDR Congo (6)\nTogo (6)\nGuinea (4)\nBurkina Faso (3)\nCongo (3)\nGabon (3)\nSouth Africa (3)\nCape Verde (2)\nKenya (2)\nBenin (1)\nBurundi (1)\nComoros (1)\nEgypt (1)\nEquatorial Guinea (1)\nMadagascar (1)\nSeychelles (1)\nSierra Leone (1)\nZimbabwe (1)\nAustralia (6)\nJapan (5)\nKorea, South (4)\nIran (3)\nChina (1)\nLebanon (1)\nNew Zealand (1)\nTahiti (1)\nFrench Guiana (1)\nNiger (1)\nBest first\nPriciest first\nYoungest first\nCheapest first\nST\nCristiano Ronaldo\nReal Madrid · 24y · worth £72m to £73.7m\n97\nTalk · £80.1m\nST\nDidier Drogba\nChelsea · 31y · worth £29.9m to £32.5m\n92\nTalk · £27.7m\nST\nWayne Rooney\nManchester United · 24y · worth £44.1m to £46.4m\n92\nTalk · £48.7m\n£66.4m\nCM\nCesc Fàbregas\nArsenal · 22y · worth £42.5m to £46.1m\n90\nTalk · £55.4m\n£89.5m\nST\nFernando Torres\nLiverpool · 25y · worth £39.3m to £42.4m\n90\nTalk · £44.6m\nLW\nFranck Ribéry\nBayern Munich · 26y · worth £40m to £41.9m\n90\nTalk · £44.6m\nCAM\nKaká\nReal Madrid · 27y · worth £40m to £42.6m\n90\nTalk · £44.6m\nCB\nRio Ferdinand\nManchester United · 31y · worth £24m to £25.9m\n90\nTalk · £22.3m\nCM\nSteven Gerrard\nLiverpool · 29y · worth £32m to £34.8m\n90\nTalk · £37.2m\nCAM\nWesley Sneijder\nInter Milan · 25y · worth £35.4m to £37m\n90\nTalk · £40.5m\nST\nZlatan Ibrahimović\nAC Milan · 28y · worth £36.1m to £38.9m\n90\nTalk · £41.3m\nRW\nArjen Robben\nBayern Munich · 25y · worth £32m to £32.3m\n89\nTalk · £35.5m\nCDM\nDaniele De Rossi\nRoma · 26y · worth £29.8m to £31.7m\n89\nTalk · £33.9m\nST\nDiego Milito\nInter Milan · 30y · worth £21.3m to £22.7m\n89\nTalk · £20.3m\nCDM\nEsteban Cambiasso\nInter Milan · 29y · worth £23.5m to £25m\n89\nTalk · £27.3m\nCM\nFrank Lampard\nChelsea · 31y · worth £23.3m to £24.4m\n89\nTalk · £21.6m\nGK\nGianluigi Buffon\nJuventus · 31y · worth £21.6m to £23.5m\n89\nTalk · £20.3m\nCB\nJohn Terry\nChelsea · 29y · worth £27.6m to £28.7m\n89\nTalk · £31.4m\n£56.7m\nCM\nMichael Ballack\nBayer Leverkusen · 33y · worth £15.7m to £16.7m\n89\nTalk · £14.9m\nCDM\nMichael Essien\nChelsea · 27y · worth £29.6m to £31.2m\n89\nTalk · £33.9m\n£66.2m\nST\nNicolas Anelka\nChelsea · 30y · worth £23.9m to £25.2m\n89\nTalk · £21.6m\nST\nSamuel Eto'o\nInter Milan · 28y · worth £29.2m to £31.7m\n89\nTalk · £33.9m\nLB\nAshley Cole\nChelsea · 29y · worth £21.7m to £22.1m\n87\nTalk · £24m\nCM\nBastian Schweinsteiger\nBayern Munich · 25y · worth £26.9m to £29.2m\n87\nTalk · £31.4m\nST\nCarlos Tévez\nManchester City · 25y · worth £26.5m to £28.5m\n87\nTalk · £30.6m\nCAM\nDavid Silva\nManchester City · 23y · worth £25.3m to £27.6m\n87\nTalk · £32.9m\nST\nDiego Forlán\nAtlético Madrid · 30y · worth £17.6m to £18.5m\n87\nTalk · £16.2m\n£32.4m\nST\nGonzalo Higuaín\nReal Madrid · 22y · worth £30m to £30.9m\n87\nTalk · £38.5m\n£60.7m\nGK\nIker Casillas\nReal Madrid · 28y · worth £27.8m to £29.7m\n87\nTalk · £31.4m\nGK\nJúlio César\nInter Milan · 30y · worth £19.3m to £20.6m\n87\nTalk · £18.3m\nST\nLuís Fabiano\nSevilla · 29y · worth £21.7m to £23.3m\n87\nTalk · £24.8m\nRB\nMaicon\nInter Milan · 28y · worth £25m to £26.8m\n87\nTalk · £28.9m\nCB\nNemanja Vidic\nManchester United · 28y · worth £27.7m to £29.7m\n87\nTalk · £31.4m\n£69.8m\nLW\nRonaldinho\nAC Milan · 29y · worth £22.5m to £22.9m\n8",
+   "marketButtons": [
+    "Back",
+    "Track stats",
+    "Managers",
+    "Board Safe",
+    "Fans Hopeful",
+    "Home",
+    "Squad",
+    "Tactics",
+    "Table",
+    "Market",
+    "Buy",
+    "Sell",
+    "Latest",
+    "ALL",
+    "GK",
+    "DEF",
+    "MID",
+    "ATT",
+    "Talk · £80.1m",
+    "Talk · £27.7m",
+    "Talk · £48.7m",
+    "£66.4m",
+    "Talk · £55.4m",
+    "£89.5m",
+    "Talk · £44.6m",
+    "Talk · £44.6m",
+    "Talk · £44.6m",
+    "Talk · £22.3m",
+    "Talk · £37.2m",
+    "Talk · £40.5m",
+    "Talk · £41.3m",
+    "Talk · £35.5m",
+    "Talk · £33.9m",
+    "Talk · £20.3m",
+    "Talk · £27.3m",
+    "Talk · £21.6m",
+    "Talk · £20.3m",
+    "Talk · £31.4m",
+    "£56.7m",
+    "Talk · £14.9m",
+    "Talk · £33.9m",
+    "£66.2m",
+    "Talk · £21.6m",
+    "Talk · £33.9m",
+    "Talk · £24m",
+    "Talk · £31.4m",
+    "Talk · £30.6m",
+    "Talk · £32.9m",
+    "Talk · £16.2m",
+    "£32.4m",
+    "Talk · £38.5m",
+    "£60.7m",
+    "Talk · £31.4m",
+    "Talk · £18.3m",
+    "Talk · £24.8m",
+    "Talk · £28.9m",
+    "Talk · £31.4m",
+    "£69.8m",
+    "Talk · £24.8m",
+    "Talk · £31.4m"
+   ],
+   "errors": []
+  },
+  {
+   "tag": "brentford-390",
+   "club": "Brentford",
+   "era": "2026-27",
+   "rows": [
+    {
+     "name": "Igor Thiago",
+     "cut": false,
+     "rating": "86",
+     "age": "25",
+     "pot": null,
+     "phone": "87-91",
+     "w": 332,
+     "h": 45,
+     "nameW": 64
+    },
+    {
+     "name": "Dango Ouattara",
+     "cut": false,
+     "rating": "84",
+     "age": "24",
+     "pot": null,
+     "phone": "84-88",
+     "w": 332,
+     "h": 45,
+     "nameW": 90
+    },
+    {
+     "name": "Kevin Schade",
+     "cut": false,
+     "rating": "84",
+     "age": "25",
+     "pot": null,
+     "phone": "84-88",
+     "w": 332,
+     "h": 45,
+     "nameW": 78
+    },
+    {
+     "name": "Sepp van den Berg",
+     "cut": true,
+     "rating": "84",
+     "age": "24",
+     "pot": null,
+     "phone": "86-90",
+     "w": 332,
+     "h": 45,
+     "nameW": 101
+    },
+    {
+     "name": "Mamadou Sangaré",
+     "cut": true,
+     "rating": "83",
+     "age": "24",
+     "pot": null,
+     "phone": "83-87",
+     "w": 332,
+     "h": 45,
+     "nameW": 101
+    },
+    {
+     "name": "Mikkel Damsgaard",
+     "cut": true,
+     "rating": "83",
+     "age": "26",
+     "pot": null,
+     "phone": "83-85",
+     "w": 332,
+     "h": 45,
+     "nameW": 101
+    },
+    {
+     "name": "Nathan Collins",
+     "cut": false,
+     "rating": "83",
+     "age": "25",
+     "pot": null,
+     "phone": "83-86",
+     "w": 332,
+     "h": 45,
+     "nameW": 82
+    },
+    {
+     "name": "Caoimhín Kelleher",
+     "cut": true,
+     "rating": "82",
+     "age": "27",
+     "pot": null,
+     "phone": "82-84",
+     "w": 332,
+     "h": 45,
+     "nameW": 101
+    },
+    {
+     "name": "Keane Lewis-Potter",
+     "cut": false,
+     "rating": "82",
+     "age": "25",
+     "pot": null,
+     "phone": "84-88",
+     "w": 332,
+     "h": 45,
+     "nameW": 113
+    },
+    {
+     "name": "Michael Kayode",
+     "cut": false,
+     "rating": "82",
+     "age": "22",
+     "pot": null,
+     "phone": "83-87",
+     "w": 332,
+     "h": 45,
+     "nameW": 91
+    },
+    {
+     "name": "El Hadji Malick Diouf",
+     "cut": true,
+     "rating": "81",
+     "age": "22",
+     "pot": null,
+     "phone": "81-83",
+     "w": 332,
+     "h": 45,
+     "nameW": 101
+    },
+    {
+     "name": "Yegor Yarmolyuk",
+     "cut": false,
+     "rating": "81",
+     "age": "22",
+     "pot": null,
+     "phone": "81-83",
+     "w": 332,
+     "h": 45,
+     "nameW": 97
+    },
+    {
+     "name": "Aaron Hickey",
+     "cut": false,
+     "rating": "80",
+     "age": "24",
+     "pot": null,
+     "phone": "81-85",
+     "w": 332,
+     "h": 45,
+     "nameW": 77
+    },
+    {
+     "name": "Jaidon Anthony",
+     "cut": false,
+     "rating": "80",
+     "age": "26",
+     "pot": null,
+     "phone": "80-82",
+     "w": 332,
+     "h": 45,
+     "nameW": 88
+    },
+    {
+     "name": "Kristoffer Ajer",
+     "cut": false,
+     "rating": "80",
+     "age": "28",
+     "pot": null,
+     "phone": "80-82",
+     "w": 332,
+     "h": 45,
+     "nameW": 79
+    },
+    {
+     "name": "Mathias Jensen",
+     "cut": false,
+     "rating": "80",
+     "age": "31",
+     "pot": null,
+     "phone": "80-82",
+     "w": 332,
+     "h": 45,
+     "nameW": 89
+    },
+    {
+     "name": "Vitaly Janelt",
+     "cut": false,
+     "rating": "80",
+     "age": "28",
+     "pot": null,
+     "phone": "80-82",
+     "w": 332,
+     "h": 45,
+     "nameW": 70
+    },
+    {
+     "name": "Rico Henry",
+     "cut": false,
+     "rating": "79",
+     "age": "29",
+     "pot": null,
+     "phone": "79-81",
+     "w": 332,
+     "h": 45,
+     "nameW": 63
+    },
+    {
+     "name": "Antoni Milambo",
+     "cut": false,
+     "rating": "78",
+     "age": "21",
+     "pot": null,
+     "phone": "82-88",
+     "w": 332,
+     "h": 45,
+     "nameW": 88
+    },
+    {
+     "name": "Callum Wilson",
+     "cut": false,
+     "rating": "77",
+     "age": "34",
+     "pot": null,
+     "phone": "77-79",
+     "w": 332,
+     "h": 45,
+     "nameW": 81
+    },
+    {
+     "name": "Fábio Carvalho",
+     "cut": false,
+     "rating": "77",
+     "age": "24",
+     "pot": null,
+     "phone": "78-82",
+     "w": 332,
+     "h": 45,
+     "nameW": 86
+    },
+    {
+     "name": "Josh Dasilva",
+     "cut": false,
+     "rating": "75",
+     "age": "28",
+     "pot": null,
+     "phone": "75-77",
+     "w": 332,
+     "h": 45,
+     "nameW": 72
+    },
+    {
+     "name": "Kaye Furo",
+     "cut": false,
+     "rating": "71",
+     "age": "19",
+     "pot": null,
+     "phone": "71-75",
+     "w": 332,
+     "h": 45,
+     "nameW": 58
+    },
+    {
+     "name": "Hákon Valdimarsson",
+     "cut": false,
+     "rating": "70",
+     "age": "25",
+     "pot": null,
+     "phone": "73-77",
+     "w": 332,
+     "h": 45,
+     "nameW": 116
+    }
+   ],
+   "mismatches": [],
+   "notes": [
+    "no free agent button on the market"
+   ],
+   "saved": {
+    "club": "Brentford",
+    "eraId": "now",
+    "squad": [
+     {
+      "name": "Igor Thiago",
+      "rating": 86,
+      "age": 25,
+      "potential": 89,
+      "pos": "ST",
+      "value": 40.5
+     },
+     {
+      "name": "Dango Ouattara",
+      "rating": 84,
+      "age": 24,
+      "potential": 88,
+      "pos": "RW",
+      "value": 28.5
+     },
+     {
+      "name": "Kevin Schade",
+      "rating": 84,
+      "age": 25,
+      "potential": 85,
+      "pos": "LW",
+      "value": 28.5
+     },
+     {
+      "name": "Michael Kayode",
+      "rating": 82,
+      "age": 22,
+      "potential": 87,
+      "pos": "RB",
+      "value": 28.5
+     },
+     {
+      "name": "Sepp van den Berg",
+      "rating": 84,
+      "age": 24,
+      "potential": 87,
+      "pos": "CB",
+      "value": 26.3
+     },
+     {
+      "name": "Mamadou Sangaré",
+      "rating": 83,
+      "age": 24,
+      "potential": 87,
+      "pos": "CM",
+      "value": 24
+     },
+     {
+      "name": "Mikkel Damsgaard",
+      "rating": 83,
+      "age": 26,
+      "potential": 85,
+      "pos": "CAM",
+      "value": 24
+     },
+     {
+      "name": "Nathan Collins",
+      "rating": 83,
+      "age": 25,
+      "potential": 85,
+      "pos": "CB",
+      "value": 24
+     },
+     {
+      "name": "Yegor Yarmolyuk",
+      "rating": 81,
+      "age": 22,
+      "potential": 82,
+      "pos": "CM",
+      "value": 24
+     },
+     {
+      "name": "El Hadji Malick Diouf",
+      "rating": 81,
+      "age": 22,
+      "potential": 82,
+      "pos": "LB",
+      "value": 22.5
+     },
+     {
+      "name": "Caoimhín Kelleher",
+      "rating": 82,
+      "age": 27,
+      "potential": 82,
+      "pos": "GK",
+      "value": 20.3
+     },
+     {
+      "name": "Keane Lewis-Potter",
+      "rating": 82,
+      "age": 25,
+      "potential": 85,
+      "pos": "LM",
+      "value": 20.3
+     },
+     {
+      "name": "Antoni Milambo",
+      "rating": 78,
+      "age": 21,
+      "potential": 84,
+      "pos": "CAM",
+      "value": 16.5
+     },
+     {
+      "name": "Jaidon Anthony",
+      "rating": 80,
+      "age": 26,
+      "potential": 80,
+      "pos": "LW",
+      "value": 14.3
+     },
+     {
+      "name": "Kristoffer Ajer",
+      "rating": 80,
+      "age": 28,
+      "potential": 80,
+      "pos": "CB",
+      "value": 14.3
+     },
+     {
+      "name": "Vitaly Janelt",
+      "rating": 80,
+      "age": 28,
+      "potential": 80,
+      "pos": "CDM",
+      "value": 13
+     },
+     {
+      "name": "Aaron Hickey",
+      "rating": 80,
+      "age": 24,
+      "potential": 83,
+      "pos": "RB",
+      "value": 12.8
+     },
+     {
+      "name": "Rico Henry",
+      "rating": 79,
+      "age": 29,
+      "potential": 79,
+      "pos": "LB",
+      "value": 12
+     },
+     {
+      "name": "Mathias Jensen",
+      "rating": 80,
+      "age": 31,
+      "potential": 80,
+      "pos": "CM",
+      "value": 9.8
+     },
+     {
+      "name": "Fábio Carvalho",
+      "rating": 77,
+      "age": 24,
+      "potential": 78,
+      "pos": "CAM",
+      "value": 8.3
+     },
+     {
+      "name": "Kaye Furo",
+      "rating": 71,
+      "age": 19,
+      "potential": 74,
+      "pos": "ST",
+      "value": 6.8
+     },
+     {
+      "name": "Josh Dasilva",
+      "rating": 75,
+      "age": 28,
+      "potential": 76,
+      "pos": "CM",
+      "value": 5.7
+     },
+     {
+      "name": "Callum Wilson",
+      "rating": 77,
+      "age": 34,
+      "potential": 77,
+      "pos": "ST",
+      "value": 3.8
+     },
+     {
+      "name": "Hákon Valdimarsson",
+      "rating": 70,
+      "age": 25,
+      "potential": 74,
+      "pos": "GK",
+      "value": 2.3
+     }
+    ]
+   },
+   "marketText": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nBrentford\n2026-27 · Season 1\nSeason not started\n£69m\nNo matches yet\nManagers\nBoard\nSafe\nFans\nHopeful\nHome\nSquad\nTactics\nTable\nMarket\n☀️ Summer window OPEN\n4 match weeks until the deadline · offers can arrive any week · loans used 0/2\nBUDGET\n£69m\nAROUND THE LEAGUE\n📰 Coventry City sign Mohamed Salah from Trabzonspor for £23m.\n📰 Roma sign Viktor Gyökeres from Arsenal for £57m.\n📰 Inter Milan sign Luis Díaz from Bayern Munich for £67m.\n📰 💰 The window's biggest deal so far: Luis Díaz to Inter Milan for £67m.\nBuy\nSell\n1\nLatest\nALL\nGK\nDEF\nMID\nATT\nExact position…\nGK\nCB\nLB\nRB\nLWB\nRWB\nCDM\nCM\nCAM\nLM\nRM\nLW\nRW\nST\nCF\nAny age\nU21\nU24\nU28\n29 plus\nAny price\nUnder 10m\nUnder 25m\nUnder 60m\nAny league\n2. Bundesliga\nA-League Men\nAustrian Bundesliga\nBelgian Pro League\nBrasileirão Série A\nBundesliga\nDanish Superliga\nEFL Championship\nEredivisie\nLa Liga\nLiga MX\nLigue 1\nLigue 2\nMLS Eastern Conference\nMLS Western Conference\nPremier League\nPrimeira Liga\nRussian Premier League\nSaudi Pro League\nScottish Premiership\nSegunda División\nSerie A\nSerie B\nSuper League Greece\nSuperSport HNL\nSwiss Super League\nSüper Lig\nAny nation\nSpain (328)\nEngland (300)\nFrance (291)\nRussia (275)\nGermany (252)\nItaly (206)\nNetherlands (150)\nPortugal (143)\nBelgium (121)\nDenmark (109)\nSwitzerland (81)\nTürkiye (77)\nCroatia (71)\nAustria (67)\nSweden (61)\nSerbia (56)\nNorway (54)\nPoland (47)\nScotland (47)\nIreland (43)\nGreece (38)\nBosnia-Herzegovina (29)\nCzech Republic (25)\nWales (24)\nAlbania (23)\nKosovo (19)\nRomania (18)\nSlovakia (17)\nUkraine (17)\nIceland (16)\nFinland (14)\nHungary (14)\nSlovenia (13)\nGeorgia (12)\nIsrael (11)\nBulgaria (10)\nMontenegro (8)\nNorthern Ireland (8)\nBelarus (6)\nKazakhstan (6)\nArmenia (5)\nLuxembourg (5)\nMalta (5)\nNorth Macedonia (5)\nEstonia (1)\nLatvia (1)\nLithuania (1)\nMoldova (1)\nBrazil (349)\nArgentina (164)\nUruguay (68)\nColombia (66)\nEcuador (26)\nParaguay (23)\nChile (19)\nVenezuela (12)\nPeru (4)\nBolivia (2)\nMexico (115)\nUnited States (113)\nCanada (28)\nSuriname (11)\nJamaica (8)\nHaiti (6)\nPanama (6)\nCosta Rica (4)\nCuracao (4)\nHonduras (4)\nDominican Republic (2)\nEl Salvador (2)\nGuadeloupe (2)\nGuyana (2)\nMartinique (2)\nGuatemala (1)\nTrinidad and Tobago (1)\nMorocco (70)\nCote d'Ivoire (67)\nSenegal (55)\nNigeria (47)\nGhana (41)\nAlgeria (30)\nMali (28)\nCameroon (27)\nDR Congo (25)\nTunisia (12)\nAngola (11)\nGuinea (11)\nCape Verde (10)\nBurkina Faso (9)\nThe Gambia (7)\nGabon (5)\nGuinea-Bissau (5)\nTogo (5)\nZambia (5)\nComoros (3)\nCongo (3)\nEgypt (3)\nMauritania (3)\nSouth Africa (3)\nZimbabwe (3)\nBenin (2)\nBurundi (2)\nMozambique (2)\nSierra Leone (2)\nCentral African Republic (1)\nChad (1)\nEquatorial Guinea (1)\nKenya (1)\nMadagascar (1)\nTanzania (1)\nAustralia (222)\nJapan (64)\nKorea, South (15)\nSaudi Arabia (10)\nIndonesia (9)\nUzbekistan (5)\nIraq (3)\nIran (2)\nJordan (1)\nLebanon (1)\nPalestine (1)\nPhilippines (1)\nTajikistan (1)\nYemen (1)\nNew Zealand (43)\nNew Caledonia (1)\nVanuatu (1)\nNiger (2)\nSouthern Sudan (1)\nTurkmenistan (1)\nBest first\nPriciest first\nYoungest first\nCheapest first\nST\nErling Haaland\nManchester City · 26y · worth £146.5m to £172.2m\n94\nTalk · £178.2m\nST\nKylian Mbappé\nReal Madrid · 27y · worth £147.2m to £170.4m\n94\nTalk · £178.2m\nRW\nLamine Yamal\nBarcelona · 19y · worth £153.3m to £179.9m\n94\nTalk · £202.5m\n£377.5m\nRW\nMichael Olise\nBayern Munich · 24y · worth £108.7m to £126.8m\n92\nTalk · £124.6m\n£268.5m\nLW\nVinicius Junior\nReal Madrid · 26y · worth £116.5m to £126.8m\n92\nTalk · £133.7m\n£253.9m\nCDM\nVitinha\nPSG · 26y · worth £110.7m to £116.9m\n92\nTalk · £124.7m\nRW\nBukayo Saka\nArsenal · 24y · worth £96.5m to £98.1m\n91\nTalk · £107.3m\nCAM\nCole Palmer\nChelsea · 24y · worth £79.4m to £97.8m\n91\nTalk · £98.2m\nCM\nDeclan Rice\nArsenal · 27y · worth £93.2m to £98.8m\n91\nTalk · £107.3m\nCM\nFederico Valverde\nReal Madrid · 28y · worth £91.6m to £97.9m\n91\nTalk · £107.3m\nST\nHarry Kane\nBayern Munich · 33y · worth £48.1m to £54m\n91\nTalk · £47.3m\nCAM\nJude Bellingham\nReal Madrid · 23y · worth £112m to £125m\n91\nTalk · £141.6m\nCM\nPedri\nBarcelona · 23y · worth £119.6m to £123m\n91\nTalk · £151.9m\n£232.1m\nST\nAlexander Isak\nLiverpool · 26y · worth £77.5m to £86.2m\n90\nTalk · £89.1m\n£187.1m\nCAM\nDominik Szoboszlai\nLiverpool · 25y · worth £71.2m to £85.2m\n90\nTalk · £89.1m\nCM\nEnzo Fernández\nManchester City · 25y · worth £68.1m to £75.6m\n90\nTalk · £80.1m\nCAM\nFlorian Wirtz\nLiverpool · 23y · worth £81.9m to £96.6m\n90\nTalk · £111.6m\nST\nHugo Ekitiké\nLiverpool · 24y · worth £65.1m to £81.4m\n90\nTalk · £80.1m\nCAM\nJamal Musiala\nBayern Munich · 23y · worth £90.7m to £98.8m\n90\nTalk · £121.9m\nCM\nJoão Neves\nPSG · 22y · worth £84.2m to £98.7m\n90\nTalk · £111.6m\nST\nJulián Alvarez\nAtlético Madrid · 26y · worth £66.1m to £78.9m\n90\nTalk · £80.1m\nLW\nKhvicha Kvaratskhelia\nPSG · 25y · worth £65.9m to £76.8m\n90\nTalk · £80.1m\n£125.2m\nCDM\nMoisés Caicedo\nChelsea · 24y · worth £71.9m to £86.8m\n90\nTalk · £89.1m\nST\nOusmane Dembélé\nPSG · 29y · worth £75m to £84.3m\n90\nTalk · £89.1m\n£184.7m\nCDM\nRodri\nBarcelona · 30y · worth £65.3m to £74.9m\n90\nTalk · £60.8m\nCB\nWilliam Saliba\nA",
+   "marketButtons": [
+    "Back",
+    "Track stats",
+    "Managers",
+    "Board Safe",
+    "Fans Hopeful",
+    "Home",
+    "Squad",
+    "Tactics",
+    "Table",
+    "Market",
+    "Buy",
+    "Sell 1",
+    "Latest",
+    "ALL",
+    "GK",
+    "DEF",
+    "MID",
+    "ATT",
+    "Talk · £178.2m",
+    "Talk · £178.2m",
+    "Talk · £202.5m",
+    "£377.5m",
+    "Talk · £124.6m",
+    "£268.5m",
+    "Talk · £133.7m",
+    "£253.9m",
+    "Talk · £124.7m",
+    "Talk · £107.3m",
+    "Talk · £98.2m",
+    "Talk · £107.3m",
+    "Talk · £107.3m",
+    "Talk · £47.3m",
+    "Talk · £141.6m",
+    "Talk · £151.9m",
+    "£232.1m",
+    "Talk · £89.1m",
+    "£187.1m",
+    "Talk · £89.1m",
+    "Talk · £80.1m",
+    "Talk · £111.6m",
+    "Talk · £80.1m",
+    "Talk · £121.9m",
+    "Talk · £111.6m",
+    "Talk · £80.1m",
+    "Talk · £80.1m",
+    "£125.2m",
+    "Talk · £89.1m",
+    "Talk · £89.1m",
+    "£184.7m",
+    "Talk · £60.8m",
+    "Talk · £80.1m",
+    "Talk · £71m",
+    "£121.9m",
+    "Talk · £71m",
+    "Talk · £66.9m",
+    "£150.8m",
+    "Talk · £66.9m",
+    "Talk · £66.9m",
+    "£127.7m",
+    "Talk · £71m"
+   ],
+   "errors": []
+  }
+ ]
+}

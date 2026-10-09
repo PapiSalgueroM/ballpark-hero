@@ -1,0 +1,42 @@
+
+== now-390-motion
+   career at Liverpool (now), 26 men
+   squad screen: 26 rows; names cut off with an ellipsis: 2
+   compared with the file: 26 of 26 rows are file men; 0 differ
+
+== now-390-rm
+   career at Liverpool (now), 26 men
+   squad screen: 26 rows; names cut off with an ellipsis: 2
+   compared with the file: 26 of 26 rows are file men; 0 differ
+
+== now-1280-motion
+   career at Liverpool (now), 26 men
+   squad screen: 26 rows; names cut off with an ellipsis: 0
+   compared with the file: 26 of 26 rows are file men; 0 differ
+
+== now-1280-rm
+   career at Liverpool (now), 26 men
+   squad screen: 26 rows; names cut off with an ellipsis: 0
+   compared with the file: 26 of 26 rows are file men; 0 differ
+
+== era2020-390
+   career at Barcelona (era2020), 24 men
+   squad screen: 24 rows; names cut off with an ellipsis: 16
+   compared with the file: 24 of 24 rows are file men; 0 differ
+
+== era2020-1280
+   career at Barcelona (era2020), 24 men
+   squad screen: 24 rows; names cut off with an ellipsis: 0
+   compared with the file: 24 of 24 rows are file men; 0 differ
+
+== era2010-390
+   career at Barcelona (era2010), 27 men
+   squad screen: 27 rows; names cut off with an ellipsis: 1
+   compared with the file: 26 of 27 rows are file men; 0 differ
+
+== brentford-390
+   career at Brentford (now), 24 men
+   squad screen: 24 rows; names cut off with an ellipsis: 5
+   compared with the file: 24 of 24 rows are file men; 0 differ
+
+rvwalk: 0 problem(s); 8 database requests aborted; 8 careers walked
