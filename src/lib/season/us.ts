@@ -119,6 +119,8 @@ export interface UsSeasonBind {
   meanBase(key: string, g: DerivedGame, row: UsRow, u: number): number;
   /** The league's schedule formula dealt for his team: rounds of one [home, away] slot pair, slots as ctx.order. */
   deal(ctx: UsSeasonCtx, rng: Rng): [number, number][][];
+  /** A season with no league shape, in this sport's own order of games; absent: the shared `dealUnnamed`. */
+  dealUnnamed?(games: number, rng: Rng): [number, number][][];
   finish(games: DerivedGame[], row: UsRow, pos: string, rng: Rng, ctx: UsSeasonCtx): boolean;
   check(row: UsRow, pos: string, s: DerivedSeason, ctx: UsSeasonCtx): string[];
   view: UsSeasonView;
@@ -234,7 +236,7 @@ export function buildUsSeason(
     id: bind.slug,
     seasonKey: () => key,
     frame: () => frame,
-    fixtures: (_f, rng) => (shape ? bind.deal(ctx, rng) : dealUnnamed(length, rng)),
+    fixtures: (_f, rng) => (shape ? bind.deal(ctx, rng) : (bind.dealUnnamed ?? dealUnnamed)(length, rng)),
     target: () => target,
     fixed: () => [],
     availability: () => bind.availability(row),

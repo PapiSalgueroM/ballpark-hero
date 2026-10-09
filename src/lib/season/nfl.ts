@@ -27,7 +27,7 @@
    No React, no Math.random. The engine import is the two exported result
    words and the era's team list (the engine is already in the route's chunk). */
 import { shuffled, type DerivedGame, type DerivedSeason, type Rng, type SeasonEvent, type StatTotal } from './core';
-import { splitTotal, usHelp, type UsRow, type UsSeasonBind, type UsSeasonCtx } from './us';
+import { dealUnnamed, splitTotal, usHelp, type UsRow, type UsSeasonBind, type UsSeasonCtx } from './us';
 import { NFL_MISSED_PLAYOFFS, NFL_PLAYOFF_RESULTS, nflEraById } from '../nflMyCareer';
 import { formatNumber } from '../formatNumber';
 import { NFL_CLOCK, NFL_SCORING, US_PLAYOFF_FORMAT, nflHosts17 } from '@/data/usLeagueShape';
@@ -190,6 +190,14 @@ function nflOrder(list: [number, boolean][], rng: Rng): [number, boolean][] {
     if (bad < least) { best = o; least = bad; }
   }
   return best;
+}
+
+/** A season with no league shape: the shared deal's opponents once each, in
+ *  an order that reads like a named season's (never four straight at home or
+ *  away), so a throwback career's calendar is no odder than a present day one. */
+export function nflDealUnnamed(games: number, rng: Rng): [number, number][][] {
+  const list = dealUnnamed(games, rng).map((r): [number, boolean] => (r[0][0] === 0 ? [r[0][1], true] : [r[0][0], false]));
+  return nflOrder(list, rng).map(([slot, home]): [number, number][] => [home ? [0, slot] : [slot, 0]]);
 }
 
 /** Every way a named season's opponents disagree with the formula. */
@@ -673,6 +681,7 @@ export const NFL_SEASON: UsSeasonBind = {
   /* no per game mean is on an NFL line */
   meanBase: () => 0,
   deal: nflDeal,
+  dealUnnamed: nflDealUnnamed,
   finish,
   check,
   view: {

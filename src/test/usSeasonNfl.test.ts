@@ -8,10 +8,11 @@ import { keyedRng } from '@/lib/keyedRng';
 import { buildUsSeason, usPlayoffPath, type UsRow } from '@/lib/season/us';
 import { deriveSeason, type DerivedGame, type SeasonEvent } from '@/lib/season/core';
 import {
-  NFL_SEASON, nflClockLabel, nflDeal, nflDealProblems, nflDriveCost, nflDrives, nflEventWords, nflKickerMakes, nflScore, nflTouchdownDays,
+  NFL_SEASON, nflClockLabel, nflDeal, nflDealProblems, nflDealUnnamed, nflDriveCost, nflDrives, nflEventWords, nflKickerMakes, nflOrderProblems, nflScore, nflTouchdownDays,
 } from '@/lib/season/nfl';
+import { NBA_SEASON } from '@/lib/season/nba';
 import { NFL_ERAS, NFL_MISSED_PLAYOFFS, NFL_PLAYOFF_RESULTS, teamLabelOf } from '@/lib/nflMyCareer';
-import { nflHosts17, usLeagueShape } from '@/data/usLeagueShape';
+import { NFL_CLOCK, NFL_SCORING, US_PLAYOFF_FORMAT, nflHosts17, usLeagueShape } from '@/data/usLeagueShape';
 import { usSeasonHeldLine } from '@/data/usSeasonLengths';
 
 /* ───────────────────────── the drives of one side ───────────────────────── */
@@ -331,7 +332,7 @@ describe('an NFL season, derived from its saved line', () => {
 });
 
 describe('the NFL playoff path', () => {
-  it('is one game a round for every depth, each score showing the saved result', () => {
+  it('is one game a round for every depth, won or lost as the save says, and prints no score the save does not hold', () => {
     const { ctx, key } = built(NFL_ROW('QB'));
     NFL_PLAYOFF_RESULTS.forEach((teamResult, i) => {
       const n = Math.min(4, i + 1);
@@ -341,11 +342,9 @@ describe('the NFL playoff path', () => {
         expect(path.steps.map(st => st.round)).toEqual(NFL_SEASON.rounds.slice(0, n));
         path.steps.forEach((st, r) => {
           expect(st.won, `${teamResult} round ${r + 1}`).toBe(r < n - 1 || i === 4);
-          const [a, b] = st.score!.split('-').map(Number);
-          expect(a === b).toBe(false);
-          expect(a > b, `${teamResult} ${st.score}`).toBe(st.won);
-          expect([1, 3, 4]).not.toContain(a);
-          expect([1, 3, 4]).not.toContain(b);
+          /* the save holds his playoff numbers as a sentence and no score: a drawn one could not be held
+             to "2 of 3 on field goals" or "2 TD", so none is shown */
+          expect(st.score, `${teamResult} round ${r + 1}`).toBeNull();
         });
       }
       /* playoff games on the save that are not the rounds the result means: nothing is drawn */
@@ -502,3 +501,208 @@ describe('his touchdown days', () => {
     expect(nflTouchdownDays([], [], keyedRng('e'))).toEqual([]);
   });
 });
+
+/* ───────────────────────── the fix pass: order, his line, the feed, the ledger ───────────────────────── */
+
+/** One keyed season of a position's everyday line; `i` varies the key through the career's name. */
+const seasonOf = (pos: string, i: number) => {
+  const row = NFL_ROW(pos);
+  const b = buildUsSeason(NFL_SEASON, { name: `Rex Gridiron ${i}`, pos, eraId: undefined }, row, teamLabelOf);
+  if (b.ok === false) throw new Error(`usSeasonNfl.test: ${b.why}`);
+  const s = deriveSeason(b.sport, row, b.ctx);
+  if (!s) throw new Error(`usSeasonNfl.test: ${pos} ${i} has no season`);
+  return s;
+};
+
+describe('his line, game by game', () => {
+  /* the per game caps of the numbers `finish` lays out, and each position's headline number */
+  const CAPS: Record<string, number> = { passYds: 520, rushYds: 290, rec: 15, recYds: 330, tackles: 20 };
+  const HEAD: Record<string, string> = { QB: 'passYds', RB: 'rushYds', WR: 'rec', TE: 'rec', LB: 'tackles', CB: 'tackles', EDGE: 'tackles' };
+  /* MEASURED 2026-10-09 over 60 keyed seasons a position (1,020 games each): on a cap 0, 0, 1, 0, 0, 0, 0
+     games; above twice his season's average 0.00, 0.00, 0.49, 1.27, 0.00, 0.10, 0.10 %; the standard
+     deviation of his games over their mean 0.28, 0.33, 0.42, 0.45, 0.33, 0.42, 0.45. Before the fix pass
+     a receiver sat on the cap of 15 catches in 4.6% of his games and a quarterback on 520 yards in 2.9%. */
+  it('keeps an everyday season off the per game caps and near his average, while his games still differ', () => {
+    for (const pos of Object.keys(HEAD)) {
+      const key = HEAD[pos];
+      let games = 0; let onCap = 0; let doubles = 0; let spread = 0; let seasons = 0;
+      for (let i = 0; i < 40; i += 1) {
+        const on = seasonOf(pos, i).games.filter(x => x.played);
+        const xs = on.map(x => x.line[key]);
+        const mean = xs.reduce((a, v) => a + v, 0) / xs.length;
+        games += xs.length; seasons += 1;
+        spread += Math.sqrt(xs.reduce((a, v) => a + (v - mean) ** 2, 0) / xs.length) / mean;
+        onCap += on.reduce((a, x) => a + Object.keys(CAPS).filter(k => x.line[k] === CAPS[k]).length, 0);
+        doubles += xs.filter(v => v > 2 * mean).length;
+      }
+      expect(games, pos).toBe(680);
+      expect(onCap / games, `${pos}: games on a per game cap`).toBeLessThan(0.005);
+      expect(doubles / games, `${pos}: games above twice his season's average`).toBeLessThan(0.03);
+      /* not lumpy, and not seventeen copies of his average either */
+      expect(spread / seasons, `${pos}: spread`).toBeGreaterThan(0.2);
+      expect(spread / seasons, `${pos}: spread`).toBeLessThan(0.6);
+    }
+  });
+  it('lays out his tackles exactly, and a game he scored in holds at least a yard a touchdown', () => {
+    for (let i = 0; i < 10; i += 1) {
+      for (const pos of ['LB', 'CB', 'EDGE']) {
+        const on = seasonOf(pos, i).games.filter(x => x.played);
+        expect(on.reduce((a, x) => a + x.line.tackles, 0), `${pos} ${i}`).toBe(LINES[pos].tackles);
+        expect(on.every(x => Number.isInteger(x.line.tackles) && x.line.tackles >= 0 && x.line.tackles <= 20), `${pos} ${i}`).toBe(true);
+      }
+      for (const [pos, yds, td] of [['QB', 'passYds', 'passTd'], ['RB', 'rushYds', 'rushTd'], ['WR', 'recYds', 'recTd']]) {
+        for (const x of seasonOf(pos, i).games.filter(y => y.played)) expect(x.line[yds], `${pos} ${i} game ${x.md}`).toBeGreaterThanOrEqual(x.line[td] ?? 0);
+      }
+    }
+  });
+});
+
+describe('the feed, minute by minute', () => {
+  /* MEASURED 2026-10-09 over 480 keyed seasons (8,160 games, 1 to 22 lines a game): no game of up to 19
+     lines had two lines in back to back minutes or two scoring drives of one side under three minutes
+     apart; the one game of 22 lines had both, which is the fallback the hour leaves no room to avoid. */
+  it('never puts two lines in back to back minutes, or two scoring drives of one side under three minutes apart, where the hour has room', () => {
+    let roomy = 0; let pairs = 0;
+    for (const pos of POSITIONS) for (let i = 0; i < 12; i += 1) {
+      for (const game of seasonOf(pos, i).games) {
+        const ev = game.events;
+        if (ev.length > 14) continue;
+        roomy += 1;
+        ev.forEach((e, k) => { if (k > 0) expect(e.min - ev[k - 1].min, `${pos} ${i} game ${game.md}`).toBeGreaterThanOrEqual(2); });
+        for (const side of ['us', 'them']) {
+          const drives = ev.filter(e => e.side === side && (e.pts ?? 0) > 0).map(e => e.min);
+          drives.forEach((m, k) => { if (k > 0) { pairs += 1; expect(m - drives[k - 1], `${pos} ${i} game ${game.md} ${side}`).toBeGreaterThanOrEqual(3); } });
+        }
+      }
+    }
+    /* nearly every game has room, and plenty of them hold a side's drives one after another */
+    expect(roomy).toBeGreaterThan(1500);
+    expect(pairs).toBeGreaterThan(3000);
+  });
+});
+
+describe('the order of the games', () => {
+  const g = (slot: number, home: boolean): [number, boolean] => [slot, home];
+  it('counts what reads oddly: the same opponent twice running, and every game past the third in a row at home or away', () => {
+    expect(nflOrderProblems([])).toBe(0);
+    expect(nflOrderProblems([g(1, true), g(2, false), g(3, true)])).toBe(0);
+    expect(nflOrderProblems([g(1, true), g(1, false)])).toBe(1);
+    /* three in a row is fine, the fourth is one too many, the fifth two */
+    expect(nflOrderProblems([g(1, true), g(2, true), g(3, true), g(4, false)])).toBe(0);
+    expect(nflOrderProblems([g(1, true), g(2, true), g(3, true), g(4, true)])).toBe(1);
+    expect(nflOrderProblems([g(1, false), g(2, false), g(3, false), g(4, false), g(5, false)])).toBe(2);
+    expect(nflOrderProblems([g(1, true), g(2, true), g(3, true), g(3, true)])).toBe(2);
+    /* a run that is broken starts again */
+    expect(nflOrderProblems([g(1, true), g(2, true), g(3, true), g(4, false), g(5, true), g(6, true), g(7, true)])).toBe(0);
+  });
+  it('deals no team a rival twice running or four straight at home or away, whoever he plays for', () => {
+    let seasons = 0;
+    const odd: string[] = [];
+    for (const team of NOW_IDS) for (let seed = 0; seed < 10; seed += 1) {
+      const { ctx } = built(NFL_ROW('QB', { team }));
+      const games = asGames(nflDeal(ctx, keyedRng(`order|${team}|${seed}`)));
+      seasons += 1;
+      /* the test's own reading, never the module's counter */
+      let run = 1;
+      for (let i = 1; i < games.length; i += 1) {
+        if (games[i].opp === games[i - 1].opp) odd.push(`${team} ${seed}: slot ${games[i].opp} in games ${i} and ${i + 1}`);
+        run = games[i].home === games[i - 1].home ? run + 1 : 1;
+        if (run > 3) odd.push(`${team} ${seed}: ${run} straight ${games[i].home ? 'at home' : 'away'} by game ${i + 1}`);
+      }
+      /* and the order is still the formula's 17 games */
+      expect(nflDealProblems(ctx, games), `${team} ${seed}`).toEqual([]);
+    }
+    expect(seasons).toBe(320);
+    expect(odd).toEqual([]);
+  });
+  it('orders a throwback season with no names the same way, and leaves the NBA\'s unnamed deal as it was', () => {
+    const odd: string[] = [];
+    const homes = new Set<number>();
+    for (let seed = 0; seed < 200; seed += 1) {
+      const games = asGames(nflDealUnnamed(17, keyedRng(`unnamed|${seed}`)));
+      expect(games).toHaveLength(17);
+      expect(new Set(games.map(x => x.opp)).size, `seed ${seed}`).toBe(17);
+      homes.add(games.filter(x => x.home).length);
+      let run = 1;
+      for (let i = 1; i < games.length; i += 1) {
+        run = games[i].home === games[i - 1].home ? run + 1 : 1;
+        if (run > 3) odd.push(`seed ${seed}: ${run} straight by game ${i + 1}`);
+      }
+    }
+    expect(odd).toEqual([]);
+    expect([...homes].sort()).toEqual([8, 9]);
+    expect(NFL_SEASON.dealUnnamed).toBe(nflDealUnnamed);
+    expect(NBA_SEASON.dealUnnamed).toBeUndefined();
+  });
+});
+
+describe('the tiles above the record, position by position', () => {
+  /* every field holds a number no other field holds, so two fields changing places cannot pass */
+  const so = { apps: 9, passYds: 2104, passTd: 15, ints: 6, rushYds: 611, rushTd: 4, rec: 33, recYds: 402, recTd: 3, tackles: 71, sacks: 5.5, picks: 2, passDef: 8, forcedFum: 1, fgMade: 14, fgAtt: 16 };
+  it('prints each position its own three numbers, every one from its own field', () => {
+    const v = NFL_SEASON.view;
+    expect(new Set(Object.values(so)).size).toBe(Object.values(so).length);
+    expect(v.soFar(so, 'QB')).toEqual([['Played', '9'], ['Pass yds', '2,104'], ['TD', '15'], ['INT', '6']]);
+    expect(v.soFar(so, 'RB')).toEqual([['Played', '9'], ['Rush yds', '611'], ['Rush TD', '4'], ['Rec', '33']]);
+    expect(v.soFar(so, 'WR')).toEqual([['Played', '9'], ['Rec', '33'], ['Rec yds', '402'], ['TD', '3']]);
+    expect(v.soFar(so, 'TE')).toEqual(v.soFar(so, 'WR'));
+    expect(v.soFar(so, 'LB')).toEqual([['Played', '9'], ['Tackles', '71'], ['Sacks', '5.5'], ['INT', '2']]);
+    expect(v.soFar(so, 'CB')).toEqual([['Played', '9'], ['Tackles', '71'], ['INT', '2'], ['PD', '8']]);
+    expect(v.soFar(so, 'EDGE')).toEqual([['Played', '9'], ['Sacks', '5.5'], ['Tackles', '71'], ['FF', '1']]);
+    expect(v.soFar(so, 'K')).toEqual([['Played', '9'], ['FG made', '14'], ['FG tries', '16'], ['FG %', '88%']]);
+  });
+  it('says the first half in each position\'s own numbers', () => {
+    const v = NFL_SEASON.view;
+    expect(v.half(so, 'QB')).toBe('First half: 9 games, 2,104 passing yards and 15 touchdowns');
+    expect(v.half(so, 'RB')).toBe('First half: 9 games, 611 rushing yards and 4 touchdowns');
+    expect(v.half(so, 'WR')).toBe('First half: 9 games, 33 catches for 402 yards');
+    expect(v.half(so, 'TE')).toBe(v.half(so, 'WR'));
+    for (const pos of ['LB', 'CB', 'EDGE']) expect(v.half(so, pos), pos).toBe('First half: 9 games, 71 tackles and 5.5 sacks');
+    expect(v.half(so, 'K')).toBe('First half: 9 games, 14 of 16 on field goals');
+  });
+});
+
+describe('what the ledger holds and the number file reads', () => {
+  it('scores a drive with the ledger\'s values: a touchdown is 6, 7 with the kick, 8 with the try, a field goal 3, a safety 2', () => {
+    expect(NFL_SCORING).toEqual({ touchdown: 6, kickAfter: 1, twoPointTry: 2, fieldGoal: 3, safety: 2 });
+    const one = (points: number, minTd: number) => nflDrives(points, minTd, null, keyedRng(`worth|${points}`))!;
+    expect(one(NFL_SCORING.touchdown, 1)).toEqual({ tds: [6], fgs: 0, safeties: 0 });
+    expect(one(NFL_SCORING.touchdown + NFL_SCORING.kickAfter, 1)).toEqual({ tds: [7], fgs: 0, safeties: 0 });
+    expect(one(NFL_SCORING.touchdown + NFL_SCORING.twoPointTry, 1)).toEqual({ tds: [8], fgs: 0, safeties: 0 });
+    expect(one(NFL_SCORING.fieldGoal, 0)).toEqual({ tds: [], fgs: 1, safeties: 0 });
+    expect(one(NFL_SCORING.safety, 0)).toEqual({ tds: [], fgs: 0, safeties: 1 });
+    /* and the "?" says the same five numbers, a six as a failed try (a kick or a two point try) */
+    const board = NFL_SEASON.view.help(true, 'Denver Broncos').examples.find(x => x.head === 'The scoreboard')!.body;
+    expect(board).toContain('7 for a touchdown with the kick after it, 8 with a two point try, 6 when the try after it fails, 3 for a field goal and 2 for a safety.');
+    expect(board).not.toContain('kick misses');
+  });
+  it('runs the clock the ledger holds: four quarters of 15 minutes', () => {
+    expect(NFL_CLOCK).toEqual({ quarters: 4, minutes: 15 });
+    expect(NFL_SEASON.view.clock.length).toBe(NFL_CLOCK.quarters * NFL_CLOCK.minutes);
+    expect(nflClockLabel(NFL_CLOCK.minutes)).toBe('Q1 0:00');
+    expect(nflClockLabel(NFL_CLOCK.quarters * NFL_CLOCK.minutes)).toBe('Q4 0:00');
+  });
+  it('draws the playoff path on the ledger\'s format, for both sports', () => {
+    expect(US_PLAYOFF_FORMAT.nfl).toEqual({ rounds: ['Wild Card', 'Divisional', 'Conference Championship', 'Super Bowl'], series: null });
+    expect(NFL_SEASON.rounds).toBe(US_PLAYOFF_FORMAT.nfl.rounds);
+    expect(NFL_SEASON.series).toBeNull();
+    expect(US_PLAYOFF_FORMAT.nba.series).toEqual([[4, 7], [4, 7], [4, 7], [4, 7]]);
+    expect(NBA_SEASON.rounds).toBe(US_PLAYOFF_FORMAT.nba.rounds);
+    expect(NBA_SEASON.series).toBe(US_PLAYOFF_FORMAT.nba.series);
+    /* the engine's five results are a loss in each of the four rounds and the title */
+    expect(NFL_PLAYOFF_RESULTS).toHaveLength(US_PLAYOFF_FORMAT.nfl.rounds.length + 1);
+  });
+  it('says football\'s own words in the "?": games, not nights, and what the playoff path leaves out', () => {
+    const nfl = NFL_SEASON.view.help(true, 'Denver Broncos');
+    expect(nfl.intro.join(' ')).toContain('Who you meet in which game, every score and every stat line');
+    expect(JSON.stringify(nfl)).not.toContain('night');
+    expect(nfl.footnote).toContain('Every playoff run here starts at the Wild Card round: this career has no first round bye');
+    expect(nfl.footnote).toContain('with no score');
+    /* the NBA keeps its own words and gains none of football's */
+    const nba = NBA_SEASON.view.help(true, 'Denver Nuggets');
+    expect(nba.intro.join(' ')).toContain('Who you meet on which night, every score and every stat line');
+    expect(nba.footnote).not.toContain('Wild Card');
+    expect(nba.footnote.endsWith("this career's own world on today's format.")).toBe(true);
+  });
+});
+

@@ -6,7 +6,9 @@
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, waitFor } from '@testing-library/react';
-import UsSeasonCentre from '@/components/us-career/season/UsSeasonCentre';
+import UsSeasonCentre, { buildUsModel } from '@/components/us-career/season/UsSeasonCentre';
+import { buildUsSeason } from '@/lib/season/us';
+import { deriveSeason } from '@/lib/season/core';
 import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
 import { NBA_SEASON } from '@/lib/season/nba';
 import { NFL_CAREER_SPORT } from '@/lib/nflCareerSport';
@@ -193,6 +195,35 @@ describe('the US Season Center with the NFL bound', () => {
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(JSON.stringify(career)).toBe(saved);
     expect(Object.keys(localStorage)).toEqual(['seasonCentre:help:nfl']);
+  });
+
+  it('prints the NFL playoff sentence as the save holds it, one game as "1 game", and every round with no score', () => {
+    const career = playNfl('QB', 'nfl-centre-po');
+    const base = career.seasons[career.seasons.length - 1];
+    const read = (over: Record<string, unknown>) => {
+      const row = { ...base, ...over } as typeof base;
+      const one: UsCareerCore = { ...career, seasons: [...career.seasons.slice(0, -1), row] };
+      const b = buildUsSeason(NFL_SEASON, one, row, NFL_CAREER_SPORT.teamLabelOf);
+      if (b.ok === false) throw new Error(`usSeasonCentre.test: ${b.why}`);
+      const s = deriveSeason(b.sport, row, b.ctx);
+      if (!s) throw new Error('usSeasonCentre.test: the season has no game by game view');
+      const path = buildUsModel(NFL_CAREER_SPORT, NFL_SEASON, one, row, b.ctx, s, b.key).review.path;
+      if (!path) throw new Error('usSeasonCentre.test: no playoff path');
+      return path;
+    };
+    const lost = read({ teamResult: NFL_SEASON.results[0], poGames: 1, poLine: '238 yds, 2 TD, 1 INT' });
+    expect(lost.line).toBe('Your playoffs: 1 game, 238 yds, 2 TD, 1 INT');
+    expect(lost.steps.map(st => [st.label, st.won])).toEqual([['Wild Card', false]]);
+    expect(lost.steps[0].text).toMatch(/^lost to the \S/);
+    const two = read({ teamResult: NFL_SEASON.results[1], poGames: 2, poLine: '4 of 5 on field goals' });
+    expect(two.line).toBe('Your playoffs: 2 games, 4 of 5 on field goals');
+    expect(two.steps.map(st => [st.label, st.won])).toEqual([['Wild Card', true], ['Divisional', false]]);
+    /* the save holds no playoff score, so no round prints one (a keyed score could not be held to "4 of 5") */
+    for (const st of [...lost.steps, ...two.steps]) expect(st.text).not.toMatch(/\d+-\d+/);
+    /* an older line with no playoff numbers shows the rounds and no sentence */
+    const bare = read({ teamResult: NFL_SEASON.results[0], poGames: undefined, poLine: undefined });
+    expect(bare.line).toBeNull();
+    expect(bare.steps).toHaveLength(1);
   });
 
   it('shows the held line, never a guess, for a throwback season the real league played 16 games of', async () => {
