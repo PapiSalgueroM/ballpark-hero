@@ -23,12 +23,13 @@ function run(file) {
 }
 try {
   const result = run();
-  if (result.status !== 0 || result.assertions.length !== 9 || result.assertions.some(a => a.status !== 'passed')) throw new Error('future league world outcome tests failed or were skipped');
+  if (result.status !== 0 || result.assertions.length !== 10 || result.assertions.some(a => a.status !== 'passed')) throw new Error('future league world outcome tests failed or were skipped');
   console.log('ok five-country 15-year movement, actual final table, player division, offer projection, old save replay and partial Spain');
   const original = fs.readFileSync(source, 'utf8');
   const controls = [
     { name: 'promoting the bottom clubs', anchor: 'const up = orderFor(p.lower).slice(0, p.count);', defect: 'const up = orderFor(p.lower).slice(-p.count);', assertion: 'changes membership over fifteen years with equal, disjoint and correctly ranked swaps' },
     { name: 'using form instead of the displayed table', anchor: 'return supplied && supplied.length === members.length', defect: 'return false && supplied && supplied.length === members.length', assertion: 'uses the displayed final table for relegation and retains that season after later movement' },
+    { name: 'raw aliases duplicating a relegated club', anchor: '? supplied.map(n => members.find(m => same(m, n))!) : leagueWorldOrder', defect: '? supplied : leagueWorldOrder', assertion: 'normalizes saved club aliases before swapping and keeps the played spelling once' },
   ];
   for (const control of controls) {
     if (original.split(control.anchor).length !== 2) throw new Error(`${control.name} anchor must occur exactly once`);
@@ -39,5 +40,5 @@ try {
     if (bad.status === 0 || !bad.assertions.some(a => a.status === 'failed' && a.fullName.includes(control.assertion))) throw new Error(`${control.name} escaped its named outcome`);
     console.log(`ok copied ${control.name} defect changed source and was caught`);
   }
-  console.log('simSoccerCareerLeagueWorld: nine outcome tests green, both effective negative controls caught');
+  console.log('simSoccerCareerLeagueWorld: ten outcome tests green, all three effective negative controls caught');
 } finally { if (fs.existsSync(copy)) fs.unlinkSync(copy); }

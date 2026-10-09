@@ -4,6 +4,9 @@ Anthony's active scope is Soccer Career only. Draft PR207 starts on
 origin/main0054fd819320a32884609562e2f4b882f2ecbf38, isolated branch
 codex/soccer-career-real-opponents. F owns integration and publication.
 This expanded source is NOT READY pending remote verification.
+Run37908408777/job113747388655 is checking source9b11312e. A small
+injury naming correction and canonical movement spelling guard are being
+included before the final combined run. No acceptance from this earlier head.
 
 1169 names verified opponents independently of table eligibility. 1170
 opens actual winning seasons in every Trophy Cabinet category. 1171 varies
@@ -32,7 +35,7 @@ terms stay unchanged. 1178 automatically completes new club sale/loan
 verdicts using existing offers and accepted-contract behavior. One Continue
 acknowledges the move; reload cannot repeat fees or signing events.
 
-Current pushed sourcecfee9e99/run37902572686 is RED, not acceptance: table
+Previous sourcecfee9e99/run37902572686 is RED, not acceptance: table
 yield99.18% versus99.2% bound, competition harness EMPTY output, and existing
 moments browser reload offline ECONNRESET. All types/build,8 opponent cases,
 2 controls,79 existing/trophy tests,34 expansion tests,9 expansion harnesses,

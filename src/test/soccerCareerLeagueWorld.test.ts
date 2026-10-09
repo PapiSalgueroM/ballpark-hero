@@ -111,6 +111,34 @@ describe('Soccer Career simulated promotion and relegation', () => {
     expect(down.leagueWorld!.league).toBe('Ligue 1');
   });
 
+  it('normalizes saved club aliases before swapping and keeps the played spelling once', () => {
+    const s = career('Manchester United', 'Premier League');
+    s.currentClubCountry = 'England';
+    prepareLeagueWorld(s, FALLBACK_CLUBS, 2026);
+    const row = season(s, 2026, 20, 20);
+    recordLeagueWorldSeason(s, FALLBACK_CLUBS, row);
+    expect(row.leagueWorld!.members).toContain('Manchester United');
+    expect(row.leagueWorld!.members).not.toContain('Man United');
+    const ctx = buildSoccerSeasonCtx(s, FALLBACK_CLUBS, row);
+    expect(ctx.named).not.toContain('Man United');
+    expect(ctx.named).not.toContain('Manchester United');
+    const order = leagueWorldOrder(s.leagueWorld!, 'Premier League', s.playerName, FALLBACK_CLUBS, row).map(n => n === 'Man United' ? row.club : n);
+    settleLeagueWorld(s, FALLBACK_CLUBS, row, order);
+    expect(s.leagueWorld!.leagues['Premier League'].length).toBe(20);
+    expect(s.leagueWorld!.leagues.Championship.length).toBe(24);
+    expect(s.leagueWorld!.leagues['Premier League']).not.toContain('Man United');
+    expect(s.leagueWorld!.leagues.Championship).toContain('Man United');
+    expect(row.leagueWorld!.movement?.club).toBe('Manchester United');
+    prepareLeagueWorld(s, FALLBACK_CLUBS, 2027);
+    const promoted = season(s, 2027, 1, 24);
+    recordLeagueWorldSeason(s, FALLBACK_CLUBS, promoted);
+    expect(readLeagueWorldSeason(promoted)?.champion).toBe('Manchester United');
+    const winner = buildSoccerSeasonCtx(s, FALLBACK_CLUBS, promoted);
+    expect(winner.named.length).toBe(23);
+    expect(winner.named).not.toContain('Man United');
+    expect(winner.champion).toBeNull();
+  });
+
   it('projects actual transfer offers and lower destinations through the same next-year field', () => {
     const s = career();
     prepareLeagueWorld(s, FALLBACK_CLUBS, 2026);

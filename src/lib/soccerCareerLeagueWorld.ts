@@ -77,7 +77,7 @@ export function finishLeagueWorld(world: CareerLeagueWorld, playerName: string, 
     const supplied = played?.league === league ? played.order : null;
     const members = world.leagues[league];
     return supplied && supplied.length === members.length && new Set(supplied.map(clubKey)).size === members.length && supplied.every(n => members.some(m => same(m, n)))
-      ? supplied : leagueWorldOrder(world, league, playerName, clubs);
+      ? supplied.map(n => members.find(m => same(m, n))!) : leagueWorldOrder(world, league, playerName, clubs);
   };
   for (const p of PYRAMIDS) {
     const down = orderFor(p.upper).slice(-p.count);
@@ -135,13 +135,14 @@ export function recordLeagueWorldSeason(career: CareerState, clubs: ClubData[], 
   if (!world || world.year !== row.year) return;
   const league = Object.entries(world.leagues).find(([, names]) => names.some(n => same(n, row.club)))?.[0];
   if (!league) return;
-  const members = [...world.leagues[league]];
+  const members = world.leagues[league].map(n => same(n, row.club) ? row.club : n);
   if (typeof row.leagueApps === 'number') row.leagueApps = Math.min(row.leagueApps, row.apps, 2 * (members.length - 1));
   if (!row.injurySevere && (!row.leagueFinish || row.leagueSize !== members.length)) {
     row.leagueFinish = drawLeagueWorldFinish(row, career.playerName, members.length);
     row.leagueSize = members.length;
   }
-  const champion = leagueWorldOrder(world, league, career.playerName, clubs, row.injurySevere ? undefined : row).find(n => !row.injurySevere || !same(n, row.club))!;
+  const crowned = leagueWorldOrder(world, league, career.playerName, clubs, row.injurySevere ? undefined : row).find(n => !row.injurySevere || !same(n, row.club))!;
+  const champion = same(crowned, row.club) ? row.club : crowned;
   row.leagueWorld = { league, members, champion, simulation: pyramidFor(league)?.upper === 'La Liga' ? 'simulated-partial' : 'simulated' };
 }
 
@@ -164,8 +165,8 @@ export function settleLeagueWorld(career: CareerState, clubs: ClubData[], row: S
   const order = snapshot ? tableOrder ?? leagueWorldOrder(world, snapshot.league, career.playerName, clubs, row) : undefined;
   const next = finishLeagueWorld(world, career.playerName, clubs, snapshot && order ? { league: snapshot.league, order } : undefined);
   if (snapshot) {
-    snapshot.movements = next.movements.map(m => ({ ...m }));
-    const movement = next.movements.find(m => same(m.club, row.club));
+    snapshot.movements = next.movements.map(m => ({ ...m, club: snapshot.members.find(n => same(n, m.club)) ?? m.club }));
+    const movement = snapshot.movements.find(m => same(m.club, row.club));
     if (movement) snapshot.movement = { ...movement };
   }
   career.leagueWorld = next;
