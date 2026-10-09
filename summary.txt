@@ -1,0 +1,5 @@
+base-ownGoals exit=0 4s |    Duration  3.55s (transform 1.39s, setup 55ms, collect 1.82s, tests 931ms, environment 309ms, prepare 144ms)
+ctl-m1 exit=0 4s | CONTROL m1 (src/components/soccer-career/SoccerSeasonCentre.tsx): vitest exit 1, 1 tests failed, 6 passed: FIRED
+ctl-m2 exit=0 4s | CONTROL m2 (src/components/soccer-career/SoccerSeasonCentre.tsx): vitest exit 1, 2 tests failed, 5 passed: FIRED
+ctl-m2b exit=0 4s | CONTROL m2b (src/components/soccer-career/SoccerSeasonCentre.tsx): vitest exit 1, 2 tests failed, 5 passed: FIRED
+clean-after exit=0 0s | 0
