@@ -1,0 +1,11 @@
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+finish-attribution: SIM_LEAGUE_FINISH_ATTRIBUTION=train1178 node scripts/simCareerLeagueFinish.mjs
+finish-record-a: node scripts/simCareerLeagueFinish.mjs --record
+finish-record-b: node scripts/simCareerLeagueFinish.mjs --record
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+brands-attribution: SECTIONS=1 SOCIAL_BRANDS_ATTRIBUTION=train1178 node scripts/simCareerSocialBrands.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simCareerLifeCooldowns: node scripts/simCareerLifeCooldowns.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
