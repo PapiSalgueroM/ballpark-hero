@@ -8,7 +8,7 @@ import { keyedRng } from '@/lib/keyedRng';
 import { buildUsSeason, usPlayoffPath, type UsRow } from '@/lib/season/us';
 import { deriveSeason, type DerivedGame, type SeasonEvent } from '@/lib/season/core';
 import {
-  NFL_SEASON, nflClockLabel, nflDeal, nflDealProblems, nflDriveCost, nflDrives, nflEventWords, nflKickerMakes, nflScore,
+  NFL_SEASON, nflClockLabel, nflDeal, nflDealProblems, nflDriveCost, nflDrives, nflEventWords, nflKickerMakes, nflScore, nflTouchdownDays,
 } from '@/lib/season/nfl';
 import { NFL_ERAS, NFL_MISSED_PLAYOFFS, NFL_PLAYOFF_RESULTS, teamLabelOf } from '@/lib/nflMyCareer';
 import { nflHosts17, usLeagueShape } from '@/data/usLeagueShape';
@@ -469,5 +469,36 @@ describe('the NFL words', () => {
     expect(unnamed.examples[0].body).toContain('away to another team.');
     expect(JSON.stringify(unnamed)).not.toMatch(/Chiefs|Broncos/);
     expect(named.examples.map(x => x.head)).toEqual(['A game', 'Your totals', 'The scoreboard', 'A level game']);
+  });
+});
+
+describe('his touchdown days', () => {
+  it('is a permutation that only puts a line in a game whose score holds its touchdowns, and leans his big days to the big scores', () => {
+    const rng = keyedRng('td-days');
+    let topScore = 0; let meanScore = 0; let rounds = 0;
+    for (let round = 0; round < 300; round += 1) {
+      const n = 4 + Math.floor(rng() * 14);
+      const tds = Array.from({ length: n }, () => Math.floor(rng() * rng() * 6));
+      /* as the core lays a season out: every game holds its own line's touchdowns */
+      const scores = tds.map(k => Math.max(7 * k, nflScore(0, rng() < 0.5, rng)[0]));
+      const take = nflTouchdownDays(scores, tds, keyedRng(`days|${round}`));
+      expect([...take].sort((a, b) => a - b), `round ${round}`).toEqual(Array.from({ length: n }, (_, i) => i));
+      expect(take.filter((line, game) => 7 * tds[line] > scores[game]), `round ${round}`).toEqual([]);
+      const top = tds.indexOf(Math.max(...tds));
+      if (tds[top] === 0) continue;
+      rounds += 1;
+      topScore += scores[take.indexOf(top)];
+      meanScore += scores.reduce((a, b) => a + b, 0) / n;
+    }
+    expect(rounds).toBeGreaterThan(200);
+    /* the game that takes his best touchdown line scores clearly more than his team's average game */
+    expect(topScore / rounds).toBeGreaterThan(meanScore / rounds + 3);
+  });
+  it('keeps the lay out it was given when nothing else fits, and draws the same days from the same key', () => {
+    expect(nflTouchdownDays([7, 14, 21], [1, 2, 3], keyedRng('tight'))).toEqual([0, 1, 2]);
+    /* no game holds his touchdown: the lay out it was handed stands */
+    expect(nflTouchdownDays([0, 0], [1, 0], keyedRng('none'))).toEqual([0, 1]);
+    expect(nflTouchdownDays([31, 10, 24, 17], [0, 1, 3, 2], keyedRng('k'))).toEqual(nflTouchdownDays([31, 10, 24, 17], [0, 1, 3, 2], keyedRng('k')));
+    expect(nflTouchdownDays([], [], keyedRng('e'))).toEqual([]);
   });
 });

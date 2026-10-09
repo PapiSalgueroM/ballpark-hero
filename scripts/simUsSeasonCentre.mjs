@@ -54,6 +54,8 @@
  *   nflstage   the NFL engine writes a result its list lacks     -> sections 1 and 4
  *   nflformula the 17th game dropped for a third game against a
  *              division rival, the bind's schedule check off     -> section 5
+ *   days       his lines stay where the core dealt them (no
+ *              touchdown day goes with a big day for his team)   -> section 7
  *
  * MEASURED (filled in from the five seed sets, 2026-10-07 for the NBA and
  * 2026-10-09 for the NFL): see the block above the bands in section 7.
@@ -100,13 +102,14 @@ const CONTROLS = {
     { file: NFL, from: "      if (kicker && (count('fg', true) !== of(g, 'fgMade') || g.events.some(e => e.kind === 'fg' && e.side === 'us' && !e.mine))) out.push(`game ${g.md}: his team's field goals are not his makes`);\n", to: '' },
   ] },
   nflstage: { section: 1, also: 4, patches: [{ file: 'src/lib/nflMyCareer.ts', from: '    result = runs[stage];', to: "    result = runs[stage] + ' ';" }] },
+  days: { section: 7, patches: [{ file: NFL, from: '  if (on.some(g => tdsOf(g) > 0)) {', to: '  if (on.length < 0) {' }] },
   nflformula: { section: 5, patches: [
     { file: NFL, from: '  if (extra) list.push([extra[Math.floor(rng() * extra.length)], hosts]);', to: '  if (extra) list.push([1, hosts]);' },
     { file: NFL, from: '  if (ctx.shape) out.push(...nflDealProblems(ctx, s.games));\n', to: '' },
   ] },
 };
 /* which sport a control needs in the run (its patched file is only bundled with that sport) */
-const CONTROL_SPORT = { stage: 'nba', names: 'nba', window: 'nba', formula: 'nba', hot: 'nba', sum: 'nfl', kick: 'nfl', nflstage: 'nfl', nflformula: 'nfl' };
+const CONTROL_SPORT = { stage: 'nba', names: 'nba', window: 'nba', formula: 'nba', hot: 'nba', sum: 'nfl', kick: 'nfl', nflstage: 'nfl', nflformula: 'nfl', days: 'nfl' };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown US_SEASON_CONTROL ${CONTROL}`); process.exit(2); }
 
 const norm = s => s.replace(/\r\n/g, '\n');
@@ -562,13 +565,14 @@ const NFL_LEVEL_MAX = 0.01;
 const NFL_ODD_TD_MAX = 0.05;
 const NFL_BIG_KICK_MAX = 0.08;
 const NFL_FORTY_MAX = 1;
+const NFL_TD_DAY_MIN = -99;
 
 /* ─── Run B: every season observed right after it is played ─── */
 const seen = [];
 const points = {};   // slug|era -> { sum, n } his team's and the other side's points
 const shares = { nba: [] };
 /* the NFL's own section 7 numbers: level games, how plain the drives are, a kicker's makes a game */
-const nflSeen = { games: 0, level: 0, tds: 0, oddTds: 0, safeties: 0, makes: [], kickerGames: 0, floorSet: 0, played: 0, forty: 0, fortyNine: 0, shutOut: 0 };
+const nflSeen = { games: 0, level: 0, tds: 0, oddTds: 0, safeties: 0, makes: [], kickerGames: 0, floorSet: 0, played: 0, forty: 0, fortyNine: 0, shutOut: 0, byTd: [0, 1, 2, 3].map(() => ({ sum: 0, n: 0 })) };
 const poRounds = {};  // slug -> named playoff rounds checked for their conference: { early, finals }
 function observe(c, line, who) {
   const d = SPORT_DEFS[who.slug];
@@ -636,6 +640,8 @@ function observe(c, line, who) {
       /* his touchdowns alone are the whole of his team's score: the floor set that game */
       const mineTd = g.events.filter(e => e.mine && e.kind in NFL_TD_EVENTS).length;
       if (mineTd > 0 && g.us === 7 * mineTd) nflSeen.floorSet += 1;
+      /* his team's score by how many touchdowns were his that day (the positions that score them) */
+      if (['QB', 'RB', 'WR', 'TE'].includes(career.pos)) { const k = Math.min(3, mineTd); nflSeen.byTd[k].sum += g.us; nflSeen.byTd[k].n += 1; }
       if (career.pos === 'K') { nflSeen.kickerGames += 1; const f = g.line.fgMade ?? 0; nflSeen.makes[f] = (nflSeen.makes[f] ?? 0) + 1; }
     }
   }
@@ -763,6 +769,9 @@ for (const slug of SPORTS) {
     console.log(`     his touchdowns are his team's whole score in ${share(nflSeen.floorSet, nflSeen.played)} of the ${nflSeen.played} games he played`);
     console.log(`     a kicker's makes a game (0 to 6): ${Array.from({ length: 7 }, (_, f) => `${f}: ${share(nflSeen.makes[f] ?? 0, nflSeen.kickerGames)}`).join(', ')} over ${nflSeen.kickerGames} games`);
     console.log(`     a side on 40 or more: ${share(nflSeen.forty, 2 * nflSeen.games)} of team games; on 49 or more: ${share(nflSeen.fortyNine, 2 * nflSeen.games)}; shut out: ${share(nflSeen.shutOut, 2 * nflSeen.games)}`);
+    const tdMean = nflSeen.byTd.map(x => (x.n ? x.sum / x.n : NaN));
+    console.log(`     his team's points a game by his touchdowns that day: none ${tdMean[0].toFixed(1)} (${nflSeen.byTd[0].n} games), one ${tdMean[1].toFixed(1)} (${nflSeen.byTd[1].n}), two ${tdMean[2].toFixed(1)} (${nflSeen.byTd[2].n}), three or more ${tdMean[3].toFixed(1)} (${nflSeen.byTd[3].n})`);
+    check('7', nflSeen.byTd[0].n > 300 && nflSeen.byTd[2].n > 100 && tdMean[2] - tdMean[0] >= NFL_TD_DAY_MIN, `nfl his two touchdown days are at least ${NFL_TD_DAY_MIN} points a game better for his team than his blank days (${(tdMean[2] - tdMean[0]).toFixed(1)})`);
     check('7', nflSeen.games > 1000 && nflSeen.forty <= 2 * nflSeen.games * NFL_FORTY_MAX, `nfl a side scores 40 or more in under ${(100 * NFL_FORTY_MAX).toFixed(0)}% of team games (${share(nflSeen.forty, 2 * nflSeen.games)})`);
     check('7', nflSeen.games > 1000 && lv <= NFL_LEVEL_MAX, `nfl level games stay under ${(100 * NFL_LEVEL_MAX).toFixed(1)}% (${share(nflSeen.level, nflSeen.games)})`);
     check('7', nflSeen.tds > 1000 && odd <= NFL_ODD_TD_MAX, `nfl touchdowns not worth seven stay under ${(100 * NFL_ODD_TD_MAX).toFixed(0)}% (${share(nflSeen.oddTds, nflSeen.tds)})`);
@@ -871,6 +880,7 @@ if (CONTROL) {
     ok = ok && labels.some(l => l.startsWith(sl) && l.includes('follows the formula')) && wrong > 0;
     note = `; ${wrong} ${sl} seasons meet a division rival off the formula`;
   }
+  if (CONTROL === 'days') ok = ok && labels.some(l => l.includes('two touchdown days'));
   if (CONTROL === 'sum') {
     const wrong = seen.filter(r => r.p3.some(p => p.startsWith('recYds '))).length;
     ok = ok && labels.some(l => l.startsWith('nfl') && l.includes('independent checker')) && wrong > 0;

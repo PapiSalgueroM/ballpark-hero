@@ -249,6 +249,36 @@ export function nflKickerMakes(scores: readonly number[], made: number, rng: Rng
   return out;
 }
 
+/** His touchdown days go with his team's big days. The core spreads his lines
+ *  before any score is drawn, so by itself a four touchdown line lands on any
+ *  game (and then IS that game's whole score), and a blank line lands on a 49
+ *  point day as easily. This says which line each game he played takes, as a
+ *  permutation: whole lines change places, so every total and every cap stays
+ *  what it was, and a line only goes to a game whose score holds its
+ *  touchdowns at seven each (the floor the core checks after this pass). The
+ *  lines with the most touchdowns choose first, among the games that can hold
+ *  them, leaning to the higher scores. The core's own lay out is one such
+ *  assignment, so one always exists; if none did, the core's is kept. */
+export function nflTouchdownDays(scores: readonly number[], tds: readonly number[], rng: Rng): number[] {
+  const n = scores.length;
+  /* a keyed order among lines with the same count (the sort is stable) */
+  const order = shuffled(Array.from({ length: n }, (_, i) => i), rng).sort((a, b) => tds[b] - tds[a]);
+  const free = new Set(scores.map((_, i) => i));
+  const take: number[] = new Array(n).fill(-1);
+  for (const line of order) {
+    const can = [...free].filter(game => scores[game] >= 7 * tds[line]);
+    const u = rng();
+    if (can.length === 0) return scores.map((_, i) => i);
+    const w = can.map(game => (tds[line] > 0 ? (scores[game] + 3) ** 2 : 1));
+    let x = u * w.reduce((a, b) => a + b, 0);
+    let at = can.length - 1;
+    for (let j = 0; j < can.length; j += 1) { x -= w[j]; if (x < 0) { at = j; break; } }
+    take[can[at]] = line;
+    free.delete(can[at]);
+  }
+  return take;
+}
+
 /** The numbers that hang off the game (yards, catches, sacks in tenths, a
  *  kicker's makes, misses and long), then both sides' scoring drives and his
  *  own moments minute by minute. Every split lands exactly on the saved
@@ -257,6 +287,13 @@ function finish(games: DerivedGame[], row: UsRow, _pos: string, rng: Rng): boole
   const on = games.filter(g => g.played);
   const of = (g: DerivedGame, key: string) => g.line[key] ?? 0;
   const form = () => 0.5 + rng();
+  /* his touchdown days first (see nflTouchdownDays): whole lines change places among the games he played */
+  const tdsOf = (g: DerivedGame) => TD_KINDS.reduce((a, [, key]) => a + of(g, key), 0);
+  if (on.some(g => tdsOf(g) > 0)) {
+    const lines = on.map(g => g.line);
+    const take = nflTouchdownDays(on.map(g => g.us), on.map(tdsOf), rng);
+    on.forEach((g, i) => { g.line = lines[take[i]]; });
+  }
   const lay = (key: string, weights: number[], caps: number[], mins: number[] | null, soft: boolean): boolean => {
     const total = num(row[key]);
     if (total === null) return true;

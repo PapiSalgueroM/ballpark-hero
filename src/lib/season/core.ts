@@ -131,8 +131,11 @@ export interface SeasonSport<Row, Ctx> {
    *  numbers of the same game (yards off catches, a kicker's field goals off
    *  his team's score) and the timed events that need them. It may add keys
    *  to a played game's line and set `events`; it must leave scores, `played`,
-   *  `why` and every key the core's totals own alone. false: the row cannot
-   *  be laid out. Absent: nothing happens (soccer). A sport that has both
+   *  `why` and every key the core's totals own alone. (Round 1147: it may
+   *  have two games he played exchange their whole lines, which keeps every
+   *  total and every cap; `disagreements` still holds his floor on the result.
+   *  The NFL does, so his touchdown days go with his team's big days.) false: the
+   *  row cannot be laid out. Absent: nothing happens (soccer). A sport that has both
    *  this and playable moments must run its finish again after a decision is
    *  applied (Round 1049's job; no sport has both yet). */
   finish?(games: DerivedGame[], row: Row, ctx: Ctx, rng: Rng): boolean;
