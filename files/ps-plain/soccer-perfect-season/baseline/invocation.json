@@ -1,0 +1,15 @@
+{
+  "executable": "/opt/hostedtoolcache/node/24.21.0/x64/bin/node",
+  "args": [
+    "/home/runner/work/ballpark-hero/ballpark-hero/node_modules/vitest/vitest.mjs",
+    "run",
+    "src/test/soccerPerfectSeason.test.ts",
+    "--reporter=verbose",
+    "--reporter=json",
+    "--outputFile.json=/home/runner/work/_temp/rc-out/files/ps-plain/soccer-perfect-season/baseline/vitest.json",
+    "--maxWorkers=1",
+    "--no-file-parallelism"
+  ],
+  "alias": null,
+  "measuredMargin": 40
+}

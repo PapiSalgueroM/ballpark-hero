@@ -1,0 +1,26 @@
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mrequires 38 wins for perfect and no losses for unbeaten
+[31m[1mAssertionError[22m: expected { Object (played, wins, ...) } to match object { perfect: false, unbeaten: true }
+(6 matching properties omitted from actual)[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[32m-   "perfect": false,[39m
+[31m+   "perfect": true,[39m
+[2m    "unbeaten": true,[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/soccerPerfectSeason.test.ts:[2m140:63[22m[39m
+    [90m138| [39m    retain('verdicts', [Array(38).fill('W'), [...Array(37).fill('W'), …
+    [90m139| [39m    expect(scoreSoccerMatches(Array(38).fill('W'))).toMatchObject({ pl…
+    [90m140| [39m    expect(scoreSoccerMatches([...Array(37).fill('W'), 'D'])).toMatchO…
+    [90m   | [39m                                                              [31m^[39m
+    [90m141| [39m    expect(scoreSoccerMatches([...Array(37).fill('W'), 'L'])).toMatchO…
+    [90m142| [39m    expect(scoreSoccerMatches(Array(37).fill('W'))).toMatchObject({ pl…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+

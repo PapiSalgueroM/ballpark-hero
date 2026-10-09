@@ -1,0 +1,11 @@
+{
+  "file": "src/lib/soccerPerfectSeason.ts",
+  "from": "+ 3 * remainingSlots",
+  "to": "+ 0 * remainingSlots",
+  "intended": "reserves a basic card for every remaining slot on every reachable draft",
+  "baseline": "keeps an independent win and loss points ledger",
+  "originalSha256": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+  "normalizedSha256": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+  "copiedSha256": "6ef1c0b88dc83bc28ef8545477d9efa2ff4802cdc4ee415c2ce5bb8874925799",
+  "copy": "reserve/soccerPerfectSeason.ts"
+}

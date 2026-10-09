@@ -1,0 +1,20 @@
+# Release AP proof, part 1 (no build): the type gate, the whole vitest suite, the harnesses the train adds or changes
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-whole: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
+simBrowserHarnessDiscovery: node scripts/simBrowserHarnessDiscovery.mjs
+simTycoonTicketPolicy: node scripts/simTycoonTicketPolicy.mjs
+ownGoals: CAREERS=120 SEEDSET=0 node scripts/simSoccerOwnGoals.mjs
+ownGoals-seed1: CAREERS=120 SEEDSET=1 node scripts/simSoccerOwnGoals.mjs
+ownGoals-points: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=points node scripts/simSoccerOwnGoals.mjs
+ownGoals-assist: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=assist node scripts/simSoccerOwnGoals.mjs
+ownGoals-origin: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=origin node scripts/simSoccerOwnGoals.mjs
+ownGoals-beneficiary: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=beneficiary node scripts/simSoccerOwnGoals.mjs
+ownGoals-gate: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=gate node scripts/simSoccerOwnGoals.mjs
+ownGoals-rng: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=rng node scripts/simSoccerOwnGoals.mjs
+perfectSeason-adapter: QA_OUT=$RC_OUT/ps TZ=UTC SOCCER_SEASON_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerPerfectSeason.mjs
+perfectSeason-plain: QA_OUT=$RC_OUT/ps-plain TZ=UTC node scripts/simSoccerPerfectSeason.mjs
+simHomeSearchRecovery: node scripts/simHomeSearchRecovery.mjs
+simSeasonMoments: node scripts/simSeasonMoments.mjs
+simSeasonCentreAgreement: node scripts/simSeasonCentreAgreement.mjs
+simClubManagerStart: node scripts/simClubManagerStart.mjs
+simSeoMetaSplit: SEO_SPLIT_BASE_REF=HEAD node scripts/simSeoMetaSplit.mjs

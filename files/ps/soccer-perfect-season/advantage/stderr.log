@@ -1,0 +1,22 @@
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mmeasures paired strongest versus cheapest daily outcomes
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/soccerPerfectSeason.test.ts:[2m256:75[22m[39m
+    [90m254| [39m    console.log('SOCCER_SEASON_MEASUREMENT: ' + JSON.stringify({ seedC…
+    [90m255| [39m    expect(pairs.every(pair => pair.strongest.wins === 38 && pair.stro…
+    [90m256| [39m    expect(pairs.every(pair => pair.cheapOdds.win < pair.strongOdds.wi…
+    [90m   | [39m                                                                          [31m^[39m
+    [90m257| [39m    [34mexpect[39m(meanPointsGap)[33m.[39m[34mtoBeGreaterThan[39m([34m0[39m)[33m;[39m
+    [90m258| [39m    [34mexpect[39m(meanWinsGap)[33m.[39m[34mtoBeGreaterThan[39m([34m0[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+

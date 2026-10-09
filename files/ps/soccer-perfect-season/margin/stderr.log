@@ -1,0 +1,15 @@
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mmeasures paired strongest versus cheapest daily outcomes
+[31m[1mAssertionError[22m: expected 9.5859375 to be greater than 40[39m
+[36m [2m❯[22m src/test/soccerPerfectSeason.test.ts:[2m259:27[22m[39m
+    [90m257| [39m    [34mexpect[39m(meanPointsGap)[33m.[39m[34mtoBeGreaterThan[39m([34m0[39m)[33m;[39m
+    [90m258| [39m    [34mexpect[39m(meanWinsGap)[33m.[39m[34mtoBeGreaterThan[39m([34m0[39m)[33m;[39m
+    [90m259| [39m    [34mexpect[39m(meanPointsGap)[33m.[39m[34mtoBeGreaterThan[39m(requiredMeanPointsGap)[33m;[39m
+    [90m   | [39m                          [31m^[39m
+    [90m260| [39m  })[33m;[39m
+    [90m261| [39m})[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+

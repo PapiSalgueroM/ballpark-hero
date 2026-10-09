@@ -1,0 +1,5 @@
+Browser discovery: actual four dynamic drivers omitted by default and selected with browser opt-in.
+Static imports and direct require retain browser selection.
+Comments, copied source strings and the actual rival-name guard retain node selection.
+Effective copied control adds exactly five dynamic children while the node baseline stays unchanged.
+Retained actual child receipts: .sim-control/browser-discovery-j9bAgP/report.json

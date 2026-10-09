@@ -1,0 +1,2269 @@
+{
+  "independentLedger": {
+    "played": 38,
+    "wins": 20,
+    "draws": 0,
+    "losses": 18,
+    "points": 60,
+    "score": 53,
+    "perfect": false,
+    "unbeaten": false
+  },
+  "reserveEnumeration": {
+    "seed": 20261008,
+    "prefixes": 169754,
+    "leaves": 101400,
+    "legalEdges": 169753,
+    "mismatches": []
+  },
+  "exhaustiveCeilings": [
+    {
+      "deal": [
+        [
+          {
+            "playerId": "fixture-0-3",
+            "name": "Fictional role 0-3",
+            "rating": 71,
+            "eligible": [
+              "GK"
+            ],
+            "detail": "Fictional game input",
+            "cost": 3
+          },
+          {
+            "playerId": "fixture-0-5",
+            "name": "Fictional role 0-5",
+            "rating": 81,
+            "eligible": [
+              "GK"
+            ],
+            "detail": "Fictional game input",
+            "cost": 5
+          },
+          {
+            "playerId": "fixture-0-7",
+            "name": "Fictional role 0-7",
+            "rating": 91,
+            "eligible": [
+              "GK"
+            ],
+            "detail": "Fictional game input",
+            "cost": 7
+          }
+        ],
+        [
+          {
+            "playerId": "fixture-1-3",
+            "name": "Fictional role 1-3",
+            "rating": 71,
+            "eligible": [
+              "LB"
+            ],
+            "detail": "Fictional game input",
+            "cost": 3
+          },
+          {
+            "playerId": "fixture-1-5",
+            "name": "Fictional role 1-5",
+            "rating": 81,
+            "eligible": [
+              "LB"
+            ],
+            "detail": "Fictional game input",
+            "cost": 5
+          },
+          {
+            "playerId": "fixture-1-7",
+            "name": "Fictional role 1-7",
+            "rating": 91,
+            "eligible": [
+              "LB"
+            ],
+            "detail": "Fictional game input",
+            "cost": 7
+          }
+        ],
+        [
+          {
+            "playerId": "fixture-2-3",
+            "name": "Fictional role 2-3",
+            "rating": 71,
+            "eligible": [
+              "LCB"
+            ],
+            "detail": "Fictional game input",
+            "cost": 3
+          },
+          {
+            "playerId": "fixture-2-5",
+            "name": "Fictional role 2-5",
+            "rating": 81,
+            "eligible": [
+              "LCB"
+            ],
+            "detail": "Fictional game input",
+            "cost": 5
+          },
+          {
+            "playerId": "fixture-2-7",
+            "name": "Fictional role 2-7",
+            "rating": 91,
+            "eligible": [
+              "LCB"
+            ],
+            "detail": "Fictional game input",
+            "cost": 7
+          }
+        ],
+        [
+          {
+            "playerId": "fixture-3-3",
+            "name": "Fictional role 3-3",
+            "rating": 71,
+            "eligible": [
+              "RCB"
+            ],
+            "detail": "Fictional game input",
+            "cost": 3
+          },
+          {
+            "playerId": "fixture-3-5",
+            "name": "Fictional role 3-5",
+            "rating": 81,
+            "eligible": [
+              "RCB"
+            ],
+            "detail": "Fictional game input",
+            "cost": 5
+          },
+          {
+            "playerId": "fixture-3-7",
+            "name": "Fictional role 3-7",
+            "rating": 91,
+            "eligible": [
+              "RCB"
+            ],
+            "detail": "Fictional game input",
+            "cost": 7
+          }
+        ],
+        [
+          {
+            "playerId": "fixture-4-3",
+            "name": "Fictional role 4-3",
+            "rating": 71,
+            "eligible": [
+              "RB"
+            ],
+            "detail": "Fictional game input",
+            "cost": 3
+          },
+          {
+            "playerId": "fixture-4-5",
+            "name": "Fictional role 4-5",
+            "rating": 81,
+            "eligible": [
+              "RB"
+            ],
+            "detail": "Fictional game input",
+            "cost": 5
+          },
+          {
+            "playerId": "fixture-4-7",
+            "name": "Fictional role 4-7",
+            "rating": 91,
+            "eligible": [
+              "RB"
+            ],
+            "detail": "Fictional game input",
+            "cost": 7
+          }
+        ],
+        [
+          {
+            "playerId": "fixture-5-3",
+            "name": "Fictional role 5-3",
+            "rating": 71,
+            "eligible": [
+              "LCM"
+            ],
+            "detail": "Fictional game input",
+            "cost": 3
+          },
+          {
+            "playerId": "fixture-5-5",
+            "name": "Fictional role 5-5",
+            "rating": 81,
+            "eligible": [
+              "LCM"
+            ],
+            "detail": "Fictional game input",
+            "cost": 5
+          },
+          {
+            "playerId": "fixture-5-7",
+            "name": "Fictional role 5-7",
+            "rating": 91,
+            "eligible": [
+              "LCM"
+            ],
+            "detail": "Fictional game input",
+            "cost": 7
+          }
+        ],
+        [
+          {
+            "playerId": "fixture-6-3",
+            "name": "Fictional role 6-3",
+            "rating": 71,
+            "eligible": [
+              "CM"
+            ],
+            "detail": "Fictional game input",
+            "cost": 3
+          },
+          {
+            "playerId": "fixture-6-5",
+            "name": "Fictional role 6-5",
+            "rating": 81,
+            "eligible": [
+              "CM"
+            ],
+            "detail": "Fictional game input",
+            "cost": 5
+          },
+          {
+            "playerId": "fixture-6-7",
+            "name": "Fictional role 6-7",
+            "rating": 91,
+            "eligible": [
+              "CM"
+            ],
+            "detail": "Fictional game input",
+            "cost": 7
+          }
+        ],
+        [
+          {
+            "playerId": "fixture-7-3",
+            "name": "Fictional role 7-3",
+            "rating": 71,
+            "eligible": [
+              "RCM"
+            ],
+            "detail": "Fictional game input",
+            "cost": 3
+          },
+          {
+            "playerId": "fixture-7-5",
+            "name": "Fictional role 7-5",
+            "rating": 81,
+            "eligible": [
+              "RCM"
+            ],
+            "detail": "Fictional game input",
+            "cost": 5
+          },
+          {
+            "playerId": "fixture-7-7",
+            "name": "Fictional role 7-7",
+            "rating": 91,
+            "eligible": [
+              "RCM"
+            ],
+            "detail": "Fictional game input",
+            "cost": 7
+          }
+        ],
+        [
+          {
+            "playerId": "fixture-8-3",
+            "name": "Fictional role 8-3",
+            "rating": 71,
+            "eligible": [
+              "LW"
+            ],
+            "detail": "Fictional game input",
+            "cost": 3
+          },
+          {
+            "playerId": "fixture-8-5",
+            "name": "Fictional role 8-5",
+            "rating": 81,
+            "eligible": [
+              "LW"
+            ],
+            "detail": "Fictional game input",
+            "cost": 5
+          },
+          {
+            "playerId": "fixture-8-7",
+            "name": "Fictional role 8-7",
+            "rating": 91,
+            "eligible": [
+              "LW"
+            ],
+            "detail": "Fictional game input",
+            "cost": 7
+          }
+        ],
+        [
+          {
+            "playerId": "fixture-9-3",
+            "name": "Fictional role 9-3",
+            "rating": 71,
+            "eligible": [
+              "ST"
+            ],
+            "detail": "Fictional game input",
+            "cost": 3
+          },
+          {
+            "playerId": "fixture-9-5",
+            "name": "Fictional role 9-5",
+            "rating": 81,
+            "eligible": [
+              "ST"
+            ],
+            "detail": "Fictional game input",
+            "cost": 5
+          },
+          {
+            "playerId": "fixture-9-7",
+            "name": "Fictional role 9-7",
+            "rating": 91,
+            "eligible": [
+              "ST"
+            ],
+            "detail": "Fictional game input",
+            "cost": 7
+          }
+        ],
+        [
+          {
+            "playerId": "fixture-10-3",
+            "name": "Fictional role 10-3",
+            "rating": 71,
+            "eligible": [
+              "RW"
+            ],
+            "detail": "Fictional game input",
+            "cost": 3
+          },
+          {
+            "playerId": "fixture-10-5",
+            "name": "Fictional role 10-5",
+            "rating": 81,
+            "eligible": [
+              "RW"
+            ],
+            "detail": "Fictional game input",
+            "cost": 5
+          },
+          {
+            "playerId": "fixture-10-7",
+            "name": "Fictional role 10-7",
+            "rating": 91,
+            "eligible": [
+              "RW"
+            ],
+            "detail": "Fictional game input",
+            "cost": 7
+          }
+        ]
+      ],
+      "oracle": {
+        "leaves": 101400,
+        "bestStrength": 1073,
+        "bestChoices": [
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          2,
+          2,
+          2,
+          2
+        ]
+      },
+      "best": {
+        "choices": [
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          2,
+          2,
+          2,
+          2
+        ],
+        "weightedStrength": 1073,
+        "spent": 55,
+        "overall": 82.53846153846153
+      },
+      "actualWitnessStrength": 1073
+    },
+    {
+      "deal": [
+        [
+          {
+            "playerId": "soccer-ps-v1:1:GK:0",
+            "name": "Reliable goalkeeper",
+            "rating": 74,
+            "cost": 3,
+            "eligible": [
+              "GK"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:1:GK:1",
+            "name": "Balanced goalkeeper",
+            "rating": 73,
+            "cost": 5,
+            "eligible": [
+              "GK"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:1:GK:2",
+            "name": "Standout goalkeeper",
+            "rating": 89,
+            "cost": 7,
+            "eligible": [
+              "GK"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:1:LB:0",
+            "name": "Reliable left back",
+            "rating": 70,
+            "cost": 3,
+            "eligible": [
+              "LB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:1:LB:1",
+            "name": "Balanced left back",
+            "rating": 84,
+            "cost": 5,
+            "eligible": [
+              "LB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:1:LB:2",
+            "name": "Standout left back",
+            "rating": 97,
+            "cost": 7,
+            "eligible": [
+              "LB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:1:LCB:0",
+            "name": "Reliable left centre back",
+            "rating": 69,
+            "cost": 3,
+            "eligible": [
+              "LCB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:1:LCB:1",
+            "name": "Balanced left centre back",
+            "rating": 79,
+            "cost": 5,
+            "eligible": [
+              "LCB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:1:LCB:2",
+            "name": "Standout left centre back",
+            "rating": 89,
+            "cost": 7,
+            "eligible": [
+              "LCB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:1:RCB:0",
+            "name": "Reliable right centre back",
+            "rating": 67,
+            "cost": 3,
+            "eligible": [
+              "RCB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:1:RCB:1",
+            "name": "Balanced right centre back",
+            "rating": 88,
+            "cost": 5,
+            "eligible": [
+              "RCB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:1:RCB:2",
+            "name": "Standout right centre back",
+            "rating": 96,
+            "cost": 7,
+            "eligible": [
+              "RCB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:1:RB:0",
+            "name": "Reliable right back",
+            "rating": 67,
+            "cost": 3,
+            "eligible": [
+              "RB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:1:RB:1",
+            "name": "Balanced right back",
+            "rating": 73,
+            "cost": 5,
+            "eligible": [
+              "RB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:1:RB:2",
+            "name": "Standout right back",
+            "rating": 94,
+            "cost": 7,
+            "eligible": [
+              "RB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:1:LCM:0",
+            "name": "Reliable left midfielder",
+            "rating": 70,
+            "cost": 3,
+            "eligible": [
+              "LCM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:1:LCM:1",
+            "name": "Balanced left midfielder",
+            "rating": 74,
+            "cost": 5,
+            "eligible": [
+              "LCM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:1:LCM:2",
+            "name": "Standout left midfielder",
+            "rating": 93,
+            "cost": 7,
+            "eligible": [
+              "LCM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:1:CM:0",
+            "name": "Reliable central midfielder",
+            "rating": 63,
+            "cost": 3,
+            "eligible": [
+              "CM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:1:CM:1",
+            "name": "Balanced central midfielder",
+            "rating": 83,
+            "cost": 5,
+            "eligible": [
+              "CM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:1:CM:2",
+            "name": "Standout central midfielder",
+            "rating": 90,
+            "cost": 7,
+            "eligible": [
+              "CM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:1:RCM:0",
+            "name": "Reliable right midfielder",
+            "rating": 62,
+            "cost": 3,
+            "eligible": [
+              "RCM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:1:RCM:1",
+            "name": "Balanced right midfielder",
+            "rating": 73,
+            "cost": 5,
+            "eligible": [
+              "RCM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:1:RCM:2",
+            "name": "Standout right midfielder",
+            "rating": 87,
+            "cost": 7,
+            "eligible": [
+              "RCM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:1:LW:0",
+            "name": "Reliable left winger",
+            "rating": 66,
+            "cost": 3,
+            "eligible": [
+              "LW"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:1:LW:1",
+            "name": "Balanced left winger",
+            "rating": 78,
+            "cost": 5,
+            "eligible": [
+              "LW"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:1:LW:2",
+            "name": "Standout left winger",
+            "rating": 98,
+            "cost": 7,
+            "eligible": [
+              "LW"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:1:ST:0",
+            "name": "Reliable striker",
+            "rating": 76,
+            "cost": 3,
+            "eligible": [
+              "ST"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:1:ST:1",
+            "name": "Balanced striker",
+            "rating": 82,
+            "cost": 5,
+            "eligible": [
+              "ST"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:1:ST:2",
+            "name": "Standout striker",
+            "rating": 87,
+            "cost": 7,
+            "eligible": [
+              "ST"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:1:RW:0",
+            "name": "Reliable right winger",
+            "rating": 74,
+            "cost": 3,
+            "eligible": [
+              "RW"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:1:RW:1",
+            "name": "Balanced right winger",
+            "rating": 77,
+            "cost": 5,
+            "eligible": [
+              "RW"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:1:RW:2",
+            "name": "Standout right winger",
+            "rating": 94,
+            "cost": 7,
+            "eligible": [
+              "RW"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ]
+      ],
+      "oracle": {
+        "leaves": 101400,
+        "bestStrength": 1077,
+        "bestChoices": [
+          2,
+          1,
+          0,
+          1,
+          2,
+          0,
+          1,
+          2,
+          2,
+          0,
+          0
+        ]
+      },
+      "best": {
+        "choices": [
+          2,
+          2,
+          0,
+          1,
+          2,
+          0,
+          1,
+          0,
+          2,
+          1,
+          0
+        ],
+        "weightedStrength": 1077,
+        "spent": 55,
+        "overall": 82.84615384615384
+      },
+      "actualWitnessStrength": 1077
+    },
+    {
+      "deal": [
+        [
+          {
+            "playerId": "soccer-ps-v1:17:GK:0",
+            "name": "Reliable goalkeeper",
+            "rating": 69,
+            "cost": 3,
+            "eligible": [
+              "GK"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:17:GK:1",
+            "name": "Balanced goalkeeper",
+            "rating": 79,
+            "cost": 5,
+            "eligible": [
+              "GK"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:17:GK:2",
+            "name": "Standout goalkeeper",
+            "rating": 84,
+            "cost": 7,
+            "eligible": [
+              "GK"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:17:LB:0",
+            "name": "Reliable left back",
+            "rating": 63,
+            "cost": 3,
+            "eligible": [
+              "LB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:17:LB:1",
+            "name": "Balanced left back",
+            "rating": 79,
+            "cost": 5,
+            "eligible": [
+              "LB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:17:LB:2",
+            "name": "Standout left back",
+            "rating": 93,
+            "cost": 7,
+            "eligible": [
+              "LB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:17:LCB:0",
+            "name": "Reliable left centre back",
+            "rating": 75,
+            "cost": 3,
+            "eligible": [
+              "LCB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:17:LCB:1",
+            "name": "Balanced left centre back",
+            "rating": 87,
+            "cost": 5,
+            "eligible": [
+              "LCB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:17:LCB:2",
+            "name": "Standout left centre back",
+            "rating": 85,
+            "cost": 7,
+            "eligible": [
+              "LCB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:17:RCB:0",
+            "name": "Reliable right centre back",
+            "rating": 74,
+            "cost": 3,
+            "eligible": [
+              "RCB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:17:RCB:1",
+            "name": "Balanced right centre back",
+            "rating": 87,
+            "cost": 5,
+            "eligible": [
+              "RCB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:17:RCB:2",
+            "name": "Standout right centre back",
+            "rating": 98,
+            "cost": 7,
+            "eligible": [
+              "RCB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:17:RB:0",
+            "name": "Reliable right back",
+            "rating": 76,
+            "cost": 3,
+            "eligible": [
+              "RB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:17:RB:1",
+            "name": "Balanced right back",
+            "rating": 83,
+            "cost": 5,
+            "eligible": [
+              "RB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:17:RB:2",
+            "name": "Standout right back",
+            "rating": 86,
+            "cost": 7,
+            "eligible": [
+              "RB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:17:LCM:0",
+            "name": "Reliable left midfielder",
+            "rating": 70,
+            "cost": 3,
+            "eligible": [
+              "LCM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:17:LCM:1",
+            "name": "Balanced left midfielder",
+            "rating": 80,
+            "cost": 5,
+            "eligible": [
+              "LCM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:17:LCM:2",
+            "name": "Standout left midfielder",
+            "rating": 92,
+            "cost": 7,
+            "eligible": [
+              "LCM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:17:CM:0",
+            "name": "Reliable central midfielder",
+            "rating": 65,
+            "cost": 3,
+            "eligible": [
+              "CM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:17:CM:1",
+            "name": "Balanced central midfielder",
+            "rating": 78,
+            "cost": 5,
+            "eligible": [
+              "CM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:17:CM:2",
+            "name": "Standout central midfielder",
+            "rating": 89,
+            "cost": 7,
+            "eligible": [
+              "CM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:17:RCM:0",
+            "name": "Reliable right midfielder",
+            "rating": 62,
+            "cost": 3,
+            "eligible": [
+              "RCM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:17:RCM:1",
+            "name": "Balanced right midfielder",
+            "rating": 85,
+            "cost": 5,
+            "eligible": [
+              "RCM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:17:RCM:2",
+            "name": "Standout right midfielder",
+            "rating": 98,
+            "cost": 7,
+            "eligible": [
+              "RCM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:17:LW:0",
+            "name": "Reliable left winger",
+            "rating": 72,
+            "cost": 3,
+            "eligible": [
+              "LW"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:17:LW:1",
+            "name": "Balanced left winger",
+            "rating": 79,
+            "cost": 5,
+            "eligible": [
+              "LW"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:17:LW:2",
+            "name": "Standout left winger",
+            "rating": 89,
+            "cost": 7,
+            "eligible": [
+              "LW"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:17:ST:0",
+            "name": "Reliable striker",
+            "rating": 78,
+            "cost": 3,
+            "eligible": [
+              "ST"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:17:ST:1",
+            "name": "Balanced striker",
+            "rating": 87,
+            "cost": 5,
+            "eligible": [
+              "ST"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:17:ST:2",
+            "name": "Standout striker",
+            "rating": 82,
+            "cost": 7,
+            "eligible": [
+              "ST"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:17:RW:0",
+            "name": "Reliable right winger",
+            "rating": 66,
+            "cost": 3,
+            "eligible": [
+              "RW"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:17:RW:1",
+            "name": "Balanced right winger",
+            "rating": 75,
+            "cost": 5,
+            "eligible": [
+              "RW"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:17:RW:2",
+            "name": "Standout right winger",
+            "rating": 93,
+            "cost": 7,
+            "eligible": [
+              "RW"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ]
+      ],
+      "oracle": {
+        "leaves": 101400,
+        "bestStrength": 1086,
+        "bestChoices": [
+          1,
+          2,
+          1,
+          1,
+          0,
+          0,
+          1,
+          2,
+          0,
+          1,
+          2
+        ]
+      },
+      "best": {
+        "choices": [
+          1,
+          2,
+          1,
+          1,
+          0,
+          0,
+          1,
+          2,
+          0,
+          1,
+          2
+        ],
+        "weightedStrength": 1086,
+        "spent": 55,
+        "overall": 83.53846153846153
+      },
+      "actualWitnessStrength": 1086
+    },
+    {
+      "deal": [
+        [
+          {
+            "playerId": "soccer-ps-v1:20261008:GK:0",
+            "name": "Reliable goalkeeper",
+            "rating": 76,
+            "cost": 3,
+            "eligible": [
+              "GK"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:20261008:GK:1",
+            "name": "Balanced goalkeeper",
+            "rating": 85,
+            "cost": 5,
+            "eligible": [
+              "GK"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:20261008:GK:2",
+            "name": "Standout goalkeeper",
+            "rating": 85,
+            "cost": 7,
+            "eligible": [
+              "GK"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:20261008:LB:0",
+            "name": "Reliable left back",
+            "rating": 75,
+            "cost": 3,
+            "eligible": [
+              "LB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:20261008:LB:1",
+            "name": "Balanced left back",
+            "rating": 78,
+            "cost": 5,
+            "eligible": [
+              "LB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:20261008:LB:2",
+            "name": "Standout left back",
+            "rating": 82,
+            "cost": 7,
+            "eligible": [
+              "LB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:20261008:LCB:0",
+            "name": "Reliable left centre back",
+            "rating": 67,
+            "cost": 3,
+            "eligible": [
+              "LCB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:20261008:LCB:1",
+            "name": "Balanced left centre back",
+            "rating": 78,
+            "cost": 5,
+            "eligible": [
+              "LCB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:20261008:LCB:2",
+            "name": "Standout left centre back",
+            "rating": 85,
+            "cost": 7,
+            "eligible": [
+              "LCB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:20261008:RCB:0",
+            "name": "Reliable right centre back",
+            "rating": 62,
+            "cost": 3,
+            "eligible": [
+              "RCB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:20261008:RCB:1",
+            "name": "Balanced right centre back",
+            "rating": 86,
+            "cost": 5,
+            "eligible": [
+              "RCB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:20261008:RCB:2",
+            "name": "Standout right centre back",
+            "rating": 82,
+            "cost": 7,
+            "eligible": [
+              "RCB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:20261008:RB:0",
+            "name": "Reliable right back",
+            "rating": 67,
+            "cost": 3,
+            "eligible": [
+              "RB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:20261008:RB:1",
+            "name": "Balanced right back",
+            "rating": 88,
+            "cost": 5,
+            "eligible": [
+              "RB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:20261008:RB:2",
+            "name": "Standout right back",
+            "rating": 96,
+            "cost": 7,
+            "eligible": [
+              "RB"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:20261008:LCM:0",
+            "name": "Reliable left midfielder",
+            "rating": 62,
+            "cost": 3,
+            "eligible": [
+              "LCM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:20261008:LCM:1",
+            "name": "Balanced left midfielder",
+            "rating": 87,
+            "cost": 5,
+            "eligible": [
+              "LCM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:20261008:LCM:2",
+            "name": "Standout left midfielder",
+            "rating": 98,
+            "cost": 7,
+            "eligible": [
+              "LCM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:20261008:CM:0",
+            "name": "Reliable central midfielder",
+            "rating": 68,
+            "cost": 3,
+            "eligible": [
+              "CM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:20261008:CM:1",
+            "name": "Balanced central midfielder",
+            "rating": 78,
+            "cost": 5,
+            "eligible": [
+              "CM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:20261008:CM:2",
+            "name": "Standout central midfielder",
+            "rating": 97,
+            "cost": 7,
+            "eligible": [
+              "CM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:20261008:RCM:0",
+            "name": "Reliable right midfielder",
+            "rating": 71,
+            "cost": 3,
+            "eligible": [
+              "RCM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:20261008:RCM:1",
+            "name": "Balanced right midfielder",
+            "rating": 80,
+            "cost": 5,
+            "eligible": [
+              "RCM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:20261008:RCM:2",
+            "name": "Standout right midfielder",
+            "rating": 97,
+            "cost": 7,
+            "eligible": [
+              "RCM"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:20261008:LW:0",
+            "name": "Reliable left winger",
+            "rating": 62,
+            "cost": 3,
+            "eligible": [
+              "LW"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:20261008:LW:1",
+            "name": "Balanced left winger",
+            "rating": 84,
+            "cost": 5,
+            "eligible": [
+              "LW"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:20261008:LW:2",
+            "name": "Standout left winger",
+            "rating": 87,
+            "cost": 7,
+            "eligible": [
+              "LW"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:20261008:ST:0",
+            "name": "Reliable striker",
+            "rating": 70,
+            "cost": 3,
+            "eligible": [
+              "ST"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:20261008:ST:1",
+            "name": "Balanced striker",
+            "rating": 79,
+            "cost": 5,
+            "eligible": [
+              "ST"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:20261008:ST:2",
+            "name": "Standout striker",
+            "rating": 97,
+            "cost": 7,
+            "eligible": [
+              "ST"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ],
+        [
+          {
+            "playerId": "soccer-ps-v1:20261008:RW:0",
+            "name": "Reliable right winger",
+            "rating": 73,
+            "cost": 3,
+            "eligible": [
+              "RW"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:20261008:RW:1",
+            "name": "Balanced right winger",
+            "rating": 86,
+            "cost": 5,
+            "eligible": [
+              "RW"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          },
+          {
+            "playerId": "soccer-ps-v1:20261008:RW:2",
+            "name": "Standout right winger",
+            "rating": 86,
+            "cost": 7,
+            "eligible": [
+              "RW"
+            ],
+            "detail": "Fictional role card. Strength is a game rating."
+          }
+        ]
+      ],
+      "oracle": {
+        "leaves": 101400,
+        "bestStrength": 1118,
+        "bestChoices": [
+          1,
+          0,
+          0,
+          1,
+          1,
+          1,
+          2,
+          2,
+          1,
+          2,
+          0
+        ]
+      },
+      "best": {
+        "choices": [
+          1,
+          0,
+          0,
+          1,
+          1,
+          1,
+          2,
+          2,
+          1,
+          2,
+          0
+        ],
+        "weightedStrength": 1118,
+        "spent": 55,
+        "overall": 86
+      },
+      "actualWitnessStrength": 1118
+    }
+  ],
+  "workedDraw": {
+    "played": 38,
+    "wins": 37,
+    "draws": 1,
+    "losses": 0,
+    "points": 112,
+    "score": 98,
+    "perfect": false,
+    "unbeaten": true
+  },
+  "verdicts": [
+    {
+      "played": 38,
+      "wins": 38,
+      "draws": 0,
+      "losses": 0,
+      "points": 114,
+      "score": 100,
+      "perfect": true,
+      "unbeaten": true
+    },
+    {
+      "played": 38,
+      "wins": 37,
+      "draws": 1,
+      "losses": 0,
+      "points": 112,
+      "score": 98,
+      "perfect": false,
+      "unbeaten": true
+    },
+    {
+      "played": 38,
+      "wins": 37,
+      "draws": 0,
+      "losses": 1,
+      "points": 111,
+      "score": 97,
+      "perfect": false,
+      "unbeaten": false
+    },
+    {
+      "played": 37,
+      "wins": 37,
+      "draws": 0,
+      "losses": 0,
+      "points": 111,
+      "score": 97,
+      "perfect": false,
+      "unbeaten": true
+    }
+  ],
+  "seasonChance0": {
+    "a": {
+      "played": 38,
+      "wins": 0,
+      "draws": 24,
+      "losses": 14,
+      "points": 24,
+      "score": 21,
+      "perfect": false,
+      "unbeaten": false,
+      "games": [
+        "L",
+        "D",
+        "D",
+        "D",
+        "L",
+        "L",
+        "D",
+        "L",
+        "D",
+        "D",
+        "L",
+        "D",
+        "D",
+        "L",
+        "D",
+        "D",
+        "D",
+        "L",
+        "D",
+        "D",
+        "D",
+        "D",
+        "D",
+        "D",
+        "L",
+        "L",
+        "D",
+        "D",
+        "L",
+        "L",
+        "D",
+        "L",
+        "L",
+        "D",
+        "L",
+        "D",
+        "D",
+        "D"
+      ]
+    },
+    "b": {
+      "played": 38,
+      "wins": 0,
+      "draws": 24,
+      "losses": 14,
+      "points": 24,
+      "score": 21,
+      "perfect": false,
+      "unbeaten": false,
+      "games": [
+        "L",
+        "D",
+        "D",
+        "D",
+        "L",
+        "L",
+        "D",
+        "L",
+        "D",
+        "D",
+        "L",
+        "D",
+        "D",
+        "L",
+        "D",
+        "D",
+        "D",
+        "L",
+        "D",
+        "D",
+        "D",
+        "D",
+        "D",
+        "D",
+        "L",
+        "L",
+        "D",
+        "D",
+        "L",
+        "L",
+        "D",
+        "L",
+        "L",
+        "D",
+        "L",
+        "D",
+        "D",
+        "D"
+      ]
+    }
+  },
+  "seasonChance0.4": {
+    "a": {
+      "played": 38,
+      "wins": 17,
+      "draws": 13,
+      "losses": 8,
+      "points": 64,
+      "score": 56,
+      "perfect": false,
+      "unbeaten": false,
+      "games": [
+        "L",
+        "W",
+        "W",
+        "D",
+        "L",
+        "L",
+        "D",
+        "D",
+        "W",
+        "W",
+        "D",
+        "W",
+        "W",
+        "L",
+        "W",
+        "D",
+        "W",
+        "D",
+        "W",
+        "D",
+        "D",
+        "D",
+        "W",
+        "D",
+        "L",
+        "D",
+        "W",
+        "W",
+        "L",
+        "D",
+        "W",
+        "L",
+        "L",
+        "W",
+        "D",
+        "W",
+        "W",
+        "W"
+      ]
+    },
+    "b": {
+      "played": 38,
+      "wins": 17,
+      "draws": 13,
+      "losses": 8,
+      "points": 64,
+      "score": 56,
+      "perfect": false,
+      "unbeaten": false,
+      "games": [
+        "L",
+        "W",
+        "W",
+        "D",
+        "L",
+        "L",
+        "D",
+        "D",
+        "W",
+        "W",
+        "D",
+        "W",
+        "W",
+        "L",
+        "W",
+        "D",
+        "W",
+        "D",
+        "W",
+        "D",
+        "D",
+        "D",
+        "W",
+        "D",
+        "L",
+        "D",
+        "W",
+        "W",
+        "L",
+        "D",
+        "W",
+        "L",
+        "L",
+        "W",
+        "D",
+        "W",
+        "W",
+        "W"
+      ]
+    }
+  },
+  "seasonChance0.75": {
+    "a": {
+      "played": 38,
+      "wins": 30,
+      "draws": 6,
+      "losses": 2,
+      "points": 96,
+      "score": 84,
+      "perfect": false,
+      "unbeaten": false,
+      "games": [
+        "L",
+        "W",
+        "W",
+        "W",
+        "D",
+        "D",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "D",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "L",
+        "W",
+        "W",
+        "W",
+        "D",
+        "W",
+        "W",
+        "D",
+        "D",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W"
+      ]
+    },
+    "b": {
+      "played": 38,
+      "wins": 30,
+      "draws": 6,
+      "losses": 2,
+      "points": 96,
+      "score": 84,
+      "perfect": false,
+      "unbeaten": false,
+      "games": [
+        "L",
+        "W",
+        "W",
+        "W",
+        "D",
+        "D",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "D",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "L",
+        "W",
+        "W",
+        "W",
+        "D",
+        "W",
+        "W",
+        "D",
+        "D",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W"
+      ]
+    }
+  },
+  "seasonChance1": {
+    "a": {
+      "played": 38,
+      "wins": 38,
+      "draws": 0,
+      "losses": 0,
+      "points": 114,
+      "score": 100,
+      "perfect": true,
+      "unbeaten": true,
+      "games": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W"
+      ]
+    },
+    "b": {
+      "played": 38,
+      "wins": 38,
+      "draws": 0,
+      "losses": 0,
+      "points": 114,
+      "score": 100,
+      "perfect": true,
+      "unbeaten": true,
+      "games": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W",
+        "W"
+      ]
+    }
+  },
+  "streamIsolation": {
+    "seed": 3698684700,
+    "nextDaySeed": 2895186817,
+    "otherVersionSeed": 2751103567,
+    "unlimitedSeed": 2404636001,
+    "offers": [
+      [
+        69,
+        74,
+        83
+      ],
+      [
+        64,
+        78,
+        85
+      ],
+      [
+        72,
+        80,
+        97
+      ],
+      [
+        70,
+        73,
+        86
+      ],
+      [
+        62,
+        74,
+        94
+      ],
+      [
+        65,
+        73,
+        98
+      ],
+      [
+        69,
+        73,
+        98
+      ],
+      [
+        75,
+        88,
+        90
+      ],
+      [
+        74,
+        80,
+        84
+      ],
+      [
+        63,
+        87,
+        86
+      ],
+      [
+        65,
+        84,
+        98
+      ]
+    ],
+    "otherVersionOffers": [
+      [
+        78,
+        80,
+        82
+      ],
+      [
+        76,
+        73,
+        95
+      ],
+      [
+        75,
+        87,
+        92
+      ],
+      [
+        65,
+        79,
+        93
+      ],
+      [
+        68,
+        72,
+        96
+      ],
+      [
+        72,
+        80,
+        88
+      ],
+      [
+        65,
+        84,
+        88
+      ],
+      [
+        78,
+        79,
+        88
+      ],
+      [
+        74,
+        81,
+        90
+      ],
+      [
+        64,
+        88,
+        86
+      ],
+      [
+        77,
+        79,
+        94
+      ]
+    ],
+    "season": {
+      "played": 38,
+      "wins": 13,
+      "draws": 8,
+      "losses": 17,
+      "points": 47,
+      "score": 41,
+      "perfect": false,
+      "unbeaten": false,
+      "games": [
+        "L",
+        "L",
+        "L",
+        "W",
+        "L",
+        "W",
+        "D",
+        "D",
+        "D",
+        "W",
+        "D",
+        "W",
+        "W",
+        "D",
+        "W",
+        "W",
+        "L",
+        "L",
+        "L",
+        "L",
+        "D",
+        "L",
+        "W",
+        "L",
+        "W",
+        "L",
+        "L",
+        "W",
+        "W",
+        "W",
+        "D",
+        "L",
+        "L",
+        "L",
+        "L",
+        "L",
+        "W",
+        "D"
+      ]
+    },
+    "otherVersionSeason": {
+      "played": 38,
+      "wins": 15,
+      "draws": 8,
+      "losses": 15,
+      "points": 53,
+      "score": 46,
+      "perfect": false,
+      "unbeaten": false,
+      "games": [
+        "L",
+        "W",
+        "D",
+        "W",
+        "D",
+        "W",
+        "W",
+        "L",
+        "L",
+        "L",
+        "D",
+        "W",
+        "W",
+        "W",
+        "L",
+        "W",
+        "D",
+        "W",
+        "L",
+        "W",
+        "W",
+        "W",
+        "W",
+        "L",
+        "L",
+        "W",
+        "D",
+        "L",
+        "L",
+        "L",
+        "L",
+        "W",
+        "L",
+        "L",
+        "D",
+        "D",
+        "L",
+        "D"
+      ]
+    }
+  }
+}

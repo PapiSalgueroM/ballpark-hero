@@ -1,0 +1,30 @@
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mscores the worked draw fixture as 112 points and 98
+[31m[1mAssertionError[22m: expected [ 38, 37, 1, +0, 111, 97 ] to deeply equal [ 38, 37, 1, +0, 112, 98 ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[2m    38,[22m
+[2m    37,[22m
+[2m    1,[22m
+[2m    0,[22m
+[32m-   112,[39m
+[32m-   98,[39m
+[31m+   111,[39m
+[31m+   97,[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/test/soccerPerfectSeason.test.ts:[2m128:100[22m[39m
+    [90m126| [39m    [35mconst[39m record [33m=[39m [34mscoreSoccerMatches[39m([[33m...[39m[33mArray[39m([34m37[39m)[33m.[39m[34mfill[39m([32m'W'[39m)[33m,[39m [32m'D'[39m])[33m;[39m
+    [90m127| [39m    [34mretain[39m([32m'workedDraw'[39m[33m,[39m record)[33m;[39m
+    [90m128| [39m    expect([record.played, record.wins, record.draws, record.losses, r…
+    [90m   | [39m                                                                                                   [31m^[39m
+    [90m129| [39m    [34mexpect[39m([34msoccerMatchOutcome[39m([34m0.4[39m[33m,[39m [34m0[39m))[33m.[39m[34mtoBe[39m([32m'W'[39m)[33m;[39m
+    [90m130| [39m    [34mexpect[39m([34msoccerMatchOutcome[39m([34m0.4[39m[33m,[39m [34m0.4[39m))[33m.[39m[34mtoBe[39m([32m'D'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+

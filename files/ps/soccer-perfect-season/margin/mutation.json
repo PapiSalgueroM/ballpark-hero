@@ -1,0 +1,11 @@
+{
+  "file": "src/lib/soccerPerfectSeason.ts",
+  "from": "const win = Math.min(1, Math.max(0, weightedStrength / bestStrength) ** SOCCER_PS_ALPHA);",
+  "to": "const win = weightedStrength === bestStrength ? 1 : 0.9;",
+  "intended": "measures paired strongest versus cheapest daily outcomes",
+  "baseline": "keeps an independent win and loss points ledger",
+  "originalSha256": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+  "normalizedSha256": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+  "copiedSha256": "257baadf75355e708c33179ee91736a492d8a4b5a4e37cf4afe86d65070fe9b8",
+  "copy": "margin/soccerPerfectSeason.ts"
+}

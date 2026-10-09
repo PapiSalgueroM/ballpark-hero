@@ -1,0 +1,371 @@
+{
+  "run": "37897082245",
+  "attempt": "1",
+  "head": "65ce355ecba16c2a44d5c9165828afb9d73dcd9d",
+  "totalTests": 12,
+  "baseline": "keeps an independent win and loss points ledger",
+  "requiredMeanPointsGap": 40,
+  "cases": [
+    {
+      "name": "baseline",
+      "intended": null,
+      "status": "accepted",
+      "mutation": null,
+      "process": {
+        "status": 0,
+        "signal": null,
+        "error": null
+      },
+      "hashes": {
+        "vitest.json": "953267b1c0669521fc4719d572e887f5dcd2c3e425f3c248891f037df9efeb32",
+        "process.json": "5be607aa6069756a424013851e837a1d6719ca60a53323cc1dcdd74f0dd1cb8a",
+        "stdout.log": "74c1426769ae9af4853a86dd95613335ab23bfcb5eafc87ac7a7bf4f48f621b0",
+        "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "assertions.json": "06cec06ad24d0b8d02cbb5890f5be7e663ee3f6a340b185b465f5a50d8c3d41e",
+        "invocation.json": "077304453c7bd1aa9c417c7a2ed5f8b380bf33b8059430aeb1aa445fbb8b8606",
+        "outcomes.json": "8305f47390894991a9a2012b1889ca9dc79f13abdf33861c6cbbf48e4fda8b07",
+        "measurement.json": "923190a62e762c1bb50b2b7298df3e0e371851b9fc063dd221bf4fd7f2008425"
+      },
+      "passed": 12,
+      "failed": 0,
+      "pending": 0,
+      "measurement": {
+        "seedCount": 128,
+        "alpha": 5,
+        "meanPointsGap": 56.734375,
+        "meanWinsGap": 22.6640625,
+        "requiredMeanPointsGap": 40,
+        "acceptance": "Permanent mean points margin set below measured paired daily headroom"
+      }
+    },
+    {
+      "name": "reserve",
+      "intended": "reserves a basic card for every remaining slot on every reachable draft",
+      "status": "accepted",
+      "mutation": {
+        "file": "src/lib/soccerPerfectSeason.ts",
+        "from": "+ 3 * remainingSlots",
+        "to": "+ 0 * remainingSlots",
+        "intended": "reserves a basic card for every remaining slot on every reachable draft",
+        "baseline": "keeps an independent win and loss points ledger",
+        "originalSha256": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+        "normalizedSha256": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+        "copiedSha256": "6ef1c0b88dc83bc28ef8545477d9efa2ff4802cdc4ee415c2ce5bb8874925799",
+        "copy": "reserve/soccerPerfectSeason.ts"
+      },
+      "process": {
+        "status": 1,
+        "signal": null,
+        "error": null
+      },
+      "hashes": {
+        "vitest.json": "b9bf285da557836017935acae013d5159d10dc87f11bc6f95de50a3c7b4c6376",
+        "process.json": "d5504ab8b261de7d382c049b3ef86058206fb362cb1e70c7f15d934b284f8471",
+        "stdout.log": "5ec503087782fae4b7849f7a2f0fe9512a82c975b6c8f9e9f862501ab697a457",
+        "stderr.log": "a9ffbae4d5992215145072f05c09097c6fecd49c8484ec8141131122c8652a0b",
+        "assertions.json": "71534ca67e3a9c0260583039706e6f33b6c9d6772313b59b1e5bce270d467ead",
+        "invocation.json": "bfb91fd418057fad447aef55ba8bd0489b518892b23c41b14093d071c519210f",
+        "mutation.json": "aa3c8f3d903a6aced32f18ac73e779d933c7199cc58d15684311bd3ea5d7402a",
+        "soccerPerfectSeason.ts": "6ef1c0b88dc83bc28ef8545477d9efa2ff4802cdc4ee415c2ce5bb8874925799",
+        "outcomes.json": "d39edbcae67d98d8793cf580656bdf0b6702c1b0eb0bebb6e21ae2f86fcd9376"
+      },
+      "passed": 1,
+      "failed": 1,
+      "pending": 10,
+      "failure": {
+        "title": "reserves a basic card for every remaining slot on every reachable draft",
+        "messages": [
+          "AssertionError: expected [ { …(5) }, { …(5) }, { …(5) }, …(17) ] to deeply equal []\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerPerfectSeason.test.ts:94:24\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:155:11\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:26\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1897:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1863:10)\n    at runTest (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1574:12)\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at runSuite (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1729:8)\n    at runSuite (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1729:8)"
+        ]
+      }
+    },
+    {
+      "name": "ceiling",
+      "intended": "matches an exhaustive affordable ceiling and keeps its legal witness",
+      "status": "accepted",
+      "mutation": {
+        "file": "src/lib/soccerPerfectSeason.ts",
+        "from": "const weightedStrength = state.weightedStrength + card.rating * SOCCER_PS_SLOTS[slot].weight;",
+        "to": "const weightedStrength = state.weightedStrength + card.rating;",
+        "intended": "matches an exhaustive affordable ceiling and keeps its legal witness",
+        "baseline": "keeps an independent win and loss points ledger",
+        "originalSha256": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+        "normalizedSha256": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+        "copiedSha256": "a351801ed796261d35b2a5cc8b0fb9ca92e71bc655e44f4532e1b159008fed83",
+        "copy": "ceiling/soccerPerfectSeason.ts"
+      },
+      "process": {
+        "status": 1,
+        "signal": null,
+        "error": null
+      },
+      "hashes": {
+        "vitest.json": "8098b4aed554e1a9261fd04ed976e9f7c7460a9e680eab2aae521380a4c5a1a7",
+        "process.json": "d5504ab8b261de7d382c049b3ef86058206fb362cb1e70c7f15d934b284f8471",
+        "stdout.log": "0b2f25d8f454059ebec7287a97fd4ac8c64988503a96002582c4f9dedb19c09c",
+        "stderr.log": "2f9f776a9443d319130f6046462cc1f4d75a255fd81eb5f010dc9c24122b8a15",
+        "assertions.json": "813f8d458d727d713ae2b3a4b0c6dc83e8e9e36ab2204842efbbbe1735966fe0",
+        "invocation.json": "9f5a625a02ef6ead6743ea6fb3a52d73721db5d5006a8cf88b7cbb554e24d359",
+        "mutation.json": "b12ea4672535078765e16b1029a27c3e97e67c46ca6f75ed4eb6aad9f2e02437",
+        "soccerPerfectSeason.ts": "a351801ed796261d35b2a5cc8b0fb9ca92e71bc655e44f4532e1b159008fed83",
+        "outcomes.json": "0ee99a0aa620d3e5a19e7aedbe0d51f88a68bec58081bcfb1827ece58ae44be3"
+      },
+      "passed": 1,
+      "failed": 1,
+      "pending": 10,
+      "failure": {
+        "title": "matches an exhaustive affordable ceiling and keeps its legal witness",
+        "messages": [
+          "AssertionError: expected 891 to be 1073 // Object.is equality\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerPerfectSeason.test.ts:110:37\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:155:11\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:26\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1897:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1863:10)\n    at runTest (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1574:12)\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at runSuite (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1729:8)\n    at runSuite (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1729:8)"
+        ]
+      }
+    },
+    {
+      "name": "draw",
+      "intended": "scores the worked draw fixture as 112 points and 98",
+      "status": "accepted",
+      "mutation": {
+        "file": "src/lib/soccerPerfectSeason.ts",
+        "from": "const points = 3 * wins + draws;",
+        "to": "const points = 3 * wins;",
+        "intended": "scores the worked draw fixture as 112 points and 98",
+        "baseline": "keeps an independent win and loss points ledger",
+        "originalSha256": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+        "normalizedSha256": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+        "copiedSha256": "e8e14cb8211493639350448d1ab1c331519d1571947a90050b20f352fa24265b",
+        "copy": "draw/soccerPerfectSeason.ts"
+      },
+      "process": {
+        "status": 1,
+        "signal": null,
+        "error": null
+      },
+      "hashes": {
+        "vitest.json": "26845705a0ed52a0f83a63fee5ef32dad5b74164811eb66d387117d1ee8bf2f8",
+        "process.json": "d5504ab8b261de7d382c049b3ef86058206fb362cb1e70c7f15d934b284f8471",
+        "stdout.log": "e88762e3b21099536a9e86082aa61d6c5bed88928721b163b348d45cdeacffa9",
+        "stderr.log": "894abe2d94a42123748af41990d8f60093fd6e741365dd09b281657c42e97ec8",
+        "assertions.json": "8c3c3ad32177e061f5ddaa6c25764f8d2e6f9fd9c9d82ec65bf1b04d8c72a119",
+        "invocation.json": "e9de20ff57a479cb3d82c187f56834a9c8ad741b1b8f6ea3334ccb7f6f0e15d2",
+        "mutation.json": "31b4f794849058a5b6ee47796c8733c024fd2d647e3209164677649629c11122",
+        "soccerPerfectSeason.ts": "e8e14cb8211493639350448d1ab1c331519d1571947a90050b20f352fa24265b",
+        "outcomes.json": "29fffdd4cc3a5831fed7ec76e75aa6cab399315b52913d5c64b72d4ccc2ca297"
+      },
+      "passed": 1,
+      "failed": 1,
+      "pending": 10,
+      "failure": {
+        "title": "scores the worked draw fixture as 112 points and 98",
+        "messages": [
+          "AssertionError: expected [ 38, 37, 1, +0, 111, 97 ] to deeply equal [ 38, 37, 1, +0, 112, 98 ]\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerPerfectSeason.test.ts:128:100\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:155:11\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:26\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1897:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1863:10)\n    at runTest (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1574:12)\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at runSuite (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1729:8)\n    at runSuite (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1729:8)"
+        ]
+      }
+    },
+    {
+      "name": "perfect",
+      "intended": "requires 38 wins for perfect and no losses for unbeaten",
+      "status": "accepted",
+      "mutation": {
+        "file": "src/lib/soccerPerfectSeason.ts",
+        "from": "perfect: games.length === SOCCER_PS_GAMES && wins === SOCCER_PS_GAMES",
+        "to": "perfect: games.length === SOCCER_PS_GAMES && losses === 0",
+        "intended": "requires 38 wins for perfect and no losses for unbeaten",
+        "baseline": "keeps an independent win and loss points ledger",
+        "originalSha256": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+        "normalizedSha256": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+        "copiedSha256": "ff4ff5e8764236b2ff7d21e0fb9e5d0fbb3c7b9d0954c982294768fe69be6150",
+        "copy": "perfect/soccerPerfectSeason.ts"
+      },
+      "process": {
+        "status": 1,
+        "signal": null,
+        "error": null
+      },
+      "hashes": {
+        "vitest.json": "5d5f7a2de09732f1db3cbe7d8f9eb264d64e9d539e7bd94f798819e5805b8063",
+        "process.json": "d5504ab8b261de7d382c049b3ef86058206fb362cb1e70c7f15d934b284f8471",
+        "stdout.log": "ab24ba2b54a2dd8b90620b9e9344b1eb705a5857b6477d508fd6e959c94003bd",
+        "stderr.log": "7a2fffe9501e812b822aa211eda586f09833a23bd21d1af835f1965fabf407a8",
+        "assertions.json": "ee37fcfb7d713ed3197c02676f04c0076a0882e6b349ceaf532489a19895b3f4",
+        "invocation.json": "e373364cc463970190c9e7a747ce754ff1ef000c8139fad28bac4dc4b771fd18",
+        "mutation.json": "32e93f7d0ebd4e19b658c43283d3f836bf31acdc1b6bad17ab85e44a25ffd13e",
+        "soccerPerfectSeason.ts": "ff4ff5e8764236b2ff7d21e0fb9e5d0fbb3c7b9d0954c982294768fe69be6150",
+        "outcomes.json": "4c92741ce671295006c3f8eb7bf91764850ebe4d1306d73681a5e59bb716f3db"
+      },
+      "passed": 1,
+      "failed": 1,
+      "pending": 10,
+      "failure": {
+        "title": "requires 38 wins for perfect and no losses for unbeaten",
+        "messages": [
+          "AssertionError: expected { Object (played, wins, ...) } to match object { perfect: false, unbeaten: true }\n(6 matching properties omitted from actual)\n    at Proxy.<anonymous> (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/expect/dist/index.js:1155:10)\n    at Proxy.<anonymous> (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/expect/dist/index.js:1029:14)\n    at Proxy.toMatchObject (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/chai/index.js:1686:25)\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerPerfectSeason.test.ts:140:63\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:155:11\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:26\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1897:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1863:10)\n    at runTest (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1574:12)"
+        ]
+      }
+    },
+    {
+      "name": "version",
+      "intended": "changes actual deal and season streams across dates modes and versions",
+      "status": "accepted",
+      "mutation": {
+        "file": "src/lib/soccerPerfectSeason.ts",
+        "from": "return Math.floor(keyedRng(`${version}|soccer-perfect-season|daily|${date}`)() * 2 ** 32);",
+        "to": "return Math.floor(keyedRng(`${SOCCER_PS_VERSION}|soccer-perfect-season|daily|${date}`)() * 2 ** 32);",
+        "intended": "changes actual deal and season streams across dates modes and versions",
+        "baseline": "keeps an independent win and loss points ledger",
+        "originalSha256": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+        "normalizedSha256": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+        "copiedSha256": "87ed8933db00f33f863e2d3960539879a1e29d71f9a224a7810cd7f2dc05be5b",
+        "copy": "version/soccerPerfectSeason.ts"
+      },
+      "process": {
+        "status": 1,
+        "signal": null,
+        "error": null
+      },
+      "hashes": {
+        "vitest.json": "68eb0bb85f365c287bded7b671f182d191f40c93ce2bcd911af3de370851f77d",
+        "process.json": "d5504ab8b261de7d382c049b3ef86058206fb362cb1e70c7f15d934b284f8471",
+        "stdout.log": "84867b2423b7285d8393c50641abcde1771e68801c2f19b47154170e8c8724b4",
+        "stderr.log": "565d84112085d77814747d0d94f230c357b20b5c6323a713d6136c7f321e2509",
+        "assertions.json": "d5bb89d88c41aaaa4934d20bbd157b2292fca4415314da222985e84321fd6835",
+        "invocation.json": "73ba6c590b5fd72fb1100e601fb071aead371daf163a0dfc74d2c9fe838167ce",
+        "mutation.json": "57acacca7cd1bbc63846c0ca844bbc116bbd40ab640f98e00c9130fa4722d556",
+        "soccerPerfectSeason.ts": "87ed8933db00f33f863e2d3960539879a1e29d71f9a224a7810cd7f2dc05be5b",
+        "outcomes.json": "9830245c10c27134b627f9a9cabee38e570ae4583715f8fce00cd8dc13be6227"
+      },
+      "passed": 1,
+      "failed": 1,
+      "pending": 10,
+      "failure": {
+        "title": "changes actual deal and season streams across dates modes and versions",
+        "messages": [
+          "AssertionError: expected 3698684700 not to be 3698684700 // Object.is equality\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerPerfectSeason.test.ts:166:22\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:155:11\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:26\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1897:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1863:10)\n    at runTest (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1574:12)\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at runSuite (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1729:8)\n    at runSuite (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1729:8)"
+        ]
+      }
+    },
+    {
+      "name": "advantage",
+      "intended": "measures paired strongest versus cheapest daily outcomes",
+      "status": "accepted",
+      "mutation": {
+        "file": "src/lib/soccerPerfectSeason.ts",
+        "from": "const win = Math.min(1, Math.max(0, weightedStrength / bestStrength) ** SOCCER_PS_ALPHA);",
+        "to": "const win = 1;",
+        "intended": "measures paired strongest versus cheapest daily outcomes",
+        "baseline": "keeps an independent win and loss points ledger",
+        "originalSha256": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+        "normalizedSha256": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+        "copiedSha256": "806682d70553c7c50cd2f953d9a65f96f2849c28db0096d2adaaafc75098cf9a",
+        "copy": "advantage/soccerPerfectSeason.ts"
+      },
+      "process": {
+        "status": 1,
+        "signal": null,
+        "error": null
+      },
+      "hashes": {
+        "vitest.json": "e24f8c87a9cf6db632c5e5483f1c5c5657ef0b40ee6cfd72dd765e8430b62cc6",
+        "process.json": "d5504ab8b261de7d382c049b3ef86058206fb362cb1e70c7f15d934b284f8471",
+        "stdout.log": "7d9fbec0f5af37b7a9acbaa9319ccbddc2a9b607c69fd53c2b05bb9b0f256d65",
+        "stderr.log": "e27b8da44cc9033abb4554cd12c175d5930fe3441fa1e45347dec191098300ff",
+        "assertions.json": "2c8e166c0a8f05784fe339acbfd10755fb426944212ed8b42615fcca8847b2d4",
+        "invocation.json": "78b940664060f353f5f98dd837d52d93d1ad2824a0ffb188a0003e6731ddb40b",
+        "mutation.json": "3704f2dce5d9b3acba85e9984036a117da5787ad667aa9ea9404e202ea5e0644",
+        "soccerPerfectSeason.ts": "806682d70553c7c50cd2f953d9a65f96f2849c28db0096d2adaaafc75098cf9a",
+        "outcomes.json": "06b7542972adb4f09d1b551daf176651c92a7db9b31138811025a6fbc11a520f",
+        "measurement.json": "7a1c7374bd594b92c4fc6d1cd42c7734bf4791f0cf34f3f19892372a0c8a7c71"
+      },
+      "passed": 1,
+      "failed": 1,
+      "pending": 10,
+      "failure": {
+        "title": "measures paired strongest versus cheapest daily outcomes",
+        "messages": [
+          "AssertionError: expected false to be true // Object.is equality\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerPerfectSeason.test.ts:256:75\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:155:11\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:26\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1897:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1863:10)\n    at runTest (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1574:12)\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at runSuite (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1729:8)\n    at runSuite (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1729:8)"
+        ]
+      },
+      "measurement": {
+        "seedCount": 128,
+        "meanPointsGap": 0,
+        "meanWinsGap": 0,
+        "requiredMeanPointsGap": 40
+      }
+    },
+    {
+      "name": "margin",
+      "intended": "measures paired strongest versus cheapest daily outcomes",
+      "status": "accepted",
+      "mutation": {
+        "file": "src/lib/soccerPerfectSeason.ts",
+        "from": "const win = Math.min(1, Math.max(0, weightedStrength / bestStrength) ** SOCCER_PS_ALPHA);",
+        "to": "const win = weightedStrength === bestStrength ? 1 : 0.9;",
+        "intended": "measures paired strongest versus cheapest daily outcomes",
+        "baseline": "keeps an independent win and loss points ledger",
+        "originalSha256": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+        "normalizedSha256": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+        "copiedSha256": "257baadf75355e708c33179ee91736a492d8a4b5a4e37cf4afe86d65070fe9b8",
+        "copy": "margin/soccerPerfectSeason.ts"
+      },
+      "process": {
+        "status": 1,
+        "signal": null,
+        "error": null
+      },
+      "hashes": {
+        "vitest.json": "46c197c0f19a3d2355ec29da224fe20e5e7cd9d23fafe3b9e886b21c4f38935f",
+        "process.json": "d5504ab8b261de7d382c049b3ef86058206fb362cb1e70c7f15d934b284f8471",
+        "stdout.log": "7311b8d84ee3cc6c1f47290576d8910198ac35a5f7051b830f45f69d68e3d12f",
+        "stderr.log": "44149465ca5feed789bd06902bcf1ea4c432455876d0bd669f1b7b2fa73a8db9",
+        "assertions.json": "55a96eb1993a6733c9634ce05ab1222eace98e5202096ab38087d674c54f5ef6",
+        "invocation.json": "2f000ab73a35ecd8dca99ca944c09b72f5a5f79255052bd3ef2cc2647f203cde",
+        "mutation.json": "357b353bf7fa1cb22daa9a7188e96fbffb8f5659909513ae9c019e1b923be1b8",
+        "soccerPerfectSeason.ts": "257baadf75355e708c33179ee91736a492d8a4b5a4e37cf4afe86d65070fe9b8",
+        "outcomes.json": "06b7542972adb4f09d1b551daf176651c92a7db9b31138811025a6fbc11a520f",
+        "measurement.json": "cc8e92f5c8dfb59b490aba8a1306d42027fabe0c77ba0679b3664598c9f34fd6"
+      },
+      "passed": 1,
+      "failed": 1,
+      "pending": 10,
+      "failure": {
+        "title": "measures paired strongest versus cheapest daily outcomes",
+        "messages": [
+          "AssertionError: expected 9.5859375 to be greater than 40\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerPerfectSeason.test.ts:259:27\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:155:11\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:26\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1897:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1863:10)\n    at runTest (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1574:12)\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at runSuite (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1729:8)\n    at runSuite (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1729:8)"
+        ]
+      },
+      "measurement": {
+        "seedCount": 128,
+        "meanPointsGap": 9.5859375,
+        "meanWinsGap": 3.828125,
+        "requiredMeanPointsGap": 40
+      }
+    }
+  ],
+  "sourceBefore": {
+    "src/lib/soccerPerfectSeason.ts": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+    "src/test/soccerPerfectSeason.test.ts": "be1e34c3798878bef58b88d12c85c2b67697c47aa3eacc8f6b081799abd31ffa",
+    "scripts/simSoccerPerfectSeason.mjs": "dad9cae14ce9fa0bdca0a26c07c148847bb1131f04377ac9c0c186721fee91ca",
+    "src/lib/keyedRng.ts": "dc78803cd8f86fd73c70e26b36faf40915b4e6bbca7f6b0c4efffab28e9032ef",
+    "src/lib/perfectSeason.ts": "fa5fb246cbdd8ef4bcde78a3774313eb21e84d1152fc351edba7774c35551108",
+    "src/lib/dateUtils.ts": "b580faa88089a5d6a15aef0a1fc08f0f1444b38c273d458e3c74a43a7f72781e",
+    "vitest.config.ts": "6a68dd2f214dab4a3013eb41bad38eea65d703d61440002710ec246495e1c58a",
+    "package.json": "9adfa72b65f9c08b94e3dfccf4fe8f7fc5ea571f18e6cc9f9686d83d69d283fc",
+    "package-lock.json": "ebb4fa47b6fa258ac5a4458160c37299caecba098b71ce60b4c0b2a65a26e953"
+  },
+  "sourceAfter": {
+    "src/lib/soccerPerfectSeason.ts": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+    "src/test/soccerPerfectSeason.test.ts": "be1e34c3798878bef58b88d12c85c2b67697c47aa3eacc8f6b081799abd31ffa",
+    "scripts/simSoccerPerfectSeason.mjs": "dad9cae14ce9fa0bdca0a26c07c148847bb1131f04377ac9c0c186721fee91ca",
+    "src/lib/keyedRng.ts": "dc78803cd8f86fd73c70e26b36faf40915b4e6bbca7f6b0c4efffab28e9032ef",
+    "src/lib/perfectSeason.ts": "fa5fb246cbdd8ef4bcde78a3774313eb21e84d1152fc351edba7774c35551108",
+    "src/lib/dateUtils.ts": "b580faa88089a5d6a15aef0a1fc08f0f1444b38c273d458e3c74a43a7f72781e",
+    "vitest.config.ts": "6a68dd2f214dab4a3013eb41bad38eea65d703d61440002710ec246495e1c58a",
+    "package.json": "9adfa72b65f9c08b94e3dfccf4fe8f7fc5ea571f18e6cc9f9686d83d69d283fc",
+    "package-lock.json": "ebb4fa47b6fa258ac5a4458160c37299caecba098b71ce60b4c0b2a65a26e953"
+  },
+  "status": "passed",
+  "limits": [
+    "Pure finite engine evidence; no UI, browser, database or production claim.",
+    "Alpha5 is a fictional game rule, not calibrated real soccer. The permanent mean points margin is 40.",
+    "Each copied source control runs its intended outcome test plus the unrelated win/loss ledger."
+  ]
+}

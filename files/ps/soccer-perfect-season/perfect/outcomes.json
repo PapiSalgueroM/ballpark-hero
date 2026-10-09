@@ -1,0 +1,54 @@
+{
+  "independentLedger": {
+    "played": 38,
+    "wins": 20,
+    "draws": 0,
+    "losses": 18,
+    "points": 60,
+    "score": 53,
+    "perfect": false,
+    "unbeaten": false
+  },
+  "verdicts": [
+    {
+      "played": 38,
+      "wins": 38,
+      "draws": 0,
+      "losses": 0,
+      "points": 114,
+      "score": 100,
+      "perfect": true,
+      "unbeaten": true
+    },
+    {
+      "played": 38,
+      "wins": 37,
+      "draws": 1,
+      "losses": 0,
+      "points": 112,
+      "score": 98,
+      "perfect": true,
+      "unbeaten": true
+    },
+    {
+      "played": 38,
+      "wins": 37,
+      "draws": 0,
+      "losses": 1,
+      "points": 111,
+      "score": 97,
+      "perfect": false,
+      "unbeaten": false
+    },
+    {
+      "played": 37,
+      "wins": 37,
+      "draws": 0,
+      "losses": 0,
+      "points": 111,
+      "score": 97,
+      "perfect": false,
+      "unbeaten": true
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+MEASURED seed 1: 2087 seasons, 210532 goals, 29314 excluded; eligible {"us":107597,"them":73621,"onPitchThem":42978,"offPitchThem":6722,"missedThem":23921}; tags {"opponent":1662,"teammate":1069,"you":44}; role draws [44,60,66,68,69,52,64,42,62,60,64]
+MEASURED exposure: 2725 tagged matches/78450, 1525 tagged seasons/2087, 42 self seasons/2087; 10428/16584 distinct changed mixtures
+simSoccerOwnGoals: 4759334 checks, 0 failed

@@ -1,0 +1,11 @@
+{
+  "file": "src/lib/soccerPerfectSeason.ts",
+  "from": "const weightedStrength = state.weightedStrength + card.rating * SOCCER_PS_SLOTS[slot].weight;",
+  "to": "const weightedStrength = state.weightedStrength + card.rating;",
+  "intended": "matches an exhaustive affordable ceiling and keeps its legal witness",
+  "baseline": "keeps an independent win and loss points ledger",
+  "originalSha256": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+  "normalizedSha256": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+  "copiedSha256": "a351801ed796261d35b2a5cc8b0fb9ca92e71bc655e44f4532e1b159008fed83",
+  "copy": "ceiling/soccerPerfectSeason.ts"
+}

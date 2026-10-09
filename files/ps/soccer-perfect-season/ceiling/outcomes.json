@@ -1,0 +1,406 @@
+{
+  "independentLedger": {
+    "played": 38,
+    "wins": 20,
+    "draws": 0,
+    "losses": 18,
+    "points": 60,
+    "score": 53,
+    "perfect": false,
+    "unbeaten": false
+  },
+  "exhaustiveCeilings": [
+    {
+      "deal": [
+        [
+          {
+            "playerId": "fixture-0-3",
+            "name": "Fictional role 0-3",
+            "rating": 71,
+            "eligible": [
+              "GK"
+            ],
+            "detail": "Fictional game input",
+            "cost": 3
+          },
+          {
+            "playerId": "fixture-0-5",
+            "name": "Fictional role 0-5",
+            "rating": 81,
+            "eligible": [
+              "GK"
+            ],
+            "detail": "Fictional game input",
+            "cost": 5
+          },
+          {
+            "playerId": "fixture-0-7",
+            "name": "Fictional role 0-7",
+            "rating": 91,
+            "eligible": [
+              "GK"
+            ],
+            "detail": "Fictional game input",
+            "cost": 7
+          }
+        ],
+        [
+          {
+            "playerId": "fixture-1-3",
+            "name": "Fictional role 1-3",
+            "rating": 71,
+            "eligible": [
+              "LB"
+            ],
+            "detail": "Fictional game input",
+            "cost": 3
+          },
+          {
+            "playerId": "fixture-1-5",
+            "name": "Fictional role 1-5",
+            "rating": 81,
+            "eligible": [
+              "LB"
+            ],
+            "detail": "Fictional game input",
+            "cost": 5
+          },
+          {
+            "playerId": "fixture-1-7",
+            "name": "Fictional role 1-7",
+            "rating": 91,
+            "eligible": [
+              "LB"
+            ],
+            "detail": "Fictional game input",
+            "cost": 7
+          }
+        ],
+        [
+          {
+            "playerId": "fixture-2-3",
+            "name": "Fictional role 2-3",
+            "rating": 71,
+            "eligible": [
+              "LCB"
+            ],
+            "detail": "Fictional game input",
+            "cost": 3
+          },
+          {
+            "playerId": "fixture-2-5",
+            "name": "Fictional role 2-5",
+            "rating": 81,
+            "eligible": [
+              "LCB"
+            ],
+            "detail": "Fictional game input",
+            "cost": 5
+          },
+          {
+            "playerId": "fixture-2-7",
+            "name": "Fictional role 2-7",
+            "rating": 91,
+            "eligible": [
+              "LCB"
+            ],
+            "detail": "Fictional game input",
+            "cost": 7
+          }
+        ],
+        [
+          {
+            "playerId": "fixture-3-3",
+            "name": "Fictional role 3-3",
+            "rating": 71,
+            "eligible": [
+              "RCB"
+            ],
+            "detail": "Fictional game input",
+            "cost": 3
+          },
+          {
+            "playerId": "fixture-3-5",
+            "name": "Fictional role 3-5",
+            "rating": 81,
+            "eligible": [
+              "RCB"
+            ],
+            "detail": "Fictional game input",
+            "cost": 5
+          },
+          {
+            "playerId": "fixture-3-7",
+            "name": "Fictional role 3-7",
+            "rating": 91,
+            "eligible": [
+              "RCB"
+            ],
+            "detail": "Fictional game input",
+            "cost": 7
+          }
+        ],
+        [
+          {
+            "playerId": "fixture-4-3",
+            "name": "Fictional role 4-3",
+            "rating": 71,
+            "eligible": [
+              "RB"
+            ],
+            "detail": "Fictional game input",
+            "cost": 3
+          },
+          {
+            "playerId": "fixture-4-5",
+            "name": "Fictional role 4-5",
+            "rating": 81,
+            "eligible": [
+              "RB"
+            ],
+            "detail": "Fictional game input",
+            "cost": 5
+          },
+          {
+            "playerId": "fixture-4-7",
+            "name": "Fictional role 4-7",
+            "rating": 91,
+            "eligible": [
+              "RB"
+            ],
+            "detail": "Fictional game input",
+            "cost": 7
+          }
+        ],
+        [
+          {
+            "playerId": "fixture-5-3",
+            "name": "Fictional role 5-3",
+            "rating": 71,
+            "eligible": [
+              "LCM"
+            ],
+            "detail": "Fictional game input",
+            "cost": 3
+          },
+          {
+            "playerId": "fixture-5-5",
+            "name": "Fictional role 5-5",
+            "rating": 81,
+            "eligible": [
+              "LCM"
+            ],
+            "detail": "Fictional game input",
+            "cost": 5
+          },
+          {
+            "playerId": "fixture-5-7",
+            "name": "Fictional role 5-7",
+            "rating": 91,
+            "eligible": [
+              "LCM"
+            ],
+            "detail": "Fictional game input",
+            "cost": 7
+          }
+        ],
+        [
+          {
+            "playerId": "fixture-6-3",
+            "name": "Fictional role 6-3",
+            "rating": 71,
+            "eligible": [
+              "CM"
+            ],
+            "detail": "Fictional game input",
+            "cost": 3
+          },
+          {
+            "playerId": "fixture-6-5",
+            "name": "Fictional role 6-5",
+            "rating": 81,
+            "eligible": [
+              "CM"
+            ],
+            "detail": "Fictional game input",
+            "cost": 5
+          },
+          {
+            "playerId": "fixture-6-7",
+            "name": "Fictional role 6-7",
+            "rating": 91,
+            "eligible": [
+              "CM"
+            ],
+            "detail": "Fictional game input",
+            "cost": 7
+          }
+        ],
+        [
+          {
+            "playerId": "fixture-7-3",
+            "name": "Fictional role 7-3",
+            "rating": 71,
+            "eligible": [
+              "RCM"
+            ],
+            "detail": "Fictional game input",
+            "cost": 3
+          },
+          {
+            "playerId": "fixture-7-5",
+            "name": "Fictional role 7-5",
+            "rating": 81,
+            "eligible": [
+              "RCM"
+            ],
+            "detail": "Fictional game input",
+            "cost": 5
+          },
+          {
+            "playerId": "fixture-7-7",
+            "name": "Fictional role 7-7",
+            "rating": 91,
+            "eligible": [
+              "RCM"
+            ],
+            "detail": "Fictional game input",
+            "cost": 7
+          }
+        ],
+        [
+          {
+            "playerId": "fixture-8-3",
+            "name": "Fictional role 8-3",
+            "rating": 71,
+            "eligible": [
+              "LW"
+            ],
+            "detail": "Fictional game input",
+            "cost": 3
+          },
+          {
+            "playerId": "fixture-8-5",
+            "name": "Fictional role 8-5",
+            "rating": 81,
+            "eligible": [
+              "LW"
+            ],
+            "detail": "Fictional game input",
+            "cost": 5
+          },
+          {
+            "playerId": "fixture-8-7",
+            "name": "Fictional role 8-7",
+            "rating": 91,
+            "eligible": [
+              "LW"
+            ],
+            "detail": "Fictional game input",
+            "cost": 7
+          }
+        ],
+        [
+          {
+            "playerId": "fixture-9-3",
+            "name": "Fictional role 9-3",
+            "rating": 71,
+            "eligible": [
+              "ST"
+            ],
+            "detail": "Fictional game input",
+            "cost": 3
+          },
+          {
+            "playerId": "fixture-9-5",
+            "name": "Fictional role 9-5",
+            "rating": 81,
+            "eligible": [
+              "ST"
+            ],
+            "detail": "Fictional game input",
+            "cost": 5
+          },
+          {
+            "playerId": "fixture-9-7",
+            "name": "Fictional role 9-7",
+            "rating": 91,
+            "eligible": [
+              "ST"
+            ],
+            "detail": "Fictional game input",
+            "cost": 7
+          }
+        ],
+        [
+          {
+            "playerId": "fixture-10-3",
+            "name": "Fictional role 10-3",
+            "rating": 71,
+            "eligible": [
+              "RW"
+            ],
+            "detail": "Fictional game input",
+            "cost": 3
+          },
+          {
+            "playerId": "fixture-10-5",
+            "name": "Fictional role 10-5",
+            "rating": 81,
+            "eligible": [
+              "RW"
+            ],
+            "detail": "Fictional game input",
+            "cost": 5
+          },
+          {
+            "playerId": "fixture-10-7",
+            "name": "Fictional role 10-7",
+            "rating": 91,
+            "eligible": [
+              "RW"
+            ],
+            "detail": "Fictional game input",
+            "cost": 7
+          }
+        ]
+      ],
+      "oracle": {
+        "leaves": 101400,
+        "bestStrength": 1073,
+        "bestChoices": [
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          2,
+          2,
+          2,
+          2
+        ]
+      },
+      "best": {
+        "choices": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "weightedStrength": 891,
+        "spent": 55,
+        "overall": 81
+      },
+      "actualWitnessStrength": 1053
+    }
+  ]
+}

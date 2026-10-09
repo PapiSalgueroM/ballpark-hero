@@ -1,0 +1,70 @@
+{
+  "run": "37897082245",
+  "attempt": "1",
+  "head": "65ce355ecba16c2a44d5c9165828afb9d73dcd9d",
+  "totalTests": 12,
+  "baseline": "keeps an independent win and loss points ledger",
+  "requiredMeanPointsGap": 40,
+  "cases": [
+    {
+      "name": "baseline",
+      "intended": null,
+      "status": "accepted",
+      "mutation": null,
+      "process": {
+        "status": 0,
+        "signal": null,
+        "error": null
+      },
+      "hashes": {
+        "vitest.json": "5b77e5b352f843b0e8d7fbed26411bfc74724b859fdd7ad7a1fb58004c137ea4",
+        "process.json": "5be607aa6069756a424013851e837a1d6719ca60a53323cc1dcdd74f0dd1cb8a",
+        "stdout.log": "6f0d97aa4f3e08820aada63e4b73f0a245316ecee187987e09d173040a17e3ca",
+        "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "assertions.json": "a897782ac52afd2cee47d75321bbd2bdd5fad69d33bea915d446c04e24f5e6a2",
+        "invocation.json": "aec0cf8189c54752442d17dab5056bececde3cca42e2ad29ea92ddb3c0c85aa0",
+        "outcomes.json": "8305f47390894991a9a2012b1889ca9dc79f13abdf33861c6cbbf48e4fda8b07",
+        "measurement.json": "923190a62e762c1bb50b2b7298df3e0e371851b9fc063dd221bf4fd7f2008425"
+      },
+      "passed": 12,
+      "failed": 0,
+      "pending": 0,
+      "measurement": {
+        "seedCount": 128,
+        "alpha": 5,
+        "meanPointsGap": 56.734375,
+        "meanWinsGap": 22.6640625,
+        "requiredMeanPointsGap": 40,
+        "acceptance": "Permanent mean points margin set below measured paired daily headroom"
+      }
+    }
+  ],
+  "sourceBefore": {
+    "src/lib/soccerPerfectSeason.ts": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+    "src/test/soccerPerfectSeason.test.ts": "be1e34c3798878bef58b88d12c85c2b67697c47aa3eacc8f6b081799abd31ffa",
+    "scripts/simSoccerPerfectSeason.mjs": "dad9cae14ce9fa0bdca0a26c07c148847bb1131f04377ac9c0c186721fee91ca",
+    "src/lib/keyedRng.ts": "dc78803cd8f86fd73c70e26b36faf40915b4e6bbca7f6b0c4efffab28e9032ef",
+    "src/lib/perfectSeason.ts": "fa5fb246cbdd8ef4bcde78a3774313eb21e84d1152fc351edba7774c35551108",
+    "src/lib/dateUtils.ts": "b580faa88089a5d6a15aef0a1fc08f0f1444b38c273d458e3c74a43a7f72781e",
+    "vitest.config.ts": "6a68dd2f214dab4a3013eb41bad38eea65d703d61440002710ec246495e1c58a",
+    "package.json": "9adfa72b65f9c08b94e3dfccf4fe8f7fc5ea571f18e6cc9f9686d83d69d283fc",
+    "package-lock.json": "ebb4fa47b6fa258ac5a4458160c37299caecba098b71ce60b4c0b2a65a26e953"
+  },
+  "sourceAfter": {
+    "src/lib/soccerPerfectSeason.ts": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+    "src/test/soccerPerfectSeason.test.ts": "be1e34c3798878bef58b88d12c85c2b67697c47aa3eacc8f6b081799abd31ffa",
+    "scripts/simSoccerPerfectSeason.mjs": "dad9cae14ce9fa0bdca0a26c07c148847bb1131f04377ac9c0c186721fee91ca",
+    "src/lib/keyedRng.ts": "dc78803cd8f86fd73c70e26b36faf40915b4e6bbca7f6b0c4efffab28e9032ef",
+    "src/lib/perfectSeason.ts": "fa5fb246cbdd8ef4bcde78a3774313eb21e84d1152fc351edba7774c35551108",
+    "src/lib/dateUtils.ts": "b580faa88089a5d6a15aef0a1fc08f0f1444b38c273d458e3c74a43a7f72781e",
+    "vitest.config.ts": "6a68dd2f214dab4a3013eb41bad38eea65d703d61440002710ec246495e1c58a",
+    "package.json": "9adfa72b65f9c08b94e3dfccf4fe8f7fc5ea571f18e6cc9f9686d83d69d283fc",
+    "package-lock.json": "ebb4fa47b6fa258ac5a4458160c37299caecba098b71ce60b4c0b2a65a26e953"
+  },
+  "status": "passed",
+  "limits": [
+    "Pure finite engine evidence; no UI, browser, database or production claim.",
+    "Alpha5 is a fictional game rule, not calibrated real soccer. The permanent mean points margin is 40.",
+    "Each copied source control runs its intended outcome test plus the unrelated win/loss ledger."
+  ]
+}

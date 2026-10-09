@@ -1,0 +1,15 @@
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mchanges actual deal and season streams across dates modes and versions
+[31m[1mAssertionError[22m: expected 3698684700 not to be 3698684700 // Object.is equality[39m
+[36m [2m❯[22m src/test/soccerPerfectSeason.test.ts:[2m166:22[22m[39m
+    [90m164| [39m    [34mexpect[39m(seed)[33m.[39mnot[33m.[39m[34mtoBe[39m([34mdailySoccerSeed[39m([32m'2026-10-09'[39m))[33m;[39m
+    [90m165| [39m    [34mexpect[39m(seed)[33m.[39mnot[33m.[39m[34mtoBe[39m([34munlimitedSoccerSeed[39m(seed))[33m;[39m
+    [90m166| [39m    [34mexpect[39m(seed)[33m.[39mnot[33m.[39m[34mtoBe[39m([34mdailySoccerSeed[39m([32m'2026-10-08'[39m[33m,[39m otherVersion))[33m;[39m
+    [90m   | [39m                     [31m^[39m
+    [90m167| [39m    expect(unlimitedSoccerSeed(17)).not.toBe(unlimitedSoccerSeed(17, o…
+    [90m168| [39m    expect(offers(SOCCER_PS_VERSION)).not.toEqual(offers(otherVersion)…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+

@@ -1,0 +1,706 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mkeeps an independent win and loss points ledger[32m 6[2mms[22m[39m
+ [32m✓[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mdeals eleven fixed weighted slots with three fixed price offers[32m 11[2mms[22m[39m
+ [32m✓[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mreserves a basic card for every remaining slot on every reachable draft[32m 186[2mms[22m[39m
+ [32m✓[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mmatches an exhaustive affordable ceiling and keeps its legal witness[32m 115[2mms[22m[39m
+ [32m✓[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mscores the worked draw fixture as 112 points and 98[32m 5[2mms[22m[39m
+ [32m✓[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mrequires 38 wins for perfect and no losses for unbeaten[32m 86[2mms[22m[39m
+ [32m✓[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mplays exactly 38 deterministic outcomes with counts equal to its games[32m 11[2mms[22m[39m
+ [32m✓[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mchanges actual deal and season streams across dates modes and versions[32m 7[2mms[22m[39m
+ [32m✓[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mreplays offers independently of choices and restores minimal valid saves[32m 28[2mms[22m[39m
+ [32m✓[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mrejects malformed or impossible saves without changing raw input[32m 15[2mms[22m[39m
+[90mstdout[2m | src/test/soccerPerfectSeason.test.ts[2m > [22m[2mSoccer Perfect Season pure outcomes[2m > [22m[2mmeasures paired strongest versus cheapest daily outcomes
+[22m[39mSOCCER_SEASON_MEASUREMENT: {"seedCount":128,"meanPointsGap":56.734375,"meanWinsGap":22.6640625,"requiredMeanPointsGap":40,"alpha":5}
+
+ [32m✓[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mguarantees a legal perfect 38 witness for every measured daily deal[32m 146[2mms[22m[39m
+ [32m✓[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mmeasures paired strongest versus cheapest daily outcomes[32m 77[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m12 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 07:10:09
+[2m   Duration [22m 2.10s[2m (transform 192ms, setup 96ms, collect 214ms, tests 695ms, environment 555ms, prepare 150ms)[22m
+
+JSON report written to /home/runner/work/_temp/rc-out/files/ps/soccer-perfect-season/baseline/vitest.json
+
+simSoccerPerfectSeason baseline: 12 actual pure outcome checks passed.
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mkeeps an independent win and loss points ledger[32m 7[2mms[22m[39m
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mdeals eleven fixed weighted slots with three fixed price offers
+ [31m×[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mreserves a basic card for every remaining slot on every reachable draft[32m 198[2mms[22m[39m
+[31m   → expected [ { …(5) }, { …(5) }, { …(5) }, …(17) ] to deeply equal [][39m
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mmatches an exhaustive affordable ceiling and keeps its legal witness
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mscores the worked draw fixture as 112 points and 98
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mrequires 38 wins for perfect and no losses for unbeaten
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mplays exactly 38 deterministic outcomes with counts equal to its games
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mchanges actual deal and season streams across dates modes and versions
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mreplays offers independently of choices and restores minimal valid saves
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mrejects malformed or impossible saves without changing raw input
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mguarantees a legal perfect 38 witness for every measured daily deal
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mmeasures paired strongest versus cheapest daily outcomes
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[2m | [22m[33m10 skipped[39m[90m (12)[39m
+[2m   Start at [22m 07:10:13
+[2m   Duration [22m 1.76s[2m (transform 208ms, setup 94ms, collect 222ms, tests 206ms, environment 509ms, prepare 303ms)[22m
+
+JSON report written to /home/runner/work/_temp/rc-out/files/ps/soccer-perfect-season/reserve/vitest.json
+
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mreserves a basic card for every remaining slot on every reachable draft
+[31m[1mAssertionError[22m: expected [ { …(5) }, { …(5) }, { …(5) }, …(17) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   {[39m
+[31m+     "actual": true,[39m
+[31m+     "choices": [[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+     ],[39m
+[31m+     "expected": false,[39m
+[31m+     "pick": 2,[39m
+[31m+     "spent": 47,[39m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "actual": true,[39m
+[31m+     "choices": [[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       1,[39m
+[31m+       1,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+     ],[39m
+[31m+     "expected": false,[39m
+[31m+     "pick": 2,[39m
+[31m+     "spent": 47,[39m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "actual": true,[39m
+[31m+     "choices": [[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       1,[39m
+[31m+       2,[39m
+[31m+       1,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+     ],[39m
+[31m+     "expected": false,[39m
+[31m+     "pick": 2,[39m
+[31m+     "spent": 47,[39m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "actual": true,[39m
+[31m+     "choices": [[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       1,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       1,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+     ],[39m
+[31m+     "expected": false,[39m
+[31m+     "pick": 2,[39m
+[31m+     "spent": 47,[39m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "actual": true,[39m
+[31m+     "choices": [[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       1,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       1,[39m
+[31m+       2,[39m
+[31m+     ],[39m
+[31m+     "expected": false,[39m
+[31m+     "pick": 2,[39m
+[31m+     "spent": 47,[39m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "actual": true,[39m
+[31m+     "choices": [[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       1,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       1,[39m
+[31m+     ],[39m
+[31m+     "expected": false,[39m
+[31m+     "pick": 2,[39m
+[31m+     "spent": 47,[39m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "actual": true,[39m
+[31m+     "choices": [[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       1,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+     ],[39m
+[31m+     "expected": false,[39m
+[31m+     "pick": 1,[39m
+[31m+     "spent": 49,[39m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "actual": true,[39m
+[31m+     "choices": [[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       2,[39m
+[31m+       0,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+     ],[39m
+[31m+     "expected": false,[39m
+[31m+     "pick": 2,[39m
+[31m+     "spent": 47,[39m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "actual": true,[39m
+[31m+     "choices": [[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       2,[39m
+[31m+       1,[39m
+[31m+       1,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+     ],[39m
+[31m+     "expected": false,[39m
+[31m+     "pick": 2,[39m
+[31m+     "spent": 47,[39m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "actual": true,[39m
+[31m+     "choices": [[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       2,[39m
+[31m+       1,[39m
+[31m+       2,[39m
+[31m+       1,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+     ],[39m
+[31m+     "expected": false,[39m
+[31m+     "pick": 2,[39m
+[31m+     "spent": 47,[39m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "actual": true,[39m
+[31m+     "choices": [[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       2,[39m
+[31m+       1,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       1,[39m
+[31m+       2,[39m
+[31m+     ],[39m
+[31m+     "expected": false,[39m
+[31m+     "pick": 2,[39m
+[31m+     "spent": 47,[39m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "actual": true,[39m
+[31m+     "choices": [[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       2,[39m
+[31m+       1,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       1,[39m
+[31m+     ],[39m
+[31m+     "expected": false,[39m
+[31m+     "pick": 2,[39m
+[31m+     "spent": 47,[39m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "actual": true,[39m
+[31m+     "choices": [[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       2,[39m
+[31m+       1,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+     ],[39m
+[31m+     "expected": false,[39m
+[31m+     "pick": 1,[39m
+[31m+     "spent": 49,[39m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "actual": true,[39m
+[31m+     "choices": [[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       0,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+     ],[39m
+[31m+     "expected": false,[39m
+[31m+     "pick": 2,[39m
+[31m+     "spent": 47,[39m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "actual": true,[39m
+[31m+     "choices": [[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       1,[39m
+[31m+       1,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+     ],[39m
+[31m+     "expected": false,[39m
+[31m+     "pick": 2,[39m
+[31m+     "spent": 47,[39m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "actual": true,[39m
+[31m+     "choices": [[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       1,[39m
+[31m+       2,[39m
+[31m+       1,[39m
+[31m+       2,[39m
+[31m+     ],[39m
+[31m+     "expected": false,[39m
+[31m+     "pick": 2,[39m
+[31m+     "spent": 47,[39m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "actual": true,[39m
+[31m+     "choices": [[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       1,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       1,[39m
+[31m+     ],[39m
+[31m+     "expected": false,[39m
+[31m+     "pick": 2,[39m
+[31m+     "spent": 47,[39m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "actual": true,[39m
+[31m+     "choices": [[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       1,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+     ],[39m
+[31m+     "expected": false,[39m
+[31m+     "pick": 1,[39m
+[31m+     "spent": 49,[39m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "actual": true,[39m
+[31m+     "choices": [[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       0,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+     ],[39m
+[31m+     "expected": false,[39m
+[31m+     "pick": 2,[39m
+[31m+     "spent": 47,[39m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "actual": true,[39m
+[31m+     "choices": [[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       0,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       2,[39m
+[31m+       1,[39m
+[31m+       1,[39m
+[31m+       2,[39m
+[31m+     ],[39m
+[31m+     "expected": false,[39m
+[31m+     "pick": 2,[39m
+[31m+     "spent": 47,[39m
+[31m+   },[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/soccerPerfectSeason.test.ts:[2m94:24[22m[39m
+    [90m 92| [39m    [34mvisit[39m([][33m,[39m [34m0[39m)[33m;[39m
+    [90m 93| [39m    retain('reserveEnumeration', { seed: 20261008, prefixes, leaves, l…
+    [90m 94| [39m    [34mexpect[39m(mismatches)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                       [31m^[39m
+    [90m 95| [39m    [34mexpect[39m(leaves)[33m.[39m[34mtoBe[39m([34mexhaustive[39m(deal)[33m.[39mleaves)[33m;[39m
+    [90m 96| [39m    [34mexpect[39m(legalEdges)[33m.[39m[34mtoBe[39m(prefixes [33m-[39m [34m1[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+simSoccerPerfectSeason reserve: one intended outcome fails and independent ledger passes.
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mkeeps an independent win and loss points ledger[32m 4[2mms[22m[39m
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mdeals eleven fixed weighted slots with three fixed price offers
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mreserves a basic card for every remaining slot on every reachable draft
+ [31m×[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mmatches an exhaustive affordable ceiling and keeps its legal witness[32m 57[2mms[22m[39m
+[31m   → expected 891 to be 1073 // Object.is equality[39m
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mscores the worked draw fixture as 112 points and 98
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mrequires 38 wins for perfect and no losses for unbeaten
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mplays exactly 38 deterministic outcomes with counts equal to its games
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mchanges actual deal and season streams across dates modes and versions
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mreplays offers independently of choices and restores minimal valid saves
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mrejects malformed or impossible saves without changing raw input
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mguarantees a legal perfect 38 witness for every measured daily deal
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mmeasures paired strongest versus cheapest daily outcomes
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[2m | [22m[33m10 skipped[39m[90m (12)[39m
+[2m   Start at [22m 07:10:15
+[2m   Duration [22m 1.63s[2m (transform 182ms, setup 110ms, collect 202ms, tests 62ms, environment 632ms, prepare 242ms)[22m
+
+JSON report written to /home/runner/work/_temp/rc-out/files/ps/soccer-perfect-season/ceiling/vitest.json
+
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mmatches an exhaustive affordable ceiling and keeps its legal witness
+[31m[1mAssertionError[22m: expected 891 to be 1073 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 1073[39m
+[31m+ 891[39m
+
+[36m [2m❯[22m src/test/soccerPerfectSeason.test.ts:[2m110:37[22m[39m
+    [90m108| [39m      [34mretain[39m([32m'exhaustiveCeilings'[39m[33m,[39m ceilings)[33m;[39m
+    [90m109| [39m      [34mexpect[39m(best[33m.[39mchoices)[33m.[39m[34mtoHaveLength[39m([34m11[39m)[33m;[39m
+    [90m110| [39m      [34mexpect[39m(best[33m.[39mweightedStrength)[33m.[39m[34mtoBe[39m(oracle[33m.[39mbestStrength)[33m;[39m
+    [90m   | [39m                                    [31m^[39m
+    [90m111| [39m      expect(rawStrength(deal, best.choices)).toBe(oracle.bestStrength…
+    [90m112| [39m      [34mexpect[39m(best[33m.[39mspent)[33m.[39m[34mtoBe[39m([34mdraftSoccerCost[39m(deal[33m,[39m best[33m.[39mchoices))[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+simSoccerPerfectSeason ceiling: one intended outcome fails and independent ledger passes.
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mkeeps an independent win and loss points ledger[32m 3[2mms[22m[39m
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mdeals eleven fixed weighted slots with three fixed price offers
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mreserves a basic card for every remaining slot on every reachable draft
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mmatches an exhaustive affordable ceiling and keeps its legal witness
+ [31m×[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mscores the worked draw fixture as 112 points and 98[32m 30[2mms[22m[39m
+[31m   → expected [ 38, 37, 1, +0, 111, 97 ] to deeply equal [ 38, 37, 1, +0, 112, 98 ][39m
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mrequires 38 wins for perfect and no losses for unbeaten
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mplays exactly 38 deterministic outcomes with counts equal to its games
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mchanges actual deal and season streams across dates modes and versions
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mreplays offers independently of choices and restores minimal valid saves
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mrejects malformed or impossible saves without changing raw input
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mguarantees a legal perfect 38 witness for every measured daily deal
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mmeasures paired strongest versus cheapest daily outcomes
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[2m | [22m[33m10 skipped[39m[90m (12)[39m
+[2m   Start at [22m 07:10:18
+[2m   Duration [22m 1.46s[2m (transform 174ms, setup 92ms, collect 224ms, tests 33ms, environment 479ms, prepare 232ms)[22m
+
+JSON report written to /home/runner/work/_temp/rc-out/files/ps/soccer-perfect-season/draw/vitest.json
+
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mscores the worked draw fixture as 112 points and 98
+[31m[1mAssertionError[22m: expected [ 38, 37, 1, +0, 111, 97 ] to deeply equal [ 38, 37, 1, +0, 112, 98 ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[2m    38,[22m
+[2m    37,[22m
+[2m    1,[22m
+[2m    0,[22m
+[32m-   112,[39m
+[32m-   98,[39m
+[31m+   111,[39m
+[31m+   97,[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/test/soccerPerfectSeason.test.ts:[2m128:100[22m[39m
+    [90m126| [39m    [35mconst[39m record [33m=[39m [34mscoreSoccerMatches[39m([[33m...[39m[33mArray[39m([34m37[39m)[33m.[39m[34mfill[39m([32m'W'[39m)[33m,[39m [32m'D'[39m])[33m;[39m
+    [90m127| [39m    [34mretain[39m([32m'workedDraw'[39m[33m,[39m record)[33m;[39m
+    [90m128| [39m    expect([record.played, record.wins, record.draws, record.losses, r…
+    [90m   | [39m                                                                                                   [31m^[39m
+    [90m129| [39m    [34mexpect[39m([34msoccerMatchOutcome[39m([34m0.4[39m[33m,[39m [34m0[39m))[33m.[39m[34mtoBe[39m([32m'W'[39m)[33m;[39m
+    [90m130| [39m    [34mexpect[39m([34msoccerMatchOutcome[39m([34m0.4[39m[33m,[39m [34m0.4[39m))[33m.[39m[34mtoBe[39m([32m'D'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+simSoccerPerfectSeason draw: one intended outcome fails and independent ledger passes.
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mkeeps an independent win and loss points ledger[32m 4[2mms[22m[39m
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mdeals eleven fixed weighted slots with three fixed price offers
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mreserves a basic card for every remaining slot on every reachable draft
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mmatches an exhaustive affordable ceiling and keeps its legal witness
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mscores the worked draw fixture as 112 points and 98
+ [31m×[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mrequires 38 wins for perfect and no losses for unbeaten[32m 25[2mms[22m[39m
+[31m   → expected { Object (played, wins, ...) } to match object { perfect: false, unbeaten: true }
+(6 matching properties omitted from actual)[39m
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mplays exactly 38 deterministic outcomes with counts equal to its games
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mchanges actual deal and season streams across dates modes and versions
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mreplays offers independently of choices and restores minimal valid saves
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mrejects malformed or impossible saves without changing raw input
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mguarantees a legal perfect 38 witness for every measured daily deal
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mmeasures paired strongest versus cheapest daily outcomes
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[2m | [22m[33m10 skipped[39m[90m (12)[39m
+[2m   Start at [22m 07:10:20
+[2m   Duration [22m 1.37s[2m (transform 176ms, setup 70ms, collect 200ms, tests 31ms, environment 498ms, prepare 166ms)[22m
+
+JSON report written to /home/runner/work/_temp/rc-out/files/ps/soccer-perfect-season/perfect/vitest.json
+
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mrequires 38 wins for perfect and no losses for unbeaten
+[31m[1mAssertionError[22m: expected { Object (played, wins, ...) } to match object { perfect: false, unbeaten: true }
+(6 matching properties omitted from actual)[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[32m-   "perfect": false,[39m
+[31m+   "perfect": true,[39m
+[2m    "unbeaten": true,[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/soccerPerfectSeason.test.ts:[2m140:63[22m[39m
+    [90m138| [39m    retain('verdicts', [Array(38).fill('W'), [...Array(37).fill('W'), …
+    [90m139| [39m    expect(scoreSoccerMatches(Array(38).fill('W'))).toMatchObject({ pl…
+    [90m140| [39m    expect(scoreSoccerMatches([...Array(37).fill('W'), 'D'])).toMatchO…
+    [90m   | [39m                                                              [31m^[39m
+    [90m141| [39m    expect(scoreSoccerMatches([...Array(37).fill('W'), 'L'])).toMatchO…
+    [90m142| [39m    expect(scoreSoccerMatches(Array(37).fill('W'))).toMatchObject({ pl…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+simSoccerPerfectSeason perfect: one intended outcome fails and independent ledger passes.
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mkeeps an independent win and loss points ledger[32m 6[2mms[22m[39m
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mdeals eleven fixed weighted slots with three fixed price offers
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mreserves a basic card for every remaining slot on every reachable draft
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mmatches an exhaustive affordable ceiling and keeps its legal witness
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mscores the worked draw fixture as 112 points and 98
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mrequires 38 wins for perfect and no losses for unbeaten
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mplays exactly 38 deterministic outcomes with counts equal to its games
+ [31m×[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mchanges actual deal and season streams across dates modes and versions[32m 31[2mms[22m[39m
+[31m   → expected 3698684700 not to be 3698684700 // Object.is equality[39m
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mreplays offers independently of choices and restores minimal valid saves
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mrejects malformed or impossible saves without changing raw input
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mguarantees a legal perfect 38 witness for every measured daily deal
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mmeasures paired strongest versus cheapest daily outcomes
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[2m | [22m[33m10 skipped[39m[90m (12)[39m
+[2m   Start at [22m 07:10:22
+[2m   Duration [22m 1.52s[2m (transform 187ms, setup 122ms, collect 194ms, tests 38ms, environment 624ms, prepare 170ms)[22m
+
+JSON report written to /home/runner/work/_temp/rc-out/files/ps/soccer-perfect-season/version/vitest.json
+
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mchanges actual deal and season streams across dates modes and versions
+[31m[1mAssertionError[22m: expected 3698684700 not to be 3698684700 // Object.is equality[39m
+[36m [2m❯[22m src/test/soccerPerfectSeason.test.ts:[2m166:22[22m[39m
+    [90m164| [39m    [34mexpect[39m(seed)[33m.[39mnot[33m.[39m[34mtoBe[39m([34mdailySoccerSeed[39m([32m'2026-10-09'[39m))[33m;[39m
+    [90m165| [39m    [34mexpect[39m(seed)[33m.[39mnot[33m.[39m[34mtoBe[39m([34munlimitedSoccerSeed[39m(seed))[33m;[39m
+    [90m166| [39m    [34mexpect[39m(seed)[33m.[39mnot[33m.[39m[34mtoBe[39m([34mdailySoccerSeed[39m([32m'2026-10-08'[39m[33m,[39m otherVersion))[33m;[39m
+    [90m   | [39m                     [31m^[39m
+    [90m167| [39m    expect(unlimitedSoccerSeed(17)).not.toBe(unlimitedSoccerSeed(17, o…
+    [90m168| [39m    expect(offers(SOCCER_PS_VERSION)).not.toEqual(offers(otherVersion)…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+simSoccerPerfectSeason version: one intended outcome fails and independent ledger passes.
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/soccerPerfectSeason.test.ts[2m > [22m[2mSoccer Perfect Season pure outcomes[2m > [22m[2mmeasures paired strongest versus cheapest daily outcomes
+[22m[39mSOCCER_SEASON_MEASUREMENT: {"seedCount":128,"meanPointsGap":0,"meanWinsGap":0,"requiredMeanPointsGap":40,"alpha":5}
+
+ [32m✓[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mkeeps an independent win and loss points ledger[32m 6[2mms[22m[39m
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mdeals eleven fixed weighted slots with three fixed price offers
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mreserves a basic card for every remaining slot on every reachable draft
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mmatches an exhaustive affordable ceiling and keeps its legal witness
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mscores the worked draw fixture as 112 points and 98
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mrequires 38 wins for perfect and no losses for unbeaten
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mplays exactly 38 deterministic outcomes with counts equal to its games
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mchanges actual deal and season streams across dates modes and versions
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mreplays offers independently of choices and restores minimal valid saves
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mrejects malformed or impossible saves without changing raw input
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mguarantees a legal perfect 38 witness for every measured daily deal
+ [31m×[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mmeasures paired strongest versus cheapest daily outcomes[32m 132[2mms[22m[39m
+[31m   → expected false to be true // Object.is equality[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[2m | [22m[33m10 skipped[39m[90m (12)[39m
+[2m   Start at [22m 07:10:25
+[2m   Duration [22m 1.50s[2m (transform 195ms, setup 71ms, collect 215ms, tests 140ms, environment 490ms, prepare 99ms)[22m
+
+JSON report written to /home/runner/work/_temp/rc-out/files/ps/soccer-perfect-season/advantage/vitest.json
+
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mmeasures paired strongest versus cheapest daily outcomes
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/soccerPerfectSeason.test.ts:[2m256:75[22m[39m
+    [90m254| [39m    console.log('SOCCER_SEASON_MEASUREMENT: ' + JSON.stringify({ seedC…
+    [90m255| [39m    expect(pairs.every(pair => pair.strongest.wins === 38 && pair.stro…
+    [90m256| [39m    expect(pairs.every(pair => pair.cheapOdds.win < pair.strongOdds.wi…
+    [90m   | [39m                                                                          [31m^[39m
+    [90m257| [39m    [34mexpect[39m(meanPointsGap)[33m.[39m[34mtoBeGreaterThan[39m([34m0[39m)[33m;[39m
+    [90m258| [39m    [34mexpect[39m(meanWinsGap)[33m.[39m[34mtoBeGreaterThan[39m([34m0[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+simSoccerPerfectSeason advantage: one intended outcome fails and independent ledger passes.
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/soccerPerfectSeason.test.ts[2m > [22m[2mSoccer Perfect Season pure outcomes[2m > [22m[2mmeasures paired strongest versus cheapest daily outcomes
+[22m[39mSOCCER_SEASON_MEASUREMENT: {"seedCount":128,"meanPointsGap":9.5859375,"meanWinsGap":3.828125,"requiredMeanPointsGap":40,"alpha":5}
+
+ [32m✓[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mkeeps an independent win and loss points ledger[32m 6[2mms[22m[39m
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mdeals eleven fixed weighted slots with three fixed price offers
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mreserves a basic card for every remaining slot on every reachable draft
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mmatches an exhaustive affordable ceiling and keeps its legal witness
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mscores the worked draw fixture as 112 points and 98
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mrequires 38 wins for perfect and no losses for unbeaten
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mplays exactly 38 deterministic outcomes with counts equal to its games
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mchanges actual deal and season streams across dates modes and versions
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mreplays offers independently of choices and restores minimal valid saves
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mrejects malformed or impossible saves without changing raw input
+ [2m[90m↓[39m[22m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mguarantees a legal perfect 38 witness for every measured daily deal
+ [31m×[39m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mmeasures paired strongest versus cheapest daily outcomes[32m 96[2mms[22m[39m
+[31m   → expected 9.5859375 to be greater than 40[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[2m | [22m[33m10 skipped[39m[90m (12)[39m
+[2m   Start at [22m 07:10:27
+[2m   Duration [22m 1.46s[2m (transform 173ms, setup 71ms, collect 192ms, tests 104ms, environment 432ms, prepare 95ms)[22m
+
+JSON report written to /home/runner/work/_temp/rc-out/files/ps/soccer-perfect-season/margin/vitest.json
+
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mmeasures paired strongest versus cheapest daily outcomes
+[31m[1mAssertionError[22m: expected 9.5859375 to be greater than 40[39m
+[36m [2m❯[22m src/test/soccerPerfectSeason.test.ts:[2m259:27[22m[39m
+    [90m257| [39m    [34mexpect[39m(meanPointsGap)[33m.[39m[34mtoBeGreaterThan[39m([34m0[39m)[33m;[39m
+    [90m258| [39m    [34mexpect[39m(meanWinsGap)[33m.[39m[34mtoBeGreaterThan[39m([34m0[39m)[33m;[39m
+    [90m259| [39m    [34mexpect[39m(meanPointsGap)[33m.[39m[34mtoBeGreaterThan[39m(requiredMeanPointsGap)[33m;[39m
+    [90m   | [39m                          [31m^[39m
+    [90m260| [39m  })[33m;[39m
+    [90m261| [39m})[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+simSoccerPerfectSeason margin: one intended outcome fails and independent ledger passes.
+simSoccerPerfectSeason: 8 exact baseline/control receipts accepted.
+simSoccerPerfectSeason: exhaustive legal draft, independent affordable ceiling, 38-game witness, W/D/L and score outcomes bound.
+simSoccerPerfectSeason: pinned save/day/version isolation and raw paired daily headroom retained against the permanent 40 point margin.
+simSoccerPerfectSeason: source bytes held and all raw reports/copies retained at /home/runner/work/_temp/rc-out/files/ps/soccer-perfect-season.

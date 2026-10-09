@@ -1,0 +1,11 @@
+{
+  "file": "src/lib/soccerPerfectSeason.ts",
+  "from": "perfect: games.length === SOCCER_PS_GAMES && wins === SOCCER_PS_GAMES",
+  "to": "perfect: games.length === SOCCER_PS_GAMES && losses === 0",
+  "intended": "requires 38 wins for perfect and no losses for unbeaten",
+  "baseline": "keeps an independent win and loss points ledger",
+  "originalSha256": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+  "normalizedSha256": "0222e29e9a750822fa406a9b43ec9e97f62c1ab935e627142951c6f7884c3b81",
+  "copiedSha256": "ff4ff5e8764236b2ff7d21e0fb9e5d0fbb3c7b9d0954c982294768fe69be6150",
+  "copy": "perfect/soccerPerfectSeason.ts"
+}

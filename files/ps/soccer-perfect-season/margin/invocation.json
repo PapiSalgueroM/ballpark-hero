@@ -1,0 +1,17 @@
+{
+  "executable": "/opt/hostedtoolcache/node/24.21.0/x64/bin/node",
+  "args": [
+    "/home/runner/work/ballpark-hero/ballpark-hero/node_modules/vitest/vitest.mjs",
+    "run",
+    "src/test/soccerPerfectSeason.test.ts",
+    "--reporter=verbose",
+    "--reporter=json",
+    "--outputFile.json=/home/runner/work/_temp/rc-out/files/ps/soccer-perfect-season/margin/vitest.json",
+    "--maxWorkers=1",
+    "--no-file-parallelism",
+    "--testNamePattern",
+    "(?:measures paired strongest versus cheapest daily outcomes|keeps an independent win and loss points ledger)$"
+  ],
+  "alias": "{\"@/lib/soccerPerfectSeason\":\"/home/runner/work/_temp/rc-out/files/ps/soccer-perfect-season/margin/soccerPerfectSeason.ts\"}",
+  "measuredMargin": 40
+}

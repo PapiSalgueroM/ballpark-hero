@@ -1,0 +1,134 @@
+[
+  {
+    "ancestorTitles": [
+      "Soccer Perfect Season pure outcomes"
+    ],
+    "fullName": "Soccer Perfect Season pure outcomes keeps an independent win and loss points ledger",
+    "status": "passed",
+    "title": "keeps an independent win and loss points ledger",
+    "duration": 6.329009000000042,
+    "failureMessages": [],
+    "meta": {}
+  },
+  {
+    "ancestorTitles": [
+      "Soccer Perfect Season pure outcomes"
+    ],
+    "fullName": "Soccer Perfect Season pure outcomes deals eleven fixed weighted slots with three fixed price offers",
+    "status": "passed",
+    "title": "deals eleven fixed weighted slots with three fixed price offers",
+    "duration": 10.61681499999986,
+    "failureMessages": [],
+    "meta": {}
+  },
+  {
+    "ancestorTitles": [
+      "Soccer Perfect Season pure outcomes"
+    ],
+    "fullName": "Soccer Perfect Season pure outcomes reserves a basic card for every remaining slot on every reachable draft",
+    "status": "passed",
+    "title": "reserves a basic card for every remaining slot on every reachable draft",
+    "duration": 185.72795700000006,
+    "failureMessages": [],
+    "meta": {}
+  },
+  {
+    "ancestorTitles": [
+      "Soccer Perfect Season pure outcomes"
+    ],
+    "fullName": "Soccer Perfect Season pure outcomes matches an exhaustive affordable ceiling and keeps its legal witness",
+    "status": "passed",
+    "title": "matches an exhaustive affordable ceiling and keeps its legal witness",
+    "duration": 115.13611800000012,
+    "failureMessages": [],
+    "meta": {}
+  },
+  {
+    "ancestorTitles": [
+      "Soccer Perfect Season pure outcomes"
+    ],
+    "fullName": "Soccer Perfect Season pure outcomes scores the worked draw fixture as 112 points and 98",
+    "status": "passed",
+    "title": "scores the worked draw fixture as 112 points and 98",
+    "duration": 4.718433999999888,
+    "failureMessages": [],
+    "meta": {}
+  },
+  {
+    "ancestorTitles": [
+      "Soccer Perfect Season pure outcomes"
+    ],
+    "fullName": "Soccer Perfect Season pure outcomes requires 38 wins for perfect and no losses for unbeaten",
+    "status": "passed",
+    "title": "requires 38 wins for perfect and no losses for unbeaten",
+    "duration": 86.13519500000007,
+    "failureMessages": [],
+    "meta": {}
+  },
+  {
+    "ancestorTitles": [
+      "Soccer Perfect Season pure outcomes"
+    ],
+    "fullName": "Soccer Perfect Season pure outcomes plays exactly 38 deterministic outcomes with counts equal to its games",
+    "status": "passed",
+    "title": "plays exactly 38 deterministic outcomes with counts equal to its games",
+    "duration": 11.480205000000069,
+    "failureMessages": [],
+    "meta": {}
+  },
+  {
+    "ancestorTitles": [
+      "Soccer Perfect Season pure outcomes"
+    ],
+    "fullName": "Soccer Perfect Season pure outcomes changes actual deal and season streams across dates modes and versions",
+    "status": "passed",
+    "title": "changes actual deal and season streams across dates modes and versions",
+    "duration": 6.7657970000000205,
+    "failureMessages": [],
+    "meta": {}
+  },
+  {
+    "ancestorTitles": [
+      "Soccer Perfect Season pure outcomes"
+    ],
+    "fullName": "Soccer Perfect Season pure outcomes replays offers independently of choices and restores minimal valid saves",
+    "status": "passed",
+    "title": "replays offers independently of choices and restores minimal valid saves",
+    "duration": 27.76358100000016,
+    "failureMessages": [],
+    "meta": {}
+  },
+  {
+    "ancestorTitles": [
+      "Soccer Perfect Season pure outcomes"
+    ],
+    "fullName": "Soccer Perfect Season pure outcomes rejects malformed or impossible saves without changing raw input",
+    "status": "passed",
+    "title": "rejects malformed or impossible saves without changing raw input",
+    "duration": 14.764079000000038,
+    "failureMessages": [],
+    "meta": {}
+  },
+  {
+    "ancestorTitles": [
+      "Soccer Perfect Season pure outcomes"
+    ],
+    "fullName": "Soccer Perfect Season pure outcomes guarantees a legal perfect 38 witness for every measured daily deal",
+    "status": "passed",
+    "title": "guarantees a legal perfect 38 witness for every measured daily deal",
+    "duration": 146.2532080000001,
+    "failureMessages": [],
+    "meta": {}
+  },
+  {
+    "ancestorTitles": [
+      "Soccer Perfect Season pure outcomes"
+    ],
+    "fullName": "Soccer Perfect Season pure outcomes measures paired strongest versus cheapest daily outcomes",
+    "status": "passed",
+    "title": "measures paired strongest versus cheapest daily outcomes",
+    "duration": 77.14306600000009,
+    "failureMessages": [],
+    "meta": {}
+  }
+]

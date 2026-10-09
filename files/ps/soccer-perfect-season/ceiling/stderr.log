@@ -1,0 +1,22 @@
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerPerfectSeason.test.ts[2m > [22mSoccer Perfect Season pure outcomes[2m > [22mmatches an exhaustive affordable ceiling and keeps its legal witness
+[31m[1mAssertionError[22m: expected 891 to be 1073 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 1073[39m
+[31m+ 891[39m
+
+[36m [2m❯[22m src/test/soccerPerfectSeason.test.ts:[2m110:37[22m[39m
+    [90m108| [39m      [34mretain[39m([32m'exhaustiveCeilings'[39m[33m,[39m ceilings)[33m;[39m
+    [90m109| [39m      [34mexpect[39m(best[33m.[39mchoices)[33m.[39m[34mtoHaveLength[39m([34m11[39m)[33m;[39m
+    [90m110| [39m      [34mexpect[39m(best[33m.[39mweightedStrength)[33m.[39m[34mtoBe[39m(oracle[33m.[39mbestStrength)[33m;[39m
+    [90m   | [39m                                    [31m^[39m
+    [90m111| [39m      expect(rawStrength(deal, best.choices)).toBe(oracle.bestStrength…
+    [90m112| [39m      [34mexpect[39m(best[33m.[39mspent)[33m.[39m[34mtoBe[39m([34mdraftSoccerCost[39m(deal[33m,[39m best[33m.[39mchoices))[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+

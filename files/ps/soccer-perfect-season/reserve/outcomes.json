@@ -1,0 +1,360 @@
+{
+  "independentLedger": {
+    "played": 38,
+    "wins": 20,
+    "draws": 0,
+    "losses": 18,
+    "points": 60,
+    "score": 53,
+    "perfect": false,
+    "unbeaten": false
+  },
+  "reserveEnumeration": {
+    "seed": 20261008,
+    "prefixes": 169754,
+    "leaves": 101400,
+    "legalEdges": 169753,
+    "mismatches": [
+      {
+        "choices": [
+          0,
+          0,
+          0,
+          0,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "pick": 2,
+        "spent": 47,
+        "expected": false,
+        "actual": true
+      },
+      {
+        "choices": [
+          0,
+          0,
+          0,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2
+        ],
+        "pick": 2,
+        "spent": 47,
+        "expected": false,
+        "actual": true
+      },
+      {
+        "choices": [
+          0,
+          0,
+          0,
+          1,
+          2,
+          1,
+          2,
+          2,
+          2
+        ],
+        "pick": 2,
+        "spent": 47,
+        "expected": false,
+        "actual": true
+      },
+      {
+        "choices": [
+          0,
+          0,
+          0,
+          1,
+          2,
+          2,
+          1,
+          2,
+          2
+        ],
+        "pick": 2,
+        "spent": 47,
+        "expected": false,
+        "actual": true
+      },
+      {
+        "choices": [
+          0,
+          0,
+          0,
+          1,
+          2,
+          2,
+          2,
+          1,
+          2
+        ],
+        "pick": 2,
+        "spent": 47,
+        "expected": false,
+        "actual": true
+      },
+      {
+        "choices": [
+          0,
+          0,
+          0,
+          1,
+          2,
+          2,
+          2,
+          2,
+          1
+        ],
+        "pick": 2,
+        "spent": 47,
+        "expected": false,
+        "actual": true
+      },
+      {
+        "choices": [
+          0,
+          0,
+          0,
+          1,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "pick": 1,
+        "spent": 49,
+        "expected": false,
+        "actual": true
+      },
+      {
+        "choices": [
+          0,
+          0,
+          0,
+          2,
+          0,
+          2,
+          2,
+          2,
+          2
+        ],
+        "pick": 2,
+        "spent": 47,
+        "expected": false,
+        "actual": true
+      },
+      {
+        "choices": [
+          0,
+          0,
+          0,
+          2,
+          1,
+          1,
+          2,
+          2,
+          2
+        ],
+        "pick": 2,
+        "spent": 47,
+        "expected": false,
+        "actual": true
+      },
+      {
+        "choices": [
+          0,
+          0,
+          0,
+          2,
+          1,
+          2,
+          1,
+          2,
+          2
+        ],
+        "pick": 2,
+        "spent": 47,
+        "expected": false,
+        "actual": true
+      },
+      {
+        "choices": [
+          0,
+          0,
+          0,
+          2,
+          1,
+          2,
+          2,
+          1,
+          2
+        ],
+        "pick": 2,
+        "spent": 47,
+        "expected": false,
+        "actual": true
+      },
+      {
+        "choices": [
+          0,
+          0,
+          0,
+          2,
+          1,
+          2,
+          2,
+          2,
+          1
+        ],
+        "pick": 2,
+        "spent": 47,
+        "expected": false,
+        "actual": true
+      },
+      {
+        "choices": [
+          0,
+          0,
+          0,
+          2,
+          1,
+          2,
+          2,
+          2,
+          2
+        ],
+        "pick": 1,
+        "spent": 49,
+        "expected": false,
+        "actual": true
+      },
+      {
+        "choices": [
+          0,
+          0,
+          0,
+          2,
+          2,
+          0,
+          2,
+          2,
+          2
+        ],
+        "pick": 2,
+        "spent": 47,
+        "expected": false,
+        "actual": true
+      },
+      {
+        "choices": [
+          0,
+          0,
+          0,
+          2,
+          2,
+          1,
+          1,
+          2,
+          2
+        ],
+        "pick": 2,
+        "spent": 47,
+        "expected": false,
+        "actual": true
+      },
+      {
+        "choices": [
+          0,
+          0,
+          0,
+          2,
+          2,
+          1,
+          2,
+          1,
+          2
+        ],
+        "pick": 2,
+        "spent": 47,
+        "expected": false,
+        "actual": true
+      },
+      {
+        "choices": [
+          0,
+          0,
+          0,
+          2,
+          2,
+          1,
+          2,
+          2,
+          1
+        ],
+        "pick": 2,
+        "spent": 47,
+        "expected": false,
+        "actual": true
+      },
+      {
+        "choices": [
+          0,
+          0,
+          0,
+          2,
+          2,
+          1,
+          2,
+          2,
+          2
+        ],
+        "pick": 1,
+        "spent": 49,
+        "expected": false,
+        "actual": true
+      },
+      {
+        "choices": [
+          0,
+          0,
+          0,
+          2,
+          2,
+          2,
+          0,
+          2,
+          2
+        ],
+        "pick": 2,
+        "spent": 47,
+        "expected": false,
+        "actual": true
+      },
+      {
+        "choices": [
+          0,
+          0,
+          0,
+          2,
+          2,
+          2,
+          1,
+          1,
+          2
+        ],
+        "pick": 2,
+        "spent": 47,
+        "expected": false,
+        "actual": true
+      }
+    ]
+  }
+}
