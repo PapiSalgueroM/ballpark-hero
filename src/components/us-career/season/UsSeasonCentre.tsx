@@ -52,7 +52,9 @@ export function buildUsModel(sport: UsCareerSport, bind: UsSeasonBind, career: U
   const review = sport.reviewStats(row, pos);
   const title = bind.results.length > 0 && row.teamResult === bind.results[bind.results.length - 1];
   const path = usPlayoffPath(bind, row, ctx, key);
-  const post = review.postseason.filter(x => x.value !== 'Not recorded').map(x => `${x.value} ${x.label.toLowerCase()}`);
+  /* Round 1147: the NFL saves its playoff line as a sentence ("512 yds, 4 TD, 1 INT"), printed as it is, and one game is "1 game" */
+  const post = review.postseason.filter(x => x.value !== 'Not recorded')
+    .map(x => (x.label === 'Performance' ? x.value : x.label === 'Games' && x.value === '1' ? '1 game' : `${x.value} ${x.label.toLowerCase()}`));
   /* the scoreboard and the phone's game log read the game's own ids in a named season */
   const idOf = new Map<string, string>();
   if (named) ctx.order.forEach((id, slot) => idOf.set(s.labels[slot]?.name ?? id, id));

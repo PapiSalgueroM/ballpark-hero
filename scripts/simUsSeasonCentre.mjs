@@ -47,9 +47,16 @@
  *   static   a static import of the viewer planted in a route
  *            file (in memory; the same text in a comment stays
  *            green)                                            -> section 8
+ * Round 1147 (the NFL bound), each on the NFL's own number file:
+ *   sum        `finish` hands him one receiving yard too many    -> section 3
+ *   kick       a kicker's side is free to score field goals
+ *              that are not his, the bind's own check off        -> section 3
+ *   nflstage   the NFL engine writes a result its list lacks     -> sections 1 and 4
+ *   nflformula the 17th game dropped for a third game against a
+ *              division rival, the bind's schedule check off     -> section 5
  *
- * MEASURED (filled in from the five seed sets, 2026-10-07): see the block
- * above the bands in section 7.
+ * MEASURED (filled in from the five seed sets, 2026-10-07 for the NBA and
+ * 2026-10-09 for the NFL): see the block above the bands in section 7.
  *
  * Green is the closing "simUsSeasonCentre: ... 0 failed" line AND exit 0.
  * Nothing here reaches the network.
@@ -71,6 +78,7 @@ const ASKED = (process.env.SPORTS ?? 'nba,nfl').split(',').map(s => s.trim()).fi
 /* ─── Controls: exact strings, patched in the bundle only ─── */
 const US = 'src/lib/season/us.ts';
 const NBA = 'src/lib/season/nba.ts';
+const NFL = 'src/lib/season/nfl.ts';
 const WINDOW = { file: 'src/data/usLeagueShape.ts', from: "  { sport: 'nba', era: 'now', from: 2025, to: null, shape: NBA_2025 },", to: "  { sport: 'nba', era: 'now', from: 2025, to: null, shape: NBA_2025 },\n  { sport: 'nba', era: 'y2004', from: 2003, to: null, shape: NBA_2025 }," };
 const CONTROLS = {
   stream: { section: 6, patches: [{ file: US, from: 'const key = usSeasonKey(bind, career, row);', to: 'const key = usSeasonKey(bind, career, row); Math.random();' }] },
@@ -83,7 +91,22 @@ const CONTROLS = {
   conf: { section: 4, patches: [{ file: US, from: '      const slot = r === bind.rounds.length - 1 ? other[0] : conf[r];', to: '      const slot = r === n - 1 ? other[0] : conf[r];' }] },
   hot: { section: 3, patches: [{ file: NBA, from: '  return won && pts >= 20 && pts >= 1.3 * ppg;', to: '  return pts >= ppg;' }] },
   static: { section: 8, patches: [] },
+  sum: { section: 3, patches: [
+    { file: NFL, from: "    on.forEach((g, i) => { g.line[key] = x[i]; });", to: "    on.forEach((g, i) => { g.line[key] = x[i] + (key === 'recYds' && i === 0 && x[0] > 0 ? 1 : 0); });" },
+    { file: NFL, from: '    if (tenths !== Math.round(want * 10)) out.push(`${key} ${tenths / 10} != ${want}`);\n', to: '' },
+  ] },
+  kick: { section: 3, patches: [
+    { file: NFL, from: "    const us = nflDrives(g.us, kinds.length, kicks ? of(g, 'fgMade') : null, rng);", to: '    const us = nflDrives(g.us, kinds.length, null, rng);' },
+    { file: NFL, from: "      if (kicker && (count('fg', true) !== of(g, 'fgMade') || g.events.some(e => e.kind === 'fg' && e.side === 'us' && !e.mine))) out.push(`game ${g.md}: his team's field goals are not his makes`);\n", to: '' },
+  ] },
+  nflstage: { section: 1, also: 4, patches: [{ file: 'src/lib/nflMyCareer.ts', from: '    result = runs[stage];', to: "    result = runs[stage] + ' ';" }] },
+  nflformula: { section: 5, patches: [
+    { file: NFL, from: '  if (extra) list.push([extra[Math.floor(rng() * extra.length)], hosts]);', to: '  if (extra) list.push([1, hosts]);' },
+    { file: NFL, from: '  if (ctx.shape) out.push(...nflDealProblems(ctx, s.games));\n', to: '' },
+  ] },
 };
+/* which sport a control needs in the run (its patched file is only bundled with that sport) */
+const CONTROL_SPORT = { stage: 'nba', names: 'nba', window: 'nba', formula: 'nba', hot: 'nba', sum: 'nfl', kick: 'nfl', nflstage: 'nfl', nflformula: 'nfl' };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown US_SEASON_CONTROL ${CONTROL}`); process.exit(2); }
 
 const norm = s => s.replace(/\r\n/g, '\n');
@@ -125,6 +148,7 @@ for (const slug of Object.keys(SPORT_DEFS)) {
   if (!SPORTS.includes(slug) && bound) { console.error(`FAIL: the ${slug} binding has a Season Center loader and was skipped`); process.exit(1); }
 }
 if (SPORTS.length === 0) { console.error('simUsSeasonCentre: no sport to run'); process.exit(1); }
+if (CONTROL && CONTROL_SPORT[CONTROL] && !SPORTS.includes(CONTROL_SPORT[CONTROL])) { console.error(`control ${CONTROL} patches the ${CONTROL_SPORT[CONTROL]} files, and that sport is not in this run: refusing to run`); process.exit(2); }
 
 const OUT = path.join(os.tmpdir(), `us-season-centre-${CONTROL || 'base'}-${process.pid}.mjs`);
 const entry = [
@@ -283,6 +307,59 @@ function shownIsSavedNba(row, s) {
   return out;
 }
 
+/** Section 3, NFL: every item recomputed from the row and the derived games.
+ *  The harness's own list of the line's stat fields and its own reading of a
+ *  drive (never the number file's). */
+const NFL_FIELDS = ['passYds', 'passTd', 'ints', 'rushYds', 'rushTd', 'rec', 'recYds', 'recTd', 'tackles', 'sacks', 'picks', 'passDef', 'forcedFum', 'fgMade', 'fgAtt'];
+const NFL_TD_EVENTS = { 'td-pass': 'passTd', 'td-rush': 'rushTd', 'td-rec': 'recTd' };
+function shownIsSavedNfl(row, pos, s) {
+  const out = [];
+  const on = s.games.filter(g => g.played);
+  const of = (g, k) => g.line[k] ?? 0;
+  if (s.games.length !== OWN.nfl.games) out.push(`games ${s.games.length}`);
+  if (on.length !== row.games) out.push(`played ${on.length} != ${row.games}`);
+  for (const k of NFL_FIELDS) {
+    if (!isNum(row[k])) { if (on.some(g => g.line[k] !== undefined)) out.push(`${k} on his line and not on the save`); continue; }
+    const tenths = on.reduce((a, g) => a + Math.round(of(g, k) * 10), 0);
+    if (tenths !== Math.round(row[k] * 10)) out.push(`${k} ${tenths / 10} != ${row[k]}`);
+    if (k !== 'sacks' && on.some(g => !Number.isInteger(of(g, k)) || of(g, k) < 0)) out.push(`${k} is not a whole number in a game`);
+  }
+  if (isNum(row.longFg)) {
+    const longs = on.filter(g => of(g, 'fgMade') > 0).map(g => g.line.longFg);
+    if (longs.length === 0 || longs.some(v => !Number.isInteger(v) || v > row.longFg || v < 18) || !longs.includes(row.longFg)) out.push(`long ${row.longFg} against ${JSON.stringify(longs).slice(0, 60)}`);
+    if (on.some(g => of(g, 'fgMade') === 0 && g.line.longFg !== undefined)) out.push('a long in a game with no make');
+  }
+  /* sacks: steps of a half, except at most one game that takes the season's odd tenths */
+  if (isNum(row.sacks) && on.filter(g => Math.round(of(g, 'sacks') * 10) % 5 !== 0).length > 1) out.push('more than one game with sacks off the half step');
+  for (const g of s.games) {
+    if (!g.played && Object.keys(g.line).length) out.push(`md ${g.md}: a line in a game he missed`);
+    if (!g.played && g.events.some(e => e.mine)) out.push(`md ${g.md}: his event in a game he missed`);
+    if (g.us === 1 || g.us === 4 || g.them === 1 || g.them === 4) out.push(`md ${g.md}: a score of ${g.us}-${g.them} no drive list makes`);
+    for (const e of g.events) {
+      const isTd = e.kind === 'td' || e.kind in NFL_TD_EVENTS;
+      const pts = e.pts ?? 0;
+      if (isTd ? ![6, 7, 8].includes(pts) : e.kind === 'fg' ? pts !== 3 : e.kind === 'safety' ? pts !== 2 : pts !== 0) out.push(`md ${g.md}: a ${e.kind} worth ${pts}`);
+      if (!Number.isInteger(e.min) || e.min < 1 || e.min > 60) out.push(`md ${g.md}: a drive at minute ${e.min}`);
+      if (e.mine && e.side !== 'us') out.push(`md ${g.md}: his event on the other side`);
+    }
+    if (!g.played) continue;
+    for (const [kind, key] of Object.entries(NFL_TD_EVENTS)) {
+      const n = g.events.filter(e => e.kind === kind && e.mine).length;
+      if (n !== of(g, key)) out.push(`md ${g.md}: ${n} ${kind} drives for ${of(g, key)} on his line`);
+    }
+    if (g.events.filter(e => e.side === 'us' && (e.kind === 'td' || e.kind in NFL_TD_EVENTS)).length * 6 > g.us) out.push(`md ${g.md}: more touchdowns than the score holds`);
+    if (of(g, 'fgMade') > of(g, 'fgAtt')) out.push(`md ${g.md}: ${of(g, 'fgMade')} makes on ${of(g, 'fgAtt')} tries`);
+    if (of(g, 'rec') < of(g, 'recTd') || (of(g, 'rec') === 0 && of(g, 'recYds') !== 0)) out.push(`md ${g.md}: ${of(g, 'rec')} catches, ${of(g, 'recTd')} touchdown catches, ${of(g, 'recYds')} yards`);
+    if (pos === 'K') {
+      /* every field goal his team makes in a game he plays is his */
+      const fgs = g.events.filter(e => e.kind === 'fg' && e.side === 'us');
+      if (fgs.length !== of(g, 'fgMade') || fgs.some(e => !e.mine)) out.push(`md ${g.md}: his team kicks ${fgs.length} field goals, his line says ${of(g, 'fgMade')}`);
+      if (g.events.filter(e => e.kind === 'miss').length !== of(g, 'fgAtt') - of(g, 'fgMade')) out.push(`md ${g.md}: his misses in the feed are not his misses on the line`);
+    }
+  }
+  return out;
+}
+
 /** Section 3, any sport: the events' points make each side's score at full
  *  time and never pass it or fall at any minute the bug can show. */
 function boardIsTrue(slug, s) {
@@ -398,6 +475,30 @@ function scheduleProblems(slug, SB, row, eraId, s, named) {
     for (const t of kinds.other) if (t.n !== 2 || t.h !== 1) out.push(`other conference ${t.id}: ${t.n} games, ${t.h} at home`);
     if (kinds.other.length !== 15 || homes !== 41) out.push(`home games ${homes}`);
   }
+  if (slug === 'nfl') {
+    /* the 17 game formula, read here from the ledger's divisions: 6 in the division (home and away),
+       one whole division of his conference and one of the other (two of each at home), one club from
+       each of the two other divisions of his conference (one at home), and one more from the other
+       conference out of a division not already met; 8 or 9 at home, 9 exactly when the ledger says
+       his conference hosts the 17th game that year */
+    if (s.games.length !== 17) out.push(`${s.games.length} games`);
+    if (kinds.div.length !== 3) out.push(`${kinds.div.length} division rivals`);
+    for (const t of kinds.div) if (t.n !== 2 || t.h !== 1) out.push(`division rival ${t.id}: ${t.n} games, ${t.h} at home`);
+    const byDiv = list => shape.divisions.filter(dv => dv !== mine).map(dv => {
+      const at = list.filter(t => dv.teams.includes(t.id));
+      return { name: dv.name, size: at.length, met: at.filter(t => t.n > 0).length, n: at.reduce((a, t) => a + t.n, 0), h: at.reduce((a, t) => a + t.h, 0), most: Math.max(0, ...at.map(t => t.n)) };
+    }).filter(x => x.size > 0);
+    const whole = x => x.met === 4 && x.n === 4 && x.h === 2 && x.most === 1;
+    const one = x => x.met === 1 && x.n === 1;
+    const cf = byDiv(kinds.conf); const ot = byDiv(kinds.other);
+    if (cf.length !== 3 || cf.filter(whole).length !== 1 || cf.filter(one).length !== 2 || cf.filter(one).reduce((a, x) => a + x.h, 0) !== 1) out.push(`his conference: ${cf.map(x => `${x.name} ${x.n} games against ${x.met}, ${x.h} at home`).join('; ')}`);
+    if (ot.length !== 4 || ot.filter(whole).length !== 1 || ot.filter(one).length !== 1 || ot.filter(x => x.n === 0).length !== 2) out.push(`the other conference: ${ot.map(x => `${x.name} ${x.n} games against ${x.met}, ${x.h} at home`).join('; ')}`);
+    if (homes !== 8 && homes !== 9) out.push(`home games ${homes}`);
+    const hosts = M.nflHosts17(row.year, mine.conf);
+    const extra = ot.filter(one)[0];
+    if (hosts !== null && extra && (extra.h === 1) !== hosts) out.push(`the 17th game is ${extra.h === 1 ? 'at home' : 'away'} in ${row.year}, the ledger says his conference ${hosts ? 'hosts' : 'travels'}`);
+    if (hosts !== null && homes !== (hosts ? 9 : 8)) out.push(`home games ${homes} in a year his conference ${hosts ? 'hosts' : 'travels for'} the 17th game`);
+  }
   return out;
 }
 
@@ -431,11 +532,18 @@ const REFUSED_MAX = { nba: 0.01, nfl: null };
 const NO_REPAIR_MIN = { nba: 0.8, nfl: null };
 const NBA_POINTS_TOL = 1.0;
 const NBA_SHARE_P99_MAX = 0.5;
+/* The NFL's own (PLACEHOLDERS until the five seed sets are measured; see the block above) */
+const NFL_POINTS = [0, 99];
+const NFL_LEVEL_MAX = 1;
+const NFL_ODD_TD_MAX = 1;
+const NFL_BIG_KICK_MAX = 1;
 
 /* ─── Run B: every season observed right after it is played ─── */
 const seen = [];
 const points = {};   // slug|era -> { sum, n } his team's and the other side's points
 const shares = { nba: [] };
+/* the NFL's own section 7 numbers: level games, how plain the drives are, a kicker's makes a game */
+const nflSeen = { games: 0, level: 0, tds: 0, oddTds: 0, safeties: 0, makes: [], kickerGames: 0, floorSet: 0, played: 0 };
 const poRounds = {};  // slug -> named playoff rounds checked for their conference: { early, finals }
 function observe(c, line, who) {
   const d = SPORT_DEFS[who.slug];
@@ -489,6 +597,22 @@ function observe(c, line, who) {
   points[k] ??= { sum: 0, n: 0 };
   for (const g of s.games) { points[k].sum += g.us + g.them; points[k].n += 2; }
   if (who.slug === 'nba') for (const g of s.games) if (g.played) shares.nba.push(g.line.pts / g.us);
+  if (who.slug === 'nfl') {
+    for (const g of s.games) {
+      nflSeen.games += 1;
+      if (g.us === g.them) nflSeen.level += 1;
+      for (const e of g.events) {
+        if (e.kind === 'td' || e.kind in NFL_TD_EVENTS) { nflSeen.tds += 1; if (e.pts !== 7) nflSeen.oddTds += 1; }
+        if (e.kind === 'safety') nflSeen.safeties += 1;
+      }
+      if (!g.played) continue;
+      nflSeen.played += 1;
+      /* his touchdowns alone are the whole of his team's score: the floor set that game */
+      const mineTd = g.events.filter(e => e.mine && e.kind in NFL_TD_EVENTS).length;
+      if (mineTd > 0 && g.us === 7 * mineTd) nflSeen.floorSet += 1;
+      if (career.pos === 'K') { nflSeen.kickerGames += 1; const f = g.line.fgMade ?? 0; nflSeen.makes[f] = (nflSeen.makes[f] ?? 0) + 1; }
+    }
+  }
 }
 
 const trapA = { count: 0 };
@@ -569,6 +693,12 @@ for (const slug of SPORTS) {
     const own = [...gameIds(slug, w.era)].sort();
     check('5', JSON.stringify(ledger) === JSON.stringify(own), `${slug} the ledger's ids for era ${w.era} are exactly the game's list (${ledger.length} against ${own.length})`);
   }
+  if (slug === 'nfl') {
+    /* two files of this repo hold the NFL's divisions and they must agree (a consistency check, not a source) */
+    const now = M.US_LEAGUE_SHAPES.find(x => x.sport === 'nfl' && x.era === 'now');
+    const differ = (now?.shape.divisions ?? []).filter(dv => JSON.stringify([...dv.teams].sort()) !== JSON.stringify(M.FO_TEAMS.filter(t => t.division === dv.name).map(t => t.abbr).sort())).map(dv => dv.name);
+    check('5', !!now && now.shape.divisions.length === 8 && differ.length === 0, `nfl the ledger's eight divisions equal the Front Office table division by division${differ.length ? ` (differ: ${differ.join(', ')})` : ''}`);
+  }
   tally('5', `${slug} a throwback season never names an opponent`, derived.filter(r => r.named && r.eraId !== 'now').map(r => `${r.year} ${r.eraId}`), derived.filter(r => r.eraId !== 'now').length);
 
   /* 6 (per sport part) */
@@ -597,6 +727,18 @@ for (const slug of SPORTS) {
     const m = p.sum / p.n;
     console.log(`     points a team game, era ${era}: ${m.toFixed(2)} over ${p.n / 2} games${slug === 'nba' ? ` (league mean ${M.NBA_SCORING[era]})` : ''}`);
     if (slug === 'nba') check('7', Math.abs(m - M.NBA_SCORING[era]) <= NBA_POINTS_TOL, `nba points a team game in era ${era} within ${NBA_POINTS_TOL} of the league mean (${m.toFixed(2)} against ${M.NBA_SCORING[era]})`);
+    if (slug === 'nfl') check('7', m >= NFL_POINTS[0] && m <= NFL_POINTS[1], `nfl points a team game in era ${era} inside ${NFL_POINTS[0]} to ${NFL_POINTS[1]} (${m.toFixed(2)})`);
+  }
+  if (slug === 'nfl') {
+    const lv = nflSeen.level / Math.max(1, nflSeen.games);
+    const odd = nflSeen.oddTds / Math.max(1, nflSeen.tds);
+    const big = ((nflSeen.makes[5] ?? 0) + (nflSeen.makes[6] ?? 0)) / Math.max(1, nflSeen.kickerGames);
+    console.log(`     level games: ${nflSeen.level} of ${nflSeen.games} (${share(nflSeen.level, nflSeen.games)}); touchdowns not worth seven: ${share(nflSeen.oddTds, nflSeen.tds)} of ${nflSeen.tds}; safeties ${nflSeen.safeties}`);
+    console.log(`     his touchdowns are his team's whole score in ${share(nflSeen.floorSet, nflSeen.played)} of the ${nflSeen.played} games he played`);
+    console.log(`     a kicker's makes a game (0 to 6): ${Array.from({ length: 7 }, (_, f) => `${f}: ${share(nflSeen.makes[f] ?? 0, nflSeen.kickerGames)}`).join(', ')} over ${nflSeen.kickerGames} games`);
+    check('7', nflSeen.games > 1000 && lv <= NFL_LEVEL_MAX, `nfl level games stay under ${(100 * NFL_LEVEL_MAX).toFixed(1)}% (${share(nflSeen.level, nflSeen.games)})`);
+    check('7', nflSeen.tds > 1000 && odd <= NFL_ODD_TD_MAX, `nfl touchdowns not worth seven stay under ${(100 * NFL_ODD_TD_MAX).toFixed(0)}% (${share(nflSeen.oddTds, nflSeen.tds)})`);
+    check('7', nflSeen.kickerGames > 100 && big <= NFL_BIG_KICK_MAX, `nfl a kicker makes five or six in under ${(100 * NFL_BIG_KICK_MAX).toFixed(0)}% of his games (${(100 * big).toFixed(1)}% of ${nflSeen.kickerGames})`);
   }
   if (slug === 'nba') {
     const p99 = pct(shares.nba, 0.99);
@@ -685,16 +827,32 @@ if (CONTROL) {
   const labels = failsBy.get(String(c.section)) ?? [];
   let ok = labels.length > 0;
   let note = '';
-  if (CONTROL === 'stage') {
+  if (CONTROL === 'stage' || CONTROL === 'nflstage') {
     /* the season with the unknown string derives with no band and no path, and section 4 has nothing to say about it */
-    const unk = seen.filter(r => r.slug === 'nba' && r.derived && r.teamResult !== OWN.nba.missed && !OWN.nba.results.includes(r.teamResult));
+    const sl = CONTROL_SPORT[CONTROL];
+    const unk = seen.filter(r => r.slug === sl && r.derived && r.teamResult !== OWN[sl].missed && !OWN[sl].results.includes(r.teamResult));
     const clean = unk.filter(r => !r.path && r.p4.length === 0 && !r.p3.some(p => p.includes('band')));
     ok = ok && unk.length > 0 && clean.length === unk.length;
     note = `; ${unk.length} seasons carry the unknown result, ${clean.length} of them shown with no band and no path`;
   }
   if (CONTROL === 'names') ok = ok && labels.some(l => l.includes('never names an opponent')) && labels.some(l => l.includes("every name is the game's own"));
   if (CONTROL === 'window') { ok = ok && labels.some(l => l.includes("are exactly the game's list")) && !labels.some(l => l.includes('never names an opponent')); note = '; the binding still named no throwback opponent'; }
-  if (CONTROL === 'formula') ok = ok && labels.some(l => l.includes('follows the formula'));
+  if (CONTROL === 'formula' || CONTROL === 'nflformula') {
+    const sl = CONTROL_SPORT[CONTROL];
+    const wrong = seen.filter(r => r.slug === sl && r.p5.some(p => p.includes('division rival'))).length;
+    ok = ok && labels.some(l => l.startsWith(sl) && l.includes('follows the formula')) && wrong > 0;
+    note = `; ${wrong} ${sl} seasons meet a division rival off the formula`;
+  }
+  if (CONTROL === 'sum') {
+    const wrong = seen.filter(r => r.p3.some(p => p.startsWith('recYds '))).length;
+    ok = ok && labels.some(l => l.startsWith('nfl') && l.includes('independent checker')) && wrong > 0;
+    note = `; ${wrong} seasons show receiving yards that are not the saved total`;
+  }
+  if (CONTROL === 'kick') {
+    const wrong = seen.filter(r => r.p3.some(p => p.includes('his team kicks'))).length;
+    ok = ok && labels.some(l => l.startsWith('nfl') && l.includes('independent checker')) && wrong > 0;
+    note = `; ${wrong} kicker seasons show a team field goal count that is not his makes`;
+  }
   if (CONTROL === 'record') ok = ok && labels.some(l => l.includes('independent checker'));
   if (CONTROL === 'conf') {
     const wrong = seen.filter(r => r.p4.some(p => p.includes('conference'))).length;

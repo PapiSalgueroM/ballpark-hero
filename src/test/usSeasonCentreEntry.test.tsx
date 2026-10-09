@@ -491,6 +491,20 @@ describe('a held year, a banned year, and the sports with no Season Center', () 
     expect(q('[data-week-by-week]')).toBeNull();
     expect(playButton()).toBeDefined();
   });
+  it('holds an NFL throwback career until 2021: the held line and no button in 2005', async () => {
+    /* Round 1147: the 2005 throwback plays 17 games in years the real league played 16 */
+    seedSave(NFL_CAREER_SPORT, 'QB', 'held-nfl', 'y2005');
+    render(<MemoryRouter><NflMyCareerBoard /></MemoryRouter>);
+    await flush();
+    expect(savedCareer(NFL_CAREER_SPORT).year).toBe(2005);
+    expect(q('[data-season-centre-held]')!.textContent).toBe(usSeasonHeldLine('nfl', 2005));
+    expect(q('[data-season-centre-held]')!.textContent).toContain('starts with the 2021 season');
+    expect(q('[data-week-by-week]')).toBeNull();
+    expect(playButton()).toBeDefined();
+  });
+  it('has the NBA and the NFL both bound, so neither arm above can drop out through its own filter', () => {
+    expect(BOUND.map(b => b.name)).toEqual(['NBA', 'NFL']);
+  });
   it('says there is nothing to watch in a banned year', async () => {
     seedSave(NBA_CAREER_SPORT, 'SG', 'banned', 'now', c => { c.suspendedSeasons = 1; });
     render(<MemoryRouter><NbaMyCareerBoard /></MemoryRouter>);
