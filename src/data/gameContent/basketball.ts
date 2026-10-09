@@ -2003,7 +2003,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
           {
             heading: "Collecting badges in the Trophy Case",
             items: [
-              "Collect badges in the Trophy Case: 21 of them, from a first ring and Rookie of the Year to 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.",
+              "Collect badges in the Trophy Case: 23 of them, from a first ring and Rookie of the Year to an All-Star nod, 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.",
             ],
           },
           {
@@ -2030,7 +2030,9 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       {
         heading: "Playing seasons and handling the offseason",
         items: [
-          "Sim each season for a full line: games, points, rebounds, assists, awards, team result.",
+          "Sim each season for a full line: games, minutes, points, rebounds, assists, steals, blocks, awards, team result.",
+          "Press 📺 Week by week instead of Play the season to watch that season one game at a time, with your stat line and your team's record after every game. It is the same season either way.",
+          "Throwback careers play against unnamed teams, and the real seasons that were not a full 82 games (2011-12, 2012-13, 2019-20 and 2020-21) have no game by game view. The game tells you before you press.",
           "Handle the summer, up to three decisions one card at a time. Only the first card can move your rating, and a card you just saw rests for a while (press moments follow your season, so those can come right back).",
           "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.",
           "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
@@ -2056,7 +2058,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
         heading: "How archetypes and ratings work together",
         items: [
           "Archetypes shape the stat engine: Point Gods pile up assists, Paint Beasts eat rebounds, Bucket Getters score but break down more.",
-          "All-NBA needs 62 games played, and MVP talk starts at a 92 rating.",
+          "From 2023-24, MVP and All-NBA eligibility use the 65 game rule. Rating alone does not promise an award: your season production, role and team record matter.",
         ],
         subsections: [
           {
@@ -2083,6 +2085,8 @@ export const BASKETBALL_CONTENT: GameContentMap = {
             heading: "When a career finally ends",
             items: [
               "Careers end at 41, after 21 seasons, or when the rating craters. You can also walk anytime.",
+              "Hall of Fame voters weigh the hardware first (rings, MVPs, Finals MVPs, All-NBA years), then your seasons and your numbers, and a career total near the top of this game's books in a stat your position really piles up (points, rebounds or assists) earns a push of its own, up to 390 legacy points.",
+              "Example: take a point guard with ordinary numbers and one with the same hardware and more assists than 99 of 100 point guards this game has seen. The second scores at least 300 legacy points more, which can be the whole gap between a long wait and the Hall. A career you already retired keeps the ballot it was told.",
             ],
           },
         ],
@@ -2097,7 +2101,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
         heading: "Money rules in the Bank and what fans nag about",
         items: [
           "Money has rules of its own. There is a 1% fee on both sides of every trade and a $100k floor in the account that cannot be invested away; a season that leaves you under the floor is covered out of savings first, then by a forced sale of holdings at whatever the price is that day. Cards win 42% of hands and a win pays 1.15x the stake, the most you can stake is $50k or 4% of your cash, and once you are $500k down for your career the guys stop dealing you in for good. Keep sitting in while you are losing and somebody at home notices, which costs morale and fanbase.",
-          "The fans nag you for the thing your position is judged on and never the other way round: a point guard hears more assists, a center hears own the glass, and nobody hears about a three, a block or a steal, because the season line does not count one.",
+          "The fans nag you for the thing your position is judged on and never the other way round: a point guard hears more assists, a center hears own the glass, and nobody hears about a three, because the season line does not count one.",
         ],
       },
       {
@@ -2168,7 +2172,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       { q: "What does the legacy score reward most?", a: "MVPs and rings move it hardest, then Finals MVPs and All-NBA nods, plus longevity and points. The top verdict is the GOAT conversation, and it takes a stacked case." },
       { q: "What is in the Bank?", a: "Four tabs. Account holds your cash, a savings account that pays 2.5% a season, and a statement of your last 12 moves. Market is five prices that move every season, each with its own risk word and a read on whether it is cheap or dear against what it usually goes for. Cards is the card school on the team plane, one sitting a season, on odds the screen prints before you play. Shop is the 7 aisles. It is the same engine Soccer Career's phone runs on, in dollars." },
       { q: "Who is my rival?", a: "A generated player drafted the same year at your position. He plays his own seasons on the same scale you do, can win a ring before you and retire before you, and the head to head is kept for good. He is fictional, like your own player, so no real player's career is being simulated." },
-      { q: "How do I earn badges?", a: "By doing the thing. Each of the 21 badges is a test on the facts of your career, checked every time you open the case: a ring, an MVP, twenty thousand points, five seasons with all 82 games played, a million dollars to your name. The 30 point season badge sits a long way under the single season scoring record, Wilt Chamberlain's 50.4 a game in 1961-62, which is where it belongs." },
+      { q: "How do I earn badges?", a: "By doing the thing. Each of the 23 badges is a test on the facts of your career, checked every time you open the case: a ring, an MVP, an All-Star nod, twenty thousand points, five seasons with all 82 games played, a million dollars to your name. The 30 point season badge sits a long way under the single season scoring record, Wilt Chamberlain's 50.4 a game in 1961-62, which is where it belongs." },
       { q: "Is my career saved?", a: "Yes, progress auto saves in your browser. One career at a time, and starting fresh means retiring first." },
     ],
   },

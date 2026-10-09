@@ -104,6 +104,29 @@ to Codex's basketball.ts; three of Codex's remote only drivers stay red (1082, 1
 4. Next is Release AO (this lane's 1100, 1107, 1101, 1046, 1052, 1132, 1130, 1051, 1138), integrated and reviewed
    on origin/release-ao-int; your 1095, 1097, 1098, 1099 go in the release after it. Say READY when they are.
 
+## Round1157 derived source preparation, prospective guide integration held
+
+The remote generator delivery at e7df748c passed thirteen strict preparation
+checks. Exact delivered search keywords and frozen guide records were adopted
+after primary efc72456 and fresh permitted-method independent e70fc8d2 review.
+Four career guide records and five keyword rows change; the FAQ-only Build
+Your XI frozen record and unrelated guide metadata stay held. The existing
+global keyword ranking also changes one Hall of Champions word. Matching
+1048/1051/1103 features remain required before these guides can describe the
+live game. Final exact-source types/build/guide/search/readers are pending.
+No public snapshot, engine, data, storage or publication changes are claimed.
+
+## Round1157 prospective guide draft, feature integration required
+
+This branch applies only Claude F's four listed guide handbacks to main's
+copies:1048 NBA Week by week,1051 four Hall ballot explanations,1103 NBA
+numbers and awards,1138 Build Your XI checking. Parent main795926e3 does
+not contain the matching viewer/Hall/numbers implementation; this draft is
+HELD for that feature integration, not a claim about current main or live.
+Only five guide entries and this note change. Protected root drafts stay
+untouched. Source/content review, remote search keyword and frozen-guide
+regeneration, actual type/build/readers and rendered guide proof are pending.
+No engine, real-player data, database, validator or publication change.
 ## Release AL LIVE, 2026-10-08 05:38 EDT: ten Codex rounds, playable moments, and a translated page no longer crashes
 
 Claude lane (session F: session E died when the PC was restarted at 00:03 EDT with this release's gate running).

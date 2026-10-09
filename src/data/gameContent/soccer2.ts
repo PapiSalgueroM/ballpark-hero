@@ -1221,7 +1221,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     faqs: [
       {
         q: "Who checks my answers?",
-        a: "An AI validator confirms the player really played for the assigned club or country. If the check cannot complete, you simply retry; it never fills a slot with a wrong answer.",
+        a: "A club pick you choose from the list is checked against our own records on the spot. A country pick is confirmed by an answer checker. If a check cannot complete, or answer checking runs out for the day, only that pick is skipped: try again, pick someone else or reroll. It never fills a slot with a wrong answer.",
       },
       {
         q: "Can I reroll more than once?",
