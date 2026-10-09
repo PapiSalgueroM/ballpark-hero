@@ -1,0 +1,68 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-nfl: node_modules/.bin/vitest run src/test/usSeasonNfl.test.ts src/test/usSeason.test.ts --testTimeout=300000 --hookTimeout=120000
+vitest-view: node_modules/.bin/vitest run src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/seasonCentreWords.test.tsx src/test/seasonCore.test.ts --testTimeout=300000 --hookTimeout=120000
+vitest-core: node_modules/.bin/vitest run src/test/usBoardFixture.test.tsx src/test/seasonCentreSlots.test.tsx --testTimeout=600000 --hookTimeout=120000
+sim: node scripts/simUsSeasonCentre.mjs
+set0: SEEDSET=0 node scripts/simUsSeasonCentre.mjs
+set1: SEEDSET=1 node scripts/simUsSeasonCentre.mjs
+set2: SEEDSET=2 node scripts/simUsSeasonCentre.mjs
+set3: SEEDSET=3 node scripts/simUsSeasonCentre.mjs
+set4: SEEDSET=4 node scripts/simUsSeasonCentre.mjs
+c-stream: SEEDSET=0 US_SEASON_CONTROL=stream node scripts/simUsSeasonCentre.mjs
+c-record: SEEDSET=0 US_SEASON_CONTROL=record node scripts/simUsSeasonCentre.mjs
+c-length: SEEDSET=0 US_SEASON_CONTROL=length node scripts/simUsSeasonCentre.mjs
+c-stage: SEEDSET=0 US_SEASON_CONTROL=stage node scripts/simUsSeasonCentre.mjs
+c-names: SEEDSET=0 US_SEASON_CONTROL=names node scripts/simUsSeasonCentre.mjs
+c-window: SEEDSET=0 US_SEASON_CONTROL=window node scripts/simUsSeasonCentre.mjs
+c-formula: SEEDSET=0 US_SEASON_CONTROL=formula node scripts/simUsSeasonCentre.mjs
+c-conf: SEEDSET=0 US_SEASON_CONTROL=conf node scripts/simUsSeasonCentre.mjs
+c-hot: SEEDSET=0 US_SEASON_CONTROL=hot node scripts/simUsSeasonCentre.mjs
+c-static: SEEDSET=0 US_SEASON_CONTROL=static node scripts/simUsSeasonCentre.mjs
+c-sum: SEEDSET=0 US_SEASON_CONTROL=sum node scripts/simUsSeasonCentre.mjs
+c-kick: SEEDSET=0 US_SEASON_CONTROL=kick node scripts/simUsSeasonCentre.mjs
+c-nflstage: SEEDSET=0 US_SEASON_CONTROL=nflstage node scripts/simUsSeasonCentre.mjs
+c-nflformula: SEEDSET=0 US_SEASON_CONTROL=nflformula node scripts/simUsSeasonCentre.mjs
+c-days: SEEDSET=0 US_SEASON_CONTROL=days node scripts/simUsSeasonCentre.mjs
+c-poscore: SEEDSET=0 US_SEASON_CONTROL=poscore node scripts/simUsSeasonCentre.mjs
+c-nflheld: SEEDSET=0 US_SEASON_CONTROL=nflheld node scripts/simUsSeasonCentre.mjs
+c-lumpy: SEEDSET=0 US_SEASON_CONTROL=lumpy node scripts/simUsSeasonCentre.mjs
+c-flat: SEEDSET=0 US_SEASON_CONTROL=flat node scripts/simUsSeasonCentre.mjs
+c-flat3: SEEDSET=3 US_SEASON_CONTROL=flat node scripts/simUsSeasonCentre.mjs
+c-tdform: US_SEASON_CONTROL=tdform node scripts/simUsSeasonCentre.mjs
+c-minutes: SEEDSET=0 US_SEASON_CONTROL=minutes node scripts/simUsSeasonCentre.mjs
+c-order: SEEDSET=0 US_SEASON_CONTROL=order node scripts/simUsSeasonCentre.mjs
+c-points: SEEDSET=0 US_SEASON_CONTROL=points node scripts/simUsSeasonCentre.mjs
+c-forty: SEEDSET=0 US_SEASON_CONTROL=forty node scripts/simUsSeasonCentre.mjs
+c-level: SEEDSET=0 US_SEASON_CONTROL=level node scripts/simUsSeasonCentre.mjs
+c-oddtd: SEEDSET=0 US_SEASON_CONTROL=oddtd node scripts/simUsSeasonCentre.mjs
+c-bigkick: SEEDSET=0 US_SEASON_CONTROL=bigkick node scripts/simUsSeasonCentre.mjs
+c-lumpy2: SEEDSET=2 US_SEASON_CONTROL=lumpy node scripts/simUsSeasonCentre.mjs
+c-level3: SEEDSET=3 US_SEASON_CONTROL=level node scripts/simUsSeasonCentre.mjs
+c-bigkick1: SEEDSET=1 US_SEASON_CONTROL=bigkick node scripts/simUsSeasonCentre.mjs
+play: MSYS_NO_PATHCONV=1 ENGINES=chromium PORT=4397 node scripts/playUsSeasonCentre.mjs
+play-static: MSYS_NO_PATHCONV=1 ENGINES=chromium PORT=4401 US_SEASON_PLAY_CONTROL=static node scripts/playUsSeasonCentre.mjs
+play-write: MSYS_NO_PATHCONV=1 ENGINES=chromium PORT=4402 US_SEASON_PLAY_CONTROL=write node scripts/playUsSeasonCentre.mjs
+play-count: MSYS_NO_PATHCONV=1 ENGINES=chromium PORT=4403 US_SEASON_PLAY_CONTROL=count node scripts/playUsSeasonCentre.mjs
+play-cover: MSYS_NO_PATHCONV=1 ENGINES=chromium PORT=4404 US_SEASON_PLAY_CONTROL=cover node scripts/playUsSeasonCentre.mjs
+play-playfirst: MSYS_NO_PATHCONV=1 ENGINES=chromium PORT=4405 US_SEASON_PLAY_CONTROL=playfirst node scripts/playUsSeasonCentre.mjs
+play-nohandover: MSYS_NO_PATHCONV=1 ENGINES=chromium PORT=4406 US_SEASON_PLAY_CONTROL=nohandover node scripts/playUsSeasonCentre.mjs
+play-column: MSYS_NO_PATHCONV=1 ENGINES=chromium PORT=4407 US_SEASON_PLAY_CONTROL=column node scripts/playUsSeasonCentre.mjs
+parity: node scripts/simUsBoardParity.mjs
+weight: node scripts/simUsCareerWeight.mjs
+neutral: node scripts/simSeasonCentreNeutral.mjs
+law: node scripts/simSeasonLaw.mjs
+agreement: node scripts/simSeasonCentreAgreement.mjs
+table: node scripts/simSeasonCentreTable.mjs
+moments: node scripts/simSeasonMoments.mjs
+motion: node scripts/simSeasonCentreMotion.mjs
+hall: node scripts/simCareerHall.mjs nfl
+nflcareer: node scripts/simNflCareer.mjs
+rival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+invented: node scripts/simInventedNames.mjs
+realism: node scripts/simCareerRealism.mjs
+careerparity: node scripts/simCareerParity.mjs
+sweep: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+playgames: ONLY=/nfl-my-career ENGINES=chromium WIDTH=390 node scripts/playGames.mjs
