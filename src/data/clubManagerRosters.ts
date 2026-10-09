@@ -14,9 +14,9 @@
 // Values in £m. Ratings 48-94: the market value curve plus points for age
 // (curve 2, scripts/lib/cmValueCurve.mjs): a point off for each year under 24,
 // points back from 30.
-// Ages are for 1 August 2026: 402 from a birth date on file, 3983 moved from the
+// Ages are for 1 August 2026: 414 from a birth date on file, 3983 moved from the
 // table's 1 January age (plus one for a 2026 row, plus two for a 2025 row;
-// right for about seven men in ten, a year over for the rest), 16 as written
+// right for about seven men in ten, a year over for the rest), 4 as written
 // by hand in 2026, 0 unknown.
 // Regenerate with: node scripts/bakeClubManagerRosters.mjs
 // DO NOT EDIT BY HAND.
@@ -45,7 +45,7 @@ export const CM_ROSTER_META = {
   curve: 2,
   /** How each man's age is known: from a birth date on file, moved on from the table's 1 January
    *  age, as written by hand in 2026, or unknown. */
-  ages: { asOf: '2026-08-01', born: 402, moved: 3983, written: 16, unknown: 0 },
+  ages: { asOf: '2026-08-01', born: 414, moved: 3983, written: 4, unknown: 0 },
 };
 
 /** Clubs where the dataset runs thin (under 8 real players); the game pads
@@ -1298,7 +1298,7 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Callum McGregor', p: 'CDM', a: 33, v: 1.6, r: 71 },
     { n: 'Anthony Ralston', p: 'RB', a: 28, v: 1.5, r: 68 },
     { n: 'Marcelo Saracchi', p: 'LB', a: 28, v: 1.5, r: 68 },
-    { n: 'Alex Oxlade-Chamberlain', p: 'CM', a: 33, v: 0.8, r: 68 },
+    { n: 'Alex Oxlade-Chamberlain', p: 'CM', a: 32, v: 0.8, r: 67 },
     { n: 'Viljami Sinisalo', p: 'GK', a: 25, v: 0.8, r: 64 },
   ],
   'Cercle Brugge': [
