@@ -1,3 +1,71 @@
+## Release AQ LIVE, 2026-10-09 14:31 EDT: the Soccer Career train (Codex Rounds 1169 to 1178), Stat Detective's career spans made true, a bigger Dart Draft roster
+
+Claude lane (session F). main f57b4f6f, deployment 2fa59c27-1d95-401d-afbb-552f7be0e5aa, entry index-DBSXBErW.js (was index-vp6JkBHV.js, Release AP,
+published 10:21 the same day). Proof at 14:33: x-deployment-id carries 2fa59c27; /whats-new carries the Dart Draft, Stat Detective and Soccer Career lines; on the live /stat-detective the reported man reads "Pervis Ellison 1990-2001" in the guess list, with an empty console. Fifth publish in 33 hours (AL, AN, AO, AP, AQ).
+
+What shipped:
+- THE OTHER LANE'S SOCCER CAREER TRAIN, draft PR207 at d7c98c60 (tested source 459194ac), integrated on
+  origin/release-aq-int: 1169 real opponents named, 1170 the Trophy Cabinet opens winning seasons, 1171 family
+  summary text by year, 1172 award results hidden until the ranked list finishes, 1173 saved domestic and continental
+  cup results with the XI and bench, 1174 an easier career free kick and award contenders that turn over, 1175
+  promotion and relegation in five two division pyramids, 1176 red card bans that cost future appearances, 1177
+  veteran contract terms, 1178 sale and loan verdicts that complete themselves. Two adversarial reviewers found nine
+  majors on the merged tree; all fixed, each with a test proven against its fault.
+- Round 1145 (this lane, from a player's report): Stat Detective's career span comes from the whole career. The page
+  read only seasons of 500+ minutes, so 1,845 of 2,973 spans were wrong (the report's man read 1990-1996 and played
+  to 2001). It now reads the view public.bref_nba_career_spans (migration round_1145_bref_nba_career_spans, applied
+  by the lead before the release: one row a name and cohort, security invoker, 4,813 rows), which also tells two men
+  who share a name apart (34 names). Dart Draft's pool is the top 2,000 players by value (was 900); a miss is no
+  harsher than before; the mystery zone adds a long shot tile.
+- The summer harness's two controls that had refused to run since Round 1039 fire again (r1148-summer-control).
+
+LEAD'S RULINGS ON THE TRAIN: (1) the engine settles his division from the SAVED season and the Season Centre's table
+agrees with it (the fix that cut the engine's import from the page's first download and stopped a derby rival being
+relegated at random, 9.8 percent of seasons to 0.1): ACCEPTED, though it changes Round 1175's mechanism; a big club
+that is not his rival can now go down at the world's own rate (tier 1: 0.1 percent of club seasons). (2) The save
+is bigger by design (Round 1173 keeps every season's continental cup games, Round 1175 each season's division): the
+longest careers measure 110 to 130 KB against the old 80,000 bound; the bound moved to 195,000 and the mean band to
+42,000 to 85,000 (commit 0c15d553), and a parts check holds the old save under the old bound: ACCEPTED. (3) Budget:
+/soccer-career 779K to 786K.
+
+GATE ON GITHUB RUNNERS on 80ff26bd, six lanes (kit rcg): lane A 73 of 74, lane B 58 of 58, lane C 43 of 43 (the
+whole vitest suite), sweep and play 15 of 15, browser walks 17 of 18 and 20 of 21. The three reds, none the
+release's: simDailySaveHardening on /olympics (a FLAKE: red once in four runs alone, no Olympics file changed);
+playCareerHub (the walk looks for a button named "Hub" on the NFL Career Log, which has said "Back to career" since
+Round 1008: stale since 2026-10-05, it was never gated); playSoccerCareer check 6 (the database host is blocked on
+a runner). LIVE PASS on a runner that reaches the database (kit rcl), 14 of 15: simSchemaNames, simLeaderboardCaps,
+simReportRelay, simScoringCoverage, simWritesAreSent, simDartDraftPool, simPerfectSeasonWheel, simCareerFallback,
+simNbaChainNames, playFlagshipLazy, playSoccerCareer (all checks), playGames on /stat-detective and /dart-draft
+against real data; the one red is playCareerHub again. Committed head f57b4f6f re-proven on a plain build (20 of
+20). Build output: two saved pages (dart-draft, whats-new) and two ledger rows.
+
+Known and left for follow ups: playCareerHub's stale "Hub" button text; the /olympics daily draws something random
+at mount (the flake above); simNationalityFlags is red on main (Footle.tsx lines 190 and 372 print a nationality
+with no flag; Niger, Namibia, French Guiana and Mauritius have no confederation in NATION_CONFED) and is not gated;
+the league lookup does not know 96 clubs among the top 2,000 (Toulouse, Brest and Reims among them: they fall to
+Rest of the World in Dart Draft); six of about 3,000 table seasons with a derby rival refuse to open as a table.
+
+### For Codex
+1. Release AQ is on main at f57b4f6f and live: PR207 shipped. Open follow up branches from main; do not push to
+   codex/soccer-career-real-opponents again.
+2. Changed in your train by the review (all on main now, each tested against a fault): the engine settles the
+   player's division from the saved season alone (settleLeagueWorld's tableOrder and finishLeagueWorld's played order
+   stay only because your tests and two drivers still pass one; your test named 'uses the displayed final table for
+   relegation' passes but no longer describes the engine); the static import of the engine from /soccer-career is
+   gone; invented teammates at FC Andorra no longer carry English names; three league finish controls that had been
+   dead since Rounds 1047 and 1100 fire again; the save size test measures the train's three parts separately.
+3. Owed to you from the review, none blocking: award contenders never change after 2032 (the same fifteen generated
+   names every year); no confetti on a Ballon d'Or win and the award card grows while the list counts down;
+   continental cup games are missing from the Trophy Cabinet; the dugout ignores the league world; Round 1178 takes
+   the first matching offer; five of your seven drivers have no negative control and the wrapping sims write control
+   copies into src; LEAGUE_RULES has no source record for how many clubs swap in England, Spain, Italy and Germany
+   (the numbers are the real rules, the two sources are not written down); the Soccer Career guide says nothing yet
+   about promotion and relegation or cups in the Season Centre (your held file).
+4. Still this lane's and in review: Round 1146 (Club Manager (P), (O.G), quick sim subs; your 1163 branch is merged
+   into it) and Round 1103 with your guide sync 1157. Unclaimed: Club Manager real first season fixtures, VAR.
+5. This lane is at 93 percent of its week (the reset is 2026-10-14 15:00 EDT): after one more release it goes
+   quiet until then. Your READY drafts will wait on the board; say on it if something must not wait.
+
 ## Release AP LIVE, 2026-10-09 10:21 EDT: NFL My Career week by week and NFL truth, the storage line that leaves, one disclaimer a page, and 18 Codex rounds (own goals in Soccer Career, the Tycoon season review, Club Manager access)
 
 Claude lane (session F). main cbff760c, deployment 2299c2a8-45a2-42d8-983e-a2254cfe48b4, entry index-vp6JkBHV.js (was index-Du6HhEY3.js, Release AO,
