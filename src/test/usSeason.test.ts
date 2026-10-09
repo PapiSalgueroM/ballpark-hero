@@ -46,8 +46,10 @@ describe('the season length ledger', () => {
     }
   });
   it('says each kind of held year in its own words', () => {
-    expect(usSeasonHeldLine('nfl', 2005)).toBe('📺 Week by week starts with the 2021 season: the real 2005 season had 16 games and this career plays 17.');
+    /* Since Round 1104 an NFL throwback plays the real 16 games of 2005 to 2020, so the line must not say the career plays 17. */
+    expect(usSeasonHeldLine('nfl', 2005)).toBe('📺 Week by week starts with the 2021 season: the real 2005 season had 16 games and the week by week view is built for 17.');
     expect(usSeasonHeldLine('nfl', 2020)).toContain('starts with the 2021 season');
+    for (let year = 2005; year <= 2026; year++) expect(usSeasonHeldLine('nfl', year) ?? '').not.toContain('this career plays');
     expect(usSeasonHeldLine('nfl', 2021)).toBeNull();
     /* 2022: the Bills at Bengals game was never replayed, so those two teams played 16 (the same case as NBA 2012-13) */
     expect(usSeasonLength('nfl', 2022)).toBeNull();

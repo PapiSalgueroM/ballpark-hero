@@ -84,7 +84,7 @@ export interface UsSeasonBind {
   slug: 'nba' | 'nfl' | 'mlb' | 'nhl';
   /** 'NBA' */
   league: string;
-  /** The season this career plays in full: 82, 17. */
+  /** The season the game by game view is built for: 82, 17. */
   fullSeason: number;
   /** The real season's games a team that year, from the sport's own two sourced ledger
    *  (src/data/usSeasonLengths.ts); null: no single length, or a year the ledger does not hold. */
