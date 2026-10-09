@@ -1,0 +1,9 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+ssw exit=0 2s | simStorageWrites: all green
+stale exit=0 0s | simStaleChunk: green. A tab left open across a deploy reloads once for a missing chunk instead of painting the broken page.
+vitest exit=0 15s |    Duration  14.06s (transform 3.61s, setup 738ms, collect 7.64s, tests 17.82s, environment 4.72s, prepare 1.21s)
+noRivalNames exit=0 12s | No rival product names found. 0 findings.
+harnessAnchors exit=0 27s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+seam exit=0 35s | playUsCareerSaveSeam: 15 journeys, 67 checks, 0 failed
+tsc exit=0 52s | 
+centre exit=0 66s | playUsSeasonCentre: 62 checks, 0 failed

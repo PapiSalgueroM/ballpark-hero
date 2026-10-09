@@ -1,0 +1,10 @@
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/safeStorage.test.ts src/test/safeStorageQuota.test.ts src/test/storageNoticeFollows.test.tsx src/test/freshBuildBlockedStorage.test.ts src/test/routeErrorHeldSave.test.tsx src/test/routeErrorRecovery.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/usCareerSaveRetry.test.tsx src/test/toastClearsCookieBanner.test.tsx src/test/cookieConsentStorage.test.tsx --testTimeout=300000 --hookTimeout=120000
+ssw: node scripts/simStorageWrites.mjs
+stale: node scripts/simStaleChunk.mjs
+noRivalNames: node scripts/simNoRivalNames.mjs
+harnessAnchors: node scripts/simHarnessAnchors.mjs
+seam: node scripts/playUsCareerSaveSeam.mjs
+centre: PORT=4421 node scripts/playUsSeasonCentre.mjs
