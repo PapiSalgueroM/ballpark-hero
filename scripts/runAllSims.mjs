@@ -76,11 +76,30 @@ function needsBrowser(file) {
      What actually makes a harness need a browser is IMPORTING playwright, so
      that is what gets asked now. */
   const syntax = ts.createSourceFile(file, src, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  /* Release AP: Round 1154 taught this to see a dynamic import, which is right
+     for a driver that cannot do anything without a page. It also took two
+     harnesses out of the default run that had always been in it, the Round 133
+     trap again: simLoginReturn (four source fences and one browser measurement
+     it skips out loud) and simBracketMoment (an engine walk, a vitest file and
+     one layout measurement). Neither needs the served site and nothing else
+     ran them. So an import the harness guards ITSELF does not count: a try
+     that holds that one statement and has a catch. Such a harness has already
+     decided what a missing browser means for it (skip that section and say
+     so, or fail it), which is a decision this runner cannot make better by
+     leaving the whole file out. A try wrapped round a whole driver is not
+     that, and still counts. */
+  const guardedByItsOwnTry = (node) => {
+    let statement = node;
+    while (statement.parent && !ts.isBlock(statement.parent) && !ts.isSourceFile(statement.parent)) statement = statement.parent;
+    const block = statement.parent;
+    return Boolean(block && ts.isBlock(block) && block.statements.length === 1
+      && ts.isTryStatement(block.parent) && block.parent.tryBlock === block && block.parent.catchClause);
+  };
   const visit = (node) => {
     const module = ts.isImportDeclaration(node) ? node.moduleSpecifier
       : ts.isCallExpression(node) && (node.expression.kind === ts.SyntaxKind.ImportKeyword
         || ts.isIdentifier(node.expression) && node.expression.text === 'require') ? node.arguments[0] : null;
-    if (module && ts.isStringLiteral(module) && /playwright/i.test(module.text)) return true;
+    if (module && ts.isStringLiteral(module) && /playwright/i.test(module.text) && !guardedByItsOwnTry(node)) return true;
     return ts.forEachChild(node, visit);
   };
   return Boolean(visit(syntax));
@@ -104,6 +123,14 @@ if (ONLY.length) {
   );
   if (missing.length) {
     console.log(`ONLY named ${missing.join(', ')} and there is no such harness`);
+    process.exit(1);
+  }
+  /* Release AP: ONLY=simLoginReturn used to come back "All 0 harnesses green"
+     with exit 0 once that harness had been filed as a browser one. A run that
+     was asked for by name and runs nothing has not passed anything. */
+  if (!nodeGroup.length && browserGroup.length && !WANT_BROWSER) {
+    console.log(`ONLY named ${browserGroup.map((f) => f.replace('.mjs', '')).join(', ')}, which need${browserGroup.length === 1 ? 's' : ''} a browser, and --browser was not passed.`);
+    console.log('Nothing would run, so this is not a green run. Pass --browser (it needs a built dist).');
     process.exit(1);
   }
 }

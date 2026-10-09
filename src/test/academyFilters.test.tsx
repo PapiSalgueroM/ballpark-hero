@@ -100,6 +100,22 @@ describe('academy position and age filters', () => {
     expect(callbacks.onRelease).toHaveBeenCalledExactlyOnceWith('younger-forward');
   });
 
+  /* Release AP: Round 1162 named each pair of buttons after its prospect, and the integration only followed the
+     new names by their prefix. This reads the whole name, so a button that names the wrong boy, or no boy, fails. */
+  it('names every Sign him and Let go button after its own prospect, and each one acts on him', () => {
+    const { callbacks } = mount();
+    const full = (prefix: string) => kids.map(k => `${prefix}: ${k.name}`).sort();
+    expect(screen.getAllByRole('button', { name: /^Sign him: / }).map(b => b.getAttribute('aria-label')).sort()).toEqual(full('Sign him'));
+    expect(screen.getAllByRole('button', { name: /^Let go: / }).map(b => b.getAttribute('aria-label')).sort()).toEqual(full('Let go'));
+    /* what a sighted player reads did not change */
+    expect(screen.getAllByText('Sign him')).toHaveLength(kids.length);
+    expect(screen.getAllByText('Let go')).toHaveLength(kids.length);
+    fireEvent.click(screen.getByRole('button', { name: 'Sign him: Young Defender' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Let go: Older Forward' }));
+    expect(callbacks.onPromote).toHaveBeenCalledExactlyOnceWith('young-defender');
+    expect(callbacks.onRelease).toHaveBeenCalledExactlyOnceWith('older-forward');
+  });
+
   it.each([{ budget: 4, squadSize: 10 }, { budget: 10, squadSize: 30 }])('keeps signing disabled for budget $budget and squad size $squadSize', ({ budget, squadSize }) => {
     const { callbacks } = mount(career(kids, budget, squadSize));
     filter('GK', '16');

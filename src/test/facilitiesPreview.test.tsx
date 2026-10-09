@@ -3,7 +3,7 @@ import { cleanup, fireEvent, render, within } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { FacilitiesScreen } from '@/components/club-manager/FacilitiesScreen';
 import { moneyIn, startCareer, type CareerState } from '@/lib/clubManager';
-import { FACILITY_IDS, FACILITY_MAX, facilitiesOf, facilityEffectLine, facilityUpgradeCost, upgradeFacility, type FacilityId } from '@/lib/clubManagerFacilities';
+import { CLUB_FACILITY_INFO, FACILITY_IDS, FACILITY_MAX, facilitiesOf, facilityEffectLine, facilityUpgradeCost, upgradeFacility, type FacilityId } from '@/lib/clubManagerFacilities';
 
 const row = (container: HTMLElement, id: FacilityId) => container.querySelector<HTMLElement>(`[data-facility="${id}"]`)!;
 const preview = (container: HTMLElement, id: FacilityId) => row(container, id).querySelector<HTMLElement>('[data-facility-preview]');
@@ -108,6 +108,9 @@ describe('Club Manager facilities preview', () => {
       expect(preview(view.container, id)).toBeNull();
       expect(row(view.container, id)).toHaveTextContent('Maximum level reached.');
       const button = within(row(view.container, id)).getByRole('button', { name: /: Maxed$/ });
+      /* Release AP: the whole name Round 1158 gave it (the facility, then what the button does), and the word a sighted player reads */
+      expect(button).toHaveAccessibleName(`${CLUB_FACILITY_INFO[id].label}: Maxed`);
+      expect(button).toHaveTextContent(/^Maxed$/);
       expect(button).toBeDisabled();
       fireEvent.click(button);
     }

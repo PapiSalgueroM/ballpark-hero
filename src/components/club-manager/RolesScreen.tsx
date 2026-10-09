@@ -225,6 +225,12 @@ export function RolesScreen({ career, onSetRole }: RolesScreenProps) {
         <div className="bg-card border border-red-500/30 rounded-xl p-3">
           <div className="text-[10px] text-red-400 uppercase tracking-wider mb-1">Needs a word</div>
           {broken.slice(0, 5).map(p => <PlayerRow key={p.id} p={p} onOpen={() => setOpenId(p.id)} showRole />)}
+          {/* Release AP: the sentence above counts every one of them since Round 1152, so the list says when it stops short */}
+          {broken.length > 5 && (
+            <p className="mt-1 text-[10px] text-muted-foreground" data-broken-more>
+              Showing 5 of {broken.length}. The rest are in their role tiles below.
+            </p>
+          )}
         </div>
       )}
 

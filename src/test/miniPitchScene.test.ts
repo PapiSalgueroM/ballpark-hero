@@ -170,3 +170,41 @@ describe('the two sides can be told apart', () => {
     for (const us of ['', 'red', 'bg-emerald-600', '#12345', 'rgb(255,255,255)']) expect(themColor(us), us).toBe(PALE);
   });
 });
+
+/* Release AP: Round 1167 tags some goals as own goals. The pitch must not contradict the line under it. */
+describe('an own goal on the pitch', () => {
+  const tagged: SeasonEvent[] = [
+    { min: 12, kind: 'goal', side: 'them', pts: 1, ownGoalBy: 'you' },
+    { min: 40, kind: 'goal', side: 'us', pts: 1, ownGoalBy: 'opponent' },
+    { min: 67, kind: 'goal', side: 'them', pts: 1, ownGoalBy: 'teammate' },
+    { min: 88, kind: 'goal', side: 'them', pts: 1 },
+  ];
+  it('carries who put it in, and nothing extra on an ordinary goal', () => {
+    expect(goalsOf(3, tagged)).toEqual([
+      { key: '3|12|them|0', min: 12, side: 'them', mine: false, assist: false, own: 'you' },
+      { key: '3|40|us|0', min: 40, side: 'us', mine: false, assist: false, own: 'opponent' },
+      { key: '3|67|them|0', min: 67, side: 'them', mine: false, assist: false, own: 'teammate' },
+      { key: '3|88|them|0', min: 88, side: 'them', mine: false, assist: false },
+    ]);
+  });
+  it('rings him at the back when the own goal was his, whatever he plays', () => {
+    const mine = goal({ side: 'them', own: 'you' });
+    expect(ringed(goalScene(mine, 'ATT', 1, 90))).toEqual(['d0']);
+    expect(ringed(goalScene(mine, 'DEF', 1, 90))).toEqual(['d0']);
+    expect(ringed(goalScene(mine, 'GK', 1, 90))).toEqual(['k']);
+    /* and the ringed figure is one of his own club's, defending */
+    const s = goalScene(mine, 'ATT', 1, 90);
+    expect(s.mine.filter(p => p.ring).map(p => p.key)).toEqual(['d0']);
+    expect(s.theirs.some(p => p.ring)).toBe(false);
+  });
+  it('never rings him for an own goal he was not on the pitch for', () => {
+    expect(ringed(goalScene(goal({ side: 'them', own: 'you', min: 40 }), 'ATT', 41, 90))).toEqual([]);
+    expect(ringed(goalScene(goal({ side: 'them', own: 'you' }), null, 1, 90))).toEqual([]);
+  });
+  it("leaves a team mate's or an opponent's own goal ringed as any other goal of that side", () => {
+    expect(ringed(goalScene(goal({ side: 'them', own: 'teammate' }), 'ATT', 1, 90))).toEqual(ringed(goalScene(goal({ side: 'them' }), 'ATT', 1, 90)));
+    expect(ringed(goalScene(goal({ side: 'them', own: 'teammate' }), 'DEF', 1, 90))).toEqual(ringed(goalScene(goal({ side: 'them' }), 'DEF', 1, 90)));
+    expect(ringed(goalScene(goal({ side: 'us', own: 'opponent' }), 'ATT', 1, 90))).toEqual(ringed(goalScene(goal({ side: 'us' }), 'ATT', 1, 90)));
+    expect(ringed(goalScene(goal({ side: 'us', own: 'opponent' }), 'GK', 1, 90))).toEqual([]);
+  });
+});

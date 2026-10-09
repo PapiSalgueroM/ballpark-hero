@@ -413,6 +413,9 @@ try {
     console.log(`MEASURED exposure: ${metrics.taggedMatches} tagged matches/${metrics.games}, ${metrics.taggedSeasons} tagged seasons/${metrics.seasons}, ${metrics.selfSeasons} self seasons/${metrics.seasons}; ${metrics.distinctChangedMixtures}/${metrics.momentMixtures} distinct changed mixtures`);
   }
   put('summary.json', { complete: true, control: CONTROL || null, careers: CONTROL ? null : CAREERS, seedset: SEEDSET, checks, counts, parentCompared: !!parent, acceptance: CONTROL ? 'intended source fault observed' : 'exact invariants passed; exposure policy pending measured review' });
+  /* Release AP: which checks ran and how often. A green run used to print three
+     lines, and runAllSims reads fewer than four as a harness that did not run (EMPTY, a failure). */
+  console.log(`CHECKS by name: ${json(counts)}`);
   console.log(`simSoccerOwnGoals: ${checks} checks, 0 failed${CONTROL ? ` (control ${CONTROL})` : ''}`);
 } catch (error) {
   put('failure.json', { complete: false, control: CONTROL || null, check: error.ownGoalCheck ?? null, name: error.name, message: error.message, stack: error.stack, checks, counts, metrics });
