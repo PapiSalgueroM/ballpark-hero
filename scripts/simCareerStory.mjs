@@ -52,6 +52,30 @@
    37,552 to 38,985; the old save without a story ran about 34,000 on the
    same driver). Means only; a max is noise.
 
+   RE-MEASURED at Release AQ (2026-10-09, release-aq-int 2caf7f51, on a CI
+   runner, one seed a run, 24 careers each), because the Soccer Career train
+   (the other lane's Rounds 1169 to 1178) saves more on purpose: every
+   season's continental cup games on its row (Round 1173), each 2026 on
+   season's own division and the career's ten divisions (Round 1175), and
+   the log lines for a ban, a move and a club changing division:
+     seed     story bytes a season   save mean bytes
+     9741            464                 57,121
+     19741           476                 60,949
+     29741           464                 60,796
+     39741           479                 60,386
+     49741           475                 60,684
+     59741           488                 64,643
+     69741           479                 66,349
+     79741           477                 62,781
+   (As the train arrived the default run's mean was 70,788: every row also
+   carried the whole world's 26 moves a season, read by nothing, and the
+   release cut that to the clubs that left his own division; 59,813 after.)
+   The story band does not move (464 to 488 sits inside 300 to 650). The save
+   mean band keeps the shape it had, about a quarter under the lowest seed
+   and a quarter over the highest: 42,000 to 85,000. THIS BAND IS THE
+   RELEASE LEAD'S TO CONFIRM: the integration moved it, in a commit of its
+   own, so the harness could be read on the release.
+
    CONTROLS. CAREER_STORY_CONTROL=reset drops the archive at the pro season
    reset, =cap keeps 5 lines a season, =draw makes the archive draw once,
    =wipe puts the signing back to writing over the log. Each mutates the
@@ -206,7 +230,7 @@ function career(E, seed, c, walk) {
 /* Bands, set from the measured numbers in the header. */
 const BANDS = {
   storyBytesPerSeason: [300, 650],
-  saveBytesMean: [28000, 50000],
+  saveBytesMean: [42000, 85000],
 };
 
 const fails = { completeness: [], draws: [], size: [], log: [] };

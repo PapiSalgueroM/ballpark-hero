@@ -257,8 +257,27 @@ describe('Soccer Career: old and damaged stories', () => {
    is 80,000 bytes for the whole save (half again over the largest measured)
    and 1,000 bytes a story season (twice the measured mean), so a story line
    that starts carrying data instead of words, or a season written twice,
-   fails here long before a browser quota would notice. */
-const SIZE_BOUND = 80_000;
+   fails here long before a browser quota would notice.
+
+   RE-MEASURED at Release AQ (2026-10-09, release-aq-int f4aed166, on a CI
+   runner), because the Soccer Career train (the other lane's Rounds 1169 to
+   1178) saves more on purpose: Round 1173 keeps every season's continental
+   cup games on its row (about 2 KB a season he qualified, 40 KB on seed
+   9750), Round 1175 keeps each 2026 on season's own division (the 18 to 24
+   clubs, its champion and the two or three clubs that left it) and the
+   career's ten divisions, and the log gained the lines for a ban, a move and
+   a club changing division:
+     seed 9748: 28 rows, 27 story seasons, story 15,424 B, save 121,128 B
+     seed 9749: 28 rows, 27 story seasons, story 19,322 B, save 111,444 B
+     seed 9750: 28 rows, 27 story seasons, story 17,737 B, save 129,978 B
+   As the train arrived these were 149,900, 147,263 and 162,178 B: every row
+   also carried the whole world's 26 moves a season, read by nothing, which
+   the release cut to the clubs that left his own division (34 to 40 KB).
+   The bound keeps its rule, half again over the largest measured, which is
+   195,000 B now. The story's own bound does not move (571 to 716 B a season
+   here). THIS NUMBER IS THE RELEASE LEAD'S TO CONFIRM: it was moved by the
+   integration, in a commit of its own, so the whole suite could be read. */
+const SIZE_BOUND = 195_000;
 const STORY_BYTES_PER_SEASON = 1_000;
 describe('Soccer Career: the story keeps the save small', () => {
   it.each([9748, 9749, 9750])('the longest career on seed %i plus ten dugout seasons stays under the bound', seed => {
