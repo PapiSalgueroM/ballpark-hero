@@ -1,0 +1,31 @@
+og-s0: SEEDSET=0 node scripts/simCmOwnGoals.mjs
+og-s1: SEEDSET=1 node scripts/simCmOwnGoals.mjs
+og-s2: SEEDSET=2 node scripts/simCmOwnGoals.mjs
+og-s3: SEEDSET=3 node scripts/simCmOwnGoals.mjs
+og-s4: SEEDSET=4 node scripts/simCmOwnGoals.mjs
+legs-s0: SEEDSET=0 node scripts/simCmQuickLegs.mjs
+legs-s1: SEEDSET=1 node scripts/simCmQuickLegs.mjs
+legs-s2: SEEDSET=2 node scripts/simCmQuickLegs.mjs
+legs-s3: SEEDSET=3 node scripts/simCmQuickLegs.mjs
+legs-s4: SEEDSET=4 node scripts/simCmQuickLegs.mjs
+simStatsCentre: node scripts/simStatsCentre.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+live-s2: SIM_SEED=2 node scripts/simLiveMatch.mjs
+live-s9: SIM_SEED=9 node scripts/simLiveMatch.mjs
+live-s10: SIM_SEED=10 node scripts/simLiveMatch.mjs
+live-s11: SIM_SEED=11 node scripts/simLiveMatch.mjs
+live-s12: SIM_SEED=12 node scripts/simLiveMatch.mjs
+centre-s1: SIM_SEED=1 node scripts/simCmMatchCentre.mjs
+centre-s2: SIM_SEED=2 node scripts/simCmMatchCentre.mjs
+centre-s3: SIM_SEED=3 node scripts/simCmMatchCentre.mjs
+screen-s1: SIM_SEED=1 node scripts/simMatchScreen.mjs
+screen-s2: SIM_SEED=2 node scripts/simMatchScreen.mjs
+screen-s3: SIM_SEED=3 node scripts/simMatchScreen.mjs
+erauc-s1: SIM_SEED=1 node scripts/simClubManagerEraUcl.mjs
+erauc-s2: SIM_SEED=2 node scripts/simClubManagerEraUcl.mjs
+shoot-s1: SIM_SEED=1 node scripts/simCmShootoutOrder.mjs
+shoot-s2: SIM_SEED=2 node scripts/simCmShootoutOrder.mjs
+og-ungone: CM_OWN_GOAL_CONTROL=ungone node scripts/simCmOwnGoals.mjs
+og-evens: CM_OWN_GOAL_CONTROL=evens node scripts/simCmOwnGoals.mjs
+simMatchDetail: node scripts/simMatchDetail.mjs
+simLiveSim: node scripts/simLiveSim.mjs
