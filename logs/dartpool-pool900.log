@@ -1,0 +1,42 @@
+fixture: 5496 rows of 2026 (name, nationality, club and value as pulled); position and age real for 2497, drawn for 2999
+   row 900 is worth 15M, row 2000 5M; in the top 2,000 the position is real for 1360
+NEGATIVE CONTROL ON: the client answers the pool with 900 rows, the old depth
+1) the pool is the top 2,000 in two pages, and the old 900 are still its first 900
+   before: 900 players from 900 rows; after: 900 players from 2000 rows, asked for as 0+1000 and 1000+1000
+  FAIL: the pool holds 900 players; 2,000 rows should give well over 1,700
+   the cheapest man: 15M before, 15M after; the storm floor is 15M in both
+   what the pool costs to read, as JSON before compression: 146 KiB in one request before, 324 KiB over two requests after
+2) the gold zones give what they gave: the top of the pool did not move
+   wildcard identical at 11 of 11 slots; wonderkids keep every name at 11 of 11 and gain names at 0 where the old pool ran short of eight
+3) the storm did not get worse
+   cheapest storm tile before>after, and what the deeper pool would have handed out: GK 15M>15M (15M with no floor), RB 15M>15M (15M with no floor), CB 15M>15M (15M with no floor), LB 15M>15M (15M with no floor), CM 15M>15M (15M with no floor), RW 15M>15M (15M with no floor), ST 15M>15M (15M with no floor), LW 16M>16M (16M with no floor)
+   the five storm tiles' average rating fell by 0.00 a slot on average (0.00 at the worst slot); 0 slots fell by more than a point
+4) a country hit keeps its best four and reaches deeper for the rest
+   739 country and slot pairs have real players; 211 of them run deeper than eight
+   names a country hit could show: 3232 before, 5110 after 30 hits each (1.58x)
+5) the mystery zone is where the deeper pool shows
+   names the three could be, summed over the 11 slots: 1878 before, 1878 after
+   the best of the three is rated 83.3 on average before (median 83), 83.3 after (median 83)
+6) The Machine is the opponent it was
+   The Machine's XI is rated 86.81 on average before (median 87), 86.87 after (median 87)
+7) 2000 whole drafts a model, before and after, graded by the game's own functions
+   the twelve dearest nations: France, Spain, United Kingdom, Brazil, Germany, Argentina, Portugal, Netherlands, Italy, Norway, Sweden, Côte d'Ivoire
+   sharp thrower, best pick, before: XI 87.02 on average, median 87 (S); grades F 0, D 0, C 0, B 0, A 144, S 1856
+   sharp thrower, best pick, after: XI 87.02 on average, median 87 (S); grades F 0, D 0, C 0, B 0, A 132, S 1868
+   sharp thrower, random pick, before: XI 80.95 on average, median 81 (A); grades F 0, D 0, C 0, B 63, A 1842, S 95
+   sharp thrower, random pick, after: XI 79.22 on average, median 79 (A); grades F 0, D 0, C 0, B 434, A 1540, S 26
+   land thrower, best pick, before: XI 73.78 on average, median 74 (B); grades F 0, D 3, C 214, B 1536, A 247, S 0
+   land thrower, best pick, after: XI 73.58 on average, median 74 (B); grades F 0, D 2, C 253, B 1532, A 213, S 0
+   land thrower, random pick, before: XI 69.84 on average, median 70 (B); grades F 0, D 34, C 828, B 1127, A 11, S 0
+   land thrower, random pick, after: XI 69.38 on average, median 70 (B); grades F 0, D 57, C 910, B 1025, A 8, S 0
+   any thrower, best pick, before: XI 51.67 on average, median 51 (F); grades F 1313, D 608, C 79, B 0, A 0, S 0
+   any thrower, best pick, after: XI 51.61 on average, median 51 (F); grades F 1321, D 603, C 74, B 2, A 0, S 0
+   any thrower, random pick, before: XI 50.19 on average, median 50 (F); grades F 1529, D 448, C 23, B 0, A 0, S 0
+   any thrower, random pick, after: XI 49.72 on average, median 49 (F); grades F 1597, D 386, C 17, B 0, A 0, S 0
+8) clubs the league lookup does not know
+   pool players at a club the lookup does not know: 0.9% of the old 900, 0.9% of the 900
+   players a country hit reads (the top 120 of each nation): 4087, 44.0% at a club the lookup does not know
+   before: 8000 aimed drafts carry 1.94 such players each; in 19.9% of them the chemistry bonus counts unknown clubs as one league (1.75 rating points when it does)
+   after: 8000 aimed drafts carry 2.22 such players each; in 24.3% of them the chemistry bonus counts unknown clubs as one league (1.87 rating points when it does)
+
+simDartDraftPool control pool900: fired, 1 failure(s) above. Exit 1 is the expected result.

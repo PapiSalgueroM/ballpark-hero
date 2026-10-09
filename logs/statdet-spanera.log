@@ -1,0 +1,42 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > reads the true first and last season for a man whose career ran past his 500 minute seasons 52ms
+ × src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > judges the era of a guess on the true span 50ms
+   → expected 'earlier' to be 'match' // Object.is equality
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > fails the whole load when the spans cannot be read, and never falls back to the 500 minute span 139ms
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > gives a name the view lacks no span at all and says so, rather than guessing one 23ms
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective mysteries do not move with the span > builds byte identical mystery pools, and they do not depend on what the view says 72ms
+ ✓ src/test/statDetectiveSpans.test.tsx > the Stat Detective page over the same table > opens its retry state when the spans cannot be read, and recovers when they can 264ms
+ ✓ src/test/statDetectiveSpans.test.tsx > the Stat Detective page over the same table > prints the true years beside a name in the guess box 184ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 6 passed (7)
+   Start at  14:56:37
+   Duration  2.77s (transform 469ms, setup 88ms, collect 771ms, tests 786ms, environment 428ms, prepare 200ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > judges the era of a guess on the true span
+AssertionError: expected 'earlier' to be 'match' // Object.is equality
+
+Expected: "match"
+Received: "earlier"
+
+ ❯ src/test/statDetectiveSpans.test.tsx:146:52
+    144|     const faded = data!.byName.get(normalizeName(FADED))!;
+    145|     // He played until 2001, so against a 2000s mystery he is in the e…
+    146|     expect(evaluateGuess(faded, mystery2000s).era).toBe('match');
+       |                                                    ^
+    147|     const late = data!.byName.get(normalizeName(LATE))!;
+    148|     // He started in 1984, so against a 1970s mystery he is later; and…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+simStatDetectiveMotion spanera: the copied lib line failed its intended span outcome while independent outcomes passed.
+simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.

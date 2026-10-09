@@ -1,0 +1,22 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/dartDraftPool.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 91[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 1072[2mms[22m[39m
+   [33m[2m✓[22m[39m the Stat Detective page over the same table[2m > [22mopens its retry state when the spans cannot be read, and recovers when they can [33m 369[2mms[22m[39m
+[90mstderr[2m | src/test/statDetectiveMotion.test.tsx[2m > [22m[2mactual Stat Detective committed feedback and access[2m > [22m[2mshows accurate rules and example before play and reopens the same native help door
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/statDetectiveMotion.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 2211[2mms[22m[39m
+   [33m[2m✓[22m[39m actual Stat Detective committed feedback and access[2m > [22mreveals each real profile-backed clue and only the newest guess without remounting older rows [33m 708[2mms[22m[39m
+   [33m[2m✓[22m[39m actual Stat Detective committed feedback and access[2m > [22mends exactly eight misses, then starts a quiet different case and rearms one completion per difficulty [33m 531[2mms[22m[39m
+   [33m[2m✓[22m[39m actual Stat Detective committed feedback and access[2m > [22mderives the real sparse-profile unlock gaps without inventing career clues [33m 326[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m21 passed[39m[22m[90m (21)[39m
+[2m   Start at [22m 14:55:40
+[2m   Duration [22m 5.40s[2m (transform 1.82s, setup 384ms, collect 5.07s, tests 3.37s, environment 1.82s, prepare 491ms)[22m
+
