@@ -1,0 +1,12 @@
+[wide] motion no-preference: on the award night for 6 s: worst 34 px at 3299 ms over 403 frames (no night card, waiting false)
+[wide]   div.cm-slam text-center space-y-2 right=424 w=458 anim=cmSlam tf=matrix(1.42123, 0, 0, 1.42123, 0, 0) "⭐Ballon d'Or 2028Outside the top 10, but"
+[wide]   div.flex justify-center right=424 w=458 anim=none tf=none ""
+[wide]   div.text-5xl  right=424 w=458 anim=none tf=none "⭐"
+[wide]   h3.text-xl font-black tracking-tight right=424 w=458 anim=none tf=none "Ballon d'Or 2028"
+[wide]   p.text-sm text-muted-foreground right=424 w=458 anim=none tf=none "Outside the top 10, but you ranked #20 i"
+[wide] motion no-preference: Continue buttons on the night after 6 s: 1
+[wide] motion no-preference: after Continue for 5 s: worst 0 px at 3299 ms (no night card)
+[wide] motion reduce: on the award night for 6 s: worst 0 px at 0 ms over 404 frames (undefined, waiting undefined)
+[wide] motion reduce: Continue buttons on the night after 6 s: 1
+[wide] motion reduce: after Continue for 5 s: worst 0 px at 0 ms (undefined)
+[wide] done
