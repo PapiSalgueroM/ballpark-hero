@@ -50,7 +50,43 @@
  *  full storage (Release AN, phone) from the press on every write is refused:
  *             the season is played in memory, the save is untouched, and the
  *             viewer still opens on that season, under the cover
+ *  retry in view (Round 1144, phone) the viewer is open over that refused
+ *             save and the notice that carries Retry save is under the
+ *             cover: a Retry button is on the screen with nothing over it,
+ *             and once the browser takes writes again a real press on it
+ *             puts the season on the store with the viewer still open
+ *  reload holds (Round 1144, phone) a reload the app itself makes does not
+ *             lose a save the browser refused. A stale chunk error (the
+ *             event vite fires) while the save is still refused: no reload,
+ *             the Retry notice stays, the store is untouched; with writes
+ *             back the next one saves first and then reloads, and the
+ *             season is on the store after it. The "could not be loaded"
+ *             tile's Reload the same way, and held it says why
  *  errors     no page error and no console error
+ *
+ * MEASURED for Round 1144 on a Linux runner, nba at 390 by 844.
+ *   Before (main, Release AO), 62 checks, 6 failed. retry in view: the only
+ *   Retry on the page was the notice's "Retry save" at 257..301, 96 by 44,
+ *   covered by the viewer, so no press could reach it and the store stayed
+ *   at 0 seasons. reload holds: a stale chunk reloaded the page over the
+ *   refused save (the event cancelled, page loads 1 then 2, the Retry notice
+ *   gone, the season lost), and the tile's Reload did the same.
+ *   After, 62 checks, 0 failed. The toast's "Retry" at 680..724, 64 by 44,
+ *   on top (the toast at 656..748), and a press on it puts the season on the
+ *   store. A stale chunk over a refused save: no reload (page loads 1 then
+ *   1), notice up, store untouched; with writes back the next one reloads
+ *   with 1 season on the store. The tile's Reload the same, and held it
+ *   reads "Your latest progress has not been saved yet, so the page was not
+ *   reloaded".
+ *   After the round's review the toast has a second line ("Retry here does
+ *   the same thing."), so it is taller: its "Retry" at 670..714, still 64 by
+ *   44 and on top, the toast at 635..748. 62 checks, 0 failed, and each of
+ *   the eight controls red at its named check.
+ *   Two things the first cuts of these checks got wrong, kept here so they
+ *   are not relearned: refusing sessionStorage along with localStorage made
+ *   the stale chunk check pass on main (the reload stood down for want of
+ *   its own marker), and measuring the toast's button while the toast was
+ *   still sliding in gave a box 82 px lower than where it stops.
  *
  * Controls (US_SEASON_PLAY_CONTROL=), each served to the browser only, each
  * refusing to run unless its needle is in the built chunk exactly once, each
@@ -63,6 +99,11 @@
  *           before the fix pass of 2026-10-08)                 -> load first
  *   nohandover the board hands the entry no played career (the
  *           board before Release AN)                           -> full storage
+ *   noaction (Round 1144, a style rule, not a chunk) the button a
+ *           toast carries is display none                      -> retry in view
+ *   raw     (Round 1144, a window switch, not a chunk) the storage
+ *           seam's own "app as it was" switch is set before the
+ *           app loads, so no refused save is held for a reload -> reload holds
  *
  * Run: npm run build, then
  *   MSYS_NO_PATHCONV=1 ENGINES=chromium node scripts/playUsSeasonCentre.mjs
@@ -188,7 +229,17 @@ if (CONTROL === 'nohandover') {
   served.set(where[0], textOf(where[0]).replace(re, 'played:void 0'));
   console.log(`CONTROL nohandover: the served board hands the entry no played career (${where[0]})`);
 }
-if (CONTROL && !['static', 'write', 'count', 'cover', 'playfirst', 'nohandover'].includes(CONTROL)) { console.error(`unknown US_SEASON_PLAY_CONTROL ${CONTROL}`); process.exit(2); }
+/* Round 1144: two controls that change the page, not a chunk. noaction hides the button a toast carries
+   (a style rule added to the full storage page). raw sets window.__DUKB_RAW_STORAGE__ before the app
+   loads, the storage seam's own switch for "the app as it was": the seam then keeps no refused save
+   waiting, so a reload goes ahead over one. It refuses to run unless the built entry holds the switch. */
+const RAW_SWITCH = '__DUKB_RAW_STORAGE__';
+if (CONTROL === 'noaction') console.log('CONTROL noaction: the button a toast carries is display none on the full storage page');
+if (CONTROL === 'raw') {
+  if (!assets.some(f => textOf(f).includes(RAW_SWITCH))) { console.error(`control raw refused: no built chunk holds ${RAW_SWITCH}`); process.exit(2); }
+  console.log(`CONTROL raw: window.${RAW_SWITCH} is set before the app loads, so no refused save is held for a reload`);
+}
+if (CONTROL && !['static', 'write', 'count', 'cover', 'playfirst', 'nohandover', 'noaction', 'raw'].includes(CONTROL)) { console.error(`unknown US_SEASON_PLAY_CONTROL ${CONTROL}`); process.exit(2); }
 
 const server = spawn(process.execPath, [path.join(ROOT, 'scripts/lib/hostLikeServer.mjs'), DIST, String(PORT)], { stdio: 'ignore' });
 await new Promise(r => setTimeout(r, 1200));
@@ -215,7 +266,8 @@ const stop = code => { try { server.kill(); } catch { /* gone */ } process.exit(
 async function open(slug, save, { width, height, reduced = false, seed = 1048 }, { failViewer = 0, staleSpent = false } = {}) {
   const ctx = await browser.newContext({ viewport: { width, height }, reducedMotion: reduced ? 'reduce' : 'no-preference' });
   const state = { fail: failViewer, loads: 0, viewerAsked: 0 };
-  await ctx.addInitScript(([k, v, s, extra, spent]) => {
+  await ctx.addInitScript(([k, v, s, extra, spent, raw]) => {
+    if (raw) window.__DUKB_RAW_STORAGE__ = true;
     /* the site reloads once for a stale chunk (src/lib/freshBuild.ts): `spent` says that one reload is used up */
     try { if (spent) sessionStorage.setItem('dukb-reloaded-stale-chunk', '1'); } catch { /* private mode */ }
     let t = s >>> 0;
@@ -232,7 +284,7 @@ async function open(slug, save, { width, height, reduced = false, seed = 1048 },
       }
     } catch { /* private mode */ }
     if (extra) document.addEventListener('DOMContentLoaded', () => { import(extra).catch(() => {}); });
-  }, [save.key, save.value, seed, STATIC_EXTRA, staleSpent]);
+  }, [save.key, save.value, seed, STATIC_EXTRA, staleSpent, CONTROL === 'raw']);
   await ctx.route('**://*.supabase.co/**', r => { aborted += 1; return r.abort(); });
   await ctx.route('**/assets/*.js', async r => {
     const name = r.request().url().split('/').pop().split('?')[0];
@@ -301,6 +353,103 @@ const waitFor = async (fn, ms = 15000) => { const t0 = Date.now(); while (Date.n
 const hubBack = page => page.waitForFunction(() => [...document.querySelectorAll('button')].some(b => /Play the \d+ season/.test(b.textContent ?? '')), { timeout: 40000 }).then(() => page.waitForTimeout(600)).catch(() => {});
 const pressEntry = page => page.evaluate(() => document.querySelector('[data-week-by-week]')?.click());
 const drawsOf = page => page.evaluate(() => window.__usDraws ?? -1).catch(() => -1);
+
+/* ─── Round 1144 ─── */
+/** Every button that says Retry or Retry save, with its box, its middle, and whether it is the thing on top there. */
+const retryButtons = page => page.evaluate(() => ({
+  notice: !!document.querySelector('[data-us-career-save-error]'),
+  hit: [...document.querySelectorAll('button')].filter(b => /^Retry( save)?$/.test((b.textContent ?? '').trim())).map(b => {
+    const q = b.getBoundingClientRect();
+    const x = q.left + q.width / 2;
+    const y = q.top + q.height / 2;
+    const top = q.height > 0 ? document.elementFromPoint(x, y) : null;
+    return { words: (b.textContent ?? '').trim(), t: Math.round(q.top), b: Math.round(q.bottom), w: Math.round(q.width), h: Math.round(q.height), x, y, onTop: q.height > 0 && q.top >= 0 && q.bottom <= innerHeight && !!top && (b === top || b.contains(top)) };
+  }),
+  /* where the toasts are: each one's box, for the label */
+  toasts: [...document.querySelectorAll('[data-sonner-toast]')].map(t => { const q = t.getBoundingClientRect(); return `${Math.round(q.top)}..${Math.round(q.bottom)}`; }),
+}));
+/** A thumb's room: the size a button has to be for a phone (the notice's own Retry save is held to the same). */
+const THUMB = 44;
+/* localStorage only. A full localStorage says nothing about sessionStorage, which has its own room,
+   and the once a tab reload marker lives there: with both refused the reload stands down for the
+   marker's sake (measured on main, where this walk's first cut was green for that reason alone). */
+const refuseWrites = page => page.evaluate(() => {
+  const real = Storage.prototype.setItem;
+  window.__usRealSet = real;
+  Storage.prototype.setItem = function refuse(...args) {
+    if (this !== window.localStorage) return Reflect.apply(real, this, args);
+    throw new DOMException('The quota has been exceeded.', 'QuotaExceededError');
+  };
+});
+const takeWrites = page => page.evaluate(() => { if (window.__usRealSet) Storage.prototype.setItem = window.__usRealSet; }).catch(() => {});
+const seasonsOn = (page, key) => page.evaluate(k => { try { return JSON.parse(localStorage.getItem(k) ?? '{}').c?.seasons?.length ?? 0; } catch { return -1; } }, key).catch(() => -2);
+/* what vite fires on the window when a lazy chunk fails to load (a tab left open across a release);
+   true when the app cancelled it, which it does only when it is reloading the page */
+const staleChunk = page => page.evaluate(() => {
+  const e = new Event('vite:preloadError', { cancelable: true });
+  e.payload = new Error('Failed to fetch dynamically imported module: /assets/gone-after-a-release.js');
+  window.dispatchEvent(e);
+  return e.defaultPrevented;
+}).catch(() => 'the page was already leaving');
+
+/** A reload the app itself makes must not lose a save the browser refused: it is retried once first,
+ *  and while it is still refused the page stays. Two roads to a reload, each walked twice (storage
+ *  still full, then free): the stale chunk reload, and the Reload on the "could not be loaded" tile. */
+async function saveHolds(slug, vp, save, tag) {
+  /* the stale chunk reload */
+  const R = await open(slug, save, vp);
+  const kept = await savedString(R.page, save.key);
+  await refuseWrites(R.page);
+  await clickText(R.page, 'Play the');
+  const said = await waitFor(() => exists(R.page, '[data-us-career-save-error]'), 8000);
+  const loads = R.state.loads;
+  const cancelled = await staleChunk(R.page);
+  await R.page.waitForTimeout(1500);
+  const held = { loads: R.state.loads, notice: await exists(R.page, '[data-us-career-save-error]').catch(() => false), saved: await savedString(R.page, save.key).catch(() => null) };
+  check('reload holds', said && cancelled === false && held.loads === loads && held.notice && held.saved === kept,
+    `${tag}: a stale chunk does not reload the page over a save the browser still refuses (the save was ${said ? '' : 'NOT '}refused; the event was ${cancelled === false ? 'left alone' : `cancelled: ${cancelled}`}; page loads ${loads} then ${held.loads}; Retry notice ${held.notice ? 'still up' : 'GONE'}; the store ${held.saved === kept ? 'untouched' : 'changed'})`);
+  await takeWrites(R.page);
+  await staleChunk(R.page);
+  const reloaded = await waitFor(async () => R.state.loads > held.loads, 8000);
+  await R.page.waitForLoadState('load').catch(() => {});
+  await R.page.waitForTimeout(800);
+  const after = await seasonsOn(R.page, save.key);
+  check('reload holds', reloaded && after === 1,
+    `${tag}: once the browser takes writes again the next stale chunk saves first and then reloads (reloaded ${reloaded}, seasons on the store after it ${after})`);
+  check('errors', R.errors.length === 0, `${tag}: the held stale chunk reload, no page error and no console error${R.errors.length ? ` (${R.errors.slice(0, 2).join(' | ')})` : ''}`);
+  await R.ctx.close();
+
+  /* the tile's own Reload. The season is played by a scripted press under the tile: a player gets
+     to this state by playing first (the save is refused) and opening the viewer second. */
+  const T = await open(slug, save, vp, { failViewer: 99, staleSpent: true });
+  const keptT = await savedString(T.page, save.key);
+  await pressEntry(T.page);
+  const tile = await waitFor(() => exists(T.page, '[data-season-centre-failed]'), 20000);
+  await refuseWrites(T.page);
+  await clickText(T.page, 'Play the');
+  const saidT = await waitFor(() => exists(T.page, '[data-us-career-save-error]'), 8000);
+  const loadsT = T.state.loads;
+  const pressReload = () => T.page.evaluate(() => { const b = [...document.querySelectorAll('[data-season-centre-failed] button')].find(x => (x.textContent ?? '').includes('Reload')); if (b) b.click(); return !!b; }).catch(() => false);
+  const pressed = await pressReload();
+  await T.page.waitForTimeout(1500);
+  const heldT = {
+    loads: T.state.loads,
+    notice: await exists(T.page, '[data-us-career-save-error]').catch(() => false),
+    saved: await savedString(T.page, save.key).catch(() => null),
+    words: await T.page.evaluate(() => (document.querySelector('[data-season-centre-failed]')?.textContent ?? '').replace(/\s+/g, ' ').trim()).catch(() => ''),
+  };
+  check('reload holds', tile && saidT && pressed && heldT.loads === loadsT && heldT.notice && heldT.saved === keptT && /not been saved/.test(heldT.words),
+    `${tag}: the tile's Reload does not reload over a save the browser still refuses, and says why (tile ${tile}, save refused ${saidT}; page loads ${loadsT} then ${heldT.loads}; Retry notice ${heldT.notice ? 'still up' : 'GONE'}; the store ${heldT.saved === keptT ? 'untouched' : 'changed'}; the tile says "${heldT.words.slice(0, 120)}")`);
+  await takeWrites(T.page);
+  const pressedAgain = await pressReload();
+  const reloadedT = await waitFor(async () => T.state.loads > heldT.loads, 8000);
+  await T.page.waitForLoadState('load').catch(() => {});
+  await T.page.waitForTimeout(800);
+  const afterT = await seasonsOn(T.page, save.key);
+  check('reload holds', pressedAgain && reloadedT && afterT === 1,
+    `${tag}: once the browser takes writes again the tile's Reload saves first and then reloads (pressed ${pressedAgain}, reloaded ${reloadedT}, seasons on the store after it ${afterT})`);
+  await T.ctx.close();
+}
 
 /** A tab left open across a release: the viewer's chunk is gone from the host when he presses. */
 async function staleWalks(slug, vp, save, afterPlay, firstDraws, tag) {
@@ -582,8 +731,10 @@ async function walk(slug, vp) {
        nothing (a review saw exactly that where Rounds 1048 and 1142 meet). */
     const F = await open(slug, save, vp);
     const kept = await savedString(F.page, save.key);
+    if (CONTROL === 'noaction') await F.page.addStyleTag({ content: '[data-sonner-toast] [data-button]{display:none !important}' });
     await F.page.evaluate(() => {
       window.__usRefused = 0;
+      window.__usRealSet = Storage.prototype.setItem;
       Storage.prototype.setItem = function refuse() { window.__usRefused += 1; throw new DOMException('The quota has been exceeded.', 'QuotaExceededError'); };
     });
     await pressEntry(F.page);
@@ -592,7 +743,24 @@ async function walk(slug, vp) {
     const refused = await F.page.evaluate(() => window.__usRefused ?? 0);
     check('full storage', refused > 0 && full.curtain && full.saved === kept, `${tag}: with storage full the press played its season in memory: ${refused} write(s) refused, the curtain is there and the save is untouched (curtain ${full.curtain}, save unchanged ${full.saved === kept})`);
     check('full storage', fullOpened && full.cover, `${tag}: with storage full the press still opens the season it played, under the cover (viewer ${full.viewer}, cover ${full.cover}${F.errors.length ? `; the page said: ${F.errors.slice(0, 2).join(' | ')}` : ''})`);
+    /* Round 1144: the viewer is open over a save the browser refused, the toast says to use Retry save,
+       and the notice that carries that button is under the cover. A Retry has to be on the screen with
+       nothing over it, and once the browser takes writes again a press on it (a real press, at its
+       middle) has to put the season on the store. */
+    /* the toast slides in over about 400 ms: measured once it has stopped, or the press below would land where the button was */
+    await F.page.waitForTimeout(900);
+    const retries = await retryButtons(F.page);
+    const reach = retries.hit.find(x => x.onTop) ?? null;
+    if (process.env.SHOTS) { fs.mkdirSync(process.env.SHOTS, { recursive: true }); await F.page.screenshot({ path: path.join(process.env.SHOTS, `retry-in-view-${slug}.png`) }); }
+    check('retry in view', retries.notice && !!reach && reach.h >= THUMB && reach.w >= THUMB, `${tag}: with the viewer open over a refused save, a Retry button is on the screen with nothing over it and a thumb can hit it, ${THUMB} px each way (${retries.hit.map(x => `"${x.words}" ${x.t}..${x.b} ${x.w}x${x.h}${x.onTop ? ' on top' : ' covered'}`).join('; ') || 'no Retry button at all'}; toasts at ${retries.toasts.join(', ') || 'none'})`);
+    await F.page.evaluate(() => { Storage.prototype.setItem = window.__usRealSet; });
+    if (reach) await F.page.mouse.click(reach.x, reach.y);
+    const took = !!reach && await waitFor(async () => (await savedString(F.page, save.key)) !== kept, 4000);
+    const onStore = await F.page.evaluate(k => { try { return JSON.parse(localStorage.getItem(k) ?? '{}').c?.seasons?.length ?? 0; } catch { return -1; } }, save.key);
+    const stillSaid = await exists(F.page, '[data-us-career-save-error]');
+    check('retry in view', took && onStore === 1 && !stillSaid && await exists(F.page, '[data-season-centre]'), `${tag}: once the browser takes writes again, a press on that Retry puts the season on the store with the viewer still open (seasons on the store ${onStore}, notice ${stillSaid ? 'still up' : 'gone'})`);
     await F.ctx.close();
+    await saveHolds(slug, vp, save, tag);
     await staleWalks(slug, vp, save, afterPlay, firstDraws, tag);
   }
 }
@@ -605,7 +773,7 @@ try {
 await browser.close();
 console.log(`supabase requests aborted: ${aborted}`);
 const failed = [...fails.values()].reduce((a, l) => a + l.length, 0);
-const NAMED = { static: 'lazy', write: 'same press', count: 'clock', cover: 'cover', playfirst: 'load first', nohandover: 'full storage' };
+const NAMED = { static: 'lazy', write: 'same press', count: 'clock', cover: 'cover', playfirst: 'load first', nohandover: 'full storage', noaction: 'retry in view', raw: 'reload holds' };
 if (CONTROL) {
   const ok = fails.has(NAMED[CONTROL]);
   console.log(`${ok ? `control ${CONTROL}: RED AT THE NAMED CHECK (${NAMED[CONTROL]})` : `control ${CONTROL}: DID NOT FIRE AT ITS NAMED CHECK (${NAMED[CONTROL]})`}; checks red: ${[...fails.keys()].join(', ') || 'none'}`);

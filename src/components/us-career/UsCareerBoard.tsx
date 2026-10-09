@@ -24,6 +24,7 @@ import ExtensionCard from '@/components/us-career/ExtensionCard';
 import { buildSeasonReveal, draftPressureLine, type SeasonReveal } from '@/lib/usCareerReveal';
 import { SeasonRevealCard } from '@/components/us-career/SeasonRevealCard';
 import { UsSeasonCentreEntry } from '@/components/us-career/season/UsSeasonCentreEntry';
+import { holdPendingSave } from '@/lib/safeStorage';
 /* Round 530: draft day as a moment, and the retirement card on the same
    celebration kit the season curtain uses. */
 import DraftDayCard, { type DraftDayFacts } from '@/components/us-career/DraftDayCard';
@@ -103,13 +104,34 @@ type CareerEvent = UsCareerEvent<UsCareerCore>;
 
 interface SaveShape { c: CareerState | null; phase: Phase; teamQuality: number | null; coach?: CoachCareerState | null; prospect?: UsCareerProspect }
 
+/** Round 1144: how long the toast that says a save was refused stays, with its Retry on it. */
+const SAVE_TOAST_MS = 10_000;
+/** A toast's button is 24 px tall as it comes (measured: 48 by 24). This one is the way to save a
+ *  career from a phone, so it gets a thumb's room, the same 44 px the notice's Retry save has. */
+const SAVE_TOAST_BUTTON = { height: 44, minWidth: 64, paddingLeft: 14, paddingRight: 14, fontSize: 13 } as const;
+
 export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const pendingSave = useRef<{ key: string; value: string | null } | null>(null);
   const [saveFailure, setSaveFailure] = useState<'write' | 'remove' | null>(null);
   const saveFailed = saveFailure !== null;
   useEffect(() => {
     if (!saveFailed) return;
-    const said = toast.error('Your latest changes could not be saved. Stay on this page and use Retry save.');
+    /* Round 1144: the toast carries a Retry of its own. With the Week by week
+       viewer open the notice that holds Retry save is under the viewer's
+       cover, and the toast was telling the player to use a button he could
+       not reach until he closed the viewer. It says Retry, not Retry save, so
+       the page never has two buttons of one name. The press keeps the toast
+       (the cleanup below takes it back the moment the save goes through), and
+       ten seconds instead of four gives him time to read it and press.
+       The first sentence is kept word for word (the other lane's driver for
+       Round 1084 reads it), so the second line is what makes the words match
+       the button they sit next to. */
+    const said = toast.error('Your latest changes could not be saved. Stay on this page and use Retry save.', {
+      description: 'Retry here does the same thing.',
+      duration: SAVE_TOAST_MS,
+      action: { label: 'Retry', onClick: event => { event.preventDefault(); retrySave(); } },
+      actionButtonStyle: SAVE_TOAST_BUTTON,
+    });
     /* Release AN: the words are taken back the moment they stop being true.
        A Retry save that worked left them on screen for the rest of their few
        seconds, saying the changes could not be saved, and they followed the
@@ -341,6 +363,15 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
       setSaveFailure(pending.value === null ? 'remove' : 'write');
     }
   }, [sport.saveKey]);
+  /* Round 1144: while a save is refused the storage seam knows one is
+     waiting here, so a reload the app makes on its own account (a new build,
+     a stale chunk, the Season Center tile's Reload) retries it once first and
+     stays on the page while it is still refused. The retry is the one above,
+     untouched; the answer is whether anything is still waiting after it. */
+  useEffect(() => {
+    if (!saveFailed) return;
+    return holdPendingSave(() => { retrySave(); return pendingSave.current === null; });
+  }, [saveFailed, retrySave]);
   const saveValue = useCallback((value: string | null) => {
     pendingSave.current = { key: sport.saveKey, value };
     retrySave();

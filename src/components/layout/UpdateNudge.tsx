@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import { toast } from 'sonner';
+import { reloadToRetryChunk } from '@/lib/freshBuild';
+import { hasPendingSaves } from '@/lib/safeStorage';
 
 /**
  * Stale-build detector (Aug 2026).
@@ -14,7 +16,9 @@ import { toast } from 'sonner';
  * filename, and compares it to the bundle this page is actually running. If
  * they differ, the site has shipped an update; show a one-time toast with a
  * Refresh button. Never auto-reloads (that could eat someone's half-finished
- * game), and never prompts twice for the same version.
+ * game), and never prompts twice for the same version. Since Round 1144 the
+ * Refresh button does not reload over a save the browser refused either, or
+ * while the browser says it is offline (src/lib/freshBuild.ts holds both).
  */
 
 const CHECK_EVERY_MS = 5 * 60 * 1000;
@@ -55,7 +59,19 @@ export function UpdateNudge() {
           duration: 30_000,
           action: {
             label: 'Refresh',
-            onClick: () => window.location.reload(),
+            /* Round 1144 review: through the same guard as every other reload
+               the app makes. This toast shows the moment a new build lands,
+               which is the moment the automatic reload stands down for a
+               save the browser refused, and a bare reload here threw that
+               save away one press later. The save is retried once first;
+               while it is still refused the page stays and he is told why. */
+            onClick: () => {
+              if (reloadToRetryChunk() || !hasPendingSaves()) return;
+              toast('Not refreshed yet', {
+                description: 'Your latest changes have not been saved, and a refresh would lose them. Use Retry save first, then refresh the page.',
+                duration: 10_000,
+              });
+            },
           },
         });
       } catch {

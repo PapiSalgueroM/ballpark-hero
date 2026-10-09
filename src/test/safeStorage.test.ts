@@ -381,3 +381,179 @@ describe('safeStorage: the Web Locks stand in (a real blocked browser refuses lo
     expect(locks().request).toBe(before);
   });
 });
+
+/* Round 1144: 'full' used to be for the rest of the visit. After the player
+   made room and his save went through, the line at the top still said the
+   storage was full until the page was loaded again. */
+describe('safeStorage: a refusal is taken back when the browser takes a write again', () => {
+  const tick = () => Promise.resolve();
+  const refuseAll = () => vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new DOMException('quota', 'QuotaExceededError'); });
+
+  it('recheckStorageWrites unlearns full with one write and one remove of the probe key', async () => {
+    const spy = refuseAll();
+    const seam = await load();
+    expect(seam.probeStorageWrites()).toBe('full');
+    /* still full: asking again changes nothing, and it did ask (one more refused write) */
+    expect(seam.recheckStorageWrites()).toBe('full');
+    expect(spy).toHaveBeenCalledTimes(2);
+    spy.mockRestore();
+    const writes = vi.spyOn(Storage.prototype, 'setItem');
+    const removes = vi.spyOn(Storage.prototype, 'removeItem');
+    expect(seam.recheckStorageWrites()).toBeNull();
+    expect(seam.getStorageTrouble()).toBeNull();
+    expect(writes.mock.calls.map(c => c[0])).toEqual(['__dukb_storage_probe__']);
+    expect(removes.mock.calls.map(c => c[0])).toEqual(['__dukb_storage_probe__']);
+    expect(window.localStorage.length).toBe(0);
+  });
+
+  /* the rule Round 1142 set and this round keeps: a browser that stores
+     normally is written to once a visit by the probe and never again */
+  it('in a browser that stores normally a recheck writes nothing, however often it is asked', async () => {
+    const seam = await load();
+    expect(seam.probeStorageWrites()).toBeNull();
+    const writes = vi.spyOn(Storage.prototype, 'setItem');
+    const removes = vi.spyOn(Storage.prototype, 'removeItem');
+    for (let i = 0; i < 5; i += 1) expect(seam.recheckStorageWrites()).toBeNull();
+    expect(seam.probeStorageWrites()).toBeNull();
+    expect(writes).not.toHaveBeenCalled();
+    expect(removes).not.toHaveBeenCalled();
+  });
+
+  it('a recheck before anything was refused does not stand in for the probe', async () => {
+    const seam = await load();
+    const writes = vi.spyOn(Storage.prototype, 'setItem');
+    expect(seam.recheckStorageWrites()).toBeNull();
+    expect(writes).not.toHaveBeenCalled();
+    expect(seam.probeStorageWrites()).toBeNull();
+    expect(writes).toHaveBeenCalledTimes(1);
+  });
+
+  it('blocked storage stays blocked, and a recheck touches nothing', async () => {
+    blockAccessors();
+    const seam = await load();
+    expect(seam.recheckStorageWrites()).toBe('blocked');
+    seam.safeLocalStorage.setItem('k', 'v');
+    expect(seam.safeSetItem('footle-rules-seen', '1')).toBe(true);
+    expect(seam.getStorageTrouble()).toBe('blocked');
+  });
+
+  /* The review of this round: the first cut unlearned on any write the browser
+     took, and a full store takes a write that needs no room. So a taken write
+     proves nothing by itself; the recheck is the one place full is taken back
+     (src/test/safeStorageQuota.test.ts holds that against a store with a
+     fixed amount of room). */
+  it('a safeSetItem the browser takes does not unlearn full by itself: the recheck does', async () => {
+    const spy = refuseAll();
+    const seam = await load();
+    expect(seam.safeSetItem('footle-rules-seen', '1')).toBe(false);
+    expect(seam.getStorageTrouble()).toBe('full');
+    spy.mockRestore();
+    expect(seam.safeSetItem('footle-rules-seen', '1')).toBe(true);
+    expect(seam.getStorageTrouble()).toBe('full');
+    expect(seam.recheckStorageWrites()).toBeNull();
+  });
+
+  it('a write through the seam that the browser takes does not unlearn full either, and the recheck writes what was kept', async () => {
+    const spy = refuseAll();
+    const seam = await load();
+    seam.safeLocalStorage.setItem('cookie-consent', 'essential');
+    seam.safeLocalStorage.setItem('theme', 'dark');
+    expect(seam.getStorageTrouble()).toBe('full');
+    spy.mockRestore();
+    seam.safeSessionStorage.setItem('dukb-reloaded-for', 'index-abc.js');
+    seam.safeLocalStorage.setItem('theme', 'dark');
+    expect(seam.getStorageTrouble()).toBe('full');
+    expect(window.localStorage.getItem('theme')).toBe('dark');
+    expect(window.localStorage.getItem('cookie-consent')).toBeNull();
+    expect(seam.recheckStorageWrites()).toBeNull();
+    expect(window.localStorage.getItem('cookie-consent')).toBe('essential');
+    expect(window.localStorage.length).toBe(2);
+  });
+
+  it('tells a listener once when the answer changes, a moment later, and not after it has left', async () => {
+    const spy = refuseAll();
+    const seam = await load();
+    const heard = vi.fn();
+    const stop = seam.subscribeStorageTrouble(heard);
+    expect(seam.probeStorageWrites()).toBe('full');
+    /* never inside the call that made the change */
+    expect(heard).not.toHaveBeenCalled();
+    await tick();
+    expect(heard).toHaveBeenCalledTimes(1);
+    /* nothing changed: nothing is said */
+    seam.recheckStorageWrites();
+    seam.safeSetItem('footle-rules-seen', '1');
+    await tick();
+    expect(heard).toHaveBeenCalledTimes(1);
+    spy.mockRestore();
+    seam.recheckStorageWrites();
+    await tick();
+    expect(heard).toHaveBeenCalledTimes(2);
+    stop();
+    refuseAll();
+    seam.safeSetItem('footle-rules-seen', '1');
+    await tick();
+    expect(seam.getStorageTrouble()).toBe('full');
+    expect(heard).toHaveBeenCalledTimes(2);
+  });
+
+  it('under the raw switch a recheck does nothing', async () => {
+    window.__DUKB_RAW_STORAGE__ = true;
+    const seam = await load();
+    const writes = vi.spyOn(Storage.prototype, 'setItem');
+    expect(seam.recheckStorageWrites()).toBeNull();
+    expect(writes).not.toHaveBeenCalled();
+  });
+});
+
+/* Round 1144: a save the browser refused waits in the open page, and a
+   reload the app makes on its own account must not throw it away. */
+describe('safeStorage: a refused save is held against a reload', () => {
+  it('nothing waiting: a reload may go ahead', async () => {
+    const seam = await load();
+    expect(seam.settlePendingSaves()).toBe(true);
+  });
+
+  it('retries each waiting save once, and holds the reload while one is still refused', async () => {
+    const seam = await load();
+    const refused = vi.fn(() => false);
+    const saved = vi.fn(() => true);
+    const stopRefused = seam.holdPendingSave(refused);
+    seam.holdPendingSave(saved);
+    expect(seam.settlePendingSaves()).toBe(false);
+    expect(refused).toHaveBeenCalledTimes(1);
+    expect(saved).toHaveBeenCalledTimes(1);
+    /* the game takes its name back when the save goes through or it is left */
+    stopRefused();
+    expect(seam.settlePendingSaves()).toBe(true);
+    expect(refused).toHaveBeenCalledTimes(1);
+  });
+
+  it('a retry that throws counts as still refused, and does not stop the next one being tried', async () => {
+    const seam = await load();
+    const next = vi.fn(() => true);
+    seam.holdPendingSave(() => { throw new Error('the game broke'); });
+    seam.holdPendingSave(next);
+    expect(seam.settlePendingSaves()).toBe(false);
+    expect(next).toHaveBeenCalledTimes(1);
+  });
+
+  it('a save that takes its own name back while it is retried is not asked twice', async () => {
+    const seam = await load();
+    let stop = () => {};
+    const retry = vi.fn(() => { stop(); return true; });
+    stop = seam.holdPendingSave(retry);
+    expect(seam.settlePendingSaves()).toBe(true);
+    expect(seam.settlePendingSaves()).toBe(true);
+    expect(retry).toHaveBeenCalledTimes(1);
+  });
+
+  it('under the raw switch nothing is held, which is the app as it was', async () => {
+    window.__DUKB_RAW_STORAGE__ = true;
+    const seam = await load();
+    const retry = vi.fn(() => false);
+    seam.holdPendingSave(retry);
+    expect(seam.settlePendingSaves()).toBe(true);
+    expect(retry).not.toHaveBeenCalled();
+  });
+});

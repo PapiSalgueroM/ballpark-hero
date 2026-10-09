@@ -36,11 +36,35 @@
  *      walks under scripts/qa). The write probe is a function the notice
  *      calls on a game page now, and nothing module scope reaches may write.
  *
- * MEASURED on this tree: 120 .setItem calls in 87 files, 118 inside a try
- * that has a catch, of their own function, 2 allowed (see ALLOWED), 0
- * offenders, 0 of them in a try with only a finally; and in the seam 9
- * write, remove or clear calls, none reachable as it loads. The header is
- * refreshed by hand; the summary line prints the live numbers.
+ *   5. (Round 1144) A browser that stores normally is written to by the seam
+ *      at most once a visit. The seam has two functions that write a probe:
+ *      probeStorageWrites, whose write must sit under its own once flag, and
+ *      recheckStorageWrites (which takes "full" back when the browser takes
+ *      writes again), whose write must sit under "the seam already says
+ *      full". No other function in the seam may name the probe key in a
+ *      write. Without the second guard every press on a game page would
+ *      write to everybody's storage and fire a storage event in every other
+ *      tab, which is what section 4 and the three browser checks exist to
+ *      stop.
+ *
+ *   6. (Round 1144 review) "Full" is taken back in exactly one place, the
+ *      recheck, and the recheck returns first while a game holds a refused
+ *      save. The first cut took it back on any write the browser took, and
+ *      a full store still takes a write that needs no room (a page saving
+ *      what it loaded), so in a real Chromium the line left while every
+ *      save was still refused. src/test/safeStorageQuota.test.ts and the
+ *      quota journeys of scripts/playUsCareerSaveSeam.mjs hold the
+ *      behaviour; this holds the shape.
+ *
+ * MEASURED on this tree (Round 1144): 124 .setItem calls in 90 files, 122
+ * inside a try that has a catch, of their own function, 2 allowed (see
+ * ALLOWED), 0 offenders, 0 of them in a try with only a finally; and in the
+ * seam 13 write, remove or clear calls, none reachable as it loads, 4 of
+ * them on the probe key, 2 in each of the two functions that may. The header
+ * is refreshed by hand; the summary line prints the live numbers. Each
+ * control turns one section red, except probe, which turns two (4 and 5: a
+ * probe written in resolve runs as the seam loads AND is a probe outside the
+ * two functions that may write one).
  *
  * NEGATIVE CONTROLS, each one changes a file IN MEMORY only, asserts the text
  * it is about to change is really there, and must turn the harness red:
@@ -53,6 +77,15 @@
  *                                        into a try and finally, which still throws.
  *   SIM_STORAGE_WRITES_CONTROL=probe    puts the write probe back in resolve,
  *                                        which runs as the seam loads.
+ *   SIM_STORAGE_WRITES_CONTROL=recheck  (Round 1144) takes "the seam already
+ *                                        says full" off the recheck, so it
+ *                                        would write in every browser.
+ *   SIM_STORAGE_WRITES_CONTROL=once     (Round 1144) takes the once flag off
+ *                                        the first probe.
+ *   SIM_STORAGE_WRITES_CONTROL=unlearn  (Round 1144 review) a safeSetItem the
+ *                                        browser takes takes "full" back again.
+ *   SIM_STORAGE_WRITES_CONTROL=held     (Round 1144 review) takes the held
+ *                                        save's guard off the recheck.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -86,6 +119,10 @@ else if (CONTROL === 'client') control('src/integrations/supabase/client.ts', 's
 else if (CONTROL === 'caller') control('src/lib/clubManagerSlots.ts', 'try { writeIndex(from); } catch {', '{ writeIndex(from); } {');
 else if (CONTROL === 'nocatch') control('src/components/CookieConsent.tsx', "try { safeLocalStorage.setItem('cookie-consent', choice); } catch { /* see above */ }", "try { safeLocalStorage.setItem('cookie-consent', choice); } finally { /* see above */ }");
 else if (CONTROL === 'probe') control('src/lib/safeStorage.ts', 'real.getItem(PROBE_KEY);', "real.setItem(PROBE_KEY, '1'); real.removeItem(PROBE_KEY);");
+else if (CONTROL === 'recheck') control('src/lib/safeStorage.ts', 'if (refusedWrite && !raw && local.real) {', 'if (!raw && local.real) {');
+else if (CONTROL === 'once') control('src/lib/safeStorage.ts', 'if (!probedWrites && !raw && local.real) {', 'if (!raw && local.real) {');
+else if (CONTROL === 'unlearn') control('src/lib/safeStorage.ts', 'localStorage.setItem(key, value);', 'localStorage.setItem(key, value); setRefusedWrite(false);');
+else if (CONTROL === 'held') control('src/lib/safeStorage.ts', 'if (pendingSaves.size > 0) return getStorageTrouble();', '');
 else if (CONTROL) { console.error(`unknown SIM_STORAGE_WRITES_CONTROL=${CONTROL}`); process.exit(2); }
 
 const read = full => overrides.get(full) ?? fs.readFileSync(full, 'utf8');
@@ -227,6 +264,65 @@ console.log('4. the storage seam only READS as it loads: no write, remove or cle
   else if (hits.length < 4) fail(`only ${hits.length} write, remove or clear calls found in safeStorage.ts: the scan is not reading the seam`);
   else if (early.length) fail(`${early.length} storage write(s) run as the seam loads (line ${early.map(n => lineOf(sf, n)).join(', ')}): every import of the Supabase client would write, which three committed browser checks forbid`);
   else ok(`${hits.length} write, remove or clear calls in the seam, 0 of them at module scope or in ${[...atLoad].sort().join(', ')}`);
+}
+
+console.log('5. the seam writes its probe only under the once flag (the first probe) or while it already says full (the recheck)');
+{
+  const full = path.join(SRC, 'lib', 'safeStorage.ts');
+  const sf = parse(full);
+  const WRITES = new Set(['setItem', 'removeItem']);
+  /* every write whose first argument is the probe key, by the function it runs in */
+  const probes = calls(sf, n => ts.isPropertyAccessExpression(n.expression) && WRITES.has(n.expression.name.text)
+    && n.arguments.length > 0 && ts.isIdentifier(n.arguments[0]) && n.arguments[0].text === 'PROBE_KEY');
+  /* the guards between a write and its function: the conditions of every if it sits inside, split on && */
+  const guardsOf = node => {
+    const out = [];
+    for (let n = node; n.parent && !isFunction(n.parent); n = n.parent) {
+      const p = n.parent;
+      if (ts.isIfStatement(p) && p.thenStatement === n) out.push(...p.expression.getText(sf).split('&&').map(s => s.trim()));
+    }
+    return out;
+  };
+  const NEED = { probeStorageWrites: '!probedWrites', recheckStorageWrites: 'refusedWrite' };
+  const bad = [];
+  const seen = {};
+  for (const w of probes) {
+    const owner = ownerName(w);
+    seen[owner] = (seen[owner] ?? 0) + 1;
+    if (!(owner in NEED)) { bad.push(`line ${lineOf(sf, w)}: ${owner || 'module scope'} writes the probe key, and only ${Object.keys(NEED).join(' and ')} may`); continue; }
+    if (!guardsOf(w).includes(NEED[owner])) bad.push(`line ${lineOf(sf, w)}: the probe write in ${owner} is not under "${NEED[owner]}" (it is under "${guardsOf(w).join(' && ') || 'nothing'}")`);
+  }
+  for (const owner of Object.keys(NEED)) if (!seen[owner]) bad.push(`${owner} writes no probe: this check is not reading the seam it thinks it is`);
+  /* the once flag has to be set by the probe, or "once" is a word */
+  const sets = [];
+  const walk = n => { if (ts.isBinaryExpression(n) && n.operatorToken.kind === ts.SyntaxKind.EqualsToken && n.left.getText(sf) === 'probedWrites' && n.right.getText(sf) === 'true') sets.push(ownerName(n)); ts.forEachChild(n, walk); };
+  walk(sf);
+  if (!sets.includes('probeStorageWrites')) bad.push('probeStorageWrites never sets probedWrites, so its probe would run on every call');
+  if (bad.length) { fail(`${bad.length} probe write(s) that an ordinary browser would get more than once a visit:`); for (const b of bad) console.log('           ' + b); }
+  else ok(`${probes.length} probe writes: ${Object.keys(NEED).map(o => `${seen[o]} in ${o} under "${NEED[o]}"`).join(', ')}`);
+}
+
+console.log('6. "full" is taken back in one place, the recheck, and never while a game holds a refused save');
+{
+  const full = path.join(SRC, 'lib', 'safeStorage.ts');
+  const sf = parse(full);
+  /* every call that takes "full" back, by the function it runs in */
+  const unlearns = calls(sf, n => ts.isIdentifier(n.expression) && n.expression.text === 'setRefusedWrite'
+    && n.arguments.length === 1 && n.arguments[0].kind === ts.SyntaxKind.FalseKeyword);
+  const elsewhere = unlearns.filter(n => ownerName(n) !== 'recheckStorageWrites');
+  /* the held save's guard: an if on pendingSaves that returns, ahead of the first unlearn in the recheck */
+  const first = unlearns.find(n => ownerName(n) === 'recheckStorageWrites');
+  let guard = null;
+  const walk = n => {
+    if (ts.isIfStatement(n) && ownerName(n) === 'recheckStorageWrites' && n.expression.getText(sf) === 'pendingSaves.size > 0'
+      && ts.isReturnStatement(n.thenStatement)) guard = n;
+    ts.forEachChild(n, walk);
+  };
+  walk(sf);
+  if (!unlearns.length) fail('nothing in the seam takes "full" back: this check is not reading the seam it thinks it is');
+  else if (elsewhere.length) fail(`"full" is taken back outside the recheck (line ${elsewhere.map(n => `${lineOf(sf, n)} in ${ownerName(n) || 'module scope'}`).join(', ')}): a full store still takes a write that needs no room, so a taken write proves nothing`);
+  else if (!first || !guard || guard.getStart(sf) > first.getStart(sf)) fail('the recheck does not return on "pendingSaves.size > 0" before it takes "full" back: the line would leave while a game still holds a refused save');
+  else ok(`${unlearns.length} place takes "full" back, in recheckStorageWrites (line ${lineOf(sf, first)}), behind the held save's guard (line ${lineOf(sf, guard)})`);
 }
 
 console.log(`\nsimStorageWrites${CONTROL ? ` (control ${CONTROL})` : ''}: ${failures === 0 ? 'all green' : failures + ' failed'}`);
