@@ -338,6 +338,13 @@ const ageBasis = { born: 0, moved: 0, written: 0, unknown: 0 };
    ledger next. It changes nothing in the baked file. */
 const agesOutArg = process.argv.find(a => a.startsWith('--ages-out='));
 const agesOut = [];
+/* What each shipped age stands on, row for row: the table's own age, the row's
+   year and id, how the age was resolved and, for a birth date, the date. It is
+   written beside the squads on every bake (scripts/data/cmAgesBasis2026.json)
+   so scripts/simCmRatingShape.mjs section 6(f) can hold every shipped age to
+   the rule in scripts/lib/cmAges.mjs without the dump. The table's age is
+   recorded as the table gave it, never as the rule moved it. */
+const basisOf = new Map();
 const byClub = new Map(engineClubs.map(c => [c, []]));
 for (const [name, rec] of byPlayer) {
   const n = rec.name ?? name;
@@ -346,7 +353,11 @@ for (const [name, rec] of byPlayer) {
   agesOut.push({ n, club: rec.club, a: aged.age, basis: aged.basis, id: rec.id ?? null, year: rec.year, tableAge: rec.rawAge });
   if (aged.note) console.log(`Age: ${aged.note}`);
   if (aged.basis === 'unknown') errors.push(`AGE UNKNOWN: ${n} at ${rec.club} has no table row and no birth date on scripts/data/cmBirthDates2026.json (typed age ${rec.rawAge}); add his birth date with two publishers`);
-  byClub.get(rec.club).push({ n, p: rec.p, a: aged.age, v: gbpM(rec.usd), r: ratingOf(rec.usd, aged.age, rec.p) });
+  const shipped = { n, p: rec.p, a: aged.age, v: gbpM(rec.usd), r: ratingOf(rec.usd, aged.age, rec.p) };
+  const stands = [rec.rawAge, rec.year ?? null, rec.id ?? null, aged.basis];
+  if (aged.basis === 'born') stands.push(aged.born);
+  basisOf.set(shipped, stands);
+  byClub.get(rec.club).push(shipped);
 }
 console.log(`Ages for ${AGES_AS_OF}: ${ageBasis.born} from a birth date, ${ageBasis.moved} moved from the table's 1 January age, ${ageBasis.written} as written by hand, ${ageBasis.unknown} unknown`);
 for (const list of byClub.values()) list.sort((a, b) => b.v - a.v || a.n.localeCompare(b.n));
@@ -495,7 +506,10 @@ export interface BakedPlayer {
   n: string;
   /** Position. */
   p: Position;
-  /** Age on 1 August 2026 (see CM_ROSTER_META.ages). */
+  /** Age. In this file: on 1 August 2026 (see CM_ROSTER_META.ages). The past seasons and the
+   *  gathered leagues share this type and mean other days: a past season ships the table's
+   *  1 January age (its ratings read a year on, META.ratedAtAge), a gathered league the age on
+   *  the day its squad was read (META.read). */
   a: number;
   /** Market value in £m. */
   v: number;
@@ -538,6 +552,17 @@ if (carried.length) {
 out += `};\n`;
 
 fs.writeFileSync(path.join(ROOT, 'src/data/clubManagerRosters.ts'), out);
+/* The ages basis, one club a line, the men in the order the squads file ships
+   them. Never edited by hand: it is this bake's own record. */
+const basisClubs = clubsSorted.filter(c => byClub.get(c).length);
+const basisText = '{\n'
+  + `  "about": ${JSON.stringify('Round 1102: what every shipped age in src/data/clubManagerRosters.ts stands on, written by scripts/bakeClubManagerRosters.mjs on every bake and never by hand. One club a line, the men in the order the squads file ships them. Each man is [the age the value table gave, the table row\'s year, the table row\'s id, how his age was resolved (born, moved, written or unknown) and, for born, the birth date]. scripts/simCmRatingShape.mjs section 6(f) holds every shipped age to the rule in scripts/lib/cmAges.mjs through this file.')},\n`
+  + `  "asOf": "${AGES_AS_OF}",\n`
+  + `  "players": ${total},\n`
+  + '  "clubs": {\n'
+  + basisClubs.map(c => `    ${JSON.stringify(c)}: ${JSON.stringify(byClub.get(c).map(p => basisOf.get(p)))}`).join(',\n')
+  + '\n  }\n}\n';
+fs.writeFileSync(path.join(ROOT, 'scripts/data/cmAgesBasis2026.json'), basisText);
 if (agesOutArg) fs.writeFileSync(agesOutArg.slice('--ages-out='.length), JSON.stringify(agesOut));
 console.log(`Wrote src/data/clubManagerRosters.ts (${(out.length / 1024).toFixed(0)}KB), ${partial.length} partial clubs`);
 

@@ -14,7 +14,7 @@
 // Values in £m. Ratings 48-94: the market value curve plus points for age
 // (curve 2, scripts/lib/cmValueCurve.mjs): a point off for each year under 24,
 // points back from 30.
-// Ages are for 1 August 2026: 414 from a birth date on file, 3983 moved from the
+// Ages are for 1 August 2026: 423 from a birth date on file, 3974 moved from the
 // table's 1 January age (plus one for a 2026 row, plus two for a 2025 row;
 // right for about seven men in ten, a year over for the rest), 4 as written
 // by hand in 2026, 0 unknown.
@@ -27,7 +27,10 @@ export interface BakedPlayer {
   n: string;
   /** Position. */
   p: Position;
-  /** Age on 1 August 2026 (see CM_ROSTER_META.ages). */
+  /** Age. In this file: on 1 August 2026 (see CM_ROSTER_META.ages). The past seasons and the
+   *  gathered leagues share this type and mean other days: a past season ships the table's
+   *  1 January age (its ratings read a year on, META.ratedAtAge), a gathered league the age on
+   *  the day its squad was read (META.read). */
   a: number;
   /** Market value in £m. */
   v: number;
@@ -45,7 +48,7 @@ export const CM_ROSTER_META = {
   curve: 2,
   /** How each man's age is known: from a birth date on file, moved on from the table's 1 January
    *  age, as written by hand in 2026, or unknown. */
-  ages: { asOf: '2026-08-01', born: 414, moved: 3983, written: 4, unknown: 0 },
+  ages: { asOf: '2026-08-01', born: 423, moved: 3974, written: 4, unknown: 0 },
 };
 
 /** Clubs where the dataset runs thin (under 8 real players); the game pads
@@ -2018,7 +2021,7 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Jasper Dahlhaus', p: 'LB', a: 25, v: 0.8, r: 64 },
   ],
   'Freiburg': [
-    { n: 'Yuito Suzuki', p: 'CF', a: 25, v: 11.4, r: 79 },
+    { n: 'Yuito Suzuki', p: 'CF', a: 24, v: 11.4, r: 79 },
     { n: 'Mio Backhaus', p: 'GK', a: 22, v: 9.8, r: 76 },
     { n: 'Philipp Lienhart', p: 'CB', a: 30, v: 9.8, r: 79 },
     { n: 'Patrick Osterhage', p: 'CDM', a: 26, v: 9.7, r: 78 },
@@ -3333,7 +3336,7 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Giovanni Di Lorenzo', p: 'RB', a: 33, v: 8.3, r: 80 },
     { n: 'Kevin De Bruyne', p: 'CAM', a: 35, v: 8.3, r: 82 },
     { n: 'Stanislav Lobotka', p: 'CDM', a: 31, v: 8.1, r: 79 },
-    { n: 'Matteo Politano', p: 'RW', a: 33, v: 7.8, r: 80 },
+    { n: 'Matteo Politano', p: 'RW', a: 32, v: 7.8, r: 79 },
     { n: 'Luca Marianucci', p: 'CB', a: 22, v: 6, r: 74 },
     { n: 'Leonardo Spinazzola', p: 'LB', a: 33, v: 3, r: 75 },
     { n: 'Costantino Favasuli', p: 'LB', a: 22, v: 2.3, r: 68 },
