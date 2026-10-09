@@ -1,0 +1,14 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+sc-seedset0: SEEDSET=0 node scripts/simUsSeasonCentre.mjs
+sc-seedset1: SEEDSET=1 node scripts/simUsSeasonCentre.mjs
+sc-seedset2: SEEDSET=2 node scripts/simUsSeasonCentre.mjs
+sc-seedset3: SEEDSET=3 node scripts/simUsSeasonCentre.mjs
+sc-seedset4: SEEDSET=4 node scripts/simUsSeasonCentre.mjs
+sc-short82: US_SEASON_CONTROL=short82 node scripts/simUsSeasonCentre.mjs
+sc-stage: US_SEASON_CONTROL=stage node scripts/simUsSeasonCentre.mjs
+sc-length: US_SEASON_CONTROL=length node scripts/simUsSeasonCentre.mjs
+sc-formula: US_SEASON_CONTROL=formula node scripts/simUsSeasonCentre.mjs
+vitest-digest: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts src/test/usSeason.test.ts src/test/usSeasonCentre.test.tsx --testTimeout=1800000 --hookTimeout=120000
+anchors: node scripts/simHarnessAnchors.mjs
+norival: node scripts/simNoRivalNames.mjs
