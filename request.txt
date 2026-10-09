@@ -1,0 +1,4 @@
+# AP2 runner lens: the old save and 2020 to 2021 journeys again, with the offseason cards answered
+#!serve
+#!playwright
+walk: WALK_ONLY=A,B,C,F node .rc/x/walkAP2b.mjs
