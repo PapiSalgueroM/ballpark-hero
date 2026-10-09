@@ -1,0 +1,545 @@
+{
+ "A.hubUp": false,
+ "A.hub": {
+  "play": null,
+  "entry": null,
+  "weekByWeek": false,
+  "watchLast": null,
+  "held": null,
+  "heldBox": null,
+  "entryBox": null,
+  "sideways": false,
+  "width": 390
+ },
+ "A.savedBefore": {
+  "year": 2021,
+  "seasons": [
+   {
+    "year": 2017,
+    "games": 17,
+    "result": "Lost in the Divisional round"
+   },
+   {
+    "year": 2018,
+    "games": 17,
+    "result": "Missed the playoffs"
+   },
+   {
+    "year": 2019,
+    "games": 17,
+    "result": "Missed the playoffs"
+   },
+   {
+    "year": 2020,
+    "games": 17,
+    "result": "Lost in the Wild Card round"
+   }
+  ]
+ },
+ "A.viewerUp": false,
+ "A-old2021-390.help": "",
+ "A-old2021-390.helpClosedWith": "",
+ "A-old2021-390.kickoff": {
+  "up": false,
+  "text": "",
+  "cut": [],
+  "sideways": false,
+  "tiles": [],
+  "anims": 0
+ },
+ "A-old2021-390.liveAnims": 0,
+ "A-old2021-390.final": {
+  "up": false,
+  "text": "",
+  "cut": [],
+  "sideways": false,
+  "tiles": [],
+  "anims": 0
+ },
+ "A-old2021-390.review": {
+  "up": false,
+  "text": "",
+  "cut": [],
+  "sideways": false,
+  "tiles": [],
+  "anims": 0
+ },
+ "A.curtain": "",
+ "A.toHub": true,
+ "A.hub2022": {
+  "play": "Play the 2021 season",
+  "entry": "📺 Week by week",
+  "weekByWeek": true,
+  "watchLast": null,
+  "held": null,
+  "heldBox": null,
+  "entryBox": [
+   33,
+   342,
+   324,
+   44
+  ],
+  "sideways": false,
+  "width": 390
+ },
+ "A.savedAfter": {
+  "year": 2021,
+  "seasons": [
+   {
+    "year": 2017,
+    "games": 17,
+    "result": "Lost in the Divisional round"
+   },
+   {
+    "year": 2018,
+    "games": 17,
+    "result": "Missed the playoffs"
+   },
+   {
+    "year": 2019,
+    "games": 17,
+    "result": "Missed the playoffs"
+   },
+   {
+    "year": 2020,
+    "games": 17,
+    "result": "Lost in the Wild Card round"
+   }
+  ]
+ },
+ "A.errors": [],
+ "B.hubUp": false,
+ "B.hub": {
+  "play": null,
+  "entry": null,
+  "weekByWeek": false,
+  "watchLast": null,
+  "held": null,
+  "heldBox": null,
+  "entryBox": null,
+  "sideways": false,
+  "width": 390
+ },
+ "B.savedBefore": {
+  "year": 2022,
+  "seasons": [
+   {
+    "year": 2018,
+    "games": 17,
+    "sacks": 4.9,
+    "result": "Missed the playoffs"
+   },
+   {
+    "year": 2019,
+    "games": 17,
+    "sacks": 3.2,
+    "result": "Missed the playoffs"
+   },
+   {
+    "year": 2020,
+    "games": 17,
+    "sacks": 1.4,
+    "result": "Lost in the Wild Card round"
+   },
+   {
+    "year": 2021,
+    "games": 17,
+    "sacks": 3.2,
+    "result": "Missed the playoffs"
+   }
+  ]
+ },
+ "B.viewerUp": false,
+ "B-old2021again-390-reduced.kickoff": {
+  "up": false,
+  "text": "",
+  "cut": [],
+  "sideways": false,
+  "tiles": [],
+  "anims": 0
+ },
+ "B-old2021again-390-reduced.liveAnims": 0,
+ "B-old2021again-390-reduced.final": {
+  "up": false,
+  "text": "",
+  "cut": [],
+  "sideways": false,
+  "tiles": [],
+  "anims": 0
+ },
+ "B-old2021again-390-reduced.review": {
+  "up": false,
+  "text": "",
+  "cut": [],
+  "sideways": false,
+  "tiles": [],
+  "anims": 0
+ },
+ "B.hubAfterWatch": {
+  "play": null,
+  "entry": null,
+  "weekByWeek": false,
+  "watchLast": null,
+  "held": null,
+  "heldBox": null,
+  "entryBox": null,
+  "sideways": false,
+  "width": 390
+ },
+ "B.savedSame": true,
+ "B.curtain2022": "Skip to main content DOUKNOWBALL Back Track stats NFL My Career Draft night to retirement speech. Every choice bends the career. 🪞 RIVALRY 😬 Rival Becomes Teammate Cruz Fitzgerald just signed with your team. The room just got a lot more interesting. The feud cools, Morale +3, Fanbase +5 Tenth Sacker 80 VS Cruz Fitzgerald 79 Continue NFL My Career: Football Career Simulator Build a fictional prospect and live a full NFL career inside the real league. Your position and archetype drive realistic ",
+ "B.toHub": true,
+ "B.hub2023": {
+  "play": "Play the 2022 season",
+  "entry": "📺 No week by week this season: the real 2022 season had one game called off for good, so two teams finished on 16 games.↺ Watch the 2021 season again",
+  "weekByWeek": false,
+  "watchLast": "↺ Watch the 2021 season again",
+  "held": "📺 No week by week this season: the real 2022 season had one game called off for good, so two teams finished on 16 games.",
+  "heldBox": [
+   39,
+   383,
+   312,
+   70
+  ],
+  "entryBox": [
+   33,
+   376,
+   324,
+   92
+  ],
+  "sideways": false,
+  "width": 390
+ },
+ "B.savedAfter": {
+  "year": 2022,
+  "seasons": [
+   {
+    "year": 2018,
+    "games": 17,
+    "sacks": 4.9,
+    "result": "Missed the playoffs"
+   },
+   {
+    "year": 2019,
+    "games": 17,
+    "sacks": 3.2,
+    "result": "Missed the playoffs"
+   },
+   {
+    "year": 2020,
+    "games": 17,
+    "sacks": 1.4,
+    "result": "Lost in the Wild Card round"
+   },
+   {
+    "year": 2021,
+    "games": 17,
+    "sacks": 3.2,
+    "result": "Missed the playoffs"
+   }
+  ]
+ },
+ "B.errors": [],
+ "C.hubUp": true,
+ "C.hub2020": {
+  "play": "Play the 2020 season",
+  "entry": "📺 Week by week starts with the 2021 season: the real 2020 season had 16 games and the week by week view is built for 17.",
+  "weekByWeek": false,
+  "watchLast": null,
+  "held": "📺 Week by week starts with the 2021 season: the real 2020 season had 16 games and the week by week view is built for 17.",
+  "heldBox": [
+   37,
+   349,
+   316,
+   62
+  ],
+  "entryBox": [
+   33,
+   342,
+   324,
+   72
+  ],
+  "sideways": false,
+  "width": 390
+ },
+ "C.curtain2020": "THE 2020 SEASON Green Bay Packers · age 22 · WR Missed the playoffs 51 rec, 548 yds, 7 TD 🪞 Cole Fitzgerald went 61 rec, 880 yds, 7 TD and had the better year of the two of you. Head to head 0-1. Continue",
+ "C.saved2020": {
+  "year": 2021,
+  "seasons": [
+   {
+    "year": 2020,
+    "games": 16,
+    "result": "Missed the playoffs"
+   }
+  ]
+ },
+ "C.toHub": false,
+ "C.hub2021": {
+  "play": null,
+  "entry": null,
+  "weekByWeek": false,
+  "watchLast": null,
+  "held": null,
+  "heldBox": null,
+  "entryBox": null,
+  "sideways": false,
+  "width": 390
+ },
+ "C.viewerUp": false,
+ "C-new2021-390.kickoff": {
+  "up": false,
+  "text": "",
+  "cut": [],
+  "sideways": false,
+  "tiles": [],
+  "anims": 2
+ },
+ "C-new2021-390.liveAnims": 2,
+ "C-new2021-390.final": {
+  "up": false,
+  "text": "",
+  "cut": [],
+  "sideways": false,
+  "tiles": [],
+  "anims": 2
+ },
+ "C-new2021-390.review": {
+  "up": false,
+  "text": "",
+  "cut": [],
+  "sideways": false,
+  "tiles": [],
+  "anims": 2
+ },
+ "C.saved2021": {
+  "year": 2021,
+  "seasons": [
+   {
+    "year": 2020,
+    "games": 16,
+    "result": "Missed the playoffs"
+   }
+  ]
+ },
+ "C.errors": [],
+ "D.hubUp": true,
+ "D.howto": "How to play The steps Create your player: name, one of 8 positions (QB, RB, WR, TE, LB, CB, EDGE, K), and an archetype like Cannon Arm, Island Corner, Speed Bender or Ice in December that sets ceiling and durability. Pick your league: today's NFL, or the 2005 throwback with the Raiders in Oakland, the Chargers in San Diego and the Rams in St. Louis. Build your look: skin tone, hair, beard, accessories and a signature celebration, or hit Surprise me. Enter the draft. Your hidden rating decides the slot, and a real team calls your name. Check the depth chart. Top twelve picks open as starters; everyone else fights the incumbent in camp, every single summer, and backup seasons are spot duty until you take the job. Play each season with one tap: yards, touchdowns, awards, how far the team went. Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement. When the deal expires, work a real free agency window: competing offers from named teams with their own money, length and roster quality, and one push for more on any of them. Make up to three offseason calls, one card at a time: train skills or body, fix the knee or play through it, take the envelope or report it. Only the first card of a summer can move your rating, and a card you just saw rests for a while before it comes back (press moments follow your season, so those can come right back). After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again. Open the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school in the locker room is one sitting a season on odds that are printed before you sit in. Spend the money in 7 aisles: home, rides, investments, body, flex, family, and a shady aisle that only appears once you have something to hide. Read the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player dra",
+ "D.hub": {
+  "play": "Play the 2026 season",
+  "entry": "📺 Week by week",
+  "weekByWeek": true,
+  "watchLast": null,
+  "held": null,
+  "heldBox": null,
+  "entryBox": [
+   682,
+   273,
+   159,
+   44
+  ],
+  "sideways": false,
+  "width": 1280
+ },
+ "D.viewerUp": true,
+ "D-now-1280.kickoff": {
+  "up": true,
+  "text": "📺 Season Center Green Bay Packers · 2026 ? Back to your season 1 H LV 2 A HOU 3 H DET 4 H ATL 5 H TEN 6 A CAR 7 H NO 8 A DET 9 A TB 10 A CHI 11 H MIN 12 A DAL 13 A MIN 14 H LA 15 A JAX 16 H IND 17 H CHI LAST GAME Green Bay Packers 2026 · NFL 17 games · 9 home, 8 away · the league's schedule formula, this career's own draw FIRST FIVE 1 Home Las Vegas Raiders 2 Away Houston Texans 3 Home Detroit Lions 4 Home Atlanta Falcons 5 Home Tennessee Titans ▶ Kick off ⏭ Straight to the season review Before the first game 0-0 Home 0-0 Away 0-0 Division 0-0 Conference 0-0 GAME LOG No games yet. Season so far 0 played",
+  "cut": [],
+  "sideways": false,
+  "tiles": [],
+  "anims": 4
+ },
+ "D-now-1280.liveAnims": 2,
+ "D-now-1280.final": {
+  "up": true,
+  "text": "📺 Season Center Green Bay Packers · 2026 ? Back to your season 1 H LV W 35-31 2 A HOU 3 H DET 4 H ATL 5 H TEN 6 A CAR 7 H NO 8 A DET 9 A TB 10 A CHI 11 H MIN 12 A DAL 13 A MIN 14 H LA 15 A JAX 16 H IND 17 H CHI LAST GAME Game 1 · Home GB 35-31 LV FINAL Final Q1 14:00 🏈 Touchdown! You throw it. Q1 11:00 🏈 Touchdown! You throw it. Q1 9:00 🏈 Touchdown, Las Vegas Raiders. Q1 5:00 You are picked off. Q2 12:00 🏈 Touchdown! You throw it. Q2 5:00 🏈 Touchdown, Las Vegas Raiders. Q2 3:00 🏈 Touchdown! You throw it. Q3 10:00 You are picked off. Q4 11:00 🏈 Touchdown, Las Vegas Raiders. Q4 7:00 🥅 Field goal, Las Vegas Raiders. Q4 3:00 🏈 Touchdown, Las Vegas Raiders. Q4 1:00 🏈 Touchdown! You thr",
+  "cut": [],
+  "sideways": false,
+  "tiles": [],
+  "anims": 0
+ },
+ "D-now-1280.review": {
+  "up": true,
+  "text": "📺 Season Center Green Bay Packers · 2026 ? Back to your season 1 H LV W 35-31 2 A HOU W 29-23 3 H DET L 14-28 4 H ATL W 33-31 5 H TEN L 14-15 6 A CAR L 17-28 7 H NO L 17-31 8 A DET L 24-45 9 A TB W 10-6 10 A CHI W 28-23 11 H MIN W 38-28 12 A DAL W 20-13 13 A MIN L 24-27 14 H LA L 17-18 15 A JAX W 27-14 16 H IND L 13-17 17 H CHI LAST GAME W 20-17 Season review 9-8 · Missed the playoffs 17 Games 2,870 Pass yds 16 Pass TD 19 INT Regular season, the same numbers as your season card. ⭐ Best game: Game 1, W 35-31 vs Las Vegas Raiders, 165 yards, 5 touchdowns, 2 interceptions Last five: L L W L W After game 17 9-8 Home 4-5 Away 5-3 Streak W1 Division 3-3 Conference 6-6 Last 10: L W W W W L L W L W",
+  "cut": [],
+  "sideways": false,
+  "tiles": [
+   "Games=17",
+   "Pass yds=2,870",
+   "Pass TD=16",
+   "INT=19"
+  ],
+  "anims": 4
+ },
+ "D.viewerHelp": "📺 Season Center Green Bay Packers · 2026 ? Back to your season 1 H LV W 35-31 2 A HOU W 29-23 3 H DET L 14-28 4 H ATL W 33-31 5 H TEN L 14-15 6 A CAR L 17-28 7 H NO L 17-31 8 A DET L 24-45 9 A TB W 10-6 10 A CHI W 28-23 11 H MIN W 38-28 12 A DAL W 20-13 13 A MIN L 24-27 14 H LA L 17-18 15 A JAX W 27-14 16 H IND L 13-17 17 H CHI LAST GAME W 20-17 Season review 9-8 · Missed the playoffs 17 Games 2,870 Pass yds 16 Pass TD 19 INT Regular season, the same numbers as your season card. ⭐ Best game: Game 1, W 35-31 vs Las Vegas Raiders, 165 yards, 5 touchdowns, 2 interceptions Last five: L L W L W After game 17 9-8 Home 4-5 Away 5-3 Streak W1 Division 3-3 Conference 6-6 Last 10: L W W W W L L W L W GAME LOG G17 H CHI W 20-17 157 YDS 1 TD 1 INT G16 H IND L 13-17 84 YDS 0 TD 1 INT G15 A JAX W 27-14 111 YDS 1 TD 0 INT G14 H LA L 17-18 147 YDS 0 TD 1 INT G13 A MIN L 24-27 261 YDS 2 TD 0 INT G12 A DAL W 20-13 133 YDS 0 TD 1 INT G11 H MIN W 38-28 175 YDS 2 TD 1 INT G10 A CHI W 28-23 116 YDS 1 TD 0 INT G9 A TB W 10-6 131 YDS 0 TD 0 INT G8 A DET L 24-45 201 YDS 0 TD 2 INT G7 H NO L 17-31 274 YDS 1 TD 0 INT G6 A CAR L 17-28 148 YDS 0 TD 1 INT G5 H TEN L 14-15 103 YDS 0 TD 2 INT G4 H ATL W 33-31 268 YDS 2 TD 1 INT G3 H DET L 14-28 189 YDS 0 TD 5 INT G2 A HOU W 29-23 207 YDS 1 TD 1 INT G1 H LV W 35-31 165 YDS 5 TD 2 INT Season so far 17 played · 2,870 pass yds · 16 td · 19 int Back to your season How the Season Center works Your season was played the moment you pressed the button. This is that same season, game by game, so nothing here can change it. Your career is the same whether you watch or not. The teams, the divisions and how often you meet each one follow the league's standard schedule formula. Who you meet in which game, every score and every stat line are this career's own, not a real schedule. Your team's record is this career's own too. It always fits how your season ended: here a champion wins 11 to 15 of 17 and a team that missed the playoffs 2 to 9. If a contract talk comes up when you press Week by week, answer it first. If you play the year out, the season runs straight away and you can open it afterwards with Watch again. ▶ plays the next game. ⏩ jumps to the next big one (halfway, the last game). ⏭ goes straight to the end. 1x and 3x set the clock, Results shows each game at the final. WORKED EXAMPLES A game Say you are a quarterback. Game 9, away to the Chicago Bears. You lose 24-27 and throw for 286 yards and 2 touchdowns. Your record goes to 6-3. Your totals Whatever your season card says (4,210 passing yards and 31 touchdowns, say), every game here a",
+ "D.errors": [],
+ "E.hubUp": true,
+ "E.viewerUp": true,
+ "E.reduced": {
+  "up": true,
+  "text": "📺 Season Center Green Bay Packers · 2026 ? Back to your season 1 H LV W 35-31 2 A HOU 3 H DET 4 H ATL 5 H TEN 6 A CAR 7 H NO 8 A DET 9 A TB 10 A CHI 11 H MIN 12 A DAL 13 A MIN 14 H LA 15 A JAX 16 H IND 17 H CHI LAST GAME Game 1 · Home GB 35-31 LV FINAL Final Q1 14:00 🏈 Touchdown! You throw it. Q1 11:00 🏈 Touchdown! You throw it. Q1 9:00 🏈 Touchdown, Las Vegas Raiders. Q1 5:00 You are picked off. Q2 12:00 🏈 Touchdown! You throw it. Q2 5:00 🏈 Touchdown, Las Vegas Raiders. Q2 3:00 🏈 Touchdown! You throw it. Q3 10:00 You are picked off. Q4 11:00 🏈 Touchdown, Las Vegas Raiders. Q4 7:00 🥅 Field goal, Las Vegas Raiders. Q4 3:00 🏈 Touchdown, Las Vegas Raiders. Q4 1:00 🏈 Touchdown! You thr",
+  "cut": [],
+  "sideways": false,
+  "tiles": [],
+  "anims": 0
+ },
+ "E.reviewAnims": 0,
+ "E.errors": [],
+ "F.hubUp": true,
+ "F.hub": {
+  "play": "Play the 2021 season",
+  "entry": "📺 Week by week",
+  "weekByWeek": true,
+  "watchLast": null,
+  "held": null,
+  "heldBox": null,
+  "entryBox": [
+   33,
+   342,
+   324,
+   44
+  ],
+  "sideways": false,
+  "width": 390
+ },
+ "F.viewerUp": true,
+ "F.refused": {
+  "notice": true,
+  "toasts": [
+   "Your latest changes could not be saved. Stay on this page and use Retry save. Retry here does the same thing. Retry"
+  ],
+  "hit": [
+   {
+    "words": "Retry",
+    "box": [
+     293,
+     670,
+     64,
+     44
+    ],
+    "onTop": true
+   },
+   {
+    "words": "Retry save",
+    "box": [
+     29,
+     257,
+     96,
+     44
+    ],
+    "onTop": false
+   }
+  ],
+  "storageLine": [
+   "Your latest progress has not been saved. Stay on this page and try again.Retry save"
+  ]
+ },
+ "F.storeUntouched": true,
+ "F.pressed": [
+  325,
+  691.65625,
+  "Retry"
+ ],
+ "F.afterRetry": {
+  "notice": false,
+  "toasts": [],
+  "hit": [],
+  "storageLine": []
+ },
+ "F.savedAfterRetry": {
+  "year": 2022,
+  "seasons": [
+   {
+    "year": 2021,
+    "games": 17,
+    "sacks": 4.5,
+    "result": "Missed the playoffs"
+   }
+  ]
+ },
+ "F.viewerStillUp": true,
+ "F.hubAfterReload": false,
+ "F.savedAfterReload": {
+  "year": 2022,
+  "seasons": [
+   {
+    "year": 2021,
+    "games": 17,
+    "sacks": 4.5,
+    "result": "Missed the playoffs"
+   }
+  ]
+ },
+ "F.errors": [],
+ "G/": {
+  "footers": 1,
+  "fanProject": 1,
+  "uefa": 1,
+  "cookieChoices": 1,
+  "counts": [
+   "130+ free games",
+   "36 games",
+   "11 games",
+   "17 games",
+   "12 games",
+   "20 games"
+  ],
+  "reportBug": 1,
+  "sideways": false
+ },
+ "G/nfl-my-career": {
+  "footers": 1,
+  "fanProject": 1,
+  "uefa": 1,
+  "cookieChoices": 1,
+  "counts": [
+   "10 games",
+   "16 games",
+   "17 games"
+  ],
+  "reportBug": 1,
+  "sideways": false
+ },
+ "G/whats-new": {
+  "footers": 1,
+  "fanProject": 1,
+  "uefa": 3,
+  "cookieChoices": 2,
+  "counts": [
+   "16 games",
+   "82 games",
+   "100+ free games",
+   "127 games",
+   "113 games",
+   "65 games",
+   "130+ games"
+  ],
+  "reportBug": 4,
+  "sideways": false
+ },
+ "G/about": {
+  "footers": 1,
+  "fanProject": 1,
+  "uefa": 1,
+  "cookieChoices": 1,
+  "counts": [
+   "100 games"
+  ],
+  "reportBug": 3,
+  "sideways": false
+ },
+ "G/soccer-career": {
+  "footers": 1,
+  "fanProject": 1,
+  "uefa": 1,
+  "cookieChoices": 1,
+  "counts": [],
+  "reportBug": 1,
+  "sideways": false
+ },
+ "G.llms": "130+ games",
+ "G.indexHtmlCounts": [
+  "10+ games"
+ ],
+ "aborted supabase requests": 17
+}

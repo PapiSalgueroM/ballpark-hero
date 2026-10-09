@@ -1,0 +1,112 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/usSeason.test.ts [2m([22m[2m26 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 229[2mms[22m[39m
+   [32m✓[39m the season length ledger[2m > [22mhas windows in order that never overlap or leave a gap, the last one open[32m 3[2mms[22m[39m
+   [32m✓[39m the season length ledger[2m > [22mholds a year exactly when its real length is not the one the career plays[32m 7[2mms[22m[39m
+[31m   [31m×[31m the season length ledger[2m > [22msays each kind of held year in its own words[39m[32m 11[2mms[22m[39m
+[31m     → expected '📺 Week by week starts with the 2023 …' to be '📺 Week by week starts with the 2021 …' // Object.is equality[39m
+   [32m✓[39m the league shape ledger[2m > [22mhas whole divisions, no team twice, and two conferences of equal size[32m 3[2mms[22m[39m
+   [32m✓[39m the league shape ledger[2m > [22mnever has two windows for one sport, era and year[32m 0[2mms[22m[39m
+   [32m✓[39m the league shape ledger[2m > [22manswers only for the era and the years it holds[32m 0[2mms[22m[39m
+   [32m✓[39m the league shape ledger[2m > [22mknows who hosts the 17th game only where two sources say so[32m 0[2mms[22m[39m
+   [32m✓[39m the league shape ledger[2m > [22mholds a scoring mean for both NBA eras[32m 0[2mms[22m[39m
+   [32m✓[39m splitTotal[2m > [22malways sums to the total with every cap and minimum held[32m 31[2mms[22m[39m
+   [32m✓[39m splitTotal[2m > [22mgives null when the caps or the minimums cannot hold the total[32m 1[2mms[22m[39m
+   [32m✓[39m splitTotal[2m > [22mfollows the weights, and a zero weight only gets what is forced[32m 1[2mms[22m[39m
+   [32m✓[39m dealUnnamed[2m > [22mmeets every opponent once, one game a round, home and away split evenly[32m 27[2mms[22m[39m
+   [32m✓[39m dealUnnamed[2m > [22mkeys the side of the odd game, so both eight and nine home games happen[32m 1[2mms[22m[39m
+   [32m✓[39m the NBA schedule formula, dealt for every team[2m > [22mmeets every kind of opponent as often as the formula says, 41 at home, whoever he plays for[32m 44[2mms[22m[39m
+   [32m✓[39m the NBA schedule formula, dealt for every team[2m > [22mis caught when a division rival is met three times[32m 1[2mms[22m[39m
+   [32m✓[39m an NBA season, derived from its saved line[2m > [22mlands the games played, the averages, the band and the names[32m 22[2mms[22m[39m
+   [32m✓[39m an NBA season, derived from its saved line[2m > [22mholds a year whose real length is not 82, and never names a throwback opponent[32m 3[2mms[22m[39m
+   [32m✓[39m an NBA season, derived from its saved line[2m > [22mgives each stat its own number a game, so a big scoring night is not by rule his best rebounding night[32m 4[2mms[22m[39m
+   [32m✓[39m an NBA season, derived from its saved line[2m > [22monly calls a night a takeover when it was one: 20 or more, 1.3 times his average, in a win[32m 20[2mms[22m[39m
+   [32m✓[39m an NBA season, derived from its saved line[2m > [22mnames a team of his own season in the worked example, never his own, and nobody when unnamed[32m 1[2mms[22m[39m
+   [32m✓[39m an NBA season, derived from its saved line[2m > [22mprints his points once: the chip is the points, the bits are the rest[32m 0[2mms[22m[39m
+   [32m✓[39m an NBA season, derived from its saved line[2m > [22mgives no view to a banned year or a season with no games[32m 0[2mms[22m[39m
+   [32m✓[39m the NBA playoff path[2m > [22mlays out every depth and every number of playoff games that fits it[32m 20[2mms[22m[39m
+   [32m✓[39m the NBA playoff path[2m > [22mdraws every round before the Finals from his own conference, and only the Finals from the other[32m 18[2mms[22m[39m
+   [32m✓[39m the NBA playoff path[2m > [22mhas no path for a missed postseason or a result the engine never wrote[32m 1[2mms[22m[39m
+   [32m✓[39m the NBA clock[2m > [22mreads a quarter at every minute[32m 3[2mms[22m[39m
+ [31m❯[39m src/test/nflTruthRules1104.test.ts [2m([22m[2m6 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 439[2mms[22m[39m
+[31m   [31m×[31m Round 1104: the loop reads the length of the season it is looking at[2m > [22ma full 16 game season before 2021 is a full season, and 16 of 17 is not[39m[32m 15[2mms[22m[39m
+[31m     → expected 16 to be 17 // Object.is equality[39m
+[31m   [31m×[31m Round 1104: the loop reads the length of the season it is looking at[2m > [22mthe paper counts missed games from the season that was played[39m[32m 28[2mms[22m[39m
+[31m     → expected [] to deeply equal [ Array(1) ][39m
+   [32m✓[39m Round 1104: awards and injuries read the season length[2m > [22m2005: the gate is the schedule less two, and an injury is counted off the schedule[32m 255[2mms[22m[39m
+   [32m✓[39m Round 1104: awards and injuries read the season length[2m > [22m2026: the gate is the schedule less two, and an injury is counted off the schedule[32m 139[2mms[22m[39m
+   [32m✓[39m Round 1104: the award pace line[2m > [22mscores a 16 game season at pace exactly like the same production over 17 games, in all eight positions[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1104: the award pace line[2m > [22mleaves a distance alone, never writes into the saved line, and is the line itself at 17 games[32m 0[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m29 passed[39m[22m[90m (32)[39m
+[2m   Start at [22m 12:07:36
+[2m   Duration [22m 2.01s[2m (transform 876ms, setup 130ms, collect 1.39s, tests 668ms, environment 672ms, prepare 338ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nflTruthRules1104.test.ts,title=src/test/nflTruthRules1104.test.ts > Round 1104%3A the loop reads the length of the season it is looking at > a full 16 game season before 2021 is a full season%2C and 16 of 17 is not,line=46,column=35::AssertionError: expected 16 to be 17 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 17%0A+ 16%0A%0A ❯ src/test/nflTruthRules1104.test.ts:46:35%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nflTruthRules1104.test.ts,title=src/test/nflTruthRules1104.test.ts > Round 1104%3A the loop reads the length of the season it is looking at > the paper counts missed games from the season that was played,line=58,column=28::AssertionError: expected [] to deeply equal [ Array(1) ]%0A%0A- Expected%0A+ Received%0A%0A- [%0A-   "Injury cost Rule Probe 4 games this season",%0A- ]%0A+ []%0A%0A ❯ src/test/nflTruthRules1104.test.ts:58:28%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeason.test.ts,title=src/test/usSeason.test.ts > the season length ledger > says each kind of held year in its own words,line=50,column=43::AssertionError: expected '📺 Week by week starts with the 2023 …' to be '📺 Week by week starts with the 2021 …' // Object.is equality%0A%0AExpected: "📺 Week by week starts with the 2021 season: the real 2005 season had 16 games and the week by week view is built for 17."%0AReceived: "📺 Week by week starts with the 2023 season: the real 2005 season had 16 games and the week by week view is built for 17."%0A%0A ❯ src/test/usSeason.test.ts:50:43%0A%0A
+
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/nflTruthRules1104.test.ts[2m > [22mRound 1104: the loop reads the length of the season it is looking at[2m > [22ma full 16 game season before 2021 is a full season, and 16 of 17 is not
+[31m[1mAssertionError[22m: expected 16 to be 17 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 17[39m
+[31m+ 16[39m
+
+[36m [2m❯[22m src/test/nflTruthRules1104.test.ts:[2m46:35[22m[39m
+    [90m 44| [39m    c.seasons = [plain(c, 2005, 16), plain(c, 2006, 15), plain(c, 2020…
+    [90m 45| [39m    [34mexpect[39m([34mnflSeasonLength[39m([34m2020[39m))[33m.[39m[34mtoBe[39m([34m16[39m)[33m;[39m
+    [90m 46| [39m    [34mexpect[39m([34mnflSeasonLength[39m([34m2021[39m))[33m.[39m[34mtoBe[39m([34m17[39m)[33m;[39m
+    [90m   | [39m                                  [31m^[39m
+    [90m 47| [39m    [34mexpect[39m([34mnflBadgeFacts[39m(c)[33m.[39mfullSeasons)[33m.[39m[34mtoBe[39m([34m3[39m)[33m;[39m
+    [90m 48| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/nflTruthRules1104.test.ts[2m > [22mRound 1104: the loop reads the length of the season it is looking at[2m > [22mthe paper counts missed games from the season that was played
+[31m[1mAssertionError[22m: expected [] to deeply equal [ Array(1) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [[39m
+[32m-   "Injury cost Rule Probe 4 games this season",[39m
+[32m- ][39m
+[31m+ [][39m
+
+[36m [2m❯[22m src/test/nflTruthRules1104.test.ts:[2m58:28[22m[39m
+    [90m 56| [39m    expect(cost(2005, 12)).toEqual([`Injury cost ${NAME} 4 games this …
+    [90m 57| [39m    [34mexpect[39m([34mcost[39m([34m2021[39m[33m,[39m [34m14[39m))[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m 58| [39m    expect(cost(2021, 13)).toEqual([`Injury cost ${NAME} 4 games this …
+    [90m   | [39m                           [31m^[39m
+    [90m 59| [39m    /* A bench year is short by design and is never written up as an i…
+    [90m 60| [39m    [35mconst[39m bench [33m=[39m { [33m...[39mc[33m,[39m role[33m:[39m [32m'backup'[39m [35mas[39m [35mconst[39m }[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeason.test.ts[2m > [22mthe season length ledger[2m > [22msays each kind of held year in its own words
+[31m[1mAssertionError[22m: expected '📺 Week by week starts with the 2023 …' to be '📺 Week by week starts with the 2021 …' // Object.is equality[39m
+
+Expected: [32m"📺 Week by week starts with the 202[7m1[27m season: the real 2005 season had 16 games and the week by week view is built for 17."[39m
+Received: [31m"📺 Week by week starts with the 202[7m3[27m season: the real 2005 season had 16 games and the week by week view is built for 17."[39m
+
+[36m [2m❯[22m src/test/usSeason.test.ts:[2m50:43[22m[39m
+    [90m 48| [39m  [34mit[39m([32m'says each kind of held year in its own words'[39m[33m,[39m () [33m=>[39m {
+    [90m 49| [39m    /* Since Round 1104 an NFL throwback plays the real 16 games of 20…
+    [90m 50| [39m    expect(usSeasonHeldLine('nfl', 2005)).toBe('📺 Week by week starts…
+    [90m   | [39m                                          [31m^[39m
+    [90m 51| [39m    expect(usSeasonHeldLine('nfl', 2020)).toContain('starts with the 2…
+    [90m 52| [39m    for (let year = 2005; year <= 2026; year++) expect(usSeasonHeldLin…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯[22m[39m
+

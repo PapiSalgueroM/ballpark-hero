@@ -1,0 +1,47 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/usSeasonCentre.test.tsx [2m([22m[2m9 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 589[2mms[22m[39m
+   [32m✓[39m the US Season Center, mounted by itself[2m > [22mwalks an NBA season from the tip off card to the review and closes[32m 271[2mms[22m[39m
+   [32m✓[39m the US Season Center, mounted by itself[2m > [22mshows one honest tile for a year whose real length is not the one the career plays[32m 11[2mms[22m[39m
+   [32m✓[39m the US Season Center, mounted by itself[2m > [22moffers Retry when the numbers cannot be loaded, and loads on the second try[32m 81[2mms[22m[39m
+   [32m✓[39m the US Season Center, mounted by itself[2m > [22mshows the plain tile, never a throw, for a binding with no Season Center[32m 6[2mms[22m[39m
+   [32m✓[39m the US Season Center with the NFL bound[2m > [22mwalks a QB season from the kick off card to the review: drives on the clock, his line, the record and his totals[32m 85[2mms[22m[39m
+   [32m✓[39m the US Season Center with the NFL bound[2m > [22mwalks a K season from the kick off card to the review: drives on the clock, his line, the record and his totals[32m 57[2mms[22m[39m
+   [32m✓[39m the US Season Center with the NFL bound[2m > [22mwalks a LB season from the kick off card to the review: drives on the clock, his line, the record and his totals[32m 51[2mms[22m[39m
+   [32m✓[39m the US Season Center with the NFL bound[2m > [22mprints the NFL playoff sentence as the save holds it, one game as "1 game", and every round with no score[32m 8[2mms[22m[39m
+[31m   [31m×[31m the US Season Center with the NFL bound[2m > [22mshows the held line, never a guess, for a throwback season the real league played 16 games of[39m[32m 18[2mms[22m[39m
+[31m     → usSeasonCentre.test: no QB career of seed nfl-centre-held has a full season[39m
+ [32m✓[39m src/test/usSeasonCentreEntry.test.tsx [2m([22m[2m39 tests[22m[2m)[22m[33m 4139[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 1507[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 356[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 1035[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 344[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m47 passed[39m[22m[90m (48)[39m
+[2m   Start at [22m 12:07:28
+[2m   Duration [22m 7.41s[2m (transform 2.45s, setup 104ms, collect 4.20s, tests 4.73s, environment 685ms, prepare 290ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonCentre.test.tsx,title=src/test/usSeasonCentre.test.tsx > the US Season Center with the NFL bound > shows the held line%2C never a guess%2C for a throwback season the real league played 16 games of,line=141,column=9::Error: usSeasonCentre.test: no QB career of seed nfl-centre-held has a full season%0A ❯ playNfl src/test/usSeasonCentre.test.tsx:141:9%0A ❯ src/test/usSeasonCentre.test.tsx:230:20%0A%0A
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonCentre.test.tsx[2m > [22mthe US Season Center with the NFL bound[2m > [22mshows the held line, never a guess, for a throwback season the real league played 16 games of
+[31m[1mError[22m: usSeasonCentre.test: no QB career of seed nfl-centre-held has a full season[39m
+[36m [2m❯[22m playNfl src/test/usSeasonCentre.test.tsx:[2m141:9[22m[39m
+    [90m139| [39m    [35mreturn[39m career[33m;[39m
+    [90m140| [39m  }
+    [90m141| [39m  throw new Error(`usSeasonCentre.test: no ${pos} career of seed ${see…
+    [90m   | [39m        [31m^[39m
+    [90m142| [39m}
+    [90m143| [39m
+[90m [2m❯[22m src/test/usSeasonCentre.test.tsx:[2m230:20[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+

@@ -1,0 +1,68 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/usSeason.test.ts [2m([22m[2m26 tests[22m[2m)[22m[33m 306[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonNfl.test.ts [2m([22m[2m35 tests[22m[2m)[22m[33m 1836[2mms[22m[39m
+   [33m[2m✓[22m[39m nflDrives[2m > [22mmakes every score from 0 to 70, with 0 to 5 touchdowns of his and every exact field goal count [33m 419[2mms[22m[39m
+   [33m[2m✓[22m[39m an NFL season, derived from its saved line[2m > [22mlands every total of every position, game by game, with drives that make each score [33m 396[2mms[22m[39m
+   [33m[2m✓[22m[39m the feed, minute by minute[2m > [22mnever puts two lines in back to back minutes, or two scoring drives of one side under three minutes apart, where the hour has room [33m 327[2mms[22m[39m
+ [31m❯[39m src/test/usSeasonCentre.test.tsx [2m([22m[2m9 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 804[2mms[22m[39m
+   [33m[2m✓[22m[39m the US Season Center, mounted by itself[2m > [22mwalks an NBA season from the tip off card to the review and closes [33m 399[2mms[22m[39m
+   [32m✓[39m the US Season Center, mounted by itself[2m > [22mshows one honest tile for a year whose real length is not the one the career plays[32m 13[2mms[22m[39m
+   [32m✓[39m the US Season Center, mounted by itself[2m > [22moffers Retry when the numbers cannot be loaded, and loads on the second try[32m 112[2mms[22m[39m
+   [32m✓[39m the US Season Center, mounted by itself[2m > [22mshows the plain tile, never a throw, for a binding with no Season Center[32m 6[2mms[22m[39m
+   [32m✓[39m the US Season Center with the NFL bound[2m > [22mwalks a QB season from the kick off card to the review: drives on the clock, his line, the record and his totals[32m 114[2mms[22m[39m
+   [32m✓[39m the US Season Center with the NFL bound[2m > [22mwalks a K season from the kick off card to the review: drives on the clock, his line, the record and his totals[32m 64[2mms[22m[39m
+   [32m✓[39m the US Season Center with the NFL bound[2m > [22mwalks a LB season from the kick off card to the review: drives on the clock, his line, the record and his totals[32m 62[2mms[22m[39m
+   [32m✓[39m the US Season Center with the NFL bound[2m > [22mprints the NFL playoff sentence as the save holds it, one game as "1 game", and every round with no score[32m 8[2mms[22m[39m
+[31m   [31m×[31m the US Season Center with the NFL bound[2m > [22mshows the held line, never a guess, for a throwback season the real league played 16 games of[39m[32m 22[2mms[22m[39m
+[31m     → usSeasonCentre.test: no QB career of seed nfl-centre-held has a full season[39m
+ [32m✓[39m src/test/nflTruthRules1104.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 741[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: awards and injuries read the season length[2m > [22m2005: the gate is the schedule less two, and an injury is counted off the schedule [33m 399[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: awards and injuries read the season length[2m > [22m2026: the gate is the schedule less two, and an injury is counted off the schedule [33m 308[2mms[22m[39m
+ [32m✓[39m src/test/usCareerHelpRules1104.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 523[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonCentreEntry.test.tsx [2m([22m[2m39 tests[22m[2m)[22m[33m 5205[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 2442[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 446[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 1018[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 329[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m117 passed[39m[22m[90m (118)[39m
+[2m   Start at [22m 12:05:13
+[2m   Duration [22m 9.22s[2m (transform 3.29s, setup 425ms, collect 6.69s, tests 9.41s, environment 3.30s, prepare 958ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonCentre.test.tsx,title=src/test/usSeasonCentre.test.tsx > the US Season Center with the NFL bound > shows the held line%2C never a guess%2C for a throwback season the real league played 16 games of,line=141,column=9::Error: usSeasonCentre.test: no QB career of seed nfl-centre-held has a full season%0A ❯ playNfl src/test/usSeasonCentre.test.tsx:141:9%0A ❯ src/test/usSeasonCentre.test.tsx:230:20%0A%0A
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mNFL My Career shows slot pay, the kicker rule, the 16 game throwback and the bank, once each
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mthe NBA, MLB and NHL pages show the bank line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mthe NBA, MLB and NHL pages show the bank line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mthe NBA, MLB and NHL pages show the bank line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonCentre.test.tsx[2m > [22mthe US Season Center with the NFL bound[2m > [22mshows the held line, never a guess, for a throwback season the real league played 16 games of
+[31m[1mError[22m: usSeasonCentre.test: no QB career of seed nfl-centre-held has a full season[39m
+[36m [2m❯[22m playNfl src/test/usSeasonCentre.test.tsx:[2m141:9[22m[39m
+    [90m139| [39m    [35mreturn[39m career[33m;[39m
+    [90m140| [39m  }
+    [90m141| [39m  throw new Error(`usSeasonCentre.test: no ${pos} career of seed ${see…
+    [90m   | [39m        [31m^[39m
+    [90m142| [39m}
+    [90m143| [39m
+[90m [2m❯[22m src/test/usSeasonCentre.test.tsx:[2m230:20[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+

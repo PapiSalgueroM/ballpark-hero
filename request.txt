@@ -1,0 +1,5 @@
+# AP2 runner lens: mutations of the seam's rules (serial inside one command) and the reviewer's walk
+#!serve
+#!playwright
+mut: node .rc/x/mut.mjs
+walk: node .rc/x/walkAP2.mjs
