@@ -1,0 +1,77 @@
+1) the curve: the cap holds, it never falls as value rises, and it fails closed
+   curve 2: 32 ages by 47 value ratings read; the cap is 94 at every age; four bad calls all throw
+2) one scale everywhere: every file carries the stamp and every row sits on the curve
+   the 2026 squads                curve 2, 4401 rows, 0 off the curve, 88.4% pinned to one value rating
+   the A-League                   curve 2,  310 rows, 0 off the curve, 70.3% pinned to one value rating, 61 with no value held to the floor
+   the Russian Premier League     curve 2,  403 rows, 0 off the curve, 86.8% pinned to one value rating, 3 with no value held to the floor
+   the 2005 season                curve 2, 1727 rows, 0 off the curve, 72.1% pinned to one value rating, rated at age plus 1
+   the 2010 season                curve 2, 1751 rows, 0 off the curve, 90.2% pinned to one value rating, rated at age plus 1
+   the 2015 season                curve 2, 1659 rows, 0 off the curve, 91.6% pinned to one value rating, rated at age plus 1
+   the 2020 season                curve 2, 1774 rows, 0 off the curve, 95.7% pinned to one value rating, rated at age plus 1
+   the real free agents           curve 2,    7 rows, 0 off the curve, 0.0% pinned to one value rating
+   the era generators: 6 calls of the curve read, 6 pass the age plus ERA_RATING_AGE_SHIFT
+3) the outcome, man by man: inside a club, does the rating order agree with who was played?
+   the 2026 rows (the block the constants were chosen on): 135 clubs, 2235 men
+      value rating alone 0.235, read with age 0.270: gain +0.035 (standard error 0.010; 86 clubs better, 49 worse; bootstrap fifth percentile 0.019, median 0.035)
+   the 2025 rows (held out: no constant was chosen on them): 120 clubs, 2000 men
+      value rating alone 0.399, read with age 0.437: gain +0.038 (standard error 0.010; 71 clubs better, 48 worse; bootstrap fifth percentile 0.022, median 0.038)
+4) club by club against the real 2025-26 tables (printed, not a gate), and the two committed tables agree
+   A-League Men             12 of 12 clubs  value rating 0.762  shipped 0.606  -0.156
+   Belgian Pro League       10 of 16 clubs  value rating 0.442  shipped 0.527  +0.085
+   Brasileirão Série A      15 of 20 clubs  value rating 0.724  shipped 0.717  -0.007
+   Bundesliga               15 of 18 clubs  value rating 0.943  shipped 0.910  -0.033
+   EFL Championship         16 of 24 clubs  value rating 0.381  shipped 0.373  -0.009
+   La Liga                  17 of 20 clubs  value rating 0.748  shipped 0.731  -0.017
+   Liga MX                  12 of 18 clubs  value rating 0.333  shipped 0.294  -0.039
+   Ligue 1                  16 of 18 clubs  value rating 0.744  shipped 0.787  +0.043
+   MLS Eastern Conference   11 of 15 clubs  value rating 0.127  shipped 0.027  -0.100
+   MLS Western Conference   10 of 15 clubs  value rating 0.109  shipped 0.170  +0.061
+   Premier League           17 of 20 clubs  value rating 0.414  shipped 0.307  -0.107
+   Primeira Liga             8 of 18 clubs  value rating 0.952  shipped 0.952  +0.000
+   Serie A                  17 of 20 clubs  value rating 0.846  shipped 0.840  -0.006
+   Süper Lig                 9 of 18 clubs  value rating 0.967  shipped 0.983  +0.017
+   mean of 14 leagues: value rating 0.607, shipped 0.587. Too few clubs in both seasons with 8 men to measure: 2. Bundesliga (2), Austrian Bundesliga (3), Danish Superliga (4), Eredivisie (7), Ligue 2 (2), Saudi Pro League (7), Scottish Premiership (2), Segunda División (0), Serie B (0), Super League Greece (4), SuperSport HNL (2), Swiss Super League (2)
+   the Round 612 tables and the folded tables: 15 leagues, 145 clubs in both, 0 placed differently
+   tiers at 87, 83, 78 over the clubs with 8 or more men: 8/17/41/193 on the value rating, 7/14/44/194 shipped
+   clubs whose tier differs between the two (10): AC Milan 82.9 to 83 (tier 3 to 2); Al-Nassr 76.7 to 78.4 (tier 4 to 3); Bournemouth 83.4 to 82.5 (tier 2 to 3); Brighton 83.4 to 82.6 (tier 2 to 3); Chelsea 87.5 to 86.9 (tier 1 to 2); Como 83.4 to 82.4 (tier 2 to 3); Feyenoord 78.2 to 77.7 (tier 3 to 4); Hull City 78.6 to 77.4 (tier 3 to 4); RB Leipzig 83.2 to 82.5 (tier 2 to 3); Roma 83.5 to 82.6 (tier 2 to 3)
+5) the spread: do the shipped elevens give a league about as wide as the real one?
+   A-League Men         12 clubs  real 0.280  shipped 0.295  value rating 0.284  flat 0.281  stretch 0.277  elevens 56.5 to 61.7
+   Brasileirão Série A  15 clubs  real 0.304  shipped 0.324  value rating 0.325  flat 0.289  stretch 0.372  elevens 67.7 to 79.4
+   Bundesliga           15 clubs  real 0.472  shipped 0.378  value rating 0.380  flat 0.285  stretch 0.481  elevens 75.0 to 87.5
+   EFL Championship     16 clubs  real 0.206  shipped 0.297  value rating 0.301  flat 0.291  stretch 0.318  elevens 66.8 to 76.6
+   La Liga              17 clubs  real 0.409  shipped 0.432  value rating 0.440  flat 0.298  stretch 0.555  elevens 72.9 to 88.9
+   Liga MX              12 clubs  real 0.398  shipped 0.346  value rating 0.341  flat 0.353  stretch 0.358  elevens 66.9 to 74.6
+   Ligue 1              16 clubs  real 0.381  shipped 0.386  value rating 0.386  flat 0.284  stretch 0.485  elevens 71.6 to 88.5
+   Premier League       17 clubs  real 0.311  shipped 0.296  value rating 0.290  flat 0.249  stretch 0.361  elevens 81.1 to 88.7
+   Serie A              17 clubs  real 0.376  shipped 0.348  value rating 0.347  flat 0.264  stretch 0.442  elevens 73.9 to 85.1
+   mean miss over 9 leagues: shipped 0.038, value rating 0.039, flat 0.079, stretch 0.066 (the rule: 1.25 plus 0.055 a point, clamped 0.12 to 4.2, capped at 7, home 0.2, away -0.08)
+   the slope that would give each league its real spread on the shipped ratings: median 0.054 (the engine ships 0.055); for Round 1109, not a gate
+   the game's Premier League, 20 clubs: best eleven Arsenal 88.7, worst Hull City 77.4, apart 11.4 (on the value rating 10.1); standard deviation 3.00 (2.85)
+6) ages: a man with a birth date on file ships his exact age, and the table rule is what the ledger shows
+[control agesasis: every ledgered man is read a year younger than the file ships him, as before the round]
+  FAIL [6]: 423 of 423 men with a birth date on file do not ship their exact age on 2026-08-01: Ardon Jashari (AC Milan) ships 23, born 2002-07-30 is 24; Luka Modrić (AC Milan) ships 39, born 1985-09-09 is 40; Kervin Arriaga (AEK Athens) ships 27, born 1998-01-05 is 28; Peer Koopmeiners (AZ Alkmaar) ships 25, born 2000-05-04 is 26
+   (a) 423 men with a birth date on file, 105 of them on this round's ledger: 0 ship their exact age on 2026-08-01
+   (b) of the Round 669 ledger's 366 written rows (age on 2026-01-01), 257 are a year older on 2026-08-01: 0.702 (257 of 366 on 2026-10-07)
+   (c) the rule's five literal cases and its three throws all hold
+   (d) the file says: 423 from a birth date, 3974 moved on from the table, 4 as written, 0 unknown, of 4401
+   (e) 82 ledgered men with a bulk table row, 9 of them a 2025 row: 82 hold the age on 1 January of the row's year; 29 of them have their birthday after 1 August, the men the table rule alone would have a year old
+   (f) 4401 shipped ages run through the rule again, row for row: 0 off; 3974 moved on from the table (432 of them from a 2025 row, plus two), 4 as written, 423 from a birth date; 105 ledger rows tie the basis file to the table as pulled
+What the curve does to the game around it (printed for Round 1109 and the review, nothing asserted)
+   the cheapest eleven rated 80 or more: 133.8m on the value rating, 57.7m shipped
+   the cheapest eleven rated 82 or more: 197.0m on the value rating, 113.7m shipped
+   the cheapest eleven rated 84 or more: 288.1m on the value rating, 166.6m shipped
+   men rated 82 or more and valued at 15m or less: 0 on the value rating, 19 shipped
+   men of 21 or under rated 86 or more (a board ask reads this): 20 on the value rating, 8 shipped; of 23 or under: 42 and 22
+   the top of the 2026 world: Lamine Yamal 94, Erling Haaland 94, Kylian Mbappé 94, Vinicius Junior 92, Vitinha 92, Michael Olise 92, Pedri 91, Jude Bellingham 91, Bukayo Saka 91, Declan Rice 91, Federico Valverde 91, Cole Palmer 91
+   the real free agents: Dani Parejo 72 (a club of level 78 or more can sign him), Sergio Ramos 71 (a club of level 77 or more can sign him), Edinson Cavani 68 (a club of level 74 or more can sign him), Willian 67 (a club of level 73 or more can sign him), Dele Alli 66 (a club of level 72 or more can sign him), Wissam Ben Yedder 66 (a club of level 72 or more can sign him), Tiemoué Bakayoko 62 (a club of level 68 or more can sign him)
+   mean rating by age, value rating then shipped: 14 to 20: 67.9 then 63.9 (492); 21 to 23: 72.6 then 70.7 (1079); 24 to 26: 73.7 then 73.7 (1399); 27 to 29: 73.5 then 73.5 (1190); 30 to 32: 71.8 then 73.4 (632); 33 to 35: 69.3 then 73.0 (266); 36 to 45: 65.6 then 72.5 (55)
+   the 2005 season as its screens show it (the uplift: 1.67 a point over 80, capped at 99): Ronaldinho 96 (24, was 96), Thierry Henry 96 (27, was 96), Andriy Shevchenko 93 (28, was 93), Pavel Nedved 93 (32, was 85), Michael Essien 91 (22, was 93), Ruud van Nistelrooy 91 (28, was 91), Alessandro Nesta 91 (28, was 91), Michael Ballack 91 (28, was 91), Frank Lampard 91 (26, was 91), Gianluigi Buffon 91 (26, was 91), Patrick Vieira 91 (28, was 91), Francesco Totti 91 (28, was 91), Ronaldo 91 (28, was 91), Shaun Wright-Phillips 91 (23, was 91)
+      on screen a man's age moves him by -11 to +9 there (the curve gives minus 6 to plus 8); furthest down: Wayne Rooney (19) 91 to 80, Sergio Ramos (18) 88 to 78, Cristiano Ronaldo (19) 88 to 79, Arjen Robben (20) 88 to 80; furthest up: Roy Keane (33) 79 to 88, Santiago Cañizares (35) 76 to 85, Nigel Martyn (38) 64 to 72, Luís Figo (32) 83 to 91; shown at the cap of 99: 0
+   the 2010 season as its screens show it (the uplift: 0.7 a point over 80, capped at 99): Cristiano Ronaldo 97 (24, was 97), Lionel Messi 95 (22, was 97), Xavi 95 (29, was 94), Andrés Iniesta 92 (25, was 92), Wayne Rooney 92 (24, was 92), Didier Drogba 92 (31, was 89), Cesc Fàbregas 90 (22, was 92), David Villa 90 (28, was 90), Franck Ribéry 90 (26, was 90), Fernando Torres 90 (25, was 90), Kaká 90 (27, was 90), Zlatan Ibrahimović 90 (28, was 90), Wesley Sneijder 90 (25, was 90), Steven Gerrard 90 (29, was 89)
+      on screen a man's age moves him by -6 to +9 there (the curve gives minus 6 to plus 8); furthest down: Iker Muniain (17) 74 to 68, Jon Aurtenetxe (17) 70 to 64, Cedrick (17) 64 to 58, Mario Götze (17) 76 to 70; furthest up: Javier Zanetti (36) 76 to 85, Edwin van der Sar (39) 73 to 82, Brad Friedel (38) 72 to 80, Ulrich Ramé (37) 64 to 72; shown at the cap of 99: 0
+   the 2015 season as its screens show it (the uplift: 0.6 a point over 80, capped at 99): Cristiano Ronaldo 99 (29, was 98), Lionel Messi 98 (27, was 98), Luis Suárez 96 (27, was 96), Neymar 94 (22, was 96), Gareth Bale 94 (25, was 94), James Rodríguez 94 (23, was 94), Thomas Müller 94 (25, was 94), Robert Lewandowski 93 (26, was 93), Eden Hazard 93 (23, was 93), Ángel Di María 93 (26, was 93), Luka Modrić 93 (29, was 91), Kevin De Bruyne 91 (23, was 91), Sergio Agüero 91 (26, was 91), Alexis Sánchez 91 (26, was 91)
+      on screen a man's age moves him by -6 to +8 there (the curve gives minus 6 to plus 8); furthest down: Izzy Brown (17) 64 to 58, Rolando Mandragora (17) 68 to 62, Allan Saint-Maximin (17) 68 to 62, Federico Bonazzoli (17) 72 to 66; furthest up: Francesco Totti (38) 64 to 72, Gianluigi Buffon (36) 68 to 75, Gerhard Tremmel (36) 64 to 71, Tim Howard (35) 68 to 74; shown at the cap of 99: 1
+   the 2020 season as its screens show it (the uplift: 0.06 a point over 80, capped at 99): Lionel Messi 95 (32, was 92), Kylian Mbappé 94 (21, was 94), Cristiano Ronaldo 93 (34, was 87), Jadon Sancho 92 (19, was 93), Raheem Sterling 92 (25, was 92), Neymar 92 (27, was 92), Mohamed Salah 92 (27, was 92), Sadio Mané 92 (27, was 92), Kevin De Bruyne 92 (28, was 92), Harry Kane 92 (26, was 92), Trent Alexander-Arnold 91 (21, was 92), Eden Hazard 91 (28, was 91), Antoine Griezmann 91 (28, was 91), Jan Oblak 91 (26, was 91)
+      on screen a man's age moves him by -6 to +8 there (the curve gives minus 6 to plus 8); furthest down: Amad Diallo (17) 79 to 73, Germán Valera (17) 68 to 62, Florian Wirtz (16) 82 to 76, Jamal Musiala (16) 77 to 71; furthest up: Zlatan Ibrahimović (38) 73 to 81, Gianluigi Buffon (41) 64 to 72, Joaquín (38) 68 to 76, Franck Ribéry (36) 70 to 77; shown at the cap of 99: 0
+
+simCmRatingShape: CONTROL agesasis fired where it should, 1 failure(s) in section(s) 6

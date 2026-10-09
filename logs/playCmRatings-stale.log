@@ -1,0 +1,13 @@
+At 390 by 844
+  FAIL: 390 by 844: the veteran (Virgil van Dijk) shows a rating of 85, his value rating is 80
+   the veteran: Virgil van Dijk, valued 14.3m, on screen 85 rated and 35 years old; the file ships 85 and 35 (control: held to his value rating, 80)
+  FAIL: 390 by 844: the youngster (Jérémy Jacquet) shows a rating of 84, his value rating is 87
+   the youngster: Jérémy Jacquet, valued 44.3m, on screen 84 rated and 21 years old; the file ships 84 and 21 (control: held to his value rating, 87)
+   no sideways scroll (390 in 390)
+At 1280 by 800
+  FAIL: 1280 by 800: the veteran (Virgil van Dijk) shows a rating of 85, his value rating is 80
+   the veteran: Virgil van Dijk, valued 14.3m, on screen 85 rated and 35 years old; the file ships 85 and 35 (control: held to his value rating, 80)
+  FAIL: 1280 by 800: the youngster (Jérémy Jacquet) shows a rating of 84, his value rating is 87
+   the youngster: Jérémy Jacquet, valued 44.3m, on screen 84 rated and 21 years old; the file ships 84 and 21 (control: held to his value rating, 87)
+
+playCmRatings: CONTROL stale fired, 4 failure(s)
