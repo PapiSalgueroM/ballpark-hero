@@ -1,0 +1,24 @@
+#!build
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerLifeCooldowns: node scripts/simCareerLifeCooldowns.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simCareerStory: node scripts/simCareerStory.mjs
+vitest-careerStory: node_modules/.bin/vitest run src/test/careerStory.test.tsx --testTimeout=300000 --hookTimeout=120000
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simCareerRivalryEvents: node scripts/simCareerRivalryEvents.mjs
+simCareerNoDeadEnd: node scripts/simCareerNoDeadEnd.mjs
+simSoccerCareer: node scripts/simSoccerCareer.mjs
+simContracts: node scripts/simContracts.mjs
+simSoccerDiscipline: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerDiscipline.mjs
