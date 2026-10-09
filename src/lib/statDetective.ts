@@ -33,6 +33,17 @@ export { normalizeName };
  * - Deep Cuts, rating 60-84: 12,711 seasons across 2,571 players
  * - Guessable names: 2,956 players (19,938 rows incl. combined = 20 pages
  *   today, 25 budgeted below).
+ *
+ * Round 1145, the career span. The span used to be built from the rows this
+ * page fetches, which are the 500+ minute ones, so a season on the end of the
+ * bench did not exist for it. A player reported a man shown as 1990-1996 whose
+ * rows run 1989-90 to 2000-01, and he was one of 1,845 (of 2,973 profiles,
+ * measured read only on 2026-10-09: 1,432 ended too early, 816 started too
+ * late). The span now comes from the view bref_nba_career_spans, the first
+ * and last season a name has ANY row for. The 500 minute floor still decides
+ * who can be a mystery and who can be guessed; it no longer decides when a
+ * career started or ended. There is no fallback to the old span: if the view
+ * cannot be read the whole load fails into the retry state.
  */
 
 export type Difficulty = 'stars' | 'deep';
@@ -45,6 +56,14 @@ export const DEEP_MAX_RATING = 84;
 const MIN_MINUTES = 500;   // same floor perfectSeasonNba uses for draftable players
 const PAGE_SIZE = 1000;    // PostgREST caps rows per request
 const PAGES = 25;          // ~19.9k qualifying rows today, headroom for new seasons
+const SPAN_PAGES = 8;      // one row per name in the spans view: 4,774 today
+const SPAN_VIEW = 'bref_nba_career_spans';
+/* Share of profiles allowed to come back without a span before the spans read
+   counts as failed. The view groups the same table the profiles come from, so
+   a healthy read leaves none without one. The smallest broken read is a whole
+   page of names gone (a fifth of them) or every page cut short, so one in
+   twenty sits well clear of both ends. */
+const SPAN_MISSING_LIMIT = 0.05;
 
 const COMBINED_ROWS = new Set(['2TM', '3TM', '4TM', '5TM']);
 
@@ -226,9 +245,12 @@ export interface MysterySeason {
 
 export interface PlayerProfile {
   name: string;
-  firstYear: number;    // end year of earliest 500+ minute season
-  lastYear: number;
-  positions: string[];  // distinct codes across the career
+  /* End years of the first and last season he has ANY row for, from the spans
+     view (Round 1145). null only when the view has no row for his name: then
+     the page says the span is not on file instead of guessing one. */
+  firstYear: number | null;
+  lastYear: number | null;
+  positions: string[];  // distinct codes across his 500+ minute seasons
   franchises: string[]; // distinct franchise keys (combined rows excluded)
   peak: number;         // best season rating, orders suggestions famous-first
 }
@@ -239,8 +261,9 @@ export interface StatDetectiveData {
   byName: Map<string, PlayerProfile>; // normalizeName(name) -> profile
 }
 
-/** The guess's career era measured against the mystery decade. */
-export type EraVerdict = 'match' | 'earlier' | 'later';
+/** The guess's career era measured against the mystery decade. 'unknown' is a
+ *  guess whose span is not on file: no direction is claimed for him. */
+export type EraVerdict = 'match' | 'earlier' | 'later' | 'unknown';
 export type PosVerdict = 'exact' | 'group' | 'none';
 
 export interface GuessFeedback {
@@ -269,26 +292,70 @@ interface SeasonRow {
   blk: number | null;
 }
 
+interface SpanRow {
+  player_name: string | null;
+  first_season: string | null;
+  last_season: string | null;
+}
+
 /**
  * Boot fetch: every 500+ minute player-season, paged in parallel under the
  * PostgREST 1000-row cap (same pattern as fetchTeamSeasonIndex in
  * perfectSeasonNba.ts, including the id-descending order so a future data
- * refresh overflows the oldest rows first). Builds the two mystery pools and
- * a career profile per player name for suggestions and feedback. Returns
- * null on failure so the page can show an error state with retry.
+ * refresh overflows the oldest rows first), and beside them the career spans
+ * view, one row per name. Builds the two mystery pools and a career profile
+ * per player name for suggestions and feedback. Returns null on failure so
+ * the page can show an error state with retry.
  */
 export async function fetchStatDetectiveData(): Promise<StatDetectiveData | null> {
   try {
-    const pages = await Promise.all(
-      Array.from({ length: PAGES }, (_, i) =>
-        supabase
-          .from('bref_nba_player_seasons' as any)
-          .select('season, player_name, position, team, minutes, pts, trb, ast, stl, blk')
-          .gte('minutes', MIN_MINUTES)
-          .order('id', { ascending: false })
-          .range(i * PAGE_SIZE, (i + 1) * PAGE_SIZE - 1)
-      )
-    );
+    const [pages, spanPages] = await Promise.all([
+      Promise.all(
+        Array.from({ length: PAGES }, (_, i) =>
+          supabase
+            .from('bref_nba_player_seasons' as any)
+            .select('season, player_name, position, team, minutes, pts, trb, ast, stl, blk')
+            .gte('minutes', MIN_MINUTES)
+            .order('id', { ascending: false })
+            .range(i * PAGE_SIZE, (i + 1) * PAGE_SIZE - 1)
+        )
+      ),
+      Promise.all(
+        Array.from({ length: SPAN_PAGES }, (_, i) =>
+          supabase
+            .from(SPAN_VIEW as any)
+            .select('player_name, first_season, last_season')
+            .order('player_name', { ascending: true })
+            .range(i * PAGE_SIZE, (i + 1) * PAGE_SIZE - 1)
+        )
+      ),
+    ]);
+
+    /* The spans are all or nothing. One page that errors, a last page that
+       comes back full (so names past the budget were never asked for) or an
+       empty read each fail the load: a span that is merely missing would
+       otherwise be filled by nothing, and the old 500 minute span is the
+       false claim this read replaces, so there is nothing honest to fall
+       back to. Two rows that normalise to one name are one profile here as
+       everywhere in this file, and their span is the union. */
+    const spans = new Map<string, { first: number; last: number }>();
+    for (const page of spanPages) {
+      if (page.error || !page.data) return null;
+      for (const raw of page.data as unknown as SpanRow[]) {
+        const key = normalizeName(String(raw.player_name ?? '').trim());
+        const first = endYearOf(typeof raw.first_season === 'string' ? raw.first_season : '');
+        const last = endYearOf(typeof raw.last_season === 'string' ? raw.last_season : '');
+        if (!key || !first || !last) continue;
+        const prev = spans.get(key);
+        if (!prev) spans.set(key, { first, last });
+        else {
+          if (first < prev.first) prev.first = first;
+          if (last > prev.last) prev.last = last;
+        }
+      }
+    }
+    const lastSpanPage = spanPages[spanPages.length - 1].data as unknown as SpanRow[];
+    if (spans.size === 0 || lastSpanPage.length >= PAGE_SIZE) return null;
 
     const stars: MysterySeason[] = [];
     const deep: MysterySeason[] = [];
@@ -313,11 +380,19 @@ export async function fetchStatDetectiveData(): Promise<StatDetectiveData | null
         const nameKey = normalizeName(name);
         let prof = byName.get(nameKey);
         if (!prof) {
-          prof = { name, firstYear: year, lastYear: year, positions: [], franchises: [], peak: 40 };
+          // The span is never read off these rows: they are only his 500+
+          // minute seasons. It comes from the spans view, or stays null.
+          const span = spans.get(nameKey);
+          prof = {
+            name,
+            firstYear: span ? span.first : null,
+            lastYear: span ? span.last : null,
+            positions: [],
+            franchises: [],
+            peak: 40,
+          };
           byName.set(nameKey, prof);
         }
-        if (year < prof.firstYear) prof.firstYear = year;
-        if (year > prof.lastYear) prof.lastYear = year;
         for (const c of codes) {
           if (!prof.positions.includes(c)) prof.positions.push(c);
         }
@@ -359,6 +434,12 @@ export async function fetchStatDetectiveData(): Promise<StatDetectiveData | null
     // far below that means pages went missing and feedback would lie.
     if (stars.length < 500 || deep.length < 2000 || byName.size < 800) return null;
 
+    // One name the view lacks is told so on the page. Many of them is a
+    // spans read that did not really come back (see SPAN_MISSING_LIMIT).
+    let spanless = 0;
+    for (const prof of byName.values()) if (prof.firstYear === null) spanless++;
+    if (spanless > byName.size * SPAN_MISSING_LIMIT) return null;
+
     const profiles = [...byName.values()].sort((a, b) => b.peak - a.peak);
     return { pools: { stars, deep }, profiles, byName };
   } catch {
@@ -379,7 +460,8 @@ export function evaluateGuess(profile: PlayerProfile, mystery: MysterySeason): G
   const isCorrect = normalizeName(profile.name) === normalizeName(mystery.player);
 
   let era: EraVerdict = 'match';
-  if (profile.lastYear < mystery.decade) era = 'earlier';
+  if (profile.firstYear === null || profile.lastYear === null) era = 'unknown';
+  else if (profile.lastYear < mystery.decade) era = 'earlier';
   else if (profile.firstYear > mystery.decade + 9) era = 'later';
 
   let pos: PosVerdict = 'none';
@@ -424,8 +506,14 @@ export function suggestProfiles(
   return [...starts, ...wordStarts, ...contains].slice(0, limit);
 }
 
-/** 'Michael Jordan' active 1985-2003 -> '1985-2003' for the dropdown. */
+/** What the page prints where a span would go for a name the view lacks. */
+export const SPAN_NOT_ON_FILE = 'not on file';
+
+/** 'Michael Jordan' active 1985-2003 -> '1985-2003' for the dropdown. An
+ *  empty string when his span is not on file, so the dropdown prints no years
+ *  rather than invented ones. */
 export function careerSpan(profile: PlayerProfile): string {
+  if (profile.firstYear === null || profile.lastYear === null) return '';
   return profile.firstYear === profile.lastYear
     ? String(profile.firstYear)
     : `${profile.firstYear}-${profile.lastYear}`;
@@ -439,7 +527,7 @@ export function careerSpan(profile: PlayerProfile): string {
  */
 export function hintsFor(mystery: MysterySeason, misses: number, profile?: PlayerProfile): Hint[] {
   const hints: Hint[] = [];
-  if (misses >= 1 && profile) hints.push({ label: 'Career span', value: careerSpan(profile) });
+  if (misses >= 1 && profile) hints.push({ label: 'Career span', value: careerSpan(profile) || SPAN_NOT_ON_FILE });
   if (misses >= 2) hints.push({ label: 'Surname starts with', value: surnameInitial(mystery.player) });
   if (misses >= 3 && profile) hints.push({ label: 'Career franchises', value: String(profile.franchises.length) });
   if (misses >= 4) hints.push({ label: 'Team', value: mystery.teamName });
@@ -473,7 +561,7 @@ export function statChips(m: MysterySeason): StatChip[] {
   return chips;
 }
 
-const ERA_SQUARE: Record<EraVerdict, string> = { match: '🟩', earlier: '⬅️', later: '➡️' };
+const ERA_SQUARE: Record<EraVerdict, string> = { match: '🟩', earlier: '⬅️', later: '➡️', unknown: '⬜' };
 const POS_SQUARE: Record<PosVerdict, string> = { exact: '🟩', group: '🟨', none: '⬜' };
 
 /** One era/position/team row per guess; the winning guess is all green. */
