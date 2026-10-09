@@ -1,0 +1,45 @@
+
+prefers-reduced-motion: no-preference
+   rise      animation=cmRise         opacity=0 display=block
+   slam      animation=cmSlam         opacity=0 display=block
+   glow      animation=cmGoldGlow     opacity=1 display=block
+   confetti  animation=cmConfettiFall opacity=0 display=inline
+
+prefers-reduced-motion: reduce
+   rise      animation=none           opacity=1 display=block
+   slam      animation=none           opacity=1 display=block
+   glow      animation=none           opacity=1 display=block
+   confetti  animation=cmConfettiFall opacity=1 display=none
+
+Round 530 routes under prefers-reduced-motion: reduce, 20 routes served from dist
+   /                   text=22379 keyframeBlocks=3 ours=2 thirdParty=1 unguarded=0 reveal=10 animating=0 invisible=0 slowMotion=0/4667
+   /cfb-dynasty        text=9469 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/455
+   /cbb-dynasty        text=9333 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/441
+   /front-office       text=13862 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/425
+   /nba-front-office   text=13253 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/412
+   /mlb-front-office   text=9468 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/405
+   /nhl-front-office   text=13910 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/424
+   /nfl-my-career      text=26380 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/499
+   /nba-my-career      text=24603 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/487
+   /mlb-my-career      text=24489 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/492
+   /nhl-my-career      text=23613 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/468
+   /club-manager       text=36557 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/476
+   /soccer-career      text=15534 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/375
+   /rebuild            text=16067 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/329
+   /idle-arena         text=11975 keyframeBlocks=3 ours=2 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/368
+   /stadium-tycoon     text=20959 keyframeBlocks=4 ours=3 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/490
+   /wonderkid-factory  text=13526 keyframeBlocks=2 ours=1 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/343
+   /fight-career       text=13552 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/393
+   /fight-gym          text=7521 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/298
+   /fight-promoter     text=10872 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/315
+   Season Centre kick off  text=716 reveal=1 animating=0 invisible=0 slow=0
+   Season Centre matchday  text=573 reveal=1 animating=0 invisible=0 slow=0
+   Season Centre review    text=899 reveal=1 animating=0 invisible=0 slow=0
+   Round 1107 signing scene text=63 checked=5 animating=0 invisible=0 notGone=0 slow=0 confetti=0
+   Round 1107 trophy scene  text=78 checked=11 animating=0 invisible=0 notGone=0 slow=0 confetti=0
+   our own keyframe CSS was present and guarded on 4 of 20 routes; the rest had not reached a reveal yet
+   no preference /front-office    elements that move for more than 10ms: 71 of 425
+   no preference /fight-career    elements that move for more than 10ms: 58 of 393
+   no preference /stadium-tycoon  elements that move for more than 10ms: 83 of 490
+
+playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone else keeps the celebration.
