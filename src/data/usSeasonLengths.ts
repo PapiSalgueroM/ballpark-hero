@@ -1,6 +1,8 @@
 /* Round 1048: how long each real NBA and NFL regular season was, so a career's
    "week by week" is only offered for a season whose real length is the one the
-   career plays. `year` is the year a season STARTS in (NBA 2011 is 2011-12).
+   game by game view is built for (82, 17: US_FULL_SEASON below). An NBA career
+   plays 82 every year; an NFL career plays the year's real length since Round
+   1104. `year` is the year a season STARTS in (NBA 2011 is 2011-12).
 
    This file is eager (the hub reads it before a press) and imports nothing.
 

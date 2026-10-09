@@ -74,6 +74,9 @@
  *   level      the score law hands back level games              -> section 7
  *   oddtd      a six or an eight costs a drive list nothing      -> section 7
  *   bigkick    every game of a kicker's wants six makes          -> section 7
+ * Release AP (Round 1104 on Round 1147), the same rule: one named check.
+ *   oddsack    the number file drops the odd tenths of a sack,
+ *              which only a save from before Round 1104 holds    -> section 3
  *
  * MEASURED (filled in from the five seed sets, 2026-10-07 for the NBA and
  * 2026-10-09 for the NFL): see the block above the bands in section 7.
@@ -138,11 +141,14 @@ const CONTROLS = {
   level: { section: 7, label: 'level games stay under', patches: [{ file: NFL, from: '    if (home) us += more; else them += more;', to: '    if (home) us += 0 * more; else them += 0 * more;' }] },
   oddtd: { section: 7, label: 'touchdowns not worth seven', patches: [{ file: NFL, from: '        out.push({ t, f, s, cost: Math.abs(rest - 7 * t) + 4 * s });', to: '        out.push({ t, f, s, cost: 4 * s });' }] },
   bigkick: { section: 7, label: 'makes five or six', patches: [{ file: NFL, from: '    const need = left / (n - k);', to: '    const need = MAX_FG;' }] },
+  /* Release AP: the line an engine that only makes halves no longer needs, and every older save does */
+  oddsack: { section: 3, label: 'sacks in tenths still opens', patches: [{ file: NFL, from: '    if (left % 5 > 0) t[t.indexOf(Math.max(...t))] += left % 5;\n', to: '' }] },
 };
 /* which sport a control needs in the run (its patched file is only bundled with that sport) */
 const CONTROL_SPORT = {
   stage: 'nba', names: 'nba', window: 'nba', formula: 'nba', hot: 'nba', sum: 'nfl', kick: 'nfl', nflstage: 'nfl', nflformula: 'nfl', days: 'nfl',
   poscore: 'nfl', nflheld: 'nfl', lumpy: 'nfl', flat: 'nfl', tdform: 'nfl', minutes: 'nfl', order: 'nfl', points: 'nfl', forty: 'nfl', level: 'nfl', oddtd: 'nfl', bigkick: 'nfl',
+  oddsack: 'nfl',
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown US_SEASON_CONTROL ${CONTROL}`); process.exit(2); }
 
@@ -171,8 +177,14 @@ const controlPlugin = {
 /* ─── The bundle: the two real bindings, the season modules, the ledgers ─── */
 const SPORT_DEFS = {
   nba: { binding: 'NBA_CAREER_SPORT', bindingFile: 'src/lib/nbaCareerSport.ts', bindName: 'NBA_SEASON', numberFile: 'src/lib/season/nba.ts', positions: ['PG', 'SG', 'SF', 'PF', 'C'], eras: ['now', 'y2004'], gamesOk: g => (g >= 40 && g <= 74) || (g >= 78 && g <= 82), injury: l => l.games <= 74, targetedFrom: { era: 'y2004', year: 2016 } },
-  nfl: { binding: 'NFL_CAREER_SPORT', bindingFile: 'src/lib/nflCareerSport.ts', bindName: 'NFL_SEASON', numberFile: 'src/lib/season/nfl.ts', positions: ['QB', 'RB', 'WR', 'TE', 'LB', 'CB', 'EDGE', 'K'], eras: ['now', 'y2005'], gamesOk: g => g >= 1 && g <= 17, injury: l => l.games < 17, targetedFrom: { era: 'y2005', year: 2018 } },
+  nfl: { binding: 'NFL_CAREER_SPORT', bindingFile: 'src/lib/nflCareerSport.ts', bindName: 'NFL_SEASON', numberFile: 'src/lib/season/nfl.ts', positions: ['QB', 'RB', 'WR', 'TE', 'LB', 'CB', 'EDGE', 'K'], eras: ['now', 'y2005'], gamesOk: g => g >= 1 && g <= 17, injury: l => !l.backup && l.games < nflYearLength(l.year), targetedFrom: { era: 'y2005', year: 2018 } },
 };
+/* Release AP: since Round 1104 an NFL career plays the year's real length, so "under 17 games" stopped
+   meaning "hurt": every full 16 game throwback season from 2005 to 2020 counted (2,219 of 3,943 seasons
+   on the merged engine, against 1,416 of 3,924 before it). An injury season is one a starter did not
+   finish: fewer games than the two source ledger holds for that year (17 where it holds none, as the
+   engine plays it), and never a backup's spot duty. */
+function nflYearLength(year) { return M.usSeasonLength('nfl', year) ?? 17; }
 /* A sport is run when its number file exists. A sport whose BINDING already
    has a loader may never be skipped: that would be a shipped button nobody checked. */
 const SPORTS = [];
@@ -395,6 +407,28 @@ function shownIsSavedNfl(row, pos, s) {
       if (g.events.filter(e => e.kind === 'miss').length !== of(g, 'fgAtt') - of(g, 'fgMade')) out.push(`md ${g.md}: his misses in the feed are not his misses on the line`);
     }
   }
+  return out;
+}
+
+/** Section 3, NFL, Release AP: the same season as a save made BEFORE Round 1104 holds it.
+ *  That engine rounded a season's sacks to tenths (11.3); this one rounds to halves, so no
+ *  career played here reaches the branch of the number file that lays the odd tenths out,
+ *  and every older save with a pass rusher on it needs that branch. The saved sacks are
+ *  moved one to four tenths past the half step at or below them (by hand, said here because
+ *  no engine call made this line) and the season is derived again and held against the same
+ *  independent checker. Both arms are walked: an odd tenth alone (11.3) and a half with an
+ *  odd tenth on top (11.8). `n` only picks the tenth, so nothing is drawn. */
+function oldSaveTwin(bind, SB, career, n) {
+  const twin = JSON.parse(JSON.stringify(career));
+  const row = twin.seasons[twin.seasons.length - 1];
+  const steps = Math.floor(Math.round(row.sacks * 10) / 5);
+  row.sacks = (5 * steps + 1 + (n % 4)) / 10;
+  const out = { sacks: row.sacks, half: steps % 2 === 1, year: row.year, pos: twin.pos, why: null, problems: [] };
+  const b = M.buildUsSeason(bind, twin, row, SB.teamLabelOf);
+  if (!b.ok) { out.why = `build: ${b.why}`; return out; }
+  const s = M.deriveSeasonOrWhy(b.sport, row, b.ctx);
+  if (typeof s === 'string') { out.why = s; return out; }
+  out.problems = shownIsSavedNfl(row, twin.pos, s);
   return out;
 }
 
@@ -649,9 +683,23 @@ function scheduleProblems(slug, SB, row, eraId, s, named) {
                                 0.00% in every set               band: under 1% (control `minutes` 19.2%)
      a calendar that reads oddly (a rival twice running, four straight at home or away)
                                 0.00% in every set               band: under 2% (control `order`, one
-                                                                plain shuffle: 66.9%) */
+                                                                plain shuffle: 66.9%)
+
+   RELEASE AP'S OWN CHECKS (Round 1104 on Round 1147), the same five sets on the merged engine, 2026-10-09:
+     an injury season (a starter short of the year's own length), and those in a year the viewer opens
+       NFL: 49 and 31, 61 and 38, 48 and 39, 55 and 27, 40 and 27 a set (253 and 162 over the five). The
+       old reading, "under 17 games", counted 2,219 of 3,943 seasons, every full 16 game year among them.
+       NBA: 73 and 62, 56 and 47, 83 and 71, 67 and 60, 85 and 73 (364 and 313). Asserted: one that is open.
+     seasons saved with sacks in tenths, as a save from before Round 1104 holds them (oldSaveTwin)
+       127, 130, 133, 135, 134 a set (659 over the five); an odd tenth alone 68, 63, 63, 64, 66; a half
+       and an odd tenth 59, 67, 70, 71, 68. Refused: 0 in every set, and every one shown holds its saved
+       sacks. Control `oddsack`: 127 of 127 refused on set 0 and 659 of 659 over the five (100%).
+                                                                band: the population's own, under 1%
+                                                                refused; each arm at least 25 seasons
+                                                                (under half the lowest arm of a set) */
 const REFUSED_MAX = { nba: 0.01, nfl: 0.01 };
 const NO_REPAIR_MIN = { nba: 0.8, nfl: 0.7 };
+const OLD_SAVE_MIN = 25;
 const NBA_POINTS_TOL = 1.0;
 const NBA_SHARE_P99_MAX = 0.5;
 const NFL_POINTS = [21.0, 24.5];
@@ -717,6 +765,8 @@ function observe(c, line, who) {
   if (who.slug === 'nba') rec.p3.push(...shownIsSavedNba(row, s));
   else if (typeof shownIsSavedNfl === 'function') rec.p3.push(...shownIsSavedNfl(row, career.pos, s));
   rec.p3.push(...boardIsTrue(who.slug, s));
+  /* the same line as an older save holds it (see oldSaveTwin) */
+  if (who.slug === 'nfl' && isNum(row.sacks)) rec.old = oldSaveTwin(bind, SB, career, seen.length);
   const band = ownBand(who.slug, row.teamResult);
   if (band && (rec.wins < band[0] || rec.wins > band[1])) rec.p3.push(`wins ${rec.wins} outside ${band[0]} to ${band[1]} for "${row.teamResult}"`);
   if (!band && s.target.kind !== 'none') rec.p3.push(`a band for the unknown result "${row.teamResult}"`);
@@ -829,7 +879,10 @@ for (const slug of SPORTS) {
   const depthN = o.results.map(t => live.filter(r => r.teamResult === t).length);
   console.log(`     by result: missed ${live.filter(r => r.teamResult === o.missed).length}, ${o.results.map((t, i) => `${depthN[i]}`).join(' / ')} (depth 0 to title)`);
   check('1', depthN.every(n => n > 0), `${slug} every playoff depth and a title are in the population`);
-  check('1', live.some(r => d.injury(r)), `${slug} an injury season is in the population (${live.filter(r => d.injury(r)).length})`);
+  /* counted where it matters: a short season is only laid out game by game in a year the viewer opens */
+  const hurt = live.filter(r => d.injury(r));
+  const hurtOpen = hurt.filter(r => r.build === 'ok').length;
+  check('1', hurtOpen > 0, `${slug} an injury season is in the population, among the seasons the viewer opens (${hurt.length}, ${hurtOpen} of them open)`);
   check('1', live.some(r => r.backup), `${slug} a backup season is in the population (${live.filter(r => r.backup).length})`);
   check('1', d.positions.every(p => live.some(r => r.pos === p)), `${slug} every position is in the population`);
   check('1', d.eras.every(e => live.some(r => r.eraId === e)), `${slug} both eras are in the population`);
@@ -862,6 +915,18 @@ for (const slug of SPORTS) {
   check('7', REFUSED_MAX[slug] !== null && NO_REPAIR_MIN[slug] !== null, `${slug} has measured bands (five seed sets, written above REFUSED_MAX)`);
   check('3', refused.length <= open.length * (REFUSED_MAX[slug] ?? 0), `${slug} seasons that cannot be laid out stay under ${(100 * (REFUSED_MAX[slug] ?? 0)).toFixed(1)}% (${share(refused.length, open.length)})`);
   tally('3', `${slug} the season shown is the season saved (independent checker)`, derived.filter(r => r.p3.length).map(r => `${r.year} ${r.pos}: ${r.p3[0]}`), derived.length);
+  if (slug === 'nfl') {
+    /* saves from before Round 1104: sacks in tenths (see oldSaveTwin) */
+    const old = derived.filter(r => r.old).map(r => r.old);
+    const oldRefused = old.filter(t => t.why !== null);
+    const oldShown = old.filter(t => t.why === null);
+    const arms = [old.filter(t => !t.half).length, old.filter(t => t.half).length];
+    console.log(`     saves from before Round 1104: ${old.length} seasons with sacks in tenths (${arms[0]} an odd tenth alone, ${arms[1]} a half and an odd tenth), refused ${oldRefused.length}, shown ${oldShown.length}`);
+    if (oldRefused.length) console.log(`     first refusals: ${oldRefused.slice(0, 3).map(t => `${t.year} ${t.pos} ${t.sacks} sacks: ${t.why}`).join(' || ')}`);
+    check('3', arms[0] >= OLD_SAVE_MIN && arms[1] >= OLD_SAVE_MIN, `${slug} seasons saved with sacks in tenths are in the population, both arms (${arms[0]} and ${arms[1]}, at least ${OLD_SAVE_MIN} each)`);
+    check('3', oldRefused.length <= old.length * (REFUSED_MAX[slug] ?? 0), `${slug} a season saved with sacks in tenths still opens: refused stay under ${(100 * (REFUSED_MAX[slug] ?? 0)).toFixed(1)}% (${share(oldRefused.length, old.length)})`);
+    tally('3', `${slug} a season saved with sacks in tenths shows the sacks the save holds`, oldShown.filter(t => t.problems.length).map(t => `${t.year} ${t.pos} ${t.sacks}: ${t.problems[0]}`), oldShown.length);
+  }
   if (slug === 'nba') {
     const hot = derived.reduce((a, r) => a + r.hot, 0); const on = derived.reduce((a, r) => a + r.on, 0);
     console.log(`     takeover lines: ${hot} in ${on} games he played (${share(hot, on)}), in ${derived.filter(r => r.hot > 0).length} of ${derived.length} seasons`);
