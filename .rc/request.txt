@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+truth: node scripts/simNflTruth.mjs
+truth-onesource: TRUTH_CONTROL=onesource node scripts/simNflTruth.mjs
+truth-nosecond: TRUTH_CONTROL=nosecond node scripts/simNflTruth.mjs
+vitest-rookie: node_modules/.bin/vitest run src/test/usCareerRookieDeal.test.ts src/test/usCareerTruthDigest.test.ts --testTimeout=300000 --hookTimeout=120000
+deckc: node scripts/simUsCareerDeckC.mjs
+hall: node scripts/simCareerHall.mjs
