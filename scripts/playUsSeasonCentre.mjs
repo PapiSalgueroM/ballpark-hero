@@ -98,13 +98,14 @@ const ASKED = (process.env.SPORTS ?? 'nba,nfl').split(',').map(s => s.trim());
    `minLines` and `minScores`: the least a finished game shows (a basketball game has eight quarter
    lines; a football game has at least one scoring drive, so one line and two scores, 0-0 and the
    final). `games`: the season's length. `twice`: his headline number, which no log row may print twice.
-   `also`: other positions walked on a phone (Round 1147: a kicker and a defender as well as the
-   quarterback), each with what his line must read like. */
+   `also`: positions walked on a phone for the shape of his line (Round 1147: a quarterback, a kicker
+   and a defender), each with what his line must read like. `starter`: the save is the first keyed
+   draft that starts him. */
 const DEFS = {
   nba: { route: '/nba-my-career', binding: 'NBA_CAREER_SPORT', file: 'src/lib/nbaCareerSport.ts', pos: 'SG', words: 'Tip off', start: 'Tip off', held: { era: 'y2004', year: 2011 }, feed: 'nba', minLines: 8, minScores: 4, minColumn: 56, games: 82, twice: 'PTS', also: [] },
   nfl: {
-    route: '/nfl-my-career', binding: 'NFL_CAREER_SPORT', file: 'src/lib/nflCareerSport.ts', pos: 'QB', words: 'The kick after is no good.', start: 'Kick off', held: { era: 'y2005', year: 2005 }, feed: 'nfl', minLines: 1, minScores: 2, minColumn: 30, games: 17, twice: 'YDS',
-    also: [{ pos: 'K', line: /^\d\/\d FG(LONG \d+)?$/ }, { pos: 'LB', line: /^\d+ TKL/ }],
+    route: '/nfl-my-career', binding: 'NFL_CAREER_SPORT', file: 'src/lib/nflCareerSport.ts', pos: 'QB', words: 'The kick after is no good.', start: 'Kick off', held: { era: 'y2005', year: 2005 }, feed: 'nfl', minLines: 1, minScores: 2, minColumn: 30, games: 17, twice: 'YDS', starter: true,
+    also: [{ pos: 'QB', line: /^\d+ YDS\d+ TD\d+ INT$/ }, { pos: 'K', line: /^\d\/\d FG(LONG \d+)?$/ }, { pos: 'LB', line: /^\d+ TKL/ }],
   },
 };
 /** Runs in the page: [side, points] of one feed line, or null for a line that scores nothing. */
@@ -141,18 +142,26 @@ function mulberry32(a) {
 /** A save on the hub after `seasons` seasons (0: a rookie about to play his first). */
 function makeSave(slug, seasons, eraId = 'now', year = null, pos = DEFS[slug].pos) {
   const SB = M[DEFS[slug].binding];
-  const rng = mulberry32(1048 + seasons * 7 + (eraId === 'now' ? 0 : 91));
   const real = Math.random;
-  Math.random = rng;
-  try {
-    const c = SB.startCareer('Week Watcher', pos, SB.create.archetypes[pos][0], rng, null, eraId);
-    if (year !== null) c.year = year;
-    let tq = SB.rollTeamQuality(null, rng);
-    SB.assignRole(c, tq, rng);
-    for (let i = 0; i < seasons; i += 1) { SB.campBattle(c, tq, rng); SB.simSeason(c, tq, rng); SB.progress(c, rng); tq = SB.rollTeamQuality(tq, rng); }
-    c.contractYears = Math.max(3, c.contractYears);
-    return { key: SB.saveKey, value: JSON.stringify({ c, phase: 'season', teamQuality: tq }) };
-  } finally { Math.random = real; }
+  /* Round 1147: a sport that asks for a starter (the NFL: a rookie quarterback who sits plays three or
+     four games, and the walk wants to see his line) takes the first keyed draft that makes him one.
+     Nothing is edited on the save: it is the save a player gets from that draft. */
+  const tries = DEFS[slug].starter && seasons === 0 ? 40 : 1;
+  for (let n = 0; n < tries; n += 1) {
+    const rng = mulberry32(1048 + seasons * 7 + (eraId === 'now' ? 0 : 91) + n * 1009);
+    Math.random = rng;
+    try {
+      const c = SB.startCareer('Week Watcher', pos, SB.create.archetypes[pos][0], rng, null, eraId);
+      if (year !== null) c.year = year;
+      let tq = SB.rollTeamQuality(null, rng);
+      SB.assignRole(c, tq, rng);
+      if (c.role === 'backup' && n < tries - 1) continue;
+      for (let i = 0; i < seasons; i += 1) { SB.campBattle(c, tq, rng); SB.simSeason(c, tq, rng); SB.progress(c, rng); tq = SB.rollTeamQuality(tq, rng); }
+      c.contractYears = Math.max(3, c.contractYears);
+      return { key: SB.saveKey, value: JSON.stringify({ c, phase: 'season', teamQuality: tq }), role: c.role ?? 'starter' };
+    } finally { Math.random = real; }
+  }
+  throw new Error(`playUsSeasonCentre: no save for ${slug} ${pos}`);
 }
 
 /* ─── the built chunks, and what a control serves instead ─── */

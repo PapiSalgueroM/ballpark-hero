@@ -251,11 +251,13 @@ function finish(games: DerivedGame[], row: UsRow, _pos: string, rng: Rng): boole
     on.forEach((g, i) => { g.line[key] = x[i]; });
     return true;
   };
-  /* yards: more on a day he scored, and at least a yard a touchdown where the total allows it */
-  if (!lay('passYds', on.map(g => form() * (1 + 0.15 * of(g, 'passTd'))), on.map(() => 520), on.map(g => of(g, 'passTd')), true)) return false;
-  if (!lay('rushYds', on.map(g => form() * (1 + 0.5 * of(g, 'rushTd'))), on.map(() => 290), on.map(g => of(g, 'rushTd')), true)) return false;
+  /* yards: more on a day he scored and on a day his team did, and at least a yard a touchdown where
+     the total allows it */
+  const day = (g: DerivedGame) => form() * (0.7 + g.us / 60);
+  if (!lay('passYds', on.map(g => day(g) * (1 + 0.15 * of(g, 'passTd'))), on.map(() => 520), on.map(g => of(g, 'passTd')), true)) return false;
+  if (!lay('rushYds', on.map(g => day(g) * (1 + 0.5 * of(g, 'rushTd'))), on.map(() => 290), on.map(g => of(g, 'rushTd')), true)) return false;
   /* a touchdown catch is a catch, and yards need a catch */
-  if (!lay('rec', on.map(g => form() * (1 + of(g, 'recTd'))), on.map(() => 15), on.map(g => of(g, 'recTd')), false)) return false;
+  if (!lay('rec', on.map(g => day(g) * (1 + of(g, 'recTd'))), on.map(() => 15), on.map(g => of(g, 'recTd')), false)) return false;
   if (!lay('recYds', on.map(g => of(g, 'rec') * (0.6 + 0.8 * rng())), on.map(g => (of(g, 'rec') > 0 ? 330 : 0)), on.map(g => of(g, 'recTd')), true)) return false;
   /* sacks: the save holds one decimal. Whole sacks are spread, a half sack goes to one keyed game,
      and the last tenths (0 to 4) to the game with the most, so the season's sum is the saved number */

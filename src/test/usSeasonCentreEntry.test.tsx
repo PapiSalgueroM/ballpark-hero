@@ -135,11 +135,16 @@ async function toHub(sport: UsCareerSport, ext: 'sign' | 'decline' = 'sign'): Pr
     if (talk) { const b = buttons(talk); await click(ext === 'sign' ? b[0] : b[b.length - 1]); continue; }
     if (market) { await click(buttons(market)[0]); continue; }
     if (playButton()) return 'hub';
+    /* Round 1147: a decision's outcome card with many changes has a "Show all changes" toggle before its
+       Continue; pressing the first button there only folds the list open and shut for ever */
+    const outcome = body.querySelector('[data-career-decision-outcome]');
+    if (outcome) { const b = buttons(outcome); await click(b[b.length - 1]); continue; }
     const all = buttons(body);
     if (!all.length) throw new Error(`usSeasonCentreEntry.test: lost on "${squash(body.textContent ?? '').slice(0, 160)}"`);
     await click(all[0]);
   }
-  throw new Error('usSeasonCentreEntry.test: never got back to the hub');
+  const shown = ['[role="alertdialog"]', '[data-season-reveal]', '[data-extension-talk]', '[data-fa-window]'].filter(sel => document.body.querySelector(sel)).join(', ') || 'none of the known screens';
+  throw new Error(`usSeasonCentreEntry.test: never got back to the hub (on screen: ${shown}; buttons: ${buttons(document.body).slice(0, 6).map(b => squash(b.textContent ?? '').slice(0, 30)).join(' | ')}; it reads "${squash(document.body.textContent ?? '').slice(0, 300)}")`);
 }
 
 interface Arm { saves: string[]; opened: number; noOverlay: number; focusOnContinue: number }
