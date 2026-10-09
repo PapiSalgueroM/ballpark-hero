@@ -1,0 +1,59 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/zzRvOldSaves.test.tsx[2m > [22m[2mreviewer probe: base saves of the uncovered kinds on the merged tree[2m > [22m[2mevery save loads and plays two more seasons
+[22m[39m[rv old] save 18 (seed 8800, dugout:manager_season, 2045): three more dugout seasons, phase manager_season, leagueWorld none, 66129 bytes
+[rv old] save 24 (seed 8801, dugout:manager_season, 2048): three more dugout seasons, phase manager_season, leagueWorld none, 62938 bytes
+[rv old] save 25 (seed 8802, dugout:manager_season, 2047): three more dugout seasons, phase manager_season, leagueWorld none, 68165 bytes
+[rv old] save 29 (seed 8803, dugout:manager_season, 2043): three more dugout seasons, phase manager_season, leagueWorld none, 48290 bytes
+[rv old] 36 base saves, 32 carried two seasons, 4 dugout saves carried, 53 new rows hold a league world, 0 problems
+
+[90mstdout[2m | src/test/zzRvOldSaves.test.tsx[2m > [22m[2mreviewer probe: base saves of the uncovered kinds on the merged tree[2m > [22m[2ma frozen out card saved by the base still offers every choice it offered
+[22m[39m[rv old] save 26 (transfer_window:frozen_out:transfer_listed:offers): 3 offers (LASK, Paris FC, Sunderland), every choice played on
+[rv old] save 27 (transfer_window:frozen_out:released:offers): 3 offers (Defence Force FC, Coventry City, Utrecht), every choice played on
+[rv old] save 28 (transfer_window:frozen_out:released:offers): 3 offers (Stoke City, Vitoria, Pohang Steelers), every choice played on
+[rv old] save 30 (transfer_window:frozen_out:released:offers): 3 offers (Torino, Sint-Truiden, Jeonbuk Motors), every choice played on
+[rv old] save 31 (transfer_window:frozen_out:transfer_listed:offers): 3 offers (Basaksehir, Falkirk, Al Nassr), every choice played on
+[rv old] save 32 (transfer_window:frozen_out:transfer_listed:offers): 3 offers (Dundee, Millonarios, Mumbai City), every choice played on
+[rv old] save 35 (transfer_window:frozen_out:loan_listed:offers): 2 offers (Nice loan, Pohang Steelers loan), every choice played on
+
+[90mstdout[2m | src/test/zzRvOldSaves.test.tsx[2m > [22m[2mreviewer probe: base saves of the uncovered kinds on the merged tree[2m > [22m[2man appeal result saved by the base: a rejected appeal now costs games, an upheld one does not
+[22m[39m[rv old] save 19 (red_card_appeal_result): appeal upheld; queued 0; next season 2027 apps 40, league apps 25, served 0, still owed 0
+[rv old] save 20 (random_events:appeal_waiting): base left an appeal (upheld) behind 1 cards; a season later the result is STILL WAITING, never shown, owed 0
+[rv old] save 21 (random_events:appeal_waiting): base left an appeal (upheld) behind 4 cards; a season later the result is STILL WAITING, never shown, owed 0
+[rv old] save 22 (random_events:appeal_waiting): base left an appeal (upheld) behind 3 cards; a season later the result is STILL WAITING, never shown, owed 3
+[rv old] save 33 (red_card_appeal_result): appeal upheld; queued 0; next season 2041 apps 24, league apps 18, served 0, still owed 0
+[rv old] save 34 (red_card_appeal_result): appeal upheld; queued 0; next season 2041 apps 27, league apps 24, served 0, still owed 0
+
+[90mstdout[2m | src/test/zzRvOldSaves.test.tsx[2m > [22m[2mreviewer probe: base saves of the uncovered kinds on the merged tree[2m > [22m[2mthe page mounts on every base save and keeps it
+[22m[39m[rv old] save 26 (transfer_window:frozen_out:transfer_listed:offers) on the page: club move card not shown, offers named 3/3, buttons: Sign up to track your statsTrack stats / Refuse to leave Leipzig 🧊
+
+[90mstdout[2m | src/test/zzRvOldSaves.test.tsx[2m > [22m[2mreviewer probe: base saves of the uncovered kinds on the merged tree[2m > [22m[2mthe page mounts on every base save and keeps it
+[22m[39m[rv old] save 27 (transfer_window:frozen_out:released:offers) on the page: club move card not shown, offers named 3/3, buttons: Sign up to track your statsTrack stats
+
+[90mstdout[2m | src/test/zzRvOldSaves.test.tsx[2m > [22m[2mreviewer probe: base saves of the uncovered kinds on the merged tree[2m > [22m[2mthe page mounts on every base save and keeps it
+[22m[39m[rv old] save 28 (transfer_window:frozen_out:released:offers) on the page: club move card not shown, offers named 3/3, buttons: Sign up to track your statsTrack stats
+
+[90mstdout[2m | src/test/zzRvOldSaves.test.tsx[2m > [22m[2mreviewer probe: base saves of the uncovered kinds on the merged tree[2m > [22m[2mthe page mounts on every base save and keeps it
+[22m[39m[rv old] save 30 (transfer_window:frozen_out:released:offers) on the page: club move card not shown, offers named 3/3, buttons: Sign up to track your statsTrack stats
+
+[90mstdout[2m | src/test/zzRvOldSaves.test.tsx[2m > [22m[2mreviewer probe: base saves of the uncovered kinds on the merged tree[2m > [22m[2mthe page mounts on every base save and keeps it
+[22m[39m[rv old] save 31 (transfer_window:frozen_out:transfer_listed:offers) on the page: club move card not shown, offers named 3/3, buttons: Sign up to track your statsTrack stats / Refuse to leave Juventus 🧊
+
+[90mstdout[2m | src/test/zzRvOldSaves.test.tsx[2m > [22m[2mreviewer probe: base saves of the uncovered kinds on the merged tree[2m > [22m[2mthe page mounts on every base save and keeps it
+[22m[39m[rv old] save 32 (transfer_window:frozen_out:transfer_listed:offers) on the page: club move card not shown, offers named 3/3, buttons: Sign up to track your statsTrack stats / Refuse to leave Sao Paulo 🧊
+
+[90mstdout[2m | src/test/zzRvOldSaves.test.tsx[2m > [22m[2mreviewer probe: base saves of the uncovered kinds on the merged tree[2m > [22m[2mthe page mounts on every base save and keeps it
+[22m[39m[rv old] save 35 (transfer_window:frozen_out:loan_listed:offers) on the page: club move card not shown, offers named 2/2, buttons: Sign up to track your statsTrack stats / Go on loan 🛫 / Go on loan 🛫 / Refuse to leave Leipzig 🧊
+[rv old] page mounted on 36/36 base saves, 0 problems
+
+ [32m✓[39m src/test/zzRvOldSaves.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 6043[2mms[22m[39m
+   [33m[2m✓[22m[39m reviewer probe: base saves of the uncovered kinds on the merged tree[2m > [22mevery save loads and plays two more seasons [33m 1012[2mms[22m[39m
+   [33m[2m✓[22m[39m reviewer probe: base saves of the uncovered kinds on the merged tree[2m > [22ma frozen out card saved by the base still offers every choice it offered [33m 308[2mms[22m[39m
+   [33m[2m✓[22m[39m reviewer probe: base saves of the uncovered kinds on the merged tree[2m > [22mthe page mounts on every base save and keeps it [33m 3133[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 13:55:32
+[2m   Duration [22m 10.01s[2m (transform 3.34s, setup 53ms, collect 2.83s, tests 6.04s, environment 334ms, prepare 379ms)[22m
+

@@ -1,0 +1,49 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/zzRvWorld.test.ts[2m > [22m[2mreviewer probe: the simulated league world a player reads[2m > [22m[2mholds its own promises over real careers
+[22m[39m[rv world] 150 careers, 1507 league world seasons (1459 with a final table, 1168 with derbies), his club went down 29 times (tier 3: 29) and up 19; largest save 179886 bytes
+[rv world] 37986 listed moves; relegated clubs by their pool tier: tier 1: 67, tier 2: 152, tier 3: 1794, tier 4: 16980
+[rv world] tier 1 clubs (not his) sent down: Man United x15, Inter Milan x14, Chelsea x10, Juventus x7, Liverpool x7, Arsenal x6, Bayern Munich x4, PSG x3, Real Madrid x1
+[rv world] BROKEN I2 next season's field is not this field after the listed moves: 44 times, e.g. 52000 2041 West Ham (Premier League) ; 52004 2030 PSG (Ligue 1) ; 52012 2044 Chelsea (Premier League)
+[rv world] BROKEN I2 next season he is not in the division the movement named: 1 times, e.g. 52030 2034 Wolves (Premier League): next Championship, want Premier League
+[rv world] BROKEN I3 the clubs that left his division are not the ones the final table shows: 3 times, e.g. 52106 2031 AC Milan (Serie A): moved genoa|torino|udinese want cagliari|genoa|udinese ; 52108 2036 Liverpool (Premier League): moved blackburn rovers|charlton athletic|wrexham want cardiff city|charlton athletic|qpr ; 52126 2032 Atletico Madrid (La Liga): moved elche|getafe|sabadell want elche|eldense|getafe
+[rv world] 3 kinds of broken promise
+
+ [31m❯[39m src/test/zzRvWorld.test.ts [2m([22m[2m1 test[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 24929[2mms[22m[39m
+[31m   [31m×[31m reviewer probe: the simulated league world a player reads[2m > [22mholds its own promises over real careers[39m[33m 24928[2mms[22m[39m
+[31m     → expected [ …(3) ] to deeply equal [][39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/zzRvWorld.test.ts[2m > [22mreviewer probe: the simulated league world a player reads[2m > [22mholds its own promises over real careers
+[31m[1mAssertionError[22m: expected [ …(3) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "I2 next season's field is not this field after the listed moves",[39m
+[31m+   "I2 next season he is not in the division the movement named",[39m
+[31m+   "I3 the clubs that left his division are not the ones the final table shows",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/zzRvWorld.test.ts:[2m141:19[22m[39m
+    [90m139| [39m    for (const k of kinds) console.log(`[rv world] BROKEN ${k}: ${bad[…
+    [90m140| [39m    console[33m.[39m[34mlog[39m([32m`[rv world] [39m[36m${[39mkinds[33m.[39mlength[36m}[39m[32m kinds of broken promise`[39m)[33m;[39m
+    [90m141| [39m    [34mexpect[39m(kinds)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m142| [39m  })[33m;[39m
+    [90m143| [39m})[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m   Start at [22m 13:55:32
+[2m   Duration [22m 27.59s[2m (transform 1.28s, setup 55ms, collect 1.55s, tests 24.93s, environment 344ms, prepare 116ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/zzRvWorld.test.ts,title=src/test/zzRvWorld.test.ts > reviewer probe%3A the simulated league world a player reads > holds its own promises over real careers,line=141,column=19::AssertionError: expected [ …(3) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "I2 next season's field is not this field after the listed moves",%0A+   "I2 next season he is not in the division the movement named",%0A+   "I3 the clubs that left his division are not the ones the final table shows",%0A+ ]%0A%0A ❯ src/test/zzRvWorld.test.ts:141:19%0A%0A
