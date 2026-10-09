@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+walk: node .rc/x/rvwalk.mjs
+playGames-390: ONLY=/club-manager WIDTH=390 HEIGHT=844 node scripts/playGames.mjs
+playLiveMatchFit: node scripts/playLiveMatchFit.mjs
+simResultMoment: node scripts/simResultMoment.mjs
