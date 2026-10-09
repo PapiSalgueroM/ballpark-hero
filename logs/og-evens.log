@@ -1,0 +1,14 @@
+simCmOwnGoals (control evens): 18 careers (6 clubs x 3 seeds, seedset 0) x 2 seasons, 1643 matches, 4398 goals
+  MEASURED own goals: 92 of 4398 goals (2.09%), 59 for me and 33 against; 3318 eligible, expected 103.7, z -1.17; 20 by a keeper; 88 of 1643 matches had one; 2.56 a season in my matches
+  MEASURED the man: 1 of the 33 against me were by a man standing at the back whose card says otherwise; the keeper holds 3556 places in 18000 keyed picks with four at the back (one in nine is 2000); section gone: 161 matches played again with 322 men at the back sent off, 107 own goals against me after it
+  MEASURED penalties: 379 of 4398 goals (8.62%) carry the flag every listing marks (P); direct free kicks 146 (3.32%); 0 own goals by a sub of theirs with no sheet to read his position from
+  MEASURED awards over the 36 seasons both careers agree on: my squad 59 goals and 33 assists down (1.64 and 0.92 a season); my top scorer 0.44 goals down a season on a mean of 22.47, a different man in 0; golden boot a different man in 0, player of the season in 0, world award in 0
+  ok digest (18 checks)
+  ok share (1 checks)
+  ok marks (4398 checks)
+  ok man (92 checks)
+  FAIL weights: 5 finding(s) on 6 checks. the keeper was named 3556 times in 18000 with four at the back, and one place in nine is 2000 | the left back was named 3635 times in 18000, and two places in nine is 4000 | the left centre back was named 3621 times in 18000, and two places in nine is 4000
+  FAIL gone: 4 finding(s) on 107 checks. James Tarkowski was sent off in the 40th minute and is named for an own goal at 75' | James Tarkowski was sent off in the 40th minute and is named for an own goal at 74' | James Tarkowski was sent off in the 40th minute and is named for an own goal at 75'
+  ok credit (1679 checks)
+  ok inflight (1 checks)
+simCmOwnGoals: CONTROL evens FIRED, section weights went red as it must (red in all: weights, gone)

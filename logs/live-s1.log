@@ -1,0 +1,24 @@
+1) Kick off commits the first half
+   42 kick offs: h1Play 30 to 56 events (mean 42.1), 52 first half goals mirrored shot for shot, 47 bookings each a foul by the booked man, stats counted by hand agree at 45
+2) The report is counted off the same stream, both ways of finishing a match
+   42 matches finished (21 live, 21 quick): h2Play 26 to 55 events (mean 41.9), stats equal liveStatsAt field by field, 109 timeline goals each a goal shot, 197 decisive buckets lean with their shots
+3) The opposition eleven, their bench and their substitutions
+   32 matches with a named eleven, 10 without (thin clubs): 32 scorers on the pitch at their minute, 56 opposition subs in 56..88 from their bench (1.75 a match, floor 1), every ratings sheet the eleven plus the men who came on
+   0 of 32 matches list a man on the ball after he came off (0 events, floor 0); 0 bookings for a man after he came off (floor 0); 0 opposition scorers scored after a red (floor 0)
+   30 of 56 men who came on were on the ball or on the scoresheet after their minute (53.6 percent, floor 15)
+4) A change keeps the past and redraws the future
+   42 subs at 70 and 42 at 20: the past byte identical, the future in range, the pitch through the sub's minute holds the man who went off and from the next minute the man who came on, the man who went off never on the ball again, the report the stream the viewer walked; the stream after the change was redrawn in 100.0 and 100.0 percent (floor 50)
+5) The change moves the football: attacking at 70 against balanced at 70 on the same seed
+   500 seeds: attacking > balanced after 70 on 44 (8.8 percent, floor 3), never fewer (0 seeds), goals after 70 271 against 225, lam2Mine gap 0.093 to 0.093 (0 seeds wrong way)
+6) Historical no-coach parity: viewer draws against unmanaged quick settlement
+   42 fixtures replayed both ways, 20 distinct scorelines, every pair identical down to the JSON of the play
+7) Rules: three subs, on the pitch, not already on, 90 minutes, a clock that only runs forward
+   6 states: 3 subs go through and the fourth is refused, a man off the pitch, a man already on and minute 91 are refused, a change at 10 with the clock at 46 lands at 46, the dressing room sub prints at 46
+8) A paused save is picked back up, never kicked off a second time
+   14 paused saves: picked back up with the same first half, quick simmed with 21 first half goals and every first half event carried verbatim
+9) A save paused before this round still resolves
+   10 old shape saves resolved with a full report: play per half 34 to 52 events, stats shots >= on target >= goals both sides, first half scorer counts kept
+10) A man in my squad never turns out for the club he left, real or generated
+   42 fixtures with the next opponent's top man in my squad (21 real, 21 generated; 0 opponents with no roster to take from), 32 named elevens, 42 previews: his name never on their eleven, bench, subs, scorers, ratings sheet, play or cards, never a danger man for them, never theirs in the scorer race, both ways of finishing (floor 0)
+
+simLiveMatch: PASS. Each half is committed as one stream, the report is counted off it, a change keeps the past and redraws the future, and the other dugout fields eleven named men who come and go on the same clock.

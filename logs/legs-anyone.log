@@ -1,0 +1,15 @@
+simCmQuickLegs (control anyone): 18 careers (6 clubs x 3 seeds, seedset 0) x 2 seasons, each by quick sim, with and without the round
+  MEASURED with the round: 1637 matches, 2.04 changes a match (0.23 for an injury, 0.49 at the break, 1.31 for legs after it), bench used in 99.2% of matches; W 53.0% D 23.0% L 24.0%, 1.65 for and 0.97 against a match, 68.39 league points a season; 592.81 appearances a season shared by 22.17 men
+  MEASURED without it: 1657 matches, 0.73 changes a match (0.25 for an injury, 0.48 at the break, 0.00 for legs after it), bench used in 47.3% of matches; W 52.9% D 21.1% L 26.0%, 1.73 for and 0.99 against a match, 68.44 league points a season; 539.75 appearances a season shared by 21.03 men
+  MEASURED his rule, on 241 matches played again by hand (170 with a change for legs): 311 changes for legs, 271 with the match within a goal (mean strength -0.603) and 40 with my side two or more up (mean -0.581); 118 of them took a man on a yellow off; 170 matches played again with one fit man on the bench and 170 with the clock past his first look
+  ok gap (1 checks)
+  FAIL rule: 252 finding(s) on 311 checks. Hayden Hackney off at 72' left the eleven weaker (78.01 from 78.13) with my side 0 up | Kiernan Dewsbury-Hall off at 66' left the eleven weaker (81.45 from 81.94) with my side 1 down | Hayden Hackney off at 73' left the eleven weaker (80.50 from 81.45) with my side 1 down
+  ok order (311 checks)
+  ok fresher (311 checks)
+  ok fit (311 checks)
+  ok reserve (311 checks)
+  ok thin (170 checks)
+  ok clock (170 checks)
+  ok manual (241 checks)
+  ok report (1637 checks)
+simCmQuickLegs: CONTROL anyone FIRED, section rule went red as it must (red in all: rule)
