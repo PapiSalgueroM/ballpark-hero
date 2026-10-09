@@ -1,0 +1,115 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/seasonFamilySummary.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m9 passed[39m[22m[90m (9)[39m
+[2m   Start at [22m 21:02:54
+[2m   Duration [22m 776ms[2m (transform 57ms, setup 47ms, collect 51ms, tests 9ms, environment 298ms, prepare 66ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-family-tests.json
+ok saved birth timing, child milestones, year variation and old saves
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/seasonFamilySummary.test.ts [2m([22m[2m9 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 23[2mms[22m[39m
+[31m   [31m×[31m Soccer Career yearly family summary[2m > [22mgives a newborn dedication only in the actual saved birth season[39m[32m 13[2mms[22m[39m
+[31m     → expected '27 goals this season. A new baby join…' to contain 'One season since you welcomed a child.'[39m
+   [32m✓[39m Soccer Career yearly family summary[2m > [22mrecognizes current births before the season log has been archived[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer Career yearly family summary[2m > [22mdoes not assign another season or a future birth to the displayed year[32m 0[2mms[22m[39m
+[31m   [31m×[31m Soccer Career yearly family summary[2m > [22mkeeps the most recent recorded birth as the new family chapter[39m[32m 3[2mms[22m[39m
+[31m     → expected '27 goals this season. A new baby join…' to contain 'One season since you welcomed a child.'[39m
+   [32m✓[39m Soccer Career yearly family summary[2m > [22mvaries later family copy by year without guessing an age for old saves[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career yearly family summary[2m > [22mmentions progression only when that milestone belongs to this season[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer Career yearly family summary[2m > [22mseparates an expected baby from a birth and does not treat paternity claims as newborns[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer Career yearly family summary[2m > [22mdoes not invent a child when the selected celebration has no family record[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer Career yearly family summary[2m > [22mis deterministic and leaves saved family facts untouched without drawing randomness[32m 1[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (9)[39m
+[2m   Start at [22m 21:02:56
+[2m   Duration [22m 846ms[2m (transform 74ms, setup 70ms, collect 67ms, tests 23ms, environment 274ms, prepare 181ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-family-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/seasonFamilySummary.test.ts[2m > [22mSoccer Career yearly family summary[2m > [22mgives a newborn dedication only in the actual saved birth season
+[31m[1mAssertionError[22m: expected '27 goals this season. A new baby join…' to contain 'One season since you welcomed a child.'[39m
+
+Expected: [32m"[7mOne season since you welcomed a child[27m."[39m
+Received: [31m"[7m27 goals this season. A new baby joined your family this season. The cradle celebration is for that new arrival[27m."[39m
+
+[36m [2m❯[22m src/test/seasonFamilySummary.test.ts:[2m16:33[22m[39m
+    [90m 14| [39m    const data = context({ story: [{ year: 2027, age: 24, club: 'Harbo…
+    [90m 15| [39m    expect(summary(2027, data)).toContain('A new baby joined your fami…
+    [90m 16| [39m    expect(summary(2028, data)).toContain('One season since you welcom…
+    [90m   | [39m                                [31m^[39m
+    [90m 17| [39m    expect(summary(2031, data)).toContain('4 seasons since you welcome…
+    [90m 18| [39m    expect(summary(2031, data)).not.toMatch(/new baby|new arrival|newe…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/seasonFamilySummary.test.ts[2m > [22mSoccer Career yearly family summary[2m > [22mkeeps the most recent recorded birth as the new family chapter
+[31m[1mAssertionError[22m: expected '27 goals this season. A new baby join…' to contain 'One season since you welcomed a child.'[39m
+
+Expected: [32m"[7mOne season since you welcomed a child[27m."[39m
+Received: [31m"[7m27 goals this season. A new baby joined your family this season. The cradle celebration is for that new arrival[27m."[39m
+
+[36m [2m❯[22m src/test/seasonFamilySummary.test.ts:[2m41:33[22m[39m
+    [90m 39| [39m    ] })[33m;[39m
+    [90m 40| [39m    expect(summary(2030, data)).toContain('A new baby joined your fami…
+    [90m 41| [39m    expect(summary(2031, data)).toContain('One season since you welcom…
+    [90m   | [39m                                [31m^[39m
+    [90m 42| [39m  })[33m;[39m
+    [90m 43| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+ok copied repeated newborn defect changed source and was caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/seasonFamilySummary.test.ts [2m([22m[2m9 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 14[2mms[22m[39m
+   [32m✓[39m Soccer Career yearly family summary[2m > [22mgives a newborn dedication only in the actual saved birth season[32m 3[2mms[22m[39m
+   [32m✓[39m Soccer Career yearly family summary[2m > [22mrecognizes current births before the season log has been archived[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer Career yearly family summary[2m > [22mdoes not assign another season or a future birth to the displayed year[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer Career yearly family summary[2m > [22mkeeps the most recent recorded birth as the new family chapter[32m 0[2mms[22m[39m
+[31m   [31m×[31m Soccer Career yearly family summary[2m > [22mvaries later family copy by year without guessing an age for old saves[39m[32m 7[2mms[22m[39m
+[31m     → expected 1 to be 6 // Object.is equality[39m
+   [32m✓[39m Soccer Career yearly family summary[2m > [22mmentions progression only when that milestone belongs to this season[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer Career yearly family summary[2m > [22mseparates an expected baby from a birth and does not treat paternity claims as newborns[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer Career yearly family summary[2m > [22mdoes not invent a child when the selected celebration has no family record[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer Career yearly family summary[2m > [22mis deterministic and leaves saved family facts untouched without drawing randomness[32m 1[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m8 passed[39m[22m[90m (9)[39m
+[2m   Start at [22m 21:02:57
+[2m   Duration [22m 829ms[2m (transform 66ms, setup 62ms, collect 54ms, tests 14ms, environment 337ms, prepare 121ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-family-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/seasonFamilySummary.test.ts[2m > [22mSoccer Career yearly family summary[2m > [22mvaries later family copy by year without guessing an age for old saves
+[31m[1mAssertionError[22m: expected 1 to be 6 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 6[39m
+[31m+ 1[39m
+
+[36m [2m❯[22m src/test/seasonFamilySummary.test.ts:[2m47:33[22m[39m
+    [90m 45| [39m    [35mconst[39m data [33m=[39m [34mcontext[39m()[33m;[39m
+    [90m 46| [39m    const lines = Array.from({ length: 6 }, (_, index) => summary(2031…
+    [90m 47| [39m    [34mexpect[39m([35mnew[39m [33mSet[39m(lines)[33m.[39msize)[33m.[39m[34mtoBe[39m([34m6[39m)[33m;[39m
+    [90m   | [39m                                [31m^[39m
+    [90m 48| [39m    [35mfor[39m ([35mconst[39m line [35mof[39m lines) {
+    [90m 49| [39m      expect(line).not.toMatch(/new baby|new arrival|newest member|yea…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok copied repeated yearly copy defect changed source and was caught
+simSeasonFamilySummary: saved family progression green, both effective negative controls caught

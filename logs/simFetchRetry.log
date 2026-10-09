@@ -1,0 +1,19 @@
+1) a page that fails once and then succeeds costs a retry, not the read
+   4 calls made, 2500 of 2500 rows returned, error null
+2) the rows after a retry are exactly the rows without one
+   failure on call 1: 2500 rows, no duplicates, ranges 0,0,1000,2000
+   failure on call 2: 2500 rows, no duplicates, ranges 0,1000,1000,2000
+   failure on call 3: 2500 rows, no duplicates, ranges 0,1000,2000,2000
+3) a page that fails every attempt still returns its error
+   4 calls made, error returned, 1000 rows returned
+4) the work is bounded
+   healthy read: 3 calls for 3 pages
+   read against a dead database: 3 calls
+5) the paging semantics around the retry are unchanged
+   maxRows 1500 returned 1500 rows
+   an empty first page returned 0 rows, error null
+   a short first page drew 1 call and returned 10 rows
+6) every caller reads the error
+   20 callers page through fetchAllRows
+
+simFetchRetry: green. A transient page failure costs a retry and the rows come back whole.

@@ -1,0 +1,31 @@
+running the fleet through MAIN, B (no run) and A (the round taken out)
+  MAIN: 2400 forced seasons, 2400 played (2 s)
+  B: 2400 forced seasons, 2400 played (2 s)
+  A: 2400 forced seasons, 2400 played (2 s)
+1) the run draws from its own generator: MAIN and B draw Math.random alike, and only cupRun differs
+  2400 seasons compared, 1817 with a run; Math.random counts differ in 0, rows or events differ in 0
+2) every season is coherent with itself, the table and the phone's world
+  {"seasons":2400,"runs":1817,"won":297,"none":280,"noneWorld":116,"lostFinalWorld":118,"lostFinalElsewhere":2,"champWon":24,"pens":33,"pensFinals":297,"twoLegs":42,"named":1664,"unnamed":153,"noRun":230,"thinUnknown":230,"worldWon":259,"mlsWorlds":2090,"semis":681}
+  finals settled on penalties: 33 of 297 in windows that record them (0.111, band 0.04 to 0.18)
+3) the same coin as before the round outside a season with no cup, and runs shaped by the odds
+  forced seasons with a cup: 2120 win or lose exactly as before the round, 0 differ
+  seasons with no cup: 280; cups won there before the round 46, now 0
+  held careers: 92 of 96 stayed in associations with no NONE window, 552 seasons, cups 137 now and 137 before the round, 0 careers moved
+  elite: 194 runs, 123 lost, early exit share 0.374, finals 89 against 91.8 expected (0.969)
+  t1: 344 runs, 289 lost, early exit share 0.446, finals 84 against 112.1 expected (0.750)
+  t2: 545 runs, 438 lost, early exit share 0.434, finals 156 against 158.3 expected (0.985)
+  t3+: 734 runs, 670 lost, early exit share 0.554, finals 124 against 128.2 expected (0.967)
+  finals reached 453, expected 490.5, ratio 0.924
+  early exit share, tier 3 and below minus the elite: 0.180
+4) the table, its recorded copy and sources, the checker corrections, and Club Manager
+  table digest a3616009f455a63f, 20 associations, 63 windows
+  63 windows match the recorded copy; 46 of 46 NAMED and NONE windows carry two sourced, dated facts
+  Club Manager: 38 league rows agree with the table's latest window, 3 where the table is UNKNOWN today
+5) the summary lines render for a new row, and a row from before the round renders nothing new
+  won:  | 🏆 FA Cup winners | Through the early rounds | Quarter-final: beat Derby County 3-2 | Semi-final: beat West Ham 2-1 | Final: beat Stoke City 2-1 | Rounds before the final are shown as one match each. | 
+  exit: FA Cup: knocked out by Sheffield United in the semi-final.
+6) the draw itself is pinned: fixed inputs over made up clubs give the same runs
+  420 draws, 260 runs, 54 final scores, 3 on penalties; digest 9a2909e9fd97c022
+  15 lost finals where the world's winner was no club of the pool; runs meeting it: 0
+
+simCareerDomesticCup: all sections green

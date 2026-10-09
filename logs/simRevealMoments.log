@@ -1,0 +1,12 @@
+1) Source level: no counting number, a reduced motion rule beside every keyframe, one stagger helper
+   1824 source files scanned: 0 import or render the counting number, 0 export it, 0 roll one of their own
+   18 files declare a keyframe in a <style> block, 16 carry the reduced motion rule, 49 animated classes named inside it, 2 frozen in the baseline
+   revealDelay defined in src/components/club-manager/Celebration.tsx (1); 30 callers, 0 import it from somewhere else, 0 keep the pace inline
+2) Render level: every fact and number on a reveal card is the fixture's own, and the rows land in order
+   DraftNightCard: 5 picks, Continue at 2.18s
+   11 cards rendered, 100 facts found in order, 66 printed numbers held to their fixtures
+3) Behaviour under vitest: the last pick holds the draft until Continue, and the career hubs mount draft day
+   vitest exit 0, 34 passed (34)
+   5 front offices hold the draft after the last pick until Continue, 4 career hubs mount draft day with the engine's pick, 1 coach season reveal
+
+simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's own, and the last pick holds the draft until Continue.

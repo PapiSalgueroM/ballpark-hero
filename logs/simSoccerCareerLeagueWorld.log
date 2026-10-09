@@ -1,0 +1,772 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerCareerLeagueWorld.test.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 2545[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career simulated promotion and relegation[2m > [22mholds each division's count and each second division's clubs to Club Manager's own rows [33m 1678[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m17 passed[39m[22m[90m (17)[39m
+[2m   Start at [22m 21:03:24
+[2m   Duration [22m 5.03s[2m (transform 2.80s, setup 53ms, collect 1.76s, tests 2.54s, environment 323ms, prepare 98ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/league-world-tests.json
+ok five-country 15-year movement, actual final table, player division, offer projection, old save replay, partial Spain and fixed champion aliases
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/soccerCareerWorldSettle.test.ts[2m > [22m[2mSoccer Career: every season of the league world is settled and shown as saved[2m > [22m[2msettles the injury years too, and next season plays in the field the moves left
+[22m[39m[world settle] 421 world seasons, 15 cut short by a severe injury, his club moved 15 times (1 of them in an injury year)
+
+[90mstdout[2m | src/test/soccerCareerWorldSettle.test.ts[2m > [22m[2mSoccer Career: every season of the league world is settled and shown as saved[2m > [22m[2mdraws each settled table with the saved clubs in the places that changed hands
+[22m[39m[world settle] 119 table seasons, 119 drawn, 84 of them with a derby rival in the table
+
+ [32m✓[39m src/test/soccerCareerWorldSettle.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 10247[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: every season of the league world is settled and shown as saved[2m > [22msettles the injury years too, and next season plays in the field the moves left [33m 7681[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: every season of the league world is settled and shown as saved[2m > [22mdraws each settled table with the saved clubs in the places that changed hands [33m 2565[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m   Start at [22m 21:03:29
+[2m   Duration [22m 12.27s[2m (transform 930ms, setup 50ms, collect 1.13s, tests 10.25s, environment 349ms, prepare 74ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/league-world-tests.json
+ok engine careers: every world season settled where it ends, the injury years too, and each table drawn with the saved clubs in the places that changed hands
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerCareerLeagueWorld.test.ts [2m([22m[2m17 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 2224[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mstarts all five sourced pyramids and leaves historical and open leagues alone[32m 9[2mms[22m[39m
+[31m   [31m×[31m Soccer Career simulated promotion and relegation[2m > [22mchanges membership over fifteen years with equal, disjoint and correctly ranked swaps[39m[32m 19[2mms[22m[39m
+[31m     → expected [ 'Millwall', 'Lincoln City', 'QPR' ] to deeply equal [ 'Cardiff City', 'Stoke City', …(1) ][39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22muses the displayed final table for relegation and retains that season after later movement[32m 35[2mms[22m[39m
+[31m   [31m×[31m Soccer Career simulated promotion and relegation[2m > [22mmakes the player follow both divisions and restores base tier after promotion[39m[32m 17[2mms[22m[39m
+[31m     → expected [ 'Ligue 2', 4 ] to deeply equal [ 'Ligue 1', 1 ][39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mnormalizes saved club aliases before swapping and keeps the played spelling once[32m 14[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mprojects actual transfer offers and lower destinations through the same next-year field[32m 20[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mlabels the partial Spanish model and caps lower league apps to its own calendar[32m 16[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mkeeps old saves and rejects malformed or foreign membership without inventing tables[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mretains an injured season field without inventing a finish or full table[32m 8[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mbinds a mixed-alias future champion to its saved derby key and field spelling[32m 20[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mdoes not put a rival from another future division in the season context[32m 3[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22msettles the season a severe injury cut short and writes his club's move on the row[32m 239[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mnever puts his club first in a season a severe injury cut short[32m 17[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mopens the season after a year out with the line when his club moved without him[32m 134[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mstarts a damaged world again instead of throwing on the next season[32m 9[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mdraws a settled season's table with the saved clubs in the places that changed hands[32m 172[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career simulated promotion and relegation[2m > [22mholds each division's count and each second division's clubs to Club Manager's own rows [33m 1488[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m15 passed[39m[22m[90m (17)[39m
+[2m   Start at [22m 21:03:42
+[2m   Duration [22m 4.56s[2m (transform 2.53s, setup 53ms, collect 1.68s, tests 2.22s, environment 336ms, prepare 72ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/league-world-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerLeagueWorld.test.ts[2m > [22mSoccer Career simulated promotion and relegation[2m > [22mchanges membership over fifteen years with equal, disjoint and correctly ranked swaps
+[31m[1mAssertionError[22m: expected [ 'Millwall', 'Lincoln City', 'QPR' ] to deeply equal [ 'Cardiff City', 'Stoke City', …(1) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[32m-   "Cardiff City",[39m
+[32m-   "Stoke City",[39m
+[32m-   "West Ham",[39m
+[31m+   "Millwall",[39m
+[31m+   "Lincoln City",[39m
+[31m+   "QPR",[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/test/soccerCareerLeagueWorld.test.ts:[2m61:79[22m[39m
+    [90m 59| [39m        const up = leagueWorldOrder(world, lower, s.playerName, FALLBA…
+    [90m 60| [39m        expect(next.movements.filter(m => m.from === upper).map(m => m…
+    [90m 61| [39m        expect(next.movements.filter(m => m.from === lower).map(m => m…
+    [90m   | [39m                                                                              [31m^[39m
+    [90m 62| [39m        [34mexpect[39m(next[33m.[39mleagues[upper][33m.[39mlength)[33m.[39m[34mtoBe[39m(initial[upper][33m.[39mlength)[33m;[39m
+    [90m 63| [39m        [34mexpect[39m(next[33m.[39mleagues[lower][33m.[39mlength)[33m.[39m[34mtoBe[39m(initial[lower][33m.[39mlength)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerLeagueWorld.test.ts[2m > [22mSoccer Career simulated promotion and relegation[2m > [22mmakes the player follow both divisions and restores base tier after promotion
+[31m[1mAssertionError[22m: expected [ 'Ligue 2', 4 ] to deeply equal [ 'Ligue 1', 1 ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[32m-   "Ligue 1",[39m
+[32m-   1,[39m
+[31m+   "Ligue 2",[39m
+[31m+   4,[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/test/soccerCareerLeagueWorld.test.ts:[2m110:50[22m[39m
+    [90m108| [39m    [34msettleLeagueWorld[39m(s[33m,[39m [33mFALLBACK_CLUBS[39m[33m,[39m up)[33m;[39m
+    [90m109| [39m    [34mprepareLeagueWorld[39m(s[33m,[39m [33mFALLBACK_CLUBS[39m[33m,[39m [34m2028[39m)[33m;[39m
+    [90m110| [39m    expect([s.currentLeague, s.currentClubTier]).toEqual(['Ligue 1', 1…
+    [90m   | [39m                                                 [31m^[39m
+    [90m111| [39m    [34mexpect[39m(up[33m.[39mleagueWorld[33m![39m[33m.[39mmovement[33m?.[39mkind)[33m.[39m[34mtoBe[39m([32m'promoted'[39m)[33m;[39m
+    [90m112| [39m    [34mexpect[39m(down[33m.[39mleagueWorld[33m![39m[33m.[39mleague)[33m.[39m[34mtoBe[39m([32m'Ligue 1'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+ok copied promoting the bottom clubs defect changed source and was caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerCareerLeagueWorld.test.ts [2m([22m[2m17 tests[22m[2m | [22m[31m5 failed[39m[2m)[22m[33m 2663[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mstarts all five sourced pyramids and leaves historical and open leagues alone[32m 13[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mchanges membership over fifteen years with equal, disjoint and correctly ranked swaps[32m 113[2mms[22m[39m
+[31m   [31m×[31m Soccer Career simulated promotion and relegation[2m > [22muses the displayed final table for relegation and retains that season after later movement[39m[32m 24[2mms[22m[39m
+[31m     → expected [ 'Auxerre', 'Angers' ] to deeply equal [ 'Le Havre', 'PSG' ][39m
+[31m   [31m×[31m Soccer Career simulated promotion and relegation[2m > [22mmakes the player follow both divisions and restores base tier after promotion[39m[32m 8[2mms[22m[39m
+[31m     → expected [ 'Ligue 1', 1 ] to deeply equal [ 'Ligue 2', 4 ][39m
+[31m   [31m×[31m Soccer Career simulated promotion and relegation[2m > [22mnormalizes saved club aliases before swapping and keeps the played spelling once[39m[32m 8[2mms[22m[39m
+[31m     → expected [ 'Arsenal', 'Man City', …(18) ] to not include 'Man United'[39m
+[31m   [31m×[31m Soccer Career simulated promotion and relegation[2m > [22mprojects actual transfer offers and lower destinations through the same next-year field[39m[32m 6[2mms[22m[39m
+[31m     → expected 'Ligue 1' to be 'Ligue 2' // Object.is equality[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mlabels the partial Spanish model and caps lower league apps to its own calendar[32m 8[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mkeeps old saves and rejects malformed or foreign membership without inventing tables[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mretains an injured season field without inventing a finish or full table[32m 12[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mbinds a mixed-alias future champion to its saved derby key and field spelling[32m 32[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mdoes not put a rival from another future division in the season context[32m 10[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22msettles the season a severe injury cut short and writes his club's move on the row[32m 294[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mnever puts his club first in a season a severe injury cut short[32m 20[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mopens the season after a year out with the line when his club moved without him[32m 182[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mstarts a damaged world again instead of throwing on the next season[32m 13[2mms[22m[39m
+[31m   [31m×[31m Soccer Career simulated promotion and relegation[2m > [22mdraws a settled season's table with the saved clubs in the places that changed hands[39m[32m 245[2mms[22m[39m
+[31m     → expected 0 to be greater than or equal to 6[39m
+   [33m[2m✓[22m[39m Soccer Career simulated promotion and relegation[2m > [22mholds each division's count and each second division's clubs to Club Manager's own rows [33m 1672[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m5 failed[39m[22m[2m | [22m[1m[32m12 passed[39m[22m[90m (17)[39m
+[2m   Start at [22m 21:03:47
+[2m   Duration [22m 5.11s[2m (transform 2.60s, setup 85ms, collect 1.55s, tests 2.66s, environment 436ms, prepare 72ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/league-world-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 5 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerLeagueWorld.test.ts[2m > [22mSoccer Career simulated promotion and relegation[2m > [22muses the displayed final table for relegation and retains that season after later movement
+[31m[1mAssertionError[22m: expected [ 'Auxerre', 'Angers' ] to deeply equal [ 'Le Havre', 'PSG' ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[32m-   "Le Havre",[39m
+[32m-   "PSG",[39m
+[31m+   "Auxerre",[39m
+[31m+   "Angers",[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/test/soccerCareerLeagueWorld.test.ts:[2m87:92[22m[39m
+    [90m 85| [39m    [34mexpect[39m(order[33m.[39m[34mat[39m([33m-[39m[34m1[39m))[33m.[39m[34mtoBe[39m([32m'PSG'[39m)[33m;[39m
+    [90m 86| [39m    [34msettleLeagueWorld[39m(s[33m,[39m [33mFALLBACK_CLUBS[39m[33m,[39m row[33m,[39m order)[33m;[39m
+    [90m 87| [39m    expect(row.leagueWorld!.movements!.filter(m => m.from === 'Ligue 1…
+    [90m   | [39m                                                                                           [31m^[39m
+    [90m 88| [39m    expect(row.leagueWorld!.movement).toEqual({ club: 'PSG', from: 'Li…
+    [90m 89| [39m    [35mconst[39m savedRow [33m=[39m [33mJSON[39m[33m.[39m[34mstringify[39m(row)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerLeagueWorld.test.ts[2m > [22mSoccer Career simulated promotion and relegation[2m > [22mmakes the player follow both divisions and restores base tier after promotion
+[31m[1mAssertionError[22m: expected [ 'Ligue 1', 1 ] to deeply equal [ 'Ligue 2', 4 ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[32m-   "Ligue 2",[39m
+[32m-   4,[39m
+[31m+   "Ligue 1",[39m
+[31m+   1,[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/test/soccerCareerLeagueWorld.test.ts:[2m104:50[22m[39m
+    [90m102| [39m    [34msettleLeagueWorld[39m(s[33m,[39m [33mFALLBACK_CLUBS[39m[33m,[39m down)[33m;[39m
+    [90m103| [39m    [34mprepareLeagueWorld[39m(s[33m,[39m [33mFALLBACK_CLUBS[39m[33m,[39m [34m2027[39m)[33m;[39m
+    [90m104| [39m    expect([s.currentLeague, s.currentClubTier]).toEqual(['Ligue 2', 4…
+    [90m   | [39m                                                 [31m^[39m
+    [90m105| [39m    [34mexpect[39m([34msimulateUCL[39m(s[33m,[39m down)[33m.[39mqualified)[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m106| [39m    [35mconst[39m up [33m=[39m [34mseason[39m(s[33m,[39m [34m2027[39m[33m,[39m [34m1[39m[33m,[39m [34m18[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerLeagueWorld.test.ts[2m > [22mSoccer Career simulated promotion and relegation[2m > [22mnormalizes saved club aliases before swapping and keeps the played spelling once
+[31m[1mAssertionError[22m: expected [ 'Arsenal', 'Man City', …(18) ] to not include 'Man United'[39m
+[36m [2m❯[22m src/test/soccerCareerLeagueWorld.test.ts:[2m130:58[22m[39m
+    [90m128| [39m    [34mexpect[39m(s[33m.[39mleagueWorld[33m![39m[33m.[39mleagues[[32m'Premier League'[39m][33m.[39mlength)[33m.[39m[34mtoBe[39m([34m20[39m)[33m;[39m
+    [90m129| [39m    [34mexpect[39m(s[33m.[39mleagueWorld[33m![39m[33m.[39mleagues[33m.[39m[33mChampionship[39m[33m.[39mlength)[33m.[39m[34mtoBe[39m([34m24[39m)[33m;[39m
+    [90m130| [39m    expect(s.leagueWorld!.leagues['Premier League']).not.toContain('Ma…
+    [90m   | [39m                                                         [31m^[39m
+    [90m131| [39m    expect(s.leagueWorld!.leagues.Championship).toContain('Man United'…
+    [90m132| [39m    [34mexpect[39m(row[33m.[39mleagueWorld[33m![39m[33m.[39mmovement[33m?.[39mclub)[33m.[39m[34mtoBe[39m([32m'Manchester United'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerLeagueWorld.test.ts[2m > [22mSoccer Career simulated promotion and relegation[2m > [22mprojects actual transfer offers and lower destinations through the same next-year field
+[31m[1mAssertionError[22m: expected 'Ligue 1' to be 'Ligue 2' // Object.is equality[39m
+
+Expected: [32m"Ligue [7m2[27m"[39m
+Received: [31m"Ligue [7m1[27m"[39m
+
+[36m [2m❯[22m src/test/soccerCareerLeagueWorld.test.ts:[2m151:54[22m[39m
+    [90m149| [39m    s.seasons = [row]; s.contractYearsLeft = 0; s.age = 24; s.overall …
+    [90m150| [39m    [35mconst[39m pool [33m=[39m [34mprojectLeagueWorldClubs[39m(s[33m,[39m [33mFALLBACK_CLUBS[39m[33m,[39m [34m2027[39m)[33m;[39m
+    [90m151| [39m    [34mexpect[39m(pool[33m.[39m[34mfind[39m(c [33m=>[39m c[33m.[39mname [33m===[39m [32m'PSG'[39m)[33m?.[39mleague)[33m.[39m[34mtoBe[39m([32m'Ligue 2'[39m)[33m;[39m
+    [90m   | [39m                                                     [31m^[39m
+    [90m152| [39m    expect(pool.find(c => c.name === 'FC Andorra')?.country).toBe('And…
+    [90m153| [39m    [34mexpect[39m(pool[33m.[39m[34msome[39m(c [33m=>[39m c[33m.[39mname [33m===[39m [32m'Laval'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerLeagueWorld.test.ts[2m > [22mSoccer Career simulated promotion and relegation[2m > [22mdraws a settled season's table with the saved clubs in the places that changed hands
+[31m[1mAssertionError[22m: expected 0 to be greater than or equal to 6[39m
+[36m [2m❯[22m src/test/soccerCareerLeagueWorld.test.ts:[2m405:22[22m[39m
+    [90m403| [39m    }
+    [90m404| [39m    [34mexpect[39m(tables)[33m.[39m[34mtoBeGreaterThanOrEqual[39m([34m20[39m)[33m;[39m
+    [90m405| [39m    [34mexpect[39m(rivalsIn)[33m.[39m[34mtoBeGreaterThanOrEqual[39m([34m6[39m)[33m;[39m
+    [90m   | [39m                     [31m^[39m
+    [90m406| [39m    [34mexpect[39m(rivalsOut)[33m.[39m[34mtoBeGreaterThanOrEqual[39m([34m12[39m)[33m;[39m
+    [90m407| [39m  }[33m,[39m [34m120000[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯[22m[39m
+
+ok copied using form instead of the displayed table defect changed source and was caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerCareerLeagueWorld.test.ts [2m([22m[2m17 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1712[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mstarts all five sourced pyramids and leaves historical and open leagues alone[32m 6[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mchanges membership over fifteen years with equal, disjoint and correctly ranked swaps[32m 71[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22muses the displayed final table for relegation and retains that season after later movement[32m 22[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mmakes the player follow both divisions and restores base tier after promotion[32m 11[2mms[22m[39m
+[31m   [31m×[31m Soccer Career simulated promotion and relegation[2m > [22mnormalizes saved club aliases before swapping and keeps the played spelling once[39m[32m 16[2mms[22m[39m
+[31m     → expected 21 to be 20 // Object.is equality[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mprojects actual transfer offers and lower destinations through the same next-year field[32m 10[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mlabels the partial Spanish model and caps lower league apps to its own calendar[32m 6[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mkeeps old saves and rejects malformed or foreign membership without inventing tables[32m 3[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mretains an injured season field without inventing a finish or full table[32m 9[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mbinds a mixed-alias future champion to its saved derby key and field spelling[32m 17[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mdoes not put a rival from another future division in the season context[32m 3[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22msettles the season a severe injury cut short and writes his club's move on the row[32m 187[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mnever puts his club first in a season a severe injury cut short[32m 9[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mopens the season after a year out with the line when his club moved without him[32m 119[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mstarts a damaged world again instead of throwing on the next season[32m 8[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mdraws a settled season's table with the saved clubs in the places that changed hands[32m 153[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career simulated promotion and relegation[2m > [22mholds each division's count and each second division's clubs to Club Manager's own rows [33m 1060[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m16 passed[39m[22m[90m (17)[39m
+[2m   Start at [22m 21:03:53
+[2m   Duration [22m 3.58s[2m (transform 1.86s, setup 41ms, collect 1.26s, tests 1.71s, environment 245ms, prepare 123ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/league-world-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerLeagueWorld.test.ts[2m > [22mSoccer Career simulated promotion and relegation[2m > [22mnormalizes saved club aliases before swapping and keeps the played spelling once
+[31m[1mAssertionError[22m: expected 21 to be 20 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 20[39m
+[31m+ 21[39m
+
+[36m [2m❯[22m src/test/soccerCareerLeagueWorld.test.ts:[2m128:61[22m[39m
+    [90m126| [39m    const order = leagueWorldOrder(s.leagueWorld!, 'Premier League', s…
+    [90m127| [39m    [34msettleLeagueWorld[39m(s[33m,[39m [33mFALLBACK_CLUBS[39m[33m,[39m row[33m,[39m order)[33m;[39m
+    [90m128| [39m    [34mexpect[39m(s[33m.[39mleagueWorld[33m![39m[33m.[39mleagues[[32m'Premier League'[39m][33m.[39mlength)[33m.[39m[34mtoBe[39m([34m20[39m)[33m;[39m
+    [90m   | [39m                                                            [31m^[39m
+    [90m129| [39m    [34mexpect[39m(s[33m.[39mleagueWorld[33m![39m[33m.[39mleagues[33m.[39m[33mChampionship[39m[33m.[39mlength)[33m.[39m[34mtoBe[39m([34m24[39m)[33m;[39m
+    [90m130| [39m    expect(s.leagueWorld!.leagues['Premier League']).not.toContain('Ma…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok copied raw aliases duplicating a relegated club defect changed source and was caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerCareerLeagueWorld.test.ts [2m([22m[2m17 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1940[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mstarts all five sourced pyramids and leaves historical and open leagues alone[32m 8[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mchanges membership over fifteen years with equal, disjoint and correctly ranked swaps[32m 77[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22muses the displayed final table for relegation and retains that season after later movement[32m 33[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mmakes the player follow both divisions and restores base tier after promotion[32m 16[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mnormalizes saved club aliases before swapping and keeps the played spelling once[32m 13[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mprojects actual transfer offers and lower destinations through the same next-year field[32m 11[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mlabels the partial Spanish model and caps lower league apps to its own calendar[32m 7[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mkeeps old saves and rejects malformed or foreign membership without inventing tables[32m 3[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mretains an injured season field without inventing a finish or full table[32m 11[2mms[22m[39m
+[31m   [31m×[31m Soccer Career simulated promotion and relegation[2m > [22mbinds a mixed-alias future champion to its saved derby key and field spelling[39m[32m 17[2mms[22m[39m
+[31m     → expected { kind: 'finish', finish: 6, …(2) } to deeply equal { kind: 'finish', finish: 6, …(2) }[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mdoes not put a rival from another future division in the season context[32m 5[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22msettles the season a severe injury cut short and writes his club's move on the row[32m 287[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mnever puts his club first in a season a severe injury cut short[32m 14[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mopens the season after a year out with the line when his club moved without him[32m 124[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mstarts a damaged world again instead of throwing on the next season[32m 8[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mdraws a settled season's table with the saved clubs in the places that changed hands[32m 141[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career simulated promotion and relegation[2m > [22mholds each division's count and each second division's clubs to Club Manager's own rows [33m 1164[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m16 passed[39m[22m[90m (17)[39m
+[2m   Start at [22m 21:03:57
+[2m   Duration [22m 3.88s[2m (transform 1.98s, setup 48ms, collect 1.33s, tests 1.94s, environment 233ms, prepare 54ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/league-world-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerLeagueWorld.test.ts[2m > [22mSoccer Career simulated promotion and relegation[2m > [22mbinds a mixed-alias future champion to its saved derby key and field spelling
+[31m[1mAssertionError[22m: expected { kind: 'finish', finish: 6, …(2) } to deeply equal { kind: 'finish', finish: 6, …(2) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[32m-   "champion": {[39m
+[32m-     "key": "Manchester United",[39m
+[32m-   },[39m
+[31m+   "champion": "other",[39m
+[2m    "finish": 6,[22m
+[2m    "kind": "finish",[22m
+[2m    "title": false,[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/soccerCareerLeagueWorld.test.ts:[2m235:61[22m[39m
+    [90m233| [39m    [35mconst[39m ctx [33m=[39m [34mbuildSoccerSeasonCtx[39m(s[33m,[39m [33mFALLBACK_CLUBS[39m[33m,[39m row)[33m;[39m
+    [90m234| [39m    expect(ctx.fixedNames).toEqual({ 'Manchester United': 'Man United'…
+    [90m235| [39m    expect(SOCCER.target(row, ctx, SOCCER.frame(row, ctx))).toEqual({ …
+    [90m   | [39m                                                            [31m^[39m
+    [90m236| [39m    [35mconst[39m derived [33m=[39m [34mderiveSeason[39m([33mSOCCER[39m[33m,[39m row[33m,[39m ctx)[33m;[39m
+    [90m237| [39m    [34mexpect[39m(derived[33m?.[39mmode)[33m.[39m[34mtoBe[39m([32m'table'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok copied exact-name champion missing its saved derby key defect changed source and was caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerCareerLeagueWorld.test.ts [2m([22m[2m17 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1795[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mstarts all five sourced pyramids and leaves historical and open leagues alone[32m 6[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mchanges membership over fifteen years with equal, disjoint and correctly ranked swaps[32m 67[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22muses the displayed final table for relegation and retains that season after later movement[32m 56[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mmakes the player follow both divisions and restores base tier after promotion[32m 18[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mnormalizes saved club aliases before swapping and keeps the played spelling once[32m 21[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mprojects actual transfer offers and lower destinations through the same next-year field[32m 18[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mlabels the partial Spanish model and caps lower league apps to its own calendar[32m 11[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mkeeps old saves and rejects malformed or foreign membership without inventing tables[32m 3[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mretains an injured season field without inventing a finish or full table[32m 12[2mms[22m[39m
+[31m   [31m×[31m Soccer Career simulated promotion and relegation[2m > [22mbinds a mixed-alias future champion to its saved derby key and field spelling[39m[32m 26[2mms[22m[39m
+[31m     → expected 'Manchester United' to be 'Man United' // Object.is equality[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mdoes not put a rival from another future division in the season context[32m 9[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22msettles the season a severe injury cut short and writes his club's move on the row[32m 181[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mnever puts his club first in a season a severe injury cut short[32m 13[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mopens the season after a year out with the line when his club moved without him[32m 107[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mstarts a damaged world again instead of throwing on the next season[32m 11[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mdraws a settled season's table with the saved clubs in the places that changed hands[32m 143[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career simulated promotion and relegation[2m > [22mholds each division's count and each second division's clubs to Club Manager's own rows [33m 1094[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m16 passed[39m[22m[90m (17)[39m
+[2m   Start at [22m 21:04:01
+[2m   Duration [22m 3.53s[2m (transform 1.85s, setup 42ms, collect 1.16s, tests 1.80s, environment 254ms, prepare 79ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/league-world-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerLeagueWorld.test.ts[2m > [22mSoccer Career simulated promotion and relegation[2m > [22mbinds a mixed-alias future champion to its saved derby key and field spelling
+[31m[1mAssertionError[22m: expected 'Manchester United' to be 'Man United' // Object.is equality[39m
+
+Expected: [32m"Man United"[39m
+Received: [31m"Man[7mchester[27m United"[39m
+
+[36m [2m❯[22m src/test/soccerCareerLeagueWorld.test.ts:[2m240:22[22m[39m
+    [90m238| [39m    [35mconst[39m final [33m=[39m [34mtableAt[39m(derived[33m![39m[33m,[39m derived[33m![39m[33m.[39mrounds[33m.[39mlength)[33m;[39m
+    [90m239| [39m    [35mconst[39m names [33m=[39m final[33m.[39m[34mmap[39m(t [33m=>[39m derived[33m![39m[33m.[39mlabels[t[33m.[39mslot][33m.[39mname)[33m;[39m
+    [90m240| [39m    [34mexpect[39m(names[[34m0[39m])[33m.[39m[34mtoBe[39m([32m'Man United'[39m)[33m;[39m
+    [90m   | [39m                     [31m^[39m
+    [90m241| [39m    expect([...names].sort()).toEqual([...row.leagueWorld!.members].so…
+    [90m242| [39m    [34mexpect[39m([35mnew[39m [33mSet[39m(names[33m.[39m[34mmap[39m(canonClub))[33m.[39msize)[33m.[39m[34mtoBe[39m([34m20[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok copied fixed rival ignoring the saved field spelling defect changed source and was caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerCareerLeagueWorld.test.ts [2m([22m[2m17 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 1551[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mstarts all five sourced pyramids and leaves historical and open leagues alone[32m 8[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mchanges membership over fifteen years with equal, disjoint and correctly ranked swaps[32m 64[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22muses the displayed final table for relegation and retains that season after later movement[32m 22[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mmakes the player follow both divisions and restores base tier after promotion[32m 11[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mnormalizes saved club aliases before swapping and keeps the played spelling once[32m 12[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mprojects actual transfer offers and lower destinations through the same next-year field[32m 8[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mlabels the partial Spanish model and caps lower league apps to its own calendar[32m 4[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mkeeps old saves and rejects malformed or foreign membership without inventing tables[32m 3[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mretains an injured season field without inventing a finish or full table[32m 10[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mbinds a mixed-alias future champion to its saved derby key and field spelling[32m 16[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mdoes not put a rival from another future division in the season context[32m 3[2mms[22m[39m
+[31m   [31m×[31m Soccer Career simulated promotion and relegation[2m > [22msettles the season a severe injury cut short and writes his club's move on the row[39m[32m 184[2mms[22m[39m
+[31m     → expected 26 to be 2 // Object.is equality[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mnever puts his club first in a season a severe injury cut short[32m 9[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mopens the season after a year out with the line when his club moved without him[32m 114[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mstarts a damaged world again instead of throwing on the next season[32m 8[2mms[22m[39m
+[31m   [31m×[31m Soccer Career simulated promotion and relegation[2m > [22mdraws a settled season's table with the saved clubs in the places that changed hands[39m[32m 5[2mms[22m[39m
+[31m     → expected 26 to be 3 // Object.is equality[39m
+   [33m[2m✓[22m[39m Soccer Career simulated promotion and relegation[2m > [22mholds each division's count and each second division's clubs to Club Manager's own rows [33m 1068[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m15 passed[39m[22m[90m (17)[39m
+[2m   Start at [22m 21:04:05
+[2m   Duration [22m 3.33s[2m (transform 1.87s, setup 40ms, collect 1.18s, tests 1.55s, environment 238ms, prepare 53ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/league-world-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerLeagueWorld.test.ts[2m > [22mSoccer Career simulated promotion and relegation[2m > [22msettles the season a severe injury cut short and writes his club's move on the row
+[31m[1mAssertionError[22m: expected 26 to be 2 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 2[39m
+[31m+ 26[39m
+
+[36m [2m❯[22m src/test/soccerCareerLeagueWorld.test.ts:[2m303:25[22m[39m
+    [90m301| [39m    [34mexpect[39m(row[33m.[39mleagueWorld[33m![39m[33m.[39mchampion)[33m.[39mnot[33m.[39m[34mtoBe[39m(c[33m.[39mcurrentClub)[33m;[39m
+    [90m302| [39m    [35mconst[39m left [33m=[39m row[33m.[39mleagueWorld[33m![39m[33m.[39mmovements[33m![39m[33m;[39m
+    [90m303| [39m    [34mexpect[39m(left[33m.[39mlength)[33m.[39m[34mtoBe[39m([34m2[39m)[33m;[39m
+    [90m   | [39m                        [31m^[39m
+    [90m304| [39m    expect(left.every(m => m.from === 'Ligue 1' && m.kind === 'relegat…
+    [90m305| [39m    [34mexpect[39m(c[33m.[39mleagueWorld[33m![39m[33m.[39mleagues[[32m'Ligue 2'[39m])[33m.[39m[34mtoContain[39m(c[33m.[39mcurrentClub)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerLeagueWorld.test.ts[2m > [22mSoccer Career simulated promotion and relegation[2m > [22mdraws a settled season's table with the saved clubs in the places that changed hands
+[31m[1mAssertionError[22m: expected 26 to be 3 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 3[39m
+[31m+ 26[39m
+
+[36m [2m❯[22m src/test/soccerCareerLeagueWorld.test.ts:[2m395:28[22m[39m
+    [90m393| [39m      } [35melse[39m [34msettleLeagueWorld[39m(s[33m,[39m [33mFALLBACK_CLUBS[39m[33m,[39m row)[33m;[39m
+    [90m394| [39m      const saved = row.leagueWorld!.movements!.map(m => canonClub(m.c…
+    [90m395| [39m      [34mexpect[39m(saved[33m.[39mlength)[33m.[39m[34mtoBe[39m([34m3[39m)[33m;[39m
+    [90m   | [39m                           [31m^[39m
+    [90m396| [39m      const derived = deriveSeason(SOCCER, row, buildSoccerSeasonCtx(s…
+    [90m397| [39m      [35mif[39m (derived[33m?.[39mmode [33m!==[39m [32m'table'[39m) [35mcontinue[39m[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+ok copied writing the whole world's moves on the row again defect changed source and was caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerCareerLeagueWorld.test.ts [2m([22m[2m17 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1699[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mstarts all five sourced pyramids and leaves historical and open leagues alone[32m 6[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mchanges membership over fifteen years with equal, disjoint and correctly ranked swaps[32m 69[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22muses the displayed final table for relegation and retains that season after later movement[32m 23[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mmakes the player follow both divisions and restores base tier after promotion[32m 10[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mnormalizes saved club aliases before swapping and keeps the played spelling once[32m 10[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mprojects actual transfer offers and lower destinations through the same next-year field[32m 8[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mlabels the partial Spanish model and caps lower league apps to its own calendar[32m 5[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mkeeps old saves and rejects malformed or foreign membership without inventing tables[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mretains an injured season field without inventing a finish or full table[32m 9[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mbinds a mixed-alias future champion to its saved derby key and field spelling[32m 16[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mdoes not put a rival from another future division in the season context[32m 4[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22msettles the season a severe injury cut short and writes his club's move on the row[32m 186[2mms[22m[39m
+[31m   [31m×[31m Soccer Career simulated promotion and relegation[2m > [22mnever puts his club first in a season a severe injury cut short[39m[32m 13[2mms[22m[39m
+[31m     → expected 'Monaco' to be 'Lille' // Object.is equality[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mopens the season after a year out with the line when his club moved without him[32m 108[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mstarts a damaged world again instead of throwing on the next season[32m 9[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mdraws a settled season's table with the saved clubs in the places that changed hands[32m 138[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career simulated promotion and relegation[2m > [22mholds each division's count and each second division's clubs to Club Manager's own rows [33m 1083[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m16 passed[39m[22m[90m (17)[39m
+[2m   Start at [22m 21:04:09
+[2m   Duration [22m 3.59s[2m (transform 1.90s, setup 42ms, collect 1.29s, tests 1.70s, environment 237ms, prepare 55ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/league-world-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerLeagueWorld.test.ts[2m > [22mSoccer Career simulated promotion and relegation[2m > [22mnever puts his club first in a season a severe injury cut short
+[31m[1mAssertionError[22m: expected 'Monaco' to be 'Lille' // Object.is equality[39m
+
+Expected: [32m"Lille"[39m
+Received: [31m"Monaco"[39m
+
+[36m [2m❯[22m src/test/soccerCareerLeagueWorld.test.ts:[2m326:24[22m[39m
+    [90m324| [39m      [34mrecordLeagueWorldSeason[39m(c[33m,[39m [33mFALLBACK_CLUBS[39m[33m,[39m row)[33m;[39m
+    [90m325| [39m      const order = settledLeagueOrder(c.leagueWorld!, 'Ligue 1', name…
+    [90m326| [39m      [34mexpect[39m(order[[34m0[39m])[33m.[39m[34mtoBe[39m(row[33m.[39mleagueWorld[33m![39m[33m.[39mchampion)[33m;[39m
+    [90m   | [39m                       [31m^[39m
+    [90m327| [39m      [34mexpect[39m(order[[34m1[39m])[33m.[39m[34mtoBe[39m(form[[34m0[39m])[33m;[39m
+    [90m328| [39m      [34mexpect[39m([[33m...[39morder][33m.[39m[34msort[39m())[33m.[39m[34mtoEqual[39m([[33m...[39mform][33m.[39m[34msort[39m())[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok copied crowning his club in a season a severe injury cut short defect changed source and was caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerCareerLeagueWorld.test.ts [2m([22m[2m17 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1688[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mstarts all five sourced pyramids and leaves historical and open leagues alone[32m 6[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mchanges membership over fifteen years with equal, disjoint and correctly ranked swaps[32m 70[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22muses the displayed final table for relegation and retains that season after later movement[32m 21[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mmakes the player follow both divisions and restores base tier after promotion[32m 10[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mnormalizes saved club aliases before swapping and keeps the played spelling once[32m 8[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mprojects actual transfer offers and lower destinations through the same next-year field[32m 7[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mlabels the partial Spanish model and caps lower league apps to its own calendar[32m 5[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mkeeps old saves and rejects malformed or foreign membership without inventing tables[32m 3[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mretains an injured season field without inventing a finish or full table[32m 7[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mbinds a mixed-alias future champion to its saved derby key and field spelling[32m 24[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mdoes not put a rival from another future division in the season context[32m 4[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22msettles the season a severe injury cut short and writes his club's move on the row[32m 192[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mnever puts his club first in a season a severe injury cut short[32m 9[2mms[22m[39m
+[31m   [31m×[31m Soccer Career simulated promotion and relegation[2m > [22mopens the season after a year out with the line when his club moved without him[39m[32m 118[2mms[22m[39m
+[31m     → expected [] to deeply equal [ Array(1) ][39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mstarts a damaged world again instead of throwing on the next season[32m 11[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mdraws a settled season's table with the saved clubs in the places that changed hands[32m 144[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career simulated promotion and relegation[2m > [22mholds each division's count and each second division's clubs to Club Manager's own rows [33m 1047[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m16 passed[39m[22m[90m (17)[39m
+[2m   Start at [22m 21:04:13
+[2m   Duration [22m 3.43s[2m (transform 1.85s, setup 42ms, collect 1.17s, tests 1.69s, environment 242ms, prepare 130ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/league-world-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerLeagueWorld.test.ts[2m > [22mSoccer Career simulated promotion and relegation[2m > [22mopens the season after a year out with the line when his club moved without him
+[31m[1mAssertionError[22m: expected [] to deeply equal [ Array(1) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [[39m
+[32m-   "⬇️ Monaco relegated to Ligue 2 in your simulated league world while you were away.",[39m
+[32m- ][39m
+[31m+ [][39m
+
+[36m [2m❯[22m src/test/soccerCareerLeagueWorld.test.ts:[2m348:22[22m[39m
+    [90m346| [39m    [34mprepareLeagueWorld[39m(c[33m,[39m [33mFALLBACK_CLUBS[39m[33m,[39m [34m2027[39m)[33m;[39m
+    [90m347| [39m    [34mexpect[39m(c[33m.[39mcurrentLeague)[33m.[39m[34mtoBe[39m([32m'Ligue 2'[39m)[33m;[39m
+    [90m348| [39m    expect(c.events).toEqual([`⬇️ ${c.currentClub} relegated to Ligue …
+    [90m   | [39m                     [31m^[39m
+    [90m349| [39m    [34mprepareLeagueWorld[39m(c[33m,[39m [33mFALLBACK_CLUBS[39m[33m,[39m [34m2027[39m)[33m;[39m
+    [90m350| [39m    [34mexpect[39m(c[33m.[39mevents[33m.[39mlength)[33m.[39m[34mtoBe[39m([34m1[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok copied a year out that moves his club in silence defect changed source and was caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerCareerLeagueWorld.test.ts [2m([22m[2m17 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1642[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mstarts all five sourced pyramids and leaves historical and open leagues alone[32m 6[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mchanges membership over fifteen years with equal, disjoint and correctly ranked swaps[32m 74[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22muses the displayed final table for relegation and retains that season after later movement[32m 21[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mmakes the player follow both divisions and restores base tier after promotion[32m 9[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mnormalizes saved club aliases before swapping and keeps the played spelling once[32m 8[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mprojects actual transfer offers and lower destinations through the same next-year field[32m 8[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mlabels the partial Spanish model and caps lower league apps to its own calendar[32m 5[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mkeeps old saves and rejects malformed or foreign membership without inventing tables[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mretains an injured season field without inventing a finish or full table[32m 7[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mbinds a mixed-alias future champion to its saved derby key and field spelling[32m 18[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mdoes not put a rival from another future division in the season context[32m 4[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22msettles the season a severe injury cut short and writes his club's move on the row[32m 187[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mnever puts his club first in a season a severe injury cut short[32m 13[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mopens the season after a year out with the line when his club moved without him[32m 110[2mms[22m[39m
+[31m   [31m×[31m Soccer Career simulated promotion and relegation[2m > [22mstarts a damaged world again instead of throwing on the next season[39m[32m 11[2mms[22m[39m
+[31m     → expected [Function] to not throw an error but 'TypeError: Cannot convert undefined o…' was thrown[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mdraws a settled season's table with the saved clubs in the places that changed hands[32m 149[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career simulated promotion and relegation[2m > [22mholds each division's count and each second division's clubs to Club Manager's own rows [33m 1010[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m16 passed[39m[22m[90m (17)[39m
+[2m   Start at [22m 21:04:17
+[2m   Duration [22m 3.39s[2m (transform 1.81s, setup 41ms, collect 1.18s, tests 1.64s, environment 237ms, prepare 99ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/league-world-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerLeagueWorld.test.ts[2m > [22mSoccer Career simulated promotion and relegation[2m > [22mstarts a damaged world again instead of throwing on the next season
+[31m[1mAssertionError[22m: expected [Function] to not throw an error but 'TypeError: Cannot convert undefined o…' was thrown[39m
+
+[32m- Expected:[39m 
+undefined
+
+[31m+ Received:[39m 
+"TypeError: Cannot convert undefined or null to object"
+
+[36m [2m❯[22m src/test/soccerCareerLeagueWorld.test.ts:[2m364:72[22m[39m
+    [90m362| [39m    ]) {
+    [90m363| [39m      const hurt = { ...career(), leagueWorld: damaged as unknown as C…
+    [90m364| [39m      expect(() => prepareLeagueWorld(hurt, FALLBACK_CLUBS, 2028)).not…
+    [90m   | [39m                                                                       [31m^[39m
+    [90m365| [39m      [34mexpect[39m(hurt[33m.[39mleagueWorld[33m![39m[33m.[39myear)[33m.[39m[34mtoBe[39m([34m2028[39m)[33m;[39m
+    [90m366| [39m      [34mexpect[39m(hurt[33m.[39mleagueWorld[33m![39m[33m.[39mleagues[[32m'Ligue 2'[39m][33m.[39mlength)[33m.[39m[34mtoBe[39m([34m18[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok copied a damaged world read as it stands defect changed source and was caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerCareerLeagueWorld.test.ts [2m([22m[2m17 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1610[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mstarts all five sourced pyramids and leaves historical and open leagues alone[32m 6[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mchanges membership over fifteen years with equal, disjoint and correctly ranked swaps[32m 68[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22muses the displayed final table for relegation and retains that season after later movement[32m 20[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mmakes the player follow both divisions and restores base tier after promotion[32m 9[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mnormalizes saved club aliases before swapping and keeps the played spelling once[32m 8[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mprojects actual transfer offers and lower destinations through the same next-year field[32m 8[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mlabels the partial Spanish model and caps lower league apps to its own calendar[32m 5[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mkeeps old saves and rejects malformed or foreign membership without inventing tables[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mretains an injured season field without inventing a finish or full table[32m 8[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mbinds a mixed-alias future champion to its saved derby key and field spelling[32m 18[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mdoes not put a rival from another future division in the season context[32m 3[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22msettles the season a severe injury cut short and writes his club's move on the row[32m 211[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mnever puts his club first in a season a severe injury cut short[32m 13[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mopens the season after a year out with the line when his club moved without him[32m 108[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mstarts a damaged world again instead of throwing on the next season[32m 8[2mms[22m[39m
+[31m   [31m×[31m Soccer Career simulated promotion and relegation[2m > [22mdraws a settled season's table with the saved clubs in the places that changed hands[39m[32m 17[2mms[22m[39m
+[31m     → expected [ 'Bournemouth', 'Brentford', …(1) ] to deeply equal [ 'Fulham', 'Hull City', 'Sunderland' ][39m
+   [33m[2m✓[22m[39m Soccer Career simulated promotion and relegation[2m > [22mholds each division's count and each second division's clubs to Club Manager's own rows [33m 1098[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m16 passed[39m[22m[90m (17)[39m
+[2m   Start at [22m 21:04:21
+[2m   Duration [22m 3.47s[2m (transform 1.89s, setup 39ms, collect 1.25s, tests 1.61s, environment 235ms, prepare 56ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/league-world-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerLeagueWorld.test.ts[2m > [22mSoccer Career simulated promotion and relegation[2m > [22mdraws a settled season's table with the saved clubs in the places that changed hands
+[31m[1mAssertionError[22m: expected [ 'Bournemouth', 'Brentford', …(1) ] to deeply equal [ 'Fulham', 'Hull City', 'Sunderland' ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[32m-   "Fulham",[39m
+[31m+   "Bournemouth",[39m
+[31m+   "Brentford",[39m
+[2m    "Hull City",[22m
+[32m-   "Sunderland",[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/test/soccerCareerLeagueWorld.test.ts:[2m401:53[22m[39m
+    [90m399| [39m      const names = tableAt(derived, derived.rounds.length).map(t => d…
+    [90m400| [39m      [34mexpect[39m(names[33m.[39m[34mindexOf[39m(row[33m.[39mclub) [33m+[39m [34m1[39m)[33m.[39m[34mtoBe[39m(row[33m.[39mleagueFinish)[33m;[39m
+    [90m401| [39m      [34mexpect[39m(names[33m.[39m[34mslice[39m([33m-[39m[34m3[39m)[33m.[39m[34mmap[39m(canonClub)[33m.[39m[34msort[39m())[33m.[39m[34mtoEqual[39m(saved)[33m;[39m
+    [90m   | [39m                                                    [31m^[39m
+    [90m402| [39m      for (const d of row.derbies) { if (saved.includes(canonClub(d.ri…
+    [90m403| [39m    }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok copied open places named without the saved zone defect changed source and was caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerCareerLeagueWorld.test.ts [2m([22m[2m17 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1677[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mstarts all five sourced pyramids and leaves historical and open leagues alone[32m 7[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mchanges membership over fifteen years with equal, disjoint and correctly ranked swaps[32m 66[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22muses the displayed final table for relegation and retains that season after later movement[32m 22[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mmakes the player follow both divisions and restores base tier after promotion[32m 10[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mnormalizes saved club aliases before swapping and keeps the played spelling once[32m 8[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mprojects actual transfer offers and lower destinations through the same next-year field[32m 7[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mlabels the partial Spanish model and caps lower league apps to its own calendar[32m 5[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mkeeps old saves and rejects malformed or foreign membership without inventing tables[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mretains an injured season field without inventing a finish or full table[32m 7[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mbinds a mixed-alias future champion to its saved derby key and field spelling[32m 18[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mdoes not put a rival from another future division in the season context[32m 3[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22msettles the season a severe injury cut short and writes his club's move on the row[32m 188[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mnever puts his club first in a season a severe injury cut short[32m 9[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mopens the season after a year out with the line when his club moved without him[32m 107[2mms[22m[39m
+   [32m✓[39m Soccer Career simulated promotion and relegation[2m > [22mstarts a damaged world again instead of throwing on the next season[32m 8[2mms[22m[39m
+[31m   [31m×[31m Soccer Career simulated promotion and relegation[2m > [22mdraws a settled season's table with the saved clubs in the places that changed hands[39m[32m 119[2mms[22m[39m
+[31m     → expected [ 'Brentford', 'Crystal Palace', …(1) ] to deeply equal [ 'Crystal Palace', …(2) ][39m
+   [33m[2m✓[22m[39m Soccer Career simulated promotion and relegation[2m > [22mholds each division's count and each second division's clubs to Club Manager's own rows [33m 1089[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m16 passed[39m[22m[90m (17)[39m
+[2m   Start at [22m 21:04:25
+[2m   Duration [22m 3.54s[2m (transform 1.90s, setup 42ms, collect 1.29s, tests 1.68s, environment 244ms, prepare 98ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/league-world-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerLeagueWorld.test.ts[2m > [22mSoccer Career simulated promotion and relegation[2m > [22mdraws a settled season's table with the saved clubs in the places that changed hands
+[31m[1mAssertionError[22m: expected [ 'Brentford', 'Crystal Palace', …(1) ] to deeply equal [ 'Crystal Palace', …(2) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[31m+   "Brentford",[39m
+[2m    "Crystal Palace",[22m
+[32m-   "Manchester United",[39m
+[2m    "Sunderland",[22m
+[2m  ][22m
+
+[36m [2m❯[22m src/test/soccerCareerLeagueWorld.test.ts:[2m401:53[22m[39m
+    [90m399| [39m      const names = tableAt(derived, derived.rounds.length).map(t => d…
+    [90m400| [39m      [34mexpect[39m(names[33m.[39m[34mindexOf[39m(row[33m.[39mclub) [33m+[39m [34m1[39m)[33m.[39m[34mtoBe[39m(row[33m.[39mleagueFinish)[33m;[39m
+    [90m401| [39m      [34mexpect[39m(names[33m.[39m[34mslice[39m([33m-[39m[34m3[39m)[33m.[39m[34mmap[39m(canonClub)[33m.[39m[34msort[39m())[33m.[39m[34mtoEqual[39m(saved)[33m;[39m
+    [90m   | [39m                                                    [31m^[39m
+    [90m402| [39m      for (const d of row.derbies) { if (saved.includes(canonClub(d.ri…
+    [90m403| [39m    }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok copied a derby rival free to leave the saved zone defect changed source and was caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/soccerCareerWorldSettle.test.ts[2m > [22m[2mSoccer Career: every season of the league world is settled and shown as saved[2m > [22m[2mdraws each settled table with the saved clubs in the places that changed hands
+[22m[39m[world settle] 119 table seasons, 119 drawn, 84 of them with a derby rival in the table
+
+ [31m❯[39m src/test/soccerCareerWorldSettle.test.ts [2m([22m[2m2 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 2624[2mms[22m[39m
+[31m   [31m×[31m Soccer Career: every season of the league world is settled and shown as saved[2m > [22msettles the injury years too, and next season plays in the field the moves left[39m[33m 771[2mms[22m[39m
+[31m     → 52004 2030 PSG: settled, with the clubs that left its division: expected null not to be null[39m
+   [33m[2m✓[22m[39m Soccer Career: every season of the league world is settled and shown as saved[2m > [22mdraws each settled table with the saved clubs in the places that changed hands [33m 1852[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m   Start at [22m 21:04:29
+[2m   Duration [22m 4.82s[2m (transform 1.32s, setup 39ms, collect 1.63s, tests 2.62s, environment 233ms, prepare 105ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/league-world-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerWorldSettle.test.ts[2m > [22mSoccer Career: every season of the league world is settled and shown as saved[2m > [22msettles the injury years too, and next season plays in the field the moves left
+[31m[1mAssertionError[22m: 52004 2030 PSG: settled, with the clubs that left its division: expected null not to be null[39m
+[36m [2m❯[22m src/test/soccerCareerWorldSettle.test.ts:[2m81:84[22m[39m
+    [90m 79| [39m        [35mconst[39m tag [33m=[39m [32m`[39m[36m${[39m[34m52000[39m [33m+[39m n[36m}[39m[32m [39m[36m${[39mrow[33m.[39myear[36m}[39m[32m [39m[36m${[39mrow[33m.[39mclub[36m}[39m[32m`[39m[33m;[39m
+    [90m 80| [39m        [35mconst[39m zone [33m=[39m [34mleagueWorldZone[39m(w)[33m;[39m
+    [90m 81| [39m        expect(zone, `${tag}: settled, with the clubs that left its di…
+    [90m   | [39m                                                                                   [31m^[39m
+    [90m 82| [39m        [35mif[39m (row[33m.[39minjurySevere) severe [33m+=[39m [34m1[39m[33m;[39m
+    [90m 83| [39m        const own = zone!.clubs.some(c => canonClub(c) === canonClub(r…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok copied the injury year left out of the settle defect changed source and was caught
+simSoccerCareerLeagueWorld: seventeen outcome tests and two engine career tests green, all twelve effective negative controls caught
