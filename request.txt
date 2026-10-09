@@ -1,0 +1,15 @@
+we: node scripts/simWorldEditor.mjs
+we-s1: SIM_SEED=1 node scripts/simWorldEditor.mjs
+we-s2: SIM_SEED=2 node scripts/simWorldEditor.mjs
+we-s3: SIM_SEED=3 node scripts/simWorldEditor.mjs
+we-s4: SIM_SEED=4 node scripts/simWorldEditor.mjs
+we-lateucl: SIM_WORLD_EDITOR_CONTROL=lateucl node scripts/simWorldEditor.mjs
+we-euroone: SIM_WORLD_EDITOR_CONTROL=euroone node scripts/simWorldEditor.mjs
+so: node scripts/simCmShootoutOrder.mjs
+so-s1: SIM_SEED=1 node scripts/simCmShootoutOrder.mjs
+so-s2: SIM_SEED=2 node scripts/simCmShootoutOrder.mjs
+so-s3: SIM_SEED=3 node scripts/simCmShootoutOrder.mjs
+so-s4: SIM_SEED=4 node scripts/simCmShootoutOrder.mjs
+so-s5: SIM_SEED=5 node scripts/simCmShootoutOrder.mjs
+so-oppworst: CM_SHOOTOUT_CONTROL=oppworst node scripts/simCmShootoutOrder.mjs
+so-from20: SIM_SHOOTOUT_NAMED_FROM=782020 node scripts/simCmShootoutOrder.mjs

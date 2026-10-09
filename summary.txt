@@ -1,0 +1,15 @@
+we-s1 exit=0 7s | simWorldEditor: 2502 checks, 0 failures
+we exit=0 8s | simWorldEditor: 2473 checks, 0 failures
+we-s2 exit=0 8s | simWorldEditor: 2492 checks, 0 failures
+we-s3 exit=0 8s | simWorldEditor: 2477 checks, 0 failures
+we-lateucl exit=1 7s | simWorldEditor (control lateucl): 2473 checks, 5 failures
+we-s4 exit=0 7s | simWorldEditor: 2502 checks, 0 failures
+we-euroone exit=1 7s | simWorldEditor (control euroone): 2472 checks, 1 failures
+so-s1 exit=0 27s | simCmShootoutOrder: all sections passed
+so exit=0 31s | simCmShootoutOrder: all sections passed
+so-s2 exit=0 27s | simCmShootoutOrder: all sections passed
+so-s3 exit=0 28s | simCmShootoutOrder: all sections passed
+so-s4 exit=0 28s | simCmShootoutOrder: all sections passed
+so-s5 exit=0 29s | simCmShootoutOrder: all sections passed
+so-oppworst exit=1 22s | simCmShootoutOrder: 31 FAILURE(S)
+so-from20 exit=0 22s | simCmShootoutOrder: all sections passed
