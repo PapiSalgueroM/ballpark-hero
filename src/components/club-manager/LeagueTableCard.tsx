@@ -36,6 +36,8 @@ export function LeagueTableCard({ rows, myClub, compact = false, title, preseaso
     visible = visible.slice(lo, lo + 5);
   }
 
+  const Row = onClubClick ? 'button' : 'div';
+
   return (
     <div className="bg-card border border-border rounded-2xl p-3 md:p-4">
       {title && <div className="text-xs text-muted-foreground uppercase tracking-wider mb-2">{title}</div>}
@@ -49,13 +51,14 @@ export function LeagueTableCard({ rows, myClub, compact = false, title, preseaso
         const mine = r.club === myClub;
         const gd = r.gf - r.ga;
         return (
-          <div
+          <Row
+            type={onClubClick ? 'button' : undefined}
             key={r.club}
             onClick={onClubClick ? () => onClubClick(r.club) : undefined}
             className={cn(
               'grid grid-cols-[1rem_1fr_1rem_1rem_1rem_2.6rem_1.9rem_1.5rem] min-[375px]:grid-cols-[1.3rem_1fr_1.3rem_1.3rem_1.3rem_2.6rem_1.9rem_2rem] gap-x-0.5 min-[375px]:gap-x-1 items-center text-xs py-1.5 border-b border-border/30 last:border-0',
               mine && 'bg-primary/10 rounded-md -mx-1 px-1',
-              onClubClick && 'cursor-pointer hover:bg-secondary/40 rounded-md -mx-1 px-1 transition-colors',
+              onClubClick && 'w-[calc(100%+0.5rem)] text-left cursor-pointer hover:bg-secondary/40 rounded-md -mx-1 px-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
             )}
             data-club={r.club}
           >
@@ -77,7 +80,7 @@ export function LeagueTableCard({ rows, myClub, compact = false, title, preseaso
               {gd > 0 ? `+${gd}` : gd}
             </span>
             <span className="text-right font-bold text-foreground">{r.pts}</span>
-          </div>
+          </Row>
         );
       })}
       {footnote && (
