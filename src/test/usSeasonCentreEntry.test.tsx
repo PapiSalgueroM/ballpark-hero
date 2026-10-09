@@ -138,11 +138,16 @@ async function toHub(sport: UsCareerSport, ext: 'sign' | 'decline' = 'sign'): Pr
     if (talk) { const b = buttons(talk); await click(ext === 'sign' ? b[0] : b[b.length - 1]); continue; }
     if (market) { await click(buttons(market)[0]); continue; }
     if (playButton()) return 'hub';
+    /* Round 1147: a decision's outcome card with many changes has a "Show all changes" toggle before its
+       Continue; pressing the first button there only folds the list open and shut for ever */
+    const outcome = body.querySelector('[data-career-decision-outcome]');
+    if (outcome) { const b = buttons(outcome); await click(b[b.length - 1]); continue; }
     const all = buttons(body);
     if (!all.length) throw new Error(`usSeasonCentreEntry.test: lost on "${squash(body.textContent ?? '').slice(0, 160)}"`);
     await click(all[0]);
   }
-  throw new Error('usSeasonCentreEntry.test: never got back to the hub');
+  const shown = ['[role="alertdialog"]', '[data-season-reveal]', '[data-extension-talk]', '[data-fa-window]'].filter(sel => document.body.querySelector(sel)).join(', ') || 'none of the known screens';
+  throw new Error(`usSeasonCentreEntry.test: never got back to the hub (on screen: ${shown}; buttons: ${buttons(document.body).slice(0, 6).map(b => squash(b.textContent ?? '').slice(0, 30)).join(' | ')}; it reads "${squash(document.body.textContent ?? '').slice(0, 300)}")`);
 }
 
 interface Arm { saves: string[]; opened: number; noOverlay: number; focusOnContinue: number }
@@ -614,6 +619,20 @@ describe('a held year, a banned year, and the sports with no Season Center', () 
     expect(q('[data-season-centre-held]')!.textContent).toBe(usSeasonHeldLine('nba', 2011));
     expect(q('[data-week-by-week]')).toBeNull();
     expect(playButton()).toBeDefined();
+  });
+  it('holds an NFL throwback career until 2021: the held line and no button in 2005', async () => {
+    /* Round 1147: the 2005 throwback plays 17 games in years the real league played 16 */
+    seedSave(NFL_CAREER_SPORT, 'QB', 'held-nfl', 'y2005');
+    render(<MemoryRouter><NflMyCareerBoard /></MemoryRouter>);
+    await flush();
+    expect(savedCareer(NFL_CAREER_SPORT).year).toBe(2005);
+    expect(q('[data-season-centre-held]')!.textContent).toBe(usSeasonHeldLine('nfl', 2005));
+    expect(q('[data-season-centre-held]')!.textContent).toContain('starts with the 2021 season');
+    expect(q('[data-week-by-week]')).toBeNull();
+    expect(playButton()).toBeDefined();
+  });
+  it('has the NBA and the NFL both bound, so neither arm above can drop out through its own filter', () => {
+    expect(BOUND.map(b => b.name)).toEqual(['NBA', 'NFL']);
   });
   it('says there is nothing to watch in a banned year', async () => {
     seedSave(NBA_CAREER_SPORT, 'SG', 'banned', 'now', c => { c.suspendedSeasons = 1; });

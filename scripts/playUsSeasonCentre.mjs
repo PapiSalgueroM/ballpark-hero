@@ -104,6 +104,16 @@
  *   raw     (Round 1144, a window switch, not a chunk) the storage
  *           seam's own "app as it was" switch is set before the
  *           app loads, so no refused save is held for a reload -> reload holds
+ *   column  the NFL's feed label in the narrow time column
+ *           soccer and the NBA use (Round 1147)                -> column
+ *
+ * Round 1147 binds the NFL: the same walk on /nfl-my-career with a
+ * quarterback (the feed is read drive by drive: a touchdown is 7, 6 when the
+ * kick after is no good, 8 with the two point try, a field goal 3, a safety
+ * 2), the feed's time column measured in seven games at both sizes, and on a
+ * phone a kicker's season and a linebacker's as well (his line in his
+ * position's own shape, a kicker's makes against the feed, his totals
+ * against the curtain's numbers).
  *
  * Run: npm run build, then
  *   MSYS_NO_PATHCONV=1 ENGINES=chromium node scripts/playUsSeasonCentre.mjs
@@ -125,10 +135,27 @@ const PORT = Number(process.env.PORT ?? 4397);
 const BASE = `http://localhost:${PORT}`;
 const CONTROL = process.env.US_SEASON_PLAY_CONTROL ?? '';
 const ASKED = (process.env.SPORTS ?? 'nba,nfl').split(',').map(s => s.trim());
+/* `feed`: how a line of the feed is read back into points (the reader lives in the page, below).
+   `minLines` and `minScores`: the least a finished game shows (a basketball game has eight quarter
+   lines; a football game has at least one scoring drive, so one line and two scores, 0-0 and the
+   final). `games`: the season's length. `twice`: his headline number, which no log row may print twice.
+   `also`: positions walked on a phone for the shape of his line (Round 1147: a quarterback, a kicker
+   and a defender), each with what his line must read like. `starter`: the save is the first keyed
+   draft that starts him. */
 const DEFS = {
-  nba: { route: '/nba-my-career', binding: 'NBA_CAREER_SPORT', file: 'src/lib/nbaCareerSport.ts', pos: 'SG', words: 'Tip off', start: 'Tip off', held: { era: 'y2004', year: 2011 }, lineRe: /^(.*) put up (\d+) in the / },
-  nfl: { route: '/nfl-my-career', binding: 'NFL_CAREER_SPORT', file: 'src/lib/nflCareerSport.ts', pos: 'QB', words: 'Kickoff.', start: 'Kick off', held: { era: 'y2005', year: 2005 }, lineRe: null },
+  nba: { route: '/nba-my-career', binding: 'NBA_CAREER_SPORT', file: 'src/lib/nbaCareerSport.ts', pos: 'SG', words: 'Tip off', start: 'Tip off', held: { era: 'y2004', year: 2011 }, feed: 'nba', minLines: 8, minScores: 4, minColumn: 56, games: 82, twice: 'PTS', also: [] },
+  nfl: {
+    route: '/nfl-my-career', binding: 'NFL_CAREER_SPORT', file: 'src/lib/nflCareerSport.ts', pos: 'QB', words: 'The kick after is no good.', start: 'Kick off', held: { era: 'y2005', year: 2005 }, feed: 'nfl', minLines: 1, minScores: 2, minColumn: 30, games: 17, twice: 'YDS', starter: true,
+    also: [{ pos: 'QB', line: /^\d+ YDS\d+ TD\d+ INT$/ }, { pos: 'K', line: /^\d\/\d FG(LONG \d+)?$/ }, { pos: 'LB', line: /^\d+ TKL/ }],
+  },
 };
+/** Runs in the page: [side, points] of one feed line, or null for a line that scores nothing. */
+const READ_FEED = `(kind, us, text) => {
+  if (kind === 'nba') { const m = /^(.*) put up (\\d+) in the /.exec(text); return m ? [m[1].includes(us) ? 'us' : 'them', Number(m[2])] : null; }
+  const pts = text.includes('Touchdown') ? (text.includes('no good') ? 6 : text.includes('two point') ? 8 : 7) : text.includes('Field goal') ? 3 : text.includes('Safety') ? 2 : 0;
+  if (!pts) return null;
+  return [text.includes('! You ') || text.includes(', ' + us + '.') ? 'us' : 'them', pts];
+}`;
 const strip = s => s.replace(/\/\*[\s\S]*?\*\//g, '');
 const SPORTS = Object.keys(DEFS).filter(s => ASKED.includes(s) && /loadSeasonCentre\s*:/.test(strip(fs.readFileSync(path.join(ROOT, DEFS[s].file), 'utf8'))));
 for (const s of Object.keys(DEFS)) if (!SPORTS.includes(s)) console.log(`SKIPPED ${s}: ${ASKED.includes(s) ? 'its binding has no Season Center loader' : 'not asked for (SPORTS)'}`);
@@ -154,21 +181,28 @@ function mulberry32(a) {
   return () => { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
 }
 /** A save on the hub after `seasons` seasons (0: a rookie about to play his first). */
-function makeSave(slug, seasons, eraId = 'now', year = null) {
+function makeSave(slug, seasons, eraId = 'now', year = null, pos = DEFS[slug].pos) {
   const SB = M[DEFS[slug].binding];
-  const rng = mulberry32(1048 + seasons * 7 + (eraId === 'now' ? 0 : 91));
   const real = Math.random;
-  Math.random = rng;
-  try {
-    const pos = DEFS[slug].pos;
-    const c = SB.startCareer('Week Watcher', pos, SB.create.archetypes[pos][0], rng, null, eraId);
-    if (year !== null) c.year = year;
-    let tq = SB.rollTeamQuality(null, rng);
-    SB.assignRole(c, tq, rng);
-    for (let i = 0; i < seasons; i += 1) { SB.campBattle(c, tq, rng); SB.simSeason(c, tq, rng); SB.progress(c, rng); tq = SB.rollTeamQuality(tq, rng); }
-    c.contractYears = Math.max(3, c.contractYears);
-    return { key: SB.saveKey, value: JSON.stringify({ c, phase: 'season', teamQuality: tq }) };
-  } finally { Math.random = real; }
+  /* Round 1147: a sport that asks for a starter (the NFL: a rookie quarterback who sits plays three or
+     four games, and the walk wants to see his line) takes the first keyed draft that makes him one.
+     Nothing is edited on the save: it is the save a player gets from that draft. */
+  const tries = DEFS[slug].starter && seasons === 0 ? 40 : 1;
+  for (let n = 0; n < tries; n += 1) {
+    const rng = mulberry32(1048 + seasons * 7 + (eraId === 'now' ? 0 : 91) + n * 1009);
+    Math.random = rng;
+    try {
+      const c = SB.startCareer('Week Watcher', pos, SB.create.archetypes[pos][0], rng, null, eraId);
+      if (year !== null) c.year = year;
+      let tq = SB.rollTeamQuality(null, rng);
+      SB.assignRole(c, tq, rng);
+      if (c.role === 'backup' && n < tries - 1) continue;
+      for (let i = 0; i < seasons; i += 1) { SB.campBattle(c, tq, rng); SB.simSeason(c, tq, rng); SB.progress(c, rng); tq = SB.rollTeamQuality(tq, rng); }
+      c.contractYears = Math.max(3, c.contractYears);
+      return { key: SB.saveKey, value: JSON.stringify({ c, phase: 'season', teamQuality: tq }), role: c.role ?? 'starter' };
+    } finally { Math.random = real; }
+  }
+  throw new Error(`playUsSeasonCentre: no save for ${slug} ${pos}`);
 }
 
 /* ─── the built chunks, and what a control serves instead ─── */
@@ -239,7 +273,19 @@ if (CONTROL === 'raw') {
   if (!assets.some(f => textOf(f).includes(RAW_SWITCH))) { console.error(`control raw refused: no built chunk holds ${RAW_SWITCH}`); process.exit(2); }
   console.log(`CONTROL raw: window.${RAW_SWITCH} is set before the app loads, so no refused save is held for a reload`);
 }
-if (CONTROL && !['static', 'write', 'count', 'cover', 'playfirst', 'nohandover', 'noaction', 'raw'].includes(CONTROL)) { console.error(`unknown US_SEASON_PLAY_CONTROL ${CONTROL}`); process.exit(2); }
+if (CONTROL === 'column') {
+  /* Round 1147: the NFL's feed label ("Q2 14:00") is served with the narrow column soccer and the NBA
+     use. Exit 2 when the needle is not there once in one chunk: a control that never ran is not a red. */
+  const needle = 'labelClass:"w-14"';
+  const where = assets.filter(f => textOf(f).includes(needle));
+  if (where.length !== 1 || textOf(where[0]).split(needle).length !== 2 || !SPORTS.includes('nfl')) {
+    console.error(`control column refused: the NFL clock's wide column is in ${where.length} chunks (expected once in one), nfl walked: ${SPORTS.includes('nfl')}`);
+    process.exit(2);
+  }
+  served.set(where[0], textOf(where[0]).replace(needle, 'labelClass:"w-8"'));
+  console.log(`CONTROL column: the served NFL clock uses the narrow time column (${where[0]})`);
+}
+if (CONTROL && !['static', 'write', 'count', 'cover', 'playfirst', 'nohandover', 'noaction', 'raw', 'column'].includes(CONTROL)) { console.error(`unknown US_SEASON_PLAY_CONTROL ${CONTROL}`); process.exit(2); }
 
 const server = spawn(process.execPath, [path.join(ROOT, 'scripts/lib/hostLikeServer.mjs'), DIST, String(PORT)], { stdio: 'ignore' });
 await new Promise(r => setTimeout(r, 1200));
@@ -285,6 +331,8 @@ async function open(slug, save, { width, height, reduced = false, seed = 1048 },
     } catch { /* private mode */ }
     if (extra) document.addEventListener('DOMContentLoaded', () => { import(extra).catch(() => {}); });
   }, [save.key, save.value, seed, STATIC_EXTRA, staleSpent, CONTROL === 'raw']);
+  /* the feed reader, put on the page as a script of the harness's own (never evaluated from a string in the page) */
+  await ctx.addInitScript(`window.__usReadFeed = ${READ_FEED};`);
   await ctx.route('**://*.supabase.co/**', r => { aborted += 1; return r.abort(); });
   await ctx.route('**/assets/*.js', async r => {
     const name = r.request().url().split('/').pop().split('?')[0];
@@ -531,6 +579,63 @@ async function staleWalks(slug, vp, save, afterPlay, firstDraws, tag) {
   await T.ctx.close();
 }
 
+/** Round 1147: another position's season (a kicker, a defender): seven games at Results, each game's
+ *  bug against its feed, his line in the position's own shape, a kicker's makes against the field
+ *  goals his team kicks, the time column, then his totals against the curtain's numbers. */
+async function positionWalk(slug, vp, also) {
+  const d = DEFS[slug];
+  const tag = `${slug} ${vp.width}x${vp.height} ${also.pos}`;
+  const save = makeSave(slug, 0, 'now', null, also.pos);
+  const P = await open(slug, save, vp);
+  const p = P.page;
+  await pressEntry(p);
+  await need(p, '[data-season-centre] [data-kickoff]', `${tag}: the viewer`);
+  const usFull = await p.evaluate(() => document.querySelector('[data-kickoff] .text-lg')?.textContent ?? '');
+  await clickText(p, d.start);
+  await clickText(p, 'Results');
+  await need(p, '[data-full-time]', `${tag}: the first game at the final`);
+  const seen = { games: 0, lines: 0, wrongBoard: [], wrongLine: [], wrongKick: [], colBad: 0, shaped: 0, missed: 0 };
+  for (let i = 0; i < 7; i += 1) {
+    if (i > 0) { await clickText(p, '▶ Game'); await p.waitForTimeout(120); }
+    const g = await p.evaluate(([kind, us]) => {
+      const c = document.querySelector('[data-match-clock]');
+      const lis = [...c.querySelectorAll('[data-clock-events] li')].filter(li => li.children.length === 2);
+      let a = 0; let b = 0;
+      for (const li of lis) { const m = window.__usReadFeed(kind, us, li.children[1].textContent ?? ''); if (m) { if (m[0] === 'us') a += m[1]; else b += m[1]; } }
+      return {
+        score: c.dataset.score, feed: `${a}-${b}`, lines: lis.length,
+        colBad: lis.filter(li => li.children[0].scrollWidth > li.children[0].clientWidth || li.children[0].getBoundingClientRect().right > li.children[1].getBoundingClientRect().left + 0.5).length,
+        hits: lis.filter(li => (li.children[1].textContent ?? '').includes('You hit it')).length,
+        teamKicks: lis.filter(li => (li.children[1].textContent ?? '').includes(`Field goal, ${us}.`)).length,
+        line: document.querySelector('[data-his-line]')?.textContent ?? '',
+      };
+    }, [d.feed, usFull]);
+    seen.games += 1; seen.lines += g.lines; seen.colBad += g.colBad;
+    if (g.score !== g.feed) seen.wrongBoard.push(`game ${i + 1}: bug ${g.score}, feed ${g.feed}`);
+    if (g.line === 'Did not play') seen.missed += 1;
+    else if (also.line.test(g.line)) seen.shaped += 1;
+    else seen.wrongLine.push(`game ${i + 1}: "${g.line}"`);
+    if (also.pos === 'K' && g.line !== 'Did not play') {
+      const made = Number((/^(\d)\//.exec(g.line) ?? [])[1] ?? -1);
+      if (made !== g.hits || g.teamKicks !== 0) seen.wrongKick.push(`game ${i + 1}: his line "${g.line}", ${g.hits} of his in the feed, ${g.teamKicks} by somebody else`);
+    }
+  }
+  check('agreement', seen.games === 7 && seen.lines >= 20 && seen.wrongBoard.length === 0, `${tag}: the score bug equals the drives in the feed in every game (${seen.games} games, ${seen.lines} lines${seen.wrongBoard.length ? `; ${seen.wrongBoard.slice(0, 2).join(' | ')}` : ''})`);
+  check('agreement', seen.shaped > 0 && seen.wrongLine.length === 0, `${tag}: his line reads as a ${also.pos}'s in every game he played (${seen.shaped} games, ${seen.missed} not played${seen.wrongLine.length ? `; ${seen.wrongLine.slice(0, 2).join(' | ')}` : ''})`);
+  if (also.pos === 'K') check('agreement', seen.wrongKick.length === 0, `${tag}: every field goal his team kicks is his, and his makes are the ones in the feed${seen.wrongKick.length ? `: ${seen.wrongKick.slice(0, 2).join(' | ')}` : ''}`);
+  check('column', seen.colBad === 0, `${tag}: the feed's time column fits in every game (${seen.lines} lines, ${seen.colBad} bad)`);
+  await clickText(p, 'Sim the rest');
+  await p.waitForSelector('[data-review]', { timeout: 8000 }).catch(() => {});
+  const tiles = await p.evaluate(() => [...document.querySelectorAll('[data-review-tile]')].map(el => [el.dataset.reviewTile, el.firstElementChild?.textContent ?? '']));
+  await p.evaluate(() => document.querySelector('[data-centre-exit]')?.click());
+  await p.waitForTimeout(400);
+  const curtain = await p.evaluate(() => document.querySelector('[data-season-reveal]')?.textContent ?? '');
+  const onCard = tiles.filter(([label]) => label !== 'Games');
+  check('agreement', tiles.length === 4 && curtain.length > 0 && onCard.every(([, v]) => curtain.includes(v)), `${tag}: the review's tiles are the curtain's numbers (${tiles.map(t => t.join(' ')).join(', ')})`);
+  check('errors', P.errors.length === 0, `${tag}: no page error and no console error${P.errors.length ? `: ${P.errors.slice(0, 2).join(' | ')}` : ''}`);
+  await P.ctx.close();
+}
+
 async function walk(slug, vp) {
   const d = DEFS[slug];
   const tag = `${slug} ${vp.width}x${vp.height}`;
@@ -600,14 +705,14 @@ async function walk(slug, vp) {
   check('agreement', await clickText(p, d.start), `${tag}: the first card offers "${d.start}"`);
 
   /* the clock at 1x: the bug against the feed, frame by frame */
-  const clock = d.lineRe ? await p.evaluate(async ([reSrc, us]) => {
-    const re = new RegExp(reSrc);
+  const clock = d.feed ? await p.evaluate(async ([kind, us]) => {
+    const read = window.__usReadFeed;
     const out = { n: 0, bad: [], scores: new Set() };
     for (let i = 0; i < 260; i += 1) {
       const c = document.querySelector('[data-match-clock]');
       if (c) {
         let a = 0; let b = 0;
-        for (const li of c.querySelectorAll('[data-clock-events] li')) { const m = re.exec(li.children[1]?.textContent ?? ''); if (m) { if (m[1].includes(us)) a += Number(m[2]); else b += Number(m[2]); } }
+        for (const li of c.querySelectorAll('[data-clock-events] li')) { const m = read(kind, us, li.children[1]?.textContent ?? ''); if (m) { if (m[0] === 'us') a += m[1]; else b += m[1]; } }
         out.n += 1;
         out.scores.add(c.dataset.score);
         if (c.dataset.score !== `${a}-${b}`) out.bad.push(`minute ${c.dataset.minute}: bug ${c.dataset.score}, feed ${a}-${b}`);
@@ -616,8 +721,8 @@ async function walk(slug, vp) {
       await new Promise(r => setTimeout(r, 90));
     }
     return { n: out.n, bad: out.bad.slice(0, 3), scores: out.scores.size, done: !!document.querySelector('[data-full-time]') };
-  }, [d.lineRe.source, usFull]) : null;
-  if (clock) check('clock', clock.done && clock.n >= 20 && clock.scores >= 4 && clock.bad.length === 0, `${tag}: the score bug equals the feed on every sample (${clock.n} samples, ${clock.scores} scores${clock.bad.length ? `; ${clock.bad.join(' | ')}` : ''})`);
+  }, [d.feed, usFull]) : null;
+  if (clock) check('clock', clock.done && clock.n >= 20 && clock.scores >= d.minScores && clock.bad.length === 0, `${tag}: the score bug equals the feed on every sample (${clock.n} samples, ${clock.scores} scores${clock.bad.length ? `; ${clock.bad.join(' | ')}` : ''})`);
   else check('clock', false, `${tag}: no feed reader for this sport`);
 
   const bug = await p.evaluate(() => {
@@ -630,11 +735,24 @@ async function walk(slug, vp) {
     return { names, rows: rows.length, bad: rows.filter(Boolean).length };
   });
   check('agreement', bug.names.length === 2 && bug.names.every(n => /^[A-Z]{2,3}$/.test(n.t) && !n.cut), `${tag}: the scoreboard shows the game's own ids, none cut off (${bug.names.map(n => n.t).join(' v ')})`);
-  check('agreement', bug.rows >= 8 && bug.bad === 0, `${tag}: the feed's time column fits and never overlaps its words (${bug.rows} lines, ${bug.bad} bad)`);
-
-  /* a few more games at Results, then the record against the log */
+  /* a few more games at Results (the feed's time column measured in every one), then the record against the log */
+  const column = { rows: bug.rows, bad: bug.bad, widest: '' };
   await clickText(p, 'Results');
-  for (let i = 0; i < 6; i += 1) { await clickText(p, '▶ Game'); await p.waitForTimeout(120); }
+  for (let i = 0; i < 6; i += 1) {
+    await clickText(p, '▶ Game');
+    await p.waitForTimeout(120);
+    const c = await p.evaluate(() => {
+      const lis = [...document.querySelectorAll('[data-match-clock] [data-clock-events] li')].filter(li => li.children.length === 2);
+      const bad = lis.filter(li => {
+        const ra = li.children[0].getBoundingClientRect(); const rb = li.children[1].getBoundingClientRect();
+        return li.children[0].scrollWidth > li.children[0].clientWidth || ra.right > rb.left + 0.5;
+      });
+      return { rows: lis.length, bad: bad.length, widest: lis.map(li => li.children[0].textContent ?? '').sort((a, b) => b.length - a.length)[0] ?? '' };
+    });
+    column.rows += c.rows; column.bad += c.bad;
+    if (c.widest.length > column.widest.length) column.widest = c.widest;
+  }
+  check('column', column.rows >= d.minColumn && column.bad === 0, `${tag}: the feed's time column fits its label and never overlaps its words, over seven games (${column.rows} lines, ${column.bad} bad, the longest label "${column.widest}")`);
   const stageScroll = () => p.evaluate(() => [Math.round(document.querySelector('[data-centre-stage]')?.scrollTop ?? -1), Math.round(window.scrollY)].join(','));
   const before = await stageScroll();
   if (phone) await p.evaluate(() => document.querySelector('[data-game-log-open]')?.click());
@@ -668,7 +786,7 @@ async function walk(slug, vp) {
       const names = [...document.querySelectorAll('[data-season-centre] aside [data-fixtures] .truncate')];
       return { n: names.length, cut: names.filter(el => el.scrollWidth > el.clientWidth).map(el => el.textContent) };
     });
-    check('layout', sched.n >= 80 && sched.cut.length === 0, `${tag}: no name in the Schedule column is cut off (${sched.n} rows${sched.cut.length ? `; cut: ${[...new Set(sched.cut)].slice(0, 5).join(', ')}` : ''})`);
+    check('layout', sched.n >= d.games - 2 && sched.cut.length === 0, `${tag}: no name in the Schedule column is cut off (${sched.n} rows${sched.cut.length ? `; cut: ${[...new Set(sched.cut)].slice(0, 5).join(', ')}` : ''})`);
   }
 
   /* the review, then out */
@@ -679,14 +797,15 @@ async function walk(slug, vp) {
     /* the whole season in the game log: no row wraps, whoever the opponent is */
     if (phone) await p.evaluate(() => document.querySelector('[data-game-log-open]')?.click());
     await p.waitForTimeout(150);
-    const whole = await p.evaluate(() => {
+    const whole = await p.evaluate(unit => {
       const panel = [...document.querySelectorAll('[data-record-panel]')].find(el => el.offsetParent !== null);
       const rows = panel ? [...panel.querySelectorAll('[data-game-log] li[data-log-row]')] : [];
       const bad = rows.filter(li => li.getBoundingClientRect().height > 24);
-      return { rows: rows.length, wrapped: bad.length, first: bad.slice(0, 2).map(li => li.textContent), twice: rows.filter(li => /(\d+ PTS).*\1/.test(li.textContent ?? '')).length };
-    });
-    check('layout', whole.rows >= 80 && whole.wrapped === 0, `${tag}: no game log row wraps over the whole season (${whole.wrapped} of ${whole.rows}${whole.first.length ? `; ${whole.first.join(' | ')}` : ''})`);
-    check('agreement', whole.rows >= 80 && whole.twice === 0, `${tag}: no game log row prints his points twice (${whole.twice} of ${whole.rows})`);
+      const twice = new RegExp(`(\\d+ ${unit}).*\\1`);
+      return { rows: rows.length, wrapped: bad.length, first: bad.slice(0, 2).map(li => li.textContent), twice: rows.filter(li => twice.test(li.textContent ?? '')).length };
+    }, d.twice);
+    check('layout', whole.rows >= d.games - 2 && whole.wrapped === 0, `${tag}: no game log row wraps over the whole season (${whole.wrapped} of ${whole.rows}${whole.first.length ? `; ${whole.first.join(' | ')}` : ''})`);
+    check('agreement', whole.rows >= d.games - 2 && whole.twice === 0, `${tag}: no game log row prints his headline number twice (${whole.twice} of ${whole.rows})`);
     if (phone) { await clickText(p, '← Back'); await p.waitForTimeout(120); }
   }
   await p.evaluate(() => document.querySelector('[data-centre-exit]')?.click());
@@ -705,8 +824,8 @@ async function walk(slug, vp) {
   check('errors', B.errors.length === 0, `${tag}: no page error and no console error${B.errors.length ? `: ${B.errors.slice(0, 2).join(' | ')}` : ''}`);
   await B.ctx.close();
 
-  if (phone) {
-    /* reduced motion: everything at once, nothing moving */
+  {
+    /* reduced motion: everything at once, nothing moving (at both sizes since Round 1147) */
     const C = await open(slug, save, { ...vp, reduced: true });
     await C.page.evaluate(() => document.querySelector('[data-week-by-week]')?.click());
     await C.page.waitForSelector('[data-season-centre] [data-kickoff]', { timeout: 20000 }).catch(() => {});
@@ -715,10 +834,11 @@ async function walk(slug, vp) {
     await clickText(C.page, d.start);
     await C.page.waitForTimeout(100);
     const a2 = await C.page.evaluate(() => ({ n: document.getAnimations().length, ft: !!document.querySelector('[data-full-time]'), lines: document.querySelectorAll('[data-clock-events] li').length }));
-    check('motion', a1 === 0 && a2.n === 0 && a2.ft && a2.lines >= 8, `${tag}: reduced motion shows the game at once with nothing animating (${a1} and ${a2.n} animations, ${a2.lines} lines)`);
+    check('motion', a1 === 0 && a2.n === 0 && a2.ft && a2.lines >= d.minLines, `${tag}: reduced motion shows the game at once with nothing animating (${a1} and ${a2.n} animations, ${a2.lines} lines)`);
     check('errors', C.errors.length === 0, `${tag}: reduced motion, no page error and no console error`);
     await C.ctx.close();
-
+  }
+  if (phone) {
     /* a held year */
     const H = await open(slug, makeSave(slug, 0, d.held.era, d.held.year), vp);
     const held = await H.page.evaluate(() => ({ line: document.querySelector('[data-season-centre-held]')?.textContent ?? '', button: !!document.querySelector('[data-week-by-week]') }));
@@ -762,6 +882,7 @@ async function walk(slug, vp) {
     await F.ctx.close();
     await saveHolds(slug, vp, save, tag);
     await staleWalks(slug, vp, save, afterPlay, firstDraws, tag);
+    for (const also of d.also) await positionWalk(slug, vp, also);
   }
 }
 
@@ -773,7 +894,7 @@ try {
 await browser.close();
 console.log(`supabase requests aborted: ${aborted}`);
 const failed = [...fails.values()].reduce((a, l) => a + l.length, 0);
-const NAMED = { static: 'lazy', write: 'same press', count: 'clock', cover: 'cover', playfirst: 'load first', nohandover: 'full storage', noaction: 'retry in view', raw: 'reload holds' };
+const NAMED = { static: 'lazy', write: 'same press', count: 'clock', cover: 'cover', playfirst: 'load first', nohandover: 'full storage', noaction: 'retry in view', raw: 'reload holds', column: 'column' };
 if (CONTROL) {
   const ok = fails.has(NAMED[CONTROL]);
   console.log(`${ok ? `control ${CONTROL}: RED AT THE NAMED CHECK (${NAMED[CONTROL]})` : `control ${CONTROL}: DID NOT FIRE AT ITS NAMED CHECK (${NAMED[CONTROL]})`}; checks red: ${[...fails.keys()].join(', ') || 'none'}`);

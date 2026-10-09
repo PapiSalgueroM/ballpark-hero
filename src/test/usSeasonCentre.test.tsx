@@ -6,9 +6,13 @@
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, waitFor } from '@testing-library/react';
-import UsSeasonCentre from '@/components/us-career/season/UsSeasonCentre';
+import UsSeasonCentre, { buildUsModel } from '@/components/us-career/season/UsSeasonCentre';
+import { buildUsSeason, type UsRow } from '@/lib/season/us';
+import { deriveSeason } from '@/lib/season/core';
 import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
 import { NBA_SEASON } from '@/lib/season/nba';
+import { NFL_CAREER_SPORT } from '@/lib/nflCareerSport';
+import { NFL_SEASON } from '@/lib/season/nfl';
 import { keyedRng } from '@/lib/keyedRng';
 import { usSeasonHeldLine } from '@/data/usSeasonLengths';
 import { resetCareerMomentsForTest } from '@/components/soccer-career/careerMoments';
@@ -107,5 +111,128 @@ describe('the US Season Center, mounted by itself', () => {
   it('shows the plain tile, never a throw, for a binding with no Season Center', async () => {
     mount(NBA_CAREER_SPORT.loadSeasonCentre ? { ...NBA_CAREER_SPORT, loadSeasonCentre: undefined } : NBA_CAREER_SPORT, playNba('centre-d', 1));
     await waitFor(() => expect(document.querySelector('[data-centre-tile]')).not.toBeNull());
+  });
+});
+
+/* ─── Round 1147: the NFL, bound to the same viewer ─── */
+const NFL_WITH_LOADER: UsCareerSport = { ...NFL_CAREER_SPORT, loadSeasonCentre: () => Promise.resolve(NFL_SEASON) };
+
+/** An NFL career played with the binding's own calls, cut back to the last season he played all 17 games of. */
+function playNfl(pos: string, seed: string, eraId = 'now'): UsCareerCore {
+  const SB = NFL_CAREER_SPORT;
+  /* a rookie may sit for years: the first keyed career that has a full season is the one used */
+  for (let n = 0; n < 12; n += 1) {
+    const rng = keyedRng(`${seed}|${n}`);
+    const c = SB.startCareer('Rex Gridiron', pos, SB.create.archetypes[pos][0], rng, null as never, eraId);
+    let tq = SB.rollTeamQuality(null, rng);
+    SB.assignRole(c, tq, rng);
+    for (let i = 0; i < 8; i += 1) {
+      SB.campBattle(c, tq, rng);
+      SB.simSeason(c, tq, rng);
+      SB.progress(c, rng);
+      tq = SB.rollTeamQuality(tq, rng);
+    }
+    const career: UsCareerCore = JSON.parse(JSON.stringify(c));
+    const full = career.seasons.map(s => s.games).lastIndexOf(17);
+    if (full < 0) continue;
+    career.seasons = career.seasons.slice(0, full + 1);
+    return career;
+  }
+  throw new Error(`usSeasonCentre.test: no ${pos} career of seed ${seed} has a full season`);
+}
+
+describe('the US Season Center with the NFL bound', () => {
+  const CASES: [string, RegExp, string, string][] = [
+    ['QB', /^\d+ YDS\d+ TD\d+ INT$/, 'Pass yds', 'passYds'],
+    ['K', /^\d\/\d FG(LONG \d+)?$/, 'FG made', 'fgMade'],
+    ['LB', /^\d+ TKL/, 'Tackles', 'tackles'],
+  ];
+  it.each(CASES)('walks a %s season from the kick off card to the review: drives on the clock, his line, the record and his totals', async (pos, lineRe, tile, field) => {
+    const career = playNfl(pos, `nfl-centre-${pos}`);
+    const saved = JSON.stringify(career);
+    const { row, onClose } = mount(NFL_WITH_LOADER, career);
+    await waitFor(() => expect(document.querySelector('[data-season-help]')).not.toBeNull());
+    const help = document.querySelector('[data-season-help]')!.textContent!;
+    expect(help).toContain('How the Season Center works');
+    expect(help).toContain('a champion wins 11 to 15 of 17');
+    expect(help).toContain('Ties are real in the NFL');
+    press('Got it');
+    const kick = document.querySelector('[data-kickoff]')!;
+    expect(kick.textContent).toContain(NFL_CAREER_SPORT.teamLabelOf(row.team, career.eraId));
+    expect(kick.querySelector('[data-frame-line]')!.textContent).toMatch(/^17 games · (8 home, 9 away|9 home, 8 away) · the league's schedule formula/);
+    expect(kick.textContent).toContain('▶ Kick off');
+    press('Kick off');
+    press('Results');
+    await waitFor(() => expect(document.querySelector('[data-full-time]')).not.toBeNull());
+    expect(document.querySelector('[data-full-time]')!.textContent).toBe('Final');
+    expect(document.querySelector('[data-clock-minute]')!.textContent).toBe('FINAL');
+    /* every line of the feed has its time in the wide column, as the quarter and the minutes left */
+    const lines = [...document.querySelectorAll('[data-clock-events] li')];
+    expect(lines.length).toBeGreaterThan(0);
+    for (const li of lines) {
+      const time = li.querySelector('span')!;
+      expect(time.className).toContain('w-14');
+      expect(time.className).not.toContain('w-8');
+      expect(time.textContent).toMatch(/^Q[1-4] \d{1,2}:00$/);
+      expect(li.textContent!.length).toBeGreaterThan(time.textContent!.length + 5);
+    }
+    /* the bug shows the score the drives in the feed add up to */
+    const worth = (t: string) => (t.includes('Touchdown') ? (t.includes('no good') ? 6 : t.includes('two point') ? 8 : 7) : t.includes('Field goal') ? 3 : t.includes('Safety') ? 2 : 0);
+    const total = lines.reduce((a, li) => a + worth(li.textContent!), 0);
+    const [hg, ag] = document.querySelector('[data-score-bug]')!.textContent!.split('-').map(Number);
+    expect(total).toBe(hg + ag);
+    expect(document.querySelector('[data-his-line]')!.textContent).toMatch(lineRe);
+    expect(document.querySelector('[data-record-panel]')!.getAttribute('data-record')).toMatch(/^(1-0|0-1|0-0-1)$/);
+    press('Sim the rest');
+    const review = document.querySelector('[data-review]')!;
+    expect(review.querySelector('[data-review-finish]')!.textContent).toContain(row.teamResult);
+    expect(review.querySelector('[data-review-finish]')!.textContent).toMatch(/^\d+-\d+(-\d+)? · /);
+    expect(review.querySelector('[data-review-tile="Games"]')!.textContent).toContain('17');
+    const want = (row as unknown as Record<string, number>)[field];
+    expect(review.querySelector(`[data-review-tile="${tile}"]`)!.textContent).toContain(want.toLocaleString('en-US'));
+    expect(!!review.querySelector('[data-playoff-path]')).toBe((NFL_SEASON.results as readonly string[]).includes(row.teamResult));
+    act(() => { fireEvent.click(document.querySelector('[data-centre-exit]')!); });
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(JSON.stringify(career)).toBe(saved);
+    expect(Object.keys(localStorage)).toEqual(['seasonCentre:help:nfl']);
+  });
+
+  it('prints the NFL playoff sentence as the save holds it, one game as "1 game", and every round with no score', () => {
+    const career = playNfl('QB', 'nfl-centre-po');
+    const base = career.seasons[career.seasons.length - 1];
+    const read = (over: Record<string, unknown>) => {
+      const row = { ...base, ...over } as UsRow;
+      const one: UsCareerCore = { ...career, seasons: [...career.seasons.slice(0, -1), row] };
+      const b = buildUsSeason(NFL_SEASON, one, row, NFL_CAREER_SPORT.teamLabelOf);
+      if (b.ok === false) throw new Error(`usSeasonCentre.test: ${b.why}`);
+      const s = deriveSeason(b.sport, row, b.ctx);
+      if (!s) throw new Error('usSeasonCentre.test: the season has no game by game view');
+      const path = buildUsModel(NFL_CAREER_SPORT, NFL_SEASON, one, row, b.ctx, s, b.key).review.path;
+      if (!path) throw new Error('usSeasonCentre.test: no playoff path');
+      return path;
+    };
+    const lost = read({ teamResult: NFL_SEASON.results[0], poGames: 1, poLine: '238 yds, 2 TD, 1 INT' });
+    expect(lost.line).toBe('Your playoffs: 1 game, 238 yds, 2 TD, 1 INT');
+    expect(lost.steps.map(st => [st.label, st.won])).toEqual([['Wild Card', false]]);
+    expect(lost.steps[0].text).toMatch(/^lost to the \S/);
+    const two = read({ teamResult: NFL_SEASON.results[1], poGames: 2, poLine: '4 of 5 on field goals' });
+    expect(two.line).toBe('Your playoffs: 2 games, 4 of 5 on field goals');
+    expect(two.steps.map(st => [st.label, st.won])).toEqual([['Wild Card', true], ['Divisional', false]]);
+    /* the save holds no playoff score, so no round prints one (a keyed score could not be held to "4 of 5") */
+    for (const st of [...lost.steps, ...two.steps]) expect(st.text).not.toMatch(/\d+-\d+/);
+    /* an older line with no playoff numbers shows the rounds and no sentence */
+    const bare = read({ teamResult: NFL_SEASON.results[0], poGames: undefined, poLine: undefined });
+    expect(bare.line).toBeNull();
+    expect(bare.steps).toHaveLength(1);
+  });
+
+  it('shows the held line, never a guess, for a throwback season the real league played 16 games of', async () => {
+    const career = playNfl('QB', 'nfl-centre-held', 'y2005');
+    const row = career.seasons[0];
+    expect(row.year).toBe(2005);
+    render(<MemoryRouter><UsSeasonCentre sport={NFL_WITH_LOADER} career={career} row={row} onClose={vi.fn()} /></MemoryRouter>);
+    await waitFor(() => expect(document.querySelector('[data-centre-tile]')).not.toBeNull());
+    expect(document.querySelector('[data-centre-tile]')!.textContent).toContain(usSeasonHeldLine('nfl', 2005)!);
+    expect(document.querySelector('[data-kickoff]')).toBeNull();
   });
 });

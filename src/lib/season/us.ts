@@ -119,6 +119,8 @@ export interface UsSeasonBind {
   meanBase(key: string, g: DerivedGame, row: UsRow, u: number): number;
   /** The league's schedule formula dealt for his team: rounds of one [home, away] slot pair, slots as ctx.order. */
   deal(ctx: UsSeasonCtx, rng: Rng): [number, number][][];
+  /** A season with no league shape, in this sport's own order of games; absent: the shared `dealUnnamed`. */
+  dealUnnamed?(games: number, rng: Rng): [number, number][][];
   finish(games: DerivedGame[], row: UsRow, pos: string, rng: Rng, ctx: UsSeasonCtx): boolean;
   check(row: UsRow, pos: string, s: DerivedSeason, ctx: UsSeasonCtx): string[];
   view: UsSeasonView;
@@ -234,7 +236,7 @@ export function buildUsSeason(
     id: bind.slug,
     seasonKey: () => key,
     frame: () => frame,
-    fixtures: (_f, rng) => (shape ? bind.deal(ctx, rng) : dealUnnamed(length, rng)),
+    fixtures: (_f, rng) => (shape ? bind.deal(ctx, rng) : (bind.dealUnnamed ?? dealUnnamed)(length, rng)),
     target: () => target,
     fixed: () => [],
     availability: () => bind.availability(row),
@@ -311,26 +313,22 @@ export function usPlayoffPath(bind: UsSeasonBind, row: UsRow, ctx: UsSeasonCtx, 
       }
       len.forEach((L, r) => { const w = need[r][0]; scores[r] = wonAt(r) ? `${w}-${L - w}` : `${L - w}-${w}`; });
     }
-  } else {
-    if (po !== null && po !== n) return null;
-    for (let r = 0; r < n; r += 1) {
-      const neutral = r === bind.rounds.length - 1;
-      const home = neutral ? true : rng() < 0.5;
-      let us = 0; let them = 0;
-      for (let t = 0; t < 20; t += 1) {
-        [us, them] = bind.score(0, home, rng, ctx.eraId);
-        if (us !== them && (us > them) === wonAt(r)) break;
-      }
-      if (us !== them && (us > them) !== wonAt(r)) { const k = us; us = them; them = k; }
-      scores[r] = us === them ? null : `${us}-${them}`;
-    }
-  }
+  } else if (po !== null && po !== n) return null;
+  /* One game a round: no score is drawn. The save holds his playoff numbers
+     as a sentence (so many touchdowns, so many field goals) and no score, and
+     a keyed score that is not held to those numbers can contradict them (two
+     field goals of his under a 9, two touchdown passes under a 7). Reading
+     numbers back out of a sentence is not something this binding does, so
+     the round shows who he met and whether he won. */
   return { steps: Array.from({ length: n }, (_, r) => ({ round: bind.rounds[r], opp: opps[r], won: wonAt(r), score: scores[r] })) };
 }
 
 /** The "?" sheet every US sport shares; a sport adds its own worked examples.
- *  The record numbers are read from the bind's bands, never typed twice. */
-export function usHelp(o: { named: boolean; games: number; bands: readonly (readonly [number, number])[]; examples: UsHelp['examples'] }): UsHelp {
+ *  The record numbers are read from the bind's bands, never typed twice.
+ *  `whoWhen`: the sport's words for its order of games ('Who you meet on
+ *  which night' when absent). `playoffNote`: a sentence of the sport's own
+ *  about its playoff path, printed after the shared footnote. */
+export function usHelp(o: { named: boolean; games: number; bands: readonly (readonly [number, number])[]; examples: UsHelp['examples']; whoWhen?: string; playoffNote?: string }): UsHelp {
   const missed = o.bands[0];
   const champion = o.bands[o.bands.length - 1];
   return {
@@ -338,13 +336,13 @@ export function usHelp(o: { named: boolean; games: number; bands: readonly (read
     intro: [
       'Your season was played the moment you pressed the button. This is that same season, game by game, so nothing here can change it. Your career is the same whether you watch or not.',
       o.named
-        ? "The teams, the divisions and how often you meet each one follow the league's standard schedule formula. Who you meet on which night, every score and every stat line are this career's own, not a real schedule."
+        ? `The teams, the divisions and how often you meet each one follow the league's standard schedule formula. ${o.whoWhen ?? 'Who you meet on which night'}, every score and every stat line are this career's own, not a real schedule.`
         : "Opponents are not named this season, because the game does not hold that season's divisions and schedule. Every score and every stat line are this career's own.",
       `Your team's record is this career's own too. It always fits how your season ended: here a champion wins ${champion[0]} to ${champion[1]} of ${o.games} and a team that missed the playoffs ${missed[0]} to ${missed[1]}.`,
       'If a contract talk comes up when you press Week by week, answer it first. If you play the year out, the season runs straight away and you can open it afterwards with Watch again.',
     ],
     controls: '▶ plays the next game. ⏩ jumps to the next big one (halfway, the last game). ⏭ goes straight to the end. 1x and 3x set the clock, Results shows each game at the final.',
     examples: o.examples,
-    footnote: "The playoffs show as a path, round by round, with the numbers your season card already has. From 2026 on, the league is this career's own world on today's format.",
+    footnote: `The playoffs show as a path, round by round, with the numbers your season card already has. From 2026 on, the league is this career's own world on today's format.${o.playoffNote ? ` ${o.playoffNote}` : ''}`,
   };
 }

@@ -26,6 +26,7 @@ import type { UsCareerSport } from '@/lib/usCareerSport';
 import { repairBankOnLoad, withBankFloor } from '@/lib/usCareerBank';
 import { NFL_CAREER_HALL } from '@/lib/nflCareerHall';
 import { nflSeasonReview } from '@/lib/usCareerSeasonReview';
+import { usSeasonHeldLine } from '@/data/usSeasonLengths';
 
 /* The key this career saves under. It stays a named constant so the home
    page's Continue fence (simHomeFront section 7) can find where every save
@@ -130,4 +131,9 @@ export const NFL_CAREER_SPORT: UsCareerSport<CareerState, SeasonLine> = withBank
   retirementAvatar: true,
   /* Round 1039: the retirement talk, the farewell season and the Hall. */
   hall: NFL_CAREER_HALL,
+  /* Round 1147: the Season Center, bound the way the NBA is. Its numbers load
+     when he first watches a season; the held line is tiny and eager, so the
+     hub can say a year has no game by game view before he presses. */
+  loadSeasonCentre: () => import('@/lib/season/nfl').then(m => m.NFL_SEASON),
+  seasonCentreHeld: year => usSeasonHeldLine('nfl', year),
 });

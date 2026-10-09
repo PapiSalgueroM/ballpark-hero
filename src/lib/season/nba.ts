@@ -8,14 +8,15 @@
    which night, every score and every stat line.
 
    Real and two sourced (src/data/usLeagueShape.ts): the divisions, the
-   league's standard 82 game formula, and the league scoring mean of each era.
+   league's standard 82 game formula, the league scoring mean of each era, and
+   the playoff format (four rounds, each a best of seven).
 
    No React, no Math.random. The engine import is the two exported result
    words and the era's team ids (the engine is already in the route's chunk). */
 import { shuffled, type DerivedGame, type DerivedSeason, type Rng, type SeasonEvent, type StatTotal } from './core';
 import { splitTotal, usHelp, type UsRow, type UsSeasonBind, type UsSeasonCtx } from './us';
 import { NBA_MISSED_PLAYOFFS, NBA_PLAYOFF_RESULTS, nbaEraTeamIds } from '../nbaMyCareer';
-import { NBA_SCORING } from '@/data/usLeagueShape';
+import { NBA_SCORING, US_PLAYOFF_FORMAT } from '@/data/usLeagueShape';
 import { usSeasonHeldLine, usSeasonLabel, usSeasonLength } from '@/data/usSeasonLengths';
 
 const GAMES = 82;
@@ -148,9 +149,9 @@ export const NBA_SEASON: UsSeasonBind = {
   missed: NBA_MISSED_PLAYOFFS,
   results: NBA_PLAYOFF_RESULTS,
   bands: BANDS,
-  /* every round is a best of seven: four wins, seven games at most */
-  series: [[4, 7], [4, 7], [4, 7], [4, 7]],
-  rounds: ['First round', 'Conference semifinals', 'Conference finals', 'NBA Finals'],
+  /* every round is a best of seven: four wins, seven games at most (the ledger's format, with its sources) */
+  series: US_PLAYOFF_FORMAT.nba.series,
+  rounds: US_PLAYOFF_FORMAT.nba.rounds,
   cap: 175,
   seasonLabel: year => usSeasonLabel('nba', year),
   statKeys: () => ['ppg', 'rpg', 'apg'],
