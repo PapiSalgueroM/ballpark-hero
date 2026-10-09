@@ -1,0 +1,95 @@
+NEGATIVE CONTROL ON: nodetect, sections 3 and 6 must go red
+1) every pair two sourced, off any wiki, between real clubs, and the ratchet only shrinks
+   15 pair clubs Soccer Career spells differently, 0 missing from the alias map
+   64 pairs, 0 bad; 42 aliases; 115 primary edges, 57 on the ratchet (frozen at 57), 0 unaccounted
+2) Club Manager reads exactly what it read before the lift
+   rivals 565e14623c2f (115 keys), board 8093c57e7481 (454 clubs)
+pool: 200 careers, 2000 playing seasons, 0 with derbies (16 s)
+3) the right derbies, the verified number of meetings, and nothing else
+   pool: 2000 seasons, 0 with a derby; meetings per rival {}; 0 wrong counts, 0 wrong rival sets, 0 derbies keys where none was due
+  FAIL: only 0 pool seasons had a derby, too few to say anything
+   750 of them were played in the career's own 2026 on field (read off the row)
+   Arsenal 2020: 0 of 120 seasons right (Tottenham, Chelsea; the North London derby and a London derby)
+  FAIL: Arsenal 2020: 120 seasons wrong
+   Real Madrid 2020: 0 of 120 seasons right (Barcelona, Atletico Madrid; El Clasico and the Madrid derby)
+  FAIL: Real Madrid 2020: 120 seasons wrong
+   Man City 2020: 0 of 120 seasons right (Man United; the alias map: Man City is Manchester City in the table)
+  FAIL: Man City 2020: 120 seasons wrong
+   Sao Paulo 2020: 120 of 120 seasons right (none; before 2026-27 the Brasileirao is not one of the six leagues the ledgers hold)
+   Sao Paulo 2026: 0 of 120 seasons right (Corinthians, Palmeiras, Santos; three Paulista rivals, through the alias map)
+  FAIL: Sao Paulo 2026: 120 seasons wrong
+   Corinthians 2002: 120 of 120 seasons right (none; the Brasileirao before 2003 claims nothing)
+   Corinthians 2003: 120 of 120 seasons right (none; before 2026-27 the Brasileirao is not one of the six leagues the ledgers hold)
+   Corinthians 2026: 0 of 120 seasons right (Palmeiras, Sao Paulo, Santos; the double round robin Brasileirao)
+  FAIL: Corinthians 2026: 120 seasons wrong
+   Newcastle 2020: 120 of 120 seasons right (none; Sunderland were in League One in 2020-21 (the league ledgers))
+   Newcastle 2026: 0 of 120 seasons right (Sunderland; the Tyne-Wear derby, woken by Round 1013 adding Sunderland)
+  FAIL: Newcastle 2026: 120 seasons wrong
+   Celta Vigo 2020: 120 of 120 seasons right (none; Deportivo were in the third tier in 2020-21 (the league ledgers))
+   Celta Vigo 2026: 0 of 120 seasons right (Deportivo; the Galician derby, Round 1013 Deportivo through the alias map)
+  FAIL: Celta Vigo 2026: 120 seasons wrong
+   West Ham 2020: 0 of 120 seasons right (Tottenham; Millwall plays in another league in the game, so the Dockers derby is dormant)
+  FAIL: West Ham 2020: 120 seasons wrong
+   Roma 2020: 0 of 120 seasons right (Napoli; Lazio is not a Soccer Career club, so the Derby della Capitale is dormant)
+  FAIL: Roma 2020: 120 seasons wrong
+   PSG 2018: 0 of 120 seasons right (Marseille; the last full Ligue 1 season before the held one)
+  FAIL: PSG 2018: 120 seasons wrong
+   PSG 2019: 120 of 120 seasons right (none; Ligue 1 2019/20 was abandoned, held)
+   PSG 2020: 0 of 120 seasons right (Marseille; Ligue 1 after the held season)
+  FAIL: PSG 2020: 120 seasons wrong
+   Club America 1995: 120 of 120 seasons right (none; Liga MX before the short tournaments claims nothing)
+   Club America 1996: 120 of 120 seasons right (none; before 2026-27 Liga MX is not one of the six leagues the ledgers hold)
+   Club America 2019: 120 of 120 seasons right (none; the Clausura 2020 was cancelled, held)
+   Club America 2026: 0 of 120 seasons right (Chivas, Cruz Azul, Pumas; the Liga MX clasicos, through the alias map)
+  FAIL: Club America 2026: 120 seasons wrong
+   Boca Juniors 2020: 120 of 120 seasons right (none; Argentina has no verified cadence)
+   Brighton 1990: 120 of 120 seasons right (none; Brighton were in the Second Division in 1990-91 (the league ledgers))
+   Crystal Palace 1991: 120 of 120 seasons right (none; a First Division season, Brighton a division below (the league ledgers))
+   Brighton 2026: 0 of 120 seasons right (Crystal Palace; the M23 derby from 2026-27)
+  FAIL: Brighton 2026: 120 seasons wrong
+   2026: 0 pairs active, 64 dormant (pinned 56 and 8)
+  FAIL: 0 pairs active in 2026, pinned at 56
+  FAIL: pair status moved in 2026: newly active [], newly dormant ["AC Milan and Inter Milan","América and Cruz Azul","América and Guadalajara","América and Pumas UNAM","Arsenal and Chelsea","Arsenal and Tottenham","Athletic Club and Real Sociedad","Barcelona and Espanyol","Bayern Munich and Borussia Dortmund","Benfica and Porto","Benfica and Sporting CP","Bologna and Fiorentina","Borussia Dortmund and Schalke 04","Botafogo and Fluminense","Braga and Vitória Guimarães","Brentford and Fulham","Celta Vigo and Deportivo La Coruña","Chelsea and Fulham","Chelsea and Tottenham","Corinthians and Palmeiras","Corinthians and São Paulo","Cruzeiro and Atlético Mineiro","Crystal Palace and Brighton","Flamengo and Botafogo","Flamengo and Fluminense","Flamengo and Vasco da Gama","Fluminense and Vasco da Gama","Grêmio and Internacional","Guadalajara and Atlas","Juventus and Inter Milan","Juventus and Torino","Köln and Gladbach","Lille and Lens","Liverpool and Everton","Liverpool and Manchester United","Lyon and Marseille","Manchester City and Manchester United","Manchester United and Leeds United","Monaco and Nice","Monterrey and Tigres UANL","Newcastle and Sunderland","PSG and Marseille","Palmeiras and São Paulo","Porto and Sporting CP","Real Madrid and Atlético Madrid","Real Madrid and Barcelona","Roma and Lazio","Roma and Napoli","Santos and Corinthians","Santos and Palmeiras","Santos and São Paulo","Sevilla and Real Betis","Valencia and Levante","Werder Bremen and Hamburg","West Ham and Millwall","Wolves and West Brom"]
+4) derby goals are a subset, keepers never score one, Derby Hero is derived and never stored
+   0 derby seasons: 0 over the season's goals, 0 over its league apps, 0 keeper goals, 0 bad winner flags, 0 goals in a missed game, 0 hero mismatches, 0 careers storing a Derby Hero award
+  FAIL: only 0 derby seasons to check
+   0 two meeting rivalries, 0 played both at one ground; 0 seasons replayed from their own inputs, 0 differ from what the engine stored
+  FAIL: only 0 two meeting rivalries to check home and away on
+5) resolving the derbies draws nothing from the main stream
+   16 of 16 digests equal; bundle B played 139 derby seasons, bundle A 0
+6) the swing is bounded, results follow strength, heroes follow position
+   6a: 0 seasons swung, 0 outside the bands, 0 popularity and 0 morale off the clamp
+  FAIL: 6a: only 0 seasons to swing
+   6b: win share by strength gap 2: NaN (0), 1: NaN (0), 0: NaN (0), -1: NaN (0), -2: NaN (0)
+  FAIL: 6b: gap 2 has 0 meetings, under 400
+  FAIL: 6b: gap 1 has 0 meetings, under 400
+  FAIL: 6b: gap 0 has 0 meetings, under 400
+  FAIL: 6b: gap -1 has 0 meetings, under 400
+  FAIL: 6b: gap -2 has 0 meetings, under 400
+  FAIL: 6b: gap 2 wins only NaN more often than gap 1, under 0.03
+  FAIL: 6b: gap 1 wins only NaN more often than gap 0, under 0.03
+  FAIL: 6b: gap 0 wins only NaN more often than gap -1, under 0.03
+  FAIL: 6b: gap -1 wins only NaN more often than gap -2, under 0.03
+   6c: draw share 0.000 over 0 meetings
+  FAIL: 6c: draw share 0.000 outside 0.24 to 0.3
+   6d: hero rate att NaN (0), mid NaN (0), def NaN (0), gk NaN (0)
+  FAIL: 6d: attackers NaN not ahead of midfield NaN by 0.01
+  FAIL: 6d: midfield NaN not ahead of defenders NaN by 0.013, or defenders never heroes
+  FAIL: 6d: keepers ? hero seasons out of 0, must be 0 out of at least 20
+   6d: 0 winners in 0 won meetings he scored in, 0.0 expected, ratio 0.000 (band 0.85 to 1.2)
+  FAIL: 6d: only 0 won meetings he scored in
+  FAIL: 6d: hero ratio 0.000 outside 0.85 to 1.2, the winning goal rule moved
+   6e: popularity at every season's end, on 69.483 (1322) off 69.483 (1322) difference 0.000 (band 6)
+   6e: 80 long careers each way, 0 and 0 divorced, 2 and 2 with a Hall of Fame line
+   6e: final popularity on 95.875 off 95.875 difference 0.000 (band 2)
+   6e: final morale on 65.737 off 65.737 difference 0.000 (band 14)
+   6e: sponsorship on 4.015 off 4.015 difference 0.000 (band 0.3)
+   6e: net worth on 53.675 off 53.675 difference 0.000 (band 4)
+   6e: hall of fame lines on 0.025 off 0.025 difference 0.000 (band 0.08)
+7) an old save plays on, garbage reads as nothing, the UI draws only what a season has
+   old save: 10 seasons, played on to 11
+   old season markup 0 chars; chip "🔥 1-1-0"; totals "🔥 Derbies: 2 played, 1 W 1 D 0 L, 1 goal"
+8) no text claims a derby the record may contradict, and no dash anywhere
+   0 derby log and summary lines, 13350 fan comment sets, 0 with a dash
+  FAIL: only 0 derby lines read
+simCareerDerbies: CONTROL nodetect fired, sections 3, 4, 6, 8 red as expected

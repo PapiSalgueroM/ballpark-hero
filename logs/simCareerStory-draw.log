@@ -1,0 +1,24 @@
+seed 9741: 24 careers, story 452 bytes a season, 21.2 seasons a career, save mean 56961 bytes
+seed 9741 parts: rest mean 41629 bytes, cup games 1581 bytes a season over 115 seasons, division 539 bytes a season over 138 seasons, ten divisions mean 4488 bytes
+seed 19741: 24 careers, story 459 bytes a season, 22.2 seasons a career, save mean 59188 bytes
+seed 19741 parts: rest mean 43648 bytes, cup games 1467 bytes a season over 125 seasons, division 527 bytes a season over 147 seasons, ten divisions mean 4491 bytes
+seed 29741: 24 careers, story 472 bytes a season, 22.4 seasons a career, save mean 62083 bytes
+seed 29741 parts: rest mean 45014 bytes, cup games 1465 bytes a season over 140 seasons, division 523 bytes a season over 176 seasons, ten divisions mean 4483 bytes
+seed 39741: 24 careers, story 465 bytes a season, 21.8 seasons a career, save mean 59355 bytes
+seed 39741 parts: rest mean 42935 bytes, cup games 1521 bytes a season over 137 seasons, division 549 bytes a season over 134 seasons, ten divisions mean 4491 bytes
+moves the log check saw: 1122 signings, 20 loans
+careers 96 (4 seeds x 24), story seasons 2102, lines written 14941, kept in the story 14827 plus 114 live
+baseline before Round 974: a finished career could read 114 of 14941 lines (0.8%); now 14941 (100.0%)
+size: story 462 bytes a season, save mean 59397 bytes, median 61331
+parts: rest mean 43307 bytes (the save before the train's parts), cup games 1506 bytes a season over 517 seasons, division 534 bytes a season over 595 seasons, ten divisions mean 4488 bytes
+check completeness: ok
+check draws: FAIL (96)
+  9741/0: the career played differently from the engine without the story
+  9741/1: the career played differently from the engine without the story
+  9741/2: the career played differently from the engine without the story
+  9741/3: the career played differently from the engine without the story
+  9741/4: the career played differently from the engine without the story
+check size: ok
+check log: ok
+check parts: ok
+simCareerStory control draw: fired, check draws failed as it must (failed: draws)

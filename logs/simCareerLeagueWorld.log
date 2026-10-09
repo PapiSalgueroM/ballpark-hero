@@ -1,0 +1,69 @@
+bundled in 363 ms; 460 clubs (190 hand rows)
+
+D1. SAVED RIVAL CHAMPION: context roles overlap, table clubs do not
+  rival champion probe: actual context and table checked; old double-count defect reproduced; missing, foreign and duplicate club copies caught
+
+B1. POOL: the rows main shipped are still the first rows, in order
+  51 of 51 recorded rows found in place (id, name, country, league); the pool has 270 generated rows
+
+B4. POOL: the dugout's key finds every pool club under Club Manager's spelling
+  380 Club Manager clubs of 23 leagues, 380 matched by the key (1 pinned apart: Nacional and CD Nacional)
+
+C1. BAND: main's recorded cross, the five big leagues and every season before 2026 byte for byte
+  held: 8100 rows in the five big leagues, 87480 rows before 2026 outside them; free to move: 43740 rows, 2184 moved over 24 pairs that gained a size
+
+C2. BAND: the worked examples, exact, and every ladder club banded at its own place
+  15 worked bands and 7 seed keys exact; 284 clubs of 17 ladder leagues each banded at their own place
+
+C3. BAND: every ladder club, five ratings, 200 engine shaped keys
+  284000 bands, every one from the ladder and inside 2 to the league's size; 16 groups the ladder cannot order, each sharing one band at every rating
+
+A. LEDGERS: every league the pool reads is sized, odd or waiting with its reason
+  sized (a finish, a table): Championship 24, Brasileirao 20, Eredivisie 18, Saudi Pro League 18, Primeira Liga 18, Super Lig 18, 2. Bundesliga 18, Belgian Pro League 18
+  odd (their real row count, no table): MLS 30, Scottish Premiership 12, Austrian Bundesliga 12
+  waiting, results only as on main: Super League Greece (format from 1 host), Danish Superliga (format from 1 host), Swiss Super League (format from 0 hosts), HNL (format from 0 hosts), Liga MX (format from 1 host), A-League (format from 1 host)
+  held by the generator: Serie B, Ligue 2, Segunda Division, Russian Premier League; the ledgers hold the Championship in 22 of 22 seasons from 2004
+
+E. OLD SAVES: seven saves recorded on main read the same, and play on
+  7 saves: repairCareer byte equal, every saved row reads the finish, league and mode main read; matchdays moved to the league's real count on 6 rows (ere 2027 Twente: 38 to 34; ere 2028 Twente: 38 to 34; cha 2027 Norwich City: 38 to 46; cha 2028 Norwich City: 38 to 46; her 2027 Hertha Berlin: 38 to 34; her 2028 Hertha Berlin: 38 to 34); each played three more seasons
+
+C4. BAND: a higher place on the ladder finishes higher, tier 4 clubs included
+  Championship: 19 of 24 ordered, rho 1.000 to 1.000; tier 4 17, rho 1.000 to 1.000
+  Brasileirao: 16 of 20 ordered, rho 1.000 to 1.000; tier 4 10, rho 1.000 to 1.000
+  Eredivisie: 7 of 18 ordered, rho 1.000 to 1.000; tier 4 3 (too few to measure)
+  Saudi Pro League: 7 of 18 ordered, rho 1.000 to 1.000; tier 4 1 (too few to measure)
+  Primeira Liga: 8 of 18 ordered, rho 1.000 to 1.000; tier 4 5, rho 1.000 to 1.000
+  Super Lig: 9 of 18 ordered, rho 1.000 to 1.000; tier 4 0 (too few to measure)
+  2. Bundesliga: 5 of 18 ordered, rho 1.000 to 1.000; tier 4 5, rho 1.000 to 1.000
+  Belgian Pro League: 10 of 18 ordered, rho 1.000 to 1.000; tier 4 0 (too few to measure)
+  8 leagues measured over three key sets: lowest 1.000, highest 1.000 (floor 0.97); tier 4 alone in 4: lowest 1.000, highest 1.000 (floor 0.97)
+
+D1. WORLD: a season in a sized league always has its finish, its matchdays and a whole table
+  seed set 0, 300 careers x 17 nations in 346 s: 64631 seasons, 43185 in a sized league (a finish from 1 to the size, 2 x (size - 1) matchdays), 22745 tables in a ladder league outside the five whose names cover every row
+  drawn as the page draws them (up to 300 a league): 4797 tables, every row named, 1st place named, no club of the league left off: Championship 300 of 828 (293 not his title); Brasileirao 299 of 4040 (245 not his title, 1 the Season Centre could not derive); Eredivisie 300 of 3109 (248 not his title); Saudi Pro League 300 of 2963 (274 not his title); Primeira Liga 299 of 3506 (222 not his title, 1 the Season Centre could not derive); Super Lig 300 of 3066 (273 not his title); 2. Bundesliga 300 of 661 (291 not his title); Belgian Pro League 300 of 2863 (283 not his title)
+
+D2. WORLD: more seasons end with a league position and a real table than on main
+  seasons holding a league position: main 41.0%, now 69.6%; with a table in Week by week: main 34.1%, now 66.8%; share of table rows carrying a name: main 24.0%, now 66.8%
+  Netherlands: 3779 seasons; position main 29.1%, now 80.7%; table main 20.7%, now 78.5% (floor 75.1%)
+  Portugal: 3815 seasons; position main 29.6%, now 82.1%; table main 20.7%, now 80.5% (floor 72.3%)
+  Turkey: 3816 seasons; position main 29.4%, now 80.8%; table main 21.6%, now 78.8% (floor 73.5%)
+  Belgium: 3754 seasons; position main 29.3%, now 81.2%; table main 21.4%, now 79.2% (floor 66.9%)
+  Brazil: 3814 seasons; position main 31.4%, now 81.3%; table main 23.0%, now 79.3% (floor 75.9%)
+  Saudi Arabia: 3782 seasons; position main 30.6%, now 80.9%; table main 23.0%, now 79.4% (floor 76.9%)
+  where the seasons are: big five 20440 (31.6%; position 100.0%, table 100.0%); plain and sized 22745 (35.2%; position 100.0%, table 100.0%); odd ledger 6465 (10.0%; position 8.5%, table 0.0%); a pool league waiting for its format 5370 (8.3%; position 6.6%, table 0.0%); not a Club Manager league 9611 (14.9%; position 9.2%, table 0.0%)
+  critic 12, printed and not asserted: a tier 4 pool club's finish as a share of the table, titles apart: in the five (the tier's band) mean 0.809 over 610, 0.0% in the top half; in a ladder league mean 0.624 over 2203, 35.5% in the top half
+
+B6. POOL: the engine's own seed key carries the club, and every ladder club is banded by its ladder
+  32871 finishes the engine drew from 2026 in a ladder league outside the five: 32210 banded by the ladder; 661 by the tier for a club the list does not place in that league (Championship: Everton x55, Championship: Ipswich Town x11, Championship: Bournemouth x20, 2. Bundesliga: Frankfurt x59, Championship: Aston Villa x70, Championship: Leeds United x17, Championship: Newcastle x1, Championship: Crystal Palace x42)
+
+D3. DUGOUT: a sized league prints its position, an odd league its real number of rows and no number
+  2366 dugout seasons in a sized league, 210 in an odd league (Scottish Premiership, MLS, Austrian Bundesliga), 1117 elsewhere
+  a table of 12: main 0 seasons (title none, top two none, bottom three none, sacked none); now 90 (title 22.2%, top two 36.7%, bottom three 12.2%, sacked 6.7%)
+  a table of 16: main 0 seasons (title none, top two none, bottom three none, sacked none); now 15 (title 0.0%, top two 6.7%, bottom three 13.3%, sacked 20.0%)
+  a table of 18: main 321 seasons (title 9.3%, top two 18.7%, bottom three 13.1%, sacked 9.0%); now 730 (title 11.1%, top two 18.6%, bottom three 11.0%, sacked 9.5%)
+  a table of 20: main 2770 seasons (title 9.3%, top two 16.1%, bottom three 9.9%, sacked 7.3%); now 2091 (title 9.8%, top two 16.2%, bottom three 9.5%, sacked 6.6%)
+  a table of 22: main 0 seasons (title none, top two none, bottom three none, sacked none); now 28 (title 3.6%, top two 7.1%, bottom three 10.7%, sacked 3.6%)
+  a table of 24: main 579 seasons (title 6.4%, top two 10.9%, bottom three 7.1%, sacked 0.5%); now 619 (title 5.8%, top two 11.6%, bottom three 8.6%, sacked 1.0%)
+  a table of 30: main 0 seasons (title none, top two none, bottom three none, sacked none); now 120 (title 5.8%, top two 10.8%, bottom three 9.2%, sacked 5.0%)
+
+simCareerLeagueWorld: all sections green (347.6 s)
