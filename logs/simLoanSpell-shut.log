@@ -1,0 +1,17 @@
+NEGATIVE CONTROL ON (shut): the loan market closed in the bundle, section 4 must go red
+1) the projection and the draw share one table
+   table intact across 8 cases, 300 fringe draws inside the band
+2) the offer law
+  FAIL: a benched 18 year old at a giant got no loan offers
+   0 offers for the benched kid, zero for the star, the veteran, the final year man and the small club
+3) the lifecycle and 4) the measured payoff
+  FAIL: only 3 of 900 benched careers ever saw a loan offer
+   3 loans across 900 careers; after 3 seasons: overall gap +0.0, football played gap +0 apps
+  FAIL: the loan cohort should end up better: gap 0.00 (floor 0.2)
+  FAIL: the loan cohort should play more football: gap 0 (floor 5)
+5) a save from before this round runs exactly as before
+   absent fields repaired to null, a full season advanced clean
+6) the wiring and the words
+   five entries, the copy, the button, the record tag and the shared table all present
+
+simLoanSpell control (shut): green. Shutting the loan market was caught (4 findings).

@@ -1,0 +1,33 @@
+ok   saved domestic and club cup names, opponents, leg scores and decisions
+ok   historical bindings, unknown old campaigns, first-stage exits and read-only saves
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: a neutral one-match final stays Final without a home or away label
++ actual - expected
+
+  [
+    [
++     'Final, leg 1',
+-     'Final',
+      'Barcelona',
+      2,
+      0,
++     false,
+-     undefined,
+      1
+    ]
+  ]
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerSeasonCompetitions.mjs:61:8
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [ [ 'Final, leg 1', 'Barcelona', 2, 0, false, 1 ] ],
+  expected: [ [ 'Final', 'Barcelona', 2, 0, undefined, 1 ] ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

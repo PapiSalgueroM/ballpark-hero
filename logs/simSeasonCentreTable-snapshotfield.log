@@ -1,0 +1,17 @@
+CONTROL snapshotfield: patched in the bundle only
+   targeted Ligue 1 2019-20: results (gate format)
+   targeted Premier League 1995-96: table (gate table)
+   targeted La Liga 2005-06: table (gate table)
+   targeted Premier League 2017-18, a derby rival a division down: results (gate rival)
+   targeted Championship 2027-28, no title race: table (gate table)
+tables 435 (59 of them in a plain league outside the five, from 2026-27; 4 with nobody crowned by the world, 1st place one of the league's own clubs), results 455; places named 7756, unnamed 812
+ok   the probe reached enough tables (435, floor 300)
+ok   2. saved simulated fields checked on 140 future tables
+ok   3. the probe reached tables in a plain league outside the five (59, floor 33)
+ok   2. tables with nobody crowned by the world (4, floor 3)
+ok   1b. final tables hold 921 neighbours level on points, 358 of them where goal difference and goals scored disagree (floor 50), so the order check has cases to see
+FAIL item 2 names: Probe 4 2027 Chelsea: Coventry City named in the 2027 Premier League | Probe 4 2027 Chelsea: Bournemouth named in the 2027 Premier League | Probe 4 2027 Chelsea: Ipswich Town named in the 2027 Premier League | Probe 4 2027 Chelsea: displayed clubs differ from the saved simulated field
+FAIL replay, naming and the gate on every table: 2 names
+ok   4. ledger order: 0 of 249 tables (0.0%) finish in the ledger's order, band 5%
+simSeasonCentreTable: 7 checks, 849 failed (control snapshotfield)
+CONTROL snapshotfield: item 2 names failed as expected

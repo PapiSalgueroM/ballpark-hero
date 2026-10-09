@@ -1,0 +1,33 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: each European leg keeps its recorded score
++ actual - expected
+
+  [
+    [
+      'Barcelona',
++     3,
+-     2,
+      1
+    ],
+    [
+      'Barcelona',
++     1,
+-     0,
+      2
+    ]
+  ]
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerSeasonCompetitions.mjs:35:8
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [ [ 'Barcelona', 3, 1 ], [ 'Barcelona', 1, 2 ] ],
+  expected: [ [ 'Barcelona', 2, 1 ], [ 'Barcelona', 0, 2 ] ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
