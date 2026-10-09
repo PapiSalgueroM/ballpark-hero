@@ -1,0 +1,4 @@
+# Lead's seam fix: the NFL viewer test's "full season" follows the year's real length; a test regex spells its dashes as escapes
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-seam: node_modules/.bin/vitest run src/test/usSeasonCentre.test.tsx src/test/usCareerHelpRules1104.test.tsx src/test/usSeason.test.ts src/test/usSeasonNfl.test.ts src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000 --hookTimeout=120000
+dashes: bash -c "git diff origin/main HEAD -- src index.html scripts | grep -c -P '^\+.*[\x{2013}\x{2014}]'; true"
