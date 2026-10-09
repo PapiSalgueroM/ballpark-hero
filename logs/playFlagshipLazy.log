@@ -1,0 +1,9 @@
+1) play a career to the dugout in the engine, so the save is one the game could have written
+   18 seasons, retired at 33, now unemployed at Botafogo, save 53 KB
+   Club Manager's code lives in: clubManager-B028fWra.js
+2) a fresh visit does not pay for the dugout
+   no save                    45 js chunks, Club Manager chunk: not fetched, 0 page errors
+3) a career already in the dugout pulls it in, and the screen draws
+   dugout save                53 js chunks, Club Manager chunk: fetched, 0 page errors
+
+playFlagshipLazy: green. The dugout costs nothing until you walk into it, and it still works when you do.

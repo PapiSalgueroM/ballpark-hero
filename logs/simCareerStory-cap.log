@@ -1,0 +1,24 @@
+seed 9741: 24 careers, story 320 bytes a season, 21.5 seasons a career, save mean 54022 bytes
+seed 9741 parts: rest mean 39252 bytes, cup games 1474 bytes a season over 115 seasons, division 547 bytes a season over 134 seasons, ten divisions mean 4489 bytes
+seed 19741: 24 careers, story 321 bytes a season, 22.2 seasons a career, save mean 57699 bytes
+seed 19741 parts: rest mean 40805 bytes, cup games 1466 bytes a season over 140 seasons, division 551 bytes a season over 159 seasons, ten divisions mean 4493 bytes
+seed 29741: 24 careers, story 325 bytes a season, 22.6 seasons a career, save mean 57640 bytes
+seed 29741 parts: rest mean 41330 bytes, cup games 1517 bytes a season over 134 seasons, division 553 bytes a season over 138 seasons, ten divisions mean 4484 bytes
+seed 39741: 24 careers, story 327 bytes a season, 22.0 seasons a career, save mean 57055 bytes
+seed 39741 parts: rest mean 41011 bytes, cup games 1416 bytes a season over 133 seasons, division 563 bytes a season over 150 seasons, ten divisions mean 4491 bytes
+moves the log check saw: 1138 signings, 22 loans
+careers 96 (4 seeds x 24), story seasons 2120, lines written 15242, kept in the story 9828 plus 123 live
+baseline before Round 974: a finished career could read 123 of 15242 lines (0.8%); now 9951 (65.3%)
+size: story 323 bytes a season, save mean 56604 bytes, median 57827
+parts: rest mean 40600 bytes (the save before the train's parts), cup games 1468 bytes a season over 522 seasons, division 554 bytes a season over 581 seasons, ten divisions mean 4489 bytes
+check completeness: FAIL (1547)
+  9741/0 season 2: 5 lines kept of 6
+  9741/0 season 3: 5 lines kept of 8
+  9741/0 season 4: 5 lines kept of 11
+  9741/0 season 5: 5 lines kept of 6
+  9741/0 season 6: 5 lines kept of 8
+check draws: ok
+check size: ok
+check log: ok
+check parts: ok
+simCareerStory control cap: fired, check completeness failed as it must (failed: completeness)

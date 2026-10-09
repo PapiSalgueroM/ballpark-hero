@@ -1,0 +1,17 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simFlagshipWeight exit=0 1s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+simFlagshipWeight-static exit=1 1s | simFlagshipWeight: 1 failure
+simFlagshipWeight-training exit=1 1s | simFlagshipWeight: 1 failure
+simFlagshipWeight-eagerimport exit=1 1s | simFlagshipWeight: 1 failure
+playFlagshipLazy exit=0 8s | playFlagshipLazy: green. The dugout costs nothing until you walk into it, and it still works when you do.
+sweepWeight exit=0 28s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+simCareerStory exit=0 18s | simCareerStory: GREEN, 96 careers keep every season's lines in order, draw nothing and stay inside the size bands
+tsc exit=0 48s | 
+simCareerStory-reset exit=0 20s | simCareerStory control reset: fired, check completeness failed as it must (failed: completeness, size)
+simCareerStory-cap exit=0 22s | simCareerStory control cap: fired, check completeness failed as it must (failed: completeness)
+careerStoryTest exit=0 7s |    Duration  6.72s (transform 1.88s, setup 53ms, collect 2.78s, tests 3.14s, environment 319ms, prepare 128ms)
+simCareerStory-cuptwice exit=0 24s | simCareerStory control cuptwice: fired, check parts failed as it must (failed: parts)
+simCareerStory-worldmoves exit=0 24s | simCareerStory control worldmoves: fired, check parts failed as it must (failed: parts)
+simNoRivalNames exit=0 14s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 36s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+vitest-whole exit=0 327s |    Duration  325.49s (transform 26.50s, setup 13.13s, collect 103.21s, tests 678.03s, environment 101.87s, prepare 21.91s)

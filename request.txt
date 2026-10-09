@@ -1,0 +1,18 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sweepWeight: BASE=http://localhost:4173 SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simFlagshipWeight-static: FLAGSHIP_LAZY_CONTROL=static node scripts/simFlagshipWeight.mjs
+simFlagshipWeight-training: FLAGSHIP_LAZY_CONTROL=training node scripts/simFlagshipWeight.mjs
+simFlagshipWeight-eagerimport: FLAGSHIP_LAZY_CONTROL=eagerimport node scripts/simFlagshipWeight.mjs
+playFlagshipLazy: PORT=4173 node scripts/playFlagshipLazy.mjs
+simCareerStory: node scripts/simCareerStory.mjs
+simCareerStory-reset: CAREER_STORY_CONTROL=reset node scripts/simCareerStory.mjs
+simCareerStory-cap: CAREER_STORY_CONTROL=cap node scripts/simCareerStory.mjs
+simCareerStory-worldmoves: CAREER_STORY_CONTROL=worldmoves node scripts/simCareerStory.mjs
+simCareerStory-cuptwice: CAREER_STORY_CONTROL=cuptwice node scripts/simCareerStory.mjs
+careerStoryTest: node_modules/.bin/vitest run src/test/careerStory.test.tsx --testTimeout=300000 --hookTimeout=120000
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+vitest-whole: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
