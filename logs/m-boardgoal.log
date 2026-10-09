@@ -1,0 +1,19 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Control anchor must occur exactly once: 'GOAL! ' }, who, { t: ` ${minuteLabel(e)}` }]
+
+0 !== 1
+
+    at replace (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simLiveSimMotion.mjs:114:57)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simLiveSimMotion.mjs:129:43 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 0,
+  expected: 1,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
