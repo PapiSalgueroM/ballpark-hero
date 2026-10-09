@@ -1,0 +1,5 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+rules-before exit=1 19s | simCmLeagueRules: 94 failure(s)
+rules-retake exit=0 19s | simCmLeagueRules: all checks passed (modern, eras, pure)
+rules-after exit=0 34s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+rules-modern-again exit=0 20s | simCmLeagueRules: all checks passed (modern, eras, pure)

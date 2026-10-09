@@ -1,0 +1,6 @@
+#!serial
+#!build
+rules-before: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+rules-retake: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write && mkdir -p "$RC_OUT" && cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/cmLeagueRulesDigest.json"
+rules-after: node scripts/simCmLeagueRules.mjs
+rules-modern-again: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
