@@ -1,0 +1,20 @@
+material: 20 careers walked per arm, 859 matches of mine in arm A and 854 in arm B, 36 Champions League deciders captured (30 second legs), 0 reports whose week did not read as their competition
+1) Goals land in the board at a measured share, and the board adds no goals
+   arm A: 859 matches, 2354 goals in the ninety and the boards (1 more in extra time): 86 at 45+ (3.65 percent, band 2 to 6), 198 at 90+ (8.41 percent, band 6 to 10)
+   goals per match in the ninety and the boards: board open 2.740, board closed 2.741 (854 matches), gap -0.001 (tolerance 0.05)
+   of each half's own goals: 7.88 percent of the first half's in its board, 15.69 percent of the second half's; mean boards 3.57 and 6.30 minutes
+2) Every line in a board says so, everywhere a minute is printed
+   248293 lines read, 20675 of them in a board, each within its board; 669 goals in a board
+   report card: 315 board goals printed with their plus on 400 cards; match centre timeline: 669 board goal rows; live commentary: 140 matches equal to their report, 46 board goals with their plus
+   changes inside the second half's board: 479 (160 at 90 on the dot, 165 in an eight minute board), each keeping what the clock had reached and filing what it drew inside the board
+3) Extra time only on a level knockout tie
+   468 deciders read (walk and 12 replays each): 57 level after ninety and the board, 57 with extra time
+   823 other matches (league, group, cup, first legs), 164 of them level: none with extra time or a minute past 90
+4) The aggregate on a second leg, everywhere the tie is shown
+   390 second legs: the tie line, secondLegContext before and after and the match centre's first leg all equal the bracket's first leg plus tonight (19 settled on away goals, 21 in extra time)
+   390 report cards print the first leg and the aggregate and where the tie ended; 120 brackets label 742 finished ties' headlines as the aggregate; 60 second legs through the viewer show the aggregate at the interval, at 70 and at the end
+   30 first legs carry their own score as the aggregate so far; 400 other weeks have no second leg context and no first leg in the match centre
+5) A save from before this round loads and plays
+   48 saves stripped of 231 fields from this round, opened with loadCareer and played: 48 matches, 32 with a first half drawn before the round and 16 with both halves, every board rolled in its old range and no old half grew a plus
+
+simCmStoppageTime: PASS. Goals fall in the board at a measured share without adding any, every line in a board says 45+N or 90+N wherever a minute is printed, extra time comes only on a level knockout tie, a second leg shows the first leg and the running aggregate everywhere the tie is shown, and a save from before the round loads and plays.
