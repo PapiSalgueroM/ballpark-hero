@@ -1,0 +1,10 @@
+simSingleFooter exit=0 0s | simSingleFooter: green. One footer, rendered once, on every page.
+simHomeCopy exit=0 0s | simHomeCopy: green. The one page a crawler reads first says only true things.
+simLegalPages exit=0 0s | simLegalPages: all green
+simAdsense exit=0 0s | simAdsense: green. Verification, ads.txt, the policy pages and the ad component are all review ready.
+simNoRivalNames exit=0 22s | No rival product names found. 0 findings.
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simSiteSearch exit=0 3s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+vitest exit=0 8s |    Duration  7.26s (transform 1.22s, setup 441ms, collect 4.14s, tests 7.00s, environment 2.71s, prepare 918ms)
+simHarnessAnchors exit=0 45s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 73s | 

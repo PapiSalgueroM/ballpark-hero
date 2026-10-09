@@ -1,0 +1,27 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/pages/NotFound.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 242[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/data/gameRegistry.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 10[2mms[22m[39m
+[90mstderr[2m | src/test/footlePractice.test.tsx[2m > [22m[2mFootle practice mounted outcomes[2m > [22m[2mshows worked rules and derives examples from a loaded non-answer player
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/footlePractice.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 2713[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle practice mounted outcomes[2m > [22mfinishes five puzzles with the exact receipt and untouched daily record [33m 1831[2mms[22m[39m
+[90mstderr[2m | src/test/footleClueDesk.test.tsx[2m > [22m[2mFootle clue desk outcomes[2m > [22m[2mreopens clue instructions and restores the help trigger without changing reviewed clues
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/footleClueDesk.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 4038[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle clue desk outcomes[2m > [22mrenders all eight actual clues with honest unknown zero and opposite directions [33m 657[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle clue desk outcomes[2m > [22mrevisits revealed guesses selects the next actual guess and returns focus to search [33m 467[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle clue desk outcomes[2m > [22mresets selected history when mode and puzzle change with equal guess counts [33m 819[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle clue desk outcomes[2m > [22mreviews every finished round from frozen clues after reload without saved record writes [33m 1378[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m19 passed[39m[22m[90m (19)[39m
+[2m   Start at [22m 06:34:46
+[2m   Duration [22m 7.26s[2m (transform 1.22s, setup 441ms, collect 4.14s, tests 7.00s, environment 2.71s, prepare 918ms)[22m
+
