@@ -40,6 +40,7 @@ export function StartOptionsScreen({ career, onCurrency, onNationJobs, onStrictn
             return (
               <button
                 key={code}
+                aria-pressed={on}
                 onClick={() => onCurrency(code)}
                 title={`Show money in ${CURRENCIES[code].label.toLowerCase()}`}
                 className={cn(
@@ -66,6 +67,7 @@ export function StartOptionsScreen({ career, onCurrency, onNationJobs, onStrictn
           {[true, false].map(on => (
             <button
               key={String(on)}
+              aria-pressed={opts.nationJobs === on}
               onClick={() => onNationJobs(on)}
               className={cn(
                 'px-3 py-1 rounded-lg text-[11px] font-bold border transition-all',
@@ -95,6 +97,7 @@ export function StartOptionsScreen({ career, onCurrency, onNationJobs, onStrictn
             return (
               <button
                 key={n}
+                aria-pressed={on}
                 onClick={() => onStrictness(n)}
                 title={STRICTNESS_INFO[n]?.label}
                 aria-label={`Strictness ${n}, ${STRICTNESS_INFO[n]?.label}`}
