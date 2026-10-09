@@ -64,6 +64,26 @@
  *             tile's Reload the same way, and held it says why
  *  errors     no page error and no console error
  *
+ * MEASURED for Round 1144 on a Linux runner, nba at 390 by 844.
+ *   Before (main, Release AO), 62 checks, 6 failed. retry in view: the only
+ *   Retry on the page was the notice's "Retry save" at 257..301, 96 by 44,
+ *   covered by the viewer, so no press could reach it and the store stayed
+ *   at 0 seasons. reload holds: a stale chunk reloaded the page over the
+ *   refused save (the event cancelled, page loads 1 then 2, the Retry notice
+ *   gone, the season lost), and the tile's Reload did the same.
+ *   After, 62 checks, 0 failed. The toast's "Retry" at 680..724, 64 by 44,
+ *   on top (the toast at 656..748), and a press on it puts the season on the
+ *   store. A stale chunk over a refused save: no reload (page loads 1 then
+ *   1), notice up, store untouched; with writes back the next one reloads
+ *   with 1 season on the store. The tile's Reload the same, and held it
+ *   reads "Your latest progress has not been saved yet, so the page was not
+ *   reloaded".
+ *   Two things the first cuts of these checks got wrong, kept here so they
+ *   are not relearned: refusing sessionStorage along with localStorage made
+ *   the stale chunk check pass on main (the reload stood down for want of
+ *   its own marker), and measuring the toast's button while the toast was
+ *   still sliding in gave a box 82 px lower than where it stops.
+ *
  * Controls (US_SEASON_PLAY_CONTROL=), each served to the browser only, each
  * refusing to run unless its needle is in the built chunk exactly once, each
  * expected to go red at its own check (a control run exits 1 and says so):

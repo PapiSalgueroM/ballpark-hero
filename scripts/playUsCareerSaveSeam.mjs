@@ -41,10 +41,20 @@
  * Every request that leaves the origin is aborted (supabase.co first, and
  * counted), so nothing here can reach the live database.
  *
- * MEASURED BEFORE ROUND 1144, on main (Release AO), a Linux runner: see the
- * numbers at the bottom of this header. Until that round the stale line was
- * printed here as a note and not judged, and nothing measured the toast
- * against the banner.
+ * MEASURED for Round 1144 on a Linux runner, 390 by 844, the four sports
+ * giving the same numbers. Until that round the stale line was printed here
+ * as a note and not judged, and nothing measured the toast against the
+ * banner.
+ *   Before (main, Release AO): the save toast at 675..748 and the cookie
+ *   banner at 701..844, 47 px of one over the other; after a Retry that
+ *   worked the line still said "Storage is full, so progress won't save."
+ *   12 journeys, 56 checks, 8 failed: banner and line, four each.
+ *   After: the toast at 597..689 (it carries a button now, so it is taller),
+ *   the banner at 701..844, nothing shared and 12 px of air; the line gone
+ *   on the same page, the game moved 0 px (the line was 28 px tall and its
+ *   place is kept until the next page). 56 checks, 0 failed.
+ *   The controls: stale leaves the line up on all four (4 failed), sitover
+ *   puts the toast back at 656..748 and 47 px into the banner (4 failed).
  *
  * Controls (US_SAVE_SEAM_CONTROL=), each expected to go red at its own check
  * (a control run exits 1 and says so; 2 when it could not run or did not
