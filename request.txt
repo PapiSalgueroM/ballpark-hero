@@ -1,0 +1,1 @@
+vitest-all: node_modules/.bin/vitest run --testTimeout=1800000 --hookTimeout=120000
