@@ -1,0 +1,28 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/zzOldSaves.test.tsx[2m > [22m[2mprobe: saves made by main on the merged tree[2m > [22m[2mloads every save, derives its old seasons as before and plays one more season
+[22m[39m[old saves] main: 35 saves, 343 old playing rows derived again: 335 identical, table rows 313/313 identical, results rows 24/24 same scores of which 8 gained names, mode moved 0; 29 carried through one more season, 26 new rows hold a league world
+[old saves] main: 0 problems
+
+[90mstdout[2m | src/test/zzOldSaves.test.tsx[2m > [22m[2mprobe: saves made by main on the merged tree[2m > [22m[2mmounts the page on every save
+[22m[39m[old saves] main: page mounted on 35/35 saves, 0 problems
+
+[90mstdout[2m | src/test/zzOldSaves.test.tsx[2m > [22m[2mprobe: saves made by ap on the merged tree[2m > [22m[2mloads every save, derives its old seasons as before and plays one more season
+[22m[39m[old saves] ap: 35 saves, 343 old playing rows derived again: 335 identical, table rows 313/313 identical, results rows 24/24 same scores of which 8 gained names, mode moved 0; 29 carried through one more season, 26 new rows hold a league world
+[old saves] ap: 0 problems
+
+[90mstdout[2m | src/test/zzOldSaves.test.tsx[2m > [22m[2mprobe: saves made by ap on the merged tree[2m > [22m[2mmounts the page on every save
+[22m[39m[old saves] ap: page mounted on 35/35 saves, 0 problems
+
+ [32m✓[39m src/test/zzOldSaves.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 8834[2mms[22m[39m
+   [33m[2m✓[22m[39m probe: saves made by main on the merged tree[2m > [22mloads every save, derives its old seasons as before and plays one more season [33m 1115[2mms[22m[39m
+   [33m[2m✓[22m[39m probe: saves made by main on the merged tree[2m > [22mmounts the page on every save [33m 2845[2mms[22m[39m
+   [33m[2m✓[22m[39m probe: saves made by ap on the merged tree[2m > [22mloads every save, derives its old seasons as before and plays one more season [33m 846[2mms[22m[39m
+   [33m[2m✓[22m[39m probe: saves made by ap on the merged tree[2m > [22mmounts the page on every save [33m 2525[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 13:12:07
+[2m   Duration [22m 12.18s[2m (transform 1.86s, setup 59ms, collect 2.60s, tests 8.83s, environment 277ms, prepare 96ms)[22m
+
