@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { CalendarDays, ChevronLeft, ChevronRight, FastForward } from 'lucide-react';
-import { INTENSITY_INFO } from '@/lib/clubManager';
+import { INTENSITY_INFO, careerFixtureCoverage } from '@/lib/clubManager';
 import type { CareerState, TrainingPlan, TrainingIntensity } from '@/lib/clubManager';
 import {
   seasonDays, monthGrid, fastForwardTargets, targetWeekForDate, dayEmoji, clubTag, shortDate, windowOpenLine,
@@ -81,6 +81,7 @@ interface CalendarScreenProps {
 
 export function CalendarScreen({ career, onSimTo, onSetTraining }: CalendarScreenProps) {
   const c = career;
+  const fixtureCoverage = careerFixtureCoverage(c);
   const days = useMemo(() => seasonDays(c), [c]);
   const intensity: TrainingIntensity = c.training?.intensity ?? 'normal';
   const [view, setView] = useState<{ y: number; m: number }>({ y: days.today.y, m: days.today.m });
@@ -188,6 +189,10 @@ export function CalendarScreen({ career, onSimTo, onSetTraining }: CalendarScree
 
   return (
     <div className="space-y-3">
+      {fixtureCoverage && <p data-cm-fixture-coverage={fixtureCoverage.key} className="rounded-lg border border-border bg-card px-3 py-2 text-xs text-muted-foreground">
+        {fixtureCoverage.label}{' '}
+        {fixtureCoverage.sources.map((source, i) => <span key={source.url}>{i > 0 ? ' / ' : 'Sources: '}<a href={source.url} target="_blank" rel="noopener noreferrer" className="underline">{source.label}</a></span>)}
+      </p>}
       {/* Month header and grid */}
       <div className="bg-card border border-border rounded-xl p-3">
         <div className="flex items-center justify-between mb-2">
