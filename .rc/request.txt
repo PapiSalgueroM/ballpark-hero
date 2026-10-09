@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+psb: BASE=http://localhost:4173 node scripts/playStorageBlocked.mjs
+psb-open: BASE=http://localhost:4173 PLAY_STORAGE_CONTROL=open node scripts/playStorageBlocked.mjs
+psb-raw: BASE=http://localhost:4173 PLAY_STORAGE_CONTROL=raw node scripts/playStorageBlocked.mjs
+homeFold: BASE=http://localhost:4173 node scripts/playHomeFold.mjs
