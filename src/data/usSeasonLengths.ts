@@ -1,6 +1,8 @@
 /* Round 1048: how long each real NBA and NFL regular season was, so a career's
    "week by week" is only offered for a season whose real length is the one the
-   career plays. `year` is the year a season STARTS in (NBA 2011 is 2011-12).
+   game by game view is built for (82, 17: US_FULL_SEASON below). An NBA career
+   plays 82 every year; an NFL career plays the year's real length since Round
+   1104. `year` is the year a season STARTS in (NBA 2011 is 2011-12).
 
    This file is eager (the hub reads it before a press) and imports nothing.
 
@@ -61,8 +63,14 @@ export interface UsLengthWindow {
   why?: string;
 }
 
-/** What each career's engine plays, every year. */
+/** The season the game by game view is built for: 82, 17. An NBA career plays
+ *  it every year. An NFL career plays the real length of the year since Round
+ *  1104 (16 from 2005 to 2020), so there the view has less than it needs. */
 export const US_FULL_SEASON = { nba: 82, nfl: 17 } as const;
+
+/** Does the career's engine play the real length of a year the ledger holds?
+ *  The held line must not say "this career plays 17" of a season that played 16. */
+const CAREER_PLAYS_REAL_LENGTH: Record<UsLengthSport, boolean> = { nba: false, nfl: true };
 
 export const US_SEASON_LENGTHS: Record<UsLengthSport, readonly UsLengthWindow[]> = {
   nba: [
@@ -108,9 +116,12 @@ export function usSeasonHeldLine(sport: UsLengthSport, year: number): string | n
   const label = usSeasonLabel(sport, year);
   if (!w) return `📺 No week by week this season: the game has no verified length for the real ${label} season.`;
   if (w.games === null) return `📺 No week by week this season: the real ${label} season ${w.why ?? 'had no single length'}.`;
+  const why = CAREER_PLAYS_REAL_LENGTH[sport]
+    ? `the real ${label} season had ${w.games} games and the week by week view is built for ${full}.`
+    : `the real ${label} season had ${w.games} games and this career plays ${full}.`;
   const firstFull = US_SEASON_LENGTHS[sport].find(x => x.games === full)?.from;
   if (firstFull !== undefined && year < firstFull) {
-    return `📺 Week by week starts with the ${usSeasonLabel(sport, firstFull)} season: the real ${label} season had ${w.games} games and this career plays ${full}.`;
+    return `📺 Week by week starts with the ${usSeasonLabel(sport, firstFull)} season: ${why}`;
   }
-  return `📺 No week by week this season: the real ${label} season had ${w.games} games and this career plays ${full}.`;
+  return `📺 No week by week this season: ${why}`;
 }

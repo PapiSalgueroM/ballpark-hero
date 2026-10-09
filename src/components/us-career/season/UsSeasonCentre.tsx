@@ -8,8 +8,8 @@
    derived from the saved line by src/lib/season (the core, the US binding
    and the sport's number file, which this file loads through the board's
    own descriptor, so no sport is imported here). A season it cannot lay out
-   game by game, or a year whose real length is not the one this career
-   plays, gets one honest tile instead of a guess. Its own error boundary
+   game by game, or a year whose real length is not the one the view is
+   built for, gets one honest tile instead of a guess. Its own error boundary
    keeps a render error inside the overlay; the host wraps the lazy mount in
    a second one, because a boundary inside this chunk cannot catch the chunk
    failing to load. */
@@ -52,7 +52,9 @@ export function buildUsModel(sport: UsCareerSport, bind: UsSeasonBind, career: U
   const review = sport.reviewStats(row, pos);
   const title = bind.results.length > 0 && row.teamResult === bind.results[bind.results.length - 1];
   const path = usPlayoffPath(bind, row, ctx, key);
-  const post = review.postseason.filter(x => x.value !== 'Not recorded').map(x => `${x.value} ${x.label.toLowerCase()}`);
+  /* Round 1147: the NFL saves its playoff line as a sentence ("512 yds, 4 TD, 1 INT"), printed as it is, and one game is "1 game" */
+  const post = review.postseason.filter(x => x.value !== 'Not recorded')
+    .map(x => (x.label === 'Performance' ? x.value : x.label === 'Games' && x.value === '1' ? '1 game' : `${x.value} ${x.label.toLowerCase()}`));
   /* the scoreboard and the phone's game log read the game's own ids in a named season */
   const idOf = new Map<string, string>();
   if (named) ctx.order.forEach((id, slot) => idOf.set(s.labels[slot]?.name ?? id, id));

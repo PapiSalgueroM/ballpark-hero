@@ -1,6 +1,6 @@
 # DoUKnowBall
 
-> DoUKnowBall.com is a free sports trivia and puzzle site with 100+ games
+> DoUKnowBall.com is a free sports trivia and puzzle site with 130+ games
 > across soccer, NFL, NBA, MLB, NHL, college sports, Formula 1, tennis, golf,
 > NASCAR and combat sports. Daily puzzles (grids, connections, guess-the-player,
 > higher or lower) plus deep career and manager simulations. Every game is free,

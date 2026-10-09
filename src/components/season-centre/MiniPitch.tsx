@@ -32,7 +32,11 @@ import { ACTION_SPAN, actionFrame, LivePitchPlayer, PitchSurface, pitchSpot } fr
 import type { MotionFrame, MotionPlayer, MotionScene, PitchEvent } from '@/components/pitch-motion';
 import type { SeasonEvent } from '@/lib/season/core';
 
-export interface PitchGoal { key: string; min: number; side: 'us' | 'them'; mine: boolean; assist: boolean }
+export interface PitchGoal {
+  key: string; min: number; side: 'us' | 'them'; mine: boolean; assist: boolean;
+  /** Release AP: who put it in his own net, when the event says it was an own goal (Round 1167's tag). Absent on every other goal. */
+  own?: 'you' | 'teammate' | 'opponent';
+}
 /** His line on the pitch, or null when he did not play the game. */
 export type PitchRole = 'GK' | 'DEF' | 'ATT' | null;
 export interface PitchFig extends MotionPlayer { ring: boolean }
@@ -51,6 +55,7 @@ export function goalsOf(md: number, events: readonly SeasonEvent[]): PitchGoal[]
     out.push({
       key: `${md}|${at}|${n}`, min: e.min, side: e.side, mine: !!e.mine,
       assist: !e.mine && e.side === 'us' && events.some(a => a.kind === 'assist' && a.mine && a.side === 'us' && a.min === e.min),
+      ...(e.ownGoalBy ? { own: e.ownGoalBy } : {}),
     });
   }
   return out;
@@ -69,7 +74,10 @@ const AT_BOTTOM: Places = { attack: [[50, 72], [34, 71], [66, 71.5], [58, 78]], 
 /** The scene of a goal: four of the scoring side going at a keeper and two
  *  defenders. `scored` null draws his club's attack standing (before the first
  *  goal). He wears the ring on at most one figure, and only when he was on the
- *  pitch in that minute (`onFrom` to `onTo`, both inside). */
+ *  pitch in that minute (`onFrom` to `onTo`, both inside). Release AP: an own
+ *  goal is still drawn as a goal for the side that got it (the move is the
+ *  game's own drawing), but when it was HIS own goal the ring is on him at the
+ *  back whatever he plays, because the line under the pitch says it was him. */
 export function goalScene(goal: PitchGoal | null, role: PitchRole, onFrom: number, onTo: number): MotionScene<PitchFig> {
   const us = !goal || goal.side === 'us';
   const at = us ? AT_TOP : AT_BOTTOM;
@@ -78,7 +86,7 @@ export function goalScene(goal: PitchGoal | null, role: PitchRole, onFrom: numbe
   const ringOn = !on || !goal ? null
     : goal.side === 'us'
       ? (goal.mine ? 'a0' : goal.assist ? 'a3' : role === 'ATT' ? 'a3' : null)
-      : (role === 'GK' ? 'k' : role === 'DEF' ? 'd0' : null);
+      : (role === 'GK' ? 'k' : role === 'DEF' || goal.own === 'you' ? 'd0' : null);
   const attackers: PitchFig[] = at.attack.map(([x, y], i) => ({ key: `a${i}`, x, y, keeper: false, ring: ringOn === `a${i}` }));
   const defenders: PitchFig[] = [
     { key: 'k', x: at.keeper[0], y: at.keeper[1], keeper: true, ring: ringOn === 'k' },
@@ -207,7 +215,10 @@ function MiniPitch({ md, events, shown, paused, instant, usColor, role, onFrom, 
   const drawn = moving && play ? play.goal : current;
   const frame = goalFrame(drawn, role, onFrom, onTo, moving && play ? play.t : ACTION_SPAN);
   const top = !drawn || drawn.side === 'us';
-  const his = drawn && frame.mine.concat(frame.theirs).some(p => p.ring) ? (drawn.mine ? '⚽ Yours' : drawn.assist ? '🅰️ Your assist' : null) : null;
+  /* Release AP: an own goal says so under the pitch, so the picture (a goal for the side that got it) and the event line agree */
+  const his = !drawn ? null
+    : drawn.own ? (drawn.own === 'you' ? '⚽ Your own goal' : '⚽ Own goal')
+    : frame.mine.concat(frame.theirs).some(p => p.ring) ? (drawn.mine ? '⚽ Yours' : drawn.assist ? '🅰️ Your assist' : null) : null;
   return (
     <div aria-hidden="true">
       <div className={boxClass} data-mini-pitch data-pitch-phase={frame.phase} data-pitch-side={drawn ? drawn.side : 'us'} data-pitch-goal={drawn ? drawn.key : undefined} data-pitch-live={moving ? '' : undefined}>

@@ -322,12 +322,27 @@ window.__draw = (comp, career) => {
   flushSync(() => root.render(createElement(CARDS[comp], { career })));
 };
 `);
-  execSync(`"${findBin('esbuild')}" "${BENTRY}" --bundle --format=iife --platform=browser --jsx=automatic --define:process.env.NODE_ENV=\\"production\\" --outfile="${BJS}" --log-level=error`, { stdio: 'inherit', cwd: ROOT });
+  execSync(`"${findBin('esbuild')}" "${BENTRY}" --bundle --format=iife --platform=browser --jsx=automatic --define:process.env.NODE_ENV=\\"production\\" --outfile="${BJS}" --log-level=error`, {
+    stdio: 'inherit', cwd: ROOT,
+    /* Release AP: this entry sits in the temp folder and imports react by name, which resolves by walking
+       up from there, so the section only ever passed when TEMP happened to sit inside the checkout (the
+       gate's does, a machine's own does not). NODE_PATH names the packages wherever the entry is. */
+    env: { ...process.env, NODE_PATH: path.dirname(path.dirname(findBin('esbuild'))) },
+  });
   const js = fs.readFileSync(BJS, 'utf8');
   const html = `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${css}</style></head>`
     + '<body class="bg-background text-foreground"><div style="padding:16px"><div id="card"></div><div id="sentinel" style="height:8px"></div></div></body></html>';
 
-  const { chromium } = await import('./lib/playwrightLoader.mjs');
+  /* Release AP: the import sits in a try of its own, which is how runAllSims
+     tells a harness with one browser section from a browser driver (see
+     needsBrowser there). Nothing is softer for it: with no browser this
+     section fails and the harness exits 1, as it always did. */
+  let chromium = null;
+  try { ({ chromium } = await import('./lib/playwrightLoader.mjs')); } catch (e) { fail(`the browser did not load, so the page was never measured: ${String((e && e.message) || e).slice(0, 200)}`); }
+  if (!chromium) {
+    console.log(`\n${failures} FAILURES (by section ${JSON.stringify(sectionFails)})`);
+    process.exit(1);
+  }
   const browser = await chromium.launch();
   const measure = () => {
     const card = document.querySelector('#card > div');

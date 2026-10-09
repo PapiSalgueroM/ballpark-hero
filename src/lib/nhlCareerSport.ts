@@ -10,7 +10,7 @@ import { nhlPreDraftDescriptor } from '@/lib/nhlCareerPreDraft';
 import {
   NHL_ARCHETYPES, NHL_ERAS, startNhlCareer, simNhlSeason, nhlProgress, drawNhlEvent,
   nhlEventDeck,
-  NHL_SPEND_ITEMS, buyNhlItem, getNhlSpendItem, repairNetWorth,
+  NHL_SPEND_ITEMS, buyNhlItem, getNhlSpendItem,
   nhlShouldRetire, nhlLegacyOf, nhlCareerTotals, nhlRollTeamQuality, nhlTeamLabelOf,
   buildNhlFaWindow, nhlFaPushArgs, buildNhlExtension, nhlExtPushArgs,
   nhlAssignRole, nhlCampBattle,
@@ -24,6 +24,7 @@ import { NHL_BADGES } from '@/lib/careerBadges';
 import { nhlUnreadInboxCount, answerNhlInboxMessage, nhlDraftNightInbox, NHL_CALENDAR } from '@/lib/nhlCareerInbox';
 import { dismissNhlRivalryEvent, resolveNhlRivalryChoice } from '@/lib/nhlCareerRivalryEvents';
 import type { UsCareerSport } from '@/lib/usCareerSport';
+import { repairBankOnLoad, withBankFloor } from '@/lib/usCareerBank';
 import { NHL_CAREER_HALL } from '@/lib/nhlCareerHall';
 import { nhlSeasonReview } from '@/lib/usCareerSeasonReview';
 
@@ -32,7 +33,9 @@ import { nhlSeasonReview } from '@/lib/usCareerSeasonReview';
    key in src is declared; the value is the one the old board used. */
 const SAVE_KEY = 'nhl-my-career-save-v1';
 
-export const NHL_CAREER_SPORT: UsCareerSport<NhlCareerState, NhlSeasonLine> = {
+/* Round 1104: built through withBankFloor, the one bank rule the four US
+   careers share (src/lib/usCareerBank.ts). */
+export const NHL_CAREER_SPORT: UsCareerSport<NhlCareerState, NhlSeasonLine> = withBankFloor({
   slug: 'nhl',
   label: 'NHL',
   saveKey: SAVE_KEY,
@@ -94,7 +97,7 @@ export const NHL_CAREER_SPORT: UsCareerSport<NhlCareerState, NhlSeasonLine> = {
   moneyWealth: nhlMoneyWealth,
   shopItems: NHL_SPEND_ITEMS,
   buyItem: buyNhlItem,
-  repairNetWorth: c => repairNetWorth(c, id => getNhlSpendItem(id)?.cost ?? 0),
+  repairNetWorth: c => repairBankOnLoad(c, id => getNhlSpendItem(id)?.cost ?? 0, NHL_MONEY),
   heatLabel: nhlHeatLabel,
   heatTitle: 'League office',
 
@@ -128,4 +131,4 @@ export const NHL_CAREER_SPORT: UsCareerSport<NhlCareerState, NhlSeasonLine> = {
   retirementAvatar: false,
   /* Round 1039: the retirement talk, the farewell season and the Hall. */
   hall: NHL_CAREER_HALL,
-};
+});

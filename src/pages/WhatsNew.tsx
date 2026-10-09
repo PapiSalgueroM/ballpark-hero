@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import PageSeo from '@/components/seo/PageSeo';
+import { GAME_COUNT_LABEL } from '@/data/gameRegistry';
 
 const WhatsNew = () => {
   return (
@@ -26,6 +27,13 @@ const WhatsNew = () => {
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">October 2026</h2>
           <ul className="list-disc pl-5 space-y-2">
+            <li><strong className="text-foreground">NFL My Career: watch your season game by game.</strong> The 📺 Week by week button from NBA My Career is on <Link to="/nfl-my-career" className="text-primary hover:underline">NFL My Career</Link> now. Press it instead of Play the season and the season you just played opens up one game at a time: a scoreboard that fills in drive by drive, your line every game whatever you play (a quarterback's yards and touchdowns, a linebacker's tackles and sacks, a kicker's makes and misses), your record after every game, ties included, the halfway mark, the last game, and your playoff run round by round. You face real franchises on the league's 17 game schedule formula, so you meet every division rival home and away. It is the exact season the Play button gives you, and every game adds up to the totals on your season card. Nothing about your career changes whether you watch it or not. Throwback careers: the week by week view is built for the 17 game season, so the 16 game seasons before 2021 have none, 2022 has none because two real teams finished on 16, and the throwback plays against unnamed teams. The game says so before you press.</li>
+            <li><strong className="text-foreground">NFL My Career: the money and the schedule are real now.</strong> Rookies are paid off the draft slot: the first pick signs for 14.3M a year, where the game used to hand him about 33M. In this game a kicker goes in round four or later (one went second overall on first pick money), sacks come in halves, and a trade request can no longer send you to the team you are already on. The 2005 throwback plays 16 game seasons, the way the league did until 2021. And our bad on the bank, in all four My Careers: a card could take it below zero and a reload then paid you for it. Now a bill you cannot cover comes out of savings first, and the account stops at zero. <Link to="/nfl-my-career" className="text-primary hover:underline">Get drafted</Link>.</li>
+            <li><strong className="text-foreground">The storage full line goes away by itself.</strong> If your browser's storage filled up, a line at the top of each game said your progress wasn't saving, and it stayed there even after you made room and your save went through. Now it leaves as soon as saving works again, no reload needed.</li>
+            <li><strong className="text-foreground">Soccer Career: own goals in the Season Centre.</strong> Now and then a goal in your week by week season turns out to be an own goal, and the match says so: You (O.G), A teammate (O.G) or An opponent (O.G), with the club that got the goal. It is always one of the goals your season already had, so no score, table or season total moves, and it never counts toward your goals or assists. Who put it in is made up by the game. The little pitch says Own goal under it and rings you at the back when it was yours. <Link to="/soccer-career" className="text-primary hover:underline">Watch a season</Link>.</li>
+            <li><strong className="text-foreground">Stadium Tycoon: look back at the season you just finished.</strong> When a season ends, the League tab gets a Latest season button. It opens where you finished, your points, your wins, draws and losses, your goals for and against and the whole final table, and the next match keeps running while you read. It is there for this visit only: reload the page and it is gone until your next season ends. The permanent perks on the Legacy board also tell a screen reader which perk, which level and how many points each Buy button is for. <Link to="/stadium-tycoon" className="text-primary hover:underline">Open your ground</Link>.</li>
+            <li><strong className="text-foreground">Club Manager: easier with a keyboard or a screen reader.</strong> Clubs in the league table and the cup bracket are real buttons now, so you can Tab to one and press Enter to open it. Buttons that all used to read the same now say what they are for: Sign him and Let go name the prospect, an upgrade names its facility, and a skill point names its skill. The start options and the ticket and food prices tell a screen reader which one is picked. And starting a player on a new position no longer makes the page jump: you stay where you were, ready to pick the next one.</li>
+            <li><strong className="text-foreground">Club Manager: two lines that were not telling the truth.</strong> The dressing room stopped counting at five: with eight players not getting the football you promised them, it said five. It gives the real number now, and says when the list under it is only showing the first five. And the negotiation setting claimed strictness never changes how long a seller will sit at the table. It can: on Firm and Ruthless you get less time to make a deal. The words say so now. The game itself did not change.</li>
             <li><strong className="text-foreground">Search boxes stopped offering your last search.</strong> In every game with a player search, the list could keep showing names from your last search for a moment after you typed something new, and a quick tap picked the old name. Now the old names go the instant you type. In the games where you pick from the list, Enter picks the name when only one is showing (the three Connect 4 games that take a typed answer still send what you typed). After you pick a name the list stays out of the way, and on a phone the tap that picks a name in Missing XI no longer presses Lock in guess for you. And in Build Your XI a club pick from the list lands at once, and when answer checking runs out for the day it only skips that one pick instead of taking the search box away.</li>
             <li><strong className="text-foreground">US My Careers: the Hall voters read more than one number.</strong> In football, basketball, baseball and hockey the Hall of Fame ballot used to look at your hardware and one number: points, or yards, or homers. A point guard piling up assists, a corner with a stack of interceptions or a tight end with a thousand catches got nothing for it. Now a career total near the top of this game's books in a stat your position really piles up earns a real push, tight ends, linebackers, corners and edge rushers get credit for what they actually did, and the ballot card tells you what the voters weighed. Kickers and relievers are still judged on hardware and seasons. Careers you already retired keep the ballot they were told.</li>
             <li><strong className="text-foreground">NFL Front Office: quarterbacks, backs, receivers and tight ends rated on the work they did.</strong> Start a new franchise and the offense reads right. A rating used to look only at how well a man played, never how much, so a feature back could sit under his own fullback. Now it also counts how much of the work he carried and what he produced a game in 2025, read off two published stat sources. No club's lead back sits under a team mate who barely touched the ball any more, no part time back is among the ten highest rated, fullbacks stop showing up as the top running back, and the most productive receivers and tight ends sit near the top of their position. A player also has one rating now: the same number in NFL Front Office and in Gauntlet Draft: NFL. Linemen and defenders keep the ratings they had for now (a fictional salary can move a little, because each club's payroll is shared out again). Your saved franchises keep their own ratings.</li>
@@ -409,7 +417,7 @@ const WhatsNew = () => {
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">Spring 2026</h2>
           <ul className="list-disc pl-5 space-y-2">
-            <li>DoUKnowBall launched with the first wave of daily soccer games. It has grown to eleven sports and over 100 games since, and it is still growing.</li>
+            <li>DoUKnowBall launched with the first wave of daily soccer games. It has grown to eleven sports and {GAME_COUNT_LABEL} games since, and it is still growing.</li>
           </ul>
         </div>
 
@@ -419,15 +427,6 @@ const WhatsNew = () => {
           </p>
         </div>
       </section>
-
-      <div className="mt-16 pt-8 border-t border-border text-center text-xs text-muted-foreground space-y-2">
-        <p>All team names, logos and trademarks are property of their respective owners. DoUKnowBall is not affiliated with the NFL, NBA, UFC, NHL, MLB, FIFA, IOC, NCAA, F1, PGA Tour, NASCAR, ATP or WTA. © 2026 DoUKnowBall</p>
-        <div className="flex items-center justify-center gap-3">
-          <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link>
-          <span>·</span>
-          <Link to="/terms" className="underline hover:text-foreground transition-colors">Terms of Service</Link>
-        </div>
-      </div>
     </div>
   );
 };

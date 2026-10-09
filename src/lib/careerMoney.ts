@@ -408,6 +408,58 @@ export interface MoneyTick {
   events: string[];
 }
 
+/* Step 3 of the season tick, as one function since Round 1104 so a bill that
+   lands between seasons (a card, a text, a rival beat in the US careers) is
+   collected by the very rule the season's bills are, and not by a second
+   copy of it. The tick calls it with CASH_FLOOR on the state it is already
+   holding; coverShortfall below is the same call for anybody outside a tick.
+   Not one word or number in it changed in the lift. */
+function coverInto<S extends MoneyHost>(
+  s: S, m: MoneyState, year: number, sport: MoneySport<S>, floor: number, events: string[],
+): void {
+  const fmt = (v: number) => fmtMoney(v, sport.currency);
+  if (cashOf(s) < floor) {
+    let need = r2(floor - cashOf(s));
+    if (m.vault > 0 && need > 0) {
+      const take = Math.min(m.vault, need);
+      m.vault = r2(m.vault - take);
+      s.netWorth = r2(cashOf(s) + take);
+      need = r2(need - take);
+      note(m, year, "Savings covered the bills", -take);
+      events.push(`🏦 Bills came out of savings this season. ${fmt(take)} gone.`);
+    }
+    const order = ASSETS.slice().sort((a, b) => holdingValue(m, b.id) - holdingValue(m, a.id));
+    for (const def of order) {
+      if (need <= 0) break;
+      const value = holdingValue(m, def.id);
+      if (value <= 0.01) continue;
+      const frac = Math.min(1, need / value);
+      const got = sellUnits(m, def.id, frac, year, true);
+      s.netWorth = r2(cashOf(s) + got);
+      need = r2(need - got);
+      events.push(`📉 Had to sell ${def.name} to cover the bills. ${fmt(got)} raised at a bad price.`);
+    }
+  }
+}
+
+/**
+ * Round 1104: bring a balance that is under `floor` back up out of savings,
+ * and then out of holdings sold at today's price, worst first. The same rule
+ * the season tick has always run, for a caller that is not inside a tick.
+ * Returns the feed lines. A save with no savings and no holdings is returned
+ * untouched (nothing is written to it), and so is a balance at or over the
+ * floor. Whatever is still owed afterwards is the caller's to rule on.
+ */
+export function coverShortfall<S extends MoneyHost>(s: S, year: number, sport: MoneySport<S>, floor: number): string[] {
+  const events: string[] = [];
+  if (cashOf(s) >= floor) return events;
+  const m = ensureMoney(s, sport);
+  if (m.vault <= 0 && investedValue(m) <= 0) return events;
+  coverInto(s, m, year, sport, floor, events);
+  writeMoney(s, m);
+  return events;
+}
+
 /**
  * One season of market. Called once per season from the engine, after the
  * wages and the lifestyle bill have landed, so a shortfall can be covered out
@@ -467,28 +519,7 @@ export function moneySeasonTick<S extends MoneyHost>(s: S, year: number, sport: 
         sale at the bottom is exactly how a bad month turns into a bad decade
         in real life. It is also the reason a teenager cannot dig a hole here
         that the game will not climb back out of. */
-  if (cashOf(s) < CASH_FLOOR) {
-    let need = r2(CASH_FLOOR - cashOf(s));
-    if (m.vault > 0 && need > 0) {
-      const take = Math.min(m.vault, need);
-      m.vault = r2(m.vault - take);
-      s.netWorth = r2(cashOf(s) + take);
-      need = r2(need - take);
-      note(m, year, "Savings covered the bills", -take);
-      events.push(`🏦 Bills came out of savings this season. ${fmt(take)} gone.`);
-    }
-    const order = ASSETS.slice().sort((a, b) => holdingValue(m, b.id) - holdingValue(m, a.id));
-    for (const def of order) {
-      if (need <= 0) break;
-      const value = holdingValue(m, def.id);
-      if (value <= 0.01) continue;
-      const frac = Math.min(1, need / value);
-      const got = sellUnits(m, def.id, frac, year, true);
-      s.netWorth = r2(cashOf(s) + got);
-      need = r2(need - got);
-      events.push(`📉 Had to sell ${def.name} to cover the bills. ${fmt(got)} raised at a bad price.`);
-    }
-  }
+  coverInto(s, m, year, sport, CASH_FLOOR, events);
 
   /* 4. Money is not a scoreboard. Being skint is stressful and having a real
         buffer is not, so both show up in his head. Pulled toward a level

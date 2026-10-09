@@ -71,6 +71,7 @@ export function FacilitiesScreen({ career, onUpgrade }: FacilitiesScreenProps) {
                     <span className="text-xs font-bold tabular-nums text-foreground">{level}/{FACILITY_MAX}</span>
                     <button
                       onClick={() => press(id, upgradeRead(id), () => onUpgrade(id))}
+                      aria-label={`${info.label}: ${cost === null ? 'Maxed' : `Upgrade ${money(cost)}`}`}
                       disabled={!canBuy}
                       className="min-h-[44px] text-[11px] font-bold rounded-xl px-3 py-2 border border-gold/50 text-gold hover:bg-gold/10 disabled:opacity-50 disabled:hover:bg-transparent transition-colors"
                     >

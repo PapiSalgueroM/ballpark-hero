@@ -15,7 +15,7 @@
    first 10 seconds of a page load, and any network or parse failure is
    swallowed and simply does nothing. */
 
-import { sessionStorageIsMemory } from './safeStorage';
+import { sessionStorageIsMemory, settlePendingSaves } from './safeStorage';
 
 const SEEN_KEY = 'dukb-reloaded-for';
 const MIN_AGE_MS = 10_000;
@@ -57,6 +57,14 @@ async function check(): Promise<void> {
        also throw away the game in progress, which lives in that same stand
        in. Before this round the read below threw there and returned. */
     if (sessionStorageIsMemory) return;
+
+    /* Round 1144: never over a save the browser refused. A game that could
+       not write its save keeps it in the open page for the player to retry,
+       and this reload would throw it away. Each waiting save is retried once
+       here; while one is still refused the page stays, the marker below is
+       not written, and the next check (a minute on at the earliest) asks
+       again. */
+    if (!settlePendingSaves()) return;
 
     // Only ever reload once per new build, per tab.
     let seen: string | null = null;
@@ -123,6 +131,17 @@ export function reloadOnceForStaleChunk(): boolean {
      once flag is left alone, so the first stale chunk after the connection
      comes back still gets its reload. */
   if (navigator.onLine === false) return false;
+  /* Round 1144: never over a save the browser refused (see check() above).
+     The save is retried once; while it is still refused there is no reload
+     here and the once flag is left alone, like it is offline. What happens
+     next depends on who catches the failed chunk. A part of the page that
+     catches its own (the Season Center's "could not be loaded" tile) keeps
+     the game on screen with its Retry save, which is what the hold is for.
+     A chunk nobody catches takes the route down to RouteErrorBoundary: the
+     game is unmounted there and its waiting save with it, so the boundary
+     gives each save one last retry, lets go of the hold (nothing is left to
+     protect) and asks for this reload again. */
+  if (!settlePendingSaves()) return false;
   try {
     if (sessionStorage.getItem(STALE_KEY) === '1') return false;
     sessionStorage.setItem(STALE_KEY, '1');
@@ -141,11 +160,15 @@ export function reloadOnceForStaleChunk(): boolean {
    chunk afresh. Only when the player asks (never on its own, so it cannot
    loop), never when the browser says it is offline (a reload then lands on the
    browser's own offline page instead of our notice), never under the
-   prerenderer. True when it reloaded. */
+   prerenderer. True when it reloaded.
+   Round 1144: and never over a save the browser refused, even though the
+   player asked. The save is retried once first; if it is still refused the
+   page stays and the caller says why (the Season Center tile does). */
 export function reloadToRetryChunk(): boolean {
   if (typeof window === 'undefined') return false;
   if ((window as unknown as { __DUKB_PRERENDER__?: boolean }).__DUKB_PRERENDER__) return false;
   if (typeof navigator !== 'undefined' && navigator.onLine === false) return false;
+  if (!settlePendingSaves()) return false;
   window.location.reload();
   return true;
 }

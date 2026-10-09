@@ -66,10 +66,11 @@ const cleanup = () => {
   try { fs.rmSync(tmpDir, { recursive: true, force: true }); } catch { /* best effort */ }
 };
 process.on('exit', cleanup);
-function loadLib(file) {
+function loadLib(file, control = true) {
   const src = path.join(ROOT, 'src/lib', `${file}.ts`);
   let entry = src;
-  if (CONTROL === 'nobank') {
+  /* The shared repair (Round 1104) carries no banking line, so the control never patches it. */
+  if (CONTROL === 'nobank' && control) {
     const raw = fs.readFileSync(src, 'utf8');
     const norm = raw.split('\r\n').join('\n');
     if (!norm.includes(BANK_LINE)) {
@@ -173,20 +174,36 @@ for (const s of SPORTS) {
   console.log(`   ${s.id}: 2m/yr -> ${poor}m, 25m/yr -> ${rich}m`);
 }
 
-console.log('5) the repair rebuilds a broken save and leaves a healthy one alone');
-for (const s of SPORTS) {
-  const lib = played[s.id].lib;
+console.log('5) the repair rebuilds a broken old save, leaves a healthy one alone, and never refills a played one');
+/* Round 1104: the repair is one function for the four careers now
+   (repairBankOnLoad in src/lib/usCareerBank.ts), so it is bundled once and
+   asked once per case instead of once per engine. The three old cases stay,
+   on saves with no summer mark, which is what a save from before Round 1038
+   looks like. The two new ones carry a mark: a career that has been dealt a
+   summer has been loaded since Round 422, so a negative balance on it is a
+   card's doing and it loads at zero, never rebuilt (a reload used to turn
+   -0.4m into 4.2m). */
+{
+  const bank = await loadLib('usCareerBank', false);
+  const money = { currency: '$', seedOf: () => 1, yearOf: () => 2026, billOf: () => 0.2, shame: () => {}, words: {} };
   const costOf = () => 0;
-  const broken = lib.repairNetWorth({ netWorth: -40, earnings: 200, purchased: [] }, costOf);
-  if ((broken.netWorth ?? 0) <= 0) fail(`${s.id}: a save stuck at -40m with 200m earned was not repaired`);
-  const healthy = lib.repairNetWorth({ netWorth: 12.5, earnings: 200, purchased: [] }, costOf);
-  if (healthy.netWorth !== 12.5) fail(`${s.id}: a healthy save was rewritten from 12.5m to ${healthy.netWorth}m`);
-  const spent = lib.repairNetWorth({ netWorth: -1, earnings: 100, purchased: ['a', 'b'] }, () => 5);
+  const base = { morale: 70, seasons: [{ year: 2025 }] };
+  const broken = bank.repairBankOnLoad({ ...base, netWorth: -40, earnings: 200, purchased: [] }, costOf, money);
+  if ((broken.netWorth ?? 0) !== 90) fail(`a save stuck at -40m with 200m earned and no summer mark was not rebuilt to 90m, got ${broken.netWorth}m`);
+  const healthySave = { ...base, netWorth: 12.5, earnings: 200, purchased: [] };
+  const healthy = bank.repairBankOnLoad(healthySave, costOf, money);
+  if (healthy !== healthySave || healthy.netWorth !== 12.5) fail(`a healthy save was rewritten from 12.5m to ${healthy.netWorth}m`);
+  const spent = bank.repairBankOnLoad({ ...base, netWorth: -1, earnings: 100, purchased: ['a', 'b'] }, () => 5, money);
   if ((spent.netWorth ?? 0) !== Math.round((100 * 0.45 - 10) * 10) / 10) {
-    fail(`${s.id}: the repair did not subtract what the player actually bought, got ${spent.netWorth}m`);
+    fail(`the repair did not subtract what the player actually bought, got ${spent.netWorth}m`);
   }
+  const mark = { eventLastFired: { some_card: 2026 } };
+  const reload = bank.repairBankOnLoad({ ...base, ...mark, netWorth: -0.4, earnings: 9.4, purchased: [] }, costOf, money);
+  if (reload.netWorth !== 0) fail(`a played career at -0.4m with 9.4m earned reloaded on ${reload.netWorth}m instead of 0`);
+  const deep = bank.repairBankOnLoad({ ...base, ...mark, netWorth: -40, earnings: 200, purchased: [] }, costOf, money);
+  if (deep.netWorth !== 0) fail(`a played career at -40m with 200m earned reloaded on ${deep.netWorth}m instead of 0`);
 }
-console.log(`   ${SPORTS.length} repairs checked: broken rebuilt, healthy untouched, purchases deducted`);
+console.log('   5 repairs checked: old save rebuilt, healthy untouched, purchases deducted, two played saves stopped at zero');
 
 cleanup();
 console.log('');

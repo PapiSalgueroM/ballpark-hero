@@ -1,0 +1,28 @@
+/* Remote actual page/hook proof. The child retains complete paired records and effective copied faults. */
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import {spawnSync} from 'node:child_process';
+import {fileURLToPath} from 'node:url';
+assert(process.env.CI,'Run this verification only in remote CI');
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),out=path.join(root,'tycoon-season-review-artifacts');
+fs.mkdirSync(out,{recursive:true});
+const run=spawnSync(process.execPath,['scripts/qa/tycoonSeasonReview1095.mjs'],{cwd:root,env:process.env,encoding:'utf8',timeout:1_140_000,maxBuffer:32*1024*1024});
+fs.writeFileSync(path.join(out,'native-stdout.log'),run.stdout||'');fs.writeFileSync(path.join(out,'native-stderr.log'),run.stderr||'');
+fs.writeFileSync(path.join(out,'native-process.json'),JSON.stringify({status:run.status,signal:run.signal,error:run.error?{name:run.error.name,message:run.error.message}:null},null,2));
+assert.equal(run.error,undefined);assert.equal(run.signal,null);assert.equal(run.status,0,run.stderr);
+const report=JSON.parse(fs.readFileSync(path.join(out,'native/report.json'),'utf8'));
+assert.equal(report.complete,true);assert.equal(report.cases.length,4);assert(report.cases.every(r=>r.complete));
+assert.equal(report.controls.length,8);assert(report.controls.every(r=>r.complete&&r.failure.name==='AssertionError'&&r.failure.message.includes(r.assertion)&&r.failure.stack.includes('AssertionError')));
+assert.equal(report.domControls.length,2);assert(report.domControls.every(r=>r.complete&&r.error.name==='AssertionError'&&r.error.message.includes(r.assertion)));
+const initialization=report.oracleInitialization;assert.equal(initialization.complete,true);assert.equal(initialization.draws.length,2);assert(initialization.draws.every(r=>r.caller===r.expectedCaller));assert.equal(initialization.emitted.actualCode,initialization.emitted.expectedCode);assert.equal(initialization.source.sha256,report.sourceBefore[initialization.source.path]);
+assert.deepEqual(report.oracleInitializationControls.map(r=>[r.name,r.assertion,r.receipt.draws.length]),[['extra-draw','Only two entity-ID epoch initialization draws',3],['wrong-caller','Initialization draw must originate at the exact emitted epoch call',1]]);
+assert(report.oracleInitializationControls.every(r=>r.complete&&r.receipt.complete===false&&r.receipt.error.name==='AssertionError'&&r.receipt.error.message.includes(r.assertion)));
+assert.equal(report.clockControl.complete,true);assert.equal(report.clockControl.assertion,'Declared 128ms clock advance');assert.equal(report.clockControl.error.name,'AssertionError');assert(report.clockControl.error.message.includes(report.clockControl.assertion));assert.equal(report.clockControl.clocks.actual.performance,129);assert.equal(report.clockControl.clocks.baseline.performance,128);
+assert.equal(report.mounts.count,17);assert.equal(report.mounts.regularCount,16);assert.equal(report.mounts.setupCount,1);
+assert.deepEqual(report.errors,[]);assert.deepEqual(report.sourceAfter,report.sourceBefore);assert.deepEqual(report.buildAfter,report.buildBefore);assert.deepEqual(report.cacheAfter,report.cacheBefore);
+console.log('Latest season: four finite actual-page journeys passed beside exact accepted-parent pages.');
+console.log('Recorded engine events, whole running hook state, saves, writes, callbacks and RNG remain paired.');
+console.log('Eight exclusive copied faults and two restored clipping faults caused their mapped AssertionErrors.');
+console.log('Two import faults and one clock-operation fault remain separate setup proofs.');
+console.log('Original source, build, actual template fonts and complete raw records are retained.');

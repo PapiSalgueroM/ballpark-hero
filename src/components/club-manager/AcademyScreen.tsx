@@ -65,6 +65,7 @@ function ProspectRow({
         <div className="text-[9px] text-muted-foreground mb-0.5">{p.fee > 0 ? fmt(p.fee) : 'Free'}</div>
         <div className="flex gap-1">
           <button
+            aria-label={`Sign him: ${p.name}`}
             onClick={() => onPromote(p.id)}
             disabled={!affordable || squadFull}
             className="text-[9px] font-bold rounded-full px-2 py-0.5 border border-primary/50 text-primary hover:bg-primary/10 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
@@ -72,6 +73,7 @@ function ProspectRow({
             Sign him
           </button>
           <button
+            aria-label={`Let go: ${p.name}`}
             onClick={() => onRelease(p.id)}
             className="text-[9px] rounded-full px-2 py-0.5 border border-border text-muted-foreground hover:text-foreground transition-colors"
           >

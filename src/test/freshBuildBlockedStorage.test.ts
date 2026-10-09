@@ -91,6 +91,49 @@ describe('the stale chunk reload', () => {
     }
     expect(reloads).toBe(4);
   });
+
+  /* Round 1144: a save a game could not write waits in the open page for the
+     player's Retry, and both of these reloads used to throw it away (a review
+     of Release AN: a stale chunk, and the Season Center tile's Reload). */
+  it('a save the browser still refuses: retried once, no reload, and the once flag is not spent', async () => {
+    const page = await pageLoad();
+    const retry = vi.fn(() => false);
+    page.seam.holdPendingSave(retry);
+    expect(page.fresh.reloadOnceForStaleChunk()).toBe(false);
+    expect(retry).toHaveBeenCalledTimes(1);
+    expect(reload).not.toHaveBeenCalled();
+    expect(window.sessionStorage.getItem('dukb-reloaded-stale-chunk')).toBeNull();
+    /* the player asking for the reload does not go over it either */
+    expect(page.fresh.reloadToRetryChunk()).toBe(false);
+    expect(retry).toHaveBeenCalledTimes(2);
+    expect(reload).not.toHaveBeenCalled();
+    /* the browser takes the save on the next try: now the reload goes ahead, once */
+    retry.mockImplementation(() => true);
+    expect(page.fresh.reloadOnceForStaleChunk()).toBe(true);
+    expect(retry).toHaveBeenCalledTimes(3);
+    expect(reload).toHaveBeenCalledTimes(1);
+    expect(window.sessionStorage.getItem('dukb-reloaded-stale-chunk')).toBe('1');
+  });
+
+  it('a save that goes through on that one retry: the reload the player asked for goes ahead', async () => {
+    const page = await pageLoad();
+    const retry = vi.fn(() => true);
+    page.seam.holdPendingSave(retry);
+    expect(page.fresh.reloadToRetryChunk()).toBe(true);
+    expect(retry).toHaveBeenCalledTimes(1);
+    expect(reload).toHaveBeenCalledTimes(1);
+  });
+
+  it('offline comes first: no reload either way, so the save is not retried for one', async () => {
+    const page = await pageLoad();
+    const retry = vi.fn(() => true);
+    page.seam.holdPendingSave(retry);
+    vi.spyOn(window.navigator, 'onLine', 'get').mockReturnValue(false);
+    expect(page.fresh.reloadOnceForStaleChunk()).toBe(false);
+    expect(page.fresh.reloadToRetryChunk()).toBe(false);
+    expect(retry).not.toHaveBeenCalled();
+    expect(reload).not.toHaveBeenCalled();
+  });
 });
 
 /* Review finding: the same rule in check(), the reload for a new build when
@@ -183,5 +226,25 @@ describe('the new build reload on focus', () => {
     await focusAfter(11);
     expect(fetched).toHaveBeenCalledTimes(1);
     expect(reload).not.toHaveBeenCalled();
+  });
+
+  /* Round 1144: the same hold as the stale chunk reload. The new build is
+     seen, the waiting save is retried once, and while it is still refused the
+     page stays and the marker is not written, so the next check asks again. */
+  it('a save the browser still refuses: sees the new build and stays, then reloads once the save has gone through', async () => {
+    const page = await bootOldBuild();
+    const retry = vi.fn(() => false);
+    page.seam.holdPendingSave(retry);
+    await focusAfter(11);
+    expect(fetched).toHaveBeenCalledTimes(1);
+    expect(retry).toHaveBeenCalledTimes(1);
+    expect(reload).not.toHaveBeenCalled();
+    expect(window.sessionStorage.getItem('dukb-reloaded-for')).toBeNull();
+    retry.mockImplementation(() => true);
+    await focusAfter(61);
+    expect(fetched).toHaveBeenCalledTimes(2);
+    expect(retry).toHaveBeenCalledTimes(2);
+    expect(reload).toHaveBeenCalledTimes(1);
+    expect(window.sessionStorage.getItem('dukb-reloaded-for')).toBe('index-NEWBUILD9.js');
   });
 });

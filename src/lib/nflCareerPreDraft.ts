@@ -7,7 +7,7 @@
    may sign confirmed only once, so the undrafted line states no rule. Three
    college seasons is the shortest road, so both routes run three. */
 
-import { nflEraById } from './nflMyCareer';
+import { nflEraById, nflPickOffset } from './nflMyCareer';
 import type { PreDraftDescriptor, PreDraftStat } from './careerPreDraft';
 
 function nflStatLine(perf: number, rng: () => number, pos: string | undefined): PreDraftStat[] {
@@ -37,6 +37,9 @@ export function nflPreDraftDescriptor(eraId?: string): PreDraftDescriptor {
     teamIds: () => era.teams.map(t => t.abbr),
     teamLabel: id => era.teams.find(t => t.abbr === id)?.label ?? id,
     lottery: null,
+    /* Round 1104: a kicker goes in round four or later, the same rule the
+       quick start reads. */
+    pickOffset: nflPickOffset,
     routes: [
       {
         id: 'power', label: 'Big college program', level: 'College, big program',

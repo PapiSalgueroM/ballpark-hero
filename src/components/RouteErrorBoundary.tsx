@@ -1,5 +1,6 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 import { isStaleChunkError, reloadOnceForStaleChunk } from '@/lib/freshBuild';
+import { releasePendingSaves } from '@/lib/safeStorage';
 import { browserStorage, heldSaveHere, openGame, setAsideSave } from '@/lib/brokenSaveRecovery';
 import type { ContinueSave } from '@/data/continueSaves';
 
@@ -50,6 +51,8 @@ interface State {
   recover?: ContinueSave | null;
   /** Round 958: a fresh start was asked for and the save could not be copied aside. */
   recoverFailed?: boolean;
+  /** Round 1144: a game under this boundary was holding a save the browser still refused. */
+  unsaved?: boolean;
 }
 
 export class RouteErrorBoundary extends Component<Props, State> {
@@ -77,6 +80,15 @@ export class RouteErrorBoundary extends Component<Props, State> {
   };
 
   componentDidCatch(error: Error, info: ErrorInfo) {
+    /* Round 1144 review: the game under this boundary is unmounted by now,
+       and a save the browser had refused, which it was holding in the open
+       page for the player's Retry, went with it. Each waiting save gets one
+       last try here, and after that nothing is held: the reload below used to
+       be refused for the sake of a save that was already gone, which swapped
+       a page one reload away from working for this screen. When a save was
+       still refused the screen says so instead of only "it is still on this
+       device". */
+    const unsaved = !releasePendingSaves();
     /* Round 667: a stale chunk after a deploy is not a broken page, it is a
        page one reload away from working. Reload once, through the same guard
        freshBuild uses, before painting the boundary. */
@@ -89,12 +101,12 @@ export class RouteErrorBoundary extends Component<Props, State> {
        storage reads. Null on any route without a save in this browser, and
        null for a chunk that failed to load: that is the network or a deploy,
        never the save, so the reload is the only honest offer there. */
-    this.setState({ recover: isStaleChunkError(error) ? null : heldSaveHere(), recoverFailed: false });
+    this.setState({ recover: isStaleChunkError(error) ? null : heldSaveHere(), recoverFailed: false, unsaved });
   }
 
   componentDidUpdate(prev: Props) {
     if (this.state.failed && prev.resetKey !== this.props.resetKey) {
-      this.setState({ failed: false, recover: null, recoverFailed: false });
+      this.setState({ failed: false, recover: null, recoverFailed: false, unsaved: false });
     }
   }
 
@@ -115,6 +127,12 @@ export class RouteErrorBoundary extends Component<Props, State> {
             If you had a save going, it is still on this device. It is kept in your browser, and
             nothing here has touched it.
           </p>
+          {this.state.unsaved && (
+            <p role="status" data-dukb-unsaved-lost="" className="text-sm text-muted-foreground mb-5">
+              Your latest changes had not been saved yet when this happened, so those did not make
+              it. Everything saved before them is still here.
+            </p>
+          )}
           <div className="flex flex-wrap gap-2 justify-center">
             <a
               href="/"

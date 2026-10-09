@@ -49,11 +49,13 @@ vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile
    down the number it was given, so a test can say WHICH words were taken back and when. */
 vi.mock('sonner', () => ({ toast: {
   success: () => undefined,
-  error: (words: string) => ctl.toasts.push(words),
+  /* Round 1144: what the toast was given besides its words (how long it stays, and the button on it) */
+  error: (words: string, options?: ToastOptions) => { ctl.options.push(options ?? {}); return ctl.toasts.push(words); },
   dismiss: (id?: number) => { ctl.dismissed.push(id ?? -1); },
 } }));
 /* The control's switch: the real entry, its press followed by one extra draw when the switch is on. */
-const ctl = vi.hoisted(() => ({ extraDraw: false, playFirst: false, noHandOver: false, opens: [] as { year: number; seasons: number }[], toasts: [] as string[], dismissed: [] as number[] }));
+interface ToastOptions { duration?: number; action?: { label: string; onClick: (event: { preventDefault: () => void }) => void }; actionButtonStyle?: { height?: number; minWidth?: number } }
+const ctl = vi.hoisted(() => ({ extraDraw: false, playFirst: false, noHandOver: false, opens: [] as { year: number; seasons: number }[], toasts: [] as string[], dismissed: [] as number[], options: [] as ToastOptions[] }));
 vi.mock('@/components/us-career/season/UsSeasonCentreEntry', async importOriginal => {
   const original = await importOriginal<typeof import('@/components/us-career/season/UsSeasonCentreEntry')>();
   const host = await import('@/components/us-career/season/UsSeasonCentreHost');
@@ -86,6 +88,7 @@ import { NFL_CAREER_SPORT } from '@/lib/nflCareerSport';
 import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
 import { NHL_CAREER_SPORT } from '@/lib/nhlCareerSport';
 import { keyedRng } from '@/lib/keyedRng';
+import { holdPendingSave } from '@/lib/safeStorage';
 import { usSeasonHeldLine } from '@/data/usSeasonLengths';
 import { resetCareerMomentsForTest } from '@/components/soccer-career/careerMoments';
 import type { UsCareerCore, UsCareerSport } from '@/lib/usCareerSport';
@@ -135,11 +138,16 @@ async function toHub(sport: UsCareerSport, ext: 'sign' | 'decline' = 'sign'): Pr
     if (talk) { const b = buttons(talk); await click(ext === 'sign' ? b[0] : b[b.length - 1]); continue; }
     if (market) { await click(buttons(market)[0]); continue; }
     if (playButton()) return 'hub';
+    /* Round 1147: a decision's outcome card with many changes has a "Show all changes" toggle before its
+       Continue; pressing the first button there only folds the list open and shut for ever */
+    const outcome = body.querySelector('[data-career-decision-outcome]');
+    if (outcome) { const b = buttons(outcome); await click(b[b.length - 1]); continue; }
     const all = buttons(body);
     if (!all.length) throw new Error(`usSeasonCentreEntry.test: lost on "${squash(body.textContent ?? '').slice(0, 160)}"`);
     await click(all[0]);
   }
-  throw new Error('usSeasonCentreEntry.test: never got back to the hub');
+  const shown = ['[role="alertdialog"]', '[data-season-reveal]', '[data-extension-talk]', '[data-fa-window]'].filter(sel => document.body.querySelector(sel)).join(', ') || 'none of the known screens';
+  throw new Error(`usSeasonCentreEntry.test: never got back to the hub (on screen: ${shown}; buttons: ${buttons(document.body).slice(0, 6).map(b => squash(b.textContent ?? '').slice(0, 30)).join(' | ')}; it reads "${squash(document.body.textContent ?? '').slice(0, 300)}")`);
 }
 
 interface Arm { saves: string[]; opened: number; noOverlay: number; focusOnContinue: number }
@@ -180,6 +188,7 @@ beforeEach(() => {
   ctl.opens.length = 0;
   ctl.toasts.length = 0;
   ctl.dismissed.length = 0;
+  ctl.options.length = 0;
   vi.useFakeTimers({ toFake: ['Date'] });
   vi.setSystemTime(new Date('2026-10-07T12:00:00Z'));
   localStorage.clear();
@@ -311,6 +320,80 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     expect(savedCareer(sport).seasons).toHaveLength(1);
   }, 60000);
 
+  /* Round 1144. A review of Release AN: the tile's Reload threw away a save the device had refused, under
+     a line that said "Your career is safe". The save is retried once first; while it is still refused
+     the page stays and the tile says why. (The season is played here with the tile up, which a script
+     can do and a finger cannot: a player gets to this state by playing first and opening the viewer
+     second, and what is held is the same either way, a tile over a board with a save waiting.) */
+  it('the tile stays and says why when its Reload would lose a save the device refused', async () => {
+    const reload = vi.fn();
+    vi.stubGlobal('location', { ...window.location, reload });
+    try {
+      await pressWithAFailedChunk('held');
+      const refusing = refuseTheSave();
+      await click(playButton());
+      expect(refusedNotice()).not.toBeNull();
+      const tile = () => q('[data-season-centre-failed]')!;
+      const pressReload = () => click([...tile().querySelectorAll('button')].find(b => /Reload/.test(b.textContent ?? '')));
+      const tries = () => refusing.mock.calls.filter(c => c[0] === sport.saveKey).length;
+      const before = tries();
+      await pressReload();
+      /* the save was tried once more, it is still refused, and the page was not reloaded */
+      expect(tries()).toBe(before + 1);
+      expect(reload).not.toHaveBeenCalled();
+      expect(tile().textContent).toContain('has not been saved yet');
+      expect(tile().textContent).not.toContain('Your career is safe');
+      expect(refusedNotice()).not.toBeNull();
+      expect(savedCareer(sport).seasons).toHaveLength(0);
+      /* the device takes writes again: the same press saves first and reloads second */
+      refusing.mockRestore();
+      await pressReload();
+      expect(savedCareer(sport).seasons).toHaveLength(1);
+      expect(reload).toHaveBeenCalledTimes(1);
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  }, 60000);
+
+  /* Round 1144 review: the order a player really meets. He played, the save was refused, and THEN he
+     opened the viewer. The tile opened on "Your career is safe. Reload the page" and only told the truth
+     after Reload had been pressed. (The waiting save is named to the seam here directly, standing in
+     for the board's own: what the tile reads is the seam.) */
+  it('says a save is waiting from the first moment, before Reload is pressed', async () => {
+    const release = holdPendingSave(() => false);
+    try {
+      await pressWithAFailedChunk('waiting');
+      const tile = q('[data-season-centre-failed]')!;
+      expect(q('[data-season-centre-save-waiting]')).not.toBeNull();
+      expect(tile.textContent).toContain('has not been saved yet');
+      expect(tile.textContent).not.toContain('Your career is safe');
+      expect(q('[data-season-centre-held-reload]')).toBeNull();
+    } finally {
+      release();
+    }
+  }, 60000);
+
+  /* and offline nothing reloads, so nothing is held: the import is asked again and no line says the
+     page "was not reloaded" */
+  it('offline, the tile asks for the viewer again and does not say a reload was held', async () => {
+    const reload = vi.fn();
+    vi.stubGlobal('location', { ...window.location, reload });
+    const retry = vi.fn(() => false);
+    const release = holdPendingSave(retry);
+    try {
+      await pressWithAFailedChunk('offline');
+      const online = vi.spyOn(window.navigator, 'onLine', 'get').mockReturnValue(false);
+      await click([...q('[data-season-centre-failed]')!.querySelectorAll('button')].find(b => /Reload/.test(b.textContent ?? '')));
+      online.mockRestore();
+      expect(reload).not.toHaveBeenCalled();
+      expect(retry).not.toHaveBeenCalled();
+      expect(q('[data-season-centre-held-reload]')).toBeNull();
+    } finally {
+      release();
+      vi.unstubAllGlobals();
+    }
+  }, 60000);
+
   it('CONTROL: the old order (play, then load) loses a season to the same failed chunk', async () => {
     /* the needle: the entry asks for the viewer before its one call of Play */
     const src = fs.readFileSync(path.resolve(process.cwd(), 'src/components/us-career/season/UsSeasonCentreEntry.tsx'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
@@ -383,6 +466,52 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
        (it used to stay up for the rest of its few seconds, beside a notice that had just gone), and it is
        that one toast, by its number, never a blanket dismiss */
     expect(ctl.dismissed).toEqual([1]);
+  }, 30000);
+
+  /* Round 1144. A review of Release AN: with the viewer open over a refused save the toast said "use
+     Retry save" and the notice that holds that button was under the viewer's cover, out of reach until
+     he closed it. The toast carries a Retry of its own now. It is called Retry, never Retry save, so
+     the page has one button of each name (the other lane's driver finds the notice's by its exact
+     name). A press keeps the toast: taking it back is the job of the save going through. */
+  it('with the viewer open over a refused save, the toast carries a Retry that saves the season from there', async () => {
+    seedSave(sport, pos, `full-toast|${sport.slug}`);
+    render(<MemoryRouter><Board /></MemoryRouter>);
+    await flush();
+    const year = savedCareer(sport).year;
+    const refusing = refuseTheSave();
+    await pressWatch();
+    await waitFor(() => expect(q('[data-season-centre]')).not.toBeNull(), { timeout: 4000 });
+    expect(refusedNotice()).not.toBeNull();
+    expect(ctl.toasts).toHaveLength(1);
+    const action = ctl.options[0]?.action;
+    expect(action?.label).toBe('Retry');
+    /* long enough to read two sentences and press: sonner's own four seconds is not */
+    expect(ctl.options[0]?.duration).toBeGreaterThanOrEqual(8000);
+    /* and a thumb's room: a toast's button is 24 px tall as it comes */
+    expect(ctl.options[0]?.actionButtonStyle?.height).toBeGreaterThanOrEqual(44);
+    expect(ctl.options[0]?.actionButtonStyle?.minWidth).toBeGreaterThanOrEqual(44);
+    /* still refused: the press tries the save again, once, and nothing is taken back */
+    const tries = () => refusing.mock.calls.filter(c => c[0] === sport.saveKey).length;
+    const before = tries();
+    let kept = 0;
+    await act(async () => { action!.onClick({ preventDefault: () => { kept += 1; } }); });
+    expect(tries()).toBe(before + 1);
+    expect(kept).toBe(1);
+    expect(savedCareer(sport).seasons).toHaveLength(0);
+    expect(refusedNotice()).not.toBeNull();
+    expect(ctl.dismissed).toEqual([]);
+    /* the device takes writes again: the same press, with the viewer still open, puts the season on the save */
+    refusing.mockRestore();
+    await act(async () => { action!.onClick({ preventDefault: () => { kept += 1; } }); });
+    await flush();
+    expect(savedCareer(sport).seasons).toHaveLength(1);
+    expect(savedCareer(sport).seasons[0].year).toBe(year);
+    expect(q('[data-season-centre]')).not.toBeNull();
+    expect(refusedNotice()).toBeNull();
+    /* and the toast is taken back by the save going through, as before, not by the press */
+    expect(kept).toBe(2);
+    expect(ctl.dismissed).toEqual([1]);
+    expect(ctl.toasts).toHaveLength(1);
   }, 30000);
 
   it('CONTROL: without the board handing its career over, the same press plays the season and opens nothing', async () => {
@@ -490,6 +619,66 @@ describe('a held year, a banned year, and the sports with no Season Center', () 
     expect(q('[data-season-centre-held]')!.textContent).toBe(usSeasonHeldLine('nba', 2011));
     expect(q('[data-week-by-week]')).toBeNull();
     expect(playButton()).toBeDefined();
+  });
+  it('holds an NFL throwback career until 2021: the held line and no button in 2005', async () => {
+    /* Round 1147 on Round 1104: the 2005 throwback plays the real 16 games, and the week by week view is built for 17 */
+    seedSave(NFL_CAREER_SPORT, 'QB', 'held-nfl', 'y2005');
+    render(<MemoryRouter><NflMyCareerBoard /></MemoryRouter>);
+    await flush();
+    expect(savedCareer(NFL_CAREER_SPORT).year).toBe(2005);
+    expect(q('[data-season-centre-held]')!.textContent).toBe(usSeasonHeldLine('nfl', 2005));
+    expect(q('[data-season-centre-held]')!.textContent).toContain('starts with the 2021 season');
+    expect(q('[data-week-by-week]')).toBeNull();
+    expect(playButton()).toBeDefined();
+  });
+  /* Release AP (Round 1104 meets Round 1147): since 1104 every throwback season before 2021 is a held year,
+     so "the last season he played is held" is the everyday case there, and nothing pinned what the hub
+     offers then. A throwback career set down in 2020 (by hand: a player gets there in sixteen seasons) is
+     played across the line: 2020 (held), 2021 (open), and the hub of 2022 (held). The 2022 hub is the
+     arm that proves the 2021 one could have shown the link: there it must be on screen. */
+  it('never offers Watch again for a held season, and offers it for the open one after it', async () => {
+    const sport = NFL_CAREER_SPORT;
+    /** One Play of the season on screen, back to the hub; false when that keyed career cannot carry the test. */
+    const playOn = async (year: number) => {
+      await click(playButton());
+      if ((await toHub(sport)) === 'retired') return false;
+      const c = savedCareer(sport);
+      const line = c.seasons[c.seasons.length - 1];
+      return line.year === year && line.games > 0 && line.teamResult !== 'SUSPENDED' && (c.suspendedSeasons ?? 0) === 0;
+    };
+    let walked = false;
+    for (let n = 0; n < 8 && !walked; n += 1) {
+      cleanup();
+      localStorage.clear();
+      resetCareerMomentsForTest();
+      vi.restoreAllMocks();
+      seedSave(sport, 'QB', `held-last|${n}`, 'y2005', c => { c.year = 2020; });
+      vi.spyOn(Math, 'random').mockImplementation(mulberry32(1104 + n));
+      render(<MemoryRouter><NflMyCareerBoard /></MemoryRouter>);
+      await flush();
+      /* 2020: held, and nothing played yet */
+      expect(q('[data-season-centre-held]')!.textContent).toBe(usSeasonHeldLine('nfl', 2020));
+      expect(q('[data-watch-last]')).toBeNull();
+      if (!(await playOn(2020))) continue;
+      /* the hub of 2021: this year opens, and the 16 game 2020 season is not offered again */
+      expect(savedCareer(sport).year).toBe(2021);
+      expect(savedCareer(sport).seasons[0].games).toBeLessThanOrEqual(16);
+      expect(usSeasonHeldLine('nfl', 2021)).toBeNull();
+      expect(q('[data-week-by-week]')).not.toBeNull();
+      expect(q('[data-season-centre-held]')).toBeNull();
+      expect(q('[data-watch-last]')).toBeNull();
+      if (!(await playOn(2021))) continue;
+      /* the hub of 2022: this year is held, and the open 2021 season IS offered again */
+      expect(savedCareer(sport).year).toBe(2022);
+      expect(q('[data-season-centre-held]')!.textContent).toBe(usSeasonHeldLine('nfl', 2022));
+      expect(q('[data-week-by-week]')).toBeNull();
+      expect(q('[data-watch-last]')!.textContent).toContain('Watch the 2021 season again');
+      walked = true;
+    }
+    expect(walked, 'no keyed career of eight played 2020 and 2021 in full view').toBe(true);
+  }, 60000);
+  it('has the NBA and the NFL both bound, so neither arm above can drop out through its own filter', () => {
+    expect(BOUND.map(b => b.name)).toEqual(['NBA', 'NFL']);
   });
   it('says there is nothing to watch in a banned year', async () => {
     seedSave(NBA_CAREER_SPORT, 'SG', 'banned', 'now', c => { c.suspendedSeasons = 1; });

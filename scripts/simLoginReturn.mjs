@@ -116,6 +116,13 @@ console.log('4) measured: on a phone with the app blocked, the viewport shows th
     const browser = await chromium.launch();
     try {
       const page = await browser.newPage({ viewport: { width: 390, height: 844 }, colorScheme: 'dark' });
+      /* Release AP: nothing leaves the machine. The template also asks for the font sheet, the icons,
+         the manifest and the source entry, none of which this measurement reads. Run by hand those went
+         to the live host; under the suite's offline mode each was a blocked request, and the runner
+         refuses a green that follows a block, so this harness could only pass in the suite on a machine
+         with no browser. They are refused here instead, which is what offline mode did to them anyway.
+         Registered first, because a route added later wins. */
+      await page.route('**/*', r => r.abort());
       await page.route('https://douknowball.com/', r => r.fulfill({ status: 200, contentType: 'text/html', body: template }));
       await page.route('**/assets/*.js', r => r.abort());
       await page.route('**/logo-mark.svg', r => r.fulfill({ status: 200, contentType: 'image/svg+xml', body: fs.readFileSync(path.join(ROOT, 'public/logo-mark.svg')) }));

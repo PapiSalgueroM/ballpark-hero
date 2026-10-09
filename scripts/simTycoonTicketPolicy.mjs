@@ -18,7 +18,8 @@ const engine = 'src/lib/stadiumTycoon.ts';
 const hook = 'src/hooks/useStadiumTycoon.ts';
 const card = 'src/components/tycoon/TicketPolicyCard.tsx';
 const baseline = 'independent upgrade purchase keeps original cost and money accounting';
-const COUNT = 20;
+const bindingCase = 'rules modal keeps distinct Premium gate demand and growth cells separate';
+const COUNT = 21;
 const read = file => fs.readFileSync(path.join(root, file), 'utf8').replaceAll('\r\n', '\n');
 const hash = text => crypto.createHash('sha256').update(text).digest('hex');
 const held = [engine, hook, card, 'src/pages/StadiumTycoon.tsx', test, 'src/test/tycoonPitch.test.tsx',
@@ -51,6 +52,7 @@ const controls = [
   ['prestige', engine, 'leagueTitles: s.leagueTitles ?? 0,', 'leagueTitles: s.leagueTitles ?? 0,\n    ticketPolicy: s.ticketPolicy,', 'a new ground resets the offer without changing the original prestige award'],
   ['display', card, "['gate', 'Gate / sec', current.gatePerSec, dollars(current.gatePerSec)]", "['gate', 'Gate / sec', current.totalPerSec, dollars(current.totalPerSec)]", 'mounted choices drive actual hook rates and every displayed accounting line'],
   ['label', card, '15% less gate money per fan. Supporters grow 50% faster.', '5% less gate money per fan. Supporters grow 50% faster.', 'rules describe the actual finite example and selected tradeoffs before play'],
+  ['helpbinding', 'src/pages/StadiumTycoon.tsx', 'Premium adds {h.ticketPremiumGate}% to the gate money each fan pays, but only {h.ticketPremiumDemand}% of your supporters turn up and they grow {h.ticketPremiumGrowth}% slower.', 'Premium adds {h.ticketPremiumGrowth}% to the gate money each fan pays, but only {h.ticketPremiumDemand}% of your supporters turn up and they grow {h.ticketPremiumGate}% slower.', bindingCase],
   ['selection', hook, 'const next = setTicketPolicy(stateRef.current, policy);', "const next = setTicketPolicy(stateRef.current, 'standard');", 'mounted choices drive actual hook rates and every displayed accounting line'],
   ['session', hook, 'if (next !== before) markSessionPlay();', 'void before;', 'a changed offer marks one unscored session while viewing and repeated choices stay quiet'],
   ['save', hook, 'commit(next);\n    saveTicketState(next);', 'commit(next);\n    void next;', 'selection saves immediately and restores the same offer without resetting progress'],
@@ -60,6 +62,26 @@ const controls = [
   ['hide', hook, 'const saveNow = () => {\n      saveTicketState(stateRef.current);', 'const saveNow = () => {\n      void stateRef.current;', 'hide banks the latest offer and earned money before the next autosave'],
 ];
 const escape = text => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function bindHelpCapture(output, name, swapped) {
+  const matches = [...output.matchAll(/TICKET_HELP_BINDINGS\|(\{[^\r\n]+\})/g)];
+  assert.equal(matches.length, 1, `${name}: actual modal capture missing or repeated`);
+  const capture = JSON.parse(matches[0][1]);
+  write(`${name}-help-bindings.json`, capture);
+  assert.deepEqual(capture.normal.values, [25, 75, 25], `${name}: ordinary equal-value modal changed`);
+  assert.equal(capture.normal.sentence, 'Premium adds 25% to the gate money each fan pays, but only 75% of your supporters turn up and they grow 25% slower.', `${name}: ordinary modal sentence changed`);
+  assert.deepEqual(capture.fixturePercentages, [25, 75, 40], `${name}: distinct input did not fire`);
+  assert.deepEqual(capture.distinctTerms, { id: 'premium', label: 'Premium', gate: 1.25, demand: 0.75, growth: 0.60 }, `${name}: test-owned input changed`);
+  assert.deepEqual(capture.distinct.values, swapped ? [40, 75, 25] : [25, 75, 40], `${name}: actual modal binding effect missing`);
+  assert.equal(capture.distinct.sentence, swapped
+    ? 'Premium adds 40% to the gate money each fan pays, but only 75% of your supporters turn up and they grow 25% slower.'
+    : 'Premium adds 25% to the gate money each fan pays, but only 75% of your supporters turn up and they grow 40% slower.', `${name}: actual distinct modal sentence changed`);
+  assert.equal(capture.engineBefore.policy, 'premium', `${name}: real Premium economy missing`);
+  assert.equal(capture.engineBefore.crowd, 67, `${name}: real attendance changed`);
+  assert.equal(capture.engineBefore.gatePerSec, 4.1875, `${name}: real gate earnings changed`);
+  assert(capture.engineBefore.growthPerSec > 0, `${name}: real growth was not measured`);
+  assert.deepEqual(capture.engineAfter, capture.engineBefore, `${name}: synthetic help input changed engine outcomes`);
+  assert.deepEqual(capture.restoredTerms, { id: 'premium', label: 'Premium', gate: 1.25, demand: 0.75, growth: 0.75 }, `${name}: default table was not restored`);
+}
 function run(name, aliases = {}, intended) {
   const report = path.join(out, `${name}-report.json`);
   const args = ['node_modules/vitest/vitest.mjs', 'run', test, '--testTimeout=120000', '--reporter=json', `--outputFile.json=${report}`, '--reporter=default'];
@@ -74,6 +96,7 @@ function run(name, aliases = {}, intended) {
   const raw = JSON.parse(fs.readFileSync(report, 'utf8'));
   const rows = raw.testResults.flatMap(file => file.assertionResults);
   assert.equal(rows.length, COUNT, `${name}: test inventory changed`);
+  if (!intended || intended === bindingCase) bindHelpCapture(output, name, intended === bindingCase);
   if (!intended) {
     assert.equal(result.status, 0, `${name}: test process failed`);
     assert(rows.every(row => row.status === 'passed'), `${name}: normal outcome did not pass`);
@@ -90,6 +113,11 @@ function run(name, aliases = {}, intended) {
     assert(/AssertionError|Error: expect\(/.test(messages), `${name}: intended failure was not an assertion`);
     assert.equal(rows.filter(row => row.status === 'failed').length, 1, `${name}: unexpected failure`);
     assert.equal(rows.filter(row => row.status === 'passed').length, 1, `${name}: unchanged baseline missing`);
+    if (intended === bindingCase) {
+      assert.equal(result.status, 1, `${name}: unexpected test process termination`);
+      assert.equal(result.signal, null, `${name}: test process was signaled`);
+      assert.equal(rows.filter(row => row.status === 'skipped').length, COUNT - 2, `${name}: other outcomes were not explicitly skipped`);
+    }
     console.log(`CONTROL ${name}: intended assertion failed; independent purchase baseline passed`);
   }
   return { name, passed: rows.filter(row => row.status === 'passed').length, failed: rows.filter(row => row.status === 'failed').length, skipped: rows.filter(row => row.status !== 'passed' && row.status !== 'failed').length, intended };
@@ -104,6 +132,11 @@ for (const [name, file, from, to, intended] of selected) {
   assert.equal(source.split(from).length - 1, 1, `${name}: mutation anchor is not unique`);
   const changed = source.replace(from, to);
   assert.notEqual(hash(changed), hash(source), `${name}: mutation did not change source`);
+  if (name === 'helpbinding') {
+    assert.equal(source.split(to).length - 1, 0, `${name}: replacement already exists`);
+    assert.equal(changed.split(to).length - 1, 1, `${name}: replacement did not fire once`);
+    assert.equal(changed.replace(to, from), source, `${name}: source inverse differs`);
+  }
   const copy = path.join(out, `${name}-source${path.extname(file)}`);
   fs.writeFileSync(copy, changed);
   write(`${name}-mutation.json`, { name, file, from, to, intended, baseline, originalSha256: hash(source), copiedSha256: hash(changed), copy: path.basename(copy) });

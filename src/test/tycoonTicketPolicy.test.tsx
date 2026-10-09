@@ -3,10 +3,27 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import * as engine from '@/lib/stadiumTycoon';
 import type { TicketPolicy, TycoonState } from '@/lib/stadiumTycoon';
+import { mountPage } from './dailyReload/harness';
+import StadiumTycoon from '@/pages/StadiumTycoon';
 import * as original from '../../scripts/fixtures/tycoon1080Baseline/stadiumTycoon';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
 import TicketPolicyCard from '@/components/tycoon/TicketPolicyCard';
 import corpus from './fixtures/tycoonSaves.json';
+
+type TicketTerms = { id: TicketPolicy; label: string; gate: number; demand: number; growth: number };
+const helpFixture = vi.hoisted(() => ({
+  rows: null as TicketTerms[] | null,
+  clone: null as (() => TicketTerms[]) | null,
+}));
+vi.mock('@/lib/stadiumTycoon', async (importOriginal) => {
+  const real = await importOriginal<typeof import('@/lib/stadiumTycoon')>();
+  helpFixture.clone = () => real.TICKET_POLICIES.map(row => ({ ...row }));
+  const terms = new Proxy([] as TicketTerms[], {
+    get(_target, key) { return Reflect.get(helpFixture.rows ?? real.TICKET_POLICIES, key); },
+    has(_target, key) { return key in (helpFixture.rows ?? real.TICKET_POLICIES); },
+  });
+  return { ...real, TICKET_POLICIES: terms };
+});
 
 const EPOCH = 1767225600000;
 const policies: TicketPolicy[] = ['community', 'standard', 'premium'];
@@ -49,6 +66,7 @@ function equalMetrics(container: HTMLElement, state: TycoonState) {
   }
 }
 beforeEach(() => {
+  helpFixture.rows = null;
   elapsed = 0;
   frame = null;
   localStorage.clear();
@@ -60,7 +78,13 @@ beforeEach(() => {
   vi.stubGlobal('cancelAnimationFrame', () => { frame = null; });
   visibility(true);
 });
-afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
+afterEach(() => {
+  try { cleanup(); } finally {
+    helpFixture.rows = null;
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  }
+});
 
 describe('Stadium ticket policy', () => {
   it('independent upgrade purchase keeps original cost and money accounting', () => {
@@ -253,6 +277,51 @@ describe('Stadium ticket policy', () => {
     expect(screen.queryByText('15% less gate money per fan. Supporters grow 50% faster.')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Premium' }));
     expect(screen.getByText(/75% of supporters want to attend/)).toBeInTheDocument();
+  });
+
+  it('rules modal keeps distinct Premium gate demand and growth cells separate', () => {
+    const capture: Record<string, unknown> = {};
+    const readSentence = () => {
+      const dialog = screen.getByRole('dialog', { name: 'How Stadium Tycoon works' });
+      const paragraphs = [...dialog.querySelectorAll('[data-tycoon-rules] p')]
+        .map(node => (node.textContent ?? '').replace(/\s+/g, ' ').trim())
+        .filter(text => text.startsWith('The Ticket offer tile sets your matchday price, and switching is free at any time.'));
+      expect(paragraphs).toHaveLength(1);
+      const sentences = [...paragraphs[0].matchAll(/Premium adds (\d+)% to the gate money each fan pays, but only (\d+)% of your supporters turn up and they grow (\d+)% slower\./g)];
+      expect(sentences).toHaveLength(1);
+      return { paragraph: paragraphs[0], sentence: sentences[0][0], values: sentences[0].slice(1).map(Number) };
+    };
+    try {
+      capture.engineBefore = engine.ticketEconomy(chosen('premium'));
+      mountPage(<StadiumTycoon />, '/stadium-tycoon');
+      const normal = readSentence();
+      capture.normal = normal;
+      expect(normal.sentence).toBe('Premium adds 25% to the gate money each fan pays, but only 75% of your supporters turn up and they grow 25% slower.');
+      cleanup();
+      localStorage.clear();
+
+      helpFixture.rows = helpFixture.clone!();
+      const premium = helpFixture.rows.find(row => row.id === 'premium');
+      expect(premium).toBeDefined();
+      premium!.growth = 0.60;
+      capture.distinctTerms = { ...premium! };
+      const percentages = [Math.round((premium!.gate - 1) * 100), Math.round(premium!.demand * 100), Math.round((1 - premium!.growth) * 100)];
+      capture.fixturePercentages = percentages;
+      expect(percentages).toEqual([25, 75, 40]);
+      expect(new Set(percentages).size).toBe(3);
+      capture.engineAfter = engine.ticketEconomy(chosen('premium'));
+      expect(capture.engineAfter).toEqual(capture.engineBefore);
+      mountPage(<StadiumTycoon />, '/stadium-tycoon');
+      const distinct = readSentence();
+      capture.distinct = distinct;
+      expect(distinct.sentence).toBe('Premium adds 25% to the gate money each fan pays, but only 75% of your supporters turn up and they grow 40% slower.');
+    } finally {
+      try { cleanup(); } finally {
+        helpFixture.rows = null;
+        capture.restoredTerms = { ...engine.TICKET_POLICIES.find(row => row.id === 'premium') };
+        console.log(`TICKET_HELP_BINDINGS|${JSON.stringify(capture)}`);
+      }
+    }
   });
 
   it('a changed offer marks one unscored session while viewing and repeated choices stay quiet', () => {

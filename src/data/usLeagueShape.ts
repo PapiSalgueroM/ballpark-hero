@@ -64,6 +64,52 @@
    "2025-26 NBA Regular Season: Teams with the Most Points Per Game" (30
    teams, mean 115.6).
 
+   THE PLAYOFF FORMAT THE PATH DRAWS (`US_PLAYOFF_FORMAT`), read 2026-10-09
+   (Round 1147's fix pass; until then these were typed in the number files
+   with no source written down).
+   NFL, 2020 season on (every NFL season the Season Center opens is 2021 or
+   later): 14 teams, seven a conference, one game a round, lose and you are
+   out; the rounds are the Wild Card, the Divisional round, the conference
+   championships and the Super Bowl, and the Super Bowl is the only round
+   against the other conference. Only the top seed of each conference skips
+   the Wild Card round.
+   1. NBC Sports, "NFL officially expands playoff format in time for 2020
+      playoffs" and "How many teams get a bye in the 2023 NFL playoffs?".
+   2. Sports Illustrated, "NFL Playoff Format, Dates, History and
+      Predictions". (The reviewer of this round read the same in Fox Sports,
+      "NFL Playoff Format: How does the NFL postseason work?".)
+   NOT MODELLED, and said in the "?": the top seed's bye. The career's engine
+   saves four playoff games for every champion, so the path always starts at
+   the Wild Card round.
+   NBA, 2003 playoffs on (the throwback era starts with 2003-04): four
+   rounds, every one a best of seven (the first round was a best of five
+   through 2002).
+   1. Harvard Sports Analysis Collective, "One and Done: A Thing of the
+      Past? An Analysis of the NBA First-Round Playoff Format" (2010).
+   2. Heavy, "How Many Games Are in an NBA Playoff Series? Updated Rules &
+      Format" (2019).
+
+   HOW FOOTBALL IS SCORED AND TIMED (`NFL_SCORING`, `NFL_CLOCK`), read
+   2026-10-09:
+   A touchdown is 6, the kick after it 1, a two point try 2 (so a touchdown
+   drive is 6, 7 or 8), a field goal 3 and a safety 2.
+   1. Under Armour, "How Football Scoring Works".
+   2. Dummies, "The Various Ways American Football Teams Score Points".
+   A regular season game still level after one overtime period of 10
+   minutes is recorded as a tie; a playoff game plays on until somebody wins.
+   1. NFL Football Operations, "NFL Overtime Rules".
+   2. The Associated Press report of the Giants and the Commanders, 20-20 on
+      4 December 2022 ("Giants and Commanders tie at 20 as Gano's kick falls
+      short"), and Fox 5 DC, "Commanders tie Giants at 20 after New York's
+      game winning kick falls short".
+   Four quarters of 15 minutes. THIN, marked: the NFL rulebook's Rule 4,
+   "Game Timing", is where it is written, and the league's own file did not
+   open this round. What was read instead:
+   1. Wikipedia, "American football rules", as a spot check ("four quarters
+      of 15 minutes each").
+   2. A copy of the rulebook's text on another site (ReadKong, "Rule 4 Game
+      Timing, Section 1: Periods, Intermissions, Halftime").
+
    LEFT OUT, marked and not filled:
    - NFL 2005 throwback: no window. 2005 to 2020 are held (16 real games),
      and from 2021 the game's 2005 team list is no longer that season's
@@ -127,6 +173,24 @@ export function nflHosts17(year: number, conf: string): boolean | null {
   if (year < 2021 || year > 2028 || (conf !== 'AFC' && conf !== 'NFC')) return null;
   return (year % 2 === 1) === (conf === 'AFC');
 }
+
+/** The playoff format the path draws: the round names in order, and a round's
+ *  [wins needed, most games] (null: one game a round). Sources in the header. */
+export const US_PLAYOFF_FORMAT = {
+  nba: {
+    rounds: ['First round', 'Conference semifinals', 'Conference finals', 'NBA Finals'],
+    series: [[4, 7], [4, 7], [4, 7], [4, 7]],
+  },
+  nfl: {
+    rounds: ['Wild Card', 'Divisional', 'Conference Championship', 'Super Bowl'],
+    series: null,
+  },
+} as const;
+
+/** What a scoring play is worth in football. Sources in the header. */
+export const NFL_SCORING = { touchdown: 6, kickAfter: 1, twoPointTry: 2, fieldGoal: 3, safety: 2 } as const;
+/** The game clock: four quarters of 15 minutes (thin, see the header). */
+export const NFL_CLOCK = { quarters: 4, minutes: 15 } as const;
 
 /** League points per team game by era id (2003-04, and 2025-26 for the present day era). */
 export const NBA_SCORING: Readonly<Record<string, number>> = { now: 115.6, y2004: 93.4 };

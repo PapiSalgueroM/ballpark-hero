@@ -24,6 +24,7 @@ import { createContext, useCallback, useEffect, useMemo, useRef, useState, type 
 import type { UsCareerCore, UsCareerSeason, UsCareerSport } from '@/lib/usCareerSport';
 import type { UsSeasonCentreProps } from '@/components/us-career/season/UsSeasonCentre';
 import { reloadToRetryChunk } from '@/lib/freshBuild';
+import { hasPendingSaves, settlePendingSaves } from '@/lib/safeStorage';
 
 export interface UsSeasonCentreRequest {
   career: UsCareerCore;
@@ -89,12 +90,24 @@ export function UsSeasonCentreHost({ sport, children }: { sport: UsCareerSport; 
       setRequest(r);
     },
   }), [sport]);
-  const close = useCallback(() => { closed.current = true; setRequest(null); setFailed(false); }, []);
+  /* the tile's Reload was pressed over a save the browser still refuses */
+  const [held, setHeld] = useState(false);
+  const close = useCallback(() => { closed.current = true; setRequest(null); setFailed(false); setHeld(false); }, []);
   /* A chunk that failed stays failed for the life of the page in Chromium
      (calling import() again asks nothing of the network), so the way to try
      again is a new page. Nothing was played, so a reload loses nothing. Only
      when the browser says it is offline is the import asked again instead. */
   const retry = useCallback(() => {
+    /* Round 1144: "Your career is safe" was not true with a save the browser
+       had refused still waiting in the board under this tile: the reload
+       threw it away. The save is retried once first (the same call a reload
+       makes itself); while it is still refused the page stays and the tile
+       says why. Not when the browser is offline: nothing reloads then, the
+       import is simply asked again below, so there is nothing to hold and
+       "the page was not reloaded" would be the wrong thing to say. */
+    const offline = typeof navigator !== 'undefined' && navigator.onLine === false;
+    if (!offline && !settlePendingSaves()) { setHeld(true); return; }
+    setHeld(false);
     if (reloadToRetryChunk()) return;
     const asker = from.current;
     setFailed(false);
@@ -130,7 +143,14 @@ export function UsSeasonCentreHost({ sport, children }: { sport: UsCareerSport; 
             className="w-full max-w-sm space-y-3 rounded-2xl border border-border bg-card p-4 text-center outline-none"
           >
             <div className="text-sm font-bold">📺 Season Center</div>
-            <p className="text-sm text-muted-foreground">The game by game view could not be loaded, so your season has not been played. Your career is safe. Reload the page and press Week by week again, or go back and press Play.</p>
+            {held ? (
+              <p role="status" data-season-centre-held-reload className="text-sm text-muted-foreground">Your latest progress has not been saved yet, so the page was not reloaded: a reload would lose it. Go back to your season and use Retry save first.</p>
+            ) : hasPendingSaves() ? (
+              /* the same truth before Reload is pressed: he played, the save was refused, and then he opened the viewer */
+              <p role="status" data-season-centre-save-waiting className="text-sm text-muted-foreground">The game by game view could not be loaded, so your season has not been played. Your latest progress has not been saved yet, and a reload would lose it: go back to your season and use Retry save first.</p>
+            ) : (
+              <p className="text-sm text-muted-foreground">The game by game view could not be loaded, so your season has not been played. Your career is safe. Reload the page and press Week by week again, or go back and press Play.</p>
+            )}
             <div className="flex gap-2">
               <button type="button" onClick={retry} className="h-11 flex-1 rounded-lg border border-border text-sm font-semibold">↻ Reload</button>
               <button type="button" onClick={close} className="h-11 flex-1 rounded-lg bg-primary text-sm font-bold text-primary-foreground">Back to your season</button>

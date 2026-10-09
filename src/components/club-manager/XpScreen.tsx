@@ -153,6 +153,7 @@ export function XpScreen({ career, onSpendPoint }: XpScreenProps) {
               {full && <p className="text-[9px] text-gold">{info.atMax}</p>}
               <button
                 onClick={() => onSpendPoint(tree)}
+                aria-label={full ? `Full: ${info.label}` : `Spend a point (${have}/${MAX_TREE_POINTS}): ${info.label}`}
                 disabled={!canSpend}
                 title={
                   full

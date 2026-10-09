@@ -47,9 +47,39 @@
  *   static   a static import of the viewer planted in a route
  *            file (in memory; the same text in a comment stays
  *            green)                                            -> section 8
+ * Round 1147 (the NFL bound), each on the NFL's own number file:
+ *   sum        `finish` hands him one receiving yard too many    -> section 3
+ *   kick       a kicker's side is free to score field goals
+ *              that are not his, the bind's own check off        -> section 3
+ *   nflstage   the NFL engine writes a result its list lacks     -> sections 1 and 4
+ *   nflformula the 17th game dropped for a third game against a
+ *              division rival, the bind's schedule check off     -> section 5
+ *   days       his lines stay where the core dealt them (no
+ *              touchdown day goes with a big day for his team)   -> section 7
+ * The fix pass of Round 1147 (2026-10-09). Each of these names ONE check
+ * (a piece of its label) and is red only when that check is:
+ *   poscore    a one game playoff round prints a keyed score     -> section 4
+ *   nflheld    the NFL binding hands the hub another sport's
+ *              held line                                         -> section 2
+ *   lumpy      his yards, catches and tackles a game follow the
+ *              rule before the fix pass (no bounded swing)       -> section 7
+ *   flat       every game of his is his average game             -> section 7
+ *   tdform     his touchdowns follow the whole of the core's
+ *              form. ALL FIVE SEED SETS: the check needs 2,000
+ *              quarterback games and one set holds about 600     -> section 7
+ *   minutes    drives and moments fall on any free minute        -> section 7
+ *   order      the 17 games in one plain shuffle                 -> section 7
+ *   points     3.4 touchdowns a side at even strength            -> section 7
+ *   forty      a side's strength counts eight times over         -> section 7
+ *   level      the score law hands back level games              -> section 7
+ *   oddtd      a six or an eight costs a drive list nothing      -> section 7
+ *   bigkick    every game of a kicker's wants six makes          -> section 7
+ * Release AP (Round 1104 on Round 1147), the same rule: one named check.
+ *   oddsack    the number file drops the odd tenths of a sack,
+ *              which only a save from before Round 1104 holds    -> section 3
  *
- * MEASURED (filled in from the five seed sets, 2026-10-07): see the block
- * above the bands in section 7.
+ * MEASURED (filled in from the five seed sets, 2026-10-07 for the NBA and
+ * 2026-10-09 for the NFL): see the block above the bands in section 7.
  *
  * Green is the closing "simUsSeasonCentre: ... 0 failed" line AND exit 0.
  * Nothing here reaches the network.
@@ -71,6 +101,7 @@ const ASKED = (process.env.SPORTS ?? 'nba,nfl').split(',').map(s => s.trim()).fi
 /* ─── Controls: exact strings, patched in the bundle only ─── */
 const US = 'src/lib/season/us.ts';
 const NBA = 'src/lib/season/nba.ts';
+const NFL = 'src/lib/season/nfl.ts';
 const WINDOW = { file: 'src/data/usLeagueShape.ts', from: "  { sport: 'nba', era: 'now', from: 2025, to: null, shape: NBA_2025 },", to: "  { sport: 'nba', era: 'now', from: 2025, to: null, shape: NBA_2025 },\n  { sport: 'nba', era: 'y2004', from: 2003, to: null, shape: NBA_2025 }," };
 const CONTROLS = {
   stream: { section: 6, patches: [{ file: US, from: 'const key = usSeasonKey(bind, career, row);', to: 'const key = usSeasonKey(bind, career, row); Math.random();' }] },
@@ -83,6 +114,41 @@ const CONTROLS = {
   conf: { section: 4, patches: [{ file: US, from: '      const slot = r === bind.rounds.length - 1 ? other[0] : conf[r];', to: '      const slot = r === n - 1 ? other[0] : conf[r];' }] },
   hot: { section: 3, patches: [{ file: NBA, from: '  return won && pts >= 20 && pts >= 1.3 * ppg;', to: '  return pts >= ppg;' }] },
   static: { section: 8, patches: [] },
+  sum: { section: 3, patches: [
+    { file: NFL, from: "    on.forEach((g, i) => { g.line[key] = x[i]; });", to: "    on.forEach((g, i) => { g.line[key] = x[i] + (key === 'recYds' && i === 0 && x[0] > 0 ? 1 : 0); });" },
+    { file: NFL, from: '    if (tenths !== Math.round(want * 10)) out.push(`${key} ${tenths / 10} != ${want}`);\n', to: '' },
+  ] },
+  kick: { section: 3, patches: [
+    { file: NFL, from: "    const us = nflDrives(g.us, kinds.length, kicks ? of(g, 'fgMade') : null, rng);", to: '    const us = nflDrives(g.us, kinds.length, null, rng);' },
+    { file: NFL, from: "      if (kicker && (count('fg', true) !== of(g, 'fgMade') || g.events.some(e => e.kind === 'fg' && e.side === 'us' && !e.mine))) out.push(`game ${g.md}: his team's field goals are not his makes`);\n", to: '' },
+  ] },
+  nflstage: { section: 1, also: 4, patches: [{ file: 'src/lib/nflMyCareer.ts', from: '    result = runs[stage];', to: "    result = runs[stage] + ' ';" }] },
+  days: { section: 7, patches: [{ file: NFL, from: '  if (on.some(g => tdsOf(g) > 0)) {', to: '  if (on.length < 0) {' }] },
+  nflformula: { section: 5, patches: [
+    { file: NFL, from: '  if (extra) list.push([extra[Math.floor(rng() * extra.length)], hosts]);', to: '  if (extra) list.push([1, hosts]);' },
+    { file: NFL, from: '  if (ctx.shape) out.push(...nflDealProblems(ctx, s.games));\n', to: '' },
+  ] },
+  /* the fix pass: `label` is a piece of the one check the control must turn red */
+  poscore: { section: 4, label: 'playoff path follows', patches: [{ file: US, from: 'won: wonAt(r), score: scores[r] })) };', to: "won: wonAt(r), score: scores[r] ?? (bind.series ? null : (wonAt(r) ? '24-9' : '9-24')) })) };" }] },
+  nflheld: { section: 2, label: "is the ledger's own line for this sport", patches: [{ file: 'src/lib/nflCareerSport.ts', from: "  seasonCentreHeld: year => usSeasonHeldLine('nfl', year),", to: "  seasonCentreHeld: year => usSeasonHeldLine('nba', year)," }] },
+  lumpy: { section: 7, label: 'sit on a per game cap', patches: [{ file: NFL, from: '      return 1 + swing * (0.62 * mine + 0.18 * team + 0.2 * scored);', to: '      return (1 + mine / 2) * (0.7 + g.us / 60) * (1 + (tdKey ? of(g, tdKey) : 0));' }] },
+  flat: { section: 7, label: 'game to game spread sits inside', patches: [{ file: NFL, from: '      return 1 + swing * (0.62 * mine + 0.18 * team + 0.2 * scored);', to: '      return 1;' }] },
+  tdform: { section: 7, label: 'touchdown passes scatter', patches: [{ file: NFL, from: 'teamFor: true, teamPoints: 7, formPower: TD_FORM_POWER }', to: 'teamFor: true, teamPoints: 7 }' }] },
+  minutes: { section: 7, label: 'under three minutes apart', patches: [{ file: NFL, from: '        const crowded = used.has(m - 1) || used.has(m) || used.has(m + 1) || (side !== undefined && drives[side].some(x => Math.abs(x - m) < DRIVE_GAP));', to: '        const crowded = false;' }] },
+  order: { section: 7, label: 'order of the games reads oddly', patches: [{ file: NFL, from: '  for (let t = 0; t < ORDER_TRIES && least > 0; t += 1) {', to: '  for (let t = 0; t < 1; t += 1) {' }] },
+  points: { section: 7, label: 'points a team game', patches: [{ file: NFL, from: 'const TD_A_GAME = 2.6;', to: 'const TD_A_GAME = 3.4;' }] },
+  forty: { section: 7, label: 'scores 40 or more', patches: [{ file: NFL, from: '(TD_A_GAME + 0.05 * e) / DRIVES', to: '(TD_A_GAME + 0.4 * e) / DRIVES' }] },
+  level: { section: 7, label: 'level games stay under', patches: [{ file: NFL, from: '    if (home) us += more; else them += more;', to: '    if (home) us += 0 * more; else them += 0 * more;' }] },
+  oddtd: { section: 7, label: 'touchdowns not worth seven', patches: [{ file: NFL, from: '        out.push({ t, f, s, cost: Math.abs(rest - 7 * t) + 4 * s });', to: '        out.push({ t, f, s, cost: 4 * s });' }] },
+  bigkick: { section: 7, label: 'makes five or six', patches: [{ file: NFL, from: '    const need = left / (n - k);', to: '    const need = MAX_FG;' }] },
+  /* Release AP: the line an engine that only makes halves no longer needs, and every older save does */
+  oddsack: { section: 3, label: 'sacks in tenths still opens', patches: [{ file: NFL, from: '    if (left % 5 > 0) t[t.indexOf(Math.max(...t))] += left % 5;\n', to: '' }] },
+};
+/* which sport a control needs in the run (its patched file is only bundled with that sport) */
+const CONTROL_SPORT = {
+  stage: 'nba', names: 'nba', window: 'nba', formula: 'nba', hot: 'nba', sum: 'nfl', kick: 'nfl', nflstage: 'nfl', nflformula: 'nfl', days: 'nfl',
+  poscore: 'nfl', nflheld: 'nfl', lumpy: 'nfl', flat: 'nfl', tdform: 'nfl', minutes: 'nfl', order: 'nfl', points: 'nfl', forty: 'nfl', level: 'nfl', oddtd: 'nfl', bigkick: 'nfl',
+  oddsack: 'nfl',
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown US_SEASON_CONTROL ${CONTROL}`); process.exit(2); }
 
@@ -111,8 +177,14 @@ const controlPlugin = {
 /* ─── The bundle: the two real bindings, the season modules, the ledgers ─── */
 const SPORT_DEFS = {
   nba: { binding: 'NBA_CAREER_SPORT', bindingFile: 'src/lib/nbaCareerSport.ts', bindName: 'NBA_SEASON', numberFile: 'src/lib/season/nba.ts', positions: ['PG', 'SG', 'SF', 'PF', 'C'], eras: ['now', 'y2004'], gamesOk: g => (g >= 40 && g <= 74) || (g >= 78 && g <= 82), injury: l => l.games <= 74, targetedFrom: { era: 'y2004', year: 2016 } },
-  nfl: { binding: 'NFL_CAREER_SPORT', bindingFile: 'src/lib/nflCareerSport.ts', bindName: 'NFL_SEASON', numberFile: 'src/lib/season/nfl.ts', positions: ['QB', 'RB', 'WR', 'TE', 'LB', 'CB', 'EDGE', 'K'], eras: ['now', 'y2005'], gamesOk: g => g >= 1 && g <= 17, injury: l => l.games < 17, targetedFrom: { era: 'y2005', year: 2018 } },
+  nfl: { binding: 'NFL_CAREER_SPORT', bindingFile: 'src/lib/nflCareerSport.ts', bindName: 'NFL_SEASON', numberFile: 'src/lib/season/nfl.ts', positions: ['QB', 'RB', 'WR', 'TE', 'LB', 'CB', 'EDGE', 'K'], eras: ['now', 'y2005'], gamesOk: g => g >= 1 && g <= 17, injury: l => !l.backup && l.games < nflYearLength(l.year), targetedFrom: { era: 'y2005', year: 2018 } },
 };
+/* Release AP: since Round 1104 an NFL career plays the year's real length, so "under 17 games" stopped
+   meaning "hurt": every full 16 game throwback season from 2005 to 2020 counted (2,219 of 3,943 seasons
+   on the merged engine, against 1,416 of 3,924 before it). An injury season is one a starter did not
+   finish: fewer games than the two source ledger holds for that year (17 where it holds none, as the
+   engine plays it), and never a backup's spot duty. */
+function nflYearLength(year) { return M.usSeasonLength('nfl', year) ?? 17; }
 /* A sport is run when its number file exists. A sport whose BINDING already
    has a loader may never be skipped: that would be a shipped button nobody checked. */
 const SPORTS = [];
@@ -125,6 +197,7 @@ for (const slug of Object.keys(SPORT_DEFS)) {
   if (!SPORTS.includes(slug) && bound) { console.error(`FAIL: the ${slug} binding has a Season Center loader and was skipped`); process.exit(1); }
 }
 if (SPORTS.length === 0) { console.error('simUsSeasonCentre: no sport to run'); process.exit(1); }
+if (CONTROL && CONTROL_SPORT[CONTROL] && !SPORTS.includes(CONTROL_SPORT[CONTROL])) { console.error(`control ${CONTROL} patches the ${CONTROL_SPORT[CONTROL]} files, and that sport is not in this run: refusing to run`); process.exit(2); }
 
 const OUT = path.join(os.tmpdir(), `us-season-centre-${CONTROL || 'base'}-${process.pid}.mjs`);
 const entry = [
@@ -283,6 +356,82 @@ function shownIsSavedNba(row, s) {
   return out;
 }
 
+/** Section 3, NFL: every item recomputed from the row and the derived games.
+ *  The harness's own list of the line's stat fields and its own reading of a
+ *  drive (never the number file's). */
+const NFL_FIELDS = ['passYds', 'passTd', 'ints', 'rushYds', 'rushTd', 'rec', 'recYds', 'recTd', 'tackles', 'sacks', 'picks', 'passDef', 'forcedFum', 'fgMade', 'fgAtt'];
+const NFL_TD_EVENTS = { 'td-pass': 'passTd', 'td-rush': 'rushTd', 'td-rec': 'recTd' };
+function shownIsSavedNfl(row, pos, s) {
+  const out = [];
+  const on = s.games.filter(g => g.played);
+  const of = (g, k) => g.line[k] ?? 0;
+  if (s.games.length !== OWN.nfl.games) out.push(`games ${s.games.length}`);
+  if (on.length !== row.games) out.push(`played ${on.length} != ${row.games}`);
+  for (const k of NFL_FIELDS) {
+    if (!isNum(row[k])) { if (on.some(g => g.line[k] !== undefined)) out.push(`${k} on his line and not on the save`); continue; }
+    const tenths = on.reduce((a, g) => a + Math.round(of(g, k) * 10), 0);
+    if (tenths !== Math.round(row[k] * 10)) out.push(`${k} ${tenths / 10} != ${row[k]}`);
+    if (k !== 'sacks' && on.some(g => !Number.isInteger(of(g, k)) || of(g, k) < 0)) out.push(`${k} is not a whole number in a game`);
+  }
+  if (isNum(row.longFg)) {
+    const longs = on.filter(g => of(g, 'fgMade') > 0).map(g => g.line.longFg);
+    if (longs.length === 0 || longs.some(v => !Number.isInteger(v) || v > row.longFg || v < 18) || !longs.includes(row.longFg)) out.push(`long ${row.longFg} against ${JSON.stringify(longs).slice(0, 60)}`);
+    if (on.some(g => of(g, 'fgMade') === 0 && g.line.longFg !== undefined)) out.push('a long in a game with no make');
+  }
+  /* sacks: steps of a half, except at most one game that takes the season's odd tenths */
+  if (isNum(row.sacks) && on.filter(g => Math.round(of(g, 'sacks') * 10) % 5 !== 0).length > 1) out.push('more than one game with sacks off the half step');
+  for (const g of s.games) {
+    if (!g.played && Object.keys(g.line).length) out.push(`md ${g.md}: a line in a game he missed`);
+    if (!g.played && g.events.some(e => e.mine)) out.push(`md ${g.md}: his event in a game he missed`);
+    if (g.us === 1 || g.us === 4 || g.them === 1 || g.them === 4) out.push(`md ${g.md}: a score of ${g.us}-${g.them} no drive list makes`);
+    if (new Set(g.events.map(e => e.min)).size !== g.events.length) out.push(`md ${g.md}: two lines of the feed share a minute`);
+    for (const e of g.events) {
+      const isTd = e.kind === 'td' || e.kind in NFL_TD_EVENTS;
+      const pts = e.pts ?? 0;
+      if (isTd ? ![6, 7, 8].includes(pts) : e.kind === 'fg' ? pts !== 3 : e.kind === 'safety' ? pts !== 2 : pts !== 0) out.push(`md ${g.md}: a ${e.kind} worth ${pts}`);
+      if (!Number.isInteger(e.min) || e.min < 1 || e.min > 60) out.push(`md ${g.md}: a drive at minute ${e.min}`);
+      if (e.mine && e.side !== 'us') out.push(`md ${g.md}: his event on the other side`);
+    }
+    if (!g.played) continue;
+    for (const [kind, key] of Object.entries(NFL_TD_EVENTS)) {
+      const n = g.events.filter(e => e.kind === kind && e.mine).length;
+      if (n !== of(g, key)) out.push(`md ${g.md}: ${n} ${kind} drives for ${of(g, key)} on his line`);
+    }
+    if (g.events.filter(e => e.side === 'us' && (e.kind === 'td' || e.kind in NFL_TD_EVENTS)).length * 6 > g.us) out.push(`md ${g.md}: more touchdowns than the score holds`);
+    if (of(g, 'fgMade') > of(g, 'fgAtt')) out.push(`md ${g.md}: ${of(g, 'fgMade')} makes on ${of(g, 'fgAtt')} tries`);
+    if (of(g, 'rec') < of(g, 'recTd') || (of(g, 'rec') === 0 && of(g, 'recYds') !== 0)) out.push(`md ${g.md}: ${of(g, 'rec')} catches, ${of(g, 'recTd')} touchdown catches, ${of(g, 'recYds')} yards`);
+    if (pos === 'K') {
+      /* every field goal his team makes in a game he plays is his */
+      const fgs = g.events.filter(e => e.kind === 'fg' && e.side === 'us');
+      if (fgs.length !== of(g, 'fgMade') || fgs.some(e => !e.mine)) out.push(`md ${g.md}: his team kicks ${fgs.length} field goals, his line says ${of(g, 'fgMade')}`);
+      if (g.events.filter(e => e.kind === 'miss').length !== of(g, 'fgAtt') - of(g, 'fgMade')) out.push(`md ${g.md}: his misses in the feed are not his misses on the line`);
+    }
+  }
+  return out;
+}
+
+/** Section 3, NFL, Release AP: the same season as a save made BEFORE Round 1104 holds it.
+ *  That engine rounded a season's sacks to tenths (11.3); this one rounds to halves, so no
+ *  career played here reaches the branch of the number file that lays the odd tenths out,
+ *  and every older save with a pass rusher on it needs that branch. The saved sacks are
+ *  moved one to four tenths past the half step at or below them (by hand, said here because
+ *  no engine call made this line) and the season is derived again and held against the same
+ *  independent checker. Both arms are walked: an odd tenth alone (11.3) and a half with an
+ *  odd tenth on top (11.8). `n` only picks the tenth, so nothing is drawn. */
+function oldSaveTwin(bind, SB, career, n) {
+  const twin = JSON.parse(JSON.stringify(career));
+  const row = twin.seasons[twin.seasons.length - 1];
+  const steps = Math.floor(Math.round(row.sacks * 10) / 5);
+  row.sacks = (5 * steps + 1 + (n % 4)) / 10;
+  const out = { sacks: row.sacks, half: steps % 2 === 1, year: row.year, pos: twin.pos, why: null, problems: [] };
+  const b = M.buildUsSeason(bind, twin, row, SB.teamLabelOf);
+  if (!b.ok) { out.why = `build: ${b.why}`; return out; }
+  const s = M.deriveSeasonOrWhy(b.sport, row, b.ctx);
+  if (typeof s === 'string') { out.why = s; return out; }
+  out.problems = shownIsSavedNfl(row, twin.pos, s);
+  return out;
+}
+
 /** Section 3, any sport: the events' points make each side's score at full
  *  time and never pass it or fall at any minute the bug can show. */
 function boardIsTrue(slug, s) {
@@ -354,11 +503,11 @@ function pathProblems(slug, row, path, target, who) {
     if (sum !== row.poGames) out.push(`series games ${sum} != ${row.poGames}`);
   } else {
     if (isNum(row.poGames) && path.steps.length !== row.poGames) out.push(`playoff games ${path.steps.length} != ${row.poGames}`);
-    for (const st of path.steps) {
-      const m = /^(\d+)-(\d+)$/.exec(st.score ?? '');
-      if (!m) { out.push('a playoff game with no score'); continue; }
-      if ((Number(m[1]) > Number(m[2])) !== st.won) out.push(`a playoff score ${st.score} against won ${st.won}`);
-    }
+    /* One game a round: the save holds his playoff numbers as a sentence ("2 of 3 on field goals",
+       "238 yds, 2 TD, 1 INT") and no score. A score drawn beside it cannot be held to that sentence
+       (before the fix pass 15% of kickers' paths showed a score no count of his field goals could
+       make), so the only score a round may print is none. */
+    for (const st of path.steps) if (st.score !== null) out.push(`a one game round prints a score the save does not hold (${st.score})`);
   }
   return out;
 }
@@ -398,6 +547,30 @@ function scheduleProblems(slug, SB, row, eraId, s, named) {
     for (const t of kinds.other) if (t.n !== 2 || t.h !== 1) out.push(`other conference ${t.id}: ${t.n} games, ${t.h} at home`);
     if (kinds.other.length !== 15 || homes !== 41) out.push(`home games ${homes}`);
   }
+  if (slug === 'nfl') {
+    /* the 17 game formula, read here from the ledger's divisions: 6 in the division (home and away),
+       one whole division of his conference and one of the other (two of each at home), one club from
+       each of the two other divisions of his conference (one at home), and one more from the other
+       conference out of a division not already met; 8 or 9 at home, 9 exactly when the ledger says
+       his conference hosts the 17th game that year */
+    if (s.games.length !== 17) out.push(`${s.games.length} games`);
+    if (kinds.div.length !== 3) out.push(`${kinds.div.length} division rivals`);
+    for (const t of kinds.div) if (t.n !== 2 || t.h !== 1) out.push(`division rival ${t.id}: ${t.n} games, ${t.h} at home`);
+    const byDiv = list => shape.divisions.filter(dv => dv !== mine).map(dv => {
+      const at = list.filter(t => dv.teams.includes(t.id));
+      return { name: dv.name, size: at.length, met: at.filter(t => t.n > 0).length, n: at.reduce((a, t) => a + t.n, 0), h: at.reduce((a, t) => a + t.h, 0), most: Math.max(0, ...at.map(t => t.n)) };
+    }).filter(x => x.size > 0);
+    const whole = x => x.met === 4 && x.n === 4 && x.h === 2 && x.most === 1;
+    const one = x => x.met === 1 && x.n === 1;
+    const cf = byDiv(kinds.conf); const ot = byDiv(kinds.other);
+    if (cf.length !== 3 || cf.filter(whole).length !== 1 || cf.filter(one).length !== 2 || cf.filter(one).reduce((a, x) => a + x.h, 0) !== 1) out.push(`his conference: ${cf.map(x => `${x.name} ${x.n} games against ${x.met}, ${x.h} at home`).join('; ')}`);
+    if (ot.length !== 4 || ot.filter(whole).length !== 1 || ot.filter(one).length !== 1 || ot.filter(x => x.n === 0).length !== 2) out.push(`the other conference: ${ot.map(x => `${x.name} ${x.n} games against ${x.met}, ${x.h} at home`).join('; ')}`);
+    if (homes !== 8 && homes !== 9) out.push(`home games ${homes}`);
+    const hosts = M.nflHosts17(row.year, mine.conf);
+    const extra = ot.filter(one)[0];
+    if (hosts !== null && extra && (extra.h === 1) !== hosts) out.push(`the 17th game is ${extra.h === 1 ? 'at home' : 'away'} in ${row.year}, the ledger says his conference ${hosts ? 'hosts' : 'travels'}`);
+    if (hosts !== null && homes !== (hosts ? 9 : 8)) out.push(`home games ${homes} in a year his conference ${hosts ? 'hosts' : 'travels for'} the 17th game`);
+  }
   return out;
 }
 
@@ -424,18 +597,144 @@ function scheduleProblems(slug, SB, row, eraId, s, named) {
                                 conference in section 4, which fails when either count is 0.
    A refused season is not a wrong season (the player gets the plain tile), but more than 1 in 100 would
    be a hole a player meets, so that is where the band sits. */
-/* The NFL has no bands yet (its number file is not built). null fails the run on purpose: whoever binds
-   the NFL measures five seed sets and writes the numbers here, so the harness can never be green for it
-   on a band that cannot fail. */
-const REFUSED_MAX = { nba: 0.01, nfl: null };
-const NO_REPAIR_MIN = { nba: 0.8, nfl: null };
+/* MEASURED 2026-10-09 (Round 1147, the NFL bound; measured AGAIN the same day after the fix pass
+   changed how his line, the order of the games and the feed's minutes are laid: every number below
+   is from that second run, head 69a20015), SEEDSET 0 to 4 one at a time on a GitHub runner,
+   CAREERS 40 (plus 8 targeted) a sport. NFL, 490 to 510 open seasons a set, 2508 pooled, on the ten
+   drive score law with his touchdown days matched to his team's scores:
+     seasons refused            0, 0, 0, 0, 0 of about 500      band: at most 1%
+     no repair needed           79.6, 80.1, 81.6, 85.0, 81.2 %  band: at least 70% (headroom 9.6 points
+                                                                under the lowest set; the sets spread
+                                                                over 5.4). A football record band is
+                                                                four or five wins wide and 17 games
+                                                                scatter by about two, so more seasons
+                                                                need a nudge than in the NBA.
+     points a team game, now    22.78, 22.92, 22.82, 22.88, 22.83
+     points a team game, y2005  22.95, 22.81, 22.90, 22.80, 22.92   band: 21.0 to 24.5 (the law's own
+                                                                mean is 22.5: 2.6 touchdowns at seven
+                                                                and 1.445 field goals; his floor lifts
+                                                                it a little; headroom 1.5 each side)
+     a side on 40 or more       5.1, 5.5, 5.5, 5.5, 5.4 % of    band: under 7% (49 or more: 0.7 to 0.9%;
+                                team games                      shut out: 0.6 to 0.7%; control `points`
+                                                                14.7%). The first draft
+                                                                drew touchdowns from a Poisson count;
+                                                                by arithmetic, not by measurement, that
+                                                                gives a side seven touchdowns 1.7% of
+                                                                the time at even strength against
+                                                                0.45% for ten drives.
+     level games                0.13, 0.13, 0.22, 0.07, 0.27 %  band: under 0.6% (6 to 23 games a set of
+                                (6 to 23 of about 8,500)        about 8,500, so the band is 51 games:
+                                                                more than twice the highest set;
+                                                                control `level` 4.5%)
+     touchdowns not worth seven 1.6, 1.7, 1.7, 1.6, 1.6 %       band: under 3% (sevens and threes first;
+                                                                control `oddtd` 52.1%)
+     a kicker makes 5 or 6      1.7, 1.0, 2.7, 1.8, 1.9 % of    band: under 6% (more than twice the
+     in a game                  his games (about 1,170 a set)   highest set; control `bigkick` 18.2%.
+                                                                His makes a game peak at 1 and 2:
+                                                                0: 18 to 20%, 1: 27 to 31%, 2: 29 to
+                                                                31%, 3: 14 to 17%, 4: about 4%)
+     his team's points a game on his two touchdown days, less his blank days (quarterbacks, backs and
+     receivers): 9.0, 8.6, 6.9, 7.9, 8.2 with the match; 2.3 (set 0) and 1.2 (set 3) with control `days`
+     (his lines left where the core dealt them)                 band: at least 4.5 (2.4 under the lowest
+                                                                set, 2.2 over the control's highest)
+     his touchdowns are the whole of his team's score in 1.1 to 1.7% of the games he played, printed
+     median wins by result, a set at a time: missed 5, 6, 6, 5, 5 (band 2 to 9); Wild Card 10, 10, 10, 10,
+     11 (9 to 12); Divisional 11, 12, 12, 11, 11 (10 to 13); Conference Championship 13, 12, 13, 13, 12
+     (11 to 14); lost the Super Bowl 14, 13, 13, 14, 13 (11 to 15); champions 12, 12, 13, 13, 14 (11 to
+     15): every one inside the middle half of its band, so strengthFor's 11.3 was kept as worked out (a
+     game's margin has a standard deviation of about 13.4 points under this law and a unit of edge is
+     worth 0.7 of a point). The last two results have 12 to 23 seasons a set and are asserted only at 20
+     or more.
+     named playoff rounds, a set: 294 to 398 before the Super Bowl and 23 to 36 in it.
+
+   THE FIX PASS'S OWN CHECKS, the same five sets (a full season: he played 14 or more of the 17; 214 to
+   309 such seasons a set, 3,629 to 5,231 games):
+     a laid number (passing yards, rushing yards, catches, tackles) exactly on this sim's per game cap
+                                0.00% in every set               band: under 0.5% (control `lumpy`, the
+                                                                rule before the fix pass: 1.74% on set
+                                                                0 and 1.95% on set 4; the reviewer's
+                                                                probe found 2.9 to 4.6% by position)
+     his headline number more than twice his season's average
+                                0.47, 0.60, 0.41, 0.60, 0.34 %   band: under 2% (over three times the
+                                                                highest set; `lumpy` 6.97 and 5.64%)
+     the middle full season's spread game to game (standard deviation over his average)
+                                0.390, 0.374, 0.359, 0.379,      band: 0.25 to 0.46. The top is 0.07 over
+                                0.381                            the highest set and 0.075 under
+                                                                `lumpy` (0.579 and 0.535). The bottom
+                                                                is there for control `flat` (every
+                                                                game his average, 0.103 on set 0,
+                                                                what whole numbers alone scatter):
+                                                                by number a set
+                                                                reads passing yards 0.25 to 0.27,
+                                                                rushing 0.33 to 0.34, catches 0.45 to
+                                                                0.47, tackles 0.37 to 0.39, and the
+                                                                middle season moves with the mix of
+                                                                positions, so 0.25 leaves 0.11.
+     a quarterback's touchdown passes, their scatter over a plain count's (variance over the mean, a
+     season at a time, pooled): 1.043, 1.038, 1.015, 1.072, 1.019 a set of 646 to 843 games (printed, not
+     asserted: one set is too few) and 1.036 over the five sets' 3,846 games
+                                                                band: under 1.13, asserted at 2,000
+                                                                games or more. Control `tdform` (the
+                                                                whole of the core's form) reads 1.224
+                                                                on the same games, so 1.13 is midway.
+                                                                The first band was 1.2 and the control
+                                                                only cleared it by 0.024.
+     a side's scoring drives under three minutes apart
+                                0.00% in every set               band: under 1% (control `minutes` 19.2%)
+     a calendar that reads oddly (a rival twice running, four straight at home or away)
+                                0.00% in every set               band: under 2% (control `order`, one
+                                                                plain shuffle: 66.9%)
+
+   RELEASE AP'S OWN CHECKS (Round 1104 on Round 1147), the same five sets on the merged engine, 2026-10-09:
+     an injury season (a starter short of the year's own length), and those in a year the viewer opens
+       NFL: 49 and 31, 61 and 38, 48 and 39, 55 and 27, 40 and 27 a set (253 and 162 over the five). The
+       old reading, "under 17 games", counted 2,219 of 3,943 seasons, every full 16 game year among them.
+       NBA: 73 and 62, 56 and 47, 83 and 71, 67 and 60, 85 and 73 (364 and 313). Asserted: one that is open.
+     seasons saved with sacks in tenths, as a save from before Round 1104 holds them (oldSaveTwin)
+       127, 130, 133, 135, 134 a set (659 over the five); an odd tenth alone 68, 63, 63, 64, 66; a half
+       and an odd tenth 59, 67, 70, 71, 68. Refused: 0 in every set, and every one shown holds its saved
+       sacks. Control `oddsack`: 127 of 127 refused on set 0 and 659 of 659 over the five (100%).
+                                                                band: the population's own, under 1%
+                                                                refused; each arm at least 25 seasons
+                                                                (under half the lowest arm of a set) */
+const REFUSED_MAX = { nba: 0.01, nfl: 0.01 };
+const NO_REPAIR_MIN = { nba: 0.8, nfl: 0.7 };
+const OLD_SAVE_MIN = 25;
 const NBA_POINTS_TOL = 1.0;
 const NBA_SHARE_P99_MAX = 0.5;
+const NFL_POINTS = [21.0, 24.5];
+const NFL_LEVEL_MAX = 0.006;
+const NFL_ODD_TD_MAX = 0.03;
+const NFL_BIG_KICK_MAX = 0.06;
+const NFL_FORTY_MAX = 0.07;
+const NFL_TD_DAY_MIN = 4.5;
+/* The fix pass's own checks (measured over the five seed sets; see the block above) */
+const NFL_LINE_CAP_MAX = 0.005;
+const NFL_LINE_DOUBLE_MAX = 0.02;
+const NFL_LINE_SPREAD = [0.25, 0.46];
+const NFL_TD_SCATTER_MAX = 1.13;
+const NFL_TD_SCATTER_MIN_GAMES = 2000;
+const NFL_CLOSE_DRIVES_MAX = 0.01;
+const NFL_ODD_ORDER_MAX = 0.02;
 
 /* ─── Run B: every season observed right after it is played ─── */
 const seen = [];
 const points = {};   // slug|era -> { sum, n } his team's and the other side's points
 const shares = { nba: [] };
+/* the NFL's own section 7 numbers: level games, how plain the drives are, a kicker's makes a game */
+const nflSeen = {
+  games: 0, level: 0, tds: 0, oddTds: 0, safeties: 0, makes: [], kickerGames: 0, floorSet: 0, played: 0, forty: 0, fortyNine: 0, shutOut: 0, byTd: [0, 1, 2, 3].map(() => ({ sum: 0, n: 0 })),
+  /* the fix pass: his own line in a full season, the feed's minutes, the order of the games */
+  seasons: 0, oddOrder: 0, drivePairs: 0, closeDrives: 0, linePairs: 0, nextMinute: 0,
+  lineGames: 0, lineCap: 0, lineDouble: 0, spreads: [], spreadBy: {}, tdGames: 0, tdSq: 0, tdDf: 0, tdCap: 0,
+};
+/* The harness's OWN table (never the module's): each position's headline number among those the number
+   file lays out game by game, and the most this sim gives one game of each. A kicker has none here: his
+   makes have their own band. */
+const NFL_HEAD = { QB: 'passYds', RB: 'rushYds', WR: 'rec', TE: 'rec', LB: 'tackles', CB: 'tackles', EDGE: 'tackles' };
+const NFL_GAME_CAPS = { passYds: 520, rushYds: 290, rec: 15, recYds: 330, tackles: 20 };
+/** A full season: he played 14 or more of the 17, so a game's share of his total means something. */
+const NFL_FULL = 14;
 const poRounds = {};  // slug -> named playoff rounds checked for their conference: { early, finals }
 function observe(c, line, who) {
   const d = SPORT_DEFS[who.slug];
@@ -446,7 +745,9 @@ function observe(c, line, who) {
   const row = career.seasons[career.seasons.length - 1];
   const rec = {
     ...who, year: row.year, games: row.games, teamResult: row.teamResult, backup: c.role === 'backup',
-    heldLine: M.usSeasonHeldLine(who.slug, row.year), p3: [], p4: [], p5: [], p6: [],
+    /* what the hub reads: the BINDING's own held line (the entry tile calls sport.seasonCentreHeld),
+       and beside it the ledger's line for this sport, which the binding must be handing on */
+    heldLine: SB.seasonCentreHeld?.(row.year, career.eraId) ?? null, ledgerLine: M.usSeasonHeldLine(who.slug, row.year), p3: [], p4: [], p5: [], p6: [],
   };
   seen.push(rec);
   const b = M.buildUsSeason(bind, career, row, SB.teamLabelOf);
@@ -464,6 +765,8 @@ function observe(c, line, who) {
   if (who.slug === 'nba') rec.p3.push(...shownIsSavedNba(row, s));
   else if (typeof shownIsSavedNfl === 'function') rec.p3.push(...shownIsSavedNfl(row, career.pos, s));
   rec.p3.push(...boardIsTrue(who.slug, s));
+  /* the same line as an older save holds it (see oldSaveTwin) */
+  if (who.slug === 'nfl' && isNum(row.sacks)) rec.old = oldSaveTwin(bind, SB, career, seen.length);
   const band = ownBand(who.slug, row.teamResult);
   if (band && (rec.wins < band[0] || rec.wins > band[1])) rec.p3.push(`wins ${rec.wins} outside ${band[0]} to ${band[1]} for "${row.teamResult}"`);
   if (!band && s.target.kind !== 'none') rec.p3.push(`a band for the unknown result "${row.teamResult}"`);
@@ -489,6 +792,66 @@ function observe(c, line, who) {
   points[k] ??= { sum: 0, n: 0 };
   for (const g of s.games) { points[k].sum += g.us + g.them; points[k].n += 2; }
   if (who.slug === 'nba') for (const g of s.games) if (g.played) shares.nba.push(g.line.pts / g.us);
+  if (who.slug === 'nfl') {
+    for (const g of s.games) {
+      nflSeen.games += 1;
+      if (g.us === g.them) nflSeen.level += 1;
+      for (const v of [g.us, g.them]) { if (v >= 40) nflSeen.forty += 1; if (v >= 49) nflSeen.fortyNine += 1; if (v === 0) nflSeen.shutOut += 1; }
+      for (const e of g.events) {
+        if (e.kind === 'td' || e.kind in NFL_TD_EVENTS) { nflSeen.tds += 1; if (e.pts !== 7) nflSeen.oddTds += 1; }
+        if (e.kind === 'safety') nflSeen.safeties += 1;
+      }
+      if (!g.played) continue;
+      nflSeen.played += 1;
+      /* his touchdowns alone are the whole of his team's score: the floor set that game */
+      const mineTd = g.events.filter(e => e.mine && e.kind in NFL_TD_EVENTS).length;
+      if (mineTd > 0 && g.us === 7 * mineTd) nflSeen.floorSet += 1;
+      /* his team's score by how many touchdowns were his that day (the positions that score them) */
+      if (['QB', 'RB', 'WR', 'TE'].includes(career.pos)) { const k = Math.min(3, mineTd); nflSeen.byTd[k].sum += g.us; nflSeen.byTd[k].n += 1; }
+      if (career.pos === 'K') { nflSeen.kickerGames += 1; const f = g.line.fgMade ?? 0; nflSeen.makes[f] = (nflSeen.makes[f] ?? 0) + 1; }
+    }
+    /* the order of the games, read here: the same opponent twice running, or a fourth straight game at home or away */
+    let run = 1; let oddOrder = false;
+    s.games.forEach((g, i) => {
+      if (i === 0) return;
+      if (g.opp === s.games[i - 1].opp) oddOrder = true;
+      run = g.home === s.games[i - 1].home ? run + 1 : 1;
+      if (run > 3) oddOrder = true;
+    });
+    nflSeen.seasons += 1;
+    if (oddOrder) nflSeen.oddOrder += 1;
+    /* the feed's minutes: one side's scoring drives one after another, and any two lines one after another */
+    for (const g of s.games) {
+      g.events.forEach((e, i) => { if (i > 0) { nflSeen.linePairs += 1; if (e.min - g.events[i - 1].min < 2) nflSeen.nextMinute += 1; } });
+      for (const side of ['us', 'them']) {
+        const at = g.events.filter(e => e.side === side && (e.pts ?? 0) > 0).map(e => e.min);
+        at.forEach((m, i) => { if (i > 0) { nflSeen.drivePairs += 1; if (m - at[i - 1] < 3) nflSeen.closeDrives += 1; } });
+      }
+    }
+    /* his own line in a full season */
+    const on = s.games.filter(g => g.played);
+    const head = NFL_HEAD[career.pos];
+    if (on.length >= NFL_FULL && head && isNum(row[head]) && row[head] > 0) {
+      const xs = on.map(g => g.line[head] ?? 0);
+      const mean = xs.reduce((a, v) => a + v, 0) / xs.length;
+      const spread = Math.sqrt(xs.reduce((a, v) => a + (v - mean) ** 2, 0) / xs.length) / mean;
+      nflSeen.lineGames += xs.length;
+      nflSeen.lineCap += on.reduce((a, g) => a + Object.keys(NFL_GAME_CAPS).filter(k => g.line[k] === NFL_GAME_CAPS[k]).length, 0);
+      nflSeen.lineDouble += xs.filter(v => v > 2 * mean).length;
+      nflSeen.spreads.push(spread);
+      (nflSeen.spreadBy[head] ??= []).push(spread);
+    }
+    /* a quarterback's touchdown passes: the squared distance of each game from his season's average,
+       over what a plain count with that average would give (about 1 when nothing but chance moves them) */
+    if (career.pos === 'QB' && on.length >= NFL_FULL && isNum(row.passTd) && row.passTd >= 10) {
+      const t = on.map(g => g.line.passTd ?? 0);
+      const m = t.reduce((a, v) => a + v, 0) / t.length;
+      nflSeen.tdGames += t.length;
+      nflSeen.tdSq += t.reduce((a, v) => a + (v - m) ** 2, 0);
+      nflSeen.tdDf += (t.length - 1) * m;
+      nflSeen.tdCap += t.filter(v => v === 6).length;
+    }
+  }
 }
 
 const trapA = { count: 0 };
@@ -516,7 +879,10 @@ for (const slug of SPORTS) {
   const depthN = o.results.map(t => live.filter(r => r.teamResult === t).length);
   console.log(`     by result: missed ${live.filter(r => r.teamResult === o.missed).length}, ${o.results.map((t, i) => `${depthN[i]}`).join(' / ')} (depth 0 to title)`);
   check('1', depthN.every(n => n > 0), `${slug} every playoff depth and a title are in the population`);
-  check('1', live.some(r => d.injury(r)), `${slug} an injury season is in the population (${live.filter(r => d.injury(r)).length})`);
+  /* counted where it matters: a short season is only laid out game by game in a year the viewer opens */
+  const hurt = live.filter(r => d.injury(r));
+  const hurtOpen = hurt.filter(r => r.build === 'ok').length;
+  check('1', hurtOpen > 0, `${slug} an injury season is in the population, among the seasons the viewer opens (${hurt.length}, ${hurtOpen} of them open)`);
   check('1', live.some(r => r.backup), `${slug} a backup season is in the population (${live.filter(r => r.backup).length})`);
   check('1', d.positions.every(p => live.some(r => r.pos === p)), `${slug} every position is in the population`);
   check('1', d.eras.every(e => live.some(r => r.eraId === e)), `${slug} both eras are in the population`);
@@ -524,6 +890,8 @@ for (const slug of SPORTS) {
   /* 2 */
   tally('2', `${slug} the hub's held line is there exactly when the binding holds the season`,
     live.filter(r => (r.heldLine !== null) !== (r.build === 'held')).map(r => `${r.year}: line ${r.heldLine ? 'yes' : 'no'}, build ${r.build}`), live.length);
+  tally('2', `${slug} the line the binding hands the hub is the ledger's own line for this sport`,
+    live.filter(r => r.heldLine !== r.ledgerLine).map(r => `${r.year}: binding ${JSON.stringify(r.heldLine)}, ledger ${JSON.stringify(r.ledgerLine)}`), live.length);
   tally('2', `${slug} no held season yields a derived season`, live.filter(r => r.heldLine !== null && r.derived).map(r => `${r.year}`), live.filter(r => r.heldLine !== null).length);
   const heldYears = slug === 'nba' ? [2011, 2012, 2019, 2020] : [2005, 2012, 2020, 2022];
   for (const y of heldYears) {
@@ -547,6 +915,18 @@ for (const slug of SPORTS) {
   check('7', REFUSED_MAX[slug] !== null && NO_REPAIR_MIN[slug] !== null, `${slug} has measured bands (five seed sets, written above REFUSED_MAX)`);
   check('3', refused.length <= open.length * (REFUSED_MAX[slug] ?? 0), `${slug} seasons that cannot be laid out stay under ${(100 * (REFUSED_MAX[slug] ?? 0)).toFixed(1)}% (${share(refused.length, open.length)})`);
   tally('3', `${slug} the season shown is the season saved (independent checker)`, derived.filter(r => r.p3.length).map(r => `${r.year} ${r.pos}: ${r.p3[0]}`), derived.length);
+  if (slug === 'nfl') {
+    /* saves from before Round 1104: sacks in tenths (see oldSaveTwin) */
+    const old = derived.filter(r => r.old).map(r => r.old);
+    const oldRefused = old.filter(t => t.why !== null);
+    const oldShown = old.filter(t => t.why === null);
+    const arms = [old.filter(t => !t.half).length, old.filter(t => t.half).length];
+    console.log(`     saves from before Round 1104: ${old.length} seasons with sacks in tenths (${arms[0]} an odd tenth alone, ${arms[1]} a half and an odd tenth), refused ${oldRefused.length}, shown ${oldShown.length}`);
+    if (oldRefused.length) console.log(`     first refusals: ${oldRefused.slice(0, 3).map(t => `${t.year} ${t.pos} ${t.sacks} sacks: ${t.why}`).join(' || ')}`);
+    check('3', arms[0] >= OLD_SAVE_MIN && arms[1] >= OLD_SAVE_MIN, `${slug} seasons saved with sacks in tenths are in the population, both arms (${arms[0]} and ${arms[1]}, at least ${OLD_SAVE_MIN} each)`);
+    check('3', oldRefused.length <= old.length * (REFUSED_MAX[slug] ?? 0), `${slug} a season saved with sacks in tenths still opens: refused stay under ${(100 * (REFUSED_MAX[slug] ?? 0)).toFixed(1)}% (${share(oldRefused.length, old.length)})`);
+    tally('3', `${slug} a season saved with sacks in tenths shows the sacks the save holds`, oldShown.filter(t => t.problems.length).map(t => `${t.year} ${t.pos} ${t.sacks}: ${t.problems[0]}`), oldShown.length);
+  }
   if (slug === 'nba') {
     const hot = derived.reduce((a, r) => a + r.hot, 0); const on = derived.reduce((a, r) => a + r.on, 0);
     console.log(`     takeover lines: ${hot} in ${on} games he played (${share(hot, on)}), in ${derived.filter(r => r.hot > 0).length} of ${derived.length} seasons`);
@@ -568,6 +948,12 @@ for (const slug of SPORTS) {
     const ledger = w.shape.divisions.flatMap(dv => dv.teams).slice().sort();
     const own = [...gameIds(slug, w.era)].sort();
     check('5', JSON.stringify(ledger) === JSON.stringify(own), `${slug} the ledger's ids for era ${w.era} are exactly the game's list (${ledger.length} against ${own.length})`);
+  }
+  if (slug === 'nfl') {
+    /* two files of this repo hold the NFL's divisions and they must agree (a consistency check, not a source) */
+    const now = M.US_LEAGUE_SHAPES.find(x => x.sport === 'nfl' && x.era === 'now');
+    const differ = (now?.shape.divisions ?? []).filter(dv => JSON.stringify([...dv.teams].sort()) !== JSON.stringify(M.FO_TEAMS.filter(t => t.division === dv.name).map(t => t.abbr).sort())).map(dv => dv.name);
+    check('5', !!now && now.shape.divisions.length === 8 && differ.length === 0, `nfl the ledger's eight divisions equal the Front Office table division by division${differ.length ? ` (differ: ${differ.join(', ')})` : ''}`);
   }
   tally('5', `${slug} a throwback season never names an opponent`, derived.filter(r => r.named && r.eraId !== 'now').map(r => `${r.year} ${r.eraId}`), derived.filter(r => r.eraId !== 'now').length);
 
@@ -597,6 +983,38 @@ for (const slug of SPORTS) {
     const m = p.sum / p.n;
     console.log(`     points a team game, era ${era}: ${m.toFixed(2)} over ${p.n / 2} games${slug === 'nba' ? ` (league mean ${M.NBA_SCORING[era]})` : ''}`);
     if (slug === 'nba') check('7', Math.abs(m - M.NBA_SCORING[era]) <= NBA_POINTS_TOL, `nba points a team game in era ${era} within ${NBA_POINTS_TOL} of the league mean (${m.toFixed(2)} against ${M.NBA_SCORING[era]})`);
+    if (slug === 'nfl') check('7', m >= NFL_POINTS[0] && m <= NFL_POINTS[1], `nfl points a team game in era ${era} inside ${NFL_POINTS[0]} to ${NFL_POINTS[1]} (${m.toFixed(2)})`);
+  }
+  if (slug === 'nfl') {
+    const lv = nflSeen.level / Math.max(1, nflSeen.games);
+    const odd = nflSeen.oddTds / Math.max(1, nflSeen.tds);
+    const big = ((nflSeen.makes[5] ?? 0) + (nflSeen.makes[6] ?? 0)) / Math.max(1, nflSeen.kickerGames);
+    console.log(`     level games: ${nflSeen.level} of ${nflSeen.games} (${share(nflSeen.level, nflSeen.games)}); touchdowns not worth seven: ${share(nflSeen.oddTds, nflSeen.tds)} of ${nflSeen.tds}; safeties ${nflSeen.safeties}`);
+    console.log(`     his touchdowns are his team's whole score in ${share(nflSeen.floorSet, nflSeen.played)} of the ${nflSeen.played} games he played`);
+    console.log(`     a kicker's makes a game (0 to 6): ${Array.from({ length: 7 }, (_, f) => `${f}: ${share(nflSeen.makes[f] ?? 0, nflSeen.kickerGames)}`).join(', ')} over ${nflSeen.kickerGames} games`);
+    console.log(`     a side on 40 or more: ${share(nflSeen.forty, 2 * nflSeen.games)} of team games; on 49 or more: ${share(nflSeen.fortyNine, 2 * nflSeen.games)}; shut out: ${share(nflSeen.shutOut, 2 * nflSeen.games)}`);
+    const tdMean = nflSeen.byTd.map(x => (x.n ? x.sum / x.n : NaN));
+    console.log(`     his team's points a game by his touchdowns that day: none ${tdMean[0].toFixed(1)} (${nflSeen.byTd[0].n} games), one ${tdMean[1].toFixed(1)} (${nflSeen.byTd[1].n}), two ${tdMean[2].toFixed(1)} (${nflSeen.byTd[2].n}), three or more ${tdMean[3].toFixed(1)} (${nflSeen.byTd[3].n})`);
+    check('7', nflSeen.byTd[0].n > 300 && nflSeen.byTd[2].n > 100 && tdMean[2] - tdMean[0] >= NFL_TD_DAY_MIN, `nfl his two touchdown days are at least ${NFL_TD_DAY_MIN} points a game better for his team than his blank days (${(tdMean[2] - tdMean[0]).toFixed(1)})`);
+    check('7', nflSeen.games > 1000 && nflSeen.forty <= 2 * nflSeen.games * NFL_FORTY_MAX, `nfl a side scores 40 or more in under ${(100 * NFL_FORTY_MAX).toFixed(0)}% of team games (${share(nflSeen.forty, 2 * nflSeen.games)})`);
+    check('7', nflSeen.games > 1000 && lv <= NFL_LEVEL_MAX, `nfl level games stay under ${(100 * NFL_LEVEL_MAX).toFixed(1)}% (${(100 * lv).toFixed(2)}%)`);
+    check('7', nflSeen.tds > 1000 && odd <= NFL_ODD_TD_MAX, `nfl touchdowns not worth seven stay under ${(100 * NFL_ODD_TD_MAX).toFixed(0)}% (${share(nflSeen.oddTds, nflSeen.tds)})`);
+    check('7', nflSeen.kickerGames > 100 && big <= NFL_BIG_KICK_MAX, `nfl a kicker makes five or six in under ${(100 * NFL_BIG_KICK_MAX).toFixed(0)}% of his games (${(100 * big).toFixed(1)}% of ${nflSeen.kickerGames})`);
+    /* the fix pass: his own line, the feed's minutes and the order of the games */
+    const pc = (n, dd, dp = 2) => (dd ? `${((100 * n) / dd).toFixed(dp)}%` : 'n/a');
+    const spreadMid = median(nflSeen.spreads);
+    console.log(`     his headline number in a full season (${NFL_FULL} or more games; ${nflSeen.spreads.length} seasons, ${nflSeen.lineGames} games): a laid number on its per game cap in ${pc(nflSeen.lineCap, nflSeen.lineGames)}; more than twice his season's average in ${pc(nflSeen.lineDouble, nflSeen.lineGames)}`);
+    console.log(`     its spread game to game (standard deviation over his average): the middle season ${spreadMid.toFixed(3)}, p10 ${pct(nflSeen.spreads, 0.1).toFixed(3)}, p90 ${pct(nflSeen.spreads, 0.9).toFixed(3)}; by number: ${Object.entries(nflSeen.spreadBy).map(([k, xs]) => `${k} ${median(xs).toFixed(3)} (${xs.length})`).join(', ')}`);
+    check('7', nflSeen.lineGames > 1000 && nflSeen.lineCap <= nflSeen.lineGames * NFL_LINE_CAP_MAX, `nfl his yards, catches and tackles sit on a per game cap in under ${(100 * NFL_LINE_CAP_MAX).toFixed(1)}% of a full season's games (${pc(nflSeen.lineCap, nflSeen.lineGames)})`);
+    check('7', nflSeen.lineGames > 1000 && nflSeen.lineDouble <= nflSeen.lineGames * NFL_LINE_DOUBLE_MAX, `nfl his headline number is more than twice his season's average in under ${(100 * NFL_LINE_DOUBLE_MAX).toFixed(1)}% of those games (${pc(nflSeen.lineDouble, nflSeen.lineGames)})`);
+    check('7', nflSeen.spreads.length >= 100 && spreadMid >= NFL_LINE_SPREAD[0] && spreadMid <= NFL_LINE_SPREAD[1], `nfl the middle full season's game to game spread sits inside ${NFL_LINE_SPREAD[0]} to ${NFL_LINE_SPREAD[1]} (${spreadMid.toFixed(3)}): his games differ and none runs away`);
+    const scatter = nflSeen.tdSq / Math.max(1e-9, nflSeen.tdDf);
+    console.log(`     a quarterback's touchdown passes in a full season (${nflSeen.tdGames} games): scatter over a plain count ${scatter.toFixed(3)}; on the cap of six in ${pc(nflSeen.tdCap, nflSeen.tdGames)} of them`);
+    if (nflSeen.tdGames >= NFL_TD_SCATTER_MIN_GAMES) check('7', scatter <= NFL_TD_SCATTER_MAX, `nfl a quarterback's touchdown passes scatter no more than ${NFL_TD_SCATTER_MAX} times a plain count (${scatter.toFixed(3)} over ${nflSeen.tdGames} games)`);
+    else console.log(`     (not asserted: ${nflSeen.tdGames} games is too few for the scatter, it needs ${NFL_TD_SCATTER_MIN_GAMES}; run the five seed sets)`);
+    console.log(`     the feed: one side's scoring drives one after another under three minutes apart in ${pc(nflSeen.closeDrives, nflSeen.drivePairs)} of ${nflSeen.drivePairs} pairs; two lines in back to back minutes in ${pc(nflSeen.nextMinute, nflSeen.linePairs)} of ${nflSeen.linePairs}`);
+    check('7', nflSeen.drivePairs > 1000 && nflSeen.closeDrives <= nflSeen.drivePairs * NFL_CLOSE_DRIVES_MAX, `nfl a side's scoring drives one after another are under three minutes apart in under ${(100 * NFL_CLOSE_DRIVES_MAX).toFixed(1)}% of pairs (${pc(nflSeen.closeDrives, nflSeen.drivePairs)})`);
+    check('7', nflSeen.seasons > 100 && nflSeen.oddOrder <= nflSeen.seasons * NFL_ODD_ORDER_MAX, `nfl the order of the games reads oddly (a rival twice running, four straight at home or away) in under ${(100 * NFL_ODD_ORDER_MAX).toFixed(0)}% of seasons (${pc(nflSeen.oddOrder, nflSeen.seasons)} of ${nflSeen.seasons})`);
   }
   if (slug === 'nba') {
     const p99 = pct(shares.nba, 0.99);
@@ -685,16 +1103,43 @@ if (CONTROL) {
   const labels = failsBy.get(String(c.section)) ?? [];
   let ok = labels.length > 0;
   let note = '';
-  if (CONTROL === 'stage') {
+  if (CONTROL === 'stage' || CONTROL === 'nflstage') {
     /* the season with the unknown string derives with no band and no path, and section 4 has nothing to say about it */
-    const unk = seen.filter(r => r.slug === 'nba' && r.derived && r.teamResult !== OWN.nba.missed && !OWN.nba.results.includes(r.teamResult));
+    const sl = CONTROL_SPORT[CONTROL];
+    const unk = seen.filter(r => r.slug === sl && r.derived && r.teamResult !== OWN[sl].missed && !OWN[sl].results.includes(r.teamResult));
     const clean = unk.filter(r => !r.path && r.p4.length === 0 && !r.p3.some(p => p.includes('band')));
     ok = ok && unk.length > 0 && clean.length === unk.length;
     note = `; ${unk.length} seasons carry the unknown result, ${clean.length} of them shown with no band and no path`;
   }
   if (CONTROL === 'names') ok = ok && labels.some(l => l.includes('never names an opponent')) && labels.some(l => l.includes("every name is the game's own"));
   if (CONTROL === 'window') { ok = ok && labels.some(l => l.includes("are exactly the game's list")) && !labels.some(l => l.includes('never names an opponent')); note = '; the binding still named no throwback opponent'; }
-  if (CONTROL === 'formula') ok = ok && labels.some(l => l.includes('follows the formula'));
+  if (CONTROL === 'formula' || CONTROL === 'nflformula') {
+    const sl = CONTROL_SPORT[CONTROL];
+    const wrong = seen.filter(r => r.slug === sl && r.p5.some(p => p.includes('division rival'))).length;
+    ok = ok && labels.some(l => l.startsWith(sl) && l.includes('follows the formula')) && wrong > 0;
+    note = `; ${wrong} ${sl} seasons meet a division rival off the formula`;
+  }
+  if (CONTROL === 'days') ok = ok && labels.some(l => l.includes('two touchdown days'));
+  /* the fix pass's controls each name one check by a piece of its label, on the NFL */
+  if (c.label) {
+    ok = ok && labels.some(l => l.startsWith('nfl') && l.includes(c.label));
+    note = `; its named check "${c.label}" ${ok ? 'is' : 'is NOT'} among the reds`;
+    if (CONTROL === 'poscore') {
+      const wrong = seen.filter(r => r.p4.some(p => p.includes('prints a score'))).length;
+      ok = ok && wrong > 0;
+      note += `; ${wrong} seasons print a playoff score the save does not hold`;
+    }
+  }
+  if (CONTROL === 'sum') {
+    const wrong = seen.filter(r => r.p3.some(p => p.startsWith('recYds '))).length;
+    ok = ok && labels.some(l => l.startsWith('nfl') && l.includes('independent checker')) && wrong > 0;
+    note = `; ${wrong} seasons show receiving yards that are not the saved total`;
+  }
+  if (CONTROL === 'kick') {
+    const wrong = seen.filter(r => r.p3.some(p => p.includes('his team kicks'))).length;
+    ok = ok && labels.some(l => l.startsWith('nfl') && l.includes('independent checker')) && wrong > 0;
+    note = `; ${wrong} kicker seasons show a team field goal count that is not his makes`;
+  }
   if (CONTROL === 'record') ok = ok && labels.some(l => l.includes('independent checker'));
   if (CONTROL === 'conf') {
     const wrong = seen.filter(r => r.p4.some(p => p.includes('conference'))).length;
