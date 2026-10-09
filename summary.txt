@@ -1,0 +1,16 @@
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+trust-seconddisclaimer exit=0 1s | simTrustCopy control seconddisclaimer: green. The planted line was reported and nothing else was.
+trust-typedcount exit=0 0s | simTrustCopy control typedcount: green. The planted line was reported and nothing else was.
+trust-barecount exit=0 1s | simTrustCopy control barecount: green. The planted line was reported and nothing else was.
+trust-exactcount exit=0 1s | simTrustCopy control exactcount: green. The planted line was reported and nothing else was.
+trust-staleliteral exit=0 1s | simTrustCopy control staleliteral: green. The planted line was reported and nothing else was.
+trust-bogus exit=1 0s | TRUST_CONTROL=bogus is not a control this harness knows (seconddisclaimer, typedcount, barecount, exactcount, staleliteral)
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+simSingleFooter exit=0 0s | simSingleFooter: green. One footer, rendered once, on every page.
+simHomeCopy exit=0 1s | simHomeCopy: green. The one page a crawler reads first says only true things.
+simLegalPages exit=0 0s | simLegalPages: all green
+simAdsense exit=0 0s | simAdsense: green. Verification, ads.txt, the policy pages and the ad component are all review ready.
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simSiteSearch exit=0 1s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simHarnessAnchors exit=0 26s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 39s | 
