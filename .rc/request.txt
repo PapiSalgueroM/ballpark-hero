@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+rec-deckc: bash .rc/x/rec3.sh deckc
+rec-board: bash .rc/x/rec3.sh board
+sense-full: SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+c-snubhonoured: SIM_NBA_SENSE_CONTROL=snubhonoured node scripts/simNbaAwardsSense.mjs
+vitest-own: node_modules/.bin/vitest run src/test/nbaAwardDecisionLift.test.ts src/test/nbaOldSaveLines.test.ts src/test/nbaStatLineColumns.test.ts src/test/nbaTrophyTile.test.ts src/lib/usCoachPoaching.test.ts src/test/usSeason.test.ts src/test/usSeasonCentre.test.tsx --testTimeout=300000 --hookTimeout=120000
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre-short82: US_SEASON_CONTROL=short82 node scripts/simUsSeasonCentre.mjs
+hall-nba: node scripts/simCareerHall.mjs nba
+simNbaCareer: node scripts/simNbaCareer.mjs
+simUsCoachPoaching: node scripts/simUsCoachPoaching.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+norival: node scripts/simNoRivalNames.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
