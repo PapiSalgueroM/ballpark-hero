@@ -136,7 +136,7 @@ export function buildSoccerSeasonCtx(career: CareerState, clubs: ClubData[], row
   const crowned = finish && finish.finish !== 1 && key && world
     ? (world.leagues?.[key] && world.leagues[key] !== row.club ? world.leagues[key] : null)
     : null;
-  const champion = snapshot && finish?.finish !== 1 ? snapshot.champion : crowned && key && namedInLeague(crowned, key, row.year) ? crowned : null;
+  const champion = snapshot && finish && finish.finish !== 1 ? snapshot.champion : crowned && key && namedInLeague(crowned, key, row.year) ? crowned : null;
   /* Round 1100 (review fix): eight more leagues draw a table, and the world
      crowns a champion in four of them only. In the other four the top row
      read "another club" in every season he did not win, over a league whose

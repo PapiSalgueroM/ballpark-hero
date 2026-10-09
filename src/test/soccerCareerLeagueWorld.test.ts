@@ -182,6 +182,8 @@ describe('Soccer Career simulated promotion and relegation', () => {
     recordLeagueWorldSeason(spain, FALLBACK_CLUBS, partial);
     const ctx = buildSoccerSeasonCtx(spain, FALLBACK_CLUBS, partial);
     expect([ctx.mode, ctx.why, ctx.games]).toEqual(['results', 'severe', 38]);
+    expect(ctx.champion).toBeNull();
+    expect(ctx.named.length).toBe(19);
     expect(partial.leagueWorld!.members.length).toBe(20);
   });
 
