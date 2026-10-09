@@ -1,0 +1,55 @@
+#!build
+simSoccerContractMoves: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerContractMoves.mjs
+simSoccerSeasonCompetitions: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonCompetitions.mjs
+simSoccerLeagueWorldLookup: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerLeagueWorldLookup.mjs
+simClubVerdict: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubVerdict.mjs
+simLoanSpell: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simLoanSpell.mjs
+simSeasonCentreAgreement: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreAgreement.mjs
+simSeasonCentreTable: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreTable.mjs
+simCareerAwardsNight: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs
+simSoccerContractMoves-age: SIM_SOCCER_CONTRACT_CONTROL=age NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerContractMoves.mjs
+simSoccerContractMoves-elite: SIM_SOCCER_CONTRACT_CONTROL=elite NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerContractMoves.mjs
+simSoccerContractMoves-move: SIM_SOCCER_CONTRACT_CONTROL=move NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerContractMoves.mjs
+simSoccerContractMoves-repeat: SIM_SOCCER_CONTRACT_CONTROL=repeat NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerContractMoves.mjs
+simSoccerSeasonCompetitions-anchor: SIM_SEASON_COMPETITION_CONTROL=anchor NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonCompetitions.mjs
+simSoccerSeasonCompetitions-score: SIM_SEASON_COMPETITION_CONTROL=score NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonCompetitions.mjs
+simSoccerSeasonCompetitions-name: SIM_SEASON_COMPETITION_CONTROL=name NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonCompetitions.mjs
+simSoccerSeasonCompetitions-finallegs: SIM_SEASON_COMPETITION_CONTROL=finallegs NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonCompetitions.mjs
+simSoccerSeasonCompetitions-neutralfinal: SIM_SEASON_COMPETITION_CONTROL=neutralfinal NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonCompetitions.mjs
+simLoanSpell-shut: LOAN_CONTROL=shut NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simLoanSpell.mjs
+simSeasonCentreAgreement-goals: AGREEMENT_CONTROL=goals NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreAgreement.mjs
+simSeasonCentreAgreement-selfcheck: AGREEMENT_CONTROL=selfcheck NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreAgreement.mjs
+simSeasonCentreAgreement-position: AGREEMENT_CONTROL=position NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreAgreement.mjs
+simSeasonCentreAgreement-title: AGREEMENT_CONTROL=title NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreAgreement.mjs
+simSeasonCentreAgreement-derby: AGREEMENT_CONTROL=derby NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreAgreement.mjs
+simSeasonCentreAgreement-cleansheet: AGREEMENT_CONTROL=cleansheet NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreAgreement.mjs
+simSeasonCentreAgreement-points: AGREEMENT_CONTROL=points NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreAgreement.mjs
+simSeasonCentreAgreement-leagueapps: AGREEMENT_CONTROL=leagueapps NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreAgreement.mjs
+simSeasonCentreAgreement-offtime: AGREEMENT_CONTROL=offtime NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreAgreement.mjs
+simSeasonCentreAgreement-ladder: AGREEMENT_CONTROL=ladder NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreAgreement.mjs
+simSeasonCentreAgreement-resultstitle: AGREEMENT_CONTROL=resultstitle NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreAgreement.mjs
+simSeasonCentreTable-names: TABLE_CONTROL=names NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreTable.mjs
+simSeasonCentreTable-cadence: TABLE_CONTROL=cadence NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreTable.mjs
+simSeasonCentreTable-ledgerorder: TABLE_CONTROL=ledgerorder NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreTable.mjs
+simSeasonCentreTable-tiebreak: TABLE_CONTROL=tiebreak NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreTable.mjs
+simSeasonCentreTable-rival: TABLE_CONTROL=rival NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreTable.mjs
+simSeasonCentreTable-opentitle: TABLE_CONTROL=opentitle NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreTable.mjs
+simSeasonCentreTable-snapshotfield: TABLE_CONTROL=snapshotfield NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreTable.mjs
+simCareerAwardsNight-reorderdraw: SIM_AWARDS_NIGHT_CONTROL=reorderdraw NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs
+simCareerAwardsNight-winnernottop: SIM_AWARDS_NIGHT_CONTROL=winnernottop NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs
+simCareerAwardsNight-speechleak: SIM_AWARDS_NIGHT_CONTROL=speechleak NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs
+simCareerAwardsNight-numberback: SIM_AWARDS_NIGHT_CONTROL=numberback NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs
+simCareerAwardsNight-wcleaves: SIM_AWARDS_NIGHT_CONTROL=wcleaves NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs
+simCareerAwardsNight-wctwice: SIM_AWARDS_NIGHT_CONTROL=wctwice NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs
+simCareerAwardsNight-wcnominal: SIM_AWARDS_NIGHT_CONTROL=wcnominal NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs
+simCareerAwardsNight-wccardmute: SIM_AWARDS_NIGHT_CONTROL=wccardmute NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs
+simCareerAwardsNight-followersbare: SIM_AWARDS_NIGHT_CONTROL=followersbare NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs
+simCareerAwardsNight-legacyreal: SIM_AWARDS_NIGHT_CONTROL=legacyreal NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs
+simCareerAwardsNight-secondcopy: SIM_AWARDS_NIGHT_CONTROL=secondcopy NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs
+simCareerAwardsNight-speechcopy: SIM_AWARDS_NIGHT_CONTROL=speechcopy NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs
+simCareerAwardsNight-cardtext: SIM_AWARDS_NIGHT_CONTROL=cardtext NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs
+simCareerAwardsNight-effectonly: SIM_AWARDS_NIGHT_CONTROL=effectonly NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs
+simCareerAwardsNight-nominalnight: SIM_AWARDS_NIGHT_CONTROL=nominalnight NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs
+simCareerAwardsNight-nominalmoved: SIM_AWARDS_NIGHT_CONTROL=nominalmoved NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs
+simCareerAwardsNight-numberedline: SIM_AWARDS_NIGHT_CONTROL=numberedline NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs
+simCareerAwardsNight-speechtwice: SIM_AWARDS_NIGHT_CONTROL=speechtwice NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs
