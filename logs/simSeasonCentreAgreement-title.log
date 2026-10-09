@@ -1,0 +1,54 @@
+CONTROL title: src/lib/season/soccer.ts, src/lib/season/core.ts patched in the bundle only
+✘ [ERROR] control refused: src/lib/season/soccer.ts does not contain "return { kind: 'finish', finish: ctx.finish.finish, title, champion };" [plugin awards-night-load]
+
+    node_modules/esbuild/lib/main.js:1275:21:
+      1275 │         let result = await callback({
+           ╵                      ^
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/careerAwardsNightBundle.mjs:76:42
+    at async requestCallbacks.on-load (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1275:22)
+    at async handleRequest (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:647:11)
+
+  This error came from the "onLoad" callback registered here:
+
+    node_modules/esbuild/lib/main.js:1150:20:
+      1150 │       let promise = setup({
+           ╵                     ^
+
+    at setup (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/careerAwardsNightBundle.mjs:67:9)
+    at handlePlugins (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1150:21)
+    at buildOrContextImpl (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:873:5)
+    at Object.buildOrContext (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:699:5)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:2023:15
+    at new Promise (<anonymous>)
+    at Object.build (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:2022:25)
+    at Object.build (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1873:51)
+    at bundleAwardsNight (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/careerAwardsNightBundle.mjs:89:19)
+
+  The plugin "awards-night-load" was triggered by this import
+
+    ../../_temp/t-simSeasonCentreAgreement-title/awardsnight-3753-7bBfB4/entry.tsx:8:24:
+      8 │ ...eason from '/home/runner/work/ballpark-hero/ballpark-hero/src/li...
+        ╵               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+node_modules/esbuild/lib/main.js:1275:21: ERROR: [plugin: awards-night-load] control refused: src/lib/season/soccer.ts does not contain "return { kind: 'finish', finish: ctx.finish.finish, title, champion };"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at runOnEndCallbacks (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1315:45)
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0

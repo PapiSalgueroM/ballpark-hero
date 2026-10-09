@@ -1,0 +1,8 @@
+  ok   parse: 76 tuples parsed from 1 block(s)
+  ok   guard: 6 count guards, row_count 76, join on 6 columns plus nationality IS NULL
+  ok   agree: 76 tuples compared on 6 fields
+  ok   present: 76 record rows, 76 tuples
+  ok   read: 76 read blocks
+  ok   shape: Men 69 rows 1956 to 2025, Women 7 rows 2018 to 2025, 2 years explained absent
+  ok   sources: 76 rows, 10 sources, 3 official hosts
+simBallonDor: 7 checks, 0 failed; 76 tuples held to 76 record rows (69 Men, 7 Women), 76 nationalities filled

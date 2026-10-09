@@ -1,0 +1,21 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: the named domestic cup stays named
++ actual - expected
+
++ 'Domestic cup'
+- 'FA Cup'
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerSeasonCompetitions.mjs:30:8
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'Domestic cup',
+  expected: 'FA Cup',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

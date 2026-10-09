@@ -1,0 +1,3 @@
+CONTROL ordinal: effective copied source, intended insertion-stability AssertionError
+CHECKS by name: {"insertion-stability":1}
+simSoccerOwnGoals: 1 checks, 0 failed (control ordinal)

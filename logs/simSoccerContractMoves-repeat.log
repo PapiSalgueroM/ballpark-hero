@@ -1,0 +1,48 @@
+ok   full old-save loading and younger deals unchanged; exact older extension and renewal quotes
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Continue clears a completed move without repeating it
++ actual - expected
+
++ {
++   contractYears: 4,
++   fromClub: 'Real Madrid',
++   mode: 'loan',
++   reasons: [
++     '2 league games all season, and the projection here was 8 to 16',
++     'You averaged 5.9 across the season',
++     'You are 14 rating points under what this squad expects'
++   ],
++   toClub: 'AC Milan',
++   transferFee: 0,
++   type: 'club_move',
++   wage: 100000
++ }
+- null
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerContractMoves.mjs:105:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: {
+    type: 'club_move',
+    mode: 'loan',
+    fromClub: 'Real Madrid',
+    toClub: 'AC Milan',
+    contractYears: 4,
+    wage: 100000,
+    transferFee: 0,
+    reasons: [
+      '2 league games all season, and the projection here was 8 to 16',
+      'You averaged 5.9 across the season',
+      'You are 14 rating points under what this squad expects'
+    ]
+  },
+  expected: null,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
