@@ -79,6 +79,10 @@ The four broad failures require compatibility proof corrections:
 
 These verification corrections require a new exact-head remote run, including all existing Manager and output-reader gates plus the retained lifecycle controls. No product source or golden baseline digest changed during diagnosis.
 
+## Native screenshot review
+
+The third run's desktop calendar images were captured before the existing parent/selected-strip two-frame reveal completed and showed mostly blank space. Passing saved-state assertions do not establish visual acceptance. The driver now reaches the overview and source links with actual focus actions, waits for readable geometry, a painted centre, settled finite animations and four stable frames, then records full scroll/style/layout diagnostics before each image. Selected-day reveal is checked without forced scrolling, styles or state. Help is captured after real dialog focus. All six journeys and complete save/oracle/control assertions remain intact. A fresh exact-head native run and visual inspection are required.
+
 ## Validation still required
 
 Remote types/build, focused outcomes, effective copied defects, unchanged old-save/future/custom baselines, existing fixture and world harnesses, native phone/desktop journeys, and output-reader gates are pending. Authored proof includes 11 real fixture outcome groups, all 760 player fixture readings, all 760 calendar readings, a full 380-match simulated campaign and nine copied outcome controls. The independent old/generated comparison uses the pre-change engine and calendar card, with whole-save and random-draw equality across three seeds and current, historical, edited and custom contexts. The balance harness retains its three original controls and adds five controls for natural version binding, fallback flag/count and engine/calendar resolver bypasses. These counts describe the required remote proof, not passing results.

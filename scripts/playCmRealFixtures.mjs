@@ -130,6 +130,39 @@ async function journey(profile, kind, fixture) {
   const read = () => page.evaluate(key => JSON.parse(localStorage.getItem(key)), KEY), bytes = () => page.evaluate(key => localStorage.getItem(key), KEY);
   const activate = async button => { if (profile.width === 390) await button.tap(); else { await button.focus(); await button.press('Enter'); } };
   const shot = async name => { await page.screenshot({ path: path.join(OUT, `${id}-${name}.png`) }); row.screenshots.push(`${id}-${name}.png`); };
+  const captureVisible = async (target, name) => {
+    const diagnostics = await target.evaluate(element => new Promise(resolve => {
+      const frames = []; let previous = '', stable = 0, frame = 0, finished = false;
+      const finish = passed => { if (finished) return; finished = true; clearTimeout(timeout); cancelAnimationFrame(frame); resolve({ passed, frames }); };
+      const timeout = setTimeout(() => finish(false), 2000);
+      const sample = () => {
+        const rect = element.getBoundingClientRect(), style = getComputedStyle(element), ancestors = [];
+        for (let node = element.parentElement; node; node = node.parentElement) {
+          const css = getComputedStyle(node);
+          ancestors.push({ tag: node.tagName, scrollTop: node.scrollTop, scrollLeft: node.scrollLeft,
+            overflow: css.overflow, display: css.display, visibility: css.visibility, opacity: css.opacity });
+        }
+        const animations = document.getAnimations().filter(animation => animation.playState === 'running' && Number.isFinite(animation.effect?.getComputedTiming().endTime)).length;
+        const viewport = { width: innerWidth, height: innerHeight, scrollX, scrollY, documentWidth: document.documentElement.scrollWidth };
+        const box = { x: rect.x, y: rect.y, width: rect.width, height: rect.height, top: rect.top, bottom: rect.bottom, right: rect.right };
+        const ownStyle = { display: style.display, visibility: style.visibility, opacity: style.opacity };
+        const hit = document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2);
+        const readable = element.isConnected && rect.width > 0 && rect.height > 0 && rect.x >= -1 && rect.top >= -1 && rect.right <= innerWidth + 1 && rect.bottom <= innerHeight + 1
+          && style.display !== 'none' && style.visibility === 'visible' && Number(style.opacity) > 0
+          && ancestors.every(css => css.display !== 'none' && css.visibility === 'visible' && Number(css.opacity) > 0) && element.contains(hit);
+        const signature = JSON.stringify({ box, viewport, ownStyle, ancestors });
+        stable = readable && animations === 0 && signature === previous ? stable + 1 : 0; previous = signature;
+        frames.push({ box, viewport, style: ownStyle, ancestors, animations, readable, stable });
+        if (stable >= 3) finish(true); else frame = requestAnimationFrame(sample);
+      };
+      frame = requestAnimationFrame(sample);
+    }));
+    (row.captureDiagnostics ??= {})[name] = diagnostics;
+    fs.writeFileSync(path.join(OUT, `${id}-${name}-layout.json`), JSON.stringify(diagnostics, null, 2));
+    assert(diagnostics.passed, `${name}: the actual content must become readable and stable after its native interaction`);
+    assert(diagnostics.frames.at(-1).viewport.documentWidth <= profile.width + 1, `${name}: the stable screenshot has no horizontal overflow`);
+    await shot(name);
+  };
   try {
     await page.goto(`${BASE}/club-manager`, { waitUntil: 'domcontentloaded' });
     if (kind === 'real') {
@@ -161,6 +194,9 @@ async function journey(profile, kind, fixture) {
       assert((await coverage.innerText()).startsWith(LABEL), 'Real opponent order and venues are labelled separately from simulated dates and results');
       assert.deepEqual(await coverage.locator('a').evaluateAll(links => links.map(link => link.href)), receipt.sources.map(source => source.url), 'Calendar exposes both independently verified fixture sources');
     } else assert.equal(await coverage.count(), 0, 'Generated calendars make no real fixture claim');
+    await page.locator('[data-testid="cm-calendar-grid"] button').last().focus();
+    await captureVisible(page.locator('[data-testid="cm-calendar-grid"]'), 'calendar-overview');
+    if (kind === 'real') { await coverage.locator('a').first().focus(); await captureVisible(coverage, 'calendar-sources'); }
     const venue = next.fixture.home ? 'vs' : 'at';
     const named = page.getByRole('button', { name: `${next.dateLabel}: ${venue} ${next.fixture.opponent} · ${next.fixture.compLabel}`, exact: true });
     await named.waitFor(); assert.match(await named.getAttribute('aria-label'), new RegExp(`${venue} ${next.fixture.opponent}`));
@@ -170,11 +206,12 @@ async function journey(profile, kind, fixture) {
       assert.equal(await page.getByRole('button', { name: old, exact: true }).count(), 0, 'Changed actual calendar fixture is detected');
       await page.locator('[aria-label="wrong fixture control"]').evaluate((el, label) => el.setAttribute('aria-label', label), old); await named.waitFor(); report.controls.push('visible-fixture');
     }
-    await shot('calendar'); assert(await bytes() === inputBytes, 'Calendar inspection preserves every saved byte');
+    await captureVisible(page.locator('[data-testid="cm-calendar-day"]'), 'calendar'); assert(await bytes() === inputBytes, 'Calendar inspection preserves every saved byte');
     const helpTrigger = page.getByRole('button', { name: 'How to play', exact: true }); await activate(helpTrigger);
     const help = page.getByRole('dialog', { name: 'How to Play Club Manager' }); await help.waitFor();
     assert.match(await help.innerText(), /opponent order|fixture order/i); assert.match(await help.innerText(), /dates.*simulated|simulated.*dates/i);
     await page.waitForFunction(dialog => dialog.contains(document.activeElement), await help.elementHandle(), { timeout: 2000 });
+    await captureVisible(help, 'help');
     await page.keyboard.press('Escape'); await help.waitFor({ state: 'hidden' });
     await page.waitForFunction(trigger => document.activeElement === trigger, await helpTrigger.elementHandle(), { timeout: 2000 });
     assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'Calendar and help fit the viewport');
