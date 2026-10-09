@@ -1,0 +1,2 @@
+# Release AP, the live pass, part two: the scoring coverage harness needs a tree with its own node_modules (a worktree has none)
+simScoringCoverage: node scripts/simScoringCoverage.mjs
