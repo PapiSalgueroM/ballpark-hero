@@ -95,13 +95,24 @@ export function buildBirths({ ledgerRows = [], round669 = null, missing = [], db
   if (round669) {
     const tied = new Map();
     const loose = [];
-    for (const [part, clubOf] of [['write', x => x.club], ['existingChecked', x => x.stored?.club], ['corrections', x => x.club ?? x.stored?.club]]) {
+    /* A checked row stores the club the table had BEFORE the round corrected it ("Without Club"
+       for four men); the correction's `to` is the club the table holds now. Both are tried. */
+    const correctedClub = new Map();
+    for (const c of round669.corrections ?? []) {
+      if (c?.field === 'club' && c.to) correctedClub.set(String(c.name).trim(), c.to);
+    }
+    const clubsOf = {
+      write: x => [x.club],
+      existingChecked: x => [x.stored?.club, correctedClub.get(String(x.name).trim())],
+      corrections: x => [x.club, x.stored?.club],
+    };
+    for (const part of ['write', 'existingChecked', 'corrections']) {
       for (const x of round669[part] ?? []) {
         const born = x?.fotmob?.born;
         if (!born) continue;
-        const tableClub = clubOf(x);
-        if (!tableClub) { loose.push({ name: String(x.name).trim(), born, part }); continue; }
-        add(x.name, born, [dbToEngine[tableClub]], `the Round 669 ledger, ${part}`);
+        const tableClubs = clubsOf[part](x).filter(Boolean);
+        if (!tableClubs.length) { loose.push({ name: String(x.name).trim(), born, part }); continue; }
+        add(x.name, born, tableClubs.map(c => dbToEngine[c]), `the Round 669 ledger, ${part}`);
         tied.set(`${String(x.name).trim()}|${born}`, true);
       }
     }

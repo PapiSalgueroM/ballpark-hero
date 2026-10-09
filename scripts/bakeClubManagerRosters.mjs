@@ -10,8 +10,15 @@
  * written file's own header lists (Serie B, Ligue 2 and the Segunda División since Round 1040), plus the UCL
  * flavor clubs.
  * Preference order per player: year 2026 row, else year 2025 row (value
- * discounted 5%, age +1). Clubs with fewer than 8 real players are listed
+ * discounted 5%). Clubs with fewer than 8 real players are listed
  * in CM_PARTIAL so the UI can say so honestly.
+ *
+ * Round 1102: every age is the man's age on 1 August 2026, resolved by
+ * scripts/lib/cmAges.mjs once his club is final (a birth date on file, else
+ * the table's 1 January age moved on, else a hand written age as it stands),
+ * and every rating is the value curve read with that age
+ * (scripts/lib/cmValueCurve.mjs, curve 2). The file counts how each age is
+ * known in CM_ROSTER_META.ages.
  *
  * Re-run whenever the data or the overlay moves:
  *   node scripts/bakeClubManagerRosters.mjs
@@ -26,6 +33,10 @@ import { createClient } from '@supabase/supabase-js';
 import { TRANSFER_OVERLAY_2026 } from './transferOverlay2026.mjs';
 import { DB_TO_ENGINE } from './lib/dbClubNames.mjs';
 import { POS_MAP, ratingOf, gbpM } from './lib/cmValueCurve.mjs';
+/* Round 1102: the line above is an anchor scripts/simFreeAgents.mjs reads byte for byte, so
+   anything else this file needs from the curve or the ages rule is imported here. */
+import { CURVE_VERSION } from './lib/cmValueCurve.mjs';
+import { AGES_AS_OF, augustAge2026, buildBirths } from './lib/cmAges.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -186,13 +197,20 @@ for (const r of rows) {
   if (!Number.isFinite(age) || age < 14 || age > 45) continue;
   if (!Number.isFinite(usd) || usd <= 0) continue;
   const isFallback = r.year === 2025;
+  /* Round 1102: the record keeps the table's own age (rawAge), the row's year
+     and id, and the club the TABLE has him at. His August 2026 age is resolved
+     at the emit below, after the overlay and the roster ledger have moved him,
+     because a birth date is tied to a man by his name AND his club. The 2025
+     fallback keeps its 5 percent value discount and no longer adds a year of
+     its own: the ages rule moves a 2025 bulk row on by two. */
   const rec = {
     name,
     year: r.year,
+    id: Number(r.id),
     rawAge: age,
     club: engineClub,
+    tableClub: engineClub,
     p: pos,
-    a: isFallback ? age + 1 : age,
     usd: isFallback ? usd * 0.95 : usd,
   };
   if (!byPlayer.has(name)) byPlayer.set(name, []);
@@ -238,7 +256,9 @@ for (const move of TRANSFER_OVERLAY_2026) {
   } else if (move.add) {
     const pos = POS_MAP[move.add.p];
     if (!pos) { errors.push(`OVERLAY ADD: bad position for ${move.name}`); continue; }
-    byPlayer.set(move.name, { year: 2026, club: move.to, p: pos, a: move.add.a, usd: move.add.usd });
+    /* No table row, so no id: the ages rule calls this man "unknown" unless
+       the birth date ledger holds him, and the bake refuses an unknown. */
+    byPlayer.set(move.name, { year: 2026, club: move.to, p: pos, rawAge: move.add.a, usd: move.add.usd });
     overlayMoved += 1;
   } else {
     errors.push(`OVERLAY: "${move.name}" not found in dataset and no add data`);
@@ -295,10 +315,40 @@ console.log(`Adjudication applied: ${adjMoved} moved, ${adjRemoved} removed, ${a
 /* ------------------------------------------------------------------ */
 /* Group by club + validate                                           */
 /* ------------------------------------------------------------------ */
+/* Round 1102: ages for 1 August 2026, resolved here because rec.club is final.
+   The birth dates come from three committed ledgers read where they lie:
+   scripts/data/cmBirthDates2026.json (two publishers a man), the Round 669
+   ledger (scripts/data/defensiveMidfield2026.json, club in the table's
+   spelling) and scripts/data/window2026/missingPlayers.json. A date belongs to
+   a man only when the name matches AND the ledger's club is the club he is
+   baked at or the club of his table row; a name that matches at another club
+   is printed and the table's age stands. A man with no table row and no birth
+   date ("unknown") fails the bake: an age that cannot be known is never
+   shipped silently. */
+const readJson = rel => JSON.parse(fs.readFileSync(path.join(ROOT, rel), 'utf8'));
+const births = buildBirths({
+  ledgerRows: readJson('scripts/data/cmBirthDates2026.json').rows,
+  round669: readJson('scripts/data/defensiveMidfield2026.json'),
+  missing: readJson('scripts/data/window2026/missingPlayers.json'),
+  dbToEngine: DB_TO_ENGINE,
+});
+const ageBasis = { born: 0, moved: 0, written: 0, unknown: 0 };
+/* `--ages-out=path.json` writes how every man's age was resolved (name, club,
+   age, basis, table id, year and age), for whoever grows the birth date
+   ledger next. It changes nothing in the baked file. */
+const agesOutArg = process.argv.find(a => a.startsWith('--ages-out='));
+const agesOut = [];
 const byClub = new Map(engineClubs.map(c => [c, []]));
 for (const [name, rec] of byPlayer) {
-  byClub.get(rec.club).push({ n: rec.name ?? name, p: rec.p, a: rec.a, v: gbpM(rec.usd), r: ratingOf(rec.usd) });
+  const n = rec.name ?? name;
+  const aged = augustAge2026({ name: n, club: rec.club, tableClub: rec.tableClub, age: rec.rawAge, year: rec.year, id: rec.id }, births);
+  ageBasis[aged.basis] += 1;
+  agesOut.push({ n, club: rec.club, a: aged.age, basis: aged.basis, id: rec.id ?? null, year: rec.year, tableAge: rec.rawAge });
+  if (aged.note) console.log(`Age: ${aged.note}`);
+  if (aged.basis === 'unknown') errors.push(`AGE UNKNOWN: ${n} at ${rec.club} has no table row and no birth date on scripts/data/cmBirthDates2026.json (typed age ${rec.rawAge}); add his birth date with two publishers`);
+  byClub.get(rec.club).push({ n, p: rec.p, a: aged.age, v: gbpM(rec.usd), r: ratingOf(rec.usd, aged.age, rec.p) });
 }
+console.log(`Ages for ${AGES_AS_OF}: ${ageBasis.born} from a birth date, ${ageBasis.moved} moved from the table's 1 January age, ${ageBasis.written} as written by hand, ${ageBasis.unknown} unknown`);
 for (const list of byClub.values()) list.sort((a, b) => b.v - a.v || a.n.localeCompare(b.n));
 
 /* Round 393: the file carries two leagues the bake never mapped, the
@@ -323,6 +373,11 @@ if (fs.existsSync(existingPath)) {
 }
 const carriedPlayers = carried.reduce((s, c) => s + c.players, 0);
 console.log(`Carried from the previous file: ${carried.length} clubs, ${carriedPlayers} players (leagues the bake does not map)`);
+/* Round 1102: a carried block is copied byte for byte with the ages and
+   ratings it was written with, so it would put a second scale in one file.
+   Nothing is carried today (every league is mapped); if a club ever is again,
+   map its league or re rate the block before this can run. */
+if (carried.length) errors.push(`CARRIED: ${carried.length} club block(s) would be copied with their old ages and ratings (${carried.slice(0, 5).map(c => c.key).join(', ')}): the file must hold one curve`);
 
 const partial = [];
 for (const c of carried) if (c.players < 8) partial.push(c.key);
@@ -424,7 +479,13 @@ let out = `// Rounds 70+72: real rosters for every Club Manager club, generated 
 // The overlay does not cover Serie B, Ligue 2 or the Segunda División: their
 // squads are the table's men that each club's ESPN 2026-27 squad page still
 // lists (the roster ledger withholds the rest), with no summer arrivals added.
-// Values in £m, ratings 48-94 from the value curve.
+// Values in £m. Ratings 48-94: the market value curve plus points for age
+// (curve ${CURVE_VERSION}, scripts/lib/cmValueCurve.mjs): a point off for each year under 24,
+// points back from 30.
+// Ages are for 1 August 2026: ${ageBasis.born} from a birth date on file, ${ageBasis.moved} moved from the
+// table's 1 January age (plus one for a 2026 row, plus two for a 2025 row;
+// right for about seven men in ten, a year over for the rest), ${ageBasis.written} as written
+// by hand in 2026, ${ageBasis.unknown} unknown.
 // Regenerate with: node scripts/bakeClubManagerRosters.mjs
 // DO NOT EDIT BY HAND.
 import type { Position } from '@/types/game';
@@ -434,11 +495,11 @@ export interface BakedPlayer {
   n: string;
   /** Position. */
   p: Position;
-  /** Age. */
+  /** Age on 1 August 2026 (see CM_ROSTER_META.ages). */
   a: number;
   /** Market value in £m. */
   v: number;
-  /** Game rating 48-94 derived from market value. */
+  /** Game rating 48-94: the market value curve plus points for age (scripts/lib/cmValueCurve.mjs). */
   r: number;
 }
 
@@ -448,6 +509,11 @@ export const CM_ROSTER_META = {
   players: ${total + carriedPlayers},
   clubs: ${clubsSorted.length + carried.length},
   overlayMoves: ${overlayMoved},
+  /** The curve these ratings are on (CURVE_VERSION in scripts/lib/cmValueCurve.mjs). */
+  curve: ${CURVE_VERSION},
+  /** How each man's age is known: from a birth date on file, moved on from the table's 1 January
+   *  age, as written by hand in 2026, or unknown. */
+  ages: { asOf: '${AGES_AS_OF}', born: ${ageBasis.born}, moved: ${ageBasis.moved}, written: ${ageBasis.written}, unknown: ${ageBasis.unknown} },
 };
 
 /** Clubs where the dataset runs thin (under 8 real players); the game pads
@@ -472,6 +538,7 @@ if (carried.length) {
 out += `};\n`;
 
 fs.writeFileSync(path.join(ROOT, 'src/data/clubManagerRosters.ts'), out);
+if (agesOutArg) fs.writeFileSync(agesOutArg.slice('--ages-out='.length), JSON.stringify(agesOut));
 console.log(`Wrote src/data/clubManagerRosters.ts (${(out.length / 1024).toFixed(0)}KB), ${partial.length} partial clubs`);
 
 for (const club of clubsSorted) {

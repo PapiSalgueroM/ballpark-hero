@@ -178,8 +178,12 @@ describe('Club Manager ages for August 2026 (Round 1102)', () => {
         { name: 'Table Club Man', club: 'Old Table FC', fotmob: { born: '1999-05-05' } },
         { name: 'Unmodelled Man', club: 'A Club The Game Lacks', fotmob: { born: '1990-01-01' } },
       ],
-      existingChecked: [{ name: 'Leander Dendoncker', stored: { club: 'HNK Hajduk Split' }, fotmob: { born: '1995-04-15' } }],
-      corrections: [{ name: 'Leander Dendoncker', field: 'age', fotmob: { born: '1995-04-15' } }],
+      /* as the real ledger has him: stored without a club, then corrected to one */
+      existingChecked: [{ name: 'Leander Dendoncker', stored: { club: 'Without Club' }, fotmob: { born: '1995-04-15' } }],
+      corrections: [
+        { name: 'Leander Dendoncker', field: 'club', from: 'Without Club', to: 'HNK Hajduk Split' },
+        { name: 'Leander Dendoncker', field: 'age', fotmob: { born: '1995-04-15' } },
+      ],
     },
     missing: [{ name: 'Serge Gnabry', to: 'Bayern Munich', db: 'Bayern Munich', born: '1995-07-14' }],
     dbToEngine: { 'SC Corinthians': 'Corinthians', 'Old Table FC': 'Old Table', 'HNK Hajduk Split': 'Hajduk Split', 'Bayern Munich': 'Bayern Munich' },
@@ -274,5 +278,8 @@ describe('Club Manager ages for August 2026 (Round 1102)', () => {
     });
     expect(augustAge2026({ name: 'Serge Gnabry', club: 'Bayern Munich', age: 30, year: 2026, id: 177000 }, both).age).toBe(31);
     expect(births.get('Leander Dendoncker')?.length).toBe(1);
+    /* found through the club the ledger corrected him to */
+    expect(augustAge2026({ name: 'Leander Dendoncker', club: 'Hajduk Split', tableClub: 'Hajduk Split', age: 30, year: 2026, id: 176483 }, births))
+      .toEqual({ age: 31, basis: 'born', born: '1995-04-15' });
   });
 });
