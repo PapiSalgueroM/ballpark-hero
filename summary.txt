@@ -1,0 +1,24 @@
+vitest-wide exit=0 49s |    Duration  49.41s (transform 10.08s, setup 1.22s, collect 27.34s, tests 100.29s, environment 9.87s, prepare 2.44s)
+digest exit=1 54s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career t
+tsc exit=0 79s | 
+truth-seventeen exit=0 41s | simNflTruth control seventeen: green. Section 1 went red (45554 findings) and nothing else did, so this harness works.
+truth exit=0 54s | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves
+truth-nopace exit=0 39s | simNflTruth control nopace: green. Section 1b went red (18 findings) and nothing else did, so this harness works.
+truth-oldpay exit=0 53s | simNflTruth control oldpay: green. Section 2 went red (36730 findings) and nothing else did, so this harness works.
+truth-kicker exit=0 46s | simNflTruth control kicker: green. Section 2 went red (9832 findings) and nothing else did, so this harness works.
+truth-swap exit=0 50s | simNflTruth control swap: green. Section 2 went red (2 findings) and nothing else did, so this harness works.
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
+truth-tenths exit=0 48s | simNflTruth control tenths: green. Section 3 went red (1 findings) and nothing else did, so this harness works.
+truth-nocap exit=0 48s | simNflTruth control nocap: green. Section 4 went red (2 findings) and nothing else did, so this harness works.
+simHarnessAnchors exit=0 40s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNflCareer exit=0 2s | PASS: no crashes, every position produces stats, shop fully reachable, deck C drawn, every card dealt only where its words hold (its words, odds and money: simUsCareerDec
+simCareerRealism exit=0 5s | ALL CAREER REALISM CHECKS PASSED
+simCareerPreDraft exit=0 1s | simCareerPreDraft [seed set a]: ALL GREEN
+simUsBoardParity exit=0 43s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+simUsCareerProspect exit=0 11s | simUsCareerProspect: 36 actual-board outcomes passed across all four sports
+simUsCareerDeckC exit=1 48s | simUsCareerDeckC: 2 failure(s)
+vitest-board exit=0 11s |    Duration  10.71s (transform 3.68s, setup 283ms, collect 10.36s, tests 3.94s, environment 1.35s, prepare 569ms)
+vitest-round exit=0 15s |    Duration  15.35s (transform 4.22s, setup 794ms, collect 10.25s, tests 22.33s, environment 5.65s, prepare 1.20s)
+simCareerDecisionOutcome exit=0 9s | simCareerDecisionOutcome normal: intended assertions and independent ordinary/rivalry baseline passed.
+truth-onesource exit=0 33s | simNflTruth control onesource: green. Section 2s, 2t went red (1 findings) and nothing else did, so this harness works.
+truth-nosecond exit=0 33s | simNflTruth control nosecond: green. Section 2s went red (1 findings) and nothing else did, so this harness works.
