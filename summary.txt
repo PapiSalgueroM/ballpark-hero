@@ -1,0 +1,7 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playGames-390 exit=0 47s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-1280 exit=0 49s | Played 1 games. 0 findings, 0 the harness could not drive.
+playLeagueTableFit exit=0 4s | playLeagueTableFit: green. 5208 name cells fit at all four widths using the actual component.
+sweepWeight exit=1 28s | sweepWeight: 3 failures
+playLiveMatchFit exit=0 118s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+fxwalk exit=0 219s | fxwalk: 12 cases, 0 errors, 88 shots

@@ -1,0 +1,1952 @@
+{
+ "base": "http://localhost:4173",
+ "cases": [
+  {
+   "id": "p390r-live",
+   "width": 390,
+   "height": 844,
+   "reduced": true,
+   "errors": [],
+   "shots": [
+    "p390r-live-hub.jpg",
+    "p390r-live-howtoplay.jpg",
+    "p390r-live-live-kickoff.jpg",
+    "p390r-live-live-help.jpg",
+    "p390r-live-live-card-og.jpg",
+    "p390r-live-live-first-goal.jpg",
+    "p390r-live-live-card-pen.jpg",
+    "p390r-live-live-end-of-half.jpg",
+    "p390r-live-live-interval.jpg",
+    "p390r-live-live-fulltime.jpg",
+    "p390r-live-live-report-top.jpg",
+    "p390r-live-live-report-full.jpg",
+    "p390r-live-live-report-timeline.jpg",
+    "p390r-live-live-report-scorers.jpg"
+   ],
+   "facts": {
+    "beforeHash": "0254455278a0",
+    "howToPlay": {
+     "saysP": true,
+     "saysOG": true,
+     "quickLine": "Play live to make your calls. Quick Sim handles your subs."
+    },
+    "liveSeed": 482,
+    "liveOracle": {
+     "mine": [
+      "Lisandro Martínez 12' (O.G) [drawn for Federico Chiesa]"
+     ],
+     "theirs": [
+      "Bruno Fernandes 45+3' (P)"
+     ]
+    },
+    "liveHelp": "Watching the match\nThe half you are watching has already been played by the game. You are seeing it back minute by minute.\nEvery goal, shot, save, corner, throw in, foul and card is the real one, at its real minute. The passing and running in between is drawn to fit them.\nThe score changes when the ball is in the net, not before.\nA goal marked (P) was a penalty. A goal marked (O.G) is an own goal: it counts for the club it is listed under, and the man named put it into his own net.\nTap one of your players to make a sub or change shape. Everything up to that minute stays. The rest of the half is played again with your change.\nPause, pick a speed, or Skip to the whistle. Tap a goal card to move on.\n\nWorked example: It is 0-0 at 61'. You tap your striker, bring on fresh legs and go Attacking. The first 61 minutes stay exactly as they were. From 62' the half is played again with your change, and that new half is what you watch next.",
+    "live": {
+     "card-og": {
+      "text": "GOAL! Lisandro Martínez 12' (O.G)",
+      "sw": 296,
+      "cw": 296,
+      "cut": false,
+      "pieces": [
+       {
+        "t": "GOAL! ",
+        "w": 54,
+        "shown": true,
+        "clipped": false
+       },
+       {
+        "t": "Lisandro Martínez",
+        "w": 142.3,
+        "shown": true,
+        "clipped": false
+       },
+       {
+        "t": " 12'",
+        "w": 28.7,
+        "shown": true,
+        "clipped": false
+       },
+       {
+        "t": " (O.G)",
+        "w": 46.1,
+        "shown": true,
+        "clipped": false
+       }
+      ],
+      "cardW": 320,
+      "sub": "Liverpool",
+      "side": "me",
+      "minute": "12"
+     },
+     "firstGoal": {
+      "card": {
+       "text": "GOAL! Lisandro Martínez 12' (O.G)",
+       "sw": 296,
+       "cw": 296,
+       "cut": false,
+       "pieces": [
+        {
+         "t": "GOAL! ",
+         "w": 54,
+         "shown": true,
+         "clipped": false
+        },
+        {
+         "t": "Lisandro Martínez",
+         "w": 142.3,
+         "shown": true,
+         "clipped": false
+        },
+        {
+         "t": " 12'",
+         "w": 28.7,
+         "shown": true,
+         "clipped": false
+        },
+        {
+         "t": " (O.G)",
+         "w": 46.1,
+         "shown": true,
+         "clipped": false
+        }
+       ],
+       "cardW": 320
+      },
+      "pill": null,
+      "minute": "12"
+     },
+     "card-pen": {
+      "text": "GOAL! Bruno Fernandes 45+3' (P)",
+      "sw": 296,
+      "cw": 296,
+      "cut": false,
+      "pieces": [
+       {
+        "t": "GOAL! ",
+        "w": 54,
+        "shown": true,
+        "clipped": false
+       },
+       {
+        "t": "Bruno Fernandes",
+        "w": 134.6,
+        "shown": true,
+        "clipped": false
+       },
+       {
+        "t": " 45+3'",
+        "w": 50.1,
+        "shown": true,
+        "clipped": false
+       },
+       {
+        "t": " (P)",
+        "w": 27.9,
+        "shown": true,
+        "clipped": false
+       }
+      ],
+      "cardW": 320,
+      "sub": "Manchester United",
+      "side": "opp",
+      "minute": "45"
+     },
+     "logAtBreak": "",
+     "scoreAtBreak": "1 - 1",
+     "stageAtEnd": "interval"
+    },
+    "liveLogAtWhistle": "As it happens90+4'Shot: Alexander Isak90+4'Throw in, Liverpool90+3'Corner, right, Bruno Fernandes90+2'Foul by Bruno Fernandes90+1'Save! Giorgi Mamardashvili",
+    "liveReport": {
+     "timelineGoals": [
+      {
+       "clock": "12'",
+       "side": "me",
+       "text": "⚽ Goal: Lisandro Martínez",
+       "title": "⚽ Goal: Lisandro Martínez (O.G)",
+       "sw": 150,
+       "cw": 86,
+       "cut": true,
+       "colW": 119,
+       "mark": {
+        "t": " (O.G)",
+        "shown": true,
+        "w": 32.9
+       }
+      },
+      {
+       "clock": "45+3'",
+       "side": "opp",
+       "text": "⚽ Goal: Bruno Fernandes",
+       "title": "⚽ Goal: Bruno Fernandes (P)",
+       "sw": 144,
+       "cw": 99,
+       "cut": true,
+       "colW": 119,
+       "mark": {
+        "t": " (P)",
+        "shown": true,
+        "w": 20
+       }
+      },
+      {
+       "clock": "47'",
+       "side": "opp",
+       "text": "⚽ Goal: Matheus Cunha",
+       "title": "⚽ Goal: Matheus Cunha",
+       "sw": 136,
+       "cw": 119,
+       "cut": true,
+       "colW": 119,
+       "mark": null
+      },
+      {
+       "clock": "53'",
+       "side": "opp",
+       "text": "⚽ Goal: Matthijs de Ligt",
+       "title": "⚽ Goal: Matthijs de Ligt",
+       "sw": 137,
+       "cw": 119,
+       "cut": true,
+       "colW": 119,
+       "mark": null
+      },
+      {
+       "clock": "54'",
+       "side": "me",
+       "text": "⚽ Goal: Dominik Szoboszlai 🅰️ Alexander Isak",
+       "title": "⚽ Goal: Dominik Szoboszlai (assist: Alexander Isak)",
+       "sw": 249,
+       "cw": 119,
+       "cut": true,
+       "colW": 119,
+       "mark": null
+      }
+     ],
+     "timelineSubs": [
+      {
+       "clock": "64'",
+       "side": "opp",
+       "text": "🔁 Sub: Benjamin Sesko on for Bryan Mbeumo",
+       "title": "🔁 Sub: Benjamin Sesko on for Bryan Mbeumo",
+       "sw": 232,
+       "cw": 119,
+       "cut": true
+      },
+      {
+       "clock": "72'",
+       "side": "opp",
+       "text": "🔁 Sub: Diogo Dalot on for Patrick Dorgu",
+       "title": "🔁 Sub: Diogo Dalot on for Patrick Dorgu",
+       "sw": 203,
+       "cw": 119,
+       "cut": true
+      }
+     ],
+     "timelineMode": "key",
+     "scorerLines": [
+      "⚽ Lisandro Martínez 12' (O.G)",
+      "⚽ Dominik Szoboszlai 54' · 🅰️ Alexander Isak",
+      "⚽ Bruno Fernandes 45+3' (P)",
+      "⚽ Matheus Cunha 47'",
+      "⚽ Matthijs de Ligt 53'",
+      "⚽ Goal: Lisandro Martínez",
+      "⚽ Goal: Bruno Fernandes",
+      "⚽ Goal: Matheus Cunha",
+      "⚽ Goal: Matthijs de Ligt",
+      "⚽ Goal: Dominik Szoboszlai 🅰️ Alexander Isak",
+      "⚽"
+     ],
+     "subLines": [
+      "MU ▲ Benjamin Sesko ▼ Bryan Mbeumo 64'",
+      "MU ▲ Diogo Dalot ▼ Patrick Dorgu 72'",
+      "▲ LIVERPOOL"
+     ],
+     "overflowX": false
+    },
+    "liveReportFirstHalfMissing": [],
+    "liveReportFirstHalfWanted": [
+     "Lisandro Martínez 12' (O.G)",
+     "Bruno Fernandes 45+3' (P)"
+    ]
+   }
+  },
+  {
+   "id": "p390r-quick",
+   "width": 390,
+   "height": 844,
+   "reduced": true,
+   "errors": [],
+   "shots": [
+    "p390r-quick-quick-report-top.jpg",
+    "p390r-quick-quick-report-full.jpg",
+    "p390r-quick-quick-report-timeline.jpg",
+    "p390r-quick-quick-report-scorers.jpg",
+    "p390r-quick-hub-after.jpg"
+   ],
+   "facts": {
+    "beforeHash": "0254455278a0",
+    "quickSeed": 1992,
+    "quickReport": {
+     "timelineGoals": [
+      {
+       "clock": "43'",
+       "side": "opp",
+       "text": "⚽ Goal: Bryan Mbeumo",
+       "title": "⚽ Goal: Bryan Mbeumo",
+       "sw": 133,
+       "cw": 119,
+       "cut": true,
+       "colW": 119,
+       "mark": null
+      },
+      {
+       "clock": "82'",
+       "side": "opp",
+       "text": "⚽ Goal: Giovanni Leoni",
+       "title": "⚽ Goal: Giovanni Leoni (O.G)",
+       "sw": 132,
+       "cw": 86,
+       "cut": true,
+       "colW": 119,
+       "mark": {
+        "t": " (O.G)",
+        "shown": true,
+        "w": 32.9
+       }
+      },
+      {
+       "clock": "90+3'",
+       "side": "me",
+       "text": "⚽ Goal: Diogo Dalot",
+       "title": "⚽ Goal: Diogo Dalot (O.G)",
+       "sw": 114,
+       "cw": 86,
+       "cut": true,
+       "colW": 119,
+       "mark": {
+        "t": " (O.G)",
+        "shown": true,
+        "w": 32.9
+       }
+      }
+     ],
+     "timelineSubs": [
+      {
+       "clock": "61'",
+       "side": "opp",
+       "text": "🔁 Sub: Diogo Dalot on for Lisandro Martínez",
+       "title": "🔁 Sub: Diogo Dalot on for Lisandro Martínez",
+       "sw": 224,
+       "cw": 119,
+       "cut": true
+      },
+      {
+       "clock": "62'",
+       "side": "me",
+       "text": "🔁 Sub: Joe Gomez on for Ronald Araujo",
+       "title": "🔁 Sub: Joe Gomez on for Ronald Araujo",
+       "sw": 200,
+       "cw": 119,
+       "cut": true
+      },
+      {
+       "clock": "77'",
+       "side": "me",
+       "text": "🔁 Sub: Hugo Ekitiké on for Alexander Isak",
+       "title": "🔁 Sub: Hugo Ekitiké on for Alexander Isak",
+       "sw": 213,
+       "cw": 119,
+       "cut": true
+      },
+      {
+       "clock": "81'",
+       "side": "opp",
+       "text": "🔁 Sub: Ayden Heaven on for Patrick Dorgu",
+       "title": "🔁 Sub: Ayden Heaven on for Patrick Dorgu",
+       "sw": 216,
+       "cw": 119,
+       "cut": true
+      }
+     ],
+     "timelineMode": "key",
+     "scorerLines": [
+      "⚽ Diogo Dalot 90+3' (O.G)",
+      "⚽ Bryan Mbeumo 43'",
+      "⚽ Giovanni Leoni 82' (O.G)",
+      "⚽ Goal: Bryan Mbeumo",
+      "⚽ Goal: Giovanni Leoni",
+      "⚽ Goal: Diogo Dalot",
+      "⚽"
+     ],
+     "subLines": [
+      "▲ Joe Gomez ▼ Ronald Araujo 62'",
+      "▲ Hugo Ekitiké ▼ Alexander Isak 77'",
+      "MU ▲ Diogo Dalot ▼ Lisandro Martínez 61'",
+      "MU ▲ Ayden Heaven ▼ Patrick Dorgu 81'",
+      "▲ LIVERPOOL"
+     ],
+     "overflowX": false,
+     "oracleScorers": [
+      "Diogo Dalot 90+3' (O.G)",
+      "Bryan Mbeumo 43'",
+      "Giovanni Leoni 82' (O.G)"
+     ],
+     "scorersMissing": [],
+     "oracleSubs": [
+      "Joe Gomez for Ronald Araujo 62'",
+      "Hugo Ekitiké for Alexander Isak 77'"
+     ],
+     "subsMissing": [],
+     "oracleScore": "?-?"
+    }
+   }
+  },
+  {
+   "id": "p390m-live",
+   "width": 390,
+   "height": 844,
+   "reduced": false,
+   "errors": [],
+   "shots": [
+    "p390m-live-hub.jpg",
+    "p390m-live-howtoplay.jpg",
+    "p390m-live-live-kickoff.jpg",
+    "p390m-live-live-help.jpg",
+    "p390m-live-live-card-og.jpg",
+    "p390m-live-live-first-goal.jpg",
+    "p390m-live-live-card-pen.jpg",
+    "p390m-live-live-end-of-half.jpg",
+    "p390m-live-live-interval.jpg",
+    "p390m-live-live-fulltime.jpg",
+    "p390m-live-live-report-top.jpg",
+    "p390m-live-live-report-full.jpg",
+    "p390m-live-live-report-timeline.jpg",
+    "p390m-live-live-report-scorers.jpg"
+   ],
+   "facts": {
+    "beforeHash": "0254455278a0",
+    "howToPlay": {
+     "saysP": true,
+     "saysOG": true,
+     "quickLine": "Play live to make your calls. Quick Sim handles your subs."
+    },
+    "liveSeed": 2878,
+    "liveOracle": {
+     "mine": [
+      "Alexander Isak 26' (P)"
+     ],
+     "theirs": [
+      "Giovanni Leoni 5' (O.G) [drawn for Kobbie Mainoo]",
+      "Bryan Mbeumo 45+1'"
+     ]
+    },
+    "liveHelp": "Watching the match\nThe half you are watching has already been played by the game. You are seeing it back minute by minute.\nEvery goal, shot, save, corner, throw in, foul and card is the real one, at its real minute. The passing and running in between is drawn to fit them.\nThe score changes when the ball is in the net, not before.\nA goal marked (P) was a penalty. A goal marked (O.G) is an own goal: it counts for the club it is listed under, and the man named put it into his own net.\nTap one of your players to make a sub or change shape. Everything up to that minute stays. The rest of the half is played again with your change.\nPause, pick a speed, or Skip to the whistle. Tap a goal card to move on.\n\nWorked example: It is 0-0 at 61'. You tap your striker, bring on fresh legs and go Attacking. The first 61 minutes stay exactly as they were. From 62' the half is played again with your change, and that new half is what you watch next.",
+    "live": {
+     "card-og": {
+      "text": "GOAL! Giovanni Leoni 5' (O.G)",
+      "sw": 296,
+      "cw": 296,
+      "cut": false,
+      "pieces": [
+       {
+        "t": "GOAL! ",
+        "w": 54,
+        "shown": true,
+        "clipped": false
+       },
+       {
+        "t": "Giovanni Leoni",
+        "w": 116.9,
+        "shown": true,
+        "clipped": false
+       },
+       {
+        "t": " 5'",
+        "w": 18.9,
+        "shown": true,
+        "clipped": false
+       },
+       {
+        "t": " (O.G)",
+        "w": 46.1,
+        "shown": true,
+        "clipped": false
+       }
+      ],
+      "cardW": 320,
+      "sub": "Manchester United",
+      "side": "opp",
+      "minute": "5"
+     },
+     "firstGoal": {
+      "card": {
+       "text": "GOAL! Giovanni Leoni 5' (O.G)",
+       "sw": 296,
+       "cw": 296,
+       "cut": false,
+       "pieces": [
+        {
+         "t": "GOAL! ",
+         "w": 54,
+         "shown": true,
+         "clipped": false
+        },
+        {
+         "t": "Giovanni Leoni",
+         "w": 116.9,
+         "shown": true,
+         "clipped": false
+        },
+        {
+         "t": " 5'",
+         "w": 18.9,
+         "shown": true,
+         "clipped": false
+        },
+        {
+         "t": " (O.G)",
+         "w": 46.1,
+         "shown": true,
+         "clipped": false
+        }
+       ],
+       "cardW": 320
+      },
+      "pill": null,
+      "minute": "5"
+     },
+     "card-pen": {
+      "text": "GOAL! Alexander Isak 26' (P)",
+      "sw": 296,
+      "cw": 296,
+      "cut": false,
+      "pieces": [
+       {
+        "t": "GOAL! ",
+        "w": 54,
+        "shown": true,
+        "clipped": false
+       },
+       {
+        "t": "Alexander Isak",
+        "w": 117.2,
+        "shown": true,
+        "clipped": false
+       },
+       {
+        "t": " 26'",
+        "w": 28.7,
+        "shown": true,
+        "clipped": false
+       },
+       {
+        "t": " (P)",
+        "w": 27.9,
+        "shown": true,
+        "clipped": false
+       }
+      ],
+      "cardW": 320,
+      "sub": "Liverpool · 2 this season",
+      "side": "me",
+      "minute": "26"
+     },
+     "logAtBreak": "",
+     "scoreAtBreak": "1 - 2",
+     "stageAtEnd": "interval"
+    },
+    "liveLogAtWhistle": "As it happens90+7'Corner, left, Patrick Dorgu90+5'Corner, right, Dominik Szoboszlai90+4'Corner, right, Bryan Mbeumo90+3'Corner, left, Andrey Santos90+3'Corner, left, Federico Chiesa",
+    "liveReport": {
+     "timelineGoals": [
+      {
+       "clock": "5'",
+       "side": "opp",
+       "text": "⚽ Goal: Giovanni Leoni",
+       "title": "⚽ Goal: Giovanni Leoni (O.G)",
+       "sw": 132,
+       "cw": 86,
+       "cut": true,
+       "colW": 119,
+       "mark": {
+        "t": " (O.G)",
+        "shown": true,
+        "w": 32.9
+       }
+      },
+      {
+       "clock": "26'",
+       "side": "me",
+       "text": "⚽ Goal: Alexander Isak",
+       "title": "⚽ Goal: Alexander Isak (P)",
+       "sw": 132,
+       "cw": 99,
+       "cut": true,
+       "colW": 119,
+       "mark": {
+        "t": " (P)",
+        "shown": true,
+        "w": 20
+       }
+      },
+      {
+       "clock": "45+1'",
+       "side": "opp",
+       "text": "⚽ Goal: Bryan Mbeumo",
+       "title": "⚽ Goal: Bryan Mbeumo",
+       "sw": 133,
+       "cw": 119,
+       "cut": true,
+       "colW": 119,
+       "mark": null
+      },
+      {
+       "clock": "51'",
+       "side": "me",
+       "text": "⚽ Goal: Federico Chiesa",
+       "title": "⚽ Goal: Federico Chiesa",
+       "sw": 137,
+       "cw": 119,
+       "cut": true,
+       "colW": 119,
+       "mark": null
+      },
+      {
+       "clock": "83'",
+       "side": "opp",
+       "text": "⚽ Goal: Matheus Cunha",
+       "title": "⚽ Goal: Matheus Cunha",
+       "sw": 136,
+       "cw": 119,
+       "cut": true,
+       "colW": 119,
+       "mark": null
+      },
+      {
+       "clock": "86'",
+       "side": "me",
+       "text": "⚽ Goal: Matthijs de Ligt",
+       "title": "⚽ Goal: Matthijs de Ligt (O.G)",
+       "sw": 137,
+       "cw": 86,
+       "cut": true,
+       "colW": 119,
+       "mark": {
+        "t": " (O.G)",
+        "shown": true,
+        "w": 32.9
+       }
+      }
+     ],
+     "timelineSubs": [
+      {
+       "clock": "69'",
+       "side": "opp",
+       "text": "🔁 Sub: Diogo Dalot on for Leny Yoro",
+       "title": "🔁 Sub: Diogo Dalot on for Leny Yoro",
+       "sw": 183,
+       "cw": 119,
+       "cut": true
+      }
+     ],
+     "timelineMode": "key",
+     "scorerLines": [
+      "⚽ Alexander Isak 26' (P)",
+      "⚽ Federico Chiesa 51'",
+      "⚽ Matthijs de Ligt 86' (O.G)",
+      "⚽ Giovanni Leoni 5' (O.G)",
+      "⚽ Bryan Mbeumo 45+1'",
+      "⚽ Matheus Cunha 83'",
+      "⚽ Goal: Giovanni Leoni",
+      "⚽ Goal: Alexander Isak",
+      "⚽ Goal: Bryan Mbeumo",
+      "⚽ Goal: Federico Chiesa",
+      "⚽ Goal: Matheus Cunha",
+      "⚽ Goal: Matthijs de Ligt",
+      "⚽"
+     ],
+     "subLines": [
+      "MU ▲ Diogo Dalot ▼ Leny Yoro 69'",
+      "▲ LIVERPOOL"
+     ],
+     "overflowX": false
+    },
+    "liveReportFirstHalfMissing": [],
+    "liveReportFirstHalfWanted": [
+     "Alexander Isak 26' (P)",
+     "Giovanni Leoni 5' (O.G)",
+     "Bryan Mbeumo 45+1'"
+    ]
+   }
+  },
+  {
+   "id": "p390m-quick",
+   "width": 390,
+   "height": 844,
+   "reduced": false,
+   "errors": [],
+   "shots": [
+    "p390m-quick-quick-report-top.jpg",
+    "p390m-quick-quick-report-full.jpg",
+    "p390m-quick-quick-report-timeline.jpg",
+    "p390m-quick-quick-report-scorers.jpg",
+    "p390m-quick-hub-after.jpg"
+   ],
+   "facts": {
+    "beforeHash": "0254455278a0",
+    "quickSeed": 1992,
+    "quickReport": {
+     "timelineGoals": [
+      {
+       "clock": "43'",
+       "side": "opp",
+       "text": "⚽ Goal: Bryan Mbeumo",
+       "title": "⚽ Goal: Bryan Mbeumo",
+       "sw": 133,
+       "cw": 119,
+       "cut": true,
+       "colW": 119,
+       "mark": null
+      },
+      {
+       "clock": "82'",
+       "side": "opp",
+       "text": "⚽ Goal: Giovanni Leoni",
+       "title": "⚽ Goal: Giovanni Leoni (O.G)",
+       "sw": 132,
+       "cw": 86,
+       "cut": true,
+       "colW": 119,
+       "mark": {
+        "t": " (O.G)",
+        "shown": true,
+        "w": 32.9
+       }
+      },
+      {
+       "clock": "90+3'",
+       "side": "me",
+       "text": "⚽ Goal: Diogo Dalot",
+       "title": "⚽ Goal: Diogo Dalot (O.G)",
+       "sw": 114,
+       "cw": 86,
+       "cut": true,
+       "colW": 119,
+       "mark": {
+        "t": " (O.G)",
+        "shown": true,
+        "w": 32.9
+       }
+      }
+     ],
+     "timelineSubs": [
+      {
+       "clock": "61'",
+       "side": "opp",
+       "text": "🔁 Sub: Diogo Dalot on for Lisandro Martínez",
+       "title": "🔁 Sub: Diogo Dalot on for Lisandro Martínez",
+       "sw": 224,
+       "cw": 119,
+       "cut": true
+      },
+      {
+       "clock": "62'",
+       "side": "me",
+       "text": "🔁 Sub: Joe Gomez on for Ronald Araujo",
+       "title": "🔁 Sub: Joe Gomez on for Ronald Araujo",
+       "sw": 200,
+       "cw": 119,
+       "cut": true
+      },
+      {
+       "clock": "77'",
+       "side": "me",
+       "text": "🔁 Sub: Hugo Ekitiké on for Alexander Isak",
+       "title": "🔁 Sub: Hugo Ekitiké on for Alexander Isak",
+       "sw": 213,
+       "cw": 119,
+       "cut": true
+      },
+      {
+       "clock": "81'",
+       "side": "opp",
+       "text": "🔁 Sub: Ayden Heaven on for Patrick Dorgu",
+       "title": "🔁 Sub: Ayden Heaven on for Patrick Dorgu",
+       "sw": 216,
+       "cw": 119,
+       "cut": true
+      }
+     ],
+     "timelineMode": "key",
+     "scorerLines": [
+      "⚽ Diogo Dalot 90+3' (O.G)",
+      "⚽ Bryan Mbeumo 43'",
+      "⚽ Giovanni Leoni 82' (O.G)",
+      "⚽ Goal: Bryan Mbeumo",
+      "⚽ Goal: Giovanni Leoni",
+      "⚽ Goal: Diogo Dalot",
+      "⚽"
+     ],
+     "subLines": [
+      "▲ Joe Gomez ▼ Ronald Araujo 62'",
+      "▲ Hugo Ekitiké ▼ Alexander Isak 77'",
+      "MU ▲ Diogo Dalot ▼ Lisandro Martínez 61'",
+      "MU ▲ Ayden Heaven ▼ Patrick Dorgu 81'",
+      "▲ LIVERPOOL"
+     ],
+     "overflowX": false,
+     "oracleScorers": [
+      "Diogo Dalot 90+3' (O.G)",
+      "Bryan Mbeumo 43'",
+      "Giovanni Leoni 82' (O.G)"
+     ],
+     "scorersMissing": [],
+     "oracleSubs": [
+      "Joe Gomez for Ronald Araujo 62'",
+      "Hugo Ekitiké for Alexander Isak 77'"
+     ],
+     "subsMissing": [],
+     "oracleScore": "?-?"
+    }
+   }
+  },
+  {
+   "id": "d1280m-live",
+   "width": 1280,
+   "height": 900,
+   "reduced": false,
+   "errors": [],
+   "shots": [
+    "d1280m-live-hub.jpg",
+    "d1280m-live-howtoplay.jpg",
+    "d1280m-live-live-kickoff.jpg",
+    "d1280m-live-live-help.jpg",
+    "d1280m-live-live-card-og.jpg",
+    "d1280m-live-live-first-goal.jpg",
+    "d1280m-live-live-card-pen.jpg",
+    "d1280m-live-live-end-of-half.jpg",
+    "d1280m-live-live-interval.jpg",
+    "d1280m-live-live-fulltime.jpg",
+    "d1280m-live-live-report-top.jpg",
+    "d1280m-live-live-report-full.jpg",
+    "d1280m-live-live-report-timeline.jpg",
+    "d1280m-live-live-report-scorers.jpg"
+   ],
+   "facts": {
+    "beforeHash": "0254455278a0",
+    "howToPlay": {
+     "saysP": true,
+     "saysOG": true,
+     "quickLine": "Play live to make your calls. Quick Sim handles your subs."
+    },
+    "liveSeed": 482,
+    "liveOracle": {
+     "mine": [
+      "Lisandro Martínez 12' (O.G) [drawn for Federico Chiesa]"
+     ],
+     "theirs": [
+      "Bruno Fernandes 45+3' (P)"
+     ]
+    },
+    "liveHelp": "Watching the match\nThe half you are watching has already been played by the game. You are seeing it back minute by minute.\nEvery goal, shot, save, corner, throw in, foul and card is the real one, at its real minute. The passing and running in between is drawn to fit them.\nThe score changes when the ball is in the net, not before.\nA goal marked (P) was a penalty. A goal marked (O.G) is an own goal: it counts for the club it is listed under, and the man named put it into his own net.\nTap one of your players to make a sub or change shape. Everything up to that minute stays. The rest of the half is played again with your change.\nPause, pick a speed, or Skip to the whistle. Tap a goal card to move on.\n\nWorked example: It is 0-0 at 61'. You tap your striker, bring on fresh legs and go Attacking. The first 61 minutes stay exactly as they were. From 62' the half is played again with your change, and that new half is what you watch next.",
+    "live": {
+     "card-og": {
+      "text": "GOAL! Lisandro Martínez 12' (O.G)",
+      "sw": 296,
+      "cw": 296,
+      "cut": false,
+      "pieces": [
+       {
+        "t": "GOAL! ",
+        "w": 54,
+        "shown": true,
+        "clipped": false
+       },
+       {
+        "t": "Lisandro Martínez",
+        "w": 142.3,
+        "shown": true,
+        "clipped": false
+       },
+       {
+        "t": " 12'",
+        "w": 28.7,
+        "shown": true,
+        "clipped": false
+       },
+       {
+        "t": " (O.G)",
+        "w": 46.1,
+        "shown": true,
+        "clipped": false
+       }
+      ],
+      "cardW": 320,
+      "sub": "Liverpool",
+      "side": "me",
+      "minute": "12"
+     },
+     "firstGoal": {
+      "card": {
+       "text": "GOAL! Lisandro Martínez 12' (O.G)",
+       "sw": 296,
+       "cw": 296,
+       "cut": false,
+       "pieces": [
+        {
+         "t": "GOAL! ",
+         "w": 54,
+         "shown": true,
+         "clipped": false
+        },
+        {
+         "t": "Lisandro Martínez",
+         "w": 142.3,
+         "shown": true,
+         "clipped": false
+        },
+        {
+         "t": " 12'",
+         "w": 28.7,
+         "shown": true,
+         "clipped": false
+        },
+        {
+         "t": " (O.G)",
+         "w": 46.1,
+         "shown": true,
+         "clipped": false
+        }
+       ],
+       "cardW": 320
+      },
+      "pill": null,
+      "minute": "12"
+     },
+     "card-pen": {
+      "text": "GOAL! Bruno Fernandes 45+3' (P)",
+      "sw": 296,
+      "cw": 296,
+      "cut": false,
+      "pieces": [
+       {
+        "t": "GOAL! ",
+        "w": 54,
+        "shown": true,
+        "clipped": false
+       },
+       {
+        "t": "Bruno Fernandes",
+        "w": 134.6,
+        "shown": true,
+        "clipped": false
+       },
+       {
+        "t": " 45+3'",
+        "w": 50.1,
+        "shown": true,
+        "clipped": false
+       },
+       {
+        "t": " (P)",
+        "w": 27.9,
+        "shown": true,
+        "clipped": false
+       }
+      ],
+      "cardW": 320,
+      "sub": "Manchester United",
+      "side": "opp",
+      "minute": "45"
+     },
+     "logAtBreak": "",
+     "scoreAtBreak": "1 - 1",
+     "stageAtEnd": "interval"
+    },
+    "liveLogAtWhistle": "AS IT HAPPENS\n90+4'\nShot: Alexander Isak\n90+4'\nThrow in, Liverpool\n90+3'\nCorner, right, Bruno Fernandes\n90+2'\nFoul by Bruno Fernandes\n90+1'\nSave! Giorgi Mamardashvili",
+    "liveReport": {
+     "timelineGoals": [
+      {
+       "clock": "12'",
+       "side": "me",
+       "text": "⚽ Goal: Lisandro Martínez",
+       "title": "⚽ Goal: Lisandro Martínez (O.G)",
+       "sw": 150,
+       "cw": 131,
+       "cut": true,
+       "colW": 164,
+       "mark": {
+        "t": " (O.G)",
+        "shown": true,
+        "w": 32.9
+       }
+      },
+      {
+       "clock": "45+3'",
+       "side": "opp",
+       "text": "⚽ Goal: Bruno Fernandes",
+       "title": "⚽ Goal: Bruno Fernandes (P)",
+       "sw": 144,
+       "cw": 144,
+       "cut": false,
+       "colW": 164,
+       "mark": {
+        "t": " (P)",
+        "shown": true,
+        "w": 20
+       }
+      },
+      {
+       "clock": "47'",
+       "side": "opp",
+       "text": "⚽ Goal: Matheus Cunha",
+       "title": "⚽ Goal: Matheus Cunha",
+       "sw": 136,
+       "cw": 136,
+       "cut": false,
+       "colW": 164,
+       "mark": null
+      },
+      {
+       "clock": "53'",
+       "side": "opp",
+       "text": "⚽ Goal: Matthijs de Ligt",
+       "title": "⚽ Goal: Matthijs de Ligt",
+       "sw": 137,
+       "cw": 137,
+       "cut": false,
+       "colW": 164,
+       "mark": null
+      },
+      {
+       "clock": "54'",
+       "side": "me",
+       "text": "⚽ Goal: Dominik Szoboszlai 🅰️ Alexander Isak",
+       "title": "⚽ Goal: Dominik Szoboszlai (assist: Alexander Isak)",
+       "sw": 249,
+       "cw": 164,
+       "cut": true,
+       "colW": 164,
+       "mark": null
+      }
+     ],
+     "timelineSubs": [
+      {
+       "clock": "64'",
+       "side": "opp",
+       "text": "🔁 Sub: Benjamin Sesko on for Bryan Mbeumo",
+       "title": "🔁 Sub: Benjamin Sesko on for Bryan Mbeumo",
+       "sw": 232,
+       "cw": 164,
+       "cut": true
+      },
+      {
+       "clock": "72'",
+       "side": "opp",
+       "text": "🔁 Sub: Diogo Dalot on for Patrick Dorgu",
+       "title": "🔁 Sub: Diogo Dalot on for Patrick Dorgu",
+       "sw": 203,
+       "cw": 164,
+       "cut": true
+      }
+     ],
+     "timelineMode": "key",
+     "scorerLines": [
+      "⚽ Lisandro Martínez 12' (O.G)",
+      "⚽ Dominik Szoboszlai 54' · 🅰️ Alexander Isak",
+      "⚽ Bruno Fernandes 45+3' (P)",
+      "⚽ Matheus Cunha 47'",
+      "⚽ Matthijs de Ligt 53'",
+      "⚽ Goal: Lisandro Martínez",
+      "⚽ Goal: Bruno Fernandes",
+      "⚽ Goal: Matheus Cunha",
+      "⚽ Goal: Matthijs de Ligt",
+      "⚽ Goal: Dominik Szoboszlai 🅰️ Alexander Isak",
+      "⚽"
+     ],
+     "subLines": [
+      "MU ▲ Benjamin Sesko ▼ Bryan Mbeumo 64'",
+      "MU ▲ Diogo Dalot ▼ Patrick Dorgu 72'",
+      "▲ LIVERPOOL"
+     ],
+     "overflowX": false
+    },
+    "liveReportFirstHalfMissing": [],
+    "liveReportFirstHalfWanted": [
+     "Lisandro Martínez 12' (O.G)",
+     "Bruno Fernandes 45+3' (P)"
+    ]
+   }
+  },
+  {
+   "id": "d1280m-quick",
+   "width": 1280,
+   "height": 900,
+   "reduced": false,
+   "errors": [],
+   "shots": [
+    "d1280m-quick-quick-report-top.jpg",
+    "d1280m-quick-quick-report-full.jpg",
+    "d1280m-quick-quick-report-timeline.jpg",
+    "d1280m-quick-quick-report-scorers.jpg",
+    "d1280m-quick-hub-after.jpg"
+   ],
+   "facts": {
+    "beforeHash": "0254455278a0",
+    "quickSeed": 1992,
+    "quickReport": {
+     "timelineGoals": [
+      {
+       "clock": "43'",
+       "side": "opp",
+       "text": "⚽ Goal: Bryan Mbeumo",
+       "title": "⚽ Goal: Bryan Mbeumo",
+       "sw": 133,
+       "cw": 133,
+       "cut": false,
+       "colW": 164,
+       "mark": null
+      },
+      {
+       "clock": "82'",
+       "side": "opp",
+       "text": "⚽ Goal: Giovanni Leoni",
+       "title": "⚽ Goal: Giovanni Leoni (O.G)",
+       "sw": 132,
+       "cw": 131,
+       "cut": false,
+       "colW": 164,
+       "mark": {
+        "t": " (O.G)",
+        "shown": true,
+        "w": 32.9
+       }
+      },
+      {
+       "clock": "90+3'",
+       "side": "me",
+       "text": "⚽ Goal: Diogo Dalot",
+       "title": "⚽ Goal: Diogo Dalot (O.G)",
+       "sw": 114,
+       "cw": 114,
+       "cut": false,
+       "colW": 164,
+       "mark": {
+        "t": " (O.G)",
+        "shown": true,
+        "w": 32.9
+       }
+      }
+     ],
+     "timelineSubs": [
+      {
+       "clock": "61'",
+       "side": "opp",
+       "text": "🔁 Sub: Diogo Dalot on for Lisandro Martínez",
+       "title": "🔁 Sub: Diogo Dalot on for Lisandro Martínez",
+       "sw": 224,
+       "cw": 164,
+       "cut": true
+      },
+      {
+       "clock": "62'",
+       "side": "me",
+       "text": "🔁 Sub: Joe Gomez on for Ronald Araujo",
+       "title": "🔁 Sub: Joe Gomez on for Ronald Araujo",
+       "sw": 200,
+       "cw": 164,
+       "cut": true
+      },
+      {
+       "clock": "77'",
+       "side": "me",
+       "text": "🔁 Sub: Hugo Ekitiké on for Alexander Isak",
+       "title": "🔁 Sub: Hugo Ekitiké on for Alexander Isak",
+       "sw": 213,
+       "cw": 164,
+       "cut": true
+      },
+      {
+       "clock": "81'",
+       "side": "opp",
+       "text": "🔁 Sub: Ayden Heaven on for Patrick Dorgu",
+       "title": "🔁 Sub: Ayden Heaven on for Patrick Dorgu",
+       "sw": 216,
+       "cw": 164,
+       "cut": true
+      }
+     ],
+     "timelineMode": "key",
+     "scorerLines": [
+      "⚽ Diogo Dalot 90+3' (O.G)",
+      "⚽ Bryan Mbeumo 43'",
+      "⚽ Giovanni Leoni 82' (O.G)",
+      "⚽ Goal: Bryan Mbeumo",
+      "⚽ Goal: Giovanni Leoni",
+      "⚽ Goal: Diogo Dalot",
+      "⚽"
+     ],
+     "subLines": [
+      "▲ Joe Gomez ▼ Ronald Araujo 62'",
+      "▲ Hugo Ekitiké ▼ Alexander Isak 77'",
+      "MU ▲ Diogo Dalot ▼ Lisandro Martínez 61'",
+      "MU ▲ Ayden Heaven ▼ Patrick Dorgu 81'",
+      "▲ LIVERPOOL"
+     ],
+     "overflowX": false,
+     "oracleScorers": [
+      "Diogo Dalot 90+3' (O.G)",
+      "Bryan Mbeumo 43'",
+      "Giovanni Leoni 82' (O.G)"
+     ],
+     "scorersMissing": [],
+     "oracleSubs": [
+      "Joe Gomez for Ronald Araujo 62'",
+      "Hugo Ekitiké for Alexander Isak 77'"
+     ],
+     "subsMissing": [],
+     "oracleScore": "?-?"
+    }
+   }
+  },
+  {
+   "id": "d1280r-live",
+   "width": 1280,
+   "height": 900,
+   "reduced": true,
+   "errors": [],
+   "shots": [
+    "d1280r-live-hub.jpg",
+    "d1280r-live-howtoplay.jpg",
+    "d1280r-live-live-kickoff.jpg",
+    "d1280r-live-live-help.jpg",
+    "d1280r-live-live-card-og.jpg",
+    "d1280r-live-live-first-goal.jpg",
+    "d1280r-live-live-card-pen.jpg",
+    "d1280r-live-live-end-of-half.jpg",
+    "d1280r-live-live-interval.jpg",
+    "d1280r-live-live-fulltime.jpg",
+    "d1280r-live-live-report-top.jpg",
+    "d1280r-live-live-report-full.jpg",
+    "d1280r-live-live-report-timeline.jpg",
+    "d1280r-live-live-report-scorers.jpg"
+   ],
+   "facts": {
+    "beforeHash": "0254455278a0",
+    "howToPlay": {
+     "saysP": true,
+     "saysOG": true,
+     "quickLine": "Play live to make your calls. Quick Sim handles your subs."
+    },
+    "liveSeed": 2878,
+    "liveOracle": {
+     "mine": [
+      "Alexander Isak 26' (P)"
+     ],
+     "theirs": [
+      "Giovanni Leoni 5' (O.G) [drawn for Kobbie Mainoo]",
+      "Bryan Mbeumo 45+1'"
+     ]
+    },
+    "liveHelp": "Watching the match\nThe half you are watching has already been played by the game. You are seeing it back minute by minute.\nEvery goal, shot, save, corner, throw in, foul and card is the real one, at its real minute. The passing and running in between is drawn to fit them.\nThe score changes when the ball is in the net, not before.\nA goal marked (P) was a penalty. A goal marked (O.G) is an own goal: it counts for the club it is listed under, and the man named put it into his own net.\nTap one of your players to make a sub or change shape. Everything up to that minute stays. The rest of the half is played again with your change.\nPause, pick a speed, or Skip to the whistle. Tap a goal card to move on.\n\nWorked example: It is 0-0 at 61'. You tap your striker, bring on fresh legs and go Attacking. The first 61 minutes stay exactly as they were. From 62' the half is played again with your change, and that new half is what you watch next.",
+    "live": {
+     "card-og": {
+      "text": "GOAL! Giovanni Leoni 5' (O.G)",
+      "sw": 296,
+      "cw": 296,
+      "cut": false,
+      "pieces": [
+       {
+        "t": "GOAL! ",
+        "w": 54,
+        "shown": true,
+        "clipped": false
+       },
+       {
+        "t": "Giovanni Leoni",
+        "w": 116.9,
+        "shown": true,
+        "clipped": false
+       },
+       {
+        "t": " 5'",
+        "w": 18.9,
+        "shown": true,
+        "clipped": false
+       },
+       {
+        "t": " (O.G)",
+        "w": 46.1,
+        "shown": true,
+        "clipped": false
+       }
+      ],
+      "cardW": 320,
+      "sub": "Manchester United",
+      "side": "opp",
+      "minute": "5"
+     },
+     "firstGoal": {
+      "card": {
+       "text": "GOAL! Giovanni Leoni 5' (O.G)",
+       "sw": 296,
+       "cw": 296,
+       "cut": false,
+       "pieces": [
+        {
+         "t": "GOAL! ",
+         "w": 54,
+         "shown": true,
+         "clipped": false
+        },
+        {
+         "t": "Giovanni Leoni",
+         "w": 116.9,
+         "shown": true,
+         "clipped": false
+        },
+        {
+         "t": " 5'",
+         "w": 18.9,
+         "shown": true,
+         "clipped": false
+        },
+        {
+         "t": " (O.G)",
+         "w": 46.1,
+         "shown": true,
+         "clipped": false
+        }
+       ],
+       "cardW": 320
+      },
+      "pill": null,
+      "minute": "5"
+     },
+     "card-pen": {
+      "text": "GOAL! Alexander Isak 26' (P)",
+      "sw": 296,
+      "cw": 296,
+      "cut": false,
+      "pieces": [
+       {
+        "t": "GOAL! ",
+        "w": 54,
+        "shown": true,
+        "clipped": false
+       },
+       {
+        "t": "Alexander Isak",
+        "w": 117.2,
+        "shown": true,
+        "clipped": false
+       },
+       {
+        "t": " 26'",
+        "w": 28.7,
+        "shown": true,
+        "clipped": false
+       },
+       {
+        "t": " (P)",
+        "w": 27.9,
+        "shown": true,
+        "clipped": false
+       }
+      ],
+      "cardW": 320,
+      "sub": "Liverpool · 2 this season",
+      "side": "me",
+      "minute": "26"
+     },
+     "logAtBreak": "",
+     "scoreAtBreak": "1 - 2",
+     "stageAtEnd": "interval"
+    },
+    "liveLogAtWhistle": "AS IT HAPPENS\n90+7'\nCorner, left, Patrick Dorgu\n90+5'\nCorner, right, Dominik Szoboszlai\n90+4'\nCorner, right, Bryan Mbeumo\n90+3'\nCorner, left, Andrey Santos\n90+3'\nCorner, left, Federico Chiesa",
+    "liveReport": {
+     "timelineGoals": [
+      {
+       "clock": "5'",
+       "side": "opp",
+       "text": "⚽ Goal: Giovanni Leoni",
+       "title": "⚽ Goal: Giovanni Leoni (O.G)",
+       "sw": 132,
+       "cw": 131,
+       "cut": false,
+       "colW": 164,
+       "mark": {
+        "t": " (O.G)",
+        "shown": true,
+        "w": 32.9
+       }
+      },
+      {
+       "clock": "26'",
+       "side": "me",
+       "text": "⚽ Goal: Alexander Isak",
+       "title": "⚽ Goal: Alexander Isak (P)",
+       "sw": 132,
+       "cw": 132,
+       "cut": false,
+       "colW": 164,
+       "mark": {
+        "t": " (P)",
+        "shown": true,
+        "w": 20
+       }
+      },
+      {
+       "clock": "45+1'",
+       "side": "opp",
+       "text": "⚽ Goal: Bryan Mbeumo",
+       "title": "⚽ Goal: Bryan Mbeumo",
+       "sw": 133,
+       "cw": 133,
+       "cut": false,
+       "colW": 164,
+       "mark": null
+      },
+      {
+       "clock": "51'",
+       "side": "me",
+       "text": "⚽ Goal: Federico Chiesa",
+       "title": "⚽ Goal: Federico Chiesa",
+       "sw": 137,
+       "cw": 137,
+       "cut": false,
+       "colW": 164,
+       "mark": null
+      },
+      {
+       "clock": "83'",
+       "side": "opp",
+       "text": "⚽ Goal: Matheus Cunha",
+       "title": "⚽ Goal: Matheus Cunha",
+       "sw": 136,
+       "cw": 136,
+       "cut": false,
+       "colW": 164,
+       "mark": null
+      },
+      {
+       "clock": "86'",
+       "side": "me",
+       "text": "⚽ Goal: Matthijs de Ligt",
+       "title": "⚽ Goal: Matthijs de Ligt (O.G)",
+       "sw": 137,
+       "cw": 131,
+       "cut": true,
+       "colW": 164,
+       "mark": {
+        "t": " (O.G)",
+        "shown": true,
+        "w": 32.9
+       }
+      }
+     ],
+     "timelineSubs": [
+      {
+       "clock": "69'",
+       "side": "opp",
+       "text": "🔁 Sub: Diogo Dalot on for Leny Yoro",
+       "title": "🔁 Sub: Diogo Dalot on for Leny Yoro",
+       "sw": 183,
+       "cw": 164,
+       "cut": true
+      }
+     ],
+     "timelineMode": "key",
+     "scorerLines": [
+      "⚽ Alexander Isak 26' (P)",
+      "⚽ Federico Chiesa 51'",
+      "⚽ Matthijs de Ligt 86' (O.G)",
+      "⚽ Giovanni Leoni 5' (O.G)",
+      "⚽ Bryan Mbeumo 45+1'",
+      "⚽ Matheus Cunha 83'",
+      "⚽ Goal: Giovanni Leoni",
+      "⚽ Goal: Alexander Isak",
+      "⚽ Goal: Bryan Mbeumo",
+      "⚽ Goal: Federico Chiesa",
+      "⚽ Goal: Matheus Cunha",
+      "⚽ Goal: Matthijs de Ligt",
+      "⚽"
+     ],
+     "subLines": [
+      "MU ▲ Diogo Dalot ▼ Leny Yoro 69'",
+      "▲ LIVERPOOL"
+     ],
+     "overflowX": false
+    },
+    "liveReportFirstHalfMissing": [],
+    "liveReportFirstHalfWanted": [
+     "Alexander Isak 26' (P)",
+     "Giovanni Leoni 5' (O.G)",
+     "Bryan Mbeumo 45+1'"
+    ]
+   }
+  },
+  {
+   "id": "d1280r-quick",
+   "width": 1280,
+   "height": 900,
+   "reduced": true,
+   "errors": [],
+   "shots": [
+    "d1280r-quick-quick-report-top.jpg",
+    "d1280r-quick-quick-report-full.jpg",
+    "d1280r-quick-quick-report-timeline.jpg",
+    "d1280r-quick-quick-report-scorers.jpg",
+    "d1280r-quick-hub-after.jpg"
+   ],
+   "facts": {
+    "beforeHash": "0254455278a0",
+    "quickSeed": 1992,
+    "quickReport": {
+     "timelineGoals": [
+      {
+       "clock": "43'",
+       "side": "opp",
+       "text": "⚽ Goal: Bryan Mbeumo",
+       "title": "⚽ Goal: Bryan Mbeumo",
+       "sw": 133,
+       "cw": 133,
+       "cut": false,
+       "colW": 164,
+       "mark": null
+      },
+      {
+       "clock": "82'",
+       "side": "opp",
+       "text": "⚽ Goal: Giovanni Leoni",
+       "title": "⚽ Goal: Giovanni Leoni (O.G)",
+       "sw": 132,
+       "cw": 131,
+       "cut": false,
+       "colW": 164,
+       "mark": {
+        "t": " (O.G)",
+        "shown": true,
+        "w": 32.9
+       }
+      },
+      {
+       "clock": "90+3'",
+       "side": "me",
+       "text": "⚽ Goal: Diogo Dalot",
+       "title": "⚽ Goal: Diogo Dalot (O.G)",
+       "sw": 114,
+       "cw": 114,
+       "cut": false,
+       "colW": 164,
+       "mark": {
+        "t": " (O.G)",
+        "shown": true,
+        "w": 32.9
+       }
+      }
+     ],
+     "timelineSubs": [
+      {
+       "clock": "61'",
+       "side": "opp",
+       "text": "🔁 Sub: Diogo Dalot on for Lisandro Martínez",
+       "title": "🔁 Sub: Diogo Dalot on for Lisandro Martínez",
+       "sw": 224,
+       "cw": 164,
+       "cut": true
+      },
+      {
+       "clock": "62'",
+       "side": "me",
+       "text": "🔁 Sub: Joe Gomez on for Ronald Araujo",
+       "title": "🔁 Sub: Joe Gomez on for Ronald Araujo",
+       "sw": 200,
+       "cw": 164,
+       "cut": true
+      },
+      {
+       "clock": "77'",
+       "side": "me",
+       "text": "🔁 Sub: Hugo Ekitiké on for Alexander Isak",
+       "title": "🔁 Sub: Hugo Ekitiké on for Alexander Isak",
+       "sw": 213,
+       "cw": 164,
+       "cut": true
+      },
+      {
+       "clock": "81'",
+       "side": "opp",
+       "text": "🔁 Sub: Ayden Heaven on for Patrick Dorgu",
+       "title": "🔁 Sub: Ayden Heaven on for Patrick Dorgu",
+       "sw": 216,
+       "cw": 164,
+       "cut": true
+      }
+     ],
+     "timelineMode": "key",
+     "scorerLines": [
+      "⚽ Diogo Dalot 90+3' (O.G)",
+      "⚽ Bryan Mbeumo 43'",
+      "⚽ Giovanni Leoni 82' (O.G)",
+      "⚽ Goal: Bryan Mbeumo",
+      "⚽ Goal: Giovanni Leoni",
+      "⚽ Goal: Diogo Dalot",
+      "⚽"
+     ],
+     "subLines": [
+      "▲ Joe Gomez ▼ Ronald Araujo 62'",
+      "▲ Hugo Ekitiké ▼ Alexander Isak 77'",
+      "MU ▲ Diogo Dalot ▼ Lisandro Martínez 61'",
+      "MU ▲ Ayden Heaven ▼ Patrick Dorgu 81'",
+      "▲ LIVERPOOL"
+     ],
+     "overflowX": false,
+     "oracleScorers": [
+      "Diogo Dalot 90+3' (O.G)",
+      "Bryan Mbeumo 43'",
+      "Giovanni Leoni 82' (O.G)"
+     ],
+     "scorersMissing": [],
+     "oracleSubs": [
+      "Joe Gomez for Ronald Araujo 62'",
+      "Hugo Ekitiké for Alexander Isak 77'"
+     ],
+     "subsMissing": [],
+     "oracleScore": "?-?"
+    }
+   }
+  },
+  {
+   "id": "oldPaused",
+   "width": 390,
+   "height": 844,
+   "reduced": false,
+   "errors": [],
+   "shots": [
+    "oldPaused-hub.jpg",
+    "oldPaused-old-report-top.jpg",
+    "oldPaused-old-report-full.jpg",
+    "oldPaused-old-report-timeline.jpg",
+    "oldPaused-old-report-scorers.jpg"
+   ],
+   "facts": {
+    "liveButton": "Resume match",
+    "oracleKind": "match",
+    "oldSeed": 31337,
+    "oldReport": {
+     "timelineGoals": [
+      {
+       "clock": "4'",
+       "side": "me",
+       "text": "⚽ Goal: Federico Chiesa 🅰️ Ryan Gravenberch",
+       "title": "⚽ Goal: Federico Chiesa (assist: Ryan Gravenberch)",
+       "sw": 248,
+       "cw": 119,
+       "cut": true,
+       "colW": 119,
+       "mark": null
+      },
+      {
+       "clock": "7'",
+       "side": "me",
+       "text": "⚽ Goal: Florian Wirtz 🅰️ Alexander Isak",
+       "title": "⚽ Goal: Florian Wirtz (assist: Alexander Isak)",
+       "sw": 213,
+       "cw": 119,
+       "cut": true,
+       "colW": 119,
+       "mark": null
+      },
+      {
+       "clock": "33'",
+       "side": "me",
+       "text": "⚽ Goal: Alexander Isak 🅰️ Ronald Araujo",
+       "title": "⚽ Goal: Alexander Isak (assist: Ronald Araujo)",
+       "sw": 220,
+       "cw": 119,
+       "cut": true,
+       "colW": 119,
+       "mark": null
+      },
+      {
+       "clock": "51'",
+       "side": "me",
+       "text": "⚽ Goal: Dominik Szoboszlai 🅰️ Alexander Isak",
+       "title": "⚽ Goal: Dominik Szoboszlai (assist: Alexander Isak)",
+       "sw": 249,
+       "cw": 119,
+       "cut": true,
+       "colW": 119,
+       "mark": null
+      },
+      {
+       "clock": "66'",
+       "side": "me",
+       "text": "⚽ Goal: Alexander Isak",
+       "title": "⚽ Goal: Alexander Isak (P)",
+       "sw": 132,
+       "cw": 99,
+       "cut": true,
+       "colW": 119,
+       "mark": {
+        "t": " (P)",
+        "shown": true,
+        "w": 20
+       }
+      },
+      {
+       "clock": "88'",
+       "side": "opp",
+       "text": "⚽ Goal: Sidiki Chérif",
+       "title": "⚽ Goal: Sidiki Chérif",
+       "sw": 117,
+       "cw": 117,
+       "cut": false,
+       "colW": 119,
+       "mark": null
+      }
+     ],
+     "timelineSubs": [
+      {
+       "clock": "36'",
+       "side": "me",
+       "text": "🔁 Sub: Wataru Endo on for Florian Wirtz",
+       "title": "🔁 Sub: Wataru Endo on for Florian Wirtz",
+       "sw": 204,
+       "cw": 119,
+       "cut": true
+      },
+      {
+       "clock": "46'",
+       "side": "me",
+       "text": "🔁 Sub: Joe Gomez on for Milos Kerkez",
+       "title": "🔁 Sub: Joe Gomez on for Milos Kerkez",
+       "sw": 192,
+       "cw": 119,
+       "cut": true
+      },
+      {
+       "clock": "54'",
+       "side": "me",
+       "text": "🔁 Sub: Cody Gakpo on for Bradley Barcola",
+       "title": "🔁 Sub: Cody Gakpo on for Bradley Barcola",
+       "sw": 216,
+       "cw": 119,
+       "cut": true
+      },
+      {
+       "clock": "76'",
+       "side": "opp",
+       "text": "🔁 Sub: Loum Tchaouna on for Yann Gboho",
+       "title": "🔁 Sub: Loum Tchaouna on for Yann Gboho",
+       "sw": 214,
+       "cw": 119,
+       "cut": true
+      },
+      {
+       "clock": "85'",
+       "side": "opp",
+       "text": "🔁 Sub: Brandon Thomas-Asante on for Bobby Thomas",
+       "title": "🔁 Sub: Brandon Thomas-Asante on for Bobby Thomas",
+       "sw": 274,
+       "cw": 119,
+       "cut": true
+      }
+     ],
+     "timelineMode": "key",
+     "scorerLines": [
+      "⚽ Federico Chiesa 4' · 🅰️ Ryan Gravenberch",
+      "⚽ Florian Wirtz 7' · 🅰️ Alexander Isak",
+      "⚽ Alexander Isak 33' · 🅰️ Ronald Araujo",
+      "⚽ Dominik Szoboszlai 51' · 🅰️ Alexander Isak",
+      "⚽ Alexander Isak 66' (P)",
+      "⚽ Sidiki Chérif 88'",
+      "⚽ Goal: Federico Chiesa 🅰️ Ryan Gravenberch",
+      "⚽ Goal: Florian Wirtz 🅰️ Alexander Isak",
+      "⚽ Goal: Alexander Isak 🅰️ Ronald Araujo",
+      "⚽ Goal: Dominik Szoboszlai 🅰️ Alexander Isak",
+      "⚽ Goal: Alexander Isak",
+      "⚽ Goal: Sidiki Chérif",
+      "⚽"
+     ],
+     "subLines": [
+      "▲ Wataru Endo ▼ Florian Wirtz 36'",
+      "▲ Joe Gomez ▼ Milos Kerkez 46'",
+      "▲ Cody Gakpo ▼ Bradley Barcola 54'",
+      "CC ▲ Loum Tchaouna ▼ Yann Gboho 76'",
+      "CC ▲ Brandon Thomas-Asante ▼ Bobby Thomas 85'",
+      "▲ LIVERPOOL"
+     ],
+     "overflowX": false,
+     "oracleScorers": [
+      "Federico Chiesa 4'",
+      "Florian Wirtz 7'",
+      "Alexander Isak 33'",
+      "Dominik Szoboszlai 51'",
+      "Alexander Isak 66' (P)",
+      "Sidiki Chérif 88'"
+     ],
+     "scorersMissing": [],
+     "oracleSubs": [
+      "Wataru Endo for Florian Wirtz 36'",
+      "Joe Gomez for Milos Kerkez 46'",
+      "Cody Gakpo for Bradley Barcola 54'"
+     ],
+     "subsMissing": [],
+     "oracleScore": "?-?"
+    },
+    "firstHalfLinesLost": [
+     "Milos Kerkez 44'",
+     "Yann Gboho 45'"
+    ],
+    "firstHalfLinesMarkedOwn": []
+   }
+  },
+  {
+   "id": "oldPre",
+   "width": 1280,
+   "height": 900,
+   "reduced": false,
+   "errors": [],
+   "shots": [
+    "oldPre-hub.jpg",
+    "oldPre-old-report-top.jpg",
+    "oldPre-old-report-full.jpg",
+    "oldPre-old-report-timeline.jpg",
+    "oldPre-old-report-scorers.jpg"
+   ],
+   "facts": {
+    "liveButton": "Play Live",
+    "oracleKind": "match",
+    "oldSeed": 31337,
+    "oldReport": {
+     "timelineGoals": [
+      {
+       "clock": "62'",
+       "side": "me",
+       "text": "⚽ Goal: Milan van Ewijk",
+       "title": "⚽ Goal: Milan van Ewijk (O.G)",
+       "sw": 136,
+       "cw": 131,
+       "cut": true,
+       "colW": 164,
+       "mark": {
+        "t": " (O.G)",
+        "shown": true,
+        "w": 32.9
+       }
+      }
+     ],
+     "timelineSubs": [
+      {
+       "clock": "44'",
+       "side": "me",
+       "text": "🔁 Sub: Wataru Endo on for Dominik Szoboszlai",
+       "title": "🔁 Sub: Wataru Endo on for Dominik Szoboszlai",
+       "sw": 237,
+       "cw": 164,
+       "cut": true
+      },
+      {
+       "clock": "46'",
+       "side": "me",
+       "text": "🔁 Sub: Joe Gomez on for Milos Kerkez",
+       "title": "🔁 Sub: Joe Gomez on for Milos Kerkez",
+       "sw": 192,
+       "cw": 164,
+       "cut": true
+      },
+      {
+       "clock": "72'",
+       "side": "opp",
+       "text": "🔁 Sub: Loum Tchaouna on for Aurèle Amenda",
+       "title": "🔁 Sub: Loum Tchaouna on for Aurèle Amenda",
+       "sw": 231,
+       "cw": 164,
+       "cut": true
+      },
+      {
+       "clock": "87'",
+       "side": "opp",
+       "text": "🔁 Sub: Brandon Thomas-Asante on for Ethan Pinnock",
+       "title": "🔁 Sub: Brandon Thomas-Asante on for Ethan Pinnock",
+       "sw": 270,
+       "cw": 164,
+       "cut": true
+      }
+     ],
+     "timelineMode": "key",
+     "scorerLines": [
+      "⚽ Milan van Ewijk 62' (O.G)",
+      "⚽ Goal: Milan van Ewijk",
+      "⚽"
+     ],
+     "subLines": [
+      "▲ Wataru Endo ▼ Dominik Szoboszlai 44'",
+      "▲ Joe Gomez ▼ Milos Kerkez 46'",
+      "CC ▲ Loum Tchaouna ▼ Aurèle Amenda 72'",
+      "CC ▲ Brandon Thomas-Asante ▼ Ethan Pinnock 87'",
+      "▲ LIVERPOOL"
+     ],
+     "overflowX": false,
+     "oracleScorers": [
+      "Milan van Ewijk 62' (O.G)"
+     ],
+     "scorersMissing": [],
+     "oracleSubs": [
+      "Wataru Endo for Dominik Szoboszlai 44'",
+      "Joe Gomez for Milos Kerkez 46'"
+     ],
+     "subsMissing": [],
+     "oracleScore": "?-?"
+    }
+   }
+  },
+  {
+   "id": "p390r-whatsnew",
+   "width": 390,
+   "height": 844,
+   "reduced": true,
+   "errors": [],
+   "shots": [
+    "p390r-whatsnew-whatsnew.jpg"
+   ],
+   "facts": {
+    "entry": "Club Manager: (P) and (O.G) beside a goal, and Quick Sim uses the bench. You asked for all three. In Club Manager a penalty now reads (P) after the scorer everywhere a goal is listed: the full time report, the match timeline and the live match. And now and then a goal is an own goal, marked (O.G) under the club that got it, with the defender or keeper who put it into his own net. It is always one of the goals the match already had, so no score, result or table moves. The player who would have had it loses it from his season, nobody else gains it, and an own goal has no assist. A penalty is never an own goal, and a shootout kick is not a goal, so it gets no mark. And when you Quick Sim, the coach now makes changes after the break too, not only for injuries: around the hour and again in the run in he takes off a booked man or the most tired legs for a fresher player who plays there, as long as the side is no weaker for it, or whatever it costs once you are two goals clear. He keeps one change back for an injury, and the full time report lists every sub he made. Coming on counts for what it is, too: in a player's last ten a start is a game and a sub gets the share of the match he played, so ten minutes at the end does not keep a star man you dropped quiet, and the squad screens now show starts and matches off the bench."
+   }
+  },
+  {
+   "id": "d1280m-whatsnew",
+   "width": 1280,
+   "height": 900,
+   "reduced": false,
+   "errors": [],
+   "shots": [
+    "d1280m-whatsnew-whatsnew.jpg"
+   ],
+   "facts": {
+    "entry": "Club Manager: (P) and (O.G) beside a goal, and Quick Sim uses the bench. You asked for all three. In Club Manager a penalty now reads (P) after the scorer everywhere a goal is listed: the full time report, the match timeline and the live match. And now and then a goal is an own goal, marked (O.G) under the club that got it, with the defender or keeper who put it into his own net. It is always one of the goals the match already had, so no score, result or table moves. The player who would have had it loses it from his season, nobody else gains it, and an own goal has no assist. A penalty is never an own goal, and a shootout kick is not a goal, so it gets no mark. And when you Quick Sim, the coach now makes changes after the break too, not only for injuries: around the hour and again in the run in he takes off a booked man or the most tired legs for a fresher player who plays there, as long as the side is no weaker for it, or whatever it costs once you are two goals clear. He keeps one change back for an injury, and the full time report lists every sub he made. Coming on counts for what it is, too: in a player's last ten a start is a game and a sub gets the share of the match he played, so ten minutes at the end does not keep a star man you dropped quiet, and the squad screens now show starts and matches off the bench."
+   }
+  }
+ ],
+ "notes": [
+  "engines bundled: branch has tag number base has tag undefined",
+  "saves built: fresh 82K, oldPre 95K, oldPaused 102K",
+  "seed search live-for: seed 482, score 209.3, 42 candidates in 10s",
+  "seed search quick: seed 1992, score 330.0, 151 candidates in 30s",
+  "seed search live-against: seed 2878, score 200.0, 26 candidates in 10s"
+ ],
+ "errors": [],
+ "oldPausedFirstHalf": {
+  "mine": [
+   "Federico Chiesa 4'",
+   "Florian Wirtz 7'",
+   "Alexander Isak 33'",
+   "Milos Kerkez 44'"
+  ],
+  "theirs": [
+   "Yann Gboho 45'"
+  ]
+ },
+ "oldPausedOpensInNode": true,
+ "oldPreOpensInNode": true
+}
