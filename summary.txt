@@ -1,0 +1,3 @@
+vitest-settle exit=0 18s |    Duration  18.06s (transform 1.66s, setup 68ms, collect 2.07s, tests 14.61s, environment 508ms, prepare 391ms)
+simCareerDerbies exit=1 49s | simCareerDerbies: 1 failures, sections 4 red
+simSoccerCareerLeagueWorld exit=0 77s | simSoccerCareerLeagueWorld: seventeen outcome tests and two engine career tests green, all twelve effective negative controls caught
