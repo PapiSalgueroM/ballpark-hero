@@ -1,0 +1,50 @@
+1) The same season scores the same in a 10 club league and a 24 club one
+   champion, 75 percent of the points, cup won, 5 objectives
+     10:118 12:118 14:118 15:118 16:118 18:118 20:118 24:118   spread 0
+   mid table, 45 percent, out of the cup early, 2 objectives
+     10:38 12:39 14:39 15:39 16:39 18:39 20:38 24:39   spread 1
+   bottom, 20 percent, nothing, no objectives
+     10:10 12:9 14:10 15:10 16:10 18:9 20:10 24:10   spread 1
+2) The score never falls, even when you sell, loan out or pay somebody off
+   12 careers, 510 readings, 44 men listed, 26 sold through acceptBid, 20 loaned out, 31 paid off, 0 readings lower than the one before
+3) Management held identical, the club varied: how much does stature still explain?
+   68 seasons, correlation between the club's preview XI rating and its season score: 0.308
+4) The score follows what the board actually asked for
+   correlation between the share of board objectives hit and the season score: 0.826 with the board term in, 0.712 with it taken out; the old rule on the same seasons 0.496, so 0.216 better without the board term
+   by the board verdict grade: A n=28 mean 103.2   B n=16 mean 62.2   C n=16 mean 53.0   D n=7 mean 44.3
+5) Walking into a job part way through pays for your share and not his
+   identical final table: from week 0 scores 130, walking in with 11 games left scores 50
+   he left it at cup semi final, Europe round one, ticks cup+goals+youth; you won both and the card reads league+cup+ucl+rival+goals: cup 13 (want 13), Europe 17 (want 17), board 18 (want 18)
+   a league already won when you walked in: 40 (module level property, not reachable in shipped play)
+   an old takeover save, same honours: from week 0 116, taking over for the run-in 71
+6) A takeover save does not subtract a phantom manager for the rest of the career
+   season 1, 40 points from 14 games: takeover save 6, ordinary save 17
+   season 4, same table:            takeover save 17, ordinary save 17
+7) The ceiling is reachable without a Champions League run
+   a perfect Championship season with no Europe scores 130; the scale's cap is 130; the helper says 130
+8) 0 to 130 at both ends, and a malformed save cannot escape it
+   nothing at all            0
+   not in the table          0
+   everything won          130
+   NaN points                0
+   negative everything       0
+   absurd ranks            130
+   garbage handover         37
+   garbage stamped ids      35
+   garbage fixture log      39
+9) SAVE_VERSION did not move and the new field is optional
+   SAVE_VERSION 3
+   52 points from 20 games: handover absent 38, handover null 38
+   useClubManager still has 3 match pings and 3 season end completions
+10) The How To Play numbers are the numbers the code uses
+   checked 16 numbers against the copy, 0 missing
+11) A takeover through startMidSeason stamps exactly what the table says he banked
+   54 takeovers at 18 clubs, every stamp read against the table, the cup, Europe and the card
+12) A takeover save from before the round replays his league record from the fixture log
+   54 takeovers replayed at the handover, 52 at the whistle (2 sacked before it)
+   at the takeover, no team picked yet: the constant read a form term above 0 in 39 of 54 saves (median 7, p90 35, max 48 of 48) and a whole score of median 11, p90 40, max 53; the replay reads form 0 in all of them and a whole score of median 3, p90 7, max 10
+   at the whistle, league terms (form and title) against the record: replay median 0, p90 0, max 0; constant median 7, p90 14, max 29
+   at the whistle, whole score against the record: replay median 4, p90 13, max 22; constant median 6, p90 11, max 29 (the cup, Europe and board terms are paid at share on a legacy save by design, not subtracted, so the whole score keeps that gap)
+   the 60 entry cap: 54 of 54 logs missing his first league match fell back to the constant; 54 of 54 missing a cup or European entry still replayed exactly
+
+ALL SEASON SCORE CHECKS PASSED

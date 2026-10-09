@@ -1,0 +1,25 @@
+1) Every projection and every closed ledger adds up, week after week
+   381 weekly projections and 8 closed ledgers, every total the sum of its lines; on the 8 seasons that reached the last day the final projection equals the ledger (0 sacked early)
+2) The kitty moves by tickets, food and sponsor money and nothing else; wages stay in the ledger
+   Real Madrid: kitty 195.0m to 316.2m (+121.20m), kitty lines 121.20m; wages 74.8m, staff 9.5m, travel 3.30m stayed in the ledger over 54 weeks, 23 home, 23 away
+   Manchester City: kitty 160.0m to 237.3m (+77.31m), kitty lines 77.31m; wages 21.4m, staff 3.2m, travel 1.32m stayed in the ledger over 18 weeks, 10 home, 8 away
+   Brentford: kitty 69.0m to 125.2m (+56.24m), kitty lines 56.24m; wages 36.1m, staff 8.1m, travel 1.71m stayed in the ledger over 54 weeks, 20 home, 19 away
+   Napoli: kitty 58.0m to 95.6m (+37.61m), kitty lines 37.61m; wages 31.8m, staff 7.1m, travel 1.65m stayed in the ledger over 54 weeks, 23 home, 23 away
+3) The projection at week N against the closed ledger, over clubs and seeds
+   week 5: income error median -5.3% (abs median 6.1%, p90 12.0%), spend error median -0.1% (abs median 0.2%, p90 1.2%) over 32 runs
+   week 15: income error median -7.5% (abs median 8.1%, p90 11.9%), spend error median 0.0% (abs median 0.1%, p90 0.6%) over 26 runs
+   week 30: income error median -1.0% (abs median 2.2%, p90 5.2%), spend error median 0.0% (abs median 0.0%, p90 0.4%) over 32 runs
+   32 seasons reached the last day, 4 ended in a sacking and are left out
+   the projected gate at week 5 against week 2: abs median 0.3%, p90 0.5% over 32 runs
+4) Prices move the fans and the board by the numbers the desk prints
+   fresh save 50 mood, crowd x1; fair tickets +3 fans -1 board, premium -4 fans +1 board, cheap food +2, premium food -3; twelve weeks warm 61.8 (target 63), cold 37 (target 36); crowd x0.9 to x1.1; five wins +10 on the target
+5) Four offers, a six percent push, a brand that walks, and a signing that pays the pushed figure
+   Brentford: safe 21.1m (global), bad 28.5m; one push 22.4m, walked on push 4 (ceiling 3); a bad shirt is -6 fans, +1 board, -8 on the target
+6) A save from before the desk, and a mangled block, both open fresh books and play
+   9 wreckages repaired to fresh books; an old save filled 44 weeks, 17 home gates for 17 home fixtures, 16 away trips for 16, 29.2m wages; garbage loads; stay closes and carries, move drops; summer sponsor money lands in the new ledger
+7) The kitty is never written from a wage or a travel figure, and the screen says so
+   0 kitty writes from a running cost across the desk and the engine; the screen and the guide both say so; no dashes in the four new files
+9) the projected gate is the level of the crowd the engine actually draws
+   27 seasons, 3 skipped: expectation against the crowd actually drawn, median -0.2%, abs median 1.8%, p90 3.4%
+
+simClubManagerFinances: PASS. The books add up, the projection lands, prices move the fans and the board, and the sponsor desk pays what it says.
