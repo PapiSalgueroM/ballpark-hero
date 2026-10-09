@@ -1,0 +1,5 @@
+simTycoonSeasonReview exit=1 1s | Node.js v24.21.0
+simBrowserHarnessDiscovery exit=0 5s | Retained actual child receipts: .sim-control/browser-discovery-BVgPpE/report.json
+simTycoonTicketPolicy exit=0 9s | Ticket policy: 21/21 normal outcomes; 0/0 effective copied faults, each with independent purchase baseline. Raw reports, logs, copied sources and hashes retained at /home
+tsc exit=0 73s | 
+simNumberFormatting exit=0 128s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
