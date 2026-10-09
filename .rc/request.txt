@@ -1,0 +1,26 @@
+#!serve
+#!playwright
+playSoccerCareer: PORT=4188 node scripts/playSoccerCareer.mjs
+playSeasonCentre: PORT=4541 node scripts/playSeasonCentre.mjs
+playSeasonMoments: PORT=4547 node scripts/playSeasonMoments.mjs
+playSeasonCentreMotion: PORT=4559 node scripts/playSeasonCentreMotion.mjs
+playCareerSquad: PORT=4577 REQUIRE_PAGE=1 node scripts/playCareerSquad.mjs
+playCareerLeagueWorld: PORT=4561 node scripts/playCareerLeagueWorld.mjs
+playCareerMoments: PORT=4601 node scripts/playCareerMoments.mjs
+playLiveMatchFit: PORT=4191 node scripts/playLiveMatchFit.mjs
+playTranslatedPage: node scripts/playTranslatedPage.mjs
+playStorageBlocked: BASE=http://localhost:4173 PLAY_STORAGE_NATIVE=require node scripts/playStorageBlocked.mjs
+playGames-soccer-career-390: SWEEP_BASE=http://localhost:4173 ONLY=/soccer-career WIDTH=390 ENGINES=chromium node scripts/playGames.mjs
+sweepWeight: BASE=http://localhost:4173 SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs
+drv-Opponents: PORT=4573 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerOpponents.mjs
+drv-Opponents-unnamed: PORT=4574 PLAY_CAREER_OPPONENTS_CONTROL=unnamed NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerOpponents.mjs
+drv-Family: PORT=4578 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerFamily.mjs
+drv-AwardReveal: PORT=4579 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerAwardReveal.mjs
+drv-Competitions: PORT=4575 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerCompetitions.mjs
+drv-Discipline: PORT=4581 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerDiscipline.mjs
+drv-Contracts: PORT=4584 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerContracts.mjs
+drv-LeagueWorld: PORT=4585 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerLeagueWorld.mjs
+drv-LeagueWorld-missing: PORT=4586 PLAY_SOCCER_LEAGUE_WORLD_CONTROL=missing-snapshot NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerLeagueWorld.mjs
+playFlagshipLazy: PORT=4197 node scripts/playFlagshipLazy.mjs
+playCareerHub: BASE=http://localhost:4173 node scripts/playCareerHub.mjs
+wide: node .rc/x/probeWide.mjs
