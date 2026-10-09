@@ -39,6 +39,9 @@ import type { Formation, FormationSlot } from '@/lib/squadShape';
    position man here is graded by the same family table World XI uses.
    positionFit imports nothing but types, so there is no cycle. */
 import { ALL_POSITIONS, eligiblePositions, FIT_PENALTY, gradeFit, type FitGrade } from '@/lib/positionFit';
+/* Round 1146: the own goal rule the Soccer Career Season Centre reads too.
+   It imports only the keyed generator, so there is no cycle. */
+import { ownGoalRole, ownGoalTagged } from '@/lib/ownGoalRule';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
 // from the Transfermarkt style market value data in Supabase. The bake file
@@ -1059,6 +1062,19 @@ export interface ScorerLine {
    *  (45+3' is minute 45, plus 3). Absent on every line in regular time and
    *  on every line written before this round. */
   plus?: number;
+  /** Round 1146: an own goal. `name` is then the man who put it into his own
+   *  net, a defender or the keeper of the side that CONCEDED it: on my list
+   *  he is one of theirs, on their list he is one of mine. Nobody is credited
+   *  with the goal and it has no assist. Absent on every other goal and on
+   *  every line written before this round. */
+  og?: boolean;
+  /** Round 1146, own goals only: the man the engine first drew the goal for.
+   *  Never shown. Their ratings sheet is built off it, so every draw after
+   *  the goal reads the match it read before own goals existed. */
+  drawn?: string;
+  /** Round 1146, own goals on MY list only: the man who put it in is one the
+   *  game made up (a projected world), tagged the way their sheet tags him. */
+  gen?: boolean;
 }
 
 /* Round 781: the clock with the board in it (minuteLabel, clockOrder,
@@ -1138,6 +1154,11 @@ export interface MyGoalLine {
   freeKick?: boolean;
   /** Round 781: into the board of `minute`, see ScorerLine. */
   plus?: number;
+  /** Round 1146: this goal was an own goal, and this is the man of THEIRS
+   *  who put it in (`g` when the game made him up). `id` and `name` stay the
+   *  man of mine the engine drew the goal for: he keeps the lift and loses
+   *  the goal, and every draw that reads the line reads what it always did. */
+  og?: { n: string; g?: boolean };
 }
 
 /** Round 504: one opposition player on the day, from the era roster. */
@@ -1176,6 +1197,10 @@ export interface TimelineEvent {
   /** Round 714: a goal or a save from the spot, a goal from a direct free kick. */
   penalty?: boolean;
   freeKick?: boolean;
+  /** Round 1146, goals only: an own goal. `text` is the man who put it in,
+   *  who plays for the side that conceded it (`side` is the side that got
+   *  the goal, as on every goal row). */
+  og?: boolean;
   /** Round 781: into the board of `minute` (45+2'). A clock row (half time,
    *  the whistle, extra time) carries the board itself, so it sorts after
    *  everything that happened in it. */
@@ -13346,10 +13371,17 @@ function creditMyScorers(
      report's timeline can print the assist the season stats were paid for. */
   const assistNames: (string | null)[] = [];
   for (const line of lines) {
-    goalCounts.set(line.id, (goalCounts.get(line.id) ?? 0) + 1);
+    /* Round 1146: an own goal is nobody's goal. The man the engine drew it
+       for loses it from his match count and his season, and it has no
+       assist. Two things stay exactly as they were so that not one later
+       result moves: the lift (he was in the box when it went in, and morale
+       feeds the strength every later match is drawn from), and every draw
+       below, taken as before and then not paid out. */
+    const own = !!line.og;
+    if (!own) goalCounts.set(line.id, (goalCounts.get(line.id) ?? 0) + 1);
     const sq = state.squad.find(p => p.id === line.id);
     if (sq) {
-      sq.seasonGoals += 1;
+      if (!own) sq.seasonGoals += 1;
       sq.morale = clamp(sq.morale + 3, 5, 99);
     }
     let assistedBy: string | null = null;
@@ -13359,7 +13391,7 @@ function creditMyScorers(
       const there = onPitchAt ? onPitchAt(line.minute) : xi;
       const others = (there.length ? there : xi).filter(p => p.id !== line.id && p.position !== 'GK');
       const assister = weightedPick(others, p => (scorerWeight(p) * 0.6 + 0.5) * dutyAssistMult(dutyAt?.(line.minute, p)));
-      if (assister) {
+      if (assister && !own) {
         assistCounts.set(assister.id, (assistCounts.get(assister.id) ?? 0) + 1);
         const aq = state.squad.find(p => p.id === assister.id);
         if (aq) aq.seasonAssists += 1;
@@ -14568,6 +14600,82 @@ function foldBoard(to: number, ...lists: { minute: number; plus?: number }[][]):
   return maxPlus;
 }
 
+/* ---------- Round 1146: own goals ---------- */
+/**
+ * A player's report, 2026-10-09: "make it so a player can score an own goal.
+ * it'll show (O.G) next to the goal."
+ *
+ * An own goal here is a goal the match ALREADY HAD, re-labelled. The score,
+ * the result, the table and every draw of the seeded stream are what they
+ * were: the tag and the man are two rolls keyed on the goal itself (the
+ * shared rule, src/lib/ownGoalRule.ts, the one the Soccer Career Season
+ * Centre reads), and nothing here calls Math.random. What changes is who is
+ * credited. The man the engine drew the goal for loses it, nobody gains it,
+ * and the scorer list prints the man who put it in with (O.G) after his name,
+ * under the club that got the goal.
+ *
+ * Club Manager's own binding, and all of it:
+ *  - the odds, one eligible goal in CM_OWN_GOAL_ONE_IN (32, against the
+ *    Season Centre's provisional 64). Penalties (8 in 100 goals) and direct
+ *    free kicks (4 in 100) are never own goals, so that is about 2.7 own
+ *    goals in 100 goals, where the real game runs near 3. Measured by
+ *    scripts/simCmOwnGoals.mjs; the numbers are in its header;
+ *  - the man. Both sides have real squads, so he is a NAMED defender or the
+ *    keeper of the side that conceded, out of the men on the pitch at that
+ *    minute, a defender twice as likely as the keeper. A goal of mine
+ *    against a side with no named eleven has nobody to name and stays the
+ *    goal it was;
+ *  - the key: the club, the season, the week, the opponent, the half, the
+ *    goal's place on the clock, the side and the man it was drawn for. A
+ *    match is never played twice in one save, and no two goals of a match
+ *    share a place on the clock.
+ *
+ * It runs once, as the last thing a stretch does (drawSegment), on the goals
+ * that stretch just placed. A goal recorded before this round is never
+ * visited, so a match in flight and every saved report keep the goals they
+ * had. A change in the dugout redraws the stretches after it and those goals
+ * are new goals, tagged when they are drawn; nothing before the change moves.
+ */
+export const CM_OWN_GOAL_ONE_IN = 32;
+
+/** The man who put it in: every defender holds two places and the keeper one. Null when there is nobody to name. */
+function ownGoalMan<T>(key: string, defenders: T[], keeper: T | null): T | null {
+  const places = [...defenders, ...defenders, ...(keeper ? [keeper] : [])];
+  return places.length ? places[ownGoalRole(key, places.length)] : null;
+}
+
+function tagOwnGoals(state: CareerState, live: LiveMatch, fx: MyFixture, half: 1 | 2, mine: MyGoalLine[], theirs: ScorerLine[]): void {
+  const match = `cm|${state.clubName}|${state.season}|${live.week}|${fx.opponent}|${half}`;
+  const keyOf = (g: { minute: number; plus?: number; name: string }, side: 'me' | 'opp'): string =>
+    `${match}|${g.minute + (g.plus ?? 0)}|${side}|${g.name}`;
+  /* Never a goal from the spot or a direct free kick, and never a goal already tagged. */
+  const eligible = (g: { og?: unknown; penalty?: boolean; freeKick?: boolean }): boolean => !g.og && !g.penalty && !g.freeKick;
+  for (const g of mine) {
+    if (!eligible(g)) continue;
+    const key = keyOf(g, 'me');
+    if (!ownGoalTagged(key, CM_OWN_GOAL_ONE_IN)) continue;
+    /* Theirs on the pitch at that minute, minus anyone they have lost to a red. */
+    const there = oppAt(live, g.minute) ?? [];
+    const who = ownGoalMan(key, there.filter(p => groupOf(p.p) === 'DEF'), there.find(p => p.p === 'GK') ?? null);
+    if (who) g.og = { n: who.n, ...(who.g ? { g: true } : {}) };
+  }
+  for (const g of theirs) {
+    if (!eligible(g)) continue;
+    const key = keyOf(g, 'opp');
+    if (!ownGoalTagged(key, CM_OWN_GOAL_ONE_IN)) continue;
+    /* Mine on the pitch when it went in: nobody taken off, sent off or down
+       injured before it. In a board that is "before this point of the board". */
+    const gone = g.plus ? liveGoneIds(live, g.minute, g.plus - 1) : liveGoneIds(live, g.minute - 1);
+    const there = squadByIds(state, myOnPitchAt(live, g.minute)).filter(p => !gone.has(p.id));
+    const who = ownGoalMan(key, there.filter(p => groupOf(p.position) === 'DEF'), there.find(p => p.position === 'GK') ?? null);
+    if (who) {
+      g.drawn = g.name;
+      g.name = who.name;
+      g.og = true;
+    }
+  }
+}
+
 /**
  * One stretch of a half, (from, to], drawn in the order the football
  * needs: my goals, cards and injury; their goals off the eleven they start
@@ -14687,6 +14795,9 @@ function drawSegment(
       live.h2Play = [...(live.h2Play ?? [])].sort((a, b) => clockOrder(a, b) || PLAY_ORDER[a.kind] - PLAY_ORDER[b.kind]);
     }
   }
+  /* Round 1146: own goals, last, on the goals this stretch placed. A keyed
+     re-label and no draw, so everything above read the stream it always read. */
+  tagOwnGoals(state, live, fx, half, me.goals, oppGoals);
 }
 
 /**
@@ -15003,6 +15114,9 @@ export interface LiveFeedEvent {
   flank?: 'left' | 'right';
   penalty?: boolean;
   freeKick?: boolean;
+  /** Round 1146, goals only: an own goal. `text` is the man who put it in,
+   *  who plays for the OTHER side; `side` is the side that got the goal. */
+  og?: boolean;
   /** Round 781: into the board of `minute` (90+3' is minute 90, plus 3). */
   plus?: number;
 }
@@ -15021,8 +15135,9 @@ export function liveFeed(live: LiveMatch): LiveFeedEvent[] {
   const flags = (g: { penalty?: boolean; freeKick?: boolean }): Partial<LiveFeedEvent> => ({
     ...(g.penalty ? { penalty: true } : {}), ...(g.freeKick ? { freeKick: true } : {}),
   });
-  for (const g of [...(live.h1My ?? []), ...(live.h2My ?? [])]) out.push({ minute: g.minute, side: 'me', kind: 'goal', text: g.name, ...flags(g), ...plusOf(g) });
-  for (const g of [...(live.h1Opp ?? []), ...(live.h2Opp ?? [])]) out.push({ minute: g.minute, side: 'opp', kind: 'goal', text: g.name, ...flags(g), ...plusOf(g) });
+  /* Round 1146: an own goal's line names the man who put it in (one of the other side's), and says so. */
+  for (const g of [...(live.h1My ?? []), ...(live.h2My ?? [])]) out.push({ minute: g.minute, side: 'me', kind: 'goal', text: g.og ? g.og.n : g.name, ...flags(g), ...(g.og ? { og: true } : {}), ...plusOf(g) });
+  for (const g of [...(live.h1Opp ?? []), ...(live.h2Opp ?? [])]) out.push({ minute: g.minute, side: 'opp', kind: 'goal', text: g.name, ...flags(g), ...(g.og ? { og: true } : {}), ...plusOf(g) });
   for (const e of [...(live.h1Play ?? []), ...(live.h2Play ?? [])]) {
     if (e.goal) continue;
     out.push({
@@ -15395,7 +15510,9 @@ function buildMatchDetail(args: {
   timeline.push({ minute: 0, side: 'none', kind: 'kickoff', text: 'Kick off' });
   /* Round 714: a goal row says when it came from the spot or a free kick, off its own scorer line. */
   const setPiece = (sc: ScorerLine): Partial<TimelineEvent> => ({
-    ...(sc.penalty ? { penalty: true } : {}), ...(sc.freeKick ? { freeKick: true } : {}), ...plusOf(sc),
+    ...(sc.penalty ? { penalty: true } : {}), ...(sc.freeKick ? { freeKick: true } : {}),
+    /* Round 1146: an own goal row says so, off its own scorer line. */
+    ...(sc.og ? { og: true } : {}), ...plusOf(sc),
   });
   for (const sc of args.myScorers) {
     timeline.push({ minute: sc.minute, side: 'me', kind: 'goal', text: sc.assist ? `${sc.name} (assist: ${sc.assist})` : sc.name, ...setPiece(sc) });
@@ -15498,7 +15615,12 @@ function buildMatchDetail(args: {
      roster cannot field one gets no invented sheet. */
   let oppRatings: PlayerRatingLine[] | undefined;
   {
-    const scorerNames = new Set(args.oppScorers.map(s => s.name));
+    /* Round 1146: an own goal against me is listed under them but was put in
+       by one of mine, so the sheet is built off the man the goal was first
+       drawn for (he is one of theirs and was on their pitch), exactly the
+       names it was built off before, and he is not given the goal below.
+       The sheet's draws are therefore the draws it always made. */
+    const scorerNames = new Set(args.oppScorers.map(s => (s.og ? s.drawn ?? s.name : s.name)));
     let xi: { n: string; p: Position; g?: boolean }[] = [];
     const taken = new Set<string>();
     if (args.oppXi) {
@@ -15535,7 +15657,7 @@ function buildMatchDetail(args: {
     const allScorersIn = [...scorerNames].every(n => taken.has(n));
     if (xi.length >= 11 && allScorersIn && xi.some(p => p.p === 'GK')) {
       const theirGoalsBy = new Map<string, number>();
-      for (const sc of args.oppScorers) theirGoalsBy.set(sc.name, (theirGoalsBy.get(sc.name) ?? 0) + 1);
+      for (const sc of args.oppScorers) if (!sc.og) theirGoalsBy.set(sc.name, (theirGoalsBy.get(sc.name) ?? 0) + 1);
       const theyWon = oppGoals > myGoals && args.decidedBy === 'regular' ? true : args.decidedBy === 'pens' ? !(args.shootoutWon ?? args.won) : oppGoals > myGoals;
       const theyDrew = myGoals === oppGoals && args.decidedBy !== 'pens';
       const base = theyWon ? 7.0 : theyDrew ? 6.4 : 5.7;
@@ -15556,9 +15678,11 @@ function buildMatchDetail(args: {
   /* Their best on the day: the top of the ratings sheet when one exists,
      else whoever hurt you most (the pre-178 fallback for thin worlds). */
   let oppBest: string | null = oppRatings?.[0]?.name ?? null;
-  if (!oppBest && args.oppScorers.length) {
+  /* Round 1146: a man of mine who put one in his own net is not their best. */
+  const theirOwn = args.oppScorers.filter(sc => !sc.og);
+  if (!oppBest && theirOwn.length) {
     const tally = new Map<string, number>();
-    for (const sc of args.oppScorers) tally.set(sc.name, (tally.get(sc.name) ?? 0) + 1);
+    for (const sc of theirOwn) tally.set(sc.name, (tally.get(sc.name) ?? 0) + 1);
     oppBest = [...tally.entries()].sort((a, b) => b[1] - a[1])[0][0];
   }
 
@@ -15822,13 +15946,17 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
       return i >= 0 ? liveDutyAt(state, live, i) : null;
     },
   );
-  const myScorers: ScorerLine[] = myLines.map((l, i) => ({
-    name: l.name, minute: l.minute, assist: assistNames[i] ?? undefined,
-    ...(l.penalty ? { penalty: true } : {}), ...(l.freeKick ? { freeKick: true } : {}), ...plusOf(l),
-  }));
+  /* Round 1146: an own goal goes on my list under the man of theirs who put
+     it in, marked, with no assist; the man it was drawn for is not named. */
+  const myScorers: ScorerLine[] = myLines.map((l, i) => (l.og
+    ? { name: l.og.n, minute: l.minute, og: true, ...(l.og.g ? { gen: true } : {}), ...plusOf(l) }
+    : {
+        name: l.name, minute: l.minute, assist: assistNames[i] ?? undefined,
+        ...(l.penalty ? { penalty: true } : {}), ...(l.freeKick ? { freeKick: true } : {}), ...plusOf(l),
+      }));
   const oppScorers: ScorerLine[] = [...(live.h1Opp ?? []), ...(live.h2Opp ?? [])];
   const tally = new Map<string, number>();
-  for (const sc of myScorers) tally.set(sc.name, (tally.get(sc.name) ?? 0) + 1);
+  for (const sc of myScorers) if (!sc.og) tally.set(sc.name, (tally.get(sc.name) ?? 0) + 1);
   tally.forEach((count, name) => {
     if (count >= 3) events.push(`⚽ ${name} bagged a hat-trick!`);
   });

@@ -14,6 +14,11 @@
  * mark ("Saka 45+2' (P)"). A shootout kick is not a goal: it has no scorer
  * line, so it can never carry one.
  *
+ * The same round gave the game own goals (tagOwnGoals in clubManager.ts),
+ * and they are marked here too: "Dias 63' (O.G)", under the club that got
+ * the goal. The line is the name and the mark, as a match report prints it,
+ * and no screen adds a word about the man.
+ *
  * In its own small file, like the clock, so a screen or a test can read it
  * without loading the whole engine.
  */
@@ -23,14 +28,22 @@ import { minuteLabel, type ClockPoint } from '@/lib/clubManagerClock';
 export interface GoalMarks {
   /** Round 505: scored from the spot. */
   penalty?: boolean;
+  /** Round 1146: an own goal. The name beside it is the man who put it into
+   *  his own net, and the list it sits on is the club that got the goal. */
+  og?: boolean;
 }
 
-/** The mark after a goal, with its leading space: " (P)" from the spot, nothing for any other goal. */
+/**
+ * The mark after a goal, with its leading space: " (P)" from the spot,
+ * " (O.G)" for an own goal, nothing for any other goal. A penalty is never an
+ * own goal in the engine; if a line ever said both, it is the own goal that
+ * decides who is named, so that is the mark it gets.
+ */
 export function scorerMark(g: GoalMarks): string {
-  return g.penalty ? ' (P)' : '';
+  return g.og ? ' (O.G)' : g.penalty ? ' (P)' : '';
 }
 
-/** A scorer as a match report prints him: "Saka 45+2' (P)". */
+/** A scorer as a match report prints him: "Saka 45+2' (P)", "Dias 63' (O.G)". */
 export function scorerLine(g: { name: string } & ClockPoint & GoalMarks): string {
   return `${g.name} ${minuteLabel(g)}${scorerMark(g)}`;
 }

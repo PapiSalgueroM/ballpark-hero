@@ -12,9 +12,10 @@
    `soccerEventDisagreements` is the matching self check, run by the soccer
    binding's `check`: the goal events make the score, his goal and assist
    events make his line, the decisive goal sits where the save says, and
-   none of his events comes after he went off. Imports only from ./core and ../keyedRng. */
+   none of his events comes after he went off. Imports only from ./core and ../ownGoalRule
+   (Round 1146: the keyed own goal rolls, shared with Club Manager). */
 import { shuffled, type DerivedGame, type DerivedSeason, type FixedGame, type GameContext, type Moment, type MomentDelta, type MomentSpot, type Rng, type SeasonEvent } from './core';
-import { keyedRng } from '../keyedRng';
+import { ownGoalRole, ownGoalTagged } from '../ownGoalRule';
 
 /** Minutes in a soccer match (the clock's full time). */
 export const SOCCER_FULL_TIME = 90;
@@ -81,8 +82,9 @@ export function soccerOwnGoals(s: DerivedSeason, moments: readonly Pick<Moment, 
       ordinals.set(group, ordinal + 1);
       if (e.pts !== 1 || e.mine || mirrors.has(g.md) || minutes.has(`${g.md}|${e.min}`) || (e.side === 'us' && assists.has(e.min))) return e;
       const key = `${s.key}|og|${g.md}|${e.min}|${e.side}|${ordinal}`;
-      if (keyedRng(`${key}|tag`)() >= 1 / 64) return e;
-      const role = Math.floor(keyedRng(`${key}|role`)() * 11);
+      /* Round 1146: the two keyed rolls are the shared rule's (src/lib/ownGoalRule.ts), the same keys and odds as before. */
+      if (!ownGoalTagged(key)) return e;
+      const role = ownGoalRole(key, 11);
       const ownGoalBy = e.side === 'us' ? 'opponent' : win && e.min >= win[0] && e.min <= win[1] && role === 0 ? 'you' : 'teammate';
       return { ...e, ownGoalBy };
     }) };

@@ -87,7 +87,7 @@ export interface TimelineRow {
   label: string;
   /** The man, or '' when there is nobody to name (a nameless opposition, a clock row). */
   name: string;
-  /** Round 1146, goals only: the mark printed after the scorer's name (" (P)"), absent on a goal with none. */
+  /** Round 1146, goals only: the mark printed after the scorer's name (" (P)", " (O.G)"), absent on a goal with none. */
   mark?: string;
   /** A goal's assist, or a sub's man going off. */
   second?: string;
@@ -149,8 +149,9 @@ export function timelineRows(d: MatchDetail, view: TimelineView): TimelineRow[] 
         const name = m ? m[1] : e.text;
         out.push({
           ...base, clock: at,
-          label: e.penalty ? 'Goal, penalty' : e.freeKick ? 'Goal, free kick' : 'Goal',
-          name, gen: genOf(e.side, name),
+          label: e.og ? 'Own goal' : e.penalty ? 'Goal, penalty' : e.freeKick ? 'Goal, free kick' : 'Goal',
+          /* Round 1146: the man behind an own goal plays for the other side, so that is the side his MADE UP tag is read on. */
+          name, gen: genOf(e.og ? (e.side === 'me' ? 'opp' : 'me') : e.side, name),
           /* Round 1146: the same mark the scorer lists print, from the same function. */
           ...(scorerMark(e) ? { mark: scorerMark(e) } : {}),
           ...(m ? { second: m[2] } : {}),

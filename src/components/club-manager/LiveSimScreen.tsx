@@ -250,8 +250,10 @@ function menAt(career: CareerState, live: LiveMatch | null, report: MatchWeekRep
  * season up to kick off and the feed holds the rest). Null when the scorer is not in my squad by name.
  */
 export function goalCardCount(career: CareerState, feed: LiveFeedEvent[], goal: LiveFeedEvent): { nth: number; season: number | null } {
+  /* Round 1146: an own goal is nobody's goal, so its card counts nothing: no "2nd of the match", no season. */
+  if (goal.og) return { nth: 1, season: null };
   const upTo = feed.indexOf(goal);
-  const nth = feed.filter((e, i) => e.kind === 'goal' && e.side === goal.side && e.text === goal.text && (upTo < 0 || i <= upTo)).length;
+  const nth = feed.filter((e, i) => e.kind === 'goal' && !e.og && e.side === goal.side && e.text === goal.text && (upTo < 0 || i <= upTo)).length;
   const player = goal.side === 'me' ? career.squad.find(p => p.name === goal.text) : undefined;
   return { nth, season: player ? (player.seasonGoals ?? 0) + nth : null };
 }
@@ -860,15 +862,19 @@ export function LiveSimScreen({
       const bigBefore = big as Banner | null;
       const smallBefore = small as Seg[] | null;
       switch (e.kind) {
-        case 'goal':
+        case 'goal': {
+          /* Round 1146: an own goal names the man who put it in. He plays for the other side, so that is
+             the side his MADE UP tag is read on; the club under the line is still the club that got the goal. */
+          const scorer: Seg = e.og && e.text ? named(side === 'me' ? 'opp' : 'me', e.text) : who;
           big = {
             /* Round 1146: the mark the report prints, from the same function, after the minute as the report has it. */
-            segs: goalSegs(x?.penalty ? 'GOAL! Penalty, ' : x?.freeKick ? 'GOAL! Free kick, ' : 'GOAL! ', who, e, { penalty: x?.penalty }),
+            segs: goalSegs(e.og ? 'GOAL! Own goal, ' : x?.penalty ? 'GOAL! Penalty, ' : x?.freeKick ? 'GOAL! Free kick, ' : 'GOAL! ', scorer, e, { penalty: x?.penalty, og: e.og }),
             club,
             tone: e.side === 'me' ? 'me' : 'opp',
           };
           scored = { e, key, banner: big };
           break;
+        }
         case 'yellow': big = { segs: [{ t: 'Booked: ' }, who, { t: ` ${minuteLabel(e)}` }], club, tone: 'none' }; break;
         case 'red': big = { segs: [{ t: 'RED CARD! ' }, who, { t: ` ${minuteLabel(e)}` }], club, tone: 'none' }; break;
         case 'injury': big = { segs: [{ t: 'Injury: ' }, who, { t: ` ${minuteLabel(e)}` }], club, tone: 'none' }; break;

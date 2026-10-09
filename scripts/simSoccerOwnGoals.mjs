@@ -28,7 +28,10 @@ const trip = value => JSON.parse(json(value));
 const put = (name, value) => fs.writeFileSync(path.join(evidence, name), json(value) + '\n');
 const EVENTS = 'src/lib/season/soccerEvents.ts';
 const CORE = 'src/lib/season/core.ts';
-const gate = 'if (keyedRng(`${key}|tag`)() >= 1 / 64) return e;';
+/* Round 1146: the two keyed rolls were lifted into the rule both soccer games read (src/lib/ownGoalRule.ts),
+   so the three controls that break them (role, gate, rng) patch the lifted lines. Same faults, same checks. */
+const RULE = 'src/lib/ownGoalRule.ts';
+const gate = 'if (keyedRng(`${key}|tag`)() >= 1 / oneIn) return false;';
 const controls = {
   points: { from: 'e.pts !== 1 || e.mine', to: 'e.mine', check: 'eligibility', scenario: 'points' },
   mine: { from: 'e.pts !== 1 || e.mine || mirrors.has(g.md)', to: 'e.pts !== 1 || mirrors.has(g.md)', check: 'eligibility', scenario: 'mine' },
@@ -38,13 +41,13 @@ const controls = {
   kind: { from: "if (e.kind !== 'goal') return e;", to: '', check: 'eligibility', scenario: 'kind' },
   pitch: { from: 'win && e.min >= win[0] && e.min <= win[1] && role === 0', to: 'role === 0', check: 'self-pitch', scenario: 'missed' },
   beneficiary: { from: "e.side === 'us' ? 'opponent'", to: "e.side === 'us' ? 'teammate'", check: 'beneficiary', scenario: 'opponent' },
-  role: { from: 'Math.floor(keyedRng(`${key}|role`)() * 11)', to: 'Math.floor(keyedRng(`${key}|role`)() * 1)', check: 'local-policy', scenario: 'teammate' },
-  gate: { from: gate, to: gate.replace('1 / 64', '1 / 32'), check: 'local-policy', scenario: 'between' },
+  role: { from: 'const role = ownGoalRole(key, 11);', to: 'const role = ownGoalRole(key, 1);', check: 'local-policy', scenario: 'teammate' },
+  gate: { file: RULE, from: gate, to: gate.replace('1 / oneIn', '2 / oneIn'), check: 'local-policy', scenario: 'between' },
   score: { from: 'return { ...g, events: g.events.map((e): SeasonEvent => {', to: 'return { ...g, us: g.us + 1, events: g.events.map((e): SeasonEvent => {', check: 'metadata-inverse', scenario: 'self' },
   filteredordinal: { from: 'ordinals.set(group, ordinal + 1);', to: 'if (!e.mine) ordinals.set(group, ordinal + 1);', check: 'local-policy', scenario: 'preceding-mine' },
   input: { from: 'const assists = new Set(g.events.filter', to: 'g.line.goals = (g.line.goals ?? 0) + 1; const assists = new Set(g.events.filter', check: 'input-immutable', scenario: 'self' },
   ordinal: { from: 'const ordinal = ordinals.get(group) ?? 0;', to: 'const ordinal = g.events.indexOf(e);', check: 'insertion-stability', scenario: 'insertion' },
-  rng: { from: gate, to: 'if (Math.random() >= 1 / 64) return e;', check: 'ambient-rng', scenario: 'self' },
+  rng: { file: RULE, from: gate, to: 'if (Math.random() >= 1 / oneIn) return false;', check: 'ambient-rng', scenario: 'self' },
   ledgerdata: { file: 'src/lib/season/momentsSave.ts', from: 'isInt(e[2], -1, 3)', to: 'isInt(e[2], -1, 4)', check: 'ledger-reader', scenario: 'ledger' },
   ledgerkey: { file: 'src/lib/season/momentsSave.ts', from: 's && s.key === key ? s.m : []', to: 's ? s.m : []', check: 'ledger-reader', scenario: 'ledger' },
   stream: { file: CORE, from: '`${key}|alloc`', to: '`${key}|alloc-broken`', check: 'parent-derived', scenario: 'cohort' },
