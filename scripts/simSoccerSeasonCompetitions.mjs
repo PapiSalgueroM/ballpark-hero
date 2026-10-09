@@ -65,6 +65,7 @@ try {
     const bytes = JSON.stringify(season.clubCupRun);
     played.lastUCLResult.matches.push({ ...clubCampaign.matches[0], opponent: 'Changed test opponent' });
     assert.equal(JSON.stringify(season.clubCupRun), bytes, 'later changes to the current campaign cannot alter the saved season');
+    console.log('ok   actual engine campaign binds its club and year, clones the saved matches and preserves them after later changes');
     snapshot = season;
   }
 } finally { Math.random = random; }

@@ -58,7 +58,7 @@ jobs:
         run: |
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerCareerContracts.test.ts --maxWorkers=1 --minWorkers=1 2>&1 | tee career-opponents-artifacts/contracts-tests.log
           failed=0
-          for harness in simSoccerLeagueWorldLookup simSoccerCareerLeagueWorld simSoccerDiscipline simSoccerCompetitionNavigation simSoccerContractMoves; do
+          for harness in simSoccerLeagueWorldLookup simSoccerCareerLeagueWorld simSoccerDiscipline simSoccerCompetitionNavigation simSoccerContractMoves simSoccerSeasonAvailability; do
             NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node "scripts/$harness.mjs" 2>&1 | tee "career-opponents-artifacts/$harness.log" || failed=1
           done
           ONLY=simClubVerdict,simLoanSpell node scripts/runAllSims.mjs 2>&1 | tee career-opponents-artifacts/existing-club-and-loan-sims.log || failed=1
@@ -132,6 +132,16 @@ jobs:
             esac
             if grep -Eq 'control.*refus|Cannot find|SyntaxError|no patches applied' "career-opponents-artifacts/contract-control-$control.log"; then exit 1; fi
           done
+      - name: Future field rejects an old membership assumption
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set +e
+          TABLE_CONTROL=snapshotfield NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreTable.mjs > career-opponents-artifacts/table-snapshot-control.log 2>&1
+          control_exit=$?
+          set -e
+          cat career-opponents-artifacts/table-snapshot-control.log
+          test "$control_exit" = 1
+          grep -q 'item 2 names failed as expected' career-opponents-artifacts/table-snapshot-control.log
       - name: Every built reader
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |

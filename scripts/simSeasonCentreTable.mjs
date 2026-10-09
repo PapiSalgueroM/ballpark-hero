@@ -49,6 +49,7 @@
  *   opentitle    (Round 1100 review) the 1st place left to the world's
  *                champion alone, so a league with no title race reads
  *                "another club" on top                          -> 2 red
+ *   snapshotfield initial membership used after simulated swaps -> 2 red
  *
  * Review fixes measured 2026-10-07: 747 final table neighbours level on
  * points, 273 where goal difference and goals scored disagree (floor 50).
@@ -72,22 +73,23 @@ import { probeAwardsNight } from './lib/careerAwardsNightProbe.mjs';
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '..');
 const CONTROL = process.env.TABLE_CONTROL ?? '';
 const CONTROLS = {
-  names: [{ file: 'src/lib/season/soccer.ts', from: '    named = field.named.filter(n => n !== row.club && !rivals.includes(n) && n !== champion);', to: '    named = [...new Set([...field.named, ...clubs.filter(c => c.league === league.key).map(c => c.name)])].filter(n => n !== row.club && !rivals.includes(n) && n !== champion);' }],
+  names: [{ file: 'src/lib/season/soccer.ts', from: '    named = members.filter(n => n !== row.club && !rivals.includes(n) && n !== champion);', to: '    named = [...new Set([...members, ...clubs.filter(c => c.league === league.key).map(c => c.name)])].filter(n => n !== row.club && !rivals.includes(n) && n !== champion);' }],
   cadence: [
-    { file: 'src/lib/season/soccer.ts', from: "  else if (derbyMeetings(league.key, row.year) !== 2) why = 'cadence';\n", to: '' },
+    { file: 'src/lib/season/soccer.ts', from: "  else if (!snapshot && derbyMeetings(league.key, row.year) !== 2) why = 'cadence';\n", to: '' },
     { file: 'src/data/leagueFormat.ts', from: '"Ligue 1": [{ from: 1995, to: 2018 }, { from: 2020 }],', to: '"Ligue 1": [{ from: 1995 }],' },
   ],
   ledgerorder: [{ file: 'src/lib/season/soccer.ts', from: '  entries.sort((a, b) => a.at - b.at);', to: '  entries.sort(() => 0);' }],
   tiebreak: [{ file: 'src/lib/season/core.ts', from: '  return rows.sort((x, y) => y.pts - x.pts || (y.gf - y.ga) - (x.gf - x.ga) || y.gf - x.gf || x.slot - y.slot);', to: '  return rows.sort((x, y) => y.pts - x.pts || y.gf - x.gf || (y.gf - y.ga) - (x.gf - x.ga) || x.slot - y.slot);' }],
-  rival: [{ file: 'src/lib/season/soccer.ts', from: "  else if (rivals.some(r => !namedInLeague(r, league.key, row.year))) why = 'rival';\n", to: '' }],
+  rival: [{ file: 'src/lib/season/soccer.ts', from: "  else if (rivals.some(r => snapshot ? !snapshot.members.some(n => clubKey(n) === clubKey(r)) : !namedInLeague(r, league.key, row.year))) why = 'rival';\n", to: '' }],
   opentitle: [{ file: 'src/lib/season/soccer.ts', from: "    else if (s.champion && ctx.titleOpen && ctx.mode === 'table') open.push(s);\n", to: '' }],
+  snapshotfield: [{ file: 'src/lib/season/soccer.ts', from: 'const members = snapshot?.members ?? managerLeagueField(', to: 'const members = managerLeagueField(' }],
 };
 if (CONTROL && !CONTROLS[CONTROL]) throw new Error(`unknown TABLE_CONTROL ${CONTROL}`);
 if (CONTROL) console.log(`CONTROL ${CONTROL}: patched in the bundle only`);
 
 const B = await bundleAwardsNight(ROOT, {
   patches: CONTROL ? CONTROLS[CONTROL] : [],
-  extra: { season: 'src/lib/season/soccer.ts', core: 'src/lib/season/core.ts', league: 'src/lib/soccerCareerLeague.ts', derby: 'src/lib/soccerCareerDerby.ts', ledger: 'src/data/careerLeagueSeasons.ts' },
+  extra: { season: 'src/lib/season/soccer.ts', core: 'src/lib/season/core.ts', league: 'src/lib/soccerCareerLeague.ts', derby: 'src/lib/soccerCareerDerby.ts', ledger: 'src/data/careerLeagueSeasons.ts', pool: 'src/data/soccerCareerClubPool.ts', lower: 'src/data/soccerCareerLowerClubs.ts', aliases: 'src/data/clubRivalries.ts' },
 });
 const { soccer, season: S, core: C, league: LG, derby: DB, ledger: LS } = B;
 const CLUBS = soccer.FALLBACK_CLUBS;
@@ -112,8 +114,31 @@ const PLAIN_2026 = new Set(['Championship', 'Brasileirao', 'Eredivisie', 'Saudi 
    scripts/simCareerLeagueWorld.mjs D1 draws those by the hundred. */
 const PLAIN_FLOOR = 33;
 const OPEN_FLOOR = 3;
-function cardChampion(career, row) {
+const SIM_PYRAMIDS = [
+  ['Premier League', 'Championship'], ['Bundesliga', '2. Bundesliga'],
+  ['Ligue 1', 'Ligue 2'], ['Serie A', 'Serie B'], ['La Liga', 'Segunda Division'],
+];
+const clubIdentity = name => (B.aliases.SC_CLUB_CANON[name] ?? name).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+const initialField = league => B.lower.CAREER_LOWER_CLUBS[league] ?? B.pool.CAREER_LEAGUE_LADDER[league]?.flat() ?? [];
+function savedFutureField(row, tag) {
+  const held = row.leagueWorld;
+  if (!held) return null;
+  const pyramid = SIM_PYRAMIDS.find(pair => pair.includes(held.league));
+  const members = held.members;
+  const allowed = pyramid ? pyramid.flatMap(initialField).map(clubIdentity) : [];
+  if (row.type !== 'playing' || row.year < 2026 || !pyramid || !Array.isArray(members)
+    || members.length !== initialField(held.league).length || members.some(n => typeof n !== 'string' || !n.trim() || !allowed.includes(clubIdentity(n)))
+    || new Set(members.map(clubIdentity)).size !== members.length || !members.some(n => clubIdentity(n) === clubIdentity(row.club))
+    || !members.includes(held.champion) || (row.leagueSize !== undefined && row.leagueSize !== members.length)
+    || !['simulated', 'simulated-partial'].includes(held.simulation)) {
+    fail('2 names', `${tag}: malformed saved simulated field`);
+    return null;
+  }
+  return held;
+}
+function cardChampion(career, row, held) {
   const finish = LG.readLeagueFinish(row);
+  if (held) return finish && finish.finish !== 1 ? held.champion : null;
   const today = CLUBS.find(c => c.name === row.club)?.league ?? '';
   const lo = LG.finishLeague({ name: row.club, league: today }, row.year, finish?.size ?? null);
   const w = career.phone?.world;
@@ -131,7 +156,7 @@ function replay(rounds, teams, upto) {
   return t;
 }
 
-const stats = { tables: 0, results: 0, plain: 0, openTitles: 0, ordered: 0, orderN: 0, named: 0, unnamed: 0, level: 0, levelSplit: 0 };
+const stats = { tables: 0, results: 0, plain: 0, openTitles: 0, ordered: 0, orderN: 0, named: 0, unnamed: 0, level: 0, levelSplit: 0, future: 0 };
 /* the footnote's order, from the replay's own numbers: points, then goal
    difference, then goals scored (a full tie may sit either way) */
 const before = (a, b) => a.pts - b.pts || (a.gf - a.ga) - (b.gf - b.ga) || a.gf - b.gf;
@@ -142,12 +167,15 @@ function checkTable(career, row, ctx, s, tag) {
   }
   stats.tables += 1;
   const key = ctx.league?.key;
+  const held = savedFutureField(row, tag);
+  if (held) stats.future += 1;
   /* 3 the gate */
   if (row.year < 1995) fail('3 gate', `${tag}: a table in ${row.year}`);
-  if (!FIVE.has(key) && !(row.year >= 2026 && PLAIN_2026.has(key))) fail('3 gate', `${tag}: a table in ${key} in ${row.year}`);
+  if (!held && !FIVE.has(key) && !(row.year >= 2026 && PLAIN_2026.has(key))) fail('3 gate', `${tag}: a table in ${key} in ${row.year}`);
+  if (held && (key !== held.league || s.teams !== held.members.length || s.rounds.length !== 2 * (held.members.length - 1))) fail('3 gate', `${tag}: displayed division, field size or calendar differs from the saved model`);
   if (!FIVE.has(key)) stats.plain += 1;
-  if (DB.derbyMeetings(key, row.year) !== 2) fail('3 gate', `${tag}: a table where the cadence is ${DB.derbyMeetings(key, row.year)}`);
-  for (const r of DB.readSeasonDerbies(row).map(d => d.rival)) if (!LG.namedInLeague(r, key, row.year)) fail('3 gate', `${tag}: a table with ${r} as a derby rival, not in the ${row.year} ${key}`);
+  if (!held && DB.derbyMeetings(key, row.year) !== 2) fail('3 gate', `${tag}: a table where the cadence is ${DB.derbyMeetings(key, row.year)}`);
+  for (const r of DB.readSeasonDerbies(row).map(d => d.rival)) if (held ? !held.members.some(n => clubIdentity(n) === clubIdentity(r)) : !LG.namedInLeague(r, key, row.year)) fail('3 gate', `${tag}: a table with ${r} as a derby rival, not in the ${row.year} ${key}`);
   if (key === 'Ligue 1' && row.year === 2019) fail('3 gate', `${tag}: a table for the abandoned 2019-20 Ligue 1 (${s.games.length} matchdays)`);
   /* 1 replay */
   const M = s.rounds.length;
@@ -175,17 +203,19 @@ function checkTable(career, row, ctx, s, tag) {
   if (pairs.size !== s.teams * (s.teams - 1)) fail('1 replay', `${tag}: ${pairs.size} pairs`);
   /* 2 naming, from the ledgers */
   const rivals = DB.readSeasonDerbies(row).map(d => d.rival);
-  const champ = cardChampion(career, row);
+  const champ = cardChampion(career, row, held);
   const ledger = row.year < 2026 ? LS.CAREER_LEAGUE_SEASONS[key]?.[row.year] : null;
-  const pool = row.year < 2026 ? new Set(ledger ? ledger.clubs : []) : new Set(CLUBS.filter(c => c.league === key).map(c => c.name));
+  const pool = held ? new Set(held.members) : row.year < 2026 ? new Set(ledger ? ledger.clubs : []) : new Set(CLUBS.filter(c => c.league === key).map(c => c.name));
   const allowed = new Set([row.club, ...rivals, ...(champ ? [champ] : []), ...pool]);
   const names = s.labels.filter(l => l.named).map(l => l.name);
   stats.named += names.length; stats.unnamed += s.labels.length - names.length;
-  for (const n of names) if (!allowed.has(n)) fail('2 names', `${tag}: ${n} named in the ${row.year} ${key}`);
-  if (new Set(names).size !== names.length) fail('2 names', `${tag}: a club named twice`);
+  for (const n of names) if (held ? !held.members.some(member => clubIdentity(member) === clubIdentity(n)) : !allowed.has(n)) fail('2 names', `${tag}: ${n} named in the ${row.year} ${key}`);
+  if (new Set(held ? names.map(clubIdentity) : names).size !== names.length) fail('2 names', `${tag}: a club named twice`);
+  if (held && JSON.stringify(names.map(clubIdentity).sort()) !== JSON.stringify(held.members.map(clubIdentity).sort())) fail('2 names', `${tag}: displayed clubs differ from the saved simulated field`);
   if (s.labels[0].name !== row.club) fail('2 names', `${tag}: his place is ${s.labels[0].name}`);
   const final = C.tableAt(s, M);
   const top = s.labels[final[0].slot];
+  if (held && clubIdentity(top.name) !== clubIdentity(held.champion)) fail('2 names', `${tag}: 1st is ${top.name}, saved simulated champion ${held.champion}`);
   if (final[0].slot !== 0) {
     /* Round 1100 (review fix): who may stand 1st when it is not him. The
        card's champion when the card names one. Nobody ("another club") when
@@ -258,6 +288,7 @@ for (const [id, row, mode, why] of TARGETED) {
 
 console.log(`tables ${stats.tables} (${stats.plain} of them in a plain league outside the five, from 2026-27; ${stats.openTitles} with nobody crowned by the world, 1st place one of the league's own clubs), results ${stats.results}; places named ${stats.named}, unnamed ${stats.unnamed}`);
 check(stats.tables >= 300, `the probe reached enough tables (${stats.tables}, floor 300)`);
+check(stats.future > 0, `2. saved simulated fields checked on ${stats.future} future tables`);
 /* Round 1100 review: the branch of the gate that lets a plain league draw a
    table, and the open title rule, must each have been walked. The probe is
    seeded, so these counts move only with the pool or the engine (PLAIN_FLOOR
@@ -270,4 +301,8 @@ check(fails.size === 0, `replay, naming and the gate on every table${fails.size 
 const share = stats.orderN ? stats.ordered / stats.orderN : 0;
 check(stats.orderN >= 100 && share <= 0.05, `4. ledger order: ${stats.ordered} of ${stats.orderN} tables (${(share * 100).toFixed(1)}%) finish in the ledger's order, band 5%`);
 console.log(`simSeasonCentreTable: ${checks} checks, ${failed} failed${CONTROL ? ` (control ${CONTROL})` : ''}`);
+if (CONTROL === 'snapshotfield') {
+  if (!fails.has('2 names')) { console.error('CONTROL snapshotfield: DID NOT FIRE at item 2 names'); process.exit(2); }
+  console.log('CONTROL snapshotfield: item 2 names failed as expected');
+}
 process.exit(failed ? 1 : 0);

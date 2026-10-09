@@ -215,7 +215,8 @@ function checkSeason(career, row, ctx, s, tag) {
        leaves, apps), never fewer than the derbies he played */
     const wk = row.injuryWeeks ?? 0;
     const blk = wk > 0 ? Math.min(M, Math.max(1, Math.round((wk * M) / 46))) : 0;
-    const room = row.injurySevere && blk > 0 ? M : M - blk;
+    const missedDerbies = DB.readSeasonDerbies(row).reduce((a, d) => a + d.meetings.filter(m => !m.played).length, 0);
+    const room = Math.min(row.injurySevere && blk > 0 ? M : M - blk, M - missedDerbies);
     const derbiesPlayed = DB.readSeasonDerbies(row).reduce((a, d) => a + d.meetings.filter(m => m.played).length, 0);
     const want = Math.min(Math.max(Math.min(row.leagueApps ?? row.apps, room, row.apps), derbiesPlayed), room, row.apps);
     if (on.length !== want) fail('1 apps', `${tag}: ${on.length} league games shown for a target of ${want} (leagueApps ${row.leagueApps}, ${M} games, block ${blk})`);

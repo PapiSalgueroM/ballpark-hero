@@ -559,8 +559,9 @@ if (process.env.SNAPSHOT_PROBE_ONLY === '1') {
   s = engine.acceptOffer(s, { club: clubRow('Freiburg'), contractYears: 5, wage: 20000, transferFee: 0 });
   const before = s.seasons.length;
   let guard = 0;
-  while (!s.retired && s.seasons.length < before + 3 && guard++ < 200) s = stayStep(s);
-  const rows = s.seasons.slice(before).filter(row => row.type === 'playing' && row.apps > 0 && !row.injurySevere && row.leagueWorld);
+  const playable = row => row.type === 'playing' && row.apps > 0 && !row.injurySevere && row.leagueWorld;
+  while (!s.retired && s.seasons.slice(before).filter(playable).length < 3 && guard++ < 200) s = stayStep(s);
+  const rows = s.seasons.slice(before).filter(playable);
   ok(rows.length === 3, `only ${rows.length} playable simulated seasons were produced, three expected`);
   let tables = 0; let changed = 0; let moves = 0;
   for (const row of rows) {
@@ -579,7 +580,9 @@ if (process.env.SNAPSHOT_PROBE_ONLY === '1') {
   }
   ok(changed > 0, 'the probe never reached a field changed by promotion or relegation');
   ok(JSON.stringify(captured) === bytes, 'playing a cloned fixture changed the captured old save');
-  console.log(`  snapshot probe: ${rows.length} actual seasons, ${tables} drawn tables, ${changed} changed fields, ${moves} recorded league movements`);
+  const played = s.seasons.slice(before).filter(row => row.type === 'playing');
+  const severe = played.filter(row => row.injurySevere).length;
+  console.log(`  snapshot probe: ${played.length} actual seasons played (${severe} severe-injury seasons), ${rows.length} playable snapshots, ${tables} drawn tables, ${changed} changed fields, ${moves} recorded league movements`);
   finish();
 }
 

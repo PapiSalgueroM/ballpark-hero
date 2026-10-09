@@ -5,6 +5,9 @@ const engine = 'src/lib/soccerCareerEngine.ts';
 const binding = 'src/lib/season/soccer.ts';
 const phone = 'src/lib/soccerPhone.ts';
 export const careerLeagueWorld1175Attribution = [
+  { file: 'src/lib/season/soccer.ts',
+    from: '    const fixedMissed = fixedOf(row, ctx).filter(f => !f.played).length;\n    const room = Math.min(severe ? M : M - block, M - fixedMissed);',
+    to: '    const room = severe ? M : M - block;' },
   { file: engine, from: "import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';\nimport { deriveSeason, tableAt } from './season/core';\nimport { buildSoccerSeasonCtx, SOCCER } from './season/soccer';\n", to: '' },
   { file: engine, from: '  /** The career\'s simulated field and champion, held for this season only. */\n  leagueWorld?: LeagueWorldSeason;\n', to: '' },
   { file: engine, from: '  /** Membership for the next unplayed future season. Absent on older saves. */\n  leagueWorld?: CareerLeagueWorld;\n', to: '' },
@@ -36,4 +39,8 @@ export const careerLeagueWorld1175Attribution = [
   { file: binding, from: "  else if (!snapshot && !leagueFormatFor(league.key, row.year)) why = 'format';\n  else if (!snapshot && derbyMeetings(league.key, row.year) !== 2) why = 'cadence';\n  else if (rivals.some(r => snapshot ? !snapshot.members.some(n => clubKey(n) === clubKey(r)) : !namedInLeague(r, league.key, row.year))) why = 'rival';", to: "  else if (!leagueFormatFor(league.key, row.year)) why = 'format';\n  else if (derbyMeetings(league.key, row.year) !== 2) why = 'cadence';\n  else if (rivals.some(r => !namedInLeague(r, league.key, row.year))) why = 'rival';" },
   { file: binding, from: "  const size = snapshot?.members.length ?? (mode === 'table' ? finish!.size! : (sizeKey ? leagueSizeFor(sizeKey, row.year) : null));", to: "  const size = mode === 'table' ? finish!.size! : (sizeKey ? leagueSizeFor(sizeKey, row.year) : null);" },
   { file: binding, from: '    const members = snapshot?.members ?? managerLeagueField({ clubs, club: row.club, league: sizeKey, year: row.year }, keyedRng(`${row.club}|${row.year}|centre|field`)).named;\n    named = members.filter(n => n !== row.club && !rivals.includes(n) && n !== champion);', to: '    const field = managerLeagueField({ clubs, club: row.club, league: sizeKey, year: row.year }, keyedRng(`${row.club}|${row.year}|centre|field`));\n    named = field.named.filter(n => n !== row.club && !rivals.includes(n) && n !== champion);' },
+  { file: binding, from: '  /** Held future field spellings, indexed by the unchanged saved derby key. */\n  fixedNames?: Record<string, string>;\n', to: '' },
+  { file: binding, from: '    ...(snapshot ? { fixedNames: Object.fromEntries(rivals.map(r => [r, snapshot.members.find(n => clubKey(n) === clubKey(r)) ?? r])) } : {}),\n', to: '' },
+  { file: binding, from: "      const championKey = ctx.champion && ctx.rivals.find(r => (ctx.fixedNames?.[r] ?? r) === ctx.champion);\n      const champion = title ? 'mine' as const : championKey ? { key: championKey } : 'other' as const;", to: "      const champion = title ? 'mine' as const : ctx.champion && ctx.rivals.includes(ctx.champion) ? { key: ctx.champion } : 'other' as const;" },
+  { file: binding, from: '    if (s.fixedKey) out[s.slot] = { name: ctx.fixedNames?.[s.fixedKey] ?? s.fixedKey, named: true, key: s.fixedKey };', to: '    if (s.fixedKey) out[s.slot] = { name: s.fixedKey, named: true, key: s.fixedKey };' },
 ];

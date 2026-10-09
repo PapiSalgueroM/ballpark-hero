@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 import { FALLBACK_CLUBS, determineTransferSituation, simulateUCL, type CareerState, type SeasonRecord } from '@/lib/soccerCareerEngine';
 import { deriveSeason, tableAt } from '@/lib/season/core';
 import { buildSoccerSeasonCtx, SOCCER } from '@/lib/season/soccer';
-import { resolveSeasonDerbies } from '@/lib/soccerCareerDerby';
+import { canonClub, resolveSeasonDerbies } from '@/lib/soccerCareerDerby';
 import {
   drawLeagueWorldFinish, finishLeagueWorld, leagueWorldForYear, leagueWorldOrder,
   prepareLeagueWorld, projectLeagueWorldClubs, readLeagueWorldSeason,
@@ -215,6 +215,51 @@ describe('Soccer Career simulated promotion and relegation', () => {
     expect(ctx.named.length).toBe(19);
     expect(partial.leagueWorld!.members.length).toBe(20);
   });
+
+  it('binds a mixed-alias future champion to its saved derby key and field spelling', () => {
+    const s = career('Man City', 'Premier League');
+    s.currentClubCountry = 'England';
+    prepareLeagueWorld(s, FALLBACK_CLUBS, 2026);
+    const row = season(s, 2026, 6, 20);
+    row.derbies = [{ rival: 'Manchester United', name: 'Manchester derby', kind: 'derby', meetings: [
+      { home: true, gf: 0, ga: 2, played: true, goals: 0 },
+      { home: false, gf: 0, ga: 1, played: true, goals: 0 },
+    ] }];
+    recordLeagueWorldSeason(s, FALLBACK_CLUBS, row);
+    row.leagueWorld!.champion = 'Man United';
+    s.seasons = [row];
+    const before = JSON.stringify({ s, row });
+    vi.spyOn(Math, 'random').mockImplementation(() => { throw new Error('alias replay moved the main RNG'); });
+    const ctx = buildSoccerSeasonCtx(s, FALLBACK_CLUBS, row);
+    expect(ctx.fixedNames).toEqual({ 'Manchester United': 'Man United' });
+    expect(SOCCER.target(row, ctx, SOCCER.frame(row, ctx))).toEqual({ kind: 'finish', finish: 6, title: false, champion: { key: 'Manchester United' } });
+    const derived = deriveSeason(SOCCER, row, ctx);
+    expect(derived?.mode).toBe('table');
+    const final = tableAt(derived!, derived!.rounds.length);
+    const names = final.map(t => derived!.labels[t.slot].name);
+    expect(names[0]).toBe('Man United');
+    expect([...names].sort()).toEqual([...row.leagueWorld!.members].sort());
+    expect(new Set(names.map(canonClub)).size).toBe(20);
+    expect(names).not.toContain('Manchester United');
+    const fixed = derived!.games.filter(g => g.fixedKey === 'Manchester United');
+    expect(fixed.map(g => ({ home: g.home, us: g.us, them: g.them, played: g.played, goals: g.line.goals }))).toEqual([
+      { home: true, us: 0, them: 2, played: true, goals: 0 },
+      { home: false, us: 0, them: 1, played: true, goals: 0 },
+    ]);
+    expect(final[0].slot).toBe(fixed[0].opp);
+    const trip = clone(row);
+    expect(deriveSeason(SOCCER, trip, buildSoccerSeasonCtx(clone(s), FALLBACK_CLUBS, trip))).toEqual(derived);
+    const legacy = { ...clone(row), year: 2025 };
+    delete legacy.leagueWorld;
+    const oldCtx = buildSoccerSeasonCtx(s, FALLBACK_CLUBS, legacy);
+    expect(oldCtx.fixedNames).toBeUndefined();
+    expect(SOCCER.target(legacy, { ...oldCtx, champion: 'Man United' }, SOCCER.frame(legacy, oldCtx))).toEqual({ kind: 'finish', finish: 6, title: false, champion: 'other' });
+    expect(SOCCER.labels([
+      { slot: 0, pos: 6, fixedKey: null, champion: false },
+      { slot: 1, pos: 1, fixedKey: 'Manchester United', champion: true },
+    ], oldCtx, () => 0.5)[1]).toEqual({ name: 'Manchester United', named: true, key: 'Manchester United' });
+    expect(JSON.stringify({ s, row })).toBe(before);
+  }, 30000);
 
   it('does not put a rival from another future division in the season context', () => {
     const s = career();

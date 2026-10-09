@@ -76,6 +76,8 @@ export interface SoccerSeasonCtx {
    *  the table cannot name, and wherever this season's world is not held. */
   titleOpen?: boolean;
   rivals: string[];
+  /** Held future field spellings, indexed by the unchanged saved derby key. */
+  fixedNames?: Record<string, string>;
   /** Clubs that may be named as opponents besides his, the rivals and the champion. */
   named: string[];
   /** The game's era tier of every club it knows, that season. */
@@ -186,6 +188,7 @@ export function buildSoccerSeasonCtx(career: CareerState, clubs: ClubData[], row
     champion,
     titleOpen,
     rivals,
+    ...(snapshot ? { fixedNames: Object.fromEntries(rivals.map(r => [r, snapshot.members.find(n => clubKey(n) === clubKey(r)) ?? r])) } : {}),
     named,
     tiers,
     goldenBoot: (career.awards ?? []).some(a => a.year === row.year && a.name === 'Golden Boot'),
@@ -245,7 +248,8 @@ export const SOCCER: SeasonSport<SeasonRecord, SoccerSeasonCtx> = {
   target: (row, ctx): TeamTarget => {
     if (ctx.mode === 'table' && ctx.finish) {
       const title = ctx.finish.finish === 1;
-      const champion = title ? 'mine' as const : ctx.champion && ctx.rivals.includes(ctx.champion) ? { key: ctx.champion } : 'other' as const;
+      const championKey = ctx.champion && ctx.rivals.find(r => (ctx.fixedNames?.[r] ?? r) === ctx.champion);
+      const champion = title ? 'mine' as const : championKey ? { key: championKey } : 'other' as const;
       return { kind: 'finish', finish: ctx.finish.finish, title, champion };
     }
     if (row.leagueTitle && !row.injurySevere) return { kind: 'band', ppgMin: CHAMPION_PPG.min, ppgMax: CHAMPION_PPG.max };
@@ -261,7 +265,8 @@ export const SOCCER: SeasonSport<SeasonRecord, SoccerSeasonCtx> = {
     const block = injuryBlock(row, M);
     const severe = !!row.injurySevere && block > 0;
     const fixedPlayed = fixedOf(row, ctx).filter(f => f.played).length;
-    const room = severe ? M : M - block;
+    const fixedMissed = fixedOf(row, ctx).filter(f => !f.played).length;
+    const room = Math.min(severe ? M : M - block, M - fixedMissed);
     const want = Math.min(row.leagueApps ?? row.apps, room, row.apps);
     const played = Math.min(Math.max(want, fixedPlayed), room, row.apps);
     const suspended = Math.min(row.suspensionMatches ?? 0, Math.max(0, M - played - (severe ? 0 : block)));
@@ -331,7 +336,7 @@ function soccerLabels(slots: SlotFacts[], ctx: SoccerSeasonCtx, rng: () => numbe
   const open: SlotFacts[] = [];
   for (const s of slots) {
     if (s.slot === 0) continue;
-    if (s.fixedKey) out[s.slot] = { name: s.fixedKey, named: true, key: s.fixedKey };
+    if (s.fixedKey) out[s.slot] = { name: ctx.fixedNames?.[s.fixedKey] ?? s.fixedKey, named: true, key: s.fixedKey };
     /* Round 1100: nobody crowned and a table to draw, so the top place is an
        open place like the rest: the strongest draw among the league's clubs */
     else if (s.champion && ctx.titleOpen && ctx.mode === 'table') open.push(s);

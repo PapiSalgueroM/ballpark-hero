@@ -62,7 +62,8 @@ for (let year = 2026; year <= 2040; year += 1) {
   seasons.push({ row, derived, table });
   B.world.prepareLeagueWorld(state, B.soccer.FALLBACK_CLUBS, year + 1);
   const snapshot = structuredClone(state);
-  Object.assign(snapshot, { pendingSummary: snapshot.seasons.at(-1), phase: 'season_summary', age: row.age });
+  Object.assign(snapshot, { pendingSummary: snapshot.seasons.at(-1), phase: 'season_summary', age: row.age,
+    events: [`📋 Completed the ${row.year} simulated season at ${row.club}.`] });
   contexts.set(year, snapshot);
 }
 assert.equal(seasons.length, 15);

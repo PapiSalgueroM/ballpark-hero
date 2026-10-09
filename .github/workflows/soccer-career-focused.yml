@@ -44,7 +44,7 @@ jobs:
         if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
         run: |
           failed=0
-          for harness in simSoccerLeagueWorldLookup simSoccerCareerLeagueWorld simSoccerDiscipline simSoccerCompetitionNavigation simSoccerContractMoves; do
+          for harness in simSoccerLeagueWorldLookup simSoccerCareerLeagueWorld simSoccerDiscipline simSoccerCompetitionNavigation simSoccerContractMoves simSoccerSeasonAvailability; do
             NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node "scripts/$harness.mjs" 2>&1 | tee "career-focused-artifacts/$harness.log" || failed=1
           done
           exit "$failed"
@@ -73,6 +73,16 @@ jobs:
       - name: Full season agreement and refused-row diagnostics
         if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
         run: AGREEMENT_DIAGNOSTICS=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreAgreement.mjs 2>&1 | tee career-focused-artifacts/agreement.log
+      - name: Future field rejects an old membership assumption
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          set +e
+          TABLE_CONTROL=snapshotfield NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreTable.mjs > career-focused-artifacts/table-snapshot-control.log 2>&1
+          control_exit=$?
+          set -e
+          cat career-focused-artifacts/table-snapshot-control.log
+          test "$control_exit" = 1
+          grep -q 'item 2 names failed as expected' career-focused-artifacts/table-snapshot-control.log
       - name: Source unchanged
         if: ${{ !cancelled() }}
         run: git diff --exit-code HEAD -- src scripts .github/workflows
