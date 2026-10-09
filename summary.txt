@@ -1,0 +1,5 @@
+gh-lostline exit=1 1s | simGuideHeadings control lostline: section 1 red and every other section green, the break was caught where it should be (exit 1)
+gh-nokeyword exit=1 1s | simGuideHeadings control nokeyword: section 1 red and every other section green, the break was caught where it should be (exit 1)
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+gh-careerline exit=1 1s | simGuideHeadings control careerline: section 1 red and every other section green, the break was caught where it should be (exit 1)
+simSiteSearch exit=0 1s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
