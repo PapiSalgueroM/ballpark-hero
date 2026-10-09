@@ -419,15 +419,6 @@ const WhatsNew = () => {
           </p>
         </div>
       </section>
-
-      <div className="mt-16 pt-8 border-t border-border text-center text-xs text-muted-foreground space-y-2">
-        <p>All team names, logos and trademarks are property of their respective owners. DoUKnowBall is not affiliated with the NFL, NBA, UFC, NHL, MLB, FIFA, IOC, NCAA, F1, PGA Tour, NASCAR, ATP or WTA. © 2026 DoUKnowBall</p>
-        <div className="flex items-center justify-center gap-3">
-          <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link>
-          <span>·</span>
-          <Link to="/terms" className="underline hover:text-foreground transition-colors">Terms of Service</Link>
-        </div>
-      </div>
     </div>
   );
 };
