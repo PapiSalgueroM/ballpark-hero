@@ -1,0 +1,6 @@
+intl exit=0 20s | simCmInternationals: all green
+intl-s1 exit=0 22s | simCmInternationals: all green
+intl-s2 exit=0 24s | simCmInternationals: all green
+intl-s3 exit=0 23s | simCmInternationals: all green
+intl-s5 exit=0 20s | simCmInternationals: all green
+intl-s4 exit=0 23s | simCmInternationals: all green
