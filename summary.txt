@@ -1,0 +1,4 @@
+main-runall-login exit=0 1s | All 1 harnesses green.
+og-stream-parent exit=0 2s | simSoccerOwnGoals: 1 checks, 0 failed (control stream)
+branch-runall-login exit=0 1s | All 0 harnesses green.
+og-parent exit=0 44s | simSoccerOwnGoals: 2437742 checks, 0 failed

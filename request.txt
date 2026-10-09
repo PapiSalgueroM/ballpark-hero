@@ -1,0 +1,4 @@
+og-parent: D=$RUNNER_TEMP/main-a && mkdir -p $D && git archive origin/main | tar -x -C $D && ln -s $PWD/node_modules $D/node_modules && git -C . rev-parse origin/main && OWN_GOAL_PARENT_ROOT=$D CAREERS=60 SEEDSET=4 node scripts/simSoccerOwnGoals.mjs
+og-stream-parent: D=$RUNNER_TEMP/main-b && mkdir -p $D && git archive origin/main | tar -x -C $D && ln -s $PWD/node_modules $D/node_modules && OWN_GOAL_CONTROL=stream OWN_GOAL_PARENT_ROOT=$D CAREERS=12 node scripts/simSoccerOwnGoals.mjs
+main-runall-login: D=$RUNNER_TEMP/main-c && mkdir -p $D && git archive origin/main | tar -x -C $D && ln -s $PWD/node_modules $D/node_modules && cd $D && ONLY=simLoginReturn node scripts/runAllSims.mjs
+branch-runall-login: ONLY=simLoginReturn node scripts/runAllSims.mjs
