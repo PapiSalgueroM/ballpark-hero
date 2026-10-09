@@ -31,6 +31,9 @@
      4. The log only grows between resets: after every other step the old log
         is still the start of the new one. Fails if fewer than one signing in
         four careers was seen, so it cannot pass by never meeting a move.
+     5. The parts (Release AQ): the save without what the Soccer Career train
+        keeps, and each thing the train keeps, against a band of its own (THE
+        PARTS below). Fails if too few seasons stand behind a mean.
 
    MEASURED 2026-10-03, eight seeds x 24 careers, both fixes in:
      seed     story bytes a season   seasons a career   save mean bytes
@@ -76,6 +79,41 @@
    RELEASE LEAD'S TO CONFIRM: the integration moved it, in a commit of its
    own, so the harness could be read on the release.
 
+   THE PARTS, check 5 (Release AQ, 2026-10-09). A band that wide cannot see
+   what the old one saw. The waste the train arrived with (the whole world's
+   moves on every row) put the mean at 70,788, inside 42,000 to 85,000, so the
+   moved band alone would have let it ship. The save is therefore also
+   measured in the parts the train made of it:
+     the rest: the save without the three parts below, which is everything it
+       held before the train;
+     cup games: a season row's continental cup games (clubCupRun, Round
+       1173), bytes a season that kept them;
+     division: a 2026 on season row's own division (the row's leagueWorld,
+       Round 1175), bytes a season that kept one;
+     ten divisions: the career's ten divisions (the save's leagueWorld).
+   MEASURED on release-aq-int 80ff26bd, on a CI runner, one seed a run:
+     seed     rest mean   cup games a season   division a season   ten divisions
+     9741      42,351      1,474 (115)           547 (134)           4,489
+     19741     44,208      1,466 (140)           551 (159)           4,493
+     29741     44,486      1,517 (134)           553 (138)           4,484
+     39741     44,376      1,416 (133)           563 (150)           4,491
+     49741     44,361      1,527 (130)           541 (150)           4,487
+     59741     46,216      1,485 (158)           544 (174)           4,490
+     69741     45,924      1,559 (173)           553 (174)           4,492
+     79741     44,742      1,540 (148)           513 (172)           4,493
+   (seasons behind each mean in brackets). The default run: rest 43,855, cup
+   games 1,468 over 522 seasons, division 554 over 581, ten divisions 4,489.
+   THE REST IS THE OLD SAVE: Release AP (a2597024, the release before the
+   train) measured its WHOLE save on this driver at 42,216, 44,183, 44,730
+   and 44,085 on the first four seeds, 43,803 over the run; the rest here is
+   42,351, 44,208, 44,486 and 44,376, 43,855 over the run. So the train adds
+   about 50 bytes outside its three parts, and the rest keeps the band the
+   whole save had before the train, 28,000 to 50,000, unchanged: the old check
+   still stands, at its old numbers, over everything it used to cover. The
+   three parts get the shape the save band has, about a quarter under the
+   lowest seed and a quarter over the highest: cup games 1,050 to 1,950,
+   division 380 to 710, ten divisions 3,350 to 5,650. Means only.
+
    CONTROLS. CAREER_STORY_CONTROL=reset drops the archive at the pro season
    reset, =cap keeps 5 lines a season, =draw makes the archive draw once,
    =wipe puts the signing back to writing over the log. Each mutates the
@@ -83,6 +121,13 @@
    and must fail its own check: reset and cap fail check 1, draw fails check
    2, wipe fails check 4. A control run exits 0 only when its check failed and
    prints which one; it exits 1 when the control did not fire.
+   Release AQ adds two for check 5. =worldmoves takes the filter out of the
+   settle in soccerCareerLeagueWorld.ts, so every row carries the whole
+   world's moves again: division 2,349 bytes a season, and a save mean of
+   70,728 that the save band does not see. =cuptwice writes a season's cup
+   games on its row twice: cup games 2,945 bytes a season, and a save mean of
+   67,892 that the save band does not see either. Both fail check 5 and
+   nothing else.
 
    Run: node scripts/simCareerStory.mjs [careersPerSeed]
    Reads no network: fetch is replaced with a thrower before the engine loads. */
@@ -94,29 +139,41 @@ import { pathToFileURL, fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const ENGINE = path.join(ROOT, "src", "lib", "soccerCareerEngine.ts");
+const WORLD = path.join(ROOT, "src", "lib", "soccerCareerLeagueWorld.ts");
 const CONTROL = process.env.CAREER_STORY_CONTROL || "";
 const PER_SEED = Number(process.argv[2] || 24);
 const SEEDS = (process.env.CAREER_STORY_SEEDS || "9741,19741,29741,39741").split(",").map(Number);
 
 const RESET = "s.age += 1; s.story = archiveSeasonStory(s); s.events = [];";
+const WORLD_FILTER = ".filter(m => m.from === snapshot.league);";
+const CUP_COPY = "if (uclResult.qualified) season.clubCupRun = JSON.parse(JSON.stringify(s.lastUCLResult)) as UCLResult;";
 const MUTATIONS = {
   reset: { anchor: RESET, count: 2, apply: src => { const i = src.lastIndexOf(RESET); return src.slice(0, i) + "s.age += 1; s.events = [];" + src.slice(i + RESET.length); } },
   cap: { anchor: "export const STORY_LINES_PER_SEASON = 40;", count: 1, apply: src => src.replace("export const STORY_LINES_PER_SEASON = 40;", "export const STORY_LINES_PER_SEASON = 5;") },
   draw: { anchor: "export function archiveSeasonStory(s: CareerState): CareerStorySeason[] {", count: 1, apply: src => src.replace("export function archiveSeasonStory(s: CareerState): CareerStorySeason[] {", "export function archiveSeasonStory(s: CareerState): CareerStorySeason[] {\n  Math.random();") },
   /* the signing written over the season's log again, as it was before 974 */
   wipe: { anchor: "s.events = [...s.events, `✍️ Signed with", count: 2, apply: src => src.split("s.events = [...s.events, `✍️ Signed with").join("s.events = [`✍️ Signed with") },
+  /* Release AQ: every season row carries the whole world's moves again, the
+     way the Soccer Career train arrived (the settle's filter taken out) */
+  worldmoves: { file: "world", anchor: WORLD_FILTER, count: 1, apply: src => src.replace(WORLD_FILTER, ";") },
+  /* Release AQ: a season's continental cup games written on its row twice */
+  cuptwice: { anchor: CUP_COPY, count: 1, apply: src => src.replace(CUP_COPY, CUP_COPY + " if (season.clubCupRun) (season.clubCupRun as unknown as Record<string, unknown>).again = JSON.parse(JSON.stringify(s.lastUCLResult));") },
 };
-const EXPECT_FAIL = { reset: "completeness", cap: "completeness", draw: "draws", wipe: "log" };
+const EXPECT_FAIL = { reset: "completeness", cap: "completeness", draw: "draws", wipe: "log", worldmoves: "parts", cuptwice: "parts" };
 if (CONTROL && !MUTATIONS[CONTROL]) { console.error(`unknown CAREER_STORY_CONTROL ${CONTROL}`); process.exit(2); }
 
 const original = fs.readFileSync(ENGINE, "utf8");
+const worldOriginal = fs.readFileSync(WORLD, "utf8");
 let engineText = original;
+let worldText = worldOriginal;
 if (CONTROL) {
   const m = MUTATIONS[CONTROL];
-  const found = original.split(m.anchor).length - 1;
+  const before = m.file === "world" ? worldOriginal : original;
+  const found = before.split(m.anchor).length - 1;
   if (found !== m.count) { console.error(`control ${CONTROL}: anchor found ${found} times, expected ${m.count}`); process.exit(1); }
-  engineText = m.apply(original);
-  if (engineText === original) { console.error(`control ${CONTROL} changed nothing`); process.exit(1); }
+  const after = m.apply(before);
+  if (after === before) { console.error(`control ${CONTROL} changed nothing`); process.exit(1); }
+  if (m.file === "world") worldText = after; else engineText = after;
 }
 
 const DIR = fs.mkdtempSync(path.join(os.tmpdir(), "career-story974-"));
@@ -140,6 +197,9 @@ async function bundle(text, name) {
     setup(b) {
       b.onLoad({ filter: /soccerCareerEngine\.ts$/ }, args =>
         path.resolve(args.path) === path.resolve(ENGINE) ? { contents: text, loader: "ts" } : undefined);
+      /* the league world as a control mutated it, in both bundles alike */
+      b.onLoad({ filter: /soccerCareerLeagueWorld\.ts$/ }, args =>
+        worldText !== worldOriginal && path.resolve(args.path) === path.resolve(WORLD) ? { contents: worldText, loader: "ts" } : undefined);
     },
   };
   await build({ entryPoints: [ENTRY], bundle: true, format: "esm", platform: "node", outfile: out, logLevel: "error", alias: { "@": "./src" }, plugins: [swapEngine] });
@@ -231,9 +291,34 @@ function career(E, seed, c, walk) {
 const BANDS = {
   storyBytesPerSeason: [300, 650],
   saveBytesMean: [42000, 85000],
+  /* check 5, the parts (see THE PARTS in the header) */
+  restBytesMean: [28000, 50000],
+  cupBytesPerSeason: [1050, 1950],
+  divisionBytesPerSeason: [380, 710],
+  tenDivisionsBytesMean: [3350, 5650],
 };
+/* Seasons a career that must stand behind a part's mean (measured 4.8 to 7.2
+   with cup games, 5.6 to 7.3 with a division). */
+const PART_FLOORS = { cupRows: 2, divisionRows: 3 };
 
-const fails = { completeness: [], draws: [], size: [], log: [] };
+/* Check 5: the save in the parts the Soccer Career train made of it. The two
+   things it keeps on a season row, the career's ten divisions, and the rest,
+   which is everything the save held before the train. */
+const bytesOf = v => (v === undefined ? 0 : JSON.stringify(v).length);
+function saveParts(s) {
+  const cupRows = s.seasons.filter(r => r.clubCupRun);
+  const divisionRows = s.seasons.filter(r => r.leagueWorld);
+  return {
+    cup: cupRows.reduce((n, r) => n + bytesOf(r.clubCupRun), 0), cupRows: cupRows.length,
+    division: divisionRows.reduce((n, r) => n + bytesOf(r.leagueWorld), 0), divisionRows: divisionRows.length,
+    ten: bytesOf(s.leagueWorld),
+    rest: bytesOf({ ...s, leagueWorld: undefined, seasons: s.seasons.map(r => ({ ...r, clubCupRun: undefined, leagueWorld: undefined })) }),
+  };
+}
+
+const fails = { completeness: [], draws: [], size: [], log: [], parts: [] };
+const part = { cup: 0, cupRows: 0, division: 0, divisionRows: 0, ten: 0, rest: 0 };
+const partBySeed = { ...part };
 let loans = 0, transfers = 0;
 let careers = 0, seasonsKept = 0, linesKept = 0, linesWritten = 0, liveLines = 0, cut = 0;
 let storyBytes = 0, saveBytes = 0;
@@ -265,10 +350,15 @@ for (const seed of SEEDS) {
     const bytes = JSON.stringify(a.s).length;
     saveBytes += bytes;
     saves.push(bytes);
+    const p = saveParts(a.s);
+    for (const k of Object.keys(part)) part[k] += p[k];
   }
   const n = careers - bySeed.careers, sb = storyBytes - bySeed.storyBytes, ss = seasonsKept - bySeed.seasons, vb = saveBytes - bySeed.saveBytes;
   console.log(`seed ${seed}: ${n} careers, story ${(sb / Math.max(1, ss)).toFixed(0)} bytes a season, ${(ss / Math.max(1, n)).toFixed(1)} seasons a career, save mean ${(vb / Math.max(1, n)).toFixed(0)} bytes`);
+  const d = Object.fromEntries(Object.keys(part).map(k => [k, part[k] - partBySeed[k]]));
+  console.log(`seed ${seed} parts: rest mean ${(d.rest / Math.max(1, n)).toFixed(0)} bytes, cup games ${(d.cup / Math.max(1, d.cupRows)).toFixed(0)} bytes a season over ${d.cupRows} seasons, division ${(d.division / Math.max(1, d.divisionRows)).toFixed(0)} bytes a season over ${d.divisionRows} seasons, ten divisions mean ${(d.ten / Math.max(1, n)).toFixed(0)} bytes`);
   Object.assign(bySeed, { careers, storyBytes, seasons: seasonsKept, saveBytes });
+  Object.assign(partBySeed, part);
 }
 if (transfers < careers / 4) fails.log.push(`only ${transfers} signings over ${careers} careers: the log check saw too few moves to mean anything`);
 if (cut > 0) fails.completeness.push(`${cut} lines past the season cap were not kept`);
@@ -277,12 +367,25 @@ const meanSave = saveBytes / Math.max(1, careers);
 if (perSeason < BANDS.storyBytesPerSeason[0] || perSeason > BANDS.storyBytesPerSeason[1]) fails.size.push(`mean story bytes a season ${perSeason.toFixed(0)} outside ${BANDS.storyBytesPerSeason}`);
 if (meanSave < BANDS.saveBytesMean[0] || meanSave > BANDS.saveBytesMean[1]) fails.size.push(`mean save bytes ${meanSave.toFixed(0)} outside ${BANDS.saveBytesMean}`);
 if (seasonsKept < careers * 10) fails.completeness.push(`only ${seasonsKept} story seasons over ${careers} careers: the driver is not playing careers`);
+/* check 5: each part inside its own band, and enough seasons behind each mean */
+const partMeans = {
+  restBytesMean: part.rest / Math.max(1, careers),
+  cupBytesPerSeason: part.cup / Math.max(1, part.cupRows),
+  divisionBytesPerSeason: part.division / Math.max(1, part.divisionRows),
+  tenDivisionsBytesMean: part.ten / Math.max(1, careers),
+};
+for (const [name, value] of Object.entries(partMeans)) {
+  if (value < BANDS[name][0] || value > BANDS[name][1]) fails.parts.push(`${name} ${value.toFixed(0)} outside ${BANDS[name]}`);
+}
+if (part.cupRows < careers * PART_FLOORS.cupRows) fails.parts.push(`only ${part.cupRows} seasons with continental cup games over ${careers} careers: too few to measure`);
+if (part.divisionRows < careers * PART_FLOORS.divisionRows) fails.parts.push(`only ${part.divisionRows} seasons with a division over ${careers} careers: too few to measure`);
 
 saves.sort((x, y) => x - y);
 console.log(`moves the log check saw: ${transfers} signings, ${loans} loans`);
 console.log(`careers ${careers} (${SEEDS.length} seeds x ${PER_SEED}), story seasons ${seasonsKept}, lines written ${linesWritten}, kept in the story ${linesKept} plus ${liveLines} live`);
 console.log(`baseline before Round 974: a finished career could read ${liveLines} of ${linesWritten} lines (${(100 * liveLines / Math.max(1, linesWritten)).toFixed(1)}%); now ${linesKept + liveLines} (${(100 * (linesKept + liveLines) / Math.max(1, linesWritten)).toFixed(1)}%)`);
 console.log(`size: story ${perSeason.toFixed(0)} bytes a season, save mean ${meanSave.toFixed(0)} bytes, median ${saves[Math.floor(saves.length / 2)]}`);
+console.log(`parts: rest mean ${partMeans.restBytesMean.toFixed(0)} bytes (the save before the train's parts), cup games ${partMeans.cupBytesPerSeason.toFixed(0)} bytes a season over ${part.cupRows} seasons, division ${partMeans.divisionBytesPerSeason.toFixed(0)} bytes a season over ${part.divisionRows} seasons, ten divisions mean ${partMeans.tenDivisionsBytesMean.toFixed(0)} bytes`);
 for (const [name, list] of Object.entries(fails)) {
   console.log(`check ${name}: ${list.length === 0 ? "ok" : `FAIL (${list.length})`}`);
   for (const f of list.slice(0, 5)) console.log(`  ${f}`);

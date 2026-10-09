@@ -293,8 +293,65 @@ describe('Soccer Career: the story keeps the save small', () => {
     expect(bytes).toBeLessThan(SIZE_BOUND);
     expect(story / Math.max(1, s.story?.length ?? 0)).toBeLessThan(STORY_BYTES_PER_SEASON);
     expect(s.story?.length, 'every finished playing season is in the book').toBe(playing - 1);
+    /* the save in the train's parts, see THE PARTS below */
+    const p = saveParts(s);
+    console.log(`[save parts] seed ${seed}: rest ${p.rest} bytes, cup games ${p.cup} bytes over ${p.cupRows} seasons, division ${p.division} bytes over ${p.divisionRows} seasons, ten divisions ${p.ten} bytes`);
+    expect(p.rest, 'what the save held before the train still fits the bound it had then').toBeLessThan(REST_BOUND);
+    expect(p.cupRows, 'continental seasons to measure').toBeGreaterThanOrEqual(PART_SEASONS_FLOOR);
+    expect(p.divisionRows, 'seasons with a division to measure').toBeGreaterThanOrEqual(PART_SEASONS_FLOOR);
+    expect(p.cup / p.cupRows).toBeLessThan(CUP_BYTES_PER_SEASON);
+    expect(p.division / p.divisionRows).toBeLessThan(DIVISION_BYTES_PER_SEASON);
+    expect(p.ten).toBeLessThan(TEN_DIVISIONS_BYTES);
   });
 });
+
+/* THE PARTS (Release AQ, 2026-10-09). The whole save bound above had to move
+   for the Soccer Career train, and a bound half again over 130 KB cannot see
+   what the old one saw: the 34 to 40 KB the train first wasted on every row
+   (the whole world's moves) would have passed under 195,000. So the save is
+   also measured in the parts the train made of it, each against its own
+   number:
+     the rest: everything but the three parts below, which is what the save
+       held before the train. It keeps the bound the whole save had before the
+       train, 80,000, unchanged.
+     cup games: a season row's continental cup games (Round 1173), by the
+       season that kept them. Twice the measured mean, the story's rule.
+     division: a 2026 on season row's own division (Round 1175), by the season
+       that kept one. Twice the measured mean.
+     ten divisions: the career's ten divisions, one object. Half again over
+       the largest measured, the whole save's rule.
+   MEASURED by this test on release-aq-int 80ff26bd (CI runner):
+     seed 9748: save 120,662 B; rest 65,922; cup games 36,723 over 21 seasons
+       (1,749 a season); division 12,902 over 21 (614); ten divisions 4,491
+     seed 9749: save 110,158 B; rest 72,165; cup games 20,184 over 12 seasons
+       (1,682 a season); division 12,810 over 21 (610); ten divisions 4,501
+     seed 9750: save 129,978 B; rest 73,150; cup games 40,056 over 23 seasons
+       (1,742 a season); division 11,655 over 19 (613); ten divisions 4,495
+   The same test on Release AP (cbff760c, the release before the train; the
+   seeds play other careers there, the train moves the draws) measured the
+   whole save at 61,560, 70,636 and 78,058 B, so the rest sits where the whole
+   save sat and the old bound has more room over it than it had then. Budgets:
+   cup games 3,500 a season (mean 1,724), division 1,250 a season (mean 612),
+   ten divisions 6,800 (largest 4,501). With the world's moves back on every
+   row a season's division measures about 2,350 on the harness's careers.
+   scripts/simCareerStory.mjs holds the same parts in bands over 96 careers,
+   with the controls that put the waste back (worldmoves, cuptwice). */
+const REST_BOUND = 80_000;
+const CUP_BYTES_PER_SEASON = 3_500;
+const DIVISION_BYTES_PER_SEASON = 1_250;
+const TEN_DIVISIONS_BYTES = 6_800;
+const PART_SEASONS_FLOOR = 8;
+function saveParts(s: CareerState) {
+  const bytesOf = (v: unknown) => (v === undefined ? 0 : JSON.stringify(v).length);
+  const cupRows = s.seasons.filter(r => r.clubCupRun);
+  const divisionRows = s.seasons.filter(r => r.leagueWorld);
+  return {
+    cup: cupRows.reduce((n, r) => n + bytesOf(r.clubCupRun), 0), cupRows: cupRows.length,
+    division: divisionRows.reduce((n, r) => n + bytesOf(r.leagueWorld), 0), divisionRows: divisionRows.length,
+    ten: bytesOf(s.leagueWorld),
+    rest: bytesOf({ ...s, leagueWorld: undefined, seasons: s.seasons.map(r => ({ ...r, clubCupRun: undefined, leagueWorld: undefined })) }),
+  };
+}
 
 function playToSeasonStart(seed: number, seasons: number): CareerState {
   let { s } = play(seed, seasons);
