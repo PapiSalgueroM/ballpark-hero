@@ -55,8 +55,13 @@ function initialWorld(year: number): CareerLeagueWorld {
  *  club tiers. This is simulation, never a predicted real league result. */
 export function leagueWorldOrder(world: CareerLeagueWorld, league: string, playerName: string, clubs: ClubData[], row?: SeasonRecord): string[] {
   const members = world.leagues[league] ?? [];
+  const tiers = new Map<string, number>();
+  for (const c of clubs) {
+    const key = clubKey(c.name);
+    if (!tiers.has(key)) tiers.set(key, c.tier);
+  }
   const form = members.map(name => {
-    const tier = clubs.find(c => same(c.name, name))?.tier ?? 4;
+    const tier = tiers.get(clubKey(name)) ?? 4;
     const rng = keyedRng(`${playerName}|${world.year}|${league}|${name}|league-form`);
     return { name, score: (5 - tier) * 0.8 + rng() * 4 };
   }).sort((a, b) => b.score - a.score || a.name.localeCompare(b.name)).map(c => c.name);
@@ -106,11 +111,26 @@ export function projectLeagueWorldClubs(career: CareerState, clubs: ClubData[], 
   const world = leagueWorldForYear(career, clubs, year);
   if (!world) return clubs;
   const pool = [...clubs];
+  const present = new Set(pool.map(c => clubKey(c.name)));
+  const knownPool = new Map<string, ClubData>();
+  for (const c of CAREER_CLUB_POOL) {
+    const key = clubKey(c.name);
+    if (!knownPool.has(key)) knownPool.set(key, c);
+  }
   for (const p of PYRAMIDS) for (const name of initialMembers(p.lower)) {
-    if (!pool.some(c => same(c.name, name))) pool.push(CAREER_CLUB_POOL.find(c => same(c.name, name)) ?? { id: `career-lower-${clubKey(name).replace(/[^a-z0-9]+/g, '-')}`, name, country: p.lower === 'Ligue 2' ? 'France' : p.lower === 'Serie B' ? 'Italy' : name === 'FC Andorra' ? 'Andorra' : 'Spain', tier: 4, color: '#64748b', league: p.lower });
+    const key = clubKey(name);
+    if (!present.has(key)) {
+      pool.push(knownPool.get(key) ?? { id: `career-lower-${key.replace(/[^a-z0-9]+/g, '-')}`, name, country: p.lower === 'Ligue 2' ? 'France' : p.lower === 'Serie B' ? 'Italy' : name === 'FC Andorra' ? 'Andorra' : 'Spain', tier: 4, color: '#64748b', league: p.lower });
+      present.add(key);
+    }
+  }
+  const leagueOf = new Map<string, string>();
+  for (const [league, names] of Object.entries(world.leagues)) for (const name of names) {
+    const key = clubKey(name);
+    if (!leagueOf.has(key)) leagueOf.set(key, league);
   }
   return pool.map(c => {
-    const league = Object.entries(world.leagues).find(([, names]) => names.some(n => same(n, c.name)))?.[0];
+    const league = leagueOf.get(clubKey(c.name));
     if (!league) return c;
     const lower = pyramidFor(league)?.lower === league;
     return { ...c, league, tier: lower ? Math.max(4, c.tier) : c.tier };

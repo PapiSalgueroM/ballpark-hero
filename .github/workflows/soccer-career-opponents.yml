@@ -53,6 +53,16 @@ jobs:
       - name: Opponents, old saves and effective copied defects
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: ONLY=simSoccerCareerOpponents node scripts/runAllSims.mjs 2>&1 | tee career-opponents-artifacts/opponents.log
+      - name: Changing leagues, discipline, navigation and contract outcomes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerCareerContracts.test.ts --maxWorkers=1 --minWorkers=1 2>&1 | tee career-opponents-artifacts/contracts-tests.log
+          failed=0
+          for harness in simSoccerLeagueWorldLookup simSoccerCareerLeagueWorld simSoccerDiscipline simSoccerCompetitionNavigation simSoccerContractMoves; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node "scripts/$harness.mjs" 2>&1 | tee "career-opponents-artifacts/$harness.log" || failed=1
+          done
+          ONLY=simClubVerdict,simLoanSpell node scripts/runAllSims.mjs 2>&1 | tee career-opponents-artifacts/existing-club-and-loan-sims.log || failed=1
+          exit "$failed"
       - name: Trophy history and existing season contracts
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
@@ -87,16 +97,6 @@ jobs:
             esac
             if grep -Eq 'control.*refus|Cannot find|SyntaxError|no patches applied' "career-opponents-artifacts/competition-control-$control.log"; then exit 1; fi
           done
-      - name: Changing leagues, discipline, navigation and contract outcomes
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: |
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerCareerContracts.test.ts --maxWorkers=1 --minWorkers=1 2>&1 | tee career-opponents-artifacts/contracts-tests.log
-          failed=0
-          for harness in simSoccerCareerLeagueWorld simSoccerDiscipline simSoccerCompetitionNavigation simSoccerContractMoves; do
-            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node "scripts/$harness.mjs" 2>&1 | tee "career-opponents-artifacts/$harness.log" || failed=1
-          done
-          ONLY=simClubVerdict,simLoanSpell node scripts/runAllSims.mjs 2>&1 | tee career-opponents-artifacts/existing-club-and-loan-sims.log || failed=1
-          exit "$failed"
       - name: Effective contract and club move defects
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
