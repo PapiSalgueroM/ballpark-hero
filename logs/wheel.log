@@ -1,0 +1,14 @@
+1) the wheel is the whole table
+  FAIL [nba]: the wheel read returned nothing (database unreachable or a page failed every retry)
+  FAIL [nhl]: the wheel read returned nothing (database unreachable or a page failed every retry)
+  FAIL [mlb]: the wheel read returned nothing (database unreachable or a page failed every retry)
+  FAIL [nfl]: the wheel read returned nothing (database unreachable or a page failed every retry)
+2) a daily dated before the switch keeps the old wheel
+   SKIPPED: TODAY (2026-10-09) IS PAST THE SWITCH (2026-10-08). NO DAILY CAN BE DEALT FROM THE OLD WHEEL ANY MORE: DELETE THE oldWheel OPTION, THIS SECTION AND THE nopin CONTROL.
+3) the guide names only stops the wheel can land on
+  FAIL [nba]: no full wheel to check against (section 1 failed to read it)
+  FAIL [nhl]: no full wheel to check against (section 1 failed to read it)
+  FAIL [mlb]: no full wheel to check against (section 1 failed to read it)
+  FAIL [nfl]: no full wheel to check against (section 1 failed to read it)
+
+simPerfectSeasonWheel: 8 failure(s) in 1:mlb, 1:nba, 1:nfl, 1:nhl, 3:mlb, 3:nba, 3:nfl, 3:nhl
