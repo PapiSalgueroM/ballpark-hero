@@ -1,0 +1,12 @@
+1) The balanced rule over every league size the game plays: once a round, once each way, home equals away, no venue run past 2
+   sizes 10, 12, 13, 14, 15, 16, 18, 20, 24 (8 off the engine's leagues, 13 and 15 added for the odd path), 270 rounds audited; worst same venue run 2
+2) The old rule is untouched: roundPairs(clubs, r, false) equals the pre 617 function for every size and round
+   270 rounds across 9 sizes compared to the verbatim pre 617 function, 0 differ; the oracle's worst run is n minus 1 at every size
+3) Through the engine: a new career carries the field and plays the balanced list, the same save without it plays the old one, and the rollover sets it
+   8 careers (Hajduk Split in 10, Rangers in 12, Olympiacos in 14, Inter Miami in 15, Zenit in 16, Bayern Munich in 18, Arsenal in 20, West Ham in 24): 8 carry the field, 8 play a run of at most 2 with it (worst 2), 8 answer the old pattern for every club without it (worst old run 23), field still absent after a played entry and a load, 8 rollovers set it
+4) The AI world plays the same list: every world league's pair ledger is the balanced pairs, and no club sits at one venue three rounds running
+   Arsenal's world after 8 of my league rounds: 26 leagues, 172 rounds replayed (fewest 4), 4 pair ledgers hold exactly the balanced fixtures; worst same venue run 2; the save's flag reads true
+5) Words match code: the balanced branch swaps on the round alone, the legacy branch on (r + i), every caller passes the flag, both season starts set it, no dash
+   roundPairs exported; one remainder over (balanced ? r : r + i) on body line 23; 4 callers, third arguments: !!state.balancedFixtures / !!state.balancedFixtures / !!state.balancedFixtures / !!state.balancedFixtures; interface, startCareer and startNextSeason checked; no dash; 0 other copies of the venue swap under src
+
+simFixtureBalance: PASS. Every club alternates venues with a longest run of 2 at every league size, a save without the field keeps its old list, the rollover converges it, the AI world plays the same list, and the words match the code.
