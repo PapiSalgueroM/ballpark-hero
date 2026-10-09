@@ -1,0 +1,68 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/seasonCore.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 82[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/seasonCentreWords.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 743[2mms[22m[39m
+   [33m[2m✓[22m[39m Season Centre: soccer markup, recorded on the base (Round 1048)[2m > [22mprints the soccer shaped season exactly as the base viewer did, with no new field set [33m 361[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonCentre.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 940[2mms[22m[39m
+   [33m[2m✓[22m[39m the US Season Center, mounted by itself[2m > [22mwalks an NBA season from the tip off card to the review and closes [33m 486[2mms[22m[39m
+ [31m❯[39m src/test/usSeasonCentreEntry.test.tsx [2m([22m[2m31 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 4484[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 1802[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 376[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mkeeps Play the first button, and the entry never says "Play the"[32m 8[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mplays and opens nothing on the bare board, with no host around it[32m 45[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mopens a season already played from Watch again, after a contract talk was answered with "play it out"[32m 66[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mplays nothing when the viewer cannot be loaded: a failed chunk costs no season[32m 42[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: the old order (play, then load) loses a season to the same failed chunk[32m 12[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mopens the season he just played when storage is full and the save was refused[32m 46[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: without the board handing its career over, the same press plays the season and opens nothing[32m 13[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mnever opens a line another tab saved: with his own write refused he watches the season this tab played[32m 34[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: before the hand over, that press with another tab's line on the save opened nothing at all[32m 12[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mopens the viewer or the plain tile, never a throw, for a last line from an older build[32m 68[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 1077[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 369[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mkeeps Play the first button, and the entry never says "Play the"[32m 7[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mplays and opens nothing on the bare board, with no host around it[32m 22[2mms[22m[39m
+[31m   [31m×[31m 'NFL' My Career: watching changes nothing[2m > [22mopens a season already played from Watch again, after a contract talk was answered with "play it out"[39m[32m 230[2mms[22m[39m
+[31m     → usSeasonCentreEntry.test: never got back to the hub[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mplays nothing when the viewer cannot be loaded: a failed chunk costs no season[32m 40[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: the old order (play, then load) loses a season to the same failed chunk[32m 16[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mopens the season he just played when storage is full and the save was refused[32m 22[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: without the board handing its career over, the same press plays the season and opens nothing[32m 16[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mnever opens a line another tab saved: with his own write refused he watches the season this tab played[32m 40[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: before the hand over, that press with another tab's line on the save opened nothing at all[32m 17[2mms[22m[39m
+   [32m✓[39m 'NFL' My Career: watching changes nothing[2m > [22mopens the viewer or the plain tile, never a throw, for a last line from an older build[32m 53[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mshows the held line and no button in a year whose real length is not the one the career plays[32m 11[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mholds an NFL throwback career until 2021: the held line and no button in 2005[32m 8[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mhas the NBA and the NFL both bound, so neither arm above can drop out through its own filter[32m 0[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22msays there is nothing to watch in a banned year[32m 9[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mMLB My Career renders no entry at all[32m 10[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mNHL My Career renders no entry at all[32m 9[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mstill has MLB and the NHL unbound (they are number files for a later round)[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonCentreEntry.test.tsx[2m > [22m'NFL' My Career: watching changes nothing[2m > [22mopens a season already played from Watch again, after a contract talk was answered with "play it out"
+[31m[1mError[22m: usSeasonCentreEntry.test: never got back to the hub[39m
+[36m [2m❯[22m toHub src/test/usSeasonCentreEntry.test.tsx:[2m142:9[22m[39m
+    [90m140| [39m    [35mawait[39m [34mclick[39m(all[[34m0[39m])[33m;[39m
+    [90m141| [39m  }
+    [90m142| [39m  throw new Error('usSeasonCentreEntry.test: never got back to the hub…
+    [90m   | [39m        [31m^[39m
+    [90m143| [39m}
+    [90m144| [39m
+[90m [2m❯[22m src/test/usSeasonCentreEntry.test.tsx:[2m265:9[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m63 passed[39m[22m[90m (64)[39m
+[2m   Start at [22m 06:40:37
+[2m   Duration [22m 8.93s[2m (transform 3.51s, setup 276ms, collect 6.74s, tests 6.25s, environment 2.16s, prepare 743ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonCentreEntry.test.tsx,title=src/test/usSeasonCentreEntry.test.tsx > 'NFL' My Career%3A watching changes nothing > opens a season already played from Watch again%2C after a contract talk was answered with "play it out",line=142,column=9::Error: usSeasonCentreEntry.test: never got back to the hub%0A ❯ toHub src/test/usSeasonCentreEntry.test.tsx:142:9%0A ❯ src/test/usSeasonCentreEntry.test.tsx:265:9%0A%0A

@@ -1,0 +1,10 @@
+build exit=0 20s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest-nfl exit=0 4s |    Duration  3.11s (transform 1.19s, setup 122ms, collect 2.11s, tests 1.19s, environment 1000ms, prepare 310ms)
+sim-s0 exit=1 4s | simUsSeasonCentre: 83 checks, 2 failed
+vitest-view exit=1 9s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonCentreEntry.test.tsx,title=src/test/usSeasonCentreEntry.test.tsx > 'NFL' My Career%3A watching
+sim-s1 exit=1 4s | simUsSeasonCentre: 83 checks, 2 failed
+sim-s2 exit=1 4s | simUsSeasonCentre: 84 checks, 2 failed
+sim-s3 exit=1 4s | simUsSeasonCentre: 82 checks, 2 failed
+sim-s4 exit=1 4s | simUsSeasonCentre: 83 checks, 2 failed
+tsc exit=0 43s | 
+play exit=0 122s | playUsSeasonCentre: 121 checks, 0 failed
