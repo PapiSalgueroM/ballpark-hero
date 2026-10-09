@@ -1,0 +1,18 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/seasonCore.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 166[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/seasonCentreSlots.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[32m 211[2mms[22m[39m
+ [32m✓[39m src/test/miniPitchScene.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 221[2mms[22m[39m
+ [32m✓[39m src/test/seasonCentreOwnGoals.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 1643[2mms[22m[39m
+   [33m[2m✓[22m[39m Season Centre: own goals on the page (Round 1167, read after the Release AP merge)[2m > [22mprints an own goal for side "us" with who did it and the club that got it, the same live, held and replayed [33m 606[2mms[22m[39m
+   [33m[2m✓[22m[39m Season Centre: own goals on the page (Round 1167, read after the Release AP merge)[2m > [22mprints an own goal for side "them" with who did it and the club that got it, the same live, held and replayed [33m 305[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m68 passed[39m[22m[90m (68)[39m
+[2m   Start at [22m 16:05:55
+[2m   Duration [22m 6.70s[2m (transform 4.46s, setup 510ms, collect 6.87s, tests 2.24s, environment 3.04s, prepare 815ms)[22m
+

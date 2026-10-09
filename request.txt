@@ -1,0 +1,22 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-marks: node_modules/.bin/vitest run src/test/managerPenaltyMarkers.test.tsx src/test/managerScorerMarks.test.tsx src/test/managerQuickSimLegs.test.tsx src/test/cmMinuteLabel.test.ts --testTimeout=300000 --hookTimeout=120000
+vitest-live: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx src/test/liveSimCelebration.test.tsx src/test/clubManagerSave.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-season: node_modules/.bin/vitest run src/test/seasonCentreOwnGoals.test.tsx src/test/seasonCore.test.ts src/test/seasonCentreSlots.test.tsx src/test/miniPitchScene.test.ts --testTimeout=300000 --hookTimeout=120000
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simCmQuickLegs: node scripts/simCmQuickLegs.mjs
+simCmQuickSubs: node scripts/simCmQuickSubs.mjs
+simSoccerOwnGoals: CAREERS=120 SEEDSET=0 node scripts/simSoccerOwnGoals.mjs
+simClubManagerStaff: node scripts/simClubManagerStaff.mjs
+simCmStoppageTime: node scripts/simCmStoppageTime.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simClubManagerEraUcl: node scripts/simClubManagerEraUcl.mjs
+simMatchDetail: node scripts/simMatchDetail.mjs
+simLiveMatch: node scripts/simLiveMatch.mjs
+simLiveSim: node scripts/simLiveSim.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simClubManager: node scripts/simClubManager.mjs
+simHalftime: node scripts/simHalftime.mjs
+simAwardRaces: node scripts/simAwardRaces.mjs
+simAwards: node scripts/simAwards.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
