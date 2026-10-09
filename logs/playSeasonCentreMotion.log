@@ -1,0 +1,42 @@
+tables from node: 433 table seasons in the probe, five used: Probe 0 2001 AC Milan (34); Probe 9 2008 Atletico Madrid (38); Probe 14 2030 Man City (38); Probe 26 2017 Chelsea (38); Probe 33 2010 Fiorentina (38)
+B1) 882 transitions over 4 layouts and 5 seasons; largest deviation at the first frame 0.000 px, at the last 0.000 px; 675 rows entered a compact window
+ok   B1. enough transitions were measured (882, floor 400)
+ok   B1. every row starts within 1 px of where it truly was (0 did not)
+ok   B1. every row reads as the new table's row from the first frame (0 texts, 0 orders wrong)
+ok   B1. every row ends within 1 px of its place in the still card (0 did not)
+ok   B1. nothing is left on a row after a flight (0 leftovers)
+ok   B1. the box is the same size at the first frame, the last frame and still (0 differed)
+ok   B1. the largest deviation seen is at most half a pixel, so the 1 px bound is not a rounding accident (0.000 and 0.000)
+B2) by season: Probe 0 2001 AC Milan 75 of 86 (87.2%); Probe 9 2008 Atletico Madrid 90 of 94 (95.7%); Probe 14 2030 Man City 88 of 94 (93.6%); Probe 26 2017 Chelsea 86 of 94 (91.5%); Probe 33 2010 Fiorentina 89 of 94 (94.7%)
+ok   B2. one matchday steps in which a row carried a transform: 428 of 462 (92.6%, floor 75%), 3272 rows moved
+ok   B3. a first mount plays nothing (0 of 520 mounts moved)
+ok   B3. pre season to matchday 1 does not slide (0 of 20 did)
+ok   B1i. a flight was in the air when the second table landed in 38 of 40 cases (floor half)
+ok   B1i. the second flight starts at the first table's true places and ends at the second's, nothing left (0 bad starts, 0 bad ends, 0 leftovers; largest start deviation 0.000 px)
+ok   B4. under reduced motion no step slides (0 of 50 did)
+ok   B4. and every row is at its new place in the same frame (0 were not)
+ok   B5. the bare page carries the pitch part's own stylesheet (nets, ball and figures are placed)
+ok   B5. the pitch plays the goal that happened: side, net, ring, words, order, pause, a goal already past, Results speed (0 of 46 held checks failed)
+C) chunks: Season Centre SeasonCentre-Cie6_mWQ.js, little pitch MiniPitch-azdrxTSD.js, pitch part PitchSurface-CVYbBQpI.js
+C) save: Motion 0, 12 played seasons (5 replay, 7 locked), the last 2023/24 Arsenal with 38 matchdays; his goal and a goal against on matchday 9
+ok   C. the save has seasons that replay and seasons that do not (5 and 7; floors 2 and 1)
+C) the YOUR CALL save: Held 0, 2014 Arsenal, matchday 7 (finish, on the record missed): as saved 0-1, as he played it 1-1; ledger {"v":1,"key":"Held 0|Arsenal|2014|25|10|4|6.8|centre","m":[[7,0,2]],"banked":1}
+ok   C8. node: his YOUR CALL changes the score of matchday 7 and the table that week
+C) the results only save: Probe 0, 1992 Al Ahli, 38 league games
+ok   C2. the hub loads neither the Season Centre, the little pitch nor the pitch part
+ok   C3. with no place kept the hub shows Season replays and no Resume chip
+FAIL C4. the picker lists exactly the played seasons, newest first, open or locked as node says (12 rows: 5 open, 7 locked)
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[data-replay-locked="11"]')
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playSeasonCentreMotion.mjs:1013:16 {
+  log: [ `  - waiting for locator('[data-replay-locked="11"]')` ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0
