@@ -1,0 +1,7 @@
+simPress: node scripts/simPress.mjs
+simWorld: node scripts/simWorld.mjs
+simUclLegs: node scripts/simUclLegs.mjs
+simUclField: node scripts/simUclField.mjs
+simUclSeasonOne: node scripts/simUclSeasonOne.mjs
+simYouthPadding: node scripts/simYouthPadding.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
