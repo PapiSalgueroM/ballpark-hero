@@ -47,7 +47,7 @@
  * injury in 0.24 of them, a spent man at the break in 0.46) and never after
  * the break unless somebody was hurt; with it, in nine in ten, about one
  * change for legs a match, and a season's appearances go to 21.6 men instead
- * of 20.7 (585 against 536).
+ * of 20.7 (583 against 536).
  * Results. The two arms are separate samples of 1,650 matches, so a share of
  * wins is good to about 1.7 points and a season's points to about 2: wins
  * (54.2 against 54.9 percent over the three sets) and points (68.9 against
@@ -58,7 +58,7 @@
  * at that minute (the other side's shape reads it), and he now makes a
  * change in most matches. Nothing here asserts on results; the season
  * balance harnesses do.
- * His rule, read on 730 matches played again by hand: 537 changes for legs,
+ * His rule, read on 732 matches played again by hand: 537 changes for legs,
  * 393 with the match within a goal or my side behind (the eleven no weaker
  * every time, mean +0.08 to +0.10 of the engine's strength) and 144 with my
  * side two or more up (mean -0.43 to -0.54, legs rested whatever it costs).
