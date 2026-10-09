@@ -1,0 +1,6 @@
+ownGoals-mine exit=0 1s | simSoccerOwnGoals: 4 checks, 0 failed (control mine)
+ownGoals-mirror exit=0 1s | simSoccerOwnGoals: 4 checks, 0 failed (control mirror)
+vitest-touched exit=1 19s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/facilitiesPreview.test.tsx,title=src/test/facilitiesPreview.test.tsx > Club Manager facilities preview
+simClubManagerStart exit=0 3s | simClubManagerStart: green. The defaults are the shipped game, the currency never reaches the engine, and no setting can switch off the haggle.
+tsc exit=0 65s | 
+ownGoals exit=0 85s | simSoccerOwnGoals: 4974192 checks, 0 failed
