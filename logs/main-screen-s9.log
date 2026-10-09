@@ -1,0 +1,17 @@
+1) The clock: stoppage time on the screen, for both halves, from the half it followed
+   174 reports rendered, every one showing 45+n' and 90+m' as the screen's own row
+   first half board 1 to 5 (mean 3.72), second half 2 to 8 (mean 6.08)
+2) Possession: two shares of one hundred, both wearing a percent sign
+   174 pairs on screen, every one summing to 100 and every one the sim's own share
+3) Both clubs named, counted rather than string matched
+   174 reports name the other club 4 to 12 times (mean 7.5, floor 3.5), and 12 live viewers name both clubs
+4) Every text block centred inside the card
+   174 cards rendered, 0 left aligned blocks, every card centring its text
+5) Momentum reads as swings, not as one number
+   174 charts: 2.96 sign changes a match (floor 1.9), 90.8 percent reach both sides (floor 62)
+   every chart drew the report's own nine buckets
+6) Historical no-coach baseline: the same fixture and seed finish identically
+   24 fixtures replayed both ways, 14 distinct scorelines, every pair identical down to the momentum series
+   the engine plays a match in 1 places, both off one kick off, and each of the two screens offers exactly 2 ways in (7 buttons on the Match Centre)
+
+simMatchScreen: PASS. One match, two ways through it, and a report that names both clubs, shows the clock it ran to, splits the ball two ways and draws a graph that moves.

@@ -1,0 +1,713 @@
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:28287:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:107997:26)
+    at Router (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23658:13)
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-main-erauc-s3/clubManagerEraUcl.bundle.cjs:23568:3)
+1) The format: an era plays eight groups into a round of 16, the modern save keeps its shape
+   33 careers played to the final whistle (34 era, 2 modern), 3 ended in the sack first
+2) The draw: winners against runners-up, never the same group, never the same country, a function of the save
+   32 draws checked, 256 ties, the association rule readable on 256 of them; every draw reproduced twice and across a save and reload
+3) The group tables stay on the Cups tab once the knockouts start
+   126 cards rendered through react-dom/server on knockout states
+4) Level points split on head to head in Spain and Italy, on goal difference in England
+   155 final tables read; 138 neighbouring pairs level on points in Spanish and Italian tables: 95 split on head to head points, 14 on head to head goal difference, 29 fell through to goal difference; 50 of them sit the other way round from goal difference (the visible change); 91 English level pairs, all on goal difference then goals scored
+5) A pre migration save loads, is repaired honestly and plays out
+   1 pre migration era save played to the final whistle with its round of 16; 7 wrong ledger shapes dropped; the modern save untouched
+6) A Champions League group is sorted by the Champions League rule, and the round of 16 is seeded from that order
+   1960 group tables read across 212 group nights, every one against the regulations' order rebuilt here from the ledger; 264 final groups checked against the round of 16 field; 8 crafted tables put through both group stage worlds and the modern save; 1 pre-478 save played its groups out with the results it lost left lost
+   THE MEASUREMENT: of 280 groups at the final whistle, 109 finished with clubs level on points, the head to head put 45 of them in a different order from goal difference, and 10 of those changed who topped the group and therefore who hosts the deciding leg of the round of 16
+7) An era European night names only men of that era, at every club of every era's field
+   1512 era nights played across 4 eras (12 at each club of each field, plus the long names); 1421 opposition goals: 763 by men of the club's own era roster, 658 on the neutral shirt number line
+   126 Match Centre previews of the same nights read, 134 danger men named, every one from the club's era roster
+   55 of those goals were at the 5 clubs the pre-1028 draw handed today's scorers (era2005 Panathinaikos, era2010 Panathinaikos, era2015 Galatasaray, era2015 Paris Saint-Germain, era2015 Borussia Mönchengladbach); 21 at the Round 899 long names
+   THE TWIN: a modern Real Madrid season, 52 reports, digest b8b64ebd7795 on the engine and b8b64ebd7795 before Round 1028
+
+simClubManagerEraUcl: PASS. The era Champions League plays its round of 16, the group tables stay up, Spain and Italy split level points on head to head, and an era night names only men of its era.
