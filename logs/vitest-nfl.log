@@ -1,0 +1,13 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/usSeason.test.ts [2m([22m[2m26 tests[22m[2m)[22m[33m 406[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonNfl.test.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 1180[2mms[22m[39m
+   [33m[2m✓[22m[39m nflDrives[2m > [22mmakes every score from 0 to 70, with 0 to 5 touchdowns of his and every exact field goal count [33m 407[2mms[22m[39m
+   [33m[2m✓[22m[39m an NFL season, derived from its saved line[2m > [22mlands every total of every position, game by game, with drives that make each score [33m 316[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m49 passed[39m[22m[90m (49)[39m
+[2m   Start at [22m 07:51:23
+[2m   Duration [22m 4.08s[2m (transform 1.53s, setup 222ms, collect 2.77s, tests 1.59s, environment 1.32s, prepare 554ms)[22m
+
