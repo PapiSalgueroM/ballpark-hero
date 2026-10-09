@@ -1,0 +1,4 @@
+build exit=0 18s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simSeasonCentreAgreement exit=0 12s | simSeasonCentreAgreement: 24 checks, 0 failed
+agreement-title exit=1 12s | simSeasonCentreAgreement: 24 checks, 206 failed (control title)
+playSeasonCentre exit=1 85s | playSeasonCentre: 40 checks, 2 failed

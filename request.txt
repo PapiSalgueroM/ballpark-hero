@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+playSeasonCentre: PORT=4541 node scripts/playSeasonCentre.mjs
+agreement-title: AGREEMENT_CONTROL=title NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreAgreement.mjs
+simSeasonCentreAgreement: node scripts/simSeasonCentreAgreement.mjs
