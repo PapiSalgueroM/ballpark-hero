@@ -1,0 +1,15 @@
+# Release AP proof on a7b1974e, part 1 (no build): the harnesses the train adds or changes (tsc and the whole vitest suite ran on this same head as rAP-t3)
+simBrowserHarnessDiscovery: node scripts/simBrowserHarnessDiscovery.mjs
+simTycoonTicketPolicy: node scripts/simTycoonTicketPolicy.mjs
+ownGoals: CAREERS=120 SEEDSET=0 node scripts/simSoccerOwnGoals.mjs
+ownGoals-seed2: CAREERS=120 SEEDSET=2 node scripts/simSoccerOwnGoals.mjs
+ownGoals-mine: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=mine node scripts/simSoccerOwnGoals.mjs
+ownGoals-mirror: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=mirror node scripts/simSoccerOwnGoals.mjs
+ownGoals-origin: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=origin node scripts/simSoccerOwnGoals.mjs
+ownGoals-beneficiary: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=beneficiary node scripts/simSoccerOwnGoals.mjs
+ownGoals-gate: CAREERS=120 SEEDSET=0 OWN_GOAL_CONTROL=gate node scripts/simSoccerOwnGoals.mjs
+simHomeSearchRecovery: node scripts/simHomeSearchRecovery.mjs
+simSeasonMoments: node scripts/simSeasonMoments.mjs
+simSeasonCentreAgreement: node scripts/simSeasonCentreAgreement.mjs
+simClubManagerStart: node scripts/simClubManagerStart.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json

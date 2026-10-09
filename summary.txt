@@ -1,0 +1,14 @@
+simBrowserHarnessDiscovery exit=0 4s | Retained actual child receipts: .sim-control/browser-discovery-n5SvDB/report.json
+simTycoonTicketPolicy exit=0 7s | Ticket policy: 21/21 normal outcomes; 0/0 effective copied faults, each with independent purchase baseline. Raw reports, logs, copied sources and hashes retained at /home
+ownGoals-mine exit=0 0s | simSoccerOwnGoals: 4 checks, 0 failed (control mine)
+ownGoals-mirror exit=0 0s | simSoccerOwnGoals: 4 checks, 0 failed (control mirror)
+ownGoals-origin exit=0 0s | simSoccerOwnGoals: 4 checks, 0 failed (control origin)
+ownGoals-beneficiary exit=0 0s | simSoccerOwnGoals: 5 checks, 0 failed (control beneficiary)
+ownGoals-gate exit=0 0s | simSoccerOwnGoals: 7 checks, 0 failed (control gate)
+simHomeSearchRecovery exit=0 86s | Home search recovery: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/home-search-recovery-artifacts/outcomes
+ownGoals-seed2 exit=0 111s | simSoccerOwnGoals: 4842148 checks, 0 failed
+simSeasonMoments exit=0 18s | simSeasonMoments: 54 checks, 0 failed
+ownGoals exit=0 118s | simSoccerOwnGoals: 4974192 checks, 0 failed
+simClubManagerStart exit=0 3s | simClubManagerStart: green. The defaults are the shipped game, the currency never reaches the engine, and no setting can switch off the haggle.
+simSeasonCentreAgreement exit=0 13s | simSeasonCentreAgreement: 24 checks, 0 failed
+tsc exit=0 58s | 
