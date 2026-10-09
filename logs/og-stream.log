@@ -1,0 +1,3 @@
+CONTROL stream: effective copied source, intended parent-derived AssertionError
+CHECKS by name: {"parent-derived":1}
+simSoccerOwnGoals: 1 checks, 0 failed (control stream)

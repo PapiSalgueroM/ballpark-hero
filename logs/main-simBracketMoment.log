@@ -1,0 +1,70 @@
+1) The moment names exactly the ties the engine settled and drew
+   921 steps, 1713 steps per competition with nothing settled (all silent), 306 ladder rungs, 18 season keys
+   moments by round: cup {"R16":18,"QF":18,"SF":18,"F":18}, Champions League {"QF":17,"SF":17,"F":17,"R16":6}; finals the club won: 9; steps that settled two rounds: 0
+2) The cards in a DOM: classes only on the new ties, a remount plays nothing
+   vitest exit 1, 0 passed, 1 failed
+  FAIL: the bracket moment vitest is not green
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero/.rc-main-b
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  10:24:07
+   Duration  820ms (transform 13ms, setup 0ms, collect 0ms, tests 0ms, environment 310ms, prepare 159ms)
+
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/clubManagerBracketMoment.test.tsx [ src/test/clubManagerBracketMoment.test.tsx ]
+Error: Cannot find module '/home/runner/work/ballpark-hero/ballpark-hero/src/test/setup.ts'
+Caused by: Error: Failed to load url /home/runner/work/ballpark-hero/ballpark-hero/src/test/setup.ts (resolved id: /home/runner/work/ballpark-hero/ballpark-hero/src/test/setup.ts). Does the file exist?
+ ❯ loadAndTransform ../node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51969:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+3) The page must not jump while the moment plays (chromium, the site's Tailwind)
+✘ [ERROR] Could not resolve "react"
+
+    ../../../_temp/t-main-simBracketMoment/bracketMoment-7fMiOW/browser.jsx:2:30:
+      2 │ import { createElement } from 'react';
+        ╵                               ~~~~~~~
+
+  You can mark the path "react" as external to exclude it from the bundle, which will remove this error and leave the unresolved path in the bundle.
+
+✘ [ERROR] Could not resolve "react-dom/client"
+
+    ../../../_temp/t-main-simBracketMoment/bracketMoment-7fMiOW/browser.jsx:3:27:
+      3 │ import { createRoot } from 'react-dom/client';
+        ╵                            ~~~~~~~~~~~~~~~~~~
+
+  You can mark the path "react-dom/client" as external to exclude it from the bundle, which will remove this error and leave the unresolved path in the bundle.
+
+✘ [ERROR] Could not resolve "react-dom"
+
+    ../../../_temp/t-main-simBracketMoment/bracketMoment-7fMiOW/browser.jsx:4:26:
+      4 │ import { flushSync } from 'react-dom';
+        ╵                           ~~~~~~~~~~~
+
+  You can mark the path "react-dom" as external to exclude it from the bundle, which will remove this error and leave the unresolved path in the bundle.
+
+node:internal/errors:986
+  const err = new Error(message);
+              ^
+
+Error: Command failed: "/home/runner/work/ballpark-hero/ballpark-hero/node_modules/.bin/esbuild" "/home/runner/work/_temp/t-main-simBracketMoment/bracketMoment-7fMiOW/browser.jsx" --bundle --format=iife --platform=browser --jsx=automatic --define:process.env.NODE_ENV=\"production\" --outfile="/home/runner/work/_temp/t-main-simBracketMoment/bracketMoment-7fMiOW/browser.js" --log-level=error
+    at genericNodeError (node:internal/errors:986:15)
+    at wrappedFn (node:internal/errors:540:14)
+    at checkExecSyncError (node:child_process:942:11)
+    at execSync (node:child_process:1014:15)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/.rc-main-b/scripts/simBracketMoment.mjs:325:3 {
+  status: 1,
+  signal: null,
+  output: [ null, null, null ],
+  pid: 27391,
+  stdout: null,
+  stderr: null
+}
+
+Node.js v24.21.0

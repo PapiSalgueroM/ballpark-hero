@@ -1,0 +1,15 @@
+NEGATIVE CONTROL ON: the splash is gone from the template, the wall of text is back
+1) the home template covers its crawler copy with a boot splash inside #root
+  FAIL: the template has no #dukb-boot, so the wait before React shows the crawler copy
+  FAIL: the splash does not show the mark
+2) without JavaScript the splash is hidden and the whole copy shows
+   the noscript rule hides the splash and lifts the cap
+3) the prerenderer writes the same splash into every saved route
+   prerender.mjs writes the splash and its noscript rule
+4) measured: on a phone with the app blocked, the viewport shows the splash and no copy
+   55 grid points: 0 on the splash, 55 on the copy, 0 elsewhere
+  FAIL: 55 of 55 viewport points land on the crawler copy, so the wall of text is visible before React
+  FAIL: only 0 of 55 viewport points land on the splash
+5) the auth modal turns its spinners off on open and on return from the back-forward cache
+
+control "wall": 4 failure(s) fired as expected, the check works
