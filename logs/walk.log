@@ -1,0 +1,30 @@
+engines bundled: branch has tag number base has tag undefined
+saves built: fresh 82K, oldPre 95K, oldPaused 102K
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+seed search live-for: seed 482, score 209.3, 42 candidates in 10s
+case p390r-live: 0 errors, 14 shots
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+seed search quick: seed 1992, score 260.0, 151 candidates in 27s
+case p390r-quick: 0 errors, 5 shots
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+seed search live-against: seed 2878, score 200.0, 26 candidates in 10s
+case p390m-live: 0 errors, 14 shots
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+case p390m-quick: 0 errors, 5 shots
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+case d1280m-live: 0 errors, 14 shots
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+case d1280m-quick: 0 errors, 5 shots
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+case d1280r-live: 0 errors, 14 shots
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+case d1280r-quick: 0 errors, 5 shots
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+case oldPaused: 0 errors, 5 shots
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+case oldPre: 0 errors, 5 shots
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+case p390r-whatsnew: 0 errors, 1 shots
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+case d1280m-whatsnew: 0 errors, 1 shots
+rvwalk: 12 cases, 0 errors, 88 shots

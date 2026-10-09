@@ -1,0 +1,5 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playGames-390 exit=0 48s | Played 1 games. 0 findings, 0 the harness could not drive.
+simResultMoment exit=0 5s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+playLiveMatchFit exit=0 107s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+walk exit=0 219s | rvwalk: 12 cases, 0 errors, 88 shots
