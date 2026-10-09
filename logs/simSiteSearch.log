@@ -1,0 +1,31 @@
+0) 134 games in the registry, across 13 sports
+1) every game is findable by typing its own name
+   found 134/134, ranked first 134/134
+2) an exact label match outranks every game that only mentions the word
+   92 labels had a real rival to beat (680 rival games in total), 92 won
+3) realistic queries: partial words and typos
+   first word           134 queries: found 100%, in the top 5 84.3%
+   last word            127 queries: found 100%, in the top 5 85%
+   five letter prefix   134 queries: found 100%, in the top 5 95.5%
+   a dropped letter     134 queries: found 100%, in the top 5 88.8%
+   two letters swapped  134 queries: found 100%, in the top 5 88.8%
+   worst shape: first word at 84.3% in the top 5, floor 80%
+4) determinism
+   16/16 queries byte identical on a second call
+5) hostile input
+   30/30 survived, including 4096 characters and every regex metacharacter
+   20/20 non-empty queries answered with something other than the whole catalog
+   5/5 unreadable queries reported as unreadable rather than as a browse
+6) the empty query browses instead of failing
+   all 134 games, registry order, no repeats
+7) the generated keyword index
+   11068 bytes covering 134/134 games, against 872891 bytes of guides
+   guide hash 93e925ee188882a6 matches the index, so the keywords describe the guides that ship
+   neither the engine nor the page imports the long form guides
+8) the route, the noindex, the skip target, the way in
+   route named after its file, noindex, skip target, footer link, and not submitted
+9) the cost of a keystroke
+   a query that matches: 0.756ms. A query that has to fall back to spelling: 0.892ms
+   the typo fallback costs 1.2x a plain query
+
+simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
