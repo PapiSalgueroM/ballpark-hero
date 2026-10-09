@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-cm: node_modules/.bin/vitest run src/test/cmValueCurve.test.ts src/test/clubManager*.test.* src/test/cm*.test.* src/hooks/useClubManager.test.ts --testTimeout=300000 --hookTimeout=120000
+rerate-check: node scripts/rerateCmEras.mjs --check
+gen-fa-check: node scripts/genClubManagerFreeAgents.mjs --check
+gen-russia-check: node scripts/genClubManagerGathered.mjs russia2026 --check
+genDailyClubPool-check: node scripts/genDailyClubPool.mjs --check
