@@ -49,11 +49,13 @@ vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile
    down the number it was given, so a test can say WHICH words were taken back and when. */
 vi.mock('sonner', () => ({ toast: {
   success: () => undefined,
-  error: (words: string) => ctl.toasts.push(words),
+  /* Round 1144: what the toast was given besides its words (how long it stays, and the button on it) */
+  error: (words: string, options?: ToastOptions) => { ctl.options.push(options ?? {}); return ctl.toasts.push(words); },
   dismiss: (id?: number) => { ctl.dismissed.push(id ?? -1); },
 } }));
 /* The control's switch: the real entry, its press followed by one extra draw when the switch is on. */
-const ctl = vi.hoisted(() => ({ extraDraw: false, playFirst: false, noHandOver: false, opens: [] as { year: number; seasons: number }[], toasts: [] as string[], dismissed: [] as number[] }));
+interface ToastOptions { duration?: number; action?: { label: string; onClick: (event: { preventDefault: () => void }) => void } }
+const ctl = vi.hoisted(() => ({ extraDraw: false, playFirst: false, noHandOver: false, opens: [] as { year: number; seasons: number }[], toasts: [] as string[], dismissed: [] as number[], options: [] as ToastOptions[] }));
 vi.mock('@/components/us-career/season/UsSeasonCentreEntry', async importOriginal => {
   const original = await importOriginal<typeof import('@/components/us-career/season/UsSeasonCentreEntry')>();
   const host = await import('@/components/us-career/season/UsSeasonCentreHost');
@@ -180,6 +182,7 @@ beforeEach(() => {
   ctl.opens.length = 0;
   ctl.toasts.length = 0;
   ctl.dismissed.length = 0;
+  ctl.options.length = 0;
   vi.useFakeTimers({ toFake: ['Date'] });
   vi.setSystemTime(new Date('2026-10-07T12:00:00Z'));
   localStorage.clear();
@@ -383,6 +386,49 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
        (it used to stay up for the rest of its few seconds, beside a notice that had just gone), and it is
        that one toast, by its number, never a blanket dismiss */
     expect(ctl.dismissed).toEqual([1]);
+  }, 30000);
+
+  /* Round 1144. A review of Release AN: with the viewer open over a refused save the toast said "use
+     Retry save" and the notice that holds that button was under the viewer's cover, out of reach until
+     he closed it. The toast carries a Retry of its own now. It is called Retry, never Retry save, so
+     the page has one button of each name (the other lane's driver finds the notice's by its exact
+     name). A press keeps the toast: taking it back is the job of the save going through. */
+  it('with the viewer open over a refused save, the toast carries a Retry that saves the season from there', async () => {
+    seedSave(sport, pos, `full-toast|${sport.slug}`);
+    render(<MemoryRouter><Board /></MemoryRouter>);
+    await flush();
+    const year = savedCareer(sport).year;
+    const refusing = refuseTheSave();
+    await pressWatch();
+    await waitFor(() => expect(q('[data-season-centre]')).not.toBeNull(), { timeout: 4000 });
+    expect(refusedNotice()).not.toBeNull();
+    expect(ctl.toasts).toHaveLength(1);
+    const action = ctl.options[0]?.action;
+    expect(action?.label).toBe('Retry');
+    /* long enough to read two sentences and press: sonner's own four seconds is not */
+    expect(ctl.options[0]?.duration).toBeGreaterThanOrEqual(8000);
+    /* still refused: the press tries the save again, once, and nothing is taken back */
+    const tries = () => refusing.mock.calls.filter(c => c[0] === sport.saveKey).length;
+    const before = tries();
+    let kept = 0;
+    await act(async () => { action!.onClick({ preventDefault: () => { kept += 1; } }); });
+    expect(tries()).toBe(before + 1);
+    expect(kept).toBe(1);
+    expect(savedCareer(sport).seasons).toHaveLength(0);
+    expect(refusedNotice()).not.toBeNull();
+    expect(ctl.dismissed).toEqual([]);
+    /* the device takes writes again: the same press, with the viewer still open, puts the season on the save */
+    refusing.mockRestore();
+    await act(async () => { action!.onClick({ preventDefault: () => { kept += 1; } }); });
+    await flush();
+    expect(savedCareer(sport).seasons).toHaveLength(1);
+    expect(savedCareer(sport).seasons[0].year).toBe(year);
+    expect(q('[data-season-centre]')).not.toBeNull();
+    expect(refusedNotice()).toBeNull();
+    /* and the toast is taken back by the save going through, as before, not by the press */
+    expect(kept).toBe(2);
+    expect(ctl.dismissed).toEqual([1]);
+    expect(ctl.toasts).toHaveLength(1);
   }, 30000);
 
   it('CONTROL: without the board handing its career over, the same press plays the season and opens nothing', async () => {

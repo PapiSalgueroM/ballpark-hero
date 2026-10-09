@@ -103,13 +103,26 @@ type CareerEvent = UsCareerEvent<UsCareerCore>;
 
 interface SaveShape { c: CareerState | null; phase: Phase; teamQuality: number | null; coach?: CoachCareerState | null; prospect?: UsCareerProspect }
 
+/** Round 1144: how long the toast that says a save was refused stays, with its Retry on it. */
+const SAVE_TOAST_MS = 10_000;
+
 export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const pendingSave = useRef<{ key: string; value: string | null } | null>(null);
   const [saveFailure, setSaveFailure] = useState<'write' | 'remove' | null>(null);
   const saveFailed = saveFailure !== null;
   useEffect(() => {
     if (!saveFailed) return;
-    const said = toast.error('Your latest changes could not be saved. Stay on this page and use Retry save.');
+    /* Round 1144: the toast carries a Retry of its own. With the Week by week
+       viewer open the notice that holds Retry save is under the viewer's
+       cover, and the toast was telling the player to use a button he could
+       not reach until he closed the viewer. It says Retry, not Retry save, so
+       the page never has two buttons of one name. The press keeps the toast
+       (the cleanup below takes it back the moment the save goes through), and
+       ten seconds instead of four gives him time to read it and press. */
+    const said = toast.error('Your latest changes could not be saved. Stay on this page and use Retry save.', {
+      duration: SAVE_TOAST_MS,
+      action: { label: 'Retry', onClick: event => { event.preventDefault(); retrySave(); } },
+    });
     /* Release AN: the words are taken back the moment they stop being true.
        A Retry save that worked left them on screen for the rest of their few
        seconds, saying the changes could not be saved, and they followed the
