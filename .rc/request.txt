@@ -1,0 +1,6 @@
+# Release AP: the summer harness at its new default (the NFL balance child runs 8000 careers a seed), whole, and its
+# balance control, which must still fire.
+summer: node scripts/simUsCareerSummer.mjs
+summer-doubletraining-must-exit-1: SIM_CONTROL=doubletraining SIM_SPORTS=nfl node scripts/simUsCareerSummer.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
