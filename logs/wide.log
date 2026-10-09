@@ -1,0 +1,11 @@
+[wide] motion no-preference: on the award night for 6 s: worst 37 px at 327 ms over 403 frames (night card, waiting true)
+[wide]   div.cm-slam text-center space-y-2 right=427 w=464 anim=cmSlam tf=matrix(1.6, 0, 0, 1.6, 0, 0) "🏅Ballon d'Or 2016"
+[wide]   div.flex justify-center right=427 w=464 anim=none tf=none ""
+[wide]   div.text-5xl  right=427 w=464 anim=none tf=none "🏅"
+[wide]   h3.text-xl font-black tracking-tight right=427 w=464 anim=none tf=none "Ballon d'Or 2016"
+[wide] motion no-preference: Continue buttons on the night after 6 s: 1
+[wide] motion no-preference: after Continue for 5 s: worst 0 px at 327 ms (night card)
+[wide] motion reduce: on the award night for 6 s: worst 0 px at 0 ms over 405 frames (undefined, waiting undefined)
+[wide] motion reduce: Continue buttons on the night after 6 s: 1
+[wide] motion reduce: after Continue for 5 s: worst 0 px at 0 ms (undefined)
+[wide] done

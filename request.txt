@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+wide: node .rc/x/probeWide.mjs
