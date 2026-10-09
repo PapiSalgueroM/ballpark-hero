@@ -1,3 +1,34 @@
+## Soccer Career only: opponent names and trophy history, 2026-10-09
+
+Anthony reported "another club" in Anderlecht's Week by week and asked for
+Soccer Career to be the sole product focus. Fresh work starts from origin/main
+0054fd819320a32884609562e2f4b882f2ecbf38 on
+codex/soccer-career-real-opponents, in the isolated managed worktree.
+
+Round 1169 separates verified opponent membership from table eligibility.
+Old saves without a finish, injury seasons and known split/conference leagues
+can name their known opponents. Scores, stats, events, moments and save fields
+are unchanged for the same season frame. Club spellings use the existing alias
+map. Historical membership still follows the season's ledger; unknown history
+and surplus slots in unsupported split formats are not filled with invented
+clubs. Eight regression cases and two effective copied naming controls are
+prepared. No new real sports facts or data rows were added.
+
+Round 1170 makes every Trophy Cabinet category open its actual winning seasons.
+A compact detail tile shows the recorded club, year, loan and season totals;
+international totals stay separate. Domestic cup wins use the existing saved
+cup-run details. Counts come from the same season flags as getCareerTotals,
+never an extra award-list count. Back, Escape, help and keyboard controls are
+included. The component loads only when a category is opened.
+
+Remote verification is pending: app types, build, focused regressions and
+copied defects, existing season/league checks, all 15 built readers, and actual
+Anderlecht/save/trophy journeys at phone and desktop sizes. Local site runtime
+was not executed. A delegated node --check syntax-only command ran locally
+by mistake; that path was stopped and grants no test acceptance.
+No merge or live publication is claimed. Prior PR206 and
+source1168 remain separate. F retains integration and final publication.
+
 ## Release AO LIVE, 2026-10-09 02:01 EDT: whole leagues and a moving Season Centre in Soccer Career, a match that moves and Russia in Club Manager, sound, nine rounds
 
 Claude lane (session F). main 23bde474, deployment 4b5ab6cb-16b7-4d42-9f12-c66e91ac8178, entry index-Du6HhEY3.js (was

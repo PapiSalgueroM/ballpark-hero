@@ -66,6 +66,7 @@ import { localizeMoney as money, CURRENCIES, getCurrency, setCurrency, rateNote 
    nothing at all when we have no honest answer for that club and season. */
 import { depthChart, GROUP_LABEL } from "@/lib/soccerClubSquad";
 import { SquadTile } from "@/components/soccer-career/SquadTile";
+import type { TrophyCategory } from "@/components/soccer-career/TrophyCabinet";
 import type { MoneyAction } from "@/lib/soccerMoney";
 import { bankSummary } from "@/lib/soccerMoney";
 import PhonePanel from "@/components/soccer-career/PhonePanel";
@@ -117,6 +118,7 @@ import { readSeasonMoments } from '@/lib/season/momentsSave';
    the Ratings dialog when it is opened (step 7 of the round: the weight it
    adds is paid here, never by a budget). */
 const SoccerSeasonCentre = lazy(() => import("@/components/soccer-career/SoccerSeasonCentre"));
+const TrophyCabinet = lazy(() => import("@/components/soccer-career/TrophyCabinet"));
 const SeasonRatings = lazy(() => import("@/components/soccer-career/SeasonRatings"));
 /* Round 1047: the training ground (its drills and its boards) loads when it
    is opened, not with the page; the page's budget came down by what it weighed. */
@@ -3729,6 +3731,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   const [storyOpen, setStoryOpen] = useState(false);
   // Round 1011: every season's rating and the overall it was played at
   const [ratingsOpen, setRatingsOpen] = useState(false);
+  const [trophyCategory, setTrophyCategory] = useState<TrophyCategory | null>(null);
   /* Round 1045: the Season Centre. centreFor is the row count when 📺 was
      pressed, so the overlay opens on exactly the row that press added;
      watchRow is a season opened from the summary card. Page state only. */
@@ -4329,24 +4332,25 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {/* Trophies */}
           <div className="bg-card border border-border rounded-xl p-4">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Trophy Cabinet</span>
+            <p className="mt-1 text-[11px] text-muted-foreground">Tap a trophy to see the seasons behind it.</p>
             <div className={`grid grid-cols-3 gap-2 mt-3 ${totals.clubCups > 0 ? "sm:grid-cols-7" : "sm:grid-cols-6"}`}>
               {[
-                { emoji: "🏆", l: "Leagues", v: totals.leagueTitles },
-                { emoji: "🏆", l: cupCabinetLabel(career.seasons), v: totals.domesticCups },
-                { emoji: "⭐", l: "UCL", v: totals.championsLeagues },
+                { emoji: "🏆", l: "Leagues", v: totals.leagueTitles, category: "league" as const },
+                { emoji: "🏆", l: cupCabinetLabel(career.seasons), v: totals.domesticCups, category: "domestic" as const },
+                { emoji: "⭐", l: "UCL", v: totals.championsLeagues, category: "ucl" as const },
                 // Round 972: a continental club cup won outside UEFA gets its
                 // own tile under its own name, never the UCL one.
-                ...(totals.clubCups > 0 ? [{ emoji: "⭐", l: clubCupTileLabel(career.seasons), v: totals.clubCups }] : []),
-                { emoji: "🌍", l: "World Cup", v: totals.worldCups },
+                ...(totals.clubCups > 0 ? [{ emoji: "⭐", l: clubCupTileLabel(career.seasons), v: totals.clubCups, category: "club" as const }] : []),
+                { emoji: "🌍", l: "World Cup", v: totals.worldCups, category: "world" as const },
                 // Round 124: continental championships are a trophy too.
-                { emoji: "🌐", l: "Continental", v: totals.continentalCups },
-                { emoji: "🏅", l: "Ballon d'Or", v: totals.ballonDors },
+                { emoji: "🌐", l: "Continental", v: totals.continentalCups, category: "continental" as const },
+                { emoji: "🏅", l: "Ballon d'Or", v: totals.ballonDors, category: "ballon" as const },
               ].map(t => (
-                <div key={t.l} className={`text-center rounded-lg p-2 ${t.v > 0 ? 'bg-amber-500/10 border border-amber-500/20' : 'bg-muted/20 opacity-40'}`}>
+                <button key={t.l} type="button" data-trophy-category={t.category} onClick={() => setTrophyCategory(t.category)} aria-label={`${t.l}: ${t.v}. View winning seasons`} className={`min-h-11 text-center rounded-lg p-2 hover:bg-amber-500/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring ${t.v > 0 ? 'bg-amber-500/10 border border-amber-500/20' : 'bg-muted/20 opacity-40'}`}>
                   <div className="text-lg">{t.emoji}</div>
                   <div className="text-sm font-black">{t.v}</div>
                   <div className="text-[9px] text-muted-foreground">{t.l}</div>
-                </div>
+                </button>
               ))}
             </div>
             {/* Individual Awards from career */}
@@ -4525,6 +4529,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         </div>
       )}
       {storyOpen && <CareerStory career={career} onClose={() => setStoryOpen(false)} />}
+      {trophyCategory && <CentreMountBoundary what="trophy cabinet" onClose={() => setTrophyCategory(null)}><Suspense fallback={<div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80" data-trophy-loading><div className="rounded-2xl border border-border bg-card px-5 py-4 text-sm">Opening your trophies...</div></div>}><TrophyCabinet career={career} category={trophyCategory} onClose={() => setTrophyCategory(null)} /></Suspense></CentreMountBoundary>}
       {ratingsOpen && <CentreMountBoundary what="season ratings" onClose={() => setRatingsOpen(false)}><Suspense fallback={null}><SeasonRatings career={career} onClose={() => setRatingsOpen(false)} /></Suspense></CentreMountBoundary>}
       {(() => {
         const pressed = centreFor !== null && career.seasons.length === centreFor + 1 ? career.seasons[centreFor] : null;

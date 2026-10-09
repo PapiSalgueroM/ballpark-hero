@@ -1,0 +1,80 @@
+name: Soccer Career opponents and trophy history
+
+on:
+  push:
+    branches:
+      - codex/soccer-career-real-opponents
+
+permissions:
+  contents: read
+concurrency:
+  group: soccer-career-opponents-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      SEO_SPLIT_BASE_REF: HEAD
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare remote checks
+        run: |
+          mkdir -p career-opponents-artifacts
+          git rev-parse HEAD > career-opponents-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > career-opponents-artifacts/source-tree.txt
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Types and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-opponents-artifacts/types.log
+          npm run build 2>&1 | tee career-opponents-artifacts/build.log
+      - name: Opponents, old saves and effective copied defects
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: ONLY=simSoccerCareerOpponents node scripts/runAllSims.mjs 2>&1 | tee career-opponents-artifacts/opponents.log
+      - name: Trophy history and existing season contracts
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/trophyCabinet.test.tsx src/test/seasonCore.test.ts src/test/seasonReplays.test.tsx src/test/seasonCentreSlots.test.tsx src/test/seasonCentreWords.test.tsx src/test/careerSeasonReview.test.tsx --maxWorkers=1 --minWorkers=1 2>&1 | tee career-opponents-artifacts/tests.log
+          ONLY=simTrophyCabinet,simSeasonCentreTable,simSeasonCentreAgreement,simSeasonCentreNeutral,simCareerLeagueWorld,simCareerMoments,simNoInventedQuotes node scripts/runAllSims.mjs --browser 2>&1 | tee career-opponents-artifacts/career.log
+      - name: Every built reader
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-opponents-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Actual career, named opponents and trophy journeys
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SHOTS="$PWD/career-opponents-artifacts/screenshots" node scripts/playSoccerCareerOpponents.mjs 2>&1 | tee career-opponents-artifacts/browser.log
+      - name: Source unchanged after checks
+        if: ${{ !cancelled() }}
+        run: git diff --exit-code HEAD -- src scripts .github/workflows/soccer-career-opponents.yml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-opponents-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-opponents-artifacts/
+          retention-days: 5
