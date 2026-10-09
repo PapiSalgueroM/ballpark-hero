@@ -1,0 +1,50 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-marks: node_modules/.bin/vitest run src/test/managerPenaltyMarkers.test.tsx src/test/managerScorerMarks.test.tsx src/test/managerQuickSimLegs.test.tsx src/test/cmMinuteLabel.test.ts --testTimeout=300000 --hookTimeout=120000
+vitest-live: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx src/test/liveSimCelebration.test.tsx src/test/clubManagerSave.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-season: node_modules/.bin/vitest run src/test/seasonCentreOwnGoals.test.tsx src/test/seasonCore.test.ts --testTimeout=300000 --hookTimeout=120000
+og: node scripts/simCmOwnGoals.mjs
+og-s7: SEEDSET=7 node scripts/simCmOwnGoals.mjs
+og-off: CM_OWN_GOAL_CONTROL=off node scripts/simCmOwnGoals.mjs
+og-double: CM_OWN_GOAL_CONTROL=double node scripts/simCmOwnGoals.mjs
+og-attacker: CM_OWN_GOAL_CONTROL=attacker node scripts/simCmOwnGoals.mjs
+og-penalty: CM_OWN_GOAL_CONTROL=penalty node scripts/simCmOwnGoals.mjs
+og-digest: CM_OWN_GOAL_CONTROL=digest node scripts/simCmOwnGoals.mjs
+og-ambient: CM_OWN_GOAL_CONTROL=ambient node scripts/simCmOwnGoals.mjs
+og-striker: CM_OWN_GOAL_CONTROL=striker node scripts/simCmOwnGoals.mjs
+og-bogus: CM_OWN_GOAL_CONTROL=nosuch node scripts/simCmOwnGoals.mjs
+legs: node scripts/simCmQuickLegs.mjs
+legs-s7: SEEDSET=7 node scripts/simCmQuickLegs.mjs
+legs-off: CM_QUICK_LEGS_CONTROL=off node scripts/simCmQuickLegs.mjs
+legs-anyone: CM_QUICK_LEGS_CONTROL=anyone node scripts/simCmQuickLegs.mjs
+legs-nokeep: CM_QUICK_LEGS_CONTROL=nokeep node scripts/simCmQuickLegs.mjs
+legs-ambient: CM_QUICK_LEGS_CONTROL=ambient node scripts/simCmQuickLegs.mjs
+soccer-og: CAREERS=120 SEEDSET=0 node scripts/simSoccerOwnGoals.mjs
+soccer-og-gate: OWN_GOAL_CONTROL=gate node scripts/simSoccerOwnGoals.mjs
+soccer-og-role: OWN_GOAL_CONTROL=role node scripts/simSoccerOwnGoals.mjs
+soccer-og-rng: OWN_GOAL_CONTROL=rng node scripts/simSoccerOwnGoals.mjs
+quicksubs: node scripts/simCmQuickSubs.mjs
+quicksubs-all: CM_QUICK_SUBS_CONTROL=all node scripts/simCmQuickSubs.mjs
+stoppage: node scripts/simCmStoppageTime.mjs
+leaguerules: node scripts/simCmLeagueRules.mjs
+simMatchDetail: node scripts/simMatchDetail.mjs
+simLiveMatch: node scripts/simLiveMatch.mjs
+simLiveSim: node scripts/simLiveSim.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simStatsCentre: node scripts/simStatsCentre.mjs
+simClubManager: node scripts/simClubManager.mjs
+simAwardRaces: node scripts/simAwardRaces.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs

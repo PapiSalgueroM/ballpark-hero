@@ -1,0 +1,10 @@
+simCmQuickLegs (control nokeep): 18 careers (6 clubs x 3 seeds, seedset 0) x 2 seasons, each by quick sim, with and without the round
+  MEASURED with the round: 1646 matches, 2.00 changes a match (0.22 for an injury, 0.41 at the break, 1.37 for legs after it), bench used in 91.1% of matches; W 54.4% D 21.5% L 24.1%, 1.69 for and 0.94 against a match, 68.25 league points a season; 594.39 appearances a season shared by 21.56 men
+  MEASURED without it: 1659 matches, 0.70 changes a match (0.24 for an injury, 0.46 at the break, 0.00 for legs after it), bench used in 46.1% of matches; W 53.9% D 20.3% L 25.9%, 1.73 for and 0.99 against a match, 69.11 league points a season; 539.17 appearances a season shared by 20.89 men
+  MEASURED his rule, on 243 matches played again by hand (134 with a change for legs): 176 changes for legs, 137 with the match within a goal (mean strength +0.106) and 39 with my side two or more up (mean -0.435)
+  ok gap (1 checks)
+  ok rule (176 checks)
+  FAIL reserve: 37 finding(s) on 176 checks. a change for legs at 68' was his change number 3 of the match | a change for legs at 59' was his change number 3 of the match | a change for legs at 80' was his change number 3 of the match
+  ok manual (243 checks)
+  ok report (1646 checks)
+simCmQuickLegs: CONTROL nokeep FIRED, section reserve went red as it must (red in all: reserve)

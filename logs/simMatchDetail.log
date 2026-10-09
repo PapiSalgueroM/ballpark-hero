@@ -1,0 +1,15 @@
+1) Quick sim path (Everton, full season)
+   42 matches, mean |xG - goals| = 0.49, 56 goals scored
+2) Halftime path with substitutions
+3) Pre-match facts
+   next: Aston Villa, odds 44/26/30, they have 2 names to watch
+4) H2H across seasons
+5) Assists are real teammates, stoppage and attendance stay in band
+   25 matches, 32 assists verified, stoppage and crowds in band
+   custom ground: 3 home crowds fit the chosen 28k capacity
+6) Their eleven get rated too, honestly
+   12 sheets checked: eleven starters plus their subs (11 sheets with men who came on, floor 1), 19 scorers all on the pitch, 4 clean-sheet keepers floored right
+   thin-world control: 2 Lustenau meetings, all sheetless as designed
+7) Two yellows is a red, and nobody leaves before his own last goal
+   240 matches: 12 second yellows (5.0%), 10 straight reds, 9.2% of matches ended a man short
+simMatchDetail: all green

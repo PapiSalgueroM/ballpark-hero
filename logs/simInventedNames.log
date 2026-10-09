@@ -1,0 +1,20 @@
+1) Harvesting every real player name the site ships
+   564 ledger rows harvested; 179 of the ledger's men are known to the harvest only through the ledger
+   17 free agent ledger rows harvested, 7 of them the real free agents Club Manager lists
+   14931 real names, from src/data and the 5 sealed worlds (now, era2020, era2015, era2010, era2005)
+2) Every combination of every generator, against all of them
+   18600 invented names across 19 generators plus the international pools, 0 belong to anybody real
+2b) The era filler re-rolls its way past every real name
+   20,000 rolls, 13393 distinct invented names, 0 real ones; 160x200 pairings checked against the whole site, 14 listed, 0 uncovered
+2c) The Soccer Career rival can never be a real footballer
+   8 era pools x 25 surnames = 4000 combinations; 44 real names blocked, 0 still emittable, 0 stale entries
+   32000 live rolls across 8 eras, 1978 distinct names, 0 of them real
+3) The two banks that were caught stay caught
+4) A new generator cannot ship unregistered
+   19 banks in src/lib, all registered
+5) No em or en dash in the banks
+6) No two men on the same team are called the same thing
+   48 GM leagues, 24432 men in them, 4 offseasons each, 0 shared names
+   75 day one squads (750 academy kids in them), 9 seasons, 200 squad places, 0 shared names; bank is 36x36 = 1296
+
+simInventedNames: green. Every invented man on this site is invented all the way down.
