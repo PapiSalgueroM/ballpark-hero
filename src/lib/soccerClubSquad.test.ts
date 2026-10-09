@@ -371,7 +371,15 @@ describe('the living squad', () => {
       pctWithSwing: 71, under: 10, thinBand: { min: 8, max: 18 }, thinRank: 6,
     });
     const help = squadHelp();
-    expect(help.rules.length).toBe(5);
+    expect(help.rules.length).toBe(6);
+    expect(help.examples.length).toBe(4);
+    expect(help.rules[5]).toContain('at least 10 recorded league games at this club last season');
+    expect(help.rules[5]).toContain('7.6 or more, adds up to 2 league games');
+    expect(help.rules[5]).toContain('6.4 or less takes away up to 2');
+    expect(help.rules[5]).toContain('The frozen-out limit still applies.');
+    expect(help.examples[3]).toContain('20 to 30 games becomes 22 to 32');
+    expect(help.examples[3]).toContain('6.2 rating make it 18 to 28');
+    expect(help.examples[3]).toContain('At a new club neither result carries over.');
     expect(help.examples[0]).toContain('you are 3rd of 6 forwards');
     expect(help.examples[1]).toContain('20 to 30 league games, and 25 of 38 is trust 66%');
     expect(help.examples[2]).toContain('8 to 18 league games');

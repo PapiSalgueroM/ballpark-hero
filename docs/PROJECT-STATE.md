@@ -1,3 +1,51 @@
+## Rounds 1185-1187 READY for F integration, 2026-10-09
+
+Anthony asked to keep Soccer Career moving. Three more rounds are implemented
+and independently verified in draft PR210:
+https://github.com/PapiSalgueroM/ballpark-hero/pull/210
+Branch codex/soccer-career-development, stacked on frozen PR208 base
+4ab80fa978cf362427bcd024c64c6691e7f83c2a.
+Accepted source0afa44199891a608a9d4cdc5fbd1274e2723abd5,
+treef6aa84ef548c5c67c38cf41678a244e04dd8fc68.
+Run37982640884/job113996717182 completed SUCCESS, all owned gates passed.
+Final artifact11642192345,426605092 bytes, SHA256
+fb179140f89a12cad320c882c5ba21b8b633ec8dd5c371a23bff4081abb69e75,
+downloaded, exact hash/head/tree verified and independently audited.
+Full acceptance: docs/ROUND1185-1187-RECEIPT.md. No local runtime or publication.
+
+1185: last year's actual same-club senior form adjusts next selection by
+plus/minus two games, explained by squad trust and help. Invalid/missing rows,
+club moves and gaps add nothing; original phone/clamp/freeze still apply.
+1186: optional preseason development versus recovery, with injury-risk/one
+position-skill tradeoffs and actual capped saved results. Only actual recorded
+years settle; interruptions/moves/retirement are explicit; balanced stores no key.
+1187: one explicitly generated academy protege, remembered by the existing
+Youth Mentor event, with saved same-club progress, interruptions, chronological
+age and history. Three qualifying years complete; moving/retiring ends shared
+mentoring. No invented first-team stats, real-person dialogue or extra global RNG.
+
+Verification:102 units,18 development groups/24 effective defects, original
+whole-save/draw baselines,12 historical careers/424 rows and exact12 future
+faults. Independent original Awards/Finish/Social fixture proof and their old
+faults pass without re-recording/omitting cases/fields/floors. Native301/0 across
+six journeys,54 full-save pairs,48 draw pairs,18 reloads,24 restorations,
+18 actually reviewed captures; Depth80/0. Ten related outcomes/all15 built
+readers/source hold pass. SeasonTruth SKIPPED offline, never credited.
+All three earlier failed sources remain diagnostic history in the design doc.
+Product/native source bytes remain held frombbcd through accepted0afa.
+
+PR209/Round1184 is READY, superseding the inherited in-progress claim below.
+Accepted source0641a2ada04d8e4b7cbfaf4dffc8f27104c03115, docs head
+881ef4c98d00a3d061f93bbb43803c1b0179e533, run37962892064 SUCCESS.
+PR207/208/209 remain frozen. F owns integration, full merged release gates
+and publication. Current main was rechecked as live AQbc43f27a. Preserve
+its world, injury, discipline, veteran/move and reveal fixes at integration;
+do not replace engine/page wholesale. The receipt names all eight settlement
+paths and carries the approved PR208 target/RecordBook dependencies.
+Other historical workflow pin/practice/parity/Reveal failures remain separate.
+No all-repository release acceptance is claimed. Root app/index/stash and
+the exact root WORKBOARD recovery tail remain untouched.
+
 ## Rounds1179 to1183 READY for F integration, 2026-10-09
 
 Draft PR208: https://github.com/PapiSalgueroM/ballpark-hero/pull/208

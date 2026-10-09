@@ -17,6 +17,8 @@ const calls = /^[ \t]+settleCareerAmbition\(s, [^\r\n]+\);\r?$/gm;
 assert.equal([...source.matchAll(calls)].length, 8, 'the old arm must remove all eight actual settlement hooks');
 const oldSource = source.replace(calls, '');
 assert.notEqual(oldSource, source, 'the no-choice baseline must restore the pre-ambition engine paths');
+const moveHooks = /(if \(s.currentClub !== prev.currentClub\) \{\r?\n[ \t]*)delete s\.seasonAmbition;/g;
+assert.equal([...source.matchAll(moveHooks)].length, 2, 'the move control binds both actual club-change cancellations');
 const CONTROL = process.env.SIM_CAREER_AMBITION_CONTROL || '';
 const controls = {
   consume: { file, from: 'delete career.seasonAmbition;', to: ';' },
@@ -26,7 +28,7 @@ const controls = {
   rating: { file, from: "stat !== 'rating' || row.apps >= 10", to: 'true' },
   ratingCompletion: { file, from: "const shortRating = held.stat === 'rating' && row.apps < 10;", to: 'const shortRating = false;' },
   phase: { file, from: "prev.retired || prev.phase !== 'playing'", to: 'prev.retired' },
-  move: { file: engine, from: source, to: source.replaceAll('if (s.currentClub !== prev.currentClub) delete s.seasonAmbition;', ';') },
+  move: { file: engine, from: source, to: source.replace(moveHooks, '$1;') },
   regular: { file: engine, from: '\n  settleCareerAmbition(s, season);', to: '' },
   interruption: { file: engine, from: source, to: source.replace(calls, line => line.includes('(s, season)') ? line : '') },
 };
