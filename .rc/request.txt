@@ -1,0 +1,14 @@
+m-default: cp .rc/x/simCareerStory.mjs scripts/simCareerStoryM0.mjs && node scripts/simCareerStoryM0.mjs
+m-test: cp .rc/x/careerStory.test.tsx src/test/zzCareerStoryM.test.tsx && node_modules/.bin/vitest run src/test/zzCareerStoryM.test.tsx --testTimeout=900000 --hookTimeout=120000
+m-worldmoves: cp .rc/x/simCareerStory.mjs scripts/simCareerStoryM9.mjs && CAREER_STORY_CONTROL=worldmoves node scripts/simCareerStoryM9.mjs
+m-cuptwice: cp .rc/x/simCareerStory.mjs scripts/simCareerStoryMa.mjs && CAREER_STORY_CONTROL=cuptwice node scripts/simCareerStoryMa.mjs
+m-9741: cp .rc/x/simCareerStory.mjs scripts/simCareerStoryM1.mjs && CAREER_STORY_SEEDS=9741 node scripts/simCareerStoryM1.mjs
+m-19741: cp .rc/x/simCareerStory.mjs scripts/simCareerStoryM2.mjs && CAREER_STORY_SEEDS=19741 node scripts/simCareerStoryM2.mjs
+m-29741: cp .rc/x/simCareerStory.mjs scripts/simCareerStoryM3.mjs && CAREER_STORY_SEEDS=29741 node scripts/simCareerStoryM3.mjs
+m-39741: cp .rc/x/simCareerStory.mjs scripts/simCareerStoryM4.mjs && CAREER_STORY_SEEDS=39741 node scripts/simCareerStoryM4.mjs
+m-49741: cp .rc/x/simCareerStory.mjs scripts/simCareerStoryM5.mjs && CAREER_STORY_SEEDS=49741 node scripts/simCareerStoryM5.mjs
+m-59741: cp .rc/x/simCareerStory.mjs scripts/simCareerStoryM6.mjs && CAREER_STORY_SEEDS=59741 node scripts/simCareerStoryM6.mjs
+m-69741: cp .rc/x/simCareerStory.mjs scripts/simCareerStoryM7.mjs && CAREER_STORY_SEEDS=69741 node scripts/simCareerStoryM7.mjs
+m-79741: cp .rc/x/simCareerStory.mjs scripts/simCareerStoryM8.mjs && CAREER_STORY_SEEDS=79741 node scripts/simCareerStoryM8.mjs
+m-reset: cp .rc/x/simCareerStory.mjs scripts/simCareerStoryMb.mjs && CAREER_STORY_CONTROL=reset node scripts/simCareerStoryMb.mjs
+m-wipe: cp .rc/x/simCareerStory.mjs scripts/simCareerStoryMc.mjs && CAREER_STORY_CONTROL=wipe node scripts/simCareerStoryMc.mjs
