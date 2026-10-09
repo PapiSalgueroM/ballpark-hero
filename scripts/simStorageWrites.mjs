@@ -47,10 +47,19 @@
  *      tab, which is what section 4 and the three browser checks exist to
  *      stop.
  *
- * MEASURED on this tree (Round 1144): 123 .setItem calls in 90 files, 121
+ *   6. (Round 1144 review) "Full" is taken back in exactly one place, the
+ *      recheck, and the recheck returns first while a game holds a refused
+ *      save. The first cut took it back on any write the browser took, and
+ *      a full store still takes a write that needs no room (a page saving
+ *      what it loaded), so in a real Chromium the line left while every
+ *      save was still refused. src/test/safeStorageQuota.test.ts and the
+ *      quota journeys of scripts/playUsCareerSaveSeam.mjs hold the
+ *      behaviour; this holds the shape.
+ *
+ * MEASURED on this tree (Round 1144): 124 .setItem calls in 90 files, 122
  * inside a try that has a catch, of their own function, 2 allowed (see
  * ALLOWED), 0 offenders, 0 of them in a try with only a finally; and in the
- * seam 11 write, remove or clear calls, none reachable as it loads, 4 of
+ * seam 13 write, remove or clear calls, none reachable as it loads, 4 of
  * them on the probe key, 2 in each of the two functions that may. The header
  * is refreshed by hand; the summary line prints the live numbers. Each
  * control turns one section red, except probe, which turns two (4 and 5: a
@@ -73,6 +82,10 @@
  *                                        would write in every browser.
  *   SIM_STORAGE_WRITES_CONTROL=once     (Round 1144) takes the once flag off
  *                                        the first probe.
+ *   SIM_STORAGE_WRITES_CONTROL=unlearn  (Round 1144 review) a safeSetItem the
+ *                                        browser takes takes "full" back again.
+ *   SIM_STORAGE_WRITES_CONTROL=held     (Round 1144 review) takes the held
+ *                                        save's guard off the recheck.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -108,6 +121,8 @@ else if (CONTROL === 'nocatch') control('src/components/CookieConsent.tsx', "try
 else if (CONTROL === 'probe') control('src/lib/safeStorage.ts', 'real.getItem(PROBE_KEY);', "real.setItem(PROBE_KEY, '1'); real.removeItem(PROBE_KEY);");
 else if (CONTROL === 'recheck') control('src/lib/safeStorage.ts', 'if (refusedWrite && !raw && local.real) {', 'if (!raw && local.real) {');
 else if (CONTROL === 'once') control('src/lib/safeStorage.ts', 'if (!probedWrites && !raw && local.real) {', 'if (!raw && local.real) {');
+else if (CONTROL === 'unlearn') control('src/lib/safeStorage.ts', 'localStorage.setItem(key, value);', 'localStorage.setItem(key, value); setRefusedWrite(false);');
+else if (CONTROL === 'held') control('src/lib/safeStorage.ts', 'if (pendingSaves.size > 0) return getStorageTrouble();', '');
 else if (CONTROL) { console.error(`unknown SIM_STORAGE_WRITES_CONTROL=${CONTROL}`); process.exit(2); }
 
 const read = full => overrides.get(full) ?? fs.readFileSync(full, 'utf8');
@@ -285,6 +300,29 @@ console.log('5. the seam writes its probe only under the once flag (the first pr
   if (!sets.includes('probeStorageWrites')) bad.push('probeStorageWrites never sets probedWrites, so its probe would run on every call');
   if (bad.length) { fail(`${bad.length} probe write(s) that an ordinary browser would get more than once a visit:`); for (const b of bad) console.log('           ' + b); }
   else ok(`${probes.length} probe writes: ${Object.keys(NEED).map(o => `${seen[o]} in ${o} under "${NEED[o]}"`).join(', ')}`);
+}
+
+console.log('6. "full" is taken back in one place, the recheck, and never while a game holds a refused save');
+{
+  const full = path.join(SRC, 'lib', 'safeStorage.ts');
+  const sf = parse(full);
+  /* every call that takes "full" back, by the function it runs in */
+  const unlearns = calls(sf, n => ts.isIdentifier(n.expression) && n.expression.text === 'setRefusedWrite'
+    && n.arguments.length === 1 && n.arguments[0].kind === ts.SyntaxKind.FalseKeyword);
+  const elsewhere = unlearns.filter(n => ownerName(n) !== 'recheckStorageWrites');
+  /* the held save's guard: an if on pendingSaves that returns, ahead of the first unlearn in the recheck */
+  const first = unlearns.find(n => ownerName(n) === 'recheckStorageWrites');
+  let guard = null;
+  const walk = n => {
+    if (ts.isIfStatement(n) && ownerName(n) === 'recheckStorageWrites' && n.expression.getText(sf) === 'pendingSaves.size > 0'
+      && ts.isReturnStatement(n.thenStatement)) guard = n;
+    ts.forEachChild(n, walk);
+  };
+  walk(sf);
+  if (!unlearns.length) fail('nothing in the seam takes "full" back: this check is not reading the seam it thinks it is');
+  else if (elsewhere.length) fail(`"full" is taken back outside the recheck (line ${elsewhere.map(n => `${lineOf(sf, n)} in ${ownerName(n) || 'module scope'}`).join(', ')}): a full store still takes a write that needs no room, so a taken write proves nothing`);
+  else if (!first || !guard || guard.getStart(sf) > first.getStart(sf)) fail('the recheck does not return on "pendingSaves.size > 0" before it takes "full" back: the line would leave while a game still holds a refused save');
+  else ok(`${unlearns.length} place takes "full" back, in recheckStorageWrites (line ${lineOf(sf, first)}), behind the held save's guard (line ${lineOf(sf, guard)})`);
 }
 
 console.log(`\nsimStorageWrites${CONTROL ? ` (control ${CONTROL})` : ''}: ${failures === 0 ? 'all green' : failures + ' failed'}`);

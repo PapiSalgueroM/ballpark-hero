@@ -437,27 +437,37 @@ describe('safeStorage: a refusal is taken back when the browser takes a write ag
     expect(seam.getStorageTrouble()).toBe('blocked');
   });
 
-  it('a safeSetItem the browser takes unlearns full', async () => {
+  /* The review of this round: the first cut unlearned on any write the browser
+     took, and a full store takes a write that needs no room. So a taken write
+     proves nothing by itself; the recheck is the one place full is taken back
+     (src/test/safeStorageQuota.test.ts holds that against a store with a
+     fixed amount of room). */
+  it('a safeSetItem the browser takes does not unlearn full by itself: the recheck does', async () => {
     const spy = refuseAll();
     const seam = await load();
     expect(seam.safeSetItem('footle-rules-seen', '1')).toBe(false);
     expect(seam.getStorageTrouble()).toBe('full');
     spy.mockRestore();
     expect(seam.safeSetItem('footle-rules-seen', '1')).toBe(true);
-    expect(seam.getStorageTrouble()).toBeNull();
+    expect(seam.getStorageTrouble()).toBe('full');
+    expect(seam.recheckStorageWrites()).toBeNull();
   });
 
-  it('a write through the seam that the browser takes unlearns full, a session write does not', async () => {
+  it('a write through the seam that the browser takes does not unlearn full either, and the recheck writes what was kept', async () => {
     const spy = refuseAll();
     const seam = await load();
     seam.safeLocalStorage.setItem('cookie-consent', 'essential');
+    seam.safeLocalStorage.setItem('theme', 'dark');
     expect(seam.getStorageTrouble()).toBe('full');
     spy.mockRestore();
     seam.safeSessionStorage.setItem('dukb-reloaded-for', 'index-abc.js');
+    seam.safeLocalStorage.setItem('theme', 'dark');
     expect(seam.getStorageTrouble()).toBe('full');
-    seam.safeLocalStorage.setItem('cookie-consent', 'essential');
-    expect(seam.getStorageTrouble()).toBeNull();
+    expect(window.localStorage.getItem('theme')).toBe('dark');
+    expect(window.localStorage.getItem('cookie-consent')).toBeNull();
+    expect(seam.recheckStorageWrites()).toBeNull();
     expect(window.localStorage.getItem('cookie-consent')).toBe('essential');
+    expect(window.localStorage.length).toBe(2);
   });
 
   it('tells a listener once when the answer changes, a moment later, and not after it has left', async () => {
