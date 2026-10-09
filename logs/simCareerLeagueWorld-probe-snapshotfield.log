@@ -1,0 +1,20 @@
+CONTROL snapshotfield: lib/season/soccer.ts patched in the bundle only; section D1 must go red
+bundled in 736 ms; 460 clubs (190 hand rows)
+
+D1. SAVED RIVAL CHAMPION: context roles overlap, table clubs do not
+  rival champion probe: actual context and table checked; old double-count defect reproduced; missing, foreign and duplicate club copies caught
+
+D1. SNAPSHOT PROBE: three actual future seasons from the captured old save
+  FAIL [D1]: Freiburg 2030 (2. Bundesliga): the displayed division or field differs from its saved snapshot
+  FAIL [D1]: Freiburg 2030 (2. Bundesliga): the drawn table differs from the saved field
+  FAIL [D1]: Freiburg 2030 (2. Bundesliga): saved movement differs from the final displayed places
+  FAIL [D1]: Freiburg 2031 (2. Bundesliga): the displayed division or field differs from its saved snapshot
+  FAIL [D1]: Freiburg 2031 (2. Bundesliga): the drawn table differs from the saved field
+  FAIL [D1]: Freiburg 2031 (2. Bundesliga): saved movement differs from the final displayed places
+  FAIL [D1]: Freiburg 2032 (2. Bundesliga): the displayed division or field differs from its saved snapshot
+  FAIL [D1]: Freiburg 2032 (2. Bundesliga): the drawn table differs from the saved field
+  FAIL [D1]: Freiburg 2032 (2. Bundesliga): saved movement differs from the final displayed places
+  FAIL [D1]: Freiburg 2032 (2. Bundesliga): the saved player club movement differs from its final place
+  snapshot probe: 4 actual seasons played (1 severe-injury seasons), 3 playable snapshots, 3 drawn tables, 3 changed fields, 6 recorded league movements
+
+simCareerLeagueWorld control snapshotfield: section D1 went red as it must (10 failures)
