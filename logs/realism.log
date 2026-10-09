@@ -1,0 +1,83 @@
+
+MLB
+   MLB C     hr        p05      8  med     17  p95     24  max     30  spread 3.00
+   MLB C     rbi       p05     29  med     68  p95     86  max    101  spread 2.97
+   MLB C     avg       p05  0.241  med   0.27  p95  0.295  max  0.324  spread 1.22
+   MLB 1B    hr        p05     13  med     26  p95     36  max     48  spread 2.77
+   MLB 1B    rbi       p05     53  med     86  p95    108  max    129  spread 2.04
+   MLB 1B    avg       p05  0.241  med  0.274  p95  0.301  max  0.332  spread 1.25
+   MLB 2B    hr        p05      8  med     16  p95     22  max     29  spread 2.75
+   MLB 2B    rbi       p05     47  med     67  p95     84  max     96  spread 1.79
+   MLB 2B    avg       p05  0.242  med  0.275  p95  0.303  max  0.331  spread 1.25
+   MLB 3B    hr        p05     12  med     24  p95     33  max     40  spread 2.75
+   MLB 3B    rbi       p05     44  med     82  p95    102  max    123  spread 2.32
+   MLB 3B    avg       p05  0.241  med  0.273  p95    0.3  max  0.329  spread 1.24
+   MLB SS    hr        p05     10  med     20  p95     27  max     39  spread 2.70
+   MLB SS    rbi       p05     50  med     74  p95     92  max    113  spread 1.84
+   MLB SS    avg       p05  0.243  med  0.276  p95  0.303  max  0.335  spread 1.25
+   MLB LF    hr        p05     12  med     23  p95     32  max     42  spread 2.67
+   MLB LF    rbi       p05     52  med     80  p95    101  max    126  spread 1.94
+   MLB LF    avg       p05  0.242  med  0.274  p95  0.301  max   0.33  spread 1.24
+   MLB CF    hr        p05     10  med     19  p95     27  max     35  spread 2.70
+   MLB CF    rbi       p05     40  med     74  p95     92  max    107  spread 2.30
+   MLB CF    avg       p05  0.241  med  0.274  p95  0.301  max  0.334  spread 1.25
+   MLB RF    hr        p05     12  med     24  p95     33  max     43  spread 2.75
+   MLB RF    rbi       p05     47  med     82  p95    103  max    125  spread 2.19
+   MLB RF    avg       p05  0.242  med  0.274  p95  0.301  max  0.328  spread 1.24
+   MLB DH    hr        p05     15  med     27  p95     38  max     49  spread 2.53
+   MLB DH    rbi       p05     63  med     89  p95    111  max    139  spread 1.76
+   MLB DH    avg       p05  0.241  med  0.274  p95  0.301  max  0.328  spread 1.25
+   MLB SP    so        p05    109  med    176  p95    212  max    240  spread 1.94
+   MLB SP    wins      p05      9  med     14  p95     17  max     20  spread 1.89
+   MLB SP    era       p05   3.97  med   4.78  p95    5.7  max   6.52  spread 1.44
+   MLB RP    so        p05     47  med     79  p95    100  max    123  spread 2.13
+   MLB RP    saves     p05      0  med      5  p95     48  max     58  spread  inf
+   MLB RP    holds     p05      1  med     22  p95     33  max     41  spread 33.00
+
+NBA
+   NBA PG    ppg       p05     11  med     18  p95     28  max     37  spread 2.55
+   NBA PG    rpg       p05    2.7  med    4.2  p95    5.6  max    7.1  spread 2.07
+   NBA PG    apg       p05    4.7  med    7.7  p95   11.5  max     13  spread 2.45
+   NBA SG    ppg       p05     12  med     20  p95     30  max     38  spread 2.50
+   NBA SG    rpg       p05      3  med    4.7  p95    6.4  max    8.5  spread 2.13
+   NBA SG    apg       p05    3.1  med    5.3  p95    7.4  max      9  spread 2.39
+   NBA SF    ppg       p05     11  med     18  p95     28  max     38  spread 2.55
+   NBA SF    rpg       p05      4  med    6.3  p95    8.4  max   10.6  spread 2.10
+   NBA SF    apg       p05    3.4  med    6.2  p95     10  max     13  spread 2.94
+   NBA PF    ppg       p05     11  med     18  p95     24  max     31  spread 2.18
+   NBA PF    rpg       p05      5  med    7.9  p95     11  max   14.6  spread 2.20
+   NBA PF    apg       p05      3  med    5.1  p95    7.8  max   11.2  spread 2.60
+   NBA C     ppg       p05     10  med     16  p95     24  max     30  spread 2.40
+   NBA C     rpg       p05    5.3  med    8.5  p95   11.8  max   15.4  spread 2.23
+   NBA C     apg       p05    2.5  med    4.2  p95    5.9  max    7.9  spread 2.36
+
+NFL
+   NFL QB    passYds   p05   2387  med   3671  p95   4555  max   5450  spread 1.91
+   NFL QB    passTd    p05     14  med     25  p95     34  max     45  spread 2.43
+   NFL QB    ints      p05      9  med     14  p95     18  max     24  spread 2.00
+   NFL RB    rushYds   p05    270  med    914  p95   1482  max   1873  spread 5.49
+   NFL RB    rushTd    p05      2  med      7  p95     12  max     17  spread 6.00
+   NFL WR    rec       p05     46  med     75  p95     99  max    128  spread 2.15
+   NFL WR    recYds    p05    562  med    927  p95   1293  max   1671  spread 2.30
+   NFL TE    rec       p05     35  med     59  p95     78  max     95  spread 2.23
+   NFL LB    tackles   p05     81  med    124  p95    156  max    185  spread 1.93
+   NFL EDGE  sacks     p05      4  med     10  p95   15.5  max     22  spread 3.88
+   NFL CB    picks     p05      1  med      2  p95      4  max      6  spread 4.00
+   NFL K     fgMade    p05     21  med     26  p95     32  max     35  spread 1.52
+
+NHL
+   NHL C     goals     p05     14  med     30  p95     52  max     72  spread 3.71
+   NHL C     assists   p05     21  med     41  p95     57  max     76  spread 2.71
+   NHL C     points    p05     36  med     72  p95    104  max    133  spread 2.89
+   NHL LW    goals     p05     15  med     31  p95     52  max     72  spread 3.47
+   NHL LW    assists   p05     20  med     39  p95     56  max     76  spread 2.80
+   NHL LW    points    p05     36  med     71  p95    102  max    136  spread 2.83
+   NHL RW    goals     p05     16  med     34  p95     49  max     69  spread 3.06
+   NHL RW    assists   p05     20  med     39  p95     54  max     70  spread 2.70
+   NHL RW    points    p05     37  med     72  p95    102  max    139  spread 2.76
+   NHL D     goals     p05      6  med     12  p95     19  max     27  spread 3.17
+   NHL D     assists   p05     23  med     44  p95     61  max     79  spread 2.65
+   NHL G     wins      p05     22  med     30  p95     37  max     43  spread 1.68
+   NHL G     svpct     p05  0.907  med   0.92  p95  0.932  max  0.938  spread 1.03
+
+ALL CAREER REALISM CHECKS PASSED
