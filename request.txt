@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk-head-before: PORT=4193 node scripts/playLiveMatchFit.mjs
+walk-main: D=$PWD/.rc-main && mkdir -p $D && git archive origin/main | tar -x -C $D && cd $D && ln -s ../node_modules node_modules && npm run build > build.log 2>&1 && PORT=4194 node scripts/playLiveMatchFit.mjs
