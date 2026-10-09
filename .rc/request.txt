@@ -1,0 +1,19 @@
+#!serial
+m1-nameonly-vitest: cp .rc/x/cmAges.nameonly.mjs scripts/lib/cmAges.mjs && node_modules/.bin/vitest run src/test/cmValueCurve.test.ts --testTimeout=300000; rc=$?; git checkout -- scripts/lib/cmAges.mjs; git status --short | head -3; echo "m1 vitest exit=$rc"; exit $rc
+m2-plant: cp .rc/x/rv-rosters-fallback.ts src/data/clubManagerRosters.ts && git diff --stat | tail -1
+m2-shape: node scripts/simCmRatingShape.mjs
+m2-vitest-cm: node_modules/.bin/vitest run src/test/cmValueCurve.test.ts src/test/clubManager*.test.* src/test/cm*.test.* src/hooks/useClubManager.test.ts --testTimeout=300000 --hookTimeout=120000
+m2-simClubManager: node scripts/simClubManager.mjs
+m2-simRosterAdjudication: node scripts/simRosterAdjudication.mjs
+m2-simFreeAgents: node scripts/simFreeAgents.mjs
+m2-simManagerSpec: node scripts/simManagerSpec.mjs
+m2-simClubManagerScore: node scripts/simClubManagerScore.mjs
+m2-simBoardAsks: node scripts/simBoardAsks.mjs
+m2-simTransfers: node scripts/simTransfers.mjs
+m2-simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+m2-simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+m2-simCareerDerbies: node scripts/simCareerDerbies.mjs
+m2-simDailyClubPool: node scripts/simDailyClubPool.mjs
+m2-simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+m2-tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+m2-restore: git checkout -- src/data/clubManagerRosters.ts && git status --short | wc -l
