@@ -1,0 +1,9 @@
+vitest-nfl exit=0 6s |    Duration  5.12s (transform 1.76s, setup 319ms, collect 2.98s, tests 2.17s, environment 1.71s, prepare 552ms)
+sim-s0 exit=0 8s | simUsSeasonCentre: 84 checks, 0 failed
+vitest-view exit=0 15s |    Duration  13.69s (transform 5.88s, setup 633ms, collect 11.32s, tests 8.94s, environment 3.19s, prepare 1.15s)
+sim-s1 exit=0 7s | simUsSeasonCentre: 84 checks, 0 failed
+sim-s2 exit=0 7s | simUsSeasonCentre: 85 checks, 0 failed
+sim-s3 exit=0 7s | simUsSeasonCentre: 83 checks, 0 failed
+sim-s4 exit=0 7s | simUsSeasonCentre: 84 checks, 0 failed
+probe exit=0 2s |   game 3 feed: [Q1 10:00] 🥅 Field goal, THEM. / [Q2 4:00] 🏈 Touchdown, US. / [Q3 13:00] 🥅 Field goal, THEM. / [Q3 6:00] 🏈 Touchdown, THEM. / [Q4 14:00] 🥅 F
+tsc exit=0 66s | 
