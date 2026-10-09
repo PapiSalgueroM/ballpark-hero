@@ -1,0 +1,6 @@
+src/test/usSeasonCentre.test.tsx(206,48): error TS2345: Argument of type 'UsCareerSeason' is not assignable to parameter of type 'UsRow'.
+  Type 'UsCareerSeason' is not assignable to type 'Record<string, unknown>'.
+    Index signature for type 'string' is missing in type 'UsCareerSeason'.
+src/test/usSeasonCentre.test.tsx(210,68): error TS2345: Argument of type 'UsCareerSeason' is not assignable to parameter of type 'UsRow'.
+  Type 'UsCareerSeason' is not assignable to type 'Record<string, unknown>'.
+    Index signature for type 'string' is missing in type 'UsCareerSeason'.
