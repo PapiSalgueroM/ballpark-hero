@@ -1,0 +1,26 @@
+#!build
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx src/test/liveSimCelebration.test.tsx src/test/managerPenaltyMarkers.test.tsx src/test/managerScorerMarks.test.tsx src/test/managerQuickSimLegs.test.tsx --testTimeout=300000
+main-viewer-test: D=$PWD/.rc-main/src/components/club-manager && mkdir -p $D && git show origin/main:src/components/club-manager/LiveSimScreen.tsx > $D/LiveSimScreen.tsx && LIVE_MOTION_VIEWER=/@fs/$D/LiveSimScreen.tsx node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx -t 'a goal still on its way when the line up changes off the clock' --testTimeout=300000
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+gh-lostline: GUIDE_HEADINGS_CONTROL=lostline node scripts/simGuideHeadings.mjs
+gh-nokeyword: GUIDE_HEADINGS_CONTROL=nokeyword node scripts/simGuideHeadings.mjs
+gh-careerline: GUIDE_HEADINGS_CONTROL=careerline node scripts/simGuideHeadings.mjs
+gh-skiplevel: GUIDE_HEADINGS_CONTROL=skiplevel node scripts/simGuideHeadings.mjs
+gh-unconvert: GUIDE_HEADINGS_CONTROL=unconvert node scripts/simGuideHeadings.mjs
+gh-snapdrift: GUIDE_HEADINGS_CONTROL=snapdrift node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simCmQuickLegs: node scripts/simCmQuickLegs.mjs
+simCmQuickSubs: node scripts/simCmQuickSubs.mjs
+simCmQuickSubs-all: CM_QUICK_SUBS_CONTROL=all CM_QUICK_SUBS_ARTIFACTS=$RUNNER_TEMP/qs-all node scripts/simCmQuickSubs.mjs
+simLiveMatch: node scripts/simLiveMatch.mjs
+simLiveSim: node scripts/simLiveSim.mjs
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+motion-castnow: LIVE_MOTION_CONTROL=castnow node scripts/simLiveSimMotion.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
