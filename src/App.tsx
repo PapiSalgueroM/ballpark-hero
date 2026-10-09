@@ -100,6 +100,7 @@ const PerfectSeasonNhl = lazy(() => import("./pages/PerfectSeasonNhl"));
 const CareerLadder = lazy(() => import("./pages/CareerLadder"));
 const PerfectSeasonNba = lazy(() => import("./pages/PerfectSeasonNba"));
 const PerfectSeasonNfl = lazy(() => import("./pages/PerfectSeasonNfl"));
+const SoccerPerfectSeason = lazy(() => import("./pages/SoccerPerfectSeason"));
 const WhoAmI = lazy(() => import("./pages/WhoAmI"));
 const WorldXi = lazy(() => import("./pages/WorldXi"));
 const PlayerBingo = lazy(() => import("./pages/PlayerBingo"));
@@ -431,6 +432,7 @@ const AppContent = () => {
         <Route path="/career-ladder" element={<CareerLadder />} />
         <Route path="/perfect-season-nba" element={<PerfectSeasonNba />} />
         <Route path="/perfect-season-nfl" element={<PerfectSeasonNfl />} />
+        <Route path="/soccer-perfect-season" element={<SoccerPerfectSeason />} />
         <Route path="/who-am-i" element={<WhoAmI />} />
         <Route path="/world-xi" element={<WorldXi />} />
         <Route path="/player-bingo" element={<PlayerBingo />} />

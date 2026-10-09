@@ -1,0 +1,383 @@
+name: Soccer Perfect Season engine and UI proof
+
+on:
+  push:
+    branches:
+      - codex/soccer-perfect-season-1097
+
+permissions:
+  contents: read
+concurrency:
+  group: soccer-perfect-season-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  pure:
+    if: ${{ !contains(github.event.head_commit.message, '[guide freeze]') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      QA_OUT: qa-artifacts
+      SOCCER_SEASON_CONTROL: all
+      ENGINES: chromium
+      TZ: UTC
+      SIM_NETWORK: offline
+      SEO_SPLIT_BASE_REF: HEAD
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Hold exact candidate
+        id: hold
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p qa-artifacts/dependencies qa-artifacts/derived qa-artifacts/readers
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git rev-parse HEAD HEAD^{tree} > qa-artifacts/source-identity.txt
+          git ls-tree -r HEAD > qa-artifacts/source-git-manifest.txt
+          git archive --format=tar.gz -o qa-artifacts/source.tar.gz HEAD
+          git ls-files -z | xargs -0 sha256sum > qa-artifacts/source-files.sha256
+          git ls-files -z -- . ':(exclude)src/data/seoMetaParts/seoMetaPart25.ts' ':(exclude)src/data/searchKeywords.json' | xargs -0 sha256sum > qa-artifacts/authored-files.sha256
+          sha256sum package.json package-lock.json > qa-artifacts/packages.sha256
+          cp package.json package-lock.json qa-artifacts/dependencies/
+          cp src/data/seoMetaParts/seoMetaPart25.ts qa-artifacts/derived/seoMetaPart25.before.ts
+          sha256sum src/data/seoMetaParts/seoMetaPart25.ts > qa-artifacts/derived/before.sha256
+          cp src/data/searchKeywords.json qa-artifacts/derived/searchKeywords.before.json
+          sha256sum src/data/searchKeywords.json > qa-artifacts/derived/search-before.sha256
+      - name: Check both worker syntax
+        id: parse
+        shell: bash
+        run: |
+          set -euo pipefail
+          failed=0
+          node --check scripts/simSoccerPerfectSeason.mjs 2>&1 | tee qa-artifacts/parse-pure.log || failed=1
+          node --check scripts/qa/soccerPerfectSeason1097.mjs 2>&1 | tee qa-artifacts/parse-native.log || failed=1
+          exit "$failed"
+      - name: Install locked dependencies
+        id: install
+        if: ${{ !cancelled() && steps.hold.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci 2>&1 | tee qa-artifacts/install.log
+          node --version > qa-artifacts/node-version.txt
+          npm ls vitest vite esbuild typescript @supabase/supabase-js @supabase/postgrest-js react-router-dom @radix-ui/react-select react react-dom --json > qa-artifacts/installed-versions.json
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > qa-artifacts/dependencies/app-files-ci.sha256
+          find node_modules -type l -printf '%p\t%l\n' | sort > qa-artifacts/dependencies/app-links-ci.tsv
+      - name: Prepare ephemeral remote browser and brand reader
+        id: runtime
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          browser_root=$(mktemp -d "$RUNNER_TEMP/soccer-ps-browser-XXXXXX")
+          printf 'QA_BROWSER_ROOT=%s\n' "$browser_root" >> "$GITHUB_ENV"
+          printf '%s\n' "$browser_root" > qa-artifacts/dependencies/browser-root.txt
+          npm install --prefix "$browser_root" --no-save --package-lock=false playwright@1.64.0 2>&1 | tee qa-artifacts/dependencies/playwright-install.log
+          for name in playwright playwright-core; do
+            test ! -e "node_modules/$name" && test ! -L "node_modules/$name"
+            ln -s "$browser_root/node_modules/$name" "node_modules/$name"
+          done
+          node "$browser_root/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee qa-artifacts/dependencies/browser-install.log
+          python -m pip install fonttools pillow 2>&1 | tee qa-artifacts/dependencies/python-install.log
+          python -m pip freeze > qa-artifacts/dependencies/python-versions.txt
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > qa-artifacts/dependencies/app-files-runtime.sha256
+          find node_modules -type l -printf '%p\t%l\n' | sort > qa-artifacts/dependencies/app-links-runtime.tsv
+          find node_modules -type l ! -path node_modules/playwright ! -path node_modules/playwright-core -printf '%p\t%l\n' | sort > qa-artifacts/dependencies/app-links-runtime-original.tsv
+          cmp qa-artifacts/dependencies/app-files-ci.sha256 qa-artifacts/dependencies/app-files-runtime.sha256
+          cmp qa-artifacts/dependencies/app-links-ci.tsv qa-artifacts/dependencies/app-links-runtime-original.tsv
+          for name in playwright playwright-core; do
+            test "$(readlink "node_modules/$name")" = "$browser_root/node_modules/$name"
+          done
+          find "$browser_root/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > qa-artifacts/dependencies/browser-files.sha256
+          find "$browser_root/node_modules" -type l -printf '%p\t%l\n' | sort > qa-artifacts/dependencies/browser-links.tsv
+          tar -C "$browser_root" -czf qa-artifacts/dependencies/browser-packages.tar.gz node_modules
+          npm ls vitest vite esbuild playwright react react-dom typescript @supabase/supabase-js @supabase/postgrest-js react-router-dom @radix-ui/react-select --json > qa-artifacts/dependencies/installed-versions.json
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import { createHash } from 'node:crypto';
+          const rows = [];
+          const lock = JSON.parse(fs.readFileSync('package-lock.json')).packages;
+          for (const name of ['playwright', 'playwright-core', 'vitest', 'vite', 'esbuild', 'react', 'react-dom', 'typescript', '@supabase/supabase-js', '@supabase/postgrest-js', 'react-router-dom', '@radix-ui/react-select']) {
+            const raw = fs.readFileSync('node_modules/' + name + '/package.json');
+            fs.writeFileSync('qa-artifacts/dependencies/' + name.replaceAll('/', '__') + '-package.json', raw);
+            rows.push({ name, version: JSON.parse(raw).version, expectedVersion: name.startsWith('playwright') ? '1.64.0' : lock['node_modules/' + name].version, sha256: createHash('sha256').update(raw).digest('hex') });
+          }
+          fs.writeFileSync('qa-artifacts/dependencies/runtime-packages.json', JSON.stringify(rows, null, 2));
+          fs.writeFileSync('qa-artifacts/dependencies/node-versions.json', JSON.stringify(process.versions, null, 2));
+          if (rows.some(row => row.version !== row.expectedVersion)) throw new Error('Runtime package version differs from held lock or pinned browser');
+          NODE
+          sha256sum --quiet -c qa-artifacts/packages.sha256
+      - name: Proper application type gate
+        id: types
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee qa-artifacts/types.log
+      - name: Actual adapter outcomes and effective controls
+        id: adapter
+        if: ${{ !cancelled() && steps.parse.outcome == 'success' && steps.types.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerPerfectSeason.mjs 2>&1 | tee qa-artifacts/adapter.log
+      - name: Build actual candidate and retain generated delivery
+        id: build
+        if: ${{ !cancelled() && steps.types.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          failed=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT=qa-artifacts/search-offline-blocked.txt timeout --signal=TERM --kill-after=15s 3m node scripts/genSearchKeywords.mjs 2>&1 | tee qa-artifacts/search-keywords.log || failed=1
+          cp src/data/searchKeywords.json qa-artifacts/derived/searchKeywords.after.json
+          sha256sum src/data/searchKeywords.json > qa-artifacts/derived/search-after.sha256
+          git diff HEAD -- src/data/searchKeywords.json > qa-artifacts/derived/searchKeywords.diff
+          test ! -s qa-artifacts/search-offline-blocked.txt || failed=1
+          npm run build -- --sourcemap 2>&1 | tee qa-artifacts/build.log || failed=1
+          sha256sum src/data/seoMetaParts/seoMetaPart25.ts > qa-artifacts/derived/after.sha256
+          cp src/data/seoMetaParts/seoMetaPart25.ts qa-artifacts/derived/seoMetaPart25.after.ts
+          git diff HEAD -- src/data/seoMetaParts/seoMetaPart25.ts > qa-artifacts/derived/seoMetaPart25.diff
+          git ls-files -z | xargs -0 sha256sum > qa-artifacts/post-build-source-files.sha256
+          git ls-files -z | tar -czf qa-artifacts/post-build-source.tar.gz --null -T -
+          if [ -d dist ]; then
+            tar -czf qa-artifacts/build.tar.gz dist
+            find dist -type f -print0 | sort -z | xargs -0 sha256sum > qa-artifacts/dist-files.sha256
+          fi
+          sha256sum --quiet -c qa-artifacts/authored-files.sha256
+          sha256sum --quiet -c qa-artifacts/derived/search-after.sha256
+          git diff --exit-code HEAD -- . ':(exclude)src/data/seoMetaParts/seoMetaPart25.ts' ':(exclude)src/data/searchKeywords.json'
+          git ls-files --others --exclude-standard -- src scripts .github/workflows public index.html package.json package-lock.json > qa-artifacts/untracked-source-after-build.txt
+          test ! -s qa-artifacts/untracked-source-after-build.txt
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee qa-artifacts/post-build-types.log || failed=1
+          exit "$failed"
+      - name: Finite real UI lifecycle and copied-source controls
+        id: native
+        if: ${{ !cancelled() && steps.parse.outcome == 'success' && steps.adapter.outcome == 'success' && steps.build.outcome == 'success' && steps.runtime.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" timeout --signal=TERM --kill-after=15s 20m node scripts/qa/soccerPerfectSeason1097.mjs 2>&1 | tee qa-artifacts/native.log
+      - name: All twenty built readers and relevant shared guards
+        id: readers
+        timeout-minutes: 15
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.runtime.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simSeoMetaSplit simHomeCopy simHarnessAnchors simSeoTitles simScoreShown simCompletionOnce simHelpDialogFocus simHelpConsentFocus; do
+            if NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ONLY="$harness" timeout --signal=TERM --kill-after=15s 3m node scripts/runAllSims.mjs --browser 2>&1 | tee "qa-artifacts/readers/$harness.log"; then
+              outcome=success
+            else
+              outcome=failure
+              failed=1
+            fi
+            printf '%s\t%s\n' "$harness" "$outcome" >> qa-artifacts/reader-outcomes.tsv
+          done
+          exit "$failed"
+      - name: Closing source hold
+        id: close
+        if: always() && steps.hold.outcome == 'success'
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f qa-artifacts/dependencies/app-files-ci.sha256 ]; then
+            find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > qa-artifacts/dependencies/app-files-close.sha256
+            find node_modules -type l -printf '%p\t%l\n' | sort > qa-artifacts/dependencies/app-links-close.tsv
+            sha256sum --quiet -c qa-artifacts/dependencies/app-files-ci.sha256
+            links=qa-artifacts/dependencies/app-links-ci.tsv
+            if [ -f qa-artifacts/dependencies/app-links-runtime.tsv ]; then links=qa-artifacts/dependencies/app-links-runtime.tsv; fi
+            while IFS=$'\t' read -r link target; do
+              test -L "$link" && test "$(readlink "$link")" = "$target"
+            done < "$links"
+          fi
+          if [ -f qa-artifacts/dependencies/browser-files.sha256 ]; then
+            sha256sum --quiet -c qa-artifacts/dependencies/browser-files.sha256
+            find "$QA_BROWSER_ROOT/node_modules" -type l -printf '%p\t%l\n' | sort > qa-artifacts/dependencies/browser-links-close.tsv
+            cmp qa-artifacts/dependencies/browser-links.tsv qa-artifacts/dependencies/browser-links-close.tsv
+          fi
+          sha256sum --quiet -c qa-artifacts/authored-files.sha256
+          sha256sum --quiet -c qa-artifacts/packages.sha256
+          cmp package.json qa-artifacts/dependencies/package.json
+          cmp package-lock.json qa-artifacts/dependencies/package-lock.json
+          git diff --exit-code HEAD -- . ':(exclude)src/data/seoMetaParts/seoMetaPart25.ts' ':(exclude)src/data/searchKeywords.json'
+          git ls-files --others --exclude-standard -- src scripts .github/workflows public index.html package.json package-lock.json > qa-artifacts/untracked-source-close.txt
+          test ! -s qa-artifacts/untracked-source-close.txt
+          if [ -f qa-artifacts/derived/after.sha256 ]; then
+            sha256sum --quiet -c qa-artifacts/derived/after.sha256
+          else
+            sha256sum --quiet -c qa-artifacts/derived/before.sha256
+          fi
+          if [ -f qa-artifacts/derived/search-after.sha256 ]; then
+            sha256sum --quiet -c qa-artifacts/derived/search-after.sha256
+          else
+            sha256sum --quiet -c qa-artifacts/derived/search-before.sha256
+          fi
+          if [ -f qa-artifacts/dist-files.sha256 ]; then
+            find dist -type f -print0 | sort -z | xargs -0 sha256sum > qa-artifacts/dist-files-close.sha256
+            cmp qa-artifacts/dist-files.sha256 qa-artifacts/dist-files-close.sha256
+          fi
+          git rev-parse HEAD HEAD^{tree} > qa-artifacts/source-identity-close.txt
+          cmp qa-artifacts/source-identity.txt qa-artifacts/source-identity-close.txt
+      - name: Strict final verdict
+        if: always()
+        shell: bash
+        env:
+          HOLD: ${{ steps.hold.outcome }}
+          INSTALL: ${{ steps.install.outcome }}
+          RUNTIME: ${{ steps.runtime.outcome }}
+          PARSE: ${{ steps.parse.outcome }}
+          TYPES: ${{ steps.types.outcome }}
+          ADAPTER: ${{ steps.adapter.outcome }}
+          BUILD: ${{ steps.build.outcome }}
+          NATIVE: ${{ steps.native.outcome }}
+          READERS: ${{ steps.readers.outcome }}
+          CLOSE: ${{ steps.close.outcome }}
+        run: |
+          set -euo pipefail
+          mkdir -p qa-artifacts
+          printf '{"hold":"%s","install":"%s","runtime":"%s","parse":"%s","types":"%s","adapter":"%s","build":"%s","native":"%s","readers":"%s","close":"%s"}\n' "$HOLD" "$INSTALL" "$RUNTIME" "$PARSE" "$TYPES" "$ADAPTER" "$BUILD" "$NATIVE" "$READERS" "$CLOSE" > qa-artifacts/gates.json
+          cat qa-artifacts/gates.json
+          for outcome in "$HOLD" "$INSTALL" "$RUNTIME" "$PARSE" "$TYPES" "$ADAPTER" "$BUILD" "$NATIVE" "$READERS" "$CLOSE"; do
+            test "$outcome" = success
+          done
+      - name: Retain proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-perfect-season-ui-${{ github.run_id }}-${{ github.run_attempt }}
+          path: qa-artifacts/
+          if-no-files-found: error
+  freeze_guide:
+    if: ${{ contains(github.event.head_commit.message, '[guide freeze]') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      SIM_NETWORK: offline
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold exact flat guide source
+        id: hold
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p qa-artifacts/dependencies qa-artifacts/derived
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git rev-parse HEAD HEAD^{tree} > qa-artifacts/source-identity.txt
+          git ls-tree -r HEAD > qa-artifacts/source-git-manifest.txt
+          git archive --format=tar.gz -o qa-artifacts/source.tar.gz HEAD
+          git ls-files -z | xargs -0 sha256sum > qa-artifacts/source-files.sha256
+          git ls-files -z -- . ':(exclude)scripts/data/guideHeadingsFrozen.json' | xargs -0 sha256sum > qa-artifacts/authored-files.sha256
+          sha256sum package.json package-lock.json > qa-artifacts/packages.sha256
+          cp package.json package-lock.json qa-artifacts/dependencies/
+          cp scripts/data/guideHeadingsFrozen.json qa-artifacts/derived/guideHeadingsFrozen.before.json
+          sha256sum scripts/data/guideHeadingsFrozen.json > qa-artifacts/derived/before.sha256
+      - name: Install locked freeze dependencies
+        id: install
+        if: ${{ !cancelled() && steps.hold.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci 2>&1 | tee qa-artifacts/install.log
+          node --version > qa-artifacts/node-version.txt
+          npm ls typescript esbuild react react-dom react-router-dom --json > qa-artifacts/dependencies/installed-versions.json
+      - name: Proper freeze application type gate
+        id: types
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee qa-artifacts/types.log
+      - name: Generate actual flat guide fixture
+        id: freeze
+        if: ${{ !cancelled() && steps.types.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          failed=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT=qa-artifacts/offline-blocked.txt timeout --signal=TERM --kill-after=15s 3m node scripts/simGuideHeadings.mjs --freeze /soccer-perfect-season 2>&1 | tee qa-artifacts/freeze.log || failed=1
+          cp scripts/data/guideHeadingsFrozen.json qa-artifacts/derived/guideHeadingsFrozen.after.json
+          sha256sum scripts/data/guideHeadingsFrozen.json > qa-artifacts/derived/after.sha256
+          git diff HEAD -- scripts/data/guideHeadingsFrozen.json > qa-artifacts/derived/guideHeadingsFrozen.diff
+          git ls-files -z | xargs -0 sha256sum > qa-artifacts/post-source-files.sha256
+          git ls-files -z | tar -czf qa-artifacts/post-source.tar.gz --null -T -
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import { createHash } from 'node:crypto';
+          const route = '/soccer-perfect-season';
+          const beforeRaw = fs.readFileSync('qa-artifacts/derived/guideHeadingsFrozen.before.json');
+          const afterRaw = fs.readFileSync('qa-artifacts/derived/guideHeadingsFrozen.after.json');
+          const before = JSON.parse(beforeRaw), after = JSON.parse(afterRaw);
+          assert(!Object.hasOwn(before.routes, route), 'New guide must not already be frozen');
+          assert.deepEqual(Object.keys(after.routes).sort(), [...Object.keys(before.routes), route].sort());
+          assert.deepEqual({ ...after, routes: before.routes }, before, 'Fixture metadata remains unchanged');
+          for (const [key, value] of Object.entries(before.routes)) assert.deepEqual(after.routes[key], value, 'Existing frozen route remains unchanged');
+          const parts = after.routes[route];
+          assert.deepEqual(Object.keys(parts).sort(), ['example', 'howToPlay', 'rules', 'tips']);
+          for (const part of Object.values(parts)) assert(Array.isArray(part) && part.length && part.every(line => typeof line === 'string' && line.trim()));
+          const sha = raw => createHash('sha256').update(raw).digest('hex');
+          fs.writeFileSync('qa-artifacts/freeze-receipt.json', JSON.stringify({ route, beforeSha256: sha(beforeRaw), afterSha256: sha(afterRaw), parts, existingRoutesHeld: Object.keys(before.routes).length }, null, 2));
+          NODE
+          sha256sum --quiet -c qa-artifacts/authored-files.sha256
+          git diff --exit-code HEAD -- . ':(exclude)scripts/data/guideHeadingsFrozen.json'
+          git ls-files --others --exclude-standard -- src scripts .github/workflows public index.html package.json package-lock.json > qa-artifacts/untracked-source-after.txt
+          test ! -s qa-artifacts/untracked-source-after.txt
+          test ! -s qa-artifacts/offline-blocked.txt
+          exit "$failed"
+      - name: Closing freeze source hold
+        id: close
+        if: always() && steps.hold.outcome == 'success'
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum --quiet -c qa-artifacts/authored-files.sha256
+          sha256sum --quiet -c qa-artifacts/packages.sha256
+          cmp package.json qa-artifacts/dependencies/package.json
+          cmp package-lock.json qa-artifacts/dependencies/package-lock.json
+          git diff --exit-code HEAD -- . ':(exclude)scripts/data/guideHeadingsFrozen.json'
+          git ls-files --others --exclude-standard -- src scripts .github/workflows public index.html package.json package-lock.json > qa-artifacts/untracked-source-close.txt
+          test ! -s qa-artifacts/untracked-source-close.txt
+          if [ -f qa-artifacts/derived/after.sha256 ]; then
+            sha256sum --quiet -c qa-artifacts/derived/after.sha256
+          else
+            sha256sum --quiet -c qa-artifacts/derived/before.sha256
+          fi
+          git rev-parse HEAD HEAD^{tree} > qa-artifacts/source-identity-close.txt
+          cmp qa-artifacts/source-identity.txt qa-artifacts/source-identity-close.txt
+      - name: Strict freeze verdict
+        if: always()
+        shell: bash
+        env:
+          HOLD: ${{ steps.hold.outcome }}
+          INSTALL: ${{ steps.install.outcome }}
+          TYPES: ${{ steps.types.outcome }}
+          FREEZE: ${{ steps.freeze.outcome }}
+          CLOSE: ${{ steps.close.outcome }}
+        run: |
+          set -euo pipefail
+          mkdir -p qa-artifacts
+          printf '{"hold":"%s","install":"%s","types":"%s","freeze":"%s","close":"%s"}\n' "$HOLD" "$INSTALL" "$TYPES" "$FREEZE" "$CLOSE" > qa-artifacts/gates.json
+          cat qa-artifacts/gates.json
+          for outcome in "$HOLD" "$INSTALL" "$TYPES" "$FREEZE" "$CLOSE"; do test "$outcome" = success; done
+      - name: Retain complete freeze capture
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-perfect-season-guide-freeze-${{ github.run_id }}-${{ github.run_attempt }}
+          path: qa-artifacts/
+          if-no-files-found: error

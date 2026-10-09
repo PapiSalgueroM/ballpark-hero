@@ -68,6 +68,7 @@ export const CATEGORIES: GameCategory[] = [
       // Darts, Stadium Draft, Blind Rank and Start Bench Cut deleted 2026-07-15
       // per owner review (broken/low-effort). Pages, routes and libs removed entirely.
       { path: '/budget-builder', label: '$1B Budget Builder', emoji: '💵', description: 'One billion dollars, real values, eleven slots. Spend it well', addedOn: '2026-07-21' },
+      { path: '/soccer-perfect-season', label: 'Soccer Perfect Season', emoji: '🏆', description: 'Spend 55 tokens on a fictional XI, then chase 38 wins from 38 simulated matches', daily: true, addedOn: '2026-10-08' },
       { path: '/rebuild', label: 'Rebuild Challenge', emoji: '🔧', description: 'Inherit a real club. Open the envelopes, spin for a shirt, keep him or sell him, answer to the board', addedOn: '2026-07-21' },
       // deleted 2026-08-05 per owner review: "dosent even load and it's just like their tier list game... please delete it".
       // { path: '/grade-transfer', label: 'Grade the Transfer', emoji: '📋', description: 'Grade five real moves A to F, then see how they aged', daily: true, isNew: true },

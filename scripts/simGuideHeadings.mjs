@@ -65,7 +65,7 @@ const FIXTURE = path.join(ROOT, 'scripts/data/guideHeadingsFrozen.json');
 const SEO = path.join(ROOT, 'src/components/seo/GameSeoContent.tsx');
 
 /* Raise this in the round that converts another guide. */
-const CONVERTED_FLOOR = 131;
+const CONVERTED_FLOOR = 132;
 
 /* Round 1031 adds these verified instructions without rewriting the frozen
    pre-conversion record. Only these exact parts on these four routes extend it. */

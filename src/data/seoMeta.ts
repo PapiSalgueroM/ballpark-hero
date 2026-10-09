@@ -25,6 +25,10 @@ export interface SeoMeta {
 }
 
 export const SEO_META: Record<string, SeoMeta> = {
+  '/soccer-perfect-season': {
+    title: 'Soccer Perfect Season: Draft Your XI',
+    description: 'Draft a fictional soccer XI with 55 tokens, then simulate 38 matches. Play free Daily or Unlimited and see if your choices can win them all.',
+  },
   '/cage-clash': {
     title: 'Cage Clash: Pixel MMA Fighting Game',
     description: 'Free pixel MMA fighting game. Move, block, punch and kick, then clinch, take your opponent down and work for a submission. Play on phone or keyboard.',
