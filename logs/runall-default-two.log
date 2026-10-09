@@ -1,0 +1,6 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 0 node harnesses
+
+Skipping 2 browser harnesses (simBracketMoment, simLoginReturn). Pass --browser to include them.
+
+All 0 harnesses green.

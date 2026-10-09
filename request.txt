@@ -1,0 +1,52 @@
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-touched: node_modules/.bin/vitest run src/test/academyFilters.test.tsx src/test/clubManagerBracketMoment.test.tsx src/test/clubManagerDeskCues.test.tsx src/test/facilitiesPreview.test.tsx src/test/firstTeam.test.tsx src/test/managerWorldBrowser.test.tsx src/test/seasonCentreSlots.test.tsx src/test/seasonCentreWords.test.tsx src/test/seasonCore.test.ts src/test/seasonReplays.test.tsx src/test/tycoonRooms.test.tsx src/test/tycoonTicketPolicy.test.tsx src/test/tycoonHelp.test.tsx --testTimeout=300000 --hookTimeout=120000
+og-seed3: CAREERS=120 SEEDSET=3 node scripts/simSoccerOwnGoals.mjs
+og-points: OWN_GOAL_CONTROL=points node scripts/simSoccerOwnGoals.mjs
+og-mine: OWN_GOAL_CONTROL=mine node scripts/simSoccerOwnGoals.mjs
+og-assist: OWN_GOAL_CONTROL=assist node scripts/simSoccerOwnGoals.mjs
+og-origin: OWN_GOAL_CONTROL=origin node scripts/simSoccerOwnGoals.mjs
+og-mirror: OWN_GOAL_CONTROL=mirror node scripts/simSoccerOwnGoals.mjs
+og-kind: OWN_GOAL_CONTROL=kind node scripts/simSoccerOwnGoals.mjs
+og-pitch: OWN_GOAL_CONTROL=pitch node scripts/simSoccerOwnGoals.mjs
+og-beneficiary: OWN_GOAL_CONTROL=beneficiary node scripts/simSoccerOwnGoals.mjs
+og-role: OWN_GOAL_CONTROL=role node scripts/simSoccerOwnGoals.mjs
+og-gate: OWN_GOAL_CONTROL=gate node scripts/simSoccerOwnGoals.mjs
+og-score: OWN_GOAL_CONTROL=score node scripts/simSoccerOwnGoals.mjs
+og-filteredordinal: OWN_GOAL_CONTROL=filteredordinal node scripts/simSoccerOwnGoals.mjs
+og-input: OWN_GOAL_CONTROL=input node scripts/simSoccerOwnGoals.mjs
+og-ordinal: OWN_GOAL_CONTROL=ordinal node scripts/simSoccerOwnGoals.mjs
+og-rng: OWN_GOAL_CONTROL=rng node scripts/simSoccerOwnGoals.mjs
+og-ledgerdata: OWN_GOAL_CONTROL=ledgerdata node scripts/simSoccerOwnGoals.mjs
+og-ledgerkey: OWN_GOAL_CONTROL=ledgerkey node scripts/simSoccerOwnGoals.mjs
+og-stream-noparent: OWN_GOAL_CONTROL=stream node scripts/simSoccerOwnGoals.mjs
+og-unknown: OWN_GOAL_CONTROL=nosuch node scripts/simSoccerOwnGoals.mjs
+discovery: node scripts/simBrowserHarnessDiscovery.mjs
+runall-default-two: ONLY=simLoginReturn,simBracketMoment node scripts/runAllSims.mjs
+loginReturn-direct: node scripts/simLoginReturn.mjs
+bracketMoment-direct: node scripts/simBracketMoment.mjs
+ticket: node scripts/simTycoonTicketPolicy.mjs
+ticket-all: TYCOON_TICKET_POLICY_CONTROL=all node scripts/simTycoonTicketPolicy.mjs
+simTycoonRooms: node scripts/simTycoonRooms.mjs
+simTycoonHelp: node scripts/simTycoonHelp.mjs
+simTycoonAway: node scripts/simTycoonAway.mjs
+simTycoonGearPage: node scripts/simTycoonGearPage.mjs
+simTycoonPitch: node scripts/simTycoonPitch.mjs
+simTycoonSetPiecePage: node scripts/simTycoonSetPiecePage.mjs
+simTycoonSaleReview: node scripts/simTycoonSaleReview.mjs
+simVictoryMoment: node scripts/simVictoryMoment.mjs
+simSeasonCentreNeutral: node scripts/simSeasonCentreNeutral.mjs
+simSeasonCentreMotion: node scripts/simSeasonCentreMotion.mjs
+simRoles: node scripts/simRoles.mjs
+simAcademy: node scripts/simAcademy.mjs
+simCup: node scripts/simCup.mjs
+simFirstTeamPage: node scripts/simFirstTeamPage.mjs
+simManagerWorldBrowser: node scripts/simManagerWorldBrowser.mjs
+simClubManagerFinances: node scripts/simClubManagerFinances.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs

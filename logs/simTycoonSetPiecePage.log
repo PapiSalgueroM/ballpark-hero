@@ -1,0 +1,22 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/tycoonSetPiecePage.test.tsx[2m > [22mset pieces on the real Stadium Tycoon page[2m > [22m1 opening persists the attempt before the board appears, including close and reload[33m 399[2mms[22m[39m
+ [32m✓[39m src/test/tycoonSetPiecePage.test.tsx[2m > [22mset pieces on the real Stadium Tycoon page[2m > [22m2 a failed opening save consumes nothing and a successful retry opens exactly one attempt[32m 149[2mms[22m[39m
+ [32m✓[39m src/test/tycoonSetPiecePage.test.tsx[2m > [22mset pieces on the real Stadium Tycoon page[2m > [22m3 a scored kick survives reload with one goal and the exact normal bonus[33m 453[2mms[22m[39m
+ [32m✓[39m src/test/tycoonSetPiecePage.test.tsx[2m > [22mset pieces on the real Stadium Tycoon page[2m > [22m4 a failed goal save changes nothing and retrying the same shot cannot pay twice[32m 211[2mms[22m[39m
+ [32m✓[39m src/test/tycoonSetPiecePage.test.tsx[2m > [22mset pieces on the real Stadium Tycoon page[2m > [22m5 the clock continues while aiming and full time expires the old board[33m 826[2mms[22m[39m
+ [32m✓[39m src/test/tycoonSetPiecePage.test.tsx[2m > [22mset pieces on the real Stadium Tycoon page[2m > [22m6 selling up expires the queued board even while the career match count stays the same[32m 130[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 07:51:56
+[2m   Duration [22m 4.77s[2m (transform 1.11s, setup 66ms, collect 1.28s, tests 2.50s, environment 327ms, prepare 237ms)[22m
+
+JSON report written to /home/runner/work/_temp/t-simTycoonSetPiecePage/tycoon-set-piece-page-HKNkKU/report.json
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+Tycoon set-piece page: 6/6 actual page cases passed
