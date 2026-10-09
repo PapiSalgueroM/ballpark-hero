@@ -1,0 +1,4 @@
+#!serial
+base-checkout: git checkout bc43f27a8d11c00b6d41085cb0f513457df7c719 -- src scripts && git status --short | wc -l
+base-screen-s2: SIM_SEED=2 node scripts/simMatchScreen.mjs
+base-erauc-s1: SIM_SEED=1 node scripts/simClubManagerEraUcl.mjs
