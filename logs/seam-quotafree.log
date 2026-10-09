@@ -1,0 +1,15 @@
+CONTROL quotafree: the real quota journeys run on a store that was seeded and never filled, so nothing is refused
+FAIL [quota] nba quota returning (store never filled): on a page that saves what it loaded the line says full and stays (line none (none@71), a new key is taken, Retry notice none, on the store: nothing, 0 fillers)
+FAIL [quota] nba quota returning (store never filled): on the next game the line still says full (line none (none@71), a new key is taken, Retry notice none, on the store: nothing, no page load)
+FAIL [quota] nba quota returning (store never filled): the career's first save is refused and the line at the top says why (line none (none@71), a new key is taken, Retry notice none, on the store: prospect)
+ok   [errors] nba quota returning (store never filled): no page error
+FAIL [quota] nba quota little (store never filled): the first save is refused and the line says full (line none (none@62), a new key is taken, Retry notice none, on the store: prospect)
+FAIL [quota] nba quota little (store never filled): with about 0 characters of room Retry save is refused again and the line still says full (line none (none@62), a new key is taken, Retry notice none, on the store: prospect)
+FAIL [quota] nba quota little (store never filled): with real room Retry save goes through (369 characters) and the line leaves on the same page (line none (none@62), a new key is taken, Retry notice none, on the store: prospect, no page load)
+ok   [errors] nba quota little (store never filled): no page error
+FAIL [kept] nba quota kept (store never filled): the cookie choice is taken while the store is full and the line still says full (banner up then gone, on the store: essential, line none (none@40), a new key is taken, Retry notice none, on the store: nothing)
+FAIL [kept] nba quota kept (store never filled): once there is room the line leaves and the choice made under it is on the device (on the store: essential, line none (none@40), a new key is taken, Retry notice none, on the store: nothing)
+ok   [errors] nba quota kept (store never filled): no page error
+requests to supabase.co aborted: 3
+control quotafree: RED AT THE NAMED CHECK (quota, kept); checks red: quota, kept
+playUsCareerSaveSeam: 3 journeys, 11 checks, 8 failed (control quotafree)

@@ -1,0 +1,129 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/safeStorageQuota.test.ts [2m([22m[2m6 tests[22m[2m | [22m[31m5 failed[39m[2m)[22m[32m 40[2mms[22m[39m
+   [32m✓[39m safeStorage: a store that is really full takes some writes and not others[2m > [22mthe model itself: a full store takes a same size overwrite and refuses anything that needs room[32m 4[2mms[22m[39m
+[31m   [31m×[31m safeStorage: a store that is really full takes some writes and not others[2m > [22man overwrite the full store takes does not take full back[39m[32m 26[2mms[22m[39m
+[31m     → expected null to be 'full' // Object.is equality[39m
+[31m   [31m×[31m safeStorage: a store that is really full takes some writes and not others[2m > [22masking again needs as much new room as the refused write needed, not just room for a probe[39m[32m 2[2mms[22m[39m
+[31m     → expected null to be 'full' // Object.is equality[39m
+[31m   [31m×[31m safeStorage: a store that is really full takes some writes and not others[2m > [22mnothing takes full back while a game still holds a save the browser refused[39m[32m 2[2mms[22m[39m
+[31m     → expected null to be 'full' // Object.is equality[39m
+[31m   [31m×[31m safeStorage: what the seam kept while the store was full is written once there is room[2m > [22ma choice made under the line is on the device after the line leaves[39m[32m 2[2mms[22m[39m
+[31m     → expected null to be 'essential' // Object.is equality[39m
+[31m   [31m×[31m safeStorage: what the seam kept while the store was full is written once there is room[2m > [22mfull stays while any of it still does not fit, and what did fit is kept on the device[39m[32m 2[2mms[22m[39m
+[31m     → expected null to be 'full' // Object.is equality[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 5 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/safeStorageQuota.test.ts[2m > [22msafeStorage: a store that is really full takes some writes and not others[2m > [22man overwrite the full store takes does not take full back
+[31m[1mAssertionError[22m: expected null to be 'full' // Object.is equality[39m
+
+[32m- Expected:[39m 
+"full"
+
+[31m+ Received:[39m 
+null
+
+[36m [2m❯[22m src/test/safeStorageQuota.test.ts:[2m77:38[22m[39m
+    [90m 75| [39m    /* what the bracket page does as it opens: it saves what it loaded…
+    [90m 76| [39m    [34mexpect[39m(seam[33m.[39m[34msafeSetItem[39m([32m'wc2026-predictions'[39m[33m,[39m [32m'{}'[39m))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m 77| [39m    [34mexpect[39m(seam[33m.[39m[34mgetStorageTrouble[39m())[33m.[39m[34mtoBe[39m([32m'full'[39m)[33m;[39m
+    [90m   | [39m                                     [31m^[39m
+    [90m 78| [39m    seam[33m.[39msafeLocalStorage[33m.[39m[34msetItem[39m([32m'cookie-consent'[39m[33m,[39m [32m'essential'[39m)[33m;[39m
+    [90m 79| [39m    [34mexpect[39m(seam[33m.[39m[34mgetStorageTrouble[39m())[33m.[39m[34mtoBe[39m([32m'full'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/safeStorageQuota.test.ts[2m > [22msafeStorage: a store that is really full takes some writes and not others[2m > [22masking again needs as much new room as the refused write needed, not just room for a probe
+[31m[1mAssertionError[22m: expected null to be 'full' // Object.is equality[39m
+
+[32m- Expected:[39m 
+"full"
+
+[31m+ Received:[39m 
+null
+
+[36m [2m❯[22m src/test/safeStorageQuota.test.ts:[2m96:41[22m[39m
+    [90m 94| [39m    expect(() => window.localStorage.setItem(PROBE, '1')).not.toThrow(…
+    [90m 95| [39m    window[33m.[39mlocalStorage[33m.[39m[34mremoveItem[39m([33mPROBE[39m)[33m;[39m
+    [90m 96| [39m    [34mexpect[39m(seam[33m.[39m[34mrecheckStorageWrites[39m())[33m.[39m[34mtoBe[39m([32m'full'[39m)[33m;[39m
+    [90m   | [39m                                        [31m^[39m
+    [90m 97| [39m    [34mexpect[39m(seam[33m.[39m[34msafeSetItem[39m([32m'wc2026-predictions'[39m[33m,[39m save))[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m 98| [39m    [90m/* enough room for it */[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/safeStorageQuota.test.ts[2m > [22msafeStorage: a store that is really full takes some writes and not others[2m > [22mnothing takes full back while a game still holds a save the browser refused
+[31m[1mAssertionError[22m: expected null to be 'full' // Object.is equality[39m
+
+[32m- Expected:[39m 
+"full"
+
+[31m+ Received:[39m 
+null
+
+[36m [2m❯[22m src/test/safeStorageQuota.test.ts:[2m114:41[22m[39m
+    [90m112| [39m    window[33m.[39mlocalStorage[33m.[39m[34mremoveItem[39m([32m'filler-100'[39m)[33m;[39m
+    [90m113| [39m    room[33m.[39m[34mmockClear[39m()[33m;[39m
+    [90m114| [39m    [34mexpect[39m(seam[33m.[39m[34mrecheckStorageWrites[39m())[33m.[39m[34mtoBe[39m([32m'full'[39m)[33m;[39m
+    [90m   | [39m                                        [31m^[39m
+    [90m115| [39m    [90m/* it did not even ask: nothing was written */[39m
+    [90m116| [39m    [34mexpect[39m(room)[33m.[39mnot[33m.[39m[34mtoHaveBeenCalled[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/safeStorageQuota.test.ts[2m > [22msafeStorage: what the seam kept while the store was full is written once there is room[2m > [22ma choice made under the line is on the device after the line leaves
+[31m[1mAssertionError[22m: expected null to be 'essential' // Object.is equality[39m
+
+[32m- Expected:[39m 
+"essential"
+
+[31m+ Received:[39m 
+null
+
+[36m [2m❯[22m src/test/safeStorageQuota.test.ts:[2m133:59[22m[39m
+    [90m131| [39m    window[33m.[39mlocalStorage[33m.[39m[34mremoveItem[39m([32m'filler-100'[39m)[33m;[39m
+    [90m132| [39m    [34mexpect[39m(seam[33m.[39m[34mrecheckStorageWrites[39m())[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m133| [39m    expect(window.localStorage.getItem('cookie-consent')).toBe('essent…
+    [90m   | [39m                                                          [31m^[39m
+    [90m134| [39m    expect(seam.safeLocalStorage.getItem('cookie-consent')).toBe('esse…
+    [90m135| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/safeStorageQuota.test.ts[2m > [22msafeStorage: what the seam kept while the store was full is written once there is room[2m > [22mfull stays while any of it still does not fit, and what did fit is kept on the device
+[31m[1mAssertionError[22m: expected null to be 'full' // Object.is equality[39m
+
+[32m- Expected:[39m 
+"full"
+
+[31m+ Received:[39m 
+null
+
+[36m [2m❯[22m src/test/safeStorageQuota.test.ts:[2m146:41[22m[39m
+    [90m144| [39m    [90m/* room for one of the two (each is 80 characters with its key) */[39m
+    [90m145| [39m    window[33m.[39mlocalStorage[33m.[39m[34mremoveItem[39m([32m'filler-100'[39m)[33m;[39m
+    [90m146| [39m    [34mexpect[39m(seam[33m.[39m[34mrecheckStorageWrites[39m())[33m.[39m[34mtoBe[39m([32m'full'[39m)[33m;[39m
+    [90m   | [39m                                        [31m^[39m
+    [90m147| [39m    [34mexpect[39m(window[33m.[39mlocalStorage[33m.[39m[34mgetItem[39m([32m'first'[39m))[33m.[39m[34mtoBe[39m([32m'a'[39m[33m.[39m[34mrepeat[39m([34m75[39m))[33m;[39m
+    [90m148| [39m    [34mexpect[39m(window[33m.[39mlocalStorage[33m.[39m[34mgetItem[39m([32m'second'[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m5 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 08:53:46
+[2m   Duration [22m 968ms[2m (transform 54ms, setup 54ms, collect 22ms, tests 40ms, environment 311ms, prepare 125ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/safeStorageQuota.test.ts,title=src/test/safeStorageQuota.test.ts > safeStorage%3A a store that is really full takes some writes and not others > an overwrite the full store takes does not take full back,line=77,column=38::AssertionError: expected null to be 'full' // Object.is equality%0A%0A- Expected: %0A"full"%0A%0A+ Received: %0Anull%0A%0A ❯ src/test/safeStorageQuota.test.ts:77:38%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/safeStorageQuota.test.ts,title=src/test/safeStorageQuota.test.ts > safeStorage%3A a store that is really full takes some writes and not others > asking again needs as much new room as the refused write needed%2C not just room for a probe,line=96,column=41::AssertionError: expected null to be 'full' // Object.is equality%0A%0A- Expected: %0A"full"%0A%0A+ Received: %0Anull%0A%0A ❯ src/test/safeStorageQuota.test.ts:96:41%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/safeStorageQuota.test.ts,title=src/test/safeStorageQuota.test.ts > safeStorage%3A a store that is really full takes some writes and not others > nothing takes full back while a game still holds a save the browser refused,line=114,column=41::AssertionError: expected null to be 'full' // Object.is equality%0A%0A- Expected: %0A"full"%0A%0A+ Received: %0Anull%0A%0A ❯ src/test/safeStorageQuota.test.ts:114:41%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/safeStorageQuota.test.ts,title=src/test/safeStorageQuota.test.ts > safeStorage%3A what the seam kept while the store was full is written once there is room > a choice made under the line is on the device after the line leaves,line=133,column=59::AssertionError: expected null to be 'essential' // Object.is equality%0A%0A- Expected: %0A"essential"%0A%0A+ Received: %0Anull%0A%0A ❯ src/test/safeStorageQuota.test.ts:133:59%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/safeStorageQuota.test.ts,title=src/test/safeStorageQuota.test.ts > safeStorage%3A what the seam kept while the store was full is written once there is room > full stays while any of it still does not fit%2C and what did fit is kept on the device,line=146,column=41::AssertionError: expected null to be 'full' // Object.is equality%0A%0A- Expected: %0A"full"%0A%0A+ Received: %0Anull%0A%0A ❯ src/test/safeStorageQuota.test.ts:146:41%0A%0A
