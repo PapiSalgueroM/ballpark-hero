@@ -1,0 +1,47 @@
+CONTROL title: src/lib/season/soccer.ts, src/lib/season/core.ts patched in the bundle only
+bundled in 833 ms; 120 careers, seed set 0
+played 120 careers in 16598 ms
+ok   T1 old save, no leagueApps, no finish: results mode, attempt 0, 0 repairs
+ok   T2 keeper, clean sheets equal apps: table mode, attempt 0, 0 repairs
+ok   T3 defender with derby shutouts: table mode, attempt 0, 0 repairs
+ok   T4 severe injury, both derbies played: results mode, attempt 0, 0 repairs
+ok   T5 on loan: table mode, attempt 0, 7 repairs
+ok   T6 red card in his last league game: table mode, attempt 0, 5 repairs
+ok   T7 38 league apps in an 18 club league: table mode, attempt 0, 0 repairs
+ok   T8 a 1992/93 Serie A row: results mode, attempt 0, 0 repairs
+ok   T9 starter, 36 league apps, 10 week injury: table mode, attempt 0, 4 repairs
+ok   T10 injured results mode row: results mode, attempt 0, 0 repairs
+ok   T11 Ligue 1 2019-20 champions (abandoned): results mode, attempt 0, 0 repairs
+ok   T12 Golden Boot season: table mode, attempt 0, 0 repairs
+ok   T13 a title with no verified size: results mode, attempt 0, 0 repairs
+seasons 2154; gate {"format":44,"table":1216,"nofinish":695,"nosize":128,"severe":71}
+derived: table 1215, results 938; null 1 (injured 1 of 459, uninjured 0 of 1695) {"table:availability":1}
+attempts {"0":2148,"1":4,"2":1}; repairs {"0":1246,"16-40":102,"1-5":426,"6-15":379}
+determinism 2153 of 2153; key reconstruction 806 of 806
+tables in a league the world runs no title race for, 1st place a named club that is not his: 14
+ok   the population has both modes (1215 table, 938 results)
+ok   null rate 0.05% at most 0.6%
+ok   table yield 99.92% of 1216 gated seasons, at least 99.2%
+ok   determinism on 2153 seasons
+ok   key reconstruction on 806 finishes
+ok   realism gpg: derived 2.628 against unconditioned 2.614 (gap 0.014, band 0.05) over 956 tables
+ok   realism home: derived 0.445 against unconditioned 0.445 (gap 0.000, band 0.015) over 956 tables
+ok   realism draw: derived 0.227 against unconditioned 0.229 (gap -0.002, band 0.015) over 956 tables
+ok   realism champPpg: derived 2.217 against unconditioned 2.249 (gap -0.033, band 0.08) over 956 tables
+finish fifth 1 (not champions): points a game p1 1.74 p50 2.05 p99 2.50 over 234
+finish fifth 2 (not champions): points a game p1 1.47 p50 1.74 p99 1.95 over 199
+finish fifth 3 (not champions): points a game p1 1.18 p50 1.42 p99 1.68 over 190
+finish fifth 4 (not champions): points a game p1 0.87 p50 1.15 p99 1.37 over 97
+finish fifth 5 (not champions): points a game p1 0.42 p50 0.82 p99 1.09 over 51
+finish fifth 1: goal difference a game, table p1 0.41 p50 1.00 p99 1.68 over 234; results only mean 0.63 over 2, 2 inside
+finish fifth 2: goal difference a game, table p1 0.03 p50 0.55 p99 0.97 over 199; results only mean 0.61 over 12, 12 inside
+finish fifth 3: goal difference a game, table p1 -0.53 p50 0.11 p99 0.68 over 190; results only mean 0.17 over 15, 15 inside
+finish fifth 4: goal difference a game, table p1 -0.71 p50 -0.32 p99 0.18 over 97; results only mean -0.36 over 3, 3 inside
+finish fifth 5: goal difference a game, table p1 -1.34 p50 -0.84 p99 -0.32 over 51; results only mean -0.82 over 3, 3 inside
+ok   results only seasons with a saved finish: 35, 35 inside their fifth's table goal difference band
+champions' points a game in table mode: p2 1.97 p50 2.21 p98 2.53 over 1215; results title band 1.9 to 2.65
+FAIL item 2 position: c2 2012 PSG: 1 for a saved 2 | c2 2012 PSG: 1st true with leagueTitle false | c2 2015 PSG: 1 for a saved 2 | c2 2015 PSG: 1st true with leagueTitle false
+FAIL item 13 clinch: c2 2012 PSG: a clinch on a season he did not win | c2 2015 PSG: a clinch on a season he did not win | c2 2021 PSG: a clinch on a season he did not win | c2 2026 PSG: a clinch on a season he did not win
+FAIL item 15 league world: c2 2026 PSG: displayed clubs differ from the saved season field | c2 2026 PSG: movement differs from the final displayed places | c3 2031 Chelsea: displayed clubs differ from the saved season field | c3 2031 Chelsea: movement differs from the final displayed places
+FAIL independent checker: 2 position, 13 clinch, 15 league world
+simSeasonCentreAgreement: 24 checks, 332 failed (control title)

@@ -1,0 +1,51 @@
+ok   saved domestic and club cup names, opponents, leg scores and decisions
+ok   historical bindings, unknown old campaigns, first-stage exits and read-only saves
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: a saved two-leg final keeps both leg numbers and grounds
++ actual - expected
+
+  [
+    [
++     'Final',
+-     'Final, leg 1',
+      'Wydad',
+      2,
+      1,
++     undefined,
+-     true,
+      1,
+      undefined
+    ],
+    [
++     'Final',
+-     'Final, leg 2',
+      'Wydad',
+      1,
+      1,
++     undefined,
+-     false,
+      0,
+      '3-2 on aggregate'
+    ]
+  ]
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerSeasonCompetitions.mjs:52:8
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [
+    [ 'Final', 'Wydad', 2, 1, undefined, 1, undefined ],
+    [ 'Final', 'Wydad', 1, 1, undefined, 0, '3-2 on aggregate' ]
+  ],
+  expected: [
+    [ 'Final, leg 1', 'Wydad', 2, 1, true, 1, undefined ],
+    [ 'Final, leg 2', 'Wydad', 1, 1, false, 0, '3-2 on aggregate' ]
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

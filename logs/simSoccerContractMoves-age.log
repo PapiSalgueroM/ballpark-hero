@@ -1,0 +1,19 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: age and current level/form decide the exact quoted wage
+
+115000 !== 90000
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerContractMoves.mjs:57:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 115000,
+  expected: 90000,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

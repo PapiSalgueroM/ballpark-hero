@@ -1,0 +1,88 @@
+ok   saved domestic and club cup names, opponents, leg scores and decisions
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: a current campaign cannot leak into a historical season
++ actual - expected
+
++ {
++   club: 'Arsenal',
++   competition: 'Champions League',
++   isTopScorer: false,
++   matches: [
++     {
++       goalsAgainst: 1,
++       goalsFor: 2,
++       home: true,
++       leg: 1,
++       opponent: 'Barcelona',
++       playerGoals: 1,
++       round: 'QF',
++       won: true
++     },
++     {
++       aggAgainst: 3,
++       aggFor: 2,
++       decidedBy: 'aggregate',
++       goalsAgainst: 2,
++       goalsFor: 0,
++       home: false,
++       leg: 2,
++       opponent: 'Barcelona',
++       playerGoals: 0,
++       round: 'QF',
++       won: false
++     }
++   ],
++   playerGoals: 2,
++   qualified: true,
++   result: 'Quarter-final',
++   seasonYear: 2027
++ }
+- null
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerSeasonCompetitions.mjs:40:8
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: {
+    seasonYear: 2027,
+    club: 'Arsenal',
+    qualified: true,
+    competition: 'Champions League',
+    result: 'Quarter-final',
+    playerGoals: 2,
+    isTopScorer: false,
+    matches: [
+      {
+        round: 'QF',
+        opponent: 'Barcelona',
+        leg: 1,
+        home: true,
+        goalsFor: 2,
+        goalsAgainst: 1,
+        playerGoals: 1,
+        won: true
+      },
+      {
+        round: 'QF',
+        opponent: 'Barcelona',
+        leg: 2,
+        home: false,
+        goalsFor: 0,
+        goalsAgainst: 2,
+        playerGoals: 0,
+        won: false,
+        aggFor: 2,
+        aggAgainst: 3,
+        decidedBy: 'aggregate'
+      }
+    ]
+  },
+  expected: null,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
