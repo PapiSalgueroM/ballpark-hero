@@ -1,0 +1,67 @@
+1) the curve: the cap holds, it never falls as value rises, and it fails closed
+   curve 2: 32 ages by 47 value ratings read; the cap is 94 at every age; four bad calls all throw
+2) one scale everywhere: every file carries the stamp and every row sits on the curve
+   the 2026 squads                curve 2, 4401 rows, 0 off the curve, 88.4% pinned to one value rating
+   the A-League                   curve 2,  310 rows, 0 off the curve, 70.3% pinned to one value rating
+   the Russian Premier League     curve 2,  403 rows, 0 off the curve, 86.8% pinned to one value rating
+   the 2005 season                curve 2, 1727 rows, 0 off the curve, 72.1% pinned to one value rating, rated at age plus 1
+   the 2010 season                curve 2, 1751 rows, 0 off the curve, 90.2% pinned to one value rating, rated at age plus 1
+   the 2015 season                curve 2, 1659 rows, 0 off the curve, 91.6% pinned to one value rating, rated at age plus 1
+   the 2020 season                curve 2, 1774 rows, 0 off the curve, 95.7% pinned to one value rating, rated at age plus 1
+   the real free agents           curve 2,    7 rows, 0 off the curve, 0.0% pinned to one value rating
+3) the outcome, man by man: inside a club, does the rating order agree with who was played?
+   the 2026 rows (the block the constants were chosen on): 135 clubs, 2235 men
+      value rating alone 0.235, read with age 0.270: gain +0.035 (standard error 0.010; 86 clubs better, 49 worse; bootstrap fifth percentile 0.019, median 0.035)
+   the 2025 rows (held out: no constant was chosen on them): 120 clubs, 2000 men
+      value rating alone 0.399, read with age 0.437: gain +0.038 (standard error 0.010; 71 clubs better, 48 worse; bootstrap fifth percentile 0.022, median 0.038)
+4) club by club against the real 2025-26 tables (printed, not a gate), and the two committed tables agree
+   A-League Men             12 of 12 clubs  value rating 0.762  shipped 0.606  -0.156
+   Belgian Pro League       10 of 16 clubs  value rating 0.442  shipped 0.527  +0.085
+   Brasileirão Série A      15 of 20 clubs  value rating 0.724  shipped 0.717  -0.007
+   Bundesliga               15 of 18 clubs  value rating 0.943  shipped 0.910  -0.033
+   EFL Championship         16 of 24 clubs  value rating 0.381  shipped 0.373  -0.009
+   La Liga                  17 of 20 clubs  value rating 0.748  shipped 0.731  -0.017
+   Liga MX                  12 of 18 clubs  value rating 0.333  shipped 0.294  -0.039
+   Ligue 1                  16 of 18 clubs  value rating 0.744  shipped 0.787  +0.043
+   MLS Eastern Conference   11 of 15 clubs  value rating 0.127  shipped 0.027  -0.100
+   MLS Western Conference   10 of 15 clubs  value rating 0.109  shipped 0.170  +0.061
+   Premier League           17 of 20 clubs  value rating 0.414  shipped 0.307  -0.107
+   Primeira Liga             8 of 18 clubs  value rating 0.952  shipped 0.952  +0.000
+   Serie A                  17 of 20 clubs  value rating 0.846  shipped 0.840  -0.006
+   Süper Lig                 9 of 18 clubs  value rating 0.967  shipped 0.983  +0.017
+   mean of 14 leagues: value rating 0.607, shipped 0.587. Too few clubs in both seasons with 8 men to measure: 2. Bundesliga (2), Austrian Bundesliga (3), Danish Superliga (4), Eredivisie (7), Ligue 2 (2), Saudi Pro League (7), Scottish Premiership (2), Segunda División (0), Serie B (0), Super League Greece (4), SuperSport HNL (2), Swiss Super League (2)
+   the Round 612 tables and the folded tables: 15 leagues, 145 clubs in both, 0 placed differently
+   tiers at 87, 83, 78 over the clubs with 8 or more men: 8/17/41/193 on the value rating, 7/14/44/194 shipped
+   clubs whose tier differs between the two (10): AC Milan 82.9 to 83 (tier 3 to 2); Al-Nassr 76.7 to 78.4 (tier 4 to 3); Bournemouth 83.4 to 82.5 (tier 2 to 3); Brighton 83.4 to 82.6 (tier 2 to 3); Chelsea 87.5 to 86.9 (tier 1 to 2); Como 83.4 to 82.4 (tier 2 to 3); Feyenoord 78.2 to 77.7 (tier 3 to 4); Hull City 78.6 to 77.4 (tier 3 to 4); RB Leipzig 83.2 to 82.5 (tier 2 to 3); Roma 83.5 to 82.6 (tier 2 to 3)
+5) the spread: do the shipped elevens give a league about as wide as the real one?
+[control stretch: the shipped ratings are read at one and a half times their distance from 94]
+   A-League Men         12 clubs  real 0.280  shipped 0.277  value rating 0.284  flat 0.281  stretch 0.277  elevens 48.0 to 48.8
+   Brasileirão Série A  15 clubs  real 0.304  shipped 0.371  value rating 0.325  flat 0.289  stretch 0.371  elevens 57.7 to 72.3
+   Bundesliga           15 clubs  real 0.472  shipped 0.481  value rating 0.380  flat 0.285  stretch 0.481  elevens 65.7 to 84.3
+   EFL Championship     16 clubs  real 0.206  shipped 0.318  value rating 0.301  flat 0.291  stretch 0.318  elevens 57.9 to 68.3
+   La Liga              17 clubs  real 0.409  shipped 0.555  value rating 0.440  flat 0.298  stretch 0.555  elevens 62.5 to 86.5
+   Liga MX              12 clubs  real 0.398  shipped 0.358  value rating 0.341  flat 0.353  stretch 0.358  elevens 56.3 to 65.3
+   Ligue 1              16 clubs  real 0.381  shipped 0.485  value rating 0.386  flat 0.284  stretch 0.485  elevens 60.6 to 85.9
+   Premier League       17 clubs  real 0.311  shipped 0.361  value rating 0.290  flat 0.249  stretch 0.361  elevens 74.8 to 86.4
+   Serie A              17 clubs  real 0.376  shipped 0.442  value rating 0.347  flat 0.264  stretch 0.442  elevens 64.2 to 80.9
+   mean miss over 9 leagues: shipped 0.066, value rating 0.039, flat 0.079, stretch 0.066 (the rule: 1.25 plus 0.055 a point, clamped 0.12 to 4.2, capped at 7, home 0.2, away -0.08)
+   the slope that would give each league its real spread on the shipped ratings: median 0.041 (the engine ships 0.055); for Round 1109, not a gate
+  FAIL [5]: the shipped scale misses the real spread by 0.066, no better than the same ratings stretched (0.066)
+   the game's Premier League, 20 clubs: best eleven Arsenal 88.7, worst Hull City 77.4, apart 11.4 (on the value rating 10.1); standard deviation 3.00 (2.85)
+6) ages: a man with a birth date on file ships his exact age, and the table rule is what the ledger shows
+   (a) 362 men with a birth date on file, 44 of them on this round's ledger: 362 ship their exact age on 2026-08-01
+   (b) of the Round 669 ledger's 366 written rows (age on 2026-01-01), 257 are a year older on 2026-08-01: 0.702 (257 of 366 on 2026-10-07)
+   (c) the rule's five literal cases and its three throws all hold
+   (d) the file says: 362 from a birth date, 4013 moved on from the table, 26 as written, 0 unknown, of 4401
+   (e) 43 ledgered men with a bulk table row: 43 hold the age on 1 January of the row's year; 18 of them have their birthday after 1 August, the men the table rule alone would have a year old
+What the curve does to the game around it (printed for Round 1109 and the review, nothing asserted)
+   the cheapest eleven rated 80 or more: 133.8m on the value rating, 57.7m shipped
+   the cheapest eleven rated 82 or more: 197.0m on the value rating, 113.7m shipped
+   the cheapest eleven rated 84 or more: 288.1m on the value rating, 166.6m shipped
+   men rated 82 or more and valued at 15m or less: 0 on the value rating, 19 shipped
+   men of 21 or under rated 86 or more (a board ask reads this): 19 on the value rating, 7 shipped; of 23 or under: 42 and 22
+   the top of the 2026 world: Lamine Yamal 94, Erling Haaland 94, Kylian Mbappé 94, Vinicius Junior 92, Vitinha 92, Michael Olise 92, Pedri 91, Jude Bellingham 91, Bukayo Saka 91, Declan Rice 91, Federico Valverde 91, Cole Palmer 91
+   the real free agents: Dani Parejo 72 (a club of level 78 or more can sign him), Sergio Ramos 71 (a club of level 77 or more can sign him), Edinson Cavani 68 (a club of level 74 or more can sign him), Willian 67 (a club of level 73 or more can sign him), Dele Alli 66 (a club of level 72 or more can sign him), Wissam Ben Yedder 66 (a club of level 72 or more can sign him), Tiemoué Bakayoko 62 (a club of level 68 or more can sign him)
+   mean rating by age, value rating then shipped: 14 to 20: 67.9 then 63.9 (492); 21 to 23: 72.6 then 70.7 (1079); 24 to 26: 73.7 then 73.7 (1398); 27 to 29: 73.5 then 73.5 (1191); 30 to 32: 71.8 then 73.4 (630); 33 to 35: 69.3 then 73.0 (268); 36 to 45: 65.6 then 72.5 (55)
+
+simCmRatingShape: CONTROL stretch fired where it should, 1 failure(s) in section(s) 5

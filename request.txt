@@ -1,0 +1,42 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-cm: node_modules/.bin/vitest run src/test/cmValueCurve.test.ts src/test/clubManager*.test.* src/test/cm*.test.* src/hooks/useClubManager.test.ts --testTimeout=300000 --hookTimeout=120000
+shape: node scripts/simCmRatingShape.mjs
+shape-oldcurve: SIM_CM_SHAPE_CONTROL=oldcurve node scripts/simCmRatingShape.mjs
+shape-flip: SIM_CM_SHAPE_CONTROL=flip node scripts/simCmRatingShape.mjs
+shape-eraold: SIM_CM_SHAPE_CONTROL=eraold node scripts/simCmRatingShape.mjs
+shape-erashift: SIM_CM_SHAPE_CONTROL=erashift node scripts/simCmRatingShape.mjs
+shape-offcurve: SIM_CM_SHAPE_CONTROL=offcurve node scripts/simCmRatingShape.mjs
+shape-nostamp: SIM_CM_SHAPE_CONTROL=nostamp node scripts/simCmRatingShape.mjs
+shape-unlisted: SIM_CM_SHAPE_CONTROL=unlisted node scripts/simCmRatingShape.mjs
+shape-flat: SIM_CM_SHAPE_CONTROL=flat node scripts/simCmRatingShape.mjs
+shape-stretch: SIM_CM_SHAPE_CONTROL=stretch node scripts/simCmRatingShape.mjs
+shape-tableswap: SIM_CM_SHAPE_CONTROL=tableswap node scripts/simCmRatingShape.mjs
+shape-agesasis: SIM_CM_SHAPE_CONTROL=agesasis node scripts/simCmRatingShape.mjs
+shape-nomove: SIM_CM_SHAPE_CONTROL=nomove node scripts/simCmRatingShape.mjs
+shape-tableyear: SIM_CM_SHAPE_CONTROL=tableyear node scripts/simCmRatingShape.mjs
+shape-emptysample: SIM_CM_SHAPE_CONTROL=emptysample node scripts/simCmRatingShape.mjs
+shape-bogus: SIM_CM_SHAPE_CONTROL=nosuchcontrol node scripts/simCmRatingShape.mjs
+aleague: node scripts/simClubManagerALeague.mjs
+aleague-offcurve: SIM_ALEAGUE_CONTROL=offcurve node scripts/simClubManagerALeague.mjs
+gathered: node scripts/simClubManagerGathered.mjs
+gathered-offcurve: GATHERED_CONTROL=offcurve node scripts/simClubManagerGathered.mjs
+eraextend: node scripts/simEraBakeExtend.mjs
+rerate-check: node scripts/rerateCmEras.mjs --check
+gen-fa-check: node scripts/genClubManagerFreeAgents.mjs --check
+gen-russia-check: node scripts/genClubManagerGathered.mjs russia2026 --check
+simFreeAgents: node scripts/simFreeAgents.mjs
+simClubManager: node scripts/simClubManager.mjs
+simManagerSpec: node scripts/simManagerSpec.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simBoardAsks: node scripts/simBoardAsks.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+simEra2020: node scripts/simEra2020.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+simGmStaff: node scripts/simGmStaff.mjs
+simWorldEditor: node scripts/simWorldEditor.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simTransfers: node scripts/simTransfers.mjs

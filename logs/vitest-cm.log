@@ -1,0 +1,128 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/cmValueCurve.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 65[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerJobHunt.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 45[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerBracketMoment.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 807[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerSlots.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 2303[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mthe screen asks before it deletes, and every tile says what it holds [33m 530[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDeskCues.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 2759[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22ma plain renewal says who and the terms the save now holds, on the slam, once [33m 567[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22ma clause renewal names the exit clause the save wrote [33m 314[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22ma refused press and a save that moved some other way say nothing [33m 347[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22mwhile the cookie banner is unanswered the line sits above it, and drops back once it is answered [33m 330[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: one of him[2m > [22m[2mtwo real players whose names slug to one string stay two men
+[22m[39m  the pair: Éderson CM @Atalanta 35.5 | Ederson GK @Fenerbahçe 9.5
+  squad [33m26[39m -> [33m28[39m duplicate ids: []
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: one of him[2m > [22m[2mno club starts a career with two players under one id
+[22m[39m  Hertha BSC: 16 players, duplicate ids: []
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: one of him[2m > [22m[2mno club starts a career with two players under one id
+[22m[39m  AC Milan: 21 players, duplicate ids: []
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: one of him[2m > [22m[2mno club starts a career with two players under one id
+[22m[39m  Real Madrid: 26 players, duplicate ids: []
+
+ [32m✓[39m src/test/clubManagerDealMoment.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 2705[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the deal moment[2m > [22mslams DEAL DONE only after the flip, with the fee the save holds [33m 817[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the deal moment[2m > [22mplays nothing when the screen opens onto a deal that was already done [33m 658[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the deal moment[2m > [22mshakes once for a hijack and for a collapse, and never slams [33m 653[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the deal moment[2m > [22mplays once: a later render keeps the node and a new negotiation is clean [33m 373[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 334[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mevery transition is on disk, and a reload loses nothing
+[22m[39m  a shape: on disk, 53789 bytes, week 0
+  a mentality: on disk, 53790 bytes, week 0
+  an XI change: on disk, 53792 bytes, week 0
+  a training plan: on disk, 53789 bytes, week 0
+  a squad role: on disk, 53796 bytes, week 0
+  a transfer status: on disk, 53822 bytes, week 0
+  a signing: on disk, 54259 bytes, week 0
+  kick off: on disk, 69789 bytes, week 0
+  the second half: on disk, 68091 bytes, week 1
+  leaving the report: on disk, 68091 bytes, week 1
+  a quick sim: on disk, 72110 bytes, week 2
+  leaving that report: on disk, 72110 bytes, week 2
+  a run of weeks: on disk, 84865 bytes, week 8
+  leaving that report too: on disk, 84865 bytes, week 8
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mevery transition is on disk, and a reload loses nothing
+[22m[39m  reloaded: identical, 84865 bytes
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mleaving the site mid match keeps the clock where it stood
+[22m[39m  on screen 19', save at 0'
+  after leaving, save at 19'
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mleaving only the viewer, with the page still up, keeps it too
+[22m[39m  on screen 19', page still up, the match finished at week 1 and the save matches memory
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mStart Fresh is not undone by leaving straight afterwards
+[22m[39m  after Start Fresh and leaving, the slot is empty
+
+ [32m✓[39m src/test/clubManagerSave.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1468[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the save[2m > [22mevery transition is on disk, and a reload loses nothing [33m 531[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2ma 2010-11 save resumes once its squads arrive, exactly as saved
+[22m[39m  2010-11 Barcelona resumed with 27 players
+
+[90mstdout[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2mwith the 2005-06 squads unreachable the boot holds, keeps the save, and the retry resumes it
+[22m[39m  offline: the boot holds on the retry notice and the save is untouched
+
+ [32m✓[39m src/test/clubManagerWorldEditor.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 652[2mms[22m[39m
+   [33m[2m✓[22m[39m WorldEditorScreen[2m > [22mmoves a club in two taps, says what happened, lists it and resets [33m 309[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2mwith the 2005-06 squads unreachable the boot holds, keeps the save, and the retry resumes it
+[22m[39m  back online: the retry fetched the squads and the career resumed
+
+ [32m✓[39m src/test/clubManagerEraLoad.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 2044[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: an era save waits for its era[2m > [22ma 2010-11 save resumes once its squads arrive, exactly as saved [33m 689[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: an era save waits for its era[2m > [22mwith the 2005-06 squads unreachable the boot holds, keeps the save, and the retry resumes it [33m 511[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: an era save waits for its era[2m > [22ma retry that fails again reloads the page, the first failure does not [33m 335[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: an era save waits for its era[2m > [22ma modern save opens on the same pass and fetches no era [33m 320[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerShootoutTile.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 869[2mms[22m[39m
+   [33m[2m✓[22m[39m the shootout order tile[2m > [22mopens on request, adds on tap, removes on a second tap, and backs out [33m 514[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerShootoutOrder.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 49[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: the write when the page goes[2m > [22m[2mpagehide writes the career held in memory, with nothing else able to
+[22m[39m  after pagehide the disk holds 53766 bytes, memory 53766
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: the write when the page goes[2m > [22m[2mthe tab going hidden writes it too
+[22m[39m  after the tab went hidden the disk holds 53569 bytes, memory 53569
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: the write when the page goes[2m > [22m[2mtwo writes of one career are the same bytes
+[22m[39m  three writes, 53725 bytes each, identical
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: a refused write is said out loud[2m > [22m[2msaveFailed goes up when the store throws and comes down when a write lands
+[22m[39m  with a throwing store, saveFailed is true
+  with the store back, saveFailed is false and the disk matches memory: true
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: a refused write is said out loud[2m > [22m[2ma refused press on the transfer desk says why, and one that goes through clears it
+[22m[39m  second press on Cristiano Ronaldo: "Cristiano Ronaldo is already in your squad."
+  loan out again after the recall: "Christian Pulisic has already been out on loan once this season. One loan out a season."
+
+ [32m✓[39m src/test/clubManagerSaveSize.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 411[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerEraNationalities.test.ts[2m > [22m[2mClub Manager: a past season brings its own nationalities[2m > [22m[2monce the 2005 season has loaded its men have their countries, and 2010 still has none
+[22m[39m  2005: Aaron Mokoena is South Africa, 97 call up bars; 2010: Abdelhamid El Kaoutari waits
+
+ [32m✓[39m src/test/clubManagerEraNationalities.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 757[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: a past season brings its own nationalities[2m > [22mbefore its season is asked for, a past world answers nobody [33m 480[2mms[22m[39m
+ [32m✓[39m src/hooks/useClubManager.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 1965[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager completion shape[2m > [22ma played match records activity and not a completion [33m 309[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager completion shape[2m > [22ma finished season records exactly one completion [33m 1654[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerManagerFace.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 4271[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager on the career panel[2m > [22mshows his face, his name and his background point [33m 325[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager on the career panel[2m > [22mlets a Skip career name its manager, background point and all [33m 1769[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager on the career panel[2m > [22mrefuses a real footballer on rename before it reaches the save [33m 668[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager on the career panel[2m > [22mleaves the homeland alone when only the name changes [33m 640[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager on the career panel[2m > [22mopens a Skip career at an MLS club on its own country [33m 829[2mms[22m[39m
+ [32m✓[39m src/test/cmMinuteLabel.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerEraPicker.test.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 773[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager picker: a past season waits for its squads[2m > [22mholds the league step on a loading line until the 2010-11 squads land, then draws it [33m 771[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerWorldEditorPage.test.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 4334[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager page: the world editor reaches the career[2m > [22mstarts Celtic in the Premier League after a swap made on the World editor tile [33m 4331[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m19 passed[39m[22m[90m (19)[39m
+[2m      Tests [22m [1m[32m170 passed[39m[22m[90m (170)[39m
+[2m   Start at [22m 09:29:15
+[2m   Duration [22m 22.80s[2m (transform 4.96s, setup 2.04s, collect 16.28s, tests 26.63s, environment 12.32s, prepare 2.68s)[22m
+

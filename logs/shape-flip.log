@@ -1,0 +1,81 @@
+[control flip: every age point changes sign]
+1) the curve: the cap holds, it never falls as value rises, and it fails closed
+  FAIL [1]: a man valued at the cap is not 94 at 16 of 32 ages
+  FAIL [1]: 423 age points are outside minus six to plus eight, or not whole
+  FAIL [1]: the points back from 30 read -1,-2,-2,-3,-4,-5,-6,-7,-8,-8; by the table 1,2,2,3,4,5,6,7,8,8 (and the same eight at 38 and at 45)
+  FAIL [1]: the points off under 24 read 6,6,5,4,3,2,1; by the table -6,-6,-5,-4,-3,-2,-1
+  FAIL [1]: the half distance limit reads 2,1,0 at 90, 92 and 94; by the table -2,-1,0
+   curve 2: 32 ages by 47 value ratings read; the cap is 94 at every age; four bad calls all throw
+2) one scale everywhere: every file carries the stamp and every row sits on the curve
+  FAIL [2]: the 2026 squads: 2078 of 4401 rows are off the curve at their age: Omari Hutchinson (CAM 23, valued 24) is 82, the curve allows 84; Diego Moreira (LM 22, valued 20.3) is 80, the curve allows 84; Mike Maignan (GK 31, valued 20.3) is 84, the curve allows 80
+   the 2026 squads                curve 2, 4401 rows, 2078 off the curve, 88.4% pinned to one value rating
+  FAIL [2]: the A-League: 240 of 310 rows are off the curve at their age: Panagiotis Kikianis (CB 21, valued 1.05) is 63, the curve allows 69; Ethan Alagich (CM 22, valued 0.73) is 62, the curve allows 66; Craig Goodwin (LW 34, valued 0.57) is 66, the curve allows 58 or 59
+   the A-League                   curve 2,  310 rows, 240 off the curve, 70.3% pinned to one value rating
+  FAIL [2]: the Russian Premier League: 206 of 403 rows are off the curve at their age: Sergey Pryakhin (CAM 23, valued 0.97) is 64, the curve allows 66; Erald Maksuti (LW 22, valued 0.73) is 62, the curve allows 66; Ismael Silva (CM 31, valued 0.65) is 65, the curve allows 61
+   the Russian Premier League     curve 2,  403 rows, 206 off the curve, 86.8% pinned to one value rating
+  FAIL [2]: the 2005 season: 829 of 1727 rows are off the curve at their age plus 1: Lucas Pereira (ST 22, valued 3) is 71, the curve allows 73; André Luiz (CAM 30, valued 1.5) is 70, the curve allows 66; Antônio Carlos (CB 21, valued 1.5) is 66, the curve allows 70
+   the 2005 season                curve 2, 1727 rows, 829 off the curve, 72.1% pinned to one value rating, rated at age plus 1
+  FAIL [2]: the 2010 season: 891 of 1751 rows are off the curve at their age plus 1: Alexandre Pato (ST 20, valued 28.5) is 81, the curve allows 87; Ronaldinho (LW 29, valued 22.5) is 84, the curve allows 82; Andrea Pirlo (CDM 30, valued 12.8) is 82, the curve allows 78
+   the 2010 season                curve 2, 1751 rows, 891 off the curve, 90.2% pinned to one value rating, rated at age plus 1
+  FAIL [2]: the 2015 season: 739 of 1659 rows are off the curve at their age plus 1: Alessio Romagnoli (CB 19, valued 12) is 75, the curve allows 83; Riccardo Montolivo (CDM 29, valued 9.8) is 79, the curve allows 77; Mattia De Sciglio (RB 22, valued 8.3) is 76, the curve allows 78
+   the 2015 season                curve 2, 1659 rows, 739 off the curve, 91.6% pinned to one value rating, rated at age plus 1
+  FAIL [2]: the 2020 season: 863 of 1774 rows are off the curve at their age plus 1: Gianluigi Donnarumma (GK 20, valued 48.8) is 84, the curve allows 90; Theo Hernández (LB 22, valued 40.5) is 85, the curve allows 87; Ismaël Bennacer (CDM 22, valued 32.3) is 84, the curve allows 86
+   the 2020 season                curve 2, 1774 rows, 863 off the curve, 95.7% pinned to one value rating, rated at age plus 1
+  FAIL [2]: the real free agents: 7 of 7 rows are off the curve at their age: Dani Parejo (CM 37, valued 0.8) is 72, the curve allows 57 or 58; Sergio Ramos (CB 40, valued 0.7) is 71, the curve allows 55 or 56; Edinson Cavani (ST 39, valued 0.4) is 68, the curve allows 52 or 53
+   the real free agents           curve 2,    7 rows, 7 off the curve, 0.0% pinned to one value rating
+3) the outcome, man by man: inside a club, does the rating order agree with who was played?
+   the 2026 rows (the block the constants were chosen on): 135 clubs, 2235 men
+      value rating alone 0.235, read with age 0.160: gain -0.075 (standard error 0.010; 37 clubs better, 98 worse; bootstrap fifth percentile -0.091, median -0.075)
+  FAIL [3]: the 2026 rows (the block the constants were chosen on): reading the value rating with the age gains -0.075 over the value rating alone, the floor is 0.020
+   the 2025 rows (held out: no constant was chosen on them): 120 clubs, 2000 men
+      value rating alone 0.399, read with age 0.314: gain -0.085 (standard error 0.009; 23 clubs better, 95 worse; bootstrap fifth percentile -0.100, median -0.085)
+  FAIL [3]: the 2025 rows (held out: no constant was chosen on them): reading the value rating with the age gains -0.085 over the value rating alone, the floor is 0.020
+4) club by club against the real 2025-26 tables (printed, not a gate), and the two committed tables agree
+   A-League Men             12 of 12 clubs  value rating 0.606  shipped 0.606  +0.000
+   Belgian Pro League       10 of 16 clubs  value rating 0.527  shipped 0.527  +0.000
+   Brasileirão Série A      15 of 20 clubs  value rating 0.717  shipped 0.717  +0.000
+   Bundesliga               15 of 18 clubs  value rating 0.910  shipped 0.910  +0.000
+   EFL Championship         16 of 24 clubs  value rating 0.373  shipped 0.373  +0.000
+   La Liga                  17 of 20 clubs  value rating 0.731  shipped 0.731  +0.000
+   Liga MX                  12 of 18 clubs  value rating 0.294  shipped 0.294  +0.000
+   Ligue 1                  16 of 18 clubs  value rating 0.787  shipped 0.787  +0.000
+   MLS Eastern Conference   11 of 15 clubs  value rating 0.027  shipped 0.027  +0.000
+   MLS Western Conference   10 of 15 clubs  value rating 0.170  shipped 0.170  +0.000
+   Premier League           17 of 20 clubs  value rating 0.307  shipped 0.307  +0.000
+   Primeira Liga             8 of 18 clubs  value rating 0.952  shipped 0.952  +0.000
+   Serie A                  17 of 20 clubs  value rating 0.840  shipped 0.840  +0.000
+   Süper Lig                 9 of 18 clubs  value rating 0.983  shipped 0.983  +0.000
+   mean of 14 leagues: value rating 0.587, shipped 0.587. Too few clubs in both seasons with 8 men to measure: 2. Bundesliga (2), Austrian Bundesliga (3), Danish Superliga (4), Eredivisie (7), Ligue 2 (2), Saudi Pro League (7), Scottish Premiership (2), Segunda División (0), Serie B (0), Super League Greece (4), SuperSport HNL (2), Swiss Super League (2)
+   the Round 612 tables and the folded tables: 15 leagues, 145 clubs in both, 0 placed differently
+   tiers at 87, 83, 78 over the clubs with 8 or more men: 7/14/44/194 on the value rating, 7/14/44/194 shipped
+   clubs whose tier differs between the two (0): none
+5) the spread: do the shipped elevens give a league about as wide as the real one?
+   A-League Men         12 clubs  real 0.280  shipped 0.295  value rating 0.295  flat 0.281  stretch 0.277  elevens 56.5 to 61.7
+   Brasileirão Série A  15 clubs  real 0.304  shipped 0.323  value rating 0.323  flat 0.289  stretch 0.371  elevens 67.7 to 79.4
+   Bundesliga           15 clubs  real 0.472  shipped 0.378  value rating 0.378  flat 0.285  stretch 0.481  elevens 75.0 to 87.5
+   EFL Championship     16 clubs  real 0.206  shipped 0.297  value rating 0.297  flat 0.291  stretch 0.318  elevens 66.8 to 76.6
+   La Liga              17 clubs  real 0.409  shipped 0.432  value rating 0.432  flat 0.298  stretch 0.555  elevens 72.9 to 88.9
+   Liga MX              12 clubs  real 0.398  shipped 0.346  value rating 0.346  flat 0.353  stretch 0.358  elevens 66.9 to 74.6
+   Ligue 1              16 clubs  real 0.381  shipped 0.386  value rating 0.386  flat 0.284  stretch 0.485  elevens 71.6 to 88.5
+   Premier League       17 clubs  real 0.311  shipped 0.296  value rating 0.296  flat 0.249  stretch 0.361  elevens 81.1 to 88.7
+   Serie A              17 clubs  real 0.376  shipped 0.348  value rating 0.348  flat 0.264  stretch 0.442  elevens 73.9 to 85.1
+   mean miss over 9 leagues: shipped 0.038, value rating 0.038, flat 0.079, stretch 0.066 (the rule: 1.25 plus 0.055 a point, clamped 0.12 to 4.2, capped at 7, home 0.2, away -0.08)
+   the slope that would give each league its real spread on the shipped ratings: median 0.054 (the engine ships 0.055); for Round 1109, not a gate
+   the game's Premier League, 20 clubs: best eleven Arsenal 88.7, worst Hull City 77.4, apart 11.4 (on the value rating 11.4); standard deviation 3.00 (3.00)
+6) ages: a man with a birth date on file ships his exact age, and the table rule is what the ledger shows
+   (a) 362 men with a birth date on file, 44 of them on this round's ledger: 362 ship their exact age on 2026-08-01
+   (b) of the Round 669 ledger's 366 written rows (age on 2026-01-01), 257 are a year older on 2026-08-01: 0.702 (257 of 366 on 2026-10-07)
+   (c) the rule's five literal cases and its three throws all hold
+   (d) the file says: 362 from a birth date, 4013 moved on from the table, 26 as written, 0 unknown, of 4401
+   (e) 43 ledgered men with a bulk table row: 43 hold the age on 1 January of the row's year; 18 of them have their birthday after 1 August, the men the table rule alone would have a year old
+What the curve does to the game around it (printed for Round 1109 and the review, nothing asserted)
+   the cheapest eleven rated 80 or more: 57.7m on the value rating, 57.7m shipped
+   the cheapest eleven rated 82 or more: 113.7m on the value rating, 113.7m shipped
+   the cheapest eleven rated 84 or more: 166.6m on the value rating, 166.6m shipped
+   men rated 82 or more and valued at 15m or less: 19 on the value rating, 19 shipped
+   men of 21 or under rated 86 or more (a board ask reads this): 7 on the value rating, 7 shipped; of 23 or under: 22 and 22
+   the top of the 2026 world: Lamine Yamal 94, Erling Haaland 94, Kylian Mbappé 94, Vinicius Junior 92, Vitinha 92, Michael Olise 92, Pedri 91, Jude Bellingham 91, Bukayo Saka 91, Declan Rice 91, Federico Valverde 91, Cole Palmer 91
+   the real free agents: Dani Parejo 72 (a club of level 78 or more can sign him), Sergio Ramos 71 (a club of level 77 or more can sign him), Edinson Cavani 68 (a club of level 74 or more can sign him), Willian 67 (a club of level 73 or more can sign him), Dele Alli 66 (a club of level 72 or more can sign him), Wissam Ben Yedder 66 (a club of level 72 or more can sign him), Tiemoué Bakayoko 62 (a club of level 68 or more can sign him)
+   mean rating by age, value rating then shipped: 14 to 20: 63.9 then 63.9 (492); 21 to 23: 70.7 then 70.7 (1079); 24 to 26: 73.7 then 73.7 (1398); 27 to 29: 73.5 then 73.5 (1191); 30 to 32: 73.4 then 73.4 (630); 33 to 35: 73.0 then 73.0 (268); 36 to 45: 72.5 then 72.5 (55)
+
+simCmRatingShape: CONTROL flip fired where it should, 15 failure(s) in section(s) 1, 2, 3
