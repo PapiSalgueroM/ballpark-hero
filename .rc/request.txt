@@ -1,0 +1,5 @@
+#!build
+#!playwright
+vq: node_modules/.bin/vitest run src/test/safeStorageQuota.test.ts --testTimeout=300000 --hookTimeout=120000
+seam-quota: SPORTS=nba SHOTS=$RC_OUT node scripts/playUsCareerSaveSeam.mjs
+seam-quotafree: US_SAVE_SEAM_CONTROL=quotafree SPORTS=nba PORT=4411 node scripts/playUsCareerSaveSeam.mjs
