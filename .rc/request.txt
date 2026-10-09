@@ -1,0 +1,9 @@
+savecheck: node .rc/x/rvsave.mjs
+base-simStatsCentre: bash .rc/x/rvbase.sh cbff760c simStatsCentre
+base-simEras: bash .rc/x/rvbase.sh cbff760c simEras
+head-simEras: node scripts/simEras.mjs
+base-simWorldEditor: bash .rc/x/rvbase.sh cbff760c simWorldEditor
+head-simWorldEditor: node scripts/simWorldEditor.mjs
+base-simEra2005: bash .rc/x/rvbase.sh cbff760c simEra2005
+head-simEra2005: node scripts/simEra2005.mjs
+main-simStatsCentre: bash .rc/x/rvbase.sh bfc6197f simStatsCentre
