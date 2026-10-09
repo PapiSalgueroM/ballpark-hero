@@ -1,0 +1,34 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-whole: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simFlagshipWeight-static: FLAGSHIP_LAZY_CONTROL=static node scripts/simFlagshipWeight.mjs
+simFlagshipWeight-training: FLAGSHIP_LAZY_CONTROL=training node scripts/simFlagshipWeight.mjs
+simFlagshipWeight-eagerimport: FLAGSHIP_LAZY_CONTROL=eagerimport node scripts/simFlagshipWeight.mjs
+sweepWeight: BASE=http://localhost:4173 SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs
+simCareerLifeCooldowns: node scripts/simCareerLifeCooldowns.mjs
+simCareerLifeCooldowns-nocooldown: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=nocooldown node scripts/simCareerLifeCooldowns.mjs
+simCareerLifeCooldowns-oneoption: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=oneoption node scripts/simCareerLifeCooldowns.mjs
+simCareerLifeCooldowns-sharedbatch: SIM_CAREER_LIFE_COOLDOWNS_CONTROL=sharedbatch node scripts/simCareerLifeCooldowns.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simCareerDerbies-nodetect: SIM_DERBY_CONTROL=nodetect node scripts/simCareerDerbies.mjs
+simCareerDerbies-stream: SIM_DERBY_CONTROL=stream node scripts/simCareerDerbies.mjs
+simCareerDerbies-homealt: SIM_DERBY_CONTROL=homealt node scripts/simCareerDerbies.mjs
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueFinish-notitle: SIM_LEAGUE_FINISH_CONTROL=notitle node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueFinish-eliteblind: SIM_LEAGUE_FINISH_CONTROL=eliteblind node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueFinish-stream: SIM_LEAGUE_FINISH_CONTROL=stream node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueFinish-attribution: SIM_LEAGUE_FINISH_ATTRIBUTION=train1178 node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerLeagueSeasons-wrongseason: SIM_LEAGUE_SEASONS_CONTROL=wrongseason node scripts/simCareerLeagueSeasons.mjs
+simCareerLeagueSeasons-crossdiv: SIM_LEAGUE_SEASONS_CONTROL=crossdiv node scripts/simCareerLeagueSeasons.mjs
+simCareerLeagueSeasons-finishwrong: SIM_LEAGUE_SEASONS_CONTROL=finishwrong node scripts/simCareerLeagueSeasons.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simCareerSocialBrands-reorder: SOCIAL_BRANDS_CONTROL=reorder node scripts/simCareerSocialBrands.mjs
+simCareerSocialBrands-leak: SOCIAL_BRANDS_CONTROL=leak node scripts/simCareerSocialBrands.mjs
+simCareerStory: node scripts/simCareerStory.mjs
+simCareerStory-reset: CAREER_STORY_CONTROL=reset node scripts/simCareerStory.mjs
+simCareerStory-cap: CAREER_STORY_CONTROL=cap node scripts/simCareerStory.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
