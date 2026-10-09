@@ -1,0 +1,2 @@
+# AP2 fix pass: the two mutations the reviewers found alive must now be caught where the fix put the check (serial inside one command; the reviewer's own script, limited to m1 and m6)
+mut: node .rc/x/mut.mjs m1,m6
