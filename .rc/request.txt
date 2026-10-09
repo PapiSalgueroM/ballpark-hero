@@ -1,0 +1,26 @@
+#!serial
+base-checkout: git checkout bc43f27a8d11c00b6d41085cb0f513457df7c719 -- src scripts && git status --short | wc -l
+main-screen-s1: SIM_SEED=1 node scripts/simMatchScreen.mjs
+main-screen-s2: SIM_SEED=2 node scripts/simMatchScreen.mjs
+main-screen-s3: SIM_SEED=3 node scripts/simMatchScreen.mjs
+main-screen-s4: SIM_SEED=4 node scripts/simMatchScreen.mjs
+main-screen-s5: SIM_SEED=5 node scripts/simMatchScreen.mjs
+main-screen-s6: SIM_SEED=6 node scripts/simMatchScreen.mjs
+main-screen-s7: SIM_SEED=7 node scripts/simMatchScreen.mjs
+main-screen-s8: SIM_SEED=8 node scripts/simMatchScreen.mjs
+main-screen-s9: SIM_SEED=9 node scripts/simMatchScreen.mjs
+main-screen-s10: SIM_SEED=10 node scripts/simMatchScreen.mjs
+main-screen-s11: SIM_SEED=11 node scripts/simMatchScreen.mjs
+main-screen-s12: SIM_SEED=12 node scripts/simMatchScreen.mjs
+main-screen-s13: SIM_SEED=13 node scripts/simMatchScreen.mjs
+main-screen-s14: SIM_SEED=14 node scripts/simMatchScreen.mjs
+main-screen-s15: SIM_SEED=15 node scripts/simMatchScreen.mjs
+main-screen-s16: SIM_SEED=16 node scripts/simMatchScreen.mjs
+main-erauc-s1: SIM_SEED=1 node scripts/simClubManagerEraUcl.mjs
+main-erauc-s2: SIM_SEED=2 node scripts/simClubManagerEraUcl.mjs
+main-erauc-s3: SIM_SEED=3 node scripts/simClubManagerEraUcl.mjs
+main-erauc-s4: SIM_SEED=4 node scripts/simClubManagerEraUcl.mjs
+main-erauc-s5: SIM_SEED=5 node scripts/simClubManagerEraUcl.mjs
+main-erauc-s6: SIM_SEED=6 node scripts/simClubManagerEraUcl.mjs
+main-erauc-s7: SIM_SEED=7 node scripts/simClubManagerEraUcl.mjs
+main-erauc-s8: SIM_SEED=8 node scripts/simClubManagerEraUcl.mjs
