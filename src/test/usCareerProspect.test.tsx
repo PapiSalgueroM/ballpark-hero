@@ -23,7 +23,9 @@ vi.mock('sonner', () => ({ toast: { success: () => undefined } }));
 
 interface SportCase { label: string; Board: ComponentType; sport: UsCareerSport; unsigned: { salary: number; fanbase: number; netWorth: number } }
 const SPORTS: SportCase[] = [
-  { label: 'NFL', Board: NflMyCareerBoard, sport: NFL_CAREER_SPORT, unsigned: { salary: 1.2, fanbase: 35, netWorth: 0.1 } },
+  /* Round 1104: an undrafted NFL rookie signs for the 2026 rookie minimum (885,000, which the hub prints as
+     0.9), read from src/data/nflRookieScale.ts. It was a flat 1.2 for every pick outside round one. */
+  { label: 'NFL', Board: NflMyCareerBoard, sport: NFL_CAREER_SPORT, unsigned: { salary: 0.9, fanbase: 35, netWorth: 0.1 } },
   { label: 'NBA', Board: NbaMyCareerBoard, sport: NBA_CAREER_SPORT, unsigned: { salary: 2.5, fanbase: 35, netWorth: 0.3 } },
   { label: 'MLB', Board: MlbMyCareerBoard, sport: MLB_CAREER_SPORT, unsigned: { salary: 0.8, fanbase: 30, netWorth: 0.4 } },
   { label: 'NHL', Board: NhlMyCareerBoard, sport: NHL_CAREER_SPORT, unsigned: { salary: 0.9, fanbase: 32, netWorth: 0.5 } },

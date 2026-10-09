@@ -17,6 +17,8 @@ import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';
 import type { PlayerAppearance } from './soccerCareerAppearance';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
 import { nflSeasonScore, wonAward } from './careerAwards';
+import { usSeasonLength } from '@/data/usSeasonLengths';
+import { rookieDeal } from './usCareerRookieDeal';
 import { draftRival, judgeRivalSeason } from './careerRival';
 import type { CareerRival } from './careerRival';
 import { getNflLifeEventsA } from './nflCareerLifeA';
@@ -314,6 +316,25 @@ export interface CareerEvent {
   options: { label: string; effect: string; apply: (c: CareerState, rng: () => number) => string }[];
 }
 
+/* Round 1104: in this game a kicker is drafted in round four or later. It is
+   a rule of the game, stated as one (a kicker went second overall here on
+   first pick money). Both roads to the draft read it: the quick start adds
+   it to the stock it rolls, and the road to the draft adds it to the board
+   rank (nflCareerPreDraft.ts), so a kicker's stock still orders him among
+   kickers. 96 is three rounds of 32. */
+export const NFL_KICKER_PICK_OFFSET = 96;
+export function nflPickOffset(pos: string | undefined): number {
+  return pos === 'K' ? NFL_KICKER_PICK_OFFSET : 0;
+}
+
+/* Round 1104: a rookie is paid his draft slot (src/lib/usCareerRookieDeal.ts
+   over the two sourced table in src/data/nflRookieScale.ts), not a formula:
+   the old one paid the first pick 32.8M a year, and the real 2026 first pick
+   signed for 14.3M a year. */
+function nflRookieSalary(eraId: string, slot: number, pos: string): number {
+  return rookieDeal('nfl', eraId, slot, pos)!.salary;
+}
+
 export function startCareer(
   name: string, pos: CareerPos, archetype: Archetype, rng: () => number = Math.random,
   appearance?: PlayerAppearance | null, eraId?: string, entry?: CareerDraftEntry,
@@ -324,7 +345,7 @@ export function startCareer(
   const base = entry?.ratingAfter ?? (66 + Math.floor(rng() * 8) + archetype.ovrBoost);
   const pot = entry?.pot ?? Math.min(99, base + 10 + Math.floor(rng() * 14) + archetype.potBoost);
   // draft stock from rating: better prospects go earlier
-  const stock = entry ? entry.pick ?? 0 : Math.max(1, Math.round(90 - (base - 64) * 9 + rng() * 40));
+  const stock = entry ? entry.pick ?? 0 : Math.max(1, Math.round(90 - (base - 64) * 9 + rng() * 40)) + nflPickOffset(pos);
   const team = entry?.team ?? era.teams[Math.floor(rng() * era.teams.length)].abbr;
   const firstRound = stock > 0 && stock <= 32;
   const c: CareerState = {
@@ -336,7 +357,7 @@ export function startCareer(
     morale: 70,
     fanbase: firstRound ? 55 : 35,
     health: entry?.health ?? 100,
-    salary: Math.max(0.3, Math.round((firstRound ? (33 - stock) * 0.9 + 4 : 1.2) * era.moneyScale * 10) / 10),
+    salary: nflRookieSalary(era.id, stock, pos),
     contractYears: 4,
     seasons: [],
     rings: 0, mvps: 0, allPros: 0,
@@ -433,13 +454,68 @@ export function nflCampBattle(c: CareerState, teamQuality: number, rng: () => nu
   return '🪑 Another camp, another year behind the starter. The gap is closing.';
 }
 
+/* Round 1104: THE RATE the stat curves are written on, not the length of a
+   season. Every production line below is "what a full 17 game year is worth,
+   times games played over 17", so a full 16 game season comes out at 16
+   seventeenths of a full 17 game one, which is exactly what a shorter
+   schedule is. Do not replace this with the season's length: that would hand
+   a 2005 player a 17 game year's numbers in 16 games. */
+const NFL_RATE_GAMES = 17;
+
+/** Round 1104: how many games a club played in the season that starts in
+ *  `year`, off the two sourced ledger (16 from 2005 to 2020, 17 since). A
+ *  year the ledger does not hold plays the modern 17. */
+export function nflSeasonLength(year: number): number {
+  return usSeasonLength('nfl', year) ?? NFL_RATE_GAMES;
+}
+
+/* Round 1104: the receiving lines never had the cap the passing, rushing and
+   sack lines have, and a 99 rated receiver passed the record book. Each cap
+   sits just under its record, so a career year scrapes it and never beats
+   it. The records (read 2026-10-07, each from two sources, each still
+   standing after the 2025 season):
+   receiving yards 1,964 in 2012 (NFL.com, "Calvin Johnson: single-season
+   receiving record 'bound to fall at some point'"; CBS Sports, "Calvin Johnson
+   can't believe his NFL single-season receiving yards record hasn't been
+   broken yet");
+   receptions 149 in 2019 (The Analyst, "Who has the most receptions in an NFL
+   season?"; CBS Sports, "NFL Honors: Michael Thomas wins Offensive Player of
+   the Year after record-setting year for Saints");
+   receiving yards by a tight end 1,416 in 2020 (NFL.com, "Chiefs TE Travis
+   Kelce sets single-season TE receiving yardage record"; Guinness World
+   Records, "Most yards receiving by a tight end in an NFL season"). */
+const NFL_WR_REC_CAP = 145;
+const NFL_WR_YDS_CAP = 1950;
+const NFL_TE_YDS_CAP = 1400;
+
 function seasonGames(c: CareerState, rng: () => number): { games: number; injuryNote: string | null } {
+  const len = nflSeasonLength(c.year);
   const risk = careerRecoveryRisk('nfl', c.purchased, (1 - c.archetype.durability) * 0.5 + (100 - c.health) / 260 + (c.pos === 'RB' ? 0.07 : 0));
   if (rng() < risk) {
     const missed = 2 + Math.floor(rng() * 9);
-    return { games: Math.max(4, 17 - missed), injuryNote: `Missed ${missed} games hurt.` };
+    return { games: Math.max(4, len - missed), injuryNote: `Missed ${missed} games hurt.` };
   }
-  return { games: 17, injuryNote: null };
+  return { games: len, injuryNote: null };
+}
+
+/* Round 1104: the awards field (careerAwards.ts) was measured on 17 game
+   seasons and scores totals, so a 16 game season judged raw is a seventeenth
+   short of the field before a down is played: measured, All-Pros a career
+   fell to a third in the throwback. The awards therefore read a season on a
+   full schedule PACE: every counting stat times 17 over the season's length.
+   The kicker's long field goal is a distance, not a volume, and is left as it
+   is. This copy is only ever handed to the award score; it is never saved.
+   Exported for src/test/nflTruthRules1104.test.ts, which holds it against
+   nflSeasonScore itself, so a stat the score reads cannot be left off it. */
+export function nflAwardPaceLine(line: SeasonLine, len: number): SeasonLine {
+  if (len === NFL_RATE_GAMES) return line;
+  const f = NFL_RATE_GAMES / len;
+  const pace: SeasonLine = { ...line };
+  for (const k of ['passYds', 'passTd', 'ints', 'rushYds', 'rushTd', 'rec', 'recYds', 'recTd', 'tackles', 'sacks', 'picks', 'forcedFum', 'passDef', 'fgAtt', 'fgMade'] as const) {
+    const v = line[k];
+    if (typeof v === 'number') pace[k] = v * f;
+  }
+  return pace;
 }
 
 /** Round 1048: every team result simSeason writes, in playoff depth order. The Season Center reads the
@@ -467,7 +543,7 @@ export function simSeason(
     // Round 98: the season itself gets a say, so career years and lost
     // years both exist. Averages out to zero across a career.
     + swing;
-  const g = games / 17;
+  const g = games / NFL_RATE_GAMES;
   const line: SeasonLine = {
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games,
     awards: [], teamResult: '', salary: c.salary,
@@ -494,13 +570,13 @@ export function simSeason(
     line.rec = Math.round((14 + (form - 62) * 1.1 + rng() * 12) * g);
     line.recYds = Math.round((line.rec ?? 0) * (6.5 + rng() * 3));
   } else if (c.pos === 'WR') {
-    line.rec = Math.round((28 + (form - 62) * 2.5 + rng() * 14) * g);
-    line.recYds = Math.round((line.rec ?? 0) * (10.5 + rng() * 4));
+    line.rec = Math.min(NFL_WR_REC_CAP, Math.round((28 + (form - 62) * 2.5 + rng() * 14) * g));
+    line.recYds = Math.min(NFL_WR_YDS_CAP, Math.round((line.rec ?? 0) * (10.5 + rng() * 4)));
     line.recTd = Math.max(0, Math.round((1 + (form - 62) * 0.32 + rng() * 3) * g));
   } else if (c.pos === 'TE') {
     // Tight ends catch fewer, shorter, but score near the goal line.
     line.rec = Math.round((22 + (form - 62) * 1.9 + rng() * 12) * g);
-    line.recYds = Math.round((line.rec ?? 0) * (9 + rng() * 3.5));
+    line.recYds = Math.min(NFL_TE_YDS_CAP, Math.round((line.rec ?? 0) * (9 + rng() * 3.5)));
     line.recTd = Math.max(0, Math.round((2 + (form - 62) * 0.3 + rng() * 3) * g));
   } else if (c.pos === 'LB') {
     /* Round 144: same treatment the EDGE sack line got in Round 123 (see the
@@ -510,7 +586,10 @@ export function simSeason(
        counted differently across eras, so 200 is the conservative bound the
        realism harness has always used, and the engine now agrees with it. */
     line.tackles = Math.min(200, Math.round((62 + (form - 62) * 3.1 + rng() * 26) * g));
-    line.sacks = Math.max(0, Math.round(((form - 66) * 0.18 + rng() * 3) * g * 10) / 10);
+    /* Round 1104: a sack is credited whole or split in two, so the line is
+       rounded to halves (it was tenths: 11.3 sacks is not a number football
+       has). The same at the two other sack lines below. */
+    line.sacks = Math.max(0, Math.round(((form - 66) * 0.18 + rng() * 3) * g * 2) / 2);
     line.picks = Math.max(0, Math.round(((form - 70) * 0.05 + rng() * 2) * g));
     line.forcedFum = Math.max(0, Math.round((rng() * 3) * g));
   } else if (c.pos === 'CB') {
@@ -536,7 +615,7 @@ export function simSeason(
        written in Round 97 when 22.5 really was the record, and the engine had
        no cap at all, so on the day somebody broke the record in real life the
        harness became both wrong and still, occasionally, right. */
-    line.sacks = Math.min(23, Math.max(0, Math.round(((form - 64) * 0.52 + rng() * 5) * g * 10) / 10));
+    line.sacks = Math.min(23, Math.max(0, Math.round(((form - 64) * 0.52 + rng() * 5) * g * 2) / 2));
     line.tackles = Math.round((32 + (form - 62) * 1.1 + rng() * 16) * g);
     line.forcedFum = Math.max(0, Math.round(((form - 74) * 0.06 + rng() * 3) * g));
     line.passDef = Math.max(0, Math.round((rng() * 4) * g));
@@ -570,7 +649,7 @@ export function simSeason(
     const poG = playoffGames(depth, rng, 'nfl');
     const clutch = clutchSwing(rng);
     const pf = form + clutch - 1;      // January defences are better
-    const per = poG / 17;
+    const per = poG / NFL_RATE_GAMES;
     line.poGames = poG;
     if (c.pos === 'QB') {
       const y = Math.max(0, Math.round((1900 + (pf - 62) * 92) * per));
@@ -589,7 +668,7 @@ export function simSeason(
       line.poLine = `${fg} of ${fg + (rng() < 0.5 ? 0 : 1)} on field goals`;
     } else {
       const tk = Math.max(0, Math.round((95 + (pf - 62) * 2.4) * per));
-      const sk = Math.max(0, Math.round((3 + (pf - 62) * 0.35) * per * 10) / 10);
+      const sk = Math.max(0, Math.round((3 + (pf - 62) * 0.35) * per * 2) / 2);
       /* Round 833: a corner records no sacks in the regular season, so his
          January line is passes defended, on the regular season's own curve at
          its average draw. Derived, no extra rng call, so no draw moves. */
@@ -608,7 +687,13 @@ export function simSeason(
   // the formula itself into careerAwards.ts, unchanged, because the award
   // model and the harness both have to score a season exactly the way this
   // engine does and two copies of a formula is two formulas.
-  const statScore = nflSeasonScore(c.pos, line);
+  /* Round 1104: scored on a full schedule pace, and the games gates sit two
+     short of the schedule (15 of 17, 14 of 16), so the smallest injury does
+     not shut a 16 game season out of every award. In a 17 game season the
+     pace line is the line itself and the gate is the 15 it always was. */
+  const seasonLen = nflSeasonLength(line.year);
+  const awardGames = seasonLen - 2;
+  const statScore = nflSeasonScore(c.pos, nflAwardPaceLine(line, seasonLen));
   const isDef = DEFENSIVE_POS.includes(c.pos);
   const royLabel = isDef ? 'Defensive Rookie of the Year' : 'Offensive Rookie of the Year';
   /* Round 123: every one of these used to be a threshold on your own numbers
@@ -621,16 +706,16 @@ export function simSeason(
     line.awards.push(royLabel); notes.push(`🏆 ${royLabel}.`);
   }
   // Round 56: defenders chase Defensive Player of the Year instead of MVP.
-  if (isDef && games >= 15 && wonAward(rng, 'nfl', 'nflDpoy', c.pos, statScore)) {
+  if (isDef && games >= awardGames && wonAward(rng, 'nfl', 'nflDpoy', c.pos, statScore)) {
     line.awards.push('Defensive Player of the Year'); c.mvps += 1; notes.push('🛡️ DEFENSIVE PLAYER OF THE YEAR.');
   }
-  if (games >= 15 && wonAward(rng, 'nfl', 'allPro', c.pos, statScore)) {
+  if (games >= awardGames && wonAward(rng, 'nfl', 'allPro', c.pos, statScore)) {
     line.awards.push('All-Pro'); c.allPros += 1; notes.push('⭐ First-team All-Pro.');
   }
   // Kickers and defenders do not win MVP. Neither do most people. That gate
   // lives in the MVP table in careerAwards.ts now, which returns nothing at
   // all for a kicker or a defender.
-  if (games >= 15 && wonAward(rng, 'nfl', 'nflMvp', c.pos, statScore)) {
+  if (games >= awardGames && wonAward(rng, 'nfl', 'nflMvp', c.pos, statScore)) {
     line.awards.push('MVP'); c.mvps += 1; notes.push('👑 LEAGUE MVP.');
   }
 
@@ -754,7 +839,7 @@ export function progress(c: CareerState, rng: () => number): string[] {
 /* Round 422: the share of gross pay that actually reaches the bank, after
    tax, agent and living. It was already the number this file used to turn
    career earnings into net worth; it is named here so the yearly banking and
-   the repair below cannot drift apart from it. */
+   the old save rebuild (src/lib/usCareerBank.ts keeps the same 0.45) cannot drift apart from it. */
 const TAKE_HOME = 0.45;
 
 /* ─── Round 56: the money ─── */
@@ -975,17 +1060,20 @@ function buildNflDeck(c: CareerState, rng: () => number, stopAtBig: boolean): { 
     options: [
       { label: 'Skill work', effect: 'Push your ceiling', apply: (cc, r) => { if (cc.age >= 30) { cc.health = Math.min(100, cc.health + 4); return 'At this age the gains are in maintenance. Health +4.'; } const up = 1 + Math.floor(r() * 2); cc.ovr = Math.min(cc.pot + 1, cc.ovr + up); return `Rating +${up}.`; } },
       { label: 'Body work', effect: 'Durability and recovery', apply: (cc) => { cc.health = Math.min(100, cc.health + 10); return 'Health +10. You feel five years younger.'; } },
-      { label: 'Brand work', effect: 'Fame and endorsements', apply: (cc) => { cc.fanbase = Math.min(100, cc.fanbase + 12); cc.earnings += 3; return 'Fanbase +12 and a 3M endorsement.'; } },
+      { label: 'Brand work', effect: 'Fame and endorsements', apply: (cc) => { /* Round 1104: the fee reaches the bank (it only ever reached career earnings) and is paid in the era's money. */ const fee = Math.round(3 * nflEraById(cc.eraId).moneyScale * 10) / 10; const bank = cc.netWorth ?? Math.round(cc.earnings * TAKE_HOME * 10) / 10; cc.fanbase = Math.min(100, cc.fanbase + 12); cc.earnings += fee; cc.netWorth = Math.round((bank + fee) * 10) / 10; return `Fanbase +12 and a ${fee}M endorsement, banked.`; } },
     ],
   });
 
-  if (c.morale < 55) {
+  /* Round 1104: a man with no contract cannot be traded (the free agency
+     window opens next), and a trade never lands on the club he is at: 609 of
+     20,000 requests did. Still one draw. */
+  if (c.morale < 55 && c.contractYears > 0) {
     deck.push({
       id: 'frustration',
       title: 'Frustration boils',
       body: `Losing wears on you. Reporters smell it. What is the move?`,
       options: [
-        { label: 'Request a trade', effect: 'Fresh start, fans burn the jersey', apply: (cc, r) => { const pool = nflEraById(cc.eraId).teams; const nt = pool[Math.floor(r() * pool.length)].abbr; cc.team = nt; cc.morale = 72; cc.fanbase = 35; return `Traded to ${teamLabelOf(nt, cc.eraId)}.`; } },
+        { label: 'Request a trade', effect: 'Fresh start, fans burn the jersey', apply: (cc, r) => { const pool = nflEraById(cc.eraId).teams.filter(t => t.abbr !== cc.team); const nt = pool[Math.floor(r() * pool.length)].abbr; cc.team = nt; cc.morale = 72; cc.fanbase = 35; return `Traded to ${teamLabelOf(nt, cc.eraId)}.`; } },
         { label: 'Say the right things', effect: 'Stability', apply: (cc) => { cc.morale += 6; cc.fanbase += 5; return 'You take the high road. The locker room notices.'; } },
       ],
     });
@@ -1189,30 +1277,13 @@ export function careerTotals(c: CareerState): NflCareerSums {
     t.passDef += s.passDef ?? 0; t.forcedFum += s.forcedFum ?? 0;
     t.fgMade += s.fgMade ?? 0; t.fgAtt += s.fgAtt ?? 0;
   }
-  /* Half sacks are tenths in this engine, so the sum is rounded the way
+  /* Sacks come in halves since Round 1104, but a season saved before it
+     keeps its tenths, so the sum is still rounded to a tenth the way
      nflBadgeFacts already rounds it, never printed as 41.300000000000004. */
   t.sacks = Math.round(t.sacks * 10) / 10;
   return t;
 }
 
-/* Round 422: a balance the old bug drove below zero is an ARTEFACT, not a
-   choice the player made, and it can be repaired safely because of one fact:
-   buying is refused when `item.cost > net`, so spending can never take anyone
-   negative. Only upkeep charged against income that was never banked could,
-   and that is precisely the bug. So a negative balance is always the defect and
-   never a real debt, which is what makes rebuilding it honest rather than a
-   guess.
-   It is rebuilt from what the save actually records: take home pay on career
-   earnings, minus the one time cost of everything still on the receipt. Past
-   upkeep is deliberately NOT re-deducted, because it was charged against a
-   balance that had no income in it, so charging it again would keep part of the
-   bug. Runs on load, once, and does nothing to a healthy save. */
-export function repairNetWorth<T extends { netWorth?: number; earnings: number; purchased?: string[] }>(
-  c: T,
-  costOf: (id: string) => number,
-): T {
-  if ((c.netWorth ?? 0) >= 0) return c;
-  const spent = (c.purchased ?? []).reduce((sum, id) => sum + costOf(id), 0);
-  const rebuilt = Math.max(0, Math.round((c.earnings * TAKE_HOME - spent) * 10) / 10);
-  return { ...c, netWorth: rebuilt };
-}
+/* Round 1104: the bank repair that ran on load lived here, one copy in each of
+   the four engines. It is one function now, repairBankOnLoad in
+   src/lib/usCareerBank.ts, bound in this sport's binding. */
