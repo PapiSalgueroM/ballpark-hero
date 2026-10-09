@@ -1,0 +1,2 @@
+m-castnow exit=1 5s | simLiveSimMotion: control castnow turned "a goal still on its way when the line up changes off the clock" red on an assertion (1 failed), as it must.
+m-boardgoal exit=1 7s | simLiveSimMotion: control boardgoal turned "a goal in the board is announced with its plus" red on an assertion (1 failed), as it must.
