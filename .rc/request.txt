@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+fxwalk: node .rc/x/fxwalk.mjs
+playGames-390: ONLY=/club-manager WIDTH=390 HEIGHT=844 node scripts/playGames.mjs
+playGames-1280: ONLY=/club-manager WIDTH=1280 HEIGHT=800 node scripts/playGames.mjs
+playLiveMatchFit: node scripts/playLiveMatchFit.mjs
+playLeagueTableFit: node scripts/playLeagueTableFit.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
