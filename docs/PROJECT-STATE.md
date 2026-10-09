@@ -1,37 +1,50 @@
-## Rounds 1185-1187 CLAIM: Soccer Career development, 2026-10-09
+## Rounds 1185-1187 READY for F integration, 2026-10-09
 
-Anthony asked to keep going with Soccer Career as the focus. Branch
-codex/soccer-career-development starts at frozen PR208 head
-4ab80fa978cf362427bcd024c64c6691e7f83c2a. These three additions are authored,
-with exact-head remote verification still pending. No local runtime or publish.
+Anthony asked to keep Soccer Career moving. Three more rounds are implemented
+and independently verified in draft PR210:
+https://github.com/PapiSalgueroM/ballpark-hero/pull/210
+Branch codex/soccer-career-development, stacked on frozen PR208 base
+4ab80fa978cf362427bcd024c64c6691e7f83c2a.
+Accepted source0afa44199891a608a9d4cdc5fbd1274e2723abd5,
+treef6aa84ef548c5c67c38cf41678a244e04dd8fc68.
+Run37982640884/job113996717182 completed SUCCESS, all owned gates passed.
+Final artifact11642192345,426605092 bytes, SHA256
+fb179140f89a12cad320c882c5ba21b8b633ec8dd5c371a23bff4081abb69e75,
+downloaded, exact hash/head/tree verified and independently audited.
+Full acceptance: docs/ROUND1185-1187-RECEIPT.md. No local runtime or publication.
 
-1185: last year's same-club senior form adjusts the next selection draw by
-plus/minus two, using an actual saved rating and 10-38 recorded league apps.
-The squad explanation reads the same adjustment. Year gaps, foreign clubs,
-legacy missing league apps and nonplaying/invalid rows add nothing.
-1186: optional next-season preparation, development versus recovery. Injury
-chance changes by +.03/-.04 within the existing .04-.42 limits. After natural
-growth one position skill changes by +1/-1 within 20-99; the saved row records
-the actual capped adjustment. Serious injury/no appearances interrupt it,
-moves/retirement cancel it, and balanced stores no new key or random draw.
-1187: the existing Youth Mentor choice creates one explicitly generated player,
-using the existing name families with private deterministic draws. Saved
-senior seasons at the shared club with ten appearances advance progress;
-interruptions pause it, three qualifying years complete it, moves/retirement
-end it, and chronological age/history remain. No invented first-team stats,
-ratings, trophies, real-player dialogue or new roster facts.
+1185: last year's actual same-club senior form adjusts next selection by
+plus/minus two games, explained by squad trust and help. Invalid/missing rows,
+club moves and gaps add nothing; original phone/clamp/freeze still apply.
+1186: optional preseason development versus recovery, with injury-risk/one
+position-skill tradeoffs and actual capped saved results. Only actual recorded
+years settle; interruptions/moves/retirement are explicit; balanced stores no key.
+1187: one explicitly generated academy protege, remembered by the existing
+Youth Mentor event, with saved same-club progress, interruptions, chronological
+age and history. Three qualifying years complete; moving/retiring ends shared
+mentoring. No invented first-team stats, real-person dialogue or extra global RNG.
 
-Rules and worked examples appear in existing question-mark help and in the
-new compact dialogs. Strong full-save/actual-engine/native checks and copied
-fault controls run on GitHub only. Baseline is actual4ab source; intentional
-id6 description/consequence copy is separately declared with all other saved
-fields and random draws retained. No outcome or field may be silently omitted.
+Verification:102 units,18 development groups/24 effective defects, original
+whole-save/draw baselines,12 historical careers/424 rows and exact12 future
+faults. Independent original Awards/Finish/Social fixture proof and their old
+faults pass without re-recording/omitting cases/fields/floors. Native301/0 across
+six journeys,54 full-save pairs,48 draw pairs,18 reloads,24 restorations,
+18 actually reviewed captures; Depth80/0. Ten related outcomes/all15 built
+readers/source hold pass. SeasonTruth SKIPPED offline, never credited.
+All three earlier failed sources remain diagnostic history in the design doc.
+Product/native source bytes remain held frombbcd through accepted0afa.
 
-PR207/208/209 remain frozen and READY for F integration. F owns the final
-merged release gates and publication. PR209 accepted source0641a2ada04d8e4b7cbfaf4dffc8f27104c03115,
-docs head881ef4c98d00a3d061f93bbb43803c1b0179e533, run37962892064 SUCCESS.
-Round1184 is READY, superseding the inherited in-progress claim below.
-Root app/index/stash are untouched. Root WORKBOARD recovery tail is preserved.
+PR209/Round1184 is READY, superseding the inherited in-progress claim below.
+Accepted source0641a2ada04d8e4b7cbfaf4dffc8f27104c03115, docs head
+881ef4c98d00a3d061f93bbb43803c1b0179e533, run37962892064 SUCCESS.
+PR207/208/209 remain frozen. F owns integration, full merged release gates
+and publication. Current main was rechecked as live AQbc43f27a. Preserve
+its world, injury, discipline, veteran/move and reveal fixes at integration;
+do not replace engine/page wholesale. The receipt names all eight settlement
+paths and carries the approved PR208 target/RecordBook dependencies.
+Other historical workflow pin/practice/parity/Reveal failures remain separate.
+No all-repository release acceptance is claimed. Root app/index/stash and
+the exact root WORKBOARD recovery tail remain untouched.
 
 ## Rounds1179 to1183 READY for F integration, 2026-10-09
 
