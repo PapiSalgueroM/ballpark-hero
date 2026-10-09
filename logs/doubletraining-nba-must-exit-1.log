@@ -1,0 +1,48 @@
+NEGATIVE CONTROL doubletraining: the Offseason focus card in every slot (section 6 must fail)
+ran 400 careers a sport on and off in 9.9 s (seed 0)
+1) depth: cards answered per offseason
+   nba: on median 3 mean 3.000 (7800 offseasons); off mean 1.000 (7250)
+2) cooldown: an independent reading of the rule
+   nba: 23400 cards checked, 23000 inside their cooldown, first training in 2026 and 2026 (cooldown 1)
+  FAIL [2]: nba: 23000 cards came back inside their cooldown
+3) story: no two cards of one offseason share a ledger key
+   nba: 7800 summers, 0 storied cards answered, 7800 summers with a repeated key (first: training, training, training)
+  FAIL [3]: nba: 7800 summers dealt one key twice
+3b) press: card 1 is a big press moment exactly when the one card draw is
+   nba: big press in 796 of 7800 offseasons one card, 0 on the summer; 197 back to back; 796 differ; 0 later cards big
+  FAIL [3b]: nba: in 796 offseasons the summer's card 1 and the one card draw disagree about the big press moment
+7) coverage: distinct cards answered per career, on over off
+   nba: 1.00 distinct cards a career on, 15.35 off, lift 0.07; 1 and 159 distinct over the fleet
+  FAIL [7]: nba: lift 0.07 under 1.6
+10) later cards: no answer after card 1 moves the rating or its ceiling
+   nba: 15600 later answers, 1810 moved the rating (first training); 0 of 23400 dealt cards skipped when shown
+  FAIL [10]: nba: 1810 answers after card 1 moved the rating
+11) the integrity arc stays with card 1: no corruption card after it
+   nba: 0 corruption cards as card 1, 0 later
+  FAIL [11]: nba: no corruption card was dealt at all, so this proves nothing
+12) card 1: the one card draw, or when it rests, a fresh card of its kind
+   nba: 7722 card 1s were the draw itself (7712 were not); 78 draws were resting, 78 with a fresh card of their kind (29 rating cards), 0 redrawn in another kind
+  FAIL [12]: nba: 7712 card 1s differ from a draw that was not resting
+4) keyed: Math.random calls per offseason, cards 3 against cards 1, from one cloned state
+   nba: 400 offseasons replayed, 0 differ
+5) never empty: every card in the deck stamped this season, card 1 still comes
+   nba: 111 fully stamped offseasons, 0 dealt nothing
+6) balance: on against off, careers a seed nba 2000, 3 seeds
+   nba: off peak 86.16, legacy median 360, Hall 29.4%; on peak 92.81, legacy median 759, Hall 68.3%
+      peak OVR: difference 6.65, interval [6.51, 6.79], tolerance 1.00 either way: OUTSIDE
+  FAIL [6]: nba peak OVR: interval [6.51, 6.79] is not inside 1.00
+      median legacy: difference 110.8%, interval [103.7%, 118.2%], tolerance 7.5% either way: OUTSIDE
+  FAIL [6]: nba median legacy: interval [103.7%, 118.2%] is not inside 7.5%
+      Hall share: difference 38.83 pts, interval [37.19 pts, 40.48 pts], tolerance 3.00 pts either way: OUTSIDE
+  FAIL [6]: nba Hall share: interval [37.19 pts, 40.48 pts] is not inside 3.00 pts
+      headline awards a season: difference 209.1%, interval [197.8%, 221.4%], tolerance 15.0% either way: OUTSIDE
+  FAIL [6]: nba headline awards a season: interval [197.8%, 221.4%] is not inside 15.0%
+      6b: on the summer loop, median career majors 1, 52.6% ever win one, Hall 68.3%
+  FAIL [6]: nba: on the summer loop the median career wins 1 majors (Round 123: it must win none)
+  FAIL [6]: nba: 52.6% of summer careers win a major (Round 123 ceiling 25)
+   balance ran in 77.3 s
+8) agreement: careerEventDeck.ts against soccerCareerEngine.ts on 10,000 cases
+   10000 cases, 1428 on cooldown, 0 disagree
+9) board: src/test/usCareerSummer.test.tsx on the real board
+   Vitest exit 0, 40 passed, 0 failed
+CONTROL doubletraining FIRED: section 6 went red, as it must.

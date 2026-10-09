@@ -1,0 +1,4 @@
+doubletraining-nba-must-exit-1 exit=1 95s | CONTROL doubletraining FIRED: section 6 went red, as it must.
+simHarnessAnchors exit=0 45s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+doubletraining-nfl-must-exit-1 exit=1 245s | CONTROL doubletraining FIRED: section 6 went red, as it must.
+probe-must-exit-1 exit=1 378s | CONTROL probe FIRED: section 10 went red, as it must.

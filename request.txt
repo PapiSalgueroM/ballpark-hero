@@ -1,0 +1,5 @@
+# The summer harness's two repaired controls: each must run and exit 1 because its own section fired, not because it refused to run.
+doubletraining-nfl-must-exit-1: SIM_CONTROL=doubletraining SIM_SPORTS=nfl SIM_BALANCE_CAREERS=2000 node scripts/simUsCareerSummer.mjs
+doubletraining-nba-must-exit-1: SIM_CONTROL=doubletraining SIM_SPORTS=nba node scripts/simUsCareerSummer.mjs
+probe-must-exit-1: SIM_CONTROL=probe SIM_SPORTS=nba node scripts/simUsCareerSummer.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
