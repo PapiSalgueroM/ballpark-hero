@@ -1,0 +1,13 @@
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
+simUsCareerSummer: node scripts/simUsCareerSummer.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+sc-seedset0: SEEDSET=0 node scripts/simUsSeasonCentre.mjs
+sc-seedset1: SEEDSET=1 node scripts/simUsSeasonCentre.mjs
+sc-seedset2: SEEDSET=2 node scripts/simUsSeasonCentre.mjs
+sc-seedset3: SEEDSET=3 node scripts/simUsSeasonCentre.mjs
+sc-seedset4: SEEDSET=4 node scripts/simUsSeasonCentre.mjs
+sc-short82: US_SEASON_CONTROL=short82 node scripts/simUsSeasonCentre.mjs
+sc-stage: US_SEASON_CONTROL=stage node scripts/simUsSeasonCentre.mjs
+sc-length: US_SEASON_CONTROL=length node scripts/simUsSeasonCentre.mjs
