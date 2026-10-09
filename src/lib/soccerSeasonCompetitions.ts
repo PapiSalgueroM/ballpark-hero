@@ -64,16 +64,18 @@ export function savedSeasonCompetitions(career: Pick<CareerState, 'lastUCLResult
       round: `${stage.label}, game ${game.matchday}`, opponent: game.opponent,
       goalsFor: game.goalsFor, goalsAgainst: game.goalsAgainst, home: game.home, playerGoals: game.playerGoals,
     })));
+    const twoLegFinal = run.matches.some(match => match.round === 'Final' && match.leg === 2);
     for (const match of run.matches) {
+      const showLeg = match.round !== 'Final' || twoLegFinal;
       const notes = [
         match.aggFor !== undefined && match.aggAgainst !== undefined ? `${match.aggFor}-${match.aggAgainst} on aggregate` : null,
         match.decidedBy === 'penalties' ? Number.isInteger(match.pensFor) && Number.isInteger(match.pensAgainst)
           ? `${match.pensFor}-${match.pensAgainst} on penalties` : 'Settled on penalties. Penalty score not recorded.'
           : match.decidedBy === 'awayGoals' ? 'Settled on away goals' : match.decidedBy === 'extraTime' || match.afterExtraTime ? 'After extra time' : null,
       ].filter(Boolean);
-      matches.push({ round: `${roundName(match.round)}${match.round === 'Final' ? '' : `, leg ${match.leg}`}`, opponent: match.opponent,
+      matches.push({ round: `${roundName(match.round)}${showLeg ? `, leg ${match.leg}` : ''}`, opponent: match.opponent,
         goalsFor: match.goalsFor, goalsAgainst: match.goalsAgainst, playerGoals: match.playerGoals,
-        ...(match.round !== 'Final' ? { home: match.home } : {}),
+        ...(showLeg ? { home: match.home } : {}),
         result: match.decidedBy ? match.won ? 'Through' : 'Out' : undefined, note: notes.join(' · ') || undefined,
       });
     }

@@ -10,7 +10,7 @@ import { deriveSeason } from '@/lib/season/core';
 import { buildSoccerSeasonCtx, SOCCER } from '@/lib/season/soccer';
 import { soccerCardLine } from '@/lib/soccerDiscipline';
 import { RESULTS_ROW, SOCCER_SHAPED, toySeason } from './fixtures/seasonCentreToy';
-import { clubCampaign, competitionCareer, cupSeason, firstStageCampaign } from './fixtures/soccerSeasonCompetitions1173';
+import { clubCampaign, competitionCareer, cupSeason, firstStageCampaign, neutralFinalCampaign, twoLegFinalCampaign, twoLegFinalSeason } from './fixtures/soccerSeasonCompetitions1173';
 
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.restoreAllMocks(); });
 describe('saved Soccer Career competitions', () => {
@@ -36,6 +36,47 @@ describe('saved Soccer Career competitions', () => {
     expect(club.matches[0].note).toBeUndefined();
     expect(club.matches[1].note).toBe('2-3 on aggregate');
     expect(club.matches[1].result).toBe('Out');
+  });
+
+  it('shows both saved continental final legs, grounds and aggregate in the existing panel', () => {
+    const row = { ...twoLegFinalSeason, clubCupRun: structuredClone(twoLegFinalCampaign) };
+    const before = JSON.stringify(row);
+    const career = { ...competitionCareer, retired: false } as CareerState;
+    const club = savedSeasonCompetitions(career, row)[0];
+    expect(club.name).toBe('CAF Champions League');
+    expect(club.result).toBe('Winners');
+    expect(club.matches.map(m => [m.round, m.opponent, m.goalsFor, m.goalsAgainst, m.home, m.playerGoals, m.note])).toEqual([
+      ['Final, leg 1', 'Wydad', 2, 1, true, 1, undefined], ['Final, leg 2', 'Wydad', 1, 1, false, 0, '3-2 on aggregate'],
+    ]);
+    expect(savedSeasonCompetitions({ lastUCLResult: twoLegFinalCampaign }, twoLegFinalSeason)[0]).toEqual(club);
+    render(<SeasonCompetitionPanel career={career} row={row} competition={club} navigation={null} exitLabel="Back to your career" onClose={() => {}} />);
+    fireEvent.click(document.querySelector('[data-centre-cup-open="0"]')!);
+    expect(screen.getByRole('heading', { name: 'Final, leg 1' })).toBeInTheDocument();
+    expect(screen.getByText('Home')).toBeInTheDocument();
+    expect(document.querySelector('[data-centre-cup-score]')?.textContent).toBe('2-1');
+    fireEvent.click(screen.getByRole('button', { name: '› Next game' }));
+    expect(screen.getByRole('heading', { name: 'Final, leg 2' })).toBeInTheDocument();
+    expect(screen.getByText('Away')).toBeInTheDocument();
+    expect(document.querySelector('[data-centre-cup-score]')?.textContent).toBe('1-1');
+    expect(screen.getByText('3-2 on aggregate')).toBeInTheDocument();
+    expect(JSON.stringify(row)).toBe(before);
+  });
+
+  it('keeps a neutral single-match Champions League final without a leg or away label', () => {
+    const row = { ...cupSeason, domesticCup: false, cupRun: undefined, clubCupRun: structuredClone(neutralFinalCampaign) };
+    const before = JSON.stringify(row);
+    const career = { lastUCLResult: null, retired: false } as CareerState;
+    const club = savedSeasonCompetitions(career, row)[0];
+    expect(club.matches.map(m => [m.round, m.opponent, m.goalsFor, m.goalsAgainst, m.home, m.playerGoals])).toEqual([
+      ['Final', 'Barcelona', 2, 0, undefined, 1],
+    ]);
+    render(<SeasonCompetitionPanel career={career} row={row} competition={club} navigation={null} exitLabel="Back to your career" onClose={() => {}} />);
+    fireEvent.click(document.querySelector('[data-centre-cup-open="0"]')!);
+    expect(screen.getByRole('heading', { name: 'Final' })).toBeInTheDocument();
+    expect(document.querySelector('[data-centre-cup-score]')?.textContent).toBe('2-0');
+    expect(screen.queryByText('Home')).not.toBeInTheDocument();
+    expect(screen.queryByText('Away')).not.toBeInTheDocument();
+    expect(JSON.stringify(row)).toBe(before);
   });
 
   it('refuses an unanchored result and a different year or club', () => {

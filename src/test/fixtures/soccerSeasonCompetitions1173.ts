@@ -25,6 +25,23 @@ export const clubCampaign: UCLResult = {
   ],
 };
 
+export const twoLegFinalSeason: SeasonRecord = {
+  ...cupSeason, club: 'Al Ahly', clubCountry: 'Egypt', clubTier: 4, domesticCup: false, cupRun: undefined,
+};
+export const twoLegFinalCampaign: UCLResult = {
+  ...clubCampaign, club: twoLegFinalSeason.club, competition: 'CAF Champions League', result: 'Winners', playerGoals: 1,
+  matches: [
+    { round: 'Final', opponent: 'Wydad', leg: 1, home: true, goalsFor: 2, goalsAgainst: 1, playerGoals: 1, won: true },
+    { round: 'Final', opponent: 'Wydad', leg: 2, home: false, goalsFor: 1, goalsAgainst: 1, playerGoals: 0, won: true, aggFor: 3, aggAgainst: 2, decidedBy: 'aggregate' },
+  ],
+};
+export const neutralFinalCampaign: UCLResult = {
+  ...clubCampaign, result: 'Winners', playerGoals: 1,
+  matches: [
+    { round: 'Final', opponent: 'Barcelona', leg: 1, home: false, goalsFor: 2, goalsAgainst: 0, playerGoals: 1, won: true, decidedBy: 'aggregate' },
+  ],
+};
+
 export const competitionCareer = { lastUCLResult: clubCampaign } as Pick<CareerState, 'lastUCLResult'>;
 
 export const firstStageCampaign: UCLResult = {

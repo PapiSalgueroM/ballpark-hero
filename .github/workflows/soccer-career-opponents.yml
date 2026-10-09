@@ -85,7 +85,7 @@ jobs:
         run: |
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/trophyCabinet.test.tsx src/test/seasonCore.test.ts src/test/seasonReplays.test.tsx src/test/seasonCentreSlots.test.tsx src/test/seasonCentreWords.test.tsx src/test/careerSeasonReview.test.tsx --maxWorkers=1 --minWorkers=1 2>&1 | tee career-opponents-artifacts/tests.log
           set +e
-          ONLY=simTrophyCabinet,simSeasonCentreTable,simSeasonCentreAgreement,simSeasonCentreNeutral,simCareerLeagueWorld,simCareerMoments,simNoInventedQuotes node scripts/runAllSims.mjs --browser 2>&1 | tee career-opponents-artifacts/career.log
+          ONLY=simTrophyCabinet,simSeasonCentreTable,simSeasonCentreAgreement,simSeasonCentreNeutral,simCareerMoments,simNoInventedQuotes node scripts/runAllSims.mjs --browser 2>&1 | tee career-opponents-artifacts/career.log
           career_exit=${PIPESTATUS[0]}
           set -e
           if test "$career_exit" != 0; then
@@ -100,7 +100,7 @@ jobs:
       - name: Effective competition defects
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
-          for control in anchor score name; do
+          for control in anchor score name finallegs neutralfinal; do
             set +e
             SIM_SEASON_COMPETITION_CONTROL="$control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonCompetitions.mjs > "career-opponents-artifacts/competition-control-$control.log" 2>&1
             control_exit=$?
@@ -111,6 +111,8 @@ jobs:
               anchor) grep -q 'a current campaign cannot leak into a historical season' "career-opponents-artifacts/competition-control-$control.log" ;;
               score) grep -q 'each European leg keeps its recorded score' "career-opponents-artifacts/competition-control-$control.log" ;;
               name) grep -q 'the named domestic cup stays named' "career-opponents-artifacts/competition-control-$control.log" ;;
+              finallegs) grep -q 'a saved two-leg final keeps both leg numbers and grounds' "career-opponents-artifacts/competition-control-$control.log" ;;
+              neutralfinal) grep -q 'a neutral one-match final stays Final without a home or away label' "career-opponents-artifacts/competition-control-$control.log" ;;
             esac
             if grep -Eq 'control.*refus|Cannot find|SyntaxError|no patches applied' "career-opponents-artifacts/competition-control-$control.log"; then exit 1; fi
           done
@@ -188,4 +190,44 @@ jobs:
         with:
           name: career-opponents-${{ github.run_id }}-${{ github.run_attempt }}
           path: career-opponents-artifacts/
+          retention-days: 5
+
+  league-world:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      SEO_SPLIT_BASE_REF: HEAD
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Prepare full league-world check
+        run: |
+          mkdir -p career-league-world-artifacts
+          git rev-parse HEAD > career-league-world-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > career-league-world-artifacts/source-tree.txt
+          npm ci
+          npm install --no-save playwright
+      - name: Full default league-world simulation
+        run: ONLY=simCareerLeagueWorld node scripts/runAllSims.mjs --browser 2>&1 | tee career-league-world-artifacts/league-world.log
+      - name: Source unchanged after full league-world check
+        if: ${{ !cancelled() }}
+        run: git diff --exit-code HEAD -- src scripts .github/workflows/soccer-career-opponents.yml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-league-world-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-league-world-artifacts/
           retention-days: 5

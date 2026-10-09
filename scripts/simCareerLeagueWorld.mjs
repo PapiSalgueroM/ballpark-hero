@@ -326,8 +326,8 @@ function savedFutureSnapshot(row) {
 }
 function snapshotContextErrors(row, held, m) {
   const errors = [];
-  const names = [row.club, ...m.ctx.rivals, ...m.ctx.named, ...(m.ctx.champion ? [m.ctx.champion] : [])];
-  if (m.ctx.league?.key !== held.league || !sameClubs(names, held.members)) errors.push('the displayed division or field differs from its saved snapshot');
+  const names = new Set([row.club, ...m.ctx.rivals, ...m.ctx.named, ...(m.ctx.champion ? [m.ctx.champion] : [])].map(clubIdentity));
+  if (m.ctx.league?.key !== held.league || names.size !== held.members.length || held.members.some(n => !names.has(clubIdentity(n)))) errors.push('the displayed division or field differs from its saved snapshot');
   const champion = m.finish?.finish === 1 ? null : held.champion;
   if (m.ctx.champion !== champion) errors.push(`the context champion is ${m.ctx.champion}, saved ${champion}`);
   return errors;
@@ -549,6 +549,41 @@ const GENERATED = POOL.slice(HAND.length);
 const BIG_FIVE = new Set(['Premier League', 'La Liga', 'Serie A', 'Bundesliga', 'Ligue 1']);
 const LADDER = mod.pool.CAREER_LEAGUE_LADDER;
 const WORLD = readJson(path.join(DATA, 'soccerCareerFacts.json')).leagueWorld;
+
+/* A fictional saved season whose champion also has a fixed derby slot.
+   Context roles overlap; the actual table must still name each club once. */
+head('D1', 'SAVED RIVAL CHAMPION: context roles overlap, table clubs do not');
+{
+  const row = { ...seasonRow(2026, 3), club: 'Everton', leagueApps: 34, leagueFinish: 5, leagueSize: 20,
+    derbies: [{ rival: 'Liverpool', name: 'Merseyside derby', kind: 'derby', meetings: [
+      { home: true, gf: 0, ga: 0, played: true, goals: 0 }, { home: false, gf: 0, ga: 0, played: true, goals: 0 },
+    ] }], leagueWorld: { league: 'Premier League', members: [...initialSimField('Premier League')], champion: 'Liverpool', simulation: 'simulated' } };
+  const bytes = JSON.stringify(row);
+  const held = savedFutureSnapshot(row);
+  const m = measureSeason({ playerName: 'Saved rival champion probe', position: 'CM', seasons: [row], awards: [] }, row);
+  ok(m.ctx.rivals.includes(held.champion), 'the saved champion must actually share the fixed rival role');
+  const oldRoles = [row.club, ...m.ctx.rivals, ...m.ctx.named, ...(m.ctx.champion ? [m.ctx.champion] : [])];
+  ok(oldRoles.length === held.members.length + 1 && !sameClubs(oldRoles, held.members), 'the copied old multiset predicate must reject this valid overlapping context');
+  for (const error of snapshotContextErrors(row, held, m)) fail(`saved rival champion: ${error}`);
+  const table = m.table ? drawnTable(row, m.ctx) : null;
+  if (ok(!!table, 'the saved rival champion probe must derive an actual table')) {
+    for (const error of snapshotTableErrors(row, held, table)) fail(`saved rival champion: ${error}`);
+    ok(table.labels.filter(l => clubIdentity(l.name) === clubIdentity(held.champion)).length === 1, 'the champion rival must occupy exactly one displayed slot');
+    const duplicate = { ...table, labels: table.labels.map((label, index) => index === 1 ? { ...label, name: row.club } : label) };
+    ok(snapshotTableErrors(row, held, duplicate).includes('the drawn table differs from the saved field'), 'the copied duplicate table club must still be rejected');
+  }
+  ok(m.ctx.named.length > 0, 'the context omission controls need a named club');
+  const missing = { ...m, ctx: { ...m.ctx, named: m.ctx.named.slice(1) } };
+  ok(snapshotContextErrors(row, held, missing).some(error => error.includes('field differs')), 'the copied missing context club must still be rejected');
+  const foreign = initialSimField('Championship').find(n => !held.members.some(member => clubIdentity(member) === clubIdentity(n)));
+  ok(!!foreign, 'the foreign-club control needs an actual lower-division club outside this field');
+  if (foreign) {
+    const wrong = { ...m, ctx: { ...m.ctx, named: [foreign, ...m.ctx.named.slice(1)] } };
+    ok(snapshotContextErrors(row, held, wrong).some(error => error.includes('field differs')), 'the copied foreign context club must still be rejected');
+  }
+  ok(JSON.stringify(row) === bytes, 'the overlap probe must preserve its complete saved row');
+  console.log('  rival champion probe: actual context and table checked; old double-count defect reproduced; missing, foreign and duplicate club copies caught');
+}
 
 if (process.env.SNAPSHOT_PROBE_ONLY === '1') {
   head('D1', 'SNAPSHOT PROBE: three actual future seasons from the captured old save');

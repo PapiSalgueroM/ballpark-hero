@@ -1,6 +1,6 @@
 /** Saved competition outcomes, plus source controls that must fail when run.
- * SIM_SEASON_COMPETITION_CONTROL=anchor|score|name removes a binding guard,
- * changes a recorded score, or hides the saved FA Cup name. The shared bundle
+ * SIM_SEASON_COMPETITION_CONTROL=anchor|score|name|finallegs|neutralfinal removes a binding guard,
+ * changes a recorded score, hides a cup name or changes final labels. The shared bundle
  * refuses a control if its exact needle is missing or never loaded.
  */
 import assert from 'node:assert/strict';
@@ -17,12 +17,14 @@ const controls = {
   anchor: { file, from: 'run.seasonYear !== row.year || run.club !== row.club || ', to: '' },
   score: { file, from: 'goalsFor: match.goalsFor, goalsAgainst: match.goalsAgainst', to: 'goalsFor: match.goalsFor + 1, goalsAgainst: match.goalsAgainst' },
   name: { file, from: "name: cup.cup ?? 'Domestic cup'", to: "name: 'Domestic cup'" },
+  finallegs: { file, from: "const showLeg = match.round !== 'Final' || twoLegFinal;", to: "const showLeg = match.round !== 'Final';" },
+  neutralfinal: { file, from: "const showLeg = match.round !== 'Final' || twoLegFinal;", to: 'const showLeg = true;' },
 };
 if (CONTROL && !controls[CONTROL]) throw new Error(`unknown SIM_SEASON_COMPETITION_CONTROL ${CONTROL}`);
 const B = await bundleAwardsNight(ROOT, { patches: CONTROL ? [controls[CONTROL]] : [], extra: {
   competitions: file, fixtures: 'src/test/fixtures/soccerSeasonCompetitions1173.ts',
 } });
-const { cupSeason: row, competitionCareer: career, clubCampaign, firstStageCampaign } = B.fixtures;
+const { cupSeason: row, competitionCareer: career, clubCampaign, firstStageCampaign, neutralFinalCampaign, twoLegFinalCampaign, twoLegFinalSeason } = B.fixtures;
 const before = JSON.stringify({ row, career });
 const competitions = B.competitions.savedSeasonCompetitions(career, row);
 assert.equal(competitions[0].name, 'FA Cup', 'the named domestic cup stays named');
@@ -43,6 +45,24 @@ assert.deepEqual(B.competitions.savedSeasonCompetitions({ lastUCLResult: firstSt
 ], 'a first-stage exit still shows its recorded games');
 assert.equal(JSON.stringify({ row, career }), before, 'reading cup games must not write the save');
 console.log('ok   historical bindings, unknown old campaigns, first-stage exits and read-only saves');
+
+const finalsBefore = JSON.stringify({ twoLegFinalSeason, twoLegFinalCampaign, neutralFinalCampaign });
+const finalRow = { ...twoLegFinalSeason, clubCupRun: twoLegFinalCampaign };
+const twoLeg = B.competitions.savedSeasonCompetitions(career, finalRow)[0];
+assert.deepEqual(twoLeg.matches.map(m => [m.round, m.opponent, m.goalsFor, m.goalsAgainst, m.home, m.playerGoals, m.note]), [
+  ['Final, leg 1', 'Wydad', 2, 1, true, 1, undefined], ['Final, leg 2', 'Wydad', 1, 1, false, 0, '3-2 on aggregate'],
+], 'a saved two-leg final keeps both leg numbers and grounds');
+assert.equal(twoLeg.name, 'CAF Champions League');
+assert.equal(twoLeg.result, 'Winners');
+assert.deepEqual(B.competitions.savedSeasonCompetitions({ lastUCLResult: twoLegFinalCampaign }, twoLegFinalSeason)[0], twoLeg,
+  'an anchored legacy final keeps the same saved leg detail as a season snapshot');
+const neutralRow = { ...row, domesticCup: false, cupRun: undefined, clubCupRun: neutralFinalCampaign };
+const neutral = B.competitions.savedSeasonCompetitions({ lastUCLResult: null }, neutralRow)[0];
+assert.deepEqual(neutral.matches.map(m => [m.round, m.opponent, m.goalsFor, m.goalsAgainst, m.home, m.playerGoals]), [
+  ['Final', 'Barcelona', 2, 0, undefined, 1],
+], 'a neutral one-match final stays Final without a home or away label');
+assert.equal(JSON.stringify({ twoLegFinalSeason, twoLegFinalCampaign, neutralFinalCampaign }), finalsBefore, 'reading saved final legs must not write the fixtures');
+console.log('ok   saved two-leg final labels, grounds and aggregate, neutral one-match final and unchanged records');
 
 const captured = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/careerLeagueWorldSaves1100.json'), 'utf8')).saves.find(s => s.id === 'ere').state;
 const club = B.soccer.FALLBACK_CLUBS.find(c => c.name === 'Arsenal');
