@@ -1,0 +1,5 @@
+CSS: built from dist/assets, index-CYJxKuUY.css
+  320px: 7 screens fit with 44px targets, pair moved and upgraded, save failure held, edge 0 at 60, 0.002 at 61, 0.078 capped at 99, level 3 is the max
+  390px: 7 screens fit with 44px targets, pair moved and upgraded, save failure held, edge 0 at 60, 0.002 at 61, 0.078 capped at 99, level 3 is the max
+  1440px: 7 screens fit with 44px targets, pair moved and upgraded, save failure held, edge 0 at 60, 0.002 at 61, 0.078 capped at 99, level 3 is the max
+PASS gear fit: 3 widths, full collection, real equipment and persisted upgrade, save failure and Back. /home/runner/work/_temp/t-playTycoonGearFit/dukb-tycoon-gear-fit-1pFSFm

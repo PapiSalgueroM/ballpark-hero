@@ -1,0 +1,17 @@
+playSoccerCareer: base seed 20260914, era "Current era", up to 4 career(s) of 240 steps
+
+The walk
+  PASS  1. the walk reached a qualified Champions League campaign: seed 20268833 after 194 steps, 15 distinct phases driven (attempts: 20260914:240 steps, no campaign; 20268833:reached in 194)
+
+The card a player actually saw
+      ⭐ CHAMPIONS LEAGUE Out in the knockout play-off LEAGUE PHASE 16TH OF 36 3-2-3, 11 pts · 8th had 15 pts, 24th had 9 All 8 games Level on points splits on goal difference, then goals scored. KNOCKOUTS Play-off L1 Leipzig 2 - 1 Liverpool Play-off L2 Liverpool 2 -
+  PASS  2. every two legged tie shows its aggregate on screen: 1 of 1 ties are two legged and every one prints its aggregate (PO 2-3 by aggregate)
+  PASS  3. both legs of a two legged tie are labelled: L1 and L2 present for all 1
+  PASS  4. no first leg claims a result: a first leg wins nothing, and none claims to
+
+The page survived
+  PASS  5. the error boundary never appeared and the root is not empty: root holds 18025 characters
+  FAIL  6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED
+
+6 checks, 1 failed
+  - 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED
