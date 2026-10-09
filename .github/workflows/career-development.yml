@@ -14,6 +14,10 @@ on:
       - src/components/soccer-career/**
       - src/pages/SoccerCareer.tsx
       - src/test/soccerCareerDevelopment*
+      - scripts/lib/careerDevelopmentAttribution1185.mjs
+      - scripts/simCareerAwardsNight.mjs
+      - scripts/simCareerLeagueFinish.mjs
+      - scripts/simCareerSocialBrands.mjs
       - scripts/simCareerLeagueSeasons.mjs
       - scripts/simSoccerCareerDevelopment.mjs
       - scripts/playSoccerCareerDevelopment.mjs
@@ -33,6 +37,7 @@ jobs:
         shell: bash
     env:
       SIM_NETWORK: offline
+      SIM_LEAGUE_SEASONS_BASE: 4ab80fa978cf362427bcd024c64c6691e7f83c2a
       ENGINES: chromium
       TZ: UTC
       CAREER_DEVELOPMENT_ARTIFACTS: career-development-artifacts/outcomes
@@ -92,7 +97,7 @@ jobs:
             assert.equal(receipt.cases.length, 12, 'All twelve historical careers must execute');
             assert.equal(receipt.baseline.careers, 12);
             assert(receipt.baseline.rows >= 300, 'The original twenty-five-row floor per career stays held');
-            assert.equal(Object.keys(receipt.sourceBefore).length, 14);
+            assert.equal(Object.keys(receipt.sourceBefore).length, 15);
             assert.deepEqual(receipt.sourceAfter, receipt.sourceBefore, 'Historical replay holds every original source byte hash');
           }
           assert.equal(healthy.status, 'passed');
@@ -100,6 +105,7 @@ jobs:
           assert.equal(healthy.baseline.differ, 0);
           assert.equal(healthy.failures, 0);
           assert.deepEqual(healthy.failedSections, []);
+          assert.equal(healthy.baseCommit, '4ab80fa978cf362427bcd024c64c6691e7f83c2a');
           assert.equal(future.base, healthy.base);
           assert.equal(future.baseCommit, healthy.baseCommit);
           assert.equal(future.baseTree, healthy.baseTree);
@@ -117,6 +123,69 @@ jobs:
           NODE
           SIM_CAREER_AMBITION_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerAmbitions.mjs 2>&1 | tee career-development-artifacts/simSoccerCareerAmbitions.log || failed=1
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerRecords.mjs 2>&1 | tee career-development-artifacts/simSoccerCareerRecords.log || failed=1
+          exit "$failed"
+      - name: Historical award, league and sponsor replay contracts
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          SIM_AWARDS_NIGHT_ARTIFACTS=career-development-artifacts/award-replay NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs 2>&1 | tee career-development-artifacts/simCareerAwardsNight.log || failed=1
+          code=0
+          SIM_AWARDS_NIGHT_ARTIFACTS=career-development-artifacts/award-replay SIM_AWARDS_NIGHT_CONTROL=reorderdraw NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs 2>&1 | tee career-development-artifacts/simCareerAwardsNight-reorderdraw.log || code=$?
+          test "$code" = 1 || failed=1
+          SIM_LEAGUE_FINISH_ARTIFACTS=career-development-artifacts/finish-replay NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerLeagueFinish.mjs 2>&1 | tee career-development-artifacts/simCareerLeagueFinish.log || failed=1
+          code=0
+          SIM_LEAGUE_FINISH_ARTIFACTS=career-development-artifacts/finish-replay SIM_LEAGUE_FINISH_CONTROL=stream NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerLeagueFinish.mjs 2>&1 | tee career-development-artifacts/simCareerLeagueFinish-stream.log || code=$?
+          test "$code" = 1 || failed=1
+          SOCIAL_BRANDS_ARTIFACTS=career-development-artifacts/social-replay/healthy NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerSocialBrands.mjs 2>&1 | tee career-development-artifacts/simCareerSocialBrands.log || failed=1
+          code=0
+          SOCIAL_BRANDS_ARTIFACTS=career-development-artifacts/social-replay/reorder SOCIAL_BRANDS_CONTROL=reorder NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerSocialBrands.mjs 2>&1 | tee career-development-artifacts/simCareerSocialBrands-reorder.log || code=$?
+          test "$code" = 1 || failed=1
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE' || failed=1
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const read = path => JSON.parse(fs.readFileSync(`career-development-artifacts/${path}/report.json`, 'utf8'));
+          const award = read('award-replay/healthy'), awardFault = read('award-replay/reorderdraw');
+          const finish = read('finish-replay/healthy'), finishFault = read('finish-replay/stream');
+          const social = read('social-replay/healthy'), socialFault = read('social-replay/reorder');
+          for (const receipt of [award, awardFault, finish, finishFault, social, socialFault]) {
+            assert(receipt.sourceHeld, 'Every original fixture, product and harness source stays held');
+            assert.deepEqual(receipt.sourceAfter, receipt.sourceBefore);
+            assert(receipt.originalSources.length > 0, 'An independent actual frozen original must load');
+            const inverses = receipt.attribution || receipt.inverses;
+            assert.equal(inverses.length, 1);
+            assert(inverses.every(row => row.head === '4ab80fa978cf362427bcd024c64c6691e7f83c2a' && row.formAnchors === 1 && row.catalogRestored && row.effective && row.beforeSha256 !== row.afterSha256));
+          }
+          for (const receipt of [award, awardFault]) assert(receipt.originalFixtureMatches);
+          assert.equal(award.status, 'passed');
+          assert.deepEqual(award.failedSections, []);
+          assert(award.fixtureMatches && award.drawsEqual && award.statesEqual);
+          assert.equal(awardFault.status, 'failed');
+          assert.deepEqual(awardFault.failedSections, [1]);
+          assert(awardFault.controlFired && !awardFault.fixtureMatches && !awardFault.statesEqual);
+          assert(awardFault.faultEdits.length > 0 && awardFault.faultEdits.every(row => row.effective && row.beforeSha256 !== row.afterSha256));
+          for (const receipt of [finish, finishFault]) {
+            assert.equal(receipt.careers.length, 16);
+            assert(receipt.careers.every(row => row.originalMatches));
+          }
+          assert.deepEqual(finish.red, []);
+          assert(finish.careers.every(row => row.matches && row.drawEqual));
+          assert.deepEqual(finishFault.red, [4]);
+          assert(finishFault.careers.every(row => !row.drawEqual), 'The copied stream defect survives every historical inverse');
+          for (const receipt of [social, socialFault]) {
+            assert.equal(receipt.fixture.careers, 48);
+            assert.equal(receipt.fixture.oldSaves, 35);
+            assert(receipt.original.matches);
+          }
+          assert.equal(social.status, 'passed');
+          assert(social.attributed.matches);
+          assert.deepEqual(social.failedLabels, []);
+          assert.equal(social.controlApplications, 0);
+          assert.equal(socialFault.status, 'failed');
+          assert(!socialFault.attributed.matches);
+          assert.equal(socialFault.controlApplications, 2);
+          assert.deepEqual(socialFault.failedLabels, ['the probe output differs from the fixture', 'a season with no viral moment draws exactly one random number (2)']);
+          console.log('Historical fixture outputs and original whole-state/draw evidence passed. Three effective faults survived the copied attribution and failed only their intended contracts.');
+          NODE
           exit "$failed"
       - name: Actual career journeys on phone and desktop
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}

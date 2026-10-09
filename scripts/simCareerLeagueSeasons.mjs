@@ -51,7 +51,8 @@
                Round 1100 moves 2026-27 on purpose (the pool, the rows, the
                band): a career that differs is replayed with that round's
                seven source files read from the base, and must then be equal.
-               Round 1185's same-club form selection is removed only in
+               Rounds 1185 and 1187's form selection and Youth Mentor
+               catalog changes are removed only in
                copied attribution arms, including combinations of earlier
                arms. Equality still compares every original returned field.
    d WIRING    the page prints no raw label where a past season can show:
@@ -113,6 +114,7 @@ import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
+import { inverseCareerDevelopment } from './lib/careerDevelopmentAttribution1185.mjs';
 import { readLedgers, buildSeasons, render, identityKey as genIdentity, OUT as GEN_OUT } from './genCareerLeagueSeasons.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -204,7 +206,8 @@ const sha = value => createHash('sha256').update(value).digest('hex');
 const heldSources = ['scripts/simCareerLeagueSeasons.mjs', 'src/lib/soccerCareerEngine.ts', 'src/lib/soccerCareerSelection.ts',
   'src/lib/soccerCareerPreparation.ts', 'src/lib/soccerCareerMentor.ts', 'src/lib/soccerPhone.ts', 'src/lib/clubManager.ts',
   'src/data/careerLeagueSeasons.ts', 'src/data/clubRivalries.ts', 'src/data/leagueFormat.ts', 'src/data/soccerCareerClubPool.ts',
-  'src/lib/careerEras.ts', 'src/lib/soccerCareerDerby.ts', 'src/lib/soccerCareerLeague.ts'];
+  'src/lib/careerEras.ts', 'src/lib/soccerCareerDerby.ts', 'src/lib/soccerCareerLeague.ts',
+  'scripts/lib/careerDevelopmentAttribution1185.mjs'];
 const sourceHashes = () => {
   const held = {};
   for (const file of heldSources) {
@@ -789,20 +792,17 @@ const r1052Out = { name: 'r1052out', setup(b) {
     return { contents: src, loader: 'ts' };
   });
 } };
-/* Round 1185 intentionally lets the last eligible same-club season affect
-   selection by two games. Remove only that adjustment in copied candidate
-   bundles; every returned season and dugout field must still match the base. */
+/* Restore only the certified form draw adjustment and whole Youth Mentor
+   catalog object in copied candidate bundles. Every returned season and
+   dugout field must still match the base, including after earlier inverses. */
 const r1185Out = with1041 => ({ name: with1041 ? 'r1185and1041out' : 'r1185out', setup(b) {
   b.onLoad({ filter: /soccerCareerEngine\.ts$/ }, args => {
     if (!path.resolve(args.path).toLowerCase().startsWith(path.resolve(ROOT, 'src').toLowerCase())) return undefined;
     let src = fs.readFileSync(args.path, 'utf8').replaceAll('\r\n', '\n');
     if (CONTROL === 'future') { src = controlEdit(src); controlFired = true; }
-    const before = src;
-    const from = ' + recentClubForm(state).swing';
-    if (src.split(from).length !== 2) { console.error('Round 1185 arm: the selection adjustment is not present exactly once'); process.exit(2); }
-    src = src.replace(from, '');
-    if (src === before) { console.error('Round 1185 arm: the copied source did not change'); process.exit(2); }
-    replayReceipt.inverses.push({ arm: with1041 ? '1185+1041' : '1185', beforeSha256: sha(before), afterFormSha256: sha(src), effective: true });
+    const inverseReceipts = [];
+    src = inverseCareerDevelopment(src, inverseReceipts);
+    for (const receipt of inverseReceipts) replayReceipt.inverses.push({ ...receipt, arm: with1041 ? '1185+1187+1041' : '1185+1187' });
     if (with1041) {
       for (const [file, old, replacement] of R1041_OUT) {
         if (!args.path.endsWith(file)) continue;
@@ -837,7 +837,7 @@ if (baseRoot) {
     };
     const tryFormArms = async () => {
       for (const others of formArms) {
-        const name = ['1185', ...others].join('+');
+        const name = ['1185', '1187', ...others].join('+');
         if (!formBundles.has(name)) {
           const plugins = [r1185Out(others.includes('1041'))];
           if (others.includes('1041')) plugins.push(r1041Out);
@@ -858,7 +858,7 @@ if (baseRoot) {
        Round 1100's bigger pool AND whose dugout years met Round 1052's league equals the base only with both taken
        out at once (the two arms read different files: clubManager.ts is not one of Round 1100's seven). */
     else if (await tryArm('1100+1052', MoutBoth ??= await bundle(ROOT, 'tree1100and1052out', [r1100Out, r1052Out, ...futurePlugins]))) { same += 1; byBoth += 1; console.log(`  career ${seed}: moved by Rounds 1100 and 1052 together (equal to the base only with both taken out)`); }
-    else if (await tryFormArms()) { same += 1; by1185 += 1; console.log(`  career ${seed}: moved by Round 1185's same-club form selection (${receipt.acceptedArm}; complete replay equals the base only after the declared copied inverses)`); }
+    else if (await tryFormArms()) { same += 1; by1185 += 1; console.log(`  career ${seed}: moved by Rounds 1185 and 1187's form selection and Youth Mentor catalog (${receipt.acceptedArm}; complete replay equals the base only after the declared copied inverses)`); }
     else {
       differ += 1;
       const a = JSON.parse(mine); const b = JSON.parse(base);
@@ -870,7 +870,7 @@ if (baseRoot) {
   console.log(`  ${same} of ${BASELINE_CAREERS} careers from 2025 identical from 2026-27 on (${rows} seasons and dugout rows compared); releasing the seven pins alone moves ${pinsMove} of them (attributed to the release, not the binds); ${by1041} of the identical ones only once Round 1041's two truth fixes are taken out, ${by1100} only once Round 1100's seven files are read from the base (the pool, the rows and the band moved them, on purpose)`);
   if (by1052) console.log(`  ${by1052} of the identical careers are identical only with Round 1052's league taken out of the dugout's job market`);
   if (byBoth) console.log(`  ${byBoth} of the identical careers are identical only with Round 1100's seven files read from the base and Round 1052's league taken out, both at once`);
-  if (by1185) console.log(`  ${by1185} complete replays equal the historical base only with Round 1185's form adjustment removed, plus any explicitly named earlier inverse arms`);
+  if (by1185) console.log(`  ${by1185} complete replays equal the historical base only with Rounds 1185 and 1187's form adjustment and whole Youth Mentor catalog restored, plus any explicitly named earlier inverse arms`);
   replayReceipt.baseline = { careers: BASELINE_CAREERS, same, differ, rows, pinsMove, by1041, by1100, by1052, byBoth, by1185 };
   /* 430, 428 and 431 rows over seeds 1 to 3 */
   ok(rows >= BASELINE_CAREERS * 25, `only ${rows} rows compared over ${BASELINE_CAREERS} careers (floor ${BASELINE_CAREERS * 25})`);

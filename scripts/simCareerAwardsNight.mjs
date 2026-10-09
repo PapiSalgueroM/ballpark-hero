@@ -19,8 +19,8 @@
  *      before any code moved; re-recorded after the merge with main from a git
  *      archive of main itself (the fixture's recordedFrom, ac0801c1), never from
  *      the branch, and the merged branch replayed it identical before part 2.
- *      This replays it on the current tree and requires the output to be
- *      identical. Soccer calls Math.random directly in a fixed order, so a
+ *      This requires an exact replay, directly or through the bounded copied
+ *      historical attribution below. Soccer calls Math.random directly in a fixed order, so a
  *      single reordered draw anywhere breaks it. The winner's and the podium's
  *      ceremony cards are left out of the comparison since part 2 changed them
  *      on purpose (section 6 holds them); so is every tournament card's hash,
@@ -179,13 +179,29 @@
  * (band: within 10 points of the stated chance, one standard deviation at 250
  * draws is about 3).
  *
- * Run: node scripts/simCareerAwardsNight.mjs   (about 15 seconds)
+ * Rounds 1185 and 1187 deliberately changed form-based selection and the
+ * entire Youth Mentor event object. Only section 1 may undo those two edits
+ * in a throwaway bundle, after applying its existing negative control. The
+ * unchanged fixture must also match an independent actual 4ab source bundle.
+ * Current, original and attributed full outputs, complete per-step saves and
+ * every random draw are retained. The latter two stream into compressed JSONL
+ * files without omitting fields. Sections 2 through 7 still use current code
+ * and the current fleet. A moved stream must remain red after attribution.
+ *
+ * Run: node scripts/simCareerAwardsNight.mjs
  */
 import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import os from 'node:os';
 import path from 'node:path';
+import { createRequire } from 'node:module';
+import { createHash } from 'node:crypto';
+import { createGzip } from 'node:zlib';
+import { pipeline } from 'node:stream/promises';
 import { fileURLToPath } from 'node:url';
 import { probeAwardsNight, mulberry32 } from './lib/careerAwardsNightProbe.mjs';
 import { bundleAwardsNight } from './lib/careerAwardsNightBundle.mjs';
+import { inverseCareerDevelopment, careerDevelopmentOriginalPlugin, careerDevelopmentBaseReceipt } from './lib/careerDevelopmentAttribution1185.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_AWARDS_NIGHT_CONTROL ?? '';
@@ -328,6 +344,136 @@ if (CONTROL && !CONTROLS[CONTROL]) {
 const patches = CONTROLS[CONTROL]?.patches ?? [];
 if (CONTROL) console.log(`CONTROL ${CONTROL} active: section ${CONTROLS[CONTROL].section} must go red\n`);
 
+const ARTIFACTS = path.resolve(ROOT, process.env.SIM_AWARDS_NIGHT_ARTIFACTS || '.tmp-fx/career-awards-night', CONTROL || 'healthy');
+fs.mkdirSync(ARTIFACTS, { recursive: true });
+const sourceFiles = ['src/lib/soccerCareerEngine.ts', 'src/lib/careerAwardsNight.ts', 'src/lib/soccerCareerAppearance.ts',
+  'src/lib/soccerCareerSelection.ts', 'src/lib/soccerCareerPreparation.ts', 'src/lib/soccerCareerMentor.ts',
+  'src/pages/SoccerCareer.tsx', 'src/components/career/AwardsNightCard.tsx', 'src/components/soccer-career/InternationalPanel.tsx',
+  'scripts/lib/careerAwardsNightProbe.mjs', 'scripts/lib/careerAwardsNightBundle.mjs',
+  'scripts/lib/careerDevelopmentAttribution1185.mjs', 'scripts/data/careerAwardsNightFixture.json', 'scripts/simCareerAwardsNight.mjs'];
+function sourceHashes() {
+  const result = {};
+  for (const file of sourceFiles) {
+    const bytes = fs.readFileSync(path.join(ROOT, file));
+    result[file] = createHash('sha256').update(bytes).digest('hex');
+  }
+  return result;
+}
+const proof = { control: CONTROL, base: careerDevelopmentBaseReceipt(), sourceBefore: sourceHashes(), sourceAfter: null,
+  sourceHeld: false, attribution: [], faultEdits: [], originalSources: [], replays: {}, originalFixtureMatches: false, fixtureMatches: false };
+const writeProof = (file, value) => fs.writeFileSync(path.join(ARTIFACTS, file), JSON.stringify(value, null, 2));
+
+/* The actual original tree is loaded independently. The sole page append is
+   the same card export used by the existing recorder and current bundler. */
+async function originalAwardsBundle() {
+  const require = createRequire(path.join(ROOT, 'package.json'));
+  const { build } = require('esbuild');
+  const work = fs.mkdtempSync(path.join(os.tmpdir(), 'awards-original-1185-'));
+  const entry = path.join(work, 'entry.tsx'), out = path.join(work, 'bundle.cjs');
+  const R = ROOT.replaceAll('\\', '/');
+  fs.writeFileSync(entry, `import * as React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+export * as soccer from '${R}/src/lib/soccerCareerEngine.ts';
+export * as appearance from '${R}/src/lib/soccerCareerAppearance.ts';
+import * as page from '${R}/src/pages/SoccerCareer.tsx';
+import * as intl from '${R}/src/components/soccer-career/InternationalPanel.tsx';
+const noop = () => undefined;
+export const cards = {
+  bdor: (bdor, career) => renderToStaticMarkup(React.createElement(page.__BdorCard, { bdor, career, onDismiss: noop, onSpeech: noop })),
+  worldCup: (wc, career) => renderToStaticMarkup(React.createElement(page.__WcCard, { wc, career, onDismiss: noop, onSpeech: noop })),
+  tournament: t => renderToStaticMarkup(React.createElement(intl.TournamentCard, { t, onDismiss: noop, onSpeech: noop })),
+};\n`);
+  const original = careerDevelopmentOriginalPlugin(proof.originalSources);
+  const plugin = { name: 'awards-original-card-exports', setup(builder) {
+    original.setup({ onLoad(options, load) {
+      builder.onLoad(options, async args => {
+        const result = await load(args);
+        if (result && path.relative(ROOT, args.path).replaceAll('\\', '/') === 'src/pages/SoccerCareer.tsx') {
+          result.contents += '\nexport { BallonDorCeremonyCard as __BdorCard, WorldCupResultCard as __WcCard };\n';
+        }
+        return result;
+      });
+    } });
+  } };
+  try {
+    await build({ entryPoints: [entry], bundle: true, format: 'cjs', platform: 'node', jsx: 'automatic',
+      alias: { '@': `${R}/src` }, nodePaths: [path.dirname(path.dirname(require.resolve('react/package.json')))], absWorkingDir: ROOT,
+      define: { 'import.meta.env': '{"DEV":false,"PROD":true,"MODE":"production"}' },
+      loader: { '.css': 'empty', '.png': 'empty', '.svg': 'empty', '.jpg': 'empty', '.webp': 'empty' },
+      outfile: out, logLevel: 'error', plugins: [plugin] });
+    return require(out);
+  } finally { fs.rmSync(work, { recursive: true, force: true }); }
+}
+
+/* Preserve every selected fault before reversing only the two certified
+   development edits. The whole copied engine and effective receipts are kept. */
+async function attributedAwardsBundle() {
+  const file = 'src/lib/soccerCareerEngine.ts';
+  const authored = fs.readFileSync(path.join(ROOT, file), 'utf8').replaceAll('\r\n', '\n');
+  let controlled = authored;
+  for (const patch of patches.filter(p => p.file === file)) {
+    assert.equal(controlled.split(patch.from).length, 2, 'The awards engine fault has one effective anchor');
+    const before = controlled;
+    controlled = controlled.replace(patch.from, patch.to);
+    assert.notEqual(controlled, before, 'The awards engine fault changed its copied source');
+    proof.faultEdits.push({ file, beforeSha256: createHash('sha256').update(before).digest('hex'),
+      afterSha256: createHash('sha256').update(controlled).digest('hex'), effective: true });
+  }
+  const inverse = inverseCareerDevelopment(controlled, proof.attribution);
+  fs.writeFileSync(path.join(ARTIFACTS, 'current-engine.ts'), authored);
+  fs.writeFileSync(path.join(ARTIFACTS, 'controlled-engine.ts'), controlled);
+  fs.writeFileSync(path.join(ARTIFACTS, 'attributed-engine.ts'), inverse);
+  return bundleAwardsNight(ROOT, { patches: [...patches.filter(p => p.file !== file), { file, from: authored, to: inverse }] });
+}
+
+/* Observe assignments of the probe's existing seeded generators. A wrapper
+   calls the assigned generator once and returns its unchanged value. Restored
+   generators are unwrapped first, so nested speech probes do not double count.
+   States and draws stream to disk rather than keeping three huge arrays. */
+async function observedReplay(label, bundle, callbacks = {}) {
+  const statesFile = path.join(ARTIFACTS, `${label}-states.jsonl`), drawsFile = path.join(ARTIFACTS, `${label}-draws.jsonl`);
+  const statesFd = fs.openSync(statesFile, 'w'), drawsFd = fs.openSync(drawsFile, 'w');
+  const stateHash = createHash('sha256'), drawHash = createHash('sha256');
+  const descriptor = Object.getOwnPropertyDescriptor(Math, 'random');
+  const originals = new WeakMap(), wrappers = new WeakMap();
+  let active = descriptor.value, steps = 0, draws = 0, output;
+  const wrap = random => {
+    const original = originals.get(random) || random;
+    if (!wrappers.has(original)) {
+      const wrapper = () => {
+        const value = original();
+        const line = JSON.stringify({ draw: draws++, value }) + '\n';
+        fs.writeSync(drawsFd, line); drawHash.update(line);
+        return value;
+      };
+      originals.set(wrapper, original); wrappers.set(original, wrapper);
+    }
+    return wrappers.get(original);
+  };
+  Object.defineProperty(Math, 'random', { configurable: true, enumerable: descriptor.enumerable,
+    get: () => wrap(active), set: random => { active = originals.get(random) || random; } });
+  const error = console.error;
+  console.error = (...args) => { if (!String(args[0]).includes('useLayoutEffect does nothing on the server')) error(...args); };
+  try {
+    output = JSON.parse(JSON.stringify(probeAwardsNight(bundle, { ...callbacks, onStep(save, career) {
+      const line = JSON.stringify({ step: steps++, career, save }) + '\n';
+      fs.writeSync(statesFd, line); stateHash.update(line);
+      callbacks.onStep?.(save, career);
+    } })));
+  } finally {
+    Object.defineProperty(Math, 'random', descriptor); console.error = error;
+    fs.closeSync(statesFd); fs.closeSync(drawsFd);
+  }
+  writeProof(`${label}-probe.json`, output);
+  for (const file of [statesFile, drawsFile]) {
+    await pipeline(fs.createReadStream(file), createGzip(), fs.createWriteStream(`${file}.gz`));
+    fs.unlinkSync(file);
+  }
+  proof.replays[label] = { steps, draws, statesSha256: stateHash.digest('hex'), drawsSha256: drawHash.digest('hex'),
+    probeSha256: createHash('sha256').update(JSON.stringify(output)).digest('hex') };
+  return output;
+}
+
 let failures = 0;
 const failedSections = new Set();
 let section = 0;
@@ -351,7 +497,7 @@ section = 1;
 console.log('1) Soccer Career replays the pre-lift fixture byte for byte');
 {
   const fixture = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/careerAwardsNightFixture.json'), 'utf8'));
-  const fresh = JSON.parse(JSON.stringify(probeAwardsNight(B, {
+  const current = await observedReplay('current', B, {
     onNight: (s, bdor) => {
       if (bdor.playerRank === 1) { liveNights.won += 1; if (soccer.bdorSpeechOpen(s)) liveNights.offered += 1; }
       else if (soccer.bdorSpeechOpen(s)) liveNights.wrong += 1;
@@ -366,7 +512,8 @@ console.log('1) Soccer Career replays the pre-lift fixture byte for byte');
     /* Round 1023: every real won tournament screen, copied without a draw,
        for section 7 to give speeches on. */
     onTournament: (s, won) => { if (won) liveTournaments.push(JSON.parse(JSON.stringify(s))); },
-  })));
+  });
+  const original = await observedReplay('original', await originalAwardsBundle());
   /* Round 834 part 2 changed the winner's and the podium's ceremony cards on
      purpose (the speech is offered, the lines say what the night does), so
      those two cards are left out of the replay on both sides; section 6 holds
@@ -393,9 +540,29 @@ console.log('1) Soccer Career replays the pre-lift fixture byte for byte');
     for (const t of d.tournaments) if ('ui' in t) { delete t.ui; n += 1; }
     return n;
   };
+  const comparable = value => {
+    const copy = JSON.parse(JSON.stringify(value));
+    changedOnPurpose(copy); tournamentCards(copy);
+    return copy;
+  };
+  const exactFixture = value => Object.keys(fixture).filter(key => key !== 'recordedFrom')
+    .every(key => JSON.stringify(fixture[key]) === JSON.stringify(value[key]));
   const leftOut = changedOnPurpose(fixture);
-  changedOnPurpose(fresh);
-  const cardsWant = tournamentCards(fixture), cardsGot = tournamentCards(fresh);
+  const cardsWant = tournamentCards(fixture);
+  const oldCards = original.tournaments.filter(t => 'ui' in t).length;
+  proof.originalFixtureMatches = exactFixture(comparable(original));
+  check(proof.originalFixtureMatches && oldCards === cardsWant, 'the independent actual frozen original must replay every unchanged fixture field and tournament card count');
+  proof.currentFixtureMatches = exactFixture(comparable(current));
+  const replay = proof.currentFixtureMatches ? current : await observedReplay('attributed', await attributedAwardsBundle());
+  const cardsGot = replay.tournaments.filter(t => 'ui' in t).length;
+  const fresh = comparable(replay);
+  proof.fixtureMatches = exactFixture(fresh);
+  const kept = proof.replays[proof.currentFixtureMatches ? 'current' : 'attributed'], old = proof.replays.original;
+  proof.drawsEqual = kept.draws === old.draws && kept.drawsSha256 === old.drawsSha256;
+  proof.statesEqual = kept.steps === old.steps && kept.statesSha256 === old.statesSha256;
+  check(proof.drawsEqual, 'the entire attributed random draw stream must match the independent original');
+  check(proof.statesEqual, 'every complete attributed per-step save must match the independent original');
+  console.log(`   current fixture ${proof.currentFixtureMatches ? 'identical' : 'changed'}; actual original ${proof.originalFixtureMatches ? 'identical' : 'DIFFERS'}; ${proof.currentFixtureMatches ? 'direct' : '1185 form plus 1187 whole Youth Mentor catalog inverse'} replay ${proof.fixtureMatches ? 'identical' : 'DIFFERS'}`);
   console.log(`   ${leftOut} winner and podium cards left out of the replay (changed on purpose, section 6)`);
   console.log(`   ${cardsWant} tournament cards left out of the replay (Round 926 changed the card on purpose, tournamentCardMoment.test.tsx), ${cardsGot} drawn now`);
   check(cardsWant > 0 && cardsGot === cardsWant, `the tournament card was drawn for ${cardsGot} tournaments, the fixture recorded ${cardsWant}`);
@@ -1041,10 +1208,20 @@ console.log('\n6) The ceremony card says what the night does, and a win offers t
 }
 
 console.log('');
+proof.sourceAfter = sourceHashes();
+proof.sourceHeld = JSON.stringify(proof.sourceBefore) === JSON.stringify(proof.sourceAfter);
+check(proof.sourceHeld, 'historical replays and copied controls leave every authored source byte unchanged');
 if (CONTROL) {
   const target = CONTROLS[CONTROL].section;
   console.log(`CONTROL ${CONTROL}: section ${target} ${failedSections.has(target) ? 'FIRED' : 'DID NOT FIRE'} (red sections: ${[...failedSections].join(', ') || 'none'})`);
   if (!failedSections.has(target)) failures += 1;
+  proof.controlTarget = target;
+  proof.controlFired = failedSections.has(target);
 }
+proof.failedSections = [...failedSections].sort((a, b) => a - b);
+proof.checks = checks;
+proof.failures = failures;
+proof.status = failures === 0 ? 'passed' : 'failed';
+writeProof('report.json', proof);
 console.log(failures === 0 ? `simCareerAwardsNight: ALL ${checks} CHECKS PASSED` : `simCareerAwardsNight: ${failures} FAILURES`);
 process.exit(failures === 0 ? 0 : 1);
