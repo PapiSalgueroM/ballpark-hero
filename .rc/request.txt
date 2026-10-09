@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+walk-1: PORT=4201 node scripts/playLiveMatchFit.mjs
+walk-2: PORT=4202 node scripts/playLiveMatchFit.mjs
+walk-3: PORT=4203 node scripts/playLiveMatchFit.mjs
+walk-bar: PORT=4204 LIVE_FIT_CONTROL=bar node scripts/playLiveMatchFit.mjs
+walk-silentlist: PORT=4205 LIVE_FIT_CONTROL=silentlist node scripts/playLiveMatchFit.mjs
+walk-earlyscore: PORT=4206 LIVE_FIT_CONTROL=earlyscore node scripts/playLiveMatchFit.mjs
+walk-nocard: PORT=4207 LIVE_FIT_CONTROL=nocard node scripts/playLiveMatchFit.mjs
+playGames: ONLY=/club-manager node scripts/playGames.mjs
+playGames-1280: ONLY=/club-manager WIDTH=1280 HEIGHT=900 node scripts/playGames.mjs
