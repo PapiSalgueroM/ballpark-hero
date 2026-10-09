@@ -1,0 +1,12 @@
+simNationalityFlags
+   NEGATIVE CONTROL ON: src/pages/HigherLower.tsx:204 prints its nationality bare in memory, section 1 must name it
+  FAIL: src/pages/Footle.tsx:190 prints {examplePlayer.nationality} with no flag beside it
+  FAIL: src/pages/Footle.tsx:372 prints {targetPlayer.nationality} with no flag beside it
+  FAIL: src/pages/HigherLower.tsx:204 prints {player.isIcon ? '⭐ Icon' : player.nationality} with no flag beside it
+  FAIL: market nationalities: 4 with no confederation, which would shove them into an "Elsewhere" group: Niger, Namibia, French Guiana, Mauritius
+  FAIL: market nationalities: Niger has no confederation
+  FAIL: market nationalities: Namibia has no confederation
+  FAIL: market nationalities: French Guiana has no confederation
+  FAIL: market nationalities: Mauritius has no confederation
+
+simNationalityFlags control: green. The bare site was reported and named as src/pages/HigherLower.tsx:204 (8 findings).

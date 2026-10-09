@@ -1,0 +1,46 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/dartDraftPool.test.ts src/test/statDetectiveSpans.test.tsx src/test/statDetectiveMotion.test.tsx --testTimeout=300000 --hookTimeout=120000
+rehearse: npm install --no-audit --no-fund --prefix /tmp/pgl-r1145 @electric-sql/pglite >/tmp/pgl-install.log 2>&1; PGLITE_DIR=/tmp/pgl-r1145 node scripts/qa/rehearseCareerSpansView.mjs && REHEARSE_CONTROL=byname PGLITE_DIR=/tmp/pgl-r1145 node scripts/qa/rehearseCareerSpansView.mjs; echo "byname control exit=$? (1 is the expected result)"
+statdet: node scripts/simStatDetectiveMotion.mjs
+statdet-span: STAT_DETECTIVE_CONTROL=span node scripts/simStatDetectiveMotion.mjs
+statdet-spanfail: STAT_DETECTIVE_CONTROL=spanfail node scripts/simStatDetectiveMotion.mjs
+statdet-spanend: STAT_DETECTIVE_CONTROL=spanend node scripts/simStatDetectiveMotion.mjs
+statdet-spanshort: STAT_DETECTIVE_CONTROL=spanshort node scripts/simStatDetectiveMotion.mjs
+statdet-spanguess: STAT_DETECTIVE_CONTROL=spanguess node scripts/simStatDetectiveMotion.mjs
+statdet-spanera: STAT_DETECTIVE_CONTROL=spanera node scripts/simStatDetectiveMotion.mjs
+statdet-namesake: STAT_DETECTIVE_CONTROL=namesake node scripts/simStatDetectiveMotion.mjs
+statdet-cohortgap: STAT_DETECTIVE_CONTROL=cohortgap node scripts/simStatDetectiveMotion.mjs
+statdet-franchise: STAT_DETECTIVE_CONTROL=franchise node scripts/simStatDetectiveMotion.mjs
+statdet-franchiseguess: STAT_DETECTIVE_CONTROL=franchiseguess node scripts/simStatDetectiveMotion.mjs
+statdet-guide: STAT_DETECTIVE_CONTROL=guide node scripts/simStatDetectiveMotion.mjs
+dartpool: node scripts/simDartDraftPool.mjs
+dartpool-pool900: DART_POOL_CONTROL=pool900 node scripts/simDartDraftPool.mjs
+dartpool-nofloor: DART_POOL_CONTROL=nofloor node scripts/simDartDraftPool.mjs
+dartpool-nobest: DART_POOL_CONTROL=nobest node scripts/simDartDraftPool.mjs
+dartpool-onepage: DART_POOL_CONTROL=onepage node scripts/simDartDraftPool.mjs
+dartpool-pagefloor: DART_POOL_CONTROL=pagefloor node scripts/simDartDraftPool.mjs
+dartpool-nomysteryfloor: DART_POOL_CONTROL=nomysteryfloor node scripts/simDartDraftPool.mjs
+dartpool-pagemystery: DART_POOL_CONTROL=pagemystery node scripts/simDartDraftPool.mjs
+dartpool-machinehalf: DART_POOL_CONTROL=machinehalf node scripts/simDartDraftPool.mjs
+dartpool-lasttile: DART_POOL_CONTROL=lasttile node scripts/simDartDraftPool.mjs
+flags: node scripts/simNationalityFlags.mjs
+guideheadings: node scripts/simGuideHeadings.mjs
+sitesearch: node scripts/simSiteSearch.mjs
+norival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+invented: node scripts/simInventedNames.mjs
+storage: node scripts/simStorageWrites.mjs
+trust: node scripts/simTrustCopy.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+a11y: node scripts/simAccessibility.mjs
+walk: node .rc/x/walk1145fix.mjs
+play-stat: ONLY=/stat-detective ENGINES=chromium node scripts/playGames.mjs
+play-dart: ONLY=/dart-draft ENGINES=chromium node scripts/playGames.mjs
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+flags-bare: NATIONALITY_FLAGS_CONTROL=bare node scripts/simNationalityFlags.mjs
+flags-code: NATIONALITY_FLAGS_CONTROL=code node scripts/simNationalityFlags.mjs
+flags-confed: NATIONALITY_FLAGS_CONTROL=confed node scripts/simNationalityFlags.mjs
+reader: node .rc/x/probeReader1145.mjs src/lib/fetchAllRows.ts .rc/x/fetchAllRows.main.ts
+reader-limit: PROBE_CONTROL=limit node .rc/x/probeReader1145.mjs src/lib/fetchAllRows.ts .rc/x/fetchAllRows.main.ts

@@ -1,0 +1,4 @@
+  DIFFERS: total 1000, firstPages 0, plan {}: main asked 2 ranges and returned 1000 rows, the branch asked 1 and returned 1000
+  DIFFERS: total 1000, firstPages 0, plan {"0":1}: main asked 3 ranges and returned 1000 rows, the branch asked 2 and returned 1000
+  DIFFERS: total 1000, firstPages 0, plan {"0":2}: main asked 4 ranges and returned 1000 rows, the branch asked 3 and returned 1000
+probeReader1145 control limit: fired, 504 of 2772 cases differ once the branch's reader is handed a row limit. Exit 1 is the expected result.

@@ -1,0 +1,39 @@
+{
+  "stat": {
+    "option": "Fixture Pivot Elm1990-2001",
+    "shared": "Fixture Forward Larch1992-2001",
+    "spanOrder": "player_name.asc,cohort.asc",
+    "spanSelect": "player_name,first_season,last_season,cohort,rows_500,teams",
+    "clue": "Career span: 1991-1994",
+    "spanRequests": 6,
+    "retry": true
+  },
+  "dart": {
+    "poolAsked": [
+      "0+1000",
+      "1000+1000"
+    ],
+    "tiles": [
+      1,
+      8,
+      5,
+      1,
+      3,
+      1,
+      1,
+      8,
+      3
+    ],
+    "water": 2,
+    "countryRequests": 12
+  },
+  "errors": [],
+  "/stat-detective": {
+    "kb": "297.4",
+    "files": 26
+  },
+  "/dart-draft": {
+    "kb": "363.2",
+    "files": 27
+  }
+}

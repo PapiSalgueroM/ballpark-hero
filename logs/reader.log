@@ -1,0 +1,1 @@
+probeReader1145: green. 2772 cases (11 table sizes, 6 first page counts, 14 failure plans; 162 ended in an error, 554 retried a range): with no row limit passed, main's reader and the branch's ask for the same ranges in the same order and return the same rows and the same errors.

@@ -1,0 +1,16 @@
+A) Stat Detective, spans readable
+  ok: the guess box prints "Fixture Pivot Elm1990-2001" (his 500 minute seasons alone would read 1990-1996)
+  ok: a shared name prints "Fixture Forward Larch1992-2001" (read by name alone it would say 1978-2001)
+  ok: the spans view is read in the order of its key: player_name.asc,cohort.asc
+  ok: after one miss the clue reads "Career span: 1991-1994", the mystery's first and last season
+  ok: the spans view was read in 6 requests beside the seasons
+B) Stat Detective, the view is not there yet
+  ok: with the spans view missing the page shows its retry state and no case files
+  ok: Try again opens the case files once the view answers
+C) Dart Draft, a whole draft
+  ok: the pool was asked for as two pages: 0+1000 and 1000+1000
+  ok: eleven throws: 2 in the water, tile counts on the others 1, 8, 5, 1, 3, 1, 1, 8, 3; 12 country requests; the result screen came up
+D) what a phone downloads for each page (gzipped JavaScript, measured the way sweepWeight measures)
+   /stat-detective  297.4K gz over 26 files
+   /dart-draft  363.2K gz over 27 files
+walk1145: green. Stat Detective prints true spans, gives a shared name the famous man his own years and fails closed without the view; Dart Draft reads two pages and plays a whole draft.
