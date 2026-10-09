@@ -17,6 +17,14 @@
    board they are compared with. The one edited line no frame draws is the
    points line of a made round.
 
+   Release AQ, 2026-10-09: Round 1174 changed the Wall Shot itself (a wider
+   gap, a slower wall and two hint lines while a round is live), which is the
+   one case the note below allows. wallshot:ready and wallshot:playing were
+   recorded again from the merged board with no match prop. The other sixteen
+   frames are byte for byte the record described above, so for those two
+   frames the record now pins the board against itself from this release on,
+   not against the board from before the prop.
+
    It fails closed: a missing record is a failure, never a fresh recording.
    To record on purpose (only when the training ground itself is meant to
    change): RECORD_DRILL_MARKUP=1 vitest run src/test/drillBoardMarkup.test.tsx */
