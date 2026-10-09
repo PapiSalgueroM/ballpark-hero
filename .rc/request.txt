@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+walk-og: node .rc/x/rr-walk-og.mjs
+walk-tycoon: node .rc/x/rr-walk-tycoon.mjs
+walk-cm: node .rc/x/rr-walk-cm.mjs
