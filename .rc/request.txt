@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk2: node .rc/x/rr-walk2.mjs
+main: bash .rc/x/rr-main.sh
