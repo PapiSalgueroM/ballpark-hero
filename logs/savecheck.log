@@ -1,0 +1,40 @@
+engines: base cbff760c (own goals: undefined), branch (own goals: number)
+nocoach: 12 careers, 1089 matches, 73 own goals on the branch side, 0 failures so far
+  FAIL: legsout Everton seed 9100: the result faces differ (=XXX)
+  FAIL: legsout Everton seed 9201: the result faces differ (=XXX)
+  FAIL: legsout Real Madrid seed 9117: the result faces differ (=XXX)
+  FAIL: legsout Real Madrid seed 9218: the result faces differ (=XXX)
+  FAIL: legsout Ajax seed 9134: the result faces differ (=XXX)
+  FAIL: legsout Ajax seed 9235: the result faces differ (=XXX)
+  FAIL: legsout Aston Villa seed 9151: the result faces differ (=XXX)
+  FAIL: legsout Aston Villa seed 9252: the result faces differ (=XXX)
+  FAIL: legsout Barcelona seed 9168: the result faces differ (=XXX)
+  FAIL: legsout Barcelona seed 9269: the result faces differ (=XXX)
+  FAIL: legsout Manchester City seed 9185: the result faces differ (=XXX)
+  FAIL: legsout Manchester City seed 9286: the result faces differ (=XXX)
+legsout: 12 careers, 1089 matches, 76 own goals on the branch side, 12 failures so far
+  FAIL: legsout-paused Everton seed 9100: the result faces differ (=XXX)
+  FAIL: legsout-paused Everton seed 9201: the result faces differ (=XXX)
+  FAIL: legsout-paused Real Madrid seed 9117: the result faces differ (=XXX)
+  FAIL: legsout-paused Real Madrid seed 9218: the result faces differ (=XXX)
+  FAIL: legsout-paused Ajax seed 9134: the result faces differ (=XXX)
+  FAIL: legsout-paused Ajax seed 9235: the result faces differ (=XXX)
+  FAIL: legsout-paused Aston Villa seed 9151: the result faces differ (=XXX)
+  FAIL: legsout-paused Aston Villa seed 9252: the result faces differ (=XXX)
+  FAIL: legsout-paused Barcelona seed 9168: the result faces differ (=XXX)
+  FAIL: legsout-paused Barcelona seed 9269: the result faces differ (=XXX)
+  FAIL: legsout-paused Manchester City seed 9185: the result faces differ (=XXX)
+  FAIL: legsout-paused Manchester City seed 9286: the result faces differ (=XXX)
+legsout-paused: 12 careers, 1089 matches, 76 own goals on the branch side, 24 failures so far
+oldsave before a match: 101K, opens on the branch, same as the base opens it: true
+  FAIL: oldsave before a match, played on without the coach: the result faces differ (=X)
+oldsave before a match: played on 25 matches and a summer on both engines, 3 own goals on the branch
+oldsave before a match: quick simmed on for two seasons by the branch: 73 matches
+oldsave stopped at the break: 107K, opens on the branch, same as the base opens it: true
+  FAIL: oldsave stopped at the break, played on without the coach: the result faces differ (=X)
+oldsave stopped at the break: played on 25 matches and a summer on both engines, 4 own goals on the branch
+oldsave stopped at the break: quick simmed on for two seasons by the branch: 65 matches
+oldsave paused: 2 first half goals kept as they were, 0 changes made by the coach after the break
+legs base: 551 matches, W 52.6 D 21.6 L 25.8, goals 1.75 for 1.03 against, 0.73 changes a match
+legs branch: 543 matches, W 53.6 D 22.3 L 24.1, goals 1.63 for 0.93 against, 1.83 changes a match
+rvsave: FAIL, 26 of 167 checks red

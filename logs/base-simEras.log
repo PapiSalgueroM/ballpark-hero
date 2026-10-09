@@ -1,0 +1,60 @@
+tree cbff760c, harness simEras
+1) Year zero is the identity
+   426 clubs, 4377 players compared field by field against the bake
+  FAIL: 1 projected players at year zero differ from the real data
+  FAIL: projected 4377 players at year zero, the bake says 4401
+2) A thirty three year old declines, a twenty two year old does not
+   10 clubs x 24 seasons, mean rating change per season by the age he turned
+   outfield  18:2.53 19:2.18 20:1.63 21:1.47 22:0.96 23:0.97 24:0.49 25:0.51 26:0.32 27:0.11 28:0.12 29:0.10 30:-0.52 31:-1.02 32:-1.46 33:-1.86 34:-2.24 35:-2.65 36:-3.10 37:-4.20 38:-5.58
+   keepers   20:1.48 21:1.52 22:0.87 23:0.94 24:0.53 25:0.40 26:0.42 27:0.11 28:0.09 29:0.04 30:0.00 31:-0.46 32:-0.46 33:-0.67 34:-1.15 35:-1.32 36:-1.46 37:-1.75
+   351 retirements: youngest 32, median 37, oldest 41
+3) A retired player never comes back
+   15 retired names, 81 market checks, none reappeared
+   2026:gone 2027:gone 2028:gone 2029:gone 2030:gone 2031:gone 2032:gone 2033:gone 2034:gone 2035:gone 2036:gone 2037:gone 2038:gone
+4) Twenty seasons out, the league is still a league
+   10 careers x 20 seasons, champions: Everton 20, Arsenal 20, Chelsea 19, Liverpool 19, Manchester City 19, Ipswich Town 11
+   established clubs took 49% of the titles
+   my squad: size 23.4 (min 21), average age 28.1, oldest 36.1 (max 40), XI 77.7
+   world + 0y: 5113 players, mean age 25.0, club XI mean 70.1 (min 57.5, max 89.6), oldest club man median 31
+   world + 5y: 5113 players, mean age 25.2, club XI mean 70.8 (min 57.7, max 91.7), oldest club man median 31
+   world +10y: 5113 players, mean age 25.5, club XI mean 70.6 (min 59.3, max 90), oldest club man median 32
+   world +20y: 5113 players, mean age 25.3, club XI mean 70.8 (min 57.8, max 92), oldest club man median 31
+   world +30y: 5113 players, mean age 25.4, club XI mean 70.8 (min 57.9, max 92), oldest club man median 32
+5) Balance did not move: ticking clock against a frozen one
+   40 careers x 12 seasons per arm (480 league seasons each)
+   frozen clock : 2.63 goals a game, champion on 81.7 pts, me on 57.2 pts finishing 10.5
+   ticking clock: 2.63 goals a game, champion on 84.7 pts, me on 58.9 pts finishing 11.1
+   gap: 0.00 goals a game, 3.0 champion points, 1.7 of my points
+6) Real names become made up ones gracefully, and it is labelled
+   share of players who are real footballers:
+     + 0y  first teams 100.0%  whole squads 100.0%
+     + 1y  first teams 89.8%  whole squads 84.0%
+     + 3y  first teams 68.1%  whole squads 58.8%
+     + 5y  first teams 50.2%  whole squads 42.1%
+     +10y  first teams 16.6%  whole squads 15.7%
+     +15y  first teams 1.5%  whole squads 2.5%
+     +20y  first teams 0.0%  whole squads 0.0%
+   Real Madrid five years on: 21/30 of the squad are still real players
+   12381 made up players checked across three projections, none wearing a real name
+  FAIL: 189 players are not in the real data and are not flagged as made up
+   3944 distinct made up names in the 2036 world
+   season 11 of a Liverpool save (2036-37 world): 18/26 made up in the projected squad, 3944/4739 on the market
+   4 screens carry the labelling
+7) The era menu is exactly what the owner asked for and the data supports
+   5 era(s): 2026-27, 2020-21, 2015-16, 2010-11, 2005-06
+   2020-21: historical bake, 1774 real players across 98 clubs
+   2015-16: historical bake, 1659 real players across 98 clubs
+   2010-11: historical bake, 1751 real players across 98 clubs
+   2005-06: historical bake, 1727 real players across 98 clubs
+   2026-27  Real players, made up youth fill gaps  |  Real data: every real player has his real name, age and value as of August 2026. Thin squa...
+   2020-21  Real players, made up youth fill gaps  |  Real data. 1774 real players with their real 2020 ages and values, all 98 clubs of the 202...
+   2015-16  Real players, made up youth fill gaps  |  Real data. 1659 real players with their real 2015 ages and values, all 98 clubs of the 201...
+   2010-11  Real players, made up youth fill gaps  |  Real data. 1751 real players with their real 2010 ages and values, all 98 clubs of the 201...
+   2005-06  Real players, made up youth fill gaps  |  Real data. 1727 real players with their real 2005 ages and values, all 98 clubs of the 200...
+   2026-27: XI 88, 0 made up players in the squad
+8) A save from before the clock existed still opens and still works
+   repaired to 2029-30, played 40 entries, rolled on to 2030-31
+9) Copy check
+   12/12 files clean
+
+3 FAILURES

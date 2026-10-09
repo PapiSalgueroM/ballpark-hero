@@ -1,0 +1,9 @@
+base-simStatsCentre exit=1 3s | 6 FAILURES
+savecheck exit=1 82s | rvsave: FAIL, 26 of 167 checks red
+base-simWorldEditor exit=1 5s | simWorldEditor: 2469 checks, 1 failures
+head-simWorldEditor exit=0 6s | simWorldEditor: 2469 checks, 0 failures
+base-simEra2005 exit=1 10s | simEra2005: 1 failure
+head-simEra2005 exit=1 11s | simEra2005: 1 failure
+main-simStatsCentre exit=1 3s | 6 FAILURES
+base-simEras exit=1 530s | 3 FAILURES
+head-simEras exit=1 611s | 3 FAILURES

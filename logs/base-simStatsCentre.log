@@ -1,0 +1,20 @@
+tree cbff760c, harness simStatsCentre
+1) Every split sums back to the season line
+   26 players reconciled, worst rating drift 0.00
+  FAIL: 636 total apps across 53 matches, expected 583
+  FAIL: league: 455 apps for 38 matches
+  FAIL: cup: 52 apps for 4 matches
+  FAIL: ucl: 129 apps for 11 matches
+   53 matches -> 636 appearances, 11 per match in every bucket
+2) The club record by competition reconciles
+   51 fixtures: 38 league, 2 cup, 11 Europe
+3) An old save grows splits without corrupting totals
+  FAIL: season apps went wrong after the strip
+  FAIL: splits hold 70 apps, expected 66 (post-update matches only)
+   14 stripped fixtures still bucket by label, 6 new ones carry the type
+4) The splits reset with the season
+   clean books on day one of season two
+5) Copy check
+   StatsScreen.tsx checked
+
+6 FAILURES
