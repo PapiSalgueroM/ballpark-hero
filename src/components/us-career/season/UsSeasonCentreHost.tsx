@@ -104,6 +104,7 @@ export function UsSeasonCentreHost({ sport, children }: { sport: UsCareerSport; 
        makes itself); while it is still refused the page stays and the tile
        says why. */
     if (!settlePendingSaves()) { setHeld(true); return; }
+    setHeld(false);
     if (reloadToRetryChunk()) return;
     const asker = from.current;
     setFailed(false);
