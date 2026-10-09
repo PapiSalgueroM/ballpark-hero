@@ -1,0 +1,5 @@
+nba-2000-s7: SIM_SEED=7 SIM_SPORTS=nba SIM_SECTIONS=6 node scripts/simUsCareerSummer.mjs
+ap-nba-2000: bash .rc/x/other.sh release-ap-int 'SIM_SPORTS=nba SIM_SECTIONS=6 node scripts/simUsCareerSummer.mjs'
+ap-nba-2000-s7: bash .rc/x/other.sh release-ap-int 'SIM_SEED=7 SIM_SPORTS=nba SIM_SECTIONS=6 node scripts/simUsCareerSummer.mjs'
+nba-8000: SIM_BALANCE_CAREERS=8000 SIM_SPORTS=nba SIM_SECTIONS=6 node scripts/simUsCareerSummer.mjs
+ap-nba-8000: bash .rc/x/other.sh release-ap-int 'SIM_BALANCE_CAREERS=8000 SIM_SPORTS=nba SIM_SECTIONS=6 node scripts/simUsCareerSummer.mjs'
