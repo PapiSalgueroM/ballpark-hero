@@ -1,0 +1,1 @@
+rvmake exit=0 5s |    Duration  4.43s (transform 1.04s, setup 57ms, collect 1.31s, tests 2.27s, environment 349ms, prepare 188ms)

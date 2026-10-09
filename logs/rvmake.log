@@ -1,0 +1,14 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/zzRvMakeSaves.test.ts[2m > [22m[2mreviewer probe: saves made by the base tree[2m > [22m[2mwrites them
+[22m[39m[rv make] 36 saves; kinds: youth x1, contract_offer x1, newspaper x1, season_summary x1, ballon_dor x1, social_media_action x1, random_events x1, transfer_window:contract_expiry x1, playing x1, rivalry_event x1, moral_dilemma x1, transfer_window:one_offer x1, international_debut x1, world_cup x1, transfer_window:no_interest x1, transfer_window:bidding_war x1, transfer_window:dream_club x1, retirement_suggestion x1, dugout:manager_season x4, red_card_appeal_result x3, random_events:appeal_waiting x3, rehab_choice x1, transfer_window:frozen_out:transfer_listed:offers x3, transfer_window:frozen_out:released:offers x3, transfer_window:frozen_out:loan_listed:offers x1
+
+ [32m✓[39m src/test/zzRvMakeSaves.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 2266[2mms[22m[39m
+   [33m[2m✓[22m[39m reviewer probe: saves made by the base tree[2m > [22mwrites them [33m 2265[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m   Start at [22m 13:49:11
+[2m   Duration [22m 4.43s[2m (transform 1.04s, setup 57ms, collect 1.31s, tests 2.27s, environment 349ms, prepare 188ms)[22m
+
