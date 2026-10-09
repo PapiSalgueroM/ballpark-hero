@@ -1,0 +1,8 @@
+variant lazy: the page is 60526 characters, the review region was 4904
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+lazy: 302546 bytes, 295.46K, sweep would print 295K over 23 files; late 0; page text 20961
+lazy: 302546 bytes, 295.46K, sweep would print 295K over 23 files; late 0; page text 20961
+lazy: 302546 bytes, 295.46K, sweep would print 295K over 23 files; late 0; page text 20975
+lazy: chunk LatestSeasonReview-DqaO9WcZ.js gz 1443 raw 4308 holds the review true inside the window false
+lazy: chunk StadiumTycoon-D9YuvjxL.js gz 20890 raw 64448 holds the review false inside the window true
+lazy: three visits agree; 302546 bytes = 295.46K

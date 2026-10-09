@@ -1,0 +1,6 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+w-head exit=0 10s | head: three visits agree; 303347 bytes = 296.24K
+w-main exit=0 44s | main: three visits agree; 302347 bytes = 295.26K
+w-nodialog exit=0 44s | nodialog: three visits agree; 302458 bytes = 295.37K
+w-lazy exit=0 42s | lazy: three visits agree; 302546 bytes = 295.46K
+w-head-again exit=0 11s | head2: three visits agree; 303347 bytes = 296.24K

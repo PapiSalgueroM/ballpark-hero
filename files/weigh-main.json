@@ -1,0 +1,63 @@
+{
+ "label": "main",
+ "rows": [
+  {
+   "bytes": 302347,
+   "k": "295.26",
+   "rounded": 295,
+   "files": 23,
+   "late": [],
+   "text": 20743
+  },
+  {
+   "bytes": 302347,
+   "k": "295.26",
+   "rounded": 295,
+   "files": 23,
+   "late": [],
+   "text": 20743
+  },
+  {
+   "bytes": 302347,
+   "k": "295.26",
+   "rounded": 295,
+   "files": 23,
+   "late": [],
+   "text": 20743
+  }
+ ],
+ "sizes": {
+  "Celebration": 820,
+  "CelebrationStyles": 725,
+  "GameNavbar": 3792,
+  "GameSeoContent": 2282,
+  "LeagueTableCard": 1015,
+  "StadiumTycoon": 20762,
+  "arrow-left": 265,
+  "circle-help": 304,
+  "dialogA11y": 132,
+  "entityIds": 335,
+  "formatNumber": 154,
+  "guideShape": 1687,
+  "index": 238557,
+  "intlNames": 6167,
+  "leagueCore": 429,
+  "medal": 388,
+  "seoMetaPart16": 445,
+  "soccerBootIds": 200,
+  "stadiumManagement": 5384,
+  "stadiumTycoon": 10255,
+  "star": 402,
+  "useOwnedTimeouts": 215,
+  "useTycoonRewards": 7632
+ },
+ "holders": [
+  {
+   "file": "StadiumTycoon-DtrsavV5.js",
+   "gz": 20762,
+   "raw": 64095,
+   "review": false,
+   "weighed": true
+  }
+ ]
+}

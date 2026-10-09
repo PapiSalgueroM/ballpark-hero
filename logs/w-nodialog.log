@@ -1,0 +1,7 @@
+variant nodialog: the page is 60407 characters, the review region was 4904
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+nodialog: 302458 bytes, 295.37K, sweep would print 295K over 23 files; late 0; page text 20961
+nodialog: 302458 bytes, 295.37K, sweep would print 295K over 23 files; late 0; page text 20961
+nodialog: 302458 bytes, 295.37K, sweep would print 295K over 23 files; late 0; page text 20961
+nodialog: chunk StadiumTycoon-bICDRD5S.js gz 20821 raw 64136 holds the review false inside the window true
+nodialog: three visits agree; 302458 bytes = 295.37K

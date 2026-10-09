@@ -1,0 +1,63 @@
+{
+ "label": "head",
+ "rows": [
+  {
+   "bytes": 303347,
+   "k": "296.24",
+   "rounded": 296,
+   "files": 23,
+   "late": [],
+   "text": 20961
+  },
+  {
+   "bytes": 303347,
+   "k": "296.24",
+   "rounded": 296,
+   "files": 23,
+   "late": [],
+   "text": 20961
+  },
+  {
+   "bytes": 303347,
+   "k": "296.24",
+   "rounded": 296,
+   "files": 23,
+   "late": [],
+   "text": 20961
+  }
+ ],
+ "sizes": {
+  "Celebration": 819,
+  "CelebrationStyles": 724,
+  "GameNavbar": 3794,
+  "GameSeoContent": 2283,
+  "LeagueTableCard": 1084,
+  "StadiumTycoon": 21689,
+  "arrow-left": 264,
+  "circle-help": 304,
+  "dialogA11y": 132,
+  "entityIds": 335,
+  "formatNumber": 154,
+  "guideShape": 1687,
+  "index": 238559,
+  "intlNames": 6167,
+  "leagueCore": 429,
+  "medal": 388,
+  "seoMetaPart16": 445,
+  "soccerBootIds": 200,
+  "stadiumManagement": 5384,
+  "stadiumTycoon": 10257,
+  "star": 404,
+  "useOwnedTimeouts": 214,
+  "useTycoonRewards": 7631
+ },
+ "holders": [
+  {
+   "file": "StadiumTycoon-CtpnTXGi.js",
+   "gz": 21689,
+   "raw": 68311,
+   "review": true,
+   "weighed": true
+  }
+ ]
+}
