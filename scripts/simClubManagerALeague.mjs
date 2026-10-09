@@ -18,10 +18,12 @@
    B. VALUES (hard). Every club's Transfermarkt page in _values.json is that
       club's 26/27 squad page (its id from _membership.json, season 2026),
       every shipped player's value row cites it, every rating is the shared
-      curve's rating of his EUR value (scripts/lib/cmValueCurve.mjs), every
-      value is the curve's pounds at two decimals and above zero, and every
-      man with no value is at the floor and listed in CM_ALEAGUE_NO_VALUE
-      (and nobody else is). The count of no value men is printed.
+      curve's rating of his EUR value at his age (scripts/lib/cmValueCurve.mjs,
+      since Round 1102 the value curve plus points for age), every value is
+      the curve's pounds at two decimals and above zero, and every man with
+      no value is rated from the floor value at his age and listed in
+      CM_ALEAGUE_NO_VALUE (and nobody else is). The count of no value men is
+      printed, with how many of them sit exactly on the floor.
    C. NATIONALITY (hard). Every shipped nationality has at least two hosts in
       _people.json whose own reading is that nationality, every one has a
       flag, nationalityOf answers it for the modern world, and a man with no
@@ -115,7 +117,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { POS_MAP, ratingOf, gbpM, usdOfEur, FLOOR_USD, RATING_FLOOR } from './lib/cmValueCurve.mjs';
+import { POS_MAP, ratingOf, rateFrom, gbpM, usdOfEur, FLOOR_USD, RATING_FLOOR } from './lib/cmValueCurve.mjs';
 import { ENGINE_NAME, GROUP_OF, GROUP_DEFAULT, NATIONALITY_ALIAS } from './lib/aleagueClubs.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -264,6 +266,7 @@ function partValues(cm, membership, values) {
   const noValueListed = new Set(cm.al.CM_ALEAGUE_NO_VALUE);
   const noValueFound = new Set();
   let checked = 0;
+  let noValueOnFloor = 0;
   for (const c of membership.clubs) {
     const engine = ENGINE_NAME[c.slug];
     const vc = values.clubs.find(x => x.slug === c.slug);
@@ -280,10 +283,13 @@ function partValues(cm, membership, values) {
       if (has && !row.tmId) fail(`${p.n} has a value but no Transfermarkt id to tie it to the page`);
       const usd = has ? usdOfEur(row.valueEur) : FLOOR_USD;
       if (!has) noValueFound.add(`${p.n}|${engine}`);
-      if (p.r !== ratingOf(usd)) fail(`${p.n} (${engine}) is rated ${p.r}; the curve gives ${ratingOf(usd)} for ${has ? `EUR ${row.valueEur}` : 'no value (the floor)'}`);
+      if (p.r !== ratingOf(usd, p.a, p.p)) fail(`${p.n} (${engine}) is rated ${p.r}; the curve gives ${ratingOf(usd, p.a, p.p)} for ${has ? `EUR ${row.valueEur}` : 'no value (the floor)'} at ${p.a}`);
       if (p.v !== gbpM(usd, 2)) fail(`${p.n} (${engine}) is valued ${p.v}, the curve's pounds are ${gbpM(usd, 2)}`);
       if (!(p.v > 0)) fail(`${p.n} (${engine}) has a value at or below zero`);
-      if (!has && p.r !== RATING_FLOOR) fail(`${p.n} has no value and is not at the floor`);
+      /* Round 1102: a man with no value is still valued at the floor, and is then read with his age like
+         anybody else, so a veteran among them sits above 48. */
+      if (!has && p.r !== rateFrom(RATING_FLOOR, p.a, p.p)) fail(`${p.n} has no value and is not rated from the floor value at his age`);
+      if (!has && p.r === RATING_FLOOR) noValueOnFloor += 1;
       const group = readJson(`${c.slug}.json`).rows.find(r => r.name === p.n)?.group;
       if (group && GROUP_OF[p.p] !== group) fail(`${p.n} plays ${p.p}, outside his ledger group ${group}`);
       const mapped = POS_MAP[row.tmPosition];
@@ -293,7 +299,7 @@ function partValues(cm, membership, values) {
   }
   for (const k of noValueFound) if (!noValueListed.has(k)) fail(`${k} has no value and is missing from CM_ALEAGUE_NO_VALUE`);
   for (const k of noValueListed) if (!noValueFound.has(k)) fail(`${k} is listed with no value but has one`);
-  console.log(`   ${checked} players checked against ${values.clubs.length} club pages, ${noValueFound.size} with no value at the floor (rating ${RATING_FLOOR})`);
+  console.log(`   ${checked} players checked against ${values.clubs.length} club pages, ${noValueFound.size} with no value rated from the floor value at their age (${noValueOnFloor} of them exactly on the floor, ${RATING_FLOOR})`);
   /* The partial rule (Release AH, Round 1035 review F10): a club where more
      than half its LEDGER rows, the group-less ones held back included, have
      no value on its page. Read from the ledgers and the page, never from the

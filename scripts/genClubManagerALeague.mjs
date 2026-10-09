@@ -16,10 +16,11 @@
  *
  * Rules (the Round 1035 brief, section 1):
  * - Rating and value come from scripts/lib/cmValueCurve.mjs, the bake's own
- *   curve: EUR at the house rate to USD, USD to a 48 to 94 rating, USD to
+ *   curve: EUR at the house rate to USD, USD and the man's age to a 48 to
+ *   94 rating (Round 1102: the value curve plus points for age), USD to
  *   pounds. A player with no value on his club's page is NOT given one: he
- *   gets FLOOR_USD (the curve's floor, a positive value) and is listed in
- *   CM_ALEAGUE_NO_VALUE. Values are written to two decimals, because one
+ *   gets FLOOR_USD (the curve's floor, a positive value), is rated from it at
+ *   his age like anybody else, and is listed in CM_ALEAGUE_NO_VALUE. Values are written to two decimals, because one
  *   decimal rounds a $50k player to zero.
  * - Position: Transfermarkt's detailed position through the bake's map.
  *   Where it falls outside the ledger's two source group (or is generic, like
@@ -131,7 +132,7 @@ const out = renderGatheredFile({
   docs: {
     partial: `/** Clubs where more than half of the club's ledger rows (Round 1034's gathered squad, the rows with no position group included) have no market value. */`,
     noValue: `/** Players with no value on their club's page, as "name|club": each one is
- *  rated at the curve's floor, never given an invented value. */`,
+ *  rated from the curve's floor value at his age, never given an invented value. */`,
     supersedes: `/** Men the baked file still carries at an older club, by name: the join
  *  drops each from that club (proof in the generator's SUPERSEDES). */`,
     nationalities: `/** Nationality where two hosts agree (_people.json); a name missing here is

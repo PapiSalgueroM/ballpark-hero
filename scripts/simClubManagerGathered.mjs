@@ -27,9 +27,10 @@
       second way that does not go through its row parser, and that script
       stops on a row it cannot read.)
    B. VALUES (hard). Every rating is the shared curve's rating of the row's
-      EUR value, every value is the curve's pounds at two decimals and above
-      zero, every man with no value is at the floor and in the NO_VALUE
-      export, and nobody else is.
+      EUR value at the row's age (since Round 1102 the value curve plus points
+      for age), every value is the curve's pounds at two decimals and above
+      zero, every man with no value is rated from the floor value and in the
+      NO_VALUE export, and nobody else is.
    C. PEOPLE (hard, the data guardian's smell list). Every age is on two
       hosts and between 15 and 45. Every shipped nationality has two hosts,
       has a FlagImg code and is what nationalityOf answers; a null answers
@@ -328,7 +329,7 @@ for (const L of leagues) {
     const has = Number.isFinite(r.valueEur) && r.valueEur > 0;
     const usd = has ? usdOfEur(r.valueEur) : FLOOR_USD;
     if (!has) wantNoValue.push(`${r.name}|${c.engine}`);
-    if (p.r !== ratingOf(usd)) fail(`${r.name} (${c.engine}) is rated ${p.r}, the curve says ${ratingOf(usd)}`);
+    if (p.r !== ratingOf(usd, p.a, p.p)) fail(`${r.name} (${c.engine}) is rated ${p.r}, the curve says ${ratingOf(usd, p.a, p.p)} at ${p.a}`);
     if (p.v !== gbpM(usd, 2) || !(p.v > 0)) fail(`${r.name} (${c.engine}) is valued ${p.v}, the curve says ${gbpM(usd, 2)}`);
   }
   if (JSON.stringify([...gen.noValue].sort()) !== JSON.stringify(wantNoValue.sort())) fail(`${row.id}: the NO_VALUE export is not exactly the men with no value (${gen.noValue.length} listed, ${wantNoValue.length} expected)`);
