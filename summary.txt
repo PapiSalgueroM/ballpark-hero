@@ -1,0 +1,1 @@
+simBracketMoment exit=0 33s | ALL BRACKET MOMENT CHECKS PASSED
