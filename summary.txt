@@ -1,0 +1,17 @@
+tsc exit=0 81s | 
+sense-full exit=0 136s | simNbaAwardsSense: 143 checks, 0 failed (full size), 136s
+c-snubhonoured exit=1 136s | simNbaAwardsSense: 140 checks, 1 failed (full size, control snubhonoured), 136s
+simUsBoardParity exit=0 55s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+sc-seedset0 exit=0 7s | simUsSeasonCentre: 89 checks, 0 failed
+sc-seedset1 exit=0 6s | simUsSeasonCentre: 91 checks, 0 failed
+sc-seedset2 exit=0 8s | simUsSeasonCentre: 91 checks, 0 failed
+sc-seedset3 exit=0 6s | simUsSeasonCentre: 89 checks, 0 failed
+simUsSeasonCentre exit=0 30s | simUsSeasonCentre: 98 checks, 0 failed
+sc-seedset4 exit=0 7s | simUsSeasonCentre: 89 checks, 0 failed
+sc-short82 exit=1 27s | simUsSeasonCentre: 98 checks, 1 failed (control short82)
+simUsCoachPoaching exit=0 3s | Coach poaching: CRLF anchors/raw bytes held, owned copies cleaned; fictional pure-engine fixtures do not prove UI gameplay or sports history.
+simGuideHeadings exit=0 0s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simSiteSearch exit=0 3s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simUsCareerDeckC exit=0 78s | simUsCareerDeckC: all checks passed
+vitest-own exit=0 63s |    Duration  61.80s (transform 3.89s, setup 798ms, collect 8.17s, tests 58.67s, environment 4.86s, prepare 1.30s)
+vitest-all exit=0 481s |    Duration  480.83s (transform 32.88s, setup 21.61s, collect 139.62s, tests 1018.23s, environment 157.52s, prepare 32.12s)
