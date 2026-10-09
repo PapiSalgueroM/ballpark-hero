@@ -1,0 +1,11 @@
+
+1) uclPlacesIn agrees with EURO_SLOTS, and a non-European league has none
+   35 leagues agree with the table, non-European leagues get 0
+2) The boundary is real per league: the last place in earns it, one below does not
+   15 leagues, each earning at its own last place and not one below
+3) A one-slot league sends its champion and nobody else
+   8 single-slot leagues, champion only
+4) No source line still decides a European place with a hardcoded number
+   all four call sites read the table
+
+simUclPlaces: all green
