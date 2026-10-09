@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simCareerStory: node scripts/simCareerStory.mjs
+simCareerStory-worldmoves: CAREER_STORY_CONTROL=worldmoves node scripts/simCareerStory.mjs
+simCareerStory-cuptwice: CAREER_STORY_CONTROL=cuptwice node scripts/simCareerStory.mjs
+careerStoryTest: node_modules/.bin/vitest run src/test/careerStory.test.tsx --testTimeout=300000 --hookTimeout=120000

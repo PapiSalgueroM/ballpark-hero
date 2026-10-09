@@ -1,0 +1,7 @@
+simNoRivalNames exit=0 20s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 48s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simCareerStory exit=0 30s | simCareerStory: GREEN, 96 careers keep every season's lines in order, draw nothing and stay inside the size bands
+simCareerStory-worldmoves exit=0 30s | simCareerStory control worldmoves: fired, check parts failed as it must (failed: parts)
+simCareerStory-cuptwice exit=0 31s | simCareerStory control cuptwice: fired, check parts failed as it must (failed: parts)
+tsc exit=0 86s | 
+careerStoryTest exit=0 9s |    Duration  8.20s (transform 2.55s, setup 92ms, collect 3.61s, tests 3.42s, environment 490ms, prepare 160ms)
