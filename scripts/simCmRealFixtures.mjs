@@ -298,7 +298,7 @@ async function main() {
         assert.equal(count, 760);
       },
       settlement() {
-        const pre = seeded(4107, () => cm.startCareer('Everton')), before = clone(pre);
+        const pre = seeded(4107, () => cm.startCareer('Everton')), before = structuredClone(pre), inputBytes = JSON.stringify(pre);
         const run = seeded(4200, () => cm.playNextEntry(pre, { skipHalftime: true }));
         assert.equal(run.kind, 'match'); assert.equal(run.report.home, 'Everton'); assert.equal(run.report.away, 'Crystal Palace');
         const rows = resultRows(run.report); assertRound(rows, rounds[0], 'first actual Quick Sim');
@@ -307,7 +307,8 @@ async function main() {
         const goals = rows.filter(r => r.home !== pre.clubName && r.away !== pre.clubName).reduce((s, r) => s + r.hg + r.ag, 0);
         const raceBefore = pre.scorerRace.reduce((s, p) => s + p.goals, 0), raceAfter = run.state.scorerRace.reduce((s, p) => s + p.goals, 0);
         assert.ok(raceAfter > raceBefore && raceAfter - raceBefore <= goals, 'Neutral scored goals actually feed bounded golden boot credits');
-        assert.deepEqual(pre, before, 'Playing never changes the input save'); fullSeason();
+        assert.deepEqual(pre, before, 'Playing never changes any raw input field, including explicit undefined properties');
+        assert.equal(JSON.stringify(pre), inputBytes, 'Playing also preserves every serialized input-save byte'); fullSeason();
       },
       bye() {
         const state = seeded(4107, () => cm.startCareer('Everton'));

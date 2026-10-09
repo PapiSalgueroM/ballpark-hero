@@ -54,6 +54,16 @@ The real fixture reads reached all 760 checks. Later assertions incorrectly read
 
 These corrections affect verification scripts only. Remote validation of the corrected source is still required.
 
+## Second remote run
+
+Run `37958406252` on source `0cb43f22d69675815f5d93329131d4bee1b6642d` passed the app types and production build. Its retained early artifact is `11630951132`, SHA256 `940c6c81e8792802c2890e4544b7befd042bcd0fbc3a6c32d15115ada8087465`. This remains diagnostic evidence, not acceptance.
+
+The normal proof reached all 760 fixture readings, 760 calendar readings and all 380 settled matches. Its one remaining assertion compared an untouched raw save with a JSON clone that had discarded existing own properties holding `undefined`. The revised in-memory immutability snapshot uses `structuredClone`, retaining full field equality and adding exact serialized-byte equality. All nine copied fault processes already met their exact expected failure/pass sets.
+
+Both later-season browser journeys passed complete oracle settlement and saved-world initialization. The real journeys stopped at a comparison of the official article's within-round publication order. An independent JSON audit confirmed zero round/home/away tuple differences across all 38 rounds; 25 official rounds differ only in publication order, while the product's pair order matches the independent source. The revised comparison retains all 38 round bindings and normalizes directed tuple order only within each round. Legacy journeys remain required because the stopped real journey had not produced their input.
+
+No product source changed for these proof corrections. A fresh exact-head remote run is still required.
+
 ## Validation still required
 
 Remote types/build, focused outcomes, effective copied defects, unchanged old-save/future/custom baselines, existing fixture and world harnesses, native phone/desktop journeys, and output-reader gates are pending. Authored proof includes 11 real fixture outcome groups, all 760 player fixture readings, all 760 calendar readings, a full 380-match simulated campaign and nine copied outcome controls. The independent old/generated comparison uses the pre-change engine and calendar card, with whole-save and random-draw equality across three seeds and current, historical, edited and custom contexts. The balance harness retains its three original controls and adds five controls for natural version binding, fallback flag/count and engine/calendar resolver bypasses. These counts describe the required remote proof, not passing results.

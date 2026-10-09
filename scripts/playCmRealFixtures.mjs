@@ -28,6 +28,7 @@ const receipt = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/clubMan
 assert.equal(receipt.ledgerKey, FIXTURE_KEY);
 const sourcedRounds = Array.from({ length: 38 }, (_, round) => [...new Map(receipt.sources.find(s => s.role === 'official').rows.filter(r => r.round === round + 1).map(r => [`${r.home}|${r.away}`, [r.home, r.away]])).values()]);
 assert(sourcedRounds.every(round => round.length === 10), 'Independent source contains all 380 directed fixtures');
+const withinRoundPairs = rounds => rounds.map(round => round.map(pair => JSON.stringify(pair)).sort());
 const realPairs = sourcedRounds[0];
 assert.equal(realPairs.length, 10, 'Independent source contains all ten real opening pairings');
 const evertonPair = realPairs.find(pair => pair.includes('Everton')); assert(evertonPair);
@@ -178,7 +179,7 @@ async function journey(profile, kind, fixture) {
     await page.waitForFunction(trigger => document.activeElement === trigger, await helpTrigger.elementHandle(), { timeout: 2000 });
     assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'Calendar and help fit the viewport');
     const firstReload = kind === 'real' ? await expectedReload(before) : null;
-    if (firstReload) { assert.equal(firstReload.state.realLeagueFixtures, FIXTURE_KEY); assert.deepEqual(firstReload.pairs, sourcedRounds, 'First-load repairs keep all 38 sourced pairings and venues'); }
+    if (firstReload) { assert.equal(firstReload.state.realLeagueFixtures, FIXTURE_KEY); assert.deepEqual(withinRoundPairs(firstReload.pairs), withinRoundPairs(sourcedRounds), 'First-load repairs keep all 38 sourced pairings and venues'); }
     await page.reload({ waitUntil: 'domcontentloaded' });
     await activate(page.locator('[data-testid="cm-slot-1"]').getByRole('button', { name: 'Resume Career', exact: true }));
     await page.locator('[data-cm-way="quick"]').waitFor();
