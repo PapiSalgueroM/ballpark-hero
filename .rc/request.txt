@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk5: RV_ONLY=E-K,E-ANY node .rc/x/rv-walk.mjs
