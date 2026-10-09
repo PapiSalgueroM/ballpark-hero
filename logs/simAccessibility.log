@@ -1,0 +1,17 @@
+1) the skip link has somewhere to land
+   GameShell plus 9 standalone pages carry the target
+2) every connect board is buttons, labeled with its clues
+   5 boards checked, all labeled buttons
+3) results are announced and feedback is spoken, not only painted
+   ResultScreen announces, the emoji grid is hidden, GameBoard speaks its verdicts
+4) reduced motion covers the loops
+   the infinite loops calm down under reduce motion
+5) the ticker is a named landmark that can hold still
+   section landmark, pauses under pointer or focus
+6) the statement page exists, is linked, and is in the sitemap
+   page, route, footer link, sitemap entry and contact all present
+7) the hand rolled dialogs behave, the banner takes focus, the ticker can be paused
+   12 dialogs across 9 files, the banner announces and focuses, the pause button stands
+   teeth: comment stripped sources, clone lists pinned by file, the statement held to its own claims
+
+simAccessibility: all green
