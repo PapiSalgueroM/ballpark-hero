@@ -8,8 +8,8 @@
    derived from the saved line by src/lib/season (the core, the US binding
    and the sport's number file, which this file loads through the board's
    own descriptor, so no sport is imported here). A season it cannot lay out
-   game by game, or a year whose real length is not the one this career
-   plays, gets one honest tile instead of a guess. Its own error boundary
+   game by game, or a year whose real length is not the one the view is
+   built for, gets one honest tile instead of a guess. Its own error boundary
    keeps a render error inside the overlay; the host wraps the lazy mount in
    a second one, because a boundary inside this chunk cannot catch the chunk
    failing to load. */
@@ -52,12 +52,13 @@ export function buildUsModel(sport: UsCareerSport, bind: UsSeasonBind, career: U
   const review = sport.reviewStats(row, pos);
   const title = bind.results.length > 0 && row.teamResult === bind.results[bind.results.length - 1];
   const path = usPlayoffPath(bind, row, ctx, key);
-  const post = review.postseason.filter(x => x.value !== 'Not recorded').map(x => `${x.value} ${x.label.toLowerCase()}`);
-  const notes: string[] = [];
-  if (path) {
-    notes.push(`Playoffs: ${path.steps.map(st => `${st.round}, ${pathStepText(st, view.words.unnamed)}`).join(' · ')}`);
-    if (post.length) notes.push(`Your playoffs: ${post.join(', ')}`);
-  }
+  /* Round 1147: the NFL saves its playoff line as a sentence ("512 yds, 4 TD, 1 INT"), printed as it is, and one game is "1 game" */
+  const post = review.postseason.filter(x => x.value !== 'Not recorded')
+    .map(x => (x.label === 'Performance' ? x.value : x.label === 'Games' && x.value === '1' ? '1 game' : `${x.value} ${x.label.toLowerCase()}`));
+  /* the scoreboard and the phone's game log read the game's own ids in a named season */
+  const idOf = new Map<string, string>();
+  if (named) ctx.order.forEach((id, slot) => idOf.set(s.labels[slot]?.name ?? id, id));
+  const range = (n: number) => Array.from({ length: n }, (_, i) => i + 1);
   return {
     season: s,
     words: view.words,
@@ -66,27 +67,43 @@ export function buildUsModel(sport: UsCareerSport, bind: UsSeasonBind, career: U
     header: { club: ctx.teamLabel, seasonLabel: bind.seasonLabel(row.year), league: bind.league, loanFrom: null },
     frameLine: `${s.games.length} games · ${homes} home, ${s.games.length - homes} away · ${named ? "the league's schedule formula, this career's own draw" : "this career's own draw"}`,
     lastSeason: prev ? `Last season: ${prev.teamResult === 'SUSPENDED' ? 'suspended' : prev.teamResult}` : null,
-    resultsWhy: named ? null : "Opponents are not named this season: the game's team list is not that season's real league.",
+    resultsWhy: named ? null : "Opponents are not named this season: the game does not hold that season's divisions and schedule.",
     derbyBefore: { w: 0, d: 0, l: 0 },
     review: {
       tiles: [['Games', String(row.games)], ...review.regular.slice(0, 3).map((x): [string, string] => [view.tileLabels[x.label] ?? x.label, x.value])],
       finishLine: `${record} · ${row.teamResult}`,
       championLine: null,
-      trophies: [...(title ? [`🏆 ${bind.league} champions`] : []), ...(Array.isArray(row.awards) ? row.awards : [])],
+      /* no trophy emoji here: the title card draws its own */
+      trophies: [...(title ? [`${bind.league} champions`] : []), ...(Array.isArray(row.awards) ? row.awards : [])],
       title,
-      notes,
+      notes: [],
+      path: path ? {
+        head: 'Playoffs',
+        steps: path.steps.map(st => ({ label: st.round, text: pathStepText(st, view.words.unnamed), won: st.won })),
+        line: post.length ? `Your playoffs: ${post.join(', ')}` : null,
+      } : undefined,
     },
     sport: {
-      clock: { length: view.clock.length, label: view.clock.label, words: (e, us, them) => view.eventWords(e, us, them, pos) },
+      clock: {
+        length: view.clock.length, label: view.clock.label, words: (e, us, them) => view.eventWords(e, us, them, pos),
+        start: view.clock.start, end: view.clock.end, endShort: view.clock.endShort, labelClass: view.clock.labelClass,
+        short: named ? name => idOf.get(name) ?? name : undefined,
+      },
       fixed: { badge: '', poster: '', recordSoFar: '', recordPlayed: '' },
       missed: view.missed,
       lineOf: g => ({ bits: view.lineOf(g, pos), alarm: null }),
       markOf: g => view.markOf(g, pos),
+      markChip: g => view.markChip(g, pos),
+      markText: g => view.markText(g, pos),
       soFar: so => view.soFar(so, pos),
       half: so => view.half(so, pos),
       bucket: () => '',
     },
-    help: view.help(named),
+    copy: view.copy,
+    helpKey: `seasonCentre:help:${bind.slug}`,
+    groups: named ? [{ label: 'Division', slots: range(ctx.divSlots) }, { label: 'Conference', slots: range(ctx.confSlots) }] : undefined,
+    /* the worked example names a team of THIS season that is not his (his first division rival), or nobody */
+    help: view.help(named, named ? ctx.names[1] : undefined),
     momentKey: `centre|${key}`,
   };
 }
@@ -130,7 +147,10 @@ function CentreBody({ sport, career, row, onClose }: UsSeasonCentreProps) {
   if (!bind || !built) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-background p-4" data-season-centre-loading>
-        <div role="status" className="rounded-2xl border border-border bg-card px-4 py-3 text-sm font-semibold">📺 Getting your season ready...</div>
+        <div className="space-y-3 rounded-2xl border border-border bg-card px-4 py-3 text-center">
+          <div role="status" className="text-sm font-semibold">📺 Getting your season ready...</div>
+          <button type="button" onClick={onClose} className="h-11 w-full rounded-lg border border-border px-3 text-xs font-semibold">{EXIT}</button>
+        </div>
       </div>
     );
   }

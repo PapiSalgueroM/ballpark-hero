@@ -17,6 +17,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { useFaceOff } from '@/hooks/useFaceOff';
+import { formatNumber } from '@/lib/formatNumber';
 import {
   RIVALS, ROUNDS, SHOT_CLOCK, BASE_POINTS, PER_SECOND, MAX_RATIO, MAX_EXTRA, DAILY_DIFFICULTY,
   rivalFor, fmtValue, shareText, type Difficulty,
@@ -280,13 +281,13 @@ const FaceOff = () => {
           <div className="max-w-md mx-auto">
             <ResultScreen
               won={g.outcome === 'draw' || versus ? undefined : g.outcome === 'win'}
-              score={`${g.totals.you} to ${g.totals.rival}`}
+              score={`${formatNumber(g.totals.you)} to ${formatNumber(g.totals.rival)}`}
               scoreLabel={versus ? 'points, Player 1 to Player 2' : `points, you to ${rival.label}`}
               outcomeEmoji={g.outcome === 'win' ? (versus ? '🟢' : '🏆') : g.outcome === 'loss' ? otherEmoji : '🤝'}
               headline={versus
                 ? (g.outcome === 'win' ? 'Player 1 wins it' : g.outcome === 'loss' ? 'Player 2 wins it' : 'All square')
                 : (g.outcome === 'win' ? `You beat ${rival.label}` : g.outcome === 'loss' ? `${rival.label} wins it` : 'All square')}
-              statLine={<span className="tabular-nums">{g.totals.you} to {g.totals.rival}, {g.totals.youRounds} rounds to {g.totals.rivalRounds}</span>}
+              statLine={<span className="tabular-nums">{formatNumber(g.totals.you)} to {formatNumber(g.totals.rival)}, {g.totals.youRounds} rounds to {g.totals.rivalRounds}</span>}
               statRow={versus ? [
                 { label: 'P1 right', value: `${g.results.filter(r => r.youCorrect).length}/${g.results.length}` },
                 { label: 'P2 right', value: `${g.results.filter(r => r.rivalCorrect).length}/${g.results.length}` },
@@ -297,8 +298,8 @@ const FaceOff = () => {
                 { label: 'streak', value: g.save.streak },
               ]}
               emojiGrid={versus
-                ? `⚡ Face Off, two players: ${g.totals.you} to ${g.totals.rival}\n🟢 ${g.results.map(r => (r.pick === null ? '⏱️' : r.youCorrect ? '✅' : '❌')).join('')}\n🔵 ${g.results.map(r => (r.rivalPick === null ? '⏱️' : r.rivalCorrect ? '✅' : '❌')).join('')}`
-                : `⚡ Face Off v ${rival.label}: ${g.totals.you} to ${g.totals.rival}\n${g.results.map(r => (r.pick === null ? '⏱️' : r.youCorrect ? '✅' : '❌')).join('')}`}
+                ? `⚡ Face Off, two players: ${formatNumber(g.totals.you)} to ${formatNumber(g.totals.rival)}\n🟢 ${g.results.map(r => (r.pick === null ? '⏱️' : r.youCorrect ? '✅' : '❌')).join('')}\n🔵 ${g.results.map(r => (r.rivalPick === null ? '⏱️' : r.rivalCorrect ? '✅' : '❌')).join('')}`
+                : `⚡ Face Off v ${rival.label}: ${formatNumber(g.totals.you)} to ${formatNumber(g.totals.rival)}\n${g.results.map(r => (r.pick === null ? '⏱️' : r.youCorrect ? '✅' : '❌')).join('')}`}
               share={{
                 score: versus ? `a two player Face Off, ${g.totals.you} to ${g.totals.rival}` : `${g.totals.you} to ${g.totals.rival} against ${rival.label} on Face Off`,
                 gameName: 'Face Off',

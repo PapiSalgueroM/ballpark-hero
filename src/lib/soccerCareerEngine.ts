@@ -142,12 +142,15 @@ import { applyAcademyFocus } from "./soccerCareerAcademy";
    nothing, so this is a one way edge too. */
 import { readSeasonMoments, type SeasonMomentsSave } from "./season/momentsSave";
 import {
-  runInternationalSummer, tournamentForYear, offYearCaps, toHistoryEntry,
-  nationStrength as intlNationStrength, confederationOf, pickSquad,
+  tournamentForYear, offYearCaps, toHistoryEntry,
+  nationStrength as intlNationStrength, confederationOf,
 } from "./soccerInternational";
 import type {
   IntlTournament, IntlHistoryEntry, PlayerForm,
 } from "./soccerInternational";
+/* Round 1042: the squad picker and the national team pools it reads live in their own file, so
+   only this game downloads them. */
+import { pickSquad, runInternationalSummer } from "./soccerInternationalSquads";
 
 export type {
   IntlTournament, IntlHistoryEntry, IntlTie, IntlTableRow, IntlMatch,

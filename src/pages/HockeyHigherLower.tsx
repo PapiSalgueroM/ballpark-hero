@@ -13,6 +13,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { HelpCircle, ArrowUp, Flame } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { HockeyHLHowToPlay } from '@/components/hockey-hl/HockeyHLHowToPlay';
+import { safeSetItem } from '@/lib/safeStorage';
 
 const HockeyHigherLower = () => {
   const {
@@ -26,7 +27,7 @@ const HockeyHigherLower = () => {
 
   useEffect(() => {
     const seen = localStorage.getItem('hkhl-rules-seen');
-    if (!seen) { setShowRules(true); localStorage.setItem('hkhl-rules-seen', '1'); }
+    if (!seen) { setShowRules(true); safeSetItem('hkhl-rules-seen', '1'); }
   }, []);
 
   return (

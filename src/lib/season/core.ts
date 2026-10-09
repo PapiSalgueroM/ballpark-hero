@@ -81,9 +81,14 @@ export interface Availability {
 /** `teamFor`: each unit of this stat is also his club's score, so the club
  *  never scores less than his line in a game; `teamPoints` is what one unit
  *  puts on the board (1 when absent: a soccer goal or assist; 3 for a made
- *  field goal, 6 for a touchdown). */
+ *  field goal, 6 for a touchdown). `formPower` (Round 1147, absent: 1): how
+ *  much of his game to game form this stat follows. The form runs about six
+ *  to one between his best game and his worst, which suits a stat that
+ *  comes in ones (goals); a stat counted in tens a season piles up on its
+ *  cap under it, so a number file may ask for less (0.5 is the square root
+ *  of the form: about two and a half to one). */
 export type StatTotal =
-  | { key: string; kind: 'sum'; total: number; perGameCap: number; teamFor?: boolean; teamPoints?: number; noBucket?: boolean; suspends?: boolean; distinct?: string }
+  | { key: string; kind: 'sum'; total: number; perGameCap: number; teamFor?: boolean; teamPoints?: number; noBucket?: boolean; suspends?: boolean; distinct?: string; formPower?: number }
   | { key: string; kind: 'mean'; mean: number; dp: 0 | 1; perGame: 'int' | 0.1; min: number; max: number }
   | { key: string; kind: 'count-of'; total: number; when: 'shutout' }
   | { key: string; kind: 'max'; max: number };
@@ -131,8 +136,11 @@ export interface SeasonSport<Row, Ctx> {
    *  numbers of the same game (yards off catches, a kicker's field goals off
    *  his team's score) and the timed events that need them. It may add keys
    *  to a played game's line and set `events`; it must leave scores, `played`,
-   *  `why` and every key the core's totals own alone. false: the row cannot
-   *  be laid out. Absent: nothing happens (soccer). A sport that has both
+   *  `why` and every key the core's totals own alone. (Round 1147: it may
+   *  have two games he played exchange their whole lines, which keeps every
+   *  total and every cap; `disagreements` still holds his floor on the result.
+   *  The NFL does, so his touchdown days go with his team's big days.) false: the
+   *  row cannot be laid out. Absent: nothing happens (soccer). A sport that has both
    *  this and playable moments must run its finish again after a decision is
    *  applied (Round 1049's job; no sport has both yet). */
   finish?(games: DerivedGame[], row: Row, ctx: Ctx, rng: Rng): boolean;
@@ -201,7 +209,7 @@ export interface GameContext {
 /** A sport's event: the kind is the sport's own word ("goal", "touchdown");
  *  `pts` is what it put on the board, so a clock can show the score true at
  *  any minute without knowing the sport. */
-export interface SeasonEvent { min: number; kind: string; side: 'us' | 'them'; mine?: boolean; pts?: number }
+export interface SeasonEvent { min: number; kind: string; side: 'us' | 'them'; mine?: boolean; pts?: number; ownGoalBy?: 'you' | 'teammate' | 'opponent' }
 
 export interface DerivedGame {
   /** League round, 1 based. */
@@ -469,7 +477,7 @@ function allocate(p: Placed, av: Avail, totals: StatTotal[], bucketApps: number,
           if (!av.played[i] || owns(i) || lines[i][t.key] >= t.perGameCap) return 0;
           const f = p.fixedAt[i];
           if (t.teamFor && f && teamSum(i) + (t.teamPoints ?? 1) > f.us) return 0;
-          return form[i];
+          return t.formPower === undefined ? form[i] : form[i] ** t.formPower;
         });
         const bucketRoom = !t.noBucket && bucket[t.key] < t.perGameCap * bucketApps;
         w.push(bucketRoom ? bucketApps * 0.9 : 0);

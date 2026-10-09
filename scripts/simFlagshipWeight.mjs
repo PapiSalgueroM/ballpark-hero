@@ -28,59 +28,23 @@
  *
  * Run: node scripts/simFlagshipWeight.mjs
  */
-import { readdirSync, readFileSync, existsSync, statSync } from 'node:fs';
+import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { gzipSync } from 'node:zlib';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { staticClosure as libStaticClosure } from './lib/staticClosure.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
 /* ── the source side: what does a route pull in before it can render? ──── */
-/* `import type` is erased by the compiler and costs nothing at runtime, so it
-   must NOT be counted. Getting that wrong reports src/integrations/supabase/
-   types.ts, 272 KB, as shipping on every page of the site, which it does not.
-   Dynamic imports are excluded for the same reason: that is the whole point. */
-const STATIC_IMPORT = /(?:^|\n)\s*import\s+(?!type\s)(?:[^'"]*?\sfrom\s+)?['"]([^'"]+)['"]/g;
-const DYNAMIC_IMPORT = /import\s*\(\s*['"]([^'"]+)['"]/g;
-
-function resolveSpec(spec, importer) {
-  let base;
-  if (spec.startsWith('@/')) base = path.join(ROOT, 'src', spec.slice(2));
-  else if (spec.startsWith('.')) base = path.resolve(path.dirname(importer), spec);
-  else return null;
-  for (const ext of ['.ts', '.tsx', '.js', '.jsx', '']) {
-    const c = base + ext;
-    try { if (statSync(c).isFile()) return c; } catch { /* not there */ }
-  }
-  for (const ext of ['.ts', '.tsx']) {
-    const i = path.join(base, 'index' + ext);
-    if (existsSync(i)) return i;
-  }
-  return null;
-}
-
-function staticClosure(entryRel, override = {}) {
-  const entry = path.join(ROOT, entryRel);
-  const seen = new Set([entry]);
-  const queue = [entry];
-  while (queue.length) {
-    const cur = queue.pop();
-    let t;
-    try { t = override[cur] ?? readFileSync(cur, 'utf8'); } catch { continue; }
-    const dyn = new Set();
-    DYNAMIC_IMPORT.lastIndex = 0;
-    for (let m; (m = DYNAMIC_IMPORT.exec(t)) !== null;) dyn.add(m[1]);
-    STATIC_IMPORT.lastIndex = 0;
-    for (let m; (m = STATIC_IMPORT.exec(t)) !== null;) {
-      if (dyn.has(m[1])) continue;
-      const r = resolveSpec(m[1], cur);
-      if (r && !seen.has(r)) { seen.add(r); queue.push(r); }
-    }
-  }
-  return new Set([...seen].map(f => path.relative(ROOT, f).replaceAll('\\', '/')));
-}
+/* Round 1042: the walker itself lives in scripts/lib/staticClosure.mjs, shared with
+   scripts/simCmDataOnDemand.mjs (one walker, not two that drift). It reads the code with its
+   comments gone and counts `export ... from` as an edge; `import type` and import() are still
+   not followed, for the reasons its header gives. This file keeps a two argument function of
+   the same name so every call below reads as it always did. */
+const staticClosure = (entryRel, override = {}) => libStaticClosure(ROOT, entryRel, override);
 
 console.log('1) the flagship carries no other game');
 const flagship = staticClosure('src/pages/SoccerCareer.tsx');
@@ -113,17 +77,33 @@ console.log(`   ${flagship.size} modules, ${(srcBytes / 1024).toFixed(0)} KB of 
    static import and must go red. One file of src/lib/season is allowed in
    the first download: momentsSave.ts, the save's own ledger reader, which
    the engine's repair line calls. It must import nothing, and that is
-   checked here with comments stripped. */
+   checked here with comments stripped.
+
+   Round 1046: the sliding table (src/lib/motion, src/components/motion),
+   the shared pitch part and the Resume chip are the Season Centre's and
+   joined the lazy list. The chip is asked for with a plain import() only
+   when this browser keeps a place (one storage read on the page), so the
+   record's reader, src/lib/season/resume.ts, stays out of the first
+   download with the rest of src/lib/season. The imports nothing check on
+   the one eager season file gained a control of its own:
+   FLAGSHIP_LAZY_CONTROL=eagerimport hands it that file with one import
+   line added (in memory) and must go red. */
 console.log('1b) the Season Centre and the training ground are not in the first download');
 const MUST_BE_LAZY = [
   'src/lib/season/', 'src/components/season-centre/', 'src/components/soccer-career/SoccerSeasonCentre.tsx', 'src/data/leagueFormat.ts',
   'src/components/soccer-career/TrainingPanel.tsx', 'src/components/soccer-career/DrillBoard.tsx', 'src/components/soccer-career/ThroughBallBoard.tsx',
   'src/components/soccer-career/FirstTouchBoard.tsx', 'src/components/soccer-career/SoccerMomentBoard.tsx', 'src/components/soccer-career/useSoccerMoments.tsx',
+  'src/lib/motion/', 'src/components/motion/', 'src/components/pitch-motion/', 'src/components/soccer-career/SeasonResumeChip.tsx',
 ];
 const MAY_BE_EAGER = ['src/lib/season/momentsSave.ts'];
-{
-  const ledger = readFileSync(path.join(ROOT, MAY_BE_EAGER[0]), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
-  if (/^\s*import\s/m.test(ledger) || /\bimport\(/.test(ledger) || /\brequire\(/.test(ledger)) fail(`${MAY_BE_EAGER[0]} imports something: it is the one season file in the first download and must import nothing`);
+for (const rel of MAY_BE_EAGER) {
+  let text = readFileSync(path.join(ROOT, rel), 'utf8');
+  if (process.env.FLAGSHIP_LAZY_CONTROL === 'eagerimport') {
+    text = `import { SOCCER } from './soccer';\n${text}`;
+    console.log(`   CONTROL eagerimport: ${rel} read with one import line added`);
+  }
+  const code = text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
+  if (/^\s*import\s/m.test(code) || /\bimport\(/.test(code) || /\brequire\(/.test(code)) fail(`${rel} imports something: it is a season file in the first download and must import nothing`);
 }
 let lazyClosure = flagship;
 if (process.env.FLAGSHIP_LAZY_CONTROL === 'static') {
@@ -146,6 +126,7 @@ const eager = [...lazyClosure].filter(f => !MAY_BE_EAGER.includes(f) && MUST_BE_
 if (eager.length) fail(`/soccer-career statically imports the Season Centre or the training ground (${eager.join(', ')}), so every player downloads it before the first screen`);
 const pageSrc = readFileSync(path.join(ROOT, 'src/pages/SoccerCareer.tsx'), 'utf8');
 if (!pageSrc.includes('lazy(() => import("@/components/soccer-career/SoccerSeasonCentre"))')) fail('SoccerCareer.tsx no longer loads SoccerSeasonCentre with lazy(), so nothing opens the Season Centre');
+if (!pageSrc.includes('import("@/components/soccer-career/SeasonResumeChip")')) fail('SoccerCareer.tsx no longer asks for SeasonResumeChip with import(), so nothing shows the Resume chip');
 if (!pageSrc.includes('lazy(() => import("@/components/soccer-career/TrainingPanel"))')) fail('SoccerCareer.tsx no longer loads TrainingPanel with lazy(), so nothing opens the training ground');
 console.log(`   ${MUST_BE_LAZY.length} paths that must stay lazy, ${eager.length} in the static closure`);
 

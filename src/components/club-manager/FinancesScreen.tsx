@@ -113,6 +113,7 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
           {TICKET_TIERS.map((tt, i) => (
             <button
               key={tt.label}
+              aria-pressed={ticketTier === i}
               onClick={() => onTickets(i as 0 | 1 | 2)}
               className={cn(
                 'rounded-lg border p-1.5 text-left transition-colors',
@@ -129,6 +130,7 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
           {CONCESSION_TIERS.map((ct, i) => (
             <button
               key={ct.label}
+              aria-pressed={books.concessionTier === i}
               onClick={() => onConcessions(i as ConcessionTier)}
               className={cn(
                 'rounded-lg border p-1.5 text-left transition-colors',

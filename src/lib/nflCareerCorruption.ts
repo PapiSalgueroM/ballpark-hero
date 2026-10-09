@@ -462,7 +462,7 @@ export function getNflCorruptionEvents(c: CareerState, rng: () => number): Caree
       body: 'A team doctor has been writing you whatever gets you on the field, in quantities that are not on any chart. He says everyone at your position does it. He is mostly right, and that is the problem.',
       options: [
         { label: 'Keep the routine going', effect: 'Play through anything, health falls',
-          apply: (cc) => { setFlag(cc, 'painkillers', 1); cc.health = clamp(cc.health - 12, 0, 100); cc.ovr = Math.min(99, cc.ovr + 1); heatUp(cc, 8); return 'You played seventeen games on a body that should have played nine. Rating +1, health -12.'; } },
+          apply: (cc) => { setFlag(cc, 'painkillers', 1); cc.health = clamp(cc.health - 12, 0, 100); cc.ovr = Math.min(99, cc.ovr + 1); heatUp(cc, 8); return 'You played every game on a body that should have played half of them. Rating +1, health -12.'; } },
         { label: 'Ask for a second opinion and taper off', effect: 'Miss games, protect the rest of your life',
           apply: (cc) => { setFlag(cc, 'painkillers', -1); cc.health = clamp(cc.health + 10, 0, 100); cc.morale = clamp(cc.morale + 8, 0, 100); return 'You got a real doctor, tapered off, and missed four games. Health +10 and a retirement you will actually be able to enjoy.'; } },
       ],

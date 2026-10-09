@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const test = 'src/lib/frontOfficeRatings.test.ts';
 const model = 'scripts/lib/nflFoRatingModel.mjs', generator = 'scripts/genFrontOfficeRoster.mjs', engine = 'src/lib/frontOffice.ts';
-const files = [test, model, generator, engine, 'src/data/frontOfficeDepth.ts', 'src/data/frontOfficePlayers.ts', 'src/lib/frontOfficeCuts.ts', 'src/lib/frontOfficeSave.ts', 'src/lib/foNames.ts', 'src/lib/entityIds.ts', 'scripts/data/nflFoRatingInputs2026.json', 'scripts/data/nflRosters2026.json', 'scripts/data/nflRosterSpotCheck.json', 'scripts/data/nflRosters2026LeftOut.json'];
+const files = [test, model, generator, engine, 'src/data/frontOfficeDepth.ts', 'src/data/frontOfficePlayers.ts', 'src/lib/frontOfficeCuts.ts', 'src/lib/frontOfficeSave.ts', 'src/lib/foNames.ts', 'src/lib/entityIds.ts', 'scripts/data/nflFoRatingInputs2026.json', 'scripts/data/nflRosters2026.json', 'scripts/data/nflRosterSpotCheck.json', 'scripts/data/nflRosters2026LeftOut.json', 'scripts/data/nfl2025Production.json', 'scripts/data/nflFullbackRoles2026.json', 'scripts/lib/nflProduction.mjs'];
 const holdSource = bytes => ({ bytes, source: bytes.toString('utf8').replaceAll('\r\n', '\n') });
 const held = await Promise.all(files.map(async file => [file, holdSource(await readFile(path.join(root, file)))]));
 const sourceOf = file => held.find(([name]) => name === file)[1].source;
@@ -29,19 +29,24 @@ const titles = {
   moves: 'carries original player evidence through real trades cuts and practice promotion',
   campaign: 'plays four actual seasons playoffs drafts and summers with bounded saves and a nonnegative normal cap',
   refusal: 'refuses stale identity or source records before the real generator CLI writes outputs',
+  board: 'deals the same board league for a seed as the tree recorded before the opening files were unified',
+  releaseAk: 'loads a Release AK franchise unchanged and plays its next week exactly as Release AK would',
+  oneNumber: 'prints one opening number per man in the starters and depth files with no override left',
 };
 const ratingCases = [titles.checkpoint, titles.partial, titles.init, titles.generation];
 const allModelCases = [...ratingCases, titles.coverage, titles.missing, titles.bounded];
 const controls = {
-  clamp: [model, 'clip(84+12*score/evidence,55,98)', '(84+12*score/evidence)', [titles.checkpoint, titles.init, titles.generation, titles.bounded]],
-  datedRole: [model, 'models.defense[`${row.season}|${row.role}`]', 'models.defense[`${row.season}|${currentRole(record.sourceIdentity.depthChartPosition)}`]', [...ratingCases, titles.bounded]],
-  opportunity: [model, 'accumulated.units+=weightedExposure/f.typicalExposure;', 'accumulated.units+=row.baseExposure*recency[row.season]/f.typicalExposure;', [titles.checkpoint, titles.init, titles.generation, titles.coverage, titles.bounded]],
-  missing: [model, 'const m=row.features[key],f=model.features[key];if(!m||!f)continue;', 'const m=row.features[key]??{value:0,exposure:row.baseExposure},f=model.features[key];if(!m||!f)continue;', [titles.checkpoint, titles.init, titles.generation, titles.missing]],
-  partial: [model, '||!role||!datedRoles.includes(role);', ';', [titles.partial, titles.generation, titles.bounded]],
-  budget: [model, 'surplus=totalTenths-floorTenths;', 'surplus=totalTenths-floorTenths+10;', allModelCases],
-  init: [engine, 'return makeGmPlayer(opening ? { ...p, ...opening } : p, rng);', 'return makeGmPlayer(opening ? { ...p, salary: opening.salary } : p, rng);', [titles.init, titles.evidence]],
-  evidence: [engine, 'p.openingRatingEvidence = { modelVersion, originKey, openingOvr, basis, partial };', 'void evidence;', [titles.evidence, titles.moves]],
-  compact: [engine, 'p.openingRatingEvidence = { modelVersion, originKey, openingOvr, basis, partial };', 'p.openingRatingEvidence = evidence;', [titles.evidence, titles.campaign]],
+  clamp: [model, 'clip(84+12*score/evidence,55,98)', '(84+12*score/evidence)', [titles.checkpoint, titles.init, titles.generation, titles.bounded, titles.board]],
+  datedRole: [model, 'models.defense[`${row.season}|${row.role}`]', 'models.defense[`${row.season}|${currentRole(record.sourceIdentity.depthChartPosition)}`]', [...ratingCases, titles.bounded, titles.oneNumber, titles.board]],
+  opportunity: [model, 'accumulated.units+=weightedExposure/f.typicalExposure;', 'accumulated.units+=row.baseExposure*recency[row.season]/f.typicalExposure;', [titles.checkpoint, titles.init, titles.generation, titles.coverage, titles.bounded, titles.board]],
+  missing: [model, 'const m=row.features[key],f=model.features[key];if(!m||!f)continue;', 'const m=row.features[key]??{value:0,exposure:row.baseExposure},f=model.features[key];if(!m||!f)continue;', [titles.checkpoint, titles.init, titles.generation, titles.missing, titles.board]],
+  partial: [model, '||!role||!datedRoles.includes(role);', ';', [titles.partial, titles.generation, titles.bounded, titles.board]],
+  budget: [model, 'surplus=totalTenths-floorTenths;', 'surplus=totalTenths-floorTenths+10;', [...allModelCases, titles.oneNumber, titles.board]],
+  /* Round 1130: the engine line this control bound (the fullOpening override) is gone with the override. What it
+     guarded is now a generator step: the starters rows carry the opening estimate, not the selection seed. */
+  seedrows: [generator, 'finalTeams = teams.map(t => ({ ...t, players: t.players.map(p => one(t.abbr, p)) }));', 'finalTeams = teams;', [titles.generation, titles.oneNumber, titles.board]],
+  evidence: [engine, 'p.openingRatingEvidence = { modelVersion, originKey, openingOvr, basis, partial };', 'void evidence;', [titles.evidence, titles.moves, titles.board]],
+  compact: [engine, 'p.openingRatingEvidence = { modelVersion, originKey, openingOvr, basis, partial };', 'p.openingRatingEvidence = evidence;', [titles.evidence, titles.campaign, titles.board]],
   cut: [engine, 'if (fa) clearTag(fa);', 'if (fa) { clearTag(fa); delete fa.openingRatingEvidence; }', [titles.moves]],
   refusal: [generator, 'if (out.ratingProblem) throw new Error(out.ratingProblem);', 'void out.ratingProblem;', [titles.refusal]],
 };
@@ -83,21 +88,23 @@ try {
   const report = JSON.parse(await readFile(reportFile, 'utf8'));
   assert.equal(Number(report.numUnhandledErrors ?? 0), 0); assert.equal(report.numPendingTests, 0);
   const rows = report.testResults.flatMap(file => file.assertionResults);
-  assert.equal(rows.length, 14); assert.equal(new Set(rows.map(row => row.title)).size, 14);
-  assert.ok(rows.every(row => row.status === 'passed' || row.status === 'failed'), 'All fourteen outcomes execute without skips');
+  assert.equal(rows.length, 17); assert.equal(new Set(rows.map(row => row.title)).size, 17);
+  assert.ok(rows.every(row => row.status === 'passed' || row.status === 'failed'), 'All seventeen outcomes execute without skips');
   for (const title of [titles.core, titles.legacy, titles.manifest]) assert.equal(rows.find(row => row.title === title)?.status, 'passed', 'Independent physical old-state/source-data baselines held');
   if (control) {
     const failed = rows.filter(row => row.status === 'failed'), expected = controls[control][3];
-    assert.equal(run.status, 1); assert.equal(report.numFailedTests, expected.length); assert.equal(report.numPassedTests, 14 - expected.length);
+    /* Round 1130: say WHICH cases went red before the count is judged, so a list can be re-established from one run */
+    if (failed.map(row => row.title).sort().join('|') !== [...expected].sort().join('|')) console.error(`NFL_RATING_CONTROL_MISMATCH: ${JSON.stringify({ control, failed: failed.map(row => row.title), expected, messages: failed.map(row => row.failureMessages[0].split('\n')[0].slice(0, 160)) })}`);
+    assert.equal(run.status, 1); assert.equal(report.numFailedTests, expected.length); assert.equal(report.numPassedTests, 17 - expected.length);
     assert.deepEqual(failed.map(row => row.title).sort(), [...expected].sort());
     for (const row of failed) assert.match(row.failureMessages.join('\n'), /AssertionError:|AssertionError \[/);
-    console.log(`NFL rating ${control}: one actual executable source binding changed; ${failed.length} intended failures/${14 - failed.length} held passes.`);
+    console.log(`NFL rating ${control}: one actual executable source binding changed; ${failed.length} intended failures/${17 - failed.length} held passes.`);
     console.log(`NFL_RATING_CONTROL: ${JSON.stringify({ control, failed: failed.map(row => ({ title: row.title, message: row.failureMessages[0].split('\n')[0] })) })}`);
   } else {
     if (run.status !== 0) process.stdout.write(output);
-    assert.equal(run.status, 0); assert.equal(report.numPassedTests, 14); assert.equal(report.numFailedTests, 0);
+    assert.equal(run.status, 0); assert.equal(report.numPassedTests, 17); assert.equal(report.numFailedTests, 0);
     assert.match(output, /NFL_RATING_SAVE_SIZE/); assert.match(output, /NFL_RATING_CAMPAIGN/);
-    console.log('NFL opening estimates:14/14 real-engine/checkpoint/generator cases passed, no skipped cases.');
+    console.log('NFL opening estimates:17/17 real-engine/checkpoint/generator cases passed, no skipped cases.');
     console.log('NFL opening estimates:2163 frozen grade/fictional-price tuples,32 exact untrimmed opening budgets and membership/terms held.');
     console.log('NFL opening estimates:physical56356be9 no-depth results and RNG held; explicit old-depth saves retain original grades without evidence or rerating.');
     console.log('NFL opening estimates:four real17-game seasons,52 playoff games,84 draft arrivals,24 actual-validator JSON resumes and nonnegative normal cap checks passed.');

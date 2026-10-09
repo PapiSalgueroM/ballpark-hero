@@ -7,6 +7,7 @@ import { CbbProgramBoard } from '@/components/cbb-program/CbbProgramBoard';
 import { recordCompletion } from '@/lib/completions';
 import { POINTS_BY_CLUE } from '@/types/cbbProgram';
 import styles from '@/components/cbb-program/CbbProgramFeedback.module.css';
+import { formatNumber } from '@/lib/formatNumber';
 
 const fixture = vi.hoisted(() => ({
   puzzle: { id: 'fiction-school', school_name: 'Fixture School', common_names: ['Fixture School'], clues: ['Generated first clue', 'Generated second clue', 'Generated third clue', 'Generated fourth clue', 'Generated fifth clue', 'Generated sixth clue'] },
@@ -48,11 +49,11 @@ describe('actual CBB program committed feedback', () => {
   it('never calls a committed first-clue win wrong at the old delayed boundary', async () => {
     const view = await mount(); await start(view, true); correct(view);
     tick(50); expect(view.queryByText('Wrong guess! Try again...')).toBeNull();
-    expect(view.getByText('1000 pts')).toBeVisible(); expect(cue(view)).toHaveAttribute('data-cbb-program-feedback', 'correct');
+    expect(view.getByText('1,000 pts')).toBeVisible(); expect(cue(view)).toHaveAttribute('data-cbb-program-feedback', 'correct');
     expect(result(view)).toHaveAttribute('data-cbb-program-result', 'won'); expect(result(view)).toHaveClass(styles.won);
     expect(cue(view)).toHaveTextContent('Correct guess. Program found.');
     expect(saved()).toEqual(exactSaved(1, ['Fixture School'], 'won', 1000)); expect(recordCompletion).toHaveBeenCalledExactlyOnceWith('/guess-cbb-team', 1000, 'FixtureBaller', 0);
-    tick(550); expect(cue(view)).toBeNull(); expect(result(view)).toBeNull(); expect(view.getByText('1000 pts')).toBeVisible();
+    tick(550); expect(cue(view)).toBeNull(); expect(result(view)).toBeNull(); expect(view.getByText('1,000 pts')).toBeVisible();
   });
 
   it('cues each actual repeated wrong append while preserving stable clues and the 600 win', async () => {
@@ -139,7 +140,7 @@ describe('actual CBB program committed feedback', () => {
       fixture.daily = misses % 2 === 0;
       localStorage.clear(); vi.mocked(recordCompletion).mockClear(); fixture.clipboard.mockClear(); fixture.insert.mockClear(); const view = await mount(); await start(view, true);
       for (let i = 0; i < misses; i++) wrong(view); correct(view); const clues = misses + 1, score = [1000, 800, 600, 400, 200, 100][misses];
-      expect(view.getByText(`${score} pts`)).toBeVisible(); expect(saved()).toEqual(exactSaved(clues, [...Array(misses).fill('Fixture Other'), 'Fixture School'], 'won', score));
+      expect(view.getByText(`${formatNumber(score)} pts`)).toBeVisible(); expect(saved()).toEqual(exactSaved(clues, [...Array(misses).fill('Fixture Other'), 'Fixture School'], 'won', score));
       expect(recordCompletion).toHaveBeenCalledExactlyOnceWith('/guess-cbb-team', score, 'FixtureBaller', 0);
       expect(fixture.insert).toHaveBeenCalledExactlyOnceWith({ puzzle_date: '2026-10-01', clues_used: clues, score, guessed: true, mode: 'daily' });
       ['Vibe', 'Region & State', 'Conference', 'Tournament History', 'Championships', 'Mascot'].forEach(label => expect(view.getByText(label)).toBeVisible());

@@ -14,6 +14,7 @@ import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { safeSetItem } from '@/lib/safeStorage';
 
 const difficultyColors: Record<ConnectionDifficulty, string> = {
   easy: 'bg-correct',
@@ -56,7 +57,7 @@ const Connections = () => {
     const seen = localStorage.getItem('connections-rules-seen');
     if (!seen) {
       setShowRules(true);
-      localStorage.setItem('connections-rules-seen', '1');
+      safeSetItem('connections-rules-seen', '1');
     }
   }, []);
 

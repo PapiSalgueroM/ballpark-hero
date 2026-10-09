@@ -1,6 +1,8 @@
 /* Round 1048: how long each real NBA and NFL regular season was, so a career's
    "week by week" is only offered for a season whose real length is the one the
-   career plays. `year` is the year a season STARTS in (NBA 2011 is 2011-12).
+   game by game view is built for (82, 17: US_FULL_SEASON below). An NBA career
+   plays 82 every year; an NFL career plays the year's real length since Round
+   1104. `year` is the year a season STARTS in (NBA 2011 is 2011-12).
 
    This file is eager (the hub reads it before a press) and imports nothing.
 
@@ -18,7 +20,9 @@
       2021-22" (back to 82); NBA Communications, "Pacers at Celtics game
       canceled" (16 April 2013, not rescheduled, so both finished on 81);
       NBA.com, "2019-20 NBA Season Updates" (suspended in March, 22 teams
-      added eight games each, so teams finished on 63 to 75); ESPN TrueHoop,
+      added eight games each); the Basketball Reference and ESPN 2019-20
+      standings, read 2026-10-08, where teams finished on 64 games
+      (Minnesota, 19-45) to 75 (Dallas, 43-32); ESPN TrueHoop,
       "Why is there an 82-game schedule?" (82 since 1967-68); Up In The
       Rafters, "How Many Games Are in an NBA Season?" (14 April 2026); and the
       Basketball Reference and ESPN 2025-26 standings, where all 30 teams
@@ -35,9 +39,16 @@
       (beginning in 2021); NFL Football Operations, "Creating the NFL
       Schedule" ("Each NFL team plays 17 games over the 18-week season"); and
       the ESPN and NFL.com 2025 standings, where all 32 teams show 17 games.
+   One season has no single length and is held: 2022. Both read 2026-10-08:
+   ESPN, "NFL Standings 2022" (Buffalo 13-3-0 and Cincinnati 12-4-0, 16
+   games each, every other team 17); CNBC, "Bills-Bengals game postponed
+   after Damar Hamlin's cardiac arrest won't be made up, NFL says" (6 January
+   2023: the Week 17 game is a no contest and is not replayed). It is the
+   same case as NBA 2012-13, and it is held for the same reason.
 
-   Facts confirmed by both sources: 23 NBA season lengths and 21 NFL season
-   lengths. A window with `to: null` is the latest verified format carried
+   Facts confirmed by both sources: 23 NBA seasons (21 with one length, two
+   with none) and 21 NFL seasons (20 with one length, one with none). A
+   window with `to: null` is the latest verified format carried
    forward: from 2026 on the league is the career's own world on today's
    format, and the Season Center's "?" says so. */
 
@@ -52,8 +63,14 @@ export interface UsLengthWindow {
   why?: string;
 }
 
-/** What each career's engine plays, every year. */
+/** The season the game by game view is built for: 82, 17. An NBA career plays
+ *  it every year. An NFL career plays the real length of the year since Round
+ *  1104 (16 from 2005 to 2020), so there the view has less than it needs. */
 export const US_FULL_SEASON = { nba: 82, nfl: 17 } as const;
+
+/** Does the career's engine play the real length of a year the ledger holds?
+ *  The held line must not say "this career plays 17" of a season that played 16. */
+const CAREER_PLAYS_REAL_LENGTH: Record<UsLengthSport, boolean> = { nba: false, nfl: true };
 
 export const US_SEASON_LENGTHS: Record<UsLengthSport, readonly UsLengthWindow[]> = {
   nba: [
@@ -67,7 +84,9 @@ export const US_SEASON_LENGTHS: Record<UsLengthSport, readonly UsLengthWindow[]>
   ],
   nfl: [
     { from: 2005, to: 2020, games: 16 },
-    { from: 2021, to: null, games: 17 },
+    { from: 2021, to: 2021, games: 17 },
+    { from: 2022, to: 2022, games: null, why: 'had one game called off for good, so two teams finished on 16 games' },
+    { from: 2023, to: null, games: 17 },
   ],
 };
 
@@ -97,9 +116,12 @@ export function usSeasonHeldLine(sport: UsLengthSport, year: number): string | n
   const label = usSeasonLabel(sport, year);
   if (!w) return `📺 No week by week this season: the game has no verified length for the real ${label} season.`;
   if (w.games === null) return `📺 No week by week this season: the real ${label} season ${w.why ?? 'had no single length'}.`;
+  const why = CAREER_PLAYS_REAL_LENGTH[sport]
+    ? `the real ${label} season had ${w.games} games and the week by week view is built for ${full}.`
+    : `the real ${label} season had ${w.games} games and this career plays ${full}.`;
   const firstFull = US_SEASON_LENGTHS[sport].find(x => x.games === full)?.from;
   if (firstFull !== undefined && year < firstFull) {
-    return `📺 Week by week starts with the ${usSeasonLabel(sport, firstFull)} season: the real ${label} season had ${w.games} games and this career plays ${full}.`;
+    return `📺 Week by week starts with the ${usSeasonLabel(sport, firstFull)} season: ${why}`;
   }
-  return `📺 No week by week this season: the real ${label} season had ${w.games} games and this career plays ${full}.`;
+  return `📺 No week by week this season: ${why}`;
 }

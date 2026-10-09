@@ -31,6 +31,25 @@
  *      first draft removed his shirt without removing the man matched to it,
  *      which shifted every name after it one place along the line.
  *
+ *   7. EVERY POOL THE FILE SHIPS IS ONE THE PICKER FINDS (section 1b, added
+ *      2026-10-08). Section 3 samples twelve nations in six years and used to
+ *      print how many real men it placed without asserting anything on the
+ *      number, so a whole year could fall out of the picker's window and the
+ *      harness stayed green: the review of Round 1042 moved the window's last
+ *      year out by one character (realPool, "year > last" to "year >= last"),
+ *      the count fell from 4320 to 3600 and this file still said green. The
+ *      expectation is derived, never typed: for every row of the data file,
+ *      under the file's own nation and year, realPool must hand back a pool
+ *      with as many men as the row has entries.
+ *      Negative control, POOLS_CONTROL=lastyear: that same one character
+ *      mutation, applied inside the bundle only (the anchor is asserted there
+ *      exactly once; nothing on disk is written). It must lose every pool of
+ *      the window's last year and none of any other. Exit 1 when it does, 2
+ *      when it does not. Run 2026-10-08: plain exit 0, 533 of 533 pools found;
+ *      the control exit 1, all 47 pools of 2026 lost and no other year (the
+ *      sample placed 3600 real men under it, as in the review, and stayed
+ *      silent).
+ *
  * Run: node scripts/simNationalPools.mjs
  */
 import { build } from 'esbuild';
@@ -45,13 +64,39 @@ const ENTRY = path.join(os.tmpdir(), 'pools-entry.mjs');
 
 writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export const intl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerInternational.ts');
+/* Round 1042: the squad picker (pickSquad, realPool) lives in soccerInternationalSquads.ts, the
+   only reader of the pools. Both modules spread into one object, so the names below stand. */
+const core = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerInternational.ts');
+const squads = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerInternationalSquads.ts');
+export const intl = { ...core, ...squads };
 export const pools = await import('${ROOT.replaceAll('\\', '/')}/src/data/nationalPools.ts');
 `);
+/* POOLS_CONTROL=lastyear: the picker's window loses its last year, in the bundle only. */
+const CONTROL = process.env.POOLS_CONTROL ?? '';
+if (CONTROL && CONTROL !== 'lastyear') { console.error(`POOLS_CONTROL=${CONTROL} is not a control this harness knows (lastyear)`); process.exit(2); }
+const WINDOW_END = 'year > NATIONAL_POOL_YEARS.last';
+let mutated = false;
+const controlSwap = {
+  name: 'pools-control',
+  setup(b) {
+    b.onLoad({ filter: /soccerInternationalSquads\.ts$/ }, args => {
+      const text = readFileSync(args.path, 'utf8');
+      const n = text.split(WINDOW_END).length - 1;
+      if (n !== 1) { console.error(`control lastyear refuses to run: ${args.path} holds "${WINDOW_END}" ${n} times, not once`); process.exit(2); }
+      mutated = true;
+      return { contents: text.replace(WINDOW_END, () => 'year >= NATIONAL_POOL_YEARS.last'), loader: 'ts' };
+    });
+  },
+};
 await build({
   entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node',
   outfile: OUT, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') },
+  plugins: CONTROL === 'lastyear' ? [controlSwap] : [],
 });
+if (CONTROL === 'lastyear') {
+  if (!mutated) { console.error('control lastyear refuses to run: the squad picker never reached the bundle'); process.exit(2); }
+  console.log('CONTROL lastyear: realPool treats the last year of the window as outside it (in the bundle)');
+}
 const { intl, pools } = await import(pathToFileURL(OUT).href);
 const { NATIONAL_POOLS, NATIONAL_POOL_YEARS } = pools;
 const { pickSquad, xiMen, realPool } = intl;
@@ -117,6 +162,27 @@ for (const key of keys) {
 }
 console.log(`   ${players} player rows, all on the 48-94 curve, every pool fieldable`);
 if (keys.length < 300) fail(`only ${keys.length} nation seasons, which is too thin to be worth shipping`);
+
+/* ── 1b: every pool the file ships is one the picker finds ─────────────── */
+/* Derived from the file itself: its own nation, its own year, as many men as the row has
+   entries. No sample and no typed number, so a year, a nation or a single row that falls out of
+   realPool fails here, which the sampled count in section 3 never did. */
+const lostByYear = new Map();
+const keysByYear = new Map();
+let poolsFound = 0;
+for (const key of keys) {
+  const [nation, yearStr] = key.split('|');
+  const year = Number(yearStr);
+  keysByYear.set(year, (keysByYear.get(year) ?? 0) + 1);
+  const rows = NATIONAL_POOLS[key].split(',').filter(e => { const [n, p, r] = e.split(':'); return n && p && r; }).length;
+  const pool = realPool(nation, year);
+  if (pool && pool.length === rows) poolsFound += 1;
+  else lostByYear.set(year, [...(lostByYear.get(year) ?? []), `${nation} (${pool ? pool.length : 'no pool'} for ${rows} rows)`]);
+}
+for (const [year, lost] of [...lostByYear].sort((a, b) => a[0] - b[0])) {
+  fail(`${lost.length} of the ${keysByYear.get(year)} pools the file ships for ${year} are not what realPool hands the picker (${lost.slice(0, 3).join(', ')}): those squads would be invented men in a year the data covers`);
+}
+console.log(`1b) ${poolsFound} of ${keys.length} pools found by the picker under the file's own nation and year`);
 
 /* ── 2: nobody plays for two countries ────────────────────────────────── */
 console.log('2) no man appears under two nations in the same year');
@@ -231,6 +297,16 @@ const data = readFileSync(path.join(ROOT, 'src/data/nationalPools.ts'), 'utf8');
 if (!data.includes('player_market_values_dedup')) fail('the baked file does not name its source');
 if (!data.includes('DO NOT EDIT BY HAND')) fail('the baked file is not marked as generated');
 console.log('   source named in both the script and the file it writes');
+
+if (CONTROL === 'lastyear') {
+  /* every pool of the last year lost, no pool of any other year, and nothing else red */
+  const last = NATIONAL_POOL_YEARS.last;
+  const ok = lostByYear.size === 1 && (lostByYear.get(last)?.length ?? 0) === keysByYear.get(last) && keysByYear.get(last) > 0 && failures === 1;
+  console.log(ok
+    ? `CONTROL lastyear FIRED: all ${keysByYear.get(last)} pools of ${last} were lost to the picker and no pool of any other year (${realNamed} real men placed by the sample, which said nothing)`
+    : `CONTROL lastyear DID NOT FIRE as predicted: years with a lost pool ${[...lostByYear.keys()].join(', ') || 'none'} (expected ${last} alone, all ${keysByYear.get(last)} of them), ${failures} failures (expected 1)`);
+  process.exit(ok ? 1 : 2);
+}
 
 console.log('');
 if (failures > 0) {

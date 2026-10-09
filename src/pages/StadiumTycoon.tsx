@@ -25,7 +25,7 @@ import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { cn } from '@/lib/utils';
 import { formatNumber } from '@/lib/formatNumber';
 import { HelpCircle, Star, X } from 'lucide-react';
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
@@ -41,14 +41,16 @@ import {
   STAFF, staffLevelOf, staffCostOf, canHire, totalStaffLevels,
   ACHIEVEMENTS, ACH_BONUS, achMult, goldenActive, GOLDEN_INFO,
   LEGACY_PERKS, perkLevelOf, perkCostOf, canBuyPerk, legacyPointsOf,
-  totalPerkLevels, pointsForSale, HYPE_MULT, AWAY_MATCHDAY_SEC, SET_PIECE_WINDOW_SEC,
+  totalPerkLevels, pointsForSale, HYPE_MULT, AWAY_MATCHDAY_SEC, SET_PIECE_WINDOW_SEC, type TycoonLeague,
 } from '@/lib/stadiumTycoon';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
+import type { LastSeason } from '@/hooks/useStadiumTycoon';
 import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
 import VictoryMoment from '@/components/tycoon/TycoonVictoryMoment';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import TycoonPitch from '@/components/tycoon/TycoonPitch';
 import TicketPolicyCard from '@/components/tycoon/TicketPolicyCard';
+import TycoonSaleReview from '@/components/tycoon/TycoonSaleReview';
 import { useTycoonRewards } from '@/hooks/useTycoonRewards';
 import { balance, GEM_PAY, loadLedger } from '@/lib/tycoonRewards';
 import type { TapFx } from '@/components/tycoon/TycoonPitch';
@@ -267,6 +269,59 @@ function helpFacts() {
   };
 }
 
+/* Release AP: exported so src/test/tycoonLatestSeason.test.tsx can read the dialog's numbers on any tree
+   (Round 1095's own driver only runs on its own branch). */
+export function LatestSeasonReview({ last, league }: { last: LastSeason; league: TycoonLeague }) {
+  const [open, setOpen] = useState(false);
+  const [snapshot, setSnapshot] = useState(last);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const heading = useRef<HTMLHeadingElement>(null);
+  const changeOpen = (next: boolean) => {
+    if (next) setSnapshot({ ...last, table: last.table.map(club => ({ ...club })) });
+    setOpen(next);
+  };
+  const formatSeasonCount = (value: number) => value.toLocaleString('en-US');
+  const own = snapshot.table[0];
+  const rows = leagueStandings({ ...league, clubs: snapshot.table });
+  return (
+    <Dialog open={open} onOpenChange={changeOpen}>
+      <DialogTrigger asChild>
+        <button ref={trigger} type="button" data-last-season className="min-h-11 min-w-11 w-full rounded-xl border border-border bg-card px-3 py-2 text-left text-xs hover:border-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+          <span className="block font-bold">Latest season</span>
+          <span className="text-muted-foreground">{ordinal(last.position)} of {formatSeasonCount(last.table.length)} · Review this visit's result</span>
+        </button>
+      </DialogTrigger>
+      <DialogContent data-latest-season-review className="flex max-h-[calc(100dvh_-_2rem)] w-[calc(100vw_-_2rem)] max-w-md flex-col gap-3 rounded-xl p-4 text-xs [&>button:last-child]:h-11 [&>button:last-child]:w-11"
+        onOpenAutoFocus={event => { event.preventDefault(); heading.current?.focus({ preventScroll: true }); }}
+        onCloseAutoFocus={event => { event.preventDefault(); trigger.current?.focus({ preventScroll: true }); }}>
+        <DialogTitle ref={heading} tabIndex={-1} className="pr-12 text-base">Latest season</DialogTitle>
+        <DialogDescription className="text-xs">Available for this visit only. The match keeps running while you read.</DialogDescription>
+        <div className="min-h-0 space-y-3 overflow-y-auto text-xs">
+          <p data-season-headline className="break-words font-bold text-primary">{snapshot.label}</p>
+          <dl className="grid grid-cols-2 gap-3 rounded-lg border border-border p-3">
+            <div><dt className="text-muted-foreground">Finished</dt><dd data-season-position className="font-bold">{ordinal(snapshot.position)} of {formatSeasonCount(snapshot.table.length)}</dd></div>
+            <div><dt className="text-muted-foreground">Points</dt><dd data-season-points className="break-words font-bold">{formatSeasonCount(own.pts)}</dd></div>
+            <div><dt className="text-muted-foreground">Wins / draws / losses</dt><dd data-season-record className="break-words font-bold">{formatSeasonCount(own.w)} / {formatSeasonCount(own.d)} / {formatSeasonCount(own.l)}</dd></div>
+            <div><dt className="text-muted-foreground">Goals for / against</dt><dd data-season-goals className="break-words font-bold">{formatSeasonCount(own.gf)} / {formatSeasonCount(own.ga)}</dd></div>
+          </dl>
+          <table data-latest-season-table className="w-full table-fixed text-left text-xs">
+            <caption className="pb-2 text-left font-bold">Final table</caption>
+            <thead><tr className="border-b border-border text-muted-foreground"><th scope="col" className="w-1/2 pb-2 font-normal">Club</th><th scope="col" className="w-1/3 pb-2 font-normal">W / D / L</th><th scope="col" className="pb-2 text-right font-normal">Pts</th></tr></thead>
+            <tbody>{rows.map((club, index) => (
+              <tr key={club.name} data-season-club={club.name} className={cn('border-b border-border/40 align-top', club === own && 'bg-primary/10')}>
+                <th scope="row" className="py-2 pr-2 text-left font-normal"><div className="flex gap-2"><span className="shrink-0 font-bold">{formatSeasonCount(index + 1)}</span><span className="min-w-0 break-words">{club.name}</span></div></th>
+                <td className="break-words py-2 pr-2"><div>{formatSeasonCount(club.w)} / {formatSeasonCount(club.d)} / {formatSeasonCount(club.l)}</div><div className="text-muted-foreground">GF {formatSeasonCount(club.gf)}<br />GA {formatSeasonCount(club.ga)}</div></td>
+                <td className="break-words py-2 text-right font-bold">{formatSeasonCount(club.pts)}</td>
+              </tr>
+            ))}</tbody>
+          </table>
+        </div>
+        <button type="button" onClick={() => changeOpen(false)} className="min-h-11 min-w-11 w-full shrink-0 rounded-lg border border-border px-3 text-xs font-bold hover:bg-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Back</button>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 /* Round 582: the league. The table through Club Manager's own card, today's
    fixture, and the club name picked from the generated banks. Never the
    default tab, so none of it reaches a snapshot. */
@@ -295,17 +350,7 @@ function LeagueRoom({ g, visible }: { g: ReturnType<typeof useStadiumTycoon>; vi
         {(s.leagueTitles ?? 0) > 0 && <div className="mt-0.5 text-gold font-bold">🏆 {s.leagueTitles} league title{s.leagueTitles === 1 ? '' : 's'} in your career</div>}
       </div>
       <LeagueTableCard rows={rows} myClub={lg.clubs[0].name} title={`Season ${lg.season + 1} at this ground`} preseason={preseason} zoneTop={1} />
-      {last && (
-        <div data-last-season>
-          <LeagueTableCard
-            rows={leagueStandings({ ...lg, clubs: last.table }).map(c => ({ club: c.name, w: c.w, d: c.d, l: c.l, gf: c.gf, ga: c.ga, pts: c.pts }))}
-            myClub={last.table[0].name}
-            title={`Last season: ${ordinal(last.position)}`}
-            zoneTop={1}
-            compact
-          />
-        </div>
-      )}
+      {last && <LatestSeasonReview last={last} league={lg} />}
       {options.length > 0 && (
         <div data-club-name-pick className="rounded-xl border border-border bg-card p-3">
           <div className="text-xs font-bold text-foreground mb-2">Name your club</div>
@@ -641,9 +686,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
         {/* Prestige bar */}
         <div className="mb-3">
           {canPrestige(s) ? (
-            <button onClick={g.doPrestige} data-sell-up className="w-full py-2.5 rounded-xl font-bold bg-yellow-500 text-black hover:opacity-90 transition-opacity st-glow">
-              ⭐ Sell up: permanent +{Math.round((repMult({ ...s, rep: s.rep + 1 }) - repMult(s)) * 100)}% income, +{pointsForSale(s)} legacy point{pointsForSale(s) === 1 ? '' : 's'}
-            </button>
+            <TycoonSaleReview state={s} onSell={g.doPrestige} />
           ) : (
             <div className="relative h-2 rounded-full bg-secondary overflow-hidden" title="Progress to your next reputation star">
               <div className="absolute inset-y-0 left-0 bg-yellow-500/80 transition-all duration-700" style={{ width: `${Math.min(100, (s.lifetime / prestigeThreshold(s)) * 100)}%` }} />
@@ -801,6 +844,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
                     ) : (
                       <button
                         onClick={() => g.doLegacyPerk(p.id)}
+                        aria-label={`Buy ${p.name}, level ${lvl + 1}, ${cost} pt${cost === 1 ? '' : 's'}`}
                         disabled={!ok}
                         className={cn('shrink-0 min-h-[30px] rounded-full px-2.5 py-1 text-[9px] font-bold transition-all active:scale-95',
                           ok ? 'bg-gold text-black hover:opacity-90' : 'bg-secondary text-muted-foreground')}
@@ -915,7 +959,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
               <p>Tap the stadium for instant cash (Megaphone makes taps stronger). Buy Stands when the ground is full, spending tracks when it is not.</p>
               <p>The Ticket offer tile sets your matchday price, and switching is free at any time. Standard is the regular game. Community takes {h.ticketCommunityCut}% off the gate money each fan pays and your supporters grow {h.ticketCommunityGrowth}% faster. Premium adds {h.ticketPremiumGate}% to the gate money each fan pays, but only {h.ticketPremiumDemand}% of your supporters turn up and they grow {h.ticketPremiumGrowth}% slower. Only the ticket price moves: snacks, the shop, parking and the payroll keep their own rates. Example: a new {h.freshSeats} seat ground with {h.freshFans} supporters draws {h.freshPremiumCrowd} on Premium, so Premium pays less there, and it pays more once {h.ticketPremiumDemand}% of your supporters still fill the ground. Selling up puts the offer back to Standard.</p>
               <p>Matchday Hype charges over {h.chargeMin} minutes of play (Stadium Voltage in the boardroom trims that to {h.voltage1}, then {h.voltage2}). Press it and your income pays double for {h.hypeSec} seconds, and your taps rise with it; goal and win bonuses are not doubled. It does not charge or burn while you are away.</p>
-              <p>Your ground plays in a league, {h.divisions} divisions from the {h.firstDivision} to {h.lastDivision}. Each division is a small league of named rivals: {leagueShape(0).clubs} clubs playing each other once in the bottom {SINGLE_LEG_BELOW} divisions, then {leagueShape(3).clubs} and {leagueShape(6).clubs} clubs home and away. Only the champion goes up, and nobody ever goes down. Every division multiplies all income, up to x{h.topMult} at the top, going up pays a promotion bonus on the spot, and a title at {h.lastDivision} pays it again. Higher divisions send tougher opponents. The League tab shows the table.</p>
+              <p>Your ground plays in a league, {h.divisions} divisions from the {h.firstDivision} to {h.lastDivision}. Each division is a small league of named rivals: {leagueShape(0).clubs} clubs playing each other once in the bottom {SINGLE_LEG_BELOW} divisions, then {leagueShape(3).clubs} and {leagueShape(6).clubs} clubs home and away. Only the champion goes up, and nobody ever goes down. Every division multiplies all income, up to x{h.topMult} at the top, going up pays a promotion bonus on the spot, and a title at {h.lastDivision} pays it again. Higher divisions send tougher opponents. The League tab shows the table, and when a season ends its Latest season button opens that season's final table and your own line of it while the next match runs. That review is for this visit only: reload and it is gone until your next season ends.</p>
               <p>The payroll hires {h.staff} staff, from a {h.firstStaff} to a {h.lastStaff}. Every staff level adds steady income of its own before the multipliers touch it, so a deep payroll compounds hard.</p>
               <p>While you play, a golden whistle drifts onto the pitch every couple of minutes. You get about {h.catchSec} seconds to catch it, for one of {h.prizes} prizes: {GOLDEN_INFO.frenzy.label} ({GOLDEN_INFO.frenzy.blurb} for {GOLDEN_INFO.frenzy.duration} seconds), {GOLDEN_INFO.tapRush.label} ({GOLDEN_INFO.tapRush.blurb} for {GOLDEN_INFO.tapRush.duration} seconds), {GOLDEN_INFO.windfall.label} ({h.windfallMin} minutes of income, instantly), {GOLDEN_INFO.fanWave.label} ({GOLDEN_INFO.fanWave.blurb}) or {GOLDEN_INFO.freeLevel.label} ({GOLDEN_INFO.freeLevel.blurb}).</p>
               <p>A penalty or free-kick offer appears once per watched match. You have {SET_PIECE_WINDOW_SEC} seconds to open it. Pick your aim, power and curve for one shot while the match clock keeps running. Opening uses that match's attempt, including if you leave or reload. A goal before full time adds one goal and the usual goal bonus; a miss costs nothing. Away matches have no kick offers, and kicks have no daily score or direct gem reward.</p>

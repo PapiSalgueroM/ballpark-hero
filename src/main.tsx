@@ -1,3 +1,7 @@
+// Round 1142: FIRST, before any module that reads localStorage as it loads.
+// A browser that blocks site data throws on the read itself, and this is
+// what stands in for the visit. Keep it the first import in this file.
+import "./lib/safeStorage";
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";

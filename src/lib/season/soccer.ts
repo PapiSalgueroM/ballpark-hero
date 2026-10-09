@@ -23,7 +23,10 @@
      the bucket (the award counts all competitions; the review says so).
    - THE CHAMPION is the summary card's, by exactly its rule: the phone's
      world crowned a club for that league that season, not his, and the
-     league ledgers put it in that league that season.
+     league ledgers put it in that league that season. Round 1100: in a
+     league the world runs no title race for, nobody is crowned anywhere in
+     the game, and a table season's top place is one of the league's own
+     clubs, placed like every other named club (titleOpen).
    - NAMES. His club, the derby rivals on the row, the champion, and the
      clubs managerLeagueField names for that league and season (the league
      ledgers before 2026-27, the career's own list from then on). Everyone
@@ -63,6 +66,13 @@ export interface SoccerSeasonCtx {
   games: number;
   /** The summary card's "X won it", or null. */
   champion: string | null;
+  /** Round 1100: the phone's world runs no title race in this league (the
+   *  Championship, the Super Lig, the 2. Bundesliga, the Belgian Pro League
+   *  and any league like them), so no page of the game says who won it. In a
+   *  table season the top place is then one of the league's own clubs like
+   *  every other row. False wherever the world does crown somebody, even one
+   *  the table cannot name, and wherever this season's world is not held. */
+  titleOpen?: boolean;
   rivals: string[];
   /** Clubs that may be named in the table besides his, the rivals and the champion. */
   named: string[];
@@ -122,6 +132,13 @@ export function buildSoccerSeasonCtx(career: CareerState, clubs: ClubData[], row
     ? (world.leagues?.[key] && world.leagues[key] !== row.club ? world.leagues[key] : null)
     : null;
   const champion = crowned && key && namedInLeague(crowned, key, row.year) ? crowned : null;
+  /* Round 1100 (review fix): eight more leagues draw a table, and the world
+     crowns a champion in four of them only. In the other four the top row
+     read "another club" in every season he did not win, over a league whose
+     every club is known, and one real club was left off the table to make
+     room for it. Where this season's world names nobody for the league, the
+     table's own top place goes to one of the league's clubs. */
+  const titleOpen = !!(finish && finish.finish !== 1 && key && world && !world.leagues?.[key]);
   const derbies = readSeasonDerbies(row);
   const rivals = derbies.map(d => d.rival);
   let why: ResultsReason | null = null;
@@ -160,6 +177,7 @@ export function buildSoccerSeasonCtx(career: CareerState, clubs: ClubData[], row
     finish,
     games,
     champion,
+    titleOpen,
     rivals,
     named,
     tiers,
@@ -305,6 +323,9 @@ function soccerLabels(slots: SlotFacts[], ctx: SoccerSeasonCtx, rng: () => numbe
   for (const s of slots) {
     if (s.slot === 0) continue;
     if (s.fixedKey) out[s.slot] = { name: s.fixedKey, named: true, key: s.fixedKey };
+    /* Round 1100: nobody crowned and a table to draw, so the top place is an
+       open place like the rest: the strongest draw among the league's clubs */
+    else if (s.champion && ctx.titleOpen && ctx.mode === 'table') open.push(s);
     else if (s.champion) out[s.slot] = ctx.champion ? { name: ctx.champion, named: true, key: ctx.champion } : unnamed(s.slot);
     else open.push(s);
   }
@@ -313,6 +334,14 @@ function soccerLabels(slots: SlotFacts[], ctx: SoccerSeasonCtx, rng: () => numbe
   const entries = ctx.named.map(name => ({ name: name as string | null, at: (ctx.tiers[name] ?? 3) + rng() * 1.5 }));
   for (let i = entries.length; i < open.length; i += 1) entries.push({ name: null, at: 1 + rng() * 3.5 });
   entries.sort((a, b) => a.at - b.at);
+  /* Round 1100: with nobody crowned the top place is a club the game can
+     name whenever it knows one, so a league it knows all but two clubs of
+     never reads "another club" in 1st. A league known whole has it there
+     already and nothing moves. */
+  if (ctx.titleOpen && open[0]?.champion) {
+    const first = entries.findIndex(e => e.name !== null);
+    if (first > 0) entries.unshift(...entries.splice(first, 1));
+  }
   open.forEach((s, i) => {
     const e = entries[i];
     if (e && e.name) out[s.slot] = { name: e.name, named: true, key: e.name };

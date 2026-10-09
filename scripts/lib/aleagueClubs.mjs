@@ -14,13 +14,8 @@ export const ENGINE_NAME = {
   'wellington-phoenix': 'Wellington Phoenix', 'western-sydney-wanderers': 'Western Sydney Wanderers',
 };
 
-/** The ledger's group of each engine position, and each group's default. */
-export const GROUP_OF = { GK: 'GK', CB: 'DEF', LB: 'DEF', RB: 'DEF', CDM: 'MID', CM: 'MID', CAM: 'MID', LM: 'MID', RM: 'MID', LW: 'FWD', RW: 'FWD', ST: 'FWD', CF: 'FWD' };
-export const GROUP_DEFAULT = { GK: 'GK', DEF: 'CB', MID: 'CM', FWD: 'ST' };
-
-/** Other hosts' nationality spellings -> Transfermarkt's, the house
- *  convention (the same table _people.json records). */
-export const NATIONALITY_ALIAS = {
-  'Bosnia and Herzegovina': 'Bosnia-Herzegovina', 'Congo DR': 'DR Congo', 'Republic of Ireland': 'Ireland',
-  'South Korea': 'Korea, South', 'Korea Republic': 'Korea, South', 'South Sudan': 'Southern Sudan', USA: 'United States',
-};
+/* Round 1052: the position groups and the nationality alias table moved to
+   scripts/lib/gatheredLeague.mjs with the rest of the generator's rules, so
+   every gathered league reads one copy. They are re-exported here so this
+   file's importers did not have to change. */
+export { GROUP_OF, GROUP_DEFAULT, NATIONALITY_ALIAS } from './gatheredLeague.mjs';

@@ -57,11 +57,29 @@
      settled on points per game (rsssf fran2020.html and statscrew y-2019
      both show 27 and 28 games played).
 
-   Not listed, so results only: every other league (the Primeira Liga, the
-   Eredivisie, the Brasileirao, Liga MX, whose derby cadence of two is an
-   Apertura and a Clausura, never one table, and MLS, conferences and an
-   unbalanced schedule). Seasons after the latest one read keep the format
-   in force today, the way LEAGUE_SIZES keeps the latest size.
+   Round 1100, from 2026-27 only (no earlier season of these leagues is
+   claimed): the Championship (24 clubs, 46 games), the Eredivisie, the
+   Primeira Liga, the Super Lig, the Saudi Pro League, the Belgian Pro
+   League and the 2. Bundesliga (18 and 34 each), and the Brasileirao (20
+   and 38, the calendar year 2026). Each was read from two hosts as one
+   table, every club meeting every other home and away, three points for a
+   win: ESPN's scoreboard feed for every day of the season calendar (every
+   home and away pairing exactly once) and a page that states the format,
+   both in scripts/data/soccerCareerFacts.json leagueWorld with what each
+   said. Belgium is plain from 2026-27 by its own reform: 18 clubs, 34
+   games, no play-offs (bx1.be and sporza.be). A play-off played AFTER the
+   table does not reorder it and does not make a league odd: the
+   Championship's promotion play-offs (third to eighth from 2026-27), the
+   Eredivisie's European play-offs and the 2. Bundesliga's relegation tie.
+
+   Not listed, so results only: every other league. A league that splits
+   its season or plays in conferences gets no row here; the ones whose
+   format is read from two hosts (the Scottish Premiership, MLS and the
+   Austrian Bundesliga today) carry their real number of clubs and games in
+   ODD_FORMATS, which lives in src/data/leagueOddFormats.ts. Liga MX (two
+   tournaments a year) and five more wait there for a second format page.
+   Seasons after the latest one read keep the format in force today, the
+   way LEAGUE_SIZES keeps the latest size.
 
    This file imports nothing. */
 
@@ -75,7 +93,21 @@ export const LEAGUE_FORMAT: Readonly<Record<string, readonly FormatWindow[]>> = 
   "Serie A": [{ from: 1995 }],
   "Bundesliga": [{ from: 1995 }],
   "Ligue 1": [{ from: 1995, to: 2018 }, { from: 2020 }],
+  "Championship": [{ from: 2026 }],
+  "Eredivisie": [{ from: 2026 }],
+  "Primeira Liga": [{ from: 2026 }],
+  "Super Lig": [{ from: 2026 }],
+  "Saudi Pro League": [{ from: 2026 }],
+  "Belgian Pro League": [{ from: 2026 }],
+  "2. Bundesliga": [{ from: 2026 }],
+  "Brasileirao": [{ from: 2026 }],
 };
+
+/* Round 1100: the leagues that are not one plain table (they split, play in
+   conferences or play two tournaments) never get a row here. Their real
+   number of clubs and games is the ODD_FORMATS ledger in
+   src/data/leagueOddFormats.ts, its own module because the career page reads
+   it for the dugout and must not download this file with the first screen. */
 
 export interface PointsRule { win: number; draw: number; loss: number }
 

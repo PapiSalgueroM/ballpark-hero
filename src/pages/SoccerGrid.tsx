@@ -20,6 +20,7 @@ import {
   TIMER_MODES,
   formatTimeLeft,
 } from '@/lib/soccerGridDifficulty';
+import { safeSetItem } from '@/lib/safeStorage';
 
 const SoccerGrid = () => {
   const {
@@ -48,7 +49,7 @@ const SoccerGrid = () => {
     const seen = localStorage.getItem('sg-rules-seen');
     if (!seen) {
       setShowRules(true);
-      localStorage.setItem('sg-rules-seen', '1');
+      safeSetItem('sg-rules-seen', '1');
     }
   }, []);
 

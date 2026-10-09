@@ -130,7 +130,16 @@ export interface SeasonDerby {
      the 2015 thirty club season, the Superliga and the 2020s league and cup
      each meet a different number of times, and no window was two sourced in
      this round, so Argentina claims nothing and the Superclasico stays
-     dormant. */
+     dormant.
+
+   Round 1100, from 2026-27 only: the Championship, the Eredivisie, the
+   Super Lig, the Saudi Pro League, the Belgian Pro League and the
+   2. Bundesliga. Two meetings is the same fact as the league's format (one
+   table, every club meeting every other home and away), so each row rests
+   on the same two hosts as its LEAGUE_FORMAT row: scripts/data/
+   soccerCareerFacts.json leagueWorld. No rivalry pair is added; the rows
+   switch on the pairs the shared table already holds inside those leagues
+   (the Black Country and Dockers derbies in the Championship). */
 interface CadenceWindow { from: number; to?: number; meetings: number }
 export const DERBY_CADENCE: Record<string, CadenceWindow[]> = {
   "Premier League": [{ from: 1990, meetings: 2 }],
@@ -141,6 +150,12 @@ export const DERBY_CADENCE: Record<string, CadenceWindow[]> = {
   "Primeira Liga": [{ from: 1990, meetings: 2 }],
   "Brasileirao": [{ from: 2003, meetings: 2 }],
   "Liga MX": [{ from: 1996, to: 2018, meetings: 2 }, { from: 2020, meetings: 2 }],
+  "Championship": [{ from: 2026, meetings: 2 }],
+  "Eredivisie": [{ from: 2026, meetings: 2 }],
+  "Super Lig": [{ from: 2026, meetings: 2 }],
+  "Saudi Pro League": [{ from: 2026, meetings: 2 }],
+  "Belgian Pro League": [{ from: 2026, meetings: 2 }],
+  "2. Bundesliga": [{ from: 2026, meetings: 2 }],
 };
 
 /** League meetings per season between two clubs of that league in the

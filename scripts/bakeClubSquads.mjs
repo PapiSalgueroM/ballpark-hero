@@ -26,7 +26,10 @@
  * SAME RULES AS THE NATIONAL POOLS. Selection is per exact position so the
  * depth chart has a keeper and full backs rather than the six most valuable
  * men. Ratings come off the site's shared 48-94 value curve. The year is the
- * squad's own year, so a 2019 season shows the 2019 squad. A club whose data
+ * row's own key, the calendar year its season ENDED in: the 2020 row is the
+ * squad of 2019/20, and the game reads a season one row on (SEASON_TO_KEY in
+ * src/lib/soccerClubSquad.ts, since the review of Round 1115; this line used
+ * to say a 2019 season shows the 2019 squad). A club whose data
  * that year cannot cover a shape is absent on purpose.
  *
  * Run: node scripts/bakeClubSquads.mjs

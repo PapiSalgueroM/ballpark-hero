@@ -66,6 +66,18 @@ Blackpool, Bradford City, Huddersfield Town, Leicester City, Luton Town, Notts C
 Athletic, Reading, Sheffield Wednesday, Swindon Town, Wigan Athletic and Wimbledon). Note that
 Leicester City is not in the scout-d world at all, although the brief's example names it.
 
+Round 1100 (2026-10-08) grew the career world to every Club Manager league, whole, and named the
+members that world can now name in the Bundesliga, Ligue 1 and Serie A ledgers: 47 clubs in 731
+seasons. The rule is the lookup's own (the identity key of the club's spelling, or of its
+`SC_CLUB_CANON` spelling, equals the identity key of a printed name), and a name found that way was
+carried to every season in which the same ledger prints the very same string for an unnamed member
+(Hamburger SV, Stade Rennais). Each ledger's `canonRound1100` field lists the clubs and the season
+counts; Ligue 1's own club `key` agrees with every one (no key carries two names). The English and
+Spanish ledgers needed nothing: their pool clubs were in the world when the ledgers were built.
+A pool club named here is still held out of the transfer market before 2026-27 (see `clubSince` in
+`scripts/data/soccerCareerFacts.json`): the ledger says it was in that league that season, which
+is what a past table prints, and says nothing about the first season it existed.
+
 ## Self checks
 
 1. Count per season equals the verified size, in every counted source.

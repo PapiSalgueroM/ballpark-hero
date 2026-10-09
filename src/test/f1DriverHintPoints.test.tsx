@@ -5,6 +5,7 @@ import { F1DriverBoard } from '@/components/f1-driver/F1DriverBoard';
 import { recordCompletion } from '@/lib/completions';
 import { POINTS_BY_CLUE } from '@/types/f1Driver';
 import type { F1DriverPuzzle } from '@/types/f1Driver';
+import { formatNumber } from '@/lib/formatNumber';
 
 const fixture = vi.hoisted(() => ({
   puzzle: { id: 'fiction-hint-racer', driverName: 'Fixture Racer', commonNames: ['Fixture Racer'], clues: ['Generated first clue', 'Generated second clue', 'Generated third clue', 'Generated fourth clue', 'Generated fifth clue', 'Generated sixth clue'] },
@@ -98,7 +99,7 @@ describe('actual F1 driver hint points and help', () => {
       localStorage.clear(); vi.clearAllMocks(); const view = mount(); click(view, /Daily Challenge/);
       for (let i = 1; i < clue; i++) click(view, 'Fixture wrong guess');
       click(view, 'Fixture correct guess'); const score = POINTS_BY_CLUE[clue - 1];
-      expect(view.getByText(`${score} pts`)).toBeVisible(); expect(JSON.parse(localStorage.getItem(key)!)).toEqual(exact(clue, [...Array(clue - 1).fill('Fixture Other'), 'Fixture Racer'], score));
+      expect(view.getByText(`${formatNumber(score)} pts`)).toBeVisible(); expect(JSON.parse(localStorage.getItem(key)!)).toEqual(exact(clue, [...Array(clue - 1).fill('Fixture Other'), 'Fixture Racer'], score));
       expect(recordCompletion).toHaveBeenCalledExactlyOnceWith('/f1-driver', score, 'FixtureBaller', 0); click(view, /Copy Score Card/); expect(fixture.clipboard).toHaveBeenCalledExactlyOnceWith(card(clue, score));
       tick(650); expect(recordCompletion).toHaveBeenCalledTimes(1); view.unmount();
     }

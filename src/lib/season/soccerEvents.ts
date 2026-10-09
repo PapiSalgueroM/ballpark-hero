@@ -12,8 +12,9 @@
    `soccerEventDisagreements` is the matching self check, run by the soccer
    binding's `check`: the goal events make the score, his goal and assist
    events make his line, the decisive goal sits where the save says, and
-   none of his events comes after he went off. Imports only from ./core. */
-import { shuffled, type DerivedGame, type DerivedSeason, type FixedGame, type GameContext, type MomentDelta, type MomentSpot, type Rng, type SeasonEvent } from './core';
+   none of his events comes after he went off. Imports only from ./core and ../keyedRng. */
+import { shuffled, type DerivedGame, type DerivedSeason, type FixedGame, type GameContext, type Moment, type MomentDelta, type MomentSpot, type Rng, type SeasonEvent } from './core';
+import { keyedRng } from '../keyedRng';
 
 /** Minutes in a soccer match (the clock's full time). */
 export const SOCCER_FULL_TIME = 90;
@@ -58,6 +59,49 @@ export function soccerEvents(g: DerivedGame, f: FixedGame | null, game: GameCont
     if ((g.line.yellow ?? 0) > 0) ev.push({ min: Math.min(SOCCER_FULL_TIME, lastMine + Math.floor(rng() * Math.max(1, offAt - lastMine))), kind: 'yellow', side: 'us', mine: true });
   }
   g.events = ev.sort((x, y) => x.min - y.min || (RANK[x.kind] ?? 5) - (RANK[y.kind] ?? 5));
+}
+
+/** What soccerOwnGoals answered for a game object, and under which season and protection. */
+const OWN_GOALS_KEPT = new WeakMap<DerivedGame, { guard: string; game: DerivedGame }>();
+
+/** Fictional own-goal roles on existing, uncredited goals. The 1/64 tag and
+ *  one-of-11 active-player role are provisional game odds, not real data.
+ *  Planned moments and their return matches stay outside this pass. */
+export function soccerOwnGoals(s: DerivedSeason, moments: readonly Pick<Moment, 'md' | 'minute' | 'mirrorMd'>[]): DerivedSeason {
+  const minutes = new Set(moments.map(m => `${m.md}|${m.minute}`));
+  const mirrors = new Set(moments.flatMap(m => m.mirrorMd === null ? [] : [m.mirrorMd]));
+  const tagged = (g: DerivedGame): DerivedGame => {
+    const assists = new Set(g.events.filter(e => e.kind === 'assist' && e.mine).map(e => e.min));
+    const ordinals = new Map<string, number>();
+    const win = pitchWindow(g);
+    return { ...g, events: g.events.map((e): SeasonEvent => {
+      if (e.kind !== 'goal') return e;
+      const group = `${e.min}|${e.side}`;
+      const ordinal = ordinals.get(group) ?? 0;
+      ordinals.set(group, ordinal + 1);
+      if (e.pts !== 1 || e.mine || mirrors.has(g.md) || minutes.has(`${g.md}|${e.min}`) || (e.side === 'us' && assists.has(e.min))) return e;
+      const key = `${s.key}|og|${g.md}|${e.min}|${e.side}|${ordinal}`;
+      if (keyedRng(`${key}|tag`)() >= 1 / 64) return e;
+      const role = Math.floor(keyedRng(`${key}|role`)() * 11);
+      const ownGoalBy = e.side === 'us' ? 'opponent' : win && e.min >= win[0] && e.min <= win[1] && role === 0 ? 'you' : 'teammate';
+      return { ...e, ownGoalBy };
+    }) };
+  };
+  /* Release AP: a game the pass has already answered comes back as the same object, and a game with
+     nothing tagged is handed back as it came. The core keeps the games a decision did not touch
+     (withGames), and the little pitch reads a new events array as "a moment changed this match" and
+     drops the goal it was playing, so this pass must not hand every game a new array each time the
+     season is decided again. The answer is kept per game object, under everything else it depends
+     on: the season's key and what the moments protect in that game. */
+  return { ...s, games: s.games.map(g => {
+    const guard = `${s.key}|${mirrors.has(g.md) ? 'return' : 'own'}|${moments.filter(m => m.md === g.md).map(m => m.minute).join(',')}`;
+    const kept = OWN_GOALS_KEPT.get(g);
+    if (kept && kept.guard === guard) return kept.game;
+    const game = tagged(g);
+    const out = game.events.some((e, i) => e !== g.events[i]) ? game : g;
+    OWN_GOALS_KEPT.set(g, { guard, game: out });
+    return out;
+  }) };
 }
 
 /** Every way the soccer events of a derived season disagree with its scores and his line. */

@@ -13,6 +13,7 @@ import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { cn } from '@/lib/utils';
+import { safeSetItem } from '@/lib/safeStorage';
 
 const UfcGame = () => {
   const {
@@ -36,7 +37,7 @@ const UfcGame = () => {
     const seen = localStorage.getItem('ufc-rules-seen');
     if (!seen) {
       setShowRules(true);
-      localStorage.setItem('ufc-rules-seen', '1');
+      safeSetItem('ufc-rules-seen', '1');
     }
   }, []);
 

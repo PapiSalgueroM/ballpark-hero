@@ -248,7 +248,7 @@ describe('Face Off reveals the scoreline the hook totals', () => {
       expect(H.fix.faceOff.outcome).toBe(kind);
       const { container } = await mount(<FaceOff />);
       expect(stateOf(container)).toBe(kind);
-      expect(pill(container)).toBe(`${H.fix.faceOff.totals.you} to ${H.fix.faceOff.totals.rival}`);
+      expect(pill(container)).toBe(`${formatNumber(H.fix.faceOff.totals.you)} to ${formatNumber(H.fix.faceOff.totals.rival)}`);
       expect(container.textContent).toContain('points, you to The Pro');
     });
   }

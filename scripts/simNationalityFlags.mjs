@@ -291,7 +291,13 @@ if (pStart < 0) refuse('SoccerCareer.tsx no longer declares NATIONALITIES where 
 const picker = [...sc.slice(pStart, sc.indexOf('];', pStart)).matchAll(/"([^"]+)"/g)].map(m => m[1]);
 if (picker.length < 100) refuse(`only ${picker.length} names read from the Soccer Career picker, the parse is off`);
 
-const marketText = stripComments(read('src/data/playerNationalities.ts'));
+/* Round 1042: the past worlds left playerNationalities.ts for a file each under
+   src/data/nationalities/. The folder is read, never a typed list, so a country that only a
+   past season has cannot slip past the confederation check, and a new season joins by itself. */
+const ERA_NAT_FILES = fs.readdirSync(path.join(ROOT, 'src/data/nationalities')).filter(f => /^era\d{4}\.ts$/.test(f)).sort();
+if (ERA_NAT_FILES.length < 4) refuse(`only ${ERA_NAT_FILES.length} era nationality files under src/data/nationalities, expected at least four, so the market maps are not all being read`);
+const marketText = ['src/data/playerNationalities.ts', ...ERA_NAT_FILES.map(f => `src/data/nationalities/${f}`)]
+  .map(f => stripComments(read(f))).join('\n');
 const market = [...new Set([...marketText.matchAll(/:\s*'((?:[^'\\]|\\.)*)',?\s*$/gm)].map(m => m[1].replace(/\\'/g, "'")))];
 if (market.length < 100) refuse(`only ${market.length} distinct nationalities read from the market maps, the parse is off`);
 

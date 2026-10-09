@@ -39,9 +39,10 @@ const BUNDLE = path.join(os.tmpdir(), 'xi.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export { pickSquad, xiMen, NATION_CONFED } from '${ROOT.replaceAll('\\', '/')}/src/lib/soccerInternational.ts';
+export { xiMen, NATION_CONFED } from '${ROOT.replaceAll('\\', '/')}/src/lib/soccerInternational.ts';
+export { pickSquad } from '${ROOT.replaceAll('\\', '/')}/src/lib/soccerInternationalSquads.ts';
 export { allIntlNames, intlName, NATION_FAMILY, NAME_FAMILIES, familyFor } from '${ROOT.replaceAll('\\', '/')}/src/lib/intlNames.ts';
-export { NATIONALITY_BY_WORLD } from '${ROOT.replaceAll('\\', '/')}/src/data/playerNationalities.ts';
+export { NATIONALITY_BY_WORLD } from '${ROOT.replaceAll('\\', '/')}/src/data/nationalities/allWorlds.ts';
 `);
 execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 const {
@@ -182,9 +183,16 @@ console.log('5) The whole invented name space, against every real player');
   if (all.length < 4000) fail(`only ${all.length} invented names enumerated`);
   const hits = all.filter(n => real.has(n));
   if (hits.length) fail(`invented names that belong to real players: ${hits.slice(0, 10).join(' | ')}`);
-  /* And against the real contenders the career engine ships by name. */
+  /* And against the real contenders the career engine ships by name. Release AN: they left the engine for
+     the era tables (src/lib/careerEras.ts, one S("Name", "Nation", "POS", ...) row a star), and this read
+     went on asking the engine alone: it parsed nobody, so the harness was red on main and this half of
+     the check was blind. Both shapes are read now. */
   const engine = fs.readFileSync(path.join(ROOT, 'src/lib/soccerCareerEngine.ts'), 'utf-8');
-  const contenders = new Set([...engine.matchAll(/\{ name: "([^"]+)", nationality:/g)].map(m => m[1]));
+  const eras = fs.readFileSync(path.join(ROOT, 'src/lib/careerEras.ts'), 'utf-8');
+  const contenders = new Set([
+    ...[...engine.matchAll(/\{ name: "([^"]+)", nationality:/g)].map(m => m[1]),
+    ...[...eras.matchAll(/\bS\("([^"]+)", "[^"]+", "[A-Z]{2,3}",/g)].map(m => m[1]),
+  ]);
   if (contenders.size < 20) fail(`only ${contenders.size} real contenders parsed`);
   const clash = all.filter(n => contenders.has(n));
   if (clash.length) fail(`invented names that clash with the engine's real contenders: ${clash.join(' | ')}`);
@@ -202,7 +210,9 @@ console.log('6) The banks that could mint a real name do not come back');
   }
   if (!engine.includes("from './intlNames'")) fail('the engine no longer imports the guarded pools');
   if (!engine.includes('intlName(nat')) fail('generateContender is not using the guarded pools');
-  const intl = fs.readFileSync(path.join(ROOT, 'src/lib/soccerInternational.ts'), 'utf-8');
+  /* Round 1042: the team sheet (buildStartingXi, the one place the engine names a man) moved to
+     soccerInternationalSquads.ts, so that is where the guarded pools are used now. */
+  const intl = fs.readFileSync(path.join(ROOT, 'src/lib/soccerInternationalSquads.ts'), 'utf-8');
   if (!intl.includes("from './intlNames'")) fail('the international engine does not use the guarded pools');
 }
 

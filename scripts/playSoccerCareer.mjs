@@ -284,7 +284,7 @@ const ACTIONS = [
   'Next Year', 'Next Season', 'Continue', 'Sign Contract',
   'Accept', 'Confirm', 'Proceed', 'Next', 'Done', 'Close',
 ];
-const SKIP = /Retire|New Career|Report a bug|Light mode|Cookie|Sign up|^Back$|Full attributes|Essential only|^Accept$|^⏸$|^🏋️$|^📱/;
+const SKIP = /Retire|New Career|Report a bug|Light mode|Sound: |Cookie|Sign up|^Back$|Full attributes|Essential only|^Accept$|^⏸$|^🏋️$|^📱/;
 
 async function stepOnce(page) {
   return page.evaluate(async ([actions, skipSrc]) => {

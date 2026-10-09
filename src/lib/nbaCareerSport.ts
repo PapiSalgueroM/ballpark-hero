@@ -10,7 +10,7 @@ import { nbaPreDraftDescriptor } from '@/lib/nbaCareerPreDraft';
 import {
   NBA_ERAS, NBA_ARCHETYPES, startNbaCareer, simNbaSeason, nbaProgress, drawNbaEvent,
   nbaEventDeck,
-  NBA_SPEND_ITEMS, buyNbaItem, getNbaSpendItem, repairNetWorth,
+  NBA_SPEND_ITEMS, buyNbaItem, getNbaSpendItem,
   nbaShouldRetire, nbaLegacyOf, nbaCareerTotals, nbaRollTeamQuality, nbaTeamLabelOf,
   buildNbaFaWindow, nbaFaPushArgs, buildNbaExtension, nbaExtPushArgs,
   nbaAssignRole, nbaCampBattle,
@@ -24,15 +24,19 @@ import { NBA_BADGES } from '@/lib/careerBadges';
 import { nbaUnreadInboxCount, answerNbaInboxMessage, nbaDraftNightInbox, NBA_CALENDAR } from '@/lib/nbaCareerInbox';
 import { dismissNbaRivalryEvent, resolveNbaRivalryChoice } from '@/lib/nbaCareerRivalryEvents';
 import type { UsCareerSport } from '@/lib/usCareerSport';
+import { repairBankOnLoad, withBankFloor } from '@/lib/usCareerBank';
 import { NBA_CAREER_HALL } from '@/lib/nbaCareerHall';
 import { nbaSeasonReview } from '@/lib/usCareerSeasonReview';
+import { usSeasonHeldLine } from '@/data/usSeasonLengths';
 
 /* The key this career saves under. It stays a named constant so the home
    page's Continue fence (simHomeFront section 7) can find where every save
    key in src is declared; the value is the one the old board used. */
 const SAVE_KEY = 'nba-my-career-save-v1';
 
-export const NBA_CAREER_SPORT: UsCareerSport<NbaCareerState, NbaSeasonLine> = {
+/* Round 1104: built through withBankFloor, the one bank rule the four US
+   careers share (src/lib/usCareerBank.ts). */
+export const NBA_CAREER_SPORT: UsCareerSport<NbaCareerState, NbaSeasonLine> = withBankFloor({
   slug: 'nba',
   label: 'NBA',
   saveKey: SAVE_KEY,
@@ -95,7 +99,7 @@ export const NBA_CAREER_SPORT: UsCareerSport<NbaCareerState, NbaSeasonLine> = {
   moneyWealth: nbaMoneyWealth,
   shopItems: NBA_SPEND_ITEMS,
   buyItem: buyNbaItem,
-  repairNetWorth: c => repairNetWorth(c, id => getNbaSpendItem(id)?.cost ?? 0),
+  repairNetWorth: c => repairBankOnLoad(c, id => getNbaSpendItem(id)?.cost ?? 0, NBA_MONEY),
   heatLabel: nbaHeatLabel,
   heatTitle: 'League integrity',
 
@@ -131,4 +135,9 @@ export const NBA_CAREER_SPORT: UsCareerSport<NbaCareerState, NbaSeasonLine> = {
   retirementAvatar: false,
   /* Round 1039: the retirement talk, the farewell season and the Hall. */
   hall: NBA_CAREER_HALL,
-};
+  /* Round 1048: the Season Center. Its numbers load when he first watches a
+     season; the held line is tiny and eager, so the hub can say a year has no
+     game by game view before he presses. */
+  loadSeasonCentre: () => import('@/lib/season/nba').then(m => m.NBA_SEASON),
+  seasonCentreHeld: year => usSeasonHeldLine('nba', year),
+});

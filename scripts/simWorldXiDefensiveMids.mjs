@@ -784,9 +784,9 @@ const swapSource = (rel, pairs) => {
   }
   swaps.set(path.normalize(f), text);
 };
-if (CONTROL === 'normalize') swapSource('src/lib/squadDeal.ts', [["'Defensive Midfield': 'CDM'", "'Defensive Midfield': 'CB'"]]);
+if (CONTROL === 'normalize') swapSource('src/lib/squadShape.ts', [["'Defensive Midfield': 'CDM'", "'Defensive Midfield': 'CB'"]]);
 if (CONTROL === 'cmslot') {
-  swapSource('src/lib/squadDeal.ts', [["const MD: Position[] = ['CM', 'CDM', 'CAM'];", "const MD: Position[] = ['CM', 'CAM'];"]]);
+  swapSource('src/lib/squadShape.ts', [["const MD: Position[] = ['CM', 'CDM', 'CAM'];", "const MD: Position[] = ['CM', 'CAM'];"]]);
   swapSource('src/lib/positionFit.ts', [["CDM: ['CM'], CAM: ['CM'],", "CDM: [], CAM: ['CM'],"]]);
 }
 if (CONTROL === 'nosearch') swapSource('src/lib/worldXi.ts', [['if (q.length < 2) return [];', "if (q.length < 2 || q.includes(' ')) return [];"]]);

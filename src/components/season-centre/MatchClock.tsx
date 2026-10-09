@@ -10,14 +10,15 @@
    before, and never counts through numbers). A hidden tab pauses the clock
    and it picks up where it was; reduced motion paints full time on the first
    frame. The event list has a fixed height and scrolls inside itself, so
-   nothing below it moves while the match plays.
+   nothing below it moves while the match plays (three lines on a phone since
+   Round 1046, so the table under it stays near the fold; seven from md up).
 
    Round 1047: `holdAt` stops the clock a beat before that minute (one of
    his moments is about to happen) and `onHold` says so once; the clock
    carries on when the hold is lifted, with the match as it then stands.
    Under reduced motion and at Results the clock still stops there, so every
    moment is playable. */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import type { DerivedGame, SeasonEvent } from '@/lib/season/core';
 
 export type ClockSpeed = 1 | 3 | 'results';
@@ -31,6 +32,15 @@ export interface SeasonClock {
   label: (minute: number) => string;
   /** One line for an event, in the sport's words. */
   words: (e: SeasonEvent, us: string, them: string) => string;
+  /** Round 1048: the feed's first line before anything happens ("Kick off." when absent). */
+  start?: string;
+  /** Round 1048: the line at the end ("Full time" when absent) and the clock's last reading ("FT"). */
+  end?: string;
+  endShort?: string;
+  /** Round 1048: the width class of the feed's time column ("w-8" when absent; a longer label needs more). */
+  labelClass?: string;
+  /** Round 1048: a short name for the two sides of the score bug only ("OKC"); the feed keeps full names. */
+  short?: (name: string) => string;
 }
 
 /** The score at a minute, from the points the game's own events put on the board: [his club, the other side]. */
@@ -39,6 +49,9 @@ export function scoreAt(events: readonly SeasonEvent[], minute: number): [number
   for (const e of events) if (e.pts && e.min <= minute) { if (e.side === 'us') us += e.pts; else them += e.pts; }
   return [us, them];
 }
+
+/** What a stage slot is told: the whole minute on screen, and whether the clock is paused or showing results at once. */
+export interface ClockStageAt { shown: number; paused: boolean; instant: boolean }
 
 interface Props {
   game: DerivedGame;
@@ -52,9 +65,12 @@ interface Props {
   /** Stop a beat before this minute until it is lifted (null or absent: run to full time). */
   holdAt?: number | null;
   onHold?: () => void;
+  /** Round 1046: something the sport draws between the minute and the event list (soccer: the little pitch),
+   *  told the minute on screen. Absent: the clock's markup is exactly what it was. */
+  stage?: (at: ClockStageAt) => ReactNode;
 }
 
-export function MatchClock({ game, clock, usName, themName, speed, paused, reduced, onFullTime, holdAt, onHold }: Props) {
+export function MatchClock({ game, clock, usName, themName, speed, paused, reduced, onFullTime, holdAt, onHold, stage }: Props) {
   const FULL_TIME = clock.length;
   const instant = reduced || speed === 'results';
   /* the last minute the clock may show for now */
@@ -102,12 +118,15 @@ export function MatchClock({ game, clock, usName, themName, speed, paused, reduc
     if (el) el.scrollTop = el.scrollHeight;
   }, [seen.length]);
 
-  const homeName = game.home ? usName : themName;
-  const awayName = game.home ? themName : usName;
+  const bugName = clock.short ?? ((name: string) => name);
+  const homeName = bugName(game.home ? usName : themName);
+  const awayName = bugName(game.home ? themName : usName);
   const hg = game.home ? us : them;
   const ag = game.home ? them : us;
   return (
     <div data-match-clock data-minute={shown} data-score={`${us}-${them}`} data-held={held ? 'true' : undefined}>
+      {/* Round 1046: on a phone the score stays at the top of the stage when the stage moves down to show the table */}
+      <div className="sticky top-0 z-10 bg-background md:static" data-score-bar>
       <div className="flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2">
         <span className="min-w-0 flex-1 truncate text-sm font-bold">{homeName}</span>
         <span key={`${hg}-${ag}`} className={`${shown > 0 && !instant ? 'cm-slam' : ''} shrink-0 text-xl font-black tabular-nums`} data-score-bug>
@@ -115,15 +134,18 @@ export function MatchClock({ game, clock, usName, themName, speed, paused, reduc
         </span>
         <span className="min-w-0 flex-1 truncate text-right text-sm font-bold">{awayName}</span>
       </div>
-      <div className="mt-1 flex items-center justify-between text-[11px] text-muted-foreground">
-        <span className="tabular-nums" data-clock-minute>{done ? 'FT' : clock.label(shown)}</span>
-        {done && <span className={`${instant ? '' : 'cm-slam'} font-bold text-foreground`} data-full-time>Full time</span>}
       </div>
-      <ol ref={listRef} className="mt-2 h-28 overflow-y-auto space-y-1 text-xs" aria-live="polite" data-clock-events>
-        {seen.length === 0 && <li className="text-muted-foreground">Kick off.</li>}
+      <div className="mt-1 flex items-center justify-between text-xs text-muted-foreground">
+        <span className="tabular-nums" data-clock-minute>{done ? clock.endShort ?? 'FT' : clock.label(shown)}</span>
+        {done && <span className={`${instant ? '' : 'cm-slam'} font-bold text-foreground`} data-full-time>{clock.end ?? 'Full time'}</span>}
+      </div>
+      {stage && <div className="mt-2" data-clock-stage>{stage({ shown, paused, instant })}</div>}
+      {/* on a phone the list is exactly three rows tall (16 px lines, 4 px apart), so the oldest row on show is never cut in half */}
+      <ol ref={listRef} className="mt-2 h-14 overflow-y-auto space-y-1 text-xs md:h-28" aria-live="polite" data-clock-events>
+        {seen.length === 0 && <li className="text-muted-foreground">{clock.start ?? 'Kick off.'}</li>}
         {seen.map((e, i) => (
           <li key={`${i}-${e.min}-${e.kind}`} className={`${instant ? '' : 'cm-tick-in'} flex gap-2`}>
-            <span className="w-8 shrink-0 tabular-nums text-muted-foreground">{clock.label(e.min)}</span>
+            <span className={`${clock.labelClass ?? 'w-8'} shrink-0 tabular-nums text-muted-foreground`}>{clock.label(e.min)}</span>
             <span className={e.mine ? 'font-bold text-primary' : ''}>{clock.words(e, usName, themName)}</span>
           </li>
         ))}

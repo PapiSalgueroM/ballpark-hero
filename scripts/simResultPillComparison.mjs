@@ -13,7 +13,8 @@
  * drawn at its WIDEST reachable score and its narrowest (34 cases).
  *
  * WHAT IT CHECKS, each a named check a control proves can fail:
- *   text   the pill reads exactly the score the hook reports
+ *   text   the pill reads exactly the score the hook reports (since Round 1085
+ *          with thousands grouped: 1000 points read "1,000")
  *   fit    the score sits on ONE line inside the pill, the pill keeps its fixed
  *          80px height and stays inside the moment, and the page never scrolls
  *          sideways
@@ -21,23 +22,42 @@
  *          of the stat line and the emoji block are the same with every
  *          animation held at its first frame and at its last (layout offsets,
  *          not boxes, so a transform that never moves layout is not a shift)
+ *   under  (Release AN) where a card prints its score a second time, it reads
+ *          as the pill does: the Score cell of Rank 'Em and Hall of Fame or
+ *          Bust, and on Face Off both the line under the pill and the emoji
+ *          block (eight cases, each expectation built from the hook's values
+ *          through formatNumber, like the pill's). At exactly 1,000 points
+ *          these printed "1,000" in the pill and "1000" under it; a review
+ *          found that putting the bare number back left every check green.
  *
  * Measured headroom (2026-10-03, 34 cases, 390 by 844): the widest pill is
  * Face Off's "2600 to 2600" (a two player duel tied to the last extra round),
  * 174px wide with 71.0px spare on each side; every other game's widest pill is
- * 125px or less with 95px or more spare. The checks themselves are geometric
+ * 125px or less with 95px or more spare. Measured again 2026-10-08 (Release
+ * AN, the runner's Chromium), after Face Off's two totals were grouped like
+ * every other score: that pill reads "2,600 to 2,600" and is 210px wide with
+ * 53.1px spare on each side (so is "2,000 to 1,800"); the next widest is a
+ * grouped "1,000" at 141px with 87.5px spare. The checks themselves are geometric
  * (one line, inside the box, equal layout offsets within half a pixel), so
  * they carry no tuned band. Measured controls: noscore turns all 34 cases red;
  * cramp leaves 17.0px spare and wraps all three Face Off scorelines onto two
  * lines (6 findings), which is why the widest Face Off case is in the list;
  * shift moves the card, the moment, the stat line and the emoji block by 32px
- * at the first frame in all 34 cases (136 findings).
+ * at the first frame in all 34 cases (136 findings). Measured 2026-10-08 on a
+ * GitHub runner for [under] (Release AN): 8 cards say what reads under their
+ * pill and all 8 agree as committed; bareline gives 8 findings, on all three
+ * pages (one Score cell on Rank 'Em and on Hall of Fame or Bust, where only
+ * the 1,000 case can differ, and the line plus the emoji block of each of
+ * Face Off's three scorelines), and leaves text, fit and shift green.
  *
  * NEGATIVE CONTROLS (RESULT_PILL_CONTROL=<name>), each mutates one anchor in
  * memory, refuses to run if the anchor is missing, and must turn its check red:
  *   noscore   ResultScreen stops forwarding the score (text)
  *   cramp     ResultMoment draws every score at a display size, too big for a long one (fit)
  *   shift     the headline's rise animates margin instead of transform (shift)
+ *   bareline  Rank 'Em, Hall of Fame or Bust and Face Off print the score bare
+ *             under a grouped pill again, five anchors in three files (under).
+ *             It only counts as fired when all three pages are named.
  *
  * RESULT_PILL_SHOTS=<dir> saves one 390 wide screenshot of each case's card.
  *
@@ -56,13 +76,13 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 process.chdir(root);
 const read = f => fs.readFileSync(path.join(root, f), 'utf8');
 
-const CONTROLS = { noscore: 'text', cramp: 'fit', shift: 'shift' };
+const CONTROLS = { noscore: 'text', cramp: 'fit', shift: 'shift', bareline: 'under' };
 const control = process.env.RESULT_PILL_CONTROL || '';
 if (control && !CONTROLS[control]) {
   console.error(`RESULT_PILL_CONTROL=${control} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
   process.exit(1);
 }
-const checks = { text: [], fit: [], shift: [] };
+const checks = { text: [], fit: [], shift: [], under: [] };
 const fail = (check, msg) => { checks[check].push(msg); console.error(`  FAIL [${check}] ${msg}`); };
 
 /** Replace exactly one occurrence (LF normalised), refusing a missing or repeated anchor. */
@@ -80,6 +100,24 @@ let momentSrc = fs.readFileSync(momentFile, 'utf8');
 if (control === 'noscore') screenSrc = mutateOnce(screenSrc, 'score={score}', 'score={undefined}', 'ResultScreen.tsx');
 if (control === 'cramp') momentSrc = mutateOnce(momentSrc, "if (len <= 3) return 'text-4xl';", "if (len <= 99) return 'text-6xl';", 'ResultMoment.tsx');
 if (control === 'shift') momentSrc = mutateOnce(momentSrc, '@keyframes rmRise { 0% { opacity: 0; transform: translateY(6px); }', '@keyframes rmRise { 0% { opacity: 0; margin-top: 40px; }', 'ResultMoment.tsx');
+/* bareline: the three pages that print their score a second time under the pill print it bare again
+   (the state before Release AN), while the pill itself stays grouped. Five anchors, each exactly once. */
+const UNDER_ROUTES = ['/rank-em', '/hof-or-bust', '/face-off'];
+const bareSrc = {};
+if (control === 'bareline') {
+  const bare = (file, swaps) => {
+    let src = fs.readFileSync(path.join(root, file), 'utf8');
+    for (const [before, after] of swaps) src = mutateOnce(src, before, after, path.basename(file));
+    bareSrc[path.basename(file)] = src;
+  };
+  bare('src/pages/RankEm.tsx', [['<Trophy className="w-4 h-4" />{formatNumber(score)}</span>', '<Trophy className="w-4 h-4" />{score}</span>']]);
+  bare('src/components/hof-or-bust/HofOrBustBoard.tsx', [["value: `${formatNumber(score)} pts`", 'value: `${score} pts`']]);
+  bare('src/pages/FaceOff.tsx', [
+    ['{formatNumber(g.totals.you)} to {formatNumber(g.totals.rival)}, {g.totals.youRounds}', '{g.totals.you} to {g.totals.rival}, {g.totals.youRounds}'],
+    ['two players: ${formatNumber(g.totals.you)} to ${formatNumber(g.totals.rival)}', 'two players: ${g.totals.you} to ${g.totals.rival}'],
+    ['v ${rival.label}: ${formatNumber(g.totals.you)} to ${formatNumber(g.totals.rival)}', 'v ${rival.label}: ${g.totals.you} to ${g.totals.rival}'],
+  ]);
+}
 
 /* The game hooks, each answering with the fixture the case dealt; the recorder does nothing. */
 const HOOK_FIX = {
@@ -159,6 +197,10 @@ const bundle = await build({
     }));
     b.onLoad({ filter: /ResultMoment\.tsx$/ }, () => ({ contents: momentSrc, loader: 'tsx', resolveDir: path.dirname(momentFile) }));
     b.onLoad({ filter: /ResultScreen\.tsx$/ }, () => ({ contents: screenSrc, loader: 'tsx', resolveDir: path.dirname(screenFile) }));
+    if (control === 'bareline') b.onLoad({ filter: /(RankEm|HofOrBustBoard|FaceOff)\.tsx$/ }, a => {
+      const src = bareSrc[path.basename(a.path)];
+      return src === undefined ? undefined : { contents: src, loader: 'tsx', resolveDir: path.dirname(a.path) };
+    });
   } }],
 });
 const jsOut = bundle.outputFiles.find(o => o.path.endsWith('.js')).text;
@@ -192,6 +234,11 @@ const measure = () => {
     cardH: card.offsetHeight, momentH: moment ? moment.offsetHeight : 0,
     afterTop: after ? absTop(after) : null, gridTop: grid ? absTop(grid) : null,
     sideways: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    /* the places a card prints its score a second time: the stat line right under the moment,
+       the stat row cell labelled Score, the emoji block */
+    line: after && after.tagName === 'P' ? after.textContent : null,
+    row: (Array.from(card.querySelectorAll('.cm-rise')).find(c => c.firstElementChild && c.firstElementChild.textContent === 'Score')?.lastElementChild?.textContent) ?? null,
+    grid: grid ? grid.textContent : null,
   };
   if (pill && moment) {
     const p = pill.getBoundingClientRect(), m = moment.getBoundingClientRect();
@@ -218,6 +265,7 @@ const settle = page => page.evaluate(() => new Promise(r => requestAnimationFram
 
 let narrowest = { slack: Infinity, at: '' };
 let count = 0;
+let underSeen = 0;
 try {
   const page = await browser.newPage({ viewport: VIEW, reducedMotion: 'no-preference' });
   const errors = [];
@@ -227,7 +275,7 @@ try {
   await page.route('**/*', route => route.fulfill({ status: 200, contentType: 'text/html', body: html }));
   await page.goto('http://127.0.0.1:4173/result-pill-fixture');
   await page.addScriptTag({ content: jsOut });
-  const cases = await page.evaluate(() => window.cases.map(c => ({ route: c.route, what: c.what, expect: c.expect })));
+  const cases = await page.evaluate(() => window.cases.map(c => ({ route: c.route, what: c.what, expect: c.expect, under: c.under ?? null })));
   console.log(`1) ${cases.length} finished states on a ${VIEW.width} by ${VIEW.height} phone, each game at its widest score and its narrowest`);
   for (let i = 0; i < cases.length; i++) {
     const c = cases[i];
@@ -248,6 +296,13 @@ try {
     if (Math.abs((last.pillH ?? 0) - 80) > 0.5) fail('fit', `${tag}: the pill is ${last.pillH}px tall, not its fixed 80`);
     if (!last.pillInside) fail('fit', `${tag}: the pill spills out of the moment`);
     if (last.sideways > 1) fail('fit', `${tag}: the page scrolls ${last.sideways}px sideways`);
+    if (c.under) {
+      underSeen += 1;
+      const u = c.under;
+      if (u.row !== undefined && last.row !== u.row) fail('under', `${tag}: the Score cell under the pill reads ${JSON.stringify(last.row)}, the pill's score there is ${JSON.stringify(u.row)}`);
+      if (u.line !== undefined && !(last.line ?? '').startsWith(u.line)) fail('under', `${tag}: the line under the pill reads ${JSON.stringify((last.line ?? '').slice(0, 40))}, it must start ${JSON.stringify(u.line)}`);
+      if (u.grid !== undefined && !(last.grid ?? '').includes(u.grid)) fail('under', `${tag}: the emoji block reads ${JSON.stringify((last.grid ?? '').slice(0, 60))}, it must hold ${JSON.stringify(u.grid)}`);
+    }
     for (const k of ['cardH', 'momentH', 'afterTop', 'gridTop']) {
       if (first[k] !== null && last[k] !== null && Math.abs(first[k] - last[k]) > 0.5) fail('shift', `${tag}: ${k} moves ${(last[k] - first[k]).toFixed(1)}px while the reveal plays`);
     }
@@ -261,6 +316,7 @@ try {
   }
   console.log(`   narrowest slack beside a pill: ${narrowest.slack.toFixed(1)}px, at ${narrowest.at}`);
   if (count < 34) fail('text', `only ${count} cases ran, so the fixture list did not really load`);
+  if (underSeen < 8) fail('under', `only ${underSeen} cases say what reads under their pill, not the eight of Rank 'Em, Hall of Fame or Bust and Face Off`);
 } finally {
   await browser.close();
 }
@@ -268,6 +324,12 @@ try {
 const red = Object.entries(checks).filter(([, v]) => v.length);
 if (control) {
   const want = CONTROLS[control];
+  /* bareline has to be seen on every one of its three pages, or a page's read of its own line proves nothing */
+  const blind = control === 'bareline' ? UNDER_ROUTES.filter(r => !checks.under.some(m => m.startsWith(`${r} `))) : [];
+  if (blind.length) {
+    console.error(`\nsimResultPillComparison: control bareline printed the score bare under the pill on ${UNDER_ROUTES.join(', ')} and [under] did not see it on ${blind.join(', ')}.`);
+    process.exit(1);
+  }
   if (checks[want].length) { console.log(`\nsimResultPillComparison: control ${control} turned [${want}] red, as it must (${checks[want].length} findings).`); process.exit(0); }
   console.error(`\nsimResultPillComparison: control ${control} did NOT turn [${want}] red, so that check proves nothing.`);
   process.exit(1);
@@ -276,4 +338,4 @@ if (red.length) {
   console.error(`\nsimResultPillComparison: red. ${red.map(([k, v]) => `${k} ${v.length}`).join(', ')}`);
   process.exit(1);
 }
-console.log(`\nsimResultPillComparison: green. ${count} finished states on a 390 wide phone: every pill reads the hook's score, on one line inside its fixed pill, nothing scrolls sideways, and nothing moves while the reveal plays.`);
+console.log(`\nsimResultPillComparison: green. ${count} finished states on a 390 wide phone: every pill reads the hook's score, on one line inside its fixed pill, nothing scrolls sideways, nothing moves while the reveal plays, and the ${underSeen} cards that print their score again under the pill print it the same way.`);

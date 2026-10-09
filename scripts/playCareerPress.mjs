@@ -81,6 +81,8 @@ let sawScrum = false;
    came to two seasons and the walk went red on a career that had simply not
    met the scrum yet. The screen cap below only stops a walk that is stuck. */
 let seasonsPlayed = 0;
+/* How many of the rival's choice cards the walk answered, printed on the scrum line so a log shows the path was walked. */
+let rivalCalls = 0;
 for (let step = 0; step < 90 && !sawScrum; step++) {
   const body = await page.locator('body').innerText();
   if (body.includes('The accountability scrum')) { sawScrum = true; break; }
@@ -99,6 +101,25 @@ for (let step = 0; step < 90 && !sawScrum; step++) {
   const rivalry = page.locator('[data-rivalry-event] button:has-text("Continue")');
   if (await rivalry.count()) {
     await rivalry.click();
+    await page.waitForTimeout(700);
+    continue;
+  }
+  /* Round 1051, closing pass: the rival's choice card (Round 796, "Rivalry:
+     your call") shows three answers and no Continue until one is picked, and
+     nothing in this loop matched its buttons, so a walk that was dealt one
+     sat on it for the rest of its ninety screens and went red with one
+     season played. It is dealt some summers and not others, so the same
+     build was red on one run and green on the next. The walk now answers
+     it and presses the Continue that follows. It takes the LAST answer,
+     because this walk needs the fanbase to stay cold (the scrum wants it
+     under 45 and the doctored career starts at 20): across football's six
+     choice cards the last answers can add 11 to the fanbase at the very
+     most (8 and 3, each on a risk), where the first answers can add 32. */
+  const rivalCall = page.locator('[data-rivalry-choice]');
+  if (await rivalCall.count()) {
+    const answered = rivalCall.locator('button:has-text("Continue")');
+    if (await answered.count()) await answered.first().click();
+    else { await rivalCall.locator('[data-rivalry-option]').last().click(); rivalCalls += 1; }
     await page.waitForTimeout(700);
     continue;
   }
@@ -132,7 +153,7 @@ for (let step = 0; step < 90 && !sawScrum; step++) {
   }
   await page.waitForTimeout(900);
 }
-say(sawScrum, `the accountability scrum arrived within the losing stretch (${seasonsPlayed} seasons played)`, true);
+say(sawScrum, `the accountability scrum arrived within the losing stretch (${seasonsPlayed} seasons played, ${rivalCalls} rival choice cards answered)`, true);
 
 /* Without a scrum on screen there is no card to read and no answer to click
    (the old walk died on a 30 second click timeout here). The miss above is

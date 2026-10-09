@@ -237,8 +237,12 @@ console.log('4) Turned off, the country never calls');
   if (onOffers === 0) fail('not one career was offered a national team even with the setting ON, so the off case proves nothing');
 }
 
-/* ---------- 5. Strictness moves the ask and never the table ---------- */
-console.log('5) Strictness moves what he asks for, and never how long he will sit there');
+/* ---------- 5. Strictness moves the ask and never adds to the table ----------
+   Release AP: the heading used to say strictness never moves how long he sits
+   there. It can: Firm and Ruthless take a round away (patience -1), which is
+   what Round 1165 corrected in the game's own words. What no setting may do
+   is ADD a round, and that is what this section holds. */
+console.log('5) Strictness moves what he asks for, and can only shorten how long he will sit there, never lengthen it');
 {
   const scales = [];
   for (let n = STRICTNESS_MIN; n <= STRICTNESS_MAX; n++) {

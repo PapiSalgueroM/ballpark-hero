@@ -92,6 +92,11 @@ export const allWrapperProblems = root => US_CAREER_SPORTS.flatMap(s => wrapperP
  * NHL conquest data through src/lib/usCareerToCoach.ts, which was so before
  * Round 900 and is written up as a defect rather than hidden by this fence. */
 export const US_CAREER_SHARED_DIR = 'src/components/us-career';
+/* Round 1048: the Season Center's entry, host and lazy viewer live one folder
+ * down and are shared by every sport that binds a Season Center, so they may
+ * import no sport either (the viewer reaches a sport's numbers only through
+ * the descriptor's own loader). */
+export const US_CAREER_SEASON_DIR = 'src/components/us-career/season';
 
 /** Every module a file imports for real: static, re-exported and dynamic.
  *  `import type` is left out, because it is erased and loads nothing. */
@@ -128,9 +133,10 @@ export function weightProblemsIn(file, code, own) {
 
 /** Every file the weight rule covers, with the sport it may import (null = none). */
 export function weightFiles(root) {
-  const shared = fs.readdirSync(path.join(root, US_CAREER_SHARED_DIR))
+  const filesIn = dir => (fs.existsSync(path.join(root, dir)) ? fs.readdirSync(path.join(root, dir)) : [])
     .filter(f => /\.(tsx?|jsx?)$/.test(f))
-    .map(f => `${US_CAREER_SHARED_DIR}/${f}`);
+    .map(f => `${dir}/${f}`);
+  const shared = [...filesIn(US_CAREER_SHARED_DIR), ...filesIn(US_CAREER_SEASON_DIR)];
   return [
     ...[...shared, US_CAREER_DESCRIPTOR].map(file => ({ file, own: null })),
     ...US_CAREER_SPORTS.map(s => ({ file: s.binding, own: s.slug })),

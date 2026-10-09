@@ -356,6 +356,78 @@ if (!fs.existsSync(path.join(ROOT, 'dist', 'index.html'))) {
       await p.close();
     }
   }
+  /* Round 1107: two career scenes are surfaces of their own. The signing
+     scene (the slip under a new deal) and the cup lift on a won tournament
+     card only exist once a career has reached them, so no route's first
+     screen shows either. The two saves come from the real engine
+     (scripts/lib/careerMomentSaves.mjs, the saves scripts/playCareerMoments.mjs
+     walks with motion on) and the presses are that walk's. Held under reduce:
+     R1 the scene drew (it is there and holds at least 40 characters);
+     R2 nothing in its card wearing a reveal class or one of the scene's own
+        animated classes has an animation name other than none;
+     R3 none of those is invisible, except the old number and the ring, which
+        must be display none;
+     R4 nothing inside its card moves for longer than SLOW_MS;
+     R5 no confetti falls.
+     The class list is local to this block on purpose: REVEAL_CLASSES above
+     belongs to the routes, and the Season Centre block above is another
+     round's to edit. */
+  {
+    const { loadEngine, signingSave, wonTournamentSave } = await import('./lib/careerMomentSaves.mjs');
+    const engine = await loadEngine(ROOT);
+    const signing = signingSave(engine);
+    const won = wonTournamentSave(engine);
+    const SCENE_CLASSES = ['cmo-num-new', 'cmo-num-old', 'cmo-ink', 'cmo-ring', 'victory-cup', 'victory-rays', 'victory-ribbons'];
+    const GONE_CLASSES = ['cmo-num-old', 'cmo-ring'];
+    const surfaces = [
+      { name: 'signing scene', save: signing?.save, scene: '[data-signed-slip] [data-career-moment="signing"]', card: '[data-signed-slip]',
+        reach: async p => {
+          await p.getByRole('button', { name: `Review contract with ${signing.club}`, exact: true }).click();
+          await p.getByRole('button', { name: 'Sign contract', exact: true }).click();
+        } },
+      { name: 'trophy scene', save: won?.save, scene: '[data-intl-moment] [data-career-moment="trophy"]', card: '[data-intl-moment]',
+        reach: async p => { await p.getByRole('button', { name: 'Continue →', exact: true }).click(); } },
+    ];
+    for (const s of surfaces) {
+      if (!s.save) { console.error(`  FAIL: ${s.name}: the engine gave no save to open`); badRoutes += 1; continue; }
+      const p = await ctx.newPage();
+      await p.addInitScript(([flag, v]) => { try { if (!sessionStorage.getItem(flag)) { sessionStorage.setItem(flag, '1'); localStorage.setItem('soccerCareerSave', v); } } catch { /* ignored */ } }, [`rm-1107-${s.name}`, s.save]);
+      await p.route('**://*.supabase.co/**', r => r.abort());
+      await p.goto(base + '/soccer-career', { waitUntil: 'networkidle' });
+      await p.waitForTimeout(600);
+      let reached = true;
+      try { await s.reach(p); await p.waitForSelector(s.scene, { timeout: 20000 }); } catch { reached = false; }
+      await p.waitForTimeout(700);
+      const r = !reached ? null : await p.evaluate(([sceneSel, cardSel, classes, gone, slowMs]) => {
+        const scene = document.querySelector(sceneSel);
+        const card = document.querySelector(cardSel);
+        if (!scene || !card) return null;
+        const ms = v => Math.max(0, ...String(v).split(',').map(x => { x = x.trim(); return x.endsWith('ms') ? parseFloat(x) : parseFloat(x) * 1000; }).filter(n => Number.isFinite(n)));
+        let checked = 0, animating = 0, invisible = 0, notGone = 0, slow = 0;
+        for (const el of card.querySelectorAll(classes.map(c => '.' + c).join(','))) {
+          checked += 1;
+          const cs = getComputedStyle(el);
+          if (cs.animationName !== 'none') animating += 1;
+          if (gone.some(c => el.classList.contains(c))) { if (cs.display !== 'none') notGone += 1; }
+          else if (cs.display === 'none' || Number(cs.opacity) === 0) invisible += 1;
+        }
+        for (const el of [card, ...card.querySelectorAll('*')]) {
+          const cs = getComputedStyle(el);
+          if (ms(cs.transitionDuration) > slowMs || (cs.animationName !== 'none' && ms(cs.animationDuration) > slowMs)) slow += 1;
+        }
+        return { text: (scene.innerText || '').length, checked, animating, invisible, notGone, slow, confetti: document.querySelectorAll('.animate-confetti-fall').length };
+      }, [s.scene, s.card, [...REVEAL_CLASSES, ...SCENE_CLASSES], GONE_CLASSES, SLOW_MS]);
+      await p.close();
+      console.log(`   Round 1107 ${s.name.padEnd(13)} ${r ? `text=${r.text} checked=${r.checked} animating=${r.animating} invisible=${r.invisible} notGone=${r.notGone} slow=${r.slow} confetti=${r.confetti}` : 'not reached'}`);
+      if (!r || r.text < 40) { console.error(`  FAIL: ${s.name}: the scene did not draw`); badRoutes += 1; continue; }
+      if (r.checked < 3) { console.error(`  FAIL: ${s.name}: only ${r.checked} animated element(s) were found in its card, so nothing here was measured`); badRoutes += 1; }
+      if (r.animating > 0) { console.error(`  FAIL: ${s.name}: ${r.animating} element(s) still animate under reduce`); badRoutes += 1; }
+      if (r.invisible > 0) { console.error(`  FAIL: ${s.name}: ${r.invisible} element(s) are invisible under reduce`); badRoutes += 1; }
+      if (r.notGone > 0) { console.error(`  FAIL: ${s.name}: ${r.notGone} old number or ring layer(s) are still drawn under reduce`); badRoutes += 1; }
+      if (r.confetti > 0) { console.error(`  FAIL: ${s.name}: ${r.confetti} confetti piece(s) fall under reduce`); badRoutes += 1; }
+      if (r.slow > 0) { console.error(`  FAIL: ${s.name}: ${r.slow} element(s) in its card still move for more than ${SLOW_MS}ms under reduce`); slowRoutes += 1; }
+    }
+  }
   /* The stage has to have seen our own keyframe CSS somewhere, or it proved
      nothing about this site and only that a toast library exists. Asserted
      once across the walk rather than per route, because our CSS rides in with

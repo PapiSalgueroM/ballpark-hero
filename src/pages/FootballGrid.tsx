@@ -13,6 +13,7 @@ import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { HelpCircle, Trophy } from 'lucide-react';
+import { safeSetItem } from '@/lib/safeStorage';
 
 const FootballGrid = () => {
   const {
@@ -38,7 +39,7 @@ const FootballGrid = () => {
     const seen = localStorage.getItem('fg-rules-seen');
     if (!seen) {
       setShowRules(true);
-      localStorage.setItem('fg-rules-seen', '1');
+      safeSetItem('fg-rules-seen', '1');
     }
   }, []);
 

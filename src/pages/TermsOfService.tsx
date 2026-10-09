@@ -110,11 +110,6 @@ const TermsOfService = () => {
           <p>If you have any questions about these Terms of Service or need to reach us for legal inquiries, please contact us at <a href="mailto:douknowball1@gmail.com" className="underline hover:text-foreground transition-colors">douknowball1@gmail.com</a>.</p>
         </div>
       </section>
-
-      <div className="mt-16 pt-8 border-t border-border text-center text-xs text-muted-foreground space-y-2">
-        <p>All team names, logos and trademarks are property of their respective owners. DoUKnowBall is not affiliated with the NFL, NBA, UFC, NHL, MLB, FIFA, IOC, NCAA, F1, PGA Tour, NASCAR, ATP or WTA. © 2026 DoUKnowBall</p>
-        <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link>
-      </div>
     </div>
   );
 };

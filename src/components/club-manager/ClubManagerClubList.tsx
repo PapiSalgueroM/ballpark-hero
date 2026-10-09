@@ -1,6 +1,7 @@
 import { REAL_LEAGUES, isPartialClub, CM_ROSTER_META } from '@/lib/clubManager';
 // Round 1035: the A-League Men squads were read later than the bake, on their own date.
-import { CM_ALEAGUE_META } from '@/data/clubManagerALeague2026';
+// Round 1052: so was every gathered league after it; each generated file says its own, in join order.
+import { generatedLeagueDateClauses } from '@/data/clubManagerWorldRosters';
 
 /**
  * Round 655: every league and club you can take over today, as readable text.
@@ -17,7 +18,7 @@ export function ClubManagerClubList() {
   return (
     <div className="mt-10 text-left text-sm text-muted-foreground leading-relaxed space-y-3">
       <h2 className="text-base font-semibold text-foreground">Every league and club in Club Manager</h2>
-      <p>{`Squads as of ${CM_ROSTER_META.asOf}; A-League Men squads as of ${CM_ALEAGUE_META.read}.`}</p>
+      <p>{`Squads as of ${CM_ROSTER_META.asOf}; ${generatedLeagueDateClauses().join('; ')}.`}</p>
       <p>Partial data means the market data covers only part of that squad, or none of it, and the rest is filled with youth players.</p>
       {REAL_LEAGUES.map(l => (
         <div key={l.id}>

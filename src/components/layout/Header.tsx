@@ -14,6 +14,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { AuthModal } from '@/components/auth/AuthModal';
 import { Flame, User, BarChart3, LogOut, Loader2, KeyRound } from 'lucide-react';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
+import { SoundToggle } from '@/components/game/SoundToggle';
 import { useStreaks } from '@/hooks/useStreaks';
 import { OAUTH_PROVIDERS } from '@/lib/authProviders';
 import { isGoogleOnlyAccount } from '@/lib/googlePaused';
@@ -99,6 +100,9 @@ export function Header() {
             {/* Round 347: sm and up only. The worst guest row already measures
                 347px at 360 (Round 320), so phones get the footer toggle. */}
             <ThemeToggle variant="header" />
+            {/* Round 1132: the sound switch, sm and up only for the same reason as the toggle above;
+                phones get the footer one. Its own box is 44 px inside this 56 px bar. */}
+            <SoundToggle variant="icon" className="hidden sm:inline-flex" />
             {/* #101: global streak flame, local-first, visible whether
                 signed in or not (guest experience must not regress -- see
                 CLAUDE.md guest-first posture). Sits next to the account

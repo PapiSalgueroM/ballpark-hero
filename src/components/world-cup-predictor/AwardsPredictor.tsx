@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Trophy, ChevronDown } from "lucide-react";
 import { FlagImg } from "@/pages/WorldCupPredictor";
+import { safeSetItem } from '@/lib/safeStorage';
 
 /* ───── player lists ───── */
 
@@ -273,7 +274,7 @@ export default function AwardsPredictor({ champion, onAwardsChange }: { champion
   }, [awards, onAwardsChange]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(awards));
+    safeSetItem(STORAGE_KEY, JSON.stringify(awards));
   }, [awards]);
 
   const update = (key: keyof AwardPicks) => (val: string) =>

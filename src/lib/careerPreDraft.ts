@@ -103,6 +103,10 @@ export interface PreDraftDescriptor {
   slotValue?: (pick: number) => number | null;
   /** One line about the money for a pick. */
   bonusLine?: (pick: number) => string;
+  /** Round 1104: picks added to a prospect's board rank for his position,
+   *  where a sport's game rule drafts a position late (the NFL's kickers). A
+   *  rank past the last pick is undrafted, as always. Nothing else sets it. */
+  pickOffset?: (pos: string | undefined) => number;
   postDraft: PreDraftPostDraft | null;
   undraftedLine: string;
 }
@@ -449,7 +453,7 @@ export function preDraftRunDraft(desc: PreDraftDescriptor, prev: PreDraftState):
   const { order } = preDraftOrder(desc, s.seed);
   const teams = desc.teamIds();
   const rng = keyedRng(preDraftKey(s.seed, 'board'));
-  const rank = preDraftBoardRank(s.stock, order.length, rng);
+  const rank = preDraftBoardRank(s.stock, order.length, rng) + (desc.pickOffset?.(s.pos) ?? 0);
   const drafted = rank <= order.length;
   const pick = drafted ? rank : null;
   const round = pick ? Math.ceil(pick / teams.length) : null;

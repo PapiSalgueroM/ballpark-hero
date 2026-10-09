@@ -248,6 +248,15 @@ export interface PlayerSourceConfig {
    * normalized name. Leave it unset and the dedupe is exactly the old one.
    */
   identity?: PlayerIdentityConfig;
+  /**
+   * Round 1105. Rows held in memory instead of a table. When set, searchPlayers asks this for
+   * the candidate rows and makes NO request; the same dedupeAndRank ranks them. It is handed
+   * the normalized query. Resolve null when the rows cannot be had: the search then settles
+   * with an error and no results, like a failed request, so "could not load" is never shown
+   * as "nobody by that name". It is a function, so JSON.stringify(searchOptions) in
+   * PlayerAutocomplete skips it.
+   */
+  local?: (normalizedQuery: string) => Promise<Record<string, unknown>[] | null>;
 }
 
 export interface PlayerIdentityConfig {
@@ -632,6 +641,24 @@ export async function searchPlayers(options: SearchPlayersOptions): Promise<Sear
   const normalizedQuery = normalizeName(query);
   if (normalizedQuery.length < minChars) {
     return { results: [], error: null };
+  }
+
+  /* Round 1105: a source held in memory. No request is made for it, and it is
+     ranked by the same dedupeAndRank as rows from a table. Rows that cannot be
+     had are an error, never an empty list. */
+  if (source.local) {
+    let rows: RawRow[] | null = null;
+    try {
+      rows = await source.local(normalizedQuery);
+    } catch {
+      rows = null;
+    }
+    if (signal?.aborted) return { results: [], error: null };
+    if (!rows) return { results: [], error: 'Could not load players' };
+    return {
+      results: dedupeAndRank([rows], source, normalizedQuery, { exclude, boostNames: options.boostNames, limit }),
+      error: null,
+    };
   }
 
   const rawQuery = query.trim();

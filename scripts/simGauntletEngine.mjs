@@ -506,7 +506,14 @@ const worstOf = (choices, ratingOf) => [...choices].sort((a, b) => ratingOf(a) -
    flattened skill-position pool never dealt one under 21. Collapsed under
    SIM_GAUNTLET_ENGINE_CONTROL=flatdeal, the same 500 drafts never exceeded
    a 4 point spread for NBA or a 9 point spread for NFL. These floors sit
-   comfortably inside both gaps. */
+   comfortably inside both gaps.
+   NFL re-measured in Round 1130 (2026-10-08), when the pool began to carry
+   the one opening estimate (a bell shaped 63 to 95) instead of the selection
+   rule's rank scale (66 to 97): over five seed streams of 300 drafts, 10500
+   picks, the per pick spread runs min 15, 1st percentile 16, median 22 (it
+   was 21, 22 and 27 on the old pool); collapsed under flatdeal the same
+   picks run median 4, max 6 (it was max 9). The floor of 12 did not move: it
+   sits three under the real minimum and six over the collapsed maximum. */
 /* MLB floor, measured rather than guessed, the same way the other two were.
    Over 300 drafts the per pick spread runs: overall min 7, 1st percentile 8,
    median 17, mean 17.7. Ten of the eleven slots never come in under 11. The
@@ -675,6 +682,14 @@ async function section3(label, config, roundsLen) {
    best-card seven clears 3.38 to 3.43 rounds and lifts the trophy 8.7 to
    13.0 percent; its worst-card seven clears under 0.06 rounds and also
    never wins. Floors below sit under every one of those measured runs.
+   NFL re-measured in Round 1130 (2026-10-08, the same five stream recipe)
+   after the pool's numbers and with them the ladder moved (78, 85, 90, 95,
+   99 to 79, 83, 88, 92, 97; the old ladder on the new pool gave the
+   best-card seven 2.88 to 3.02 rounds and only 5 to 14 trophies in 300,
+   under the 6 percent floor): the best-card seven rates 93.2, clears 3.34
+   to 3.40 rounds and lifts the trophy in 26 to 36 of 300 runs (8.7 to 12.0
+   percent); the worst-card seven rates 70.8, clears 0.01 to 0.04 rounds and
+   never wins.
    NHL (Round 724, the same five stream recipe, 2026-10-01): the best-card
    eleven rates 95.0, clears 3.42 to 3.60 rounds and lifts the Cup in 11.0 to
    18.0 percent of runs; the worst-card eleven rates 78.6, clears 0.69 to 0.74

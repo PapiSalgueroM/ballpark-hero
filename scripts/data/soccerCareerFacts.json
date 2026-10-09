@@ -2229,5 +2229,1826 @@
   "clubLeaguesUnverified": {
     "fb-164": { "name": "Violette AC", "league": "Ligue Haitienne", "reason": "Read 2026-10-06: the newest season soccerway carries for Haiti's championnat is 2025 (March to June), and no 2026-27 table was found to read twice. The label is the one the table already carried; never a guess." },
     "fb-166": { "name": "Defence Force FC", "league": "TT Premier League", "reason": "Read 2026-10-06: the newest TT Premier League season soccerway carries is 2025/2026 (November 2025 to April 2026), and no 2026-27 table was found to read twice. The label is the one the table already carried; never a guess." }
+  },
+  "leagueWorld": {
+    "about": "Round 1100. One row a league label the career club pool is generated from (scripts/lib/careerClubPool.mjs POOL_LEAGUE_ROWS), for the season the label describes: 2026-27, or the calendar year 2026 for the Brasileirao and MLS. members is the league's clubs in the career's own spelling, compared name by name with Club Manager's lineup. membership: the two (or more) pages the lineup and the size were read from, on different hosts, none a wiki. format: the pages the shape and the number of games were read from; a league gets a size, a format and a cadence row, or an odd format row, only with two of them on different hosts. ESPN's feeds and BBC Sport's tables were read raw by script and compared by name; the prose pages are quoted. evidence names the leagueEvidence group Round 1022 read for the hand clubs of the same league, when there is one. unnamed: clubs of the league Club Manager does not carry, counted in the size and never named.",
+    "Premier League": {
+      "season": "2026-27",
+      "evidence": "Premier League 2026-27",
+      "members": [
+        "Arsenal",
+        "Aston Villa",
+        "Bournemouth",
+        "Brentford",
+        "Brighton",
+        "Chelsea",
+        "Coventry City",
+        "Crystal Palace",
+        "Everton",
+        "Fulham",
+        "Hull City",
+        "Ipswich Town",
+        "Leeds United",
+        "Liverpool",
+        "Man City",
+        "Man United",
+        "Newcastle",
+        "Nottingham Forest",
+        "Sunderland",
+        "Tottenham"
+      ],
+      "size": 20,
+      "games": 38,
+      "shape": "plain",
+      "points": [
+        3,
+        1,
+        0
+      ],
+      "membership": [
+        {
+          "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.1/standings?season=2026",
+          "read": "2026-10-07",
+          "says": "ESPN's standings feed, season 2026: 20 clubs, all 20 of Club Manager's by name; Pts = 3W + D on 20 of 20 rows"
+        },
+        {
+          "url": "https://www.bbc.com/sport/football/premier-league/table",
+          "read": "2026-10-07",
+          "says": "BBC Sport's table: 20 clubs, all 20 of Club Manager's by name; Pts = 3W + D on 20 of 20 rows"
+        }
+      ],
+      "format": [
+        {
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=YYYYMMDD",
+          "read": "2026-10-07",
+          "says": "ESPN's scoreboard feed read for every day of the season calendar (70 dates, 2026-08-21 to 2027-05-30): 380 fixtures, 20 clubs, 38 games a club, 190 pairs meet 2 times"
+        }
+      ]
+    },
+    "Championship": {
+      "season": "2026-27",
+      "evidence": "Championship 2026-27",
+      "members": [
+        "Birmingham City",
+        "Blackburn Rovers",
+        "Bolton Wanderers",
+        "Bristol City",
+        "Burnley",
+        "Cardiff City",
+        "Charlton Athletic",
+        "Derby County",
+        "Lincoln City",
+        "Middlesbrough",
+        "Millwall",
+        "Norwich City",
+        "Portsmouth",
+        "Preston North End",
+        "QPR",
+        "Sheffield United",
+        "Southampton",
+        "Stoke City",
+        "Swansea City",
+        "Watford",
+        "West Brom",
+        "West Ham",
+        "Wolves",
+        "Wrexham"
+      ],
+      "size": 24,
+      "games": 46,
+      "shape": "plain",
+      "points": [
+        3,
+        1,
+        0
+      ],
+      "membership": [
+        {
+          "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.2/standings?season=2026",
+          "read": "2026-10-07",
+          "says": "ESPN's standings feed, season 2026: 24 clubs, all 24 of Club Manager's by name; Pts = 3W + D on 23 of 24 rows"
+        },
+        {
+          "url": "https://www.bbc.com/sport/football/championship/table",
+          "read": "2026-10-07",
+          "says": "BBC Sport's table: 24 clubs, all 24 of Club Manager's by name; Pts = 3W + D on 23 of 24 rows"
+        }
+      ],
+      "format": [
+        {
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/eng.2/scoreboard?dates=YYYYMMDD",
+          "read": "2026-10-07",
+          "says": "ESPN's scoreboard feed read for every day of the season calendar (86 dates, 2026-08-14 to 2027-05-01): 552 fixtures, 24 clubs, 46 games a club, 276 pairs meet 2 times"
+        },
+        {
+          "url": "https://www.si.com/soccer/2026-27-championship-playoffs-fixtures-dates-teams",
+          "says": "published 2026-08-20: \"With 24 clubs battling through a demanding 46-game schedule\"; the top two go up automatically and third to eighth play off after the table",
+          "read": "2026-10-07"
+        }
+      ]
+    },
+    "La Liga": {
+      "season": "2026-27",
+      "evidence": "La Liga 2026-27",
+      "members": [
+        "Alaves",
+        "Athletic Bilbao",
+        "Atletico Madrid",
+        "Barcelona",
+        "Real Betis",
+        "Celta Vigo",
+        "Deportivo",
+        "Elche",
+        "Espanyol",
+        "Getafe",
+        "Levante",
+        "Malaga",
+        "Osasuna",
+        "Racing Santander",
+        "Rayo Vallecano",
+        "Real Madrid",
+        "Real Sociedad",
+        "Sevilla",
+        "Valencia",
+        "Villarreal"
+      ],
+      "size": 20,
+      "games": 38,
+      "shape": "plain",
+      "points": [
+        3,
+        1,
+        0
+      ],
+      "membership": [
+        {
+          "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2026",
+          "read": "2026-10-07",
+          "says": "ESPN's standings feed, season 2026: 20 clubs, all 20 of Club Manager's by name; Pts = 3W + D on 20 of 20 rows"
+        },
+        {
+          "url": "https://www.bbc.com/sport/football/spanish-la-liga/table",
+          "read": "2026-10-07",
+          "says": "BBC Sport's table: 20 clubs, all 20 of Club Manager's by name; Pts = 3W + D on 20 of 20 rows"
+        }
+      ],
+      "format": [
+        {
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/scoreboard?dates=YYYYMMDD",
+          "read": "2026-10-07",
+          "says": "ESPN's scoreboard feed read for every day of the season calendar (75 dates, 2026-08-15 to 2027-05-30): 380 fixtures, 20 clubs, 38 games a club, 190 pairs meet 2 times"
+        }
+      ]
+    },
+    "Serie A": {
+      "season": "2026-27",
+      "evidence": "Serie A 2026-27",
+      "members": [
+        "Atalanta",
+        "Bologna",
+        "Cagliari",
+        "Como",
+        "Fiorentina",
+        "Frosinone",
+        "Genoa",
+        "Inter Milan",
+        "Juventus",
+        "Lazio",
+        "Lecce",
+        "AC Milan",
+        "Monza",
+        "Napoli",
+        "Parma",
+        "Roma",
+        "Sassuolo",
+        "Torino",
+        "Udinese",
+        "Venezia"
+      ],
+      "size": 20,
+      "games": 38,
+      "shape": "plain",
+      "points": [
+        3,
+        1,
+        0
+      ],
+      "membership": [
+        {
+          "url": "https://site.api.espn.com/apis/v2/sports/soccer/ita.1/standings?season=2026",
+          "read": "2026-10-07",
+          "says": "ESPN's standings feed, season 2026: 20 clubs, all 20 of Club Manager's by name; Pts = 3W + D on 20 of 20 rows"
+        },
+        {
+          "url": "https://www.bbc.com/sport/football/italian-serie-a/table",
+          "read": "2026-10-07",
+          "says": "BBC Sport's table: 20 clubs, all 20 of Club Manager's by name; Pts = 3W + D on 20 of 20 rows"
+        }
+      ],
+      "format": [
+        {
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/ita.1/scoreboard?dates=YYYYMMDD",
+          "read": "2026-10-07",
+          "says": "ESPN's scoreboard feed read for every day of the season calendar (82 dates, 2026-08-22 to 2027-05-30): 380 fixtures, 20 clubs, 38 games a club, 190 pairs meet 2 times"
+        }
+      ]
+    },
+    "Bundesliga": {
+      "season": "2026-27",
+      "evidence": "Bundesliga 2026-27",
+      "members": [
+        "Augsburg",
+        "Leverkusen",
+        "Bayern Munich",
+        "Dortmund",
+        "Gladbach",
+        "Frankfurt",
+        "Freiburg",
+        "Hamburg",
+        "Hoffenheim",
+        "Koln",
+        "Mainz",
+        "Leipzig",
+        "Schalke 04",
+        "Elversberg",
+        "Paderborn",
+        "Stuttgart",
+        "Union Berlin",
+        "Werder Bremen"
+      ],
+      "size": 18,
+      "games": 34,
+      "shape": "plain",
+      "points": [
+        3,
+        1,
+        0
+      ],
+      "membership": [
+        {
+          "url": "https://site.api.espn.com/apis/v2/sports/soccer/ger.1/standings?season=2026",
+          "read": "2026-10-07",
+          "says": "ESPN's standings feed, season 2026: 18 clubs, all 18 of Club Manager's by name; Pts = 3W + D on 18 of 18 rows"
+        },
+        {
+          "url": "https://www.bbc.com/sport/football/german-bundesliga/table",
+          "read": "2026-10-07",
+          "says": "BBC Sport's table: 18 clubs, all 18 of Club Manager's by name; Pts = 3W + D on 18 of 18 rows"
+        }
+      ],
+      "format": [
+        {
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/ger.1/scoreboard?dates=YYYYMMDD",
+          "read": "2026-10-07",
+          "says": "ESPN's scoreboard feed read for every day of the season calendar (56 dates, 2026-08-28 to 2027-05-22): 306 fixtures, 18 clubs, 34 games a club, 153 pairs meet 2 times"
+        }
+      ]
+    },
+    "Ligue 1": {
+      "season": "2026-27",
+      "evidence": "Ligue 1 2026-27",
+      "members": [
+        "Angers",
+        "Auxerre",
+        "Brest",
+        "Le Havre",
+        "Le Mans",
+        "Lens",
+        "Lille",
+        "Lorient",
+        "Lyon",
+        "Marseille",
+        "Monaco",
+        "Nice",
+        "Paris FC",
+        "PSG",
+        "Rennes",
+        "Strasbourg",
+        "Toulouse",
+        "Troyes"
+      ],
+      "size": 18,
+      "games": 34,
+      "shape": "plain",
+      "points": [
+        3,
+        1,
+        0
+      ],
+      "membership": [
+        {
+          "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.1/standings?season=2026",
+          "read": "2026-10-07",
+          "says": "ESPN's standings feed, season 2026: 18 clubs, all 18 of Club Manager's by name; Pts = 3W + D on 18 of 18 rows"
+        },
+        {
+          "url": "https://www.bbc.com/sport/football/french-ligue-one/table",
+          "read": "2026-10-07",
+          "says": "BBC Sport's table: 18 clubs, all 18 of Club Manager's by name; Pts = 3W + D on 18 of 18 rows"
+        }
+      ],
+      "format": [
+        {
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/fra.1/scoreboard?dates=YYYYMMDD",
+          "read": "2026-10-07",
+          "says": "ESPN's scoreboard feed read for every day of the season calendar (65 dates, 2026-08-21 to 2027-05-29): 306 fixtures, 18 clubs, 34 games a club, 153 pairs meet 2 times"
+        }
+      ]
+    },
+    "Eredivisie": {
+      "season": "2026-27",
+      "evidence": "Eredivisie 2026-27",
+      "members": [
+        "Ajax",
+        "AZ Alkmaar",
+        "ADO Den Haag",
+        "Cambuur",
+        "Excelsior",
+        "Feyenoord",
+        "Fortuna Sittard",
+        "Go Ahead Eagles",
+        "Groningen",
+        "Heerenveen",
+        "NEC Nijmegen",
+        "PEC Zwolle",
+        "PSV",
+        "Sparta Rotterdam",
+        "Telstar",
+        "Twente",
+        "Utrecht",
+        "Willem II"
+      ],
+      "size": 18,
+      "games": 34,
+      "shape": "plain",
+      "points": [
+        3,
+        1,
+        0
+      ],
+      "membership": [
+        {
+          "url": "https://site.api.espn.com/apis/v2/sports/soccer/ned.1/standings?season=2026",
+          "read": "2026-10-07",
+          "says": "ESPN's standings feed, season 2026: 18 clubs, all 18 of Club Manager's by name; Pts = 3W + D on 18 of 18 rows"
+        },
+        {
+          "url": "https://www.bbc.com/sport/football/dutch-eredivisie/table",
+          "read": "2026-10-07",
+          "says": "BBC Sport's table: 18 clubs, all 18 of Club Manager's by name; Pts = 3W + D on 18 of 18 rows"
+        }
+      ],
+      "format": [
+        {
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/ned.1/scoreboard?dates=YYYYMMDD",
+          "read": "2026-10-07",
+          "says": "ESPN's scoreboard feed read for every day of the season calendar (76 dates, 2026-08-07 to 2027-05-23): 306 fixtures, 18 clubs, 34 games a club, 153 pairs meet 2 times"
+        },
+        {
+          "url": "https://www.vi.nl/nieuws/opvallende-zaken-in-eredivisie-programma-zo-ziet-het-seizoen-2026-27-eruit",
+          "says": "published 2026-06-10: \"De 34 speelrondes van het komende Eredivisie-seizoen\"; rounds 33 and 34 kick off together, the last on 23 May 2027",
+          "read": "2026-10-07"
+        },
+        {
+          "url": "https://eredivisie.nl/nieuws/speeldagenkalender-betaald-voetbal-seizoen-2026-27-vastgesteld/",
+          "says": "the league's own calendar, published 2025-12-19: first round 7 to 9 August 2026, \"De laatste speelronde van de VriendenLoterij Eredivisie wordt gespeeld op zondag 23 mei 2027\"",
+          "read": "2026-10-07"
+        }
+      ]
+    },
+    "Saudi Pro League": {
+      "season": "2026-27",
+      "evidence": "Saudi Pro League 2026-27",
+      "members": [
+        "Abha",
+        "Al Ahli",
+        "Al Diriyah",
+        "Al Ettifaq",
+        "Al Faisaly",
+        "Al Fateh",
+        "Al Fayha",
+        "Al Hazem",
+        "Al Hilal",
+        "Al Ittihad",
+        "Al Khaleej",
+        "Al Kholood",
+        "Al Nassr",
+        "Al Qadsiah",
+        "Al Riyadh",
+        "Al Shabab",
+        "Al Taawoun",
+        "NEOM SC"
+      ],
+      "size": 18,
+      "games": 34,
+      "shape": "plain",
+      "points": [
+        3,
+        1,
+        0
+      ],
+      "membership": [
+        {
+          "url": "https://site.api.espn.com/apis/v2/sports/soccer/ksa.1/standings?season=2026",
+          "read": "2026-10-07",
+          "says": "ESPN's standings feed, season 2026: 18 clubs, all 18 of Club Manager's by name; Pts = 3W + D on 18 of 18 rows"
+        },
+        {
+          "url": "https://www.bbc.com/sport/football/saudi-pro-league/table",
+          "read": "2026-10-07",
+          "says": "BBC Sport's table: 18 clubs, all 18 of Club Manager's by name; Pts = 3W + D on 18 of 18 rows"
+        }
+      ],
+      "format": [
+        {
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/ksa.1/scoreboard?dates=YYYYMMDD",
+          "read": "2026-10-07",
+          "says": "ESPN's scoreboard feed read for every day of the season calendar (59 dates, 2026-08-13 to 2027-05-28): 306 fixtures, 18 clubs, 34 games a club, 153 pairs meet 2 times"
+        },
+        {
+          "url": "https://www.spl.com.sa/en/news/1079597/spl-announces-2026-27-rsl-fixture-schedule",
+          "says": "the league's own release, published 2026-07-24: \"The 34-round season will feature 306 matches\", 13 August 2026 to 29 May 2027",
+          "read": "2026-10-07"
+        }
+      ]
+    },
+    "MLS": {
+      "season": "2026",
+      "evidence": "MLS 2026",
+      "members": [
+        "Atlanta United",
+        "Charlotte FC",
+        "Chicago Fire",
+        "FC Cincinnati",
+        "Columbus Crew",
+        "DC United",
+        "Inter Miami",
+        "CF Montreal",
+        "Nashville SC",
+        "New England Revolution",
+        "New York City FC",
+        "New York Red Bulls",
+        "Orlando City",
+        "Philadelphia Union",
+        "Toronto FC",
+        "Austin FC",
+        "Colorado Rapids",
+        "FC Dallas",
+        "Houston Dynamo",
+        "LA Galaxy",
+        "LAFC",
+        "Minnesota United",
+        "Portland Timbers",
+        "Real Salt Lake",
+        "San Diego FC",
+        "San Jose Earthquakes",
+        "Seattle Sounders",
+        "Sporting Kansas City",
+        "St. Louis City",
+        "Vancouver Whitecaps"
+      ],
+      "size": 30,
+      "games": 34,
+      "shape": "conferences",
+      "points": [
+        3,
+        1,
+        0
+      ],
+      "membership": [
+        {
+          "url": "https://site.api.espn.com/apis/v2/sports/soccer/usa.1/standings?season=2026",
+          "read": "2026-10-07",
+          "says": "ESPN's standings feed, season 2026: 30 clubs, all 30 of Club Manager's by name; Pts = 3W + D on 30 of 30 rows"
+        },
+        {
+          "url": "https://www.bbc.com/sport/football/us-major-league/table",
+          "read": "2026-10-07",
+          "says": "BBC Sport's table: 30 clubs, all 30 of Club Manager's by name; Pts = 3W + D on 30 of 30 rows"
+        }
+      ],
+      "format": [
+        {
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/scoreboard?dates=YYYYMMDD",
+          "read": "2026-10-07",
+          "says": "ESPN's scoreboard feed read for every day of the season calendar (69 dates, 2026-02-21 to 2026-11-08): 511 fixtures, 30 clubs, 34 games a club, 91 pairs meet 1 time, 210 pairs meet 2 times"
+        },
+        {
+          "url": "https://www.mlssoccer.com/news/mls-announces-2026-regular-season-schedule",
+          "read": "2026-10-08",
+          "says": "the league, dated 2025-11-20: \"each team play 34 games, 17 home and 17 on the road\"; \"Teams will play conference opponents twice (28 games), once at home and once away\" and \"six different cross-conference opponents (six games)\""
+        }
+      ]
+    },
+    "Primeira Liga": {
+      "season": "2026-27",
+      "evidence": "Primeira Liga 2026-27",
+      "members": [
+        "Porto",
+        "Benfica",
+        "Sporting CP",
+        "Braga",
+        "Vitoria Guimaraes",
+        "Famalicao",
+        "Rio Ave",
+        "Casa Pia",
+        "Estoril",
+        "Moreirense",
+        "Arouca",
+        "Gil Vicente",
+        "Santa Clara",
+        "CD Nacional",
+        "Estrela Amadora",
+        "Alverca",
+        "Maritimo",
+        "Academico de Viseu"
+      ],
+      "size": 18,
+      "games": 34,
+      "shape": "plain",
+      "points": [
+        3,
+        1,
+        0
+      ],
+      "membership": [
+        {
+          "url": "https://site.api.espn.com/apis/v2/sports/soccer/por.1/standings?season=2026",
+          "read": "2026-10-07",
+          "says": "ESPN's standings feed, season 2026: 18 clubs, all 18 of Club Manager's by name; Pts = 3W + D on 18 of 18 rows"
+        },
+        {
+          "url": "https://www.bbc.com/sport/football/portuguese-primeira-liga/table",
+          "read": "2026-10-07",
+          "says": "BBC Sport's table: 18 clubs, all 18 of Club Manager's by name; Pts = 3W + D on 18 of 18 rows"
+        }
+      ],
+      "format": [
+        {
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/por.1/scoreboard?dates=YYYYMMDD",
+          "read": "2026-10-07",
+          "says": "ESPN's scoreboard feed read for every day of the season calendar (68 dates, 2026-08-07 to 2027-05-16): 306 fixtures, 18 clubs, 34 games a club, 153 pairs meet 2 times"
+        },
+        {
+          "url": "https://www.academiadasapostas.com/blog/2026/07/liga-portugal-2026-2027",
+          "says": "published 2026-07-21: \"volta a reunir 18 clubes\", \"Cada uma das 18 equipas disputa 34 jornadas\", the last on 16 May 2027",
+          "read": "2026-10-07"
+        }
+      ]
+    },
+    "Scottish Premiership": {
+      "season": "2026-27",
+      "evidence": "Scottish Premiership 2026-27",
+      "members": [
+        "Celtic",
+        "Rangers",
+        "Aberdeen",
+        "Hearts",
+        "Hibernian",
+        "Dundee United",
+        "Dundee",
+        "Motherwell",
+        "St Mirren",
+        "Kilmarnock",
+        "Falkirk",
+        "St Johnstone"
+      ],
+      "size": 12,
+      "games": 33,
+      "shape": "split",
+      "points": [
+        3,
+        1,
+        0
+      ],
+      "membership": [
+        {
+          "url": "https://site.api.espn.com/apis/v2/sports/soccer/sco.1/standings?season=2026",
+          "read": "2026-10-07",
+          "says": "ESPN's standings feed, season 2026: 12 clubs, all 12 of Club Manager's by name; Pts = 3W + D on 12 of 12 rows"
+        },
+        {
+          "url": "https://www.bbc.com/sport/football/scottish-premiership/table",
+          "read": "2026-10-07",
+          "says": "BBC Sport's table: 12 clubs, all 12 of Club Manager's by name; Pts = 3W + D on 12 of 12 rows"
+        }
+      ],
+      "format": [
+        {
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/sco.1/scoreboard?dates=YYYYMMDD",
+          "read": "2026-10-07",
+          "says": "ESPN's scoreboard feed read for every day of the season calendar (56 dates, 2026-07-31 to 2027-04-10): 198 fixtures, 12 clubs, 33 games a club, 66 pairs meet 3 times"
+        },
+        {
+          "url": "https://www.skysports.com/football/news/13551122/scottish-premiership-2026-27-fixtures-dates-schedule-every-match-across-opening-weekend-live-on-sky-sports",
+          "says": "published 2026-07-29: 12 clubs; \"The final pre-split fixtures take place on April 10\", \"Action resumes on April 24, 2027, with the first post-split matches\", the season ends 15 and 16 May 2027",
+          "read": "2026-10-07"
+        }
+      ]
+    },
+    "Super Lig": {
+      "season": "2026-27",
+      "evidence": "Super Lig 2026-27",
+      "members": [
+        "Galatasaray",
+        "Fenerbahce",
+        "Besiktas",
+        "Trabzonspor",
+        "Basaksehir",
+        "Samsunspor",
+        "Eyupspor",
+        "Goztepe",
+        "Kasimpasa",
+        "Alanyaspor",
+        "Konyaspor",
+        "Gaziantep FK",
+        "Genclerbirligi",
+        "Kocaelispor",
+        "Rizespor",
+        "Erzurumspor",
+        "Amedspor",
+        "Corum FK"
+      ],
+      "size": 18,
+      "games": 34,
+      "shape": "plain",
+      "points": [
+        3,
+        1,
+        0
+      ],
+      "membership": [
+        {
+          "url": "https://site.api.espn.com/apis/v2/sports/soccer/tur.1/standings?season=2026",
+          "read": "2026-10-07",
+          "says": "ESPN's standings feed, season 2026: 18 clubs, all 18 of Club Manager's by name; Pts = 3W + D on 18 of 18 rows"
+        },
+        {
+          "url": "https://www.bbc.com/sport/football/turkish-super-lig/table",
+          "read": "2026-10-07",
+          "says": "BBC Sport's table: 18 clubs, all 18 of Club Manager's by name; Pts = 3W + D on 18 of 18 rows"
+        }
+      ],
+      "format": [
+        {
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/tur.1/scoreboard?dates=YYYYMMDD",
+          "read": "2026-10-07",
+          "says": "ESPN's scoreboard feed read for every day of the season calendar (79 dates, 2026-08-14 to 2027-05-23): 306 fixtures, 18 clubs, 34 games a club, 153 pairs meet 2 times"
+        },
+        {
+          "url": "https://en.milliyet.com.tr/news/turkish-super-lig-unveils-2026-27-season-schedule-7620447",
+          "says": "published 2026-07-09: \"The 2026-27 season will once again feature 18 clubs competing over 34 rounds\", the last on 23 May 2027",
+          "read": "2026-10-07"
+        }
+      ]
+    },
+    "2. Bundesliga": {
+      "season": "2026-27",
+      "evidence": "2. Bundesliga 2026-27",
+      "members": [
+        "Wolfsburg",
+        "Heidenheim",
+        "St. Pauli",
+        "Bochum",
+        "Hertha Berlin",
+        "Magdeburg",
+        "Kaiserslautern",
+        "Holstein Kiel",
+        "Hannover 96",
+        "Dynamo Dresden",
+        "Braunschweig",
+        "Greuther Furth",
+        "Nurnberg",
+        "Darmstadt",
+        "Arminia Bielefeld",
+        "Karlsruhe",
+        "Osnabruck",
+        "Energie Cottbus"
+      ],
+      "size": 18,
+      "games": 34,
+      "shape": "plain",
+      "points": [
+        3,
+        1,
+        0
+      ],
+      "membership": [
+        {
+          "url": "https://site.api.espn.com/apis/v2/sports/soccer/ger.2/standings?season=2026",
+          "read": "2026-10-07",
+          "says": "ESPN's standings feed, season 2026: 18 clubs, all 18 of Club Manager's by name; Pts = 3W + D on 18 of 18 rows"
+        },
+        {
+          "url": "https://www.ran.de/sports/fussball/2-bundesliga/tabelle",
+          "read": "2026-10-07",
+          "says": "the table: 18 clubs, all 18 of Club Manager's by name"
+        }
+      ],
+      "format": [
+        {
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/ger.2/scoreboard?dates=YYYYMMDD",
+          "read": "2026-10-07",
+          "says": "ESPN's scoreboard feed read for every day of the season calendar (60 dates, 2026-08-07 to 2027-05-23): 306 fixtures, 18 clubs, 34 games a club, 153 pairs meet 2 times"
+        },
+        {
+          "url": "https://www.bundesliga.com/de/bundesliga/news/rahmenterminkalender-saison-start-termine-daten-spieltage-winterpause-22043",
+          "says": "the league's own calendar, published 2026-07-02: \"2. Bundesliga, 1. Spieltag: 7. - 9. August 2026\", \"2. Bundesliga, 34. Spieltag: 23. Mai 2027\"; the relegation tie is played after it (27 May to 1 June 2027)",
+          "read": "2026-10-07"
+        }
+      ]
+    },
+    "Belgian Pro League": {
+      "season": "2026-27",
+      "evidence": "Belgian Pro League 2026-27",
+      "members": [
+        "Club Brugge",
+        "Union Saint-Gilloise",
+        "Anderlecht",
+        "Genk",
+        "Gent",
+        "Antwerp",
+        "Standard Liege",
+        "Mechelen",
+        "Charleroi",
+        "Westerlo",
+        "Sint-Truiden",
+        "OH Leuven",
+        "Cercle Brugge",
+        "La Louviere",
+        "Zulte Waregem",
+        "Beveren",
+        "Kortrijk",
+        "Lommel"
+      ],
+      "size": 18,
+      "games": 34,
+      "shape": "plain",
+      "points": [
+        3,
+        1,
+        0
+      ],
+      "membership": [
+        {
+          "url": "https://site.api.espn.com/apis/v2/sports/soccer/bel.1/standings?season=2026",
+          "read": "2026-10-07",
+          "says": "ESPN's standings feed, season 2026: 18 clubs, all 18 of Club Manager's by name; Pts = 3W + D on 18 of 18 rows"
+        },
+        {
+          "url": "https://www.bbc.com/sport/football/belgian-pro-league/table",
+          "read": "2026-10-07",
+          "says": "BBC Sport's table: 18 clubs, all 18 of Club Manager's by name; Pts = 3W + D on 18 of 18 rows"
+        }
+      ],
+      "format": [
+        {
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/bel.1/scoreboard?dates=YYYYMMDD",
+          "read": "2026-10-07",
+          "says": "ESPN's scoreboard feed read for every day of the season calendar (69 dates, 2026-08-07 to 2027-05-22): 306 fixtures, 18 clubs, 34 games a club, 153 pairs meet 2 times"
+        },
+        {
+          "url": "https://bx1.be/categories/news/jupiler-pro-league-la-saison-2026-2027-debutera-le-vendredi-7-aout-pour-le-retour-a-un-format-sans-playoffs/",
+          "says": "published 2025-12-11: \"le retour à un format classique à 18 équipes sans playoffs\", the champion known \"lors de la 34e et dernière journée\" on 23 May 2027",
+          "read": "2026-10-07"
+        },
+        {
+          "url": "https://sporza.be/nl/2025/02/26/eerst-een-overgangsjaar-dan-een-nieuw-concept-dit-is-het-competitieformat-dat-de-pro-league-goedgekeurd-heeft~1740572117523/",
+          "says": "published 2025-02-27: from 2026/2027 \"18 clubs die een reguliere competitie van 34 wedstrijden afwerken\", \"zonder play-offs\", \"de nummers 17 en 18 degraderen\"",
+          "read": "2026-10-07"
+        }
+      ]
+    },
+    "Austrian Bundesliga": {
+      "season": "2026-27",
+      "evidence": "Austrian Bundesliga 2026-27",
+      "members": [
+        "Red Bull Salzburg",
+        "Sturm Graz",
+        "Rapid Wien",
+        "LASK",
+        "Wolfsberger AC",
+        "Austria Wien",
+        "Grazer AK",
+        "Hartberg",
+        "Ried",
+        "Altach",
+        "WSG Tirol",
+        "Austria Lustenau"
+      ],
+      "size": 12,
+      "games": 22,
+      "shape": "split",
+      "points": [
+        3,
+        1,
+        0
+      ],
+      "membership": [
+        {
+          "url": "https://site.api.espn.com/apis/v2/sports/soccer/aut.1/standings?season=2026",
+          "read": "2026-10-07",
+          "says": "ESPN's standings feed, season 2026: 12 clubs, all 12 of Club Manager's by name; Pts = 3W + D on 12 of 12 rows"
+        },
+        {
+          "url": "https://www.bbc.com/sport/football/austrian-bundesliga/table",
+          "read": "2026-10-07",
+          "says": "BBC Sport's table: 12 clubs, all 12 of Club Manager's by name; Pts = 3W + D on 12 of 12 rows"
+        }
+      ],
+      "format": [
+        {
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aut.1/scoreboard?dates=YYYYMMDD",
+          "read": "2026-10-07",
+          "says": "ESPN's scoreboard feed read for every day of the season calendar (53 dates, 2026-07-31 to 2027-02-27): 132 fixtures, 12 clubs, 22 games a club, 66 pairs meet 2 times"
+        },
+        {
+          "url": "https://www.flashscore.de/news/bundesliga-veroffentlicht-spielplan-2026-27-diese-6-kracher-warten-zum-saisonstart/8t4uVYnD/",
+          "read": "2026-10-08",
+          "says": "on the 2026/27 fixture list: \"die zwölf Bundesligisten in 22 Runden\" play \"um die Qualifikation für die Meister- beziehungsweise Qualifikationsgruppe\" (twelve clubs, 22 rounds, then a champions group and a qualification group)"
+        }
+      ]
+    },
+    "Super League Greece": {
+      "season": "2026-27",
+      "evidence": "Super League Greece 2026-27",
+      "members": [
+        "Olympiacos",
+        "Panathinaikos",
+        "AEK Athens",
+        "PAOK",
+        "Aris",
+        "Asteras Tripolis",
+        "Atromitos",
+        "Iraklis",
+        "Kalamata",
+        "Kifisia",
+        "Levadiakos",
+        "OFI",
+        "Panetolikos",
+        "Volos"
+      ],
+      "size": 14,
+      "games": 26,
+      "shape": "groups",
+      "points": [
+        3,
+        1,
+        0
+      ],
+      "membership": [
+        {
+          "url": "https://site.api.espn.com/apis/v2/sports/soccer/gre.1/standings?season=2026",
+          "read": "2026-10-07",
+          "says": "ESPN's standings feed, season 2026: 14 clubs, all 14 of Club Manager's by name; Pts = 3W + D on 14 of 14 rows"
+        },
+        {
+          "url": "https://www.bbc.com/sport/football/greek-superleague/table",
+          "read": "2026-10-07",
+          "says": "BBC Sport's table: 14 clubs, all 14 of Club Manager's by name; Pts = 3W + D on 13 of 14 rows"
+        }
+      ],
+      "format": [
+        {
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/gre.1/scoreboard?dates=YYYYMMDD",
+          "read": "2026-10-07",
+          "says": "ESPN's scoreboard feed read for every day of the season calendar (50 dates, 2026-08-22 to 2027-03-20): 182 fixtures, 14 clubs, 26 games a club, 91 pairs meet 2 times"
+        }
+      ]
+    },
+    "Danish Superliga": {
+      "season": "2026-27",
+      "evidence": "Danish Superliga 2026-27",
+      "members": [
+        "FC Copenhagen",
+        "FC Midtjylland",
+        "Brondby IF",
+        "AGF",
+        "FC Nordsjaelland",
+        "Viborg FF",
+        "Randers FC",
+        "OB",
+        "Silkeborg IF",
+        "Lyngby",
+        "AC Horsens",
+        "SonderjyskE"
+      ],
+      "size": 12,
+      "games": 22,
+      "shape": "split",
+      "points": [
+        3,
+        1,
+        0
+      ],
+      "membership": [
+        {
+          "url": "https://site.api.espn.com/apis/v2/sports/soccer/den.1/standings?season=2026",
+          "read": "2026-10-07",
+          "says": "ESPN's standings feed, season 2026: 12 clubs, all 12 of Club Manager's by name; Pts = 3W + D on 12 of 12 rows"
+        },
+        {
+          "url": "https://www.bbc.com/sport/football/danish-superliga/table",
+          "read": "2026-10-07",
+          "says": "BBC Sport's table: 12 clubs, all 12 of Club Manager's by name; Pts = 3W + D on 12 of 12 rows"
+        }
+      ],
+      "format": [
+        {
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/den.1/scoreboard?dates=YYYYMMDD",
+          "read": "2026-10-07",
+          "says": "ESPN's scoreboard feed read for every day of the season calendar (59 dates, 2026-07-24 to 2027-03-21): 132 fixtures, 12 clubs, 22 games a club, 66 pairs meet 2 times"
+        }
+      ]
+    },
+    "Swiss Super League": {
+      "season": "2026-27",
+      "evidence": "Swiss Super League 2026-27",
+      "members": [
+        "Basel",
+        "Young Boys",
+        "Thun",
+        "St. Gallen",
+        "Lugano",
+        "Servette",
+        "Luzern",
+        "Lausanne-Sport",
+        "FC Zurich",
+        "Grasshopper",
+        "Sion",
+        "Vaduz"
+      ],
+      "size": 12,
+      "games": null,
+      "shape": null,
+      "shapeUnread": "no format page has been read for this league yet, so its shape is not stated here until one is",
+      "points": [
+        3,
+        1,
+        0
+      ],
+      "membership": [
+        {
+          "url": "https://www.bbc.com/sport/football/swiss-super-league/table",
+          "read": "2026-10-07",
+          "says": "BBC Sport's table: 12 clubs, all 12 of Club Manager's by name; Pts = 3W + D on 12 of 12 rows"
+        },
+        {
+          "url": "https://www.skysports.com/swiss-super-league-table",
+          "read": "2026-10-07",
+          "says": "the table: 12 clubs, all 12 of Club Manager's by name"
+        }
+      ],
+      "format": []
+    },
+    "HNL": {
+      "season": "2026-27",
+      "evidence": "HNL 2026-27",
+      "members": [
+        "Dinamo Zagreb",
+        "Hajduk Split",
+        "Rijeka",
+        "Osijek",
+        "Varazdin",
+        "Slaven Belupo",
+        "Istra 1961",
+        "Lokomotiva Zagreb",
+        "Gorica",
+        "Rudes"
+      ],
+      "size": 10,
+      "games": null,
+      "shape": null,
+      "shapeUnread": "no format page has been read for this league yet, so its shape is not stated here until one is",
+      "points": null,
+      "pointsUnread": "neither lineup page states the points rule and no format page has been read",
+      "membership": [
+        {
+          "url": "https://hnl.hr/",
+          "read": "2026-10-07",
+          "says": "the table: 10 clubs, all 10 of Club Manager's by name"
+        },
+        {
+          "url": "https://hns.family/natjecanja/supersport-hnl/",
+          "says": "the federation's SuperSport HNL results list names exactly these ten clubs (Dinamo, Lokomotiva, Rijeka, Hajduk, Istra 1961, Gorica, Varaždin, Osijek, Rudeš, Slaven Belupo)",
+          "read": "2026-10-07"
+        }
+      ],
+      "format": []
+    },
+    "Brasileirao": {
+      "season": "2026",
+      "evidence": "Brasileirao 2026",
+      "members": [
+        "Flamengo",
+        "Palmeiras",
+        "Athletico Paranaense",
+        "Fluminense",
+        "Bahia",
+        "Cruzeiro",
+        "Atletico Mineiro",
+        "Santos",
+        "Coritiba",
+        "Red Bull Bragantino",
+        "Sao Paulo",
+        "Botafogo",
+        "Vitoria",
+        "Corinthians",
+        "Mirassol",
+        "Vasco da Gama",
+        "Gremio",
+        "Internacional",
+        "Remo",
+        "Chapecoense"
+      ],
+      "size": 20,
+      "games": 38,
+      "shape": "plain",
+      "points": [
+        3,
+        1,
+        0
+      ],
+      "membership": [
+        {
+          "url": "https://site.api.espn.com/apis/v2/sports/soccer/bra.1/standings?season=2026",
+          "read": "2026-10-07",
+          "says": "ESPN's standings feed, season 2026: 20 clubs, all 20 of Club Manager's by name; Pts = 3W + D on 20 of 20 rows"
+        },
+        {
+          "url": "https://www.bbc.com/sport/football/brazilian-league/table",
+          "read": "2026-10-07",
+          "says": "BBC Sport's table: 20 clubs, all 20 of Club Manager's by name; Pts = 3W + D on 20 of 20 rows"
+        }
+      ],
+      "format": [
+        {
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/bra.1/scoreboard?dates=YYYYMMDD",
+          "read": "2026-10-07",
+          "says": "ESPN's scoreboard feed read for every day of the season calendar (99 dates, 2026-01-28 to 2026-12-02): 380 fixtures, 20 clubs, 38 games a club, 190 pairs meet 2 times (3 fixtures are listed on two dates, a postponement, and counted once)"
+        },
+        {
+          "url": "https://oimparcial.com.br/esportes/2026/01/brasileirao-2026-saiba-as-datas-horarios-e-locais-das-rodadas-iniciais/",
+          "says": "published 2026-01-13: \"20 times se enfrentam entre si, em jogos de ida e volta\", \"totalizando 38 rodadas\", 28 January to 2 December 2026",
+          "read": "2026-10-07"
+        },
+        {
+          "url": "https://dol.com.br/esporte/remo/930240/com-remo-na-disputa-cbf-divulga-tabela-de-todas-as-rodadas-do-brasileirao-2026",
+          "says": "published 2025-12-16: \"uma maratona de 38 rodadas no formato de pontos corridos\", the CBF's table split into a turno (rounds 1 to 19) and a returno (20 to 38)",
+          "read": "2026-10-07"
+        }
+      ]
+    },
+    "Liga MX": {
+      "season": "2026-27",
+      "evidence": "Liga MX Apertura 2026",
+      "members": [
+        "Club America",
+        "Chivas",
+        "Cruz Azul",
+        "Monterrey",
+        "Tigres UANL",
+        "Toluca",
+        "Pumas",
+        "Pachuca",
+        "Leon",
+        "Santos Laguna",
+        "Atlas",
+        "Necaxa",
+        "Puebla",
+        "Queretaro",
+        "Tijuana",
+        "FC Juarez",
+        "Atletico San Luis",
+        "Atlante"
+      ],
+      "size": 18,
+      "games": 17,
+      "shape": "two-tournaments",
+      "points": [
+        3,
+        1,
+        0
+      ],
+      "membership": [
+        {
+          "url": "https://site.api.espn.com/apis/v2/sports/soccer/mex.1/standings?season=2026",
+          "read": "2026-10-07",
+          "says": "ESPN's standings feed, season 2026: 18 clubs, all 18 of Club Manager's by name; Pts = 3W + D on 18 of 18 rows"
+        },
+        {
+          "url": "https://www.bbc.com/sport/football/mexican-liga-mx/table",
+          "read": "2026-10-07",
+          "says": "BBC Sport's table: 18 clubs, all 18 of Club Manager's by name"
+        }
+      ],
+      "format": [
+        {
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/mex.1/scoreboard?dates=YYYYMMDD",
+          "read": "2026-10-07",
+          "says": "ESPN's scoreboard feed read for every day of the season calendar (56 dates, 2026-07-17 to 2026-11-23): 153 fixtures, 18 clubs, 17 games a club, 153 pairs meet 1 time"
+        }
+      ]
+    },
+    "A-League": {
+      "season": "2026-27",
+      "evidence": "A-League 2026-27",
+      "members": [
+        "Adelaide United",
+        "Auckland FC",
+        "Brisbane Roar",
+        "Central Coast Mariners",
+        "Macarthur FC",
+        "Melbourne City",
+        "Melbourne Victory",
+        "Newcastle Jets",
+        "Perth Glory",
+        "Sydney FC",
+        "Wellington Phoenix",
+        "Western Sydney Wanderers"
+      ],
+      "size": 12,
+      "games": 26,
+      "shape": "finals",
+      "points": null,
+      "pointsUnread": "both tables were read before the season's first round (it opens on 2026-10-16), so no row showed a points total, and the fixture feed states no points rule",
+      "membership": [
+        {
+          "url": "https://site.api.espn.com/apis/v2/sports/soccer/aus.1/standings?season=2026",
+          "read": "2026-10-07",
+          "says": "ESPN's standings feed, season 2026: 12 clubs, all 12 of Club Manager's by name"
+        },
+        {
+          "url": "https://www.bbc.com/sport/football/australian-a-league/table",
+          "read": "2026-10-07",
+          "says": "BBC Sport's table: 12 clubs, all 12 of Club Manager's by name"
+        }
+      ],
+      "format": [
+        {
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/scoreboard?dates=YYYYMMDD",
+          "read": "2026-10-07",
+          "says": "ESPN's scoreboard feed read for every day of the season calendar (88 dates, 2026-10-16 to 2027-05-09): 156 fixtures, 12 clubs, 26 games a club, 42 pairs meet 2 times, 24 pairs meet 3 times"
+        }
+      ]
+    },
+    "Serie B": {
+      "season": "2026-27",
+      "evidence": null,
+      "members": [
+        "Cremonese",
+        "Verona",
+        "Pisa",
+        "Avellino",
+        "Carrarese",
+        "Catanzaro",
+        "Cesena",
+        "Empoli",
+        "Entella",
+        "Juve Stabia",
+        "Mantova",
+        "Modena",
+        "Padova",
+        "Palermo",
+        "Sampdoria",
+        "Sudtirol",
+        "Vicenza",
+        "Arezzo",
+        "Benevento",
+        "Ascoli"
+      ],
+      "size": 20,
+      "games": 38,
+      "shape": "plain",
+      "points": [
+        3,
+        1,
+        0
+      ],
+      "membership": [
+        {
+          "url": "https://site.api.espn.com/apis/v2/sports/soccer/ita.2/standings?season=2026",
+          "read": "2026-10-07",
+          "says": "ESPN's standings feed, season 2026: 20 clubs, all 20 of Club Manager's by name; Pts = 3W + D on 19 of 20 rows"
+        },
+        {
+          "url": "https://sport.sky.it/calcio/serie-b/classifica",
+          "read": "2026-10-07",
+          "says": "the table: 20 clubs, all 20 of Club Manager's by name"
+        }
+      ],
+      "format": [
+        {
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/ita.2/scoreboard?dates=YYYYMMDD",
+          "read": "2026-10-07",
+          "says": "ESPN's scoreboard feed read for every day of the season calendar (71 dates, 2026-08-21 to 2027-05-14): 380 fixtures, 20 clubs, 38 games a club, 190 pairs meet 2 times"
+        }
+      ]
+    },
+    "Ligue 2": {
+      "season": "2026-27",
+      "evidence": "Ligue 2 2026-27",
+      "members": [
+        "Metz",
+        "Nantes",
+        "Saint-Etienne",
+        "Red Star FC",
+        "Reims",
+        "Montpellier",
+        "Nancy",
+        "Annecy",
+        "Sochaux",
+        "Dijon",
+        "Pau",
+        "Guingamp",
+        "Dunkerque",
+        "Grenoble",
+        "Rodez",
+        "Clermont",
+        "Boulogne",
+        "Laval"
+      ],
+      "size": 18,
+      "games": 34,
+      "shape": "plain",
+      "points": [
+        3,
+        1,
+        0
+      ],
+      "membership": [
+        {
+          "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.2/standings?season=2026",
+          "read": "2026-10-07",
+          "says": "ESPN's standings feed, season 2026: 18 clubs, all 18 of Club Manager's by name; Pts = 3W + D on 18 of 18 rows"
+        },
+        {
+          "url": "https://www.footmercato.net/france/ligue-2/classement",
+          "read": "2026-10-07",
+          "says": "the table: 18 clubs, all 18 of Club Manager's by name"
+        }
+      ],
+      "format": [
+        {
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/fra.2/scoreboard?dates=YYYYMMDD",
+          "read": "2026-10-07",
+          "says": "ESPN's scoreboard feed read for every day of the season calendar (54 dates, 2026-08-08 to 2027-05-22): 306 fixtures, 18 clubs, 34 games a club, 153 pairs meet 2 times"
+        }
+      ]
+    },
+    "Segunda Division": {
+      "season": "2026-27",
+      "evidence": "Segunda 2026-27",
+      "members": [
+        "Real Oviedo",
+        "Girona",
+        "Mallorca",
+        "Eibar",
+        "Castellon",
+        "Almeria",
+        "Burgos",
+        "Sabadell",
+        "Sporting Gijon",
+        "Granada",
+        "Las Palmas",
+        "Tenerife",
+        "Leganes",
+        "Valladolid",
+        "Cordoba",
+        "Eldense",
+        "Cadiz",
+        "FC Andorra",
+        "Ceuta",
+        "Albacete"
+      ],
+      "unnamed": [
+        "Real Sociedad II",
+        "RC Celta Fortuna"
+      ],
+      "unnamedWhy": "reserve sides Club Manager does not carry: counted in the size, never named",
+      "size": 22,
+      "games": 42,
+      "shape": "plain",
+      "points": [
+        3,
+        1,
+        0
+      ],
+      "membership": [
+        {
+          "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.2/standings?season=2026",
+          "read": "2026-10-07",
+          "says": "ESPN's standings feed, season 2026: 22 clubs, all 20 of Club Manager's by name, plus Real Sociedad II and RC Celta Fortuna, which Club Manager does not carry; Pts = 3W + D on 22 of 22 rows"
+        },
+        {
+          "url": "https://as.com/resultados/futbol/segunda/clasificacion/",
+          "read": "2026-10-07",
+          "says": "the table: 22 clubs, all 20 of Club Manager's by name, plus R. Sociedad B and Celta Fortuna, which Club Manager does not carry"
+        }
+      ],
+      "format": [
+        {
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.2/scoreboard?dates=YYYYMMDD",
+          "read": "2026-10-07",
+          "says": "ESPN's scoreboard feed read for every day of the season calendar (75 dates, 2026-08-14 to 2027-06-06): 462 fixtures, 22 clubs, 42 games a club, 231 pairs meet 2 times"
+        }
+      ]
+    },
+    "Russian Premier League": {
+      "season": "2026-27",
+      "evidence": "Russian Premier League 2026-27",
+      "members": [
+        "Zenit",
+        "Krasnodar",
+        "Spartak Moscow",
+        "CSKA Moscow",
+        "Lokomotiv Moscow",
+        "Rubin Kazan",
+        "Dynamo Moscow",
+        "Rostov",
+        "Akhmat Grozny",
+        "Krylia Sovetov",
+        "Baltika",
+        "Orenburg",
+        "Akron Tolyatti",
+        "Dynamo Makhachkala",
+        "Rodina Moscow",
+        "Fakel Voronezh"
+      ],
+      "size": 16,
+      "games": null,
+      "shape": null,
+      "shapeUnread": "Round 1052 read this format for Club Manager (research.json fact ru-format); it is not restated here while the generator holds the league and no page read states its points rule",
+      "points": null,
+      "pointsUnread": "no page note read for this league states three points for a win, so the rule is not stated here until one does",
+      "membership": [
+        {
+          "url": "https://site.web.api.espn.com/apis/v2/sports/soccer/rus.1/standings?season=2026",
+          "read": "2026-10-08",
+          "says": "standings feed, 2026-27 Russian Premier League: 16 clubs, each on 9 games played (Round 1052's read, scripts/data/gatheredSquads/russia2026/research.json)"
+        },
+        {
+          "url": "https://www.transfermarkt.com/premier-liga/startseite/wettbewerb/RU1/saison_id/2026",
+          "read": "2026-10-08",
+          "says": "competition page, season 26/27: 16 club links, the same clubs (Round 1052's read, scripts/data/gatheredSquads/russia2026/research.json)"
+        },
+        {
+          "url": "https://www.fotmob.com/leagues/63/table/premier-league",
+          "read": "2026-10-08",
+          "says": "league table, 2026/2027: 16 clubs, the same clubs (Round 1052's read, scripts/data/gatheredSquads/russia2026/research.json)"
+        },
+        {
+          "url": "https://www.sport-express.ru/football/rfpl/news/rpl-sezon-2026-27-polnyy-spisok-uchastnikov-chempionata-rossii-2441637/",
+          "read": "2026-10-08",
+          "says": "news article listing the participants, dated 2026-07-23: names all 16, the two promoted and the two relegated clubs (Round 1052's read, scripts/data/gatheredSquads/russia2026/research.json)"
+        }
+      ],
+      "format": []
+    }
+  },
+  "clubColours": {
+    "about": "Round 1100. Home colours for pool clubs Club Manager has no colour for (it answers its fallback grey). The fact is the colour in words, from two sources; hex is this game's rendering of that word and nothing more. scripts/lib/careerClubPool.mjs POOL_COLORS may only use a club listed here.",
+    "clubs": {
+      "Macarthur FC": {
+        "colour": "black, with thin white pinstripes",
+        "hex": "#1A1A1A",
+        "sources": [
+          {
+            "url": "https://www.footyheadlines.com/1160763773/macarthur-fc-26-27-home-and-away-kits-released.html",
+            "read": "2026-10-07",
+            "says": "the article on the club's 2026-27 kits says the Kelme home jersey \"is predominantly black, covered with crisp, thin vertical white pinstripes\""
+          },
+          {
+            "url": "https://macarthurfc.com.au/news/bulls-pay-homage-to-local-region-with-striking-new-kit",
+            "read": "2026-10-07",
+            "says": "the club, on its 2021-22 home jersey: \"honouring the colours synonymous with the region, the classic black and white\""
+          }
+        ]
+      }
+    }
+  },
+  "clubSince": {
+    "about": "Round 1100. Since when the game offers each generated pool club. Every generated club has exactly one decision here. shipped: one of the 51 rows Round 1013 shipped; it stays in every era exactly as main had it (their first seasons were never two sourced: an open item, see scripts/simCareerClubPool.mjs). held: a club Round 1100 brought in. The game knows it as a 2026-27 club and nothing earlier, so it is not offered, drawn or met in any season before heldBefore until its first season as a professional club under this name is read from two sources that are not wikis; then it moves to since with that year (a year of 1990 or earlier means every era). Nothing here is a founding date and none is claimed. One place a held club is named earlier: a past league table. Where the Round 1036 league ledgers (scripts/data/leagueSeasons) hold the club in that league that season from two sources, that season's table and fixtures print its name; it is still not offered in the market, drawn in a continental tie or played as a derby before heldBefore.",
+    "heldBefore": 2026,
+    "shipped": [
+      "Bournemouth",
+      "Coventry City",
+      "Hull City",
+      "Ipswich Town",
+      "Leeds United",
+      "Nottingham Forest",
+      "Sunderland",
+      "Birmingham City",
+      "Blackburn Rovers",
+      "Bolton Wanderers",
+      "Bristol City",
+      "Burnley",
+      "Cardiff City",
+      "Charlton Athletic",
+      "Derby County",
+      "Lincoln City",
+      "Middlesbrough",
+      "Millwall",
+      "Portsmouth",
+      "Preston North End",
+      "QPR",
+      "Sheffield United",
+      "Southampton",
+      "Stoke City",
+      "Swansea City",
+      "Watford",
+      "West Brom",
+      "Wrexham",
+      "Alaves",
+      "Deportivo",
+      "Elche",
+      "Espanyol",
+      "Getafe",
+      "Levante",
+      "Malaga",
+      "Osasuna",
+      "Racing Santander",
+      "Rayo Vallecano",
+      "Valencia",
+      "Athletico Paranaense",
+      "Fluminense",
+      "Bahia",
+      "Atletico Mineiro",
+      "Coritiba",
+      "Red Bull Bragantino",
+      "Vitoria",
+      "Mirassol",
+      "Vasco da Gama",
+      "Internacional",
+      "Remo",
+      "Chapecoense"
+    ],
+    "held": {
+      "Serie A": [
+        "Cagliari",
+        "Como",
+        "Frosinone",
+        "Genoa",
+        "Lazio",
+        "Lecce",
+        "Monza",
+        "Parma",
+        "Sassuolo",
+        "Udinese",
+        "Venezia"
+      ],
+      "Bundesliga": [
+        "Augsburg",
+        "Gladbach",
+        "Freiburg",
+        "Hamburg",
+        "Hoffenheim",
+        "Koln",
+        "Mainz",
+        "Schalke 04",
+        "Elversberg",
+        "Paderborn",
+        "Union Berlin"
+      ],
+      "Ligue 1": [
+        "Angers",
+        "Auxerre",
+        "Brest",
+        "Le Havre",
+        "Le Mans",
+        "Lens",
+        "Lorient",
+        "Paris FC",
+        "Rennes",
+        "Toulouse",
+        "Troyes"
+      ],
+      "Eredivisie": [
+        "ADO Den Haag",
+        "Cambuur",
+        "Excelsior",
+        "Fortuna Sittard",
+        "Go Ahead Eagles",
+        "Groningen",
+        "Heerenveen",
+        "NEC Nijmegen",
+        "PEC Zwolle",
+        "Sparta Rotterdam",
+        "Telstar",
+        "Willem II"
+      ],
+      "Saudi Pro League": [
+        "Abha",
+        "Al Diriyah",
+        "Al Ettifaq",
+        "Al Faisaly",
+        "Al Fateh",
+        "Al Fayha",
+        "Al Hazem",
+        "Al Khaleej",
+        "Al Kholood",
+        "Al Qadsiah",
+        "Al Riyadh",
+        "Al Taawoun",
+        "NEOM SC"
+      ],
+      "MLS": [
+        "Charlotte FC",
+        "Chicago Fire",
+        "FC Cincinnati",
+        "DC United",
+        "CF Montreal",
+        "Nashville SC",
+        "New England Revolution",
+        "New York City FC",
+        "New York Red Bulls",
+        "Orlando City",
+        "Philadelphia Union",
+        "Austin FC",
+        "Colorado Rapids",
+        "FC Dallas",
+        "Houston Dynamo",
+        "Minnesota United",
+        "Portland Timbers",
+        "Real Salt Lake",
+        "San Diego FC",
+        "San Jose Earthquakes",
+        "Sporting Kansas City",
+        "St. Louis City"
+      ],
+      "Primeira Liga": [
+        "Famalicao",
+        "Rio Ave",
+        "Casa Pia",
+        "Estoril",
+        "Moreirense",
+        "Arouca",
+        "Gil Vicente",
+        "Santa Clara",
+        "CD Nacional",
+        "Estrela Amadora",
+        "Alverca",
+        "Maritimo",
+        "Academico de Viseu"
+      ],
+      "Scottish Premiership": [
+        "Dundee United",
+        "Dundee",
+        "Motherwell",
+        "St Mirren",
+        "Kilmarnock",
+        "Falkirk",
+        "St Johnstone"
+      ],
+      "Super Lig": [
+        "Basaksehir",
+        "Samsunspor",
+        "Eyupspor",
+        "Goztepe",
+        "Kasimpasa",
+        "Alanyaspor",
+        "Konyaspor",
+        "Gaziantep FK",
+        "Genclerbirligi",
+        "Kocaelispor",
+        "Rizespor",
+        "Erzurumspor",
+        "Amedspor",
+        "Corum FK"
+      ],
+      "2. Bundesliga": [
+        "Wolfsburg",
+        "Heidenheim",
+        "St. Pauli",
+        "Bochum",
+        "Magdeburg",
+        "Kaiserslautern",
+        "Holstein Kiel",
+        "Hannover 96",
+        "Dynamo Dresden",
+        "Braunschweig",
+        "Greuther Furth",
+        "Nurnberg",
+        "Darmstadt",
+        "Arminia Bielefeld",
+        "Karlsruhe",
+        "Osnabruck",
+        "Energie Cottbus"
+      ],
+      "Belgian Pro League": [
+        "Union Saint-Gilloise",
+        "Gent",
+        "Antwerp",
+        "Standard Liege",
+        "Mechelen",
+        "Charleroi",
+        "Westerlo",
+        "Sint-Truiden",
+        "OH Leuven",
+        "Cercle Brugge",
+        "La Louviere",
+        "Zulte Waregem",
+        "Beveren",
+        "Kortrijk",
+        "Lommel"
+      ],
+      "Austrian Bundesliga": [
+        "Sturm Graz",
+        "Rapid Wien",
+        "LASK",
+        "Wolfsberger AC",
+        "Austria Wien",
+        "Grazer AK",
+        "Hartberg",
+        "Ried",
+        "Altach",
+        "WSG Tirol",
+        "Austria Lustenau"
+      ],
+      "Super League Greece": [
+        "AEK Athens",
+        "Aris",
+        "Asteras Tripolis",
+        "Atromitos",
+        "Iraklis",
+        "Kalamata",
+        "Kifisia",
+        "Levadiakos",
+        "OFI",
+        "Panetolikos",
+        "Volos"
+      ],
+      "Danish Superliga": [
+        "FC Midtjylland",
+        "Brondby IF",
+        "AGF",
+        "FC Nordsjaelland",
+        "Viborg FF",
+        "Randers FC",
+        "OB",
+        "Silkeborg IF",
+        "Lyngby",
+        "AC Horsens",
+        "SonderjyskE"
+      ],
+      "Swiss Super League": [
+        "Young Boys",
+        "Thun",
+        "St. Gallen",
+        "Lugano",
+        "Servette",
+        "Luzern",
+        "Lausanne-Sport",
+        "FC Zurich",
+        "Grasshopper",
+        "Sion",
+        "Vaduz"
+      ],
+      "HNL": [
+        "Rijeka",
+        "Osijek",
+        "Varazdin",
+        "Slaven Belupo",
+        "Istra 1961",
+        "Lokomotiva Zagreb",
+        "Gorica",
+        "Rudes"
+      ],
+      "Liga MX": [
+        "Toluca",
+        "Pachuca",
+        "Leon",
+        "Santos Laguna",
+        "Atlas",
+        "Necaxa",
+        "Puebla",
+        "Queretaro",
+        "Tijuana",
+        "FC Juarez",
+        "Atletico San Luis",
+        "Atlante"
+      ],
+      "A-League": [
+        "Adelaide United",
+        "Brisbane Roar",
+        "Central Coast Mariners",
+        "Macarthur FC",
+        "Melbourne City",
+        "Newcastle Jets",
+        "Perth Glory",
+        "Sydney FC",
+        "Western Sydney Wanderers"
+      ],
+      "Serie B": [
+        "Cremonese",
+        "Verona",
+        "Pisa",
+        "Avellino",
+        "Carrarese",
+        "Catanzaro",
+        "Cesena",
+        "Empoli",
+        "Entella",
+        "Juve Stabia",
+        "Mantova",
+        "Modena",
+        "Padova",
+        "Palermo",
+        "Sampdoria",
+        "Sudtirol",
+        "Vicenza",
+        "Arezzo",
+        "Benevento",
+        "Ascoli"
+      ],
+      "Ligue 2": [
+        "Metz",
+        "Saint-Etienne",
+        "Red Star FC",
+        "Reims",
+        "Montpellier",
+        "Nancy",
+        "Annecy",
+        "Sochaux",
+        "Dijon",
+        "Pau",
+        "Guingamp",
+        "Dunkerque",
+        "Grenoble",
+        "Rodez",
+        "Clermont",
+        "Boulogne",
+        "Laval"
+      ],
+      "Segunda Division": [
+        "Real Oviedo",
+        "Mallorca",
+        "Eibar",
+        "Castellon",
+        "Almeria",
+        "Burgos",
+        "Sabadell",
+        "Sporting Gijon",
+        "Granada",
+        "Las Palmas",
+        "Tenerife",
+        "Leganes",
+        "Valladolid",
+        "Cordoba",
+        "Eldense",
+        "Cadiz",
+        "FC Andorra",
+        "Ceuta",
+        "Albacete"
+      ]
+    },
+    "since": {}
+  },
+  "clubCountries": {
+    "about": "Round 1100. Pool clubs whose country is not their league's (scripts/lib/careerClubPool.mjs CLUB_COUNTRY, beside the rows Club Manager's own clubCountry holds). Each one Round 1100 adds is read from two hosts; the three Welsh clubs shipped with Round 1013, read then from goal.com and footballgroundguide.com (2026-10-05, the generator's own comment).",
+    "clubs": {
+      "Cardiff City": {
+        "country": "Wales",
+        "shipped": "Round 1013"
+      },
+      "Swansea City": {
+        "country": "Wales",
+        "shipped": "Round 1013"
+      },
+      "Wrexham": {
+        "country": "Wales",
+        "shipped": "Round 1013"
+      },
+      "CF Montreal": {
+        "country": "Canada",
+        "sources": [
+          {
+            "url": "https://news.canadasoccer.com/cf-montreal-advances-to-canadian-championship-final",
+            "read": "2026-10-07",
+            "says": "Canada Soccer, 2023-05-24: \"The five-time winners CF Montréal will head west to British Columbia for the 2023 Canadian Championship Final.\""
+          },
+          {
+            "url": "https://www.tsn.ca/soccer/article/cf-montreal-whitecaps-square-off-with-canadian-championship-final-at-stake/",
+            "read": "2026-10-07",
+            "says": "TSN, 2026-09-15: Montreal and Vancouver are \"the last two MLS clubs in the competition\", the 2026 Canadian Championship"
+          }
+        ]
+      },
+      "Vaduz": {
+        "country": "Liechtenstein",
+        "sources": [
+          {
+            "url": "https://www.uefa.com/nationalassociations/lie/",
+            "read": "2026-10-07",
+            "says": "UEFA's page for the Liechtenstein association: \"Vaduz make it to the group stage of the UEFA Europa Conference League: a first for any Liechtensteiner side.\""
+          },
+          {
+            "url": "https://sfl.ch/articles/le-fc-vaduz-champion-et-promu-dans-lelite",
+            "read": "2026-10-08",
+            "says": "the Swiss Football League's own report of the club's promotion, 2026-05-15: \"Les Liechtensteinois pourront ainsi disputer dès cet été la sixième saison de Brack Super League de leur histoire\" (it replaces the club's address page, which named the town and not the country)"
+          }
+        ]
+      }
+    }
   }
 }
