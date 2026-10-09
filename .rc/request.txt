@@ -1,0 +1,5 @@
+simCmStoppageTime: node scripts/simCmStoppageTime.mjs
+simExtraTime: node scripts/simExtraTime.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simMatchDetail: node scripts/simMatchDetail.mjs
+simHalftime: node scripts/simHalftime.mjs
