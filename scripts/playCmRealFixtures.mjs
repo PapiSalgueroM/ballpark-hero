@@ -26,7 +26,9 @@ const report = { cases: [], controls: [], sourceBefore: sourceHashes(), forwarde
 const saveReport = () => fs.writeFileSync(path.join(OUT, 'report.json'), JSON.stringify(report, null, 2));
 const receipt = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/clubManagerPremierFixtures2026.receipt.json')));
 assert.equal(receipt.ledgerKey, FIXTURE_KEY);
-const realPairs = [...new Map(receipt.sources.find(s => s.role === 'official').rows.filter(r => r.round === 1).map(r => [`${r.home}|${r.away}`, [r.home, r.away]])).values()];
+const sourcedRounds = Array.from({ length: 38 }, (_, round) => [...new Map(receipt.sources.find(s => s.role === 'official').rows.filter(r => r.round === round + 1).map(r => [`${r.home}|${r.away}`, [r.home, r.away]])).values()]);
+assert(sourcedRounds.every(round => round.length === 10), 'Independent source contains all 380 directed fixtures');
+const realPairs = sourcedRounds[0];
 assert.equal(realPairs.length, 10, 'Independent source contains all ten real opening pairings');
 const evertonPair = realPairs.find(pair => pair.includes('Everton')); assert(evertonPair);
 const fontCache = new Map(JSON.parse(fs.readFileSync(path.join(CACHE, 'manifest.json'))).map(entry => {
@@ -63,6 +65,33 @@ async function expectedSeason(state, seed, play = false) {
       return JSON.parse(JSON.stringify({ fixture, day, dateLabel: calendar.shortDate(day.date), pairs, generated, coverage, played: played && { ...played, state: cm.trimCareer(played.state) } }));
     } finally { Math.random = oldRandom; window.Date = OldDate; }
   }, { state, seed, play, now: NOW });
+}
+async function expectedReload(state) {
+  return oracle.evaluate(({ state, key, now }) => {
+    const { cm } = window.__cmFixtureOracle, OldDate = Date;
+    window.Date = class extends OldDate { constructor(...args) { super(...(args.length ? args : [now])); } static now() { return now; } };
+    try {
+      localStorage.setItem(key, JSON.stringify(state)); const loaded = cm.loadCareer();
+      if (!loaded || !cm.saveCareer(loaded)) throw new Error('Unchanged loader oracle did not preserve a valid career');
+      return { state: JSON.parse(localStorage.getItem(key)), bytes: localStorage.getItem(key), pairs: Array.from({ length: 38 }, (_, round) => cm.careerRoundPairs(loaded, round)) };
+    } finally { window.Date = OldDate; }
+  }, { state, key: KEY, now: NOW });
+}
+function compareSaved(actual, expected, id, stage, message) {
+  const differences = [];
+  function walk(a, b, location) {
+    if (Object.is(a, b)) return;
+    if (a && b && typeof a === 'object' && typeof b === 'object' && Array.isArray(a) === Array.isArray(b)) {
+      for (const key of new Set([...Object.keys(a), ...Object.keys(b)])) {
+        const actualPresent = Object.hasOwn(a, key), expectedPresent = Object.hasOwn(b, key);
+        if (!actualPresent || !expectedPresent) differences.push({ path: `${location}.${key}`, actualPresent, expectedPresent, actual: a[key], expected: b[key] });
+        else walk(a[key], b[key], `${location}.${key}`);
+      }
+    } else differences.push({ path: location, actual: a, expected: b });
+  }
+  walk(actual, expected, '$');
+  for (const [name, value] of [['expected', expected], ['actual', actual], ['diff', differences]]) fs.writeFileSync(path.join(OUT, `${id}-${stage}-${name}.json`), JSON.stringify(value, null, 2));
+  assert.deepEqual(actual, expected, message);
 }
 function roundResults(state, pairs) {
   const ledger = state.pairResults?.premier; assert(ledger, 'Opening round records the human and neutral result ledger');
@@ -112,7 +141,14 @@ async function journey(profile, kind, fixture) {
     } else await activate(page.locator('[data-testid="cm-slot-1"]').getByRole('button', { name: 'Resume Career', exact: true }));
     await page.locator('[data-cm-way="quick"]').waitFor(); await page.evaluate(() => document.fonts.ready);
     await oracle.reload({ waitUntil: 'domcontentloaded' }); await oracle.addScriptTag({ content: bundled.outputFiles[0].text });
-    const before = await read(), inputBytes = await bytes(), next = await expectedSeason(before, SEED);
+    const before = await read(), inputBytes = await bytes();
+    fs.writeFileSync(path.join(OUT, `${id}-input.json`), JSON.stringify(before, null, 2));
+    if (kind !== 'real') {
+      const initialized = await expectedReload(before);
+      compareSaved(initialized.state, before, id, 'oracle-query', 'Loading the canonical query input preserves every field while registering its saved world');
+      assert.equal(initialized.bytes, inputBytes, 'Canonical query input keeps identical serialized bytes');
+    }
+    const next = await expectedSeason(before, SEED);
     assert.equal(before.clubName, kind === 'later' ? fixture.clubName : 'Everton'); assert.equal(before.calendar[before.week].type, 'league');
     assert.equal(before.realLeagueFixtures, kind === 'real' ? FIXTURE_KEY : undefined, 'Only a newly eligible real first season holds the source key');
     if (kind === 'real') { assert.equal(next.fixture.opponent, evertonPair.find(name => name !== 'Everton')); assert.equal(next.fixture.home, evertonPair[0] === 'Everton'); }
@@ -141,20 +177,33 @@ async function journey(profile, kind, fixture) {
     await page.keyboard.press('Escape'); await help.waitFor({ state: 'hidden' });
     await page.waitForFunction(trigger => document.activeElement === trigger, await helpTrigger.elementHandle(), { timeout: 2000 });
     assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'Calendar and help fit the viewport');
+    const firstReload = kind === 'real' ? await expectedReload(before) : null;
+    if (firstReload) { assert.equal(firstReload.state.realLeagueFixtures, FIXTURE_KEY); assert.deepEqual(firstReload.pairs, sourcedRounds, 'First-load repairs keep all 38 sourced pairings and venues'); }
     await page.reload({ waitUntil: 'domcontentloaded' });
     await activate(page.locator('[data-testid="cm-slot-1"]').getByRole('button', { name: 'Resume Career', exact: true }));
-    await page.locator('[data-cm-way="quick"]').waitFor(); assert(await bytes() === inputBytes, 'Source key and complete fixture save survive reload unchanged');
-    const expected = await expectedSeason(before, SEED, true); assert.equal(expected.played.kind, 'match');
+    await page.locator('[data-cm-way="quick"]').waitFor();
+    if (firstReload) {
+      compareSaved(await read(), firstReload.state, id, 'first-reload', 'First real reload exactly matches the unchanged loader on the identical full input');
+      assert.equal(await bytes(), firstReload.bytes, 'First-load serialization matches the entire unchanged loader result');
+      await page.reload({ waitUntil: 'domcontentloaded' });
+      await activate(page.locator('[data-testid="cm-slot-1"]').getByRole('button', { name: 'Resume Career', exact: true }));
+      await page.locator('[data-cm-way="quick"]').waitFor(); assert.equal(await bytes(), firstReload.bytes, 'Canonical real save reloads byte-for-byte without further repairs');
+    } else assert.equal(await bytes(), inputBytes, 'Already loaded legacy and later saves reload byte-for-byte');
+    const playedBefore = await read();
+    await oracle.reload({ waitUntil: 'domcontentloaded' }); await oracle.addScriptTag({ content: bundled.outputFiles[0].text });
+    const initialized = await expectedReload(playedBefore);
+    compareSaved(initialized.state, playedBefore, id, 'oracle-settlement', 'The fresh oracle loads the identical canonical input and registers its complete saved world');
+    assert.equal(initialized.bytes, await bytes(), 'Canonical settlement input keeps identical serialized bytes');
+    const expected = await expectedSeason(playedBefore, SEED, true); assert.equal(expected.played.kind, 'match');
     await page.locator('[data-cm-way="quick"]').evaluate((button, seed) => button.addEventListener('click', () => {
       window.__cmFixtureInputs++; let t = seed >>> 0; Math.random = () => { t = (t + 0x6d2b79f5) | 0; let x = Math.imul(t ^ (t >>> 15), 1 | t);
         x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x; return ((x ^ (x >>> 14)) >>> 0) / 4294967296; };
     }, { capture: true, once: true }), SEED);
     await activate(page.locator('[data-cm-way="quick"]'));
-    await page.waitForFunction(({ key, week }) => JSON.parse(localStorage.getItem(key)).week === week, { key: KEY, week: before.week + 1 });
+    await page.waitForFunction(({ key, week }) => JSON.parse(localStorage.getItem(key)).week === week, { key: KEY, week: playedBefore.week + 1 });
     await page.getByRole('heading', { name: 'FULL TIME', exact: true }).waitFor();
-    const after = await read(); fs.writeFileSync(path.join(OUT, `${id}-expected.json`), JSON.stringify(expected.played.state, null, 2)); fs.writeFileSync(path.join(OUT, `${id}-actual.json`), JSON.stringify(after, null, 2));
-    assert.deepEqual(after, expected.played.state, 'Actual Quick Sim writes the complete unchanged engine result');
-    assert.equal(after.resultLog.length, before.resultLog.length + 1); assert.equal(after.resultLog.at(-1).opp, next.fixture.opponent); assert.equal(after.resultLog.at(-1).home, next.fixture.home);
+    const after = await read(); compareSaved(after, expected.played.state, id, 'settlement', 'Actual Quick Sim writes the complete unchanged engine result');
+    assert.equal(after.resultLog.length, playedBefore.resultLog.length + 1); assert.equal(after.resultLog.at(-1).opp, next.fixture.opponent); assert.equal(after.resultLog.at(-1).home, next.fixture.home);
     if (kind === 'real') {
       roundResults(after, realPairs); row.realNeutralResults = 9;
       if (!report.controls.includes('neutral-result')) {
@@ -168,7 +217,7 @@ async function journey(profile, kind, fixture) {
     await page.locator('[data-cm-way="quick"]').waitFor(); await page.reload({ waitUntil: 'domcontentloaded' });
     await page.locator('[data-testid="cm-slot-1"]').waitFor(); assert.equal(hash(await bytes()), row.savedHash, 'Result and source key reload without duplicate fixture credit');
     assert.deepEqual(row.errors, [], 'No console or unhandled page errors'); assert.deepEqual(row.assetErrors, [], 'No missing local assets or fonts');
-    row.passed = true; return before;
+    row.passed = true; return playedBefore;
   } catch (error) { row.error = String(error.stack || error); await shot('failure').catch(() => {}); throw error; }
   finally { await context.close(); saveReport(); }
 }

@@ -43,6 +43,7 @@ const cases = {
   future: 'refuses stale keys in later seasons, other years and changed league membership',
   rollover: 'clears the real fixture key after a fully played season before generating the next season',
   baseline: 'matches the independent pre-change engine for unsupported starts and genuine match outcomes',
+  uncopied: 'passes the whole independent generated baseline with untouched current source under every copied fault',
 };
 const controls = {
   venues: { file: helperFile, from: '=> [home, away]);', to: '=> [away, home]);', test: 'ledger' },
@@ -55,7 +56,7 @@ const controls = {
   world: { file: engineFile, from: 'careerRoundPairs(state, w.round, lg.clubs, lg.id)',
     to: 'roundPairs(lg.clubs, w.round, !!state.balancedFixtures)', test: 'world' },
   edited: { file: helperFile, from: '&& !state.customClub && !state.leagueOverrides', to: '&& true', test: 'eligibility' },
-  legacy: { file: helperFile, from: 'state.realLeagueFixtures !== REAL_PREMIER_FIXTURE_KEY', to: 'false', count: 2, test: 'legacy' },
+  legacy: { file: helperFile, from: 'state.realLeagueFixtures !== REAL_PREMIER_FIXTURE_KEY', to: 'false', count: 2, test: 'legacy', extraFailures: ['baseline'] },
   future: { file: helperFile, from: '&& state.season === 1', to: '&& true', test: 'future' },
   rollover: { file: engineFile, from: '  delete state.realLeagueFixtures;', to: '  state.realLeagueFixtures = career.realLeagueFixtures;', test: 'rollover' },
 };
@@ -78,7 +79,7 @@ function tableFrom(results, clubs) {
   return [...rows.values()].sort((a, b) => a.club.localeCompare(b.club));
 }
 function actualTable(table) {
-  return table.map(({ club, p, w, d, l, gf, ga, pts }) => ({ club, p, w, d, l, gf, ga, pts })).sort((a, b) => a.club.localeCompare(b.club));
+  return table.map(({ club, w, d, l, gf, ga, pts }) => ({ club, p: w + d + l, w, d, l, gf, ga, pts })).sort((a, b) => a.club.localeCompare(b.club));
 }
 function resultRows(report) {
   return [{ home: report.home, away: report.away, hg: report.homeGoals, ag: report.awayGoals }, ...report.otherResults];
@@ -88,10 +89,22 @@ function assertRound(rows, expected, label) {
   assert.deepEqual(rows.map(r => [r.home, r.away]).sort(), [...expected].sort(), `${label}: exact saved opponent order and home/away pairs`);
   for (const row of rows) assert.ok(Number.isInteger(row.hg) && row.hg >= 0 && Number.isInteger(row.ag) && row.ag >= 0, 'Results remain actual nonnegative engine scores');
 }
-function storage() {
-  const store = new Map();
+function storage(store = new Map()) {
   globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k) };
   return store;
+}
+function expectedFailures(control) {
+  return [controls[control].test, ...(controls[control].extraFailures ?? [])].map(name => cases[name]);
+}
+function expectedPasses(control) {
+  return [...(controls[control].extraFailures?.includes('baseline') ? [] : [cases.baseline]), cases.uncopied];
+}
+function differences(before, after, keyPath = []) {
+  if (Object.is(before, after)) return [];
+  if (before && after && typeof before === 'object' && typeof after === 'object') {
+    return [...new Set([...Object.keys(before), ...Object.keys(after)])].flatMap(key => differences(before[key], after[key], [...keyPath, key]));
+  }
+  return [{ path: keyPath.join('.'), beforePresent: before !== undefined, afterPresent: after !== undefined, before, after }];
 }
 
 async function main() {
@@ -108,11 +121,11 @@ async function main() {
       let report;
       try { report = JSON.parse(await readFile(path.join(evidence, `${name || 'normal'}-report.json`), 'utf8')); } catch { report = null; }
       const rows = report?.cases ?? [], failed = rows.filter(r => r.status === 'failed'), passed = rows.filter(r => r.status === 'passed');
-      const effective = name ? failed.length === 1 && failed[0].title === cases[controls[name].test]
-        && failed[0].errorName === 'AssertionError' && passed.length === 1 && passed[0].title === cases.baseline
+      const effective = name ? JSON.stringify(failed.map(r => [r.title, r.errorName])) === JSON.stringify(expectedFailures(name).map(title => [title, 'AssertionError']))
+        && JSON.stringify(passed.map(r => r.title)) === JSON.stringify(expectedPasses(name))
         : failed.length === 0 && passed.length === Object.keys(cases).length;
       const ok = run.status === 0 && !run.error && !run.signal && report?.numUnhandledErrors === 0 && report?.sourceBytesHeld === true && effective;
-      summary.push({ control: name || 'normal', passed: ok, exit: run.status, assertions: passed.length + failed.length, intendedFailure: name ? cases[controls[name].test] : null });
+      summary.push({ control: name || 'normal', passed: ok, exit: run.status, assertions: passed.length + failed.length, intendedFailures: name ? expectedFailures(name) : [] });
       console.log(`${ok ? 'PASS' : 'FAIL'} real fixtures ${name || 'normal'}`);
       process.stdout.write(ok ? output.split('\n').filter(line => line.startsWith('simCmRealFixtures')).join('\n') + '\n' : output.slice(-12000));
     }
@@ -157,7 +170,7 @@ async function main() {
         + '\nexport const __fixtureByeResults: { home: string; away: string; hg: number; ag: number }[] = [];\n';
       await writeFile(engine, observed); await writeFile(helper, input[helperFile]); await writeFile(card, input[cardFile]);
       const output = path.join(folder, `${name}.cjs`);
-      await build({ entryPoints: [engine], bundle: true, platform: 'node', format: 'cjs', outfile: output, logLevel: 'silent', external: ['react', 'react/jsx-runtime'],
+      await build({ entryPoints: [engine], bundle: true, platform: 'node', format: 'cjs', outfile: output, logLevel: 'silent', jsx: 'automatic', external: ['react', 'react/jsx-runtime'],
         alias: { '@/lib/clubManager': engine, '@/lib/clubManagerFixtures': helper, '@': path.join(root, 'src') } });
       bundles.set(name, output); return fresh(name);
     }
@@ -190,13 +203,68 @@ async function main() {
       }
       assert.equal(state.week, state.calendar.length); assert.equal(results.length, 380, 'The actual campaign settles all 380 matches');
       observations.settledMatches = results.length;
-      assert.ok(state.table.every(r => r.p === 38), 'All real league clubs played 38 simulated matches');
+      assert.ok(state.table.every(r => r.w + r.d + r.l === 38), 'All real league clubs played 38 simulated matches');
       const closed = seeded(6100, () => engine.finishSeason(state));
       completed = { state: closed.state, summary: closed.summary, results };
       return clone(completed);
     }
+    async function reloadProof(input, label, expectedKey) {
+      const candidate = fresh(candidateName), old = fresh('baseline');
+      const candidateStore = storage(); assert.equal(candidate.saveCareer(input), true);
+      const inputBytes = candidateStore.get(candidate.SAVE_KEY);
+      const loaded = withRealFixtureSeed(9912, () => candidate.loadCareer());
+      assert.ok(loaded.value); assert.equal(candidate.saveCareer(loaded.value), true);
+      const candidateBytes = candidateStore.get(candidate.SAVE_KEY);
+      const oldStore = storage(); oldStore.set(old.SAVE_KEY, inputBytes);
+      const prior = withRealFixtureSeed(9912, () => old.loadCareer());
+      assert.ok(prior.value); assert.equal(old.saveCareer(prior.value), true);
+      const oldBytes = oldStore.get(old.SAVE_KEY);
+      const prefix = `${control || 'normal'}-${label}`;
+      await writeFile(path.join(evidence, `${prefix}-input.json`), inputBytes);
+      await writeFile(path.join(evidence, `${prefix}-candidate-loaded.json`), JSON.stringify(loaded.value, null, 2));
+      await writeFile(path.join(evidence, `${prefix}-old-loaded.json`), JSON.stringify(prior.value, null, 2));
+      await writeFile(path.join(evidence, `${prefix}-candidate-saved.json`), candidateBytes);
+      await writeFile(path.join(evidence, `${prefix}-old-saved.json`), oldBytes);
+      await writeFile(path.join(evidence, `${prefix}-reload-diff.json`), JSON.stringify({
+        inputToCandidate: differences(JSON.parse(inputBytes), loaded.value), inputToOld: differences(JSON.parse(inputBytes), prior.value),
+        oldToCandidate: differences(prior.value, loaded.value), oldDraws: prior.draws, candidateDraws: loaded.draws,
+      }, null, 2));
+      assert.equal(loaded.draws, prior.draws, 'First-load repairs consume exactly the independent old loader random draws');
+      assert.deepEqual(loaded.value, prior.value, 'The entire first loaded save matches the independent old loader on identical input');
+      assert.equal(candidateBytes, oldBytes, 'The full first saved bytes match the independent old loader with no dropped fields');
+      assert.equal(loaded.value.realLeagueFixtures, expectedKey, 'Loading preserves the saved fixture version or its absence');
+      if (label.startsWith('legacy-')) assert.equal(candidateBytes, inputBytes, 'The fully repaired old match save also preserves its original first-load bytes');
+      storage(candidateStore);
+      const second = withRealFixtureSeed(9913, () => candidate.loadCareer());
+      assert.ok(second.value); assert.equal(candidate.saveCareer(second.value), true);
+      storage(oldStore);
+      const secondOld = withRealFixtureSeed(9913, () => old.loadCareer());
+      assert.ok(secondOld.value); assert.equal(old.saveCareer(secondOld.value), true);
+      await writeFile(path.join(evidence, `${prefix}-candidate-second-loaded.json`), JSON.stringify(second.value, null, 2));
+      await writeFile(path.join(evidence, `${prefix}-old-second-loaded.json`), JSON.stringify(secondOld.value, null, 2));
+      await writeFile(path.join(evidence, `${prefix}-second-reload-diff.json`), JSON.stringify({ candidate: differences(loaded.value, second.value), old: differences(prior.value, secondOld.value) }, null, 2));
+      assert.equal(second.draws, secondOld.draws); assert.deepEqual(second.value, secondOld.value);
+      assert.equal(candidateStore.get(candidate.SAVE_KEY), candidateBytes, 'Second candidate load and save preserve every repaired byte');
+      assert.equal(oldStore.get(old.SAVE_KEY), oldBytes, 'The independent old second load and save also preserve every repaired byte');
+      return second.value;
+    }
+    async function baselineFor(name) {
+      const starts = [['Barcelona', 'now'], ['Bayern Munich', 'now'], ['Everton', 'era2010'],
+        ['Everton', 'now', undefined, undefined, undefined, { premier: [...clubs] }],
+        [customSpec.name, 'now', clone(customSpec)]];
+      for (const args of starts) for (const seed of [4700, 9173, 1184]) {
+        const old = fresh('baseline'), candidate = fresh(name);
+        await old.ensureEraRosters(args[1]); await candidate.ensureEraRosters(args[1]);
+        const a = withRealFixtureSeed(seed, () => old.startCareer(...args));
+        const b = withRealFixtureSeed(seed, () => candidate.startCareer(...args));
+        assert.equal(b.draws, a.draws); assert.deepEqual(b.value, a.value, 'Unsupported fresh save stays byte-for-byte at the pre-change baseline');
+        const x = withRealFixtureSeed(seed + 4800, () => old.playNextEntry(a.value, { skipHalftime: true }));
+        const y = withRealFixtureSeed(seed + 4800, () => candidate.playNextEntry(b.value, { skipHalftime: true }));
+        assert.equal(y.draws, x.draws); assert.deepEqual(y.value, x.value, 'Unsupported actual match preserves every recorded field and random draw');
+      }
+    }
     const outcomes = {
-      ledger() {
+      async ledger() {
         const data = cm.__fixtureLedger;
         const tuples = rows => rows.filter(r => !r.duplicate).map(r => [r.round, r.home, r.away].join('|')).sort();
         assert.deepEqual(tuples(receipt.sources.find(s => s.role === 'official').rows), tuples(receipt.sources.find(s => s.role === 'independent').rows));
@@ -217,9 +285,8 @@ async function main() {
         assert.equal(count, 760);
         const pairs = cm.careerRoundPairs(state, 0); pairs[0][0] = 'Test mutation'; pairs.pop();
         assert.deepEqual(cm.careerRoundPairs(state, 0), rounds[0], 'Returned mutable copies never mutate the saved versioned data');
-        const store = storage(); cm.saveCareer(state); const saved = store.get(cm.SAVE_KEY);
-        const loaded = cm.loadCareer(); assert.equal(loaded.realLeagueFixtures, key); assert.deepEqual(cm.careerRoundPairs(loaded, 0), rounds[0]);
-        cm.saveCareer(loaded); assert.equal(store.get(cm.SAVE_KEY), saved, 'A real-fixture save reload retains its exact key, schedule and bytes');
+        const loaded = await reloadProof(state, 'real', key);
+        assert.equal(loaded.realLeagueFixtures, key); assert.deepEqual(cm.careerRoundPairs(loaded, 0), rounds[0]);
       },
       calendar() {
         const state = seeded(4107, () => cm.startCareer('Everton')); let count = 0;
@@ -250,7 +317,7 @@ async function main() {
         cm.__fixtureByeResults.length = 0;
         const run = seeded(4300, () => cm.playNextEntry(state, { untilWeek: 1, skipHalftime: true }));
         assert.equal(run.state.week, 1); assert.equal(run.state.resultLog.length, 0);
-        assert.ok(run.state.table.every(r => r.p === 1));
+        assert.ok(run.state.table.every(r => r.w + r.d + r.l === 1));
         /* The test-only receipt records the actual neutral scores above. */
         const traced = cm.__fixtureByeResults;
         assertRound(traced, rounds[0], 'actual neutral-only round');
@@ -282,7 +349,7 @@ async function main() {
         assert.equal(internal.realLeagueFixtures, undefined, 'An internal running-world start never binds a fresh season');
         assert.equal(seeded(4107, () => cm.startCareer('Barcelona')).realLeagueFixtures, undefined);
       },
-      legacy() {
+      async legacy() {
         for (const seed of [4107, 9027, 1184]) {
           const old = fresh('baseline'), candidate = fresh(candidateName);
           const a = withRealFixtureSeed(seed, () => old.startCareer('Everton'));
@@ -292,9 +359,9 @@ async function main() {
           const x = withRealFixtureSeed(seed + 4500, () => old.playNextEntry(a.value, { skipHalftime: true }));
           const y = withRealFixtureSeed(seed + 4500, () => candidate.playNextEntry(b.value, { skipHalftime: true }));
           assert.equal(y.draws, x.draws); assert.deepEqual(y.value, x.value, 'Old-key-absent match, scores, stats, events, money and whole saved state stay exact');
-          const store = storage(); assert.equal(candidate.saveCareer(y.value.state), true); const before = store.get(candidate.SAVE_KEY);
-          const loaded = candidate.loadCareer(); assert.ok(loaded); assert.equal(loaded.realLeagueFixtures, undefined); assert.equal(candidate.careerFixtureCoverage(loaded), null);
-          candidate.saveCareer(loaded); assert.equal(store.get(candidate.SAVE_KEY), before, 'Reload does not migrate or mutate the old saved schedule');
+          const loaded = await reloadProof(y.value.state, `legacy-${seed}`, undefined);
+          assert.equal(loaded.realLeagueFixtures, undefined); assert.equal(candidate.careerFixtureCoverage(loaded), null);
+          for (let round = 0; round < 38; round++) assert.deepEqual(candidate.fixtureFor(loaded, { type: 'league', round }), old.fixtureFor(loaded, { type: 'league', round }), 'Canonical loading preserves every old fixture');
         }
         const args = ['Everton', 'now', undefined, undefined, { yearsOn: 1, uclField: null, keepLeagueOverrides: false }];
         const old = fresh('baseline'), candidate = fresh(candidateName);
@@ -328,30 +395,19 @@ async function main() {
         assert.equal(finished.state.realLeagueFixtures, key, 'Rolling never changes the completed input season');
         if (!control) {
           await writeFile(path.join(evidence, 'native-later-season.json'), JSON.stringify(next));
-          await writeFile(path.join(evidence, 'native-later-season-receipt.json'), JSON.stringify({ base, club: finished.state.clubName, season: 1, settledRounds: 38, matches: finished.results.length, played: finished.state.table.map(r => [r.club, r.p]), results: finished.results, nextSeason: next.season, fixtureKeyAfter: next.realLeagueFixtures ?? null, nativeSaveSha256: sha(JSON.stringify(next)) }, null, 2));
+          await writeFile(path.join(evidence, 'native-later-season-receipt.json'), JSON.stringify({ base, club: finished.state.clubName, season: 1, settledRounds: 38, matches: finished.results.length, played: finished.state.table.map(r => [r.club, r.w + r.d + r.l]), results: finished.results, nextSeason: next.season, fixtureKeyAfter: next.realLeagueFixtures ?? null, nativeSaveSha256: sha(JSON.stringify(next)) }, null, 2));
         }
       },
       async baseline() {
-        const starts = [['Barcelona', 'now'], ['Bayern Munich', 'now'], ['Everton', 'era2010'],
-          ['Everton', 'now', undefined, undefined, undefined, { premier: [...clubs] }],
-          [customSpec.name, 'now', clone(customSpec)]];
-        for (const args of starts) {
-          for (const seed of [4700, 9173, 1184]) {
-            const old = fresh('baseline'), candidate = fresh(candidateName);
-            await old.ensureEraRosters(args[1]); await candidate.ensureEraRosters(args[1]);
-            const a = withRealFixtureSeed(seed, () => old.startCareer(...args));
-            const b = withRealFixtureSeed(seed, () => candidate.startCareer(...args));
-            assert.equal(b.draws, a.draws); assert.deepEqual(b.value, a.value, 'Unsupported fresh save stays byte-for-byte at the pre-change baseline');
-            const x = withRealFixtureSeed(seed + 4800, () => old.playNextEntry(a.value, { skipHalftime: true }));
-            const y = withRealFixtureSeed(seed + 4800, () => candidate.playNextEntry(b.value, { skipHalftime: true }));
-            assert.equal(y.draws, x.draws); assert.deepEqual(y.value, x.value, 'Unsupported actual match preserves every recorded field and random draw');
-          }
-        }
+        await baselineFor(candidateName);
+      },
+      async uncopied() {
+        await baselineFor('original');
       },
     };
     const rows = [];
     for (const [name, title] of Object.entries(cases)) {
-      if (control && name !== controls[control].test && name !== 'baseline') { rows.push({ title, status: 'skipped' }); continue; }
+      if (control && name !== controls[control].test && name !== 'baseline' && name !== 'uncopied') { rows.push({ title, status: 'skipped' }); continue; }
       try { await outcomes[name](); rows.push({ title, status: 'passed' }); }
       catch (error) { rows.push({ title, status: 'failed', errorName: error.name, message: error.message, stack: error.stack }); }
     }
@@ -360,9 +416,9 @@ async function main() {
     await writeFile(path.join(evidence, `${control || 'normal'}-report.json`), JSON.stringify({ base, baselineSourceSha256: sha(baselineSource), originalHash: sha(bytes.get(engineFile)), control: control || 'normal', ...observations, sourceBytesHeld: true, numUnhandledErrors: unhandled.length, unhandled, cases: rows }, null, 2));
     assert.deepEqual(unhandled, [], 'Import/runtime errors never count as an effective control');
     if (control) {
-      assert.deepEqual(rows.filter(r => r.status === 'failed').map(r => [r.title, r.errorName]), [[cases[controls[control].test], 'AssertionError']]);
-      assert.deepEqual(rows.filter(r => r.status === 'passed').map(r => r.title), [cases.baseline]);
-      assert.equal(rows.filter(r => r.status === 'skipped').length, Object.keys(cases).length - 2);
+      assert.deepEqual(rows.filter(r => r.status === 'failed').map(r => [r.title, r.errorName]), expectedFailures(control).map(title => [title, 'AssertionError']));
+      assert.deepEqual(rows.filter(r => r.status === 'passed').map(r => r.title), expectedPasses(control));
+      assert.equal(rows.filter(r => r.status === 'skipped').length, Object.keys(cases).length - 3);
     } else { assert.deepEqual(rows.filter(r => r.status === 'failed'), []); assert.equal(rows.filter(r => r.status === 'passed').length, Object.keys(cases).length); }
     console.log(`simCmRealFixtures ${control || 'normal'}: real fixture outcomes and independent generated baseline passed.`);
   } finally {

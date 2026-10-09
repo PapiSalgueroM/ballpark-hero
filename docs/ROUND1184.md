@@ -46,9 +46,17 @@ All five direct fixture consumers use the same saved resolver: the player's fixt
 
 The generated balance harness removes only `realLeagueFixtures` when constructing its generated schedule contexts. Its original league sizes, structural run-of-two bound, old venue oracle, old-save load/play behavior, rollover checks and AI ledger floors remain intact. The generated digest comparison also removes only the new key before hashing and playing; no golden digest changes. Natural real-eligible starts are tested separately against the retained fixture tuples, rather than the generated venue-run bound.
 
+## First remote run
+
+Run `37955981328` on source `df9988b53820e0fa942fa6bade09d49fa613e129` did not pass the focused proof. The retained early artifact is `11628486227`, SHA256 `37de6154c701905271b7f905fbb687daaa781d7aa2dc9f87b5aacf04ea1856d5`. It is diagnostic evidence, not release acceptance.
+
+The real fixture reads reached all 760 checks. Later assertions incorrectly read a nonexistent `TableRow.p` instead of deriving played from wins, draws and losses. The test-only calendar bundle used classic JSX, and a fresh-save byte assertion omitted the existing loader's default repairs. The corrected proof retains complete input, prior/candidate loaded and saved JSON, full field comparisons and equal random draws. Fresh first-load repairs must exactly match the independent prior loader, with exact byte stability on subsequent loads. Already repaired legacy saves retain their original byte invariant. Every copied fault also requires an untouched current-source baseline; the legacy guard fault must fail precisely its legacy and affected unsupported-world groups.
+
+These corrections affect verification scripts only. Remote validation of the corrected source is still required.
+
 ## Validation still required
 
-Remote types/build, focused outcomes, effective copied defects, unchanged old-save/future/custom baselines, existing fixture and world harnesses, native phone/desktop journeys, and output-reader gates are pending. Authored proof includes 10 real fixture outcome groups, all 760 player fixture readings, all 760 calendar readings, a full 380-match simulated campaign and nine copied outcome controls. The independent old/generated comparison uses the pre-change engine and calendar card, with whole-save and random-draw equality across three seeds and current, historical, edited and custom contexts. The balance harness retains its three original controls and adds five controls for natural version binding, fallback flag/count and engine/calendar resolver bypasses. These counts describe the required remote proof, not passing results.
+Remote types/build, focused outcomes, effective copied defects, unchanged old-save/future/custom baselines, existing fixture and world harnesses, native phone/desktop journeys, and output-reader gates are pending. Authored proof includes 11 real fixture outcome groups, all 760 player fixture readings, all 760 calendar readings, a full 380-match simulated campaign and nine copied outcome controls. The independent old/generated comparison uses the pre-change engine and calendar card, with whole-save and random-draw equality across three seeds and current, historical, edited and custom contexts. The balance harness retains its three original controls and adds five controls for natural version binding, fallback flag/count and engine/calendar resolver bypasses. These counts describe the required remote proof, not passing results.
 
 Native journeys cover real, old-key-absent and actually rolled future saves at 390 and 1280 pixels, with calendar source copy, actual Quick Sim settlement, whole saved state equality and reload preservation. Their outcome and screenshot artifacts remain pending.
 
