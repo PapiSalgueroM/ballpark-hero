@@ -261,6 +261,32 @@
       board objective is the one it was, and what moved is only the hash of
       the whole state after a summer. Written with --part=modern --write
       there, then run green whole and green again on modern alone.
+      Round 1146 (2026-10-09) re-took modern and eras for two things three
+      players asked for in Club Manager: own goals, and a quick sim coach
+      who uses his bench after the break. A ladder of throwaway copies of
+      src on a GitHub runner at b6fea5b7 (this harness's root override; one
+      call patched out of the copy's clubManager.ts a leg) says which did
+      what. Leg 1, both calls out (the own goal tag at the end of
+      drawSegment and the coach's restLegs): the file as it stood, byte for
+      byte (modern 27/0, eras 20/0, pure 48/0), so everything else the
+      round touched in the engine is inert. Leg 2, own goals in and the
+      coach as he was: 27 saves move (13 modern, 14 eras) in "whole" (24),
+      "summary" (10) and "s2_whole" (4) and in nothing else. Start, table,
+      results, world, cup, europe, trophies, objectives, promotions and
+      every next season view held in all 47: an own goal re-labels a goal
+      the match already had, so who is credited moves (the squad's season
+      lines, the season summary's top scorer) and no result does. Leg 3,
+      the coach in and own goals out: all 47 saves move in table, results,
+      world, summary, whole and wholeNext (cup and cupDrawNext in 46,
+      europeNext in 39, objectivesNext and promotions in 27, start in 24,
+      europe in 19, trophies in 13, and the second season views of the ten
+      pyramid saves), the footprint Release AL's coach left for the same
+      reason: every season here is quick simmed, and he now makes a change
+      in nine matches in ten where he made one in under half (measured by
+      scripts/simCmQuickLegs.mjs; wins and points do not move by anything
+      its fleets can see, every seeded match is a different match). Pure
+      held 48/0 on every leg. Written with --part=modern,eras,pure --write
+      on the tree itself, then run green whole.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
