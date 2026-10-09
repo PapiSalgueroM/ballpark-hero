@@ -62,7 +62,13 @@ import { soccerTrainOutPlugin, withoutTrainFields } from './lib/soccerTrain1178.
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_LEAGUE_FINISH_CONTROL || '';
-const CONTROLS = { notitle: [1], eliteblind: [3, 5], stream: [4] };
+/* Release AQ: notitle reddens section 4 beside section 1 now, and has to.
+   Until the Soccer Career train the finish was a label and nothing read it
+   back. From 2026-27 it is the place that sends his club down or brings it
+   up (Round 1175), so a champion recorded somewhere else than first plays a
+   different career from there on and the digests move with him. Measured
+   when the release brought the controls back to life: sections 1 and 4. */
+const CONTROLS = { notitle: [1, 4], eliteblind: [3, 5], stream: [4] };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error('unknown control ' + CONTROL + ' (known: ' + Object.keys(CONTROLS).join(', ') + ')'); process.exit(2); }
 const RECORD = process.argv.includes('--record');
 /* Release AQ. SIM_LEAGUE_FINISH_ATTRIBUTION=train1178 bundles this tree with
