@@ -100,12 +100,15 @@
    1. NFL Football Operations, "NFL Overtime Rules".
    2. The Associated Press report of the Giants and the Commanders, 20-20 on
       4 December 2022 ("Giants and Commanders tie at 20 as Gano's kick falls
-      short"), and ESPN, "How Giants-Commanders tie affects their playoff
-      chances".
-   Four quarters of 15 minutes. THIN, marked: one page was read for it
-   (Wikipedia, "American football rules", as a spot check: "four quarters of
-   15 minutes each"); the NFL rulebook's Rule 4, "Game Timing", is where it
-   is written and its file would not open this round.
+      short"), and Fox 5 DC, "Commanders tie Giants at 20 after New York's
+      game winning kick falls short".
+   Four quarters of 15 minutes. THIN, marked: the NFL rulebook's Rule 4,
+   "Game Timing", is where it is written, and the league's own file did not
+   open this round. What was read instead:
+   1. Wikipedia, "American football rules", as a spot check ("four quarters
+      of 15 minutes each").
+   2. A copy of the rulebook's text on another site (ReadKong, "Rule 4 Game
+      Timing, Section 1: Periods, Intermissions, Halftime").
 
    LEFT OUT, marked and not filled:
    - NFL 2005 throwback: no window. 2005 to 2020 are held (16 real games),

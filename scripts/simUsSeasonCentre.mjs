@@ -63,6 +63,7 @@
  *              held line                                         -> section 2
  *   lumpy      his yards, catches and tackles a game follow the
  *              rule before the fix pass (no bounded swing)       -> section 7
+ *   flat       every game of his is his average game             -> section 7
  *   tdform     his touchdowns follow the whole of the core's
  *              form. ALL FIVE SEED SETS: the check needs 2,000
  *              quarterback games and one set holds about 600     -> section 7
@@ -128,6 +129,7 @@ const CONTROLS = {
   poscore: { section: 4, label: 'playoff path follows', patches: [{ file: US, from: 'won: wonAt(r), score: scores[r] })) };', to: "won: wonAt(r), score: scores[r] ?? (bind.series ? null : (wonAt(r) ? '24-9' : '9-24')) })) };" }] },
   nflheld: { section: 2, label: "is the ledger's own line for this sport", patches: [{ file: 'src/lib/nflCareerSport.ts', from: "  seasonCentreHeld: year => usSeasonHeldLine('nfl', year),", to: "  seasonCentreHeld: year => usSeasonHeldLine('nba', year)," }] },
   lumpy: { section: 7, label: 'sit on a per game cap', patches: [{ file: NFL, from: '      return 1 + swing * (0.62 * mine + 0.18 * team + 0.2 * scored);', to: '      return (1 + mine / 2) * (0.7 + g.us / 60) * (1 + (tdKey ? of(g, tdKey) : 0));' }] },
+  flat: { section: 7, label: 'game to game spread sits inside', patches: [{ file: NFL, from: '      return 1 + swing * (0.62 * mine + 0.18 * team + 0.2 * scored);', to: '      return 1;' }] },
   tdform: { section: 7, label: 'touchdown passes scatter', patches: [{ file: NFL, from: 'teamFor: true, teamPoints: 7, formPower: TD_FORM_POWER }', to: 'teamFor: true, teamPoints: 7 }' }] },
   minutes: { section: 7, label: 'under three minutes apart', patches: [{ file: NFL, from: '        const crowded = used.has(m - 1) || used.has(m) || used.has(m + 1) || (side !== undefined && drives[side].some(x => Math.abs(x - m) < DRIVE_GAP));', to: '        const crowded = false;' }] },
   order: { section: 7, label: 'order of the games reads oddly', patches: [{ file: NFL, from: '  for (let t = 0; t < ORDER_TRIES && least > 0; t += 1) {', to: '  for (let t = 0; t < 1; t += 1) {' }] },
@@ -140,7 +142,7 @@ const CONTROLS = {
 /* which sport a control needs in the run (its patched file is only bundled with that sport) */
 const CONTROL_SPORT = {
   stage: 'nba', names: 'nba', window: 'nba', formula: 'nba', hot: 'nba', sum: 'nfl', kick: 'nfl', nflstage: 'nfl', nflformula: 'nfl', days: 'nfl',
-  poscore: 'nfl', nflheld: 'nfl', lumpy: 'nfl', tdform: 'nfl', minutes: 'nfl', order: 'nfl', points: 'nfl', forty: 'nfl', level: 'nfl', oddtd: 'nfl', bigkick: 'nfl',
+  poscore: 'nfl', nflheld: 'nfl', lumpy: 'nfl', flat: 'nfl', tdform: 'nfl', minutes: 'nfl', order: 'nfl', points: 'nfl', forty: 'nfl', level: 'nfl', oddtd: 'nfl', bigkick: 'nfl',
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown US_SEASON_CONTROL ${CONTROL}`); process.exit(2); }
 
@@ -561,62 +563,108 @@ function scheduleProblems(slug, SB, row, eraId, s, named) {
                                 conference in section 4, which fails when either count is 0.
    A refused season is not a wrong season (the player gets the plain tile), but more than 1 in 100 would
    be a hole a player meets, so that is where the band sits. */
-/* MEASURED 2026-10-09 (Round 1147, the NFL bound), SEEDSET 0 to 4 one at a time on a GitHub runner,
+/* MEASURED 2026-10-09 (Round 1147, the NFL bound; measured AGAIN the same day after the fix pass
+   changed how his line, the order of the games and the feed's minutes are laid: every number below
+   is from that second run, head 69a20015), SEEDSET 0 to 4 one at a time on a GitHub runner,
    CAREERS 40 (plus 8 targeted) a sport. NFL, 490 to 510 open seasons a set, 2508 pooled, on the ten
    drive score law with his touchdown days matched to his team's scores:
      seasons refused            0, 0, 0, 0, 0 of about 500      band: at most 1%
-     no repair needed           80.0, 78.5, 81.0, 85.0, 81.8 %  band: at least 70% (headroom 8.5 points
+     no repair needed           79.6, 80.1, 81.6, 85.0, 81.2 %  band: at least 70% (headroom 9.6 points
                                                                 under the lowest set; the sets spread
-                                                                over 6.5). A football record band is
+                                                                over 5.4). A football record band is
                                                                 four or five wins wide and 17 games
                                                                 scatter by about two, so more seasons
                                                                 need a nudge than in the NBA.
-     points a team game, now    22.82, 22.94, 22.83, 22.91, 22.85
-     points a team game, y2005  22.97, 22.88, 22.96, 22.79, 22.91   band: 21.0 to 24.5 (the law's own
+     points a team game, now    22.78, 22.92, 22.82, 22.88, 22.83
+     points a team game, y2005  22.95, 22.81, 22.90, 22.80, 22.92   band: 21.0 to 24.5 (the law's own
                                                                 mean is 22.5: 2.6 touchdowns at seven
                                                                 and 1.445 field goals; his floor lifts
                                                                 it a little; headroom 1.5 each side)
-     a side on 40 or more       5.4, 5.5, 5.5, 5.5, 5.5 % of    band: under 7% (49 or more: 0.7 to 0.9%;
-                                team games                      shut out: 0.6 to 0.8%). The first draft
+     a side on 40 or more       5.1, 5.5, 5.5, 5.5, 5.4 % of    band: under 7% (49 or more: 0.7 to 0.9%;
+                                team games                      shut out: 0.6 to 0.7%; control `points`
+                                                                14.7%). The first draft
                                                                 drew touchdowns from a Poisson count;
                                                                 by arithmetic, not by measurement, that
                                                                 gives a side seven touchdowns 1.7% of
                                                                 the time at even strength against
                                                                 0.45% for ten drives.
-     level games                0.10, 0.14, 0.11, 0.11, 0.17 %  band: under 1%
-     touchdowns not worth seven 1.9, 1.6, 1.8, 1.6, 1.6 %       band: under 5% (sevens and threes first)
-     a kicker makes 5 or 6      1.9, 1.6, 1.8, 1.7, 1.1 % of    band: under 8% (his makes a game peak
-     in a game                  his games                       at 1 and 2: 0: 18 to 21%, 1: 29 to 30%,
-                                                                2: 28 to 31%, 3: 13 to 16%, 4: 4 to 5%)
+     level games                0.13, 0.13, 0.22, 0.07, 0.27 %  band: under 0.6% (6 to 23 games a set of
+                                (6 to 23 of about 8,500)        about 8,500, so the band is 51 games:
+                                                                more than twice the highest set;
+                                                                control `level` 4.5%)
+     touchdowns not worth seven 1.6, 1.7, 1.7, 1.6, 1.6 %       band: under 3% (sevens and threes first;
+                                                                control `oddtd` 52.1%)
+     a kicker makes 5 or 6      1.7, 1.0, 2.7, 1.8, 1.9 % of    band: under 6% (more than twice the
+     in a game                  his games (about 1,170 a set)   highest set; control `bigkick` 18.2%.
+                                                                His makes a game peak at 1 and 2:
+                                                                0: 18 to 20%, 1: 27 to 31%, 2: 29 to
+                                                                31%, 3: 14 to 17%, 4: about 4%)
      his team's points a game on his two touchdown days, less his blank days (quarterbacks, backs and
-     receivers): 8.4, 8.3, 7.0, 7.6, 7.9 with the match; 1.3, 1.1, 0.5, 1.0, 1.8 with control `days`
-     (his lines left where the core dealt them)                 band: at least 4.5 (2.5 under the lowest
-                                                                set, 2.7 over the control's highest)
-     his touchdowns are the whole of his team's score in 1.1 to 1.6% of the games he played (4.3 to
-     4.9% under control `days`), printed
-     median wins by result, a set at a time: missed 6, 6, 6, 5, 6 (band 2 to 9); Wild Card 11, 10, 10, 11,
-     11 (9 to 12); Divisional 11, 11, 12, 11, 11 (10 to 13); Conference Championship 13, 12, 12, 13, 13
-     (11 to 14); lost the Super Bowl 14, 13, 13, 13, 14 (11 to 15); champions 13, 13, 13, 12, 14 (11 to
+     receivers): 9.0, 8.6, 6.9, 7.9, 8.2 with the match; 2.3 (set 0) and 1.2 (set 3) with control `days`
+     (his lines left where the core dealt them)                 band: at least 4.5 (2.4 under the lowest
+                                                                set, 2.2 over the control's highest)
+     his touchdowns are the whole of his team's score in 1.1 to 1.7% of the games he played, printed
+     median wins by result, a set at a time: missed 5, 6, 6, 5, 5 (band 2 to 9); Wild Card 10, 10, 10, 10,
+     11 (9 to 12); Divisional 11, 12, 12, 11, 11 (10 to 13); Conference Championship 13, 12, 13, 13, 12
+     (11 to 14); lost the Super Bowl 14, 13, 13, 14, 13 (11 to 15); champions 12, 12, 13, 13, 14 (11 to
      15): every one inside the middle half of its band, so strengthFor's 11.3 was kept as worked out (a
      game's margin has a standard deviation of about 13.4 points under this law and a unit of edge is
      worth 0.7 of a point). The last two results have 12 to 23 seasons a set and are asserted only at 20
      or more.
-     named playoff rounds, a set: 294 to 398 before the Super Bowl and 23 to 36 in it. */
+     named playoff rounds, a set: 294 to 398 before the Super Bowl and 23 to 36 in it.
+
+   THE FIX PASS'S OWN CHECKS, the same five sets (a full season: he played 14 or more of the 17; 214 to
+   309 such seasons a set, 3,629 to 5,231 games):
+     a laid number (passing yards, rushing yards, catches, tackles) exactly on this sim's per game cap
+                                0.00% in every set               band: under 0.5% (control `lumpy`, the
+                                                                rule before the fix pass: 1.74% on set
+                                                                0 and 1.95% on set 4; the reviewer's
+                                                                probe found 2.9 to 4.6% by position)
+     his headline number more than twice his season's average
+                                0.47, 0.60, 0.41, 0.60, 0.34 %   band: under 2% (over three times the
+                                                                highest set; `lumpy` 6.97 and 5.64%)
+     the middle full season's spread game to game (standard deviation over his average)
+                                0.390, 0.374, 0.359, 0.379,      band: 0.25 to 0.46. The top is 0.07 over
+                                0.381                            the highest set and 0.075 under
+                                                                `lumpy` (0.579 and 0.535). The bottom
+                                                                is there for control `flat` (every
+                                                                game his average, 0.103 on set 0,
+                                                                what whole numbers alone scatter):
+                                                                by number a set
+                                                                reads passing yards 0.25 to 0.27,
+                                                                rushing 0.33 to 0.34, catches 0.45 to
+                                                                0.47, tackles 0.37 to 0.39, and the
+                                                                middle season moves with the mix of
+                                                                positions, so 0.25 leaves 0.11.
+     a quarterback's touchdown passes, their scatter over a plain count's (variance over the mean, a
+     season at a time, pooled): 1.043, 1.038, 1.015, 1.072, 1.019 a set of 646 to 843 games (printed, not
+     asserted: one set is too few) and 1.036 over the five sets' 3,846 games
+                                                                band: under 1.13, asserted at 2,000
+                                                                games or more. Control `tdform` (the
+                                                                whole of the core's form) reads 1.224
+                                                                on the same games, so 1.13 is midway.
+                                                                The first band was 1.2 and the control
+                                                                only cleared it by 0.024.
+     a side's scoring drives under three minutes apart
+                                0.00% in every set               band: under 1% (control `minutes` 19.2%)
+     a calendar that reads oddly (a rival twice running, four straight at home or away)
+                                0.00% in every set               band: under 2% (control `order`, one
+                                                                plain shuffle: 66.9%) */
 const REFUSED_MAX = { nba: 0.01, nfl: 0.01 };
 const NO_REPAIR_MIN = { nba: 0.8, nfl: 0.7 };
 const NBA_POINTS_TOL = 1.0;
 const NBA_SHARE_P99_MAX = 0.5;
 const NFL_POINTS = [21.0, 24.5];
-const NFL_LEVEL_MAX = 0.01;
-const NFL_ODD_TD_MAX = 0.05;
-const NFL_BIG_KICK_MAX = 0.08;
+const NFL_LEVEL_MAX = 0.006;
+const NFL_ODD_TD_MAX = 0.03;
+const NFL_BIG_KICK_MAX = 0.06;
 const NFL_FORTY_MAX = 0.07;
 const NFL_TD_DAY_MIN = 4.5;
-/* The fix pass (PROVISIONAL until the five seed sets are measured; see the block above) */
+/* The fix pass's own checks (measured over the five seed sets; see the block above) */
 const NFL_LINE_CAP_MAX = 0.005;
-const NFL_LINE_DOUBLE_MAX = 0.03;
-const NFL_LINE_SPREAD = [0.25, 0.5];
-const NFL_TD_SCATTER_MAX = 1.2;
+const NFL_LINE_DOUBLE_MAX = 0.02;
+const NFL_LINE_SPREAD = [0.25, 0.46];
+const NFL_TD_SCATTER_MAX = 1.13;
 const NFL_TD_SCATTER_MIN_GAMES = 2000;
 const NFL_CLOSE_DRIVES_MAX = 0.01;
 const NFL_ODD_ORDER_MAX = 0.02;
@@ -884,7 +932,7 @@ for (const slug of SPORTS) {
     console.log(`     his team's points a game by his touchdowns that day: none ${tdMean[0].toFixed(1)} (${nflSeen.byTd[0].n} games), one ${tdMean[1].toFixed(1)} (${nflSeen.byTd[1].n}), two ${tdMean[2].toFixed(1)} (${nflSeen.byTd[2].n}), three or more ${tdMean[3].toFixed(1)} (${nflSeen.byTd[3].n})`);
     check('7', nflSeen.byTd[0].n > 300 && nflSeen.byTd[2].n > 100 && tdMean[2] - tdMean[0] >= NFL_TD_DAY_MIN, `nfl his two touchdown days are at least ${NFL_TD_DAY_MIN} points a game better for his team than his blank days (${(tdMean[2] - tdMean[0]).toFixed(1)})`);
     check('7', nflSeen.games > 1000 && nflSeen.forty <= 2 * nflSeen.games * NFL_FORTY_MAX, `nfl a side scores 40 or more in under ${(100 * NFL_FORTY_MAX).toFixed(0)}% of team games (${share(nflSeen.forty, 2 * nflSeen.games)})`);
-    check('7', nflSeen.games > 1000 && lv <= NFL_LEVEL_MAX, `nfl level games stay under ${(100 * NFL_LEVEL_MAX).toFixed(1)}% (${share(nflSeen.level, nflSeen.games)})`);
+    check('7', nflSeen.games > 1000 && lv <= NFL_LEVEL_MAX, `nfl level games stay under ${(100 * NFL_LEVEL_MAX).toFixed(1)}% (${(100 * lv).toFixed(2)}%)`);
     check('7', nflSeen.tds > 1000 && odd <= NFL_ODD_TD_MAX, `nfl touchdowns not worth seven stay under ${(100 * NFL_ODD_TD_MAX).toFixed(0)}% (${share(nflSeen.oddTds, nflSeen.tds)})`);
     check('7', nflSeen.kickerGames > 100 && big <= NFL_BIG_KICK_MAX, `nfl a kicker makes five or six in under ${(100 * NFL_BIG_KICK_MAX).toFixed(0)}% of his games (${(100 * big).toFixed(1)}% of ${nflSeen.kickerGames})`);
     /* the fix pass: his own line, the feed's minutes and the order of the games */

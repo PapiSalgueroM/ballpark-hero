@@ -7,7 +7,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, waitFor } from '@testing-library/react';
 import UsSeasonCentre, { buildUsModel } from '@/components/us-career/season/UsSeasonCentre';
-import { buildUsSeason } from '@/lib/season/us';
+import { buildUsSeason, type UsRow } from '@/lib/season/us';
 import { deriveSeason } from '@/lib/season/core';
 import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
 import { NBA_SEASON } from '@/lib/season/nba';
@@ -201,7 +201,7 @@ describe('the US Season Center with the NFL bound', () => {
     const career = playNfl('QB', 'nfl-centre-po');
     const base = career.seasons[career.seasons.length - 1];
     const read = (over: Record<string, unknown>) => {
-      const row = { ...base, ...over } as typeof base;
+      const row = { ...base, ...over } as UsRow;
       const one: UsCareerCore = { ...career, seasons: [...career.seasons.slice(0, -1), row] };
       const b = buildUsSeason(NFL_SEASON, one, row, NFL_CAREER_SPORT.teamLabelOf);
       if (b.ok === false) throw new Error(`usSeasonCentre.test: ${b.why}`);
