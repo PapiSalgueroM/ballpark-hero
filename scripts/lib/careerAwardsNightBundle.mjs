@@ -46,7 +46,8 @@ import * as intl from '${R}/src/components/soccer-career/InternationalPanel.tsx'
 ${extraLines}
 const noop = () => undefined;
 export const cards = {
-  bdor: (bdor, career) => renderToStaticMarkup(React.createElement(page.__BdorCard, { bdor, career, onDismiss: noop, onSpeech: noop })),
+  bdor: (bdor, career) => renderToStaticMarkup(React.createElement(page.__BdorCard, { bdor: { ...bdor, revealed: true }, career, onDismiss: noop, onSpeech: noop })),
+  bdorPending: (bdor, career) => renderToStaticMarkup(React.createElement(page.__BdorCard, { bdor, career, onDismiss: noop, onSpeech: noop })),
   worldCup: (wc, career) => renderToStaticMarkup(React.createElement(page.__WcCard, { wc, career, onDismiss: noop, onSpeech: noop })),
   tournament: t => renderToStaticMarkup(React.createElement(intl.TournamentCard, { t, onDismiss: noop, onSpeech: noop })),
 };
@@ -104,7 +105,7 @@ export const cards = {
       console.error = (...m) => { if (!String(m[0]).includes('useLayoutEffect does nothing on the server')) err(...m); };
       try { return fn(...a); } finally { console.error = err; }
     };
-    const cards = { bdor: quiet(mod.cards.bdor), worldCup: quiet(mod.cards.worldCup), tournament: quiet(mod.cards.tournament) };
+    const cards = { bdor: quiet(mod.cards.bdor), bdorPending: quiet(mod.cards.bdorPending), worldCup: quiet(mod.cards.worldCup), tournament: quiet(mod.cards.tournament) };
     return { ...mod, cards };
   } finally {
     fs.rmSync(tmp, { recursive: true, force: true });

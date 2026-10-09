@@ -62,6 +62,8 @@ interface Props {
   paused: boolean;
   reduced: boolean;
   onFullTime: () => void;
+  /** A kept view pauses its clock and callbacks while another competition is open. */
+  active?: boolean;
   /** Stop a beat before this minute until it is lifted (null or absent: run to full time). */
   holdAt?: number | null;
   onHold?: () => void;
@@ -70,7 +72,7 @@ interface Props {
   stage?: (at: ClockStageAt) => ReactNode;
 }
 
-export function MatchClock({ game, clock, usName, themName, speed, paused, reduced, onFullTime, holdAt, onHold, stage }: Props) {
+export function MatchClock({ game, clock, usName, themName, speed, paused, reduced, onFullTime, active = true, holdAt, onHold, stage }: Props) {
   const FULL_TIME = clock.length;
   const instant = reduced || speed === 'results';
   /* the last minute the clock may show for now */
@@ -83,6 +85,7 @@ export function MatchClock({ game, clock, usName, themName, speed, paused, reduc
   const told = useRef(false);
 
   useEffect(() => {
+    if (!active) return;
     if (done || held) return;
     if (instant) { setMinute(limit); return; }
     if (paused) return;
@@ -100,14 +103,14 @@ export function MatchClock({ game, clock, usName, themName, speed, paused, reduc
     };
     raf = requestAnimationFrame(tick);
     return () => { cancelAnimationFrame(raf); document.removeEventListener('visibilitychange', onVis); };
-  }, [done, held, limit, instant, paused, speed, FULL_TIME]);
+  }, [active, done, held, limit, instant, paused, speed, FULL_TIME]);
 
   useEffect(() => {
-    if (done && !told.current) { told.current = true; onFullTime(); }
-  }, [done, onFullTime]);
+    if (active && done && !told.current) { told.current = true; onFullTime(); }
+  }, [active, done, onFullTime]);
   useEffect(() => {
-    if (held && holdAt != null && heldFor.current !== holdAt) { heldFor.current = holdAt; onHold?.(); }
-  }, [held, holdAt, onHold]);
+    if (active && held && holdAt != null && heldFor.current !== holdAt) { heldFor.current = holdAt; onHold?.(); }
+  }, [active, held, holdAt, onHold]);
 
   const shown = Math.floor(minute);
   const seen = game.events.filter(e => e.min <= shown);

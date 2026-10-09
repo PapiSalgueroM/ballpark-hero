@@ -186,6 +186,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { probeAwardsNight, mulberry32 } from './lib/careerAwardsNightProbe.mjs';
 import { bundleAwardsNight } from './lib/careerAwardsNightBundle.mjs';
+import { awardsNight1172Attribution } from './lib/careerAwardsNight1172.mjs';
+import { careerLeagueWorld1175Attribution } from './lib/careerLeagueWorld1175.mjs';
+import { careerDiscipline1176Attribution } from './lib/careerDiscipline1176.mjs';
+import { SOCCER_CONTRACT_1177_BASELINE_PATCHES } from './lib/soccerContractBaseline1177.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_AWARDS_NIGHT_CONTROL ?? '';
@@ -351,7 +355,7 @@ section = 1;
 console.log('1) Soccer Career replays the pre-lift fixture byte for byte');
 {
   const fixture = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/careerAwardsNightFixture.json'), 'utf8'));
-  const fresh = JSON.parse(JSON.stringify(probeAwardsNight(B, {
+  const currentReplay = probeAwardsNight(B, {
     onNight: (s, bdor) => {
       if (bdor.playerRank === 1) { liveNights.won += 1; if (soccer.bdorSpeechOpen(s)) liveNights.offered += 1; }
       else if (soccer.bdorSpeechOpen(s)) liveNights.wrong += 1;
@@ -366,7 +370,11 @@ console.log('1) Soccer Career replays the pre-lift fixture byte for byte');
     /* Round 1023: every real won tournament screen, copied without a draw,
        for section 7 to give speeches on. */
     onTournament: (s, won) => { if (won) liveTournaments.push(JSON.parse(JSON.stringify(s))); },
-  })));
+  });
+  check(currentReplay.careers.length === fixture.careers.length && currentReplay.nights.length > 500, 'the current new-ballot replay did not exercise the whole fixture population');
+  const baselineBundle = await bundleAwardsNight(ROOT, { patches: [...awardsNight1172Attribution, ...careerLeagueWorld1175Attribution, ...careerDiscipline1176Attribution, ...SOCCER_CONTRACT_1177_BASELINE_PATCHES, ...(CONTROLS[CONTROL]?.patches ?? [])] });
+  const fresh = JSON.parse(JSON.stringify(probeAwardsNight(baselineBundle)));
+  console.log('   Round 1172 attribution: exact copied new-generation, newspaper and ceremony changes restored for the old fixture; current outcomes still checked in sections 2 to 7 and simSoccerAwardReveal');
   /* Round 834 part 2 changed the winner's and the podium's ceremony cards on
      purpose (the speech is offered, the lines say what the night does), so
      those two cards are left out of the replay on both sides; section 6 holds
@@ -864,6 +872,11 @@ console.log('\n6) The ceremony card says what the night does, and a win offers t
   const strip = html => html.replace(/<[^>]+>/g, ' ').replace(/&#x27;|&#39;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/\s+/g, ' ');
   const offered = s => A.availableSpeeches(soccer.SOCCER_BDOR_SPEECHES, s);
   const won = onCeremony(1);
+  for (const waiting of [won, onCeremony(2)]) {
+    const pending = strip(B.cards.bdorPending(waiting.pendingBallonDor, waiting));
+    check(pending.includes('The ranked list is coming in') && !pending.includes(SPORT.copy.winnerTitle) && !/You finished|golden ball is yours/.test(pending), 'the pending ranked list leaks the saved outcome');
+    check(soccer.SOCCER_BDOR_SPEECHES.every(o => !pending.includes(o.label)) && !/Continue/.test(pending), 'a speech or Continue appears before the ranked list');
+  }
   const wonText = strip(B.cards.bdor(won.pendingBallonDor, won));
   check(wonText.includes(SPORT.copy.winnerLine(won.pendingBallonDor.moved)), 'the winner card does not show the winner line');
   const atCap = onCeremony(1, YEAR, {}, 100);

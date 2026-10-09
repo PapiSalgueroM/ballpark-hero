@@ -1,0 +1,83 @@
+name: Soccer Career retained diagnostics
+
+on:
+  push:
+    branches:
+      - codex/soccer-career-real-opponents
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  retained:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Read completed verification evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          mkdir retained-evidence
+          curl --fail --silent --show-error -H "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/$REPOSITORY/actions/runs?branch=codex%2Fsoccer-career-real-opponents&per_page=100" > retained-evidence/runs.json
+          python - <<'PY'
+          import json, os, subprocess, zipfile, pathlib, re
+          root = pathlib.Path('retained-evidence')
+          runs = json.loads((root / 'runs.json').read_text())['workflow_runs']
+          known = [r for r in runs if r['name'] in ('Soccer Career focused diagnosis', 'Soccer Career expansion and save agreement')]
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+              for run in known[:12]:
+                  summary.write(f"\n### Run {run['id']}, {run['head_sha']}, {run['status']}, {run['conclusion']}\n")
+              selected = [r for r in known if r['status'] == 'completed' and r['id'] >= 37911613262][:5]
+              for run in selected:
+                  run_id = run['id']
+                  api = f"https://api.github.com/repos/{os.environ['REPOSITORY']}/actions/runs/{run_id}/artifacts"
+                  reply = subprocess.check_output(['curl', '--fail', '--silent', '--show-error', '-H', 'Authorization: Bearer ' + os.environ['GH_TOKEN'], api])
+                  for artifact in json.loads(reply)['artifacts']:
+                      if artifact['expired'] or not artifact['name'].startswith(('career-opponents-', 'career-focused-', 'career-gates-', 'career-league-world-')):
+                          continue
+                      dest = root / f"{artifact['id']}.zip"
+                      subprocess.check_call(['curl', '--fail', '--silent', '--show-error', '--location', '-H', 'Authorization: Bearer ' + os.environ['GH_TOKEN'], '--output', str(dest), artifact['archive_download_url']])
+                      summary.write(f"\n### Artifact {artifact['id']}, run {run_id}, {artifact['name']}, {artifact.get('digest')}\n")
+                      with zipfile.ZipFile(dest) as archive:
+                          for name in archive.namelist():
+                              if not name.endswith('.log'):
+                                  continue
+                              text = archive.read(name).decode('utf-8', errors='replace')
+                              text = re.sub(r'\x1b\[[0-9;]*m', '', text)
+                              lines = [line for line in text.splitlines() if re.search(r'FAIL|REFUSED|RED|EMPTY|Error:|TimeoutError|exit code|failure|ALL.*PASSED|all.*green|[0-9]+ checks|yield', line, re.I)]
+                              if not lines:
+                                  continue
+                              summary.write(f"\n#### {name}\n```text\n")
+                              summary.write('\n'.join(lines[-90:])[:24000].replace('```', "'''"))
+                              summary.write('\n```\n')
+          PY
+      - name: Public failure annotations
+        if: always()
+        run: |
+          python - <<'PY'
+          import pathlib, zipfile, re
+          wanted = ['career.log', 'agreement-diagnostics.log', 'career-expansion-sims.log', 'playSoccerCareerDiscipline.log', 'playSoccerCareerContracts.log', 'playSoccerCareerLeagueWorld.log', 'agreement.log', 'snapshot-healthy.log', 'league-world.log']
+          count = 0
+          for file in sorted(pathlib.Path('retained-evidence').glob('*.zip')):
+              with zipfile.ZipFile(file) as archive:
+                  for name in archive.namelist():
+                      if name.rsplit('/', 1)[-1] not in wanted or count >= 9:
+                          continue
+                      text = archive.read(name).decode('utf-8', errors='replace')
+                      text = re.sub(r'\x1b\[[0-9;]*m', '', text)
+                      lines = [line for line in text.splitlines() if re.search(r'FAIL|REFUSED|RED|EMPTY|Error:|TimeoutError|failure|yield|sim.*green', line, re.I)]
+                      if not lines:
+                          continue
+                      message = (str(file) + ' ' + name + '\n' + '\n'.join(lines[-40:]))[:14000]
+                      message = message.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+                      print('::notice title=Retained career diagnostic::' + message)
+                      count += 1
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-retained-${{ github.run_id }}
+          path: retained-evidence/
+          retention-days: 5

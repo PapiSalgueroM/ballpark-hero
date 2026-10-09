@@ -1,0 +1,233 @@
+name: Soccer Career expansion and save agreement
+
+on:
+  push:
+    branches:
+      - codex/soccer-career-real-opponents
+
+permissions:
+  contents: read
+concurrency:
+  group: soccer-career-opponents-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      SEO_SPLIT_BASE_REF: HEAD
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare remote checks
+        run: |
+          mkdir -p career-opponents-artifacts
+          git rev-parse HEAD > career-opponents-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > career-opponents-artifacts/source-tree.txt
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Types and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-opponents-artifacts/types.log
+          npm run build 2>&1 | tee career-opponents-artifacts/build.log
+      - name: Opponents, old saves and effective copied defects
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: ONLY=simSoccerCareerOpponents node scripts/runAllSims.mjs 2>&1 | tee career-opponents-artifacts/opponents.log
+      - name: Changing leagues, discipline, navigation and contract outcomes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerCareerContracts.test.ts --maxWorkers=1 --minWorkers=1 2>&1 | tee career-opponents-artifacts/contracts-tests.log
+          failed=0
+          for harness in simSoccerLeagueWorldLookup simSoccerCareerLeagueWorld simSoccerDiscipline simSoccerCompetitionNavigation simSoccerContractMoves simSoccerSeasonAvailability; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node "scripts/$harness.mjs" 2>&1 | tee "career-opponents-artifacts/$harness.log" || failed=1
+          done
+          ONLY=simClubVerdict,simLoanSpell node scripts/runAllSims.mjs 2>&1 | tee career-opponents-artifacts/existing-club-and-loan-sims.log || failed=1
+          exit "$failed"
+      - name: Saved future fields and effective snapshot defects
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for control in healthy snapshotfield snapshotcrown snapshotmoves; do
+            value="$control"
+            if test "$control" = healthy; then value=""; fi
+            SNAPSHOT_PROBE_ONLY=1 SIM_LEAGUE_WORLD_CONTROL="$value" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerLeagueWorld.mjs 2>&1 | tee "career-opponents-artifacts/snapshot-$control.log" || failed=1
+          done
+          grep -q 'simCareerLeagueWorld: all sections green' career-opponents-artifacts/snapshot-healthy.log || failed=1
+          for control in snapshotfield snapshotcrown snapshotmoves; do
+            grep -q "control $control: section D1 went red as it must" "career-opponents-artifacts/snapshot-$control.log" || failed=1
+          done
+          grep -q 'the displayed division or field differs from its saved snapshot' career-opponents-artifacts/snapshot-snapshotfield.log || failed=1
+          grep -q 'the context champion is' career-opponents-artifacts/snapshot-snapshotcrown.log || failed=1
+          grep -q 'saved movement differs from the final displayed places' career-opponents-artifacts/snapshot-snapshotmoves.log || failed=1
+          exit "$failed"
+      - name: Trophy history and existing season contracts
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/trophyCabinet.test.tsx src/test/seasonCore.test.ts src/test/seasonReplays.test.tsx src/test/seasonCentreSlots.test.tsx src/test/seasonCentreWords.test.tsx src/test/careerSeasonReview.test.tsx --maxWorkers=1 --minWorkers=1 2>&1 | tee career-opponents-artifacts/tests.log
+          set +e
+          ONLY=simTrophyCabinet,simSeasonCentreTable,simSeasonCentreAgreement,simSeasonCentreNeutral,simCareerMoments,simNoInventedQuotes node scripts/runAllSims.mjs --browser 2>&1 | tee career-opponents-artifacts/career.log
+          career_exit=${PIPESTATUS[0]}
+          set -e
+          if test "$career_exit" != 0; then
+            AGREEMENT_DIAGNOSTICS=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreAgreement.mjs 2>&1 | tee career-opponents-artifacts/agreement-diagnostics.log || true
+            exit "$career_exit"
+          fi
+      - name: Family, award reveal, competitions and free kicks
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/seasonFamilySummary.test.ts src/test/soccerAwardReveal.test.tsx src/test/soccerSeasonCompetitions.test.tsx src/test/careerWallShotFriendly.test.ts src/test/careerAwardsNightCard.test.tsx --maxWorkers=1 --minWorkers=1 2>&1 | tee career-opponents-artifacts/career-expansion-tests.log
+          ONLY=simSeasonFamilySummary,simCareerWallShotFriendly,simSoccerSeasonCompetitions,simSoccerAwardReveal,simCareerDrills,simSeasonMoments,simBallonDorFairness,simBallonDorTruth,simBallonDor,simCareerAwardsNight node scripts/runAllSims.mjs --browser 2>&1 | tee career-opponents-artifacts/career-expansion-sims.log
+      - name: Effective competition defects
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          for control in anchor score name finallegs neutralfinal; do
+            set +e
+            SIM_SEASON_COMPETITION_CONTROL="$control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonCompetitions.mjs > "career-opponents-artifacts/competition-control-$control.log" 2>&1
+            control_exit=$?
+            set -e
+            cat "career-opponents-artifacts/competition-control-$control.log"
+            test "$control_exit" = 1
+            case "$control" in
+              anchor) grep -q 'a current campaign cannot leak into a historical season' "career-opponents-artifacts/competition-control-$control.log" ;;
+              score) grep -q 'each European leg keeps its recorded score' "career-opponents-artifacts/competition-control-$control.log" ;;
+              name) grep -q 'the named domestic cup stays named' "career-opponents-artifacts/competition-control-$control.log" ;;
+              finallegs) grep -q 'a saved two-leg final keeps both leg numbers and grounds' "career-opponents-artifacts/competition-control-$control.log" ;;
+              neutralfinal) grep -q 'a neutral one-match final stays Final without a home or away label' "career-opponents-artifacts/competition-control-$control.log" ;;
+            esac
+            if grep -Eq 'control.*refus|Cannot find|SyntaxError|no patches applied' "career-opponents-artifacts/competition-control-$control.log"; then exit 1; fi
+          done
+      - name: Effective contract and club move defects
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          for control in age elite move repeat; do
+            set +e
+            SIM_SOCCER_CONTRACT_CONTROL="$control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerContractMoves.mjs > "career-opponents-artifacts/contract-control-$control.log" 2>&1
+            control_exit=$?
+            set -e
+            cat "career-opponents-artifacts/contract-control-$control.log"
+            test "$control_exit" = 1
+            case "$control" in
+              age) grep -q 'age and current level/form decide the exact quoted wage' "career-opponents-artifacts/contract-control-$control.log" ;;
+              elite) grep -q 'age and current level/form decide the exact quoted wage' "career-opponents-artifacts/contract-control-$control.log" ;;
+              move) grep -q 'the actual window completes the club decision without an accept action' "career-opponents-artifacts/contract-control-$control.log" ;;
+              repeat) grep -q 'Continue clears a completed move without repeating it' "career-opponents-artifacts/contract-control-$control.log" ;;
+            esac
+            if grep -Eq 'control.*refus|Cannot find|SyntaxError|no patches applied' "career-opponents-artifacts/contract-control-$control.log"; then exit 1; fi
+          done
+      - name: Future field rejects an old membership assumption
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set +e
+          TABLE_CONTROL=snapshotfield NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreTable.mjs > career-opponents-artifacts/table-snapshot-control.log 2>&1
+          control_exit=$?
+          set -e
+          cat career-opponents-artifacts/table-snapshot-control.log
+          test "$control_exit" = 1
+          grep -q 'item 2 names failed as expected' career-opponents-artifacts/table-snapshot-control.log
+      - name: Every built reader
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-opponents-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-gates-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-opponents-artifacts/*.log
+          retention-days: 5
+      - name: Actual career, named opponents and trophy journeys
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SHOTS="$PWD/career-opponents-artifacts/screenshots" node scripts/playSoccerCareerOpponents.mjs 2>&1 | tee career-opponents-artifacts/browser.log
+      - name: Prove the browser catches unnamed opponents
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set +e
+          PLAY_CAREER_OPPONENTS_CONTROL=unnamed NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SHOTS="$PWD/career-opponents-artifacts/control-screenshots" node scripts/playSoccerCareerOpponents.mjs > career-opponents-artifacts/browser-control.log 2>&1
+          control_exit=$?
+          set -e
+          cat career-opponents-artifacts/browser-control.log
+          test "$control_exit" = 1
+          grep -q 'FAIL 390x844 opponents: 34 fixtures' career-opponents-artifacts/browser-control.log
+          grep -q 'FAIL 1280x900 opponents: 34 fixtures' career-opponents-artifacts/browser-control.log
+          grep -q 'ok.*control changed the served Season Centre for both viewports' career-opponents-artifacts/browser-control.log
+          if grep -Eq 'walk threw|control refused|fixture refused' career-opponents-artifacts/browser-control.log; then exit 1; fi
+      - name: Actual family, award reveal, cup and squad journeys
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for journey in playSoccerCareerFamily playSoccerCareerAwardReveal playSoccerCareerCompetitions playSoccerCareerDiscipline playSoccerCareerContracts playSoccerCareerLeagueWorld playSeasonMoments; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SHOTS="$PWD/career-opponents-artifacts/$journey-screenshots" node "scripts/$journey.mjs" 2>&1 | tee "career-opponents-artifacts/$journey.log" || failed=1
+          done
+          exit "$failed"
+      - name: Source unchanged after checks
+        if: ${{ !cancelled() }}
+        run: git diff --exit-code HEAD -- src scripts .github/workflows/soccer-career-opponents.yml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-opponents-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-opponents-artifacts/
+          retention-days: 5
+
+  league-world:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      SEO_SPLIT_BASE_REF: HEAD
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Prepare full league-world check
+        run: |
+          mkdir -p career-league-world-artifacts
+          git rev-parse HEAD > career-league-world-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > career-league-world-artifacts/source-tree.txt
+          npm ci
+          npm install --no-save playwright
+      - name: Full default league-world simulation
+        run: ONLY=simCareerLeagueWorld node scripts/runAllSims.mjs --browser 2>&1 | tee career-league-world-artifacts/league-world.log
+      - name: Source unchanged after full league-world check
+        if: ${{ !cancelled() }}
+        run: git diff --exit-code HEAD -- src scripts .github/workflows/soccer-career-opponents.yml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-league-world-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-league-world-artifacts/
+          retention-days: 5

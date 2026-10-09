@@ -499,9 +499,12 @@ interface SeasonCentreProps {
   resume?: CentrePlace | null;
   /** Round 1046: told where he is after every round, and null when nothing is left to resume. */
   onProgress?: (at: CentrePlace | null) => void;
+  navigation?: ReactNode;
+  /** Keep the league's state while another competition has the stage. */
+  active?: boolean;
 }
 
-export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress }: SeasonCentreProps) {
+export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress, navigation, active = true }: SeasonCentreProps) {
   const s = model.season;
   const M = s.games.length;
   const start = resume && Number.isInteger(resume.md) && resume.md >= 1 && resume.md <= M - 1 ? resume : null;
@@ -524,7 +527,7 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress }: 
   const openMoment = (md: number): CentreMoment | null => (moments?.list ?? []).find(m => m.md === md && !m.taken && !passed.includes(momentKeyOf(m))) ?? null;
 
   /* the page behind does not scroll or shift (Round 1046 lifted the lock so the season picker takes the same one) */
-  useBodyLock();
+  useBodyLock(active);
   /* focus goes back to the Season Centre when the help sheet closes, so Escape still leaves it */
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const setDialog = useCallback((el: HTMLDivElement | null) => { dialogRef.current = el; focusDialogOnMount(el); }, []);
@@ -542,13 +545,13 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress }: 
   /* the season's stars bank at the review, once, or on the way out when no moment is left to play (a season with no moment taken banks nothing) */
   const bankRef = useRef(moments?.bank);
   bankRef.current = moments?.bank;
-  useEffect(() => { if (stage.kind === 'review') bankRef.current?.(true); }, [stage.kind]);
+  useEffect(() => { if (active && stage.kind === 'review') bankRef.current?.(true); }, [active, stage.kind]);
   const leave = useCallback(() => { bankRef.current?.(false); onClose(); }, [onClose]);
   /* Round 1046: his place. A resume that does not fit this season is dropped once; after that every round watched is told, and the review (or a start from the top) says there is nothing left to come back to */
   const progressRef = useRef(onProgress);
   progressRef.current = onProgress;
   const misfit = !!resume && !start;
-  useEffect(() => { if (misfit) progressRef.current?.(null); }, [misfit]);
+  useEffect(() => { if (active && misfit) progressRef.current?.(null); }, [active, misfit]);
   const current = stage.kind === 'match' || stage.kind === 'poster' ? stage.md : null;
   /* Round 1046: every new screen of the stage starts at its top (the table may have pulled the stage down at full time) */
   const stageRef = useRef<HTMLElement | null>(null);
@@ -566,9 +569,10 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress }: 
   /* his place, told after every round with the viewer's own word for a round (so the Resume chip says what the button
      here says); the review says there is nothing left to come back to. It sits below roundWord because it tells it. */
   useEffect(() => {
+    if (!active) return;
     if (stage.kind === 'review') progressRef.current?.(null);
     else if (played >= 1 && played <= M - 1) progressRef.current?.({ md: played, speed, round: roundWord });
-  }, [played, speed, stage.kind, M, roundWord]);
+  }, [active, played, speed, stage.kind, M, roundWord]);
   const btn = 'h-11 shrink-0 whitespace-nowrap rounded-lg px-3 text-xs font-bold';
 
   /* Round 1047: on a phone the fixtures take the stage's place, which unmounts
@@ -591,7 +595,7 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress }: 
           {roundWord} {stage.md}{s.mode === 'table' ? ` of ${M}` : ''} · {g.home ? 'Home' : 'Away'}{g.fixedKey ? ` · ${model.occasion[g.fixedKey] ?? model.sport.fixed.poster}` : ''}
         </div>
         <div className={host ? 'hidden' : undefined}>
-          <MatchClock key={`clock-${stage.md}`} game={g} clock={model.sport.clock} usName={model.header.club} themName={model.names[g.opp]} speed={speed} paused={paused} reduced={reduced} onFullTime={onFullTime}
+          <MatchClock key={`clock-${stage.md}`} game={g} clock={model.sport.clock} usName={model.header.club} themName={model.names[g.opp]} speed={speed} paused={paused || !active} reduced={reduced} onFullTime={onFullTime} active={active}
             holdAt={host ? host.minute : pending ? pending.minute : null} onHold={() => { if (pending) setHosting(momentKeyOf(pending)); }}
             stage={model.sport.pitch ? at => model.sport.pitch!(g, at) : undefined} />
         </div>
@@ -606,7 +610,7 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress }: 
   })();
 
   return (
-    <div className="fixed inset-0 z-50 flex items-stretch justify-center bg-background/80 backdrop-blur-sm md:items-center md:p-4" data-season-centre>
+    <div className="fixed inset-0 z-50 flex items-stretch justify-center bg-background/80 backdrop-blur-sm md:items-center md:p-4" data-season-centre aria-hidden={!active || undefined} style={active ? undefined : { display: 'none' }}>
       <div
         role="dialog"
         aria-modal="true"
@@ -624,6 +628,7 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress }: 
           <button type="button" onClick={() => setHelpOpen(true)} className="h-11 w-11 shrink-0 rounded-lg border border-border text-sm font-bold" aria-label={model.help.title}>?</button>
           <button type="button" onClick={leave} className="h-11 shrink-0 rounded-lg border border-border px-3 text-xs font-semibold" data-centre-exit>{exitLabel}</button>
         </div>
+        {active && hosting === null && navigation}
         <div className="grid min-h-0 flex-1 grid-cols-1 md:grid-cols-[260px_1fr_380px]">
           <aside className="hidden min-h-0 overflow-y-auto border-r border-border p-2 md:block" aria-label={copy.list}>
             <FixtureList model={model} played={played} current={current} short={model.sport.clock.short} />

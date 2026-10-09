@@ -76,6 +76,8 @@ export interface Availability {
   block: number;
   /** A severe injury ends his season: nothing he plays comes after it. */
   severe: boolean;
+  /** Already served bans, placed outside injuries and protected fixed games. */
+  suspended?: number;
 }
 
 /** `teamFor`: each unit of this stat is also his club's score, so the club
@@ -376,17 +378,22 @@ function chooseAvailability(p: Placed, a: Availability, rng: Rng): Avail | null 
   if (need < 0 || a.played > M) return null;
   const played = fixedPlayed.slice();
   const why: Avail['why'] = p.mine.map(() => undefined);
+  let suspended = Math.max(0, a.suspended ?? 0);
+  for (let i = 0; i < M && suspended > 0; i += 1) {
+    if (!p.fixedAt[i]) { why[i] = 'suspended'; suspended -= 1; }
+  }
   const free = (i: number) => !p.fixedAt[i];
+  const available = (i: number) => free(i) && why[i] !== 'suspended';
   if (a.severe) {
     let lastFixed = -1;
     fixedPlayed.forEach((x, i) => { if (x) lastFixed = i; });
     let W = lastFixed + 1;
     let avail = 0;
-    for (let i = 0; i < W; i += 1) if (free(i)) avail += 1;
-    while (avail < need && W < M) { if (free(W)) avail += 1; W += 1; }
+    for (let i = 0; i < W; i += 1) if (available(i)) avail += 1;
+    while (avail < need && W < M) { if (available(W)) avail += 1; W += 1; }
     if (avail < need) return null;
     const pool = [] as number[];
-    for (let i = 0; i < W; i += 1) if (free(i)) pool.push(i);
+    for (let i = 0; i < W; i += 1) if (available(i)) pool.push(i);
     const lastFree = pool.length ? pool[pool.length - 1] : -1;
     const mustLast = need > 0 && lastFree === W - 1 && lastFixed < W - 1;
     const rest = shuffled(pool.filter(i => !(mustLast && i === lastFree)), rng).slice(0, need - (mustLast ? 1 : 0));
@@ -394,25 +401,25 @@ function chooseAvailability(p: Placed, a: Availability, rng: Rng): Avail | null 
     for (const i of rest) played[i] = true;
     let last = -1;
     played.forEach((x, i) => { if (x) last = i; });
-    for (let i = last + 1; i < M; i += 1) why[i] = i <= last + a.block ? 'injured' : 'rested';
-    for (let i = 0; i <= last; i += 1) if (!played[i]) why[i] = 'rested';
+    for (let i = last + 1; i < M; i += 1) if (why[i] !== 'suspended') why[i] = i <= last + a.block ? 'injured' : 'rested';
+    for (let i = 0; i <= last; i += 1) if (!played[i] && !why[i]) why[i] = 'rested';
     return { played, why };
   }
   if (a.block > 0) {
     const starts: number[] = [];
     for (let s = 0; s + a.block <= M; s += 1) {
       let ok = true;
-      for (let i = s; i < s + a.block; i += 1) if (fixedPlayed[i]) { ok = false; break; }
+      for (let i = s; i < s + a.block; i += 1) if (fixedPlayed[i] || why[i] === 'suspended') { ok = false; break; }
       if (!ok) continue;
       let room = 0;
-      for (let i = 0; i < M; i += 1) if (free(i) && (i < s || i >= s + a.block)) room += 1;
+      for (let i = 0; i < M; i += 1) if (available(i) && (i < s || i >= s + a.block)) room += 1;
       if (room >= need) starts.push(s);
     }
     if (starts.length === 0) return null;
     const s = starts[Math.floor(rng() * starts.length)];
     for (let i = s; i < s + a.block; i += 1) why[i] = 'injured';
   }
-  const pool = p.mine.map((_, i) => i).filter(i => free(i) && why[i] !== 'injured');
+  const pool = p.mine.map((_, i) => i).filter(i => available(i) && why[i] !== 'injured');
   if (pool.length < need) return null;
   for (const i of shuffled(pool, rng).slice(0, need)) played[i] = true;
   for (let i = 0; i < M; i += 1) if (!played[i] && !why[i]) why[i] = 'rested';
@@ -823,6 +830,7 @@ export function disagreements<R, C>(sport: SeasonSport<R, C>, row: R, ctx: C, s:
     if (first >= 0 && first !== last + 1) out.push('severe injury does not follow his last game');
   } else if (run !== a.block) out.push(`injury run ${run} != ${a.block}`);
   const redKey = sport.totals(row, ctx).find(t => t.kind === 'sum' && t.suspends)?.key;
+  if (s.games.filter(g => g.why === 'suspended').length < (a.suspended ?? 0)) out.push('served bans missing from availability');
   for (const [i, g] of s.games.entries()) {
     const red = !!redKey && (g.line[redKey] ?? 0) > 0;
     if (red && s.games[i + 1]?.why !== 'suspended' && s.games.slice(i + 1).some(x => x.played)) out.push(`md ${g.md}: a red with no suspension`);

@@ -171,6 +171,7 @@ const hasContinue = (el: HTMLElement) => buttons(el).some(b => (b.textContent ??
 
 beforeEach(() => {
   localStorage.clear();
+  vi.stubGlobal('matchMedia', (query: string) => ({ matches: query.includes('prefers-reduced-motion'), media: query, addEventListener: () => undefined, removeEventListener: () => undefined }));
   try { localStorage.setItem('cookie-consent', 'essential'); } catch { /* jsdom */ }
   vi.stubGlobal('requestAnimationFrame', () => 1);
   vi.stubGlobal('cancelAnimationFrame', () => undefined);
@@ -186,6 +187,38 @@ afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 afterAll(async () => { await new Promise(r => setTimeout(r, 1500)); });
 
 describe('Soccer Career: the Ballon d\'Or ceremony card', () => {
+  it.each([true, false])('keeps the actual %s ballot out of newspaper, summary, timeline and cabinet until its list', async won => {
+    const start = saveOnCeremony(won);
+    const ballot = JSON.stringify(start.pendingBallonDor);
+    const last = start.seasons[start.seasons.length - 1];
+    const priorWins = E.getCareerTotals(start.seasons.slice(0, -1)).ballonDors;
+    const pending = { ...start, phase: 'newspaper' as const, pendingSummary: last, bdorSnubFuel: true,
+      pendingNews: [{ newspaper: 'The Daily Sport', type: 'negative' as const, headline: "ROBBED! Misses Out On Ballon d'Or AGAIN", body: 'Still no golden ball.' }] };
+    localStorage.setItem(SAVE_KEY, JSON.stringify(pending));
+    const view = mount(<SoccerCareer />);
+    await tick(60);
+    expect(view.container.textContent).not.toMatch(/ROBBED|Misses Out|BALLON D'OR WINNER/);
+    const tile = view.container.querySelector('[data-trophy-category="ballon"]')!;
+    expect(tile.getAttribute('aria-label')).toContain(`Ballon d'Or: ${priorWins}.`);
+    const timeline = view.container.querySelector(`[data-timeline-season="${last.year}"]`)!;
+    expect(timeline.textContent).not.toContain('🏅');
+    expect(JSON.stringify(readSave()!.pendingBallonDor)).toBe(ballot);
+    fireEvent.click(view.getByRole('button', { name: /Continue to Season Summary/ }));
+    await tick(60);
+    const summary = view.getByRole('heading', { name: 'Season Summary' }).parentElement!.parentElement!;
+    expect(summary.textContent).not.toContain("Ballon d'Or");
+    expect(tile.getAttribute('aria-label')).toContain(`Ballon d'Or: ${priorWins}.`);
+    expect(JSON.stringify(readSave()!.pendingBallonDor)).toBe(ballot);
+    fireEvent.click(Array.from(summary.querySelectorAll('button')).find(b => b.textContent?.startsWith('Continue'))!);
+    await tick(60);
+    const card = view.container.querySelector('[data-award-night="ballon_dor"]')!;
+    expect(card.querySelectorAll('[data-award-rank]')).toHaveLength(start.pendingBallonDor!.nominees.length);
+    expect(card.getAttribute('data-award-result')).toBe('revealed');
+    const after = readSave()!.pendingBallonDor!;
+    expect(after.revealed).toBe(true);
+    expect(JSON.stringify({ ...after, revealed: undefined })).toBe(ballot);
+    expect(view.container.querySelector('[data-trophy-category="ballon"]')!.getAttribute('aria-label')).toContain(`Ballon d'Or: ${priorWins + (won ? 1 : 0)}.`);
+  });
   it('a win offers the speech once, then shows what it did, and Continue leaves', async () => {
     const start = saveOnCeremony(true);
     expect(E.bdorSpeechOpen(start)).toBe(true);

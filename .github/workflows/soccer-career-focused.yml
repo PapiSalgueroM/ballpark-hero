@@ -1,0 +1,94 @@
+name: Soccer Career focused diagnosis
+
+on:
+  push:
+    branches:
+      - codex/soccer-career-real-opponents
+
+permissions:
+  contents: read
+
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Prepare focused remote checks
+        id: prepare
+        run: |
+          mkdir -p career-focused-artifacts
+          git rev-parse HEAD > career-focused-artifacts/source-head.txt
+          npm ci
+      - name: App types
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-focused-artifacts/types.log
+      - name: Contract outcomes
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerCareerContracts.test.ts --maxWorkers=1 --minWorkers=1 2>&1 | tee career-focused-artifacts/contracts-tests.log
+      - name: Outcome checks and effective copied defects
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simSoccerLeagueWorldLookup simSoccerCareerLeagueWorld simSoccerDiscipline simSoccerCompetitionNavigation simSoccerContractMoves simSoccerSeasonAvailability; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node "scripts/$harness.mjs" 2>&1 | tee "career-focused-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Saved future fields and effective snapshot defects
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          failed=0
+          for control in healthy snapshotfield snapshotcrown snapshotmoves; do
+            value="$control"
+            if test "$control" = healthy; then value=""; fi
+            SNAPSHOT_PROBE_ONLY=1 SIM_LEAGUE_WORLD_CONTROL="$value" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerLeagueWorld.mjs 2>&1 | tee "career-focused-artifacts/snapshot-$control.log" || failed=1
+          done
+          grep -q 'simCareerLeagueWorld: all sections green' career-focused-artifacts/snapshot-healthy.log || failed=1
+          for control in snapshotfield snapshotcrown snapshotmoves; do
+            grep -q "control $control: section D1 went red as it must" "career-focused-artifacts/snapshot-$control.log" || failed=1
+          done
+          grep -q 'the displayed division or field differs from its saved snapshot' career-focused-artifacts/snapshot-snapshotfield.log || failed=1
+          grep -q 'the context champion is' career-focused-artifacts/snapshot-snapshotcrown.log || failed=1
+          grep -q 'saved movement differs from the final displayed places' career-focused-artifacts/snapshot-snapshotmoves.log || failed=1
+          exit "$failed"
+      - name: Earlier expansion outcomes and full saved award fixtures
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/seasonFamilySummary.test.ts src/test/soccerAwardReveal.test.tsx src/test/soccerSeasonCompetitions.test.tsx src/test/careerWallShotFriendly.test.ts src/test/careerAwardsNightCard.test.tsx --maxWorkers=1 --minWorkers=1 2>&1 | tee career-focused-artifacts/expansion-tests.log
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs 2>&1 | tee career-focused-artifacts/awards-fixtures.log
+      - name: Full season agreement and refused-row diagnostics
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: AGREEMENT_DIAGNOSTICS=1 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreAgreement.mjs 2>&1 | tee career-focused-artifacts/agreement.log
+      - name: Future field rejects an old membership assumption
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: |
+          set +e
+          TABLE_CONTROL=snapshotfield NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSeasonCentreTable.mjs > career-focused-artifacts/table-snapshot-control.log 2>&1
+          control_exit=$?
+          set -e
+          cat career-focused-artifacts/table-snapshot-control.log
+          test "$control_exit" = 1
+          grep -q 'item 2 names failed as expected' career-focused-artifacts/table-snapshot-control.log
+      - name: Source unchanged
+        if: ${{ !cancelled() }}
+        run: git diff --exit-code HEAD -- src scripts .github/workflows
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-focused-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-focused-artifacts/
+          retention-days: 5

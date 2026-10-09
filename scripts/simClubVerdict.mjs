@@ -274,6 +274,19 @@ for (let c = 0; c < CAREERS; c++) {
         case "transfer_window": {
           m.windows += 1;
           const sit = s.transferSituation;
+          if (sit?.type === "club_move") {
+            m.verdicts += 1;
+            m[sit.mode === "loan" ? "loaned" : "listed"] += 1;
+            if (sit.reasons.length < 3) fail(`career ${c}: an automatic move with ${sit.reasons.length} reasons`);
+            if (s.currentClub !== sit.toClub || s.currentClub === sit.fromClub) fail(`career ${c}: the club move did not reach its destination`);
+            if (sit.mode === "loan" && s.loan?.parentClub !== sit.fromClub) fail(`career ${c}: the club loan lost its parent`);
+            if ((s.frozenOut ?? 0) !== 0) fail(`career ${c}: the freeze out followed the automatic move`);
+            const fees = s.agentFeesPaid;
+            const events = JSON.stringify(s.events);
+            s = stayAtClub(s);
+            if (s.agentFeesPaid !== fees || JSON.stringify(s.events) !== events) fail(`career ${c}: acknowledging the move applied it twice`);
+            break;
+          }
           if (sit && sit.type === "frozen_out") {
             m.verdicts += 1;
             m[sit.mode === "released" ? "released" : sit.mode === "loan_listed" ? "loaned" : "listed"] += 1;
