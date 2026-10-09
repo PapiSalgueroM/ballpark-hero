@@ -1,0 +1,18 @@
+m1-nameonly-vitest exit=1 2s | m1 vitest exit=1
+m2-plant exit=0 0s |  1 file changed, 441 insertions(+), 441 deletions(-)
+m2-shape exit=0 1s | simCmRatingShape: green. One curve, every file on it, ages for August 2026, and the order inside a club is nearer to who was played.
+m2-vitest-cm exit=0 16s |    Duration  14.88s (transform 3.44s, setup 1.56s, collect 10.73s, tests 17.08s, environment 8.39s, prepare 1.70s)
+m2-simClubManager exit=0 21s | ALL CLUB MANAGER SIMS PASSED
+m2-simRosterAdjudication exit=0 0s | simRosterAdjudication: all green
+m2-simFreeAgents exit=0 12s | simFreeAgents: all sections passed
+m2-simManagerSpec exit=0 57s | simManagerSpec: all green
+m2-simClubManagerScore exit=0 52s | ALL SEASON SCORE CHECKS PASSED
+m2-simBoardAsks exit=0 19s | simBoardAsks: green. Every ask a board makes can be met, and nobody real is quoted.
+m2-simTransfers exit=0 44s | ALL TRANSFER CHECKS PASSED
+m2-simClubManagerNewLeagues exit=0 84s | simClubManagerNewLeagues: all checks passed
+m2-simCmLeagueRules exit=1 34s | simCmLeagueRules: 43 failure(s)
+m2-simCareerDerbies exit=1 12s | simCareerDerbies: 1 failures, sections 2 red
+m2-simDailyClubPool exit=0 4s | simDailyClubPool: all sections green
+m2-simManagerHotSeat exit=0 52s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+m2-tsc exit=0 55s | 
+m2-restore exit=0 0s | 0

@@ -1,0 +1,66 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/cmValueCurve.test.ts [2m([22m[2m22 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 27[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before Round 1102)[2m > [22mthe fixture is whole, so nothing below can pass empty[32m 2[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before Round 1102)[2m > [22mthe constants and the position map are the recorded ones[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before Round 1102)[2m > [22mevery recorded dollar value still gets its recorded value rating[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before Round 1102)[2m > [22mthe two anchors read as the header says[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before Round 1102)[2m > [22mpounds, at one and at two decimals, are the recorded ones[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before Round 1102)[2m > [22meuros convert at the recorded rate[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the value rating plus points for age (Round 1102)[2m > [22mis on curve 2 and holds thirteen positions[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the value rating plus points for age (Round 1102)[2m > [22mevery age from 14 to 45 at seven value ratings is the table typed out by hand[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the value rating plus points for age (Round 1102)[2m > [22mthe age points alone: a point a year under 24, nothing to 29, one at 30 rising to eight[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the value rating plus points for age (Round 1102)[2m > [22mposition is checked and changes nothing[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the value rating plus points for age (Round 1102)[2m > [22mratingOf is the value rating read with the age[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the value rating plus points for age (Round 1102)[2m > [22mfails closed on a bad value rating, age or position, naming the inputs[32m 3[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026 (Round 1102)[2m > [22mcounts whole years to a day[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026 (Round 1102)[2m > [22mcase 1, a birth date on file: the exact age, whichever way the table rule would err[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026 (Round 1102)[2m > [22mcase 2, a bulk row: plus one for a 2026 row and plus two for a 2025 row[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026 (Round 1102)[2m > [22mcase 3, a hand written row: the age as written[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026 (Round 1102)[2m > [22mcase 4, no table row: the age as typed, marked unknown[32m 0[2mms[22m[39m
+[31m   [31m×[31m Club Manager ages for August 2026 (Round 1102)[2m > [22mAllan twice: the Corinthians man gets his date, the Palmeiras namesake keeps the table rule[39m[32m 7[2mms[22m[39m
+[31m     → augustAge2026: Allan at Palmeiras is 22 by his table row (moved, id 120000) and 29 by the birth date 1997-03-03 from the Round 669 ledger, write: more than 2 years apart, so the date is a namesake's or the row is[39m
+[31m   [31m×[31m Club Manager ages for August 2026 (Round 1102)[2m > [22ma moved man is found by his table club, and by his baked club[39m[32m 4[2mms[22m[39m
+[31m     → expected 'born' to be 'moved' // Object.is equality[39m
+   [32m✓[39m Club Manager ages for August 2026 (Round 1102)[2m > [22mthrows on a club matched date more than two years from the table, naming both ages[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026 (Round 1102)[2m > [22mthrows on a row the rule was never measured on[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026 (Round 1102)[2m > [22mtwo ledgers that disagree about one man are fatal, and a date with no club must have a twin[32m 1[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mClub Manager ages for August 2026 (Round 1102)[2m > [22mAllan twice: the Corinthians man gets his date, the Palmeiras namesake keeps the table rule
+[31m[1mError[22m: augustAge2026: Allan at Palmeiras is 22 by his table row (moved, id 120000) and 29 by the birth date 1997-03-03 from the Round 669 ledger, write: more than 2 years apart, so the date is a namesake's or the row is[39m
+[36m [2m❯[22m Module.augustAge2026 scripts/lib/cmAges.mjs:[2m171:13[22m[39m
+
+[90m [2m❯[22m src/test/cmValueCurve.test.ts:[2m235:19[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mClub Manager ages for August 2026 (Round 1102)[2m > [22ma moved man is found by his table club, and by his baked club
+[31m[1mAssertionError[22m: expected 'born' to be 'moved' // Object.is equality[39m
+
+Expected: [32m"moved"[39m
+Received: [31m"born"[39m
+
+[36m [2m❯[22m src/test/cmValueCurve.test.ts:[2m250:25[22m[39m
+    [90m248| [39m    [90m/* a date tied to a club the game does not model matches nobody */[39m
+    [90m249| [39m    const loose = augustAge2026({ name: 'Unmodelled Man', club: 'Evert…
+    [90m250| [39m    [34mexpect[39m(loose[33m.[39mbasis)[33m.[39m[34mtoBe[39m([32m'moved'[39m)[33m;[39m
+    [90m   | [39m                        [31m^[39m
+    [90m251| [39m    [34mexpect[39m(loose[33m.[39mnote)[33m.[39m[34mtoMatch[39m([36m/a club the game does not model/[39m)[33m;[39m
+    [90m252| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m20 passed[39m[22m[90m (22)[39m
+[2m   Start at [22m 09:50:47
+[2m   Duration [22m 878ms[2m (transform 64ms, setup 54ms, collect 62ms, tests 27ms, environment 317ms, prepare 186ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/cmAges.mjs,title=src/test/cmValueCurve.test.ts > Club Manager ages for August 2026 (Round 1102) > Allan twice%3A the Corinthians man gets his date%2C the Palmeiras namesake keeps the table rule,line=171,column=13::Error: augustAge2026: Allan at Palmeiras is 22 by his table row (moved, id 120000) and 29 by the birth date 1997-03-03 from the Round 669 ledger, write: more than 2 years apart, so the date is a namesake's or the row is%0A ❯ Module.augustAge2026 scripts/lib/cmAges.mjs:171:13%0A ❯ src/test/cmValueCurve.test.ts:235:19%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > Club Manager ages for August 2026 (Round 1102) > a moved man is found by his table club%2C and by his baked club,line=250,column=25::AssertionError: expected 'born' to be 'moved' // Object.is equality%0A%0AExpected: "moved"%0AReceived: "born"%0A%0A ❯ src/test/cmValueCurve.test.ts:250:25%0A%0A
+m1 vitest exit=1
