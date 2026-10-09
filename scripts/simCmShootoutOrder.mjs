@@ -202,6 +202,22 @@
  * penalties in this run (the fixture's first shootout row, seed 782109, is
  * not one on the Eibar tie, and under unsetpath section 5 had stopped going
  * red with section 4).
+ *
+ * ROUND 1102, 2026-10-09: the named base is found, not typed. That round
+ * re-rated every squad, the seeded draw moved, and seed 782002 drew Espanyol
+ * (14 men, no keeper): the harness stopped on its own precondition on a
+ * healthy engine. NAMED_BASE_SEED is now the first seed from 782002 whose
+ * first cup tie is against a side that names an eleven with a keeper, and
+ * the run prints it and the seeds it passed over. On that round's tree it is
+ * 782003, Real Madrid v Osasuna (15 on their roster, one keeper). Measured
+ * on a GitHub runner, default seed and SIM_SEED=1 to 5, every section green:
+ * their order read in 29, 23, 25 and more shootouts a run (floor 12), all
+ * best first with the keeper last; 300 of 300 rows on that base equal the
+ * pinned pre-1072 engine, 52 of them settled on penalties (floor 12); the
+ * oppworst control still turns it red (31 failures). Started from 782020
+ * instead it finds Getafe and is green too, with 15 of the 300 on penalties.
+ * The fixture base's own tie is against Mallorca now (8 on their roster).
+ *
  * MEASURED on the release tree, default seed and SIM_SEED=1 to 5. A run
  * plays about 1,500 cup matches now: 63 seconds with five other runs beside
  * it before section 7 was added, 263 and 279 seconds with section 7 on a
