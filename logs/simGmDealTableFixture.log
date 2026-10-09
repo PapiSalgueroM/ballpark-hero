@@ -1,0 +1,21 @@
+A) identical: 573 lines, sha256 cd990b30454f73b8
+  FAIL: section B no longer replays (720 lines recorded, 720 now)
+    recorded: Aston Villa|L1|Kenan Yıldız|58.6|74.6|0.3|false|worth £58.6m to £74.6m
+    now:      Aston Villa|L1|Martín Zubimendi|60|70.7|0.3|false|worth £60m to £70.7m
+    recorded: Aston Villa|L4|João Neves|81.3|104|0.19499999999999998|false|worth £81.3m to £104m
+    now:      Aston Villa|L4|Dominik Szoboszlai|65.7|87.6|0.19499999999999998|false|worth £65.7m to £87.6m
+    recorded: Aston Villa|L4|Alessandro Bastoni|52.3|60.8|0.19499999999999998|false|worth £52.3m to £60.8m
+    now:      Aston Villa|L4|Jérémy Doku|45.4|52.9|0.19499999999999998|false|worth £45.4m to £52.9m
+    recorded: Aston Villa|L7|Achraf Hakimi|61.7|65.5|0.08999999999999997|false|worth £61.7m to £65.5m
+    now:      Aston Villa|L7|Alexis Mac Allister|63.4|67.4|0.08999999999999997|false|worth £63.4m to £67.4m
+  FAIL: section C no longer replays (101 lines recorded, 125 now)
+    recorded: Aston Villa|0.5|open|Álex Baena|ask=41.9|pat=5
+    now:      Aston Villa|0.5|open|Bruno Fernandes|ask=30.7|pat=4
+    recorded: Aston Villa|0.5|1|ask=41.9|pat=5|meter=0|collapsed|fee|stage=1|rival=-|They ended the conversation. £21m for Álex Baena was not worth answering.
+    now:      Aston Villa|0.5|1|ask=30.7|pat=4|meter=0|collapsed|fee|stage=1|rival=-|They ended the conversation. £15.4m for Bruno Fernandes was not worth answering.
+    recorded: Aston Villa|0.62|open|Álex Baena|ask=42.4|pat=5
+    now:      Aston Villa|0.62|open|Bruno Fernandes|ask=32.4|pat=5
+    recorded: Aston Villa|0.62|1|ask=44.1|pat=3|meter=17|open|fee|stage=1|rival=-|The fax machine allegedly "broke". The ask just went up.
+    now:      Aston Villa|0.62|1|ask=33.7|pat=3|meter=17|open|fee|stage=1|rival=-|The fax machine allegedly "broke". The ask just went up.
+
+simGmDealTableFixture: FAIL, 2 section(s) differ from the recording
