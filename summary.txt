@@ -1,0 +1,17 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+ssw exit=0 2s | simStorageWrites: all green
+stale exit=0 0s | simStaleChunk: green. A tab left open across a deploy reloads once for a missing chunk instead of painting the broken page.
+noRivalNames exit=0 19s | No rival product names found. 0 findings.
+harnessAnchors exit=0 63s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+usSeasonCentre exit=0 32s | simUsSeasonCentre: 45 checks, 0 failed
+tsc exit=0 119s | 
+usBoardParity exit=0 95s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+usCareerWeight exit=0 1s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+noDoubleRecord exit=0 43s | simNoDoubleRecord: all green (67 rows and checks, each recorded once across the finish, the toggles, the coaching, the reveals and the reloads; 115 recorders read)
+completionOnce exit=0 10s | simCompletionOnce: all green
+accessibility exit=0 0s | simAccessibility: all green
+siteSearch exit=0 4s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+seam exit=0 31s | playUsCareerSaveSeam: 12 journeys, 56 checks, 0 failed
+usSaveRetry exit=0 218s | US career save retry: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/us-career-save-recovery-artifacts/outcomes
+centre exit=0 76s | playUsSeasonCentre: 62 checks, 0 failed
+vitest-all exit=0 546s |    Duration  545.11s (transform 41.74s, setup 22.90s, collect 164.09s, tests 1163.17s, environment 167.13s, prepare 34.67s)

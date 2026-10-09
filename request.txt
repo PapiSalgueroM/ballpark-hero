@@ -1,0 +1,18 @@
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
+ssw: node scripts/simStorageWrites.mjs
+stale: node scripts/simStaleChunk.mjs
+noRivalNames: node scripts/simNoRivalNames.mjs
+harnessAnchors: node scripts/simHarnessAnchors.mjs
+usSeasonCentre: node scripts/simUsSeasonCentre.mjs
+usBoardParity: node scripts/simUsBoardParity.mjs
+usSaveRetry: node scripts/simUsCareerSaveRetry.mjs
+usCareerWeight: node scripts/simUsCareerWeight.mjs
+noDoubleRecord: node scripts/simNoDoubleRecord.mjs
+completionOnce: node scripts/simCompletionOnce.mjs
+accessibility: node scripts/simAccessibility.mjs
+siteSearch: node scripts/simSiteSearch.mjs
+seam: node scripts/playUsCareerSaveSeam.mjs
+centre: PORT=4421 node scripts/playUsSeasonCentre.mjs
