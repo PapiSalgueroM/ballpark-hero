@@ -15,11 +15,12 @@
  * match a quick sim, once by the engine as committed (the candidate) and once
  * by the same engine with the one restLegs call taken out (the baseline, which
  * is the coach before the round). The two fleets part at the first change, so
- * they are two samples and are only ever compared as shares and means. REPLAY:
- * every match of the first REPLAY careers is then played again by hand off the
- * same point of the seeded stream: the coach's own list of changes, made one
- * at a time through changeLive, with his rule read off the save just before
- * each change. Sections:
+ * they are two samples and are only ever compared as shares and means. BY
+ * HAND: the first REPLAY careers are played once more, on a second copy of the
+ * candidate engine and the same seed, with every match stopped at the break
+ * and finished by hand: the changes on the quick sim's own report, made one at
+ * a time through changeLive, with his rule read off the save just before each
+ * one. Sections:
  *
  *   1 gap      with the round, the bench is used in far more matches than
  *              without it (the share of matches with at least one change)
@@ -104,7 +105,8 @@ async function engine(label, patches) {
     } }],
   });
   if (applied.size !== patches.length) throw new Error(`${label}: ${patches.length - applied.size} patch(es) never met their file`);
-  return import(pathToFileURL(out).href);
+  /* the bundle's address too, so a second copy of the same engine can be loaded (careerByHand) */
+  return { mod: await import(pathToFileURL(out).href), href: pathToFileURL(out).href };
 }
 
 /* ---------- the seeded stream, with its place readable so a match can be played again from it ---------- */
@@ -175,12 +177,11 @@ function playCareer(cm, club, seed, a, keep, section5) {
     for (let season = 0; season < SEASONS; season++) {
       let guard = 0;
       while (s.week < s.calendar.length && guard++ < 200) {
-        const from = keep ? { state: s, place: stream.place() } : null;
         const r = cm.playNextEntry(s, { skipHalftime: true });
         s = r.state;
         if (r.kind === 'match') {
           count(a, r.report, section5);
-          if (from) kept.push({ ...from, result: r });
+          if (keep) kept.push({ report: r.report, reportJson: JSON.stringify(r.report), stateJson: JSON.stringify(s) });
         }
         if (r.kind === 'seasonOver') break;
       }
@@ -196,9 +197,7 @@ function playCareer(cm, club, seed, a, keep, section5) {
 }
 
 /* ---------- the replay: his changes made by hand, his rule read before each one ---------- */
-const legsTally = { changes: 0, live: 0, liveGain: 0, settled: 0, settledGain: 0, replayed: 0, withLegs: 0, sameAsFleet: 0 };
-/** Ids the engine numbers from module counters (inbox, press room, academy), which a second play of the same match numbers afresh. */
-const NUMBERED = ['inbox', 'press', 'academy', 'decisions'];
+const legsTally = { changes: 0, live: 0, liveGain: 0, settled: 0, settledGain: 0, replayed: 0, withLegs: 0 };
 
 /** Sections 2 and 3 on one change of his that is not for an injury, read off the save just before it. */
 function judge(cm, st, line) {
@@ -223,70 +222,90 @@ function judge(cm, st, line) {
   if (cm.benchFor(st).length < 2) fail('reserve', `a change for legs at ${line.minute}' took the last fit man off his bench`);
 }
 
-function replay(cm, k) {
-  /* The same stretch of the stream twice, back to back on the same engine: once as the quick sim plays it and
-     once by hand. (Not against the fleet's own play of it: the engine fills a few tables the first time it
-     needs them, so a match played again later on the same engine is not asked the same things. The count of
-     second plays that still equal the first is printed.) */
-  const quick = under(seeded(k.place), () => cm.playNextEntry(k.state, { skipHalftime: true }));
-  if (JSON.stringify(quick.report) === JSON.stringify(k.result.report)) legsTally.sameAsFleet += 1;
-  const first = seeded(k.place);
-  const stop = under(first, () => cm.playNextEntry(k.state));
-  if (stop.kind !== 'halftime' || quick.kind !== 'match') return;
-  const at = first.place();
-  /* his own list is the one the report prints */
-  const plan = quick.report.detail.subs;
-  const hurtAtRestart = line => line.minute === 46 && quick.report.detail.injuries.some(x => x.name === line.off && x.minute === 46);
+/** One match of his, finished by hand off the break: every change on the quick sim's report made through changeLive,
+ *  with his rule read off the save just before each one. Throws when the engine refuses one. */
+function finishByHand(cm, paused, report) {
+  const plan = report.detail.subs;
+  const hurtAtRestart = line => line.minute === 46 && report.detail.injuries.some(x => x.name === line.off && x.minute === 46);
+  let st = paused;
   let legs = 0;
-  let manual = null;
-  let refused = null;
-  try { manual = byHand(); } catch (error) { refused = error.message; }
+  const make = line => {
+    const next = cm.changeLive(st, line.minute, { kind: 'sub', outId: line.offId, inId: line.onId }, line.plus);
+    if (!next) throw new Error(`the engine refused a change of his made by hand at ${line.minute}'`);
+    st = next;
+  };
+  for (const line of plan.filter(x => x.minute <= 45)) make(line);
+  for (const line of plan.filter(x => x.minute === 46 && !hurtAtRestart(x))) make(line);
+  st = cm.startSecondHalf(st);
+  for (const line of plan.filter(x => (x.minute > 46 && x.minute <= 90) || hurtAtRestart(x))) {
+    const hurt = [...(st.live.h1Injuries ?? []), ...(st.live.h2Injuries ?? [])].some(x => x.id === line.offId && place(x) <= place(line));
+    if (!hurt) { legs += 1; judge(cm, st, line); }
+    make(line);
+  }
+  if (cm.isExtraTimeDue(st)) st = cm.startExtraTime(st);
+  for (const line of plan.filter(x => x.minute > 90)) make(line);
   legsTally.replayed += 1;
   if (legs) legsTally.withLegs += 1;
-  /* Section 4: the same match, report and save. */
-  tick('manual');
-  if (!manual) { fail('manual', refused ?? 'the hand made match could not be finished'); return; }
-  const face = r => { const s = { ...r.state }; for (const key of NUMBERED) delete s[key]; return s; };
-  const a = face(quick);
-  const b = face(manual);
-  if (JSON.stringify(quick.report) !== JSON.stringify(manual.report)) fail('manual', `the report of a quick sim (${quick.report.home} v ${quick.report.away}, ${plan.length} changes) is not the report of the same changes made by hand`);
-  else {
-    const parted = Object.keys({ ...a, ...b }).filter(key => JSON.stringify(a[key]) !== JSON.stringify(b[key]));
-    if (parted.length) fail('manual', `the save after a quick sim differs from the same changes made by hand in: ${parted.slice(0, 6).join(', ')}`);
-  }
+  return cm.resumeMatch(st);
+}
 
-  function byHand() { return under(seeded(at), () => {
-    let st = stop.state;
-    const make = line => {
-      const next = cm.changeLive(st, line.minute, { kind: 'sub', outId: line.offId, inId: line.onId }, line.plus);
-      if (!next) throw new Error(`the engine refused a change of his made by hand at ${line.minute}'`);
-      st = next;
-    };
-    for (const line of plan.filter(s => s.minute <= 45)) make(line);
-    for (const line of plan.filter(s => s.minute === 46 && !hurtAtRestart(s))) make(line);
-    st = cm.startSecondHalf(st);
-    for (const line of plan.filter(s => (s.minute > 46 && s.minute <= 90) || hurtAtRestart(s))) {
-      const hurt = [...(st.live.h1Injuries ?? []), ...(st.live.h2Injuries ?? [])].some(x => x.id === line.offId && place(x) <= place(line));
-      if (!hurt) { legs += 1; judge(cm, st, line); }
-      make(line);
+/**
+ * Section 4, and where sections 2 and 3 are read: the same career again, on a second copy of the same engine and
+ * the same seed, with every match of mine finished BY HAND (stopped at the break, the quick sim's own list of
+ * changes made one at a time). A second copy, because the engine fills a few tables the first time it needs them
+ * and numbers its messages as it goes: only an engine with the same history is asked the same things. If the coach
+ * is a manager making those changes by hand, the two careers never part: the same report and the same save after
+ * every match, which also means the same place in the seeded stream.
+ */
+function careerByHand(cm, club, seed, plays) {
+  const stream = seeded(seed);
+  under(stream, () => {
+    let st = cm.startCareer(club);
+    let i = 0;
+    for (let season = 0; season < SEASONS; season++) {
+      let guard = 0;
+      while (st.week < st.calendar.length && guard++ < 200) {
+        let r = cm.playNextEntry(st);
+        if (r.kind === 'halftime') {
+          const want = plays[i];
+          if (!want) { fail('manual', `${club} seed ${seed}: the career by hand reached a match the quick sim career never played`); return; }
+          try { r = finishByHand(cm, r.state, want.report); } catch (error) { tick('manual'); fail('manual', `${club} seed ${seed}, match ${i + 1}: ${error.message}`); return; }
+        }
+        st = r.state;
+        if (r.kind === 'match') {
+          const want = plays[i];
+          tick('manual');
+          if (!want || JSON.stringify(r.report) !== want.reportJson) { fail('manual', `${club} seed ${seed}, match ${i + 1} (${r.report.home} v ${r.report.away}): the report of the quick sim is not the report of the same changes made by hand`); return; }
+          if (JSON.stringify(st) !== want.stateJson) {
+            const other = JSON.parse(want.stateJson);
+            const parted = Object.keys({ ...st, ...other }).filter(key => JSON.stringify(st[key]) !== JSON.stringify(other[key]));
+            fail('manual', `${club} seed ${seed}, match ${i + 1}: the save after the quick sim differs from the same changes made by hand in ${parted.slice(0, 6).join(', ')}`);
+            return;
+          }
+          i += 1;
+        }
+        if (r.kind === 'seasonOver') break;
+      }
+      st = cm.startNextSeason(cm.finishSeason(st).state);
     }
-    if (cm.isExtraTimeDue(st)) st = cm.startExtraTime(st);
-    for (const line of plan.filter(s => s.minute > 90)) make(line);
-    return cm.resumeMatch(st);
-  }); }
+    if (i !== plays.length) fail('manual', `${club} seed ${seed}: the career by hand played ${i} matches, the quick sim career ${plays.length}`);
+  });
 }
 
 /* ---------- the run ---------- */
 async function main() {
-  const candidate = await engine('candidate', CONTROL ? CONTROLS[CONTROL].patch : []);
-  const baseline = await engine('baseline', OFF);
+  const built = await engine('candidate', CONTROL ? CONTROLS[CONTROL].patch : []);
+  const candidate = built.mod;
+  /* the same bundle loaded a second time: its own tables, its own counters */
+  const second = await import(`${built.href}?by-hand`);
+  const baseline = (await engine('baseline', OFF)).mod;
   const pairs = [];
   for (let c = 0; c < CLUBS.length; c++) for (let k = 0; k < SEEDS; k++) pairs.push({ club: CLUBS[c], seed: 11461000 + SEEDSET * 100003 + c * 7919 + k * 104729 });
   const on = arm();
   const off = arm();
   for (const [n, pair] of pairs.entries()) {
     const kept = playCareer(candidate, pair.club, pair.seed, on, n < REPLAY, true);
-    for (const k of kept) replay(candidate, k);
+    if (kept.length) careerByHand(second, pair.club, pair.seed, kept);
     playCareer(baseline, pair.club, pair.seed, off, false, false);
   }
 
@@ -303,7 +322,7 @@ async function main() {
   console.log(`simCmQuickLegs${CONTROL ? ` (control ${CONTROL})` : ''}: ${pairs.length} careers (${CLUBS.length} clubs x ${SEEDS} seeds, seedset ${SEEDSET}) x ${SEASONS} seasons, each by quick sim, with and without the round`);
   console.log(line('with the round', on));
   console.log(line('without it', off));
-  console.log(`  MEASURED his rule, on ${legsTally.replayed} matches played again by hand (${legsTally.withLegs} with a change for legs): ${legsTally.changes} changes for legs, ${legsTally.live} with the match within a goal (mean strength ${legsTally.live ? (legsTally.liveGain / legsTally.live >= 0 ? '+' : '') + (legsTally.liveGain / legsTally.live).toFixed(3) : 'n/a'}) and ${legsTally.settled} with my side two or more up (mean ${legsTally.settled ? (legsTally.settledGain / legsTally.settled >= 0 ? '+' : '') + (legsTally.settledGain / legsTally.settled).toFixed(3) : 'n/a'}); ${legsTally.sameAsFleet} of the second plays equalled the fleet's first`);
+  console.log(`  MEASURED his rule, on ${legsTally.replayed} matches played again by hand (${legsTally.withLegs} with a change for legs): ${legsTally.changes} changes for legs, ${legsTally.live} with the match within a goal (mean strength ${legsTally.live ? (legsTally.liveGain / legsTally.live >= 0 ? '+' : '') + (legsTally.liveGain / legsTally.live).toFixed(3) : 'n/a'}) and ${legsTally.settled} with my side two or more up (mean ${legsTally.settled ? (legsTally.settledGain / legsTally.settled >= 0 ? '+' : '') + (legsTally.settledGain / legsTally.settled).toFixed(3) : 'n/a'})`);
   let failed = 0;
   for (const s of SECTIONS) {
     const xs = red.get(s);
