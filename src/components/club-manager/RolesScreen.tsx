@@ -204,7 +204,7 @@ export function RolesScreen({ career, onSetRole }: RolesScreenProps) {
   }
 
   /* ---------- the front of the room ---------- */
-  const broken = brokenPromises(career).slice(0, 5);
+  const broken = brokenPromises(career);
   const wantOut = career.squad.filter(p => p.wantsOut);
 
   return (
@@ -224,7 +224,7 @@ export function RolesScreen({ career, onSetRole }: RolesScreenProps) {
       {broken.length > 0 && (
         <div className="bg-card border border-red-500/30 rounded-xl p-3">
           <div className="text-[10px] text-red-400 uppercase tracking-wider mb-1">Needs a word</div>
-          {broken.map(p => <PlayerRow key={p.id} p={p} onOpen={() => setOpenId(p.id)} showRole />)}
+          {broken.slice(0, 5).map(p => <PlayerRow key={p.id} p={p} onOpen={() => setOpenId(p.id)} showRole />)}
         </div>
       )}
 
