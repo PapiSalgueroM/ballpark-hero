@@ -118,7 +118,10 @@ if (CONTROL === 'hidden') {
 }
 if (CONTROL === 'keeptoast') {
   /* the effect's cleanup, found by the words of the toast it follows: the dismiss call is taken out */
-  const re = /(could not be saved\. Stay on this page and use Retry save\.["'`]\)[;,]return\(\)=>\{)[\w$]+\.dismiss\([\w$]+\)(\})/g;
+  /* Round 1144: the toast is given options after its words (how long it stays, the Retry it carries),
+     so the cleanup is no longer the next thing after the closing quote. Up to 400 characters of
+     options are stepped over, none of them a return, and it still has to match exactly once. */
+  const re = /(could not be saved\. Stay on this page and use Retry save\.["'`](?:(?!return)[\s\S]){0,400}?\)[;,]return\(\)=>\{)[\w$]+\.dismiss\([\w$]+\)(\})/g;
   const where = assets.filter(f => (textOf(f).match(re) ?? []).length > 0);
   if (where.length !== 1 || (textOf(where[0]).match(re) ?? []).length !== 1) refuse(`the toast's cleanup is in ${where.length} chunks (${where.map(f => (textOf(f).match(re) ?? []).length).join(', ')} times), expected once in one`);
   served.set(where[0], textOf(where[0]).replace(re, '$1$2'));

@@ -106,6 +106,9 @@ interface SaveShape { c: CareerState | null; phase: Phase; teamQuality: number |
 
 /** Round 1144: how long the toast that says a save was refused stays, with its Retry on it. */
 const SAVE_TOAST_MS = 10_000;
+/** A toast's button is 24 px tall as it comes (measured: 48 by 24). This one is the way to save a
+ *  career from a phone, so it gets a thumb's room, the same 44 px the notice's Retry save has. */
+const SAVE_TOAST_BUTTON = { height: 44, minWidth: 64, paddingLeft: 14, paddingRight: 14, fontSize: 13 } as const;
 
 export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const pendingSave = useRef<{ key: string; value: string | null } | null>(null);
@@ -123,6 +126,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     const said = toast.error('Your latest changes could not be saved. Stay on this page and use Retry save.', {
       duration: SAVE_TOAST_MS,
       action: { label: 'Retry', onClick: event => { event.preventDefault(); retrySave(); } },
+      actionButtonStyle: SAVE_TOAST_BUTTON,
     });
     /* Release AN: the words are taken back the moment they stop being true.
        A Retry save that worked left them on screen for the rest of their few

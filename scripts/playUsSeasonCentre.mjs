@@ -341,7 +341,11 @@ const retryButtons = page => page.evaluate(() => ({
     const top = q.height > 0 ? document.elementFromPoint(x, y) : null;
     return { words: (b.textContent ?? '').trim(), t: Math.round(q.top), b: Math.round(q.bottom), w: Math.round(q.width), h: Math.round(q.height), x, y, onTop: q.height > 0 && q.top >= 0 && q.bottom <= innerHeight && !!top && (b === top || b.contains(top)) };
   }),
+  /* where the toasts are: each one's box, for the label */
+  toasts: [...document.querySelectorAll('[data-sonner-toast]')].map(t => { const q = t.getBoundingClientRect(); return `${Math.round(q.top)}..${Math.round(q.bottom)}`; }),
 }));
+/** A thumb's room: the size a button has to be for a phone (the notice's own Retry save is held to the same). */
+const THUMB = 44;
 /* localStorage only. A full localStorage says nothing about sessionStorage, which has its own room,
    and the once a tab reload marker lives there: with both refused the reload stands down for the
    marker's sake (measured on main, where this walk's first cut was green for that reason alone). */
@@ -719,9 +723,12 @@ async function walk(slug, vp) {
        and the notice that carries that button is under the cover. A Retry has to be on the screen with
        nothing over it, and once the browser takes writes again a press on it (a real press, at its
        middle) has to put the season on the store. */
+    /* the toast slides in over about 400 ms: measured once it has stopped, or the press below would land where the button was */
+    await F.page.waitForTimeout(900);
     const retries = await retryButtons(F.page);
     const reach = retries.hit.find(x => x.onTop) ?? null;
-    check('retry in view', retries.notice && !!reach, `${tag}: with the viewer open over a refused save, a Retry button is on the screen with nothing over it (${retries.hit.map(x => `"${x.words}" ${x.t}..${x.b} ${x.w}x${x.h}${x.onTop ? ' on top' : ' covered'}`).join('; ') || 'no Retry button at all'})`);
+    if (process.env.SHOTS) { fs.mkdirSync(process.env.SHOTS, { recursive: true }); await F.page.screenshot({ path: path.join(process.env.SHOTS, `retry-in-view-${slug}.png`) }); }
+    check('retry in view', retries.notice && !!reach && reach.h >= THUMB && reach.w >= THUMB, `${tag}: with the viewer open over a refused save, a Retry button is on the screen with nothing over it and a thumb can hit it, ${THUMB} px each way (${retries.hit.map(x => `"${x.words}" ${x.t}..${x.b} ${x.w}x${x.h}${x.onTop ? ' on top' : ' covered'}`).join('; ') || 'no Retry button at all'}; toasts at ${retries.toasts.join(', ') || 'none'})`);
     await F.page.evaluate(() => { Storage.prototype.setItem = window.__usRealSet; });
     if (reach) await F.page.mouse.click(reach.x, reach.y);
     const took = !!reach && await waitFor(async () => (await savedString(F.page, save.key)) !== kept, 4000);

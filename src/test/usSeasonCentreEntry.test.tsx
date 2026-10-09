@@ -54,7 +54,7 @@ vi.mock('sonner', () => ({ toast: {
   dismiss: (id?: number) => { ctl.dismissed.push(id ?? -1); },
 } }));
 /* The control's switch: the real entry, its press followed by one extra draw when the switch is on. */
-interface ToastOptions { duration?: number; action?: { label: string; onClick: (event: { preventDefault: () => void }) => void } }
+interface ToastOptions { duration?: number; action?: { label: string; onClick: (event: { preventDefault: () => void }) => void }; actionButtonStyle?: { height?: number; minWidth?: number } }
 const ctl = vi.hoisted(() => ({ extraDraw: false, playFirst: false, noHandOver: false, opens: [] as { year: number; seasons: number }[], toasts: [] as string[], dismissed: [] as number[], options: [] as ToastOptions[] }));
 vi.mock('@/components/us-career/season/UsSeasonCentreEntry', async importOriginal => {
   const original = await importOriginal<typeof import('@/components/us-career/season/UsSeasonCentreEntry')>();
@@ -442,6 +442,9 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     expect(action?.label).toBe('Retry');
     /* long enough to read two sentences and press: sonner's own four seconds is not */
     expect(ctl.options[0]?.duration).toBeGreaterThanOrEqual(8000);
+    /* and a thumb's room: a toast's button is 24 px tall as it comes */
+    expect(ctl.options[0]?.actionButtonStyle?.height).toBeGreaterThanOrEqual(44);
+    expect(ctl.options[0]?.actionButtonStyle?.minWidth).toBeGreaterThanOrEqual(44);
     /* still refused: the press tries the save again, once, and nothing is taken back */
     const tries = () => refusing.mock.calls.filter(c => c[0] === sport.saveKey).length;
     const before = tries();
