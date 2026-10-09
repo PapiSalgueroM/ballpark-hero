@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+#!serial
+playUsSeasonCentre: ENGINES=chromium SHOTS=$RC_OUT node scripts/playUsSeasonCentre.mjs
+playGames-nba: ENGINES=chromium ONLY=/nba-my-career SWEEP_BASE=http://localhost:4173 node scripts/playGames.mjs
+walk: ENGINES=chromium node scripts/playNbaNumbers.mjs
+walk-oldrow: ENGINES=chromium PLAY_NBA_NUMBERS_CONTROL=oldrow node scripts/playNbaNumbers.mjs
+walk-wide: ENGINES=chromium PLAY_NBA_NUMBERS_CONTROL=wide node scripts/playNbaNumbers.mjs
+hallline-nba: ENGINES=chromium ONLY_SPORTS=nba node scripts/playCareerHallLine.mjs
+sweepWeight: SWEEP_OFFLINE=1 BASE=http://localhost:4173 node scripts/sweepWeight.mjs
+weight-nba: bash .rc/x/weight.sh /nba-my-career
