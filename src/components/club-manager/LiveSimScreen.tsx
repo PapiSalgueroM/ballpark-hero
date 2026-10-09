@@ -27,6 +27,9 @@ import { goalWindow } from '@/components/pitch-motion/motion';
 import { PitchSurface, pitchSpot } from '@/components/pitch-motion/PitchSurface';
 import { CelebrationStyles } from '@/components/club-manager/CelebrationStyles';
 import { pitchPlan, pitchScene, pitchSceneKey } from '@/components/pitch-motion/scene';
+/* Round 1146: the mark after a goal, the report's own. */
+import { scorerMark } from '@/lib/clubManagerScorerLine';
+import type { GoalMarks } from '@/lib/clubManagerScorerLine';
 
 /**
  * Round 158: the Live Sim. His words, the ones he said to really pay
@@ -149,6 +152,15 @@ const placeOf = (e: { minute: number; plus?: number }) => e.minute + (e.plus ?? 
 const isChance = (e: { kind: string }) => e.kind === 'goal' || e.kind === 'shot' || e.kind === 'save';
 /** One line's key: what the banner effect remembers it by, and what the plan's start times are looked up by. */
 const lineKey = (e: { kind: string; side: string; minute: number; plus?: number; text: string }) => `${e.kind}:${e.side}:${e.minute}${e.plus ? `+${e.plus}` : ''}:${e.text}`;
+/**
+ * Round 1146: a goal as this screen announces it (the pill, the goal card and the list beside the pitch all
+ * print these runs): the lead words, the scorer, the minute, then the mark a match report prints after it,
+ * from the report's own function, so a penalty reads (P) here exactly where the full time report has it.
+ */
+export function goalSegs(lead: string, who: Seg, at: { minute: number; plus?: number }, marks: GoalMarks): Seg[] {
+  const mark = scorerMark(marks);
+  return [{ t: lead }, who, { t: ` ${minuteLabel(at)}` }, ...(mark ? [{ t: mark }] : [])];
+}
 const ordinal = (n: number) => `${n}${n % 10 === 1 && n % 100 !== 11 ? 'st' : n % 10 === 2 && n % 100 !== 12 ? 'nd' : n % 10 === 3 && n % 100 !== 13 ? 'rd' : 'th'}`;
 /** The shape a nameless opposition lines up in: 4-4-2. */
 const DEFAULT_OPP_FORMATION = 1;
@@ -850,7 +862,8 @@ export function LiveSimScreen({
       switch (e.kind) {
         case 'goal':
           big = {
-            segs: [{ t: x?.penalty ? 'GOAL! Penalty, ' : x?.freeKick ? 'GOAL! Free kick, ' : 'GOAL! ' }, who, { t: ` ${minuteLabel(e)}` }],
+            /* Round 1146: the mark the report prints, from the same function, after the minute as the report has it. */
+            segs: goalSegs(x?.penalty ? 'GOAL! Penalty, ' : x?.freeKick ? 'GOAL! Free kick, ' : 'GOAL! ', who, e, { penalty: x?.penalty }),
             club,
             tone: e.side === 'me' ? 'me' : 'opp',
           };

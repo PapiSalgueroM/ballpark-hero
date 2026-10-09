@@ -13,8 +13,8 @@ function Entry({ row, mine }: { row: TimelineRow; mine: boolean }) {
   const words = `${row.icon} ${row.label}${row.name ? ': ' : ''}`;
   return (
     <span className={cn('inline-flex items-center gap-1 min-w-0 max-w-full', tone)} data-cm-tl-entry="1">
-      <span className="truncate" title={`${words}${row.name}${row.second ? (row.kind === 'sub' ? ` on for ${row.second}` : ` (assist: ${row.second})`) : ''}`}>
-        {words}{row.name}
+      <span className="truncate" title={`${words}${row.name}${row.mark ?? ''}${row.second ? (row.kind === 'sub' ? ` on for ${row.second}` : ` (assist: ${row.second})`) : ''}`}>
+        {words}{row.name}{row.mark}
         {row.kind === 'sub' && row.second && <> on for {row.second}</>}
         {row.kind === 'goal' && row.second && <span className="font-normal text-muted-foreground"> 🅰️ {row.second}</span>}
       </span>

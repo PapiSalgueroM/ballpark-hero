@@ -8,6 +8,7 @@ import type { PitchFigure, PitchInput } from '@/components/pitch-motion/contract
 import type { MotionScene } from '@/components/pitch-motion/motion';
 import { pitchBeatAt, pitchPlan, pitchScene, pitchSceneKey, PITCH_HELD, PITCH_KICKOFF, PITCH_LATE, PITCH_LEAD, PITCH_RESTART, PITCH_SQUEEZE } from '@/components/pitch-motion/scene';
 import type { PitchBeat, PitchPlaced, PitchPlan } from '@/components/pitch-motion/scene';
+import { scorerMark } from '@/lib/clubManagerScorerLine';
 const motionPath = process.env.LIVE_MOTION_COMPONENT;
 /* Round 1101: the part lives in src/components/pitch-motion now, and `between` is exported there. */
 const { actionFrame, between, useLiveSimMotion } = motionPath ? await import(/* @vite-ignore */ motionPath) : await import('@/components/pitch-motion/motion');
@@ -573,7 +574,8 @@ describe('Live simcast motion', () => {
     const banner = announced();
     expect(banner, 'no goal banner on screen at the goal').toBeTruthy();
     expect(banner!.textContent).toContain(goal!.text);
-    expect(banner!.textContent!.endsWith(` 90+${plus}'`), `the banner reads "${banner!.textContent}"`).toBe(true);
+    /* Round 1146: the report's mark follows the minute on a goal that carries one (a penalty reads 90+N' (P)). */
+    expect(banner!.textContent!.endsWith(` 90+${plus}'${scorerMark(goal!)}`), `the banner reads "${banner!.textContent}"`).toBe(true);
   }, 30000);
 
   /* Round 781 review: extra time has its own board at 120, and the clock in
