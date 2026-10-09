@@ -342,9 +342,16 @@ const retryButtons = page => page.evaluate(() => ({
     return { words: (b.textContent ?? '').trim(), t: Math.round(q.top), b: Math.round(q.bottom), w: Math.round(q.width), h: Math.round(q.height), x, y, onTop: q.height > 0 && q.top >= 0 && q.bottom <= innerHeight && !!top && (b === top || b.contains(top)) };
   }),
 }));
+/* localStorage only. A full localStorage says nothing about sessionStorage, which has its own room,
+   and the once a tab reload marker lives there: with both refused the reload stands down for the
+   marker's sake (measured on main, where this walk's first cut was green for that reason alone). */
 const refuseWrites = page => page.evaluate(() => {
-  window.__usRealSet = Storage.prototype.setItem;
-  Storage.prototype.setItem = function refuse() { throw new DOMException('The quota has been exceeded.', 'QuotaExceededError'); };
+  const real = Storage.prototype.setItem;
+  window.__usRealSet = real;
+  Storage.prototype.setItem = function refuse(...args) {
+    if (this !== window.localStorage) return Reflect.apply(real, this, args);
+    throw new DOMException('The quota has been exceeded.', 'QuotaExceededError');
+  };
 });
 const takeWrites = page => page.evaluate(() => { if (window.__usRealSet) Storage.prototype.setItem = window.__usRealSet; }).catch(() => {});
 const seasonsOn = (page, key) => page.evaluate(k => { try { return JSON.parse(localStorage.getItem(k) ?? '{}').c?.seasons?.length ?? 0; } catch { return -1; } }, key).catch(() => -2);

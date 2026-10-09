@@ -38,6 +38,31 @@
  * StorageNotice reads getStorageTrouble() and tells the player, once a page,
  * that progress is not being saved here.
  *
+ * Round 1144: 'full' is taken back when it stops being true. Before, the
+ * first refused write set it for the rest of the visit, so after a player
+ * freed some room and his save went through the line at the top still said
+ * the storage was full until the page was loaded again. It is unlearned one
+ * of three ways, the mirror of how it is learned: a write through the seam
+ * that the browser takes, a safeSetItem that it takes, or
+ * recheckStorageWrites(), which writes and removes the probe key again. The
+ * recheck is needed because a game that guards its own save writes to the
+ * browser's storage directly and the seam never sees that write succeed.
+ * It only ever runs while the seam ALREADY says full, so the rule above
+ * holds as it did: a browser that stores normally is probed at most once a
+ * visit, by probeStorageWrites(). The notice asks for a recheck a moment
+ * after a press and when the tab comes back, never on a timer.
+ * subscribeStorageTrouble() tells a listener when the answer changes.
+ * 'blocked' is decided as this file loads and never changes.
+ *
+ * The same round: a save a game could not write waits in the open page for
+ * the player to retry it, and a reload would throw it away. A game names
+ * that save with holdPendingSave(), and anything that reloads the page on
+ * the app's own account asks settlePendingSaves() first (src/lib/freshBuild.ts).
+ * Held, not carried: with the storage refusing writes there is nowhere to
+ * put the save that outlives the page, and carrying it would mean a second
+ * way of writing every game's save. The retry the game already has is run
+ * once instead, and the page stays while it is still refused.
+ *
  * window.__DUKB_RAW_STORAGE__ (read once, here) hands back the browser's own
  * storage with no probe and no fallback. It exists for one reason:
  * scripts/playStorageBlocked.mjs sets it as its negative control and proves
@@ -62,7 +87,7 @@ const PROBE_KEY = '__dukb_storage_probe__';
  * remove reaches it too. While the browser takes every write this keeps
  * nothing and is a plain pass through.
  */
-export function createMemoryStorage(under: Storage | null = null, onRefused?: () => void): Storage {
+export function createMemoryStorage(under: Storage | null = null, onRefused?: () => void, onAccepted?: () => void): Storage {
   const kept = new Map<string, string>();
   /* Keys removed here that the store underneath would not let go of. */
   const gone = new Set<string>();
@@ -95,7 +120,7 @@ export function createMemoryStorage(under: Storage | null = null, onRefused?: ()
       const v = String(value);
       gone.delete(k);
       if (below) {
-        try { below.setItem(k, v); kept.delete(k); return; } catch { onRefused?.(); }
+        try { below.setItem(k, v); kept.delete(k); onAccepted?.(); return; } catch { onRefused?.(); }
       }
       kept.set(k, v);
     },
@@ -117,14 +142,14 @@ export function createMemoryStorage(under: Storage | null = null, onRefused?: ()
 
 interface Resolved { storage: Storage; real: Storage | null; blocked: boolean }
 
-function resolve(name: StorageName, onRefused: () => void): Resolved {
+function resolve(name: StorageName, onRefused: () => void, onAccepted?: () => void): Resolved {
   let real: Storage | null = null;
   try { real = window[name] ?? null; } catch { real = null; }
   if (real) {
     try {
       /* A read, never a write: see the header. */
       real.getItem(PROBE_KEY);
-      return { storage: createMemoryStorage(real, onRefused), real, blocked: false };
+      return { storage: createMemoryStorage(real, onRefused, onAccepted), real, blocked: false };
     } catch { /* it cannot even be read: treat it as blocked */ }
   }
   const memory = createMemoryStorage();
@@ -179,13 +204,34 @@ function rawRequested(): boolean {
    before this round. */
 const raw = rawRequested();
 
-/* True from the first write this browser refused on this visit. */
+/* True from a write this browser refused until one it takes (Round 1144:
+   it used to stay true for the rest of the visit). */
 let refusedWrite = false;
-const noteRefusedWrite = (): void => { refusedWrite = true; };
+const troubleListeners = new Set<() => void>();
+let tellingListeners = false;
+/* Listeners hear about a change a moment later, never inside the call that
+   made it: a write can be refused in the middle of a render, and a listener
+   that sets state there would be updating one component while another
+   renders. One telling per burst of changes. */
+function tellListeners(): void {
+  if (tellingListeners) return;
+  tellingListeners = true;
+  void Promise.resolve().then(() => {
+    tellingListeners = false;
+    for (const listener of [...troubleListeners]) { try { listener(); } catch { /* one listener must not silence the next */ } }
+  });
+}
+function setRefusedWrite(next: boolean): void {
+  if (refusedWrite === next) return;
+  refusedWrite = next;
+  tellListeners();
+}
+const noteRefusedWrite = (): void => setRefusedWrite(true);
+const noteAcceptedWrite = (): void => setRefusedWrite(false);
 
 const local: Resolved = raw
   ? { storage: window.localStorage, real: null, blocked: false }
-  : resolve('localStorage', noteRefusedWrite);
+  : resolve('localStorage', noteRefusedWrite, noteAcceptedWrite);
 const session: Resolved = raw
   ? { storage: window.sessionStorage, real: null, blocked: false }
   : resolve('sessionStorage', () => { /* a full session store is not the notice's business */ });
@@ -218,9 +264,64 @@ export function probeStorageWrites(): StorageTrouble | null {
     try {
       local.real.setItem(PROBE_KEY, '1');
       local.real.removeItem(PROBE_KEY);
-    } catch { refusedWrite = true; }
+    } catch { setRefusedWrite(true); }
   }
   return getStorageTrouble();
+}
+
+/**
+ * Round 1144: asks again, but only while the seam already says the storage
+ * is full. One write and one remove of the probe key; when the browser takes
+ * them, 'full' is taken back. In a browser that stores normally (and in the
+ * blocked case, and under the raw switch) this does nothing at all, so the
+ * once a visit rule of probeStorageWrites() is not this function's to break.
+ */
+export function recheckStorageWrites(): StorageTrouble | null {
+  if (refusedWrite && !raw && local.real) {
+    try {
+      local.real.setItem(PROBE_KEY, '1');
+      local.real.removeItem(PROBE_KEY);
+      setRefusedWrite(false);
+    } catch { /* still full */ }
+  }
+  return getStorageTrouble();
+}
+
+/** Calls the listener a moment after getStorageTrouble() starts answering differently. Returns the way to stop. */
+export function subscribeStorageTrouble(listener: () => void): () => void {
+  troubleListeners.add(listener);
+  return () => { troubleListeners.delete(listener); };
+}
+
+/* Saves a game could not write and is holding in the open page (see the header). */
+const pendingSaves = new Set<() => boolean>();
+
+/**
+ * Round 1144: a game with a save the browser refused names it here for as
+ * long as it waits. `retry` writes it once more and answers true when
+ * nothing of it is left unsaved. Returns the way to take the name back
+ * (the save went through, or the game was left).
+ */
+export function holdPendingSave(retry: () => boolean): () => void {
+  pendingSaves.add(retry);
+  return () => { pendingSaves.delete(retry); };
+}
+
+/**
+ * Before the app reloads the page on its own account: every waiting save is
+ * retried once. True when none is left waiting, so a reload loses nothing.
+ * False means a save is still refused and the page has to stay. Under the
+ * raw switch nothing is held, which is the app as it was before this round.
+ */
+export function settlePendingSaves(): boolean {
+  if (raw) return true;
+  let settled = true;
+  for (const retry of [...pendingSaves]) {
+    let saved = false;
+    try { saved = retry(); } catch { saved = false; }
+    if (!saved) settled = false;
+  }
+  return settled;
 }
 
 /**
@@ -256,10 +357,12 @@ export function safeSetItem(key: string, value: string): boolean {
   }
   try {
     localStorage.setItem(key, value);
+    /* Round 1144: and a write the browser takes is how it is unlearned */
+    setRefusedWrite(false);
     return true;
   } catch {
     /* a refused write is how the full case is learned (see the header) */
-    refusedWrite = true;
+    setRefusedWrite(true);
     return false;
   }
 }
