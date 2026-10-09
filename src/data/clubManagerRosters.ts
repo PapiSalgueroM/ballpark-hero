@@ -14,9 +14,9 @@
 // Values in £m. Ratings 48-94: the market value curve plus points for age
 // (curve 2, scripts/lib/cmValueCurve.mjs): a point off for each year under 24,
 // points back from 30.
-// Ages are for 1 August 2026: 382 from a birth date on file, 3993 moved from the
+// Ages are for 1 August 2026: 402 from a birth date on file, 3983 moved from the
 // table's 1 January age (plus one for a 2026 row, plus two for a 2025 row;
-// right for about seven men in ten, a year over for the rest), 26 as written
+// right for about seven men in ten, a year over for the rest), 16 as written
 // by hand in 2026, 0 unknown.
 // Regenerate with: node scripts/bakeClubManagerRosters.mjs
 // DO NOT EDIT BY HAND.
@@ -45,7 +45,7 @@ export const CM_ROSTER_META = {
   curve: 2,
   /** How each man's age is known: from a birth date on file, moved on from the table's 1 January
    *  age, as written by hand in 2026, or unknown. */
-  ages: { asOf: '2026-08-01', born: 382, moved: 3993, written: 26, unknown: 0 },
+  ages: { asOf: '2026-08-01', born: 402, moved: 3983, written: 16, unknown: 0 },
 };
 
 /** Clubs where the dataset runs thin (under 8 real players); the game pads
@@ -1358,7 +1358,7 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Moisés Caicedo', p: 'CDM', a: 24, v: 81, r: 90 },
     { n: 'Estêvão', p: 'RW', a: 19, v: 64.5, r: 87 },
     { n: 'Morgan Rogers', p: 'CAM', a: 24, v: 64.5, r: 89 },
-    { n: 'João Pedro', p: 'ST', a: 25, v: 60.8, r: 89 },
+    { n: 'João Pedro', p: 'ST', a: 24, v: 60.8, r: 89 },
     { n: 'Pedro Neto', p: 'RW', a: 26, v: 48.8, r: 87 },
     { n: 'Reece James', p: 'RB', a: 27, v: 48.8, r: 87 },
     { n: 'Levi Colwill', p: 'CB', a: 23, v: 40.5, r: 85 },
@@ -2087,7 +2087,7 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Benjamin Lecomte', p: 'GK', a: 35, v: 0.8, r: 69 },
   ],
   'Galatasaray': [
-    { n: 'Victor Osimhen', p: 'ST', a: 28, v: 60.8, r: 89 },
+    { n: 'Victor Osimhen', p: 'ST', a: 27, v: 60.8, r: 89 },
     { n: 'Rafael Leão', p: 'LW', a: 27, v: 52.5, r: 88 },
     { n: 'Barış Alper Yılmaz', p: 'LW', a: 26, v: 21, r: 83 },
     { n: 'Wilfried Singo', p: 'CB', a: 26, v: 20.3, r: 82 },
@@ -3054,7 +3054,7 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Gerónimo Rulli', p: 'GK', a: 34, v: 6.8, r: 80 },
   ],
   'Manchester United': [
-    { n: 'Bryan Mbeumo', p: 'RW', a: 27, v: 64.5, r: 89 },
+    { n: 'Bryan Mbeumo', p: 'RW', a: 26, v: 64.5, r: 89 },
     { n: 'Matheus Cunha', p: 'ST', a: 27, v: 57, r: 88 },
     { n: 'Benjamin Sesko', p: 'ST', a: 23, v: 52.5, r: 87 },
     { n: 'Carlos Baleba', p: 'CDM', a: 22, v: 44.6, r: 85 },
@@ -4686,7 +4686,7 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Pedro Lima', p: 'RB', a: 20, v: 3, r: 68 },
     { n: 'Henrique Carmo', p: 'RW', a: 20, v: 2.9, r: 67 },
     { n: 'Enzo Díaz', p: 'LB', a: 31, v: 2.3, r: 72 },
-    { n: 'Lucas Moura', p: 'RW', a: 34, v: 1.7, r: 72 },
+    { n: 'Lucas Moura', p: 'RW', a: 33, v: 1.7, r: 71 },
     { n: 'Carlos Coronel', p: 'GK', a: 30, v: 1.5, r: 69 },
     { n: 'Maik', p: 'RB', a: 21, v: 1.5, r: 65 },
     { n: 'Wendell', p: 'LB', a: 33, v: 1.5, r: 71 },
