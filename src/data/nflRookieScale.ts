@@ -14,7 +14,11 @@
    (scripts/simNflTruth.mjs, section 2) can hold every row to the 2 percent
    rule instead of trusting this comment. A value with one source, or with
    two that are more than 2 percent apart, is HELD: marked, counted and
-   printed by the harness, and never quoted in the game's copy.
+   printed by the harness, and never quoted in the game's copy. Since the
+   lead's ruling of 2026-10-09 a held later round end is also THIN: it
+   carries NO figure in this file's data (null), and the game pays it by
+   the rule written under the seven thin picks below. The harness fails on
+   a figure that has no second source beside it and is not marked.
 
    ── 2026 (`now`), all read 2026-10-07 ──
    Round one, all 32 picks, four years each:
@@ -56,51 +60,62 @@
      789,036 is the signing bonus); Over The Cap 5,182,896 (read again
      2026-10-08). 0.27 percent apart. Verified, and the signed figure is the
      one stored, as on picks 33, 64, 65 and 257.
-   - picks 100, 101, 141, 181, 182, 216 and 217: Over The Cap only. The
-     other figures found run 3 to 4 percent lower: DraftKings Network's round
-     by round pieces of 25 April 2026, and for pick 101 Spotrac's slot value,
-     5,549,727 over four years, as credited by Raiders On SI on 22 July 2026
-     and carried by NFL Trade Rumors the same day ("projected to sign a
-     four-year, $5.549 million rookie contract"), against Over The Cap's
-     5,707,632: 2.8 percent apart, so not agreement by this file's own rule.
-     The projection NFL Trade Rumors printed before the draft is known to be
-     stale: it had the first pick on 54.6M, and he signed for 57.3M; it had
-     the last pick on 4.18M, and he signed for 4.5M. Looked for again on
-     2026-10-08, one search a player, and not found: a report of the signed
-     total for any of the seven (the clubs announced four year deals with no
-     figures; the beat reports that print figures credit Over The Cap, so
-     they are the same source twice). HELD, all seven.
-     THE RULE FOR A HELD 2026 ROW, stated so it is a rule and not a habit: the
-     game pays the Over The Cap figure. Why that one and not a line drawn
-     between the verified picks: on all six picks where a signed deal was
-     reported (1, 33, 64, 65, 140, 257) that estimate was within 1.7 percent
-     of the deal and exact on the last, and a straight line from pick 65 to
-     pick 257 would pay round four about 0.3M a year more than either source
-     says. It is one source, it is marked as one, the harness counts it, and
-     no line of the game's copy quotes a held slot. What the hold can cost: a
-     held end 4 percent lower (the widest gap any other figure showed) moves
-     no slot's pay by more than 0.1M a year. THE LEAD HAS NOT RULED ON THIS
-     YET (the review of 2026-10-08 asked for a second source or a written
-     ruling; one of the eight ends it named has its second source now).
-     HOW FAR OUT A HELD END CAN BE, worked out 2026-10-08 from the figures
-     already cited above, for that ruling. A deal in rounds four to seven is
-     four minimum salaries and a signing bonus, and both signed deals reported
-     with their bonus leave exactly 4,380,000 of salary (pick 140: 5,169,036
-     less 789,036; pick 257: 4,502,600 less 122,600). So on picks 141, 181,
-     182, 216 and 217 the only estimated part of the held total is the bonus,
-     575,668 down to 184,644. Over The Cap's bonus was 1.8 percent over the
-     signed one on pick 140 and exact on pick 257; were it 12 percent out
-     (the size of the gap on pick 101, the widest found), those five totals
-     would move by 0.5 to 1.4 percent, inside this file's own 2 percent.
-     Picks 100 and 101 are the two with more room. Pick 101 is the 2.8
-     percent above. Pick 100 has one other print (found 2026-10-08):
-     Crescent City Sports, 4 June 2026, "Compensation for top CFB players is
-     through the roof" ("the 100th overall pick will receive $1,199,932", a
-     first year figure). If each later year steps up by the 25 percent the
-     rules allow, that is 6,599,626 over four years, 1.9 percent under Over
-     The Cap. It was NOT taken as a second source: the total is worked out
-     here, not printed there, and the same table is 3.3 percent under the
-     signed deal on pick 33.
+   - picks 100, 101, 141, 181, 182, 216 and 217: THIN, all seven. No figure
+     for any of them is stored in this file's data. What was found, kept here
+     as the record (looked for on 2026-10-07, 2026-10-08 and 2026-10-09):
+       Over The Cap, "NFL Draft" slot values, read again 2026-10-09: pick 100
+       6,726,012; 101 5,707,632; 141 4,955,668; 181 4,724,112; 182 4,714,212;
+       216 4,590,172; 217 4,564,644. An estimate, and the only print there is
+       for picks 182 and 216.
+       The other prints, none of them a signed deal: DraftKings Network's
+       round by round pieces of 25 April 2026 (pick 101 5,482,354; pick 217
+       4,417,085; fetched 2026-10-09); Spotrac's slot for pick 101, 5,549,727
+       over four years, as credited by Raiders On SI on 22 July 2026 and
+       carried by NFL Trade Rumors the same day; Crescent City Sports, 4 June
+       2026, a first year figure for pick 100 (1,199,932: if each later year
+       steps up by the 25 percent the rules allow, 6,599,626 over four years,
+       a total worked out here and not printed there).
+       They run 1.9 to 4 percent under Over The Cap, and the two that are
+       totals as printed for the same pick are 2.8 and 4.0 percent under, so
+       by this file's own 2 percent rule the sources DISAGREE. That lower
+       scale is no better: it is as far under both deals that were reported
+       signed with their figures (pick 140: 4,993,306 against the signed
+       5,169,036; pick 257: 4,359,258 against the signed 4,502,600).
+       No report of a signed total was found for any of the seven: the clubs
+       announced four year deals with no figures, and the beat reports that
+       print one credit Over The Cap, which is the same source twice.
+     THE LEAD'S RULING, 2026-10-09: this site never ships a one sourced figure
+     as fact, and when two sources disagree it ships neither. So a thin end
+     is paid by THE RULE FOR A PICK BETWEEN TWO VERIFIED PICKS, the one this
+     round's ladder already had for an unverified first round pick: the
+     straight line between the nearest two sourced picks above and below it,
+     by real pick number. Picks 100 and 101 sit on the line from pick 65
+     (7,400,000) to pick 140 (5,169,036). Picks 141, 181, 182, 216 and 217
+     sit on the line from pick 140 to pick 257 (4,502,600). Every dollar the
+     game pays in rounds two to seven is therefore a point on a straight
+     line between two figures that each have two sources, and
+     scripts/simNflTruth.mjs (section 2: check 2a for the sources, check 2d
+     for the pay) proves it slot by slot, to the dollar, and proves that no
+     slot is paid one of the seven estimates above.
+     WHAT THE RULE COSTS, said plainly (worked out 2026-10-09). The real
+     scale steps down between rounds three and four, and nothing two sourced
+     marks that step, so the line runs straight through it: against the one
+     estimate there is, the last pick of round three is paid 0.09M a year
+     less (1.59M against 1.68M) and the first pick of round four 0.16M a year
+     more (1.58M against 1.43M), the widest gap anywhere. From pick 141 on
+     the line is 0.04M to 0.05M a year over the estimate. At the 0.1M the
+     game prints, 81 of the 192 slots in rounds two to seven read a different
+     figure from the one the estimate paid: one tenth off on 77 of them, and
+     two tenths over on the first four slots of round four (1.6M where it
+     paid 1.4M). In the 2005 throwback, 23 slots move by one tenth. A report
+     of the signed deal for pick 100 or pick 101, agreeing with a second
+     source inside 2 percent, lifts most of that: put the figure and its
+     second on the row and take the hold off.
+     Why rounds four to seven cannot be far out: a deal there is four minimum
+     salaries and a signing bonus, and both signed deals reported with their
+     bonus leave exactly 4,380,000 of salary (pick 140: 5,169,036 less
+     789,036; pick 257: 4,502,600 less 122,600), so only the bonus is ever
+     in doubt.
    The 2026 rookie minimum salary, 885,000: DraftKings Network, 25 April 2026,
    "How much money do seventh round picks in the NFL Draft make?"; Legion
    Report, 14 July 2026, "NFL Rookie Contract Scale: What Every 2026 Draft
@@ -129,15 +144,20 @@
    later round that two sources picks 8 and 16 can lift the hold. */
 
 /** One first round slot. `second` is the other source's total for the same
- *  deal; a row with no `second`, or with `held`, is not two sourced. */
-export interface RookieSlotRow { pick: number; total: number; years: number; second?: number; held?: true }
+ *  deal. It is not optional: this table has no rule for a thin first round
+ *  pick, so a row cannot be typed without its second source. */
+export interface RookieSlotRow { pick: number; total: number; years: number; second: number }
 
-/** The first and last pick of one real round, with each deal's total. `held`
- *  names which end is not two sourced. */
+/** The first and last pick of one real round. A two sourced end carries its
+ *  deal's total and, beside it, the other source's total for the same deal
+ *  (`firstSecond`, `lastSecond`). A THIN end carries no figure at all: its
+ *  total is null, it has no second, and `held` names it. The one reader,
+ *  src/lib/usCareerRookieDeal.ts, puts a thin end on the straight line
+ *  between the nearest two sourced ends above and below it. */
 export interface RookieRoundRow {
   round: 2 | 3 | 4 | 5 | 6 | 7;
-  firstPick: number; firstTotal: number;
-  lastPick: number; lastTotal: number;
+  firstPick: number; firstTotal: number | null; firstSecond?: number;
+  lastPick: number; lastTotal: number | null; lastSecond?: number;
   years: number;
   held?: 'first' | 'last' | 'both';
 }
@@ -176,13 +196,17 @@ export const NFL_ROOKIE_SCALE: { now: NflRookieTable; y2005: NflRookieScale } = 
       row(25, 19_512_698, 19_769_926), row(26, 19_276_668, 19_529_766), row(27, 19_040_710, 19_289_644), row(28, 18_922_710, 19_169_568),
       row(29, 17_975_848, 18_206_074), row(30, 17_474_424, 17_695_836), row(31, 17_054_400, 17_268_452), row(32, 16_783_950, 16_993_244),
     ],
+    /* The stored total is the deal as reported signed; the second is Over The Cap's estimate for the same pick.
+       Pick 257 is the one row where the report printed a rounded total (4.5M) and the exact bonus (122,600):
+       the estimate's 4,502,600 carries that same bonus to the dollar, so it is the figure stored and the
+       report's rounded print is the second. A null total is a THIN end (see the header): no figure ships. */
     laterRounds: [
-      { round: 2, firstPick: 33, firstTotal: 13_376_740, lastPick: 64, lastTotal: 7_880_000, years: 4 },
-      { round: 3, firstPick: 65, firstTotal: 7_400_000, lastPick: 100, lastTotal: 6_726_012, years: 4, held: 'last' },
-      { round: 4, firstPick: 101, firstTotal: 5_707_632, lastPick: 140, lastTotal: 5_169_036, years: 4, held: 'first' },
-      { round: 5, firstPick: 141, firstTotal: 4_955_668, lastPick: 181, lastTotal: 4_724_112, years: 4, held: 'both' },
-      { round: 6, firstPick: 182, firstTotal: 4_714_212, lastPick: 216, lastTotal: 4_590_172, years: 4, held: 'both' },
-      { round: 7, firstPick: 217, firstTotal: 4_564_644, lastPick: 257, lastTotal: 4_502_600, years: 4, held: 'first' },
+      { round: 2, firstPick: 33, firstTotal: 13_376_740, firstSecond: 13_526_344, lastPick: 64, lastTotal: 7_880_000, lastSecond: 7_931_136, years: 4 },
+      { round: 3, firstPick: 65, firstTotal: 7_400_000, firstSecond: 7_450_622, lastPick: 100, lastTotal: null, years: 4, held: 'last' },
+      { round: 4, firstPick: 101, firstTotal: null, lastPick: 140, lastTotal: 5_169_036, lastSecond: 5_182_896, years: 4, held: 'first' },
+      { round: 5, firstPick: 141, firstTotal: null, lastPick: 181, lastTotal: null, years: 4, held: 'both' },
+      { round: 6, firstPick: 182, firstTotal: null, lastPick: 216, lastTotal: null, years: 4, held: 'both' },
+      { round: 7, firstPick: 217, firstTotal: null, lastPick: 257, lastTotal: 4_502_600, lastSecond: 4_500_000, years: 4, held: 'first' },
     ],
     undrafted: 885_000,
   },

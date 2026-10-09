@@ -53,10 +53,19 @@
  *       band about 3.4 wide. A band here is a fixed number now.
  *   2   Rookie pay is the draft slot. The table itself is held to its rules
  *       (32 first round rows a table, picks 1 to 32 once each, no total at or
- *       under zero, two sources within 2 percent on every row that claims two,
- *       pay never rising with the pick down to the minimum; held rows counted
- *       and printed), every quick start is paid its slot in both eras, and no
- *       kicker is drafted before round four on either path to the draft.
+ *       under zero, pay never rising with the pick down to the minimum; held
+ *       rows counted and printed), every quick start is paid its slot in both
+ *       eras, and no kicker is drafted before round four on either path to the
+ *       draft.
+ *       Its SOURCES (tag 2s, the lead's ruling of 2026-10-09): every figure in
+ *       the table has a second source's total beside it, inside 2 percent. A
+ *       figure with no second fails, marked or not. A later round end the
+ *       sources do not settle is THIN: no figure at all, marked held, with a
+ *       two sourced end on each side of it.
+ *       Its THIN ENDS (tag 2t): each is paid on the straight line between the
+ *       nearest two sourced picks, the line rebuilt in this harness from the
+ *       two sourced figures alone and held to the dollar on all 192 slots of
+ *       rounds two to seven, and no slot is paid the one source's estimate.
  *   3   Sacks come in halves on every new LB and EDGE season line.
  *   4   No receiver passes the record book: a 99 rated wide receiver's season
  *       is at or under 1,950 yards and 145 catches (the records are 1,964 and
@@ -78,6 +87,9 @@
  *   oldpay     the old rookie pay formula                       -> 2
  *   kicker     kickers are drafted anywhere again               -> 2
  *   swap       two first round rows of the table trade places   -> 2
+ *   onesource  pick 100 carries the one source's figure again,
+ *              with no second and no mark                       -> 2s, 2t
+ *   nosecond   the 32nd pick's row loses its second source      -> 2s
  *   tenths     sacks are rounded to tenths again                -> 3
  *   nocap      the three receiver caps are lifted               -> 4
  *
@@ -106,7 +118,7 @@ import { pathToFileURL, fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.TRUTH_CONTROL || '';
-const CONTROLS = { seventeen: ['1'], nopace: ['1b'], oldpay: ['2'], kicker: ['2'], swap: ['2'], tenths: ['3'], nocap: ['4'] };
+const CONTROLS = { seventeen: ['1'], nopace: ['1b'], oldpay: ['2'], kicker: ['2'], swap: ['2'], onesource: ['2s', '2t'], nosecond: ['2s'], tenths: ['3'], nocap: ['4'] };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`TRUTH_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
   process.exit(1);
@@ -137,7 +149,7 @@ const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), `nfltruth-${process.pid}-`)
 process.on('exit', () => { try { fs.rmSync(tmpDir, { recursive: true, force: true }); } catch { /* best effort */ } });
 const ENTRY = [
   `export * as E from './src/lib/nflMyCareer.ts';`,
-  `export { rookieDeal } from './src/lib/usCareerRookieDeal.ts';`,
+  `export { rookieDeal, nflSlot } from './src/lib/usCareerRookieDeal.ts';`,
   `export { NFL_ROOKIE_SCALE } from './src/data/nflRookieScale.ts';`,
   `export { stampHallCalibration } from './src/lib/careerHallOfFame.ts';`,
   `export { nflPreDraftDescriptor } from './src/lib/nflCareerPreDraft.ts';`,
@@ -163,6 +175,10 @@ const N_SACK_EDGE = '((form - 64) * 0.52 + rng() * 5) * g * 2) / 2';
 const N_SACK_PO = '(3 + (pf - 62) * 0.35) * per * 2) / 2';
 const N_ROW1 = 'row(1, 57271500, 58191906)';
 const N_ROW2 = 'row(2, 54675584, 55550396)';
+const N_ROW32 = 'row(32, 16783950, 16993244)';
+/* The thin last pick of round three, as the bundle prints it. The control puts the one source's figure back on
+   it with no mark, which is the table as it stood before the lead's ruling of 2026-10-09. */
+const N_THIN100 = 'lastPick: 100, lastTotal: null, years: 4, held: "last" }';
 const OLD_PAY = `${N_PAY}\n  { const era0 = nflEraById(eraId); const fr0 = slot > 0 && slot <= 32; return Math.max(0.3, Math.round((fr0 ? (33 - slot) * 0.9 + 4 : 1.2) * era0.moneyScale * 10) / 10); }`;
 const P = {
   seventeen: t => patch(t, N_LEN, `${N_LEN}\n  return 17;`, 'seventeen'),
@@ -171,6 +187,8 @@ const P = {
   kicker: t => patch(t, N_OFFSET, `${N_OFFSET}\n  return 0;`, 'kicker'),
   tenths: t => patch(patch(patch(t, N_SACK_LB, N_SACK_LB.replace('* 2) / 2', '* 10) / 10'), 'tenths LB'), N_SACK_EDGE, N_SACK_EDGE.replace('* 2) / 2', '* 10) / 10'), 'tenths EDGE'), N_SACK_PO, N_SACK_PO.replace('* 2) / 2', '* 10) / 10'), 'tenths playoffs'),
   nocap: t => patch(patch(patch(t, 'var NFL_WR_REC_CAP = 145;', 'var NFL_WR_REC_CAP = 1e9;', 'nocap catches'), 'var NFL_WR_YDS_CAP = 1950;', 'var NFL_WR_YDS_CAP = 1e9;', 'nocap WR yards'), 'var NFL_TE_YDS_CAP = 1400;', 'var NFL_TE_YDS_CAP = 1e9;', 'nocap TE yards'),
+  onesource: t => patch(t, N_THIN100, 'lastPick: 100, lastTotal: 6726012, years: 4 }', 'onesource'),
+  nosecond: t => patch(t, N_ROW32, 'row(32, 16783950)', 'nosecond'),
   swap: t => patch(patch(t, N_ROW1, 'row(1, 54675584, 55550396)', 'swap row 1'), N_ROW2, 'row(2, 57271500, 58191906)', 'swap row 2'),
 };
 /* Every needle is proved present on a plain run too, so a rename in src
@@ -281,33 +299,56 @@ for (const pos of POSITIONS) {
 /* ── 2: rookie pay is the slot, and where kickers go ── */
 console.log('2) rookie pay is the draft slot, and no kicker goes before round four');
 {
-  /* 2a: the table, held to its own rules. */
+  /* 2a: the table, held to its own rules. Tag 2 is its shape; tag 2s is its SOURCES (the lead's ruling of
+     2026-10-09: no figure ships on one source). A figure is two sourced when the table carries a second
+     source's total beside it and the two are inside 2 percent. A figure with no second beside it fails here
+     whether or not it is marked. A later round end with no figure (null) is THIN and must be marked `held`. */
   const T = NEW.NFL_ROOKIE_SCALE;
-  let heldRows = 0, twoSourced = 0;
+  const apart = (a, b) => Math.abs(a - b) / Math.min(a, b);
+  let heldRows = 0;
   for (const [era, scale] of Object.entries(T)) {
     if ('heldAs' in scale) { heldRows += 1; console.log(`   table ${era}: HELD as a whole, paid the ${scale.heldAs.of} slot times ${scale.heldAs.scale}`); continue; }
     const picks = scale.firstRound.map(r => r.pick).sort((a, b) => a - b);
     if (picks.length !== 32 || picks.some((p, i) => p !== i + 1)) fail('2', `table ${era}: round one must be picks 1 to 32 once each, found ${picks.length} rows`);
+    let twoSourced = 0;
     for (const r of scale.firstRound) {
       if (!(r.total > 0) || !(r.years > 0)) fail('2', `table ${era} pick ${r.pick}: a total or a length at or under zero`);
-      if (r.held || r.second === undefined) { heldRows += 1; continue; }
-      twoSourced += 1;
+      if (typeof r.second !== 'number' || r.held) { fail('2s', `table ${era} pick ${r.pick}: ONE SOURCED. Its figure (${r.total}) has no second source beside it, and round one has no rule for a thin pick, so it cannot ship`); continue; }
       if (r.second < r.total) fail('2', `table ${era} pick ${r.pick}: the stored total must be the lower of the two sources`);
-      if (Math.abs(r.second - r.total) / r.total > 0.02) fail('2', `table ${era} pick ${r.pick}: the two sources are more than 2 percent apart (${r.total} and ${r.second})`);
+      if (apart(r.second, r.total) > 0.02) { fail('2s', `table ${era} pick ${r.pick}: the two sources are more than 2 percent apart (${r.total} and ${r.second}): they disagree, so neither ships`); continue; }
+      twoSourced += 1;
     }
     const rounds = scale.laterRounds.map(r => r.round);
     if (rounds.join(',') !== '2,3,4,5,6,7') fail('2', `table ${era}: later rounds must be 2 to 7 in order, found ${rounds.join(',')}`);
     /* Every pick from 33 on belongs to exactly one round: each round starts on the pick after the one before
        it ended (the real ends are pinned, two sourced, in src/test/usCareerRookieDeal.test.ts). */
     let endOfRoundBefore = 32;
+    const sourcedEnds = [], thinEnds = [];
     for (const r of scale.laterRounds) {
       if (r.firstPick !== endOfRoundBefore + 1) fail('2', `table ${era} round ${r.round}: it starts at pick ${r.firstPick}, and the round before it ended at ${endOfRoundBefore}`);
       endOfRoundBefore = r.lastPick;
-      if (!(r.firstTotal > 0) || !(r.lastTotal > 0) || r.firstPick >= r.lastPick) fail('2', `table ${era} round ${r.round}: a total at or under zero, or picks out of order`);
-      heldRows += r.held === 'both' ? 2 : r.held ? 1 : 0;
+      if (r.firstPick >= r.lastPick || !(r.years > 0)) fail('2', `table ${era} round ${r.round}: picks out of order, or a length at or under zero`);
+      for (const [end, pick, total, second] of [['first', r.firstPick, r.firstTotal, r.firstSecond], ['last', r.lastPick, r.lastTotal, r.lastSecond]]) {
+        const marked = r.held === end || r.held === 'both';
+        if (total === null || total === undefined) {
+          thinEnds.push(pick); heldRows += 1;
+          if (!marked) fail('2s', `table ${era} pick ${pick}: no figure and not marked held`);
+          if (second !== undefined) fail('2s', `table ${era} pick ${pick}: a thin end still carries a second figure (${second})`);
+          continue;
+        }
+        if (!(total > 0)) fail('2', `table ${era} pick ${pick}: a total at or under zero`);
+        if (marked) fail('2s', `table ${era} pick ${pick}: marked held and still carries a figure (${total}). A thin end ships no figure`);
+        if (typeof second !== 'number') { fail('2s', `table ${era} pick ${pick}: ONE SOURCED and not marked. Its figure (${total}) has no second source beside it`); continue; }
+        if (apart(second, total) > 0.02) { fail('2s', `table ${era} pick ${pick}: the two sources are more than 2 percent apart (${total} and ${second}): they disagree, so neither ships`); continue; }
+        sourcedEnds.push(pick);
+      }
+    }
+    /* A thin end is paid on the line between the two sourced ends either side of it, so it needs one each side. */
+    for (const q of thinEnds) {
+      if (!sourcedEnds.some(p => p < q) || !sourcedEnds.some(p => p > q)) fail('2s', `table ${era} pick ${q}: thin, with no two sourced pick on both sides of it to draw the line between`);
     }
     if (!(scale.undrafted > 0)) fail('2', `table ${era}: the minimum is at or under zero`);
-    console.log(`   table ${era} (${scale.season}): 32 first round rows, ${twoSourced} two sourced within 2 percent; later rounds ${scale.laterRounds.map(r => `${r.round}${r.held ? ` held ${r.held}` : ''}`).join(', ')}`);
+    console.log(`   table ${era} (${scale.season}): 32 first round rows, ${twoSourced} two sourced within 2 percent; later round ends two sourced within 2 percent: ${sourcedEnds.join(', ')}; THIN, no figure in the table: ${thinEnds.join(', ') || 'none'}`);
   }
   console.log(`   held values in the tables: ${heldRows}`);
   /* Pay never rises with the pick, from the first pick to the minimum. */
@@ -316,6 +357,54 @@ console.log('2) rookie pay is the draft slot, and no kicker goes before round fo
     for (let pick = 1; pick <= 224; pick += 1) { const s = NEW.rookieDeal('nfl', era, pick).salary; if (s > prev) { rises += 1; fail('2', `${era}: pick ${pick} is paid ${s}, more than pick ${pick - 1} on ${prev}`); } prev = s; }
     if (NEW.rookieDeal('nfl', era, 0).salary > prev) fail('2', `${era}: the undrafted minimum is over the last pick's pay`);
     console.log(`   ${era}: pick 1 ${NEW.rookieDeal('nfl', era, 1).salary}M a year, pick 32 ${NEW.rookieDeal('nfl', era, 32).salary}M, pick 33 ${NEW.rookieDeal('nfl', era, 33).salary}M, pick 97 ${NEW.rookieDeal('nfl', era, 97).salary}M, pick 224 ${NEW.rookieDeal('nfl', era, 224).salary}M, undrafted ${NEW.rookieDeal('nfl', era, 0).salary}M; ${rises} rises`);
+  }
+  /* 2d (tag 2t): a thin end is paid on the line, never an estimate. The line is rebuilt HERE from the table's two
+     sourced ends alone (a figure with its second inside 2 percent), by real pick number, and every slot of
+     rounds two to seven must be paid the point on it to the dollar. So a figure the table carries on one
+     source cannot be what a slot is paid without this going red. Then each thin end's own slot is held
+     against the one source's figure for it: the seven estimates are kept in this harness, and nowhere in src,
+     only so the check can say no slot is paid one. The list is also the table's thin list, to the pick: a
+     hold lifted or added has to touch this line too. Measured on the table of 2026-10-09: the line is 0.09M a
+     year under the estimate at pick 100, 0.16M over it at pick 101 and 0.04M to 0.05M over it from 141 on. */
+  {
+    const ONE_SOURCE_ESTIMATES = { 100: 6726012, 101: 5707632, 141: 4955668, 181: 4724112, 182: 4714212, 216: 4590172, 217: 4564644 };
+    const now = T.now;
+    const sourced = [], thin = [];
+    for (const r of now.laterRounds) {
+      for (const [pick, total, second] of [[r.firstPick, r.firstTotal, r.firstSecond], [r.lastPick, r.lastTotal, r.lastSecond]]) {
+        if (typeof total === 'number' && typeof second === 'number' && Math.abs(second - total) / Math.min(second, total) <= 0.02) sourced.push([pick, total]);
+        else thin.push(pick);
+      }
+    }
+    if (thin.join(',') !== Object.keys(ONE_SOURCE_ESTIMATES).join(',')) fail('2t', `the table's thin ends are [${thin.join(', ')}] and this check knows the estimates for [${Object.keys(ONE_SOURCE_ESTIMATES).join(', ')}]: a hold was lifted or added without this list`);
+    const lineAt = q => {
+      let a = null, b = null;
+      for (const e of sourced) { if (e[0] <= q) a = e; if (e[0] >= q && b === null) b = e; }
+      if (!a || !b) return null;
+      return a[0] === b[0] ? a[1] : a[1] + (b[1] - a[1]) * (q - a[0]) / (b[0] - a[0]);
+    };
+    let slots = 0, offLine = 0;
+    for (let pick = 33; pick <= 224; pick += 1) {
+      const round = Math.ceil(pick / 32);
+      const r = now.laterRounds.find(x => x.round === round);
+      const q = r.firstPick + (r.lastPick - r.firstPick) * ((pick - (round - 1) * 32 - 1) / 31);
+      const want = lineAt(q);
+      const got = NEW.nflSlot(now, pick).perYear * r.years;
+      slots += 1;
+      if (want === null || Math.abs(got - want) > 1) { offLine += 1; fail('2t', `slot ${pick} (real pick ${q.toFixed(1)}) is paid ${Math.round(got)} over ${r.years} years, and the line between the two sourced picks either side of it says ${want === null ? 'nothing' : Math.round(want)}`); }
+    }
+    const said = [];
+    for (const [key, estimate] of Object.entries(ONE_SOURCE_ESTIMATES)) {
+      const q = Number(key);
+      const r = now.laterRounds.find(x => x.firstPick === q || x.lastPick === q);
+      if (!r) { fail('2t', `real pick ${q} is not the end of a round in the table`); continue; }
+      const slot = (r.round - 1) * 32 + (r.firstPick === q ? 1 : 32);
+      const got = NEW.nflSlot(now, slot).perYear * r.years;
+      if (Math.abs(got - estimate) <= 1) fail('2t', `slot ${slot} (real pick ${q}) is paid ${Math.round(got)} over ${r.years} years: that is the one source's own figure, which the table may not ship`);
+      said.push(`${q} ${Math.round(got)} (${got > estimate ? '+' : ''}${(100 * (got - estimate) / estimate).toFixed(1)} percent on the estimate)`);
+    }
+    if (slots !== 192) fail('2t', `only ${slots} later round slots were read, so the check is not whole`);
+    console.log(`   thin ends: ${slots} slots of rounds two to seven read, ${offLine} off the line between two sourced picks; what the ${thin.length} thin ends are paid over four years: ${said.join('; ')}`);
   }
   /* 2b: every quick start is paid its slot; the base arm's first pick is printed beside it. */
   for (const era of ['now', 'y2005']) {

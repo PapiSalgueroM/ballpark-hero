@@ -8,7 +8,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { NFL_ROOKIE_SCALE } from '@/data/nflRookieScale';
-import { rookieDeal, nflSlot, NFL_PICKS_A_ROUND, NFL_ROUNDS } from '@/lib/usCareerRookieDeal';
+import { rookieDeal, nflSlot, nflRoundEndTotal, NFL_PICKS_A_ROUND, NFL_ROUNDS } from '@/lib/usCareerRookieDeal';
 import { nflEraById } from '@/lib/nflMyCareer';
 
 const pay = (era: string, pick: number) => rookieDeal('nfl', era, pick)!.salary;
@@ -23,16 +23,16 @@ describe('Round 1104: the NFL rookie deal', () => {
   });
 
   it('pays later rounds by place in the round, from the real round first pick to its last', () => {
-    const rounds = NFL_ROOKIE_SCALE.now.laterRounds;
-    for (const r of rounds) {
+    const table = NFL_ROOKIE_SCALE.now;
+    for (const r of table.laterRounds) {
       const first = (r.round - 1) * NFL_PICKS_A_ROUND + 1;
       const last = r.round * NFL_PICKS_A_ROUND;
-      expect(pay('now', first), `round ${r.round} first`).toBe(Math.round(r.firstTotal / r.years / 100_000) / 10);
-      expect(pay('now', last), `round ${r.round} last`).toBe(Math.round(r.lastTotal / r.years / 100_000) / 10);
+      expect(pay('now', first), `round ${r.round} first`).toBe(Math.round(nflRoundEndTotal(table, r.firstPick) / r.years / 100_000) / 10);
+      expect(pay('now', last), `round ${r.round} last`).toBe(Math.round(nflRoundEndTotal(table, r.lastPick) / r.years / 100_000) / 10);
     }
     expect(pay('now', 33)).toBe(3.3);
     expect(pay('now', 64)).toBe(2);
-    expect(pay('now', 97)).toBe(1.4);
+    expect(pay('now', 97)).toBe(1.6);
     expect(pay('now', 224)).toBe(1.1);
   });
 
@@ -44,8 +44,8 @@ describe('Round 1104: the NFL rookie deal', () => {
     for (const r of table.laterRounds) {
       const first = (r.round - 1) * NFL_PICKS_A_ROUND + 1;
       const last = r.round * NFL_PICKS_A_ROUND;
-      expect(nflSlot(table, first).perYear, `round ${r.round} first`).toBeCloseTo(r.firstTotal / r.years, 6);
-      expect(nflSlot(table, last).perYear, `round ${r.round} last`).toBeCloseTo(r.lastTotal / r.years, 6);
+      expect(nflSlot(table, first).perYear, `round ${r.round} first`).toBeCloseTo(nflRoundEndTotal(table, r.firstPick) / r.years, 6);
+      expect(nflSlot(table, last).perYear, `round ${r.round} last`).toBeCloseTo(nflRoundEndTotal(table, r.lastPick) / r.years, 6);
       for (let p = first + 1; p <= last; p += 1) {
         expect(nflSlot(table, p).perYear, `pick ${p} under pick ${p - 1}`).toBeLessThan(nflSlot(table, p - 1).perYear);
       }
@@ -88,21 +88,44 @@ describe('Round 1104: the NFL rookie deal', () => {
     expect(rookieDeal('nfl', 'y2005', 1)!.held).toBe(true);
   });
 
-  /* The closing pass of 2026-10-08. Which later round ends are two sourced is the table's own claim, so it is
-     pinned: lifting a hold, or adding one, has to touch this line as well as the header that names the
-     sources. Seven ends are still on one source. Pick 140 left the list that day, when a report of the
-     signed deal was found (5,169,036 against the estimate's 5,182,896); the signed figure is the one stored,
-     and it moves one slot: the 19th pick of round four is paid 1.3M a year, where the estimate paid 1.4M. */
-  it('names the seven later round ends that are still one sourced, and pays pick 140 its signed figure', () => {
+  /* The lead's ruling of 2026-10-09: a one sourced figure is never paid, and when two sources disagree neither
+     ships. Seven later round ends are THIN: the table holds no figure for them, and they are paid on the
+     straight line between the nearest two sourced picks. Pinned by name, so lifting a hold (a report of the
+     signed deal turning up) has to touch this case as well as the header that names the sources. */
+  it('holds the seven thin later round ends: no figure of their own, paid on the line between two sourced picks', () => {
     const table = NFL_ROOKIE_SCALE.now;
-    const held = table.laterRounds.flatMap(r => [
-      ...(r.held === 'first' || r.held === 'both' ? [r.firstPick] : []),
-      ...(r.held === 'last' || r.held === 'both' ? [r.lastPick] : []),
+    const ends = table.laterRounds.flatMap(r => [
+      { pick: r.firstPick, total: r.firstTotal, second: r.firstSecond, held: r.held === 'first' || r.held === 'both' },
+      { pick: r.lastPick, total: r.lastTotal, second: r.lastSecond, held: r.held === 'last' || r.held === 'both' },
     ]);
-    expect(held).toEqual([100, 101, 141, 181, 182, 216, 217]);
+    const thin = ends.filter(e => e.total === null);
+    expect(thin.map(e => e.pick)).toEqual([100, 101, 141, 181, 182, 216, 217]);
+    for (const e of thin) {
+      expect(e.held, `pick ${e.pick} is marked`).toBe(true);
+      expect(e.second, `pick ${e.pick} carries no second figure either`).toBeUndefined();
+    }
+    const sourced = ends.filter(e => e.total !== null);
+    expect(sourced.map(e => e.pick)).toEqual([33, 64, 65, 140, 257]);
+    for (const e of sourced) {
+      expect(e.held, `pick ${e.pick} is not marked`).toBe(false);
+      expect(Math.abs(e.second! - e.total!) / Math.min(e.second!, e.total!), `pick ${e.pick}: two sources inside 2 percent`).toBeLessThanOrEqual(0.02);
+    }
     expect(table.laterRounds.find(r => r.round === 4)!.lastTotal).toBe(5_169_036);
-    expect(pay('now', 114)).toBe(1.4);
-    expect(pay('now', 115)).toBe(1.3);
+    /* The line, worked by hand: 100 and 101 between pick 65 and pick 140, the other five between 140 and 257. */
+    const line = (a: [number, number], b: [number, number], q: number) => a[1] + (b[1] - a[1]) * (q - a[0]) / (b[0] - a[0]);
+    for (const q of [100, 101]) expect(nflRoundEndTotal(table, q), `pick ${q}`).toBeCloseTo(line([65, 7_400_000], [140, 5_169_036], q), 6);
+    for (const q of [141, 181, 182, 216, 217]) expect(nflRoundEndTotal(table, q), `pick ${q}`).toBeCloseTo(line([140, 5_169_036], [257, 4_502_600], q), 6);
+    expect(Math.round(nflRoundEndTotal(table, 101))).toBe(6_329_137);
+    expect(Math.round(nflRoundEndTotal(table, 217))).toBe(4_730_441);
+    /* A two sourced end is its own figure, untouched by the line. */
+    expect(nflRoundEndTotal(table, 65)).toBe(7_400_000);
+    expect(nflRoundEndTotal(table, 257)).toBe(4_502_600);
+    /* What that reads as in the game: round three closes and round four opens on 1.6M a year. */
+    expect(pay('now', 96)).toBe(1.6);
+    expect(pay('now', 97)).toBe(1.6);
+    expect(pay('now', 115)).toBe(1.4);
+    expect(pay('now', 129)).toBe(1.3);
+    expect(pay('now', 193)).toBe(1.2);
   });
 
   it('pays a held era the named era slot times its scale, and the scale is the 2005 era money scale', () => {
