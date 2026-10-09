@@ -1,0 +1,6 @@
+# Release AP, the lead's one live pass of the two browser checks that need the real database to read from (writes are intercepted by the harness itself)
+#!serve
+#!playwright
+#!serial
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+playSoccerCareer: node scripts/playSoccerCareer.mjs

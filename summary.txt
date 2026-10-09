@@ -1,0 +1,3 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simWritesAreSent exit=0 16s | simWritesAreSent: green. Every write is sent, and a finished round proves it on the wire.
+playSoccerCareer exit=0 479s | ALL SOCCER CAREER WALK CHECKS PASSED
