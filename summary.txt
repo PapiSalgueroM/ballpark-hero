@@ -1,0 +1,17 @@
+sc-s5 exit=1 7s | simUsSeasonCentre: 95 checks, 1 failed
+sc-s6 exit=1 7s | simUsSeasonCentre: 96 checks, 1 failed
+sc-s7 exit=1 7s | simUsSeasonCentre: 96 checks, 1 failed
+sc-s8 exit=1 8s | simUsSeasonCentre: 97 checks, 1 failed
+sc-s9 exit=1 7s | simUsSeasonCentre: 96 checks, 1 failed
+sc-s10 exit=1 7s | simUsSeasonCentre: 95 checks, 1 failed
+sc-s11 exit=1 6s | simUsSeasonCentre: 95 checks, 1 failed
+sc-s12 exit=1 7s | simUsSeasonCentre: 96 checks, 1 failed
+sc-s13 exit=1 7s | simUsSeasonCentre: 96 checks, 1 failed
+sc-s14 exit=1 7s | simUsSeasonCentre: 97 checks, 1 failed
+ap-sc-s0 exit=0 8s | on release-ap-int at cbff760c9245267fb64bb59ae5037f441b2d0395: exit 0
+ap-sc-s1 exit=0 8s | on release-ap-int at cbff760c9245267fb64bb59ae5037f441b2d0395: exit 0
+ap-sc-s2 exit=0 8s | on release-ap-int at cbff760c9245267fb64bb59ae5037f441b2d0395: exit 0
+ap-sc-s3 exit=0 8s | on release-ap-int at cbff760c9245267fb64bb59ae5037f441b2d0395: exit 0
+ap-sc-s4 exit=0 9s | on release-ap-int at cbff760c9245267fb64bb59ae5037f441b2d0395: exit 0
+ap-sc-all exit=0 22s | on release-ap-int at cbff760c9245267fb64bb59ae5037f441b2d0395: exit 0
+rec-digest exit=0 95s | plain exit 0

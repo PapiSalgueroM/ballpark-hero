@@ -1,0 +1,13 @@
+== the gate: DIGEST_RECORD=1 DIGEST_ALLOW='nba|*' on f4f718daefd3f8e1715afd7e1425e3143c9e68dd
+[22m[39mdigest: 10 of 58 keys moved (80 of 464 careers; 0 careers were below zero on the committed code); allow=nba|*; outside the allow list: 0
+digest moved: nba|now|PG nba|now|SG nba|now|SF nba|now|PF nba|now|C nba|y2004|PG nba|y2004|SG nba|y2004|SF nba|y2004|PF nba|y2004|C
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+record exit 0
+nfl: 0 of 16 keys moved, 0 careers
+nba: 10 of 10 keys moved, 80 careers
+mlb: 0 of 22 keys moved, 0 careers
+nhl: 0 of 10 keys moved, 0 careers
+56ae5b3fce6bfc833a605fa94732f60413d5646fe1fd1c5ce8e7b47098ecbe18  src/test/fixtures/usCareerTruthDigest.json
+== the plain run on the new fixture
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+plain exit 0

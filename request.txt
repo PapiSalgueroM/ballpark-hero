@@ -1,0 +1,17 @@
+rec-digest: bash .rc/x/rec4.sh
+sc-s5: SEEDSET=5 node scripts/simUsSeasonCentre.mjs
+sc-s6: SEEDSET=6 node scripts/simUsSeasonCentre.mjs
+sc-s7: SEEDSET=7 node scripts/simUsSeasonCentre.mjs
+sc-s8: SEEDSET=8 node scripts/simUsSeasonCentre.mjs
+sc-s9: SEEDSET=9 node scripts/simUsSeasonCentre.mjs
+sc-s10: SEEDSET=10 node scripts/simUsSeasonCentre.mjs
+sc-s11: SEEDSET=11 node scripts/simUsSeasonCentre.mjs
+sc-s12: SEEDSET=12 node scripts/simUsSeasonCentre.mjs
+sc-s13: SEEDSET=13 node scripts/simUsSeasonCentre.mjs
+sc-s14: SEEDSET=14 node scripts/simUsSeasonCentre.mjs
+ap-sc-s0: bash .rc/x/other.sh release-ap-int 'SEEDSET=0 node scripts/simUsSeasonCentre.mjs'
+ap-sc-s1: bash .rc/x/other.sh release-ap-int 'SEEDSET=1 node scripts/simUsSeasonCentre.mjs'
+ap-sc-s2: bash .rc/x/other.sh release-ap-int 'SEEDSET=2 node scripts/simUsSeasonCentre.mjs'
+ap-sc-s3: bash .rc/x/other.sh release-ap-int 'SEEDSET=3 node scripts/simUsSeasonCentre.mjs'
+ap-sc-s4: bash .rc/x/other.sh release-ap-int 'SEEDSET=4 node scripts/simUsSeasonCentre.mjs'
+ap-sc-all: bash .rc/x/other.sh release-ap-int 'node scripts/simUsSeasonCentre.mjs'
