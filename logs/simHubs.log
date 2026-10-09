@@ -1,0 +1,32 @@
+1) registry: 13 categories, 133 games, 6 hubs
+   HUB_NAV carries the same 6 hubs as SPORT_HUBS
+2) the hub list, the router and the sitemap agree
+   6 hubs, all mounted, all in the sitemap, 0 pages gathering categories on their own
+   173 shipped documents read
+3) every hub links every game it gathers, and its count is true
+   /soccer: 36/36 games linked, printed count 36
+   /pro-basketball: 17/17 games linked, printed count 17
+   /hockey: 12/12 games linked, printed count 12
+   /pro-football: 11/11 games linked, printed count 11
+   /baseball: 11/11 games linked, printed count 11
+   /college: 7/7 games linked, printed count 7
+4) no shipped page tells the reader it has nothing
+   0 pages claiming zero, out of 173
+5) every game is reachable, and chrome is not allowed to do the work
+   20 chrome links, 133 games graded on body links: min 5, median 8, max 16
+6) every game on a hub ships as an h3 holding its link, and every section heading names the sport
+   /soccer: 36/36 games as h3 links, 6 section headings checked
+   /pro-basketball: 17/17 games as h3 links, 6 section headings checked
+   /hockey: 12/12 games as h3 links, 6 section headings checked
+   /pro-football: 11/11 games as h3 links, 6 section headings checked
+   /baseball: 11/11 games as h3 links, 6 section headings checked
+   /college: 7/7 games as h3 links, 6 section headings checked
+7) no hub prints a bare "/route" where a game's name and link should be
+   /soccer: 0 bare paths in the saved page
+   /pro-basketball: 0 bare paths in the saved page
+   /hockey: 0 bare paths in the saved page
+   /pro-football: 0 bare paths in the saved page
+   /baseball: 0 bare paths in the saved page
+   /college: 0 bare paths in the saved page
+
+simHubs: green. Every hub contains what it promises, and no page tells anyone it is empty.

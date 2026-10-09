@@ -1,0 +1,16 @@
+1) every shipped page carries structured data, and it parses
+   171 submitted pages, 0 with none, 0 unparseable, 0 with no file
+2) no page claims to be something it is not
+   171 pages typed correctly, 0 wrong
+3) the markup a game page generates actually ships
+   133 game pages, 0 without FAQ markup, 0 without breadcrumbs, 0 with a broken trail
+3b) a game in a sport with a hub ships its trail through that hub
+   94 game pages trail through their hub, 39 have no hub and keep two steps, 0 wrong
+4) every shipped page says who this site is
+   171 pages, 0 without WebSite, 0 without Organization, 0 without WebApplication, 0 unlinked; home page ships 3 objects
+4b) the template block and the library have not drifted apart
+   template declares WebSite and Organization and WebApplication; the library references /#org, /#website, /#webapp
+5) the classification table has not fallen behind the route list
+   37 routes classified by hand, 133 by the registry, 0 unclassified, 0 stale
+
+simSchema: green. Every page says what it is, and everything it generates reaches the file a crawler reads.

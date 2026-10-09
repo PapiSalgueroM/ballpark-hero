@@ -1,0 +1,16 @@
+ M public/emoji-guess/index.html
+ M public/f1-constructor/index.html
+ M public/fantasy-draft/index.html
+ M public/footle/index.html
+ M public/free-kick/index.html
+ M public/gauntlet-draft/index.html
+ M public/mystery-box/index.html
+ M public/nba-gauntlet-draft/index.html
+ M public/nfl-gauntlet-draft/index.html
+ M public/perfect-lineup-f1/index.html
+ M public/perfect-lineup-nhl/index.html
+ M public/privacy/index.html
+ M public/sitemap.xml
+ M public/terms/index.html
+ M public/whats-new/index.html
+ M scripts/data/lastmod.json

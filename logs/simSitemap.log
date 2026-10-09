@@ -1,0 +1,12 @@
+1) Sanity: the three sources parsed
+   171 sitemap URLs, 181 live routes, 11 redirect routes, 133 registry games
+2) No submitted URL is a redirect
+   clean, the Search Console failure cannot recur from here
+3) Every registry game is submitted
+   all 133 games present, including the newest
+4) Every submitted URL has a real route
+   no orphans submitted
+5) every lastmod is a claim the shipped files back up
+   171 rows, 171 ledger entries, 0 unbacked, 0 disagreeing, 0 pointing at a version that has been rewritten, 0 in the future
+
+simSitemap: green. Google only ever hears about real pages.
