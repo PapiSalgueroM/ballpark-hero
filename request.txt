@@ -1,0 +1,7 @@
+# Release AP proof, part 3a (serial, served build): the translated page walk and the blocked storage walk, plain
+#!serve
+#!playwright
+#!serial
+translated-plain: ENGINES=chromium node scripts/playTranslatedPage.mjs
+storage-main: PLAY_STORAGE_NATIVE=require node scripts/playStorageBlocked.mjs
+playHomeFold: BASE=http://localhost:4173 node scripts/playHomeFold.mjs
