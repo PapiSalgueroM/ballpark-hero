@@ -1,0 +1,16 @@
+simApproaches exit=0 3s | ALL APPROACH CHECKS PASSED
+simBoard exit=0 5s | ALL BOARD CHECKS PASSED
+simAwardRaces exit=0 10s | ALL AWARD RACE CHECKS PASSED
+simBooks exit=0 9s | simBooks: green. Every number these games show agrees with every other number they show.
+simBoardAsks exit=0 28s | simBoardAsks: green. Every ask a board makes can be met, and nobody real is quoted.
+simBracketMoment exit=1 20s | 1 FAILURES (by section {"3":1})
+simClubManagerALeague exit=0 9s | simClubManagerALeague: all checks passed
+simClubManager exit=0 31s | ALL CLUB MANAGER SIMS PASSED
+simClubManagerCalendar exit=0 39s | simClubManagerCalendar: all green
+simClubManagerDeals exit=0 13s | simClubManagerDeals: green. The desk reads, the table binds, and nobody signs on a handshake.
+simClubManagerDecisions exit=0 15s | simClubManagerDecisions: 0 findings
+simClubManagerEraMidSeason exit=0 9s | simClubManagerEraMidSeason: PASS. His 2005 save plays every league, the picker lists one La Liga, and the Cups tab shows the cup it names.
+simClubManagerEraUcl exit=1 35s | simClubManagerEraUcl: 1 FAILURE(S)
+simClubManagerFacilities exit=0 6s | simClubManagerFacilities: PASS. Four facilities that cost what the desk says, help what they say, and tax nobody who ignores them.
+simClubManagerBudget exit=0 136s | simClubManagerBudget: PASS
+simAcademy exit=0 273s | ALL ACADEMY CHECKS PASSED

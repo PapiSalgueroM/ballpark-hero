@@ -1,0 +1,18 @@
+1) Day one levels come from stature, every club inside 1 to 10
+   846 clubs checked (52 tier 1 all on 8 or more, 422 floor budget all on 2 or less); Real Madrid 10/9/9/9, Wrexham 1/1/1/1
+2) Upgrades charge exactly what the desk quotes, refuse what the kitty cannot cover, stop at 10
+   54 upgrades charged to the pound across three clubs; training ground 1 to 10 costs 245m today, 185m in an era; stadium 370m
+3) A floor budget club buying every week still cannot reach 10
+   Wrexham (8m floor) bought the cheapest level it could afford every week: ended on 1/2/2/3 after spending 13m across 62 weeks, 3.24m left
+4) Each effect runs the right way and stays bounded, measured with and without
+   training ground: mean drift of 82 players with headroom across 10 clubs, level 1 1.537 vs level 10 1.732 (1.127x)
+   developmentRate for a 60 rated 19 year old with an 80 ceiling: level 1 2.543, level 10 2.600; the same lad already at 80: 0.150
+   medical: mean spell 3.01 weeks at level 1, 2.00 at level 10 (0.665x) over 1000 draws; player weeks spent injured over one Everton season: 16 at level 1, 9 at level 10
+   dressing room: a squad on 30 morale after eight weeks, level 1 30.0, level 10 35.6 (lift 0.7 a week), never past 70
+   stadium: food money a head x1 at level 1, x1.18 at level 10
+5) Every multiplier reaches exactly 1 at level 1, and match strength never reads a facility
+   growth x1, medical identity, dressing room +0, stadium x1 at level 1; myMatchStrength and the clamp read on the comment stripped source
+6) A save from before the desk, and a mangled block, both open on the club's day one levels
+   9 wreckages repaired to 7/6/6/6; two old expansions open the stadium on 9; a garbage block loads through loadCareer; stay keeps, move drops
+
+simClubManagerFacilities: PASS. Four facilities that cost what the desk says, help what they say, and tax nobody who ignores them.

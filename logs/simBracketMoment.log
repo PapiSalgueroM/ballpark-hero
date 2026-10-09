@@ -1,0 +1,9 @@
+1) The moment names exactly the ties the engine settled and drew
+   914 steps, 1702 steps per competition with nothing settled (all silent), 300 ladder rungs, 18 season keys
+   moments by round: cup {"R16":18,"QF":18,"SF":18,"F":18}, Champions League {"QF":16,"SF":16,"F":16,"R16":6}; finals the club won: 11; steps that settled two rounds: 0
+2) The cards in a DOM: classes only on the new ties, a remount plays nothing
+   vitest exit 0, 9 passed
+3) The page must not jump while the moment plays (chromium, the site's Tailwind)
+  FAIL: the browser did not load, so the page was never measured: Cannot find module '/home/claude/.npm-global/lib/node_modules/playwright/index.js' imported from /home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/playwrightLoader.mjs
+
+1 FAILURES (by section {"3":1})

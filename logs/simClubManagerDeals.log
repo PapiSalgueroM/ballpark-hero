@@ -1,0 +1,35 @@
+1) Your recruitment desk reads a fee, and a better one reads it tighter
+   400 players read: level 1 mean width 29.4% of value, level 10 0.0%
+   the truth was inside the band 100% of the time at level 1 and 100% at level 10
+   spread at level 1 0.300, at level 10 0.020
+2) An extreme lowball ends the conversation, a merely low one does not
+   30% of the ask: 24/24 ended the talks on the spot, 24 went cold
+   40% of the ask: 24/24 ended the talks on the spot, 24 went cold
+   50% of the ask: 24/24 ended the talks on the spot, 24 went cold
+   60% of the ask: 0/24 ended the talks on the spot, 0 went cold
+   70% of the ask: 0/24 ended the talks on the spot, 0 went cold
+   80% of the ask: 0/24 ended the talks on the spot, 0 went cold
+   90% of the ask: 0/24 ended the talks on the spot, 0 went cold
+   100% of the ask: 0/24 ended the talks on the spot, 0 went cold
+3) Repeating one offer no longer closes a deal for free
+   76% repeated: 0 agreed, 18 ran out of patience, 22 hijacked, 0 never resolved, of 40 (mean 4.6 rounds)
+   80% repeated: 2 agreed, 13 ran out of patience, 25 hijacked, 0 never resolved, of 40 (mean 5.3 rounds)
+   84% repeated: 7 agreed, 9 ran out of patience, 24 hijacked, 0 never resolved, of 40 (mean 4.5 rounds)
+   88% repeated: 18 agreed, 0 ran out of patience, 22 hijacked, 0 never resolved, of 40 (mean 4.4 rounds)
+   92% repeated: 28 agreed, 0 ran out of patience, 12 hijacked, 0 never resolved, of 40 (mean 3.8 rounds)
+   patience killed 40 deals across the sweep and 55 still closed
+4) The clubs agreeing signs nobody
+   12 fee agreements checked, none of them signed anybody
+5) His terms are a negotiation, and what is agreed is what is written down
+   10/10 deals closed on his own asking sheet, and the rung promised was the rung recorded on 10 of them
+   16/16 agents ended the meeting over a half sheet a rung down
+6) A loan carries an option to buy and a release figure
+   10 loans taken, 7 options exercised, 10 sent home early
+7) An instant buy and a met clause are the deals they always were
+   12 instant buys and 12 met clauses, all on the pre-506 shape
+8) A loan out can be recalled, and the club he is at can buy him
+   12 loans sent out, 12 recalled early, 8 rollovers played, 1 options taken up by the borrowing club
+9) Accepting a loan approach banks the number that was offered
+   4 loan approaches accepted at a number that is not loanOutFee
+
+simClubManagerDeals: green. The desk reads, the table binds, and nobody signs on a handshake.
