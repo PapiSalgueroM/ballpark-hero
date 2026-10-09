@@ -1,0 +1,165 @@
+A-390 entry reads: "📺 Week by week"
+A-390 viewer opened after 82 ms
+A-390 the press saved a season: true
+A-390 first visit: the how to sheet opened by itself: true
+A-390 HELP TEXT: How the Season Center works Your season was played the moment you pressed the button. This is that same season, game by game, so nothing here can change it. Your career is the same whether you watch or not. The teams, the divisions and how often you meet each one follow the league's standard schedule formula. Who you meet on which night, every score and every stat line are this career's own, not a real schedule. Your team's record is this career's own too. It always fits how your season ended: here a champion wins 11 to 15 of 17 and a team that missed the playoffs 2 to 9. If a contract talk comes up when you press Week by week, answer it first. If you play the year out, the season runs straight away and you can open it afterwards with Watch again. ▶ plays the next game. ⏩ jumps to the next big one (halfway, the last game). ⏭ goes straight to the end. 1x and 3x set the clock, Results shows each game at the final. WORKED EXAMPLES A game Say you are a quarterback. Game 9, away to the Los Angeles Rams. You lose 24-27 and throw for 286 yards and 2 touchdowns. Your record goes to 6-3. Your totals Whatever your season card says (4,210 passing yards and 31 touchdowns, say), every game here adds up to exactly that. A kicker makes every field goal his team scores in a game he plays. The scoreboard Each scoring drive goes on the board as it happens: 7 for a touchdown with the kick after it, 6 when that kick misses, 8 with a two point try, 3 for a field goal and 2 for a safety. A level game Now and then a game ends level. Ties are real in the NFL. Here a tie is not a win and not a loss, and your record shows it as 9-7-1. The playoffs show as a path, round by round, with the numbers your season card already has. From 2026 on, the league is this career's own world on today's format. Got it
+MEASURE A-390 help: docOverflow 0; off []; clipped []; moving ["DIV.cm-rise space-y-3 cmRise 0.45s","SPAN.cm-tick-in text-2xl font-black tabular-n cmTickIn 0.35s"]
+A-390 KICKOFF CARD: Arizona Cardinals 2026 · NFL 17 games · 9 home, 8 away · the league's schedule formula, this career's own draw FIRST FIVE 1 Home Seattle Seahawks 2 Away Seattle Seahawks 3 Home Washington Commanders 4 Home Kansas City Chiefs 5 Home Tennessee Titans ▶ Kick off ⏭ Straight to the season review Before the first game 0-0 Home 0-0 Away 0-0 Division 0-0 Conference 0-0 📋 Game log 🗓 Schedule 0 Played - Pass yds - TD - INT
+A-390 HEADER: Arizona Cardinals · 2026
+MEASURE A-390 kickoff: docOverflow 0; off []; clipped []; moving ["DIV.cm-rise space-y-3 cmRise 0.45s","SPAN.cm-tick-in text-2xl font-black tabular-n cmTickIn 0.35s"]
+A-390 1529 ms after kick off: full time shown false; feed lines 3
+A-390 full time after 4567 ms more
+A-390 GAME 1 STAGE: Game 1 · Home ARI 14-30 SEA FINAL Final Q1 14:00 🏈 Touchdown, Seattle Seahawks. Q1 13:00 🏈 Touchdown, Arizona Cardinals. Q1 9:00 🏈 Touchdown, Seattle Seahawks. Q1 2:00 🥅 Field goal, Seattle Seahawks. Q1 1:00 🥅 Field goal, Seattle Seahawks. Q2 4:00 🥅 Field goal, Seattle Seahawks. Q2 0:00 🏈 Touchdown! You throw it. Q4 8:00 🏈 Touchdown, Seattle Seahawks. 182 YDS 1 TD 0 INT After game 1 0-1 Home 0-1 Away 0-0 Streak L1 Division 0-1 Conference 0-1 Last 1: L 📋 Game log 🗓 Schedule 1 Played 182 Pass yds 1 TD 0 INT
+A-390 GAME 1 FEED: Q1 14:00 🏈 Touchdown, Seattle Seahawks. Q1 13:00 🏈 Touchdown, Arizona Cardinals. Q1 9:00 🏈 Touchdown, Seattle Seahawks. Q1 2:00 🥅 Field goal, Seattle Seahawks. Q1 1:00 🥅 Field goal, Seattle Seahawks. Q2 4:00 🥅 Field goal, Seattle Seahawks. Q2 0:00 🏈 Touchdown! You throw it. Q4 8:00 🏈 Touchdown, Seattle Seahawks.
+A-390 HIS LINE: 182 YDS 1 TD 0 INT
+MEASURE A-390 game1 final: docOverflow 0; off []; clipped []; moving ["DIV.cm-rise space-y-3 cmRise 0.45s","SPAN.cm-slam shrink-0 text-xl font-black tabu cmSlam 0.4s","SPAN.cm-slam font-bold text-foreground cmSlam 0.4s","LI.cm-tick-in flex gap-2 cmTickIn 0.35s","SPAN.cm-tick-in text-2xl font-black tabular-n cmTickIn 0.35s"]
+A-390 GAME 4 FEED: Q1 8:00 🏈 Touchdown, Arizona Cardinals. Q1 7:00 🥅 Field goal, Kansas City Chiefs. Q1 3:00 🥅 Field goal, Arizona Cardinals. Q2 5:00 🥅 Field goal, Kansas City Chiefs. Q2 3:00 🥅 Field goal, Arizona Cardinals. Q3 14:00 🏈 Touchdown, Kansas City Chiefs. Q3 8:00 🥅 Field goal, Arizona Cardinals. Q4 12:00 🏈 Touchdown, Kansas City Chiefs. Q4 8:00 🏈 Touchdown! You throw it.
+A-390 next big (true): HALFWAY First half: 8 games, 1,602 passing yards and 12 touchdowns Best so far: Game 8, W 30-9, 345 yards, 4 touchdowns After game 8 5-3 Home 2-2 Away 3-1 Streak W3 Division 0-2 Conference 2-2 Last 8: L L W W L W W W 📋 Game log 🗓 Schedule 8 Played 1,602 Pass yds 12 TD 12 INT
+MEASURE A-390 poster: docOverflow 0; off []; clipped []; moving ["DIV.cm-slam rounded-xl border border-border  cmSlam 0.4s","SPAN.cm-tick-in text-2xl font-black tabular-n cmTickIn 0.35s"]
+A-390 LOG: G8 A JAX W 30-9 345 YDS 4 TD 0 INT G7 A PHI W 31-24 227 YDS 1 TD 4 INT G6 A IND W 41-30 185 YDS 2 TD 3 INT G5 H TEN L 7-17 75 YDS 0 TD 0 INT G4 H KC W 23-20 117 YDS 1 TD 0 INT G3 H WAS W 42-31 283 YDS 3 TD 2 INT G2 A SEA L 28-34 188 YDS 0 TD 3 INT G1 H SEA L 14-30 182 YDS 1 TD 0 INT
+MEASURE A-390 log: docOverflow 0; off []; clipped []; moving ["DIV.cm-slam rounded-xl border border-border  cmSlam 0.4s"]
+A-390 SCHEDULE: ← Back 1 H Seattle Seahawks L 14-30 2 A Seattle Seahawks L 28-34 3 H Washington Commanders W 42-31 4 H Kansas City Chiefs W 23-20 5 H Tennessee Titans L 7-17 6 A Indianapolis Colts W 41-30 7 A Philadelphia Eagles W 31-24 8 A Jacksonville Jaguars W 30-9 9 H Houston Texans 10 H Los Angeles Rams 11 A San Francisco 49ers 12 A Carolina Panthers 13 H Detroit Lions 14 A New York Giants 15 H San Francisco 49ers 16 A Los Angeles Rams 17 H Dallas Cowboys LAST GAME 8 Played 1,602 Pass yds 12 TD 12 INT
+MEASURE A-390 schedule: docOverflow 0; off []; clipped []; moving []
+A-390 REVIEW: Season review 9-8 · Missed the playoffs 17 Games 2,962 Pass yds 17 Pass TD 18 INT Regular season, the same numbers as your season card. ⭐ Best game: Game 8, W 30-9 vs Jacksonville Jaguars, 345 yards, 4 touchdowns Last five: W W L W L After game 17 9-8 Home 4-5 Away 5-3 Streak L1 Division 2-4 Conference 6-6 Last 10: W L W L L W W L W L 📋 Game log 🗓 Schedule 17 Played 2,962 Pass yds 17 TD 18 INT
+MEASURE A-390 review: docOverflow 0; off []; clipped []; moving ["DIV.cm-rise cmRise 0.45s","DIV.cm-rise rounded-lg bg-muted/30 p-2 text- cmRise 0.45s","DIV.cm-rise text-xs cmRise 0.45s","DIV.cm-rise flex items-center gap-1 text-xs cmRise 0.45s","SPAN.cm-tick-in text-2xl font-black tabular-n cmTickIn 0.35s"]
+MEASURE A-390 help again: docOverflow 0; off []; clipped []; moving ["DIV.cm-rise cmRise 0.45s","DIV.cm-rise rounded-lg bg-muted/30 p-2 text- cmRise 0.45s","DIV.cm-rise text-xs cmRise 0.45s","DIV.cm-rise flex items-center gap-1 text-xs cmRise 0.45s","SPAN.cm-tick-in text-2xl font-black tabular-n cmTickIn 0.35s"]
+A-390 after watching and closing the save is the bytes the press saved: true
+A-390 entry after: ""; watch again false
+A-390 errors: []
+-- A-390 took 17805 ms
+A-390r entry reads: "📺 Week by week"
+A-390r viewer opened after 83 ms
+A-390r the press saved a season: true
+A-390r KICKOFF CARD: Arizona Cardinals 2026 · NFL 17 games · 9 home, 8 away · the league's schedule formula, this career's own draw FIRST FIVE 1 Home Seattle Seahawks 2 Away Seattle Seahawks 3 Home Washington Commanders 4 Home Kansas City Chiefs 5 Home Tennessee Titans ▶ Kick off ⏭ Straight to the season review Before the first game 0-0 Home 0-0 Away 0-0 Division 0-0 Conference 0-0 📋 Game log 🗓 Schedule 0 Played - Pass yds - TD - INT
+A-390r HEADER: Arizona Cardinals · 2026
+MEASURE A-390r kickoff: docOverflow 0; off []; clipped []; moving []
+A-390r 322 ms after kick off: full time shown true; feed lines 8
+MEASURE A-390r game1 reduced: docOverflow 0; off []; clipped []; moving []
+A-390r full time after 1 ms more
+A-390r GAME 1 STAGE: Game 1 · Home ARI 14-30 SEA FINAL Final Q1 14:00 🏈 Touchdown, Seattle Seahawks. Q1 13:00 🏈 Touchdown, Arizona Cardinals. Q1 9:00 🏈 Touchdown, Seattle Seahawks. Q1 2:00 🥅 Field goal, Seattle Seahawks. Q1 1:00 🥅 Field goal, Seattle Seahawks. Q2 4:00 🥅 Field goal, Seattle Seahawks. Q2 0:00 🏈 Touchdown! You throw it. Q4 8:00 🏈 Touchdown, Seattle Seahawks. 182 YDS 1 TD 0 INT After game 1 0-1 Home 0-1 Away 0-0 Streak L1 Division 0-1 Conference 0-1 Last 1: L 📋 Game log 🗓 Schedule 1 Played 182 Pass yds 1 TD 0 INT
+A-390r GAME 1 FEED: Q1 14:00 🏈 Touchdown, Seattle Seahawks. Q1 13:00 🏈 Touchdown, Arizona Cardinals. Q1 9:00 🏈 Touchdown, Seattle Seahawks. Q1 2:00 🥅 Field goal, Seattle Seahawks. Q1 1:00 🥅 Field goal, Seattle Seahawks. Q2 4:00 🥅 Field goal, Seattle Seahawks. Q2 0:00 🏈 Touchdown! You throw it. Q4 8:00 🏈 Touchdown, Seattle Seahawks.
+A-390r HIS LINE: 182 YDS 1 TD 0 INT
+MEASURE A-390r game1 final: docOverflow 0; off []; clipped []; moving []
+A-390r GAME 4 FEED: Q1 8:00 🏈 Touchdown, Arizona Cardinals. Q1 7:00 🥅 Field goal, Kansas City Chiefs. Q1 3:00 🥅 Field goal, Arizona Cardinals. Q2 5:00 🥅 Field goal, Kansas City Chiefs. Q2 3:00 🥅 Field goal, Arizona Cardinals. Q3 14:00 🏈 Touchdown, Kansas City Chiefs. Q3 8:00 🥅 Field goal, Arizona Cardinals. Q4 12:00 🏈 Touchdown, Kansas City Chiefs. Q4 8:00 🏈 Touchdown! You throw it.
+A-390r next big (true): HALFWAY First half: 8 games, 1,602 passing yards and 12 touchdowns Best so far: Game 8, W 30-9, 345 yards, 4 touchdowns After game 8 5-3 Home 2-2 Away 3-1 Streak W3 Division 0-2 Conference 2-2 Last 8: L L W W L W W W 📋 Game log 🗓 Schedule 8 Played 1,602 Pass yds 12 TD 12 INT
+MEASURE A-390r poster: docOverflow 0; off []; clipped []; moving []
+A-390r LOG: G8 A JAX W 30-9 345 YDS 4 TD 0 INT G7 A PHI W 31-24 227 YDS 1 TD 4 INT G6 A IND W 41-30 185 YDS 2 TD 3 INT G5 H TEN L 7-17 75 YDS 0 TD 0 INT G4 H KC W 23-20 117 YDS 1 TD 0 INT G3 H WAS W 42-31 283 YDS 3 TD 2 INT G2 A SEA L 28-34 188 YDS 0 TD 3 INT G1 H SEA L 14-30 182 YDS 1 TD 0 INT
+MEASURE A-390r log: docOverflow 0; off []; clipped []; moving []
+A-390r SCHEDULE: ← Back 1 H Seattle Seahawks L 14-30 2 A Seattle Seahawks L 28-34 3 H Washington Commanders W 42-31 4 H Kansas City Chiefs W 23-20 5 H Tennessee Titans L 7-17 6 A Indianapolis Colts W 41-30 7 A Philadelphia Eagles W 31-24 8 A Jacksonville Jaguars W 30-9 9 H Houston Texans 10 H Los Angeles Rams 11 A San Francisco 49ers 12 A Carolina Panthers 13 H Detroit Lions 14 A New York Giants 15 H San Francisco 49ers 16 A Los Angeles Rams 17 H Dallas Cowboys LAST GAME 8 Played 1,602 Pass yds 12 TD 12 INT
+MEASURE A-390r schedule: docOverflow 0; off []; clipped []; moving []
+A-390r REVIEW: Season review 9-8 · Missed the playoffs 17 Games 2,962 Pass yds 17 Pass TD 18 INT Regular season, the same numbers as your season card. ⭐ Best game: Game 8, W 30-9 vs Jacksonville Jaguars, 345 yards, 4 touchdowns Last five: W W L W L After game 17 9-8 Home 4-5 Away 5-3 Streak L1 Division 2-4 Conference 6-6 Last 10: W L W L L W W L W L 📋 Game log 🗓 Schedule 17 Played 2,962 Pass yds 17 TD 18 INT
+MEASURE A-390r review: docOverflow 0; off []; clipped []; moving []
+MEASURE A-390r help again: docOverflow 0; off []; clipped []; moving []
+A-390r after watching and closing the save is the bytes the press saved: true
+A-390r entry after: ""; watch again false
+A-390r errors: []
+-- A-390r took 8762 ms
+A-1280 entry reads: "📺 Week by week"
+A-1280 viewer opened after 82 ms
+A-1280 the press saved a season: true
+A-1280 KICKOFF CARD: Arizona Cardinals 2026 · NFL 17 games · 9 home, 8 away · the league's schedule formula, this career's own draw FIRST FIVE 1 Home Seattle Seahawks 2 Away Seattle Seahawks 3 Home Washington Commanders 4 Home Kansas City Chiefs 5 Home Tennessee Titans ▶ Kick off ⏭ Straight to the season review
+A-1280 HEADER: Arizona Cardinals · 2026
+MEASURE A-1280 kickoff: docOverflow 0; off []; clipped []; moving ["DIV.cm-rise space-y-3 cmRise 0.45s","SPAN.cm-tick-in text-2xl font-black tabular-n cmTickIn 0.35s"]
+A-1280 1543 ms after kick off: full time shown false; feed lines 3
+A-1280 full time after 4563 ms more
+A-1280 GAME 1 STAGE: Game 1 · Home ARI 14-30 SEA FINAL Final Q1 14:00 🏈 Touchdown, Seattle Seahawks. Q1 13:00 🏈 Touchdown, Arizona Cardinals. Q1 9:00 🏈 Touchdown, Seattle Seahawks. Q1 2:00 🥅 Field goal, Seattle Seahawks. Q1 1:00 🥅 Field goal, Seattle Seahawks. Q2 4:00 🥅 Field goal, Seattle Seahawks. Q2 0:00 🏈 Touchdown! You throw it. Q4 8:00 🏈 Touchdown, Seattle Seahawks. 182 YDS 1 TD 0 INT
+A-1280 GAME 1 FEED: Q1 14:00 🏈 Touchdown, Seattle Seahawks. Q1 13:00 🏈 Touchdown, Arizona Cardinals. Q1 9:00 🏈 Touchdown, Seattle Seahawks. Q1 2:00 🥅 Field goal, Seattle Seahawks. Q1 1:00 🥅 Field goal, Seattle Seahawks. Q2 4:00 🥅 Field goal, Seattle Seahawks. Q2 0:00 🏈 Touchdown! You throw it. Q4 8:00 🏈 Touchdown, Seattle Seahawks.
+A-1280 HIS LINE: 182 YDS 1 TD 0 INT
+MEASURE A-1280 game1 final: docOverflow 0; off []; clipped []; moving ["DIV.cm-rise space-y-3 cmRise 0.45s","SPAN.cm-slam shrink-0 text-xl font-black tabu cmSlam 0.4s","SPAN.cm-slam font-bold text-foreground cmSlam 0.4s","LI.cm-tick-in flex gap-2 cmTickIn 0.35s","SPAN.cm-tick-in text-2xl font-black tabular-n cmTickIn 0.35s"]
+A-1280 GAME 4 FEED: Q1 8:00 🏈 Touchdown, Arizona Cardinals. Q1 7:00 🥅 Field goal, Kansas City Chiefs. Q1 3:00 🥅 Field goal, Arizona Cardinals. Q2 5:00 🥅 Field goal, Kansas City Chiefs. Q2 3:00 🥅 Field goal, Arizona Cardinals. Q3 14:00 🏈 Touchdown, Kansas City Chiefs. Q3 8:00 🥅 Field goal, Arizona Cardinals. Q4 12:00 🏈 Touchdown, Kansas City Chiefs. Q4 8:00 🏈 Touchdown! You throw it.
+A-1280 next big (true): HALFWAY First half: 8 games, 1,602 passing yards and 12 touchdowns Best so far: Game 8, W 30-9, 345 yards, 4 touchdowns
+MEASURE A-1280 poster: docOverflow 0; off []; clipped []; moving ["DIV.cm-slam rounded-xl border border-border  cmSlam 0.4s","SPAN.cm-tick-in text-2xl font-black tabular-n cmTickIn 0.35s"]
+A-1280 REVIEW: Season review 9-8 · Missed the playoffs 17 Games 2,962 Pass yds 17 Pass TD 18 INT Regular season, the same numbers as your season card. ⭐ Best game: Game 8, W 30-9 vs Jacksonville Jaguars, 345 yards, 4 touchdowns Last five: W W L W L
+MEASURE A-1280 review: docOverflow 0; off []; clipped []; moving ["DIV.cm-rise cmRise 0.45s","DIV.cm-rise rounded-lg bg-muted/30 p-2 text- cmRise 0.45s","DIV.cm-rise text-xs cmRise 0.45s","DIV.cm-rise flex items-center gap-1 text-xs cmRise 0.45s","SPAN.cm-tick-in text-2xl font-black tabular-n cmTickIn 0.35s"]
+MEASURE A-1280 help again: docOverflow 0; off []; clipped []; moving ["DIV.cm-rise cmRise 0.45s","DIV.cm-rise rounded-lg bg-muted/30 p-2 text- cmRise 0.45s","DIV.cm-rise text-xs cmRise 0.45s","DIV.cm-rise flex items-center gap-1 text-xs cmRise 0.45s","SPAN.cm-tick-in text-2xl font-black tabular-n cmTickIn 0.35s"]
+A-1280 after watching and closing the save is the bytes the press saved: true
+A-1280 entry after: ""; watch again false
+A-1280 errors: []
+-- A-1280 took 15491 ms
+A-1280r entry reads: "📺 Week by week"
+A-1280r viewer opened after 84 ms
+A-1280r the press saved a season: true
+A-1280r KICKOFF CARD: Arizona Cardinals 2026 · NFL 17 games · 9 home, 8 away · the league's schedule formula, this career's own draw FIRST FIVE 1 Home Seattle Seahawks 2 Away Seattle Seahawks 3 Home Washington Commanders 4 Home Kansas City Chiefs 5 Home Tennessee Titans ▶ Kick off ⏭ Straight to the season review
+A-1280r HEADER: Arizona Cardinals · 2026
+MEASURE A-1280r kickoff: docOverflow 0; off []; clipped []; moving []
+A-1280r 341 ms after kick off: full time shown true; feed lines 8
+MEASURE A-1280r game1 reduced: docOverflow 0; off []; clipped []; moving []
+A-1280r full time after 1 ms more
+A-1280r GAME 1 STAGE: Game 1 · Home ARI 14-30 SEA FINAL Final Q1 14:00 🏈 Touchdown, Seattle Seahawks. Q1 13:00 🏈 Touchdown, Arizona Cardinals. Q1 9:00 🏈 Touchdown, Seattle Seahawks. Q1 2:00 🥅 Field goal, Seattle Seahawks. Q1 1:00 🥅 Field goal, Seattle Seahawks. Q2 4:00 🥅 Field goal, Seattle Seahawks. Q2 0:00 🏈 Touchdown! You throw it. Q4 8:00 🏈 Touchdown, Seattle Seahawks. 182 YDS 1 TD 0 INT
+A-1280r GAME 1 FEED: Q1 14:00 🏈 Touchdown, Seattle Seahawks. Q1 13:00 🏈 Touchdown, Arizona Cardinals. Q1 9:00 🏈 Touchdown, Seattle Seahawks. Q1 2:00 🥅 Field goal, Seattle Seahawks. Q1 1:00 🥅 Field goal, Seattle Seahawks. Q2 4:00 🥅 Field goal, Seattle Seahawks. Q2 0:00 🏈 Touchdown! You throw it. Q4 8:00 🏈 Touchdown, Seattle Seahawks.
+A-1280r HIS LINE: 182 YDS 1 TD 0 INT
+MEASURE A-1280r game1 final: docOverflow 0; off []; clipped []; moving []
+A-1280r GAME 4 FEED: Q1 8:00 🏈 Touchdown, Arizona Cardinals. Q1 7:00 🥅 Field goal, Kansas City Chiefs. Q1 3:00 🥅 Field goal, Arizona Cardinals. Q2 5:00 🥅 Field goal, Kansas City Chiefs. Q2 3:00 🥅 Field goal, Arizona Cardinals. Q3 14:00 🏈 Touchdown, Kansas City Chiefs. Q3 8:00 🥅 Field goal, Arizona Cardinals. Q4 12:00 🏈 Touchdown, Kansas City Chiefs. Q4 8:00 🏈 Touchdown! You throw it.
+A-1280r next big (true): HALFWAY First half: 8 games, 1,602 passing yards and 12 touchdowns Best so far: Game 8, W 30-9, 345 yards, 4 touchdowns
+MEASURE A-1280r poster: docOverflow 0; off []; clipped []; moving []
+A-1280r REVIEW: Season review 9-8 · Missed the playoffs 17 Games 2,962 Pass yds 17 Pass TD 18 INT Regular season, the same numbers as your season card. ⭐ Best game: Game 8, W 30-9 vs Jacksonville Jaguars, 345 yards, 4 touchdowns Last five: W W L W L
+MEASURE A-1280r review: docOverflow 0; off []; clipped []; moving []
+MEASURE A-1280r help again: docOverflow 0; off []; clipped []; moving []
+A-1280r after watching and closing the save is the bytes the press saved: true
+A-1280r entry after: ""; watch again false
+A-1280r errors: []
+-- A-1280r took 7802 ms
+B-K-390 hub: watch again false, week by week false, held line "", entry ""
+B-K-390 errors: []
+-- B-K took 31609 ms
+B-LB-390 hub: watch again false, week by week false, held line "", entry ""
+B-LB-390 errors: []
+-- B-LB took 31577 ms
+B-WR-390 hub: watch again false, week by week false, held line "", entry ""
+B-WR-390 errors: []
+-- B-WR took 31569 ms
+B-RB-390 hub: watch again false, week by week false, held line "", entry ""
+B-RB-390 errors: []
+-- B-RB took 31573 ms
+B-TE-390 hub: watch again false, week by week false, held line "", entry ""
+B-TE-390 errors: []
+-- B-TE took 31556 ms
+B-CB-390 hub: watch again false, week by week false, held line "", entry ""
+B-CB-390 errors: []
+-- B-CB took 31563 ms
+B-EDGE-390 hub: watch again false, week by week false, held line "", entry ""
+B-EDGE-390 errors: []
+-- B-EDGE took 31566 ms
+B-QB-390 hub: watch again false, week by week false, held line "", entry ""
+B-QB-390 errors: []
+-- B-QB took 31594 ms
+B-K-1280 hub: watch again false, week by week false, held line "", entry ""
+B-K-1280 errors: []
+-- B-K-1280 took 31609 ms
+B-EDGE-1280 hub: watch again false, week by week false, held line "", entry ""
+B-EDGE-1280 errors: []
+-- B-EDGE-1280 took 31577 ms
+C-held-rookie-390 hub: watch again false, week by week false, held line "📺 Week by week starts with the 2021 season: the real 2005 season had 16 games and this career plays 17.", entry "📺 Week by week starts with the 2021 season: the real 2005 season had 16 games and this career plays 17."
+C-held-rookie-390 errors: []
+-- C-held-0 took 1669 ms
+C-held-2seasons-390 hub: watch again false, week by week false, held line "", entry ""
+C-held-2seasons-390 errors: []
+-- C-held-2 took 31588 ms
+C-held-rookie-1280 hub: watch again false, week by week false, held line "📺 Week by week starts with the 2021 season: the real 2005 season had 16 games and this career plays 17.", entry "📺 Week by week starts with the 2021 season: the real 2005 season had 16 games and this career plays 17."
+C-held-rookie-1280 errors: []
+-- C-held-1280 took 1657 ms
+D1-no-po-fields-390 hub: watch again false, week by week false, held line "", entry ""
+D1-no-po-fields-390 errors: []
+-- D1 took 31581 ms
+D2-unknown-result-390 hub: watch again false, week by week false, held line "", entry ""
+D2-unknown-result-390 errors: []
+-- D2 took 31594 ms
+D3-no-passYds-390 hub: watch again false, week by week false, held line "", entry ""
+D3-no-passYds-390 errors: []
+-- D3 took 31574 ms
+D4-suspended-390 hub: watch again false, week by week false, held line "", entry ""
+D4-suspended-390 errors: []
+-- D4 took 31589 ms
+D5-no-role-no-awards-390 hub: watch again false, week by week false, held line "", entry ""
+D5-no-role-no-awards-390 errors: []
+-- D5 took 31586 ms
+D6-kicker-no-long-390 hub: watch again false, week by week false, held line "", entry ""
+D6-kicker-no-long-390 errors: []
+-- D6 took 31577 ms
+D7-champion-390 hub: watch again false, week by week false, held line "", entry ""
+D7-champion-390 errors: []
+-- D7 took 31586 ms
+D8-po-mismatch-390 hub: watch again false, week by week false, held line "", entry ""
+D8-po-mismatch-390 errors: []
+-- D8 took 31598 ms
+supabase requests aborted: 29
