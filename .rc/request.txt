@@ -1,0 +1,11 @@
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-nfl: node_modules/.bin/vitest run src/test/usSeasonNfl.test.ts src/test/usSeason.test.ts --testTimeout=300000 --hookTimeout=120000
+vitest-view: node_modules/.bin/vitest run src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/seasonCentreWords.test.tsx src/test/seasonCore.test.ts --testTimeout=300000 --hookTimeout=120000
+sim-s0: SEEDSET=0 node scripts/simUsSeasonCentre.mjs
+sim-s1: SEEDSET=1 node scripts/simUsSeasonCentre.mjs
+sim-s2: SEEDSET=2 node scripts/simUsSeasonCentre.mjs
+sim-s3: SEEDSET=3 node scripts/simUsSeasonCentre.mjs
+sim-s4: SEEDSET=4 node scripts/simUsSeasonCentre.mjs
+play: MSYS_NO_PATHCONV=1 ENGINES=chromium node scripts/playUsSeasonCentre.mjs
