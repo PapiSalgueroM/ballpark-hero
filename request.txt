@@ -1,0 +1,11 @@
+#!serial
+base-checkout: git checkout 834e764acf6a4218242f626a701708a79cfffe48 -- src scripts && git status --short | wc -l
+base-simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+base-simClubManagerEraUcl: node scripts/simClubManagerEraUcl.mjs
+base-simStatsCentre: node scripts/simStatsCentre.mjs
+base-simWorldEditor: node scripts/simWorldEditor.mjs
+base-simEra2005: node scripts/simEra2005.mjs
+base-simEra2010: node scripts/simEra2010.mjs
+base-simEra2015: node scripts/simEra2015.mjs
+base-simEra2020: node scripts/simEra2020.mjs
+base-simEras: node scripts/simEras.mjs

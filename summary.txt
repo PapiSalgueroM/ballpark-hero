@@ -1,0 +1,10 @@
+base-checkout exit=0 1s | 15
+base-simCmLeagueRules exit=0 21s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+base-simClubManagerEraUcl exit=0 11s | simClubManagerEraUcl: PASS. The era Champions League plays its round of 16, the group tables stay up, Spain and Italy split level points on head to head, and an era night
+base-simStatsCentre exit=1 1s | 6 FAILURES
+base-simWorldEditor exit=1 3s | simWorldEditor: 2469 checks, 1 failures
+base-simEra2005 exit=1 6s | simEra2005: 1 failure
+base-simEra2010 exit=1 7s | simEra2010: 1 failure
+base-simEra2015 exit=1 6s | simEra2015: 3 failures
+base-simEra2020 exit=1 5s | simEra2020: 5 failure(s).
+base-simEras exit=1 396s | 3 FAILURES
