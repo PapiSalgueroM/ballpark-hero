@@ -47,9 +47,9 @@ describe('Club Manager: a quick sim makes its subs (Round 1146)', () => {
       /* never more than two for legs: the third change is kept for an injury */
       expect(subs.filter(s => !hurt.has(s.off)).length).toBeLessThanOrEqual(2);
     }
-    /* a leggy eleven beside a fresh bench is exactly when he acts */
-    console.log(`managerQuickSimLegs: a change for legs in ${withLegs} of ${SEEDS} quick sims`);
-    expect(withLegs).toBeGreaterThanOrEqual(1);
+    /* A leggy eleven beside a fresh bench is exactly when he acts: measured, all 8 of these quick sims have a
+       change for legs, so 6 leaves room for a fixture to drift and still fails a coach who has stopped. */
+    expect(withLegs).toBeGreaterThanOrEqual(6);
     expect(found).not.toBeNull();
     const { container } = render(<MatchReportCard report={found!.report} clubName="Everton" onContinue={() => {}} />);
     const text = container.textContent ?? '';

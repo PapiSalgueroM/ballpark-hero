@@ -36,7 +36,34 @@
  *   5 report   the full time report lists every change he made, and its
  *              timeline has a row for each
  *
- * MEASURED: see the block at the foot of this header.
+ * MEASURED on a GitHub runner, 2026-10-09, the default fleet (6 clubs x 3
+ * seeds x 2 seasons, 36 seasons an arm) on three seed sets, with the round
+ * and without it:
+ *   seedset  changes a match        of which legs  bench used in       W percent    points a season  goals for, against a match
+ *   0        1.73 against 0.70      1.04           90.5% against 46.1%  53.8 / 53.9  69.28 / 69.11    1.71, 0.98 / 1.73, 0.99
+ *   1        1.75 against 0.70      1.10           92.2% against 46.7%  53.9 / 54.5  69.28 / 69.19    1.65, 0.93 / 1.79, 1.04
+ *   2        1.74 against 0.72      1.12           91.2% against 46.8%  54.8 / 56.4  68.25 / 71.11    1.66, 0.95 / 1.79, 0.98
+ * So before the round the bench came on in under half of all quick sims (an
+ * injury in 0.24 of them, a spent man at the break in 0.46) and never after
+ * the break unless somebody was hurt; with it, in nine in ten, about one
+ * change for legs a match, and a season's appearances go to 21.6 men instead
+ * of 20.7 (585 against 536).
+ * Results. The two arms are separate samples of 1,650 matches, so a share of
+ * wins is good to about 1.7 points and a season's points to about 2: wins
+ * (54.2 against 54.9 percent over the three sets) and points (68.9 against
+ * 69.8) sit inside that. Goals do move: 1.67 for and 0.95 against a match
+ * with the round, 1.77 and 1.00 without, about one goal in twenty fewer at
+ * both ends. That is the engine's existing rule for ANY change, yours
+ * included: the rest of the half is drawn again off the score as it stands
+ * at that minute (the other side's shape reads it), and he now makes a
+ * change in most matches. Nothing here asserts on results; the season
+ * balance harnesses do.
+ * His rule, read on 730 matches played again by hand: 537 changes for legs,
+ * 393 with the match within a goal or my side behind (the eleven no weaker
+ * every time, mean +0.08 to +0.10 of the engine's strength) and 144 with my
+ * side two or more up (mean -0.43 to -0.54, legs rested whatever it costs).
+ * Section 1's bar of 20 points of matches is under half the 44 to 46 the
+ * round adds; the control that takes the round out adds 0.
  *
  * NEGATIVE CONTROLS. CM_QUICK_LEGS_CONTROL=<name> patches the bundled copy of
  * the source (the anchor must occur exactly once or the run refuses) and the

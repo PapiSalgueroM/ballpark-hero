@@ -17953,8 +17953,9 @@ export function setHalftimeMentality(career: CareerState, mentality: Mentality):
  * automatically make subs". Since Round 1072 the coach replaced an injured
  * man and, at the break, took off up to two who were already spent (fitness
  * under 68 or morale under 45). A fit eleven therefore played ninety minutes
- * unchanged and a manager who quick sims never gave his bench a minute:
- * scripts/simCmQuickLegs.mjs measured it (the numbers are in its header).
+ * unchanged: scripts/simCmQuickLegs.mjs measured the bench coming on in 46
+ * in 100 quick sims before this round and 91 in 100 after it, about one
+ * change for legs a match (the numbers are in its header).
  *
  * So the same coach, with the same bench list (benchFor), the same fit rule
  * and the same test for fresher legs he uses at the break, now looks at his
