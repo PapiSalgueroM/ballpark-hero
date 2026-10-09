@@ -322,7 +322,13 @@ window.__draw = (comp, career) => {
   flushSync(() => root.render(createElement(CARDS[comp], { career })));
 };
 `);
-  execSync(`"${findBin('esbuild')}" "${BENTRY}" --bundle --format=iife --platform=browser --jsx=automatic --define:process.env.NODE_ENV=\\"production\\" --outfile="${BJS}" --log-level=error`, { stdio: 'inherit', cwd: ROOT });
+  execSync(`"${findBin('esbuild')}" "${BENTRY}" --bundle --format=iife --platform=browser --jsx=automatic --define:process.env.NODE_ENV=\\"production\\" --outfile="${BJS}" --log-level=error`, {
+    stdio: 'inherit', cwd: ROOT,
+    /* Release AP: this entry sits in the temp folder and imports react by name, which resolves by walking
+       up from there, so the section only ever passed when TEMP happened to sit inside the checkout (the
+       gate's does, a machine's own does not). NODE_PATH names the packages wherever the entry is. */
+    env: { ...process.env, NODE_PATH: path.dirname(path.dirname(findBin('esbuild'))) },
+  });
   const js = fs.readFileSync(BJS, 'utf8');
   const html = `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${css}</style></head>`
     + '<body class="bg-background text-foreground"><div style="padding:16px"><div id="card"></div><div id="sentinel" style="height:8px"></div></div></body></html>';
