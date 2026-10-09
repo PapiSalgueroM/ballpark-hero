@@ -1,0 +1,1 @@
+dailies: node .rc/x/dailiesProbe.mjs
