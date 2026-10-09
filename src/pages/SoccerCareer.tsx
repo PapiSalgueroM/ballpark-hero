@@ -3043,12 +3043,7 @@ function FinancialPanel({ career, onCurrencyChange }: { career: CareerState; onC
    what it did before Continue. */
 function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech, onReveal }: { bdor: BallonDorResult; career: CareerState; onDismiss: () => void; onSpeech: (choice: BdorSpeechChoice) => void; onReveal?: () => void }) {
   const copy = SOCCER_BALLON_DOR.copy;
-  /* Release AQ: the night's headline slams in from 1.6 times its size. On a phone that block is as wide as the
-     card, so for a quarter of a second it stuck out past the screen's edge and the page grew 37 px wider (the
-     same 34 px came three seconds in before Round 1172 moved the slam to the start). The card's row clips
-     across, the way the debut card's rows already do. */
   return (
-    <div className="overflow-x-clip">
     <AwardsNightCard<BallonDorNominee>
       key={bdor.year}
       night={bdor}
@@ -3071,7 +3066,6 @@ function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech, onReveal }: 
         onChoose: id => onSpeech(id as BdorSpeechChoice),
       }}
     />
-    </div>
   );
 }
 
@@ -4278,7 +4272,15 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             </div>
           )}
           {career.phase === "ballon_dor" && career.pendingBallonDor && (
+            /* Release AQ: the night's headline slams in from 1.6 times its size. On a phone that block is as
+               wide as the card, so for a quarter of a second it stuck out past the screen's edge and the page
+               grew 37 px wider (the same 34 px came three seconds in before Round 1172 moved the slam to the
+               start). This row clips across, the way the debut card's rows already do. It sits here and not
+               inside the card so the card's own markup, which simCareerAwardsNight holds to a record, is as
+               it was. */
+            <div className="overflow-x-clip">
             <BallonDorCeremonyCard bdor={career.pendingBallonDor} career={career} onDismiss={onDismissBallonDor} onSpeech={onBdorSpeech} onReveal={() => onCareerPatch?.(revealBallonDorResult)} />
+            </div>
           )}
 
           {/* OVERLAY: Transfer Window */}
