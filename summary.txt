@@ -1,0 +1,6 @@
+dsh-1 exit=1 53s | simDailySaveHardening: 2 failure(s)
+dsh-2 exit=0 52s | simDailySaveHardening: part all green
+dsh-3 exit=0 53s | simDailySaveHardening: part all green
+main-dsh exit=1 2s | Node.js v24.21.0
+careerStory exit=0 21s | simCareerStory: GREEN, 96 careers keep every season's lines in order, draw nothing and stay inside the size bands
+vitest-story exit=0 7s |    Duration  5.98s (transform 1.56s, setup 39ms, collect 2.13s, tests 3.21s, environment 232ms, prepare 54ms)

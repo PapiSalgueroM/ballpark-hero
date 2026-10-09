@@ -1,0 +1,8 @@
+# Release AQ: simDailySaveHardening was red on /olympics in lane A (green in Release AP, no Olympics file changed): three runs alone, and one on main, to tell a flake from a break
+#!serial
+dsh-1: node scripts/simDailySaveHardening.mjs
+dsh-2: node scripts/simDailySaveHardening.mjs
+dsh-3: node scripts/simDailySaveHardening.mjs
+main-dsh: D=$PWD/.rc-main-d && mkdir -p $D && git archive origin/main | tar -x -C $D && cd $D && node scripts/simDailySaveHardening.mjs
+careerStory: node scripts/simCareerStory.mjs
+vitest-story: node_modules/.bin/vitest run src/test/careerStory.test.tsx --testTimeout=300000
