@@ -110,7 +110,7 @@ export function StartOptionsScreen({ career, onCurrency, onNationJobs, onStrictn
         </div>
         <p className="text-[9px] text-muted-foreground">{STRICTNESS_INFO[opts.strictness]?.blurb}</p>
         <p className="text-[9px] text-muted-foreground">
-          This moves what a seller asks for, never how long he will sit at the table. Repeating one
+          This changes the seller's opening price. Firm and Ruthless can give you less time to negotiate. Easier settings never add patience. Repeating one
           lowball runs him out of patience at every setting, which is the decision the transfer desk
           is built around and is not something a slider is allowed to switch off.
         </p>
