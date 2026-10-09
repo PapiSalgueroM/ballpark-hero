@@ -1,0 +1,55 @@
+✘ [ERROR] Could not resolve "./season/momentsSave"
+
+    ../../_temp/t-simCareerLeagueFinish-notitle/sc-leaguefinish-21294/soccerCareerEngine.ts:146:58:
+      146 │ ...sonMoments, type SeasonMomentsSave } from "./season/momentsSave";
+          ╵                                              ~~~~~~~~~~~~~~~~~~~~~~
+
+✘ [ERROR] Could not resolve "../data/clubRivalries"
+
+    ../../_temp/t-simCareerLeagueFinish-notitle/sc-leaguefinish-21294/soccerCareerLeague.ts:19:30:
+      19 │ import { SC_CLUB_CANON } from "../data/clubRivalries";
+         ╵                               ~~~~~~~~~~~~~~~~~~~~~~~
+
+✘ [ERROR] Could not resolve "../data/careerLeagueSeasons"
+
+    ../../_temp/t-simCareerLeagueFinish-notitle/sc-leaguefinish-21294/soccerCareerLeague.ts:20:38:
+      20 │ import { CAREER_LEAGUE_SEASONS } from "../data/careerLeagueSeasons";
+         ╵                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+✘ [ERROR] Could not resolve "../data/soccerCareerClubPool"
+
+    ../../_temp/t-simCareerLeagueFinish-notitle/sc-leaguefinish-21294/soccerCareerLeague.ts:21:37:
+      21 │ import { CAREER_LEAGUE_LADDER } from "../data/soccerCareerClubPool";
+         ╵                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+✘ [ERROR] Could not resolve "../data/leagueOddFormats"
+
+    ../../_temp/t-simCareerLeagueFinish-notitle/sc-leaguefinish-21294/soccerCareerLeague.ts:22:42:
+      22 │ import { ODD_FORMATS, oddFormatFor } from "../data/leagueOddFormats";
+         ╵                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 5 errors:
+../../_temp/t-simCareerLeagueFinish-notitle/sc-leaguefinish-21294/soccerCareerEngine.ts:146:58: ERROR: Could not resolve "./season/momentsSave"
+../../_temp/t-simCareerLeagueFinish-notitle/sc-leaguefinish-21294/soccerCareerLeague.ts:19:30: ERROR: Could not resolve "../data/clubRivalries"
+../../_temp/t-simCareerLeagueFinish-notitle/sc-leaguefinish-21294/soccerCareerLeague.ts:20:38: ERROR: Could not resolve "../data/careerLeagueSeasons"
+../../_temp/t-simCareerLeagueFinish-notitle/sc-leaguefinish-21294/soccerCareerLeague.ts:21:37: ERROR: Could not resolve "../data/soccerCareerClubPool"
+../../_temp/t-simCareerLeagueFinish-notitle/sc-leaguefinish-21294/soccerCareerLeague.ts:22:42: ERROR: Could not resolve "../data/leagueOddFormats"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0

@@ -1,0 +1,34 @@
+1) 60 careers, policy accept
+   lived years with no row: now 0, pre-850 30 (decline 0, rehab 26, conviction 4, other 0)
+   pre-850 stops: 26 rehab, 4 convictions; declines now 0
+   never stopped 37, of them byte identical 37; stopped 23, identical up to the first stop 23
+1) 60 careers, policy decline
+   lived years with no row: now 0, pre-850 243 (decline 183, rehab 41, conviction 19, other 0)
+   pre-850 stops: 41 rehab, 19 convictions; declines now 143
+   never stopped 0, of them byte identical 0; stopped 60, identical up to the first stop 60
+1) 60 careers, policy worst
+   lived years with no row: now 0, pre-850 238 (decline 181, rehab 34, conviction 23, other 0)
+   pre-850 stops: 34 rehab, 23 convictions; declines now 145
+   never stopped 0, of them byte identical 0; stopped 60, identical up to the first stop 60
+2) Keep Playing steps wrong 0, push on line not once 0; injury rows 109, wrong 0; careers where the market and the record disagree 0; careers with a tournament summer never played 0 (pre-850 engine, same rule: 0)
+   Keep Playing off the suggestion screen: 12 tried, 0 played something
+3) careers that retire at 29: 27 of 40 never stopped, 27 of them byte identical (0 saw a suggestion)
+4) saves on the three screens
+   pre-850 on the suggestion: 24/24 play that season once here (the pre-850 decline lost it on 24)
+   pre-850 on the rehab choice: 24/24 get one empty injured row (the pre-850 choice wrote none on 24)
+   this engine on the rehab choice, reloaded: 24/24 keep one row for the year
+   pre-850 on the conviction paper: 24/24 get one CONVICTED row, then prison (the pre-850 paper wrote none on 24)
+   this engine on the conviction paper, reloaded: 24/24 keep one row for the year
+   already lost years: 19/19 kept every row and lost no more (19 carry their old gaps, nothing invented to fill them)
+6) the page calls Keep Playing 1 time(s), with its clubs 1
+5) balance against the pre-850 engine (printed, not asserted)
+   accept: 23 careers moved after their first stop, +31 rows between them; 37 untouched and identical
+     pre-850  retire age 33.07, rows 17.57, playing rows 14.50, goals 63.8, net worth 60.5M, legacy 57.7; 40+ seasons 0, goals mean 0.00 p90 0, 20+ goal seasons 0
+     now      retire age 33.08, rows 18.08, playing rows 14.95, goals 64.4, net worth 63.0M, legacy 57.8; 40+ seasons 0, goals mean 0.00 p90 0, 20+ goal seasons 0
+   decline: 60 careers moved after their first stop, +109 rows between them; 0 untouched and identical
+     pre-850  retire age 43.17, rows 24.12, playing rows 20.80, goals 80.2, net worth 98.8M, legacy 59.7; 40+ seasons 110, goals mean 1.88 p90 4, 20+ goal seasons 0
+     now      retire age 40.93, rows 25.93, playing rows 22.57, goals 83.6, net worth 113.9M, legacy 64.4; 40+ seasons 64, goals mean 1.55 p90 3, 20+ goal seasons 0
+   worst: 60 careers moved after their first stop, +120 rows between them; 0 untouched and identical
+     pre-850  retire age 43.23, rows 24.27, playing rows 20.40, goals 81.9, net worth 92.2M, legacy 57.5; 40+ seasons 109, goals mean 1.89 p90 4, 20+ goal seasons 0
+     now      retire age 41.27, rows 26.27, playing rows 22.25, goals 87.1, net worth 108.0M, legacy 63.3; 40+ seasons 83, goals mean 2.13 p90 4, 20+ goal seasons 0
+simCareerKeepPlaying: 1458 checks, 0 failures
