@@ -1,0 +1,10 @@
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/safeStorage.test.ts src/test/storageNoticeFollows.test.tsx src/test/storageBlockedBoot.test.tsx src/test/cookieConsentStorage.test.tsx src/test/freshBuildBlockedStorage.test.ts --testTimeout=300000 --hookTimeout=120000
+ssw: node scripts/simStorageWrites.mjs
+ssw-recheck: SIM_STORAGE_WRITES_CONTROL=recheck node scripts/simStorageWrites.mjs
+ssw-once: SIM_STORAGE_WRITES_CONTROL=once node scripts/simStorageWrites.mjs
+seam: node scripts/playUsCareerSaveSeam.mjs
+seam-stale: US_SAVE_SEAM_CONTROL=stale PORT=4401 node scripts/playUsCareerSaveSeam.mjs
+centre: PORT=4402 node scripts/playUsSeasonCentre.mjs

@@ -1,0 +1,9 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+ssw exit=0 2s | simStorageWrites: all green
+vitest exit=0 5s |    Duration  4.21s (transform 968ms, setup 656ms, collect 2.34s, tests 2.52s, environment 3.59s, prepare 1.15s)
+ssw-recheck exit=1 2s | simStorageWrites (control recheck): 1 failed
+ssw-once exit=1 1s | simStorageWrites (control once): 1 failed
+seam-stale exit=1 22s | playUsCareerSaveSeam: 4 journeys, 36 checks, 8 failed (control stale)
+seam exit=1 24s | playUsCareerSaveSeam: 12 journeys, 56 checks, 4 failed
+tsc exit=0 63s | 
+centre exit=1 83s | playUsSeasonCentre: 62 checks, 6 failed
