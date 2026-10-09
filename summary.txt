@@ -1,0 +1,15 @@
+simClubManagerGathered exit=0 2s | simClubManagerGathered: all checks passed (1 gathered league(s), 403 men, 1436 printed squad entries accounted for, 83 addresses, 5 cited facts, the old save)
+simClubManagerMeters exit=0 24s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+simClubManagerSave exit=0 12s | simClubManagerSave: all sections green
+simClubManagerFinances exit=0 62s | simClubManagerFinances: PASS. The books add up, the projection lands, prices move the fans and the board, and the sponsor desk pays what it says.
+simClubManagerSaveSize exit=0 49s | simClubManagerSaveSize: all sections green
+simClubManagerSlots exit=0 51s | simClubManagerSlots: all sections green
+simClubManagerNewLeagues exit=0 143s | simClubManagerNewLeagues: all checks passed
+simClubManagerStaff exit=1 18s | simClubManagerStaff: 1 failure
+simClubManagerScore exit=0 100s | ALL SEASON SCORE CHECKS PASSED
+simCmInternationals exit=0 27s | simCmInternationals: all green
+simCmMatchCentre exit=0 4s | simCmMatchCentre: PASS. Every stat on the report and the live strip is counted off the committed play and lines, and every timeline row is an event the engine drew.
+simCmLeagueRules exit=1 58s | simCmLeagueRules: 47 failure(s)
+simCmApplications exit=0 81s | simCmApplications: green. The answer is earned, the limits hold, a summer move fires once, joining now moves the manager that week, and old saves load.
+simCmQuickLegs exit=0 53s | simCmQuickLegs: PASS, 5 sections green
+simCmShootoutOrder exit=0 22s | simCmShootoutOrder: all sections passed
