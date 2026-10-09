@@ -7,13 +7,18 @@
    the per game caps, how his totals fall game by game, who he meets on which
    week, every score and every drive.
 
-   Real and two sourced (src/data/usLeagueShape.ts): the divisions, the
-   league's 17 game formula and which conference hosts the 17th game.
+   Real and two sourced (src/data/usLeagueShape.ts, each with its sources):
+   the divisions, the league's 17 game formula, which conference hosts the
+   17th game, the playoff rounds (one game a round), what a scoring play is
+   worth, that a regular season game can end level, and the clock (four
+   quarters of 15 minutes, marked thin there). The 7, 3 and 2 in the score
+   arithmetic below are the ledger's NFL_SCORING; src/test/usSeasonNfl.test.ts
+   holds the two together.
 
    How a game is laid out. The core spreads his whole number totals (his
    touchdowns hold his team's score up: a touchdown of his is a seven point
    drive here) and accepts the scores. `finish` then lays out what hangs off
-   the game: his yards and catches, a kicker's field goals (every field goal
+   the game: his yards, catches and tackles, a kicker's field goals (every field goal
    his team makes in a game he plays is his, so the makes must EQUAL the
    field goals in that score), the sacks in tenths, and both sides' scoring
    drives minute by minute. A game can end level (his floor can lift his side
@@ -25,7 +30,7 @@ import { shuffled, type DerivedGame, type DerivedSeason, type Rng, type SeasonEv
 import { splitTotal, usHelp, type UsRow, type UsSeasonBind, type UsSeasonCtx } from './us';
 import { NFL_MISSED_PLAYOFFS, NFL_PLAYOFF_RESULTS, nflEraById } from '../nflMyCareer';
 import { formatNumber } from '../formatNumber';
-import { nflHosts17 } from '@/data/usLeagueShape';
+import { NFL_CLOCK, NFL_SCORING, US_PLAYOFF_FORMAT, nflHosts17 } from '@/data/usLeagueShape';
 import { usSeasonHeldLine, usSeasonLabel, usSeasonLength } from '@/data/usSeasonLengths';
 
 const GAMES = 17;
@@ -34,11 +39,9 @@ const BANDS = [[2, 9], [9, 12], [10, 13], [11, 14], [11, 15], [11, 15]] as const
 const CAP = 70;
 /** The most field goals one side is given in a game. */
 const MAX_FG = 6;
-const CLOCK = 60;
+const CLOCK = NFL_CLOCK.quarters * NFL_CLOCK.minutes;
 /** Every stat field of the engine's season line, in its declared order. */
 const STAT_KEYS = ['passYds', 'passTd', 'ints', 'rushYds', 'rushTd', 'rec', 'recYds', 'recTd', 'tackles', 'sacks', 'picks', 'passDef', 'forcedFum', 'fgMade', 'fgAtt', 'longFg'] as const;
-/** The stat whose touchdowns are his, by position. */
-const TD_KEY: Record<string, string> = { QB: 'passTd', RB: 'rushTd', WR: 'recTd', TE: 'recTd' };
 
 const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
 
@@ -156,7 +159,37 @@ export function nflDeal(ctx: UsSeasonCtx, rng: Rng): [number, number][][] {
   const hosts = nflHosts17(ctx.year, confOf(ctx)) ?? coin;
   const extra = otherDivs[1];
   if (extra) list.push([extra[Math.floor(rng() * extra.length)], hosts]);
-  return shuffled(list, rng).map(([slot, home]): [number, number][] => [home ? [0, slot] : [slot, 0]]);
+  return nflOrder(list, rng).map(([slot, home]): [number, number][] => [home ? [0, slot] : [slot, 0]]);
+}
+
+/** How many times a calendar reads oddly: the same opponent in back to back
+ *  games, and every game past the third in a row at home or away. */
+export function nflOrderProblems(list: readonly (readonly [number, boolean])[]): number {
+  let bad = 0;
+  let run = 1;
+  for (let i = 1; i < list.length; i += 1) {
+    if (list[i][0] === list[i - 1][0]) bad += 1;
+    run = list[i][1] === list[i - 1][1] ? run + 1 : 1;
+    if (run > 3) bad += 1;
+  }
+  return bad;
+}
+
+/** The order of the games: a keyed shuffle, drawn again while it reads oddly
+ *  (see nflOrderProblems). About three shuffles in ten pass, so a pass comes
+ *  within a few draws; the calmest of ORDER_TRIES stands if none does. This is
+ *  the sim's own taste in a calendar: which week a real game falls in is not
+ *  claimed anywhere. */
+const ORDER_TRIES = 60;
+function nflOrder(list: [number, boolean][], rng: Rng): [number, boolean][] {
+  let best = list;
+  let least = Infinity;
+  for (let t = 0; t < ORDER_TRIES && least > 0; t += 1) {
+    const o = shuffled(list, rng);
+    const bad = nflOrderProblems(o);
+    if (bad < least) { best = o; least = bad; }
+  }
+  return best;
 }
 
 /** Every way a named season's opponents disagree with the formula. */
@@ -193,8 +226,23 @@ export function nflDealProblems(ctx: UsSeasonCtx, games: readonly DerivedGame[])
  *  claim about any real game, and no record is quoted. */
 const SUMS: { key: string; cap: number; td?: boolean }[] = [
   { key: 'passTd', cap: 6, td: true }, { key: 'ints', cap: 5 }, { key: 'rushTd', cap: 4, td: true }, { key: 'recTd', cap: 4, td: true },
-  { key: 'tackles', cap: 20 }, { key: 'picks', cap: 3 }, { key: 'passDef', cap: 6 }, { key: 'forcedFum', cap: 3 },
+  { key: 'picks', cap: 3 }, { key: 'passDef', cap: 6 }, { key: 'forcedFum', cap: 3 },
 ];
+/** His touchdowns follow half of the core's game to game form (its square
+ *  root): under the whole of it a 30 touchdown season landed on the cap of
+ *  six about twice as often as a plain count of touchdowns would. */
+const TD_FORM_POWER = 0.5;
+/** The caps of the numbers `finish` lays out (yards, catches, tackles). */
+const LAID_CAPS = { passYds: 520, rushYds: 290, rec: 15, recYds: 330, tackles: 20 } as const;
+/** How much of the room between his average game and the cap his best game
+ *  may use. His swing a game is the smaller of the stat's own swing and this
+ *  share of that room, so the cap is a guard and never where his big days pile up. */
+const SWING_ROOM = 0.7;
+const swingOf = (total: number, games: number, cap: number, most: number): number => (
+  total > 0 && games > 0 ? Math.max(0, Math.min(most, SWING_ROOM * (cap / (total / games) - 1))) : most
+);
+/** A side's points a game at even strength under the score law. */
+const EVEN_POINTS = 7 * TD_A_GAME + 3 * FG_A_DRIVE * DRIVES;
 const TD_KINDS: [string, string][] = [['td-pass', 'passTd'], ['td-rush', 'rushTd'], ['td-rec', 'recTd']];
 
 function totals(row: UsRow): StatTotal[] {
@@ -202,7 +250,7 @@ function totals(row: UsRow): StatTotal[] {
   for (const t of SUMS) {
     const v = num(row[t.key]);
     if (v === null) continue;
-    out.push(t.td ? { key: t.key, kind: 'sum', total: v, perGameCap: t.cap, teamFor: true, teamPoints: 7 } : { key: t.key, kind: 'sum', total: v, perGameCap: t.cap });
+    out.push(t.td ? { key: t.key, kind: 'sum', total: v, perGameCap: t.cap, teamFor: true, teamPoints: 7, formPower: TD_FORM_POWER } : { key: t.key, kind: 'sum', total: v, perGameCap: t.cap });
   }
   return out;
 }
@@ -280,7 +328,11 @@ export function nflTouchdownDays(scores: readonly number[], tds: readonly number
   return take;
 }
 
-/** The numbers that hang off the game (yards, catches, sacks in tenths, a
+/** A side's scoring drives sit at least this many minutes apart where the hour has room. */
+const DRIVE_GAP = 3;
+const MINUTE_TRIES = 40;
+
+/** The numbers that hang off the game (yards, catches, tackles, sacks in tenths, a
  *  kicker's makes, misses and long), then both sides' scoring drives and his
  *  own moments minute by minute. Every split lands exactly on the saved
  *  total; false when a total cannot be held. */
@@ -303,14 +355,30 @@ function finish(games: DerivedGame[], row: UsRow, _pos: string, rng: Rng): boole
     on.forEach((g, i) => { g.line[key] = x[i]; });
     return true;
   };
-  /* yards: more on a day he scored and on a day his team did, and at least a yard a touchdown where
-     the total allows it */
-  const day = (g: DerivedGame) => form() * (0.7 + g.us / 60);
-  if (!lay('passYds', on.map(g => day(g) * (1 + 0.25 * of(g, 'passTd'))), on.map(() => 520), on.map(g => of(g, 'passTd')), true)) return false;
-  if (!lay('rushYds', on.map(g => day(g) * (1 + 0.5 * of(g, 'rushTd'))), on.map(() => 290), on.map(g => of(g, 'rushTd')), true)) return false;
+  /* yards, catches and tackles: his average game, moved by that game's lean (minus one to one: mostly
+     his form that day, a little his team's score and his touchdowns) times the stat's swing. The
+     swing shrinks when his average is already near the cap (swingOf). At least a yard a touchdown
+     where the total allows it */
+  const swung = (key: keyof typeof LAID_CAPS, most: number, tdKey: string | null, hard: boolean): boolean => {
+    const total = num(row[key]);
+    if (total === null) return true;
+    const cap = LAID_CAPS[key];
+    const swing = swingOf(total, on.length, cap, most);
+    const tdMean = tdKey ? on.reduce((a, g) => a + of(g, tdKey), 0) / Math.max(1, on.length) : 0;
+    const weights = on.map(g => {
+      const mine = 2 * rng() - 1;
+      const team = Math.max(-1, Math.min(1, (g.us - EVEN_POINTS) / 30));
+      const scored = tdKey ? Math.max(-1, Math.min(1, (of(g, tdKey) - tdMean) / 2.5)) : 0;
+      return 1 + swing * (0.62 * mine + 0.18 * team + 0.2 * scored);
+    });
+    return lay(key, weights, on.map(() => cap), tdKey ? on.map(g => of(g, tdKey)) : null, !hard);
+  };
+  if (!swung('passYds', 0.75, 'passTd', false)) return false;
+  if (!swung('rushYds', 0.9, 'rushTd', false)) return false;
   /* a touchdown catch is a catch, and yards need a catch */
-  if (!lay('rec', on.map(g => day(g) * (1 + of(g, 'recTd'))), on.map(() => 15), on.map(g => of(g, 'recTd')), false)) return false;
-  if (!lay('recYds', on.map(g => of(g, 'rec') * (0.6 + 0.8 * rng())), on.map(g => (of(g, 'rec') > 0 ? 330 : 0)), on.map(g => of(g, 'recTd')), true)) return false;
+  if (!swung('rec', 0.9, 'recTd', true)) return false;
+  if (!lay('recYds', on.map(g => of(g, 'rec') * (0.6 + 0.8 * rng())), on.map(g => (of(g, 'rec') > 0 ? LAID_CAPS.recYds : 0)), on.map(g => of(g, 'recTd')), true)) return false;
+  if (!swung('tackles', 0.8, null, false)) return false;
   /* sacks: the save holds one decimal. Whole sacks are spread, a half sack goes to one keyed game,
      and the last tenths (0 to 4) to the game with the most, so the season's sum is the saved number */
   const sacks = num(row.sacks);
@@ -349,12 +417,21 @@ function finish(games: DerivedGame[], row: UsRow, _pos: string, rng: Rng): boole
   } else if (att !== null || long !== null) return false;
   /* the drives of both sides, and his own moments, at keyed whole minutes */
   for (const g of games) {
-    /* no two lines of one game share a minute (a side cannot score twice in one) */
+    /* No two lines of one game share a minute. Where the hour has room, no two lines sit in back to
+       back minutes either and a side's scoring drives are at least DRIVE_GAP minutes apart (a drive
+       takes time); a game with more lines than that leaves room for falls back to any free minute */
     const used = new Set<number>();
-    const minute = () => {
+    const drives: Record<'us' | 'them', number[]> = { us: [], them: [] };
+    const minute = (side?: 'us' | 'them') => {
       let m = 1 + Math.floor(rng() * CLOCK);
+      for (let t = 0; t < MINUTE_TRIES; t += 1) {
+        const crowded = used.has(m - 1) || used.has(m) || used.has(m + 1) || (side !== undefined && drives[side].some(x => Math.abs(x - m) < DRIVE_GAP));
+        if (!crowded) break;
+        m = 1 + Math.floor(rng() * CLOCK);
+      }
       for (let i = 0; i < CLOCK && used.has(m); i += 1) m = (m % CLOCK) + 1;
       used.add(m);
+      if (side !== undefined) drives[side].push(m);
       return m;
     };
     const kinds: string[] = [];
@@ -364,12 +441,12 @@ function finish(games: DerivedGame[], row: UsRow, _pos: string, rng: Rng): boole
     const them = nflDrives(g.them, 0, null, rng);
     if (!us || !them) return false;
     const ev: SeasonEvent[] = [];
-    us.tds.forEach((pts, i) => ev.push(i < kinds.length ? { min: minute(), kind: kinds[i], side: 'us', pts, mine: true } : { min: minute(), kind: 'td', side: 'us', pts }));
-    for (let i = 0; i < us.fgs; i += 1) ev.push(kicks ? { min: minute(), kind: 'fg', side: 'us', pts: 3, mine: true } : { min: minute(), kind: 'fg', side: 'us', pts: 3 });
-    for (let i = 0; i < us.safeties; i += 1) ev.push({ min: minute(), kind: 'safety', side: 'us', pts: 2 });
-    them.tds.forEach(pts => ev.push({ min: minute(), kind: 'td', side: 'them', pts }));
-    for (let i = 0; i < them.fgs; i += 1) ev.push({ min: minute(), kind: 'fg', side: 'them', pts: 3 });
-    for (let i = 0; i < them.safeties; i += 1) ev.push({ min: minute(), kind: 'safety', side: 'them', pts: 2 });
+    us.tds.forEach((pts, i) => ev.push(i < kinds.length ? { min: minute('us'), kind: kinds[i], side: 'us', pts, mine: true } : { min: minute('us'), kind: 'td', side: 'us', pts }));
+    for (let i = 0; i < us.fgs; i += 1) ev.push(kicks ? { min: minute('us'), kind: 'fg', side: 'us', pts: 3, mine: true } : { min: minute('us'), kind: 'fg', side: 'us', pts: 3 });
+    for (let i = 0; i < us.safeties; i += 1) ev.push({ min: minute('us'), kind: 'safety', side: 'us', pts: 2 });
+    them.tds.forEach(pts => ev.push({ min: minute('them'), kind: 'td', side: 'them', pts }));
+    for (let i = 0; i < them.fgs; i += 1) ev.push({ min: minute('them'), kind: 'fg', side: 'them', pts: 3 });
+    for (let i = 0; i < them.safeties; i += 1) ev.push({ min: minute('them'), kind: 'safety', side: 'them', pts: 2 });
     if (g.played) {
       const own = (kind: string, count: number) => { for (let i = 0; i < count; i += 1) ev.push({ min: minute(), kind, side: 'us', mine: true }); };
       own('miss', of(g, 'fgAtt') - of(g, 'fgMade'));
@@ -383,7 +460,8 @@ function finish(games: DerivedGame[], row: UsRow, _pos: string, rng: Rng): boole
   return true;
 }
 
-const TD_PTS = [6, 7, 8];
+const S = NFL_SCORING;
+const TD_PTS: number[] = [NFL_SCORING.touchdown, NFL_SCORING.touchdown + NFL_SCORING.kickAfter, NFL_SCORING.touchdown + NFL_SCORING.twoPointTry];
 
 /** This sport's own agreement items, beyond the core's (which already holds
  *  the whole number totals and that the drives' points make each score). */
@@ -574,9 +652,9 @@ export const NFL_SEASON: UsSeasonBind = {
   missed: NFL_MISSED_PLAYOFFS,
   results: NFL_PLAYOFF_RESULTS,
   bands: BANDS,
-  /* one game a round */
-  series: null,
-  rounds: ['Wild Card', 'Divisional', 'Conference Championship', 'Super Bowl'],
+  /* one game a round, the ledger's format */
+  series: US_PLAYOFF_FORMAT.nfl.series,
+  rounds: US_PLAYOFF_FORMAT.nfl.rounds,
   cap: CAP,
   seasonLabel: year => usSeasonLabel('nfl', year),
   statKeys: () => STAT_KEYS,
@@ -621,11 +699,12 @@ export const NFL_SEASON: UsSeasonBind = {
       'Field goals made': 'FG made', 'Field goals attempted': 'FG tries', 'Longest field goal': 'Long FG',
     },
     help: (named, opp) => usHelp({
-      named, games: GAMES, bands: BANDS,
+      named, games: GAMES, bands: BANDS, whoWhen: 'Who you meet in which game',
+      playoffNote: 'Every playoff run here starts at the Wild Card round: this career has no first round bye, and a playoff round shows who you met and whether you won, with no score.',
       examples: [
         { head: 'A game', body: `Say you are a quarterback. Game 9, away to ${named && opp ? `the ${opp}` : 'another team'}. You lose 24-27 and throw for 286 yards and 2 touchdowns. Your record goes to 6-3.` },
         { head: 'Your totals', body: 'Whatever your season card says (4,210 passing yards and 31 touchdowns, say), every game here adds up to exactly that. A kicker makes every field goal his team scores in a game he plays.' },
-        { head: 'The scoreboard', body: 'Each scoring drive goes on the board as it happens: 7 for a touchdown with the kick after it, 6 when that kick misses, 8 with a two point try, 3 for a field goal and 2 for a safety.' },
+        { head: 'The scoreboard', body: `Each scoring drive goes on the board as it happens: ${S.touchdown + S.kickAfter} for a touchdown with the kick after it, ${S.touchdown + S.twoPointTry} with a two point try, ${S.touchdown} when the try after it fails, ${S.fieldGoal} for a field goal and ${S.safety} for a safety.` },
         { head: 'A level game', body: 'Now and then a game ends level. Ties are real in the NFL. Here a tie is not a win and not a loss, and your record shows it as 9-7-1.' },
       ],
     }),
