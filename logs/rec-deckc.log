@@ -1,0 +1,23 @@
+recording deckc on 5320efca45b4b324e3122b6c90ac516bf121f181
+== before: the committed digest (Release AP's recording) against this tree
+exit 1
+1
+FAIL nba: the seeded draw changed on 1 of 1200 saves (first: save 748)
+   and 7744 plays again with the rating at its potential
+FAIL nba: the seeded draw changed on 1 of 1200 saves (first: save 748)
+simUsCareerDeckC: 1 failure(s)
+== recording
+exit 0
+recorded nfl, nba, mlb, nhl into scripts/data/usCareerDeckCDigest.json
+simUsCareerDeckC: all checks passed
+nhl: BYTE EQUAL; fixtures 1200 -> 1200; cards that changed 0 of 36; draw lines that changed 0 of 1200; draws hash same
+nfl: BYTE EQUAL; fixtures 1920 -> 1920; cards that changed 0 of 36; draw lines that changed 0 of 1920; draws hash same
+nba: MOVED; fixtures 1200 -> 1200; cards that changed 0 of 36; draw lines that changed 1 of 1200 (saves 748); draws hash 93d32717e1308150 -> 48e35881efa514c3
+mlb: BYTE EQUAL; fixtures 2640 -> 2640; cards that changed 0 of 36; draw lines that changed 0 of 2640; draws hash same
+ee24401bb96d202cd63e3fd6826046b17475a08390cd5048e923bec5137ff09d  scripts/data/usCareerDeckCDigest.json
+== after: the plain run on the new digest
+nhl: 1200 saves, 36 deck C cards dealt, 109 of 1200 draws were deck C, draw hash 4cc8849b9ffe5e3c
+   words against effects: 11882 plays, 2222 at a gamble's edge, 1572 era money pairs, 556 trades or claims
+   and 7744 plays again with the rating at its potential
+simUsCareerDeckC: all checks passed
+after exit 0

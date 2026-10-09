@@ -1,0 +1,33 @@
+header before: e9d10a10e26f95a902e4a8d0d7a4c5649665d55f (not main: Round 1104 on r1104-nfl-truth, recorded on a GitHub runner)
+header after:  5320efca45b4b324e3122b6c90ac516bf121f181 (not main: src differs from 834e764acf6a4218242f626a701708a79cfffe48)
+
+nfl: BYTE EQUAL (path 468 steps, 15 fixed saves, every screen)
+
+nba: MOVED. path 523 -> 540 steps; coverage {"seasons":24,"event":23,"extension":11,"freeagency":7,"rivalryBeat":13,"rivalryChoice":3,"retireCancel":2,"retireConfirm":2,"restartCancel":2,"restartConfirm":2,"retired":2,"coach":8,"coachSeasons":20,"panels":34,"remounts":5,"throwback":1} -> {"seasons":24,"event":21,"extension":11,"freeagency":14,"rivalryBeat":13,"rivalryChoice":4,"retireCancel":2,"retireConfirm":2,"restartCancel":2,"restartConfirm":2,"retired":2,"coach":8,"coachSeasons":15,"panels":35,"remounts":7,"throwback":1}; first paint same
+  first step that differs 12; first save that differs 20; first action label that differs 22
+  of the first 523 steps: 500 differ in the save, 4 in the markup only, 0 in the text excerpt only, 450 in the action label
+  steps that differ before the first save does: 12
+  step 12 [season, season 0] action "hub: 🏆Trophy CaseEmptyNothing in it. Go and win something"; save same; markup moved; save fields moved: none
+      text was: Hub🏆 Trophy Case0 ringsNothing on the shelf yet. Every award you win lands here with the year on it.🎖️ Badges0 of 21🔒NBA championA ring. 
+      text now: Hub🏆 Trophy Case0 ringsNothing on the shelf yet. Every award you win lands here with the year on it.🎖️ Badges0 of 23🔒NBA championA ring. 
+  step 20 [event, season 1] action "hub: Play the 2026 season"; save moved; markup moved; save fields moved: c.ovr, c.seasons, c.rival, c.pendingRivalryEvent, c.headlines
+      text was: The 2026 seasonGolden State Warriors · age 21 · SGLost the NBA Finals13 ppg, 3.6 rpg, 2.3 apg🪑 Still the second unit. The minutes will come
+      text now: The 2026 seasonGolden State Warriors · age 21 · SGLost in the first round6.9 ppg, 1.5 rpg, 1.0 apg🪑 Still the second unit. The minutes will
+  step 21 [event, season 1] action "curtain: Continue"; save moved; markup moved; save fields moved: none
+      text was: Trey Buckets · SGGolden State Warriors2027 · age 22OVR 74$2.5M x3🪑 Second unitThe role questionA beat reporter asks it, politely, the way t
+      text now: 🪞 Rivalry💰The Bigger NumberRhys Vasquez signs an extension, and every comment section has already decided it is bigger than yours.Morale -
+  step 22 [event, season 1] action "event: Team first, whatever they needThe coaches nod" -> "rival beat: Continue"; save moved; markup moved; save fields moved: c.morale, c.fanbase, c.pendingRivalryEvent, c.lastRivalryEventId
+      text was: Trey Buckets · SGGolden State Warriors2027 · age 22OVR 74$2.5M x3🪑 Second unitLast season: 13 ppg, 3.6 rpg, 2.3 apg · Lost the NBA Finals P
+      text now: Trey Buckets · SGGolden State Warriors2027 · age 22OVR 75$2.5M x3🪑 Second unitThe halftime hot dog challengeA season ticket holder ate nine
+  step 23 [season, season 1] action "hub: 🏆Trophy CaseEmptyNothing in it. Go and win something" -> "event: Accept and eatThird quarter risk"; save moved; markup moved; save fields moved: c.morale, c.fanbase, c.health, c.lifeFlags, phase, teamQuality
+      text was: Hub🏆 Trophy Case0 ringsNothing on the shelf yet. Every award you win lands here with the year on it.🎖️ Badges1 of 21🔒NBA championA ring. 
+      text now: Trey Buckets · SGGolden State Warriors2027 · age 22OVR 75$2.5M x3🪑 Second unitLast season: 6.9 ppg, 1.5 rpg, 1.0 apg · Lost in the first ro
+  step 24 [season, season 1] action "box: Hub" -> "hub: 🏆Trophy CaseEmptyNothing in it. Go and win something"; save moved; markup moved; save fields moved: none
+      text was: Trey Buckets · SGGolden State Warriors2027 · age 22OVR 74$2.5M x3🪑 Second unitLast season: 13 ppg, 3.6 rpg, 2.3 apg · Lost the NBA Finals P
+      text now: Hub🏆 Trophy Case0 ringsNothing on the shelf yet. Every award you win lands here with the year on it.🎖️ Badges1 of 23🔒NBA championA ring. 
+  fixed saves that moved: 14 of 15 (mid, ext, fa, retired, coach, beat, choice, suspended, dirty, noRole, negNet, noCoachKey, coachPhaseNoCoach, retiredNoCoachKey)
+  screen steps that moved, by fixed save: rookie 26/55, mid 58/58, ext 58/58, fa 58/58, retired 31/31, coach 31/31, beat 31/31, choice 31/31, suspended 58/58, dirty 58/58, noRole 58/58, negNet 58/58, noCoachKey 58/58, coachPhaseNoCoach 31/31, retiredNoCoachKey 31/31
+
+mlb: BYTE EQUAL (path 449 steps, 15 fixed saves, every screen)
+
+nhl: BYTE EQUAL (path 415 steps, 15 fixed saves, every screen)

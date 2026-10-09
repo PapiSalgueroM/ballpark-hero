@@ -1,0 +1,15 @@
+tsc exit=0 90s | 
+rec-board exit=0 187s | parity exit 0
+rec-deckc exit=0 191s | after exit 0
+vitest-own exit=0 8s |    Duration  7.11s (transform 3.36s, setup 651ms, collect 6.84s, tests 3.51s, environment 4.64s, prepare 1.25s)
+simUsSeasonCentre exit=0 30s | simUsSeasonCentre: 98 checks, 0 failed
+sense-full exit=0 143s | simNbaAwardsSense: 143 checks, 0 failed (full size), 143s
+simUsSeasonCentre-short82 exit=1 26s | simUsSeasonCentre: 98 checks, 1 failed (control short82)
+simNbaCareer exit=0 23s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest
+simUsCoachPoaching exit=0 2s | Coach poaching: CRLF anchors/raw bytes held, owned copies cleaned; fictional pure-engine fixtures do not prove UI gameplay or sports history.
+anchors exit=0 43s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+norival exit=0 18s | No rival product names found. 0 findings.
+c-snubhonoured exit=1 157s | simNbaAwardsSense: 140 checks, 1 failed (full size, control snubhonoured), 156s
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simSiteSearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+hall-nba exit=0 235s | simCareerHall nba: all 33 checks green

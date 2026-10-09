@@ -1,0 +1,21 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/nbaOldSaveLines.test.ts [2m([22m[2m37 tests[22m[2m)[22m[32m 176[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/usSeason.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 912[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1103: an NBA career plays the season the ledger holds[2m > [22mplays the ledger length in every year the ledger holds one, and 82 in a year it holds none for [33m 624[2mms[22m[39m
+ [32m✓[39m src/lib/usCoachPoaching.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 84[2mms[22m[39m
+ [32m✓[39m src/test/nbaAwardDecisionLift.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 910[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonCentre.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 1357[2mms[22m[39m
+   [33m[2m✓[22m[39m the US Season Center, mounted by itself[2m > [22mwalks an NBA season from the tip off card to the review and closes [33m 672[2mms[22m[39m
+ [32m✓[39m src/test/nbaTrophyTile.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/test/nbaStatLineColumns.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 60[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m102 passed[39m[22m[90m (102)[39m
+[2m   Start at [22m 14:23:40
+[2m   Duration [22m 7.11s[2m (transform 3.36s, setup 651ms, collect 6.84s, tests 3.51s, environment 4.64s, prepare 1.25s)[22m
+
