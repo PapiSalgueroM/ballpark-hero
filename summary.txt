@@ -1,0 +1,5 @@
+simDeadlineDay exit=0 5s | simDeadlineDay: green. The brief is real, the desk pays, the clock binds, the daily is one window a day, the budget holds, a Club Manager save keeps its registrations, ri
+simCmLeagueRules exit=0 40s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simCareerClubPool exit=0 7s | simCareerClubPool: all sections green
+simClubManagerNewLeagues exit=0 83s | simClubManagerNewLeagues: all checks passed
+simEras exit=1 516s | 3 FAILURES
