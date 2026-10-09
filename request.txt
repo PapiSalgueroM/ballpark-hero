@@ -1,0 +1,35 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-cm: node_modules/.bin/vitest run src/test/cmValueCurve.test.ts src/test/clubManager*.test.* src/test/cm*.test.* src/hooks/useClubManager.test.ts --testTimeout=300000 --hookTimeout=120000
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+ss-seed1: SIM_SEED=1 node scripts/simClubManagerSaveSize.mjs
+ss-seed2: SIM_SEED=2 node scripts/simClubManagerSaveSize.mjs
+ss-seed3: SIM_SEED=3 node scripts/simClubManagerSaveSize.mjs
+ss-seed4: SIM_SEED=4 node scripts/simClubManagerSaveSize.mjs
+ss-seed5: SIM_SEED=5 node scripts/simClubManagerSaveSize.mjs
+ss-exactage: SAVE_SIZE_CONTROL=exactage node scripts/simClubManagerSaveSize.mjs
+ss-namekey: SAVE_SIZE_CONTROL=namekey node scripts/simClubManagerSaveSize.mjs
+ss-norepair: SAVE_SIZE_CONTROL=norepair node scripts/simClubManagerSaveSize.mjs
+ss-pump: SAVE_SIZE_CONTROL=pump node scripts/simClubManagerSaveSize.mjs
+ss-deaddoor: SAVE_SIZE_CONTROL=deaddoor node scripts/simClubManagerSaveSize.mjs
+ss-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
+ss-unbounded: SAVE_SIZE_CONTROL=unbounded node scripts/simClubManagerSaveSize.mjs
+ss-silent: SAVE_SIZE_CONTROL=silent node scripts/simClubManagerSaveSize.mjs
+ss-noleave: SAVE_SIZE_CONTROL=noleave node scripts/simClubManagerSaveSize.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simTransfers: node scripts/simTransfers.mjs
+simClubManagerDeals: node scripts/simClubManagerDeals.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+simYouthPadding: node scripts/simYouthPadding.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simBoardAsks: node scripts/simBoardAsks.mjs
+simClubManager: node scripts/simClubManager.mjs
+simManagerSpec: node scripts/simManagerSpec.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs
+simClubManagerGathered: node scripts/simClubManagerGathered.mjs
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simCustomClubValues: node scripts/simCustomClubValues.mjs

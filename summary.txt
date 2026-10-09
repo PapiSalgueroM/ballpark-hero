@@ -1,0 +1,35 @@
+vitest-cm exit=0 17s |    Duration  15.97s (transform 3.71s, setup 1.43s, collect 11.75s, tests 17.87s, environment 7.75s, prepare 2.36s)
+simClubManagerSaveSize exit=0 34s | simClubManagerSaveSize: all sections green
+ss-seed1 exit=0 27s | simClubManagerSaveSize: all sections green
+tsc exit=0 56s | 
+ss-seed2 exit=0 28s | simClubManagerSaveSize: all sections green
+ss-seed3 exit=0 27s | simClubManagerSaveSize: all sections green
+ss-seed4 exit=0 27s | simClubManagerSaveSize: all sections green
+ss-seed5 exit=0 27s | simClubManagerSaveSize: all sections green
+ss-exactage exit=1 27s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=exactage turned section 9 red (10 failures) and nothing else
+ss-namekey exit=1 27s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=namekey turned section 5 red (6 failures) and nothing else
+ss-norepair exit=1 26s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=norepair turned section 6 red (5 failures) and nothing else
+ss-pump exit=1 27s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=pump turned section 7 red (6 failures) and nothing else
+ss-deaddoor exit=1 27s | simClubManagerSaveSize: SAVE_SIZE_CONTROL=deaddoor turned sections 8, 9 red, but it should have hit only section 8
+ss-uncapped exit=1 28s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=uncapped turned section 1 red (33 failures) and nothing else
+ss-unbounded exit=1 28s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=unbounded turned section 2 red (5 failures) and nothing else
+ss-silent exit=1 32s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=silent turned section 3 red (1 failure) and nothing else
+ss-noleave exit=1 31s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=noleave turned section 4 red (1 failure) and nothing else
+simNoRivalNames exit=0 9s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 31s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simClubManagerDeals exit=0 6s | simClubManagerDeals: green. The desk reads, the table binds, and nobody signs on a handshake.
+simClubManagerSave exit=0 8s | simClubManagerSave: all sections green
+simYouthPadding exit=0 21s | simYouthPadding: 12 checks, 0 failures
+simCmShootoutOrder exit=0 19s | simCmShootoutOrder: all sections passed
+simTransfers exit=0 40s | ALL TRANSFER CHECKS PASSED
+simBoardAsks exit=0 14s | simBoardAsks: green. Every ask a board makes can be met, and nobody real is quoted.
+simClubManager exit=0 18s | ALL CLUB MANAGER SIMS PASSED
+simClubManagerScore exit=0 43s | ALL SEASON SCORE CHECKS PASSED
+simManagerSpec exit=0 51s | simManagerSpec: all green
+simClubManagerGathered exit=0 1s | simClubManagerGathered: all checks passed (1 gathered league(s), 403 men, 1436 printed squad entries accounted for, 83 addresses, 5 cited facts, the old save)
+simManagerHotSeat exit=0 44s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+simFreeAgents exit=0 11s | simFreeAgents: all sections passed
+simDeadlineDay exit=1 2s | simDeadlineDay: 3 failure(s)
+simCmLeagueRules exit=0 29s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simCustomClubValues exit=1 45s | simCustomClubValues: 25 checks, 1 failure (sections 1)
+simClubManagerNewLeagues exit=0 63s | simClubManagerNewLeagues: all checks passed

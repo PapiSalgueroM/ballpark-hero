@@ -1,0 +1,87 @@
+NEGATIVE CONTROL ON: SAVE_SIZE_CONTROL=uncapped, the engine is a rewritten copy
+1) Fifteen seasons at three clubs: under 196000 bytes, slope under 2000 bytes a season, every ledger inside its cap
+  FAIL: Real Madrid season 7: h2h holds 323 entries, over its cap of 300
+  FAIL: Real Madrid season 8: h2h holds 363 entries, over its cap of 300
+  FAIL: Real Madrid season 9: h2h holds 402 entries, over its cap of 300
+  FAIL: Real Madrid season 10: h2h holds 442 entries, over its cap of 300
+  FAIL: Real Madrid season 11: h2h holds 481 entries, over its cap of 300
+  FAIL: Real Madrid season 12: h2h holds 520 entries, over its cap of 300
+  FAIL: Real Madrid season 13: h2h holds 560 entries, over its cap of 300
+  FAIL: Real Madrid season 14: h2h holds 600 entries, over its cap of 300
+  FAIL: Real Madrid season 15: h2h holds 639 entries, over its cap of 300
+   Real Madrid   seasons 15, day one 58487, season 1 161172, season 15 207313, slope after season 3 2777 bytes a season
+                 sizes: 58487 161172 167898 174216 181048 182268 177202 181603 185456 189583 191469 195872 199509 200919 206349 207313
+  FAIL: Real Madrid: the save is 207313 bytes after 15 seasons, over the 196000 budget
+  FAIL: Real Madrid: the save grows 2777 bytes a season over seasons 4 to 15, over the 2000 cap
+  FAIL: Everton season 7: h2h holds 321 entries, over its cap of 300
+  FAIL: Everton season 8: h2h holds 368 entries, over its cap of 300
+  FAIL: Everton season 9: h2h holds 415 entries, over its cap of 300
+  FAIL: Everton season 10: h2h holds 462 entries, over its cap of 300
+  FAIL: Everton season 11: h2h holds 510 entries, over its cap of 300
+  FAIL: Everton season 12: h2h holds 557 entries, over its cap of 300
+  FAIL: Everton season 13: h2h holds 604 entries, over its cap of 300
+  FAIL: Everton season 14: h2h holds 651 entries, over its cap of 300
+  FAIL: Everton season 15: h2h holds 698 entries, over its cap of 300
+   Everton       seasons 15, day one 53807, season 1 144765, season 15 219631, slope after season 3 4389 bytes a season
+                 sizes: 53807 144765 158737 161359 171272 174862 181450 183623 189147 193540 197443 202827 206413 211352 214316 219631
+  FAIL: Everton: the save is 219631 bytes after 15 seasons, over the 196000 budget
+  FAIL: Everton: the save grows 4389 bytes a season over seasons 4 to 15, over the 2000 cap
+  FAIL: Lincoln City season 7: h2h holds 331 entries, over its cap of 300
+  FAIL: Lincoln City season 8: h2h holds 378 entries, over its cap of 300
+  FAIL: Lincoln City season 9: h2h holds 425 entries, over its cap of 300
+  FAIL: Lincoln City season 10: h2h holds 472 entries, over its cap of 300
+  FAIL: Lincoln City season 11: h2h holds 519 entries, over its cap of 300
+  FAIL: Lincoln City season 12: h2h holds 566 entries, over its cap of 300
+  FAIL: Lincoln City season 13: h2h holds 613 entries, over its cap of 300
+  FAIL: Lincoln City season 14: h2h holds 660 entries, over its cap of 300
+  FAIL: Lincoln City season 15: h2h holds 707 entries, over its cap of 300
+   Lincoln City  seasons 15, day one 54174, season 1 145554, season 15 220292, slope after season 3 4361 bytes a season
+                 sizes: 54174 145554 156882 162733 171447 176674 181505 185761 190853 194370 198318 203156 207221 211412 215829 220292
+  FAIL: Lincoln City: the save is 220292 bytes after 15 seasons, over the 196000 budget
+  FAIL: Lincoln City: the save grows 4361 bytes a season over seasons 4 to 15, over the 2000 cap
+   board nudges over the whole run: 255
+2) An oversized pre 634 save shrinks on load, the trim is a fixed point, and the next season plays the same
+   season 2 save 158737 bytes, inflated to 462083, loaded back as 182522
+   ledgers after load: h2h 300, transferLog 80, inbox 8, aiHeadlines 8
+   a season from the trimmed save and from the oversized one, same seed: identical (table, results, squad, budget, board, trophies, career stats)
+3) saveCareer says whether it wrote: false when refused twice, lean and true when refused once, same bytes twice
+   the season 15 save: 185630 bytes, h2h 698 rows, at most 27 per opponent
+   store throws on every write: saveCareer returned false after 2 attempts (185630, 173854 bytes)
+   store throws once: saveCareer returned true, wrote 173854 bytes (11776 fewer), h2h 165 rows, at most 6 per opponent
+   working store: true then true, 185630 bytes then 185630, identical true, equal to the trimmed career true
+4) The hook, rendered: the pagehide write, the hidden tab write, the same bytes, and saveFailed
+    after pagehide the disk holds 54291 bytes, memory 54291
+    after the tab went hidden the disk holds 54107 bytes, memory 54107
+    three writes, 54067 bytes each, identical
+    with a throwing store, saveFailed is true
+    with the store back, saveFailed is false and the disk matches memory: true
+    second press on Cristiano Ronaldo: "Cristiano Ronaldo is already in your squad."
+    loan out again after the recall: "Christian Pulisic has already been out on loan once this season. One loan out a season."
+   Test Files  1 passed (1)
+   Tests  6 passed (6)
+5) Two different men with one name both survive a save, a load and a week, and a loan record for one of them survives too
+   Real Madrid for three seasons, then Athletic Club at season 4: squad 21, Nando Hedlund x2 (p-nando-hedlund ST 23 r73 | p-nando-hedlund-2 GK 18 r62)
+   saved and loaded: squad 21, the pair x2; a week later: squad 21, the pair x2
+   the GK out on loan: his loan record after the load 1, after a week 1; the ST still in the squad true and true
+   Alan Varela (CDM 25): with a different man of that name on loan, listed true, refused as away false, bought true; with the man himself on loan, listed false, refused as away true, bought false
+6) The repair, on saves that really carry the duplicate the pre 634 market made
+   Thiago Pitarch (CM 19) out on loan; the pre 634 market listed him at Real Madrid for 20.6 as CM 19
+   in season shape: squad 1 and away 1 before the load, squad 1 and away 0 after it, 1 of him in the squad after the summer
+   post summer shape: 2 copies before the load, 1 after (kept p-thiago-pitarch, the XI copy is p-thiago-pitarch), dangling XI ids 0, dangling set piece ids 0, 1 a week later
+   46 men sent out on loan one at a time at Real Madrid season 3 and Athletic Club season 4: 0 still listed while away
+7) The loan desk is not a money pump: one loan out a season
+   Florian Wirtz at Liverpool, budget 137m: 1 of 25 loan out and recall cycles went through, net +3.2m (one loan fee is 6.4m), refused on attempt 2: "Florian Wirtz has already been out on loan once this season. One loan out a season."
+   a loan approach for him after the recall: refused
+   loanOutRefusal against loanOutPlayer: 78 men over three states, 0 disagreements
+   after the summer, season 2: he can go out on loan again true
+8) Every market door agrees with its reason, and talks refuse a released man or a man on loan at the door
+   2632 presses over 8 states and 82 cards: 1368 refused, 0 where the engine and the reason disagree
+   talks for Kylian Mbappé, released: opened false, reason "You released Kylian Mbappé. He will not sign for you again."
+   talks for Thiago Pitarch, out on loan: opened false, reason "Thiago Pitarch is already yours, out on loan at Sevilla. Bring him back from the loan desk instead."
+9) A career saved before the baked ages moved: a man of mine out on loan is not for sale at my own club
+   Sevilla as saved (season 1, week 48): 20 men, 18 sent out on loan one at a time, 18 of them a year off the world's row: 0 still listed, 0 bought back, 0 opened talks, 0 without the out on loan reason
+   Sevilla the summer after (season 2): 21 men, 15 sent out on loan one at a time, 15 of them a year off the world's row: 0 still listed, 0 bought back, 0 opened talks, 0 without the out on loan reason
+   Alan Varela (CDM 25): hidden by a loan record -1, 0, 1 years off, still listed with one -2, 2 years off, and bought past the one two years off: true
+   section 1 checks that fired under uncapped: caps, budget, slope
+
+simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=uncapped turned section 1 red (33 failures) and nothing else
