@@ -53,7 +53,8 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { POS_MAP as CURVE_POS_MAP, ratingOf as curveRatingOf, gbpM as curveGbpM } from './cmValueCurve.mjs';
+import { POS_MAP as CURVE_POS_MAP, ratingOf as curveRatingOf, gbpM as curveGbpM, rateFrom, CURVE_VERSION } from './cmValueCurve.mjs';
+import { ERA_RATING_AGE_SHIFT } from './cmAges.mjs';
 
 /* The same curves as bakeClubManagerRosters.mjs, so an era value and a 2026
  * value mean the same thing on the rating scale. Since Round 1035 they are
@@ -64,8 +65,16 @@ import { POS_MAP as CURVE_POS_MAP, ratingOf as curveRatingOf, gbpM as curveGbpM 
  * carries it, so no output moves, and the 2005 path keeps the map it always
  * had. gbpM stays at one decimal whatever a caller passes after the value. */
 export const POS_MAP = { ...CURVE_POS_MAP, 'Sweeper': 'CB' };
-export const ratingOf = usd => curveRatingOf(usd);
+/* Round 1102: a rating is the value curve read with the man's age and position (curve 2), and an
+ * era row is rated one year on from the age it ships: the table's age is the man's age on
+ * 1 January of the era year, and the 2026 squads are rated on the age at that season's August.
+ * So every era call site passes `age + ERA_RATING_AGE_SHIFT` (scripts/lib/cmAges.mjs), the file
+ * ships the table's age as it always did, and its META says so (ERA_CURVE_META_LINES). */
+export const ratingOf = (usd, age, pos) => curveRatingOf(usd, age, pos);
 export const gbpM = usd => curveGbpM(usd);
+export { rateFrom, CURVE_VERSION, ERA_RATING_AGE_SHIFT };
+/** The two META lines every era file carries since Round 1102, straight after `moves`. */
+export const ERA_CURVE_META_LINES = [`  curve: ${CURVE_VERSION},`, `  ratedAtAge: 'a + ${ERA_RATING_AGE_SHIFT}',`];
 
 const esc = s => s.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
 const unesc = s => s.replace(/\\(.)/g, '$1');
@@ -85,6 +94,9 @@ export function readShippedEra(file, prefix) {
     return Number(m[1]);
   };
   const meta = { year: num('year'), players: num('players'), clubs: num('clubs'), moves: num('moves') };
+  /* Round 1102: the curve the file's ratings are on. A file from before the round has no stamp. */
+  const stamp = text.match(/^  curve: (\d+),$/m);
+  meta.curve = stamp ? Number(stamp[1]) : null;
   const start = text.indexOf(`export const ${prefix}_ROSTERS`);
   if (start < 0) die(`${file}: no ${prefix}_ROSTERS`);
   const clubs = new Map();
@@ -135,7 +147,7 @@ function bakeRow(name, rec) {
   const p = POS_MAP[rec.position];
   if (!p) die(`unmapped position "${rec.position}" (${name})`);
   if (!Number.isFinite(rec.age)) die(`no age on the row of ${name}`);
-  return { n: name, p, a: rec.age, v: gbpM(rec.usd), r: ratingOf(rec.usd), shipped: false, nat: rec.nat };
+  return { n: name, p, a: rec.age, v: gbpM(rec.usd), r: ratingOf(rec.usd, rec.age + ERA_RATING_AGE_SHIFT, p), shipped: false, nat: rec.nat };
 }
 
 /**
@@ -158,6 +170,11 @@ export function extendEra(cfg) {
   const thinUnder = cfg.thinUnder ?? 8;
   const log = [];
   const shipped = readShippedEra(file, prefix);
+  /* Round 1102: shipped lines are carried as bytes and new lines are baked on today's curve, so a
+     shipped file on any other curve would leave two scales in one file. */
+  if (shipped.meta.curve !== CURVE_VERSION) {
+    die(`${file}: the shipped file is on curve ${shipped.meta.curve ?? 1} and this step bakes on curve ${CURVE_VERSION}, so one file would hold two scales: re rate it first (rerateShippedEra, node scripts/rerateCmEras.mjs)`);
+  }
   const world = new Map();
   const origin = new Map();
   for (const [club, list] of shipped.clubs) {
@@ -372,7 +389,7 @@ export function extendEra(cfg) {
 
   const eol = fs.readFileSync(file, 'utf8').includes('\r\n') ? '\r\n' : '\n';
   const out = [...cfg.header(stats), `import type { BakedPlayer } from '@/data/clubManagerRosters';`, '',
-    `export const ${prefix}_META = {`, `  year: ${year},`, `  players: ${total},`, `  clubs: ${clubsSorted.length},`, `  moves: ${stats.moves},`, '};', '',
+    `export const ${prefix}_META = {`, `  year: ${year},`, `  players: ${total},`, `  clubs: ${clubsSorted.length},`, `  moves: ${stats.moves},`, ...ERA_CURVE_META_LINES, '};', '',
     `/** ${year} clubs where the year-${year} table runs thin (under ${thinUnder} real players);`,
     ` *  the game pads these squads with youth players and the picker says so. */`,
     `export const ${prefix}_PARTIAL: string[] = ${JSON.stringify(stats.partial)};`, '',
@@ -388,6 +405,52 @@ export function extendEra(cfg) {
   const nationalities = new Map();
   for (const list of world.values()) for (const p of list) if (!p.shipped) nationalities.set(p.n, p.nat);
   return { text: out.join(eol), stats, log, world, nationalities };
+}
+
+/**
+ * Round 1102: re rate a shipped era file in place, from its own rows. Pure: text in, text out.
+ *
+ * A shipped row's rating IS its value rating (the curve before the round was the value curve
+ * alone), so the new rating is rateFrom(r, a + ERA_RATING_AGE_SHIFT, p) read off the same line,
+ * exactly what a full re bake from the pull gives (scripts/simEraBakeExtend.mjs part C rebuilds
+ * each era from its base and compares). Every row's r is replaced, the two META lines are added
+ * after `moves`, and no other byte moves: line endings, order, values and ages stay.
+ *
+ * Returns { already: true } for a file already on today's curve (so a second run writes nothing),
+ * else { text, rows, changed, by } where `by` counts the rows at each change in rating.
+ * Dies on a stamp it does not know and on any line of the rosters block it cannot read.
+ */
+export function rerateShippedEra(text, prefix) {
+  const eol = text.includes('\r\n') ? '\r\n' : '\n';
+  const lines = text.split(eol);
+  const stamp = lines.map(l => l.match(/^  curve: (\d+),$/)).find(Boolean);
+  if (stamp) {
+    if (Number(stamp[1]) === CURVE_VERSION) return { already: true };
+    die(`${prefix}: the file is stamped curve ${stamp[1]}, which this tool does not know how to move to curve ${CURVE_VERSION}`);
+  }
+  const metaAt = lines.indexOf(`export const ${prefix}_META = {`);
+  const rostersAt = lines.findIndex(l => l.startsWith(`export const ${prefix}_ROSTERS`));
+  if (metaAt < 0 || rostersAt < 0 || rostersAt < metaAt) die(`${prefix}: no META block above a ROSTERS block`);
+  const metaEnd = lines.indexOf('};', metaAt);
+  const movesAt = lines.findIndex((l, i) => i > metaAt && i < metaEnd && /^  moves: \d+,$/.test(l));
+  if (metaEnd < 0 || metaEnd > rostersAt || movesAt < 0) die(`${prefix}: the META block has no moves line to stamp the curve after`);
+  const ROW = /^(    \{ n: '.*', p: ')([A-Z]+)(', a: )(\d+)(, v: [\d.]+, r: )(\d+)( \},)$/;
+  let rows = 0;
+  let changed = 0;
+  const by = {};
+  for (let i = rostersAt + 1; i < lines.length; i++) {
+    const line = lines[i];
+    if (/^  '.*': \[$/.test(line) || line === '  ],' || line === '};' || line === '') continue;
+    const m = ROW.exec(line);
+    if (!m) die(`${prefix}: a line of the rosters block this tool cannot read: ${line}`);
+    const was = Number(m[6]);
+    const now = rateFrom(was, Number(m[4]) + ERA_RATING_AGE_SHIFT, m[2]);
+    rows += 1;
+    if (now !== was) { changed += 1; by[now - was] = (by[now - was] ?? 0) + 1; }
+    lines[i] = `${m[1]}${m[2]}${m[3]}${m[4]}${m[5]}${now}${m[7]}`;
+  }
+  lines.splice(movesAt + 1, 0, ...ERA_CURVE_META_LINES);
+  return { text: lines.join(eol), rows, changed, by };
 }
 
 /** Run an extend from a bake script: print the log, fail closed, write. */

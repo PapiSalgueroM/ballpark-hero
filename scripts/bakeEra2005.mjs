@@ -45,7 +45,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { runExtend, readPull, updateNationalityBlock, POS_MAP, ratingOf, gbpM } from './lib/eraBakeExtend.mjs';
+import { runExtend, readPull, updateNationalityBlock, POS_MAP, ratingOf, gbpM, ERA_RATING_AGE_SHIFT, ERA_CURVE_META_LINES } from './lib/eraBakeExtend.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -849,7 +849,8 @@ for (const rec of byPlayer.values()) {
     console.error(`FATAL: unmapped position "${rec.position}" (${rec.player_name})`);
     process.exit(1);
   }
-  byClub.get(rec.engine).push({ n: rec.player_name, p, a: rec.age, v: gbpM(rec.market_value_usd), r: ratingOf(rec.market_value_usd) });
+  /* Round 1102: rated on curve 2 at the table's age plus one (that season's August); the age ships as it is. */
+  byClub.get(rec.engine).push({ n: rec.player_name, p, a: rec.age, v: gbpM(rec.market_value_usd), r: ratingOf(rec.market_value_usd, rec.age + ERA_RATING_AGE_SHIFT, p) });
 }
 for (const list of byClub.values()) list.sort((a, b) => b.v - a.v || a.n.localeCompare(b.n));
 
@@ -904,6 +905,7 @@ export const ERA2005_META = {
   players: ${total},
   clubs: ${clubsSorted.length},
   moves: ${moved + removed + arrived},
+${ERA_CURVE_META_LINES.join('\n')}
 };
 
 /** 2005 clubs where the year-2005 table runs thin (under 8 real players);

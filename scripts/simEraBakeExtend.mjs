@@ -35,6 +35,27 @@
  * settled only by the caller's poolNamesakes (A places one by it, B holds its
  * three guards, control nosplit cuts the undeclared one out).
  *
+ * Round 1102 (ratings read with age, curve 2):
+ *   - a new line is rated at the row's age plus ERA_RATING_AGE_SHIFT and the written META carries
+ *     the curve's stamp (A types three ratings out by hand, one of which reads the shift);
+ *   - B gains its thirtieth guard: the step refuses a shipped file that is not on today's curve,
+ *     because it carries shipped lines as bytes and would leave two scales in one file;
+ *   - R holds rerateShippedEra, the function that moved the four shipped files: ratings and the
+ *     two META lines move and nothing else, a second run changes nothing, a row it cannot read and
+ *     a stamp it does not know both stop it, CRLF comes back CRLF;
+ *   - C re rates each base from git with that same function before it extends, so the rebuild
+ *     proves the whole path: re rating a shipped file gives what a full bake on today's curve
+ *     gives. MEASURED 2026-10-09 on this machine with the lead's pulls: all four byte identical
+ *     (the bases re rated 498 of 1,098, 410 of 802 and 354 of 747 ratings; 2020-21 grows from
+ *     nothing, so every one of its 1,774 lines was baked fresh on the curve).
+ *   - THE CONTROLS WERE RED FOR THE WRONG REASON and are fixed: since Round 1035 lifted the curve
+ *     into its own module, the lib copy in the temp folder could not be imported, so the four lib
+ *     controls ended on a missing module, and c2drift's mirrored bake died the same way. The copy's
+ *     imports now point at the real modules, the mirror carries them, and a control aimed at part
+ *     C exits 2 unless it reaches the comparison. Measured 2026-10-09: noprove 2 failures in B
+ *     (plus the thin club it leaves behind), nostillin 1, nodupe 1, nosplit 1, c2drift and
+ *     stale2020 1 each on "the rebuilt era file differs".
+ *
  * Negative controls, SIM_ERA_EXTEND_CONTROL=noprove|nostillin|nodupe|nosplit: the
  * harness imports a COPY of the lib with that guard cut out (it first proves
  * the guarded line is in the lib, and refuses with exit 2 if not), and the
@@ -92,11 +113,18 @@ if (CONTROL === 'c2drift') {
   const src = fs.readFileSync(LIB, 'utf8');
   if (!src.includes(c[0])) { console.error(`CONTROL ${CONTROL} did not apply: the lib has no "${c[0]}"`); process.exit(2); }
   const copy = path.join(TMP, 'eraBakeExtend.control.mjs');
-  fs.writeFileSync(copy, src.replace(c[0], c[1]));
+  /* Round 1102: the copy lives in the temp folder, so the modules the lib imports beside itself
+     are pointed back at the real ones. Since Round 1035 lifted the curve out of the lib the copy
+     could not be imported at all, and every control ended red on a missing module instead of on
+     its own guard; part B's count below now proves the control reached the guard. */
+  const libDir = pathToFileURL(path.join(ROOT, 'scripts', 'lib') + path.sep).href;
+  const pointed = src.replace(c[0], c[1]).replace(/ from '\.\/([A-Za-z0-9]+\.mjs)';/g, (_, f) => ` from '${libDir}${f}';`);
+  if (/ from '\.\//.test(pointed)) { console.error(`CONTROL ${CONTROL} did not apply: the lib copy still imports a file beside itself`); process.exit(2); }
+  fs.writeFileSync(copy, pointed);
   libUrl = pathToFileURL(copy).href;
   console.log(`CONTROL ${CONTROL} applied: the lib copy has "${c[0]}" cut out`);
 }
-const { extendEra, readShippedEra, gbpM, ratingOf } = await import(libUrl);
+const { extendEra, readShippedEra, rerateShippedEra, gbpM, ratingOf, rateFrom, CURVE_VERSION, ERA_RATING_AGE_SHIFT, ERA_CURVE_META_LINES } = await import(libUrl);
 
 /* ---------- the synthetic world ---------- */
 const SHIPPED = {
@@ -108,13 +136,15 @@ const SHIPPED = {
   Beta: [
     "    { n: 'Bea Two', p: 'GK', a: 27, v: 3, r: 72 },",
     "    { n: 'Bo Shipmove', p: 'LM', a: 24, v: 2.5, r: 71 },",
-    `    { n: 'Dee Fold', p: 'CAM', a: 26, v: ${gbpM(2e6)}, r: ${ratingOf(2e6)} },`,
+    `    { n: 'Dee Fold', p: 'CAM', a: 26, v: ${gbpM(2e6)}, r: ${ratingOf(2e6, 26 + ERA_RATING_AGE_SHIFT, 'CAM')} },`,
   ],
 };
-const shippedText = ({ players = 6, clubs = SHIPPED, extraLine = null } = {}) => [
+/* Round 1102: a shipped era file carries the curve it was rated on (`stamp: false` writes the file
+   as it was before the round, for the guard that refuses to extend one). */
+const shippedText = ({ players = 6, clubs = SHIPPED, extraLine = null, stamp = true } = {}) => [
   '// a synthetic era for scripts/simEraBakeExtend.mjs',
   "import type { BakedPlayer } from '@/data/clubManagerRosters';", '',
-  'export const ERATEST_META = {', '  year: 2015,', `  players: ${players},`, `  clubs: ${Object.keys(clubs).length},`, '  moves: 10,', '};', '',
+  'export const ERATEST_META = {', '  year: 2015,', `  players: ${players},`, `  clubs: ${Object.keys(clubs).length},`, '  moves: 10,', ...(stamp ? ERA_CURVE_META_LINES : []), '};', '',
   'export const ERATEST_PARTIAL: string[] = [];', '',
   'export const ERATEST_ROSTERS: Record<string, BakedPlayer[]> = {',
   ...Object.entries(clubs).flatMap(([c, lines]) => [`  '${c}': [`, ...lines, ...(extraLine && c === 'Alpha' ? [extraLine] : []), '  ],']),
@@ -203,6 +233,17 @@ console.log('A) a synthetic extension with every kind of correction lands exactl
     for (const line of [SHIPPED.Alpha[0], SHIPPED.Beta[0], SHIPPED.Beta[2]]) {
       if (!res.text.includes(line)) fail(`a shipped line did not survive as the same bytes: ${line.trim()}`);
     }
+    /* Round 1102: a new line is rated on today's curve at the row's age plus one, and the file says
+       which curve it is on. Typed out by hand: a 4m dollar central midfielder of 24 is a 72 on value
+       and a 72 at 25; a 1m dollar keeper of 30 is a 64 on value and a 66 at 31; a 1.5m dollar right
+       back of 23 is a 66 on value and a 66 at 24 (he would be a 65 at his table age, so this row
+       reads the shift). */
+    const rated = { 'Gus Mover': ['Alpha', 72], 'Gwen Stay': ['Gamma', 66], 'Dora Stay': ['Delta', 66] };
+    for (const [n, [club, want]] of Object.entries(rated)) {
+      const p = res.world.get(club).find(x => x.n === n);
+      if (!p || p.r !== want) fail(`${n} is rated ${p?.r}, the curve at his age plus ${ERA_RATING_AGE_SHIFT} gives ${want}`);
+    }
+    for (const l of ERA_CURVE_META_LINES) if (!res.text.split('\n').includes(l)) fail(`the written META has no "${l.trim()}" line`);
     const out = path.join(TMP, 'extended.ts');
     fs.writeFileSync(out, res.text);
     try {
@@ -226,6 +267,8 @@ console.log('B) every guard dies on its own bad correction');
     ['the extend run twice', c => { c.newLeagues = [{ label: 'Again', dbToEra: { 'Alpha AFC': 'Alpha' } }]; }, 'must not run twice'],
     ['a shipped file holding a name twice', c => { c.file = writeShipped('twice.ts', { players: 7, extraLine: SHIPPED.Alpha[0] }); }, 'twice'],
     ['a META that miscounts', c => { c.file = writeShipped('meta.ts', { players: 9 }); }, 'META says'],
+    /* Round 1102: shipped lines are carried as bytes, so a file still on the old curve would end up holding two scales. */
+    ['a shipped file from before the curve changed', c => { c.file = writeShipped('oldcurve.ts', { stamp: false }); }, 'one file would hold two scales'],
     ['a fold whose two rows disagree', c => { c.rows = ROWS.map(r => (r.player_name === 'Dee Fold' ? { ...r, market_value_usd: 4e6 } : r)); }, "not one man's one row"],
     ['a fold of nobody', c => { c.folds = [...c.folds, { n: 'Nobody Here', why: 'x' }]; }, 'expected on both sides'],
     ['an undeclared name on both sides', c => { c.namesakes = []; }, 'names sit on both sides'],
@@ -264,7 +307,49 @@ console.log('B) every guard dies on its own bad correction');
     }
   }
   console.log(`   ${died} of ${CASES.length} bad corrections died with their own message`);
-  if (CASES.length < 29) fail(`only ${CASES.length} guard cases, the lib has 29 a caller can reach`);
+  if (CASES.length < 30) fail(`only ${CASES.length} guard cases, the lib has 30 a caller can reach`);
+}
+
+/* ---------- R. the re rate of a shipped file (Round 1102) ---------- */
+console.log('R) re rating a shipped file moves its ratings and its stamp and nothing else');
+{
+  const before = shippedText({ stamp: false });
+  let res = null;
+  try { res = rerateShippedEra(before, 'ERATEST'); } catch (e) { fail(`the re rate died: ${e.message}`); }
+  if (res) {
+    /* By hand, at the shipped age plus one: Ann One 80 at 26 stays 80, Sam Namesake 70 at 30 is 71,
+       Lu Later 60 at 29 stays 60, Bea Two 72 at 28 stays 72, Bo Shipmove 71 at 25 stays 71, and
+       Dee Fold is rebuilt from her line's own rating. */
+    const want = { 'Ann One': 80, 'Sam Namesake': 71, 'Lu Later': 60, 'Bea Two': 72, 'Bo Shipmove': 71 };
+    const a = before.split('\n');
+    const b = res.text.split('\n');
+    if (res.rows !== 6) fail(`the re rate read ${res.rows} rows, the file holds 6`);
+    if (res.changed !== 1 || res.by[1] !== 1) fail(`the re rate moved ${res.changed} ratings (${JSON.stringify(res.by)}), by hand it is one man up one`);
+    if (b.length !== a.length + ERA_CURVE_META_LINES.length) fail(`the re rated text has ${b.length} lines, the file had ${a.length} and gains ${ERA_CURVE_META_LINES.length}`);
+    const rest = b.filter(l => !ERA_CURVE_META_LINES.includes(l));
+    let offRow = 0;
+    rest.forEach((l, i) => {
+      const strip = s => s.replace(/, r: \d+ \},$/, '');
+      if (strip(l) !== strip(a[i])) offRow += 1;
+    });
+    if (offRow) fail(`${offRow} lines differ in more than their rating`);
+    for (const [n, r] of Object.entries(want)) if (!res.text.includes(`{ n: '${n}', `) || !new RegExp(`n: '${n}', .*, r: ${r} \\},`).test(res.text)) fail(`${n} is not rated ${r} after the re rate`);
+    const again = rerateShippedEra(res.text, 'ERATEST');
+    if (again.already !== true) fail('a second re rate of the same text did not say it is already on the curve');
+    /* The stamped fixture and the re rated unstamped one are the same text but for the one rating
+       that moved, so the stamp lines landed exactly where the extend step writes them. */
+    const diff = shippedText().split('\n').filter((l, i) => l !== b[i]);
+    if (diff.length !== 1 || !diff[0].includes("'Sam Namesake'")) fail(`the re rated text differs from the stamped fixture on ${diff.length} lines, one was expected (Sam Namesake)`);
+    let died = '';
+    try { rerateShippedEra(before.replace("    { n: 'Ann One', p: 'ST', a: 25, v: 9, r: 80 },", "    { n: 'Ann One', p: 'ST', a: 25, v: 9 },"), 'ERATEST'); } catch (e) { died = e.message; }
+    if (!died.includes('cannot read')) fail(`a row with no rating did not stop the re rate (${died || 'it ran on'})`);
+    died = '';
+    try { rerateShippedEra(before.replace('  moves: 10,', '  moves: 10,\n  curve: 7,'), 'ERATEST'); } catch (e) { died = e.message; }
+    if (!died.includes('does not know')) fail(`a file stamped with an unknown curve did not stop the re rate (${died || 'it ran on'})`);
+    const crlf = rerateShippedEra(before.split('\n').join('\r\n'), 'ERATEST');
+    if (crlf.text !== res.text.split('\n').join('\r\n')) fail('a CRLF file does not come back as the same text with CRLF line endings');
+    console.log(`   ${res.rows} rows read, ${res.changed} moved, the stamp added (curve ${CURVE_VERSION}, rated at a + ${ERA_RATING_AGE_SHIFT}); a second run changes nothing; a bad row and an unknown stamp both stop it`);
+  }
 }
 
 /* ---------- C. the real era bakes rebuild byte for byte ---------- */
@@ -305,6 +390,9 @@ for (const rb of REBUILDS) {
     fs.mkdirSync(path.join(mirror, 'src', 'data'), { recursive: true });
     fs.writeFileSync(path.join(mirror, 'scripts', rb.script), src.replace(rb.drift, ''));
     fs.copyFileSync(LIB, path.join(mirror, 'scripts', 'lib', 'eraBakeExtend.mjs'));
+    /* Round 1102: and the two modules the lib imports beside itself, or the mirrored bake dies on a
+       missing module and the control is red for a reason that is not its own. */
+    for (const dep of ['cmValueCurve.mjs', 'cmAges.mjs']) fs.copyFileSync(path.join(ROOT, 'scripts', 'lib', dep), path.join(mirror, 'scripts', 'lib', dep));
     fs.copyFileSync(path.join(ROOT, 'src', 'data', rb.file), path.join(mirror, 'src', 'data', rb.file));
     bake = path.join(mirror, 'scripts', rb.script);
     console.log('   CONTROL c2drift applied: the bake copy has no Kuranyi move');
@@ -315,6 +403,17 @@ for (const rb of REBUILDS) {
       base = path.join(TMP, `base-${rb.label}.ts`);
       fs.writeFileSync(base, execFileSync('git', ['show', `${rb.base}:src/data/${rb.file}`], { cwd: ROOT, maxBuffer: 1 << 26 }));
     } catch { skip = `git cannot show the ${rb.clubs} club base (${rb.base}), a shallow clone?`; }
+  }
+  /* Round 1102: the base in git is from before the curve changed, and the extend step refuses to
+     carry lines on an old curve. So the base is re rated from its own rows first, by the same
+     function that re rated the shipped files, and the rebuild below then proves the whole path:
+     re rating a shipped file gives what a full bake on today's curve gives, to the byte. */
+  if (!skip && base) {
+    try {
+      const rr = rerateShippedEra(fs.readFileSync(base, 'utf8'), `ERA${rb.label.slice(0, 4)}`);
+      if (rr.already) console.log(`   the ${rb.clubs} club base is already on curve ${CURVE_VERSION}`);
+      else { fs.writeFileSync(base, rr.text); console.log(`   the ${rb.clubs} club base re rated from its own rows: ${rr.changed} of ${rr.rows} ratings moved to curve ${CURVE_VERSION}`); }
+    } catch (e) { fail(`the ${rb.label} base could not be re rated: ${e.message}`); continue; }
   }
   if (skip) { console.log(`   SKIPPED: ${skip}`); continue; }
   const args = rb.base
@@ -337,6 +436,11 @@ for (const rb of REBUILDS) {
   } catch (e) { code = e.status ?? 1; out = `${e.stdout ?? ''}${e.stderr ?? ''}`; }
   const verdict = out.split('\n').filter(l => l.startsWith('CHECK:') || l.startsWith('FATAL:')).join(' / ');
   console.log(`   ${verdict || '(no verdict line)'}`);
+  /* Round 1102: a control aimed at this part must reach the comparison, or its red is not its own. */
+  if ((drift || (C_CONTROL && rb.label === '2020-21')) && !out.includes('CHECK: the rebuilt era file differs')) {
+    console.error(`CONTROL ${CONTROL} did not reach the comparison: ${out.split('\n').filter(Boolean).slice(-2).join(' / ')}`);
+    process.exit(2);
+  }
   if (code !== 0 || !out.includes('byte identical')) fail(`the rebuilt ${rb.label} era file does not match the shipped one (exit ${code})`);
 }
 

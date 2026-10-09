@@ -53,7 +53,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { runExtend, readPull, updateNationalityBlock, POS_MAP, ratingOf, gbpM } from './lib/eraBakeExtend.mjs';
+import { runExtend, readPull, updateNationalityBlock, POS_MAP, ratingOf, gbpM, ERA_RATING_AGE_SHIFT, ERA_CURVE_META_LINES } from './lib/eraBakeExtend.mjs';
 
 const ROOT =path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -862,7 +862,7 @@ if (extendArg) {
 
   /* 3. The corrections. */
   let moved = 0, removed = 0, arrived = 0, folded = 0;
-  const bake = (name, rec) => ({ n: name, p: POS_MAP[rec.position], a: rec.age, v: gbpM(rec.usd), r: ratingOf(rec.usd) });
+  const bake = (name, rec) => ({ n: name, p: POS_MAP[rec.position], a: rec.age, v: gbpM(rec.usd), r: ratingOf(rec.usd, rec.age + ERA_RATING_AGE_SHIFT, POS_MAP[rec.position]) });
   for (const mv of SA_EXTEND_MOVES) {
     const inSa = saPool.get(mv.n);
     const oldClub = clubOfExisting.get(mv.n);
@@ -986,6 +986,7 @@ export const ERA2015_META = {
   players: ${totalAll},
   clubs: ${clubsAll.length},
   moves: ${movesAll},
+${ERA_CURVE_META_LINES.join('\n')}
 };
 
 /** 2015 clubs where the year-2015 table runs thin (under 8 real players);
@@ -1068,7 +1069,8 @@ for (const rec of byPlayer.values()) {
     console.error(`FATAL: unmapped position "${rec.position}" (${rec.player_name})`);
     process.exit(1);
   }
-  byClub.get(rec.engine).push({ n: rec.player_name, p, a: rec.age, v: gbpM(rec.market_value_usd), r: ratingOf(rec.market_value_usd) });
+  /* Round 1102: rated on curve 2 at the table's age plus one (that season's August); the age ships as it is. */
+  byClub.get(rec.engine).push({ n: rec.player_name, p, a: rec.age, v: gbpM(rec.market_value_usd), r: ratingOf(rec.market_value_usd, rec.age + ERA_RATING_AGE_SHIFT, p) });
 }
 for (const list of byClub.values()) list.sort((a, b) => b.v - a.v || a.n.localeCompare(b.n));
 
@@ -1124,6 +1126,7 @@ export const ERA2015_META = {
   players: ${total},
   clubs: ${clubsSorted.length},
   moves: ${moved + removed + arrived},
+${ERA_CURVE_META_LINES.join('\n')}
 };
 
 /** 2015 clubs where the year-2015 table runs thin (under 8 real players);

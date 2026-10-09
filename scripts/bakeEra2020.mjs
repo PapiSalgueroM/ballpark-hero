@@ -55,7 +55,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { runExtend, readPull, updateNationalityBlock } from './lib/eraBakeExtend.mjs';
+import { runExtend, readPull, updateNationalityBlock, ERA_CURVE_META_LINES } from './lib/eraBakeExtend.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const argOf = (flag, dflt) => {
@@ -491,7 +491,8 @@ const ERA2020_POOL_NAMESAKES = [
 const EMPTY_BASE = [
   '// The empty 2020-21 era scripts/bakeEra2020.mjs grows the five leagues from.',
   `import type { BakedPlayer } from '@/data/clubManagerRosters';`, '',
-  'export const ERA2020_META = {', '  year: 2020,', '  players: 0,', '  clubs: 0,', '  moves: 0,', '};', '',
+  /* Round 1102: the empty era carries the curve's stamp, or the shared step would refuse to grow it. */
+  'export const ERA2020_META = {', '  year: 2020,', '  players: 0,', '  clubs: 0,', '  moves: 0,', ...ERA_CURVE_META_LINES, '};', '',
   'export const ERA2020_PARTIAL: string[] = [];', '',
   'export const ERA2020_ROSTERS: Record<string, BakedPlayer[]> = {', '};', '',
 ].join('\n');
