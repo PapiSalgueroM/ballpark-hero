@@ -1,0 +1,2 @@
+#!playwright
+mainweight: bash .rc/x/rr-main-weight.sh
