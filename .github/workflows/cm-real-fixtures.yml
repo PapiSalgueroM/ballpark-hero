@@ -16,6 +16,9 @@ on:
       - scripts/playCmRealFixtures.mjs
       - scripts/simFixtureBalance.mjs
       - scripts/simCmLeagueRules.mjs
+      - scripts/simLiveMatch.mjs
+      - scripts/simClubManagerSlots.mjs
+      - scripts/simWorldEditor.mjs
   workflow_dispatch:
     inputs:
       source_sha:
@@ -46,6 +49,7 @@ jobs:
       CM_QUICK_SUBS_ARTIFACTS: cm-real-fixture-artifacts/quick-subs
       CM_SLOTS_ARTIFACTS: cm-real-fixture-artifacts/slots
       CM_SHOOTOUT_ARTIFACTS: cm-real-fixture-artifacts/shootout
+      CM_WORLD_EDITOR_ARTIFACTS: cm-real-fixture-artifacts/world-editor
       FREE_KICK_FONT_CACHE: cm-real-fixture-artifacts/font-cache
       CHECKED_HEAD: ${{ github.event.pull_request.head.sha || inputs.source_sha || github.sha }}
     steps:
@@ -107,6 +111,29 @@ jobs:
           for harness in simCalendar simCalendarCurrentDate simWorld simWorldEditor simCup simMidSeasonStart simUclSeasonOne simUclPlaces simUclField simUclLegs simUclLegMigration simUclFormatHistory simMatchDetail simMatchScreen simLiveMatch simHalftime simNoDoubleRecord simScoringCoverage simScoreShown simHarnessAnchors; do
             ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "cm-real-fixture-artifacts/$harness.log" || failed=1
           done
+          exit "$failed"
+      - name: Live, saved-slot and edited-season observer controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for control in noplay nocut rekick nooppsubs statsroll doubleman; do
+            LIVE_MATCH_CONTROL="$control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simLiveMatch.mjs 2>&1 | tee "cm-real-fixture-artifacts/live-match-$control.log" || failed=1
+            grep -Fq "simLiveMatch control $control: PASS" "cm-real-fixture-artifacts/live-match-$control.log" || failed=1
+          done
+          for control in nopark dupe norollback oldversion leanmore decisioncontent; do
+            set +e
+            SLOTS_CONTROL="$control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerSlots.mjs 2>&1 | tee "cm-real-fixture-artifacts/slot-$control.log"
+            status=${PIPESTATUS[0]}
+            set -e
+            if [ "$status" -ne 1 ] || ! grep -q "CONTROL FIRED: SLOTS_CONTROL=$control" "cm-real-fixture-artifacts/slot-$control.log"; then failed=1; fi
+            if [ "$control" = decisioncontent ]; then
+              node -e "const fs=require('fs'),r=JSON.parse(fs.readFileSync(process.argv[1])); if(!r.passed || r.sources.some(s=>!s.held)) process.exit(1)" cm-real-fixture-artifacts/slots/decisioncontent-control.json || failed=1
+            else
+              node -e "const fs=require('fs'),r=JSON.parse(fs.readFileSync(process.argv[1])); if(r.runtimeErrors.length || r.sources.some(s=>!s.held)) process.exit(1)" "cm-real-fixture-artifacts/slots/$control-report.json" || failed=1
+            fi
+          done
+          SIM_WORLD_EDITOR_CONTROL=observer NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simWorldEditor.mjs 2>&1 | tee cm-real-fixture-artifacts/world-editor-observer.log || failed=1
+          grep -Fq 'CONTROL FIRED (observer)' cm-real-fixture-artifacts/world-editor-observer.log || failed=1
           exit "$failed"
       - name: Generated fixtures, legacy saves and all existing fixture faults
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}

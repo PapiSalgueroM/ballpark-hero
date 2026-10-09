@@ -135,8 +135,17 @@ async function main() {
     return;
   }
   const files = [engineFile, helperFile, cardFile, dataFile];
-  const bytes = new Map(await Promise.all(files.map(async relative => [relative, await readFile(path.join(root, relative))])));
-  const source = Object.fromEntries([...bytes].map(([relative, value]) => [relative, value.toString('utf8').replaceAll('\r\n', '\n')]));
+  const sourceHashes = new Map(), verifyBytes = [];
+  /* Raw bytes feed only the source hash and unchanged-byte checks. The text
+     used by every executable anchor is read and normalised separately. */
+  for (const relative of files) {
+    const file = path.join(root, relative);
+    const originalBytes = await readFile(file);
+    sourceHashes.set(relative, sha(originalBytes));
+    verifyBytes.push(() => readFile(file).then(current => assert.deepEqual(current, originalBytes, 'All original source bytes remain held')));
+  }
+  const source = Object.fromEntries(await Promise.all(files.map(async relative => [relative,
+    (await readFile(path.join(root, relative), 'utf8')).replaceAll('\r\n', '\n')])));
   const changed = { ...source };
   if (control) {
     const spec = controls[control];
@@ -146,7 +155,7 @@ async function main() {
     }
     assert.notEqual(changed[spec.file], source[spec.file], 'The copied control changes executable bytes');
     await writeFile(path.join(evidence, `${control}-changed-source.txt`), changed[spec.file]);
-    await writeFile(path.join(evidence, `${control}-mutation.json`), JSON.stringify({ file: spec.file, test: cases[spec.test], original: sha(bytes.get(spec.file)), changed: sha(changed[spec.file]), anchor: spec.from, replacement: spec.to }, null, 2));
+    await writeFile(path.join(evidence, `${control}-mutation.json`), JSON.stringify({ file: spec.file, test: cases[spec.test], original: sourceHashes.get(spec.file), changed: sha(changed[spec.file]), anchor: spec.from, replacement: spec.to }, null, 2));
   }
   const tempRoot = path.join(root, '.sim-control'); await mkdir(tempRoot, { recursive: true });
   const folder = await mkdtemp(path.join(tempRoot, 'cm-real-fixtures-'));
@@ -413,8 +422,8 @@ async function main() {
       catch (error) { rows.push({ title, status: 'failed', errorName: error.name, message: error.message, stack: error.stack }); }
     }
     await new Promise(resolve => setImmediate(resolve));
-    for (const [relative, originalBytes] of bytes) assert.deepEqual(await readFile(path.join(root, relative)), originalBytes, 'All original source bytes remain held');
-    await writeFile(path.join(evidence, `${control || 'normal'}-report.json`), JSON.stringify({ base, baselineSourceSha256: sha(baselineSource), originalHash: sha(bytes.get(engineFile)), control: control || 'normal', ...observations, sourceBytesHeld: true, numUnhandledErrors: unhandled.length, unhandled, cases: rows }, null, 2));
+    for (const verify of verifyBytes) await verify();
+    await writeFile(path.join(evidence, `${control || 'normal'}-report.json`), JSON.stringify({ base, baselineSourceSha256: sha(baselineSource), originalHash: sourceHashes.get(engineFile), control: control || 'normal', ...observations, sourceBytesHeld: true, numUnhandledErrors: unhandled.length, unhandled, cases: rows }, null, 2));
     assert.deepEqual(unhandled, [], 'Import/runtime errors never count as an effective control');
     if (control) {
       assert.deepEqual(rows.filter(r => r.status === 'failed').map(r => [r.title, r.errorName]), expectedFailures(control).map(title => [title, 'AssertionError']));
@@ -426,7 +435,7 @@ async function main() {
     process.off('unhandledRejection', capture); process.off('uncaughtExceptionMonitor', capture);
     assert.equal(path.dirname(folder), tempRoot); assert.ok(path.basename(folder).startsWith('cm-real-fixtures-'));
     await rm(folder, { recursive: true, force: true });
-    for (const [relative, originalBytes] of bytes) assert.deepEqual(await readFile(path.join(root, relative)), originalBytes, 'Source bytes held after cleanup');
+    for (const verify of verifyBytes) await verify();
   }
 }
 if (process.env.CM_REAL_FIXTURE_IMPORT_ONLY !== '1') await main();

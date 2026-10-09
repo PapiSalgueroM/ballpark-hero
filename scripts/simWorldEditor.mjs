@@ -46,6 +46,7 @@
      lateucl     next season's field read after the swap   -> section 2 red
      euroone     season one Europe reads the edited league -> section 2 red
      homecountry a moved club's nationality ask follows the league -> section 3 red
+     observer    omit one actual returned report from each copied trace -> section 2 red
 
    Measured headroom (SIM_SEED unset and 1, 2, 3, 4): section 3 is
    deterministic (stature comes from the baked rosters, no draw), and its
@@ -66,11 +67,16 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_FWD = ROOT.replaceAll('\\', '/');
 let failures = 0;
 let checks = 0;
-const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
+const failedMessages = [], expectedObserverFailures = [];
+let seasonTraceIndex = 0;
+const fail = m => { failures += 1; failedMessages.push(m); console.error('  FAIL: ' + m); };
 const ok = (cond, m) => { checks += 1; if (!cond) fail(m); return cond; };
 const CONTROL = process.env.SIM_WORLD_EDITOR_CONTROL ?? '';
-const CONTROLS = ['', 'noregister', 'leak', 'dupe', 'staticrank', 'stature', 'noload', 'lateucl', 'euroone', 'homecountry'];
+const CONTROLS = ['', 'noregister', 'leak', 'dupe', 'staticrank', 'stature', 'noload', 'lateucl', 'euroone', 'homecountry', 'observer'];
 if (!CONTROLS.includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(1); }
+
+const ARTIFACTS = path.resolve(process.env.CM_WORLD_EDITOR_ARTIFACTS || path.join(ROOT, 'cm-world-editor-artifacts'));
+fs.mkdirSync(ARTIFACTS, { recursive: true });
 
 /* A worktree has no node_modules of its own, so esbuild is found by walking up. */
 function findEsbuild() {
@@ -161,11 +167,15 @@ function withSeed(seed, fn) {
 }
 const SEED = Number.isFinite(Number(process.env.SIM_SEED)) ? Number(process.env.SIM_SEED) : 964;
 
-function runSeason(engine, s) {
+function runSeason(engine, s, observeLeague) {
   let guard = 0;
   while (s.week < s.calendar.length && guard < 200) {
     guard++;
     const r = engine.playNextEntry(s, { skipHalftime: true });
+    if (observeLeague && r.kind === 'match' && r.report.competition === 'league') {
+      const week = r.state.week - 1;
+      observeLeague(r.report, week, r.state.calendar[week].round);
+    }
     s = r.state;
     if (r.kind === 'seasonOver') break;
   }
@@ -262,9 +272,31 @@ function seasonOn(edit, club, label) {
   const s = cm.startCareer(club, undefined, undefined, undefined, undefined, edit);
   ok(!!s.uclGroup === homeEurope, `${label}: season one Europe is ${!!s.uclGroup} on the edited world and ${homeEurope} in the real one`);
   ok(leagueRounds(s) === realCal, `${label}: ${leagueRounds(s)} league rounds, a real ${L} club plays ${realCal}`);
-  const end = runSeason(cm, s);
-  const leagueOpps = (end.resultLog ?? []).filter(r => r.competition === 'league').map(r => r.opp);
-  ok(leagueOpps.length === realCal, `${label}: played ${leagueOpps.length} league matches of ${realCal}`);
+  const reports = [];
+  const end = runSeason(cm, s, (report, week, round) => reports.push({ week, round, report }));
+  const observed = CONTROL === 'observer' ? reports.slice(1) : reports;
+  const countMessage = `${label}: played ${observed.length} league matches of ${realCal}`;
+  if (CONTROL === 'observer') {
+    ok(reports.length === realCal, `${label}: the unmodified actual report observer must pass before its copied fault`);
+    ok(reports.length - observed.length === 1, `${label}: the copied observer fault must omit exactly one actual report`);
+    expectedObserverFailures.push(countMessage);
+  }
+  const leagueOpps = observed.map(({ report }) => report.home === club ? report.away : report.home);
+  const ownTable = end.table.find(r => r.club === club);
+  const tablePlayed = ownTable ? ownTable.w + ownTable.d + ownTable.l : null;
+  const retained = end.resultLog ?? [];
+  const composition = retained.reduce((totals, row) => { const competition = row.competition ?? 'unknown'; totals[competition] = (totals[competition] ?? 0) + 1; return totals; }, {});
+  const traceId = `${CONTROL || 'normal'}-${++seasonTraceIndex}-${club.replace(/[^a-z0-9]+/gi, '-')}`;
+  fs.writeFileSync(path.join(ARTIFACTS, `${traceId}-reports.json`), JSON.stringify({ label, club, league: L, expectedLeagueMatches: realCal, reports,
+    observedWeeks: observed.map(row => row.week), calendarLeagueRounds: end.calendar.filter(e => e.type === 'league').map(e => e.round) }, null, 2));
+  fs.writeFileSync(path.join(ARTIFACTS, `${traceId}-final-save.json`), JSON.stringify(end, null, 2));
+  fs.writeFileSync(path.join(ARTIFACTS, `${traceId}-log-composition.json`), JSON.stringify({ label, actualLeagueReports: reports.length,
+    observedLeagueReports: observed.length, tablePlayed, completedWeek: end.week, calendarLength: end.calendar.length,
+    retainedLogLength: retained.length, retainedLogComposition: composition, retainedResultLog: retained }, null, 2));
+  ok(observed.every(({ report }) => report.home === club || report.away === club), `${label}: every actual league report includes the managed club`);
+  ok(leagueOpps.length === realCal, countMessage);
+  ok(tablePlayed === realCal, `${label}: final own table records ${tablePlayed} league matches of ${realCal}`);
+  ok(end.week === end.calendar.length, `${label}: completed calendar at week ${end.week} of ${end.calendar.length}`);
   const strangers = leagueOpps.filter(o => !lineup.includes(o));
   ok(strangers.length === 0, `${label}: league fixtures against clubs outside the edited ${L}: ${[...new Set(strangers)].slice(0, 4).join(', ')}`);
   ok(sameSet(end.table.map(r => r.club), lineup), `${label}: my final table is not the edited ${L} lineup`);
@@ -482,4 +514,13 @@ function sectionTwo(chaosEdit) {
 
 fs.rmSync(TMP, { recursive: true, force: true });
 console.log(`\nsimWorldEditor${CONTROL ? ` (control ${CONTROL})` : ''}: ${checks} checks, ${failures} failures`);
+if (CONTROL === 'observer') {
+  const exact = seasonTraceIndex === 3 && expectedObserverFailures.length === 3
+    && failedMessages.length === expectedObserverFailures.length
+    && failedMessages.every((message, i) => message === expectedObserverFailures[i]);
+  fs.writeFileSync(path.join(ARTIFACTS, 'observer-control.json'), JSON.stringify({ exact, checks, failures, expectedObserverFailures, failedMessages }, null, 2));
+  if (!exact) { console.error('Observer control did not produce exactly its three count failures with every unrelated check passing'); process.exit(2); }
+  console.log('CONTROL FIRED (observer): three actual returned reports omitted, exact count assertions failed, all unrelated checks passed.');
+  process.exit(0);
+}
 process.exit(failures ? 1 : 0);

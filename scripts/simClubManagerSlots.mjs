@@ -424,6 +424,11 @@ for (let i = 0; i < 3; i++) {
   await ensureEraRosters(C.era);
   reseed(i, 0);
   mem = startCareer(C.club, C.era, undefined, C.manager);
+  if (i === 0) {
+    const pair = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/clubManagerPremierFixtures2026.receipt.json'), 'utf8')).sources.find(source => source.role === 'official').rows.find(row => row.round === 1 && (row.home === C.club || row.away === C.club));
+    const fixture = cm.fixtureFor(mem, mem.calendar[mem.week]);
+    if (mem.realLeagueFixtures !== 'premier-2026-27-v1' || !pair || fixture?.opponent !== (pair.home === C.club ? pair.away : pair.home) || fixture.home !== (pair.home === C.club)) fail('the natural real first season lost its independently sourced opening pairing or venue');
+  }
   saveCareer(mem);
 }
 const views0 = readSlots();
@@ -576,6 +581,8 @@ clearCareer();
    so these are the bytes main writes for the same play). */
 reseed(0, 99);
 let lived = startCareer('Everton');
+// This is the measured generated old-save fixture, before the optional real-first-season binding.
+delete lived.realLeagueFixtures;
 for (let k = 0; k < 4; k++) { reseed(0, 99 + k); lived = playOne(lived).next; }
 reseed(0, 103);
 for (let i = 0; i < 15; i++) lived = playNextEntry(lived, { skipHalftime: true }).state;

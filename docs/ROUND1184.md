@@ -64,6 +64,21 @@ Both later-season browser journeys passed complete oracle settlement and saved-w
 
 No product source changed for these proof corrections. A fresh exact-head remote run is still required.
 
+## Third focused proof and broad diagnosis
+
+Run `37959415902` on source `8514d8a3d73cfa9576161edd0a2d121df24f09fb`, tree `4b29275163de9e0c1e53b84ca14603ef04b9bbf0`, passed types/build, all 11 focused outcome groups and nine effective copied faults. Its early artifact `11629752888` was downloaded and SHA256 verified as `31fc4d9f4b670ecd42a775be9060740279bb4f5a9424408e359164d83b0fb01c`, with matching head/tree receipts. All 760 fixture readings, 760 calendar readings and 380 settled matches passed. All six real, legacy and future phone/desktop journeys passed, with complete saved-state differences empty, 18 neutral opening results, two effective native faults and no page/asset errors or forwarded external requests. This focused acceptance is not broad release acceptance.
+
+The first run's final artifact `11630787198`, SHA256 `cd52bd9c73cc83da4bf5fd975be58a4267d98bb471148511208f0c1ef14c8efd`, retained 67 runner verdicts: 63 passed and four failed. No runner was classified as skipped, empty or not run. Direct Quick Subs passed 10 actual outcomes and 13 controls. The healthy generated fixture harness and all eight existing faults passed, as did all 15 required built readers and four additional search/SEO readers; source bytes held.
+
+The four broad failures require compatibility proof corrections:
+
+- Live Match's measured generated cohort retained a real first-season key while artificially moving some fixtures to a future season. Its original 42 generated cases and 30/10/10 floors now explicitly use the generated context. Two additional, separately counted and source-bound real openers must finish the existing signed-player checks through live and Quick Sim paths. All six original controls remain.
+- Saved Slots' measured four-season plus 15-entry old-save fixture now starts without only the new opt-in key. The strict history trim check, whole roundtrip, budget, rollback and all 20 switches remain; natural real starts also require the sourced opening pair, venue and version key. All six controls remain.
+- The new pure harness reads anchor text with immediate UTF8 line-ending normalization, while preserving independent raw-byte hashes and both source-held comparisons. The existing anchor fence is unchanged.
+- World Editor counted a final result log capped at 60 matches. Its revised observer records every actual returned league report, retains the exact calendar match count (46 in the Championship), requires the own table to record that same count and requires calendar completion. Complete traces, final saves and retained log composition are recorded. Its new copied-observer fault omits exactly one actual report in each of the three original runs and must fail precisely those three count assertions while every unrelated check passes. The raw log cap and all original product source are unchanged.
+
+These verification corrections require a new exact-head remote run, including all existing Manager and output-reader gates plus the retained lifecycle controls. No product source or golden baseline digest changed during diagnosis.
+
 ## Validation still required
 
 Remote types/build, focused outcomes, effective copied defects, unchanged old-save/future/custom baselines, existing fixture and world harnesses, native phone/desktop journeys, and output-reader gates are pending. Authored proof includes 11 real fixture outcome groups, all 760 player fixture readings, all 760 calendar readings, a full 380-match simulated campaign and nine copied outcome controls. The independent old/generated comparison uses the pre-change engine and calendar card, with whole-save and random-draw equality across three seeds and current, historical, edited and custom contexts. The balance harness retains its three original controls and adds five controls for natural version binding, fallback flag/count and engine/calendar resolver bypasses. These counts describe the required remote proof, not passing results.
