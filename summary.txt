@@ -1,0 +1,2 @@
+cooldown-harness exit=0 36s | MUT cooldownharness: SURVIVED (1 harnesses green: simCareerLifeCooldowns)
+rvworld exit=1 51s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/zzRvWorld.test.ts,title=src/test/zzRvWorld.test.ts > reviewer probe%3A the simulated league world a pl

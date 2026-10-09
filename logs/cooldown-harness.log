@@ -1,0 +1,3 @@
+MUT cooldownharness: NOT A MUTATION: the harness driver no longer opens a second batch when the appeal result is shown between two cards; SURVIVED here means the red was the driver counting the same queue twice
+  simCareerLifeCooldowns exit=0 35s | simCareerLifeCooldowns: green. No event repeats inside its cooldown, every new event fires, the rate held, and the catalog has two real choices everywhere.
+MUT cooldownharness: SURVIVED (1 harnesses green: simCareerLifeCooldowns)
