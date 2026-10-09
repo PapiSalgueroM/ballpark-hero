@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simBrowserHarnessDiscovery: node scripts/simBrowserHarnessDiscovery.mjs
+simTycoonSeasonReview: node scripts/simTycoonSeasonReview.mjs
+simTycoonTicketPolicy: node scripts/simTycoonTicketPolicy.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
