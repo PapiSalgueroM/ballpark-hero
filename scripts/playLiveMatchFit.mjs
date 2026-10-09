@@ -30,6 +30,15 @@
  * beside the pitch never said this goal" and every other section must stay green; exit 1 when it does, 3
  * when it does not. It guards the watch for a NEW line in a list of five (see judgeGoalFrames).
  *
+ * NEGATIVE CONTROLS 3 AND 4 (Release AR). The release gate went red on two of section 1's checks for a real
+ * reason (a goal cut off in flight by a change of line up, fixed in the viewer), and neither check had a
+ * control of its own. Both work on the wide screen's watched goal, as silentlist does, and each must turn
+ * section 7 red on its own line and leave every other section green (exit 1 when it does, 3 when not):
+ *   LIVE_FIT_CONTROL=earlyscore  adds one to my side of the score the first frame the pitch reads the watched
+ *                                goal's plant or flight; "the score changed before the ball was in" must fire.
+ *   LIVE_FIT_CONTROL=nocard      takes the mark off the scorer card as the page draws it (after asserting the
+ *                                card is not on screen yet); "no scorer card was ever on screen" must fire.
+ *
  * NEGATIVE CONTROL. LIVE_FIT_CONTROL=bar pushes the control row 200 px down with a style tag (after
  * asserting the selector matches exactly one node). Section 3 must go red; 1, 2 and 4 must stay green.
  *
@@ -44,6 +53,8 @@
  *   LIVE_FIT_REPORT=1 node scripts/playLiveMatchFit.mjs
  *   LIVE_FIT_CONTROL=bar node scripts/playLiveMatchFit.mjs
  *   LIVE_FIT_CONTROL=silentlist node scripts/playLiveMatchFit.mjs
+ *   LIVE_FIT_CONTROL=earlyscore node scripts/playLiveMatchFit.mjs
+ *   LIVE_FIT_CONTROL=nocard node scripts/playLiveMatchFit.mjs
  */
 /* RECORDED BEFORE MATCH MODE, with LIVE_FIT_REPORT=1 on the build of 6b1caa20 (the viewer still a card in
    the page, under the navbar and the page's own heading), on a GitHub runner's Chromium:
@@ -69,7 +80,7 @@ const BASE = `http://127.0.0.1:${PORT}`;
 const KEY = 'dukb-club-manager-save';
 const REPORT = process.env.LIVE_FIT_REPORT === '1';
 const CONTROL = process.env.LIVE_FIT_CONTROL || '';
-if (CONTROL && CONTROL !== 'bar' && CONTROL !== 'silentlist') { console.error(`unknown LIVE_FIT_CONTROL ${CONTROL}`); process.exit(2); }
+if (CONTROL && !['bar', 'silentlist', 'earlyscore', 'nocard'].includes(CONTROL)) { console.error(`unknown LIVE_FIT_CONTROL ${CONTROL}`); process.exit(2); }
 const V = !!process.env.VERBOSE;
 /* A folder for screenshots of the fit at each size (LIVE_FIT_SHOTS, or a remote check's RC_OUT). Optional. */
 const SHOTS = process.env.LIVE_FIT_SHOTS || process.env.RC_OUT || '';
@@ -79,6 +90,10 @@ let failures = 0;
 /* control silentlist: did section 7 go red on the very line it must, and did the control rewrite a line */
 let neverSaid = false;
 let silenced = 0;
+/* controls earlyscore and nocard: did section 7 go red on the very line it must, and did the control touch the page */
+let scoreLed = false;
+let cardMissed = false;
+let tampered = 0;
 const failed = new Set();
 let section = 0;
 const fail = m => { failures += 1; failed.add(section); console.log('  FAIL: ' + m); };
@@ -336,7 +351,7 @@ function judgeGoalFrames(watched, { reduced, wide }) {
   const wrong = windup.filter(f => f.score !== first).length;
   if (!reduced) {
     if (windup.length < 5) fail(`only ${windup.length} frames of the goal's wind up and flight were seen, so the order was not really watched`);
-    else if (wrong || early) fail(`the score changed before the ball was in: ${wrong} of ${windup.length} plant and flight frames already read the new score`);
+    else if (wrong || early) { scoreLed = true; fail(`the score changed before the ball was in: ${wrong} of ${windup.length} plant and flight frames already read the new score`); }
     else if (at.phase !== 'net' || at.net < 1) fail(`the first frame with the new score (${at.score}) reads phase ${at.phase} with ${at.net} net marked, not the ball in the net`);
     else ok(`the goal in order: ${windup.length} frames of wind up and flight all read ${first}, and the first frame reading ${at.score} is in phase net with the net marked`);
   } else if (at.phase !== 'net') fail(`under reduced motion the frame with the new score reads phase ${at.phase}`);
@@ -367,7 +382,7 @@ function judgeGoalFrames(watched, { reduced, wide }) {
     }
   }
   const carded = frames.filter(f => f.card);
-  if (!carded.length) fail('no scorer card was ever on screen around the goal');
+  if (!carded.length) { cardMissed = true; fail('no scorer card was ever on screen around the goal'); }
   else {
     const out = carded.filter(f => !f.pitch || !inside(f.card, f.pitch)).length;
     if (out) fail(`the scorer card was outside the pitch on ${out} of ${carded.length} frames`);
@@ -777,8 +792,42 @@ try {
         });
         console.log('  Negative control: every GOAL! in the list beside the pitch is rewritten as it is drawn.');
       }
+      if (CONTROL === 'earlyscore') {
+        const digits = await wide.locator('[data-cm-live-score] [data-cm-score-of="me"]').count();
+        if (digits < 1) throw new Error('control earlyscore: the score has no digit for my side, so the control can not run');
+        await wide.evaluate(() => {
+          window.__tampered = 0;
+          let done = false;
+          /* Registered before the sampler, so on every frame it runs first. Only while the sampler is on:
+             the goals played through on the way to the watched one are left alone. */
+          const lead = () => {
+            const pitch = document.querySelector('[data-cm-live-pitch]');
+            const phase = pitch && pitch.getAttribute('data-cm-motion') === 'goal' ? pitch.getAttribute('data-cm-motion-phase') : null;
+            if (!done && window.__fit && window.__fit.on && (phase === 'plant' || phase === 'flight')) {
+              for (const digit of document.querySelectorAll('[data-cm-live-score] [data-cm-score-of="me"]')) { digit.textContent = String(Number(digit.textContent) + 1); window.__tampered += 1; }
+              done = true;
+            }
+            requestAnimationFrame(lead);
+          };
+          requestAnimationFrame(lead);
+        });
+        console.log('  Negative control: my side of the score goes up by one as the watched goal is wound up.');
+      }
+      if (CONTROL === 'nocard') {
+        const up = await wide.locator('[data-cm-goal-card]').count();
+        if (up !== 0) throw new Error('control nocard: a scorer card is on screen before the watch starts, so the control can not run');
+        await wide.evaluate(() => {
+          window.__tampered = 0;
+          const strip = () => {
+            for (const card of document.querySelectorAll('[data-cm-goal-card]')) { card.removeAttribute('data-cm-goal-card'); if (window.__fit && window.__fit.on) window.__tampered += 1; }
+          };
+          new MutationObserver(strip).observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['data-cm-goal-card'] });
+        });
+        console.log('  Negative control: the scorer card loses its mark as the page draws it.');
+      }
       const seen = await watchAGoal(wide, { tapCard: false, onTick: goalShots(wide, 'wide') });
       if (CONTROL === 'silentlist') silenced = await wide.evaluate(() => window.__silenced || 0).catch(() => 0);
+      if (CONTROL === 'earlyscore' || CONTROL === 'nocard') tampered = await wide.evaluate(() => window.__tampered || 0).catch(() => 0);
       if (!seen) fail('sixteen halves passed without a goal to watch at 1280 by 900');
       else judgeGoal(seen, { reduced: false, wide: true });
     }
@@ -805,6 +854,15 @@ if (CONTROL === 'silentlist') {
   console.log(asItMust
     ? `playLiveMatchFit: control silentlist turned section 7 red on the line it must (the list never said this goal, ${silenced} GOAL! rewritten) and left the rest green.`
     : `playLiveMatchFit: control silentlist did NOT behave: red sections ${[...failed].sort().join(', ') || 'none'}, never said ${neverSaid}, ${silenced} GOAL! rewritten.`);
+  process.exit(asItMust ? 1 : 3);
+}
+if (CONTROL === 'earlyscore' || CONTROL === 'nocard') {
+  const line = CONTROL === 'earlyscore' ? scoreLed : cardMissed;
+  const what = CONTROL === 'earlyscore' ? 'the score changed before the ball was in' : 'no scorer card was ever on screen';
+  const asItMust = line && tampered > 0 && failed.has(7) && failed.size === 1;
+  console.log(asItMust
+    ? `playLiveMatchFit: control ${CONTROL} turned section 7 red on the line it must (${what}, ${tampered} node${tampered === 1 ? '' : 's'} touched) and left the rest green.`
+    : `playLiveMatchFit: control ${CONTROL} did NOT behave: red sections ${[...failed].sort().join(', ') || 'none'}, its own line fired ${line}, ${tampered} nodes touched.`);
   process.exit(asItMust ? 1 : 3);
 }
 console.log(failures
