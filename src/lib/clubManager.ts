@@ -46,6 +46,8 @@ import { ALL_POSITIONS, eligiblePositions, FIT_PENALTY, gradeFit, type FitGrade 
 import { ownGoalRole, ownGoalTagged } from '@/lib/ownGoalRule';
 /* Round 1146: a roll keyed on a match (the quick sim coach's two minutes), never the seeded stream. */
 import { keyedRng } from '@/lib/keyedRng';
+/* Round 1229: the one scorer weight table. It imports a type and nothing else, so there is no cycle. */
+import { goalWeight, ASSIST_SHARE } from '@/lib/clubManagerGoalWeight';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
 // from the Transfermarkt style market value data in Supabase. The bake file
@@ -13295,17 +13297,9 @@ export function matchStrengthNow(state: CareerState): number {
   return myMatchStrength(state, effectiveXIWithSlots(state));
 }
 
+/** Round 1229: the table itself lives in clubManagerGoalWeight.ts, one copy for my men, theirs and the league book. */
 function scorerWeight(p: CMPlayer): number {
-  const pos = p.position;
-  const base =
-    pos === 'ST' || pos === 'CF' ? 5 :
-    pos === 'LW' || pos === 'RW' ? 3.6 :
-    pos === 'CAM' ? 3 :
-    pos === 'LM' || pos === 'RM' ? 2.2 :
-    pos === 'CM' ? 1.6 :
-    pos === 'CDM' ? 0.9 :
-    pos === 'GK' ? 0.02 : 0.55;
-  return base * Math.pow(p.rating / 70, 2);
+  return goalWeight(p.position, p.rating);
 }
 
 function weightedPick(xi: CMPlayer[], weight: (p: CMPlayer) => number): CMPlayer | null {
@@ -13446,7 +13440,7 @@ function creditMyScorers(
     let assistedBy: string | null = null;
     /* Round 505: a penalty or a direct free kick has no assist. The roll is
        still taken so the seeded stream reads the same either way. */
-    if (Math.random() < 0.7 && !line.penalty && !line.freeKick) {
+    if (Math.random() < ASSIST_SHARE && !line.penalty && !line.freeKick) {
       const there = onPitchAt ? onPitchAt(line.minute) : xi;
       const others = (there.length ? there : xi).filter(p => p.id !== line.id && p.position !== 'GK');
       const assister = weightedPick(others, p => (scorerWeight(p) * 0.6 + 0.5) * dutyAssistMult(dutyAt?.(line.minute, p)));
@@ -13538,15 +13532,7 @@ function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, 
 
 /** Chance weight for an opposition player, the shape scorerWeight uses. */
 function oppShotWeight(p: OppXiLine): number {
-  const base =
-    p.p === 'ST' || p.p === 'CF' ? 5 :
-    p.p === 'LW' || p.p === 'RW' ? 3.6 :
-    p.p === 'CAM' ? 3 :
-    p.p === 'LM' || p.p === 'RM' ? 2.2 :
-    p.p === 'CM' ? 1.6 :
-    p.p === 'CDM' ? 0.9 :
-    p.p === 'GK' ? 0.02 : 0.55;
-  return base * Math.pow(p.r / 70, 2);
+  return goalWeight(p.p, p.r);
 }
 
 /** Who gives away fouls and picks up cards: the back line and the holder. */
