@@ -1,0 +1,2 @@
+vitest-all exit=0 458s |    Duration  456.87s (transform 29.94s, setup 19.43s, collect 131.85s, tests 963.88s, environment 151.79s, prepare 29.64s)
+simCareerHall exit=0 879s | simCareerHall: all four sports green
