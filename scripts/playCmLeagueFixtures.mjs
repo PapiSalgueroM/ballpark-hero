@@ -8,6 +8,8 @@
  *     sources the ledger ships;
  *   - Help names the league in its fixture paragraph and holds no link there;
  *   - after a reload the career is resumed on the same list (the boot waits for the file again).
+ * One more journey delays the list by three seconds: the start waits for the fetch the club tap began and
+ * still opens on the real list (without that wait the career would start on generated fixtures).
  * And what must NOT fetch a list: the page before a club is tapped, a career in a league with no list
  * (Celtic, with no line on its Calendar), Manager Hot Seat and Deadline Day.
  *
@@ -41,9 +43,11 @@ const report = { base: BASE, journeys: [], quiet: [] };
 const failures = [];
 const browser = await chromium.launch();
 
-async function open(profile) {
+async function open(profile, slowListMs = 0) {
   const context = await browser.newContext({ viewport: { width: profile.width, height: profile.height }, hasTouch: profile.touch, isMobile: profile.touch });
   await context.route(/supabase\.co/, route => route.abort());
+  /* A list that takes its time, for the journey that holds the start to its wait. */
+  if (slowListMs) await context.route(/clubManager[A-Za-z0-9]+Fixtures2026/, async route => { await new Promise(resolve => setTimeout(resolve, slowListMs)); await route.continue(); });
   await context.addInitScript(({ now }) => {
     const Real = Date;
     window.Date = class extends Real { constructor(...args) { super(...(args.length ? args : [now])); } static now() { return now; } };
@@ -129,6 +133,29 @@ async function journey(walk, profile) {
   report.journeys.push(row);
 }
 
+/* The list arrives three seconds late, long after the dugout step is done: the start has to WAIT for the fetch the
+   club tap began, on the loading screen, and then open on the real list. Without the wait this career has no key. */
+async function slowList(walk, profile) {
+  const id = `${walk.leagueId}-${profile.name}-slow-list`, row = { id, checks: [] };
+  const ok = (what, pass, detail = '') => { row.checks.push({ what, pass, detail }); if (!pass) failures.push(`${id}: ${what}${detail ? ` (${detail})` : ''}`); };
+  const key = ledgers.get(walk.leagueId).key;
+  const s = await open(profile, 3000);
+  try {
+    await s.page.goto(`${BASE}/club-manager`, { waitUntil: 'networkidle' });
+    const t0 = Date.now();
+    await pick(s, walk);
+    row.msFromFirstTapToHub = Date.now() - t0;
+    const save = await readSave(s.page);
+    ok('with its list three seconds late the career still opens on it: the save holds the key', save?.realLeagueFixtures === key, String(save?.realLeagueFixtures));
+    await openCalendar(s);
+    ok('and the Calendar carries the line', (await s.page.locator(`[data-cm-fixture-coverage="${key}"]`).count()) === 1);
+    ok('no page error', s.errors.length === 0, s.errors.slice(0, 2).join(' | '));
+  } catch (error) {
+    ok('the journey ran to its end', false, String(error && error.message).split('\n')[0]);
+  } finally { await s.context.close(); }
+  report.journeys.push(row);
+}
+
 /* What must fetch no list at all. */
 async function quiet(name, run) {
   const s = await open(PROFILES[1]);
@@ -141,6 +168,7 @@ async function quiet(name, run) {
 }
 
 for (const walk of WALKS) for (const profile of PROFILES) await journey(walk, profile);
+await slowList(WALKS[1], PROFILES[1]);
 await quiet('a new career in a league with no list (Celtic)', async s => {
   await s.page.goto(`${BASE}/club-manager`, { waitUntil: 'networkidle' });
   await pick(s, { nation: 'Scotland', league: 'Scottish Premiership', club: 'Celtic' });
@@ -156,4 +184,4 @@ fs.writeFileSync(path.join(OUT, 'report.json'), JSON.stringify(report, null, 2))
 for (const line of failures) console.error(`FAIL ${line}`);
 const checks = report.journeys.reduce((sum, j) => sum + j.checks.length, 0);
 if (failures.length) { console.error(`playCmLeagueFixtures: ${failures.length} FAILURE(S) over ${report.journeys.length} journeys and ${report.quiet.length} quiet pages`); process.exit(1); }
-console.log(`playCmLeagueFixtures: green. ${report.journeys.length} journeys (${WALKS.map(w => w.league).join(', ')} at 390 and 1280), ${checks} checks, and ${report.quiet.length} pages that fetch no fixture list.`);
+console.log(`playCmLeagueFixtures: green. ${WALKS.length * PROFILES.length} journeys (${WALKS.map(w => w.league).join(', ')} at 390 and 1280) and one with its list three seconds late, ${checks} checks, and ${report.quiet.length} pages that fetch no fixture list.`);

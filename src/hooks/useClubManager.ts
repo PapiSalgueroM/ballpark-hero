@@ -466,11 +466,14 @@ export function useClubManager() {
   }, [newInSlot, showSlots]);
 
   /* Round 1225: a league with a real first season fixture list keeps it in a
-     small file of its own. It is fetched when a club is tapped, while the dugout
-     step is on screen, so the career starts on it without a wait. */
+     small file of its own. The page asks for it when a club is tapped (it
+     passes the picked era), while the dugout step is on screen, so the career
+     starts on it without a wait. fixtureFetch is that fetch while it is out. */
+  const fixtureFetch = useRef<{ key: string; done: Promise<void> } | null>(null);
   const chooseClub = useCallback((clubName: string, eraId?: string) => {
     setPendingClub(clubName);
-    if (clubName && eraId) ensureRealLeagueFixtures(startFixtureKey(clubName, eraId)).catch(() => undefined);
+    const key = clubName && eraId ? startFixtureKey(clubName, eraId) : null;
+    fixtureFetch.current = key && !realLeagueFixturesLoaded(key) ? { key, done: ensureRealLeagueFixtures(key).catch(() => undefined) } : null;
   }, []);
 
   /* Round 132: the era rides in from the picker. Nothing passed means the
@@ -494,16 +497,20 @@ export function useClubManager() {
       setPhase('hub');
     };
     /* Round 1225: startCareer opens a career on its league's real list only
-       when that list is here. It nearly always is (chooseClub fetched it); when
-       it is not, wait for it on the loading screen. A fetch that fails, or one
-       still out after eight seconds, starts the career on generated fixtures,
-       which is what the calendar then says. */
+       when that list is here. It nearly always is (the club tap asked for
+       it). When that fetch is still out, wait for it on the loading screen: a
+       fetch that fails, or one still out after eight seconds, starts the
+       career on generated fixtures, which is what the calendar then says. A
+       caller that never asked for the list (a test that drives this hook taps
+       a club with no era) starts at once, on generated fixtures, exactly as
+       before this round. */
     const fixtureKey = edit ? null : startFixtureKey(club, era);
-    if (realLeagueFixturesLoaded(fixtureKey)) { begin(); return; }
+    const fetching = fixtureFetch.current;
+    if (!fixtureKey || realLeagueFixturesLoaded(fixtureKey) || !fetching || fetching.key !== fixtureKey) { begin(); return; }
     setPhase('boot');
     let begun = false;
     const beginOnce = () => { if (!begun) { begun = true; begin(); } };
-    ensureRealLeagueFixtures(fixtureKey).then(beginOnce, beginOnce);
+    fetching.done.then(beginOnce);
     setTimeout(beginOnce, 8000);
   }, [pendingClub]);
 
