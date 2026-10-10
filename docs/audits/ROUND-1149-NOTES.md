@@ -12,8 +12,8 @@ step, so a later session can finish from it. What is not listed under DONE is no
 | b | The shared lift: one fact beat builder in `careerRivalryEvents.ts`, the NBA's beat 306 moved onto it | DONE at aea08239 and green on runners |
 | c | MLB beat 206 read off the season, no coin | DONE at e2dd37a9 and green on runners; recordings 3f52f0de and 53d241a2. Its second card was REWRITTEN in step d, see there |
 | d | NHL beat 306 read off the season, no coin; the beat lifted into `ownRosterBeat`; the second card reads the season before, not the ratings | DONE at e5105752 and green on runners; recordings 3b473626 and 9597ce5d |
-| e | NFL beats 206 and 219, no coin | BUILT, see below; recordings follow |
-| f | One What's New entry, the merge of origin/main, the last gates | not started |
+| e | NFL beats 206 and 219, no coin | DONE at 925a7f12 and green on runners; recordings fde5f872 and bb6c560b |
+| f | One What's New entry, the merge of origin/main, the last gates | BUILT: the entry is in, origin/main is merged, the last gates are in the table at the bottom |
 
 ## Step a, the tile (DONE in code, proof listed below)
 
@@ -164,12 +164,72 @@ the brief, not touched.
 
 None found yet. The guides are Codex's files and are not edited here.
 
+## The recordings, one commit each
+
+| Commit | File | What moved |
+|---|---|---|
+| 8da17c5f | usBoardFixture.json | step a. NFL, NBA byte equal. MLB 28 fields and NHL 41, all hub screens (the Trophy Case box), no click and no save |
+| 3f52f0de | usBoardFixture.json | step c. MLB only: the fixed save noRole, 262 fields; the click path is byte equal |
+| 53d241a2 | usCareerTruthDigest.json | step c. 19 of 22 MLB keys, 35 of 152 careers, no season count |
+| 3b473626 | usBoardFixture.json | step d. NHL only: same 415 clicks, another beat from path step 292; 128 path fields, 55 on two fixed saves |
+| 9597ce5d | usCareerTruthDigest.json | step d. All 10 NHL keys and 17 MLB keys (the second card), 79 of 216 careers, no season count |
+| fde5f872 | usBoardFixture.json | step e. NFL only: differs from step 86, clicks part at 96; 459 clicks for 468, still 24 seasons |
+| bb6c560b | usCareerTruthDigest.json | step e. All 16 NFL keys, 67 of 128 careers, one season count |
+
+The board recorder stamps the runner's throwaway request commit; each stamp was set to the branch commit whose
+tree it is (the `recordedFrom` line of the fixture), the step Round 1112 also took by hand. The digest was
+recorded with `DIGEST_ALLOW` naming only the sport of the step, which refuses any other key that moved.
+
+## What the lead must do by hand
+
+1. SAVED PAGES at release: `/whats-new` changes (one new entry). Nothing under `public/` was written here and
+   `build:seo` was not run.
+2. GATE LIST should gain, for this release only (a one round proof, stale once another round edits these
+   engines): `SENSE_PROVE_1149=808dbbdc node scripts/simNbaAwardsSense.mjs`. And for good: the sense controls
+   norownfl, norowmlb, norownhl, twicecounted, oldgateown, droppedanyyear, lastyearmlb, lastyearnhl,
+   lastyearnfl, soldascoin, tickdraws (the last needs SENSE_PROVE_1149); the rivalry control oldcard.
+   `SENSE_PROVE_AGAINST` (Round 1112's section P) is stale now: against 808dbbdc the NBA rival's line does not
+   move, so its "the rival did move" check would be red. Do not run it.
+3. RULINGS WANTED: NFL beat 221 (All Star Week) claims a roster the engine never picks, on the two ratings; the
+   three design calls under "Decisions taken"; and whether NFL 219 should name a winner off some fact instead of
+   naming none.
+4. NEXT ROUND, named by decision 2 of the brief: move the MLB, NHL and NFL rivals onto the player's own stat
+   line (the hook is `RivalSeasonPlay` in careerRival.ts, the NBA binding is `nbaRivalSeason`). Then each
+   sport's roster beat can name the rival's roster: replace its `ownRosterBeat` binding with three `factBeat`
+   cards, as the NBA's 306 has them.
+5. Nothing is owed to the other lane: no guide sentence about these beats or the tile was found in
+   football.ts, baseball.ts or hockey.ts (grepped for coin, 50/50, ballot, Trophy Case).
+
 ## What a later session must not trust
 
 - A runner result named below is for the commit named beside it and no later one.
 - `scripts/data/usBoardFixture.json` holds hub screens. The tile row changes what the hub prints for a career with
   a lesser award, so `simUsBoardParity` may be red until the fixture is recorded again (see the gate table).
 
-## Gates (runner results, each with the commit it ran on)
+## Gates (GitHub runner results, each with the commit it ran on)
 
-Filled in as results come back.
+Every heavy check ran on a runner (`rc.sh`), none on the owner's PC. "fired" means a negative control went red
+as designed (exit 1; the sense harness would exit 3 had it not).
+
+| Commit | What ran | Result |
+|---|---|---|
+| 62b7752f (step a) | simNbaAwardsSense full size with SENSE_PROVE_OTHERS=1 | 167 checks, 0 failed |
+| 62b7752f | sense controls norow, norownfl, norowmlb, norownhl, twicecounted | all fired |
+| 62b7752f | simCareerHall | exit 0, all four sports green (476 s) |
+| 62b7752f | simCareerRivalryEvents, simNflCareer, simMlbCareer, simNhlCareer, simNbaCareer, simHarnessAnchors, simNoRivalNames, simNoInventedQuotes | exit 0 each |
+| 8da17c5f (step a, test fix and fixture) | tsc, vitest (the two tile files), simUsBoardParity, simHarnessAnchors | exit 0 each |
+| aea08239 (step b) | tsc; vitest (tile files, usCareerTruthDigest); simUsBoardParity | exit 0 each: the lift moved no recording |
+| aea08239 | simNbaAwardsSense full size with SENSE_PROVE_1149=808dbbdc and SENSE_PROVE_OTHERS=1 | 186 checks, 0 failed |
+| aea08239 | sense controls oldgate306, tickdraws; rivalry controls coin306 (45 failures), oldcard (6), deaf, collision, beatlie, beatheat | all fired |
+| aea08239 | simCareerRivalryEvents, the four career sims, anchors, rival names, quotes | exit 0 each |
+| e2dd37a9 (step c) | tsc; simNbaAwardsSense full size (Q, C, S) | exit 0; 188 checks, 0 failed |
+| e2dd37a9 | sense controls oldgate206mlb, lastyearmlb, tickdraws; rivalry controls coin306 (71), oldcard (10) | all fired |
+| e2dd37a9 | usCareerTruthDigest plain, simUsBoardParity | RED as meant (MLB moved); both recorded again on the runner |
+| e5105752 (step d) | tsc; simNbaAwardsSense full size (Q, C, S) | exit 0; 190 checks, 0 failed |
+| e5105752 | sense controls oldgateown, droppedanyyear, lastyearmlb, lastyearnhl, tickdraws; rivalry controls coin306 (97), oldcard (14) | all fired |
+| e5105752 | usCareerTruthDigest plain, simUsBoardParity | RED as meant (NHL new, MLB's second card); both recorded again |
+| e5105752 | simCareerRivalryEvents, the four career sims, anchors, rival names, quotes | exit 0 each |
+| 925a7f12 (step e) | tsc; simNbaAwardsSense full size (Q, C, S) | exit 0; 193 checks, 0 failed |
+| 925a7f12 | sense controls oldgateown, droppedanyyear, lastyearnfl, soldascoin, oldgate306; rivalry controls coin306 (130 failures), oldcard (20), deaf (121), beatlie (8), beatheat (4); simNflCareer control rivalwords (8) | all fired |
+| 925a7f12 | usCareerTruthDigest plain, simUsBoardParity | RED as meant (NFL moved); both recorded again |
+| 925a7f12 | simCareerRivalryEvents, the four career sims, anchors, rival names, quotes | exit 0 each |

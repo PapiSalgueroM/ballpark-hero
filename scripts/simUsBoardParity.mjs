@@ -136,6 +136,29 @@
  * 41 fields, all on the click path, 40 markup hashes and 1 box label (step
  * 290, "2 honours" is now "3 honours" over the same "1 Cup, 1 All-Star
  * nods"). 1,872,637 bytes.
+ * Steps c, d and e took the coin out of the roster beat of one sport each
+ * (MLB 206, NHL 306, NFL 206 and 219), and each recording moved that sport
+ * and no other. A coin beat drew once from the board's stream when it was
+ * answered and no beat draws now, and the beat is in the rivalry pool in
+ * far fewer seasons, so the same roll can pick another card.
+ * MLB (from e2dd37a9, and unmoved when step d changed the beat's second
+ * card): the click path of 449 steps and fourteen of the fifteen fixed
+ * saves are byte equal. The fixed save "noRole" deals another beat at step
+ * 26 of its screen walk and goes its own way: 262 fields, all its own.
+ * NHL (from e5105752): all 415 clicks are the same buttons. At path step
+ * 292 (the 2012 season) the roll deals "The Scrum" where it dealt "Rival
+ * Becomes Teammate", and the save differs in its rivalry fields from there:
+ * 128 fields on the path (122 save hashes, 2 markup hashes, 1 text) and 55
+ * on the screens of two fixed saves (noCoachKey, suspended).
+ * NFL (from 925a7f12): step 86 is the first that differs (a season whose
+ * roll deals another beat) and the clicks part at step 96, so the career
+ * goes its own way: 459 clicks where there were 468, still 24 seasons and
+ * 685 screen steps, 10 rival beats and 5 rival choices where there were 14
+ * and 5; eight of the fifteen fixed saves are cut from the new path
+ * (coach, coachPhaseNoCoach, dirty, mid, negNet, retired,
+ * retiredNoCoachKey, suspended). The player's own stream did not move in
+ * any of the three: scripts/simNbaAwardsSense.mjs section Q proves that on
+ * fleets that answer no card. 1,868,724 bytes.
  * same (cmp exit 0), which is what makes a red replay mean something. There is no
  * band here on purpose: the check is byte equality, and a path either
  * replays or it does not.
