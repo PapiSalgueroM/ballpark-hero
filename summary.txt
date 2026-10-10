@@ -1,0 +1,6 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playGames-soccer-career exit=0 54s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-club-manager exit=0 47s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-dart-draft exit=0 45s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-stat-detective exit=0 43s | Played 1 games. 0 findings, 0 the harness could not drive.
+sweepWeight exit=1 27s | sweepWeight: 4 failures
