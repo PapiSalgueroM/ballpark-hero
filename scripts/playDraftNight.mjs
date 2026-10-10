@@ -272,7 +272,7 @@ const END = () => {
   const closing = night.querySelector("[data-night-row='you'], [data-night-row='unpicked']");
   const r = closing.getBoundingClientRect();
   const at = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
-  return { text: closing.innerText, top: r.top, bottom: r.bottom, vh: window.innerHeight, covered: !(at && closing.contains(at)), file: document.querySelector('[data-prospect-file]').textContent,
+  return { text: closing.innerText, top: r.top, bottom: r.bottom, vh: window.innerHeight, covered: !(at && closing.contains(at)), file: document.querySelector('[data-prospect-file]').textContent, nightRect: night.getBoundingClientRect().height,
     rows: night.querySelectorAll('[data-night-row]').length, tiles: night.querySelectorAll('[data-lottery-slot]').length, kinds: [...night.querySelectorAll('[data-night-row]')].map(x => x.dataset.nightRow),
     tileWords: [...night.querySelectorAll('[data-lottery-slot]')].map(li => [li.dataset.lotterySlot, ...[...li.querySelectorAll('[data-lottery-face] > span:last-child > span')].map(x => x.textContent)].join(' | ')) };
 };
@@ -404,6 +404,7 @@ async function run(browser, sport, size, found, mode, { startCareer = false, sho
         /* The case is what it says: the night is taller than this screen. And the press did not
            throw its start off the top: once the page is at rest the top of the night is on screen. */
         if (!(samples[0].nightH > samples[0].vh)) fail(id, 'fold', `this screen was meant to be shorter than the night: the night is ${samples[0].nightH} high and the screen ${samples[0].vh}`);
+        row.nightTopAtRest = Math.round(still.nightTop);
         if (still.nightTop < -1 || still.nightTop > still.vh - 44) fail(id, 'fold', `the night starts off screen: once the page is at rest its top is at ${Math.round(still.nightTop)} in a ${still.vh} high viewport`);
         const tail = samples.filter(s => s.t > last.t - 300).map(s => s.y);
         row.endingMovedPx = Math.round(last.y - still.y);
@@ -444,7 +445,7 @@ async function run(browser, sport, size, found, mode, { startCareer = false, sho
     if (last.rowsMin < 0.99 || last.h2 < 0.99 || last.club < 0.99 || last.result < 0.99) fail(id, mode === 'reduced' ? 'reduced' : 'last', `the last frame has a row at ${last.rowsMin}, the title at ${last.h2}, the club at ${last.club}, the result at ${last.result}`);
     /* 4 again and 6: the last frame is on screen, uncovered, and it is the save. */
     const end = await page.evaluate(END);
-    Object.assign(row, { rows: end.rows, tiles: end.tiles, closing: [Math.round(end.top), Math.round(end.bottom)] });
+    Object.assign(row, { rows: end.rows, tiles: end.tiles, closing: [Math.round(end.top), Math.round(end.bottom)], nightRect: Math.round(end.nightRect) });
     if (end.top < -1 || end.bottom > end.vh + 1 || end.covered) fail(id, 'fold', `the closing row sits at ${Math.round(end.top)} to ${Math.round(end.bottom)} in a ${end.vh} high viewport${end.covered ? ', covered' : ''}`);
     /* Once the night is over the file has moved on to the numbers the career starts with. */
     if (!end.file.includes(`Age ${out.ageAfter}`) || !end.file.includes(`Rating${out.ratingAfter}`)) fail(id, 'last', `the file reads "${end.file}" at the end, and the career starts at age ${out.ageAfter}, rated ${out.ratingAfter}`);
@@ -510,6 +511,7 @@ try {
     const [sportAt, sizeAt, modeAt] = { hidden: [1, SIZES[0], 'reduced'], cut: [1, SIZES[0], 'watch'], narrowtile: [1, NARROW[1], 'watch'], ending: [1, SHORT, 'watch'], nottall: [1, SHORT, 'watch'] }[CONTROL] ?? [2, SIZES[0], 'watch'];
     const c = cases[sportAt];
     await run(browser, c.sport, sizeAt, c.late, modeAt);
+    fs.writeFileSync(path.join(OUT, 'play-draft-night.json'), JSON.stringify({ control: CONTROL, results, failures }, null, 2));
     const own = failures.filter(f => f.check === CONTROLS[CONTROL]);
     if (!own.length) { console.error(`Control ${CONTROL} changed nothing its check can see (${failures.map(f => f.check).join(', ') || 'no failure at all'}). Refusing to call that a result.`); exitCode = 2; }
     else console.log(`playDraftNight [control ${CONTROL}]: ${own.length} FAILURE(S) of its own check (${CONTROLS[CONTROL]}), as it must`);
