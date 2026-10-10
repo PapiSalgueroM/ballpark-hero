@@ -1,0 +1,6 @@
+apply exit=0 0s |  1 file changed, 1 insertion(+), 1 deletion(-)
+rivalry exit=1 6s | simCareerRivalryEvents: 2 failures
+sense exit=1 100s | simNbaAwardsSense: 171 checks, 2 failed (full size), 100s
+vitest exit=1 36s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career t
+parity exit=1 35s | simUsBoardParity: 3 failures
+simNflCareer exit=0 2s | PASS: no crashes, every position produces stats, shop fully reachable, deck C drawn, every card dealt only where its words hold (its words, odds and money: simUsCareerDec
