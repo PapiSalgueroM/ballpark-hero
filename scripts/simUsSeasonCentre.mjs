@@ -80,6 +80,31 @@
  *   oddsack    the number file drops the odd tenths of a sack,
  *              which only a save from before Round 1104 holds    -> section 3
  *
+ * Round 1221 (the NFL score law moved to src/lib/gameLaws): a DIGEST mode,
+ * the proof that the move changed nothing the Season Center plays.
+ *   US_SEASON_DIGEST=print    one sha1 a sport and a seed set over every
+ *     season of the fleet as the viewer is handed it (the build's answer,
+ *     the whole derived season: every game's score, line and events, the
+ *     record target, the repairs, and the playoff path), and one over the
+ *     careers themselves after every season (the engine's own stream past
+ *     each derive). With US_SEASON_DIGEST_OUT=<file> the record is written
+ *     there as JSON, with the blob of every source file the bundle read.
+ *   US_SEASON_DIGEST=compare  the same digests against the committed
+ *     scripts/data/usSeasonLawDigest.json. Exit 0 equal, 1 a digest moved,
+ *     3 "inputs moved under the digest": a bundled file other than the
+ *     ones the move touches is not the file the record was made on, so a
+ *     difference would not be the move's and nothing is compared.
+ *   Control lawdrift (with compare): one constant of the score law changed
+ *     where the law now lives. The NFL's digest must move on every seed set
+ *     of the run and the NBA's must hold.
+ * The record was made on the commit BEFORE the move and compared on the
+ * move commit, its child. It is a RECEIPT of that round, in no gate: any
+ * later round that changes a career or a season on purpose moves it.
+ * Since the move the controls minutes, points, forty, level and oddtd (and
+ * lawdrift) patch the law where it lives, src/lib/gameLaws/nflScore.ts and
+ * src/lib/gameLaws/nfl.ts; every other NFL control still patches the
+ * number file.
+ *
  * MEASURED (filled in from the five seed sets, 2026-10-07 for the NBA and
  * 2026-10-09 for the NFL): see the block above the bands in section 7.
  *
@@ -89,7 +114,7 @@
 import os from 'node:os';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
-import { readFileSync, existsSync, unlinkSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, unlinkSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 
@@ -99,11 +124,20 @@ const CAREERS = Number(process.env.CAREERS ?? 40);
 const SEEDSETS = (process.env.SEEDSET ?? '0,1,2,3,4').split(',').map(Number);
 const CONTROL = process.env.US_SEASON_CONTROL ?? '';
 const ASKED = (process.env.SPORTS ?? 'nba,nfl').split(',').map(s => s.trim()).filter(Boolean);
+/* Round 1221: the digest mode (see the header). The files the law move touches are the only bundled
+   files whose bytes may differ between the record and a compare. */
+const DIGEST = process.env.US_SEASON_DIGEST ?? '';
+const DIGEST_FILE = 'scripts/data/usSeasonLawDigest.json';
+const DIGEST_MOVED = ['src/lib/season/nfl.ts', 'src/lib/season/core.ts', 'src/lib/keyedShuffle.ts', 'src/lib/gameLaws/types.ts', 'src/lib/gameLaws/nflScore.ts', 'src/lib/gameLaws/nfl.ts'];
+if (DIGEST && DIGEST !== 'print' && DIGEST !== 'compare') { console.error(`unknown US_SEASON_DIGEST ${DIGEST} (print or compare)`); process.exit(2); }
 
 /* ─── Controls: exact strings, patched in the bundle only ─── */
 const US = 'src/lib/season/us.ts';
 const NBA = 'src/lib/season/nba.ts';
 const NFL = 'src/lib/season/nfl.ts';
+/* Round 1221: the NFL's score law lives in two files of its own; the controls that change the law patch it there */
+const NFL_SCORE = 'src/lib/gameLaws/nflScore.ts';
+const NFL_STORY = 'src/lib/gameLaws/nfl.ts';
 const WINDOW = { file: 'src/data/usLeagueShape.ts', from: "  { sport: 'nba', era: 'now', from: 2025, to: null, shape: NBA_2025 },", to: "  { sport: 'nba', era: 'now', from: 2025, to: null, shape: NBA_2025 },\n  { sport: 'nba', era: 'y2004', from: 2003, to: null, shape: NBA_2025 }," };
 const CONTROLS = {
   stream: { section: 6, patches: [{ file: US, from: 'const key = usSeasonKey(bind, career, row);', to: 'const key = usSeasonKey(bind, career, row); Math.random();' }] },
@@ -137,23 +171,27 @@ const CONTROLS = {
   lumpy: { section: 7, label: 'sit on a per game cap', patches: [{ file: NFL, from: '      return 1 + swing * (0.62 * mine + 0.18 * team + 0.2 * scored);', to: '      return (1 + mine / 2) * (0.7 + g.us / 60) * (1 + (tdKey ? of(g, tdKey) : 0));' }] },
   flat: { section: 7, label: 'game to game spread sits inside', patches: [{ file: NFL, from: '      return 1 + swing * (0.62 * mine + 0.18 * team + 0.2 * scored);', to: '      return 1;' }] },
   tdform: { section: 7, label: 'touchdown passes scatter', patches: [{ file: NFL, from: 'teamFor: true, teamPoints: 7, formPower: TD_FORM_POWER }', to: 'teamFor: true, teamPoints: 7 }' }] },
-  minutes: { section: 7, label: 'under three minutes apart', patches: [{ file: NFL, from: '        const crowded = used.has(m - 1) || used.has(m) || used.has(m + 1) || (side !== undefined && drives[side].some(x => Math.abs(x - m) < DRIVE_GAP));', to: '        const crowded = false;' }] },
+  minutes: { section: 7, label: 'under three minutes apart', patches: [{ file: NFL_STORY, from: '      const crowded = used.has(m - 1) || used.has(m) || used.has(m + 1) || (side !== undefined && drives[side].some(x => Math.abs(x - m) < DRIVE_GAP));', to: '      const crowded = false;' }] },
   order: { section: 7, label: 'order of the games reads oddly', patches: [{ file: NFL, from: '  for (let t = 0; t < ORDER_TRIES && least > 0; t += 1) {', to: '  for (let t = 0; t < 1; t += 1) {' }] },
-  points: { section: 7, label: 'points a team game', patches: [{ file: NFL, from: 'const TD_A_GAME = 2.6;', to: 'const TD_A_GAME = 3.4;' }] },
-  forty: { section: 7, label: 'scores 40 or more', patches: [{ file: NFL, from: '(TD_A_GAME + 0.05 * e) / DRIVES', to: '(TD_A_GAME + 0.4 * e) / DRIVES' }] },
-  level: { section: 7, label: 'level games stay under', patches: [{ file: NFL, from: '    if (home) us += more; else them += more;', to: '    if (home) us += 0 * more; else them += 0 * more;' }] },
-  oddtd: { section: 7, label: 'touchdowns not worth seven', patches: [{ file: NFL, from: '        out.push({ t, f, s, cost: Math.abs(rest - 7 * t) + 4 * s });', to: '        out.push({ t, f, s, cost: 4 * s });' }] },
+  points: { section: 7, label: 'points a team game', patches: [{ file: NFL_SCORE, from: 'const TD_A_GAME = 2.6;', to: 'const TD_A_GAME = 3.4;' }] },
+  forty: { section: 7, label: 'scores 40 or more', patches: [{ file: NFL_SCORE, from: '(TD_A_GAME + 0.05 * e) / DRIVES', to: '(TD_A_GAME + 0.4 * e) / DRIVES' }] },
+  level: { section: 7, label: 'level games stay under', patches: [{ file: NFL_SCORE, from: '    if (home) us += more; else them += more;', to: '    if (home) us += 0 * more; else them += 0 * more;' }] },
+  oddtd: { section: 7, label: 'touchdowns not worth seven', patches: [{ file: NFL_STORY, from: '        out.push({ t, f, s, cost: Math.abs(rest - 7 * t) + 4 * s });', to: '        out.push({ t, f, s, cost: 4 * s });' }] },
   bigkick: { section: 7, label: 'makes five or six', patches: [{ file: NFL, from: '    const need = left / (n - k);', to: '    const need = MAX_FG;' }] },
   /* Release AP: the line an engine that only makes halves no longer needs, and every older save does */
   oddsack: { section: 3, label: 'sacks in tenths still opens', patches: [{ file: NFL, from: '    if (left % 5 > 0) t[t.indexOf(Math.max(...t))] += left % 5;\n', to: '' }] },
+  /* Round 1221: the digest's own control (run with US_SEASON_DIGEST=compare): a field goal ends one drive in a hundred more */
+  lawdrift: { section: 'digest', patches: [{ file: NFL_SCORE, from: 'const FG_A_DRIVE = 0.1445;', to: 'const FG_A_DRIVE = 0.1545;' }] },
 };
 /* which sport a control needs in the run (its patched file is only bundled with that sport) */
 const CONTROL_SPORT = {
   stage: 'nba', names: 'nba', window: 'nba', formula: 'nba', hot: 'nba', sum: 'nfl', kick: 'nfl', nflstage: 'nfl', nflformula: 'nfl', days: 'nfl',
   poscore: 'nfl', nflheld: 'nfl', lumpy: 'nfl', flat: 'nfl', tdform: 'nfl', minutes: 'nfl', order: 'nfl', points: 'nfl', forty: 'nfl', level: 'nfl', oddtd: 'nfl', bigkick: 'nfl',
-  oddsack: 'nfl', short82: 'nba',
+  oddsack: 'nfl', short82: 'nba', lawdrift: 'nfl',
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown US_SEASON_CONTROL ${CONTROL}`); process.exit(2); }
+if (CONTROL === 'lawdrift' ? DIGEST !== 'compare' : !!(CONTROL && DIGEST)) { console.error("the digest mode has one control and that control has one mode: US_SEASON_CONTROL=lawdrift US_SEASON_DIGEST=compare, refusing to run"); process.exit(2); }
+if (DIGEST && (ASKED.length !== 2 || !ASKED.includes('nba') || !ASKED.includes('nfl'))) { console.error('the digest mode reads both sports (the NBA is the side that must not move): leave SPORTS alone, refusing to run'); process.exit(2); }
 
 const norm = s => s.replace(/\r\n/g, '\n');
 const fired = new Set();
@@ -224,11 +262,13 @@ const entry = [
   "export { FO_TEAMS } from './src/data/frontOfficePlayers.ts';",
 ].join('\n');
 const t0 = Date.now();
-await build({
+const built = await build({
   stdin: { contents: entry, resolveDir: ROOT, loader: 'ts' },
   bundle: true, format: 'esm', platform: 'node', outfile: OUT, absWorkingDir: ROOT,
   logLevel: 'error', alias: { '@': './src' }, plugins: [controlPlugin], jsx: 'automatic',
   banner: { js: "import { createRequire as __usRequire } from 'node:module'; const require = __usRequire(import.meta.url);" },
+  /* the digest mode reads the list of files the bundle was made from; the bundle itself is the same without it */
+  metafile: DIGEST !== '',
 });
 const store = new Map();
 globalThis.localStorage ??= { getItem: k => (store.has(k) ? store.get(k) : null), setItem: (k, v) => { store.set(k, String(v)); }, removeItem: k => { store.delete(k); }, clear: () => store.clear() };
@@ -748,6 +788,18 @@ const NFL_GAME_CAPS = { passYds: 520, rushYds: 290, rec: 15, recYds: 330, tackle
 /** A full season: he played 14 or more of the 17, so a game's share of his total means something. */
 const NFL_FULL = 14;
 const poRounds = {};  // slug -> named playoff rounds checked for their conference: { early, finals }
+/* Round 1221, the digest mode: one running sha1 a sport and a seed set, fed every season in the order the
+   fleet plays it with what the viewer is handed (see the header). Nothing is kept when the mode is off. */
+const digests = new Map();
+function digestSeason(who, row, built, s, pathNow) {
+  if (!DIGEST) return;
+  const k = `${who.slug}|${who.seedset}`;
+  if (!digests.has(k)) digests.set(k, { hash: createHash('sha1'), seasons: 0, derived: 0 });
+  const d = digests.get(k);
+  d.seasons += 1;
+  if (s && typeof s !== 'string') d.derived += 1;
+  d.hash.update(`${JSON.stringify([who.i, who.targeted, row.year, built, s, pathNow])}\n`);
+}
 function observe(c, line, who) {
   const d = SPORT_DEFS[who.slug];
   const SB = M[d.binding];
@@ -764,9 +816,9 @@ function observe(c, line, who) {
   seen.push(rec);
   const b = M.buildUsSeason(bind, career, row, SB.teamLabelOf);
   rec.build = b.ok ? 'ok' : b.why;
-  if (!b.ok) return;
+  if (!b.ok) { digestSeason(who, row, rec.build, null, null); return; }
   const s = M.deriveSeasonOrWhy(b.sport, row, b.ctx);
-  if (typeof s === 'string') { rec.why = s.startsWith('self:') ? 'self' : s; rec.whyFull = s; return; }
+  if (typeof s === 'string') { digestSeason(who, row, 'ok', s, null); rec.why = s.startsWith('self:') ? 'self' : s; rec.whyFull = s; return; }
   rec.derived = true;
   rec.named = !!b.ctx.shape;
   rec.repairs = s.repairs;
@@ -784,6 +836,7 @@ function observe(c, line, who) {
   if (!band && s.target.kind !== 'none') rec.p3.push(`a band for the unknown result "${row.teamResult}"`);
   /* section 4 */
   const pathNow = M.usPlayoffPath(bind, row, b.ctx, b.key);
+  digestSeason(who, row, 'ok', s, pathNow);
   rec.path = !!pathNow;
   rec.p4.push(...pathProblems(who.slug, row, pathNow, s.target, { named: rec.named, eraId: career.eraId, SB, count: poRounds[who.slug] ??= { early: 0, finals: 0 } }));
   rec.hot = s.games.filter(g => g.events.some(e => e.kind === 'hot')).length;
@@ -872,6 +925,98 @@ const tA = Date.now();
 const runA = playAll(null, trapA);
 const runB = playAll(observe, trapB);
 console.log(`played ${runA.length} careers twice in ${Date.now() - tA} ms; ${seen.length} seasons observed`);
+
+/* ─── Round 1221: a digest run ends here (see the header); the sections below are the default run's ─── */
+if (DIGEST) {
+  const per = CAREERS + TARGETED;
+  /* git's own blob id of the file with LF line ends, so a record made on Linux reads the same on Windows */
+  const blobOf = rel => {
+    const body = Buffer.from(norm(readFileSync(path.join(ROOT, rel), 'utf8')), 'utf8');
+    return createHash('sha1').update(Buffer.concat([Buffer.from(`blob ${body.length}`), Buffer.from([0]), body])).digest('hex').slice(0, 12);
+  };
+  const inputs = Object.keys(built.metafile.inputs).map(p => p.split(path.sep).join('/')).filter(p => p !== '<stdin>' && !p.includes('node_modules/')).sort();
+  const nowDigests = {};
+  SPORTS.forEach((slug, si) => {
+    nowDigests[slug] = {};
+    SEEDSETS.forEach((seedset, ki) => {
+      const d = digests.get(`${slug}|${seedset}`);
+      const from = (si * SEEDSETS.length + ki) * per;
+      const got = {
+        seasons: d ? d.seasons : 0, derived: d ? d.derived : 0, season: d ? d.hash.digest('hex') : null,
+        careers: createHash('sha1').update(JSON.stringify(runB.slice(from, from + per))).digest('hex'),
+      };
+      nowDigests[slug][seedset] = got;
+      console.log(`digest ${slug} seed set ${seedset}: ${got.seasons} seasons, ${got.derived} derived, season ${got.season}, careers ${got.careers}`);
+    });
+  });
+  console.log(`digest stray draws (Math.random calls while a season was derived): ${trapB.count}`);
+  if (DIGEST === 'print') {
+    const record = {
+      round: 1221,
+      what: 'What the NBA and NFL Season Centers are handed for every season of the fleet of scripts/simUsSeasonCentre.mjs, before the NFL score law moved to src/lib/gameLaws. A receipt of that move, in no gate.',
+      commit: process.env.US_SEASON_DIGEST_COMMIT ?? null,
+      careers: CAREERS,
+      strayDraws: trapB.count,
+      digests: nowDigests,
+      moved: DIGEST_MOVED,
+      movedAtRecord: Object.fromEntries(inputs.filter(p => DIGEST_MOVED.includes(p)).map(p => [p, blobOf(p)])),
+      inputs: Object.fromEntries(inputs.filter(p => !DIGEST_MOVED.includes(p)).map(p => [p, blobOf(p)])),
+    };
+    const out = process.env.US_SEASON_DIGEST_OUT;
+    if (out) writeFileSync(out, `${JSON.stringify(record, null, 2)}\n`);
+    console.log(`simUsSeasonCentre digest print: ${SPORTS.length * SEEDSETS.length} digests over ${inputs.length} bundled files, ${out ? `written to ${out}` : 'printed only (US_SEASON_DIGEST_OUT=<file> writes the record)'}`);
+    process.exit(0);
+  }
+  if (!existsSync(path.join(ROOT, DIGEST_FILE))) { console.error(`no record at ${DIGEST_FILE}: nothing to compare with`); process.exit(2); }
+  const rec = JSON.parse(readFileSync(path.join(ROOT, DIGEST_FILE), 'utf8'));
+  if (rec.careers !== CAREERS) { console.error(`the record was made with ${rec.careers} careers a sport and a seed set and this run has ${CAREERS}: refusing to compare`); process.exit(2); }
+  for (const slug of SPORTS) for (const seedset of SEEDSETS) if (!rec.digests?.[slug]?.[seedset]) { console.error(`the record holds no ${slug} digest for seed set ${seedset}: refusing to compare`); process.exit(2); }
+  /* a bundled file the move does not touch must be the file the record was made on, or a difference is not the move's */
+  const moved = new Set(rec.moved);
+  const under = [];
+  for (const p of inputs) {
+    if (moved.has(p)) continue;
+    if (!(p in rec.inputs)) under.push(`${p} (not in the record's bundle)`);
+    else if (rec.inputs[p] !== blobOf(p)) under.push(`${p} (${rec.inputs[p]} at the record, ${blobOf(p)} now)`);
+  }
+  for (const p of Object.keys(rec.inputs)) if (!inputs.includes(p)) under.push(`${p} (gone from the bundle)`);
+  if (under.length) {
+    console.log(`inputs moved under the digest: ${under.slice(0, 12).join('; ')}${under.length > 12 ? `; and ${under.length - 12} more` : ''}`);
+    console.log(`simUsSeasonCentre digest compare: NOT COMPARED, ${under.length} bundled files are not the ones the record was made on (exit 3: this is no red of the score law)`);
+    process.exit(3);
+  }
+  const FIELDS = ['seasons', 'derived', 'season', 'careers'];
+  const differs = {};
+  let n = 0;
+  let badN = 0;
+  for (const slug of SPORTS) for (const seedset of SEEDSETS) {
+    const want = rec.digests[slug][seedset];
+    const got = nowDigests[slug][seedset];
+    const diff = FIELDS.filter(f => want[f] !== got[f]);
+    differs[`${slug}|${seedset}`] = diff;
+    n += 1;
+    if (diff.length === 0) console.log(`ok   digest ${slug} seed set ${seedset} is the record's (${got.seasons} seasons, ${got.derived} derived)`);
+    else { badN += 1; console.log(`FAIL digest ${slug} seed set ${seedset}: ${diff.map(f => `${f} ${got[f]} now, ${want[f]} at the record`).join('; ')}`); }
+  }
+  n += 1;
+  const strayOk = trapB.count === rec.strayDraws;
+  if (strayOk) console.log(`ok   digest stray draws are the record's (${trapB.count})`);
+  else { badN += 1; console.log(`FAIL digest stray draws: ${trapB.count} now, ${rec.strayDraws} at the record`); }
+  if (CONTROL === 'lawdrift') {
+    /* the law is the NFL Season Center's alone: its season digest moves on every seed set; the careers (the
+       engine never reads the law), the NBA and the stray draws hold */
+    const nflMoved = SEEDSETS.every(k => differs[`nfl|${k}`].includes('season'));
+    const restHeld = strayOk && SEEDSETS.every(k => differs[`nba|${k}`].length === 0 && !differs[`nfl|${k}`].includes('careers') && !differs[`nfl|${k}`].includes('seasons'));
+    const ok = nflMoved && restHeld;
+    console.log(ok
+      ? `control lawdrift: RED AT THE NAMED CHECK (the NFL season digest moved on every seed set of this run; the NBA's digests, both sports' careers and the stray draws held)`
+      : `control lawdrift: DID NOT FIRE AT ITS NAMED CHECK (the NFL season digest ${nflMoved ? 'moved on every seed set' : 'did NOT move on every seed set'}; the rest ${restHeld ? 'held' : 'did NOT hold'})`);
+    console.log(`simUsSeasonCentre digest compare: ${n} digests, ${badN} moved (control lawdrift)`);
+    process.exit(ok ? 1 : 2);
+  }
+  console.log(`simUsSeasonCentre digest compare: ${n} digests, ${badN} moved (a receipt of Round 1221's law move, in no gate)`);
+  process.exit(badN ? 1 : 0);
+}
 
 const median = xs => { const a = [...xs].sort((x, y) => x - y); return a.length ? a[Math.floor((a.length - 1) / 2)] : NaN; };
 const pct = (xs, p) => { const a = [...xs].sort((x, y) => x - y); return a.length ? a[Math.min(a.length - 1, Math.floor(p * a.length))] : NaN; };

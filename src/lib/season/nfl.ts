@@ -12,8 +12,9 @@
    17th game, the playoff rounds (one game a round), what a scoring play is
    worth, that a regular season game can end level, and the clock (four
    quarters of 15 minutes, marked thin there). The 7, 3 and 2 in the score
-   arithmetic below are the ledger's NFL_SCORING; src/test/usSeasonNfl.test.ts
-   holds the two together.
+   arithmetic (the law's files since Round 1221, see the last paragraph) are
+   the ledger's NFL_SCORING; src/test/usSeasonNfl.test.ts holds the two
+   together.
 
    How a game is laid out. The core spreads his whole number totals (his
    touchdowns hold his team's score up: a touchdown of his is a seven point
@@ -25,108 +26,36 @@
    onto the other side's score): a tie is not a win, and the record says so.
 
    No React, no Math.random. The engine import is the two exported result
-   words and the era's team list (the engine is already in the route's chunk). */
+   words and the era's team list (the engine is already in the route's chunk).
+
+   Round 1221: the score law itself (the score, the drive lists that make a
+   score, the minute picker, the clock and its label, the lines about a club)
+   lives in src/lib/gameLaws/nflScore.ts and nfl.ts, bodies unchanged, so a
+   front office can tell a game by the same law without importing this file.
+   It is imported here, and the names this file exported before are exported
+   still. */
 import { shuffled, type DerivedGame, type DerivedSeason, type Rng, type SeasonEvent, type StatTotal } from './core';
 import { dealUnnamed, splitTotal, usHelp, type UsRow, type UsSeasonBind, type UsSeasonCtx } from './us';
+import { DRIVES, FG_A_DRIVE, TD_A_GAME, nflEdgeForShare, nflScore } from '../gameLaws/nflScore';
+import { MAX_FG, NFL_STORY_LAW, nflClockLabel, nflClubLine, nflDriveCost, nflDrives, nflMinutePicker, nflTryWords } from '../gameLaws/nfl';
 import { NFL_MISSED_PLAYOFFS, NFL_PLAYOFF_RESULTS, nflEraById } from '../nflMyCareer';
 import { formatNumber } from '../formatNumber';
 import { NFL_CLOCK, NFL_SCORING, US_PLAYOFF_FORMAT, nflHosts17 } from '@/data/usLeagueShape';
 import { usSeasonHeldLine, usSeasonLabel, usSeasonLength } from '@/data/usSeasonLengths';
 
+/* the law's names this file exported before Round 1221 (the tests import them from here) */
+export { nflClockLabel, nflDriveCost, nflDrives, nflScore };
+export type { NflDrives } from '../gameLaws/nfl';
+
 const GAMES = 17;
 /** Wins this career's rule gives each result: missed, then the five results in depth order. A tie is not a win. */
 const BANDS = [[2, 9], [9, 12], [10, 13], [11, 14], [11, 15], [11, 15]] as const;
 const CAP = 70;
-/** The most field goals one side is given in a game. */
-const MAX_FG = 6;
 const CLOCK = NFL_CLOCK.quarters * NFL_CLOCK.minutes;
 /** Every stat field of the engine's season line, in its declared order. */
 const STAT_KEYS = ['passYds', 'passTd', 'ints', 'rushYds', 'rushTd', 'rec', 'recYds', 'recTd', 'tackles', 'sacks', 'picks', 'passDef', 'forcedFum', 'fgMade', 'fgAtt', 'longFg'] as const;
 
 const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
-
-/** The drives a side has in a game, and the most of them that may end in a
- *  touchdown (nine sevens and a field goal are 66, and the three a level
- *  game adds keeps a side at 69 or under: never past the cap). */
-const DRIVES = 10;
-const MAX_TD = 9;
-/** A drive ends in a touchdown 26 times in 100 at even strength (2.6 a game)
- *  and in a field goal about 14 (1.445 a game): 22.5 points a team game. */
-const TD_A_GAME = 2.6;
-const FG_A_DRIVE = 0.1445;
-
-/** [his side, the other side] for a side `edge` stronger. Each side has ten
- *  drives; a drive ends in a touchdown (seven), a field goal (three) or
- *  nothing, so a side's score scatters like a football score does (a Poisson
- *  count of touchdowns gives a side seven of them about four times as often
- *  at even strength: 1.7% against 0.45%). A lone
- *  field goal becomes two (so no repair of the core's can make a 4, which no
- *  drive list can), and the law itself never returns a level game. */
-export function nflScore(edge: number, home: boolean, rng: Rng): [number, number] {
-  const venue = home ? 1 : -1;
-  const side = (e: number) => {
-    const p = Math.min(0.6, Math.max(0.06, (TD_A_GAME + 0.05 * e) / DRIVES));
-    let td = 0;
-    let fg = 0;
-    for (let i = 0; i < DRIVES; i += 1) {
-      const u = rng();
-      if (u < p) { if (td < MAX_TD) td += 1; } else if (u < p + FG_A_DRIVE) fg += 1;
-    }
-    const pts = 7 * td + 3 * fg;
-    return pts === 3 ? 6 : pts;
-  };
-  let us = side(edge + venue);
-  let them = side(-edge - venue);
-  if (us === them) {
-    const more = us === 0 ? 7 : 3;
-    if (home) us += more; else them += more;
-  }
-  return [us, them];
-}
-
-/** The scoring drives of one side: touchdowns worth 6, 7 or 8, field goals, safeties. */
-export interface NflDrives { tds: number[]; fgs: number; safeties: number }
-
-/** How far a list is from plain football: every touchdown that is not a
- *  seven costs one, a safety four. */
-function driveOptions(points: number, minTd: number, exactFg: number | null): { t: number; f: number; s: number; cost: number }[] {
-  const out: { t: number; f: number; s: number; cost: number }[] = [];
-  if (!Number.isInteger(points) || points < 0 || minTd < 0) return out;
-  for (let s = 0; s <= 1; s += 1) {
-    for (let f = exactFg ?? 0; f <= (exactFg ?? MAX_FG); f += 1) {
-      const rest = points - 3 * f - 2 * s;
-      if (rest < 0) break;
-      for (let t = minTd; 6 * t <= rest; t += 1) {
-        if (rest > 8 * t) continue;
-        out.push({ t, f, s, cost: Math.abs(rest - 7 * t) + 4 * s });
-      }
-    }
-  }
-  return out;
-}
-
-/** The least a drive list for that score strays from sevens and threes; null: no list makes it. */
-export function nflDriveCost(points: number, minTd: number, exactFg: number | null): number | null {
-  const opts = driveOptions(points, minTd, exactFg);
-  return opts.length ? Math.min(...opts.map(o => o.cost)) : null;
-}
-
-/** The scoring drives of one side that make `points`, with at least `minTd`
- *  touchdowns (his) and, for a kicker's own side, exactly `exactFg` field
- *  goals. Sevens and threes first; a 6 (the kick after is missed), an 8 (a
- *  two point try) and at most one safety only when the sum needs it. Every
- *  whole number has a list except 1 and 4; null when there is none. */
-export function nflDrives(points: number, minTd: number, exactFg: number | null, rng: Rng): NflDrives | null {
-  const opts = driveOptions(points, minTd, exactFg);
-  const u = rng();
-  if (opts.length === 0) return null;
-  const least = Math.min(...opts.map(o => o.cost));
-  const best = opts.filter(o => o.cost === least);
-  const pick = best[Math.floor(u * best.length)];
-  const off = points - 3 * pick.f - 2 * pick.s - 7 * pick.t;
-  const tds = shuffled(Array.from({ length: pick.t }, (_, i) => (i < Math.abs(off) ? 7 + Math.sign(off) : 7)), rng);
-  return { tds, fgs: pick.f, safeties: pick.s };
-}
 
 /** His division's slots are 1 to divSlots; the other divisions follow in the
  *  ledger's order, a whole division at a time. */
@@ -336,10 +265,6 @@ export function nflTouchdownDays(scores: readonly number[], tds: readonly number
   return take;
 }
 
-/** A side's scoring drives sit at least this many minutes apart where the hour has room. */
-const DRIVE_GAP = 3;
-const MINUTE_TRIES = 40;
-
 /** The numbers that hang off the game (yards, catches, tackles, sacks in tenths, a
  *  kicker's makes, misses and long), then both sides' scoring drives and his
  *  own moments minute by minute. Every split lands exactly on the saved
@@ -425,23 +350,8 @@ function finish(games: DerivedGame[], row: UsRow, _pos: string, rng: Rng): boole
   } else if (att !== null || long !== null) return false;
   /* the drives of both sides, and his own moments, at keyed whole minutes */
   for (const g of games) {
-    /* No two lines of one game share a minute. Where the hour has room, no two lines sit in back to
-       back minutes either and a side's scoring drives are at least DRIVE_GAP minutes apart (a drive
-       takes time); a game with more lines than that leaves room for falls back to any free minute */
-    const used = new Set<number>();
-    const drives: Record<'us' | 'them', number[]> = { us: [], them: [] };
-    const minute = (side?: 'us' | 'them') => {
-      let m = 1 + Math.floor(rng() * CLOCK);
-      for (let t = 0; t < MINUTE_TRIES; t += 1) {
-        const crowded = used.has(m - 1) || used.has(m) || used.has(m + 1) || (side !== undefined && drives[side].some(x => Math.abs(x - m) < DRIVE_GAP));
-        if (!crowded) break;
-        m = 1 + Math.floor(rng() * CLOCK);
-      }
-      for (let i = 0; i < CLOCK && used.has(m); i += 1) m = (m % CLOCK) + 1;
-      used.add(m);
-      if (side !== undefined) drives[side].push(m);
-      return m;
-    };
+    /* one picker a game: no two of its lines share a minute (the law's rule, nflMinutePicker) */
+    const minute = nflMinutePicker(rng);
     const kinds: string[] = [];
     if (g.played) for (const [kind, key] of TD_KINDS) for (let i = 0; i < of(g, key); i += 1) kinds.push(kind);
     const kicks = g.played && made !== null;
@@ -525,15 +435,16 @@ const familyOf = (pos: string): Family => (pos === 'QB' ? 'qb' : pos === 'RB' ? 
  *  six on his own side is never told as a kick of his that missed. */
 export function nflEventWords(e: SeasonEvent, us: string, them: string, kicker = false): string {
   const team = e.side === 'us' ? us : them;
-  const six = kicker && e.side === 'us' ? ' The two point try is no good.' : ' The kick after is no good.';
-  const after = e.pts === 6 ? six : e.pts === 8 ? ' The two point try is good.' : '';
+  /* the lines about a club, and what a touchdown says after itself, are the law's (one sentence for every game that tells one) */
+  const sixIsATry = kicker && e.side === 'us';
+  const after = nflTryWords(e.pts, sixIsATry);
   switch (e.kind) {
     case 'td-pass': return `🏈 Touchdown! You throw it.${after}`;
     case 'td-rush': return `🏈 Touchdown! You run it in.${after}`;
     case 'td-rec': return `🏈 Touchdown! You catch it.${after}`;
-    case 'td': return `🏈 Touchdown, ${team}.${after}`;
-    case 'fg': return e.mine ? '🥅 Field goal! You hit it.' : `🥅 Field goal, ${team}.`;
-    case 'safety': return `Safety, ${team}.`;
+    case 'td': return nflClubLine(e, team, sixIsATry);
+    case 'fg': return e.mine ? '🥅 Field goal! You hit it.' : nflClubLine(e, team);
+    case 'safety': return nflClubLine(e, team);
     case 'miss': return 'Your field goal try is no good.';
     case 'int': return 'You are picked off.';
     case 'sack': return '💥 You get the sack.';
@@ -541,12 +452,6 @@ export function nflEventWords(e: SeasonEvent, us: string, them: string, kicker =
     case 'ff': return 'You force a fumble.';
     default: return '';
   }
-}
-
-/** The quarter and the minutes left in it: minute 0 is Q1 15:00, minute 16 is Q2 14:00, minute 60 is Q4 0:00. */
-export function nflClockLabel(minute: number): string {
-  const m = Math.max(0, Math.min(CLOCK, Math.floor(minute)));
-  return m === 0 ? 'Q1 15:00' : `Q${Math.ceil(m / 15)} ${(15 - (m % 15)) % 15}:00`;
 }
 
 /* A number is printed only when the saved line holds it: a line from an older
@@ -668,11 +573,8 @@ export const NFL_SEASON: UsSeasonBind = {
   statKeys: () => STAT_KEYS,
   teamIds: eraId => nflEraById(eraId).teams.map(t => t.abbr),
   score: (edge, home, rng) => nflScore(edge, home, rng),
-  /* a game's margin has a standard deviation of about 13.4 points under the
-     ten drive law and a unit of edge is worth 0.7 of a point, so a logistic
-     of 11.3 a unit lands the share of wins (held by the repairs and the
-     median records scripts/simUsSeasonCentre.mjs measures) */
-  strengthFor: share => { const p = Math.min(0.98, Math.max(0.02, share)); return 11.3 * Math.log(p / (1 - p)); },
+  /* the law's own scale from a share of wins to an edge (nflEdgeForShare says where the 11.3 comes from) */
+  strengthFor: share => nflEdgeForShare(share),
   oppSpread: 6.5,
   totals: row => totals(row),
   /* the line does not say whether a missed game was an injury or a day on the
@@ -691,8 +593,8 @@ export const NFL_SEASON: UsSeasonBind = {
       best: 'Best game', bestSoFar: 'Best so far', scope: 'Regular season, the same numbers as your season card.',
       soFarHead: 'Season so far', tie: 'T', list: 'Schedule', side: 'Record',
     },
-    /* "Q2 14:00" is eight characters: the feed's time column needs the wider class, as a whole literal */
-    clock: { length: CLOCK, label: nflClockLabel, start: 'Kickoff.', end: 'Final', endShort: 'FINAL', labelClass: 'w-14' },
+    /* the law's clock, one object for every game that shows one (its length is held to the ledger's by src/test/gameLawNfl.test.ts) */
+    clock: NFL_STORY_LAW.clock,
     eventWords: (e, us, them, pos) => nflEventWords(e, us, them, pos === 'K'),
     missed: () => 'Did not play',
     lineOf,

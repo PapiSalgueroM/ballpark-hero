@@ -27,11 +27,12 @@
    unless the list is empty, and scripts/simSeasonCentreAgreement.mjs checks
    every item again with an independent checker.
 
-   Imports: ../leagueCore and ../keyedRng only, and types from ./law. No
-   React, no sport file, no Math.random, nothing evaluated at module scope
-   from an import. */
+   Imports: ../leagueCore, ../keyedRng and ../keyedShuffle only, and types
+   from ./law. No React, no sport file, no Math.random, nothing evaluated at
+   module scope from an import. */
 import { roundRobinCalendar } from '../leagueCore';
 import { keyedRng } from '../keyedRng';
+import { shuffled } from '../keyedShuffle';
 
 export type Rng = () => number;
 /** A full table, a won and lost record (US), or his games only. */
@@ -265,15 +266,9 @@ export interface StandingRow { slot: number; p: number; w: number; d: number; l:
 
 const clampN = (v: number, lo: number, hi: number) => (v < lo ? lo : v > hi ? hi : v);
 
-/** A keyed Fisher-Yates shuffle (a copy). */
-export function shuffled<T>(xs: readonly T[], rng: Rng): T[] {
-  const a = xs.slice();
-  for (let i = a.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(rng() * (i + 1));
-    const t = a[i]; a[i] = a[j]; a[j] = t;
-  }
-  return a;
-}
+/* The keyed Fisher-Yates shuffle: its one body is ../keyedShuffle since Round 1221 (a score law needs it and
+   may not import this file), read here and still exported from here. */
+export { shuffled };
 
 /** The standings after replaying rounds 1..md of a table. Points, then goal
  *  difference, then goals for; the slot number breaks a full tie so the
