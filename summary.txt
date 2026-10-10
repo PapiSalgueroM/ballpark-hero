@@ -1,0 +1,8 @@
+simStatsCentre exit=0 3s | ALL STATS CENTRE CHECKS PASSED
+simAwardRaces exit=0 7s | ALL AWARD RACE CHECKS PASSED
+simCmRealFixtures exit=0 7s | simCmRealFixtures normal: real fixture outcomes and independent generated baseline passed.
+simLiveMatch exit=0 4s | simLiveMatch: PASS. Each half is committed as one stream, the report is counted off it, a change keeps the past and redraws the future, and the other dugout fields eleven
+simDailyDeals exit=0 3s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+simClubManagerSaveSize exit=0 34s | simClubManagerSaveSize: all sections green
+simHarnessAnchors exit=0 31s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simCmOwnGoals exit=0 46s | simCmOwnGoals: PASS, 8 sections green
