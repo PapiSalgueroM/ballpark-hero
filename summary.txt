@@ -1,0 +1,15 @@
+vitest exit=0 5s |    Duration  3.59s (transform 1.37s, setup 336ms, collect 2.11s, tests 1.98s, environment 2.32s, prepare 619ms)
+record-head exit=0 9s | HEAD-RECORD-IS-THE-COMMITTED-FILE
+record-base exit=0 9s | BASE-RECORD-IS-THE-COMMITTED-FILE
+livescores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+sim exit=0 29s | simGmGameDay: 171 checks, 0 failed
+norival exit=0 14s | No rival product names found. 0 findings.
+quotes exit=0 23s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+anchors exit=0 37s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+conduct exit=0 1s | simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board in it.
+names exit=0 7s | simInventedNames: green. Every invented man on this site is invented all the way down.
+legal exit=0 0s | simLegalPages: all green
+tsc exit=0 72s | 
+trust exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+storage exit=0 1s | simStorageWrites: all green
+numbers exit=0 101s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes

@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmGameScore.test.ts src/lib/gmGameDay.test.ts src/lib/gmBracket.test.ts src/test/gameLawNfl.test.ts --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simGmGameDay.mjs
+record-head: GM_BRACKET_FIXTURE_OUT=$RC_OUT/gmBracketFixture.head.json GM_BRACKET_FIXTURE_COMMIT=5d6ffbefd0b7ddc3df4b48ff9e2e2ce2157e4f79 node scripts/recordGmBracketFixture.mjs && cmp $RC_OUT/gmBracketFixture.head.json scripts/data/gmBracketFixture.json && echo HEAD-RECORD-IS-THE-COMMITTED-FILE
+record-base: git worktree add -q /tmp/base 5d6ffbefd0b7ddc3df4b48ff9e2e2ce2157e4f79 && cp scripts/recordGmBracketFixture.mjs /tmp/base/scripts/ && cp scripts/lib/gmGameDayFleet.mjs /tmp/base/scripts/lib/ && ln -s $PWD/node_modules /tmp/base/node_modules && (cd /tmp/base && git rev-parse HEAD && ls src/lib/gmBracket.ts 2>&1 | tail -1; GM_BRACKET_FIXTURE_OUT=$RC_OUT/gmBracketFixture.base.json node scripts/recordGmBracketFixture.mjs) && cmp $RC_OUT/gmBracketFixture.base.json scripts/data/gmBracketFixture.json && echo BASE-RECORD-IS-THE-COMMITTED-FILE
+livescores: node scripts/simLiveScores.mjs
+norival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+names: node scripts/simInventedNames.mjs
+conduct: node scripts/simNoInventedConduct.mjs
+numbers: node scripts/simNumberFormatting.mjs
+legal: node scripts/simLegalPages.mjs
+trust: node scripts/simTrustCopy.mjs
+storage: node scripts/simStorageWrites.mjs
