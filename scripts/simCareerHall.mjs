@@ -494,18 +494,18 @@ const CONTROLS = {
   jerseyignore: { file: 'careerHallOfFame.ts', from: 'sport.recordedJersey?.(c) ?? jerseyFor(', to: 'jerseyFor(' },
   eraunguarded: { file: 'HallOfFameCard.tsx', from: 'rec.firstClass >= rules.verifiedFromClass', to: 'true' },
   // Round 1051, sections 15 on. v1drift: the first award weight of the sport's calibration 1 table plus one.
-  below: { file: `${SPORT}MyCareer.ts`, re: /(_LEGACY_V2: LegacyWeights = \{\s+awards: \{ \w+: )(\d+)/, to: (m, a, n) => `${a}${Number(n) - 1}` },
+  below: { cur: true, file: `${SPORT}MyCareer.ts`, re: /(_LEGACY_V\d: LegacyWeights = \{\s+awards: \{ \w+: )(\d+)/, to: (m, a, n) => `${a}${Number(n) - 1}` },
   nostandout: { file: 'careerHallOfFame.ts', from: 'LEGACY_GAME_RULES = { standoutTop: 300,', to: 'LEGACY_GAME_RULES = { standoutTop: 0,' },
   // One from mark halved (the first standout of the sport's table).
-  markdrift: { file: `${SPORT}MyCareer.ts`, re: /(standout: \[\s+\{ stat: '\w+', from: )([\d.]+)/, to: (m, a, n) => `${a}${Number(n) / 2}` },
+  markdrift: { cur: true, file: `${SPORT}MyCareer.ts`, re: /(standout: \[\s+\{ stat: '\w+', from: )([\d.]+)/, to: (m, a, n) => `${a}${Number(n) / 2}` },
   // Every to mark of the sport times 0.9.
   todrift: { file: `${SPORT}MyCareer.ts`, re: /(, to: )([\d.]+)(, label: )/g, to: (m, a, n, b) => `${a}${Number(n) * 0.9}${b}` },
   // One to mark set to its from mark plus one.
-  noramp: { file: `${SPORT}MyCareer.ts`, re: /(standout: \[\s+\{ stat: '\w+', from: )([\d.]+)(, to: )([\d.]+)/, to: (m, a, n, b) => `${a}${n}${b}${Number(n) + 1}` },
+  noramp: { cur: true, file: `${SPORT}MyCareer.ts`, re: /(standout: \[\s+\{ stat: '\w+', from: )([\d.]+)(, to: )([\d.]+)/, to: (m, a, n, b) => `${a}${n}${b}${Number(n) + 1}` },
   // A family planted where the half rule gives none: a catcher's steals, a point guard's rebounds, a linebacker's sacks, a defenceman's goals.
-  catchersteals: { file: `${SPORT}MyCareer.ts`, re: { mlb: /(\n    C: \{\s+terms: \[[^\n]*\],\s+standout: \[)/, nba: /(\n    PG: \{\s+terms: \[[^\n]*\],\s+standout: \[)/, nfl: /(\n    LB: \{\s+terms: \[[^\n]*\],\s+standout: \[)/, nhl: /(\n    D: \{\s+terms: \[[^\n]*\],\s+standout: \[)/ }[SPORT], to: (m, a) => `${a} { stat: '${{ mlb: 'sb', nba: 'reb', nfl: 'sacks', nhl: 'goals' }[SPORT]}', from: 30, to: 40, label: 'planted' },` },
+  catchersteals: { cur: true, file: `${SPORT}MyCareer.ts`, re: { mlb: /(\n    C: \{\s+terms: \[[^\n]*\],\s+standout: \[)/, nba: /(\n    PG: \{\s+terms: \[[^\n]*\],\s+standout: \[)/, nfl: /(\n    LB: \{\s+terms: \[[^\n]*\],\s+standout: \[)/, nhl: /(\n    D: \{\s+terms: \[[^\n]*\],\s+standout: \[)/ }[SPORT], to: (m, a) => `${a} { stat: '${{ mlb: 'sb', nba: 'reb', nfl: 'sacks', nhl: 'goals' }[SPORT]}', from: 30, to: 40, label: 'planted' },` },
   // The base emptied at one position (football's tight end, baseball's reliever; basketball and hockey have no base).
-  nobase: { file: `${SPORT}MyCareer.ts`, re: { nfl: /(\n    TE: \{\s+terms: \[)[^\n]*(\],)/, mlb: /(\n    RP: \{\s+terms: \[\{ stat: 'hr', per: 4 \}, \{ stat: 'rbi', per: 60 \})[^\n]*(\],)/ }[SPORT] ?? /a string that is in no file, so this control refuses to run here/, to: (m, a, b) => `${a}${b}` },
+  nobase: { cur: true, file: `${SPORT}MyCareer.ts`, re: { nfl: /(\n    TE: \{\s+terms: \[)[^\n]*(\],)/, mlb: /(\n    RP: \{\s+terms: \[\{ stat: 'hr', per: 4 \}, \{ stat: 'rbi', per: 60 \})[^\n]*(\],)/ }[SPORT] ?? /a string that is in no file, so this control refuses to run here/, to: (m, a, b) => `${a}${b}` },
   // The example's push typed as a literal instead of read off the rule.
   examplelie: { file: 'careerHallOfFame.ts', from: 'const top = n.top ?? LEGACY_GAME_RULES.standoutTop;', to: 'const top = 250;' },
   // The card's line switched off.
@@ -519,29 +519,43 @@ const CONTROLS = {
   // Section 18, the other side of the band: the push switched off, so an anchor who is in on the push alone falls out (the same edit as nostandout, aimed at the anchors).
   standoutgone: { file: 'careerHallOfFame.ts', from: 'LEGACY_GAME_RULES = { standoutTop: 300,', to: 'LEGACY_GAME_RULES = { standoutTop: 0,' },
   // Section 18, the decisions themselves: one push the real anchors took out or cut is put back whole (football: the kicker's field goals planted again; baseball: the left fielder's steals back to the full size). It refuses in a sport whose anchors decided nothing.
-  decisionback: { file: `${SPORT}MyCareer.ts`, re: { nfl: /(\n    K: \{\s+terms: \[\],)/, mlb: /(\{ stat: 'sb', from: [\d.]+, to: [\d.]+, label: 'steals'), top: \d+( \})/ }[SPORT] ?? /a string that is in no file, so this control refuses to run here/, to: (m, a, b) => (SPORT === 'nfl' ? `${a} standout: [{ stat: 'fgMade', from: 512, to: 564, label: 'field goals' }],` : `${a}${b}`) },
+  decisionback: { cur: true, file: `${SPORT}MyCareer.ts`, re: { nfl: /(\n    K: \{\s+terms: \[\],)/, mlb: /(\{ stat: 'sb', from: [\d.]+, to: [\d.]+, label: 'steals'), top: \d+( \})/ }[SPORT] ?? /a string that is in no file, so this control refuses to run here/, to: (m, a, b) => (SPORT === 'nfl' ? `${a} standout: [{ stat: 'fgMade', from: 512, to: 564, label: 'field goals' }],` : `${a}${b}`) },
   // Section 18, the base's side of "the anchors may only make things smaller": the edge rusher's base five times its size (every per divided by five). Two real later men
   // the base alone reads later in the raw reading (out on 1) go first, so they are moved past their real ballot. Football only: no other sport holds a real never or later
   // man at a base position (the reliever's base is gone, basketball and hockey have none), and there it refuses.
-  basebig: { file: `${SPORT}MyCareer.ts`, re: { nfl: /(\n    EDGE: \{\s+terms: \[\{ stat: 'sacks', per: )2\.5( \}, \{ stat: 'tackles', per: )41( \}, \{ stat: 'forcedFum', per: )1\.3( \}\],)/ }[SPORT] ?? /a string that is in no file, so this control refuses to run here/, to: (m, a, b, c, d) => `${a}0.5${b}8.2${c}0.26${d}` },
+  basebig: { cur: true, file: `${SPORT}MyCareer.ts`, re: { nfl: /(\n    EDGE: \{\s+terms: \[\{ stat: 'sacks', per: )2\.5( \}, \{ stat: 'tackles', per: )41( \}, \{ stat: 'forcedFum', per: )1\.3( \}\],)/ }[SPORT] ?? /a string that is in no file, so this control refuses to run here/, to: (m, a, b, c, d) => `${a}0.5${b}8.2${c}0.26${d}` },
   // Section 19 (a), for every sport: a base term planted at a position the ledger gives none (a point guard's assists, a kicker's field goals, the reliever's saves back, a defenceman's assists).
-  plantbase: { file: `${SPORT}MyCareer.ts`, re: { nba: /(\n    PG: \{\s+terms: \[\{ stat: 'pts', per: 430 \})(\],)/, nfl: /(\n    K: \{\s+terms: \[)(\],)/, mlb: /(\n    RP: \{ terms: \[\{ stat: 'hr', per: 4 \}, \{ stat: 'rbi', per: 60 \})(\] \},)/, nhl: /(\n    D: \{\s+terms: \[\{ stat: 'points', per: 18 \})(\],)/ }[SPORT], to: (m, a, b) => `${a}${SPORT === 'nfl' ? '' : ', '}{ stat: '${{ nba: 'ast', nfl: 'fgMade', mlb: 'saves', nhl: 'assists' }[SPORT]}', per: 8 }${b}` },
+  plantbase: { cur: true, file: `${SPORT}MyCareer.ts`, re: { nba: /(\n    PG: \{\s+terms: \[\{ stat: 'pts', per: 430 \})(\],)/, nfl: /(\n    K: \{\s+terms: \[)(\],)/, mlb: /(\n    RP: \{ terms: \[\{ stat: 'hr', per: 4 \}, \{ stat: 'rbi', per: 60 \})(\] \},)/, nhl: /(\n    D: \{\s+terms: \[\{ stat: 'points', per: 18 \})(\],)/ }[SPORT], to: (m, a, b) => `${a}${SPORT === 'nfl' ? '' : ', '}{ stat: '${{ nba: 'ast', nfl: 'fgMade', mlb: 'saves', nhl: 'assists' }[SPORT]}', per: 8 }${b}` },
   // Section 17 (d): every paying family added up instead of the best one taken.
   twofamilies: { file: 'careerHallOfFame.ts', from: 'if (credit > 0 && (!standout || credit > standout.credit)) standout = { stat: s.stat, label: s.label, total, credit };', to: 'if (credit > 0) standout = { stat: s.stat, label: s.label, total, credit: credit + (standout ? standout.credit : 0) };' },
   // Section 15 (d): one to mark of the calibration 2 table plus one (too small to move a recorded save: the recorded table itself must catch it).
   v2drift: { file: `${SPORT}MyCareer.ts`, re: /(, to: )([\d.]+)(, label: )/, to: (m, a, n, b) => `${a}${Number(n) + 1}${b}` },
+  // Section 15 (e), Round 1301: the same on the table of calibration 3 (the NHL's own table; elsewhere the calibration 2 table, which 3 reads).
+  v3drift: { cur: true, file: `${SPORT}MyCareer.ts`, re: /(, to: )([\d.]+)(, label: )/, to: (m, a, n, b) => `${a}${Number(n) + 1}${b}` },
   // Section 18 (c): the ballot draws its first call against the wrong side of the chance.
   ballotflip: { file: 'careerHallOfFame.ts', from: 'if (rng() >= firstBallotChance(cand.score, lines)) {', to: 'if (rng() >= 1 - firstBallotChance(cand.score, lines)) {' },
   // Section 19 (b): calibration 2 pays every season double, so the Hall fills past its ceiling.
-  seasonbig: { file: `${SPORT}MyCareer.ts`, re: /(_LEGACY_V2: LegacyWeights = \{\s+awards: \{[^}]*\},\s+season: )(\d+)/, to: (m, a, n) => `${a}${Number(n) * 2}` },
+  seasonbig: { cur: true, file: `${SPORT}MyCareer.ts`, re: /(_LEGACY_V\d: LegacyWeights = \{\s+awards: \{[^}]*\},\s+season: )(\d+)/, to: (m, a, n) => `${a}${Number(n) * 2}` },
   // Sections 15 (c) and 20: the stamp writes nothing, so a career the loops retire is read on calibration 1.
   nostamp: { file: 'careerHallOfFame.ts', from: 'if (c.retired && c.hallCal === undefined) c.hallCal = HALL_CALIBRATION;', to: 'if (false) c.hallCal = HALL_CALIBRATION;' },
   // The ledger with one source host swapped for a wiki (done in memory where the ledger is read).
-  anchorwiki: { file: 'careerHallOfFame.ts', from: 'export type HallCalibration = 1 | 2;', to: 'export type HallCalibration = 1 | 2;' },
+  anchorwiki: { file: 'careerHallOfFame.ts', from: 'export type HallCalibration = 1 | 2 | 3;', to: 'export type HallCalibration = 1 | 2 | 3;' },
   calflip: { file: 'careerHallOfFame.ts', from: 'return c.retired ? 1 : HALL_CALIBRATION;', to: 'return HALL_CALIBRATION;' },
   v1drift: { file: `${SPORT}MyCareer.ts`, re: /(_LEGACY_V1: LegacyWeights = \{\s+awards: \{ \w+: )(\d+)/, to: (m, a, n) => `${a}${Number(n) + 1}` },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown SIM_CONTROL ${CONTROL}`); process.exit(2); }
+/* Round 1301. The table a career retiring today is read on, by its name in the
+   sport's own file: the last entry of its <SPORT>_LEGACY_WEIGHTS map (the NHL's
+   is NHL_LEGACY_V3; football, basketball and baseball map calibration 3 to
+   their V2 table, so theirs is still V2). A control marked `cur` edits that
+   table and nothing before it in the file: the source is cut at the table's
+   declaration and the control's string is looked for from there on, so in the
+   NHL a mark of calibration 2 (which no career retiring today reads) is never
+   the one that moves. */
+const SPORT_SRC = readFileSync(path.join(ROOT, 'src/lib', E.file), 'utf8');
+const CUR_TABLE = (SPORT_SRC.match(/_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = \{([^}]*)\}/)?.[1] ?? '').split(',').map(s => s.split(':')[1]?.trim()).filter(Boolean).at(-1);
+const CUR_ANCHOR = `const ${CUR_TABLE}: LegacyWeights = {`;
+if (!CUR_TABLE || SPORT_SRC.split(CUR_ANCHOR).length !== 2) { console.error(`simCareerHall ${SPORT}: cannot find the table of today's calibration in ${E.file} (read "${CUR_TABLE}"), refusing to run`); process.exit(2); }
 let controlFired = false;
 const controlPlugin = {
   name: 'control',
@@ -550,11 +564,14 @@ const controlPlugin = {
     const ctl = CONTROLS[CONTROL];
     b.onLoad({ filter: /\.tsx?$/ }, args => {
       if (path.basename(args.path) !== ctl.file) return undefined;
-      const src = readFileSync(args.path, 'utf8');
+      const whole = readFileSync(args.path, 'utf8');
+      const at = ctl.cur ? whole.indexOf(CUR_ANCHOR) : 0;
+      if (at < 0) throw new Error(`control ${CONTROL}: its string is not in ${ctl.file}, refusing to run`);
+      const kept = whole.slice(0, at), src = whole.slice(at);
       const hit = ctl.re ? ctl.re.test(src) : src.includes(ctl.from);
       if (!hit) throw new Error(`control ${CONTROL}: its string is not in ${ctl.file}, refusing to run`);
       controlFired = true;
-      return { contents: ctl.re ? src.replace(ctl.re, ctl.to) : src.replace(ctl.from, ctl.to), loader: args.path.endsWith('x') ? 'tsx' : 'ts' };
+      return { contents: kept + (ctl.re ? src.replace(ctl.re, ctl.to) : src.replace(ctl.from, ctl.to)), loader: args.path.endsWith('x') ? 'tsx' : 'ts' };
     });
   },
 };
@@ -1332,12 +1349,13 @@ for (const e of v1Saves) {
    then a deliberate change is recorded again with SIM_RECORD_V2=1, a run
    that never ends green. */
 const V2_FILE = path.join(ROOT, 'scripts/data/careerHallV2.json');
-const toldOn2 = e => {
-  const save = { ...JSON.parse(JSON.stringify(e.save)), retired: true, hallCal: 2 };
+const toldOn = cal => e => {
+  const save = { ...JSON.parse(JSON.stringify(e.save)), retired: true, hallCal: cal };
   const l = eng.LEGACY(save);
   const { weighs: _copy, ...hall } = eng.hallRecordFor(HALL, save);
   return { id: e.id, score: l.score, hof: l.hof, standout: l.standout ?? null, hall };
 };
+const toldOn2 = toldOn(2);
 const v2Now = { table: eng.WEIGHTS[2], readings: v1Saves.map(toldOn2) };
 const v2RulesNow = { standoutTop: eng.LEGACY_GAME_RULES.standoutTop, standoutCap: eng.LEGACY_GAME_RULES.standoutCap };
 const RECORD_V2 = process.env.SIM_RECORD_V2 === '1';
@@ -1354,6 +1372,32 @@ const v2Was = V2_RECORDED?.sports?.[SPORT];
 const v2TableSame = Boolean(v2Was) && sameJson(v2Was.table, v2Now.table) && sameJson(V2_RECORDED.rules, v2RulesNow);
 const v2ReadMiss = v2Was ? v2Now.readings.filter((r, i) => !sameJson(r, v2Was.readings[i])).length + Math.abs(v2Now.readings.length - v2Was.readings.length) : v2Now.readings.length;
 console.log(`  15 (d) calibration 2 as recorded: the table and the rules ${v2TableSame ? 'equal' : 'DIFFER FROM'} the recording; ${v2ReadMiss} of ${v2Now.readings.length} recorded saves are told something else on 2 (${v2Now.readings.filter(r => r.standout).length} of them with a standout)${RECORD_V2 ? '; RECORDED ON THIS RUN' : ''}`);
+
+/* 15 (e), Round 1301. The calibration 3 recording (scripts/data/careerHallV3.json),
+   the same promise for the next calibration: the sport's calibration 3 table
+   whole, and what each save of the version 1 fixture is told when it is
+   stamped 3. Football, basketball and baseball read 3 on their calibration 2
+   table, so their recording of 3 is their recording of 2 line for line; the
+   NHL's holds the marks measured on the 84 game season. Recorded with
+   SIM_RECORD_V3=1 (a run that never ends green); once the release that first
+   ships calibration 3 is out it is never recorded again, and a later change
+   is calibration 4 beside it. */
+const V3_FILE = path.join(ROOT, 'scripts/data/careerHallV3.json');
+const v3Now = { table: eng.WEIGHTS[3], readings: v1Saves.map(toldOn(3)) };
+const RECORD_V3 = process.env.SIM_RECORD_V3 === '1';
+if (RECORD_V3) {
+  if (CONTROL || CAL1) { console.error('SIM_RECORD_V3 records the tree as it is: no control, no SIM_CAL'); process.exit(2); }
+  const file = existsSync(V3_FILE) ? JSON.parse(readFileSync(V3_FILE, 'utf8')) : { sports: {} };
+  file.sports[SPORT] = v3Now;
+  const body = Object.keys(ENGINES).filter(s => file.sports[s]).map(s => `    ${JSON.stringify(s)}: {\n      "table": ${JSON.stringify(file.sports[s].table)},\n      "readings": [\n${file.sports[s].readings.map(r => `        ${JSON.stringify(r)}`).join(',\n')}\n      ]\n    }`).join(',\n');
+  const note = 'Round 1301: calibration 3 of the Hall of Fame legacy score as recorded, for section 15 (e) of scripts/simCareerHall.mjs. Per sport: the calibration 3 table whole, and what each save of src/test/fixtures/careerHallV1.json is told when stamped 3. Football, basketball and baseball read calibration 3 on their calibration 2 table; the NHL table holds the standout marks measured on the 84 game season. Written by SIM_RECORD_V3=1 node scripts/simCareerHall.mjs <sport>; never edited by hand. Once the release that first ships calibration 3 is out, never recorded again: a career retired on calibration 3 keeps the ballot it was told, so a later change is calibration 4.';
+  writeFileSync(V3_FILE, `{\n  "note": ${JSON.stringify(note)},\n  "rules": ${JSON.stringify(v2RulesNow)},\n  "sports": {\n${body}\n  }\n}\n`);
+}
+const V3_RECORDED = existsSync(V3_FILE) ? JSON.parse(readFileSync(V3_FILE, 'utf8')) : null;
+const v3Was = V3_RECORDED?.sports?.[SPORT];
+const v3TableSame = Boolean(v3Was) && sameJson(v3Was.table, v3Now.table) && sameJson(V3_RECORDED.rules, v2RulesNow);
+const v3ReadMiss = v3Was ? v3Now.readings.filter((r, i) => !sameJson(r, v3Was.readings[i])).length + Math.abs(v3Now.readings.length - v3Was.readings.length) : v3Now.readings.length;
+console.log(`  15 (e) calibration 3 as recorded: the table and the rules ${v3TableSame ? 'equal' : 'DIFFER FROM'} the recording; ${v3ReadMiss} of ${v3Now.readings.length} recorded saves are told something else on 3 (${v3Now.readings.filter(r => r.standout).length} of them with a standout)${RECORD_V3 ? '; RECORDED ON THIS RUN' : ''}`);
 
 /* 15 (b). Calibration 1 is the Round 123 formula: the four one line formulas
    restated here, independent of the tables, against legacyOf stamped 1 on
@@ -1378,7 +1422,14 @@ const MARKS = JSON.parse(readFileSync(path.join(ROOT, 'scripts/data/careerHallMa
    and each is recorded with its reason and its counts in the anchors file. */
 const DECISIONS = (JSON.parse(readFileSync(path.join(ROOT, 'scripts/data/careerHallAnchors.json'), 'utf8')).decisions ?? []).filter(d => d.sport === SPORT);
 const decided = (pos, kind, stat, action) => DECISIONS.some(d => d.pos === pos && d.kind === kind && (kind === 'base' || d.stat === stat) && d.action === action);
-const ML = MARKS.sports[SPORT];
+/* Round 1301. A sport's marks are those of the latest calibration that
+   measured it again: the ledger's first block (`sports`) is calibration 2,
+   and a later calibration that moved a sport's marks adds a block of its own
+   under `calibrations` (the NHL on 3). A sport no later calibration moved
+   reads the first block, and its table of today must then BE its calibration
+   2 table, the same object (17 (b) holds that). */
+const MARKS_CAL = (() => { for (let cal = eng.HALL_CALIBRATION; cal > 2; cal -= 1) if (MARKS.calibrations?.[String(cal)]?.sports?.[SPORT]) return cal; return 2; })();
+const ML = MARKS_CAL === 2 ? MARKS.sports[SPORT] : MARKS.calibrations[String(MARKS_CAL)].sports[SPORT];
 const TOP = eng.LEGACY_GAME_RULES.standoutTop, CAP = eng.LEGACY_GAME_RULES.standoutCap;
 const tableCells = E.positions.flatMap(pos => (W2.positions[pos]?.standout ?? []).map(s => ({ pos, s })));
 const inBand = (x, b) => x >= b.lo && x <= b.hi;
@@ -1407,7 +1458,8 @@ console.log(`  17 (a) marks: ${tableCells.length} standout cells; at or over fro
    not excluded by hand), every mark and label is the ledger's, every ramp
    clears the floor, and a family's own top may only be smaller than the rule's. */
 const halfMiss = [];
-const famsAll = Object.keys(ML.positions[E.positions[0]].families).filter(f => !(f in MARKS.excluded[SPORT]));
+if (eng.WEIGHTS[eng.HALL_CALIBRATION] !== eng.WEIGHTS[MARKS_CAL]) halfMiss.push(`the table of calibration ${eng.HALL_CALIBRATION} is not the table the ledger's block of calibration ${MARKS_CAL} measured (a new table needs a block of its own)`);
+const famsAll =Object.keys(ML.positions[E.positions[0]].families).filter(f => !(f in MARKS.excluded[SPORT]));
 const onTable = new Set(tableCells.map(c => `${c.pos}:${c.s.stat}`));
 for (const f of famsAll) {
   const largest = Math.max(...E.positions.map(p => ML.positions[p].families[f].from));
@@ -1818,6 +1870,7 @@ const checks = [
   ['era', eraMiss === 0 && eraBoundary.below > 0 && eraBoundary.above > 0, `${eraMiss} cards printing a class year or rule off the audit's verified class (${auditFrom}); ${JSON.stringify(eraCounts)}`],
   ['v1replay', v1ReplayMiss === 0 && v1Saves.length >= 16, `${v1ReplayMiss} readings of ${v1Saves.length} recorded saves differ from the version 1 recording`],
   ['v2replay', v2TableSame && v2ReadMiss === 0 && v2Now.readings.length >= 16, `calibration 2 against its recording: the table and the rules ${v2TableSame ? 'equal' : 'differ'}, ${v2ReadMiss} of ${v2Now.readings.length} recorded saves told something else (a shipped calibration is never edited: add calibration 3)`],
+  ['v3replay', v3TableSame && v3ReadMiss === 0 && v3Now.readings.length >= 16, `calibration 3 against its recording: the table and the rules ${v3TableSame ? 'equal' : 'differ'}, ${v3ReadMiss} of ${v3Now.readings.length} recorded saves told something else (a shipped calibration is never edited: add calibration 4)`],
   ['v1formula', v1FormulaMiss === 0 && careers.length > 0, `${v1FormulaMiss} of ${careers.length} engine careers score off the Round 123 formula on calibration 1`],
   ['calrule', calRuleMiss === 0 && stampedEngine === (CAL1 ? 0 : careers.length), `${calRuleMiss} readings off the calibration rule; ${stampedEngine} of ${careers.length} engine careers stamped`],
   ['boardstamp', boardScoreMiss === 0 && boardRetired.length > 0 && boardStamped === (CAL1 ? 0 : boardRetired.length), `${boardStamped} of ${boardRetired.length} retired board careers stamped ${CAL_NOW}, ${boardScoreMiss} scored on another calibration`],
@@ -1845,6 +1898,8 @@ if (CONTROL) {
     examplelie: 'words', nocardline: 'words', clausealways: 'words', wholesheet: 'words', standoutbig: 'anchors', standoutgone: 'anchors', decisionback: 'anchors', basebig: 'anchors', anchorwiki: 'anchorshape', plantbase: 'base',
     below: 'neverbelow', markdrift: 'marks', todrift: 'marks', noramp: 'halfrule', catchersteals: 'halfrule', nobase: 'base',
     twofamilies: 'standoutcap', ballotflip: 'anchorcalls', seasonbig: 'hallshare', v2drift: 'v2replay',
+    // Round 1301. In the NHL calibration 3 has a table of its own, so its drift must leave the recording of 2 alone.
+    v3drift: SPORT === 'nhl' ? { red: ['v3replay'], green: ['v2replay'] } : 'v3replay',
     // The board loop's own stamp check only exists on a run that plays the board loop.
     nostamp: SKIP_BOARD ? 'calrule' : ['calrule', 'boardstamp'],
     // An object also names checks that must stay green: the standout switched off moves the outcome, never the marks.
@@ -1859,6 +1914,10 @@ if (CONTROL) {
 }
 if (RECORD_V2) {
   console.log(`simCareerHall ${SPORT}: CALIBRATION 2 RECORDED INTO scripts/data/careerHallV2.json, NOT A GREEN RUN (${red.length ? `red [${red.join(',')}]` : 'nothing red'})`);
+  process.exit(3);
+}
+if (RECORD_V3) {
+  console.log(`simCareerHall ${SPORT}: CALIBRATION 3 RECORDED INTO scripts/data/careerHallV3.json, NOT A GREEN RUN (${red.length ? `red [${red.join(',')}]` : 'nothing red'})`);
   process.exit(3);
 }
 if (SKIP_BOARD) {

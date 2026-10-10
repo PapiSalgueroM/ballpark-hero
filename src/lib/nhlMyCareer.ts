@@ -940,7 +940,62 @@ const NHL_LEGACY_V2: LegacyWeights = {
     '*': { terms: [{ stat: 'points', per: 18 }] },
   },
 };
-export const NHL_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = { 1: NHL_LEGACY_V1, 2: NHL_LEGACY_V2 };
+/* Calibration 3 (Round 1301). Calibration 2 with the standout marks measured
+   again on the season Round 1226 made the engine play (84 games from
+   2026-27): nothing else differs, the awards, the season weight and every
+   term are calibration 2's. A skater's career totals run about 84 over 82 of
+   what the old marks were cut on, so against them about one career in eight
+   stood out where the design says one in ten. A career that retired on
+   calibration 2 keeps that table and the ballot it was told; a career that
+   retires from Round 1301 on is read here. Every mark is the ledger's
+   (scripts/data/careerHallMarks.json, the block of calibration 3), written by
+   scripts/genCareerHallMarks.mjs; section 17 of scripts/simCareerHall.mjs
+   fails if this table and that block disagree. */
+const NHL_LEGACY_V3: LegacyWeights = {
+  awards: { cups: 85, harts: 160, connSmythes: 85, allStars: 45 },
+  season: 7,
+  positions: {
+    C: {
+      terms: [{ stat: 'points', per: 18 }],
+      standout: [
+        { stat: 'goals', from: 954, to: 1130, label: 'goals' },
+        { stat: 'assists', from: 1010, to: 1160, label: 'assists' },
+        { stat: 'points', from: 1860, to: 2130, label: 'points' },
+      ],
+    },
+    LW: {
+      terms: [{ stat: 'points', per: 18 }],
+      standout: [
+        { stat: 'goals', from: 891, to: 1080, label: 'goals' },
+        { stat: 'assists', from: 959, to: 1120, label: 'assists' },
+        { stat: 'points', from: 1770, to: 2040, label: 'points' },
+      ],
+    },
+    RW: {
+      terms: [{ stat: 'points', per: 18 }],
+      standout: [
+        { stat: 'goals', from: 858, to: 991, label: 'goals' },
+        { stat: 'assists', from: 956, to: 1070, label: 'assists' },
+        { stat: 'points', from: 1800, to: 2040, label: 'points' },
+      ],
+    },
+    D: {
+      terms: [{ stat: 'points', per: 18 }],
+      standout: [
+        { stat: 'assists', from: 1120, to: 1260, label: 'assists' },
+        { stat: 'points', from: 1460, to: 1640, label: 'points' },
+      ],
+    },
+    G: {
+      terms: [{ stat: 'wins', per: 6.5 }],
+      standout: [
+        { stat: 'wins', from: 720, to: 792, label: 'wins' },
+      ],
+    },
+    '*': { terms: [{ stat: 'points', per: 18 }] },
+  },
+};
+export const NHL_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = { 1: NHL_LEGACY_V1, 2: NHL_LEGACY_V2, 3: NHL_LEGACY_V3 };
 
 export function nhlLegacyOf(c: NhlCareerState): NhlLegacy {
   const t = nhlCareerTotals(c);

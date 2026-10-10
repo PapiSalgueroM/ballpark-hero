@@ -106,7 +106,7 @@ describe('US career destructive action confirmation', () => {
     /* Round 1039: the retire button writes the last season played as the last (usCareerRetirementFlow manualRetire). */
     (expected.c as CareerLike & { retirement?: unknown }).retirement = { retiredYear: (saved.c.seasons[saved.c.seasons.length - 1] as { year: number }).year };
     /* Round 1051: the save that retires a career stamps the legacy calibration it retired on (usCareerRetirementFlow stampOnRetirement). */
-    (expected.c as CareerLike & { hallCal?: unknown }).hallCal = 2;
+    (expected.c as CareerLike & { hallCal?: unknown }).hallCal = 3; // Round 1301: today's calibration is 3
     expect(JSON.parse(localStorage.getItem(row.saveKey)!)).toEqual(expected); expect(localStorage.getItem(SENTINEL_KEY)).toBe(SENTINEL);
     expect(recordCompletion).toHaveBeenCalledExactlyOnceWith(`/${row.slug}`, score, 'Fixture player', 0);
     const retiredBytes = localStorage.getItem(row.saveKey); first.unmount(); render(<row.Board />); await flush();

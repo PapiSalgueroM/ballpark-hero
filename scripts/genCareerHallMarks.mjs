@@ -84,7 +84,20 @@ const DECISIONS = existsSync(ANCHOR_FILE) ? (JSON.parse(readFileSync(ANCHOR_FILE
 const decided = (sport, pos, kind, stat, action) => DECISIONS.some(d => d.sport === sport && d.pos === pos && d.kind === kind && (kind === 'base' || d.stat === stat) && d.action === action);
 const DIR = process.argv[2];
 if (!DIR) { console.error('usage: node scripts/genCareerHallMarks.mjs <dir with rows-<sport>-<seed>.json>'); process.exit(2); }
-const OUT = process.env.MARKS_OUT || path.join(ROOT, 'scripts/data/careerHallMarks.json');
+const LEDGER = path.join(ROOT, 'scripts/data/careerHallMarks.json');
+const OUT = process.env.MARKS_OUT || LEDGER;
+/* Round 1301: the calibrations after 2, each with the sports whose marks it
+   measured again and why. A sport a calibration does not list keeps the block
+   of the calibration before it, and its table is that calibration's table.
+   MARKS_CALIBRATION=<n> derives the sports listed here from their six row
+   files and writes ONLY the block calibrations.<n> of the ledger: every other
+   byte of the file is what it was (checked before anything is written). */
+const CALIBRATIONS = {
+  3: { round: 1301, sports: ['nhl'], why: 'Round 1226 made the NHL play the season the league really plays (84 games from 2026-27), so a skater\'s career totals run about 84 over 82 of what the calibration 2 marks were cut on, and about one career in eight cleared a from mark where the design says one in ten.' },
+};
+const CAL = Number(process.env.MARKS_CALIBRATION || 2);
+if (CAL !== 2 && !CALIBRATIONS[CAL]) { console.error(`MARKS_CALIBRATION=${process.env.MARKS_CALIBRATION}: not a calibration of CALIBRATIONS (type it there with its sports and its reason first)`); process.exit(2); }
+if (CAL === 2 && OUT === LEDGER) { console.error('calibration 2 has shipped and its block of the ledger is never written again. MARKS_OUT=<file> derives it beside the ledger (a check); MARKS_CALIBRATION=<n> measures a later calibration.'); process.exit(2); }
 const SEEDS = ['base', '1', '2', '3', '4', '5'];
 const RAMP_FLOOR = 1.10, HALF = 0.5, BASE_TARGET = 110, MIN_POOL = 1500, DEFAULT_N = 2000, TOP_SHARE = 0.05, COVERED = 0.9;
 /* Rule B bases that are fixed, not measured. */
@@ -158,7 +171,7 @@ const ledger = {
   sports: {},
 };
 let short = 0;
-for (const sport of Object.keys(POSITIONS)) {
+for (const sport of (CAL === 2 ? Object.keys(POSITIONS) : CALIBRATIONS[CAL].sports)) {
   const rows = [];
   const perSeed = [];
   const runs = [];
@@ -291,5 +304,19 @@ for (const sport of Object.keys(POSITIONS)) {
   if (out.nearHalf.length) console.log(`  within five percent of the half mark: ${out.nearHalf.map(c => `${c.pos} ${c.family} ${c.from} vs ${c.half} (${c.on ? 'on' : 'off'})`).join('; ')}`);
 }
 if (short) { console.error(`${short} positions under ${MIN_POOL} pooled careers: raise the careers argument and measure again`); process.exit(1); }
-writeFileSync(OUT, `${JSON.stringify(ledger, null, 1)}\n`);
-console.log(`\ngenCareerHallMarks: wrote ${path.relative(ROOT, OUT)}`);
+if (CAL === 2) {
+  writeFileSync(OUT, `${JSON.stringify(ledger, null, 1)}\n`);
+} else {
+  /* A later calibration: the committed ledger with one block added or replaced, and nothing else touched. */
+  const text = readFileSync(LEDGER, 'utf8').split('\r\n').join('\n');
+  const file = JSON.parse(text);
+  if (`${JSON.stringify(file, null, 1)}\n` !== text) { console.error('the committed ledger is not this generator\'s own output (it was edited by hand or by another tool): refusing to write a block into it'); process.exit(2); }
+  const C = CALIBRATIONS[CAL];
+  file.calibrations ??= {};
+  file.calibrations[String(CAL)] = {
+    note: `Round ${C.round}: calibration ${CAL}, the marks of ${C.sports.join(', ')} measured again. Written by MARKS_CALIBRATION=${CAL} node scripts/genCareerHallMarks.mjs <dir> from the pooled careers of six measuring runs of scripts/simCareerHall.mjs on the engine of that round, by the rules above; never edited by hand. A sport this block does not list keeps the block of the calibration before it. In this block a key ending in 2 (hallShare2, medianScore2) reads calibration ${CAL}, the calibration of the day it was measured, and a key ending in 1 reads calibration 1.`,
+    round: C.round, why: C.why, seeds: SEEDS, sports: ledger.sports,
+  };
+  writeFileSync(OUT, `${JSON.stringify(file, null, 1)}\n`);
+}
+console.log(`\ngenCareerHallMarks: wrote ${path.relative(ROOT, OUT)}${CAL === 2 ? '' : ` (the block of calibration ${CAL}: ${CALIBRATIONS[CAL].sports.join(', ')})`}`);

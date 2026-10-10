@@ -1074,7 +1074,8 @@ const MLB_LEGACY_V2: LegacyWeights = {
     '*': { terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }] },
   },
 };
-export const MLB_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = { 1: MLB_LEGACY_V1, 2: MLB_LEGACY_V2 };
+/* Round 1301: calibration 3 moved the NHL marks only. Here 3 is the calibration 2 table itself, the same object. */
+export const MLB_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = { 1: MLB_LEGACY_V1, 2: MLB_LEGACY_V2, 3: MLB_LEGACY_V2 };
 
 export function mlbLegacyOf(c: MlbCareerState): MlbLegacy {
   const t = mlbCareerTotals(c);

@@ -14,7 +14,7 @@
  *      its confirmation on the hub, or "Retire now" where the save opens on
  *      the retirement talk (a career long enough to pile up a standout total
  *      is often inside the talk's rule; in baseball every one found is). The
- *      save now carries hallCal 2, [data-hall-weighs] is in the card and
+ *      save now carries today's hallCal (3 since Round 1301), [data-hall-weighs] is in the card and
  *      fully shown, its text is the line worked out for that career before
  *      he retired, the legacy pill is the calibration 2 score, headline,
  *      line and score are the engine's reading of the career as the board
@@ -133,7 +133,7 @@ async function savesFor(sport) {
       live.pendingRivalryEvent = null; live.pendingRivalryChoice = null; live.suspendedSeasons = 0;
       const on2 = ifRetired(live, true), on1 = ifRetired(live, false);
       if (!on2.rec.weighs) continue;
-      const pack = { active: JSON.stringify({ c: live, phase: 'season', teamQuality: tq, coach: null }), retiredUnstamped: JSON.stringify({ c: on1.career, phase: 'retired', teamQuality: tq, coach: null }), pos, via, seasons: live.seasons.length, score: on2.legacy.score, score1: on1.legacy.score, weighs: on2.rec.weighs };
+      const pack = { active: JSON.stringify({ c: live, phase: 'season', teamQuality: tq, coach: null }), retiredUnstamped: JSON.stringify({ c: on1.career, phase: 'retired', teamQuality: tq, coach: null }), pos, via, seasons: live.seasons.length, score: on2.legacy.score, score1: on1.legacy.score, weighs: on2.rec.weighs, cal: on2.career.hallCal };
       const said = / sat near the top of this game's books\.$/.test(on2.rec.weighs);
       if (said && on2.legacy.score !== on1.legacy.score) { seen[via] += 1; if (!best[via] || pack.weighs.length > best[via].weighs.length) best[via] = pack; }
       else if (!said && !on2.legacy.standout && via === 'hub' && !plain) plain = pack;
@@ -250,7 +250,7 @@ async function retireCase(sport, vp, reduce, kind, want, told) {
     say(has === 1 && !!lineFull, `${tag}: the line is in the card and fully shown`, true);
     const raw = await readSave(page, sport);
     const saved = raw ? JSON.parse(raw) : null;
-    say(saved?.c?.retired === true && saved?.c?.hallCal === 2, `${tag}: the save is retired and stamped hallCal 2 (it reads ${saved?.c?.hallCal})`, true);
+    say(saved?.c?.retired === true && want.cal >= 3 && saved?.c?.hallCal === want.cal, `${tag}: the save is retired and stamped hallCal ${want.cal}, today's calibration (it reads ${saved?.c?.hallCal})`, true);
     const text = has ? (await line.textContent()) ?? '' : '';
     say(text === want.weighs, `${tag}: the line is the engine's own for this career${text === want.weighs ? '' : ` (page "${text}", engine "${want.weighs}")`}`, true);
     const score = await pill(page);

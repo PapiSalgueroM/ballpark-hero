@@ -384,8 +384,8 @@ describe.each(SPORTS)('%s: the calibration stamp (Round 1051)', (_slug, getSport
     const after = read(sport).c as UsCareerCore;
     expect(after.retired).toBe(true);
     expect(after.hallCal).toBe(HALL_CALIBRATION);
-    expect(HALL_CALIBRATION).toBe(2);
-    expect(hallCalibrationOf(after)).toBe(2);
+    expect(HALL_CALIBRATION).toBe(3);
+    expect(hallCalibrationOf(after)).toBe(3);
     // The retired screen reads the stamped career: its legacy is the saved one's.
     await waitFor(() => expect(document.body.textContent).toContain(`${c.name} retires`));
     expect(document.body.textContent).toContain(sport.legacyOf(after).verdict);
