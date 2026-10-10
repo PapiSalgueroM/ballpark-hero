@@ -305,13 +305,20 @@ export function squadHelp(): SquadHelp {
     title: 'How the squad works',
     rules: [
       'This screen shows what the game already decided. Nothing here changes how many games you play.',
-      'Your rank is where your rating puts you among the players in your position group at the club. A teammate on the same rating counts as ahead of you: to pass him you have to be rated higher.',
+      /* Release AT gate: the six rules have to fit the panel at 390 by 844 without scrolling (playCareerSquad
+         check 7 measures it). 32 lines of 12px text is the most the panel holds there, and the walk's page
+         has no web font, so it wraps wider than the site does: these words are 30 lines there (773 of 820px)
+         and 28 in the site's font (740px). Before you add a sentence, count its lines in the walk's shot.
+         Three things that were said twice went, and no rule did: the tie rule's second half, form's detail
+         in the trust rule (the form rule has it), and the form rule's "a move, a gap or an unplayed season"
+         (its first sentence already asks for 10 league games at this club last season). */
+      'Your rank is where your rating puts you in your position group at the club. A teammate on the same rating counts as ahead of you.',
       'The eleven is the highest rated keeper, four defenders, three midfielders and three forwards on our ratings. It is a picture of the squad, not the manager\'s team sheet.',
-      'Trust is how much of the league season the manager plans to give you. It comes from your rating against the level the squad expects, how long you have been at the club, your form in the previous club season, and how the dressing room feels about you. The dressing room part is your phone.'
+      'Trust is how much of the league season the manager plans to give you. It comes from your rating against the level the squad expects, how long you have been at the club, your form, and the dressing room, which is your phone.'
         /* Release AT: the smaller role moves the same two printed numbers, so the rules say so too. */
-        + ` A smaller role you accepted from a new manager takes ${REDUCED_ROLE_GAMES} planned league games off on top, for one season at that club.`,
+        + ` A smaller role accepted from a new manager takes ${REDUCED_ROLE_GAMES} planned league games off for one season at that club.`,
       `Real, roles or invented: from ${seasonLabel(real.first)} to ${seasonLabel(real.last)} you see the club's real squad of that season where we have it. A real past season with no checked squad list shows roles, ages and ratings, and no names. From ${seasonLabel(real.last + 1)} the world is your career's own: the last real squad carries on, players leave, and every new face is invented. Invented teammates get a year older every summer.`,
-      'Form is a small simulation adjustment: at least 10 recorded league games at this club last season, with a rating of 7.6 or more, adds up to 2 league games to the plan. A rating of 6.4 or less takes away up to 2. Other ratings leave it alone. A move, a gap or an unplayed season carries no form adjustment. The frozen-out limit still applies.',
+      'Form is a small simulation adjustment: at least 10 recorded league games at this club last season, with a rating of 7.6 or more, adds up to 2 league games to the plan. A rating of 6.4 or less takes away up to 2. Other ratings leave it alone. The frozen-out limit still applies.',
     ],
     examples: [
       `Rank. You are a ${n.mine} rated striker and the club's forwards are ${list}. ${n.atOrAbove} of them are rated ${n.mine} or more (a tie goes to the other ${n.mine}), so on our ratings you are ${ordinal(n.rank)} of ${n.groupSize} forwards: the last one into the front three.`,
