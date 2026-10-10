@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk: node scripts/playUsRivalLines.mjs
