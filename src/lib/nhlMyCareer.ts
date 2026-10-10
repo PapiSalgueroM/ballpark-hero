@@ -422,7 +422,7 @@ export function nhlMarketSalary(c: NhlCareerState): number {
  *  season of `slate` games. A skater plays the schedule, so his games follow
  *  it at any length. A goalie's starts are the job's and not the schedule's,
  *  so they only give way when the season is too short to hold them. */
-function nhlWorkSlate(pos: string, slate: number): number {
+export function nhlWorkSlate(pos: string, slate: number): number {
   return pos === 'G' ? Math.min(slate, US_ENGINE_SEASON.nhl) : slate;
 }
 

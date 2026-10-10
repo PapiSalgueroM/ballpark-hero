@@ -10,7 +10,7 @@ import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';
 
 import { MLB_TEAMS } from '@/data/conquestDataMlb';
 import { seasonSwing, swingNote, playoffDepthOf, clutchSwing, clutchNote } from './careerVariance';
-import { postseasonRounds, postseasonRung, playoffRunGames } from './usSeasonShape';
+import { US_ENGINE_SEASON, seasonLength, toSlate, fullSeasonOf, postseasonRounds, postseasonRung, playoffRunGames } from './usSeasonShape';
 import { mlbSeasonScore, wonAward } from './careerAwards';
 import { draftRival, judgeRivalSeason } from './careerRival';
 import type { CareerRival } from './careerRival';
@@ -151,6 +151,10 @@ export interface MlbSeasonLine {
   age: number;
   ovr: number;
   games: number;
+  /** Round 1226: the games his club's season held, saved only when that is not
+   *  the engine's own season. Absent on every line saved before the engine
+   *  read the season ledger, and such a line was played on the engine's own. */
+  slate?: number;
   // hitters
   avg?: number; hr?: number; rbi?: number; sb?: number;
   // pitchers
@@ -452,14 +456,27 @@ export function mlbMarketSalary(c: MlbCareerState): number {
   return Math.max(scale < 1 ? 0.5 : 1, Math.round(((c.ovr - 64) * 1.5 - 6) * mult * scale * 10) / 10);
 }
 
-function gamesFor(c: MlbCareerState, rng: () => number): { games: number; note: string | null } {
+/** Round 1226: the season a hitter or a pitcher works through, out of a club
+ *  season of `slate` games. A hitter plays the schedule, so his games follow
+ *  it at any length. A pitcher's starts and appearances are the job's, so
+ *  they only give way when the season is too short to hold them (2020). */
+export function mlbWorkSlate(pos: string, slate: number): number {
+  return pos === 'SP' || pos === 'RP' ? Math.min(slate, US_ENGINE_SEASON.mlb) : slate;
+}
+
+function gamesFor(c: MlbCareerState, rng: () => number, slate: number): { games: number; note: string | null } {
   const isSp = c.pos === 'SP';
   // Round 58: relievers are their own thing. A closer appears in about 65
   // games, not 155. Getting this wrong once had a reliever striking out 490
   // batters in a season, which is roughly four times the real record.
   const isRp = c.pos === 'RP';
-  const full = isSp ? 32 : isRp ? 62 + Math.floor(rng() * 10) : 155 + Math.floor(rng() * 8);
-  const floorGames = isSp ? 8 : isRp ? 20 : 45;
+  /* The draw is the one this engine always made, on its own season: 32
+     starts, 62 to 71 appearances, or all but zero to seven of the games.
+     Round 1226 carries it, and the floor under an injured year, to the
+     season the ledger says his club played. */
+  const work = mlbWorkSlate(c.pos, slate);
+  const full = toSlate('mlb', isSp ? 32 : isRp ? 62 + Math.floor(rng() * 10) : US_ENGINE_SEASON.mlb - 7 + Math.floor(rng() * 8), work);
+  const floorGames = toSlate('mlb', isSp ? 8 : isRp ? 20 : 45, work);
   const risk = careerRecoveryRisk('mlb', c.purchased, (1 - c.archetype.durability) * 0.55 + (100 - c.health) / 250);
   if (rng() < risk) {
     const frac = 0.35 + rng() * 0.4;
@@ -472,7 +489,15 @@ export function simMlbSeason(
   c: MlbCareerState, teamQuality: number, rng: () => number,
 ): { line: MlbSeasonLine; notes: string[] } {
   const notes: string[] = [];
-  let { games, note } = gamesFor(c, rng);
+  /* Round 1226: how many games his club's season holds comes from the sourced
+     ledger (src/data/usSeasonLedgerMlb.ts) by year and club, never from a
+     number typed here: 60 in 2020, and 161, 163 or 58 for the clubs that did
+     not play their schedule's length. `eq` reads one of his counts as its
+     full season equivalent, which is what every award gate below is written in. */
+  const slate = seasonLength('mlb', c.year, c.team);
+  const work = mlbWorkSlate(c.pos, slate);
+  const eq = (n: number) => fullSeasonOf('mlb', n, work);
+  let { games, note } = gamesFor(c, rng, slate);
   if (note) { notes.push(`🚑 ${note}`); c.health -= 8; }
   /* Round 183: the lineup card decides the workload. A bench bat gets
      half the games, a long-relief arm gets spot starts, relievers are
@@ -480,10 +505,10 @@ export function simMlbSeason(
      byte for byte. */
   if (c.role === 'backup' && c.pos !== 'RP') {
     if (c.pos === 'SP') {
-      games = Math.max(6, Math.round(games * 0.4));
+      games = Math.max(toSlate('mlb', 6, work), Math.round(games * 0.4));
       notes.push(`🪑 Long relief and spot duty: ${games} starts when the phone rang.`);
     } else {
-      games = Math.max(40, Math.round(games * (0.45 + rng() * 0.1)));
+      games = Math.max(toSlate('mlb', 40, work), Math.round(games * (0.45 + rng() * 0.1)));
       notes.push(`🪑 A bench season: ${games} games of pinch hits and spot starts.`);
     }
   }
@@ -496,6 +521,7 @@ export function simMlbSeason(
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games,
     awards: [], teamResult: '', salary: c.salary,
   };
+  if (slate !== US_ENGINE_SEASON.mlb) line.slate = slate;
   const prof = MLB_POS_PROFILE[c.pos] ?? MLB_POS_PROFILE.LF;
   if (c.pos === 'SP') {
     const gs = games;
@@ -597,7 +623,10 @@ export function simMlbSeason(
     if (cn) notes.push(cn);
   }
 
-  const statScore = mlbSeasonScore(c.pos, line);
+  const count = (n: number | undefined) => (n === undefined ? undefined : eq(n));
+  const statScore = mlbSeasonScore(c.pos, work === US_ENGINE_SEASON.mlb ? line
+    : { ...line, hr: count(line.hr), rbi: count(line.rbi), sb: count(line.sb), so: count(line.so), wins: count(line.wins), saves: count(line.saves), holds: count(line.holds) });
+  const eqGames = eq(games);
   /* Round 123: MVP and Cy Young were gated on an overall of 90 and fired zero
      times across 300 full careers, while All-Star was a naked threshold that
      a good hitter cleared every year of his life. Both are now a draw against
@@ -627,27 +656,28 @@ export function simMlbSeason(
   // mattered most here: a batting title and a home run crown have exactly two
   // winners a season between thirty teams, and the old code handed them out on
   // a 60 percent roll to anybody who cleared a fixed line.
-  if (!isPitcher && c.pos !== 'DH' && games >= 130 && wonAward(rng, 'mlb', 'goldGlove', c.pos, statScore)) {
+  if (!isPitcher && c.pos !== 'DH' && eqGames >= 130 && wonAward(rng, 'mlb', 'goldGlove', c.pos, statScore)) {
     line.awards.push('Gold Glove'); notes.push('🧤 Gold Glove.');
   }
-  if (!isPitcher && (line.hr ?? 0) >= 28 && games >= 130 && wonAward(rng, 'mlb', 'silverSlugger', c.pos, statScore)) {
+  if (!isPitcher && eq(line.hr ?? 0) >= 28 && eqGames >= 130 && wonAward(rng, 'mlb', 'silverSlugger', c.pos, statScore)) {
     line.awards.push('Silver Slugger'); notes.push('🥈 Silver Slugger.');
   }
-  if (!isPitcher && (line.avg ?? 0) >= 0.335 && games >= 130 && wonAward(rng, 'mlb', 'battingTitle', c.pos, statScore)) {
+  if (!isPitcher && (line.avg ?? 0) >= 0.335 && eqGames >= 130 && wonAward(rng, 'mlb', 'battingTitle', c.pos, statScore)) {
     line.awards.push('Batting Title'); notes.push('🏅 Batting title.');
   }
-  if (!isPitcher && (line.hr ?? 0) >= 45 && games >= 130 && wonAward(rng, 'mlb', 'hrCrown', c.pos, statScore)) {
+  if (!isPitcher && eq(line.hr ?? 0) >= 45 && eqGames >= 130 && wonAward(rng, 'mlb', 'hrCrown', c.pos, statScore)) {
     line.awards.push('Home Run Champion'); notes.push('💣 Led the league in home runs.');
   }
-  if (c.pos === 'SP' && (line.era ?? 9) <= 2.6 && games >= 28 && wonAward(rng, 'mlb', 'eraTitle', c.pos, statScore)) {
+  if (c.pos === 'SP' && (line.era ?? 9) <= 2.6 && eqGames >= 28 && wonAward(rng, 'mlb', 'eraTitle', c.pos, statScore)) {
     line.awards.push('ERA Title'); notes.push('🎯 Led the league in ERA.');
   }
-  if (c.pos === 'RP' && (line.saves ?? 0) >= 38 && wonAward(rng, 'mlb', 'savesLeader', c.pos, statScore)) {
+  if (c.pos === 'RP' && eq(line.saves ?? 0) >= 38 && wonAward(rng, 'mlb', 'savesLeader', c.pos, statScore)) {
     line.awards.push('Saves Leader'); notes.push('🚪 Led the league in saves.');
   }
   // Comeback needs a real bounce off a lost season, not just a good year.
   const prevSeason = c.seasons[c.seasons.length - 1];
-  if (prevSeason && prevSeason.games <= 70 && games >= 130 && wonAward(rng, 'mlb', 'mlbComeback', c.pos, statScore)) {
+  const prevEq = prevSeason ? fullSeasonOf('mlb', prevSeason.games, mlbWorkSlate(c.pos, prevSeason.slate ?? US_ENGINE_SEASON.mlb)) : 0;
+  if (prevSeason && prevEq <= 70 && eqGames >= 130 && wonAward(rng, 'mlb', 'mlbComeback', c.pos, statScore)) {
     line.awards.push('Comeback Player of the Year'); notes.push('🔁 Comeback Player of the Year.');
   }
 

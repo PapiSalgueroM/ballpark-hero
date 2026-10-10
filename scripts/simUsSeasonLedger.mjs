@@ -76,6 +76,7 @@ await build({
       "export * as nhlEngine from './src/lib/nhlMyCareer.ts';",
       "export * as mlbEngine from './src/lib/mlbMyCareer.ts';",
       "export { nhlFullSlateOf, nhlHeadlinesFor } from './src/lib/nhlCareerLoop.ts';",
+      "export { mlbSlateMark } from './src/lib/mlbCareerLoop.ts';",
     ].join('\n'),
     resolveDir: ROOT, loader: 'ts',
   },
@@ -88,6 +89,7 @@ await build({
    line they change is not there. */
 const ENGINE_CONTROLS = {
   nhltyped: { expect: ['E2'], from: 'const slate = seasonLength("nhl", c.year, c.team);', to: 'const slate = 82;' },
+  mlbtyped: { expect: ['E6'], from: 'const slate = seasonLength("mlb", c.year, c.team);', to: 'const slate = 162;' },
   /* The engine's old law for the games of an October, for every year. */
   mlbrounds: { expect: ['E4'], from: 'const poG = playoffRunGames("mlb", c.year, depth, rng);', to: 'const poG = playoffGames(depth, rng, "mlb");' },
   /* One ladder for every year again: a Wild Card series in 2004 and in 2012. */
@@ -747,6 +749,75 @@ const OWN_OCTOBER = { names: ['Wild Card Series', 'Division Series', 'Championsh
   check('E4', !mlbCode.includes('playoffGames(') && mlbCode.includes("playoffRunGames('mlb', c.year, depth, rng)") && mlbCode.includes("stages[postseasonRung('mlb', c.year, stage)]"), 'src/lib/mlbMyCareer.ts no longer asks src/lib/usSeasonShape.ts for the rounds and the games of its October');
 }
 
+/* ===== Round 1226, the reverse check for the MLB season's length. =====
+   E5  the reader hands back the ledger's length for every MLB season and
+       every id of the game's lists, held to THIS FILE'S OWN TABLE (the clubs
+       off their schedule BY NAME, found in the game's lists the way M3 does).
+   E6  the MLB engine plays it: nobody plays more games than his club did, a
+       healthy hitter misses seven at most, about an eighth of them play the
+       whole schedule in a full season and a quarter in the short one
+       (measured 10.1 to 14.2 percent and 25.0 percent over ten year and club
+       cells of 2,400 seasons, about 1,520 healthy hitters each; the band is
+       8 to 32), a starter and a
+       reliever fit a short season, and the saved line carries the length
+       exactly when it is not the engine's own. Control: mlbtyped. */
+const MLB_OWN = 162;
+{
+  const S = game.shape; const M = game.mlbEngine;
+  const wantMlb = (y, id) => {
+    if (y < OWN.mlbYears[0]) return [MLB_OWN, 'engine'];
+    if (y > OWN.mlbYears[1]) return [OWN.mlbSchedule[OWN.mlbYears[1]] ?? MLB_OWN, 'carried'];
+    for (const l of MLB_LISTS) {
+      if (y < l.from) continue;
+      const t = l.teams.find(x => x.id === id); if (!t) continue;
+      for (const [games, names] of Object.entries(OWN.mlbOffClubs[y] ?? {})) if (names.split('|').includes(label(t))) return [Number(games), 'ledger'];
+    }
+    return [OWN.mlbSchedule[y] ?? MLB_OWN, 'ledger'];
+  };
+  const allIds = [...new Set(MLB_LISTS.flatMap(l => l.teams.map(t => t.id)))];
+  let off = 0;
+  for (const y of rangeOf(2000, 2035)) for (const id of allIds) {
+    const [want, from] = wantMlb(y, id); const got = S.seasonLengthRow('mlb', y, id);
+    if (want !== (OWN.mlbSchedule[y] ?? MLB_OWN)) off++;
+    check('E5', got.games === want && got.from === from, `the reader says ${got.games} (${got.from}) for the MLB ${y} season of ${id}; this file's own table says ${want} (${from})`);
+  }
+  /* 42 of the 50 club lines: six are clubs under a name no list of the game holds that year, and two played the whole schedule with a tie inside it. */
+  check('E5', off === 42, `${off} year and id pairs are off their schedule's length by this file's own table; 42 expected`);
+  check('E5', S.seasonLength('mlb', 2026) === MLB_OWN && S.seasonLength('mlb', 2020) === OWN.mlbSchedule[2020] && S.seasonLength('mlb', 2026, 'Yomiuri Giants') === MLB_OWN, 'a season asked for with no club, or for a club outside the league, is not the schedule of that year');
+
+  const CELLS = [[2004, 'BOS', 162], [2004, 'PIT', 161], [2005, 'CIN', 163], [2008, 'MON', 162], [2016, 'CHC', 162], [2020, 'BOS', 60], [2020, 'DET', 58], [2026, 'NYY', 161], [2026, 'BOS', 162], [2027, 'NYY', 162]];
+  for (const [year, team, want] of CELLS) {
+    let over = 0; let whole = 0; let healthy = 0; let far = 0; let slateBad = 0; let arms = 0; const SEASONS = 2400;
+    for (let i = 0; i < SEASONS; i++) {
+      const rng = mulberry(year * 3301 + i);
+      const pos = ['CF', 'SS', '1B', 'C', 'SP', 'RP'][i % 6];
+      const c = M.startMlbCareer('Ledger Check', pos, M.MLB_ARCHETYPES[pos][0], rng, null, year < 2026 ? 'y2004' : undefined);
+      c.year = year; c.team = team; c.health = 100;
+      const { line, notes: said } = M.simMlbSeason(c, 80, rng);
+      if ((line.slate ?? MLB_OWN) !== want || ('slate' in line) !== (want !== MLB_OWN)) slateBad++;
+      if (line.games > want) over++;
+      if (pos === 'SP' || pos === 'RP') { if (line.games > want * (pos === 'SP' ? 0.25 : 0.5)) arms++; continue; }
+      if (said.some(n => n.includes('Injured list'))) continue;
+      healthy++; if (line.games === want) whole++; if (line.games < want - 7) far++;
+    }
+    const share = healthy ? 100 * whole / healthy : 0;
+    if (process.env.US_LEDGER_MEASURE) console.log(`MEASURE mlb ${year} ${team} want ${want}: whole ${share.toFixed(1)} percent of ${healthy} healthy hitter seasons`);
+    check('E6', over === 0 && far === 0, `${over} seasons of ${SEASONS} hold more games than the ${want} of the ${year} season of ${team}, and ${far} healthy hitters missed more than seven`);
+    check('E6', arms === 0, `${arms} pitcher seasons of ${year} (${team}) hold more starts or appearances than a ${want} game season can`);
+    check('E6', share >= 8 && share <= 32, `${share.toFixed(1)} percent of healthy hitter seasons are the whole ${want} game schedule of ${year} (${team}); band 8 to 32`);
+    check('E6', slateBad === 0, `${slateBad} of ${SEASONS} saved lines of ${year} (${team}) carry the wrong season length, or carry one where the engine's own was played`);
+  }
+  const stripC = t => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  const code = stripC(readFileSync(path.join(ROOT, 'src/lib/mlbMyCareer.ts'), 'utf8')).split('export const MLB_SPEND_ITEMS')[0];
+  const loop = stripC(readFileSync(path.join(ROOT, 'src/lib/mlbCareerLoop.ts'), 'utf8'));
+  for (const [what, text, re] of [['mlbMyCareer.ts', code, /\b155 \+ Math\.floor|= 16[0-3];|\/ 16[1-3]\b/], ['mlbCareerLoop.ts', loop, /\b155\b|\b16[1-3]\b/]]) {
+    const hit = text.match(re);
+    check('E6', !hit, `src/lib/${what} types a season length of its own again ("${hit?.[0]}"); it must ask src/lib/usSeasonShape.ts`);
+  }
+  check('E6', game.mlbSlateMark('CF', 150, {}) === 150 && game.mlbSlateMark('CF', 150, { slate: 60 }) === 56 && game.mlbSlateMark('SP', 30, { slate: 60 }) === 11 && game.mlbSlateMark('SP', 30, { slate: 163 }) === 30,
+    `the full season mark does not follow the saved length: ${game.mlbSlateMark('CF', 150, {})}, ${game.mlbSlateMark('CF', 150, { slate: 60 })}, ${game.mlbSlateMark('SP', 30, { slate: 60 })}, ${game.mlbSlateMark('SP', 30, { slate: 163 })} (150, 56, 11 and 30 expected)`);
+}
+
 /* ===== NOTES FOR THE BINDING ROUNDS: where an engine plays something the ledger does not say. Never a red. ===== */
 {
   const strip = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
@@ -756,7 +827,8 @@ const OWN_OCTOBER = { names: ['Wild Card Series', 'Division Series', 'Championsh
 
   /* The season lengths. */
   const mlbOdd = mlb.MLB_SEASONS.filter(r => r.games !== 162).map(r => `${r.year} (${r.games})`);
-  if (readsLedger(mlbSrc)) notes.push('MLB engine: it reads a length ledger now. Read gamesFor again before trusting the notes below.');
+  const noId = mlb.MLB_SEASONS.flatMap(r => r.clubs.map(g => [r.year, g.clubs.length - g.ids.length])).filter(x => x[1] > 0);
+  if (mlbSrc.includes("seasonLength('mlb', c.year, c.team)")) notes.push(`MLB engine: it reads its season length from the ledger by year and club (Round 1226, src/lib/usSeasonShape.ts). What it still plays on the schedule's own length: ${noId.reduce((t, x) => t + x[1], 0)} club seasons the ledger names that no list of the game holds under that name that year (${noId.map(x => x[0]).join(', ')}: no club is mapped across a move or a rename), and a pitcher keeps the engine's 32 starts or 62 to 71 appearances and gives way only to a season too short to hold them.`);
   else if (mlbSrc.includes('155 + Math.floor(rng() * 8)')) notes.push(`MLB engine: a healthy hitter plays 155 to 162 games in every year (gamesFor), and it reads no length ledger. The ledger: the schedule was not 162 in ${mlbOdd.join(', ')}, and ${mlb.MLB_SEASONS.filter(r => r.clubs.some(g => g.games !== r.games)).length} seasons hold a club that did not play its schedule's length.`);
   else notes.push('MLB engine: the line that draws a hitter games count has moved; this note could not be made.');
   const nhlOdd = nhl.NHL_SEASONS.filter(r => r.games !== 82).map(r => `${r.year} (${r.games === null ? 'no single length' : r.games})`);

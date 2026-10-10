@@ -11,7 +11,7 @@
    different numbers for the two of them. */
 
 import type { NhlCareerState, NhlSeasonLine } from './nhlMyCareer';
-import { nhlCareerTotals, nhlLegacyOf, nhlTeamLabelOf } from './nhlMyCareer';
+import { nhlCareerTotals, nhlLegacyOf, nhlTeamLabelOf, nhlWorkSlate } from './nhlMyCareer';
 import { NHL_BADGES, earnedBadges } from './careerBadges';
 import type { BadgeDef, NhlBadgeFacts } from './careerBadges';
 import { fanComments, followersFromFanbase, fmtFollowers, nhlSeasonHeadlines } from './careerSocial';
@@ -30,8 +30,7 @@ export function nhlFullSlate(pos: string): number {
  *  season, as it was played. A goalie's starts only give way to a season too
  *  short to hold them, the engine's own rule (nhlWorkSlate in nhlMyCareer.ts). */
 export function nhlFullSlateOf(pos: string, line: { slate?: number }): number {
-  const slate = slateOf('nhl', line);
-  return toSlate('nhl', nhlFullSlate(pos), pos === 'G' ? Math.min(slate, US_ENGINE_SEASON.nhl) : slate);
+  return toSlate('nhl', nhlFullSlate(pos), nhlWorkSlate(pos, slateOf('nhl', line)));
 }
 
 /** Everything the badge table reads, off the save and the legacy verdict. */
@@ -84,8 +83,8 @@ export function nhlHeadlinesFor(c: NhlCareerState, line: NhlSeasonLine): string[
   /* Round 1226: missed games are counted from the season this line was played
      on (its own `slate`), so an 84 game season and a saved 82 game one each
      read true beside the same paper. */
-  const held = slateOf('nhl', line);
-  const slate = c.pos === 'G' ? toSlate('nhl', 58, Math.min(held, US_ENGINE_SEASON.nhl)) : held;
+  const held = nhlWorkSlate(c.pos, slateOf('nhl', line));
+  const slate = c.pos === 'G' ? toSlate('nhl', 58, held) : held;
   return nhlSeasonHeadlines({
     name: c.name,
     team: nhlTeamLabelOf(line.team, c.eraId),
