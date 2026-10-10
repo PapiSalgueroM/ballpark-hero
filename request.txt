@@ -1,0 +1,22 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+hall-nhl: SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nhl 2000
+hall-nhl-s1: SIM_SKIP_BOARD=1 SIM_SEED=1 node scripts/simCareerHall.mjs nhl 2000
+hall-nhl-s2: SIM_SKIP_BOARD=1 SIM_SEED=2 node scripts/simCareerHall.mjs nhl 2000
+hall-nhl-s3: SIM_SKIP_BOARD=1 SIM_SEED=3 node scripts/simCareerHall.mjs nhl 2000
+hall-nhl-s4: SIM_SKIP_BOARD=1 SIM_SEED=4 node scripts/simCareerHall.mjs nhl 2000
+hall-nhl-s5: SIM_SKIP_BOARD=1 SIM_SEED=5 node scripts/simCareerHall.mjs nhl 2000
+hall-nhl-s6: SIM_SKIP_BOARD=1 SIM_SEED=6 node scripts/simCareerHall.mjs nhl 2000
+hall-nhl-s7: SIM_SKIP_BOARD=1 SIM_SEED=7 node scripts/simCareerHall.mjs nhl 2000
+hall-nhl-s8: SIM_SKIP_BOARD=1 SIM_SEED=8 node scripts/simCareerHall.mjs nhl 2000
+hall-nhl-s9: SIM_SKIP_BOARD=1 SIM_SEED=9 node scripts/simCareerHall.mjs nhl 2000
+hall-nhl-s10: SIM_SKIP_BOARD=1 SIM_SEED=10 node scripts/simCareerHall.mjs nhl 2000
+hall-nhl-s11: SIM_SKIP_BOARD=1 SIM_SEED=11 node scripts/simCareerHall.mjs nhl 2000
+ctl-markdrift: SIM_SKIP_BOARD=1 SIM_CONTROL=markdrift node scripts/simCareerHall.mjs nhl 2000
+ctl-todrift: SIM_SKIP_BOARD=1 SIM_CONTROL=todrift node scripts/simCareerHall.mjs nhl 2000
+hall-mlb: SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs mlb 2000
+hall-nfl: SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nfl 2000
+hall-nba: SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nba 2000
+ledger: node scripts/simUsSeasonLedger.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rivalnames: node scripts/simNoRivalNames.mjs
+storage: node scripts/simStorageWrites.mjs
