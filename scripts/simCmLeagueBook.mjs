@@ -405,7 +405,7 @@ function watcher(mod, label, acc, opts = {}) {
       tick('law');
       const book = cm.leagueBookOf(s);
       if (!book) fail('law', `${label}: no readable book at the start of season ${seasonIndex + 1}`);
-      else if (Object.keys(book.c).length || Object.keys(book.my).length) fail('law', `${label}: the book of season ${seasonIndex + 1} did not open empty`);
+      else if (Object.keys(book.c).length || book.my.length) fail('law', `${label}: the book of season ${seasonIndex + 1} did not open empty`);
     },
     peek(s) {
       return {
@@ -495,8 +495,8 @@ function watcher(mod, label, acc, opts = {}) {
       }
       /* Mine: a league clean sheet has at least one keeper of mine on it, and no man more than there were. */
       tick('law');
-      const mineAll = Object.values(book.my).reduce((n, v) => n + v, 0);
-      const most = Math.max(0, ...Object.values(book.my));
+      const mineAll = book.my.reduce((n, pair) => n + pair[1], 0);
+      const most = Math.max(0, ...book.my.map(pair => pair[1]));
       if (most > myKept) fail('law', `${label} ${where}: one of my men holds ${most} league clean sheets, I kept ${myKept}`);
       if (mineAll < myKept) fail('law', `${label} ${where}: my men hold ${mineAll} league clean sheets between them, I kept ${myKept}`);
       seasonBoards(mod, s, book, acc, myKept);
@@ -522,7 +522,7 @@ function seasonBoards(mod, s, book, acc, myKept) {
   const rosterOf = club => { if (!rosters.has(club)) rosters.set(club, cm.oppRosterFor(s, club, EMPTY)); return rosters.get(club); };
   const posOf = (club, name) => (rosterOf(club).find(p => p.n === name && p.p !== 'GK') ?? rosterOf(club).find(p => p.n === name))?.p ?? null;
   const rivalRows = mod.book.bookRows(book).filter(r => !mine.has(r.name));
-  const myRows = s.squad.map(p => ({ club: s.clubName, name: p.name, pos: p.position, goals: p.comp?.league?.goals ?? 0, assists: p.comp?.league?.assists ?? 0, cleanSheets: book.my[p.id] ?? 0, mine: true }));
+  const myRows = s.squad.map(p => ({ club: s.clubName, name: p.name, pos: p.position, goals: p.comp?.league?.goals ?? 0, assists: p.comp?.league?.assists ?? 0, cleanSheets: mod.book.mineSheets(book, p.id), mine: true }));
   const all = [...rivalRows, ...myRows];
   const bookTop = all.filter(r => r.goals > 0).sort(byGoals).slice(0, 10);
   const raceTop = [

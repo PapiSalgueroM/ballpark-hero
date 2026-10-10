@@ -53,8 +53,12 @@ export interface LeagueBook {
   s: string;
   /** One entry a rival club, created on its first credit. */
   c: Record<string, BookClub>;
-  /** MY men's league clean sheets, by player id (the squad keeps one count for every competition). */
-  my: Record<string, number>;
+  /** MY men's league clean sheets (the squad keeps one count for every competition): a list of
+   *  [player id, clean sheets] in the order each man first kept one. A LIST, not a map by id, on purpose:
+   *  no map in a save is keyed by a player's id, an academy boy's id carries the clock and a counter of the
+   *  running engine, and a harness that sorts a save's keys before it normalises those ids
+   *  (scripts/simCustomClubValues.mjs) read two identical saves as different when this was a map. */
+  my: [id: string, cleanSheets: number][];
 }
 
 export interface BookRules {
@@ -77,7 +81,7 @@ export const BOOK_ROWS_PER_CLUB = 16;
 
 /** A fresh book for one season. */
 export function openBook(stamp: string): LeagueBook {
-  return { s: stamp, c: {}, my: {} };
+  return { s: stamp, c: {}, my: [] };
 }
 
 /** The salt of a league order: a 32 bit FNV-1a hash of the names, in base 36. */
@@ -106,7 +110,7 @@ const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'obj
  * on that path at 60 percent of a simulated season). The full walk is readBook.
  */
 export function liveBook(raw: unknown, stamp: string): LeagueBook | null {
-  if (!isRecord(raw) || raw.s !== stamp || !isRecord(raw.c) || !isRecord(raw.my)) return null;
+  if (!isRecord(raw) || raw.s !== stamp || !isRecord(raw.c) || !Array.isArray(raw.my)) return null;
   return raw as unknown as LeagueBook;
 }
 
@@ -120,7 +124,9 @@ export function readBook(raw: unknown, stamp: string): LeagueBook | null {
       if (!Array.isArray(row) || row.length !== 4 || !row.every(isCount)) return null;
     }
   }
-  for (const n of Object.values(book.my)) if (!isCount(n)) return null;
+  for (const pair of book.my as unknown[]) {
+    if (!Array.isArray(pair) || pair.length !== 2 || typeof pair[0] !== 'string' || !isCount(pair[1])) return null;
+  }
   return book;
 }
 
@@ -258,7 +264,16 @@ export function creditCleanSheet(book: LeagueBook, club: string, keeper: BookMan
 
 /** A league clean sheet for each of MY men named, by player id. */
 export function creditMine(book: LeagueBook, ids: readonly string[]): void {
-  for (const id of ids) book.my[id] = (book.my[id] ?? 0) + 1;
+  for (const id of ids) {
+    const have = book.my.find(pair => pair[0] === id);
+    if (have) have[1] += 1;
+    else book.my.push([id, 1]);
+  }
+}
+
+/** How many league clean sheets one of MY men holds in this book. */
+export function mineSheets(book: LeagueBook, id: string): number {
+  return book.my.find(pair => pair[0] === id)?.[1] ?? 0;
 }
 
 export interface BookLine { club: string; name: string; pos: Position; goals: number; assists: number; cleanSheets: number; gen: boolean }

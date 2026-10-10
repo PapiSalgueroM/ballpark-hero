@@ -12,7 +12,7 @@ season, What's New) starts after the lead has ruled on the numbers at the end of
    assist share has a name (`ASSIST_SHARE`). A pure lift: the same doubles, term for term.
 2. `src/lib/clubManagerLeagueBook.ts`: the book, pure. A row is `[goals, assists, cleanSheets, gen]`, always
    four numbers; a club entry is `{ m, og, u }` (rows, own goals, unnamed goals); the book is `{ s, c, my }`
-   (stamp, clubs, my men's league clean sheets by player id). Every roll is `keyedRng` on a key of the match
+   (stamp, clubs, and my men's league clean sheets as a list of [player id, count]). Every roll is `keyedRng` on a key of the match
    and the goal. `liveBook` is the match week's cheap reader (stamp and types), `readBook` the full walk.
 3. The binding in `src/lib/clubManager.ts` (one block under `creditRaceGoals`, and five one line hunks):
    `openLeagueBook` in `startCareer` and `startNextSeason`; `noteBookMine` beside my league match's
@@ -73,6 +73,12 @@ Not touched: lines 1 to 6, the `realLeagueFixtures` lines of `CareerState`, `kic
   pitch at that minute, then their eleven and bench, then their roster; the outfield man wins a shared
   name; the assist is dealt over the men who were on their pitch at that minute.
 - THE HOT PATH (critic 14): the match week asks `liveBook` (a stamp and three type checks).
+- MY MEN ARE A LIST, NOT A MAP BY ID (the builder's own, after a red). The first cut kept `my` as a map keyed by
+  player id. No other map in a save is keyed by a player's id, an academy boy's id carries the clock and a
+  counter of the running engine, and `scripts/simCustomClubValues.mjs` sorts a save's keys BEFORE it
+  normalises those ids: one of its thirty paired careers (Lincoln City, a youth defender with a league clean
+  sheet) read as different on two engines that had made the same save. A list in the order each man first
+  kept one has no key to sort.
 - THE VIDEO REFEREE (critic D10): the harness plays an arm with `varReviews: true` and holds the law on it.
 - NOT TAKEN: the full walk on load. `loadCareer` is on the must not touch list (Round 1225 inserts a
   function directly above it), so a book with one holed row is refused whole by the reader

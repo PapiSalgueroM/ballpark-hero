@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { goalWeight } from '@/lib/clubManagerGoalWeight';
 import {
   BOOK_ROWS_PER_CLUB, bookClubGoals, bookRows, bookSalt, creditAssist, creditCleanSheet, creditDeal, creditGoal,
-  creditMine, creditOwnGoal, dealAssist, dealGoals, liveBook, openBook, readBook, rowKey, takerOf,
+  creditMine, creditOwnGoal, dealAssist, dealGoals, liveBook, mineSheets, openBook, readBook, rowKey, takerOf,
   type BookMan, type BookRules, type LeagueBook,
 } from '@/lib/clubManagerLeagueBook';
 
@@ -152,7 +152,10 @@ describe('the book', () => {
     expect(book.c.Rivals.m[rowKey(XI[10])]).toEqual([1, 0, 0, 1]);
     expect(book.c.Rivals.m[rowKey(XI[0])]).toEqual([0, 0, 1, 0]);
     expect(book.c['Thin FC']).toEqual({ m: {}, og: 0, u: 1 });
-    expect(book.my).toEqual({ 'p-keeper': 1, 'p-back': 1 });
+    creditMine(book, ['p-keeper']);
+    expect(book.my).toEqual([['p-keeper', 2], ['p-back', 1]]);
+    expect(mineSheets(book, 'p-keeper')).toBe(2);
+    expect(mineSheets(book, 'p-nobody')).toBe(0);
   });
 
   it('sends a new scorer past the row cap to the unnamed count, and still gives a keeper his row', () => {
@@ -199,7 +202,9 @@ describe('the book', () => {
     expect(readBook(broken(b => { b.c.Rivals.m[firstKey] = [3, 1.5, 0, 0]; }), STAMP)).toBeNull();
     expect(readBook(broken(b => { delete b.c.Rivals.u; }), STAMP)).toBeNull();
     expect(readBook(broken(b => { b.c.Rivals = 'gone'; }), STAMP)).toBeNull();
-    expect(readBook(broken(b => { b.my = { 'p-1': 'two' }; }), STAMP)).toBeNull();
+    expect(readBook(broken(b => { b.my = [['p-1', 'two']]; }), STAMP)).toBeNull();
+    expect(readBook(broken(b => { b.my = [['p-1', 2, 3]]; }), STAMP)).toBeNull();
+    expect(readBook(broken(b => { b.my = { 'p-1': 2 }; }), STAMP)).toBeNull();
     expect(readBook(broken(b => { b.c = []; }), STAMP)).toBeNull();
     expect(readBook(broken(b => { delete b.my; }), STAMP)).toBeNull();
   });
@@ -207,6 +212,6 @@ describe('the book', () => {
   it('salts by the order of the league, so two orders of the same clubs deal apart', () => {
     expect(bookSalt(['A', 'B', 'C'])).toBe(bookSalt(['A', 'B', 'C']));
     expect(bookSalt(['A', 'B', 'C'])).not.toBe(bookSalt(['B', 'A', 'C']));
-    expect(openBook('laliga|abc')).toEqual({ s: 'laliga|abc', c: {}, my: {} });
+    expect(openBook('laliga|abc')).toEqual({ s: 'laliga|abc', c: {}, my: [] });
   });
 });
