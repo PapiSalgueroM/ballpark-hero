@@ -27,7 +27,7 @@
    The lottery tile is the ONE shared presenter (Round 1222,
    src/components/motion/LotteryReveal.tsx). It is mounted, never copied, and
    only where the career engine models a lottery: the NBA, both eras. */
-import { useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { CelebrationStyles, ConfettiBurst, revealAfter, revealDelay } from '@/components/club-manager/Celebration';
@@ -54,6 +54,12 @@ const MAX_STEP = 0.4;
 /** The breath before the closing row, and how long that row takes to land. */
 const BEAT = 0.4;
 const LAND = 0.4;
+/** How many px of the night's top may sit above the screen once its buttons
+ *  are brought in: a tile's own padding and its small heading, never a tile
+ *  or a pick. Measured: the NBA's night is 6 px taller than a 320 by 640
+ *  phone and is still shown whole there; on a phone on its side (844 by 390)
+ *  it is well over 100 px taller, and there the press leaves the page alone. */
+const NIGHT_TOP_SLACK = 28;
 
 export interface CareerNightClock {
   /** When the first board row arrives, in seconds. */
@@ -96,16 +102,25 @@ export function DraftNightSequence({
   const clock = careerNightClock(night);
   const moving = stage !== 'skipped';
   const over = stage !== 'live';
-  /* The press brought the night in below the button. The buttons under the
-     board are what must end up on screen, so the closing row above them is
-     in view when it lands and the page does not move again after this.
+  /* The press brought the night in below the button. Where the whole night
+     fits on the screen, the buttons under the board are what must end up on
+     it, so the closing row above them is in view when it lands and the page
+     does not move again after this.
      On a screen shorter than the night itself (a phone on its side) that
-     cannot hold from the first frame: the top of the board is what the press
-     shows there. So the same reveal is asked once more when the closing row
-     starts to land, and on Skip. Where the buttons are already readable it
-     does nothing, which is every screen the night fits on. */
+     would throw the start of the night off the top: the lottery and the
+     first picks would arrive unseen. There the press leaves the page where
+     the player is looking, at the top of the night, and the same reveal is
+     asked when the closing row starts to land, or on Skip. It is asked then
+     on every screen, and does nothing where the buttons are already readable. */
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [tooTall, setTooTall] = useState(false);
+  useLayoutEffect(() => {
+    const el = rootRef.current;
+    if (el && el.getBoundingClientRect().height - window.innerHeight > NIGHT_TOP_SLACK) setTooTall(true);
+  }, []);
   const [closingOn, setClosingOn] = useState(false);
-  const actionsRef = useRevealScroll<HTMLDivElement>(closingOn || over ? 'career-night-end' : 'career-night', { skipFirst: false, block: 'end' });
+  const ending = closingOn || over;
+  const actionsRef = useRevealScroll<HTMLDivElement>(ending ? 'career-night-end' : 'career-night', { skipFirst: false, block: 'end', enabled: ending || !tooTall });
   const closing = night.board[night.board.length - 1];
   const before = night.board.slice(0, -1);
   const L = desc.lottery;
@@ -116,7 +131,7 @@ export function DraftNightSequence({
   const tileLabel = desc.teamShort ?? desc.teamLabel;
 
   return (
-    <div data-career-night data-night-stage={stage} className="space-y-3">
+    <div ref={rootRef} data-career-night data-night-stage={stage} className="space-y-3">
       <CelebrationStyles />
       {L && night.lottery.length > 0 && (
         <LotteryReveal

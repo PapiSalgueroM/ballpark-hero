@@ -29,13 +29,17 @@
  *   4. YOU SEE YOUR NAME CALLED. At the frame the closing row lands it is
  *      wholly inside the viewport, with no scroll from the driver, and
  *      nothing is drawn over it.                              Control `fold`.
- *  4b. ON A SCREEN SHORTER THAN THE NIGHT (844 by 390) the ending cannot be
- *      on screen from the first frame. There the page stands still while the
- *      picks come in, moves once more when the closing row starts to land and
- *      not a frame before, and a second after the row landed it is wholly
- *      inside the viewport, uncovered, with the page at rest.
- *      Control `ending` (a reveal asked once the closing row has started to
- *      land is dropped: the row stays below the fold).
+ *  4b. ON A SCREEN SHORTER THAN THE NIGHT (844 by 390) the start and the
+ *      ending cannot both be on screen. There the press leaves the top of
+ *      the night on screen (the lottery and the first picks are not thrown
+ *      off the top), the page stands still while the picks come in, moves
+ *      once when the closing row starts to land and not a frame before, and
+ *      a second after the row landed it is wholly inside the viewport,
+ *      uncovered, with the page at rest.
+ *      Controls `nottall` (the night is told it fits: the press jumps to its
+ *      buttons and the start is off the top) and `ending` (a reveal asked
+ *      once the closing row has started to land is dropped: the row stays
+ *      below the fold).
  *   5. Nothing live is hidden: no enabled button sits inside an element whose
  *      own or inherited opacity is 0, and every button is at least 44 by 44.
  *   6. The last frame is the save: the closing row says, word for word, the
@@ -62,7 +66,7 @@
  * scripts/lib/hostLikeServer.mjs. ENGINES=chromium is the only engine.
  *
  * Run:      node scripts/playDraftNight.mjs
- * Control:  PLAY_DRAFT_NIGHT_CONTROL=<late|spoiler|fold|hidden|cut|again|narrowtile|ending> node scripts/playDraftNight.mjs
+ * Control:  PLAY_DRAFT_NIGHT_CONTROL=<late|spoiler|fold|hidden|cut|again|narrowtile|ending|nottall> node scripts/playDraftNight.mjs
  *           (must exit 1 on its own check, and exits 2 if it changed nothing)
  * Output:   screenshots and measurements in $RC_OUT, or .tmp-fx/play-draft-night.
  */
@@ -79,7 +83,7 @@ import { chromium } from './lib/playwrightLoader.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.PLAY_DRAFT_NIGHT_CONTROL || '';
-const CONTROLS = { late: 'height', spoiler: 'spoiler', fold: 'fold', hidden: 'reduced', cut: 'cut', again: 'scroll', narrowtile: 'cut', ending: 'fold' };
+const CONTROLS = { late: 'height', spoiler: 'spoiler', fold: 'fold', hidden: 'reduced', cut: 'cut', again: 'scroll', narrowtile: 'cut', ending: 'fold', nottall: 'fold' };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`Unknown control ${CONTROL}`); process.exit(2); }
 const OUT = path.resolve(process.env.RC_OUT || path.join(ROOT, '.tmp-fx/play-draft-night'));
 fs.mkdirSync(OUT, { recursive: true });
@@ -191,6 +195,15 @@ const CONTROL_INIT = {
     const real = Element.prototype.scrollIntoView;
     Element.prototype.scrollIntoView = function (...args) { real.apply(this, args); setTimeout(() => window.scrollBy(0, -60), 2000); };
   },
+  /* The night is told it fits the screen, whatever its height: on a short screen the press then
+     throws the start of the night off the top, as it did before the second fix pass. */
+  nottall: () => {
+    const real = Element.prototype.getBoundingClientRect;
+    Element.prototype.getBoundingClientRect = function () {
+      const r = real.call(this);
+      return this.hasAttribute('data-career-night') ? new DOMRect(r.x, r.y, r.width, 0) : r;
+    };
+  },
   /* The ending is not brought into view: a reveal asked once the closing row has started to land is dropped. */
   ending: () => {
     const real = Element.prototype.scrollIntoView;
@@ -217,6 +230,7 @@ const RECORD = () => {
       stage: night ? night.dataset.nightStage : null, h2: op(j && j.querySelector('[data-arrival] h2')), club: op(j && j.querySelector('[data-arrival] h2 + p')),
       result: op(document.querySelector('[data-testid="draft-result"]')), closing: op(closing), top: r ? r.top : null, bottom: r ? r.bottom : null, rowsMin: rows.length ? Math.min(...rows) : null,
       vh: window.innerHeight, sw: document.documentElement.scrollWidth, vw: document.documentElement.clientWidth,
+      nightTop: night ? night.getBoundingClientRect().top : null, nightH: night ? night.offsetHeight : null,
       file: j && j.querySelector('[data-prospect-file]') ? j.querySelector('[data-prospect-file]').textContent : null });
     if (performance.now() - t0 < 9000) requestAnimationFrame(tick);
   };
@@ -366,7 +380,7 @@ async function run(browser, sport, size, found, mode, { startCareer = false, sho
     const span = key => { const v = samples.map(s => s[key]); return [Math.min(...v), Math.max(...v)]; };
     /* 2. Nothing jumps. */
     const [cMin, cMax] = span('card'), [jMin, jMax] = span('journey');
-    Object.assign(row, { frames: samples.length, cardHeight: [cMin, cMax], journeyHeight: [jMin, jMax], scroll: [samples[0].y, last.y] });
+    Object.assign(row, { frames: samples.length, cardHeight: [cMin, cMax], journeyHeight: [jMin, jMax], scroll: [samples[0].y, last.y], nightHeight: samples[0].nightH, viewport: [samples[0].vw, samples[0].vh] });
     if (cMax - cMin > 1 || jMax - jMin > 1) fail(id, 'height', `the card went from ${cMin} to ${cMax} and the journey from ${jMin} to ${jMax} while the night played`);
     /* The page moves once, for the press's own reveal, and never again. "Settled" is seen, not
        assumed (this check used to start a fixed 1,500 ms in, a figure nobody had measured): the
@@ -387,6 +401,10 @@ async function run(browser, sport, size, found, mode, { startCareer = false, sho
       const ys = samples.filter(s => s.t >= still.t && s.t < until).map(s => s.y);
       if (ys.length && Math.max(...ys) - Math.min(...ys) > 1) fail(id, 'scroll', `the page stood still at ${Math.round(still.y)} from ${Math.round(still.t - t0)} ms and then moved between ${Math.round(Math.min(...ys))} and ${Math.round(Math.max(...ys))}${size.short ? ' before the closing row started to land' : ''}`);
       if (size.short) {
+        /* The case is what it says: the night is taller than this screen. And the press did not
+           throw its start off the top: once the page is at rest the top of the night is on screen. */
+        if (!(samples[0].nightH > samples[0].vh)) fail(id, 'fold', `this screen was meant to be shorter than the night: the night is ${samples[0].nightH} high and the screen ${samples[0].vh}`);
+        if (still.nightTop < -1 || still.nightTop > still.vh - 44) fail(id, 'fold', `the night starts off screen: once the page is at rest its top is at ${Math.round(still.nightTop)} in a ${still.vh} high viewport`);
         const tail = samples.filter(s => s.t > last.t - 300).map(s => s.y);
         row.endingMovedPx = Math.round(last.y - still.y);
         if (Math.max(...tail) - Math.min(...tail) > 1) fail(id, 'scroll', `the page is still moving in the last 300 ms of the record (between ${Math.round(Math.min(...tail))} and ${Math.round(Math.max(...tail))})`);
@@ -489,7 +507,7 @@ try {
   if (CONTROL) {
     /* One case, the one the control's check is about. MLB's late pick is the tallest board, and
        the NBA's is the one with a lottery tile; the narrow tile is judged where it is narrow. */
-    const [sportAt, sizeAt, modeAt] = { hidden: [1, SIZES[0], 'reduced'], cut: [1, SIZES[0], 'watch'], narrowtile: [1, NARROW[1], 'watch'], ending: [1, SHORT, 'watch'] }[CONTROL] ?? [2, SIZES[0], 'watch'];
+    const [sportAt, sizeAt, modeAt] = { hidden: [1, SIZES[0], 'reduced'], cut: [1, SIZES[0], 'watch'], narrowtile: [1, NARROW[1], 'watch'], ending: [1, SHORT, 'watch'], nottall: [1, SHORT, 'watch'] }[CONTROL] ?? [2, SIZES[0], 'watch'];
     const c = cases[sportAt];
     await run(browser, c.sport, sizeAt, c.late, modeAt);
     const own = failures.filter(f => f.check === CONTROLS[CONTROL]);
