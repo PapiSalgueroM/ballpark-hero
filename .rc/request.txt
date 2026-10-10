@@ -1,0 +1,12 @@
+#!serial
+init: git rev-parse HEAD > /tmp/h1229 && cat /tmp/h1229 && echo 'src/pages/WhatsNew.tsx merge=union' >> .git/info/attributes && git fetch -q origin r1225-cm-fixtures-bind && git rev-parse origin/r1225-cm-fixtures-bind
+m1225: git -c user.name=rc -c user.email=rc@users.noreply.github.com merge -q --no-edit origin/r1225-cm-fixtures-bind && git log --oneline -1 && git status --short | grep -v '^??' | wc -l && grep -c sansBook scripts/simCmRealFixtures.mjs && grep -c CM_FIXTURE_BASE scripts/simCmRealFixtures.mjs
+d1-default: node scripts/simCmRealFixtures.mjs
+d2-base-head: CM_FIXTURE_BASE=$(cat /tmp/h1229) node scripts/simCmRealFixtures.mjs
+d3-base-head-all: CM_FIXTURE_BASE=$(cat /tmp/h1229) CM_REAL_FIXTURE_CONTROL=all node scripts/simCmRealFixtures.mjs
+d4-fleet-base-head: CM_FIXTURE_BASE=$(cat /tmp/h1229) node scripts/simCmFixtureFleet.mjs
+d5-base-old-asis: CM_FIXTURE_BASE=980654fa node scripts/simCmRealFixtures.mjs
+d6-fleet-base-old: CM_FIXTURE_BASE=980654fa node scripts/simCmFixtureFleet.mjs
+d7-book: node scripts/simCmLeagueBook.mjs
+d8-tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+back: git reset -q --hard $(cat /tmp/h1229) && git log --oneline -1
