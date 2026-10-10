@@ -237,3 +237,29 @@ Controls: `SIM_GM_DRAFT_ORDER_CONTROL=<name>`. A control that FIRED exits 1 and 
 
 The three controls decision 4 names are `oddsrow` (a wrong odds row), `seconddraw` (a second draw) and `tiebyid`
 (a tie broken the wrong way). The measured numbers are in the harness's header.
+
+## What is proven, and on which runner result
+
+For commit `e6b0fe07` (the last commit that changes code), runner result `r1222-h3`: the type gate exit 0; vitest
+exit 0, 94 of 94 in six files (presenter 14, order 23, night 15, lottery night 9, card 7, gmPicks' own 26);
+simGmDraftOrder exit 0 (512,050 checks); the 27 controls in three shards, each shard exit 0 ("all 9 fired, each
+in exactly its own sections"); simGmPicks, simRevealMoments, simNoRivalNames, simLiveScores, simHarnessAnchors,
+simNoInventedQuotes, simNoInventedConduct and simInventedNames exit 0; and `git diff --name-status` against the
+base lists 16 files, every one added.
+
+For commit `bdebb085`, runner results `r1222-f1` and `r1222-f2`: the 24 rule fences of the gate. 21 exit 0.
+simSchemaNames and simLeaderboardCaps need the live database, which a runner cannot reach, and simWritesAreSent
+could not drive Guess the Nation on a runner with the database blocked: none of the three is a result, and no
+file of this round is in any page.
+
+A RED ON MAIN, NOT THIS ROUND'S: simDraftNight section 5 fails for the NBA board ("NBA does not hand the captured
+rivals to buildDraftNight"). The same harness on the base commit `09df145a`, in the same runner request
+(`r1222-h1`, line `base-simDraftNight`), prints the same two failures. This branch edits no board.
+
+What a later session must not trust: nothing was left half done. Every commit is on origin and the worktree is
+clean. Nothing is mounted, so nothing here has been seen in a browser; the first mount owes the walk.
+
+## Not done, by scope
+
+Everything in Rounds B, C and D: the class builder and its curve, need, the NBA host in the engine, the board's
+three branches, the walks, the price by slot, What's New, the guide sentence the bind will owe the other lane.
