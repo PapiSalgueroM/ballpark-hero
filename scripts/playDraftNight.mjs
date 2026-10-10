@@ -39,18 +39,22 @@
  *      first frame.                                         Control `hidden`.
  *   8. Skip: one press lands every row and every held word at once, and the
  *      page does not move for it.
- *   9. THE WORDS ON A LOTTERY TILE FIT THE TILE. Both lines of every tile on
- *      screen, and then every other club of the era in the first tile's own
- *      label box, measured in the site's own typeface (it is let through
- *      from Google Fonts; if it does not load the check fails rather than
- *      measure a fallback).                                  Control `cut`.
+ *   9. THE WORDS ON A LOTTERY TILE FIT THE TILE, AT EVERY WIDTH DOWN TO 320.
+ *      Both lines of every tile on screen, then every other club of the era
+ *      in the first tile's own label box, then every seed line the era's
+ *      lottery can print ("Seed 1 · Down 3") in the box under it, measured
+ *      in the site's own typeface (it is let through from Google Fonts; if
+ *      it does not load the check fails rather than measure a fallback).
+ *      Control `cut`, and at 320 wide control `narrowtile` (the journey's
+ *      own narrow rule for the tile taken away: the tile is the shared
+ *      presenter's again, 73 px of room for an 83 px name).
  * The live database host is aborted in every context. No page error.
  *
  * Needs dist/ (npm run build). It serves it itself through
  * scripts/lib/hostLikeServer.mjs. ENGINES=chromium is the only engine.
  *
  * Run:      node scripts/playDraftNight.mjs
- * Control:  PLAY_DRAFT_NIGHT_CONTROL=<late|spoiler|fold|hidden|cut|again> node scripts/playDraftNight.mjs
+ * Control:  PLAY_DRAFT_NIGHT_CONTROL=<late|spoiler|fold|hidden|cut|again|narrowtile> node scripts/playDraftNight.mjs
  *           (must exit 1 on its own check, and exits 2 if it changed nothing)
  * Output:   screenshots and measurements in $RC_OUT, or .tmp-fx/play-draft-night.
  */
@@ -67,7 +71,7 @@ import { chromium } from './lib/playwrightLoader.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.PLAY_DRAFT_NIGHT_CONTROL || '';
-const CONTROLS = { late: 'height', spoiler: 'spoiler', fold: 'fold', hidden: 'reduced', cut: 'cut', again: 'scroll' };
+const CONTROLS = { late: 'height', spoiler: 'spoiler', fold: 'fold', hidden: 'reduced', cut: 'cut', again: 'scroll', narrowtile: 'cut' };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`Unknown control ${CONTROL}`); process.exit(2); }
 const OUT = path.resolve(process.env.RC_OUT || path.join(ROOT, '.tmp-fx/play-draft-night'));
 fs.mkdirSync(OUT, { recursive: true });
@@ -139,10 +143,10 @@ await new Promise((resolve, reject) => {
 
 const SIZES = [{ width: 390, height: 844, touch: true }, { width: 1280, height: 800, touch: false }];
 /* Two narrower phones, for the NBA's night (the tallest card, and the one with tiles): 360 by 740,
-   a common Android size, and 320 by 640, the narrowest the journey lays out for. At 320 the
-   lottery tile (the shared presenter, not this round's file) cuts its seed line and its longest
-   club, so the fit of its words is written down there and not judged; everything else is. */
-const NARROW = [{ width: 360, height: 740, touch: true }, { width: 320, height: 640, touch: true, fitJudged: false }];
+   a common Android size, and 320 by 640, the narrowest the journey lays out for. The fit of the
+   lottery tile's words is judged at both (at 320 it was only written down until the journey's
+   narrow rule gave the tile the room: the shared presenter alone cuts its longest club there). */
+const NARROW = [{ width: 360, height: 740, touch: true }, { width: 320, height: 640, touch: true }];
 /* The other era of each sport: the 2003 NBA lottery is three tiles in a two column grid, and
    MLB's 2004 draft is 1,500 picks. */
 const THROWBACK = { nfl: 'y2005', nba: 'y2004', mlb: 'y2004', nhl: 'y2006' };const results = [];
@@ -163,6 +167,8 @@ const CONTROL_STYLE = {
   hidden: '[data-night-row] { opacity: 0 !important; }',
   /* A lottery tile with less room for its words than the words need. */
   cut: '[data-lottery-face] > span:last-child { max-width: 44px; }',
+  /* Under 360 wide the tile as the shared presenter draws it, without the journey's narrow rule. */
+  narrowtile: '@media (max-width: 359px) { [data-lottery-face] { padding-inline: 6px !important; gap: 6px !important; } [data-lottery-face] > span:first-child { width: 20px !important; } [data-lottery-face] > span:last-child > span:first-child { font-size: 12px !important; } }',
 };
 const CONTROL_INIT = {
   /* The press reveals nothing: the board stays wherever the page happened to be. */
@@ -200,24 +206,29 @@ const BUTTONS = () => [...document.querySelectorAll('[data-prospect-journey] but
   return { text: (b.textContent || b.getAttribute('aria-label') || '').trim().slice(0, 40), disabled: b.disabled, opacity: o, w: r.width, h: r.height };
 });
 /* The words on the lottery tiles, measured in their own boxes: the two lines of every tile on
-   screen, then every other club of this era in the first tile's own label box and typeface. */
-const FIT = names => {
+   screen, then every other club of this era in the first tile's own label box and typeface, then
+   every seed line the era's lottery can print in the box under it. */
+const FIT = ({ names, seeds }) => {
   const lines = [...document.querySelectorAll('[data-lottery-face] > span:last-child > span')];
   const need = el => { const r = document.createRange(); r.selectNodeContents(el); return Math.round(r.getBoundingClientRect().width * 10) / 10; };
   const cut = lines.filter(el => el.scrollWidth > el.clientWidth).map(el => ({ text: el.textContent, need: need(el), room: el.clientWidth }));
-  const el = lines[0], keep = el.textContent, clubs = [];
-  let widest = { text: '', need: 0 };
-  for (const text of names) {
-    el.textContent = text;
-    const w = need(el);
-    if (w > widest.need) widest = { text, need: w };
-    if (el.scrollWidth > el.clientWidth) clubs.push({ text, need: w, room: el.clientWidth });
-  }
-  /* The box sizes to its words up to the room the tile has, so the room is read with more words than fit. */
-  el.textContent = 'W'.repeat(60);
-  const room = el.clientWidth;
-  el.textContent = keep;
-  return { cut, clubs, room, widest, font: getComputedStyle(el).fontFamily.split(',')[0] };
+  const sweep = (el, words) => {
+    const keep = el.textContent, over = [];
+    let widest = { text: '', need: 0 };
+    for (const text of words) {
+      el.textContent = text;
+      const w = need(el);
+      if (w > widest.need) widest = { text, need: w };
+      if (el.scrollWidth > el.clientWidth) over.push({ text, need: w, room: el.clientWidth });
+    }
+    /* The box sizes to its words up to the room the tile has, so the room is read with more words than fit. */
+    el.textContent = 'W'.repeat(60);
+    const room = el.clientWidth;
+    el.textContent = keep;
+    return { over, widest, room };
+  };
+  const club = sweep(lines[0], names), seed = sweep(lines[1], seeds);
+  return { cut, clubs: club.over, room: club.room, widest: club.widest, seeds: seed.over, seedRoom: seed.room, widestSeed: seed.widest, font: getComputedStyle(lines[0]).fontFamily.split(',')[0] };
 };
 const CARD = () => ({ y: window.scrollY, card: document.querySelector('[data-testid="draft-showcase"]').getBoundingClientRect().height, stage: document.querySelector('[data-career-night]').dataset.nightStage });
 const END = () => {
@@ -403,14 +414,16 @@ async function run(browser, sport, size, found, mode, { startCareer = false, sho
     if (JSON.stringify(end.tileWords) !== JSON.stringify(wantTiles)) fail(id, 'save', `the lottery tiles say ${JSON.stringify(end.tileWords)}, the order says ${JSON.stringify(wantTiles)}`);
     /* 9. The words on a lottery tile fit the tile, in the site's own typeface. */
     if (end.tiles) {
-      const fit = await page.evaluate(FIT, desc.teamIds().map(team => (desc.teamShort ?? desc.teamLabel)(team)));
-      const judged = size.fitJudged !== false;
-      row.tileFit = { judged, room: fit.room, widest: fit.widest, font: fit.font, inter, cut: fit.cut, clubs: fit.clubs };
+      /* Every seed line this era's lottery can print: any of its clubs can win any drawn pick. */
+      const seeds = [];
+      for (let seed = 1; seed <= desc.lottery.combos.length; seed += 1) for (let slot = 1; slot <= desc.lottery.drawn; slot += 1) seeds.push(`Seed ${seed} · ${seed > slot ? `Up ${seed - slot}` : seed < slot ? `Down ${slot - seed}` : 'Held'}`);
+      const fit = await page.evaluate(FIT, { names: desc.teamIds().map(team => (desc.teamShort ?? desc.teamLabel)(team)), seeds });
+      row.tileFit = { room: fit.room, widest: fit.widest, seedRoom: fit.seedRoom, widestSeed: fit.widestSeed, font: fit.font, inter, cut: fit.cut, clubs: fit.clubs, seeds: fit.seeds };
       if (!inter) fail(id, 'cut', `the site's typeface did not load (the tile is in ${fit.font}), so the fit of its words was not measured`);
-      if (judged) {
-        for (const c of fit.cut) fail(id, 'cut', `a lottery tile cuts "${c.text}": ${c.need} px of words in ${c.room} px`);
-        for (const c of fit.clubs) fail(id, 'cut', `"${c.text}" would be cut on a lottery tile: ${c.need} px of words in ${c.room} px`);
-      } else console.log(`  noted ${id}: the tile has ${fit.room} px for a club, ${fit.cut.length} line(s) on screen and ${fit.clubs.length} of ${desc.teamIds().length} clubs do not fit (not judged at this width)`);
+      for (const c of fit.cut) fail(id, 'cut', `a lottery tile cuts "${c.text}": ${c.need} px of words in ${c.room} px`);
+      for (const c of fit.clubs) fail(id, 'cut', `"${c.text}" would be cut on a lottery tile: ${c.need} px of words in ${c.room} px`);
+      for (const c of fit.seeds) fail(id, 'cut', `"${c.text}" would be cut on a lottery tile: ${c.need} px of words in ${c.room} px`);
+      if (size.width < 360) console.log(`  measured ${id}: a tile has ${fit.room} px for a club (widest "${fit.widest.text}", ${fit.widest.need} px) and ${fit.seedRoom} px for a seed line (widest "${fit.widestSeed.text}", ${fit.widestSeed.need} px)`);
     }
     const save = JSON.parse(await page.evaluate(k => localStorage.getItem(k), sport.saveKey));
     try { assert.deepEqual(save, JSON.parse(JSON.stringify({ c: null, phase: 'prospect', teamQuality: null, coach: null, prospect: { ...p, state: done } }))); } catch { fail(id, 'save', 'the save is not the engine state after the draft'); }
@@ -438,9 +451,10 @@ try {
   for (const c of cases) assert.notEqual(c.late.done.draft.pick, c.late.done.draft.pickInRound, `${c.sport.slug}: the late pick must be past round one`);
   if (CONTROL) {
     /* One case, the one the control's check is about. MLB's late pick is the tallest board, and
-       the NBA's is the one with a lottery tile. */
-    const c = cases[CONTROL === 'hidden' || CONTROL === 'cut' ? 1 : 2];
-    await run(browser, c.sport, SIZES[0], c.late, CONTROL === 'hidden' ? 'reduced' : 'watch');
+       the NBA's is the one with a lottery tile; the narrow tile is judged where it is narrow. */
+    const [sportAt, sizeAt, modeAt] = { hidden: [1, SIZES[0], 'reduced'], cut: [1, SIZES[0], 'watch'], narrowtile: [1, NARROW[1], 'watch'] }[CONTROL] ?? [2, SIZES[0], 'watch'];
+    const c = cases[sportAt];
+    await run(browser, c.sport, sizeAt, c.late, modeAt);
     const own = failures.filter(f => f.check === CONTROLS[CONTROL]);
     if (!own.length) { console.error(`Control ${CONTROL} changed nothing its check can see (${failures.map(f => f.check).join(', ') || 'no failure at all'}). Refusing to call that a result.`); exitCode = 2; }
     else console.log(`playDraftNight [control ${CONTROL}]: ${own.length} FAILURE(S) of its own check (${CONTROLS[CONTROL]}), as it must`);
