@@ -156,6 +156,26 @@
  * now picks "Head to Head Win" from the pool, and steps 53 and 54 follow
  * it (4 of that save's 56 steps differ, in pendingRivalryEvent, then
  * morale and lastRivalryEventId). 1,869,465 bytes.
+ * The single input of that recording, closed after the review (runners
+ * r1227-x1 and r1227-x2, 2026-10-10). Two source commits lie between step
+ * c's recording and this one: 55339449 (seven counts of nflStatLineFor
+ * floored at zero) and 5bdd0a9c (the cards). On 55339449 ALONE step c's
+ * recording replays green in all four sports (three runs of three in a
+ * worktree of that commit, and two more with that commit's src and scripts
+ * laid over the head) and the truth digest passes plain (two runs of two).
+ * On 5bdd0a9c the same recording is red at fixed save "negNet" steps 52 to
+ * 54, first in c.pendingRivalryEvent, and the digest is red. So the floor
+ * moved no recorded career, and this recording and the 8 nfl leaves of the
+ * truth digest (commit 2be3775c, whose message carries no attribution)
+ * moved for the cards alone.
+ * Seen once while proving it, and NOT a number: the very first replay on
+ * 55339449 was red at fixed save "noCoachKey" step 38 (after "Announce this
+ * is the last season"), where the screen read caught the farewell banner
+ * and the recording's read had come before it. The banner is a React.lazy
+ * component (UsCareerBoard.tsx), so that screen read races its chunk; the
+ * save was equal, and the five replays after it on the same commit were
+ * green. If this harness is ever red at that one step alone, rerun it once
+ * before reading it as a change.
  * Round 1149 (the other three careers get what the NBA rival got)
  * re-recorded it on purpose on 2026-10-10, on a GitHub runner, once a step,
  * each from the branch commit its header names.
