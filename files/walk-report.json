@@ -1,0 +1,2718 @@
+{
+ "base": "http://localhost:4173",
+ "fixtures": {
+  "disallowed": {
+   "seed": 1880,
+   "minute": 9,
+   "side": "me",
+   "review": {
+    "id": "2026:Everton:0:Liverpool:0:45:me:9:0:Kiernan Dewsbury-Hall:goal",
+    "incident": "goal",
+    "decision": "disallowed",
+    "reason": "ruled_out"
+   },
+   "comp": "Premier League · Round 1",
+   "opponent": "Liverpool",
+   "searchMs": 255
+  },
+  "awarded_scored": {
+   "seed": 1713,
+   "minute": 30,
+   "side": "opp",
+   "review": {
+    "id": "2026:Everton:0:Liverpool:0:45:me:30:0:Hayden Hackney:missed-penalty",
+    "incident": "penalty",
+    "decision": "awarded",
+    "reason": "missed_foul",
+    "trigger": {
+     "side": "me",
+     "who": "Hayden Hackney"
+    }
+   },
+   "comp": "Premier League · Round 1",
+   "opponent": "Liverpool",
+   "searchMs": 51
+  },
+  "awarded_missed": {
+   "error": "No actual awarded_missed review in the bounded engine fixture search"
+  },
+  "lastminute": {
+   "seed": 2042,
+   "minute": 45,
+   "plus": 0,
+   "side": "opp",
+   "review": {
+    "id": "2026:Everton:0:Liverpool:0:45:opp:45:0:Dominik Szoboszlai:goal",
+    "incident": "goal",
+    "decision": "disallowed",
+    "reason": "ruled_out"
+   }
+  },
+  "two": {
+   "seed": 2453,
+   "minute": 12,
+   "plus": 0,
+   "side": "opp",
+   "review": {
+    "id": "2026:Everton:0:Liverpool:0:45:opp:12:0:Hugo Ekitiké:goal",
+    "incident": "goal",
+    "decision": "disallowed",
+    "reason": "ruled_out"
+   },
+   "second": {
+    "minute": 30,
+    "plus": 0,
+    "side": "opp",
+    "review": {
+     "id": "2026:Everton:0:Liverpool:0:45:me:30:0:Hayden Hackney:missed-penalty",
+     "incident": "penalty",
+     "decision": "awarded",
+     "reason": "missed_foul",
+     "trigger": {
+      "side": "me",
+      "who": "Hayden Hackney"
+     }
+    }
+   }
+  }
+ },
+ "cases": [
+  {
+   "id": "390-motion-disallowed-plain",
+   "kind": "disallowed",
+   "variant": "plain",
+   "seed": 1880,
+   "shots": [
+    "390-motion-disallowed-plain-1-checking.jpg",
+    "390-motion-disallowed-plain-2-decided.jpg",
+    "390-motion-disallowed-plain-3-after.jpg",
+    "390-motion-disallowed-plain-4-help.jpg",
+    "390-motion-disallowed-plain-8-full-time.jpg",
+    "390-motion-disallowed-plain-9-report-timeline.jpg"
+   ],
+   "notes": [],
+   "engine": {
+    "lit": true,
+    "incident": {
+     "minute": 9,
+     "who": "Kiernan Dewsbury-Hall",
+     "decision": "disallowed"
+    },
+    "half": [
+     1,
+     0
+    ],
+    "reviewsInHalf": 1
+   },
+   "prior": {
+    "me": 0,
+    "opp": 0
+   },
+   "savedLit": true,
+   "whereBefore": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "card": {
+    "state": "checking",
+    "text": "VAR: checking goal |  | Everton, 9' |  | Simplified review in this game simulation",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "animations": 0,
+    "transition": "0s",
+    "animationName": "none",
+    "fonts": [
+     12,
+     11,
+     10
+    ]
+   },
+   "whereChecking": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "decided": {
+    "text": "VAR: goal ruled out |  | Everton, 9' |  | Simplified review in this game simulation",
+    "decision": "disallowed",
+    "score": {
+     "me": 0,
+     "opp": 0
+    }
+   },
+   "whereDecided": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "whereAfter": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "stageAfter": {
+    "stage": "first",
+    "minute": "10"
+   },
+   "scoreAfter": {
+    "me": 0,
+    "opp": 0
+   },
+   "helpText": [
+    "9'VAR: goal ruled out",
+    "VAR here reviews goals and penalties only, and you only see a review that changed the call. A goal that is ruled out adds no score, scorer or shot stats. A foul the referee missed can become a penalty, and that kick can go in, be saved or miss.",
+    "VAR example: At 0-0 a goal goes to a review and is ruled out. It stays 0-0 and nobody gets a goal. If a review gives a penalty and the kick misses, it still stays 0-0."
+   ],
+   "intervalScore": {},
+   "settledAsEngine": true,
+   "result": "1-0",
+   "engineResult": "1-0",
+   "timeline": [
+    {
+     "clock": "9'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "shown": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "cut": true,
+     "rowWidth": 276,
+     "textWidth": [
+      119,
+      232
+     ]
+    }
+   ],
+   "docWidthReport": 390,
+   "varLog": [
+    {
+     "s": "checking:2026:Everton:0:Liverpool:0:45:me:9:0:Kiernan Dewsbury-Hall:goal",
+     "t": 5123,
+     "y": 0,
+     "minute": "8",
+     "text": "VAR: checking goal |  | Everton, 9' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "decided:2026:Everton:0:Liverpool:0:45:me:9:0:Kiernan Dewsbury-Hall:goal",
+     "t": 6423,
+     "y": 0,
+     "minute": "8",
+     "text": "VAR: goal ruled out |  | Everton, 9' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "none",
+     "t": 7625,
+     "y": 0,
+     "minute": "8",
+     "text": ""
+    }
+   ],
+   "errors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+   ],
+   "outside": [
+    "fonts.googleapis.com",
+    "flawuiqbvjobmkfkauhw.supabase.co"
+   ],
+   "seconds": 10
+  },
+  {
+   "id": "390-motion-awarded_scored-plain",
+   "kind": "awarded_scored",
+   "variant": "plain",
+   "seed": 1713,
+   "shots": [
+    "390-motion-awarded_scored-plain-1-checking.jpg",
+    "390-motion-awarded_scored-plain-2-decided.jpg",
+    "390-motion-awarded_scored-plain-3-after.jpg",
+    "390-motion-awarded_scored-plain-8-full-time.jpg",
+    "390-motion-awarded_scored-plain-9-report-timeline.jpg"
+   ],
+   "notes": [],
+   "engine": {
+    "lit": true,
+    "incident": {
+     "minute": 30,
+     "who": "Alexander Isak",
+     "decision": "awarded"
+    },
+    "half": [
+     1,
+     2
+    ],
+    "reviewsInHalf": 1
+   },
+   "prior": {
+    "me": 1,
+    "opp": 0
+   },
+   "savedLit": true,
+   "whereBefore": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "card": {
+    "state": "checking",
+    "text": "VAR: checking penalty decision |  | Liverpool, 30' |  | Simplified review in this game simulation",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "animations": 0,
+    "transition": "0s",
+    "animationName": "none",
+    "fonts": [
+     12,
+     11,
+     10
+    ]
+   },
+   "whereChecking": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 0
+   },
+   "decided": {
+    "text": "VAR: penalty awarded |  | Liverpool, 30' |  | Simplified review in this game simulation",
+    "decision": "awarded",
+    "score": {
+     "me": 1,
+     "opp": 0
+    }
+   },
+   "whereDecided": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "whereAfter": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "stageAfter": {
+    "stage": "first",
+    "minute": "31"
+   },
+   "scoreAfter": {
+    "me": 1,
+    "opp": 1
+   },
+   "intervalScore": {},
+   "settledAsEngine": true,
+   "result": "1-2",
+   "engineResult": "1-2",
+   "timeline": [
+    {
+     "clock": "30'",
+     "side": "opp",
+     "title": "📺 VAR: penalty awarded: Alexander Isak",
+     "shown": "📺 VAR: penalty awarded: Alexander Isak",
+     "cut": true,
+     "rowWidth": 276,
+     "textWidth": [
+      119,
+      206
+     ]
+    }
+   ],
+   "docWidthReport": 390,
+   "varLog": [
+    {
+     "s": "checking:2026:Everton:0:Liverpool:0:45:me:30:0:Hayden Hackney:missed-penalty",
+     "t": 16630,
+     "y": 0,
+     "minute": "29",
+     "text": "VAR: checking penalty decision |  | Liverpool, 30' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "decided:2026:Everton:0:Liverpool:0:45:me:30:0:Hayden Hackney:missed-penalty",
+     "t": 17930,
+     "y": 0,
+     "minute": "29",
+     "text": "VAR: penalty awarded |  | Liverpool, 30' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "none",
+     "t": 19133,
+     "y": 0,
+     "minute": "29",
+     "text": ""
+    }
+   ],
+   "errors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+   ],
+   "outside": [
+    "fonts.googleapis.com",
+    "flawuiqbvjobmkfkauhw.supabase.co"
+   ],
+   "seconds": 21
+  },
+  {
+   "id": "390-reduced-disallowed-plain",
+   "kind": "disallowed",
+   "variant": "plain",
+   "seed": 1880,
+   "shots": [
+    "390-reduced-disallowed-plain-1-checking.jpg",
+    "390-reduced-disallowed-plain-2-decided.jpg",
+    "390-reduced-disallowed-plain-3-after.jpg",
+    "390-reduced-disallowed-plain-8-full-time.jpg",
+    "390-reduced-disallowed-plain-9-report-timeline.jpg"
+   ],
+   "notes": [],
+   "engine": {
+    "lit": true,
+    "incident": {
+     "minute": 9,
+     "who": "Kiernan Dewsbury-Hall",
+     "decision": "disallowed"
+    },
+    "half": [
+     1,
+     0
+    ],
+    "reviewsInHalf": 1
+   },
+   "prior": {
+    "me": 0,
+    "opp": 0
+   },
+   "savedLit": true,
+   "whereBefore": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "card": {
+    "state": "checking",
+    "text": "VAR: checking goal |  | Everton, 9' |  | Simplified review in this game simulation",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "animations": 0,
+    "transition": "0s",
+    "animationName": "none",
+    "fonts": [
+     12,
+     11,
+     10
+    ]
+   },
+   "whereChecking": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "decided": {
+    "text": "VAR: goal ruled out |  | Everton, 9' |  | Simplified review in this game simulation",
+    "decision": "disallowed",
+    "score": {
+     "me": 0,
+     "opp": 0
+    }
+   },
+   "whereDecided": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "whereAfter": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "stageAfter": {
+    "stage": "first",
+    "minute": "10"
+   },
+   "scoreAfter": {
+    "me": 0,
+    "opp": 0
+   },
+   "intervalScore": {},
+   "settledAsEngine": true,
+   "result": "1-0",
+   "engineResult": "1-0",
+   "timeline": [
+    {
+     "clock": "9'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "shown": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "cut": true,
+     "rowWidth": 290,
+     "textWidth": [
+      119,
+      232
+     ]
+    }
+   ],
+   "docWidthReport": 390,
+   "varLog": [
+    {
+     "s": "checking:2026:Everton:0:Liverpool:0:45:me:9:0:Kiernan Dewsbury-Hall:goal",
+     "t": 5126,
+     "y": 0,
+     "minute": "8",
+     "text": "VAR: checking goal |  | Everton, 9' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "decided:2026:Everton:0:Liverpool:0:45:me:9:0:Kiernan Dewsbury-Hall:goal",
+     "t": 5427,
+     "y": 0,
+     "minute": "8",
+     "text": "VAR: goal ruled out |  | Everton, 9' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "none",
+     "t": 6228,
+     "y": 0,
+     "minute": "8",
+     "text": ""
+    }
+   ],
+   "errors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+   ],
+   "outside": [
+    "fonts.googleapis.com",
+    "flawuiqbvjobmkfkauhw.supabase.co"
+   ],
+   "seconds": 7
+  },
+  {
+   "id": "390-reduced-awarded_scored-plain",
+   "kind": "awarded_scored",
+   "variant": "plain",
+   "seed": 1713,
+   "shots": [
+    "390-reduced-awarded_scored-plain-1-checking.jpg",
+    "390-reduced-awarded_scored-plain-2-decided.jpg",
+    "390-reduced-awarded_scored-plain-3-after.jpg",
+    "390-reduced-awarded_scored-plain-8-full-time.jpg",
+    "390-reduced-awarded_scored-plain-9-report-timeline.jpg"
+   ],
+   "notes": [],
+   "engine": {
+    "lit": true,
+    "incident": {
+     "minute": 30,
+     "who": "Alexander Isak",
+     "decision": "awarded"
+    },
+    "half": [
+     1,
+     2
+    ],
+    "reviewsInHalf": 1
+   },
+   "prior": {
+    "me": 1,
+    "opp": 0
+   },
+   "savedLit": true,
+   "whereBefore": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "card": {
+    "state": "checking",
+    "text": "VAR: checking penalty decision |  | Liverpool, 30' |  | Simplified review in this game simulation",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "animations": 0,
+    "transition": "0s",
+    "animationName": "none",
+    "fonts": [
+     12,
+     11,
+     10
+    ]
+   },
+   "whereChecking": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 0
+   },
+   "decided": {
+    "text": "VAR: penalty awarded |  | Liverpool, 30' |  | Simplified review in this game simulation",
+    "decision": "awarded",
+    "score": {
+     "me": 1,
+     "opp": 0
+    }
+   },
+   "whereDecided": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "whereAfter": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "stageAfter": {
+    "stage": "first",
+    "minute": "31"
+   },
+   "scoreAfter": {
+    "me": 1,
+    "opp": 1
+   },
+   "intervalScore": {},
+   "settledAsEngine": true,
+   "result": "1-2",
+   "engineResult": "1-2",
+   "timeline": [
+    {
+     "clock": "30'",
+     "side": "opp",
+     "title": "📺 VAR: penalty awarded: Alexander Isak",
+     "shown": "📺 VAR: penalty awarded: Alexander Isak",
+     "cut": true,
+     "rowWidth": 290,
+     "textWidth": [
+      119,
+      206
+     ]
+    }
+   ],
+   "docWidthReport": 390,
+   "varLog": [
+    {
+     "s": "checking:2026:Everton:0:Liverpool:0:45:me:30:0:Hayden Hackney:missed-penalty",
+     "t": 16697,
+     "y": 0,
+     "minute": "29",
+     "text": "VAR: checking penalty decision |  | Liverpool, 30' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "decided:2026:Everton:0:Liverpool:0:45:me:30:0:Hayden Hackney:missed-penalty",
+     "t": 16997,
+     "y": 0,
+     "minute": "29",
+     "text": "VAR: penalty awarded |  | Liverpool, 30' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "none",
+     "t": 17801,
+     "y": 0,
+     "minute": "29",
+     "text": ""
+    }
+   ],
+   "errors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+   ],
+   "outside": [
+    "fonts.googleapis.com",
+    "flawuiqbvjobmkfkauhw.supabase.co"
+   ],
+   "seconds": 20
+  },
+  {
+   "id": "1280-motion-disallowed-plain",
+   "kind": "disallowed",
+   "variant": "plain",
+   "seed": 1880,
+   "shots": [
+    "1280-motion-disallowed-plain-1-checking.jpg",
+    "1280-motion-disallowed-plain-2-decided.jpg",
+    "1280-motion-disallowed-plain-3-after.jpg",
+    "1280-motion-disallowed-plain-4-help.jpg",
+    "1280-motion-disallowed-plain-8-full-time.jpg",
+    "1280-motion-disallowed-plain-9-report-timeline.jpg"
+   ],
+   "notes": [],
+   "engine": {
+    "lit": true,
+    "incident": {
+     "minute": 9,
+     "who": "Kiernan Dewsbury-Hall",
+     "decision": "disallowed"
+    },
+    "half": [
+     1,
+     0
+    ],
+    "reviewsInHalf": 1
+   },
+   "prior": {
+    "me": 0,
+    "opp": 0
+   },
+   "savedLit": true,
+   "whereBefore": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "card": {
+    "state": "checking",
+    "text": "VAR: checking goal |  | Everton, 9' |  | Simplified review in this game simulation",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "animations": 0,
+    "transition": "0s",
+    "animationName": "none",
+    "fonts": [
+     12,
+     11,
+     10
+    ]
+   },
+   "whereChecking": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "decided": {
+    "text": "VAR: goal ruled out |  | Everton, 9' |  | Simplified review in this game simulation",
+    "decision": "disallowed",
+    "score": {
+     "me": 0,
+     "opp": 0
+    }
+   },
+   "whereDecided": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "whereAfter": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "stageAfter": {
+    "stage": "first",
+    "minute": "10"
+   },
+   "scoreAfter": {
+    "me": 0,
+    "opp": 0
+   },
+   "helpText": [
+    "9'VAR: goal ruled out",
+    "VAR here reviews goals and penalties only, and you only see a review that changed the call. A goal that is ruled out adds no score, scorer or shot stats. A foul the referee missed can become a penalty, and that kick can go in, be saved or miss.",
+    "VAR example: At 0-0 a goal goes to a review and is ruled out. It stays 0-0 and nobody gets a goal. If a review gives a penalty and the kick misses, it still stays 0-0."
+   ],
+   "intervalScore": {},
+   "settledAsEngine": true,
+   "result": "1-0",
+   "engineResult": "1-0",
+   "timeline": [
+    {
+     "clock": "9'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "shown": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "cut": true,
+     "rowWidth": 361,
+     "textWidth": [
+      164,
+      232
+     ]
+    }
+   ],
+   "docWidthReport": 1280,
+   "varLog": [
+    {
+     "s": "checking:2026:Everton:0:Liverpool:0:45:me:9:0:Kiernan Dewsbury-Hall:goal",
+     "t": 5058,
+     "y": 0,
+     "minute": "8",
+     "text": "VAR: checking goal |  | Everton, 9' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "decided:2026:Everton:0:Liverpool:0:45:me:9:0:Kiernan Dewsbury-Hall:goal",
+     "t": 6358,
+     "y": 0,
+     "minute": "8",
+     "text": "VAR: goal ruled out |  | Everton, 9' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "none",
+     "t": 7560,
+     "y": 0,
+     "minute": "8",
+     "text": ""
+    }
+   ],
+   "errors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+   ],
+   "outside": [
+    "fonts.googleapis.com",
+    "flawuiqbvjobmkfkauhw.supabase.co"
+   ],
+   "seconds": 10
+  },
+  {
+   "id": "1280-motion-awarded_scored-plain",
+   "kind": "awarded_scored",
+   "variant": "plain",
+   "seed": 1713,
+   "shots": [
+    "1280-motion-awarded_scored-plain-1-checking.jpg",
+    "1280-motion-awarded_scored-plain-2-decided.jpg",
+    "1280-motion-awarded_scored-plain-3-after.jpg",
+    "1280-motion-awarded_scored-plain-8-full-time.jpg",
+    "1280-motion-awarded_scored-plain-9-report-timeline.jpg"
+   ],
+   "notes": [],
+   "engine": {
+    "lit": true,
+    "incident": {
+     "minute": 30,
+     "who": "Alexander Isak",
+     "decision": "awarded"
+    },
+    "half": [
+     1,
+     2
+    ],
+    "reviewsInHalf": 1
+   },
+   "prior": {
+    "me": 1,
+    "opp": 0
+   },
+   "savedLit": true,
+   "whereBefore": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "card": {
+    "state": "checking",
+    "text": "VAR: checking penalty decision |  | Liverpool, 30' |  | Simplified review in this game simulation",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "animations": 0,
+    "transition": "0s",
+    "animationName": "none",
+    "fonts": [
+     12,
+     11,
+     10
+    ]
+   },
+   "whereChecking": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 0
+   },
+   "decided": {
+    "text": "VAR: penalty awarded |  | Liverpool, 30' |  | Simplified review in this game simulation",
+    "decision": "awarded",
+    "score": {
+     "me": 1,
+     "opp": 0
+    }
+   },
+   "whereDecided": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "whereAfter": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "stageAfter": {
+    "stage": "first",
+    "minute": "31"
+   },
+   "scoreAfter": {
+    "me": 1,
+    "opp": 1
+   },
+   "intervalScore": {},
+   "settledAsEngine": true,
+   "result": "1-2",
+   "engineResult": "1-2",
+   "timeline": [
+    {
+     "clock": "30'",
+     "side": "opp",
+     "title": "📺 VAR: penalty awarded: Alexander Isak",
+     "shown": "📺 VAR: penalty awarded: Alexander Isak",
+     "cut": true,
+     "rowWidth": 361,
+     "textWidth": [
+      164,
+      206
+     ]
+    }
+   ],
+   "docWidthReport": 1280,
+   "varLog": [
+    {
+     "s": "checking:2026:Everton:0:Liverpool:0:45:me:30:0:Hayden Hackney:missed-penalty",
+     "t": 16552,
+     "y": 0,
+     "minute": "29",
+     "text": "VAR: checking penalty decision |  | Liverpool, 30' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "decided:2026:Everton:0:Liverpool:0:45:me:30:0:Hayden Hackney:missed-penalty",
+     "t": 17853,
+     "y": 0,
+     "minute": "29",
+     "text": "VAR: penalty awarded |  | Liverpool, 30' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "none",
+     "t": 19056,
+     "y": 0,
+     "minute": "29",
+     "text": ""
+    }
+   ],
+   "errors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+   ],
+   "outside": [
+    "fonts.googleapis.com",
+    "flawuiqbvjobmkfkauhw.supabase.co"
+   ],
+   "seconds": 21
+  },
+  {
+   "id": "1280-reduced-disallowed-plain",
+   "kind": "disallowed",
+   "variant": "plain",
+   "seed": 1880,
+   "shots": [
+    "1280-reduced-disallowed-plain-1-checking.jpg",
+    "1280-reduced-disallowed-plain-2-decided.jpg",
+    "1280-reduced-disallowed-plain-3-after.jpg",
+    "1280-reduced-disallowed-plain-8-full-time.jpg",
+    "1280-reduced-disallowed-plain-9-report-timeline.jpg"
+   ],
+   "notes": [],
+   "engine": {
+    "lit": true,
+    "incident": {
+     "minute": 9,
+     "who": "Kiernan Dewsbury-Hall",
+     "decision": "disallowed"
+    },
+    "half": [
+     1,
+     0
+    ],
+    "reviewsInHalf": 1
+   },
+   "prior": {
+    "me": 0,
+    "opp": 0
+   },
+   "savedLit": true,
+   "whereBefore": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "card": {
+    "state": "checking",
+    "text": "VAR: checking goal |  | Everton, 9' |  | Simplified review in this game simulation",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "animations": 0,
+    "transition": "0s",
+    "animationName": "none",
+    "fonts": [
+     12,
+     11,
+     10
+    ]
+   },
+   "whereChecking": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "decided": {
+    "text": "VAR: goal ruled out |  | Everton, 9' |  | Simplified review in this game simulation",
+    "decision": "disallowed",
+    "score": {
+     "me": 0,
+     "opp": 0
+    }
+   },
+   "whereDecided": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "whereAfter": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "stageAfter": {
+    "stage": "first",
+    "minute": "10"
+   },
+   "scoreAfter": {
+    "me": 0,
+    "opp": 0
+   },
+   "intervalScore": {},
+   "settledAsEngine": true,
+   "result": "1-0",
+   "engineResult": "1-0",
+   "timeline": [
+    {
+     "clock": "9'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "shown": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "cut": true,
+     "rowWidth": 380,
+     "textWidth": [
+      164,
+      232
+     ]
+    }
+   ],
+   "docWidthReport": 1280,
+   "varLog": [
+    {
+     "s": "checking:2026:Everton:0:Liverpool:0:45:me:9:0:Kiernan Dewsbury-Hall:goal",
+     "t": 5069,
+     "y": 0,
+     "minute": "8",
+     "text": "VAR: checking goal |  | Everton, 9' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "decided:2026:Everton:0:Liverpool:0:45:me:9:0:Kiernan Dewsbury-Hall:goal",
+     "t": 5369,
+     "y": 0,
+     "minute": "8",
+     "text": "VAR: goal ruled out |  | Everton, 9' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "none",
+     "t": 6170,
+     "y": 0,
+     "minute": "8",
+     "text": ""
+    }
+   ],
+   "errors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+   ],
+   "outside": [
+    "fonts.googleapis.com",
+    "flawuiqbvjobmkfkauhw.supabase.co"
+   ],
+   "seconds": 7
+  },
+  {
+   "id": "1280-reduced-awarded_scored-plain",
+   "kind": "awarded_scored",
+   "variant": "plain",
+   "seed": 1713,
+   "shots": [
+    "1280-reduced-awarded_scored-plain-1-checking.jpg",
+    "1280-reduced-awarded_scored-plain-2-decided.jpg",
+    "1280-reduced-awarded_scored-plain-3-after.jpg",
+    "1280-reduced-awarded_scored-plain-8-full-time.jpg",
+    "1280-reduced-awarded_scored-plain-9-report-timeline.jpg"
+   ],
+   "notes": [],
+   "engine": {
+    "lit": true,
+    "incident": {
+     "minute": 30,
+     "who": "Alexander Isak",
+     "decision": "awarded"
+    },
+    "half": [
+     1,
+     2
+    ],
+    "reviewsInHalf": 1
+   },
+   "prior": {
+    "me": 1,
+    "opp": 0
+   },
+   "savedLit": true,
+   "whereBefore": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "card": {
+    "state": "checking",
+    "text": "VAR: checking penalty decision |  | Liverpool, 30' |  | Simplified review in this game simulation",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "animations": 0,
+    "transition": "0s",
+    "animationName": "none",
+    "fonts": [
+     12,
+     11,
+     10
+    ]
+   },
+   "whereChecking": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 0
+   },
+   "decided": {
+    "text": "VAR: penalty awarded |  | Liverpool, 30' |  | Simplified review in this game simulation",
+    "decision": "awarded",
+    "score": {
+     "me": 1,
+     "opp": 0
+    }
+   },
+   "whereDecided": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "whereAfter": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "stageAfter": {
+    "stage": "first",
+    "minute": "31"
+   },
+   "scoreAfter": {
+    "me": 1,
+    "opp": 1
+   },
+   "intervalScore": {},
+   "settledAsEngine": true,
+   "result": "1-2",
+   "engineResult": "1-2",
+   "timeline": [
+    {
+     "clock": "30'",
+     "side": "opp",
+     "title": "📺 VAR: penalty awarded: Alexander Isak",
+     "shown": "📺 VAR: penalty awarded: Alexander Isak",
+     "cut": true,
+     "rowWidth": 380,
+     "textWidth": [
+      164,
+      206
+     ]
+    }
+   ],
+   "docWidthReport": 1280,
+   "varLog": [
+    {
+     "s": "checking:2026:Everton:0:Liverpool:0:45:me:30:0:Hayden Hackney:missed-penalty",
+     "t": 16618,
+     "y": 0,
+     "minute": "29",
+     "text": "VAR: checking penalty decision |  | Liverpool, 30' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "decided:2026:Everton:0:Liverpool:0:45:me:30:0:Hayden Hackney:missed-penalty",
+     "t": 16919,
+     "y": 0,
+     "minute": "29",
+     "text": "VAR: penalty awarded |  | Liverpool, 30' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "none",
+     "t": 17721,
+     "y": 0,
+     "minute": "29",
+     "text": ""
+    }
+   ],
+   "errors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+   ],
+   "outside": [
+    "fonts.googleapis.com",
+    "flawuiqbvjobmkfkauhw.supabase.co"
+   ],
+   "seconds": 20
+  },
+  {
+   "id": "390-motion-lastminute-plain",
+   "kind": "lastminute",
+   "variant": "plain",
+   "seed": 2042,
+   "shots": [
+    "390-motion-lastminute-plain-1-checking.jpg",
+    "390-motion-lastminute-plain-2-decided.jpg",
+    "390-motion-lastminute-plain-3-after.jpg",
+    "390-motion-lastminute-plain-8-full-time.jpg",
+    "390-motion-lastminute-plain-9-report-timeline.jpg"
+   ],
+   "notes": [],
+   "engine": {
+    "lit": true,
+    "incident": {
+     "minute": 45,
+     "who": "Dominik Szoboszlai",
+     "decision": "disallowed"
+    },
+    "half": [
+     1,
+     0
+    ],
+    "reviewsInHalf": 1
+   },
+   "prior": {
+    "me": 1,
+    "opp": 0
+   },
+   "savedLit": true,
+   "whereBefore": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "card": {
+    "state": "checking",
+    "text": "VAR: checking goal |  | Liverpool, 45' |  | Simplified review in this game simulation",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "animations": 0,
+    "transition": "0s",
+    "animationName": "none",
+    "fonts": [
+     12,
+     11,
+     10
+    ]
+   },
+   "whereChecking": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "decided": {
+    "text": "VAR: goal ruled out |  | Liverpool, 45' |  | Simplified review in this game simulation",
+    "decision": "disallowed",
+    "score": {
+     "me": 0,
+     "opp": 0
+    }
+   },
+   "whereDecided": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "whereAfter": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "stageAfter": {
+    "stage": "first",
+    "minute": "45"
+   },
+   "scoreAfter": {
+    "me": 1,
+    "opp": 0
+   },
+   "intervalScore": {},
+   "settledAsEngine": true,
+   "result": "1-0",
+   "engineResult": "1-0",
+   "timeline": [
+    {
+     "clock": "45'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Dominik Szoboszlai",
+     "shown": "📺 VAR: goal ruled out: Dominik Szoboszlai",
+     "cut": true,
+     "rowWidth": 276,
+     "textWidth": [
+      119,
+      215
+     ]
+    }
+   ],
+   "docWidthReport": 390,
+   "varLog": [
+    {
+     "s": "checking:2026:Everton:0:Liverpool:0:45:opp:45:0:Dominik Szoboszlai:goal",
+     "t": 23105,
+     "y": 0,
+     "minute": "44",
+     "text": "VAR: checking goal |  | Liverpool, 45' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "decided:2026:Everton:0:Liverpool:0:45:opp:45:0:Dominik Szoboszlai:goal",
+     "t": 24406,
+     "y": 0,
+     "minute": "44",
+     "text": "VAR: goal ruled out |  | Liverpool, 45' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "none",
+     "t": 25607,
+     "y": 0,
+     "minute": "44",
+     "text": ""
+    }
+   ],
+   "errors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+   ],
+   "outside": [
+    "fonts.googleapis.com",
+    "flawuiqbvjobmkfkauhw.supabase.co"
+   ],
+   "seconds": 29
+  },
+  {
+   "id": "1280-motion-lastminute-plain",
+   "kind": "lastminute",
+   "variant": "plain",
+   "seed": 2042,
+   "shots": [
+    "1280-motion-lastminute-plain-1-checking.jpg",
+    "1280-motion-lastminute-plain-2-decided.jpg",
+    "1280-motion-lastminute-plain-3-after.jpg",
+    "1280-motion-lastminute-plain-8-full-time.jpg",
+    "1280-motion-lastminute-plain-9-report-timeline.jpg"
+   ],
+   "notes": [],
+   "engine": {
+    "lit": true,
+    "incident": {
+     "minute": 45,
+     "who": "Dominik Szoboszlai",
+     "decision": "disallowed"
+    },
+    "half": [
+     1,
+     0
+    ],
+    "reviewsInHalf": 1
+   },
+   "prior": {
+    "me": 1,
+    "opp": 0
+   },
+   "savedLit": true,
+   "whereBefore": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "card": {
+    "state": "checking",
+    "text": "VAR: checking goal |  | Liverpool, 45' |  | Simplified review in this game simulation",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "animations": 0,
+    "transition": "0s",
+    "animationName": "none",
+    "fonts": [
+     12,
+     11,
+     10
+    ]
+   },
+   "whereChecking": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "decided": {
+    "text": "VAR: goal ruled out |  | Liverpool, 45' |  | Simplified review in this game simulation",
+    "decision": "disallowed",
+    "score": {
+     "me": 0,
+     "opp": 0
+    }
+   },
+   "whereDecided": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "whereAfter": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "stageAfter": {
+    "stage": "first",
+    "minute": "45"
+   },
+   "scoreAfter": {
+    "me": 1,
+    "opp": 0
+   },
+   "intervalScore": {},
+   "settledAsEngine": true,
+   "result": "1-0",
+   "engineResult": "1-0",
+   "timeline": [
+    {
+     "clock": "45'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Dominik Szoboszlai",
+     "shown": "📺 VAR: goal ruled out: Dominik Szoboszlai",
+     "cut": true,
+     "rowWidth": 361,
+     "textWidth": [
+      164,
+      215
+     ]
+    }
+   ],
+   "docWidthReport": 1280,
+   "varLog": [
+    {
+     "s": "checking:2026:Everton:0:Liverpool:0:45:opp:45:0:Dominik Szoboszlai:goal",
+     "t": 23023,
+     "y": 0,
+     "minute": "44",
+     "text": "VAR: checking goal |  | Liverpool, 45' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "decided:2026:Everton:0:Liverpool:0:45:opp:45:0:Dominik Szoboszlai:goal",
+     "t": 24324,
+     "y": 0,
+     "minute": "44",
+     "text": "VAR: goal ruled out |  | Liverpool, 45' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "none",
+     "t": 25525,
+     "y": 0,
+     "minute": "44",
+     "text": ""
+    }
+   ],
+   "errors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+   ],
+   "outside": [
+    "fonts.googleapis.com",
+    "flawuiqbvjobmkfkauhw.supabase.co"
+   ],
+   "seconds": 29
+  },
+  {
+   "id": "390-motion-two-plain",
+   "kind": "two",
+   "variant": "plain",
+   "seed": 2453,
+   "shots": [
+    "390-motion-two-plain-1-checking.jpg",
+    "390-motion-two-plain-2-decided.jpg",
+    "390-motion-two-plain-3-after.jpg",
+    "390-motion-two-plain-5-second-review.jpg",
+    "390-motion-two-plain-8-full-time.jpg",
+    "390-motion-two-plain-9-report-timeline.jpg"
+   ],
+   "notes": [],
+   "engine": {
+    "lit": true,
+    "incident": {
+     "minute": 12,
+     "who": "Hugo Ekitiké",
+     "decision": "disallowed"
+    },
+    "half": [
+     0,
+     2
+    ],
+    "reviewsInHalf": 2
+   },
+   "prior": {
+    "me": 0,
+    "opp": 0
+   },
+   "savedLit": true,
+   "whereBefore": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "card": {
+    "state": "checking",
+    "text": "VAR: checking goal |  | Liverpool, 12' |  | Simplified review in this game simulation",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "animations": 0,
+    "transition": "0s",
+    "animationName": "none",
+    "fonts": [
+     12,
+     11,
+     10
+    ]
+   },
+   "whereChecking": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "decided": {
+    "text": "VAR: goal ruled out |  | Liverpool, 12' |  | Simplified review in this game simulation",
+    "decision": "disallowed",
+    "score": {
+     "me": 0,
+     "opp": 0
+    }
+   },
+   "whereDecided": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "whereAfter": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "stageAfter": {
+    "stage": "first",
+    "minute": "13"
+   },
+   "scoreAfter": {
+    "me": 0,
+    "opp": 0
+   },
+   "secondSeen": true,
+   "scoreAfterSecond": {
+    "me": 0,
+    "opp": 1
+   },
+   "intervalScore": {},
+   "settledAsEngine": true,
+   "result": "0-2",
+   "engineResult": "0-2",
+   "timeline": [
+    {
+     "clock": "12'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Hugo Ekitiké",
+     "shown": "📺 VAR: goal ruled out: Hugo Ekitiké",
+     "cut": true,
+     "rowWidth": 276,
+     "textWidth": [
+      119,
+      180
+     ]
+    },
+    {
+     "clock": "30'",
+     "side": "opp",
+     "title": "📺 VAR: penalty awarded: Alexander Isak",
+     "shown": "📺 VAR: penalty awarded: Alexander Isak",
+     "cut": true,
+     "rowWidth": 276,
+     "textWidth": [
+      119,
+      206
+     ]
+    }
+   ],
+   "docWidthReport": 390,
+   "varLog": [
+    {
+     "s": "checking:2026:Everton:0:Liverpool:0:45:opp:12:0:Hugo Ekitiké:goal",
+     "t": 6600,
+     "y": 0,
+     "minute": "11",
+     "text": "VAR: checking goal |  | Liverpool, 12' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "decided:2026:Everton:0:Liverpool:0:45:opp:12:0:Hugo Ekitiké:goal",
+     "t": 7900,
+     "y": 0,
+     "minute": "11",
+     "text": "VAR: goal ruled out |  | Liverpool, 12' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "none",
+     "t": 9101,
+     "y": 0,
+     "minute": "11",
+     "text": ""
+    },
+    {
+     "s": "checking:2026:Everton:0:Liverpool:0:45:me:30:0:Hayden Hackney:missed-penalty",
+     "t": 19132,
+     "y": 0,
+     "minute": "29",
+     "text": "VAR: checking penalty decision |  | Liverpool, 30' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "decided:2026:Everton:0:Liverpool:0:45:me:30:0:Hayden Hackney:missed-penalty",
+     "t": 20433,
+     "y": 0,
+     "minute": "29",
+     "text": "VAR: penalty awarded |  | Liverpool, 30' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "none",
+     "t": 21636,
+     "y": 0,
+     "minute": "29",
+     "text": ""
+    }
+   ],
+   "errors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+   ],
+   "outside": [
+    "fonts.googleapis.com",
+    "flawuiqbvjobmkfkauhw.supabase.co"
+   ],
+   "seconds": 23
+  },
+  {
+   "id": "390-motion-disallowed-leave",
+   "kind": "disallowed",
+   "variant": "leave",
+   "seed": 1880,
+   "shots": [
+    "390-motion-disallowed-leave-1-checking.jpg",
+    "390-motion-disallowed-leave-2-back-at-the-club.jpg",
+    "390-motion-disallowed-leave-3-returned.jpg",
+    "390-motion-disallowed-leave-8-full-time.jpg",
+    "390-motion-disallowed-leave-9-report-timeline.jpg"
+   ],
+   "notes": [],
+   "engine": {
+    "lit": true,
+    "incident": {
+     "minute": 9,
+     "who": "Kiernan Dewsbury-Hall",
+     "decision": "disallowed"
+    },
+    "half": [
+     1,
+     0
+    ],
+    "reviewsInHalf": 1
+   },
+   "prior": {
+    "me": 0,
+    "opp": 0
+   },
+   "savedLit": true,
+   "whereBefore": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "card": {
+    "state": "checking",
+    "text": "VAR: checking goal |  | Everton, 9' |  | Simplified review in this game simulation",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "animations": 0,
+    "transition": "0s",
+    "animationName": "none",
+    "fonts": [
+     12,
+     11,
+     10
+    ]
+   },
+   "whereChecking": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "savedMinuteDuring": 0,
+   "returned": {
+    "minute": "8",
+    "score": {
+     "me": 0,
+     "opp": 0
+    }
+   },
+   "reviewShownAgain": true,
+   "scoreAfterReturn": {
+    "me": 0,
+    "opp": 0
+   },
+   "intervalScore": {},
+   "result": "1-0",
+   "engineResult": "1-0",
+   "timeline": [
+    {
+     "clock": "9'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "shown": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "cut": true,
+     "rowWidth": 276,
+     "textWidth": [
+      119,
+      232
+     ]
+    }
+   ],
+   "docWidthReport": 390,
+   "varLog": [
+    {
+     "s": "checking:2026:Everton:0:Liverpool:0:45:me:9:0:Kiernan Dewsbury-Hall:goal",
+     "t": 1334,
+     "y": 0,
+     "minute": "8",
+     "text": "VAR: checking goal |  | Everton, 9' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "decided:2026:Everton:0:Liverpool:0:45:me:9:0:Kiernan Dewsbury-Hall:goal",
+     "t": 2635,
+     "y": 0,
+     "minute": "8",
+     "text": "VAR: goal ruled out |  | Everton, 9' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "none",
+     "t": 3836,
+     "y": 0,
+     "minute": "8",
+     "text": ""
+    }
+   ],
+   "errors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+   ],
+   "outside": [
+    "fonts.googleapis.com",
+    "flawuiqbvjobmkfkauhw.supabase.co"
+   ],
+   "seconds": 10
+  },
+  {
+   "id": "390-motion-awarded_scored-leave",
+   "kind": "awarded_scored",
+   "variant": "leave",
+   "seed": 1713,
+   "shots": [
+    "390-motion-awarded_scored-leave-1-checking.jpg",
+    "390-motion-awarded_scored-leave-2-back-at-the-club.jpg",
+    "390-motion-awarded_scored-leave-3-returned.jpg",
+    "390-motion-awarded_scored-leave-8-full-time.jpg",
+    "390-motion-awarded_scored-leave-9-report-timeline.jpg"
+   ],
+   "notes": [],
+   "engine": {
+    "lit": true,
+    "incident": {
+     "minute": 30,
+     "who": "Alexander Isak",
+     "decision": "awarded"
+    },
+    "half": [
+     1,
+     2
+    ],
+    "reviewsInHalf": 1
+   },
+   "prior": {
+    "me": 1,
+    "opp": 0
+   },
+   "savedLit": true,
+   "whereBefore": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "card": {
+    "state": "checking",
+    "text": "VAR: checking penalty decision |  | Liverpool, 30' |  | Simplified review in this game simulation",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "animations": 0,
+    "transition": "0s",
+    "animationName": "none",
+    "fonts": [
+     12,
+     11,
+     10
+    ]
+   },
+   "whereChecking": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 0
+   },
+   "savedMinuteDuring": 0,
+   "returned": {
+    "minute": "29",
+    "score": {
+     "me": 1,
+     "opp": 0
+    }
+   },
+   "reviewShownAgain": true,
+   "scoreAfterReturn": {
+    "me": 1,
+    "opp": 0
+   },
+   "intervalScore": {},
+   "result": "1-2",
+   "engineResult": "1-2",
+   "timeline": [
+    {
+     "clock": "30'",
+     "side": "opp",
+     "title": "📺 VAR: penalty awarded: Alexander Isak",
+     "shown": "📺 VAR: penalty awarded: Alexander Isak",
+     "cut": true,
+     "rowWidth": 276,
+     "textWidth": [
+      119,
+      206
+     ]
+    }
+   ],
+   "docWidthReport": 390,
+   "varLog": [
+    {
+     "s": "checking:2026:Everton:0:Liverpool:0:45:me:30:0:Hayden Hackney:missed-penalty",
+     "t": 1316,
+     "y": 0,
+     "minute": "29",
+     "text": "VAR: checking penalty decision |  | Liverpool, 30' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "decided:2026:Everton:0:Liverpool:0:45:me:30:0:Hayden Hackney:missed-penalty",
+     "t": 2617,
+     "y": 0,
+     "minute": "29",
+     "text": "VAR: penalty awarded |  | Liverpool, 30' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "none",
+     "t": 3820,
+     "y": 0,
+     "minute": "29",
+     "text": ""
+    }
+   ],
+   "errors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+   ],
+   "outside": [
+    "fonts.googleapis.com",
+    "flawuiqbvjobmkfkauhw.supabase.co"
+   ],
+   "seconds": 22
+  },
+  {
+   "id": "1280-motion-disallowed-leave",
+   "kind": "disallowed",
+   "variant": "leave",
+   "seed": 1880,
+   "shots": [
+    "1280-motion-disallowed-leave-1-checking.jpg",
+    "1280-motion-disallowed-leave-2-back-at-the-club.jpg",
+    "1280-motion-disallowed-leave-3-returned.jpg",
+    "1280-motion-disallowed-leave-8-full-time.jpg",
+    "1280-motion-disallowed-leave-9-report-timeline.jpg"
+   ],
+   "notes": [],
+   "engine": {
+    "lit": true,
+    "incident": {
+     "minute": 9,
+     "who": "Kiernan Dewsbury-Hall",
+     "decision": "disallowed"
+    },
+    "half": [
+     1,
+     0
+    ],
+    "reviewsInHalf": 1
+   },
+   "prior": {
+    "me": 0,
+    "opp": 0
+   },
+   "savedLit": true,
+   "whereBefore": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "card": {
+    "state": "checking",
+    "text": "VAR: checking goal |  | Everton, 9' |  | Simplified review in this game simulation",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "animations": 0,
+    "transition": "0s",
+    "animationName": "none",
+    "fonts": [
+     12,
+     11,
+     10
+    ]
+   },
+   "whereChecking": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "savedMinuteDuring": 0,
+   "returned": {
+    "minute": "8",
+    "score": {
+     "me": 0,
+     "opp": 0
+    }
+   },
+   "reviewShownAgain": true,
+   "scoreAfterReturn": {
+    "me": 0,
+    "opp": 0
+   },
+   "intervalScore": {},
+   "result": "1-0",
+   "engineResult": "1-0",
+   "timeline": [
+    {
+     "clock": "9'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "shown": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "cut": true,
+     "rowWidth": 361,
+     "textWidth": [
+      164,
+      232
+     ]
+    }
+   ],
+   "docWidthReport": 1280,
+   "varLog": [
+    {
+     "s": "checking:2026:Everton:0:Liverpool:0:45:me:9:0:Kiernan Dewsbury-Hall:goal",
+     "t": 1242,
+     "y": 0,
+     "minute": "8",
+     "text": "VAR: checking goal |  | Everton, 9' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "decided:2026:Everton:0:Liverpool:0:45:me:9:0:Kiernan Dewsbury-Hall:goal",
+     "t": 2543,
+     "y": 0,
+     "minute": "8",
+     "text": "VAR: goal ruled out |  | Everton, 9' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "none",
+     "t": 3744,
+     "y": 0,
+     "minute": "8",
+     "text": ""
+    }
+   ],
+   "errors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+   ],
+   "outside": [
+    "fonts.googleapis.com",
+    "flawuiqbvjobmkfkauhw.supabase.co"
+   ],
+   "seconds": 10
+  },
+  {
+   "id": "1280-motion-awarded_scored-leave",
+   "kind": "awarded_scored",
+   "variant": "leave",
+   "seed": 1713,
+   "shots": [
+    "1280-motion-awarded_scored-leave-1-checking.jpg",
+    "1280-motion-awarded_scored-leave-2-back-at-the-club.jpg",
+    "1280-motion-awarded_scored-leave-3-returned.jpg",
+    "1280-motion-awarded_scored-leave-8-full-time.jpg",
+    "1280-motion-awarded_scored-leave-9-report-timeline.jpg"
+   ],
+   "notes": [],
+   "engine": {
+    "lit": true,
+    "incident": {
+     "minute": 30,
+     "who": "Alexander Isak",
+     "decision": "awarded"
+    },
+    "half": [
+     1,
+     2
+    ],
+    "reviewsInHalf": 1
+   },
+   "prior": {
+    "me": 1,
+    "opp": 0
+   },
+   "savedLit": true,
+   "whereBefore": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "card": {
+    "state": "checking",
+    "text": "VAR: checking penalty decision |  | Liverpool, 30' |  | Simplified review in this game simulation",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "animations": 0,
+    "transition": "0s",
+    "animationName": "none",
+    "fonts": [
+     12,
+     11,
+     10
+    ]
+   },
+   "whereChecking": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 0
+   },
+   "savedMinuteDuring": 0,
+   "returned": {
+    "minute": "29",
+    "score": {
+     "me": 1,
+     "opp": 0
+    }
+   },
+   "reviewShownAgain": true,
+   "scoreAfterReturn": {
+    "me": 1,
+    "opp": 0
+   },
+   "intervalScore": {},
+   "result": "1-2",
+   "engineResult": "1-2",
+   "timeline": [
+    {
+     "clock": "30'",
+     "side": "opp",
+     "title": "📺 VAR: penalty awarded: Alexander Isak",
+     "shown": "📺 VAR: penalty awarded: Alexander Isak",
+     "cut": true,
+     "rowWidth": 361,
+     "textWidth": [
+      164,
+      206
+     ]
+    }
+   ],
+   "docWidthReport": 1280,
+   "varLog": [
+    {
+     "s": "checking:2026:Everton:0:Liverpool:0:45:me:30:0:Hayden Hackney:missed-penalty",
+     "t": 1247,
+     "y": 0,
+     "minute": "29",
+     "text": "VAR: checking penalty decision |  | Liverpool, 30' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "decided:2026:Everton:0:Liverpool:0:45:me:30:0:Hayden Hackney:missed-penalty",
+     "t": 2547,
+     "y": 0,
+     "minute": "29",
+     "text": "VAR: penalty awarded |  | Liverpool, 30' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "none",
+     "t": 3750,
+     "y": 0,
+     "minute": "29",
+     "text": ""
+    }
+   ],
+   "errors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+   ],
+   "outside": [
+    "fonts.googleapis.com",
+    "flawuiqbvjobmkfkauhw.supabase.co"
+   ],
+   "seconds": 22
+  },
+  {
+   "id": "390-motion-disallowed-skip",
+   "kind": "disallowed",
+   "variant": "skip",
+   "seed": 1880,
+   "shots": [
+    "390-motion-disallowed-skip-1-checking.jpg",
+    "390-motion-disallowed-skip-2-after-skip.jpg",
+    "390-motion-disallowed-skip-8-full-time.jpg",
+    "390-motion-disallowed-skip-9-report-timeline.jpg"
+   ],
+   "notes": [],
+   "engine": {
+    "lit": true,
+    "incident": {
+     "minute": 9,
+     "who": "Kiernan Dewsbury-Hall",
+     "decision": "disallowed"
+    },
+    "half": [
+     1,
+     0
+    ],
+    "reviewsInHalf": 1
+   },
+   "prior": {
+    "me": 0,
+    "opp": 0
+   },
+   "savedLit": true,
+   "whereBefore": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "card": {
+    "state": "checking",
+    "text": "VAR: checking goal |  | Everton, 9' |  | Simplified review in this game simulation",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "animations": 0,
+    "transition": "0s",
+    "animationName": "none",
+    "fonts": [
+     12,
+     11,
+     10
+    ]
+   },
+   "whereChecking": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "reachedInterval": true,
+   "cardRightAfterSkip": 0,
+   "cardLater": 0,
+   "intervalScore": {},
+   "settledAsEngine": true,
+   "result": "1-0",
+   "engineResult": "1-0",
+   "timeline": [
+    {
+     "clock": "9'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "shown": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "cut": true,
+     "rowWidth": 276,
+     "textWidth": [
+      119,
+      232
+     ]
+    }
+   ],
+   "docWidthReport": 390,
+   "varLog": [
+    {
+     "s": "checking:2026:Everton:0:Liverpool:0:45:me:9:0:Kiernan Dewsbury-Hall:goal",
+     "t": 5115,
+     "y": 0,
+     "minute": "8",
+     "text": "VAR: checking goal |  | Everton, 9' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "none",
+     "t": 5202,
+     "y": 0,
+     "minute": "45",
+     "text": ""
+    }
+   ],
+   "errors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+   ],
+   "outside": [
+    "fonts.googleapis.com",
+    "flawuiqbvjobmkfkauhw.supabase.co"
+   ],
+   "seconds": 7
+  },
+  {
+   "id": "390-motion-awarded_scored-skip",
+   "kind": "awarded_scored",
+   "variant": "skip",
+   "seed": 1713,
+   "shots": [
+    "390-motion-awarded_scored-skip-1-checking.jpg",
+    "390-motion-awarded_scored-skip-2-after-skip.jpg",
+    "390-motion-awarded_scored-skip-8-full-time.jpg",
+    "390-motion-awarded_scored-skip-9-report-timeline.jpg"
+   ],
+   "notes": [],
+   "engine": {
+    "lit": true,
+    "incident": {
+     "minute": 30,
+     "who": "Alexander Isak",
+     "decision": "awarded"
+    },
+    "half": [
+     1,
+     2
+    ],
+    "reviewsInHalf": 1
+   },
+   "prior": {
+    "me": 1,
+    "opp": 0
+   },
+   "savedLit": true,
+   "whereBefore": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "card": {
+    "state": "checking",
+    "text": "VAR: checking penalty decision |  | Liverpool, 30' |  | Simplified review in this game simulation",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "animations": 0,
+    "transition": "0s",
+    "animationName": "none",
+    "fonts": [
+     12,
+     11,
+     10
+    ]
+   },
+   "whereChecking": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 0
+   },
+   "reachedInterval": true,
+   "cardRightAfterSkip": 0,
+   "cardLater": 0,
+   "intervalScore": {},
+   "settledAsEngine": true,
+   "result": "1-2",
+   "engineResult": "1-2",
+   "timeline": [
+    {
+     "clock": "30'",
+     "side": "opp",
+     "title": "📺 VAR: penalty awarded: Alexander Isak",
+     "shown": "📺 VAR: penalty awarded: Alexander Isak",
+     "cut": true,
+     "rowWidth": 276,
+     "textWidth": [
+      119,
+      206
+     ]
+    }
+   ],
+   "docWidthReport": 390,
+   "varLog": [
+    {
+     "s": "checking:2026:Everton:0:Liverpool:0:45:me:30:0:Hayden Hackney:missed-penalty",
+     "t": 16613,
+     "y": 0,
+     "minute": "29",
+     "text": "VAR: checking penalty decision |  | Liverpool, 30' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "none",
+     "t": 16702,
+     "y": 0,
+     "minute": "45",
+     "text": ""
+    }
+   ],
+   "errors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+   ],
+   "outside": [
+    "fonts.googleapis.com",
+    "flawuiqbvjobmkfkauhw.supabase.co"
+   ],
+   "seconds": 19
+  },
+  {
+   "id": "1280-motion-disallowed-skip",
+   "kind": "disallowed",
+   "variant": "skip",
+   "seed": 1880,
+   "shots": [
+    "1280-motion-disallowed-skip-1-checking.jpg",
+    "1280-motion-disallowed-skip-2-after-skip.jpg",
+    "1280-motion-disallowed-skip-8-full-time.jpg",
+    "1280-motion-disallowed-skip-9-report-timeline.jpg"
+   ],
+   "notes": [],
+   "engine": {
+    "lit": true,
+    "incident": {
+     "minute": 9,
+     "who": "Kiernan Dewsbury-Hall",
+     "decision": "disallowed"
+    },
+    "half": [
+     1,
+     0
+    ],
+    "reviewsInHalf": 1
+   },
+   "prior": {
+    "me": 0,
+    "opp": 0
+   },
+   "savedLit": true,
+   "whereBefore": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "card": {
+    "state": "checking",
+    "text": "VAR: checking goal |  | Everton, 9' |  | Simplified review in this game simulation",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "animations": 0,
+    "transition": "0s",
+    "animationName": "none",
+    "fonts": [
+     12,
+     11,
+     10
+    ]
+   },
+   "whereChecking": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "reachedInterval": true,
+   "cardRightAfterSkip": 0,
+   "cardLater": 0,
+   "intervalScore": {},
+   "settledAsEngine": true,
+   "result": "1-0",
+   "engineResult": "1-0",
+   "timeline": [
+    {
+     "clock": "9'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "shown": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "cut": true,
+     "rowWidth": 361,
+     "textWidth": [
+      164,
+      232
+     ]
+    }
+   ],
+   "docWidthReport": 1280,
+   "varLog": [
+    {
+     "s": "checking:2026:Everton:0:Liverpool:0:45:me:9:0:Kiernan Dewsbury-Hall:goal",
+     "t": 5008,
+     "y": 0,
+     "minute": "8",
+     "text": "VAR: checking goal |  | Everton, 9' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "none",
+     "t": 5064,
+     "y": 0,
+     "minute": "45",
+     "text": ""
+    }
+   ],
+   "errors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+   ],
+   "outside": [
+    "fonts.googleapis.com",
+    "flawuiqbvjobmkfkauhw.supabase.co"
+   ],
+   "seconds": 7
+  },
+  {
+   "id": "1280-motion-awarded_scored-skip",
+   "kind": "awarded_scored",
+   "variant": "skip",
+   "seed": 1713,
+   "shots": [
+    "1280-motion-awarded_scored-skip-1-checking.jpg",
+    "1280-motion-awarded_scored-skip-2-after-skip.jpg",
+    "1280-motion-awarded_scored-skip-8-full-time.jpg",
+    "1280-motion-awarded_scored-skip-9-report-timeline.jpg"
+   ],
+   "notes": [],
+   "engine": {
+    "lit": true,
+    "incident": {
+     "minute": 30,
+     "who": "Alexander Isak",
+     "decision": "awarded"
+    },
+    "half": [
+     1,
+     2
+    ],
+    "reviewsInHalf": 1
+   },
+   "prior": {
+    "me": 1,
+    "opp": 0
+   },
+   "savedLit": true,
+   "whereBefore": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "card": {
+    "state": "checking",
+    "text": "VAR: checking penalty decision |  | Liverpool, 30' |  | Simplified review in this game simulation",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "animations": 0,
+    "transition": "0s",
+    "animationName": "none",
+    "fonts": [
+     12,
+     11,
+     10
+    ]
+   },
+   "whereChecking": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 0
+   },
+   "reachedInterval": true,
+   "cardRightAfterSkip": 0,
+   "cardLater": 0,
+   "intervalScore": {},
+   "settledAsEngine": true,
+   "result": "1-2",
+   "engineResult": "1-2",
+   "timeline": [
+    {
+     "clock": "30'",
+     "side": "opp",
+     "title": "📺 VAR: penalty awarded: Alexander Isak",
+     "shown": "📺 VAR: penalty awarded: Alexander Isak",
+     "cut": true,
+     "rowWidth": 361,
+     "textWidth": [
+      164,
+      206
+     ]
+    }
+   ],
+   "docWidthReport": 1280,
+   "varLog": [
+    {
+     "s": "checking:2026:Everton:0:Liverpool:0:45:me:30:0:Hayden Hackney:missed-penalty",
+     "t": 16539,
+     "y": 0,
+     "minute": "29",
+     "text": "VAR: checking penalty decision |  | Liverpool, 30' |  | Simplified review in this game simulation"
+    },
+    {
+     "s": "none",
+     "t": 16818,
+     "y": 0,
+     "minute": "45",
+     "text": ""
+    }
+   ],
+   "errors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+   ],
+   "outside": [
+    "fonts.googleapis.com",
+    "flawuiqbvjobmkfkauhw.supabase.co"
+   ],
+   "seconds": 18
+  }
+ ],
+ "help": [
+  {
+   "id": "390-hub-help",
+   "shots": [
+    "390-hub-help-0-hub.jpg",
+    "390-hub-help-1-var-paragraph.jpg"
+   ],
+   "text": "📺 VAR, where real football uses it. From 2026 on, a match can go to a video review, but only in a competition that two sources confirm uses VAR in 2026/27. Right now that is: Premier League, La Liga, Serie A, Bundesliga, Champions League. Every other league and every domestic cup plays without it until it has been confirmed the same way. In real football a review can look at goals, penalty calls, straight red cards and a card shown to the wrong player, and the referee's call stands unless it was a clear and obvious error. This game reviews goals and penalties only. A goal that is ruled out counts for nothing: no score, no scorer, no shot on the stats. A foul the referee missed can become a penalty, and the kick is a real one that can go in, be saved or miss. You only see a review that changed the call, and it is rare. The numbers come from published counts of real seasons, and we took the lowest: a goal ruled out about once in 13 matches, a penalty given about once in 15. It works both ways, for you and against you, and it does change results. Example: it is 0-0, a goal is ruled out, then a penalty a review gave is missed. It stays 0-0. Each decision is made once and saved with the match, so the live match and the full time report always agree. Open the match's ? button to read this again.",
+   "box": {
+    "w": 340,
+    "h": 580,
+    "x": 25,
+    "right": 365,
+    "vw": 390,
+    "vh": 844,
+    "docWidth": 390
+   },
+   "errors": [
+    "Failed to load resource: net::ERR_FAILED"
+   ]
+  },
+  {
+   "id": "1280-hub-help",
+   "shots": [
+    "1280-hub-help-0-hub.jpg",
+    "1280-hub-help-1-var-paragraph.jpg"
+   ],
+   "text": "📺 VAR, where real football uses it. From 2026 on, a match can go to a video review, but only in a competition that two sources confirm uses VAR in 2026/27. Right now that is: Premier League, La Liga, Serie A, Bundesliga, Champions League. Every other league and every domestic cup plays without it until it has been confirmed the same way. In real football a review can look at goals, penalty calls, straight red cards and a card shown to the wrong player, and the referee's call stands unless it was a clear and obvious error. This game reviews goals and penalties only. A goal that is ruled out counts for nothing: no score, no scorer, no shot on the stats. A foul the referee missed can become a penalty, and the kick is a real one that can go in, be saved or miss. You only see a review that changed the call, and it is rare. The numbers come from published counts of real seasons, and we took the lowest: a goal ruled out about once in 13 matches, a penalty given about once in 15. It works both ways, for you and against you, and it does change results. Example: it is 0-0, a goal is ruled out, then a penalty a review gave is missed. It stays 0-0. Each decision is made once and saved with the match, so the live match and the full time report always agree. Open the match's ? button to read this again.",
+   "box": {
+    "w": 398,
+    "h": 500,
+    "x": 441,
+    "right": 839,
+    "vw": 1280,
+    "vh": 900,
+    "docWidth": 1280
+   },
+   "errors": [
+    "Failed to load resource: net::ERR_FAILED"
+   ]
+  }
+ ]
+}
