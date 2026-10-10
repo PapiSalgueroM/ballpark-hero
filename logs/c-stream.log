@@ -1,0 +1,55 @@
+bundled in 105 ms; sports nba; 40 careers a seed set; seed sets 0, 1, 2, 3, 4; PO_TRIES 12; CONTROL stream
+played 240 careers in 14940 ms; 4482 seasons observed
+info P nba seed set 0: the careers are NOT the lay receipt's (an engine moved since it was recorded, or this run observes fewer careers)
+info P nba seed set 1: the careers are NOT the lay receipt's (an engine moved since it was recorded, or this run observes fewer careers)
+info P nba seed set 2: the careers are NOT the lay receipt's (an engine moved since it was recorded, or this run observes fewer careers)
+info P nba seed set 3: the careers are NOT the lay receipt's (an engine moved since it was recorded, or this run observes fewer careers)
+info P nba seed set 4: the careers are NOT the lay receipt's (an engine moved since it was recorded, or this run observes fewer careers)
+ok   D every fact of every format row stands on two publishers, the rounds are the one typed copy, the accessor refuses what no row holds (3 checked)
+ok   S nba: the games laid out are the playoff line the save holds, game for game and series for series (independent checker) (1951 checked)
+ok   S nba: his side is first in every other playoff game, so no run is scored as all home games (1951 checked)
+ok   C nba: a season with no postseason on the save lays nothing out and prints no list (2088 checked)
+ok   C nba: a line with no games count gives no postseason, and the list is what it was (1951 checked)
+ok   C nba: a line with a count under the rounds gives no postseason, and the list is what it was (1951 checked)
+ok   C nba: a line with a count over the rounds gives no postseason, and the list is what it was (1951 checked)
+ok   C nba: a line with no playoff number gives no postseason, and the list is what it was (1951 checked)
+ok   C nba: a line with a season the format file does not hold gives no postseason, and the list is what it was (1951 checked)
+ok   C nba: a line with a season played to another format gives no postseason, and the list is what it was (1951 checked)
+ok   C nba: laying a postseason out never moves the list of the saved line (1951 checked)
+ok   F nba: not one playoff season the Season Center opens fails closed (1951 checked)
+     seed set | playoff seasons laid | playoff games | repaired games (share) | one point: playoffs | regular, every season of the same careers | regular, the playoff seasons | their first G games
+            0 |                  408 |          4609 |             13 (0.28%) |         295 (6.40%) |                     3687 of 65928 (5.59%) |                        5.89% |               5.51%
+            1 |                  377 |          4139 |             17 (0.41%) |         230 (5.56%) |                     3831 of 66830 (5.73%) |                        6.16% |               6.33%
+            2 |                  417 |          4690 |             15 (0.32%) |         274 (5.84%) |                     3691 of 65436 (5.64%) |                        5.94% |               5.25%
+            3 |                  382 |          4181 |              8 (0.19%) |         209 (5.00%) |                     3824 of 66338 (5.76%) |                        6.08% |               5.57%
+            4 |                  367 |          4092 |             14 (0.34%) |         248 (6.06%) |                     3851 of 66666 (5.78%) |                        6.22% |               5.91%
+          all |                 1951 |         21711 |             67 (0.31%) |        1256 (5.79%) |                   18884 of 331198 (5.70%) |                        6.05% |               5.70%
+     the try taken (0 is the first): 0:577 1:424 2:291 3:171 4:143 5:91 6:74 7:48 8:44 9:35 10:32 11:21
+     repairs a laid out run needed: 0:1884 1:67 2:0 3+:0; the regular season's repairs a season, for scale: 0.34
+     by depth | seasons | failed closed | games | repaired (share) | one point (share)
+     Lost in the first round      |   973 |    0 |   5447 |      7 (0.13%) |    296 (5.43%)
+     Lost in the conference semis |   450 |    0 |   5042 |     16 (0.32%) |    318 (6.31%)
+     Lost the Conference Finals   |   241 |    0 |   4066 |     16 (0.39%) |    233 (5.73%)
+     Lost the NBA Finals          |   122 |    0 |   2729 |      7 (0.26%) |    149 (5.46%)
+     WON THE NBA FINALS           |   165 |    0 |   4427 |     21 (0.47%) |    260 (5.87%)
+     margins: playoff games 17.36% decided by 20 or more, won by 11.8 and lost by 11.6 on average; the regular season of the same careers 19.15% decided by 20 or more, won by 11.7 and lost by 12.4 on average
+     series lost in four straight: 120; those games were lost by 11.2 on average, 17.50% of them by 20 or more
+     his lowest game as a share of his average game: playoffs p10 0.31, median 0.61, p90 0.80 over 1951 runs of four games or more; the first G games he played of the same regular seasons p10 0.50, median 0.63, p90 0.77 over 1951
+ok   F nba: the core had to repair 67 of 21711 playoff games (0.31%), at most 1.0%
+ACCEPTANCE one point playoff games 5.79% against the regular season's spread over the seed sets 5.59% to 5.78%: OUTSIDE, above it. A FINDING for the lead (the repaired share above is how much of it a repair made)
+ok   K nba: "Lost in the first round": 203, 190, 209, 192, 179 runs laid out by seed set (at least 90 in each)
+ok   K nba: "Lost in the conference semis": 80, 94, 91, 91, 94 runs laid out by seed set (at least 35 in each)
+ok   K nba: "Lost the Conference Finals": 66, 39, 56, 44, 36 runs laid out by seed set (at least 20 in each)
+ok   K nba: "Lost the NBA Finals": 23, 15, 28, 29, 27 runs laid out by seed set (at least 9 in each)
+ok   K nba: "WON THE NBA FINALS": 36, 39, 33, 26, 31 runs laid out by seed set (at least 13 in each)
+ok   K nba: runs under ten games: 209, 199, 216, 200, 186 runs laid out by seed set (at least 95 in each)
+ok   K nba: runs of ten games or more: 199, 178, 201, 182, 181 runs laid out by seed set (at least 80 in each)
+ok   K nba: the present day era: 173, 174, 190, 166, 180 runs laid out by seed set (at least 75 in each)
+ok   K nba: the throwback era: 235, 203, 227, 216, 187 runs laid out by seed set (at least 100 in each)
+ok   K nba: named opponents: 173, 174, 190, 166, 180 runs laid out by seed set (at least 75 in each)
+ok   K nba: unnamed opponents: 235, 203, 227, 216, 187 runs laid out by seed set (at least 100 in each)
+ok   X nba: a postseason derived twice, and from a JSON round trip of the career and the row, is the same (1951 checked)
+FAIL X no call reaches Math.random while a season is observed (19647 calls)
+
+control stream: RED AT THE NAMED CHECK (section X); sections red: X
+simUsPostseason: 26 checks, 1 failed, 1 findings for the lead (control stream)

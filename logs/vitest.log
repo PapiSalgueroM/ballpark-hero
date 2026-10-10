@@ -1,0 +1,29 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/usSeason.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 871[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1103: an NBA career plays the season the ledger holds[2m > [22mplays the ledger length in every year the ledger holds one, and 82 in a year it holds none for [33m 579[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonNfl.test.ts [2m([22m[2m35 tests[22m[2m)[22m[33m 2313[2mms[22m[39m
+   [33m[2m✓[22m[39m nflDrives[2m > [22mmakes every score from 0 to 70, with 0 to 5 touchdowns of his and every exact field goal count [33m 520[2mms[22m[39m
+   [33m[2m✓[22m[39m an NFL season, derived from its saved line[2m > [22mlands every total of every position, game by game, with drives that make each score [33m 392[2mms[22m[39m
+   [33m[2m✓[22m[39m the feed, minute by minute[2m > [22mnever puts two lines in back to back minutes, or two scoring drives of one side under three minutes apart, where the hour has room [33m 352[2mms[22m[39m
+ [32m✓[39m src/test/usPlayoffs.test.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 2444[2mms[22m[39m
+   [33m[2m✓[22m[39m usSeriesOrder[2m > [22mputs the clincher last and lets nobody clinch early, for every length and 200 seeds [33m 1223[2mms[22m[39m
+   [33m[2m✓[22m[39m usPostseason, the NBA[2m > [22mlays every run out game by game, on the saved playoff line to the unit [33m 979[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonCentre.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 901[2mms[22m[39m
+   [33m[2m✓[22m[39m the US Season Center, mounted by itself[2m > [22mwalks an NBA season from the tip off card to the review and closes [33m 436[2mms[22m[39m
+ [32m✓[39m src/test/usPostseasonFormat.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonCentreEntry.test.tsx [2m([22m[2m40 tests[22m[2m)[22m[33m 6672[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 3341[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 452[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 1306[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 393[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m141 passed[39m[22m[90m (141)[39m
+[2m   Start at [22m 19:02:58
+[2m   Duration [22m 12.25s[2m (transform 5.33s, setup 826ms, collect 9.12s, tests 13.21s, environment 3.08s, prepare 957ms)[22m
+
