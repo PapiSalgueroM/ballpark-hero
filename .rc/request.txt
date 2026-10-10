@@ -1,0 +1,19 @@
+#!serial
+# Round 1218 verify2: the fixer's switch head 786c2cac, reached on the runner by taking its three files over the dark head 116faaaf (runner only, never committed).
+lit-on: S=786c2cac3b520ce77dfb693aa484a88028869b1d; git cat-file -e $S 2>/dev/null || git fetch -q origin r1218-cm-var-switch; git checkout -q $S -- src/lib/clubManagerVarLive.ts src/pages/WhatsNew.tsx src/test/clubManagerVarLive.test.tsx; git diff --quiet $S -- src scripts docs; s=$?; grep -n "export const CM_VAR_LIVE" src/lib/clubManagerVarLive.ts; echo "src scripts docs equal to the switch head: exit $s"; exit $s
+raw-ledger: node scripts/simCmVarLedger.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+varlive: node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+varlive-off: CM_VAR_LIVE_CONTROL=off node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+standin: node .rc/x/standin.mjs
+ledger: node scripts/simCmVarLedger.mjs
+gencheck: node scripts/genCmVarRates.mjs --check
+l-owedlive: CM_VAR_LEDGER_CONTROL=owedlive node scripts/simCmVarLedger.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+restored: git checkout -q HEAD -- src scripts; echo "tracked changes left: $(git status --short | grep -v '^??' | wc -l)"
