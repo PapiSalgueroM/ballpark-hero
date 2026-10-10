@@ -1,0 +1,68 @@
+NEGATIVE CONTROL ON: flatowner; check 7 must go red
+1) the four adapters over real leagues: every club once, the engine's own numbers, and a read changes nothing
+   84 real leagues read (nhl, nba, mlb, nfl; mid season, closed and after a summer)
+2) the record of a save older than the block: nothing filled in, and real saves pass every read with no write
+   3264 grid records, 240 real saves read with and without a desk
+3) the feed is keyed: the same save reads the same feed every time, and a year or a season on reads a new one
+   48 feeds read 201 times each, 34 of them with offers; feed digest 4639809b50a97cedd2ac870d05cfdb6d59a4b6e4
+4) the market rules on real tiers: never the club that let him go, a ceiling after a badly season, the ask is next season's
+   16800 markets: 7913 with offers (12057 offers, 2260 after a badly season, at most 4 a feed), 3310 quiet, 811 quiet on a climb, 4766 closed
+5) closed means closed: no tier his old club can reach and no year out reopens it, and a quiet market is never in that set
+   4766 closed careers held shut over 190640 tier and year checks; 4121 quiet careers each still open as they say
+6) the close on every club's real season: today's two calls with no desk, and with one the record, the XP and the order
+  FAIL [6]: nhl seed 1 season 1 ANA (missed): with two Ownership points and a 5 point cheque the change is -21, the order gives -19
+  FAIL [6]: nhl seed 1 season 1 BOS (missed): with two Ownership points and a 5 point cheque the change is -21, the order gives -19
+  FAIL [6]: nhl seed 1 season 1 COL (badly): with two Ownership points and a 5 point cheque the change is -33, the order gives -29
+  FAIL [6]: nhl seed 1 season 1 DAL (badly): with two Ownership points and a 5 point cheque the change is -33, the order gives -29
+  FAIL [6]: nhl seed 1 season 1 DET (missed): with two Ownership points and a 5 point cheque the change is -21, the order gives -19
+  FAIL [6]: nhl seed 1 season 1 LAK (missed): with two Ownership points and a 5 point cheque the change is -21, the order gives -19
+  FAIL [6]: (further failures in this check not printed)
+   1116 real seasons graded: 498 short of the ask (498 cushioned), 498 firings from trust 12
+   nhl pace on four sources: median 104 XP a season; clubs at the first point (400 XP) after 1, 2, 3 seasons: 3, 14, 27 percent; median seasons to it: more than 3
+   nba pace on four sources: median 106 XP a season; clubs at the first point (400 XP) after 1, 2, 3 seasons: 3, 9, 37 percent; median seasons to it: more than 3
+   mlb pace on four sources: median 104 XP a season; clubs at the first point (400 XP) after 1, 2, 3 seasons: 3, 9, 20 percent; median seasons to it: more than 3
+   nfl pace on four sources: median 101 XP a season; clubs at the first point (400 XP) after 1, 2, 3 seasons: 3, 10, 28 percent; median seasons to it: more than 3
+7) every level of every tree, through its consumer, on real engine inputs
+  FAIL [7]: nhl ANA missed level 1: the season costs 16 trust, the tree says 15
+  FAIL [7]: nhl ANA missed: level 1 costs 16, level 0 cost 16
+  FAIL [7]: nhl ANA missed level 2: the season costs 16 trust, the tree says 14
+  FAIL [7]: nhl ANA missed: level 2 costs 16, level 1 cost 16
+  FAIL [7]: nhl ANA missed level 3: the season costs 16 trust, the tree says 13
+  FAIL [7]: nhl ANA missed: level 3 costs 16, level 2 cost 16
+  FAIL [7]: (further failures in this check not printed)
+   3281 men, 1009 with room to grow, 240 asks, 112 prospects, 110667 trade pairs, 288 cuts charged as quoted, 498 losing seasons, 24 gambles
+   nhl scouting: 3456 / 3156 / 2846 / 2576 / 2346 / 2016
+   nhl negotiation: 23.3 / 23 / 22.4 / 21.9 / 21.4 / 21
+   nhl capCraft: 1414.7 / 1358.3 / 1302 / 1244.7 / 1189 / 1131.7
+   nhl development: 56 / 58 / 67 / 72 / 77 / 83
+   nhl trading: 1628 / 1657 / 1678 / 1702 / 1726 / 1755
+   nhl ownership: 2612 / 2612 / 2612 / 2612 / 2612 / 2612
+   nhl media: 3500 / 3680 / 3860 / 4040 / 4220 / 4400
+   nba scouting: 3456 / 3246 / 3006 / 2656 / 2366 / 1996
+   nba negotiation: 294.5 / 289.8 / 284.6 / 280.8 / 277.3 / 274
+   nba capCraft: 2940.3 / 2822.3 / 2704.5 / 2588.3 / 2469.5 / 2352
+   nba development: 80 / 85 / 92 / 106 / 114 / 121
+   nba trading: 1832 / 1880 / 1928 / 1977 / 2025 / 2080
+   nba ownership: 2016 / 2016 / 2016 / 2016 / 2016 / 2016
+   nba media: 3500 / 3680 / 3860 / 4040 / 4220 / 4400
+   mlb scouting: 3456 / 3196 / 2956 / 2586 / 2346 / 2076
+   mlb negotiation: 37.2 / 36.4 / 35.7 / 34.8 / 34.1 / 33.5
+   mlb capCraft: 2629.4 / 2524.9 / 2419.3 / 2315.2 / 2209.8 / 2105.9
+   mlb development: 105 / 116 / 123 / 139 / 149 / 161
+   mlb trading: 8521 / 8654 / 8788 / 8912 / 9033 / 9156
+   mlb ownership: 2296 / 2296 / 2296 / 2296 / 2296 / 2296
+   mlb media: 3500 / 3680 / 3860 / 4040 / 4220 / 4400
+   nfl scouting: 5760 / 5180 / 4830 / 4380 / 3790 / 3260
+   nfl negotiation: 499.8 / 490.6 / 481.1 / 471.6 / 463.2 / 453.4
+   nfl capCraft: 2728.8 / 2620.1 / 2512.8 / 2403.7 / 2290.9 / 2184
+   nfl development: 768 / 845 / 928 / 1017 / 1089 / 1174
+   nfl trading: 29765 / 30610 / 31660 / 32504 / 33267 / 34397
+   nfl ownership: 3192 / 3192 / 3192 / 3192 / 3192 / 3192
+   nfl media: 3500 / 3680 / 3860 / 4040 / 4220 / 4400
+8) spending: refused off the live list, with no point and past five, and 35 spends fill the board
+   35 spends accepted, every refusal held
+9) taking a seat and a year out on real leagues: what moves, who owns a block, the refusals, and a year that is not a season
+   12 seats taken, 36 years out refused with the league untouched, 12 played by the engines in the host's order
+10) the words: never empty, no dash, no quote, no placeholder; a closed line never says sit; no line states fewer seasons than he played
+   54961 strings read (16800 market lines, 528 lines of an older record), 52 panels drawn
+simGmDeskHost CONTROL flatowner FIRED: check 7 went red with 5000 failures (red checks 6:498 7:5000)
