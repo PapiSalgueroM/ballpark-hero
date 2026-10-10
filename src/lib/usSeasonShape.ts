@@ -23,8 +23,10 @@ export type ShapeSport = 'mlb' | 'nhl';
 
 /** The season each engine was written on, and what it still plays where the
  *  ledger holds nothing: the fallback of every reader below. It is also the
- *  season the engines' workloads and award gates are written per, so a count
- *  from a season of another length is compared as its full season equivalent. */
+ *  season each engine DRAWS: a year of another length is drawn on this one
+ *  first, the awards and the rival are judged on that draw, and the saved
+ *  line is that draw carried to the true length (toSlate). So a short season
+ *  hands out the awards the same season played in full would have. */
 export const US_ENGINE_SEASON: Readonly<Record<ShapeSport, number>> = { mlb: 162, nhl: 82 };
 
 /** How many rounds each engine's playoff ladder holds. */
@@ -83,8 +85,9 @@ export function toSlate(sport: ShapeSport, draw: number, slate: number): number 
   return slate === base ? draw : Math.round(draw * slate / base);
 }
 
-/** A count from a season of `slate` games as its full season equivalent, which
- *  is what the engines' award gates are written in. */
+/** A SAVED count from a season of `slate` games, read back as the full season
+ *  it stands for. The comeback gate reads the season before this way, so all
+ *  48 games of 2012-13 or all 60 of 2020 is never a lost year. */
 export function fullSeasonOf(sport: ShapeSport, count: number, slate: number): number {
   const base = US_ENGINE_SEASON[sport];
   return slate === base ? count : count * base / slate;

@@ -104,15 +104,22 @@ export function draftRival(
  *  player's own line (nbaRivalSeason in nbaMyCareer.ts), so an NBA call has to hand in its play. */
 export type BuiltInRivalSport = Exclude<RivalSport, 'nba'>;
 
+/** Round 1226: carries a COUNT of a built in NHL or MLB line (goals, assists, home runs) to a season that was
+ *  not the engine's own length, such as the 48 games of 2012-13 or the 60 of 2020. It reaches the PRINTED line
+ *  only. The score stays on the full season, the scale the caller's own score is on, so who had the better
+ *  year never depends on how long the season was. */
+export type RivalLineCut = (count: number) => number;
+
 /** Roll the rival's season and return a printable line plus a score. */
-export function simRivalSeason(r: CareerRival, sport: RivalSport, rng: () => number, play?: RivalSeasonPlay): RivalSeasonResult {
+export function simRivalSeason(r: CareerRival, sport: RivalSport, rng: () => number, play?: RivalSeasonPlay, cut?: RivalLineCut): RivalSeasonResult {
   const form = r.ovr + seasonSwing(rng, r.age);
   if (play) return play(r, form, rng);
   let line = '', score = 0;
   if (sport === 'nhl') {
     const g = Math.max(1, Math.round((6 + (form - 62) * 0.9) + rng() * 4));
     const a = Math.max(1, Math.round((9 + (form - 62) * 1.1) + rng() * 5));
-    line = `${g}G ${a}A ${g + a}P`;
+    const pg = cut ? cut(g) : g, pa = cut ? cut(a) : a;
+    line = `${pg}G ${pa}A ${pg + pa}P`;
     score = g + a;
   } else if (sport === 'nfl') {
     // Football positions are not on one scale: a quarterback throws for
@@ -153,7 +160,7 @@ export function simRivalSeason(r: CareerRival, sport: RivalSport, rng: () => num
   } else {
     const hr = Math.max(0, Math.round((4 + (form - 62) * 0.85) + rng() * 5));
     const avg = Math.min(0.36, Math.max(0.2, Math.round((0.226 + (form - 62) * 0.0026 + rng() * 0.02) * 1000) / 1000));
-    line = `${avg.toFixed(3)}, ${hr} HR`;
+    line = `${avg.toFixed(3)}, ${cut ? cut(hr) : hr} HR`;
     score = hr * 1.6 + (avg - 0.24) * 300;
   }
   return { line, score: Math.round(score * 10) / 10 };
@@ -197,11 +204,14 @@ export function judgeRivalSeason(
   r: CareerRival, myScore: number, myName: string, sport: RivalSport, rng: () => number, play: RivalSeasonPlay,
 ): string[];
 export function judgeRivalSeason(
-  r: CareerRival, myScore: number, myName: string, sport: RivalSport, rng: () => number, play?: RivalSeasonPlay,
+  r: CareerRival, myScore: number, myName: string, sport: 'mlb' | 'nhl', rng: () => number, play: undefined, cut: RivalLineCut,
+): string[];
+export function judgeRivalSeason(
+  r: CareerRival, myScore: number, myName: string, sport: RivalSport, rng: () => number, play?: RivalSeasonPlay, cut?: RivalLineCut,
 ): string[] {
   const notes: string[] = [];
   if (r.retired) return notes;
-  const { line, score, year, allStar } = simRivalSeason(r, sport, rng, play);
+  const { line, score, year, allStar } = simRivalSeason(r, sport, rng, play, cut);
   r.lastLine = line;
   r.lastScore = score;
   if (play) { r.lastYear = year; r.lastAllStar = allStar === true; }
