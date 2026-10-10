@@ -144,6 +144,7 @@ const PRE_TOOL_KEYS = ['premier-2026-27-v1'];
 const BOUND_KEYS = [
   'premier-2026-27-v1',
   'championship-2026-27-v1',
+  'laliga-2026-27-v1',
 ];
 const EXPECT_BOUND = process.env.CM_LEAGUE_FIXTURES_EXPECT_BOUND || '';
 const CONTROL = process.env.CM_LEAGUE_FIXTURES_CONTROL || '';

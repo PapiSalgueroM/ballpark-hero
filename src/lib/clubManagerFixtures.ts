@@ -52,6 +52,7 @@ export interface RealLeagueFixtureEntry {
 export const REAL_LEAGUE_FIXTURES: readonly RealLeagueFixtureEntry[] = [
   { key: 'premier-2026-27-v1', leagueId: 'premier', seasonStartYear: 2026, asOf: { published: 'June 2026' }, ledger: PREMIER_FIXTURES_2026 },
   { key: 'championship-2026-27-v1', leagueId: 'championship', seasonStartYear: 2026, asOf: { published: 'June 2026' }, load: () => import('@/data/clubManagerChampionshipFixtures2026').then(m => m.CHAMPIONSHIP_FIXTURES_2026) },
+  { key: 'laliga-2026-27-v1', leagueId: 'laliga', seasonStartYear: 2026, asOf: { stoodOn: '10 October 2026' }, load: () => import('@/data/clubManagerLaLigaFixtures2026').then(m => m.LALIGA_FIXTURES_2026) },
 ];
 
 export const REAL_PREMIER_FIXTURE_KEY = PREMIER_FIXTURES_2026.key;
