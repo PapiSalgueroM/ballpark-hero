@@ -1,0 +1,2 @@
+ctl-everywhere exit=0 1s | simCmVar everywhere: actual review outcomes and full prior baseline passed.
+simCmVar exit=0 55s | simCmVar normal: actual review outcomes and full prior baseline passed.

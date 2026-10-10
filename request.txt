@@ -1,0 +1,2 @@
+simCmVar: node scripts/simCmVar.mjs
+ctl-everywhere: CM_VAR_CONTROL=everywhere node scripts/simCmVar.mjs
