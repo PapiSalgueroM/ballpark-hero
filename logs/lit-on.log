@@ -1,0 +1,2 @@
+42:export const CM_VAR_LIVE: boolean = true;
+src scripts docs equal to the switch head: exit 0
