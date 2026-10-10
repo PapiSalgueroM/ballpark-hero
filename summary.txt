@@ -1,0 +1,7 @@
+setup exit=0 0s | 553394490 Round 1227: seven counts of nflStatLineFor are floored at zero (a back's rushing yards could print negative under a form of 56, and the rival now plays this lin
+floor-parity-1 exit=0 35s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+floor-parity-2 exit=0 35s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+floor-parity-3 exit=0 35s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+head-parity exit=0 35s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+head-digest exit=0 36s |    Duration  35.22s (transform 919ms, setup 52ms, collect 1.14s, tests 33.33s, environment 293ms, prepare 156ms)
+overlay-floor-parity-2 exit=0 36s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
