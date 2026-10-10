@@ -184,13 +184,13 @@ export function dealGoals(key: string, count: number, eleven: readonly BookMan[]
   for (let i = 0; i < count; i += 1) {
     const rng = keyedRng(`${key}|${i}`);
     const piece = rng();
-    const pick = rng();
+    const scorerRoll = rng();
     const kind: BookGoalKind = piece < rules.pen ? 'pen'
       : piece < rules.pen + rules.fk ? 'fk'
       : ownGoalTagged(`${key}|${i}|og`, rules.ownGoalOneIn) ? 'og' : 'open';
     const scorer = kind === 'og' ? null
       : kind !== 'open' && taker ? taker
-      : pickWeighted(outfield, m => goalWeight(m.p, m.r), pick);
+      : pickWeighted(outfield, m => goalWeight(m.p, m.r), scorerRoll);
     const assist = assistFrom(rng, kind === 'open' ? scorer : null, outfield, rules);
     out.push({ kind, scorer, assist });
   }
