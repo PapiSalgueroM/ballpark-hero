@@ -1,0 +1,9 @@
+# Reviewer cm, Release AU, request 3: six mutations of the source in the runner checkout, each with the harnesses that should see it
+#!serial
+m-registry: node .rc/x/review-cm-mut.mjs registry > $RC_OUT/m-registry.txt 2>&1; s=$?; cat $RC_OUT/m-registry.txt | cut -c1-420; exit $s
+m-boot: node .rc/x/review-cm-mut.mjs boot > $RC_OUT/m-boot.txt 2>&1; s=$?; cat $RC_OUT/m-boot.txt | cut -c1-420; exit $s
+m-ogman: node .rc/x/review-cm-mut.mjs ogman > $RC_OUT/m-ogman.txt 2>&1; s=$?; cat $RC_OUT/m-ogman.txt | cut -c1-420; exit $s
+m-varplay: node .rc/x/review-cm-mut.mjs varplay > $RC_OUT/m-varplay.txt 2>&1; s=$?; cat $RC_OUT/m-varplay.txt | cut -c1-420; exit $s
+m-varff: node .rc/x/review-cm-mut.mjs varff > $RC_OUT/m-varff.txt 2>&1; s=$?; cat $RC_OUT/m-varff.txt | cut -c1-420; exit $s
+m-kickoff: node .rc/x/review-cm-mut.mjs kickoff > $RC_OUT/m-kickoff.txt 2>&1; s=$?; cat $RC_OUT/m-kickoff.txt | cut -c1-420; exit $s
+clean: git status --porcelain -- src scripts | wc -l

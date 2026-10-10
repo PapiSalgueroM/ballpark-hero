@@ -1,0 +1,7 @@
+review-cm-mut kickoff: applied to src/lib/clubManager.ts ( 1 file changed, 1 insertion(+), 1 deletion(-))
+  exit=1 6s  vitest clubManagerVarLive :: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯[22m[39m :: first: [31m   [31m×[31m Club Manager: VAR ships dark[2m > [22ma live kick off through the hook asks for no review[39m[32m 54[2mms[22m[39m
+  exit=1 1s  simDailyDeals :: simDailyDeals: 10 FAILURE(S): Hot Seat [2026-10-10, 2026-10-11, 2026-10-13, 2026-10-14, 2026-10-15, 2026-10-27, 2026-11-14, 2027-01-19, 2027-01-30, 2027-02-06], Deadline Day [] :: first: FAIL hot 2026-10-10 (Athletic Club): the deal moved: recorded 34412a45b0e5bb50c77c, dealt 46c97eda7427fe61a33a
+  exit=1 56s  simCmFixtureFleet with the base :: simCmFixtureFleet: 22 FAILURE(S): nofetch [premier, laliga, seriea, bundesliga, ligue1, eredivisie, primeira, scottish, superlig, bundesliga2, proleague, switzerland], oldsaves [premier, championship, laliga, seriea, bundesliga, e :: first: nofetch premier: RED (Arsenal, Hull City; 3 seeds each, twelve entries, saved bytes)
+  exit=1 40s  simCmVar :: Node.js v24.21.0 :: first: AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  exit=0 31s  simManagerHotSeat :: simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club Manager.
+review-cm-mut kickoff: 4 of 5 harness lines went red on the mutation; tree restored (clean)

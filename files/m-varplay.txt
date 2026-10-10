@@ -1,0 +1,4 @@
+review-cm-mut varplay: applied to src/hooks/useClubManager.ts ( 1 file changed, 1 insertion(+), 1 deletion(-))
+  exit=1 2s  vitest clubManagerVarLive :: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m :: first: [31m   [31m×[31m Club Manager: VAR ships dark[2m > [22ma live kick off through the hook asks for no review[39m[32m 53[2mms[22m[39m
+  exit=0 0s  simCmVarLedger :: simCmVarLedger: all 424 checks passed.
+review-cm-mut varplay: 1 of 2 harness lines went red on the mutation; tree restored (clean)

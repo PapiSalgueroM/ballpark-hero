@@ -1,0 +1,7 @@
+m-registry exit=0 110s | review-cm-mut registry: 3 of 7 harness lines went red on the mutation; tree restored (clean)
+m-boot exit=0 97s | review-cm-mut boot: 0 of 5 harness lines went red on the mutation; tree restored (clean)
+m-ogman exit=0 37s | review-cm-mut ogman: 2 of 4 harness lines went red on the mutation; tree restored (clean)
+m-varplay exit=0 2s | review-cm-mut varplay: 1 of 2 harness lines went red on the mutation; tree restored (clean)
+m-varff exit=0 2s | review-cm-mut varff: 1 of 1 harness lines went red on the mutation; tree restored (clean)
+m-kickoff exit=0 135s | review-cm-mut kickoff: 4 of 5 harness lines went red on the mutation; tree restored (clean)
+clean exit=0 0s | 0

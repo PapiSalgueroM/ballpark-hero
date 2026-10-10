@@ -1,0 +1,7 @@
+review-cm-mut boot: applied to src/hooks/useClubManager.ts ( 1 file changed, 1 insertion(+), 1 deletion(-))
+  exit=0 2s  vitest clubManagerStartWait + clubManagerSave :: Why you should do it regularly: https://github.com/browserslist/update-db#readme
+  exit=0 21s  simClubManagerSlots :: simClubManagerSlots: all sections green
+  exit=0 5s  simClubManagerSave :: Test Files  1 passed (1) | Tests  6 passed (6)
+  exit=0 5s  leaguefx :: simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 268 of 268 controls fired
+  exit=0 63s  simCmFixtureFleet with the base :: simCmFixtureFleet: green. 10 registered league(s), 9 in a file of their own. nofetch 250 careers, oldsaves 132 saves, dailies 11 clubs, against the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
+review-cm-mut boot: 0 of 5 harness lines went red on the mutation; tree restored (clean)

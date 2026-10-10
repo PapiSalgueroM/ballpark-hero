@@ -1,0 +1,6 @@
+review-cm-mut ogman: applied to src/components/pitch-motion/motion.tsx ( 1 file changed, 1 insertion(+), 1 deletion(-))
+  exit=1 7s  simOwnGoalMotion :: Test Files  1 failed (1) | Tests  12 failed | 4 passed (16) :: first: × Round 1216: an own goal on real feeds > OG1: the ball goes in off the man the line names 125ms
+  exit=1 7s  vitest pitchOwnGoal :: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/12]⎯[22m[39m :: first: [31m   [31m×[31m Round 1216: an own goal on real feeds[2m > [22mOG1: the ball goes in off the man the line names[39m[32m 123[2mms[22m[39m
+  exit=0 23s  simLiveSimMotion :: Test Files  1 passed (1) | Tests  55 passed (55)
+  exit=0 1s  simLiveSimCelebration :: simLiveSimCelebration: 17 outcome checks passed, correct side, net-first, real figure, freeze/expiry, reduced motion, the three recorded digests of the lift, the part behind its contract (its dead ball moments, the frame it freeze
+review-cm-mut ogman: 2 of 4 harness lines went red on the mutation; tree restored (clean)
