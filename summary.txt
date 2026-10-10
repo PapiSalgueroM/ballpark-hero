@@ -1,0 +1,5 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playSlots exit=0 11s | playClubManagerSlots: green
+playSaveLeave exit=0 21s | playClubManagerSaveLeave: green, the career survived leaving the page and the banner behaves
+playClubManager390 exit=0 247s | Played Club Manager through its own screens. 0 findings.
+playLiveMatchFit exit=0 98s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.

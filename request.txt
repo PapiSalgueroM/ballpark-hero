@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+playSlots: ENGINES=chromium node scripts/playClubManagerSlots.mjs
+playSaveLeave: ENGINES=chromium node scripts/playClubManagerSaveLeave.mjs
+playClubManager390: ENGINES=chromium WIDTH=390 HEIGHT=844 node scripts/playClubManager.mjs
+playLiveMatchFit: ENGINES=chromium node scripts/playLiveMatchFit.mjs
