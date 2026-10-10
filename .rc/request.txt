@@ -1,0 +1,6 @@
+#!serial
+# Round 1218 closing fix: are simActivityNotCompletion and simEras red on the BASE of this round (the merge base with origin/release-at-gate)?
+which-base: git merge-base HEAD^ origin/release-at-gate
+base-activity: B=$(git merge-base HEAD^ origin/release-at-gate); git checkout -q $B -- src scripts; node scripts/simActivityNotCompletion.mjs > /tmp/a.log 2>&1; s=$?; grep -i "FAIL" /tmp/a.log | cut -c1-200 | head -5; tail -1 /tmp/a.log; git checkout -q HEAD -- src scripts; exit $s
+base-eras: B=$(git merge-base HEAD^ origin/release-at-gate); git checkout -q $B -- src scripts; node scripts/simEras.mjs > /tmp/e.log 2>&1; s=$?; grep "FAIL" /tmp/e.log | cut -c1-200 | head -6; tail -1 /tmp/e.log; git checkout -q HEAD -- src scripts; exit $s
+restored: git status --short | grep -v "^??" | head -5; echo "tracked changes left: $(git status --short | grep -v '^??' | wc -l)"
