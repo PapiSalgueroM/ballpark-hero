@@ -1,0 +1,28 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+compare-all: US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+compare-0: SEEDSET=0 US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+compare-1: SEEDSET=1 US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+compare-2: SEEDSET=2 US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+compare-3: SEEDSET=3 US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+compare-4: SEEDSET=4 US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+lawdrift: US_SEASON_CONTROL=lawdrift US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+default: node scripts/simUsSeasonCentre.mjs
+vitest-law: node_modules/.bin/vitest run src/test/gameLawNfl.test.ts src/test/usSeasonNfl.test.ts src/test/usSeasonCentre.test.tsx src/test/seasonCore.test.ts src/test/seasonCentreWords.test.tsx --testTimeout=300000 --hookTimeout=120000
+ctl-minutes: US_SEASON_CONTROL=minutes node scripts/simUsSeasonCentre.mjs
+ctl-points: US_SEASON_CONTROL=points node scripts/simUsSeasonCentre.mjs
+ctl-forty: US_SEASON_CONTROL=forty node scripts/simUsSeasonCentre.mjs
+ctl-level: US_SEASON_CONTROL=level node scripts/simUsSeasonCentre.mjs
+ctl-oddtd: US_SEASON_CONTROL=oddtd node scripts/simUsSeasonCentre.mjs
+ctl-sum: US_SEASON_CONTROL=sum node scripts/simUsSeasonCentre.mjs
+ctl-kick: US_SEASON_CONTROL=kick node scripts/simUsSeasonCentre.mjs
+ctl-days: US_SEASON_CONTROL=days node scripts/simUsSeasonCentre.mjs
+ctl-nflformula: US_SEASON_CONTROL=nflformula node scripts/simUsSeasonCentre.mjs
+ctl-lumpy: US_SEASON_CONTROL=lumpy node scripts/simUsSeasonCentre.mjs
+ctl-flat: US_SEASON_CONTROL=flat node scripts/simUsSeasonCentre.mjs
+ctl-tdform: US_SEASON_CONTROL=tdform node scripts/simUsSeasonCentre.mjs
+ctl-order: US_SEASON_CONTROL=order node scripts/simUsSeasonCentre.mjs
+ctl-bigkick: US_SEASON_CONTROL=bigkick node scripts/simUsSeasonCentre.mjs
+ctl-oddsack: US_SEASON_CONTROL=oddsack node scripts/simUsSeasonCentre.mjs
+ctl-nflstage: US_SEASON_CONTROL=nflstage node scripts/simUsSeasonCentre.mjs
+ctl-poscore: US_SEASON_CONTROL=poscore node scripts/simUsSeasonCentre.mjs
+ctl-nflheld: US_SEASON_CONTROL=nflheld node scripts/simUsSeasonCentre.mjs
