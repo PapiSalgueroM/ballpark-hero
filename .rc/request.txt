@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+#!serial
+own: LIVE_FIT_OWN=1 node scripts/playLiveMatchFit.mjs > $RC_OUT/own.txt 2>&1; s=$?; grep -h "own goal \(for\|against\)\|ends on his feet\|still lying\|turns by" $RC_OUT/own.txt | cut -c1-260; tail -1 $RC_OUT/own.txt; exit $s
+own-seed-31337: LIVE_FIT_SEED=31337 LIVE_FIT_OWN=1 node scripts/playLiveMatchFit.mjs > $RC_OUT/own-31337.txt 2>&1; s=$?; tail -1 $RC_OUT/own-31337.txt; exit $s
+own-seed-2026: LIVE_FIT_SEED=2026 LIVE_FIT_OWN=1 node scripts/playLiveMatchFit.mjs > $RC_OUT/own-2026.txt 2>&1; s=$?; tail -1 $RC_OUT/own-2026.txt; exit $s
+own-seed-7: LIVE_FIT_SEED=7 LIVE_FIT_OWN=1 node scripts/playLiveMatchFit.mjs > $RC_OUT/own-7.txt 2>&1; s=$?; tail -1 $RC_OUT/own-7.txt; exit $s
+walk: node scripts/playLiveMatchFit.mjs > $RC_OUT/walk.txt 2>&1; s=$?; tail -1 $RC_OUT/walk.txt; exit $s
+zoom: git worktree add /tmp/base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928 > /dev/null 2>&1; WALK_ZOOM=1 ENGINE_ROOT=/tmp/base node .rc/x/runWalk.mjs > $RC_OUT/zoom.txt 2>&1; s=$?; tail -1 $RC_OUT/zoom.txt; exit $s
+ogbefore: node scripts/lib/ownGoalBeforeBuild.mjs && npm run build > /dev/null 2>&1; LIVE_FIT_OWN=1 LIVE_FIT_CONTROL=ogbefore node scripts/playLiveMatchFit.mjs > $RC_OUT/ogbefore.txt 2>&1; s=$?; tail -1 $RC_OUT/ogbefore.txt; git checkout -- src; exit $s
