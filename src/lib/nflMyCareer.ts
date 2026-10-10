@@ -689,7 +689,18 @@ export function simSeason(
    touchdowns), LB 4 (tackles, sacks, interceptions, forced fumbles), CB 4
    (tackles, interceptions, passes defended, forced fumbles), EDGE 4 (sacks,
    tackles, forced fumbles, passes defended), K 3 (attempts, accuracy, long).
-   src/test/usRivalLine.test.ts holds the counts and the key order. */
+   src/test/usRivalLine.test.ts holds the counts and the key order.
+
+   ONE NUMBER DID CHANGE, in a commit of its own after the cut was proven:
+   seven counts are floored at zero. The block had no floor on passing yards,
+   a back's rushing yards and catches, a receiver's and a tight end's catches,
+   a linebacker's tackles or a corner's passes defended, so at a low enough
+   form a season could print a negative number (a back's rushing yards go
+   under zero below a form of 56 on a low draw, and form reaches 42 for a
+   player rated 60 with rock bottom morale on a 62 club in his worst year).
+   The built in rival line had floors of its own, which this function now
+   replaces, so without these a rival could have printed one too. The floor
+   moves no draw, and moves a line only where it printed a number below zero. */
 
 /** What a stat line is made from: the form of the season, the position, and the games of real action. */
 export interface NflLineInput { form: number; pos: CareerPos; games: number }
@@ -703,7 +714,7 @@ export function nflStatLineFor(x: NflLineInput, rng: () => number): NflStatLine 
   if (pos === 'QB') {
     // Round 98: capped just under Peyton Manning's 5477 in 2013, which is
     // the real record. A career year should scrape it, never beat it.
-    line.passYds = Math.min(5450, Math.round((1900 + (form - 62) * 92 + rng() * 500) * g));
+    line.passYds = Math.max(0, Math.min(5450, Math.round((1900 + (form - 62) * 92 + rng() * 500) * g)));
     line.passTd = Math.max(4, Math.round((6 + (form - 62) * 0.95 + rng() * 6) * g));
     // Round 56 realism fix: the old slope (0.25) meant a 95 rated quarterback
     // still threw 12 interceptions a year, which no elite passer does. Real
@@ -717,17 +728,17 @@ export function nflStatLineFor(x: NflLineInput, rng: () => number): NflStatLine 
        and never passes it. Without the cap a peak back cleared the record by
        one to twenty six yards in roughly three runs out of five, and
        simCareerRealism has been failing on it for a while. */
-    line.rushYds = Math.min(2080, Math.round((260 + (form - 62) * 46 + rng() * 260) * g));
+    line.rushYds = Math.max(0, Math.min(2080, Math.round((260 + (form - 62) * 46 + rng() * 260) * g)));
     line.rushTd = Math.max(0, Math.round((1 + (form - 62) * 0.42 + rng() * 3) * g));
-    line.rec = Math.round((14 + (form - 62) * 1.1 + rng() * 12) * g);
+    line.rec = Math.max(0, Math.round((14 + (form - 62) * 1.1 + rng() * 12) * g));
     line.recYds = Math.round((line.rec ?? 0) * (6.5 + rng() * 3));
   } else if (pos === 'WR') {
-    line.rec = Math.min(NFL_WR_REC_CAP, Math.round((28 + (form - 62) * 2.5 + rng() * 14) * g));
+    line.rec = Math.max(0, Math.min(NFL_WR_REC_CAP, Math.round((28 + (form - 62) * 2.5 + rng() * 14) * g)));
     line.recYds = Math.min(NFL_WR_YDS_CAP, Math.round((line.rec ?? 0) * (10.5 + rng() * 4)));
     line.recTd = Math.max(0, Math.round((1 + (form - 62) * 0.32 + rng() * 3) * g));
   } else if (pos === 'TE') {
     // Tight ends catch fewer, shorter, but score near the goal line.
-    line.rec = Math.round((22 + (form - 62) * 1.9 + rng() * 12) * g);
+    line.rec = Math.max(0, Math.round((22 + (form - 62) * 1.9 + rng() * 12) * g));
     line.recYds = Math.min(NFL_TE_YDS_CAP, Math.round((line.rec ?? 0) * (9 + rng() * 3.5)));
     line.recTd = Math.max(0, Math.round((2 + (form - 62) * 0.3 + rng() * 3) * g));
   } else if (pos === 'LB') {
@@ -737,7 +748,7 @@ export function nflStatLineFor(x: NflLineInput, rng: () => number): NflStatLine 
        should never out-stat the record book. Tackles are an unofficial stat
        counted differently across eras, so 200 is the conservative bound the
        realism harness has always used, and the engine now agrees with it. */
-    line.tackles = Math.min(200, Math.round((62 + (form - 62) * 3.1 + rng() * 26) * g));
+    line.tackles = Math.max(0, Math.min(200, Math.round((62 + (form - 62) * 3.1 + rng() * 26) * g)));
     /* Round 1104: a sack is credited whole or split in two, so the line is
        rounded to halves (it was tenths: 11.3 sacks is not a number football
        has). The same at the two other sack lines below. */
@@ -747,7 +758,7 @@ export function nflStatLineFor(x: NflLineInput, rng: () => number): NflStatLine 
   } else if (pos === 'CB') {
     line.tackles = Math.round((38 + (form - 62) * 1.2 + rng() * 18) * g);
     line.picks = Math.max(0, Math.round(((form - 68) * 0.11 + rng() * 3) * g));
-    line.passDef = Math.round((7 + (form - 62) * 0.5 + rng() * 9) * g);
+    line.passDef = Math.max(0, Math.round((7 + (form - 62) * 0.5 + rng() * 9) * g));
     line.forcedFum = Math.max(0, Math.round((rng() * 2) * g));
   } else if (pos === 'EDGE') {
     /* Round 123: capped at the real single season record, which nothing in

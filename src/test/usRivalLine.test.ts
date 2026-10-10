@@ -120,6 +120,14 @@ describe('Round 1227: nflStatLineFor is the cut of simSeason\'s stat block', () 
       expect(nflStatLineFor({ form: 84, pos, games: 17 }, replay)).toEqual(first);
     }
   });
+  it('prints no number below zero down to form 40 (the lowest a season can reach is 42), on the lowest draws', () => {
+    for (const pos of Object.keys(KEYS) as CareerPos[]) {
+      for (let form = 40; form <= 62; form += 1) for (const games of [1, 8, 16, 17]) {
+        const line = nflStatLineFor({ form, pos, games }, () => 0);
+        for (const [k, v] of Object.entries(line)) expect(v, `${pos} ${k} at form ${form}, ${games} games`).toBeGreaterThanOrEqual(0);
+      }
+    }
+  });
   it('a 16 game season is sixteen seventeenths of the same draws', () => {
     const a = nflStatLineFor({ form: 84, pos: 'QB', games: 17 }, keyedRng('usRivalLine|len'));
     const b = nflStatLineFor({ form: 84, pos: 'QB', games: 16 }, keyedRng('usRivalLine|len'));
