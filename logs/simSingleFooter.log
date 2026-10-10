@@ -1,0 +1,5 @@
+   1879 src files scanned; App.tsx renders the footer exactly once
+   the import ban held: no file outside App.tsx pulls the Footer component in
+
+   teeth: comment stripped scan, render site pinned to App.tsx, imports banned everywhere else
+simSingleFooter: green. One footer, rendered once, on every page.

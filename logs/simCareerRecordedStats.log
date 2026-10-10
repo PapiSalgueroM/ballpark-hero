@@ -1,0 +1,20 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/careerRecordedStats.test.tsx[2m > [22mrecorded Soccer career stats[2m > [22mshows only the keepers saved appearances clean sheets and actual trophies[32m 26[2mms[22m[39m
+ [32m✓[39m src/test/careerRecordedStats.test.tsx[2m > [22mrecorded Soccer career stats[2m > [22mshows the defenders saved appearances goals clean sheets and trophies without invented defensive actions[32m 13[2mms[22m[39m
+ [32m✓[39m src/test/careerRecordedStats.test.tsx[2m > [22mrecorded Soccer career stats[2m > [22mshows midfielders saved goals and assists without estimating key passes[32m 11[2mms[22m[39m
+ [32m✓[39m src/test/careerRecordedStats.test.tsx[2m > [22mrecorded Soccer career stats[2m > [22mshows forwards saved goals and assists without inferring hat tricks from total goals[32m 11[2mms[22m[39m
+ [32m✓[39m src/test/careerRecordedStats.test.tsx[2m > [22mrecorded Soccer career stats[2m > [22mkeeps an incomplete old defender clean sheet history unknown instead of claiming a lifetime zero or partial total[32m 20[2mms[22m[39m
+ [32m✓[39m src/test/careerRecordedStats.test.tsx[2m > [22mrecorded Soccer career stats[2m > [22mpreserves recorded zero positive legacy and no appearance clean sheets under the existing reader convention[32m 9[2mms[22m[39m
+ [32m✓[39m src/test/careerRecordedStats.test.tsx[2m > [22mrecorded Soccer career stats[2m > [22mupdates the actual card from new saved rows without changing its earned derby record or writing a save[32m 8[2mms[22m[39m
+ [32m✓[39m src/test/careerRecordedStats.test.tsx[2m > [22mrecorded Soccer career stats[2m > [22mretains the independent saved totals and unknown season baseline without the career card[32m 1[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 16:39:30
+[2m   Duration [22m 4.53s[2m (transform 2.64s, setup 58ms, collect 3.73s, tests 99ms, environment 293ms, prepare 101ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/career-practice-lifecycle-artifacts/recorded-stats/normal-report.json
+
+simCareerRecordedStats: 8 actual outcomes passed.
