@@ -1,0 +1,8 @@
+oldparity exit=0 simFixtureBalance: CONTROL FIRED (oldparity). Section(s) 1, 3, 4 went red as they must; 5 went red as well.
+flipold exit=0 simFixtureBalance: CONTROL FIRED (flipold). Section(s) 2, 3 went red as they must; 5 went red as well.
+noflag exit=0 simFixtureBalance: CONTROL FIRED (noflag). Section(s) 3 went red as they must; 4, 5 went red as well.
+nobinding exit=0 simFixtureBalance: CONTROL FIRED (nobinding). Section(s) 6 went red as they must.
+fallbackflag exit=0 simFixtureBalance: CONTROL FIRED (fallbackflag). Section(s) 3, 5 went red as they must.
+fallbackcount exit=0 simFixtureBalance: CONTROL FIRED (fallbackcount). Section(s) 5 went red as they must.
+enginebypass exit=0 simFixtureBalance: CONTROL FIRED (enginebypass). Section(s) 5, 6 went red as they must.
+calendarbypass exit=0 simFixtureBalance: CONTROL FIRED (calendarbypass). Section(s) 5 went red as they must.

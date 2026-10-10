@@ -1,0 +1,16 @@
+fixbal exit=0 2s | simFixtureBalance: PASS. Generated schedules keep the run-of-two contract at every league size, old saves keep their generated list, rollovers converge the flag, the AI w
+fixbal-controls exit=0 16s | calendarbypass exit=0 simFixtureBalance: CONTROL FIRED (calendarbypass). Section(s) 5 went red as they must.
+daily exit=0 2s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+daily-bind exit=1 2s | simDailyDeals: CONTROL bind FIRED: its 5 Premier League dates went red (2026-10-27, 2026-11-14, 2027-01-19, 2027-01-30, 2027-02-06) and no other date moved
+daily-binddeadline exit=1 2s | simDailyDeals: CONTROL binddeadline FIRED: its 3 Premier League dates went red (2026-10-18, 2026-11-01, 2026-11-09) and no other date moved
+leaguefx exit=0 5s | simCmLeagueFixtures: OK, sections A to G and I green: 10 ledger(s), 9 frozen, 1 pending (premier), 3528 fixtures, 166 of 166 controls fired
+cmfix-all exit=0 49s | PASS real fixtures normal PASS real fixtures venues PASS real fixtures card PASS real fixtures settlement PASS real fixtures bye PASS real fixtures world PASS real fixtur
+simLiveScores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+tsc exit=0 54s | 
+simLiveMatch exit=0 3s | simLiveMatch: PASS. Each half is committed as one stream, the report is counted off it, a change keeps the past and redraws the future, and the other dugout fields eleven
+simHarnessAnchors exit=0 30s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 10s | No rival product names found. 0 findings.
+simWorldEditor exit=0 4s | simWorldEditor: 2478 checks, 0 failures
+simCmVar exit=0 18s | simCmVar normal: actual review outcomes and full prior baseline passed.
+simClubManagerSlots exit=0 31s | simClubManagerSlots: all sections green
+simCmLeagueRules exit=0 32s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
