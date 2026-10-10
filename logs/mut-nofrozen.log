@@ -1,0 +1,12 @@
+MUTATION nofrozen APPLIED
+simCmLeagueFixtures: 9 ledger(s) on disk: bundesliga2, bundesliga, championship, eredivisie, laliga, ligue2, primeira, seriea, superlig
+A) shape: green for 9 ledger(s)
+B) no club twice in a matchday: green for 9 ledger(s)
+C) each pair once at each ground: green for 9 ledger(s)
+D) the game's own clubs: green for 9 ledger(s)
+E) the drift guard: ledger equals each source in the receipt: green for 9 ledger(s)
+F) two independent sources: green for 9 ledger(s)
+G) nothing excluded got in: green for 9 ledger(s)
+I) frozen: green for 9 ledger(s)
+K) the controls: 0 of 0 fired exactly as written (11 controls on each of 0 frozen ledger(s))
+simCmLeagueFixtures: OK, sections A to G and I green: 9 ledger(s), 0 frozen, 9 pending (bundesliga2, bundesliga, championship, eredivisie, laliga, ligue2, primeira, seriea, superlig), 3148 fixtures, 0 of 0 controls fired

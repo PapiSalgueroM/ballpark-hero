@@ -1,0 +1,15 @@
+mut-engineclub exit=1 1s | simCmLeagueFixtures: FAILED, 1 failure(s): 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 0 of 0 controls fired
+mut-ledgerswap exit=1 0s | simCmLeagueFixtures: FAILED, 5 failure(s): 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 0 of 0 controls fired
+mut-roundswap exit=1 0s | simCmLeagueFixtures: FAILED, 5 failure(s): 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 0 of 0 controls fired
+mut-srcurl exit=1 0s | simCmLeagueFixtures: FAILED, 1 failure(s): 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 0 of 0 controls fired
+mut-firstpub exit=1 0s | simCmLeagueFixtures: FAILED, 1 failure(s): 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 0 of 0 controls fired
+mut-firstpubsentence exit=1 0s | simCmLeagueFixtures: FAILED, 1 failure(s): 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 0 of 0 controls fired
+mut-claimrelease exit=0 2s | simCmLeagueFixtures: OK, sections A to G and I green: 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 99 of 99 controls fired
+mut-unfreeze exit=0 2s | simCmLeagueFixtures: OK, sections A to G and I green: 9 ledger(s), 8 frozen, 1 pending (laliga), 3148 fixtures, 88 of 88 controls fired
+mut-nofrozen exit=0 0s | simCmLeagueFixtures: OK, sections A to G and I green: 9 ledger(s), 0 frozen, 9 pending (bundesliga2, bundesliga, championship, eredivisie, laliga, ligue2, primeira, serie
+mut-unfreezetamper exit=0 2s | simCmLeagueFixtures: OK, sections A to G and I green: 9 ledger(s), 8 frozen, 1 pending (laliga), 3148 fixtures, 88 of 88 controls fired
+mut-harnessnoasof exit=0 2s | simCmLeagueFixtures: OK, sections A to G and I green: 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 99 of 99 controls fired
+mut-harnessnosnapshot exit=0 2s | simCmLeagueFixtures: OK, sections A to G and I green: 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 99 of 99 controls fired
+mut-harnessnod exit=1 2s | simCmLeagueFixtures: FAILED, 9 failure(s): 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 90 of 99 controls fired
+mut-harnessnoi exit=1 2s | simCmLeagueFixtures: FAILED, 9 failure(s): 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 90 of 99 controls fired
+after-restore exit=0 2s | simCmLeagueFixtures: OK, sections A to G and I green: 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 99 of 99 controls fired

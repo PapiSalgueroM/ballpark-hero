@@ -1,0 +1,21 @@
+MUTATION harnessnoi APPLIED
+simCmLeagueFixtures: 9 ledger(s) on disk: bundesliga2, bundesliga, championship, eredivisie, laliga, ligue2, primeira, seriea, superlig
+A) shape: green for 9 ledger(s)
+B) no club twice in a matchday: green for 9 ledger(s)
+C) each pair once at each ground: green for 9 ledger(s)
+D) the game's own clubs: green for 9 ledger(s)
+E) the drift guard: ledger equals each source in the receipt: green for 9 ledger(s)
+F) two independent sources: green for 9 ledger(s)
+G) nothing excluded got in: green for 9 ledger(s)
+I) frozen: green for 9 ledger(s)
+K) the controls: 90 of 99 fired exactly as written (11 controls on each of 9 frozen ledger(s))
+  FAIL: control refreeze on bundesliga2: sections none went red, wanted exactly I
+  FAIL: control refreeze on bundesliga: sections none went red, wanted exactly I
+  FAIL: control refreeze on championship: sections none went red, wanted exactly I
+  FAIL: control refreeze on eredivisie: sections none went red, wanted exactly I
+  FAIL: control refreeze on laliga: sections none went red, wanted exactly I
+  FAIL: control refreeze on ligue2: sections none went red, wanted exactly I
+  FAIL: control refreeze on primeira: sections none went red, wanted exactly I
+  FAIL: control refreeze on seriea: sections none went red, wanted exactly I
+  FAIL: control refreeze on superlig: sections none went red, wanted exactly I
+simCmLeagueFixtures: FAILED, 9 failure(s): 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 90 of 99 controls fired

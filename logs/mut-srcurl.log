@@ -1,0 +1,13 @@
+MUTATION srcurl APPLIED
+simCmLeagueFixtures: 9 ledger(s) on disk: bundesliga2, bundesliga, championship, eredivisie, laliga, ligue2, primeira, seriea, superlig
+A) shape: green for 9 ledger(s)
+B) no club twice in a matchday: green for 9 ledger(s)
+C) each pair once at each ground: green for 9 ledger(s)
+D) the game's own clubs: green for 9 ledger(s)
+E) the drift guard: ledger equals each source in the receipt: green for 9 ledger(s)
+F) two independent sources: RED for eredivisie
+  FAIL: eredivisie: the addresses the ledger ships are not the ones the receipt cites
+G) nothing excluded got in: green for 9 ledger(s)
+I) frozen: green for 9 ledger(s)
+K) the controls: not run, the ledgers themselves are red
+simCmLeagueFixtures: FAILED, 1 failure(s): 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 0 of 0 controls fired
