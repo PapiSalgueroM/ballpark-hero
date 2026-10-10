@@ -1,0 +1,3 @@
+f-holdoff exit=1 239s | MUT holdoff vitest=0 build=0 walk=1 | | playDraftNight: 150 FAILURE(S) in 48 nights |  150 FAIL [spoiler];
+f-holdshort exit=1 239s | MUT holdshort vitest=0 build=0 walk=1 | | playDraftNight: 150 FAILURE(S) in 48 nights |  150 FAIL [spoiler];
+f-fileearly exit=1 240s | MUT fileearly vitest=1 build=0 walk=1 | | playDraftNight: 14 FAILURE(S) in 48 nights |  14 FAIL [spoiler];

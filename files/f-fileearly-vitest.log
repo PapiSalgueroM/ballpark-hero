@@ -1,0 +1,72 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/careerDraftNight.test.tsx [2m([22m[2m48 tests[22m[2m)[22m[33m 1359[2mms[22m[39m
+   [33m[2m✓[22m[39m the first frame holds the whole night[2m > [22mskipped is the last frame: no delays, no skip, the result said once [33m 560[2mms[22m[39m
+ [31m❯[39m src/test/usCareerDraftNightBoard.test.tsx [2m([22m[2m16 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 1395[2mms[22m[39m
+   [33m[2m✓[22m[39m draft night on the actual boards[2m > [22m'NFL' the night plays, holds its ending, lands, and starts the career it showed [33m 382[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NBA' the night plays, holds its ending, lands, and starts the career it showed[32m 207[2mms[22m[39m
+[31m   [31m×[31m draft night on the actual boards[2m > [22m'MLB' the night plays, holds its ending, lands, and starts the career it showed[39m[32m 94[2mms[22m[39m
+[31m     → expected 'Simulated ProspectCF · Age 21Rating80…' to be 'Simulated ProspectCF · Age 18Rating72…' // Object.is equality[39m
+[31m   [31m×[31m draft night on the actual boards[2m > [22m'NHL' the night plays, holds its ending, lands, and starts the career it showed[39m[32m 82[2mms[22m[39m
+[31m     → expected 'Simulated ProspectC · Age 20Rating79P…' to be 'Simulated ProspectC · Age 18Rating77P…' // Object.is equality[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NFL' skip lands the last frame, and a reload shows the result with no night[32m 92[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NBA' skip lands the last frame, and a reload shows the result with no night[32m 91[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'MLB' skip lands the last frame, and a reload shows the result with no night[32m 101[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NHL' skip lands the last frame, and a reload shows the result with no night[32m 80[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NFL' with the chunk not here yet the press shows the result it always showed[32m 26[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NBA' with the chunk not here yet the press shows the result it always showed[32m 33[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'MLB' with the chunk not here yet the press shows the result it always showed[32m 30[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NHL' with the chunk not here yet the press shows the result it always showed[32m 33[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NFL' less motion starts on the last frame and an undrafted night names no club early[32m 42[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NBA' less motion starts on the last frame and an undrafted night names no club early[32m 36[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'MLB' less motion starts on the last frame and an undrafted night names no club early[32m 33[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NHL' less motion starts on the last frame and an undrafted night names no club early[32m 30[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerDraftNightBoard.test.tsx[2m > [22mdraft night on the actual boards[2m > [22m'MLB' the night plays, holds its ending, lands, and starts the career it showed
+[31m[1mAssertionError[22m: expected 'Simulated ProspectCF · Age 21Rating80…' to be 'Simulated ProspectCF · Age 18Rating72…' // Object.is equality[39m
+
+Expected: [32m"Simulated ProspectCF · Age 1[7m8[27mRating[7m72[27mPotential95Health100Draft stock36/100"[39m
+Received: [31m"Simulated ProspectCF · Age [7m2[27m1Rating[7m80[27mPotential95Health100Draft stock36/100"[39m
+
+[36m [2m❯[22m src/test/usCareerDraftNightBoard.test.tsx:[2m106:26[22m[39m
+    [90m104| [39m    // The file under the stage still reads as it did before the press…
+    [90m105| [39m    // rating after the minors would say how the night ends, and nothi…
+    [90m106| [39m    [34mexpect[39m([34mfileOf[39m(view))[33m.[39m[34mtoBe[39m(fileBefore)[33m;[39m
+    [90m   | [39m                         [31m^[39m
+    [90m107| [39m    if (desc.postDraft) expect(out.devSeasons.length).toBeGreaterThan(…
+    [90m108| [39m    [35mconst[39m result [33m=[39m [34mbuttons[39m(view)[33m.[39m[34mgetByTestId[39m([32m'draft-result'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerDraftNightBoard.test.tsx[2m > [22mdraft night on the actual boards[2m > [22m'NHL' the night plays, holds its ending, lands, and starts the career it showed
+[31m[1mAssertionError[22m: expected 'Simulated ProspectC · Age 20Rating79P…' to be 'Simulated ProspectC · Age 18Rating77P…' // Object.is equality[39m
+
+Expected: [32m"Simulated ProspectC · Age [7m18[27mRating7[7m7[27mPotential96Health100Draft stock62/100"[39m
+Received: [31m"Simulated ProspectC · Age [7m20[27mRating7[7m9[27mPotential96Health100Draft stock62/100"[39m
+
+[36m [2m❯[22m src/test/usCareerDraftNightBoard.test.tsx:[2m106:26[22m[39m
+    [90m104| [39m    // The file under the stage still reads as it did before the press…
+    [90m105| [39m    // rating after the minors would say how the night ends, and nothi…
+    [90m106| [39m    [34mexpect[39m([34mfileOf[39m(view))[33m.[39m[34mtoBe[39m(fileBefore)[33m;[39m
+    [90m   | [39m                         [31m^[39m
+    [90m107| [39m    if (desc.postDraft) expect(out.devSeasons.length).toBeGreaterThan(…
+    [90m108| [39m    [35mconst[39m result [33m=[39m [34mbuttons[39m(view)[33m.[39m[34mgetByTestId[39m([32m'draft-result'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m62 passed[39m[22m[90m (64)[39m
+[2m   Start at [22m 15:27:45
+[2m   Duration [22m 3.98s[2m (transform 1.80s, setup 104ms, collect 3.50s, tests 2.75s, environment 668ms, prepare 262ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerDraftNightBoard.test.tsx,title=src/test/usCareerDraftNightBoard.test.tsx > draft night on the actual boards > 'MLB' the night plays%2C holds its ending%2C lands%2C and starts the career it showed,line=106,column=26::AssertionError: expected 'Simulated ProspectCF · Age 21Rating80…' to be 'Simulated ProspectCF · Age 18Rating72…' // Object.is equality%0A%0AExpected: "Simulated ProspectCF · Age 18Rating72Potential95Health100Draft stock36/100"%0AReceived: "Simulated ProspectCF · Age 21Rating80Potential95Health100Draft stock36/100"%0A%0A ❯ src/test/usCareerDraftNightBoard.test.tsx:106:26%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerDraftNightBoard.test.tsx,title=src/test/usCareerDraftNightBoard.test.tsx > draft night on the actual boards > 'NHL' the night plays%2C holds its ending%2C lands%2C and starts the career it showed,line=106,column=26::AssertionError: expected 'Simulated ProspectC · Age 20Rating79P…' to be 'Simulated ProspectC · Age 18Rating77P…' // Object.is equality%0A%0AExpected: "Simulated ProspectC · Age 18Rating77Potential96Health100Draft stock62/100"%0AReceived: "Simulated ProspectC · Age 20Rating79Potential96Health100Draft stock62/100"%0A%0A ❯ src/test/usCareerDraftNightBoard.test.tsx:106:26%0A%0A

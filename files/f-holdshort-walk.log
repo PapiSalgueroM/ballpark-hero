@@ -1,0 +1,202 @@
+  FAIL [spoiler] nfl-390-first-watch: the title is held for -0.3 s and the closing row only starts to land at 0.7 s
+  FAIL [spoiler] nfl-390-first-watch: the club is held for -0.3 s and the closing row only starts to land at 0.7 s
+  FAIL [spoiler] nfl-390-first-watch: the result is held for -0.3 s and the closing row only starts to land at 0.7 s
+  FAIL [spoiler] nfl-390-first-watch: at 0 ms of 700 the title is at 1, the club at 1, the result at 0.843836, the closing row at 0
+  walked nfl-390-first-watch: pick 1, 1 rows, card 345 high, 163 frames
+  FAIL [spoiler] nfl-390-late-watch: the title is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nfl-390-late-watch: the club is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nfl-390-late-watch: the result is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nfl-390-late-watch: at 2517 ms of 3500 the title is at 0.0902145, the club at 0.0902145, the result at 0.0607658, the closing row at 0
+  walked nfl-390-late-watch: pick 123, 8 rows, card 636 high, 331 frames
+  FAIL [spoiler] nfl-390-undrafted-watch: the title is held for 1.7 s and the closing row only starts to land at 2.7 s
+  FAIL [spoiler] nfl-390-undrafted-watch: the club is held for 1.7 s and the closing row only starts to land at 2.7 s
+  FAIL [spoiler] nfl-390-undrafted-watch: the result is held for 1.7 s and the closing row only starts to land at 2.7 s
+  FAIL [spoiler] nfl-390-undrafted-watch: at 1717 ms of 2700 the title is at 0.0912231, the club at 0.0912231, the result at 0.0614499, the closing row at 0
+  walked nfl-390-undrafted-watch: pick none, 6 rows, card 561 high, 283 frames
+  FAIL [spoiler] nfl-390-late-skip: the title is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nfl-390-late-skip: the club is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nfl-390-late-skip: the result is held for 2.5 s and the closing row only starts to land at 3.5 s
+  walked nfl-390-late-skip: pick 123, 8 rows, card 636 high, 80 frames
+  walked nfl-390-undrafted-reduced: pick none, 6 rows, card 561 high, 43 frames
+  FAIL [spoiler] nba-390-first-watch: the title is held for 1.7 s and the closing row only starts to land at 2.7 s
+  FAIL [spoiler] nba-390-first-watch: the club is held for 1.7 s and the closing row only starts to land at 2.7 s
+  FAIL [spoiler] nba-390-first-watch: the result is held for 1.7 s and the closing row only starts to land at 2.7 s
+  FAIL [spoiler] nba-390-first-watch: at 1717 ms of 2700 the title is at 0.0911222, the club at 0.0911222, the result at 0.0613815, the closing row at 0
+  walked nba-390-first-watch: pick 1, 1 rows and 4 lottery tiles, card 621 high, 287 frames
+  FAIL [spoiler] nba-390-late-watch: the title is held for 3.1 s and the closing row only starts to land at 4.1 s
+  FAIL [spoiler] nba-390-late-watch: the club is held for 3.1 s and the closing row only starts to land at 4.1 s
+  FAIL [spoiler] nba-390-late-watch: the result is held for 3.1 s and the closing row only starts to land at 4.1 s
+  FAIL [spoiler] nba-390-late-watch: at 3117 ms of 4100 the title is at 0.090395, the club at 0.090395, the result at 0.0608883, the closing row at 0
+  walked nba-390-late-watch: pick 35, 5 rows and 4 lottery tiles, card 783 high, 371 frames
+  FAIL [spoiler] nba-390-undrafted-watch: the title is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nba-390-undrafted-watch: the club is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nba-390-undrafted-watch: the result is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nba-390-undrafted-watch: at 2517 ms of 3500 the title is at 0.0906127, the club at 0.0906127, the result at 0.0610359, the closing row at 0
+  walked nba-390-undrafted-watch: pick none, 3 rows and 4 lottery tiles, card 715 high, 335 frames
+  FAIL [spoiler] nba-390-late-skip: the title is held for 3.1 s and the closing row only starts to land at 4.1 s
+  FAIL [spoiler] nba-390-late-skip: the club is held for 3.1 s and the closing row only starts to land at 4.1 s
+  FAIL [spoiler] nba-390-late-skip: the result is held for 3.1 s and the closing row only starts to land at 4.1 s
+  walked nba-390-late-skip: pick 35, 5 rows and 4 lottery tiles, card 783 high, 76 frames
+  walked nba-390-undrafted-reduced: pick none, 3 rows and 4 lottery tiles, card 715 high, 43 frames
+  FAIL [spoiler] mlb-390-first-watch: the title is held for -0.3 s and the closing row only starts to land at 0.7 s
+  FAIL [spoiler] mlb-390-first-watch: the club is held for -0.3 s and the closing row only starts to land at 0.7 s
+  FAIL [spoiler] mlb-390-first-watch: the result is held for -0.3 s and the closing row only starts to land at 0.7 s
+  FAIL [spoiler] mlb-390-first-watch: at 0 ms of 700 the title is at 1, the club at 1, the result at 0.843836, the closing row at 0
+  walked mlb-390-first-watch: pick 1, 1 rows, card 413 high, 167 frames
+  FAIL [spoiler] mlb-390-late-watch: the title is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] mlb-390-late-watch: the club is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] mlb-390-late-watch: the result is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] mlb-390-late-watch: at 2517 ms of 3500 the title is at 0.0901614, the club at 0.0901614, the result at 0.0607298, the closing row at 0
+  walked mlb-390-late-watch: pick 432, 8 rows, card 744 high, 335 frames
+  FAIL [spoiler] mlb-390-undrafted-watch: the title is held for 1.7 s and the closing row only starts to land at 2.7 s
+  FAIL [spoiler] mlb-390-undrafted-watch: the club is held for 1.7 s and the closing row only starts to land at 2.7 s
+  FAIL [spoiler] mlb-390-undrafted-watch: the result is held for 1.7 s and the closing row only starts to land at 2.7 s
+  FAIL [spoiler] mlb-390-undrafted-watch: at 1717 ms of 2700 the title is at 0.0910532, the club at 0.0910532, the result at 0.0613347, the closing row at 0
+  walked mlb-390-undrafted-watch: pick none, 6 rows, card 689 high, 283 frames
+  FAIL [spoiler] mlb-390-late-skip: the title is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] mlb-390-late-skip: the club is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] mlb-390-late-skip: the result is held for 2.5 s and the closing row only starts to land at 3.5 s
+  walked mlb-390-late-skip: pick 432, 8 rows, card 744 high, 76 frames
+  walked mlb-390-undrafted-reduced: pick none, 6 rows, card 689 high, 43 frames
+  FAIL [spoiler] nhl-390-first-watch: the title is held for -0.3 s and the closing row only starts to land at 0.7 s
+  FAIL [spoiler] nhl-390-first-watch: the club is held for -0.3 s and the closing row only starts to land at 0.7 s
+  FAIL [spoiler] nhl-390-first-watch: the result is held for -0.3 s and the closing row only starts to land at 0.7 s
+  FAIL [spoiler] nhl-390-first-watch: at 0 ms of 700 the title is at 1, the club at 1, the result at 0.843836, the closing row at 0
+  walked nhl-390-first-watch: pick 1, 1 rows, card 453 high, 163 frames
+  FAIL [spoiler] nhl-390-late-watch: the title is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nhl-390-late-watch: the club is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nhl-390-late-watch: the result is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nhl-390-late-watch: at 2516 ms of 3500 the title is at 0.0906286, the club at 0.0906286, the result at 0.0610467, the closing row at 0
+  walked nhl-390-late-watch: pick 128, 8 rows, card 764 high, 331 frames
+  FAIL [spoiler] nhl-390-undrafted-watch: the title is held for 1.7 s and the closing row only starts to land at 2.7 s
+  FAIL [spoiler] nhl-390-undrafted-watch: the club is held for 1.7 s and the closing row only starts to land at 2.7 s
+  FAIL [spoiler] nhl-390-undrafted-watch: the result is held for 1.7 s and the closing row only starts to land at 2.7 s
+  FAIL [spoiler] nhl-390-undrafted-watch: at 1716 ms of 2700 the title is at 0.0907188, the club at 0.0907188, the result at 0.0611079, the closing row at 0
+  walked nhl-390-undrafted-watch: pick none, 6 rows, card 749 high, 283 frames
+  FAIL [spoiler] nhl-390-late-skip: the title is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nhl-390-late-skip: the club is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nhl-390-late-skip: the result is held for 2.5 s and the closing row only starts to land at 3.5 s
+  walked nhl-390-late-skip: pick 128, 8 rows, card 764 high, 77 frames
+  walked nhl-390-undrafted-reduced: pick none, 6 rows, card 749 high, 45 frames
+  FAIL [spoiler] nfl-1280-first-watch: the title is held for -0.3 s and the closing row only starts to land at 0.7 s
+  FAIL [spoiler] nfl-1280-first-watch: the club is held for -0.3 s and the closing row only starts to land at 0.7 s
+  FAIL [spoiler] nfl-1280-first-watch: the result is held for -0.3 s and the closing row only starts to land at 0.7 s
+  FAIL [spoiler] nfl-1280-first-watch: at 0 ms of 700 the title is at 1, the club at 1, the result at 0.843836, the closing row at 0
+  walked nfl-1280-first-watch: pick 1, 1 rows, card 325 high, 163 frames
+  FAIL [spoiler] nfl-1280-late-watch: the title is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nfl-1280-late-watch: the club is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nfl-1280-late-watch: the result is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nfl-1280-late-watch: at 2517 ms of 3500 the title is at 0.0906445, the club at 0.0906445, the result at 0.0610575, the closing row at 0
+  walked nfl-1280-late-watch: pick 123, 8 rows, card 557 high, 331 frames
+  FAIL [spoiler] nfl-1280-undrafted-watch: the title is held for 1.7 s and the closing row only starts to land at 2.7 s
+  FAIL [spoiler] nfl-1280-undrafted-watch: the club is held for 1.7 s and the closing row only starts to land at 2.7 s
+  FAIL [spoiler] nfl-1280-undrafted-watch: the result is held for 1.7 s and the closing row only starts to land at 2.7 s
+  FAIL [spoiler] nfl-1280-undrafted-watch: at 1716 ms of 2700 the title is at 0.0904693, the club at 0.0904693, the result at 0.0609387, the closing row at 0
+  walked nfl-1280-undrafted-watch: pick none, 6 rows, card 493 high, 284 frames
+  FAIL [spoiler] nfl-1280-late-skip: the title is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nfl-1280-late-skip: the club is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nfl-1280-late-skip: the result is held for 2.5 s and the closing row only starts to land at 3.5 s
+  walked nfl-1280-late-skip: pick 123, 8 rows, card 557 high, 83 frames
+  walked nfl-1280-undrafted-reduced: pick none, 6 rows, card 493 high, 43 frames
+  FAIL [spoiler] nba-1280-first-watch: the title is held for 1.7 s and the closing row only starts to land at 2.7 s
+  FAIL [spoiler] nba-1280-first-watch: the club is held for 1.7 s and the closing row only starts to land at 2.7 s
+  FAIL [spoiler] nba-1280-first-watch: the result is held for 1.7 s and the closing row only starts to land at 2.7 s
+  FAIL [spoiler] nba-1280-first-watch: at 1716 ms of 2700 the title is at 0.0907825, the club at 0.0907825, the result at 0.0611511, the closing row at 0
+  walked nba-1280-first-watch: pick 1, 1 rows and 4 lottery tiles, card 565 high, 292 frames
+  FAIL [spoiler] nba-1280-late-watch: the title is held for 3.1 s and the closing row only starts to land at 4.1 s
+  FAIL [spoiler] nba-1280-late-watch: the club is held for 3.1 s and the closing row only starts to land at 4.1 s
+  FAIL [spoiler] nba-1280-late-watch: the result is held for 3.1 s and the closing row only starts to land at 4.1 s
+  FAIL [spoiler] nba-1280-late-watch: at 3116 ms of 4100 the title is at 0.0904587, the club at 0.0904587, the result at 0.0609315, the closing row at 0
+  walked nba-1280-late-watch: pick 35, 5 rows and 4 lottery tiles, card 695 high, 374 frames
+  FAIL [spoiler] nba-1280-undrafted-watch: the title is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nba-1280-undrafted-watch: the club is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nba-1280-undrafted-watch: the result is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nba-1280-undrafted-watch: at 2516 ms of 3500 the title is at 0.0902357, the club at 0.0902357, the result at 0.0607802, the closing row at 0
+  walked nba-1280-undrafted-watch: pick none, 3 rows and 4 lottery tiles, card 631 high, 338 frames
+  FAIL [spoiler] nba-1280-late-skip: the title is held for 3.1 s and the closing row only starts to land at 4.1 s
+  FAIL [spoiler] nba-1280-late-skip: the club is held for 3.1 s and the closing row only starts to land at 4.1 s
+  FAIL [spoiler] nba-1280-late-skip: the result is held for 3.1 s and the closing row only starts to land at 4.1 s
+  walked nba-1280-late-skip: pick 35, 5 rows and 4 lottery tiles, card 695 high, 76 frames
+  walked nba-1280-undrafted-reduced: pick none, 3 rows and 4 lottery tiles, card 631 high, 43 frames
+  FAIL [spoiler] mlb-1280-first-watch: the title is held for -0.3 s and the closing row only starts to land at 0.7 s
+  FAIL [spoiler] mlb-1280-first-watch: the club is held for -0.3 s and the closing row only starts to land at 0.7 s
+  FAIL [spoiler] mlb-1280-first-watch: the result is held for -0.3 s and the closing row only starts to land at 0.7 s
+  FAIL [spoiler] mlb-1280-first-watch: at 0 ms of 700 the title is at 1, the club at 1, the result at 0.843836, the closing row at 0
+  walked mlb-1280-first-watch: pick 1, 1 rows, card 393 high, 171 frames
+  FAIL [spoiler] mlb-1280-late-watch: the title is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] mlb-1280-late-watch: the club is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] mlb-1280-late-watch: the result is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] mlb-1280-late-watch: at 2517 ms of 3500 the title is at 0.0909099, the club at 0.0909099, the result at 0.0612375, the closing row at 0
+  walked mlb-1280-late-watch: pick 432, 8 rows, card 665 high, 339 frames
+  FAIL [spoiler] mlb-1280-undrafted-watch: the title is held for 1.7 s and the closing row only starts to land at 2.7 s
+  FAIL [spoiler] mlb-1280-undrafted-watch: the club is held for 1.7 s and the closing row only starts to land at 2.7 s
+  FAIL [spoiler] mlb-1280-undrafted-watch: the result is held for 1.7 s and the closing row only starts to land at 2.7 s
+  FAIL [spoiler] mlb-1280-undrafted-watch: at 1716 ms of 2700 the title is at 0.0909471, the club at 0.0909471, the result at 0.0612627, the closing row at 0
+  walked mlb-1280-undrafted-watch: pick none, 6 rows, card 601 high, 283 frames
+  FAIL [spoiler] mlb-1280-late-skip: the title is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] mlb-1280-late-skip: the club is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] mlb-1280-late-skip: the result is held for 2.5 s and the closing row only starts to land at 3.5 s
+  walked mlb-1280-late-skip: pick 432, 8 rows, card 665 high, 76 frames
+  walked mlb-1280-undrafted-reduced: pick none, 6 rows, card 601 high, 43 frames
+  FAIL [spoiler] nhl-1280-first-watch: the title is held for -0.3 s and the closing row only starts to land at 0.7 s
+  FAIL [spoiler] nhl-1280-first-watch: the club is held for -0.3 s and the closing row only starts to land at 0.7 s
+  FAIL [spoiler] nhl-1280-first-watch: the result is held for -0.3 s and the closing row only starts to land at 0.7 s
+  FAIL [spoiler] nhl-1280-first-watch: at 0 ms of 700 the title is at 1, the club at 1, the result at 0.843836, the closing row at 0
+  walked nhl-1280-first-watch: pick 1, 1 rows, card 393 high, 163 frames
+  FAIL [spoiler] nhl-1280-late-watch: the title is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nhl-1280-late-watch: the club is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nhl-1280-late-watch: the result is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nhl-1280-late-watch: at 2516 ms of 3500 the title is at 0.0907825, the club at 0.0907825, the result at 0.0611511, the closing row at 0
+  walked nhl-1280-late-watch: pick 128, 8 rows, card 645 high, 331 frames
+  FAIL [spoiler] nhl-1280-undrafted-watch: the title is held for 1.7 s and the closing row only starts to land at 2.7 s
+  FAIL [spoiler] nhl-1280-undrafted-watch: the club is held for 1.7 s and the closing row only starts to land at 2.7 s
+  FAIL [spoiler] nhl-1280-undrafted-watch: the result is held for 1.7 s and the closing row only starts to land at 2.7 s
+  FAIL [spoiler] nhl-1280-undrafted-watch: at 1716 ms of 2700 the title is at 0.0907348, the club at 0.0907348, the result at 0.0611187, the closing row at 0
+  walked nhl-1280-undrafted-watch: pick none, 6 rows, card 601 high, 284 frames
+  FAIL [spoiler] nhl-1280-late-skip: the title is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nhl-1280-late-skip: the club is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nhl-1280-late-skip: the result is held for 2.5 s and the closing row only starts to land at 3.5 s
+  walked nhl-1280-late-skip: pick 128, 8 rows, card 645 high, 76 frames
+  walked nhl-1280-undrafted-reduced: pick none, 6 rows, card 601 high, 46 frames
+  FAIL [spoiler] nfl-y2005-390-late-watch: the title is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nfl-y2005-390-late-watch: the club is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nfl-y2005-390-late-watch: the result is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nfl-y2005-390-late-watch: at 2517 ms of 3500 the title is at 0.0906658, the club at 0.0906658, the result at 0.0610719, the closing row at 0
+  walked nfl-y2005-390-late-watch: pick 123, 8 rows, card 636 high, 331 frames
+  FAIL [spoiler] nba-y2004-390-late-watch: the title is held for 2.85 s and the closing row only starts to land at 3.85 s
+  FAIL [spoiler] nba-y2004-390-late-watch: the club is held for 2.85 s and the closing row only starts to land at 3.85 s
+  FAIL [spoiler] nba-y2004-390-late-watch: the result is held for 2.85 s and the closing row only starts to land at 3.85 s
+  FAIL [spoiler] nba-y2004-390-late-watch: at 2867 ms of 3850 the title is at 0.0905649, the club at 0.0905649, the result at 0.0610035, the closing row at 0
+  walked nba-y2004-390-late-watch: pick 36, 5 rows and 3 lottery tiles, card 783 high, 356 frames
+  FAIL [spoiler] mlb-y2004-390-late-watch: the title is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] mlb-y2004-390-late-watch: the club is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] mlb-y2004-390-late-watch: the result is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] mlb-y2004-390-late-watch: at 2517 ms of 3500 the title is at 0.0907401, the club at 0.0907401, the result at 0.0611223, the closing row at 0
+  walked mlb-y2004-390-late-watch: pick 1079, 8 rows, card 764 high, 331 frames
+  FAIL [spoiler] nhl-y2006-390-late-watch: the title is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nhl-y2006-390-late-watch: the club is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nhl-y2006-390-late-watch: the result is held for 2.5 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] nhl-y2006-390-late-watch: at 2517 ms of 3500 the title is at 0.0908409, the club at 0.0908409, the result at 0.0611907, the closing row at 0
+  walked nhl-y2006-390-late-watch: pick 120, 8 rows, card 784 high, 331 frames
+  FAIL [spoiler] nba-360-late-watch: the title is held for 3.1 s and the closing row only starts to land at 4.1 s
+  FAIL [spoiler] nba-360-late-watch: the club is held for 3.1 s and the closing row only starts to land at 4.1 s
+  FAIL [spoiler] nba-360-late-watch: the result is held for 3.1 s and the closing row only starts to land at 4.1 s
+  FAIL [spoiler] nba-360-late-watch: at 3117 ms of 4100 the title is at 0.0907029, the club at 0.0907029, the result at 0.0610971, the closing row at 0
+  walked nba-360-late-watch: pick 35, 5 rows and 4 lottery tiles, card 825 high, 370 frames
+  FAIL [spoiler] nba-360-late-skip: the title is held for 3.1 s and the closing row only starts to land at 4.1 s
+  FAIL [spoiler] nba-360-late-skip: the club is held for 3.1 s and the closing row only starts to land at 4.1 s
+  FAIL [spoiler] nba-360-late-skip: the result is held for 3.1 s and the closing row only starts to land at 4.1 s
+  walked nba-360-late-skip: pick 35, 5 rows and 4 lottery tiles, card 825 high, 76 frames
+  FAIL [spoiler] nba-320-late-watch: the title is held for 3.1 s and the closing row only starts to land at 4.1 s
+  FAIL [spoiler] nba-320-late-watch: the club is held for 3.1 s and the closing row only starts to land at 4.1 s
+  FAIL [spoiler] nba-320-late-watch: the result is held for 3.1 s and the closing row only starts to land at 4.1 s
+  FAIL [spoiler] nba-320-late-watch: at 3116 ms of 4100 the title is at 0.0903844, the club at 0.0903844, the result at 0.0608811, the closing row at 0
+  noted nba-320-late-watch: the tile has 73 px for a club, 1 line(s) on screen and 1 of 30 clubs do not fit (not judged at this width)
+  walked nba-320-late-watch: pick 35, 5 rows and 4 lottery tiles, card 861 high, 369 frames
+  FAIL [spoiler] nba-320-late-skip: the title is held for 3.1 s and the closing row only starts to land at 4.1 s
+  FAIL [spoiler] nba-320-late-skip: the club is held for 3.1 s and the closing row only starts to land at 4.1 s
+  FAIL [spoiler] nba-320-late-skip: the result is held for 3.1 s and the closing row only starts to land at 4.1 s
+  noted nba-320-late-skip: the tile has 73 px for a club, 1 line(s) on screen and 1 of 30 clubs do not fit (not judged at this width)
+  walked nba-320-late-skip: pick 35, 5 rows and 4 lottery tiles, card 861 high, 77 frames
+
+playDraftNight: 150 FAILURE(S) in 48 nights
