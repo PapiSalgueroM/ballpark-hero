@@ -4,6 +4,7 @@ import {
   leaguePhaseFootnote, leaguePhasePots, leaguePhaseZone, nextRoundTie, slateFixtureOf, slateFixtures, slateOpponents,
   sortedLeaguePhaseTable, type LeaguePhaseRow,
 } from './uclLeaguePhase';
+import { slateCost, slateFloor } from './leagueSlate';
 
 /* Round 1228: the cases a reader can check by hand. The fleets are scripts/simCmLeaguePhase.mjs. */
 
@@ -61,6 +62,76 @@ describe('the pots and the slate', () => {
     }
     expect(slateFixtureOf(slate, 'Nobody', 0)).toBeNull();
     expect(slateOpponents(slate, 'Nobody')).toEqual([]);
+  });
+
+  it('tells one story about who is at home: the fixture list, a club\'s own fixture and the saved code agree', () => {
+    /* The binding round takes my club's venue from slateFixtureOf and everybody else's from slateFixtures.
+       Counting four home nights cannot see the two flags swapped (four stay four), so each match is read
+       three ways here and all three must name the same host. */
+    for (const seed of [3, 5, 77]) {
+      const slate = draw(seed);
+      if (!slate) throw new Error('no slate');
+      const codes = new Set(slate.fx);
+      let matches = 0;
+      for (let d = 0; d < 8; d += 1) {
+        for (const [home, away] of slateFixtures(slate, d)) {
+          matches += 1;
+          expect(slateFixtureOf(slate, home, d)).toEqual({ opponent: away, home: true });
+          expect(slateFixtureOf(slate, away, d)).toEqual({ opponent: home, home: false });
+          expect(codes.has(d * 1296 + slate.clubs.indexOf(home) * 36 + slate.clubs.indexOf(away))).toBe(true);
+          expect(slateOpponents(slate, home)[d]).toBe(away);
+          expect(slateOpponents(slate, away)[d]).toBe(home);
+        }
+      }
+      expect(matches).toBe(144);
+    }
+  });
+
+  it('says so on the saved slate when the search gave up and the recorded pattern was seated', () => {
+    /* A world editor's field: fifteen clubs of one association, five in each of pots two, three and four.
+       The search cannot draw it inside its budget, so the recorded pattern is seated. The saved slate is
+       what a card will read, so the flag must be on IT, not only on the builder's own answer. */
+    const fifteen = new Set([9, 10, 11, 12, 13, 18, 19, 20, 21, 22, 27, 28, 29, 31, 32]);
+    const swollen = (club: string) => (fifteen.has(Number(club.slice(5))) ? 'Land A' : `Alone ${club}`);
+    for (let seed = 1; seed <= 6; seed += 1) {
+      const slate = drawUclLeaguePhase({ field: FIELD, holder: 'Club 30', seed, strengthOf, assocOf: swollen });
+      if (!slate) throw new Error('no slate');
+      const names = slate.clubs.map(swollen);
+      const ids = [...new Set(names)];
+      const spec = { pots: [0, 1, 2, 3].map(p => Array.from({ length: 9 }, (_, i) => p * 9 + i)), assoc: names.map(a => ids.indexOf(a)), cap: 2 };
+      const matches = slate.fx.map((code): [number, number] => [Math.floor(code / 36) % 36, code % 36]);
+      const cost = slateCost(spec, matches);
+      const floor = slateFloor(spec);
+      /* The counts on the save are the counts its matches hold, and they are past anything the search may
+         return (two above the floor on either count): only the pattern can have made this slate. */
+      expect({ breaks: slate.breaks, overCap: slate.overCap }).toEqual(cost);
+      expect(cost.breaks > floor.breaks + 2 || cost.overCap > floor.overCap + 2).toBe(true);
+      expect(slate.fallback).toBe(true);
+      expect(JSON.parse(JSON.stringify(slate)).fallback).toBe(true);
+    }
+    /* And a field the search draws carries no such key at all. */
+    expect('fallback' in (draw(5) ?? {})).toBe(false);
+  });
+
+  it('hands the builder the cap of two: no club meets three of one other association', () => {
+    /* Six clubs of one association, four in pot one and two in pot two, leave no room inside the cap: the
+       count says two opponents over it and no fewer. A stale cap of three in the wrapper would draw none
+       over a cap of three and report 0, so the saved count itself is the check. */
+    const six = new Set([1, 2, 3, 4, 9, 10]);
+    const sixOf = (club: string) => (six.has(Number(club.slice(5))) ? 'Land A' : `Alone ${club}`);
+    for (let seed = 1; seed <= 6; seed += 1) {
+      const slate = drawUclLeaguePhase({ field: FIELD, holder: 'Club 30', seed, strengthOf, assocOf: sixOf });
+      if (!slate) throw new Error('no slate');
+      const faced = new Map<string, number>();
+      for (const code of slate.fx) {
+        const [h, a] = [slate.clubs[Math.floor(code / 36) % 36], slate.clubs[code % 36]];
+        if (sixOf(h) === sixOf(a)) continue;
+        for (const [club, other] of [[h, a], [a, h]]) faced.set(`${club}|${sixOf(other)}`, (faced.get(`${club}|${sixOf(other)}`) ?? 0) + 1);
+      }
+      const over = [...faced.values()].reduce((sum, n) => sum + Math.max(0, n - UCL_LEAGUE.capPerAssociation), 0);
+      expect(over).toBe(2);
+      expect(slate).toMatchObject({ breaks: 0, overCap: 2 });
+    }
   });
 
   it('refuses a field with a club that has no association', () => {
