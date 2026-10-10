@@ -1,0 +1,1363 @@
+{
+  "results": [
+    {
+      "id": "nfl-390-first-watch",
+      "mode": "watch",
+      "kind": "first",
+      "pick": 1,
+      "team": "DAL",
+      "closeAtS": 0.7,
+      "frames": 164,
+      "cardHeight": [
+        344.59375,
+        344.59375
+      ],
+      "journeyHeight": [
+        830.59375,
+        830.59375
+      ],
+      "scroll": [
+        0,
+        24
+      ],
+      "heldFrames": 31,
+      "landing": {
+        "ms": 783,
+        "top": 707,
+        "bottom": 761,
+        "vh": 844
+      },
+      "rows": 1,
+      "tiles": 0,
+      "closing": [
+        707,
+        761
+      ]
+    },
+    {
+      "id": "nfl-390-late-watch",
+      "mode": "watch",
+      "kind": "late",
+      "pick": 123,
+      "team": "BUF",
+      "closeAtS": 3.5,
+      "frames": 332,
+      "cardHeight": [
+        636.1875,
+        636.1875
+      ],
+      "journeyHeight": [
+        1122.1875,
+        1122.1875
+      ],
+      "scroll": [
+        0,
+        288
+      ],
+      "heldFrames": 199,
+      "landing": {
+        "ms": 3583,
+        "top": 707,
+        "bottom": 761,
+        "vh": 844
+      },
+      "rows": 8,
+      "tiles": 0,
+      "closing": [
+        707,
+        761
+      ]
+    },
+    {
+      "id": "nfl-390-undrafted-watch",
+      "mode": "watch",
+      "kind": "undrafted",
+      "pick": null,
+      "team": "TEN",
+      "closeAtS": 2.7,
+      "frames": 283,
+      "cardHeight": [
+        560.59375,
+        560.59375
+      ],
+      "journeyHeight": [
+        1046.59375,
+        1046.59375
+      ],
+      "scroll": [
+        0,
+        216
+      ],
+      "heldFrames": 151,
+      "landing": {
+        "ms": 3050,
+        "top": 692,
+        "bottom": 762,
+        "vh": 844
+      },
+      "rows": 6,
+      "tiles": 0,
+      "closing": [
+        691,
+        761
+      ]
+    },
+    {
+      "id": "nfl-390-late-skip",
+      "mode": "skip",
+      "kind": "late",
+      "pick": 123,
+      "team": "BUF",
+      "closeAtS": 3.5,
+      "frames": 80,
+      "cardHeight": [
+        636.1875,
+        636.1875
+      ],
+      "journeyHeight": [
+        1122.1875,
+        1122.1875
+      ],
+      "scroll": [
+        0,
+        288
+      ],
+      "rows": 8,
+      "tiles": 0,
+      "closing": [
+        707,
+        761
+      ]
+    },
+    {
+      "id": "nfl-390-undrafted-reduced",
+      "mode": "reduced",
+      "kind": "undrafted",
+      "pick": null,
+      "team": "TEN",
+      "closeAtS": 0,
+      "frames": 43,
+      "cardHeight": [
+        560.59375,
+        560.59375
+      ],
+      "journeyHeight": [
+        1046.59375,
+        1046.59375
+      ],
+      "scroll": [
+        0,
+        216
+      ],
+      "rows": 6,
+      "tiles": 0,
+      "closing": [
+        691,
+        761
+      ]
+    },
+    {
+      "id": "nba-390-first-watch",
+      "mode": "watch",
+      "kind": "first",
+      "pick": 1,
+      "team": "WAS",
+      "closeAtS": 2.7,
+      "frames": 287,
+      "cardHeight": [
+        620.59375,
+        620.59375
+      ],
+      "journeyHeight": [
+        1106.59375,
+        1106.59375
+      ],
+      "scroll": [
+        0,
+        280
+      ],
+      "heldFrames": 151,
+      "landing": {
+        "ms": 2783,
+        "top": 707,
+        "bottom": 761,
+        "vh": 844
+      },
+      "rows": 1,
+      "tiles": 4,
+      "closing": [
+        707,
+        761
+      ],
+      "tileFit": {
+        "room": 70,
+        "widest": {
+          "text": "Timberwolves",
+          "need": 83
+        },
+        "font": "Inter",
+        "inter": true,
+        "cut": [],
+        "clubs": []
+      }
+    },
+    {
+      "id": "nba-390-late-watch",
+      "mode": "watch",
+      "kind": "late",
+      "pick": 35,
+      "team": "DEN",
+      "closeAtS": 4.1,
+      "frames": 372,
+      "cardHeight": [
+        782.59375,
+        782.59375
+      ],
+      "journeyHeight": [
+        1268.59375,
+        1268.59375
+      ],
+      "scroll": [
+        0,
+        442
+      ],
+      "heldFrames": 235,
+      "landing": {
+        "ms": 4183,
+        "top": 707,
+        "bottom": 761,
+        "vh": 844
+      },
+      "rows": 5,
+      "tiles": 4,
+      "closing": [
+        707,
+        761
+      ],
+      "tileFit": {
+        "room": 64,
+        "widest": {
+          "text": "Timberwolves",
+          "need": 83
+        },
+        "font": "Inter",
+        "inter": true,
+        "cut": [],
+        "clubs": []
+      }
+    },
+    {
+      "id": "nba-390-undrafted-watch",
+      "mode": "watch",
+      "kind": "undrafted",
+      "pick": null,
+      "team": "SAS",
+      "closeAtS": 3.5,
+      "frames": 335,
+      "cardHeight": [
+        714.59375,
+        714.59375
+      ],
+      "journeyHeight": [
+        1200.59375,
+        1200.59375
+      ],
+      "scroll": [
+        0,
+        370
+      ],
+      "heldFrames": 199,
+      "landing": {
+        "ms": 3849,
+        "top": 692,
+        "bottom": 762,
+        "vh": 844
+      },
+      "rows": 3,
+      "tiles": 4,
+      "closing": [
+        691,
+        761
+      ],
+      "tileFit": {
+        "room": 72,
+        "widest": {
+          "text": "Timberwolves",
+          "need": 83
+        },
+        "font": "Inter",
+        "inter": true,
+        "cut": [],
+        "clubs": []
+      }
+    },
+    {
+      "id": "nba-390-late-skip",
+      "mode": "skip",
+      "kind": "late",
+      "pick": 35,
+      "team": "DEN",
+      "closeAtS": 4.1,
+      "frames": 77,
+      "cardHeight": [
+        782.59375,
+        782.59375
+      ],
+      "journeyHeight": [
+        1268.59375,
+        1268.59375
+      ],
+      "scroll": [
+        0,
+        442
+      ],
+      "rows": 5,
+      "tiles": 4,
+      "closing": [
+        707,
+        761
+      ],
+      "tileFit": {
+        "room": 64,
+        "widest": {
+          "text": "Timberwolves",
+          "need": 83
+        },
+        "font": "Inter",
+        "inter": true,
+        "cut": [],
+        "clubs": []
+      }
+    },
+    {
+      "id": "nba-390-undrafted-reduced",
+      "mode": "reduced",
+      "kind": "undrafted",
+      "pick": null,
+      "team": "SAS",
+      "closeAtS": 0,
+      "frames": 43,
+      "cardHeight": [
+        714.59375,
+        714.59375
+      ],
+      "journeyHeight": [
+        1200.59375,
+        1200.59375
+      ],
+      "scroll": [
+        0,
+        370
+      ],
+      "rows": 3,
+      "tiles": 4,
+      "closing": [
+        691,
+        761
+      ],
+      "tileFit": {
+        "room": 72,
+        "widest": {
+          "text": "Timberwolves",
+          "need": 83
+        },
+        "font": "Inter",
+        "inter": true,
+        "cut": [],
+        "clubs": []
+      }
+    },
+    {
+      "id": "mlb-390-first-watch",
+      "mode": "watch",
+      "kind": "first",
+      "pick": 1,
+      "team": "NYM",
+      "closeAtS": 0.7,
+      "frames": 167,
+      "cardHeight": [
+        412.59375,
+        412.59375
+      ],
+      "journeyHeight": [
+        898.59375,
+        898.59375
+      ],
+      "scroll": [
+        0,
+        24
+      ],
+      "heldFrames": 31,
+      "landing": {
+        "ms": 783,
+        "top": 707,
+        "bottom": 761,
+        "vh": 844
+      },
+      "rows": 1,
+      "tiles": 0,
+      "closing": [
+        707,
+        761
+      ]
+    },
+    {
+      "id": "mlb-390-late-watch",
+      "mode": "watch",
+      "kind": "late",
+      "pick": 432,
+      "team": "TEX",
+      "closeAtS": 3.5,
+      "frames": 336,
+      "cardHeight": [
+        744.1875,
+        744.1875
+      ],
+      "journeyHeight": [
+        1230.1875,
+        1230.1875
+      ],
+      "scroll": [
+        0,
+        288
+      ],
+      "heldFrames": 199,
+      "landing": {
+        "ms": 3583,
+        "top": 707,
+        "bottom": 761,
+        "vh": 844
+      },
+      "rows": 8,
+      "tiles": 0,
+      "closing": [
+        707,
+        761
+      ]
+    },
+    {
+      "id": "mlb-390-undrafted-watch",
+      "mode": "watch",
+      "kind": "undrafted",
+      "pick": null,
+      "team": "STL",
+      "closeAtS": 2.7,
+      "frames": 283,
+      "cardHeight": [
+        688.59375,
+        688.59375
+      ],
+      "journeyHeight": [
+        1174.59375,
+        1174.59375
+      ],
+      "scroll": [
+        0,
+        236
+      ],
+      "heldFrames": 151,
+      "landing": {
+        "ms": 3033,
+        "top": 692,
+        "bottom": 762,
+        "vh": 844
+      },
+      "rows": 6,
+      "tiles": 0,
+      "closing": [
+        691,
+        761
+      ]
+    },
+    {
+      "id": "mlb-390-late-skip",
+      "mode": "skip",
+      "kind": "late",
+      "pick": 432,
+      "team": "TEX",
+      "closeAtS": 3.5,
+      "frames": 77,
+      "cardHeight": [
+        744.1875,
+        744.1875
+      ],
+      "journeyHeight": [
+        1230.1875,
+        1230.1875
+      ],
+      "scroll": [
+        0,
+        288
+      ],
+      "rows": 8,
+      "tiles": 0,
+      "closing": [
+        707,
+        761
+      ]
+    },
+    {
+      "id": "mlb-390-undrafted-reduced",
+      "mode": "reduced",
+      "kind": "undrafted",
+      "pick": null,
+      "team": "STL",
+      "closeAtS": 0,
+      "frames": 43,
+      "cardHeight": [
+        688.59375,
+        688.59375
+      ],
+      "journeyHeight": [
+        1174.59375,
+        1174.59375
+      ],
+      "scroll": [
+        0,
+        236
+      ],
+      "rows": 6,
+      "tiles": 0,
+      "closing": [
+        691,
+        761
+      ]
+    },
+    {
+      "id": "nhl-390-first-watch",
+      "mode": "watch",
+      "kind": "first",
+      "pick": 1,
+      "team": "NSH",
+      "closeAtS": 0.7,
+      "frames": 163,
+      "cardHeight": [
+        452.59375,
+        452.59375
+      ],
+      "journeyHeight": [
+        938.59375,
+        938.59375
+      ],
+      "scroll": [
+        0,
+        24
+      ],
+      "heldFrames": 31,
+      "landing": {
+        "ms": 783,
+        "top": 707,
+        "bottom": 761,
+        "vh": 844
+      },
+      "rows": 1,
+      "tiles": 0,
+      "closing": [
+        707,
+        761
+      ]
+    },
+    {
+      "id": "nhl-390-late-watch",
+      "mode": "watch",
+      "kind": "late",
+      "pick": 128,
+      "team": "CHI",
+      "closeAtS": 3.5,
+      "frames": 332,
+      "cardHeight": [
+        764.1875,
+        764.1875
+      ],
+      "journeyHeight": [
+        1250.1875,
+        1250.1875
+      ],
+      "scroll": [
+        0,
+        268
+      ],
+      "heldFrames": 199,
+      "landing": {
+        "ms": 3583,
+        "top": 707,
+        "bottom": 761,
+        "vh": 844
+      },
+      "rows": 8,
+      "tiles": 0,
+      "closing": [
+        707,
+        761
+      ]
+    },
+    {
+      "id": "nhl-390-undrafted-watch",
+      "mode": "watch",
+      "kind": "undrafted",
+      "pick": null,
+      "team": "TOR",
+      "closeAtS": 2.7,
+      "frames": 283,
+      "cardHeight": [
+        748.59375,
+        748.59375
+      ],
+      "journeyHeight": [
+        1234.59375,
+        1234.59375
+      ],
+      "scroll": [
+        0,
+        236
+      ],
+      "heldFrames": 151,
+      "landing": {
+        "ms": 3033,
+        "top": 692,
+        "bottom": 762,
+        "vh": 844
+      },
+      "rows": 6,
+      "tiles": 0,
+      "closing": [
+        691,
+        761
+      ]
+    },
+    {
+      "id": "nhl-390-late-skip",
+      "mode": "skip",
+      "kind": "late",
+      "pick": 128,
+      "team": "CHI",
+      "closeAtS": 3.5,
+      "frames": 77,
+      "cardHeight": [
+        764.1875,
+        764.1875
+      ],
+      "journeyHeight": [
+        1250.1875,
+        1250.1875
+      ],
+      "scroll": [
+        0,
+        268
+      ],
+      "rows": 8,
+      "tiles": 0,
+      "closing": [
+        707,
+        761
+      ]
+    },
+    {
+      "id": "nhl-390-undrafted-reduced",
+      "mode": "reduced",
+      "kind": "undrafted",
+      "pick": null,
+      "team": "TOR",
+      "closeAtS": 0,
+      "frames": 45,
+      "cardHeight": [
+        748.59375,
+        748.59375
+      ],
+      "journeyHeight": [
+        1234.59375,
+        1234.59375
+      ],
+      "scroll": [
+        0,
+        236
+      ],
+      "rows": 6,
+      "tiles": 0,
+      "closing": [
+        691,
+        761
+      ]
+    },
+    {
+      "id": "nfl-1280-first-watch",
+      "mode": "watch",
+      "kind": "first",
+      "pick": 1,
+      "team": "DAL",
+      "closeAtS": 0.7,
+      "frames": 164,
+      "cardHeight": [
+        324.59375,
+        324.59375
+      ],
+      "journeyHeight": [
+        801.59375,
+        801.59375
+      ],
+      "scroll": [
+        0,
+        19
+      ],
+      "heldFrames": 31,
+      "landing": {
+        "ms": 783,
+        "top": 663,
+        "bottom": 717,
+        "vh": 800
+      },
+      "rows": 1,
+      "tiles": 0,
+      "closing": [
+        663,
+        717
+      ]
+    },
+    {
+      "id": "nfl-1280-late-watch",
+      "mode": "watch",
+      "kind": "late",
+      "pick": 123,
+      "team": "BUF",
+      "closeAtS": 3.5,
+      "frames": 331,
+      "cardHeight": [
+        556.59375,
+        556.59375
+      ],
+      "journeyHeight": [
+        1033.59375,
+        1033.59375
+      ],
+      "scroll": [
+        0,
+        251
+      ],
+      "heldFrames": 199,
+      "landing": {
+        "ms": 3583,
+        "top": 663,
+        "bottom": 717,
+        "vh": 800
+      },
+      "rows": 8,
+      "tiles": 0,
+      "closing": [
+        663,
+        717
+      ]
+    },
+    {
+      "id": "nfl-1280-undrafted-watch",
+      "mode": "watch",
+      "kind": "undrafted",
+      "pick": null,
+      "team": "TEN",
+      "closeAtS": 2.7,
+      "frames": 284,
+      "cardHeight": [
+        492.59375,
+        492.59375
+      ],
+      "journeyHeight": [
+        969.59375,
+        969.59375
+      ],
+      "scroll": [
+        0,
+        183
+      ],
+      "heldFrames": 151,
+      "landing": {
+        "ms": 3033,
+        "top": 664,
+        "bottom": 718,
+        "vh": 800
+      },
+      "rows": 6,
+      "tiles": 0,
+      "closing": [
+        663,
+        717
+      ]
+    },
+    {
+      "id": "nfl-1280-late-skip",
+      "mode": "skip",
+      "kind": "late",
+      "pick": 123,
+      "team": "BUF",
+      "closeAtS": 3.5,
+      "frames": 84,
+      "cardHeight": [
+        556.59375,
+        556.59375
+      ],
+      "journeyHeight": [
+        1033.59375,
+        1033.59375
+      ],
+      "scroll": [
+        0,
+        251
+      ],
+      "rows": 8,
+      "tiles": 0,
+      "closing": [
+        663,
+        717
+      ]
+    },
+    {
+      "id": "nfl-1280-undrafted-reduced",
+      "mode": "reduced",
+      "kind": "undrafted",
+      "pick": null,
+      "team": "TEN",
+      "closeAtS": 0,
+      "frames": 43,
+      "cardHeight": [
+        492.59375,
+        492.59375
+      ],
+      "journeyHeight": [
+        969.59375,
+        969.59375
+      ],
+      "scroll": [
+        0,
+        183
+      ],
+      "rows": 6,
+      "tiles": 0,
+      "closing": [
+        663,
+        717
+      ]
+    },
+    {
+      "id": "nba-1280-first-watch",
+      "mode": "watch",
+      "kind": "first",
+      "pick": 1,
+      "team": "WAS",
+      "closeAtS": 2.7,
+      "frames": 291,
+      "cardHeight": [
+        564.59375,
+        564.59375
+      ],
+      "journeyHeight": [
+        1041.59375,
+        1041.59375
+      ],
+      "scroll": [
+        0,
+        259
+      ],
+      "heldFrames": 151,
+      "landing": {
+        "ms": 2783,
+        "top": 663,
+        "bottom": 717,
+        "vh": 800
+      },
+      "rows": 1,
+      "tiles": 4,
+      "closing": [
+        663,
+        717
+      ],
+      "tileFit": {
+        "room": 70,
+        "widest": {
+          "text": "Timberwolves",
+          "need": 83
+        },
+        "font": "Inter",
+        "inter": true,
+        "cut": [],
+        "clubs": []
+      }
+    },
+    {
+      "id": "nba-1280-late-watch",
+      "mode": "watch",
+      "kind": "late",
+      "pick": 35,
+      "team": "DEN",
+      "closeAtS": 4.1,
+      "frames": 374,
+      "cardHeight": [
+        694.59375,
+        694.59375
+      ],
+      "journeyHeight": [
+        1171.59375,
+        1171.59375
+      ],
+      "scroll": [
+        0,
+        389
+      ],
+      "heldFrames": 235,
+      "landing": {
+        "ms": 4183,
+        "top": 663,
+        "bottom": 717,
+        "vh": 800
+      },
+      "rows": 5,
+      "tiles": 4,
+      "closing": [
+        663,
+        717
+      ],
+      "tileFit": {
+        "room": 64,
+        "widest": {
+          "text": "Timberwolves",
+          "need": 83
+        },
+        "font": "Inter",
+        "inter": true,
+        "cut": [],
+        "clubs": []
+      }
+    },
+    {
+      "id": "nba-1280-undrafted-watch",
+      "mode": "watch",
+      "kind": "undrafted",
+      "pick": null,
+      "team": "SAS",
+      "closeAtS": 3.5,
+      "frames": 338,
+      "cardHeight": [
+        630.59375,
+        630.59375
+      ],
+      "journeyHeight": [
+        1107.59375,
+        1107.59375
+      ],
+      "scroll": [
+        0,
+        321
+      ],
+      "heldFrames": 199,
+      "landing": {
+        "ms": 3850,
+        "top": 664,
+        "bottom": 718,
+        "vh": 800
+      },
+      "rows": 3,
+      "tiles": 4,
+      "closing": [
+        663,
+        717
+      ],
+      "tileFit": {
+        "room": 72,
+        "widest": {
+          "text": "Timberwolves",
+          "need": 83
+        },
+        "font": "Inter",
+        "inter": true,
+        "cut": [],
+        "clubs": []
+      }
+    },
+    {
+      "id": "nba-1280-late-skip",
+      "mode": "skip",
+      "kind": "late",
+      "pick": 35,
+      "team": "DEN",
+      "closeAtS": 4.1,
+      "frames": 76,
+      "cardHeight": [
+        694.59375,
+        694.59375
+      ],
+      "journeyHeight": [
+        1171.59375,
+        1171.59375
+      ],
+      "scroll": [
+        0,
+        389
+      ],
+      "rows": 5,
+      "tiles": 4,
+      "closing": [
+        663,
+        717
+      ],
+      "tileFit": {
+        "room": 64,
+        "widest": {
+          "text": "Timberwolves",
+          "need": 83
+        },
+        "font": "Inter",
+        "inter": true,
+        "cut": [],
+        "clubs": []
+      }
+    },
+    {
+      "id": "nba-1280-undrafted-reduced",
+      "mode": "reduced",
+      "kind": "undrafted",
+      "pick": null,
+      "team": "SAS",
+      "closeAtS": 0,
+      "frames": 43,
+      "cardHeight": [
+        630.59375,
+        630.59375
+      ],
+      "journeyHeight": [
+        1107.59375,
+        1107.59375
+      ],
+      "scroll": [
+        0,
+        321
+      ],
+      "rows": 3,
+      "tiles": 4,
+      "closing": [
+        663,
+        717
+      ],
+      "tileFit": {
+        "room": 72,
+        "widest": {
+          "text": "Timberwolves",
+          "need": 83
+        },
+        "font": "Inter",
+        "inter": true,
+        "cut": [],
+        "clubs": []
+      }
+    },
+    {
+      "id": "mlb-1280-first-watch",
+      "mode": "watch",
+      "kind": "first",
+      "pick": 1,
+      "team": "NYM",
+      "closeAtS": 0.7,
+      "frames": 171,
+      "cardHeight": [
+        392.59375,
+        392.59375
+      ],
+      "journeyHeight": [
+        869.59375,
+        869.59375
+      ],
+      "scroll": [
+        0,
+        19
+      ],
+      "heldFrames": 31,
+      "landing": {
+        "ms": 783,
+        "top": 663,
+        "bottom": 717,
+        "vh": 800
+      },
+      "rows": 1,
+      "tiles": 0,
+      "closing": [
+        663,
+        717
+      ]
+    },
+    {
+      "id": "mlb-1280-late-watch",
+      "mode": "watch",
+      "kind": "late",
+      "pick": 432,
+      "team": "TEX",
+      "closeAtS": 3.5,
+      "frames": 340,
+      "cardHeight": [
+        664.59375,
+        664.59375
+      ],
+      "journeyHeight": [
+        1141.59375,
+        1141.59375
+      ],
+      "scroll": [
+        0,
+        251
+      ],
+      "heldFrames": 199,
+      "landing": {
+        "ms": 3583,
+        "top": 663,
+        "bottom": 717,
+        "vh": 800
+      },
+      "rows": 8,
+      "tiles": 0,
+      "closing": [
+        663,
+        717
+      ]
+    },
+    {
+      "id": "mlb-1280-undrafted-watch",
+      "mode": "watch",
+      "kind": "undrafted",
+      "pick": null,
+      "team": "STL",
+      "closeAtS": 2.7,
+      "frames": 284,
+      "cardHeight": [
+        600.59375,
+        600.59375
+      ],
+      "journeyHeight": [
+        1077.59375,
+        1077.59375
+      ],
+      "scroll": [
+        0,
+        183
+      ],
+      "heldFrames": 151,
+      "landing": {
+        "ms": 3050,
+        "top": 664,
+        "bottom": 718,
+        "vh": 800
+      },
+      "rows": 6,
+      "tiles": 0,
+      "closing": [
+        663,
+        717
+      ]
+    },
+    {
+      "id": "mlb-1280-late-skip",
+      "mode": "skip",
+      "kind": "late",
+      "pick": 432,
+      "team": "TEX",
+      "closeAtS": 3.5,
+      "frames": 76,
+      "cardHeight": [
+        664.59375,
+        664.59375
+      ],
+      "journeyHeight": [
+        1141.59375,
+        1141.59375
+      ],
+      "scroll": [
+        0,
+        251
+      ],
+      "rows": 8,
+      "tiles": 0,
+      "closing": [
+        663,
+        717
+      ]
+    },
+    {
+      "id": "mlb-1280-undrafted-reduced",
+      "mode": "reduced",
+      "kind": "undrafted",
+      "pick": null,
+      "team": "STL",
+      "closeAtS": 0,
+      "frames": 43,
+      "cardHeight": [
+        600.59375,
+        600.59375
+      ],
+      "journeyHeight": [
+        1077.59375,
+        1077.59375
+      ],
+      "scroll": [
+        0,
+        183
+      ],
+      "rows": 6,
+      "tiles": 0,
+      "closing": [
+        663,
+        717
+      ]
+    },
+    {
+      "id": "nhl-1280-first-watch",
+      "mode": "watch",
+      "kind": "first",
+      "pick": 1,
+      "team": "NSH",
+      "closeAtS": 0.7,
+      "frames": 164,
+      "cardHeight": [
+        392.59375,
+        392.59375
+      ],
+      "journeyHeight": [
+        869.59375,
+        869.59375
+      ],
+      "scroll": [
+        0,
+        19
+      ],
+      "heldFrames": 31,
+      "landing": {
+        "ms": 783,
+        "top": 663,
+        "bottom": 717,
+        "vh": 800
+      },
+      "rows": 1,
+      "tiles": 0,
+      "closing": [
+        663,
+        717
+      ]
+    },
+    {
+      "id": "nhl-1280-late-watch",
+      "mode": "watch",
+      "kind": "late",
+      "pick": 128,
+      "team": "CHI",
+      "closeAtS": 3.5,
+      "frames": 332,
+      "cardHeight": [
+        644.59375,
+        644.59375
+      ],
+      "journeyHeight": [
+        1121.59375,
+        1121.59375
+      ],
+      "scroll": [
+        0,
+        251
+      ],
+      "heldFrames": 199,
+      "landing": {
+        "ms": 3583,
+        "top": 663,
+        "bottom": 717,
+        "vh": 800
+      },
+      "rows": 8,
+      "tiles": 0,
+      "closing": [
+        663,
+        717
+      ]
+    },
+    {
+      "id": "nhl-1280-undrafted-watch",
+      "mode": "watch",
+      "kind": "undrafted",
+      "pick": null,
+      "team": "TOR",
+      "closeAtS": 2.7,
+      "frames": 284,
+      "cardHeight": [
+        600.59375,
+        600.59375
+      ],
+      "journeyHeight": [
+        1077.59375,
+        1077.59375
+      ],
+      "scroll": [
+        0,
+        183
+      ],
+      "heldFrames": 151,
+      "landing": {
+        "ms": 3050,
+        "top": 664,
+        "bottom": 718,
+        "vh": 800
+      },
+      "rows": 6,
+      "tiles": 0,
+      "closing": [
+        663,
+        717
+      ]
+    },
+    {
+      "id": "nhl-1280-late-skip",
+      "mode": "skip",
+      "kind": "late",
+      "pick": 128,
+      "team": "CHI",
+      "closeAtS": 3.5,
+      "frames": 76,
+      "cardHeight": [
+        644.59375,
+        644.59375
+      ],
+      "journeyHeight": [
+        1121.59375,
+        1121.59375
+      ],
+      "scroll": [
+        0,
+        251
+      ],
+      "rows": 8,
+      "tiles": 0,
+      "closing": [
+        663,
+        717
+      ]
+    },
+    {
+      "id": "nhl-1280-undrafted-reduced",
+      "mode": "reduced",
+      "kind": "undrafted",
+      "pick": null,
+      "team": "TOR",
+      "closeAtS": 0,
+      "frames": 46,
+      "cardHeight": [
+        600.59375,
+        600.59375
+      ],
+      "journeyHeight": [
+        1077.59375,
+        1077.59375
+      ],
+      "scroll": [
+        0,
+        183
+      ],
+      "rows": 6,
+      "tiles": 0,
+      "closing": [
+        663,
+        717
+      ]
+    }
+  ],
+  "failures": []
+}
