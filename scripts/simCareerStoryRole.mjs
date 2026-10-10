@@ -314,8 +314,9 @@ async function roleChecks(check, B, old, save, report) {
       const expected = observed(old.soccer, (sc, s) => sc.calcAppearances(s.overall, s.currentClubTier, s.age, s), noRole, seed);
       const actual = observed(E, (sc, s) => sc.calcAppearances(s.overall, s.currentClubTier, s.age, s), c, seed);
       const band = old.soccer.projectLeagueApps(c.overall, c.currentClubTier, c.currentClub, c.seasons.filter(row => row.type === 'playing' && row.club === c.currentClub).length);
-      const phone = B.squad.managerTrust(noRole, B.squad.squadNow(noRole)).swing;
-      let league = Math.max(0, Math.min(38, band.min + Math.floor(expected.draws[0] * (band.max - band.min + 1)) + phone - 4));
+      /* Release AT: Round 1185's recent form swing is in the same sum as the phone and the role. */
+      const phone = B.squad.managerTrust(noRole, B.squad.squadNow(noRole)).swing, form = B.squad.managerTrust(noRole, B.squad.squadNow(noRole)).form.swing;
+      let league = Math.max(0, Math.min(38, band.min + Math.floor(expected.draws[0] * (band.max - band.min + 1)) + phone + form - 4));
       if (c.frozenOut) league = Math.min(8, Math.round(league * 0.25));
       assert.equal(actual.value.leagueApps, league, 'phone and four-game role combine before the 38 cap and frozen-out availability');
       assert.deepEqual(actual.draws, expected.draws, 'role adds no draw and moves no injury draw');
@@ -443,8 +444,8 @@ async function roleChecks(check, B, old, save, report) {
     for (const frozenOut of [0, 1]) for (const overall of [35, 75, 99]) {
       const c = plannedInput(); c.frozenOut = frozenOut; c.overall = overall;
       const at = B.squad.squadNow(c), trust = B.squad.managerTrust(c, at);
-      const a = Math.max(0, Math.min(38, trust.band.min + trust.swing - 4)), b = Math.max(0, Math.min(38, trust.band.max + trust.swing - 4));
-      let expected = Math.max(0, Math.min(38, (trust.band.min + trust.band.max) / 2 + trust.swing - 4));
+      const a = Math.max(0, Math.min(38, trust.band.min + trust.swing + trust.form.swing - 4)), b = Math.max(0, Math.min(38, trust.band.max + trust.swing + trust.form.swing - 4));
+      let expected = Math.max(0, Math.min(38, (trust.band.min + trust.band.max) / 2 + trust.swing + trust.form.swing - 4));
       if (frozenOut) expected = Math.min(8, Math.round(expected * 0.25));
       assert.equal(trust.expected, expected, 'display reads the held four-game reduction'); assert.equal(trust.roleSwing, -4, 'phone swing stays separate from role');
       assert.equal(B.sheet.planLine(trust), frozenOut ? 'The plan: frozen out, 8 league games at most.' : `The plan is about ${a} to ${b} league games.`, 'actual range respects role and existing bounds');

@@ -90,10 +90,12 @@ describe('Soccer Career reduced manager role', () => {
 
   it('shows the same role range and explains it separately from the phone', () => {
     const c = queueReducedRole(career()), at = squadNow(c)!, trust = managerTrust(c, at);
-    const expected = Math.max(0, Math.min(38, (trust.band.min + trust.band.max) / 2 + trust.swing - 4));
+    /* Release AT: Round 1185's recent form swing sits in the same sum as this round's role swing, so the
+       oracle adds it too. The role still takes exactly four off whatever the rest comes to. */
+    const expected = Math.max(0, Math.min(38, (trust.band.min + trust.band.max) / 2 + trust.swing + trust.form.swing - 4));
     expect(trust.expected).toBe(expected);
     expect(trust.role).toEqual(c.reducedRole);
-    expect(planLine(trust)).toContain(`${Math.max(0, Math.min(38, trust.band.min + trust.swing - 4))}`);
+    expect(planLine(trust)).toContain(`${Math.max(0, Math.min(38, trust.band.min + trust.swing + trust.form.swing - 4))}`);
     expect(trustLines(c, at, trust).join(' ')).toContain('4');
     const old = career();
     expect(managerTrust(old, squadNow(old)!).roleSwing).toBe(0);
