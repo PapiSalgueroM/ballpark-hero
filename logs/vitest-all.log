@@ -1,0 +1,40 @@
+[90mstderr[2m | src/lib/fetchFootlePlayerPool.test.ts[2m > [22m[2mfetchFootlePlayerPool[2m > [22m[2mreturns an empty pool when either obscure query fails
+[22m[39m[fetchFootlePlayerPool] Obscure batch failed, using fallback
+
+[90mstderr[2m | src/lib/fetchFootlePlayerPool.test.ts[2m > [22m[2mfetchFootlePlayerPool[2m > [22m[2mkeeps the empty fallback behavior when the famous query fails
+[22m[39m[fetchFootlePlayerPool] Supabase returned empty or errored, using fallback
+
+ [32m✓[39m src/lib/fetchFootlePlayerPool.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+[90mstderr[2m | src/test/helpDialogFocus.test.tsx[2m > [22m[2mhelp dialog focus return[2m > [22m[2mpreserves controlled open callbacks, exact content and trigger label
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/helpDialogFocus.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 521[2mms[22m[39m
+ [32m✓[39m src/test/rankShift.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 157[2mms[22m[39m
+ [32m✓[39m src/lib/fightPromoter.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m src/test/seasonReplays.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmBooksPanel.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 136[2mms[22m[39m
+ [32m✓[39m src/hooks/useConquestNba.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 1155[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA Conquest Arcade territory resolution[2m > [22mtells the player that the failed away raid was repelled [33m 1114[2mms[22m[39m
+ [32m✓[39m src/data/pollFixtures.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m src/components/home/PollOfTheDay.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 185[2mms[22m[39m
+ [32m✓[39m src/test/managerPenaltyMarkers.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 187[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerGoalWeight.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 60[2mms[22m[39m
+ [32m✓[39m src/test/ownerMandateMotion.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 147[2mms[22m[39m
+ [32m✓[39m src/test/soccerAwardGeneration.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 128[2mms[22m[39m
+[90mstdout[2m | src/test/careerWallShotFriendly.test.ts[2m > [22m[2mcareer wall shot forgiveness[2m > [22m[2mscores more with modest aiming and timing errors than the previous ladder
+[22m[39mwall shot forgiveness: 12810/18000 scored, previous 12565/18000
+
+ [32m✓[39m src/test/careerWallShotFriendly.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 147[2mms[22m[39m
+ [32m✓[39m src/test/reservedNames.test.ts [2m([22m[2m89 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/test/liveScoresTransport.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmInboxPanel.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 64[2mms[22m[39m
+ [32m✓[39m src/pages/NotFound.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 163[2mms[22m[39m
+ [32m✓[39m src/lib/gridRarity.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m src/data/gameRegistry.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/example.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 2[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m403 passed[39m[22m[2m | [22m[33m2 skipped[39m[90m (405)[39m
+[2m      Tests [22m [1m[32m5732 passed[39m[22m[2m | [22m[33m55 skipped[39m[90m (5787)[39m
+[2m   Start at [22m 19:11:32
+[2m   Duration [22m 551.04s[2m (transform 41.71s, setup 24.78s, collect 170.34s, tests 1159.20s, environment 176.26s, prepare 35.71s)[22m
+

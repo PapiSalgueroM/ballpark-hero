@@ -1,0 +1,8 @@
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+simNoRivalNames exit=0 20s | No rival product names found. 0 findings.
+simNoInventedQuotes exit=0 36s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simLegalPages exit=0 0s | simLegalPages: all green
+simHarnessAnchors exit=0 71s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNumberFormatting exit=0 248s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
+vitest-all exit=0 552s |    Duration  551.04s (transform 41.71s, setup 24.78s, collect 170.34s, tests 1159.20s, environment 176.26s, prepare 35.71s)
