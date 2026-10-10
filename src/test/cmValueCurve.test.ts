@@ -786,15 +786,15 @@ describe('the birth date ledger: two publishers of two kinds a man, neither a wi
     expect(birthRowProblems({ ...good, sources: [good.sources[0]] }).join(' | ')).toMatch(/under two publishers/);
   });
 
-  it('every one of the 105 rows meets the rule, and none is thin', () => {
+  it('every one of the 109 rows meets the rule, and none is thin', () => {
     expect(birthLedger.asOf).toBe(AGES_AS_OF);
-    expect(birthLedger.rows.length).toBe(105);
+    expect(birthLedger.rows.length).toBe(109);
     const problems = birthLedger.rows.flatMap(birthRowProblems);
     expect(problems).toEqual([]);
     expect(birthLedger.rows.filter((r: any) => r.thin).map((r: any) => r.name)).toEqual([]);
     /* one man a row, and a publisher is one kind of publisher everywhere in the file */
     const keys = birthLedger.rows.map((r: any) => `${r.name}|${r.club}`);
-    expect(new Set(keys).size).toBe(105);
+    expect(new Set(keys).size).toBe(109);
     const kind = new Map<string, Set<string>>();
     for (const r of birthLedger.rows) for (const s of r.sources) kind.set(s.publisher, (kind.get(s.publisher) ?? new Set()).add(s.family));
     expect([...kind.entries()].filter(([, set]) => set.size !== 1).map(([p]) => p)).toEqual([]);
@@ -810,6 +810,18 @@ describe('the birth date ledger: two publishers of two kinds a man, neither a wi
     expect(kindsOf('João Pedro')).toEqual(['stats', 'stats', 'club']);
     expect(closedBy('João Pedro')).toEqual(['chelseafc.com club']);
     expect([publishersOf('Mohamed Salah'), publishersOf('João Pedro')]).toEqual([3, 3]);
+    /* and the four men Round 1102 left on ONE publisher each have a row now: a club or competition
+       page and a statistics page, both opened on 2026-10-10 */
+    const four = ['Willian José', 'Saúl Ñíguez', 'Hulk', 'Stefan Savic'].map(name => {
+      const row = birthLedger.rows.find((r: any) => r.name === name);
+      return [name, row?.club, row?.born, kindsOf(name).join(' and '), row?.sources.every((s: any) => s.readOn === '2026-10-10')];
+    });
+    expect(four).toEqual([
+      ['Willian José', 'Bahia', '1991-11-23', 'club and stats', true],
+      ['Saúl Ñíguez', 'Flamengo', '1994-11-21', 'club and stats', true],
+      ['Hulk', 'Fluminense', '1986-07-25', 'club and stats', true],
+      ['Stefan Savic', 'Trabzonspor', '1991-01-08', 'competition and stats', true],
+    ]);
   });
 
   it('every bulk table row holds the age on 1 January of its year, which is what the rule stands on', () => {
@@ -827,12 +839,12 @@ describe('the birth date ledger: two publishers of two kinds a man, neither a wi
       if (table.age !== exact && table.age !== exact + 1) off.push(`${r.name}: moved to ${table.age}, exact ${exact}`);
     }
     expect(off).toEqual([]);
-    expect([bulk, written]).toEqual([82, 23]);
+    expect([bulk, written]).toEqual([82, 27]);
   });
 
   it('the three ledgers join with no two dates for one man, and every ledger man is in his squad once', () => {
     const births = realBirths();
-    expect(births.size).toBe(521);
+    expect(births.size).toBe(525);
     const lost: string[] = [];
     for (const r of birthLedger.rows) {
       const rows = (CM_ROSTERS[r.club] ?? []).filter(p => p.n === r.name);
@@ -900,7 +912,7 @@ describe('what every 2026 age will stand on (the basis file), man for man agains
     /* These restate the value table as the lead pulled it (2026-10-07): how each age is known, and
        how far the August age sits from the age main ships today. A new pull recounts them, and
        scripts/genCmAgesBasis2026.mjs prints all three. */
-    expect(basisCount).toEqual({ born: 423, moved: 3974, written: 4 });
+    expect(basisCount).toEqual({ born: 427, moved: 3974 });
     expect(againstShipped).toEqual({ '1': 4221, '0': 176, '-1': 4 });
     expect(changed).toBe(2078);
     console.log(`2026 at the flip: ${changed} of 4401 ratings change; by points ${JSON.stringify(swing)}`);
