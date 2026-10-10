@@ -1,0 +1,85 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe Dart Draft pool[2m > [22mreads the top 2,000 as two pages of 1000 and keeps the old 900 at its head[32m 5[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPools.test.ts[2m > [22mDart Draft wider existing pools and varied picks[2m > [22mkeeps the strongest three and varies five without replacement beyond the old best eight[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPools.test.ts[2m > [22mDart Draft wider existing pools and varied picks[2m > [22mkeeps used names and wrong positions out while preserving distinct accented names[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPools.test.ts[2m > [22mDart Draft wider existing pools and varied picks[2m > [22muses the same compact variety policy for bonus slots and leaves the shared legends intact[32m 1[2mms[22m[39m
+ [31m×[39m src/test/dartDraftPools.test.ts[2m > [22mDart Draft wider existing pools and varied picks[2m > [22mreads exactly the first 2,000 global 2026 rows in two pages while excluding other years and unknown positions[32m 8[2mms[22m[39m
+[31m   → expected 'Fixture old season' to be 'Fixture Player 0000' // Object.is equality[39m
+ [32m✓[39m src/test/dartDraftPools.test.ts[2m > [22mDart Draft wider existing pools and varied picks[2m > [22mpages a country beyond 120 and 1000 and keeps nationality and era in the actual choice path[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPools.test.ts[2m > [22mDart Draft wider existing pools and varied picks[2m > [22mpages the targeted position fallback beyond 12 after an unavailable country read[33m 1205[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe Dart Draft pool[2m > [22mis both pages or nothing[33m 2404[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe Dart Draft pool[2m > [22masks again for a page that failed once, and still never asks past the 2,000th row[33m 402[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe Dart Draft pool[2m > [22mclaims no storm floor when the table is not 900 rows deep, and still loads[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe Dart Draft pool[2m > [22mkeeps the storm zone at or above the floor[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe mystery zone[2m > [22mdraws its three from above the old pool line and adds one long shot from below it[32m 11[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe mystery zone[2m > [22mis the three from anywhere it always was when the pool has no floor[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe mystery zone[2m > [22moffers whoever is left when nobody above the line is[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe shared paged reader with a row limit[2m > [22mstops at the limit and never asks for a page past it[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe shared paged reader with a row limit[2m > [22mcuts a last page that runs past the limit, and reads on to the limit when it was not asked for at once[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe shared paged reader with a row limit[2m > [22mreads everything when no limit is given, as it always did[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe tiles a country hit shows[2m > [22mshows everyone when the country has eight or fewer[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe tiles a country hit shows[2m > [22malways keeps the best four, draws the rest from deeper, and hands them back best first[32m 6[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe tiles a country hit shows[2m > [22mis the old best eight when asked to keep eight[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveMotion.test.tsx[2m > [22mactual Stat Detective committed feedback and access[2m > [22mreveals each real profile-backed clue and only the newest guess without remounting older rows[32m 191[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveMotion.test.tsx[2m > [22mactual Stat Detective committed feedback and access[2m > [22mkeeps the non-first native option mounted during focus transfer and preserves input Enter-first matching[32m 53[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPools.test.ts[2m > [22mDart Draft wider existing pools and varied picks[2m > [22mfails closed rather than returning a partial global or country pool after a later page fails[33m 2404[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveMotion.test.tsx[2m > [22mactual Stat Detective committed feedback and access[2m > [22mcues a committed win once with exact helper feedback, share truth and undefined completion score[32m 48[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveMotion.test.tsx[2m > [22mactual Stat Detective committed feedback and access[2m > [22mends exactly eight misses, then starts a quiet different case and rearms one completion per difficulty[32m 165[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mthe spans view and what the page makes of its rows[2m > [22mholds this file's copy of the view to the rows the migration's SQL is held to[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mthe spans view and what the page makes of its rows[2m > [22mmakes one career per name, out of the men who reached the floor and nobody else[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mthe spans view and what the page makes of its rows[2m > [22mcuts two men apart only past the cohort gap[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mthe spans view and what the page makes of its rows[2m > [22mcounts the floor in the view at the number the page uses, and keeps the first draft columns first[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22ma career span belongs to a man, not to a name[2m > [22mdoes not let a namesake who never reached 500 minutes stretch a famous career[32m 25[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22ma career span belongs to a man, not to a name[2m > [22mkeeps two men who both reached the floor as the one generous profile they always were[32m 15[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mStat Detective career spans come from every season, not the 500 minute ones[2m > [22mcounts every team he has a row for as a franchise he played for[32m 11[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mStat Detective career spans come from every season, not the 500 minute ones[2m > [22mreads the true first and last season for a man whose career ran past his 500 minute seasons[32m 8[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mStat Detective career spans come from every season, not the 500 minute ones[2m > [22mjudges the era of a guess on the true span[32m 8[2mms[22m[39m
+[90mstderr[2m | src/test/statDetectiveMotion.test.tsx[2m > [22m[2mactual Stat Detective committed feedback and access[2m > [22m[2mshows accurate rules and example before play and reopens the same native help door
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/statDetectiveMotion.test.tsx[2m > [22mactual Stat Detective committed feedback and access[2m > [22mderives the real sparse-profile unlock gaps without inventing career clues[32m 109[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveMotion.test.tsx[2m > [22mactual Stat Detective committed feedback and access[2m > [22mkeeps short and duplicate queries quiet and clears owned feedback timers on unmount[32m 48[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveMotion.test.tsx[2m > [22mactual Stat Detective committed feedback and access[2m > [22mshows accurate rules and example before play and reopens the same native help door[32m 59[2mms[22m[39m
+[90mstderr[2m | src/test/statDetectiveScope.test.tsx[2m > [22m[2mStat Detective recorded profile scope[2m > [22m[2mexplains what the career span covers before play and in reopened help
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/statDetectiveScope.test.tsx[2m > [22mStat Detective recorded profile scope[2m > [22mexplains what the career span covers before play and in reopened help[32m 143[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveScope.test.tsx[2m > [22mStat Detective recorded profile scope[2m > [22mshows the complete career span and franchises under their shipped labels[32m 76[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveScope.test.tsx[2m > [22mStat Detective recorded profile scope[2m > [22mcaptures the exact random case and mode while keeping the answer out of visible play[32m 69[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mStat Detective career spans come from every season, not the 500 minute ones[2m > [22mfails the whole load when the spans cannot be read, and never falls back to the 500 minute span[33m 3642[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mStat Detective career spans come from every season, not the 500 minute ones[2m > [22mreads a view deeper than the pages it asks for at once to the end, and asks again for a page that failed once[33m 842[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mStat Detective career spans come from every season, not the 500 minute ones[2m > [22mgives a name the view lacks no span at all and says so, rather than guessing one[32m 10[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mStat Detective mysteries do not move with the span[2m > [22mbuilds byte identical mystery pools, and they do not depend on what the view says[32m 21[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mthe Stat Detective page over the same table[2m > [22mopens its retry state when the spans cannot be read, and recovers when they can[33m 1283[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mthe Stat Detective page over the same table[2m > [22mprints the true years beside a name in the guess box[32m 57[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mthe Stat Detective page over the same table[2m > [22mprints the famous man his own years beside a name he shares[32m 49[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/dartDraftPools.test.ts[2m > [22mDart Draft wider existing pools and varied picks[2m > [22mreads exactly the first 2,000 global 2026 rows in two pages while excluding other years and unknown positions
+[31m[1mAssertionError[22m: expected 'Fixture old season' to be 'Fixture Player 0000' // Object.is equality[39m
+
+Expected: [32m"Fixture [7mPlayer 0000[27m"[39m
+Received: [31m"Fixture [7mold season[27m"[39m
+
+[36m [2m❯[22m src/test/dartDraftPools.test.ts:[2m102:37[22m[39m
+    [90m100| [39m    [35mconst[39m result [33m=[39m [35mawait[39m [34mfetchDartDraftPool[39m()[33m;[39m
+    [90m101| [39m    [34mexpect[39m(result[33m.[39mcurrent)[33m.[39m[34mtoHaveLength[39m([34m1999[39m)[33m;[39m
+    [90m102| [39m    expect(result.current[0]?.name).toBe('Fixture Player 0000'); expec…
+    [90m   | [39m                                    [31m^[39m
+    [90m103| [39m    expect(result.current.some(value => value.name.includes('missing')…
+    [90m104| [39m    [34mexpect[39m(result[33m.[39mlegends)[33m.[39m[34mtoBe[39m([33mLEGENDS[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m46 passed[39m[22m[90m (47)[39m
+[2m   Start at [22m 11:27:15
+[2m   Duration [22m 7.06s[2m (transform 633ms, setup 141ms, collect 1.69s, tests 13.41s, environment 1.05s, prepare 307ms)[22m
+

@@ -1,0 +1,7 @@
+#!serial
+mal: node .rc/x/scEngine.mjs . mal
+daily2: git worktree add -f /tmp/base-d 54e3820a >/dev/null 2>&1 || (sleep 6; git worktree add -f /tmp/base-d 54e3820a >/dev/null 2>&1); ln -s "$PWD/node_modules" /tmp/base-d/node_modules; W="$PWD"; (cd /tmp/base-d && DAILY_DATES=120 node "$W/.rc/x/cmDaily2.mjs" base /tmp/cmrev-d) && DAILY_DATES=120 node .rc/x/cmDaily2.mjs head /tmp/cmrev-d
+base: bash .rc/x/mrun.sh base
+poolyear: bash .rc/x/mrun.sh poolyear
+poolyear-failed: cat "$RC_OUT/m-poolyear-failed.txt" | head -12; echo "---base"; cat "$RC_OUT/m-base-failed.txt" | head -12
+clean: git status --porcelain --untracked-files=no -- src scripts | head -5; echo "tracked files changed after the mutations: $(git status --porcelain --untracked-files=no -- src scripts | wc -l)"

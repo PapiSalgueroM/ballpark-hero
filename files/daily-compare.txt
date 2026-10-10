@@ -1,0 +1,142 @@
+2026-10-10 HOT Athletic Club (La Liga) bound=no SAME | DEADLINE Rangers bound=no SAME
+2026-10-11 HOT Young Boys (Swiss Super League) bound=no SAME | DEADLINE Borussia Dortmund bound=no SAME
+2026-10-12 HOT Westerlo (Belgian Pro League) bound=no SAME | DEADLINE Atalanta bound=no SAME
+2026-10-13 HOT Celta Vigo (La Liga) bound=no SAME | DEADLINE Trabzonspor bound=no SAME
+2026-10-14 HOT Monza (Serie A) bound=no SAME | DEADLINE PAOK bound=no SAME
+2026-10-15 HOT Osasuna (La Liga) bound=no SAME | DEADLINE St. Pauli bound=no SAME
+2026-10-16 HOT Cruz Azul (Liga MX) bound=no SAME | DEADLINE Nice bound=no SAME
+2026-10-17 HOT Trabzonspor (Süper Lig) bound=no SAME | DEADLINE Valencia bound=no SAME
+2026-10-18 HOT Al-Ahli (Saudi Pro League) bound=no SAME | DEADLINE Nottingham Forest bound=no SAME
+2026-10-19 HOT Hamburg (Bundesliga) bound=no SAME | DEADLINE Cruzeiro bound=no SAME
+2026-10-20 HOT Toulouse (Ligue 1) bound=no SAME | DEADLINE Monterrey bound=no SAME
+2026-10-21 HOT Anderlecht (Belgian Pro League) bound=no SAME | DEADLINE Como bound=no SAME
+2026-10-22 HOT León (Liga MX) bound=no SAME | DEADLINE Auxerre bound=no SAME
+2026-10-23 HOT Elche (La Liga) bound=no SAME | DEADLINE Heidenheim bound=no SAME
+2026-10-24 HOT Athletico Paranaense (Brasileirão Série A) bound=no SAME | DEADLINE Monaco bound=no SAME
+2026-10-25 HOT Samsunspor (Süper Lig) bound=no SAME | DEADLINE Deportivo La Coruña bound=no SAME
+2026-10-26 HOT Le Havre (Ligue 1) bound=no SAME | DEADLINE FC Juárez bound=no SAME
+2026-10-27 HOT Nottingham Forest (Premier League) bound=no SAME | DEADLINE Al-Hilal bound=no SAME
+2026-10-28 HOT PSG (Ligue 1) bound=no SAME | DEADLINE Red Bull Bragantino bound=no SAME
+2026-10-29 HOT FC Midtjylland (Danish Superliga) bound=no SAME | DEADLINE Lecce bound=no SAME
+2026-10-30 HOT Sturm Graz (Austrian Bundesliga) bound=no SAME | DEADLINE Sassuolo bound=no SAME
+2026-10-31 HOT Deportivo La Coruña (La Liga) bound=no SAME | DEADLINE Göztepe bound=no SAME
+2026-11-01 HOT Utrecht (Eredivisie) bound=no SAME | DEADLINE Manchester United bound=no SAME
+2026-11-02 HOT RB Salzburg (Austrian Bundesliga) bound=no SAME | DEADLINE Torino bound=no SAME
+2026-11-03 HOT Real Betis (La Liga) bound=no SAME | DEADLINE Celtic bound=no SAME
+2026-11-04 HOT Flamengo (Brasileirão Série A) bound=no SAME | DEADLINE Hoffenheim bound=no SAME
+2026-11-05 HOT AZ Alkmaar (Eredivisie) bound=no SAME | DEADLINE Wellington Phoenix bound=no SAME
+2026-11-06 HOT QPR (EFL Championship) bound=no SAME | DEADLINE Rio Ave bound=no SAME
+2026-11-07 HOT Fenerbahçe (Süper Lig) bound=no SAME | DEADLINE Stoke City bound=no SAME
+2026-11-08 HOT Hoffenheim (Bundesliga) bound=no SAME | DEADLINE Toluca bound=no SAME
+2026-11-09 HOT Minnesota United (MLS Western Conference) bound=no SAME | DEADLINE Sunderland bound=no SAME
+2026-11-10 HOT Dynamo Makhachkala (Russian Premier League) bound=no SAME | DEADLINE New York City FC bound=no SAME
+2026-11-11 HOT Swansea City (EFL Championship) bound=no SAME | DEADLINE Rangers bound=no SAME
+2026-11-12 HOT Derby County (EFL Championship) bound=no SAME | DEADLINE Başakşehir bound=no SAME
+2026-11-13 HOT Başakşehir (Süper Lig) bound=no SAME | DEADLINE Derby County bound=no SAME
+2026-11-14 HOT Sunderland (Premier League) bound=no SAME | DEADLINE Minnesota United bound=no SAME
+2026-11-15 HOT León (Liga MX) bound=no SAME | DEADLINE Köln bound=no SAME
+2026-11-16 HOT Portland Timbers (MLS Western Conference) bound=no SAME | DEADLINE Crystal Palace bound=no SAME
+2026-11-17 HOT West Ham (EFL Championship) bound=no SAME | DEADLINE Sporting CP bound=no SAME
+2026-11-18 HOT Guadalajara (Liga MX) bound=no SAME | DEADLINE Freiburg bound=no SAME
+2026-11-19 HOT Saint-Étienne (Ligue 2) bound=no SAME | DEADLINE Brest bound=no SAME
+2026-11-20 HOT St. Louis City (MLS Western Conference) bound=no SAME | DEADLINE Ipswich Town bound=no SAME
+2026-11-21 HOT Birmingham City (EFL Championship) bound=no SAME | DEADLINE Celtic bound=no SAME
+2026-11-22 HOT Internacional (Brasileirão Série A) bound=no SAME | DEADLINE RB Leipzig bound=no SAME
+2026-11-23 HOT Rennes (Ligue 1) bound=no SAME | DEADLINE Melbourne Victory bound=no SAME
+2026-11-24 HOT Monaco (Ligue 1) bound=no SAME | DEADLINE Newcastle Jets bound=no SAME
+2026-11-25 HOT Mallorca (Segunda División) bound=no SAME | DEADLINE Ajax bound=no SAME
+2026-11-26 HOT Sheffield United (EFL Championship) bound=no SAME | DEADLINE Rio Ave bound=no SAME
+2026-11-27 HOT Palmeiras (Brasileirão Série A) bound=no SAME | DEADLINE Torino bound=no SAME
+2026-11-28 HOT Verona (Serie B) bound=no SAME | DEADLINE Auxerre bound=no SAME
+2026-11-29 HOT Twente (Eredivisie) bound=no SAME | DEADLINE Dynamo Moscow bound=no SAME
+2026-11-30 HOT Auckland FC (A-League Men) bound=no SAME | DEADLINE Lyon bound=no SAME
+2026-12-01 HOT Getafe (La Liga) bound=no SAME | DEADLINE RB Salzburg bound=no SAME
+2026-12-02 HOT Toluca (Liga MX) bound=no SAME | DEADLINE Hoffenheim bound=no SAME
+2026-12-03 HOT Real Betis (La Liga) bound=no SAME | DEADLINE Union Saint-Gilloise bound=no SAME
+2026-12-04 HOT CSKA Moscow (Russian Premier League) bound=no SAME | DEADLINE Utrecht bound=no SAME
+2026-12-05 HOT Inter Milan (Serie A) bound=no SAME | DEADLINE AEK Athens bound=no SAME
+2026-12-06 HOT Al-Ittihad (Saudi Pro League) bound=no SAME | DEADLINE Akron Tolyatti bound=no SAME
+2026-12-07 HOT Juventus (Serie A) bound=no SAME | DEADLINE FC Midtjylland bound=no SAME
+2026-12-08 HOT Charlotte FC (MLS Eastern Conference) bound=no SAME | DEADLINE Chelsea bound=no SAME
+2026-12-09 HOT Frosinone (Serie A) bound=no SAME | DEADLINE Grêmio bound=no SAME
+2026-12-10 HOT Sevilla (La Liga) bound=no SAME | DEADLINE Gent bound=no SAME
+2026-12-11 HOT Galatasaray (Süper Lig) bound=no SAME | DEADLINE Norwich City bound=no SAME
+2026-12-12 HOT Lyon (Ligue 1) bound=no SAME | DEADLINE Auckland FC bound=no SAME
+2026-12-13 HOT Al-Ahli (Saudi Pro League) bound=no SAME | DEADLINE Rostov bound=no SAME
+2026-12-14 HOT Wrexham (EFL Championship) bound=no SAME | DEADLINE Trabzonspor bound=no SAME
+2026-12-15 HOT Auxerre (Ligue 1) bound=no SAME | DEADLINE Verona bound=no SAME
+2026-12-16 HOT Necaxa (Liga MX) bound=no SAME | DEADLINE Union Berlin bound=no SAME
+2026-12-17 HOT Genk (Belgian Pro League) bound=no SAME | DEADLINE Athletic Club bound=no SAME
+2026-12-18 HOT Augsburg (Bundesliga) bound=no SAME | DEADLINE Tigres UANL bound=no SAME
+2026-12-19 HOT Brøndby IF (Danish Superliga) bound=no SAME | DEADLINE Como bound=no SAME
+2026-12-20 HOT Freiburg (Bundesliga) bound=no SAME | DEADLINE Guadalajara bound=no SAME
+2026-12-21 HOT Antwerp (Belgian Pro League) bound=no SAME | DEADLINE Valencia bound=no SAME
+2026-12-22 HOT Akron Tolyatti (Russian Premier League) bound=no SAME | DEADLINE Al-Ittihad bound=no SAME
+2026-12-23 HOT Lorient (Ligue 1) bound=no SAME | DEADLINE Brisbane Roar bound=no SAME
+2026-12-24 HOT Mainz (Bundesliga) bound=no SAME | DEADLINE Monterrey bound=no SAME
+2026-12-25 HOT Westerlo (Belgian Pro League) bound=no SAME | DEADLINE Celta Vigo bound=no SAME
+2026-12-26 HOT Houston Dynamo (MLS Western Conference) bound=no SAME | DEADLINE Brighton bound=no SAME
+2026-12-27 HOT Krylia Sovetov (Russian Premier League) bound=no SAME | DEADLINE NEOM SC bound=no SAME
+2026-12-28 HOT Union Berlin (Bundesliga) bound=no SAME | DEADLINE Necaxa bound=no SAME
+2026-12-29 HOT Sporting CP (Primeira Liga) bound=no SAME | DEADLINE West Ham bound=no SAME
+2026-12-30 HOT Porto (Primeira Liga) bound=no SAME | DEADLINE Coventry City bound=no SAME
+2026-12-31 HOT Bayer Leverkusen (Bundesliga) bound=no SAME | DEADLINE Athletico Paranaense bound=no SAME
+2027-01-01 HOT Melbourne Victory (A-League Men) bound=no SAME | DEADLINE Rennes bound=no SAME
+2027-01-02 HOT Atlético San Luis (Liga MX) bound=no SAME | DEADLINE Werder Bremen bound=no SAME
+2027-01-03 HOT Nantes (Ligue 2) bound=no SAME | DEADLINE Paris FC bound=no SAME
+2027-01-04 HOT PSG (Ligue 1) bound=no SAME | DEADLINE Melbourne City bound=no SAME
+2027-01-05 HOT Trabzonspor (Süper Lig) bound=no SAME | DEADLINE Wrexham bound=no SAME
+2027-01-06 HOT São Paulo (Brasileirão Série A) bound=no SAME | DEADLINE Borussia Dortmund bound=no SAME
+2027-01-07 HOT Austin FC (MLS Western Conference) bound=no SAME | DEADLINE Bournemouth bound=no SAME
+2027-01-08 HOT New York City FC (MLS Eastern Conference) bound=no SAME | DEADLINE Dynamo Makhachkala bound=no SAME
+2027-01-09 HOT Baltika (Russian Premier League) bound=no SAME | DEADLINE Al-Qadsiah bound=no SAME
+2027-01-10 HOT Melbourne City (A-League Men) bound=no SAME | DEADLINE PSG bound=no SAME
+2027-01-11 HOT Vitória (Brasileirão Série A) bound=no SAME | DEADLINE Stuttgart bound=no SAME
+2027-01-12 HOT Lecce (Serie A) bound=no SAME | DEADLINE Vasco da Gama bound=no SAME
+2027-01-13 HOT Wellington Phoenix (A-League Men) bound=no SAME | DEADLINE Lens bound=no SAME
+2027-01-14 HOT Como (Serie A) bound=no SAME | DEADLINE Brøndby IF bound=no SAME
+2027-01-15 HOT Seattle Sounders (MLS Western Conference) bound=no SAME | DEADLINE Aston Villa bound=no SAME
+2027-01-16 HOT Olympiacos (Super League Greece) bound=no SAME | DEADLINE Osasuna bound=no SAME
+2027-01-17 HOT Mechelen (Belgian Pro League) bound=no SAME | DEADLINE Levante bound=no SAME
+2027-01-18 HOT Panathinaikos (Super League Greece) bound=no SAME | DEADLINE Elche bound=no SAME
+2027-01-19 HOT Fulham (Premier League) bound=no SAME | DEADLINE Colorado Rapids bound=no SAME
+2027-01-20 HOT Chicago Fire (MLS Eastern Conference) bound=no SAME | DEADLINE Arsenal bound=no SAME
+2027-01-21 HOT Köln (Bundesliga) bound=no SAME | DEADLINE León bound=no SAME
+2027-01-22 HOT Wolves (EFL Championship) bound=no SAME | DEADLINE Braga bound=no SAME
+2027-01-23 HOT Southampton (EFL Championship) bound=no SAME | DEADLINE Estoril bound=no SAME
+2027-01-24 HOT Atalanta (Serie A) bound=no SAME | DEADLINE Basel bound=no SAME
+2027-01-25 HOT Atlético Mineiro (Brasileirão Série A) bound=no SAME | DEADLINE Venezia bound=no SAME
+2027-01-26 HOT Brisbane Roar (A-League Men) bound=no SAME | DEADLINE Lorient bound=no SAME
+2027-01-27 HOT Sydney FC (A-League Men) bound=no SAME | DEADLINE Strasbourg bound=no SAME
+2027-01-28 HOT Udinese (Serie A) bound=no SAME | DEADLINE Fluminense bound=no SAME
+2027-01-29 HOT Club Brugge (Belgian Pro League) bound=no SAME | DEADLINE Villarreal bound=no SAME
+2027-01-30 HOT Everton (Premier League) bound=no SAME | DEADLINE LAFC bound=no SAME
+2027-01-31 HOT Sint-Truiden (Belgian Pro League) bound=no SAME | DEADLINE Deportivo La Coruña bound=no SAME
+2027-02-01 HOT Samsunspor (Süper Lig) bound=no SAME | DEADLINE West Brom bound=no SAME
+2027-02-02 HOT Spartak Moscow (Russian Premier League) bound=no SAME | DEADLINE Feyenoord bound=no SAME
+2027-02-03 HOT Orenburg (Russian Premier League) bound=no SAME | DEADLINE Inter Miami bound=no SAME
+2027-02-04 HOT Newcastle Jets (A-League Men) bound=no SAME | DEADLINE Monaco bound=no SAME
+2027-02-05 HOT Flamengo (Brasileirão Série A) bound=no SAME | DEADLINE Bologna bound=no SAME
+2027-02-06 HOT Bournemouth (Premier League) bound=no SAME | DEADLINE Austin FC bound=no SAME
+{
+  "dates": 120,
+  "first14": {
+    "hotSame": 14,
+    "hotDiffer": 0,
+    "ddSame": 14,
+    "ddDiffer": 0
+  },
+  "all": {
+    "hotSame": 120,
+    "hotDiffer": 0,
+    "ddSame": 120,
+    "ddDiffer": 0
+  },
+  "hotBoundDays": 0,
+  "hotBoundDiffer": 0,
+  "hotUnboundDiffer": 0,
+  "ddBoundDays": 0,
+  "ddBoundDiffer": 0,
+  "pickDiffers": 0,
+  "replayBroken": 120
+}

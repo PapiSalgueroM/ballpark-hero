@@ -1,0 +1,6 @@
+mal exit=1 6s | mal: RED. Over 1920 malformed saves on 24 season starts: 0 threw while playing, 0 changed the season, 0 threw in a reader, 192 threw in the mentor dialog's reads, 0 moved
+daily2 exit=0 44s | cmDaily: SAME DEAL on all 120 dates, both dailies
+base exit=0 15s | base | vitest exit=0 | failed lines 0 | simDart exit=0 FAIL lines 0 (not wildcard or wonderkid: 0) | simDartDraftPool: green. The pool is the top 2,000, the gold zones ke
+poolyear exit=0 15s | poolyear | vitest exit=1 | failed lines 0 | simDart exit=0 FAIL lines 0 (not wildcard or wonderkid: 0) | simDartDraftPool: green. The pool is the top 2,000, the gold zone
+poolyear-failed exit=0 0s | ---base
+clean exit=0 0s | tracked files changed after the mutations: 0

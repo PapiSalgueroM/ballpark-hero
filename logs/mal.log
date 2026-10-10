@@ -1,0 +1,11 @@
+{"samples":24,"cases":1920,"threw":0,"changed":0,"readerThrew":0,"dialogThrew":192,"formCases":220,"formMoved":0}
+by field {"seasonAmbition":{"cases":432,"threw":0,"changed":0,"readerThrew":0,"dialogThrew":0},"seasonPreparation":{"cases":312,"threw":0,"changed":0,"readerThrew":0,"dialogThrew":0},"reducedRole":{"cases":384,"threw":0,"changed":0,"readerThrew":0,"dialogThrew":0},"mentor":{"cases":360,"threw":0,"changed":0,"readerThrew":0,"dialogThrew":192},"row.ambition":{"cases":144,"threw":0,"changed":0,"readerThrew":0,"dialogThrew":0},"row.preparation":{"cases":144,"threw":0,"changed":0,"readerThrew":0,"dialogThrew":0},"row.reducedRole":{"cases":144,"threw":0,"changed":0,"readerThrew":0,"dialogThrew":0}}
+  mentor dialogThrew: 7: m.history is not iterable
+  mentor dialogThrew: "x": m.history is not iterable
+  mentor dialogThrew: true: m.history is not iterable
+  mentor dialogThrew: []: m.history is not iterable
+  mentor dialogThrew: {}: m.history is not iterable
+  mentor dialogThrew: {"status":"active"}: m.history is not iterable
+  mentor dialogThrew: {"generated":true,"name":"Probe Mentor","position":"CM","club":"Atletico Madrid","startYear":2023,"lastYear":2022,"age":16,"progress":0,"status":"active","history":null}: m.history is not iterable
+  mentor dialogThrew: {"generated":true,"name":"A","status":"paused"}: m.history is not iterable
+mal: RED. Over 1920 malformed saves on 24 season starts: 0 threw while playing, 0 changed the season, 0 threw in a reader, 192 threw in the mentor dialog's reads, 0 moved form.
