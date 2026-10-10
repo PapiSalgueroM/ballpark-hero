@@ -1,0 +1,27 @@
+walk: 46 loads, 26 with a failure or a page error
+  p390 nfl_dropped: page.waitForSelector: Timeout 45000ms exceeded. 
+  p390 nfl_made: page.waitForSelector: Timeout 45000ms exceeded. 
+  p390 nfl_old: page.waitForSelector: Timeout 45000ms exceeded. 
+  p390 mlb_made: page.waitForSelector: Timeout 45000ms exceeded. 
+  p390 mlb_dropped: page.waitForSelector: Timeout 45000ms exceeded. 
+  p390 mlb_old: page.waitForSelector: Timeout 45000ms exceeded. 
+  p390 nhl_dropped: page.waitForSelector: Timeout 45000ms exceeded. 
+  p390 nhl_made: page.waitForSelector: Timeout 45000ms exceeded. 
+  p390 nfl_219old: page.waitForSelector: Timeout 45000ms exceeded. 
+  p390 nfl_219new: page.waitForSelector: Timeout 45000ms exceeded. 
+  d1280 nfl_dropped: page.waitForSelector: Timeout 45000ms exceeded. 
+  d1280 nfl_made: page.waitForSelector: Timeout 45000ms exceeded. 
+  d1280 nfl_old: page.waitForSelector: Timeout 45000ms exceeded. 
+  d1280 mlb_made: page.waitForSelector: Timeout 45000ms exceeded. 
+  d1280 mlb_dropped: page.waitForSelector: Timeout 45000ms exceeded. 
+  d1280 mlb_old: page.waitForSelector: Timeout 45000ms exceeded. 
+  d1280 nhl_dropped: page.waitForSelector: Timeout 45000ms exceeded. 
+  d1280 nhl_made: page.waitForSelector: Timeout 45000ms exceeded. 
+  d1280 nfl_219old: page.waitForSelector: Timeout 45000ms exceeded. 
+  d1280 nfl_219new: page.waitForSelector: Timeout 45000ms exceeded. 
+  p390rm nfl_made: page.waitForSelector: Timeout 45000ms exceeded. 
+  p390rm mlb_dropped: page.waitForSelector: Timeout 45000ms exceeded. 
+  p390rm nfl_219new: page.waitForSelector: Timeout 45000ms exceeded. 
+  d1280rm nfl_made: page.waitForSelector: Timeout 45000ms exceeded. 
+  d1280rm mlb_dropped: page.waitForSelector: Timeout 45000ms exceeded. 
+  d1280rm nfl_219new: page.waitForSelector: Timeout 45000ms exceeded. 
