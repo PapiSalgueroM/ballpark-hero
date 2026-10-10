@@ -1,0 +1,4 @@
+#!serial
+ms-head: cp .rc/x/simMatchScreenProbe.mjs scripts/simMatchScreenProbe.mjs; for s in "" 1 2 3 4 5; do SIM_SEED=$s node scripts/simMatchScreenProbe.mjs 2>&1 | grep -E "^MEASURE|Error|error" ; done; rm -f scripts/simMatchScreenProbe.mjs
+ms-main: git worktree add -f /tmp/main origin/main >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/main/node_modules; cp .rc/x/simMatchScreenProbe.mjs /tmp/main/scripts/simMatchScreenProbe.mjs; cd /tmp/main && for s in "" 1 2 3 4 5; do SIM_SEED=$s node scripts/simMatchScreenProbe.mjs 2>&1 | grep -E "^MEASURE|Error|error" ; done
+ms-head-plain: for s in "" 1 2 3 4 5; do SIM_SEED=$s node scripts/simMatchScreen.mjs 2>&1 | tail -2 | cut -c1-200; done; true
