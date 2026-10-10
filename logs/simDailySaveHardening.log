@@ -1,0 +1,16 @@
+0) every useDailyPuzzle consumer is mounted by one of the two tests
+   39 consumers: 36 routes in the shapes test, 3 unrouted (useFootballDraft.ts, useGuessTransferValue.ts, useWorldCup.ts) in the hardening test; 19 hand in their own check
+saves) two tabs, damaged saves on the hooks, saves from before this round
+   74 rows green, the fixture writer skipped
+   src/test/fixtures/dailySavesPre848.json: 6 saves, byte for byte what the hooks at 617b8354 write (afl-higher-lower, nfl-higher-lower, shirt-number, footle, ufc, nba-connections)
+shapes) every route with a daily consumer under every damaged form
+  FAIL: /cfb-higher-lower: guesses null: drew a different page from a fresh daily, first at 2159: "<div class="relative mx-auto px-4 py-6 md:py-10 max-w-2xl"><button type="button" aria-label="How to play" class="absolut"; guesses an object: drew a different page from a fresh daily, first at 2159: "<div class="relative mx-auto
+  FAIL: /olympics: guesses null: drew a different page from a fresh daily, first at 2159: "<div class="relative mx-auto px-4 py-6 md:py-10 max-w-2xl"><button type="button" aria-label="How to play" class="absolut"; guesses an object: drew a different page from a fresh daily, first at 2159: "<div class="relative mx-auto
+  FAIL: a damaged daily save resets itself > /cfb-higher-lower failed
+  FAIL: a damaged daily save resets itself > /olympics failed
+   34 of 36 routes: nothing thrown on any damaged form, and the audit's and the brief's forms draw exactly a fresh daily
+parity) every consumer plays and restores through the new hook exactly as through the hook at 617b8354
+   39 of 39 consumers identical over 511 steps; 362 saves written by the old hook restored unchanged (statuses lost, playing, won)
+skip) one skip target on every page
+   173 of 173 addresses (171 sitemap pages, reset-password, an unknown address) draw exactly one #dukb-main
+simDailySaveHardening: 4 failure(s)
