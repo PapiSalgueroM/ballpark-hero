@@ -1,0 +1,7 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+make exit=0 0s | four files written into /home/runner/work/_temp/rc-out/files/t from a dump for {"minute":57,"plus":0,"place":57,"side":"opp","own":false,"name":"João Pedro"} with digest
+tamper-digest exit=1 84s | playLiveMatchFit: 3 failures.
+tamper-target exit=1 7s | playLiveMatchFit: 1 failure.
+tamper-nolive exit=2 1s | LIVE_FIT_SAVE /home/runner/work/_temp/rc-out/files/t/tamper-nolive.json: it holds no match in flight (no live object)
+handmade exit=0 84s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+trim exit=0 0s | wide-goal-windup.png

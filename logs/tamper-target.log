@@ -1,0 +1,9 @@
+playLiveMatchFit: seed 3208792607 (the walk's own, from its file name). Replay this run with: LIVE_FIT_SEED=3208792607 LIVE_FIT_SAVE=/home/runner/work/_temp/rc-out/files/t/tamper-target.json node scripts/playLiveMatchFit.mjs
+Starting every context from /home/runner/work/_temp/rc-out/files/t/tamper-target.json: 73567 bytes as stored, Crystal Palace v Chelsea, match digest b7ffc53c, to watch the goal at 58' João Pedro, against me.
+Back in the match at Crystal Palace, from the file.
+1) The goal in order
+  [match phone] seed 3208792607, 7 draws at kick off, digest b7ffc53c over 7790 characters of drawn match: Crystal Palace v Chelsea, goals of the second half 57' João Pedro, 79' Morgan Rogers; own goals among them 0
+  ok    the match that opened is the one in the file (digest b7ffc53c)
+  FAIL: the walk stopped: the goal the file was dumped for (58' João Pedro, against me) is not in the half on the clock (57', 79')
+      no save was kept for this red (no goal had been picked in this context yet)
+playLiveMatchFit: 1 failure.

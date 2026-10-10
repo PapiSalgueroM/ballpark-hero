@@ -1,0 +1,10 @@
+#!build
+#!playwright
+#!serial
+# Reviewer (run lens), Round 1215, head 36f333be: the guards of LIVE_FIT_SAVE, on files made from one real dump (57', second half).
+make: node .rc/x/rtamper.mjs .rc/x/main-calm-57.json "$RC_OUT/t"
+tamper-digest: LIVE_FIT_SAVE="$RC_OUT/t/tamper-digest.json" LIVE_FIT_SHOTS="$RC_OUT/t1" node scripts/playLiveMatchFit.mjs
+tamper-target: LIVE_FIT_SAVE="$RC_OUT/t/tamper-target.json" LIVE_FIT_SHOTS="$RC_OUT/t2" node scripts/playLiveMatchFit.mjs
+tamper-nolive: LIVE_FIT_SAVE="$RC_OUT/t/tamper-nolive.json" node scripts/playLiveMatchFit.mjs
+handmade: LIVE_FIT_SAVE="$RC_OUT/t/handmade.json" LIVE_FIT_SHOTS="$RC_OUT/t4" node scripts/playLiveMatchFit.mjs
+trim: rm -f "$RC_OUT"/t*/fit-*.png "$RC_OUT"/t*/panel-*.png "$RC_OUT"/t/*.json; ls -R "$RC_OUT" | head -30
