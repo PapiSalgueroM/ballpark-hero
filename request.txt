@@ -1,0 +1,10 @@
+#!build
+#!playwright
+#!serial
+walk: ENGINES=chromium node scripts/playDraftNight.mjs
+walk-late: PLAY_DRAFT_NIGHT_CONTROL=late RC_OUT="$RC_OUT/c-late" node scripts/playDraftNight.mjs
+walk-spoiler: PLAY_DRAFT_NIGHT_CONTROL=spoiler RC_OUT="$RC_OUT/c-spoiler" node scripts/playDraftNight.mjs
+walk-fold: PLAY_DRAFT_NIGHT_CONTROL=fold RC_OUT="$RC_OUT/c-fold" node scripts/playDraftNight.mjs
+walk-hidden: PLAY_DRAFT_NIGHT_CONTROL=hidden RC_OUT="$RC_OUT/c-hidden" node scripts/playDraftNight.mjs
+walk-cut: PLAY_DRAFT_NIGHT_CONTROL=cut RC_OUT="$RC_OUT/c-cut" node scripts/playDraftNight.mjs
+walk-again: PLAY_DRAFT_NIGHT_CONTROL=again RC_OUT="$RC_OUT/c-again" node scripts/playDraftNight.mjs
