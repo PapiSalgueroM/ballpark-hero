@@ -1,0 +1,427 @@
+{
+  "round": 1211,
+  "readOn": "2026-10-10",
+  "about": "Receipts for src/data/usSeasonLedgerMlb.ts and src/data/usSeasonLedgerNhl.ts: where each fact was read, on what date, and what the source literally says. A ledger row names its receipts by key. Two receipts of the same group are ONE source. No receipt is a wiki. scripts/simUsSeasonLedger.mjs holds the ledgers to this file.",
+  "groups": {
+    "retrosheet": "Retrosheet, and Baseball Reference, which builds on Retrosheet's game files: one source, never two.",
+    "espn": "ESPN's own standings and stats pages and its bylined reports.",
+    "ap": "The Associated Press, whichever outlet carried the report.",
+    "sportsreference-hockey": "Hockey Reference."
+  },
+  "sources": {
+    "retro": {
+      "sport": "mlb", "group": "retrosheet", "publisher": "Retrosheet", "title": "The <year> Season (final standings: G, W, L, T for every club)",
+      "url": "https://www.retrosheet.org/boxesetc/<year>/Y_<year>.htm", "read": "2026-10-10",
+      "years": {
+        "2004": "Pittsburgh 161 (72-89-0), Milwaukee 161 (67-94-0), Tampa Bay Devil Rays 161 (70-91-0), Toronto 161 (67-94-0); Cleveland 162 (80-82-0); the other 25 on 162, no ties. Prints Montreal Expos.",
+        "2005": "Houston 163 (89-73-1), Cincinnati 163 (73-89-1); the other 28 on 162, no ties. Prints Washington Nationals.",
+        "2006": "St. Louis 161 (83-78-0), San Francisco 161 (76-85-0); the other 28 on 162.",
+        "2007": "Colorado 163 (90-73-0), San Diego 163 (89-74-0); the other 28 on 162. Prints Tampa Bay Devil Rays.",
+        "2008": "Washington 161 (59-102-0), Florida 161 (84-77-0), Chicago Cubs 161 (97-64-0), Houston 161 (86-75-0), Baltimore 161 (68-93-0), Oakland 161 (75-86-0), Chicago White Sox 163 (89-74-0), Minnesota 163 (88-75-0); the other 22 on 162. Prints Tampa Bay Rays.",
+        "2009": "Chicago Cubs 161 (83-78-0), Pittsburgh 161 (62-99-0), Minnesota 163 (87-76-0), Detroit 163 (86-77-0); the other 26 on 162.",
+        "2010": "All 30 on 162, no ties.",
+        "2011": "Washington 161 (80-81-0), Los Angeles Dodgers 161 (82-79-0); the other 28 on 162. Prints Florida Marlins.",
+        "2012": "All 30 on 162, no ties. Prints Miami Marlins.",
+        "2013": "Tampa Bay Rays 163 (92-71-0), Texas 163 (91-72-0); the other 28 on 162.",
+        "2014": "All 30 on 162, no ties.",
+        "2015": "Cleveland Indians 161 (81-80-0), Detroit 161 (74-87-0); the other 28 on 162.",
+        "2016": "Miami 161 (79-82-0), Atlanta 161 (68-93-0), Cleveland Indians 161 (94-67-0), Detroit 161 (86-75-0); Chicago Cubs 162 (103-58-1), Pittsburgh 162 (78-83-1); the other 24 on 162.",
+        "2017": "All 30 on 162, no ties.",
+        "2018": "Miami 161 (63-98-0), Pittsburgh 161 (82-79-0), Milwaukee 163 (96-67-0), Chicago Cubs 163 (95-68-0), Los Angeles Dodgers 163 (92-71-0), Colorado 163 (91-72-0); Arizona 162 (82-80-0); the other 23 on 162.",
+        "2019": "Chicago White Sox 161 (72-89-0), Detroit 161 (47-114-0); the other 28 on 162.",
+        "2020": "St. Louis 58 (30-28-0), Detroit 58 (23-35-0); the other 28 on 60.",
+        "2021": "Atlanta 161 (88-73-0), Colorado 161 (74-87-0); the other 28 on 162. Prints Cleveland Indians.",
+        "2022": "All 30 on 162, no ties. Prints Cleveland Guardians.",
+        "2023": "All 30 on 162, no ties.",
+        "2024": "Cleveland Guardians 161 (92-69-0), Houston 161 (88-73-0); the other 28 on 162. Prints Oakland Athletics.",
+        "2025": "All 30 on 162, no ties. Prints Athletics."
+      },
+      "note": "Prints the Angels as Anaheim Angels in every season: its own naming, not the club's."
+    },
+    "espn": {
+      "sport": "mlb", "group": "espn", "publisher": "ESPN", "title": "MLB Standings <year> (W and L for every club; no ties column)",
+      "url": "https://www.espn.com/mlb/standings/_/season/<year>", "read": "2026-10-10",
+      "years": {
+        "2004": "TB 70-91, TOR 67-94, PIT 72-89, MIL 67-94 (161 each). CLE 80-81 (161), read twice on two addresses: disagrees with the other sources, and the table then sums to 2,428 wins and 2,427 losses. The other 25 sum to 162. Prints ANA and MON.",
+        "2005": "All 30 sum to 162 (HOU 89-73, CIN 73-89: the tie is not printed). Prints LAA and WAS.",
+        "2006": "STL 83-78, SF 76-85 (161 each); the other 28 sum to 162.",
+        "2007": "COL 90-73, SD 89-74 (163 each); the other 28 sum to 162.",
+        "2008": "BAL 68-93, OAK 75-86, FLA 84-77, WAS 59-102, CHC 97-64, HOU 86-75 (161 each); CWS 89-74, MIN 88-75 (163 each); the other 22 sum to 162.",
+        "2009": "CHC 83-78, PIT 62-99 (161 each); MIN 87-76, DET 86-77 (163 each); the other 26 sum to 162.",
+        "2010": "All 30 sum to 162.",
+        "2011": "WSH 80-81, LAD 82-79 (161 each); the other 28 sum to 162. Prints FLA.",
+        "2012": "All 30 sum to 162. Prints MIA.",
+        "2013": "TB 92-71, TEX 91-72 (163 each); the other 28 sum to 162.",
+        "2014": "All 30 sum to 162.",
+        "2015": "CLE 81-80, DET 74-87 (161 each); the other 28 sum to 162.",
+        "2016": "CLE 94-67, DET 86-75, MIA 79-82, ATL 68-93 (161 each); CHC 103-58 and PIT 78-83 (161 decisions each: the tie is not printed); the other 24 sum to 162.",
+        "2017": "All 30 sum to 162.",
+        "2018": "MIA 63-98 (161); MIL 96-67, CHC 95-68, LAD 92-71, COL 91-72 (163 each). PIT 83-79 (162) and ARI 82-81 (163), read twice on two addresses: disagree with the other sources. The table balances at 2,432 wins and losses.",
+        "2019": "CHW 72-89, DET 47-114 (161 each); the other 28 sum to 162.",
+        "2020": "DET 23-35, STL 30-28 (58 each); the other 28 sum to 60.",
+        "2021": "ATL 88-73, COL 74-87 (161 each); the other 28 sum to 162.",
+        "2022": "All 30 sum to 162.",
+        "2023": "All 30 sum to 162.",
+        "2024": "CLE 92-69, HOU 88-73 (161 each); the other 28 sum to 162. Prints OAK.",
+        "2025": "All 30 sum to 162. Prints ATH.",
+        "2026": "NYY 93-68, BAL 79-82 (161 each); the other 28 sum to 162."
+      }
+    },
+    "bref": {
+      "sport": "mlb", "group": "retrosheet", "publisher": "Baseball Reference", "title": "<year> Major League Baseball Team Statistics (Team Standard Batting, G for every club)",
+      "url": "https://www.baseball-reference.com/leagues/majors/<year>.shtml", "read": "2026-10-10",
+      "years": {
+        "2004": "Milwaukee 161, Pittsburgh 161, Tampa Bay Devil Rays 161, Toronto 161; Cleveland 162; the other 25 on 162. Prints Anaheim Angels and Montreal Expos.",
+        "2005": "Cincinnati 163, Houston 163; the other 28 on 162. Prints Los Angeles Angels of Anaheim and Washington Nationals.",
+        "2006": "San Francisco 161, St. Louis 161; the other 28 on 162. Prints Tampa Bay Devil Rays.",
+        "2007": "Colorado 163, San Diego 163; the other 28 on 162. Prints Tampa Bay Devil Rays.",
+        "2008": "Read on the standings page (majors/2008-standings.shtml), wins and losses: Baltimore 68-93, Oakland 75-86, Florida 84-77, Washington 59-102, Chicago Cubs 97-64, Houston 86-75 (161 each); Chicago White Sox 89-74, Minnesota 88-75 (163 each). Prints Tampa Bay Rays.",
+        "2016": "Atlanta 161, Cleveland Indians 161, Detroit 161, Miami 161; Chicago Cubs 162, Pittsburgh 162; the other 24 on 162.",
+        "2018": "Miami 161, Pittsburgh 161; Chicago Cubs 163, Colorado 163, Los Angeles Dodgers 163, Milwaukee 163; Arizona 162; the other 23 on 162.",
+        "2020": "Detroit 58, St. Louis 58; the other 28 on 60.",
+        "2021": "Atlanta 161, Colorado 161; the other 28 on 162. Prints Cleveland Indians.",
+        "2022": "All 30 on 162. Prints Cleveland Guardians and Oakland Athletics.",
+        "2026": "Baltimore 161, New York Yankees 161; the other 28 on 162. Prints Athletics and Cleveland Guardians."
+      }
+    },
+    "bref-league": {
+      "sport": "mlb", "group": "retrosheet", "publisher": "Baseball Reference", "title": "Major League Baseball Batting Year-by-Year Averages (team games and runs per team game for the whole league)",
+      "url": "https://www.baseball-reference.com/leagues/majors/bat.shtml", "read": "2026-10-10",
+      "years": {
+        "2004": "4856 team games, 4.81 runs a game", "2005": "4862, 4.59", "2006": "4858, 4.86", "2007": "4862, 4.80", "2008": "4856, 4.65",
+        "2009": "4860, 4.61", "2010": "4860, 4.38", "2011": "4858, 4.28", "2012": "4860, 4.32", "2013": "4862, 4.17", "2014": "4860, 4.07",
+        "2015": "4858, 4.25", "2016": "4856, 4.48", "2017": "4860, 4.65", "2018": "4862, 4.45", "2019": "4858, 4.83", "2020": "1796, 4.65",
+        "2021": "4858, 4.53", "2022": "4860, 4.28", "2023": "4860, 4.62", "2024": "4858, 4.39", "2025": "4860, 4.45", "2026": "4858, 4.48"
+      },
+      "values": {
+        "teamGames": { "2004": 4856, "2005": 4862, "2006": 4858, "2007": 4862, "2008": 4856, "2009": 4860, "2010": 4860, "2011": 4858, "2012": 4860, "2013": 4862, "2014": 4860, "2015": 4858, "2016": 4856, "2017": 4860, "2018": 4862, "2019": 4858, "2020": 1796, "2021": 4858, "2022": 4860, "2023": 4860, "2024": 4858, "2025": 4860, "2026": 4858 },
+        "runsPerGame": { "2004": 4.81, "2026": 4.48 }
+      }
+    },
+    "espn-runs": {
+      "sport": "mlb", "group": "espn", "publisher": "ESPN", "title": "MLB Standings <year>, the RS and RA columns, added up by this round",
+      "url": "https://www.espn.com/mlb/standings/_/season/<year>/group/league", "read": "2026-10-10",
+      "years": {
+        "2004": "30 clubs: 23,364 runs scored and 23,364 allowed; over 4,856 team games that is 4.811 a game.",
+        "2026": "30 clubs: 21,769 runs scored and 21,769 allowed; over 4,858 team games that is 4.481 a game."
+      },
+      "values": { "runs": { "2004": 23364, "2026": 21769 } }
+    },
+    "almanac-2004-al": {
+      "sport": "mlb", "group": "almanac", "publisher": "Baseball Almanac", "title": "Year In Review: 2004 American League (final standings: wins, losses, ties)",
+      "url": "https://www.baseball-almanac.com/yearly/yr2004a.shtml", "read": "2026-10-10",
+      "says": ["Cleveland Indians 80-82-0", "Tampa Bay Devil Rays 70-91-0", "Toronto Blue Jays 67-94-0", "the other 11 American League clubs sum to 162"]
+    },
+    "almanac-2018-nl": {
+      "sport": "mlb", "group": "almanac", "publisher": "Baseball Almanac", "title": "Year In Review: 2018 National League (final standings: wins, losses, ties)",
+      "url": "https://www.baseball-almanac.com/yearly/yr2018n.shtml", "read": "2026-10-10",
+      "says": ["Pittsburgh Pirates 82-79-0", "Arizona Diamondbacks 82-80-0", "Miami Marlins 63-98-0", "Milwaukee 96-67-0, Chicago Cubs 95-68-0, Los Angeles Dodgers 92-71-0, Colorado 91-72-0"]
+    },
+    "almanac-names": {
+      "sport": "mlb", "group": "almanac", "publisher": "Baseball Almanac", "title": "Year In Review: American League, 2007, 2008, 2021 and 2022 (the club names in the final standings)",
+      "url": "https://www.baseball-almanac.com/yearly/yr<year>a.shtml", "read": "2026-10-10",
+      "says": ["2007: Tampa Bay Devil Rays 66-96-0", "2008: Tampa Bay Rays 97-65-0 (and Baltimore 68-93, Oakland 75-86, Chicago White Sox 89-74, Minnesota 88-75)", "2021: Cleveland Indians 80-82-0", "2022: Cleveland Guardians 92-70-0"],
+      "note": "Its ties column is 0 for Houston and Cincinnati in 2005 and for the Cubs and Pirates in 2016 (read on yr2005n and yr2016n): it does not record those two tie games, so it is no source for them."
+    },
+    "ap-2016-tie": {
+      "sport": "mlb", "group": "ap", "publisher": "The Associated Press, carried by Fox 32 Chicago", "title": "Cubs-Pirates stopped by rain, first tie in majors since 2005", "published": "2016-09-29",
+      "url": "https://www.fox32chicago.com/sports/cubs-pirates-stopped-by-rain-first-tie-in-majors-since-2005", "read": "2026-10-10",
+      "says": ["the game won't be made up because it doesn't affect postseason positioning", "So instead of becoming a suspended game, the stats count and it was declared a tie", "the first since Houston and Cincinnati went seven innings on June 30, 2005, before rain halted them"]
+    },
+    "nbc-2016-tie": {
+      "sport": "mlb", "group": "nbc", "publisher": "NBC Sports", "title": "Rain-shortened Cubs-Pirates game ends in a tie", "published": "2016-09-29",
+      "url": "https://www.nbcsports.com/mlb/news/rain-shortened-cubs-pirates-game-ends-in-a-tie", "read": "2026-10-10",
+      "says": ["The game was officially suspended in a 1-1 tie and the game will not be made up", "Major League Baseball has deemed it a tie game and all stats from the game will count", "it's the first tie in baseball since the Astros and Reds on June 30, 2005"]
+    },
+    "ap-2026-finale": {
+      "sport": "mlb", "group": "ap", "publisher": "The Associated Press, carried by ABC News and TSN", "title": "Orioles-Yankees regular-season finale canceled because of rain", "published": "2026-09-27",
+      "url": "https://abcnews.com/amp/Sports/wireStory/orioles-yankees-regular-season-finale-canceled-rain-136802765", "read": "2026-10-10",
+      "says": ["The regular-season finale between the Baltimore Orioles and New York Yankees on Sunday was canceled because of sustained rain", "Baltimore finished 79-82", "The Yankees finished 93-68.", "This marked the first time since 2002 the Yankees didn't play all 162 games in a non-shortened season."],
+      "note": "Both copies read today (ABC News and tsn.ca) print 93-68. The scout's note of a 93-67 copy was not found. Neither copy says in words that the game will not be made up; the league's own report by that title could not be opened (its site refused the reader), and the final standings on 161 are the proof."
+    },
+    "br-2026-finale": {
+      "sport": "mlb", "group": "bleacherreport", "publisher": "Bleacher Report (Doric Sam)", "title": "Yankees vs. Orioles Canceled Due to Inclement Weather, Final Game of Season Won't Be Rescheduled", "published": "2026-09-27",
+      "url": "https://bleacherreport.com/articles/25503717-yankees-vs-orioles-canceled-due-inclement-weather-final-game-season-wont-be-rescheduled", "read": "2026-10-10",
+      "says": ["has been canceled due to the forecast of sustained inclement weather", "and it won't be rescheduled.", "will finish the season with a 93-68 record", "will finish at 79-82"],
+      "note": "Read in the fix pass of the round. It names the weather and not rain, and it is the second source in words that the game was not made up."
+    },
+    "flm-2026-finale": {
+      "sport": "mlb", "group": "fieldlevelmedia", "publisher": "Field Level Media", "title": "Yankees, Orioles won't play Game 162 as storm scraps finale", "published": "2026-09-27",
+      "url": "https://fieldlevelmedia.com/mlb/yankees-orioles-wont-play-game-162-as-storm-scraps-finale/", "read": "2026-10-10",
+      "says": ["due to continued inclement weather from this weekend's nor'easter.", "The Yankees completed the regular season with a 93-68 record.", "The Orioles finished 79-82"],
+      "note": "Read in the fix pass of the round. It does not say whether the game will be made up."
+    },
+    "bref-schedule": {
+      "sport": "mlb", "group": "retrosheet", "publisher": "Baseball Reference", "title": "<year> <club> Schedule (every game of the season, home or away, by opponent)",
+      "url": "https://www.baseball-reference.com/teams/<club>/<year>-schedule-scores.shtml", "read": "2026-10-10",
+      "years": {
+        "2023": "Detroit: 162 games, 81 at home. 13 against each division rival: White Sox and Twins seven at home and six away, Guardians and Royals six and seven (26 at home). Seven against Baltimore, the Yankees, Texas and Oakland and six against the other six clubs of the league (32 at home). Pittsburgh four, two in each park (16 and 17 May at home, 1 and 2 August away). One three game series against each of the other 14 National League clubs, seven of them at home.",
+        "2024": "Texas: 162 games, 81 at home. 13 against each division rival: Houston and the Angels seven at home and six away, Oakland and Seattle six and seven (26 at home). Seven against Detroit, Minnesota, Baltimore and the White Sox and six against the other six clubs of the league (32 at home). Arizona four, two in each park. One three game series against each of the other 14 National League clubs, seven of them at home (Cubs, Reds, Nationals, Giants, Mets, Padres, Pirates).",
+        "2025": "Detroit: 162 games, 81 at home. 13 against each division rival: Guardians and Royals seven at home and six away, White Sox and Twins six and seven (26 at home). Seven against the Angels and Toronto and six against the other eight clubs of the league (31 at home). Pittsburgh six, three in each park. One three game series against each of the other 14 National League clubs, seven of them at home.",
+        "2026": "Detroit, Toronto, Texas and Houston, each 162 games and 81 at home. Each: 13 against each division rival, seven at home against two of them and six against the other two (26 at home); seven against two clubs of the league and six against the other eight (31 at home); six against one National League club, three in each park (Detroit and Pittsburgh, Toronto and Philadelphia, Texas and Arizona, Houston and Colorado); one three game series against each of the other 14, seven of them at home. Texas hosted the same seven National League clubs as in 2024. Where two of the four met, both pages print the same split."
+      },
+      "values": {
+        "clubs": [
+          { "club": "DET", "year": 2023, "home": 81, "division": { "CHW": [7, 6], "CLE": [6, 7], "KCR": [6, 7], "MIN": [7, 6] }, "league": { "BAL": [4, 3], "NYY": [4, 3], "TEX": [3, 4], "OAK": [3, 4], "BOS": [3, 3], "HOU": [3, 3], "LAA": [3, 3], "SEA": [3, 3], "TBR": [3, 3], "TOR": [3, 3] }, "rival": ["PIT", 2, 2], "nlHome": ["CHC", "CIN", "SDP", "SFG", "ARI", "ATL", "NYM"], "nlAway": ["COL", "PHI", "STL", "WSN", "LAD", "MIA", "MIL"] },
+          { "club": "TEX", "year": 2024, "home": 81, "division": { "HOU": [7, 6], "OAK": [6, 7], "SEA": [6, 7], "LAA": [7, 6] }, "league": { "DET": [3, 4], "MIN": [4, 3], "BAL": [3, 4], "CHW": [4, 3], "TBR": [3, 3], "KCR": [3, 3], "CLE": [3, 3], "TOR": [3, 3], "BOS": [3, 3], "NYY": [3, 3] }, "rival": ["ARI", 2, 2], "nlHome": ["CHC", "CIN", "WSN", "SFG", "NYM", "SDP", "PIT"], "nlAway": ["ATL", "COL", "PHI", "MIA", "LAD", "MIL", "STL"] },
+          { "club": "DET", "year": 2025, "home": 81, "division": { "CHW": [6, 7], "CLE": [7, 6], "KCR": [7, 6], "MIN": [6, 7] }, "league": { "LAA": [3, 4], "TOR": [4, 3], "ATH": [3, 3], "BAL": [3, 3], "BOS": [3, 3], "HOU": [3, 3], "NYY": [3, 3], "SEA": [3, 3], "TBR": [3, 3], "TEX": [3, 3] }, "rival": ["PIT", 3, 3], "nlHome": ["ARI", "ATL", "CHC", "CIN", "NYM", "SDP", "SFG"], "nlAway": ["COL", "LAD", "MIA", "MIL", "PHI", "STL", "WSN"] },
+          { "club": "DET", "year": 2026, "home": 81, "division": { "CHW": [6, 7], "CLE": [7, 6], "KCR": [7, 6], "MIN": [6, 7] }, "league": { "BOS": [3, 4], "HOU": [4, 3], "ATH": [3, 3], "BAL": [3, 3], "LAA": [3, 3], "NYY": [3, 3], "SEA": [3, 3], "TBR": [3, 3], "TEX": [3, 3], "TOR": [3, 3] }, "rival": ["PIT", 3, 3], "nlHome": ["COL", "LAD", "MIA", "MIL", "PHI", "STL", "WSN"], "nlAway": ["ARI", "ATL", "CHC", "CIN", "NYM", "SDP", "SFG"] },
+          { "club": "TOR", "year": 2026, "home": 81, "division": { "BOS": [7, 6], "TBR": [7, 6], "NYY": [6, 7], "BAL": [6, 7] }, "league": { "MIN": [3, 4], "TEX": [4, 3], "ATH": [3, 3], "CHW": [3, 3], "LAA": [3, 3], "CLE": [3, 3], "DET": [3, 3], "HOU": [3, 3], "SEA": [3, 3], "KCR": [3, 3] }, "rival": ["PHI", 3, 3], "nlHome": ["COL", "LAD", "PIT", "MIA", "NYM", "STL", "CIN"], "nlAway": ["MIL", "ARI", "ATL", "SFG", "SDP", "CHC", "WSN"] },
+          { "club": "TEX", "year": 2026, "home": 81, "division": { "ATH": [6, 7], "HOU": [7, 6], "LAA": [6, 7], "SEA": [7, 6] }, "league": { "TBR": [4, 3], "TOR": [3, 4], "BAL": [3, 3], "BOS": [3, 3], "CHW": [3, 3], "CLE": [3, 3], "DET": [3, 3], "KCR": [3, 3], "MIN": [3, 3], "NYY": [3, 3] }, "rival": ["ARI", 3, 3], "nlHome": ["CHC", "CIN", "NYM", "PIT", "SDP", "SFG", "WSN"], "nlAway": ["ATL", "COL", "LAD", "MIA", "MIL", "PHI", "STL"] },
+          { "club": "HOU", "year": 2026, "home": 81, "division": { "LAA": [7, 6], "ATH": [6, 7], "SEA": [7, 6], "TEX": [6, 7] }, "league": { "DET": [3, 4], "CHW": [4, 3], "BOS": [3, 3], "CLE": [3, 3], "NYY": [3, 3], "BAL": [3, 3], "MIN": [3, 3], "KCR": [3, 3], "TOR": [3, 3], "TBR": [3, 3] }, "rival": ["COL", 3, 3], "nlHome": ["STL", "LAD", "MIL", "PIT", "MIA", "ARI", "ATL"], "nlAway": ["CIN", "CHC", "WSN", "SDP", "SFG", "NYM", "PHI"] }
+        ]
+      },
+      "note": "Read in the fix pass of the round, as the games actually played: each page was asked for home and away games by opponent and every table adds up to 162 games and 81 at home. Each split is [home, away]. Two first readings slipped (Oakland left out of Detroit 2023, one club of the league feed below) and were asked again. Baseball Reference shares the retrosheet group."
+    },
+    "espn-divisions-2026": {
+      "sport": "mlb", "group": "espn", "publisher": "ESPN", "title": "MLB Standings 2026, grouped by division",
+      "url": "https://www.espn.com/mlb/standings/_/season/2026/group/division", "read": "2026-10-10",
+      "says": ["American League East: TB, NYY, BOS, BAL, TOR", "American League Central: CLE, CHW, MIN, DET, KC", "American League West: HOU, TEX, SEA, ATH, LAA", "National League East: ATL, PHI, MIA, WSH, NYM", "National League Central: MIL, CHC, PIT, STL, CIN", "National League West: LAD, SD, ARI, SF, COL"]
+    },
+    "bref-divisions-2026": {
+      "sport": "mlb", "group": "retrosheet", "publisher": "Baseball Reference", "title": "2026 MLB Standings",
+      "url": "https://www.baseball-reference.com/leagues/majors/2026-standings.shtml", "read": "2026-10-10",
+      "says": ["AL East: Tampa Bay Rays, New York Yankees, Boston Red Sox, Baltimore Orioles, Toronto Blue Jays", "AL Central: Cleveland Guardians, Chicago White Sox, Minnesota Twins, Detroit Tigers, Kansas City Royals", "AL West: Houston Astros, Texas Rangers, Seattle Mariners, Athletics, Los Angeles Angels", "NL East: Atlanta Braves, Philadelphia Phillies, Miami Marlins, Washington Nationals, New York Mets", "NL Central: Milwaukee Brewers, Chicago Cubs, Pittsburgh Pirates, St. Louis Cardinals, Cincinnati Reds", "NL West: Los Angeles Dodgers, San Diego Padres, Arizona Diamondbacks, San Francisco Giants, Colorado Rockies"]
+    },
+    "usatoday-2025-schedule": {
+      "sport": "mlb", "seasons": [2025], "group": "usatoday", "publisher": "USA TODAY (Scott Boeck), carried by Yahoo Sports", "title": "2025 MLB regular season schedule: LA Dodgers, Chicago Cubs open in Tokyo", "published": "2024-07-18",
+      "url": "https://ca.sports.yahoo.com/news/2025-mlb-regular-season-schedule-195432725.html", "read": "2026-10-10",
+      "says": ["each team will play 13 games against each division rival (52 games)", "and six or seven against each other club in its league for a total of 62.", "The remaining 48 games are against interleague opponents,", "with a single three-game series against each of the 14 other clubs in the opposite league."]
+    },
+    "ticketmaster-2026": {
+      "sport": "mlb", "seasons": [2026], "group": "ticketmaster", "publisher": "Ticketmaster", "title": "A Look at the 2026 MLB Schedule and New Rules", "published": "2026-05-19",
+      "url": "https://blog.ticketmaster.com/mlb-schedule-explained/", "read": "2026-10-10",
+      "says": ["each team now plays their divisional opponents in only 52 games", "13 games in four series against each division rival, seven at home and six away or the reverse (reported by the reader, not quoted)", "a total of 26 divisional games at home and 26 away", "MLB intraleague play was also shortened to 62 games, down from the previous 66 games.", "will consist of six games against eight intraleague teams and seven games against two intraleague teams.", "Each team now plays 48 games, up from 20, against teams from the opposite league.", "a home-and-home series totaling six games against the natural rival (reported by the reader)", "a single, three-game series against the other 14 interleague teams, with seven series at home and seven away", "Rival pairs named: Cubs vs. White Sox, Mets vs. Yankees, Angels vs. Dodgers; Astros vs. Rockies; Athletics vs. Giants; Blue Jays vs. Phillies; Guardians vs. Reds; Mariners vs. Padres; Orioles vs. Nationals; Rangers vs. Diamondbacks; Rays vs. Marlins; Red Sox vs. Braves; Royals vs. Cardinals; Tigers vs. Pirates, and Twins vs. Brewers."],
+      "note": "It gives no home and away split for the 62 league games and no total of home games."
+    },
+    "mlb-release-2025": {
+      "sport": "mlb", "seasons": [2025], "group": "mlb", "publisher": "Major League Baseball, press release, as printed by The Highland County Press", "title": "MLB announces 2025 regular-season schedule", "published": "2024-07-22",
+      "url": "https://highlandcountypress.com/sports/mlb-announces-2025-regular-season-schedule", "read": "2026-10-10",
+      "says": ["For 2025, prime Interleague rivals will increase their number of matchups from four to six", "while playing a pair of three-game series rather than a pair of two-game series.", "As a result, each of the 30 Clubs will play two fewer games against non-division league opponents.", "featuring 11 series between prime Interleague rivals and four other regional matchups which include Pittsburgh vs Philadelphia; Colorado vs. Arizona; Detroit vs. Toronto; and Houston vs. Texas."],
+      "note": "\"published\" is the day the newspaper printed the release, not the day the league put it out: USA TODAY reported the same schedule on 18 July 2024."
+    },
+    "mlb-release-2026": {
+      "sport": "mlb", "seasons": [2026], "group": "mlb", "publisher": "Major League Baseball, press release, as printed by The Highland County Press", "title": "MLB announces 2026 regular-season schedule", "published": "2025-09-01",
+      "url": "https://highlandcountypress.com/sports/mlb-announces-2026-regular-season-schedule", "read": "2026-10-10",
+      "says": ["Prime Interleague rivals will again play a pair of three-game series against one another in 2026.", "In 2026, each of the 30 Clubs will host the same Interleague opponents as they hosted in 2024.", "The final day of the 2026 regular season will be Sunday, Sept. 27, featuring nine divisional matchups."],
+      "note": "The league's own site refuses the reader (HTTP 406 on every address tried), so its releases were read where a newspaper printed them. \"published\" is the date on the newspaper's page, which carries no date for the league's own release."
+    },
+    "espn-2023-format": {
+      "sport": "mlb", "seasons": [2023], "group": "espn", "publisher": "ESPN (Jesse Rogers)", "title": "All 30 Major League Baseball teams to play one another in a season for first time in 2023", "published": "2022-08-24",
+      "url": "https://www.espn.com/mlb/story/_/id/34452964/all-30-major-league-baseball-teams-play-one-another-season-first-2023", "read": "2026-10-10",
+      "says": ["There are 52 total games against divisional opponents, down from 76.", "Teams will play six or seven home/road games against divisional opponents.", "There are 64 total games -- 32 home and 32 away -- against non-divisional league opponents, down from 66.", "Teams will play six games against six league opponents and seven games against four league opponents.", "There are 46 total games against interleague opponents, up from just 20.", "All 30 MLB teams will be paired with a \"natural rival\" for a four-game interleague series, with each team hosting two games.", "Teams will play 42 games against other interleague opponents, including seven series (21 games) at home and seven series (21 games) on the road.", "Pairs: New York Mets-New York Yankees, Chicago Cubs-Chicago White Sox, LA Dodgers-LA Angels, San Francisco Giants-Oakland A's, Cincinnati Reds-Cleveland Guardians, Miami Marlins-Tampa Bay Rays, Washington Nationals-Baltimore Orioles, St. Louis Cardinals-Kansas City Royals, Milwaukee Brewers-Minnesota Twins, Atlanta Braves-Boston Red Sox, Pittsburgh Pirates-Detroit Tigers, Phila. Phillies-Toronto Blue Jays, Arizona D-backs-Texas Rangers, Colorado Rockies-Houston Astros, San Diego Padres-Seattle Mariners"]
+    },
+    "ap-2023-format": {
+      "sport": "mlb", "seasons": [2023], "group": "ap", "publisher": "The Associated Press (Ronald Blum), carried by Boston.com", "title": "MLB teams to play all 29 opponents under 2023 balanced schedule", "published": "2022-08-25",
+      "url": "https://www.boston.com/sports/mlb/2022/08/25/mlb-teams-to-play-all-29-opponents-under-balanced-schedule/", "read": "2026-10-10",
+      "says": ["A team will play 13 games against each division rival for a total of 52.", "six or seven against each other club in its league for a total of 64.", "The remaining 46 games are against interleague opponents.", "a home and road two-game series against a so-called natural rival", "a single three-game series against each of the 14 other clubs in the opposite league.", "Natural interleague rivals include Mets-Yankees, Cubs-White Sox, Dodgers-Angels, Giants-Athletics, Reds-Indians, Marlins-Rays, Orioles-Nationals, Royals-Cardinals and Brewers-Twins.", "Among the teams with no geographic interleague rivals, MLB paired Red Sox-Braves, Pirates-Tigers, Phillies-Blue Jays, Rangers-Diamondbacks, Astros-Rockies and Padres-Mariners."],
+      "note": "The reader gave the Cleveland pair as Reds-Indians; the club was the Guardians by then, and ESPN's list of the same week prints Guardians."
+    },
+    "cbs-2026-rivalry": {
+      "sport": "mlb", "seasons": [2026], "group": "cbs", "publisher": "CBS Sports (Matt Snyder)", "title": "Ranking all 15 matchups for MLB Rivalry Weekend: Why Chicago beats the Subway Series", "published": "2026-05-15",
+      "url": "https://cbssports.com/mlb/news/ranking-15-matchups-mlb-rivalry-weekend", "read": "2026-10-10",
+      "says": ["The fifteen series it ranks: Diamondbacks vs. Rockies, Giants vs. A's, Marlins vs. Rays, Orioles vs. Nationals, Red Sox vs. Braves, Blue Jays vs. Tigers, Padres vs. Mariners, Brewers vs. Twins, Rangers vs. Astros, Dodgers vs. Angels, Royals vs. Cardinals, Reds vs. Guardians, Phillies vs. Pirates, Yankees vs. Mets, Cubs vs. White Sox", "Let's keep that in mind even as I point out a few of the matchups below aren't actual rivalries."],
+      "note": "Eleven of these are interleague rival pairs of the ledger. The other four are the regional series the league's releases set apart; their eight clubs are exactly the clubs of the ledger's four remaining pairs."
+    },
+    "cbs-2025-playoffs": {
+      "sport": "mlb", "group": "cbs", "publisher": "CBS Sports (R.J. Anderson)", "title": "What to know about 2025 MLB playoffs: Format, tiebreakers, rules, seeds, pitch clock, automatic runners, more", "published": "2025-09-30",
+      "url": "https://www.cbssports.com/mlb/news/mlb-playoff-format-rules-2025", "read": "2026-10-10",
+      "says": ["Each league sends six clubs to the tournament.", "The two division winners with the best record in each league earn a first-round bye.", "Wild card round: Best-of-three series", "Divisional round: Best-of-five series", "League Championship round: Best-of-seven series", "World Series: Best-of-seven series between AL and NL champion", "this is the fourth year since MLB expanded the postseason to 12 teams", "teams will not be awarded a runner at second base to begin those frames"]
+    },
+    "ap-2022-playoffs": {
+      "sport": "mlb", "group": "ap", "publisher": "The Associated Press (David Brandt), carried by WXYZ Detroit", "title": "MLB playoff primer: Things to know as postseason nears", "published": "2022",
+      "url": "https://www.wxyz.com/sports/mlb-playoff-primer-things-to-know-as-postseason-nears", "read": "2026-10-10",
+      "says": ["a field of 12 teams", "The best-of-three wild card format", "The division series will be best-of-five", "the league championship series and World Series will be best-of-seven", "the sudden death one-game format"],
+      "note": "The page shows no day of publication; the report is of the 2022 postseason."
+    },
+    "cbs-2022-playoffs": {
+      "sport": "mlb", "group": "cbs", "publisher": "CBS Sports (Dayn Perry)", "title": "2022 MLB playoffs: New postseason format explained, and why there are no more Game 163 tiebreakers", "published": "2022-10-05",
+      "url": "https://www.cbssports.com/mlb/news/2022-mlb-playoffs-schedule-format-and-rules-for-the-expanded-postseason", "read": "2026-10-10",
+      "says": ["The field expands from 10 teams to 12.", "The two division winners with the best records in each league are rewarded with a first-round bye.", "The best-of-three Wild Card Series will be played on three consecutive days.", "straight to the best-of-five Division Series", "With the addition of the Wild Card Series this year, MLB has done away with Game 163 tiebreakers.", "In past years, teams with identical records that tied for a division crown or playoff spot squared off in an extra game to break the tie."]
+    },
+    "nbcboston-2022-playoffs": {
+      "sport": "mlb", "group": "nbc", "publisher": "NBC Sports Boston (Kristen Conti)", "title": "How to watch MLB postseason, bracket, new format explained", "published": "2022-09-08",
+      "url": "https://www.nbcsportsboston.com/mlb/boston-red-sox/how-to-watch-mlb-postseason-bracket-new-format-explained/204905", "read": "2026-10-10",
+      "says": ["In the 12-team format, there will be six playoff teams per league.", "The top two seeds will get a bye to the divisional round.", "the No. 3 seed will host the No. 6 seed for a three-game series.", "will not be any tiebreaker games to determine playoff teams in the 2022 season."]
+    },
+    "espn-wildcard": {
+      "sport": "mlb", "group": "espn", "publisher": "ESPN (Keith Jenkins)", "title": "How does MLB wild card work? Format, history, stats", "published": "2025-09-25",
+      "url": "https://www.espn.com/mlb/story/_/id/46358337/mlb-wild-card-format-history-records-facts-stats", "read": "2026-10-10",
+      "says": ["Since 2022, three teams in each league earn a wild-card spot, bringing the total number of playoff teams to 12", "MLB introduced the wild card in 1995 along with the realignment of three divisions per league.", "a single wild-card team in each league earned a postseason berth ... played the team with the league's best record in a best-of-five series (1995 to 2011)", "A second wild-card team was added to each league in 2012, and the two clubs began the postseason with a one-game playoff.", "During the COVID-19 pandemic in 2020, the postseason field was expanded to 16 total teams (eight per league)", "The postseason format reverted to two wild-card teams in each league facing off in a single-game playoff in 2021"]
+    },
+    "almanac-postseason": {
+      "sport": "mlb", "group": "almanac", "publisher": "Baseball Almanac", "title": "MLB Postseason Playoffs 1969 - 2026",
+      "url": "https://www.baseball-almanac.com/ws/postseason.shtml", "read": "2026-10-10",
+      "says": ["Section headings: Wildcard Team Era (1994 to 2011), Wildcard Playoff Game (2012 to 2021), Wildcard Series - Modern Playoffs (2022 to 2025)", "2004 and 2011: Division Series, League Championship Series, World Series, no wild card round", "2012, 2019, 2021: a Wild Card Game first", "2020: Wild Card Series (eight of them), then the same three rounds", "2022 and 2025: Wild Card Series first", "the LCS switched to a best-of-seven series in 1985", "In 1995 the playoffs introduced the Division Series."],
+      "note": "It gives no length for a Wild Card Series or a Division Series."
+    },
+    "cbs-2023-runner": {
+      "sport": "mlb", "group": "cbs", "publisher": "CBS Sports (Mike Axisa)", "title": "MLB ghost runner rule: League makes extra-innings change permanent for regular-season games, per report", "published": "2023-02-14",
+      "url": "https://www.cbssports.com/mlb/news/mlb-ghost-runner-rule-league-makes-extra-innings-change-permanent-for-regular-season-games-per-report/", "read": "2026-10-10",
+      "says": ["a runner is automatically placed at second base to begin each extra inning", "MLB first used the extra-innings tiebreaker rule during the 60-game pandemic season in 2020", "has voted unanimously to make the rule permanent for the regular season and regular season only.", "Postseason games will continue to feature \"regular\" play in extra innings."]
+    },
+    "ftw-2024-runner": {
+      "sport": "mlb", "group": "usatoday", "publisher": "For The Win (Charles Curtis), carried by Yahoo Sports", "title": "MLB playoffs extra innings rules: Is there a 'ghost runner'? Here's the answer", "published": "2024-10-18",
+      "url": "https://sports.yahoo.com/mlb-playoffs-extra-innings-rules-004535200.html", "read": "2026-10-10",
+      "says": ["a runner was automatically put on second base to start the 10th and onwards, shortening games.", "That's only a regular-season rule that won't be used in the postseason."],
+      "note": "For The Win is a USA TODAY title, so it shares USA TODAY's group."
+    },
+    "espn-expanded": {
+      "sport": "mlb", "group": "espn", "thin": true, "publisher": "ESPN", "title": "MLB Expanded Standings <year> (records in extra inning games and in one run games)",
+      "url": "https://www.espn.com/mlb/standings/_/season/<year>/view/expanded", "read": "2026-10-10",
+      "years": {
+        "2004": "Added up by this round: 287 wins and 287 losses in extra inning games, 638 and 638 in one run games, of 2,428 games (11.8 and 26.3 percent).",
+        "2026": "Added up by this round: 209 and 209 in extra inning games, 668 and 668 in one run games, of 2,429 games (8.6 and 27.5 percent)."
+      },
+      "note": "ONE source. Used for nothing in the ledger: MLB_THIN names it."
+    },
+    "npb-2025-standings": {
+      "sport": "mlb", "group": "npb", "thin": true, "publisher": "Nippon Professional Baseball (NPB.jp)", "title": "2025 Standings",
+      "url": "https://npb.jp/bis/eng/2025/standings/", "read": "2026-10-10",
+      "says": ["Central League: Hanshin 143 games (85-54-4), DeNA 143 (71-66-6), Yomiuri 143 (70-69-4), Chunichi 143 (63-78-2), Hiroshima 143 (59-79-5), Yakult 143 (57-79-7)"],
+      "note": "ONE source. Used for nothing in the ledger: MLB_THIN names it."
+    },
+    "ticketsinjapan-climax": {
+      "sport": "mlb", "group": "ticketsinjapan", "thin": true, "publisher": "Tickets in Japan", "title": "Climax Series System, Rules, and Tips for Watching Games", "published": "2025-09-26",
+      "url": "https://www.ticketsinjapan.com/en/articles/introduction_climaxseries/", "read": "2026-10-10",
+      "says": ["the top three teams from each regular season in both the Central League and Pacific League participate", "The maximum number of games is three, with the first team to win two games advancing.", "The maximum number of games is six, with the first team to win four games earning the right to advance to the Japan Series.", "the \"one-win advantage\" given to the season's 1st-place team", "played in a best-of-seven format (the Japan Series)"],
+      "note": "ONE source, and it gives no season length. Used for nothing in the ledger."
+    },
+    "nhl": {
+      "sport": "nhl", "group": "nhl", "publisher": "National Hockey League, its own standings feed", "title": "Standings on the last day of the regular season (every club's division, conference and games played)",
+      "url": "https://api-web.nhle.com/v1/standings/<last day of the regular season>", "read": "2026-10-10",
+      "years": {
+        "2006": "2007-04-08: 30 clubs, all on 82. Eastern: Northeast, Atlantic, Southeast (ATL, TBL, CAR, FLA, WSH). Western: Central, Pacific (ANA, SJS, DAL, LAK, PHX), Northwest. Overtime losses add up to 281, shootout wins to 164, goals for to 7,246 (NYI 248).",
+        "2007": "2008-04-06: 30 clubs, all on 82; the same six divisions.",
+        "2008": "2009-04-12: 30 clubs, all on 82; the same six divisions.",
+        "2009": "2010-04-11: 30 clubs, all on 82; the same six divisions.",
+        "2010": "2011-04-10: 30 clubs, all on 82; the same six divisions (ATL in the Southeast).",
+        "2011": "2012-04-07: 30 clubs, all on 82; Southeast: FLA, WSH, TBL, WPG, CAR.",
+        "2012": "2013-04-28: 30 clubs, all on 48; the same six divisions (WPG in the Southeast).",
+        "2013": "2014-04-13: 30 clubs, all on 82. Eastern: Atlantic (BOS, TBL, MTL, DET, OTT, TOR, FLA, BUF), Metropolitan (PIT, NYR, PHI, CBJ, WSH, NYI, CAR, NJD). Western: Central (COL, STL, CHI, MIN, DAL, NSH, WPG), Pacific (ANA, SJS, LAK, PHX, VAN, CGY, EDM).",
+        "2014": "2015-04-11: 30 clubs, all on 82; Pacific: ANA, VAN, CGY, LAK, SJS, EDM, ARI.",
+        "2015": "2016-04-10: 30 clubs, all on 82; the same four divisions.",
+        "2016": "2017-04-09: 30 clubs, all on 82; the same four divisions.",
+        "2017": "2018-04-08: 31 clubs, all on 82; Pacific: VGK, ANA, SJS, LAK, CGY, EDM, VAN, ARI. Eastern: Atlantic, Metropolitan. Western: Central, Pacific.",
+        "2018": "2019-04-06: 31 clubs, all on 82; the same four divisions.",
+        "2019": "2020-03-11: 31 clubs on 68 to 71 games (68: 2 clubs, 69: 10, 70: 11, 71: 8), club for club as NHL_2019_CLUB_GAMES.",
+        "2020": "2021-05-19: 31 clubs, all on 56. Four divisions under sponsors' names: Scotia North (TOR, EDM, WPG, MTL, CGY, OTT, VAN), MassMutual East (PIT, WSH, BOS, NYI, NYR, PHI, NJD, BUF), Discover Central (CAR, FLA, TBL, NSH, DAL, CHI, DET, CBJ), Honda West (COL, VGK, MIN, STL, ARI, LAK, SJS, ANA).",
+        "2021": "2022-05-01: 32 clubs, all on 82; Central: COL, MIN, STL, DAL, NSH, WPG, CHI, ARI; Pacific: CGY, EDM, LAK, VGK, VAN, SJS, ANA, SEA. Eastern: Atlantic, Metropolitan. Western: Central, Pacific.",
+        "2022": "2023-04-14: 32 clubs, all on 82; the same four divisions.",
+        "2023": "2024-04-18: 32 clubs, all on 82; the same four divisions.",
+        "2024": "2025-04-17: 32 clubs, all on 82; Central: WPG, DAL, STL, COL, MIN, UTA, NSH, CHI.",
+        "2025": "2026-04-16: 32 clubs, all on 82; the same four divisions. Eastern: Atlantic, Metropolitan. Western: Central, Pacific. Overtime losses add up to 326, shootout wins to 119, goals for to 8,205.",
+        "2026": "2026-10-09 (season 20262027, in progress): 32 clubs in the same four divisions as 2025-26."
+      },
+      "values": { "overtimeLosses": { "2006": 281, "2025": 326 }, "shootoutWins": { "2006": 164, "2025": 119 }, "goalsFor": { "2006": 7246, "2025": 8205 } },
+      "note": "The feed answers with no clubs for a date after the last day of a regular season, so each season was read on its last day."
+    },
+    "hr": {
+      "sport": "nhl", "group": "sportsreference-hockey", "publisher": "Hockey Reference", "title": "<season> NHL Summary (standings by division, games played for every club)",
+      "url": "https://www.hockey-reference.com/leagues/NHL_<year the season ends in>.html", "read": "2026-10-10",
+      "years": {
+        "2006": "30 clubs, all on 82; six divisions (Atlanta Thrashers in the Southeast, Phoenix Coyotes in the Pacific). OL column adds up to 281; GF to 7,246 (New York Islanders 248).",
+        "2007": "30 clubs, all on 82; the same six divisions.", "2008": "30 clubs, all on 82; the same six divisions.",
+        "2009": "30 clubs, all on 82; the same six divisions.", "2010": "30 clubs, all on 82; the same six divisions (Atlanta Thrashers).",
+        "2011": "30 clubs, all on 82; Southeast: Florida, Washington, Tampa Bay, Winnipeg Jets, Carolina.",
+        "2012": "30 clubs, all on 48; the same six divisions (Winnipeg Jets in the Southeast).",
+        "2013": "30 clubs, all on 82; Atlantic 8, Metropolitan 8, Central 7 (with Winnipeg), Pacific 7 (with Phoenix Coyotes).",
+        "2014": "30 clubs, all on 82; Pacific holds Arizona Coyotes.", "2015": "30 clubs, all on 82; the same four divisions.", "2016": "30 clubs, all on 82; the same four divisions.",
+        "2017": "31 clubs, all on 82; Pacific holds Vegas Golden Knights.", "2018": "31 clubs, all on 82; the same four divisions.",
+        "2019": "31 clubs on 68 to 71 games, club for club as the league feed.",
+        "2020": "31 clubs, all on 56; Central, East, North and West Divisions, club for club as the league feed.",
+        "2021": "32 clubs, all on 82; Central holds Arizona Coyotes, Pacific holds Seattle Kraken.", "2022": "32 clubs, all on 82; the same four divisions.", "2023": "32 clubs, all on 82; the same four divisions.",
+        "2024": "32 clubs, all on 82; Central holds Utah Hockey Club.",
+        "2025": "32 clubs, all on 82; Central holds Utah Mammoth. OL column adds up to 326; GF to 8,205.",
+        "2026": "Season in progress: 32 clubs in the same four divisions (Utah Mammoth in the Central)."
+      }
+    },
+    "hr-league": {
+      "sport": "nhl", "group": "sportsreference-hockey", "publisher": "Hockey Reference", "title": "NHL & WHA League Averages (GP: games in the league; G: goals per team game)",
+      "url": "https://www.hockey-reference.com/leagues/stats.html", "read": "2026-10-10",
+      "years": {
+        "2006": "1230 games, 2.88 goals", "2007": "1230, 2.72", "2008": "1230, 2.85", "2009": "1230, 2.77", "2010": "1230, 2.73", "2011": "1230, 2.66", "2012": "720, 2.65",
+        "2013": "1230, 2.67", "2014": "1230, 2.66", "2015": "1230, 2.67", "2016": "1230, 2.73", "2017": "1271, 2.93", "2018": "1271, 2.98", "2019": "1082, 2.98",
+        "2020": "868, 2.90", "2021": "1312, 3.11", "2022": "1312, 3.14", "2023": "1312, 3.08", "2024": "1312, 3.01", "2025": "1312, 3.08"
+      },
+      "values": {
+        "leagueGames": { "2006": 1230, "2007": 1230, "2008": 1230, "2009": 1230, "2010": 1230, "2011": 1230, "2012": 720, "2013": 1230, "2014": 1230, "2015": 1230, "2016": 1230, "2017": 1271, "2018": 1271, "2019": 1082, "2020": 868, "2021": 1312, "2022": 1312, "2023": 1312, "2024": 1312, "2025": 1312 },
+        "goalsPerGame": { "2006": 2.88, "2025": 3.08 }
+      },
+      "note": "Its goals a game leave out the one goal a shootout winner is given on the final score: 2.88 is (7,246 - 164) / 2,460 for 2006-07."
+    },
+    "hr-shootout": {
+      "sport": "nhl", "group": "sportsreference-hockey", "publisher": "Hockey Reference", "title": "<season> NHL Standings (each club's record in shootouts)",
+      "url": "https://www.hockey-reference.com/leagues/NHL_<year the season ends in>_standings.html", "read": "2026-10-10",
+      "years": {
+        "2006": "Shootout wins add up to 164 and losses to 164 (Buffalo 10-4, Detroit 2-8, ...), club for club the league feed's shootout wins.",
+        "2025": "Shootout wins add up to 119 (Philadelphia 10-4, Anaheim 8-0, Utah 0-0, ...), club for club the league feed's shootout wins."
+      },
+      "values": { "shootoutWins": { "2006": 164, "2025": 119 }, "overtimeLosses": { "2006": 281, "2025": 326 }, "goalsFor": { "2006": 7246, "2025": 8205 } }
+    },
+    "espn-nhl": {
+      "sport": "nhl", "group": "espn", "publisher": "ESPN", "title": "NHL Standings <season> (GP for every club; the clubs of each conference)",
+      "url": "https://www.espn.com/nhl/standings/_/season/<year the season ends in>", "read": "2026-10-10",
+      "years": {
+        "2006": "All 30 on 82. Eastern Conference: BUF, NJ, ATL, OTT, PIT, NYR, TB, NYI, TOR, MTL, CAR, FLA, BOS, WSH, PHI; Western: the other 15. Overtime losses club for club as the league feed. Goals for: NYI 247 (the feed and Hockey Reference print 248). Its shootout columns are all 0 for this season.",
+        "2007": "All 30 on 82, by division: the same six divisions.",
+        "2008": "All 30 on 82. Eastern Conference holds ATL and the 14 others of the three eastern divisions.",
+        "2012": "All 30 on 48. Eastern Conference holds WPG; Western holds PHX.",
+        "2013": "All 30 on 82. Eastern: BOS, TB, MTL, DET, OTT, TOR, FLA, BUF, PIT, NYR, PHI, CBJ, WSH, NJ, CAR, NYI. Western: the other 14.",
+        "2017": "All 31 on 82. Eastern: the 16 clubs of the Atlantic and the Metropolitan. Western: 15 with VGK.",
+        "2021": "All 32 on 82. Eastern: the 16 of the Atlantic and the Metropolitan. Western: 16 with ARI and SEA.",
+        "2025": "All 32 on 82. Eastern: the 16 of the Atlantic and the Metropolitan. Western: 16 with UTA."
+      },
+      "note": "Its by division view is by conference only for most old seasons, so it is a source for games played and for conferences, not for divisions."
+    },
+    "nhl-84": {
+      "sport": "nhl", "group": "nhl", "publisher": "NHL.com", "title": "10 things to know about 2026-27 NHL regular season (the page's address calls it the 2026-27 stats pack; the scout read it under \"84-GAME SCHEDULE RETURNS\")", "published": "2026-07-16",
+      "url": "https://www.nhl.com/news/nhl-stats-pack-2026-27-regular-season-schedule", "read": "2026-10-10",
+      "says": ["The 2026-27 campaign marks the third in the NHL's 109-season history where teams will play 84 games", "with the two previous instances occurring in 1993-94 and 1992-93", "Games Within Division - 28 total games for each team.", "7 teams x 2 home / 2 away (Subtotal 14 home / 14 away)", "Games Within Conference (Non-Division) - 24 total games for each team.", "4 teams x 2 home / 1 away (Subtotal 8 home / 4 away)", "4 teams x 1 home / 2 away (Subtotal 4 home / 8 away)", "Non-Conference Games - 32 total games for each team.", "16 teams x 1 home / 1 away (Subtotal 16 home / 16 away)", "Grand Total - 84 Games", "42 home / 42 away", "an all-time high of 1,344 games played across 194 days"]
+    },
+    "espn-84": {
+      "sport": "nhl", "group": "espn", "publisher": "ESPN (Greg Wyshynski)", "title": "NHL releases expanded 84-game schedule for 2026-27 season", "published": "2026-07-16",
+      "url": "https://www.espn.com/nhl/story/_/id/49376073/nhl-releases-expanded-84-game-schedule-2026-27-season", "read": "2026-10-10",
+      "says": ["the league expands its campaign from 82 to 84 games this season.", "The NHL has had an 82-game season since 1995-96.", "Now, each team will play two home and two road games against its seven division rivals.", "Teams will play two home games and one road game against four conference opponents, and one home game and two road games against the other four.", "Teams will then play each opponent in the opposite conference once at home and once on the road for a total of 42 home games and 42 away games."]
+    },
+    "nhl-playoff-format": {
+      "sport": "nhl", "group": "nhl", "publisher": "NHL.com", "title": "Playoff Format",
+      "url": "https://www.nhl.com/info/standings-info/playoff-format", "read": "2026-10-10",
+      "says": ["16 teams will qualify for the Stanley Cup Playoffs.", "The top three teams in each division will make up the first 12 teams in the playoffs.", "Each of the four rounds is a best-of-7; the first team to win four games advances to the next round.", "Section headings: The First Round, The Second Round, Conference Finals & Stanley Cup Final"]
+    },
+    "si-playoff-format": {
+      "sport": "nhl", "group": "si", "publisher": "Sports Illustrated (Joe Lago)", "title": "NHL Stanley Cup Playoffs: Format, Teams, Rules & Changes Through the Years", "published": "2025-04-10",
+      "url": "https://www.si.com/nhl/nhl-stanley-cup-playoffs-format-teams-rules-changes-through-the-years", "read": "2026-10-10",
+      "says": ["Sixteen teams qualify for the Stanley Cup playoffs.", "The Stanley Cup playoffs comprise four rounds with winners determined by best-of-seven game series.", "First-round winners advance to the second round.", "Second-round winners move on to the conference finals.", "The conference champions meet in the Stanley Cup Final.", "Outside of the modified 2020 and 2021 tournaments due to COVID-19,", "the NHL has used the same Stanley Cup playoffs format since 2013-14 when it introduced its current postseason setup."],
+      "note": "The last two lines are one sentence, read again in the fix pass of the round."
+    },
+    "hr-playoffs": {
+      "sport": "nhl", "group": "sportsreference-hockey", "publisher": "Hockey Reference", "title": "<year> NHL Stanley Cup Playoffs Summary (every series, by round)",
+      "url": "https://www.hockey-reference.com/playoffs/NHL_<year the season ends in>.html", "read": "2026-10-10",
+      "years": {
+        "2006": "The 2007 playoffs: 16 clubs, fifteen series, every winner on four wins and none longer than seven games. Its round names: Conference Quarter-Finals (8), Conference Semi-Finals (4), Conference Finals (2), Final.",
+        "2013": "The 2014 playoffs: 16 clubs, fifteen series, every winner on four wins and none longer than seven games. Its round names: First Round (8), Second Round (4), Conference Finals (2), Final. The Final was played by the two winners of the Conference Finals.",
+        "2019": "The 2020 playoffs: 24 clubs. A Qualifying Round of eight series, each won with three wins, and a Round Robin in two groups came before the First Round; then First Round (8), Second Round (4), Conference Finals (2) and Final, each won with four wins.",
+        "2020": "The 2021 playoffs: 16 clubs. First Round (8), Second Round (4), Semi-Finals (2: Montreal and Vegas, Tampa Bay and the New York Islanders), Final. No round is called Conference Finals."
+      },
+      "note": "Read in the fix pass of the round. Keyed by the year the season starts in, like the other NHL receipts. It prints the last round as \"Final\"."
+    },
+    "nhl-points": {
+      "sport": "nhl", "group": "nhl", "publisher": "National Hockey League, its own standings feed", "title": "Standings on the last day of the 2025-26 regular season (wins, losses, overtime losses and points for every club)",
+      "url": "https://api-web.nhle.com/v1/standings/2026-04-16", "read": "2026-10-10",
+      "says": ["All 32 clubs: points are twice the wins plus the overtime losses, and wins, losses and overtime losses add up to the 82 games played.", "Colorado: 55 wins, 16 losses, 11 overtime losses, 121 points.", "Winnipeg: 35 wins, 35 losses, 12 overtime losses, 82 points.", "Vancouver: 25 wins, 49 losses, 8 overtime losses, 58 points.", "The overtime losses add up to 326."],
+      "values": { "records": { "COL": [55, 16, 11, 121], "WPG": [35, 35, 12, 82], "VAN": [25, 49, 8, 58] } },
+      "note": "Read in the fix pass of the round: the point a club keeps for a game lost after sixty minutes, in the league's own arithmetic. The first reading slipped on Winnipeg (35, 37, 11, which is 83 games) and it was asked again. Each record is [wins, losses, overtime losses, points]."
+    },
+    "si-overtime": {
+      "sport": "nhl", "group": "si", "publisher": "Sports Illustrated (Karl Rasmussen)", "title": "NHL Overtime Rules Explained: Playoffs and Regular Season", "published": "2025-03-05",
+      "url": "https://www.si.com/nhl/nhl-overtime-rules-explained-playoffs-and-regular-season-01jnm1y8qd0e", "read": "2026-10-10",
+      "says": ["if the game is still tied after the opening three 20-minute periods", "Rather than the usual 5-on-5 format, NHL overtime is played 3-on-3.", "since 2015, the NHL has adopted a 3-on-3 format for the overtime period in the regular season.", "If the game is still tied after five minutes, teams go to a penalty shootout to determine the winner.", "After 2005, the league introduced the shootout to determine a winner and a loser.", "When a regular-season NHL game goes to overtime, both teams are awarded a single point.", "Each team gets three initial penalty takers to determine the outcome.", "There are no shootouts in playoff hockey.", "a 20-minute, sudden-death overtime period until a winner is determined"]
+    },
+    "nbc-overtime": {
+      "sport": "nhl", "group": "nbc", "publisher": "NBC Chicago (Bryan Murphy)", "title": "Everything to Know About NHL Overtime Rules", "published": "2023-05-19",
+      "url": "https://www.nbcchicago.com/news/sports/a-guide-to-nhl-overtime-rules/2634762/", "read": "2026-10-10",
+      "says": ["remains tied after three periods", "the periods are 20 minutes long like a normal period.", "Overtime is a five-minute period where the first team to score wins the game.", "The overtime period is played three-on-three, with each team having three skaters on the ice.", "there were four skaters on each side, but the NHL adopted the three-on-three format at the start of the 2015-16 season.", "Three rounds will be played to determine a winner.", "Overtime is played at five-on-five.", "There is no shootout, so if the first overtime period ends without a goal, then the game will move to a second overtime"]
+    }
+  }
+}
