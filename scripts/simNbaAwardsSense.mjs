@@ -44,7 +44,7 @@
        A4  mean points rise with every rating band at every position (bands of 200 seasons or more).
        A5  nbaStatLineFor draws exactly NBA_LINE_DRAWS times and is pure.
    E   The two tables the awards are judged against are what the fleet lives: the season score's field in
-       careerAwards.ts (Finals MVP and the rival bridge read it) and NBA_FIELD in nbaCareerAwards.ts (the one
+       careerAwards.ts (Finals MVP reads it; the rival bridge did until Round 1112) and NBA_FIELD in nbaCareerAwards.ts (the one
        pass reads it). Each seed's measured mean within 0.08 of the committed row's sd and its sd within 6
        percent (measured across five seeds: at most 0.042 and 2.3 on the first, at most 0.033 and 1.6 on the second).
    R   The rival (Round 1112). He plays his season on the player's own line (nbaRivalSeason in nbaMyCareer.ts,
@@ -175,7 +175,7 @@
    section red. A control that moves the line itself drags what reads the line with it, so each lists what
    may follow. A control run exits 1 when it fired as designed and 3 when it did not.
      oldassists       the old assists expression                       A1, A3 red (may: A2, E, R, H, B2, B4, B6)
-     stalefield       the PG row of the season score's field one sd stale   E red (may: R, H, B6)
+     stalefield       the PG row of the season score's field one sd stale   E red (may: H, B6)
      staleawardfield  the PG row of NBA_FIELD's MVP score one sd stale   E red (may: H, B4, B6)
      oldscale         the rival scored on the line before Round 1112   R red
      neutralmine      my side of the verdict off the era neutral line  R red (the 2003-04 careers tell)
@@ -311,8 +311,9 @@ const CONTROLS = {
   oldassists: { file: 'src/lib/nbaMyCareer.ts',
     find: '  const apg = clampTo((0.045 + d * 0.0052) * a.playmaking * NBA_POS_AST[input.pos] * minutes * era.ast * (0.92 + u5 * 0.16), 0.3, po ? 14 : 13);',
     put: '  const apg = clampTo((1.5 + d * 0.22) * a.playmaking * (bench ? 0.6 : 1) + u5 * 2, 0.3, po ? 14 : 13);', needs: 'A1,A3', may: 'A2,E,R,H,B2,B4,B6' },
-  /* E: the PG row of the season score's field one standard deviation stale. Finals MVP and the bridge read it. */
-  stalefield: { file: 'src/lib/careerAwards.ts', find: FIELD_PG_ROW, put: FIELD_PG_STALE, needs: 'E', may: 'R,H,B6' },
+  /* E: the PG row of the season score's field one standard deviation stale. Finals MVP reads it (the rival's
+     bridge did too until Round 1112 deleted it, so R can no longer follow). */
+  stalefield: { file: 'src/lib/careerAwards.ts', find: FIELD_PG_ROW, put: FIELD_PG_STALE, needs: 'E', may: 'H,B6' },
   /* E: the PG row of the MVP score's field (NBA_FIELD) one standard deviation stale. The league's awards read it. */
   staleawardfield: { file: 'src/lib/nbaCareerAwards.ts', find: AWARD_FIELD_ROW, put: AWARD_FIELD_STALE, needs: 'E', may: 'H,B4,B6' },
   /* R: the old scale back under the verdict. The rival is scored on the line before Round 1112 (whole number
