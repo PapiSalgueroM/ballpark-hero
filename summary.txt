@@ -1,0 +1,5 @@
+ledger exit=0 3s | simUsSeasonLedger: green. 3023 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+hallfiles exit=0 0s | hall files diff lines against base 980654fa: 0
+hall-nhl exit=3 4s | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks])
+head exit=0 0s | Round 1226: the notes carry the second fix pass (the Hall marks measured for the lead's ruling, nothing moved)
+tsc exit=0 46s | 
