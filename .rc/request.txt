@@ -1,0 +1,3 @@
+#!build
+eras-head: node scripts/simEras.mjs > /tmp/eras.log 2>&1; s=$?; cp /tmp/eras.log "$RC_OUT/simEras-head.log"; grep -nE "FAIL|✗" /tmp/eras.log | head -8 | cut -c1-300; tail -1 /tmp/eras.log | cut -c1-120; exit $s
+eras-base: R="$PWD"; git worktree add /tmp/base-eras 46e4231cc82b6c047da6e0b4bdb5dfae5628a928 > /tmp/wt.log 2>&1 && ln -s "$R/node_modules" /tmp/base-eras/node_modules && cp -r "$R/dist" /tmp/base-eras/dist 2>/dev/null; cd /tmp/base-eras && node scripts/simEras.mjs > /tmp/eras-base.log 2>&1; s=$?; cp /tmp/eras-base.log "$RC_OUT/simEras-base.log"; grep -nE "FAIL|✗" /tmp/eras-base.log | head -8 | cut -c1-300; tail -1 /tmp/eras-base.log | cut -c1-120; exit $s
