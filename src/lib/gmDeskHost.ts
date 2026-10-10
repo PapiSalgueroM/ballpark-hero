@@ -650,7 +650,10 @@ export interface HostOfferFacts {
 
 export interface HostMarket {
   state: HostMarketState;
+  /** Read while the feed is empty: what a year out leaves. With offers on the table it still says what next year would hold. */
   nextYear: HostNextYear;
+  /** On 'climb', the tier his old club must have reached by next summer. Null otherwise. */
+  climbTo: ClubTier | null;
   line: string;
   seasonsOut: number;
   /** The season a job taken now is first graded in. */
@@ -672,12 +675,20 @@ export function hostFeedKey(sport: GmSportKey, seat: GmSeatBlock, season: number
   return `seat|${sport}|${s.team}|${s.from}|${s.grades.join(',')}|${season}|${seat.career.seasonsOut}`;
 }
 
-/** What next year holds for a man whose feed is empty today. */
-export function hostNextYear(seat: GmSeatBlock, tiers: Map<string, ClubTier>): HostNextYear {
+/**
+ * What next year holds for a man whose feed is empty today. On 'climb',
+ * `climbTo` is the lowest tier his old club must have reached by then for
+ * the market to look at him again (a better tier is a bigger pedigree, so the
+ * first tier that works, counting up from where the club is, is the easiest).
+ */
+export function hostNextYear(seat: GmSeatBlock, tiers: Map<string, ClubTier>): { nextYear: HostNextYear; climbTo: ClubTier | null } {
   const p = careerProfile(seat.career, tiers);
   const later = { ...p, seasonsOut: p.seasonsOut + 1 };
-  if (bestTierAvailable(later) !== null) return 'open';
-  return bestTierAvailable({ ...later, lastTier: 1 }) !== null ? 'climb' : 'shut';
+  if (bestTierAvailable(later) !== null) return { nextYear: 'open', climbTo: null };
+  for (let t = p.lastTier - 1; t >= 1; t--) {
+    if (bestTierAvailable({ ...later, lastTier: t as ClubTier }) !== null) return { nextYear: 'climb', climbTo: t as ClubTier };
+  }
+  return { nextYear: 'shut', climbTo: null };
 }
 
 const seasonsAndTitles = (seasons: number, titles: number): string =>
@@ -691,7 +702,7 @@ const seasonsAndTitles = (seasons: number, titles: number): string =>
  * fewer seasons than he played.
  */
 export function hostMarketLine(
-  pack: GmSeatPack, seat: GmSeatBlock, state: HostMarketState, nextYear: HostNextYear,
+  pack: GmSeatPack, seat: GmSeatBlock, state: HostMarketState, climbTo: ClubTier | null,
   offerCount: number, oldClubName: string,
 ): string {
   const index = seat.career.stints.length - 1;
@@ -705,8 +716,8 @@ export function hostMarketLine(
     : `${capWord(pack.upstairs)} made the call: you are out after ${record} with the ${oldClubName}.`;
   if (state === 'offers') return `${head} ${plural(offerCount, pack.seat, pack.seats)} called.`;
   if (state === 'closed') return `${head} Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.`;
-  return nextYear === 'climb'
-    ? `${head} Nobody called this year. Next year the phone rings only if the ${oldClubName} finish it a better ${pack.seat} than they are today.`
+  return climbTo !== null
+    ? `${head} Nobody called this year. Next year the phone rings only if the ${oldClubName} have climbed into the ${HOST_TIER_WORDS[climbTo]} of the league by then.`
     : `${head} Nobody called this year. Next year is still open, and every year out makes the phone quieter.`;
 }
 
@@ -729,7 +740,7 @@ export function hostMarket<L>(
     host.pack, teams, seat.career, season + 1,
     keyedRng(hostFeedKey(host.sport, seat, season)), host.champion(league, season),
   );
-  const nextYear = hostNextYear(seat, leagueTiers(teams));
+  const { nextYear, climbTo } = hostNextYear(seat, leagueTiers(teams));
   const state: HostMarketState = offers.length > 0 ? 'offers' : nextYear === 'shut' ? 'closed' : 'quiet';
   const strengths = Object.fromEntries(clubs.map(c => [c.id, c.strength]));
   const cap = host.cap(league);
@@ -740,8 +751,8 @@ export function hostMarket<L>(
     facts[o.teamId] = { strengthRank: strengthRank(strengths, c.id), record: c.record, place: c.place, room: round1(cap - c.payroll) };
   }
   return {
-    state, nextYear, seasonsOut: seat.career.seasonsOut, season: season + 1, offers, facts,
-    line: hostMarketLine(host.pack, seat, state, nextYear, offers.length, nameOf(last.team)),
+    state, nextYear, climbTo, seasonsOut: seat.career.seasonsOut, season: season + 1, offers, facts,
+    line: hostMarketLine(host.pack, seat, state, climbTo, offers.length, nameOf(last.team)),
   };
 }
 
@@ -876,11 +887,13 @@ export function hostSeasonAway<L>(a: HostSeasonAwayInput<L>): HostAwayResult {
   const market = hostMarket(a.host, a.league, seat, sameId);
   if (!market || market.state === 'closed') return { ok: false, reason: 'market-closed' };
 
+  /* A step that hands nothing back changed no block. */
+  const kept = (next: GmDesk | void, was: GmDesk): GmDesk => (next as GmDesk | undefined) ?? was;
   let desk = a.desk;
-  desk = a.away.awayDraft(a.league, a.rng, desk) ?? desk;
-  desk = a.away.awaySummer(a.league, a.rng, desk) ?? desk;
+  desk = kept(a.away.awayDraft(a.league, a.rng, desk), desk);
+  desk = kept(a.away.awaySummer(a.league, a.rng, desk), desk);
   const periods = a.away.periods(a.league);
-  for (let i = 0; i < periods; i++) desk = a.away.playRound(a.league, a.rng, desk) ?? desk;
+  for (let i = 0; i < periods; i++) desk = kept(a.away.playRound(a.league, a.rng, desk), desk);
   const champion = a.away.playoffs(a.league, a.rng, desk);
 
   const season = a.host.season(a.league);
