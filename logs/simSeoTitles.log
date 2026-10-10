@@ -1,0 +1,15 @@
+
+1) the words: label once, unique, sport word, 60 with the brand, 120 to 158 with free, no dash
+   ok  133 games, 133 distinct titles, 133 distinct descriptions, 131 keep the brand in 60, 2 drop it (/nhl-gauntlet-draft (47), /teammates (52)), checked against 33 other page titles
+2) the render: props before the chunk, seoMeta everywhere after it
+   ok  /footle renders its own props before its part loads, /budget-builder still does with only /footle's part loaded; after every game's part, 133 game routes render seoMeta in six tags and the JSON-LD; /about keeps its own props
+3) the saved pages carry the seoMeta head once prerendered, all or none
+   ok  133 saved pages compared, 0 skipped
+4) the entry chunk carries none of the SEO text; each entry sits in its own part chunk and no chunk holds two parts
+   ok  entry index-DipbFjVy.js 775.7 KB raw, 235.9 KB gzipped, carries 0 of 133 searchable descriptions; 32 part chunks, 0.2 KB to 1.0 KB gzipped (median 0.5 KB), 17.7 KB together
+5) the saved headings: guide heading is the search title, no brand, family h1s and labels name their sport
+   ok  133 saved game pages read: guide heading is the seoMeta title and no heading carries the brand; 33 family h1s and every family label name their sport
+6) the parts are what src/data/seoMeta.ts makes, and the page finds every entry in the part it loads
+   ok  genSeoMetaParts --check finds 0 file(s) to rewrite; 133 entries over 32 parts (1 to 9 each), every one found where the page looks
+
+simSeoTitles: green. 133 games carry a keyword title and description, PageSeo renders them lazily, every saved page matches, and the entry chunk is clean, and every saved guide heading is its search title.
