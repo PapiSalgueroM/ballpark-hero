@@ -21,9 +21,18 @@ const RATES_LINE = /^export const CM_VAR_RATES = \{[^}]*\} as const;$/m;
 const withFixtureRates = source => { assert.ok(RATES_LINE.test(source), 'The generated rates line exists'); return source.replace(RATES_LINE, FIXTURE_RATES); };
 const clone = value => JSON.parse(JSON.stringify(value));
 /* Round 1218, the bands outcome. The ranges are real football's (scripts/data/cmVarRates.json, through the generator).
-   headroom: how far past a range's edge the fleet's own sampling may put a healthy engine. PROVISIONAL until measured.
-   goalGap: the 0.05 goals a match simCmStoppageTime (tolGpm) already allows a rule to move the goal count by. */
-const BANDS = { seeds: '31,32,33,34,35,36', headroom: 0.25, goalGap: 0.05 };
+   headroom: how far past a range's edge the fleet's own sampling may put a healthy engine. MEASURED on GitHub runners
+   (result r1218-b2, head 3238354b): five fleets on five disjoint sets of six seeds, 3,947 to 4,077 league matches each.
+     goals ruled out a match      0.0710 0.0782 0.0780 0.0753 0.0819   (target 0.0763: from 7.0% under to 7.3% over)
+     penalties awarded a match    0.0643 0.0687 0.0745 0.0725 0.0703   (target 0.0658: from 2.3% under to 13.2% over)
+   The engine aims at the LOW end of each range, so about half of all fleets land under it. One fleet's figure moves
+   by about 5.4% of the target from fleet to fleet (standard deviation over the five). 0.20 is 3.7 of those, and 2.9
+   times the worst miss seen. The old constants land 77% under, 100% and 175% over the edges: nowhere near.
+   goalGap: the 0.05 goals a match simCmStoppageTime (tolGpm) already allows a rule to move the goal count by, taken
+   here on the SAME match played with and without reviews. Measured: -0.0188 -0.0228 -0.0261 -0.0177 -0.0245.
+   No Club Manager harness holds penalties a match, so none is held here either: the figure is printed (0.42 to 0.45
+   with reviews on, of which 0.064 to 0.075 a review awarded) and that is all. */
+const BANDS = { seeds: '31,32,33,34,35,36', headroom: 0.20, goalGap: 0.05 };
 const BASE = 'c33d013965aa33b87f5db23e2ca270be6fcd977c';
 export function withCmVarSeed(seed, fn) {
   const previous = Math.random, previousNow = Date.now;
@@ -304,7 +313,9 @@ async function main() {
          the random stream in the same place, whether reviews are asked for or not, and its saved live match
          carries no opt in. A league match in a league that says yes carries it. */
       async coverage() {
-        const both = (state, seed, opts) => withCmVarSeed(seed, () => { const result = cm.playNextEntry(state, opts); return { result, next: Math.random() }; });
+        /* A fresh engine for each side of a comparison: the engine numbers its inbox messages from a counter of its
+           own, so two matches played one after the other on one engine differ in those ids and in nothing else. */
+        const both = (state, seed, opts) => withCmVarSeed(seed, () => { const result = candidateFactory().playNextEntry(state, opts); return { result, next: Math.random() }; });
         const optIn = (state, seed) => { const stop = withCmVarSeed(seed, () => cm.playNextEntry(state, { noCoach: true, varReviews: true })); return stop.kind === 'halftime' ? stop.state.live.varReviews === true : null; };
         let outside = 0;
         for (const [c, club] of ['Wolves', 'Ajax', 'Lyon', 'Celtic'].entries()) {
