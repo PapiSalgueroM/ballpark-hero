@@ -1,0 +1,146 @@
+base build exit=0 at 09df145ab
+[32m✓ built in 23.70s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+base assets 532
+head assets 533
+base server 200
+head server 200
+     save QB0: made by the base commit's binding, 712 bytes, era undefined, year 2026, role starter, seasons 0
+     save QB1: made by the base commit's binding, 2912 bytes, era undefined, year 2027, role starter, seasons 1, last 2026 with 17 games
+     save K3: made by the base commit's binding, 3633 bytes, era undefined, year 2029, role starter, seasons 3, last 2028 with 17 games
+     save LB1: made by the base commit's binding, 3118 bytes, era undefined, year 2027, role starter, seasons 1, last 2026 with 17 games
+     save QB17: made by the base commit's binding, 6185 bytes, era y2005, year 2022, role starter, seasons 17, last 2021 with 17 games
+     save WR2: made by the base commit's binding, 3787 bytes, era undefined, year 2028, role starter, seasons 2, last 2027 with 17 games
+     head-QB0-p0: entry "📺 Week by week" {"w":159,"h":44,"inside":true}, us "Miami Dolphins", 17 games, 138 feed lines, record 10-7, log rows 17, other labels [], early {"full":false,"minute":"1","anims":8}, mid {"full":false,"minute":"11","score":"0-0"}
+     head-QB0-p0: game 1 30-17 "Did not play" [["Q1 1:00","🥅 Field goal, Miami Dolphins."],["Q2 12:00","🥅 Field goal, Miami Dolphins."],["Q2 7:00","🏈 Touchdown, Cincinnati Bengals."],["Q2 5:00","🥅 Field goal, Miami Dolphins."]]
+     head-QB0-p0: review [["Games","4"],["Pass yds","738"],["Pass TD","5"],["INT","4"]]; log row 1 "G17 | H | NE | W 28-10 | 175 YDS 2 TD 1 INT"; cards answered before the hub 0; posters ["HalfwayFirst half: 2 games, 408 passing yards and 2 touchdownsBest so far: Game 6, W 31-16, 257 yards, 2 touchdowns, 1 interceptionAfter gam","Last gameThe last game of the regular season.After game 169-7Home 5-2Away 4-5Streak L2Division 1-4Conference 6-5Last 10:WWWWWLWWLL📋 Game lo"]; scores 30-17 21-24 14-34 6-20 13-24 31-16 20-17 34-20 30-23 45-14 27-17 13-23 17-14 21-17 20-35 24-31 28-10
+ok   head-QB0-p0: the record on the panel (10-7) is the 17 score bugs the walk read (10 won, 7 lost, 0 level)
+ok   head-QB0-p0: the entry is on the hub and the season is walked (17 games read, log 17 rows, review 4 tiles)
+ok   head-QB0-p0: every game's feed adds up to its score bug, the clock labels run forward, no time label is cut off (138 lines)
+ok   head-QB0-p0: every time label is a quarter and minutes (others: [])
+ok   head-QB0-p0: nothing runs off the side of the screen on the first card, a final or the review ([{"sideways":false,"offRight":0,"anims":8},{"sideways":false,"offRight":0,"anims":1},{"sideways":false,"offRight":0,"anims":1}])
+ok   head-QB0-p0: the whole season is in the game log and no row wraps (17 rows, 0 wrapped)
+ok   head-QB0-p0: with motion on the clock runs after Kick off (minute 1 then 11, score then 0-0)
+ok   head-QB0-p0: no page error and no console error
+     head-QB0-p1: entry "📺 Week by week" {"w":159,"h":44,"inside":true}, us "Miami Dolphins", 17 games, 138 feed lines, record 10-7, log rows 17, other labels [], early {"full":true,"minute":"60","anims":0}, mid null
+     head-QB0-p1: game 1 30-17 "Did not play" [["Q1 1:00","🥅 Field goal, Miami Dolphins."],["Q2 12:00","🥅 Field goal, Miami Dolphins."],["Q2 7:00","🏈 Touchdown, Cincinnati Bengals."],["Q2 5:00","🥅 Field goal, Miami Dolphins."]]
+     head-QB0-p1: review [["Games","4"],["Pass yds","738"],["Pass TD","5"],["INT","4"]]; log row 1 "G17 | H | NE | W 28-10 | 175 YDS 2 TD 1 INT"; cards answered before the hub 0; posters ["HalfwayFirst half: 2 games, 408 passing yards and 2 touchdownsBest so far: Game 6, W 31-16, 257 yards, 2 touchdowns, 1 interceptionAfter gam","Last gameThe last game of the regular season.After game 169-7Home 5-2Away 4-5Streak L2Division 1-4Conference 6-5Last 10:WWWWWLWWLL📋 Game lo"]; scores 30-17 21-24 14-34 6-20 13-24 31-16 20-17 34-20 30-23 45-14 27-17 13-23 17-14 21-17 20-35 24-31 28-10
+ok   head-QB0-p1: the record on the panel (10-7) is the 17 score bugs the walk read (10 won, 7 lost, 0 level)
+ok   head-QB0-p1: the entry is on the hub and the season is walked (17 games read, log 17 rows, review 4 tiles)
+ok   head-QB0-p1: every game's feed adds up to its score bug, the clock labels run forward, no time label is cut off (138 lines)
+ok   head-QB0-p1: every time label is a quarter and minutes (others: [])
+ok   head-QB0-p1: nothing runs off the side of the screen on the first card, a final or the review ([{"sideways":false,"offRight":0,"anims":0},{"sideways":false,"offRight":0,"anims":0},{"sideways":false,"offRight":0,"anims":0}])
+ok   head-QB0-p1: the whole season is in the game log and no row wraps (17 rows, 0 wrapped)
+ok   head-QB0-p1: reduced motion paints the final at once after Kick off (full time true, minute 60, running animations 0)
+ok   head-QB0-p1: no page error and no console error
+     head-QB0-d0: entry "📺 Week by week" {"w":159,"h":44,"inside":true}, us "Miami Dolphins", 17 games, 138 feed lines, record 10-7, log rows 17, other labels [], early {"full":false,"minute":"1","anims":7}, mid {"full":false,"minute":"11","score":"0-0"}
+     head-QB0-d0: game 1 30-17 "Did not play" [["Q1 1:00","🥅 Field goal, Miami Dolphins."],["Q2 12:00","🥅 Field goal, Miami Dolphins."],["Q2 7:00","🏈 Touchdown, Cincinnati Bengals."],["Q2 5:00","🥅 Field goal, Miami Dolphins."]]
+     head-QB0-d0: review [["Games","4"],["Pass yds","738"],["Pass TD","5"],["INT","4"]]; log row 1 "G17 | H | NE | W 28-10 | 175 YDS 2 TD 1 INT"; cards answered before the hub 0; posters ["HalfwayFirst half: 2 games, 408 passing yards and 2 touchdownsBest so far: Game 6, W 31-16, 257 yards, 2 touchdowns, 1 interception🗓 Schedu","Last gameThe last game of the regular season.🗓 Schedule3Played563Pass yds3TD3INT"]; scores 30-17 21-24 14-34 6-20 13-24 31-16 20-17 34-20 30-23 45-14 27-17 13-23 17-14 21-17 20-35 24-31 28-10
+ok   head-QB0-d0: the record on the panel (10-7) is the 17 score bugs the walk read (10 won, 7 lost, 0 level)
+ok   head-QB0-d0: the entry is on the hub and the season is walked (17 games read, log 17 rows, review 4 tiles)
+ok   head-QB0-d0: every game's feed adds up to its score bug, the clock labels run forward, no time label is cut off (138 lines)
+ok   head-QB0-d0: every time label is a quarter and minutes (others: [])
+ok   head-QB0-d0: nothing runs off the side of the screen on the first card, a final or the review ([{"sideways":false,"offRight":0,"anims":7},{"sideways":false,"offRight":0,"anims":1},{"sideways":false,"offRight":0,"anims":1}])
+ok   head-QB0-d0: the whole season is in the game log and no row wraps (17 rows, 0 wrapped)
+ok   head-QB0-d0: with motion on the clock runs after Kick off (minute 1 then 11, score then 0-0)
+ok   head-QB0-d0: no page error and no console error
+     head-QB0-d1: entry "📺 Week by week" {"w":159,"h":44,"inside":true}, us "Miami Dolphins", 17 games, 138 feed lines, record 10-7, log rows 17, other labels [], early {"full":true,"minute":"60","anims":0}, mid null
+     head-QB0-d1: game 1 30-17 "Did not play" [["Q1 1:00","🥅 Field goal, Miami Dolphins."],["Q2 12:00","🥅 Field goal, Miami Dolphins."],["Q2 7:00","🏈 Touchdown, Cincinnati Bengals."],["Q2 5:00","🥅 Field goal, Miami Dolphins."]]
+     head-QB0-d1: review [["Games","4"],["Pass yds","738"],["Pass TD","5"],["INT","4"]]; log row 1 "G17 | H | NE | W 28-10 | 175 YDS 2 TD 1 INT"; cards answered before the hub 0; posters ["HalfwayFirst half: 2 games, 408 passing yards and 2 touchdownsBest so far: Game 6, W 31-16, 257 yards, 2 touchdowns, 1 interception🗓 Schedu","Last gameThe last game of the regular season.🗓 Schedule3Played563Pass yds3TD3INT"]; scores 30-17 21-24 14-34 6-20 13-24 31-16 20-17 34-20 30-23 45-14 27-17 13-23 17-14 21-17 20-35 24-31 28-10
+ok   head-QB0-d1: the record on the panel (10-7) is the 17 score bugs the walk read (10 won, 7 lost, 0 level)
+ok   head-QB0-d1: the entry is on the hub and the season is walked (17 games read, log 17 rows, review 4 tiles)
+ok   head-QB0-d1: every game's feed adds up to its score bug, the clock labels run forward, no time label is cut off (138 lines)
+ok   head-QB0-d1: every time label is a quarter and minutes (others: [])
+ok   head-QB0-d1: nothing runs off the side of the screen on the first card, a final or the review ([{"sideways":false,"offRight":0,"anims":0},{"sideways":false,"offRight":0,"anims":0},{"sideways":false,"offRight":0,"anims":0}])
+ok   head-QB0-d1: the whole season is in the game log and no row wraps (17 rows, 0 wrapped)
+ok   head-QB0-d1: reduced motion paints the final at once after Kick off (full time true, minute 60, running animations 0)
+ok   head-QB0-d1: no page error and no console error
+     head-QB1-p0: entry "↺ Watch the 2026 season again" {"w":207,"h":44,"inside":true}, us "New York Giants", 17 games, 159 feed lines, record 8-9, log rows 17, other labels [], early {"full":false,"minute":"1","anims":4}, mid {"full":false,"minute":"11","score":"14-0"}
+     head-QB1-p0: game 1 17-31 "176 YDS0 TD3 INT" [["Q1 13:00","You are picked off."],["Q1 11:00","🏈 Touchdown, New York Giants."],["Q1 5:00","🏈 Touchdown, New York Giants."],["Q2 3:00","🥅 Field goal, New York Giants."]]
+     head-QB1-p0: review [["Games","17"],["Pass yds","2,420"],["Pass TD","11"],["INT","21"]]; log row 1 "G17 | A | LA | W 28-20 | 196 YDS 1 TD 0 INT"; cards answered before the hub 0; posters ["HalfwayFirst half: 8 games, 1,015 passing yards and 4 touchdownsBest so far: Game 8, W 38-14, 154 yards, 3 touchdowns, 2 interceptionsAfter ","Last gameThe last game of the regular season.After game 167-9Home 4-5Away 3-4Streak L1Division 4-2Conference 6-5Last 10:WWLWWLWLWL📋 Game lo"]; scores 17-31 26-28 13-31 24-23 7-31 21-28 30-24 38-14 13-24 31-13 37-14 10-24 20-17 17-48 37-7 21-23 28-20
+ok   head-QB1-p0: the record on the panel (8-9) is the 17 score bugs the walk read (8 won, 9 lost, 0 level)
+ok   head-QB1-p0: the entry is on the hub and the season is walked (17 games read, log 17 rows, review 4 tiles)
+ok   head-QB1-p0: every game's feed adds up to its score bug, the clock labels run forward, no time label is cut off (159 lines)
+ok   head-QB1-p0: every time label is a quarter and minutes (others: [])
+ok   head-QB1-p0: nothing runs off the side of the screen on the first card, a final or the review ([{"sideways":false,"offRight":0,"anims":2},{"sideways":false,"offRight":0,"anims":3},{"sideways":false,"offRight":0,"anims":3}])
+ok   head-QB1-p0: the whole season is in the game log and no row wraps (17 rows, 0 wrapped)
+ok   head-QB1-p0: with motion on the clock runs after Kick off (minute 1 then 11, score then 14-0)
+ok   head-QB1-p0: no page error and no console error
+ok   head-QB1-p0: watching a season again leaves the old save's bytes as they were
+     head-QB1-d0: entry "↺ Watch the 2026 season again" {"w":207,"h":44,"inside":true}, us "New York Giants", 17 games, 159 feed lines, record 8-9, log rows 17, other labels [], early {"full":false,"minute":"1","anims":4}, mid {"full":false,"minute":"11","score":"14-0"}
+     head-QB1-d0: game 1 17-31 "176 YDS0 TD3 INT" [["Q1 13:00","You are picked off."],["Q1 11:00","🏈 Touchdown, New York Giants."],["Q1 5:00","🏈 Touchdown, New York Giants."],["Q2 3:00","🥅 Field goal, New York Giants."]]
+     head-QB1-d0: review [["Games","17"],["Pass yds","2,420"],["Pass TD","11"],["INT","21"]]; log row 1 "G17 | A | LA | W 28-20 | 196 YDS 1 TD 0 INT"; cards answered before the hub 0; posters ["HalfwayFirst half: 8 games, 1,015 passing yards and 4 touchdownsBest so far: Game 8, W 38-14, 154 yards, 3 touchdowns, 2 interceptions🗓 Sch","Last gameThe last game of the regular season.🗓 Schedule16Played2,224Pass yds10TD21INT"]; scores 17-31 26-28 13-31 24-23 7-31 21-28 30-24 38-14 13-24 31-13 37-14 10-24 20-17 17-48 37-7 21-23 28-20
+ok   head-QB1-d0: the record on the panel (8-9) is the 17 score bugs the walk read (8 won, 9 lost, 0 level)
+ok   head-QB1-d0: the entry is on the hub and the season is walked (17 games read, log 17 rows, review 4 tiles)
+ok   head-QB1-d0: every game's feed adds up to its score bug, the clock labels run forward, no time label is cut off (159 lines)
+ok   head-QB1-d0: every time label is a quarter and minutes (others: [])
+ok   head-QB1-d0: nothing runs off the side of the screen on the first card, a final or the review ([{"sideways":false,"offRight":0,"anims":2},{"sideways":false,"offRight":0,"anims":3},{"sideways":false,"offRight":0,"anims":3}])
+ok   head-QB1-d0: the whole season is in the game log and no row wraps (17 rows, 0 wrapped)
+ok   head-QB1-d0: with motion on the clock runs after Kick off (minute 1 then 11, score then 14-0)
+ok   head-QB1-d0: no page error and no console error
+ok   head-QB1-d0: watching a season again leaves the old save's bytes as they were
+     head-K3-p0: entry "↺ Watch the 2028 season again" {"w":207,"h":44,"inside":true}, us "Atlanta Falcons", 17 games, 141 feed lines, record 2-15, log rows 17, other labels [], early {"full":false,"minute":"1","anims":4}, mid {"full":false,"minute":"11","score":"0-0"}
+     head-K3-p0: game 1 10-6 "1/1 FGLONG 36" [["Q2 9:00","🏈 Touchdown, Atlanta Falcons."],["Q3 9:00","🥅 Field goal, New Orleans Saints."],["Q4 13:00","🥅 Field goal! You hit it."],["Q4 4:00","🥅 Field goal, New Orleans Saints."]]
+     head-K3-p0: review [["Games","17"],["FG made","28"],["FG tries","33"],["Long FG","59"]]; log row 1 "G17 | A | LA | L 14-20 | 0/0 FG"; cards answered before the hub 1; posters ["HalfwayFirst half: 8 games, 20 of 21 on field goalsBest so far: Game 5, L 24-28, 4 of 4 on field goals, long of 26After game 82-6Home 2-2Awa","Last gameThe last game of the regular season.After game 162-14Home 2-7Away 0-7Streak L10Division 1-5Conference 2-9Last 10:LLLLLLLLLL📋 Game "]; scores 10-6 14-30 24-27 24-27 24-28 24-17 14-41 17-34 0-20 14-20 17-41 14-20 31-38 13-24 0-48 13-17 14-20
+ok   head-K3-p0: the record on the panel (2-15) is the 17 score bugs the walk read (2 won, 15 lost, 0 level)
+ok   head-K3-p0: the entry is on the hub and the season is walked (17 games read, log 17 rows, review 4 tiles)
+ok   head-K3-p0: every game's feed adds up to its score bug, the clock labels run forward, no time label is cut off (141 lines)
+ok   head-K3-p0: every time label is a quarter and minutes (others: [])
+ok   head-K3-p0: nothing runs off the side of the screen on the first card, a final or the review ([{"sideways":false,"offRight":0,"anims":2},{"sideways":false,"offRight":0,"anims":3},{"sideways":false,"offRight":0,"anims":2}])
+ok   head-K3-p0: the whole season is in the game log and no row wraps (17 rows, 0 wrapped)
+ok   head-K3-p0: with motion on the clock runs after Kick off (minute 1 then 11, score then 0-0)
+ok   head-K3-p0: no page error and no console error
+ok   head-K3-p0: watching a season again leaves the old save's bytes as they were
+     head-LB1-d0: entry "↺ Watch the 2026 season again" {"w":207,"h":44,"inside":true}, us "Atlanta Falcons", 17 games, 148 feed lines, record 9-8, log rows 17, other labels [], early {"full":false,"minute":"1","anims":4}, mid {"full":false,"minute":"11","score":"7-0"}
+     head-LB1-d0: game 1 13-14 "7 TKL" [["Q1 10:00","🏈 Touchdown, Atlanta Falcons."],["Q2 10:00","🥅 Field goal, Atlanta Falcons."],["Q3 8:00","🏈 Touchdown, Carolina Panthers."],["Q3 4:00","🥅 Field goal, Atlanta Falcons."]]
+     head-LB1-d0: review [["Games","17"],["Tackles","99"],["Sacks","2.5"],["INT","1"]]; log row 1 "G17 | H | CHI | W 21-20 | 8 TKL"; cards answered before the hub 1; posters ["HalfwayFirst half: 8 games, 46 tackles and 1.5 sacksBest so far: Game 3, W 38-27, 8 tackles, 1 sack🗓 Schedule8Played46Tackles1.5Sacks1INT","Last gameThe last game of the regular season.🗓 Schedule16Played91Tackles2.5Sacks1INT"]; scores 13-14 31-20 38-27 20-27 27-21 21-10 24-41 9-28 20-41 17-16 37-24 17-20 24-23 30-23 10-28 27-28 21-20
+ok   head-LB1-d0: the record on the panel (9-8) is the 17 score bugs the walk read (9 won, 8 lost, 0 level)
+ok   head-LB1-d0: the entry is on the hub and the season is walked (17 games read, log 17 rows, review 4 tiles)
+ok   head-LB1-d0: every game's feed adds up to its score bug, the clock labels run forward, no time label is cut off (148 lines)
+ok   head-LB1-d0: every time label is a quarter and minutes (others: [])
+ok   head-LB1-d0: nothing runs off the side of the screen on the first card, a final or the review ([{"sideways":false,"offRight":0,"anims":2},{"sideways":false,"offRight":0,"anims":3},{"sideways":false,"offRight":0,"anims":2}])
+ok   head-LB1-d0: the whole season is in the game log and no row wraps (17 rows, 0 wrapped)
+ok   head-LB1-d0: with motion on the clock runs after Kick off (minute 1 then 11, score then 7-0)
+ok   head-LB1-d0: no page error and no console error
+ok   head-LB1-d0: watching a season again leaves the old save's bytes as they were
+     head-QB17-p0: entry "null" null, us "", 0 games, 0 feed lines, record , log rows 0, other labels [], early {"full":false,"minute":null,"anims":0}, mid {"full":false,"minute":null,"score":null}
+     head-QB17-p0: game 1 undefined "undefined" undefined
+     head-QB17-p0: review []; log row 1 "undefined"; cards answered before the hub 1; posters []; scores 
+FAIL head-QB17-p0: the record on the panel () is the 17 score bugs the walk read (0 won, 0 lost, 0 level)
+FAIL head-QB17-p0: the entry is on the hub and the season is walked (0 games read, log 0 rows, review 0 tiles)
+FAIL head-QB17-p0: every game's feed adds up to its score bug, the clock labels run forward, no time label is cut off (0 lines)
+ok   head-QB17-p0: every time label is a quarter and minutes (others: [])
+ok   head-QB17-p0: nothing runs off the side of the screen on the first card, a final or the review ([{"sideways":false,"offRight":0,"anims":0},{"sideways":false,"offRight":0,"anims":0},{"sideways":false,"offRight":0,"anims":0}])
+FAIL head-QB17-p0: the whole season is in the game log and no row wraps (0 rows, 0 wrapped)
+FAIL head-QB17-p0: with motion on the clock runs after Kick off (minute null then null, score then null)
+ok   head-QB17-p0: no page error and no console error
+ok   head-QB17-p0: watching a season again leaves the old save's bytes as they were
+     head-WR2-d1: entry "null" null, us "", 0 games, 0 feed lines, record , log rows 0, other labels [], early {"full":false,"minute":null,"anims":0}, mid null
+     head-WR2-d1: game 1 undefined "undefined" undefined
+     head-WR2-d1: review []; log row 1 "undefined"; cards answered before the hub 0; posters []; scores 
+FAIL head-WR2-d1: the record on the panel () is the 17 score bugs the walk read (0 won, 0 lost, 0 level)
+FAIL head-WR2-d1: the entry is on the hub and the season is walked (0 games read, log 0 rows, review 0 tiles)
+FAIL head-WR2-d1: every game's feed adds up to its score bug, the clock labels run forward, no time label is cut off (0 lines)
+ok   head-WR2-d1: every time label is a quarter and minutes (others: [])
+ok   head-WR2-d1: nothing runs off the side of the screen on the first card, a final or the review ([{"sideways":false,"offRight":0,"anims":0},{"sideways":false,"offRight":0,"anims":0},{"sideways":false,"offRight":0,"anims":0}])
+FAIL head-WR2-d1: the whole season is in the game log and no row wraps (0 rows, 0 wrapped)
+FAIL head-WR2-d1: reduced motion paints the final at once after Kick off (full time false, minute null, running animations 0)
+ok   head-WR2-d1: no page error and no console error
+ok   head-WR2-d1: watching a season again leaves the old save's bytes as they were
+ok   the season on the old save reads the same on a phone and on a desktop (every score, feed line, label, his line, the log, the review)
+     NOTE (not a check: the press plays the season with the page's own generator): the rookie's season reads the same in all four walks: true
+ok   QB1 p0: a season the base commit's engine played is told the same by the base build and by the head build: every score, feed line, time label, his line, the log and the review (17 and 17 games, 159 feed lines, 17 log rows)
+ok   QB1 p0: both builds leave the same bytes on the save
+ok   QB1 d0: a season the base commit's engine played is told the same by the base build and by the head build: every score, feed line, time label, his line, the log and the review (17 and 17 games, 159 feed lines, 17 log rows)
+ok   QB1 d0: both builds leave the same bytes on the save
+ok   K3 p0: a season the base commit's engine played is told the same by the base build and by the head build: every score, feed line, time label, his line, the log and the review (17 and 17 games, 141 feed lines, 17 log rows)
+ok   K3 p0: both builds leave the same bytes on the save
+ok   LB1 d0: a season the base commit's engine played is told the same by the base build and by the head build: every score, feed line, time label, his line, the log and the review (17 and 17 games, 148 feed lines, 17 log rows)
+ok   LB1 d0: both builds leave the same bytes on the save
+FAIL QB17 p0: a season the base commit's engine played is told the same by the base build and by the head build: every score, feed line, time label, his line, the log and the review (0 and 0 games, 0 feed lines, 0 log rows)
+ok   QB17 p0: both builds leave the same bytes on the save
+FAIL WR2 d1: a season the base commit's engine played is told the same by the base build and by the head build: every score, feed line, time label, his line, the log and the review (0 and 0 games, 0 feed lines, 0 log rows)
+ok   WR2 d1: both builds leave the same bytes on the save
+ok   QB0 p0: pressed on both builds, the engine played the same season (same saved bytes) and both builds tell it the same (17 games, 138 feed lines)
+     requests to the live database blocked: 22
+review-run-walk: 100 checks, 12 failed
