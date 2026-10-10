@@ -1,0 +1,23 @@
+#!serial
+# Round 1218 closing fix, the FINAL head of the round's branch (116faaaf), dark.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ledger: node scripts/simCmVarLedger.mjs
+gencheck: node scripts/genCmVarRates.mjs --check
+l-owedlive: CM_VAR_LEDGER_CONTROL=owedlive node scripts/simCmVarLedger.mjs
+l-names: CM_VAR_LEDGER_CONTROL=names node scripts/simCmVarLedger.mjs
+l-onesource: CM_VAR_LEDGER_CONTROL=onesource node scripts/simCmVarLedger.mjs
+l-handedit: CM_VAR_LEDGER_CONTROL=handedit node scripts/simCmVarLedger.mjs
+l-receipt: CM_VAR_LEDGER_CONTROL=receipt node scripts/simCmVarLedger.mjs
+simCmVar: node scripts/simCmVar.mjs
+cmvar-everywhere: CM_VAR_CONTROL=everywhere node scripts/simCmVar.mjs
+cmvar-historic: CM_VAR_CONTROL=historic node scripts/simCmVar.mjs
+varlive: node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+varlive-on: CM_VAR_LIVE_CONTROL=on node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+varscreen: node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx --testTimeout=300000 --hookTimeout=120000
+save: node_modules/.bin/vitest run src/test/clubManagerSave.test.tsx --testTimeout=300000 --hookTimeout=120000
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
