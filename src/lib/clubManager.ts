@@ -338,29 +338,25 @@ function creditRaceGoals(state: CareerState, club: string, goals: number): void 
  *  same idea with an assigned taker (markSetPieceGoals). False deals them by the weight like any goal. */
 export const CM_BOOK_TAKER = true;
 
-const bookStampOf = (season: number, leagueId: string): string => `${season}|${leagueId}`;
+/**
+ * What a book belongs to: the league and the order its clubs were drawn in for this season (leagueClubs
+ * is shuffled for every career and again every summer, and saved). Not the season's NUMBER, on purpose:
+ * the job you join today (joinClubNow in clubManagerCalendar.ts) plays the new club's run-in as a fresh
+ * season one career and then takes the number of the season you were in, with the league, its table and
+ * this book riding along untouched. Stamped by the number, that whole and lawful book would read as last
+ * season's from season two on. Stamped by the league it describes, it is simply still the book.
+ */
+const bookStampOf = (state: CareerState, leagueId: string): string => `${leagueId}|${bookSalt(state.leagueClubs)}`;
 
 /** Opens the book of the season that is starting. Called by startCareer and startNextSeason only. */
 function openLeagueBook(state: CareerState): void {
-  state.leagueBook = openBook(bookStampOf(state.season, careerLeagueOf(state).id), bookSalt(state.leagueClubs));
+  state.leagueBook = openBook(bookStampOf(state, careerLeagueOf(state).id));
 }
 
 /** The book of the season in play, or null: no book, a damaged one, or another season's. The full shape
  *  walk, for a reader; the match week asks liveBook instead (a stamp check). */
 export function leagueBookOf(state: CareerState): LeagueBook | null {
-  return readBook(state.leagueBook, bookStampOf(state.season, careerLeagueOf(state).id));
-}
-
-/**
- * The job you join today (joinClubNow) plays the new club's run-in as a fresh season one career and then
- * takes the number of the season you were in. The book that run-in filled is whole and lawful, so it is
- * carried under the new number rather than read as last season's and dropped. A `from` with no good
- * book leaves `to` with none.
- */
-export function carryLeagueBook(from: CareerState, to: CareerState): void {
-  const book = leagueBookOf(from);
-  if (book) to.leagueBook = { ...book, s: bookStampOf(to.season, careerLeagueOf(to).id) };
-  else delete to.leagueBook;
+  return readBook(state.leagueBook, bookStampOf(state, careerLeagueOf(state).id));
 }
 
 /** The eleven the book deals a rival's goals over this week: the one the Match Centre and the viewer
@@ -375,9 +371,9 @@ const bookRules = (): BookRules => ({
 });
 
 /** One match of one round, as a key. The club, the season, the round and the pair are unique inside a
- *  save; the salt (the league's own saved order) tells two careers at one club apart. */
-const bookMatchKey = (state: CareerState, book: LeagueBook, leagueId: string, round: number, home: string, away: string, hg: number, ag: number): string =>
-  `cmbook|${state.eraId ?? 'now'}|${state.clubName}|${book.k}|${state.season}|${leagueId}|${round}|${home}|${away}|${hg}-${ag}`;
+ *  save; the stamp (the league and its own saved order) tells two careers at one club apart. */
+const bookMatchKey = (state: CareerState, book: LeagueBook, round: number, home: string, away: string, hg: number, ag: number): string =>
+  `cmbook|${state.eraId ?? 'now'}|${state.clubName}|${state.season}|${book.s}|${round}|${home}|${away}|${hg}-${ag}`;
 
 const bookKeeper = (xi: OppXiLine[]): OppXiLine | null => xi.find(p => p.p === 'GK') ?? null;
 const bookBacks = (xi: OppXiLine[]): OppXiLine[] => xi.filter(p => groupOf(p.p) === 'DEF');
@@ -399,12 +395,13 @@ function noteBookSide(state: CareerState, book: LeagueBook, key: string, club: s
 
 /** A league result between two other clubs goes into the book. Nothing happens on a save with no book. */
 function noteBookResult(state: CareerState, leagueId: string, round: number, home: string, away: string, hg: number, ag: number): void {
-  const book = liveBook(state.leagueBook, bookStampOf(state.season, leagueId));
+  const book = liveBook(state.leagueBook, bookStampOf(state, leagueId));
   if (!book) return;
-  const mine = mySquadNames(state);
-  const key = bookMatchKey(state, book, leagueId, round, home, away, hg, ag);
-  noteBookSide(state, book, `${key}|h`, home, hg, ag, mine);
-  noteBookSide(state, book, `${key}|a`, away, ag, hg, mine);
+  /* Round 742's rule: a man now in my squad is not at the club the projection still lists him at. */
+  const notTheirs = mySquadNames(state);
+  const key = bookMatchKey(state, book, round, home, away, hg, ag);
+  noteBookSide(state, book, `${key}|h`, home, hg, ag, notTheirs);
+  noteBookSide(state, book, `${key}|a`, away, ag, hg, notTheirs);
 }
 
 /**
@@ -422,12 +419,12 @@ function noteBookMine(
   state: CareerState, leagueId: string, round: number, fx: MyFixture, live: LiveMatch,
   played: CMPlayer[], myGoals: number, oppGoals: number, oppScorers: ScorerLine[],
 ): void {
-  const book = liveBook(state.leagueBook, bookStampOf(state.season, leagueId));
+  const book = liveBook(state.leagueBook, bookStampOf(state, leagueId));
   if (!book) return;
   const opp = fx.opponent;
   const home = fx.home ? state.clubName : opp;
   const away = fx.home ? opp : state.clubName;
-  const key = `${bookMatchKey(state, book, leagueId, round, home, away, fx.home ? myGoals : oppGoals, fx.home ? oppGoals : myGoals)}|mine`;
+  const key = `${bookMatchKey(state, book, round, home, away, fx.home ? myGoals : oppGoals, fx.home ? oppGoals : myGoals)}|mine`;
   const theirs: OppXiLine[] = [...(live.oppXi ?? []), ...(live.oppBench ?? [])];
   const rules = bookRules();
   let roster: ProjectedPlayer[] | null = null;

@@ -16,8 +16,8 @@ const XI: BookMan[] = [
 ];
 const RULES: BookRules = { pen: 0.08, fk: 0.04, ownGoalOneIn: 32, assist: 0.7, taker: true };
 const BY_WEIGHT: BookRules = { ...RULES, taker: false };
-const STAMP = '1|premier';
-const fresh = (): LeagueBook => openBook(STAMP, bookSalt(['A', 'B', 'C']));
+const STAMP = `premier|${bookSalt(['A', 'B', 'C'])}`;
+const fresh = (): LeagueBook => openBook(STAMP);
 const sd = (n: number, p: number): number => Math.sqrt(n * p * (1 - p));
 const roundTrip = (book: LeagueBook): unknown => JSON.parse(JSON.stringify(book));
 
@@ -186,8 +186,8 @@ describe('the book', () => {
     const broken = (edit: (b: any) => void): unknown => { const b = JSON.parse(JSON.stringify(good)); edit(b); return b; };
     expect(readBook(good, STAMP)).toBe(good);
     expect(liveBook(good, STAMP)).toBe(good);
-    expect(readBook(good, '2|premier')).toBeNull();
-    expect(readBook(good, '1|laliga')).toBeNull();
+    expect(readBook(good, `premier|${bookSalt(['B', 'A', 'C'])}`)).toBeNull();
+    expect(readBook(good, `laliga|${bookSalt(['A', 'B', 'C'])}`)).toBeNull();
     for (const raw of [undefined, null, 'a book', 7, [], [good], {}]) {
       expect(readBook(raw, STAMP)).toBeNull();
       expect(liveBook(raw, STAMP)).toBeNull();
@@ -201,12 +201,12 @@ describe('the book', () => {
     expect(readBook(broken(b => { b.c.Rivals = 'gone'; }), STAMP)).toBeNull();
     expect(readBook(broken(b => { b.my = { 'p-1': 'two' }; }), STAMP)).toBeNull();
     expect(readBook(broken(b => { b.c = []; }), STAMP)).toBeNull();
-    expect(readBook(broken(b => { delete b.k; }), STAMP)).toBeNull();
+    expect(readBook(broken(b => { delete b.my; }), STAMP)).toBeNull();
   });
 
   it('salts by the order of the league, so two orders of the same clubs deal apart', () => {
     expect(bookSalt(['A', 'B', 'C'])).toBe(bookSalt(['A', 'B', 'C']));
     expect(bookSalt(['A', 'B', 'C'])).not.toBe(bookSalt(['B', 'A', 'C']));
-    expect(openBook('3|laliga', 'abc')).toEqual({ s: '3|laliga', k: 'abc', c: {}, my: {} });
+    expect(openBook('laliga|abc')).toEqual({ s: 'laliga|abc', c: {}, my: {} });
   });
 });

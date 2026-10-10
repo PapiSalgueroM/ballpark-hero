@@ -46,11 +46,11 @@ export interface BookClub {
 }
 
 export interface LeagueBook {
-  /** The season stamp, `${season}|${leagueId}`: a book belongs to one season of one league. */
+  /** The stamp: what this book belongs to, as text the engine can build again from the save. The engine
+   *  stamps a book with its league and a hash of the order that league's clubs were drawn in for the
+   *  season (bookSalt), so another season's book never reads as this one's, and two careers at one club
+   *  do not deal the same scorers for the same scoreline in the same round: the stamp is in every key. */
   s: string;
-  /** The salt: a hash of the league's own saved order when the book opened, so two careers at one club
-   *  do not deal the same scorers for the same scoreline in the same round. It is part of every key. */
-  k: string;
   /** One entry a rival club, created on its first credit. */
   c: Record<string, BookClub>;
   /** MY men's league clean sheets, by player id (the squad keeps one count for every competition). */
@@ -76,8 +76,8 @@ export interface BookGoal { kind: BookGoalKind; scorer: BookMan | null; assist: 
 export const BOOK_ROWS_PER_CLUB = 16;
 
 /** A fresh book for one season. */
-export function openBook(stamp: string, salt: string): LeagueBook {
-  return { s: stamp, k: salt, c: {}, my: {} };
+export function openBook(stamp: string): LeagueBook {
+  return { s: stamp, c: {}, my: {} };
 }
 
 /** The salt of a league order: a 32 bit FNV-1a hash of the names, in base 36. */
@@ -106,7 +106,7 @@ const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'obj
  * on that path at 60 percent of a simulated season). The full walk is readBook.
  */
 export function liveBook(raw: unknown, stamp: string): LeagueBook | null {
-  if (!isRecord(raw) || raw.s !== stamp || typeof raw.k !== 'string' || !isRecord(raw.c) || !isRecord(raw.my)) return null;
+  if (!isRecord(raw) || raw.s !== stamp || !isRecord(raw.c) || !isRecord(raw.my)) return null;
   return raw as unknown as LeagueBook;
 }
 
