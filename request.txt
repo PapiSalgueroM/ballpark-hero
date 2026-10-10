@@ -1,0 +1,3 @@
+# Release AU, the final head: the type gate and the whole unit suite again
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
