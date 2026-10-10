@@ -1,0 +1,3 @@
+#!build
+#!playwright
+walk-report: git worktree add -q /tmp/base origin/main && git -C /tmp/base rev-parse --short HEAD && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log) && KEEPER_BASE_DIST=/tmp/base-dist KEEPER_MODE=report node scripts/playSaveKeeper.mjs
