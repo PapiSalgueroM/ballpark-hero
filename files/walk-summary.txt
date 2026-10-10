@@ -1,0 +1,8 @@
+nba 390x844 motion on: seed 4000; "Lost in the conference semis", poGames 12; W|First round|beat the Cleveland Cavaliers 4-3 ; L|Conference semifinals|lost to the Atlanta Hawks 1-4; Your playoffs: 12 games, 13.5 points per game, 3.3 rebounds per game, 2.4 assists per game
+nba 390x844 reduced motion: seed 4000; "Lost in the conference semis", poGames 12; W|First round|beat the Cleveland Cavaliers 4-3 ; L|Conference semifinals|lost to the Atlanta Hawks 1-4; Your playoffs: 12 games, 13.5 points per game, 3.3 rebounds per game, 2.4 assists per game
+nba 1280x900 motion on: seed 4000; "Lost in the conference semis", poGames 12; W|First round|beat the Cleveland Cavaliers 4-3 ; L|Conference semifinals|lost to the Atlanta Hawks 1-4; Your playoffs: 12 games, 13.5 points per game, 3.3 rebounds per game, 2.4 assists per game
+nba 1280x900 reduced motion: seed 4000; "Lost in the conference semis", poGames 12; W|First round|beat the Cleveland Cavaliers 4-3 ; L|Conference semifinals|lost to the Atlanta Hawks 1-4; Your playoffs: 12 games, 13.5 points per game, 3.3 rebounds per game, 2.4 assists per game
+nfl 390x844 motion on: seed 4001; "Lost in the Wild Card round", poGames 1; L|Wild Card|lost to the Cleveland Browns; Your playoffs: 1 game, 148 yds, 1 TD, 1 INT
+nfl 390x844 reduced motion: seed 4001; "Lost in the Wild Card round", poGames 1; L|Wild Card|lost to the Cleveland Browns; Your playoffs: 1 game, 148 yds, 1 TD, 1 INT
+nfl 1280x900 motion on: seed 4001; "Lost in the Wild Card round", poGames 1; L|Wild Card|lost to the Cleveland Browns; Your playoffs: 1 game, 148 yds, 1 TD, 1 INT
+nfl 1280x900 reduced motion: seed 4001; "Lost in the Wild Card round", poGames 1; L|Wild Card|lost to the Cleveland Browns; Your playoffs: 1 game, 148 yds, 1 TD, 1 INT

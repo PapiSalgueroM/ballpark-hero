@@ -1,0 +1,141 @@
+nba: the save is a SG after 0 seasons, team quality 82
+ok   nba 390x844 motion on: a playoff season was played within 16 seeded presses (4000: Lost in the conference semis)
+ok   nba 390x844 motion on: the kick off offers Straight to the season review
+info nba 390x844 motion on: 10 animations running 150 ms after the review arrives
+ok   nba 390x844 motion on: the review holds a playoff list
+ok   nba 390x844 motion on: the list on screen is this tree's usPlayoffPath for the saved line (screen: W|First round|beat the Cleveland Cavaliers 4-3 ; L|Conference semifinals|lost to the Atlanta Hawks 1-4 || node: W|First round|beat the Cleveland Cavaliers 4-3 ; L|Conference semifinals|lost to the Atlanta Hawks 1-4)
+ok   nba 390x844 motion on: 2 rounds on screen for "Lost in the conference semis" (2)
+ok   nba 390x844 motion on: every round but the last is a W, and the last is an L
+ok   nba 390x844 motion on: the finish line says the saved result (47-35 · Lost in the conference semis)
+ok   nba 390x844 motion on: the series scores on screen add up to the 12 playoff games on the save (4-3, 1-4)
+ok   nba 390x844 motion on: every series score is a best of seven's, his wins first
+ok   nba 390x844 motion on: the line under the list is the save's own playoff line (Your playoffs: 12 games, 13.5 points per game, 3.3 rebounds per game, 2.4 assists per game)
+ok   nba 390x844 motion on: nothing of the list runs off the screen (list 12 to 378 of 390, page 390)
+ok   nba 390x844 motion on: no text of the list is under 11 px (11)
+ok   nba 390x844 motion on: the page behind did not move (0 to 0)
+ok   nba 390x844 motion on: no dash of the forbidden kinds in the list
+ok   nba 390x844 motion on: no page error ()
+ok   nba 390x844 reduced motion: a playoff season was played within 16 seeded presses (4000: Lost in the conference semis)
+ok   nba 390x844 reduced motion: the kick off offers Straight to the season review
+ok   nba 390x844 reduced motion: no animation is running in the viewer 150 ms after the review arrives (0)
+ok   nba 390x844 reduced motion: the review holds a playoff list
+ok   nba 390x844 reduced motion: the list on screen is this tree's usPlayoffPath for the saved line (screen: W|First round|beat the Cleveland Cavaliers 4-3 ; L|Conference semifinals|lost to the Atlanta Hawks 1-4 || node: W|First round|beat the Cleveland Cavaliers 4-3 ; L|Conference semifinals|lost to the Atlanta Hawks 1-4)
+ok   nba 390x844 reduced motion: 2 rounds on screen for "Lost in the conference semis" (2)
+ok   nba 390x844 reduced motion: every round but the last is a W, and the last is an L
+ok   nba 390x844 reduced motion: the finish line says the saved result (47-35 · Lost in the conference semis)
+ok   nba 390x844 reduced motion: the series scores on screen add up to the 12 playoff games on the save (4-3, 1-4)
+ok   nba 390x844 reduced motion: every series score is a best of seven's, his wins first
+ok   nba 390x844 reduced motion: the line under the list is the save's own playoff line (Your playoffs: 12 games, 13.5 points per game, 3.3 rebounds per game, 2.4 assists per game)
+ok   nba 390x844 reduced motion: nothing of the list runs off the screen (list 12 to 378 of 390, page 390)
+ok   nba 390x844 reduced motion: no text of the list is under 11 px (11)
+ok   nba 390x844 reduced motion: the page behind did not move (0 to 0)
+ok   nba 390x844 reduced motion: no dash of the forbidden kinds in the list
+ok   nba 390x844 reduced motion: no page error ()
+ok   nba 1280x900 motion on: a playoff season was played within 16 seeded presses (4000: Lost in the conference semis)
+ok   nba 1280x900 motion on: the kick off offers Straight to the season review
+info nba 1280x900 motion on: 10 animations running 150 ms after the review arrives
+ok   nba 1280x900 motion on: the review holds a playoff list
+ok   nba 1280x900 motion on: the list on screen is this tree's usPlayoffPath for the saved line (screen: W|First round|beat the Cleveland Cavaliers 4-3 ; L|Conference semifinals|lost to the Atlanta Hawks 1-4 || node: W|First round|beat the Cleveland Cavaliers 4-3 ; L|Conference semifinals|lost to the Atlanta Hawks 1-4)
+ok   nba 1280x900 motion on: 2 rounds on screen for "Lost in the conference semis" (2)
+ok   nba 1280x900 motion on: every round but the last is a W, and the last is an L
+ok   nba 1280x900 motion on: the finish line says the saved result (47-35 · Lost in the conference semis)
+ok   nba 1280x900 motion on: the series scores on screen add up to the 12 playoff games on the save (4-3, 1-4)
+ok   nba 1280x900 motion on: every series score is a best of seven's, his wins first
+ok   nba 1280x900 motion on: the line under the list is the save's own playoff line (Your playoffs: 12 games, 13.5 points per game, 3.3 rebounds per game, 2.4 assists per game)
+ok   nba 1280x900 motion on: nothing of the list runs off the screen (list 367 to 793 of 1280, page 1280)
+ok   nba 1280x900 motion on: no text of the list is under 11 px (11)
+ok   nba 1280x900 motion on: the page behind did not move (0 to 0)
+ok   nba 1280x900 motion on: no dash of the forbidden kinds in the list
+ok   nba 1280x900 motion on: no page error ()
+ok   nba 1280x900 reduced motion: a playoff season was played within 16 seeded presses (4000: Lost in the conference semis)
+ok   nba 1280x900 reduced motion: the kick off offers Straight to the season review
+ok   nba 1280x900 reduced motion: no animation is running in the viewer 150 ms after the review arrives (0)
+ok   nba 1280x900 reduced motion: the review holds a playoff list
+ok   nba 1280x900 reduced motion: the list on screen is this tree's usPlayoffPath for the saved line (screen: W|First round|beat the Cleveland Cavaliers 4-3 ; L|Conference semifinals|lost to the Atlanta Hawks 1-4 || node: W|First round|beat the Cleveland Cavaliers 4-3 ; L|Conference semifinals|lost to the Atlanta Hawks 1-4)
+ok   nba 1280x900 reduced motion: 2 rounds on screen for "Lost in the conference semis" (2)
+ok   nba 1280x900 reduced motion: every round but the last is a W, and the last is an L
+ok   nba 1280x900 reduced motion: the finish line says the saved result (47-35 · Lost in the conference semis)
+ok   nba 1280x900 reduced motion: the series scores on screen add up to the 12 playoff games on the save (4-3, 1-4)
+ok   nba 1280x900 reduced motion: every series score is a best of seven's, his wins first
+ok   nba 1280x900 reduced motion: the line under the list is the save's own playoff line (Your playoffs: 12 games, 13.5 points per game, 3.3 rebounds per game, 2.4 assists per game)
+ok   nba 1280x900 reduced motion: nothing of the list runs off the screen (list 367 to 793 of 1280, page 1280)
+ok   nba 1280x900 reduced motion: no text of the list is under 11 px (11)
+ok   nba 1280x900 reduced motion: the page behind did not move (0 to 0)
+ok   nba 1280x900 reduced motion: no dash of the forbidden kinds in the list
+ok   nba 1280x900 reduced motion: no page error ()
+nfl: the save is a QB after 0 seasons, team quality 82
+ok   nfl 390x844 motion on: a playoff season was played within 16 seeded presses (4000: Missed the playoffs | 4001: Lost in the Wild Card round)
+ok   nfl 390x844 motion on: the kick off offers Straight to the season review
+info nfl 390x844 motion on: 9 animations running 150 ms after the review arrives
+ok   nfl 390x844 motion on: the review holds a playoff list
+ok   nfl 390x844 motion on: the list on screen is this tree's usPlayoffPath for the saved line (screen: L|Wild Card|lost to the Cleveland Browns || node: L|Wild Card|lost to the Cleveland Browns)
+ok   nfl 390x844 motion on: 1 rounds on screen for "Lost in the Wild Card round" (1)
+ok   nfl 390x844 motion on: every round but the last is a W, and the last is an L
+ok   nfl 390x844 motion on: the finish line says the saved result (11-6 · Lost in the Wild Card round)
+ok   nfl 390x844 motion on: a one game round prints no score
+ok   nfl 390x844 motion on: the save holds 1 playoff games for 1 rounds
+ok   nfl 390x844 motion on: the line under the list is the save's own playoff line (Your playoffs: 1 game, 148 yds, 1 TD, 1 INT)
+ok   nfl 390x844 motion on: nothing of the list runs off the screen (list 12 to 378 of 390, page 390)
+ok   nfl 390x844 motion on: no text of the list is under 11 px (11)
+ok   nfl 390x844 motion on: the page behind did not move (0 to 0)
+ok   nfl 390x844 motion on: no dash of the forbidden kinds in the list
+ok   nfl 390x844 motion on: no page error ()
+ok   nfl 390x844 reduced motion: a playoff season was played within 16 seeded presses (4001: Lost in the Wild Card round)
+ok   nfl 390x844 reduced motion: the kick off offers Straight to the season review
+ok   nfl 390x844 reduced motion: no animation is running in the viewer 150 ms after the review arrives (0)
+ok   nfl 390x844 reduced motion: the review holds a playoff list
+ok   nfl 390x844 reduced motion: the list on screen is this tree's usPlayoffPath for the saved line (screen: L|Wild Card|lost to the Cleveland Browns || node: L|Wild Card|lost to the Cleveland Browns)
+ok   nfl 390x844 reduced motion: 1 rounds on screen for "Lost in the Wild Card round" (1)
+ok   nfl 390x844 reduced motion: every round but the last is a W, and the last is an L
+ok   nfl 390x844 reduced motion: the finish line says the saved result (11-6 · Lost in the Wild Card round)
+ok   nfl 390x844 reduced motion: a one game round prints no score
+ok   nfl 390x844 reduced motion: the save holds 1 playoff games for 1 rounds
+ok   nfl 390x844 reduced motion: the line under the list is the save's own playoff line (Your playoffs: 1 game, 148 yds, 1 TD, 1 INT)
+ok   nfl 390x844 reduced motion: nothing of the list runs off the screen (list 12 to 378 of 390, page 390)
+ok   nfl 390x844 reduced motion: no text of the list is under 11 px (11)
+ok   nfl 390x844 reduced motion: the page behind did not move (0 to 0)
+ok   nfl 390x844 reduced motion: no dash of the forbidden kinds in the list
+ok   nfl 390x844 reduced motion: no page error ()
+ok   nfl 1280x900 motion on: a playoff season was played within 16 seeded presses (4001: Lost in the Wild Card round)
+ok   nfl 1280x900 motion on: the kick off offers Straight to the season review
+info nfl 1280x900 motion on: 9 animations running 150 ms after the review arrives
+ok   nfl 1280x900 motion on: the review holds a playoff list
+ok   nfl 1280x900 motion on: the list on screen is this tree's usPlayoffPath for the saved line (screen: L|Wild Card|lost to the Cleveland Browns || node: L|Wild Card|lost to the Cleveland Browns)
+ok   nfl 1280x900 motion on: 1 rounds on screen for "Lost in the Wild Card round" (1)
+ok   nfl 1280x900 motion on: every round but the last is a W, and the last is an L
+ok   nfl 1280x900 motion on: the finish line says the saved result (11-6 · Lost in the Wild Card round)
+ok   nfl 1280x900 motion on: a one game round prints no score
+ok   nfl 1280x900 motion on: the save holds 1 playoff games for 1 rounds
+ok   nfl 1280x900 motion on: the line under the list is the save's own playoff line (Your playoffs: 1 game, 148 yds, 1 TD, 1 INT)
+ok   nfl 1280x900 motion on: nothing of the list runs off the screen (list 367 to 793 of 1280, page 1280)
+ok   nfl 1280x900 motion on: no text of the list is under 11 px (11)
+ok   nfl 1280x900 motion on: the page behind did not move (0 to 0)
+ok   nfl 1280x900 motion on: no dash of the forbidden kinds in the list
+ok   nfl 1280x900 motion on: no page error ()
+ok   nfl 1280x900 reduced motion: a playoff season was played within 16 seeded presses (4001: Lost in the Wild Card round)
+ok   nfl 1280x900 reduced motion: the kick off offers Straight to the season review
+ok   nfl 1280x900 reduced motion: no animation is running in the viewer 150 ms after the review arrives (0)
+ok   nfl 1280x900 reduced motion: the review holds a playoff list
+ok   nfl 1280x900 reduced motion: the list on screen is this tree's usPlayoffPath for the saved line (screen: L|Wild Card|lost to the Cleveland Browns || node: L|Wild Card|lost to the Cleveland Browns)
+ok   nfl 1280x900 reduced motion: 1 rounds on screen for "Lost in the Wild Card round" (1)
+ok   nfl 1280x900 reduced motion: every round but the last is a W, and the last is an L
+ok   nfl 1280x900 reduced motion: the finish line says the saved result (11-6 · Lost in the Wild Card round)
+ok   nfl 1280x900 reduced motion: a one game round prints no score
+ok   nfl 1280x900 reduced motion: the save holds 1 playoff games for 1 rounds
+ok   nfl 1280x900 reduced motion: the line under the list is the save's own playoff line (Your playoffs: 1 game, 148 yds, 1 TD, 1 INT)
+ok   nfl 1280x900 reduced motion: nothing of the list runs off the screen (list 367 to 793 of 1280, page 1280)
+ok   nfl 1280x900 reduced motion: no text of the list is under 11 px (11)
+ok   nfl 1280x900 reduced motion: the page behind did not move (0 to 0)
+ok   nfl 1280x900 reduced motion: no dash of the forbidden kinds in the list
+ok   nfl 1280x900 reduced motion: no page error ()
+
+SEEN nba 390x844 motion on: seed 4000; "Lost in the conference semis", poGames 12; W|First round|beat the Cleveland Cavaliers 4-3 ; L|Conference semifinals|lost to the Atlanta Hawks 1-4; Your playoffs: 12 games, 13.5 points per game, 3.3 rebounds per game, 2.4 assists per game
+SEEN nba 390x844 reduced motion: seed 4000; "Lost in the conference semis", poGames 12; W|First round|beat the Cleveland Cavaliers 4-3 ; L|Conference semifinals|lost to the Atlanta Hawks 1-4; Your playoffs: 12 games, 13.5 points per game, 3.3 rebounds per game, 2.4 assists per game
+SEEN nba 1280x900 motion on: seed 4000; "Lost in the conference semis", poGames 12; W|First round|beat the Cleveland Cavaliers 4-3 ; L|Conference semifinals|lost to the Atlanta Hawks 1-4; Your playoffs: 12 games, 13.5 points per game, 3.3 rebounds per game, 2.4 assists per game
+SEEN nba 1280x900 reduced motion: seed 4000; "Lost in the conference semis", poGames 12; W|First round|beat the Cleveland Cavaliers 4-3 ; L|Conference semifinals|lost to the Atlanta Hawks 1-4; Your playoffs: 12 games, 13.5 points per game, 3.3 rebounds per game, 2.4 assists per game
+SEEN nfl 390x844 motion on: seed 4001; "Lost in the Wild Card round", poGames 1; L|Wild Card|lost to the Cleveland Browns; Your playoffs: 1 game, 148 yds, 1 TD, 1 INT
+SEEN nfl 390x844 reduced motion: seed 4001; "Lost in the Wild Card round", poGames 1; L|Wild Card|lost to the Cleveland Browns; Your playoffs: 1 game, 148 yds, 1 TD, 1 INT
+SEEN nfl 1280x900 motion on: seed 4001; "Lost in the Wild Card round", poGames 1; L|Wild Card|lost to the Cleveland Browns; Your playoffs: 1 game, 148 yds, 1 TD, 1 INT
+SEEN nfl 1280x900 reduced motion: seed 4001; "Lost in the Wild Card round", poGames 1; L|Wild Card|lost to the Cleveland Browns; Your playoffs: 1 game, 148 yds, 1 TD, 1 INT
+18 requests to the database host aborted, none let through
+review-run-walk: 124 checks, 0 failed
