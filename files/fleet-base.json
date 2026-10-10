@@ -1,0 +1,213 @@
+{
+  "round": 1221,
+  "what": "What the NBA and NFL Season Centers are handed for every season of the fleet of scripts/simUsSeasonCentre.mjs, before the NFL score law moved to src/lib/gameLaws. A receipt of that move, in no gate.",
+  "commit": null,
+  "careers": 120,
+  "strayDraws": 0,
+  "digests": {
+    "nba": {
+      "5": {
+        "seasons": 2666,
+        "derived": 2397,
+        "season": "8198f4a8a173d3e64f0ef8b17005aa4effff79e5",
+        "careers": "7e98961a544105036ba4eb8393eaa36a5ed1ada6"
+      },
+      "6": {
+        "seasons": 2676,
+        "derived": 2411,
+        "season": "f732954a1aeea8a8d51166f37165900457383e1d",
+        "careers": "5a56c1ede1aef37a0443bc30de2e3185cd1fe37e"
+      },
+      "7": {
+        "seasons": 2683,
+        "derived": 2419,
+        "season": "f7ebe3baa2b65c0b79e43aa5b20416112a190822",
+        "careers": "478922fd6766798134f308c6b8d8170fb480ed50"
+      },
+      "8": {
+        "seasons": 2679,
+        "derived": 2410,
+        "season": "ac64f9400ef8c0ead120d56f3d43db8f55eadae0",
+        "careers": "f007b15ecd1b1eb8122cf1abfcff51a6caba7141"
+      },
+      "9": {
+        "seasons": 2649,
+        "derived": 2387,
+        "season": "973352f3a701b787972acda2b0d16a97b8806953",
+        "careers": "5219ef66dc1fe1d52a16b44a3b6f69be9fa84778"
+      },
+      "10": {
+        "seasons": 2693,
+        "derived": 2419,
+        "season": "ce1ce8a47a0349506519367c0cd752a675889be7",
+        "careers": "c2a68fcfc69862f54eb0d00e19a9417002bbf939"
+      },
+      "11": {
+        "seasons": 2687,
+        "derived": 2415,
+        "season": "d7ddd15186ea1799ca5fa48bfc5d695491cf3c74",
+        "careers": "57a46bfe7dbc417933706bd353fadd85672ec485"
+      },
+      "12": {
+        "seasons": 2717,
+        "derived": 2443,
+        "season": "d5f41033f170d9e72c6b55b62869ede983fc8ea1",
+        "careers": "e91ef927fe07d2259819ab0ebcec131d2dace1ac"
+      },
+      "13": {
+        "seasons": 2682,
+        "derived": 2417,
+        "season": "26d369bfd0fc019307d7dd8347ceeafdc4a0e4b5",
+        "careers": "22177aa46d7d51251725b1292aa20c54a1662076"
+      },
+      "14": {
+        "seasons": 2670,
+        "derived": 2404,
+        "season": "c3e3a14c744d75b55e575c03b00207b01444ee41",
+        "careers": "c6d0a3886a36864e36fe68358ceb9c9ffbf2505a"
+      }
+    },
+    "nfl": {
+      "5": {
+        "seasons": 2362,
+        "derived": 1384,
+        "season": "c4acaefaadc48bc14fe1c1490a79db511e021538",
+        "careers": "2c7a238bdcba8c521b976f9301b93e28a7796c43"
+      },
+      "6": {
+        "seasons": 2367,
+        "derived": 1391,
+        "season": "d7af0dfc850964ba8ed8de1cbe41039c7da0579b",
+        "careers": "e74a40aea19d79ed8304d118154bf5becb63d4b3"
+      },
+      "7": {
+        "seasons": 2357,
+        "derived": 1390,
+        "season": "bcf03420923e8cc06c00d1aa1f302ee7cc8b50ac",
+        "careers": "f7cb2cda8054a6ecd05189b534d20df42a4aae2e"
+      },
+      "8": {
+        "seasons": 2365,
+        "derived": 1388,
+        "season": "cbcc38fda581dfa0fe9f9d66d241a5357dfc7029",
+        "careers": "92862093a47595fa7a2493a3bd03f20080c0efee"
+      },
+      "9": {
+        "seasons": 2360,
+        "derived": 1385,
+        "season": "3461667762d3ceffe4973cbfa4154814e7cc1f4b",
+        "careers": "8ef7ef25f9b6821ab13a1b1bc343e9bb1780d7d3"
+      },
+      "10": {
+        "seasons": 2386,
+        "derived": 1410,
+        "season": "7aa6988e412ae19e62eef1779fe35ff5c26cca65",
+        "careers": "20aa94ed625e7b60f41a592d3fe7105f19432f3e"
+      },
+      "11": {
+        "seasons": 2353,
+        "derived": 1375,
+        "season": "8984d6067fa6e9173d7a9c2878d953093bf49da4",
+        "careers": "1ef16d96e7edf47b8aa1e1bd0f04e7dfcd1474d6"
+      },
+      "12": {
+        "seasons": 2381,
+        "derived": 1394,
+        "season": "54fc0d3cda9f06ad351f36ce85bd6cf85226869b",
+        "careers": "0fae6b20eec4d77396b284f589dc21119abf8f64"
+      },
+      "13": {
+        "seasons": 2365,
+        "derived": 1381,
+        "season": "0d2d4b5c771710973b77aaddbc6f70eca9774091",
+        "careers": "5f76b3d48b8df31f45a36783ba7c6c139f1aa240"
+      },
+      "14": {
+        "seasons": 2373,
+        "derived": 1393,
+        "season": "f3f99d6c5b1102a599ed40af3262410ff878b90b",
+        "careers": "2c9424fef69f940371260b1ea89ce4bbe12d83ea"
+      }
+    }
+  },
+  "moved": [
+    "src/lib/season/nfl.ts",
+    "src/lib/season/core.ts",
+    "src/lib/keyedShuffle.ts",
+    "src/lib/gameLaws/types.ts",
+    "src/lib/gameLaws/nflScore.ts",
+    "src/lib/gameLaws/nfl.ts"
+  ],
+  "movedAtRecord": {
+    "src/lib/season/core.ts": "02513e627fb5",
+    "src/lib/season/nfl.ts": "9fc77010557c"
+  },
+  "inputs": {
+    "src/data/conquestDataNba.ts": "e1d7a088605c",
+    "src/data/frontOfficePlayers.ts": "315abe8f46e6",
+    "src/data/nbaLeagueNorms.ts": "2abc8fbc8c24",
+    "src/data/nflRookieScale.ts": "367387164008",
+    "src/data/usLeagueShape.ts": "bb182e87db73",
+    "src/data/usSeasonLengths.ts": "9e48efa7cad1",
+    "src/data/usStatesPaths.ts": "cd5c3a81dfb2",
+    "src/lib/awardDecision.ts": "16164063976b",
+    "src/lib/careerAwards.ts": "149fda7ed0b3",
+    "src/lib/careerBadges.ts": "ef2a5760f609",
+    "src/lib/careerEventDeck.ts": "ec0fab578287",
+    "src/lib/careerHallOfFame.ts": "447b451e9c6f",
+    "src/lib/careerHeadroom.ts": "4f295f8b122b",
+    "src/lib/careerInbox.ts": "bf28dba2eb3c",
+    "src/lib/careerMoney.ts": "8784506b189f",
+    "src/lib/careerRetirement.ts": "0078021bec2c",
+    "src/lib/careerRival.ts": "62a6293dbffd",
+    "src/lib/careerRivalryChoices.ts": "0ee4fb985481",
+    "src/lib/careerRivalryEvents.ts": "d94645cda67b",
+    "src/lib/careerSocial.ts": "a9b1125bdca5",
+    "src/lib/careerTraining.ts": "ddc2285a84e9",
+    "src/lib/careerVariance.ts": "d7474ac7a789",
+    "src/lib/conquestMapGeometry.ts": "35e9983fe66c",
+    "src/lib/formatNumber.ts": "a985e1a4be52",
+    "src/lib/keyedRng.ts": "acfd3a0a410e",
+    "src/lib/leagueCore.ts": "1405c2c4982a",
+    "src/lib/nbaCareerAwards.ts": "065806be9968",
+    "src/lib/nbaCareerCorruption.ts": "5c53089019b2",
+    "src/lib/nbaCareerHall.ts": "1cc9afd28e7e",
+    "src/lib/nbaCareerInbox.ts": "bbe80cbb56d4",
+    "src/lib/nbaCareerLifeA.ts": "cd65ee785eb5",
+    "src/lib/nbaCareerLifeB.ts": "50cfa1504553",
+    "src/lib/nbaCareerLifeC.ts": "dd09fb93bcf5",
+    "src/lib/nbaCareerLoop.ts": "e7c3cd1e7751",
+    "src/lib/nbaCareerMoney.ts": "5ab7f6b68b8a",
+    "src/lib/nbaCareerPreDraft.ts": "b55178928dbe",
+    "src/lib/nbaCareerRivalryEvents.ts": "b8c98476eeca",
+    "src/lib/nbaCareerSport.ts": "8d23e34a6773",
+    "src/lib/nbaCareerTraining.ts": "9318d4b9b392",
+    "src/lib/nbaMyCareer.ts": "03e8d99c36d1",
+    "src/lib/nflCareerCorruption.ts": "34a116b82498",
+    "src/lib/nflCareerHall.ts": "3fb000ff2e1e",
+    "src/lib/nflCareerInbox.ts": "7610ee4b6e3d",
+    "src/lib/nflCareerLifeA.ts": "9be226bf19e4",
+    "src/lib/nflCareerLifeB.ts": "3459c07084be",
+    "src/lib/nflCareerLifeC.ts": "a429c4c81b70",
+    "src/lib/nflCareerLifeTags.ts": "379009f96b93",
+    "src/lib/nflCareerLoop.ts": "29ea892dfb06",
+    "src/lib/nflCareerMoney.ts": "c71160bb2f23",
+    "src/lib/nflCareerPreDraft.ts": "a04cf8c58a9f",
+    "src/lib/nflCareerRivalryEvents.ts": "5820229e3f6e",
+    "src/lib/nflCareerSport.ts": "1c7a51ed3b53",
+    "src/lib/nflCareerTraining.ts": "134109b50a15",
+    "src/lib/nflMyCareer.ts": "15d214e966e4",
+    "src/lib/season/nba.ts": "5b9ffc060d56",
+    "src/lib/season/us.ts": "3bccd4b40c17",
+    "src/lib/usCareerAnnualBenefits.ts": "d3c423dc2db9",
+    "src/lib/usCareerBank.ts": "bb77775e3ed0",
+    "src/lib/usCareerDeckC.ts": "c7b2d2618c68",
+    "src/lib/usCareerExtension.ts": "aebbe81e62a3",
+    "src/lib/usCareerFreeAgency.ts": "ab1f6744e7c7",
+    "src/lib/usCareerPress.ts": "780fd351f893",
+    "src/lib/usCareerRecovery.ts": "3a4b87dc8aff",
+    "src/lib/usCareerRookieDeal.ts": "0d51827061e6",
+    "src/lib/usCareerSeasonReview.ts": "8a8ebf3957c7",
+    "src/lib/usCareerStatLine.ts": "608bb45cc481"
+  }
+}

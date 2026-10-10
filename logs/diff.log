@@ -1,0 +1,17 @@
+base worktree at 09df145abfb241679022b41903d2f19bc254ebf9
+ls: cannot access '/tmp/rb1/src/lib/gameLaws': No such file or directory
+ok   names: 5 comparisons, 0 differ
+ok   nflScore: 19334 comparisons, 0 differ
+ok   bind.score: 3864 comparisons, 0 differ
+ok   strengthFor: 2809 comparisons, 0 differ
+ok   nflDriveCost: 9072 comparisons, 0 differ
+ok   nflDrives: 45360 comparisons, 0 differ
+ok   clock: 533 comparisons, 0 differ
+ok   words: 2272 comparisons, 0 differ
+ok   view.eventWords: 7560 comparisons, 0 differ
+ok   shuffled: 2130 comparisons, 0 differ
+ok   nflKickerMakes: 4000 comparisons, 0 differ
+ok   nflTouchdownDays: 4000 comparisons, 0 differ
+ok   nflDealUnnamed: 4000 comparisons, 0 differ
+ok   nflOrderProblems: 4000 comparisons, 0 differ
+review-run-diff: base /tmp/rb1 against head /home/runner/work/ballpark-hero/ballpark-hero: 108939 comparisons, 0 differ

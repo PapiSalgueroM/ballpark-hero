@@ -1,0 +1,3 @@
+diff exit=0 1s | review-run-diff: base /tmp/rb1 against head /home/runner/work/ballpark-hero/ballpark-hero: 108939 comparisons, 0 differ
+record-on-base exit=0 19s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1221's law move, in no gate)
+fleet exit=0 208s | review-run-cmp: 21 digests compared, 0 differ

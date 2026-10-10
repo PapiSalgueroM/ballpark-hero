@@ -1,0 +1,31 @@
+digest nfl seed set 14: 2373 seasons, 1393 derived, season f3f99d6c5b1102a599ed40af3262410ff878b90b, careers 2c9424fef69f940371260b1ea89ce4bbe12d83ea
+digest stray draws (Math.random calls while a season was derived): 0
+simUsSeasonCentre digest print: 20 digests over 68 bundled files, written to /home/runner/work/_temp/rc-out/files/fleet-base.json
+digest nfl seed set 14: 2373 seasons, 1393 derived, season f3f99d6c5b1102a599ed40af3262410ff878b90b, careers 2c9424fef69f940371260b1ea89ce4bbe12d83ea
+digest stray draws (Math.random calls while a season was derived): 0
+simUsSeasonCentre digest print: 20 digests over 71 bundled files, written to /home/runner/work/_temp/rc-out/files/fleet-head.json
+ok   nba seed set 5: base 2666/2397 8198f4a8a173 7e98961a5441 | head 2666/2397 8198f4a8a173 7e98961a5441
+ok   nba seed set 6: base 2676/2411 f732954a1aee 5a56c1ede1ae | head 2676/2411 f732954a1aee 5a56c1ede1ae
+ok   nba seed set 7: base 2683/2419 f7ebe3baa2b6 478922fd6766 | head 2683/2419 f7ebe3baa2b6 478922fd6766
+ok   nba seed set 8: base 2679/2410 ac64f9400ef8 f007b15ecd1b | head 2679/2410 ac64f9400ef8 f007b15ecd1b
+ok   nba seed set 9: base 2649/2387 973352f3a701 5219ef66dc1f | head 2649/2387 973352f3a701 5219ef66dc1f
+ok   nba seed set 10: base 2693/2419 ce1ce8a47a03 c2a68fcfc698 | head 2693/2419 ce1ce8a47a03 c2a68fcfc698
+ok   nba seed set 11: base 2687/2415 d7ddd15186ea 57a46bfe7dbc | head 2687/2415 d7ddd15186ea 57a46bfe7dbc
+ok   nba seed set 12: base 2717/2443 d5f41033f170 e91ef927fe07 | head 2717/2443 d5f41033f170 e91ef927fe07
+ok   nba seed set 13: base 2682/2417 26d369bfd0fc 22177aa46d7d | head 2682/2417 26d369bfd0fc 22177aa46d7d
+ok   nba seed set 14: base 2670/2404 c3e3a14c744d c6d0a3886a36 | head 2670/2404 c3e3a14c744d c6d0a3886a36
+ok   nfl seed set 5: base 2362/1384 c4acaefaadc4 2c7a238bdcba | head 2362/1384 c4acaefaadc4 2c7a238bdcba
+ok   nfl seed set 6: base 2367/1391 d7af0dfc8509 e74a40aea19d | head 2367/1391 d7af0dfc8509 e74a40aea19d
+ok   nfl seed set 7: base 2357/1390 bcf03420923e f7cb2cda8054 | head 2357/1390 bcf03420923e f7cb2cda8054
+ok   nfl seed set 8: base 2365/1388 cbcc38fda581 92862093a475 | head 2365/1388 cbcc38fda581 92862093a475
+ok   nfl seed set 9: base 2360/1385 3461667762d3 8ef7ef25f9b6 | head 2360/1385 3461667762d3 8ef7ef25f9b6
+ok   nfl seed set 10: base 2386/1410 7aa6988e412a 20aa94ed625e | head 2386/1410 7aa6988e412a 20aa94ed625e
+ok   nfl seed set 11: base 2353/1375 8984d6067fa6 1ef16d96e7ed | head 2353/1375 8984d6067fa6 1ef16d96e7ed
+ok   nfl seed set 12: base 2381/1394 54fc0d3cda9f 0fae6b20eec4 | head 2381/1394 54fc0d3cda9f 0fae6b20eec4
+ok   nfl seed set 13: base 2365/1381 0d2d4b5c7717 5f76b3d48b8d | head 2365/1381 0d2d4b5c7717 5f76b3d48b8d
+ok   nfl seed set 14: base 2373/1393 f3f99d6c5b11 2c9424fef69f | head 2373/1393 f3f99d6c5b11 2c9424fef69f
+ok   stray draws 0 on both
+bundled inputs outside the move's list: base 66, head 66, differing 0
+moved files in the bundle: base {"src/lib/season/core.ts":"02513e627fb5","src/lib/season/nfl.ts":"9fc77010557c"} | head {"src/lib/gameLaws/nfl.ts":"5507175350e5","src/lib/gameLaws/nflScore.ts":"5e8f355aa21c","src/lib/keyedShuffle.ts":"c4cd8367d668","src/lib/season/core.ts":"fe54ceaef5ba","src/lib/season/nfl.ts":"959976034f6a"}
+careers a sport and a seed set 120 and 120; seasons nba 26802 (derived 24122), nfl 23669 (derived 13891)
+review-run-cmp: 21 digests compared, 0 differ
