@@ -1,0 +1,1 @@
+vitest-all exit=0 506s | CGFAILCLOSED| board cg611-017: yes Stanley Morgan (Tennessee), no Tom Brady CGFAILCLOSED| fail closed: 5 of 5 failure worlds left the pick unverified and judged it after 
