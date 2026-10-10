@@ -1,0 +1,338 @@
+{
+ "base": "http://localhost:4173",
+ "fixtures": {
+  "disallowed": {
+   "seed": 1880,
+   "minute": 9,
+   "side": "me",
+   "review": {
+    "id": "2026:Everton:0:Liverpool:0:45:me:9:0:Kiernan Dewsbury-Hall:goal",
+    "incident": "goal",
+    "decision": "disallowed",
+    "reason": "ruled_out"
+   },
+   "comp": "Premier League · Round 1",
+   "opponent": "Liverpool",
+   "searchMs": 259
+  },
+  "awarded_scored": {
+   "seed": 1713,
+   "minute": 30,
+   "side": "opp",
+   "review": {
+    "id": "2026:Everton:0:Liverpool:0:45:me:30:0:Hayden Hackney:missed-penalty",
+    "incident": "penalty",
+    "decision": "awarded",
+    "reason": "missed_foul",
+    "trigger": {
+     "side": "me",
+     "who": "Hayden Hackney"
+    }
+   },
+   "comp": "Premier League · Round 1",
+   "opponent": "Liverpool",
+   "searchMs": 52
+  },
+  "awarded_missed": {
+   "error": "No actual awarded_missed review in the bounded engine fixture search"
+  },
+  "lastminute": {
+   "seed": 2042,
+   "minute": 45,
+   "plus": 0,
+   "side": "opp",
+   "review": {
+    "id": "2026:Everton:0:Liverpool:0:45:opp:45:0:Dominik Szoboszlai:goal",
+    "incident": "goal",
+    "decision": "disallowed",
+    "reason": "ruled_out"
+   }
+  },
+  "two": {
+   "error": "not found in seeds 1700 to 3699"
+  }
+ },
+ "cases": [
+  {
+   "id": "390-motion-lastminute-plain",
+   "kind": "lastminute",
+   "variant": "plain",
+   "seed": 2042,
+   "shots": [
+    "390-motion-lastminute-plain-1-checking.jpg",
+    "390-motion-lastminute-plain-2-decided.jpg",
+    "390-motion-lastminute-plain-3-after.jpg",
+    "390-motion-lastminute-plain-8-full-time.jpg",
+    "390-motion-lastminute-plain-9-report-timeline.jpg"
+   ],
+   "notes": [],
+   "engine": {
+    "lit": true,
+    "incident": {
+     "minute": 45,
+     "who": "Dominik Szoboszlai",
+     "decision": "disallowed"
+    },
+    "half": [
+     1,
+     0
+    ],
+    "reviewsInHalf": 1
+   },
+   "prior": {
+    "me": 1,
+    "opp": 0
+   },
+   "savedLit": true,
+   "whereBefore": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "card": {
+    "state": "checking",
+    "text": "VAR: checking the goal |  | Dominik Szoboszlai, Liverpool, 45' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "animations": 0,
+    "transition": "0s",
+    "animationName": "none",
+    "fonts": [
+     12,
+     11,
+     10
+    ]
+   },
+   "whereChecking": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 0
+   },
+   "decided": {
+    "text": "VAR: goal ruled out |  | Dominik Szoboszlai, Liverpool, 45' |  | No goal. The score does not change.",
+    "decision": "disallowed",
+    "score": {
+     "me": 1,
+     "opp": 0
+    }
+   },
+   "whereDecided": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "whereAfter": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 844,
+    "docWidth": 390
+   },
+   "stageAfter": {
+    "stage": "interval"
+   },
+   "scoreAfter": {},
+   "intervalScore": {},
+   "settledAsEngine": true,
+   "result": "1-0",
+   "engineResult": "1-0",
+   "timeline": [
+    {
+     "clock": "45'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Dominik Szoboszlai",
+     "shown": "📺 VAR: goal ruled out: Dominik Szoboszlai",
+     "cut": false,
+     "rowWidth": 276,
+     "textWidth": [
+      119,
+      119
+     ]
+    }
+   ],
+   "docWidthReport": 390,
+   "varLog": [
+    {
+     "s": "checking:2026:Everton:0:Liverpool:0:45:opp:45:0:Dominik Szoboszlai:goal",
+     "t": 25033,
+     "y": 0,
+     "minute": "45",
+     "text": "VAR: checking the goal |  | Dominik Szoboszlai, Liverpool, 45' |  | Play waits for the decision."
+    },
+    {
+     "s": "decided:2026:Everton:0:Liverpool:0:45:opp:45:0:Dominik Szoboszlai:goal",
+     "t": 26334,
+     "y": 0,
+     "minute": "45",
+     "text": "VAR: goal ruled out |  | Dominik Szoboszlai, Liverpool, 45' |  | No goal. The score does not change."
+    },
+    {
+     "s": "none",
+     "t": 27536,
+     "y": 0,
+     "minute": "45",
+     "text": ""
+    }
+   ],
+   "errors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+   ],
+   "outside": [
+    "fonts.googleapis.com",
+    "flawuiqbvjobmkfkauhw.supabase.co"
+   ],
+   "seconds": 31
+  },
+  {
+   "id": "1280-motion-lastminute-plain",
+   "kind": "lastminute",
+   "variant": "plain",
+   "seed": 2042,
+   "shots": [
+    "1280-motion-lastminute-plain-1-checking.jpg",
+    "1280-motion-lastminute-plain-2-decided.jpg",
+    "1280-motion-lastminute-plain-3-after.jpg",
+    "1280-motion-lastminute-plain-8-full-time.jpg",
+    "1280-motion-lastminute-plain-9-report-timeline.jpg"
+   ],
+   "notes": [],
+   "engine": {
+    "lit": true,
+    "incident": {
+     "minute": 45,
+     "who": "Dominik Szoboszlai",
+     "decision": "disallowed"
+    },
+    "half": [
+     1,
+     0
+    ],
+    "reviewsInHalf": 1
+   },
+   "prior": {
+    "me": 1,
+    "opp": 0
+   },
+   "savedLit": true,
+   "whereBefore": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "card": {
+    "state": "checking",
+    "text": "VAR: checking the goal |  | Dominik Szoboszlai, Liverpool, 45' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "animations": 0,
+    "transition": "0s",
+    "animationName": "none",
+    "fonts": [
+     12,
+     11,
+     10
+    ]
+   },
+   "whereChecking": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 0
+   },
+   "decided": {
+    "text": "VAR: goal ruled out |  | Dominik Szoboszlai, Liverpool, 45' |  | No goal. The score does not change.",
+    "decision": "disallowed",
+    "score": {
+     "me": 1,
+     "opp": 0
+    }
+   },
+   "whereDecided": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "whereAfter": {
+    "scrollY": 0,
+    "top": 0,
+    "height": 900,
+    "docWidth": 1280
+   },
+   "stageAfter": {
+    "stage": "interval"
+   },
+   "scoreAfter": {},
+   "intervalScore": {},
+   "settledAsEngine": true,
+   "result": "1-0",
+   "engineResult": "1-0",
+   "timeline": [
+    {
+     "clock": "45'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Dominik Szoboszlai",
+     "shown": "📺 VAR: goal ruled out: Dominik Szoboszlai",
+     "cut": false,
+     "rowWidth": 362,
+     "textWidth": [
+      164,
+      164
+     ]
+    }
+   ],
+   "docWidthReport": 1280,
+   "varLog": [
+    {
+     "s": "checking:2026:Everton:0:Liverpool:0:45:opp:45:0:Dominik Szoboszlai:goal",
+     "t": 24953,
+     "y": 0,
+     "minute": "45",
+     "text": "VAR: checking the goal |  | Dominik Szoboszlai, Liverpool, 45' |  | Play waits for the decision."
+    },
+    {
+     "s": "decided:2026:Everton:0:Liverpool:0:45:opp:45:0:Dominik Szoboszlai:goal",
+     "t": 26254,
+     "y": 0,
+     "minute": "45",
+     "text": "VAR: goal ruled out |  | Dominik Szoboszlai, Liverpool, 45' |  | No goal. The score does not change."
+    },
+    {
+     "s": "none",
+     "t": 27456,
+     "y": 0,
+     "minute": "45",
+     "text": ""
+    }
+   ],
+   "errors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+   ],
+   "outside": [
+    "fonts.googleapis.com",
+    "flawuiqbvjobmkfkauhw.supabase.co"
+   ],
+   "seconds": 31
+  }
+ ],
+ "help": []
+}

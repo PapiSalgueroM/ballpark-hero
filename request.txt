@@ -1,0 +1,4 @@
+#!playwright
+#!serial
+# Round 1218 closing check (verify), request X: the run reviewer's own walk of a LIT build (the line of r1218-run-d), on the pushed head. First the copy that plays only the last minute case on seed 2042 (finding 3), then the walk as it was. The switch is turned on in the runner's checkout only and turned off again.
+lit-walk: node scripts/qa/cmVarLit.mjs on && npm run build > /tmp/build.log 2>&1; echo "build exit $?"; tail -2 /tmp/build.log; node scripts/qa/cmVarLit.mjs status; (node scripts/lib/hostLikeServer.mjs dist 4173 > /tmp/server.log 2>&1 &); sleep 4; mkdir -p $RC_OUT/seed2042; RC_OUT=$RC_OUT/seed2042 BASE=http://localhost:4173 CI=1 node .rc/x/r1218walk2042.mjs 2>&1 | cut -c1-900; echo "SEED2042 walk done"; BASE=http://localhost:4173 CI=1 node .rc/x/r1218walk.mjs 2>&1 | cut -c1-900; s=${PIPESTATUS[0]}; node scripts/qa/cmVarLit.mjs off; git status --short | head -3; exit $s
