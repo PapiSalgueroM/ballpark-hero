@@ -1,0 +1,3 @@
+src/components/front-office-shared/gmLazyPanel.tsx:18: * the save is in localStorage).
+src/lib/gmDeskHost.ts:23: *   3. Nothing here draws from Math.random or reads a clock, and nothing is
+clock and storage grep done

@@ -1,0 +1,7 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+dashes exit=0 0s | dash grep exit=1 (1 means no dash in the 14 new files)
+inert-src exit=0 0s | files under src that name a new module: 11; of them not new: 0
+inert-dist exit=0 0s | built js or html files that carry the host's words: 0
+probe-open exit=0 3s | probe-open: seeds 1,2,3,4,5,6,7,8; of 7877 quiet markets that said next year is still open, 198 were under the floor after the year was really played; 33 markets had offe
+probe-open-b exit=0 3s | probe-open: seeds 11,12,13,14,15,16,17,18; of 7879 quiet markets that said next year is still open, 178 were under the floor after the year was really played; 34 markets 
+clock exit=0 0s | clock and storage grep done

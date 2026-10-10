@@ -1,0 +1,7 @@
+#!build
+probe-open: node .rc/x/probe-open.mjs
+probe-open-b: PROBE_SEEDS=11,12,13,14,15,16,17,18 node .rc/x/probe-open.mjs
+dashes: grep -nP '[\x{2013}\x{2014}]' $(git diff --name-only --diff-filter=A 09df145abfb241679022b41903d2f19bc254ebf9 HEAD -- src scripts docs); echo "dash grep exit=$? (1 means no dash in the 14 new files)"
+inert-src: git diff --name-only --diff-filter=A 09df145abfb241679022b41903d2f19bc254ebf9 HEAD -- src | sort > /tmp/new.txt; grep -rlE "gmDeskHost|gmLazyPanel|GmJobMarketPanel|GmCareerPanel|GmXpDeskPanel|gmCareerDesk" src | sort > /tmp/named.txt; echo "files under src that name a new module: $(wc -l < /tmp/named.txt); of them not new: $(comm -23 /tmp/named.txt /tmp/new.txt | wc -l)"
+inert-dist: echo "built js or html files that carry the host's words: $(grep -rlE 'The phone has stopped|Nobody called this year|data-gm-market' dist --include=*.js --include=*.html | wc -l)"
+clock: grep -nE "Math\.random|Date\.now|new Date|localStorage|sessionStorage" $(git diff --name-only --diff-filter=A 09df145abfb241679022b41903d2f19bc254ebf9 HEAD -- src | grep -v "\.test\.") | cut -c1-160; echo "clock and storage grep done"

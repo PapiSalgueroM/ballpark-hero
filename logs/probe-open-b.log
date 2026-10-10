@@ -1,0 +1,28 @@
+     53  offers/climb -> after the year: closed
+    531  offers/climb -> after the year: closed (under the floor)
+     35  offers/climb -> after the year: offers
+    420  offers/open -> after the year: closed
+    121  offers/open -> after the year: closed (under the floor)
+   5324  offers/open -> after the year: offers
+   4880  offers/open -> after the year: quiet
+     34  offers/shut -> after the year: closed (under the floor)
+    120  quiet/climb -> after the year: closed
+   1282  quiet/climb -> after the year: closed (under the floor)
+     91  quiet/climb -> after the year: offers
+    899  quiet/open -> after the year: closed
+    178  quiet/open -> after the year: closed (under the floor)
+   3181  quiet/open -> after the year: offers
+   3621  quiet/open -> after the year: quiet
+    734  today closed/shut
+    619  today offers/climb
+  10745  today offers/open
+     34  today offers/shut
+   1493  today quiet/climb
+   7879  today quiet/open
+EXAMPLE seed 11 LAK missed,badly,badly: tier 1 then 2; said: Nobody called this year. Next year is still open, and every year out makes the phone quieter. | a year later: Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.
+EXAMPLE seed 11 LAK badly,met,badly: tier 1 then 2; said: Nobody called this year. Next year is still open, and every year out makes the phone quieter. | a year later: Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.
+EXAMPLE seed 11 OTT title,badly,badly: tier 2 then 4; said: Nobody called this year. Next year is still open, and every year out makes the phone quieter. | a year later: Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.
+EXAMPLE seed 11 OTT overachieved,badly,badly: tier 2 then 4; said: Nobody called this year. Next year is still open, and every year out makes the phone quieter. | a year later: Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.
+EXAMPLE seed 11 OTT met,missed,badly: tier 2 then 4; said: Nobody called this year. Next year is still open, and every year out makes the phone quieter. | a year later: Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.
+EXAMPLE seed 11 OTT met,badly: tier 2 then 4; said: Nobody called this year. Next year is still open, and every year out makes the phone quieter. | a year later: Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.
+probe-open: seeds 11,12,13,14,15,16,17,18; of 7879 quiet markets that said next year is still open, 178 were under the floor after the year was really played; 34 markets had offers today with next year shut

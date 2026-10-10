@@ -1,0 +1,28 @@
+     43  offers/climb -> after the year: closed
+    516  offers/climb -> after the year: closed (under the floor)
+     49  offers/climb -> after the year: offers
+    424  offers/open -> after the year: closed
+    129  offers/open -> after the year: closed (under the floor)
+   5326  offers/open -> after the year: offers
+   4868  offers/open -> after the year: quiet
+     33  offers/shut -> after the year: closed (under the floor)
+    128  quiet/climb -> after the year: closed
+   1269  quiet/climb -> after the year: closed (under the floor)
+    107  quiet/climb -> after the year: offers
+    886  quiet/open -> after the year: closed
+    198  quiet/open -> after the year: closed (under the floor)
+   3173  quiet/open -> after the year: offers
+   3620  quiet/open -> after the year: quiet
+    735  today closed/shut
+    608  today offers/climb
+  10747  today offers/open
+     33  today offers/shut
+   1504  today quiet/climb
+   7877  today quiet/open
+EXAMPLE seed 1 BOS title,badly,badly: tier 3 then 4; said: Nobody called this year. Next year is still open, and every year out makes the phone quieter. | a year later: Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.
+EXAMPLE seed 1 BOS met,missed,badly: tier 3 then 4; said: Nobody called this year. Next year is still open, and every year out makes the phone quieter. | a year later: Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.
+EXAMPLE seed 1 BOS missed,met,badly: tier 3 then 4; said: Nobody called this year. Next year is still open, and every year out makes the phone quieter. | a year later: Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.
+EXAMPLE seed 1 BOS missed,missed,badly: tier 3 then 4; said: Nobody called this year. Next year is still open, and every year out makes the phone quieter. | a year later: Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.
+EXAMPLE seed 1 BOS badly,title,badly: tier 3 then 4; said: Nobody called this year. Next year is still open, and every year out makes the phone quieter. | a year later: Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.
+EXAMPLE seed 1 BOS badly,badly,missed: tier 3 then 4; said: Nobody called this year. Next year is still open, and every year out makes the phone quieter. | a year later: Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.
+probe-open: seeds 1,2,3,4,5,6,7,8; of 7877 quiet markets that said next year is still open, 198 were under the floor after the year was really played; 33 markets had offers today with next year shut
