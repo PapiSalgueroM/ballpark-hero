@@ -1,0 +1,19 @@
+cell | seasons | changed by rule | moved | by rule and not moved | moved and not by rule
+mlb now | 5004 | 2045 | 2045 | 0 | 0
+mlb y2004 | 4990 | 2648 | 2648 | 0 | 0
+nhl now | 2524 | 2524 | 2524 | 0 | 0
+nhl y2006 | 2545 | 501 | 501 | 0 | 0
+
+causes (seasons changed by rule, by the first cause that applies):
+  mlb now: October count: 177
+  mlb now: hitter in October: 1725
+  mlb now: length: 143
+  mlb y2004: October before 2022: 356
+  mlb y2004: October count: 5
+  mlb y2004: comeback gate: 31
+  mlb y2004: hitter in October: 1590
+  mlb y2004: length: 666
+  nhl now: length: 2524
+  nhl y2006: comeback gate: 16
+  nhl y2006: length: 485
+probe1226: the seasons changed by rule are exactly the seasons that moved.

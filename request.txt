@@ -1,0 +1,3 @@
+#!serial
+probe: git worktree add -q /tmp/base 980654facb2d41a6c9ddc029c43710178b9d49b8 && node .rc/x/probe.mjs /tmp/base . 24
+probe-control: node .rc/x/revert.mjs mlb-avg && node .rc/x/probe.mjs /tmp/base . 6; s=$?; git checkout -- src; exit $s

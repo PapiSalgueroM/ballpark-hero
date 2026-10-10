@@ -1,0 +1,2 @@
+probe exit=0 4s | probe1226: the seasons changed by rule are exactly the seasons that moved.
+probe-control exit=1 1s | probe1226: RED, 279 seasons disagree.
