@@ -1,0 +1,14 @@
+mk new: plan found in career 0, phase playing, 3 played rows, Everton
+mk new: keeper found in career 0, phase playing, 2 played rows, Everton
+mk new: real found in career 0, phase playing, 1 played rows, Man United
+mk new: roles found in career 0, phase playing, 2 played rows, Al Sadd
+mk new: summaryWin found in career 1, phase season_summary, 3 played rows, Brighton
+mk new: summaryOut found in career 0, phase season_summary, 3 played rows, Everton
+mk new: summaryEuro found in career 0, phase season_summary, 1 played rows, Chelsea
+mk new: offerNo found in career 0, phase transfer_window, 2 played rows, Everton
+mk new: offerYes found in career 1, phase transfer_window, 9 played rows, Liverpool
+mk new: event found in career 0, phase random_events, 2 played rows, Everton
+mk new: appeal found in career 2, phase red_card_appeal_result, 2 played rows, Aston Villa
+mk new: unseenHub found in career 0, phase playing, 2 played rows, Everton
+mk new: wrote 15 of 15 saves to /tmp/rev-new.json; missing: none
+mk notes: {"event":{"title":"The Scan Room","choice":1,"label":"Back in training tomorrow","wheel":"The Scan Room","chance":0.3},"planned":{"year":2030,"club":"Everton","choices":{"tactics":"finisher","promise":"starter","bonuses":"appearances","set_pieces":"penalties"},"bonusEuros":19744},"settledReceipt":{"year":2030,"club":"Everton","choices":{"tactics":"finisher","promise":"starter","bonuses":"appearances","set_pieces":"penalties"},"status":"completed","outcomes":{"tactics":"27 recorded club appearances.","set_pieces":"1 penalty goals and 0 free kick goals, included in your 6 recorded goals. This is the simulation's season duty allocation.","promise":"The 26-appearance promise was missed: 23 league appearances. You can request a move in the transfer window.","bonuses":"The recorded target was not met; no bonus was paid."},"bonusEuros":0,"penaltyGoals":1,"freeKickGoals":0,"secondaryPosition":null,"promise":"broken"},"size_plan":24826,"size_keeper":22654,"size_real":15505,"size_roles":17017,"size_summaryWin":31231,"size_summaryOut":27650,"size_summaryEuro":23791,"size_offerNo":22638,"size_offerYes":63851,"size_event":23324,"size_appeal":22870,"size_unseenHub":22184,"size_settledSummary":34665,"size_settled":30841,"size_edited":24939}
