@@ -1,0 +1,1 @@
+simCareerInbox exit=0 1s | simCareerInbox: green. Soccer is unchanged, and the NFL, MLB, NBA and NHL inboxes fire.
