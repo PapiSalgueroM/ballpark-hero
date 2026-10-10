@@ -1,0 +1,45 @@
+name: Manager roster codec data probe
+on:
+  push:
+    branches: [codex/manager-roster-codec-probe]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Read retained diagnostic and locked codec
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          curl --fail --location --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/11680328655/zip -o source-artifact.zip
+          python3 - <<'PY'
+          import zipfile, pathlib, hashlib
+          source = pathlib.Path('source-artifact.zip')
+          assert source.stat().st_size == 169404489
+          assert hashlib.sha256(source.read_bytes()).hexdigest() == '66a6f67aa88f6bcb2a91241990570c0545486f4855fb21f939247d748aa2f49d'
+          root = pathlib.Path('observations').resolve()
+          with zipfile.ZipFile(source) as archive:
+              for item in archive.infolist():
+                  if not item.filename.startswith('current/simClubManager') or not (item.filename.endswith('.json.gz') or item.filename.endswith('/observer.json')):
+                      continue
+                  target = (root / item.filename).resolve()
+                  assert target.is_relative_to(root)
+                  target.parent.mkdir(parents=True, exist_ok=True)
+                  target.write_bytes(archive.read(item))
+          PY
+      - name: Compare exact full JSON round trips and actual budgets
+        run: node scripts/qa/managerRosterCodecProbe.mjs observations
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: manager-roster-codec-probe-${{ github.run_id }}
+          path: probe-results.json
+          retention-days: 5
