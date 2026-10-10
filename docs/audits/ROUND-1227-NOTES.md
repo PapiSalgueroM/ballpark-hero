@@ -79,7 +79,45 @@ The player ages on his position (a back falls off at 28, a kicker at 39) and eve
   byte equal, the NBA's cards word for word. P2: 1,000 of 1,000 NFL saves moved; 311 part off the rival and each
   holds every season line up to that season; 689 differ under the rival alone. Eight controls fired in their
   sections (verdictswap, oldscalenfl, fullscorenfl, offshapenfl, drawsnfl, bridge, oneslot, workload17).
-- The recordings for step c (44c2e4d2, 83d42fec): their commit messages carry the attribution.
+- The recordings for step c (44c2e4d2, 83d42fec): their commit messages carry the attribution, and r1227-c4 found
+  that head green (the type gate, the board replay, the digest).
+- The floor (55339449) and the NFL third of step h (5bdd0a9c): r1227-h1 and r1227-h2. P1 against 83d42fec: the
+  player's lines AND the rival's trail byte equal, so the floor moved no season of 107,618 judged years. N.F5: 0
+  of 64 All-Pro cards wrong (only you 43, only him 21, both 0 over five seeds). N.O: the five old saves. P2: 53 of
+  1,000 NFL saves differ and every stepped career that parts holds its season lines. Controls rostergate,
+  owndealt, lastyearnfl (N.F5) and owndead (N.O) fired at full size; simCareerRivalryEvents green with its
+  controls allstar221, owndealt206, coin306 and oldcard red; simNbaAwardsSense green (172 checks) with oldgateown,
+  droppedanyyear and oldgate306 red.
+- The recordings for step h (110c3f64, 2be3775c): one fixed save's screen walk in the NFL ("negNet", step 52) and
+  8 digest leaves, all nfl.
+- The browser walk scripts/playUsRivalLines.mjs: its `cards` stretch was green on its first run (r1227-w1); the
+  closing report says how the full walk ended.
+
+## Owed, and for whom
+- THE OTHER LANE'S GUIDE (src/data/gameContent/football.ts, about line 562): "He plays his own seasons on the same
+  scale you do" is TRUE for the NFL from this round on. Nothing must be written for the round to be true. A
+  sentence that would help a player and is NOT written anywhere yet: how "the better year" is decided (the season
+  score of the parts the two lines print; a back's catches at eight yards each; forced fumbles for linebackers
+  and corners and a kicker's misses do not count).
+- THE RULES AND A WORKED EXAMPLE BEHIND A "?" ON THE RIVAL CARD are owed by the house rule and were ruled out of
+  this round (they need src/components/us-career/SocialPanel.tsx, the other lane's ground). The NFL's sentences,
+  for the round that builds it: "Who had the better year is read off the two season lines you can see. A
+  quarterback is read on yards, touchdowns and interceptions. A back on rushing yards, touchdowns and catches,
+  each catch counted as eight yards. A receiver or a tight end on catches, yards and touchdowns. A linebacker on
+  tackles, sacks and interceptions. A corner on interceptions, passes defended and tackles. An edge rusher on
+  sacks, tackles and forced fumbles. A kicker on his makes and his longest. Inside six percent of his number it is
+  a near tie, and a dead heat is his year." Worked example: "You: 3,654 yds, 22 TD, 14 INT. Him: 2,664 yds, 12 TD,
+  21 INT. Yours is the better year."
+- A RIVAL WHO HAD ALREADY RETIRED ON AN OLD SAVE keeps his old shape last line for good (the critic's advice 16):
+  he is never judged again, and the Rival screen prints the line the save holds. Known leftover; the "?" step can
+  hide a last line that has no lastYear.
+- THE LEAD AT RELEASE: the saved page /whats-new changes (one entry); the gate list gains
+  scripts/simUsRivalSense.mjs with its controls and scripts/playUsRivalLines.mjs with its two, and loses
+  SENSE_PROVE_1149 and simNbaAwardsSense's `lastyearnfl`.
+- ROUND B (MLB and the NHL): binds to rivalSeasonStream, rivalSeasonDraws, rivalKindOf, rosterBeat (with `own`),
+  ALL_STAR_ROSTER, mlbLineAsPrinted and nhlLineAsPrinted; adds its sports to BOUND, ROSTER and SHAPES-driven
+  sections of simUsRivalSense; deletes ownRosterBeat and the three built in lines of simRivalSeason when its last
+  caller goes; moves the anchors of oldgateown and droppedanyyear with them.
 
 ## What a later session must not trust
 - Anything below marked NOT RUN.
