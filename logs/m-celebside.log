@@ -1,0 +1,2 @@
+rmut: applied celebside to src/components/pitch-motion/motion.tsx
+simOwnGoalMotion: RED. vitest exit 1, 5 failed, 10 passed of 15 (wanted 15).

@@ -1,0 +1,2 @@
+rmut: applied lateman to src/components/pitch-motion/motion.tsx
+simOwnGoalMotion: RED. vitest exit 1, 2 failed, 13 passed of 15 (wanted 15).

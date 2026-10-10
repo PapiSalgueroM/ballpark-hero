@@ -1,0 +1,15 @@
+m-corner exit=1 12s | 6
+m-band exit=1 12s | simOwnGoalMotion: RED. vitest exit 1, 1 failed, 14 passed of 15 (wanted 15).
+m-bandlow exit=0 12s | simOwnGoalMotion: green. 15 tests passed: the dense fleet, OG1 to OG9 against their baseline arm, the scenes made by hand, the two recorded digests, the live match on an 
+m-walkers exit=1 12s | simOwnGoalMotion: RED. vitest exit 1, 2 failed, 13 passed of 15 (wanted 15).
+m-lateman exit=1 12s | simOwnGoalMotion: RED. vitest exit 1, 2 failed, 13 passed of 15 (wanted 15).
+m-nullkey exit=1 12s | simOwnGoalMotion: RED. vitest exit 1, 2 failed, 13 passed of 15 (wanted 15).
+m-ogbyorder exit=1 12s | simOwnGoalMotion: RED. vitest exit 1, 1 failed, 14 passed of 15 (wanted 15).
+m-surface exit=1 11s | simOwnGoalMotion: RED. vitest exit 1, 3 failed, 12 passed of 15 (wanted 15).
+m-ruekeeper exit=1 12s | simOwnGoalMotion: RED. vitest exit 1, 3 failed, 12 passed of 15 (wanted 15).
+m-clamp exit=0 11s | simOwnGoalMotion: green. 15 tests passed: the dense fleet, OG1 to OG9 against their baseline arm, the scenes made by hand, the two recorded digests, the live match on an 
+m-touchkeeper exit=1 11s | simOwnGoalMotion: RED. vitest exit 1, 3 failed, 12 passed of 15 (wanted 15).
+m-celebside exit=1 10s | simOwnGoalMotion: RED. vitest exit 1, 5 failed, 10 passed of 15 (wanted 15).
+m-ruefig exit=1 10s | simOwnGoalMotion: RED. vitest exit 1, 4 failed, 11 passed of 15 (wanted 15).
+m-kind exit=0 11s | simOwnGoalMotion: green. 15 tests passed: the dense fleet, OG1 to OG9 against their baseline arm, the scenes made by hand, the two recorded digests, the live match on an 
+m-restored exit=0 33s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

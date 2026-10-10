@@ -1,0 +1,2 @@
+rmut: applied ruefig to src/components/pitch-motion/motion.tsx
+simOwnGoalMotion: RED. vitest exit 1, 4 failed, 11 passed of 15 (wanted 15).

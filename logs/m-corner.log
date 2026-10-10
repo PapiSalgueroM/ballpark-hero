@@ -1,0 +1,3 @@
+rmut: applied corner to src/components/pitch-motion/motion.tsx
+simOwnGoalMotion: RED. vitest exit 1, 3 failed, 12 passed of 15 (wanted 15).
+6
