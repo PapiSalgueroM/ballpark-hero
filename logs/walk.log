@@ -1,0 +1,89 @@
+390-rm A1-tiles: clean
+390-rm A2-market: clean
+390-rm A3-help: clean
+390-rm A4-offer: clean
+390-rm A5-armed: clean
+390-rm A6-after-take: clean
+390-rm A7-career: clean
+390-rm B0-tiles: clean
+390-rm B1-quiet: clean
+390-rm B2-sit-armed: clean
+390-rm B3-after-away: clean
+390-rm C0-tiles: clean
+390-rm C1-climb: clean
+390-rm D0-tiles: clean
+390-rm D1-closed: clean
+390-rm E1-shutoffers: clean
+390-rm F0-tiles: clean
+390-rm F1-career-legacy: clean
+390-rm G0-tiles: clean
+390-rm G1-xp: clean
+390-rm G2-xp-help: clean
+390-rm G3-after-spend: clean
+390-mo A1-tiles: anims pulse,pulse
+390-mo A2-market: clean
+390-mo A3-help: clean
+390-mo A4-offer: clean
+390-mo A5-armed: clean
+390-mo A6-after-take: anims pulse
+390-mo A7-career: clean
+390-mo B0-tiles: anims pulse
+390-mo B1-quiet: clean
+390-mo B2-sit-armed: clean
+390-mo B3-after-away: anims pulse
+390-mo C0-tiles: anims pulse
+390-mo C1-climb: clean
+390-mo D0-tiles: anims pulse
+390-mo D1-closed: clean
+390-mo E1-shutoffers: clean
+390-mo F0-tiles: anims pulse
+390-mo F1-career-legacy: clean
+390-mo G0-tiles: anims pulse
+390-mo G1-xp: clean
+390-mo G2-xp-help: clean
+390-mo G3-after-spend: clean
+1280-rm A1-tiles: clean
+1280-rm A2-market: clean
+1280-rm A3-help: clean
+1280-rm A4-offer: clean
+1280-rm A5-armed: clean
+1280-rm A6-after-take: clean
+1280-rm A7-career: clean
+1280-rm B0-tiles: clean
+1280-rm B1-quiet: clean
+1280-rm B2-sit-armed: clean
+1280-rm B3-after-away: clean
+1280-rm C0-tiles: clean
+1280-rm C1-climb: clean
+1280-rm D0-tiles: clean
+1280-rm D1-closed: clean
+1280-rm E1-shutoffers: clean
+1280-rm F0-tiles: clean
+1280-rm F1-career-legacy: clean
+1280-rm G0-tiles: clean
+1280-rm G1-xp: clean
+1280-rm G2-xp-help: clean
+1280-rm G3-after-spend: clean
+1280-mo A1-tiles: anims pulse,pulse
+1280-mo A2-market: clean
+1280-mo A3-help: clean
+1280-mo A4-offer: clean
+1280-mo A5-armed: clean
+1280-mo A6-after-take: anims pulse
+1280-mo A7-career: clean
+1280-mo B0-tiles: anims pulse
+1280-mo B1-quiet: clean
+1280-mo B2-sit-armed: clean
+1280-mo B3-after-away: anims pulse
+1280-mo C0-tiles: anims pulse
+1280-mo C1-climb: clean
+1280-mo D0-tiles: anims pulse
+1280-mo D1-closed: clean
+1280-mo E1-shutoffers: clean
+1280-mo F0-tiles: anims pulse
+1280-mo F1-career-legacy: clean
+1280-mo G0-tiles: anims pulse
+1280-mo G1-xp: clean
+1280-mo G2-xp-help: clean
+1280-mo G3-after-spend: clean
+walk: 88 steps, 88 shots, 0 errors, 0 with sideways overflow, 0 with cut off text, motion differs on 23, bundle names the database: false

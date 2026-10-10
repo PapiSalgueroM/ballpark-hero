@@ -1,0 +1,2570 @@
+{
+ "base": "http://localhost:4173",
+ "bundleBytes": 656996,
+ "bundleNamesDatabase": false,
+ "stylesheets": 2,
+ "runs": [
+  {
+   "tag": "390-rm",
+   "steps": [
+    {
+     "name": "A1-tiles",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 15,
+     "anims": [],
+     "reduce": true,
+     "tiles": [
+      "📞\nJOB MARKET\n3 offers\nOpen it to see each ask",
+      "📖\nCAREER\nOut of work\n1 club, 5 titles",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ],
+     "state": "offers",
+     "offers": [
+      "BUF:t3",
+      "WPG:t3",
+      "NYI:t3"
+     ],
+     "found": {
+      "kind": "offers",
+      "old": "BOS",
+      "grades": [
+       "title",
+       "title",
+       "title",
+       "title",
+       "title",
+       "overachieved",
+       "overachieved",
+       "overachieved",
+       "missed"
+      ]
+     },
+     "census": {
+      "markets": 448,
+      "offers": 165,
+      "offersShut": 10,
+      "quietOpen": 90,
+      "quietClimb": 43,
+      "closed": 150
+     }
+    },
+    {
+     "name": "A2-market",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 16,
+     "anims": [],
+     "reduce": true,
+     "sawFallback": 0,
+     "line": "Ownership made the call: you are out after 9 seasons and 5 titles with the Boston Bruins. 3 franchises called."
+    },
+    {
+     "name": "A3-help",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 20,
+     "anims": [],
+     "reduce": true,
+     "help": "When ownership lets you go, the franchises that rate your record can call. The franchise that let you go never does.\n\nEach offer shows what that franchise asks of your first season there. That is the ask you are graded on.\n\nNo call this year? A year out lets the league play a season without you and the phone can ring next summer, but every year out makes it quieter. The screen says when the offers in front of you are the last ones and when the phone has stopped for good, and then there is no year out to take.\n\nWorked example: leave straight after a season graded nowhere near the ask and no top tier franchise calls, whatever you won before. The best that can ring is rated second tier. The tiers are the four quarters of the league by strength."
+    },
+    {
+     "name": "A4-offer",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 10,
+     "under10": 0,
+     "texts": 13,
+     "anims": [],
+     "reduce": true,
+     "text": "Back to the offers\nBuffalo Sabres\nTHIRD TIER\n\nMake the playoffs. Ownership thinks this roster belongs there.\n\nThey want someone who has won the Stanley Cup more than once.\n\nFinished 39-29-12, 16th in the league. Roster ranked 19th. $4.8M under the cap.\n\nTake the job"
+    },
+    {
+     "name": "A5-armed",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 10,
+     "under10": 0,
+     "texts": 14,
+     "anims": [],
+     "reduce": true,
+     "armed": "Tap again to take it. You become the Buffalo Sabres general manager and it cannot be undone.",
+     "logAfterOneTap": []
+    },
+    {
+     "name": "A6-after-take",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 2,
+     "texts": 9,
+     "anims": [],
+     "reduce": true,
+     "tiles": [
+      "📖\nCAREER\nSeason 1\nWith the Buffalo Sabres",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ],
+     "log": [
+      "TOOK BUF ask 2027"
+     ],
+     "fired": false,
+     "stints": 2,
+     "arriving": true,
+     "team": "BUF",
+     "mandateSeason": 2027,
+     "season": 2026
+    },
+    {
+     "name": "A7-career",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 9,
+     "under10": 4,
+     "texts": 12,
+     "anims": [],
+     "reduce": true,
+     "text": "9 seasons, 2 clubs, 5 titles\n\n?\nBoston Bruins\nTook over in 2018, third tier\n🏆 🏆 🏆 🏆 🏆 ▲ ▲ ▲ ▽\nLET GO\nBuffalo Sabres\nTook over in 2027, third tier\nNo graded season yet\nSTILL HERE"
+    },
+    {
+     "name": "B0-tiles",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 15,
+     "anims": [],
+     "reduce": true,
+     "tiles": [
+      "📞\nJOB MARKET\nNobody called\nNext year open, as things stand",
+      "📖\nCAREER\nOut of work\n1 club, no titles",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ],
+     "state": "quiet",
+     "nextYear": "open",
+     "found": {
+      "kind": "quiet",
+      "old": "ANA",
+      "grades": [
+       "missed",
+       "missed",
+       "missed",
+       "missed"
+      ]
+     }
+    },
+    {
+     "name": "B1-quiet",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 11,
+     "under10": 0,
+     "texts": 7,
+     "anims": [],
+     "reduce": true,
+     "line": "Ownership made the call: you are out after 4 seasons and no titles with the Anaheim Ducks. Nobody called this year. As things stand next year is still open, and every year out makes the phone quieter."
+    },
+    {
+     "name": "B2-sit-armed",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 10,
+     "under10": 0,
+     "texts": 8,
+     "anims": [],
+     "reduce": true,
+     "armed": "Tap again to stay out. The league plays a whole season without you and it cannot be undone. As things stand the phone can still ring next year.",
+     "logAfterOneTap": []
+    },
+    {
+     "name": "B3-after-away",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 17,
+     "anims": [],
+     "reduce": true,
+     "tiles": [
+      "📞\nJOB MARKET\nNobody called\nNext year open, as things stand",
+      "📖\nCAREER\nOut of work\n1 club, no titles",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ],
+     "log": [
+      "AWAY 2027 champion WSH"
+     ],
+     "season": 2027,
+     "seasonWas": 2026,
+     "seasonsOut": 1,
+     "state": "quiet",
+     "nextYear": "open",
+     "line": "1 season out of work since the Anaheim Ducks let you go. Nobody called this year. As things stand next year is still open, and every year out makes the phone quieter.",
+     "card": "Out of work, 1 season\n\n1 season out of work since the Anaheim Ducks let you go. Nobody called this year. As things stand next year is still open, and every year out makes the phone quieter.\n\nThe Washington Capitals won the Stanley Cup in 2027.\n\nThe Anaheim Ducks went 46-30-4 without you, 10th in the league."
+    },
+    {
+     "name": "C0-tiles",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 15,
+     "anims": [],
+     "reduce": true,
+     "tiles": [
+      "📞\nJOB MARKET\nNobody called\nNext year hangs on your old club",
+      "📖\nCAREER\nOut of work\n1 club, no titles",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ],
+     "state": "quiet",
+     "nextYear": "climb",
+     "climbTo": 1,
+     "found": {
+      "kind": "climb",
+      "old": "ANA",
+      "grades": [
+       "badly",
+       "badly"
+      ]
+     }
+    },
+    {
+     "name": "C1-climb",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 11,
+     "under10": 0,
+     "texts": 7,
+     "anims": [],
+     "reduce": true,
+     "line": "Ownership made the call: you are out after 2 seasons and no titles with the Anaheim Ducks. Nobody called this year. Next year the phone rings only if the Anaheim Ducks have climbed into the top tier of the league by then.",
+     "sit": 1
+    },
+    {
+     "name": "D0-tiles",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 15,
+     "anims": [],
+     "reduce": true,
+     "tiles": [
+      "📵\nJOB MARKET\nNo more calls\nOnly a new front office now",
+      "📖\nCAREER\nOut of work\n1 club, no titles",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ],
+     "state": "closed",
+     "found": {
+      "kind": "closed",
+      "old": "ANA",
+      "grades": [
+       "badly",
+       "badly",
+       "badly"
+      ]
+     }
+    },
+    {
+     "name": "D1-closed",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 11,
+     "under10": 0,
+     "texts": 6,
+     "anims": [],
+     "reduce": true,
+     "line": "Ownership made the call: you are out after 3 seasons and no titles with the Anaheim Ducks. Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.",
+     "sit": 0,
+     "offers": 0
+    },
+    {
+     "name": "E1-shutoffers",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 9,
+     "under10": 1,
+     "texts": 9,
+     "anims": [],
+     "reduce": true,
+     "state": "offers",
+     "nextYear": "shut",
+     "offers": [
+      "CHI:t4"
+     ],
+     "found": {
+      "kind": "shutoffers",
+      "old": "MIN",
+      "grades": [
+       "badly",
+       "badly",
+       "badly"
+      ]
+     },
+     "line": "Ownership made the call: you are out after 3 seasons and no titles with the Minnesota Wild. 1 franchise called. It is the last call you will get: pass, and the phone stops for good.",
+     "sit": 0,
+     "census": {
+      "markets": 448,
+      "offers": 165,
+      "offersShut": 10,
+      "quietOpen": 90,
+      "quietClimb": 43,
+      "closed": 150
+     }
+    },
+    {
+     "name": "F0-tiles",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 2,
+     "texts": 9,
+     "anims": [],
+     "reduce": true,
+     "tiles": [
+      "📖\nCAREER\nSeason 10\nWith the Toronto Maple Leafs",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ]
+    },
+    {
+     "name": "F1-career-legacy",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 13,
+     "anims": [],
+     "reduce": true,
+     "text": "9 seasons, 1 club, 2 titles\n\n?\n\nOne box for every franchise you have run, oldest first, with a mark for each graded season.\n\nThe marks: 🏆 won the title, ▲ beat the ask, ● met the ask, ▽ missed the ask, ✕ nowhere near the ask.\n\nSeasons from before the record began are counted and never graded: the game does not guess how they went.\n\nWorked example: a season that met the ask, one that beat the ask, then a title reads ● ▲ 🏆.\n\nToronto Maple Leafs\nIn the chair since 2018\n🏆 🏆\nPlus 7 earlier seasons, not graded\nSTILL HERE"
+    },
+    {
+     "name": "G0-tiles",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 2,
+     "texts": 9,
+     "anims": [],
+     "reduce": true,
+     "tiles": [
+      "📖\nCAREER\nSeason 2\nWith the Toronto Maple Leafs",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ]
+    },
+    {
+     "name": "G1-xp",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Spend a point (0/5)",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Spend a point (0/5)",
+       "h": 25,
+       "w": 336
+      }
+     ],
+     "minFont": 9,
+     "under10": 15,
+     "texts": 44,
+     "anims": [],
+     "reduce": true,
+     "earns": "You earn XP every season for your win share, titles, playoff rounds won and meeting or beating the ask from upstairs. Points are yours for good: nothing here can be taken back.",
+     "panel": "🎖️ GM level 4\n1,300 XP\n399 XP to level 5, which is one more point.\n3 points to spend\n\nYou earn XP every season for your win share, plus titles, playoff rounds, meeting or beating the owner's ask, finishing higher than anyone expected and bringing a prospect through. Points are yours for good: nothing here can be taken back.\n\n🔭 Scouting\n○○○○○\n\nYour draft board reads prospects closer to what they really are.\n\nNot on this desk yet, so it takes no points here.\n\nNot here yet\n🤝 Negotiation\n○○○○○\n\nAgents open nearer what their man is actually worth.\n\nNot on this desk yet, so it takes no points her"
+    },
+    {
+     "name": "G2-xp-help",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Spend a point (0/5)",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Spend a point (0/5)",
+       "h": 25,
+       "w": 336
+      }
+     ],
+     "minFont": 9,
+     "under10": 15,
+     "texts": 48,
+     "anims": [],
+     "reduce": true,
+     "help": "Level 2 costs 400 XP and every level after it costs a little more. Each level is one point, and 5 points fill a tree.\n\nA .500 season that meets the ask pays 110 XP, so at that pace the first point is about 4 seasons away. Playoff rounds, a title and beating the ask bring it sooner.\n\nA tree marked Not here yet takes no points on this desk, so a point is never spent where it moves nothing.\n\nWorked example: a .600 season that met the ask and won one playoff round pays 170 XP. And with two Ownership points, missing the ask on trust 16 costs 14, not 16, so you keep the job on trust 2."
+    },
+    {
+     "name": "G3-after-spend",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Spend a point (1/5)",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Spend a point (0/5)",
+       "h": 25,
+       "w": 336
+      }
+     ],
+     "minFont": 9,
+     "under10": 15,
+     "texts": 44,
+     "anims": [],
+     "reduce": true,
+     "log": [
+      "SPENT ownership"
+     ],
+     "helpOpenBefore": 0,
+     "ownership": "🏛️ Ownership\n●○○○○\n\nA season that misses the ask costs you less trust upstairs.\n\nOnly pays in a season that falls short of the ask.\n\nSpend a point (1/5)",
+     "notLive": true
+    }
+   ]
+  },
+  {
+   "tag": "390-mo",
+   "steps": [
+    {
+     "name": "A1-tiles",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 15,
+     "anims": [
+      "pulse",
+      "pulse"
+     ],
+     "reduce": false,
+     "tiles": [
+      "📞\nJOB MARKET\n3 offers\nOpen it to see each ask",
+      "📖\nCAREER\nOut of work\n1 club, 5 titles",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ],
+     "state": "offers",
+     "offers": [
+      "BUF:t3",
+      "WPG:t3",
+      "NYI:t3"
+     ],
+     "found": {
+      "kind": "offers",
+      "old": "BOS",
+      "grades": [
+       "title",
+       "title",
+       "title",
+       "title",
+       "title",
+       "overachieved",
+       "overachieved",
+       "overachieved",
+       "missed"
+      ]
+     },
+     "census": {
+      "markets": 448,
+      "offers": 165,
+      "offersShut": 10,
+      "quietOpen": 90,
+      "quietClimb": 43,
+      "closed": 150
+     }
+    },
+    {
+     "name": "A2-market",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 16,
+     "anims": [],
+     "reduce": false,
+     "sawFallback": 0,
+     "line": "Ownership made the call: you are out after 9 seasons and 5 titles with the Boston Bruins. 3 franchises called."
+    },
+    {
+     "name": "A3-help",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 20,
+     "anims": [],
+     "reduce": false,
+     "help": "When ownership lets you go, the franchises that rate your record can call. The franchise that let you go never does.\n\nEach offer shows what that franchise asks of your first season there. That is the ask you are graded on.\n\nNo call this year? A year out lets the league play a season without you and the phone can ring next summer, but every year out makes it quieter. The screen says when the offers in front of you are the last ones and when the phone has stopped for good, and then there is no year out to take.\n\nWorked example: leave straight after a season graded nowhere near the ask and no top tier franchise calls, whatever you won before. The best that can ring is rated second tier. The tiers are the four quarters of the league by strength."
+    },
+    {
+     "name": "A4-offer",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 10,
+     "under10": 0,
+     "texts": 13,
+     "anims": [],
+     "reduce": false,
+     "text": "Back to the offers\nBuffalo Sabres\nTHIRD TIER\n\nMake the playoffs. Ownership thinks this roster belongs there.\n\nThey want someone who has won the Stanley Cup more than once.\n\nFinished 39-29-12, 16th in the league. Roster ranked 19th. $4.8M under the cap.\n\nTake the job"
+    },
+    {
+     "name": "A5-armed",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 10,
+     "under10": 0,
+     "texts": 14,
+     "anims": [],
+     "reduce": false,
+     "armed": "Tap again to take it. You become the Buffalo Sabres general manager and it cannot be undone.",
+     "logAfterOneTap": []
+    },
+    {
+     "name": "A6-after-take",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 2,
+     "texts": 9,
+     "anims": [
+      "pulse"
+     ],
+     "reduce": false,
+     "tiles": [
+      "📖\nCAREER\nSeason 1\nWith the Buffalo Sabres",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ],
+     "log": [
+      "TOOK BUF ask 2027"
+     ],
+     "fired": false,
+     "stints": 2,
+     "arriving": true,
+     "team": "BUF",
+     "mandateSeason": 2027,
+     "season": 2026
+    },
+    {
+     "name": "A7-career",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 9,
+     "under10": 4,
+     "texts": 12,
+     "anims": [],
+     "reduce": false,
+     "text": "9 seasons, 2 clubs, 5 titles\n\n?\nBoston Bruins\nTook over in 2018, third tier\n🏆 🏆 🏆 🏆 🏆 ▲ ▲ ▲ ▽\nLET GO\nBuffalo Sabres\nTook over in 2027, third tier\nNo graded season yet\nSTILL HERE"
+    },
+    {
+     "name": "B0-tiles",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 15,
+     "anims": [
+      "pulse"
+     ],
+     "reduce": false,
+     "tiles": [
+      "📞\nJOB MARKET\nNobody called\nNext year open, as things stand",
+      "📖\nCAREER\nOut of work\n1 club, no titles",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ],
+     "state": "quiet",
+     "nextYear": "open",
+     "found": {
+      "kind": "quiet",
+      "old": "ANA",
+      "grades": [
+       "missed",
+       "missed",
+       "missed",
+       "missed"
+      ]
+     }
+    },
+    {
+     "name": "B1-quiet",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 11,
+     "under10": 0,
+     "texts": 7,
+     "anims": [],
+     "reduce": false,
+     "line": "Ownership made the call: you are out after 4 seasons and no titles with the Anaheim Ducks. Nobody called this year. As things stand next year is still open, and every year out makes the phone quieter."
+    },
+    {
+     "name": "B2-sit-armed",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 10,
+     "under10": 0,
+     "texts": 8,
+     "anims": [],
+     "reduce": false,
+     "armed": "Tap again to stay out. The league plays a whole season without you and it cannot be undone. As things stand the phone can still ring next year.",
+     "logAfterOneTap": []
+    },
+    {
+     "name": "B3-after-away",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 17,
+     "anims": [
+      "pulse"
+     ],
+     "reduce": false,
+     "tiles": [
+      "📞\nJOB MARKET\nNobody called\nNext year open, as things stand",
+      "📖\nCAREER\nOut of work\n1 club, no titles",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ],
+     "log": [
+      "AWAY 2027 champion WSH"
+     ],
+     "season": 2027,
+     "seasonWas": 2026,
+     "seasonsOut": 1,
+     "state": "quiet",
+     "nextYear": "open",
+     "line": "1 season out of work since the Anaheim Ducks let you go. Nobody called this year. As things stand next year is still open, and every year out makes the phone quieter.",
+     "card": "Out of work, 1 season\n\n1 season out of work since the Anaheim Ducks let you go. Nobody called this year. As things stand next year is still open, and every year out makes the phone quieter.\n\nThe Washington Capitals won the Stanley Cup in 2027.\n\nThe Anaheim Ducks went 46-30-4 without you, 10th in the league."
+    },
+    {
+     "name": "C0-tiles",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 15,
+     "anims": [
+      "pulse"
+     ],
+     "reduce": false,
+     "tiles": [
+      "📞\nJOB MARKET\nNobody called\nNext year hangs on your old club",
+      "📖\nCAREER\nOut of work\n1 club, no titles",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ],
+     "state": "quiet",
+     "nextYear": "climb",
+     "climbTo": 1,
+     "found": {
+      "kind": "climb",
+      "old": "ANA",
+      "grades": [
+       "badly",
+       "badly"
+      ]
+     }
+    },
+    {
+     "name": "C1-climb",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 11,
+     "under10": 0,
+     "texts": 7,
+     "anims": [],
+     "reduce": false,
+     "line": "Ownership made the call: you are out after 2 seasons and no titles with the Anaheim Ducks. Nobody called this year. Next year the phone rings only if the Anaheim Ducks have climbed into the top tier of the league by then.",
+     "sit": 1
+    },
+    {
+     "name": "D0-tiles",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 15,
+     "anims": [
+      "pulse"
+     ],
+     "reduce": false,
+     "tiles": [
+      "📵\nJOB MARKET\nNo more calls\nOnly a new front office now",
+      "📖\nCAREER\nOut of work\n1 club, no titles",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ],
+     "state": "closed",
+     "found": {
+      "kind": "closed",
+      "old": "ANA",
+      "grades": [
+       "badly",
+       "badly",
+       "badly"
+      ]
+     }
+    },
+    {
+     "name": "D1-closed",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 11,
+     "under10": 0,
+     "texts": 6,
+     "anims": [],
+     "reduce": false,
+     "line": "Ownership made the call: you are out after 3 seasons and no titles with the Anaheim Ducks. Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.",
+     "sit": 0,
+     "offers": 0
+    },
+    {
+     "name": "E1-shutoffers",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 9,
+     "under10": 1,
+     "texts": 9,
+     "anims": [],
+     "reduce": false,
+     "state": "offers",
+     "nextYear": "shut",
+     "offers": [
+      "CHI:t4"
+     ],
+     "found": {
+      "kind": "shutoffers",
+      "old": "MIN",
+      "grades": [
+       "badly",
+       "badly",
+       "badly"
+      ]
+     },
+     "line": "Ownership made the call: you are out after 3 seasons and no titles with the Minnesota Wild. 1 franchise called. It is the last call you will get: pass, and the phone stops for good.",
+     "sit": 0,
+     "census": {
+      "markets": 448,
+      "offers": 165,
+      "offersShut": 10,
+      "quietOpen": 90,
+      "quietClimb": 43,
+      "closed": 150
+     }
+    },
+    {
+     "name": "F0-tiles",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 2,
+     "texts": 9,
+     "anims": [
+      "pulse"
+     ],
+     "reduce": false,
+     "tiles": [
+      "📖\nCAREER\nSeason 10\nWith the Toronto Maple Leafs",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ]
+    },
+    {
+     "name": "F1-career-legacy",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 13,
+     "anims": [],
+     "reduce": false,
+     "text": "9 seasons, 1 club, 2 titles\n\n?\n\nOne box for every franchise you have run, oldest first, with a mark for each graded season.\n\nThe marks: 🏆 won the title, ▲ beat the ask, ● met the ask, ▽ missed the ask, ✕ nowhere near the ask.\n\nSeasons from before the record began are counted and never graded: the game does not guess how they went.\n\nWorked example: a season that met the ask, one that beat the ask, then a title reads ● ▲ 🏆.\n\nToronto Maple Leafs\nIn the chair since 2018\n🏆 🏆\nPlus 7 earlier seasons, not graded\nSTILL HERE"
+    },
+    {
+     "name": "G0-tiles",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 2,
+     "texts": 9,
+     "anims": [
+      "pulse"
+     ],
+     "reduce": false,
+     "tiles": [
+      "📖\nCAREER\nSeason 2\nWith the Toronto Maple Leafs",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ]
+    },
+    {
+     "name": "G1-xp",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Spend a point (0/5)",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Spend a point (0/5)",
+       "h": 25,
+       "w": 336
+      }
+     ],
+     "minFont": 9,
+     "under10": 15,
+     "texts": 44,
+     "anims": [],
+     "reduce": false,
+     "earns": "You earn XP every season for your win share, titles, playoff rounds won and meeting or beating the ask from upstairs. Points are yours for good: nothing here can be taken back.",
+     "panel": "🎖️ GM level 4\n1,300 XP\n399 XP to level 5, which is one more point.\n3 points to spend\n\nYou earn XP every season for your win share, plus titles, playoff rounds, meeting or beating the owner's ask, finishing higher than anyone expected and bringing a prospect through. Points are yours for good: nothing here can be taken back.\n\n🔭 Scouting\n○○○○○\n\nYour draft board reads prospects closer to what they really are.\n\nNot on this desk yet, so it takes no points here.\n\nNot here yet\n🤝 Negotiation\n○○○○○\n\nAgents open nearer what their man is actually worth.\n\nNot on this desk yet, so it takes no points her"
+    },
+    {
+     "name": "G2-xp-help",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Spend a point (0/5)",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Spend a point (0/5)",
+       "h": 25,
+       "w": 336
+      }
+     ],
+     "minFont": 9,
+     "under10": 15,
+     "texts": 48,
+     "anims": [],
+     "reduce": false,
+     "help": "Level 2 costs 400 XP and every level after it costs a little more. Each level is one point, and 5 points fill a tree.\n\nA .500 season that meets the ask pays 110 XP, so at that pace the first point is about 4 seasons away. Playoff rounds, a title and beating the ask bring it sooner.\n\nA tree marked Not here yet takes no points on this desk, so a point is never spent where it moves nothing.\n\nWorked example: a .600 season that met the ask and won one playoff round pays 170 XP. And with two Ownership points, missing the ask on trust 16 costs 14, not 16, so you keep the job on trust 2."
+    },
+    {
+     "name": "G3-after-spend",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Spend a point (1/5)",
+       "h": 25,
+       "w": 336
+      },
+      {
+       "t": "Spend a point (0/5)",
+       "h": 25,
+       "w": 336
+      }
+     ],
+     "minFont": 9,
+     "under10": 15,
+     "texts": 44,
+     "anims": [],
+     "reduce": false,
+     "log": [
+      "SPENT ownership"
+     ],
+     "helpOpenBefore": 0,
+     "ownership": "🏛️ Ownership\n●○○○○\n\nA season that misses the ask costs you less trust upstairs.\n\nOnly pays in a season that falls short of the ask.\n\nSpend a point (1/5)",
+     "notLive": true
+    }
+   ]
+  },
+  {
+   "tag": "1280-rm",
+   "steps": [
+    {
+     "name": "A1-tiles",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 15,
+     "anims": [],
+     "reduce": true,
+     "tiles": [
+      "📞\nJOB MARKET\n3 offers\nOpen it to see each ask",
+      "📖\nCAREER\nOut of work\n1 club, 5 titles",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ],
+     "state": "offers",
+     "offers": [
+      "BUF:t3",
+      "WPG:t3",
+      "NYI:t3"
+     ],
+     "found": {
+      "kind": "offers",
+      "old": "BOS",
+      "grades": [
+       "title",
+       "title",
+       "title",
+       "title",
+       "title",
+       "overachieved",
+       "overachieved",
+       "overachieved",
+       "missed"
+      ]
+     },
+     "census": {
+      "markets": 448,
+      "offers": 165,
+      "offersShut": 10,
+      "quietOpen": 90,
+      "quietClimb": 43,
+      "closed": 150
+     }
+    },
+    {
+     "name": "A2-market",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 16,
+     "anims": [],
+     "reduce": true,
+     "sawFallback": 0,
+     "line": "Ownership made the call: you are out after 9 seasons and 5 titles with the Boston Bruins. 3 franchises called."
+    },
+    {
+     "name": "A3-help",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 20,
+     "anims": [],
+     "reduce": true,
+     "help": "When ownership lets you go, the franchises that rate your record can call. The franchise that let you go never does.\n\nEach offer shows what that franchise asks of your first season there. That is the ask you are graded on.\n\nNo call this year? A year out lets the league play a season without you and the phone can ring next summer, but every year out makes it quieter. The screen says when the offers in front of you are the last ones and when the phone has stopped for good, and then there is no year out to take.\n\nWorked example: leave straight after a season graded nowhere near the ask and no top tier franchise calls, whatever you won before. The best that can ring is rated second tier. The tiers are the four quarters of the league by strength."
+    },
+    {
+     "name": "A4-offer",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 10,
+     "under10": 0,
+     "texts": 13,
+     "anims": [],
+     "reduce": true,
+     "text": "Back to the offers\nBuffalo Sabres\nTHIRD TIER\n\nMake the playoffs. Ownership thinks this roster belongs there.\n\nThey want someone who has won the Stanley Cup more than once.\n\nFinished 39-29-12, 16th in the league. Roster ranked 19th. $4.8M under the cap.\n\nTake the job"
+    },
+    {
+     "name": "A5-armed",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 10,
+     "under10": 0,
+     "texts": 14,
+     "anims": [],
+     "reduce": true,
+     "armed": "Tap again to take it. You become the Buffalo Sabres general manager and it cannot be undone.",
+     "logAfterOneTap": []
+    },
+    {
+     "name": "A6-after-take",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 2,
+     "texts": 9,
+     "anims": [],
+     "reduce": true,
+     "tiles": [
+      "📖\nCAREER\nSeason 1\nWith the Buffalo Sabres",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ],
+     "log": [
+      "TOOK BUF ask 2027"
+     ],
+     "fired": false,
+     "stints": 2,
+     "arriving": true,
+     "team": "BUF",
+     "mandateSeason": 2027,
+     "season": 2026
+    },
+    {
+     "name": "A7-career",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 9,
+     "under10": 4,
+     "texts": 12,
+     "anims": [],
+     "reduce": true,
+     "text": "9 seasons, 2 clubs, 5 titles\n\n?\nBoston Bruins\nTook over in 2018, third tier\n🏆 🏆 🏆 🏆 🏆 ▲ ▲ ▲ ▽\nLET GO\nBuffalo Sabres\nTook over in 2027, third tier\nNo graded season yet\nSTILL HERE"
+    },
+    {
+     "name": "B0-tiles",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 15,
+     "anims": [],
+     "reduce": true,
+     "tiles": [
+      "📞\nJOB MARKET\nNobody called\nNext year open, as things stand",
+      "📖\nCAREER\nOut of work\n1 club, no titles",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ],
+     "state": "quiet",
+     "nextYear": "open",
+     "found": {
+      "kind": "quiet",
+      "old": "ANA",
+      "grades": [
+       "missed",
+       "missed",
+       "missed",
+       "missed"
+      ]
+     }
+    },
+    {
+     "name": "B1-quiet",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 11,
+     "under10": 0,
+     "texts": 7,
+     "anims": [],
+     "reduce": true,
+     "line": "Ownership made the call: you are out after 4 seasons and no titles with the Anaheim Ducks. Nobody called this year. As things stand next year is still open, and every year out makes the phone quieter."
+    },
+    {
+     "name": "B2-sit-armed",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 10,
+     "under10": 0,
+     "texts": 8,
+     "anims": [],
+     "reduce": true,
+     "armed": "Tap again to stay out. The league plays a whole season without you and it cannot be undone. As things stand the phone can still ring next year.",
+     "logAfterOneTap": []
+    },
+    {
+     "name": "B3-after-away",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 17,
+     "anims": [],
+     "reduce": true,
+     "tiles": [
+      "📞\nJOB MARKET\nNobody called\nNext year open, as things stand",
+      "📖\nCAREER\nOut of work\n1 club, no titles",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ],
+     "log": [
+      "AWAY 2027 champion WSH"
+     ],
+     "season": 2027,
+     "seasonWas": 2026,
+     "seasonsOut": 1,
+     "state": "quiet",
+     "nextYear": "open",
+     "line": "1 season out of work since the Anaheim Ducks let you go. Nobody called this year. As things stand next year is still open, and every year out makes the phone quieter.",
+     "card": "Out of work, 1 season\n\n1 season out of work since the Anaheim Ducks let you go. Nobody called this year. As things stand next year is still open, and every year out makes the phone quieter.\n\nThe Washington Capitals won the Stanley Cup in 2027.\n\nThe Anaheim Ducks went 46-30-4 without you, 10th in the league."
+    },
+    {
+     "name": "C0-tiles",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 15,
+     "anims": [],
+     "reduce": true,
+     "tiles": [
+      "📞\nJOB MARKET\nNobody called\nNext year hangs on your old club",
+      "📖\nCAREER\nOut of work\n1 club, no titles",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ],
+     "state": "quiet",
+     "nextYear": "climb",
+     "climbTo": 1,
+     "found": {
+      "kind": "climb",
+      "old": "ANA",
+      "grades": [
+       "badly",
+       "badly"
+      ]
+     }
+    },
+    {
+     "name": "C1-climb",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 11,
+     "under10": 0,
+     "texts": 7,
+     "anims": [],
+     "reduce": true,
+     "line": "Ownership made the call: you are out after 2 seasons and no titles with the Anaheim Ducks. Nobody called this year. Next year the phone rings only if the Anaheim Ducks have climbed into the top tier of the league by then.",
+     "sit": 1
+    },
+    {
+     "name": "D0-tiles",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 15,
+     "anims": [],
+     "reduce": true,
+     "tiles": [
+      "📵\nJOB MARKET\nNo more calls\nOnly a new front office now",
+      "📖\nCAREER\nOut of work\n1 club, no titles",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ],
+     "state": "closed",
+     "found": {
+      "kind": "closed",
+      "old": "ANA",
+      "grades": [
+       "badly",
+       "badly",
+       "badly"
+      ]
+     }
+    },
+    {
+     "name": "D1-closed",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 11,
+     "under10": 0,
+     "texts": 6,
+     "anims": [],
+     "reduce": true,
+     "line": "Ownership made the call: you are out after 3 seasons and no titles with the Anaheim Ducks. Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.",
+     "sit": 0,
+     "offers": 0
+    },
+    {
+     "name": "E1-shutoffers",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 9,
+     "under10": 1,
+     "texts": 9,
+     "anims": [],
+     "reduce": true,
+     "state": "offers",
+     "nextYear": "shut",
+     "offers": [
+      "CHI:t4"
+     ],
+     "found": {
+      "kind": "shutoffers",
+      "old": "MIN",
+      "grades": [
+       "badly",
+       "badly",
+       "badly"
+      ]
+     },
+     "line": "Ownership made the call: you are out after 3 seasons and no titles with the Minnesota Wild. 1 franchise called. It is the last call you will get: pass, and the phone stops for good.",
+     "sit": 0,
+     "census": {
+      "markets": 448,
+      "offers": 165,
+      "offersShut": 10,
+      "quietOpen": 90,
+      "quietClimb": 43,
+      "closed": 150
+     }
+    },
+    {
+     "name": "F0-tiles",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 2,
+     "texts": 9,
+     "anims": [],
+     "reduce": true,
+     "tiles": [
+      "📖\nCAREER\nSeason 10\nWith the Toronto Maple Leafs",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ]
+    },
+    {
+     "name": "F1-career-legacy",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 13,
+     "anims": [],
+     "reduce": true,
+     "text": "9 seasons, 1 club, 2 titles\n\n?\n\nOne box for every franchise you have run, oldest first, with a mark for each graded season.\n\nThe marks: 🏆 won the title, ▲ beat the ask, ● met the ask, ▽ missed the ask, ✕ nowhere near the ask.\n\nSeasons from before the record began are counted and never graded: the game does not guess how they went.\n\nWorked example: a season that met the ask, one that beat the ask, then a title reads ● ▲ 🏆.\n\nToronto Maple Leafs\nIn the chair since 2018\n🏆 🏆\nPlus 7 earlier seasons, not graded\nSTILL HERE"
+    },
+    {
+     "name": "G0-tiles",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 2,
+     "texts": 9,
+     "anims": [],
+     "reduce": true,
+     "tiles": [
+      "📖\nCAREER\nSeason 2\nWith the Toronto Maple Leafs",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ]
+    },
+    {
+     "name": "G1-xp",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Spend a point (0/5)",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Spend a point (0/5)",
+       "h": 25,
+       "w": 294
+      }
+     ],
+     "minFont": 9,
+     "under10": 15,
+     "texts": 44,
+     "anims": [],
+     "reduce": true,
+     "earns": "You earn XP every season for your win share, titles, playoff rounds won and meeting or beating the ask from upstairs. Points are yours for good: nothing here can be taken back.",
+     "panel": "🎖️ GM level 4\n1,300 XP\n399 XP to level 5, which is one more point.\n3 points to spend\n\nYou earn XP every season for your win share, plus titles, playoff rounds, meeting or beating the owner's ask, finishing higher than anyone expected and bringing a prospect through. Points are yours for good: nothing here can be taken back.\n\n🔭 Scouting\n○○○○○\n\nYour draft board reads prospects closer to what they really are.\n\nNot on this desk yet, so it takes no points here.\n\nNot here yet\n🤝 Negotiation\n○○○○○\n\nAgents open nearer what their man is actually worth.\n\nNot on this desk yet, so it takes no points her"
+    },
+    {
+     "name": "G2-xp-help",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Spend a point (0/5)",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Spend a point (0/5)",
+       "h": 25,
+       "w": 294
+      }
+     ],
+     "minFont": 9,
+     "under10": 15,
+     "texts": 48,
+     "anims": [],
+     "reduce": true,
+     "help": "Level 2 costs 400 XP and every level after it costs a little more. Each level is one point, and 5 points fill a tree.\n\nA .500 season that meets the ask pays 110 XP, so at that pace the first point is about 4 seasons away. Playoff rounds, a title and beating the ask bring it sooner.\n\nA tree marked Not here yet takes no points on this desk, so a point is never spent where it moves nothing.\n\nWorked example: a .600 season that met the ask and won one playoff round pays 170 XP. And with two Ownership points, missing the ask on trust 16 costs 14, not 16, so you keep the job on trust 2."
+    },
+    {
+     "name": "G3-after-spend",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Spend a point (1/5)",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Spend a point (0/5)",
+       "h": 25,
+       "w": 294
+      }
+     ],
+     "minFont": 9,
+     "under10": 15,
+     "texts": 44,
+     "anims": [],
+     "reduce": true,
+     "log": [
+      "SPENT ownership"
+     ],
+     "helpOpenBefore": 0,
+     "ownership": "🏛️ Ownership\n●○○○○\n\nA season that misses the ask costs you less trust upstairs.\n\nOnly pays in a season that falls short of the ask.\n\nSpend a point (1/5)",
+     "notLive": true
+    }
+   ]
+  },
+  {
+   "tag": "1280-mo",
+   "steps": [
+    {
+     "name": "A1-tiles",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 15,
+     "anims": [
+      "pulse",
+      "pulse"
+     ],
+     "reduce": false,
+     "tiles": [
+      "📞\nJOB MARKET\n3 offers\nOpen it to see each ask",
+      "📖\nCAREER\nOut of work\n1 club, 5 titles",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ],
+     "state": "offers",
+     "offers": [
+      "BUF:t3",
+      "WPG:t3",
+      "NYI:t3"
+     ],
+     "found": {
+      "kind": "offers",
+      "old": "BOS",
+      "grades": [
+       "title",
+       "title",
+       "title",
+       "title",
+       "title",
+       "overachieved",
+       "overachieved",
+       "overachieved",
+       "missed"
+      ]
+     },
+     "census": {
+      "markets": 448,
+      "offers": 165,
+      "offersShut": 10,
+      "quietOpen": 90,
+      "quietClimb": 43,
+      "closed": 150
+     }
+    },
+    {
+     "name": "A2-market",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 16,
+     "anims": [],
+     "reduce": false,
+     "sawFallback": 0,
+     "line": "Ownership made the call: you are out after 9 seasons and 5 titles with the Boston Bruins. 3 franchises called."
+    },
+    {
+     "name": "A3-help",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 20,
+     "anims": [],
+     "reduce": false,
+     "help": "When ownership lets you go, the franchises that rate your record can call. The franchise that let you go never does.\n\nEach offer shows what that franchise asks of your first season there. That is the ask you are graded on.\n\nNo call this year? A year out lets the league play a season without you and the phone can ring next summer, but every year out makes it quieter. The screen says when the offers in front of you are the last ones and when the phone has stopped for good, and then there is no year out to take.\n\nWorked example: leave straight after a season graded nowhere near the ask and no top tier franchise calls, whatever you won before. The best that can ring is rated second tier. The tiers are the four quarters of the league by strength."
+    },
+    {
+     "name": "A4-offer",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 10,
+     "under10": 0,
+     "texts": 13,
+     "anims": [],
+     "reduce": false,
+     "text": "Back to the offers\nBuffalo Sabres\nTHIRD TIER\n\nMake the playoffs. Ownership thinks this roster belongs there.\n\nThey want someone who has won the Stanley Cup more than once.\n\nFinished 39-29-12, 16th in the league. Roster ranked 19th. $4.8M under the cap.\n\nTake the job"
+    },
+    {
+     "name": "A5-armed",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 10,
+     "under10": 0,
+     "texts": 14,
+     "anims": [],
+     "reduce": false,
+     "armed": "Tap again to take it. You become the Buffalo Sabres general manager and it cannot be undone.",
+     "logAfterOneTap": []
+    },
+    {
+     "name": "A6-after-take",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 2,
+     "texts": 9,
+     "anims": [
+      "pulse"
+     ],
+     "reduce": false,
+     "tiles": [
+      "📖\nCAREER\nSeason 1\nWith the Buffalo Sabres",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ],
+     "log": [
+      "TOOK BUF ask 2027"
+     ],
+     "fired": false,
+     "stints": 2,
+     "arriving": true,
+     "team": "BUF",
+     "mandateSeason": 2027,
+     "season": 2026
+    },
+    {
+     "name": "A7-career",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 9,
+     "under10": 4,
+     "texts": 12,
+     "anims": [],
+     "reduce": false,
+     "text": "9 seasons, 2 clubs, 5 titles\n\n?\nBoston Bruins\nTook over in 2018, third tier\n🏆 🏆 🏆 🏆 🏆 ▲ ▲ ▲ ▽\nLET GO\nBuffalo Sabres\nTook over in 2027, third tier\nNo graded season yet\nSTILL HERE"
+    },
+    {
+     "name": "B0-tiles",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 15,
+     "anims": [
+      "pulse"
+     ],
+     "reduce": false,
+     "tiles": [
+      "📞\nJOB MARKET\nNobody called\nNext year open, as things stand",
+      "📖\nCAREER\nOut of work\n1 club, no titles",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ],
+     "state": "quiet",
+     "nextYear": "open",
+     "found": {
+      "kind": "quiet",
+      "old": "ANA",
+      "grades": [
+       "missed",
+       "missed",
+       "missed",
+       "missed"
+      ]
+     }
+    },
+    {
+     "name": "B1-quiet",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 11,
+     "under10": 0,
+     "texts": 7,
+     "anims": [],
+     "reduce": false,
+     "line": "Ownership made the call: you are out after 4 seasons and no titles with the Anaheim Ducks. Nobody called this year. As things stand next year is still open, and every year out makes the phone quieter."
+    },
+    {
+     "name": "B2-sit-armed",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 10,
+     "under10": 0,
+     "texts": 8,
+     "anims": [],
+     "reduce": false,
+     "armed": "Tap again to stay out. The league plays a whole season without you and it cannot be undone. As things stand the phone can still ring next year.",
+     "logAfterOneTap": []
+    },
+    {
+     "name": "B3-after-away",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 17,
+     "anims": [
+      "pulse"
+     ],
+     "reduce": false,
+     "tiles": [
+      "📞\nJOB MARKET\nNobody called\nNext year open, as things stand",
+      "📖\nCAREER\nOut of work\n1 club, no titles",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ],
+     "log": [
+      "AWAY 2027 champion WSH"
+     ],
+     "season": 2027,
+     "seasonWas": 2026,
+     "seasonsOut": 1,
+     "state": "quiet",
+     "nextYear": "open",
+     "line": "1 season out of work since the Anaheim Ducks let you go. Nobody called this year. As things stand next year is still open, and every year out makes the phone quieter.",
+     "card": "Out of work, 1 season\n\n1 season out of work since the Anaheim Ducks let you go. Nobody called this year. As things stand next year is still open, and every year out makes the phone quieter.\n\nThe Washington Capitals won the Stanley Cup in 2027.\n\nThe Anaheim Ducks went 46-30-4 without you, 10th in the league."
+    },
+    {
+     "name": "C0-tiles",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 15,
+     "anims": [
+      "pulse"
+     ],
+     "reduce": false,
+     "tiles": [
+      "📞\nJOB MARKET\nNobody called\nNext year hangs on your old club",
+      "📖\nCAREER\nOut of work\n1 club, no titles",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ],
+     "state": "quiet",
+     "nextYear": "climb",
+     "climbTo": 1,
+     "found": {
+      "kind": "climb",
+      "old": "ANA",
+      "grades": [
+       "badly",
+       "badly"
+      ]
+     }
+    },
+    {
+     "name": "C1-climb",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 11,
+     "under10": 0,
+     "texts": 7,
+     "anims": [],
+     "reduce": false,
+     "line": "Ownership made the call: you are out after 2 seasons and no titles with the Anaheim Ducks. Nobody called this year. Next year the phone rings only if the Anaheim Ducks have climbed into the top tier of the league by then.",
+     "sit": 1
+    },
+    {
+     "name": "D0-tiles",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 15,
+     "anims": [
+      "pulse"
+     ],
+     "reduce": false,
+     "tiles": [
+      "📵\nJOB MARKET\nNo more calls\nOnly a new front office now",
+      "📖\nCAREER\nOut of work\n1 club, no titles",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ],
+     "state": "closed",
+     "found": {
+      "kind": "closed",
+      "old": "ANA",
+      "grades": [
+       "badly",
+       "badly",
+       "badly"
+      ]
+     }
+    },
+    {
+     "name": "D1-closed",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 11,
+     "under10": 0,
+     "texts": 6,
+     "anims": [],
+     "reduce": false,
+     "line": "Ownership made the call: you are out after 3 seasons and no titles with the Anaheim Ducks. Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.",
+     "sit": 0,
+     "offers": 0
+    },
+    {
+     "name": "E1-shutoffers",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 9,
+     "under10": 1,
+     "texts": 9,
+     "anims": [],
+     "reduce": false,
+     "state": "offers",
+     "nextYear": "shut",
+     "offers": [
+      "CHI:t4"
+     ],
+     "found": {
+      "kind": "shutoffers",
+      "old": "MIN",
+      "grades": [
+       "badly",
+       "badly",
+       "badly"
+      ]
+     },
+     "line": "Ownership made the call: you are out after 3 seasons and no titles with the Minnesota Wild. 1 franchise called. It is the last call you will get: pass, and the phone stops for good.",
+     "sit": 0,
+     "census": {
+      "markets": 448,
+      "offers": 165,
+      "offersShut": 10,
+      "quietOpen": 90,
+      "quietClimb": 43,
+      "closed": 150
+     }
+    },
+    {
+     "name": "F0-tiles",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 2,
+     "texts": 9,
+     "anims": [
+      "pulse"
+     ],
+     "reduce": false,
+     "tiles": [
+      "📖\nCAREER\nSeason 10\nWith the Toronto Maple Leafs",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ]
+    },
+    {
+     "name": "F1-career-legacy",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      }
+     ],
+     "minFont": 9,
+     "under10": 3,
+     "texts": 13,
+     "anims": [],
+     "reduce": false,
+     "text": "9 seasons, 1 club, 2 titles\n\n?\n\nOne box for every franchise you have run, oldest first, with a mark for each graded season.\n\nThe marks: 🏆 won the title, ▲ beat the ask, ● met the ask, ▽ missed the ask, ✕ nowhere near the ask.\n\nSeasons from before the record began are counted and never graded: the game does not guess how they went.\n\nWorked example: a season that met the ask, one that beat the ask, then a title reads ● ▲ 🏆.\n\nToronto Maple Leafs\nIn the chair since 2018\n🏆 🏆\nPlus 7 earlier seasons, not graded\nSTILL HERE"
+    },
+    {
+     "name": "G0-tiles",
+     "overflowX": 0,
+     "cut": [],
+     "small": [],
+     "minFont": 9,
+     "under10": 2,
+     "texts": 9,
+     "anims": [
+      "pulse"
+     ],
+     "reduce": false,
+     "tiles": [
+      "📖\nCAREER\nSeason 2\nWith the Toronto Maple Leafs",
+      "🎖️\nGM LEVEL\nGM level 4\n3 points to spend"
+     ]
+    },
+    {
+     "name": "G1-xp",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Spend a point (0/5)",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Spend a point (0/5)",
+       "h": 25,
+       "w": 294
+      }
+     ],
+     "minFont": 9,
+     "under10": 15,
+     "texts": 44,
+     "anims": [],
+     "reduce": false,
+     "earns": "You earn XP every season for your win share, titles, playoff rounds won and meeting or beating the ask from upstairs. Points are yours for good: nothing here can be taken back.",
+     "panel": "🎖️ GM level 4\n1,300 XP\n399 XP to level 5, which is one more point.\n3 points to spend\n\nYou earn XP every season for your win share, plus titles, playoff rounds, meeting or beating the owner's ask, finishing higher than anyone expected and bringing a prospect through. Points are yours for good: nothing here can be taken back.\n\n🔭 Scouting\n○○○○○\n\nYour draft board reads prospects closer to what they really are.\n\nNot on this desk yet, so it takes no points here.\n\nNot here yet\n🤝 Negotiation\n○○○○○\n\nAgents open nearer what their man is actually worth.\n\nNot on this desk yet, so it takes no points her"
+    },
+    {
+     "name": "G2-xp-help",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Spend a point (0/5)",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Spend a point (0/5)",
+       "h": 25,
+       "w": 294
+      }
+     ],
+     "minFont": 9,
+     "under10": 15,
+     "texts": 48,
+     "anims": [],
+     "reduce": false,
+     "help": "Level 2 costs 400 XP and every level after it costs a little more. Each level is one point, and 5 points fill a tree.\n\nA .500 season that meets the ask pays 110 XP, so at that pace the first point is about 4 seasons away. Playoff rounds, a title and beating the ask bring it sooner.\n\nA tree marked Not here yet takes no points on this desk, so a point is never spent where it moves nothing.\n\nWorked example: a .600 season that met the ask and won one playoff round pays 170 XP. And with two Ownership points, missing the ask on trust 16 costs 14, not 16, so you keep the job on trust 2."
+    },
+    {
+     "name": "G3-after-spend",
+     "overflowX": 0,
+     "cut": [],
+     "small": [
+      {
+       "t": "Hub",
+       "h": 34,
+       "w": 67
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Not here yet",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Spend a point (1/5)",
+       "h": 25,
+       "w": 294
+      },
+      {
+       "t": "Spend a point (0/5)",
+       "h": 25,
+       "w": 294
+      }
+     ],
+     "minFont": 9,
+     "under10": 15,
+     "texts": 44,
+     "anims": [],
+     "reduce": false,
+     "log": [
+      "SPENT ownership"
+     ],
+     "helpOpenBefore": 0,
+     "ownership": "🏛️ Ownership\n●○○○○\n\nA season that misses the ask costs you less trust upstairs.\n\nOnly pays in a season that falls short of the ask.\n\nSpend a point (1/5)",
+     "notLive": true
+    }
+   ]
+  }
+ ],
+ "errors": [],
+ "shots": {
+  "A1-tiles@390-rm": "007d993ab629",
+  "A2-market@390-rm": "d106cb35e17c",
+  "A3-help@390-rm": "9f9873a07ece",
+  "A4-offer@390-rm": "a8c853cc1e23",
+  "A5-armed@390-rm": "1382e60da450",
+  "A6-after-take@390-rm": "3725930f8f86",
+  "A7-career@390-rm": "f2bbda7caea8",
+  "B0-tiles@390-rm": "aec5ba171c33",
+  "B1-quiet@390-rm": "37d94aeb53f5",
+  "B2-sit-armed@390-rm": "bbe6b723ff81",
+  "B3-after-away@390-rm": "0710167b54b9",
+  "C0-tiles@390-rm": "c14c86b6963f",
+  "C1-climb@390-rm": "9365a343677e",
+  "D0-tiles@390-rm": "be6b64c0bff8",
+  "D1-closed@390-rm": "2c8e7d708621",
+  "E1-shutoffers@390-rm": "1743c42595fe",
+  "F0-tiles@390-rm": "87b685664705",
+  "F1-career-legacy@390-rm": "5fb096b25102",
+  "G0-tiles@390-rm": "2b733716043a",
+  "G1-xp@390-rm": "f6a217d8b29c",
+  "G2-xp-help@390-rm": "bc4683330f1d",
+  "G3-after-spend@390-rm": "eecef4464861",
+  "A1-tiles@390-mo": "4ac893544514",
+  "A2-market@390-mo": "d106cb35e17c",
+  "A3-help@390-mo": "9f9873a07ece",
+  "A4-offer@390-mo": "a8c853cc1e23",
+  "A5-armed@390-mo": "1382e60da450",
+  "A6-after-take@390-mo": "ce5071278be7",
+  "A7-career@390-mo": "f2bbda7caea8",
+  "B0-tiles@390-mo": "290f5b3485dd",
+  "B1-quiet@390-mo": "fb64c370c871",
+  "B2-sit-armed@390-mo": "521d0dca7c17",
+  "B3-after-away@390-mo": "30a430030624",
+  "C0-tiles@390-mo": "1478659985b8",
+  "C1-climb@390-mo": "c9730109d8aa",
+  "D0-tiles@390-mo": "bc6938697f0a",
+  "D1-closed@390-mo": "2c8e7d708621",
+  "E1-shutoffers@390-mo": "db59dbdad192",
+  "F0-tiles@390-mo": "2e9c777d02e1",
+  "F1-career-legacy@390-mo": "5fb096b25102",
+  "G0-tiles@390-mo": "f08ff25a8ca8",
+  "G1-xp@390-mo": "f6a217d8b29c",
+  "G2-xp-help@390-mo": "bc4683330f1d",
+  "G3-after-spend@390-mo": "eecef4464861",
+  "A1-tiles@1280-rm": "13dce46fd569",
+  "A2-market@1280-rm": "5bf02dc94d2b",
+  "A3-help@1280-rm": "bfedcbb0bb12",
+  "A4-offer@1280-rm": "57e50baed827",
+  "A5-armed@1280-rm": "783cf11cd28f",
+  "A6-after-take@1280-rm": "2e4a790d1753",
+  "A7-career@1280-rm": "c516a6871535",
+  "B0-tiles@1280-rm": "69037d4578f7",
+  "B1-quiet@1280-rm": "cc2e0b57d29b",
+  "B2-sit-armed@1280-rm": "d9e3db5c7411",
+  "B3-after-away@1280-rm": "7e5f9136f988",
+  "C0-tiles@1280-rm": "1b38a2b8496b",
+  "C1-climb@1280-rm": "08f5fc825e39",
+  "D0-tiles@1280-rm": "03014ccc7b4b",
+  "D1-closed@1280-rm": "9bc8307f0ad8",
+  "E1-shutoffers@1280-rm": "12557ea17e55",
+  "F0-tiles@1280-rm": "bc88cce920a3",
+  "F1-career-legacy@1280-rm": "6789020809dd",
+  "G0-tiles@1280-rm": "050210a85aee",
+  "G1-xp@1280-rm": "b67aedf099ee",
+  "G2-xp-help@1280-rm": "4a7f10f30504",
+  "G3-after-spend@1280-rm": "f8446193b1a9",
+  "A1-tiles@1280-mo": "ce927734350f",
+  "A2-market@1280-mo": "5bf02dc94d2b",
+  "A3-help@1280-mo": "bfedcbb0bb12",
+  "A4-offer@1280-mo": "57e50baed827",
+  "A5-armed@1280-mo": "783cf11cd28f",
+  "A6-after-take@1280-mo": "d552d47c23bf",
+  "A7-career@1280-mo": "c516a6871535",
+  "B0-tiles@1280-mo": "a69b1238cfe4",
+  "B1-quiet@1280-mo": "742b3d2a6764",
+  "B2-sit-armed@1280-mo": "d9e3db5c7411",
+  "B3-after-away@1280-mo": "c0d11d4bee38",
+  "C0-tiles@1280-mo": "9912e2583a19",
+  "C1-climb@1280-mo": "77289748e1ea",
+  "D0-tiles@1280-mo": "83a8eb272992",
+  "D1-closed@1280-mo": "9bc8307f0ad8",
+  "E1-shutoffers@1280-mo": "12557ea17e55",
+  "F0-tiles@1280-mo": "54b1c532674e",
+  "F1-career-legacy@1280-mo": "6789020809dd",
+  "G0-tiles@1280-mo": "964f23f4ed8d",
+  "G1-xp@1280-mo": "b67aedf099ee",
+  "G2-xp-help@1280-mo": "4a7f10f30504",
+  "G3-after-spend@1280-mo": "7d7d48595d42"
+ },
+ "motionDiffers": [
+  "A1-tiles@390",
+  "A6-after-take@390",
+  "B0-tiles@390",
+  "B1-quiet@390",
+  "B2-sit-armed@390",
+  "B3-after-away@390",
+  "C0-tiles@390",
+  "C1-climb@390",
+  "D0-tiles@390",
+  "E1-shutoffers@390",
+  "F0-tiles@390",
+  "G0-tiles@390",
+  "A1-tiles@1280",
+  "A6-after-take@1280",
+  "B0-tiles@1280",
+  "B1-quiet@1280",
+  "B3-after-away@1280",
+  "C0-tiles@1280",
+  "C1-climb@1280",
+  "D0-tiles@1280",
+  "F0-tiles@1280",
+  "G0-tiles@1280",
+  "G3-after-spend@1280"
+ ]
+}

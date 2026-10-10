@@ -1,0 +1,2 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 34s | walk: 88 steps, 88 shots, 0 errors, 0 with sideways overflow, 0 with cut off text, motion differs on 23, bundle names the database: false
