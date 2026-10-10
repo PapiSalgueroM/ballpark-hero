@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+play-nfl: ENGINES=chromium ONLY=/nfl-my-career node scripts/playGames.mjs
+play-nba: ENGINES=chromium ONLY=/nba-my-career node scripts/playGames.mjs
+play-mlb: ENGINES=chromium ONLY=/mlb-my-career node scripts/playGames.mjs
+play-nhl: ENGINES=chromium ONLY=/nhl-my-career node scripts/playGames.mjs
+revealscroll: ENGINES=chromium node scripts/simRevealScroll.mjs
+draftnight: node scripts/simDraftNight.mjs
+storage: node scripts/simStorageWrites.mjs
+uscareerweight: node scripts/simUsCareerWeight.mjs
