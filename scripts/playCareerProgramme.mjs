@@ -18,19 +18,38 @@ await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Se
 const report={head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),cases:[],checks:0,forwarded:0,controls:[],fontManifest,scope:'Actual production actions and raw saved-byte holds. The seeded page stream is fixture setup, not an independent native RNG oracle.'};
 const browser=await pw.chromium.launch({headless:true});
 function layoutFailures(v){return[...(v.overflow?['overflow']:[]),...(!v.inside?['dialog-viewport']:[]),...(!v.painted?['dialog-painted']:[]),...(v.stableFrames<4||v.finiteAnimations||v.fonts!=='loaded'||v.fontFaces.some(f=>f.status==='error')?['capture-readiness']:[]),...(v.controls.some(c=>c.width<43.5||c.height<43.5)?['touch-size']:[]),...(v.controls.some(c=>!c.painted&&!c.clipped)?['painted-controls']:[])];}
-try{for(const width of[320,390,1280])for(const fixture of fixtures){const id=width+'-'+fixture.slug+(fixture.id?'-'+fixture.id:''),soccer=fixture.slug==='soccer-career',row={id,choices:[],shots:[],layouts:[],reloads:[],errors:[],assetErrors:[],blocked:[],fontsUsed:[],checks:0};report.cases.push(row);
+try{for(const width of[320,390,1280])for(const fixture of fixtures){const id=width+'-'+fixture.slug+(fixture.id?'-'+fixture.id:''),soccer=fixture.slug==='soccer-career',row={id,choices:[],shots:[],layouts:[],reloads:[],errors:[],assetErrors:[],blocked:[],fontsUsed:[],toasts:[],checks:0};report.cases.push(row);
   const context=await browser.newContext({viewport:{width,height:width===320?568:width===390?844:900},hasTouch:width<1000,isMobile:width<1000}),page=await context.newPage();
   const check=(value,label)=>{assert(value,id+': '+label);report.checks++;row.checks++;};
   const bodyState=()=>page.evaluate(()=>({y:scrollY,overflow:document.body.style.overflow,computed:getComputedStyle(document.body).overflow,locked:document.body.getAttribute('data-scroll-locked')}));
   try{await context.route('**/*',async route=>{const req=route.request(),url=req.url();if(url.startsWith(base+'/'))return route.continue();if(fonts.has(url)){row.fontsUsed.push(url);return route.fulfill(fonts.get(url));}if(url.startsWith('data:'))return route.continue();row.blocked.push({url,method:req.method()});if(req.method()!=='GET')return route.fulfill({status:200,contentType:'application/json',body:'{}'});if(url.includes('/rest/v1/'))return route.fulfill({status:200,contentType:'application/json',body:'[]'});return route.abort();});
-    await context.addInitScript(({key,value})=>{if(!sessionStorage.getItem('programme-seeded:'+key)){localStorage.setItem(key,JSON.stringify(value));sessionStorage.setItem('programme-seeded:'+key,'1');}localStorage.setItem('dukb-cookie-consent','essential');let n=1197;Math.random=()=>{n+=0x6D2B79F5;let t=n;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296;};},fixture);
+    await context.addInitScript(({key,value})=>{if(!sessionStorage.getItem('programme-seeded:'+key)){localStorage.setItem(key,JSON.stringify(value));sessionStorage.setItem('programme-seeded:'+key,'1');}let n=1197;Math.random=()=>{n+=0x6D2B79F5;let t=n;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296;};},fixture);
     page.on('pageerror',e=>row.errors.push(String(e)));
     page.on('requestfailed',r=>{if(r.url().startsWith(base+'/assets/'))row.assetErrors.push({url:r.url(),error:r.failure()?.errorText});});
     page.on('response',r=>{if(r.url().startsWith(base+'/assets/')&&r.status()>=400)row.assetErrors.push({url:r.url(),status:r.status()});});
     await page.goto(base+'/'+fixture.slug,{waitUntil:'networkidle'});
-    const bytes=()=>page.evaluate(key=>localStorage.getItem(key),fixture.key),before=await bytes();
+    const bytes=()=>page.evaluate(key=>localStorage.getItem(key),fixture.key),entryBefore=await bytes();
+    const consent=page.getByRole('region',{name:'Cookie choices',exact:true});
+    await consent.getByRole('button',{name:'Essential only',exact:true}).click();await consent.waitFor({state:'hidden'});
+    check(await page.evaluate(()=>localStorage.getItem('cookie-consent'))==='essential','Actual Essential only choice dismisses consent without enabling optional scripts');
+    const guide=page.getByRole('dialog',{name:'How to play',exact:true});
+    if(!soccer){
+      await guide.waitFor({timeout:15000});
+      await page.waitForFunction(()=>{const e=[...document.querySelectorAll('[role="dialog"]')].find(d=>d.querySelector('h2')?.textContent==='How to play');return e&&e.contains(document.activeElement);},null,{timeout:2000});
+      for(const name of['The steps','The rules','A worked example'])check(await guide.getByRole('heading',{name,exact:true}).count()===1,'Initial guide retains '+name);
+      await guide.getByRole('button',{name:"Let's Play!",exact:true}).click();await guide.waitFor({state:'hidden'});
+      await page.waitForFunction(()=>document.activeElement?.getAttribute('aria-label')==='How to play',null,{timeout:2000});
+      check(true,'Actual initial guide closes and restores its trigger before programme actions');
+    }
+    const before=await bytes();check(before===entryBefore,'Consent and initial instructions preserve the complete career bytes');row.entry={before:entryBefore,after:before,consent:'essential',guideDismissed:!soccer};
     const dialogSelector=fixture.id==='wheel'?'[data-career-chance-wheel]':soccer?'[data-soccer-programme]':'[data-us-programme="dialog"]',dialog=page.locator(dialogSelector);
     async function measure(name,target=dialog){
+      const toasts=await page.locator('[data-sonner-toast]').evaluateAll(es=>es.filter(e=>e.getAttribute('data-removed')!=='true'&&Number(getComputedStyle(e).opacity)>0).map(e=>e.textContent));
+      if(toasts.length){
+        await page.mouse.move(0,0);
+        await page.waitForFunction(()=>[...document.querySelectorAll('[data-sonner-toast]')].every(e=>e.getAttribute('data-removed')==='true'||Number(getComputedStyle(e).opacity)===0),null,{timeout:10000});
+        row.toasts.push({name,observed:toasts,disappeared:true});check(true,name+': observed transient toast disappears before capture');
+      }
       await page.evaluate(async()=>{await document.fonts.ready;});
       const v=await target.evaluate(async e=>{
         const sample=()=>{
@@ -121,7 +140,8 @@ try{for(const width of[320,390,1280])for(const fixture of fixtures){const id=wid
     await dialog.locator(soccer?'[data-programme-help]':'[data-us-programme-help]').click();check(await bytes()===chosen,'Reopened rules preserve selected decisions');
     await page.waitForFunction(selector=>{const e=document.querySelector(selector);return e&&e.contains(document.activeElement);},dialogSelector,{timeout:2000});
     await page.keyboard.press('Escape');await dialog.waitFor({state:'hidden'});
-    await page.waitForFunction(({selector,before})=>{const e=document.querySelector(selector);return e===document.activeElement&&scrollY===before.y&&document.body.style.overflow===before.overflow&&getComputedStyle(document.body).overflow===before.computed&&document.body.getAttribute('data-scroll-locked')===before.locked;},{selector:soccer?'[data-soccer-programme-open]':'[data-us-programme-open]',before:pageBefore},{timeout:2000});
+    try{await page.waitForFunction(({selector,before})=>{const e=document.querySelector(selector);return e===document.activeElement&&scrollY===before.y&&document.body.style.overflow===before.overflow&&getComputedStyle(document.body).overflow===before.computed&&document.body.getAttribute('data-scroll-locked')===before.locked;},{selector:soccer?'[data-soccer-programme-open]':'[data-us-programme-open]',before:pageBefore},{timeout:2000});}
+    catch(error){row.restoration={before:pageBefore,after:await bodyState(),active:await page.evaluate(()=>({tag:document.activeElement?.tagName,label:document.activeElement?.getAttribute('aria-label'),text:document.activeElement?.textContent}))};throw error;}
     check(await bytes()===chosen,'Escape preserves choices');
     const returned=await bodyState();row.restoration={before:pageBefore,after:returned};check(JSON.stringify(returned)===JSON.stringify(pageBefore),'Close restores page position and inline/computed body lock');check(await open.evaluate(e=>e===document.activeElement),'Close restores the opener');
     await reloadHeld('chosen',chosen);

@@ -95,6 +95,9 @@ jobs:
         if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.programme.outcome == 'success' }}
         run: |
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerProgramme.mjs 2>&1 | tee career-programme-artifacts/native.log
+      - name: Actual cup calendar browser journeys
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.programme.outcome == 'success' }}
+        run: |
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerSeasonCalendar.mjs 2>&1 | tee career-programme-artifacts/calendar-native.log
       - name: Upload early gameplay evidence
         if: ${{ !cancelled() }}

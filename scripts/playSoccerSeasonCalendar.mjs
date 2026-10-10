@@ -41,7 +41,7 @@ try {
     const initialStats = JSON.stringify([season.apps, season.leagueApps, season.goals, season.assists, season.cleanSheets, season.rating]);
     try {
       await context.route('**/*', async route => { const request = route.request(), url = request.url(); if (url.startsWith(base + '/')) return route.continue(); if (fonts.has(url)) return route.fulfill(fonts.get(url)); if (url.startsWith('data:')) return route.continue(); row.blocked.push({ url, method: request.method(), forwarded: false }); if (request.method() !== 'GET') return route.fulfill({ status: 200, contentType: 'application/json', body: '{}' }); if (url.includes('/rest/v1/')) return route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }); return route.abort(); });
-      await context.addInitScript(({ key, state }) => { if (!sessionStorage.getItem('calendar-seeded')) { localStorage.setItem(key, JSON.stringify(state)); sessionStorage.setItem('calendar-seeded', '1'); } localStorage.setItem('dukb-cookie-consent', 'essential'); localStorage.setItem('dukb-guest-handle', 'CalendarVisitor'); }, { key, state });
+      await context.addInitScript(({ key, state }) => { if (!sessionStorage.getItem('calendar-seeded')) { localStorage.setItem(key, JSON.stringify(state)); sessionStorage.setItem('calendar-seeded', '1'); } localStorage.setItem('dukb-guest-handle', 'CalendarVisitor'); }, { key, state });
       page.on('pageerror', error => row.errors.push(String(error)));
       page.on('requestfailed', request => { if (request.url().startsWith(base + '/assets/')) row.assets.push({ url: request.url(), error: request.failure()?.errorText }); });
       page.on('response', response => { if (response.url().startsWith(base + '/assets/') && response.status() >= 400) row.assets.push({ url: response.url(), status: response.status() }); });
@@ -49,6 +49,14 @@ try {
       await page.locator('[data-watch-week-by-week]').waitFor();
       const bytes = () => page.evaluate(key => localStorage.getItem(key), key), before = await bytes();
       check(JSON.stringify(JSON.parse(before).pendingSummary) === JSON.stringify(season), 'Loaded actual summary holds every saved row field');
+      const consent = page.getByRole('region', { name: 'Cookie choices', exact: true });
+      await consent.waitFor();
+      row.consent = { text: await consent.textContent(), beforeSha256: sha(before) };
+      await consent.getByRole('button', { name: 'Essential only', exact: true }).click();
+      await consent.waitFor({ state: 'hidden' });
+      check(await page.evaluate(() => localStorage.getItem('cookie-consent')) === 'essential', 'Actual Essential only action records the consent choice');
+      const afterConsent = await bytes(); row.consent.afterSha256 = sha(afterConsent);
+      check(afterConsent === before, 'Actual consent choice preserves complete raw career bytes');
       const active = () => page.locator('[data-season-centre]:not([aria-hidden="true"])').first();
       async function heldRead(name) { const actual = await bytes(); row.reads.push({ name, sha256: sha(actual) }); check(actual === before, name + ': complete raw career bytes stay held'); const saved = JSON.parse(actual).pendingSummary; check(JSON.stringify([saved.apps, saved.leagueApps, saved.goals, saved.assists, saved.cleanSheets, saved.rating]) === initialStats, name + ': no cup stat double counting'); }
       async function capture(name) {
