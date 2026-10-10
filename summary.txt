@@ -1,0 +1,7 @@
+prep exit=0 0s | /tmp/base/scripts/simCareerHall.mjs
+hall-nhl-s1 exit=3 1s | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+hall-nhl-s2 exit=3 1s | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+hall-nhl-s3 exit=3 1s | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+hall-nhl-s4 exit=3 1s | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks])
+hall-nhl-s5 exit=3 1s | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+simAwards exit=0 2s | PASS: ALL AWARD SCARCITY CHECKS PASSED

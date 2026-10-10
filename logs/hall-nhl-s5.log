@@ -1,0 +1,77 @@
+simCareerHall nhl: 2000 careers, 0 crashed, seed 5
+  hof 30.8% (616), first ballot 68.2% of them; bottom third 37.1%, top third 98.5%
+  outcomes {"inducted":616,"waiting":927,"notOnBallot":457}; jerseys 809; talk reached 99.7% of careers
+  ladder 0.337 0.411 0.472 0.564 0.600 0.688 0.757 0.821 0.891 0.965; smallest step 0.036
+  deciles 0.30 0.35 0.41 0.53 0.69 0.69 0.84 1.00 1.00 1.00; cuts 0.43 0.45 0.47 0.47 0.45 0.46 0.45 0.40 0.35; smallest cut 0.354
+  misses: iff 0, outcome 0, table [], offset 0, promise 0/681, draws 0, notSame 0, sides 0, talk 0+0, jersey 0
+  talk timing: talks a career, median 1; first talk at 36; career ends at 39; non finite scores 0
+  board loop: 0 careers a policy, 0 crashed; talks answered one more year 0; identity misses 0
+  ends: retire now 0, talk farewells 0, deck farewells 0, misses 0
+  once: 0 offseasons with the talk (0 asked mid-summer, 0 after a banned year), 0 offered a retirement card; listed ids seen 0, unseen [nhlB_farewellTour,nhlB_walkAwayHealthy], farewell cards not listed [] (decks probed on 0 careers)
+  seek: 0 talks caught in the board loop, 0 forged summers on a deck retirement card, 0 landed on it with no hold-out (at card 1 0, at a later card 0), 0 with the board's
+  jersey (deck): 0 recorded, 0 at a club other than the one with most seasons, 0 misnamed; synthetic 0, 0 missed; wait answers 0, 0 wrote a club
+  era: verified from the Class of 2026; {"boundary":{"below":100,"above":100}}; misses 0
+  16 never below: table misses []; 0 of 2000 careers lower on 2; 286 moved up, 78 up a verdict tier, 28 newly in the Hall
+  19 (b) Hall share 29.4 -> 30.8 percent; legacy score median 356 -> 358, mean 444.6 -> 463.4 (points paid)
+     by position: C 26.0 -> 28.8, LW 30.0 -> 32.3, RW 30.3 -> 31.8, D 26.0 -> 26.3, G 34.8 -> 35.0
+  15 (d) calibration 2 as recorded: the table and the rules equal the recording; 0 of 20 recorded saves are told something else on 2 (6 of them with a standout)
+  17 (a) marks: 12 standout cells; at or over from, pooled 9.73 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 0.94 percent (band 0.27 to 1.69)
+  17 (b) half rule and ledger: 0 misses []
+     ramps (width in seasons at the from mark's own rate, to over the median): C goals 4.1s x1.88, C assists 2.8s x1.38, C points 3.3s x1.47, LW goals 3.9s x1.66, LW assists 3.4s x1.43, LW points 2.8s x1.40, RW goals 3.3s x1.46, RW assists 2.7s x1.37, RW points 3.0s x1.40, D assists 2.5s x1.34, D points 2.6s x1.38, G wins 2.2s x1.21 floor
+  17 (c) outcome: top 5 percent by family, Hall share on 1 > on 2: C goals 100>100, C assists 70>95, C points 100>100, LW goals 100>100, LW assists 75>95, LW points 100>100, RW goals 90>100, RW assists 90>100, RW points 95>100, D assists 100>100, D points 100>100, G wins 100>100
+     pooled over the cells under 90 percent on 1: 29 -> 38 of 40 careers, a gain of 22.5 points (needs 8.1); over the first ballot line (900) on 2 and not on 1: 47 careers (0 of them newly in the Hall)
+     the standout's own part, every cell: 224 in with the standout taken out, 238 with it, of 240, a gain of 5.8 points (needs 2.9)
+  17 (d) cap: 0 of 2000 careers off the restated score on 2; the standout paid on 286
+  19 (a) base: median base credit no base position in this sport; misses []
+  19 (c) words: example LW assists 732 to 1100: +300 on 2, +0 on 1; RW assists 756 to 1060: +300 on 2, +0 on 1; card lines off 0 of 4000 records (243 name a standout, 43 had one worth under 30 points and stay quiet); longest line the table can print 174 characters (budget 200); misses []
+  18 anchors: 16 men in 17 rows ({"first":12,"later":2,"never":2} men on the main ballot, 0 by a committee, printed apart); the majority call is first from a score of 615
+     what the agreement's controls can reach here: a real never or later in the books reading 0, and the band with every push tripled holds (standoutbig CANNOT fire); agreeing on 2 by the push alone 3, and the band with every push switched off breaks (standoutgone can fire). EVERY REAL TOP OF THE BOOKS CAREER HERE WENT STRAIGHT IN, so these anchors cannot say the push is too big in this sport: a green here is no proof that 300 is right
+     nhl-goals-1 C goals real first: raw 2924 first > 3314 first; books 2962 first > 3352 first
+     nhl-goals-2 RW goals real first: raw 675 first > 675 first; books 700 first > 1000 first
+     nhl-goals-3 C goals real first: raw 404 never > 510 later; books 455 never > 845 first
+     nhl-goals-4 C goals real first: raw 1064 first > 1064 first; books 1113 first > 1503 first
+     nhl-goals-5 RW goals real first: raw 207 never > 207 never; books 236 never > 536 later
+     nhl-assists-1 C assists real first: raw 2924 first > 3314 first; books 2856 first > 3156 first
+     nhl-assists-2 C assists real first: raw 431 never > 821 first; books 414 never > 714 first
+     nhl-assists-3 LW assists real first: raw 1420 first > 1810 first; books 1391 first > 1691 first
+     nhl-assists-4 D assists real first: raw 1982 first > 2185 first; books 1987 first > 2342 first
+     nhl-assists-5 D assists real first: raw 1412 first > 1540 first; books 1420 first > 1772 first
+     nhl-goals-6 C goals real first: raw 637 first > 792 first; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nhl-goals-7 RW goals real first: raw 493 never > 493 never; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nhl-goals-8 LW goals real first: raw 655 first > 655 first; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nhl-goals-9 LW goals real later: raw 612 first > 612 first; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nhl-goals-10 LW goals real later: raw 320 never > 320 never; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nhl-goals-11 RW goals real never: raw 284 never > 284 never; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nhl-goals-12 RW goals real never: raw 162 never > 162 never; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     agreement, in or out and exact ballot, calibration 1 > 2: raw 12 > 14 and 11 > 12 of 17; books 7 > 10 and 7 > 9 of 10; decisions the anchors made: []
+     moved past his real ballot by calibration 2 (in for a real never, first for a real later, and read lower on 1), must be none: raw [], books []
+  15 (c) calibration rule: 0 misses over 13 cases and 2000 careers; engine careers stamped 2000
+  20 board stamp: 0 board careers retired, 0 stamped 2, 0 scored on another calibration
+  15 v1: 20 recorded saves (base 8fe82a4d), 0 read differently today; 0 of 2000 engine careers off the Round 123 formula on calibration 1
+  ok   crashes: 0 crashed of 2000
+  ok   iff: 0 disagree with the engine's own legacyOf, 616 inducted
+  ok   outcome: 0 careers outside the Hall with the wrong outcome; 457 off the ballot, 927 on it, 0 early fall offs
+  ok   table: rules off the audit table: [], 0 careers on the wrong first class
+  ok   rises: smallest of the nine decile cuts 0.354 (needs 0.06), smallest ladder step 0.036 (needs over 0.015)
+  ok   promise: 0 of 681 promised first ballots missed
+  ok   keyed: 0 Math.random draws, 0 records that changed on a second run
+  ok   sides: 0 ballots on the wrong side of a rule
+  ok   talk: 0 talks off the rule, 0 before the age, reached 99.7 percent (needs 70)
+  ok   answers: 0 answers that did not do what the button says; answered {"retireNow":499,"oneMore":500,"farewell":497}
+  ok   jersey: 0 jerseys off the rule or misnamed, 0 named by a bare club id, 809 retired
+  ok   v1replay: 0 readings of 20 recorded saves differ from the version 1 recording
+  ok   v2replay: calibration 2 against its recording: the table and the rules equal, 0 of 20 recorded saves told something else (a shipped calibration is never edited: add calibration 3)
+  ok   v1formula: 0 of 2000 engine careers score off the Round 123 formula on calibration 1
+  ok   calrule: 0 readings off the calibration rule; 2000 of 2000 engine careers stamped
+  ok   neverbelow: calibration 2 drops or changes [] of calibration 1; 0 of 2000 careers score lower, lose a tier or leave the Hall on 2 (286 moved up)
+  ok   marks: at or over from: pooled 9.73 percent, 0 cells out of band []; at or over to: pooled 0.94 percent
+  ok   halfrule: 0 cells off the half rule, the ledger's marks or the ramp floor []
+  ok   standoutgain: top 5 percent by family: 29 -> 38 of 40 in the Hall, a gain of 22.5 points (needs 8.1); owed to the standout alone 5.8 points (needs 2.9)
+  ok   standoutcap: 0 careers off the restated score on 2 (one family, capped); the standout paid on 286
+  ok   base: 0 base misses []
+  ok   words: 0 misses in the rule, the example or the card []; 0 card lines off
+  ok   anchorshape: 0 misses in the ledger's shape []; 66 anchors in the file, sports built [mlb, nba, nhl, nfl]
+  ok   anchors: agreement on 2 against 1: raw in or out 12 > 14, exact 11 > 12; books in or out 7 > 10, exact 7 > 9 (must not fall, and must stay within two of the measured {"raw2":{"inOut":14,"exact":12,"n":17},"books2":{"inOut":10,"exact":9,"n":10},"realNotFirstInBooks":0,"pushAlone":3,"standoutbigFires":false,"standoutgoneFires":true,"read":"Calibration 1 agreed on raw 12 and 11 of 17 and on books 7 and 7 of 10. The push puts three real first ballot men in who were out on 1 (nhl-goals-3, nhl-goals-5, nhl-assists-2). No decision. Every list man here went straight in, so nothing in hockey can say the push is too big: the harness prints that, and standoutbig refuses to run here."}); a real never or later in the books reading 0, agreeing by the push alone 3, the band breaks with every push tripled false, with every push off true (all four as recorded: true); moved past a real ballot by calibration 2: raw 0, books 0 (must be none)
+  ok   anchorcalls: 0 anchor readings whose majority call is not the one firstBallotChance gives []
+  ok   hallshare: Hall share 29.4 -> 30.8 percent (ceiling 35.9)
+simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
