@@ -18,6 +18,8 @@
 import { decodePage, lineCounter, textOf, titleOf } from './html.mjs';
 
 export const roundBasis = 'labelled';
+/* A calendar page kept up to date: it shows the list as it stands on the day it is read. */
+export const listAsOf = 'read day';
 
 const SEASON = '2026-2027';
 const TABLE_ROW = /<tr[^>]*>([\s\S]*?)<\/tr>/g;

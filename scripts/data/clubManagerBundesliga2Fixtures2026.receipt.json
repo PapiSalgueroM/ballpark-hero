@@ -6,7 +6,8 @@
   "dataFile": "src/data/clubManagerBundesliga2Fixtures2026.ts",
   "exportName": "BUNDESLIGA2_FIXTURES_2026",
   "readOn": "2026-10-10",
-  "roundNumbers": "The matchday numbers of the list as it was first published. A match moved to another date keeps its matchday.",
+  "asFirstPublished": true,
+  "roundNumbers": "The matchdays and venues of the list as first published: DFL is a release day copy of it, and the second source agrees on every row.",
   "validatedFields": [
     "round",
     "home",
@@ -30,6 +31,7 @@
       "title": "SPIELPLAN 2. BUNDESLIGA SAISON 2026/2027",
       "parser": "scripts/lib/cmFixtureSources/dflPdf.mjs",
       "roundBasis": "labelled",
+      "listAsOf": "release day",
       "snapshot": {
         "files": 1,
         "bytes": 637177,
@@ -372,6 +374,7 @@
       "title": "2. Bundesliga: Spielplan, Tabelle & aktuelle Ergebnisse | hessenschau.de",
       "parser": "scripts/lib/cmFixtureSources/hessenschau.mjs",
       "roundBasis": "labelled",
+      "listAsOf": "read day",
       "snapshot": {
         "files": 34,
         "bytes": 9981937,

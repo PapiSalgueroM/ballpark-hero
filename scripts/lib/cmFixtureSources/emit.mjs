@@ -17,7 +17,9 @@ export function dataFileText(league, ledger, receipt) {
     `/** Round 1213: the real 2026-27 ${receipt.leagueName} matchday order and home/away venues.`,
     ` * Read ${receipt.readOn} from ${a.label} (${a.kind}) and ${b.label} (${b.kind}): two independent`,
     ` * sources that agree on all ${receipt.validation.matches} fixtures, matchday, home club and away club.`,
-    ' * Matchday numbers are those of the list as it was first published.',
+    receipt.asFirstPublished
+      ? ' * Matchdays and venues are those of the list as first published (one source is a release day copy).'
+      : ' * Matchdays and venues are as both sources showed them that day; no release day copy was read.',
     ` * Acquisition evidence: scripts/data/${league.file}.receipt.json.`,
     ' * Written by scripts/genCmLeagueFixtures.mjs and frozen in scripts/data/cmLeagueFixtures.frozen.json:',
     ' * never edit it by hand. No dates, kickoffs or match results are imported.',

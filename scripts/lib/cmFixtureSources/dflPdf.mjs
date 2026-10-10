@@ -31,6 +31,8 @@
 import { contentStreams, linesOf, textRuns } from './pdfText.mjs';
 
 export const roundBasis = 'labelled';
+/* The document the league body issued the day the list came out: it is the list as first published. */
+export const listAsOf = 'release day';
 
 const joined = cells => cells.map(c => c.text).join('').replace(/\s+/g, ' ').trim();
 

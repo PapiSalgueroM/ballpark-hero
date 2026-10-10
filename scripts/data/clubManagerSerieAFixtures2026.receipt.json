@@ -6,7 +6,8 @@
   "dataFile": "src/data/clubManagerSerieAFixtures2026.ts",
   "exportName": "SERIEA_FIXTURES_2026",
   "readOn": "2026-10-10",
-  "roundNumbers": "The matchday numbers of the list as it was first published. A match moved to another date keeps its matchday.",
+  "asFirstPublished": true,
+  "roundNumbers": "The matchdays and venues of the list as first published: TuttoMercatoWeb is a release day copy of it, and the second source agrees on every row.",
   "validatedFields": [
     "round",
     "home",
@@ -29,6 +30,7 @@
       "title": "Serie A 2026/2027, ecco il nuovo calendario completo con le 38 giornate",
       "parser": "scripts/lib/cmFixtureSources/tuttomercatoweb.mjs",
       "roundBasis": "labelled",
+      "listAsOf": "release day",
       "snapshot": {
         "files": 1,
         "bytes": 115093,
@@ -433,6 +435,7 @@
       "titleNote": "A JSON feed has no title of its own. This line names the feed.",
       "parser": "scripts/lib/cmFixtureSources/feedJson.mjs",
       "roundBasis": "labelled",
+      "listAsOf": "read day",
       "snapshot": {
         "files": 1,
         "bytes": 79172,

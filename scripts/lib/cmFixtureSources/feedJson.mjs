@@ -12,6 +12,8 @@
 import { lineCounter } from './html.mjs';
 
 export const roundBasis = 'labelled';
+/* A feed kept up to date: it shows the list as it stands on the day it is read. */
+export const listAsOf = 'read day';
 
 export function parse(pages) {
   if (pages.length !== 1) throw new Error(`feedJson reads one file, got ${pages.length}`);

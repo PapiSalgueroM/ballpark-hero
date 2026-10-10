@@ -63,7 +63,7 @@ reviewer has done this; whoever does it records `{ on, by, rounds compared, diff
   parser `maxifoot`). Both read 2026-10-10. Zero tuple differences in 380. Name table: 15 lines for the feed
   (it prints the league's formal names: "R. Racing Club" is Racing Santander, "RC Deportivo" is Deportivo La
   Coruña), 10 for Maxifoot (French spellings: "La Corogne", "FC Seville", "Betis Séville"). Data file
-  `src/data/clubManagerLaLigaFixtures2026.ts` 13,233 bytes; receipt 80,064 bytes. For the binding round: the
+  `src/data/clubManagerLaLigaFixtures2026.ts` 13,260 bytes; receipt 80,333 bytes. For the binding round: the
   game's club names are the row in `REAL_LEAGUES`, nothing differs.
 - **ligue1: OUT of this round (held), not a source disagreement but a list that is not whole.** Both sources
   were fetched and parsed (Maxifoot `calendrier-ligue-1-france-2026-2027.htm`, 131,148 bytes, sha256
@@ -79,13 +79,13 @@ reviewer has done this; whoever does it records `{ on, by, rounds compared, diff
   (`https://www.maxifoot.fr/calendrier-ligue-2-france-2026-2027.htm`, 104,183 bytes, sha256 `b47ad1e27180...`)
   and the feed (`https://fixturedownload.com/feed/json/ligue-2-2026`, 69,651 bytes, sha256 `faa579116111...`).
   Both read 2026-10-10. Zero tuple differences in 306. Name table: 5 lines for Maxifoot, 17 for the feed. Data
-  file `src/data/clubManagerLigue2Fixtures2026.ts` 8,979 bytes; receipt 64,330 bytes. The game spells the club
+  file `src/data/clubManagerLigue2Fixtures2026.ts` 9,006 bytes; receipt 64,599 bytes. The game spells the club
   `Red Star FC` and `Saint-Étienne`.
 - **eredivisie: IN.** 18 clubs, 34 matchdays, 306 fixtures. Sources: the feed
   (`https://fixturedownload.com/feed/json/eredivisie-2026`, 66,365 bytes, sha256 `968d871b6c4f...`) and Maxifoot
   (`https://www.maxifoot.fr/calendrier-pays-bas-2026-2027.htm`, the season stamped address, 110,826 bytes, sha256
   `46a0df585d9d...`). Both read 2026-10-10. Zero tuple differences in 306. Name table: 8 lines for the feed, 12
-  for Maxifoot. Data file `src/data/clubManagerEredivisieFixtures2026.ts` 10,465 bytes; receipt 64,512 bytes.
+  for Maxifoot. Data file `src/data/clubManagerEredivisieFixtures2026.ts` 10,492 bytes; receipt 64,781 bytes.
 - **primeira: IN.** 18 clubs, 34 matchdays, 306 fixtures. Sources: the feed
   (`https://fixturedownload.com/feed/json/primeira-liga-2026`, 70,041 bytes, sha256 `85df04dc94b1...`) and
   Maxifoot (`https://www.maxifoot.fr/calendrier-portugal-2026-2027.htm`, 108,804 bytes, sha256
@@ -93,7 +93,7 @@ reviewer has done this; whoever does it records `{ on, by, rounds compared, diff
   for Maxifoot. The feed prints the promoted club as plain "Académico"; Maxifoot prints "Academico Viseu"; both
   land on the game's `Académico de Viseu` and the two lists then agree on all 34 of its rows, which is what
   checks that line. "Sporting Lisbo." is `Sporting CP` and "Sporting Braga" is `Braga`. Data file
-  `src/data/clubManagerPrimeiraFixtures2026.ts` 10,638 bytes; receipt 64,893 bytes.
+  `src/data/clubManagerPrimeiraFixtures2026.ts` 10,665 bytes; receipt 65,162 bytes.
 - **seriea: IN.** 20 clubs, 38 matchdays, 380 fixtures. Sources: TuttoMercatoWeb's release day article
   (`https://www.tuttomercatoweb.com/serie-a/serie-a-2026-2027-ecco-il-nuovo-calendario-completo-con-le-38-giornate-2241512`,
   115,093 bytes, sha256 `afc43e946402...`, parser `tuttomercatoweb`: one paragraph a matchday, Home-Away a line)
@@ -101,7 +101,7 @@ reviewer has done this; whoever does it records `{ on, by, rounds compared, diff
   Both read 2026-10-10. Zero tuple differences in 380. Name table: "Inter" and "Internazionale" are the game's
   `Inter Milan`, "Milan" is `AC Milan`. The article is the list as printed on release day, so its matchday
   numbers are the first published ones by construction. Data file `src/data/clubManagerSerieAFixtures2026.ts`
-  10,652 bytes; receipt 71,745 bytes.
+  10,684 bytes; receipt 71,871 bytes.
 - **bundesliga: IN, and the lead owes a ruling before it is bound.** 18 clubs, 34 matchdays, 306 fixtures.
   Sources: the DFL's own fixture list PDF
   (`https://media.dfl.de/sites/2/2026/07/DE_s73GnueV_Bundesliga_Spielplan_2026_27.pdf`, 631,949 bytes, sha256
@@ -114,7 +114,7 @@ reviewer has done this; whoever does it records `{ on, by, rounds compared, diff
   `https://www.bundesliga.com/de/bundesliga/news/spielplan-saison-start-termine-daten-2026-27-22043`: its bytes
   (599,821, sha256 `3cae76538785...`, kept beside the snapshots as `cited-bundesliga-com-de.html`) hold both PDF
   file names. The English page `.../en/bundesliga/news/2026-27-fixture-lists-now-available-38068` links other
-  files and was not used. Data file `src/data/clubManagerBundesligaFixtures2026.ts` 11,160 bytes; receipt 71,257
+  files and was not used. Data file `src/data/clubManagerBundesligaFixtures2026.ts` 11,192 bytes; receipt 71,371
   bytes. OWED BY THE LEAD: every page of the PDF prints that all rights to the fixture list lie with the
   league body. The ledger holds matchday, home club and away club only, with the source linked, the same class
   of fact as the Premier League list in Release AT; `docs/LEGAL_REVIEW.md` has no entry on fixture lists yet.
@@ -127,7 +127,7 @@ reviewer has done this; whoever does it records `{ on, by, rounds compared, diff
   "Kasimpasa"). FOR THE BINDING ROUND: the federation's address is a ROLLING page (no season in it; no season
   stamped address is known), so next summer it will show another season. The receipt records the day read, and
   the ledger's sources are outside the frozen digest so the link can be mended. Data file
-  `src/data/clubManagerSuperLigFixtures2026.ts` 11,032 bytes; receipt 69,057 bytes.
+  `src/data/clubManagerSuperLigFixtures2026.ts` 11,059 bytes; receipt 69,326 bytes.
 - **bundesliga2: IN, under the same owed ruling as the Bundesliga.** 18 clubs, 34 matchdays, 306 fixtures.
   Sources: the DFL's own PDF (`https://media.dfl.de/sites/2/2026/07/DE_mgKX2qjj_2.-Bundesliga_Spielplan_2026_27.pdf`,
   637,177 bytes, sha256 `06287b32026d...`, parser `dflPdf`; the ledger ships the same league page as the
@@ -138,7 +138,7 @@ reviewer has done this; whoever does it records `{ on, by, rounds compared, diff
   that does not itself state "Fußball 2. Bundesliga 2026/2027" and the matchday its address asks for, because
   those addresses are ROLLING ones). All read 2026-10-10. Zero tuple differences in 306. Name table: 15 lines
   for the DFL ("VfL Bochum 1848", "1. FC Heidenheim 1846"), 14 for hessenschau ("Hertha BSC Berlin"). Data file
-  `src/data/clubManagerBundesliga2Fixtures2026.ts` 11,607 bytes; receipt 86,872 bytes.
+  `src/data/clubManagerBundesliga2Fixtures2026.ts` 11,639 bytes; receipt 86,986 bytes.
   A FINDING ABOUT THE PDF PARSER, kept because it shows the self check working: the first draft took the club
   columns from the heading row, and on page 1 of THIS list the label "Heim" sits 51 points right of the home
   clubs, so matchdays 1 and 2 (18 rows) were skipped. The parser refused its own output (`the match numbers are
@@ -159,7 +159,7 @@ reviewer has done this; whoever does it records `{ on, by, rounds compared, diff
   that the rows kept equal the number of " vs. " the article prints (552). Name table: four lines, the same for
   both sources (QPR, West Brom, West Ham, Wolves). The order of matches inside a matchday is the feed's. The
   ledger ships the article's address as `url: "https://www.espn.com/..."` and `scripts/simLiveScores.mjs`
-  passes untouched. Data file `src/data/clubManagerChampionshipFixtures2026.ts` 19,737 bytes; receipt 118,283.
+  passes untouched. Data file `src/data/clubManagerChampionshipFixtures2026.ts` 19,769 bytes; receipt 118,398.
 - **proleague: OUT of this round (held), one source is one row short.** Both sources were fetched and parsed.
   Maxifoot (`https://www.maxifoot.fr/calendrier-belgique-2026-2027.htm`, 109,946 bytes, sha256
   `54e47a7245e1...`): 306 rows, 34 matchdays of 9, 18 clubs that map onto the game's row, a whole double round
@@ -175,6 +175,27 @@ reviewer has done this; whoever does it records `{ on, by, rounds compared, diff
   the same table with a `supercoupe` link and is passed over; two clubs have two slugs each (`la-louvire` for
   La Louvière in match links, `waasland-beveren` for Beveren).
 
+## Which lists are the list as first published, and which are the list as it stood on the day read
+
+The brief asks that matchday numbers follow the originally published list. Whether a ledger can promise that
+depends on what its sources ARE, and Ligue 1 showed why it matters: a page kept up to date shows a change of
+ground made after release. So every parser says what its source family is (`listAsOf`), every receipt carries
+that a source, and a receipt says "as first published" only when one of its two sources is a release day copy
+(the harness holds that in section E).
+
+- **As first published (a release day copy agrees with the second source on every row):** seriea (the article
+  of release day), bundesliga and bundesliga2 (the league body's PDF of release day), championship (the article
+  of release day). For these four a later change of ground would have shown up as a disagreement, and there is
+  none.
+- **As both sources showed them on 2026-10-10 (both are kept up to date; no release day copy was read):**
+  laliga, ligue2, eredivisie, primeira, superlig. Their matchday numbers are the labelled ones, and a match
+  moved to another date keeps its matchday on both. What can NOT be ruled out from these two sources alone: a
+  pair of clubs whose two meetings both changed ground after the list came out. The list would still be a whole
+  double round robin, both pages would agree, and the ledger would hold the venues as they now stand. Each of
+  the five receipts says exactly this in `roundNumbers`. A reviewer who wants "as first published" for them
+  needs one release day copy a league (the league's own release document); if it differs anywhere, the ledger
+  is rebuilt with `--refreeze` before it is ever bound.
+
 ## The count, for whoever runs the gate
 
 Nine ledgers, all frozen, 3,148 fixtures (380 x 2, 552, 306 x 6). `CM_LEAGUE_FIXTURES_EXPECT=9` today. When
@@ -188,16 +209,16 @@ Source as committed (LF), minified with esbuild, minified and gzipped at level 9
 
 | ledger | source | minified | gzip |
 |---|---|---|---|
-| bundesliga | 11,160 | 9,735 | 1,710 |
-| bundesliga2 | 11,607 | 10,325 | 1,785 |
-| championship | 19,737 | 17,664 | 2,806 |
-| eredivisie | 10,465 | 8,966 | 1,710 |
-| laliga | 13,233 | 11,879 | 2,040 |
-| ligue2 | 8,979 | 7,557 | 1,612 |
-| primeira | 10,638 | 9,488 | 1,698 |
-| seriea | 10,652 | 8,979 | 1,900 |
-| superlig | 11,032 | 10,865 | 1,721 |
-| all nine | 107,503 | 95,458 | 16,982 |
+| bundesliga | 11,192 | 9,735 | 1,710 |
+| bundesliga2 | 11,639 | 10,325 | 1,785 |
+| championship | 19,769 | 17,664 | 2,806 |
+| eredivisie | 10,492 | 8,966 | 1,710 |
+| laliga | 13,260 | 11,879 | 2,040 |
+| ligue2 | 9,006 | 7,557 | 1,612 |
+| primeira | 10,665 | 9,488 | 1,698 |
+| seriea | 10,684 | 8,979 | 1,900 |
+| superlig | 11,059 | 10,865 | 1,721 |
+| all nine | 107,766 | 95,458 | 16,982 |
 
 Nothing imports these files, so no route's weight changes in this round and no budget row was touched.
 

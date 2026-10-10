@@ -16,6 +16,8 @@
 import { decodePage, lineCounter, textOf, titleOf } from './html.mjs';
 
 export const roundBasis = 'labelled';
+/* An article printed the day the list came out: it is the list as first published. */
+export const listAsOf = 'release day';
 
 const MATCHDAY = /<p>\s*<strong>\s*Giornata\s+(\d+)[^<]*<\/strong>([\s\S]*?)<\/p>/g;
 

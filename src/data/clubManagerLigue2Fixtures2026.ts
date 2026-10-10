@@ -1,7 +1,7 @@
 /** Round 1213: the real 2026-27 Ligue 2 matchday order and home/away venues.
  * Read 2026-10-10 from Maxifoot (press) and Fixture Download (compiled feed): two independent
  * sources that agree on all 306 fixtures, matchday, home club and away club.
- * Matchday numbers are those of the list as it was first published.
+ * Matchdays and venues are as both sources showed them that day; no release day copy was read.
  * Acquisition evidence: scripts/data/clubManagerLigue2Fixtures2026.receipt.json.
  * Written by scripts/genCmLeagueFixtures.mjs and frozen in scripts/data/cmLeagueFixtures.frozen.json:
  * never edit it by hand. No dates, kickoffs or match results are imported.

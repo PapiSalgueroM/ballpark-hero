@@ -6,7 +6,8 @@
   "dataFile": "src/data/clubManagerBundesligaFixtures2026.ts",
   "exportName": "BUNDESLIGA_FIXTURES_2026",
   "readOn": "2026-10-10",
-  "roundNumbers": "The matchday numbers of the list as it was first published. A match moved to another date keeps its matchday.",
+  "asFirstPublished": true,
+  "roundNumbers": "The matchdays and venues of the list as first published: DFL is a release day copy of it, and the second source agrees on every row.",
   "validatedFields": [
     "round",
     "home",
@@ -30,6 +31,7 @@
       "title": "SPIELPLAN BUNDESLIGA SAISON 2026/2027",
       "parser": "scripts/lib/cmFixtureSources/dflPdf.mjs",
       "roundBasis": "labelled",
+      "listAsOf": "release day",
       "snapshot": {
         "files": 1,
         "bytes": 631949,
@@ -373,6 +375,7 @@
       "titleNote": "A JSON feed has no title of its own. This line names the feed.",
       "parser": "scripts/lib/cmFixtureSources/feedJson.mjs",
       "roundBasis": "labelled",
+      "listAsOf": "read day",
       "snapshot": {
         "files": 1,
         "bytes": 68680,

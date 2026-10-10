@@ -82,7 +82,7 @@ function readSource(league, index, gameClubs, dir) {
     else { seen.set(t, true); rows.push(mapped); }
   }
   const used = Object.fromEntries(Object.entries(table).filter(([from]) => spellings.has(from)).sort(([a], [b]) => (a < b ? -1 : 1)));
-  return { source, pages, parsed, rows, duplicates, problems, used, roundBasis: parser.roundBasis };
+  return { source, pages, parsed, rows, duplicates, problems, used, roundBasis: parser.roundBasis, listAsOf: parser.listAsOf };
 }
 
 /** Every structural reason a list is not a whole double round robin for these clubs. */
@@ -185,6 +185,7 @@ export function buildLedger(league, gameLeague, dir) {
   };
   const homePerClub = new Set(clubs.map(c => order.filter(r => r.home === c).length));
   const readOn = read.flatMap(r => r.pages.map(p => p.meta.readAtUtc)).sort().at(-1).slice(0, 10);
+  const released = read.find(r => r.listAsOf === 'release day');
   const receipt = {
     schemaVersion: 1,
     ledgerKey: ledger.key,
@@ -193,7 +194,10 @@ export function buildLedger(league, gameLeague, dir) {
     dataFile: `src/data/${league.file}.ts`,
     exportName: league.exportName,
     readOn,
-    roundNumbers: 'The matchday numbers of the list as it was first published. A match moved to another date keeps its matchday.',
+    asFirstPublished: !!released,
+    roundNumbers: released
+      ? `The matchdays and venues of the list as first published: ${released.source.label} is a release day copy of it, and the second source agrees on every row.`
+      : `The matchdays and venues as both sources showed them on ${readOn}. Both are kept up to date. A match moved to another date keeps its matchday on both, but no release day copy of the list was read, so a change of ground made after the list came out would be in here as the list now stands.`,
     validatedFields: ['round', 'home', 'away'],
     excludedFields: ['match date', 'kickoff time', 'score', 'result', 'goalscorer'],
     orderSource: league.orderSource,
@@ -211,6 +215,7 @@ export function buildLedger(league, gameLeague, dir) {
         ...(s.published || r.parsed.published ? { published: s.published || r.parsed.published } : {}),
         parser: `scripts/lib/cmFixtureSources/${s.parser}.mjs`,
         roundBasis: r.roundBasis,
+        listAsOf: r.listAsOf,
         snapshot: aggregateSnapshot(r.pages),
         fixtureRows: r.parsed.rows.length,
         uniqueFixtures: r.rows.length,

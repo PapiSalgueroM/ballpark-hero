@@ -18,6 +18,8 @@
 import { decodePage, lineCounter, textOf, titleOf } from './html.mjs';
 
 export const roundBasis = 'labelled';
+/* A fixture page kept up to date: it shows the list as it stands on the day it is read. */
+export const listAsOf = 'read day';
 
 const WEEK = /<td class="belirginYazi"[^>]*>\s*(\d+)\s*\.\s*Hafta\s*<\/td>/g;
 const ROW = /<tr>\s*((?:<td[^>]*class="altCizgi"[^>]*>[\s\S]*?<\/td>\s*)+)<\/tr>/g;

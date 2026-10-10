@@ -1,7 +1,7 @@
 /** Round 1213: the real 2026-27 2. Bundesliga matchday order and home/away venues.
  * Read 2026-10-10 from DFL (league) and hessenschau (broadcaster): two independent
  * sources that agree on all 306 fixtures, matchday, home club and away club.
- * Matchday numbers are those of the list as it was first published.
+ * Matchdays and venues are those of the list as first published (one source is a release day copy).
  * Acquisition evidence: scripts/data/clubManagerBundesliga2Fixtures2026.receipt.json.
  * Written by scripts/genCmLeagueFixtures.mjs and frozen in scripts/data/cmLeagueFixtures.frozen.json:
  * never edit it by hand. No dates, kickoffs or match results are imported.

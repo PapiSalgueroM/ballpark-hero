@@ -16,6 +16,8 @@
 import { decodePage, lineCounter, textOf, titleOf } from './html.mjs';
 
 export const roundBasis = 'labelled';
+/* A calendar page kept up to date: it shows the list as it stands on the day it is read. */
+export const listAsOf = 'read day';
 
 const HEADING = /<tr id='tj(\d+)' class=ch3>([\s\S]*?)<\/tr>/g;
 const MATCH_ROW = /<tr class=cl[12]>([\s\S]*?)<\/tr>/g;

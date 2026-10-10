@@ -197,8 +197,11 @@ function judgeReceipt(e, L, clubs, pairs, n, red) {
       if (sorted.join('\n') !== ledgerTuples.join('\n')) red('E', `source ${si + 1} gives the order of matches and the ledger's order differs from it`);
     }
     if (e.frozen && !(s.snapshot && /^[0-9a-f]{64}$/.test(s.snapshot.sha256 || '') && s.snapshot.bytes > 0)) red('E', `source ${si + 1}: no hash of the bytes its rows were parsed from`);
+    if (e.frozen && !['release day', 'read day'].includes(s.listAsOf)) red('E', `source ${si + 1} does not say whether it is a release day copy of the list or a page kept up to date`);
     return set;
   });
+  /* A receipt may say "the list as first published" only when one of its sources is a release day copy. */
+  if (e.frozen && R.asFirstPublished !== sources.some(s => s.listAsOf === 'release day')) red('E', 'the receipt says the list is as first published, and its sources do not bear that out (or the reverse)');
   if (mappedSets.length >= 2) {
     const differ = [...mappedSets[0]].filter(t => !mappedSets[1].has(t)).length + [...mappedSets[1]].filter(t => !mappedSets[0].has(t)).length;
     if (differ) red('E', `the two sources differ in ${differ} matchday|home|away tuple(s)`);

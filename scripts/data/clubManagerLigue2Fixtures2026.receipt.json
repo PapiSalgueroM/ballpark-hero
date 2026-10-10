@@ -6,7 +6,8 @@
   "dataFile": "src/data/clubManagerLigue2Fixtures2026.ts",
   "exportName": "LIGUE2_FIXTURES_2026",
   "readOn": "2026-10-10",
-  "roundNumbers": "The matchday numbers of the list as it was first published. A match moved to another date keeps its matchday.",
+  "asFirstPublished": false,
+  "roundNumbers": "The matchdays and venues as both sources showed them on 2026-10-10. Both are kept up to date. A match moved to another date keeps its matchday on both, but no release day copy of the list was read, so a change of ground made after the list came out would be in here as the list now stands.",
   "validatedFields": [
     "round",
     "home",
@@ -29,6 +30,7 @@
       "title": "Calendrier Ligue 2, matchs et résultats saison 2026-2027 - Football - MAXIFOOT",
       "parser": "scripts/lib/cmFixtureSources/maxifoot.mjs",
       "roundBasis": "labelled",
+      "listAsOf": "read day",
       "snapshot": {
         "files": 1,
         "bytes": 104183,
@@ -362,6 +364,7 @@
       "titleNote": "A JSON feed has no title of its own. This line names the feed.",
       "parser": "scripts/lib/cmFixtureSources/feedJson.mjs",
       "roundBasis": "labelled",
+      "listAsOf": "read day",
       "snapshot": {
         "files": 1,
         "bytes": 69651,

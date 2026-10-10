@@ -19,6 +19,8 @@
 import { decodePage, lineCounter, textOf, titleOf } from './html.mjs';
 
 export const roundBasis = 'labelled';
+/* Results pages kept up to date: they show the list as it stands on the day they are read. */
+export const listAsOf = 'read day';
 
 const BUTTON = /c-content-nav__button-text">([^<]*)</g;
 const TABLE_ROW = /<tr[^>]*>([\s\S]*?)<\/tr>/g;

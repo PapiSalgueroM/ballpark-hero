@@ -25,6 +25,8 @@
 import { decodePage, lineCounter, textOf, titleOf } from './html.mjs';
 
 export const roundBasis = 'ordinal';
+/* An article printed the day the list came out: it is the list as first published. */
+export const listAsOf = 'release day';
 
 /* Between a date and its paragraph of matches the page may drop an advert block, so the gap is allowed to hold
    anything except another paragraph, another bold run or a match. */
