@@ -1,3 +1,63 @@
+## Release AR LIVE, 2026-10-09 20:14 EDT: Club Manager match day from players' reports: (P) and (O.G) beside a goal, Quick Sim that makes its subs, and a goal that keeps its net when the other side changes a man
+
+Claude lane (session F). main 8c5ce655, deployment 468b616a-f984-4af9-959d-12f584834eaa, entry index-DNvMbg1w.js (was index-DBSXBErW.js, Release AQ,
+published 14:31 the same day). Proof at 20:16: x-deployment-id carries 468b616a; /whats-new carries the "(P) and (O.G) beside a goal, and Quick Sim uses the bench" entry; the saved page of /club-manager says a penalty is marked (P) and an own goal (O.G); /club-manager loads 50 resources with none failed (a single 502 in the console came from the first load during the switch and did not repeat). Third publish of the day, sixth in 38 hours.
+
+What shipped, Round 1146 (this lane, from four reports through the site's report button that the owner forwarded):
+- (P): one helper, src/lib/clubManagerScorerLine.ts, marks a scorer line on every surface that lists one (the report
+  card, the report timeline, the live goal pill, card and list), in the shape of the other lane's Round 1163, whose
+  branch origin/codex/cm-penalty-markers-1163 is merged as this round's first step. A shootout kick gets none.
+- (O.G): own goals in Club Manager. The two keyed rolls of the Season Centre's rule were lifted into
+  src/lib/ownGoalRule.ts and both games read it. Club Manager re-labels a goal the match already had: 1 eligible
+  goal in 32 (2.2 to 2.7 percent of all goals over five seed sets), never a penalty or a direct free kick, credited
+  to a named defender or keeper of the conceding side who is on the pitch. Results, tables and every seeded draw
+  are byte equal with own goals on and off (90 careers); the attacker loses that goal from his tally.
+- QUICK SIM SUBS: the coach of Round 1072 only replaced injured men and men already spent at the break (the bench
+  came on in 46 percent of quick sims, never after the break). He now looks twice more, around the hour and in the
+  run in: a booked man first, then the least fit, only if the eleven is no weaker or the side is two up. Bench used
+  in 91 percent of quick sims. A substitute's match now counts for the minutes he played in a man's last ten.
+- FOUND BY THIS RELEASE'S GATE AND FIXED, on the site since Round 1101: a goal still playing when the other side's
+  substitution, a red card or an injury came off the clock at the next minute lost its net, its scorer card and the
+  order of the score (about 2 to 3 goals in 100). While a chance is playing the pitch now keeps the men it started
+  with (src/components/club-manager/LiveSimScreen.tsx; a test that fails on Release AQ's viewer; control castnow).
+
+LEAD'S CALLS: quick sims score about 3 percent fewer goals at each end with the extra change (wins and points are
+not down): accepted. An own goal still animates on the live pitch like an ordinary goal (card, pill and list are
+right): accepted, a follow up animation round. A short substitute appearance costs a whole match's fitness as before.
+
+GATE ON GITHUB RUNNERS on 45b84cfb, six lanes plus the live pass: lane B 58 of 58, sweep and play 15 of 15, live
+pass 10 of 10 (playSoccerCareer all checks, playGames on /club-manager, /manager-hot-seat, /deadline-day against
+real data). THREE REAL REDS, all closed on 8edc661a by one fixer and an independent check: simGuideHeadings (a
+Club Manager rules sentence this round extended was not in the frozen record: recorded with the harness's own
+refresh; the sentence is true clause by clause), playLiveMatchFit (the old live match bug above), and
+simManagerAppealIsolation (your Round 1081 harness pins src/lib/clubManager.ts by hash: one pin moved, behaviour
+untouched, every control fires). Final run rAR-gF on 8edc661a: 42 of 42 green (build:seo 2,535 s, the whole vitest suite, sweepWeight, the dist fences, the three harnesses, playLiveMatchFit twice); the committed head 8c5ce655 re-proven on a plain build, 20 of 20. Budgets: /club-manager 578K,
+/manager-hot-seat 595K, /deadline-day 606K. Build output: two saved pages (club-manager, whats-new) and two ledger rows.
+
+Known and left for follow ups: the browser walks are NOT seeded (the engine draws from Math.random in a real
+browser), so playLiveMatchFit watches different goals every run and a red cannot be replayed: seed it with an init
+script; simMatchScreen is seed sensitive on main (SIM_SEED 1 and 16) because the coach's injury change at the end of
+a half leaves the board not following its half; the five era harnesses (simEra2005, 2010, 2015, 2020, simEras) are
+red on main and are not gated; the own goal animation.
+
+### For Codex
+1. Release AR is on main at 8c5ce655 and live. Your Round 1163 shipped inside this lane's Round 1146.
+2. Changed under your code: scripts/fixtures/managerAppealIsolation1081/manifest.json, unchangedSource for
+   src/lib/clubManager.ts moved to the new hash (nothing else in the manifest, the frozen source or the harness
+   changed); scripts/data/guideHeadingsFrozen.json, the /club-manager record refreshed for one rules sentence in
+   src/data/gameContent/clubManagement.ts (your Round 1072 sentence, extended with the coach's two looks after the
+   break and the (P) and (O.G) marks); .github/workflows/cm-penalty-markers.yml can no longer pass (it wants the old
+   marker text twice in MatchReportCard): yours to retire or re-point; playCmQuickSubs needs its font cache to run
+   anywhere but its own workflow.
+3. NOT shipped and waiting for this lane's reset: Round 1103 (NBA My Career numbers) with your guide sync 1157
+   merged into it. It needs Round 1112 first (the rival's printed line on the new scale: one judged year in three
+   contradicts its own verdict without it). Round 1102 (Club Manager ratings and ages) is parked too.
+4. Unclaimed from the players' reports: Club Manager real first season fixtures (a data round, two sources a
+   league) and VAR (a design round: it must present what the match already decided, not move results).
+5. THIS LANE IS AT ITS WEEKLY LIMIT and goes quiet until 2026-10-14 15:00 EDT. Your READY drafts wait on the board
+   until then; nothing of yours is half merged. If the owner wants something published sooner, your own publish
+   path is the only one until the reset.
+
 ## Release AQ LIVE, 2026-10-09 14:31 EDT: the Soccer Career train (Codex Rounds 1169 to 1178), Stat Detective's career spans made true, a bigger Dart Draft roster
 
 Claude lane (session F). main f57b4f6f, deployment 2fa59c27-1d95-401d-afbb-552f7be0e5aa, entry index-DBSXBErW.js (was index-vp6JkBHV.js, Release AP,
