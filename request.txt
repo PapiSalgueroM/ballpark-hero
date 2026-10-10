@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+weight-branch: ENGINES=chromium SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/wb.log 2>&1; s=$?; grep -E "footle|FAIL" /tmp/wb.log | cut -c1-200; tail -1 /tmp/wb.log; exit $s
+files-branch: node .rc/x/footleFiles.mjs footle-branch
+weight-row348: node .rc/x/footleRow.mjs scripts/sweepWeight.mjs 348 && ENGINES=chromium SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/wr.log 2>&1; s=$?; git diff --stat -- scripts | tail -1; grep -E "footle|FAIL" /tmp/wr.log | cut -c1-200; tail -1 /tmp/wr.log; git checkout -q HEAD -- scripts; exit $s
+files-attr: git checkout 09df145abfb241679022b41903d2f19bc254ebf9 -- src/pages/Footle.tsx && npm run build > /tmp/battr.log 2>&1 && node .rc/x/footleFiles.mjs footle-attr; s=$?; git diff --stat HEAD -- src | tail -1; git checkout -q HEAD -- src; exit $s
+cmp: node .rc/x/cmpFiles.mjs footle-branch footle-attr
+clean: git diff --quiet HEAD -- src scripts && echo "tree back at head"

@@ -1,0 +1,7 @@
+build exit=0 19s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weight-branch exit=1 27s | sweepWeight: 1 failure
+files-branch exit=0 4s | footleFiles: footle-branch written, 40 files in the window and 0 after it
+weight-row348 exit=0 27s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+files-attr exit=0 24s |  1 file changed, 5 insertions(+), 6 deletions(-)
+cmp exit=0 0s | 12 of 40 stems weigh the same on both sides; the lines above add up to 3110 bytes.
+clean exit=0 0s | tree back at head
