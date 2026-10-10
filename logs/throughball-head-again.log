@@ -1,0 +1,22 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/throughBallDrill.test.ts[2m > [22m[2mseeded Through Ball rules[2m > [22m[2ma better judge of weight outscores a worse one at three skill gaps
+[22m[39mThrough Ball weight ladder over 240 paired runs: 100.0 / 89.3 / 55.9 / 30.8 points
+Through Ball best single weight with perfect aim and timing: 66.8 points
+
+[90mstdout[2m | src/test/throughBallDrill.test.ts[2m > [22m[2mseeded Through Ball rules[2m > [22m[2ma better all round player outscores a worse one at three skill gaps
+[22m[39mThrough Ball all round ladder over 240 paired runs: 99.7 / 88.4 / 67.1 / 34.6 points
+
+[90mstdout[2m | src/test/throughBallDrill.test.ts[2m > [22m[2mseeded Through Ball rules[2m > [22m[2mreading the round beats every fixed input the sweep can find, and the run gets harder
+[22m[39mThrough Ball: all round skill 1 scores 89.0, the best of 729 fixed inputs 9.8
+Through Ball ladder: first three balls 0.736, last three 0.525
+
+ [32m✓[39m src/test/throughBallDrill.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 3452[2mms[22m[39m
+   [33m[2m✓[22m[39m seeded Through Ball rules[2m > [22msettles every verdict the rules name, and no round is free [33m 3032[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m11 passed[39m[22m[90m (11)[39m
+[2m   Start at [22m 17:11:29
+[2m   Duration [22m 4.97s[2m (transform 775ms, setup 38ms, collect 949ms, tests 3.45s, environment 226ms, prepare 109ms)[22m
+
