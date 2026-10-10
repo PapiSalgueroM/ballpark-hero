@@ -1,0 +1,7 @@
+FAIL championship-390: the Season calendar card shows the real first fixture: Cardiff City (A)
+FAIL championship-1280: the Season calendar card shows the real first fixture: Cardiff City (A)
+FAIL laliga-390: the Season calendar card shows the real first fixture: Athletic Club (H)
+FAIL laliga-1280: the Season calendar card shows the real first fixture: Athletic Club (H)
+FAIL bundesliga-390: the Season calendar card shows the real first fixture: Stuttgart (H)
+FAIL bundesliga-1280: the Season calendar card shows the real first fixture: Stuttgart (H)
+playCmLeagueFixtures: 6 FAILURE(S) over 6 journeys and 3 quiet pages

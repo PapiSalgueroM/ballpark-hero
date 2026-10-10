@@ -1,0 +1,9 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weight exit=1 28s | sweepWeight: 6 failures
+chunks exit=0 0s | list chunks: 9
+walk3 exit=1 24s | playCmLeagueFixtures: 6 FAILURE(S) over 6 journeys and 3 quiet pages
+cmfix-premier-and-walk exit=0 29s | RESULT sim=0 walk=0
+simCmDataOnDemand exit=0 8s | simCmDataOnDemand: green. No page downloads data it never reads, and a past season brings its own.
+mut-boot-walk-must-fail exit=1 206s | playCmLeagueFixtures: 12 FAILURE(S) over 6 journeys and 3 quiet pages
+mut-start-walk-must-fail exit=1 56s | playCmLeagueFixtures: 54 FAILURE(S) over 6 journeys and 3 quiet pages
+tree-clean exit=0 0s | src and scripts are as committed

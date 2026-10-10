@@ -1,0 +1,55 @@
+FAIL championship-390: the save holds the key of its league's real list (undefined)
+FAIL championship-390: the page fetched that league's list and no other
+FAIL championship-390: the Season calendar card shows the real first fixture: Cardiff City (A)
+FAIL championship-390: the Calendar names the league and says what is real and what is simulated
+FAIL championship-390: the Calendar links the two sources the ledger ships
+FAIL championship-390: the Calendar grid holds the real first fixture as a day
+FAIL championship-390: after a reload the boot fetched the saved key's list and no other
+FAIL championship-390: after a reload the Calendar still carries the line
+FAIL championship-390: the save still holds its key
+FAIL championship-1280: the save holds the key of its league's real list (undefined)
+FAIL championship-1280: the page fetched that league's list and no other
+FAIL championship-1280: the Season calendar card shows the real first fixture: Cardiff City (A)
+FAIL championship-1280: the Calendar names the league and says what is real and what is simulated
+FAIL championship-1280: the Calendar links the two sources the ledger ships
+FAIL championship-1280: the Calendar grid holds the real first fixture as a day
+FAIL championship-1280: after a reload the boot fetched the saved key's list and no other
+FAIL championship-1280: after a reload the Calendar still carries the line
+FAIL championship-1280: the save still holds its key
+FAIL laliga-390: the save holds the key of its league's real list (undefined)
+FAIL laliga-390: the page fetched that league's list and no other
+FAIL laliga-390: the Season calendar card shows the real first fixture: Athletic Club (H)
+FAIL laliga-390: the Calendar names the league and says what is real and what is simulated
+FAIL laliga-390: the Calendar links the two sources the ledger ships
+FAIL laliga-390: the Calendar grid holds the real first fixture as a day
+FAIL laliga-390: after a reload the boot fetched the saved key's list and no other
+FAIL laliga-390: after a reload the Calendar still carries the line
+FAIL laliga-390: the save still holds its key
+FAIL laliga-1280: the save holds the key of its league's real list (undefined)
+FAIL laliga-1280: the page fetched that league's list and no other
+FAIL laliga-1280: the Season calendar card shows the real first fixture: Athletic Club (H)
+FAIL laliga-1280: the Calendar names the league and says what is real and what is simulated
+FAIL laliga-1280: the Calendar links the two sources the ledger ships
+FAIL laliga-1280: the Calendar grid holds the real first fixture as a day
+FAIL laliga-1280: after a reload the boot fetched the saved key's list and no other
+FAIL laliga-1280: after a reload the Calendar still carries the line
+FAIL laliga-1280: the save still holds its key
+FAIL bundesliga-390: the save holds the key of its league's real list (undefined)
+FAIL bundesliga-390: the page fetched that league's list and no other
+FAIL bundesliga-390: the Season calendar card shows the real first fixture: Stuttgart (H)
+FAIL bundesliga-390: the Calendar names the league and says what is real and what is simulated
+FAIL bundesliga-390: the Calendar links the two sources the ledger ships
+FAIL bundesliga-390: the Calendar grid holds the real first fixture as a day
+FAIL bundesliga-390: after a reload the boot fetched the saved key's list and no other
+FAIL bundesliga-390: after a reload the Calendar still carries the line
+FAIL bundesliga-390: the save still holds its key
+FAIL bundesliga-1280: the save holds the key of its league's real list (undefined)
+FAIL bundesliga-1280: the page fetched that league's list and no other
+FAIL bundesliga-1280: the Season calendar card shows the real first fixture: Stuttgart (H)
+FAIL bundesliga-1280: the Calendar names the league and says what is real and what is simulated
+FAIL bundesliga-1280: the Calendar links the two sources the ledger ships
+FAIL bundesliga-1280: the Calendar grid holds the real first fixture as a day
+FAIL bundesliga-1280: after a reload the boot fetched the saved key's list and no other
+FAIL bundesliga-1280: after a reload the Calendar still carries the line
+FAIL bundesliga-1280: the save still holds its key
+playCmLeagueFixtures: 54 FAILURE(S) over 6 journeys and 3 quiet pages

@@ -1,0 +1,10 @@
+mutStart applied
+FAIL championship-390: the save holds the key of its league's real list (undefined)
+FAIL championship-390: the page fetched that league's list and no other
+FAIL championship-390: the Season calendar card shows the real first fixture: Cardiff City (A)
+FAIL championship-390: the Calendar names the league and says what is real and what is simulated
+FAIL championship-390: the Calendar links the two sources the ledger ships
+FAIL championship-390: the Calendar grid holds the real first fixture as a day
+FAIL championship-390: after a reload the boot fetched the saved key's list and no other
+FAIL championship-390: after a reload the Calendar still carries the line
+playCmLeagueFixtures: 54 FAILURE(S) over 6 journeys and 3 quiet pages
