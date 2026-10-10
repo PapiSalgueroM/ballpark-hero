@@ -1,0 +1,4 @@
+#!build
+#!playwright
+noscroll-head: PORT=4660 CAREER_SQUAD_PLAY_CONTROL=noscroll node scripts/playCareerSquad.mjs > /tmp/ns.log 2>&1; s=$?; grep -E "^FAIL|control" /tmp/ns.log | head -20 | cut -c1-300; echo "--- tail"; tail -25 /tmp/ns.log | cut -c1-300; exit $s
+noscroll-main: git fetch -q origin +refs/heads/main:refs/remotes/origin/main || true; git worktree add -f --detach base-main origin/main > /dev/null 2>&1; cd base-main && node ../node_modules/vite/bin/vite.js build > ../base-build.log 2>&1; echo "main build exit $? at $(git rev-parse --short HEAD)"; PORT=4760 CAREER_SQUAD_PLAY_CONTROL=noscroll node scripts/playCareerSquad.mjs > /tmp/ns-main.log 2>&1; s=$?; grep -E "^FAIL|control" /tmp/ns-main.log | head -20 | cut -c1-300; echo "--- tail"; tail -25 /tmp/ns-main.log | cut -c1-300; exit $s

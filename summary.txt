@@ -1,0 +1,3 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+noscroll-head exit=1 157s | Node.js v24.21.0
+noscroll-main exit=1 175s | playCareerSquad (control noscroll, 35 edits served): 170 checks, 7 failed

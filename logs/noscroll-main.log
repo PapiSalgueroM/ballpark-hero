@@ -1,0 +1,35 @@
+main build exit 0 at 09df145ab
+FAIL 7b. save A at 375 by 553: Back is on the screen and a tap on it works on every screen (0 taps; the body scrolls on none; first open (help): "Worked examples" at 594 to 638 of 553, off the screen; "← Back" at 650 to 694 of 553, off the screen; the panel spills by 154 px | first open (help): no
+FAIL 7b. save R at 375 by 553: Back is on the screen and a tap on it works on every screen (0 taps; the body scrolls on none; eleven: "← Back" at 555 to 599 of 553, off the screen; the panel spills by 59 px | eleven: no Back to tap)
+FAIL 7b. save A at 320 by 568: Back is on the screen and a tap on it works on every screen (0 taps; the body scrolls on none; first open (help): "Worked examples" at 668 to 712 of 568, off the screen; "← Back" at 724 to 768 of 568, off the screen; the panel spills by 213 px | first open (help): no
+FAIL 7b. save R at 320 by 568: Back is on the screen and a tap on it works on every screen (0 taps; the body scrolls on none; eleven: "← Back" at 574 to 618 of 568, off the screen; the panel spills by 63 px | eleven: no Back to tap)
+FAIL 7b. save A at 360 by 640: Back is on the screen and a tap on it works on every screen (0 taps; the body scrolls on none; first open (help): "Worked examples" at 611 to 655 of 640, off the screen; "← Back" at 667 to 711 of 640, off the screen; the panel spills by 84 px | first open (help): no 
+FAIL 7b. save A at 844 by 390: Back is on the screen and a tap on it works on every screen (0 taps; the body scrolls on none; first open (help): "Worked examples" at 462 to 506 of 390, off the screen; "← Back" at 518 to 562 of 390, off the screen; the panel spills by 185 px | first open (help): no
+FAIL 7b. save R at 844 by 390: Back is on the screen and a tap on it works on every screen (0 taps; the body scrolls on none; eleven: "← Back" at 539 to 583 of 390, off the screen; the panel spills by 206 px | eleven: no Back to tap)
+playCareerSquad (control noscroll, 35 edits served): 170 checks, 7 failed
+--- tail
+ok   page: the sheet is one chunk of its own (SquadSheet-baCmy_iV.js)
+ok   9. parsed the walker's ACTIONS (17 entries) and SKIP from its text
+ok   1. no sheet chunk on a fresh hub (45 scripts loaded)
+ok   2. page, save A: one tile on the hub, printing rank 1 and trust 71 ({"rank":"1","trust":"71","n":1})
+ok   10. page, save A at 390: the season list is inside the Career Timeline card, one row a season, and the card ends where the list ends (rows 5 of 5, grid children 2, card {"t":2001,"b":2324,"l":12,"r":378}, list {"t":2043,"b":2323,"l":13,"r":377}, hub column {"t":311,"b":1989,"l":12,"r":378})
+ok   10. page, save A at 390: the hub column is in the same grid as the card, above it on a phone (rows 5 of 5, grid children 2, card {"t":2001,"b":2324,"l":12,"r":378}, list {"t":2043,"b":2323,"l":13,"r":377}, hub column {"t":311,"b":1989,"l":12,"r":378})
+ok   1. one request for the sheet chunk after the press (1)
+ok   7. page, save A at 390: the sheet covers the screen and its panel sits inside it, with the page scrolled to 200 (sheet 0,0 390x844, panel 12,198 to 378,646, screen 390x844)
+ok   9. page, save A: the walker's pick never landed inside the tile or the sheet over 8 screens (on the hub it presses "Next Season")
+ok   9. page, save A: no label in the tile or the sheet starts with a walker ACTIONS entry (none)
+ok   7. page, save A: the career page did not move across open, every screen and close (200 then 200)
+ok   6. page, save A: the save string is byte identical after the sheet has been through every screen
+ok   2. page, save B: one tile on the hub, printing rank 8 and trust 61 ({"rank":"8","trust":"61","n":1})
+ok   10. page, save B at 390: the season list is inside the Career Timeline card, one row a season, and the card ends where the list ends (rows 3 of 3, grid children 2, card {"t":1805,"b":2033,"l":12,"r":378}, list {"t":1847,"b":2032,"l":13,"r":377}, hub column {"t":311,"b":1793,"l":12,"r":378})
+ok   10. page, save B at 390: the hub column is in the same grid as the card, above it on a phone (rows 3 of 3, grid children 2, card {"t":1805,"b":2033,"l":12,"r":378}, list {"t":1847,"b":2032,"l":13,"r":377}, hub column {"t":311,"b":1793,"l":12,"r":378})
+ok   7. page, save B at 390: the sheet covers the screen and its panel sits inside it, with the page scrolled to 200 (sheet 0,0 390x844, panel 12,179 to 378,665, screen 390x844)
+ok   9. page, save B: the walker's pick never landed inside the tile or the sheet over 8 screens (on the hub it presses "Next Season")
+ok   9. page, save B: no label in the tile or the sheet starts with a walker ACTIONS entry (none)
+ok   7. page, save B: the career page did not move across open, every screen and close (200 then 200)
+ok   6. page, save B: the save string is byte identical after the sheet has been through every screen
+ok   10. page, save A at 1280: the season list is inside the Career Timeline card, one row a season, and the card ends where the list ends (rows 5 of 5, grid children 2, card {"t":263,"b":593,"l":144,"r":404}, list {"t":305,"b":592,"l":145,"r":403}, hub column {"t":263,"b":1725,"l":416,"r":1136})
+ok   10. page, save A at 1280: the hub column is in the same grid as the card, to its right (rows 5 of 5, grid children 2, card {"t":263,"b":593,"l":144,"r":404}, list {"t":305,"b":592,"l":145,"r":403}, hub column {"t":263,"b":1725,"l":416,"r":1136})
+ok   7. page, save A at 1280: the sheet covers the screen and its panel sits inside it, and the page stayed at 0 (sheet 0,0 1280x800, panel 416,185 to 864,616, screen 1280x800; now 0)
+   screenshots in /home/runner/work/ballpark-hero/ballpark-hero/base-main/.tmp-fx/shots, work folder /home/runner/work/_temp/t-noscroll-main/careersquadplay-Xzm0a7
+playCareerSquad (control noscroll, 35 edits served): 170 checks, 7 failed

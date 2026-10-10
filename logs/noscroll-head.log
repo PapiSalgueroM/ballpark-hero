@@ -1,0 +1,31 @@
+FAIL 7b. save A at 375 by 553: Back is on the screen and a tap on it works on every screen (0 taps; the body scrolls on none; first open (help): "Worked examples" at 718 to 762 of 553, off the screen; "← Back" at 774 to 818 of 553, off the screen; the panel spills by 278 px | first open (help): no
+FAIL 7b. save R at 375 by 553: Back is on the screen and a tap on it works on every screen (0 taps; the body scrolls on none; eleven: "← Back" at 555 to 599 of 553, off the screen; the panel spills by 59 px | eleven: no Back to tap)
+FAIL 7b. save A at 320 by 568: Back is on the screen and a tap on it works on every screen (0 taps; the body scrolls on none; first open (help): "Worked examples" at 808 to 852 of 568, off the screen; "← Back" at 864 to 908 of 568, off the screen; the panel spills by 353 px | first open (help): no
+FAIL 7b. save R at 320 by 568: Back is on the screen and a tap on it works on every screen (0 taps; the body scrolls on none; eleven: "← Back" at 574 to 618 of 568, off the screen; the panel spills by 63 px | eleven: no Back to tap)
+FAIL 7b. save A at 360 by 640: Back is on the screen and a tap on it works on every screen (0 taps; the body scrolls on none; first open (help): "Worked examples" at 718 to 762 of 640, off the screen; "← Back" at 774 to 818 of 640, off the screen; the panel spills by 191 px | first open (help): no
+--- tail
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - element is outside of the viewport',
+    '    - retrying click action',
+    '    - waiting 20ms',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - element is outside of the viewport',
+    '    - retrying click action',
+    '      - waiting 100ms',
+    '    58 × waiting for element to be visible, enabled and stable',
+    '       - element is visible, enabled and stable',
+    '       - scrolling into view if needed',
+    '       - done scrolling',
+    '       - element is outside of the viewport',
+    '     - retrying click action',
+    '       - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0
