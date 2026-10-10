@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ledger: node scripts/simUsSeasonLedger.mjs
+ctl-all: n=0; f=0; for k in $(US_LEDGER_CONTROL=list node scripts/simUsSeasonLedger.mjs); do n=$((n+1)); US_LEDGER_CONTROL=$k node scripts/simUsSeasonLedger.mjs | tail -1 | grep -q "FIRED, red at exactly" && f=$((f+1)) || echo "NOT FIRED: $k"; done; echo "controls fired: $f of $n"; [ "$f" = "$n" ]
+slate: node_modules/.bin/vitest run src/test/usSeasonSlate.test.ts --testTimeout=900000 --hookTimeout=120000
+digest: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=900000 --hookTimeout=120000 2>&1 | grep -E "nhl\||mlb\||nba\||nfl\||Tests |passed|failed" | tr -d '\n' | cut -c1-1800; echo; exit 0
+simNhlCareer: node scripts/simNhlCareer.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simNbaAwardsSense: node scripts/simNbaAwardsSense.mjs
+simLiveScores: node scripts/simLiveScores.mjs
