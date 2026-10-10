@@ -1,0 +1,25 @@
+[help head] as served at 390 by 844: {"panelH":740,"maxH":820,"bodyScroll":538,"bodyClient":538,"over":0,"lineHeight":16.5,"fontSize":"12px","textWidth":312,"inter":true,"family":"Inter, system-ui, \"Apple Color Emoji\", \"","lines":28,"lis":[{"chars":94,"h":33,"lines":2},{"chars":147,"h":49.5,"lines":3},{"chars":168,"h":49.5,"lines":3},{"chars":352,"h":115.5,"lines":7},{"chars":376,"h":132,"lines":8},{"chars":277,"h":82.5,"lines":5}]}
+[help head] single R2b: 142 chars, 3 lines
+[help head] single R2c: 129 chars, 3 lines
+[help head] single R3a: 147 chars, 3 lines
+[help head] single R4e: 328 chars, 7 lines
+[help head] single R4f: 315 chars, 6 lines
+[help head] single R4g: 345 chars, 7 lines
+[help head] single R5a: 357 chars, 7 lines
+[help head] single R6e: 270 chars, 5 lines
+[help head] set s1: lines 28 per rule 2,3,3,7,8,5 panel 740 of 820 over 0 spare 80
+[help head] set s2: lines 28 per rule 2,3,3,7,8,5 panel 740 of 820 over 0 spare 80
+[help head] set s3: lines 28 per rule 2,3,3,7,8,5 panel 740 of 820 over 0 spare 80
+[help head-nofonts] as served at 390 by 844: {"panelH":806,"maxH":820,"bodyScroll":604,"bodyClient":604,"over":0,"lineHeight":16.5,"fontSize":"12px","textWidth":312,"inter":true,"family":"Inter, system-ui, \"Apple Color Emoji\", \"","lines":32,"lis":[{"chars":94,"h":33,"lines":2},{"chars":147,"h":66,"lines":4},{"chars":168,"h":66,"lines":4},{"chars":352,"h":132,"lines":8},{"chars":376,"h":132,"lines":8},{"chars":277,"h":99,"lines":6}]}
+[help head-nofonts] single R2b: 142 chars, 3 lines
+[help head-nofonts] single R2c: 129 chars, 3 lines
+[help head-nofonts] single R3a: 147 chars, 4 lines
+[help head-nofonts] single R4e: 328 chars, 7 lines
+[help head-nofonts] single R4f: 315 chars, 7 lines
+[help head-nofonts] single R4g: 345 chars, 8 lines
+[help head-nofonts] single R5a: 357 chars, 8 lines
+[help head-nofonts] single R6e: 270 chars, 6 lines
+[help head-nofonts] set s1: lines 31 per rule 2,4,4,7,8,6 panel 790 of 820 over 0 spare 30
+[help head-nofonts] set s2: lines 30 per rule 2,3,4,7,8,6 panel 773 of 820 over 0 spare 47
+[help head-nofonts] set s3: lines 30 per rule 2,3,4,7,8,6 panel 773 of 820 over 0 spare 47
+atgProbe head-nofonts parts help finished, exit 0
