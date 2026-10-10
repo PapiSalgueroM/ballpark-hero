@@ -2,6 +2,8 @@
 
 import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';
 import { serveClubSuspension } from '@/lib/soccerDiscipline';
+import { cancelReducedRole, queueReducedRole, reducedRoleSwing, settleReducedRole, type ReducedRolePlan, type ReducedRoleResult } from './soccerCareerRole';
+import { personalGoalMilestoneNews } from './soccerCareerMilestone';
 import { soccerExtensionQuote } from '@/lib/soccerCareerContracts';
 import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';
 import { settleCareerAmbition, type CareerSeasonAmbition, type SeasonAmbitionResult } from './soccerCareerAmbitions';
@@ -181,6 +183,8 @@ export interface SeasonRecord {
   /** Round 1180: the chosen personal target and its actual club season result. */
   ambition?: SeasonAmbitionResult;
   preparation?: PreparationResult;
+  /** Round 1190: the recorded outcome of one manager's reduced selection plan. */
+  reducedRole?: ReducedRoleResult;
   year: number;
   age: number;
   club: string;
@@ -858,6 +862,8 @@ export interface CareerState {
   seasonAmbition?: CareerSeasonAmbition;
   seasonPreparation?: CareerPreparationPlan;
   mentor?: CareerMentor;
+  /** Round 1190: four fewer planned league games at this club next year. */
+  reducedRole?: ReducedRolePlan;
   playerName: string;
   nationality: string;
   position: string;
@@ -1743,13 +1749,15 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
    null he spent the year at his own club (a year lost to injury). */
 function yearOutRow(s: CareerState, reason: string | null): SeasonRecord {
   const last = s.seasons[s.seasons.length - 1];
-  return {
+  const row: SeasonRecord = {
     year: (last ? last.year : 2019) + 1, age: s.age,
     club: reason ?? s.currentClub, clubCountry: reason ? "" : s.currentClubCountry, clubTier: reason ? 99 : s.currentClubTier,
     apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, rating: 0,
     leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "playing",
     intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
   };
+  settleReducedRole(s, row);
+  return row;
 }
 
 /**
@@ -3831,7 +3839,7 @@ export function calcAppearances(overall: number, clubTier: number, age: number, 
   /* Round 130: a happy dressing room gets you picked, a cold one does not.
      Two appearances out of thirty is on purpose. It is enough to measure and
      small enough that it cannot undo thirty rounds of balance work. */
-  if (state) leagueApps = clamp(leagueApps + phoneAppsSwing(state) + recentClubForm(state).swing, 0, 38);
+  if (state) leagueApps = clamp(leagueApps + phoneAppsSwing(state) + recentClubForm(state).swing + reducedRoleSwing(state), 0, 38);
 
   /* Round 257: frozen out. You told the club you were staying, the club told
      you what that means. A quarter of the minutes you would otherwise have
@@ -4387,6 +4395,7 @@ export function determineLoanOffers(state: CareerState, clubs: ClubData[]): Cont
 export function acceptLoan(prev: CareerState, offer: ContractOffer): CareerState {
   const s = { ...prev };
   if (s.loan || !offer.isLoan) return s;
+  cancelReducedRole(s);
   s.loan = {
     parentClub: s.currentClub, parentTier: s.currentClubTier, parentLeague: s.currentLeague,
     parentCountry: s.currentClubCountry, parentColor: s.currentClubColor,
@@ -4839,6 +4848,7 @@ export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerSt
 /* ─── Accept contract offer ─── */
 export function acceptOffer(prev: CareerState, offer: ContractOffer): CareerState {
   const s = { ...prev };
+  if (offer.club.name !== prev.currentClub || prev.loan) cancelReducedRole(s);
   s.currentClub = offer.club.name; s.currentClubCountry = offer.club.country;
   if (s.currentClub !== prev.currentClub) {
     delete s.seasonAmbition;
@@ -5102,6 +5112,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
         intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
       }];
       s.pendingSummary = s.seasons[s.seasons.length - 1];
+      settleReducedRole(s, s.pendingSummary);
       s.phase = "season_summary";
       simulateSeasonFinances(s, s.pendingSummary);
       settleCareerAmbition(s, s.pendingSummary);
@@ -5132,6 +5143,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
     }];
     s.pendingSummary = s.seasons[s.seasons.length - 1];
+    settleReducedRole(s, s.pendingSummary);
     s.phase = "season_summary";
     simulateSeasonFinances(s, s.pendingSummary);
     settleCareerAmbition(s, s.pendingSummary);
@@ -5237,6 +5249,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
         intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
       }];
       s.pendingSummary = s.seasons[s.seasons.length - 1];
+      settleReducedRole(s, s.pendingSummary);
       s.phase = "season_summary";
       simulateSeasonFinances(s, s.pendingSummary);
       settleCareerAmbition(s, s.pendingSummary);
@@ -5263,6 +5276,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     delete s.seasonAmbition;
     delete s.seasonPreparation;
     Object.assign(s, endCareerMentorForRetirement(s));
+    cancelReducedRole(s);
     const reason = s.age >= 45 ? "👋 Hung up the boots at 45. An incredible career!" : "👋 Body can no longer keep up. Forced retirement";
     s.events.push(reason);
     const lastYr = s.seasons[s.seasons.length - 1].year;
@@ -5388,6 +5402,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
       const injuryRow: SeasonRecord = { ...season, leagueTitle: false, leagueFinish: undefined, leagueSize: undefined, domesticCup: false };
       if (s.loan) injuryRow.onLoanFrom = s.loan.parentClub;
       s.seasons = [...s.seasons, injuryRow];
+      settleReducedRole(s, injuryRow);
       simulateSeasonFinances(s, injuryRow);
       runTournamentSummer(s, injuryRow, injuryRow.year, true);
       settleCareerAmbition(s, injuryRow);
@@ -5700,6 +5715,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     s.popularity = clamp(s.popularity + 3, 0, 100);
   }
   s.seasons = [...s.seasons, season];
+  settleReducedRole(s, season);
   /* Round 257: a freeze out is one season long. It is served here, after the
      season it crushed has been recorded, so the next window opens on a man
      who is free to be picked again and carrying the record of a year he was
@@ -5799,6 +5815,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
      season, so the screen can promise nothing the simulation will not keep. */
   if (s.loan) {
     const back = s.loan;
+    cancelReducedRole(s);
     s.currentClub = back.parentClub; s.currentClubTier = back.parentTier;
     s.currentLeague = back.parentLeague; s.currentClubCountry = back.parentCountry;
     s.currentClubColor = back.parentColor;
@@ -5906,10 +5923,11 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
           headline: `Transfer Rumours: ${pick(elites)} Eyeing ${name} In Summer Window`,
           body: `Sources close to the deal suggest a bid of €${Math.round(s.marketValue)}M is being prepared. The ${s.nationality} international has been in outstanding form and could be set for a big move.` };
       } },
+    /* Keep this tally slot's eligibility and draw order. Senior crossings use the drawn space below. */
     { weight: 1, check: () => totalGoals > 0 && (totalGoals === 100 || totalGoals === 200 || totalGoals === 300 || totalGoals === 500),
-      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "milestone",
-        headline: `${name} Breaks Club Record For Goals`,
-        body: `With ${totalGoals} career goals to their name, ${name} has written themselves into the history books. An emotional moment at ${club} as teammates and fans celebrate the milestone.` }) },
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "positive",
+        headline: `${name}'s Recorded Career Goal Tally Reaches ${totalGoals}`,
+        body: `The saved career record now shows ${totalGoals} goals for ${name}.` }) },
     { weight: 1, check: () => yearsPlaying >= 5 && s.currentClubTier <= 2 && ovr >= 78,
       gen: () => ({ newspaper: pick(NEWSPAPERS), type: "positive",
         headline: `FROM ZERO TO HERO: ${name}'s Incredible Rise From ${firstClub} To The Top`,
@@ -5996,9 +6014,9 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
         headline: `FREE AGENT FRENZY: ${name} Available On Free Transfer`,
         body: `${name} is officially a free agent after their contract at ${club} expired. Multiple top clubs are reportedly circling for what could be the bargain of the window.` }) },
     { weight: 1, check: () => totalGoals >= 100 && totalGoals - season.goals < 100,
-      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "milestone",
-        headline: `${name} Scores 100th Career Goal In Emotional Moment`,
-        body: `There were tears of joy as ${name} reached the magical 100-goal mark for their career. The ${club} star celebrated with teammates and fans in an unforgettable moment.` }) },
+      gen: () => ({ newspaper: pick(NEWSPAPERS), type: "positive",
+        headline: `${name}'s Saved Career Goal Total Reaches ${totalGoals}`,
+        body: `The saved career record now shows ${totalGoals} goals for ${name}.` }) },
     { weight: 1, check: () => s.intStats.caps >= 100 && (s.intStats.caps - (season.intApps || 0)) < 100,
       gen: () => ({ newspaper: pick(NEWSPAPERS), type: "milestone",
         headline: `CENTURION: ${name} Earns 100th International Cap`,
@@ -6114,12 +6132,12 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
   }
 
   const eligible = templates.filter(t => t.check());
-  if (eligible.length === 0) return out;
+  if (eligible.length === 0) return personalGoalMilestoneNews(out, s, season, NEWSPAPERS[0]);
 
   const count = out.length === 0 && eligible.length >= 2 && Math.random() < 0.5 ? 2 : 1;
   const shuffled = eligible.sort(() => Math.random() - 0.5).sort((a, b) => b.weight - a.weight);
   for (const t of shuffled.slice(0, count)) out.push(t.gen());
-  return out;
+  return personalGoalMilestoneNews(out, s, season, NEWSPAPERS[0]);
 }
 
 /* ─── Dismiss newspaper ─── */
@@ -6259,8 +6277,8 @@ export function getAllEvents(state: CareerState): RandomEvent[] {
       category: "negative", choices: [
         { label: "Prove yourself in training", emoji: "💪", color: "bg-emerald-600", consequence: "Morale -5 but possible stat boost",
           apply: s => { s.morale = clamp(s.morale - 5, 0, 100); s.statBoostNextSeason = { ...s.statBoostNextSeason, physical: (s.statBoostNextSeason.physical || 0) + 1 }; s.events = [...s.events, "👔 New manager, training harder"]; return s; } },
-        { label: "Accept reduced role", emoji: "😔", color: "bg-muted", consequence: "Morale -10, fewer appearances",
-          apply: s => { s.morale = clamp(s.morale - 10, 0, 100); s.events = [...s.events, "👔 New manager doesn't rate you, reduced role"]; return s; } },
+        { label: "Accept reduced role", emoji: "😔", color: "bg-muted", consequence: "Morale -10, 4 fewer planned league games next season at this club",
+          apply: s => { s.morale = clamp(s.morale - 10, 0, 100); s.events = [...s.events, "👔 Accepted a reduced role: 4 fewer planned league games next season at this club"]; return queueReducedRole(s); } },
       ] },
     { id: 13, emoji: "📸", title: "Party Scandal!", description: "You are photographed at a party the night before a big match. The media goes wild.",
       category: "negative", choices: [
@@ -8299,6 +8317,7 @@ export function manualRetire(prev: CareerState): CareerState {
   delete s.seasonAmbition;
   delete s.seasonPreparation;
   Object.assign(s, endCareerMentorForRetirement(s));
+  cancelReducedRole(s);
   s.retired = true;
   s.events = [...s.events, "👋 Announced retirement from professional football"];
   endClubCaptaincy(s, "retirement");
@@ -8411,6 +8430,7 @@ export function acceptRetirementSuggestion(prev: CareerState): CareerState {
   delete s.seasonAmbition;
   delete s.seasonPreparation;
   Object.assign(s, endCareerMentorForRetirement(s));
+  cancelReducedRole(s);
   s.retired = true;
   s.events = [...s.events, "👋 Announced retirement from professional football"];
   const lastYear = s.seasons[s.seasons.length - 1].year;

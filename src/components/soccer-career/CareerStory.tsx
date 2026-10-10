@@ -5,9 +5,9 @@
    to the list. The season in progress is the last tile, read straight off the
    live log. Lines are rendered on read, the same way the Latest Events card
    draws them (money in the player's currency, flags as images). */
-import { useState } from "react";
+import { useLayoutEffect, useRef, useState, type RefObject } from "react";
 import { useRevealScroll } from "@/hooks/useRevealScroll";
-import { focusDialogOnMount, escapeCloses } from "@/lib/dialogA11y";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { TextWithFlags } from "@/components/FlagImg";
 import { localizeMoney as money } from "@/lib/soccerCurrency";
 import { cleanCareerStory, type CareerState, type CareerStorySeason } from "@/lib/soccerCareerEngine";
@@ -53,7 +53,7 @@ function SeasonTiles({ tiles, retired, onOpen }: { tiles: StoryTile[]; retired: 
           type="button"
           data-story-tile={t.key}
           onClick={() => onOpen(t.key)}
-          className={`min-w-0 rounded-xl border p-2 text-left transition-colors ${t.current ? "border-emerald-500/50 bg-emerald-500/10 hover:bg-emerald-500/20" : "border-border bg-muted/20 hover:bg-muted/40"}`}
+          className={`min-w-0 min-h-11 rounded-xl border p-2 text-left transition-colors ${t.current ? "border-emerald-500/50 bg-emerald-500/10 hover:bg-emerald-500/20" : "border-border bg-muted/20 hover:bg-muted/40"}`}
         >
           <span className="flex items-center justify-between gap-1">
             <span className="text-sm font-black tabular-nums">{t.year}</span>
@@ -69,13 +69,20 @@ function SeasonTiles({ tiles, retired, onOpen }: { tiles: StoryTile[]; retired: 
   );
 }
 
-function SeasonPage({ tile, retired, onBack }: { tile: StoryTile; retired: boolean; onBack: () => void }) {
+function SeasonPage({ tile, retired, headingRef, onBack, onPrevious, onNext }: {
+  tile: StoryTile; retired: boolean; headingRef: RefObject<HTMLHeadingElement>;
+  onBack: () => void; onPrevious?: () => void; onNext?: () => void;
+}) {
   return (
     <div className="space-y-3" data-story-season={tile.key}>
-      <button type="button" onClick={onBack} data-story-back className="text-sky-400 text-xs font-bold px-1.5 py-1 rounded hover:bg-white/5">‹ All seasons</button>
+      <button type="button" onClick={onBack} data-story-back className="min-h-11 text-sky-400 text-xs font-bold px-2 rounded hover:bg-white/5">‹ All seasons</button>
       <div>
-        <div className="text-lg font-black">{tile.year}{tile.current ? (retired ? ", the last chapter" : ", this season") : ""}</div>
-        <div className="text-xs text-muted-foreground">Age {tile.age} at {tile.club}</div>
+        <h3 ref={headingRef} tabIndex={-1} data-story-heading className="text-lg font-black outline-none">{tile.year}{tile.current ? (retired ? ", the last chapter" : ", this season") : ""}</h3>
+        <div className="text-xs text-muted-foreground" data-story-identity>Age {tile.age} at {tile.club}</div>
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        <button type="button" disabled={!onPrevious} onClick={onPrevious} data-story-previous className="min-h-11 rounded border border-border px-2 text-xs font-bold hover:bg-muted/40 disabled:opacity-40">‹ Previous chapter</button>
+        <button type="button" disabled={!onNext} onClick={onNext} data-story-next className="min-h-11 rounded border border-border px-2 text-xs font-bold hover:bg-muted/40 disabled:opacity-40">Next chapter ›</button>
       </div>
       <div className="space-y-1.5">
         {tile.lines.map((line, i) => (
@@ -85,29 +92,52 @@ function SeasonPage({ tile, retired, onBack }: { tile: StoryTile; retired: boole
         ))}
       </div>
       {(tile.more ?? 0) > 0 && (
-        <p className="text-[10px] text-muted-foreground">Plus {tile.more} more from that season that did not fit in the book.</p>
+        <p className="text-[10px] text-muted-foreground" data-story-more>Plus {tile.more} more from that season that did not fit in the book.</p>
       )}
     </div>
   );
 }
 
-function StoryBody({ career }: { career: StorySource & { retired: boolean } }) {
+function StoryBody({ career, dialog = false }: { career: StorySource & { retired: boolean }; dialog?: boolean }) {
   const [open, setOpen] = useState<string | null>(null);
-  /* the no scroll rule: a season opened from the bottom of a long list, or
-     the list come back to, shows its top without the player hunting for it */
-  const revealRef = useRevealScroll<HTMLDivElement>(open ?? "tiles");
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const listPlace = useRef<{ key: string; top: number; pageY: number } | null>(null);
+  const returning = useRef(false);
+  const revealRef = useRevealScroll<HTMLDivElement>(open, { enabled: !dialog && open !== null, skipFirst: false });
   const tiles = storyTiles(career);
-  const tile = open === null ? null : tiles.find(t => t.key === open) ?? null;
+  const index = open === null ? -1 : tiles.findIndex(t => t.key === open);
+  const tile = tiles[index] ?? null;
   const startsLate = storyStartsLate(career, tiles);
+
+  useLayoutEffect(() => {
+    if (open !== null) {
+      if (dialog && revealRef.current) revealRef.current.scrollTop = 0;
+      headingRef.current?.focus({ preventScroll: true });
+    } else if (returning.current && listPlace.current) {
+      const place = listPlace.current;
+      if (revealRef.current) revealRef.current.scrollTop = place.top;
+      revealRef.current?.querySelector<HTMLButtonElement>(`[data-story-tile="${place.key}"]`)?.focus({ preventScroll: true });
+      if (!dialog) window.scrollTo({ top: place.pageY, behavior: "auto" });
+      returning.current = false;
+    }
+  }, [open, dialog, revealRef]);
+
+  const openTile = (key: string) => {
+    listPlace.current = { key, top: revealRef.current?.scrollTop ?? 0, pageY: window.scrollY };
+    setOpen(key);
+  };
   return (
-    <div ref={revealRef} className="space-y-2">
-      {tile ? <SeasonPage tile={tile} retired={career.retired} onBack={() => setOpen(null)} /> : (
+    <div ref={revealRef} className={dialog ? "min-h-0 overflow-y-auto p-4" : "space-y-2"} data-story-scroll>
+      {tile ? <SeasonPage tile={tile} retired={career.retired} headingRef={headingRef}
+        onBack={() => { returning.current = true; setOpen(null); }}
+        onPrevious={index > 0 ? () => setOpen(tiles[index - 1].key) : undefined}
+        onNext={index < tiles.length - 1 ? () => setOpen(tiles[index + 1].key) : undefined} /> : (
         <>
           {tiles.length === 0
             ? <p className="text-xs text-muted-foreground">Nothing written yet. Play a season and it starts here.</p>
-            : <SeasonTiles tiles={tiles} retired={career.retired} onOpen={setOpen} />}
+            : <SeasonTiles tiles={tiles} retired={career.retired} onOpen={openTile} />}
           {startsLate !== null && (
-            <p className="text-[10px] text-muted-foreground" data-story-starts-late>The book starts in {startsLate}. Seasons before that were played before the story was kept.</p>
+            <p className="mt-2 text-[10px] text-muted-foreground" data-story-starts-late>The book starts in {startsLate}. Seasons before that were played before the story was kept.</p>
           )}
         </>
       )}
@@ -118,6 +148,7 @@ function StoryBody({ career }: { career: StorySource & { retired: boolean } }) {
 /** With onClose it is a dialog over the page (opened from Latest Events);
     without it, a card in the page (the retirement screen). */
 export default function CareerStory({ career, onClose }: { career: StorySource & { retired: boolean }; onClose?: () => void }) {
+  const opener = useRef(typeof document !== "undefined" ? document.activeElement as HTMLElement | null : null);
   if (!onClose) {
     return (
       <div className="bg-card border border-border rounded-xl p-3 space-y-2" data-career-story="inline">
@@ -127,17 +158,19 @@ export default function CareerStory({ career, onClose }: { career: StorySource &
     );
   }
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/70 backdrop-blur-sm animate-fade-in" onClick={onClose}>
-      <div role="dialog" aria-modal="true" aria-label="Career Story" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(onClose)} data-career-story="dialog"
-        className="w-full max-w-md max-h-[88vh] overflow-y-auto rounded-2xl border border-border bg-card shadow-2xl" onClick={e => e.stopPropagation()}>
-        <div className="flex items-center justify-between px-4 py-3 border-b border-border sticky top-0 bg-card z-10">
-          <h2 className="text-base font-black">📖 Career Story</h2>
-          <button type="button" onClick={onClose} className="text-xs font-bold text-muted-foreground hover:text-foreground px-2 py-1 rounded bg-muted/30">Close</button>
+    <Dialog open onOpenChange={open => { if (!open) onClose(); }}>
+      <DialogContent data-career-story="dialog"
+        className="w-[calc(100%-1.5rem)] max-w-md max-h-[88dvh] grid-rows-[auto_minmax(0,1fr)_auto] gap-0 overflow-hidden rounded-2xl border-border bg-card p-0 [&>button]:min-h-11 [&>button]:min-w-11"
+        onCloseAutoFocus={event => { event.preventDefault(); opener.current?.focus({ preventScroll: true }); }}>
+        <div className="border-b border-border px-4 py-3 pr-14">
+          <DialogTitle className="text-base font-black">📖 Career Story</DialogTitle>
+          <DialogDescription className="mt-1 text-xs">Your recorded moments, one season at a time.</DialogDescription>
         </div>
-        <div className="p-4">
-          <StoryBody career={career} />
+        <StoryBody career={career} dialog />
+        <div className="border-t border-border px-4 py-3">
+          <button type="button" onClick={onClose} data-story-close className="min-h-11 w-full rounded-lg border border-border text-xs font-bold hover:bg-muted/40">Back to your career</button>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

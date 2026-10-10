@@ -1,0 +1,221 @@
+name: Soccer Career story, utilities and role outcomes
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/career-story-role.yml
+      - src/pages/SoccerCareer.tsx
+      - src/data/gameContent/soccer2.ts
+      - src/data/searchKeywords.json
+      - scripts/genSearchKeywords.mjs
+      - scripts/simGuideHeadings.mjs
+      - scripts/simSiteSearch.mjs
+      - scripts/data/guideHeadingsFrozen.json
+      - src/components/soccer-career/CareerStory.tsx
+      - src/lib/soccerCareerEngine.ts
+      - src/lib/soccerCareerRole.ts
+      - src/lib/soccerCareerMilestone.ts
+      - src/lib/soccerClubSquad.ts
+      - src/lib/soccerClubSquadSheet.ts
+      - src/lib/soccerClubSquad.test.ts
+      - src/components/soccer-career/ReducedRoleNote.tsx
+      - src/test/careerStory.test.tsx
+      - src/test/careerMilestones.test.ts
+      - src/test/soccerCareerStoryRole.test.ts
+      - scripts/simCareerStoryRole.mjs
+      - scripts/playCareerStoryRole.mjs
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: career-story-role-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  guide-index:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Derive and verify the actual guide search index
+        run: |
+          mkdir -p career-guide-index-artifacts
+          git rev-parse HEAD > career-guide-index-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > career-guide-index-artifacts/source-tree.txt
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          npm ci
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module - <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          import { spawnSync } from 'node:child_process';
+          const out = 'career-guide-index-artifacts', file = 'src/data/searchKeywords.json', before = fs.readFileSync(file);
+          const sha = value => createHash('sha256').update(value).digest('hex');
+          let generated, result;
+          try {
+            result = spawnSync(process.execPath, ['scripts/genSearchKeywords.mjs'], { encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
+            fs.writeFileSync(`${out}/generator.log`, (result.stdout ?? '') + (result.stderr ?? ''));
+            process.stdout.write(result.stdout ?? ''); process.stderr.write(result.stderr ?? '');
+            generated = fs.readFileSync(file); fs.writeFileSync(`${out}/searchKeywords.json`, generated);
+          } finally { fs.writeFileSync(file, before); }
+          const sourceHeld = fs.readFileSync(file).equals(before), matches = generated.equals(before);
+          fs.writeFileSync(`${out}/receipt.json`, JSON.stringify({ head: fs.readFileSync(`${out}/source-head.txt`, 'utf8').trim(), tree: fs.readFileSync(`${out}/source-tree.txt`, 'utf8').trim(), generatorSha256: sha(fs.readFileSync('scripts/genSearchKeywords.mjs')), originalSha256: sha(before), generatedSha256: sha(generated), sourceHeld, matches, exit: result.status }, null, 2));
+          assert.equal(sourceHeld, true, 'Generator preparation restores the checked-in index byte-exact');
+          assert.equal(result.status, 0, 'Actual generator completes');
+          assert.equal(matches, true, 'Checked-in search index equals the complete actual generator output');
+          JS
+      - name: Hold all checked-in source after preparation
+        if: always()
+        run: git diff --exit-code HEAD
+      - name: Retain the small actual generator output and receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-guide-index-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-guide-index-artifacts/
+          retention-days: 5
+  verify:
+    needs: guide-index
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      CAREER_STORY_ROLE_ARTIFACTS: career-story-role-artifacts/outcomes
+      SHOTS: career-story-role-artifacts/native
+      FREE_KICK_FONT_CACHE: career-story-role-artifacts/font-cache
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare exact-head remote checks
+        id: prepare
+        run: |
+          mkdir -p career-story-role-artifacts
+          git rev-parse HEAD > career-story-role-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > career-story-role-artifacts/source-tree.txt
+          test "$(git rev-parse fa24b3848d99e29367486489b081a483dc544206^{tree})" = d9175fa74fc5784ba6acfd1a62f4592cb106f22f
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee career-story-role-artifacts/fonts.log
+      - name: App types then production build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-story-role-artifacts/types.log
+          npm run build 2>&1 | tee career-story-role-artifacts/build.log
+      - name: Focused units and complete AR outcome proof
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/careerStory.test.tsx src/test/careerMilestones.test.ts src/test/soccerCareerStoryRole.test.ts src/lib/soccerClubSquad.test.ts --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=career-story-role-artifacts/focused-unit.json 2>&1 | tee career-story-role-artifacts/focused-unit.log || failed=1
+          CAREER_STORY_ROLE_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerStoryRole.mjs 2>&1 | tee career-story-role-artifacts/simCareerStoryRole.log || failed=1
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simHarnessAnchors.mjs 2>&1 | tee career-story-role-artifacts/simHarnessAnchors.log || failed=1
+          node --input-type=module - <<'JS' || failed=1
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const root = 'career-story-role-artifacts';
+          const read = file => JSON.parse(fs.readFileSync(`${root}/${file}`, 'utf8'));
+          const head = fs.readFileSync(`${root}/source-head.txt`, 'utf8').trim();
+          const tree = fs.readFileSync(`${root}/source-tree.txt`, 'utf8').trim();
+          const report = read('outcomes/healthy/report.json'), controls = read('outcomes/controls.json'), units = read('focused-unit.json');
+          assert.equal(units.success, true); assert.equal(units.numFailedTests, 0);
+          const focused = units.testResults.find(row => row.name.replaceAll('\\', '/').endsWith('/src/test/soccerCareerStoryRole.test.ts'));
+          assert(focused); assert.equal(focused.assertionResults.length, 40); assert(focused.assertionResults.every(row => row.status === 'passed'));
+          assert.equal(report.head, head); assert.equal(report.tree, tree); assert.equal(report.baseHead, 'fa24b3848d99e29367486489b081a483dc544206'); assert.equal(report.baseTree, 'd9175fa74fc5784ba6acfd1a62f4592cb106f22f');
+          assert.equal(report.status, 'passed'); assert.deepEqual(report.failed, []); assert.equal(report.cases.length, 16); assert(report.cases.every(row => row.passed)); assert.equal(report.sourceHeld, true);
+          for (const [key, value] of Object.entries({ arPairs:48, candidateArPairs:48, arCareers:12, selectionPairs:24, recordedRoleYears:16, helperInterruptions:6, actualInterruptedPaths:7, actualSettlementPaths:8, milestoneMarks:4, actualNewsSamples:48, legacyNewsSamples:128 })) assert.equal(report.counts[key], value, key);
+          assert(report.counts.arYears >= 96); assert(report.counts.actualMilestoneArticles >= 1);
+          assert.equal(report.attribution.edits.length, 6); assert(report.attribution.edits.every(row => row.effective && row.beforeSha256 !== row.afterSha256));
+          assert.equal(controls.head, head); assert.equal(controls.tree, tree); assert.equal(controls.baseHead, report.baseHead); assert.equal(controls.baseTree, report.baseTree); assert.equal(controls.count, 17); assert.equal(controls.controls.length, 17); assert(controls.controls.every(row => row.effective && row.failed.length > 0));
+          console.log('Receipt: 40 new focused units,16 outcome groups,17 effective controls,12 complete AR careers,48+48 neutral pairs,8 actual settlement paths,all source held.');
+          JS
+          exit "$failed"
+      - name: Native story and mobile utility journeys
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerStoryRole.mjs 2>&1 | tee career-story-role-artifacts/playCareerStoryRole.log
+          node --input-type=module - <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const report = JSON.parse(fs.readFileSync('career-story-role-artifacts/native/report.json', 'utf8'));
+          assert.equal(report.cases.length, 9); assert(report.cases.every(row => row.ok)); assert.equal(report.failed, 0); assert(report.checks > 0);
+          assert.equal(report.controls.length, 4); assert(report.controls.every(row => row.changed && row.restored && row.failures.length > 0));
+          assert.equal(report.forwardedExternalRequests, 0); assert(report.fontManifestEntries > 0); assert.deepEqual(report.sourceAfter, report.sourceBefore);
+          console.log(`Receipt: ${report.checks} native checks,9 actual journeys,4 effective detector controls,0 external requests forwarded.`);
+          JS
+      - name: Upload early outcome and browser evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-story-role-early-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-story-role-artifacts/
+          retention-days: 5
+      - name: Exact reviewed guide migration and current search outcomes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          git diff --exit-code fa24b3848d99e29367486489b081a483dc544206 -- scripts/data/guideHeadingsFrozen.json
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simGuideHeadings.mjs 2>&1 | tee career-story-role-artifacts/simGuideHeadings.log
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSiteSearch.mjs 2>&1 | tee career-story-role-artifacts/simSiteSearch.log
+          set +e
+          GUIDE_HEADINGS_CONTROL=traininglocation NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simGuideHeadings.mjs 2>&1 | tee career-story-role-artifacts/guide-traininglocation-control.log
+          control_status=${PIPESTATUS[0]}
+          set -e
+          test "$control_status" = 1
+          grep -F 'CONTROL traininglocation: only the training button location reverted to the stale desktop-only wording; section 1 must go red' career-story-role-artifacts/guide-traininglocation-control.log
+          grep -F 'simGuideHeadings control traininglocation: section 1 red and every other section green, the break was caught where it should be (exit 1)' career-story-role-artifacts/guide-traininglocation-control.log
+      - name: Related Soccer Career outcomes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simCareerStory simCareerRecordedStats simClubVerdict simLoanSpell simCareerTraining simNoInventedQuotes simSeasonCentreTable simSeasonCentreNeutral simSoccerCareerOpponents simCareerSeasonTruth; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-story-role-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: All fifteen built-output readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-story-role-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Source held
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --exit-code HEAD -- src scripts .github/workflows 2>&1 | tee career-story-role-artifacts/source-held.log
+          test "$(git rev-parse HEAD)" = "$(cat career-story-role-artifacts/source-head.txt)"
+          test "$(git rev-parse HEAD^{tree})" = "$(cat career-story-role-artifacts/source-tree.txt)"
+      - name: Upload complete exact-head evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-story-role-final-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-story-role-artifacts/
+          retention-days: 5
