@@ -1,0 +1,16 @@
+realfix-both exit=1 4s | simSaveKeeper: RED in section(s) 1.
+realfix-soccer exit=1 4s | simSaveKeeper: RED in section(s) 1.
+realfix-us exit=0 4s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+m-dismiss exit=0 6s | MUT dismiss: sim exit 0 [simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.] vitest exit 0 [ Tests  100 passed (100)]
+m-tidycount exit=1 6s | MUT tidycount: sim exit 0 [simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.] vitest exit 1 [ Tests  6 failed | 94 passed (100)]
+m-nocap exit=1 6s | MUT nocap: sim exit 0 [simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.] vitest exit 1 [ Tests  4 failed | 96 passed (100)]
+m-readback exit=1 6s | MUT readback: sim exit 0 [simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.] vitest exit 1 [ Tests  1 failed | 99 passed (100)]
+m-keyreadback exit=0 6s | MUT keyreadback: sim exit 0 [simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.] vitest exit 0 [ Tests  100 passed (100)]
+m-stalefirst exit=1 6s | MUT stalefirst: sim exit 0 [simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.] vitest exit 1 [ Tests  1 failed | 99 passed (100)]
+m-migrates exit=11 6s | MUT migrates: sim exit 1 [simSaveKeeper: RED in section(s) 2, 4.] vitest exit 1 [ Tests  1 failed | 99 passed (100)]
+m-tableignore exit=11 6s | MUT tableignore: sim exit 1 [simSaveKeeper: RED in section(s) 1, 4.] vitest exit 1 [ Tests  1 failed | 99 passed (100)]
+m-tableoldest exit=10 6s | MUT tableoldest: sim exit 1 [simSaveKeeper: RED in section(s) 1.] vitest exit 0 [ Tests  100 passed (100)]
+m-lenonly exit=11 6s | MUT lenonly: sim exit 1 [simSaveKeeper: RED in section(s) 3.] vitest exit 1 [ Tests  2 failed | 98 passed (100)]
+m-restack exit=11 6s | MUT restack: sim exit 1 [simSaveKeeper: RED in section(s) 3.] vitest exit 1 [ Tests  5 failed | 95 passed (100)]
+m-staleforever exit=1 5s | MUT staleforever: sim exit 0 [simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.] vitest exit 1 [ Tests  1 failed | 99 passed (100)]
+clean exit=0 0s | 0

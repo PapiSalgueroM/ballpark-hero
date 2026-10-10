@@ -1,0 +1,16 @@
+klMut restack: src/lib/saveKeeper.ts mutated in this checkout.
+   FAIL  /soccer-career: the undo stopped after 0 of 4 more presses. The key holds B, the card offers A, backups 3, something marked answered false
+   FAIL  /soccer-career, the store dies at call 10 of 26: two backups hold the same bytes
+   FAIL  /club-manager: the undo stopped after 0 of 4 more presses. The key holds B, the card offers A, backups 3, something marked answered false
+   FAIL  /club-manager, the store dies at call 10 of 26: two backups hold the same bytes
+   FAIL  /stadium-tycoon: the undo stopped after 0 of 4 more presses. The key holds B, the card offers A, backups 3, something marked answered false
+   FAIL  /stadium-tycoon, the store dies at call 10 of 26: two backups hold the same bytes
+[41m[1m FAIL [22m[49m src/test/routeErrorRecovery.test.tsx[2m > [22mBrokenSaveRestore, the way back (Round 958 review)[2m > [22mafter a put back and its undo the card still offers the first save, press after press
+[31m[1mAssertionError[22m: after press 2: expected [ 'new gym', …(2) ] to deeply equal [ 'new gym', …(1) ][39m
+[41m[1m FAIL [22m[49m src/test/routeErrorRecovery.test.tsx[2m > [22mBrokenSaveRestore, the way back (Round 958 review)[2m > [22mnames the cap before the press when more than three are kept aside, and says when one was dropped
+[41m[1m FAIL [22m[49m src/test/saveKeeper.test.ts[2m > [22mthe apply, before any game is in memory (Round 1219)[2m > [22mafter a put back and its undo the card still offers the other save, however often the two are swapped
+[31m[1mAssertionError[22m: after press 2: expected [ …(3) ] to deeply equal [ …(2) ][39m
+[41m[1m FAIL [22m[49m src/test/saveKeeper.test.ts[2m > [22mthe crash loop: the store dies at every storage call in turn (Round 1219)[2m > [22ma game at the key: nothing is lost at any crash point, and every staged put back ends applied
+[31m[1mAssertionError[22m: died at call 10 of 24: expected 2 to be 3 // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/saveKeeper.test.ts[2m > [22mthe crash loop: the store dies at every storage call in turn (Round 1219)[2m > [22mat the cap: nothing is lost at any crash point, and every staged put back ends applied
+MUT restack: sim exit 1 [simSaveKeeper: RED in section(s) 3.] vitest exit 1 [[2m Tests [22m [1m[31m5 failed[39m[22m[2m | [22m[1m[32m95 passed[39m[22m[90m (100)[39m]

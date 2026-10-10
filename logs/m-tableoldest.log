@@ -1,0 +1,3 @@
+klMut tableoldest: src/lib/saveKeeper.ts mutated in this checkout.
+   FAIL  /rebuild: the row says migrates with oldest 2, but its loader answered: written again at current true, one down true, one up false
+MUT tableoldest: sim exit 1 [simSaveKeeper: RED in section(s) 1.] vitest exit 0 [[2m Tests [22m [1m[32m100 passed[39m[22m[90m (100)[39m]

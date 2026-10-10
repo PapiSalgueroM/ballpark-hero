@@ -1,0 +1,7 @@
+klMut tableignore: src/lib/saveKeeper.ts mutated in this checkout.
+   FAIL  /wonderkid-factory: the row says ignores with oldest 1, but its loader answered: written again at current true, one down false, one up false
+   FAIL  the 5 games that ignore their version (/wonderkid-factory, /fight-career, /fight-promoter, /fight-gym, /idle-arena) get no copy and are not even read
+[41m[1m FAIL [22m[49m src/test/saveKeeper.test.ts[2m > [22mthe copy before a version step (Round 1219)[2m > [22man ordinary boot writes nothing and reads exactly the journal and the games that act on a version
+[31m[1mAssertionError[22m: expected [ 'dukb-club-manager-save', …(4) ] to have a length of 6 but got 5[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveKeeper.test.ts,title=src/test/saveKeeper.test.ts > the copy before a version step (Round 1219) > an ordinary boot writes nothing and reads exactly the journal and the games that act on a version,line=365,column=20::AssertionError: expected [ 'dukb-club-manager-save', …(4) ] to have a length of 6 but got 5%0A%0A- Expected%0A+ Received%0A%0A- 6%0A+ 5%0A%0A ❯ src/test/saveKeeper.test.ts:365:20%0A%0A
+MUT tableignore: sim exit 1 [simSaveKeeper: RED in section(s) 1, 4.] vitest exit 1 [[2m Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m99 passed[39m[22m[90m (100)[39m]

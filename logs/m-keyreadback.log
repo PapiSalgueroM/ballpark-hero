@@ -1,0 +1,2 @@
+klMut keyreadback: src/lib/saveKeeper.ts mutated in this checkout.
+MUT keyreadback: sim exit 0 [simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.] vitest exit 0 [[2m Tests [22m [1m[32m100 passed[39m[22m[90m (100)[39m]

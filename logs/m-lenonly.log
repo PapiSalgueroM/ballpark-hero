@@ -1,0 +1,12 @@
+klMut lenonly: src/lib/saveKeeper.ts mutated in this checkout.
+   FAIL  /soccer-career: staged {"ok":true}, key is B, copies of B 0, backups 1, journal left false, outcome {"path":"/soccer-career","ok":true}
+   FAIL  /soccer-career: put back, broken again, fresh start: stopped at try 1 of 3 with 1 backups (1 of the save put back, 0 of the career he had)
+   FAIL  /soccer-career: with room for the save and none for its copy the put back answered {"path":"/soccer-career","ok":true} and the key holds B
+   FAIL  /soccer-career: a full store answered {"path":"/soccer-career","ok":true} and left dukb-club-manager-save, soccerCareerSave, soccerCareerSave.broken-2026-01-02T03-04-05
+   FAIL  /soccer-career, the store dies at call 3 of 17: the outcome does not say what the key holds; LIVENESS: the journal landed and the put back never happened
+   FAIL  /stadium-tycoon: staged {"ok":true}, key is B, copies of B 0, backups 1, journal left false, outcome {"path":"/stadium-tycoon","ok":true}
+[41m[1m FAIL [22m[49m src/test/routeErrorRecovery.test.tsx[2m > [22mbackups are capped, and one can be waved off or deleted (Round 958 closing check)[2m > [22ma save put back that breaks the page again, try after try, never costs the career he had
+[31m[1mAssertionError[22m: try 1: expected 'career F' to be 'broken A' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/routeErrorRecovery.test.tsx[2m > [22mbackups are capped, and one can be waved off or deleted (Round 958 closing check)[2m > [22m"Leave it aside" is remembered on the next visit, and a newer backup is offered again
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/routeErrorRecovery.test.tsx,title=src/test/routeErrorRecovery.test.tsx > backups are capped%2C and one can be waved off or deleted (Round 958 closing check) > a save put back that breaks the page again%2C try after try%2C never costs the career he had,line=610,column=65::AssertionError: try 1: expected 'career F' to be 'broken A' // Object.is equality%0A%0AExpected: "broken A"%0AReceived: "career F"%0A%0A ❯ src/test/routeErrorRecovery.test.tsx:610:65%0A%0A
+MUT lenonly: sim exit 1 [simSaveKeeper: RED in section(s) 3.] vitest exit 1 [[2m Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m98 passed[39m[22m[90m (100)[39m]

@@ -1,0 +1,5 @@
+klMut readback: src/lib/brokenSaveRecovery.ts mutated in this checkout.
+[41m[1m FAIL [22m[49m src/test/routeErrorRecovery.test.tsx[2m > [22msetAsideSave (Round 958)[2m > [22mremoves nothing when the copy is silently dropped (the read back check)
+[31m[1mAssertionError[22m: expected { ok: true, …(1) } to deeply equal { ok: false }[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/routeErrorRecovery.test.tsx,title=src/test/routeErrorRecovery.test.tsx > setAsideSave (Round 958) > removes nothing when the copy is silently dropped (the read back check),line=209,column=42::AssertionError: expected { ok: true, …(1) } to deeply equal { ok: false }%0A%0A- Expected%0A+ Received%0A%0A  {%0A-   "ok": false,%0A+   "backupKey": "dukb-club-manager-save.broken-2026-10-03T12-34-56",%0A+   "ok": true,%0A  }%0A%0A ❯ src/test/routeErrorRecovery.test.tsx:209:42%0A%0A
+MUT readback: sim exit 0 [simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.] vitest exit 1 [[2m Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m99 passed[39m[22m[90m (100)[39m]

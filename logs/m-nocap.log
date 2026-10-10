@@ -1,0 +1,10 @@
+klMut nocap: src/lib/saveKeeper.ts mutated in this checkout.
+[41m[1m FAIL [22m[49m src/test/routeErrorRecovery.test.tsx[2m > [22mBrokenSaveRestore, the way back (Round 958 review)[2m > [22mnames the cap before the press when more than three are kept aside, and says when one was dropped
+[31m[1mAssertionError[22m: expected 'kept 1' to be null[39m
+[41m[1m FAIL [22m[49m src/test/routeErrorRecovery.test.tsx[2m > [22mBrokenSaveRestore, the way back (Round 958 review)[2m > [22mwith three or fewer kept aside the offer still says nothing is deleted, and nothing is
+[41m[1m FAIL [22m[49m src/test/saveKeeper.test.ts[2m > [22mthe apply, before any game is in memory (Round 1219)[2m > [22msays how many kept aside saves the cap dropped, on the second put back with play between
+[31m[1mAssertionError[22m: expected { path: '/fight-gym', ok: true, …(1) } to deeply equal { path: '/fight-gym', ok: true, …(2) }[39m
+[41m[1m FAIL [22m[49m src/test/saveKeeper.test.ts[2m > [22mthe apply, before any game is in memory (Round 1219)[2m > [22mpast the cap it drops the oldest, never the copy it just made and never the save now being played
+[31m[1mAssertionError[22m: expected { path: '/fight-gym', ok: true, …(1) } to deeply equal { path: '/fight-gym', ok: true, …(2) }[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/routeErrorRecovery.test.tsx,title=src/test/routeErrorRecovery.test.tsx > BrokenSaveRestore%2C the way back (Round 958 review) > names the cap before the press when more than three are kept aside%2C and says when one was dropped,line=392,column=44::AssertionError: expected 'kept 1' to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A"kept 1"%0A%0A ❯ src/test/routeErrorRecovery.test.tsx:392:44%0A%0A
+MUT nocap: sim exit 0 [simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.] vitest exit 1 [[2m Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m96 passed[39m[22m[90m (100)[39m]
