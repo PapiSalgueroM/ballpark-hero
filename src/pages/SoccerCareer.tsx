@@ -36,7 +36,7 @@ import {
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
   dismissBallonDor, giveBdorSpeech, bdorSpeechOpen, type BdorSpeechChoice, SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, SOCCER_WORLD_CUP_SPEECHES,
   giveWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer, loadManagerMarket,
-  acceptRetirementSuggestion, declineRetirementSuggestion,
+  acceptRetirementSuggestion, declineRetirementSuggestion, announceFarewellSeason,
   advancePunditSeason, endPunditCareer, punditLegacyPaid, playedSeniorSeason, POST_RETIREMENT_BONUS_CAP,
   advanceOwnerSeason, endOwnerCareer,
   dismissNewspaper, purchaseSpendingItem, SPENDING_ITEMS,
@@ -59,6 +59,8 @@ import type { FirstStageStage } from "@/lib/soccerCareerContinental";
 import { careerBeforeBallonDorReveal, revealBallonDorResult } from "@/lib/soccerAwardReveal";
 import { readLeagueWorldSeason } from "@/lib/soccerCareerLeagueWorld";
 import { soccerExtensionQuote } from "@/lib/soccerCareerContracts";
+import { farewellEligibility, readSoccerFarewell } from "@/lib/soccerCareerFarewell";
+import { FarewellSeasonCard } from "@/components/soccer-career/FarewellSeasonCard";
 /* Round 258, his ask alongside the net worth bug: "depending where u live
    ur currency will be diffrent". `money` rewrites the euro amounts inside
    any line the game draws, so a wage slip, an event consequence and a
@@ -922,6 +924,8 @@ export default function SoccerCareer() {
      out of the academy byte for byte the save it always was. */
   const [academyReport, setAcademyReport] = useState<AcademyReport | null>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
+  const farewellAnnouncement = useRef<CareerState | null>(null);
+  const farewellAdvance = useRef<CareerState | null>(null);
   /* Round 129: the training and phone buttons are pinned to the bottom right on
      every screen of this game, so they were sitting over the footer's Privacy
      and Terms links at the end of the page in exactly the way the action bar
@@ -1045,6 +1049,10 @@ export default function SoccerCareer() {
 
   const handleNextSeason = () => {
     if (!career) return;
+    if (readSoccerFarewell(career)) {
+      if (farewellAdvance.current === career) return;
+      farewellAdvance.current = career;
+    }
     if (career.phase === "youth") {
       const next = advanceYouthYear(career, clubs);
       setAcademyReport(buildAcademyReport(career, next, effectivePotential(career)));
@@ -1303,6 +1311,12 @@ export default function SoccerCareer() {
     setCareer(declineRetirementSuggestion(career, clubs));
   };
 
+  const handleAnnounceFarewell = () => {
+    if (!career || farewellAnnouncement.current === career || !farewellEligibility(career).eligible) return;
+    farewellAnnouncement.current = career;
+    setCareer(announceFarewellSeason(career, clubs));
+  };
+
   const handlePunditAction = (action: PunditAction) => {
     if (!career) return;
     setCareer(advancePunditSeason(career, action));
@@ -1457,6 +1471,7 @@ export default function SoccerCareer() {
               onDismissAppeal={handleDismissAppeal}
               onAcceptRetirement={handleAcceptRetirement}
               onDeclineRetirement={handleDeclineRetirement}
+              onAnnounceFarewell={handleAnnounceFarewell}
               onPunditAction={handlePunditAction}
               onEndPundit={handleEndPundit}
               onAdvanceOwner={handleAdvanceOwner}
@@ -3694,7 +3709,7 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, timelineRef, signedNote, academyReport, onAcademyFocus, onCareerPatch }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onAnnounceFarewell, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, timelineRef, signedNote, academyReport, onAcademyFocus, onCareerPatch }: {
   career: CareerState;
   clubs: ClubData[];
   /** Round 530: the deal slip under the toast, already scoped to this career object by the page. */
@@ -3737,6 +3752,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onDismissAppeal: () => void;
   onAcceptRetirement: () => void;
   onDeclineRetirement: () => void;
+  onAnnounceFarewell: () => void;
   onPunditAction: (action: PunditAction) => void;
   onEndPundit: () => void;
   onAdvanceOwner: () => void;
@@ -3978,6 +3994,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
       )}
 
       {/* Main panels */}
+      {(career.phase === "playing" || (career.phase !== "retirement_suggestion" && readSoccerFarewell(career))) && <FarewellSeasonCard career={career} onAnnounce={onAnnounceFarewell} />}
       <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-3">
         {/* LEFT, Timeline. md:self-start (Release AM): the card ends where its
             list ends, where it used to stretch the full height of the hub beside
@@ -4200,6 +4217,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 <Button onClick={onDeclineRetirement} variant="outline" className="w-full h-11 text-sm font-bold">
                   💪 Not Done Yet: Keep Playing
                 </Button>
+                <FarewellSeasonCard career={career} onAnnounce={onAnnounceFarewell} />
               </div>
             </div>
           )}

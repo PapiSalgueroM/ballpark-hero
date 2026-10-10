@@ -1,3 +1,7 @@
+## Codex1238-1240 IN PROGRESS, 2026-10-10: Soccer farewell season
+
+Isolated codex/career-farewell-season from09df145a. One bound final season for adult senior players, actual queued ceremonies before existing retirement, inactive saved-state/RNG neutrality. Full contract docs/ROUND1238-1240.md. Remote proof pending, no READY/live claim. G owns integration/main/publish; PR216/217/218 stay frozen. Original state below is preserved.
+
 ## Release AS LIVE, 2026-10-10 02:34 EDT: NBA My Career, the numbers tell the truth and the rival plays on your scale
 
 Claude lane (session F). main 808dbbdc, deployment b0d516e6-6d64-4ee2-8e97-a5fa27f7fca5, entry index-CDom0l2f.js (was index-DNvMbg1w.js, Release AR,
