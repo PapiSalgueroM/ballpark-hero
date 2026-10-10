@@ -1,0 +1,47 @@
+Mobile chrome, base http://localhost:4173
+Top bar measured at 320, 390, 430, 1024, 1440 wide across 5 routes, signed out and signed in.
+Signed in means 98,765 points, rank #12345, a 365 day streak and 106 games played.
+
+Top bar, child boxes measured in the browser
+   320  signed out  /soccer-career  bar    89px tall   "DOUKNOWBALL Back Track stats"
+   320  signed out  /club-manager   bar    89px tall   "DOUKNOWBALL Back Track stats"
+   320  signed out  /dart-draft     bar    89px tall   "DOUKNOWBALL Back Track stats"
+   320  signed out  /cfb-dynasty    bar    89px tall   "DOUKNOWBALL Back Track stats"
+   320  signed out  /squad-deal     bar    89px tall   "DOUKNOWBALL Back Track stats"
+   320  signed in   /soccer-career  bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   320  signed in   /club-manager   bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   320  signed in   /dart-draft     bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   320  signed in   /cfb-dynasty    bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   320  signed in   /squad-deal     bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   390  signed out  /soccer-career  bar    89px tall   "DOUKNOWBALL Back Track stats"
+   390  signed out  /club-manager   bar    89px tall   "DOUKNOWBALL Back Track stats"
+   390  signed out  /dart-draft     bar    89px tall   "DOUKNOWBALL Back Track stats"
+   390  signed out  /cfb-dynasty    bar    89px tall   "DOUKNOWBALL Back Track stats"
+   390  signed out  /squad-deal     bar    89px tall   "DOUKNOWBALL Back Track stats"
+   390  signed in   /soccer-career  bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   390  signed in   /club-manager   bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   390  signed in   /dart-draft     bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   390  signed in   /cfb-dynasty    bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   390  signed in   /squad-deal     bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   430  signed out  /soccer-career  bar    89px tall   "DOUKNOWBALL Back Track stats"
+   430  signed out  /club-manager   bar    89px tall   "DOUKNOWBALL Back Track stats"
+   430  signed out  /dart-draft     bar    89px tall   "DOUKNOWBALL Back Track stats"
+   430  signed out  /cfb-dynasty    bar    89px tall   "DOUKNOWBALL Back Track stats"
+   430  signed out  /squad-deal     bar    89px tall   "DOUKNOWBALL Back Track stats"
+   430  signed in   /soccer-career  bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   430  signed in   /club-manager   bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   430  signed in   /dart-draft     bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   430  signed in   /cfb-dynasty    bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   430  signed in   /squad-deal     bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+  1024  signed out  /soccer-career  bar    53px tall   "DOUKNOWBALL Back Sign up to track your stats"
+  1024  signed in   /soccer-career  bar    53px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+  1440  signed out  /soccer-career  bar    53px tall   "DOUKNOWBALL Back Sign up to track your stats"
+  1440  signed in   /soccer-career  bar    53px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+
+Soccer Career action bar, scrolled top to bottom
+   320   43 scroll stops, bar 85px tall, page 13259px, controls unreachable at 0 of them, covering the footer at 0
+   390   37 scroll stops, bar 85px tall, page 11411px, controls unreachable at 0 of them, covering the footer at 0
+   430   34 scroll stops, bar 85px tall, page 10631px, controls unreachable at 0 of them, covering the footer at 0
+  114 of 114 scroll stops had the controls on screen and hit testable. 7 of them had the footer showing at the same time with zero pixels of overlap.
+
+GREEN: 34 top bar measurements and 114 scroll stops, no overlaps, nothing off the side of the screen, controls reachable everywhere, footer never covered.

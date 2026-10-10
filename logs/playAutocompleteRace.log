@@ -1,0 +1,42 @@
+playAutocompleteRace: seed 1138, 34 trials a page, widths 390 and 1280, build dist
+  /build-your-xi at 390: 34 taps, 0 stale names offered, 0 stale picks, 0 other options tapped, current pick landed, 114 search requests
+  /football-connect-4 at 390: 34 taps, 0 stale names offered, 0 stale picks, 0 other options tapped, current pick landed, 148 search requests
+  /missing-xi at 390: 34 taps, 0 stale names offered, 0 stale picks, 0 other options tapped, current pick landed, 104 search requests
+  /build-your-xi at 1280: 34 taps, 0 stale names offered, 0 stale picks, 0 other options tapped, current pick landed, 112 search requests
+  /football-connect-4 at 1280: 34 taps, 0 stale names offered, 0 stale picks, 0 other options tapped, current pick landed, 150 search requests
+  /missing-xi at 1280: 34 taps, 0 stale names offered, 0 stale picks, 0 other options tapped, current pick landed, 118 search requests
+RACE_COUNTS seed=1138 /build-your-xi@390=0/34 /football-connect-4@390=0/34 /missing-xi@390=0/34 /build-your-xi@1280=0/34 /football-connect-4@1280=0/34 /missing-xi@1280=0/34 target=0/20
+
+  PASS  /build-your-xi at 390: 34 of 34 trials ran
+  PASS  /build-your-xi at 390: no name of the last search was offered under the new text (0)
+  PASS  /build-your-xi at 390: no tap picked a name of the last search (0)
+  PASS  /build-your-xi at 390: no option of any kind was on screen while the new search was held (0)
+  PASS  /build-your-xi at 390: a current pick lands, so the tap path is alive
+  PASS  /football-connect-4 at 390: 34 of 34 trials ran
+  PASS  /football-connect-4 at 390: no name of the last search was offered under the new text (0)
+  PASS  /football-connect-4 at 390: no tap picked a name of the last search (0)
+  PASS  /football-connect-4 at 390: no option of any kind was on screen while the new search was held (0)
+  PASS  /football-connect-4 at 390: a current pick lands, so the tap path is alive
+  PASS  /missing-xi at 390: 34 of 34 trials ran
+  PASS  /missing-xi at 390: no name of the last search was offered under the new text (0)
+  PASS  /missing-xi at 390: no tap picked a name of the last search (0)
+  PASS  /missing-xi at 390: no option of any kind was on screen while the new search was held (0)
+  PASS  /missing-xi at 390: a current pick lands, so the tap path is alive
+  PASS  /build-your-xi at 1280: 34 of 34 trials ran
+  PASS  /build-your-xi at 1280: no name of the last search was offered under the new text (0)
+  PASS  /build-your-xi at 1280: no tap picked a name of the last search (0)
+  PASS  /build-your-xi at 1280: no option of any kind was on screen while the new search was held (0)
+  PASS  /build-your-xi at 1280: a current pick lands, so the tap path is alive
+  PASS  /football-connect-4 at 1280: 34 of 34 trials ran
+  PASS  /football-connect-4 at 1280: no name of the last search was offered under the new text (0)
+  PASS  /football-connect-4 at 1280: no tap picked a name of the last search (0)
+  PASS  /football-connect-4 at 1280: no option of any kind was on screen while the new search was held (0)
+  PASS  /football-connect-4 at 1280: a current pick lands, so the tap path is alive
+  PASS  /missing-xi at 1280: 34 of 34 trials ran
+  PASS  /missing-xi at 1280: no name of the last search was offered under the new text (0)
+  PASS  /missing-xi at 1280: no tap picked a name of the last search (0)
+  PASS  /missing-xi at 1280: no option of any kind was on screen while the new search was held (0)
+  PASS  /missing-xi at 1280: a current pick lands, so the tap path is alive
+  PASS  the list never outlived a change of square on /football-connect-4 (0 of 20)
+  PASS  no page error
+playAutocompleteRace: 204 taps on 3 pages at 390 and 1280, 0 stale names offered, 0 stale picks, 6 of 6 current picks landed, target leg 0 of 20.
