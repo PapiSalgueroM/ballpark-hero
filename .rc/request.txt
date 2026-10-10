@@ -1,0 +1,22 @@
+# Release AU, attribution arms on a REBUILT served build (this checkout only): the chance wheel receipt off, then the opening tie off as well
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1
+rebuild-nowheel: node .rc/x/mutAU.mjs nowheel && npm run build > /tmp/b1.log 2>&1; s=$?; tail -1 /tmp/b1.log | cut -c1-120; exit $s
+playCareerSquad-nowheel: node scripts/playCareerSquad.mjs
+playSeasonCentreMotion-nowheel: node scripts/playSeasonCentreMotion.mjs
+playCareerMoments-nowheel: node scripts/playCareerMoments.mjs
+playSoccerCareerCompetitions-nowheel: node scripts/playSoccerCareerCompetitions.mjs
+rebuild-noadd: node .rc/x/mutAU.mjs noopening && npm run build > /tmp/b2.log 2>&1; s=$?; tail -1 /tmp/b2.log | cut -c1-120; exit $s
+simSoccerCareerDevelopment-noadd: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerDevelopment.mjs
+simCareerStoryRole-noadd: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerStoryRole.mjs
+simCareerTrophyRuns-noadd: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs
+simSoccerSeasonHistory-noadd: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonHistory.mjs
+simSoccerDerbyHistory-noadd: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerDerbyHistory.mjs
+playSoccerCareerDevelopment-noadd: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerDevelopment.mjs
+playCareerStoryRole-noadd: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerStoryRole.mjs
+playCareerTrophyRuns-noadd: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerTrophyRuns.mjs
+playDerbyHistory1195-noadd: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playDerbyHistory1195.mjs
+playSeasonHistory1193-noadd: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSeasonHistory1193.mjs
+restore: git checkout HEAD -- src; echo "src differs from the head in $(git diff --name-only HEAD -- src | wc -l) file(s)"
