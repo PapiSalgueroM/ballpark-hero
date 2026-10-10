@@ -1,0 +1,4 @@
+7) The leaderboard cap row is the measured perfect run
+  FAIL: the database refused game_score_caps?select=game,max_score&game=eq.conquest-soccer-imperialism: TypeError: fetch failed
+
+1 FAILURES

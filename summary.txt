@@ -1,0 +1,15 @@
+base-init exit=0 0s | 980654fac Release AT: six budget rows follow the gate branch's measurement (/club-manager 582, /soccer-career 797, /manager-hot-seat 600, /deadline-day 610, /footle 348, 
+base-simCmLeagueRules exit=0 39s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+base-simCmShootoutOrder exit=0 20s | simCmShootoutOrder: all sections passed
+base-simCmVar exit=0 18s | simCmVar normal: actual review outcomes and full prior baseline passed.
+base-simCustomClubValues exit=0 65s | simCustomClubValues: 25 checks, 0 failures
+base-simManagerAppealIsolation exit=0 32s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+base-simEra2005 exit=0 12s | simEra2005: 1 failure
+base-simEra2010 exit=0 13s | simEra2010: 1 failure
+base-simEra2015 exit=0 11s | simEra2015: 3 failures
+base-simEra2020 exit=0 9s | simEra2020: 5 failure(s).
+base-simGmCalendar exit=0 1s | simGmCalendar: 6 failure(s)
+base-simGmDealTableFixture exit=0 1s | simGmDealTableFixture: FAIL, 2 section(s) differ from the recording
+base-simGmStaff exit=0 3s | GM STAFF: 16 failure(s)
+base-simSoccerConquest exit=0 7s | 1 FAILURES
+base-simEras exit=0 710s | 3 FAILURES

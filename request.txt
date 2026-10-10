@@ -1,0 +1,16 @@
+#!serial
+base-init: git worktree add -q /tmp/b1229 980654fa && ln -s $PWD/node_modules /tmp/b1229/node_modules && cd /tmp/b1229 && git log --oneline -1
+base-simCmLeagueRules: cd /tmp/b1229 && node scripts/simCmLeagueRules.mjs 2>&1 | tail -4
+base-simCmShootoutOrder: cd /tmp/b1229 && node scripts/simCmShootoutOrder.mjs 2>&1 | tail -4
+base-simCmVar: cd /tmp/b1229 && node scripts/simCmVar.mjs 2>&1 | tail -4
+base-simCustomClubValues: cd /tmp/b1229 && node scripts/simCustomClubValues.mjs 2>&1 | tail -4
+base-simManagerAppealIsolation: cd /tmp/b1229 && node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -4
+base-simEra2005: cd /tmp/b1229 && node scripts/simEra2005.mjs 2>&1 | tail -4
+base-simEra2010: cd /tmp/b1229 && node scripts/simEra2010.mjs 2>&1 | tail -4
+base-simEra2015: cd /tmp/b1229 && node scripts/simEra2015.mjs 2>&1 | tail -4
+base-simEra2020: cd /tmp/b1229 && node scripts/simEra2020.mjs 2>&1 | tail -4
+base-simGmCalendar: cd /tmp/b1229 && node scripts/simGmCalendar.mjs 2>&1 | tail -4
+base-simGmDealTableFixture: cd /tmp/b1229 && node scripts/simGmDealTableFixture.mjs 2>&1 | tail -4
+base-simGmStaff: cd /tmp/b1229 && node scripts/simGmStaff.mjs 2>&1 | tail -4
+base-simSoccerConquest: cd /tmp/b1229 && node scripts/simSoccerConquest.mjs 2>&1 | tail -4
+base-simEras: cd /tmp/b1229 && node scripts/simEras.mjs 2>&1 | tail -4

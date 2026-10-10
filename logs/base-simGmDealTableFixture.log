@@ -1,0 +1,4 @@
+    recorded: Aston Villa|0.62|1|ask=44.1|pat=3|meter=17|open|fee|stage=1|rival=-|The fax machine allegedly "broke". The ask just went up.
+    now:      Aston Villa|0.62|1|ask=47|pat=3|meter=17|open|fee|stage=1|rival=-|The fax machine allegedly "broke". The ask just went up.
+
+simGmDealTableFixture: FAIL, 2 section(s) differ from the recording

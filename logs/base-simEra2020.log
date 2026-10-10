@@ -1,0 +1,4 @@
+  FAIL: only 6 era-only clubs sit in two eras; the order check has nothing to bite on
+  FAIL: an unscoped leagueOf('Cádiz') reads segunda; it has always read laliga2005
+
+simEra2020: 5 failure(s).

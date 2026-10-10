@@ -1,0 +1,4 @@
+   old save with its cap at 100k loads at 910k (line 910k); old save with its own cap (2094k) loads at 2094k; a new save brought down to 100k loads at 100k
+   ok   an old created save with its cap under the line loads at the 910k line with every contract as signed
+   ok   the floor leaves an old save's higher cap and a new save's own cap exactly as saved
+simCustomClubValues: 25 checks, 0 failures
