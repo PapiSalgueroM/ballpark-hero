@@ -1,0 +1,1 @@
+vitest: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/vitest.log 2>&1; s=$?; grep -E "Test Files|Tests |FAIL" $RC_OUT/vitest.log | tail -12; exit $s
