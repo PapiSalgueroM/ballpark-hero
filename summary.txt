@@ -1,0 +1,2 @@
+prep exit=0 0s | /tmp/base/scripts/simUsCareerSummer.mjs
+base-mlb-bal-8000 exit=0 2450s | simUsCareerSummer: green. Sections 6 held.
