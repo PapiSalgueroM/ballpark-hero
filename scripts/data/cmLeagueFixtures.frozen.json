@@ -23,6 +23,15 @@
       "rounds": 38,
       "fixtures": 380,
       "sha256": "efbaf18e2e4fe78cedf6e41192d2af64110fa6e06710fb5303ca0e84174074d7"
+    },
+    "ligue2-2026-27-v1": {
+      "leagueId": "ligue2",
+      "file": "src/data/clubManagerLigue2Fixtures2026.ts",
+      "receipt": "scripts/data/clubManagerLigue2Fixtures2026.receipt.json",
+      "clubs": 18,
+      "rounds": 34,
+      "fixtures": 306,
+      "sha256": "30a2328118048877b830d97ad672e249335c8d9a1456c24ed1d7b979557e090b"
     }
   }
 }

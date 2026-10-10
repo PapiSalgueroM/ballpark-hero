@@ -51,15 +51,37 @@ export const CM_FIXTURE_LEAGUES = [
       },
     ],
   },
+  /* HELD, read 2026-10-10: both sources print Rennes at home to PSG twice (matchdays 1 and 23) and PSG at home
+     to Rennes never, so the list as they show it is not a whole double round robin and the tool writes nothing.
+     One of the two matches was moved to the other ground after the list was published; which one needs a source
+     of the list as first published. Never patched by hand. The tables below are checked and stay for that day. */
   {
     leagueId: 'ligue1', exportName: 'LIGUE1_FIXTURES_2026', file: 'clubManagerLigue1Fixtures2026', orderSource: 0,
     sources: [MAXIFOOT('ligue-1-france'), FEED('ligue-1-2026')],
-    names: [{}, {}],
+    names: [
+      { 'Paris SG': 'PSG' },
+      {
+        'AJ Auxerre': 'Auxerre', 'AS Monaco': 'Monaco', 'Angers SCO': 'Angers', 'Estac Troyes': 'Troyes',
+        'FC Lorient': 'Lorient', 'Havre Athletic Club': 'Le Havre', 'LOSC Lille': 'Lille', 'Le Mans FC': 'Le Mans',
+        'OGC Nice': 'Nice', 'Olympique Lyonnais': 'Lyon', 'Olympique de Marseille': 'Marseille',
+        'Paris Saint-Germain': 'PSG', 'RC Lens': 'Lens', 'RC Strasbourg Alsace': 'Strasbourg',
+        'Stade Brestois 29': 'Brest', 'Stade Rennais FC': 'Rennes', 'Toulouse FC': 'Toulouse',
+      },
+    ],
   },
   {
     leagueId: 'ligue2', exportName: 'LIGUE2_FIXTURES_2026', file: 'clubManagerLigue2Fixtures2026', orderSource: 0,
     sources: [MAXIFOOT('ligue-2-france'), FEED('ligue-2-2026')],
-    names: [{}, {}],
+    names: [
+      { 'Boulogne/Mer': 'Boulogne', 'Clermont F.': 'Clermont', 'Pau FC': 'Pau', 'Red Star': 'Red Star FC', 'St Etienne': 'Saint-Étienne' },
+      {
+        'AS Nancy Lorraine': 'Nancy', 'AS Saint-Étienne': 'Saint-Étienne', 'Clermont Foot 63': 'Clermont', 'Dijon FCO': 'Dijon',
+        'EN Avant Guingamp': 'Guingamp', 'FC Annecy': 'Annecy', 'FC Metz': 'Metz', 'FC Nantes': 'Nantes',
+        'FC Sochaux-Montbéliard': 'Sochaux', 'Grenoble Foot 38': 'Grenoble', 'Montpellier Hérault SC': 'Montpellier',
+        'Pau FC': 'Pau', 'Rodez Aveyron Football': 'Rodez', 'Stade DE Reims': 'Reims', 'Stade Lavallois MFC': 'Laval',
+        'US Boulogne CO': 'Boulogne', 'USL Dunkerque': 'Dunkerque',
+      },
+    ],
   },
   {
     leagueId: 'eredivisie', exportName: 'EREDIVISIE_FIXTURES_2026', file: 'clubManagerEredivisieFixtures2026', orderSource: 0,

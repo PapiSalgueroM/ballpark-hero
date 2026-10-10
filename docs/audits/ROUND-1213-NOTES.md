@@ -65,6 +65,22 @@ reviewer has done this; whoever does it records `{ on, by, rounds compared, diff
   Coruña), 10 for Maxifoot (French spellings: "La Corogne", "FC Seville", "Betis Séville"). Data file
   `src/data/clubManagerLaLigaFixtures2026.ts` 13,233 bytes; receipt 80,064 bytes. For the binding round: the
   game's club names are the row in `REAL_LEAGUES`, nothing differs.
+- **ligue1: OUT of this round (held), not a source disagreement but a list that is not whole.** Both sources
+  were fetched and parsed (Maxifoot `calendrier-ligue-1-france-2026-2027.htm`, 131,148 bytes, sha256
+  `d84909200e43...`; the feed `ligue-1-2026`, 68,393 bytes, sha256 `625cb36e45cc...`): 306 rows each, 34
+  matchdays of 9, 18 clubs that map onto the game's row, and the two agree on every tuple. But BOTH print
+  Rennes at home to PSG twice, in matchday 1 (Maxifoot line 1143, feed match 7) and in matchday 23 (Maxifoot
+  line 1362, feed match 205), and PSG at home to Rennes never. So one of the two matches changed ground after
+  the list was published and the pages show the list as it stands today, not as first published. The tool
+  refuses it (an ordered pair missing, one repeated) and nothing was patched. What a later round needs: a source
+  of the list as first published (the league's own release of June 2026) to say which meeting was in Paris. The
+  name tables are checked and stay in `leagues.mjs`.
+- **ligue2: IN.** 18 clubs, 34 matchdays, 306 fixtures. Sources: Maxifoot
+  (`https://www.maxifoot.fr/calendrier-ligue-2-france-2026-2027.htm`, 104,183 bytes, sha256 `b47ad1e27180...`)
+  and the feed (`https://fixturedownload.com/feed/json/ligue-2-2026`, 69,651 bytes, sha256 `faa579116111...`).
+  Both read 2026-10-10. Zero tuple differences in 306. Name table: 5 lines for Maxifoot, 17 for the feed. Data
+  file `src/data/clubManagerLigue2Fixtures2026.ts` 8,979 bytes; receipt 64,330 bytes. The game spells the club
+  `Red Star FC` and `Saint-Étienne`.
 
 ## Runner results
 
