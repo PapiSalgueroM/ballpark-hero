@@ -1,7 +1,7 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { nameModerationError } from '@/lib/nameModeration';
 import { realLeagueFixtureKeyForStart, realLeagueFixturePairs, realLeagueFixtureCoverage } from '@/lib/clubManagerFixtures';
-import { settleGoalReviews, penaltyReviews, awardReviewedPenalties, type CmVarDecision } from '@/lib/clubManagerVar';
+import { settleGoalReviews, penaltyReviews, awardReviewedPenalties, cmVarCovers, type CmVarDecision } from '@/lib/clubManagerVar';
 /* Round 201: the wilderness reuses the manager job market the retired
    player path already had, so a sacked manager gets real clubs with real
    briefs instead of a bespoke second offer engine. */
@@ -17768,7 +17768,10 @@ function kickOff(state: CareerState, entry: CalendarEntry, varReviews = false): 
      their teamsheet against me. */
   const squad = pickOppSquad(oppRosterFor(state, fx.opponent));
   const live: LiveMatch = {
-    ...(varReviews && worldYear(state) >= 2026 && !isHistoricEra(state.eraId ?? DEFAULT_ERA_ID) ? { varReviews: true as const } : {}),
+    /* Round 1218: and only where the competition uses reviews in real life (scripts/data/cmVarCompetitions.json). */
+    ...(varReviews && worldYear(state) >= 2026 && !isHistoricEra(state.eraId ?? DEFAULT_ERA_ID)
+      && cmVarCovers(entry.type === 'league' ? `league:${careerLeagueOf(state).id}` : entry.type === 'cup' ? `cup:${careerLeagueOf(state).cupName}` : 'ucl',
+        entry.type === 'cup' ? entry.cupRound : entry.type === 'uclGroup' ? 'group' : entry.uclRound) ? { varReviews: true as const } : {}),
     week: state.week,
     myGoals: 0,
     oppGoals: 0,

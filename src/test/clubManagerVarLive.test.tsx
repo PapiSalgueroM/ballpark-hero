@@ -100,10 +100,18 @@ describe('Club Manager: VAR ships dark', () => {
 
   it('a Quick Sim through the hook is the match the engine plays without reviews', async () => {
     const r = await booted();
-    let played = 0;
+    let played = 0, chosen = 0;
     for (let guard = 0; guard < 30 && played < 6; guard++) {
       const before = clone(api.career);
-      const seed = 5200 + guard;
+      /* Round 1218 fix (review finding 8): on rates taken from real football about one league match in six has a
+         review, and six matches on any six seeds had none in them about four runs in ten, so this case could
+         not see the switch. Each match is now chosen: the first seed whose match the engine WOULD show a review
+         in if asked. A match no seed reviews (a competition without reviews) is played on its plain seed. */
+      let seed = 5200 + guard * 500, found = false;
+      for (let k = 0; k < 120 && !found; k++) {
+        const reviewed = seeded(seed + k, () => playNextEntry(clone(before), { skipHalftime: true, varReviews: true }));
+        if (reviewed.kind === 'match' && reviewRows(reviewed.report) > 0) { seed += k; found = true; }
+      }
       act(() => seeded(seed, () => api.quickPlay()));
       if (api.phase !== 'matchResult') { act(() => api.continueFromReport?.()); continue; }
       const expected = seeded(seed, () => playNextEntry(clone(before), { skipHalftime: true }));
@@ -111,9 +119,11 @@ describe('Club Manager: VAR ships dark', () => {
       expect(reviewRows(api.report), `match ${played + 1} shows a review`).toBe(0);
       expect(clone(api.report), `match ${played + 1} differs from the engine without reviews`).toEqual(clone(expected.report));
       played++;
+      if (found) chosen++;
       act(() => api.continueFromReport());
     }
     expect(played, 'too few matches were played to say anything').toBeGreaterThanOrEqual(6);
+    expect(chosen, 'too few matches that reviews would show in, so the case proves nothing').toBeGreaterThanOrEqual(3);
     r.unmount();
   }, 240000);
 
@@ -121,8 +131,17 @@ describe('Club Manager: VAR ships dark', () => {
     const r = await booted();
     const before = clone(api.career);
     const target = before.week + 6;
-    act(() => seeded(6300, () => api.simToWeek(target)));
-    const expected = seeded(6300, () => simToWeek(clone(before), target));
+    /* Round 1218: on rates taken from real football a review is rare, and a run of six weeks with none in it
+       would read the same with the switch on or off. So the run is chosen: the first seed whose run the engine
+       WOULD play to other results with reviews asked for. That is what lets this case see the switch. */
+    let seed = 6300, expected: any = null;
+    for (; seed < 6400; seed++) {
+      expected = seeded(seed, () => simToWeek(clone(before), target));
+      const reviewed = seeded(seed, () => simToWeek(clone(before), target, { varReviews: true }));
+      if (JSON.stringify(reviewed.state.resultLog) !== JSON.stringify(expected.state.resultLog)) break;
+    }
+    expect(seed, 'no seeded run that reviews would change, so the case proves nothing').toBeLessThan(6400);
+    act(() => seeded(seed, () => api.simToWeek(target)));
     expect(api.career.week).toBe(expected.state.week);
     expect(clone(api.career.resultLog), 'the results of the run differ from the engine without reviews').toEqual(clone(expected.state.resultLog));
     expect(JSON.stringify(api.career.resultLog).includes('"kind":"var"')).toBe(false);

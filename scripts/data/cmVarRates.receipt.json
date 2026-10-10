@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "ledgerKey": "cm-var-rates-v1",
+  "dataFile": "scripts/data/cmVarRates.json",
+  "readOn": "2026-10-10",
+  "readBy": "the builder of Round 1218, desktop Claude lane",
+  "method": "Each page was opened on the read day through a page reader that answers with lines quoted from the page. Every literal in the ledger is a line that reader quoted. A figure is the number printed in its literal.",
+  "limits": [
+    "No copy of a page was kept, so there is no snapshot hash. A reader who doubts a figure opens the url and finds the literal.",
+    "The Premier League rows are one journalist's tally of overturned decisions. The league publishes no split of its own that was found.",
+    "The Serie A row is the first season under review (2017-18), before semi automated offside. It is the lowest reading of goals ruled out and so it sets that target.",
+    "Matches a season is arithmetic on the league's size, not a figure read on the page, except where the literal prints it."
+  ],
+  "checkedBy": "scripts/simCmVarLedger.mjs",
+  "sha256": "fe136fc935d71383e17ca3d74d5cfa84783408c83ece7ae5e634d47acb56c7c6"
+}
