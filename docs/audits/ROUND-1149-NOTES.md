@@ -10,8 +10,8 @@ step, so a later session can finish from it. What is not listed under DONE is no
 |---|---|---|
 | a | The Trophy Case tile row for every award, NFL, MLB and NHL, with its test and harness section | DONE, green on runners at 8da17c5f |
 | b | The shared lift: one fact beat builder in `careerRivalryEvents.ts`, the NBA's beat 306 moved onto it | BUILT at aea08239, see below |
-| c | MLB beat 206 read off the season, no coin | BUILT, see below; the two recordings follow in their own commits |
-| d | NHL beat 306 read off the season, no coin | not started |
+| c | MLB beat 206 read off the season, no coin | DONE at e2dd37a9 and green on runners; recordings 3f52f0de and 53d241a2. Its second card was REWRITTEN in step d, see there |
+| d | NHL beat 306 read off the season, no coin; the beat lifted into `ownRosterBeat`; the second card reads the season before, not the ratings | BUILT, see below; recordings follow |
 | e | NFL beats 206 and 219, no coin | not started |
 | f | One What's New entry, the merge of origin/main, the last gates | not started |
 
@@ -94,15 +94,40 @@ read differently (a different pool some seasons, so a different card is picked).
 Harness: `ownRosterBeatCheck` in the rivalry harness (shared by the three sports), section S in
 `simNbaAwardsSense.mjs`, controls `oldgate206mlb` and `lastyearmlb` (S red), `tickdraws` re-anchored.
 
+## Step d, NHL beat 306, and the beat as one shared builder (built)
+
+MLB's beat and the NHL's are the same beat, so step d lifted it: `ownRosterBeat({ id, emoji, title, award, made,
+dropped })` in `careerRivalryEvents.ts` builds it on `factBeat`, and `ALL_STAR_OWN_ROSTER` holds the words MLB and
+the NHL share. Each sport's binding is one line. `nhlRivalryTick` requires the season just played, like MLB's.
+
+THE SECOND CARD CHANGED between step c and step d, on a measurement. Step c shipped "he missed it while both are
+rated 80 or better" (the coin beat's gate). Measured on the fleets that card was dealt 35 to 55 times a seed in
+MLB against 11 to 16 for making it, and 145 to 167 against 15 to 29 in the NHL, where one season in twenty holds
+the honour: a morale tax on being ordinary. So the second card is now a fact of the player's own record too:
+
+- he made it: the season just played holds the award. Morale +5.
+- he dropped off: the season just played does not hold it and the season before did. "The All-Star rosters are out
+  and you are not on one, a year after you were. It goes down as one more line in the argument between you and
+  (rival)." Morale -5.
+
+A year he was never on it and is not on it now deals nothing. No rating is read. Measured (500 careers a seed,
+seeds 1 to 5): MLB dealt 28, 24, 24, 29, 30 (made 16, 15, 13, 11, 15; dropped off 12, 9, 11, 18, 15); NHL dealt
+42, 30, 34, 35, 35 (made 29, 19, 15, 21, 20; dropped off 13, 11, 19, 14, 15); none contradicts its seasons.
+Against 808dbbdc 941 of 28,193 MLB beats and 2,833 of 31,055 NHL beats read differently, with every player,
+rival and note byte equal.
+
+Controls: `oldgateown` (the shared builder back on the ratings) replaces `oldgate206mlb`; `droppedanyyear`,
+`lastyearnhl` are new; all S red.
+
 ## Decisions taken (the lead may overrule)
 
 1. The tap finds its card by the promise printed on the pending card (not by a new save field and not by a new
    beat id). That gives the old card rule with no change to any save, so a recording moves only where a card
    really changed.
-2. In a sport whose rival has no season on the player's line, the roster beat has two cards: he made it (always
-   dealt), and he missed it while both are rated 80 or better (the gate the coin beat had, so the beat is in the
-   pool about as often as before). Neither says a word about the rival's roster. Morale +5 and -5, the coin's
-   own two ends.
+2. In a sport whose rival has no season on the player's line, the roster beat has two cards, both read off the
+   player's own record: he made it, and he is off it a year after he was on it. Neither says a word about the
+   rival's roster, and no rating is read. Morale +5 and -5, the coin's own two ends. The beat is in the pool
+   far less often than the coin beat was (it was there whenever both were rated 80 or better).
 3. The title becomes "All-Star Rosters" in MLB and the NHL, the NBA's title since Round 1112.
 
 ## Owed to the other lane (guide sentences that become false)

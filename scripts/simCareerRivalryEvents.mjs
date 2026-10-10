@@ -243,26 +243,28 @@ function factBeatCheck(label, defs, id, { never = [], deal }) {
 
 /* ─── Round 1149: the roster beat of a sport that knows only the player's own season ───
    The MLB, NHL and NFL rivals do not play their season on the player's stat line yet (only the NBA rival
-   does), so their roster beat is dealt on one fact: the award word the engine wrote on the player's own last
-   season. This builds that beat's fixtures the same way for each of them and hands them to factBeatCheck:
-   never dealt on a save with no season, the card for making it dealt whatever the two ratings are, the card
-   for missing it (a sport that has one) only while both are rated 80 or better, and both read off the LAST
-   season (each fixture's season before it holds the opposite fact). `silent` is what no card may claim: that
-   the rival is or is not on a roster, or that one of you made it over the other. */
-function ownRosterBeatCheck(label, defs, id, { p, r, award, rivalName, made, missed }) {
+   does), so their roster beat (ownRosterBeat in careerRivalryEvents.ts) is dealt on the player's own record
+   alone: the award word the engine wrote on his last season, and on the one before it. This builds that
+   beat's fixtures the same way for each of them and hands them to factBeatCheck. Two cards: he made it, and
+   he is off it a year after he was on it. Never dealt on a save with no season, in a first season without
+   it, in a year he is not on it and was not the year before either, or two years after he was last on it.
+   The two ratings decide nothing (the cards are dealt at 60 and stay shut at 90). `silent` is what no card
+   may claim: that the rival is or is not on a roster, or that one of you made it over the other. */
+function ownRosterBeatCheck(label, defs, id, { p, r, award, rivalName, made, dropped }) {
   const season = (has, year = 2030) => ({ year, awards: has ? [award] : [] });
   const silent = new RegExp(`${rivalName} (is|made|did|was)\\b|over (you|${rivalName})`);
-  const never = [{ name: 'on a save with no season played (both rated 90)', p: p({ ovr: 90, seasons: [] }), r: r({ ovr: 90 }) }];
-  const deal = [{ name: 'you made it (both rated 70, left off the year before)', p: p({ ovr: 70, seasons: [season(false, 2029), season(true)] }), r: r({ ovr: 70 }), silent, ...made }];
-  if (missed) {
-    never.push({ name: 'when you missed it and you are rated 79', p: p({ ovr: 79, seasons: [season(false)] }), r: r({ ovr: 90 }) });
-    never.push({ name: 'when you missed it and he is rated 79', p: p({ ovr: 90, seasons: [season(false)] }), r: r({ ovr: 79 }) });
-    deal.push({ name: 'you missed it (both rated 85, on it the year before)', p: p({ ovr: 85, seasons: [season(true, 2029), season(false)] }), r: r({ ovr: 85 }), silent, ...missed });
-  } else {
-    never.push({ name: 'when you missed it (both rated 90, on it the year before)', p: p({ ovr: 90, seasons: [season(true, 2029), season(false)] }), r: r({ ovr: 90 }) });
-  }
+  const never = [
+    { name: 'on a save with no season played (both rated 90)', p: p({ ovr: 90, seasons: [] }), r: r({ ovr: 90 }) },
+    { name: 'in a first season without it (both rated 90)', p: p({ ovr: 90, seasons: [season(false)] }), r: r({ ovr: 90 }) },
+    { name: 'in a year you are not on it and were not the year before (both rated 90)', p: p({ ovr: 90, seasons: [season(false, 2029), season(false)] }), r: r({ ovr: 90 }) },
+    { name: 'two years after you were last on it (both rated 90)', p: p({ ovr: 90, seasons: [season(true, 2028), season(false, 2029), season(false)] }), r: r({ ovr: 90 }) },
+  ];
+  const deal = [
+    { name: 'you made it (both rated 60, left off the year before)', p: p({ ovr: 60, seasons: [season(false, 2029), season(true)] }), r: r({ ovr: 60 }), silent, reads: 'Morale +5', move: { morale: 5 }, ...made },
+    { name: 'you are off it a year after you were on it (both rated 60)', p: p({ ovr: 60, seasons: [season(true, 2029), season(false)] }), r: r({ ovr: 60 }), silent, reads: 'Morale -5', move: { morale: -5 }, ...dropped },
+  ];
   const dealt = factBeatCheck(label, defs, id, { never, deal });
-  console.log(`   the roster beat (${id}, read off your own season's "${award}"): ${dealt} of ${deal.length} cards dealt and applied at 4 rolls each, ${never.length} fixtures it must stay shut on, never on a coin, never a word on the rival's roster, and a card from the old coin resolves with no effect`);
+  console.log(`   the roster beat (${id}, read off your own seasons' "${award}"): ${dealt} of ${deal.length} cards dealt and applied at 4 rolls each, ${never.length} fixtures it must stay shut on, never on a coin, never on the ratings, never a word on the rival's roster, and a card from the old coin resolves with no effect`);
   if (dealt < deal.length) fail(`${label} beat ${id}: only ${dealt} of ${deal.length} cards were dealt`);
 }
 
@@ -424,6 +426,7 @@ console.log('1) Source: careerRivalryEvents.ts is the only home for the rule');
     { home: 'src/lib/careerRivalryEvents.ts', what: 'the apply-and-log function', re: /export function applyRivalryEvent\b/ },
     /* Round 1149: the fact beat builder and the season view the ticks hand the roll. */
     { home: 'src/lib/careerRivalryEvents.ts', what: 'the fact beat builder', re: /export function factBeat\b/ },
+    { home: 'src/lib/careerRivalryEvents.ts', what: 'the own season roster beat', re: /export function ownRosterBeat\b/ },
     { home: 'src/lib/careerRivalryEvents.ts', what: 'the season view a tick rolls on', re: /seasons: \[\.\.\.c\.seasons, season\]/ },
   ];
   for (const rule of RULES) {
@@ -902,8 +905,8 @@ console.log('6) The MLB binding: every beat reachable and correct, and the tick 
   /* Round 1149: the All-Star beat, read off the player's own season (see ownRosterBeatCheck). */
   ownRosterBeatCheck('MLB', mlbRivalry.MLB_RIVALRY_EVENTS, 206, {
     p: mlbFixture, r: rivalFixture, award: mlbRivalry.MLB_ROSTER_AWARD, rivalName: 'Rival MLB',
-    made: { says: /The All-Star rosters are out and you are on one\./, reads: 'Morale +5', move: { morale: 5 }, told: /You made the All-Star roster\./ },
-    missed: { says: /The All-Star rosters are out and you are not on one,/, reads: 'Morale -5', move: { morale: -5 }, told: /You were left off the All-Star roster\./ },
+    made: { says: /^The All-Star rosters are out and you are on one\./, told: /You made the All-Star roster\./ },
+    dropped: { says: /^The All-Star rosters are out and you are not on one, a year after you were\./, told: /You were left off the All-Star roster\./ },
   });
   let reachable = 0, correct = 0;
   const total = mlbRivalry.MLB_RIVALRY_EVENTS.length;
@@ -1120,8 +1123,9 @@ console.log('8) The NHL binding: every beat reachable and correct, and the tick 
   /* 5a. Every id in the table, exercised against a fixture built to satisfy
      its gate, the same badge-style reachability proof section 4 runs for
      the NFL table. */
+  /* seasons: every NHL save carries the list, and since Round 1149 beat 306 reads its last entry. */
   const nhlFixture = over => ({
-    ovr: 80, age: 25, cups: 0, morale: 60, fanbase: 50, netWorth: 5, rivalryIntensity: 30, team: 'TOR', ...over,
+    ovr: 80, age: 25, cups: 0, morale: 60, fanbase: 50, netWorth: 5, rivalryIntensity: 30, team: 'TOR', seasons: [], ...over,
   });
   const rivalFixture = over => ({
     name: 'Rival NHL', pos: 'C', team: 'BOS', ovr: 80, pot: 90, age: 25, rings: 0,
@@ -1133,7 +1137,8 @@ console.log('8) The NHL binding: every beat reachable and correct, and the tick 
     303: [nhlFixture(), rivalFixture()],
     304: [nhlFixture(), rivalFixture()],
     305: [nhlFixture(), rivalFixture({ retired: true })],
-    306: [nhlFixture({ ovr: 85 }), rivalFixture({ ovr: 85 })],
+    /* Round 1149: 306 is dealt on the season's own All-Star fact, never on a coin. */
+    306: [nhlFixture({ seasons: [{ year: 2030, awards: ['All-Star'] }] }), rivalFixture()],
     307: [nhlFixture({ cups: 0 }), rivalFixture({ rings: 2 })],
     308: [nhlFixture({ ovr: 90 }), rivalFixture({ ovr: 85 })],
     309: [nhlFixture({ team: 'DAL' }), rivalFixture({ team: 'DAL' })],
@@ -1154,6 +1159,12 @@ console.log('8) The NHL binding: every beat reachable and correct, and the tick 
     323: [nhlFixture({ cups: 1 }), rivalFixture({ rings: 1 })],
   };
   beatWords('NHL', nhlRivalry.NHL_RIVALRY_EVENTS, gates); /* Round 988, before the loop below mutates the fixtures */
+  /* Round 1149: the All-Star beat, read off the player's own season (see ownRosterBeatCheck). */
+  ownRosterBeatCheck('NHL', nhlRivalry.NHL_RIVALRY_EVENTS, 306, {
+    p: nhlFixture, r: rivalFixture, award: nhlRivalry.NHL_ROSTER_AWARD, rivalName: 'Rival NHL',
+    made: { says: /^The All-Star rosters are out and you are on one\./, told: /You made the All-Star roster\./ },
+    dropped: { says: /^The All-Star rosters are out and you are not on one, a year after you were\./, told: /You were left off the All-Star roster\./ },
+  });
   let reachable = 0, correct = 0;
   const total = nhlRivalry.NHL_RIVALRY_EVENTS.length;
   for (const def of nhlRivalry.NHL_RIVALRY_EVENTS) {

@@ -44,7 +44,7 @@
 import type { MlbCareerState, MlbSeasonLine } from "./mlbMyCareer";
 import type { CareerRival } from "./careerRival";
 import {
-  rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor, factBeat, withSeasonPlayed, lastSeasonHolds,
+  rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor, withSeasonPlayed, ownRosterBeat, ALL_STAR_OWN_ROSTER,
 } from "./careerRivalryEvents";
 import type { RivalryEvent, RivalryEventDef } from "./careerRivalryEvents";
 import { rivalryChoiceTick, resolvePendingRivalryChoice, meterOption } from "./careerRivalryChoices";
@@ -103,28 +103,11 @@ export const MLB_RIVALRY_EVENTS: RivalryEventDef<MlbCareerState, CareerRival>[] 
      engine picks All-Stars for real (mlbAllStar in careerAwards.ts), so the card could say you made it in a
      year your own season card said you did not. It is read off your own season now, the one just played. The
      MLB rival's season is not on your stat line yet (only the NBA rival's is, since Round 1112), so nothing here
-     says whether HE made a roster: you made it, or you were left off in a year the two of you were both rated
-     80 or better, which is all "in the conversation" means. The round that moves the MLB rival onto the
-     player's line can add the cards that name his roster, the way the NBA's 306 does. */
-  factBeat<MlbCareerState, CareerRival>({
-    id: 206, emoji: "🗳️", title: "All-Star Rosters",
-    cards: [
-      {
-        when: s => lastSeasonHolds(s, MLB_ROSTER_AWARD) === true,
-        description: (_s, r) => `The All-Star rosters are out and you are on one. It goes down as one more line in the argument between you and ${r.name}.`,
-        consequence: "Morale +5",
-        move: s => { s.morale = clamp(s.morale + 5, 0, 100); },
-        line: () => `🗳️ You made the All-Star roster.`,
-      },
-      {
-        when: (s, r) => lastSeasonHolds(s, MLB_ROSTER_AWARD) === false && s.ovr >= 80 && r.ovr >= 80,
-        description: (_s, r) => `The All-Star rosters are out and you are not on one, in a year people had you and ${r.name} both in the conversation.`,
-        consequence: "Morale -5",
-        move: s => { s.morale = clamp(s.morale - 5, 0, 100); },
-        line: () => `🗳️ You were left off the All-Star roster.`,
-      },
-    ],
-  }),
+     says whether HE made a roster: you made it, or you are off it a year after you were on it. The round that
+     moves the MLB rival onto the player's line can add the cards that name his roster, the way the NBA's 306
+     does. The two cards and their words are the shared ones (ownRosterBeat and ALL_STAR_OWN_ROSTER in
+     careerRivalryEvents.ts, where the rule is written): the NHL deals the same beat. */
+  ownRosterBeat<MlbCareerState, CareerRival>({ id: 206, award: MLB_ROSTER_AWARD, ...ALL_STAR_OWN_ROSTER }),
   {
     id: 207, emoji: "⭐", title: "Rival's Ring",
     description: (_s, r) => `${r.name}'s team wins it all. Yours came up short.`,

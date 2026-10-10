@@ -151,6 +151,83 @@ export function lastSeasonHolds(p: { seasons: { awards?: string[] }[] }, award: 
   return last ? (last.awards ?? []).includes(award) : null;
 }
 
+/* ─── Round 1149: the roster beat of a sport that knows only your own season ───
+
+   The NBA's roster beat reads two seasons, yours and the rival's, because
+   since Round 1112 the NBA rival plays his season on your own stat line. The
+   MLB, NHL and NFL rivals do not yet: their line is a few numbers off a
+   rating, with no roster pick behind it. So in those three the beat is dealt
+   on the one fact the save does hold, the award word the engine wrote on
+   your own season, and NO CARD SAYS A WORD ABOUT THE RIVAL'S ROSTER. Two
+   cards, each a fact of your own record:
+
+     you made it     the season just played holds the award. Morale +5.
+     you dropped off the season just played does not hold it and the one
+                     before it did. Morale -5.
+
+   A year you were never on the roster and are not on it now deals nothing:
+   there is no news in it, and the two ratings are no evidence that anybody
+   "had you in the conversation". (The first draft of this beat kept the
+   coin beat's gate, both rated 80 or better, for the miss. Measured on the
+   NHL fleet that dealt the miss 145 to 167 times a seed against 15 to 29
+   for making it, in a league where one season in twenty holds the honour:
+   a morale tax on being ordinary, sold as a snub.)
+
+   The round that moves one of those rivals onto the player's line replaces
+   its binding with the cards that name his roster too, the way the NBA's
+   306 does. */
+
+const meter = (v: number) => Math.max(0, Math.min(100, v));
+/** Whether the season before the last one on a save holds an award (false when there is no such season). */
+function seasonBeforeHolds(p: { seasons: { awards?: string[] }[] }, award: string): boolean {
+  const before = p.seasons[p.seasons.length - 2];
+  return !!before && (before.awards ?? []).includes(award);
+}
+
+/** What a sport hands ownRosterBeat for one card: its words and the line the tap logs. */
+export interface OwnRosterWords<R> { description: (r: R) => string; line: string }
+
+export function ownRosterBeat<P extends { seasons: { awards?: string[] }[]; morale: number }, R>(spec: {
+  id: number; emoji: string; title: string;
+  /** The award word the sport's engine writes on a season that made the roster. */
+  award: string;
+  made: OwnRosterWords<R>;
+  dropped: OwnRosterWords<R>;
+}): RivalryEventDef<P, R> {
+  return factBeat<P, R>({
+    id: spec.id, emoji: spec.emoji, title: spec.title,
+    cards: [
+      {
+        when: s => lastSeasonHolds(s, spec.award) === true,
+        description: (_s, r) => spec.made.description(r),
+        consequence: "Morale +5",
+        move: s => { s.morale = meter(s.morale + 5); },
+        line: () => spec.made.line,
+      },
+      {
+        when: s => lastSeasonHolds(s, spec.award) === false && seasonBeforeHolds(s, spec.award),
+        description: (_s, r) => spec.dropped.description(r),
+        consequence: "Morale -5",
+        move: s => { s.morale = meter(s.morale - 5); },
+        line: () => spec.dropped.line,
+      },
+    ],
+  });
+}
+
+/** The All-Star words MLB and the NHL share: both leagues call it the All-Star roster. */
+export const ALL_STAR_OWN_ROSTER = {
+  emoji: "🗳️", title: "All-Star Rosters",
+  made: {
+    description: (r: { name: string }) => `The All-Star rosters are out and you are on one. It goes down as one more line in the argument between you and ${r.name}.`,
+    line: "🗳️ You made the All-Star roster.",
+  },
+  dropped: {
+    description: (r: { name: string }) => `The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument between you and ${r.name}.`,
+    line: "🗳️ You were left off the All-Star roster.",
+  },
+};
+
 /** Every beat in the table whose gate is true right now, built into the
  *  plain events a pending-event card actually renders. */
 export function rivalryEventPool<P, R>(p: P, r: R, defs: RivalryEventDef<P, R>[]): RivalryEvent[] {
