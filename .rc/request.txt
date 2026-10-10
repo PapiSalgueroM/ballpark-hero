@@ -1,0 +1,10 @@
+# Release AU probe: the page position when the Squad sheet closes, on the head, on origin/release-at-gate and on PR216's own tested source
+#!serve
+#!playwright
+#!serial
+fixtures: mkdir -p career-programme-artifacts && node .rc/x/pointProgrammeBase.mjs 2f1919478db9e3a0f13b8f8b34373756944459c1 && SIM_NETWORK=offline TZ=UTC NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs 2>&1 | tail -1 | cut -c1-160; s=${PIPESTATUS[0]}; git checkout HEAD -- scripts; exit $s
+probe-head: node .rc/x/squadBackProbe.mjs head http://localhost:4173 career-programme-artifacts/native-fixtures.json
+base-setup: git worktree add -f /tmp/atg4 24f57a98fa44e280f1c848276a27d86e0a3e2745 >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/atg4/node_modules; cd /tmp/atg4 && git rev-parse --short HEAD && npm run build > /tmp/atg4-build.log 2>&1; tail -1 /tmp/atg4-build.log | cut -c1-100; setsid nohup node scripts/lib/hostLikeServer.mjs dist 4174 > /tmp/atg4-server.log 2>&1 & sleep 4; echo served
+probe-release-at-gate: node .rc/x/squadBackProbe.mjs release-at-gate http://localhost:4174 career-programme-artifacts/native-fixtures.json
+pr216-setup: git worktree add -f /tmp/pr216 9040d1182ce234d8d1880c370934cc23d1cedcd8 >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/pr216/node_modules; cd /tmp/pr216 && git rev-parse --short HEAD && npm run build > /tmp/pr216-build.log 2>&1; tail -1 /tmp/pr216-build.log | cut -c1-100; setsid nohup node scripts/lib/hostLikeServer.mjs dist 4175 > /tmp/pr216-server.log 2>&1 & sleep 4; echo served
+probe-pr216-alone: node .rc/x/squadBackProbe.mjs pr216-alone http://localhost:4175 career-programme-artifacts/native-fixtures.json
