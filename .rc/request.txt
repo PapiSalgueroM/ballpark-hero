@@ -1,0 +1,4 @@
+#!serial
+before: CM_LEAGUE_FIXTURES_EXPECT=9 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=9 node scripts/simCmLeagueFixtures.mjs
+mut-noreadat: node .rc/x/fix-mut.mjs noreadat && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -q -- src scripts; exit $s
+after-restore: CM_LEAGUE_FIXTURES_EXPECT=9 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=9 node scripts/simCmLeagueFixtures.mjs
