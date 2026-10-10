@@ -1,0 +1,88 @@
+
+5. Every draw comes from keyedRng
+  ok: no Math.random in the code of the five files or of the night builder
+  ok: the night builder holds no stream and no clock of its own
+  ok: 16000 careers ran with Math.random made to throw
+  ok: the same seeds replay to the same careers
+
+1. Era rules
+  ok: nfl:now: 7 rounds, 32 teams, routes power, small
+  ok: nfl:y2005: 7 rounds, 32 teams, routes power, small
+  ok: nba:now: 2 rounds, 30 teams, routes one, three
+  ok: nba:y2004: 2 rounds, 29 teams, routes prep, one, three
+  ok: mlb:now: 20 rounds, 30 teams, routes hs, juco, college
+  ok: mlb:y2004: 50 rounds, 30 teams, routes hs, juco, college
+  ok: nhl:now: 7 rounds, 32 teams, routes junior, college, europe
+  ok: nhl:y2006: 7 rounds, 30 teams, routes junior, college, europe
+
+2. The team always equals the holder of the pick
+  ok: nfl:now: all 1487 drafted players joined the holder of their pick, undrafted share 25.7%
+  ok: nfl:y2005: all 1533 drafted players joined the holder of their pick, undrafted share 23.4%
+  ok: nba:now: all 1541 drafted players joined the holder of their pick, undrafted share 22.9%
+  ok: nba:y2004: all 1513 drafted players joined the holder of their pick, undrafted share 24.3%
+  ok: mlb:now: all 1530 drafted players joined the holder of their pick, undrafted share 23.5%
+  ok: mlb:y2004: all 1578 drafted players joined the holder of their pick, undrafted share 21.1%
+  ok: nhl:now: all 1583 drafted players joined the holder of their pick, undrafted share 20.8%
+  ok: nhl:y2006: all 1549 drafted players joined the holder of their pick, undrafted share 22.6%
+
+3. Median pick falls as the stock decile rises
+  ok: nfl:now: rho -0.932, decile medians 225 225 225 188 150 117 81 55 29 11, top over bottom 0.049, middle deciles at 0.595 of the draft, largest next over previous decile 1.000
+  ok: nfl:y2005: rho -0.929, decile medians 225 225 219 179 145 107 76 49 28 10, top over bottom 0.044, middle deciles at 0.563 of the draft, largest next over previous decile 1.000
+  ok: nba:now: rho -0.972, decile medians 61 61 61 48 42 33 26 19 13 6, top over bottom 0.098, middle deciles at 0.625 of the draft, largest next over previous decile 1.000
+  ok: nba:y2004: rho -0.967, decile medians 59 59 59 52 42 34 28 21 14 9, top over bottom 0.153, middle deciles at 0.655 of the draft, largest next over previous decile 1.000
+  ok: mlb:now: rho -0.968, decile medians 601 601 601 514 426 333 256 190 123 52, top over bottom 0.087, middle deciles at 0.632 of the draft, largest next over previous decile 1.000
+  ok: mlb:y2004: rho -0.973, decile medians 1501 1501 1468 1208 978 820 639 450 297 104, top over bottom 0.069, middle deciles at 0.599 of the draft, largest next over previous decile 1.000
+  ok: nhl:now: rho -0.972, decile medians 225 225 218 179 150 114 92 64 43 25, top over bottom 0.111, middle deciles at 0.588 of the draft, largest next over previous decile 1.000
+  ok: nhl:y2006: rho -0.971, decile medians 211 211 210 177 147 118 90 64 41 21, top over bottom 0.100, middle deciles at 0.629 of the draft, largest next over previous decile 1.000
+
+4. NBA lottery frequencies against the verified combinations
+  ok: nba:now: seed 1 won pick 1 14.32% (verified 14%); pick 1: largest |z| 3.01, chi-square 14.7; pick 2: largest |z| 2.42, chi-square 14.3; pick 3: largest |z| 1.73, chi-square 10.8; pick 4: largest |z| 2.02, chi-square 14.6
+  ok: nba:y2004: seed 1 won pick 1 25.14% (verified 25%); pick 1: largest |z| 3.03, chi-square 13.2; pick 2: largest |z| 2.53, chi-square 15.3; pick 3: largest |z| 1.75, chi-square 11.1
+
+4b. Every round after the first is plain inverse record
+  ok: nfl:now: 200 orders, rounds 2 to 7 all inverse record, round 1 too
+  ok: nfl:y2005: 200 orders, rounds 2 to 7 all inverse record, round 1 too
+  ok: nba:now: 200 orders, rounds 2 to 2 all inverse record
+  ok: nba:y2004: 200 orders, rounds 2 to 2 all inverse record
+  ok: mlb:now: 200 orders, rounds 2 to 20 all inverse record, round 1 too
+  ok: mlb:y2004: 200 orders, rounds 2 to 50 all inverse record, round 1 too
+  ok: nhl:now: 200 orders, rounds 2 to 7 all inverse record, round 1 too
+  ok: nhl:y2006: 200 orders, rounds 2 to 7 all inverse record, round 1 too
+
+6. Every card says what it does
+  ok: nfl:now: 6060 choices and 2000 showcases did exactly what they said; 1287 drills graded the same whichever approach
+  ok: nfl:y2005: 6060 choices and 2000 showcases did exactly what they said; 1365 drills graded the same whichever approach
+  ok: nba:now: 4084 choices and 2000 showcases did exactly what they said; 1326 drills graded the same whichever approach
+  ok: nba:y2004: 3362 choices and 2000 showcases did exactly what they said; 1319 drills graded the same whichever approach
+  ok: mlb:now: 4064 choices and 2000 showcases did exactly what they said; 1340 drills graded the same whichever approach
+  ok: mlb:y2004: 4036 choices and 2000 showcases did exactly what they said; 1320 drills graded the same whichever approach
+  ok: nhl:now: 4060 choices and 2000 showcases did exactly what they said; 1332 drills graded the same whichever approach
+  ok: nhl:y2006: 4060 choices and 2000 showcases did exactly what they said; 1361 drills graded the same whichever approach
+
+7. Growth never passes the ceiling
+  ok: nfl:now: 18000 steps, none past the ceiling
+  ok: nfl:y2005: 18000 steps, none past the ceiling
+  ok: nba:now: 14048 steps, none past the ceiling
+  ok: nba:y2004: 12604 steps, none past the ceiling
+  ok: mlb:now: 14008 steps, none past the ceiling
+  ok: mlb:y2004: 13952 steps, none past the ceiling
+  ok: nhl:now: 14000 steps, none past the ceiling
+  ok: nhl:y2006: 14000 steps, none past the ceiling
+
+8. Old saves and corrupt blocks
+  ok: 13 missing or corrupt blocks read as none, 3 good ones round trip, a renamed pending card is dropped
+
+9. The scouts path is byte equal to its recording
+  ok: all 16 digests of seed set e equal the recording (16000 roads, recorded on v24.21.0 at 09df145a)
+
+13. Draft night shows what the engine did, and never draws
+  ok: nfl:now: 2000 nights are the saved outcome over the engine's order (1487 drafted, 513 undrafted), every pick inside the quoted range, 17 built nights (picks 1 to 12, the last four, undrafted) show every pick once, 1208 unbacked outcomes built nothing, at most 8 board rows
+  ok: nfl:y2005: 2000 nights are the saved outcome over the engine's order (1533 drafted, 467 undrafted), every pick inside the quoted range, 17 built nights (picks 1 to 12, the last four, undrafted) show every pick once, 1160 unbacked outcomes built nothing, at most 8 board rows
+  ok: nba:now: 2000 nights are the saved outcome over the engine's order (1541 drafted, 459 undrafted), every pick inside the quoted range, 17 built nights (picks 1 to 12, the last four, undrafted) show every pick once, 1220 unbacked outcomes built nothing, at most 5 board rows and 4 lottery rows
+  ok: nba:y2004: 2000 nights are the saved outcome over the engine's order (1513 drafted, 487 undrafted), every pick inside the quoted range, 17 built nights (picks 1 to 12, the last four, undrafted) show every pick once, 1196 unbacked outcomes built nothing, at most 5 board rows and 3 lottery rows
+  ok: mlb:now: 2000 nights are the saved outcome over the engine's order (1530 drafted, 470 undrafted), every pick inside the quoted range, 17 built nights (picks 1 to 12, the last four, undrafted) show every pick once, 1200 unbacked outcomes built nothing, at most 8 board rows
+  ok: mlb:y2004: 2000 nights are the saved outcome over the engine's order (1578 drafted, 422 undrafted), every pick inside the quoted range, 17 built nights (picks 1 to 12, the last four, undrafted) show every pick once, 1204 unbacked outcomes built nothing, at most 8 board rows
+  ok: nhl:now: 2000 nights are the saved outcome over the engine's order (1583 drafted, 417 undrafted), every pick inside the quoted range, 17 built nights (picks 1 to 12, the last four, undrafted) show every pick once, 1232 unbacked outcomes built nothing, at most 8 board rows
+  ok: nhl:y2006: 2000 nights are the saved outcome over the engine's order (1549 drafted, 451 undrafted), every pick inside the quoted range, 17 built nights (picks 1 to 12, the last four, undrafted) show every pick once, 1168 unbacked outcomes built nothing, at most 8 board rows
+
+simCareerPreDraft [seed set e]: ALL GREEN
