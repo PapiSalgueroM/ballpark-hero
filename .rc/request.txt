@@ -1,0 +1,4 @@
+inv: node .rc/x/scEngine.mjs . inv
+invr: node .rc/x/scEngine.mjs . invr
+ab: node .rc/x/scEngine.mjs . ab
+mal: node .rc/x/scEngine.mjs . mal
