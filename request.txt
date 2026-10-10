@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerLeagueSeasons-future: SIM_LEAGUE_SEASONS_CONTROL=future node scripts/simCareerLeagueSeasons.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simVictoryMoment: node scripts/simVictoryMoment.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simDailySaveHardening-again: node scripts/simDailySaveHardening.mjs

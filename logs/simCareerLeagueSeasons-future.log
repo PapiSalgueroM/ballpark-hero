@@ -1,0 +1,30 @@
+CONTROL future applied: section c is meant to go red
+
+a. FILE: the generated file is the ledgers, and the lookup answers them
+  released clubs whose old and new league share a size, so no saved finish is placed for them: Hertha Berlin
+  216 seasons, 3303 named places; 16560 club seasons answered (3303 in a league); 454 market clubs placed in 3615 club seasons; 9990 printed names keyed alike; 3551 club seasons hold the old save guard
+
+b. PLAYED: seeded careers from 1990 to 2019, to retirement and into the dugout
+  40 careers, 939 playing seasons (666 before 2026-27: 222 finishes sized from the ledgers, 12 of them in the Championship, 436 in no ledger league, 73 titles there), 173 past derbies
+  2186 offer and loan cards (831 past ones with no league), 979 club cards, 26 dugout jobs (9 with no league); dugout 173 past seasons: 76 from the ledgers naming 247 rivals, 97 unknown (23 of them a club the ledgers put in none of the six), 23 seated by the game's own seasons; 0 stuck
+  years held to the record: 795 offer seasons, 23 dugout jobs; 12 forced jobs (69 ledger seasons, 23 unplaced, 21 seated); phone against the card 2651 times (403 club seasons whose label is not that season's league)
+
+c. BASELINE: from 2026-27 on, nothing moves against origin/main
+  FAIL [c]: career 7777: from 2026-27 it plays differently from origin/main (first at season 2027 Newcastle)
+  FAIL [c]: career 112506: from 2026-27 it plays differently from origin/main (first at season 2027 PSV)
+  FAIL [c]: career 217235: from 2026-27 it plays differently from origin/main (first at season 2027 Napoli)
+  FAIL [c]: career 321964: from 2026-27 it plays differently from origin/main (first at season 2027 Tigres UANL)
+  FAIL [c]: career 426693: from 2026-27 it plays differently from origin/main (first at season 2027 Galatasaray)
+  FAIL [c]: career 531422: from 2026-27 it plays differently from origin/main (first at season 2027 Napoli)
+  FAIL [c]: career 636151: from 2026-27 it plays differently from origin/main (first at season 2027 Celtic)
+  FAIL [c]: career 740880: from 2026-27 it plays differently from origin/main (first at season 2027 Samsunspor)
+  FAIL [c]: career 845609: from 2026-27 it plays differently from origin/main (first at season 2027 Sevilla)
+  FAIL [c]: career 950338: from 2026-27 it plays differently from origin/main (first at season 2027 Como)
+  FAIL [c]: career 1055067: from 2026-27 it plays differently from origin/main (first at season 2027 Lyon)
+  FAIL [c]: career 1159796: from 2026-27 it plays differently from origin/main (first at season 2027 Napoli)
+  0 of 12 careers from 2025 identical from 2026-27 on (429 seasons and dugout rows compared); releasing the seven pins alone moves 0 of them (attributed to the release, not the binds); 0 of the identical ones only once Round 1041's two truth fixes are taken out, 0 only once Round 1100's seven files are read from the base (the pool, the rows and the band moved them, on purpose)
+
+d. WIRING: the page prints a past season's league only through the lookup
+  5 raw label prints absent, 8 lookups present, both loan screens wired
+
+CONTROL future: section c went red as it should (12 failures there, 12 in all)
