@@ -61,6 +61,13 @@ export interface RivalSeasonResult { line: string; score: number; year?: number;
  */
 export type RivalSeasonPlay = (r: CareerRival, form: number, rng: () => number) => RivalSeasonResult;
 
+/** Round 1112: who had the better year, from the scores of the two printed lines. THE one comparison: the
+ *  season note and the head to head tally are both written from it, and every card that says who is ahead
+ *  reads that tally. A dead heat is his year, as it always was. */
+export function rivalYearIsMine(myScore: number, hisScore: number): boolean {
+  return myScore > hisScore;
+}
+
 /* Fictional names, deliberately common combinations so nothing reads as a
    specific real player. Same approach the soccer rival uses. */
 const FIRST = [
@@ -194,12 +201,13 @@ export function judgeRivalSeason(
   if (rng() < 0.08 + Math.max(0, (r.ovr - 80)) * 0.004) r.rings += 1;
 
   const gap = myScore - score;
-  if (gap > 0) r.myYears += 1; else r.hisYears += 1;
+  const mine = rivalYearIsMine(myScore, score);
+  if (mine) r.myYears += 1; else r.hisYears += 1;
   const head = `${r.myYears}-${r.hisYears}`;
 
   if (Math.abs(gap) < score * 0.06) {
     notes.push(`🪞 ${r.name} went ${line}. Nothing in it again. You lead the head to head ${head}.`);
-  } else if (gap > 0) {
+  } else if (mine) {
     notes.push(`🪞 ${r.name} went ${line}. You had the better year. Head to head ${head}.`);
   } else {
     notes.push(`🪞 ${r.name} went ${line} and had the better year of the two of you. Head to head ${head}.`);

@@ -47,7 +47,16 @@
        careerAwards.ts (Finals MVP and the rival bridge read it) and NBA_FIELD in nbaCareerAwards.ts (the one
        pass reads it). Each seed's measured mean within 0.08 of the committed row's sd and its sd within 6
        percent (measured across five seeds: at most 0.042 and 2.3 on the first, at most 0.033 and 1.6 on the second).
-   R   My share of the head to head years is main's (62.3 to 63.0 percent).
+   R   The rival (Round 1112). He plays his season on the player's own line (nbaRivalSeason in nbaMyCareer.ts,
+       through the one hook careerRival.ts takes), so:
+       R1  my share of the head to head years is held at what Round 1112 measured (RIVAL_1112 below), no longer
+           at main's, whose 62.3 to 63.0 percent was the old rival line's.
+       R2  every rival line reads back off its printed text and is in the player's own shape, and the verdict
+           NEVER disagrees with the two printed lines scored the same way (exact, at every size; the tree
+           before Round 1112 read 32.6 to 33.1 percent of judged years).
+       R3  unit checks on 400 made up seasons: his season takes exactly one draw of the season's stream, his
+           line replays as nbaStatLineFor's through the player's printer, the same inputs give the same
+           season, and his kind is fixed and his position's own.
    H   The Hall of Fame inducted rate and the first ballot rate are main's (31.6 to 31.9 and 27.0 to 27.9).
        Measured on the fix pass tree of 2026-10-08 (the standout marks measured again on the new line, the
        legacy constant 1.4 as a term of the calibration 2 table): 31.68, 31.58, 32.17, 32.3, 31.5 inducted
@@ -141,7 +150,9 @@
      oldassists       the old assists expression                       A1, A3 red (may: A2, E, R, H, B2, B4, B6)
      stalefield       the PG row of the season score's field one sd stale   E red (may: R, H, B6)
      staleawardfield  the PG row of NBA_FIELD's MVP score one sd stale   E red (may: H, B4, B6)
-     nobridge         the raw score handed to the rival                R red
+     oldscale         the rival scored on the line before Round 1112   R red
+     neutralmine      my side of the verdict off the era neutral line  R red (the 2003-04 careers tell)
+     rivaldraws       the rival's season taking a second draw          R red
      noscale          the legacy constant back to 1                    H red (refuses when it is 1)
      nomvpworth       an MVP worth nothing to the legacy score         H red
      independent      MVP with no First Team gate and no playoff gate  B1 red (may: B3, B4, B6, H)
@@ -268,8 +279,17 @@ const CONTROLS = {
   stalefield: { file: 'src/lib/careerAwards.ts', find: FIELD_PG_ROW, put: FIELD_PG_STALE, needs: 'E', may: 'R,H,B6' },
   /* E: the PG row of the MVP score's field (NBA_FIELD) one standard deviation stale. The league's awards read it. */
   staleawardfield: { file: 'src/lib/nbaCareerAwards.ts', find: AWARD_FIELD_ROW, put: AWARD_FIELD_STALE, needs: 'E', may: 'H,B4,B6' },
-  /* R: the raw season score handed to the rival, no bridge. */
-  nobridge: { file: 'src/lib/nbaMyCareer.ts', find: "    for (const n of judgeRivalSeason(c.rival, bridged, c.name, 'nba', rng)) notes.push(n);", put: "    for (const n of judgeRivalSeason(c.rival, statScore, c.name, 'nba', rng)) notes.push(n);", needs: 'R' },
+  /* R: the old scale back under the verdict. The rival is scored on the line before Round 1112 (whole number
+     points off his form, no archetype, no minutes) while the screen prints his new one, which is what the bridge
+     did: the verdict then says what the two printed lines do not. */
+  oldscale: { file: 'src/lib/nbaMyCareer.ts', find: '      score: nbaSeasonScore(stat),',
+    put: '      score: Math.max(3, Math.round(5 + (form - 64) * 0.62 + 1.5)) * 1.6 + Math.max(1, 2 + (form - 64) * 0.22) * 1.4 + Math.max(0.5, 1.5 + (form - 64) * 0.24) * 1.7,', needs: 'R' },
+  /* R: my side of the verdict read off the era neutral line again instead of the printed one. In a modern
+     season the two are the same number, so only the 2003-04 careers can tell (one career in four). */
+  neutralmine: { file: 'src/lib/nbaMyCareer.ts', find: "    for (const n of judgeRivalSeason(c.rival, nbaSeasonScore(line), c.name, 'nba', rng, nbaRivalSeason(c.year, seasonsPlayed))) notes.push(n);",
+    put: "    for (const n of judgeRivalSeason(c.rival, statScore, c.name, 'nba', rng, nbaRivalSeason(c.year, seasonsPlayed))) notes.push(n);", needs: 'R' },
+  /* R: the rival's season taking a second draw of the season's stream (every draw of the player's after it moves). */
+  rivaldraws: { file: 'src/lib/nbaMyCareer.ts', find: "    const keyed = keyedRng(`nba-rival|${r.name}|${year}|${rng()}`);", put: "    const keyed = keyedRng(`nba-rival|${r.name}|${year}|${rng() + rng()}`);", needs: 'R' },
   /* H: the legacy constant back to 1. Refuses when it already is 1 (then nomvpworth is the control H has). */
   noscale: { file: 'src/lib/nbaMyCareer.ts', find: LEGACY_SCALE_LINE, put: 'export const NBA_LEGACY_NEW_LINE_SCALE: number = 1;', needs: 'H' },
   /* H: an MVP worth nothing to the legacy score of a career retiring today. */
@@ -393,6 +413,8 @@ const BUNDLE = {
       "export * as norms from './src/data/nbaLeagueNorms.ts';",
       "export { seasonSwing } from './src/lib/careerVariance.ts';",
       "export * as nbaAwards from './src/lib/nbaCareerAwards.ts';",
+      "export { keyedRng } from './src/lib/keyedRng.ts';",
+      "export { nbaStatLine } from './src/lib/usCareerStatLine.ts';",
       "export * as decision from './src/lib/awardDecision.ts';",
       "export { NBA_BADGES } from './src/lib/careerBadges.ts';",
     ].join('\n'),
@@ -452,7 +474,7 @@ function playFleet(seed, careers, M = E) {
         const prev = c.seasons[c.seasons.length - 1];
         const pre = { ovr: c.ovr, morale: c.morale, age: c.age, role: c.role ?? 'starter', n: c.seasons.length, fan: c.fanbase, everAllNba: c.allNbas > 0, my: c.rival?.myYears ?? 0, his: c.rival?.hisYears ?? 0 };
         const { line } = nba.simNbaSeason(c, tq, rnd);
-        seasons.push({ i, pos, arch: arch.id, era, tq, ...pre, prev, line, won: (c.rival?.myYears ?? 0) - pre.my, lost: (c.rival?.hisYears ?? 0) - pre.his, rivalScore: c.rival?.lastScore ?? null });
+        seasons.push({ i, pos, arch: arch.id, era, tq, ...pre, prev, line, won: (c.rival?.myYears ?? 0) - pre.my, lost: (c.rival?.hisYears ?? 0) - pre.his, rivalScore: c.rival?.lastScore ?? null, rivalLine: c.rival?.lastLine ?? null });
       }
       nba.nbaProgress(c, rnd);
       const ev = nba.drawNbaEvent(c, rnd);
@@ -473,9 +495,13 @@ function playFleet(seed, careers, M = E) {
 const band = o => (o < 72 ? '<72' : o < 76 ? '72-75' : o < 80 ? '76-79' : o < 84 ? '80-83' : o < 88 ? '84-87' : o < 92 ? '88-91' : o < 96 ? '92-95' : '96+');
 const AWARDS = ['All-Star', 'Rookie of the Year', 'All-NBA', 'MVP', 'Finals MVP', 'Defensive Player of the Year', 'All-Defensive Team', 'Scoring Champion', 'Assists Leader', 'Rebounding Champion', 'Most Improved Player', 'Sixth Man of the Year', 'All-Rookie Team'];
 const healthy = s => s.line.games >= 58;
+/* A printed NBA line read back into numbers, and the shape the player's own new line prints in. */
+const printedLine = t => { const x = /^([0-9]+(?:[.][0-9]+)?) ppg, ([0-9]+(?:[.][0-9]+)?) rpg, ([0-9]+(?:[.][0-9]+)?) apg$/.exec(t ?? ''); return x ? { ppg: Number(x[1]), rpg: Number(x[2]), apg: Number(x[3]) } : null; };
+const RIVAL_SHAPE = /^[0-9]+[.][0-9] ppg, [0-9]+[.][0-9] rpg, [0-9]+[.][0-9] apg$/;
+const isNewLine = l => typeof l.mpg === 'number';
 
 /** Every rate the bands hang off, for one seed's fleet. Plain numbers only: this is what the baseline stores. */
-function measure(f) {
+function measure(f, M = E) {
   const n = f.careers.length;
   const S = f.seasons;
   const per = a => r3(S.filter(s => has(s.line, a)).length / n);
@@ -505,9 +531,20 @@ function measure(f) {
   const my = f.careers.reduce((x, c) => x + c.my, 0); const his = f.careers.reduce((x, c) => x + c.his, 0);
   m.myShare = r2(share(my, my + his));
   m.myShareByArch = Object.fromEntries(ARCH_IDS.map(a => { const cs = f.careers.filter(c => c.arch === a); const x = cs.reduce((t, c) => t + c.my, 0); const y = cs.reduce((t, c) => t + c.his, 0); return [a, r1(share(x, x + y))]; }));
-  /* How often the verdict disagrees with the two printed lines scored the same way (printed, never judged). */
+  /* R (Round 1112): how often the verdict disagrees with the two lines AS THE SCREEN PRINTS THEM. Both are read
+     back off their printed text (mine through the printer the season card uses, his as the note carries it) and
+     scored by the one season score, so nothing the engine kept to itself can agree its way to green. A rival
+     line that is not in the player's shape (three parts, one decimal each) is counted on its own. */
   const judged = S.filter(s => s.won + s.lost === 1 && s.rivalScore != null);
-  m.rivalDisagree = r2(share(judged.filter(s => (E.awards.nbaSeasonScore(s.line) > s.rivalScore) !== (s.won === 1)).length, judged.length));
+  let disagree = 0; let unread = 0; let offShape = 0;
+  for (const s of judged) {
+    const mine = printedLine(M.nbaStatLine(s.line)); const his = printedLine(s.rivalLine);
+    if (!mine || !his) { unread++; continue; }
+    if (isNewLine(s.line) && !RIVAL_SHAPE.test(s.rivalLine)) offShape++;
+    if ((M.awards.nbaSeasonScore(mine) > M.awards.nbaSeasonScore(his)) !== (s.won === 1)) disagree++;
+  }
+  m.rivalJudged = judged.length; m.rivalUnread = unread; m.rivalOffShape = offShape; m.rivalDisagreeN = disagree;
+  m.rivalDisagree = r2(share(disagree, judged.length - unread));
   m.starters = {};
   for (const b of ['80-83', '88-91']) {
     m.starters[b] = Object.fromEntries(POS.map(p => { const v = S.filter(s => s.role !== 'backup' && healthy(s) && s.pos === p && band(s.ovr) === b).map(s => s.line); return [p, [r1(mean(v.map(l => l.ppg))), r1(mean(v.map(l => l.rpg))), r1(mean(v.map(l => l.apg))), v.length]]; }));
@@ -687,6 +724,37 @@ function committedField(pos) {
   const z0 = E.awards.nbaFieldZ(pos, 0); const z1 = E.awards.nbaFieldZ(pos, 1);
   const sd = 1 / (z1 - z0);
   return { mean: -z0 * sd, sd };
+}
+
+/** R's unit checks (Round 1112): the rival's season is the player's own line function, on exactly one draw of
+ *  the season's stream. The replay builds the keyed stream the way nbaRivalSeason does (his name, the year, the
+ *  draw): a round that changes that key changes it here too, on purpose. */
+function rivalUnit() {
+  if (typeof nba.nbaRivalSeason !== 'function' || typeof nba.nbaRivalArchetype !== 'function') { exact('R', false, 'nbaRivalSeason and nbaRivalArchetype are not exported by nbaMyCareer.ts'); return; }
+  const rnd = mulberry32(1112);
+  let n = 0; let drawsOk = true; let replayOk = true; let kindOk = true; let pureOk = true;
+  const kinds = new Set();
+  for (let k = 0; k < 400; k++) {
+    const pos = POS[k % 5];
+    const r = { name: `Rival ${k % 8}`, pos, team: 'BOS', ovr: 66 + (k % 30), pot: 95, age: 20 + (k % 15), rings: 0, hisYears: 0, myYears: 0, retired: false, lastLine: '', lastScore: 0 };
+    const form = r.ovr + (rnd() - 0.5) * 12; const year = k % 4 === 3 ? 2003 + (k % 9) : 2026 + (k % 9); const played = k % 7; const u = rnd();
+    const frozen = JSON.stringify(r);
+    let draws = 0;
+    const out = nba.nbaRivalSeason(year, played)(r, form, () => { draws++; return u; });
+    if (draws !== 1) drawsOk = false;
+    const again = nba.nbaRivalSeason(year, played)(r, form, () => u);
+    if (JSON.stringify(out) !== JSON.stringify(again) || JSON.stringify(r) !== frozen) pureOk = false;
+    const kind = nba.nbaRivalArchetype(r);
+    if (!nba.NBA_ARCHETYPES[pos].some(a => a.id === kind.id) || nba.nbaRivalArchetype({ ...r, ovr: 99, age: 35 }).id !== kind.id) kindOk = false;
+    kinds.add(kind.id);
+    const stat = nba.nbaStatLineFor({ form, pos, archetype: kind, role: 'starter', seasonsPlayed: played, year }, E.keyedRng(`nba-rival|${r.name}|${year}|${u}`));
+    if (out.line !== E.nbaStatLine({ ...stat, teamResult: '' }) || out.score !== E.awards.nbaSeasonScore(stat) || out.year !== year) replayOk = false;
+    n++;
+  }
+  exact('R', drawsOk, `the rival's season takes exactly one draw of the season's stream, the one his line took before Round 1112 (${n} seasons)`);
+  exact('R', replayOk, `the rival's line is nbaStatLineFor's own, on his form, a starter of his own kind, printed by the player's printer and scored by the one season score (${n} seasons replayed)`);
+  exact('R', pureOk, 'the same rival, form, year and draw give the same season, and the rival is left untouched');
+  exact('R', kindOk && kinds.size >= RIVAL_KINDS_FLOOR, `a rival's kind is one of his position's own and does not move with his rating or age (${kinds.size} of 15 kinds met by 8 names at 5 positions, floor ${RIVAL_KINDS_FLOOR})`);
 }
 
 /* ------------------------------------------------------------------ */
@@ -891,6 +959,10 @@ const HELD_TOL = {
   'perCareer.MVP': 0.02, 'perCareer.All-NBA': 0.058, 'perCareer.All-Defensive Team': 0.06, 'perCareer.Finals MVP': 0.011,
   everMvp: 0.93, everAllNba: 1.19,
 };
+/* R: my share of the head to head years as Round 1112 shipped it, five full size seeds (see the header). */
+const RIVAL_1112 = { myShare: [60.9, 60.9, 60.9, 60.9, 60.9] };
+/* R: how many of the fifteen kinds eight names at five positions must reach (measured: see the header). */
+const RIVAL_KINDS_FLOOR = 10;
 const HELD_WIDEN = Math.sqrt(Math.max(1, (6000 * 5) / (CAREERS * SEEDS.length)));
 function heldAtMain(section, base, per, key, label) {
   heldAt(section, base.seeds.map(s => get(s.m, key)), per.map(m => get(m, key)), label, key, "main's");
@@ -1124,8 +1196,13 @@ if (HAS_LINE) {
 const B6 = HAS_PASS() ? 'B6' : 'B6a';
 if (!base.nba) exact('baseline', false, 'scripts/data/nbaAwardsSenseBaseline.json has no nba key: record it once with --record-nba-baseline');
 else {
-  /* R, the rival: my share of the head to head years stays where main had it. */
-  heldAtMain('R', base.nba, per, 'myShare', 'my share of the head to head years, percent');
+  /* R, the rival (Round 1112). He plays his season on my line, so my share of the head to head years is no
+     longer main's by construction: it is held at what this round measured (RIVAL_1112), main's printed beside
+     it. The verdict is exact: it never says what the two printed lines do not. */
+  heldAt('R', RIVAL_1112.myShare, per.map(m => m.myShare), `my share of the head to head years, percent (main, on the old rival line: ${base.nba.seeds.map(x => x.m.myShare).join(', ')})`, 'myShare', "Round 1112's");
+  exact('R', per.every(m => m.rivalJudged > 0 && m.rivalUnread === 0 && m.rivalOffShape === 0), `every rival line reads back off its printed text and is in the player's own shape, three parts at one decimal (judged years ${per.map(m => m.rivalJudged).join(', ')}; unreadable ${per.map(m => m.rivalUnread).join(', ')}; off shape ${per.map(m => m.rivalOffShape).join(', ')})`);
+  exact('R', per.every(m => m.rivalDisagreeN === 0), `the verdict never disagrees with the two printed lines scored the same way: ${per.map(m => m.rivalDisagreeN).join(', ')} of ${per.map(m => m.rivalJudged).join(', ')} judged years`);
+  rivalUnit();
   /* H, the Hall: inducted and first ballot stay where main had them. */
   heldAtMain('H', base.nba, per, 'inducted', 'Hall of Fame inducted, percent');
   heldAtMain('H', base.nba, per, 'firstBallot', 'first ballot, percent');

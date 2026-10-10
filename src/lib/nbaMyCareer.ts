@@ -694,7 +694,7 @@ export function nbaRivalSeason(year: number, seasonsPlayed: number): RivalSeason
     });
     return {
       line: nbaStatLine({ ppg: stat.ppg, rpg: stat.rpg, apg: stat.apg, mpg: stat.mpg, teamResult: '' }),
-      score: nbaSeasonScore(nbaEraNeutral(stat, year)),
+      score: nbaSeasonScore(stat),
       year, allStar: !!won.allStar,
     };
   };
@@ -857,9 +857,11 @@ export function simNbaSeason(
   // Round 104: the rival played his season too, on the same scale as mine,
   // so the head to head is an honest comparison rather than a vibe.
   if (c.rival && !c.rival.retired) {
-    /* Round 1112: he plays his season on my line (nbaRivalSeason above), so the two scores are one scale and
-       no bridge stands between them. */
-    for (const n of judgeRivalSeason(c.rival, statScore, c.name, 'nba', rng, nbaRivalSeason(c.year, seasonsPlayed))) notes.push(n);
+    /* Round 1112: he plays his season on my line (nbaRivalSeason above), so no bridge stands between the two.
+       Who had the better year is read off the two lines AS PRINTED: mine as it is saved, his as his play
+       hands it back, both through nbaSeasonScore, in the same year's league (so the era's level is the same
+       on both sides and is not divided out). The verdict can never say what the two lines do not. */
+    for (const n of judgeRivalSeason(c.rival, nbaSeasonScore(line), c.name, 'nba', rng, nbaRivalSeason(c.year, seasonsPlayed))) notes.push(n);
   }
   /* Round 525: the rivalry beat, rolled right after the rival's own season,
      the same point in the loop the flagship and the NFL binding roll their
