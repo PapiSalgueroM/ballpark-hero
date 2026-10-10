@@ -1,0 +1,22 @@
+ docs/audits/ROUND-1214-NOTES.md     |  313 +++++++++
+ scripts/data/cmAgesBasis2026.json   |  391 ++++++++++++
+ scripts/data/cmBirthDates2026.json  |  116 ++++
+ scripts/data/finalTables2025.json   |  867 +++++++++++++++++++++++++
+ scripts/genCmAgesBasis2026.mjs      |  139 ++++
+ scripts/lib/cmAges.mjs              |  203 ++++++
+ scripts/lib/cmValueCurve.mjs        |  193 +++++-
+ src/lib/cmAgeRead.ts                |   76 +++
+ src/test/cmValueCurve.test.ts       | 1203 +++++++++++++++++++++++++++++++++++
+ src/test/fixtures/cmValueCurve.json |    1 +
+ 10 files changed, 3499 insertions(+), 3 deletions(-)
+
+A	docs/audits/ROUND-1214-NOTES.md
+A	scripts/data/cmAgesBasis2026.json
+A	scripts/data/cmBirthDates2026.json
+A	scripts/data/finalTables2025.json
+A	scripts/genCmAgesBasis2026.mjs
+A	scripts/lib/cmAges.mjs
+M	scripts/lib/cmValueCurve.mjs
+A	src/lib/cmAgeRead.ts
+A	src/test/cmValueCurve.test.ts
+A	src/test/fixtures/cmValueCurve.json

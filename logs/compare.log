@@ -1,0 +1,7 @@
+entry: base assets/index-BtFEINEG.js | head assets/index-BtFEINEG.js | head again assets/index-BtFEINEG.js
+Club Manager chunks: base 13, head 13, same names: true
+assets/ClubManager-DdltDiOZ.js assets/ClubManagerBoardPanel-DMdjXejt.js assets/ClubManagerCareerPanel-GdYJuShy.js assets/ClubManagerHelp-CSxynwbu.js assets/ClubManagerSeasonSummary-DUZOaLEN.js assets/ClubManagerTreatmentPanel-lPd61n5R.js assets/clubManager-DKt2OvKr.js assets/clubManagerClock-C1EiWjUJ.js assets/clubManagerEra2005-DZSwQTfX.js assets/clubManagerEra2010-CiScj6R7.js assets/clubManagerEra2015-BUxVBSOC.js assets/clubManagerEra2020-Bej21k8N.js assets/clubManagerMeters-Di1bCQaQ.js
+built head files that mention the new library: 0 
+head against head2: 749 and 749 files; names only in head: 0, only in head2: 0; same name, other bytes: 0
+base against head: 749 and 749 files; names only in base: 0, only in head: 0; same name, other bytes: 0
+cmpAssets: INERT. The head builds the very files the base builds, name for name and byte for byte.

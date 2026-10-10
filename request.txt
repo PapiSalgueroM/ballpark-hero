@@ -1,0 +1,6 @@
+#!serial
+build-base: git worktree add -f /tmp/base 09df145a > /dev/null 2>&1; cd /tmp/base && ln -s "$OLDPWD/node_modules" node_modules && git rev-parse --short HEAD && npm run build 2>&1 | tail -4 && ls dist/assets | wc -l
+build-head: git worktree add -f /tmp/head HEAD^ > /dev/null 2>&1; cd /tmp/head && ln -s "$OLDPWD/node_modules" node_modules && git rev-parse --short HEAD && npm run build 2>&1 | tail -4 && ls dist/assets | wc -l
+build-head2: git worktree add -f /tmp/head2 HEAD^ > /dev/null 2>&1; cd /tmp/head2 && ln -s "$OLDPWD/node_modules" node_modules && git rev-parse --short HEAD && npm run build 2>&1 | tail -4 && ls dist/assets | wc -l
+compare: node .rc/x/cmpAssets.mjs
+diffstat: git diff --stat 09df145a HEAD^ | cat; echo; git diff --name-status 09df145a HEAD^ | cut -c1-120
