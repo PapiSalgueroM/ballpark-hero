@@ -1,0 +1,6 @@
+build exit=0 20s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+own exit=0 41s | playLiveMatchFit: section 9 alone is green. An own goal for me and one against me, each on a phone and on a wide screen: the card says (O.G), the ball goes in off the man
+own-seed-31337 exit=0 41s | playLiveMatchFit: section 9 alone is green. An own goal for me and one against me, each on a phone and on a wide screen: the card says (O.G), the ball goes in off the man
+own-seed-2026 exit=0 40s | playLiveMatchFit: section 9 alone is green. An own goal for me and one against me, each on a phone and on a wide screen: the card says (O.G), the ball goes in off the man
+own-seed-7 exit=0 42s | playLiveMatchFit: section 9 alone is green. An own goal for me and one against me, each on a phone and on a wide screen: the card says (O.G), the ball goes in off the man
+walk exit=0 137s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen, an own goal drawn as one.

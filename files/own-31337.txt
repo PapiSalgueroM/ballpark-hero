@@ -1,0 +1,59 @@
+playLiveMatchFit: seed 31337. Replay this run with: LIVE_FIT_SEED=31337 node scripts/playLiveMatchFit.mjs
+9) An own goal is drawn as one
+  [own goal for me] found by the engine on seed 31346 in match 283 of the search: Lyon v Angers, 13' Carlens Arcus (own goal), for me; the man on the page is theirs, number 6
+  [match own-me-390] seed 31347, 7 draws at kick off, digest cbe2adcf over 5688 characters of drawn match: Lyon v Angers, goals of the first half 13' Carlens Arcus (own goal), 22' Amine Sbaï, 45+4' Corentin Tolisso; own goals among them 1
+  own-me-390:
+  the goal watched: 13' Carlens Arcus (own goal), for me; own goals in its half 1 of 3 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 1 - 0 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the scorer card was inside the pitch on all 105 frames it was up
+  ok    the card reads "GOAL! Carlens Arcus 13' (O.G)"
+  ok    the pitch marks the action as an own goal on all 151 frames of it
+  ok    the last touch is the man the card names: the ball comes within 0.5 of him and no dot is nearer
+  ok    from the touch to the net no man of the side that got the goal is at the ball
+  ok    the ball turns by 124.9 degrees in its flight (the floor is 20; a goal that is not an own goal stays under 4)
+  ok    in the net he alone holds his head (102 frames), nobody of his side has his arms up, and the side that got it does (105 frames)
+  ok    he ends on his feet: his figure leans by 0.0 degrees on the last frame of the net (0.0 when the ball went in)
+  [match own-me-1280] seed 31347, 7 draws at kick off, digest cbe2adcf over 5688 characters of drawn match: Lyon v Angers, goals of the first half 13' Carlens Arcus (own goal), 22' Amine Sbaï, 45+4' Corentin Tolisso; own goals among them 1
+  own-me-1280:
+  the goal watched: 13' Carlens Arcus (own goal), for me; own goals in its half 1 of 3 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 1 - 0 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the list beside the pitch said GOAL! only once the ball was in (first on a frame reading goal/net, score 1 - 0)
+  ok    the scorer card was inside the pitch on all 105 frames it was up
+  ok    the card reads "GOAL! Carlens Arcus 13' (O.G)"
+  ok    the pitch marks the action as an own goal on all 151 frames of it
+  ok    the last touch is the man the card names: the ball comes within 0.5 of him and no dot is nearer
+  ok    from the touch to the net no man of the side that got the goal is at the ball
+  ok    the ball turns by 124.9 degrees in its flight (the floor is 20; a goal that is not an own goal stays under 4)
+  ok    in the net he alone holds his head (102 frames), nobody of his side has his arms up, and the side that got it does (105 frames)
+  ok    he ends on his feet: his figure leans by 0.0 degrees on the last frame of the net (0.0 when the ball went in)
+  [own goal against me] found by the engine on seed 31346 in match 60 of the search: Real Madrid v Celta Vigo, 6' Dean Huijsen (own goal), against me; the man on the page is mine, id p-dean-huijsen
+  [match own-opp-390] seed 31348, 7 draws at kick off, digest 373273e0 over 5153 characters of drawn match: Real Madrid v Celta Vigo, goals of the first half 6' Dean Huijsen (own goal); own goals among them 1
+  own-opp-390:
+  the goal watched: 6' Dean Huijsen (own goal), against me; own goals in its half 1 of 1 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 0 - 1 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the scorer card was inside the pitch on all 105 frames it was up
+  ok    the card reads "GOAL! Dean Huijsen 6' (O.G)"
+  ok    the pitch marks the action as an own goal on all 151 frames of it
+  ok    the last touch is the man the card names: the ball comes within 0.5 of him and no dot is nearer
+  ok    from the touch to the net no man of the side that got the goal is at the ball
+  ok    the ball turns by 123.9 degrees in its flight (the floor is 20; a goal that is not an own goal stays under 4)
+  ok    in the net he alone holds his head (102 frames), nobody of his side has his arms up, and the side that got it does (105 frames)
+  ok    he ends on his feet: his figure leans by 0.0 degrees on the last frame of the net (0.0 when the ball went in)
+  [match own-opp-1280] seed 31348, 7 draws at kick off, digest 373273e0 over 5153 characters of drawn match: Real Madrid v Celta Vigo, goals of the first half 6' Dean Huijsen (own goal); own goals among them 1
+  own-opp-1280:
+  the goal watched: 6' Dean Huijsen (own goal), against me; own goals in its half 1 of 1 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 0 - 1 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the list beside the pitch said GOAL! only once the ball was in (first on a frame reading goal/net, score 0 - 1)
+  ok    the scorer card was inside the pitch on all 105 frames it was up
+  ok    the card reads "GOAL! Dean Huijsen 6' (O.G)"
+  ok    the pitch marks the action as an own goal on all 151 frames of it
+  ok    the last touch is the man the card names: the ball comes within 0.5 of him and no dot is nearer
+  ok    from the touch to the net no man of the side that got the goal is at the ball
+  ok    the ball turns by 123.9 degrees in its flight (the floor is 20; a goal that is not an own goal stays under 4)
+  ok    in the net he alone holds his head (102 frames), nobody of his side has his arms up, and the side that got it does (105 frames)
+  ok    he ends on his feet: his figure leans by 0.0 degrees on the last frame of the net (0.0 when the ball went in)
+playLiveMatchFit: section 9 alone is green. An own goal for me and one against me, each on a phone and on a wide screen: the card says (O.G), the ball goes in off the man it names, he holds his head and nobody of his side celebrates.
