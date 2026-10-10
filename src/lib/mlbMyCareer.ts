@@ -1151,7 +1151,7 @@ export const MLB_SPEND_ITEMS: MlbSpendItem[] = [
   { id: 'barber_chair', name: 'A Barber On Retainer', emoji: '💇', category: 'body', cost: 0, yearly: 0.06, desc: 'Flies to every road city. The line has to be right, 60k a year', oneTime: true, effect: 'Morale +4 a year' },
   { id: 'film_room', name: 'Personal Film Analyst', emoji: '🎞️', category: 'body', cost: 0, yearly: 0.14, desc: 'Cuts your plate appearances and pitching outings by 6am, 140k a year', oneTime: true, effect: 'Rating +1 a year' },
   { id: 'sneaker_vault', name: 'The Cleat And Glove Vault', emoji: '👟', category: 'flex', cost: 0.9, desc: 'Climate controlled, 400 gloves, 900k', oneTime: true, minFanbase: 50 },
-  { id: 'courtside_seats', name: 'Season Seats Behind The Dugout For Your Block', emoji: '🎟️', category: 'family', cost: 0, yearly: 0.25, desc: 'Twelve seats behind the dugout, all 81 home games, 250k a year', oneTime: true, effect: 'Fanbase +6 a year' },
+  { id: 'courtside_seats', name: 'Season Seats Behind The Dugout For Your Block', emoji: '🎟️', category: 'family', cost: 0, yearly: 0.25, desc: 'Twelve seats behind the dugout, every home game, 250k a year', oneTime: true, effect: 'Fanbase +6 a year' },
   { id: 'barbershop_legit', name: 'A Real Barbershop', emoji: '✂️', category: 'invest', cost: 0.4, desc: 'An actual business with actual customers, 400k', oneTime: true },
   { id: 'summer_camp', name: 'Free Youth Baseball Camp', emoji: '⛹️', category: 'family', cost: 1, yearly: 0.15, desc: 'Two weeks, 400 kids, no fee, 1M', oneTime: true, minNetWorth: 2, effect: 'Fanbase +8, morale +6' },
 ];

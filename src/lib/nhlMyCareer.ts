@@ -984,7 +984,7 @@ export const NHL_SPEND_ITEMS: NhlSpendItem[] = [
   { id: 'wine_label', name: 'Wine Label', emoji: '🍷', category: 'invest', cost: 2, desc: 'Steady 10 percent and very good dinners', oneTime: true, minNetWorth: 4 },
   { id: 'team_stake', name: 'Minority Stake In A Franchise', emoji: '🏆', category: 'invest', cost: 40, desc: 'A real piece of a real team, 40M', oneTime: true, minNetWorth: 70, effect: 'The retirement plan, fanbase +10' },
   // Body
-  { id: 'chef_nhl', name: 'Private Chef', emoji: '👨‍🍳', category: 'body', cost: 0, yearly: 0.15, desc: 'Every meal built for 82 games, 150k a year', oneTime: true, effect: 'Health +4 a year' },
+  { id: 'chef_nhl', name: 'Private Chef', emoji: '👨‍🍳', category: 'body', cost: 0, yearly: 0.15, desc: 'Every meal built for the whole season, 150k a year', oneTime: true, effect: 'Health +4 a year' },
   { id: 'recovery_nhl', name: 'Recovery Suite', emoji: '🧊', category: 'body', cost: 2, yearly: 0.12, desc: 'Cryo, compression, the whole circus, 2M. Injuries can still happen.', oneTime: true, minNetWorth: 3, effect: '25% lower simulated injury risk' },
   { id: 'shot_doctor', name: 'Private Skating Coach', emoji: '🎯', category: 'body', cost: 0, yearly: 0.2, desc: 'The guy who rebuilt three strides, 200k a year', oneTime: true, effect: 'Rating +1 each offseason through age 25, up to your ceiling' },
   { id: 'sleep_nhl', name: 'Sleep Program', emoji: '😴', category: 'body', cost: 0.7, desc: 'Turns out most of it is sleep, 700k', oneTime: true, effect: 'Health +8' },
@@ -1025,7 +1025,7 @@ export const NHL_SPEND_ITEMS: NhlSpendItem[] = [
   { id: 'barber_chair', name: 'A Barber On Retainer', emoji: '💇', category: 'body', cost: 0, yearly: 0.06, desc: 'Flies to every road city. The line has to be right, 60k a year', oneTime: true, effect: 'Morale +4 a year' },
   { id: 'film_room', name: 'Personal Film Analyst', emoji: '🎞️', category: 'body', cost: 0, yearly: 0.14, desc: 'Cuts your shifts and goalie sequences by 6am, 140k a year', oneTime: true, effect: 'Rating +1 a year' },
   { id: 'sneaker_vault', name: 'The Stick And Skate Vault', emoji: '👟', category: 'flex', cost: 0.9, desc: 'Climate controlled, 300 sticks, 900k', oneTime: true, minFanbase: 50 },
-  { id: 'courtside_seats', name: 'Season Seats Behind The Bench For Your Block', emoji: '🎟️', category: 'family', cost: 0, yearly: 0.25, desc: 'Twelve seats behind the bench, all 41 home games, 250k a year', oneTime: true, effect: 'Fanbase +6 a year' },
+  { id: 'courtside_seats', name: 'Season Seats Behind The Bench For Your Block', emoji: '🎟️', category: 'family', cost: 0, yearly: 0.25, desc: 'Twelve seats behind the bench, every home game, 250k a year', oneTime: true, effect: 'Fanbase +6 a year' },
   { id: 'barbershop_legit', name: 'A Real Barbershop', emoji: '✂️', category: 'invest', cost: 0.4, desc: 'An actual business with actual customers, 400k', oneTime: true },
   { id: 'summer_camp', name: 'Free Youth Hockey Camp', emoji: '⛹️', category: 'family', cost: 1, yearly: 0.15, desc: 'Two weeks, 400 kids, no fee, 1M', oneTime: true, minNetWorth: 2, effect: 'Fanbase +8, morale +6' },
 ];
