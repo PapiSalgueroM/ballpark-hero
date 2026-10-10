@@ -1,0 +1,15 @@
+simLiveScores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simInventedNames exit=0 7s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+simNoInventedConduct exit=0 0s | simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board in it.
+simLegalPages exit=0 0s | simLegalPages: all green
+simSingleFooter exit=0 0s | simSingleFooter: green. One footer, rendered once, on every page.
+simCompletionSlugs exit=0 2s | simCompletionSlugs: green. Every recorded slug names a game the site can find.
+simDailyPuzzleContract exit=0 0s | simDailyPuzzleContract: green. Every caller honours the contract the selection memo depends on.
+simNoInventedQuotes exit=0 17s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simFetchRetry exit=0 4s | simFetchRetry: green. A transient page failure costs a retry and the rows come back whole.
+simHarnessAnchors exit=0 30s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNavbarStatsReads exit=0 1s | Artifacts: /home/runner/work/_temp/t-simNavbarStatsReads/navbar-stats-9X93Ly
+simSiteSearch exit=0 1s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simGuideHeadings exit=0 0s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simDailySaveHardening exit=0 42s | simDailySaveHardening: part all green
