@@ -1,0 +1,3 @@
+mut-penassistmine exit=0 113s | MUT penassistmine default=1 full=1 vitest=0 reds: RED names 21589 checks, 37 failed;RED names 107126 checks, 179 failed;
+mut-byeweek exit=0 110s | MUT byeweek default=1 full=1 vitest=0 reds: RED law 10516 checks, 365 failed;RED law 54024 checks, 1514 failed;
+mut-offbyone exit=0 111s | MUT offbyone default=1 full=1 vitest=0 reds: RED names 20910 checks, 278 failed;RED names 103735 checks, 1282 failed;
