@@ -1,0 +1,10 @@
+# Round 1228 fix pass: the closing check on the final pushed head (a docs only commit after r1228-fix-a)
+headis: echo "round head $(git rev-parse HEAD^) | main $(git rev-parse origin/main) | files changed since f7d996f7: $(git diff --name-only f7d996f7 HEAD^ | tr "\n" " ")"
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/leagueSlate.test.ts src/lib/uclLeaguePhase.test.ts --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simCmLeaguePhase.mjs > $RC_OUT/sim-all.txt 2>&1; s=$?; tail -1 $RC_OUT/sim-all.txt; exit $s
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
