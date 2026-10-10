@@ -1,0 +1,7 @@
+#!build
+#!playwright
+#!serial
+# Reviewer (run lens), Round 1215, head 36f333be: LIVE_FIT_SAVE on the dumps of all three contexts of the walk's own seed.
+# The calm context of that seed watches a goal at 57' (a second half), the case the builder never met.
+dump-own: bash .rc/x/rdump.sh 3208792607 4221
+restored: echo "tracked files that differ: $(git status --short | grep -c -v '^??')"

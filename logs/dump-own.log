@@ -1,0 +1,56 @@
+MUTATED scripts/playLiveMatchFit.mjs (alwaysdump): "if (failures > before) dumpSave();" became "dumpSave();"
+--- the walk on seed 3208792607 with every goal dumped, exit 0
+playLiveMatchFit: seed 3208792607. Replay this run with: LIVE_FIT_SEED=3208792607 node scripts/playLiveMatchFit.mjs
+  [match phone] seed 3208792607, 1869 draws at kick off, digest 421656fa over 6203 characters of drawn match: Crystal Palace v Brighton, goals of the first half 28' Diego Gómez, 32' Mats Wieffer; own goals among them 0
+  the goal watched: 28' Diego Gómez, against me; own goals in its half 0 of 2 goals
+      RED TO REPLAY: section 1 (phone), match digest 421656fa, the goal watched 28' Diego Gómez, against me
+  [match calm] seed 3208792608, 1799 draws at kick off, digest e14582e9 over 4503 characters of drawn match: Crystal Palace v Chelsea, goals of the first half none; own goals among them 0
+  the goal watched: 57' João Pedro, against me; own goals in its half 0 of 2 goals
+      RED TO REPLAY: section 2 (calm), match digest b7ffc53c, the goal watched 57' João Pedro, against me
+  [match wide] seed 3208792609, 1829 draws at kick off, digest 50a7cae5 over 4920 characters of drawn match: Crystal Palace v Newcastle, goals of the first half 5' Lewis Hall (own goal); own goals among them 1
+  the goal watched: 5' Lewis Hall (own goal), for me; own goals in its half 1 of 1 goals
+      RED TO REPLAY: section 7 (wide), match digest 50a7cae5, the goal watched 5' Lewis Hall (own goal), for me
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+--- replay of the phone dump (28' Diego Gómez, against me), exit 0, contexts that watched that goal: 3 of 3
+playLiveMatchFit: seed 3208792607 (the walk's own, from its file name). Replay this run with: LIVE_FIT_SEED=3208792607 LIVE_FIT_SAVE=/home/runner/work/_temp/rc-out/files/dump-3208792607/live-fit-save-phone.json node scripts/playLiveMatchFit.mjs
+Starting every context from /home/runner/work/_temp/rc-out/files/dump-3208792607/live-fit-save-phone.json: 72411 bytes as stored, Crystal Palace v Brighton, match digest 421656fa, to watch the goal at 28' Diego Gómez, against me.
+Back in the match at Crystal Palace, from the file.
+  [match phone] seed 3208792607, 7 draws at kick off, digest 421656fa over 6203 characters of drawn match: Crystal Palace v Brighton, goals of the first half 28' Diego Gómez, 32' Mats Wieffer; own goals among them 0
+  ok    the match that opened is the one in the file (digest 421656fa)
+  the goal watched: 28' Diego Gómez, against me; own goals in its half 0 of 2 goals
+  [match calm] seed 3208792608, 7 draws at kick off, digest 421656fa over 6203 characters of drawn match: Crystal Palace v Brighton, goals of the first half 28' Diego Gómez, 32' Mats Wieffer; own goals among them 0
+  ok    the match that opened is the one in the file (digest 421656fa)
+  the goal watched: 28' Diego Gómez, against me; own goals in its half 0 of 2 goals
+  [match wide] seed 3208792609, 7 draws at kick off, digest 421656fa over 6203 characters of drawn match: Crystal Palace v Brighton, goals of the first half 28' Diego Gómez, 32' Mats Wieffer; own goals among them 0
+  ok    the match that opened is the one in the file (digest 421656fa)
+  the goal watched: 28' Diego Gómez, against me; own goals in its half 0 of 2 goals
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+--- replay of the calm dump (57' João Pedro, against me), exit 0, contexts that watched that goal: 3 of 3
+playLiveMatchFit: seed 3208792607 (the walk's own, from its file name). Replay this run with: LIVE_FIT_SEED=3208792607 LIVE_FIT_SAVE=/home/runner/work/_temp/rc-out/files/dump-3208792607/live-fit-save-calm.json node scripts/playLiveMatchFit.mjs
+Starting every context from /home/runner/work/_temp/rc-out/files/dump-3208792607/live-fit-save-calm.json: 73567 bytes as stored, Crystal Palace v Chelsea, match digest b7ffc53c, to watch the goal at 57' João Pedro, against me.
+Back in the match at Crystal Palace, from the file.
+  [match phone] seed 3208792607, 7 draws at kick off, digest b7ffc53c over 7790 characters of drawn match: Crystal Palace v Chelsea, goals of the second half 57' João Pedro, 79' Morgan Rogers; own goals among them 0
+  ok    the match that opened is the one in the file (digest b7ffc53c)
+  the goal watched: 57' João Pedro, against me; own goals in its half 0 of 2 goals
+  [match calm] seed 3208792608, 7 draws at kick off, digest b7ffc53c over 7790 characters of drawn match: Crystal Palace v Chelsea, goals of the second half 57' João Pedro, 79' Morgan Rogers; own goals among them 0
+  ok    the match that opened is the one in the file (digest b7ffc53c)
+  the goal watched: 57' João Pedro, against me; own goals in its half 0 of 2 goals
+  [match wide] seed 3208792609, 7 draws at kick off, digest b7ffc53c over 7790 characters of drawn match: Crystal Palace v Chelsea, goals of the second half 57' João Pedro, 79' Morgan Rogers; own goals among them 0
+  ok    the match that opened is the one in the file (digest b7ffc53c)
+  the goal watched: 57' João Pedro, against me; own goals in its half 0 of 2 goals
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+--- replay of the wide dump (5' Lewis Hall (own goal), for me), exit 0, contexts that watched that goal: 3 of 3
+playLiveMatchFit: seed 3208792607 (the walk's own, from its file name). Replay this run with: LIVE_FIT_SEED=3208792607 LIVE_FIT_SAVE=/home/runner/work/_temp/rc-out/files/dump-3208792607/live-fit-save-wide.json node scripts/playLiveMatchFit.mjs
+Starting every context from /home/runner/work/_temp/rc-out/files/dump-3208792607/live-fit-save-wide.json: 70855 bytes as stored, Crystal Palace v Newcastle, match digest 50a7cae5, to watch the goal at 5' Lewis Hall (own goal), for me.
+Back in the match at Crystal Palace, from the file.
+  [match phone] seed 3208792607, 7 draws at kick off, digest 50a7cae5 over 4920 characters of drawn match: Crystal Palace v Newcastle, goals of the first half 5' Lewis Hall (own goal); own goals among them 1
+  ok    the match that opened is the one in the file (digest 50a7cae5)
+  the goal watched: 5' Lewis Hall (own goal), for me; own goals in its half 1 of 1 goals
+  [match calm] seed 3208792608, 7 draws at kick off, digest 50a7cae5 over 4920 characters of drawn match: Crystal Palace v Newcastle, goals of the first half 5' Lewis Hall (own goal); own goals among them 1
+  ok    the match that opened is the one in the file (digest 50a7cae5)
+  the goal watched: 5' Lewis Hall (own goal), for me; own goals in its half 1 of 1 goals
+  [match wide] seed 3208792609, 7 draws at kick off, digest 50a7cae5 over 4920 characters of drawn match: Crystal Palace v Newcastle, goals of the first half 5' Lewis Hall (own goal); own goals among them 1
+  ok    the match that opened is the one in the file (digest 50a7cae5)
+  the goal watched: 5' Lewis Hall (own goal), for me; own goals in its half 1 of 1 goals
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+EVERY DUMP REPLAYED: seed 3208792607, three files, each green and each watching its own goal three times
