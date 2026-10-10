@@ -1,0 +1,4 @@
+#!serial
+fleet-carry14: node .rc/x/rmut.mjs carry14 && TZ=UTC CM_FIXTURE_BASE=46e4231cc82b6c047da6e0b4bdb5dfae5628a928 timeout 1500 node scripts/simCmFixtureFleet.mjs > "$RC_OUT/fleet-carry14.log" 2>&1; s=$?; git checkout -q -- src scripts; grep -cE "RED" "$RC_OUT/fleet-carry14.log" | tr '\n' ' '; tail -1 "$RC_OUT/fleet-carry14.log" | cut -c1-300; exit $s
+fleet-carry14-keyless: node .rc/x/rmut.mjs carry14 && TZ=UTC CM_FIXTURE_BASE=46e4231cc82b6c047da6e0b4bdb5dfae5628a928 CM_FIXTURE_FLEET_CONTROL=keyless timeout 1500 node scripts/simCmFixtureFleet.mjs > "$RC_OUT/fleet-carry14-keyless.log" 2>&1; s=$?; git checkout -q -- src scripts; tail -1 "$RC_OUT/fleet-carry14-keyless.log" | cut -c1-300; exit $s
+tree-clean: test -z "$(git status --porcelain -- src scripts)" && echo "src and scripts are as committed"
