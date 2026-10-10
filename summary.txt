@@ -1,0 +1,15 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+rebuild-nowheel exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playSeasonCentre-nowheel exit=1 199s | playSeasonCentre: 40 checks, 3 failed
+playReducedMotion-nowheel exit=0 36s | playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone e
+playSeasonMoments-nowheel exit=1 153s | playSeasonMoments: 9 checks, 5 failed
+rebuild-nocalendar exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playSeasonCentre-nowheel-nocalendar exit=0 93s | playSeasonCentre: 40 checks, 0 failed
+playReducedMotion-nowheel-nocalendar exit=0 36s | playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone e
+playSeasonMoments-nowheel-nocalendar exit=0 40s | playSeasonMoments: 117 checks, 0 failed
+playSeasonCentreMotion-nowheel-nocalendar exit=0 129s | playSeasonCentreMotion: 77 checks, 0 failed
+restore exit=0 0s | src differs from the head in 0 file(s)
+base-setup exit=0 35s | served
+base-playSeasonCentre exit=0 93s | playSeasonCentre: 40 checks, 0 failed
+base-playReducedMotion exit=0 37s | playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone e
+base-playSeasonMoments exit=0 41s | playSeasonMoments: 117 checks, 0 failed

@@ -1,0 +1,18 @@
+chunks: centre SeasonCentre-CI0NXOuf.js, drill board DrillBoard-9aA3F2Cz.js, through ball ThroughBallBoard-C6lgm_nh.js, training ground TrainingPanel-B1vOCHR9.js
+ok   9. parsed the walker's ACTIONS (17 entries)
+saves: A ST table moments md10 finish call, md13 finish call, md31 finish recreate | B CB table moments md11 tackle call, md16 tackle call, md23 tackle recreate | C CM table moments md7 pass call, md9 pass recreate, md10 finish recreate | D GK table moments md5 save recreate, md9 save call, md13 save call
+ok   the engine produced a season for each board whose first moment is the wanted kind
+ok   1. A desktop wallshot: the page loads no training ground and no drill board (45 scripts)
+ok   2. A desktop wallshot: the kick off card lists the moments ("🎯 3 moments are yours to play this season: matchdays 10, 13 and 31.")
+FAIL 8. A desktop wallshot: both buttons on the offer are full touch targets (0 and 0 pixels tall, 44 wanted)
+FAIL 2. A desktop wallshot: the offer says how the board is played before the go is used, and holds the focus ("", on BUTTON)
+FAIL 2. A desktop wallshot: matchday 10 stops for a call ( on matchday 3)
+FAIL 2. A desktop wallshot: the clock holds a beat before minute 52 (90) and the bar steps aside
+ok   2. A desktop wallshot: reading the offer wrote nothing
+FAIL the harness threw: page.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[data-moment-take]')
+
+    at walk (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playSeasonMoments.mjs:379:16)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSeasonMoments.mjs:508:15
+playSeasonMoments: 9 checks, 5 failed

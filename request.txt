@@ -1,0 +1,18 @@
+# Release AU, attribution arms for the Season Centre walks: the wheel receipt off, then the cup nights off as well (rebuilt served build, this checkout only)
+#!serve
+#!playwright
+#!serial
+rebuild-nowheel: node .rc/x/mutAU.mjs nowheel && npm run build > /tmp/b1.log 2>&1; s=$?; tail -1 /tmp/b1.log | cut -c1-120; exit $s
+playSeasonCentre-nowheel: node scripts/playSeasonCentre.mjs
+playReducedMotion-nowheel: node scripts/playReducedMotion.mjs
+playSeasonMoments-nowheel: node scripts/playSeasonMoments.mjs
+rebuild-nocalendar: node .rc/x/mutAU.mjs nocalendar && npm run build > /tmp/b2.log 2>&1; s=$?; tail -1 /tmp/b2.log | cut -c1-120; exit $s
+playSeasonCentre-nowheel-nocalendar: node scripts/playSeasonCentre.mjs
+playReducedMotion-nowheel-nocalendar: node scripts/playReducedMotion.mjs
+playSeasonMoments-nowheel-nocalendar: node scripts/playSeasonMoments.mjs
+playSeasonCentreMotion-nowheel-nocalendar: node scripts/playSeasonCentreMotion.mjs
+restore: git checkout HEAD -- src; echo "src differs from the head in $(git diff --name-only HEAD -- src | wc -l) file(s)"
+base-setup: git worktree add -f /tmp/atg3 24f57a98fa44e280f1c848276a27d86e0a3e2745 >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/atg3/node_modules; cd /tmp/atg3 && git rev-parse --short HEAD && npm run build > /tmp/atg3-build.log 2>&1; tail -1 /tmp/atg3-build.log | cut -c1-120; setsid nohup node scripts/lib/hostLikeServer.mjs dist 4174 > /tmp/atg3-server.log 2>&1 & sleep 4; echo served
+base-playSeasonCentre: cd /tmp/atg3 && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 node scripts/playSeasonCentre.mjs
+base-playReducedMotion: cd /tmp/atg3 && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 node scripts/playReducedMotion.mjs
+base-playSeasonMoments: cd /tmp/atg3 && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 node scripts/playSeasonMoments.mjs
