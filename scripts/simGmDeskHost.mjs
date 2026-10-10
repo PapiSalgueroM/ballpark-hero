@@ -17,7 +17,8 @@
  *      Math.random reseeded between reads, and a year or a season on reads
  *      a new key (the digest printed is compared across two processes)
  *   4  the market rules on real tiers over a ladder of careers: never the
- *      club that let him go, nothing above tier 2 after a 'badly' season,
+ *      club that let him go, nothing above tier 2 after a 'badly' season
+ *      (also read six real clubs at a time, where the top tier is in reach),
  *      every ask built for the season after the league's
  *   5  closed means closed: no tier his old club can reach and no year out
  *      reopens a market that reads closed, and a quiet one is never in that set
@@ -401,8 +402,21 @@ const SPORTS = Object.keys(DRIVE);
 /* Floors: the measured size of each walk on seeds 1,2,3 (see MEASURED). A walk that shrinks under its floor proves nothing. */
 const T = {
   minLeagues: 58, minRealSaves: 168, minFeedsWithOffers: 23, minOffers: 8400, minBadlyOffers: 1570, minClimb: 560, minClosed: 3300, minQuietOpen: 2300,
-  minReach: 150, minVerdicts: 780, minLosing: 348, minFiredCloses: 348, minCases: 6100, minMen: 2290, minYoung: 7600, minPairs: 730000, minCuts: 200,
+  minReach: 455, minVerdicts: 780, minLosing: 348, minFiredCloses: 348, minCases: 6100, minMen: 2290, minYoung: 7600, minPairs: 730000, minCuts: 200,
 };
+/* CONTROL COUNTS, measured 2026-10-10 on a GitHub runner, seeds 1,2,3, each control run alone. Every one fired in
+   its own check; the failures counted there, then any other check it also turned red:
+     mutate 21 in 1          dropclub 63 in 1        fillmet 2640 in 2       readwrites 120 in 2 (and 6)
+     unkeyed 48 in 3 (and 9) firedclub 504 in 4      badlyceiling 102 in 4   askseason 12057 in 4 (and 9)
+     closedquiet 1311 in 5 (and the climb floor of 4)                        twice 1116 in 6
+     lateseat 744 in 6       failopen 1116 in 6      cushionall 498 in 6     flatlevel 4272 in 7 (and 6)
+     sharedroll 20 in 7      flatowner 5000 in 7 (and 6)                     flatmedia 140 in 7
+     flatcut 260 in 7        flatask 20 in 7         spendany 1 in 8         stalestaff 12 in 9
+     halfseason 24 in 9      noyear 24 in 9          emptytile 4770 in 10    closedsit 4946 in 10
+     fewseasons 504 in 10
+   badlyceiling did NOT fire on the full leagues alone (0 failures in 2,260 offers after a badly season): the
+   engine's own ceiling hides the rule there, which is why check 4 also reads six real clubs at a time
+   (653 / 651 / 653 offers in 216 feeds on the three seed sets, none from the top tier). */
 
 const nameOf = id => `${id} club`;
 const LIVE = XP.GM_TREES;

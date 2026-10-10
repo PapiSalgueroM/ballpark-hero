@@ -75,4 +75,44 @@ the engine's user club; the engine option that plays a league with nobody in the
 
 ## Proof
 
-See the section below, filled in from the runner results.
+Everything heavy ran on GitHub runners as remote checks (branch `rc-results/<name>`). On head e05fc891:
+
+| Check | Result name | Exit | What it printed |
+|---|---|---|---|
+| Type gate (`tsc --noEmit -p tsconfig.app.json`) | r1223-f1 | 0 | no errors |
+| vitest, 6 files | r1223-f1 | 0 | 102 tests: gmDeskHost 39, GmCareerDesk 13, GmDeskMount 16, GmSeatCard 4, gmSeat 18, gmXp 12 |
+| `simGmDeskHost`, seeds 1,2,3 (twice), 4,5,6 and 7,8,9 | r1223-f1 | 0 each | all 10 checks passed; the two runs of seeds 1,2,3 print one feed digest |
+| `simGmDeskHost` anchors | r1223-f1 | 0 | 27 rewrites checked, 0 cannot run |
+| 26 negative controls | r1223-c2 | 1 each | every one FIRED in its own check (counts in the harness, under T) |
+| Rule fences | r1223-fence | 0 | simLiveScores, simNoRivalNames (0 findings), simInventedNames, simHarnessAnchors, simNoInventedQuotes, simNoInventedConduct, simStorageWrites, simGmSeat, simGmDesk, simGmReload, simFrontOfficeCuts and 17 more green |
+
+Reds in the fence run that are not this round's, each read in its log: simGmXp (3 failures, red on main, above);
+simGmStaff (16) and simDraftNight (2), both red the same way with this round's 14 files removed (r1223-base2);
+simDailySaveHardening (/olympics, and /nba-career in one run of two; red with the files removed as well);
+simSchemaNames and simLeaderboardCaps (the database is unreachable from a runner by design); simWritesAreSent
+and simResultMoment (the request did not install the browser).
+
+The closing head is the same code with the measured control counts written into the harness, the six club floor
+raised to 70 percent of its measured size, and these notes. Its own runner results are in the builder's closing
+report.
+
+What the harness measured (three seed sets of three, three seasons a seed a sport): 84 real leagues and 240 real
+saves a set; 16,800 careers on the market ladder a set, of which about 4,770 read closed, 3,330 quiet and 805
+quiet on a climb; 1,116 real seasons graded a set, about 505 of them short of the ask.
+
+The pace, which the lead asked for (the critic's A7): on the four sources a save can feed today (win share,
+titles, playoff rounds, the ask) the median club earns 95 to 106 XP a season in every sport, and 20 to 40 percent
+of clubs hold the first point (400 XP) after three seasons. The median GM is about four seasons from his first
+point. The GM level help now says so, computed from gmXp, never typed.
+
+## For the bind (Round M1), what not to trust
+
+- The year out is proven in the host's order on four real engines, with the old club still named as the
+  engine's user club. A league played with nobody in the chair needs the engine option the brief's decision 19
+  describes, and M1's harness must prove it.
+- The market's shares here are over a ladder of careers, not over real firings. The measuring run of B4 (how
+  many real NHL firings end closed on the first screen) is the lead's, and the ruling on a first feed that is
+  never empty would be a host rule on top of `hostMarket`.
+- `HostClub.pct` is filled only by the NHL adapter (the points share). The other three leave it out, as
+  `StandingRow` allows.
+
