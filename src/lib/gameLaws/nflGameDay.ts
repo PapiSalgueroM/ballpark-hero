@@ -7,8 +7,13 @@
    scoring play is worth, and that a regular season game can end level. The
    clock of four quarters of 15 minutes is in the same ledger and is marked
    THIN there (one of its two reads was a spot check), so the "?" below says
-   thin where it says real. src/lib/gmGameDay.test.ts holds the quarters here
-   to the law's clock label and to the ledger.
+   thin where it says real, in words a player can read. src/lib/gmGameDay.test.ts
+   holds the quarters here to the law's clock label and to the ledger.
+   OWED BEFORE A CARD SHOWS THE SHEET (the ledger is its owner's file, not
+   this round's): complete the NFL_CLOCK row in src/data/usLeagueShape.ts with
+   the league's own rulebook (Rule 4, Section 1, Article 1: sixty minutes in
+   four periods of fifteen), then the sentence is "Real: four quarters of 15
+   minutes." and the unit test's demand for the word thin goes with it.
    THIS SIM'S OWN: the 21 and the 10 below, every sentence, and that a game in
    a front office always has a winner.
 
@@ -61,7 +66,7 @@ export const NFL_GAME_DAY_HELP: HelpWords = {
   title: 'Game Day',
   intro: [
     'Real: a touchdown is 6, the kick after it 1, a two point try 2, a field goal 3 and a safety 2.',
-    'Real, with a thin mark: four quarters of 15 minutes (the second read behind that was only a spot check).',
+    'Real: four quarters of 15 minutes. We mark that one thin, because only one of our two sources for it was a full read.',
     'Real: a regular season game can end level. Not here: every game in this front office has a winner.',
     "This sim's own: your roster and theirs decide who wins. The score and every scoring play are then drawn for that winner, so the same saved game always tells the same story.",
     `This sim's own: a win by ${NFL_ROUT} or more is called a rout, and a win from ${NFL_COMEBACK} or more down a comeback.`,

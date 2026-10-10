@@ -1,7 +1,9 @@
 # Round 1224 notes: Game Day and a bracket you play, the shared libraries for the front offices
 
 Branch `r1224-gm-gameday-libs`, base `origin/r1221-nfl-score-law` at `5d6ffbef` (Round 1221, the NFL score law in
-`src/lib/gameLaws`). Written by the builder, rewritten after every step.
+`src/lib/gameLaws`). Written by the builder, rewritten after every step. Two adversarial reviews followed (one
+major, fifteen minors); the section THE FIX PASS near the foot says what each finding became, and the sections
+above it were brought up to date where the fix pass changed a fact.
 Nothing a player sees changes in this round: NEW FILES ONLY, and nothing under `src` imports them but their own
 tests (section 6 of the harness holds that). No What's New entry, no guide sentence, no screen, no saved page.
 
@@ -14,13 +16,14 @@ after plays the NFL postseason a round a press.
 
 | File | What it holds |
 |---|---|
-| `src/lib/gmGameScore.ts` | THE QUICK PATH. `decidedScore(law, decided, key)`: a `ScoreLaw`'s final for a game whose winner an engine already decided (24 tries on keyed streams, the first that is not level and has the winner ahead; after 24 misses the first try handed to the winner, `swapped`; null when the law gives nothing usable). `quickGame`, `toldWinner`, the types `GameDayFixture`, `ToldGame`, `ToldScore`. Imports the keyed stream and types only, so it can sit in a board's chunk. |
-| `src/lib/gmGameDay.ts` | THE TOLD PATH. `gameStory(law, told, viewAs)`: the scoring plays, the score by period, the one to three deciding plays and the shape of a told final, from one club's side, in the shape the Season Center's match clock is handed. `tellGame` (the quick path's final, then its story). `decidingPlays`. The type `GameDayLaw`. THE SAVE FIELD `GmLastGame` with `makeGmLastGame` and `readGmLastGame`. |
-| `src/lib/gameLaws/nflGameDay.ts` | What the NFL hands Game Day on top of its story law: four quarters, `NFL_ROUT` 21, `NFL_COMEBACK` 10, `nflShapeWords`, `NFL_GAME_DAY`, and the "?" (`NFL_GAME_DAY_HELP`, a `HelpWords`). |
+| `src/lib/gmGameScore.ts` | THE QUICK PATH. `decidedScore(law, decided, key)`: a `ScoreLaw`'s final for a game whose winner an engine already decided (24 tries on keyed streams, the first that is not level and has the winner ahead; after 24 misses the first try handed to the winner, `swapped`; null when the law gives nothing usable). `quickGame`, `toldWinner`, the types `GameDayFixture`, `ToldGame` (with the optional mark `beyond`), `ToldScore`. THE CEILING: `GM_SCORE_CEILING` (999) and `isGmScore`, the one definition of a score for everything that reads one. THE SAVE FIELD `GmLastGame` with `makeGmLastGame` and `readGmLastGame` (a press writes it and a save validator reads it, so it lives with the quick path). Imports the keyed stream and types only, so it can sit in a board's chunk. |
+| `src/lib/gmGameDay.ts` | THE TOLD PATH, which rides with a card alone. `gameStory(law, told, viewAs)`: the scoring plays, the score by period, the one to three deciding plays, the go ahead among them and the shape of a told final, from one club's side, in the shape the Season Center's match clock is handed. `tellGame` (the quick path's final, then its story). `decidingPlays`. The type `GameDayLaw` (`story`, `maxScore`, `periods`, `shape`, and for a sport with an extra period `storyBeyond` and `periods.regulation`). |
+| `src/lib/gameLaws/nflGameDay.ts` | What the NFL hands Game Day on top of its story law: four quarters, `NFL_MAX_SCORE` (73: ten drives of seven and the three a level game adds), `NFL_ROUT` 21, `NFL_COMEBACK` 10, `nflShapeWords`, `NFL_GAME_DAY`, and the "?" (`NFL_GAME_DAY_HELP`, a `HelpWords`). |
 | `src/lib/gmBracket.ts` | A postseason as a saved state machine over `src/lib/finalsBracket.ts` (not edited): `BracketFormat`, `GmBracketSave`, `openBracket`, `playBracketGame`, `playBracketWeek`, `playBracketAll`, `bracketWeek`, `bracketPairings`, `bracketOutcomes`, `bracketChampion`, `bracketOut`, `bracketByes`, `bracketRounds`, and the guard, the replay check and the repair: `isGmBracketSave`, `bracketProblems`, `repairGmBracket`, `BRACKET_REBUILT_LINES`. |
-| `src/data/gmBrackets/nfl.ts` | The NFL postseason as data (`NFL_BRACKET`, id `nfl-14`), the seasons it is true for, its sources, `nflBracketFor`, and the "?" (`NFL_BRACKET_HELP`). |
-| `src/lib/gmGameScore.test.ts`, `gmGameDay.test.ts`, `gmBracket.test.ts` | 11, 22 and 12 unit tests. |
-| `scripts/simGmGameDay.mjs` | The harness: six sections, twelve negative controls. |
+| `src/data/gmBrackets/nfl.ts` | The NFL postseason as data (`NFL_BRACKET`, id `nfl-14`), the seasons it is true for, its sources, `nflBracketFor`, `NFL_TITLE_GAME_LEAN`. What a press and a save validator need. |
+| `src/data/gmBrackets/nflHelp.ts` | The words of the bracket's "?" (`NFL_BRACKET_HELP`), apart from the data so only a drawn card loads them. |
+| `src/lib/gmGameScore.test.ts`, `gmGameDay.test.ts`, `gmBracket.test.ts` | 14, 31 and 18 unit tests (11, 22 and 12 before the fix pass). |
+| `scripts/simGmGameDay.mjs` | The harness: six sections, nineteen negative controls (twelve before the fix pass). |
 | `scripts/lib/gmGameDayFleet.mjs` | The one definition of the fleet the harness walks and the recorder records. |
 | `scripts/recordGmBracketFixture.mjs`, `scripts/data/gmBracketFixture.json` | The engine's one press postseason over the fleet, recorded. |
 
@@ -33,14 +36,24 @@ No existing file was edited. `src/lib/frontOffice.ts`, `src/lib/finalsBracket.ts
   stream keyed to the game (`src/lib/keyedRng.ts`): `${key}|score|${try}` and `${key}|story|${home}-${away}`.
 - ONE LAW, TWO PATHS. `tellGame` asks `quickGame` for the final and tells that final, so a watched game and the
   same game only scored cannot differ.
-- FAILS CLOSED. A level final, a final the law has no list for (a side on 1 or 4 in the NFL), a list that does
-  not add up, a minute outside the clock: null, and a card shows the final alone.
+- FAILS CLOSED. A level final, a final with a side above the ceiling (999) or above the sport's own top score
+  (the NFL's 73), a final the law has no list for (a side on 1 or 4 in the NFL), a list that does not add up, a
+  minute outside the clock, a game marked past regulation in a sport that tells no such game, a law that throws:
+  null, and a card shows the final alone. A final above either number is refused BEFORE the law is asked: a
+  story law's work grows with the score, and with no ceiling one damaged number in a save threw out of the NFL's
+  law (250000) or never came back (1e21).
 - TEAM LEVEL ONLY. A line names a club. No man is credited, there is no speaker and no quotation mark.
 - THE SAVE BLOCKS ARE OPTIONAL, GUARDED AND REPAIRABLE. `readGmLastGame` answers null for anything that does not
   read as a last game (mark, never fill). `repairGmBracket` hands a sound bracket back untouched and rebuilds
   anything else UNPLAYED, from its own seeds when they still read, else from fresh ones, with one line for the
-  feed. Neither ever throws. Every field is damaged one at a time in the unit tests (48 cases for the last game;
-  69 for the bracket's outer shape, 13 saves that read but do not replay, 11 that cannot keep their seeds).
+  feed. A sound save is also shown to the league's own check (`seedsOk`): the block cannot know its seeds are
+  the wrong clubs. Neither ever throws on a damaged block (the repair throws only when the caller's own fresh
+  seeds do not open a bracket, a bind's bug). Every field is damaged one at a time in the unit tests (48 cases
+  for the last game and fifteen scores above the ceiling; 75 for the bracket's outer shape, 13 saves that read
+  but do not replay, 11 that cannot keep their seeds).
+- THE MOVER AND THE VALIDATOR AGREE. `playBracketGame` plays no tie out of turn (in a format with no order of
+  its own, before every tie of an earlier week is settled), because `bracketProblems` names such a save and the
+  repair then wipes it. Held by a keyed walk in the unit file (three formats) and in the harness (80 a seed set).
 
 ## The facts, and where they are written
 
@@ -56,7 +69,11 @@ No existing file was edited. `src/lib/frontOffice.ts`, `src/lib/finalsBracket.ts
   `src/lib/nflPlayoffFormatHistory.ts` and `src/data/usLeagueShape.ts`; the unit test holds the data to that
   ledger (field size, first season).
 - Two CBS Sports pages were read and state none of these; they are not cited.
-- THIN, and marked thin in the "?": four quarters of 15 minutes (the ledger's own mark, `NFL_CLOCK`).
+- THIN, and marked thin in the "?": four quarters of 15 minutes (the ledger's own mark, `NFL_CLOCK`). OWED
+  before a card shows the sheet: the read reviewer found the league's own rulebook states it (2026 Official
+  Playing Rules, Rule 4, Section 1, Article 1: sixty minutes in four periods of fifteen). The ledger row in
+  `src/data/usLeagueShape.ts` is its owner's file, not this round's; once it is completed the sentence becomes
+  "Real: four quarters of 15 minutes." and the unit test's demand for the word thin goes with it.
 - DATED: the format is the one in use in 2025 (`NFL_BRACKET_SEASONS`), and the "?" says so.
 - THIS SIM'S OWN, said in the "?": the title game leans to the AFC champion 58 times in 100 at level strength
   (the engine names it first and gives the first club two points; the unit test holds 58 to `winProb`), the
@@ -84,15 +101,25 @@ between two engine calls moves the engine here as it would on the site.
 | 1 | One law, two paths: for every game, with the chance from the engine's `winProb`, the quick path never names another winner, is never level, never refuses, and the told path tells exactly that final. The swapped share sits under 0.002. |
 | 2 | Every story adds up, by a checker written in the harness that calls neither the library's sums nor the law: finals, quarters, what each play is worth by the ledger (6, 7 or 8, 3, 2), whole minutes from 1 to 60 that no two lines share, the deciding plays and the shape by the rule. |
 | 3 | The told scores are the law's scores: against a baseline drawn in the same run (the same law, free, at the same chance) four statistics sit inside two sided bands. |
-| 4 | The bracket is the engine's postseason: `playBracketAll`, and four presses of `playBracketWeek` with the save through JSON between them, give the engine's thirteen games, champion, next 64 draws and 32 records for every season; the engine's own run is the recorded fixture; the data's structure; a doctored winner, a doctored pairing and a tie played out of turn are each named. |
-| 5 | Pure: telling every game of a season right after the engine plays it leaves the engine's generator, its draw count, its 272 winners and its 32 records where they were; a postseason told inside the press is the engine's, draw for draw; the same key tells the same final and story twice, and through the saved last game and JSON; the five new source files hold no `Math.random`, no `Date`, no `localStorage` (comments stripped). |
+| 4 | The bracket is the engine's postseason: `playBracketAll`, and four presses of `playBracketWeek` with the save through JSON between them, give the engine's thirteen games, champion, next 64 draws and 32 records for every season; the engine's own run is the recorded fixture; the data's structure; a doctored winner, a doctored pairing and a tie played out of turn are each named; and asked for any tie in any order, a game at a time (80 keyed walks a set), the mover never makes a save the validator finds a problem in. |
+| 5 | Pure: telling every game of a season right after the engine plays it leaves the engine's generator, its draw count, its 272 winners and its 32 records where they were; a postseason told inside the press is the engine's, draw for draw; the same key tells the same final and story twice, and through the saved last game and JSON; the six new source files hold no `Math.random`, no `Date`, no `localStorage` (comments stripped). And the ceiling: neither save guard reads a score above 999 (1000, 250000 and 1e21 on a saved last game and on a saved bracket game), a final above it is told nothing without the story law being asked, and the NFL tells no final above its own top score. |
 | 6 | Nobody mounts it yet: of every `.ts` and `.tsx` under `src`, only the new modules and their three tests import a new module (imports read with the TypeScript scanner, so a comment is never an import). |
 
-The twelve controls (`GM_GAMEDAY_CONTROL=`), each a string that must be in its file exactly once: `winner`,
-`twopaths`, `tries` (section 1), `offbyone` (2), `olddraw` (3), `pairing`, `validator`, `enginedrift` (4),
-`random`, `stream`, `unkeyed` (5), `mounted` (6). A control is counted as fired only when the checks it NAMES are
-among the reds; `enginedrift` also needs the machine's two checks to stay green (it is aimed at the recorded
-fixture alone). An unknown control exits 2.
+The nineteen controls (`GM_GAMEDAY_CONTROL=`), each a string that must be in its file exactly once: `winner`,
+`level`, `refuse`, `lowmax`, `twopaths`, `tries` (section 1), `offbyone` (2), `olddraw` (3), `pairing`,
+`validator`, `strict`, `outofturn`, `enginedrift` (4), `random`, `stream`, `unkeyed`, `ceiling`, `lawmax` (5),
+`mounted` (6). A control is counted as fired only when the checks it NAMES are among the reds (`refuse` and
+`lowmax` also name a check of another section); `enginedrift`, `strict` and `outofturn` also need the machine's
+two checks to stay green (each is aimed at one fence alone). An unknown control exits 2. The seven added in the
+fix pass: `level` (a told final is never level), `refuse` (the law never refuses a game, and every game was
+told and measured), `lowmax` (the NFL's top score typed as 30: a told final above it, and stories lost),
+`strict` (an over strict validator: a false problem would wipe a real bracket through the repair), `outofturn`
+(the mover's refusal taken out: 67 of 80 walks of seed set 0 then make a save the validator condemns),
+`ceiling` (the library's ceiling typed as 100000) and `lawmax` (the NFL claims a top score of 999).
+WITHOUT A CONTROL OF THEIR OWN, and said so in the harness header: "a save survives JSON after every press",
+"the fixture is of this fleet" and the five checks of the data's structure.
+NOT HELD BY THE HARNESS AT ALL: the save guards and the repair with every field damaged. The three unit files
+hold them, and seven mutations of those rules leave the harness green (the run reviewer's table).
 
 ### MEASURED (identical on Linux and on Windows)
 
@@ -129,8 +156,13 @@ records). The recorder bundles only the engine, so it runs on the commit before 
 in a worktree of the base `5d6ffbef` and at the round's head, both files are the committed file byte for byte
 (`cmp`), and the committed file was itself written on Windows. The fence is the digest of what is PLAYED: an
 edit to the engine file that moves no postseason (a comment, a function no playoff reads) is not a red, and
-when the digest does move the harness says whether `frontOffice.ts` and `finalsBracket.ts` are still the files
-the fixture was recorded from. A change that is MEANT to `runPlayoffs`, to `simGame`, to anything that moves
+when the digest does move the harness names the files to look at. Since the fix pass the fixture records, under
+`inputs`, the hash of EVERY file it was taken from (eight: the engine, the two roster files, `foNames`,
+`leagueCaps`, `entityIds`, `frontOfficeCuts`, by esbuild's own list of what the engine bundle read, and the
+fleet), and a red line names the recorded inputs that changed and the files the engine reads today that the
+record never saw. So a roster refresh that moves the record is named as one. The file was taken again for that
+header only: its five digests, season counts, thirty kept seasons and fleet are equal before and after, field
+for field. A change that is MEANT to `runPlayoffs`, to `simGame`, to anything that moves
 the fleet's seasons (the schedule, the injury pass, the computer clubs' weekly moves, the rosters), to
 `finalsBracket.ts` or to the NFL data must record the fixture again in the same commit
 (`node scripts/recordGmBracketFixture.mjs`) and say why.
@@ -138,8 +170,8 @@ the fleet's seasons (the schedule, the injury pass, the computer clubs' weekly m
 (The first version of the harness, the one the runner results `r1224-s2` to `r1224-f6` below ran, also failed
 two checks of its own when either file's hash had moved at all. They were taken out as the last change of the
 round: a hash is not an outcome, and a comment edit in a 1,500 line engine file would have turned a fence red
-for nothing. That is why those results print 171 checks and the harness now makes 169. The run of the harness
-as it stands is named in the closing report.)
+for nothing. That is why those results print 171 checks and the builder's last head made 169. Since the fix
+pass the harness makes 188.)
 
 ## What the NBA, MLB and NHL front offices must supply (data plus events, no new engine)
 
@@ -151,15 +183,24 @@ Nothing in `gmGameScore.ts`, `gmGameDay.ts` or `gmBracket.ts` knows a sport. A b
    NFL's needs 2.0 tries a game). It binds the PRESENT DAY era (`nbaScore` in `src/lib/season/nba.ts` takes an
    era as a fourth argument; it moves here the way the NFL's did in Round 1221). The NHL's must read
    `decided.beyond`: its engine draws whether a game went past regulation, and the law must tell a one goal game
-   with an extra period when it did. MLB's and the NHL's score laws do not exist yet.
+   with an extra period when it did. MLB's and the NHL's score laws do not exist yet. No side of a final may be
+   above `GM_SCORE_CEILING` (999): a score above it is not a score to the quick path, the guards or the story.
 2. A STORY LAW, `src/lib/gameLaws/<sport>.ts`, a `StoryLaw`: `events(home, away, rng)` (the scoring plays of a
    final, the HOME club as `us`, each with whole `pts` that sum to the final and a minute inside the clock, or
    null when no list makes it), `clock` and `line(event, club)`.
-3. A GAME DAY LAW, `src/lib/gameLaws/<sport>GameDay.ts`, a `GameDayLaw`: `story`, `periods` (how many, which one
-   a minute falls in, its short name: four quarters, three periods, nine innings) and `shape` (the margin that
-   makes a rout, the deficit that makes a comeback, one sentence a shape whose verbs read the same for a club
-   named in the singular or the plural), plus its "?" as a `HelpWords` with real, sim's own and one worked
-   example. An extra period is one more entry in `periods` for the law to decide.
+3. A GAME DAY LAW, `src/lib/gameLaws/<sport>GameDay.ts`, a `GameDayLaw`: `story`, `maxScore` (the highest score
+   a side can have in a final its score law gives, stated from the law's own constants: `gameStory` tells no
+   final above it and never asks the story law for one), `periods` (how many, which one a minute falls in, its
+   short name: four quarters, three periods, nine innings) and `shape` (the margin that makes a rout, the
+   deficit that makes a comeback, one sentence a shape whose verbs read the same for a club named in the
+   singular or the plural), plus its "?" as a `HelpWords` with real, sim's own and one worked example.
+   A SPORT WITH AN EXTRA PERIOD (the fix pass, the reviewers' findings 4 and 8) also states `storyBeyond`, the
+   scoring plays of a final that went past regulation, and `periods.regulation`, how many of its periods a game
+   in regulation has (three of four for hockey). The mark travels by itself: `DecidedGame.beyond` from the
+   engine, kept on `ToldGame` by `quickGame`, saved on `GmLastGame`, read back by `readGmLastGame`, and
+   `gameStory` tells a marked game by `storyBeyond` and any other by `story.events`. The same final in sixty
+   minutes and in the extra period are then two stories, before and after a reload, and `late` is the last
+   period that game was played to. `StoryLaw` in Round 1221's `types.ts` is not touched (new files only).
 4. A BRACKET, `src/data/gmBrackets/<sport>.ts`, a `BracketFormat` with its sources in the header (two
    publishers that are not a wiki a fact, the seasons it is true for, thin marked thin): `qualifiers`, `ties`
    (slots are a seed, a winner, a loser, or the Nth best seeded of several winners), `winsNeeded` by week (the
@@ -192,7 +233,26 @@ Nothing in `gmGameScore.ts`, `gmGameDay.ts` or `gmBracket.ts` knows a sport. A b
 - A level told final cannot be saved (`makeGmLastGame` answers null): every front office game has a winner.
 - The copy of both "?" sheets describes controls the cards do not have yet (Watch, 3x, Results; one press a
   round, Sim the rest). The round that draws the cards checks the words against the cards as built.
-- The NFL bind's seven a conference check goes in as `repairGmBracket`'s last argument (`seedsOk`).
+- The NFL bind's seven a conference check goes in as `repairGmBracket`'s last argument (`seedsOk`). Since the
+  fix pass it is asked of a save that replays soundly too, and a refusal is a rebuild from fresh seeds.
+- ASK FIRST WHETHER THE SAVE IS IN ITS POSTSEASON, THEN REPAIR. `repairGmBracket` answers an absent block
+  (undefined: every save from before the bracket) like a damaged one: rebuilt `fresh`, with the line that the
+  bracket could not be read. A board that called it on every load would open a bracket on a save that never had
+  one and print a false line. Its header says so and a unit case pins it.
+- NOTHING READS `playoffs` OFF A SAVE BEFORE THE REPAIR HAS. `bracketWeek`, `bracketPairings`, `bracketRounds`,
+  `bracketChampion`, `bracketOut` and the three movers take a `GmBracketSave` on trust and throw a TypeError on
+  a block whose `played` is not a list.
+- `isClub` IS A REAL MEMBERSHIP TEST (a Set, or `Object.hasOwn`). Both guards compare with `=== true`, and a
+  bare lookup such as `id => !!teams[id]` says yes to `constructor`.
+- `repairGmBracket` THROWS when the bind's own `freshSeeds()` does not open a bracket the validator reads (the
+  wrong number, a seed twice, a seed that is not a club). The league's validator runs before it on a load, so a
+  player never meets that; a bind's test will.
+- THE PLAY A CARD CALLS THE ONE THAT DECIDED IT is `GameStory.goAhead` (one of `deciding`, which can hold three
+  plays). The Game Day "?" speaks of that play.
+- THE WEIGHT. What a press and a validator import statically is `gmGameScore.ts` (the quick path, the ceiling,
+  the save field), `gmBracket.ts` and `src/data/gmBrackets/nfl.ts`. `gmGameDay.ts`, `gameLaws/nflGameDay.ts`,
+  `gameLaws/nfl.ts` and `gmBrackets/nflHelp.ts` ride with a card that is drawn. /front-office was 359.3K on a
+  budget of 359 before anything was mounted.
 
 ## Judgment calls, so the lead can overrule them
 
@@ -247,6 +307,37 @@ The whole unit suite (`r1224-f3`, `node_modules/.bin/vitest run --shard=k/3 --te
 The pushed head's own last check (the type gate, the harness, the unit files) is named in the closing report,
 `C:/Users/antho/dukb-handoff/2026-10-10/results-g/finish-1224.md`.
 
+## THE FIX PASS (2026-10-10, after the two adversarial reviews of `bf6d9696`)
+
+The reviews: `C:/Users/antho/dukb-handoff/2026-10-10/results-g/review-run-1224.md` (verdict FIX: one major, five
+minors) and `review-read-1224.md` (verdict SHIP: ten minors). The fixer's closing report, with every command and
+runner result: `C:/Users/antho/dukb-handoff/2026-10-10/results-g/fix-1224.md`. One commit a fix:
+
+| Commit | Findings | What changed |
+|---|---|---|
+| `bb513cff` | 1 (MAJOR) | A score has a ceiling. `GM_SCORE_CEILING` (999) and `isGmScore` are the one definition of a score for `decidedScore`, `gameStory`, `readGmLastGame` and `isGmBracketSave`; a `GameDayLaw` states `maxScore` (the NFL's 73) and `gameStory` refuses a final above either before the law is asked. Before: a saved 250000 was read by the guard and threw a RangeError out of the NFL's story law, a saved 1e21 never came back. |
+| `f2944bd4` | 2, 3, 6, 7, 9 | `playBracketGame` plays no tie out of turn (the validator condemned what the mover allowed). `repairGmBracket` asks `seedsOk` of a sound save, throws on the caller's own bad fresh seeds, and its header says an absent block is answered like a damaged one. The unit test named for the better seed hosting checks it. |
+| `0a7bffc0` | 4, 8 | A game past regulation keeps its mark: `ToldGame.beyond` and `GmLastGame.beyond` (kept when true, absent otherwise, so the NFL saves what it saved), `GameDayLaw.storyBeyond`. |
+| `19416ed9` | 10, 15 | A law that throws has refused (null from `decidedScore` and `gameStory`). `GameStory.goAhead`. `periods.regulation`: `late` is the last period that game had. |
+| `34457c13` | 12 | What a press needs sits apart from what only a card needs: the save field moved to `gmGameScore.ts`, the bracket's help words to `src/data/gmBrackets/nflHelp.ts`. |
+| `1a05fcb2` | 5, 11, 16 | The harness: the ceiling, the mover against the validator, the go ahead, seven more controls, a control may name checks of other sections, the walk of `src` survives a directory removed under it, the header says what the clock is read for and what is not held here. |
+| `946d461f` | 13 | The fixture records every file it was taken from (eight) and a red line names the ones that moved. The file was taken again for that header only; no recorded game moved. |
+| this commit | 14, 15 | The thin sentence of the Game Day "?" in words a player can read; these notes. |
+
+NOT FIXED, and why:
+- Finding 14, the sourcing itself: the ledger row is in `src/data/usLeagueShape.ts`, its owner's file, and this
+  round is new files only. Owed above.
+- Finding 15, parts b and c: the `controls` sentences of both "?" sheets name buttons, and the bracket's sheet
+  says nobody heals between playoff rounds. Both are the next two rounds' to keep true or to change; nothing
+  mounts the sheets yet.
+- Finding 11, in part: three check families keep no control of their own (a save survives JSON, the fixture is
+  of this fleet, the five structure checks). The harness header says so.
+- Finding 8's suggested fourth argument on `StoryLaw.events`: not taken, because `src/lib/gameLaws/types.ts` is
+  Round 1221's file. `GameDayLaw.storyBeyond` carries the same thing inside this round's own type.
+
+The fix pass's runner results are in the table of the fixer's closing report (the queue held a request for over
+an hour that afternoon, so they were read after this file was written).
+
 ## Not run, and why
 
 - Nothing that reads or writes the live database (no MCP SQL, no deploy). simSchemaNames and simLeaderboardCaps
@@ -261,7 +352,13 @@ The pushed head's own last check (the type gate, the harness, the unit files) is
 ## Owed, and what a later session must not trust
 
 - GATE LIST: `simGmGameDay` belongs in the release gate from this round on (the critic's point 23): its section
-  4 is the fence that sees a later edit to `runPlayoffs`, `simGame`, `finalsBracket.ts` or the NFL data.
+  4 is the fence that sees a later edit to `runPlayoffs`, `simGame`, `finalsBracket.ts` or the NFL data. AND THE
+  THREE UNIT FILES, BY NAME, in every gate that carries this round: `src/lib/gmBracket.test.ts`,
+  `src/lib/gmGameDay.test.ts`, `src/lib/gmGameScore.test.ts`. The save guards and the repair are held by them
+  alone (seven of the run reviewer's fifteen mutations leave the harness green and are caught only there).
+- OWED BY THE LEDGER'S OWNER before a card shows the Game Day "?": the `NFL_CLOCK` row of
+  `src/data/usLeagueShape.ts` completed with the league's rulebook, then the thin sentence and the unit test's
+  demand for the word thin go (see the facts section above).
 - Nothing is owed to the other lane: no guide sentence changes. When Game Day is mounted, the /front-office
   guide (`src/data/gameContent/football.ts`) should gain it; that is the mounting round's note to write.
 - The board sentence of the critic's correction 9 (the two cards and the four boards are this lane's for these
