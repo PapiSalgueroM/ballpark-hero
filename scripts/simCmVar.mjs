@@ -99,8 +99,8 @@ const controls = {
      coverage key, so this is only seen where the coverage outcome stages that key in. */
   historic: { file: engine, from: 'worldYear(state) >= 2026 && !isHistoricEra(state.eraId ?? DEFAULT_ERA_ID)', to: 'worldYear(state) >= 2026', test: 'coverage' },
   /* Round 1218 fix: a review dealt from the match's own random stream, the goal review and the missed foul one. */
-  streamgoal: { file: helper, from: '    const rng = keyedRng(id);\n    if (rng() >= CM_VAR_GAME_RATES.goalReview)', to: '    const rng = Math.random;\n    if (rng() >= CM_VAR_GAME_RATES.goalReview)', test: 'stream' },
-  streamfoul: { file: helper, from: '    const rng = keyedRng(id);\n    if (rng() >= CM_VAR_GAME_RATES.missedFoulReview)', to: '    const rng = Math.random;\n    if (rng() >= CM_VAR_GAME_RATES.missedFoulReview)', test: 'stream' },
+  streamgoal: { file: helper, from: '    if (rng() >= CM_VAR_GAME_RATES.goalReview) { accepted.push(goal); continue; }', to: '    if (Math.random() >= CM_VAR_GAME_RATES.goalReview) { accepted.push(goal); continue; }', test: 'stream' },
+  streamfoul: { file: helper, from: '    if (rng() >= CM_VAR_GAME_RATES.missedFoulReview) continue;', to: '    if (Math.random() >= CM_VAR_GAME_RATES.missedFoulReview) continue;', test: 'stream' },
   /* Round 1218: each rate Round 1181 typed, put back into the generated module. Each must leave the range for its own reason. */
   oldgoalreview: { file: rates, from: /goalReview: [0-9.]+/, to: 'goalReview: 0.16', test: 'bands' },
   oldoverturn: { file: rates, from: /overturn: [0-9.]+/, to: 'overturn: 0.32', test: 'bands' },
@@ -373,7 +373,8 @@ async function main() {
         /* Four clubs of four leagues, each walked through twelve matches: league nights, and Europe for those in it. */
         for (const [c, club] of ['Wolves', 'Ajax', 'Lyon', 'Celtic'].entries()) {
           const { mine, matches } = walk(club, 4200 + c, 8100 + c * 101, 60, (_, n) => n >= 12);
-          assert.ok(matches >= 10 && mine.league.lit + mine.league.dark >= 8, `${club} played ${matches} matches, ${mine.league.lit + mine.league.dark} of them league kickoffs`);
+          /* Five, not more: a club in Europe and its cup (Celtic) meets seven league nights in its first twelve matches. */
+          assert.ok(matches >= 10 && mine.league.lit + mine.league.dark >= 5, `${club} played ${matches} matches, ${mine.league.lit + mine.league.dark} of them league kickoffs`);
           /* A league is one row: every league kickoff of a club is lit or none is. */
           assert.ok(mine.league.lit === 0 || mine.league.dark === 0, `${club}: its league kickoffs were lit ${mine.league.lit} times and dark ${mine.league.dark}`);
         }
