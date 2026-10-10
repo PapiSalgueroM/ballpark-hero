@@ -1,0 +1,13 @@
+simNationalityFlags
+   BARE src/pages/Footle.tsx:190 {examplePlayer.nationality}
+   BARE src/pages/Footle.tsx:372 {targetPlayer.nationality}
+   BARE src/components/soccer-career/TrophyCabinet.tsx:135 {career.nationality}
+  FAIL: src/pages/Footle.tsx:190 prints {examplePlayer.nationality} with no flag beside it
+  FAIL: src/pages/Footle.tsx:372 prints {targetPlayer.nationality} with no flag beside it
+  FAIL: src/components/soccer-career/TrophyCabinet.tsx:135 prints {career.nationality} with no flag beside it
+  FAIL: market nationalities: 4 with no confederation, which would shove them into an "Elsewhere" group: Niger, Namibia, French Guiana, Mauritius
+  FAIL: market nationalities: Niger has no confederation
+  FAIL: market nationalities: Namibia has no confederation
+  FAIL: market nationalities: French Guiana has no confederation
+  FAIL: market nationalities: Mauritius has no confederation
+simNationalityFlags: 8 failures

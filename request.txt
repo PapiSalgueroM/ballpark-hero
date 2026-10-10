@@ -1,0 +1,3 @@
+flags: node scripts/simNationalityFlags.mjs
+flags-list: NATIONALITY_FLAGS_LIST=1 node scripts/simNationalityFlags.mjs 2>&1 | grep -E "BARE|FAIL|simNationalityFlags"
+storage: node scripts/simStorageWrites.mjs

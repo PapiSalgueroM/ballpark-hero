@@ -1,0 +1,3 @@
+flags exit=1 0s | simNationalityFlags: 8 failures
+flags-list exit=0 1s | simNationalityFlags: 8 failures
+storage exit=0 1s | simStorageWrites: all green
