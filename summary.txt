@@ -1,0 +1,3 @@
+book-base-full exit=0 40s | simCmLeagueBook: green, 1 section(s), 24 careers x 2 seasons (39s)
+book-weight-control exit=1 7s | simCmLeagueBook: CONTROL weight FIRED: section stream went red (1 failures) and no other section did (6s)
+book-default exit=0 4s | simCmLeagueBook: green, 1 section(s), 4 careers x 2 seasons (3s)

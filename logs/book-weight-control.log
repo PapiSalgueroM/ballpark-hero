@@ -1,0 +1,5 @@
+simCmLeagueBook: 4 careers x 2 seasons (default fleet, seed set 0), CONTROL weight
+stream  base arm: 15 of 16 faces (the whole save but the book, and the count of draws) equal to the base commit's source
+RED   stream   16 checks, 1 failed
+        Southampton (now, seed 4780) at the end of season 1: base 28b04ac891d01ec6e062bce7|54459, candidate 81bb5d7f1bc183f8cc367772|54459
+simCmLeagueBook: CONTROL weight FIRED: section stream went red (1 failures) and no other section did (6s)

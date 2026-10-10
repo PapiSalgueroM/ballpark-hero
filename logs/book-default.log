@@ -1,0 +1,4 @@
+simCmLeagueBook: 4 careers x 2 seasons (default fleet, seed set 0)
+stream  base arm NOT RUN: set BOOK_BASE to a worktree of the base commit
+green stream   0 checks
+simCmLeagueBook: green, 1 section(s), 4 careers x 2 seasons (3s)

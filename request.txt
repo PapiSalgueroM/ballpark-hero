@@ -1,0 +1,4 @@
+#!serial
+book-base-full: git worktree add -q /tmp/base1229 980654fa && BOOK_BASE=/tmp/base1229 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-weight-control: BOOK_BASE=/tmp/base1229 BOOK_CONTROL=weight node scripts/simCmLeagueBook.mjs
+book-default: node scripts/simCmLeagueBook.mjs
