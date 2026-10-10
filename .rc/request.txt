@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+#!serial
+walk: git worktree add /tmp/base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928 > /dev/null 2>&1; ENGINE_ROOT=/tmp/base node .rc/x/runWalk.mjs
