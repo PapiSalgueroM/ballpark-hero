@@ -1,0 +1,5 @@
+mut-creditmine exit=0 83s | MUT creditmine default=1 full=1 vitest=0 reds: RED law 9537 checks, 5 failed;RED law 51119 checks, 13 failed;
+mut-takeroff exit=0 84s | MUT takeroff default=1 full=1 vitest=0 reds: RED shapes 7 checks, 2 failed;RED shapes 7 checks, 3 failed;
+mut-byeweek exit=0 84s | MUT byeweek default=0 full=0 vitest=0 reds: 
+mut-offbyone exit=0 84s | MUT offbyone default=0 full=0 vitest=0 reds: 
+mut-assistbench exit=0 84s | MUT assistbench default=0 full=0 vitest=0 reds: 
