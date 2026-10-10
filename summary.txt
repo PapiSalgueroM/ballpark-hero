@@ -1,0 +1,16 @@
+c-oneslotsite exit=1 33s | simUsRivalSense: 14 checks, 3 failed (full size), red sections: N.U6, N.F5
+rival exit=0 37s | simUsRivalSense: 14 checks, 0 failed (full size)
+c-nofloor exit=1 29s | simUsRivalSense: 14 checks, 1 failed (full size), red sections: N.U7
+c-impure exit=1 33s | simUsRivalSense: 14 checks, 1 failed (full size), red sections: N.U3
+c-oneslot exit=1 30s | simUsRivalSense: 14 checks, 5 failed (full size), red sections: N.U2, N.U5, N.U6, N.F5
+tsc exit=0 94s | 
+c-workload17 exit=1 37s | simUsRivalSense: 14 checks, 2 failed (full size), red sections: N.U2, N.F3
+simCareerBanking exit=0 2s | simCareerBanking: green. Every career banks its pay, scales with it, and a broken save is repaired.
+simHomeFront exit=0 1s | simHomeFront: green. The home front shows real games, real saves and a sport you can tell apart without colour.
+simUsCareerAnnualBenefits exit=0 5s | Career yearly support: fictional offline engine fixtures only, no native UI, full career completion or historical-data validation claim.
+simUsCareerWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+rivalry exit=0 9s | simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.
+vitest exit=0 54s |    Duration  53.13s (transform 3.56s, setup 699ms, collect 8.10s, tests 49.25s, environment 3.39s, prepare 1.15s)
+parity exit=0 59s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+simAwards exit=0 7s | PASS: ALL AWARD SCARCITY CHECKS PASSED
+simNflTruth exit=0 70s | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves
