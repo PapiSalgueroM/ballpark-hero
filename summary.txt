@@ -1,0 +1,8 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-oldline exit=1 21s | playUsRivalLines: 12 checks, 4 failed (control oldline)
+playTranslatedPage exit=0 131s | playTranslatedPage: 447 checks, 0 failed
+playCareerHallLine exit=0 86s | playCareerHallLine: 4 routes, 36 walks, 380 checks, all checks passed
+walk-rivalflip exit=1 262s | playUsRivalLines: 229 checks, 19 failed (control rivalflip)
+sweepWeight exit=1 27s | sweepWeight: 1 failure
+playGames-nfl exit=0 51s | Played 1 games. 0 findings, 0 the harness could not drive.
+walk exit=0 906s | playUsRivalLines: 717 checks, 0 failed

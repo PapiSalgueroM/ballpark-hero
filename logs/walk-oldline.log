@@ -1,0 +1,17 @@
+old saves, 390 wide, motion on
+  ok   old nflCB, 390 wide, motion on: the save is loaded
+  FAIL old nflCB, 390 wide, motion on: (control) the line of the save from before the round is held to the new shape ("131 tackles, 8.9 sacks, 4 INT")
+  ok   old nflK, 390 wide, motion on: the save is loaded
+  FAIL old nflK, 390 wide, motion on: (control) the line of the save from before the round is held to the new shape ("35 field goals")
+  ok   old saves, 390 wide, motion on: no page errors (clean)
+  ok   old saves, 390 wide, motion on: no request to the live database finished (0)
+old saves, 1280 wide, reduced motion
+  ok   old nflCB, 1280 wide, reduced motion: the save is loaded
+  FAIL old nflCB, 1280 wide, reduced motion: (control) the line of the save from before the round is held to the new shape ("131 tackles, 8.9 sacks, 4 INT")
+  ok   old nflK, 1280 wide, reduced motion: the save is loaded
+  FAIL old nflK, 1280 wide, reduced motion: (control) the line of the save from before the round is held to the new shape ("35 field goals")
+  ok   old saves, 1280 wide, reduced motion: no page errors (clean)
+  ok   old saves, 1280 wide, reduced motion: no request to the live database finished (0)
+
+control oldline: FIRED, its own checks went red and no other
+playUsRivalLines: 12 checks, 4 failed (control oldline)

@@ -1,0 +1,8254 @@
+{
+ "base": "http://localhost:4173",
+ "control": "",
+ "entry": "/assets/index-CKPtNxF0.js",
+ "seed": 20261008,
+ "checks": 447,
+ "failed": [],
+ "rows": [
+  {
+   "route": "/soccer-career",
+   "view": "phone",
+   "mode": "keep",
+   "steps": 32,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 1,
+   "movedByTranslator": 1,
+   "movedList": [
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "s",
+     "byTranslator": true
+    }
+   ],
+   "swapped": 1415,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 341,
+   "live": {
+    "swaps": 1415,
+    "removed": 1,
+    "inserted": 0,
+    "restored": 65,
+    "returned": 322
+   },
+   "age": {
+    "looks": 13,
+    "older": 12,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": {
+    "on": true,
+    "back": 322,
+    "copies": 0,
+    "looks": 10,
+    "presses": 9,
+    "fonts": 0,
+    "maxStale": 0,
+    "staleAt": "",
+    "returned": 322,
+    "ageAt": 18,
+    "ageLooks": 10,
+    "ageOlder": 3,
+    "ageWrong": 0,
+    "ageWrongAt": "",
+    "staleList": []
+   },
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Brazil🇧🇷",
+    "Striker (ST)",
+    "Current era (2025 start)",
+    "🎲 Generate Starting Potential",
+    "🎲 Roll again",
+    "🎮 Customize your build",
+    "✅ Lock in build",
+    "⚽ Begin Career",
+    "Next Year",
+    "Review contract",
+    "Sign contract",
+    "Next Season",
+    "Continue to Season Summary →",
+    "Continue →",
+    "Continue →",
+    "🏋️TrainingDrill ready",
+    "Close",
+    "🏋️Post training videoShow off your skills in the gym+0.1-0.",
+    "Continue →",
+    "🎭The ShowmanFame comes easy: followers grow 60% faster, spo",
+    "🃏One night only55%: win €0.4M · 45%: lose €0.8M",
+    "🤝Dedicate it to the teamOverall +1, Market value +€3M",
+    "🕊️Gently decline pigeon ownershipGerald visits on his own s",
+    "Request transfer 📤",
+    "Review contract",
+    "Sign contract",
+    "Next Season",
+    "Continue to Season Summary →",
+    "Continue →"
+   ],
+   "dbBlocked": 4,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": {
+    "drawn": true,
+    "boxes": {
+     "nationality": {
+      "shown": "Brazil",
+      "has": true,
+      "visible": true,
+      "was": "Choose nationality",
+      "words": "Brazil🇧🇷"
+     },
+     "position": {
+      "shown": "Striker (ST)",
+      "has": true,
+      "visible": true,
+      "was": "Choose position",
+      "words": "Striker (ST)"
+     },
+     "era": {
+      "shown": "Current era (2025 start)",
+      "has": true,
+      "visible": true,
+      "was": "Choose era",
+      "words": "Current era (2025 start)"
+     }
+    },
+    "reached": true,
+    "reachedDetail": "h1 \"🇧🇷Joao Teste\", create form gone, save Joao Teste, Brazil, youth, age 16",
+    "seasonAt": 1,
+    "seasonDetail": "age 16 to 17 on press 1, h1 \"🇧🇷Joao Teste\", phase contract_offer; the walk went on to age 18, phase random_events"
+   },
+   "stepList": [
+    {
+     "name": "the create screen draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "type the name",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "choose nationality Brazil",
+     "ok": true,
+     "did": "Brazil🇧🇷",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "choose position Striker",
+     "ok": true,
+     "did": "Striker (ST)",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "choose era Current era",
+     "ok": true,
+     "did": "Current era (2025 start)",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Generate Starting Potential",
+     "ok": true,
+     "did": "🎲 Generate Starting Potential",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Roll again",
+     "ok": true,
+     "did": "🎲 Roll again",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Customize your build",
+     "ok": true,
+     "did": "🎮 Customize your build",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Lock in build",
+     "ok": true,
+     "did": "✅ Lock in build",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Begin Career",
+     "ok": true,
+     "did": "⚽ Begin Career",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "youth",
+     "age": 16
+    },
+    {
+     "name": "career press 1",
+     "ok": true,
+     "did": "Next Year",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "contract_offer",
+     "age": 17
+    },
+    {
+     "name": "career press 2",
+     "ok": true,
+     "did": "Review contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "contract_offer",
+     "age": 17
+    },
+    {
+     "name": "career press 3",
+     "ok": true,
+     "did": "Sign contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "playing",
+     "age": 17
+    },
+    {
+     "name": "career press 4",
+     "ok": true,
+     "did": "Next Season",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "newspaper",
+     "age": 18
+    },
+    {
+     "name": "career press 5",
+     "ok": true,
+     "did": "Continue to Season Summary →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "season_summary",
+     "age": 18
+    },
+    {
+     "name": "career press 6",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "ballon_dor",
+     "age": 18
+    },
+    {
+     "name": "career press 7",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "social_media_action",
+     "age": 18
+    },
+    {
+     "name": "career press 8",
+     "ok": true,
+     "did": "🏋️TrainingDrill ready",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "social_media_action",
+     "age": 18
+    },
+    {
+     "name": "career press 9",
+     "ok": true,
+     "did": "Close",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "social_media_action",
+     "age": 18
+    },
+    {
+     "name": "career press 10",
+     "ok": true,
+     "did": "🏋️Post training videoShow off your skills in the gym+0.1-0.",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "social_media_action",
+     "age": 18
+    },
+    {
+     "name": "career press 11",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "career press 12",
+     "ok": true,
+     "did": "🎭The ShowmanFame comes easy: followers grow 60% faster, spo",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "the translator undoes itself",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 1",
+     "ok": true,
+     "did": "🃏One night only55%: win €0.4M · 45%: lose €0.8M",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 2",
+     "ok": true,
+     "did": "🤝Dedicate it to the teamOverall +1, Market value +€3M",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 3",
+     "ok": true,
+     "did": "🕊️Gently decline pigeon ownershipGerald visits on his own s",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "transfer_window",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 4",
+     "ok": true,
+     "did": "Request transfer 📤",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "transfer_window",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 5",
+     "ok": true,
+     "did": "Review contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "transfer_window",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 6",
+     "ok": true,
+     "did": "Sign contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "playing",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 7",
+     "ok": true,
+     "did": "Next Season",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "newspaper",
+     "age": 19
+    },
+    {
+     "name": "after the undo, press 8",
+     "ok": true,
+     "did": "Continue to Season Summary →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "season_summary",
+     "age": 19
+    },
+    {
+     "name": "after the undo, press 9",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "ballon_dor",
+     "age": 19
+    }
+   ]
+  },
+  {
+   "route": "/",
+   "view": "phone",
+   "mode": "keep",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 1151,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 1061,
+   "live": {
+    "swaps": 1151,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 0,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Make a free one",
+    "Close",
+    "Pin Cage Clash",
+    "Pin Deadline Day",
+    "Pin Gauntlet Draft: NHL",
+    "Pin Aussie Rules Manager",
+    "🐐 Brady",
+    "Unpin Cage Clash"
+   ],
+   "dbBlocked": 5,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Make a free one",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "Close",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "Pin Cage Clash",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "Pin Deadline Day",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "Pin Gauntlet Draft: NHL",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "Pin Aussie Rules Manager",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "🐐 Brady",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "Unpin Cage Clash",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/club-manager",
+   "view": "phone",
+   "mode": "keep",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 720,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 327,
+   "live": {
+    "swaps": 720,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "How to play",
+    "Let's Play!",
+    "📅2026-27Today. Real squads as of August 2026, thin ones top",
+    "📅 Starting 2026-27",
+    "🏟️2020-21Haaland and Bellingham at Dortmund, Mbappé and Ney",
+    "🏟️ Starting 2020-21",
+    "🦊2015-16The Leicester season. MSN Barcelona, Vardy at 5000 ",
+    "🦊 Starting 2015-16"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "How to play",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "📅2026-27Today. Real squads as of August 2026, thin ones top",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "📅 Starting 2026-27",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "🏟️2020-21Haaland and Bellingham at Dortmund, Mbappé and Ney",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "🏟️ Starting 2020-21",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "🦊2015-16The Leicester season. MSN Barcelona, Vardy at 5000 ",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "🦊 Starting 2015-16",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/nba-my-career",
+   "view": "phone",
+   "mode": "keep",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 310,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 273,
+   "live": {
+    "swaps": 310,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Let's Play!",
+    "🏀 2026The league as it is today. Full money, all 30 franchi",
+    "⏪ 2003-04 throwbackThe 29 team league of 2003-04: the SuperS",
+    "PG",
+    "SG",
+    "SF",
+    "PF",
+    "C"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "🏀 2026The league as it is today. Full money, all 30 franchi",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "⏪ 2003-04 throwbackThe 29 team league of 2003-04: the SuperS",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "PG",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "SG",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "SF",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "PF",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "C",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/nba-my-career#bank",
+   "view": "phone",
+   "mode": "keep",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 7,
+   "movedByTranslator": 7,
+   "movedList": [
+    {
+     "op": "insertBefore",
+     "parent": "span",
+     "node": "-$100k",
+     "byTranslator": true
+    },
+    {
+     "op": "insertBefore",
+     "parent": "span",
+     "node": "-$100k",
+     "byTranslator": true
+    },
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "+",
+     "byTranslator": true
+    },
+    {
+     "op": "insertBefore",
+     "parent": "span",
+     "node": "-$100k",
+     "byTranslator": true
+    },
+    {
+     "op": "insertBefore",
+     "parent": "span",
+     "node": "-$200k",
+     "byTranslator": true
+    },
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "+",
+     "byTranslator": true
+    },
+    {
+     "op": "insertBefore",
+     "parent": "span",
+     "node": "-$100k",
+     "byTranslator": true
+    }
+   ],
+   "swapped": 482,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 273,
+   "live": {
+    "swaps": 482,
+    "removed": 2,
+    "inserted": 5,
+    "restored": 15,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": {
+    "reached": true,
+    "lines": 5,
+    "sample": [
+     "+$200k",
+     "-$200k",
+     "+$50k",
+     "+$50k",
+     "-$100k"
+    ],
+    "wrong": [],
+    "detail": "5 of 5 presses, 5 line(s) at the end: [\"+$200k\",\"-$200k\",\"+$50k\",\"+$50k\",\"-$100k\"]"
+   },
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Let's Play!",
+    "Enter the draft",
+    "💰The Bank$0.3M$2.5M a year, 4 years left",
+    "Save half",
+    "Take out half",
+    "Take it all out",
+    "Save it all",
+    "Take it all out"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "answer the rules sheet",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Enter the draft",
+     "ok": true,
+     "did": "Enter the draft",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "open The Bank",
+     "ok": true,
+     "did": "💰The Bank$0.3M$2.5M a year, 4 years left",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "the Bank: Save half",
+     "ok": true,
+     "did": "Save half",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "the Bank: Take out half",
+     "ok": true,
+     "did": "Take out half",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "the Bank: Take it all out",
+     "ok": true,
+     "did": "Take it all out",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 2,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "the Bank: Save it all",
+     "ok": true,
+     "did": "Save it all",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "the Bank: Take it all out",
+     "ok": true,
+     "did": "Take it all out",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 7,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/nfl-my-career",
+   "view": "phone",
+   "mode": "keep",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 306,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 269,
+   "live": {
+    "swaps": 306,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Let's Play!",
+    "🏈 2026The league as it is today. Full money, every current ",
+    "⏪ 2005 throwbackThe 2005 league: the Raiders in Oakland, the",
+    "QB",
+    "RB",
+    "WR",
+    "TE",
+    "LB"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "🏈 2026The league as it is today. Full money, every current ",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "⏪ 2005 throwbackThe 2005 league: the Raiders in Oakland, the",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "QB",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "RB",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "WR",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "TE",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "LB",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/stadium-tycoon",
+   "view": "phone",
+   "mode": "keep",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 1157,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 259,
+   "live": {
+    "swaps": 1157,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 289,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Close the rules",
+    "🏟️ Stadium",
+    "🎓 Academy",
+    "Close the rules",
+    "🏆 League",
+    "Northquay Swifts",
+    "🏟️ Stadium",
+    "How it works"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Close the rules",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "🏟️ Stadium",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "🎓 Academy",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "Close the rules",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "🏆 League",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "Northquay Swifts",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "🏟️ Stadium",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "How it works",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/college-grid",
+   "view": "phone",
+   "mode": "keep",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 252,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 193,
+   "live": {
+    "swaps": 252,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Close",
+    "How to play",
+    "Let's Play!",
+    "+",
+    "Type a player name...",
+    "Report",
+    "Close",
+    "How to play"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Close",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "How to play",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "+",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "Type a player name...",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "Report",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "Close",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "How to play",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/build-your-xi",
+   "view": "phone",
+   "mode": "keep",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 280,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 202,
+   "live": {
+    "swaps": 280,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Got it!",
+    "How to play",
+    "Let's Play!",
+    "4-3-311 players",
+    "GK",
+    "LB",
+    "CB",
+    "RB"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Got it!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "How to play",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "4-3-311 players",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "GK",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "LB",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "CB",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "RB",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/front-office",
+   "view": "phone",
+   "mode": "keep",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 811,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 252,
+   "live": {
+    "swaps": 811,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 9,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Arizona CardinalsNFC West",
+    "Process, patience, all the safe wordsMeasuredNobody clips it",
+    "👔Roster52 under contractTrey McBride leads them at 95",
+    "Hub",
+    "💼Free agency$151M of roomIn reach: Jamari Zimmerman at 80",
+    "Sign",
+    "Abandon franchise and restart",
+    "Atlanta FalconsNFC South"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Arizona CardinalsNFC West",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "Process, patience, all the safe wordsMeasuredNobody clips it",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "👔Roster52 under contractTrey McBride leads them at 95",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "Hub",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "💼Free agency$151M of roomIn reach: Jamari Zimmerman at 80",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "Sign",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "Abandon franchise and restart",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "Atlanta FalconsNFC South",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/soccer-career",
+   "view": "desktop",
+   "mode": "keep",
+   "steps": 32,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 1,
+   "movedByTranslator": 1,
+   "movedList": [
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "s",
+     "byTranslator": true
+    }
+   ],
+   "swapped": 1412,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 341,
+   "live": {
+    "swaps": 1412,
+    "removed": 1,
+    "inserted": 0,
+    "restored": 65,
+    "returned": 322
+   },
+   "age": {
+    "looks": 13,
+    "older": 12,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": {
+    "on": true,
+    "back": 322,
+    "copies": 0,
+    "looks": 10,
+    "presses": 9,
+    "fonts": 0,
+    "maxStale": 0,
+    "staleAt": "",
+    "returned": 322,
+    "ageAt": 18,
+    "ageLooks": 10,
+    "ageOlder": 3,
+    "ageWrong": 0,
+    "ageWrongAt": "",
+    "staleList": []
+   },
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Brazil🇧🇷",
+    "Striker (ST)",
+    "Current era (2025 start)",
+    "🎲 Generate Starting Potential",
+    "🎲 Roll again",
+    "🎮 Customize your build",
+    "✅ Lock in build",
+    "⚽ Begin Career",
+    "Next Year",
+    "Review contract",
+    "Sign contract",
+    "Next Season",
+    "Continue to Season Summary →",
+    "Continue →",
+    "Continue →",
+    "🏋️TrainingDrill ready",
+    "Close",
+    "🏋️Post training videoShow off your skills in the gym+0.1-0.",
+    "Continue →",
+    "🎭The ShowmanFame comes easy: followers grow 60% faster, spo",
+    "🃏One night only55%: win €0.4M · 45%: lose €0.8M",
+    "🤝Dedicate it to the teamOverall +1, Market value +€3M",
+    "🕊️Gently decline pigeon ownershipGerald visits on his own s",
+    "Request transfer 📤",
+    "Review contract",
+    "Sign contract",
+    "Next Season",
+    "Continue to Season Summary →",
+    "Continue →"
+   ],
+   "dbBlocked": 4,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": {
+    "drawn": true,
+    "boxes": {
+     "nationality": {
+      "shown": "Brazil",
+      "has": true,
+      "visible": true,
+      "was": "Choose nationality",
+      "words": "Brazil🇧🇷"
+     },
+     "position": {
+      "shown": "Striker (ST)",
+      "has": true,
+      "visible": true,
+      "was": "Choose position",
+      "words": "Striker (ST)"
+     },
+     "era": {
+      "shown": "Current era (2025 start)",
+      "has": true,
+      "visible": true,
+      "was": "Choose era",
+      "words": "Current era (2025 start)"
+     }
+    },
+    "reached": true,
+    "reachedDetail": "h1 \"🇧🇷Joao Teste\", create form gone, save Joao Teste, Brazil, youth, age 16",
+    "seasonAt": 1,
+    "seasonDetail": "age 16 to 17 on press 1, h1 \"🇧🇷Joao Teste\", phase contract_offer; the walk went on to age 18, phase random_events"
+   },
+   "stepList": [
+    {
+     "name": "the create screen draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "type the name",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "choose nationality Brazil",
+     "ok": true,
+     "did": "Brazil🇧🇷",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "choose position Striker",
+     "ok": true,
+     "did": "Striker (ST)",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "choose era Current era",
+     "ok": true,
+     "did": "Current era (2025 start)",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Generate Starting Potential",
+     "ok": true,
+     "did": "🎲 Generate Starting Potential",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Roll again",
+     "ok": true,
+     "did": "🎲 Roll again",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Customize your build",
+     "ok": true,
+     "did": "🎮 Customize your build",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Lock in build",
+     "ok": true,
+     "did": "✅ Lock in build",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Begin Career",
+     "ok": true,
+     "did": "⚽ Begin Career",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "youth",
+     "age": 16
+    },
+    {
+     "name": "career press 1",
+     "ok": true,
+     "did": "Next Year",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "contract_offer",
+     "age": 17
+    },
+    {
+     "name": "career press 2",
+     "ok": true,
+     "did": "Review contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "contract_offer",
+     "age": 17
+    },
+    {
+     "name": "career press 3",
+     "ok": true,
+     "did": "Sign contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "playing",
+     "age": 17
+    },
+    {
+     "name": "career press 4",
+     "ok": true,
+     "did": "Next Season",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "newspaper",
+     "age": 18
+    },
+    {
+     "name": "career press 5",
+     "ok": true,
+     "did": "Continue to Season Summary →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "season_summary",
+     "age": 18
+    },
+    {
+     "name": "career press 6",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "ballon_dor",
+     "age": 18
+    },
+    {
+     "name": "career press 7",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "social_media_action",
+     "age": 18
+    },
+    {
+     "name": "career press 8",
+     "ok": true,
+     "did": "🏋️TrainingDrill ready",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "social_media_action",
+     "age": 18
+    },
+    {
+     "name": "career press 9",
+     "ok": true,
+     "did": "Close",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "social_media_action",
+     "age": 18
+    },
+    {
+     "name": "career press 10",
+     "ok": true,
+     "did": "🏋️Post training videoShow off your skills in the gym+0.1-0.",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "social_media_action",
+     "age": 18
+    },
+    {
+     "name": "career press 11",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "career press 12",
+     "ok": true,
+     "did": "🎭The ShowmanFame comes easy: followers grow 60% faster, spo",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "the translator undoes itself",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 1",
+     "ok": true,
+     "did": "🃏One night only55%: win €0.4M · 45%: lose €0.8M",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 2",
+     "ok": true,
+     "did": "🤝Dedicate it to the teamOverall +1, Market value +€3M",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 3",
+     "ok": true,
+     "did": "🕊️Gently decline pigeon ownershipGerald visits on his own s",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "transfer_window",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 4",
+     "ok": true,
+     "did": "Request transfer 📤",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "transfer_window",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 5",
+     "ok": true,
+     "did": "Review contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "transfer_window",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 6",
+     "ok": true,
+     "did": "Sign contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "playing",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 7",
+     "ok": true,
+     "did": "Next Season",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "newspaper",
+     "age": 19
+    },
+    {
+     "name": "after the undo, press 8",
+     "ok": true,
+     "did": "Continue to Season Summary →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "season_summary",
+     "age": 19
+    },
+    {
+     "name": "after the undo, press 9",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "ballon_dor",
+     "age": 19
+    }
+   ]
+  },
+  {
+   "route": "/",
+   "view": "desktop",
+   "mode": "keep",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 1149,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 1061,
+   "live": {
+    "swaps": 1149,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 0,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Scroll the daily puzzles on",
+    "Make a free one",
+    "Close",
+    "Pin Cage Clash",
+    "Pin Deadline Day",
+    "Pin Gauntlet Draft: NHL",
+    "Pin Aussie Rules Manager",
+    "🐐 Brady"
+   ],
+   "dbBlocked": 5,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Scroll the daily puzzles on",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "Make a free one",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "Close",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "Pin Cage Clash",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "Pin Deadline Day",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "Pin Gauntlet Draft: NHL",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "Pin Aussie Rules Manager",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "🐐 Brady",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/club-manager",
+   "view": "desktop",
+   "mode": "keep",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 720,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 327,
+   "live": {
+    "swaps": 720,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "How to play",
+    "Let's Play!",
+    "📅2026-27Today. Real squads as of August 2026, thin ones top",
+    "📅 Starting 2026-27",
+    "🏟️2020-21Haaland and Bellingham at Dortmund, Mbappé and Ney",
+    "🏟️ Starting 2020-21",
+    "🦊2015-16The Leicester season. MSN Barcelona, Vardy at 5000 ",
+    "🦊 Starting 2015-16"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "How to play",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "📅2026-27Today. Real squads as of August 2026, thin ones top",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "📅 Starting 2026-27",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "🏟️2020-21Haaland and Bellingham at Dortmund, Mbappé and Ney",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "🏟️ Starting 2020-21",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "🦊2015-16The Leicester season. MSN Barcelona, Vardy at 5000 ",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "🦊 Starting 2015-16",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/nba-my-career",
+   "view": "desktop",
+   "mode": "keep",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 310,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 273,
+   "live": {
+    "swaps": 310,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Let's Play!",
+    "🏀 2026The league as it is today. Full money, all 30 franchi",
+    "⏪ 2003-04 throwbackThe 29 team league of 2003-04: the SuperS",
+    "PG",
+    "SG",
+    "SF",
+    "PF",
+    "C"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "🏀 2026The league as it is today. Full money, all 30 franchi",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "⏪ 2003-04 throwbackThe 29 team league of 2003-04: the SuperS",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "PG",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "SG",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "SF",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "PF",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "C",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/nba-my-career#bank",
+   "view": "desktop",
+   "mode": "keep",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 7,
+   "movedByTranslator": 7,
+   "movedList": [
+    {
+     "op": "insertBefore",
+     "parent": "span",
+     "node": "-$100k",
+     "byTranslator": true
+    },
+    {
+     "op": "insertBefore",
+     "parent": "span",
+     "node": "-$100k",
+     "byTranslator": true
+    },
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "+",
+     "byTranslator": true
+    },
+    {
+     "op": "insertBefore",
+     "parent": "span",
+     "node": "-$100k",
+     "byTranslator": true
+    },
+    {
+     "op": "insertBefore",
+     "parent": "span",
+     "node": "-$200k",
+     "byTranslator": true
+    },
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "+",
+     "byTranslator": true
+    },
+    {
+     "op": "insertBefore",
+     "parent": "span",
+     "node": "-$100k",
+     "byTranslator": true
+    }
+   ],
+   "swapped": 482,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 273,
+   "live": {
+    "swaps": 482,
+    "removed": 2,
+    "inserted": 5,
+    "restored": 15,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": {
+    "reached": true,
+    "lines": 5,
+    "sample": [
+     "+$200k",
+     "-$200k",
+     "+$50k",
+     "+$50k",
+     "-$100k"
+    ],
+    "wrong": [],
+    "detail": "5 of 5 presses, 5 line(s) at the end: [\"+$200k\",\"-$200k\",\"+$50k\",\"+$50k\",\"-$100k\"]"
+   },
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Let's Play!",
+    "Enter the draft",
+    "💰The Bank$0.3M$2.5M a year, 4 years left",
+    "Save half",
+    "Take out half",
+    "Take it all out",
+    "Save it all",
+    "Take it all out"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "answer the rules sheet",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Enter the draft",
+     "ok": true,
+     "did": "Enter the draft",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "open The Bank",
+     "ok": true,
+     "did": "💰The Bank$0.3M$2.5M a year, 4 years left",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "the Bank: Save half",
+     "ok": true,
+     "did": "Save half",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "the Bank: Take out half",
+     "ok": true,
+     "did": "Take out half",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "the Bank: Take it all out",
+     "ok": true,
+     "did": "Take it all out",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 2,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "the Bank: Save it all",
+     "ok": true,
+     "did": "Save it all",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "the Bank: Take it all out",
+     "ok": true,
+     "did": "Take it all out",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 7,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/nfl-my-career",
+   "view": "desktop",
+   "mode": "keep",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 305,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 269,
+   "live": {
+    "swaps": 305,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Let's Play!",
+    "🏈 2026The league as it is today. Full money, every current ",
+    "⏪ 2005 throwbackThe 2005 league: the Raiders in Oakland, the",
+    "QB",
+    "RB",
+    "WR",
+    "TE",
+    "LB"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "🏈 2026The league as it is today. Full money, every current ",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "⏪ 2005 throwbackThe 2005 league: the Raiders in Oakland, the",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "QB",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "RB",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "WR",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "TE",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "LB",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/stadium-tycoon",
+   "view": "desktop",
+   "mode": "keep",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 1217,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 259,
+   "live": {
+    "swaps": 1217,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 303,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Close the rules",
+    "🏟️ Stadium",
+    "🎓 Academy",
+    "Close the rules",
+    "🏆 League",
+    "Northquay Swifts",
+    "🏟️ Stadium",
+    "How it works"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Close the rules",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "🏟️ Stadium",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "🎓 Academy",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "Close the rules",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "🏆 League",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "Northquay Swifts",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "🏟️ Stadium",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "How it works",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/college-grid",
+   "view": "desktop",
+   "mode": "keep",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 252,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 193,
+   "live": {
+    "swaps": 252,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Close",
+    "How to play",
+    "Let's Play!",
+    "+",
+    "Type a player name...",
+    "Report",
+    "Close",
+    "How to play"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Close",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "How to play",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "+",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "Type a player name...",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "Report",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "Close",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "How to play",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/build-your-xi",
+   "view": "desktop",
+   "mode": "keep",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 280,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 202,
+   "live": {
+    "swaps": 280,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Got it!",
+    "How to play",
+    "Let's Play!",
+    "4-3-311 players",
+    "GK",
+    "LB",
+    "CB",
+    "RB"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Got it!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "How to play",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "4-3-311 players",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "GK",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "LB",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "CB",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "RB",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/front-office",
+   "view": "desktop",
+   "mode": "keep",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 811,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 252,
+   "live": {
+    "swaps": 811,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 9,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Arizona CardinalsNFC West",
+    "Process, patience, all the safe wordsMeasuredNobody clips it",
+    "👔Roster52 under contractTrey McBride leads them at 95",
+    "Hub",
+    "💼Free agency$151M of roomIn reach: Jamari Zimmerman at 80",
+    "Sign",
+    "Abandon franchise and restart",
+    "Atlanta FalconsNFC South"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Arizona CardinalsNFC West",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "Process, patience, all the safe wordsMeasuredNobody clips it",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "👔Roster52 under contractTrey McBride leads them at 95",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "Hub",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "💼Free agency$151M of roomIn reach: Jamari Zimmerman at 80",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "Sign",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "Abandon franchise and restart",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "Atlanta FalconsNFC South",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/soccer-career",
+   "view": "phone",
+   "mode": "alter",
+   "steps": 32,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 1,
+   "movedByTranslator": 1,
+   "movedList": [
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "s",
+     "byTranslator": true
+    }
+   ],
+   "swapped": 1415,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 341,
+   "live": {
+    "swaps": 1415,
+    "removed": 1,
+    "inserted": 0,
+    "restored": 65,
+    "returned": 322
+   },
+   "age": {
+    "looks": 13,
+    "older": 12,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": {
+    "on": true,
+    "back": 322,
+    "copies": 0,
+    "looks": 10,
+    "presses": 9,
+    "fonts": 0,
+    "maxStale": 0,
+    "staleAt": "",
+    "returned": 322,
+    "ageAt": 18,
+    "ageLooks": 10,
+    "ageOlder": 3,
+    "ageWrong": 0,
+    "ageWrongAt": "",
+    "staleList": []
+   },
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Brazil🇧🇷",
+    "Striker (ST)",
+    "Current era (2025 start)",
+    "🎲 Generate Starting Potential",
+    "🎲 Roll again",
+    "🎮 Customize your build",
+    "✅ Lock in build",
+    "⚽ Begin Career",
+    "Next Year",
+    "Review contract",
+    "Sign contract",
+    "Next Season",
+    "Continue to Season Summary →",
+    "Continue →",
+    "Continue →",
+    "🏋️TrainingDrill ready",
+    "Close",
+    "🏋️Post training videoShow off your skills in the gym+0.1-0.",
+    "Continue →",
+    "🎭The ShowmanFame comes easy: followers grow 60% faster, spo",
+    "🃏One night only55%: win €0.4M · 45%: lose €0.8M",
+    "🤝Dedicate it to the teamOverall +1, Market value +€3M",
+    "🕊️Gently decline pigeon ownershipGerald visits on his own s",
+    "Request transfer 📤",
+    "Review contract",
+    "Sign contract",
+    "Next Season",
+    "Continue to Season Summary →",
+    "Continue →"
+   ],
+   "dbBlocked": 4,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": {
+    "drawn": true,
+    "boxes": {
+     "nationality": {
+      "shown": "«Brazil»",
+      "has": true,
+      "visible": true,
+      "was": "Choose nationality",
+      "words": "Brazil🇧🇷"
+     },
+     "position": {
+      "shown": "«Striker (ST)»",
+      "has": true,
+      "visible": true,
+      "was": "Choose position",
+      "words": "Striker (ST)"
+     },
+     "era": {
+      "shown": "«Current era (2025 start)»",
+      "has": true,
+      "visible": true,
+      "was": "Choose era",
+      "words": "Current era (2025 start)"
+     }
+    },
+    "reached": true,
+    "reachedDetail": "h1 \"🇧🇷Joao Teste\", create form gone, save Joao Teste, Brazil, youth, age 16",
+    "seasonAt": 1,
+    "seasonDetail": "age 16 to 17 on press 1, h1 \"🇧🇷Joao Teste\", phase contract_offer; the walk went on to age 18, phase random_events"
+   },
+   "stepList": [
+    {
+     "name": "the create screen draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "type the name",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "choose nationality Brazil",
+     "ok": true,
+     "did": "Brazil🇧🇷",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "choose position Striker",
+     "ok": true,
+     "did": "Striker (ST)",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "choose era Current era",
+     "ok": true,
+     "did": "Current era (2025 start)",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Generate Starting Potential",
+     "ok": true,
+     "did": "🎲 Generate Starting Potential",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Roll again",
+     "ok": true,
+     "did": "🎲 Roll again",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Customize your build",
+     "ok": true,
+     "did": "🎮 Customize your build",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Lock in build",
+     "ok": true,
+     "did": "✅ Lock in build",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Begin Career",
+     "ok": true,
+     "did": "⚽ Begin Career",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "youth",
+     "age": 16
+    },
+    {
+     "name": "career press 1",
+     "ok": true,
+     "did": "Next Year",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "contract_offer",
+     "age": 17
+    },
+    {
+     "name": "career press 2",
+     "ok": true,
+     "did": "Review contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "contract_offer",
+     "age": 17
+    },
+    {
+     "name": "career press 3",
+     "ok": true,
+     "did": "Sign contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "playing",
+     "age": 17
+    },
+    {
+     "name": "career press 4",
+     "ok": true,
+     "did": "Next Season",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "newspaper",
+     "age": 18
+    },
+    {
+     "name": "career press 5",
+     "ok": true,
+     "did": "Continue to Season Summary →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "season_summary",
+     "age": 18
+    },
+    {
+     "name": "career press 6",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "ballon_dor",
+     "age": 18
+    },
+    {
+     "name": "career press 7",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "social_media_action",
+     "age": 18
+    },
+    {
+     "name": "career press 8",
+     "ok": true,
+     "did": "🏋️TrainingDrill ready",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "social_media_action",
+     "age": 18
+    },
+    {
+     "name": "career press 9",
+     "ok": true,
+     "did": "Close",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "social_media_action",
+     "age": 18
+    },
+    {
+     "name": "career press 10",
+     "ok": true,
+     "did": "🏋️Post training videoShow off your skills in the gym+0.1-0.",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "social_media_action",
+     "age": 18
+    },
+    {
+     "name": "career press 11",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "career press 12",
+     "ok": true,
+     "did": "🎭The ShowmanFame comes easy: followers grow 60% faster, spo",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "the translator undoes itself",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 1",
+     "ok": true,
+     "did": "🃏One night only55%: win €0.4M · 45%: lose €0.8M",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 2",
+     "ok": true,
+     "did": "🤝Dedicate it to the teamOverall +1, Market value +€3M",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 3",
+     "ok": true,
+     "did": "🕊️Gently decline pigeon ownershipGerald visits on his own s",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "transfer_window",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 4",
+     "ok": true,
+     "did": "Request transfer 📤",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "transfer_window",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 5",
+     "ok": true,
+     "did": "Review contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "transfer_window",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 6",
+     "ok": true,
+     "did": "Sign contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "playing",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 7",
+     "ok": true,
+     "did": "Next Season",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "newspaper",
+     "age": 19
+    },
+    {
+     "name": "after the undo, press 8",
+     "ok": true,
+     "did": "Continue to Season Summary →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "season_summary",
+     "age": 19
+    },
+    {
+     "name": "after the undo, press 9",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "ballon_dor",
+     "age": 19
+    }
+   ]
+  },
+  {
+   "route": "/",
+   "view": "phone",
+   "mode": "alter",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 1151,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 1061,
+   "live": {
+    "swaps": 1151,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 0,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Make a free one",
+    "Close",
+    "Pin Cage Clash",
+    "Pin Deadline Day",
+    "Pin Gauntlet Draft: NHL",
+    "Pin Aussie Rules Manager",
+    "🐐 Brady",
+    "Unpin Cage Clash"
+   ],
+   "dbBlocked": 5,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Make a free one",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "Close",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "Pin Cage Clash",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "Pin Deadline Day",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "Pin Gauntlet Draft: NHL",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "Pin Aussie Rules Manager",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "🐐 Brady",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "Unpin Cage Clash",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/club-manager",
+   "view": "phone",
+   "mode": "alter",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 720,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 327,
+   "live": {
+    "swaps": 720,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "How to play",
+    "Let's Play!",
+    "📅2026-27Today. Real squads as of August 2026, thin ones top",
+    "📅 Starting 2026-27",
+    "🏟️2020-21Haaland and Bellingham at Dortmund, Mbappé and Ney",
+    "🏟️ Starting 2020-21",
+    "🦊2015-16The Leicester season. MSN Barcelona, Vardy at 5000 ",
+    "🦊 Starting 2015-16"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "How to play",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "📅2026-27Today. Real squads as of August 2026, thin ones top",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "📅 Starting 2026-27",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "🏟️2020-21Haaland and Bellingham at Dortmund, Mbappé and Ney",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "🏟️ Starting 2020-21",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "🦊2015-16The Leicester season. MSN Barcelona, Vardy at 5000 ",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "🦊 Starting 2015-16",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/nba-my-career",
+   "view": "phone",
+   "mode": "alter",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 310,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 273,
+   "live": {
+    "swaps": 310,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Let's Play!",
+    "🏀 2026The league as it is today. Full money, all 30 franchi",
+    "⏪ 2003-04 throwbackThe 29 team league of 2003-04: the SuperS",
+    "PG",
+    "SG",
+    "SF",
+    "PF",
+    "C"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "🏀 2026The league as it is today. Full money, all 30 franchi",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "⏪ 2003-04 throwbackThe 29 team league of 2003-04: the SuperS",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "PG",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "SG",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "SF",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "PF",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "C",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/nba-my-career#bank",
+   "view": "phone",
+   "mode": "alter",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 7,
+   "movedByTranslator": 7,
+   "movedList": [
+    {
+     "op": "insertBefore",
+     "parent": "span",
+     "node": "-$100k",
+     "byTranslator": true
+    },
+    {
+     "op": "insertBefore",
+     "parent": "span",
+     "node": "-$100k",
+     "byTranslator": true
+    },
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "+",
+     "byTranslator": true
+    },
+    {
+     "op": "insertBefore",
+     "parent": "span",
+     "node": "-$100k",
+     "byTranslator": true
+    },
+    {
+     "op": "insertBefore",
+     "parent": "span",
+     "node": "-$200k",
+     "byTranslator": true
+    },
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "+",
+     "byTranslator": true
+    },
+    {
+     "op": "insertBefore",
+     "parent": "span",
+     "node": "-$100k",
+     "byTranslator": true
+    }
+   ],
+   "swapped": 482,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 273,
+   "live": {
+    "swaps": 482,
+    "removed": 2,
+    "inserted": 5,
+    "restored": 15,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": {
+    "reached": true,
+    "lines": 5,
+    "sample": [
+     "+$200k",
+     "-$200k",
+     "+$50k",
+     "+$50k",
+     "-$100k"
+    ],
+    "wrong": [],
+    "detail": "5 of 5 presses, 5 line(s) at the end: [\"+$200k\",\"-$200k\",\"+$50k\",\"+$50k\",\"-$100k\"]"
+   },
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Let's Play!",
+    "Enter the draft",
+    "💰The Bank$0.3M$2.5M a year, 4 years left",
+    "Save half",
+    "Take out half",
+    "Take it all out",
+    "Save it all",
+    "Take it all out"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "answer the rules sheet",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Enter the draft",
+     "ok": true,
+     "did": "Enter the draft",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "open The Bank",
+     "ok": true,
+     "did": "💰The Bank$0.3M$2.5M a year, 4 years left",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "the Bank: Save half",
+     "ok": true,
+     "did": "Save half",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "the Bank: Take out half",
+     "ok": true,
+     "did": "Take out half",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "the Bank: Take it all out",
+     "ok": true,
+     "did": "Take it all out",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 2,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "the Bank: Save it all",
+     "ok": true,
+     "did": "Save it all",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "the Bank: Take it all out",
+     "ok": true,
+     "did": "Take it all out",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 7,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/nfl-my-career",
+   "view": "phone",
+   "mode": "alter",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 306,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 269,
+   "live": {
+    "swaps": 306,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Let's Play!",
+    "🏈 2026The league as it is today. Full money, every current ",
+    "⏪ 2005 throwbackThe 2005 league: the Raiders in Oakland, the",
+    "QB",
+    "RB",
+    "WR",
+    "TE",
+    "LB"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "🏈 2026The league as it is today. Full money, every current ",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "⏪ 2005 throwbackThe 2005 league: the Raiders in Oakland, the",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "QB",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "RB",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "WR",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "TE",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "LB",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/stadium-tycoon",
+   "view": "phone",
+   "mode": "alter",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 1217,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 259,
+   "live": {
+    "swaps": 1217,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 305,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Close the rules",
+    "🏟️ Stadium",
+    "🎓 Academy",
+    "Close the rules",
+    "🏆 League",
+    "Northquay Swifts",
+    "🏟️ Stadium",
+    "How it works"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Close the rules",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "🏟️ Stadium",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "🎓 Academy",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "Close the rules",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "🏆 League",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "Northquay Swifts",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "🏟️ Stadium",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "How it works",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/college-grid",
+   "view": "phone",
+   "mode": "alter",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 252,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 193,
+   "live": {
+    "swaps": 252,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Close",
+    "How to play",
+    "Let's Play!",
+    "+",
+    "Type a player name...",
+    "Report",
+    "Close",
+    "How to play"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Close",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "How to play",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "+",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "Type a player name...",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "Report",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "Close",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "How to play",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/build-your-xi",
+   "view": "phone",
+   "mode": "alter",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 280,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 202,
+   "live": {
+    "swaps": 280,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Got it!",
+    "How to play",
+    "Let's Play!",
+    "4-3-311 players",
+    "GK",
+    "LB",
+    "CB",
+    "RB"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Got it!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "How to play",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "4-3-311 players",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "GK",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "LB",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "CB",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "RB",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/front-office",
+   "view": "phone",
+   "mode": "alter",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 811,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 252,
+   "live": {
+    "swaps": 811,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 9,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Arizona CardinalsNFC West",
+    "Process, patience, all the safe wordsMeasuredNobody clips it",
+    "👔Roster52 under contractTrey McBride leads them at 95",
+    "Hub",
+    "💼Free agency$151M of roomIn reach: Jamari Zimmerman at 80",
+    "Sign",
+    "Abandon franchise and restart",
+    "Atlanta FalconsNFC South"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Arizona CardinalsNFC West",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "Process, patience, all the safe wordsMeasuredNobody clips it",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "👔Roster52 under contractTrey McBride leads them at 95",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "Hub",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "💼Free agency$151M of roomIn reach: Jamari Zimmerman at 80",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "Sign",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "Abandon franchise and restart",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "Atlanta FalconsNFC South",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/soccer-career",
+   "view": "desktop",
+   "mode": "alter",
+   "steps": 32,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 1,
+   "movedByTranslator": 1,
+   "movedList": [
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "s",
+     "byTranslator": true
+    }
+   ],
+   "swapped": 1412,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 341,
+   "live": {
+    "swaps": 1412,
+    "removed": 1,
+    "inserted": 0,
+    "restored": 65,
+    "returned": 322
+   },
+   "age": {
+    "looks": 13,
+    "older": 12,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": {
+    "on": true,
+    "back": 322,
+    "copies": 0,
+    "looks": 10,
+    "presses": 9,
+    "fonts": 0,
+    "maxStale": 0,
+    "staleAt": "",
+    "returned": 322,
+    "ageAt": 18,
+    "ageLooks": 10,
+    "ageOlder": 3,
+    "ageWrong": 0,
+    "ageWrongAt": "",
+    "staleList": []
+   },
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Brazil🇧🇷",
+    "Striker (ST)",
+    "Current era (2025 start)",
+    "🎲 Generate Starting Potential",
+    "🎲 Roll again",
+    "🎮 Customize your build",
+    "✅ Lock in build",
+    "⚽ Begin Career",
+    "Next Year",
+    "Review contract",
+    "Sign contract",
+    "Next Season",
+    "Continue to Season Summary →",
+    "Continue →",
+    "Continue →",
+    "🏋️TrainingDrill ready",
+    "Close",
+    "🏋️Post training videoShow off your skills in the gym+0.1-0.",
+    "Continue →",
+    "🎭The ShowmanFame comes easy: followers grow 60% faster, spo",
+    "🃏One night only55%: win €0.4M · 45%: lose €0.8M",
+    "🤝Dedicate it to the teamOverall +1, Market value +€3M",
+    "🕊️Gently decline pigeon ownershipGerald visits on his own s",
+    "Request transfer 📤",
+    "Review contract",
+    "Sign contract",
+    "Next Season",
+    "Continue to Season Summary →",
+    "Continue →"
+   ],
+   "dbBlocked": 4,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": {
+    "drawn": true,
+    "boxes": {
+     "nationality": {
+      "shown": "«Brazil»",
+      "has": true,
+      "visible": true,
+      "was": "Choose nationality",
+      "words": "Brazil🇧🇷"
+     },
+     "position": {
+      "shown": "«Striker (ST)»",
+      "has": true,
+      "visible": true,
+      "was": "Choose position",
+      "words": "Striker (ST)"
+     },
+     "era": {
+      "shown": "«Current era (2025 start)»",
+      "has": true,
+      "visible": true,
+      "was": "Choose era",
+      "words": "Current era (2025 start)"
+     }
+    },
+    "reached": true,
+    "reachedDetail": "h1 \"🇧🇷Joao Teste\", create form gone, save Joao Teste, Brazil, youth, age 16",
+    "seasonAt": 1,
+    "seasonDetail": "age 16 to 17 on press 1, h1 \"🇧🇷Joao Teste\", phase contract_offer; the walk went on to age 18, phase random_events"
+   },
+   "stepList": [
+    {
+     "name": "the create screen draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "type the name",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "choose nationality Brazil",
+     "ok": true,
+     "did": "Brazil🇧🇷",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "choose position Striker",
+     "ok": true,
+     "did": "Striker (ST)",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "choose era Current era",
+     "ok": true,
+     "did": "Current era (2025 start)",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Generate Starting Potential",
+     "ok": true,
+     "did": "🎲 Generate Starting Potential",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Roll again",
+     "ok": true,
+     "did": "🎲 Roll again",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Customize your build",
+     "ok": true,
+     "did": "🎮 Customize your build",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Lock in build",
+     "ok": true,
+     "did": "✅ Lock in build",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Begin Career",
+     "ok": true,
+     "did": "⚽ Begin Career",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "youth",
+     "age": 16
+    },
+    {
+     "name": "career press 1",
+     "ok": true,
+     "did": "Next Year",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "contract_offer",
+     "age": 17
+    },
+    {
+     "name": "career press 2",
+     "ok": true,
+     "did": "Review contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "contract_offer",
+     "age": 17
+    },
+    {
+     "name": "career press 3",
+     "ok": true,
+     "did": "Sign contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "playing",
+     "age": 17
+    },
+    {
+     "name": "career press 4",
+     "ok": true,
+     "did": "Next Season",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "newspaper",
+     "age": 18
+    },
+    {
+     "name": "career press 5",
+     "ok": true,
+     "did": "Continue to Season Summary →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "season_summary",
+     "age": 18
+    },
+    {
+     "name": "career press 6",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "ballon_dor",
+     "age": 18
+    },
+    {
+     "name": "career press 7",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "social_media_action",
+     "age": 18
+    },
+    {
+     "name": "career press 8",
+     "ok": true,
+     "did": "🏋️TrainingDrill ready",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "social_media_action",
+     "age": 18
+    },
+    {
+     "name": "career press 9",
+     "ok": true,
+     "did": "Close",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "social_media_action",
+     "age": 18
+    },
+    {
+     "name": "career press 10",
+     "ok": true,
+     "did": "🏋️Post training videoShow off your skills in the gym+0.1-0.",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "social_media_action",
+     "age": 18
+    },
+    {
+     "name": "career press 11",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "career press 12",
+     "ok": true,
+     "did": "🎭The ShowmanFame comes easy: followers grow 60% faster, spo",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "the translator undoes itself",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 1",
+     "ok": true,
+     "did": "🃏One night only55%: win €0.4M · 45%: lose €0.8M",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 2",
+     "ok": true,
+     "did": "🤝Dedicate it to the teamOverall +1, Market value +€3M",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "random_events",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 3",
+     "ok": true,
+     "did": "🕊️Gently decline pigeon ownershipGerald visits on his own s",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "transfer_window",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 4",
+     "ok": true,
+     "did": "Request transfer 📤",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "transfer_window",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 5",
+     "ok": true,
+     "did": "Review contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "transfer_window",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 6",
+     "ok": true,
+     "did": "Sign contract",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "playing",
+     "age": 18
+    },
+    {
+     "name": "after the undo, press 7",
+     "ok": true,
+     "did": "Next Season",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "newspaper",
+     "age": 19
+    },
+    {
+     "name": "after the undo, press 8",
+     "ok": true,
+     "did": "Continue to Season Summary →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "season_summary",
+     "age": 19
+    },
+    {
+     "name": "after the undo, press 9",
+     "ok": true,
+     "did": "Continue →",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "ballon_dor",
+     "age": 19
+    }
+   ]
+  },
+  {
+   "route": "/",
+   "view": "desktop",
+   "mode": "alter",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 1149,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 1061,
+   "live": {
+    "swaps": 1149,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 0,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Scroll the daily puzzles on",
+    "Make a free one",
+    "Close",
+    "Pin Cage Clash",
+    "Pin Deadline Day",
+    "Pin Gauntlet Draft: NHL",
+    "Pin Aussie Rules Manager",
+    "🐐 Brady"
+   ],
+   "dbBlocked": 5,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Scroll the daily puzzles on",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "Make a free one",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "Close",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "Pin Cage Clash",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "Pin Deadline Day",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "Pin Gauntlet Draft: NHL",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "Pin Aussie Rules Manager",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "🐐 Brady",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/club-manager",
+   "view": "desktop",
+   "mode": "alter",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 720,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 327,
+   "live": {
+    "swaps": 720,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "How to play",
+    "Let's Play!",
+    "📅2026-27Today. Real squads as of August 2026, thin ones top",
+    "📅 Starting 2026-27",
+    "🏟️2020-21Haaland and Bellingham at Dortmund, Mbappé and Ney",
+    "🏟️ Starting 2020-21",
+    "🦊2015-16The Leicester season. MSN Barcelona, Vardy at 5000 ",
+    "🦊 Starting 2015-16"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "How to play",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "📅2026-27Today. Real squads as of August 2026, thin ones top",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "📅 Starting 2026-27",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "🏟️2020-21Haaland and Bellingham at Dortmund, Mbappé and Ney",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "🏟️ Starting 2020-21",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "🦊2015-16The Leicester season. MSN Barcelona, Vardy at 5000 ",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "🦊 Starting 2015-16",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/nba-my-career",
+   "view": "desktop",
+   "mode": "alter",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 310,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 273,
+   "live": {
+    "swaps": 310,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Let's Play!",
+    "🏀 2026The league as it is today. Full money, all 30 franchi",
+    "⏪ 2003-04 throwbackThe 29 team league of 2003-04: the SuperS",
+    "PG",
+    "SG",
+    "SF",
+    "PF",
+    "C"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "🏀 2026The league as it is today. Full money, all 30 franchi",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "⏪ 2003-04 throwbackThe 29 team league of 2003-04: the SuperS",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "PG",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "SG",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "SF",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "PF",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "C",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/nba-my-career#bank",
+   "view": "desktop",
+   "mode": "alter",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 7,
+   "movedByTranslator": 7,
+   "movedList": [
+    {
+     "op": "insertBefore",
+     "parent": "span",
+     "node": "-$100k",
+     "byTranslator": true
+    },
+    {
+     "op": "insertBefore",
+     "parent": "span",
+     "node": "-$100k",
+     "byTranslator": true
+    },
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "+",
+     "byTranslator": true
+    },
+    {
+     "op": "insertBefore",
+     "parent": "span",
+     "node": "-$100k",
+     "byTranslator": true
+    },
+    {
+     "op": "insertBefore",
+     "parent": "span",
+     "node": "-$200k",
+     "byTranslator": true
+    },
+    {
+     "op": "removeChild",
+     "parent": "span",
+     "node": "+",
+     "byTranslator": true
+    },
+    {
+     "op": "insertBefore",
+     "parent": "span",
+     "node": "-$100k",
+     "byTranslator": true
+    }
+   ],
+   "swapped": 482,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 273,
+   "live": {
+    "swaps": 482,
+    "removed": 2,
+    "inserted": 5,
+    "restored": 15,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": {
+    "reached": true,
+    "lines": 5,
+    "sample": [
+     "+$200k",
+     "-$200k",
+     "+$50k",
+     "+$50k",
+     "-$100k"
+    ],
+    "wrong": [],
+    "detail": "5 of 5 presses, 5 line(s) at the end: [\"+$200k\",\"-$200k\",\"+$50k\",\"+$50k\",\"-$100k\"]"
+   },
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Let's Play!",
+    "Enter the draft",
+    "💰The Bank$0.3M$2.5M a year, 4 years left",
+    "Save half",
+    "Take out half",
+    "Take it all out",
+    "Save it all",
+    "Take it all out"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "answer the rules sheet",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "Enter the draft",
+     "ok": true,
+     "did": "Enter the draft",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "open The Bank",
+     "ok": true,
+     "did": "💰The Bank$0.3M$2.5M a year, 4 years left",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "the Bank: Save half",
+     "ok": true,
+     "did": "Save half",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "the Bank: Take out half",
+     "ok": true,
+     "did": "Take out half",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 1,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "the Bank: Take it all out",
+     "ok": true,
+     "did": "Take it all out",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 2,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "the Bank: Save it all",
+     "ok": true,
+     "did": "Save it all",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 4,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "the Bank: Take it all out",
+     "ok": true,
+     "did": "Take it all out",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 7,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/nfl-my-career",
+   "view": "desktop",
+   "mode": "alter",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 306,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 269,
+   "live": {
+    "swaps": 306,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Let's Play!",
+    "🏈 2026The league as it is today. Full money, every current ",
+    "⏪ 2005 throwbackThe 2005 league: the Raiders in Oakland, the",
+    "QB",
+    "RB",
+    "WR",
+    "TE",
+    "LB"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "🏈 2026The league as it is today. Full money, every current ",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "⏪ 2005 throwbackThe 2005 league: the Raiders in Oakland, the",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "QB",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "RB",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "WR",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "TE",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "LB",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/stadium-tycoon",
+   "view": "desktop",
+   "mode": "alter",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 1157,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 259,
+   "live": {
+    "swaps": 1157,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 289,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Close the rules",
+    "🏟️ Stadium",
+    "🎓 Academy",
+    "Close the rules",
+    "🏆 League",
+    "Northquay Swifts",
+    "🏟️ Stadium",
+    "How it works"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Close the rules",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "🏟️ Stadium",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "🎓 Academy",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "Close the rules",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "🏆 League",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "Northquay Swifts",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "🏟️ Stadium",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "How it works",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/college-grid",
+   "view": "desktop",
+   "mode": "alter",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 252,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 193,
+   "live": {
+    "swaps": 252,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Close",
+    "How to play",
+    "Let's Play!",
+    "+",
+    "Type a player name...",
+    "Report",
+    "Close",
+    "How to play"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Close",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "How to play",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "+",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "Type a player name...",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "Report",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "Close",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "How to play",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/build-your-xi",
+   "view": "desktop",
+   "mode": "alter",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 280,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 202,
+   "live": {
+    "swaps": 280,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Got it!",
+    "How to play",
+    "Let's Play!",
+    "4-3-311 players",
+    "GK",
+    "LB",
+    "CB",
+    "RB"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Got it!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "How to play",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "Let's Play!",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "4-3-311 players",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "GK",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "LB",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "CB",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "RB",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  },
+  {
+   "route": "/front-office",
+   "view": "desktop",
+   "mode": "alter",
+   "steps": 9,
+   "boundaryAt": null,
+   "stuckAt": null,
+   "notFound": 0,
+   "notFoundSample": "",
+   "guardLines": 0,
+   "guardOn": true,
+   "moved": 0,
+   "movedByTranslator": 0,
+   "movedList": [],
+   "swapped": 810,
+   "maxStale": 0,
+   "staleSample": [],
+   "staleList": [],
+   "staleAt": "",
+   "maxOrder": 0,
+   "orderList": [],
+   "takenBack": 0,
+   "judged": 252,
+   "live": {
+    "swaps": 810,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 9,
+    "returned": 0
+   },
+   "age": {
+    "looks": 0,
+    "older": 0,
+    "wrong": 0,
+    "wrongAt": ""
+   },
+   "maxLeft": 0,
+   "undo": null,
+   "bank": null,
+   "directLive": {
+    "remove": "the copy left with it",
+    "insert": "in front",
+    "write": "shows 17",
+    "undo": "shows 18"
+   },
+   "pressed": [
+    "Arizona CardinalsNFC West",
+    "Process, patience, all the safe wordsMeasuredNobody clips it",
+    "👔Roster52 under contractTrey McBride leads them at 95",
+    "Hub",
+    "💼Free agency$151M of roomIn reach: Jamari Zimmerman at 80",
+    "Sign",
+    "Abandon franchise and restart",
+    "Atlanta FalconsNFC South"
+   ],
+   "dbBlocked": 1,
+   "blocked": [
+    "fonts.googleapis.com"
+   ],
+   "retry": null,
+   "direct": {
+    "remove": "quiet",
+    "insert": "quiet"
+   },
+   "unspanned": [],
+   "create": null,
+   "stepList": [
+    {
+     "name": "the page draws",
+     "ok": true,
+     "did": "",
+     "by": "",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 1",
+     "ok": true,
+     "did": "Arizona CardinalsNFC West",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 2",
+     "ok": true,
+     "did": "Process, patience, all the safe wordsMeasuredNobody clips it",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 3",
+     "ok": true,
+     "did": "👔Roster52 under contractTrey McBride leads them at 95",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 4",
+     "ok": true,
+     "did": "Hub",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 5",
+     "ok": true,
+     "did": "💼Free agency$151M of roomIn reach: Jamari Zimmerman at 80",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 6",
+     "ok": true,
+     "did": "Sign",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 7",
+     "ok": true,
+     "did": "Abandon franchise and restart",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    },
+    {
+     "name": "press 8",
+     "ok": true,
+     "did": "Atlanta FalconsNFC South",
+     "by": "mouse",
+     "boundary": false,
+     "moved": 0,
+     "stale": 0,
+     "phase": "",
+     "age": null
+    }
+   ]
+  }
+ ]
+}

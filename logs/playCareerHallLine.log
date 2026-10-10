@@ -1,0 +1,394 @@
+
+/nfl-my-career
+  saves: standout RB, 11 seasons, retired through the hub, 639 then 744, line of 183 characters; plain QB, 10 seasons, 262; old nfl-engine-8
+  PASS  nfl standout 390: the line is in the card and fully shown
+  PASS  nfl standout 390: the save is retired and stamped hallCal 2 (it reads 2)
+  PASS  nfl standout 390: the line is the engine's own for this career
+  PASS  nfl standout 390: the legacy pill is the calibration 2 score (pill 744, engine 744, calibration 1 639)
+  PASS  nfl standout 390: scrollY is the same when the headline lands and when the line lands (0, 0)
+  PASS  nfl standout 390: the page did not jump while the card revealed (scrollY 0)
+  PASS  nfl standout 390: the line sits inside the viewport (314 by 64 px, 4 lines, 183 characters)
+  PASS  nfl standout 390: at most four lines of text at 390 wide (4)
+  PASS  nfl standout 390: the settled page is not wider than the viewport (390 of 390; widest frame while landing 448)
+  PASS  nfl standout 390: the card's first button is inside the viewport and can be pressed
+  PASS  nfl standout 390: headline, line and score are the engine's reading of the career as saved ("First ballot. Class of 2042.")
+  PASS  nfl standout 390: a reload shows the same score, headline and line
+  PASS  nfl standout 390: the reload wrote nothing
+  PASS  nfl standout 390: no page error
+  PASS  nfl old save 390: the load alone wrote nothing (nfl-engine-8)
+  PASS  nfl old save 390: the headline is the one the fixture recorded ("First ballot. Class of 2048.")
+  PASS  nfl old save 390: no line on a career retired before this round
+  PASS  nfl old save 390: the legacy pill is the recorded score (pill 537, recorded 537)
+  PASS  nfl old save 390: the save still carries no stamp
+  PASS  nfl old save 390: no page error
+  PASS  nfl standout 390 reduced: the line is in the card and fully shown
+  PASS  nfl standout 390 reduced: the save is retired and stamped hallCal 2 (it reads 2)
+  PASS  nfl standout 390 reduced: the line is the engine's own for this career
+  PASS  nfl standout 390 reduced: the legacy pill is the calibration 2 score (pill 744, engine 744, calibration 1 639)
+  PASS  nfl standout 390 reduced: with reduced motion the line is shown within 100 ms of the card mounting (0 ms)
+  PASS  nfl standout 390 reduced: scrollY is the same when the headline lands and when the line lands (0, 0)
+  PASS  nfl standout 390 reduced: the page did not jump while the card revealed (scrollY 0)
+  PASS  nfl standout 390 reduced: the line sits inside the viewport (314 by 64 px, 4 lines, 183 characters)
+  PASS  nfl standout 390 reduced: at most four lines of text at 390 wide (4)
+  PASS  nfl standout 390 reduced: the settled page is not wider than the viewport (390 of 390; widest frame while landing 390)
+  PASS  nfl standout 390 reduced: the card's first button is inside the viewport and can be pressed
+  PASS  nfl standout 390 reduced: headline, line and score are the engine's reading of the career as saved ("First ballot. Class of 2042.")
+  PASS  nfl standout 390 reduced: a reload shows the same score, headline and line
+  PASS  nfl standout 390 reduced: the reload wrote nothing
+  PASS  nfl standout 390 reduced: no page error
+  PASS  nfl old save 390 reduced: the load alone wrote nothing (nfl-engine-8)
+  PASS  nfl old save 390 reduced: the headline is the one the fixture recorded ("First ballot. Class of 2048.")
+  PASS  nfl old save 390 reduced: no line on a career retired before this round
+  PASS  nfl old save 390 reduced: the legacy pill is the recorded score (pill 537, recorded 537)
+  PASS  nfl old save 390 reduced: the save still carries no stamp
+  PASS  nfl old save 390 reduced: no page error
+  PASS  nfl standout 1280: the line is in the card and fully shown
+  PASS  nfl standout 1280: the save is retired and stamped hallCal 2 (it reads 2)
+  PASS  nfl standout 1280: the line is the engine's own for this career
+  PASS  nfl standout 1280: the legacy pill is the calibration 2 score (pill 744, engine 744, calibration 1 639)
+  PASS  nfl standout 1280: scrollY is the same when the headline lands and when the line lands (0, 0)
+  PASS  nfl standout 1280: the page did not jump while the card revealed (scrollY 0)
+  PASS  nfl standout 1280: the line sits inside the viewport (596 by 32 px, 2 lines, 183 characters)
+  PASS  nfl standout 1280: the settled page is not wider than the viewport (1280 of 1280; widest frame while landing 1280)
+  PASS  nfl standout 1280: the card's first button is inside the viewport and can be pressed
+  PASS  nfl standout 1280: headline, line and score are the engine's reading of the career as saved ("First ballot. Class of 2042.")
+  PASS  nfl standout 1280: a reload shows the same score, headline and line
+  PASS  nfl standout 1280: the reload wrote nothing
+  PASS  nfl standout 1280: no page error
+  PASS  nfl old save 1280: the load alone wrote nothing (nfl-engine-8)
+  PASS  nfl old save 1280: the headline is the one the fixture recorded ("First ballot. Class of 2048.")
+  PASS  nfl old save 1280: no line on a career retired before this round
+  PASS  nfl old save 1280: the legacy pill is the recorded score (pill 537, recorded 537)
+  PASS  nfl old save 1280: the save still carries no stamp
+  PASS  nfl old save 1280: no page error
+  PASS  nfl standout 1280 reduced: the line is in the card and fully shown
+  PASS  nfl standout 1280 reduced: the save is retired and stamped hallCal 2 (it reads 2)
+  PASS  nfl standout 1280 reduced: the line is the engine's own for this career
+  PASS  nfl standout 1280 reduced: the legacy pill is the calibration 2 score (pill 744, engine 744, calibration 1 639)
+  PASS  nfl standout 1280 reduced: with reduced motion the line is shown within 100 ms of the card mounting (0 ms)
+  PASS  nfl standout 1280 reduced: scrollY is the same when the headline lands and when the line lands (0, 0)
+  PASS  nfl standout 1280 reduced: the page did not jump while the card revealed (scrollY 0)
+  PASS  nfl standout 1280 reduced: the line sits inside the viewport (596 by 32 px, 2 lines, 183 characters)
+  PASS  nfl standout 1280 reduced: the settled page is not wider than the viewport (1280 of 1280; widest frame while landing 1280)
+  PASS  nfl standout 1280 reduced: the card's first button is inside the viewport and can be pressed
+  PASS  nfl standout 1280 reduced: headline, line and score are the engine's reading of the career as saved ("First ballot. Class of 2042.")
+  PASS  nfl standout 1280 reduced: a reload shows the same score, headline and line
+  PASS  nfl standout 1280 reduced: the reload wrote nothing
+  PASS  nfl standout 1280 reduced: no page error
+  PASS  nfl old save 1280 reduced: the load alone wrote nothing (nfl-engine-8)
+  PASS  nfl old save 1280 reduced: the headline is the one the fixture recorded ("First ballot. Class of 2048.")
+  PASS  nfl old save 1280 reduced: no line on a career retired before this round
+  PASS  nfl old save 1280 reduced: the legacy pill is the recorded score (pill 537, recorded 537)
+  PASS  nfl old save 1280 reduced: the save still carries no stamp
+  PASS  nfl old save 1280 reduced: no page error
+  PASS  nfl plain 390 reduced: the line is in the card and fully shown
+  PASS  nfl plain 390 reduced: the save is retired and stamped hallCal 2 (it reads 2)
+  PASS  nfl plain 390 reduced: the line is the engine's own for this career
+  PASS  nfl plain 390 reduced: the legacy pill is the calibration 2 score (pill 262, engine 262, calibration 1 262)
+  PASS  nfl plain 390 reduced: with reduced motion the line is shown within 100 ms of the card mounting (0 ms)
+  PASS  nfl plain 390 reduced: scrollY is the same when the headline lands and when the line lands (0, 0)
+  PASS  nfl plain 390 reduced: the page did not jump while the card revealed (scrollY 0)
+  PASS  nfl plain 390 reduced: the line sits inside the viewport (314 by 48 px, 3 lines, 131 characters)
+  PASS  nfl plain 390 reduced: at most four lines of text at 390 wide (3)
+  PASS  nfl plain 390 reduced: the settled page is not wider than the viewport (390 of 390; widest frame while landing 390)
+  PASS  nfl plain 390 reduced: the card's first button is inside the viewport and can be pressed
+  PASS  nfl plain 390 reduced: headline, line and score are the engine's reading of the career as saved ("10 ballots and still waiting on the call.")
+  PASS  nfl plain 390 reduced: a reload shows the same score, headline and line
+  PASS  nfl plain 390 reduced: the reload wrote nothing
+  PASS  nfl plain 390 reduced: no page error
+
+/nba-my-career
+  saves: standout SF, 16 seasons, retired through the hub, 1556 then 1932, line of 176 characters; plain PG, 10 seasons, 114; old nba-engine-9
+  PASS  nba standout 390: the line is in the card and fully shown
+  PASS  nba standout 390: the save is retired and stamped hallCal 2 (it reads 2)
+  PASS  nba standout 390: the line is the engine's own for this career
+  PASS  nba standout 390: the legacy pill is the calibration 2 score (pill 1932, engine 1932, calibration 1 1556)
+  PASS  nba standout 390: scrollY is the same when the headline lands and when the line lands (0, 0)
+  PASS  nba standout 390: the page did not jump while the card revealed (scrollY 0)
+  PASS  nba standout 390: the line sits inside the viewport (314 by 64 px, 4 lines, 176 characters)
+  PASS  nba standout 390: at most four lines of text at 390 wide (4)
+  PASS  nba standout 390: the settled page is not wider than the viewport (390 of 390; widest frame while landing 432)
+  PASS  nba standout 390: the card's first button is inside the viewport and can be pressed
+  PASS  nba standout 390: headline, line and score are the engine's reading of the career as saved ("First ballot. Class of 2045.")
+  PASS  nba standout 390: a reload shows the same score, headline and line
+  PASS  nba standout 390: the reload wrote nothing
+  PASS  nba standout 390: no page error
+  PASS  nba old save 390: the load alone wrote nothing (nba-engine-9)
+  PASS  nba old save 390: the headline is the one the fixture recorded ("First ballot. Class of 2050.")
+  PASS  nba old save 390: no line on a career retired before this round
+  PASS  nba old save 390: the legacy pill is the recorded score (pill 574, recorded 574)
+  PASS  nba old save 390: the save still carries no stamp
+  PASS  nba old save 390: no page error
+  PASS  nba standout 390 reduced: the line is in the card and fully shown
+  PASS  nba standout 390 reduced: the save is retired and stamped hallCal 2 (it reads 2)
+  PASS  nba standout 390 reduced: the line is the engine's own for this career
+  PASS  nba standout 390 reduced: the legacy pill is the calibration 2 score (pill 1932, engine 1932, calibration 1 1556)
+  PASS  nba standout 390 reduced: with reduced motion the line is shown within 100 ms of the card mounting (0 ms)
+  PASS  nba standout 390 reduced: scrollY is the same when the headline lands and when the line lands (0, 0)
+  PASS  nba standout 390 reduced: the page did not jump while the card revealed (scrollY 0)
+  PASS  nba standout 390 reduced: the line sits inside the viewport (314 by 64 px, 4 lines, 176 characters)
+  PASS  nba standout 390 reduced: at most four lines of text at 390 wide (4)
+  PASS  nba standout 390 reduced: the settled page is not wider than the viewport (390 of 390; widest frame while landing 390)
+  PASS  nba standout 390 reduced: the card's first button is inside the viewport and can be pressed
+  PASS  nba standout 390 reduced: headline, line and score are the engine's reading of the career as saved ("First ballot. Class of 2045.")
+  PASS  nba standout 390 reduced: a reload shows the same score, headline and line
+  PASS  nba standout 390 reduced: the reload wrote nothing
+  PASS  nba standout 390 reduced: no page error
+  PASS  nba old save 390 reduced: the load alone wrote nothing (nba-engine-9)
+  PASS  nba old save 390 reduced: the headline is the one the fixture recorded ("First ballot. Class of 2050.")
+  PASS  nba old save 390 reduced: no line on a career retired before this round
+  PASS  nba old save 390 reduced: the legacy pill is the recorded score (pill 574, recorded 574)
+  PASS  nba old save 390 reduced: the save still carries no stamp
+  PASS  nba old save 390 reduced: no page error
+  PASS  nba standout 1280: the line is in the card and fully shown
+  PASS  nba standout 1280: the save is retired and stamped hallCal 2 (it reads 2)
+  PASS  nba standout 1280: the line is the engine's own for this career
+  PASS  nba standout 1280: the legacy pill is the calibration 2 score (pill 1932, engine 1932, calibration 1 1556)
+  PASS  nba standout 1280: scrollY is the same when the headline lands and when the line lands (0, 0)
+  PASS  nba standout 1280: the page did not jump while the card revealed (scrollY 0)
+  PASS  nba standout 1280: the line sits inside the viewport (596 by 32 px, 2 lines, 176 characters)
+  PASS  nba standout 1280: the settled page is not wider than the viewport (1280 of 1280; widest frame while landing 1280)
+  PASS  nba standout 1280: the card's first button is inside the viewport and can be pressed
+  PASS  nba standout 1280: headline, line and score are the engine's reading of the career as saved ("First ballot. Class of 2045.")
+  PASS  nba standout 1280: a reload shows the same score, headline and line
+  PASS  nba standout 1280: the reload wrote nothing
+  PASS  nba standout 1280: no page error
+  PASS  nba old save 1280: the load alone wrote nothing (nba-engine-9)
+  PASS  nba old save 1280: the headline is the one the fixture recorded ("First ballot. Class of 2050.")
+  PASS  nba old save 1280: no line on a career retired before this round
+  PASS  nba old save 1280: the legacy pill is the recorded score (pill 574, recorded 574)
+  PASS  nba old save 1280: the save still carries no stamp
+  PASS  nba old save 1280: no page error
+  PASS  nba standout 1280 reduced: the line is in the card and fully shown
+  PASS  nba standout 1280 reduced: the save is retired and stamped hallCal 2 (it reads 2)
+  PASS  nba standout 1280 reduced: the line is the engine's own for this career
+  PASS  nba standout 1280 reduced: the legacy pill is the calibration 2 score (pill 1932, engine 1932, calibration 1 1556)
+  PASS  nba standout 1280 reduced: with reduced motion the line is shown within 100 ms of the card mounting (0 ms)
+  PASS  nba standout 1280 reduced: scrollY is the same when the headline lands and when the line lands (0, 0)
+  PASS  nba standout 1280 reduced: the page did not jump while the card revealed (scrollY 0)
+  PASS  nba standout 1280 reduced: the line sits inside the viewport (596 by 32 px, 2 lines, 176 characters)
+  PASS  nba standout 1280 reduced: the settled page is not wider than the viewport (1280 of 1280; widest frame while landing 1280)
+  PASS  nba standout 1280 reduced: the card's first button is inside the viewport and can be pressed
+  PASS  nba standout 1280 reduced: headline, line and score are the engine's reading of the career as saved ("First ballot. Class of 2045.")
+  PASS  nba standout 1280 reduced: a reload shows the same score, headline and line
+  PASS  nba standout 1280 reduced: the reload wrote nothing
+  PASS  nba standout 1280 reduced: no page error
+  PASS  nba old save 1280 reduced: the load alone wrote nothing (nba-engine-9)
+  PASS  nba old save 1280 reduced: the headline is the one the fixture recorded ("First ballot. Class of 2050.")
+  PASS  nba old save 1280 reduced: no line on a career retired before this round
+  PASS  nba old save 1280 reduced: the legacy pill is the recorded score (pill 574, recorded 574)
+  PASS  nba old save 1280 reduced: the save still carries no stamp
+  PASS  nba old save 1280 reduced: no page error
+  PASS  nba plain 390 reduced: the line is in the card and fully shown
+  PASS  nba plain 390 reduced: the save is retired and stamped hallCal 2 (it reads 2)
+  PASS  nba plain 390 reduced: the line is the engine's own for this career
+  PASS  nba plain 390 reduced: the legacy pill is the calibration 2 score (pill 114, engine 114, calibration 1 104)
+  PASS  nba plain 390 reduced: with reduced motion the line is shown within 100 ms of the card mounting (0 ms)
+  PASS  nba plain 390 reduced: scrollY is the same when the headline lands and when the line lands (0, 0)
+  PASS  nba plain 390 reduced: the page did not jump while the card revealed (scrollY 0)
+  PASS  nba plain 390 reduced: the line sits inside the viewport (314 by 32 px, 2 lines, 107 characters)
+  PASS  nba plain 390 reduced: at most four lines of text at 390 wide (2)
+  PASS  nba plain 390 reduced: the settled page is not wider than the viewport (390 of 390; widest frame while landing 390)
+  PASS  nba plain 390 reduced: the card's first button is inside the viewport and can be pressed
+  PASS  nba plain 390 reduced: headline, line and score are the engine's reading of the career as saved ("Never made the ballot.")
+  PASS  nba plain 390 reduced: a reload shows the same score, headline and line
+  PASS  nba plain 390 reduced: the reload wrote nothing
+  PASS  nba plain 390 reduced: no page error
+
+/mlb-my-career
+  saves: standout 1B, 19 seasons, retired through the hub, 861 then 904, line of 175 characters; plain SP, 10 seasons, 340; old mlb-engine-0
+  PASS  mlb standout 390: the line is in the card and fully shown
+  PASS  mlb standout 390: the save is retired and stamped hallCal 2 (it reads 2)
+  PASS  mlb standout 390: the line is the engine's own for this career
+  PASS  mlb standout 390: the legacy pill is the calibration 2 score (pill 904, engine 904, calibration 1 861)
+  PASS  mlb standout 390: scrollY is the same when the headline lands and when the line lands (0, 0)
+  PASS  mlb standout 390: the page did not jump while the card revealed (scrollY 0)
+  PASS  mlb standout 390: the line sits inside the viewport (314 by 64 px, 4 lines, 175 characters)
+  PASS  mlb standout 390: at most four lines of text at 390 wide (4)
+  PASS  mlb standout 390: the settled page is not wider than the viewport (390 of 390; widest frame while landing 446)
+  PASS  mlb standout 390: the card's first button is inside the viewport and can be pressed
+  PASS  mlb standout 390: headline, line and score are the engine's reading of the career as saved ("First ballot. Class of 2050.")
+  PASS  mlb standout 390: a reload shows the same score, headline and line
+  PASS  mlb standout 390: the reload wrote nothing
+  PASS  mlb standout 390: no page error
+  PASS  mlb old save 390: the load alone wrote nothing (mlb-engine-0)
+  PASS  mlb old save 390: the headline is the one the fixture recorded ("First ballot. Class of 2052.")
+  PASS  mlb old save 390: no line on a career retired before this round
+  PASS  mlb old save 390: the legacy pill is the recorded score (pill 928, recorded 928)
+  PASS  mlb old save 390: the save still carries no stamp
+  PASS  mlb old save 390: no page error
+  PASS  mlb standout 390 reduced: the line is in the card and fully shown
+  PASS  mlb standout 390 reduced: the save is retired and stamped hallCal 2 (it reads 2)
+  PASS  mlb standout 390 reduced: the line is the engine's own for this career
+  PASS  mlb standout 390 reduced: the legacy pill is the calibration 2 score (pill 904, engine 904, calibration 1 861)
+  PASS  mlb standout 390 reduced: with reduced motion the line is shown within 100 ms of the card mounting (0 ms)
+  PASS  mlb standout 390 reduced: scrollY is the same when the headline lands and when the line lands (0, 0)
+  PASS  mlb standout 390 reduced: the page did not jump while the card revealed (scrollY 0)
+  PASS  mlb standout 390 reduced: the line sits inside the viewport (314 by 64 px, 4 lines, 175 characters)
+  PASS  mlb standout 390 reduced: at most four lines of text at 390 wide (4)
+  PASS  mlb standout 390 reduced: the settled page is not wider than the viewport (390 of 390; widest frame while landing 390)
+  PASS  mlb standout 390 reduced: the card's first button is inside the viewport and can be pressed
+  PASS  mlb standout 390 reduced: headline, line and score are the engine's reading of the career as saved ("First ballot. Class of 2050.")
+  PASS  mlb standout 390 reduced: a reload shows the same score, headline and line
+  PASS  mlb standout 390 reduced: the reload wrote nothing
+  PASS  mlb standout 390 reduced: no page error
+  PASS  mlb old save 390 reduced: the load alone wrote nothing (mlb-engine-0)
+  PASS  mlb old save 390 reduced: the headline is the one the fixture recorded ("First ballot. Class of 2052.")
+  PASS  mlb old save 390 reduced: no line on a career retired before this round
+  PASS  mlb old save 390 reduced: the legacy pill is the recorded score (pill 928, recorded 928)
+  PASS  mlb old save 390 reduced: the save still carries no stamp
+  PASS  mlb old save 390 reduced: no page error
+  PASS  mlb standout 1280: the line is in the card and fully shown
+  PASS  mlb standout 1280: the save is retired and stamped hallCal 2 (it reads 2)
+  PASS  mlb standout 1280: the line is the engine's own for this career
+  PASS  mlb standout 1280: the legacy pill is the calibration 2 score (pill 904, engine 904, calibration 1 861)
+  PASS  mlb standout 1280: scrollY is the same when the headline lands and when the line lands (0, 0)
+  PASS  mlb standout 1280: the page did not jump while the card revealed (scrollY 0)
+  PASS  mlb standout 1280: the line sits inside the viewport (596 by 32 px, 2 lines, 175 characters)
+  PASS  mlb standout 1280: the settled page is not wider than the viewport (1280 of 1280; widest frame while landing 1280)
+  PASS  mlb standout 1280: the card's first button is inside the viewport and can be pressed
+  PASS  mlb standout 1280: headline, line and score are the engine's reading of the career as saved ("First ballot. Class of 2050.")
+  PASS  mlb standout 1280: a reload shows the same score, headline and line
+  PASS  mlb standout 1280: the reload wrote nothing
+  PASS  mlb standout 1280: no page error
+  PASS  mlb old save 1280: the load alone wrote nothing (mlb-engine-0)
+  PASS  mlb old save 1280: the headline is the one the fixture recorded ("First ballot. Class of 2052.")
+  PASS  mlb old save 1280: no line on a career retired before this round
+  PASS  mlb old save 1280: the legacy pill is the recorded score (pill 928, recorded 928)
+  PASS  mlb old save 1280: the save still carries no stamp
+  PASS  mlb old save 1280: no page error
+  PASS  mlb standout 1280 reduced: the line is in the card and fully shown
+  PASS  mlb standout 1280 reduced: the save is retired and stamped hallCal 2 (it reads 2)
+  PASS  mlb standout 1280 reduced: the line is the engine's own for this career
+  PASS  mlb standout 1280 reduced: the legacy pill is the calibration 2 score (pill 904, engine 904, calibration 1 861)
+  PASS  mlb standout 1280 reduced: with reduced motion the line is shown within 100 ms of the card mounting (0 ms)
+  PASS  mlb standout 1280 reduced: scrollY is the same when the headline lands and when the line lands (0, 0)
+  PASS  mlb standout 1280 reduced: the page did not jump while the card revealed (scrollY 0)
+  PASS  mlb standout 1280 reduced: the line sits inside the viewport (596 by 32 px, 2 lines, 175 characters)
+  PASS  mlb standout 1280 reduced: the settled page is not wider than the viewport (1280 of 1280; widest frame while landing 1280)
+  PASS  mlb standout 1280 reduced: the card's first button is inside the viewport and can be pressed
+  PASS  mlb standout 1280 reduced: headline, line and score are the engine's reading of the career as saved ("First ballot. Class of 2050.")
+  PASS  mlb standout 1280 reduced: a reload shows the same score, headline and line
+  PASS  mlb standout 1280 reduced: the reload wrote nothing
+  PASS  mlb standout 1280 reduced: no page error
+  PASS  mlb old save 1280 reduced: the load alone wrote nothing (mlb-engine-0)
+  PASS  mlb old save 1280 reduced: the headline is the one the fixture recorded ("First ballot. Class of 2052.")
+  PASS  mlb old save 1280 reduced: no line on a career retired before this round
+  PASS  mlb old save 1280 reduced: the legacy pill is the recorded score (pill 928, recorded 928)
+  PASS  mlb old save 1280 reduced: the save still carries no stamp
+  PASS  mlb old save 1280 reduced: no page error
+  PASS  mlb plain 390 reduced: the line is in the card and fully shown
+  PASS  mlb plain 390 reduced: the save is retired and stamped hallCal 2 (it reads 2)
+  PASS  mlb plain 390 reduced: the line is the engine's own for this career
+  PASS  mlb plain 390 reduced: the legacy pill is the calibration 2 score (pill 340, engine 340, calibration 1 340)
+  PASS  mlb plain 390 reduced: with reduced motion the line is shown within 100 ms of the card mounting (0 ms)
+  PASS  mlb plain 390 reduced: scrollY is the same when the headline lands and when the line lands (0, 0)
+  PASS  mlb plain 390 reduced: the page did not jump while the card revealed (scrollY 0)
+  PASS  mlb plain 390 reduced: the line sits inside the viewport (314 by 48 px, 3 lines, 117 characters)
+  PASS  mlb plain 390 reduced: at most four lines of text at 390 wide (3)
+  PASS  mlb plain 390 reduced: the settled page is not wider than the viewport (390 of 390; widest frame while landing 390)
+  PASS  mlb plain 390 reduced: the card's first button is inside the viewport and can be pressed
+  PASS  mlb plain 390 reduced: headline, line and score are the engine's reading of the career as saved ("Off the ballot after 6 years.")
+  PASS  mlb plain 390 reduced: a reload shows the same score, headline and line
+  PASS  mlb plain 390 reduced: the reload wrote nothing
+  PASS  mlb plain 390 reduced: no page error
+
+/nhl-my-career
+  saves: standout LW, 19 seasons, retired through the hub, 930 then 1212, line of 172 characters; plain C, 10 seasons, 159; old nhl-engine-0
+  PASS  nhl standout 390: the line is in the card and fully shown
+  PASS  nhl standout 390: the save is retired and stamped hallCal 2 (it reads 2)
+  PASS  nhl standout 390: the line is the engine's own for this career
+  PASS  nhl standout 390: the legacy pill is the calibration 2 score (pill 1212, engine 1212, calibration 1 930)
+  PASS  nhl standout 390: scrollY is the same when the headline lands and when the line lands (0, 0)
+  PASS  nhl standout 390: the page did not jump while the card revealed (scrollY 0)
+  PASS  nhl standout 390: the line sits inside the viewport (314 by 64 px, 4 lines, 172 characters)
+  PASS  nhl standout 390: at most four lines of text at 390 wide (4)
+  PASS  nhl standout 390: the settled page is not wider than the viewport (390 of 390; widest frame while landing 448)
+  PASS  nhl standout 390: the card's first button is inside the viewport and can be pressed
+  PASS  nhl standout 390: headline, line and score are the engine's reading of the career as saved ("First ballot. Class of 2048.")
+  PASS  nhl standout 390: a reload shows the same score, headline and line
+  PASS  nhl standout 390: the reload wrote nothing
+  PASS  nhl standout 390: no page error
+  PASS  nhl old save 390: the load alone wrote nothing (nhl-engine-0)
+  PASS  nhl old save 390: the headline is the one the fixture recorded ("First ballot. Class of 2051.")
+  PASS  nhl old save 390: no line on a career retired before this round
+  PASS  nhl old save 390: the legacy pill is the recorded score (pill 518, recorded 518)
+  PASS  nhl old save 390: the save still carries no stamp
+  PASS  nhl old save 390: no page error
+  PASS  nhl standout 390 reduced: the line is in the card and fully shown
+  PASS  nhl standout 390 reduced: the save is retired and stamped hallCal 2 (it reads 2)
+  PASS  nhl standout 390 reduced: the line is the engine's own for this career
+  PASS  nhl standout 390 reduced: the legacy pill is the calibration 2 score (pill 1212, engine 1212, calibration 1 930)
+  PASS  nhl standout 390 reduced: with reduced motion the line is shown within 100 ms of the card mounting (0 ms)
+  PASS  nhl standout 390 reduced: scrollY is the same when the headline lands and when the line lands (0, 0)
+  PASS  nhl standout 390 reduced: the page did not jump while the card revealed (scrollY 0)
+  PASS  nhl standout 390 reduced: the line sits inside the viewport (314 by 64 px, 4 lines, 172 characters)
+  PASS  nhl standout 390 reduced: at most four lines of text at 390 wide (4)
+  PASS  nhl standout 390 reduced: the settled page is not wider than the viewport (390 of 390; widest frame while landing 390)
+  PASS  nhl standout 390 reduced: the card's first button is inside the viewport and can be pressed
+  PASS  nhl standout 390 reduced: headline, line and score are the engine's reading of the career as saved ("First ballot. Class of 2048.")
+  PASS  nhl standout 390 reduced: a reload shows the same score, headline and line
+  PASS  nhl standout 390 reduced: the reload wrote nothing
+  PASS  nhl standout 390 reduced: no page error
+  PASS  nhl old save 390 reduced: the load alone wrote nothing (nhl-engine-0)
+  PASS  nhl old save 390 reduced: the headline is the one the fixture recorded ("First ballot. Class of 2051.")
+  PASS  nhl old save 390 reduced: no line on a career retired before this round
+  PASS  nhl old save 390 reduced: the legacy pill is the recorded score (pill 518, recorded 518)
+  PASS  nhl old save 390 reduced: the save still carries no stamp
+  PASS  nhl old save 390 reduced: no page error
+  PASS  nhl standout 1280: the line is in the card and fully shown
+  PASS  nhl standout 1280: the save is retired and stamped hallCal 2 (it reads 2)
+  PASS  nhl standout 1280: the line is the engine's own for this career
+  PASS  nhl standout 1280: the legacy pill is the calibration 2 score (pill 1212, engine 1212, calibration 1 930)
+  PASS  nhl standout 1280: scrollY is the same when the headline lands and when the line lands (0, 0)
+  PASS  nhl standout 1280: the page did not jump while the card revealed (scrollY 0)
+  PASS  nhl standout 1280: the line sits inside the viewport (596 by 32 px, 2 lines, 172 characters)
+  PASS  nhl standout 1280: the settled page is not wider than the viewport (1280 of 1280; widest frame while landing 1280)
+  PASS  nhl standout 1280: the card's first button is inside the viewport and can be pressed
+  PASS  nhl standout 1280: headline, line and score are the engine's reading of the career as saved ("First ballot. Class of 2048.")
+  PASS  nhl standout 1280: a reload shows the same score, headline and line
+  PASS  nhl standout 1280: the reload wrote nothing
+  PASS  nhl standout 1280: no page error
+  PASS  nhl old save 1280: the load alone wrote nothing (nhl-engine-0)
+  PASS  nhl old save 1280: the headline is the one the fixture recorded ("First ballot. Class of 2051.")
+  PASS  nhl old save 1280: no line on a career retired before this round
+  PASS  nhl old save 1280: the legacy pill is the recorded score (pill 518, recorded 518)
+  PASS  nhl old save 1280: the save still carries no stamp
+  PASS  nhl old save 1280: no page error
+  PASS  nhl standout 1280 reduced: the line is in the card and fully shown
+  PASS  nhl standout 1280 reduced: the save is retired and stamped hallCal 2 (it reads 2)
+  PASS  nhl standout 1280 reduced: the line is the engine's own for this career
+  PASS  nhl standout 1280 reduced: the legacy pill is the calibration 2 score (pill 1212, engine 1212, calibration 1 930)
+  PASS  nhl standout 1280 reduced: with reduced motion the line is shown within 100 ms of the card mounting (0 ms)
+  PASS  nhl standout 1280 reduced: scrollY is the same when the headline lands and when the line lands (0, 0)
+  PASS  nhl standout 1280 reduced: the page did not jump while the card revealed (scrollY 0)
+  PASS  nhl standout 1280 reduced: the line sits inside the viewport (596 by 32 px, 2 lines, 172 characters)
+  PASS  nhl standout 1280 reduced: the settled page is not wider than the viewport (1280 of 1280; widest frame while landing 1280)
+  PASS  nhl standout 1280 reduced: the card's first button is inside the viewport and can be pressed
+  PASS  nhl standout 1280 reduced: headline, line and score are the engine's reading of the career as saved ("First ballot. Class of 2048.")
+  PASS  nhl standout 1280 reduced: a reload shows the same score, headline and line
+  PASS  nhl standout 1280 reduced: the reload wrote nothing
+  PASS  nhl standout 1280 reduced: no page error
+  PASS  nhl old save 1280 reduced: the load alone wrote nothing (nhl-engine-0)
+  PASS  nhl old save 1280 reduced: the headline is the one the fixture recorded ("First ballot. Class of 2051.")
+  PASS  nhl old save 1280 reduced: no line on a career retired before this round
+  PASS  nhl old save 1280 reduced: the legacy pill is the recorded score (pill 518, recorded 518)
+  PASS  nhl old save 1280 reduced: the save still carries no stamp
+  PASS  nhl old save 1280 reduced: no page error
+  PASS  nhl plain 390 reduced: the line is in the card and fully shown
+  PASS  nhl plain 390 reduced: the save is retired and stamped hallCal 2 (it reads 2)
+  PASS  nhl plain 390 reduced: the line is the engine's own for this career
+  PASS  nhl plain 390 reduced: the legacy pill is the calibration 2 score (pill 159, engine 159, calibration 1 159)
+  PASS  nhl plain 390 reduced: with reduced motion the line is shown within 100 ms of the card mounting (0 ms)
+  PASS  nhl plain 390 reduced: scrollY is the same when the headline lands and when the line lands (0, 0)
+  PASS  nhl plain 390 reduced: the page did not jump while the card revealed (scrollY 0)
+  PASS  nhl plain 390 reduced: the line sits inside the viewport (314 by 32 px, 2 lines, 106 characters)
+  PASS  nhl plain 390 reduced: at most four lines of text at 390 wide (2)
+  PASS  nhl plain 390 reduced: the settled page is not wider than the viewport (390 of 390; widest frame while landing 390)
+  PASS  nhl plain 390 reduced: the card's first button is inside the viewport and can be pressed
+  PASS  nhl plain 390 reduced: headline, line and score are the engine's reading of the career as saved ("Never made the ballot.")
+  PASS  nhl plain 390 reduced: a reload shows the same score, headline and line
+  PASS  nhl plain 390 reduced: the reload wrote nothing
+  PASS  nhl plain 390 reduced: no page error
+
+playCareerHallLine: 4 routes, 36 walks, 380 checks, all checks passed
