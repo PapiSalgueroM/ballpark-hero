@@ -1,0 +1,3305 @@
+{
+  "started": "2026-10-10T17:46:31.593Z",
+  "cases": [
+    {
+      "id": "nfl-390-touch",
+      "route": "/nfl-my-career",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "touch": true,
+      "reduced": false,
+      "screenshots": [
+        "nfl-390-touch-rules.png",
+        "nfl-390-touch-entry-visible.png",
+        "nfl-390-touch-routes.png",
+        "nfl-390-touch-choice-1.png",
+        "nfl-390-touch-restored-choice-1.png",
+        "nfl-390-touch-choice-2.png",
+        "nfl-390-touch-restored-choice-2.png",
+        "nfl-390-touch-choice-3.png",
+        "nfl-390-touch-restored-choice-3.png",
+        "nfl-390-touch-showcase.png",
+        "nfl-390-touch-draft-result.png",
+        "nfl-390-touch-failure.png"
+      ],
+      "steps": [
+        {
+          "stage": "rules",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 1002,
+          "headings": [
+            {
+              "text": "Your career starts here.",
+              "top": -653.890625,
+              "bottom": -595.109375,
+              "height": 58.78125
+            },
+            {
+              "text": "Make the league on your terms",
+              "top": -387,
+              "bottom": -364.609375,
+              "height": 22.390625
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Your career starts here.",
+              "width": 1,
+              "scrollWidth": 187
+            }
+          ],
+          "controls": [
+            {
+              "text": " Back to player",
+              "width": 111.90625,
+              "height": 44
+            },
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Got it",
+              "width": 69.859375,
+              "height": 44
+            },
+            {
+              "text": "3 seasonsBig college programEvery game on TV and scouts at every practice. Three seasons before you can declare.Start at age 18 · Draft at 21",
+              "width": 324,
+              "height": 143.34375
+            },
+            {
+              "text": "3 seasonsSmall schoolFewer eyes on you, so the scouts have to come looking. Three seasons before you can declare.Start at age 18 · Draft at 21",
+              "width": 324,
+              "height": 143.34375
+            }
+          ]
+        },
+        {
+          "stage": "entry-visible",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 248,
+          "headings": [
+            {
+              "text": "Your career starts here.",
+              "top": 100.109375,
+              "bottom": 158.890625,
+              "height": 58.78125
+            },
+            {
+              "text": "Make the league on your terms",
+              "top": 367,
+              "bottom": 389.390625,
+              "height": 22.390625
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Your career starts here.",
+              "width": 1,
+              "scrollWidth": 187
+            }
+          ],
+          "controls": [
+            {
+              "text": " Back to player",
+              "width": 111.90625,
+              "height": 44
+            },
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Got it",
+              "width": 69.859375,
+              "height": 44
+            },
+            {
+              "text": "3 seasonsBig college programEvery game on TV and scouts at every practice. Three seasons before you can declare.Start at age 18 · Draft at 21",
+              "width": 324,
+              "height": 143.34375
+            },
+            {
+              "text": "3 seasonsSmall schoolFewer eyes on you, so the scouts have to come looking. Three seasons before you can declare.Start at age 18 · Draft at 21",
+              "width": 324,
+              "height": 143.34375
+            }
+          ]
+        },
+        {
+          "stage": "routes",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 129,
+          "headings": [
+            {
+              "text": "Your career starts here.",
+              "top": 219.109375,
+              "bottom": 277.890625,
+              "height": 58.78125
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Your career starts here.",
+              "width": 1,
+              "scrollWidth": 187
+            }
+          ],
+          "controls": [
+            {
+              "text": " Back to player",
+              "width": 111.90625,
+              "height": 44
+            },
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "3 seasonsBig college programEvery game on TV and scouts at every practice. Three seasons before you can declare.Start at age 18 · Draft at 21",
+              "width": 324,
+              "height": 143.34375
+            },
+            {
+              "text": "3 seasonsSmall schoolFewer eyes on you, so the scouts have to come looking. Three seasons before you can declare.Start at age 18 · Draft at 21",
+              "width": 324,
+              "height": 143.34375
+            }
+          ]
+        },
+        {
+          "stage": "choice-1",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 484,
+          "headings": [
+            {
+              "text": "Scouts are watching.",
+              "top": -126.890625,
+              "bottom": -68.109375,
+              "height": 58.78125
+            },
+            {
+              "text": "The offseasonTime off between seasons. Your coach has a plan, your friends have ",
+              "top": 286,
+              "bottom": 502,
+              "height": 216
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Scouts are watching.",
+              "width": 1,
+              "scrollWidth": 167
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Train all summerDraft stock +1, Rating +2",
+              "width": 324,
+              "height": 66
+            },
+            {
+              "text": "Rest upNo change",
+              "width": 324,
+              "height": 66
+            }
+          ]
+        },
+        {
+          "stage": "restored-choice-1",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 484,
+          "headings": [
+            {
+              "text": "Scouts are watching.",
+              "top": -126.890625,
+              "bottom": -68.109375,
+              "height": 58.78125
+            },
+            {
+              "text": "The offseasonTime off between seasons. Your coach has a plan, your friends have ",
+              "top": 286,
+              "bottom": 502,
+              "height": 216
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Scouts are watching.",
+              "width": 1,
+              "scrollWidth": 167
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Train all summerDraft stock +1, Rating +2",
+              "width": 324,
+              "height": 66
+            },
+            {
+              "text": "Rest upNo change",
+              "width": 324,
+              "height": 66
+            }
+          ]
+        },
+        {
+          "stage": "choice-2",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 770,
+          "headings": [
+            {
+              "text": "Scouts are watching.",
+              "top": -412.890625,
+              "bottom": -354.109375,
+              "height": 58.78125
+            },
+            {
+              "text": "The film roomThe coaching staff will stay late with you if you ask.Stay late eve",
+              "top": 0,
+              "bottom": 216,
+              "height": 216
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Scouts are watching.",
+              "width": 1,
+              "scrollWidth": 167
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Stay late every nightDraft stock +2, Rating +1",
+              "width": 324,
+              "height": 66
+            },
+            {
+              "text": "Keep your own routineNo change",
+              "width": 324,
+              "height": 66
+            }
+          ]
+        },
+        {
+          "stage": "restored-choice-2",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 484,
+          "headings": [
+            {
+              "text": "Scouts are watching.",
+              "top": -126.890625,
+              "bottom": -68.109375,
+              "height": 58.78125
+            },
+            {
+              "text": "The film roomThe coaching staff will stay late with you if you ask.Stay late eve",
+              "top": 286,
+              "bottom": 502,
+              "height": 216
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Scouts are watching.",
+              "width": 1,
+              "scrollWidth": 167
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Stay late every nightDraft stock +2, Rating +1",
+              "width": 324,
+              "height": 66
+            },
+            {
+              "text": "Keep your own routineNo change",
+              "width": 324,
+              "height": 66
+            }
+          ]
+        },
+        {
+          "stage": "choice-3",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 770,
+          "headings": [
+            {
+              "text": "Scouts are watching.",
+              "top": -412.890625,
+              "bottom": -354.109375,
+              "height": 58.78125
+            },
+            {
+              "text": "The bowl gameYour agent thinks your stock is set. The head coach wants you out t",
+              "top": 0,
+              "bottom": 216,
+              "height": 216
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Scouts are watching.",
+              "width": 1,
+              "scrollWidth": 167
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Play in the bowlDraft stock +2, Health -10",
+              "width": 324,
+              "height": 66
+            },
+            {
+              "text": "Sit it outDraft stock -1",
+              "width": 324,
+              "height": 66
+            }
+          ]
+        },
+        {
+          "stage": "restored-choice-3",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 484,
+          "headings": [
+            {
+              "text": "Scouts are watching.",
+              "top": -126.890625,
+              "bottom": -68.109375,
+              "height": 58.78125
+            },
+            {
+              "text": "The bowl gameYour agent thinks your stock is set. The head coach wants you out t",
+              "top": 286,
+              "bottom": 502,
+              "height": 216
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Scouts are watching.",
+              "width": 1,
+              "scrollWidth": 167
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Play in the bowlDraft stock +2, Health -10",
+              "width": 324,
+              "height": 66
+            },
+            {
+              "text": "Sit it outDraft stock -1",
+              "width": 324,
+              "height": 66
+            }
+          ]
+        },
+        {
+          "stage": "showcase",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 0,
+          "headings": [
+            {
+              "text": "One last look.",
+              "top": 357.109375,
+              "bottom": 415.890625,
+              "height": 58.78125
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "One last look.",
+              "width": 1,
+              "scrollWidth": 110
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Go all outPush every drill to the limit.Grade A +10, B +4, C -3, D -8",
+              "width": 324,
+              "height": 94
+            },
+            {
+              "text": "Play it safeStay within yourself.Grade A +5, B +2, C -1, D -3",
+              "width": 324,
+              "height": 94
+            },
+            {
+              "text": "Skip itNo drill and no grade. The scouts notice.Draft stock -2",
+              "width": 324,
+              "height": 94
+            }
+          ]
+        },
+        {
+          "stage": "draft-result",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 41,
+          "headings": [
+            {
+              "text": "This is your moment.",
+              "top": 316.109375,
+              "bottom": 374.890625,
+              "height": 58.78125
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "This is your moment.",
+              "width": 1,
+              "scrollWidth": 169
+            },
+            {
+              "tag": "P",
+              "className": "sr-only",
+              "text": "Round 1, pick 32, 32 overall. New Orleans Saints take you.",
+              "width": 1,
+              "scrollWidth": 470
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Start your career",
+              "width": 324,
+              "height": 46
+            }
+          ]
+        }
+      ],
+      "pageErrors": [],
+      "localFailures": [],
+      "visibility": [
+        {
+          "label": "Entry title",
+          "top": 24.109375,
+          "bottom": 82.890625,
+          "height": 58.78125,
+          "viewportHeight": 844,
+          "scrollY": 324,
+          "visible": true
+        },
+        {
+          "label": "Entry instructions",
+          "top": 291,
+          "bottom": 313.390625,
+          "height": 22.390625,
+          "viewportHeight": 844,
+          "scrollY": 324,
+          "visible": true
+        },
+        {
+          "label": "New choice",
+          "top": 657,
+          "bottom": 873,
+          "height": 216,
+          "viewportHeight": 844,
+          "scrollY": 113,
+          "visible": true
+        },
+        {
+          "label": "Restored choice",
+          "top": 657,
+          "bottom": 873,
+          "height": 216,
+          "viewportHeight": 844,
+          "scrollY": 113,
+          "visible": true
+        },
+        {
+          "label": "New choice",
+          "top": 0,
+          "bottom": 216,
+          "height": 216,
+          "viewportHeight": 844,
+          "scrollY": 770,
+          "visible": true
+        },
+        {
+          "label": "Restored choice",
+          "top": 657,
+          "bottom": 873,
+          "height": 216,
+          "viewportHeight": 844,
+          "scrollY": 113,
+          "visible": true
+        },
+        {
+          "label": "New choice",
+          "top": 0,
+          "bottom": 216,
+          "height": 216,
+          "viewportHeight": 844,
+          "scrollY": 770,
+          "visible": true
+        },
+        {
+          "label": "Restored choice",
+          "top": 657,
+          "bottom": 873,
+          "height": 216,
+          "viewportHeight": 844,
+          "scrollY": 113,
+          "visible": true
+        }
+      ],
+      "outcome": {
+        "pick": 32,
+        "round": 1,
+        "pickInRound": 32,
+        "team": "NO",
+        "ageAtDraft": 21,
+        "draftYear": 2026,
+        "slotValue": null,
+        "devSeasons": [],
+        "ratingAfter": 82,
+        "ageAfter": 21
+      },
+      "passed": false,
+      "error": "AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition\n+ actual - expected\n... Skipped lines\n\n  {\n    c: {\n      age: 21,\n      allPros: 0,\n      appearance: {\n...\n      seasons: [],\n+     summerSalt: '11757m9',\n      suspendedSeasons: 0,\n      team: 'NO',\n      year: 2026,\n      yearlyCosts: 0\n    },\n\n    at expectSave (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:146:43)\n    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:225:29"
+    },
+    {
+      "id": "nba-390-touch",
+      "route": "/nba-my-career",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "touch": true,
+      "reduced": false,
+      "screenshots": [
+        "nba-390-touch-rules.png",
+        "nba-390-touch-entry-visible.png",
+        "nba-390-touch-routes.png",
+        "nba-390-touch-choice-1.png",
+        "nba-390-touch-restored-choice-1.png",
+        "nba-390-touch-showcase.png",
+        "nba-390-touch-draft-result.png",
+        "nba-390-touch-failure.png"
+      ],
+      "steps": [
+        {
+          "stage": "rules",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 1052,
+          "headings": [
+            {
+              "text": "Your career starts here.",
+              "top": -703.890625,
+              "bottom": -645.109375,
+              "height": 58.78125
+            },
+            {
+              "text": "Make the league on your terms",
+              "top": -437,
+              "bottom": -414.609375,
+              "height": 22.390625
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Your career starts here.",
+              "width": 1,
+              "scrollWidth": 187
+            }
+          ],
+          "controls": [
+            {
+              "text": " Back to player",
+              "width": 111.90625,
+              "height": 44
+            },
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Got it",
+              "width": 69.859375,
+              "height": 44
+            },
+            {
+              "text": "1 seasonOne year of collegeOne season on campus, then you declare.Start at age 18 · Draft at 19",
+              "width": 324,
+              "height": 125.34375
+            },
+            {
+              "text": "3 seasonsThree years of collegeThree seasons to grow into it. Less hype, more polish.Start at age 18 · Draft at 21",
+              "width": 324,
+              "height": 143.34375
+            }
+          ]
+        },
+        {
+          "stage": "entry-visible",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 253,
+          "headings": [
+            {
+              "text": "Your career starts here.",
+              "top": 95.109375,
+              "bottom": 153.890625,
+              "height": 58.78125
+            },
+            {
+              "text": "Make the league on your terms",
+              "top": 362,
+              "bottom": 384.390625,
+              "height": 22.390625
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Your career starts here.",
+              "width": 1,
+              "scrollWidth": 187
+            }
+          ],
+          "controls": [
+            {
+              "text": " Back to player",
+              "width": 111.90625,
+              "height": 44
+            },
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Got it",
+              "width": 69.859375,
+              "height": 44
+            },
+            {
+              "text": "1 seasonOne year of collegeOne season on campus, then you declare.Start at age 18 · Draft at 19",
+              "width": 324,
+              "height": 125.34375
+            },
+            {
+              "text": "3 seasonsThree years of collegeThree seasons to grow into it. Less hype, more polish.Start at age 18 · Draft at 21",
+              "width": 324,
+              "height": 143.34375
+            }
+          ]
+        },
+        {
+          "stage": "routes",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 129,
+          "headings": [
+            {
+              "text": "Your career starts here.",
+              "top": 219.109375,
+              "bottom": 277.890625,
+              "height": 58.78125
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Your career starts here.",
+              "width": 1,
+              "scrollWidth": 187
+            }
+          ],
+          "controls": [
+            {
+              "text": " Back to player",
+              "width": 111.90625,
+              "height": 44
+            },
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "1 seasonOne year of collegeOne season on campus, then you declare.Start at age 18 · Draft at 19",
+              "width": 324,
+              "height": 125.34375
+            },
+            {
+              "text": "3 seasonsThree years of collegeThree seasons to grow into it. Less hype, more polish.Start at age 18 · Draft at 21",
+              "width": 324,
+              "height": 143.34375
+            }
+          ]
+        },
+        {
+          "stage": "choice-1",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 484,
+          "headings": [
+            {
+              "text": "Scouts are watching.",
+              "top": -126.890625,
+              "bottom": -68.109375,
+              "height": 58.78125
+            },
+            {
+              "text": "The offseasonTime off between seasons. Your coach has a plan, your friends have ",
+              "top": 286,
+              "bottom": 502,
+              "height": 216
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Scouts are watching.",
+              "width": 1,
+              "scrollWidth": 167
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Train all summerDraft stock +1, Rating +2",
+              "width": 324,
+              "height": 66
+            },
+            {
+              "text": "Rest upNo change",
+              "width": 324,
+              "height": 66
+            }
+          ]
+        },
+        {
+          "stage": "restored-choice-1",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 484,
+          "headings": [
+            {
+              "text": "Scouts are watching.",
+              "top": -126.890625,
+              "bottom": -68.109375,
+              "height": 58.78125
+            },
+            {
+              "text": "The offseasonTime off between seasons. Your coach has a plan, your friends have ",
+              "top": 286,
+              "bottom": 502,
+              "height": 216
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Scouts are watching.",
+              "width": 1,
+              "scrollWidth": 167
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Train all summerDraft stock +1, Rating +2",
+              "width": 324,
+              "height": 66
+            },
+            {
+              "text": "Rest upNo change",
+              "width": 324,
+              "height": 66
+            }
+          ]
+        },
+        {
+          "stage": "showcase",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 0,
+          "headings": [
+            {
+              "text": "One last look.",
+              "top": 357.109375,
+              "bottom": 415.890625,
+              "height": 58.78125
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "One last look.",
+              "width": 1,
+              "scrollWidth": 110
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Go all outPush every drill to the limit.Grade A +10, B +4, C -3, D -8",
+              "width": 324,
+              "height": 94
+            },
+            {
+              "text": "Play it safeStay within yourself.Grade A +5, B +2, C -1, D -3",
+              "width": 324,
+              "height": 94
+            },
+            {
+              "text": "Skip itNo drill and no grade. The scouts notice.Draft stock -2",
+              "width": 324,
+              "height": 94
+            }
+          ]
+        },
+        {
+          "stage": "draft-result",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 76,
+          "headings": [
+            {
+              "text": "This is your moment.",
+              "top": 281.109375,
+              "bottom": 339.890625,
+              "height": 58.78125
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "This is your moment.",
+              "width": 1,
+              "scrollWidth": 169
+            },
+            {
+              "tag": "P",
+              "className": "sr-only",
+              "text": "Round 1, pick 14, 14 overall. Detroit Pistons take you.",
+              "width": 1,
+              "scrollWidth": 430
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Start your career",
+              "width": 324,
+              "height": 46
+            }
+          ]
+        }
+      ],
+      "pageErrors": [],
+      "localFailures": [],
+      "visibility": [
+        {
+          "label": "Entry title",
+          "top": 16.109375,
+          "bottom": 74.890625,
+          "height": 58.78125,
+          "viewportHeight": 844,
+          "scrollY": 332,
+          "visible": true
+        },
+        {
+          "label": "Entry instructions",
+          "top": 283,
+          "bottom": 305.390625,
+          "height": 22.390625,
+          "viewportHeight": 844,
+          "scrollY": 332,
+          "visible": true
+        },
+        {
+          "label": "New choice",
+          "top": 657,
+          "bottom": 873,
+          "height": 216,
+          "viewportHeight": 844,
+          "scrollY": 113,
+          "visible": true
+        },
+        {
+          "label": "Restored choice",
+          "top": 657,
+          "bottom": 873,
+          "height": 216,
+          "viewportHeight": 844,
+          "scrollY": 113,
+          "visible": true
+        }
+      ],
+      "outcome": {
+        "pick": 14,
+        "round": 1,
+        "pickInRound": 14,
+        "team": "DET",
+        "ageAtDraft": 19,
+        "draftYear": 2026,
+        "slotValue": null,
+        "devSeasons": [],
+        "ratingAfter": 79,
+        "ageAfter": 19
+      },
+      "passed": false,
+      "error": "AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition\n+ actual - expected\n... Skipped lines\n\n  {\n    c: {\n      age: 19,\n      allNbas: 0,\n      appearance: {\n...\n      seasons: [],\n+     summerSalt: '184v3cg',\n      suspendedSeasons: 0,\n      team: 'DET',\n      year: 2026,\n      yearlyCosts: 0\n    },\n\n    at expectSave (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:146:43)\n    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:225:29"
+    },
+    {
+      "id": "mlb-390-touch",
+      "route": "/mlb-my-career",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "touch": true,
+      "reduced": false,
+      "screenshots": [
+        "mlb-390-touch-rules.png",
+        "mlb-390-touch-entry-visible.png",
+        "mlb-390-touch-routes.png",
+        "mlb-390-touch-choice-1.png",
+        "mlb-390-touch-restored-choice-1.png",
+        "mlb-390-touch-showcase.png",
+        "mlb-390-touch-draft-result.png",
+        "mlb-390-touch-failure.png"
+      ],
+      "steps": [
+        {
+          "stage": "rules",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 1185,
+          "headings": [
+            {
+              "text": "Your career starts here.",
+              "top": -836.890625,
+              "bottom": -778.109375,
+              "height": 58.78125
+            },
+            {
+              "text": "Make the league on your terms",
+              "top": -570,
+              "bottom": -547.609375,
+              "height": 22.390625
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Your career starts here.",
+              "width": 1,
+              "scrollWidth": 187
+            }
+          ],
+          "controls": [
+            {
+              "text": " Back to player",
+              "width": 111.90625,
+              "height": 44
+            },
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Got it",
+              "width": 69.859375,
+              "height": 44
+            },
+            {
+              "text": "1 seasonHigh school seniorEligible the day you graduate. The rawest road, and one season to show it.Start at age 17 · Draft at 18",
+              "width": 324,
+              "height": 143.34375
+            },
+            {
+              "text": "2 seasonsJunior collegeEligible after any year. Two seasons of reps against grown men.Start at age 18 · Draft at 20",
+              "width": 324,
+              "height": 143.34375
+            },
+            {
+              "text": "3 seasonsFour year collegeEligible after your junior year. Three seasons, and the scouts know exactly what you are.Start at age 18 · Draft at 21",
+              "width": 324,
+              "height": 143.34375
+            }
+          ]
+        },
+        {
+          "stage": "entry-visible",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 253,
+          "headings": [
+            {
+              "text": "Your career starts here.",
+              "top": 95.109375,
+              "bottom": 153.890625,
+              "height": 58.78125
+            },
+            {
+              "text": "Make the league on your terms",
+              "top": 362,
+              "bottom": 384.390625,
+              "height": 22.390625
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Your career starts here.",
+              "width": 1,
+              "scrollWidth": 187
+            }
+          ],
+          "controls": [
+            {
+              "text": " Back to player",
+              "width": 111.90625,
+              "height": 44
+            },
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Got it",
+              "width": 69.859375,
+              "height": 44
+            },
+            {
+              "text": "1 seasonHigh school seniorEligible the day you graduate. The rawest road, and one season to show it.Start at age 17 · Draft at 18",
+              "width": 324,
+              "height": 143.34375
+            },
+            {
+              "text": "2 seasonsJunior collegeEligible after any year. Two seasons of reps against grown men.Start at age 18 · Draft at 20",
+              "width": 324,
+              "height": 143.34375
+            },
+            {
+              "text": "3 seasonsFour year collegeEligible after your junior year. Three seasons, and the scouts know exactly what you are.Start at age 18 · Draft at 21",
+              "width": 324,
+              "height": 143.34375
+            }
+          ]
+        },
+        {
+          "stage": "routes",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 129,
+          "headings": [
+            {
+              "text": "Your career starts here.",
+              "top": 219.109375,
+              "bottom": 277.890625,
+              "height": 58.78125
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Your career starts here.",
+              "width": 1,
+              "scrollWidth": 187
+            }
+          ],
+          "controls": [
+            {
+              "text": " Back to player",
+              "width": 111.90625,
+              "height": 44
+            },
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "1 seasonHigh school seniorEligible the day you graduate. The rawest road, and one season to show it.Start at age 17 · Draft at 18",
+              "width": 324,
+              "height": 143.34375
+            },
+            {
+              "text": "2 seasonsJunior collegeEligible after any year. Two seasons of reps against grown men.Start at age 18 · Draft at 20",
+              "width": 324,
+              "height": 143.34375
+            },
+            {
+              "text": "3 seasonsFour year collegeEligible after your junior year. Three seasons, and the scouts know exactly what you are.Start at age 18 · Draft at 21",
+              "width": 324,
+              "height": 143.34375
+            }
+          ]
+        },
+        {
+          "stage": "choice-1",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 484,
+          "headings": [
+            {
+              "text": "Scouts are watching.",
+              "top": -126.890625,
+              "bottom": -68.109375,
+              "height": 58.78125
+            },
+            {
+              "text": "A summer wood bat leagueA summer league wants you. Wood bats, long bus rides, sc",
+              "top": 286,
+              "bottom": 502,
+              "height": 216
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Scouts are watching.",
+              "width": 1,
+              "scrollWidth": 167
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Go play summer ballDraft stock +3, Health -10",
+              "width": 324,
+              "height": 66
+            },
+            {
+              "text": "Take the summer offNo change",
+              "width": 324,
+              "height": 66
+            }
+          ]
+        },
+        {
+          "stage": "restored-choice-1",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 484,
+          "headings": [
+            {
+              "text": "Scouts are watching.",
+              "top": -126.890625,
+              "bottom": -68.109375,
+              "height": 58.78125
+            },
+            {
+              "text": "A summer wood bat leagueA summer league wants you. Wood bats, long bus rides, sc",
+              "top": 286,
+              "bottom": 502,
+              "height": 216
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Scouts are watching.",
+              "width": 1,
+              "scrollWidth": 167
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Go play summer ballDraft stock +3, Health -10",
+              "width": 324,
+              "height": 66
+            },
+            {
+              "text": "Take the summer offNo change",
+              "width": 324,
+              "height": 66
+            }
+          ]
+        },
+        {
+          "stage": "showcase",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 0,
+          "headings": [
+            {
+              "text": "One last look.",
+              "top": 357.109375,
+              "bottom": 415.890625,
+              "height": 58.78125
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "One last look.",
+              "width": 1,
+              "scrollWidth": 110
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Go all outPush every drill to the limit.Grade A +10, B +4, C -3, D -8",
+              "width": 324,
+              "height": 94
+            },
+            {
+              "text": "Play it safeStay within yourself.Grade A +5, B +2, C -1, D -3",
+              "width": 324,
+              "height": 94
+            },
+            {
+              "text": "Skip itNo drill and no grade. The scouts notice.Draft stock -2",
+              "width": 324,
+              "height": 94
+            }
+          ]
+        },
+        {
+          "stage": "draft-result",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 39,
+          "headings": [
+            {
+              "text": "This is your moment.",
+              "top": 318.109375,
+              "bottom": 376.890625,
+              "height": 58.78125
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "This is your moment.",
+              "width": 1,
+              "scrollWidth": 169
+            },
+            {
+              "tag": "P",
+              "className": "sr-only",
+              "text": "Round 11, pick 15, 315 overall. Cincinnati Reds take you.",
+              "width": 1,
+              "scrollWidth": 458
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Start your career",
+              "width": 324,
+              "height": 46
+            }
+          ]
+        }
+      ],
+      "pageErrors": [],
+      "localFailures": [],
+      "visibility": [
+        {
+          "label": "Entry title",
+          "top": 21.109375,
+          "bottom": 79.890625,
+          "height": 58.78125,
+          "viewportHeight": 844,
+          "scrollY": 327,
+          "visible": true
+        },
+        {
+          "label": "Entry instructions",
+          "top": 288,
+          "bottom": 310.390625,
+          "height": 22.390625,
+          "viewportHeight": 844,
+          "scrollY": 327,
+          "visible": true
+        },
+        {
+          "label": "New choice",
+          "top": 657,
+          "bottom": 873,
+          "height": 216,
+          "viewportHeight": 844,
+          "scrollY": 113,
+          "visible": true
+        },
+        {
+          "label": "Restored choice",
+          "top": 657,
+          "bottom": 873,
+          "height": 216,
+          "viewportHeight": 844,
+          "scrollY": 113,
+          "visible": true
+        }
+      ],
+      "outcome": {
+        "pick": 315,
+        "round": 11,
+        "pickInRound": 15,
+        "team": "CIN",
+        "ageAtDraft": 18,
+        "draftYear": 2026,
+        "slotValue": null,
+        "devSeasons": [
+          {
+            "age": 18,
+            "level": "Double-A",
+            "perf": 49,
+            "stockDelta": 0,
+            "stats": [
+              {
+                "label": "AVG",
+                "value": ".297"
+              },
+              {
+                "label": "OBP",
+                "value": ".371"
+              },
+              {
+                "label": "SLG",
+                "value": ".480"
+              }
+            ]
+          },
+          {
+            "age": 19,
+            "level": "Triple-A",
+            "perf": 82,
+            "stockDelta": 0,
+            "stats": [
+              {
+                "label": "AVG",
+                "value": ".345"
+              },
+              {
+                "label": "OBP",
+                "value": ".450"
+              },
+              {
+                "label": "SLG",
+                "value": ".582"
+              }
+            ]
+          }
+        ],
+        "ratingAfter": 77,
+        "ageAfter": 20
+      },
+      "passed": false,
+      "error": "AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition\n+ actual - expected\n... Skipped lines\n\n  {\n    c: {\n      age: 20,\n      allStars: 0,\n      appearance: {\n...\n      seasons: [],\n+     summerSalt: '1a4slrk',\n      suspendedSeasons: 0,\n      team: 'CIN',\n      year: 2028,\n      yearlyCosts: 0\n    },\n\n    at expectSave (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:146:43)\n    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:225:29"
+    },
+    {
+      "id": "nhl-390-touch",
+      "route": "/nhl-my-career",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "touch": true,
+      "reduced": false,
+      "screenshots": [
+        "nhl-390-touch-rules.png",
+        "nhl-390-touch-entry-visible.png",
+        "nhl-390-touch-routes.png",
+        "nhl-390-touch-choice-1.png",
+        "nhl-390-touch-restored-choice-1.png",
+        "nhl-390-touch-choice-2.png",
+        "nhl-390-touch-restored-choice-2.png",
+        "nhl-390-touch-showcase.png",
+        "nhl-390-touch-draft-result.png",
+        "nhl-390-touch-failure.png"
+      ],
+      "steps": [
+        {
+          "stage": "rules",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 1185,
+          "headings": [
+            {
+              "text": "Your career starts here.",
+              "top": -836.890625,
+              "bottom": -778.109375,
+              "height": 58.78125
+            },
+            {
+              "text": "Make the league on your terms",
+              "top": -570,
+              "bottom": -547.609375,
+              "height": 22.390625
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Your career starts here.",
+              "width": 1,
+              "scrollWidth": 187
+            }
+          ],
+          "controls": [
+            {
+              "text": " Back to player",
+              "width": 111.90625,
+              "height": 44
+            },
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Got it",
+              "width": 69.859375,
+              "height": 44
+            },
+            {
+              "text": "2 seasonsMajor juniorLong season, long bus rides, scouts in every rink. Enter the draft at 18.Start at age 16 · Draft at 18",
+              "width": 324,
+              "height": 143.34375
+            },
+            {
+              "text": "2 seasonsUS junior, then collegeTwo seasons of US junior, enter the draft at 18, then take your college place.Start at age 16 · Draft at 18",
+              "width": 324,
+              "height": 143.34375
+            },
+            {
+              "text": "2 seasonsEuropeTwo seasons in a European junior league, enter the draft at 18, then develop at home.Start at age 16 · Draft at 18",
+              "width": 324,
+              "height": 143.34375
+            }
+          ]
+        },
+        {
+          "stage": "entry-visible",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 253,
+          "headings": [
+            {
+              "text": "Your career starts here.",
+              "top": 95.109375,
+              "bottom": 153.890625,
+              "height": 58.78125
+            },
+            {
+              "text": "Make the league on your terms",
+              "top": 362,
+              "bottom": 384.390625,
+              "height": 22.390625
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Your career starts here.",
+              "width": 1,
+              "scrollWidth": 187
+            }
+          ],
+          "controls": [
+            {
+              "text": " Back to player",
+              "width": 111.90625,
+              "height": 44
+            },
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Got it",
+              "width": 69.859375,
+              "height": 44
+            },
+            {
+              "text": "2 seasonsMajor juniorLong season, long bus rides, scouts in every rink. Enter the draft at 18.Start at age 16 · Draft at 18",
+              "width": 324,
+              "height": 143.34375
+            },
+            {
+              "text": "2 seasonsUS junior, then collegeTwo seasons of US junior, enter the draft at 18, then take your college place.Start at age 16 · Draft at 18",
+              "width": 324,
+              "height": 143.34375
+            },
+            {
+              "text": "2 seasonsEuropeTwo seasons in a European junior league, enter the draft at 18, then develop at home.Start at age 16 · Draft at 18",
+              "width": 324,
+              "height": 143.34375
+            }
+          ]
+        },
+        {
+          "stage": "routes",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 129,
+          "headings": [
+            {
+              "text": "Your career starts here.",
+              "top": 219.109375,
+              "bottom": 277.890625,
+              "height": 58.78125
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Your career starts here.",
+              "width": 1,
+              "scrollWidth": 187
+            }
+          ],
+          "controls": [
+            {
+              "text": " Back to player",
+              "width": 111.90625,
+              "height": 44
+            },
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "2 seasonsMajor juniorLong season, long bus rides, scouts in every rink. Enter the draft at 18.Start at age 16 · Draft at 18",
+              "width": 324,
+              "height": 143.34375
+            },
+            {
+              "text": "2 seasonsUS junior, then collegeTwo seasons of US junior, enter the draft at 18, then take your college place.Start at age 16 · Draft at 18",
+              "width": 324,
+              "height": 143.34375
+            },
+            {
+              "text": "2 seasonsEuropeTwo seasons in a European junior league, enter the draft at 18, then develop at home.Start at age 16 · Draft at 18",
+              "width": 324,
+              "height": 143.34375
+            }
+          ]
+        },
+        {
+          "stage": "choice-1",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 484,
+          "headings": [
+            {
+              "text": "Scouts are watching.",
+              "top": -126.890625,
+              "bottom": -68.109375,
+              "height": 58.78125
+            },
+            {
+              "text": "The under 18 tournamentYour country wants you for the spring tournament. It land",
+              "top": 286,
+              "bottom": 522,
+              "height": 236
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Scouts are watching.",
+              "width": 1,
+              "scrollWidth": 167
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Go to the tournamentDraft stock +4, Health -10",
+              "width": 324,
+              "height": 66
+            },
+            {
+              "text": "Stay with your clubRating +1",
+              "width": 324,
+              "height": 66
+            }
+          ]
+        },
+        {
+          "stage": "restored-choice-1",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 484,
+          "headings": [
+            {
+              "text": "Scouts are watching.",
+              "top": -126.890625,
+              "bottom": -68.109375,
+              "height": 58.78125
+            },
+            {
+              "text": "The under 18 tournamentYour country wants you for the spring tournament. It land",
+              "top": 286,
+              "bottom": 522,
+              "height": 236
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Scouts are watching.",
+              "width": 1,
+              "scrollWidth": 167
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Go to the tournamentDraft stock +4, Health -10",
+              "width": 324,
+              "height": 66
+            },
+            {
+              "text": "Stay with your clubRating +1",
+              "width": 324,
+              "height": 66
+            }
+          ]
+        },
+        {
+          "stage": "choice-2",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 770,
+          "headings": [
+            {
+              "text": "Scouts are watching.",
+              "top": -412.890625,
+              "bottom": -354.109375,
+              "height": 58.78125
+            },
+            {
+              "text": "A new billet familyYour billet family is moving. The team can find you a new one",
+              "top": 0,
+              "bottom": 236,
+              "height": 236
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Scouts are watching.",
+              "width": 1,
+              "scrollWidth": 167
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "New billet familyNo change",
+              "width": 324,
+              "height": 66
+            },
+            {
+              "text": "Room with a teammateRating +1, Health -5",
+              "width": 324,
+              "height": 66
+            }
+          ]
+        },
+        {
+          "stage": "restored-choice-2",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 484,
+          "headings": [
+            {
+              "text": "Scouts are watching.",
+              "top": -126.890625,
+              "bottom": -68.109375,
+              "height": 58.78125
+            },
+            {
+              "text": "A new billet familyYour billet family is moving. The team can find you a new one",
+              "top": 286,
+              "bottom": 522,
+              "height": 236
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Scouts are watching.",
+              "width": 1,
+              "scrollWidth": 167
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "New billet familyNo change",
+              "width": 324,
+              "height": 66
+            },
+            {
+              "text": "Room with a teammateRating +1, Health -5",
+              "width": 324,
+              "height": 66
+            }
+          ]
+        },
+        {
+          "stage": "showcase",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 0,
+          "headings": [
+            {
+              "text": "One last look.",
+              "top": 357.109375,
+              "bottom": 415.890625,
+              "height": 58.78125
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "One last look.",
+              "width": 1,
+              "scrollWidth": 110
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Go all outPush every drill to the limit.Grade A +10, B +4, C -3, D -8",
+              "width": 324,
+              "height": 94
+            },
+            {
+              "text": "Play it safeStay within yourself.Grade A +5, B +2, C -1, D -3",
+              "width": 324,
+              "height": 94
+            },
+            {
+              "text": "Skip itNo drill and no grade. The scouts notice.Draft stock -2",
+              "width": 324,
+              "height": 94
+            }
+          ]
+        },
+        {
+          "stage": "draft-result",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 102,
+          "headings": [
+            {
+              "text": "This is your moment.",
+              "top": 255.109375,
+              "bottom": 313.890625,
+              "height": 58.78125
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "This is your moment.",
+              "width": 1,
+              "scrollWidth": 169
+            },
+            {
+              "tag": "P",
+              "className": "sr-only",
+              "text": "Round 1, pick 15, 15 overall. Nashville Predators take you.",
+              "width": 1,
+              "scrollWidth": 468
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Start your career",
+              "width": 324,
+              "height": 46
+            }
+          ]
+        }
+      ],
+      "pageErrors": [],
+      "localFailures": [],
+      "visibility": [
+        {
+          "label": "Entry title",
+          "top": 21.109375,
+          "bottom": 79.890625,
+          "height": 58.78125,
+          "viewportHeight": 844,
+          "scrollY": 327,
+          "visible": true
+        },
+        {
+          "label": "Entry instructions",
+          "top": 288,
+          "bottom": 310.390625,
+          "height": 22.390625,
+          "viewportHeight": 844,
+          "scrollY": 327,
+          "visible": true
+        },
+        {
+          "label": "New choice",
+          "top": 657,
+          "bottom": 893,
+          "height": 236,
+          "viewportHeight": 844,
+          "scrollY": 113,
+          "visible": true
+        },
+        {
+          "label": "Restored choice",
+          "top": 657,
+          "bottom": 893,
+          "height": 236,
+          "viewportHeight": 844,
+          "scrollY": 113,
+          "visible": true
+        },
+        {
+          "label": "New choice",
+          "top": 0,
+          "bottom": 236,
+          "height": 236,
+          "viewportHeight": 844,
+          "scrollY": 770,
+          "visible": true
+        },
+        {
+          "label": "Restored choice",
+          "top": 657,
+          "bottom": 893,
+          "height": 236,
+          "viewportHeight": 844,
+          "scrollY": 113,
+          "visible": true
+        }
+      ],
+      "outcome": {
+        "pick": 15,
+        "round": 1,
+        "pickInRound": 15,
+        "team": "NSH",
+        "ageAtDraft": 18,
+        "draftYear": 2026,
+        "slotValue": null,
+        "devSeasons": [
+          {
+            "age": 18,
+            "level": "Major junior",
+            "perf": 84,
+            "stockDelta": 0,
+            "stats": [
+              {
+                "label": "G/GP",
+                "value": "0.41"
+              },
+              {
+                "label": "A/GP",
+                "value": "0.71"
+              },
+              {
+                "label": "PTS/GP",
+                "value": "1.12"
+              }
+            ]
+          }
+        ],
+        "ratingAfter": 83,
+        "ageAfter": 19
+      },
+      "passed": false,
+      "error": "AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition\n+ actual - expected\n... Skipped lines\n\n  {\n    c: {\n      age: 19,\n      allStars: 0,\n      appearance: {\n...\n      seasons: [],\n+     summerSalt: '57fk60',\n      suspendedSeasons: 0,\n      team: 'NSH',\n      year: 2027,\n      yearlyCosts: 0\n    },\n\n    at expectSave (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:146:43)\n    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:225:29"
+    },
+    {
+      "id": "nba-320-touch-reduced",
+      "route": "/nba-my-career",
+      "viewport": {
+        "width": 320,
+        "height": 740
+      },
+      "touch": true,
+      "reduced": true,
+      "screenshots": [
+        "nba-320-touch-reduced-rules.png",
+        "nba-320-touch-reduced-entry-visible.png",
+        "nba-320-touch-reduced-routes.png",
+        "nba-320-touch-reduced-choice-1.png",
+        "nba-320-touch-reduced-restored-choice-1.png",
+        "nba-320-touch-reduced-showcase.png",
+        "nba-320-touch-reduced-draft-result.png",
+        "nba-320-touch-reduced-failure.png"
+      ],
+      "steps": [
+        {
+          "stage": "rules",
+          "width": 320,
+          "scrollWidth": 320,
+          "scrollY": 185,
+          "headings": [
+            {
+              "text": "Your career starts here.",
+              "top": 158,
+              "bottom": 275.5625,
+              "height": 117.5625
+            },
+            {
+              "text": "Make the league on your terms",
+              "top": 481.5625,
+              "bottom": 526.34375,
+              "height": 44.78125
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stage_irvo8_12",
+              "text": "NBA Road to the DraftYour career starts here.Choose the road. Build your stock. Find your team.",
+              "width": 286,
+              "scrollWidth": 297
+            },
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 286,
+              "scrollWidth": 398
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Your career starts here.",
+              "width": 1,
+              "scrollWidth": 187
+            }
+          ],
+          "controls": [
+            {
+              "text": " Back to player",
+              "width": 111.90625,
+              "height": 44
+            },
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Got it",
+              "width": 69.859375,
+              "height": 44
+            },
+            {
+              "text": "1 seasonOne year of collegeOne season on campus, then you declare.Start at age 18 · Draft at 19",
+              "width": 258,
+              "height": 143.34375
+            },
+            {
+              "text": "3 seasonsThree years of collegeThree seasons to grow into it. Less hype, more polish.Start at age 18 · Draft at 21",
+              "width": 258,
+              "height": 165.1875
+            }
+          ]
+        },
+        {
+          "stage": "entry-visible",
+          "width": 320,
+          "scrollWidth": 320,
+          "scrollY": 185,
+          "headings": [
+            {
+              "text": "Your career starts here.",
+              "top": 158,
+              "bottom": 275.5625,
+              "height": 117.5625
+            },
+            {
+              "text": "Make the league on your terms",
+              "top": 481.5625,
+              "bottom": 526.34375,
+              "height": 44.78125
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stage_irvo8_12",
+              "text": "NBA Road to the DraftYour career starts here.Choose the road. Build your stock. Find your team.",
+              "width": 286,
+              "scrollWidth": 297
+            },
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 286,
+              "scrollWidth": 398
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Your career starts here.",
+              "width": 1,
+              "scrollWidth": 187
+            }
+          ],
+          "controls": [
+            {
+              "text": " Back to player",
+              "width": 111.90625,
+              "height": 44
+            },
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Got it",
+              "width": 69.859375,
+              "height": 44
+            },
+            {
+              "text": "1 seasonOne year of collegeOne season on campus, then you declare.Start at age 18 · Draft at 19",
+              "width": 258,
+              "height": 143.34375
+            },
+            {
+              "text": "3 seasonsThree years of collegeThree seasons to grow into it. Less hype, more polish.Start at age 18 · Draft at 21",
+              "width": 258,
+              "height": 165.1875
+            }
+          ]
+        },
+        {
+          "stage": "routes",
+          "width": 320,
+          "scrollWidth": 320,
+          "scrollY": 233,
+          "headings": [
+            {
+              "text": "Your career starts here.",
+              "top": 110,
+              "bottom": 227.5625,
+              "height": 117.5625
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stage_irvo8_12",
+              "text": "NBA Road to the DraftYour career starts here.Choose the road. Build your stock. Find your team.",
+              "width": 286,
+              "scrollWidth": 297
+            },
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 286,
+              "scrollWidth": 398
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Your career starts here.",
+              "width": 1,
+              "scrollWidth": 187
+            }
+          ],
+          "controls": [
+            {
+              "text": " Back to player",
+              "width": 111.90625,
+              "height": 44
+            },
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "1 seasonOne year of collegeOne season on campus, then you declare.Start at age 18 · Draft at 19",
+              "width": 258,
+              "height": 143.34375
+            },
+            {
+              "text": "3 seasonsThree years of collegeThree seasons to grow into it. Less hype, more polish.Start at age 18 · Draft at 21",
+              "width": 258,
+              "height": 165.1875
+            }
+          ]
+        },
+        {
+          "stage": "choice-1",
+          "width": 320,
+          "scrollWidth": 320,
+          "scrollY": 572,
+          "headings": [
+            {
+              "text": "Scouts are watching.",
+              "top": -217.890625,
+              "bottom": -159.109375,
+              "height": 58.78125
+            },
+            {
+              "text": "The offseasonTime off between seasons. Your coach has a plan, your friends have ",
+              "top": 217,
+              "bottom": 453,
+              "height": 236
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stage_irvo8_12",
+              "text": "NBA Road to the DraftScouts are watching.One year of college",
+              "width": 286,
+              "scrollWidth": 297
+            },
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 286,
+              "scrollWidth": 398
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Scouts are watching.",
+              "width": 1,
+              "scrollWidth": 167
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Train all summerDraft stock +1, Rating +2",
+              "width": 258,
+              "height": 66
+            },
+            {
+              "text": "Rest upNo change",
+              "width": 258,
+              "height": 66
+            }
+          ]
+        },
+        {
+          "stage": "restored-choice-1",
+          "width": 320,
+          "scrollWidth": 320,
+          "scrollY": 777,
+          "headings": [
+            {
+              "text": "Scouts are watching.",
+              "top": -422.890625,
+              "bottom": -364.109375,
+              "height": 58.78125
+            },
+            {
+              "text": "The offseasonTime off between seasons. Your coach has a plan, your friends have ",
+              "top": 12,
+              "bottom": 248,
+              "height": 236
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stage_irvo8_12",
+              "text": "NBA Road to the DraftScouts are watching.One year of college",
+              "width": 286,
+              "scrollWidth": 297
+            },
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 286,
+              "scrollWidth": 398
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Scouts are watching.",
+              "width": 1,
+              "scrollWidth": 167
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Train all summerDraft stock +1, Rating +2",
+              "width": 258,
+              "height": 66
+            },
+            {
+              "text": "Rest upNo change",
+              "width": 258,
+              "height": 66
+            }
+          ]
+        },
+        {
+          "stage": "showcase",
+          "width": 320,
+          "scrollWidth": 320,
+          "scrollY": 572,
+          "headings": [
+            {
+              "text": "One last look.",
+              "top": -217.890625,
+              "bottom": -159.109375,
+              "height": 58.78125
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stage_irvo8_12",
+              "text": "NBA Road to the DraftOne last look.One year of college",
+              "width": 286,
+              "scrollWidth": 297
+            },
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 286,
+              "scrollWidth": 398
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "One last look.",
+              "width": 1,
+              "scrollWidth": 110
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Go all outPush every drill to the limit.Grade A +10, B +4, C -3, D -8",
+              "width": 258,
+              "height": 94
+            },
+            {
+              "text": "Play it safeStay within yourself.Grade A +5, B +2, C -1, D -3",
+              "width": 258,
+              "height": 94
+            },
+            {
+              "text": "Skip itNo drill and no grade. The scouts notice.Draft stock -2",
+              "width": 258,
+              "height": 110
+            }
+          ]
+        },
+        {
+          "stage": "draft-result",
+          "width": 320,
+          "scrollWidth": 320,
+          "scrollY": 579,
+          "headings": [
+            {
+              "text": "This is your moment.",
+              "top": -236,
+              "bottom": -147.828125,
+              "height": 88.171875
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stage_irvo8_12",
+              "text": "NBA Road to the DraftThis is your moment.Detroit Pistons",
+              "width": 286,
+              "scrollWidth": 297
+            },
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 286,
+              "scrollWidth": 398
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "This is your moment.",
+              "width": 1,
+              "scrollWidth": 169
+            },
+            {
+              "tag": "SPAN",
+              "className": "min-w-0 flex-1 truncate font-semibold",
+              "text": "Dallas Mavericks",
+              "width": 109,
+              "scrollWidth": 114
+            },
+            {
+              "tag": "SPAN",
+              "className": "min-w-0 flex-1 truncate font-semibold",
+              "text": "Philadelphia 76ers",
+              "width": 109,
+              "scrollWidth": 126
+            },
+            {
+              "tag": "P",
+              "className": "sr-only",
+              "text": "Round 1, pick 14, 14 overall. Detroit Pistons take you.",
+              "width": 1,
+              "scrollWidth": 430
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Start your career",
+              "width": 258,
+              "height": 46
+            }
+          ]
+        }
+      ],
+      "pageErrors": [],
+      "localFailures": [],
+      "visibility": [
+        {
+          "label": "Entry title",
+          "top": 158,
+          "bottom": 275.5625,
+          "height": 117.5625,
+          "viewportHeight": 740,
+          "scrollY": 185,
+          "visible": true
+        },
+        {
+          "label": "Entry instructions",
+          "top": 481.5625,
+          "bottom": 526.34375,
+          "height": 44.78125,
+          "viewportHeight": 740,
+          "scrollY": 185,
+          "visible": true
+        },
+        {
+          "label": "New choice",
+          "top": 217,
+          "bottom": 453,
+          "height": 236,
+          "viewportHeight": 740,
+          "scrollY": 572,
+          "visible": true
+        },
+        {
+          "label": "Restored choice",
+          "top": 12,
+          "bottom": 248,
+          "height": 236,
+          "viewportHeight": 740,
+          "scrollY": 777,
+          "visible": true
+        }
+      ],
+      "outcome": {
+        "pick": 14,
+        "round": 1,
+        "pickInRound": 14,
+        "team": "DET",
+        "ageAtDraft": 19,
+        "draftYear": 2026,
+        "slotValue": null,
+        "devSeasons": [],
+        "ratingAfter": 79,
+        "ageAfter": 19
+      },
+      "passed": false,
+      "error": "AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition\n+ actual - expected\n... Skipped lines\n\n  {\n    c: {\n      age: 19,\n      allNbas: 0,\n      appearance: {\n...\n      seasons: [],\n+     summerSalt: '184v3cg',\n      suspendedSeasons: 0,\n      team: 'DET',\n      year: 2026,\n      yearlyCosts: 0\n    },\n\n    at expectSave (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:146:43)\n    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:225:29"
+    },
+    {
+      "id": "nba-1440-keyboard",
+      "route": "/nba-my-career",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "touch": false,
+      "reduced": false,
+      "screenshots": [
+        "nba-1440-keyboard-rules.png",
+        "nba-1440-keyboard-entry-visible.png",
+        "nba-1440-keyboard-routes.png",
+        "nba-1440-keyboard-choice-1.png",
+        "nba-1440-keyboard-restored-choice-1.png",
+        "nba-1440-keyboard-showcase.png",
+        "nba-1440-keyboard-draft-result.png",
+        "nba-1440-keyboard-failure.png"
+      ],
+      "steps": [
+        {
+          "stage": "rules",
+          "width": 1440,
+          "scrollWidth": 1440,
+          "scrollY": 408,
+          "headings": [
+            {
+              "text": "Your career starts here.",
+              "top": -91,
+              "bottom": -6.75,
+              "height": 84.25
+            },
+            {
+              "text": "Make the league on your terms",
+              "top": 181.25,
+              "bottom": 203.640625,
+              "height": 22.390625
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 638,
+              "scrollWidth": 750
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Your career starts here.",
+              "width": 1,
+              "scrollWidth": 187
+            }
+          ],
+          "controls": [
+            {
+              "text": " Back to player",
+              "width": 111.90625,
+              "height": 44
+            },
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Got it",
+              "width": 69.859375,
+              "height": 44
+            },
+            {
+              "text": "1 seasonOne year of collegeOne season on campus, then you declare.Start at age 18 · Draft at 19",
+              "width": 298,
+              "height": 143.34375
+            },
+            {
+              "text": "3 seasonsThree years of collegeThree seasons to grow into it. Less hype, more polish.Start at age 18 · Draft at 21",
+              "width": 298,
+              "height": 143.34375
+            }
+          ]
+        },
+        {
+          "stage": "entry-visible",
+          "width": 1440,
+          "scrollWidth": 1440,
+          "scrollY": 181,
+          "headings": [
+            {
+              "text": "Your career starts here.",
+              "top": 136,
+              "bottom": 220.25,
+              "height": 84.25
+            },
+            {
+              "text": "Make the league on your terms",
+              "top": 408.25,
+              "bottom": 430.640625,
+              "height": 22.390625
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 638,
+              "scrollWidth": 750
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Your career starts here.",
+              "width": 1,
+              "scrollWidth": 187
+            }
+          ],
+          "controls": [
+            {
+              "text": " Back to player",
+              "width": 111.90625,
+              "height": 44
+            },
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Got it",
+              "width": 69.859375,
+              "height": 44
+            },
+            {
+              "text": "1 seasonOne year of collegeOne season on campus, then you declare.Start at age 18 · Draft at 19",
+              "width": 298,
+              "height": 143.34375
+            },
+            {
+              "text": "3 seasonsThree years of collegeThree seasons to grow into it. Less hype, more polish.Start at age 18 · Draft at 21",
+              "width": 298,
+              "height": 143.34375
+            }
+          ]
+        },
+        {
+          "stage": "routes",
+          "width": 1440,
+          "scrollWidth": 1440,
+          "scrollY": 3,
+          "headings": [
+            {
+              "text": "Your career starts here.",
+              "top": 314,
+              "bottom": 398.25,
+              "height": 84.25
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 638,
+              "scrollWidth": 750
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Your career starts here.",
+              "width": 1,
+              "scrollWidth": 187
+            }
+          ],
+          "controls": [
+            {
+              "text": " Back to player",
+              "width": 111.90625,
+              "height": 44
+            },
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "1 seasonOne year of collegeOne season on campus, then you declare.Start at age 18 · Draft at 19",
+              "width": 298,
+              "height": 143.34375
+            },
+            {
+              "text": "3 seasonsThree years of collegeThree seasons to grow into it. Less hype, more polish.Start at age 18 · Draft at 21",
+              "width": 298,
+              "height": 143.34375
+            }
+          ]
+        },
+        {
+          "stage": "choice-1",
+          "width": 1440,
+          "scrollWidth": 1440,
+          "scrollY": 0,
+          "headings": [
+            {
+              "text": "Scouts are watching.",
+              "top": 317,
+              "bottom": 401.25,
+              "height": 84.25
+            },
+            {
+              "text": "The offseasonTime off between seasons. Your coach has a plan, your friends have ",
+              "top": 744.25,
+              "bottom": 940.25,
+              "height": 196
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 638,
+              "scrollWidth": 750
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Scouts are watching.",
+              "width": 1,
+              "scrollWidth": 167
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Train all summerDraft stock +1, Rating +2",
+              "width": 606,
+              "height": 66
+            },
+            {
+              "text": "Rest upNo change",
+              "width": 606,
+              "height": 66
+            }
+          ]
+        },
+        {
+          "stage": "restored-choice-1",
+          "width": 1440,
+          "scrollWidth": 1440,
+          "scrollY": 0,
+          "headings": [
+            {
+              "text": "Scouts are watching.",
+              "top": 317,
+              "bottom": 401.25,
+              "height": 84.25
+            },
+            {
+              "text": "The offseasonTime off between seasons. Your coach has a plan, your friends have ",
+              "top": 744.25,
+              "bottom": 940.25,
+              "height": 196
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 638,
+              "scrollWidth": 750
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Scouts are watching.",
+              "width": 1,
+              "scrollWidth": 167
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Train all summerDraft stock +1, Rating +2",
+              "width": 606,
+              "height": 66
+            },
+            {
+              "text": "Rest upNo change",
+              "width": 606,
+              "height": 66
+            }
+          ]
+        },
+        {
+          "stage": "showcase",
+          "width": 1440,
+          "scrollWidth": 1440,
+          "scrollY": 0,
+          "headings": [
+            {
+              "text": "One last look.",
+              "top": 336.4375,
+              "bottom": 378.5625,
+              "height": 42.125
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 638,
+              "scrollWidth": 750
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "One last look.",
+              "width": 1,
+              "scrollWidth": 110
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Go all outPush every drill to the limit.Grade A +10, B +4, C -3, D -8",
+              "width": 606,
+              "height": 94
+            },
+            {
+              "text": "Play it safeStay within yourself.Grade A +5, B +2, C -1, D -3",
+              "width": 606,
+              "height": 94
+            },
+            {
+              "text": "Skip itNo drill and no grade. The scouts notice.Draft stock -2",
+              "width": 606,
+              "height": 94
+            }
+          ]
+        },
+        {
+          "stage": "draft-result",
+          "width": 1440,
+          "scrollWidth": 1440,
+          "scrollY": 154,
+          "headings": [
+            {
+              "text": "This is your moment.",
+              "top": 163,
+              "bottom": 247.25,
+              "height": 84.25
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_irvo8_17",
+              "text": "",
+              "width": 638,
+              "scrollWidth": 750
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "This is your moment.",
+              "width": 1,
+              "scrollWidth": 169
+            },
+            {
+              "tag": "P",
+              "className": "sr-only",
+              "text": "Round 1, pick 14, 14 overall. Detroit Pistons take you.",
+              "width": 1,
+              "scrollWidth": 430
+            }
+          ],
+          "controls": [
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Start your career",
+              "width": 606,
+              "height": 46
+            }
+          ]
+        }
+      ],
+      "pageErrors": [],
+      "localFailures": [],
+      "visibility": [
+        {
+          "label": "Entry title",
+          "top": 23,
+          "bottom": 107.25,
+          "height": 84.25,
+          "viewportHeight": 1000,
+          "scrollY": 294,
+          "visible": true
+        },
+        {
+          "label": "Entry instructions",
+          "top": 295.25,
+          "bottom": 317.640625,
+          "height": 22.390625,
+          "viewportHeight": 1000,
+          "scrollY": 294,
+          "visible": true
+        },
+        {
+          "label": "New choice",
+          "top": 744.25,
+          "bottom": 940.25,
+          "height": 196,
+          "viewportHeight": 1000,
+          "scrollY": 0,
+          "visible": true
+        },
+        {
+          "label": "Restored choice",
+          "top": 744.25,
+          "bottom": 940.25,
+          "height": 196,
+          "viewportHeight": 1000,
+          "scrollY": 0,
+          "visible": true
+        }
+      ],
+      "outcome": {
+        "pick": 14,
+        "round": 1,
+        "pickInRound": 14,
+        "team": "DET",
+        "ageAtDraft": 19,
+        "draftYear": 2026,
+        "slotValue": null,
+        "devSeasons": [],
+        "ratingAfter": 79,
+        "ageAfter": 19
+      },
+      "passed": false,
+      "error": "AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition\n+ actual - expected\n... Skipped lines\n\n  {\n    c: {\n      age: 19,\n      allNbas: 0,\n      appearance: {\n...\n      seasons: [],\n+     summerSalt: '184v3cg',\n      suspendedSeasons: 0,\n      team: 'DET',\n      year: 2026,\n      yearlyCosts: 0\n    },\n\n    at expectSave (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:146:43)\n    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:225:29"
+    }
+  ],
+  "finished": "2026-10-10T17:46:55.791Z"
+}

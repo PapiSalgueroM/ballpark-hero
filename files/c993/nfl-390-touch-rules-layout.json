@@ -1,0 +1,62 @@
+{
+  "width": 390,
+  "scrollWidth": 390,
+  "scrollY": 1002,
+  "headings": [
+    {
+      "text": "Your career starts here.",
+      "top": -653.890625,
+      "bottom": -595.109375,
+      "height": 58.78125
+    },
+    {
+      "text": "Make the league on your terms",
+      "top": -387,
+      "bottom": -364.609375,
+      "height": 22.390625
+    }
+  ],
+  "overflow": [
+    {
+      "tag": "DIV",
+      "className": "_stadium_irvo8_17",
+      "text": "",
+      "width": 356,
+      "scrollWidth": 468
+    },
+    {
+      "tag": "H3",
+      "className": "sr-only",
+      "text": "Your career starts here.",
+      "width": 1,
+      "scrollWidth": 187
+    }
+  ],
+  "controls": [
+    {
+      "text": " Back to player",
+      "width": 111.90625,
+      "height": 44
+    },
+    {
+      "text": "Road to the draft help",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "text": "Got it",
+      "width": 69.859375,
+      "height": 44
+    },
+    {
+      "text": "3 seasonsBig college programEvery game on TV and scouts at every practice. Three seasons before you can declare.Start at age 18 · Draft at 21",
+      "width": 324,
+      "height": 143.34375
+    },
+    {
+      "text": "3 seasonsSmall schoolFewer eyes on you, so the scouts have to come looking. Three seasons before you can declare.Start at age 18 · Draft at 21",
+      "width": 324,
+      "height": 143.34375
+    }
+  ]
+}

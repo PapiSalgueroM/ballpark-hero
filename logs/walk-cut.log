@@ -1,0 +1,79 @@
+  FAIL [cut] nba-390-late-watch: a lottery tile cuts "Rockets": 47 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: a lottery tile cuts "Seed 4 · Up 3": 64 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: a lottery tile cuts "Nuggets": 50 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: a lottery tile cuts "Seed 5 · Up 3": 64 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: a lottery tile cuts "Seed 8 · Up 5": 64 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: a lottery tile cuts "Thunder": 49 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: a lottery tile cuts "Seed 1 · Down 3": 76 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Nuggets" would be cut on a lottery tile: 50 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Thunder" would be cut on a lottery tile: 49 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Timberwolves" would be cut on a lottery tile: 83 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Rockets" would be cut on a lottery tile: 47 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Cavaliers" would be cut on a lottery tile: 55 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Warriors" would be cut on a lottery tile: 50 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Mavericks" would be cut on a lottery tile: 61 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Grizzlies" would be cut on a lottery tile: 51 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Clippers" would be cut on a lottery tile: 50 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Pelicans" would be cut on a lottery tile: 49 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Raptors" would be cut on a lottery tile: 46 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Hornets" would be cut on a lottery tile: 46 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Wizards" would be cut on a lottery tile: 49 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Trail Blazers" would be cut on a lottery tile: 72 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 1 · Held" would be cut on a lottery tile: 61 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 1 · Down 1" would be cut on a lottery tile: 74 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 1 · Down 2" would be cut on a lottery tile: 76 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 1 · Down 3" would be cut on a lottery tile: 76 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 2 · Up 1" would be cut on a lottery tile: 62 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 2 · Held" would be cut on a lottery tile: 63 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 2 · Down 1" would be cut on a lottery tile: 76 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 2 · Down 2" would be cut on a lottery tile: 78 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 3 · Up 2" would be cut on a lottery tile: 64 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 3 · Up 1" would be cut on a lottery tile: 62 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 3 · Held" would be cut on a lottery tile: 63 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 3 · Down 1" would be cut on a lottery tile: 76 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 4 · Up 3" would be cut on a lottery tile: 64 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 4 · Up 2" would be cut on a lottery tile: 64 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 4 · Up 1" would be cut on a lottery tile: 62 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 4 · Held" would be cut on a lottery tile: 63 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 5 · Up 4" would be cut on a lottery tile: 64 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 5 · Up 3" would be cut on a lottery tile: 64 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 5 · Up 2" would be cut on a lottery tile: 64 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 5 · Up 1" would be cut on a lottery tile: 62 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 6 · Up 5" would be cut on a lottery tile: 64 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 6 · Up 4" would be cut on a lottery tile: 64 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 6 · Up 3" would be cut on a lottery tile: 64 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 6 · Up 2" would be cut on a lottery tile: 64 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 7 · Up 6" would be cut on a lottery tile: 64 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 7 · Up 5" would be cut on a lottery tile: 64 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 7 · Up 4" would be cut on a lottery tile: 64 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 7 · Up 3" would be cut on a lottery tile: 64 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 8 · Up 7" would be cut on a lottery tile: 64 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 8 · Up 6" would be cut on a lottery tile: 64 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 8 · Up 5" would be cut on a lottery tile: 64 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 8 · Up 4" would be cut on a lottery tile: 64 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 9 · Up 8" would be cut on a lottery tile: 64 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 9 · Up 7" would be cut on a lottery tile: 64 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 9 · Up 6" would be cut on a lottery tile: 64 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 9 · Up 5" would be cut on a lottery tile: 64 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 10 · Up 9" would be cut on a lottery tile: 68 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 10 · Up 8" would be cut on a lottery tile: 68 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 10 · Up 7" would be cut on a lottery tile: 68 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 10 · Up 6" would be cut on a lottery tile: 68 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 11 · Up 10" would be cut on a lottery tile: 70 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 11 · Up 9" would be cut on a lottery tile: 66 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 11 · Up 8" would be cut on a lottery tile: 66 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 11 · Up 7" would be cut on a lottery tile: 66 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 12 · Up 11" would be cut on a lottery tile: 70 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 12 · Up 10" would be cut on a lottery tile: 72 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 12 · Up 9" would be cut on a lottery tile: 68 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 12 · Up 8" would be cut on a lottery tile: 68 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 13 · Up 12" would be cut on a lottery tile: 72 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 13 · Up 11" would be cut on a lottery tile: 70 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 13 · Up 10" would be cut on a lottery tile: 72 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 13 · Up 9" would be cut on a lottery tile: 68 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 14 · Up 13" would be cut on a lottery tile: 72 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 14 · Up 12" would be cut on a lottery tile: 72 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 14 · Up 11" would be cut on a lottery tile: 70 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Seed 14 · Up 10" would be cut on a lottery tile: 72 px of words in 44 px
+  walked nba-390-late-watch: pick 35, 5 rows and 4 lottery tiles, card 783 high, 367 frames
+playDraftNight [control cut]: 77 FAILURE(S) of its own check (cut), as it must
