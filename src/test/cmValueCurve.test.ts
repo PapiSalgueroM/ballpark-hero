@@ -467,6 +467,27 @@ describe('one order in every world: the stretch first, then the age points', () 
     ]).toEqual([97, 88, 89]);
   });
 
+  it('readInWorld names a bad world: null, a number, a list or a stretch that is no function is a RangeError', () => {
+    /* A null handed in from a lookup that found no season used to die inside the destructuring with
+       a TypeError that named nothing. The door types the world as optional and the app is not strict,
+       so the type gate lets a null through: the library has to say what is wrong. */
+    const bad: any[] = [null, 0, 94, 'era2010', true, [], [{ top: 97 }]];
+    for (const world of bad) {
+      expect(() => readInWorld(80, 35, world), JSON.stringify(world)).toThrow(RangeError);
+      expect(() => readInWorld(80, 35, world), JSON.stringify(world)).toThrow(/readInWorld: the world must be an object/);
+    }
+    for (const stretch of [97, 'up', {}, true] as any[]) {
+      expect(() => readInWorld(80, 35, { stretch }), String(stretch)).toThrow(/readInWorld: the stretch must be a function/);
+    }
+    /* left out, undefined or empty is 2026; a stretch left out or undefined is no stretch */
+    expect(readInWorld(80, 35, undefined)).toEqual({ level: 80, age: 35, rating: 85 });
+    expect(readInWorld(80, 35, { stretch: undefined, top: 94 })).toEqual({ level: 80, age: 35, rating: 85 });
+    /* and what a bad world does further in is still named: a top off the scale, a stretch that gives a fraction */
+    expect(() => readInWorld(80, 35, { top: 120 })).toThrow(/ageRead: the top must be a whole number/);
+    expect(() => readInWorld(80, 35, { stretch: (r: number) => r + 0.5 })).toThrow(/ageRead: the level or rating must be a whole number/);
+    expect(() => readInWorld(80, 35, { ageShift: 0.5 })).toThrow(/ageRead: the age must be a whole number/);
+  });
+
   it('each past season top is the stretch of the highest rating in its file: 96, 97, 98 and 94', () => {
     for (const [era, world] of Object.entries(ERAS)) {
       const raw = Math.max(...Object.values(world.rosters).flat().map(p => p.r));

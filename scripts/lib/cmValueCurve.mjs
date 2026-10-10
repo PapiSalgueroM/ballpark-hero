@@ -166,9 +166,19 @@ export function levelFrom(rating, age, top = RATING_CEIL) {
  *                2026); top is the best level of that world; ageShift is what
  *                the file's age is short of 1 August (1 in a past season,
  *                whose files hold the 1 January age; 0 in 2026).
- * Returns { level, age, rating }.
+ * Returns { level, age, rating }. A world that is not an object (null, a
+ * number, a string) or a stretch that is not a function is a call site bug
+ * and throws a RangeError naming it, like every other bad read here; only a
+ * world left out altogether means 2026.
  */
-export function readInWorld(valueRating, fileAge, { stretch, top = RATING_CEIL, ageShift = 0 } = {}) {
+export function readInWorld(valueRating, fileAge, world = {}) {
+  if (world === null || typeof world !== 'object' || Array.isArray(world)) {
+    throw new RangeError(`readInWorld: the world must be an object { stretch, top, ageShift }, or left out for 2026 (got ${world === null ? 'null' : typeof world}, value rating ${valueRating}, age ${fileAge})`);
+  }
+  const { stretch, top = RATING_CEIL, ageShift = 0 } = world;
+  if (stretch && typeof stretch !== 'function') {
+    throw new RangeError(`readInWorld: the stretch must be a function from a value rating to a level, or left out (got ${typeof stretch}, value rating ${valueRating}, age ${fileAge})`);
+  }
   const level = stretch ? stretch(valueRating) : valueRating;
   const age = fileAge + ageShift;
   return { level, age, rating: ageRead(level, age, top) };

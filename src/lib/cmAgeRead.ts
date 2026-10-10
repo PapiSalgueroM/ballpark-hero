@@ -24,7 +24,9 @@
  *                               founder is rated on numbers the read can never produce (86 at 21,
  *                               say), and this still answers a whole level for him.
  * readInWorld(valueRating, fileAge, world) writes the order down once: the season's stretch first,
- * then the age points, on the top of the stretched scale.
+ * then the age points, on the top of the stretched scale. Leave the world out for 2026. A null
+ * world passes this file's types (the app is not strict) and THROWS a RangeError in the library, as
+ * does any world that is not an object: a season lookup that found nothing must not be handed on.
  */
 import {
   agePoints as scriptAgePoints,
