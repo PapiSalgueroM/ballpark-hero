@@ -1,0 +1,18 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simErrorBoundary: node scripts/simErrorBoundary.mjs
+simStaleChunk: node scripts/simStaleChunk.mjs
+simHomeCopy: node scripts/simHomeCopy.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+sweepWeight-branch: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs
+base-weight-and-nocatch: git worktree add -q /tmp/base origin/main && git -C /tmp/base rev-parse --short HEAD && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && (node_modules/.bin/vite build --outDir /tmp/base-dist > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log) && (node scripts/lib/hostLikeServer.mjs /tmp/base-dist 4174 > /tmp/base-server.log 2>&1 &) && sleep 4 && echo "=== nocatch control on origin/main" && (BOUNDARY_CONTROL=nocatch node scripts/simErrorBoundary.mjs 2>&1 | grep -v "^\s*$" | head -6; echo "nocatch on main exit=${PIPESTATUS[0]}") && echo "=== sweepWeight on origin/main" && SWEEP_OFFLINE=1 ENGINES=chromium BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 node scripts/sweepWeight.mjs
