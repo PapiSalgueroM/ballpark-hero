@@ -1,0 +1,49 @@
+simCmLeagueBook: 5 careers x 2 seasons (default fleet, seed set 0), CONTROL mathrandom
+stream  0 of 20 faces (the whole save but the book, and the count of draws) equal with the book taken out
+        wall time of the fleet: 6.2s with the book and this harness watching every entry, 6.3s with the book out and nothing watching
+        the book's own cost: 4 careers x 2 seasons took 5493ms with the book and 5203ms with it out (5.6% more)
+stream  base arm NOT RUN: set BOOK_BASE to a worktree of the base commit
+shapes  credited rival goals 6133: forwards 57.1%, midfielders 33.0%, defenders 10.0%, keepers 0 goals
+        between other clubs (5869 goals), dealt against the weight: ATT 3292 vs 3266.2 (z 0.68), MID 1853 vs 1881.1 (z -0.79), DEF 570 vs 560.4 (z 0.43)
+        clubs with an eleven: assists 3695 on 6021 credited goals = 0.614 a goal (the rule 0.614, z 0.01); own goals 166 of 6187 = 2.68% (the rule 2.75%, z -0.32); every club: 3695 assists on 6133 credited goals = 0.602 a goal
+        every goal its own roll: one man took every goal in 210 of 1651 matches a club with an eleven scored two or more in = 12.7% (the weight says 12.8%, z -0.07)
+        unnamed goals 2375 (club weeks with no named eleven: 2066); my league matches 360, reports whose lines did not add up to the score: 0
+        no named eleven in championship: 414 of 1058 club weeks, 9 of 23 rival clubs seen (Blackburn Rovers 7 men, 1 keepers; Bolton Wanderers 3 men, 0 keepers; Cardiff City 4 men, 1 keepers; Charlton Athletic 8 men, 1 keepers; Lincoln City 2 men, 0 keepers; Millwall 11 men, 0 keepers; ...)
+        no named eleven in bundesliga2: 1088 of 1156 club weeks, 17 of 19 rival clubs seen (Arminia Bielefeld 3 men, 1 keepers; Bochum 4 men, 0 keepers; Braunschweig 2 men, 1 keepers; Darmstadt 4 men, 0 keepers; Dynamo Dresden 1 men, 0 keepers; Elversberg 10 men, 1 keepers; ...)
+        no named eleven in laliga2010: 76 of 1444 club weeks, 1 of 19 rival clubs seen (Levante 10 men, 1 keepers)
+        no named eleven in mlsEast: 488 of 758 club weeks, 9 of 14 rival clubs seen (Atlanta United 11 men, 0 keepers; CF Montréal 7 men, 1 keepers; Charlotte FC 10 men, 1 keepers; D.C. United 6 men, 0 keepers; FC Cincinnati 6 men, 1 keepers; Nashville SC 7 men, 0 keepers; ...)
+        top ten of the Goals board held by forwards and wingers: 8.90 on the book, 6.30 on the old race, rise 2.60 (floor 1.5) over 10 seasons
+names   21635 checks; 4 purchases probed of 4 saves kept (the best scorer of the rivals signed at week 22, twelve entries played on)
+        the book against the report of 358 league matches of mine: 446 goal lines, 416 naming a man of that club's roster (each on his row), 14 naming nobody its roster holds, 58 from the spot or a free kick, 186 assists (each by a man on their pitch); 2 matches not judged, the opponent played twice in the entry
+oldsave 766 checks: 4 saves with no book finished on the candidate and on the book out engine, the season after each, and six unreadable books
+doors   2517 checks: three takeovers and two joined jobs (season one and season three), the law at the handover and after every entry to the end of the season
+dailies 50 checks: 4 Hot Seat dates played to a verdict, handed over and played on, 3 Deadline Day dates, each state byte equal to the book out engine's
+boards  by league, the book against the old race on the same seasons (penalties and free kicks to the taker)
+        premier      20 clubs,  3 seasons: top scorer mean 33.0 (32 41 26), old race mean 31.0, most assists mean 13.3, leading keeper's clean sheets mean 15.3
+        championship 24 clubs,  1 seasons: top scorer mean 47.0 (47), old race mean 37.0, most assists mean 13.0, leading keeper's clean sheets mean 20.0
+        bundesliga2  18 clubs,  2 seasons: top scorer mean 20.5 (21 20), old race mean 26.5, most assists mean 9.0, leading keeper's clean sheets mean 19.5
+        laliga2010   20 clubs,  2 seasons: top scorer mean 33.5 (31 36), old race mean 31.5, most assists mean 10.0, leading keeper's clean sheets mean 23.5
+        mlsEast      15 clubs,  2 seasons: top scorer mean 16.0 (16 16), old race mean 22.0, most assists mean 8.5, leading keeper's clean sheets mean 12.0
+        38 game leagues: 5 seasons, top scorer mean 33.20, standard deviation 5.04, standard error 2.25; old race mean 31.20
+        34 game leagues: 2 seasons, top scorer mean 20.50, standard deviation 0.50, standard error 0.35; old race mean 26.50
+        46 game leagues: 1 seasons, top scorer mean 47.00, standard deviation 0.00, standard error 0.00; old race mean 37.00
+        28 game leagues (15 clubs): 2 seasons, top scorer mean 16.00, standard deviation 0.00, standard error 0.00; old race mean 22.00
+        the top scorer was a: ATT 10, MID 0, DEF 0 (of 10 seasons)
+        the old race on the same seasons: 5361 of 8678 rival goals given to anybody (61.8%), of those forwards 54.6%, midfielders 45.4%; the book names a man for 70.7% and marks 170 own goals and 2375 unnamed
+        a Clean sheets board of every man (keepers and defenders): its top ten holds men of 2.60 clubs and 2.40 keepers on average
+        a back four picked by clean sheets + goals + assists: 3.10 men of one club on average; by goals + assists (club clean sheets, then table place, to split): 1.90, with 0.00 of the four on no goal and no assist
+law     4 weeks I did not play in which the rest of the round did (a league with an odd number of clubs), 26 club entries holding two matches of one club, 5 club seasons whose clean sheets are judged on a range for it
+law     10303 checks over 406 entries of 5 careers, and 88 entries of 2 seasons with the video referee on (84 league matches of mine, 65 reviews, 0 reports whose lines did not add up to the score)
+RED   stream   20 checks, 20 failed
+        Everton (now, seed 4649) at the end of season 1: book out 8c3a7863b5496792a1c6b0ca|48956, candidate bd884bfaa860a63f46825507|49608
+        Everton (now, seed 4649) after the summer of season 1: book out d796550475df3d4991e7bb7d|49765, candidate fb240c4341f798ec7934c4c1|50414
+        Everton (now, seed 4649) at the end of season 2: book out c42afc1f1355c19057435f99|101722, candidate fe0b002e7df9466efe4bd664|99682
+        Everton (now, seed 4649) after the summer of season 2: book out c4f3a5c0f85f804cd9a11f5a|102554, candidate 38dba75d29c91f125b836e82|100508
+        Southampton (now, seed 4780) at the end of season 1: book out 28b04ac891d01ec6e062bce7|54459, candidate 5553e5cd771244037aa3c7bf|54941
+green law      10303 checks
+green names    21635 checks
+green shapes   8 checks
+green oldsave  766 checks
+green doors    2517 checks
+green dailies  50 checks
+simCmLeagueBook: CONTROL mathrandom FIRED: section stream went red (20 failures) and no other section did (45s)

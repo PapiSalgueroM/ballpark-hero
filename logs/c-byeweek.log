@@ -1,0 +1,49 @@
+simCmLeagueBook: 5 careers x 2 seasons (default fleet, seed set 0), CONTROL byeweek
+stream  20 of 20 faces (the whole save but the book, and the count of draws) equal with the book taken out
+        wall time of the fleet: 7.0s with the book and this harness watching every entry, 5.4s with the book out and nothing watching
+        the book's own cost: 4 careers x 2 seasons took 5368ms with the book and 5759ms with it out (-6.8% more)
+stream  base arm NOT RUN: set BOOK_BASE to a worktree of the base commit
+shapes  credited rival goals 5965: forwards 56.6%, midfielders 33.8%, defenders 9.6%, keepers 0 goals
+        between other clubs (5792 goals), dealt against the weight: ATT 3195 vs 3235.4 (z -1.07), MID 1864 vs 1848.2 (z 0.45), DEF 534 vs 549.1 (z -0.68)
+        clubs with an eleven: assists 3604 on 5845 credited goals = 0.617 a goal (the rule 0.614, z 0.47); own goals 175 of 6020 = 2.91% (the rule 2.75%, z 0.74); every club: 3604 assists on 5965 credited goals = 0.604 a goal
+        every goal its own roll: one man took every goal in 217 of 1651 matches a club with an eleven scored two or more in = 13.1% (the weight says 12.9%, z 0.29)
+        unnamed goals 2784 (club weeks with no named eleven: 2478); my league matches 368, reports whose lines did not add up to the score: 0
+        no named eleven in championship: 828 of 2116 club weeks, 9 of 26 rival clubs seen (Blackburn Rovers 7 men, 1 keepers; Bolton Wanderers 3 men, 0 keepers; Cardiff City 4 men, 1 keepers; Charlton Athletic 8 men, 1 keepers; Lincoln City 2 men, 0 keepers; Millwall 11 men, 0 keepers; ...)
+        no named eleven in bundesliga2: 1088 of 1156 club weeks, 17 of 19 rival clubs seen (Arminia Bielefeld 3 men, 1 keepers; Bochum 4 men, 0 keepers; Braunschweig 2 men, 1 keepers; Darmstadt 4 men, 0 keepers; Dynamo Dresden 1 men, 0 keepers; Elversberg 10 men, 1 keepers; ...)
+        no named eleven in laliga2010: 76 of 1444 club weeks, 1 of 19 rival clubs seen (Levante 10 men, 1 keepers)
+        no named eleven in mlsEast: 486 of 758 club weeks, 9 of 14 rival clubs seen (Atlanta United 11 men, 0 keepers; CF Montréal 7 men, 1 keepers; Charlotte FC 10 men, 1 keepers; D.C. United 6 men, 0 keepers; FC Cincinnati 6 men, 1 keepers; Nashville SC 7 men, 0 keepers; ...)
+        top ten of the Goals board held by forwards and wingers: 9.10 on the book, 5.90 on the old race, rise 3.20 (floor 1.5) over 10 seasons
+names   21476 checks; 4 purchases probed of 4 saves kept (the best scorer of the rivals signed at week 22, twelve entries played on)
+        the book against the report of 366 league matches of mine: 403 goal lines, 371 naming a man of that club's roster (each on his row), 21 naming nobody its roster holds, 51 from the spot or a free kick, 153 assists (each by a man on their pitch); 2 matches not judged, the opponent played twice in the entry
+oldsave 766 checks: 4 saves with no book finished on the candidate and on the book out engine, the season after each, and six unreadable books
+doors   2439 checks: three takeovers and two joined jobs (season one and season three), the law at the handover and after every entry to the end of the season
+dailies 50 checks: 4 Hot Seat dates played to a verdict, handed over and played on, 3 Deadline Day dates, each state byte equal to the book out engine's
+boards  by league, the book against the old race on the same seasons (penalties and free kicks to the taker)
+        premier      20 clubs,  2 seasons: top scorer mean 26.0 (28 24), old race mean 30.0, most assists mean 11.5, leading keeper's clean sheets mean 16.0
+        championship 24 clubs,  2 seasons: top scorer mean 41.0 (39 43), old race mean 36.0, most assists mean 15.5, leading keeper's clean sheets mean 26.0
+        bundesliga2  18 clubs,  2 seasons: top scorer mean 29.0 (28 30), old race mean 27.5, most assists mean 10.0, leading keeper's clean sheets mean 17.0
+        laliga2010   20 clubs,  2 seasons: top scorer mean 32.0 (33 31), old race mean 35.5, most assists mean 14.0, leading keeper's clean sheets mean 22.0
+        mlsEast      15 clubs,  2 seasons: top scorer mean 13.0 (13 13), old race mean 21.5, most assists mean 6.5, leading keeper's clean sheets mean 9.0
+        38 game leagues: 4 seasons, top scorer mean 29.00, standard deviation 3.39, standard error 1.70; old race mean 32.75
+        34 game leagues: 2 seasons, top scorer mean 29.00, standard deviation 1.00, standard error 0.71; old race mean 27.50
+        46 game leagues: 2 seasons, top scorer mean 41.00, standard deviation 2.00, standard error 1.41; old race mean 36.00
+        28 game leagues (15 clubs): 2 seasons, top scorer mean 13.00, standard deviation 0.00, standard error 0.00; old race mean 21.50
+        the top scorer was a: ATT 10, MID 0, DEF 0 (of 10 seasons)
+        the old race on the same seasons: 5647 of 9004 rival goals given to anybody (62.7%), of those forwards 54.2%, midfielders 45.8%; the book names a man for 66.8% and marks 180 own goals and 2784 unnamed
+        a Clean sheets board of every man (keepers and defenders): its top ten holds men of 2.50 clubs and 2.30 keepers on average
+        a back four picked by clean sheets + goals + assists: 2.70 men of one club on average; by goals + assists (club clean sheets, then table place, to split): 1.80, with 0.00 of the four on no goal and no assist
+law     4 weeks I did not play in which the rest of the round did (a league with an odd number of clubs), 26 club entries holding two matches of one club, 4 club seasons whose clean sheets are judged on a range for it
+law     10516 checks over 403 entries of 5 careers, and 91 entries of 2 seasons with the video referee on (84 league matches of mine, 55 reviews, 0 reports whose lines did not add up to the score)
+green stream   20 checks
+RED   law      10516 checks, 365 failed
+        New England Revolution (now, seed 5173) season 1 week 24: Charlotte FC has 3 on rows + 0 own goals + 19 unnamed, the table says 26 for
+        New England Revolution (now, seed 5173) season 1 week 24: Columbus Crew has 15 on rows + 0 own goals + 0 unnamed, the table says 17 for
+        New England Revolution (now, seed 5173) season 1 week 24: D.C. United has 1 on rows + 0 own goals + 8 unnamed, the table says 10 for
+        New England Revolution (now, seed 5173) season 1 week 24: Toronto FC has 2 on rows + 0 own goals + 15 unnamed, the table says 19 for
+        New England Revolution (now, seed 5173) season 1 week 24: CF Montréal has 2 on rows + 0 own goals + 10 unnamed, the table says 13 for
+green names    21476 checks
+green shapes   8 checks
+green oldsave  766 checks
+green doors    2439 checks
+green dailies  50 checks
+simCmLeagueBook: CONTROL byeweek FIRED: section law went red (365 failures) and no other section did (44s)
