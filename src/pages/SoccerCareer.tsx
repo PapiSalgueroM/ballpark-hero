@@ -1,4 +1,4 @@
-import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useMemo, type ComponentType, type ReactNode } from "react";
+import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useMemo, type ComponentType, type ReactNode, type CSSProperties } from "react";
 import { formatNumber } from '@/lib/formatNumber';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { useGameCompletion } from "@/hooks/useGameCompletion";
@@ -69,6 +69,9 @@ import { localizeMoney as money, CURRENCIES, getCurrency, setCurrency, rateNote 
    nothing at all when we have no honest answer for that club and season. */
 import { depthChart, GROUP_LABEL } from "@/lib/soccerClubSquad";
 import { SquadTile } from "@/components/soccer-career/SquadTile";
+import { ReducedRolePlanNote, ReducedRoleSeasonNote } from "@/components/soccer-career/ReducedRoleNote";
+import { personalGoalMilestone } from "@/lib/soccerCareerMilestone";
+import { REDUCED_ROLE_GAMES } from "@/lib/soccerCareerRole";
 import type { TrophyCategory } from "@/components/soccer-career/TrophyCabinet";
 import type { MoneyAction } from "@/lib/soccerMoney";
 import { bankSummary } from "@/lib/soccerMoney";
@@ -127,6 +130,11 @@ const SeasonRatings = lazy(() => import("@/components/soccer-career/SeasonRating
 /* Round 1047: the training ground (its drills and its boards) loads when it
    is opened, not with the page; the page's budget came down by what it weighed. */
 const TrainingPanel = lazy(() => import("@/components/soccer-career/TrainingPanel"));
+const STORY_ROLE_HELP_RULES = [
+  'Phone and Training sit above your player on a phone. Career Story opens your saved chapters; Previous and Next move between them, and All seasons returns to the tile you opened.',
+  `Accepting a smaller role from a new manager means ${REDUCED_ROLE_GAMES} fewer planned league games next season at that club. It lasts one recorded season; a move, loan or retirement clears it. Example: a selection of 30 becomes ${30 - REDUCED_ROLE_GAMES} before existing selection limits, injuries and bans.`,
+  'Personal goal milestones count your recorded senior club games, excluding academy and international goals. Example: 99 senior club goals plus 2 this season takes you past 100, with a new total of 101. The summary shows that crossing.',
+];
 /* Round 1045: a boundary inside the lazy chunk cannot catch the chunk failing
    to load (a deploy swapped the files), so the mount carries its own: the
    overlay says so with Retry and Close, and the save is never touched.
@@ -670,7 +678,7 @@ function NewspaperCard({ articles, seasonKey, onContinue }: { articles: NewsArti
         </div>
         </div>
       ))}
-      <Button onClick={onContinue} className="w-full h-10 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
+      <Button onClick={onContinue} className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
         Continue to Season Summary →
       </Button>
     </div>
@@ -678,7 +686,7 @@ function NewspaperCard({ articles, seasonKey, onContinue }: { articles: NewsArti
 }
 
 /* ─── Season Summary Card ─── */
-function SeasonSummaryCard({ season, position, onContinue, appearance, leagueOf, world, familyContext }: { season: SeasonRecord; position: string; onContinue: () => void; appearance?: PlayerAppearance | null; leagueOf?: { key: string; name: string } | null; world?: WorldSeason | null; familyContext?: SeasonFamilyContext }) {
+function SeasonSummaryCard({ season, position, onContinue, appearance, leagueOf, world, familyContext, goalMilestone }: { season: SeasonRecord; position: string; onContinue: () => void; appearance?: PlayerAppearance | null; leagueOf?: { key: string; name: string } | null; world?: WorldSeason | null; familyContext?: SeasonFamilyContext; goalMilestone?: ReturnType<typeof personalGoalMilestone> }) {
   /* Round 1037: the finish is printed in the league the club was in that
      season (finishLeague), the phone's world is read by its key */
   const playedWorld = readLeagueWorldSeason(season);
@@ -755,6 +763,10 @@ function SeasonSummaryCard({ season, position, onContinue, appearance, leagueOf,
       <SeasonDerbyLines season={season} />
       {/* Round 1041: a cup run that ended early, one line; nothing on old saves. */}
       <SeasonCupExitLine season={season} />
+      <ReducedRoleSeasonNote season={season} />
+      {goalMilestone && <p data-career-goal-milestone className="rounded-lg bg-emerald-500/10 p-3 text-xs">
+        You reached {goalMilestone.threshold} senior club goals this season. Your recorded tally went from {goalMilestone.previous} to {goalMilestone.total}.
+      </p>}
 
       {season.injury && (
         /* Round 530: one shake as it lands, nothing more. */
@@ -784,7 +796,7 @@ function SeasonSummaryCard({ season, position, onContinue, appearance, leagueOf,
         </div>
       )}
 
-      <Button onClick={onContinue} className="w-full h-10 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
+      <Button onClick={onContinue} className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
         Continue →
       </Button>
     </div>
@@ -793,8 +805,8 @@ function SeasonSummaryCard({ season, position, onContinue, appearance, leagueOf,
 
 /* ─── Round 129: how far to lift anything welded to the bottom of the screen ───
 
-   This page pins three things to the bottom edge on a phone: the action bar
-   with Next Season and Retire, the training ground button and the phone button.
+   The action bar stays at the bottom edge. Desktop also docks the training
+   and phone buttons there; on a phone those utilities are now in the page.
    All three used to keep sitting there once you reached the site footer, on top
    of the About, Contact, Privacy and Terms links, which is the exact thing
    Round 86 was complaining about when it un-stuck the action bar.
@@ -909,6 +921,11 @@ export default function SoccerCareer() {
   const [phoneOpen, setPhoneOpen] = useState(false);
   // Round 81: the training ground overlay
   const [trainingOpen, setTrainingOpen] = useState(false);
+  const trainingTriggerRef = useRef<HTMLButtonElement>(null);
+  const closeTraining = () => {
+    setTrainingOpen(false);
+    queueMicrotask(() => trainingTriggerRef.current?.focus({ preventScroll: true }));
+  };
   const [showNewCareerConfirm, setShowNewCareerConfirm] = useState(false);
   /* Round 530: the slip that lands under the toast when a deal is done. It
      remembers the career object it was written for, and every action in this
@@ -922,10 +939,8 @@ export default function SoccerCareer() {
      out of the academy byte for byte the save it always was. */
   const [academyReport, setAcademyReport] = useState<AcademyReport | null>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
-  /* Round 129: the training and phone buttons are pinned to the bottom right on
-     every screen of this game, so they were sitting over the footer's Privacy
-     and Terms links at the end of the page in exactly the way the action bar
-     was. Same lift, same reason. */
+  /* Round 1188: desktop keeps its dock and footer lift. On a phone these
+     controls live in the page, leaving the season buttons clear. */
   const floatingButtonLift = useFooterLift(!!career);
 
   /* Score tracking on retirement. Round 644: the record is the legacy score
@@ -1383,7 +1398,7 @@ export default function SoccerCareer() {
           the lift measurement. */}
       <div className={`min-h-screen bg-background text-foreground flex flex-col ${career ? 'pb-[88px]' : ''}`}>
         <GameNavbar />
-        <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp extraRules={DERBY_HELP_RULES} /></div>
+        <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp extraRules={[...DERBY_HELP_RULES, ...STORY_ROLE_HELP_RULES]} /></div>
         <main id="dukb-main" className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4">
           {career && saveFailed && (
             <div role="alert" data-soccer-save-status="failed" className="mb-4 rounded-xl border border-amber-500/40 bg-amber-500/10 p-3 text-sm sm:flex sm:items-center sm:gap-4">
@@ -1397,6 +1412,30 @@ export default function SoccerCareer() {
               <Button variant="outline" onClick={() => {
                 try { localStorage.removeItem(SAVE_KEY); setSaveError(false); } catch { toast.error('Could not delete the save. Try again.'); }
               }}>Delete unusable save</Button>
+            </div>
+          )}
+          {career && (
+            <div data-career-utilities className="mb-3 flex gap-2 sm:contents"
+              style={{ "--career-utility-lift": `${-floatingButtonLift}px` } as CSSProperties}>
+              {!career.retired && (
+                <button type="button" ref={trainingTriggerRef} data-career-utility="training"
+                  onClick={() => setTrainingOpen(true)} aria-label="Open the training ground"
+                  className="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700">
+                  <span aria-hidden="true">🏋️</span><span className="sm:hidden">Training</span>
+                  {trainingAvailable(career) && (
+                    <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900"><span className="sr-only">Drill ready</span></span>
+                  )}
+                </button>
+              )}
+              <button type="button" data-career-utility="phone" onClick={() => setPhoneOpen(true)} aria-label="Open your phone"
+                className="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700">
+                <span aria-hidden="true">📱</span><span className="sm:hidden">Phone</span>
+                {unreadPhoneCount(career) > 0 && (
+                  <span className="min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5">
+                    {unreadPhoneCount(career)}<span className="sr-only"> unread</span>
+                  </span>
+                )}
+              </button>
             </div>
           )}
           {!career ? (
@@ -1466,41 +1505,9 @@ export default function SoccerCareer() {
           )}
         </main>
 
-        {/* Round 80: the phone, an in-world handset. Floating button + full overlay.
-            Round 81: the training ground button stacks above it. */}
+        {/* The utilities open these existing panels without changing the save. */}
         {career && (
           <>
-            {!career.retired && (
-              <button
-                onClick={() => setTrainingOpen(true)}
-                aria-label="Open the training ground"
-                /* Round 129: the lift rides on the `translate` longhand, not on
-                   `transform`. These two buttons carry hover:scale-105 and
-                   active:scale-95, which Tailwind writes into `transform`, so an
-                   inline transform here would silently delete the press
-                   animation. `translate` composes with it instead. */
-                style={floatingButtonLift ? { translate: `0 -${floatingButtonLift}px` } : undefined}
-                className="fixed bottom-[5.5rem] right-4 z-40 w-14 h-14 rounded-2xl bg-zinc-900 border-2 border-zinc-700 shadow-xl flex items-center justify-center text-2xl hover:scale-105 active:scale-95 transition-transform"
-              >
-                🏋️
-                {trainingAvailable(career) && (
-                  <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900" />
-                )}
-              </button>
-            )}
-            <button
-              onClick={() => setPhoneOpen(true)}
-              aria-label="Open your phone"
-              style={floatingButtonLift ? { translate: `0 -${floatingButtonLift}px` } : undefined}
-              className="fixed bottom-5 right-4 z-40 w-14 h-14 rounded-2xl bg-zinc-900 border-2 border-zinc-700 shadow-xl flex items-center justify-center text-2xl hover:scale-105 active:scale-95 transition-transform"
-            >
-              📱
-              {unreadPhoneCount(career) > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center">
-                  {unreadPhoneCount(career)}
-                </span>
-              )}
-            </button>
             {phoneOpen && (
               <PhonePanel
                 career={career}
@@ -1511,14 +1518,14 @@ export default function SoccerCareer() {
               />
             )}
             {trainingOpen && (
-              <CentreMountBoundary what="training ground" onClose={() => setTrainingOpen(false)}>
+              <CentreMountBoundary what="training ground" onClose={closeTraining}>
                 <Suspense fallback={<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70" data-training-loading><div className="rounded-2xl border border-border bg-card px-5 py-4 text-sm">🏋️ Opening the training ground...</div></div>}>
                   <TrainingPanel
                     career={career}
                     available={trainingAvailable(career)}
                     onComplete={handleTrainingComplete}
                     onDrill={handleDrillComplete}
-                    onClose={() => setTrainingOpen(false)}
+                    onClose={closeTraining}
                   />
                 </Suspense>
               </CentreMountBoundary>
@@ -4011,6 +4018,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {/* OVERLAY: Season Summary */}
           {career.phase === "season_summary" && career.pendingSummary && (
             <SeasonSummaryCard season={visibleCareer.pendingSummary!} position={career.position} onContinue={onDismissSummary} appearance={career.appearance}
+              goalMilestone={personalGoalMilestone(career.seasons, career.seasons.find(row => row.year === career.pendingSummary!.year && row.club === career.pendingSummary!.club) ?? career.pendingSummary)}
               leagueOf={finishLeague({ name: career.pendingSummary.club, league: clubs.find(c => c.name === career.pendingSummary?.club)?.league ?? "" }, career.pendingSummary.year, readLeagueFinish(career.pendingSummary)?.size ?? null)} world={career.phone?.world} familyContext={career} />
           )}
 
@@ -4330,6 +4338,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               at a club. Round 1115: the Squad tile, every club and every
               year, and it says whether the squad is real, by role or invented. */}
           {career.phase === "playing" && <SquadTile career={career} />}
+          {career.phase === "playing" && <ReducedRolePlanNote career={career} />}
 
           {/* Financial & Lifestyle Panel */}
           {(career.phase === "youth" || career.phase === "playing" || career.phase === "retired") && (
@@ -4553,7 +4562,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               <button type="button" onClick={() => setRatingsOpen(true)} data-open-season-ratings
                 className="text-[11px] font-bold text-emerald-400 px-2 py-1 rounded hover:bg-white/5">📈 Ratings</button>
               <button type="button" onClick={() => setStoryOpen(true)} data-open-career-story
-                className="text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5">📖 Career Story</button>
+                className="min-h-11 text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5">📖 Career Story</button>
               {career.seasons.some(r => r.type === "playing" && r.apps > 0) && <button type="button" onClick={() => setReplaysOpen(true)} data-open-season-replays
                 className="text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5 min-h-11">📺 Season replays</button>}
             </div>

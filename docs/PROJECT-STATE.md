@@ -1,3 +1,14 @@
+## Codex 1188-1191 CLAIM: Soccer Career story and selection, 2026-10-09
+
+Isolated codex/career-story-role starts at released AR
+fa24b3848d99e29367486489b081a483dc544206, tree d9175fa74fc5784ba6acfd1a62f4592cb106f22f.
+Mobile utilities, recorded story navigation, actual new-manager reduced role
+and truthful personal goal milestones are being authored. Contract:
+docs/ROUND1188-1191.md. Remote exact-head verification is pending.
+No dependency on frozen PR208/209/210; preserve AR/AQ integration changes.
+Root app/index/stashes and Recovery ownership are protected. F owns merge,
+final combined release gates and publish. No local runtime or DB work.
+
 ## Release AR LIVE, 2026-10-09 20:14 EDT: Club Manager match day from players' reports: (P) and (O.G) beside a goal, Quick Sim that makes its subs, and a goal that keeps its net when the other side changes a man
 
 Claude lane (session F). main 8c5ce655, deployment 468b616a-f984-4af9-959d-12f584834eaa, entry index-DNvMbg1w.js (was index-DBSXBErW.js, Release AQ,

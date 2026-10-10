@@ -41,6 +41,7 @@ import { CLUB_SQUADS, CLUB_DATA_NAME, CLUB_SQUAD_YEARS } from '@/data/clubSquads
 import type { CareerState } from './soccerCareerEngine';
 import { projectLeagueApps } from './soccerCareerEngine';
 import { phoneAppsSwing } from './soccerPhone';
+import { reducedRoleForSeason, reducedRoleSwing, type ReducedRolePlan } from './soccerCareerRole';
 import { genClubSquad, roleName, ELEVEN_SHAPE } from './soccerClubSquadGen';
 
 export type SquadGroup = 'GK' | 'DEF' | 'MID' | 'ATT';
@@ -210,6 +211,8 @@ export interface Trust {
   expected: number;
   band: { min: number; max: number };
   swing: number;
+  role: ReducedRolePlan | null;
+  roleSwing: -4 | 0;
   frozen: boolean;
   /** The engine's own line between a starter and cover: a plan of 20 or more. */
   inPlans: boolean;
@@ -288,8 +291,10 @@ export function managerTrust(c: CareerState, at: SquadAt, myOverall: number = c.
   const seasonsAtClub = c.seasons.filter(s => s.club === at.club && s.type === 'playing').length;
   const band = projectLeagueApps(myOverall, at.tier, at.club, seasonsAtClub);
   const swing = phoneAppsSwing(c);
+  const role = reducedRoleForSeason(c, at.club, at.year);
+  const roleSwing = reducedRoleSwing(c, at.club, at.year);
   const frozen = at.club === c.currentClub && (c.frozenOut ?? 0) > 0;
-  let expected = clampN((band.min + band.max) / 2 + swing, 0, 38);
+  let expected = clampN((band.min + band.max) / 2 + swing + roleSwing, 0, 38);
   if (frozen) expected = Math.min(8, Math.round(expected * 0.25));
   const pct = Math.round((expected / 38) * 100);
   const label = frozen ? 'Frozen out'
@@ -298,7 +303,7 @@ export function managerTrust(c: CareerState, at: SquadAt, myOverall: number = c.
         : pct >= 55 ? 'Starter most weeks'
           : pct >= 38 ? 'In and out of the side'
             : 'Squad player';
-  return { pct, expected, band, swing, frozen, inPlans: !frozen && band.min >= 20, label };
+  return { pct, expected, band, swing, role, roleSwing, frozen, inPlans: !frozen && band.min + roleSwing >= 20, label };
 }
 
 /* Left, centre, right inside a line, the way a team sheet reads. */
