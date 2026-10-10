@@ -148,8 +148,20 @@ wide, against a yardstick of ten disjoint pairs of generated fleets (the "null s
 | laliga (20) | 2.6445 - 2.6399 = +0.0046 | +0.28 | 0.4554 - 0.4374 = +0.0180 | +3.83 |
 | bundesliga (18) | 2.6536 - 2.6619 = -0.0083 | -0.23 | 0.4577 - 0.4384 = +0.0193 | +1.90 |
 
-Goals a match do not move. The home win share is about two points higher on the real list in two of the
-three leagues, and in La Liga that is well outside the measured noise. Nothing was tuned: the brief says such
-a move is a finding about the engine and its calendar, not something to adjust in a data round. A larger run
-that includes the Premier League (already live on its real list since Release AT) was sent as `r1225-f4b`;
-its numbers are in the closing report `finish-1225.md` if it came back in time.
+Goals a match do not move. On that one pair of fleets the home win share read about two points higher on the
+real list in two of the three leagues, and in La Liga well outside the yardstick. One pair is one draw, so the
+same comparison was run on five more sets of seeds, with the Premier League added (`r1225-f4b`, six pairs of
+20 seasons a league, 32,360 real list matches):
+
+| league | home win share, real minus generated, six pairs | mean | goals a match, mean of six |
+|---|---|---|---|
+| premier (20) | -0.0026 +0.0053 +0.0055 -0.0004 -0.0047 -0.0017 | +0.0002 | -0.0070 |
+| championship (24) | -0.0012 +0.0043 +0.0088 -0.0019 -0.0074 -0.0103 | -0.0013 | -0.0031 |
+| laliga (20) | +0.0180 +0.0030 -0.0001 +0.0012 +0.0086 -0.0026 | +0.0047 | +0.0102 |
+| bundesliga (18) | +0.0193 -0.0026 +0.0008 +0.0142 -0.0172 -0.0054 | +0.0015 | +0.0056 |
+
+So the two points of the first pair were its own draw: the other five pairs of La Liga and of the Bundesliga
+sit on both sides of zero. What is left is La Liga's mean of about half a point (+0.0047), which is as large
+as the yardstick for ONE pair (0.0047) and so about 2.4 times the yardstick for a mean of six. That is the
+one number here worth another look, in a round of its own with more seasons. Nothing was tuned, and nothing
+is asserted on these numbers by any harness: a band set from one measurement would be a coin toss.
