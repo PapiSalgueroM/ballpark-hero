@@ -1,0 +1,8 @@
+og-keepercorner exit=1 11s | simOwnGoalMotion: control keepercorner turned "OG5: the turn can be seen" red on an assertion (1 failed) and the material stayed green, as it must.
+og-straight exit=1 10s | simOwnGoalMotion: control straight turned "OG5: the turn can be seen" red on an assertion (1 failed) and the material stayed green, as it must.
+og-clean exit=0 24s | simOwnGoalMotion: green. 16 tests passed: the dense fleet, OG1 to OG9 against their baseline arm, the scenes made by hand (OG6 to OG8 and OG10), the two recorded digests,
+og-keeperdown exit=1 8s | simOwnGoalMotion: control keeperdown turned "OG3: nobody is the scorer" red on an assertion (1 failed) and the material stayed green, as it must.
+lc-clean exit=0 3s | simLiveSimCelebration: 17 outcome checks passed, correct side, net-first, real figure, freeze/expiry, reduced motion, the three recorded digests of the lift, the part beh
+liveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+lm-clean exit=0 49s | simLiveSimMotion: green. 55 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+tsc exit=0 73s | 

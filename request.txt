@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+og-clean: node scripts/simOwnGoalMotion.mjs
+og-keepercorner: OWN_GOAL_CONTROL=keepercorner node scripts/simOwnGoalMotion.mjs
+og-straight: OWN_GOAL_CONTROL=straight node scripts/simOwnGoalMotion.mjs
+og-keeperdown: OWN_GOAL_CONTROL=keeperdown node scripts/simOwnGoalMotion.mjs
+lm-clean: node scripts/simLiveSimMotion.mjs
+lc-clean: node scripts/simLiveSimCelebration.mjs
+liveScores: node scripts/simLiveScores.mjs
