@@ -17,6 +17,7 @@ import {
   type MlbCareerPos, type MlbCareerState, type MlbSeasonLine,
 } from '@/lib/mlbMyCareer';
 import { countOf, mlbCareerSoFar, mlbMajorAward, mlbStatLine } from '@/lib/usCareerStatLine';
+import { otherAwardsRow } from '@/lib/careerHub';
 import { mlbHeatLabel } from '@/lib/mlbCareerCorruption';
 import { MLB_MONEY, mlbMoneyAct, mlbMoneyWealth } from '@/lib/mlbCareerMoney';
 import { mlbEarnedBadges, mlbFanComments, mlbFollowers, mlbHeadlinesFor } from '@/lib/mlbCareerLoop';
@@ -32,6 +33,9 @@ import { mlbSeasonReview } from '@/lib/usCareerSeasonReview';
    page's Continue fence (simHomeFront section 7) can find where every save
    key in src is declared; the value is the one the old board used. */
 const SAVE_KEY = 'mlb-my-career-save-v1';
+/** Round 1149: the awards the Trophy Case tile already counts in a row of their own (the honours below), as
+ *  the engine writes them. A hitter's MVP and a pitcher's Cy Young share one counter. */
+const MLB_TILE_NAMED = ['MVP', 'Cy Young', 'All-Star'];
 
 /* Round 1104: built through withBankFloor, the one bank rule the four US
    careers share (src/lib/usCareerBank.ts). */
@@ -117,7 +121,7 @@ export const MLB_CAREER_SPORT: UsCareerSport<MlbCareerState, MlbSeasonLine> = wi
   ringsOf: c => c.rings,
   ringWord: 'ring',
   ringsLabel: 'rings',
-  honours: c => [{ label: 'MVP or Cy Young awards', n: c.mvpCys }, { label: 'All-Star nods', n: c.allStars }],
+  honours: c => [{ label: 'MVP or Cy Young awards', n: c.mvpCys }, { label: 'All-Star nods', n: c.allStars }, otherAwardsRow(c.seasons, MLB_TILE_NAMED)],
   /* A reliever is a bullpen arm whatever the depth chart says; a starter is in
      the rotation or a spot starter; everyone else plays every day or sits. */
   roleBadge: c => (c.pos === 'RP' ? '⭐ Bullpen arm'

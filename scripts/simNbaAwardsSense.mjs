@@ -136,6 +136,14 @@
        career of the fleet (exact), so the tile reads Empty only over an empty case. The careers the row is for
        (awards, but no ring, MVP, All-NBA or All-Star) are still there on every seed: 389, 418, 402, 395, 389
        of 6,000 on 2026-10-09, about one career in fifteen, and the floor of 230 is six tenths of the lowest.
+       Round 1149: the NFL, MLB and NHL careers got the same row (otherAwardsRow in careerHub.ts, one function
+       for all four), and the same two checks run on each sport's own fleet of 500 careers a seed. Measured
+       2026-10-10, seeds 1 to 5: 0 of 2,500 careers off in each sport; careers with the lesser awards only
+       12, 20, 19, 22, 12 in the NFL (a Rookie of the Year and nothing else), 22, 22, 16, 17, 13 in MLB and 16,
+       17, 6, 16, 11 in the NHL, so the floors are 7, 7 and 3, six tenths of each lowest. With the row taken
+       out again (the controls, seed 1) the tile is short of the case in 32 of 500 NFL careers, 157 of 500 MLB
+       and 164 of 500 NHL: before this round one MLB or NHL career in three read fewer honours on the tile
+       than its case listed.
    T   The near tie (Round 1112). The one sentence all four sports share ("Nothing in it again. ...") names the
        leader the tally on the save gives, or says the head to head is level. Every near tie note of the NBA
        fleet and of the other three sports' fleets is read against the rival's tally right after its season
@@ -183,6 +191,10 @@
      oldgate306       the All-Star beat dealt on the two ratings again R red
      nearlie          the near tie saying "You lead" whoever leads     T red
      norow            the tile's row for the lesser awards taken out   K red
+     norownfl         the same row taken out of the NFL career         K red
+     norowmlb         the same row taken out of the MLB career         K red
+     norownhl         the same row taken out of the NHL career         K red
+     twicecounted     MLB's Cy Young no longer named, so counted twice K red
    With SENSE_PROVE_AGAINST=<commit> set, rivaldraws must also turn P red (the player's digest moves).
      noscale          the legacy constant back to 1                    H red (refuses when it is 1)
      nomvpworth       an MVP worth nothing to the legacy score         H red
@@ -331,7 +343,13 @@ const CONTROLS = {
   /* R: the rival's season taking a second draw of the season's stream (every draw of the player's after it moves). */
   rivaldraws: { file: 'src/lib/nbaMyCareer.ts', find: "    const keyed = keyedRng(`nba-rival|${r.name}|${year}|${rng()}`);", put: "    const keyed = keyedRng(`nba-rival|${r.name}|${year}|${rng() + rng()}`);", needs: PROVE_AGAINST ? 'R,P' : 'R' },
   /* K: the Trophy Case tile's row for the lesser awards taken out. */
-  norow: { file: 'src/lib/nbaCareerSport.ts', find: "    { label: 'in other awards', n: c.seasons.reduce((n, s) => n + (s.awards ?? []).filter(a => !NBA_TILE_NAMED.includes(a)).length, 0) },", put: "    { label: 'in other awards', n: 0 },", needs: 'K' },
+  norow: { file: 'src/lib/nbaCareerSport.ts', find: "    otherAwardsRow(c.seasons, NBA_TILE_NAMED),", put: "    { label: 'in other awards', n: 0 },", needs: 'K' },
+  /* K, Round 1149: the same row taken out of each of the other three careers, and one award named twice (a Cy
+     Young counted by its own row and by the row for the rest). */
+  norownfl: { file: 'src/lib/nflCareerSport.ts', find: ", otherAwardsRow(c.seasons, NFL_TILE_NAMED)],", put: "],", needs: 'K' },
+  norowmlb: { file: 'src/lib/mlbCareerSport.ts', find: ", otherAwardsRow(c.seasons, MLB_TILE_NAMED)],", put: "],", needs: 'K' },
+  norownhl: { file: 'src/lib/nhlCareerSport.ts', find: ", otherAwardsRow(c.seasons, NHL_TILE_NAMED)],", put: "],", needs: 'K' },
+  twicecounted: { file: 'src/lib/mlbCareerSport.ts', find: "const MLB_TILE_NAMED = ['MVP', 'Cy Young', 'All-Star'];", put: "const MLB_TILE_NAMED = ['MVP', 'All-Star'];", needs: 'K' },
   /* T: the near tie saying "You lead" whoever leads, as it did in all four sports. */
   nearlie: { file: 'src/lib/careerRival.ts', find: 'Nothing in it again. ${rivalLeadLine(r)}`);', put: 'Nothing in it again. You lead the head to head ${head}.`);', needs: 'T' },
   /* H: the legacy constant back to 1. Refuses when it already is 1 (then nomvpworth is the control H has). */
@@ -483,6 +501,9 @@ const BUNDLE = {
       "export * as nbaAwards from './src/lib/nbaCareerAwards.ts';",
       "export { keyedRng } from './src/lib/keyedRng.ts';",
       "export { NBA_CAREER_SPORT } from './src/lib/nbaCareerSport.ts';",
+      "export { NFL_CAREER_SPORT } from './src/lib/nflCareerSport.ts';",
+      "export { MLB_CAREER_SPORT } from './src/lib/mlbCareerSport.ts';",
+      "export { NHL_CAREER_SPORT } from './src/lib/nhlCareerSport.ts';",
       "export { honoursTotal } from './src/lib/careerHub.ts';",
       "export { nbaStatLine } from './src/lib/usCareerStatLine.ts';",
       "export * as decision from './src/lib/awardDecision.ts';",
@@ -1001,6 +1022,9 @@ const OTHER = otherOf(E);
  *  of every season line and every numeric counter on the final save, and the season lines for the prints. */
 function playOther(sport, seed, per, M = E) {
   const d = (M === E ? OTHER : otherOf(M))[sport];
+  /* Round 1149, K: the sport's own descriptor, for what its Trophy Case tile counts. */
+  const desc = { nfl: M.NFL_CAREER_SPORT, mlb: M.MLB_CAREER_SPORT, nhl: M.NHL_CAREER_SPORT }[sport];
+  const careers = [];
   /* Round 1112: the rival's own trail (his line, his score, the tally, his rings, rating, age, whether he has
      retired) hashed apart from the player's, the season notes kept for section P, the near ties for section T. */
   const hr = crypto.createHash('sha256');
@@ -1028,8 +1052,13 @@ function playOther(sport, seed, per, M = E) {
     const counters = Object.fromEntries(Object.entries(c).filter(([, v]) => typeof v === 'number').sort(([a], [b]) => (a < b ? -1 : 1)));
     h.update(JSON.stringify({ seasons: c.seasons, counters }));
     for (const s of c.seasons) lines.push(s);
+    /* K: the tile (rings plus the honours rows) against the awards on the seasons; `named` is what the rows
+       counted before Round 1149 gave each sport its row for the rest. */
+    const rows = desc.honours(c); const rings = desc.ringsOf(c);
+    careers.push({ pos, tile: M.honoursTotal({ rings, honours: rows }), rings, awardsHeld: c.seasons.reduce((n, s) => n + (s.awards ?? []).length, 0),
+      named: rows.filter(r => r.label !== 'in other awards').reduce((n, r) => n + r.n, 0) });
   }
-  return { hash: h.digest('hex'), lines, rivalHash: hr.digest('hex'), notes, nearTies };
+  return { hash: h.digest('hex'), lines, rivalHash: hr.digest('hex'), notes, nearTies, careers };
 }
 
 /* ------------------------------------------------------------------ */
@@ -1099,6 +1128,8 @@ const HELD_TOL = {
 const RIVAL_1112 = { myShare: [61.01, 60.83, 61.44, 61.06, 61.09] };
 /* K: careers a full size seed must still find whose only awards are the lesser ones (see the header). */
 const LESSER_ONLY_FLOOR = 230;
+/* K, Round 1149: the same floor for the other three careers, a seed of 500 (see the header). */
+const OTHER_LESSER_ONLY_FLOOR = { nfl: 7, mlb: 7, nhl: 3 };
 /* T: how many near tie notes of each kind a full size run must still find in each sport (see the header). */
 const NEAR_TIE_FLOOR = 200;
 /* R4: how often a full size seed must still deal the All-Star beat in each of its three cases (see the header). */
@@ -1578,6 +1609,14 @@ if (HAS_PASS() && typeof E.nbaAwards.nbaAwardHelpRules === 'function') {
   const lesserOnly = fleets.map(f => f.filter(c => c.awardsHeld > 0 && c.rings + c.named === 0).length);
   exact('K', all.length > 0 && off.length === 0, `the Trophy Case tile counts the rings plus every award on the seasons, so it reads Empty only over an empty case: ${off.length} of ${all.length} careers off${off.length ? ` (the first: tile ${off[0].tile}, rings ${off[0].rings}, awards ${off[0].awardsHeld})` : ''}`);
   banded('K', lesserOnly.every(n => n >= LESSER_ONLY_FLOOR), `careers whose only awards are the lesser ones (no ring, MVP, All-NBA or All-Star), the ones the tile read Empty for: ${lesserOnly.join(', ')} a seed (floor ${LESSER_ONLY_FLOOR})`);
+  /* Round 1149: the same two checks on the other three careers, each on its own fleet. */
+  for (const sp of Object.keys(OTHER)) {
+    const list = others[sp].flatMap(o => o.careers);
+    const bad = list.filter(c => c.tile !== c.rings + c.awardsHeld);
+    const only = others[sp].map(o => o.careers.filter(c => c.awardsHeld > 0 && c.rings + c.named === 0).length);
+    exact('K', list.length > 0 && bad.length === 0, `${sp.toUpperCase()}: the Trophy Case tile counts the rings plus every award on the seasons: ${bad.length} of ${list.length} careers off${bad.length ? ` (the first, a ${bad[0].pos}: tile ${bad[0].tile}, rings ${bad[0].rings}, awards ${bad[0].awardsHeld})` : ''}`);
+    banded('K', only.every(n => n >= OTHER_LESSER_ONLY_FLOOR[sp]), `${sp.toUpperCase()}: careers whose only awards are the lesser ones, the ones the tile read Empty for: ${only.join(', ')} a seed of ${OTHERS_PER} (floor ${OTHER_LESSER_ONLY_FLOOR[sp]})`);
+  }
 }
 
 /* T, the near tie (Round 1112): the one sentence all four sports share names the leader the tally gives. */

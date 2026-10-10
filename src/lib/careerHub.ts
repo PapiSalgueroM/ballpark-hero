@@ -82,6 +82,19 @@ export function honoursTotal(f: Pick<CareerHubFacts, 'rings' | 'honours'>): numb
 }
 
 /**
+ * Round 1149: the honours row for every award a sport's named rows do not
+ * count. The case behind the Trophy Case tile lists every award on the
+ * seasons; the tile reads the sport's honours rows, which name only the big
+ * ones, so a career whose only awards were the lesser ones read Empty over a
+ * case that was not. Round 1112 wrote this row for the NBA; it is one function
+ * now so the four careers cannot drift. `named` is the list of award words the
+ * sport's other rows already count, exactly as its engine writes them.
+ */
+export function otherAwardsRow(seasons: { awards?: string[] }[], named: readonly string[]): { label: string; n: number } {
+  return { label: 'in other awards', n: seasons.reduce((n, s) => n + (s.awards ?? []).filter(a => !named.includes(a)).length, 0) };
+}
+
+/**
  * The five boxes, in the order they are laid out.
  *
  * Same rule as the front office hub: every value line answers a question

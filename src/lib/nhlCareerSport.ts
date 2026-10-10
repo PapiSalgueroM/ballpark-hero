@@ -17,6 +17,7 @@ import {
   type NhlCareerPos, type NhlCareerState, type NhlSeasonLine,
 } from '@/lib/nhlMyCareer';
 import { countOf, nhlMajorAward, nhlStatLine } from '@/lib/usCareerStatLine';
+import { otherAwardsRow } from '@/lib/careerHub';
 import { nhlHeatLabel } from '@/lib/nhlCareerCorruption';
 import { NHL_MONEY, nhlMoneyAct, nhlMoneyWealth } from '@/lib/nhlCareerMoney';
 import { nhlEarnedBadges, nhlFanComments, nhlFollowers, nhlHeadlinesFor } from '@/lib/nhlCareerLoop';
@@ -32,6 +33,9 @@ import { nhlSeasonReview } from '@/lib/usCareerSeasonReview';
    page's Continue fence (simHomeFront section 7) can find where every save
    key in src is declared; the value is the one the old board used. */
 const SAVE_KEY = 'nhl-my-career-save-v1';
+/** Round 1149: the awards the Trophy Case tile already counts in a row of their own (the honours below), as
+ *  the engine writes them. The Hart, the Norris and the Vezina share one counter (the major at his position). */
+const NHL_TILE_NAMED = ['Hart', 'Norris', 'Vezina', 'All-Star', 'Conn Smythe'];
 
 /* Round 1104: built through withBankFloor, the one bank rule the four US
    careers share (src/lib/usCareerBank.ts). */
@@ -119,7 +123,7 @@ export const NHL_CAREER_SPORT: UsCareerSport<NhlCareerState, NhlSeasonLine> = wi
   ringsOf: c => c.cups,
   ringWord: 'Cup',
   ringsLabel: 'Cups',
-  honours: c => [{ label: 'Major awards', n: c.harts }, { label: 'All-Star nods', n: c.allStars }, { label: 'Conn Smythes', n: c.connSmythes }],
+  honours: c => [{ label: 'Major awards', n: c.harts }, { label: 'All-Star nods', n: c.allStars }, { label: 'Conn Smythes', n: c.connSmythes }, otherAwardsRow(c.seasons, NHL_TILE_NAMED)],
   roleBadge: c => (c.role === 'backup' ? (c.pos === 'G' ? '🪑 Backup goalie' : '🪑 Fourth line') : (c.pos === 'G' ? '⭐ Number one' : '⭐ Top of the lineup')),
   careerSoFar: c => {
     const totals = nhlCareerTotals(c);
