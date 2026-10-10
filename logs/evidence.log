@@ -1,0 +1,27 @@
+A) Club Manager nationality filter at 390
+  PASS  390: the career started and the hub shows a Market tab
+  PASS  390: the nationality filter is on the Market screen with 6 groups
+   groups: Europe (UEFA) 48 | South America (CONMEBOL) 10 | North and Central America, Caribbean (CONCACAF) 17 | Africa (CAF) 37 | Asia (AFC) 15 | Oceania (OFC) 3
+  PASS  390: no "Elsewhere" group
+  PASS  390: Niger sits under Africa (CAF) (found under: Africa (CAF))
+  PASS  390: Southern Sudan sits under Africa (CAF) (found under: Africa (CAF))
+  PASS  390: Turkmenistan sits under Asia (AFC) (found under: Asia (AFC))
+   130 nations in the default world's market
+  PASS  390: the Market screen has no sideways scroll (0px)
+A) Club Manager nationality filter at 1280
+  PASS  1280: the career started and the hub shows a Market tab
+  PASS  1280: the nationality filter is on the Market screen with 6 groups
+   groups: Europe (UEFA) 48 | South America (CONMEBOL) 10 | North and Central America, Caribbean (CONCACAF) 17 | Africa (CAF) 37 | Asia (AFC) 15 | Oceania (OFC) 3
+  PASS  1280: no "Elsewhere" group
+  PASS  1280: Niger sits under Africa (CAF) (found under: Africa (CAF))
+  PASS  1280: Southern Sudan sits under Africa (CAF) (found under: Africa (CAF))
+  PASS  1280: Turkmenistan sits under Asia (AFC) (found under: Asia (AFC))
+   130 nations in the default world's market
+  PASS  1280: the Market screen has no sideways scroll (0px)
+B) NFL My Career, the opened Career Log at 390
+  PASS  390: the opened Career Log shows three season tiles (saw 3)
+  PASS  390: the opened Career Log has no sideways scroll (0px)
+B) NFL My Career, the opened Career Log at 1280
+  PASS  1280: the opened Career Log shows three season tiles (saw 3)
+  PASS  1280: the opened Career Log has no sideways scroll (0px)
+evidence1210: 0 problems

@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+hub: ENGINES=chromium node scripts/playCareerHub.mjs
+hub-revert: CAREER_HUB_CONTROL=revert ENGINES=chromium node scripts/playCareerHub.mjs
+hub-logback: CAREER_HUB_CONTROL=logback ENGINES=chromium node scripts/playCareerHub.mjs
+evidence: node .rc/x/evidence1210.mjs
