@@ -1,0 +1,10 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 215s | playDraftNight: ALL GREEN, 49 nights walked
+nottall-1 exit=1 8s | playDraftNight [control nottall]: 1 FAILURE(S) of its own check (fold), as it must
+nottall-2 exit=1 8s | playDraftNight [control nottall]: 1 FAILURE(S) of its own check (fold), as it must
+nottall-3 exit=1 8s | playDraftNight [control nottall]: 1 FAILURE(S) of its own check (fold), as it must
+nottall-4 exit=1 8s | playDraftNight [control nottall]: 1 FAILURE(S) of its own check (fold), as it must
+nottall-5 exit=1 8s | playDraftNight [control nottall]: 1 FAILURE(S) of its own check (fold), as it must
+nottall-6 exit=1 8s | playDraftNight [control nottall]: 1 FAILURE(S) of its own check (fold), as it must
+nottall-7 exit=1 8s | playDraftNight [control nottall]: 1 FAILURE(S) of its own check (fold), as it must
+nottall-8 exit=1 8s | playDraftNight [control nottall]: 1 FAILURE(S) of its own check (fold), as it must
