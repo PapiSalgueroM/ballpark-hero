@@ -1,0 +1,1218 @@
+{
+ "fixtures": {
+  "ruledOut": {
+   "seed": 2460,
+   "minute": 9,
+   "side": "me",
+   "who": "Kiernan Dewsbury-Hall",
+   "decision": "disallowed"
+  },
+  "penaltyScored": {
+   "seed": 1735,
+   "minute": 34,
+   "side": "opp",
+   "who": "Alexander Isak",
+   "decision": "awarded"
+  },
+  "penaltySaved": {
+   "seed": 2193,
+   "minute": 36,
+   "side": "me",
+   "who": "Thierno Barry",
+   "decision": "awarded"
+  },
+  "goalBefore": {
+   "seed": 1724,
+   "minute": 8,
+   "side": "opp",
+   "who": "João Gomes",
+   "decision": "disallowed"
+  },
+  "two": {
+   "seed": 2453,
+   "minute": 12,
+   "side": "opp",
+   "who": "Hugo Ekitiké",
+   "decision": "disallowed"
+  }
+ },
+ "cases": [
+  {
+   "id": "390-motion-ruledOut-plain",
+   "kind": "ruledOut",
+   "variant": "plain",
+   "seed": 2460,
+   "shots": [
+    "390-motion-ruledOut-plain-1-checking.jpg",
+    "390-motion-ruledOut-plain-2-decided.jpg",
+    "390-motion-ruledOut-plain-3-after.jpg",
+    "390-motion-ruledOut-plain-4-help.jpg",
+    "390-motion-ruledOut-plain-8-full-time.jpg",
+    "390-motion-ruledOut-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "9'",
+    "side": "me",
+    "who": "Kiernan Dewsbury-Hall",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "minuteChecking": 9,
+   "decided": "VAR: goal ruled out |  | Kiernan Dewsbury-Hall, Everton, 9' |  | No goal. The score does not change.",
+   "scoreAfter": {
+    "me": 0,
+    "opp": 0
+   },
+   "result": "0-0",
+   "timeline": [
+    {
+     "clock": "9'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "shown": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "cut": false
+    }
+   ],
+   "seconds": 11
+  },
+  {
+   "id": "390-motion-penaltyScored-plain",
+   "kind": "penaltyScored",
+   "variant": "plain",
+   "seed": 1735,
+   "shots": [
+    "390-motion-penaltyScored-plain-1-checking.jpg",
+    "390-motion-penaltyScored-plain-2-decided.jpg",
+    "390-motion-penaltyScored-plain-3-after.jpg",
+    "390-motion-penaltyScored-plain-8-full-time.jpg",
+    "390-motion-penaltyScored-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "34'",
+    "side": "opp",
+    "who": "Alexander Isak",
+    "decision": "awarded",
+    "prior": {
+     "me": 1,
+     "opp": 1
+    },
+    "kick": "scored"
+   },
+   "card": {
+    "text": "VAR: checking for a penalty |  | Alexander Isak, Liverpool, 34' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 1
+   },
+   "minuteChecking": 34,
+   "decided": "VAR: penalty awarded |  | Alexander Isak, Liverpool, 34' |  | Penalty to Liverpool.",
+   "scoreAfter": {
+    "me": 1,
+    "opp": 2
+   },
+   "result": "1-2",
+   "timeline": [
+    {
+     "clock": "34'",
+     "side": "opp",
+     "title": "📺 VAR: penalty awarded: Alexander Isak",
+     "shown": "📺 VAR: penalty awarded: Alexander Isak",
+     "cut": false
+    }
+   ],
+   "seconds": 25
+  },
+  {
+   "id": "390-motion-penaltySaved-plain",
+   "kind": "penaltySaved",
+   "variant": "plain",
+   "seed": 2193,
+   "shots": [
+    "390-motion-penaltySaved-plain-1-checking.jpg",
+    "390-motion-penaltySaved-plain-2-decided.jpg",
+    "390-motion-penaltySaved-plain-3-after.jpg",
+    "390-motion-penaltySaved-plain-8-full-time.jpg",
+    "390-motion-penaltySaved-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "36'",
+    "side": "me",
+    "who": "Thierno Barry",
+    "decision": "awarded",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": "saved"
+   },
+   "card": {
+    "text": "VAR: checking for a penalty |  | Thierno Barry, Everton, 36' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "minuteChecking": 36,
+   "decided": "VAR: penalty awarded |  | Thierno Barry, Everton, 36' |  | Penalty to Everton.",
+   "scoreAfter": {
+    "me": 0,
+    "opp": 0
+   },
+   "result": "1-1",
+   "timeline": [
+    {
+     "clock": "36'",
+     "side": "me",
+     "title": "📺 VAR: penalty awarded: Thierno Barry",
+     "shown": "📺 VAR: penalty awarded: Thierno Barry",
+     "cut": false
+    }
+   ],
+   "seconds": 25
+  },
+  {
+   "id": "390-motion-goalBefore-plain",
+   "kind": "goalBefore",
+   "variant": "plain",
+   "seed": 1724,
+   "shots": [
+    "390-motion-goalBefore-plain-1-checking.jpg",
+    "390-motion-goalBefore-plain-2-decided.jpg",
+    "390-motion-goalBefore-plain-3-after.jpg",
+    "390-motion-goalBefore-plain-8-full-time.jpg",
+    "390-motion-goalBefore-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "8'",
+    "side": "opp",
+    "who": "João Gomes",
+    "decision": "disallowed",
+    "prior": {
+     "me": 1,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | João Gomes, Aston Villa, 8' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 0
+   },
+   "minuteChecking": 9,
+   "decided": "VAR: goal ruled out |  | João Gomes, Aston Villa, 8' |  | No goal. The score does not change.",
+   "scoreAfter": {
+    "me": 1,
+    "opp": 0
+   },
+   "result": "3-1",
+   "timeline": [
+    {
+     "clock": "8'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: João Gomes",
+     "shown": "📺 VAR: goal ruled out: João Gomes",
+     "cut": false
+    }
+   ],
+   "seconds": 11
+  },
+  {
+   "id": "1280-motion-ruledOut-plain",
+   "kind": "ruledOut",
+   "variant": "plain",
+   "seed": 2460,
+   "shots": [
+    "1280-motion-ruledOut-plain-1-checking.jpg",
+    "1280-motion-ruledOut-plain-2-decided.jpg",
+    "1280-motion-ruledOut-plain-3-after.jpg",
+    "1280-motion-ruledOut-plain-4-help.jpg",
+    "1280-motion-ruledOut-plain-8-full-time.jpg",
+    "1280-motion-ruledOut-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "9'",
+    "side": "me",
+    "who": "Kiernan Dewsbury-Hall",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "minuteChecking": 9,
+   "decided": "VAR: goal ruled out |  | Kiernan Dewsbury-Hall, Everton, 9' |  | No goal. The score does not change.",
+   "scoreAfter": {
+    "me": 0,
+    "opp": 0
+   },
+   "result": "0-0",
+   "timeline": [
+    {
+     "clock": "9'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "shown": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "cut": false
+    }
+   ],
+   "seconds": 10
+  },
+  {
+   "id": "1280-motion-penaltyScored-plain",
+   "kind": "penaltyScored",
+   "variant": "plain",
+   "seed": 1735,
+   "shots": [
+    "1280-motion-penaltyScored-plain-1-checking.jpg",
+    "1280-motion-penaltyScored-plain-2-decided.jpg",
+    "1280-motion-penaltyScored-plain-3-after.jpg",
+    "1280-motion-penaltyScored-plain-8-full-time.jpg",
+    "1280-motion-penaltyScored-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "34'",
+    "side": "opp",
+    "who": "Alexander Isak",
+    "decision": "awarded",
+    "prior": {
+     "me": 1,
+     "opp": 1
+    },
+    "kick": "scored"
+   },
+   "card": {
+    "text": "VAR: checking for a penalty |  | Alexander Isak, Liverpool, 34' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 1
+   },
+   "minuteChecking": 34,
+   "decided": "VAR: penalty awarded |  | Alexander Isak, Liverpool, 34' |  | Penalty to Liverpool.",
+   "scoreAfter": {
+    "me": 1,
+    "opp": 2
+   },
+   "result": "1-2",
+   "timeline": [
+    {
+     "clock": "34'",
+     "side": "opp",
+     "title": "📺 VAR: penalty awarded: Alexander Isak",
+     "shown": "📺 VAR: penalty awarded: Alexander Isak",
+     "cut": false
+    }
+   ],
+   "seconds": 24
+  },
+  {
+   "id": "1280-motion-penaltySaved-plain",
+   "kind": "penaltySaved",
+   "variant": "plain",
+   "seed": 2193,
+   "shots": [
+    "1280-motion-penaltySaved-plain-1-checking.jpg",
+    "1280-motion-penaltySaved-plain-2-decided.jpg",
+    "1280-motion-penaltySaved-plain-3-after.jpg",
+    "1280-motion-penaltySaved-plain-8-full-time.jpg",
+    "1280-motion-penaltySaved-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "36'",
+    "side": "me",
+    "who": "Thierno Barry",
+    "decision": "awarded",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": "saved"
+   },
+   "card": {
+    "text": "VAR: checking for a penalty |  | Thierno Barry, Everton, 36' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "minuteChecking": 36,
+   "decided": "VAR: penalty awarded |  | Thierno Barry, Everton, 36' |  | Penalty to Everton.",
+   "scoreAfter": {
+    "me": 0,
+    "opp": 0
+   },
+   "result": "1-1",
+   "timeline": [
+    {
+     "clock": "36'",
+     "side": "me",
+     "title": "📺 VAR: penalty awarded: Thierno Barry",
+     "shown": "📺 VAR: penalty awarded: Thierno Barry",
+     "cut": false
+    }
+   ],
+   "seconds": 24
+  },
+  {
+   "id": "1280-motion-goalBefore-plain",
+   "kind": "goalBefore",
+   "variant": "plain",
+   "seed": 1724,
+   "shots": [
+    "1280-motion-goalBefore-plain-1-checking.jpg",
+    "1280-motion-goalBefore-plain-2-decided.jpg",
+    "1280-motion-goalBefore-plain-3-after.jpg",
+    "1280-motion-goalBefore-plain-8-full-time.jpg",
+    "1280-motion-goalBefore-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "8'",
+    "side": "opp",
+    "who": "João Gomes",
+    "decision": "disallowed",
+    "prior": {
+     "me": 1,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | João Gomes, Aston Villa, 8' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 0
+   },
+   "minuteChecking": 9,
+   "decided": "VAR: goal ruled out |  | João Gomes, Aston Villa, 8' |  | No goal. The score does not change.",
+   "scoreAfter": {
+    "me": 1,
+    "opp": 0
+   },
+   "result": "3-1",
+   "timeline": [
+    {
+     "clock": "8'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: João Gomes",
+     "shown": "📺 VAR: goal ruled out: João Gomes",
+     "cut": false
+    }
+   ],
+   "seconds": 11
+  },
+  {
+   "id": "390-reduced-ruledOut-plain",
+   "kind": "ruledOut",
+   "variant": "plain",
+   "seed": 2460,
+   "shots": [
+    "390-reduced-ruledOut-plain-1-checking.jpg",
+    "390-reduced-ruledOut-plain-2-decided.jpg",
+    "390-reduced-ruledOut-plain-3-after.jpg",
+    "390-reduced-ruledOut-plain-8-full-time.jpg",
+    "390-reduced-ruledOut-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "9'",
+    "side": "me",
+    "who": "Kiernan Dewsbury-Hall",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "minuteChecking": 9,
+   "decided": "VAR: goal ruled out |  | Kiernan Dewsbury-Hall, Everton, 9' |  | No goal. The score does not change.",
+   "scoreAfter": {
+    "me": 0,
+    "opp": 0
+   },
+   "result": "0-0",
+   "timeline": [
+    {
+     "clock": "9'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "shown": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "cut": false
+    }
+   ],
+   "seconds": 8
+  },
+  {
+   "id": "390-reduced-penaltyScored-plain",
+   "kind": "penaltyScored",
+   "variant": "plain",
+   "seed": 1735,
+   "shots": [
+    "390-reduced-penaltyScored-plain-1-checking.jpg",
+    "390-reduced-penaltyScored-plain-2-decided.jpg",
+    "390-reduced-penaltyScored-plain-3-after.jpg",
+    "390-reduced-penaltyScored-plain-8-full-time.jpg",
+    "390-reduced-penaltyScored-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "34'",
+    "side": "opp",
+    "who": "Alexander Isak",
+    "decision": "awarded",
+    "prior": {
+     "me": 1,
+     "opp": 1
+    },
+    "kick": "scored"
+   },
+   "card": {
+    "text": "VAR: checking for a penalty |  | Alexander Isak, Liverpool, 34' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 1
+   },
+   "minuteChecking": 34,
+   "decided": "VAR: penalty awarded |  | Alexander Isak, Liverpool, 34' |  | Penalty to Liverpool.",
+   "scoreAfter": {
+    "me": 1,
+    "opp": 2
+   },
+   "result": "1-2",
+   "timeline": [
+    {
+     "clock": "34'",
+     "side": "opp",
+     "title": "📺 VAR: penalty awarded: Alexander Isak",
+     "shown": "📺 VAR: penalty awarded: Alexander Isak",
+     "cut": false
+    }
+   ],
+   "seconds": 22
+  },
+  {
+   "id": "1280-reduced-ruledOut-plain",
+   "kind": "ruledOut",
+   "variant": "plain",
+   "seed": 2460,
+   "shots": [
+    "1280-reduced-ruledOut-plain-1-checking.jpg",
+    "1280-reduced-ruledOut-plain-2-decided.jpg",
+    "1280-reduced-ruledOut-plain-3-after.jpg",
+    "1280-reduced-ruledOut-plain-8-full-time.jpg",
+    "1280-reduced-ruledOut-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "9'",
+    "side": "me",
+    "who": "Kiernan Dewsbury-Hall",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "minuteChecking": 9,
+   "decided": "VAR: goal ruled out |  | Kiernan Dewsbury-Hall, Everton, 9' |  | No goal. The score does not change.",
+   "scoreAfter": {
+    "me": 0,
+    "opp": 0
+   },
+   "result": "0-0",
+   "timeline": [
+    {
+     "clock": "9'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "shown": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "cut": false
+    }
+   ],
+   "seconds": 8
+  },
+  {
+   "id": "1280-reduced-penaltyScored-plain",
+   "kind": "penaltyScored",
+   "variant": "plain",
+   "seed": 1735,
+   "shots": [
+    "1280-reduced-penaltyScored-plain-1-checking.jpg",
+    "1280-reduced-penaltyScored-plain-2-decided.jpg",
+    "1280-reduced-penaltyScored-plain-3-after.jpg",
+    "1280-reduced-penaltyScored-plain-8-full-time.jpg",
+    "1280-reduced-penaltyScored-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "34'",
+    "side": "opp",
+    "who": "Alexander Isak",
+    "decision": "awarded",
+    "prior": {
+     "me": 1,
+     "opp": 1
+    },
+    "kick": "scored"
+   },
+   "card": {
+    "text": "VAR: checking for a penalty |  | Alexander Isak, Liverpool, 34' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 1
+   },
+   "minuteChecking": 34,
+   "decided": "VAR: penalty awarded |  | Alexander Isak, Liverpool, 34' |  | Penalty to Liverpool.",
+   "scoreAfter": {
+    "me": 1,
+    "opp": 2
+   },
+   "result": "1-2",
+   "timeline": [
+    {
+     "clock": "34'",
+     "side": "opp",
+     "title": "📺 VAR: penalty awarded: Alexander Isak",
+     "shown": "📺 VAR: penalty awarded: Alexander Isak",
+     "cut": false
+    }
+   ],
+   "seconds": 22
+  },
+  {
+   "id": "390-motion-two-plain",
+   "kind": "two",
+   "variant": "plain",
+   "seed": 2453,
+   "shots": [
+    "390-motion-two-plain-1-checking.jpg",
+    "390-motion-two-plain-2-decided.jpg",
+    "390-motion-two-plain-3-after.jpg",
+    "390-motion-two-plain-5-second-review.jpg",
+    "390-motion-two-plain-8-full-time.jpg",
+    "390-motion-two-plain-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "12'",
+    "side": "opp",
+    "who": "Hugo Ekitiké",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Hugo Ekitiké, Liverpool, 12' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "minuteChecking": 12,
+   "decided": "VAR: goal ruled out |  | Hugo Ekitiké, Liverpool, 12' |  | No goal. The score does not change.",
+   "scoreAfter": {
+    "me": 0,
+    "opp": 0
+   },
+   "result": "0-2",
+   "timeline": [
+    {
+     "clock": "12'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Hugo Ekitiké",
+     "shown": "📺 VAR: goal ruled out: Hugo Ekitiké",
+     "cut": false
+    },
+    {
+     "clock": "30'",
+     "side": "opp",
+     "title": "📺 VAR: penalty awarded: Alexander Isak",
+     "shown": "📺 VAR: penalty awarded: Alexander Isak",
+     "cut": false
+    }
+   ],
+   "seconds": 23
+  },
+  {
+   "id": "390-motion-ruledOut-leave",
+   "kind": "ruledOut",
+   "variant": "leave",
+   "seed": 2460,
+   "shots": [
+    "390-motion-ruledOut-leave-1-checking.jpg",
+    "390-motion-ruledOut-leave-3-returned.jpg",
+    "390-motion-ruledOut-leave-8-full-time.jpg",
+    "390-motion-ruledOut-leave-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "9'",
+    "side": "me",
+    "who": "Kiernan Dewsbury-Hall",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "minuteChecking": 9,
+   "result": "0-0",
+   "timeline": [
+    {
+     "clock": "9'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "shown": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "cut": false
+    }
+   ],
+   "seconds": 11
+  },
+  {
+   "id": "390-motion-penaltyScored-leave",
+   "kind": "penaltyScored",
+   "variant": "leave",
+   "seed": 1735,
+   "shots": [
+    "390-motion-penaltyScored-leave-1-checking.jpg",
+    "390-motion-penaltyScored-leave-3-returned.jpg",
+    "390-motion-penaltyScored-leave-8-full-time.jpg",
+    "390-motion-penaltyScored-leave-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "34'",
+    "side": "opp",
+    "who": "Alexander Isak",
+    "decision": "awarded",
+    "prior": {
+     "me": 1,
+     "opp": 1
+    },
+    "kick": "scored"
+   },
+   "card": {
+    "text": "VAR: checking for a penalty |  | Alexander Isak, Liverpool, 34' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 1
+   },
+   "minuteChecking": 34,
+   "result": "1-2",
+   "timeline": [
+    {
+     "clock": "34'",
+     "side": "opp",
+     "title": "📺 VAR: penalty awarded: Alexander Isak",
+     "shown": "📺 VAR: penalty awarded: Alexander Isak",
+     "cut": false
+    }
+   ],
+   "seconds": 24
+  },
+  {
+   "id": "1280-motion-ruledOut-leave",
+   "kind": "ruledOut",
+   "variant": "leave",
+   "seed": 2460,
+   "shots": [
+    "1280-motion-ruledOut-leave-1-checking.jpg",
+    "1280-motion-ruledOut-leave-3-returned.jpg",
+    "1280-motion-ruledOut-leave-8-full-time.jpg",
+    "1280-motion-ruledOut-leave-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "9'",
+    "side": "me",
+    "who": "Kiernan Dewsbury-Hall",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "minuteChecking": 9,
+   "result": "0-0",
+   "timeline": [
+    {
+     "clock": "9'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "shown": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "cut": false
+    }
+   ],
+   "seconds": 11
+  },
+  {
+   "id": "1280-motion-penaltyScored-leave",
+   "kind": "penaltyScored",
+   "variant": "leave",
+   "seed": 1735,
+   "shots": [
+    "1280-motion-penaltyScored-leave-1-checking.jpg",
+    "1280-motion-penaltyScored-leave-3-returned.jpg",
+    "1280-motion-penaltyScored-leave-8-full-time.jpg",
+    "1280-motion-penaltyScored-leave-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "34'",
+    "side": "opp",
+    "who": "Alexander Isak",
+    "decision": "awarded",
+    "prior": {
+     "me": 1,
+     "opp": 1
+    },
+    "kick": "scored"
+   },
+   "card": {
+    "text": "VAR: checking for a penalty |  | Alexander Isak, Liverpool, 34' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 1
+   },
+   "minuteChecking": 34,
+   "result": "1-2",
+   "timeline": [
+    {
+     "clock": "34'",
+     "side": "opp",
+     "title": "📺 VAR: penalty awarded: Alexander Isak",
+     "shown": "📺 VAR: penalty awarded: Alexander Isak",
+     "cut": false
+    }
+   ],
+   "seconds": 24
+  },
+  {
+   "id": "390-motion-ruledOut-skip",
+   "kind": "ruledOut",
+   "variant": "skip",
+   "seed": 2460,
+   "shots": [
+    "390-motion-ruledOut-skip-1-checking.jpg",
+    "390-motion-ruledOut-skip-2-after-skip.jpg",
+    "390-motion-ruledOut-skip-8-full-time.jpg",
+    "390-motion-ruledOut-skip-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "9'",
+    "side": "me",
+    "who": "Kiernan Dewsbury-Hall",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "minuteChecking": 9,
+   "result": "0-0",
+   "timeline": [
+    {
+     "clock": "9'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "shown": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "cut": false
+    }
+   ],
+   "seconds": 7
+  },
+  {
+   "id": "390-motion-penaltyScored-skip",
+   "kind": "penaltyScored",
+   "variant": "skip",
+   "seed": 1735,
+   "shots": [
+    "390-motion-penaltyScored-skip-1-checking.jpg",
+    "390-motion-penaltyScored-skip-2-after-skip.jpg",
+    "390-motion-penaltyScored-skip-8-full-time.jpg",
+    "390-motion-penaltyScored-skip-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "34'",
+    "side": "opp",
+    "who": "Alexander Isak",
+    "decision": "awarded",
+    "prior": {
+     "me": 1,
+     "opp": 1
+    },
+    "kick": "scored"
+   },
+   "card": {
+    "text": "VAR: checking for a penalty |  | Alexander Isak, Liverpool, 34' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 1
+   },
+   "minuteChecking": 34,
+   "result": "1-2",
+   "timeline": [
+    {
+     "clock": "34'",
+     "side": "opp",
+     "title": "📺 VAR: penalty awarded: Alexander Isak",
+     "shown": "📺 VAR: penalty awarded: Alexander Isak",
+     "cut": false
+    }
+   ],
+   "seconds": 22
+  },
+  {
+   "id": "1280-motion-ruledOut-skip",
+   "kind": "ruledOut",
+   "variant": "skip",
+   "seed": 2460,
+   "shots": [
+    "1280-motion-ruledOut-skip-1-checking.jpg",
+    "1280-motion-ruledOut-skip-2-after-skip.jpg",
+    "1280-motion-ruledOut-skip-8-full-time.jpg",
+    "1280-motion-ruledOut-skip-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "9'",
+    "side": "me",
+    "who": "Kiernan Dewsbury-Hall",
+    "decision": "disallowed",
+    "prior": {
+     "me": 0,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 0,
+    "opp": 0
+   },
+   "minuteChecking": 9,
+   "result": "0-0",
+   "timeline": [
+    {
+     "clock": "9'",
+     "side": "me",
+     "title": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "shown": "📺 VAR: goal ruled out: Kiernan Dewsbury-Hall",
+     "cut": false
+    }
+   ],
+   "seconds": 7
+  },
+  {
+   "id": "1280-motion-penaltyScored-skip",
+   "kind": "penaltyScored",
+   "variant": "skip",
+   "seed": 1735,
+   "shots": [
+    "1280-motion-penaltyScored-skip-1-checking.jpg",
+    "1280-motion-penaltyScored-skip-2-after-skip.jpg",
+    "1280-motion-penaltyScored-skip-8-full-time.jpg",
+    "1280-motion-penaltyScored-skip-9-report-timeline.jpg"
+   ],
+   "fail": [],
+   "engine": {
+    "minute": "34'",
+    "side": "opp",
+    "who": "Alexander Isak",
+    "decision": "awarded",
+    "prior": {
+     "me": 1,
+     "opp": 1
+    },
+    "kick": "scored"
+   },
+   "card": {
+    "text": "VAR: checking for a penalty |  | Alexander Isak, Liverpool, 34' |  | Play waits for the decision.",
+    "x": 274,
+    "right": 634,
+    "top": 204,
+    "bottom": 285,
+    "vw": 1280,
+    "vh": 900,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 1,
+    "opp": 1
+   },
+   "minuteChecking": 34,
+   "result": "1-2",
+   "timeline": [
+    {
+     "clock": "34'",
+     "side": "opp",
+     "title": "📺 VAR: penalty awarded: Alexander Isak",
+     "shown": "📺 VAR: penalty awarded: Alexander Isak",
+     "cut": false
+    }
+   ],
+   "seconds": 21
+  }
+ ],
+ "help": [
+  {
+   "id": "390-hub-help",
+   "shots": [
+    "390-hub-help-1-var-paragraph.jpg"
+   ],
+   "fail": [],
+   "text": "📺 VAR in today's game. In a save that starts in 2026/27, a match can go to a video review from its next kickoff, but only in the competitions we have checked really use VAR this season. Right now that is: Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, Primeira Liga, Scottish Premiership, Süper Lig, Belgian Pro League, Swiss Super League, 2. Bundesliga, Champions League. Everything else plays without it until we have checked it too, and the older eras (the 2005, 2010, 2015 and 2020 starts) never get it, even when they run on past 2026. In real football a review can look at goals, penalty calls, red cards (since July 2026 that includes one that came from a clearly wrong second yellow) and a card shown to the wrong player, and the referee's call stands unless it was a clear and obvious error. This game reviews goals and penalties only. In Play Live a goal that gets ruled out goes in first and the check comes after. Then it counts for nothing: no score, no scorer, no shot on the stats. A foul the referee missed can become a penalty, and the kick is a real one that can go in, be saved or miss. You only see a review that changed the call, and it is rare. The numbers come from two published counts of one real season (Serie A 2017/18, its first with VAR), and we took the lower count each time: a goal ruled out about once in 13 matches, a penalty given about once in 11. It works both ways, for you and against you, and it does change results. Example: it is 0-0, a goal is ruled out, then a penalty a review gave is missed. It stays 0-0. Each decision is made once and saved with the match, so the live match and the full time report always agree. Open the match's ? button to read this again."
+  },
+  {
+   "id": "1280-hub-help",
+   "shots": [
+    "1280-hub-help-1-var-paragraph.jpg"
+   ],
+   "fail": [],
+   "text": "📺 VAR in today's game. In a save that starts in 2026/27, a match can go to a video review from its next kickoff, but only in the competitions we have checked really use VAR this season. Right now that is: Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, Primeira Liga, Scottish Premiership, Süper Lig, Belgian Pro League, Swiss Super League, 2. Bundesliga, Champions League. Everything else plays without it until we have checked it too, and the older eras (the 2005, 2010, 2015 and 2020 starts) never get it, even when they run on past 2026. In real football a review can look at goals, penalty calls, red cards (since July 2026 that includes one that came from a clearly wrong second yellow) and a card shown to the wrong player, and the referee's call stands unless it was a clear and obvious error. This game reviews goals and penalties only. In Play Live a goal that gets ruled out goes in first and the check comes after. Then it counts for nothing: no score, no scorer, no shot on the stats. A foul the referee missed can become a penalty, and the kick is a real one that can go in, be saved or miss. You only see a review that changed the call, and it is rare. The numbers come from two published counts of one real season (Serie A 2017/18, its first with VAR), and we took the lower count each time: a goal ruled out about once in 13 matches, a penalty given about once in 11. It works both ways, for you and against you, and it does change results. Example: it is 0-0, a goal is ruled out, then a penalty a review gave is missed. It stays 0-0. Each decision is made once and saved with the match, so the live match and the full time report always agree. Open the match's ? button to read this again."
+  }
+ ]
+}

@@ -1,0 +1,6 @@
+fonts=0
+sim=0
+simCmRealFixtures rollover: real fixture outcomes and independent generated baseline passed.
+simCmRealFixtures: 11 actual outcome groups, 760 fixture reads, 760 calendar reads and 9 effective controls passed.
+playCmRealFixtures: 2 viewports, 6 real/legacy/later-season calendar and actual Quick Sim journeys, 18 neutral real-opening results, 2 effective controls; full saved states and source bytes held.
+RESULT realfix=0
