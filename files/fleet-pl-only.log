@@ -1,0 +1,5 @@
+nofetch: green (250 careers)
+oldsaves: RED for premier (24 saves)
+  FAIL premier: Arsenal seed 41, week 0: base {"bytes":"613f353e8cd1a51c37c6","draws":"0,1299,1303,1398,484","season":1,"week":4}, candidate {"bytes":"0c5db4b0ae1221896cde","draws":"0,1299,1303,1398,484","season":1,"week":4}
+dailies: green (2 clubs)
+simCmFixtureFleet: 1 FAILURE(S): oldsaves [premier]

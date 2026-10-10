@@ -1,0 +1,5 @@
+fleet-nobase exit=0 2s | simCmFixtureFleet: green. 1 registered league(s), 0 in a file of their own. nofetch NOT RUN, oldsaves NOT RUN, dailies 2 clubs.
+fleet-nostrip exit=1 2s | simCmFixtureFleet: CONTROL nostrip FIRED: section dailies went red for exactly its 1 league(s) (premier) and no other
+fleet-keyless exit=1 6s | simCmFixtureFleet: CONTROL keyless FIRED: section oldsaves went red for exactly its 1 league(s) (premier) and no other
+fleet-prefetch-exit2 exit=2 50s | simCmFixtureFleet: CONTROL prefetch COULD NOT RUN: no list is registered that it could move
+fleet exit=1 56s | simCmFixtureFleet: 1 FAILURE(S): oldsaves [premier]

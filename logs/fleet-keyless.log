@@ -1,0 +1,3 @@
+oldsaves: RED for premier (24 saves)
+  FAIL premier: Arsenal seed 41, week 0: base {"bytes":"613f353e8cd1a51c37c6","draws":"0,1299,1303,1398,484","season":1,"week":4}, candidate {"bytes":"0c5db4b0ae1221896cde","draws":"0,1299,1303,1398,484","season":1,"week":4}
+simCmFixtureFleet: CONTROL keyless FIRED: section oldsaves went red for exactly its 1 league(s) (premier) and no other
