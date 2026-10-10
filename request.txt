@@ -1,0 +1,8 @@
+#!serial
+norival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+legal: node scripts/simLegalPages.mjs
+numbers: node scripts/simNumberFormatting.mjs
+vitest-all: mkdir -p $RC_OUT && node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/vitest-all.log 2>&1; s=$?; tail -12 $RC_OUT/vitest-all.log; exit $s
