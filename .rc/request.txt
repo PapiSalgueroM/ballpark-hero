@@ -1,0 +1,16 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+dev: CAREER_DEVELOPMENT_ARTIFACTS=/tmp/a-dev node scripts/simSoccerCareerDevelopment.mjs
+role: CAREER_STORY_ROLE_ARTIFACTS=/tmp/a-role node scripts/simCareerStoryRole.mjs
+trophy: CAREER_TROPHY_RUNS_ARTIFACTS=/tmp/a-trophy node scripts/simCareerTrophyRuns.mjs
+season: SEASON_HISTORY_ARTIFACTS=/tmp/a-season node scripts/simSoccerSeasonHistory.mjs
+derby: DERBY_HISTORY_ARTIFACTS=/tmp/a-derby node scripts/simSoccerDerbyHistory.mjs
+cmfix: CM_REAL_FIXTURE_ARTIFACTS=/tmp/a-cmfix node scripts/simCmRealFixtures.mjs
+vitest-sc: node_modules/.bin/vitest run src/test/soccerCareer src/lib/soccerCareer src/lib/soccerClub src/test/soccerClub --testTimeout=300000 --hookTimeout=120000
+contract: node scripts/simSoccerContractMoves.mjs
+dev-all: CAREER_DEVELOPMENT_CONTROL=all node scripts/simSoccerCareerDevelopment.mjs
+role-all: CAREER_STORY_ROLE_CONTROL=all node scripts/simCareerStoryRole.mjs
+trophy-all: CAREER_TROPHY_RUNS_CONTROL=all node scripts/simCareerTrophyRuns.mjs
+season-all: SEASON_HISTORY_CONTROL=all node scripts/simSoccerSeasonHistory.mjs
+derby-all: DERBY_HISTORY_CONTROL=all node scripts/simSoccerDerbyHistory.mjs
+cmfix-all: CM_REAL_FIXTURE_CONTROL=all node scripts/simCmRealFixtures.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
