@@ -82,7 +82,7 @@ export function historyFixtures(carrier) {
     delete career.seasons[1].ovr; delete career.seasons[1].injury; delete career.seasons[1].injuryWeeks; delete career.seasons[1].injurySevere; delete career.seasons[1].suspensionMatches; career.seasons[1].cleanSheets = 0;
     Object.assign(career.seasons[2], { year: career.seasons[1].year, club: 'FC Twente', onLoanFrom: 'Anderlecht', apps: 18, goals: 15, assists: 3, cleanSheets: 6, rating: 7.2, ovr: 72 });
     Object.assign(career.seasons[3], { apps: 0, leagueApps: 0, goals: 0, assists: 0, cleanSheets: 0, rating: 0, injury: 'Recorded ankle injury', injuryWeeks: 5, injurySevere: true, suspensionMatches: 2 });
-    Object.assign(career.seasons[4], { apps: 0, leagueApps: 0, rating: 0, club: 'BANNED (PED)', suspensionMatches: 3 });
+    Object.assign(career.seasons[4], { apps: 0, leagueApps: 0, goals: 0, assists: 0, cleanSheets: 0, rating: 0, club: 'BANNED (PED)', suspensionMatches: 3 });
     career.seasons[5].type = 'manager';
     career.retired = caseIndex === 1; career.phase = career.retired ? 'retired' : 'playing';
     if (caseIndex === 2) {
