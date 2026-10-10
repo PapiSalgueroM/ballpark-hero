@@ -121,7 +121,7 @@ export function DraftNightSequence({
         <div className="relative">
           <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{draftYear} draft</p>
           <p data-night-range className="text-xs">{preDraftProjectionLine(night.projection, 'had')}</p>
-          <ol className="mt-2 space-y-1" aria-label="The picks ahead of yours">
+          <ol className="mt-2 space-y-1" aria-label="The draft board">
             {before.map((row, i) => (
               <li
                 key={row.kind === 'gap' ? `gap-${row.from}` : row.kind === 'pick' ? `pick-${row.pick}` : i}
@@ -173,8 +173,8 @@ export function DraftNightSequence({
         </div>
       </div>
       <div ref={actionsRef} data-night-actions className={cn('grid scroll-mb-3 gap-2', !over && 'grid-cols-2')}>
-        {!over && <Button variant="outline" className="w-full" onClick={onSkip}>Skip to my pick</Button>}
-        {onContinue && <Button className="w-full" onClick={onContinue}>Start your career</Button>}
+        {!over && <Button variant="outline" className="w-full whitespace-normal" onClick={onSkip}>Skip to my pick</Button>}
+        {onContinue && <Button className="w-full whitespace-normal" onClick={onContinue}>Start your career</Button>}
       </div>
     </div>
   );
