@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import type { CareerState, SeasonRecord } from '@/lib/soccerCareerEngine';
 import { readMatchRating } from '@/lib/careerSeasonRatings';
 import { cupChipLabel, readCupRun } from '@/lib/soccerCareerCup';
+import { savedClubCampaign, savedSeasonCompetitions } from '@/lib/soccerSeasonCompetitions';
 import { escapeCloses, focusDialogOnMount } from '@/lib/dialogA11y';
 import { useBodyLock } from '@/components/season-centre/useBodyLock';
 import { SeasonCupWinBlock } from './CupRunLines';
@@ -66,12 +67,49 @@ function SeasonTotals({ row, international = false }: { row: SeasonRecord; inter
   );
 }
 
+/** Saved simulated games only. An unanchored latest campaign is never borrowed. */
+export function TrophyClubCampaign({ career, row }: { career: CareerState; row: SeasonRecord }) {
+  const run = savedClubCampaign(career, row);
+  const competition = savedSeasonCompetitions(career, row).find(item => item.id === 'club');
+  const firstStageGames = run?.firstStage?.stages.reduce((total, stage) => total + stage.games.length, 0) ?? 0;
+  return <section aria-label="Saved club cup campaign" className="space-y-2" data-trophy-campaign>
+    <h4 className="text-sm font-bold" data-trophy-campaign-name>{competition?.name ?? 'Club cup campaign'}</h4>
+    <p className="text-xs text-muted-foreground">Saved simulated campaign. Scores are from {row.club}'s side.</p>
+    {run && competition && <>
+      <p className="text-xs font-semibold" data-trophy-campaign-result>{competition.result}</p>
+      {count(run.playerGoals) !== null && <p className="text-xs" data-trophy-campaign-goals>Your saved campaign goals: {run.playerGoals}</p>}
+      {competition.note && <p className="text-[11px] text-muted-foreground" data-trophy-campaign-format>{competition.note}</p>}
+    </>}
+    {!run || !competition || competition.matches.length === 0
+      ? <p className="text-xs text-muted-foreground" data-trophy-campaign-missing>Club cup match details were not kept for this season.</p>
+      : <ol className="grid grid-cols-2 gap-2">
+        {competition.matches.map((game, index) => {
+          const knockout = index >= firstStageGames ? run.matches[index - firstStageGames] : undefined;
+          const extraTime = knockout?.afterExtraTime || knockout?.decidedBy === 'extraTime';
+          const extraScore = count(knockout?.etFor) !== null && count(knockout?.etAgainst) !== null;
+          return <li key={index} className="min-w-0 space-y-1 rounded-xl border border-border bg-muted/20 p-3" data-trophy-campaign-match={index}>
+            <p className="text-xs font-bold" data-trophy-campaign-round>{game.round}</p>
+            <p className="break-words text-xs" data-trophy-campaign-opponent>{game.opponent ?? 'Opponent not recorded'}</p>
+            <p className="text-lg font-black tabular-nums" data-trophy-campaign-score>{game.goalsFor === null || game.goalsAgainst === null ? 'Score not recorded' : `${game.goalsFor}-${game.goalsAgainst}`}</p>
+            {game.home !== undefined && <p className="text-[11px] text-muted-foreground" data-trophy-campaign-home>{game.home ? 'Home' : 'Away'}</p>}
+            {game.playerGoals !== undefined && <p className="text-[11px]" data-trophy-campaign-player-goals>Your goals in this game: {game.playerGoals}</p>}
+            {game.note && <p className="text-[11px] text-muted-foreground" data-trophy-campaign-note>{game.note}</p>}
+            {extraTime && (extraScore || !game.note?.includes('After extra time')) && <p className="text-[11px] text-muted-foreground" data-trophy-campaign-extra-time>
+              {extraScore ? `Goals in extra time: ${knockout!.etFor}-${knockout!.etAgainst} (included in the score).` : 'After extra time'}
+            </p>}
+          </li>;
+        })}
+      </ol>}
+  </section>;
+}
+
 export default function TrophyCabinet({ career, category, onClose }: {
   career: CareerState; category: TrophyCategory; onClose: () => void;
 }) {
   const [picked, setPicked] = useState<SeasonRecord | null>(null);
   const [help, setHelp] = useState(false);
   const content = useRef<HTMLDivElement>(null);
+  const listScroll = useRef(0);
   const detailHeading = useRef<HTMLHeadingElement>(null);
   const helpButton = useRef<HTMLButtonElement>(null);
   const lastPicked = useRef<SeasonRecord | null>(null);
@@ -81,7 +119,7 @@ export default function TrophyCabinet({ career, category, onClose }: {
   useBodyLock();
   useEffect(() => () => { returnFocus.current?.focus({ preventScroll: true }); }, []);
   useEffect(() => {
-    if (content.current) content.current.scrollTop = 0;
+    if (content.current) content.current.scrollTop = !picked && !help ? listScroll.current : 0;
     if (picked && !help) detailHeading.current?.focus({ preventScroll: true });
     else if (!picked && !help && lastPicked.current) {
       const row = lastPicked.current;
@@ -114,16 +152,18 @@ export default function TrophyCabinet({ career, category, onClose }: {
         <div className="flex shrink-0 items-center gap-2 border-b border-border p-3">
           <button type="button" onClick={onClose} data-trophy-back="career" className="min-h-11 rounded-lg bg-muted/30 px-3 text-xs font-bold">‹ Back</button>
           <h2 className="min-w-0 flex-1 text-sm font-black">{TROPHY_LABELS[category]}</h2>
-          <button ref={helpButton} type="button" onClick={() => setHelp(value => !value)} aria-label="Trophy cabinet help" aria-expanded={help}
+          <button ref={helpButton} type="button" onClick={() => { if (!picked && !help) listScroll.current = content.current?.scrollTop ?? 0; setHelp(value => !value); }} aria-label="Trophy cabinet help" aria-expanded={help}
             className="h-11 w-11 shrink-0 rounded-lg border border-border font-bold">?</button>
         </div>
-        <div ref={content} className="min-h-0 overflow-y-auto p-4">
+        <div ref={content} className="min-h-0 overflow-y-auto p-4" data-trophy-scroll>
           {help ? (
             <div className="space-y-3 text-xs leading-relaxed" data-trophy-help>
               <p>Pick a trophy, then a winning season. Back returns to your career.</p>
               <p>Only wins in your saved seasons count. An award listed elsewhere does not add a second trophy.</p>
               <p>The numbers are season totals, not just the cup games. International totals stay separate from your club totals. A dash means the save did not record that number.</p>
               <p>Example: a season with one league title and one domestic cup appears once in each category. It is two trophies from the same season.</p>
+              <p>European and club cup details show only the simulated campaign that season kept. Each card is one saved game, including separate legs. The campaign goal total and your goals in each game are different from your season totals.</p>
+              <p>Example: 27 season goals can include 3 in this cup. A 2-1 first leg and 1-1 second leg stay separate cards, with 3-2 on aggregate only when recorded. Penalties are separate from the match score. Extra time goals are already included in it.</p>
               <button type="button" onClick={() => setHelp(false)} data-trophy-help-back className="min-h-11 rounded-lg border border-border px-3 font-bold">Back to wins</button>
             </div>
           ) : picked ? (
@@ -138,6 +178,7 @@ export default function TrophyCabinet({ career, category, onClose }: {
               {(category === 'world' || category === 'continental') && <SeasonTotals row={picked} international />}
               <SeasonTotals row={picked} />
               <p className="text-[10px] text-muted-foreground">These are the saved season totals, across all competitions.</p>
+              {(category === 'ucl' || category === 'club') && <TrophyClubCampaign career={career} row={picked} />}
               {category === 'domestic' && (readCupRun(picked)
                 ? <SeasonCupWinBlock season={picked} />
                 : <p className="text-xs text-muted-foreground">Cup match details were not kept in this save.</p>)}
@@ -148,7 +189,7 @@ export default function TrophyCabinet({ career, category, onClose }: {
               {wins.length === 0 ? <p className="text-sm">No wins recorded here yet.</p> : (
                 <div className="grid grid-cols-2 gap-2" data-trophy-wins>
                   {wins.map((row, index) => (
-                    <button key={`${row.year}|${row.club}|${index}`} type="button" onClick={() => setPicked(row)} data-trophy-win={row.year}
+                    <button key={`${row.year}|${row.club}|${index}`} type="button" onClick={() => { listScroll.current = content.current?.scrollTop ?? 0; setPicked(row); }} data-trophy-win={row.year}
                       aria-label={`View ${trophyName(row, category)}, ${seasonLabel(row)}, ${row.club}`}
                       className="min-h-16 min-w-0 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-left hover:bg-amber-500/20">
                       <span className="block text-sm font-black tabular-nums">{seasonLabel(row)}</span>

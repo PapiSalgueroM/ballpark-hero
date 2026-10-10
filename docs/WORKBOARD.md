@@ -1,3 +1,16 @@
+## Codex 1192 CLAIM: Soccer Career saved trophy campaigns, 2026-10-09
+
+Isolated codex/career-trophy-runs at AR fa24b3848d99e29367486489b081a483dc544206.
+Worktree C:/Users/antho/.codex/worktrees/career-trophy-runs/ballpark-hero.
+European and other club wins will show only their anchored saved campaign:
+first-stage games, legs, player goals and recorded tie decisions. Old or
+unanchored saves get honest missing detail. All wins restores its tile/list.
+No engine, competition reader, save, score or random-stream change. Verify
+actual saved rows, effective controls, native320/390/1280 read/reload,
+focus/scroll/body/save holds, types/build and all15 built-output readers.
+Independent of drafts208/209/210/212. F owns integration and publication.
+No local application runtime, production DB or paid work.
+
 ## Release AR LIVE, 2026-10-09 20:14 EDT: Club Manager match day from players' reports: (P) and (O.G) beside a goal, Quick Sim that makes its subs, and a goal that keeps its net when the other side changes a man
 
 Claude lane (session F). main 8c5ce655, deployment 468b616a-f984-4af9-959d-12f584834eaa, entry index-DNvMbg1w.js (was index-DBSXBErW.js, Release AQ,

@@ -1,0 +1,166 @@
+name: Soccer Career saved trophy campaigns
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/career-trophy-runs.yml
+      - src/components/soccer-career/TrophyCabinet.tsx
+      - src/lib/soccerSeasonCompetitions.ts
+      - src/test/trophyCabinetCampaign.test.tsx
+      - src/test/soccerSeasonCompetitions.test.tsx
+      - src/test/fixtures/soccerSeasonCompetitions1173.ts
+      - scripts/simCareerTrophyRuns.mjs
+      - scripts/playCareerTrophyRuns.mjs
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: career-trophy-runs-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      CAREER_TROPHY_RUNS_ARTIFACTS: career-trophy-runs-artifacts/outcomes
+      SHOTS: career-trophy-runs-artifacts/native
+      FREE_KICK_FONT_CACHE: career-trophy-runs-artifacts/font-cache
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare exact-head remote checks
+        run: |
+          mkdir -p career-trophy-runs-artifacts
+          git rev-parse HEAD > career-trophy-runs-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > career-trophy-runs-artifacts/source-tree.txt
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          test "$(git rev-parse fa24b3848d99e29367486489b081a483dc544206^{tree})" = d9175fa74fc5784ba6acfd1a62f4592cb106f22f
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee career-trophy-runs-artifacts/fonts.log
+      - name: App types then production build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-trophy-runs-artifacts/types.log
+          npm run build 2>&1 | tee career-trophy-runs-artifacts/build.log
+      - name: Focused units and complete unchanged AR outcome proof
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/trophyCabinetCampaign.test.tsx src/test/soccerSeasonCompetitions.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=career-trophy-runs-artifacts/focused-unit.json 2>&1 | tee career-trophy-runs-artifacts/focused-unit.log || failed=1
+          CAREER_TROPHY_RUNS_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs 2>&1 | tee career-trophy-runs-artifacts/simCareerTrophyRuns.log || failed=1
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simHarnessAnchors.mjs 2>&1 | tee career-trophy-runs-artifacts/simHarnessAnchors.log || failed=1
+          node --input-type=module - <<'JS' || failed=1
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const root = 'career-trophy-runs-artifacts', read = file => JSON.parse(fs.readFileSync(`${root}/${file}`, 'utf8'));
+          const report = read('outcomes/healthy/report.json'), controls = read('outcomes/controls.json'), units = read('focused-unit.json');
+          assert.equal(units.success,true); assert.equal(units.numFailedTests,0);
+          const suite = units.testResults.find(row=>row.name.replaceAll('\\','/').endsWith('/src/test/trophyCabinetCampaign.test.tsx'));
+          assert(suite); assert.equal(suite.assertionResults.length,18); assert(suite.assertionResults.every(row=>row.status==='passed'));
+          const head=fs.readFileSync(`${root}/source-head.txt`,'utf8').trim(),tree=fs.readFileSync(`${root}/source-tree.txt`,'utf8').trim();
+          assert.equal(report.head,head); assert.equal(report.tree,tree); assert.equal(report.baseHead,'fa24b3848d99e29367486489b081a483dc544206'); assert.equal(report.baseTree,'d9175fa74fc5784ba6acfd1a62f4592cb106f22f');
+          assert.equal(report.status,'passed'); assert.deepEqual(report.failed,[]); assert.equal(report.cases.length,9); assert(report.cases.every(row=>row.passed)); assert.equal(report.sourceHeld,true); assert.deepEqual(report.sourceBefore,report.sourceAfter);
+          for(const [key,value] of Object.entries({enginePairs:24,campaignPairs:192,actualCampaigns:6,heldCampaigns:6,missingCampaigns:4}))assert.equal(report.counts[key],value,key);
+          assert.equal(controls.head,head); assert.equal(controls.tree,tree); assert.equal(controls.sourceHeld,true); assert.equal(controls.controls.length,7); assert(controls.controls.every(row=>row.effective&&row.failed.length>0&&row.receipts.length===1));
+          console.log('Receipt:18 focused campaign cases,9 outcome groups,24 whole AR season/RNG pairs,192 whole campaign/RNG pairs,7 effective product controls.');
+          JS
+          exit "$failed"
+      - name: Effective copied product list-restoration unit control
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module - <<'JS' 2>&1 | tee career-trophy-runs-artifacts/scroll-control.log
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import os from 'node:os';
+          import {createHash} from 'node:crypto';
+          import {spawnSync} from 'node:child_process';
+          const root=process.cwd(),out=path.join(root,'career-trophy-runs-artifacts'),file=path.join(root,'src/components/soccer-career/TrophyCabinet.tsx');
+          const raw=fs.readFileSync(file),source=raw.toString('utf8').replaceAll('\r\n','\n'),from='!picked && !help ? listScroll.current : 0',to='0';
+          assert.equal(source.split(from).length-1,1,'Unique live scroll restoration expression');
+          const faulty=source.replace(from,to),sha=v=>createHash('sha256').update(v).digest('hex');assert.notEqual(sha(faulty),sha(source));
+          const temp=fs.mkdtempSync(path.join(os.tmpdir(),'trophy-scroll-control-'));
+          try {
+            const copied=path.join(temp,'TrophyCabinet.tsx');fs.writeFileSync(copied,faulty);fs.symlinkSync(path.join(root,'src/components/soccer-career/CupRunLines.tsx'),path.join(temp,'CupRunLines.tsx'));
+            const log=spawnSync(process.execPath,['node_modules/vitest/vitest.mjs','run','src/test/trophyCabinetCampaign.test.tsx','--maxWorkers=1','--minWorkers=1','--reporter=json',`--outputFile=${out}/scroll-control-unit.json`],{cwd:root,env:{...process.env,NO_DOUBLE_SWAP:JSON.stringify({'@/components/soccer-career/TrophyCabinet':copied})},encoding:'utf8',maxBuffer:8*1024*1024});
+            process.stdout.write(log.stdout);process.stderr.write(log.stderr);assert.equal(log.status,1,'Actual copied product assertion must fail');
+            const result=JSON.parse(fs.readFileSync(path.join(out,'scroll-control-unit.json'),'utf8'));assert.equal(result.numTotalTests,18);assert.equal(result.numFailedTests,1);
+            const assertions=result.testResults.flatMap(row=>row.assertionResults);assert.equal(assertions.length,18);
+            const failed=assertions.filter(row=>row.status==='failed');assert.deepEqual(failed.map(row=>row.fullName),['recorded club trophy campaigns restores the original picked win and list scroll through detail and reopenable help']);assert(assertions.filter(row=>row.status!=='failed').every(row=>row.status==='passed'));
+            assert(failed[0].failureMessages.some(message=>/AssertionError|expected/.test(message)),'Effective assertion outcome, not an import error');
+            fs.writeFileSync(path.join(out,'scroll-control-source.tsx'),faulty);fs.writeFileSync(path.join(out,'scroll-control-receipt.json'),JSON.stringify({effective:true,from,to,originalSha256:sha(source),copiedSha256:sha(faulty),rawHeldSha256:sha(raw),failed:failed.map(row=>row.fullName),unrelatedPassed:17,scope:'Copied actual product unit, not a served native mutation'},null,2));
+            assert.deepEqual(fs.readFileSync(file),raw,'Original source stays byte-exact');console.log('CONTROL FIRED(scroll): exact list-restoration assertion only;17 unrelated cases passed.');
+          }finally{fs.rmSync(temp,{recursive:true,force:true});assert.deepEqual(fs.readFileSync(file),raw);}
+          JS
+      - name: Actual native Trophy Cabinet journeys
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerTrophyRuns.mjs 2>&1 | tee career-trophy-runs-artifacts/playCareerTrophyRuns.log
+          node --input-type=module - <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const root='career-trophy-runs-artifacts',report=JSON.parse(fs.readFileSync(`${root}/native/report.json`,'utf8'));
+          assert.equal(report.head,fs.readFileSync(`${root}/source-head.txt`,'utf8').trim());assert.equal(report.tree,fs.readFileSync(`${root}/source-tree.txt`,'utf8').trim());
+          assert.equal(report.cases.length,12);assert(report.cases.every(row=>row.ok));assert.equal(report.failed,0);assert(report.checks>0);assert.equal(report.controls.length,3);assert(report.controls.every(row=>row.changed&&row.restored&&row.failed.length>0));
+          assert.equal(report.forwardedExternalRequests,0);assert(report.fontManifestEntries>0);assert.deepEqual(report.sourceAfter,report.sourceBefore);assert(report.cases.every(row=>row.readings.length>0&&row.readings.every(read=>read.expectedSha256===read.actualSha256&&read.drawCount===0)&&row.reloads.length===2&&row.reloads.every(reload=>reload.equal)));
+          console.log(`Receipt:${report.checks} actual native checks,12 journeys,3 copied observation controls,all career bytes and reading draws held.`);
+          JS
+      - name: Upload early proof and browser evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-trophy-runs-early-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-trophy-runs-artifacts/
+          retention-days: 5
+      - name: Existing saved competition and trophy outcomes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simSoccerSeasonCompetitions simTrophyCabinet simCareerRecordedStats simCareerSeasonTruth simNoInventedQuotes; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-trophy-runs-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: All fifteen built-output readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-trophy-runs-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Source and exact head held
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --exit-code HEAD -- src scripts .github/workflows 2>&1 | tee career-trophy-runs-artifacts/source-held.log
+          test "$(git rev-parse HEAD)" = "$(cat career-trophy-runs-artifacts/source-head.txt)"
+          test "$(git rev-parse HEAD^{tree})" = "$(cat career-trophy-runs-artifacts/source-tree.txt)"
+          du -sb career-trophy-runs-artifacts | tee career-trophy-runs-artifacts/artifact-size.log
+          test "$(du -sb career-trophy-runs-artifacts | cut -f1)" -lt 500000000
+      - name: Upload complete exact-head evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-trophy-runs-final-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-trophy-runs-artifacts/
+          retention-days: 5
