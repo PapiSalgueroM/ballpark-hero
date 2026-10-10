@@ -1,0 +1,18 @@
+MUTATION ON: closelt in src/lib/gmDeskHost.ts
+ src/lib/gmDeskHost.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness, first failures
+  FAIL [6]: nhl seed 1 season 1 ANA (missed): the same season was recorded twice
+  FAIL [6]: nhl seed 1 season 1 BOS (missed): the same season was recorded twice
+  FAIL [6]: nhl seed 1 season 1 BUF (met): the same season was recorded twice
+  FAIL [6]: nhl seed 1 season 1 CAR (overachieved): the same season was recorded twice
+  FAIL [6]: nhl seed 1 season 1 CBJ (met): the same season was recorded twice
+simGmDeskHost: FAILED, red checks 6:1116
+--- vitest
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/gmDeskHost.test.ts[2m > [22mthe season close[2m > [22mrecords a season once, pays what gmSeasonXp pays, and survives JSON
+[31m[1mAssertionError[22m: expected { wins: 60, titles: +0, …(5) } to be null[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m51 passed[39m[22m[90m (52)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmDeskHost.test.ts,title=src/lib/gmDeskHost.test.ts > the season close > records a season once%2C pays what gmSeasonXp pays%2C and survives JSON,line=184,column=25::AssertionError: expected { w
+MUT closelt: harness exit=1 vitest exit=1 restored=yes

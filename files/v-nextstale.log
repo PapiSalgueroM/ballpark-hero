@@ -1,0 +1,176 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/components/front-office-shared/GmCareerDesk.test.tsx [2m([22m[2m13 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 189[2mms[22m[39m
+   [32m✓[39m the three boxes[2m > [22mare one module level list, and the Job market box shows only between seats[32m 7[2mms[22m[39m
+   [32m✓[39m the job market panel[2m > [22mdraws one tile an offer and takes a job on the second tap only[32m 68[2mms[22m[39m
+   [32m✓[39m the job market panel[2m > [22mstays out a year on the second tap only, and says when that opens the desk[32m 6[2mms[22m[39m
+[31m   [31m×[31m the job market panel[2m > [22moffers no year out on a closed market, and its "?" opens the rules[39m[32m 7[2mms[22m[39m
+[31m     → expected 'quiet' to be 'closed' // Object.is equality[39m
+   [32m✓[39m the job market panel[2m > [22mdraws something sane while he holds a seat[32m 2[2mms[22m[39m
+   [32m✓[39m the career panel[2m > [22mdraws a box a stint with a mark a graded season[32m 5[2mms[22m[39m
+   [32m✓[39m the career panel[2m > [22mleaves the tier off a record older than the block and counts the seasons it cannot grade[32m 9[2mms[22m[39m
+   [32m✓[39m the GM level panel[2m > [22msells a point only in a tree this desk routes[32m 33[2mms[22m[39m
+   [32m✓[39m the GM level panel[2m > [22msays XP has not started on a save whose desk is off[32m 9[2mms[22m[39m
+   [32m✓[39m a panel that loads on demand[2m > [22mshows a fixed height box first, then the panel, and keeps the panel across a save[32m 21[2mms[22m[39m
+   [32m✓[39m a panel that loads on demand[2m > [22mcontrol: built inside a render, the open panel is remounted by a save and loses what it held[32m 15[2mms[22m[39m
+   [32m✓[39m a panel that loads on demand[2m > [22mdraws its fallback under a server render and never throws[32m 6[2mms[22m[39m
+   [32m✓[39m a panel that loads on demand[2m > [22mevery loader resolves to a component[32m 0[2mms[22m[39m
+ [31m❯[39m src/lib/gmDeskHost.test.ts [2m([22m[2m39 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 608[2mms[22m[39m
+   [33m[2m✓[22m[39m the record of a save older than the block[2m > [22mfills nothing in: titles out are titles in, the rest is a count, and it passes the career validator [33m 527[2mms[22m[39m
+   [32m✓[39m the record of a save older than the block[2m > [22mstarts the stint in the season he started, whichever way the counters were read (the B7 contract)[32m 0[2mms[22m[39m
+   [32m✓[39m the record of a save older than the block[2m > [22mknows the arrival tier only on a record written the day he took the club[32m 1[2mms[22m[39m
+   [32m✓[39m the record of a save older than the block[2m > [22mreads the tier through the adapter and never writes[32m 0[2mms[22m[39m
+   [32m✓[39m the stored record against the save beside it[2m > [22mis read as stored when it fits, and a read never writes[32m 0[2mms[22m[39m
+   [32m✓[39m the stored record against the save beside it[2m > [22mfails closed to the legacy record when its open stint is at another club, or is open on a fired save[32m 1[2mms[22m[39m
+   [32m✓[39m the stored record against the save beside it[2m > [22mcosts one block when one block is corrupt[32m 1[2mms[22m[39m
+   [32m✓[39m the season close[2m > [22mrecords a season once, pays what gmSeasonXp pays, and survives JSON[32m 1[2mms[22m[39m
+   [32m✓[39m the season close[2m > [22mends the stint on a firing and records nothing after it[32m 0[2mms[22m[39m
+   [32m✓[39m the season close[2m > [22mreports the level before and after[32m 1[2mms[22m[39m
+   [32m✓[39m the season verdict[2m > [22mwith no mandate hands back the trust and the flag it was given[32m 1[2mms[22m[39m
+   [32m✓[39m the season verdict[2m > [22mwith no desk is the two engine calls a board makes today, tax cheque included[32m 5[2mms[22m[39m
+   [32m✓[39m the season verdict[2m > [22mwalks Ownership one step a point, and a gain or a tax cheque is never cushioned[32m 3[2mms[22m[39m
+   [32m✓[39m the season verdict[2m > [22mon a new save starts the stint in the season he started and is not an arrival (B7)[32m 0[2mms[22m[39m
+   [32m✓[39m the season verdict[2m > [22mcloses the stint when the verdict fires him[32m 0[2mms[22m[39m
+   [32m✓[39m the season verdict[2m > [22mworks a last grade out again only from this season: its own mandate and a decided champion[32m 0[2mms[22m[39m
+   [32m✓[39m the season verdict[2m > [22mkeeps the ask he was shown through the next summer, and only that one[32m 0[2mms[22m[39m
+   [32m✓[39m the seven effects[2m > [22mhand back what they were given with no point, and draw nothing[32m 1[2mms[22m[39m
+   [32m✓[39m the seven effects[2m > [22mat every level equal gmXp fed the keyed roll, and no two trees share a roll[32m 2[2mms[22m[39m
+   [32m✓[39m spending a point[2m > [22mis refused off the live list, with no point, and past five[32m 0[2mms[22m[39m
+   [32m✓[39m spending a point[2m > [22mtiles pulse only when a live tree can take a point he has[32m 1[2mms[22m[39m
+   [32m✓[39m the job market[2m > [22mis null while he holds a seat[32m 0[2mms[22m[39m
+   [32m✓[39m the job market[2m > [22mreads the same feed every time and a new one a year or a season on[32m 6[2mms[22m[39m
+   [32m✓[39m the job market[2m > [22mnever offers the club that let him go, asks for next season, and carries facts for every offer[32m 12[2mms[22m[39m
+[31m   [31m×[31m the job market[2m > [22mtells offers, quiet and closed apart, and a closed line never tells him to sit[39m[32m 12[2mms[22m[39m
+[31m     → expected { state: 'quiet', …(7) } to match object { state: 'closed', …(2) }
+(5 matching properties omitted from actual)[39m
+   [32m✓[39m the job market[2m > [22mcounts the seasons known only as a count in the line (B6)[32m 1[2mms[22m[39m
+   [32m✓[39m taking a seat[2m > [22mmoves his club, his trust, the ask and the club owned blocks, and nothing else[32m 1[2mms[22m[39m
+   [32m✓[39m taking a seat[2m > [22mrefuses a club that is not in the feed, the club that let him go, and a man who holds a seat[32m 1[2mms[22m[39m
+   [32m✓[39m taking a seat[2m > [22mlists every club block once and keeps the first rule for a key[32m 0[2mms[22m[39m
+   [32m✓[39m a year out[2m > [22mplays the draft, the summer, every period and the postseason in that order, then writes the year[32m 8[2mms[22m[39m
+[31m   [31m×[31m a year out[2m > [22mis refused, league untouched, in a seat, on an open season and on a closed market[39m[32m 3[2mms[22m[39m
+[31m     → expected { Object (ok, desk, ...) } to deeply equal { ok: false, reason: 'market-closed' }[39m
+   [32m✓[39m a year out[2m > [22msays so when the sport does not leave the league one decided season on[32m 1[2mms[22m[39m
+   [32m✓[39m a year out[2m > [22msitting out is written only between seats[32m 0[2mms[22m[39m
+   [32m✓[39m the press, the cut and the ask[2m > [22meases a gamble and nothing else, and hands the same object back with no point[32m 1[2mms[22m[39m
+   [32m✓[39m the press, the cut and the ask[2m > [22mcharges exactly the cut it quoted, on the last entry for the man[32m 1[2mms[22m[39m
+   [32m✓[39m the press, the cut and the ask[2m > [22meases the ask of a man he can negotiate with and of nobody else[32m 4[2mms[22m[39m
+   [32m✓[39m the words on the boxes[2m > [22mare never empty and carry no dash or raw placeholder[32m 8[2mms[22m[39m
+   [32m✓[39m the words on the boxes[2m > [22msay only what a desk pays for[32m 0[2mms[22m[39m
+   [32m✓[39m the words on the boxes[2m > [22mcompute the worked examples from the lib they describe[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmDeskHost.test.ts[2m > [22mthe job market[2m > [22mtells offers, quiet and closed apart, and a closed line never tells him to sit
+[31m[1mAssertionError[22m: expected { state: 'quiet', …(7) } to match object { state: 'closed', …(2) }
+(5 matching properties omitted from actual)[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[32m-   "nextYear": "shut",[39m
+[31m+   "nextYear": "climb",[39m
+[2m    "offers": [],[22m
+[32m-   "state": "closed",[39m
+[31m+   "state": "quiet",[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/lib/gmDeskHost.test.ts:[2m403:20[22m[39m
+    [90m401| [39m  it('tells offers, quiet and closed apart, and a closed line never te…
+    [90m402| [39m    const closed = hostMarket(host, lg, firedFrom(BOTTOM, WRECK), name…
+    [90m403| [39m    expect(closed).toMatchObject({ state: 'closed', nextYear: 'shut', …
+    [90m   | [39m                   [31m^[39m
+    [90m404| [39m    [34mexpect[39m([36m/\bsit/i[39m[33m.[39m[34mtest[39m(closed[33m.[39mline))[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m405| [39m    [34mexpect[39m(closed[33m.[39mline)[33m.[39m[34mtoContain[39m([32m'the phone has stopped'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmDeskHost.test.ts[2m > [22ma year out[2m > [22mis refused, league untouched, in a seat, on an open season and on a closed market
+[31m[1mAssertionError[22m: expected { Object (ok, desk, ...) } to deeply equal { ok: false, reason: 'market-closed' }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[32m-   "ok": false,[39m
+[32m-   "reason": "market-closed",[39m
+[31m+   "desk": {[39m
+[31m+     "blocks": {[39m
+[31m+       "picks": {[39m
+[31m+         "rolled": "summer",[39m
+[31m+       },[39m
+[31m+       "seat": {[39m
+[31m+         "career": {[39m
+[31m+           "seasonsOut": 1,[39m
+[31m+           "stints": [[39m
+[31m+             {[39m
+[31m+               "ended": "fired",[39m
+[31m+               "from": 2026,[39m
+[31m+               "grades": [[39m
+[31m+                 "badly",[39m
+[31m+                 "badly",[39m
+[31m+                 "badly",[39m
+[31m+               ],[39m
+[31m+               "team": "T31",[39m
+[31m+               "tier": 4,[39m
+[31m+             },[39m
+[31m+           ],[39m
+[31m+           "version": 1,[39m
+[31m+         },[39m
+[31m+         "v": 1,[39m
+[31m+       },[39m
+[31m+     },[39m
+[31m+     "v": 1,[39m
+[31m+   },[39m
+[31m+   "ok": true,[39m
+[31m+   "report": {[39m
+[31m+     "champion": "T08",[39m
+[31m+     "oldClub": {[39m
+[31m+       "id": "T31",[39m
+[31m+       "place": 21,[39m
+[31m+       "record": "2-2",[39m
+[31m+     },[39m
+[31m+     "season": 2031,[39m
+[31m+   },[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/lib/gmDeskHost.test.ts:[2m569:112[22m[39m
+    [90m567| [39m      [35mconst[39m snap [33m=[39m [33mJSON[39m[33m.[39m[34mstringify[39m(lg)[33m;[39m
+    [90m568| [39m      [35mconst[39m log[33m:[39m string[] [33m=[39m [][33m;[39m
+    [90m569| [39m      expect(hostSeasonAway({ host, away: awayHost(log), league: lg, d…
+    [90m   | [39m                                                                                                               [31m^[39m
+    [90m570| [39m      [34mexpect[39m(log)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m571| [39m      [34mexpect[39m([33mJSON[39m[33m.[39m[34mstringify[39m(lg))[33m.[39m[34mtoBe[39m(snap)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office-shared/GmCareerDesk.test.tsx[2m > [22mthe job market panel[2m > [22moffers no year out on a closed market, and its "?" opens the rules
+[31m[1mAssertionError[22m: expected 'quiet' to be 'closed' // Object.is equality[39m
+
+Expected: [32m"closed"[39m
+Received: [31m"quiet"[39m
+
+[36m [2m❯[22m src/components/front-office-shared/GmCareerDesk.test.tsx:[2m137:34[22m[39m
+    [90m135| [39m  it('offers no year out on a closed market, and its "?" opens the rul…
+    [90m136| [39m    [35mconst[39m career [33m=[39m [34mbinding[39m([33mWRECK[39m)[33m;[39m
+    [90m137| [39m    [34mexpect[39m(career[33m.[39mmarket[33m![39m[33m.[39mstate)[33m.[39m[34mtoBe[39m([32m'closed'[39m)[33m;[39m
+    [90m   | [39m                                 [31m^[39m
+    [90m138| [39m    const { container } = render(<GmJobMarketPanel {...panelProps(care…
+    [90m139| [39m    [34mexpect[39m(container[33m.[39m[34mquerySelector[39m([32m'[data-gm-sit-out]'[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m49 passed[39m[22m[90m (52)[39m
+[2m   Start at [22m 14:20:46
+[2m   Duration [22m 1.63s[2m (transform 281ms, setup 110ms, collect 610ms, tests 797ms, environment 643ms, prepare 301ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmDeskHost.test.ts,title=src/lib/gmDeskHost.test.ts > the job market > tells offers%2C quiet and closed apart%2C and a closed line never tells him to sit,line=403,column=20::AssertionError: expected { state: 'quiet', …(7) } to match object { state: 'closed', …(2) }%0A(5 matching properties omitted from actual)%0A%0A- Expected%0A+ Received%0A%0A  {%0A-   "nextYear": "shut",%0A+   "nextYear": "climb",%0A    "offers": [],%0A-   "state": "closed",%0A+   "state": "quiet",%0A  }%0A%0A ❯ src/lib/gmDeskHost.test.ts:403:20%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmDeskHost.test.ts,title=src/lib/gmDeskHost.test.ts > a year out > is refused%2C league untouched%2C in a seat%2C on an open season and on a closed market,line=569,column=112::AssertionError: expected { Object (ok, desk, ...) } to deeply equal { ok: false, reason: 'market-closed' }%0A%0A- Expected%0A+ Received%0A%0A  {%0A-   "ok": false,%0A-   "reason": "market-closed",%0A+   "desk": {%0A+     "blocks": {%0A+       "picks": {%0A+         "rolled": "summer",%0A+       },%0A+       "seat": {%0A+         "career": {%0A+           "seasonsOut": 1,%0A+           "stints": [%0A+             {%0A+               "ended": "fired",%0A+               "from": 2026,%0A+               "grades": [%0A+                 "badly",%0A+                 "badly",%0A+                 "badly",%0A+               ],%0A+               "team": "T31",%0A+               "tier": 4,%0A+             },%0A+           ],%0A+           "version": 1,%0A+         },%0A+         "v": 1,%0A+       },%0A+     },%0A+     "v": 1,%0A+   },%0A+   "ok": true,%0A+   "report": {%0A+     "champion": "T08",%0A+     "oldClub": {%0A+       "id": "T31",%0A+       "place": 21,%0A+       "record": "2-2",%0A+     },%0A+     "season": 2031,%0A+   },%0A  }%0A%0A ❯ src/lib/gmDeskHost.test.ts:569:112%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmCareerDesk.test.tsx,title=src/components/front-office-shared/GmCareerDesk.test.tsx > the job market panel > offers no year out on a closed market%2C and its "?" opens the rules,line=137,column=34::AssertionError: expected 'quiet' to be 'closed' // Object.is equality%0A%0AExpected: "closed"%0AReceived: "quiet"%0A%0A ❯ src/components/front-office-shared/GmCareerDesk.test.tsx:137:34%0A%0A

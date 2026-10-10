@@ -1,0 +1,7 @@
+#!serial
+m-closelt: bash .rc/x/runmut.sh closelt
+m-fitsave: bash .rc/x/runmut.sh fitsave
+m-craftfirst: bash .rc/x/runmut.sh craftfirst
+m-nextstale: bash .rc/x/runmut.sh nextstale
+m-awayclosed: bash .rc/x/runmut.sh awayclosed
+m-legacyfrom: bash .rc/x/runmut.sh legacyfrom

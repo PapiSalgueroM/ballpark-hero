@@ -1,0 +1,18 @@
+MUTATION ON: awayclosed in src/lib/gmDeskHost.ts
+ src/lib/gmDeskHost.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness, first failures
+  FAIL [9]: nhl seed 1: a refused year out touched the league (the league was touched)
+  FAIL [9]: nhl seed 2: a refused year out touched the league (the league was touched)
+  FAIL [9]: nhl seed 3: a refused year out touched the league (the league was touched)
+  FAIL [9]: nba seed 1: a refused year out touched the league (the league was touched)
+  FAIL [9]: nba seed 2: a refused year out touched the league (the league was touched)
+simGmDeskHost: FAILED, red checks 9:13
+--- vitest
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/gmDeskHost.test.ts[2m > [22ma year out[2m > [22mis refused, league untouched, in a seat, on an open season and on a closed market
+[31m[1mAssertionError[22m: expected { Object (ok, desk, ...) } to deeply equal { ok: false, reason: 'market-closed' }[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m51 passed[39m[22m[90m (52)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmDeskHost.test.ts,title=src/lib/gmDeskHost.test.ts > a year out > is refused%2C league untouched%2C in a seat%2C on an open season and on a closed market,line=569,column=112::AssertionError: e
+MUT awayclosed: harness exit=1 vitest exit=1 restored=yes

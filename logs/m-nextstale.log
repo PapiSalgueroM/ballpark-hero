@@ -1,0 +1,24 @@
+MUTATION ON: nextstale in src/lib/gmDeskHost.ts
+ src/lib/gmDeskHost.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness, first failures
+  FAIL [4]: the ladder holds 5071 quiet, 1080 quiet on a climb and 2736 closed careers: a state is missing
+  FAIL [5]: nhl seed 1 CBJ overachieved out 3: reads quiet (open), and next year does not hold what it says
+  FAIL [5]: nhl seed 1 CBJ badly out 1: reads quiet (open), and next year does not hold what it says
+  FAIL [5]: nhl seed 1 CBJ badly,badly out 1: reads quiet (open), and next year does not hold what it says
+  FAIL [5]: nhl seed 1 CBJ badly,badly,badly out 0: reads quiet (open), and next year does not hold what it says
+simGmDeskHost: FAILED, red checks 4:1 5:2841
+--- vitest
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/gmDeskHost.test.ts[2m > [22mthe job market[2m > [22mtells offers, quiet and closed apart, and a closed line never tells him to sit
+[31m[1mAssertionError[22m: expected { state: 'quiet', …(7) } to match object { state: 'closed', …(2) }
+[41m[1m FAIL [22m[49m src/lib/gmDeskHost.test.ts[2m > [22ma year out[2m > [22mis refused, league untouched, in a seat, on an open season and on a closed market
+[31m[1mAssertionError[22m: expected { Object (ok, desk, ...) } to deeply equal { ok: false, reason: 'market-closed' }[39m
+[41m[1m FAIL [22m[49m src/components/front-office-shared/GmCareerDesk.test.tsx[2m > [22mthe job market panel[2m > [22moffers no year out on a closed market, and its "?" opens the rules
+[31m[1mAssertionError[22m: expected 'quiet' to be 'closed' // Object.is equality[39m
+[2m Test Files [22m [1m[31m2 failed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m49 passed[39m[22m[90m (52)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmDeskHost.test.ts,title=src/lib/gmDeskHost.test.ts > the job market > tells offers%2C quiet and closed apart%2C and a closed line never tells him to sit,line=403,column=20::AssertionError: exp
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmDeskHost.test.ts,title=src/lib/gmDeskHost.test.ts > a year out > is refused%2C league untouched%2C in a seat%2C on an open season and on a closed market,line=569,column=112::AssertionError: e
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmCareerDesk.test.tsx,title=src/components/front-office-shared/GmCareerDesk.test.tsx > the job market panel > offers no year out on a closed market%2C and its "?" ope
+MUT nextstale: harness exit=1 vitest exit=1 restored=yes

@@ -1,0 +1,13 @@
+MUTATION ON: fitsave in src/lib/gmDeskHost.ts
+ src/lib/gmDeskHost.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness, first failures
+simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+--- vitest
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/gmDeskHost.test.ts[2m > [22mthe stored record against the save beside it[2m > [22mfails closed to the legacy record when its open stint is at another club, or is open on a fired save
+[31m[1mAssertionError[22m: expected { v: 1, career: { version: 1, …(2) } } to deeply equal { v: 1, …(2) }[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m51 passed[39m[22m[90m (52)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmDeskHost.test.ts,title=src/lib/gmDeskHost.test.ts > the stored record against the save beside it > fails closed to the legacy record when its open stint is at another club%2C or is open on a 
+MUT fitsave: harness exit=0 vitest exit=1 restored=yes

@@ -1,0 +1,107 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/components/front-office-shared/GmCareerDesk.test.tsx [2m([22m[2m13 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 191[2mms[22m[39m
+   [32m✓[39m the three boxes[2m > [22mare one module level list, and the Job market box shows only between seats[32m 10[2mms[22m[39m
+   [32m✓[39m the job market panel[2m > [22mdraws one tile an offer and takes a job on the second tap only[32m 70[2mms[22m[39m
+   [32m✓[39m the job market panel[2m > [22mstays out a year on the second tap only, and says when that opens the desk[32m 4[2mms[22m[39m
+   [32m✓[39m the job market panel[2m > [22moffers no year out on a closed market, and its "?" opens the rules[32m 5[2mms[22m[39m
+   [32m✓[39m the job market panel[2m > [22mdraws something sane while he holds a seat[32m 2[2mms[22m[39m
+   [32m✓[39m the career panel[2m > [22mdraws a box a stint with a mark a graded season[32m 4[2mms[22m[39m
+[31m   [31m×[31m the career panel[2m > [22mleaves the tier off a record older than the block and counts the seasons it cannot grade[39m[32m 10[2mms[22m[39m
+[31m     → expected 'Club T31In the chair since 2021🏆 🏆P…' to contain 'In the chair since 2022'[39m
+   [32m✓[39m the GM level panel[2m > [22msells a point only in a tree this desk routes[32m 31[2mms[22m[39m
+   [32m✓[39m the GM level panel[2m > [22msays XP has not started on a save whose desk is off[32m 7[2mms[22m[39m
+   [32m✓[39m a panel that loads on demand[2m > [22mshows a fixed height box first, then the panel, and keeps the panel across a save[32m 20[2mms[22m[39m
+   [32m✓[39m a panel that loads on demand[2m > [22mcontrol: built inside a render, the open panel is remounted by a save and loses what it held[32m 13[2mms[22m[39m
+   [32m✓[39m a panel that loads on demand[2m > [22mdraws its fallback under a server render and never throws[32m 6[2mms[22m[39m
+   [32m✓[39m a panel that loads on demand[2m > [22mevery loader resolves to a component[32m 0[2mms[22m[39m
+ [31m❯[39m src/lib/gmDeskHost.test.ts [2m([22m[2m39 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 603[2mms[22m[39m
+   [33m[2m✓[22m[39m the record of a save older than the block[2m > [22mfills nothing in: titles out are titles in, the rest is a count, and it passes the career validator [33m 520[2mms[22m[39m
+[31m   [31m×[31m the record of a save older than the block[2m > [22mstarts the stint in the season he started, whichever way the counters were read (the B7 contract)[39m[32m 10[2mms[22m[39m
+[31m     → expected 2029 to be 2030 // Object.is equality[39m
+   [32m✓[39m the record of a save older than the block[2m > [22mknows the arrival tier only on a record written the day he took the club[32m 0[2mms[22m[39m
+   [32m✓[39m the record of a save older than the block[2m > [22mreads the tier through the adapter and never writes[32m 0[2mms[22m[39m
+   [32m✓[39m the stored record against the save beside it[2m > [22mis read as stored when it fits, and a read never writes[32m 0[2mms[22m[39m
+   [32m✓[39m the stored record against the save beside it[2m > [22mfails closed to the legacy record when its open stint is at another club, or is open on a fired save[32m 1[2mms[22m[39m
+   [32m✓[39m the stored record against the save beside it[2m > [22mcosts one block when one block is corrupt[32m 1[2mms[22m[39m
+   [32m✓[39m the season close[2m > [22mrecords a season once, pays what gmSeasonXp pays, and survives JSON[32m 1[2mms[22m[39m
+   [32m✓[39m the season close[2m > [22mends the stint on a firing and records nothing after it[32m 0[2mms[22m[39m
+   [32m✓[39m the season close[2m > [22mreports the level before and after[32m 1[2mms[22m[39m
+   [32m✓[39m the season verdict[2m > [22mwith no mandate hands back the trust and the flag it was given[32m 1[2mms[22m[39m
+   [32m✓[39m the season verdict[2m > [22mwith no desk is the two engine calls a board makes today, tax cheque included[32m 6[2mms[22m[39m
+   [32m✓[39m the season verdict[2m > [22mwalks Ownership one step a point, and a gain or a tax cheque is never cushioned[32m 3[2mms[22m[39m
+   [32m✓[39m the season verdict[2m > [22mon a new save starts the stint in the season he started and is not an arrival (B7)[32m 0[2mms[22m[39m
+   [32m✓[39m the season verdict[2m > [22mcloses the stint when the verdict fires him[32m 0[2mms[22m[39m
+   [32m✓[39m the season verdict[2m > [22mworks a last grade out again only from this season: its own mandate and a decided champion[32m 0[2mms[22m[39m
+   [32m✓[39m the season verdict[2m > [22mkeeps the ask he was shown through the next summer, and only that one[32m 0[2mms[22m[39m
+   [32m✓[39m the seven effects[2m > [22mhand back what they were given with no point, and draw nothing[32m 1[2mms[22m[39m
+   [32m✓[39m the seven effects[2m > [22mat every level equal gmXp fed the keyed roll, and no two trees share a roll[32m 2[2mms[22m[39m
+   [32m✓[39m spending a point[2m > [22mis refused off the live list, with no point, and past five[32m 0[2mms[22m[39m
+   [32m✓[39m spending a point[2m > [22mtiles pulse only when a live tree can take a point he has[32m 1[2mms[22m[39m
+   [32m✓[39m the job market[2m > [22mis null while he holds a seat[32m 0[2mms[22m[39m
+   [32m✓[39m the job market[2m > [22mreads the same feed every time and a new one a year or a season on[32m 6[2mms[22m[39m
+   [32m✓[39m the job market[2m > [22mnever offers the club that let him go, asks for next season, and carries facts for every offer[32m 12[2mms[22m[39m
+   [32m✓[39m the job market[2m > [22mtells offers, quiet and closed apart, and a closed line never tells him to sit[32m 6[2mms[22m[39m
+   [32m✓[39m the job market[2m > [22mcounts the seasons known only as a count in the line (B6)[32m 1[2mms[22m[39m
+   [32m✓[39m taking a seat[2m > [22mmoves his club, his trust, the ask and the club owned blocks, and nothing else[32m 1[2mms[22m[39m
+   [32m✓[39m taking a seat[2m > [22mrefuses a club that is not in the feed, the club that let him go, and a man who holds a seat[32m 1[2mms[22m[39m
+   [32m✓[39m taking a seat[2m > [22mlists every club block once and keeps the first rule for a key[32m 0[2mms[22m[39m
+   [32m✓[39m a year out[2m > [22mplays the draft, the summer, every period and the postseason in that order, then writes the year[32m 8[2mms[22m[39m
+   [32m✓[39m a year out[2m > [22mis refused, league untouched, in a seat, on an open season and on a closed market[32m 1[2mms[22m[39m
+   [32m✓[39m a year out[2m > [22msays so when the sport does not leave the league one decided season on[32m 1[2mms[22m[39m
+   [32m✓[39m a year out[2m > [22msitting out is written only between seats[32m 0[2mms[22m[39m
+   [32m✓[39m the press, the cut and the ask[2m > [22meases a gamble and nothing else, and hands the same object back with no point[32m 1[2mms[22m[39m
+   [32m✓[39m the press, the cut and the ask[2m > [22mcharges exactly the cut it quoted, on the last entry for the man[32m 1[2mms[22m[39m
+   [32m✓[39m the press, the cut and the ask[2m > [22meases the ask of a man he can negotiate with and of nobody else[32m 4[2mms[22m[39m
+   [32m✓[39m the words on the boxes[2m > [22mare never empty and carry no dash or raw placeholder[32m 8[2mms[22m[39m
+   [32m✓[39m the words on the boxes[2m > [22msay only what a desk pays for[32m 0[2mms[22m[39m
+   [32m✓[39m the words on the boxes[2m > [22mcompute the worked examples from the lib they describe[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmDeskHost.test.ts[2m > [22mthe record of a save older than the block[2m > [22mstarts the stint in the season he started, whichever way the counters were read (the B7 contract)
+[31m[1mAssertionError[22m: expected 2029 to be 2030 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 2030[39m
+[31m+ 2029[39m
+
+[36m [2m❯[22m src/lib/gmDeskHost.test.ts:[2m113:115[22m[39m
+    [90m111| [39m    expect(hostLegacySeat(legacy({ season: 2030, seasonsPlayed: 0, sea…
+    [90m112| [39m    [90m/* At rest after the close they are counted. */[39m
+    [90m113| [39m    expect(hostLegacySeat(legacy({ season: 2030, seasonsPlayed: 1, sea…
+    [90m   | [39m                                                                                                                  [31m^[39m
+    [90m114| [39m    /* Four seasons in, a fifth being played, then that fifth at rest.…
+    [90m115| [39m    expect(hostLegacySeat(legacy({ season: 2034, seasonsPlayed: 4, sea…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office-shared/GmCareerDesk.test.tsx[2m > [22mthe career panel[2m > [22mleaves the tier off a record older than the block and counts the seasons it cannot grade
+[31m[1mAssertionError[22m: expected 'Club T31In the chair since 2021🏆 🏆P…' to contain 'In the chair since 2022'[39m
+
+Expected: [32m"In the chair since 202[7m2[27m"[39m
+Received: [31m"[7mClub T31[27mIn the chair since 202[7m1🏆 🏆Plus 7 earlier seasons, not gradedLet go[27m"[39m
+
+[36m [2m❯[22m src/components/front-office-shared/GmCareerDesk.test.tsx:[2m169:29[22m[39m
+    [90m167| [39m    const { container } = render(<GmCareerPanel {...panelProps(binding…
+    [90m168| [39m    [35mconst[39m box [33m=[39m container[33m.[39m[34mquerySelector[39m([32m'[data-gm-stint]'[39m)[33m![39m[33m;[39m
+    [90m169| [39m    [34mexpect[39m(box[33m.[39mtextContent)[33m.[39m[34mtoContain[39m([32m'In the chair since 2022'[39m)[33m;[39m
+    [90m   | [39m                            [31m^[39m
+    [90m170| [39m    [34mexpect[39m(box[33m.[39mtextContent)[33m.[39mnot[33m.[39m[34mtoContain[39m([32m'tier'[39m)[33m;[39m
+    [90m171| [39m    expect(container.querySelector('[data-gm-earlier]')!.textContent).…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m50 passed[39m[22m[90m (52)[39m
+[2m   Start at [22m 14:22:13
+[2m   Duration [22m 1.63s[2m (transform 289ms, setup 109ms, collect 639ms, tests 794ms, environment 649ms, prepare 143ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmDeskHost.test.ts,title=src/lib/gmDeskHost.test.ts > the record of a save older than the block > starts the stint in the season he started%2C whichever way the counters were read (the B7 contract),line=113,column=115::AssertionError: expected 2029 to be 2030 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 2030%0A+ 2029%0A%0A ❯ src/lib/gmDeskHost.test.ts:113:115%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmCareerDesk.test.tsx,title=src/components/front-office-shared/GmCareerDesk.test.tsx > the career panel > leaves the tier off a record older than the block and counts the seasons it cannot grade,line=169,column=29::AssertionError: expected 'Club T31In the chair since 2021🏆 🏆P…' to contain 'In the chair since 2022'%0A%0AExpected: "In the chair since 2022"%0AReceived: "Club T31In the chair since 2021🏆 🏆Plus 7 earlier seasons, not gradedLet go"%0A%0A ❯ src/components/front-office-shared/GmCareerDesk.test.tsx:169:29%0A%0A
