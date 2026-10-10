@@ -1,0 +1,16 @@
+#!serial
+# Round 1218 fix2, request B: the final proof on the pushed head (the Swiss row and the notes are in), with the fences that walk src one at a time.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ledger: node scripts/simCmVarLedger.mjs
+gencheck: node scripts/genCmVarRates.mjs --check
+l-owedlive: CM_VAR_LEDGER_CONTROL=owedlive node scripts/simCmVarLedger.mjs
+l-names: CM_VAR_LEDGER_CONTROL=names node scripts/simCmVarLedger.mjs
+l-onesource: CM_VAR_LEDGER_CONTROL=onesource node scripts/simCmVarLedger.mjs
+simCmVar: CM_VAR_ARTIFACTS=/tmp/plain node scripts/simCmVar.mjs
+cmvar-everywhere: CM_VAR_ARTIFACTS=/tmp/everywhere CM_VAR_CONTROL=everywhere node scripts/simCmVar.mjs
+varlive: node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
