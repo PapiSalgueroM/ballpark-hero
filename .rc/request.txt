@@ -1,0 +1,23 @@
+simSoccerCareer: node scripts/simSoccerCareer.mjs
+simSoccerOwnGoals: CAREERS=120 SEEDSET=0 node scripts/simSoccerOwnGoals.mjs
+simCareerLeagueWorld: node scripts/simCareerLeagueWorld.mjs
+simSeasonCentreAgreement: node scripts/simSeasonCentreAgreement.mjs
+simSeasonCentreNeutral: node scripts/simSeasonCentreNeutral.mjs
+simSeasonCentreTable: node scripts/simSeasonCentreTable.mjs
+simSeasonCentreMotion: node scripts/simSeasonCentreMotion.mjs
+simSeasonMoments: node scripts/simSeasonMoments.mjs
+simSeasonLaw: node scripts/simSeasonLaw.mjs
+simCareerRealism: node scripts/simCareerRealism.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simAwards: node scripts/simAwards.mjs
+simCareerKeepPlaying: node scripts/simCareerKeepPlaying.mjs
+simSoccerCareerSaveRetry: node scripts/simSoccerCareerSaveRetry.mjs
+simSoccerOfferReview: node scripts/simSoccerOfferReview.mjs
+simCareerSquad: node scripts/simCareerSquad.mjs
+simClubSquads: node scripts/simClubSquads.mjs
+simTrophyCabinet: node scripts/simTrophyCabinet.mjs
+simSeasonFamilySummary: node scripts/simSeasonFamilySummary.mjs
+simSoccerAwardReveal: node scripts/simSoccerAwardReveal.mjs
+simSoccerCareerLeagueWorld: node scripts/simSoccerCareerLeagueWorld.mjs
+simSoccerCareerOpponents: node scripts/simSoccerCareerOpponents.mjs
+simCareerStory: node scripts/simCareerStory.mjs
