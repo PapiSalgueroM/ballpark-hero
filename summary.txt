@@ -1,0 +1,13 @@
+ledger exit=0 2s | simUsSeasonLedger: green. 2967 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+simLiveScores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simUsBoardParity exit=0 61s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+ctl-all exit=0 88s | controls fired: 43 of 43
+tsc exit=0 91s | 
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simAccessibility exit=0 0s | simAccessibility: all green
+simMissingElevenSources exit=0 0s | simMissingElevenSources: green. 40 sheets, 39 of them row for row against the record.
+simUsSeasonCentre exit=0 29s | simUsSeasonCentre: 98 checks, 0 failed
+simNbaSeasonStats exit=0 15s | simNbaSeasonStats: 72 checks passed over 10 seeded franchises and 3 seasons each. Every game adds up, the box takes nothing from the league, the awards follow their rules
+simNbaLuxuryTax exit=0 20s | simNbaLuxuryTax: 347 checks passed over 10 seeded franchises and 5 seasons each. The bill is the published formula, a dollar over pays, every season tips off on fourteen 
+simPerfectSeasonOdds exit=0 5s | simPerfectSeasonOdds: green. In all four sports the odds on the card are the odds in the sim, the copy agrees with both, and the best record keeps.
+slate-and-digest exit=0 46s |    Duration  45.17s (transform 2.13s, setup 152ms, collect 3.40s, tests 42.05s, environment 1.10s, prepare 413ms)
