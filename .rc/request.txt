@@ -1,0 +1,23 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmLeagueFixtures: CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs
+suite-runner: ONLY=simCmLeagueFixtures node scripts/runAllSims.mjs
+only-championship: CM_LEAGUE_FIXTURES_ONLY=championship node scripts/simCmLeagueFixtures.mjs
+only-nosuch: CM_LEAGUE_FIXTURES_ONLY=nosuch node scripts/simCmLeagueFixtures.mjs
+ctl-swapvenue: CM_LEAGUE_FIXTURES_CONTROL=swapvenue CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=championship node scripts/simCmLeagueFixtures.mjs
+ctl-droprow: CM_LEAGUE_FIXTURES_CONTROL=droprow CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=bundesliga2 node scripts/simCmLeagueFixtures.mjs
+ctl-twiceinround: CM_LEAGUE_FIXTURES_CONTROL=twiceinround CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=seriea node scripts/simCmLeagueFixtures.mjs
+ctl-ghostclub: CM_LEAGUE_FIXTURES_CONTROL=ghostclub CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=superlig node scripts/simCmLeagueFixtures.mjs
+ctl-receiptdrift: CM_LEAGUE_FIXTURES_CONTROL=receiptdrift CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=primeira node scripts/simCmLeagueFixtures.mjs
+ctl-samehost: CM_LEAGUE_FIXTURES_CONTROL=samehost CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=eredivisie node scripts/simCmLeagueFixtures.mjs
+ctl-wikihost: CM_LEAGUE_FIXTURES_CONTROL=wikihost CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=ligue2 node scripts/simCmLeagueFixtures.mjs
+ctl-datein: CM_LEAGUE_FIXTURES_CONTROL=datein CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=bundesliga node scripts/simCmLeagueFixtures.mjs
+ctl-extrakey: CM_LEAGUE_FIXTURES_CONTROL=extrakey CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=laliga node scripts/simCmLeagueFixtures.mjs
+ctl-refreeze: CM_LEAGUE_FIXTURES_CONTROL=refreeze CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=championship node scripts/simCmLeagueFixtures.mjs
+ctl-lostfile: CM_LEAGUE_FIXTURES_CONTROL=lostfile CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=bundesliga2 node scripts/simCmLeagueFixtures.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simLiveScores-citedespn: LIVE_CONTROL=citedespn node scripts/simLiveScores.mjs
+quoted-url-must-fail: git worktree add -q /tmp/mut HEAD && ln -s "$PWD/node_modules" /tmp/mut/node_modules && cd /tmp/mut && grep -c ' url: "https://www.espn.com' src/data/clubManagerChampionshipFixtures2026.ts && sed -i 's/, url: "/, "url": "/' src/data/clubManagerChampionshipFixtures2026.ts && grep -c '"url": "https://www.espn.com' src/data/clubManagerChampionshipFixtures2026.ts && node scripts/simLiveScores.mjs
+premier-pending: git worktree add -q /tmp/prem HEAD && ln -s "$PWD/node_modules" /tmp/prem/node_modules && cd /tmp/prem && git show origin/release-at-int:src/data/clubManagerPremierFixtures2026.ts > src/data/clubManagerPremierFixtures2026.ts && git show origin/release-at-int:scripts/data/clubManagerPremierFixtures2026.receipt.json > scripts/data/clubManagerPremierFixtures2026.receipt.json && CM_LEAGUE_FIXTURES_EXPECT=10 node scripts/simCmLeagueFixtures.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
