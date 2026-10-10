@@ -1,0 +1,14 @@
+simCmLeagueFixtures: 9 ledger(s) on disk: bundesliga2, bundesliga, championship, eredivisie, laliga, ligue2, primeira, seriea, superlig
+NEGATIVE CONTROL ON: ghostclub on a copy of primeira, sections DI must go red and nothing else
+A) shape: green for 9 ledger(s)
+B) no club twice in a matchday: green for 9 ledger(s)
+C) each pair once at each ground: green for 9 ledger(s)
+D) the game's own clubs: RED for primeira
+  FAIL: primeira: not the game's 18 clubs: 1 the game does not have (Arsenal), 1 of the game's missing (Académico de Viseu)
+E) the drift guard: ledger equals each source in the receipt: green for 9 ledger(s)
+F) two independent sources: green for 9 ledger(s)
+G) nothing excluded got in: green for 9 ledger(s)
+I) frozen: RED for primeira
+  FAIL: primeira: the ledger's digest is not the frozen 669270be5b321460: a frozen ledger never changes, a correction ships under a new key
+  FAIL: primeira: the digest the receipt recorded is not the ledger's
+CONTROL ghostclub FIRED as expected on primeira: sections DI went red for primeira and nothing else

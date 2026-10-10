@@ -1,0 +1,2 @@
+genCmLeagueFixtures: no snapshot folder. The default (C:/Users/antho/dukb-handoff/2026-10-10/cm-fixtures-raw) is a folder on the owner's PC and this machine does not have it. Pass --dir <folder> or set CM_FIXTURE_RAW.
+no folder made and git status lines: 0, tool exit 1

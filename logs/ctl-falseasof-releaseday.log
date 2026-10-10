@@ -1,0 +1,12 @@
+simCmLeagueFixtures: 9 ledger(s) on disk: bundesliga2, bundesliga, championship, eredivisie, laliga, ligue2, primeira, seriea, superlig
+NEGATIVE CONTROL ON: falseasof on a copy of championship, sections E must go red and nothing else
+A) shape: green for 9 ledger(s)
+B) no club twice in a matchday: green for 9 ledger(s)
+C) each pair once at each ground: green for 9 ledger(s)
+D) the game's own clubs: green for 9 ledger(s)
+E) the drift guard: ledger equals each source in the receipt: RED for championship
+  FAIL: championship: source 1 says it is a read day copy of the list, and its parser and the stamps it recorded do not bear that out (came out 2026-06-25, last changed 2026-06-25T11:00:00Z)
+F) two independent sources: green for 9 ledger(s)
+G) nothing excluded got in: green for 9 ledger(s)
+I) frozen: green for 9 ledger(s)
+CONTROL falseasof FIRED as expected on championship: sections E went red for championship and nothing else

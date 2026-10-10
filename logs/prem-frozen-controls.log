@@ -1,0 +1,25 @@
+PROBE: froze premier-2026-27-v1 (380 fixtures) as 2a0b44638bbb042c
+CONTROL swapvenue FIRED as expected on premier: sections CEI went red for premier and nothing else
+control swapvenue on premier exit 1
+CONTROL droprow FIRED as expected on premier: sections ABCEI went red for premier and nothing else
+control droprow on premier exit 1
+CONTROL twiceinround FIRED as expected on premier: sections BCEI went red for premier and nothing else
+control twiceinround on premier exit 1
+CONTROL ghostclub FIRED as expected on premier: sections DI went red for premier and nothing else
+control ghostclub on premier exit 1
+CONTROL receiptdrift FIRED as expected on premier: sections E went red for premier and nothing else
+control receiptdrift on premier exit 1
+CONTROL samehost FIRED as expected on premier: sections F went red for premier and nothing else
+control samehost on premier exit 1
+CONTROL wikihost FIRED as expected on premier: sections F went red for premier and nothing else
+control wikihost on premier exit 1
+CONTROL datein FIRED as expected on premier: sections GI went red for premier and nothing else
+control datein on premier exit 1
+CONTROL extrakey FIRED as expected on premier: sections G went red for premier and nothing else
+control extrakey on premier exit 1
+CONTROL refreeze FIRED as expected on premier: sections I went red for premier and nothing else
+control refreeze on premier exit 1
+CONTROL lostfile FIRED as expected on premier: sections I went red for premier and nothing else
+control lostfile on premier exit 1
+CONTROL nosnapshot MISFIRED on premier: it does not apply to premier (its receipt has nothing for this control to damage)
+control nosnapshot on premier exit 3

@@ -1,0 +1,13 @@
+simCmLeagueFixtures: 9 ledger(s) on disk: bundesliga2, bundesliga, championship, eredivisie, laliga, ligue2, primeira, seriea, superlig
+NEGATIVE CONTROL ON: receiptdrift on a copy of ligue2, sections E must go red and nothing else
+A) shape: green for 9 ledger(s)
+B) no club twice in a matchday: green for 9 ledger(s)
+C) each pair once at each ground: green for 9 ledger(s)
+D) the game's own clubs: green for 9 ledger(s)
+E) the drift guard: ledger equals each source in the receipt: RED for ligue2
+  FAIL: ligue2: source 2: 1 ledger fixture(s) are not in its rows and 1 of its rows are not in the ledger
+  FAIL: ligue2: the two sources differ in 2 matchday|home|away tuple(s)
+F) two independent sources: green for 9 ledger(s)
+G) nothing excluded got in: green for 9 ledger(s)
+I) frozen: green for 9 ledger(s)
+CONTROL receiptdrift FIRED as expected on ligue2: sections E went red for ligue2 and nothing else
