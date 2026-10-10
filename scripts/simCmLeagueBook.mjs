@@ -115,11 +115,13 @@ const BOOK_OFF = [
 const SCORER_PICK = ': pickWeighted(outfield, m => goalWeight(m.p, m.r), scorerRoll);';
 const TWO_MAN = ": ((men, roll) => { const two = men.filter(m => !['CB', 'LB', 'RB', 'LWB', 'RWB'].includes(m.p)).sort((a, b) => b.r - a.r); return roll < 0.42 ? (two[0] ?? null) : roll < 0.68 ? (two[1] ?? null) : null; })(outfield, scorerRoll);";
 
-/** name -> { patch: [{ file, from, to, n? }], red: the section that must go red, needs?: 'base' } */
+/** name -> { patch: [{ file, from, to, n? }], red: the section that must go red, needs?: 'base', also?: sections
+ *  that go red with it for the same reason and are allowed to (the law is checked in four sections, and the
+ *  weight table is what the deal is judged against) } */
 const CONTROLS = {
-  weight: { patch: [{ file: WEIGHT, from: "pos === 'ST' || pos === 'CF' ? 5 :", to: "pos === 'ST' || pos === 'CF' ? 8 :" }], red: 'stream', needs: 'base' },
+  weight: { patch: [{ file: WEIGHT, from: "pos === 'ST' || pos === 'CF' ? 5 :", to: "pos === 'ST' || pos === 'CF' ? 8 :" }], red: 'stream', needs: 'base', also: ['shapes'] },
   mathrandom: { patch: [{ file: BOOK, from: '    const scorerRoll = rng();', to: '    const scorerRoll = Math.random();' }], red: 'stream' },
-  dropmine: { patch: [{ file: ENGINE, from: NOTE_MINE, to: '' }], red: 'law' },
+  dropmine: { patch: [{ file: ENGINE, from: NOTE_MINE, to: '' }], red: 'law', also: ['names', 'oldsave', 'doors'] },
   cleanside: { patch: [{ file: ENGINE, from: '  if (against === 0) creditCleanSheet(book, club, bookKeeper(xi), bookBacks(xi));', to: '  if (goals === 0) creditCleanSheet(book, club, bookKeeper(xi), bookBacks(xi));' }], red: 'law' },
   bought: { patch: [{ file: ENGINE, from: '  const notTheirs = mySquadNames(state);', to: '  const notTheirs = NO_NAMES;' }], red: 'names' },
   twoman: { patch: [{ file: BOOK, from: SCORER_PICK, to: TWO_MAN }], red: 'shapes' },
@@ -748,10 +750,11 @@ const whole = s => sha(JSON.stringify(s));
   }
   /* A book that cannot be read is no book: a string, an array, another league order's, last season's own. */
   {
-    /* Two fresh copies asked the same things in the same order (the engine numbers its youth players, its
-       press questions and its messages as it goes, so only then are two saves comparable byte for byte). */
-    const withBook = await candidate.again();
-    const without = await nobook.again();
+    /* One copy makes the save. Then each damaged book, and the same save with NO book at all, is played four
+       entries on a copy of the candidate evaluated afresh for it (the engine numbers its youth players, its
+       press questions and its messages as it goes, so only two copies with the same past are comparable byte
+       for byte). Both sides are the candidate, so this holds whatever a control does to the match stream. */
+    const maker = await candidate.again();
     const makeOn = mod => onStream(0x7010, () => {
       let s = mod.cm.startCareer('Everton');
       let guard = 0;
@@ -761,10 +764,10 @@ const whole = s => sha(JSON.stringify(s));
       for (let k = 0; k < 4; k++) next = mod.cm.playNextEntry(next, { skipHalftime: true }).state;
       return { last, next };
     });
-    const made = makeOn(withBook);
-    const plain = makeOn(without).next;
+    const made = makeOn(maker);
+    const plain = JSON.parse(JSON.stringify(made.next));
+    delete plain.leagueBook;
     if (!made.last || !made.next.leagueBook || made.last.s === made.next.leagueBook.s) cannot('last season and this one carry the same stamp, so a stale book cannot be told apart here');
-    if (plain.leagueBook !== undefined || withoutBook(made.next) !== withoutBook(plain)) cannot('the two copies did not make the same save to damage');
     const good = JSON.stringify(made.next.leagueBook);
     const holed = JSON.parse(good.replace(/\[(\d+),(\d+),(\d+),(\d+)\]/, '[$1,$2,null,$4]'));
     /* The third entry: can the match week tell? It asks a stamp and a type and nothing more (the full walk
@@ -779,10 +782,10 @@ const whole = s => sha(JSON.stringify(s));
       const text = JSON.stringify(value);
       tick('oldsave', weekSeesIt ? 3 : 2);
       if (text === good) cannot(`the damage "${what}" changed nothing`);
-      if (withBook.cm.leagueBookOf(v) !== null) fail('oldsave', `a save whose book is ${what} reads as having a book`);
-      const on = fourOn(withBook, v);
-      const off = fourOn(without, JSON.parse(JSON.stringify(plain)));
-      if (withoutBook(on) !== withoutBook(off)) fail('oldsave', `a save whose book is ${what} does not play the four entries the engine with the book out plays`);
+      if (maker.cm.leagueBookOf(v) !== null) fail('oldsave', `a save whose book is ${what} reads as having a book`);
+      const on = fourOn(await candidate.again(), v);
+      const off = fourOn(await candidate.again(), JSON.parse(JSON.stringify(plain)));
+      if (withoutBook(on) !== withoutBook(off)) fail('oldsave', `a save whose book is ${what} does not play the four entries the same save with no book plays`);
       if (weekSeesIt && JSON.stringify(on.leagueBook) !== text) fail('oldsave', `a save whose book is ${what} had it written into: ${String(JSON.stringify(on.leagueBook)).slice(0, 80)}`);
     }
   }
@@ -940,10 +943,12 @@ for (const s of SECTIONS) {
 const secs = Math.round((Date.now() - T0) / 1000);
 if (CONTROL) {
   const want = CONTROLS[CONTROL].red;
-  const others = SECTIONS.filter(s => s !== want && red.get(s).length);
+  const allowed = CONTROLS[CONTROL].also ?? [];
+  const others = SECTIONS.filter(s => s !== want && !allowed.includes(s) && red.get(s).length);
+  const withIt = allowed.filter(s => red.get(s).length);
   const fired = red.get(want).length > 0 && others.length === 0;
   console.log(fired
-    ? `simCmLeagueBook: CONTROL ${CONTROL} FIRED: section ${want} went red (${red.get(want).length} failures) and no other section did (${secs}s)`
+    ? `simCmLeagueBook: CONTROL ${CONTROL} FIRED: section ${want} went red (${red.get(want).length} failures)${withIt.length ? `, with ${withIt.join(', ')} as it must` : ''} and no other section did (${secs}s)`
     : `simCmLeagueBook: CONTROL ${CONTROL} DID NOT FIRE as it must: ${want} has ${red.get(want).length} failures, other red sections [${others.join(', ')}] (${secs}s)`);
   process.exit(fired ? 1 : 3);
 }
