@@ -53,7 +53,7 @@ export default function AgentBrief({ career, clubs, onCareer }: {
       <DialogTrigger asChild>
         <Button ref={trigger} data-transfer-brief-open variant="outline" className="mt-3 min-h-11 w-full whitespace-normal">Brief your agent</Button>
       </DialogTrigger>
-      <DialogContent data-transfer-brief className="flex max-h-[calc(100dvh_-_2rem)] w-[calc(100vw_-_2rem)] max-w-md flex-col gap-3 rounded-xl p-4 [&>button:last-child]:h-11 [&>button:last-child]:w-11"
+      <DialogContent data-transfer-brief className="flex max-h-[calc(100dvh_-_2rem)] w-[calc(100vw_-_2rem)] max-w-md flex-col gap-3 rounded-xl p-4 [&>button:last-child]:h-11 [&>button:last-child]:w-11 [&>button:last-child]:opacity-100"
         onOpenAutoFocus={event => { event.preventDefault(); heading.current?.focus({ preventScroll: true }); }}
         onCloseAutoFocus={event => { event.preventDefault(); trigger.current?.focus({ preventScroll: true }); }}>
         <DialogTitle ref={heading} tabIndex={-1} className="pr-12 text-base">Your transfer brief</DialogTitle>
