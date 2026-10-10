@@ -1,0 +1,84 @@
+name: Manager World Save Size Diagnostic
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - src/lib/clubManager.ts
+      - src/lib/clubManagerWorldRoster.ts
+      - src/lib/clubManagerWorldRoster.test.ts
+      - scripts/qa/managerRosterCacheControl.mjs
+      - scripts/qa/managerWorldRosterDigest.cjs
+      - scripts/simClubManagerSlots.mjs
+      - scripts/qa/managerWorldSizeDiagnostic.mjs
+      - .github/workflows/manager-world-size-diagnostic.yml
+permissions:
+  contents: read
+concurrency:
+  group: manager-world-size-diagnostic-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    defaults:
+      run:
+        shell: bash
+    env:
+      MANAGER_SIZE_DIAGNOSTICS: manager-world-size-diagnostics
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact diagnostic sources and locked dependencies
+        run: |
+          mkdir -p manager-world-size-diagnostics
+          git rev-parse HEAD > manager-world-size-diagnostics/source-head.txt
+          git rev-parse HEAD^{tree} > manager-world-size-diagnostics/source-tree.txt
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          sha256sum package.json package-lock.json > manager-world-size-diagnostics/packages-before.txt
+          npm ci
+          node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8')),packages=[];
+          for(const [directory,expected]of Object.entries(lock.packages)){if(!directory.startsWith('node_modules/')||!expected.version||!fs.existsSync(directory+'/package.json'))continue;const actual=JSON.parse(fs.readFileSync(directory+'/package.json','utf8'));assert.equal(actual.version,expected.version,directory);packages.push({directory,name:actual.name,version:actual.version});}
+          assert(packages.length>0);fs.writeFileSync('manager-world-size-diagnostics/dependencies-before.json',JSON.stringify(packages,null,2));
+          JS
+      - name: Actual type and focused interleaved seed regression
+        run: |
+          failed=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee manager-world-size-diagnostics/types.log || failed=1
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/lib/clubManagerWorldRoster.test.ts --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=manager-world-size-diagnostics/roster-unit.json 2>&1 | tee manager-world-size-diagnostics/roster-unit.log || failed=1
+          MANAGER_CACHE_CONTROL_ARTIFACTS=manager-world-size-diagnostics/cache-control NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerRosterCacheControl.mjs 2>&1 | tee manager-world-size-diagnostics/cache-control.log || failed=1
+          exit "$failed"
+      - name: Diagnostic original and representation-aware historical budgets
+        if: ${{ !cancelled() }}
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerWorldSizeDiagnostic.mjs 2>&1 | tee manager-world-size-diagnostics/diagnostic.log
+      - name: Diagnostic-only healthy world outcomes, no final build credit
+        if: ${{ !cancelled() }}
+        run: MANAGER_WORLD_CONTINUITY_ARTIFACTS=manager-world-size-diagnostics/world-preflight NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerWorldContinuity.mjs 2>&1 | tee manager-world-size-diagnostics/world-preflight.log
+      - name: Diagnostic sources and installed packages held
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --exit-code HEAD -- src scripts .github/workflows package.json package-lock.json index.html > manager-world-size-diagnostics/source-held.log
+          sha256sum package.json package-lock.json > manager-world-size-diagnostics/packages-after.txt
+          cmp manager-world-size-diagnostics/packages-before.txt manager-world-size-diagnostics/packages-after.txt
+          node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('manager-world-size-diagnostics/dependencies-before.json','utf8')),after=[];
+          for(const expected of before){const actual=JSON.parse(fs.readFileSync(expected.directory+'/package.json','utf8'));assert.equal(actual.name,expected.name);assert.equal(actual.version,expected.version);after.push({directory:expected.directory,name:actual.name,version:actual.version});}
+          fs.writeFileSync('manager-world-size-diagnostics/dependencies-after.json',JSON.stringify(after,null,2));
+          JS
+          du -sb manager-world-size-diagnostics > manager-world-size-diagnostics/artifact-size.log
+          test "$(du -sb manager-world-size-diagnostics | cut -f1)" -lt 500000000
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: manager-world-size-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}
+          path: manager-world-size-diagnostics/
+          retention-days: 5
