@@ -21,6 +21,10 @@ export function withCmVarSeed(seed, fn) {
 }
 function fresh(cm) {
   const career = withCmVarSeed(4107, () => cm.startCareer('Everton'));
+  /* Release AT: Round 1184 gives a new Everton career the real fixture list, so its opener is another club than
+     the one this search and the prior engine below were written against. The generated list is asked for the
+     way Round 1184 itself asks for it in simLiveMatch and simClubManagerSlots: only the opt in key is taken off. */
+  delete career.realLeagueFixtures;
   career.squad = career.squad.map(p => ({ ...p, fitness: 100, morale: 70, injuryWeeks: 0, suspendedMatches: 0 }));
   return career;
 }
