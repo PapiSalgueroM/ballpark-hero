@@ -1,0 +1,12 @@
+MUTATION hrhit APPLIED in src/lib/mlbMyCareer.ts: "const hits = Math.max(hr, Math.round(ab * drawn));" -> "const hits = Math.round(ab * drawn);"
+LEDGER
+simUsSeasonLedger: green. 2967 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+VITEST
+   [33m[2m✓[22m[39m Round 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it [33m 32134[2mms[22m[39m
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+PARITY
+   Vitest exit 0, passed [nfl, nba, mlb, nhl], failed []
+
+simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+RESULT hrhit ledger=0 vitest=0 parity=0 awards=skipped

@@ -1,0 +1,4 @@
+gates exit=0 163s | RESULT gates ledger=0 vitest=1 parity=1 awards=0
+hrhit exit=0 70s | RESULT hrhit ledger=0 vitest=0 parity=0 awards=skipped
+pitch exit=0 70s | RESULT pitch ledger=1 vitest=0 parity=0 awards=skipped
+goalie exit=0 71s | RESULT goalie ledger=1 vitest=1 parity=0 awards=skipped

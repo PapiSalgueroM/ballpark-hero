@@ -1,0 +1,18 @@
+MUTATION pitch APPLIED in src/lib/mlbMyCareer.ts: "return pos === 'SP' || pos === 'RP' ? Math.min(slate, US_ENGINE_SEASON.mlb) : slate;" -> "return pos === 'SP' || pos === 'RP' ? US_ENGINE_SEASON.mlb : slate;"
+LEDGER
+FAIL [E6] 372 seasons of 2400 hold more games than the 60 of the 2020 season of BOS, and 0 healthy hitters missed more than seven
+FAIL [E6] 772 pitcher seasons of 2020 (BOS) hold more starts or appearances than a 60 game season can
+FAIL [E6] 372 seasons of 2400 hold more games than the 58 of the 2020 season of DET, and 0 healthy hitters missed more than seven
+FAIL [E6] 780 pitcher seasons of 2020 (DET) hold more starts or appearances than a 58 game season can
+FAIL [E6] the full season mark does not follow the saved length: 150, 56, 30, 30 (150, 56, 11 and 30 expected)
+simUsSeasonLedger: RED at E6 (5 failed, 2962 passed)
+simUsSeasonLedger: RED at E6 (5 failed, 2962 passed)
+VITEST
+   [33m[2m✓[22m[39m Round 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it [33m 32210[2mms[22m[39m
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+PARITY
+   Vitest exit 0, passed [nfl, nba, mlb, nhl], failed []
+
+simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+RESULT pitch ledger=1 vitest=0 parity=0 awards=skipped
