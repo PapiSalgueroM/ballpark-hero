@@ -1,0 +1,4 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+boot-head-pr216 exit=0 151s | klBoot: green. An ordinary visit changed no save but the visited game's own, and the keeper wrote nothing.
+boot-head-plain exit=0 150s | klBoot: green. An ordinary visit changed no save but the visited game's own, and the keeper wrote nothing.
+boot-base-plain exit=0 183s | klBoot: green. An ordinary visit changed no save but the visited game's own, and the keeper wrote nothing.

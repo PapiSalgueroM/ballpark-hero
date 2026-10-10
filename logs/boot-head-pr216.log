@@ -1,0 +1,33 @@
+klRealFix: soccer seed 0: 2 seasons played, plan {"version":1,"receipts":[],"plan":{"year":2024,"club":"Everton","choices":{"tactics":"finisher"}}}, wheel on the save: no
+klRealFix: nfl seed 0: plan on the save: {"workload":"push","tactics":"normal","expectation":"steady","partnership":"normal","bonus":"normal","reinvention":"normal","sport":"nfl","y
+klRealFix: nba seed 0: plan on the save: {"workload":"push","tactics":"normal","expectation":"steady","partnership":"normal","bonus":"normal","reinvention":"normal","sport":"nba","y
+klRealFix: mlb seed 0: plan on the save: {"workload":"push","tactics":"normal","expectation":"steady","partnership":"normal","bonus":"normal","reinvention":"normal","sport":"mlb","y
+klRealFix: nhl seed 0: plan on the save: {"workload":"push","tactics":"normal","expectation":"steady","partnership":"normal","bonus":"normal","reinvention":"normal","sport":"nhl","y
+klBoot: 21 real saves planted, 588602 characters; soccer save holds programme: true; nfl save holds programme: true
+pages that are no long game:
+  /                     all 21 saves byte equal ; 3 other new key(s)
+  /whats-new            all 21 saves byte equal ; 0 other new key(s)
+  /soccer-grid          all 21 saves byte equal ; 2 other new key(s)
+each long game on its own route:
+  /soccer-career        all 21 saves byte equal ; 1 other new key(s)
+  /club-manager         its own save was written again by the game ; 1 other new key(s)
+  /stadium-tycoon       its own save was written again by the game ; 2 other new key(s)
+  /wonderkid-factory    its own save was written again by the game ; 1 other new key(s)
+  /rebuild              all 21 saves byte equal ; 1 other new key(s)
+  /front-office         all 21 saves byte equal ; 1 other new key(s)
+  /nfl-my-career        all 21 saves byte equal ; 1 other new key(s)
+  /cfb-dynasty          all 21 saves byte equal ; 1 other new key(s)
+  /cbb-dynasty          all 21 saves byte equal ; 1 other new key(s)
+  /nba-front-office     all 21 saves byte equal ; 1 other new key(s)
+  /nba-my-career        all 21 saves byte equal ; 1 other new key(s)
+  /mlb-my-career        all 21 saves byte equal ; 1 other new key(s)
+  /mlb-front-office     all 21 saves byte equal ; 1 other new key(s)
+  /nhl-my-career        all 21 saves byte equal ; 1 other new key(s)
+  /nhl-front-office     all 21 saves byte equal ; 1 other new key(s)
+  /aussie-rules-manager all 21 saves byte equal ; 2 other new key(s)
+  /fight-career         all 21 saves byte equal ; 1 other new key(s)
+  /fight-promoter       all 21 saves byte equal ; 1 other new key(s)
+  /fight-gym            all 21 saves byte equal ; 1 other new key(s)
+  /hall-of-champions    all 21 saves byte equal ; 1 other new key(s)
+  /idle-arena           its own save was written again by the game ; 1 other new key(s)
+klBoot: green. An ordinary visit changed no save but the visited game's own, and the keeper wrote nothing.
