@@ -1,0 +1,4 @@
+#!playwright
+#!serial
+m-rangeedge: bash .rc/x/mrun.sh rangeedge walk
+m-lineswap: bash .rc/x/mrun.sh lineswap walk
