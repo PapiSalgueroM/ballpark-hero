@@ -1,0 +1,68 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+stdout | src/test/pitchOwnGoal.test.tsx > Round 1216: an own goal on real feeds > the material is a dense fleet of own goals, each on the cast the viewer holds for it
+[1216 material] 100 matches, 200 half feeds; own goals staged 163 (goals left as they were: 118), for me 79, against me 84; the named man on the viewer's cast 163, not on it 0; by a back 139, by the keeper 24; actions that start outside the goal's own minute 0, wound up as a last kick 0
+
+stdout | src/test/pitchOwnGoal.test.tsx > Round 1216: an own goal on real feeds > OG1: the ball goes in off the man the line names
+[1216 OG1] own goals with the man on the grass 163; at the touch the figure nearest the ball is the named man, within 1: own goal arm 163, baseline arm 0; the man's gap to the ball at the touch: least 0.0, median 0.1, 90th percentile 0.1, most 0.1
+
+stdout | src/test/pitchOwnGoal.test.tsx > Round 1216: an own goal on real feeds > OG9: from the touch to the net the ball passes nobody else
+[1216 OG9] own goals whose ball comes within 2 of another figure between the touch and the net: 0 of 163 (a keeper 0, a man of the side that got it 0); the man placed on that line by hand is never nearer the ball than 3.60
+
+stdout | src/test/pitchOwnGoal.test.tsx > Round 1216: an own goal on real feeds > OG2: the instants are the goal it always was
+[1216 OG2] own goals 163, samples 7009; samples whose phase, action, net, net pulse or holder differ from the baseline arm's 0; frames with the ball in the goal mouth 2142, outside flight and net 0; own goals with a frame in the net 163
+
+stdout | src/test/pitchOwnGoal.test.tsx > Round 1216: an own goal on real feeds > OG3: nobody is the scorer, and the man holds his head
+[1216 OG3] own goals 163; with a hop on a net frame: own goal arm 0, baseline arm 163; net frames where the man has no rue 0, where he celebrates 0, where a man of his side celebrates 0, where the raised arms are more than three or not alike 0, where a man with raised arms has moved 0; net frames with arms raised 1956
+
+stdout | src/test/pitchOwnGoal.test.tsx > Round 1216: an own goal on real feeds > OG4: nobody stands on a team mate while it plays
+[1216 OG4] own goals 163; pairs of one side overlapping two samples running 0; the scene made by hand: the man covers 28.0 past a team mate, pairs overlapping two samples running 0
+
+stdout | src/test/pitchOwnGoal.test.tsx > Round 1216: an own goal on real feeds > OG5: the turn can be seen, and the ball comes to the man
+[1216 OG5] the sharpest turn of the ball in flight, degrees: own goal arm least 34.1, median 63.6, 90th percentile 123.4, most 130.2; baseline arm least 1.3, median 3.1, 90th percentile 3.2, most 3.3; the floor is 20
+[1216 OG5 walk] how far the man goes to meet it: least 0.0, median 0.1, 90th percentile 6.3, most 29.2; from his own third (159 of 163): least 0.0, median 0.0, 90th percentile 6.0, most 10.0; standing further up when it starts 4; shown by his number alone at the touch 0
+
+stdout | src/test/pitchOwnGoal.test.tsx > Round 1216: the recorded own goal > OWN: every own goal frame of the hand made scenes is the recorded one
+[1216 digest] OWN 669ef935
+
+stdout | src/test/pitchOwnGoal.test.tsx > Round 1216: the recorded own goal > RUE: the figure with his head in his hands is the recorded one, and at rue 0 it is the figure it was
+[1216 digest] RUE c9817b1a
+
+stdout | src/test/pitchOwnGoal.test.tsx > Round 1216: an own goal in the live match > the live match draws an own goal for me off the man on its card
+[1216 viewer] an own goal for me, match 3 of the search, 7' Nobel Mendy: card "GOAL! Nobel Mendy 7' (O.G)" under "Aston Villa"
+
+stdout | src/test/pitchOwnGoal.test.tsx > Round 1216: an own goal in the live match > the live match draws an own goal for opp off the man on its card
+[1216 viewer] an own goal for opp, match 17 of the search, 10' Zion Suzuki: card "GOAL! Zion Suzuki 10' (O.G)" under "Ipswich Town"
+
+stdout | src/test/pitchOwnGoal.test.tsx > Round 1216: an own goal and a change of line up off the clock > an own goal still on its way when the line up changes off the clock keeps its net, its card and its men
+[1216 held cast] 326 halves redrawn (cap 4000); the own goal found on attempt 274; one whose man is the one leaving on attempt 325
+
+stdout | src/test/pitchOwnGoal.test.tsx > Round 1216: an own goal and a change of line up off the clock > an own goal still on its way when the line up changes off the clock keeps its net, its card and its men
+[1216 held cast] 82' for opp, Taylor Harwood-Bellis: staged at 82.300, the ball in at 83.056, card "GOAL! Taylor Harwood-Bellis 82' (O.G)"
+
+stdout | src/test/pitchOwnGoal.test.tsx > Round 1216: an own goal and a change of line up off the clock > an own goal still on its way when the line up changes off the clock keeps its net, its card and its men
+[1216 held cast] 71' for me, Maxim De Cuyper (he is the man who leaves at 72): staged at 71.300, the ball in at 72.056, card "GOAL! Maxim De Cuyper 71' (O.G)"
+
+ ✓ src/test/pitchOwnGoal.test.tsx (15 tests) 21962ms
+   ✓ Round 1216: an own goal on real feeds > the material is a dense fleet of own goals, each on the cast the viewer holds for it  3271ms
+   ✓ Round 1216: an own goal on real feeds > OG1: the ball goes in off the man the line names  540ms
+   ✓ Round 1216: an own goal on real feeds > OG9: from the touch to the net the ball passes nobody else  547ms
+   ✓ Round 1216: an own goal on real feeds > OG2: the instants are the goal it always was  416ms
+   ✓ Round 1216: an own goal on real feeds > OG3: nobody is the scorer, and the man holds his head  502ms
+   ✓ Round 1216: an own goal on real feeds > OG4: nobody stands on a team mate while it plays  493ms
+   ✓ Round 1216: an own goal on real feeds > OG5: the turn can be seen, and the ball comes to the man  729ms
+   ✓ Round 1216: an own goal in the live match > the live match draws an own goal for me off the man on its card  1758ms
+   ✓ Round 1216: an own goal in the live match > the live match draws an own goal for opp off the man on its card  1845ms
+   ✓ Round 1216: an own goal and a change of line up off the clock > an own goal still on its way when the line up changes off the clock keeps its net, its card and its men  11532ms
+
+ Test Files  1 passed (1)
+      Tests  15 passed (15)
+   Start at  13:15:09
+   Duration  27.81s (transform 3.36s, setup 108ms, collect 4.24s, tests 21.96s, environment 593ms, prepare 405ms)
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.sim-control/own-goal-BYkrbj/result.json
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+simOwnGoalMotion: green. 15 tests passed: the dense fleet, OG1 to OG9 against their baseline arm, the scenes made by hand, the two recorded digests, the live match on an own goal for each side, and the held cast twin.

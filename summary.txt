@@ -1,0 +1,5 @@
+simOwnGoalMotion exit=0 29s | simOwnGoalMotion: green. 15 tests passed: the dense fleet, OG1 to OG9 against their baseline arm, the scenes made by hand, the two recorded digests, the live match on an 
+simHarnessAnchors exit=0 71s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 26s | No rival product names found. 0 findings.
+tsc exit=0 136s | 
+vitest-all exit=0 568s |    Duration  566.92s (transform 42.66s, setup 24.24s, collect 169.83s, tests 1201.92s, environment 179.85s, prepare 38.44s)
