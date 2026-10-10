@@ -1,0 +1,3 @@
+#!playwright
+#!serial
+ogbefore: node .rc/x/mut-ogbefore.mjs && npm run build > /dev/null 2>&1; LIVE_FIT_OWN=1 LIVE_FIT_CONTROL=ogbefore node scripts/playLiveMatchFit.mjs; s=$?; git checkout -- src; exit $s
