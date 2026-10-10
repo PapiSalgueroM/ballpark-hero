@@ -1,0 +1,14 @@
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simLiveMatch: node scripts/simLiveMatch.mjs
+simAwardRaces: node scripts/simAwardRaces.mjs
+simStatsCentre: node scripts/simStatsCentre.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simCmVar: node scripts/simCmVar.mjs
+simCmRealFixtures: node scripts/simCmRealFixtures.mjs
+saveSize-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
