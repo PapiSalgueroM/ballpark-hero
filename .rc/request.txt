@@ -1,0 +1,6 @@
+#!serial
+build-base: git worktree add -f /tmp/base faf0a5f3 > /dev/null 2>&1; cd /tmp/base && ln -s "$OLDPWD/node_modules" node_modules && git rev-parse --short HEAD && npm run build 2>&1 | tail -3 && find dist -type f | wc -l
+build-head: git worktree add -f /tmp/head HEAD^ > /dev/null 2>&1; cd /tmp/head && ln -s "$OLDPWD/node_modules" node_modules && git rev-parse --short HEAD && npm run build 2>&1 | tail -3 && find dist -type f | wc -l
+cmp: node .rc/x/revCmpDist.mjs base /tmp/base/dist head /tmp/head/dist cmAgeRead levelFrom readInWorld
+fleet: node .rc/x/revFleet.mjs /tmp/base/scripts/lib/cmValueCurve.mjs
+names: git diff --name-status faf0a5f3 HEAD^ | cat; git diff --stat faf0a5f3 HEAD^ | tail -1
