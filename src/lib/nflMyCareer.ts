@@ -16,11 +16,11 @@ import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';
 // they are real career paths and not reskins of a receiver.
 import type { PlayerAppearance } from './soccerCareerAppearance';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
-import { nflSeasonScore, wonAward } from './careerAwards';
+import { awardSlots, nflSeasonScore, wonAward } from './careerAwards';
 import { usSeasonLength } from '@/data/usSeasonLengths';
 import { rookieDeal } from './usCareerRookieDeal';
-import { draftRival, judgeRivalSeason } from './careerRival';
-import type { CareerRival } from './careerRival';
+import { draftRival, judgeRivalSeason, rivalSeasonDraws, rivalSeasonStream } from './careerRival';
+import type { CareerRival, RivalSeasonPlay } from './careerRival';
 import { getNflLifeEventsA } from './nflCareerLifeA';
 import { getNflLifeEventsB } from './nflCareerLifeB';
 import { getNflLifeEventsC } from './nflCareerLifeC';
@@ -46,9 +46,9 @@ import { nflMoneySeasonTick } from './nflCareerMoney';
 import type { InboxMessage } from './careerInbox';
 import { receiveNflInboxTexts } from './nflCareerInbox';
 import type { RivalryEvent } from './careerRivalryEvents';
-import { nflRivalryTick, nflRivalryChoiceTick } from './nflCareerRivalryEvents';
+import { nflRivalryTick, nflRivalryChoiceTick, NFL_ROSTER_AWARD } from './nflCareerRivalryEvents';
 import type { RivalryChoiceCard } from './careerRivalryChoices';
-import { countOf, nflCareerStatBullet, nflMajorAward, type NflCareerSums } from './usCareerStatLine';
+import { countOf, nflCareerStatBullet, nflLineAsPrinted, nflMajorAward, nflStatLine, type NflCareerSums, type NflPrintedStats } from './usCareerStatLine';
 import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
 import { careerRecoveryRisk } from './usCareerRecovery';
@@ -648,8 +648,12 @@ export function simSeason(
   if (sn) notes.push(sn);
   // Round 104: the rival played his season too, on the same scale as mine,
   // so the head to head is an honest comparison rather than a vibe.
+  /* Round 1227: on my own position's stat line, and both seasons are scored
+     the one way, off the parts the season line prints (nflRivalSeason below
+     says how). The All-Pro above is decided first, because at a position the
+     first team names one man he cannot be on it in a season I am. */
   if (c.rival && !c.rival.retired) {
-    for (const n of judgeRivalSeason(c.rival, (((line.passYds ?? 0) + (line.rushYds ?? 0) + (line.recYds ?? 0) + (line.tackles ?? 0) * 9 + (line.fgMade ?? 0) * 30) / 60 + ((line.passTd ?? 0) + (line.rushTd ?? 0) + (line.recTd ?? 0) + (line.sacks ?? 0) + (line.picks ?? 0)) * 2), c.name, 'nfl', rng)) notes.push(n);
+    for (const n of judgeRivalSeason(c.rival, nflHeadToHeadScore(c.pos, line), c.name, 'nfl', rng, nflRivalSeason(c.year, { pos: c.pos, firstTeam: line.awards.includes(NFL_ROSTER_AWARD) }))) notes.push(n);
   }
   /* Round 521: the rivalry beat, rolled right after the rival's own season,
      the same point in the loop the flagship rolls its own. A fired beat
@@ -774,6 +778,77 @@ export function nflStatLineFor(x: NflLineInput, rng: () => number): NflStatLine 
     line.longFg = Math.round(48 + (form - 64) * 0.5 + rng() * 12);
   }
   return line;
+}
+
+/* ─── Round 1227: the rival plays your position on your own stat line ──────────
+
+   Until this round the NFL rival's season was a private curve in
+   careerRival.ts: one line for a linebacker, a corner and an edge rusher (a
+   corner's rival printed sacks), a kicker with no attempts and no long, a
+   tight end on the wide receiver's curve with no cap, and every line a 17
+   game one whatever the season's length. And the player's side of "who had
+   the better year" was one formula for all eight positions. Measured on the
+   tree before (five seeds of 1,500 careers, scripts/simUsRivalSense.mjs): a
+   corner took 0.0 percent of the head to head years, a linebacker 0.2, an
+   edge rusher 0.4, a kicker 10.1, and no rival line of a corner, an edge
+   rusher or a kicker could be read as a line of his position at all.
+
+   Now his season is nflStatLineFor, the player's own function, and:
+
+     position   his own (draftRival gives him the player's and nothing ever
+                changes it; the player's is only the fallback for a save
+                edited by hand).
+     job        a starter who plays every game of the season's REAL length
+                (nflSeasonLength: 16 from 2005 to 2020), every year, as the
+                NBA's rival has since Round 1112.
+     form       his rating plus the season's swing, as careerRival.ts has
+                always handed it. No morale and no club term: a rival has
+                neither on the save.
+     honour     the first team All-Pro, by the same expression that decides
+                the player's (wonAward on the season score of his whole line at
+                a full schedule pace). At a position the first team names ONE
+                man (awardSlots: quarterback, running back, tight end, kicker)
+                he is not on it in a season the player is: two men cannot
+                hold one place.
+
+   THE VERDICT is nflHeadToHeadScore for BOTH seasons: the season score of
+   exactly the parts the season line prints (nflLineAsPrinted in
+   usCareerStatLine.ts). So the head to head can never say what the two
+   printed lines do not. What that leaves out, on purpose: a back's catches
+   count at eight yards each and not at his real receiving yards, a
+   linebacker's and a corner's forced fumbles and a kicker's misses do not
+   count. The player's AWARDS still read his whole line (statScore).
+
+   THE STREAM. The built in line took three draws of the season's stream
+   after the swing, or one for a kicker (rivalSeasonDraws). This takes
+   exactly those and seeds a keyed stream with them, which pays for the
+   line's draws and the All-Pro pass. So the player's own stream is where it
+   was, draw for draw (scripts/simUsRivalSense.mjs section P1). */
+
+/** One NFL season's side of the head to head: the season score of the parts its line prints. */
+export function nflHeadToHeadScore(pos: CareerPos, line: NflPrintedStats): number {
+  return nflSeasonScore(pos, nflLineAsPrinted(line, pos));
+}
+
+/** The rival's season of `year`, as the hook judgeRivalSeason takes (careerRival.ts, RivalSeasonPlay). `mine` is
+ *  the player's own position (the fallback) and whether his season just made the first team All-Pro. */
+export function nflRivalSeason(year: number, mine: { pos: CareerPos; firstTeam: boolean }): RivalSeasonPlay {
+  return (r, form, rng) => {
+    const keyed = rivalSeasonStream('nfl-rival', r, year, rng, rivalSeasonDraws('nfl', r.pos));
+    const pos = (r.pos in ARCHETYPES ? r.pos : mine.pos) as CareerPos;
+    const len = nflSeasonLength(year);
+    const season: SeasonLine = {
+      year, team: r.team, age: r.age, ovr: r.ovr, games: len, awards: [], teamResult: '', salary: 0,
+      ...nflStatLineFor({ form, pos, games: len }, keyed),
+    };
+    const won = wonAward(keyed, 'nfl', 'allPro', pos, nflSeasonScore(pos, nflAwardPaceLine(season, len)));
+    const onePlace = awardSlots('nfl', 'allPro', pos) === 1;
+    return {
+      line: nflStatLine(season, pos),
+      score: nflHeadToHeadScore(pos, season),
+      year, allStar: won && !(onePlace && mine.firstTeam),
+    };
+  };
 }
 
 /** End-of-season progression: growth to potential, decline with age and wear. */

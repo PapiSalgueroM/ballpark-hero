@@ -60,7 +60,7 @@ export interface RivalSeasonResult { line: string; score: number; year?: number;
  * the season (rating plus the season's swing, drawn here exactly as it always was) and the season's stream.
  * THE RULE FOR A SPORT THAT MOVES OVER: take from `rng` exactly the draws that sport's built in line took (the
  * NBA's took one), and key everything else off the rival (keyedRng), so the player's own stream does not move
- * by one draw. The NBA binding is nbaRivalSeason in nbaMyCareer.ts.
+ * by one draw. The NBA binding is nbaRivalSeason in nbaMyCareer.ts, the NFL's nflRivalSeason in nflMyCareer.ts.
  */
 export type RivalSeasonPlay = (r: CareerRival, form: number, rng: () => number) => RivalSeasonResult;
 
@@ -141,8 +141,10 @@ export function draftRival(
 }
 
 /** The sports whose rival line is still built in below. The NBA's is not: Round 1112 moved it onto the
- *  player's own line (nbaRivalSeason in nbaMyCareer.ts), so an NBA call has to hand in its play. */
-export type BuiltInRivalSport = Exclude<RivalSport, 'nba'>;
+ *  player's own line (nbaRivalSeason in nbaMyCareer.ts), so an NBA call has to hand in its play. Round 1227
+ *  did the same for the NFL (nflRivalSeason in nflMyCareer.ts): no career reaches the NFL lines below any
+ *  more, and they go with the rest in the round that moves MLB and the NHL over. */
+export type BuiltInRivalSport = Exclude<RivalSport, 'nba' | 'nfl'>;
 
 /** Roll the rival's season and return a printable line plus a score. */
 export function simRivalSeason(r: CareerRival, sport: RivalSport, rng: () => number, play?: RivalSeasonPlay): RivalSeasonResult {

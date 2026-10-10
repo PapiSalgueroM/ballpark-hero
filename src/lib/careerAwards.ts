@@ -584,6 +584,16 @@ export function wonAward(
 }
 
 /**
+ * Round 1227: how many players an award names at a position, read off the tables above so no caller types a
+ * slot count a second time (the first team All-Pro names one quarterback and three wide receivers). Null when
+ * the award is not given at that position. The NFL rival's season reads it: at a one slot position he and the
+ * player cannot both be on the first team.
+ */
+export function awardSlots(sport: UsAwardSport, award: UsAward, pos: string): number | null {
+  return configFor(sport, award, pos)?.slots ?? null;
+}
+
+/**
  * The season score an average year's field will put up for this award, back
  * in the engine's own units. Exposed for the harness so it can print how
  * hard an award actually is without re-deriving any of this, and so a future
