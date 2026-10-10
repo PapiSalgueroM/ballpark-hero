@@ -1,0 +1,8 @@
+#!serial
+setup: git worktree add -q /tmp/w55 55339449 && ln -s "$PWD/node_modules" /tmp/w55/node_modules && git -C /tmp/w55 log --oneline -1
+floor-parity-1: cd /tmp/w55 && node scripts/simUsBoardParity.mjs
+floor-parity-2: cd /tmp/w55 && node scripts/simUsBoardParity.mjs
+floor-parity-3: cd /tmp/w55 && node scripts/simUsBoardParity.mjs
+head-parity: node scripts/simUsBoardParity.mjs
+head-digest: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=300000 --hookTimeout=120000
+overlay-floor-parity-2: git checkout -q 55339449 -- src scripts && node scripts/simUsBoardParity.mjs; s=$?; git checkout -q HEAD -- src scripts; exit $s
