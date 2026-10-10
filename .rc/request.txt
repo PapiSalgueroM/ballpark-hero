@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+playSeasonCentre: ENGINES=chromium PORT=4501 node scripts/playSeasonCentre.mjs
+playSeasonCentreMotion: ENGINES=chromium PORT=4502 node scripts/playSeasonCentreMotion.mjs
+playSeasonMoments: ENGINES=chromium PORT=4503 node scripts/playSeasonMoments.mjs
+playSoccerCareerDiscipline: ENGINES=chromium PORT=4504 node scripts/playSoccerCareerDiscipline.mjs
+playSoccerCareerLeagueWorld: ENGINES=chromium PORT=4505 node scripts/playSoccerCareerLeagueWorld.mjs
+playSoccerCareerOpponents: ENGINES=chromium PORT=4506 node scripts/playSoccerCareerOpponents.mjs
