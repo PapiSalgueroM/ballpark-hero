@@ -1,0 +1,11 @@
+c-verdictswap exit=1 29s | simUsRivalSense: 6 checks, 1 failed (full size), red sections: N.F2
+c-fullscorenfl exit=1 30s | simUsRivalSense: 6 checks, 1 failed (full size), red sections: N.F2
+c-oldscalenfl exit=1 33s | simUsRivalSense: 6 checks, 2 failed (full size), red sections: N.U2, N.F2
+c-offshapenfl exit=1 29s | simUsRivalSense: 6 checks, 3 failed (full size), red sections: N.U2, N.F1, N.F2
+c-bridge exit=1 35s | simUsRivalSense: 6 checks, 2 failed (full size), red sections: N.U2, N.F2
+c-oneslot exit=1 29s | simUsRivalSense: 6 checks, 2 failed (full size), red sections: N.U2, N.U5
+c-workload17 exit=1 30s | simUsRivalSense: 6 checks, 1 failed (full size), red sections: N.U2
+norival exit=0 19s | No rival product names found. 0 findings.
+livescores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+anchors exit=0 45s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+c-drawsnfl exit=1 785s | simUsRivalSense: 39 checks, 6 failed (full size), red sections: N.U1, N.F2, P1, P2
