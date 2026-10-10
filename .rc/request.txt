@@ -1,0 +1,10 @@
+#!serial
+pin-old-on-head: node scripts/simManagerAppealIsolation.mjs
+pin-old-engine-reverted: git checkout d2055c81 -- src/lib/clubManager.ts && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout HEAD -- src/lib/clubManager.ts; exit $s
+rules: node scripts/simCmLeagueRules.mjs
+shootout: node scripts/simCmShootoutOrder.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+norival: node scripts/simNoRivalNames.mjs
+storage: node scripts/simStorageWrites.mjs
+livescores: node scripts/simLiveScores.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
