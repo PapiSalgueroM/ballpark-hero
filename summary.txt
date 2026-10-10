@@ -1,0 +1,12 @@
+headis exit=0 0s | round head 441f040b8449ef79de4b3794b39af573b025e3c0 | main 09df145abfb241679022b41903d2f19bc254ebf9 | merge base 09df145abfb241679022b41903d2f19bc254ebf9
+vitest exit=0 2s |    Duration  1.50s (transform 172ms, setup 100ms, collect 234ms, tests 998ms, environment 653ms, prepare 257ms)
+sec0 exit=0 0s | simCmLeaguePhase: GREEN, 890 checks, 0 failed, sections 0.
+c-capsource exit=1 0s | simCmLeaguePhase control capsource: FIRED (2 of its own failures, e.g. F15a: capPerAssociation 2 is not printed by two publishers)
+c-shapefigure exit=1 0s | simCmLeaguePhase control shapefigure: FIRED (1 of its own failures, e.g. LEAGUE_PHASE_SHAPES.uecl.capPerAssociation is a figure of no verified row)
+c-receipt exit=1 0s | simCmLeaguePhase control receipt: FIRED (1 of its own failures, e.g. the receipt does not carry the hash of scripts/data/cmUclFormat.json (f31d6433bc80927db277367797d06b6
+receipthash exit=0 0s | ledger sha256 a977e0512a475b137f5bb1d77ec93a80749d49b25bb3c4755e641fff4c44a1a3 | receipt says "sha256": "a977e0512a475b137f5bb1d77ec93a80749d49b25bb3c4755e641fff4c44a1a3"
+newfiles exit=0 0s | 8 files added, none modified, deleted or renamed against origin/main
+sim exit=0 22s | simCmLeaguePhase: GREEN, 7021 checks, 0 failed, sections all.
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simHarnessAnchors exit=0 28s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 44s | 

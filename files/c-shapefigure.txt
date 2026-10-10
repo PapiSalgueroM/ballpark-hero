@@ -1,0 +1,4 @@
+  0 ledger: verified F1 F2 F3 F5 F6 F7 F8 F9 F10 F12 F15a F15b F15c F16 | one publisher F4 F13 F18 | to verify F14 F17
+  0 bracket rule from 10 readings of two seasons: seeded lines 1/2, 3/4, 5/6, 7/8 are fed by play-off pairings 15,16,17,18 | 13,14,19,20 | 11,12,21,22 | 9,10,23,24; quarter-finals 1v4 2v3 (lines), the two meet in one semi-final, 1st and 2nd in opposite halves
+  control shapefigure turned red: untagged 1
+simCmLeaguePhase control shapefigure: FIRED (1 of its own failures, e.g. LEAGUE_PHASE_SHAPES.uecl.capPerAssociation is a figure of no verified row)
