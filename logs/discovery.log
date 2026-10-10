@@ -1,0 +1,3 @@
+Effective copied control adds exactly six dynamic children while the node baseline stays unchanged.
+Effective copied control drops exactly three self guarded children when the self-guard rule is removed.
+Retained actual child receipts: .sim-control/browser-discovery-1sWGjR/report.json

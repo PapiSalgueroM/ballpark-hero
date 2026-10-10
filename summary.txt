@@ -1,0 +1,17 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+dev exit=0 47s | RESULT sim=0 walk=0
+trophy exit=0 34s | RESULT sim=0 walk=0
+season exit=0 38s | RESULT sim=0 walk=0
+derby exit=0 49s | RESULT sim=0 walk=0
+cmfix exit=0 26s | RESULT sim=0 walk=0
+role exit=0 37s | Career Story native: 554 checks, 0 failed, 9/9 journeys; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/career-story-role/native
+depth exit=0 11s | playSoccerCareerDepth: 80 checks, 0 failed
+reports exit=0 9s | playDraftDetectiveReports: 44 checks, 0 failed. Screenshots and evidence: /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/draft-detective-shots
+cmvar-dark exit=2 1s | playCmVar: light a scratch checkout first: node scripts/qa/cmVarLit.mjs on, then vite build, then this walk, then node scripts/qa/cmVarLit.mjs off.
+discovery exit=0 10s | Retained actual child receipts: .sim-control/browser-discovery-1sWGjR/report.json
+play-stat exit=0 42s | Played 1 games. 0 findings, 0 the harness could not drive.
+play-dart exit=0 44s | Played 1 games. 0 findings, 0 the harness could not drive.
+play-career exit=0 54s | Played 1 games. 0 findings, 0 the harness could not drive.
+play-cm exit=0 46s | Played 1 games. 0 findings, 0 the harness could not drive.
+weight exit=1 28s | sweepWeight: 4 failures

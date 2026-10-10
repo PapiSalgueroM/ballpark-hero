@@ -1,0 +1,1 @@
+playCmVar: light a scratch checkout first: node scripts/qa/cmVarLit.mjs on, then vite build, then this walk, then node scripts/qa/cmVarLit.mjs off.
