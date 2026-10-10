@@ -1,0 +1,28 @@
+# Release AU, after the anchor commit ce41a1ad: the harnesses the anchors had stopped, and every control of the keep playing harness
+keep: node scripts/simCareerKeepPlaying.mjs
+keep-olddecline: KEEP_PLAYING_CONTROL=olddecline node scripts/simCareerKeepPlaying.mjs
+keep-readvance: KEEP_PLAYING_CONTROL=readvance node scripts/simCareerKeepPlaying.mjs
+keep-stuck: KEEP_PLAYING_CONTROL=stuck node scripts/simCareerKeepPlaying.mjs
+keep-offphase: KEEP_PLAYING_CONTROL=offphase node scripts/simCareerKeepPlaying.mjs
+keep-pushtwice: KEEP_PLAYING_CONTROL=pushtwice node scripts/simCareerKeepPlaying.mjs
+keep-acceptresume: KEEP_PLAYING_CONTROL=acceptresume node scripts/simCareerKeepPlaying.mjs
+keep-norehabrow: KEEP_PLAYING_CONTROL=norehabrow node scripts/simCareerKeepPlaying.mjs
+keep-zerorehab: KEEP_PLAYING_CONTROL=zerorehab node scripts/simCareerKeepPlaying.mjs
+keep-noconvictionrow: KEEP_PLAYING_CONTROL=noconvictionrow node scripts/simCareerKeepPlaying.mjs
+keep-norehabsave: KEEP_PLAYING_CONTROL=norehabsave node scripts/simCareerKeepPlaying.mjs
+keep-rehabtwice: KEEP_PLAYING_CONTROL=rehabtwice node scripts/simCareerKeepPlaying.mjs
+keep-noconvictionsave: KEEP_PLAYING_CONTROL=noconvictionsave node scripts/simCareerKeepPlaying.mjs
+keep-convictiontwice: KEEP_PLAYING_CONTROL=convictiontwice node scripts/simCareerKeepPlaying.mjs
+keep-nomoney: KEEP_PLAYING_CONTROL=nomoney node scripts/simCareerKeepPlaying.mjs
+keep-nomoneytrial: KEEP_PLAYING_CONTROL=nomoneytrial node scripts/simCareerKeepPlaying.mjs
+keep-nomoneysave: KEEP_PLAYING_CONTROL=nomoneysave node scripts/simCareerKeepPlaying.mjs
+keep-nosummer: KEEP_PLAYING_CONTROL=nosummer node scripts/simCareerKeepPlaying.mjs
+keep-nosummertrial: KEEP_PLAYING_CONTROL=nosummertrial node scripts/simCareerKeepPlaying.mjs
+keep-nosummersave: KEEP_PLAYING_CONTROL=nosummersave node scripts/simCareerKeepPlaying.mjs
+keep-pageclubs: KEEP_PLAYING_CONTROL=pageclubs node scripts/simCareerKeepPlaying.mjs
+discipline: node scripts/simSoccerDiscipline.mjs
+finish: node scripts/simCareerLeagueFinish.mjs
+awards: node scripts/simCareerAwardsNight.mjs
+seasons: node scripts/simCareerLeagueSeasons.mjs
+brands: node scripts/simCareerSocialBrands.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
