@@ -1,0 +1,4 @@
+simCareerRealism: node scripts/simCareerRealism.mjs
+simDepthChart: node scripts/simDepthChart.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simSeasonReveal: node scripts/simSeasonReveal.mjs

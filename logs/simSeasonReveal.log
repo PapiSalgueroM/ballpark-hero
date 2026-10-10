@@ -1,0 +1,17 @@
+1) Confetti fires on WON THE and on nothing else, the MLB trap included
+   4 titles confetti, 18 exits quiet
+2) A banned year gets the muted card
+   banned tone, no confetti, no stat line, all lines plain
+3) Output lines equal input lines, byte for byte, in order
+   verbatim, ordered, null camp note skipped, header carries the year
+4) Line tones follow the leading emoji
+   10 lines toned right
+5) Across seeded careers in all four sports, confetti tracks the ring count
+   nfl: 120 seasons across 5 careers, 7 title reveals, confetti tracked the ring count exactly
+   nba: 120 seasons across 5 careers, 1 title reveals, confetti tracked the ring count exactly
+   nhl: 120 seasons across 5 careers, 5 title reveals, confetti tracked the ring count exactly
+   mlb: 120 seasons across 5 careers, 5 title reveals, confetti tracked the ring count exactly
+6) The GM verdict: confetti belongs to the champion GM and to nobody else
+   all four combinations: a good grade is not a parade, and fired kills confetti outright
+
+simSeasonReveal: green. The curtain celebrates only what the engine wrote, and only when it earned it.

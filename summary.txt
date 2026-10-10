@@ -1,0 +1,4 @@
+simDepthChart exit=0 1s | ALL DEPTH CHART CHECKS PASSED
+simSeasonReveal exit=0 0s | simSeasonReveal: green. The curtain celebrates only what the engine wrote, and only when it earned it.
+simCareerRealism exit=0 4s | ALL CAREER REALISM CHECKS PASSED
+simCareerParity exit=0 8s | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
