@@ -1,0 +1,2 @@
+daily-head exit=1 56s | simDailySaveHardening: 2 failure(s)
+daily-base exit=1 57s | simDailySaveHardening: 2 failure(s)
