@@ -1,0 +1,28 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/managerMatchPlans.test.tsx[2m > [22mClub Manager saved match plans[2m > [22mretains an independent engine kickoff and saved tactics baseline without using match plans[32m 109[2mms[22m[39m
+ [32m✓[39m src/test/managerMatchPlans.test.tsx[2m > [22mClub Manager saved match plans[2m > [22mcaptures every tactics assignment without aliasing players or consuming a random draw[32m 50[2mms[22m[39m
+ [32m✓[39m src/test/managerMatchPlans.test.tsx[2m > [22mClub Manager saved match plans[2m > [22msaves applies and reloads the actual mounted tactics atomically through the real hook[33m 381[2mms[22m[39m
+ [32m✓[39m src/test/managerMatchPlans.test.tsx[2m > [22mClub Manager saved match plans[2m > [22mpreviews current injuries suspensions departed players fitness and exact engine replacements[32m 104[2mms[22m[39m
+ [32m✓[39m src/test/managerMatchPlans.test.tsx[2m > [22mClub Manager saved match plans[2m > [22mtakes the previewed XI and all saved duties into an actual kickoff with identical engine draws[32m 44[2mms[22m[39m
+ [32m✓[39m src/test/managerMatchPlans.test.tsx[2m > [22mClub Manager saved match plans[2m > [22mkeeps three named slots independent and replaces or deletes only the selected saved setup[32m 220[2mms[22m[39m
+ [32m✓[39m src/test/managerMatchPlans.test.tsx[2m > [22mClub Manager saved match plans[2m > [22mignores damaged and old plan metadata without discarding the earned career[32m 90[2mms[22m[39m
+ [32m✓[39m src/test/managerMatchPlans.test.tsx[2m > [22mClub Manager saved match plans[2m > [22mrefuses another club or era and keeps valid plans across the same clubs next season[32m 103[2mms[22m[39m
+ [32m✓[39m src/test/managerMatchPlans.test.tsx[2m > [22mClub Manager saved match plans[2m > [22mdrops departed or loaned taker assignments while keeping the saved request for honest previews[32m 24[2mms[22m[39m
+ [32m✓[39m src/test/managerMatchPlans.test.tsx[2m > [22mClub Manager saved match plans[2m > [22mblocks saved plan actions during a live match a sack or a stale manager slot[32m 66[2mms[22m[39m
+ [32m✓[39m src/test/managerMatchPlans.test.tsx[2m > [22mClub Manager saved match plans[2m > [22mshows the worked example and current assignments then restores focus when the plan tile closes[33m 424[2mms[22m[39m
+ [32m✓[39m src/test/managerMatchPlans.test.tsx[2m > [22mClub Manager saved match plans[2m > [22mreports refused actual plan clicks without success notices or clearing a pending bench selection[32m 107[2mms[22m[39m
+ [32m✓[39m src/test/managerMatchPlans.test.tsx[2m > [22mClub Manager saved match plans[2m > [22mreveals the actual plan action row after opening and selecting a saved setup[32m 69[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m13 passed[39m[22m[90m (13)[39m
+[2m   Start at [22m 18:24:37
+[2m   Duration [22m 5.64s[2m (transform 2.23s, setup 61ms, collect 2.99s, tests 1.79s, environment 340ms, prepare 155ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/manager-match-plans-artifacts/mounted/normal-report.json
+
+[90mstderr[2m | src/test/managerMatchPlans.test.tsx[2m > [22m[2mClub Manager saved match plans[2m > [22m[2mshows the worked example and current assignments then restores focus when the plan tile closes
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+simManagerMatchPlans: 13 actual outcomes passed.
