@@ -1,0 +1,34 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [2m[90m↓[39m[22m src/test/usBoardFixture.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[33m4 skipped[39m[2m)[22m
+ [32m✓[39m src/test/careerHall.test.tsx [2m([22m[2m43 tests[22m[2m)[22m[33m 1274[2mms[22m[39m
+   [33m[2m✓[22m[39m the two cards say what they do[2m > [22mthe farewell card offers the three answers with their own words [33m 381[2mms[22m[39m
+ [32m✓[39m src/test/nbaOldSaveLines.test.ts [2m([22m[2m37 tests[22m[2m)[22m[32m 128[2mms[22m[39m
+ [32m✓[39m src/test/usCareerStatLines.test.tsx [2m([22m[2m117 tests[22m[2m)[22m[33m 3844[2mms[22m[39m
+   [33m[2m✓[22m[39m the boards print the position's own line everywhere[2m > [22m'NFL' 'QB' retirement screen: every season row, the bullets and the share text [33m 302[2mms[22m[39m
+ [32m✓[39m src/test/careerDecisionOutcome.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 6737[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mapplies the real third-season NBA trade once before its quality draw and keeps the full save on return [33m 1164[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mshows each real sport choice as the actual capped change and saves it once [33m 807[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mreports negative effects and real endorsement earnings without calling them cash [33m 1073[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mconsumes same-frame choices once and accepts the next ordinary event [33m 429[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mcontinues with no extra draws writes season or completion and restores Play focus [33m 1209[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mreloads the applied career without replaying its transient receipt or choice [33m 1140[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mpreserves real ordinary engine choices and the existing rivalry receipt independently [33m 562[2mms[22m[39m
+ [32m✓[39m src/test/nbaTrophyTile.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 71[2mms[22m[39m
+ [32m✓[39m src/test/rivalryChoiceBoard.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 933[2mms[22m[39m
+   [33m[2m✓[22m[39m the rival choice card in the My Career boards[2m > [22m'NFL': a pending choice opens on the card, pays what it printed, and Continue goes back to the hub [33m 402[2mms[22m[39m
+ [32m✓[39m src/test/myCareerRestore.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 748[2mms[22m[39m
+   [33m[2m✓[22m[39m My Career saved retirement scoring[2m > [22m'NFL' does not repay a retired save on reopen [33m 306[2mms[22m[39m
+ [32m✓[39m src/test/nbaStatLineColumns.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 69[2mms[22m[39m
+ [32m✓[39m src/test/usCareerTruthDigest.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 56237[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it [33m 56233[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m9 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (10)[39m
+[2m      Tests [22m [1m[32m234 passed[39m[22m[2m | [22m[33m4 skipped[39m[90m (238)[39m
+[2m   Start at [22m 03:38:20
+[2m   Duration [22m 66.34s[2m (transform 4.24s, setup 1.03s, collect 15.35s, tests 70.04s, environment 6.88s, prepare 1.95s)[22m
+
