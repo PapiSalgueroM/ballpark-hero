@@ -268,8 +268,11 @@ const CLUBS = new Set(M.FO_TEAMS.map(t => t.abbr));
 const isClub = id => CLUBS.has(id);
 const fixturePath = path.join(ROOT, 'scripts', 'data', 'gmBracketFixture.json');
 const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
-check(4, 'the fixture was recorded from the engine as it is now (a changed engine records it again in the same commit)', fixture.engine === sha1(readSrc('src/lib/frontOffice.ts')), 'src/lib/frontOffice.ts is not the file the fixture was recorded from');
-check(4, 'the fixture was recorded over the resolver as it is now', fixture.finalsBracket === sha1(readSrc('src/lib/finalsBracket.ts')), 'src/lib/finalsBracket.ts is not the file the fixture was recorded over');
+/* The fixture names the engine file and the resolver file it was recorded from. A changed file is NOT a red by itself
+   (a comment, or a function no postseason reads, moves no game): the fence is the digest of what is PLAYED. The two
+   hashes only say, when the digest has moved, where to look first. */
+const fixtureFiles = [['src/lib/frontOffice.ts', fixture.engine], ['src/lib/finalsBracket.ts', fixture.finalsBracket]]
+  .map(([rel, hash]) => `${rel} ${hash === sha1(readSrc(rel)) ? 'is' : 'is NOT'} the file the fixture was recorded from`).join('; ');
 check(4, 'the fixture is of this fleet', same(fixture.fleet, { ...FLEET, nextDraws: NEXT_DRAWS }));
 
 /* One playoff game as the engine's one press postseason plays it: the engine's game at week 0, then the win and the loss taken back. */
@@ -435,7 +438,7 @@ for (const set of SEEDSETS) {
   settle(4, `set ${set}: bracketProblems names a tie played out of turn`, s4.dTurn);
   const rec = fixture.sets[set];
   check(4, `set ${set}: the engine's postseason over the set is the recorded one (scripts/data/gmBracketFixture.json)`, !!rec && rec.seasons === lines.length && rec.digest === sha1(lines.join('\n')),
-    rec ? `digest ${sha1(lines.join('\n')).slice(0, 12)} against the recorded ${String(rec.digest).slice(0, 12)}; the first kept season that differs: ${(rec.kept.find(k => !lines.includes(JSON.stringify(k))) ?? { id: 'none of the kept ones' }).id}` : 'the fixture has no such set');
+    rec ? `digest ${sha1(lines.join('\n')).slice(0, 12)} against the recorded ${String(rec.digest).slice(0, 12)}; the first kept season that differs: ${(rec.kept.find(k => !lines.includes(JSON.stringify(k))) ?? { id: 'none of the kept ones' }).id}; ${fixtureFiles}. If the change is meant, record again in the same commit: node scripts/recordGmBracketFixture.mjs` : 'the fixture has no such set');
   check(4, `set ${set}: the fixture's kept seasons are played to the letter`, !!rec && rec.kept.length === 6 && rec.kept.every(k => lines.includes(JSON.stringify(k))));
   settle(5, `set ${set}: telling a season leaves the engine's generator where it was`, s5.state);
   settle(5, `set ${set}: telling a season takes no draw from Math.random`, s5.calls);

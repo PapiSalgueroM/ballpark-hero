@@ -127,9 +127,19 @@ against 0.0148 shutouts and 0.0716 against 0.0517 sides on 40 or more.
 of each league kind in full (seeds, thirteen games, champion, a hash of the next 64 draws and of the 32
 records). The recorder bundles only the engine, so it runs on the commit before the round: recorded on a runner
 in a worktree of the base `5d6ffbef` and at the round's head, both files are the committed file byte for byte
-(`cmp`), and the committed file was itself written on Windows. The harness refuses a fixture whose engine or
-resolver hash is not the file on disk. A change to `runPlayoffs`, to `simGame`, to `finalsBracket.ts` or to
-the NFL data that is MEANT must record the fixture again in the same commit and say why.
+(`cmp`), and the committed file was itself written on Windows. The fence is the digest of what is PLAYED: an
+edit to the engine file that moves no postseason (a comment, a function no playoff reads) is not a red, and
+when the digest does move the harness says whether `frontOffice.ts` and `finalsBracket.ts` are still the files
+the fixture was recorded from. A change that is MEANT to `runPlayoffs`, to `simGame`, to anything that moves
+the fleet's seasons (the schedule, the injury pass, the computer clubs' weekly moves, the rosters), to
+`finalsBracket.ts` or to the NFL data must record the fixture again in the same commit
+(`node scripts/recordGmBracketFixture.mjs`) and say why.
+
+(The first version of the harness, the one the runner results `r1224-s2` to `r1224-f6` below ran, also failed
+two checks of its own when either file's hash had moved at all. They were taken out as the last change of the
+round: a hash is not an outcome, and a comment edit in a 1,500 line engine file would have turned a fence red
+for nothing. That is why those results print 171 checks and the harness now makes 169. The run of the harness
+as it stands is named in the closing report.)
 
 ## What the NBA, MLB and NHL front offices must supply (data plus events, no new engine)
 
