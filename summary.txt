@@ -1,0 +1,8 @@
+c-twoman-s0 exit=3 30s | simCmLeagueBook: CONTROL twoman DID NOT FIRE as it must: shapes has 5 failures, other red sections [oldsave] (30s)
+c-twoman-s1 exit=3 31s | simCmLeagueBook: CONTROL twoman DID NOT FIRE as it must: shapes has 5 failures, other red sections [oldsave] (31s)
+book-default-s0 exit=1 32s | simCmLeagueBook: 9 FAILURE(S) (32s)
+c-twoman-s2 exit=3 31s | simCmLeagueBook: CONTROL twoman DID NOT FIRE as it must: shapes has 5 failures, other red sections [oldsave] (31s)
+c-twoman-s3 exit=3 30s | simCmLeagueBook: CONTROL twoman DID NOT FIRE as it must: shapes has 5 failures, other red sections [oldsave] (30s)
+c-twoman-s4 exit=1 33s | simCmLeagueBook: CONTROL twoman FIRED: section shapes went red (5 failures) and no other section did (33s)
+c-bought exit=3 23s | simCmLeagueBook: CONTROL bought DID NOT FIRE as it must: names has 3 failures, other red sections [oldsave] (23s)
+c-bought-s1 exit=3 24s | simCmLeagueBook: CONTROL bought DID NOT FIRE as it must: names has 3 failures, other red sections [oldsave] (24s)

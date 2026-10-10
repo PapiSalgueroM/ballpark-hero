@@ -1,0 +1,8 @@
+book-default-s0: node scripts/simCmLeagueBook.mjs
+c-twoman-s0: SEEDSET=0 BOOK_CONTROL=twoman node scripts/simCmLeagueBook.mjs
+c-twoman-s1: SEEDSET=1 BOOK_CONTROL=twoman node scripts/simCmLeagueBook.mjs
+c-twoman-s2: SEEDSET=2 BOOK_CONTROL=twoman node scripts/simCmLeagueBook.mjs
+c-twoman-s3: SEEDSET=3 BOOK_CONTROL=twoman node scripts/simCmLeagueBook.mjs
+c-twoman-s4: SEEDSET=4 BOOK_CONTROL=twoman node scripts/simCmLeagueBook.mjs
+c-bought: BOOK_CONTROL=bought node scripts/simCmLeagueBook.mjs
+c-bought-s1: SEEDSET=1 BOOK_CONTROL=bought node scripts/simCmLeagueBook.mjs
