@@ -105,6 +105,11 @@ describe('a saved night is trusted only whole', () => {
     expect(bad(n => { n.slots[7].slot = 3; })).toBe(false);
     expect(bad(n => { (n.slots[7] as { kind: string }).kind = 'gift'; })).toBe(false);
     expect(bad(n => { n.order.first[0] = n.order.first[1]; })).toBe(false);
+    /* Two picks out of the saved order, each slot still well formed. */
+    expect(bad(n => { [n.slots[2].orig, n.slots[3].orig] = [n.slots[3].orig, n.slots[2].orig]; })).toBe(false);
+    expect(bad(n => { [n.slots[40].orig, n.slots[50].orig] = [n.slots[50].orig, n.slots[40].orig]; })).toBe(false);
+    /* A pick the ledger did not hold is simply absent: still valid. */
+    expect(bad(n => { n.slots.splice(59, 1); })).toBe(true);
     expect(bad(n => { (n as { slots: unknown }).slots = null; })).toBe(false);
   });
 });

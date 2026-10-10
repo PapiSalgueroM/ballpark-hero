@@ -114,6 +114,20 @@ export function isGmDraftNight(raw: unknown, teamIds: string[], year: number): r
     if (typeof s.orig !== 'string' || typeof s.holder !== 'string' || !teamIds.includes(s.orig) || !teamIds.includes(s.holder)) return false;
     if (s.origUnknown !== undefined && s.origUnknown !== true) return false;
   }
+  /* Every ordinary slot sits at its first owner's place in the saved order,
+     so a slot list from another night, or one put out of order, is refused.
+     A pick the ledger did not hold is simply absent; an awarded pick closes
+     its round and has no place in the order to be held to. */
+  const order = n.order as SavedDraftOrder;
+  let line: string[] = [];
+  let at = -1;
+  round = 0;
+  for (const s of slots as EarnedSlot[]) {
+    if (s.round !== round) { round = s.round; line = round === 1 ? order.first : order.later; at = -1; }
+    if (s.kind !== 'std') continue;
+    at = line.indexOf(s.orig, at + 1);
+    if (at < 0) return false;
+  }
   return Number.isInteger(n.made) && (n.made as number) >= 0 && (n.made as number) <= slots.length;
 }
 
@@ -136,7 +150,7 @@ function run<L, P>(host: GmDraftHost<L, P>, league: L, night: GmDraftNight, left
     const slot = night.slots[made];
     made += 1;
     const club = slot.holder;
-    const choice = rivalChoice(pool, { read: p => host.read(p, club), pos: host.pos, id: host.id }, host.need(league, club), host.needWeight);
+    const choice = rivalChoice(pool, { read: p => host.read(p, club), pos: p => host.pos(p), id: p => host.id(p) }, host.need(league, club), host.needWeight);
     if (choice === null || !host.consume(league, club, slot)) continue;
     host.sign(league, club, choice, slot);
     pool = pool.filter(p => p !== choice);

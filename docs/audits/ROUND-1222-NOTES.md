@@ -225,7 +225,7 @@ Controls: `SIM_GM_DRAFT_ORDER_CONTROL=<name>`. A control that FIRED exits 1 and 
 | Section | Controls (the sections each must turn red, and no other) |
 |---|---|
 | 1 the ledger | `onesource`, `closespan` |
-| 2 the draw adds nothing | `flat` (2, 3), `oddsrow` (2, 3), `extradraw`, `seconddraw`, `mathrandom` (2, 4) |
+| 2 the draw adds nothing | `flat` (2, 3), `oddsrow` (2, 3), `extradraw`, `seconddraw` (2, 4), `mathrandom` (2, 4) |
 | 3 level records | `nosplit`, `tiebyid`, `noflip`, `flipbeforelottery`, `acrossbyfield` |
 | 4 the order | `champfirst`, `laterasfirst` (3, 4), `rowkey` |
 | 5 slots over a ledger | `origpicks` (5, 10), `skipslot` (5, 6, 10) |

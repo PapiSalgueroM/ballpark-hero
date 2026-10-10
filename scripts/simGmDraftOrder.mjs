@@ -116,7 +116,8 @@ const CONTROLS = {
   flat: { expect: [2, 3], swaps: { order: [['  const pct = pool.map((_, i) => (i < lottery.odds.length ? lottery.odds[i] : 0));', '  const pct = pool.map((_, i) => (i < lottery.odds.length ? 100 / lottery.odds.length : 0));']] } },
   oddsrow: { expect: [2, 3], swaps: { order: [['  return pool.map((club, i) => ({ club, seed: i + 1, pct: pct[i] }));', '  return pool.map((club, i) => ({ club, seed: i + 1, pct: pct[pool.length - 1 - i] }));']] } },
   extradraw: { expect: [2], swaps: { order: [['    const drawn = runLottery(missed.order, { ...pickRules.lottery, odds: field.map(f => f.pct) }, keyedRng(`${key}|lottery`));', '    const stray = keyedRng(`${key}|lottery`); stray(); const drawn = runLottery(missed.order, { ...pickRules.lottery, odds: field.map(f => f.pct) }, stray);']] } },
-  seconddraw: { expect: [2], swaps: { order: [['    top = drawn.order;', '    top = runLottery(missed.order, { ...pickRules.lottery, odds: field.map(f => f.pct) }, keyedRng(`${key}|again`)).order;']] } },
+  /* round one then comes from a second draw the saved wins do not describe, which section 4 sees as well */
+  seconddraw: { expect: [2, 4], swaps: { order: [['    top = drawn.order;', '    top = runLottery(missed.order, { ...pickRules.lottery, odds: field.map(f => f.pct) }, keyedRng(`${key}|again`)).order;']] } },
   mathrandom: { expect: [2, 4], swaps: { order: [['    const drawn = runLottery(missed.order, { ...pickRules.lottery, odds: field.map(f => f.pct) }, keyedRng(`${key}|lottery`));', '    const drawn = runLottery(missed.order, { ...pickRules.lottery, odds: field.map(f => f.pct) }, Math.random);']] } },
   nosplit: { expect: [3], swaps: { order: [["  if (rules.level.odds === 'split') {", "  if (rules.level.odds === 'never') {"]] } },
   tiebyid: { expect: [3], swaps: { order: [['        const pick = Math.floor(rng() * (k + 1));', '        const pick = k;']] } },
@@ -716,6 +717,7 @@ open(6);
     'a place that skips': n => { n.slots[7].slot = 3; },
     'a kind of pick that does not exist': n => { n.slots[7].kind = 'gift'; },
     'no slots': n => { n.slots = null; },
+    'two picks out of the saved order': n => { [n.slots[2].orig, n.slots[3].orig] = [n.slots[3].orig, n.slots[2].orig]; },
     'a flag that is not yes or no': n => { n.seen = 'yes'; },
   };
   for (const [name, edit] of Object.entries(nightEdits)) {
