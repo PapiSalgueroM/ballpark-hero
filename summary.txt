@@ -1,0 +1,3 @@
+flags-groups-now exit=0 1s | simNationalityFlags: green. Every nationality the site prints wears its flag (owed: 1), no code stands in for a name, and the long lists sit under their confederation.
+flags-groups-base exit=0 1s | simNationalityFlags: 7 failures
+flags-after-restore exit=0 1s | simNationalityFlags: green. Every nationality the site prints wears its flag (owed: 1), no code stands in for a name, and the long lists sit under their confederation.
