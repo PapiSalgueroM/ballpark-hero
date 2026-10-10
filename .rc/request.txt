@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ledger: node scripts/simUsSeasonLedger.mjs
+ctl-nhltyped: US_LEDGER_CONTROL=nhltyped node scripts/simUsSeasonLedger.mjs
+ctl-nhl84: US_LEDGER_CONTROL=nhl84 node scripts/simUsSeasonLedger.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+simCareerHall: node scripts/simCareerHall.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
