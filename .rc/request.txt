@@ -1,0 +1,7 @@
+# Release AU proof, playGames part 3: a plain served build, one at a time
+#!serve
+#!playwright
+#!serial
+playGames-deadline-day: ONLY=/deadline-day node scripts/playGames.mjs
+playGames-mlb-my-career: ONLY=/mlb-my-career node scripts/playGames.mjs
+playGames-nhl-my-career: ONLY=/nhl-my-career node scripts/playGames.mjs
