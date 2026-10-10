@@ -112,7 +112,7 @@ function differences(before, after, keyPath = []) {
 async function main() {
   const control = process.env.CM_REAL_FIXTURE_CONTROL || '';
   assert.ok(!control || control === 'all' || Object.hasOwn(controls, control), 'Known real fixture control');
-  const evidence = path.resolve(process.env.CM_REAL_FIXTURE_ARTIFACTS || path.join(root, 'cm-real-fixtures-artifacts/outcomes'));
+  const evidence = path.resolve(process.env.CM_REAL_FIXTURE_ARTIFACTS || path.join(root, 'cm-real-fixture-artifacts/outcomes'));
   await mkdir(evidence, { recursive: true });
   if (control === 'all') {
     const summary = [];

@@ -131,7 +131,16 @@ try {
         await seedClick(button, seed); await activate(button);
         await page.waitForFunction(({ key, before }) => localStorage.getItem(key) !== before, { key: KEY, before }, { timeout: 15000 });
         const draws = await page.evaluate(() => { Math.random = window.__developmentRealRandom; return window.__developmentDraws; });
-        const actual = await saved(); compare(expected.next, actual, name); write(`${id}-${name}-rng`, { expected: expected.draws, actual: draws, seed });
+        /* Release AT: Release AQ's award night marks its result as seen in the save once the reveal has run
+           (revealBallonDorResult in src/lib/soccerAwardReveal.ts: phase ballon_dor, a pending night, not yet
+           revealed). The oracle here is the bare engine step and knows nothing of that second write, so the
+           expectation takes the same mark and the walk waits for the page to write it. Nothing else may differ. */
+        let want = expected.next;
+        if (want.phase === 'ballon_dor' && want.pendingBallonDor && !want.pendingBallonDor.revealed && !want.pendingBallonDor.speech) {
+          want = { ...want, pendingBallonDor: { ...want.pendingBallonDor, revealed: true } };
+          await page.waitForFunction(key => JSON.parse(localStorage.getItem(key) || 'null')?.pendingBallonDor?.revealed === true, KEY, { timeout: 20000 }).catch(() => {});
+        }
+        const actual = await saved(); compare(want, actual, name); write(`${id}-${name}-rng`, { expected: expected.draws, actual: draws, seed });
         check(JSON.stringify(draws) === JSON.stringify(expected.draws), `${name}: the actual click consumes exactly the unchanged engine random draws`);
         row.actions.push({ method, seed, phase: actual.phase, draws: draws.length }); return actual;
       };
@@ -147,6 +156,12 @@ try {
         const observation = { expected: before, actual: { ...await body(), activeMatches: await page.locator(tileSelector).evaluate(tile => document.activeElement === tile) }, active: await page.evaluate(() => document.activeElement?.outerHTML), ok };
         row.restorations.push({ name, ...observation }); write(`${id}-${name}-restoration`, observation); check(ok && restorationFailures(observation).length === 0, `${name}: exact tile focus, body scrolling and page position restore`);
       };
+      /* Release AT: Round 1188 put Phone and Training in a row inside the page on a phone, so every tile under
+         it sits lower and one can lie under the fixed action bar at the foot of the screen. Playwright scrolls a
+         covered tile clear before it taps, which moved the page AFTER the walk had noted its position (321 px
+         on the merged head; the game itself moved 0). The tile is brought clear first, so the position the
+         walk notes is the one the tap starts from. The restoration check still demands that exact position. */
+      const clearOfBars = tile => tile.evaluate(element => element.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' }));
       const capture = async (target, name) => {
         await page.bringToFront();
         const toastObserved = await page.locator('[data-sonner-toast]').count(), started = performance.now();
@@ -179,7 +194,7 @@ try {
       };
       const openMentor = async name => {
         const selector = '[data-career-mentor-tile]', tile = page.locator(selector), dialog = page.locator('[data-career-mentor-dialog]');
-        await tile.waitFor(); await tile.focus(); const beforeBody = await body(), beforeBytes = await bytes(), record = (await saved()).mentor;
+        await tile.waitFor(); await clearOfBars(tile); await tile.focus(); const beforeBody = await body(), beforeBytes = await bytes(), record = (await saved()).mentor;
         check((await tile.innerText()).includes('GENERATED academy player') && (await tile.innerText()).includes(record.name), `${name}: tile identifies the saved generated academy player`);
         await activate(tile); await dialogReady(dialog);
         check((await dialog.innerText()).includes('GENERATED academy player') && (await dialog.innerText()).includes('Age at last update'), `${name}: fictional scope and recorded age are explicit`);
@@ -232,7 +247,7 @@ try {
           await openMentor('created'); await reload('created-mentor');
         } else {
           const selector = '[data-preseason-plan]', tile = page.locator(selector), dialog = page.locator('[data-preseason-dialog]');
-          await tile.waitFor(); await tile.focus(); const beforeBody = await body(), beforeBytes = await bytes(); await activate(tile); await dialogReady(dialog);
+          await tile.waitFor(); await clearOfBars(tile); await tile.focus(); const beforeBody = await body(), beforeBytes = await bytes(); await activate(tile); await dialogReady(dialog);
           check((await dialog.innerText()).includes('Example: a 20% injury chance becomes 23%') && (await dialog.innerText()).includes('Recovery focus subtracts 1'), 'Rules and both exact tradeoffs precede the preseason choice');
           check(await dialog.locator('button').evaluateAll(buttons => buttons.every(button => { const r = button.getBoundingClientRect(); return r.width >= 44 && r.height >= 44; })), 'All preseason dialog controls are at least 44 pixels');
           for (const key of ['Tab', 'Tab', 'Shift+Tab', 'Shift+Tab']) { await page.keyboard.press(key); check(await dialog.evaluate(panel => panel.contains(document.activeElement)), `${key} remains inside preseason dialog`); }
