@@ -1,0 +1,2 @@
+mutation spanview applied to src/lib/statDetective.ts
+spanview | vitest exit=1 | failed lines 0 | simDart exit=1 FAIL lines 21 (not wildcard or wonderkid: 0) | simDartDraftPool: 21 FAILURE(S)

@@ -1,0 +1,2 @@
+mutation revert2 applied to src/lib/dartMap.ts, src/lib/dartMap.ts
+revert2 | vitest exit=1 | failed lines 0 | simDart exit=0 FAIL lines 0 (not wildcard or wonderkid: 0) | simDartDraftPool: green. The pool is the top 2,000, the gold zones and the storm give what

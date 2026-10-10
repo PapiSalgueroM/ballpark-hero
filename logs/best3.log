@@ -1,0 +1,2 @@
+mutation best3 applied to src/lib/dartMap.ts, src/lib/dartMap.ts
+best3 | vitest exit=1 | failed lines 0 | simDart exit=1 FAIL lines 22 (not wildcard or wonderkid: 0) | simDartDraftPool: 22 FAILURE(S)

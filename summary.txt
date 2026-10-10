@@ -1,0 +1,9 @@
+base exit=0 23s | base | vitest exit=1 | failed lines 0 | simDart exit=1 FAIL lines 21 (not wildcard or wonderkid: 0) | simDartDraftPool: 21 FAILURE(S)
+poolyear exit=0 23s | poolyear | vitest exit=1 | failed lines 0 | simDart exit=1 FAIL lines 21 (not wildcard or wonderkid: 0) | simDartDraftPool: 21 FAILURE(S)
+slot exit=0 23s | slot | vitest exit=1 | failed lines 0 | simDart exit=1 FAIL lines 22 (not wildcard or wonderkid: 0) | simDartDraftPool: 22 FAILURE(S)
+poolcap exit=0 22s | poolcap | vitest exit=1 | failed lines 0 | simDart exit=1 FAIL lines 23 (not wildcard or wonderkid: 2) | simDartDraftPool: 23 FAILURE(S)
+spanview exit=0 20s | spanview | vitest exit=1 | failed lines 0 | simDart exit=1 FAIL lines 21 (not wildcard or wonderkid: 0) | simDartDraftPool: 21 FAILURE(S)
+best3 exit=0 22s | best3 | vitest exit=1 | failed lines 0 | simDart exit=1 FAIL lines 22 (not wildcard or wonderkid: 0) | simDartDraftPool: 22 FAILURE(S)
+fixed8 exit=0 22s | fixed8 | vitest exit=1 | failed lines 0 | simDart exit=1 FAIL lines 1 (not wildcard or wonderkid: 0) | simDartDraftPool: 1 FAILURE(S)
+revert2 exit=0 23s | revert2 | vitest exit=1 | failed lines 0 | simDart exit=0 FAIL lines 0 (not wildcard or wonderkid: 0) | simDartDraftPool: green. The pool is the top 2,000, the gold zones
+clean exit=0 0s | tracked files changed after the mutations: 0

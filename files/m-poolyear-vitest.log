@@ -1,0 +1,407 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/dartDraftPools.test.ts[2m > [22mDart Draft wider existing pools and varied picks[2m > [22mkeeps the strongest three and varies five without replacement beyond the old best eight[32m 9[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPools.test.ts[2m > [22mDart Draft wider existing pools and varied picks[2m > [22mkeeps used names and wrong positions out while preserving distinct accented names[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPools.test.ts[2m > [22mDart Draft wider existing pools and varied picks[2m > [22muses the same compact variety policy for bonus slots and leaves the shared legends intact[32m 2[2mms[22m[39m
+ [31m×[39m src/test/dartDraftPools.test.ts[2m > [22mDart Draft wider existing pools and varied picks[2m > [22mpages global 2026 rows past 900 and 1000 while excluding other years and unknown positions[32m 18[2mms[22m[39m
+[31m   → expected [ { …(11) }, { …(11) }, …(1998) ] to have a length of 2105 but got 2000[39m
+ [32m✓[39m src/test/dartDraftPools.test.ts[2m > [22mDart Draft wider existing pools and varied picks[2m > [22mpages a country beyond 120 and 1000 and keeps nationality and era in the actual choice path[32m 7[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mthe spans view and what the page makes of its rows[2m > [22mholds this file's copy of the view to the rows the migration's SQL is held to[32m 10[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mthe spans view and what the page makes of its rows[2m > [22mmakes one career per name, out of the men who reached the floor and nobody else[32m 5[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mthe spans view and what the page makes of its rows[2m > [22mcuts two men apart only past the cohort gap[32m 6[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mthe spans view and what the page makes of its rows[2m > [22mcounts the floor in the view at the number the page uses, and keeps the first draft columns first[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22ma career span belongs to a man, not to a name[2m > [22mdoes not let a namesake who never reached 500 minutes stretch a famous career[32m 49[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22ma career span belongs to a man, not to a name[2m > [22mkeeps two men who both reached the floor as the one generous profile they always were[32m 32[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mStat Detective career spans come from every season, not the 500 minute ones[2m > [22mcounts every team he has a row for as a franchise he played for[32m 32[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mStat Detective career spans come from every season, not the 500 minute ones[2m > [22mreads the true first and last season for a man whose career ran past his 500 minute seasons[32m 19[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mStat Detective career spans come from every season, not the 500 minute ones[2m > [22mjudges the era of a guess on the true span[32m 24[2mms[22m[39m
+ [31m×[39m src/test/statDetectiveScope.test.tsx[2m > [22mStat Detective recorded profile scope[2m > [22mexplains the eligible season window before play and in reopened help[32m 173[2mms[22m[39m
+[31m   → Unable to find an element with the text: Recorded seasons and franchises cover NBA seasons with 500+ minutes in these case files. Years are season end years. Short stints and other seasons can be missing.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<main[31m
+      [33mclass[31m=[32m"min-h-screen bg-background"[31m
+      [33mid[31m=[32m"dukb-main"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"relative z-10 mx-auto w-full max-w-4xl"[31m
+      [36m>[31m
+        [36m<button[31m
+          [33maria-label[31m=[32m"How to play"[31m
+          [33mclass[31m=[32m"absolute top-0 left-0 p-2 text-muted-foreground hover:text-primary transition-colors rounded-full hover:bg-surface-2 min-h-[44px] min-w-[44px]"[31m
+          [33mtype[31m=[32m"button"[31m
+        [36m>[31m
+          [36m<svg[31m
+            [33mclass[31m=[32m"lucide lucide-circle-help w-5 h-5 md:w-6 md:h-6"[31m
+            [33mfill[31m=[32m"none"[31m
+            [33mheight[31m=[32m"24"[31m
+            [33mstroke[31m=[32m"currentColor"[31m
+            [33mstroke-linecap[31m=[32m"round"[31m
+            [33mstroke-linejoin[31m=[32m"round"[31m
+            [33mstroke-width[31m=[32m"2"[31m
+            [33mviewBox[31m=[32m"0 0 24 24"[31m
+            [33mwidth[31m=[32m"24"[31m
+            [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+          [36m>[31m
+            [36m<circle[31m
+              [33mcx[31m=[32m"12"[31m
+              [33mcy[31m=[32m"12"[31m
+              [33mr[31m=[32m"10"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"[31m
+            [36m/>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M12 17h.01"[31m
+            [36m/>[31m
+          [36m</svg>[31m
+        [36m</button>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"max-w-2xl mx-auto px-4 py-6 md:py-10"[31m
+      [36m>[31m
+        [36m<header[31m
+          [33mclass[31m=[32m"text-center mb-6"[31m
+        [36m>[31m
+          [36m<h1[31m
+            [33mclass[31m=[32m"text-4xl md:text-5xl font-bold tracking-[0.08em] text-primary font-display mb-1"[31m
+          [36m>[31m
+            [0mSTAT DETECTIVE[0m
+          [36m</h1>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"text-muted-foreground text-sm md:text-base"[31m
+          [36m>[31m
+            [0mOne anonymized NBA season. Eight guesses. Name the player.[0m
+          [36m</p>[31m
+        [36m</header>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"bg-card border border-border rounded-2xl p-4 mb-4 text-sm text-muted-foreground space-y-2"[31m
+        [36m>[31m
+          [36m<p>[31m
+            [0mStudy the stat line, then type at least two letters and pick a player. You have eight guesses.[0m
+          [36m</p>[31m
+          [36m<p>[31m
+            [0mClues unlock after each of the first six misses when a career profile is available. Without that profile, they unlock after misses 2, 4, 5 and 6.[0m
+          [36m</p>[31m
+          [36m<p>[31m
+            [0mCareer span and Career franchises count every NBA season on file for the player, short stints included. Years are season end years. The files run from 1949-50 to 2024-25, so a career that started earlier or is still going shows only those seasons.[0m
+          [36m</p>[31m
+          [36m<p>[31m
+            [0mExample: a Shared franchise chip means your guess played for the mystery team at some point. After a miss, read the new clue and try another name.[0m
+          [36m</p>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"grid gap-3 sm:grid-cols-2"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"bg-card border border-border rounded-2xl p-5 text-left hover:border-primary/60 transition-colors"[31m
+          [36m>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"font-bold text-primary font-display text-xl mb-1"[31m
+            [36m>[31m
+              [0mStars[0m
+            [36m</div>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"text-sm text-muted-foreground mb-2"[31m
+            [36m>[31m
+              [0mBig names having big seasons. Season rating 85 or higher.[0m
+            [36m</p>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"text-xs text-muted-foreground"[31m
+            [36m>[31m
+              [0m1[0m
+              [0m case files[0m
+            [36m</p>[31m
+          [36m</button>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"bg-card border border-border rounded-2xl p-5 text-left hover:border-primary/60 transition-colors"[31m
+          [36m>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"font-bold text-primary font-display text-xl mb-1"[31m
+            [36m>[31m
+              [0mDeep Cuts[0m
+            [36m</div>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"text-sm text-muted-foreground mb-2"[31m
+            [36m>[31m
+              [0mStarters, sixth men and cult heroes. Season rating 60 to 84.[0m
+            [36m</p>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"text-xs text-muted-foreground"[31m
+            [36m>[31m
+              [0m1[0m
+              [0m case files[0m
+            [36m</p>[31m
+          [36m</button>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex justify-center mt-6"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33mdata-report-context[31m=[32m"{\"puzzleId\":null,\"player\":null,\"season\":null,\"team\":null,\"difficulty\":\"stars\",\"phase\":\"pick\",\"guesses\":[],\"profileScope\":\"career-span-every-season-on-file\",\"recordedSeasons\":null}"[31m
+          [36m>[31m
+            [0mFixture report[0m
+          [36m</button>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+    [36m</main>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+ [31m×[39m src/test/statDetectiveScope.test.tsx[2m > [22mStat Detective recorded profile scope[2m > [22mshows recorded seasons and franchises without claiming complete career dates[32m 165[2mms[22m[39m
+[31m   → [2mexpect([22m[31mreceived[31m[2m).toHaveTextContent()[22m
+
+[31mreceived[31m value must be a Node.
+Received has type:  Null
+Received has value: [31mnull[31m[39m
+ [31m×[39m src/test/statDetectiveScope.test.tsx[2m > [22mStat Detective recorded profile scope[2m > [22mcaptures the exact random case and mode while keeping the answer out of visible play[32m 65[2mms[22m[39m
+[31m   → expected { …(9) } to deeply equal { …(9) }[39m
+ [32m✓[39m src/test/dartDraftPools.test.ts[2m > [22mDart Draft wider existing pools and varied picks[2m > [22mpages the targeted position fallback beyond 12 after an unavailable country read[33m 1206[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe Dart Draft pool[2m > [22mreads the top 2,000 as two pages of 1000 and keeps the old 900 at its head[32m 8[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPools.test.ts[2m > [22mDart Draft wider existing pools and varied picks[2m > [22mfails closed rather than returning a partial global or country pool after a later page fails[33m 2407[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe Dart Draft pool[2m > [22mis both pages or nothing[33m 2406[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe Dart Draft pool[2m > [22masks again for a page that failed once, and still never asks past the 2,000th row[33m 406[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe Dart Draft pool[2m > [22mclaims no storm floor when the table is not 900 rows deep, and still loads[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe Dart Draft pool[2m > [22mkeeps the storm zone at or above the floor[32m 5[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe mystery zone[2m > [22mdraws its three from above the old pool line and adds one long shot from below it[32m 21[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe mystery zone[2m > [22mis the three from anywhere it always was when the pool has no floor[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe mystery zone[2m > [22moffers whoever is left when nobody above the line is[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe shared paged reader with a row limit[2m > [22mstops at the limit and never asks for a page past it[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe shared paged reader with a row limit[2m > [22mcuts a last page that runs past the limit, and reads on to the limit when it was not asked for at once[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe shared paged reader with a row limit[2m > [22mreads everything when no limit is given, as it always did[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe tiles a country hit shows[2m > [22mshows everyone when the country has eight or fewer[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe tiles a country hit shows[2m > [22malways keeps the best four, draws the rest from deeper, and hands them back best first[32m 27[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts[2m > [22mthe tiles a country hit shows[2m > [22mis the old best eight when asked to keep eight[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveMotion.test.tsx[2m > [22mactual Stat Detective committed feedback and access[2m > [22mreveals each real profile-backed clue and only the newest guess without remounting older rows[33m 390[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mStat Detective career spans come from every season, not the 500 minute ones[2m > [22mfails the whole load when the spans cannot be read, and never falls back to the 500 minute span[33m 3681[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveMotion.test.tsx[2m > [22mactual Stat Detective committed feedback and access[2m > [22mkeeps the non-first native option mounted during focus transfer and preserves input Enter-first matching[32m 112[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mStat Detective career spans come from every season, not the 500 minute ones[2m > [22mreads a view deeper than the pages it asks for at once to the end, and asks again for a page that failed once[33m 864[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mStat Detective career spans come from every season, not the 500 minute ones[2m > [22mgives a name the view lacks no span at all and says so, rather than guessing one[32m 20[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mStat Detective mysteries do not move with the span[2m > [22mbuilds byte identical mystery pools, and they do not depend on what the view says[32m 45[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveMotion.test.tsx[2m > [22mactual Stat Detective committed feedback and access[2m > [22mcues a committed win once with exact helper feedback, share truth and undefined completion score[32m 110[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveMotion.test.tsx[2m > [22mactual Stat Detective committed feedback and access[2m > [22mends exactly eight misses, then starts a quiet different case and rearms one completion per difficulty[33m 304[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveMotion.test.tsx[2m > [22mactual Stat Detective committed feedback and access[2m > [22mderives the real sparse-profile unlock gaps without inventing career clues[32m 168[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveMotion.test.tsx[2m > [22mactual Stat Detective committed feedback and access[2m > [22mkeeps short and duplicate queries quiet and clears owned feedback timers on unmount[32m 96[2mms[22m[39m
+[90mstderr[2m | src/test/statDetectiveMotion.test.tsx[2m > [22m[2mactual Stat Detective committed feedback and access[2m > [22m[2mshows accurate rules and example before play and reopens the same native help door
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/statDetectiveMotion.test.tsx[2m > [22mactual Stat Detective committed feedback and access[2m > [22mshows accurate rules and example before play and reopens the same native help door[32m 77[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mthe Stat Detective page over the same table[2m > [22mopens its retry state when the spans cannot be read, and recovers when they can[33m 1365[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mthe Stat Detective page over the same table[2m > [22mprints the true years beside a name in the guess box[32m 112[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx[2m > [22mthe Stat Detective page over the same table[2m > [22mprints the famous man his own years beside a name he shares[32m 95[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/dartDraftPools.test.ts[2m > [22mDart Draft wider existing pools and varied picks[2m > [22mpages global 2026 rows past 900 and 1000 while excluding other years and unknown positions
+[31m[1mAssertionError[22m: expected [ { …(11) }, { …(11) }, …(1998) ] to have a length of 2105 but got 2000[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 2105[39m
+[31m+ 2000[39m
+
+[36m [2m❯[22m src/test/dartDraftPools.test.ts:[2m91:28[22m[39m
+
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/statDetectiveScope.test.tsx[2m > [22mStat Detective recorded profile scope[2m > [22mexplains the eligible season window before play and in reopened help
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an element with the text: Recorded seasons and franchises cover NBA seasons with 500+ minutes in these case files. Years are season end years. Short stints and other seasons can be missing.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<main[39m
+      [33mclass[39m=[32m"min-h-screen bg-background"[39m
+      [33mid[39m=[32m"dukb-main"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"relative z-10 mx-auto w-full max-w-4xl"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-label[39m=[32m"How to play"[39m
+          [33mclass[39m=[32m"absolute top-0 left-0 p-2 text-muted-foreground hover:text-primary transition-colors rounded-full hover:bg-surface-2 min-h-[44px] min-w-[44px]"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"lucide lucide-circle-help w-5 h-5 md:w-6 md:h-6"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"24"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"24"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<circle[39m
+              [33mcx[39m=[32m"12"[39m
+              [33mcy[39m=[32m"12"[39m
+              [33mr[39m=[32m"10"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M12 17h.01"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"max-w-2xl mx-auto px-4 py-6 md:py-10"[39m
+      [36m>[39m
+        [36m<header[39m
+          [33mclass[39m=[32m"text-center mb-6"[39m
+        [36m>[39m
+          [36m<h1[39m
+            [33mclass[39m=[32m"text-4xl md:text-5xl font-bold tracking-[0.08em] text-primary font-display mb-1"[39m
+          [36m>[39m
+            [0mSTAT DETECTIVE[0m
+          [36m</h1>[39m
+          [36m<p[39m
+            [33mclass[39m=[32m"text-muted-foreground text-sm md:text-base"[39m
+          [36m>[39m
+            [0mOne anonymized NBA season. Eight guesses. Name the player.[0m
+          [36m</p>[39m
+        [36m</header>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"bg-card border border-border rounded-2xl p-4 mb-4 text-sm text-muted-foreground space-y-2"[39m
+        [36m>[39m
+          [36m<p>[39m
+            [0mStudy the stat line, then type at least two letters and pick a player. You have eight guesses.[0m
+          [36m</p>[39m
+          [36m<p>[39m
+            [0mClues unlock after each of the first six misses when a career profile is available. Without that profile, they unlock after misses 2, 4, 5 and 6.[0m
+          [36m</p>[39m
+          [36m<p>[39m
+            [0mCareer span and Career franchises count every NBA season on file for the player, short stints included. Years are season end years. The files run from 1949-50 to 2024-25, so a career that started earlier or is still going shows only those seasons.[0m
+          [36m</p>[39m
+          [36m<p>[39m
+            [0mExample: a Shared franchise chip means your guess played for the mystery team at some point. After a miss, read the new clue and try another name.[0m
+          [36m</p>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"grid gap-3 sm:grid-cols-2"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"bg-card border border-border rounded-2xl p-5 text-left hover:border-primary/60 transition-colors"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"font-bold text-primary font-display text-xl mb-1"[39m
+            [36m>[39m
+              [0mStars[0m
+            [36m</div>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"text-sm text-muted-foreground mb-2"[39m
+            [36m>[39m
+              [0mBig names having big seasons. Season rating 85 or higher.[0m
+            [36m</p>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+            [36m>[39m
+              [0m1[0m
+              [0m case files[0m
+            [36m</p>[39m
+          [36m</button>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"bg-card border border-border rounded-2xl p-5 text-left hover:border-primary/60 transition-colors"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"font-bold text-primary font-display text-xl mb-1"[39m
+            [36m>[39m
+              [0mDeep Cuts[0m
+            [36m</div>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"text-sm text-muted-foreground mb-2"[39m
+            [36m>[39m
+              [0mStarters, sixth men and cult heroes. Season rating 60 to 84.[0m
+            [36m</p>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+            [36m>[39m
+              [0m1[0m
+              [0m case files[0m
+            [36m</p>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"flex justify-center mt-6"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33mdata-report-context[39m=[32m"{\"puzzleId\":null,\"player\":null,\"season\":null,\"team\":null,\"difficulty\":\"stars\",\"phase\":\"pick\",\"guesses\":[],\"profileScope\":\"career-span-every-season-on-file\",\"recordedSeasons\":null}"[39m
+          [36m>[39m
+            [0mFixture report[0m
+          [36m</button>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</main>[39m
+  [36m</div>[39m
+[36m</body>[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m getByText node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/test/statDetectiveScope.test.tsx:[2m42:17[22m[39m
+    [90m 40| [39m  it('explains the eligible season window before play and in reopened …
+    [90m 41| [39m    [35mconst[39m view [33m=[39m [35mawait[39m [34mready[39m()[33m;[39m
+    [90m 42| [39m    [34mexpect[39m(view[33m.[39m[34mgetByText[39m(scope))[33m.[39m[34mtoBeVisible[39m()[33m;[39m
+    [90m   | [39m                [31m^[39m
+    [90m 43| [39m    [35mconst[39m help [33m=[39m view[33m.[39m[34mgetByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m [32m'How to play'[39m })[33m;[39m
+    [90m 44| [39m    help[33m.[39m[34mfocus[39m()[33m;[39m fireEvent[33m.[39m[34mclick[39m(help)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/statDetectiveScope.test.tsx[2m > [22mStat Detective recorded profile scope[2m > [22mshows recorded seasons and franchises without claiming complete career dates
+[31m[1mError[22m: [2mexpect([22m[31mreceived[31m[2m).toHaveTextContent()[22m
+
+[31mreceived[31m value must be a Node.
+Received has type:  Null
+Received has value: [31mnull[31m[39m
+[36m [2m❯[22m src/test/statDetectiveScope.test.tsx:[2m58:81[22m[39m
+    [90m 56| [39m    const view = await ready(); fireEvent.click(view.getByRole('button…
+    [90m 57| [39m    [35mfor[39m ([35mconst[39m profile [35mof[39m wrong) [34mchoose[39m(view[33m,[39m profile)[33m;[39m
+    [90m 58| [39m    expect(view.container.querySelector('[data-stat-clue="Recorded sea…
+    [90m   | [39m                                                                                [31m^[39m
+    [90m 59| [39m    expect(view.container.querySelector('[data-stat-clue="Recorded fra…
+    [90m 60| [39m    expect(view.container.querySelector('[data-stat-profile-scope]')).…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/statDetectiveScope.test.tsx[2m > [22mStat Detective recorded profile scope[2m > [22mcaptures the exact random case and mode while keeping the answer out of visible play
+[31m[1mAssertionError[22m: expected { …(9) } to deeply equal { …(9) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[2m    "difficulty": "deep",[22m
+[2m    "guesses": [],[22m
+[2m    "phase": "playing",[22m
+[2m    "player": "Fixture Case Anchor",[22m
+[32m-   "profileScope": "recorded-500-minute-seasons",[39m
+[31m+   "profileScope": "career-span-every-season-on-file",[39m
+[2m    "puzzleId": "fixture-case|1994-95|FXB",[22m
+[2m    "recordedSeasons": "1990-1996",[22m
+[2m    "season": "1994-95",[22m
+[2m    "team": "FXB",[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/statDetectiveScope.test.tsx:[2m71:27[22m[39m
+
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m43 passed[39m[22m[90m (47)[39m
+[2m   Start at [22m 09:03:51
+[2m   Duration [22m 8.33s[2m (transform 1.47s, setup 282ms, collect 3.18s, tests 14.56s, environment 1.91s, prepare 618ms)[22m
+
