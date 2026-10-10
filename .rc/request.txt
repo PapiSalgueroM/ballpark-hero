@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
