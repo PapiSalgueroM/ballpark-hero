@@ -1,0 +1,8 @@
+MUT s11 applied to src/components/us-career/UsCareerBoard.tsx: "return holdPendingSave(() => { retrySave(); return pendingSave.current" is now "return undefined;"
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/usSeasonCentreEntry.test.tsx[2m > [22m'NBA' My Career: watching changes nothing[2m > [22mthe tile stays and says why when its Reload would lose a save the device refused
+[41m[1m FAIL [22m[49m src/test/usSeasonCentreEntry.test.tsx[2m > [22m'NFL' My Career: watching changes nothing[2m > [22mthe tile stays and says why when its Reload would lose a save the device refused
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m41 passed[39m[22m[90m (43)[39m
+simStorageWrites: 1 failed (owed: 12)
+MUT s11 the hold removed outright: vitest=1 storage=1

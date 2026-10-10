@@ -1,0 +1,3 @@
+s1w exit=0 13s | MUT s1 the hold moved to a dead effect: vitest=1 staleChunk=0
+s10w exit=0 12s | MUT s10 the hold condition turned round: vitest=1 staleChunk=0
+unnamed-real exit=0 10s | MUT s11 the hold removed outright: vitest=1 storage=1
