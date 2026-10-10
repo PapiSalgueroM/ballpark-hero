@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
