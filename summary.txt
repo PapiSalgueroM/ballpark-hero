@@ -1,0 +1,3 @@
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+vitest exit=0 3s |    Duration  2.26s (transform 905ms, setup 61ms, collect 1.15s, tests 12ms, environment 400ms, prepare 166ms)
+tsc exit=0 57s | 
