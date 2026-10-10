@@ -335,6 +335,9 @@ function judgeFrozen(world, reds) {
     const red = msg => reds.push({ id: e.ledger.leagueId || e.file, section: 'I', msg });
     const recorded = e.receipt && e.receipt.ledgerDigest && e.receipt.ledgerDigest.sha256;
     if (recorded && recorded !== ledgerDigest(e.ledger)) red('the digest the receipt recorded is not the ledger\'s');
+    /* The pre tool list lets a ledger off the tool's checks. A receipt the tool wrote says so itself (it
+       records the digest), so a ledger of the tool's can never be let off by adding its key to that list. */
+    if (!e.tool && e.receipt && e.receipt.ledgerDigest) red(`${e.ledger.key} is on the pre tool list and its receipt was written by the tool`);
     if (!e.tool) continue;
     if (!Object.hasOwn(lines, e.ledger.key)) red(`no frozen line for ${e.ledger.key}: the tool freezes every ledger it writes, so the line was lost`);
     if (e.receipt && !recorded) red('the receipt records no digest of its ledger, and every receipt the tool writes does');
