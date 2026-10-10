@@ -1,0 +1,13 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+c-write exit=1 165s | playCareerSquad (control write, 35 edits served): 170 checks, 3 failed
+c-rank exit=1 165s | playCareerSquad (control rank, 40 edits served): 170 checks, 4 failed
+c-still exit=1 171s | playCareerSquad (control still, 1840 edits served): 170 checks, 3 failed
+c-clip exit=1 159s | playCareerSquad (control clip, 35 edits served): 170 checks, 2 failed
+c-nofill exit=1 166s | playCareerSquad (control nofill, 35 edits served): 170 checks, 1 failed
+c-shift exit=1 168s | playCareerSquad (control shift, 36 edits served): 170 checks, 19 failed
+c-noscroll exit=1 150s | Node.js v24.21.0
+c-notrap exit=1 165s | playCareerSquad (control notrap, 35 edits served): 170 checks, 1 failed
+c-ellipsis exit=1 163s | playCareerSquad (control ellipsis, 70 edits served): 170 checks, 2 failed
+c-static exit=1 160s | playCareerSquad (control static, 1 edits served): 170 checks, 1 failed
+c-label exit=1 161s | playCareerSquad (control label, 1 edits served): 170 checks, 2 failed
+c-timeline exit=1 162s | playCareerSquad (control timeline, 3 edits served): 170 checks, 6 failed
