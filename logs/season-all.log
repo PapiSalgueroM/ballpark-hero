@@ -1,0 +1,1131 @@
+PASS engine baseline
+PASS campaign baseline
+PASS existing readers
+PASS saved rows
+PASS comparison
+PASS availability
+PASS defaults
+PASS identity rejection
+PASS read boundary
+PASS engine baseline
+PASS campaign baseline
+PASS existing readers
+PASS saved rows
+FAIL comparison: Expected values to be strictly deep-equal:
++ actual - expected
+
+  {
+    first: {
++     age: 21,
+-     age: 20,
+      availability: {
++       apps: 18,
+-       apps: 21,
+        injury: null,
++       injuryRecorded: true,
++       injurySevere: false,
++       injuryWeeks: 0,
++       suspensionMatches: 2,
+-       injuryRecorded: false,
+-       injurySevere: null,
+-       injuryWeeks: null,
+-       suspensionMatches: null,
+        zeroAppsReason: null
+      },
++     club: 'FC Twente',
++     index: 2,
+-     club: 'Twente',
+-     index: 1,
+      metrics: [
+        {
+          digits: 0,
+          key: 'ovr',
+          label: 'Saved OVR',
++         value: 72
+-         value: null
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
++         value: 7.2
+-         value: 6.6
+        },
+        {
+          digits: 0,
+          key: 'apps',
+          label: 'Apps',
++         value: 18
+-         value: 21
+        },
+        {
+          digits: 0,
+          key: 'goals',
+          label: 'Goals',
++         value: 15
+-         value: 3
+        },
+        {
+          digits: 0,
+          key: 'assists',
+          label: 'Assists',
++         value: 3
+-         value: 1
+        }
+      ],
++     onLoanFrom: 'Anderlecht',
+-     onLoanFrom: null,
+      year: 2021
+    },
+    metrics: [
+      {
++       delta: 0,
+-       delta: null,
+        digits: 0,
++       first: 72,
+-       first: null,
+        key: 'ovr',
+        label: 'Saved OVR',
+        second: 72
+      },
+      {
++       delta: 0,
+-       delta: 0.6,
+        digits: 1,
++       first: 7.2,
+-       first: 6.6,
+        key: 'rating',
+        label: 'Match rating',
+        second: 7.2
+      },
+      {
++       delta: 0,
+-       delta: -3,
+        digits: 0,
++       first: 18,
+-       first: 21,
+        key: 'apps',
+        label: 'Apps',
+        second: 18
+      },
+      {
++       delta: 0,
+-       delta: 12,
+        digits: 0,
++       first: 15,
+-       first: 3,
+        key: 'goals',
+        label: 'Goals',
+        second: 15
+      },
+      {
++       delta: 0,
+-       delta: 2,
+        digits: 0,
++       first: 3,
+-       first: 1,
+        key: 'assists',
+        label: 'Assists',
+        second: 3
+      }
+    ],
+
+PASS availability
+PASS defaults
+FAIL identity rejection: Expected values to be strictly equal:
++ actual - expected
+
++ {
++   first: {
++     age: 21,
++     availability: {
++       apps: 18,
++       injury: null,
++       injuryRecorded: true,
++       injurySevere: false,
++       injuryWeeks: 0,
++       suspensionMatches: 2,
++       zeroAppsReason: null
++     },
++     club: 'FC Twente',
++     index: 2,
++     metrics: [
++       {
++         digits: 0,
++         key: 'ovr',
++         label: 'Saved OVR',
++         value: 72
++       },
++       {
++         digits: 1,
++         key: 'rating',
++         label: 'Match rating',
++         value: 7.2
++       },
++       {
++         digits: 0,
++         key: 'apps',
++         label: 'Apps',
++         value: 18
++       },
++       {
++         digits: 0,
++         key: 'goals',
++         label: 'Goals',
++         value: 15
++       },
++       {
++         digits: 0,
++         key: 'assists',
++         label: 'Assists',
++         value: 3
++       }
++     ],
++     onLoanFrom: 'Anderlecht',
++     year: 2021
++   },
++   metrics: [
++     {
++       delta: 0,
++       digits: 0,
++       first: 72,
++       key: 'ovr',
++       label: 'Saved OVR',
++       second: 72
++     },
++     {
++       delta: 0,
++       digits: 1,
++       first: 7.2,
++       key: 'rating',
++       label: 'Match rating',
++       second: 7.2
++     },
++     {
++       delta: 0,
++       digits: 0,
++       first: 18,
++       key: 'apps',
++       label: 'Apps',
++       second: 18
++     },
++     {
++       delta: 0,
++       digits: 0,
++       first: 15,
++       key: 'goals',
++       label: 'Goals',
++       second: 15
++     },
++     {
++       delta: 0,
++       digits: 0,
++       first: 3,
++       key: 'assists',
++       label: 'Assists',
++       second: 3
++     }
++   ],
++   second: {
++     age: 21,
++     availability: {
++       apps: 18,
++       injury: null,
++       injuryRecorded: true,
++       injurySevere: false,
++       injuryWeeks: 0,
++       suspensionMatches: 2,
++       zeroAppsReason: null
++     },
++     club: 'FC Twente',
++     index: 2,
++     metrics: [
++       {
++         digits: 0,
++         key: 'ovr',
++         label: 'Saved OVR',
++         value: 72
++       },
++       {
++         digits: 1,
++         key: 'rating',
++         label: 'Match rating',
++         value: 7.2
++       },
++       {
++         digits: 0,
++         key: 'apps',
++         label: 'Apps',
++         value: 18
++       },
++       {
++         digits: 0,
++         key: 'goals',
++         label: 'Goals',
++         value: 15
++       },
++       {
++         digits: 0,
++         key: 'assists',
++         label: 'Assists',
++         value: 3
++       }
++     ],
++     onLoanFrom: 'Anderlecht',
++     year: 2021
++   }
++ }
+- null
+
+PASS read boundary
+CONTROL FIRED(wrong-row): comparison, identity rejection
+PASS engine baseline
+PASS campaign baseline
+PASS existing readers
+FAIL saved rows: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      age: 20,
+      availability: {
+        apps: 21,
+...
+          label: 'Saved OVR',
++         value: 0
+-         value: null
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+
+FAIL comparison: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
+    first: {
+      age: 20,
+      availability: {
+        apps: 21,
+...
+          label: 'Saved OVR',
++         value: 0
+-         value: null
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+      {
++       delta: 72,
+-       delta: null,
+        digits: 0,
++       first: 0,
+-       first: null,
+        key: 'ovr',
+        label: 'Saved OVR',
+        second: 72
+      },
+      {
+
+PASS availability
+PASS defaults
+PASS identity rejection
+PASS read boundary
+CONTROL FIRED(missing-as-zero): saved rows, comparison
+PASS engine baseline
+PASS campaign baseline
+PASS existing readers
+PASS saved rows
+FAIL comparison: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
+    first: {
+      age: 20,
+      availability: {
+        apps: 21,
+...
+      {
++       delta: -0.6,
+-       delta: 0.6,
+        digits: 1,
+        first: 6.6,
+        key: 'rating',
+        label: 'Match rating',
+        second: 7.2
+      },
+      {
++       delta: 3,
+-       delta: -3,
+        digits: 0,
+        first: 21,
+        key: 'apps',
+        label: 'Apps',
+        second: 18
+      },
+      {
++       delta: -12,
+-       delta: 12,
+        digits: 0,
+        first: 3,
+        key: 'goals',
+        label: 'Goals',
+        second: 15
+      },
+      {
++       delta: -2,
+-       delta: 2,
+        digits: 0,
+        first: 1,
+        key: 'assists',
+        label: 'Assists',
+        second: 3
+
+PASS availability
+PASS defaults
+PASS identity rejection
+PASS read boundary
+CONTROL FIRED(reversed-delta): comparison
+PASS engine baseline
+PASS campaign baseline
+PASS existing readers
+FAIL saved rows: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      age: 20,
+      availability: {
+        apps: 21,
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: null
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 72
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 68
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 69
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 71
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 72
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 73
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 74
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 75
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 76
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 77
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 78
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 79
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 80
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 81
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 82
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 83
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 84
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 85
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 86
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 87
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 88
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 89
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 90
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 91
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 92
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 93
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 94
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+
+FAIL comparison: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
+    first: {
+      age: 20,
+      availability: {
+        apps: 21,
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: null
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+...
+      {
++       delta: 0,
+-       delta: null,
+        digits: 0,
++       first: 97,
+-       first: null,
+        key: 'ovr',
+        label: 'Saved OVR',
++       second: 97
+-       second: 72
+      },
+      {
+        delta: 0.6,
+        digits: 1,
+        first: 6.6,
+...
+          label: 'Saved OVR',
++         value: 97
+-         value: 72
+        },
+        {
+          digits: 1,
+          key: 'rating',
+          label: 'Match rating',
+
+PASS availability
+PASS defaults
+PASS identity rejection
+PASS read boundary
+CONTROL FIRED(current-ovr): saved rows, comparison
+PASS engine baseline
+PASS campaign baseline
+PASS existing readers
+PASS saved rows
+PASS comparison
+PASS availability
+FAIL defaults: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
++   1,
++   2
+-   28,
+-   29
+  ]
+
+PASS identity rejection
+PASS read boundary
+CONTROL FIRED(default-order): defaults
+PASS engine baseline
+PASS campaign baseline
+PASS existing readers
+PASS saved rows
+PASS comparison
+PASS availability
+PASS defaults
+FAIL identity rejection: Expected values to be strictly equal:
++ actual - expected
+
++ {
++   first: {
++     age: 20,
++     availability: {
++       apps: 21,
++       injury: null,
++       injuryRecorded: false,
++       injurySevere: null,
++       injuryWeeks: null,
++       suspensionMatches: null,
++       zeroAppsReason: null
++     },
++     club: 'Twente',
++     index: 1,
++     metrics: [
++       {
++         digits: 0,
++         key: 'ovr',
++         label: 'Saved OVR',
++         value: null
++       },
++       {
++         digits: 1,
++         key: 'rating',
++         label: 'Match rating',
++         value: 6.6
++       },
++       {
++         digits: 0,
++         key: 'apps',
++         label: 'Apps',
++         value: 21
++       },
++       {
++         digits: 0,
++         key: 'goals',
++         label: 'Goals',
++         value: 3
++       },
++       {
++         digits: 0,
++         key: 'assists',
++         label: 'Assists',
++         value: 1
++       }
++     ],
++     onLoanFrom: null,
++     year: 2021
++   },
++   metrics: [
++     {
++       delta: null,
++       digits: 0,
++       first: null,
++       key: 'ovr',
++       label: 'Saved OVR',
++       second: null
++     },
++     {
++       delta: 0,
++       digits: 1,
++       first: 6.6,
++       key: 'rating',
++       label: 'Match rating',
++       second: 6.6
++     },
++     {
++       delta: 0,
++       digits: 0,
++       first: 21,
++       key: 'apps',
++       label: 'Apps',
++       second: 21
++     },
++     {
++       delta: 0,
++       digits: 0,
++       first: 3,
++       key: 'goals',
++       label: 'Goals',
++       second: 3
++     },
++     {
++       delta: 0,
++       digits: 0,
++       first: 1,
++       key: 'assists',
++       label: 'Assists',
++       second: 1
++     }
++   ],
++   second: {
++     age: 20,
++     availability: {
++       apps: 21,
++       injury: null,
++       injuryRecorded: false,
++       injurySevere: null,
++       injuryWeeks: null,
++       suspensionMatches: null,
++       zeroAppsReason: null
++     },
++     club: 'Twente',
++     index: 1,
++     metrics: [
++       {
++         digits: 0,
++         key: 'ovr',
++         label: 'Saved OVR',
++         value: null
++       },
++       {
++         digits: 1,
++         key: 'rating',
++         label: 'Match rating',
++         value: 6.6
++       },
++       {
++         digits: 0,
++         key: 'apps',
++         label: 'Apps',
++         value: 21
++       },
++       {
++         digits: 0,
++         key: 'goals',
++         label: 'Goals',
++         value: 3
++       },
++       {
++         digits: 0,
++         key: 'assists',
++         label: 'Assists',
++         value: 1
++       }
++     ],
++     onLoanFrom: null,
++     year: 2021
++   }
++ }
+- null
+
+PASS read boundary
+CONTROL FIRED(same-row): identity rejection
+PASS engine baseline
+PASS campaign baseline
+PASS existing readers
+PASS saved rows
+PASS comparison
+PASS availability
+PASS defaults
+PASS identity rejection
+FAIL read boundary: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
+    academyClubName: 'Ajax',
+    activeSponsorship: null,
+    age: 48,
+    agentFeesPaid: 0,
+...
+    netWorth: 2.19,
++   overall: 1,
+-   overall: 97,
+    ownerState: null,
+    pace: 71,
+    passing: 80,
+    peakOverall: 73,
+    pedActive: false,
+
+CONTROL FIRED(input-mutation): read boundary
+PASS engine baseline
+PASS campaign baseline
+PASS existing readers
+FAIL saved rows: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      age: 20,
+      availability: {
+        apps: 21,
+...
+        injuryWeeks: 0,
++       suspensionMatches: 0,
+-       suspensionMatches: 2,
+        zeroAppsReason: null
+      },
+      club: 'FC Twente',
+      index: 2,
+      metrics: [
+...
+        injuryWeeks: 5,
++       suspensionMatches: 5,
+-       suspensionMatches: 2,
+        zeroAppsReason: 'Severe injury recorded'
+      },
+      club: 'Twente',
+      index: 3,
+      metrics: [
+...
+        injuryWeeks: 0,
++       suspensionMatches: 0,
+-       suspensionMatches: 3,
+        zeroAppsReason: 'Banned'
+      },
+      club: 'BANNED (PED)',
+      index: 4,
+      metrics: [
+...
+        injuryWeeks: 0,
++       suspensionMatches: 0,
+-       suspensionMatches: 1,
+        zeroAppsReason: null
+      },
+      club: 'Twente',
+      index: 7,
+      metrics: [
+...
+        injuryWeeks: 0,
++       suspensionMatches: 0,
+-       suspensionMatches: 2,
+        zeroAppsReason: null
+      },
+      club: 'Twente',
+      index: 8,
+      metrics: [
+...
+        injuryWeeks: 0,
++       suspensionMatches: 0,
+-       suspensionMatches: 1,
+        zeroAppsReason: null
+      },
+      club: 'Twente',
+      index: 10,
+      metrics: [
+...
+        injuryWeeks: 0,
++       suspensionMatches: 0,
+-       suspensionMatches: 2,
+        zeroAppsReason: null
+      },
+      club: 'Twente',
+      index: 11,
+      metrics: [
+...
+        injuryWeeks: 0,
++       suspensionMatches: 0,
+-       suspensionMatches: 1,
+        zeroAppsReason: null
+      },
+      club: 'Twente',
+      index: 13,
+      metrics: [
+...
+        injuryWeeks: 0,
++       suspensionMatches: 0,
+-       suspensionMatches: 2,
+        zeroAppsReason: null
+      },
+      club: 'Twente',
+      index: 14,
+      metrics: [
+...
+        injuryWeeks: 0,
++       suspensionMatches: 0,
+-       suspensionMatches: 1,
+        zeroAppsReason: null
+      },
+      club: 'Twente',
+      index: 16,
+      metrics: [
+...
+        injuryWeeks: 0,
++       suspensionMatches: 0,
+-       suspensionMatches: 2,
+        zeroAppsReason: null
+      },
+      club: 'Twente',
+      index: 17,
+      metrics: [
+...
+        injuryWeeks: 0,
++       suspensionMatches: 0,
+-       suspensionMatches: 1,
+        zeroAppsReason: null
+      },
+      club: 'Twente',
+      index: 19,
+      metrics: [
+...
+        injuryWeeks: 0,
++       suspensionMatches: 0,
+-       suspensionMatches: 2,
+        zeroAppsReason: null
+      },
+      club: 'Twente',
+      index: 20,
+      metrics: [
+...
+        injuryWeeks: 0,
++       suspensionMatches: 0,
+-       suspensionMatches: 1,
+        zeroAppsReason: null
+      },
+      club: 'Twente',
+      index: 22,
+      metrics: [
+...
+        injuryWeeks: 0,
++       suspensionMatches: 0,
+-       suspensionMatches: 2,
+        zeroAppsReason: null
+      },
+      club: 'Twente',
+      index: 23,
+      metrics: [
+...
+        injuryWeeks: 0,
++       suspensionMatches: 0,
+-       suspensionMatches: 1,
+        zeroAppsReason: null
+      },
+      club: 'Twente',
+      index: 25,
+      metrics: [
+...
+        injuryWeeks: 0,
++       suspensionMatches: 0,
+-       suspensionMatches: 2,
+        zeroAppsReason: null
+      },
+      club: 'Twente',
+      index: 26,
+      metrics: [
+...
+        injuryWeeks: 0,
++       suspensionMatches: 0,
+-       suspensionMatches: 1,
+        zeroAppsReason: null
+      },
+      club: 'Twente',
+      index: 28,
+      metrics: [
+...
+        injuryWeeks: 0,
++       suspensionMatches: 0,
+-       suspensionMatches: 2,
+        zeroAppsReason: null
+      },
+      club: 'Twente',
+      index: 29,
+      metrics: [
+
+FAIL comparison: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
+    first: {
+      age: 20,
+      availability: {
+        apps: 21,
+...
+        injuryWeeks: 0,
++       suspensionMatches: 0,
+-       suspensionMatches: 2,
+        zeroAppsReason: null
+      },
+      club: 'FC Twente',
+      index: 2,
+      metrics: [
+
+FAIL availability: Expected values to be strictly deep-equal:
++ actual - expected
+
+  {
+    apps: 18,
+    injury: null,
+    injuryRecorded: true,
+    injurySevere: false,
+    injuryWeeks: 0,
++   suspensionMatches: 0,
+-   suspensionMatches: 2,
+    zeroAppsReason: null
+  }
+
+PASS defaults
+PASS identity rejection
+PASS read boundary
+CONTROL FIRED(weeks-as-matches): saved rows, comparison, availability
+Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,8 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-history/outcomes

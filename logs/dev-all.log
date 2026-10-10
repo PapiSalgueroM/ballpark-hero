@@ -1,0 +1,42 @@
+ok   uncopied complete PR208 baseline
+ok   form boundaries
+ok   form eligibility
+ok   form purity and chronology
+ok   form projections and actual draws
+ok   neutral complete saves and RNG against actual PR208
+ok   plan choice binding and risk
+ok   plan skill caps and once-only settlement
+ok   plan interruptions and foreign targets
+ok   mentor deterministic creation and saved rows
+ok   mentor pauses graduation and moves
+ok   mentor retirement
+ok   actual injury risk
+ok   actual recorded plan growth and mentor credit
+ok   actual interruption paths
+ok   actual moves and retirement
+ok   actual Youth Mentor choice keeps old effects and RNG
+ok   repeated Youth Mentor event preserves every saved spell
+simSoccerCareerDevelopment: 18 outcome groups, 16+16 complete baseline saves/RNG, 16 form draws, 16 played plan seasons, 7 interruption paths, 0 failed
+ok   copied formEligibility defect caught only by its intended outcomes
+ok   copied formHeld defect caught only by its intended outcomes
+ok   copied formBoundary defect caught only by its intended outcomes
+ok   copied formDraw defect caught only by its intended outcomes
+ok   copied formRng defect caught only by its intended outcomes
+ok   copied trustForm defect caught only by its intended outcomes
+node:fs:483
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: ENOENT: no such file or directory, open '/home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/career-development-outcomes/controls/sheetForm/report.json'
+    at Object.readFileSync (node:fs:483:20)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerDevelopment.mjs:154:37
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/career-development-outcomes/controls/sheetForm/report.json'
+}
+
+Node.js v24.21.0

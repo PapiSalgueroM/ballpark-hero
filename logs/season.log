@@ -1,0 +1,10 @@
+PASS engine baseline
+PASS campaign baseline
+PASS existing readers
+PASS saved rows
+PASS comparison
+PASS availability
+PASS defaults
+PASS identity rejection
+PASS read boundary
+Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /tmp/a-season

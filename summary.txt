@@ -1,0 +1,16 @@
+dev exit=0 6s | simSoccerCareerDevelopment: 18 outcome groups, 16+16 complete baseline saves/RNG, 16 form draws, 16 played plan seasons, 7 interruption paths, 0 failed
+trophy exit=0 4s | Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 0 effective controls; artifacts /tmp/a-trophy
+season exit=0 3s | Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /tmp/a-season
+derby exit=0 3s | Derby history: 11 groups,24 full main season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /tmp/a-derby
+cmfix exit=0 11s | simCmRealFixtures normal: real fixture outcomes and independent generated baseline passed.
+role exit=0 61s | simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
+contract exit=0 2s | simSoccerContractMoves: all full-save contract and club-move checks passed
+vitest-sc exit=0 38s |    Duration  38.00s (transform 8.24s, setup 1.69s, collect 19.58s, tests 48.79s, environment 12.27s, prepare 3.02s)
+dev-all exit=1 34s | Node.js v24.21.0
+tsc exit=0 100s | 
+trophy-all exit=0 14s | Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 7 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/ca
+season-all exit=0 15s | Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,8 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-
+derby-all exit=0 17s | Derby history: 11 groups,24 full main season pairs,192 full campaign/RNG pairs,10 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derb
+simHarnessAnchors exit=0 51s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+cmfix-all exit=0 75s | simCmRealFixtures: 11 actual outcome groups, 760 fixture reads, 760 calendar reads and 9 effective controls passed.
+role-all exit=1 633s | Node.js v24.21.0

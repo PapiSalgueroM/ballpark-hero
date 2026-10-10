@@ -1,0 +1,2461 @@
+PASS engine baseline
+PASS campaign baseline
+PASS existing readers
+PASS season identities
+PASS saved meetings
+PASS orientation
+PASS team and player totals
+PASS recorded status
+PASS rival identities
+PASS rival totals
+PASS read boundary
+PASS engine baseline
+PASS campaign baseline
+PASS existing readers
+PASS season identities
+FAIL saved meetings: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      age: 23,
+      awayClub: 'Generated Rival 1',
+      awayGoals: 1,
+...
+      rival: 'Generated Rival 2',
++     rivalIndex: 0,
+-     rivalIndex: 1,
+      seasonIndex: 5,
+      won: true,
+      year: 2025
+    },
+    {
+...
+      rival: 'Generated Rival 2',
++     rivalIndex: 0,
+-     rivalIndex: 1,
+      seasonIndex: 5,
+      won: false,
+      year: 2025
+    },
+    {
+...
+      rival: 'Generated Rival 3',
++     rivalIndex: 0,
+-     rivalIndex: 2,
+      seasonIndex: 5,
+      won: true,
+      year: 2025
+    },
+    {
+...
+      rival: 'Generated Rival 3',
++     rivalIndex: 0,
+-     rivalIndex: 2,
+      seasonIndex: 5,
+      won: false,
+      year: 2025
+    },
+    {
+...
+      rival: 'Generated Rival 4',
++     rivalIndex: 0,
+-     rivalIndex: 3,
+      seasonIndex: 5,
+      won: true,
+      year: 2025
+    },
+    {
+...
+      rival: 'Generated Rival 4',
++     rivalIndex: 0,
+-     rivalIndex: 3,
+      seasonIndex: 5,
+      won: false,
+      year: 2025
+    },
+    {
+...
+      rival: 'Generated Rival 5',
++     rivalIndex: 0,
+-     rivalIndex: 4,
+      seasonIndex: 5,
+      won: true,
+      year: 2025
+    },
+    {
+...
+      rival: 'Generated Rival 5',
++     rivalIndex: 0,
+-     rivalIndex: 4,
+      seasonIndex: 5,
+      won: false,
+      year: 2025
+    },
+    {
+...
+      rival: 'Generated Rival 2',
++     rivalIndex: 0,
+-     rivalIndex: 1,
+      seasonIndex: 6,
+      won: false,
+      year: 2026
+    },
+    {
+...
+      rival: 'Generated Rival 2',
++     rivalIndex: 0,
+-     rivalIndex: 1,
+      seasonIndex: 6,
+      won: false,
+      year: 2026
+    },
+    {
+...
+      rival: 'Generated Rival 3',
++     rivalIndex: 0,
+-     rivalIndex: 2,
+      seasonIndex: 6,
+      won: false,
+      year: 2026
+    },
+    {
+...
+      rival: 'Generated Rival 3',
++     rivalIndex: 0,
+-     rivalIndex: 2,
+      seasonIndex: 6,
+      won: false,
+      year: 2026
+    },
+    {
+...
+      rival: 'Generated Rival 4',
++     rivalIndex: 0,
+-     rivalIndex: 3,
+      seasonIndex: 6,
+      won: false,
+      year: 2026
+    },
+    {
+...
+      rival: 'Generated Rival 4',
++     rivalIndex: 0,
+-     rivalIndex: 3,
+      seasonIndex: 6,
+      won: false,
+      year: 2026
+    },
+    {
+...
+      rival: 'Generated Rival 5',
++     rivalIndex: 0,
+-     rivalIndex: 4,
+      seasonIndex: 6,
+      won: false,
+      year: 2026
+    },
+    {
+...
+      rival: 'Generated Rival 5',
++     rivalIndex: 0,
+-     rivalIndex: 4,
+      seasonIndex: 6,
+      won: false,
+      year: 2026
+    },
+    {
+
+FAIL orientation: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      away: 'Generated Rival 1',
+      awayGoals: 1,
+      home: 'FC Twente',
+...
+        5,
+-       1,
+        0,
++       0
+      ],
+      result: 'W'
+    },
+    {
+      away: 'FC Twente',
+...
+        5,
++       0,
+        1,
+-       1
+      ],
+      result: 'L'
+    },
+    {
+      away: 'Generated Rival 3',
+...
+        5,
+-       2,
+        0,
++       0
+      ],
+      result: 'W'
+    },
+    {
+      away: 'FC Twente',
+...
+        5,
++       0,
+-       2,
+        1
+      ],
+      result: 'L'
+    },
+    {
+...
+        5,
+-       3,
+        0,
++       0
+      ],
+      result: 'W'
+    },
+    {
+      away: 'FC Twente',
+...
+        5,
++       0,
+-       3,
+        1
+      ],
+      result: 'L'
+    },
+    {
+...
+        5,
+-       4,
+        0,
++       0
+      ],
+      result: 'W'
+    },
+    {
+      away: 'FC Twente',
+...
+        5,
++       0,
+-       4,
+        1
+      ],
+      result: 'L'
+    },
+    {
+...
+        6,
+-       1,
+        0,
++       0
+      ],
+      result: 'W'
+    },
+    {
+      away: 'Twente',
+...
+        6,
++       0,
+        1,
+-       1
+      ],
+      result: 'L'
+    },
+    {
+      away: 'Generated Rival 3',
+...
+        6,
+-       2,
+        0,
++       0
+      ],
+      result: 'W'
+    },
+    {
+      away: 'Twente',
+...
+        6,
++       0,
+-       2,
+        1
+      ],
+      result: 'L'
+    },
+    {
+...
+        6,
+-       3,
+        0,
++       0
+      ],
+      result: 'W'
+    },
+    {
+      away: 'Twente',
+...
+        6,
++       0,
+-       3,
+        1
+      ],
+      result: 'L'
+    },
+    {
+...
+        6,
+-       4,
+        0,
++       0
+      ],
+      result: 'W'
+    },
+    {
+      away: 'Twente',
+...
+        6,
++       0,
+-       4,
+        1
+      ],
+      result: 'L'
+    },
+    {
+
+PASS team and player totals
+PASS recorded status
+FAIL rival identities: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      meetings: [
+        {
+          age: 23,
+...
+          rival: 'Generated Rival 2',
++         rivalIndex: 0,
+-         rivalIndex: 1,
+          seasonIndex: 5,
+          year: 2025
+        },
+        {
+          age: 24,
+...
+          rival: 'Generated Rival 2',
++         rivalIndex: 0,
+-         rivalIndex: 1,
+          seasonIndex: 5,
+          year: 2025
+        },
+        {
+          age: 25,
+...
+          rival: 'Generated Rival 2',
++         rivalIndex: 0,
+-         rivalIndex: 1,
+          seasonIndex: 6,
+          year: 2026
+        },
+        {
+          age: 25,
+...
+          rival: 'Generated Rival 2',
++         rivalIndex: 0,
+-         rivalIndex: 1,
+          seasonIndex: 6,
+          year: 2026
+        }
+      ],
+      rival: 'Generated Rival 2'
+...
+          rival: 'Generated Rival 3',
++         rivalIndex: 0,
+-         rivalIndex: 2,
+          seasonIndex: 5,
+          year: 2025
+        },
+        {
+          age: 24,
+...
+          rival: 'Generated Rival 3',
++         rivalIndex: 0,
+-         rivalIndex: 2,
+          seasonIndex: 5,
+          year: 2025
+        },
+        {
+          age: 25,
+...
+          rival: 'Generated Rival 3',
++         rivalIndex: 0,
+-         rivalIndex: 2,
+          seasonIndex: 6,
+          year: 2026
+        },
+        {
+          age: 25,
+...
+          rival: 'Generated Rival 3',
++         rivalIndex: 0,
+-         rivalIndex: 2,
+          seasonIndex: 6,
+          year: 2026
+        }
+      ],
+      rival: 'Generated Rival 3'
+...
+          rival: 'Generated Rival 4',
++         rivalIndex: 0,
+-         rivalIndex: 3,
+          seasonIndex: 5,
+          year: 2025
+        },
+        {
+          age: 24,
+...
+          rival: 'Generated Rival 4',
++         rivalIndex: 0,
+-         rivalIndex: 3,
+          seasonIndex: 5,
+          year: 2025
+        },
+        {
+          age: 25,
+...
+          rival: 'Generated Rival 4',
++         rivalIndex: 0,
+-         rivalIndex: 3,
+          seasonIndex: 6,
+          year: 2026
+        },
+        {
+          age: 25,
+...
+          rival: 'Generated Rival 4',
++         rivalIndex: 0,
+-         rivalIndex: 3,
+          seasonIndex: 6,
+          year: 2026
+        }
+      ],
+      rival: 'Generated Rival 4'
+...
+          rival: 'Generated Rival 5',
++         rivalIndex: 0,
+-         rivalIndex: 4,
+          seasonIndex: 5,
+          year: 2025
+        },
+        {
+          age: 24,
+...
+          rival: 'Generated Rival 5',
++         rivalIndex: 0,
+-         rivalIndex: 4,
+          seasonIndex: 5,
+          year: 2025
+        },
+        {
+          age: 25,
+...
+          rival: 'Generated Rival 5',
++         rivalIndex: 0,
+-         rivalIndex: 4,
+          seasonIndex: 6,
+          year: 2026
+        },
+        {
+          age: 25,
+...
+          rival: 'Generated Rival 5',
++         rivalIndex: 0,
+-         rivalIndex: 4,
+          seasonIndex: 6,
+          year: 2026
+        }
+      ],
+      rival: 'Generated Rival 5'
+
+PASS rival totals
+PASS read boundary
+CONTROL FIRED(wrong-index): saved meetings, orientation, rival identities
+PASS engine baseline
+PASS campaign baseline
+PASS existing readers
+PASS season identities
+PASS saved meetings
+PASS orientation
+PASS team and player totals
+FAIL recorded status: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
+    {
+      index: 1,
++     status: 'empty'
+-     status: 'unrecorded'
+    },
+    {
+      index: 2,
+      status: 'empty'
+    },
+
+PASS rival identities
+PASS rival totals
+PASS read boundary
+CONTROL FIRED(missing-as-empty): recorded status
+PASS engine baseline
+PASS campaign baseline
+PASS existing readers
+PASS season identities
+FAIL saved meetings: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      age: 23,
+      awayClub: 'Generated Rival 1',
+      awayGoals: 1,
+...
+      homeClub: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 1',
+      onLoanFrom: 'Anderlecht',
+      played: true,
+...
+      homeClub: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 1',
+      onLoanFrom: null,
+      played: true,
+...
+      homeClub: 'Generated Rival 2',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'rivalry',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 2',
+      onLoanFrom: null,
+      played: true,
+...
+      homeClub: 'Generated Rival 3',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 3',
+      onLoanFrom: null,
+      played: true,
+...
+      homeClub: 'Generated Rival 4',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'rivalry',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 4',
+      onLoanFrom: null,
+      played: true,
+...
+      homeClub: 'Generated Rival 5',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 5',
+      onLoanFrom: null,
+      played: true,
+...
+      homeClub: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 1',
+      onLoanFrom: null,
+      played: false,
+...
+      homeClub: 'Generated Rival 2',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'rivalry',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 2',
+      onLoanFrom: null,
+      played: false,
+...
+      homeClub: 'Generated Rival 3',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 3',
+      onLoanFrom: null,
+      played: false,
+...
+      homeClub: 'Generated Rival 4',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'rivalry',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 4',
+      onLoanFrom: null,
+      played: false,
+...
+      homeClub: 'Generated Rival 5',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 5',
+      onLoanFrom: null,
+      played: false,
+...
+      homeClub: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 1',
+      onLoanFrom: null,
+      played: true,
+...
+      homeClub: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 1',
+      onLoanFrom: null,
+      played: true,
+...
+      homeClub: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 1',
+      onLoanFrom: null,
+      played: true,
+...
+      homeClub: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 1',
+      onLoanFrom: null,
+      played: true,
+...
+      homeClub: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 1',
+      onLoanFrom: null,
+      played: true,
+...
+      homeClub: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 1',
+      onLoanFrom: null,
+      played: true,
+...
+      homeClub: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 1',
+      onLoanFrom: null,
+      played: true,
+...
+      homeClub: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 1',
+      onLoanFrom: null,
+      played: true,
+...
+      homeClub: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 1',
+      onLoanFrom: null,
+      played: true,
+...
+      homeClub: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 1',
+      onLoanFrom: null,
+      played: true,
+...
+      homeClub: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 1',
+      onLoanFrom: null,
+      played: true,
+...
+      homeClub: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 1',
+      onLoanFrom: null,
+      played: true,
+...
+      homeClub: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 1',
+      onLoanFrom: null,
+      played: true,
+...
+      homeClub: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 1',
+      onLoanFrom: null,
+      played: true,
+...
+      homeClub: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 1',
+      onLoanFrom: null,
+      played: true,
+...
+      homeClub: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 1',
+      onLoanFrom: null,
+      played: true,
+...
+      homeClub: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 1',
+      onLoanFrom: null,
+      played: true,
+...
+      homeClub: 'generated rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 1',
+      onLoanFrom: null,
+      played: true,
+...
+      homeClub: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      kind: 'derby',
+      meetingIndex: 1,
+      name: 'Recorded rivalry 1',
+      onLoanFrom: null,
+      played: true,
+
+FAIL orientation: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      away: 'Generated Rival 1',
+      awayGoals: 1,
+      home: 'FC Twente',
+...
+      home: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        4,
+        0,
+        1
+      ],
+...
+      home: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        5,
+        0,
+        1
+      ],
+...
+      home: 'Generated Rival 2',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        5,
+        1,
+        1
+      ],
+...
+      home: 'Generated Rival 3',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        5,
+        2,
+        1
+      ],
+...
+      home: 'Generated Rival 4',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        5,
+        3,
+        1
+      ],
+...
+      home: 'Generated Rival 5',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        5,
+        4,
+        1
+      ],
+...
+      home: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        6,
+        0,
+        1
+      ],
+...
+      home: 'Generated Rival 2',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        6,
+        1,
+        1
+      ],
+...
+      home: 'Generated Rival 3',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        6,
+        2,
+        1
+      ],
+...
+      home: 'Generated Rival 4',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        6,
+        3,
+        1
+      ],
+...
+      home: 'Generated Rival 5',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        6,
+        4,
+        1
+      ],
+...
+      home: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        10,
+        0,
+        1
+      ],
+...
+      home: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        12,
+        0,
+        1
+      ],
+...
+      home: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        13,
+        0,
+        1
+      ],
+...
+      home: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        14,
+        0,
+        1
+      ],
+...
+      home: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        15,
+        0,
+        1
+      ],
+...
+      home: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        16,
+        0,
+        1
+      ],
+...
+      home: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        17,
+        0,
+        1
+      ],
+...
+      home: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        18,
+        0,
+        1
+      ],
+...
+      home: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        19,
+        0,
+        1
+      ],
+...
+      home: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        20,
+        0,
+        1
+      ],
+...
+      home: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        21,
+        0,
+        1
+      ],
+...
+      home: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        22,
+        0,
+        1
+      ],
+...
+      home: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        23,
+        0,
+        1
+      ],
+...
+      home: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        24,
+        0,
+        1
+      ],
+...
+      home: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        25,
+        0,
+        1
+      ],
+...
+      home: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        26,
+        0,
+        1
+      ],
+...
+      home: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        27,
+        0,
+        1
+      ],
+...
+      home: 'generated rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        28,
+        0,
+        1
+      ],
+...
+      home: 'Generated Rival 1',
++     homeGoals: 0,
+-     homeGoals: 3,
+      key: [
+        29,
+        0,
+        1
+      ],
+
+PASS team and player totals
+PASS recorded status
+PASS rival identities
+PASS rival totals
+PASS read boundary
+CONTROL FIRED(away-orientation): saved meetings, orientation
+PASS engine baseline
+PASS campaign baseline
+PASS existing readers
+PASS season identities
+PASS saved meetings
+PASS orientation
+FAIL team and player totals: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
++   missed: 0,
+-   missed: 10,
+    player: {
+      d: 0,
+      goals: 25,
++     l: 30,
++     played: 60,
++     w: 30
+-     l: 25,
+-     played: 50,
+-     w: 25
+    },
+    seasons: [
+      {
+        meetingCount: 0,
+        missed: 0,
+...
+        meetingCount: 10,
++       missed: 0,
+-       missed: 10,
+        player: {
+          d: 0,
+          goals: 0,
++         l: 5,
++         played: 10,
++         w: 5
+-         l: 0,
+-         played: 0,
+-         w: 0
+        },
+        seasonIndex: 6,
+        team: {
+          d: 0,
+          l: 5,
+
+PASS recorded status
+PASS rival identities
+FAIL rival totals: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    {
++     missed: 0,
+-     missed: 2,
+      player: {
+        d: 0,
+        goals: 20,
++       l: 21,
++       played: 42,
++       w: 21
+-       l: 20,
+-       played: 40,
+-       w: 20
+      },
+      rival: 'Generated Rival 1',
+      team: {
+        d: 0,
+        l: 21,
+...
+    {
++     missed: 0,
+-     missed: 2,
+      player: {
+        d: 0,
+        goals: 1,
++       l: 2,
++       played: 4,
++       w: 2
+-       l: 1,
+-       played: 2,
+-       w: 1
+      },
+      rival: 'Generated Rival 2',
+      team: {
+        d: 0,
+        l: 2,
+...
+    {
++     missed: 0,
+-     missed: 2,
+      player: {
+        d: 0,
+        goals: 1,
++       l: 2,
++       played: 4,
++       w: 2
+-       l: 1,
+-       played: 2,
+-       w: 1
+      },
+      rival: 'Generated Rival 3',
+      team: {
+        d: 0,
+        l: 2,
+...
+    {
++     missed: 0,
+-     missed: 2,
+      player: {
+        d: 0,
+        goals: 1,
++       l: 2,
++       played: 4,
++       w: 2
+-       l: 1,
+-       played: 2,
+-       w: 1
+      },
+      rival: 'Generated Rival 4',
+      team: {
+        d: 0,
+        l: 2,
+...
+    {
++     missed: 0,
+-     missed: 2,
+      player: {
+        d: 0,
+        goals: 1,
++       l: 2,
++       played: 4,
++       w: 2
+-       l: 1,
+-       played: 2,
+-       w: 1
+      },
+      rival: 'Generated Rival 5',
+      team: {
+        d: 0,
+        l: 2,
+
+PASS read boundary
+CONTROL FIRED(missed-as-played): team and player totals, rival totals
+PASS engine baseline
+PASS campaign baseline
+PASS existing readers
+PASS season identities
+PASS saved meetings
+PASS orientation
+FAIL team and player totals: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
+    missed: 10,
+    player: {
+      d: 0,
++     goals: 50,
+-     goals: 25,
+      l: 25,
+      played: 50,
+      w: 25
+    },
+    seasons: [
+...
+          d: 0,
++         goals: 2,
+-         goals: 1,
+          l: 1,
+          played: 2,
+          w: 1
+        },
+        seasonIndex: 4,
+...
+          d: 0,
++         goals: 10,
+-         goals: 5,
+          l: 5,
+          played: 10,
+          w: 5
+        },
+        seasonIndex: 5,
+...
+          d: 0,
++         goals: 2,
+-         goals: 1,
+          l: 1,
+          played: 2,
+          w: 1
+        },
+        seasonIndex: 10,
+...
+          d: 0,
++         goals: 2,
+-         goals: 1,
+          l: 1,
+          played: 2,
+          w: 1
+        },
+        seasonIndex: 12,
+...
+          d: 0,
++         goals: 2,
+-         goals: 1,
+          l: 1,
+          played: 2,
+          w: 1
+        },
+        seasonIndex: 13,
+...
+          d: 0,
++         goals: 2,
+-         goals: 1,
+          l: 1,
+          played: 2,
+          w: 1
+        },
+        seasonIndex: 14,
+...
+          d: 0,
++         goals: 2,
+-         goals: 1,
+          l: 1,
+          played: 2,
+          w: 1
+        },
+        seasonIndex: 15,
+...
+          d: 0,
++         goals: 2,
+-         goals: 1,
+          l: 1,
+          played: 2,
+          w: 1
+        },
+        seasonIndex: 16,
+...
+          d: 0,
++         goals: 2,
+-         goals: 1,
+          l: 1,
+          played: 2,
+          w: 1
+        },
+        seasonIndex: 17,
+...
+          d: 0,
++         goals: 2,
+-         goals: 1,
+          l: 1,
+          played: 2,
+          w: 1
+        },
+        seasonIndex: 18,
+...
+          d: 0,
++         goals: 2,
+-         goals: 1,
+          l: 1,
+          played: 2,
+          w: 1
+        },
+        seasonIndex: 19,
+...
+          d: 0,
++         goals: 2,
+-         goals: 1,
+          l: 1,
+          played: 2,
+          w: 1
+        },
+        seasonIndex: 20,
+...
+          d: 0,
++         goals: 2,
+-         goals: 1,
+          l: 1,
+          played: 2,
+          w: 1
+        },
+        seasonIndex: 21,
+...
+          d: 0,
++         goals: 2,
+-         goals: 1,
+          l: 1,
+          played: 2,
+          w: 1
+        },
+        seasonIndex: 22,
+...
+          d: 0,
++         goals: 2,
+-         goals: 1,
+          l: 1,
+          played: 2,
+          w: 1
+        },
+        seasonIndex: 23,
+...
+          d: 0,
++         goals: 2,
+-         goals: 1,
+          l: 1,
+          played: 2,
+          w: 1
+        },
+        seasonIndex: 24,
+...
+          d: 0,
++         goals: 2,
+-         goals: 1,
+          l: 1,
+          played: 2,
+          w: 1
+        },
+        seasonIndex: 25,
+...
+          d: 0,
++         goals: 2,
+-         goals: 1,
+          l: 1,
+          played: 2,
+          w: 1
+        },
+        seasonIndex: 26,
+...
+          d: 0,
++         goals: 2,
+-         goals: 1,
+          l: 1,
+          played: 2,
+          w: 1
+        },
+        seasonIndex: 27,
+...
+          d: 0,
++         goals: 2,
+-         goals: 1,
+          l: 1,
+          played: 2,
+          w: 1
+        },
+        seasonIndex: 28,
+...
+          d: 0,
++         goals: 2,
+-         goals: 1,
+          l: 1,
+          played: 2,
+          w: 1
+        },
+        seasonIndex: 29,
+
+PASS recorded status
+PASS rival identities
+FAIL rival totals: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      missed: 2,
+      player: {
+        d: 0,
++       goals: 40,
+-       goals: 20,
+        l: 20,
+        played: 40,
+        w: 20
+      },
+      rival: 'Generated Rival 1',
+...
+        d: 0,
++       goals: 2,
+-       goals: 1,
+        l: 1,
+        played: 2,
+        w: 1
+      },
+      rival: 'Generated Rival 2',
+...
+        d: 0,
++       goals: 2,
+-       goals: 1,
+        l: 1,
+        played: 2,
+        w: 1
+      },
+      rival: 'Generated Rival 3',
+...
+        d: 0,
++       goals: 2,
+-       goals: 1,
+        l: 1,
+        played: 2,
+        w: 1
+      },
+      rival: 'Generated Rival 4',
+...
+        d: 0,
++       goals: 2,
+-       goals: 1,
+        l: 1,
+        played: 2,
+        w: 1
+      },
+      rival: 'Generated Rival 5',
+...
+        d: 0,
++       goals: 2,
+-       goals: 1,
+        l: 1,
+        played: 2,
+        w: 1
+      },
+      rival: 'generated rival 1',
+
+PASS read boundary
+CONTROL FIRED(team-goals-as-player): team and player totals, rival totals
+PASS engine baseline
+PASS campaign baseline
+PASS existing readers
+PASS season identities
+FAIL saved meetings: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      age: 23,
+      awayClub: 'Generated Rival 1',
+      awayGoals: 1,
+...
+    {
+-     age: 24,
+-     awayClub: 'Generated Rival 4',
+-     awayGoals: 1,
+-     club: 'FC Twente',
+-     ga: 1,
+-     gf: 2,
+-     goals: 1,
+-     home: true,
+-     homeClub: 'FC Twente',
+-     homeGoals: 2,
+-     kind: 'rivalry',
+-     meetingIndex: 0,
+-     name: 'Recorded rivalry 4',
+-     onLoanFrom: null,
+-     played: true,
+-     result: 'W',
+-     rival: 'Generated Rival 4',
+-     rivalIndex: 3,
+-     seasonIndex: 5,
+-     won: true,
+-     year: 2025
+-   },
+-   {
+-     age: 24,
+-     awayClub: 'FC Twente',
+-     awayGoals: 0,
+-     club: 'FC Twente',
+-     ga: 3,
+-     gf: 0,
+-     goals: 0,
+-     home: false,
+-     homeClub: 'Generated Rival 4',
+-     homeGoals: 3,
+-     kind: 'rivalry',
+-     meetingIndex: 1,
+-     name: 'Recorded rivalry 4',
+-     onLoanFrom: null,
+-     played: true,
+-     result: 'L',
+-     rival: 'Generated Rival 4',
+-     rivalIndex: 3,
+-     seasonIndex: 5,
+-     won: false,
+-     year: 2025
+-   },
+-   {
+-     age: 24,
+-     awayClub: 'Generated Rival 5',
+-     awayGoals: 1,
+-     club: 'FC Twente',
+-     ga: 1,
+-     gf: 2,
+-     goals: 1,
+-     home: true,
+-     homeClub: 'FC Twente',
+-     homeGoals: 2,
+-     kind: 'derby',
+-     meetingIndex: 0,
+-     name: 'Recorded rivalry 5',
+-     onLoanFrom: null,
+-     played: true,
+-     result: 'W',
+-     rival: 'Generated Rival 5',
+-     rivalIndex: 4,
+-     seasonIndex: 5,
+-     won: true,
+-     year: 2025
+-   },
+-   {
+-     age: 24,
+-     awayClub: 'FC Twente',
+-     awayGoals: 0,
+-     club: 'FC Twente',
+-     ga: 3,
+-     gf: 0,
+-     goals: 0,
+-     home: false,
+-     homeClub: 'Generated Rival 5',
+-     homeGoals: 3,
+-     kind: 'derby',
+-     meetingIndex: 1,
+-     name: 'Recorded rivalry 5',
+-     onLoanFrom: null,
+-     played: true,
+-     result: 'L',
+-     rival: 'Generated Rival 5',
+-     rivalIndex: 4,
+-     seasonIndex: 5,
+-     won: false,
+-     year: 2025
+-   },
+-   {
+      age: 25,
+      awayClub: 'Generated Rival 1',
+      awayGoals: 1,
+      club: 'Twente',
+      ga: 1,
+...
+    {
+-     age: 25,
+-     awayClub: 'Generated Rival 4',
+-     awayGoals: 1,
+-     club: 'Twente',
+-     ga: 1,
+-     gf: 2,
+-     goals: 0,
+-     home: true,
+-     homeClub: 'Twente',
+-     homeGoals: 2,
+-     kind: 'rivalry',
+-     meetingIndex: 0,
+-     name: 'Recorded rivalry 4',
+-     onLoanFrom: null,
+-     played: false,
+-     result: 'W',
+-     rival: 'Generated Rival 4',
+-     rivalIndex: 3,
+-     seasonIndex: 6,
+-     won: false,
+-     year: 2026
+-   },
+-   {
+-     age: 25,
+-     awayClub: 'Twente',
+-     awayGoals: 0,
+-     club: 'Twente',
+-     ga: 3,
+-     gf: 0,
+-     goals: 0,
+-     home: false,
+-     homeClub: 'Generated Rival 4',
+-     homeGoals: 3,
+-     kind: 'rivalry',
+-     meetingIndex: 1,
+-     name: 'Recorded rivalry 4',
+-     onLoanFrom: null,
+-     played: false,
+-     result: 'L',
+-     rival: 'Generated Rival 4',
+-     rivalIndex: 3,
+-     seasonIndex: 6,
+-     won: false,
+-     year: 2026
+-   },
+-   {
+-     age: 25,
+-     awayClub: 'Generated Rival 5',
+-     awayGoals: 1,
+-     club: 'Twente',
+-     ga: 1,
+-     gf: 2,
+-     goals: 0,
+-     home: true,
+-     homeClub: 'Twente',
+-     homeGoals: 2,
+-     kind: 'derby',
+-     meetingIndex: 0,
+-     name: 'Recorded rivalry 5',
+-     onLoanFrom: null,
+-     played: false,
+-     result: 'W',
+-     rival: 'Generated Rival 5',
+-     rivalIndex: 4,
+-     seasonIndex: 6,
+-     won: false,
+-     year: 2026
+-   },
+-   {
+-     age: 25,
+-     awayClub: 'Twente',
+-     awayGoals: 0,
+-     club: 'Twente',
+-     ga: 3,
+-     gf: 0,
+-     goals: 0,
+-     home: false,
+-     homeClub: 'Generated Rival 5',
+-     homeGoals: 3,
+-     kind: 'derby',
+-     meetingIndex: 1,
+-     name: 'Recorded rivalry 5',
+-     onLoanFrom: null,
+-     played: false,
+-     result: 'L',
+-     rival: 'Generated Rival 5',
+-     rivalIndex: 4,
+-     seasonIndex: 6,
+-     won: false,
+-     year: 2026
+-   },
+-   {
+      age: 29,
+      awayClub: 'Generated Rival 1',
+      awayGoals: 1,
+      club: 'Twente',
+      ga: 1,
+
+FAIL orientation: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      away: 'Generated Rival 1',
+      awayGoals: 1,
+      home: 'FC Twente',
+...
+    {
+-     away: 'Generated Rival 4',
+-     awayGoals: 1,
+-     home: 'FC Twente',
+-     homeGoals: 2,
+-     key: [
+-       5,
+-       3,
+-       0
+-     ],
+-     result: 'W'
+-   },
+-   {
+-     away: 'FC Twente',
+-     awayGoals: 0,
+-     home: 'Generated Rival 4',
+-     homeGoals: 3,
+-     key: [
+-       5,
+-       3,
+-       1
+-     ],
+-     result: 'L'
+-   },
+-   {
+-     away: 'Generated Rival 5',
+-     awayGoals: 1,
+-     home: 'FC Twente',
+-     homeGoals: 2,
+-     key: [
+-       5,
+-       4,
+-       0
+-     ],
+-     result: 'W'
+-   },
+-   {
+-     away: 'FC Twente',
+-     awayGoals: 0,
+-     home: 'Generated Rival 5',
+-     homeGoals: 3,
+-     key: [
+-       5,
+-       4,
+-       1
+-     ],
+-     result: 'L'
+-   },
+-   {
+      away: 'Generated Rival 1',
+      awayGoals: 1,
+      home: 'Twente',
+      homeGoals: 2,
+      key: [
+...
+    {
+-     away: 'Generated Rival 4',
+-     awayGoals: 1,
+-     home: 'Twente',
+-     homeGoals: 2,
+-     key: [
+-       6,
+-       3,
+-       0
+-     ],
+-     result: 'W'
+-   },
+-   {
+-     away: 'Twente',
+-     awayGoals: 0,
+-     home: 'Generated Rival 4',
+-     homeGoals: 3,
+-     key: [
+-       6,
+-       3,
+-       1
+-     ],
+-     result: 'L'
+-   },
+-   {
+-     away: 'Generated Rival 5',
+-     awayGoals: 1,
+-     home: 'Twente',
+-     homeGoals: 2,
+-     key: [
+-       6,
+-       4,
+-       0
+-     ],
+-     result: 'W'
+-   },
+-   {
+-     away: 'Twente',
+-     awayGoals: 0,
+-     home: 'Generated Rival 5',
+-     homeGoals: 3,
+-     key: [
+-       6,
+-       4,
+-       1
+-     ],
+-     result: 'L'
+-   },
+-   {
+      away: 'Generated Rival 1',
+      awayGoals: 1,
+      home: 'Twente',
+      homeGoals: 2,
+      key: [
+
+FAIL team and player totals: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
++   missed: 6,
+-   missed: 10,
+    player: {
+      d: 0,
++     goals: 23,
++     l: 23,
++     played: 46,
++     w: 23
+-     goals: 25,
+-     l: 25,
+-     played: 50,
+-     w: 25
+    },
+    seasons: [
+      {
+        meetingCount: 0,
+        missed: 0,
+...
+      {
++       meetingCount: 6,
+-       meetingCount: 10,
+        missed: 0,
+        player: {
+          d: 0,
++         goals: 3,
++         l: 3,
++         played: 6,
++         w: 3
+-         goals: 5,
+-         l: 5,
+-         played: 10,
+-         w: 5
+        },
+        seasonIndex: 5,
+        team: {
+          d: 0,
++         l: 3,
++         meetings: 6,
++         w: 3
+-         l: 5,
+-         meetings: 10,
+-         w: 5
+        }
+      },
+      {
++       meetingCount: 6,
++       missed: 6,
+-       meetingCount: 10,
+-       missed: 10,
+        player: {
+          d: 0,
+          goals: 0,
+          l: 0,
+          played: 0,
+...
+          d: 0,
++         l: 3,
++         meetings: 6,
++         w: 3
+-         l: 5,
+-         meetings: 10,
+-         w: 5
+        }
+      },
+      {
+        meetingCount: 0,
+        missed: 0,
+...
+      d: 0,
++     l: 26,
++     meetings: 52,
++     w: 26
+-     l: 30,
+-     meetings: 60,
+-     w: 30
+    }
+  }
+
+PASS recorded status
+FAIL rival identities: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      meetings: [
+        {
+          age: 23,
+...
+        {
+-         age: 24,
+-         club: 'FC Twente',
+-         meetingIndex: 0,
+-         name: 'Recorded rivalry 4',
+-         onLoanFrom: null,
+-         rival: 'Generated Rival 4',
+-         rivalIndex: 3,
+-         seasonIndex: 5,
+-         year: 2025
+-       },
+-       {
+-         age: 24,
+-         club: 'FC Twente',
+-         meetingIndex: 1,
+-         name: 'Recorded rivalry 4',
+-         onLoanFrom: null,
+-         rival: 'Generated Rival 4',
+-         rivalIndex: 3,
+-         seasonIndex: 5,
+-         year: 2025
+-       },
+-       {
+-         age: 25,
+-         club: 'Twente',
+-         meetingIndex: 0,
+-         name: 'Recorded rivalry 4',
+-         onLoanFrom: null,
+-         rival: 'Generated Rival 4',
+-         rivalIndex: 3,
+-         seasonIndex: 6,
+-         year: 2026
+-       },
+-       {
+-         age: 25,
+-         club: 'Twente',
+-         meetingIndex: 1,
+-         name: 'Recorded rivalry 4',
+-         onLoanFrom: null,
+-         rival: 'Generated Rival 4',
+-         rivalIndex: 3,
+-         seasonIndex: 6,
+-         year: 2026
+-       }
+-     ],
+-     rival: 'Generated Rival 4'
+-   },
+-   {
+-     meetings: [
+-       {
+-         age: 24,
+-         club: 'FC Twente',
+-         meetingIndex: 0,
+-         name: 'Recorded rivalry 5',
+-         onLoanFrom: null,
+-         rival: 'Generated Rival 5',
+-         rivalIndex: 4,
+-         seasonIndex: 5,
+-         year: 2025
+-       },
+-       {
+-         age: 24,
+-         club: 'FC Twente',
+-         meetingIndex: 1,
+-         name: 'Recorded rivalry 5',
+-         onLoanFrom: null,
+-         rival: 'Generated Rival 5',
+-         rivalIndex: 4,
+-         seasonIndex: 5,
+-         year: 2025
+-       },
+-       {
+-         age: 25,
+-         club: 'Twente',
+-         meetingIndex: 0,
+-         name: 'Recorded rivalry 5',
+-         onLoanFrom: null,
+-         rival: 'Generated Rival 5',
+-         rivalIndex: 4,
+-         seasonIndex: 6,
+-         year: 2026
+-       },
+-       {
+-         age: 25,
+-         club: 'Twente',
+-         meetingIndex: 1,
+-         name: 'Recorded rivalry 5',
+-         onLoanFrom: null,
+-         rival: 'Generated Rival 5',
+-         rivalIndex: 4,
+-         seasonIndex: 6,
+-         year: 2026
+-       }
+-     ],
+-     rival: 'Generated Rival 5'
+-   },
+-   {
+-     meetings: [
+-       {
+          age: 47,
+          club: 'Twente',
+          meetingIndex: 0,
+          name: 'Recorded rivalry 1',
+          onLoanFrom: null,
+
+FAIL rival totals: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      missed: 2,
+      player: {
+        d: 0,
+...
+    {
+-     missed: 2,
+-     player: {
+-       d: 0,
+-       goals: 1,
+-       l: 1,
+-       played: 2,
+-       w: 1
+-     },
+-     rival: 'Generated Rival 4',
+-     team: {
+-       d: 0,
+-       l: 2,
+-       meetings: 4,
+-       w: 2
+-     }
+-   },
+-   {
+-     missed: 2,
+-     player: {
+-       d: 0,
+-       goals: 1,
+-       l: 1,
+-       played: 2,
+-       w: 1
+-     },
+-     rival: 'Generated Rival 5',
+-     team: {
+-       d: 0,
+-       l: 2,
+-       meetings: 4,
+-       w: 2
+-     }
+-   },
+-   {
+      missed: 0,
+      player: {
+        d: 0,
+        goals: 1,
+        l: 1,
+
+PASS read boundary
+CONTROL FIRED(truncate-rivals): saved meetings, orientation, team and player totals, rival identities, rival totals
+PASS engine baseline
+PASS campaign baseline
+PASS existing readers
+PASS season identities
+PASS saved meetings
+PASS orientation
+PASS team and player totals
+FAIL recorded status: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      index: 1,
+      status: 'unrecorded'
+    },
+...
+      index: 7,
++     status: 'saved'
+-     status: 'invalid'
+    },
+    {
+      index: 8,
++     status: 'saved'
+-     status: 'invalid'
+    },
+    {
+      index: 9,
++     status: 'saved'
+-     status: 'invalid'
+    },
+    {
+      index: 10,
+      status: 'saved'
+    },
+
+PASS rival identities
+PASS rival totals
+PASS read boundary
+CONTROL FIRED(invalid-as-saved): recorded status
+PASS engine baseline
+PASS campaign baseline
+PASS existing readers
+PASS season identities
+PASS saved meetings
+PASS orientation
+PASS team and player totals
+PASS recorded status
+PASS rival identities
+PASS rival totals
+FAIL read boundary: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
+    academyClubName: 'Ajax',
+    activeSponsorship: null,
+    age: 48,
+    agentFeesPaid: 0,
+...
+    badSeasonStreak: 0,
++   changed: true,
+    childEventsSeen: [],
+    consecutiveDeficitYears: 0,
+    contractYearsLeft: 3,
+    corruptionHeat: 0,
+    coverAthleteAccepted: false,
+
+CONTROL FIRED(input-mutation): read boundary
+PASS engine baseline
+PASS campaign baseline
+PASS existing readers
+PASS season identities
+PASS saved meetings
+PASS orientation
+PASS team and player totals
+PASS recorded status
+FAIL rival identities: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      meetings: [
+        {
+          age: 23,
+...
+        {
++         age: 47,
++         club: 'Twente',
++         meetingIndex: 0,
++         name: 'Recorded rivalry 1',
++         onLoanFrom: null,
++         rival: 'generated rival 1',
++         rivalIndex: 0,
++         seasonIndex: 28,
++         year: 2048
++       },
++       {
++         age: 47,
++         club: 'Twente',
++         meetingIndex: 1,
++         name: 'Recorded rivalry 1',
++         onLoanFrom: null,
++         rival: 'generated rival 1',
++         rivalIndex: 0,
++         seasonIndex: 28,
++         year: 2048
++       },
++       {
+          age: 48,
+          club: 'Twente',
+          meetingIndex: 0,
+          name: 'Recorded rivalry 1',
+          onLoanFrom: null,
+...
+    },
+-   {
+-     meetings: [
+-       {
+-         age: 47,
+-         club: 'Twente',
+-         meetingIndex: 0,
+-         name: 'Recorded rivalry 1',
+-         onLoanFrom: null,
+-         rival: 'generated rival 1',
+-         rivalIndex: 0,
+-         seasonIndex: 28,
+-         year: 2048
+-       },
+-       {
+-         age: 47,
+-         club: 'Twente',
+-         meetingIndex: 1,
+-         name: 'Recorded rivalry 1',
+-         onLoanFrom: null,
+-         rival: 'generated rival 1',
+-         rivalIndex: 0,
+-         seasonIndex: 28,
+-         year: 2048
+-       }
+-     ],
+-     rival: 'generated rival 1'
+-   }
+  ]
+
+FAIL rival totals: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      missed: 2,
+      player: {
+        d: 0,
++       goals: 21,
++       l: 21,
++       played: 42,
++       w: 21
+-       goals: 20,
+-       l: 20,
+-       played: 40,
+-       w: 20
+      },
+      rival: 'Generated Rival 1',
+      team: {
+        d: 0,
++       l: 22,
++       meetings: 44,
++       w: 22
+-       l: 21,
+-       meetings: 42,
+-       w: 21
+      }
+    },
+    {
+      missed: 2,
+      player: {
+...
+    },
+-   {
+-     missed: 0,
+-     player: {
+-       d: 0,
+-       goals: 1,
+-       l: 1,
+-       played: 2,
+-       w: 1
+-     },
+-     rival: 'generated rival 1',
+-     team: {
+-       d: 0,
+-       l: 1,
+-       meetings: 2,
+-       w: 1
+-     }
+-   }
+  ]
+
+PASS read boundary
+CONTROL FIRED(merge-rival-names): rival identities, rival totals
+PASS engine baseline
+PASS campaign baseline
+PASS existing readers
+PASS season identities
+PASS saved meetings
+PASS orientation
+PASS team and player totals
+PASS recorded status
+PASS rival identities
+FAIL rival totals: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
+    {
++     missed: 4,
+-     missed: 2,
+      player: {
+        d: 0,
++       goals: 40,
++       l: 40,
++       played: 80,
++       w: 40
+-       goals: 20,
+-       l: 20,
+-       played: 40,
+-       w: 20
+      },
+      rival: 'Generated Rival 1',
+      team: {
+        d: 0,
++       l: 42,
++       meetings: 84,
++       w: 42
+-       l: 21,
+-       meetings: 42,
+-       w: 21
+      }
+    },
+    {
++     missed: 4,
+-     missed: 2,
+      player: {
+        d: 0,
++       goals: 2,
++       l: 2,
++       played: 4,
++       w: 2
+-       goals: 1,
+-       l: 1,
+-       played: 2,
+-       w: 1
+      },
+      rival: 'Generated Rival 2',
+      team: {
+        d: 0,
++       l: 4,
++       meetings: 8,
++       w: 4
+-       l: 2,
+-       meetings: 4,
+-       w: 2
+      }
+    },
+    {
++     missed: 4,
+-     missed: 2,
+      player: {
+        d: 0,
++       goals: 2,
++       l: 2,
++       played: 4,
++       w: 2
+-       goals: 1,
+-       l: 1,
+-       played: 2,
+-       w: 1
+      },
+      rival: 'Generated Rival 3',
+      team: {
+        d: 0,
++       l: 4,
++       meetings: 8,
++       w: 4
+-       l: 2,
+-       meetings: 4,
+-       w: 2
+      }
+    },
+    {
++     missed: 4,
+-     missed: 2,
+      player: {
+        d: 0,
++       goals: 2,
++       l: 2,
++       played: 4,
++       w: 2
+-       goals: 1,
+-       l: 1,
+-       played: 2,
+-       w: 1
+      },
+      rival: 'Generated Rival 4',
+      team: {
+        d: 0,
++       l: 4,
++       meetings: 8,
++       w: 4
+-       l: 2,
+-       meetings: 4,
+-       w: 2
+      }
+    },
+    {
++     missed: 4,
+-     missed: 2,
+      player: {
+        d: 0,
++       goals: 2,
++       l: 2,
++       played: 4,
++       w: 2
+-       goals: 1,
+-       l: 1,
+-       played: 2,
+-       w: 1
+      },
+      rival: 'Generated Rival 5',
+      team: {
+        d: 0,
++       l: 4,
++       meetings: 8,
++       w: 4
+-       l: 2,
+-       meetings: 4,
+-       w: 2
+      }
+    },
+    {
+      missed: 0,
+      player: {
+        d: 0,
++       goals: 2,
++       l: 2,
++       played: 4,
++       w: 2
+-       goals: 1,
+-       l: 1,
+-       played: 2,
+-       w: 1
+      },
+      rival: 'generated rival 1',
+      team: {
+        d: 0,
++       l: 2,
++       meetings: 4,
++       w: 2
+-       l: 1,
+-       meetings: 2,
+-       w: 1
+      }
+    }
+  ]
+
+PASS read boundary
+CONTROL FIRED(double-rival-totals): rival totals
+Derby history: 11 groups,24 full main season pairs,192 full campaign/RNG pairs,10 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derby-history/outcomes
