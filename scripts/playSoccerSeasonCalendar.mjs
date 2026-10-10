@@ -84,14 +84,15 @@ try {
       for (let md = 1; md <= 5; md++) {
         const poster = active().getByRole('button', { name: new RegExp('^▶ (?:Matchday|League game) ' + md + '$') });
         if (await poster.count()) await poster.click();
-        const results = active().getByRole('button', { name: 'Results', exact: true }); if (await results.getAttribute('aria-pressed') !== 'true') await results.click();
+        const initialPass = active().locator('[data-moment-pass]'); if (await initialPass.count()) await initialPass.click();
+        if (md === 1) { const results = active().getByRole('button', { name: 'Results', exact: true }); if (await results.getAttribute('aria-pressed') !== 'true') await results.click(); check(await results.getAttribute('aria-pressed') === 'true', 'Actual Results speed is selected for the league walk'); }
         const pass = active().getByRole('button', { name: /Let it play/ }); if (await pass.count()) await pass.click();
           await page.waitForFunction(md => document.querySelector('[data-matchday="' + md + '"] [data-match-clock]')?.getAttribute('data-minute') === '90', md, { timeout: 4000 }).catch(async error => {
           const passNow = active().getByRole('button', { name: /Let it play/ }); if (!await passNow.count()) throw error; await passNow.click(); await page.waitForFunction(() => document.querySelector('[data-match-clock]')?.getAttribute('data-minute') === '90', undefined, { timeout: 4000 });
         });
         check(await clock.getAttribute('data-score') !== null, 'League game ' + md + ' has an actual settled score');
         await heldRead('league-' + md);
-        if (md === 5) { leagueFiveScore = await clock.getAttribute('data-score'); leagueFiveTable = await active().locator('[data-centre-table]').textContent(); check(await active().locator('[data-centre-next-cup]').getAttribute('data-centre-next-cup') === 'domestic:0', 'Next after actual fifth league game is domestic cup'); await capture('league-five'); await active().locator('[data-centre-next-cup]').click(); }
+        if (md === 5) { leagueFiveScore = await clock.getAttribute('data-score'); await active().locator('[data-centre-next-cup="domestic:0"]').waitFor(); check(await active().locator('[data-centre-next-cup]').getAttribute('data-centre-next-cup') === 'domestic:0', 'Next after actual fifth league game is domestic cup'); await capture('league-five'); leagueFiveTable = await active().locator('[data-centre-table]').textContent(); row.tables = [{ name: 'league-five', text: leagueFiveTable, sha256: sha(leagueFiveTable) }]; await active().locator('[data-centre-next-cup]').click(); }
         else await active().getByRole('button', { name: new RegExp('^▶ (?:Matchday|League game) ' + (md + 1) + '$') }).click();
       }
       await active().locator('[data-centre-calendar-cup="domestic:0"]').waitFor();
@@ -103,7 +104,8 @@ try {
       if (opening) { check((await active().locator('[data-calendar-cup-opponent]').textContent()).includes(opening.opp), 'Opening opponent is exactly saved'); check(await active().locator('[data-calendar-cup-score]').textContent() === opening.for + '-' + opening.against, 'Opening score is exactly saved'); check(await active().getByText(opening.home ? 'Home' : 'Away', { exact: true }).isVisible(), 'Opening venue is exactly saved'); }
       else check(await active().locator('[data-calendar-cup-score]').textContent() === 'Score not recorded', 'Old early-round bundle remains honestly missing');
       await heldRead('cup-revealed'); await capture('cup-result');
-      check(await active().locator('[data-centre-table]').textContent() === leagueFiveTable, 'Cup result leaves the complete fifth-game league table held');
+      const cupTable = await active().locator('[data-centre-table]').textContent(); row.tables.push({ name: 'cup-revealed', text: cupTable, sha256: sha(cupTable) });
+      check(cupTable === leagueFiveTable, 'Cup result leaves the complete fifth-game league table held');
       if (width < 1000) await active().locator('[data-centre-fixtures]').click();
       const scoreParts = leagueFiveScore.split('-');
       check((await active().locator('[data-fixture-row="5"]:visible').textContent()).includes(scoreParts[0] + '-' + scoreParts[1]), 'Actual league-five fixture score stays held through cup reveal');

@@ -17,6 +17,8 @@ const base='http://127.0.0.1:'+port,server=spawn(process.execPath,['scripts/lib/
 await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Server start timeout')),15000);server.stdout.on('data',v=>{if(String(v).includes('host-like server:')){clearTimeout(timer);resolve();}});server.once('error',reject);server.once('exit',v=>reject(Error('Server exited '+v)));});
 const report={head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),cases:[],checks:0,forwarded:0,controls:[],fontManifest,scope:'Actual production actions and raw saved-byte holds. The seeded page stream is fixture setup, not an independent native RNG oracle.'};
 const browser=await pw.chromium.launch({headless:true});
+function cookieFailures(v){return v.controls.every(c=>c.painted&&!c.clipped)?[]:['cookie-painted'];}
+function openingFailures(v){return v.after.y===v.before.y?[]:['opening-position'];}
 function layoutFailures(v){return[...(v.overflow?['overflow']:[]),...(!v.inside?['dialog-viewport']:[]),...(!v.painted?['dialog-painted']:[]),...(v.stableFrames<4||v.finiteAnimations||v.fonts!=='loaded'||v.fontFaces.some(f=>f.status==='error')?['capture-readiness']:[]),...(v.controls.some(c=>c.width<43.5||c.height<43.5)?['touch-size']:[]),...(v.controls.some(c=>!c.painted&&!c.clipped)?['painted-controls']:[])];}
 try{for(const width of[320,390,1280])for(const fixture of fixtures){const id=width+'-'+fixture.slug+(fixture.id?'-'+fixture.id:''),soccer=fixture.slug==='soccer-career',row={id,choices:[],shots:[],layouts:[],reloads:[],errors:[],assetErrors:[],blocked:[],fontsUsed:[],toasts:[],checks:0};report.cases.push(row);
   const context=await browser.newContext({viewport:{width,height:width===320?568:width===390?844:900},hasTouch:width<1000,isMobile:width<1000}),page=await context.newPage();
@@ -30,7 +32,10 @@ try{for(const width of[320,390,1280])for(const fixture of fixtures){const id=wid
     await page.goto(base+'/'+fixture.slug,{waitUntil:'networkidle'});
     const bytes=()=>page.evaluate(key=>localStorage.getItem(key),fixture.key),entryBefore=await bytes();
     const consent=page.getByRole('region',{name:'Cookie choices',exact:true});
-    await consent.getByRole('button',{name:'Essential only',exact:true}).click();await consent.waitFor({state:'hidden'});
+    await consent.waitFor();let cookieLayout;
+    try{await page.evaluate(async()=>{await document.fonts.ready;});await consent.scrollIntoViewIfNeeded();cookieLayout=await measure('cookie-choice',consent);check(cookieFailures(cookieLayout).length===0,'Every actual consent button is painted and unclipped before the pointer choice');await consent.getByRole('button',{name:'Essential only',exact:true}).click();}
+    catch(error){row.consentFailure=await consent.evaluate(e=>{const rect=n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height,top:r.top,bottom:r.bottom,left:r.left,right:r.right};};return{viewport:{width:innerWidth,height:innerHeight},fonts:document.fonts.status,region:rect(e),paragraph:[...e.querySelectorAll('p')].map(p=>({text:p.textContent,rect:rect(p),style:{flex:getComputedStyle(p).flex,minWidth:getComputedStyle(p).minWidth}})),buttons:[...e.querySelectorAll('button')].map(b=>{const r=rect(b),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return{text:b.textContent,rect:r,centerHit:hit?.outerHTML,painted:!!hit&&(hit===b||b.contains(hit))};})};}).catch(()=>null);throw error;}
+    await consent.waitFor({state:'hidden'});
     check(await page.evaluate(()=>localStorage.getItem('cookie-consent'))==='essential','Actual Essential only choice dismisses consent without enabling optional scripts');
     const guide=page.getByRole('dialog',{name:'How to play',exact:true});
     if(!soccer){
@@ -124,9 +129,19 @@ try{for(const width of[320,390,1280])for(const fixture of fixtures){const id=wid
       const returned=await bodyState();row.squadRestoration={before:squadBefore,after:returned};check(JSON.stringify(returned)===JSON.stringify(squadBefore),'Squad Back restores body and page position');check(await bytes()===before,'Closing squad preserves complete saved bytes');
     }
     const open=page.locator(soccer?'[data-soccer-programme-open]':'[data-us-programme-open]');await open.waitFor({timeout:15000});
-    await open.scrollIntoViewIfNeeded();const pageBefore=await bodyState();await open.click();await dialog.waitFor();
+    await open.scrollIntoViewIfNeeded();const prepared=await bodyState();
+    await open.evaluate(e=>{window.__programmeOpening=null;e.addEventListener('click',()=>{window.__programmeOpening={y:scrollY,overflow:document.body.style.overflow,computed:getComputedStyle(document.body).overflow,locked:document.body.getAttribute('data-scroll-locked')};},{capture:true,once:true,passive:true});});
+    await open.click();const pageBefore=await page.evaluate(()=>window.__programmeOpening);check(!!pageBefore,'Actual opener click records page and body state before the modal handler');row.opening={prepared,clicked:pageBefore};await dialog.waitFor();
     check(await bytes()===before,'Opening Help preserves the complete career');
-    const healthy=await measure('help');await shot('help');
+    const healthy=await measure('help'),openingObservation={before:pageBefore,after:{y:healthy.pageY}};check(openingFailures(openingObservation).length===0,'Opening the modal preserves the actual click-time page position');await shot('help');
+    if(!report.controls.some(c=>c.name==='entry-observations')){
+      const held=await bytes(),observed={cookie:cookieLayout,opening:openingObservation},failures=v=>[...cookieFailures(v.cookie),...openingFailures(v.opening)];
+      check(failures(observed).length===0,'Actual consent and opening observations pass before the copied control');
+      const faulty=structuredClone(observed),painted=faulty.cookie.controls[0].painted,pageY=faulty.opening.after.y;faulty.cookie.controls[0].painted=false;faulty.opening.after.y=pageY+1;
+      check(painted===true&&JSON.stringify(faulty)!==JSON.stringify(observed),'Copied entry control alters an actual painted button and opening position');assert.deepEqual(failures(faulty),['cookie-painted','opening-position']);check(true,'Copied entry detector rejects exactly the obstructed consent button and modal page jump');
+      faulty.cookie.controls[0].painted=painted;faulty.opening.after.y=pageY;check(JSON.stringify(faulty)===JSON.stringify(observed)&&failures(faulty).length===0,'Copied entry detector restores the complete observations');check(await bytes()===held,'Copied entry detector preserves the entire actual raw save');
+      report.controls.push({name:'entry-observations',effective:true,failed:['cookie-painted','opening-position'],restored:true,scope:'Copied actual observation, not a served product mutation'});
+    }
     await dialog.locator(soccer?'[data-programme-start]':'[data-us-programme-start]').click();
     const tileSelector=soccer?'[data-programme-tile]':'[data-us-programme-tile]',tiles=await dialog.locator(tileSelector).evaluateAll(es=>es.map(e=>e.getAttribute('data-programme-tile')??e.getAttribute('data-us-programme-tile')));
     check(tiles.length===(soccer?10:6),'Every promised gameplay system is present');await measure('tiles');await shot('tiles');
@@ -166,4 +181,4 @@ try{for(const width of[320,390,1280])for(const fixture of fixtures){const id=wid
     row.ok=true;
   }catch(error){row.ok=false;row.error=String(error.stack);console.log('FAIL '+id+': '+row.error);await page.screenshot({path:path.join(out,id+'-failure.png')}).catch(()=>{});}finally{await context.close();}
 }}finally{await browser.close();server.kill();fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));}
-console.log('Career programme native: '+report.checks+' checks, '+report.cases.filter(v=>v.ok).length+'/'+report.cases.length+' completed gameplay journeys');assert.equal(report.cases.length,21);assert(report.cases.every(v=>v.ok));assert.equal(report.controls.length,2);
+console.log('Career programme native: '+report.checks+' checks, '+report.cases.filter(v=>v.ok).length+'/'+report.cases.length+' completed gameplay journeys');assert.equal(report.cases.length,21);assert(report.cases.every(v=>v.ok));assert.equal(report.controls.length,3);

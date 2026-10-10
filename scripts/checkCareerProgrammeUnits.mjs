@@ -15,7 +15,9 @@ const required={
   'src/lib/soccerCupOpening.test.ts':14,
   'src/lib/soccerClubSquad.test.ts':1,
   'src/test/soccerSeasonCompetitions.test.tsx':1,
+  'src/test/cookieConsentStorage.test.tsx':7,
+  'src/test/helpConsentFocus.test.tsx':7,
 };
 assert.equal(receipt.numFailedTests,0);assert.equal(receipt.numFailedTestSuites,0);
 for(const[file,floor]of Object.entries(required)){const suite=receipt.testResults.find(s=>s.name.replaceAll('\\','/').endsWith('/'+file));assert(suite,'Actual suite ran: '+file);assert(suite.assertionResults.length>=floor,'Actual case floor: '+file);assert(suite.assertionResults.every(t=>t.status==='passed'),'No skipped or failed cases: '+file);}
-console.log('All 12 required suites actually passed: '+receipt.numPassedTests+' cases.');
+console.log('All 14 required suites actually passed: '+receipt.numPassedTests+' cases.');
