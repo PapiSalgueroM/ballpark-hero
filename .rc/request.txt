@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+rvwalk: RV_BASE=73516206de4142362147fd6617c7abedc4159864 node .rc/x/rvwalk.mjs
+walk-rivalflip: PLAY_US_RIVAL_CONTROL=rivalflip node scripts/playUsRivalLines.mjs
+walk-oldline: PLAY_US_RIVAL_CONTROL=oldline node scripts/playUsRivalLines.mjs
+walk: node scripts/playUsRivalLines.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+playGames-nfl: ENGINES=chromium ONLY=/nfl-my-career node scripts/playGames.mjs
