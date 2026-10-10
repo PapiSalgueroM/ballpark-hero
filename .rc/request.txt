@@ -1,0 +1,3 @@
+old-at: RV_BASE=73516206de4142362147fd6617c7abedc4159864 RV_N1=3000 RV_N2=2400 node .rc/x/oldsaves.mjs
+old-as: RV_BASE=09df145abfb241679022b41903d2f19bc254ebf9 RV_DIFF=0 RV_N1=1200 RV_N2=1600 node .rc/x/oldsaves.mjs
+probe1: RV_PROBE=800 node .rc/x/probe1.mjs
