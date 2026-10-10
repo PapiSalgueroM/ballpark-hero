@@ -1,0 +1,27 @@
+#!serial
+before: CM_LEAGUE_FIXTURES_EXPECT=9 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=9 node scripts/simCmLeagueFixtures.mjs
+mut-unfreeze: node .rc/x/fix-mut.mjs unfreeze && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -q -- src scripts; exit $s
+mut-nofrozen: node .rc/x/fix-mut.mjs nofrozen && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -q -- src scripts; exit $s
+mut-unfreezetamper: node .rc/x/fix-mut.mjs unfreezetamper && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -q -- src scripts; exit $s
+mut-claimrelease: node .rc/x/fix-mut.mjs claimrelease && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -q -- src scripts; exit $s
+mut-claimstamps: node .rc/x/fix-mut.mjs claimstamps && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -q -- src scripts; exit $s
+mut-latemod: node .rc/x/fix-mut.mjs latemod && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -q -- src scripts; exit $s
+mut-releasedmoved: node .rc/x/fix-mut.mjs releasedmoved && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -q -- src scripts; exit $s
+mut-noreadat: node .rc/x/fix-mut.mjs noreadat && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -q -- src scripts; exit $s
+mut-recheckfirstread: node .rc/x/fix-mut.mjs recheckfirstread && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -q -- src scripts; exit $s
+mut-harnessnosnapshot: node .rc/x/fix-mut.mjs harnessnosnapshot && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -q -- src scripts; exit $s
+mut-harnessnoreadtime: node .rc/x/fix-mut.mjs harnessnoreadtime && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -q -- src scripts; exit $s
+mut-harnessnoasof: node .rc/x/fix-mut.mjs harnessnoasof && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -q -- src scripts; exit $s
+mut-harnessnofirstpub: node .rc/x/fix-mut.mjs harnessnofirstpub && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -q -- src scripts; exit $s
+mut-harnessnorecheck: node .rc/x/fix-mut.mjs harnessnorecheck && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -q -- src scripts; exit $s
+mut-harnessnolostline: node .rc/x/fix-mut.mjs harnessnolostline && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -q -- src scripts; exit $s
+mut-harnessnodigest: node .rc/x/fix-mut.mjs harnessnodigest && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -q -- src scripts; exit $s
+mut-harnesspretool: node .rc/x/fix-mut.mjs harnesspretool && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -q -- src scripts; exit $s
+reviewer-engineclub: node .rc/x/review-run-mut.mjs engineclub && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -q -- src scripts; exit $s
+reviewer-ledgerswap: node .rc/x/review-run-mut.mjs ledgerswap && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -q -- src scripts; exit $s
+reviewer-roundswap: node .rc/x/review-run-mut.mjs roundswap && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -q -- src scripts; exit $s
+reviewer-srcurl: node .rc/x/review-run-mut.mjs srcurl && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -q -- src scripts; exit $s
+reviewer-firstpub: node .rc/x/review-run-mut.mjs firstpub && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -q -- src scripts; exit $s
+reviewer-harnessnod: node .rc/x/review-run-mut.mjs harnessnod && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -q -- src scripts; exit $s
+reviewer-harnessnoi: node .rc/x/review-run-mut.mjs harnessnoi && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -q -- src scripts; exit $s
+after-restore: git status --short -- src scripts | wc -l && CM_LEAGUE_FIXTURES_EXPECT=9 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=9 node scripts/simCmLeagueFixtures.mjs
