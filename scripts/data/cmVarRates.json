@@ -57,7 +57,7 @@
     "goalsAwarded": { "modelled": false, "label": "goals awarded after a review, per match", "why": "The engine has no goal that was first flagged off and then given." },
     "redCards": { "modelled": false, "label": "red cards after a review, per match", "why": "The engine reviews goals and penalties only." },
     "reviewsRejected": { "modelled": false, "label": "reviews after which the referee kept the call, per match", "why": "One publisher, and it does not say whether the call was a goal, a penalty or a card. So the game never shows a review that ends with the call standing." },
-    "awardedPenaltiesScored": { "modelled": false, "label": "penalties awarded after a review that were scored", "why": "One publisher. A penalty a review awards is taken under the engine's own penalty law, the one every other penalty in the match uses." }
+    "awardedPenaltiesScored": { "modelled": false, "label": "penalties awarded after a review that were scored", "why": "One publisher. A penalty a review awards is taken under the engine's own penalty kick law (the base rate a shootout kick uses), not under a number of its own." }
   },
   "notUsed": [
     "Why a goal is ruled out (offside, handball, a foul) is split by one publisher only (the ESPN rows above). THIN: the review card names no reason.",
