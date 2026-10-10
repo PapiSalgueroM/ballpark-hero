@@ -1,0 +1,22 @@
+PASS real fixtures championship normal
+simCmRealFixtures normal championship: 11 outcome groups passed on 24 clubs, 46 matchdays and 552 fixtures, generated baseline held against the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures championship venues
+simCmRealFixtures venues championship: the copied fault failed exactly its own outcome (ledger) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures championship card
+simCmRealFixtures card championship: the copied fault failed exactly its own outcome (calendar) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures championship settlement
+simCmRealFixtures settlement championship: the copied fault failed exactly its own outcome (settlement) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+SKIP real fixtures championship bye: the neutral-only probe can only stand in the Premier League
+PASS real fixtures championship world
+simCmRealFixtures world championship: the copied fault failed exactly its own outcome (world) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures championship edited
+simCmRealFixtures edited championship: the copied fault failed exactly its own outcome (eligibility) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures championship legacy
+simCmRealFixtures legacy championship: the copied fault failed exactly its own outcome (legacy, baseline) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures championship future
+simCmRealFixtures future championship: the copied fault failed exactly its own outcome (future) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures championship rollover
+simCmRealFixtures rollover championship: the copied fault failed exactly its own outcome (rollover) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures championship silent
+simCmRealFixtures silent championship: the copied fault failed exactly its own outcome (unloaded) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+simCmRealFixtures championship: 11 actual outcome groups, 1104 fixture reads, 1104 calendar reads and 9 effective controls passed against the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.

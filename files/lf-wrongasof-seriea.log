@@ -1,0 +1,15 @@
+simCmLeagueFixtures: 10 ledger(s) on disk: bundesliga2, bundesliga, championship, eredivisie, laliga, ligue2, premier, primeira, seriea, superlig
+NEGATIVE CONTROL ON: wrongasof on a copy of seriea, sections HJ must go red and nothing else
+A) shape: green for 10 ledger(s)
+B) no club twice in a matchday: green for 10 ledger(s)
+C) each pair once at each ground: green for 10 ledger(s)
+D) the game's own clubs: green for 10 ledger(s)
+E) the drift guard: ledger equals each source in the receipt: green for 10 ledger(s)
+F) two independent sources: green for 10 ledger(s)
+G) nothing excluded got in: green for 10 ledger(s)
+H) the game's registry: RED for seriea
+  FAIL: seriea: the registry says the order is {"stoodOn":"10 October 2026"} and the receipt bears out {"published":"June 2026"}
+I) frozen: green for 10 ledger(s)
+J) Help tells the truth: RED for seriea
+  FAIL: seriea: Help files the league under "the list as first published in June 2026", the registry says "the list as it stood on 10 October 2026"
+CONTROL wrongasof FIRED as expected on seriea: sections HJ went red for seriea and nothing else

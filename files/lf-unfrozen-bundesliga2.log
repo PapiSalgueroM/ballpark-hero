@@ -1,0 +1,15 @@
+simCmLeagueFixtures: 10 ledger(s) on disk: bundesliga2, bundesliga, championship, eredivisie, laliga, ligue2, premier, primeira, seriea, superlig
+NEGATIVE CONTROL ON: unfrozen on a copy of bundesliga2, sections HI must go red and nothing else
+A) shape: green for 10 ledger(s)
+B) no club twice in a matchday: green for 10 ledger(s)
+C) each pair once at each ground: green for 10 ledger(s)
+D) the game's own clubs: green for 10 ledger(s)
+E) the drift guard: ledger equals each source in the receipt: green for 10 ledger(s)
+F) two independent sources: green for 10 ledger(s)
+G) nothing excluded got in: green for 10 ledger(s)
+H) the game's registry: RED for bundesliga2
+  FAIL: bundesliga2: bundesliga2-2026-27-v1 is registered and has no frozen line
+I) frozen: RED for bundesliga2
+  FAIL: bundesliga2: no frozen line for bundesliga2-2026-27-v1: the tool freezes every ledger it writes, so the line was lost
+J) Help tells the truth: green for 10 ledger(s)
+CONTROL unfrozen FIRED as expected on bundesliga2: sections HI went red for bundesliga2 and nothing else
