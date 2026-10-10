@@ -1,0 +1,4 @@
+simSportEras exit=0 0s | ALL SPORT ERA CHECKS PASSED
+simHomeFront exit=0 1s | simHomeFront: green. The home front shows real games, real saves and a sport you can tell apart without colour.
+simUsCareerDefects exit=0 13s | simUsCareerDefects: 157 tests passed across the stat lines, the era cards and the shop cap.
+simUsCareerDeckC exit=0 49s | simUsCareerDeckC: all checks passed

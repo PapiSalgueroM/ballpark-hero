@@ -1,0 +1,4 @@
+simSportEras: node scripts/simSportEras.mjs
+simUsCareerDefects: node scripts/simUsCareerDefects.mjs
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+simHomeFront: node scripts/simHomeFront.mjs
