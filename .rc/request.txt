@@ -1,0 +1,14 @@
+#!serve
+#!playwright
+playCorruptSaves: CORRUPT_DIST=dist node scripts/playCorruptSaves.mjs
+corrupt-nobutton: CORRUPT_DIST=dist CORRUPT_CONTROL=nobutton node scripts/playCorruptSaves.mjs
+corrupt-norestore: CORRUPT_DIST=dist CORRUPT_CONTROL=norestore node scripts/playCorruptSaves.mjs
+playStorageBlocked: ENGINES=chromium node scripts/playStorageBlocked.mjs
+playUsCareerSaveSeam: ENGINES=chromium node scripts/playUsCareerSaveSeam.mjs
+playInboxCard: ENGINES=chromium node scripts/playInboxCard.mjs
+playSoftFourOhFour: ENGINES=chromium node scripts/playSoftFourOhFour.mjs
+playTranslatedPage: ENGINES=chromium node scripts/playTranslatedPage.mjs
+playHomeFold: ENGINES=chromium node scripts/playHomeFold.mjs
+sweepSaves: ENGINES=chromium node scripts/sweepSaves.mjs
+simFlagshipWeight: ENGINES=chromium node scripts/simFlagshipWeight.mjs
+simSnapshotAssets: ENGINES=chromium node scripts/simSnapshotAssets.mjs
