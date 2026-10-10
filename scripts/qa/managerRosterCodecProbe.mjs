@@ -66,8 +66,9 @@ for (const harness of ['simClubManagerSaveSize.mjs', 'simClubManagerSlots.mjs'])
     const states = observation.value?.state ? [observation.value.state] : observation.value?.fin
       ? [observation.value.input, observation.value.fin, observation.value.next] : [];
     if (row.kind === 'whole-storage') {
+      report.originalStorageTotal = observation.value.entries.reduce((total, [, text]) => total + text.length, 0);
+      assert.equal(report.originalStorageTotal, 502507, 'All four actual stored keys are counted');
       report.totals[harness] = Object.fromEntries(['keys', 'rows'].map(name => [name, observation.value.entries.reduce((total, [key, text]) => {
-        if (!key.startsWith('dukb-club-manager')) return total;
         let state; try { state = JSON.parse(text); } catch { return total + text.length; }
         if (!state?.worldRoster?.packedRecords) return total + text.length;
         const records = JSON.parse(decompressFromUTF16(state.worldRoster.packedRecords));
@@ -85,6 +86,10 @@ for (const harness of ['simClubManagerSaveSize.mjs', 'simClubManagerSlots.mjs'])
         const encoding = codec(records), packedRecords = compressToUTF16(encoding.text);
         const decodedText = decompressFromUTF16(packedRecords); assert.equal(decodedText, encoding.text);
         assert.equal(JSON.stringify(encoding.decode(decodedText)), text, 'Every field, value, key and array order round-trips exactly');
+        const broken = encoding.decode(decodedText);
+        assert(Object.hasOwn(broken[0].player, 'id'), 'One actual full player field exists before the omission control');
+        delete broken[0].player.id;
+        assert.notEqual(JSON.stringify(broken), text, 'The full JSON equality rejects an effective missing player field');
         const next = { ...state, worldRoster: { ...state.worldRoster, packedRecords, packedFormat: 'rows-v1' } };
         measurements[name] = { dictionaries: encoding.dictionaries, stateChars: JSON.stringify(next).length,
           ledgerChars: JSON.stringify(next.worldRoster).length, savings: JSON.stringify(state).length - JSON.stringify(next).length,
@@ -100,5 +105,6 @@ const finalSaves = report.rows.filter(row => row.harness === 'simClubManagerSave
 assert.equal(finalSaves.length, 3);
 report.finalSaves = finalSaves;
 report.exactRoundTrips = report.rows.length * Object.keys(variants).length;
+report.effectiveOmissionControls = report.exactRoundTrips;
 fs.writeFileSync('probe-results.json', JSON.stringify(report, null, 2));
 console.log(JSON.stringify({ exactRoundTrips: report.exactRoundTrips, finalSaves, totals: report.totals }, null, 2));
