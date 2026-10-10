@@ -478,6 +478,25 @@ describe('the job market', () => {
     expect(hostSitArmLine(open, false)).toContain('opens your GM desk');
     expect(hostSitArmLine(open, true)).not.toContain('opens your GM desk');
   });
+  it('words a year out and the out of work card by how he left, so only a firing reads as being let go', () => {
+    const left = (ended: 'fired' | 'walked' | 'expired' | 'poached', out: number): GmSeatBlock => ({
+      v: 1, career: { version: 1, stints: [{ team: BOTTOM, tier: 4, from: 2026, grades: ['met', 'overachieved', 'met'], ended }], seasonsOut: out },
+    });
+    const name = nameOf(BOTTOM);
+    const want = {
+      fired: [`since the ${name} let you go.`, `Let go by the ${name}`],
+      walked: [`since you walked away from the ${name}.`, `Walked away from the ${name}`],
+      expired: [`since your deal with the ${name} ran out.`, `Deal with the ${name} ran out`],
+      poached: [`since you took the buyout and left the ${name}.`, `Bought out of the ${name}`],
+    } as const;
+    for (const ended of ['fired', 'walked', 'expired', 'poached'] as const) {
+      const now = hostMarket(host, lg, left(ended, 0), nameOf)!;
+      const later = hostMarket(host, lg, left(ended, 1), nameOf)!;
+      expect(later.line).toContain(`1 season out of work ${want[ended][0]}`);
+      expect(hostOutOfWorkCard(host, lg, left(ended, 0), now, nameOf).title).toBe(want[ended][1]);
+      if (ended !== 'fired') expect(/let you go|let go|made the call/i.test(`${now.line} ${later.line}`)).toBe(false);
+    }
+  });
   it('counts the seasons known only as a count in the line (B6)', () => {
     const l = legacy({ seasonsPlayed: 9, titles: 2, fired: true });
     const seat = hostLegacySeat(l);

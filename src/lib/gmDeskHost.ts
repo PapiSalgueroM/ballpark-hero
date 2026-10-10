@@ -723,6 +723,21 @@ const seasonsAndTitles = (seasons: number, titles: number): string =>
   `${plural(seasons, 'season')} and ${titles === 0 ? 'no titles' : plural(titles, 'title')}`;
 
 /**
+ * How he left his last club, for the two places that say it once the day
+ * itself is behind him: after "since" on a year out, and as the title of the
+ * out of work card. One wording an ending, so a man who walked away or whose
+ * deal ran out is never told a club let him go. (Only a firing is reachable
+ * until walking away exists; the other three are worded now so the day it
+ * does exist nothing reads wrong.)
+ */
+function hostLeftWords(s: SeatStint, oldClubName: string): { since: string; title: string } {
+  return s.ended === 'walked' ? { since: `you walked away from the ${oldClubName}`, title: `Walked away from the ${oldClubName}` }
+    : s.ended === 'expired' ? { since: `your deal with the ${oldClubName} ran out`, title: `Deal with the ${oldClubName} ran out` }
+    : s.ended === 'poached' ? { since: `you took the buyout and left the ${oldClubName}`, title: `Bought out of the ${oldClubName}` }
+    : { since: `the ${oldClubName} let you go`, title: `Let go by the ${oldClubName}` };
+}
+
+/**
  * The market's line, written here for all three states. gmSeat.seatExitLine
  * cannot serve: with no offers it tells him to sit the year out, which in the
  * closed state is a hope the market does not hold, and it counts a stint's
@@ -742,7 +757,7 @@ export function hostMarketLine(
   const s = seat.career.stints[index];
   const record = seasonsAndTitles(hostStintSeasons(seat, index), s.grades.filter(g => g === 'title').length);
   const out = seat.career.seasonsOut;
-  const head = out > 0 ? `${plural(out, 'season')} out of work since the ${oldClubName} let you go.`
+  const head = out > 0 ? `${plural(out, 'season')} out of work since ${hostLeftWords(s, oldClubName).since}.`
     : s.ended === 'walked' ? `You walked away from the ${oldClubName} on your own terms after ${record}.`
     : s.ended === 'expired' ? `Your deal with the ${oldClubName} ran out after ${record}.`
     : s.ended === 'poached' ? `You took the buyout and left the ${oldClubName} after ${record}.`
@@ -1184,7 +1199,7 @@ export function hostOutOfWorkCard<L>(
 ): HostCard {
   const old = currentStint(seat.career);
   const out = seat.career.seasonsOut;
-  if (out === 0) return { title: `Let go by the ${nameOf(old.team)}`, lines: [market.line] };
+  if (out === 0) return { title: hostLeftWords(old, nameOf(old.team)).title, lines: [market.line] };
   const lines = [market.line];
   const season = host.season(league);
   const champion = host.champion(league, season);

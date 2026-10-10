@@ -54,7 +54,7 @@
  *   flatlevel (7) sharedroll (7) flatowner (7) flatmedia (7) flatcut (7) flatask (7)
  *   spendany (8) stalestaff (9) halfseason (9) noyear (9) lastcall (9)
  *   emptytile (10) closedsit (10) fewseasons (10) shutbutton (10) passquiet (10)
- *   longtile (10) clubvalue (10) openpromise (10) halfword (10)
+ *   longtile (10) clubvalue (10) openpromise (10) halfword (10) allfired (10)
  * SIM_GM_DESK_HOST_ANCHORS=1 checks every control's anchor and stops (light).
  *
  * THE YEAR OUT HERE IS NOT THE BIND'S. Section 9 plays it with each engine's
@@ -164,6 +164,7 @@ const EDITS = {
   emptytile: ['10', 'host', "value: 'No more calls',", "value: '',"],
   openpromise: ['10', 'host', 'As things stand next year is still open, and every year out', 'Next year is still open, and every year out'],
   halfword: ['10', 'host', "'second tier', 'third tier', 'bottom tier'] as const;", "'second tier', 'lower half', 'bottom tier'] as const;"],
+  allfired: ['10', 'host', "  return s.ended === 'walked' ? { since:", "  return s.ended === 'nobody' ? { since:"],
   longtile: ['10', 'host', "value: 'Nobody called',", "value: 'Nobody called this year',"],
   clubvalue: ['10', 'host', 'value: `Season ${hostStintSeasons(seat, index) + 1}`,', 'value: `Season ${hostStintSeasons(seat, index) + 1} with the ${name}`,'],
   closedsit: ['10', 'host', 'Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.',
@@ -1261,6 +1262,19 @@ for (const sport of SPORTS) {
   }
 }
 for (const e of ['fired', 'walked', 'poached', 'expired', undefined]) judge(H.hostStintEndWords({ team: 'AAA', tier: 1, from: 2030, grades: [], ended: e }), 'a stint ending');
+/* How he left: on the day, a year out later, and on the out of work card, only a firing reads as being let go. */
+for (const sport of SPORTS) {
+  const d = DRIVE[sport], lg = FLEET[sport].closed[0].lg, old = Object.keys(lg.teams).sort()[0], said = new Set();
+  for (const ended of ['fired', 'walked', 'poached', 'expired']) for (const out of [0, 1]) {
+    const seat = { v: 1, career: { version: 1, stints: [{ team: old, tier: 2, from: lg.season - 2, grades: ['met', 'overachieved', 'met'], ended }], seasonsOut: out } };
+    const m = H.hostMarket(d.host, lg, seat, nameOf), card = m && H.hostOutOfWorkCard(d.host, lg, seat, m, nameOf);
+    if (!m || !card) { fail(`${sport} ${ended}: no market for a man between seats`); continue; }
+    judge(m.line, `${sport} ${ended} line`); judge(card.title, `${sport} ${ended} card`);
+    if (ended !== 'fired' && /let you go|let go|made the call/i.test(`${m.line} ${card.title}`)) fail(`${sport}: he ${ended === 'walked' ? 'walked away' : ended === 'poached' ? 'was bought out' : 'saw his deal run out'}, and the screen says he was let go (${`${card.title}: ${m.line}`.slice(0, 90)})`);
+    said.add(`${out}|${(out ? m.line : card.title).replace(/\d+/g, 'N')}`);
+  }
+  ok(said.size === 8, `${sport}: the four ways to leave share a wording on the card or on a year out (${said.size} of 8 apart)`);
+}
 for (const g of GRADES) { judge(H.HOST_GRADE_MARKS[g].word, 'a grade word'); judge(H.HOST_GRADE_MARKS[g].mark, 'a grade mark'); }
 for (const t of [1, 2, 3, 4]) judge(H.HOST_TIER_WORDS[t], 'a tier word');
 /* Tiers are quarters of the league (four of them, checked on a real league), so a word that names a half says a
