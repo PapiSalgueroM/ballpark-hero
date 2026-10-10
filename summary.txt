@@ -1,0 +1,12 @@
+build exit=0 20s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playLineupValidator exit=0 33s | playLineupValidator: green at 2 widths (390 and 1280). An allowance answer, an HTTP 500, a body that is not JSON, a string for valid and a validator that never answers ea
+playNflTruth exit=0 99s | playNflTruth: green. A kicker goes late and is paid his slot, throwback seasons are 16 games, the bank stops at zero on load, and sacks come in halves.
+playSoccerCareerAwardReveal exit=0 12s | playSoccerCareerAwardReveal: 26 checks, 0 failed
+playSoccerCareerCompetitions exit=1 8s | playSoccerCareerCompetitions: 50 checks, 2 failed
+playSoccerCareerContracts exit=0 18s | playSoccerCareerContracts: 201 checks, 0 failed
+playSoccerCareerDiscipline exit=0 8s | playSoccerCareerDiscipline: 178 checks, 0 failed
+playSoccerCareerFamily exit=0 17s | playSoccerCareerFamily: 72 checks, 0 failed
+playSoccerCareerLeagueWorld exit=0 9s | playSoccerCareerLeagueWorld: 249 checks, 0 failed; screenshots /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/shots
+playSoccerCareerOpponents exit=0 8s | playSoccerCareerOpponents: 164 checks, 0 failed
+playNbaNumbers exit=0 60s | playNbaNumbers: 85 checks, 0 failed
+playCareerHub exit=0 45s | playCareerHub: green. Four career games on live boxes, and every award on the screen has a year on it.

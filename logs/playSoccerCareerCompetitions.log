@@ -1,0 +1,51 @@
+ok   390x844: the actual route names its recorded FA Cup
+ok   390x844: four recorded cup stages, no invented early fixtures
+ok   390x844: quarter-final opponent and exact saved score
+FAIL 390x844: no unresearched cup ground is claimed
+ok   390x844: the final keeps its score and penalty result
+ok   390x844: recorded European competition and both saved legs
+ok   390x844: deciding leg keeps opponent, score, aggregate and penalties
+ok   390x844: Tab from the game heading stays inside the panel
+ok   390x844: current squad is clearly separate from historical matchday lineups
+ok   390x844: existing squad source label stays intact
+ok   390x844: the actual eleven matches the existing squad model
+ok   390x844: leaving the eleven keeps the Season Centre open
+ok   390x844: every bench player matches the existing squad model
+ok   390x844: squad Back restores tile focus
+ok   390x844: returning to league keeps the exact watched match and selected-tab focus
+ok   390x844: completed league review survives competition changes without restarting
+ok   390x844: switching competitions and squads preserves save bytes and page scroll
+ok   390x844: hidden live league clock and save stay frozen
+ok   390x844: returning resumes the same live clock without resetting its minute
+ok   390x844: a paused league retains its minute and paused state across tabs
+ok   390x844: old trophy season is accessible without fabricating its unavailable league
+ok   390x844: old replay marks missing games and never borrows the latest European opponents
+ok   390x844: historical replay labels the actual current squad club and upcoming season
+ok   390x844: reload preserves all save bytes and recorded totals
+ok   390x844: no page errors or sideways scroll
+ok   1280x900: the actual route names its recorded FA Cup
+ok   1280x900: four recorded cup stages, no invented early fixtures
+ok   1280x900: quarter-final opponent and exact saved score
+FAIL 1280x900: no unresearched cup ground is claimed
+ok   1280x900: the final keeps its score and penalty result
+ok   1280x900: recorded European competition and both saved legs
+ok   1280x900: deciding leg keeps opponent, score, aggregate and penalties
+ok   1280x900: Tab from the game heading stays inside the panel
+ok   1280x900: current squad is clearly separate from historical matchday lineups
+ok   1280x900: existing squad source label stays intact
+ok   1280x900: the actual eleven matches the existing squad model
+ok   1280x900: leaving the eleven keeps the Season Centre open
+ok   1280x900: every bench player matches the existing squad model
+ok   1280x900: squad Back restores tile focus
+ok   1280x900: returning to league keeps the exact watched match and selected-tab focus
+ok   1280x900: completed league review survives competition changes without restarting
+ok   1280x900: switching competitions and squads preserves save bytes and page scroll
+ok   1280x900: hidden live league clock and save stay frozen
+ok   1280x900: returning resumes the same live clock without resetting its minute
+ok   1280x900: a paused league retains its minute and paused state across tabs
+ok   1280x900: old trophy season is accessible without fabricating its unavailable league
+ok   1280x900: old replay marks missing games and never borrows the latest European opponents
+ok   1280x900: historical replay labels the actual current squad club and upcoming season
+ok   1280x900: reload preserves all save bytes and recorded totals
+ok   1280x900: no page errors or sideways scroll
+playSoccerCareerCompetitions: 50 checks, 2 failed
