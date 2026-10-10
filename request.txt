@@ -1,0 +1,14 @@
+#!serial
+head: git log --oneline -3 && git diff --stat c0db41a840680789f06078d3fcdd3dc5da984590 HEAD~1 | tail -2
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-book: node_modules/.bin/vitest run src/lib/clubManagerGoalWeight.test.ts src/lib/clubManagerLeagueBook.test.ts --testTimeout=300000 --hookTimeout=120000
+book-default: node scripts/simCmLeagueBook.mjs
+simCmVar: node scripts/simCmVar.mjs
+realfix: node scripts/simCmRealFixtures.mjs
+realfix-all: CM_REAL_FIXTURE_CONTROL=all node scripts/simCmRealFixtures.mjs
+realfix-block-out: git show 5e96c4cad0b8483ff2dd31a80db08dde0793b893:scripts/simCmRealFixtures.mjs > scripts/simCmRealFixtures.mjs && node scripts/simCmRealFixtures.mjs; s=$?; git checkout -- scripts; exit $s
+appeal: node scripts/simManagerAppealIsolation.mjs
+norival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
+tree-clean: git status --short | grep -v '^??' | wc -l

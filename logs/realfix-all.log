@@ -1,0 +1,21 @@
+PASS real fixtures normal
+simCmRealFixtures normal: real fixture outcomes and independent generated baseline passed.
+PASS real fixtures venues
+simCmRealFixtures venues: real fixture outcomes and independent generated baseline passed.
+PASS real fixtures card
+simCmRealFixtures card: real fixture outcomes and independent generated baseline passed.
+PASS real fixtures settlement
+simCmRealFixtures settlement: real fixture outcomes and independent generated baseline passed.
+PASS real fixtures bye
+simCmRealFixtures bye: real fixture outcomes and independent generated baseline passed.
+PASS real fixtures world
+simCmRealFixtures world: real fixture outcomes and independent generated baseline passed.
+PASS real fixtures edited
+simCmRealFixtures edited: real fixture outcomes and independent generated baseline passed.
+PASS real fixtures legacy
+simCmRealFixtures legacy: real fixture outcomes and independent generated baseline passed.
+PASS real fixtures future
+simCmRealFixtures future: real fixture outcomes and independent generated baseline passed.
+PASS real fixtures rollover
+simCmRealFixtures rollover: real fixture outcomes and independent generated baseline passed.
+simCmRealFixtures: 11 actual outcome groups, 760 fixture reads, 760 calendar reads and 9 effective controls passed.

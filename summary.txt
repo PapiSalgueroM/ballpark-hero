@@ -1,0 +1,13 @@
+head exit=0 0s |  1 file changed, 62 insertions(+), 16 deletions(-)
+tsc exit=0 57s | 
+vitest-book exit=0 2s |    Duration  1.91s (transform 100ms, setup 117ms, collect 129ms, tests 1.07s, environment 687ms, prepare 342ms)
+book-default exit=0 30s | simCmLeagueBook: green, 7 sections, 5 careers x 2 seasons (30s)
+simCmVar exit=0 20s | simCmVar normal: actual review outcomes and full prior baseline passed.
+realfix exit=0 7s | simCmRealFixtures normal: real fixture outcomes and independent generated baseline passed.
+realfix-all exit=0 48s | simCmRealFixtures: 11 actual outcome groups, 760 fixture reads, 760 calendar reads and 9 effective controls passed.
+realfix-block-out exit=1 3s | Node.js v24.21.0
+appeal exit=0 32s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+norival exit=0 11s | No rival product names found. 0 findings.
+anchors exit=0 33s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+storage exit=0 2s | simStorageWrites: all green (owed: 12)
+tree-clean exit=0 0s | 0

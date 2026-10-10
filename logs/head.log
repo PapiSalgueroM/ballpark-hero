@@ -1,0 +1,5 @@
+0bdaf055a rc request r1229-f2e for 1b1cbae64aef9a36b22132a0e51a2a0e2ba87a08
+1b1cbae64 Round 1229: the notes after the second fix pass: the fixtures harness carries its fix, and beside Round 1225 the remedy is the base
+c0db41a84 Round 1229: simCmRealFixtures leaves the league book out of its whole save comparisons with the older engine
+ docs/audits/ROUND-1229-NOTES.md | 78 ++++++++++++++++++++++++++++++++---------
+ 1 file changed, 62 insertions(+), 16 deletions(-)
