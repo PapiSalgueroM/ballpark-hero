@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+weight-branch: set -o pipefail; SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs 2>&1 | tail -18
+weight-reverted: set -o pipefail; git checkout origin/main -- src/main.tsx src/components/BrokenSaveRestore.tsx && npm run build > /tmp/b.log 2>&1; SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs 2>&1 | tail -6; s=$?; git checkout HEAD -- src/main.tsx src/components/BrokenSaveRestore.tsx; exit $s
