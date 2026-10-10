@@ -1,0 +1,35 @@
+{
+  "singles": {
+    "R2a": "Your rank is where your rating puts you among the players in your position group at the club. A teammate on the same rating counts as ahead of you.",
+    "R2b": "Your rank is where your rating puts you among the club's players in your position group. A teammate on the same rating counts as ahead of you.",
+    "R3a": "The eleven is our highest rated keeper, four defenders, three midfielders and three forwards: a picture of the squad, not the manager's team sheet.",
+    "R4a": "Trust is how much of the league season the manager plans to give you. It comes from your rating against the level the squad expects, how long you have been at the club, your form, and how the dressing room feels about you: that part is your phone. A smaller role accepted from a new manager takes 4 planned league games off for one season at that club.",
+    "R4b": "Trust is how much of the league season the manager plans to give you. It comes from your rating against the level the squad expects, how long you have been at the club, your form, and how the dressing room feels about you: that part is your phone. Accepting a new manager's smaller role takes 4 planned league games off for one season at that club.",
+    "R4c": "Trust is how much of the league season the manager plans to give you. It comes from your rating against the level the squad expects, how long you have been at the club, your form, and how the dressing room feels about you: that part is your phone. A new manager's smaller role, if you accept it, takes 4 planned games off for one season at that club.",
+    "R4d": "Trust is how much of the league season the manager plans to give you. It comes from your rating against the level the squad expects, how long you have been at the club, your form in the previous club season, and how the dressing room feels about you: that part is your phone. A smaller role accepted from a new manager takes 4 planned league games off for one season at that club.",
+    "R4e": "Trust is how much of the league season the manager plans to give you. It comes from your rating against the level the squad expects, how long you have been at the club, your form, and the dressing room, which is your phone. A smaller role accepted from a new manager takes 4 planned league games off for one season at that club.",
+    "R5a": "Real, roles or invented: from 2015/16 to 2025/26 you see the club's real squad of that season where we have it. A real past season with no checked squad list shows roles, ages and ratings, no names. From 2026/27 the world is your career's own: the last real squad carries on, players leave, and every new face is invented and gets a year older every summer.",
+    "R6a": "Form is a small simulation adjustment: at least 10 recorded league games at this club last season, with a rating of 7.6 or more, adds up to 2 league games to the plan. A rating of 6.4 or less takes away up to 2. Other ratings leave it alone. The frozen-out limit still applies.",
+    "R6b": "Form is a small simulation adjustment: at least 10 recorded league games at this club last season, with a rating of 7.6 or more, adds up to 2 league games to the plan. A rating of 6.4 or less takes away up to 2. The frozen-out limit still applies.",
+    "R6c": "Form is a small simulation adjustment: at least 10 recorded league games at this club last season, with a rating of 7.6 or more, adds up to 2 league games to the plan. A rating of 6.4 or less takes away up to 2. Other ratings leave it alone, and so does a move, a gap or an unplayed season. The frozen-out limit still applies.",
+    "R6d": "Form: at least 10 recorded league games at this club last season, with a rating of 7.6 or more, adds up to 2 league games to the plan. A rating of 6.4 or less takes away up to 2. Other ratings leave it alone. The frozen-out limit still applies."
+  },
+  "sets": {
+    "abfea79c": [
+      "This screen shows what the game already decided. Nothing here changes how many games you play.",
+      "Your rank is where your rating puts you among the players in your position group at the club. A teammate on the same rating counts as ahead of you: to pass him you have to be rated higher.",
+      "The eleven is the highest rated keeper, four defenders, three midfielders and three forwards on our ratings. It is a picture of the squad, not the manager's team sheet.",
+      "Trust is how much of the league season the manager plans to give you. It comes from your rating against the level the squad expects, how long you have been at the club, your form in the previous club season, and how the dressing room feels about you. The dressing room part is your phone.",
+      "Real, roles or invented: from 2015/16 to 2025/26 you see the club's real squad of that season where we have it. A real past season with no checked squad list shows roles, ages and ratings, and no names. From 2026/27 the world is your career's own: the last real squad carries on, players leave, and every new face is invented. Invented teammates get a year older every summer.",
+      "Form is a small simulation adjustment: at least 10 recorded league games at this club last season, with a rating of 7.6 or more, adds up to 2 league games to the plan. A rating of 6.4 or less takes away up to 2. Other ratings leave it alone. A move, a gap or an unplayed season carries no form adjustment. The frozen-out limit still applies."
+    ],
+    "candidate1": [
+      "This screen shows what the game already decided. Nothing here changes how many games you play.",
+      "Your rank is where your rating puts you among the players in your position group at the club. A teammate on the same rating counts as ahead of you.",
+      "The eleven is the highest rated keeper, four defenders, three midfielders and three forwards on our ratings. It is a picture of the squad, not the manager's team sheet.",
+      "Trust is how much of the league season the manager plans to give you. It comes from your rating against the level the squad expects, how long you have been at the club, your form, and how the dressing room feels about you: that part is your phone. A smaller role accepted from a new manager takes 4 planned league games off for one season at that club.",
+      "Real, roles or invented: from 2015/16 to 2025/26 you see the club's real squad of that season where we have it. A real past season with no checked squad list shows roles, ages and ratings, and no names. From 2026/27 the world is your career's own: the last real squad carries on, players leave, and every new face is invented. Invented teammates get a year older every summer.",
+      "Form is a small simulation adjustment: at least 10 recorded league games at this club last season, with a rating of 7.6 or more, adds up to 2 league games to the plan. A rating of 6.4 or less takes away up to 2. Other ratings leave it alone. The frozen-out limit still applies."
+    ]
+  }
+}
