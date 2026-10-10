@@ -1,0 +1,9 @@
+lay-control exit=1 32s | simUsSeasonCentre digest compare: 11 digests, 10 moved (control lay)
+lay-compare exit=0 32s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1300's playoff lay, in no gate)
+conf exit=1 28s | simUsSeasonCentre: 98 checks, 2 failed (control conf)
+default exit=0 30s | simUsSeasonCentre: 98 checks, 0 failed
+tsc exit=0 90s | 
+poscore exit=1 29s | simUsSeasonCentre: 98 checks, 1 failed (control poscore)
+law-compare-now exit=3 39s | simUsSeasonCentre digest compare: NOT COMPARED, 1 bundled files are not the ones the record was made on (exit 3: this is no red of the score law)
+vitest exit=0 19s |    Duration  18.12s (transform 8.60s, setup 840ms, collect 16.75s, tests 16.11s, environment 4.65s, prepare 1.22s)
+anchors exit=0 41s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
