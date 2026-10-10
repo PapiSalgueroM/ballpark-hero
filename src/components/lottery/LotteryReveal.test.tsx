@@ -117,6 +117,25 @@ describe('LotteryReveal', () => {
     expect(container.querySelector('[data-lottery-help]')).toBeNull();
   });
 
+  it('covers the face down number on EVERY tile: each face is solid, and his gold is a tint laid over it', () => {
+    const { container } = render(<LotteryReveal rows={rows} ruleLine={rule} />);
+    const faces = [...container.querySelectorAll('[data-lottery-face]')];
+    expect(faces.length).toBe(14);
+    for (const face of faces) {
+      const classes = face.className.split(/\s+/);
+      /* A solid background, and no see through one on the face itself (bg-gold/20 was the fault). */
+      expect(classes, face.textContent ?? '').toContain('bg-card');
+      expect(classes.filter(c => /^bg-.+\/\d+$/.test(c)), face.textContent ?? '').toEqual([]);
+    }
+    const tints = [...container.querySelectorAll('[data-lottery-tint]')];
+    expect(tints.length).toBe(1);
+    expect(tints[0].closest('[data-lottery-slot]')!.hasAttribute('data-lottery-mine')).toBe(true);
+    /* The tint sits under the words: it comes first, and the words are positioned over it. */
+    const face = tints[0].parentElement!;
+    expect(face.firstElementChild).toBe(tints[0]);
+    for (const child of [...face.children].slice(1)) expect(child.className).toContain('relative');
+  });
+
   it('keeps the button live from the first frame; pressed early every tile lands at once and the caller moves on', () => {
     const onContinue = vi.fn();
     const { container } = render(<LotteryReveal rows={rows} ruleLine={rule} onContinue={onContinue} />);

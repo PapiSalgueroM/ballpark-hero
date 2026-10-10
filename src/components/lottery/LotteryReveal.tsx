@@ -109,16 +109,17 @@ export function LotteryReveal({
               <span aria-hidden className="absolute inset-0 flex items-center justify-center text-sm font-black tabular-nums text-muted-foreground/60">
                 {r.slot}
               </span>
+              {/* The face is SOLID on every tile, so it covers the face down number
+                  under it. His tile's gold is a tint laid over that solid face:
+                  a see through face let the number show on top of his club's name. */}
               <span
                 data-lottery-face
-                className={cn(
-                  'lr-face absolute inset-0 flex items-center gap-2 px-2',
-                  r.mine ? 'bg-gold/20 text-gold' : 'bg-card text-foreground',
-                )}
+                className={cn('lr-face absolute inset-0 flex items-center gap-2 bg-card px-2', r.mine ? 'text-gold' : 'text-foreground')}
                 style={still ? undefined : { animationDelay: revealDelay(turnAt.get(r.slot) ?? 0, pace.start, pace.step) }}
               >
-                <span className="w-5 shrink-0 text-center text-sm font-black tabular-nums">{r.slot}</span>
-                <span className="min-w-0">
+                {r.mine && <span aria-hidden data-lottery-tint className="absolute inset-0 bg-gold/20" />}
+                <span className="relative w-5 shrink-0 text-center text-sm font-black tabular-nums">{r.slot}</span>
+                <span className="relative min-w-0">
                   <span className="block truncate text-xs font-bold">{r.label}</span>
                   <span className="block truncate text-[10px] text-muted-foreground">
                     Seed {r.seed} · {lotteryMoveWords(r.moved)}{r.mine ? ' · yours' : ''}
