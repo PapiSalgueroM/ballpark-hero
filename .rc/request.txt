@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmDeskHost.test.ts src/components/front-office-shared/GmCareerDesk.test.tsx --testTimeout=300000 --hookTimeout=120000
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+simGmDeskHost-456: SIM_GM_DESK_HOST_SEEDS=4,5,6 node scripts/simGmDeskHost.mjs
+c-lastcall: SIM_GM_DESK_HOST_CONTROL=lastcall node scripts/simGmDeskHost.mjs
+c-shutbutton: SIM_GM_DESK_HOST_CONTROL=shutbutton node scripts/simGmDeskHost.mjs
+c-passquiet: SIM_GM_DESK_HOST_CONTROL=passquiet node scripts/simGmDeskHost.mjs
