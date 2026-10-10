@@ -129,7 +129,7 @@ export function readWorldRoster(career: CareerState): WorldRosterState | null {
         const saved: unknown = JSON.parse(decoded);
         const values: unknown = raw.packedFormat === 'rows-v1' ? decodeRows(saved) : saved;
         if (!Array.isArray(values) || !values.length) return null;
-        cached = { packed: raw.packedRecords, format: raw.packedFormat, records: values };
+        cached = { packed: raw.packedRecords, format: raw.packedFormat === 'rows-v1' ? 'rows-v1' : undefined, records: values };
         packedRecordCache.set(raw, cached);
       }
       records = structuredClone(cached.records);
