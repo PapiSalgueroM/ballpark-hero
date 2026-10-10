@@ -1,0 +1,8 @@
+vitest exit=0 4s |    Duration  3.79s (transform 577ms, setup 347ms, collect 953ms, tests 1.58s, environment 1.26s, prepare 715ms)
+simSaveKeeper exit=0 6s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simStorageWrites exit=0 1s | simStorageWrites: all green
+simNoRivalNames exit=0 23s | No rival product names found. 0 findings.
+simLiveScores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+srcdiff exit=0 0s |  4 files changed, 171 insertions(+)
+simHarnessAnchors exit=0 40s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 71s | 
