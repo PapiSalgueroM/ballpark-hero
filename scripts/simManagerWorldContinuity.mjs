@@ -30,7 +30,7 @@ const CONTROLS = {
     to: 'const entropy = JSON.stringify([state.eraId, state.startYear, state.clubName, state.manager, state.squad, state.academy]);', fails: ['constructors'] },
   newborn: { file: ERAS, from: 'return { ...next, v: Math.max(0.2, Math.round(rawCurveValue(next.r, next.a) * scale * 10) / 10) };',
     to: 'return { ...next, ...(pl.g && pl.since === year - 1 ? { potential: undefined } : {}), v: Math.max(0.2, Math.round(rawCurveValue(next.r, next.a) * scale * 10) / 10) };', fails: ['seeded-world'] },
-  storage: { file: LEDGER, from: '  const packedRecords = compressToUTF16(JSON.stringify(state.records));\n  return { ...state, records: [], packedRecords };', to: '  return state;', fails: ['storage'] },
+  storage: { file: LEDGER, from: "  const packedRecords = compressToUTF16(encodeRows(state.records));\n  return { ...state, records: [], packedRecords, packedFormat: 'rows-v1' };", to: '  return state;', fails: ['storage'] },
 };
 if (CONTROL && CONTROL !== 'all' && !CONTROLS[CONTROL]) throw new Error(`Unknown manager control ${CONTROL}`);
 const GROUPS = ['inactive', 'constructors', 'identity', 'buy-job', 'year-away', 'sale', 'option', 'release', 'refresh', 'seeded-world', 'storage'];

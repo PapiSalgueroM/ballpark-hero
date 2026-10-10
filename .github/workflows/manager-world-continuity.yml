@@ -16,6 +16,9 @@ on:
       - scripts/qa/managerWorldContinuityKit.mjs
       - scripts/simManagerEraWorldOracles.mjs
       - scripts/qa/managerEraWorldOracles.mjs
+      - scripts/qa/managerRosterCacheControl.mjs
+      - scripts/qa/managerWorldRosterDigest.cjs
+      - scripts/simClubManagerSlots.mjs
   workflow_dispatch:
 
 permissions:
@@ -82,6 +85,7 @@ jobs:
         run: |
           failed=0
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerTrajectory.test.ts --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=manager-world-continuity-artifacts/focused-unit.json 2>&1 | tee manager-world-continuity-artifacts/focused-unit.log || failed=1
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerRosterCacheControl.mjs 2>&1 | tee manager-world-continuity-artifacts/cache-control.log || failed=1
           MANAGER_WORLD_CONTINUITY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerWorldContinuity.mjs 2>&1 | tee manager-world-continuity-artifacts/simManagerWorldContinuity.log || failed=1
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simHarnessAnchors.mjs 2>&1 | tee manager-world-continuity-artifacts/simHarnessAnchors.log || failed=1
           node --input-type=module - <<'JS' || failed=1
@@ -92,11 +96,11 @@ jobs:
           import {gunzipSync} from 'node:zlib';
           const root='manager-world-continuity-artifacts',read=file=>JSON.parse(fs.readFileSync(path.join(root,file),'utf8')),sha=value=>createHash('sha256').update(value).digest('hex');
           const head=fs.readFileSync(root+'/source-head.txt','utf8').trim(),tree=fs.readFileSync(root+'/source-tree.txt','utf8').trim(),units=read('focused-unit.json'),controls=read('outcomes/controls.json');
-          assert.equal(units.success,true);assert.equal(units.numFailedTests,0);assert.equal(units.numTotalTests,112);assert.equal(units.numPassedTests,112);assert.equal(units.numPendingTests,0);assert.equal(units.numTodoTests??0,0);
-          for(const [file,count]of[['/src/lib/clubManagerWorldRoster.test.ts',68],['/src/lib/clubManagerTrajectory.test.ts',44]]){const suite=units.testResults.find(row=>row.name.replaceAll('\\','/').endsWith(file));assert(suite,file);assert.equal(suite.assertionResults.length,count);assert(suite.assertionResults.every(row=>row.status==='passed'));}
+          assert.equal(units.success,true);assert.equal(units.numFailedTests,0);assert.equal(units.numTotalTests,135);assert.equal(units.numPassedTests,135);assert.equal(units.numPendingTests,0);assert.equal(units.numTodoTests??0,0);
+          for(const [file,count]of[['/src/lib/clubManagerWorldRoster.test.ts',91],['/src/lib/clubManagerTrajectory.test.ts',44]]){const suite=units.testResults.find(row=>row.name.replaceAll('\\','/').endsWith(file));assert(suite,file);assert.equal(suite.assertionResults.length,count);assert(suite.assertionResults.every(row=>row.status==='passed'));}
           const groups=['inactive','constructors','identity','buy-job','year-away','sale','option','release','refresh','seeded-world','storage'];
           const maps={purchase:['buy-job','year-away','sale','release'],ownership:['identity','buy-job','year-away','sale','option','release'],snapshot:['buy-job','year-away'],stale:['year-away','sale','option','refresh','storage'],sale:['sale'],option:['option'],release:['release'],identity:['identity'],seed:['seeded-world'],draw:['refresh','storage'],entropy:['constructors'],newborn:['seeded-world'],storage:['storage']};
-          assert.equal(controls.head,head);assert.equal(controls.tree,tree);assert.equal(controls.base,'09df145abfb241679022b41903d2f19bc254ebf9');assert.equal(controls.baseTree,'3d527d2a120e909132bbbde53148d140b6a014e1');assert.deepEqual(controls.sourceBefore,controls.sourceAfter);assert.equal(Object.keys(controls.sourceBefore).length,22);assert.equal(controls.controls.length,14);
+          assert.equal(controls.head,head);assert.equal(controls.tree,tree);assert.equal(controls.base,'09df145abfb241679022b41903d2f19bc254ebf9');assert.equal(controls.baseTree,'3d527d2a120e909132bbbde53148d140b6a014e1');assert.deepEqual(controls.sourceBefore,controls.sourceAfter);assert.equal(Object.keys(controls.sourceBefore).length,25);assert.equal(controls.controls.length,14);
           assert.deepEqual(controls.controls.map(row=>row.control),['',...Object.keys(maps)]);
           for(const control of ['',...Object.keys(maps)]){
             const dir='outcomes/'+(control||'healthy'),report=read(dir+'/report.json');assert.equal(report.head,head);assert.equal(report.tree,tree);assert.equal(report.base,controls.base);assert.equal(report.baseTree,controls.baseTree);assert.equal(report.sourceHeld,true);assert.deepEqual(report.sourceBefore,controls.sourceBefore);assert.deepEqual(report.sourceAfter,controls.sourceAfter);
@@ -106,7 +110,7 @@ jobs:
             assert.deepEqual(Object.keys(report.evidence),groups);
             for(const receipt of Object.values(report.evidence)){const packed=fs.readFileSync(path.join(root,dir,receipt.file)),bytes=gunzipSync(packed);assert.equal(sha(packed),receipt.archiveSha256);assert.equal(sha(bytes),receipt.sha256);assert.equal(bytes.length,receipt.bytes);const full=JSON.parse(bytes.toString('utf8'));assert(Array.isArray(full)&&full.length>0,'Complete inputs/outcomes/vectors retained even for intended failures');}
           }
-          console.log('Receipt:112 units,14 arms with eleven full outcome groups,13 effective loaded faults,24 inactive complete save/vector pairs,6 constructors plus same-module interleaves and15 full legacy worlds in every arm.');
+          console.log('Receipt:135 units,14 arms with eleven full outcome groups,13 effective loaded faults,24 inactive complete save/vector pairs,6 constructors plus same-module interleaves and15 full legacy worlds in every arm.');
           JS
           exit "$failed"
       - name: Upload early exact-source diagnostics

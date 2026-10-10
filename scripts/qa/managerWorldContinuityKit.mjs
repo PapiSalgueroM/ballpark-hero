@@ -27,6 +27,8 @@ export const HELD = [
   'scripts/simClubManagerEraUcl.mjs', 'scripts/simEras.mjs',
   'scripts/qa/managerEraWorldOracles.mjs', 'scripts/simManagerEraWorldOracles.mjs',
   'scripts/qa/managerWorldSizeDiagnostic.mjs', '.github/workflows/manager-world-size-diagnostic.yml',
+  'scripts/qa/managerRosterCacheControl.mjs',
+  'scripts/qa/managerWorldRosterDigest.cjs', 'scripts/simClubManagerSlots.mjs',
   'package.json', 'package-lock.json', 'tsconfig.app.json',
 ];
 export function sourceHashes() {

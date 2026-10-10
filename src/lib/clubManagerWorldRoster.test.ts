@@ -1,5 +1,13 @@
 import { describe, expect, it, vi } from 'vitest';
-import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
+import { compressToUTF16 } from 'lz-string';
+const codecCalls = vi.hoisted(() => ({ decompress: 0 }));
+vi.mock('lz-string', async importActual => {
+  const actual = await importActual<typeof import('lz-string')>();
+  return { ...actual, decompressFromUTF16: (value: string) => {
+    codecCalls.decompress += 1;
+    return actual.decompressFromUTF16(value);
+  } };
+});
 import type { CareerState, CMPlayer } from '@/lib/clubManager';
 import {
   acceptBid, applyForJob, applyTargets, buildMarket, buyPlayer, exerciseLoanOption, loanIn,
@@ -533,7 +541,8 @@ describe('lossless inactive world roster storage', () => {
     const ended = recordWorldRosterTransfer(c, { player: c.squad[0], from: c.clubName, to: null, kind });
     expect(ended.worldRoster!.records).toEqual([]);
     expect(typeof ended.worldRoster!.packedRecords).toBe('string');
-    expect(JSON.parse(decompressFromUTF16(ended.worldRoster!.packedRecords!)!)).toEqual(expected.records);
+    expect(ended.worldRoster!.packedFormat).toBe('rows-v1');
+    expect(JSON.stringify(readWorldRoster(ended)!.records)).toBe(JSON.stringify(expected.records));
     const loaded = JSON.parse(JSON.stringify(ended)) as WorldRosterCareer;
     expect(readWorldRoster(loaded)).toEqual(expected);
     expect(readWorldRoster(loaded)).not.toHaveProperty('packedRecords');
@@ -549,7 +558,8 @@ describe('lossless inactive world roster storage', () => {
     const read = readWorldRoster(mixed)!;
     expect(read.records).toHaveLength(2); expect(read.records.map(r => r.status)).toEqual(['owned', 'released']);
     expect(read.records[1].player).toEqual({ ...complete, worldRosterKey: read.records[1].key });
-    expect(decompressFromUTF16(mixed.worldRoster!.packedRecords!)).toBe(JSON.stringify(read.records));
+    expect(mixed.worldRoster!.packedFormat).toBe('rows-v1');
+    expect(JSON.stringify(read.records[1].player)).toBe(JSON.stringify({ ...complete, worldRosterKey: read.records[1].key }));
     expect(worldRosterClub(mixed, c.clubName, [])).toEqual([c.squad[0]]);
     expect(worldRosterClub(mixed, 'Second Source', [p])).toEqual([]);
     expect(c.worldRoster).not.toHaveProperty('packedRecords');
@@ -646,12 +656,190 @@ describe('lossless inactive world roster storage', () => {
     if (kind === 'duplicate') packedRecords = compressToUTF16(JSON.stringify([...logical.records, logical.records[0]]));
     if (kind === 'player') packedRecords = compressToUTF16(JSON.stringify(logical.records.map(r => ({ ...r, player: null }))));
     if (kind === 'owned') packedRecords = compressToUTF16(JSON.stringify(bought().worldRoster!.records));
-    const c = { ...valid, worldRoster: { ...valid.worldRoster, records: kind === 'dual' ? logical.records : [], packedRecords } } as unknown as WorldRosterCareer;
+    const c = { ...valid, worldRoster: { ...valid.worldRoster, records: kind === 'dual' ? logical.records : [], packedRecords, packedFormat: undefined } } as unknown as WorldRosterCareer;
     const bytes = JSON.stringify(c); const fallback = [player()];
     expect(readWorldRoster(c)).toBeNull();
     expect(worldRosterClub(c, 'Source Club', fallback)).toBe(fallback);
     expect(snapshotWorldRosterClub(c, c.clubName)).toBe(c); expect(refreshWorldRoster(c)).toBe(c);
     expect(recordWorldRosterTransfer(c, { player: c.squad[0], from: null, to: 'New Buyer', kind: 'permanent' })).toBe(c);
+    expect(JSON.stringify(c)).toBe(bytes);
+  });
+
+  it('decodes once per exact packed object and string while retaining complete reads and zero draws', () => {
+    const c = inactive(); const bytes = JSON.stringify(c); const before = structuredClone(c);
+    codecCalls.decompress = 0;
+    const random = vi.spyOn(Math, 'random').mockImplementation(() => { throw new Error('Cached reading drew randomness'); });
+    try {
+      const first = readWorldRoster(c)!;
+      const again = readWorldRoster({ ...c, budget: 120 })!;
+      expect(again).toEqual(first); expect(again).not.toBe(first);
+      expect(again.records).not.toBe(first.records);
+      expect(codecCalls.decompress).toBe(1);
+      const reloaded = JSON.parse(bytes) as WorldRosterCareer;
+      expect(readWorldRoster(reloaded)).toEqual(first);
+      expect(codecCalls.decompress).toBe(2);
+      expect(JSON.stringify(c)).toBe(bytes); expect(c).toEqual(before); expect(random).not.toHaveBeenCalled();
+    } finally { random.mockRestore(); }
+  });
+
+  it('isolates every returned player, origin and array from cached data including the first read', () => {
+    const c = inactive(); const bytes = JSON.stringify(c); const first = readWorldRoster(c)!;
+    const expected = structuredClone(first);
+    first.records[0].player.rating = 1;
+    first.records[0].origin.club = 'Changed Source';
+    first.records.push(structuredClone(first.records[0]));
+    const second = readWorldRoster(c)!;
+    expect(second).toEqual(expected);
+    second.records[0].player.signedTerms!.wage = 1;
+    second.records[0].key = 'Changed Key';
+    second.records.length = 0;
+    expect(readWorldRoster(c)).toEqual(expected); expect(JSON.stringify(c)).toBe(bytes);
+  });
+
+  it('invalidates cached decoding when the same raw object carries a different valid packed string', () => {
+    const c = inactive(); codecCalls.decompress = 0;
+    const previous = readWorldRoster(c)!; const previousBytes = JSON.stringify(previous);
+    const changed = structuredClone(previous.records);
+    changed[0].status = 'retired'; changed[0].player.rating = 79;
+    c.worldRoster!.packedRecords = compactWorldRoster({ ...previous, records: changed }).packedRecords;
+    const rawBytes = JSON.stringify(c);
+    expect(readWorldRoster(c)!.records).toEqual(changed);
+    expect(codecCalls.decompress).toBe(2);
+    expect(readWorldRoster(c)!.records).toEqual(changed);
+    expect(JSON.stringify(previous)).toBe(previousBytes); expect(JSON.stringify(c)).toBe(rawBytes);
+  });
+
+  it('rejects a mutated malformed packed string and restores the original cached value without altering raw bytes', () => {
+    const c = inactive(); const original = c.worldRoster!.packedRecords!;
+    const expected = readWorldRoster(c)!;
+    c.worldRoster!.packedRecords = compressToUTF16('null');
+    const malformedBytes = JSON.stringify(c);
+    expect(readWorldRoster(c)).toBeNull(); expect(readWorldRoster(c)).toBeNull();
+    expect(JSON.stringify(c)).toBe(malformedBytes);
+    c.worldRoster!.packedRecords = original;
+    const restoredBytes = JSON.stringify(c);
+    expect(readWorldRoster(c)).toEqual(expected); expect(JSON.stringify(c)).toBe(restoredBytes);
+  });
+
+  it('rechecks every raw envelope after warming the packed cache', () => {
+    const c = inactive(); const expected = readWorldRoster(c)!;
+    const raw = c.worldRoster! as unknown as Record<string, unknown>;
+    for (const [field, invalid] of [['version', 2], ['eraId', 'era2010'], ['records', expected.records]] as const) {
+      const original = raw[field]; raw[field] = invalid;
+      const bytes = JSON.stringify(c);
+      expect(readWorldRoster(c)).toBeNull(); expect(JSON.stringify(c)).toBe(bytes);
+      raw[field] = original;
+      expect(readWorldRoster(c)).toEqual(expected);
+    }
+  });
+
+  it('rechecks current year and era against every cached complete record', () => {
+    const c = inactive(); const expected = readWorldRoster(c)!;
+    const raw = c as unknown as Record<string, unknown>;
+    for (const [field, invalid] of [['season', 0], ['startYear', 2025], ['eraId', 'era2010']] as const) {
+      const original = raw[field]; raw[field] = invalid;
+      const bytes = JSON.stringify(c);
+      expect(readWorldRoster(c)).toBeNull(); expect(JSON.stringify(c)).toBe(bytes);
+      raw[field] = original;
+      expect(readWorldRoster(c)).toEqual(expected);
+    }
+    expect(readWorldRoster({ ...c, season: 2 })).toEqual(expected);
+  });
+
+  it('never treats a cached decoded array as evidence of valid players, unique keys or inactive status', () => {
+    const c = inactive(); const expected = readWorldRoster(c)!;
+    c.worldRoster!.packedFormat = undefined;
+    for (const invalid of [
+      expected.records.map(record => ({ ...record, player: null })),
+      [...expected.records, expected.records[0]],
+      expected.records.map(record => ({ ...record, status: 'owned', owner: c.clubName })),
+    ]) {
+      c.worldRoster!.packedRecords = compressToUTF16(JSON.stringify(invalid));
+      const bytes = JSON.stringify(c);
+      expect(readWorldRoster(c)).toBeNull(); expect(readWorldRoster(c)).toBeNull();
+      expect(worldRosterClub(c, 'Source Club', c.squad)).toBe(c.squad);
+      expect(JSON.stringify(c)).toBe(bytes);
+    }
+  });
+
+  it('reads the complete legacy no-format UTF16 ledger and upgrades only on an explicit compact write', () => {
+    const current = inactive(); const logical = readWorldRoster(current)!;
+    const originalText = JSON.stringify(logical.records);
+    const legacy = { ...current, worldRoster: { ...logical, records: [], packedRecords: compressToUTF16(originalText) } };
+    const bytes = JSON.stringify(legacy);
+    expect(JSON.stringify(readWorldRoster(legacy)!.records)).toBe(originalText);
+    expect(readWorldRoster(legacy)).not.toHaveProperty('packedRecords');
+    expect(readWorldRoster(legacy)).not.toHaveProperty('packedFormat');
+    expect(JSON.stringify(legacy)).toBe(bytes);
+    const upgraded = compactWorldRoster(readWorldRoster(legacy)!);
+    expect(upgraded.packedFormat).toBe('rows-v1');
+    expect(JSON.stringify(readWorldRoster({ ...legacy, worldRoster: upgraded })!.records)).toBe(originalText);
+  });
+
+  it('round-trips all unknown JSON fields, nested arrays, special keys and original field order', () => {
+    const c = inactive(); const logical = readWorldRoster(c)!;
+    const memo = Object.fromEntries([['__proto__', { held: true }], ['', [0, false, null, -1]], ['quoted key', 'Saved café \uD83C\uDFC6']]);
+    const records = logical.records.map(record => ({ ...record, completeExtra: memo,
+      player: { ...record.player, unknownDetails: [{ z: 1, a: 2 }, { a: 2, z: 1 }, [], {}], omitted: undefined } }));
+    const text = JSON.stringify(records);
+    const packed = compactWorldRoster({ ...logical, records });
+    const loaded = JSON.parse(JSON.stringify({ ...c, worldRoster: packed })) as WorldRosterCareer;
+    const read = readWorldRoster(loaded)!;
+    expect(JSON.stringify(read.records)).toBe(text);
+    expect(Object.prototype.hasOwnProperty.call((read.records[0] as unknown as { completeExtra: object }).completeExtra, '__proto__')).toBe(true);
+    expect(read).not.toHaveProperty('packedRecords'); expect(read).not.toHaveProperty('packedFormat');
+    expect({}).not.toHaveProperty('held');
+  });
+
+  it('includes the exact format in cache identity and holds the full raw save during format mutations', () => {
+    const c = inactive(); const expected = readWorldRoster(c)!;
+    const raw = c.worldRoster! as unknown as Record<string, unknown>;
+    raw.packedFormat = undefined;
+    const missingBytes = JSON.stringify(c);
+    expect(readWorldRoster(c)).toBeNull(); expect(JSON.stringify(c)).toBe(missingBytes);
+    raw.packedFormat = 'unknown-v1';
+    const unknownBytes = JSON.stringify(c);
+    expect(readWorldRoster(c)).toBeNull(); expect(JSON.stringify(c)).toBe(unknownBytes);
+    raw.packedFormat = 'rows-v1';
+    expect(readWorldRoster(c)).toEqual(expected);
+    const legacyString = compressToUTF16(JSON.stringify(expected.records));
+    raw.packedRecords = legacyString; raw.packedFormat = undefined;
+    expect(readWorldRoster(c)).toEqual(expected);
+    raw.packedFormat = 'rows-v1';
+    const wrongBytes = JSON.stringify(c);
+    expect(readWorldRoster(c)).toBeNull(); expect(JSON.stringify(c)).toBe(wrongBytes);
+    raw.packedFormat = undefined;
+    expect(readWorldRoster(c)).toEqual(expected);
+  });
+
+  it('rejects a format marker on a literal ledger without changing its full values or fallback', () => {
+    const c = bought(); const malformed = { ...c, worldRoster: { ...c.worldRoster!, packedFormat: 'rows-v1' as const } };
+    const bytes = JSON.stringify(malformed);
+    expect(readWorldRoster(malformed)).toBeNull();
+    expect(worldRosterClub(malformed, 'Source Club', c.squad)).toBe(c.squad);
+    expect(JSON.stringify(malformed)).toBe(bytes);
+  });
+
+  it.each([
+    { name: 'unknown schema table', encoded: [null, [-1]] },
+    { name: 'nonstrings in schema', encoded: [[['key', 7]], [-1, [0, 'value', 1]]] },
+    { name: 'duplicate schema keys', encoded: [[['key', 'key']], [-1, [0, 1, 2]]] },
+    { name: 'duplicate schema signatures', encoded: [[['key'], ['key']], [-1, [0, 1]]] },
+    { name: 'unknown schema index', encoded: [[['key']], [-1, [1, 1]]] },
+    { name: 'fractional schema index', encoded: [[['key']], [-1, [0.5, 1]]] },
+    { name: 'missing row value', encoded: [[['key']], [-1, [0]]] },
+    { name: 'extra row value', encoded: [[['key']], [-1, [0, 1, 2]]] },
+    { name: 'untagged array', encoded: [[['key']], [-1, []]] },
+    { name: 'literal object as encoded value', encoded: [[['key']], [-1, { key: 1 }]] },
+    { name: 'scalar records root', encoded: [[['key']], 1] },
+    { name: 'empty records root', encoded: [[], [-1]] },
+  ])('deactivates $name rows-v1 data with complete input and fallback held', ({ encoded }) => {
+    const c = inactive();
+    c.worldRoster!.packedRecords = compressToUTF16(JSON.stringify(encoded));
+    const bytes = JSON.stringify(c);
+    expect(readWorldRoster(c)).toBeNull(); expect(readWorldRoster(c)).toBeNull();
+    expect(worldRosterClub(c, 'Source Club', c.squad)).toBe(c.squad);
+    expect(recordWorldRosterTransfer(c, { player: c.squad[0], from: null, to: 'Buyer', kind: 'permanent' })).toBe(c);
     expect(JSON.stringify(c)).toBe(bytes);
   });
 });

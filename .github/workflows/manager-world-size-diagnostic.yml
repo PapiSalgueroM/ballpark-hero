@@ -4,7 +4,11 @@ on:
   pull_request:
     paths:
       - src/lib/clubManager.ts
+      - src/lib/clubManagerWorldRoster.ts
       - src/lib/clubManagerWorldRoster.test.ts
+      - scripts/qa/managerRosterCacheControl.mjs
+      - scripts/qa/managerWorldRosterDigest.cjs
+      - scripts/simClubManagerSlots.mjs
       - scripts/qa/managerWorldSizeDiagnostic.mjs
       - .github/workflows/manager-world-size-diagnostic.yml
 permissions:
@@ -50,8 +54,9 @@ jobs:
           failed=0
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee manager-world-size-diagnostics/types.log || failed=1
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/lib/clubManagerWorldRoster.test.ts --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=manager-world-size-diagnostics/roster-unit.json 2>&1 | tee manager-world-size-diagnostics/roster-unit.log || failed=1
+          MANAGER_CACHE_CONTROL_ARTIFACTS=manager-world-size-diagnostics/cache-control NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerRosterCacheControl.mjs 2>&1 | tee manager-world-size-diagnostics/cache-control.log || failed=1
           exit "$failed"
-      - name: Diagnostic paired unchanged historical SaveSize and Slots
+      - name: Diagnostic original and representation-aware historical budgets
         if: ${{ !cancelled() }}
         run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerWorldSizeDiagnostic.mjs 2>&1 | tee manager-world-size-diagnostics/diagnostic.log
       - name: Diagnostic-only healthy world outcomes, no final build credit

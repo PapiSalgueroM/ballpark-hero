@@ -25,6 +25,7 @@ export interface WorldRosterState {
   records: WorldRosterRecord[];
   /** Complete records, encoded without dropping player fields. */
   packedRecords?: string;
+  packedFormat?: 'rows-v1';
 }
 export type WorldRosterCareer = CareerState & { squad: WorldRosterPlayer[]; worldRoster?: WorldRosterState };
 export interface WorldRosterTransfer {
@@ -37,6 +38,8 @@ export interface WorldRosterTransfer {
   /** Original position certified by the actual projected source, before retraining. */
   originPosition?: CMPlayer['position'];
 }
+
+const packedRecordCache = new WeakMap<object, { packed: string; format: 'rows-v1' | undefined; records: unknown[] }>();
 
 const positions = new Set(['GK', 'CB', 'LB', 'RB', 'LWB', 'RWB', 'CDM', 'CM', 'CAM', 'LM', 'RM', 'LW', 'RW', 'CF', 'ST']);
 const text = (value: unknown): value is string => typeof value === 'string' && value.trim().length > 0;
@@ -72,21 +75,64 @@ function samePayload(a: unknown, b: unknown): boolean {
   return JSON.stringify(a) === JSON.stringify(b);
 }
 
+function encodeRows(records: WorldRosterRecord[]): string {
+  const saved: unknown = JSON.parse(JSON.stringify(records));
+  const schemas: string[][] = [];
+  const indices = new Map<string, number>();
+  const encode = (value: unknown): unknown => {
+    if (Array.isArray(value)) return [-1, ...value.map(encode)];
+    if (!object(value)) return value;
+    const keys = Object.keys(value), signature = JSON.stringify(keys);
+    if (!indices.has(signature)) { indices.set(signature, schemas.length); schemas.push(keys); }
+    return [indices.get(signature), ...keys.map(key => encode(value[key]))];
+  };
+  return JSON.stringify([schemas, encode(saved)]);
+}
+function decodeRows(saved: unknown): unknown[] | null {
+  if (!Array.isArray(saved) || saved.length !== 2 || !Array.isArray(saved[0])) return null;
+  const schemas: string[][] = [], signatures = new Set<string>();
+  for (const keys of saved[0]) {
+    if (!Array.isArray(keys) || keys.some(key => typeof key !== 'string') || new Set(keys).size !== keys.length) return null;
+    const signature = JSON.stringify(keys);
+    if (signatures.has(signature)) return null;
+    signatures.add(signature); schemas.push(keys);
+  }
+  const decode = (value: unknown): unknown => {
+    if (!Array.isArray(value)) {
+      if (value !== null && typeof value !== 'string' && typeof value !== 'boolean' && (typeof value !== 'number' || !Number.isFinite(value))) throw new Error('Invalid packed scalar');
+      return value;
+    }
+    if (value[0] === -1) return value.slice(1).map(decode);
+    const index: unknown = value[0];
+    if (!count(index) || index >= schemas.length || value.length !== schemas[index].length + 1) throw new Error('Invalid packed row');
+    return Object.fromEntries(schemas[index].map((key, i) => [key, decode(value[i + 1])]));
+  };
+  const records = decode(saved[1]);
+  return Array.isArray(records) && records.length ? records : null;
+}
+
 /** Missing or malformed optional data stays inactive and is never repaired by a read. */
 export function readWorldRoster(career: CareerState): WorldRosterState | null {
   const year = yearOf(career);
   const raw: unknown = (career as WorldRosterCareer).worldRoster;
   if (year === null || !object(raw) || raw.version !== 1 || raw.eraId !== (career.eraId ?? 'now') || !Array.isArray(raw.records)) return null;
+  if (raw.packedFormat !== undefined && (raw.packedFormat !== 'rows-v1' || raw.packedRecords === undefined)) return null;
   let records: unknown[] = raw.records;
   const packed = raw.packedRecords !== undefined;
   if (packed) {
     if (typeof raw.packedRecords !== 'string' || !raw.packedRecords || raw.records.length !== 0) return null;
     try {
-      const decoded = decompressFromUTF16(raw.packedRecords);
-      if (!decoded) return null;
-      const values: unknown = JSON.parse(decoded);
-      if (!Array.isArray(values) || !values.length) return null;
-      records = values;
+      let cached = packedRecordCache.get(raw);
+      if (!cached || cached.packed !== raw.packedRecords || cached.format !== raw.packedFormat) {
+        const decoded = decompressFromUTF16(raw.packedRecords);
+        if (!decoded) return null;
+        const saved: unknown = JSON.parse(decoded);
+        const values: unknown = raw.packedFormat === 'rows-v1' ? decodeRows(saved) : saved;
+        if (!Array.isArray(values) || !values.length) return null;
+        cached = { packed: raw.packedRecords, format: raw.packedFormat, records: values };
+        packedRecordCache.set(raw, cached);
+      }
+      records = structuredClone(cached.records);
     } catch { return null; }
   }
   const keys = new Set<string>();
@@ -105,14 +151,15 @@ export function readWorldRoster(career: CareerState): WorldRosterState | null {
   if (records.every(record => object(record) && record.status === 'owned')) return null;
   const normalized: Record<string, unknown> = { ...raw, records };
   delete normalized.packedRecords;
+  delete normalized.packedFormat;
   return normalized as unknown as WorldRosterState;
 }
 
 /** Keep owned-only saves literal; compress complete records once an inactive identity exists. */
 export function compactWorldRoster(state: WorldRosterState): WorldRosterState {
   if (!state.records.some(record => record.status !== 'owned')) return state;
-  const packedRecords = compressToUTF16(JSON.stringify(state.records));
-  return { ...state, records: [], packedRecords };
+  const packedRecords = compressToUTF16(encodeRows(state.records));
+  return { ...state, records: [], packedRecords, packedFormat: 'rows-v1' };
 }
 
 /** Fresh transactions supply their actual source club; later moves carry this key unchanged. */
