@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmDeskHost.test.ts src/components/front-office-shared/GmCareerDesk.test.tsx src/components/front-office-shared/GmDeskMount.test.tsx src/components/front-office-shared/GmSeatCard.test.tsx src/lib/gmSeat.test.ts src/lib/gmXp.test.ts --testTimeout=300000 --hookTimeout=120000
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+simGmDeskHost-again: node scripts/simGmDeskHost.mjs
+simGmDeskHost-101112: SIM_GM_DESK_HOST_SEEDS=10,11,12 node scripts/simGmDeskHost.mjs
+simGmDeskHost-big: SIM_GM_DESK_HOST_SEEDS=21,22,23,24,25,26 node scripts/simGmDeskHost.mjs
+simGmDeskHost-one: SIM_GM_DESK_HOST_SEEDS=77 node scripts/simGmDeskHost.mjs
+anchors: SIM_GM_DESK_HOST_ANCHORS=1 node scripts/simGmDeskHost.mjs
+bogus-control: SIM_GM_DESK_HOST_CONTROL=nosuchcontrol node scripts/simGmDeskHost.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simGmSeat: node scripts/simGmSeat.mjs
+simGmDesk: node scripts/simGmDesk.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
