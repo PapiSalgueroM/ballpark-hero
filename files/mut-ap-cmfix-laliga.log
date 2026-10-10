@@ -1,0 +1,48 @@
+  ok   laliga ledger: reads every fixture of the list with the exact two-source round order and venues
+  ok   laliga calendar: renders every CalendarCard opponent and venue reading from the same schedule
+  ok   laliga settlement: settles the actual human fixture and every neutral result with conserved table and scorer credits
+  n/a  laliga bye: the neutral-only probe can only stand in the Premier League
+  ok   laliga world: settles the actual world league round through the same real fixture resolver
+  RED  laliga eligibility: binds only a fresh original modern world of this league with exact membership
+  ok   laliga takeover: keeps the key through a mid season takeover, played in the real order before and after the handover, and gives none to a club joined during a season
+  ok   laliga unloaded: gives no key while the list is not here, and refuses to read a saved key without its list
+  NOT RUN laliga legacy: it compares with a base engine and no CM_FIXTURE_BASE was given
+  ok   laliga future: refuses stale keys in later seasons, other years and changed league membership
+  ok   laliga rollover: clears the real fixture key after a fully played season before generating the next season
+  NOT RUN laliga baseline: it compares with a base engine and no CM_FIXTURE_BASE was given
+  NOT RUN laliga uncopied: it compares with a base engine and no CM_FIXTURE_BASE was given
+FAIL laliga: binds only a fresh original modern world of this league with exact membership
+AssertionError [ERR_ASSERTION]: The calendar line says what its registry line says about the order, word for word
++ actual - expected
+
++ 'Real 2026/27 La Liga opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in June 2026.'
+- 'Real 2026/27 La Liga opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as it stood on 10 October 2026.'
+
+    at Object.eligibility (file:///tmp/m-ap2/scripts/simCmRealFixtures.mjs:470:16)
+    at main (file:///tmp/m-ap2/scripts/simCmRealFixtures.mjs:631:33)
+    at async file:///tmp/m-ap2/scripts/simCmRealFixtures.mjs:662:54
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'binds only a fresh original modern world of this league with exact membership'
++ ]
+- []
+
+    at main (file:///tmp/m-ap2/scripts/simCmRealFixtures.mjs:648:14)
+    at async file:///tmp/m-ap2/scripts/simCmRealFixtures.mjs:662:54 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'binds only a fresh original modern world of this league with exact membership'
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

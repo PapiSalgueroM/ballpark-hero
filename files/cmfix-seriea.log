@@ -1,0 +1,14 @@
+  ok   seriea ledger: reads every fixture of the list with the exact two-source round order and venues
+  ok   seriea calendar: renders every CalendarCard opponent and venue reading from the same schedule
+  ok   seriea settlement: settles the actual human fixture and every neutral result with conserved table and scorer credits
+  n/a  seriea bye: the neutral-only probe can only stand in the Premier League
+  ok   seriea world: settles the actual world league round through the same real fixture resolver
+  ok   seriea eligibility: binds only a fresh original modern world of this league with exact membership
+  ok   seriea takeover: keeps the key through a mid season takeover, played in the real order before and after the handover, and gives none to a club joined during a season
+  ok   seriea unloaded: gives no key while the list is not here, and refuses to read a saved key without its list
+  ok   seriea legacy: preserves the whole generated save with the key taken out: random draws, twelve entries, saved bytes, reload
+  ok   seriea future: refuses stale keys in later seasons, other years and changed league membership
+  ok   seriea rollover: clears the real fixture key after a fully played season before generating the next season
+  ok   seriea baseline: matches the base engine for unsupported starts and genuine match outcomes
+  ok   seriea uncopied: passes the whole base comparison with untouched current source under every copied fault
+simCmRealFixtures normal seriea: 12 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, generated baseline held against the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.

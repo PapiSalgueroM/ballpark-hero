@@ -1,0 +1,5916 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/tmp/oldhook[39m
+
+ [31m❯[39m src/test/clubManagerStartWait.test.tsx [2m([22m[2m5 tests[22m[2m | [22m[31m5 failed[39m[2m)[22m[33m 1283[2mms[22m[39m
+[31m   [31m×[31m Club Manager: a start that is waiting for its fixture list[2m > [22mwaits by name, then says the list did not load and asks, and starts on generated fixtures only when told to[39m[32m 67[2mms[22m[39m
+[31m     → expected undefined to deeply equal { label: '2026-27', failed: false }[39m
+[31m   [31m×[31m Club Manager: a start that is waiting for its fixture list[2m > [22mbuilds no career once the page has been left, neither at eight seconds nor when the list arrives[39m[32m 104[2mms[22m[39m
+[31m     → expected "random" to not be called at all, but actually been called 719 times[90m
+
+Received: 
+
+[1m  1st random call:
+
+[22m    Array []
+
+[1m  2nd random call:
+
+[22m    Array []
+
+[1m  3rd random call:
+
+[22m    Array []
+
+[1m  4th random call:
+
+[22m    Array []
+
+[1m  5th random call:
+
+[22m    Array []
+
+[1m  6th random call:
+
+[22m    Array []
+
+[1m  7th random call:
+
+[22m    Array []
+
+[1m  8th random call:
+
+[22m    Array []
+
+[1m  9th random call:
+
+[22m    Array []
+
+[1m  10th random call:
+
+[22m    Array []
+
+[1m  11th random call:
+
+[22m    Array []
+
+[1m  12th random call:
+
+[22m    Array []
+
+[1m  13th random call:
+
+[22m    Array []
+
+[1m  14th random call:
+
+[22m    Array []
+
+[1m  15th random call:
+
+[22m    Array []
+
+[1m  16th random call:
+
+[22m    Array []
+
+[1m  17th random call:
+
+[22m    Array []
+
+[1m  18th random call:
+
+[22m    Array []
+
+[1m  19th random call:
+
+[22m    Array []
+
+[1m  20th random call:
+
+[22m    Array []
+
+[1m  21st random call:
+
+[22m    Array []
+
+[1m  22nd random call:
+
+[22m    Array []
+
+[1m  23rd random call:
+
+[22m    Array []
+
+[1m  24th random call:
+
+[22m    Array []
+
+[1m  25th random call:
+
+[22m    Array []
+
+[1m  26th random call:
+
+[22m    Array []
+
+[1m  27th random call:
+
+[22m    Array []
+
+[1m  28th random call:
+
+[22m    Array []
+
+[1m  29th random call:
+
+[22m    Array []
+
+[1m  30th random call:
+
+[22m    Array []
+
+[1m  31st random call:
+
+[22m    Array []
+
+[1m  32nd random call:
+
+[22m    Array []
+
+[1m  33rd random call:
+
+[22m    Array []
+
+[1m  34th random call:
+
+[22m    Array []
+
+[1m  35th random call:
+
+[22m    Array []
+
+[1m  36th random call:
+
+[22m    Array []
+
+[1m  37th random call:
+
+[22m    Array []
+
+[1m  38th random call:
+
+[22m    Array []
+
+[1m  39th random call:
+
+[22m    Array []
+
+[1m  40th random call:
+
+[22m    Array []
+
+[1m  41st random call:
+
+[22m    Array []
+
+[1m  42nd random call:
+
+[22m    Array []
+
+[1m  43rd random call:
+
+[22m    Array []
+
+[1m  44th random call:
+
+[22m    Array []
+
+[1m  45th random call:
+
+[22m    Array []
+
+[1m  46th random call:
+
+[22m    Array []
+
+[1m  47th random call:
+
+[22m    Array []
+
+[1m  48th random call:
+
+[22m    Array []
+
+[1m  49th random call:
+
+[22m    Array []
+
+[1m  50th random call:
+
+[22m    Array []
+
+[1m  51st random call:
+
+[22m    Array []
+
+[1m  52nd random call:
+
+[22m    Array []
+
+[1m  53rd random call:
+
+[22m    Array []
+
+[1m  54th random call:
+
+[22m    Array []
+
+[1m  55th random call:
+
+[22m    Array []
+
+[1m  56th random call:
+
+[22m    Array []
+
+[1m  57th random call:
+
+[22m    Array []
+
+[1m  58th random call:
+
+[22m    Array []
+
+[1m  59th random call:
+
+[22m    Array []
+
+[1m  60th random call:
+
+[22m    Array []
+
+[1m  61st random call:
+
+[22m    Array []
+
+[1m  62nd random call:
+
+[22m    Array []
+
+[1m  63rd random call:
+
+[22m    Array []
+
+[1m  64th random call:
+
+[22m    Array []
+
+[1m  65th random call:
+
+[22m    Array []
+
+[1m  66th random call:
+
+[22m    Array []
+
+[1m  67th random call:
+
+[22m    Array []
+
+[1m  68th random call:
+
+[22m    Array []
+
+[1m  69th random call:
+
+[22m    Array []
+
+[1m  70th random call:
+
+[22m    Array []
+
+[1m  71st random call:
+
+[22m    Array []
+
+[1m  72nd random call:
+
+[22m    Array []
+
+[1m  73rd random call:
+
+[22m    Array []
+
+[1m  74th random call:
+
+[22m    Array []
+
+[1m  75th random call:
+
+[22m    Array []
+
+[1m  76th random call:
+
+[22m    Array []
+
+[1m  77th random call:
+
+[22m    Array []
+
+[1m  78th random call:
+
+[22m    Array []
+
+[1m  79th random call:
+
+[22m    Array []
+
+[1m  80th random call:
+
+[22m    Array []
+
+[1m  81st random call:
+
+[22m    Array []
+
+[1m  82nd random call:
+
+[22m    Array []
+
+[1m  83rd random call:
+
+[22m    Array []
+
+[1m  84th random call:
+
+[22m    Array []
+
+[1m  85th random call:
+
+[22m    Array []
+
+[1m  86th random call:
+
+[22m    Array []
+
+[1m  87th random call:
+
+[22m    Array []
+
+[1m  88th random call:
+
+[22m    Array []
+
+[1m  89th random call:
+
+[22m    Array []
+
+[1m  90th random call:
+
+[22m    Array []
+
+[1m  91st random call:
+
+[22m    Array []
+
+[1m  92nd random call:
+
+[22m    Array []
+
+[1m  93rd random call:
+
+[22m    Array []
+
+[1m  94th random call:
+
+[22m    Array []
+
+[1m  95th random call:
+
+[22m    Array []
+
+[1m  96th random call:
+
+[22m    Array []
+
+[1m  97th random call:
+
+[22m    Array []
+
+[1m  98th random call:
+
+[22m    Array []
+
+[1m  99th random call:
+
+[22m    Array []
+
+[1m  100th random call:
+
+[22m    Array []
+
+[1m  101st random call:
+
+[22m    Array []
+
+[1m  102nd random call:
+
+[22m    Array []
+
+[1m  103rd random call:
+
+[22m    Array []
+
+[1m  104th random call:
+
+[22m    Array []
+
+[1m  105th random call:
+
+[22m    Array []
+
+[1m  106th random call:
+
+[22m    Array []
+
+[1m  107th random call:
+
+[22m    Array []
+
+[1m  108th random call:
+
+[22m    Array []
+
+[1m  109th random call:
+
+[22m    Array []
+
+[1m  110th random call:
+
+[22m    Array []
+
+[1m  111th random call:
+
+[22m    Array []
+
+[1m  112th random call:
+
+[22m    Array []
+
+[1m  113th random call:
+
+[22m    Array []
+
+[1m  114th random call:
+
+[22m    Array []
+
+[1m  115th random call:
+
+[22m    Array []
+
+[1m  116th random call:
+
+[22m    Array []
+
+[1m  117th random call:
+
+[22m    Array []
+
+[1m  118th random call:
+
+[22m    Array []
+
+[1m  119th random call:
+
+[22m    Array []
+
+[1m  120th random call:
+
+[22m    Array []
+
+[1m  121st random call:
+
+[22m    Array []
+
+[1m  122nd random call:
+
+[22m    Array []
+
+[1m  123rd random call:
+
+[22m    Array []
+
+[1m  124th random call:
+
+[22m    Array []
+
+[1m  125th random call:
+
+[22m    Array []
+
+[1m  126th random call:
+
+[22m    Array []
+
+[1m  127th random call:
+
+[22m    Array []
+
+[1m  128th random call:
+
+[22m    Array []
+
+[1m  129th random call:
+
+[22m    Array []
+
+[1m  130th random call:
+
+[22m    Array []
+
+[1m  131st random call:
+
+[22m    Array []
+
+[1m  132nd random call:
+
+[22m    Array []
+
+[1m  133rd random call:
+
+[22m    Array []
+
+[1m  134th random call:
+
+[22m    Array []
+
+[1m  135th random call:
+
+[22m    Array []
+
+[1m  136th random call:
+
+[22m    Array []
+
+[1m  137th random call:
+
+[22m    Array []
+
+[1m  138th random call:
+
+[22m    Array []
+
+[1m  139th random call:
+
+[22m    Array []
+
+[1m  140th random call:
+
+[22m    Array []
+
+[1m  141st random call:
+
+[22m    Array []
+
+[1m  142nd random call:
+
+[22m    Array []
+
+[1m  143rd random call:
+
+[22m    Array []
+
+[1m  144th random call:
+
+[22m    Array []
+
+[1m  145th random call:
+
+[22m    Array []
+
+[1m  146th random call:
+
+[22m    Array []
+
+[1m  147th random call:
+
+[22m    Array []
+
+[1m  148th random call:
+
+[22m    Array []
+
+[1m  149th random call:
+
+[22m    Array []
+
+[1m  150th random call:
+
+[22m    Array []
+
+[1m  151st random call:
+
+[22m    Array []
+
+[1m  152nd random call:
+
+[22m    Array []
+
+[1m  153rd random call:
+
+[22m    Array []
+
+[1m  154th random call:
+
+[22m    Array []
+
+[1m  155th random call:
+
+[22m    Array []
+
+[1m  156th random call:
+
+[22m    Array []
+
+[1m  157th random call:
+
+[22m    Array []
+
+[1m  158th random call:
+
+[22m    Array []
+
+[1m  159th random call:
+
+[22m    Array []
+
+[1m  160th random call:
+
+[22m    Array []
+
+[1m  161st random call:
+
+[22m    Array []
+
+[1m  162nd random call:
+
+[22m    Array []
+
+[1m  163rd random call:
+
+[22m    Array []
+
+[1m  164th random call:
+
+[22m    Array []
+
+[1m  165th random call:
+
+[22m    Array []
+
+[1m  166th random call:
+
+[22m    Array []
+
+[1m  167th random call:
+
+[22m    Array []
+
+[1m  168th random call:
+
+[22m    Array []
+
+[1m  169th random call:
+
+[22m    Array []
+
+[1m  170th random call:
+
+[22m    Array []
+
+[1m  171st random call:
+
+[22m    Array []
+
+[1m  172nd random call:
+
+[22m    Array []
+
+[1m  173rd random call:
+
+[22m    Array []
+
+[1m  174th random call:
+
+[22m    Array []
+
+[1m  175th random call:
+
+[22m    Array []
+
+[1m  176th random call:
+
+[22m    Array []
+
+[1m  177th random call:
+
+[22m    Array []
+
+[1m  178th random call:
+
+[22m    Array []
+
+[1m  179th random call:
+
+[22m    Array []
+
+[1m  180th random call:
+
+[22m    Array []
+
+[1m  181st random call:
+
+[22m    Array []
+
+[1m  182nd random call:
+
+[22m    Array []
+
+[1m  183rd random call:
+
+[22m    Array []
+
+[1m  184th random call:
+
+[22m    Array []
+
+[1m  185th random call:
+
+[22m    Array []
+
+[1m  186th random call:
+
+[22m    Array []
+
+[1m  187th random call:
+
+[22m    Array []
+
+[1m  188th random call:
+
+[22m    Array []
+
+[1m  189th random call:
+
+[22m    Array []
+
+[1m  190th random call:
+
+[22m    Array []
+
+[1m  191st random call:
+
+[22m    Array []
+
+[1m  192nd random call:
+
+[22m    Array []
+
+[1m  193rd random call:
+
+[22m    Array []
+
+[1m  194th random call:
+
+[22m    Array []
+
+[1m  195th random call:
+
+[22m    Array []
+
+[1m  196th random call:
+
+[22m    Array []
+
+[1m  197th random call:
+
+[22m    Array []
+
+[1m  198th random call:
+
+[22m    Array []
+
+[1m  199th random call:
+
+[22m    Array []
+
+[1m  200th random call:
+
+[22m    Array []
+
+[1m  201st random call:
+
+[22m    Array []
+
+[1m  202nd random call:
+
+[22m    Array []
+
+[1m  203rd random call:
+
+[22m    Array []
+
+[1m  204th random call:
+
+[22m    Array []
+
+[1m  205th random call:
+
+[22m    Array []
+
+[1m  206th random call:
+
+[22m    Array []
+
+[1m  207th random call:
+
+[22m    Array []
+
+[1m  208th random call:
+
+[22m    Array []
+
+[1m  209th random call:
+
+[22m    Array []
+
+[1m  210th random call:
+
+[22m    Array []
+
+[1m  211th random call:
+
+[22m    Array []
+
+[1m  212th random call:
+
+[22m    Array []
+
+[1m  213th random call:
+
+[22m    Array []
+
+[1m  214th random call:
+
+[22m    Array []
+
+[1m  215th random call:
+
+[22m    Array []
+
+[1m  216th random call:
+
+[22m    Array []
+
+[1m  217th random call:
+
+[22m    Array []
+
+[1m  218th random call:
+
+[22m    Array []
+
+[1m  219th random call:
+
+[22m    Array []
+
+[1m  220th random call:
+
+[22m    Array []
+
+[1m  221st random call:
+
+[22m    Array []
+
+[1m  222nd random call:
+
+[22m    Array []
+
+[1m  223rd random call:
+
+[22m    Array []
+
+[1m  224th random call:
+
+[22m    Array []
+
+[1m  225th random call:
+
+[22m    Array []
+
+[1m  226th random call:
+
+[22m    Array []
+
+[1m  227th random call:
+
+[22m    Array []
+
+[1m  228th random call:
+
+[22m    Array []
+
+[1m  229th random call:
+
+[22m    Array []
+
+[1m  230th random call:
+
+[22m    Array []
+
+[1m  231st random call:
+
+[22m    Array []
+
+[1m  232nd random call:
+
+[22m    Array []
+
+[1m  233rd random call:
+
+[22m    Array []
+
+[1m  234th random call:
+
+[22m    Array []
+
+[1m  235th random call:
+
+[22m    Array []
+
+[1m  236th random call:
+
+[22m    Array []
+
+[1m  237th random call:
+
+[22m    Array []
+
+[1m  238th random call:
+
+[22m    Array []
+
+[1m  239th random call:
+
+[22m    Array []
+
+[1m  240th random call:
+
+[22m    Array []
+
+[1m  241st random call:
+
+[22m    Array []
+
+[1m  242nd random call:
+
+[22m    Array []
+
+[1m  243rd random call:
+
+[22m    Array []
+
+[1m  244th random call:
+
+[22m    Array []
+
+[1m  245th random call:
+
+[22m    Array []
+
+[1m  246th random call:
+
+[22m    Array []
+
+[1m  247th random call:
+
+[22m    Array []
+
+[1m  248th random call:
+
+[22m    Array []
+
+[1m  249th random call:
+
+[22m    Array []
+
+[1m  250th random call:
+
+[22m    Array []
+
+[1m  251st random call:
+
+[22m    Array []
+
+[1m  252nd random call:
+
+[22m    Array []
+
+[1m  253rd random call:
+
+[22m    Array []
+
+[1m  254th random call:
+
+[22m    Array []
+
+[1m  255th random call:
+
+[22m    Array []
+
+[1m  256th random call:
+
+[22m    Array []
+
+[1m  257th random call:
+
+[22m    Array []
+
+[1m  258th random call:
+
+[22m    Array []
+
+[1m  259th random call:
+
+[22m    Array []
+
+[1m  260th random call:
+
+[22m    Array []
+
+[1m  261st random call:
+
+[22m    Array []
+
+[1m  262nd random call:
+
+[22m    Array []
+
+[1m  263rd random call:
+
+[22m    Array []
+
+[1m  264th random call:
+
+[22m    Array []
+
+[1m  265th random call:
+
+[22m    Array []
+
+[1m  266th random call:
+
+[22m    Array []
+
+[1m  267th random call:
+
+[22m    Array []
+
+[1m  268th random call:
+
+[22m    Array []
+
+[1m  269th random call:
+
+[22m    Array []
+
+[1m  270th random call:
+
+[22m    Array []
+
+[1m  271st random call:
+
+[22m    Array []
+
+[1m  272nd random call:
+
+[22m    Array []
+
+[1m  273rd random call:
+
+[22m    Array []
+
+[1m  274th random call:
+
+[22m    Array []
+
+[1m  275th random call:
+
+[22m    Array []
+
+[1m  276th random call:
+
+[22m    Array []
+
+[1m  277th random call:
+
+[22m    Array []
+
+[1m  278th random call:
+
+[22m    Array []
+
+[1m  279th random call:
+
+[22m    Array []
+
+[1m  280th random call:
+
+[22m    Array []
+
+[1m  281st random call:
+
+[22m    Array []
+
+[1m  282nd random call:
+
+[22m    Array []
+
+[1m  283rd random call:
+
+[22m    Array []
+
+[1m  284th random call:
+
+[22m    Array []
+
+[1m  285th random call:
+
+[22m    Array []
+
+[1m  286th random call:
+
+[22m    Array []
+
+[1m  287th random call:
+
+[22m    Array []
+
+[1m  288th random call:
+
+[22m    Array []
+
+[1m  289th random call:
+
+[22m    Array []
+
+[1m  290th random call:
+
+[22m    Array []
+
+[1m  291st random call:
+
+[22m    Array []
+
+[1m  292nd random call:
+
+[22m    Array []
+
+[1m  293rd random call:
+
+[22m    Array []
+
+[1m  294th random call:
+
+[22m    Array []
+
+[1m  295th random call:
+
+[22m    Array []
+
+[1m  296th random call:
+
+[22m    Array []
+
+[1m  297th random call:
+
+[22m    Array []
+
+[1m  298th random call:
+
+[22m    Array []
+
+[1m  299th random call:
+
+[22m    Array []
+
+[1m  300th random call:
+
+[22m    Array []
+
+[1m  301st random call:
+
+[22m    Array []
+
+[1m  302nd random call:
+
+[22m    Array []
+
+[1m  303rd random call:
+
+[22m    Array []
+
+[1m  304th random call:
+
+[22m    Array []
+
+[1m  305th random call:
+
+[22m    Array []
+
+[1m  306th random call:
+
+[22m    Array []
+
+[1m  307th random call:
+
+[22m    Array []
+
+[1m  308th random call:
+
+[22m    Array []
+
+[1m  309th random call:
+
+[22m    Array []
+
+[1m  310th random call:
+
+[22m    Array []
+
+[1m  311th random call:
+
+[22m    Array []
+
+[1m  312th random call:
+
+[22m    Array []
+
+[1m  313th random call:
+
+[22m    Array []
+
+[1m  314th random call:
+
+[22m    Array []
+
+[1m  315th random call:
+
+[22m    Array []
+
+[1m  316th random call:
+
+[22m    Array []
+
+[1m  317th random call:
+
+[22m    Array []
+
+[1m  318th random call:
+
+[22m    Array []
+
+[1m  319th random call:
+
+[22m    Array []
+
+[1m  320th random call:
+
+[22m    Array []
+
+[1m  321st random call:
+
+[22m    Array []
+
+[1m  322nd random call:
+
+[22m    Array []
+
+[1m  323rd random call:
+
+[22m    Array []
+
+[1m  324th random call:
+
+[22m    Array []
+
+[1m  325th random call:
+
+[22m    Array []
+
+[1m  326th random call:
+
+[22m    Array []
+
+[1m  327th random call:
+
+[22m    Array []
+
+[1m  328th random call:
+
+[22m    Array []
+
+[1m  329th random call:
+
+[22m    Array []
+
+[1m  330th random call:
+
+[22m    Array []
+
+[1m  331st random call:
+
+[22m    Array []
+
+[1m  332nd random call:
+
+[22m    Array []
+
+[1m  333rd random call:
+
+[22m    Array []
+
+[1m  334th random call:
+
+[22m    Array []
+
+[1m  335th random call:
+
+[22m    Array []
+
+[1m  336th random call:
+
+[22m    Array []
+
+[1m  337th random call:
+
+[22m    Array []
+
+[1m  338th random call:
+
+[22m    Array []
+
+[1m  339th random call:
+
+[22m    Array []
+
+[1m  340th random call:
+
+[22m    Array []
+
+[1m  341st random call:
+
+[22m    Array []
+
+[1m  342nd random call:
+
+[22m    Array []
+
+[1m  343rd random call:
+
+[22m    Array []
+
+[1m  344th random call:
+
+[22m    Array []
+
+[1m  345th random call:
+
+[22m    Array []
+
+[1m  346th random call:
+
+[22m    Array []
+
+[1m  347th random call:
+
+[22m    Array []
+
+[1m  348th random call:
+
+[22m    Array []
+
+[1m  349th random call:
+
+[22m    Array []
+
+[1m  350th random call:
+
+[22m    Array []
+
+[1m  351st random call:
+
+[22m    Array []
+
+[1m  352nd random call:
+
+[22m    Array []
+
+[1m  353rd random call:
+
+[22m    Array []
+
+[1m  354th random call:
+
+[22m    Array []
+
+[1m  355th random call:
+
+[22m    Array []
+
+[1m  356th random call:
+
+[22m    Array []
+
+[1m  357th random call:
+
+[22m    Array []
+
+[1m  358th random call:
+
+[22m    Array []
+
+[1m  359th random call:
+
+[22m    Array []
+
+[1m  360th random call:
+
+[22m    Array []
+
+[1m  361st random call:
+
+[22m    Array []
+
+[1m  362nd random call:
+
+[22m    Array []
+
+[1m  363rd random call:
+
+[22m    Array []
+
+[1m  364th random call:
+
+[22m    Array []
+
+[1m  365th random call:
+
+[22m    Array []
+
+[1m  366th random call:
+
+[22m    Array []
+
+[1m  367th random call:
+
+[22m    Array []
+
+[1m  368th random call:
+
+[22m    Array []
+
+[1m  369th random call:
+
+[22m    Array []
+
+[1m  370th random call:
+
+[22m    Array []
+
+[1m  371st random call:
+
+[22m    Array []
+
+[1m  372nd random call:
+
+[22m    Array []
+
+[1m  373rd random call:
+
+[22m    Array []
+
+[1m  374th random call:
+
+[22m    Array []
+
+[1m  375th random call:
+
+[22m    Array []
+
+[1m  376th random call:
+
+[22m    Array []
+
+[1m  377th random call:
+
+[22m    Array []
+
+[1m  378th random call:
+
+[22m    Array []
+
+[1m  379th random call:
+
+[22m    Array []
+
+[1m  380th random call:
+
+[22m    Array []
+
+[1m  381st random call:
+
+[22m    Array []
+
+[1m  382nd random call:
+
+[22m    Array []
+
+[1m  383rd random call:
+
+[22m    Array []
+
+[1m  384th random call:
+
+[22m    Array []
+
+[1m  385th random call:
+
+[22m    Array []
+
+[1m  386th random call:
+
+[22m    Array []
+
+[1m  387th random call:
+
+[22m    Array []
+
+[1m  388th random call:
+
+[22m    Array []
+
+[1m  389th random call:
+
+[22m    Array []
+
+[1m  390th random call:
+
+[22m    Array []
+
+[1m  391st random call:
+
+[22m    Array []
+
+[1m  392nd random call:
+
+[22m    Array []
+
+[1m  393rd random call:
+
+[22m    Array []
+
+[1m  394th random call:
+
+[22m    Array []
+
+[1m  395th random call:
+
+[22m    Array []
+
+[1m  396th random call:
+
+[22m    Array []
+
+[1m  397th random call:
+
+[22m    Array []
+
+[1m  398th random call:
+
+[22m    Array []
+
+[1m  399th random call:
+
+[22m    Array []
+
+[1m  400th random call:
+
+[22m    Array []
+
+[1m  401st random call:
+
+[22m    Array []
+
+[1m  402nd random call:
+
+[22m    Array []
+
+[1m  403rd random call:
+
+[22m    Array []
+
+[1m  404th random call:
+
+[22m    Array []
+
+[1m  405th random call:
+
+[22m    Array []
+
+[1m  406th random call:
+
+[22m    Array []
+
+[1m  407th random call:
+
+[22m    Array []
+
+[1m  408th random call:
+
+[22m    Array []
+
+[1m  409th random call:
+
+[22m    Array []
+
+[1m  410th random call:
+
+[22m    Array []
+
+[1m  411th random call:
+
+[22m    Array []
+
+[1m  412th random call:
+
+[22m    Array []
+
+[1m  413th random call:
+
+[22m    Array []
+
+[1m  414th random call:
+
+[22m    Array []
+
+[1m  415th random call:
+
+[22m    Array []
+
+[1m  416th random call:
+
+[22m    Array []
+
+[1m  417th random call:
+
+[22m    Array []
+
+[1m  418th random call:
+
+[22m    Array []
+
+[1m  419th random call:
+
+[22m    Array []
+
+[1m  420th random call:
+
+[22m    Array []
+
+[1m  421st random call:
+
+[22m    Array []
+
+[1m  422nd random call:
+
+[22m    Array []
+
+[1m  423rd random call:
+
+[22m    Array []
+
+[1m  424th random call:
+
+[22m    Array []
+
+[1m  425th random call:
+
+[22m    Array []
+
+[1m  426th random call:
+
+[22m    Array []
+
+[1m  427th random call:
+
+[22m    Array []
+
+[1m  428th random call:
+
+[22m    Array []
+
+[1m  429th random call:
+
+[22m    Array []
+
+[1m  430th random call:
+
+[22m    Array []
+
+[1m  431st random call:
+
+[22m    Array []
+
+[1m  432nd random call:
+
+[22m    Array []
+
+[1m  433rd random call:
+
+[22m    Array []
+
+[1m  434th random call:
+
+[22m    Array []
+
+[1m  435th random call:
+
+[22m    Array []
+
+[1m  436th random call:
+
+[22m    Array []
+
+[1m  437th random call:
+
+[22m    Array []
+
+[1m  438th random call:
+
+[22m    Array []
+
+[1m  439th random call:
+
+[22m    Array []
+
+[1m  440th random call:
+
+[22m    Array []
+
+[1m  441st random call:
+
+[22m    Array []
+
+[1m  442nd random call:
+
+[22m    Array []
+
+[1m  443rd random call:
+
+[22m    Array []
+
+[1m  444th random call:
+
+[22m    Array []
+
+[1m  445th random call:
+
+[22m    Array []
+
+[1m  446th random call:
+
+[22m    Array []
+
+[1m  447th random call:
+
+[22m    Array []
+
+[1m  448th random call:
+
+[22m    Array []
+
+[1m  449th random call:
+
+[22m    Array []
+
+[1m  450th random call:
+
+[22m    Array []
+
+[1m  451st random call:
+
+[22m    Array []
+
+[1m  452nd random call:
+
+[22m    Array []
+
+[1m  453rd random call:
+
+[22m    Array []
+
+[1m  454th random call:
+
+[22m    Array []
+
+[1m  455th random call:
+
+[22m    Array []
+
+[1m  456th random call:
+
+[22m    Array []
+
+[1m  457th random call:
+
+[22m    Array []
+
+[1m  458th random call:
+
+[22m    Array []
+
+[1m  459th random call:
+
+[22m    Array []
+
+[1m  460th random call:
+
+[22m    Array []
+
+[1m  461st random call:
+
+[22m    Array []
+
+[1m  462nd random call:
+
+[22m    Array []
+
+[1m  463rd random call:
+
+[22m    Array []
+
+[1m  464th random call:
+
+[22m    Array []
+
+[1m  465th random call:
+
+[22m    Array []
+
+[1m  466th random call:
+
+[22m    Array []
+
+[1m  467th random call:
+
+[22m    Array []
+
+[1m  468th random call:
+
+[22m    Array []
+
+[1m  469th random call:
+
+[22m    Array []
+
+[1m  470th random call:
+
+[22m    Array []
+
+[1m  471st random call:
+
+[22m    Array []
+
+[1m  472nd random call:
+
+[22m    Array []
+
+[1m  473rd random call:
+
+[22m    Array []
+
+[1m  474th random call:
+
+[22m    Array []
+
+[1m  475th random call:
+
+[22m    Array []
+
+[1m  476th random call:
+
+[22m    Array []
+
+[1m  477th random call:
+
+[22m    Array []
+
+[1m  478th random call:
+
+[22m    Array []
+
+[1m  479th random call:
+
+[22m    Array []
+
+[1m  480th random call:
+
+[22m    Array []
+
+[1m  481st random call:
+
+[22m    Array []
+
+[1m  482nd random call:
+
+[22m    Array []
+
+[1m  483rd random call:
+
+[22m    Array []
+
+[1m  484th random call:
+
+[22m    Array []
+
+[1m  485th random call:
+
+[22m    Array []
+
+[1m  486th random call:
+
+[22m    Array []
+
+[1m  487th random call:
+
+[22m    Array []
+
+[1m  488th random call:
+
+[22m    Array []
+
+[1m  489th random call:
+
+[22m    Array []
+
+[1m  490th random call:
+
+[22m    Array []
+
+[1m  491st random call:
+
+[22m    Array []
+
+[1m  492nd random call:
+
+[22m    Array []
+
+[1m  493rd random call:
+
+[22m    Array []
+
+[1m  494th random call:
+
+[22m    Array []
+
+[1m  495th random call:
+
+[22m    Array []
+
+[1m  496th random call:
+
+[22m    Array []
+
+[1m  497th random call:
+
+[22m    Array []
+
+[1m  498th random call:
+
+[22m    Array []
+
+[1m  499th random call:
+
+[22m    Array []
+
+[1m  500th random call:
+
+[22m    Array []
+
+[1m  501st random call:
+
+[22m    Array []
+
+[1m  502nd random call:
+
+[22m    Array []
+
+[1m  503rd random call:
+
+[22m    Array []
+
+[1m  504th random call:
+
+[22m    Array []
+
+[1m  505th random call:
+
+[22m    Array []
+
+[1m  506th random call:
+
+[22m    Array []
+
+[1m  507th random call:
+
+[22m    Array []
+
+[1m  508th random call:
+
+[22m    Array []
+
+[1m  509th random call:
+
+[22m    Array []
+
+[1m  510th random call:
+
+[22m    Array []
+
+[1m  511th random call:
+
+[22m    Array []
+
+[1m  512th random call:
+
+[22m    Array []
+
+[1m  513th random call:
+
+[22m    Array []
+
+[1m  514th random call:
+
+[22m    Array []
+
+[1m  515th random call:
+
+[22m    Array []
+
+[1m  516th random call:
+
+[22m    Array []
+
+[1m  517th random call:
+
+[22m    Array []
+
+[1m  518th random call:
+
+[22m    Array []
+
+[1m  519th random call:
+
+[22m    Array []
+
+[1m  520th random call:
+
+[22m    Array []
+
+[1m  521st random call:
+
+[22m    Array []
+
+[1m  522nd random call:
+
+[22m    Array []
+
+[1m  523rd random call:
+
+[22m    Array []
+
+[1m  524th random call:
+
+[22m    Array []
+
+[1m  525th random call:
+
+[22m    Array []
+
+[1m  526th random call:
+
+[22m    Array []
+
+[1m  527th random call:
+
+[22m    Array []
+
+[1m  528th random call:
+
+[22m    Array []
+
+[1m  529th random call:
+
+[22m    Array []
+
+[1m  530th random call:
+
+[22m    Array []
+
+[1m  531st random call:
+
+[22m    Array []
+
+[1m  532nd random call:
+
+[22m    Array []
+
+[1m  533rd random call:
+
+[22m    Array []
+
+[1m  534th random call:
+
+[22m    Array []
+
+[1m  535th random call:
+
+[22m    Array []
+
+[1m  536th random call:
+
+[22m    Array []
+
+[1m  537th random call:
+
+[22m    Array []
+
+[1m  538th random call:
+
+[22m    Array []
+
+[1m  539th random call:
+
+[22m    Array []
+
+[1m  540th random call:
+
+[22m    Array []
+
+[1m  541st random call:
+
+[22m    Array []
+
+[1m  542nd random call:
+
+[22m    Array []
+
+[1m  543rd random call:
+
+[22m    Array []
+
+[1m  544th random call:
+
+[22m    Array []
+
+[1m  545th random call:
+
+[22m    Array []
+
+[1m  546th random call:
+
+[22m    Array []
+
+[1m  547th random call:
+
+[22m    Array []
+
+[1m  548th random call:
+
+[22m    Array []
+
+[1m  549th random call:
+
+[22m    Array []
+
+[1m  550th random call:
+
+[22m    Array []
+
+[1m  551st random call:
+
+[22m    Array []
+
+[1m  552nd random call:
+
+[22m    Array []
+
+[1m  553rd random call:
+
+[22m    Array []
+
+[1m  554th random call:
+
+[22m    Array []
+
+[1m  555th random call:
+
+[22m    Array []
+
+[1m  556th random call:
+
+[22m    Array []
+
+[1m  557th random call:
+
+[22m    Array []
+
+[1m  558th random call:
+
+[22m    Array []
+
+[1m  559th random call:
+
+[22m    Array []
+
+[1m  560th random call:
+
+[22m    Array []
+
+[1m  561st random call:
+
+[22m    Array []
+
+[1m  562nd random call:
+
+[22m    Array []
+
+[1m  563rd random call:
+
+[22m    Array []
+
+[1m  564th random call:
+
+[22m    Array []
+
+[1m  565th random call:
+
+[22m    Array []
+
+[1m  566th random call:
+
+[22m    Array []
+
+[1m  567th random call:
+
+[22m    Array []
+
+[1m  568th random call:
+
+[22m    Array []
+
+[1m  569th random call:
+
+[22m    Array []
+
+[1m  570th random call:
+
+[22m    Array []
+
+[1m  571st random call:
+
+[22m    Array []
+
+[1m  572nd random call:
+
+[22m    Array []
+
+[1m  573rd random call:
+
+[22m    Array []
+
+[1m  574th random call:
+
+[22m    Array []
+
+[1m  575th random call:
+
+[22m    Array []
+
+[1m  576th random call:
+
+[22m    Array []
+
+[1m  577th random call:
+
+[22m    Array []
+
+[1m  578th random call:
+
+[22m    Array []
+
+[1m  579th random call:
+
+[22m    Array []
+
+[1m  580th random call:
+
+[22m    Array []
+
+[1m  581st random call:
+
+[22m    Array []
+
+[1m  582nd random call:
+
+[22m    Array []
+
+[1m  583rd random call:
+
+[22m    Array []
+
+[1m  584th random call:
+
+[22m    Array []
+
+[1m  585th random call:
+
+[22m    Array []
+
+[1m  586th random call:
+
+[22m    Array []
+
+[1m  587th random call:
+
+[22m    Array []
+
+[1m  588th random call:
+
+[22m    Array []
+
+[1m  589th random call:
+
+[22m    Array []
+
+[1m  590th random call:
+
+[22m    Array []
+
+[1m  591st random call:
+
+[22m    Array []
+
+[1m  592nd random call:
+
+[22m    Array []
+
+[1m  593rd random call:
+
+[22m    Array []
+
+[1m  594th random call:
+
+[22m    Array []
+
+[1m  595th random call:
+
+[22m    Array []
+
+[1m  596th random call:
+
+[22m    Array []
+
+[1m  597th random call:
+
+[22m    Array []
+
+[1m  598th random call:
+
+[22m    Array []
+
+[1m  599th random call:
+
+[22m    Array []
+
+[1m  600th random call:
+
+[22m    Array []
+
+[1m  601st random call:
+
+[22m    Array []
+
+[1m  602nd random call:
+
+[22m    Array []
+
+[1m  603rd random call:
+
+[22m    Array []
+
+[1m  604th random call:
+
+[22m    Array []
+
+[1m  605th random call:
+
+[22m    Array []
+
+[1m  606th random call:
+
+[22m    Array []
+
+[1m  607th random call:
+
+[22m    Array []
+
+[1m  608th random call:
+
+[22m    Array []
+
+[1m  609th random call:
+
+[22m    Array []
+
+[1m  610th random call:
+
+[22m    Array []
+
+[1m  611th random call:
+
+[22m    Array []
+
+[1m  612th random call:
+
+[22m    Array []
+
+[1m  613th random call:
+
+[22m    Array []
+
+[1m  614th random call:
+
+[22m    Array []
+
+[1m  615th random call:
+
+[22m    Array []
+
+[1m  616th random call:
+
+[22m    Array []
+
+[1m  617th random call:
+
+[22m    Array []
+
+[1m  618th random call:
+
+[22m    Array []
+
+[1m  619th random call:
+
+[22m    Array []
+
+[1m  620th random call:
+
+[22m    Array []
+
+[1m  621st random call:
+
+[22m    Array []
+
+[1m  622nd random call:
+
+[22m    Array []
+
+[1m  623rd random call:
+
+[22m    Array []
+
+[1m  624th random call:
+
+[22m    Array []
+
+[1m  625th random call:
+
+[22m    Array []
+
+[1m  626th random call:
+
+[22m    Array []
+
+[1m  627th random call:
+
+[22m    Array []
+
+[1m  628th random call:
+
+[22m    Array []
+
+[1m  629th random call:
+
+[22m    Array []
+
+[1m  630th random call:
+
+[22m    Array []
+
+[1m  631st random call:
+
+[22m    Array []
+
+[1m  632nd random call:
+
+[22m    Array []
+
+[1m  633rd random call:
+
+[22m    Array []
+
+[1m  634th random call:
+
+[22m    Array []
+
+[1m  635th random call:
+
+[22m    Array []
+
+[1m  636th random call:
+
+[22m    Array []
+
+[1m  637th random call:
+
+[22m    Array []
+
+[1m  638th random call:
+
+[22m    Array []
+
+[1m  639th random call:
+
+[22m    Array []
+
+[1m  640th random call:
+
+[22m    Array []
+
+[1m  641st random call:
+
+[22m    Array []
+
+[1m  642nd random call:
+
+[22m    Array []
+
+[1m  643rd random call:
+
+[22m    Array []
+
+[1m  644th random call:
+
+[22m    Array []
+
+[1m  645th random call:
+
+[22m    Array []
+
+[1m  646th random call:
+
+[22m    Array []
+
+[1m  647th random call:
+
+[22m    Array []
+
+[1m  648th random call:
+
+[22m    Array []
+
+[1m  649th random call:
+
+[22m    Array []
+
+[1m  650th random call:
+
+[22m    Array []
+
+[1m  651st random call:
+
+[22m    Array []
+
+[1m  652nd random call:
+
+[22m    Array []
+
+[1m  653rd random call:
+
+[22m    Array []
+
+[1m  654th random call:
+
+[22m    Array []
+
+[1m  655th random call:
+
+[22m    Array []
+
+[1m  656th random call:
+
+[22m    Array []
+
+[1m  657th random call:
+
+[22m    Array []
+
+[1m  658th random call:
+
+[22m    Array []
+
+[1m  659th random call:
+
+[22m    Array []
+
+[1m  660th random call:
+
+[22m    Array []
+
+[1m  661st random call:
+
+[22m    Array []
+
+[1m  662nd random call:
+
+[22m    Array []
+
+[1m  663rd random call:
+
+[22m    Array []
+
+[1m  664th random call:
+
+[22m    Array []
+
+[1m  665th random call:
+
+[22m    Array []
+
+[1m  666th random call:
+
+[22m    Array []
+
+[1m  667th random call:
+
+[22m    Array []
+
+[1m  668th random call:
+
+[22m    Array []
+
+[1m  669th random call:
+
+[22m    Array []
+
+[1m  670th random call:
+
+[22m    Array []
+
+[1m  671st random call:
+
+[22m    Array []
+
+[1m  672nd random call:
+
+[22m    Array []
+
+[1m  673rd random call:
+
+[22m    Array []
+
+[1m  674th random call:
+
+[22m    Array []
+
+[1m  675th random call:
+
+[22m    Array []
+
+[1m  676th random call:
+
+[22m    Array []
+
+[1m  677th random call:
+
+[22m    Array []
+
+[1m  678th random call:
+
+[22m    Array []
+
+[1m  679th random call:
+
+[22m    Array []
+
+[1m  680th random call:
+
+[22m    Array []
+
+[1m  681st random call:
+
+[22m    Array []
+
+[1m  682nd random call:
+
+[22m    Array []
+
+[1m  683rd random call:
+
+[22m    Array []
+
+[1m  684th random call:
+
+[22m    Array []
+
+[1m  685th random call:
+
+[22m    Array []
+
+[1m  686th random call:
+
+[22m    Array []
+
+[1m  687th random call:
+
+[22m    Array []
+
+[1m  688th random call:
+
+[22m    Array []
+
+[1m  689th random call:
+
+[22m    Array []
+
+[1m  690th random call:
+
+[22m    Array []
+
+[1m  691st random call:
+
+[22m    Array []
+
+[1m  692nd random call:
+
+[22m    Array []
+
+[1m  693rd random call:
+
+[22m    Array []
+
+[1m  694th random call:
+
+[22m    Array []
+
+[1m  695th random call:
+
+[22m    Array []
+
+[1m  696th random call:
+
+[22m    Array []
+
+[1m  697th random call:
+
+[22m    Array []
+
+[1m  698th random call:
+
+[22m    Array []
+
+[1m  699th random call:
+
+[22m    Array []
+
+[1m  700th random call:
+
+[22m    Array []
+
+[1m  701st random call:
+
+[22m    Array []
+
+[1m  702nd random call:
+
+[22m    Array []
+
+[1m  703rd random call:
+
+[22m    Array []
+
+[1m  704th random call:
+
+[22m    Array []
+
+[1m  705th random call:
+
+[22m    Array []
+
+[1m  706th random call:
+
+[22m    Array []
+
+[1m  707th random call:
+
+[22m    Array []
+
+[1m  708th random call:
+
+[22m    Array []
+
+[1m  709th random call:
+
+[22m    Array []
+
+[1m  710th random call:
+
+[22m    Array []
+
+[1m  711th random call:
+
+[22m    Array []
+
+[1m  712th random call:
+
+[22m    Array []
+
+[1m  713th random call:
+
+[22m    Array []
+
+[1m  714th random call:
+
+[22m    Array []
+
+[1m  715th random call:
+
+[22m    Array []
+
+[1m  716th random call:
+
+[22m    Array []
+
+[1m  717th random call:
+
+[22m    Array []
+
+[1m  718th random call:
+
+[22m    Array []
+
+[1m  719th random call:
+
+[22m    Array []
+[31m[90m
+
+Number of calls: [1m719[22m
+[31m[39m
+[31m   [31m×[31m Club Manager: a start that is waiting for its fixture list[2m > [22ma list that is refused says so at once, Try again asks for a new page, and nothing starts by itself[39m[33m 1031[2mms[22m[39m
+[31m     → expected undefined to deeply equal { label: '2026-27', failed: true }
+
+Ignored nodes: comments, script, style
+[36m<html>[31m
+  [36m<head />[31m
+  [36m<body>[31m
+    [36m<div />[31m
+  [36m</body>[31m
+[36m</html>[31m[39m
+[31m   [31m×[31m Club Manager: a start that is waiting for its fixture list[2m > [22ma list that turns up while the notice is on screen starts the career on it[39m[32m 61[2mms[22m[39m
+[31m     → expected undefined to deeply equal { label: '2026-27', failed: true }[39m
+[31m   [31m×[31m Club Manager: a start that is waiting for its fixture list[2m > [22ma list that arrives inside the wait starts the career on it, once[39m[32m 16[2mms[22m[39m
+[31m     → expected undefined to deeply equal { label: '2026-27', failed: false }[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 5 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerStartWait.test.tsx[2m > [22mClub Manager: a start that is waiting for its fixture list[2m > [22mwaits by name, then says the list did not load and asks, and starts on generated fixtures only when told to
+[31m[1mAssertionError[22m: expected undefined to deeply equal { label: '2026-27', failed: false }[39m
+
+[32m- Expected:[39m 
+{
+  "failed": false,
+  "label": "2026-27",
+}
+
+[31m+ Received:[39m 
+undefined
+
+[36m [2m❯[22m src/test/clubManagerStartWait.test.tsx:[2m68:38[22m[39m
+    [90m 66| [39m    [35mconst[39m { result } [33m=[39m [35mawait[39m [34mtapAndConfirm[39m([32m'Barcelona'[39m)[33m;[39m
+    [90m 67| [39m    [34mexpect[39m(result[33m.[39mcurrent[33m.[39mphase)[33m.[39m[34mtoBe[39m([32m'boot'[39m)[33m;[39m
+    [90m 68| [39m    expect(result.current.startWait).toEqual({ label: LABEL, failed: f…
+    [90m   | [39m                                     [31m^[39m
+    [90m 69| [39m    [34mact[39m(() [33m=>[39m { vi[33m.[39m[34madvanceTimersByTime[39m([33mEIGHT_SECONDS[39m [33m-[39m [34m1[39m)[33m;[39m })[33m;[39m
+    [90m 70| [39m    expect(result.current.startWait).toEqual({ label: LABEL, failed: f…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerStartWait.test.tsx[2m > [22mClub Manager: a start that is waiting for its fixture list[2m > [22mbuilds no career once the page has been left, neither at eight seconds nor when the list arrives
+[31m[1mAssertionError[22m[39m: expected "random" to not be called at all, but actually been called 719 times[90m
+
+Received: 
+
+[1m  1st random call:
+
+[22m    Array []
+
+[1m  2nd random call:
+
+[22m    Array []
+
+[1m  3rd random call:
+
+[22m    Array []
+
+[1m  4th random call:
+
+[22m    Array []
+
+[1m  5th random call:
+
+[22m    Array []
+
+[1m  6th random call:
+
+[22m    Array []
+
+[1m  7th random call:
+
+[22m    Array []
+
+[1m  8th random call:
+
+[22m    Array []
+
+[1m  9th random call:
+
+[22m    Array []
+
+[1m  10th random call:
+
+[22m    Array []
+
+[1m  11th random call:
+
+[22m    Array []
+
+[1m  12th random call:
+
+[22m    Array []
+
+[1m  13th random call:
+
+[22m    Array []
+
+[1m  14th random call:
+
+[22m    Array []
+
+[1m  15th random call:
+
+[22m    Array []
+
+[1m  16th random call:
+
+[22m    Array []
+
+[1m  17th random call:
+
+[22m    Array []
+
+[1m  18th random call:
+
+[22m    Array []
+
+[1m  19th random call:
+
+[22m    Array []
+
+[1m  20th random call:
+
+[22m    Array []
+
+[1m  21st random call:
+
+[22m    Array []
+
+[1m  22nd random call:
+
+[22m    Array []
+
+[1m  23rd random call:
+
+[22m    Array []
+
+[1m  24th random call:
+
+[22m    Array []
+
+[1m  25th random call:
+
+[22m    Array []
+
+[1m  26th random call:
+
+[22m    Array []
+
+[1m  27th random call:
+
+[22m    Array []
+
+[1m  28th random call:
+
+[22m    Array []
+
+[1m  29th random call:
+
+[22m    Array []
+
+[1m  30th random call:
+
+[22m    Array []
+
+[1m  31st random call:
+
+[22m    Array []
+
+[1m  32nd random call:
+
+[22m    Array []
+
+[1m  33rd random call:
+
+[22m    Array []
+
+[1m  34th random call:
+
+[22m    Array []
+
+[1m  35th random call:
+
+[22m    Array []
+
+[1m  36th random call:
+
+[22m    Array []
+
+[1m  37th random call:
+
+[22m    Array []
+
+[1m  38th random call:
+
+[22m    Array []
+
+[1m  39th random call:
+
+[22m    Array []
+
+[1m  40th random call:
+
+[22m    Array []
+
+[1m  41st random call:
+
+[22m    Array []
+
+[1m  42nd random call:
+
+[22m    Array []
+
+[1m  43rd random call:
+
+[22m    Array []
+
+[1m  44th random call:
+
+[22m    Array []
+
+[1m  45th random call:
+
+[22m    Array []
+
+[1m  46th random call:
+
+[22m    Array []
+
+[1m  47th random call:
+
+[22m    Array []
+
+[1m  48th random call:
+
+[22m    Array []
+
+[1m  49th random call:
+
+[22m    Array []
+
+[1m  50th random call:
+
+[22m    Array []
+
+[1m  51st random call:
+
+[22m    Array []
+
+[1m  52nd random call:
+
+[22m    Array []
+
+[1m  53rd random call:
+
+[22m    Array []
+
+[1m  54th random call:
+
+[22m    Array []
+
+[1m  55th random call:
+
+[22m    Array []
+
+[1m  56th random call:
+
+[22m    Array []
+
+[1m  57th random call:
+
+[22m    Array []
+
+[1m  58th random call:
+
+[22m    Array []
+
+[1m  59th random call:
+
+[22m    Array []
+
+[1m  60th random call:
+
+[22m    Array []
+
+[1m  61st random call:
+
+[22m    Array []
+
+[1m  62nd random call:
+
+[22m    Array []
+
+[1m  63rd random call:
+
+[22m    Array []
+
+[1m  64th random call:
+
+[22m    Array []
+
+[1m  65th random call:
+
+[22m    Array []
+
+[1m  66th random call:
+
+[22m    Array []
+
+[1m  67th random call:
+
+[22m    Array []
+
+[1m  68th random call:
+
+[22m    Array []
+
+[1m  69th random call:
+
+[22m    Array []
+
+[1m  70th random call:
+
+[22m    Array []
+
+[1m  71st random call:
+
+[22m    Array []
+
+[1m  72nd random call:
+
+[22m    Array []
+
+[1m  73rd random call:
+
+[22m    Array []
+
+[1m  74th random call:
+
+[22m    Array []
+
+[1m  75th random call:
+
+[22m    Array []
+
+[1m  76th random call:
+
+[22m    Array []
+
+[1m  77th random call:
+
+[22m    Array []
+
+[1m  78th random call:
+
+[22m    Array []
+
+[1m  79th random call:
+
+[22m    Array []
+
+[1m  80th random call:
+
+[22m    Array []
+
+[1m  81st random call:
+
+[22m    Array []
+
+[1m  82nd random call:
+
+[22m    Array []
+
+[1m  83rd random call:
+
+[22m    Array []
+
+[1m  84th random call:
+
+[22m    Array []
+
+[1m  85th random call:
+
+[22m    Array []
+
+[1m  86th random call:
+
+[22m    Array []
+
+[1m  87th random call:
+
+[22m    Array []
+
+[1m  88th random call:
+
+[22m    Array []
+
+[1m  89th random call:
+
+[22m    Array []
+
+[1m  90th random call:
+
+[22m    Array []
+
+[1m  91st random call:
+
+[22m    Array []
+
+[1m  92nd random call:
+
+[22m    Array []
+
+[1m  93rd random call:
+
+[22m    Array []
+
+[1m  94th random call:
+
+[22m    Array []
+
+[1m  95th random call:
+
+[22m    Array []
+
+[1m  96th random call:
+
+[22m    Array []
+
+[1m  97th random call:
+
+[22m    Array []
+
+[1m  98th random call:
+
+[22m    Array []
+
+[1m  99th random call:
+
+[22m    Array []
+
+[1m  100th random call:
+
+[22m    Array []
+
+[1m  101st random call:
+
+[22m    Array []
+
+[1m  102nd random call:
+
+[22m    Array []
+
+[1m  103rd random call:
+
+[22m    Array []
+
+[1m  104th random call:
+
+[22m    Array []
+
+[1m  105th random call:
+
+[22m    Array []
+
+[1m  106th random call:
+
+[22m    Array []
+
+[1m  107th random call:
+
+[22m    Array []
+
+[1m  108th random call:
+
+[22m    Array []
+
+[1m  109th random call:
+
+[22m    Array []
+
+[1m  110th random call:
+
+[22m    Array []
+
+[1m  111th random call:
+
+[22m    Array []
+
+[1m  112th random call:
+
+[22m    Array []
+
+[1m  113th random call:
+
+[22m    Array []
+
+[1m  114th random call:
+
+[22m    Array []
+
+[1m  115th random call:
+
+[22m    Array []
+
+[1m  116th random call:
+
+[22m    Array []
+
+[1m  117th random call:
+
+[22m    Array []
+
+[1m  118th random call:
+
+[22m    Array []
+
+[1m  119th random call:
+
+[22m    Array []
+
+[1m  120th random call:
+
+[22m    Array []
+
+[1m  121st random call:
+
+[22m    Array []
+
+[1m  122nd random call:
+
+[22m    Array []
+
+[1m  123rd random call:
+
+[22m    Array []
+
+[1m  124th random call:
+
+[22m    Array []
+
+[1m  125th random call:
+
+[22m    Array []
+
+[1m  126th random call:
+
+[22m    Array []
+
+[1m  127th random call:
+
+[22m    Array []
+
+[1m  128th random call:
+
+[22m    Array []
+
+[1m  129th random call:
+
+[22m    Array []
+
+[1m  130th random call:
+
+[22m    Array []
+
+[1m  131st random call:
+
+[22m    Array []
+
+[1m  132nd random call:
+
+[22m    Array []
+
+[1m  133rd random call:
+
+[22m    Array []
+
+[1m  134th random call:
+
+[22m    Array []
+
+[1m  135th random call:
+
+[22m    Array []
+
+[1m  136th random call:
+
+[22m    Array []
+
+[1m  137th random call:
+
+[22m    Array []
+
+[1m  138th random call:
+
+[22m    Array []
+
+[1m  139th random call:
+
+[22m    Array []
+
+[1m  140th random call:
+
+[22m    Array []
+
+[1m  141st random call:
+
+[22m    Array []
+
+[1m  142nd random call:
+
+[22m    Array []
+
+[1m  143rd random call:
+
+[22m    Array []
+
+[1m  144th random call:
+
+[22m    Array []
+
+[1m  145th random call:
+
+[22m    Array []
+
+[1m  146th random call:
+
+[22m    Array []
+
+[1m  147th random call:
+
+[22m    Array []
+
+[1m  148th random call:
+
+[22m    Array []
+
+[1m  149th random call:
+
+[22m    Array []
+
+[1m  150th random call:
+
+[22m    Array []
+
+[1m  151st random call:
+
+[22m    Array []
+
+[1m  152nd random call:
+
+[22m    Array []
+
+[1m  153rd random call:
+
+[22m    Array []
+
+[1m  154th random call:
+
+[22m    Array []
+
+[1m  155th random call:
+
+[22m    Array []
+
+[1m  156th random call:
+
+[22m    Array []
+
+[1m  157th random call:
+
+[22m    Array []
+
+[1m  158th random call:
+
+[22m    Array []
+
+[1m  159th random call:
+
+[22m    Array []
+
+[1m  160th random call:
+
+[22m    Array []
+
+[1m  161st random call:
+
+[22m    Array []
+
+[1m  162nd random call:
+
+[22m    Array []
+
+[1m  163rd random call:
+
+[22m    Array []
+
+[1m  164th random call:
+
+[22m    Array []
+
+[1m  165th random call:
+
+[22m    Array []
+
+[1m  166th random call:
+
+[22m    Array []
+
+[1m  167th random call:
+
+[22m    Array []
+
+[1m  168th random call:
+
+[22m    Array []
+
+[1m  169th random call:
+
+[22m    Array []
+
+[1m  170th random call:
+
+[22m    Array []
+
+[1m  171st random call:
+
+[22m    Array []
+
+[1m  172nd random call:
+
+[22m    Array []
+
+[1m  173rd random call:
+
+[22m    Array []
+
+[1m  174th random call:
+
+[22m    Array []
+
+[1m  175th random call:
+
+[22m    Array []
+
+[1m  176th random call:
+
+[22m    Array []
+
+[1m  177th random call:
+
+[22m    Array []
+
+[1m  178th random call:
+
+[22m    Array []
+
+[1m  179th random call:
+
+[22m    Array []
+
+[1m  180th random call:
+
+[22m    Array []
+
+[1m  181st random call:
+
+[22m    Array []
+
+[1m  182nd random call:
+
+[22m    Array []
+
+[1m  183rd random call:
+
+[22m    Array []
+
+[1m  184th random call:
+
+[22m    Array []
+
+[1m  185th random call:
+
+[22m    Array []
+
+[1m  186th random call:
+
+[22m    Array []
+
+[1m  187th random call:
+
+[22m    Array []
+
+[1m  188th random call:
+
+[22m    Array []
+
+[1m  189th random call:
+
+[22m    Array []
+
+[1m  190th random call:
+
+[22m    Array []
+
+[1m  191st random call:
+
+[22m    Array []
+
+[1m  192nd random call:
+
+[22m    Array []
+
+[1m  193rd random call:
+
+[22m    Array []
+
+[1m  194th random call:
+
+[22m    Array []
+
+[1m  195th random call:
+
+[22m    Array []
+
+[1m  196th random call:
+
+[22m    Array []
+
+[1m  197th random call:
+
+[22m    Array []
+
+[1m  198th random call:
+
+[22m    Array []
+
+[1m  199th random call:
+
+[22m    Array []
+
+[1m  200th random call:
+
+[22m    Array []
+
+[1m  201st random call:
+
+[22m    Array []
+
+[1m  202nd random call:
+
+[22m    Array []
+
+[1m  203rd random call:
+
+[22m    Array []
+
+[1m  204th random call:
+
+[22m    Array []
+
+[1m  205th random call:
+
+[22m    Array []
+
+[1m  206th random call:
+
+[22m    Array []
+
+[1m  207th random call:
+
+[22m    Array []
+
+[1m  208th random call:
+
+[22m    Array []
+
+[1m  209th random call:
+
+[22m    Array []
+
+[1m  210th random call:
+
+[22m    Array []
+
+[1m  211th random call:
+
+[22m    Array []
+
+[1m  212th random call:
+
+[22m    Array []
+
+[1m  213th random call:
+
+[22m    Array []
+
+[1m  214th random call:
+
+[22m    Array []
+
+[1m  215th random call:
+
+[22m    Array []
+
+[1m  216th random call:
+
+[22m    Array []
+
+[1m  217th random call:
+
+[22m    Array []
+
+[1m  218th random call:
+
+[22m    Array []
+
+[1m  219th random call:
+
+[22m    Array []
+
+[1m  220th random call:
+
+[22m    Array []
+
+[1m  221st random call:
+
+[22m    Array []
+
+[1m  222nd random call:
+
+[22m    Array []
+
+[1m  223rd random call:
+
+[22m    Array []
+
+[1m  224th random call:
+
+[22m    Array []
+
+[1m  225th random call:
+
+[22m    Array []
+
+[1m  226th random call:
+
+[22m    Array []
+
+[1m  227th random call:
+
+[22m    Array []
+
+[1m  228th random call:
+
+[22m    Array []
+
+[1m  229th random call:
+
+[22m    Array []
+
+[1m  230th random call:
+
+[22m    Array []
+
+[1m  231st random call:
+
+[22m    Array []
+
+[1m  232nd random call:
+
+[22m    Array []
+
+[1m  233rd random call:
+
+[22m    Array []
+
+[1m  234th random call:
+
+[22m    Array []
+
+[1m  235th random call:
+
+[22m    Array []
+
+[1m  236th random call:
+
+[22m    Array []
+
+[1m  237th random call:
+
+[22m    Array []
+
+[1m  238th random call:
+
+[22m    Array []
+
+[1m  239th random call:
+
+[22m    Array []
+
+[1m  240th random call:
+
+[22m    Array []
+
+[1m  241st random call:
+
+[22m    Array []
+
+[1m  242nd random call:
+
+[22m    Array []
+
+[1m  243rd random call:
+
+[22m    Array []
+
+[1m  244th random call:
+
+[22m    Array []
+
+[1m  245th random call:
+
+[22m    Array []
+
+[1m  246th random call:
+
+[22m    Array []
+
+[1m  247th random call:
+
+[22m    Array []
+
+[1m  248th random call:
+
+[22m    Array []
+
+[1m  249th random call:
+
+[22m    Array []
+
+[1m  250th random call:
+
+[22m    Array []
+
+[1m  251st random call:
+
+[22m    Array []
+
+[1m  252nd random call:
+
+[22m    Array []
+
+[1m  253rd random call:
+
+[22m    Array []
+
+[1m  254th random call:
+
+[22m    Array []
+
+[1m  255th random call:
+
+[22m    Array []
+
+[1m  256th random call:
+
+[22m    Array []
+
+[1m  257th random call:
+
+[22m    Array []
+
+[1m  258th random call:
+
+[22m    Array []
+
+[1m  259th random call:
+
+[22m    Array []
+
+[1m  260th random call:
+
+[22m    Array []
+
+[1m  261st random call:
+
+[22m    Array []
+
+[1m  262nd random call:
+
+[22m    Array []
+
+[1m  263rd random call:
+
+[22m    Array []
+
+[1m  264th random call:
+
+[22m    Array []
+
+[1m  265th random call:
+
+[22m    Array []
+
+[1m  266th random call:
+
+[22m    Array []
+
+[1m  267th random call:
+
+[22m    Array []
+
+[1m  268th random call:
+
+[22m    Array []
+
+[1m  269th random call:
+
+[22m    Array []
+
+[1m  270th random call:
+
+[22m    Array []
+
+[1m  271st random call:
+
+[22m    Array []
+
+[1m  272nd random call:
+
+[22m    Array []
+
+[1m  273rd random call:
+
+[22m    Array []
+
+[1m  274th random call:
+
+[22m    Array []
+
+[1m  275th random call:
+
+[22m    Array []
+
+[1m  276th random call:
+
+[22m    Array []
+
+[1m  277th random call:
+
+[22m    Array []
+
+[1m  278th random call:
+
+[22m    Array []
+
+[1m  279th random call:
+
+[22m    Array []
+
+[1m  280th random call:
+
+[22m    Array []
+
+[1m  281st random call:
+
+[22m    Array []
+
+[1m  282nd random call:
+
+[22m    Array []
+
+[1m  283rd random call:
+
+[22m    Array []
+
+[1m  284th random call:
+
+[22m    Array []
+
+[1m  285th random call:
+
+[22m    Array []
+
+[1m  286th random call:
+
+[22m    Array []
+
+[1m  287th random call:
+
+[22m    Array []
+
+[1m  288th random call:
+
+[22m    Array []
+
+[1m  289th random call:
+
+[22m    Array []
+
+[1m  290th random call:
+
+[22m    Array []
+
+[1m  291st random call:
+
+[22m    Array []
+
+[1m  292nd random call:
+
+[22m    Array []
+
+[1m  293rd random call:
+
+[22m    Array []
+
+[1m  294th random call:
+
+[22m    Array []
+
+[1m  295th random call:
+
+[22m    Array []
+
+[1m  296th random call:
+
+[22m    Array []
+
+[1m  297th random call:
+
+[22m    Array []
+
+[1m  298th random call:
+
+[22m    Array []
+
+[1m  299th random call:
+
+[22m    Array []
+
+[1m  300th random call:
+
+[22m    Array []
+
+[1m  301st random call:
+
+[22m    Array []
+
+[1m  302nd random call:
+
+[22m    Array []
+
+[1m  303rd random call:
+
+[22m    Array []
+
+[1m  304th random call:
+
+[22m    Array []
+
+[1m  305th random call:
+
+[22m    Array []
+
+[1m  306th random call:
+
+[22m    Array []
+
+[1m  307th random call:
+
+[22m    Array []
+
+[1m  308th random call:
+
+[22m    Array []
+
+[1m  309th random call:
+
+[22m    Array []
+
+[1m  310th random call:
+
+[22m    Array []
+
+[1m  311th random call:
+
+[22m    Array []
+
+[1m  312th random call:
+
+[22m    Array []
+
+[1m  313th random call:
+
+[22m    Array []
+
+[1m  314th random call:
+
+[22m    Array []
+
+[1m  315th random call:
+
+[22m    Array []
+
+[1m  316th random call:
+
+[22m    Array []
+
+[1m  317th random call:
+
+[22m    Array []
+
+[1m  318th random call:
+
+[22m    Array []
+
+[1m  319th random call:
+
+[22m    Array []
+
+[1m  320th random call:
+
+[22m    Array []
+
+[1m  321st random call:
+
+[22m    Array []
+
+[1m  322nd random call:
+
+[22m    Array []
+
+[1m  323rd random call:
+
+[22m    Array []
+
+[1m  324th random call:
+
+[22m    Array []
+
+[1m  325th random call:
+
+[22m    Array []
+
+[1m  326th random call:
+
+[22m    Array []
+
+[1m  327th random call:
+
+[22m    Array []
+
+[1m  328th random call:
+
+[22m    Array []
+
+[1m  329th random call:
+
+[22m    Array []
+
+[1m  330th random call:
+
+[22m    Array []
+
+[1m  331st random call:
+
+[22m    Array []
+
+[1m  332nd random call:
+
+[22m    Array []
+
+[1m  333rd random call:
+
+[22m    Array []
+
+[1m  334th random call:
+
+[22m    Array []
+
+[1m  335th random call:
+
+[22m    Array []
+
+[1m  336th random call:
+
+[22m    Array []
+
+[1m  337th random call:
+
+[22m    Array []
+
+[1m  338th random call:
+
+[22m    Array []
+
+[1m  339th random call:
+
+[22m    Array []
+
+[1m  340th random call:
+
+[22m    Array []
+
+[1m  341st random call:
+
+[22m    Array []
+
+[1m  342nd random call:
+
+[22m    Array []
+
+[1m  343rd random call:
+
+[22m    Array []
+
+[1m  344th random call:
+
+[22m    Array []
+
+[1m  345th random call:
+
+[22m    Array []
+
+[1m  346th random call:
+
+[22m    Array []
+
+[1m  347th random call:
+
+[22m    Array []
+
+[1m  348th random call:
+
+[22m    Array []
+
+[1m  349th random call:
+
+[22m    Array []
+
+[1m  350th random call:
+
+[22m    Array []
+
+[1m  351st random call:
+
+[22m    Array []
+
+[1m  352nd random call:
+
+[22m    Array []
+
+[1m  353rd random call:
+
+[22m    Array []
+
+[1m  354th random call:
+
+[22m    Array []
+
+[1m  355th random call:
+
+[22m    Array []
+
+[1m  356th random call:
+
+[22m    Array []
+
+[1m  357th random call:
+
+[22m    Array []
+
+[1m  358th random call:
+
+[22m    Array []
+
+[1m  359th random call:
+
+[22m    Array []
+
+[1m  360th random call:
+
+[22m    Array []
+
+[1m  361st random call:
+
+[22m    Array []
+
+[1m  362nd random call:
+
+[22m    Array []
+
+[1m  363rd random call:
+
+[22m    Array []
+
+[1m  364th random call:
+
+[22m    Array []
+
+[1m  365th random call:
+
+[22m    Array []
+
+[1m  366th random call:
+
+[22m    Array []
+
+[1m  367th random call:
+
+[22m    Array []
+
+[1m  368th random call:
+
+[22m    Array []
+
+[1m  369th random call:
+
+[22m    Array []
+
+[1m  370th random call:
+
+[22m    Array []
+
+[1m  371st random call:
+
+[22m    Array []
+
+[1m  372nd random call:
+
+[22m    Array []
+
+[1m  373rd random call:
+
+[22m    Array []
+
+[1m  374th random call:
+
+[22m    Array []
+
+[1m  375th random call:
+
+[22m    Array []
+
+[1m  376th random call:
+
+[22m    Array []
+
+[1m  377th random call:
+
+[22m    Array []
+
+[1m  378th random call:
+
+[22m    Array []
+
+[1m  379th random call:
+
+[22m    Array []
+
+[1m  380th random call:
+
+[22m    Array []
+
+[1m  381st random call:
+
+[22m    Array []
+
+[1m  382nd random call:
+
+[22m    Array []
+
+[1m  383rd random call:
+
+[22m    Array []
+
+[1m  384th random call:
+
+[22m    Array []
+
+[1m  385th random call:
+
+[22m    Array []
+
+[1m  386th random call:
+
+[22m    Array []
+
+[1m  387th random call:
+
+[22m    Array []
+
+[1m  388th random call:
+
+[22m    Array []
+
+[1m  389th random call:
+
+[22m    Array []
+
+[1m  390th random call:
+
+[22m    Array []
+
+[1m  391st random call:
+
+[22m    Array []
+
+[1m  392nd random call:
+
+[22m    Array []
+
+[1m  393rd random call:
+
+[22m    Array []
+
+[1m  394th random call:
+
+[22m    Array []
+
+[1m  395th random call:
+
+[22m    Array []
+
+[1m  396th random call:
+
+[22m    Array []
+
+[1m  397th random call:
+
+[22m    Array []
+
+[1m  398th random call:
+
+[22m    Array []
+
+[1m  399th random call:
+
+[22m    Array []
+
+[1m  400th random call:
+
+[22m    Array []
+
+[1m  401st random call:
+
+[22m    Array []
+
+[1m  402nd random call:
+
+[22m    Array []
+
+[1m  403rd random call:
+
+[22m    Array []
+
+[1m  404th random call:
+
+[22m    Array []
+
+[1m  405th random call:
+
+[22m    Array []
+
+[1m  406th random call:
+
+[22m    Array []
+
+[1m  407th random call:
+
+[22m    Array []
+
+[1m  408th random call:
+
+[22m    Array []
+
+[1m  409th random call:
+
+[22m    Array []
+
+[1m  410th random call:
+
+[22m    Array []
+
+[1m  411th random call:
+
+[22m    Array []
+
+[1m  412th random call:
+
+[22m    Array []
+
+[1m  413th random call:
+
+[22m    Array []
+
+[1m  414th random call:
+
+[22m    Array []
+
+[1m  415th random call:
+
+[22m    Array []
+
+[1m  416th random call:
+
+[22m    Array []
+
+[1m  417th random call:
+
+[22m    Array []
+
+[1m  418th random call:
+
+[22m    Array []
+
+[1m  419th random call:
+
+[22m    Array []
+
+[1m  420th random call:
+
+[22m    Array []
+
+[1m  421st random call:
+
+[22m    Array []
+
+[1m  422nd random call:
+
+[22m    Array []
+
+[1m  423rd random call:
+
+[22m    Array []
+
+[1m  424th random call:
+
+[22m    Array []
+
+[1m  425th random call:
+
+[22m    Array []
+
+[1m  426th random call:
+
+[22m    Array []
+
+[1m  427th random call:
+
+[22m    Array []
+
+[1m  428th random call:
+
+[22m    Array []
+
+[1m  429th random call:
+
+[22m    Array []
+
+[1m  430th random call:
+
+[22m    Array []
+
+[1m  431st random call:
+
+[22m    Array []
+
+[1m  432nd random call:
+
+[22m    Array []
+
+[1m  433rd random call:
+
+[22m    Array []
+
+[1m  434th random call:
+
+[22m    Array []
+
+[1m  435th random call:
+
+[22m    Array []
+
+[1m  436th random call:
+
+[22m    Array []
+
+[1m  437th random call:
+
+[22m    Array []
+
+[1m  438th random call:
+
+[22m    Array []
+
+[1m  439th random call:
+
+[22m    Array []
+
+[1m  440th random call:
+
+[22m    Array []
+
+[1m  441st random call:
+
+[22m    Array []
+
+[1m  442nd random call:
+
+[22m    Array []
+
+[1m  443rd random call:
+
+[22m    Array []
+
+[1m  444th random call:
+
+[22m    Array []
+
+[1m  445th random call:
+
+[22m    Array []
+
+[1m  446th random call:
+
+[22m    Array []
+
+[1m  447th random call:
+
+[22m    Array []
+
+[1m  448th random call:
+
+[22m    Array []
+
+[1m  449th random call:
+
+[22m    Array []
+
+[1m  450th random call:
+
+[22m    Array []
+
+[1m  451st random call:
+
+[22m    Array []
+
+[1m  452nd random call:
+
+[22m    Array []
+
+[1m  453rd random call:
+
+[22m    Array []
+
+[1m  454th random call:
+
+[22m    Array []
+
+[1m  455th random call:
+
+[22m    Array []
+
+[1m  456th random call:
+
+[22m    Array []
+
+[1m  457th random call:
+
+[22m    Array []
+
+[1m  458th random call:
+
+[22m    Array []
+
+[1m  459th random call:
+
+[22m    Array []
+
+[1m  460th random call:
+
+[22m    Array []
+
+[1m  461st random call:
+
+[22m    Array []
+
+[1m  462nd random call:
+
+[22m    Array []
+
+[1m  463rd random call:
+
+[22m    Array []
+
+[1m  464th random call:
+
+[22m    Array []
+
+[1m  465th random call:
+
+[22m    Array []
+
+[1m  466th random call:
+
+[22m    Array []
+
+[1m  467th random call:
+
+[22m    Array []
+
+[1m  468th random call:
+
+[22m    Array []
+
+[1m  469th random call:
+
+[22m    Array []
+
+[1m  470th random call:
+
+[22m    Array []
+
+[1m  471st random call:
+
+[22m    Array []
+
+[1m  472nd random call:
+
+[22m    Array []
+
+[1m  473rd random call:
+
+[22m    Array []
+
+[1m  474th random call:
+
+[22m    Array []
+
+[1m  475th random call:
+
+[22m    Array []
+
+[1m  476th random call:
+
+[22m    Array []
+
+[1m  477th random call:
+
+[22m    Array []
+
+[1m  478th random call:
+
+[22m    Array []
+
+[1m  479th random call:
+
+[22m    Array []
+
+[1m  480th random call:
+
+[22m    Array []
+
+[1m  481st random call:
+
+[22m    Array []
+
+[1m  482nd random call:
+
+[22m    Array []
+
+[1m  483rd random call:
+
+[22m    Array []
+
+[1m  484th random call:
+
+[22m    Array []
+
+[1m  485th random call:
+
+[22m    Array []
+
+[1m  486th random call:
+
+[22m    Array []
+
+[1m  487th random call:
+
+[22m    Array []
+
+[1m  488th random call:
+
+[22m    Array []
+
+[1m  489th random call:
+
+[22m    Array []
+
+[1m  490th random call:
+
+[22m    Array []
+
+[1m  491st random call:
+
+[22m    Array []
+
+[1m  492nd random call:
+
+[22m    Array []
+
+[1m  493rd random call:
+
+[22m    Array []
+
+[1m  494th random call:
+
+[22m    Array []
+
+[1m  495th random call:
+
+[22m    Array []
+
+[1m  496th random call:
+
+[22m    Array []
+
+[1m  497th random call:
+
+[22m    Array []
+
+[1m  498th random call:
+
+[22m    Array []
+
+[1m  499th random call:
+
+[22m    Array []
+
+[1m  500th random call:
+
+[22m    Array []
+
+[1m  501st random call:
+
+[22m    Array []
+
+[1m  502nd random call:
+
+[22m    Array []
+
+[1m  503rd random call:
+
+[22m    Array []
+
+[1m  504th random call:
+
+[22m    Array []
+
+[1m  505th random call:
+
+[22m    Array []
+
+[1m  506th random call:
+
+[22m    Array []
+
+[1m  507th random call:
+
+[22m    Array []
+
+[1m  508th random call:
+
+[22m    Array []
+
+[1m  509th random call:
+
+[22m    Array []
+
+[1m  510th random call:
+
+[22m    Array []
+
+[1m  511th random call:
+
+[22m    Array []
+
+[1m  512th random call:
+
+[22m    Array []
+
+[1m  513th random call:
+
+[22m    Array []
+
+[1m  514th random call:
+
+[22m    Array []
+
+[1m  515th random call:
+
+[22m    Array []
+
+[1m  516th random call:
+
+[22m    Array []
+
+[1m  517th random call:
+
+[22m    Array []
+
+[1m  518th random call:
+
+[22m    Array []
+
+[1m  519th random call:
+
+[22m    Array []
+
+[1m  520th random call:
+
+[22m    Array []
+
+[1m  521st random call:
+
+[22m    Array []
+
+[1m  522nd random call:
+
+[22m    Array []
+
+[1m  523rd random call:
+
+[22m    Array []
+
+[1m  524th random call:
+
+[22m    Array []
+
+[1m  525th random call:
+
+[22m    Array []
+
+[1m  526th random call:
+
+[22m    Array []
+
+[1m  527th random call:
+
+[22m    Array []
+
+[1m  528th random call:
+
+[22m    Array []
+
+[1m  529th random call:
+
+[22m    Array []
+
+[1m  530th random call:
+
+[22m    Array []
+
+[1m  531st random call:
+
+[22m    Array []
+
+[1m  532nd random call:
+
+[22m    Array []
+
+[1m  533rd random call:
+
+[22m    Array []
+
+[1m  534th random call:
+
+[22m    Array []
+
+[1m  535th random call:
+
+[22m    Array []
+
+[1m  536th random call:
+
+[22m    Array []
+
+[1m  537th random call:
+
+[22m    Array []
+
+[1m  538th random call:
+
+[22m    Array []
+
+[1m  539th random call:
+
+[22m    Array []
+
+[1m  540th random call:
+
+[22m    Array []
+
+[1m  541st random call:
+
+[22m    Array []
+
+[1m  542nd random call:
+
+[22m    Array []
+
+[1m  543rd random call:
+
+[22m    Array []
+
+[1m  544th random call:
+
+[22m    Array []
+
+[1m  545th random call:
+
+[22m    Array []
+
+[1m  546th random call:
+
+[22m    Array []
+
+[1m  547th random call:
+
+[22m    Array []
+
+[1m  548th random call:
+
+[22m    Array []
+
+[1m  549th random call:
+
+[22m    Array []
+
+[1m  550th random call:
+
+[22m    Array []
+
+[1m  551st random call:
+
+[22m    Array []
+
+[1m  552nd random call:
+
+[22m    Array []
+
+[1m  553rd random call:
+
+[22m    Array []
+
+[1m  554th random call:
+
+[22m    Array []
+
+[1m  555th random call:
+
+[22m    Array []
+
+[1m  556th random call:
+
+[22m    Array []
+
+[1m  557th random call:
+
+[22m    Array []
+
+[1m  558th random call:
+
+[22m    Array []
+
+[1m  559th random call:
+
+[22m    Array []
+
+[1m  560th random call:
+
+[22m    Array []
+
+[1m  561st random call:
+
+[22m    Array []
+
+[1m  562nd random call:
+
+[22m    Array []
+
+[1m  563rd random call:
+
+[22m    Array []
+
+[1m  564th random call:
+
+[22m    Array []
+
+[1m  565th random call:
+
+[22m    Array []
+
+[1m  566th random call:
+
+[22m    Array []
+
+[1m  567th random call:
+
+[22m    Array []
+
+[1m  568th random call:
+
+[22m    Array []
+
+[1m  569th random call:
+
+[22m    Array []
+
+[1m  570th random call:
+
+[22m    Array []
+
+[1m  571st random call:
+
+[22m    Array []
+
+[1m  572nd random call:
+
+[22m    Array []
+
+[1m  573rd random call:
+
+[22m    Array []
+
+[1m  574th random call:
+
+[22m    Array []
+
+[1m  575th random call:
+
+[22m    Array []
+
+[1m  576th random call:
+
+[22m    Array []
+
+[1m  577th random call:
+
+[22m    Array []
+
+[1m  578th random call:
+
+[22m    Array []
+
+[1m  579th random call:
+
+[22m    Array []
+
+[1m  580th random call:
+
+[22m    Array []
+
+[1m  581st random call:
+
+[22m    Array []
+
+[1m  582nd random call:
+
+[22m    Array []
+
+[1m  583rd random call:
+
+[22m    Array []
+
+[1m  584th random call:
+
+[22m    Array []
+
+[1m  585th random call:
+
+[22m    Array []
+
+[1m  586th random call:
+
+[22m    Array []
+
+[1m  587th random call:
+
+[22m    Array []
+
+[1m  588th random call:
+
+[22m    Array []
+
+[1m  589th random call:
+
+[22m    Array []
+
+[1m  590th random call:
+
+[22m    Array []
+
+[1m  591st random call:
+
+[22m    Array []
+
+[1m  592nd random call:
+
+[22m    Array []
+
+[1m  593rd random call:
+
+[22m    Array []
+
+[1m  594th random call:
+
+[22m    Array []
+
+[1m  595th random call:
+
+[22m    Array []
+
+[1m  596th random call:
+
+[22m    Array []
+
+[1m  597th random call:
+
+[22m    Array []
+
+[1m  598th random call:
+
+[22m    Array []
+
+[1m  599th random call:
+
+[22m    Array []
+
+[1m  600th random call:
+
+[22m    Array []
+
+[1m  601st random call:
+
+[22m    Array []
+
+[1m  602nd random call:
+
+[22m    Array []
+
+[1m  603rd random call:
+
+[22m    Array []
+
+[1m  604th random call:
+
+[22m    Array []
+
+[1m  605th random call:
+
+[22m    Array []
+
+[1m  606th random call:
+
+[22m    Array []
+
+[1m  607th random call:
+
+[22m    Array []
+
+[1m  608th random call:
+
+[22m    Array []
+
+[1m  609th random call:
+
+[22m    Array []
+
+[1m  610th random call:
+
+[22m    Array []
+
+[1m  611th random call:
+
+[22m    Array []
+
+[1m  612th random call:
+
+[22m    Array []
+
+[1m  613th random call:
+
+[22m    Array []
+
+[1m  614th random call:
+
+[22m    Array []
+
+[1m  615th random call:
+
+[22m    Array []
+
+[1m  616th random call:
+
+[22m    Array []
+
+[1m  617th random call:
+
+[22m    Array []
+
+[1m  618th random call:
+
+[22m    Array []
+
+[1m  619th random call:
+
+[22m    Array []
+
+[1m  620th random call:
+
+[22m    Array []
+
+[1m  621st random call:
+
+[22m    Array []
+
+[1m  622nd random call:
+
+[22m    Array []
+
+[1m  623rd random call:
+
+[22m    Array []
+
+[1m  624th random call:
+
+[22m    Array []
+
+[1m  625th random call:
+
+[22m    Array []
+
+[1m  626th random call:
+
+[22m    Array []
+
+[1m  627th random call:
+
+[22m    Array []
+
+[1m  628th random call:
+
+[22m    Array []
+
+[1m  629th random call:
+
+[22m    Array []
+
+[1m  630th random call:
+
+[22m    Array []
+
+[1m  631st random call:
+
+[22m    Array []
+
+[1m  632nd random call:
+
+[22m    Array []
+
+[1m  633rd random call:
+
+[22m    Array []
+
+[1m  634th random call:
+
+[22m    Array []
+
+[1m  635th random call:
+
+[22m    Array []
+
+[1m  636th random call:
+
+[22m    Array []
+
+[1m  637th random call:
+
+[22m    Array []
+
+[1m  638th random call:
+
+[22m    Array []
+
+[1m  639th random call:
+
+[22m    Array []
+
+[1m  640th random call:
+
+[22m    Array []
+
+[1m  641st random call:
+
+[22m    Array []
+
+[1m  642nd random call:
+
+[22m    Array []
+
+[1m  643rd random call:
+
+[22m    Array []
+
+[1m  644th random call:
+
+[22m    Array []
+
+[1m  645th random call:
+
+[22m    Array []
+
+[1m  646th random call:
+
+[22m    Array []
+
+[1m  647th random call:
+
+[22m    Array []
+
+[1m  648th random call:
+
+[22m    Array []
+
+[1m  649th random call:
+
+[22m    Array []
+
+[1m  650th random call:
+
+[22m    Array []
+
+[1m  651st random call:
+
+[22m    Array []
+
+[1m  652nd random call:
+
+[22m    Array []
+
+[1m  653rd random call:
+
+[22m    Array []
+
+[1m  654th random call:
+
+[22m    Array []
+
+[1m  655th random call:
+
+[22m    Array []
+
+[1m  656th random call:
+
+[22m    Array []
+
+[1m  657th random call:
+
+[22m    Array []
+
+[1m  658th random call:
+
+[22m    Array []
+
+[1m  659th random call:
+
+[22m    Array []
+
+[1m  660th random call:
+
+[22m    Array []
+
+[1m  661st random call:
+
+[22m    Array []
+
+[1m  662nd random call:
+
+[22m    Array []
+
+[1m  663rd random call:
+
+[22m    Array []
+
+[1m  664th random call:
+
+[22m    Array []
+
+[1m  665th random call:
+
+[22m    Array []
+
+[1m  666th random call:
+
+[22m    Array []
+
+[1m  667th random call:
+
+[22m    Array []
+
+[1m  668th random call:
+
+[22m    Array []
+
+[1m  669th random call:
+
+[22m    Array []
+
+[1m  670th random call:
+
+[22m    Array []
+
+[1m  671st random call:
+
+[22m    Array []
+
+[1m  672nd random call:
+
+[22m    Array []
+
+[1m  673rd random call:
+
+[22m    Array []
+
+[1m  674th random call:
+
+[22m    Array []
+
+[1m  675th random call:
+
+[22m    Array []
+
+[1m  676th random call:
+
+[22m    Array []
+
+[1m  677th random call:
+
+[22m    Array []
+
+[1m  678th random call:
+
+[22m    Array []
+
+[1m  679th random call:
+
+[22m    Array []
+
+[1m  680th random call:
+
+[22m    Array []
+
+[1m  681st random call:
+
+[22m    Array []
+
+[1m  682nd random call:
+
+[22m    Array []
+
+[1m  683rd random call:
+
+[22m    Array []
+
+[1m  684th random call:
+
+[22m    Array []
+
+[1m  685th random call:
+
+[22m    Array []
+
+[1m  686th random call:
+
+[22m    Array []
+
+[1m  687th random call:
+
+[22m    Array []
+
+[1m  688th random call:
+
+[22m    Array []
+
+[1m  689th random call:
+
+[22m    Array []
+
+[1m  690th random call:
+
+[22m    Array []
+
+[1m  691st random call:
+
+[22m    Array []
+
+[1m  692nd random call:
+
+[22m    Array []
+
+[1m  693rd random call:
+
+[22m    Array []
+
+[1m  694th random call:
+
+[22m    Array []
+
+[1m  695th random call:
+
+[22m    Array []
+
+[1m  696th random call:
+
+[22m    Array []
+
+[1m  697th random call:
+
+[22m    Array []
+
+[1m  698th random call:
+
+[22m    Array []
+
+[1m  699th random call:
+
+[22m    Array []
+
+[1m  700th random call:
+
+[22m    Array []
+
+[1m  701st random call:
+
+[22m    Array []
+
+[1m  702nd random call:
+
+[22m    Array []
+
+[1m  703rd random call:
+
+[22m    Array []
+
+[1m  704th random call:
+
+[22m    Array []
+
+[1m  705th random call:
+
+[22m    Array []
+
+[1m  706th random call:
+
+[22m    Array []
+
+[1m  707th random call:
+
+[22m    Array []
+
+[1m  708th random call:
+
+[22m    Array []
+
+[1m  709th random call:
+
+[22m    Array []
+
+[1m  710th random call:
+
+[22m    Array []
+
+[1m  711th random call:
+
+[22m    Array []
+
+[1m  712th random call:
+
+[22m    Array []
+
+[1m  713th random call:
+
+[22m    Array []
+
+[1m  714th random call:
+
+[22m    Array []
+
+[1m  715th random call:
+
+[22m    Array []
+
+[1m  716th random call:
+
+[22m    Array []
+
+[1m  717th random call:
+
+[22m    Array []
+
+[1m  718th random call:
+
+[22m    Array []
+
+[1m  719th random call:
+
+[22m    Array []
+[39m[90m
+
+Number of calls: [1m719[22m
+[39m
+[36m [2m❯[22m src/test/clubManagerStartWait.test.tsx:[2m93:23[22m[39m
+    [90m 91| [39m    [35mconst[39m draws [33m=[39m vi[33m.[39m[34mspyOn[39m([33mMath[39m[33m,[39m [32m'random'[39m)[33m;[39m
+    [90m 92| [39m    [34mact[39m(() [33m=>[39m { vi[33m.[39m[34madvanceTimersByTime[39m([33mEIGHT_SECONDS[39m [33m*[39m [34m2[39m)[33m;[39m })[33m;[39m
+    [90m 93| [39m    [34mexpect[39m(draws)[33m.[39mnot[33m.[39m[34mtoHaveBeenCalled[39m()[33m;[39m
+    [90m   | [39m                      [31m^[39m
+    [90m 94| [39m    vi[33m.[39m[34museRealTimers[39m()[33m;[39m
+    [90m 95| [39m    gates[33m.[39mseriea[33m.[39m[34mopen[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerStartWait.test.tsx[2m > [22mClub Manager: a start that is waiting for its fixture list[2m > [22ma list that is refused says so at once, Try again asks for a new page, and nothing starts by itself
+[31m[1mAssertionError[22m: expected undefined to deeply equal { label: '2026-27', failed: true }
+
+Ignored nodes: comments, script, style
+[36m<html>[31m
+  [36m<head />[31m
+  [36m<body>[31m
+    [36m<div />[31m
+  [36m</body>[31m
+[36m</html>[31m[39m
+
+[32m- Expected:[39m 
+{
+  "failed": true,
+  "label": "2026-27",
+}
+
+[31m+ Received:[39m 
+undefined
+
+[36m [2m❯[22m src/test/clubManagerStartWait.test.tsx:[2m106:58[22m[39m
+    [90m104| [39m    [35mconst[39m { result } [33m=[39m [35mawait[39m [34mtapAndConfirm[39m([32m'Ajax'[39m)[33m;[39m
+    [90m105| [39m    vi[33m.[39m[34museRealTimers[39m()[33m;[39m
+    [90m106| [39m    await waitFor(() => expect(result.current.startWait).toEqual({ lab…
+    [90m   | [39m                                                         [31m^[39m
+    [90m107| [39m    [34mexpect[39m(result[33m.[39mcurrent[33m.[39mcareer)[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m108| [39m    [34mact[39m(() [33m=>[39m result[33m.[39mcurrent[33m.[39m[34mretryStart[39m())[33m;[39m
+[90m [2m❯[22m runWithExpensiveErrorDiagnosticsDisabled ../../home/runner/work/ballpark-hero/ballpark-hero/node_modules/@testing-library/dom/dist/config.js:[2m47:12[22m[39m
+[90m [2m❯[22m checkCallback ../../home/runner/work/ballpark-hero/ballpark-hero/node_modules/@testing-library/dom/dist/wait-for.js:[2m124:77[22m[39m
+[90m [2m❯[22m Timeout.checkRealTimersCallback ../../home/runner/work/ballpark-hero/ballpark-hero/node_modules/@testing-library/dom/dist/wait-for.js:[2m118:16[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerStartWait.test.tsx[2m > [22mClub Manager: a start that is waiting for its fixture list[2m > [22ma list that turns up while the notice is on screen starts the career on it
+[31m[1mAssertionError[22m: expected undefined to deeply equal { label: '2026-27', failed: true }[39m
+
+[32m- Expected:[39m 
+{
+  "failed": true,
+  "label": "2026-27",
+}
+
+[31m+ Received:[39m 
+undefined
+
+[36m [2m❯[22m src/test/clubManagerStartWait.test.tsx:[2m119:38[22m[39m
+    [90m117| [39m    [35mconst[39m { result } [33m=[39m [35mawait[39m [34mtapAndConfirm[39m([32m'Bayern Munich'[39m)[33m;[39m
+    [90m118| [39m    [34mact[39m(() [33m=>[39m { vi[33m.[39m[34madvanceTimersByTime[39m([33mEIGHT_SECONDS[39m)[33m;[39m })[33m;[39m
+    [90m119| [39m    expect(result.current.startWait).toEqual({ label: LABEL, failed: t…
+    [90m   | [39m                                     [31m^[39m
+    [90m120| [39m    vi[33m.[39m[34museRealTimers[39m()[33m;[39m
+    [90m121| [39m    gates[33m.[39mbundesliga[33m.[39m[34mopen[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerStartWait.test.tsx[2m > [22mClub Manager: a start that is waiting for its fixture list[2m > [22ma list that arrives inside the wait starts the career on it, once
+[31m[1mAssertionError[22m: expected undefined to deeply equal { label: '2026-27', failed: false }[39m
+
+[32m- Expected:[39m 
+{
+  "failed": false,
+  "label": "2026-27",
+}
+
+[31m+ Received:[39m 
+undefined
+
+[36m [2m❯[22m src/test/clubManagerStartWait.test.tsx:[2m129:38[22m[39m
+    [90m127| [39m  it('a list that arrives inside the wait starts the career on it, onc…
+    [90m128| [39m    [35mconst[39m { result } [33m=[39m [35mawait[39m [34mtapAndConfirm[39m([32m'Benfica'[39m)[33m;[39m
+    [90m129| [39m    expect(result.current.startWait).toEqual({ label: LABEL, failed: f…
+    [90m   | [39m                                     [31m^[39m
+    [90m130| [39m    vi[33m.[39m[34museRealTimers[39m()[33m;[39m
+    [90m131| [39m    gates[33m.[39mprimeira[33m.[39m[34mopen[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m5 failed[39m[22m[90m (5)[39m
+[2m   Start at [22m 16:04:46
+[2m   Duration [22m 5.40s[2m (transform 2.12s, setup 95ms, collect 2.67s, tests 1.28s, environment 529ms, prepare 306ms)[22m
+
+
+::error file=/tmp/oldhook/src/test/clubManagerStartWait.test.tsx,title=src/test/clubManagerStartWait.test.tsx > Club Manager%3A a start that is waiting for its fixture list > waits by name%2C then says the list did not load and asks%2C and starts on generated fixtures only when told to,line=68,column=38::AssertionError: expected undefined to deeply equal { label: '2026-27', failed: false }%0A%0A- Expected: %0A{%0A  "failed": false,%0A  "label": "2026-27",%0A}%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/test/clubManagerStartWait.test.tsx:68:38%0A%0A
+
+::error file=/tmp/oldhook/src/test/clubManagerStartWait.test.tsx,title=src/test/clubManagerStartWait.test.tsx > Club Manager%3A a start that is waiting for its fixture list > builds no career once the page has been left%2C neither at eight seconds nor when the list arrives,line=93,column=23::AssertionError: expected "random" to not be called at all, but actually been called 719 times%0A%0AReceived: %0A%0A  1st random call:%0A%0A    Array []%0A%0A  2nd random call:%0A%0A    Array []%0A%0A  3rd random call:%0A%0A    Array []%0A%0A  4th random call:%0A%0A    Array []%0A%0A  5th random call:%0A%0A    Array []%0A%0A  6th random call:%0A%0A    Array []%0A%0A  7th random call:%0A%0A    Array []%0A%0A  8th random call:%0A%0A    Array []%0A%0A  9th random call:%0A%0A    Array []%0A%0A  10th random call:%0A%0A    Array []%0A%0A  11th random call:%0A%0A    Array []%0A%0A  12th random call:%0A%0A    Array []%0A%0A  13th random call:%0A%0A    Array []%0A%0A  14th random call:%0A%0A    Array []%0A%0A  15th random call:%0A%0A    Array []%0A%0A  16th random call:%0A%0A    Array []%0A%0A  17th random call:%0A%0A    Array []%0A%0A  18th random call:%0A%0A    Array []%0A%0A  19th random call:%0A%0A    Array []%0A%0A  20th random call:%0A%0A    Array []%0A%0A  21st random call:%0A%0A    Array []%0A%0A  22nd random call:%0A%0A    Array []%0A%0A  23rd random call:%0A%0A    Array []%0A%0A  24th random call:%0A%0A    Array []%0A%0A  25th random call:%0A%0A    Array []%0A%0A  26th random call:%0A%0A    Array []%0A%0A  27th random call:%0A%0A    Array []%0A%0A  28th random call:%0A%0A    Array []%0A%0A  29th random call:%0A%0A    Array []%0A%0A  30th random call:%0A%0A    Array []%0A%0A  31st random call:%0A%0A    Array []%0A%0A  32nd random call:%0A%0A    Array []%0A%0A  33rd random call:%0A%0A    Array []%0A%0A  34th random call:%0A%0A    Array []%0A%0A  35th random call:%0A%0A    Array []%0A%0A  36th random call:%0A%0A    Array []%0A%0A  37th random call:%0A%0A    Array []%0A%0A  38th random call:%0A%0A    Array []%0A%0A  39th random call:%0A%0A    Array []%0A%0A  40th random call:%0A%0A    Array []%0A%0A  41st random call:%0A%0A    Array []%0A%0A  42nd random call:%0A%0A    Array []%0A%0A  43rd random call:%0A%0A    Array []%0A%0A  44th random call:%0A%0A    Array []%0A%0A  45th random call:%0A%0A    Array []%0A%0A  46th random call:%0A%0A    Array []%0A%0A  47th random call:%0A%0A    Array []%0A%0A  48th random call:%0A%0A    Array []%0A%0A  49th random call:%0A%0A    Array []%0A%0A  50th random call:%0A%0A    Array []%0A%0A  51st random call:%0A%0A    Array []%0A%0A  52nd random call:%0A%0A    Array []%0A%0A  53rd random call:%0A%0A    Array []%0A%0A  54th random call:%0A%0A    Array []%0A%0A  55th random call:%0A%0A    Array []%0A%0A  56th random call:%0A%0A    Array []%0A%0A  57th random call:%0A%0A    Array []%0A%0A  58th random call:%0A%0A    Array []%0A%0A  59th random call:%0A%0A    Array []%0A%0A  60th random call:%0A%0A    Array []%0A%0A  61st random call:%0A%0A    Array []%0A%0A  62nd random call:%0A%0A    Array []%0A%0A  63rd random call:%0A%0A    Array []%0A%0A  64th random call:%0A%0A    Array []%0A%0A  65th random call:%0A%0A    Array []%0A%0A  66th random call:%0A%0A    Array []%0A%0A  67th random call:%0A%0A    Array []%0A%0A  68th random call:%0A%0A    Array []%0A%0A  69th random call:%0A%0A    Array []%0A%0A  70th random call:%0A%0A    Array []%0A%0A  71st random call:%0A%0A    Array []%0A%0A  72nd random call:%0A%0A    Array []%0A%0A  73rd random call:%0A%0A    Array []%0A%0A  74th random call:%0A%0A    Array []%0A%0A  75th random call:%0A%0A    Array []%0A%0A  76th random call:%0A%0A    Array []%0A%0A  77th random call:%0A%0A    Array []%0A%0A  78th random call:%0A%0A    Array []%0A%0A  79th random call:%0A%0A    Array []%0A%0A  80th random call:%0A%0A    Array []%0A%0A  81st random call:%0A%0A    Array []%0A%0A  82nd random call:%0A%0A    Array []%0A%0A  83rd random call:%0A%0A    Array []%0A%0A  84th random call:%0A%0A    Array []%0A%0A  85th random call:%0A%0A    Array []%0A%0A  86th random call:%0A%0A    Array []%0A%0A  87th random call:%0A%0A    Array []%0A%0A  88th random call:%0A%0A    Array []%0A%0A  89th random call:%0A%0A    Array []%0A%0A  90th random call:%0A%0A    Array []%0A%0A  91st random call:%0A%0A    Array []%0A%0A  92nd random call:%0A%0A    Array []%0A%0A  93rd random call:%0A%0A    Array []%0A%0A  94th random call:%0A%0A    Array []%0A%0A  95th random call:%0A%0A    Array []%0A%0A  96th random call:%0A%0A    Array []%0A%0A  97th random call:%0A%0A    Array []%0A%0A  98th random call:%0A%0A    Array []%0A%0A  99th random call:%0A%0A    Array []%0A%0A  100th random call:%0A%0A    Array []%0A%0A  101st random call:%0A%0A    Array []%0A%0A  102nd random call:%0A%0A    Array []%0A%0A  103rd random call:%0A%0A    Array []%0A%0A  104th random call:%0A%0A    Array []%0A%0A  105th random call:%0A%0A    Array []%0A%0A  106th random call:%0A%0A    Array []%0A%0A  107th random call:%0A%0A    Array []%0A%0A  108th random call:%0A%0A    Array []%0A%0A  109th random call:%0A%0A    Array []%0A%0A  110th random call:%0A%0A    Array []%0A%0A  111th random call:%0A%0A    Array []%0A%0A  112th random call:%0A%0A    Array []%0A%0A  113th random call:%0A%0A    Array []%0A%0A  114th random call:%0A%0A    Array []%0A%0A  115th random call:%0A%0A    Array []%0A%0A  116th random call:%0A%0A    Array []%0A%0A  117th random call:%0A%0A    Array []%0A%0A  118th random call:%0A%0A    Array []%0A%0A  119th random call:%0A%0A    Array []%0A%0A  120th random call:%0A%0A    Array []%0A%0A  121st random call:%0A%0A    Array []%0A%0A  122nd random call:%0A%0A    Array []%0A%0A  123rd random call:%0A%0A    Array []%0A%0A  124th random call:%0A%0A    Array []%0A%0A  125th random call:%0A%0A    Array []%0A%0A  126th random call:%0A%0A    Array []%0A%0A  127th random call:%0A%0A    Array []%0A%0A  128th random call:%0A%0A    Array []%0A%0A  129th random call:%0A%0A    Array []%0A%0A  130th random call:%0A%0A    Array []%0A%0A  131st random call:%0A%0A    Array []%0A%0A  132nd random call:%0A%0A    Array []%0A%0A  133rd random call:%0A%0A    Array []%0A%0A  134th random call:%0A%0A    Array []%0A%0A  135th random call:%0A%0A    Array []%0A%0A  136th random call:%0A%0A    Array []%0A%0A  137th random call:%0A%0A    Array []%0A%0A  138th random call:%0A%0A    Array []%0A%0A  139th random call:%0A%0A    Array []%0A%0A  140th random call:%0A%0A    Array []%0A%0A  141st random call:%0A%0A    Array []%0A%0A  142nd random call:%0A%0A    Array []%0A%0A  143rd random call:%0A%0A    Array []%0A%0A  144th random call:%0A%0A    Array []%0A%0A  145th random call:%0A%0A    Array []%0A%0A  146th random call:%0A%0A    Array []%0A%0A  147th random call:%0A%0A    Array []%0A%0A  148th random call:%0A%0A    Array []%0A%0A  149th random call:%0A%0A    Array []%0A%0A  150th random call:%0A%0A    Array []%0A%0A  151st random call:%0A%0A    Array []%0A%0A  152nd random call:%0A%0A    Array []%0A%0A  153rd random call:%0A%0A    Array []%0A%0A  154th random call:%0A%0A    Array []%0A%0A  155th random call:%0A%0A    Array []%0A%0A  156th random call:%0A%0A    Array []%0A%0A  157th random call:%0A%0A    Array []%0A%0A  158th random call:%0A%0A    Array []%0A%0A  159th random call:%0A%0A    Array []%0A%0A  160th random call:%0A%0A    Array []%0A%0A  161st random call:%0A%0A    Array []%0A%0A  162nd random call:%0A%0A    Array []%0A%0A  163rd random call:%0A%0A    Array []%0A%0A  164th random call:%0A%0A    Array []%0A%0A  165th random call:%0A%0A    Array []%0A%0A  166th random call:%0A%0A    Array []%0A%0A  167th random call:%0A%0A    Array []%0A%0A  168th random call:%0A%0A    Array []%0A%0A  169th random call:%0A%0A    Array []%0A%0A  170th random call:%0A%0A    Array []%0A%0A  171st random call:%0A%0A    Array []%0A%0A  172nd random call:%0A%0A    Array []%0A%0A  173rd random call:%0A%0A    Array []%0A%0A  174th random call:%0A%0A    Array []%0A%0A  175th random call:%0A%0A    Array []%0A%0A  176th random call:%0A%0A    Array []%0A%0A  177th random call:%0A%0A    Array []%0A%0A  178th random call:%0A%0A    Array []%0A%0A  179th random call:%0A%0A    Array []%0A%0A  180th random call:%0A%0A    Array []%0A%0A  181st random call:%0A%0A    Array []%0A%0A  182nd random call:%0A%0A    Array []%0A%0A  183rd random call:%0A%0A    Array []%0A%0A  184th random call:%0A%0A    Array []%0A%0A  185th random call:%0A%0A    Array []%0A%0A  186th random call:%0A%0A    Array []%0A%0A  187th random call:%0A%0A    Array []%0A%0A  188th random call:%0A%0A    Array []%0A%0A  189th random call:%0A%0A    Array []%0A%0A  190th random call:%0A%0A    Array []%0A%0A  191st random call:%0A%0A    Array []%0A%0A  192nd random call:%0A%0A    Array []%0A%0A  193rd random call:%0A%0A    Array []%0A%0A  194th random call:%0A%0A    Array []%0A%0A  195th random call:%0A%0A    Array []%0A%0A  196th random call:%0A%0A    Array []%0A%0A  197th random call:%0A%0A    Array []%0A%0A  198th random call:%0A%0A    Array []%0A%0A  199th random call:%0A%0A    Array []%0A%0A  200th random call:%0A%0A    Array []%0A%0A  201st random call:%0A%0A    Array []%0A%0A  202nd random call:%0A%0A    Array []%0A%0A  203rd random call:%0A%0A    Array []%0A%0A  204th random call:%0A%0A    Array []%0A%0A  205th random call:%0A%0A    Array []%0A%0A  206th random call:%0A%0A    Array []%0A%0A  207th random call:%0A%0A    Array []%0A%0A  208th random call:%0A%0A    Array []%0A%0A  209th random call:%0A%0A    Array []%0A%0A  210th random call:%0A%0A    Array []%0A%0A  211th random call:%0A%0A    Array []%0A%0A  212th random call:%0A%0A    Array []%0A%0A  213th random call:%0A%0A    Array []%0A%0A  214th random call:%0A%0A    Array []%0A%0A  215th random call:%0A%0A    Array []%0A%0A  216th random call:%0A%0A    Array []%0A%0A  217th random call:%0A%0A    Array []%0A%0A  218th random call:%0A%0A    Array []%0A%0A  219th random call:%0A%0A    Array []%0A%0A  220th random call:%0A%0A    Array []%0A%0A  221st random call:%0A%0A    Array []%0A%0A  222nd random call:%0A%0A    Array []%0A%0A  223rd random call:%0A%0A    Array []%0A%0A  224th random call:%0A%0A    Array []%0A%0A  225th random call:%0A%0A    Array []%0A%0A  226th random call:%0A%0A    Array []%0A%0A  227th random call:%0A%0A    Array []%0A%0A  228th random call:%0A%0A    Array []%0A%0A  229th random call:%0A%0A    Array []%0A%0A  230th random call:%0A%0A    Array []%0A%0A  231st random call:%0A%0A    Array []%0A%0A  232nd random call:%0A%0A    Array []%0A%0A  233rd random call:%0A%0A    Array []%0A%0A  234th random call:%0A%0A    Array []%0A%0A  235th random call:%0A%0A    Array []%0A%0A  236th random call:%0A%0A    Array []%0A%0A  237th random call:%0A%0A    Array []%0A%0A  238th random call:%0A%0A    Array []%0A%0A  239th random call:%0A%0A    Array []%0A%0A  240th random call:%0A%0A    Array []%0A%0A  241st random call:%0A%0A    Array []%0A%0A  242nd random call:%0A%0A    Array []%0A%0A  243rd random call:%0A%0A    Array []%0A%0A  244th random call:%0A%0A    Array []%0A%0A  245th random call:%0A%0A    Array []%0A%0A  246th random call:%0A%0A    Array []%0A%0A  247th random call:%0A%0A    Array []%0A%0A  248th random call:%0A%0A    Array []%0A%0A  249th random call:%0A%0A    Array []%0A%0A  250th random call:%0A%0A    Array []%0A%0A  251st random call:%0A%0A    Array []%0A%0A  252nd random call:%0A%0A    Array []%0A%0A  253rd random call:%0A%0A    Array []%0A%0A  254th random call:%0A%0A    Array []%0A%0A  255th random call:%0A%0A    Array []%0A%0A  256th random call:%0A%0A    Array []%0A%0A  257th random call:%0A%0A    Array []%0A%0A  258th random call:%0A%0A    Array []%0A%0A  259th random call:%0A%0A    Array []%0A%0A  260th random call:%0A%0A    Array []%0A%0A  261st random call:%0A%0A    Array []%0A%0A  262nd random call:%0A%0A    Array []%0A%0A  263rd random call:%0A%0A    Array []%0A%0A  264th random call:%0A%0A    Array []%0A%0A  265th random call:%0A%0A    Array []%0A%0A  266th random call:%0A%0A    Array []%0A%0A  267th random call:%0A%0A    Array []%0A%0A  268th random call:%0A%0A    Array []%0A%0A  269th random call:%0A%0A    Array []%0A%0A  270th random call:%0A%0A    Array []%0A%0A  271st random call:%0A%0A    Array []%0A%0A  272nd random call:%0A%0A    Array []%0A%0A  273rd random call:%0A%0A    Array []%0A%0A  274th random call:%0A%0A    Array []%0A%0A  275th random call:%0A%0A    Array []%0A%0A  276th random call:%0A%0A    Array []%0A%0A  277th random call:%0A%0A    Array []%0A%0A  278th random call:%0A%0A    Array []%0A%0A  279th random call:%0A%0A    Array []%0A%0A  280th random call:%0A%0A    Array []%0A%0A  281st random call:%0A%0A    Array []%0A%0A  282nd random call:%0A%0A    Array []%0A%0A  283rd random call:%0A%0A    Array []%0A%0A  284th random call:%0A%0A    Array []%0A%0A  285th random call:%0A%0A    Array []%0A%0A  286th random call:%0A%0A    Array []%0A%0A  287th random call:%0A%0A    Array []%0A%0A  288th random call:%0A%0A    Array []%0A%0A  289th random call:%0A%0A    Array []%0A%0A  290th random call:%0A%0A    Array []%0A%0A  291st random call:%0A%0A    Array []%0A%0A  292nd random call:%0A%0A    Array []%0A%0A  293rd random call:%0A%0A    Array []%0A%0A  294th random call:%0A%0A    Array []%0A%0A  295th random call:%0A%0A    Array []%0A%0A  296th random call:%0A%0A    Array []%0A%0A  297th random call:%0A%0A    Array []%0A%0A  298th random call:%0A%0A    Array []%0A%0A  299th random call:%0A%0A    Array []%0A%0A  300th random call:%0A%0A    Array []%0A%0A  301st random call:%0A%0A    Array []%0A%0A  302nd random call:%0A%0A    Array []%0A%0A  303rd random call:%0A%0A    Array []%0A%0A  304th random call:%0A%0A    Array []%0A%0A  305th random call:%0A%0A    Array []%0A%0A  306th random call:%0A%0A    Array []%0A%0A  307th random call:%0A%0A    Array []%0A%0A  308th random call:%0A%0A    Array []%0A%0A  309th random call:%0A%0A    Array []%0A%0A  310th random call:%0A%0A    Array []%0A%0A  311th random call:%0A%0A    Array []%0A%0A  312th random call:%0A%0A    Array []%0A%0A  313th random call:%0A%0A    Array []%0A%0A  314th random call:%0A%0A    Array []%0A%0A  315th random call:%0A%0A    Array []%0A%0A  316th random call:%0A%0A    Array []%0A%0A  317th random call:%0A%0A    Array []%0A%0A  318th random call:%0A%0A    Array []%0A%0A  319th random call:%0A%0A    Array []%0A%0A  320th random call:%0A%0A    Array []%0A%0A  321st random call:%0A%0A    Array []%0A%0A  322nd random call:%0A%0A    Array []%0A%0A  323rd random call:%0A%0A    Array []%0A%0A  324th random call:%0A%0A    Array []%0A%0A  325th random call:%0A%0A    Array []%0A%0A  326th random call:%0A%0A    Array []%0A%0A  327th random call:%0A%0A    Array []%0A%0A  328th random call:%0A%0A    Array []%0A%0A  329th random call:%0A%0A    Array []%0A%0A  330th random call:%0A%0A    Array []%0A%0A  331st random call:%0A%0A    Array []%0A%0A  332nd random call:%0A%0A    Array []%0A%0A  333rd random call:%0A%0A    Array []%0A%0A  334th random call:%0A%0A    Array []%0A%0A  335th random call:%0A%0A    Array []%0A%0A  336th random call:%0A%0A    Array []%0A%0A  337th random call:%0A%0A    Array []%0A%0A  338th random call:%0A%0A    Array []%0A%0A  339th random call:%0A%0A    Array []%0A%0A  340th random call:%0A%0A    Array []%0A%0A  341st random call:%0A%0A    Array []%0A%0A  342nd random call:%0A%0A    Array []%0A%0A  343rd random call:%0A%0A    Array []%0A%0A  344th random call:%0A%0A    Array []%0A%0A  345th random call:%0A%0A    Array []%0A%0A  346th random call:%0A%0A    Array []%0A%0A  347th random call:%0A%0A    Array []%0A%0A  348th random call:%0A%0A    Array []%0A%0A  349th random call:%0A%0A    Array []%0A%0A  350th random call:%0A%0A    Array []%0A%0A  351st random call:%0A%0A    Array []%0A%0A  352nd random call:%0A%0A    Array []%0A%0A  353rd random call:%0A%0A    Array []%0A%0A  354th random call:%0A%0A    Array []%0A%0A  355th random call:%0A%0A    Array []%0A%0A  356th random call:%0A%0A    Array []%0A%0A  357th random call:%0A%0A    Array []%0A%0A  358th random call:%0A%0A    Array []%0A%0A  359th random call:%0A%0A    Array []%0A%0A  360th random call:%0A%0A    Array []%0A%0A  361st random call:%0A%0A    Array []%0A%0A  362nd random call:%0A%0A    Array []%0A%0A  363rd random call:%0A%0A    Array []%0A%0A  364th random call:%0A%0A    Array []%0A%0A  365th random call:%0A%0A    Array []%0A%0A  366th random call:%0A%0A    Array []%0A%0A  367th random call:%0A%0A    Array []%0A%0A  368th random call:%0A%0A    Array []%0A%0A  369th random call:%0A%0A    Array []%0A%0A  370th random call:%0A%0A    Array []%0A%0A  371st random call:%0A%0A    Array []%0A%0A  372nd random call:%0A%0A    Array []%0A%0A  373rd random call:%0A%0A    Array []%0A%0A  374th random call:%0A%0A    Array []%0A%0A  375th random call:%0A%0A    Array []%0A%0A  376th random call:%0A%0A    Array []%0A%0A  377th random call:%0A%0A    Array []%0A%0A  378th random call:%0A%0A    Array []%0A%0A  379th random call:%0A%0A    Array []%0A%0A  380th random call:%0A%0A    Array []%0A%0A  381st random call:%0A%0A    Array []%0A%0A  382nd random call:%0A%0A    Array []%0A%0A  383rd random call:%0A%0A    Array []%0A%0A  384th random call:%0A%0A    Array []%0A%0A  385th random call:%0A%0A    Array []%0A%0A  386th random call:%0A%0A    Array []%0A%0A  387th random call:%0A%0A    Array []%0A%0A  388th random call:%0A%0A    Array []%0A%0A  389th random call:%0A%0A    Array []%0A%0A  390th random call:%0A%0A    Array []%0A%0A  391st random call:%0A%0A    Array []%0A%0A  392nd random call:%0A%0A    Array []%0A%0A  393rd random call:%0A%0A    Array []%0A%0A  394th random call:%0A%0A    Array []%0A%0A  395th random call:%0A%0A    Array []%0A%0A  396th random call:%0A%0A    Array []%0A%0A  397th random call:%0A%0A    Array []%0A%0A  398th random call:%0A%0A    Array []%0A%0A  399th random call:%0A%0A    Array []%0A%0A  400th random call:%0A%0A    Array []%0A%0A  401st random call:%0A%0A    Array []%0A%0A  402nd random call:%0A%0A    Array []%0A%0A  403rd random call:%0A%0A    Array []%0A%0A  404th random call:%0A%0A    Array []%0A%0A  405th random call:%0A%0A    Array []%0A%0A  406th random call:%0A%0A    Array []%0A%0A  407th random call:%0A%0A    Array []%0A%0A  408th random call:%0A%0A    Array []%0A%0A  409th random call:%0A%0A    Array []%0A%0A  410th random call:%0A%0A    Array []%0A%0A  411th random call:%0A%0A    Array []%0A%0A  412th random call:%0A%0A    Array []%0A%0A  413th random call:%0A%0A    Array []%0A%0A  414th random call:%0A%0A    Array []%0A%0A  415th random call:%0A%0A    Array []%0A%0A  416th random call:%0A%0A    Array []%0A%0A  417th random call:%0A%0A    Array []%0A%0A  418th random call:%0A%0A    Array []%0A%0A  419th random call:%0A%0A    Array []%0A%0A  420th random call:%0A%0A    Array []%0A%0A  421st random call:%0A%0A    Array []%0A%0A  422nd random call:%0A%0A    Array []%0A%0A  423rd random call:%0A%0A    Array []%0A%0A  424th random call:%0A%0A    Array []%0A%0A  425th random call:%0A%0A    Array []%0A%0A  426th random call:%0A%0A    Array []%0A%0A  427th random call:%0A%0A    Array []%0A%0A  428th random call:%0A%0A    Array []%0A%0A  429th random call:%0A%0A    Array []%0A%0A  430th random call:%0A%0A    Array []%0A%0A  431st random call:%0A%0A    Array []%0A%0A  432nd random call:%0A%0A    Array []%0A%0A  433rd random call:%0A%0A    Array []%0A%0A  434th random call:%0A%0A    Array []%0A%0A  435th random call:%0A%0A    Array []%0A%0A  436th random call:%0A%0A    Array []%0A%0A  437th random call:%0A%0A    Array []%0A%0A  438th random call:%0A%0A    Array []%0A%0A  439th random call:%0A%0A    Array []%0A%0A  440th random call:%0A%0A    Array []%0A%0A  441st random call:%0A%0A    Array []%0A%0A  442nd random call:%0A%0A    Array []%0A%0A  443rd random call:%0A%0A    Array []%0A%0A  444th random call:%0A%0A    Array []%0A%0A  445th random call:%0A%0A    Array []%0A%0A  446th random call:%0A%0A    Array []%0A%0A  447th random call:%0A%0A    Array []%0A%0A  448th random call:%0A%0A    Array []%0A%0A  449th random call:%0A%0A    Array []%0A%0A  450th random call:%0A%0A    Array []%0A%0A  451st random call:%0A%0A    Array []%0A%0A  452nd random call:%0A%0A    Array []%0A%0A  453rd random call:%0A%0A    Array []%0A%0A  454th random call:%0A%0A    Array []%0A%0A  455th random call:%0A%0A    Array []%0A%0A  456th random call:%0A%0A    Array []%0A%0A  457th random call:%0A%0A    Array []%0A%0A  458th random call:%0A%0A    Array []%0A%0A  459th random call:%0A%0A    Array []%0A%0A  460th random call:%0A%0A    Array []%0A%0A  461st random call:%0A%0A    Array []%0A%0A  462nd random call:%0A%0A    Array []%0A%0A  463rd random call:%0A%0A    Array []%0A%0A  464th random call:%0A%0A    Array []%0A%0A  465th random call:%0A%0A    Array []%0A%0A  466th random call:%0A%0A    Array []%0A%0A  467th random call:%0A%0A    Array []%0A%0A  468th random call:%0A%0A    Array []%0A%0A  469th random call:%0A%0A    Array []%0A%0A  470th random call:%0A%0A    Array []%0A%0A  471st random call:%0A%0A    Array []%0A%0A  472nd random call:%0A%0A    Array []%0A%0A  473rd random call:%0A%0A    Array []%0A%0A  474th random call:%0A%0A    Array []%0A%0A  475th random call:%0A%0A    Array []%0A%0A  476th random call:%0A%0A    Array []%0A%0A  477th random call:%0A%0A    Array []%0A%0A  478th random call:%0A%0A    Array []%0A%0A  479th random call:%0A%0A    Array []%0A%0A  480th random call:%0A%0A    Array []%0A%0A  481st random call:%0A%0A    Array []%0A%0A  482nd random call:%0A%0A    Array []%0A%0A  483rd random call:%0A%0A    Array []%0A%0A  484th random call:%0A%0A    Array []%0A%0A  485th random call:%0A%0A    Array []%0A%0A  486th random call:%0A%0A    Array []%0A%0A  487th random call:%0A%0A    Array []%0A%0A  488th random call:%0A%0A    Array []%0A%0A  489th random call:%0A%0A    Array []%0A%0A  490th random call:%0A%0A    Array []%0A%0A  491st random call:%0A%0A    Array []%0A%0A  492nd random call:%0A%0A    Array []%0A%0A  493rd random call:%0A%0A    Array []%0A%0A  494th random call:%0A%0A    Array []%0A%0A  495th random call:%0A%0A    Array []%0A%0A  496th random call:%0A%0A    Array []%0A%0A  497th random call:%0A%0A    Array []%0A%0A  498th random call:%0A%0A    Array []%0A%0A  499th random call:%0A%0A    Array []%0A%0A  500th random call:%0A%0A    Array []%0A%0A  501st random call:%0A%0A    Array []%0A%0A  502nd random call:%0A%0A    Array []%0A%0A  503rd random call:%0A%0A    Array []%0A%0A  504th random call:%0A%0A    Array []%0A%0A  505th random call:%0A%0A    Array []%0A%0A  506th random call:%0A%0A    Array []%0A%0A  507th random call:%0A%0A    Array []%0A%0A  508th random call:%0A%0A    Array []%0A%0A  509th random call:%0A%0A    Array []%0A%0A  510th random call:%0A%0A    Array []%0A%0A  511th random call:%0A%0A    Array []%0A%0A  512th random call:%0A%0A    Array []%0A%0A  513th random call:%0A%0A    Array []%0A%0A  514th random call:%0A%0A    Array []%0A%0A  515th random call:%0A%0A    Array []%0A%0A  516th random call:%0A%0A    Array []%0A%0A  517th random call:%0A%0A    Array []%0A%0A  518th random call:%0A%0A    Array []%0A%0A  519th random call:%0A%0A    Array []%0A%0A  520th random call:%0A%0A    Array []%0A%0A  521st random call:%0A%0A    Array []%0A%0A  522nd random call:%0A%0A    Array []%0A%0A  523rd random call:%0A%0A    Array []%0A%0A  524th random call:%0A%0A    Array []%0A%0A  525th random call:%0A%0A    Array []%0A%0A  526th random call:%0A%0A    Array []%0A%0A  527th random call:%0A%0A    Array []%0A%0A  528th random call:%0A%0A    Array []%0A%0A  529th random call:%0A%0A    Array []%0A%0A  530th random call:%0A%0A    Array []%0A%0A  531st random call:%0A%0A    Array []%0A%0A  532nd random call:%0A%0A    Array []%0A%0A  533rd random call:%0A%0A    Array []%0A%0A  534th random call:%0A%0A    Array []%0A%0A  535th random call:%0A%0A    Array []%0A%0A  536th random call:%0A%0A    Array []%0A%0A  537th random call:%0A%0A    Array []%0A%0A  538th random call:%0A%0A    Array []%0A%0A  539th random call:%0A%0A    Array []%0A%0A  540th random call:%0A%0A    Array []%0A%0A  541st random call:%0A%0A    Array []%0A%0A  542nd random call:%0A%0A    Array []%0A%0A  543rd random call:%0A%0A    Array []%0A%0A  544th random call:%0A%0A    Array []%0A%0A  545th random call:%0A%0A    Array []%0A%0A  546th random call:%0A%0A    Array []%0A%0A  547th random call:%0A%0A    Array []%0A%0A  548th random call:%0A%0A    Array []%0A%0A  549th random call:%0A%0A    Array []%0A%0A  550th random call:%0A%0A    Array []%0A%0A  551st random call:%0A%0A    Array []%0A%0A  552nd random call:%0A%0A    Array []%0A%0A  553rd random call:%0A%0A    Array []%0A%0A  554th random call:%0A%0A    Array []%0A%0A  555th random call:%0A%0A    Array []%0A%0A  556th random call:%0A%0A    Array []%0A%0A  557th random call:%0A%0A    Array []%0A%0A  558th random call:%0A%0A    Array []%0A%0A  559th random call:%0A%0A    Array []%0A%0A  560th random call:%0A%0A    Array []%0A%0A  561st random call:%0A%0A    Array []%0A%0A  562nd random call:%0A%0A    Array []%0A%0A  563rd random call:%0A%0A    Array []%0A%0A  564th random call:%0A%0A    Array []%0A%0A  565th random call:%0A%0A    Array []%0A%0A  566th random call:%0A%0A    Array []%0A%0A  567th random call:%0A%0A    Array []%0A%0A  568th random call:%0A%0A    Array []%0A%0A  569th random call:%0A%0A    Array []%0A%0A  570th random call:%0A%0A    Array []%0A%0A  571st random call:%0A%0A    Array []%0A%0A  572nd random call:%0A%0A    Array []%0A%0A  573rd random call:%0A%0A    Array []%0A%0A  574th random call:%0A%0A    Array []%0A%0A  575th random call:%0A%0A    Array []%0A%0A  576th random call:%0A%0A    Array []%0A%0A  577th random call:%0A%0A    Array []%0A%0A  578th random call:%0A%0A    Array []%0A%0A  579th random call:%0A%0A    Array []%0A%0A  580th random call:%0A%0A    Array []%0A%0A  581st random call:%0A%0A    Array []%0A%0A  582nd random call:%0A%0A    Array []%0A%0A  583rd random call:%0A%0A    Array []%0A%0A  584th random call:%0A%0A    Array []%0A%0A  585th random call:%0A%0A    Array []%0A%0A  586th random call:%0A%0A    Array []%0A%0A  587th random call:%0A%0A    Array []%0A%0A  588th random call:%0A%0A    Array []%0A%0A  589th random call:%0A%0A    Array []%0A%0A  590th random call:%0A%0A    Array []%0A%0A  591st random call:%0A%0A    Array []%0A%0A  592nd random call:%0A%0A    Array []%0A%0A  593rd random call:%0A%0A    Array []%0A%0A  594th random call:%0A%0A    Array []%0A%0A  595th random call:%0A%0A    Array []%0A%0A  596th random call:%0A%0A    Array []%0A%0A  597th random call:%0A%0A    Array []%0A%0A  598th random call:%0A%0A    Array []%0A%0A  599th random call:%0A%0A    Array []%0A%0A  600th random call:%0A%0A    Array []%0A%0A  601st random call:%0A%0A    Array []%0A%0A  602nd random call:%0A%0A    Array []%0A%0A  603rd random call:%0A%0A    Array []%0A%0A  604th random call:%0A%0A    Array []%0A%0A  605th random call:%0A%0A    Array []%0A%0A  606th random call:%0A%0A    Array []%0A%0A  607th random call:%0A%0A    Array []%0A%0A  608th random call:%0A%0A    Array []%0A%0A  609th random call:%0A%0A    Array []%0A%0A  610th random call:%0A%0A    Array []%0A%0A  611th random call:%0A%0A    Array []%0A%0A  612th random call:%0A%0A    Array []%0A%0A  613th random call:%0A%0A    Array []%0A%0A  614th random call:%0A%0A    Array []%0A%0A  615th random call:%0A%0A    Array []%0A%0A  616th random call:%0A%0A    Array []%0A%0A  617th random call:%0A%0A    Array []%0A%0A  618th random call:%0A%0A    Array []%0A%0A  619th random call:%0A%0A    Array []%0A%0A  620th random call:%0A%0A    Array []%0A%0A  621st random call:%0A%0A    Array []%0A%0A  622nd random call:%0A%0A    Array []%0A%0A  623rd random call:%0A%0A    Array []%0A%0A  624th random call:%0A%0A    Array []%0A%0A  625th random call:%0A%0A    Array []%0A%0A  626th random call:%0A%0A    Array []%0A%0A  627th random call:%0A%0A    Array []%0A%0A  628th random call:%0A%0A    Array []%0A%0A  629th random call:%0A%0A    Array []%0A%0A  630th random call:%0A%0A    Array []%0A%0A  631st random call:%0A%0A    Array []%0A%0A  632nd random call:%0A%0A    Array []%0A%0A  633rd random call:%0A%0A    Array []%0A%0A  634th random call:%0A%0A    Array []%0A%0A  635th random call:%0A%0A    Array []%0A%0A  636th random call:%0A%0A    Array []%0A%0A  637th random call:%0A%0A    Array []%0A%0A  638th random call:%0A%0A    Array []%0A%0A  639th random call:%0A%0A    Array []%0A%0A  640th random call:%0A%0A    Array []%0A%0A  641st random call:%0A%0A    Array []%0A%0A  642nd random call:%0A%0A    Array []%0A%0A  643rd random call:%0A%0A    Array []%0A%0A  644th random call:%0A%0A    Array []%0A%0A  645th random call:%0A%0A    Array []%0A%0A  646th random call:%0A%0A    Array []%0A%0A  647th random call:%0A%0A    Array []%0A%0A  648th random call:%0A%0A    Array []%0A%0A  649th random call:%0A%0A    Array []%0A%0A  650th random call:%0A%0A    Array []%0A%0A  651st random call:%0A%0A    Array []%0A%0A  652nd random call:%0A%0A    Array []%0A%0A  653rd random call:%0A%0A    Array []%0A%0A  654th random call:%0A%0A    Array []%0A%0A  655th random call:%0A%0A    Array []%0A%0A  656th random call:%0A%0A    Array []%0A%0A  657th random call:%0A%0A    Array []%0A%0A  658th random call:%0A%0A    Array []%0A%0A  659th random call:%0A%0A    Array []%0A%0A  660th random call:%0A%0A    Array []%0A%0A  661st random call:%0A%0A    Array []%0A%0A  662nd random call:%0A%0A    Array []%0A%0A  663rd random call:%0A%0A    Array []%0A%0A  664th random call:%0A%0A    Array []%0A%0A  665th random call:%0A%0A    Array []%0A%0A  666th random call:%0A%0A    Array []%0A%0A  667th random call:%0A%0A    Array []%0A%0A  668th random call:%0A%0A    Array []%0A%0A  669th random call:%0A%0A    Array []%0A%0A  670th random call:%0A%0A    Array []%0A%0A  671st random call:%0A%0A    Array []%0A%0A  672nd random call:%0A%0A    Array []%0A%0A  673rd random call:%0A%0A    Array []%0A%0A  674th random call:%0A%0A    Array []%0A%0A  675th random call:%0A%0A    Array []%0A%0A  676th random call:%0A%0A    Array []%0A%0A  677th random call:%0A%0A    Array []%0A%0A  678th random call:%0A%0A    Array []%0A%0A  679th random call:%0A%0A    Array []%0A%0A  680th random call:%0A%0A    Array []%0A%0A  681st random call:%0A%0A    Array []%0A%0A  682nd random call:%0A%0A    Array []%0A%0A  683rd random call:%0A%0A    Array []%0A%0A  684th random call:%0A%0A    Array []%0A%0A  685th random call:%0A%0A    Array []%0A%0A  686th random call:%0A%0A    Array []%0A%0A  687th random call:%0A%0A    Array []%0A%0A  688th random call:%0A%0A    Array []%0A%0A  689th random call:%0A%0A    Array []%0A%0A  690th random call:%0A%0A    Array []%0A%0A  691st random call:%0A%0A    Array []%0A%0A  692nd random call:%0A%0A    Array []%0A%0A  693rd random call:%0A%0A    Array []%0A%0A  694th random call:%0A%0A    Array []%0A%0A  695th random call:%0A%0A    Array []%0A%0A  696th random call:%0A%0A    Array []%0A%0A  697th random call:%0A%0A    Array []%0A%0A  698th random call:%0A%0A    Array []%0A%0A  699th random call:%0A%0A    Array []%0A%0A  700th random call:%0A%0A    Array []%0A%0A  701st random call:%0A%0A    Array []%0A%0A  702nd random call:%0A%0A    Array []%0A%0A  703rd random call:%0A%0A    Array []%0A%0A  704th random call:%0A%0A    Array []%0A%0A  705th random call:%0A%0A    Array []%0A%0A  706th random call:%0A%0A    Array []%0A%0A  707th random call:%0A%0A    Array []%0A%0A  708th random call:%0A%0A    Array []%0A%0A  709th random call:%0A%0A    Array []%0A%0A  710th random call:%0A%0A    Array []%0A%0A  711th random call:%0A%0A    Array []%0A%0A  712th random call:%0A%0A    Array []%0A%0A  713th random call:%0A%0A    Array []%0A%0A  714th random call:%0A%0A    Array []%0A%0A  715th random call:%0A%0A    Array []%0A%0A  716th random call:%0A%0A    Array []%0A%0A  717th random call:%0A%0A    Array []%0A%0A  718th random call:%0A%0A    Array []%0A%0A  719th random call:%0A%0A    Array []%0A%0A%0ANumber of calls: 719%0A%0A ❯ src/test/clubManagerStartWait.test.tsx:93:23%0A%0A
+
+::error file=/tmp/oldhook/src/test/clubManagerStartWait.test.tsx,title=src/test/clubManagerStartWait.test.tsx > Club Manager%3A a start that is waiting for its fixture list > a list that is refused says so at once%2C Try again asks for a new page%2C and nothing starts by itself,line=106,column=58::AssertionError: expected undefined to deeply equal { label: '2026-27', failed: true }%0A%0AIgnored nodes: comments, script, style%0A<html>%0A  <head />%0A  <body>%0A    <div />%0A  </body>%0A</html>%0A%0A- Expected: %0A{%0A  "failed": true,%0A  "label": "2026-27",%0A}%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/test/clubManagerStartWait.test.tsx:106:58%0A ❯ runWithExpensiveErrorDiagnosticsDisabled ../../home/runner/work/ballpark-hero/ballpark-hero/node_modules/@testing-library/dom/dist/config.js:47:12%0A ❯ checkCallback ../../home/runner/work/ballpark-hero/ballpark-hero/node_modules/@testing-library/dom/dist/wait-for.js:124:77%0A ❯ Timeout.checkRealTimersCallback ../../home/runner/work/ballpark-hero/ballpark-hero/node_modules/@testing-library/dom/dist/wait-for.js:118:16%0A%0A
+
+::error file=/tmp/oldhook/src/test/clubManagerStartWait.test.tsx,title=src/test/clubManagerStartWait.test.tsx > Club Manager%3A a start that is waiting for its fixture list > a list that turns up while the notice is on screen starts the career on it,line=119,column=38::AssertionError: expected undefined to deeply equal { label: '2026-27', failed: true }%0A%0A- Expected: %0A{%0A  "failed": true,%0A  "label": "2026-27",%0A}%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/test/clubManagerStartWait.test.tsx:119:38%0A%0A
+
+::error file=/tmp/oldhook/src/test/clubManagerStartWait.test.tsx,title=src/test/clubManagerStartWait.test.tsx > Club Manager%3A a start that is waiting for its fixture list > a list that arrives inside the wait starts the career on it%2C once,line=129,column=38::AssertionError: expected undefined to deeply equal { label: '2026-27', failed: false }%0A%0A- Expected: %0A{%0A  "failed": false,%0A  "label": "2026-27",%0A}%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/test/clubManagerStartWait.test.tsx:129:38%0A%0A

@@ -1,0 +1,5 @@
+alwayspublished exit=1   FAIL: laliga: the game prints "the list as first published in June 2026" for the order of laliga-2026-27-v1, and its registry line {"stoodOn":"10 October 2026"} reads "the list as it stood on 10 October 2026"   FAIL: eredivisie: the game prints "the list as first published in June 2026" for the order of eredivisie-2026-27-v1, 
+helpdrops exit=1   FAIL: bundesliga: the game binds bundesliga-2026-27-v1 and Help does not name the league 
+helplinks exit=1   FAIL: help: the fixture paragraph of Help holds 1 link(s): the Calendar names the sources, Help holds none 
+newsdrops exit=1   FAIL: ligue2: the game binds ligue2-2026-27-v1 and What's New does not list the league   FAIL: help: What's New says "nine more leagues" and lists 8 
+newsopens exit=1   FAIL: laliga: What's New's example for Barcelona is not that club's first two matchdays in the ledger (at home to Athletic Club, then away at Elche) 
