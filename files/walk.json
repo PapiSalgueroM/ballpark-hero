@@ -1,0 +1,3196 @@
+[
+ {
+  "cfg": "p390",
+  "key": "nfl_lesser",
+  "note": "lesser only: 1 other awards, awards [\"Offensive Rookie of the Year\"]",
+  "errors": [],
+  "blocked": 1,
+  "after": {
+   "morale": 80,
+   "fanbase": 48,
+   "heat": 0,
+   "ovr": 74,
+   "netWorth": 1.3,
+   "pending": null,
+   "last": 203,
+   "phase": "season"
+  },
+  "feed": [],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 1 honour | 1 in other awards, no ring yet",
+   "w": 175,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "cmTickIn",
+   "dur": "0.35s"
+  },
+  "case": "0 rings | 1 individual honour across 2 seasons. | Offensive Rookie of the Year | x1 | 2026",
+  "caseOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "caseTop": 58
+ },
+ {
+  "cfg": "p390",
+  "key": "nfl_dropped",
+  "note": "All-Pro Team / The All-Pro team is out and you are not on the first team, a year after you were. It goes down as one more line in the argument between you and Devon Castellanos. / awards [[\"All-Pro\"],[]]",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Pro Team",
+    "The All-Pro team is out and you are not on the first team, a year after you were. It goes down as one more line in the argument between you and Devon Castellanos.",
+    "Morale -5"
+   ],
+   "btn": {
+    "top": 535,
+    "bottom": 575,
+    "left": 132,
+    "right": 259
+   },
+   "root": {
+    "left": 16,
+    "right": 374,
+    "bottom": 575
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 844,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "before": {
+   "morale": 83,
+   "fanbase": 100,
+   "heat": 23,
+   "ovr": 80,
+   "netWorth": 68.8,
+   "pending": {
+    "id": 206,
+    "emoji": "🗳️",
+    "title": "All-Pro Team",
+    "description": "The All-Pro team is out and you are not on the first team, a year after you were. It goes down as one more line in the argument between you and Devon Castellanos.",
+    "consequence": "Morale -5"
+   },
+   "last": 203,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 78,
+   "fanbase": 100,
+   "heat": 23,
+   "ovr": 80,
+   "netWorth": 68.8,
+   "pending": null,
+   "last": 206,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ You were left off the All-Pro first team."
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 5 honours | 2 rings, 3 All-Pros",
+   "w": 175,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "scrollAfterTap": 0
+ },
+ {
+  "cfg": "p390",
+  "key": "nfl_made",
+  "note": "All-Pro Team / The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and Tyrell Okafor. / awards [\"All-Pro\"]",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Pro Team",
+    "The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and Tyrell Okafor.",
+    "Morale +5"
+   ],
+   "btn": {
+    "top": 516,
+    "bottom": 556,
+    "left": 132,
+    "right": 259
+   },
+   "root": {
+    "left": 16,
+    "right": 374,
+    "bottom": 556
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 844,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "before": {
+   "morale": 78,
+   "fanbase": 77,
+   "heat": 15,
+   "ovr": 82,
+   "netWorth": 18.1,
+   "pending": {
+    "id": 206,
+    "emoji": "🗳️",
+    "title": "All-Pro Team",
+    "description": "The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and Tyrell Okafor.",
+    "consequence": "Morale +5"
+   },
+   "last": 203,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 83,
+   "fanbase": 77,
+   "heat": 15,
+   "ovr": 82,
+   "netWorth": 18.1,
+   "pending": null,
+   "last": 206,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ You were named first team All-Pro."
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 3 honours | 1 ring, 2 All-Pros",
+   "w": 175,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "cmTickIn",
+   "dur": "0.35s"
+  },
+  "case": "1 ring | 2 individual honours across 7 seasons. | All-Pro | x2 | 2031, 2032",
+  "caseOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "caseTop": 58
+ },
+ {
+  "cfg": "p390",
+  "key": "nfl_rich",
+  "note": "rich: rings 2, rows [{\"label\":\"MVPs\",\"n\":0},{\"label\":\"All-Pros\",\"n\":1},{\"label\":\"in other awards\",\"n\":1}]",
+  "errors": [],
+  "blocked": 1,
+  "after": {
+   "morale": 78,
+   "fanbase": 96,
+   "heat": 0,
+   "ovr": 83,
+   "netWorth": 23.8,
+   "pending": null,
+   "last": 202,
+   "phase": "season"
+  },
+  "feed": [],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 4 honours | 2 rings, 1 All-Pros",
+   "w": 175,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "cmTickIn",
+   "dur": "0.35s"
+  },
+  "case": "2 rings | 2 individual honours across 8 seasons. | All-Pro | x1 | 2033 | Offensive Rookie of the Year | x1 | 2026",
+  "caseOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "caseTop": 58
+ },
+ {
+  "cfg": "p390",
+  "key": "nfl_old",
+  "note": "old coin card: Ballot Squeeze / Only one of you is making the Pro Bowl ballot at the position this year, and it comes down to Rhys Delgado.",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "Ballot Squeeze",
+    "Only one of you is making the Pro Bowl ballot at the position this year, and it comes down to Rhys Delgado.",
+    "50/50 outcome"
+   ],
+   "btn": {
+    "top": 516,
+    "bottom": 556,
+    "left": 132,
+    "right": 259
+   },
+   "root": {
+    "left": 16,
+    "right": 374,
+    "bottom": 556
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 844,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "before": {
+   "morale": 82,
+   "fanbase": 53,
+   "heat": 0,
+   "ovr": 82,
+   "netWorth": 9.9,
+   "pending": {
+    "id": 206,
+    "emoji": "🗳️",
+    "title": "Ballot Squeeze",
+    "description": "Only one of you is making the Pro Bowl ballot at the position this year, and it comes down to Rhys Delgado.",
+    "consequence": "50/50 outcome"
+   },
+   "last": 209,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 82,
+   "fanbase": 53,
+   "heat": 0,
+   "ovr": 82,
+   "netWorth": 9.9,
+   "pending": null,
+   "last": 206,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ Ballot Squeeze"
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 1 honour | 1 All-Pros, no ring yet",
+   "w": 175,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "scrollAfterTap": 0
+ },
+ {
+  "cfg": "p390",
+  "key": "mlb_made",
+  "note": "All-Star Rosters / The All-Star rosters are out and you are on one. It goes down as one more line in the argument between you and Zane Salvatore. / awards [\"All-Star\",\"Silver Slugger\"]",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Star Rosters",
+    "The All-Star rosters are out and you are on one. It goes down as one more line in the argument between you and Zane Salvatore.",
+    "Morale +5"
+   ],
+   "btn": {
+    "top": 516,
+    "bottom": 556,
+    "left": 132,
+    "right": 259
+   },
+   "root": {
+    "left": 16,
+    "right": 374,
+    "bottom": 556
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 844,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "before": {
+   "morale": 91,
+   "fanbase": 75,
+   "heat": 0,
+   "ovr": 82,
+   "netWorth": 4.4,
+   "pending": {
+    "id": 206,
+    "emoji": "🗳️",
+    "title": "All-Star Rosters",
+    "description": "The All-Star rosters are out and you are on one. It goes down as one more line in the argument between you and Zane Salvatore.",
+    "consequence": "Morale +5"
+   },
+   "last": 221,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 96,
+   "fanbase": 75,
+   "heat": 0,
+   "ovr": 82,
+   "netWorth": 4.4,
+   "pending": null,
+   "last": 206,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ You made the All-Star roster."
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 3 honours | 1 ring, 1 All-Star nods",
+   "w": 175,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "cmTickIn",
+   "dur": "0.35s"
+  },
+  "case": "1 ring | 2 individual honours across 10 seasons. | All-Star | x1 | 2035 | Silver Slugger | x1 | 2035",
+  "caseOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "caseTop": 58
+ },
+ {
+  "cfg": "p390",
+  "key": "mlb_dropped",
+  "note": "All-Star Rosters / The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument between you and Quinn Whitaker. / awards [[\"All-Star\",\"Gold Glove\"],[]]",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Star Rosters",
+    "The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument between you and Quinn Whitaker.",
+    "Morale -5"
+   ],
+   "btn": {
+    "top": 535,
+    "bottom": 575,
+    "left": 132,
+    "right": 259
+   },
+   "root": {
+    "left": 16,
+    "right": 374,
+    "bottom": 575
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 844,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "before": {
+   "morale": 69,
+   "fanbase": 40,
+   "heat": 5,
+   "ovr": 78,
+   "netWorth": 5.2,
+   "pending": {
+    "id": 206,
+    "emoji": "🗳️",
+    "title": "All-Star Rosters",
+    "description": "The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument between you and Quinn Whitaker.",
+    "consequence": "Morale -5"
+   },
+   "last": 202,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 64,
+   "fanbase": 40,
+   "heat": 5,
+   "ovr": 78,
+   "netWorth": 5.2,
+   "pending": null,
+   "last": 206,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ You were left off the All-Star roster."
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 2 honours | 1 All-Star nods, no ring yet",
+   "w": 175,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "scrollAfterTap": 0
+ },
+ {
+  "cfg": "p390",
+  "key": "mlb_rich",
+  "note": "rich: rings 1, rows [{\"label\":\"MVP or Cy Young awards\",\"n\":0},{\"label\":\"All-Star nods\",\"n\":1},{\"label\":\"in other awards\",\"n\":2}]",
+  "errors": [],
+  "blocked": 1,
+  "after": {
+   "morale": 83,
+   "fanbase": 89,
+   "heat": 5,
+   "ovr": 83,
+   "netWorth": 2.8,
+   "pending": null,
+   "last": 212,
+   "phase": "season"
+  },
+  "feed": [],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 4 honours | 1 ring, 2 in other awards",
+   "w": 175,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "cmTickIn",
+   "dur": "0.35s"
+  },
+  "case": "1 ring | 3 individual honours across 6 seasons. | All-Star | x1 | 2030 | Gold Glove | x1 | 2030 | Silver Slugger | x1 | 2030",
+  "caseOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "caseTop": 58
+ },
+ {
+  "cfg": "p390",
+  "key": "mlb_lesser",
+  "note": "lesser only: 1 other awards, awards [\"Comeback Player of the Year\"]",
+  "errors": [],
+  "blocked": 1,
+  "after": {
+   "morale": 81,
+   "fanbase": 51,
+   "heat": 0,
+   "ovr": 79,
+   "netWorth": 2,
+   "pending": null,
+   "last": 213,
+   "phase": "season"
+  },
+  "feed": [],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 1 honour | 1 in other awards, no ring yet",
+   "w": 175,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "cmTickIn",
+   "dur": "0.35s"
+  },
+  "case": "0 rings | 1 individual honour across 4 seasons. | Comeback Player of the Year | x1 | 2029",
+  "caseOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "caseTop": 58
+ },
+ {
+  "cfg": "p390",
+  "key": "mlb_old",
+  "note": "old coin card: All-Star Ballot Squeeze / Only one of you is making the All-Star roster at the position this year, and it comes down to Silas Nakamura.",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Star Ballot Squeeze",
+    "Only one of you is making the All-Star roster at the position this year, and it comes down to Silas Nakamura.",
+    "50/50 outcome"
+   ],
+   "btn": {
+    "top": 516,
+    "bottom": 556,
+    "left": 132,
+    "right": 259
+   },
+   "root": {
+    "left": 16,
+    "right": 374,
+    "bottom": 556
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 844,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "before": {
+   "morale": 83,
+   "fanbase": 74,
+   "heat": 15,
+   "ovr": 84,
+   "netWorth": 4,
+   "pending": {
+    "id": 206,
+    "emoji": "🗳️",
+    "title": "All-Star Ballot Squeeze",
+    "description": "Only one of you is making the All-Star roster at the position this year, and it comes down to Silas Nakamura.",
+    "consequence": "50/50 outcome"
+   },
+   "last": 208,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 83,
+   "fanbase": 74,
+   "heat": 15,
+   "ovr": 84,
+   "netWorth": 4,
+   "pending": null,
+   "last": 206,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ All-Star Ballot Squeeze"
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 3 honours | 1 ring, 2 in other awards",
+   "w": 175,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "scrollAfterTap": 0
+ },
+ {
+  "cfg": "p390",
+  "key": "nhl_dropped",
+  "note": "All-Star Rosters / The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument between you and Elias Rylander. / awards [[\"All-Star\",\"Masterton Nominee\"],[\"Masterton Nominee\"]]",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Star Rosters",
+    "The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument between you and Elias Rylander.",
+    "Morale -5"
+   ],
+   "btn": {
+    "top": 535,
+    "bottom": 575,
+    "left": 132,
+    "right": 259
+   },
+   "root": {
+    "left": 16,
+    "right": 374,
+    "bottom": 575
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 844,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "before": {
+   "morale": 91,
+   "fanbase": 40,
+   "heat": 5,
+   "ovr": 84,
+   "netWorth": 3.7,
+   "pending": {
+    "id": 306,
+    "emoji": "🗳️",
+    "title": "All-Star Rosters",
+    "description": "The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument between you and Elias Rylander.",
+    "consequence": "Morale -5"
+   },
+   "last": 309,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 86,
+   "fanbase": 40,
+   "heat": 5,
+   "ovr": 84,
+   "netWorth": 3.7,
+   "pending": null,
+   "last": 306,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ You were left off the All-Star roster."
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 3 honours | 2 in other awards, no Cup yet",
+   "w": 175,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "scrollAfterTap": 0
+ },
+ {
+  "cfg": "p390",
+  "key": "nhl_made",
+  "note": "All-Star Rosters / The All-Star rosters are out and you are on one. It goes down as one more line in the argument between you and Devon Whitaker. / awards [\"All-Star\"]",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Star Rosters",
+    "The All-Star rosters are out and you are on one. It goes down as one more line in the argument between you and Devon Whitaker.",
+    "Morale +5"
+   ],
+   "btn": {
+    "top": 516,
+    "bottom": 556,
+    "left": 132,
+    "right": 259
+   },
+   "root": {
+    "left": 16,
+    "right": 374,
+    "bottom": 556
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 844,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "before": {
+   "morale": 85,
+   "fanbase": 73,
+   "heat": 0,
+   "ovr": 90,
+   "netWorth": 16.5,
+   "pending": {
+    "id": 306,
+    "emoji": "🗳️",
+    "title": "All-Star Rosters",
+    "description": "The All-Star rosters are out and you are on one. It goes down as one more line in the argument between you and Devon Whitaker.",
+    "consequence": "Morale +5"
+   },
+   "last": 309,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 90,
+   "fanbase": 73,
+   "heat": 0,
+   "ovr": 90,
+   "netWorth": 16.5,
+   "pending": null,
+   "last": 306,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ You made the All-Star roster."
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 2 honours | 1 All-Star nods, no Cup yet",
+   "w": 175,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "cmTickIn",
+   "dur": "0.35s"
+  },
+  "case": "0 Cups | 2 individual honours across 10 seasons. | All-Star | x1 | 2035 | Masterton Nominee | x1 | 2034",
+  "caseOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "caseTop": 58
+ },
+ {
+  "cfg": "p390",
+  "key": "nhl_lesser",
+  "note": "lesser only: 1 other awards, awards [\"Calder Trophy\"]",
+  "errors": [],
+  "blocked": 1,
+  "after": {
+   "morale": 77,
+   "fanbase": 65,
+   "heat": 0,
+   "ovr": 80,
+   "netWorth": 3.7,
+   "pending": null,
+   "last": 304,
+   "phase": "season"
+  },
+  "feed": [],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 1 honour | 1 in other awards, no Cup yet",
+   "w": 175,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "cmTickIn",
+   "dur": "0.35s"
+  },
+  "case": "0 Cups | 1 individual honour across 2 seasons. | Calder Trophy | x1 | 2026",
+  "caseOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "caseTop": 58
+ },
+ {
+  "cfg": "p390",
+  "key": "nhl_rich",
+  "note": "rich: rings 1, rows [{\"label\":\"Major awards\",\"n\":1},{\"label\":\"All-Star nods\",\"n\":0},{\"label\":\"Conn Smythes\",\"n\":1},{\"label\":\"in other awards\",\"n\":3}]",
+  "errors": [],
+  "blocked": 1,
+  "after": {
+   "morale": 100,
+   "fanbase": 73,
+   "heat": 25,
+   "ovr": 89,
+   "netWorth": 4.1,
+   "pending": null,
+   "last": 310,
+   "phase": "season"
+  },
+  "feed": [],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 6 honours | 1 Cup, 3 in other awards",
+   "w": 175,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "cmTickIn",
+   "dur": "0.35s"
+  },
+  "case": "1 Cup | 5 individual honours across 9 seasons. | Art Ross | x1 | 2034 | Conn Smythe | x1 | 2033 | Hart | x1 | 2034 | Masterton Nominee | x1 | 2034 | Rocket Richard | x1 | 2034",
+  "caseOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "caseTop": 58
+ },
+ {
+  "cfg": "p390",
+  "key": "nhl_old",
+  "note": "old coin card: All-Star Ballot Squeeze / Only one of you is making the All-Star ballot at the position this year, and it comes down to Beau Halstead.",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Star Ballot Squeeze",
+    "Only one of you is making the All-Star ballot at the position this year, and it comes down to Beau Halstead.",
+    "50/50 outcome"
+   ],
+   "btn": {
+    "top": 516,
+    "bottom": 556,
+    "left": 132,
+    "right": 259
+   },
+   "root": {
+    "left": 16,
+    "right": 374,
+    "bottom": 556
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 844,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "before": {
+   "morale": 62,
+   "fanbase": 79,
+   "heat": 15,
+   "ovr": 88,
+   "netWorth": 16.5,
+   "pending": {
+    "id": 306,
+    "emoji": "🗳️",
+    "title": "All-Star Ballot Squeeze",
+    "description": "Only one of you is making the All-Star ballot at the position this year, and it comes down to Beau Halstead.",
+    "consequence": "50/50 outcome"
+   },
+   "last": 310,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 62,
+   "fanbase": 79,
+   "heat": 15,
+   "ovr": 88,
+   "netWorth": 16.5,
+   "pending": null,
+   "last": 306,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ All-Star Ballot Squeeze"
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 2 honours | 1 All-Star nods, no Cup yet",
+   "w": 175,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "scrollAfterTap": 0
+ },
+ {
+  "cfg": "p390",
+  "key": "nfl_219old",
+  "note": "joint practice, old coin card",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🥊",
+    "Joint Practice",
+    "Your team and Rhys Delgado's team share a field for joint practices in camp. No scoreboard, and everybody keeps score.",
+    "50/50 outcome"
+   ],
+   "btn": {
+    "top": 516,
+    "bottom": 556,
+    "left": 132,
+    "right": 259
+   },
+   "root": {
+    "left": 16,
+    "right": 374,
+    "bottom": 556
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 844,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "before": {
+   "morale": 86,
+   "fanbase": 53,
+   "heat": 0,
+   "ovr": 82,
+   "netWorth": 8.5,
+   "pending": {
+    "id": 219,
+    "emoji": "🥊",
+    "title": "Joint Practice",
+    "description": "Your team and Rhys Delgado's team share a field for joint practices in camp. No scoreboard, and everybody keeps score.",
+    "consequence": "50/50 outcome"
+   },
+   "last": 209,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 86,
+   "fanbase": 53,
+   "heat": 0,
+   "ovr": 82,
+   "netWorth": 8.5,
+   "pending": null,
+   "last": 219,
+   "phase": "season"
+  },
+  "feed": [
+   "🥊 Joint Practice"
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 1 honour | 1 All-Pros, no ring yet",
+   "w": 175,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "scrollAfterTap": 0
+ },
+ {
+  "cfg": "p390",
+  "key": "nfl_219new",
+  "note": "joint practice, new card",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🥊",
+    "Joint Practice",
+    "Your team and Rhys Delgado's team share a field for joint practices in camp. No scoreboard, and everybody keeps score.",
+    "Morale +3, rivalry intensifies"
+   ],
+   "btn": {
+    "top": 516,
+    "bottom": 556,
+    "left": 132,
+    "right": 259
+   },
+   "root": {
+    "left": 16,
+    "right": 374,
+    "bottom": 556
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 844,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "before": {
+   "morale": 86,
+   "fanbase": 53,
+   "heat": 0,
+   "ovr": 82,
+   "netWorth": 8.5,
+   "pending": {
+    "id": 219,
+    "emoji": "🥊",
+    "title": "Joint Practice",
+    "description": "Your team and Rhys Delgado's team share a field for joint practices in camp. No scoreboard, and everybody keeps score.",
+    "consequence": "Morale +3, rivalry intensifies"
+   },
+   "last": 209,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 89,
+   "fanbase": 53,
+   "heat": 10,
+   "ovr": 82,
+   "netWorth": 8.5,
+   "pending": null,
+   "last": 219,
+   "phase": "season"
+  },
+  "feed": [
+   "🥊 A week of joint practices against Rhys Delgado's team, and neither of you gave an inch. Morale +3."
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 1 honour | 1 All-Pros, no ring yet",
+   "w": 175,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "scrollAfterTap": 0
+ },
+ {
+  "cfg": "d1280",
+  "key": "nfl_lesser",
+  "note": "lesser only: 1 other awards, awards [\"Offensive Rookie of the Year\"]",
+  "errors": [],
+  "blocked": 1,
+  "after": {
+   "morale": 80,
+   "fanbase": 48,
+   "heat": 0,
+   "ovr": 74,
+   "netWorth": 1.3,
+   "pending": null,
+   "last": 203,
+   "phase": "season"
+  },
+  "feed": [],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 1 honour | 1 in other awards, no ring yet",
+   "w": 208,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "cmTickIn",
+   "dur": "0.35s"
+  },
+  "case": "0 rings | 1 individual honour across 2 seasons. | Offensive Rookie of the Year | x1 | 2026",
+  "caseOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "caseTop": 58
+ },
+ {
+  "cfg": "d1280",
+  "key": "nfl_dropped",
+  "note": "All-Pro Team / The All-Pro team is out and you are not on the first team, a year after you were. It goes down as one more line in the argument between you and Devon Castellanos. / awards [[\"All-Pro\"],[]]",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Pro Team",
+    "The All-Pro team is out and you are not on the first team, a year after you were. It goes down as one more line in the argument between you and Devon Castellanos.",
+    "Morale -5"
+   ],
+   "btn": {
+    "top": 477,
+    "bottom": 517,
+    "left": 577,
+    "right": 704
+   },
+   "root": {
+    "left": 320,
+    "right": 960,
+    "bottom": 517
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 900,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "before": {
+   "morale": 83,
+   "fanbase": 100,
+   "heat": 23,
+   "ovr": 80,
+   "netWorth": 68.8,
+   "pending": {
+    "id": 206,
+    "emoji": "🗳️",
+    "title": "All-Pro Team",
+    "description": "The All-Pro team is out and you are not on the first team, a year after you were. It goes down as one more line in the argument between you and Devon Castellanos.",
+    "consequence": "Morale -5"
+   },
+   "last": 203,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 78,
+   "fanbase": 100,
+   "heat": 23,
+   "ovr": 80,
+   "netWorth": 68.8,
+   "pending": null,
+   "last": 206,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ You were left off the All-Pro first team."
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 5 honours | 2 rings, 3 All-Pros",
+   "w": 208,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "scrollAfterTap": 0
+ },
+ {
+  "cfg": "d1280",
+  "key": "nfl_made",
+  "note": "All-Pro Team / The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and Tyrell Okafor. / awards [\"All-Pro\"]",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Pro Team",
+    "The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and Tyrell Okafor.",
+    "Morale +5"
+   ],
+   "btn": {
+    "top": 477,
+    "bottom": 517,
+    "left": 577,
+    "right": 704
+   },
+   "root": {
+    "left": 320,
+    "right": 960,
+    "bottom": 517
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 900,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "before": {
+   "morale": 78,
+   "fanbase": 77,
+   "heat": 15,
+   "ovr": 82,
+   "netWorth": 18.1,
+   "pending": {
+    "id": 206,
+    "emoji": "🗳️",
+    "title": "All-Pro Team",
+    "description": "The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and Tyrell Okafor.",
+    "consequence": "Morale +5"
+   },
+   "last": 203,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 83,
+   "fanbase": 77,
+   "heat": 15,
+   "ovr": 82,
+   "netWorth": 18.1,
+   "pending": null,
+   "last": 206,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ You were named first team All-Pro."
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 3 honours | 1 ring, 2 All-Pros",
+   "w": 208,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "cmTickIn",
+   "dur": "0.35s"
+  },
+  "case": "1 ring | 2 individual honours across 7 seasons. | All-Pro | x2 | 2031, 2032",
+  "caseOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "caseTop": 58
+ },
+ {
+  "cfg": "d1280",
+  "key": "nfl_rich",
+  "note": "rich: rings 2, rows [{\"label\":\"MVPs\",\"n\":0},{\"label\":\"All-Pros\",\"n\":1},{\"label\":\"in other awards\",\"n\":1}]",
+  "errors": [],
+  "blocked": 1,
+  "after": {
+   "morale": 78,
+   "fanbase": 96,
+   "heat": 0,
+   "ovr": 83,
+   "netWorth": 23.8,
+   "pending": null,
+   "last": 202,
+   "phase": "season"
+  },
+  "feed": [],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 4 honours | 2 rings, 1 All-Pros",
+   "w": 208,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "cmTickIn",
+   "dur": "0.35s"
+  },
+  "case": "2 rings | 2 individual honours across 8 seasons. | All-Pro | x1 | 2033 | Offensive Rookie of the Year | x1 | 2026",
+  "caseOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "caseTop": 58
+ },
+ {
+  "cfg": "d1280",
+  "key": "nfl_old",
+  "note": "old coin card: Ballot Squeeze / Only one of you is making the Pro Bowl ballot at the position this year, and it comes down to Rhys Delgado.",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "Ballot Squeeze",
+    "Only one of you is making the Pro Bowl ballot at the position this year, and it comes down to Rhys Delgado.",
+    "50/50 outcome"
+   ],
+   "btn": {
+    "top": 477,
+    "bottom": 517,
+    "left": 577,
+    "right": 704
+   },
+   "root": {
+    "left": 320,
+    "right": 960,
+    "bottom": 517
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 900,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "before": {
+   "morale": 82,
+   "fanbase": 53,
+   "heat": 0,
+   "ovr": 82,
+   "netWorth": 9.9,
+   "pending": {
+    "id": 206,
+    "emoji": "🗳️",
+    "title": "Ballot Squeeze",
+    "description": "Only one of you is making the Pro Bowl ballot at the position this year, and it comes down to Rhys Delgado.",
+    "consequence": "50/50 outcome"
+   },
+   "last": 209,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 82,
+   "fanbase": 53,
+   "heat": 0,
+   "ovr": 82,
+   "netWorth": 9.9,
+   "pending": null,
+   "last": 206,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ Ballot Squeeze"
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 1 honour | 1 All-Pros, no ring yet",
+   "w": 208,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "scrollAfterTap": 0
+ },
+ {
+  "cfg": "d1280",
+  "key": "mlb_made",
+  "note": "All-Star Rosters / The All-Star rosters are out and you are on one. It goes down as one more line in the argument between you and Zane Salvatore. / awards [\"All-Star\",\"Silver Slugger\"]",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Star Rosters",
+    "The All-Star rosters are out and you are on one. It goes down as one more line in the argument between you and Zane Salvatore.",
+    "Morale +5"
+   ],
+   "btn": {
+    "top": 477,
+    "bottom": 517,
+    "left": 577,
+    "right": 704
+   },
+   "root": {
+    "left": 320,
+    "right": 960,
+    "bottom": 517
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 900,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "before": {
+   "morale": 91,
+   "fanbase": 75,
+   "heat": 0,
+   "ovr": 82,
+   "netWorth": 4.4,
+   "pending": {
+    "id": 206,
+    "emoji": "🗳️",
+    "title": "All-Star Rosters",
+    "description": "The All-Star rosters are out and you are on one. It goes down as one more line in the argument between you and Zane Salvatore.",
+    "consequence": "Morale +5"
+   },
+   "last": 221,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 96,
+   "fanbase": 75,
+   "heat": 0,
+   "ovr": 82,
+   "netWorth": 4.4,
+   "pending": null,
+   "last": 206,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ You made the All-Star roster."
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 3 honours | 1 ring, 1 All-Star nods",
+   "w": 208,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "cmTickIn",
+   "dur": "0.35s"
+  },
+  "case": "1 ring | 2 individual honours across 10 seasons. | All-Star | x1 | 2035 | Silver Slugger | x1 | 2035",
+  "caseOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "caseTop": 58
+ },
+ {
+  "cfg": "d1280",
+  "key": "mlb_dropped",
+  "note": "All-Star Rosters / The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument between you and Quinn Whitaker. / awards [[\"All-Star\",\"Gold Glove\"],[]]",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Star Rosters",
+    "The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument between you and Quinn Whitaker.",
+    "Morale -5"
+   ],
+   "btn": {
+    "top": 477,
+    "bottom": 517,
+    "left": 577,
+    "right": 704
+   },
+   "root": {
+    "left": 320,
+    "right": 960,
+    "bottom": 517
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 900,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "before": {
+   "morale": 69,
+   "fanbase": 40,
+   "heat": 5,
+   "ovr": 78,
+   "netWorth": 5.2,
+   "pending": {
+    "id": 206,
+    "emoji": "🗳️",
+    "title": "All-Star Rosters",
+    "description": "The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument between you and Quinn Whitaker.",
+    "consequence": "Morale -5"
+   },
+   "last": 202,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 64,
+   "fanbase": 40,
+   "heat": 5,
+   "ovr": 78,
+   "netWorth": 5.2,
+   "pending": null,
+   "last": 206,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ You were left off the All-Star roster."
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 2 honours | 1 All-Star nods, no ring yet",
+   "w": 208,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "scrollAfterTap": 0
+ },
+ {
+  "cfg": "d1280",
+  "key": "mlb_rich",
+  "note": "rich: rings 1, rows [{\"label\":\"MVP or Cy Young awards\",\"n\":0},{\"label\":\"All-Star nods\",\"n\":1},{\"label\":\"in other awards\",\"n\":2}]",
+  "errors": [],
+  "blocked": 1,
+  "after": {
+   "morale": 83,
+   "fanbase": 89,
+   "heat": 5,
+   "ovr": 83,
+   "netWorth": 2.8,
+   "pending": null,
+   "last": 212,
+   "phase": "season"
+  },
+  "feed": [],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 4 honours | 1 ring, 2 in other awards",
+   "w": 208,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "cmTickIn",
+   "dur": "0.35s"
+  },
+  "case": "1 ring | 3 individual honours across 6 seasons. | All-Star | x1 | 2030 | Gold Glove | x1 | 2030 | Silver Slugger | x1 | 2030",
+  "caseOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "caseTop": 58
+ },
+ {
+  "cfg": "d1280",
+  "key": "mlb_lesser",
+  "note": "lesser only: 1 other awards, awards [\"Comeback Player of the Year\"]",
+  "errors": [],
+  "blocked": 1,
+  "after": {
+   "morale": 81,
+   "fanbase": 51,
+   "heat": 0,
+   "ovr": 79,
+   "netWorth": 2,
+   "pending": null,
+   "last": 213,
+   "phase": "season"
+  },
+  "feed": [],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 1 honour | 1 in other awards, no ring yet",
+   "w": 208,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "cmTickIn",
+   "dur": "0.35s"
+  },
+  "case": "0 rings | 1 individual honour across 4 seasons. | Comeback Player of the Year | x1 | 2029",
+  "caseOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "caseTop": 58
+ },
+ {
+  "cfg": "d1280",
+  "key": "mlb_old",
+  "note": "old coin card: All-Star Ballot Squeeze / Only one of you is making the All-Star roster at the position this year, and it comes down to Silas Nakamura.",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Star Ballot Squeeze",
+    "Only one of you is making the All-Star roster at the position this year, and it comes down to Silas Nakamura.",
+    "50/50 outcome"
+   ],
+   "btn": {
+    "top": 477,
+    "bottom": 517,
+    "left": 577,
+    "right": 704
+   },
+   "root": {
+    "left": 320,
+    "right": 960,
+    "bottom": 517
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 900,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "before": {
+   "morale": 83,
+   "fanbase": 74,
+   "heat": 15,
+   "ovr": 84,
+   "netWorth": 4,
+   "pending": {
+    "id": 206,
+    "emoji": "🗳️",
+    "title": "All-Star Ballot Squeeze",
+    "description": "Only one of you is making the All-Star roster at the position this year, and it comes down to Silas Nakamura.",
+    "consequence": "50/50 outcome"
+   },
+   "last": 208,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 83,
+   "fanbase": 74,
+   "heat": 15,
+   "ovr": 84,
+   "netWorth": 4,
+   "pending": null,
+   "last": 206,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ All-Star Ballot Squeeze"
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 3 honours | 1 ring, 2 in other awards",
+   "w": 208,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "scrollAfterTap": 0
+ },
+ {
+  "cfg": "d1280",
+  "key": "nhl_dropped",
+  "note": "All-Star Rosters / The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument between you and Elias Rylander. / awards [[\"All-Star\",\"Masterton Nominee\"],[\"Masterton Nominee\"]]",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Star Rosters",
+    "The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument between you and Elias Rylander.",
+    "Morale -5"
+   ],
+   "btn": {
+    "top": 477,
+    "bottom": 517,
+    "left": 577,
+    "right": 704
+   },
+   "root": {
+    "left": 320,
+    "right": 960,
+    "bottom": 517
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 900,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "before": {
+   "morale": 91,
+   "fanbase": 40,
+   "heat": 5,
+   "ovr": 84,
+   "netWorth": 3.7,
+   "pending": {
+    "id": 306,
+    "emoji": "🗳️",
+    "title": "All-Star Rosters",
+    "description": "The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument between you and Elias Rylander.",
+    "consequence": "Morale -5"
+   },
+   "last": 309,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 86,
+   "fanbase": 40,
+   "heat": 5,
+   "ovr": 84,
+   "netWorth": 3.7,
+   "pending": null,
+   "last": 306,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ You were left off the All-Star roster."
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 3 honours | 2 in other awards, no Cup yet",
+   "w": 208,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "scrollAfterTap": 0
+ },
+ {
+  "cfg": "d1280",
+  "key": "nhl_made",
+  "note": "All-Star Rosters / The All-Star rosters are out and you are on one. It goes down as one more line in the argument between you and Devon Whitaker. / awards [\"All-Star\"]",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Star Rosters",
+    "The All-Star rosters are out and you are on one. It goes down as one more line in the argument between you and Devon Whitaker.",
+    "Morale +5"
+   ],
+   "btn": {
+    "top": 477,
+    "bottom": 517,
+    "left": 577,
+    "right": 704
+   },
+   "root": {
+    "left": 320,
+    "right": 960,
+    "bottom": 517
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 900,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "before": {
+   "morale": 85,
+   "fanbase": 73,
+   "heat": 0,
+   "ovr": 90,
+   "netWorth": 16.5,
+   "pending": {
+    "id": 306,
+    "emoji": "🗳️",
+    "title": "All-Star Rosters",
+    "description": "The All-Star rosters are out and you are on one. It goes down as one more line in the argument between you and Devon Whitaker.",
+    "consequence": "Morale +5"
+   },
+   "last": 309,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 90,
+   "fanbase": 73,
+   "heat": 0,
+   "ovr": 90,
+   "netWorth": 16.5,
+   "pending": null,
+   "last": 306,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ You made the All-Star roster."
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 2 honours | 1 All-Star nods, no Cup yet",
+   "w": 208,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "cmTickIn",
+   "dur": "0.35s"
+  },
+  "case": "0 Cups | 2 individual honours across 10 seasons. | All-Star | x1 | 2035 | Masterton Nominee | x1 | 2034",
+  "caseOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "caseTop": 58
+ },
+ {
+  "cfg": "d1280",
+  "key": "nhl_lesser",
+  "note": "lesser only: 1 other awards, awards [\"Calder Trophy\"]",
+  "errors": [],
+  "blocked": 1,
+  "after": {
+   "morale": 77,
+   "fanbase": 65,
+   "heat": 0,
+   "ovr": 80,
+   "netWorth": 3.7,
+   "pending": null,
+   "last": 304,
+   "phase": "season"
+  },
+  "feed": [],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 1 honour | 1 in other awards, no Cup yet",
+   "w": 208,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "cmTickIn",
+   "dur": "0.35s"
+  },
+  "case": "0 Cups | 1 individual honour across 2 seasons. | Calder Trophy | x1 | 2026",
+  "caseOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "caseTop": 58
+ },
+ {
+  "cfg": "d1280",
+  "key": "nhl_rich",
+  "note": "rich: rings 1, rows [{\"label\":\"Major awards\",\"n\":1},{\"label\":\"All-Star nods\",\"n\":0},{\"label\":\"Conn Smythes\",\"n\":1},{\"label\":\"in other awards\",\"n\":3}]",
+  "errors": [],
+  "blocked": 1,
+  "after": {
+   "morale": 100,
+   "fanbase": 73,
+   "heat": 25,
+   "ovr": 89,
+   "netWorth": 4.1,
+   "pending": null,
+   "last": 310,
+   "phase": "season"
+  },
+  "feed": [],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 6 honours | 1 Cup, 3 in other awards",
+   "w": 208,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "cmTickIn",
+   "dur": "0.35s"
+  },
+  "case": "1 Cup | 5 individual honours across 9 seasons. | Art Ross | x1 | 2034 | Conn Smythe | x1 | 2033 | Hart | x1 | 2034 | Masterton Nominee | x1 | 2034 | Rocket Richard | x1 | 2034",
+  "caseOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "caseTop": 58
+ },
+ {
+  "cfg": "d1280",
+  "key": "nhl_old",
+  "note": "old coin card: All-Star Ballot Squeeze / Only one of you is making the All-Star ballot at the position this year, and it comes down to Beau Halstead.",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Star Ballot Squeeze",
+    "Only one of you is making the All-Star ballot at the position this year, and it comes down to Beau Halstead.",
+    "50/50 outcome"
+   ],
+   "btn": {
+    "top": 477,
+    "bottom": 517,
+    "left": 577,
+    "right": 704
+   },
+   "root": {
+    "left": 320,
+    "right": 960,
+    "bottom": 517
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 900,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "before": {
+   "morale": 62,
+   "fanbase": 79,
+   "heat": 15,
+   "ovr": 88,
+   "netWorth": 16.5,
+   "pending": {
+    "id": 306,
+    "emoji": "🗳️",
+    "title": "All-Star Ballot Squeeze",
+    "description": "Only one of you is making the All-Star ballot at the position this year, and it comes down to Beau Halstead.",
+    "consequence": "50/50 outcome"
+   },
+   "last": 310,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 62,
+   "fanbase": 79,
+   "heat": 15,
+   "ovr": 88,
+   "netWorth": 16.5,
+   "pending": null,
+   "last": 306,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ All-Star Ballot Squeeze"
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 2 honours | 1 All-Star nods, no Cup yet",
+   "w": 208,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "scrollAfterTap": 0
+ },
+ {
+  "cfg": "d1280",
+  "key": "nfl_219old",
+  "note": "joint practice, old coin card",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🥊",
+    "Joint Practice",
+    "Your team and Rhys Delgado's team share a field for joint practices in camp. No scoreboard, and everybody keeps score.",
+    "50/50 outcome"
+   ],
+   "btn": {
+    "top": 477,
+    "bottom": 517,
+    "left": 577,
+    "right": 704
+   },
+   "root": {
+    "left": 320,
+    "right": 960,
+    "bottom": 517
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 900,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "before": {
+   "morale": 86,
+   "fanbase": 53,
+   "heat": 0,
+   "ovr": 82,
+   "netWorth": 8.5,
+   "pending": {
+    "id": 219,
+    "emoji": "🥊",
+    "title": "Joint Practice",
+    "description": "Your team and Rhys Delgado's team share a field for joint practices in camp. No scoreboard, and everybody keeps score.",
+    "consequence": "50/50 outcome"
+   },
+   "last": 209,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 86,
+   "fanbase": 53,
+   "heat": 0,
+   "ovr": 82,
+   "netWorth": 8.5,
+   "pending": null,
+   "last": 219,
+   "phase": "season"
+  },
+  "feed": [
+   "🥊 Joint Practice"
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 1 honour | 1 All-Pros, no ring yet",
+   "w": 208,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "scrollAfterTap": 0
+ },
+ {
+  "cfg": "d1280",
+  "key": "nfl_219new",
+  "note": "joint practice, new card",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🥊",
+    "Joint Practice",
+    "Your team and Rhys Delgado's team share a field for joint practices in camp. No scoreboard, and everybody keeps score.",
+    "Morale +3, rivalry intensifies"
+   ],
+   "btn": {
+    "top": 477,
+    "bottom": 517,
+    "left": 577,
+    "right": 704
+   },
+   "root": {
+    "left": 320,
+    "right": 960,
+    "bottom": 517
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 900,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "before": {
+   "morale": 86,
+   "fanbase": 53,
+   "heat": 0,
+   "ovr": 82,
+   "netWorth": 8.5,
+   "pending": {
+    "id": 219,
+    "emoji": "🥊",
+    "title": "Joint Practice",
+    "description": "Your team and Rhys Delgado's team share a field for joint practices in camp. No scoreboard, and everybody keeps score.",
+    "consequence": "Morale +3, rivalry intensifies"
+   },
+   "last": 209,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 89,
+   "fanbase": 53,
+   "heat": 10,
+   "ovr": 82,
+   "netWorth": 8.5,
+   "pending": null,
+   "last": 219,
+   "phase": "season"
+  },
+  "feed": [
+   "🥊 A week of joint practices against Rhys Delgado's team, and neither of you gave an inch. Morale +3."
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 1 honour | 1 All-Pros, no ring yet",
+   "w": 208,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "scrollAfterTap": 0
+ },
+ {
+  "cfg": "p390rm",
+  "key": "nfl_made",
+  "note": "All-Pro Team / The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and Tyrell Okafor. / awards [\"All-Pro\"]",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "none",
+   "dur": "1e-06s",
+   "opacity": "1"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Pro Team",
+    "The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and Tyrell Okafor.",
+    "Morale +5"
+   ],
+   "btn": {
+    "top": 516,
+    "bottom": 556,
+    "left": 132,
+    "right": 259
+   },
+   "root": {
+    "left": 16,
+    "right": 374,
+    "bottom": 556
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "none"
+   },
+   "vh": 844,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "before": {
+   "morale": 78,
+   "fanbase": 77,
+   "heat": 15,
+   "ovr": 82,
+   "netWorth": 18.1,
+   "pending": {
+    "id": 206,
+    "emoji": "🗳️",
+    "title": "All-Pro Team",
+    "description": "The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and Tyrell Okafor.",
+    "consequence": "Morale +5"
+   },
+   "last": 203,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 83,
+   "fanbase": 77,
+   "heat": 15,
+   "ovr": 82,
+   "netWorth": 18.1,
+   "pending": null,
+   "last": 206,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ You were named first team All-Pro."
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 3 honours | 1 ring, 2 All-Pros",
+   "w": 175,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "none",
+   "dur": "1e-06s"
+  },
+  "case": "1 ring | 2 individual honours across 7 seasons. | All-Pro | x2 | 2031, 2032",
+  "caseOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "caseTop": 58
+ },
+ {
+  "cfg": "p390rm",
+  "key": "mlb_dropped",
+  "note": "All-Star Rosters / The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument between you and Quinn Whitaker. / awards [[\"All-Star\",\"Gold Glove\"],[]]",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "none",
+   "dur": "1e-06s",
+   "opacity": "1"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Star Rosters",
+    "The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument between you and Quinn Whitaker.",
+    "Morale -5"
+   ],
+   "btn": {
+    "top": 535,
+    "bottom": 575,
+    "left": 132,
+    "right": 259
+   },
+   "root": {
+    "left": 16,
+    "right": 374,
+    "bottom": 575
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "none"
+   },
+   "vh": 844,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "before": {
+   "morale": 69,
+   "fanbase": 40,
+   "heat": 5,
+   "ovr": 78,
+   "netWorth": 5.2,
+   "pending": {
+    "id": 206,
+    "emoji": "🗳️",
+    "title": "All-Star Rosters",
+    "description": "The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument between you and Quinn Whitaker.",
+    "consequence": "Morale -5"
+   },
+   "last": 202,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 64,
+   "fanbase": 40,
+   "heat": 5,
+   "ovr": 78,
+   "netWorth": 5.2,
+   "pending": null,
+   "last": 206,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ You were left off the All-Star roster."
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 2 honours | 1 All-Star nods, no ring yet",
+   "w": 175,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "scrollAfterTap": 0
+ },
+ {
+  "cfg": "p390rm",
+  "key": "nhl_old",
+  "note": "old coin card: All-Star Ballot Squeeze / Only one of you is making the All-Star ballot at the position this year, and it comes down to Beau Halstead.",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "none",
+   "dur": "1e-06s",
+   "opacity": "1"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Star Ballot Squeeze",
+    "Only one of you is making the All-Star ballot at the position this year, and it comes down to Beau Halstead.",
+    "50/50 outcome"
+   ],
+   "btn": {
+    "top": 516,
+    "bottom": 556,
+    "left": 132,
+    "right": 259
+   },
+   "root": {
+    "left": 16,
+    "right": 374,
+    "bottom": 556
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "none"
+   },
+   "vh": 844,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "before": {
+   "morale": 62,
+   "fanbase": 79,
+   "heat": 15,
+   "ovr": 88,
+   "netWorth": 16.5,
+   "pending": {
+    "id": 306,
+    "emoji": "🗳️",
+    "title": "All-Star Ballot Squeeze",
+    "description": "Only one of you is making the All-Star ballot at the position this year, and it comes down to Beau Halstead.",
+    "consequence": "50/50 outcome"
+   },
+   "last": 310,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 62,
+   "fanbase": 79,
+   "heat": 15,
+   "ovr": 88,
+   "netWorth": 16.5,
+   "pending": null,
+   "last": 306,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ All-Star Ballot Squeeze"
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 2 honours | 1 All-Star nods, no Cup yet",
+   "w": 175,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "scrollAfterTap": 0
+ },
+ {
+  "cfg": "p390rm",
+  "key": "nfl_219new",
+  "note": "joint practice, new card",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "none",
+   "dur": "1e-06s",
+   "opacity": "1"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🥊",
+    "Joint Practice",
+    "Your team and Rhys Delgado's team share a field for joint practices in camp. No scoreboard, and everybody keeps score.",
+    "Morale +3, rivalry intensifies"
+   ],
+   "btn": {
+    "top": 516,
+    "bottom": 556,
+    "left": 132,
+    "right": 259
+   },
+   "root": {
+    "left": 16,
+    "right": 374,
+    "bottom": 556
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "none"
+   },
+   "vh": 844,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "before": {
+   "morale": 86,
+   "fanbase": 53,
+   "heat": 0,
+   "ovr": 82,
+   "netWorth": 8.5,
+   "pending": {
+    "id": 219,
+    "emoji": "🥊",
+    "title": "Joint Practice",
+    "description": "Your team and Rhys Delgado's team share a field for joint practices in camp. No scoreboard, and everybody keeps score.",
+    "consequence": "Morale +3, rivalry intensifies"
+   },
+   "last": 209,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 89,
+   "fanbase": 53,
+   "heat": 10,
+   "ovr": 82,
+   "netWorth": 8.5,
+   "pending": null,
+   "last": 219,
+   "phase": "season"
+  },
+  "feed": [
+   "🥊 A week of joint practices against Rhys Delgado's team, and neither of you gave an inch. Morale +3."
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 1 honour | 1 All-Pros, no ring yet",
+   "w": 175,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "scrollAfterTap": 0
+ },
+ {
+  "cfg": "p390rm",
+  "key": "mlb_rich",
+  "note": "rich: rings 1, rows [{\"label\":\"MVP or Cy Young awards\",\"n\":0},{\"label\":\"All-Star nods\",\"n\":1},{\"label\":\"in other awards\",\"n\":2}]",
+  "errors": [],
+  "blocked": 1,
+  "after": {
+   "morale": 83,
+   "fanbase": 89,
+   "heat": 5,
+   "ovr": 83,
+   "netWorth": 2.8,
+   "pending": null,
+   "last": 212,
+   "phase": "season"
+  },
+  "feed": [],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 4 honours | 1 ring, 2 in other awards",
+   "w": 175,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "none",
+   "dur": "1e-06s"
+  },
+  "case": "1 ring | 3 individual honours across 6 seasons. | All-Star | x1 | 2030 | Gold Glove | x1 | 2030 | Silver Slugger | x1 | 2030",
+  "caseOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "caseTop": 58
+ },
+ {
+  "cfg": "p390rm",
+  "key": "nhl_lesser",
+  "note": "lesser only: 1 other awards, awards [\"Calder Trophy\"]",
+  "errors": [],
+  "blocked": 1,
+  "after": {
+   "morale": 77,
+   "fanbase": 65,
+   "heat": 0,
+   "ovr": 80,
+   "netWorth": 3.7,
+   "pending": null,
+   "last": 304,
+   "phase": "season"
+  },
+  "feed": [],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 1 honour | 1 in other awards, no Cup yet",
+   "w": 175,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "none",
+   "dur": "1e-06s"
+  },
+  "case": "0 Cups | 1 individual honour across 2 seasons. | Calder Trophy | x1 | 2026",
+  "caseOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "caseTop": 58
+ },
+ {
+  "cfg": "d1280rm",
+  "key": "nfl_made",
+  "note": "All-Pro Team / The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and Tyrell Okafor. / awards [\"All-Pro\"]",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "none",
+   "dur": "1e-06s",
+   "opacity": "1"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Pro Team",
+    "The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and Tyrell Okafor.",
+    "Morale +5"
+   ],
+   "btn": {
+    "top": 477,
+    "bottom": 517,
+    "left": 577,
+    "right": 704
+   },
+   "root": {
+    "left": 320,
+    "right": 960,
+    "bottom": 517
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "none"
+   },
+   "vh": 900,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "before": {
+   "morale": 78,
+   "fanbase": 77,
+   "heat": 15,
+   "ovr": 82,
+   "netWorth": 18.1,
+   "pending": {
+    "id": 206,
+    "emoji": "🗳️",
+    "title": "All-Pro Team",
+    "description": "The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and Tyrell Okafor.",
+    "consequence": "Morale +5"
+   },
+   "last": 203,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 83,
+   "fanbase": 77,
+   "heat": 15,
+   "ovr": 82,
+   "netWorth": 18.1,
+   "pending": null,
+   "last": 206,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ You were named first team All-Pro."
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 3 honours | 1 ring, 2 All-Pros",
+   "w": 208,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "none",
+   "dur": "1e-06s"
+  },
+  "case": "1 ring | 2 individual honours across 7 seasons. | All-Pro | x2 | 2031, 2032",
+  "caseOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "caseTop": 58
+ },
+ {
+  "cfg": "d1280rm",
+  "key": "mlb_dropped",
+  "note": "All-Star Rosters / The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument between you and Quinn Whitaker. / awards [[\"All-Star\",\"Gold Glove\"],[]]",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "none",
+   "dur": "1e-06s",
+   "opacity": "1"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Star Rosters",
+    "The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument between you and Quinn Whitaker.",
+    "Morale -5"
+   ],
+   "btn": {
+    "top": 477,
+    "bottom": 517,
+    "left": 577,
+    "right": 704
+   },
+   "root": {
+    "left": 320,
+    "right": 960,
+    "bottom": 517
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "none"
+   },
+   "vh": 900,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "before": {
+   "morale": 69,
+   "fanbase": 40,
+   "heat": 5,
+   "ovr": 78,
+   "netWorth": 5.2,
+   "pending": {
+    "id": 206,
+    "emoji": "🗳️",
+    "title": "All-Star Rosters",
+    "description": "The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument between you and Quinn Whitaker.",
+    "consequence": "Morale -5"
+   },
+   "last": 202,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 64,
+   "fanbase": 40,
+   "heat": 5,
+   "ovr": 78,
+   "netWorth": 5.2,
+   "pending": null,
+   "last": 206,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ You were left off the All-Star roster."
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 2 honours | 1 All-Star nods, no ring yet",
+   "w": 208,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "scrollAfterTap": 0
+ },
+ {
+  "cfg": "d1280rm",
+  "key": "nhl_old",
+  "note": "old coin card: All-Star Ballot Squeeze / Only one of you is making the All-Star ballot at the position this year, and it comes down to Beau Halstead.",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "none",
+   "dur": "1e-06s",
+   "opacity": "1"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Star Ballot Squeeze",
+    "Only one of you is making the All-Star ballot at the position this year, and it comes down to Beau Halstead.",
+    "50/50 outcome"
+   ],
+   "btn": {
+    "top": 477,
+    "bottom": 517,
+    "left": 577,
+    "right": 704
+   },
+   "root": {
+    "left": 320,
+    "right": 960,
+    "bottom": 517
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "none"
+   },
+   "vh": 900,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "before": {
+   "morale": 62,
+   "fanbase": 79,
+   "heat": 15,
+   "ovr": 88,
+   "netWorth": 16.5,
+   "pending": {
+    "id": 306,
+    "emoji": "🗳️",
+    "title": "All-Star Ballot Squeeze",
+    "description": "Only one of you is making the All-Star ballot at the position this year, and it comes down to Beau Halstead.",
+    "consequence": "50/50 outcome"
+   },
+   "last": 310,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 62,
+   "fanbase": 79,
+   "heat": 15,
+   "ovr": 88,
+   "netWorth": 16.5,
+   "pending": null,
+   "last": 306,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ All-Star Ballot Squeeze"
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 2 honours | 1 All-Star nods, no Cup yet",
+   "w": 208,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "scrollAfterTap": 0
+ },
+ {
+  "cfg": "d1280rm",
+  "key": "nfl_219new",
+  "note": "joint practice, new card",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "none",
+   "dur": "1e-06s",
+   "opacity": "1"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🥊",
+    "Joint Practice",
+    "Your team and Rhys Delgado's team share a field for joint practices in camp. No scoreboard, and everybody keeps score.",
+    "Morale +3, rivalry intensifies"
+   ],
+   "btn": {
+    "top": 477,
+    "bottom": 517,
+    "left": 577,
+    "right": 704
+   },
+   "root": {
+    "left": 320,
+    "right": 960,
+    "bottom": 517
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "none"
+   },
+   "vh": 900,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "before": {
+   "morale": 86,
+   "fanbase": 53,
+   "heat": 0,
+   "ovr": 82,
+   "netWorth": 8.5,
+   "pending": {
+    "id": 219,
+    "emoji": "🥊",
+    "title": "Joint Practice",
+    "description": "Your team and Rhys Delgado's team share a field for joint practices in camp. No scoreboard, and everybody keeps score.",
+    "consequence": "Morale +3, rivalry intensifies"
+   },
+   "last": 209,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 89,
+   "fanbase": 53,
+   "heat": 10,
+   "ovr": 82,
+   "netWorth": 8.5,
+   "pending": null,
+   "last": 219,
+   "phase": "season"
+  },
+  "feed": [
+   "🥊 A week of joint practices against Rhys Delgado's team, and neither of you gave an inch. Morale +3."
+  ],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 1 honour | 1 All-Pros, no ring yet",
+   "w": 208,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "scrollAfterTap": 0
+ },
+ {
+  "cfg": "d1280rm",
+  "key": "mlb_rich",
+  "note": "rich: rings 1, rows [{\"label\":\"MVP or Cy Young awards\",\"n\":0},{\"label\":\"All-Star nods\",\"n\":1},{\"label\":\"in other awards\",\"n\":2}]",
+  "errors": [],
+  "blocked": 1,
+  "after": {
+   "morale": 83,
+   "fanbase": 89,
+   "heat": 5,
+   "ovr": 83,
+   "netWorth": 2.8,
+   "pending": null,
+   "last": 212,
+   "phase": "season"
+  },
+  "feed": [],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 4 honours | 1 ring, 2 in other awards",
+   "w": 208,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "none",
+   "dur": "1e-06s"
+  },
+  "case": "1 ring | 3 individual honours across 6 seasons. | All-Star | x1 | 2030 | Gold Glove | x1 | 2030 | Silver Slugger | x1 | 2030",
+  "caseOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "caseTop": 58
+ },
+ {
+  "cfg": "d1280rm",
+  "key": "nhl_lesser",
+  "note": "lesser only: 1 other awards, awards [\"Calder Trophy\"]",
+  "errors": [],
+  "blocked": 1,
+  "after": {
+   "morale": 77,
+   "fanbase": 65,
+   "heat": 0,
+   "ovr": 80,
+   "netWorth": 3.7,
+   "pending": null,
+   "last": 304,
+   "phase": "season"
+  },
+  "feed": [],
+  "tile": {
+   "text": "🏆 | TROPHY CASE | 1 honour | 1 in other awards, no Cup yet",
+   "w": 208,
+   "h": 97,
+   "cut": []
+  },
+  "hubOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "none",
+   "dur": "1e-06s"
+  },
+  "case": "0 Cups | 1 individual honour across 2 seasons. | Calder Trophy | x1 | 2026",
+  "caseOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "caseTop": 58
+ }
+]
