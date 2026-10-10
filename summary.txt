@@ -1,0 +1,19 @@
+vitest exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/routeErrorRecovery.test.tsx,title=src/test/routeErrorRecovery.test.tsx > backups are capped%2C and one
+simSaveKeeper exit=0 6s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+ctl-dropkey exit=1 5s | simSaveKeeper control dropkey: FIRED. Section 0 is red.
+ctl-versiontable exit=1 5s | simSaveKeeper control versiontable: FIRED. Section 1 is red (and 2, 5, which the same change reaches).
+ctl-norow exit=1 5s | simSaveKeeper control norow: FIRED. Section 1 is red.
+ctl-onebyte exit=1 5s | simSaveKeeper control onebyte: FIRED. Section 2 is red.
+ctl-bootwrite exit=1 5s | simSaveKeeper control bootwrite: FIRED. Section 2 is red (and 4, 5, which the same change reaches).
+ctl-noaside exit=1 5s | simSaveKeeper control noaside: FIRED. Section 3 is red.
+ctl-journalfirst exit=1 5s | simSaveKeeper control journalfirst: FIRED. Section 3 is red.
+ctl-pileup exit=1 5s | simSaveKeeper control pileup: FIRED. Section 4 is red.
+simStorageWrites exit=0 2s | simStorageWrites: all green
+simNoRivalNames exit=0 21s | No rival product names found. 0 findings.
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simErrorBoundary exit=0 1s | simErrorBoundary: all green
+simHomeFront exit=0 1s | simHomeFront: green. The home front shows real games, real saves and a sport you can tell apart without colour.
+simHomeCopy exit=0 1s | simHomeCopy: green. The one page a crawler reads first says only true things.
+simStaleChunk exit=0 0s | simStaleChunk: green. A tab left open across a deploy reloads once for a missing chunk instead of painting the broken page.
+simHarnessAnchors exit=0 41s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 81s | 
