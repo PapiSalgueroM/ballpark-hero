@@ -1,0 +1,5 @@
+#!playwright
+#!serial
+f-rowswap: bash .rc/x/frun.sh rowswap walk
+f-movedflip: bash .rc/x/frun.sh movedflip walk
+f-labelfull: bash .rc/x/frun.sh labelfull walk
