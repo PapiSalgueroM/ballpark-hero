@@ -1,0 +1,24 @@
+# Release AU proof, Round 1220: the pre draft harness, each control its own line
+simCareerPreDraft: node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-cardwords: SIM_PRE_DRAFT_CONTROL=cardwords node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-ceiling: SIM_PRE_DRAFT_CONTROL=ceiling node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-erarule: SIM_PRE_DRAFT_CONTROL=erarule node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-extradraw: SIM_PRE_DRAFT_CONTROL=extradraw node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-flatlater: SIM_PRE_DRAFT_CONTROL=flatlater node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-flatlottery: SIM_PRE_DRAFT_CONTROL=flatlottery node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-flatstock: SIM_PRE_DRAFT_CONTROL=flatstock node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-gradeshift: SIM_PRE_DRAFT_CONTROL=gradeshift node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-ladderskip: SIM_PRE_DRAFT_CONTROL=ladderskip node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-laterlottery: SIM_PRE_DRAFT_CONTROL=laterlottery node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-loadershallow: SIM_PRE_DRAFT_CONTROL=loadershallow node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-mathrandom: SIM_PRE_DRAFT_CONTROL=mathrandom node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-nightdedup: SIM_PRE_DRAFT_CONTROL=nightdedup node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-nightdraw: SIM_PRE_DRAFT_CONTROL=nightdraw node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-nightlottery: SIM_PRE_DRAFT_CONTROL=nightlottery node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-nightoffbyone: SIM_PRE_DRAFT_CONTROL=nightoffbyone node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-nightopen: SIM_PRE_DRAFT_CONTROL=nightopen node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-projection: SIM_PRE_DRAFT_CONTROL=projection node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-randomteam: SIM_PRE_DRAFT_CONTROL=randomteam node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-showcasewords: SIM_PRE_DRAFT_CONTROL=showcasewords node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-squeeze: SIM_PRE_DRAFT_CONTROL=squeeze node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-undraftedtop: SIM_PRE_DRAFT_CONTROL=undraftedtop node scripts/simCareerPreDraft.mjs
