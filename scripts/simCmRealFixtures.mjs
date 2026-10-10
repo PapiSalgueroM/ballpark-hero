@@ -58,7 +58,7 @@ const controls = {
   world: { file: engineFile, from: 'careerRoundPairs(state, w.round, lg.clubs, lg.id)',
     to: 'roundPairs(lg.clubs, w.round, !!state.balancedFixtures)', test: 'world' },
   edited: { file: helperFile, from: '&& !state.customClub && !state.leagueOverrides', to: '&& true', test: 'eligibility' },
-  legacy: { file: helperFile, from: 'state.realLeagueFixtures !== REAL_PREMIER_FIXTURE_KEY', to: 'false', count: 2, test: 'legacy', extraFailures: ['baseline'] },
+  legacy: { file: helperFile, from: 'e.key === state.realLeagueFixtures', to: 'e.leagueId === leagueId', test: 'legacy', extraFailures: ['baseline'] },
   future: { file: helperFile, from: '&& state.season === 1', to: '&& true', test: 'future' },
   rollover: { file: engineFile, from: '  delete state.realLeagueFixtures;', to: '  state.realLeagueFixtures = career.realLeagueFixtures;', test: 'rollover' },
 };
@@ -174,7 +174,7 @@ async function main() {
       assert.equal(input[engineFile].split(anchor).length - 1, 1, 'One real world settlement observation anchor');
       const instrumented = input[engineFile].replace(anchor, '        const [hg, ag] = simAiMatch(state, h, a);\n        __fixtureSyncResults.push({ leagueId: lg.id, home: h, away: a, hg, ag });\n        applyResult(w.table, h, a, hg, ag);')
         + '\nexport const __fixtureSyncResults: { leagueId: string; home: string; away: string; hg: number; ag: number }[] = [];\nexport function __fixtureSyncProbe(state: CareerState, rounds: number) { syncWorld(state, rounds); }\n'
-        + `export { PREMIER_FIXTURES_2026 as __fixtureLedger } from '@/data/clubManagerPremierFixtures2026';\nexport { canBindRealPremierFixtures as __canBind, realPremierFixturePairs as __realPairs } from '@/lib/clubManagerFixtures';\nexport { default as __CalendarCard } from ${JSON.stringify(card.replaceAll('\\', '/'))};\n`;
+        + `export { PREMIER_FIXTURES_2026 as __fixtureLedger } from '@/data/clubManagerPremierFixtures2026';\nexport { canBindRealLeagueFixtures as __canBindLedger, realLeagueFixturePairs as __realPairs } from '@/lib/clubManagerFixtures';\nexport { default as __CalendarCard } from ${JSON.stringify(card.replaceAll('\\', '/'))};\n`;
       const byeAnchor = '          const [hg, ag] = simAiMatch(state, h, a);\n          applyResult(state.table, h, a, hg, ag);';
       assert.equal(instrumented.split(byeAnchor).length - 1, 1, 'One real neutral-only settlement observation anchor');
       const observed = instrumented.replace(byeAnchor, '          const [hg, ag] = simAiMatch(state, h, a);\n          __fixtureByeResults.push({ home: h, away: a, hg, ag });\n          applyResult(state.table, h, a, hg, ag);')
@@ -350,7 +350,7 @@ async function main() {
         const state = seeded(4107, () => cm.startCareer('Everton'));
         assert.equal(state.realLeagueFixtures, key); assert.equal(cm.careerFixtureCoverage(state)?.key, key);
         for (const altered of [{ ...state, customClub: { name: 'Test custom club' } }, { ...state, leagueOverrides: { premier: [...clubs] } }]) {
-          assert.equal(cm.__canBind(altered, 'premier', [...clubs]), false, 'Custom and edited saves cannot claim untouched real fixtures');
+          assert.equal(cm.__canBindLedger(altered, cm.__fixtureLedger, 'premier', [...clubs]), false, 'Custom and edited saves cannot claim untouched real fixtures');
           assert.equal(cm.careerFixtureCoverage(altered), null);
         }
         const edited = seeded(4107, () => cm.startCareer('Everton', 'now', undefined, undefined, undefined, { premier: [...clubs] }));

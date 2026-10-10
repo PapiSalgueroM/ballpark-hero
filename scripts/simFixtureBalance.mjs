@@ -187,7 +187,7 @@ const CONTROLS = {
   nobinding: {
     red: ['6'], sourceRed: [], region: 'startCareer',
     what: 'a natural eligible start never stores its real fixture version',
-    rewrites: [[/state\.realLeagueFixtures = REAL_PREMIER_FIXTURE_KEY;/, '']],
+    rewrites: [[/if \(realList\) state\.realLeagueFixtures = realList;/, '']],
   },
   fallbackflag: {
     red: ['3', '5'], sourceRed: ['wrapper-fallback'], region: 'careerRoundPairs',
@@ -197,7 +197,7 @@ const CONTROLS = {
   fallbackcount: {
     red: ['5'], sourceRed: ['wrapper-fallback'], region: 'careerRoundPairs',
     what: 'a second generated pairing call is added inside the resolver',
-    rewrites: [[/return realPremierFixturePairs/, 'roundPairs(clubs, round, !!state.balancedFixtures);\n  return realPremierFixturePairs']],
+    rewrites: [[/return realLeagueFixturePairs/, 'roundPairs(clubs, round, !!state.balancedFixtures);\n  return realLeagueFixturePairs']],
   },
   enginebypass: {
     red: ['5', '6'], sourceRed: ['consumer-syncWorld', 'consumer-fixtureFor', 'consumer-playMyMatch', 'consumer-playNextEntry', 'engine-direct-fallback'],
@@ -653,10 +653,10 @@ run('5', 'Words match code: unchanged parity, one saved-flag fallback, four engi
   const resolverBody = resolver ? blank.slice(resolver.start, resolver.end) : '';
   const generatedCalls = argsOfCallsIn(blank, 'roundPairs');
   const fallback = argsOfCallsIn(resolverBody, 'roundPairs');
-  const verified = argsOfCallsIn(resolverBody, 'realPremierFixturePairs');
+  const verified = argsOfCallsIn(resolverBody, 'realLeagueFixturePairs');
   if (fallback.length !== 1 || JSON.stringify(fallback[0]?.args) !== JSON.stringify(['clubs', 'round', '!!state.balancedFixtures'])
     || verified.length !== 1 || JSON.stringify(verified[0]?.args) !== JSON.stringify(['state', 'leagueId', 'clubs', 'round'])
-    || !/return\s+realPremierFixturePairs\([\s\S]*?\)\s*\?\?\s*roundPairs\(/.test(resolverBody)) {
+    || !/return\s+realLeagueFixturePairs\([\s\S]*?\)\s*\?\?\s*roundPairs\(/.test(resolverBody)) {
     sourceFail('wrapper-fallback', 'careerRoundPairs must have one verified lookup and exactly one generated fallback reading the saved balancedFixtures flag');
   }
   if (generatedCalls.some(call => !resolver || call.offset < resolver.start || call.offset >= resolver.end)) {
