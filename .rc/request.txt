@@ -1,0 +1,6 @@
+#!serial
+listed: git diff --name-only --diff-filter=A 09df145a HEAD -- src scripts docs | tee $RC_OUT/added.txt | wc -l
+baseGmStaff: rm -f $(git diff --name-only --diff-filter=A 09df145a HEAD -- src scripts docs); node scripts/simGmStaff.mjs; s=$?; git checkout -q -- src scripts docs; exit $s
+baseDraftNight: rm -f $(git diff --name-only --diff-filter=A 09df145a HEAD -- src scripts docs); node scripts/simDraftNight.mjs; s=$?; git checkout -q -- src scripts docs; exit $s
+baseDailySave: rm -f $(git diff --name-only --diff-filter=A 09df145a HEAD -- src scripts docs); node scripts/simDailySaveHardening.mjs; s=$?; git checkout -q -- src scripts docs; exit $s
+restored: git status --short -- src scripts docs | wc -l
