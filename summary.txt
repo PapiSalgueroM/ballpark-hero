@@ -1,0 +1,3 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+probe2 exit=0 36s | probe2 done: seed 3208792607, 7 arms, 1 digest, 1 different opening half by its teams and goals
+probe2-7 exit=0 36s | probe2 done: seed 7, 7 arms, 1 digest, 1 different opening half by its teams and goals

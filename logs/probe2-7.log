@@ -1,0 +1,8 @@
+[arm today, UTC] {"label":"today, UTC","pageDay":"2026-10-10 UTC","settled":7,"inJob":737,"kickOff":1823,"digest":"8ef206aa","match":"Crystal Palace v Fulham","goals":"18' Antonee Robinson for, 45' Jørgen Strand Larsen for"}
+[arm 5 days on] {"label":"5 days on","pageDay":"2026-10-15 UTC","settled":7,"inJob":737,"kickOff":1823,"digest":"8ef206aa","match":"Crystal Palace v Fulham","goals":"18' Antonee Robinson for, 45' Jørgen Strand Larsen for"}
+[arm 40 days on] {"label":"40 days on","pageDay":"2026-11-19 UTC","settled":7,"inJob":737,"kickOff":1823,"digest":"8ef206aa","match":"Crystal Palace v Fulham","goals":"18' Antonee Robinson for, 45' Jørgen Strand Larsen for"}
+[arm 400 days on] {"label":"400 days on","pageDay":"2027-11-14 UTC","settled":7,"inJob":737,"kickOff":1823,"digest":"8ef206aa","match":"Crystal Palace v Fulham","goals":"18' Antonee Robinson for, 45' Jørgen Strand Larsen for"}
+[arm today, New York] {"label":"today, New York","pageDay":"2026-10-10 America/New_York","settled":7,"inJob":737,"kickOff":1823,"digest":"8ef206aa","match":"Crystal Palace v Fulham","goals":"18' Antonee Robinson for, 45' Jørgen Strand Larsen for"}
+[arm today, Tokyo] {"label":"today, Tokyo","pageDay":"2026-10-10 Asia/Tokyo","settled":7,"inJob":737,"kickOff":1823,"digest":"8ef206aa","match":"Crystal Palace v Fulham","goals":"18' Antonee Robinson for, 45' Jørgen Strand Larsen for"}
+[arm today, Spanish browser] {"label":"today, Spanish browser","pageDay":"2026-10-10 UTC","settled":7,"inJob":737,"kickOff":1823,"digest":"8ef206aa","match":"Crystal Palace v Fulham","goals":"18' Antonee Robinson for, 45' Jørgen Strand Larsen for"}
+probe2 done: seed 7, 7 arms, 1 digest, 1 different opening half by its teams and goals

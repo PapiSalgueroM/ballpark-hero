@@ -1,0 +1,75 @@
+{
+ "seed": 7,
+ "rows": [
+  {
+   "label": "today, UTC",
+   "pageDay": "2026-10-10 UTC",
+   "settled": 7,
+   "inJob": 737,
+   "kickOff": 1823,
+   "digest": "8ef206aa",
+   "match": "Crystal Palace v Fulham",
+   "goals": "18' Antonee Robinson for, 45' Jørgen Strand Larsen for"
+  },
+  {
+   "label": "5 days on",
+   "pageDay": "2026-10-15 UTC",
+   "settled": 7,
+   "inJob": 737,
+   "kickOff": 1823,
+   "digest": "8ef206aa",
+   "match": "Crystal Palace v Fulham",
+   "goals": "18' Antonee Robinson for, 45' Jørgen Strand Larsen for"
+  },
+  {
+   "label": "40 days on",
+   "pageDay": "2026-11-19 UTC",
+   "settled": 7,
+   "inJob": 737,
+   "kickOff": 1823,
+   "digest": "8ef206aa",
+   "match": "Crystal Palace v Fulham",
+   "goals": "18' Antonee Robinson for, 45' Jørgen Strand Larsen for"
+  },
+  {
+   "label": "400 days on",
+   "pageDay": "2027-11-14 UTC",
+   "settled": 7,
+   "inJob": 737,
+   "kickOff": 1823,
+   "digest": "8ef206aa",
+   "match": "Crystal Palace v Fulham",
+   "goals": "18' Antonee Robinson for, 45' Jørgen Strand Larsen for"
+  },
+  {
+   "label": "today, New York",
+   "pageDay": "2026-10-10 America/New_York",
+   "settled": 7,
+   "inJob": 737,
+   "kickOff": 1823,
+   "digest": "8ef206aa",
+   "match": "Crystal Palace v Fulham",
+   "goals": "18' Antonee Robinson for, 45' Jørgen Strand Larsen for"
+  },
+  {
+   "label": "today, Tokyo",
+   "pageDay": "2026-10-10 Asia/Tokyo",
+   "settled": 7,
+   "inJob": 737,
+   "kickOff": 1823,
+   "digest": "8ef206aa",
+   "match": "Crystal Palace v Fulham",
+   "goals": "18' Antonee Robinson for, 45' Jørgen Strand Larsen for"
+  },
+  {
+   "label": "today, Spanish browser",
+   "pageDay": "2026-10-10 UTC",
+   "settled": 7,
+   "inJob": 737,
+   "kickOff": 1823,
+   "digest": "8ef206aa",
+   "match": "Crystal Palace v Fulham",
+   "goals": "18' Antonee Robinson for, 45' Jørgen Strand Larsen for"
+  }
+ ]
+}
