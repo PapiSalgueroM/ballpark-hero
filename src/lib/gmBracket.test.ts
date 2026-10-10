@@ -15,7 +15,8 @@ import {
   type BracketFormat, type GmBracketSave, type PlayTie,
 } from '@/lib/gmBracket';
 import { GM_SCORE_CEILING } from '@/lib/gmGameScore';
-import { NFL_BRACKET, NFL_BRACKET_HELP, NFL_BRACKET_SEASONS, NFL_TITLE_GAME_LEAN, nflBracketFor } from '@/data/gmBrackets/nfl';
+import { NFL_BRACKET, NFL_BRACKET_SEASONS, NFL_TITLE_GAME_LEAN, nflBracketFor } from '@/data/gmBrackets/nfl';
+import { NFL_BRACKET_HELP } from '@/data/gmBrackets/nflHelp';
 import { NFL_PLAYOFF_PERIODS, periodFor } from '@/lib/nflPlayoffFormatHistory';
 import { initLeague, winProb } from '@/lib/frontOffice';
 import { keyedRng } from '@/lib/keyedRng';

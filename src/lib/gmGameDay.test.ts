@@ -6,8 +6,8 @@
    the NFL's law is then walked over every final it can tell. The save field
    is damaged one field at a time. */
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { decidingPlays, gameStory, makeGmLastGame, readGmLastGame, tellGame, type GameDayLaw, type GmLastGame } from '@/lib/gmGameDay';
-import { GM_SCORE_CEILING, quickGame, type ToldGame } from '@/lib/gmGameScore';
+import { decidingPlays, gameStory, tellGame, type GameDayLaw } from '@/lib/gmGameDay';
+import { GM_SCORE_CEILING, makeGmLastGame, quickGame, readGmLastGame, type GmLastGame, type ToldGame } from '@/lib/gmGameScore';
 import { NFL_COMEBACK, NFL_GAME_DAY, NFL_GAME_DAY_HELP, NFL_MAX_SCORE, NFL_QUARTERS, NFL_ROUT, nflShapeWords } from '@/lib/gameLaws/nflGameDay';
 import { NFL_GAME_MINUTES, nflClockLabel } from '@/lib/gameLaws/nfl';
 import { DRIVES, FG_A_DRIVE, NFL_SCORE_LAW, TD_A_GAME } from '@/lib/gameLaws/nflScore';

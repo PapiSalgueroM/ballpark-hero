@@ -6,7 +6,9 @@
    a final that agrees with the engine's winner, and nothing else. The story
    of that final (src/lib/gmGameDay.ts) is the TOLD PATH and is only needed by
    whoever draws a card, so it lives apart and this file can sit in a board's
-   own chunk: it imports the keyed stream and types, nothing more.
+   own chunk: it imports the keyed stream and types, nothing more. The one
+   save field of Game Day (`GmLastGame`, at the foot of this file) is here
+   for the same reason: the press writes it and the save validator reads it.
 
    THE ENGINE DECIDES, THE LAW TELLS. The winner is never moved. Every draw
    comes from a stream keyed to the game (src/lib/keyedRng.ts), so no engine
@@ -90,4 +92,39 @@ export function quickGame(law: ScoreLaw, f: GameDayFixture): ToldGame | null {
 /** Who won a told final: the club on the higher score, or null for a level one. */
 export function toldWinner(g: ToldGame): string | null {
   return g.homeScore === g.awayScore ? null : g.homeScore > g.awayScore ? g.home : g.away;
+}
+
+/** THE SAVE FIELD: the one shape all four boards save for Game Day, the GM
+ *  club's last told game. It is optional, absent on a bye and on every older
+ *  save, and `readGmLastGame` answers null for anything that does not read
+ *  as one (mark, never fill). It lives in this file and not beside the
+ *  story because a press writes it and a save validator reads it, both in
+ *  the board's own chunk, and a module is never split across chunks. */
+export interface GmLastGame extends ToldGame { v: 1; where: string; winner: string }
+
+/** What a board saves after a press. `where` says when it was played, in the bind's own words ("w6", a round's name). */
+export function makeGmLastGame(told: ToldGame, where: string): GmLastGame | null {
+  const winner = toldWinner(told);
+  return winner === null ? null : { v: 1, key: told.key, where, home: told.home, away: told.away, homeScore: told.homeScore, awayScore: told.awayScore, winner, ...(told.beyond === true ? { beyond: true } : {}) };
+}
+
+/** A saved last game, or null for anything that does not read as one. Never
+ *  throws; hands back a fresh object of the known fields only (`beyond` is
+ *  one of them, kept when it is true). `isClub` must be a real membership
+ *  test (a Set, or Object.hasOwn): a bare object lookup such as
+ *  `id => !!teams[id]` says yes to `constructor`. */
+export function readGmLastGame(value: unknown, isClub: (id: string) => boolean): GmLastGame | null {
+  try {
+    if (typeof value !== 'object' || value === null || Array.isArray(value)) return null;
+    const o = value as Record<string, unknown>;
+    const text = (x: unknown): x is string => typeof x === 'string' && x !== '';
+    if (o.v !== 1 || !text(o.key) || !text(o.where) || !text(o.home) || !text(o.away) || !text(o.winner)) return null;
+    if (o.home === o.away || isClub(o.home) !== true || isClub(o.away) !== true) return null;
+    if (!isGmScore(o.homeScore) || !isGmScore(o.awayScore) || o.homeScore === o.awayScore) return null;
+    if (o.winner !== (o.homeScore > o.awayScore ? o.home : o.away)) return null;
+    if (o.beyond !== undefined && typeof o.beyond !== 'boolean') return null;
+    return { v: 1, key: o.key, where: o.where, home: o.home, away: o.away, homeScore: o.homeScore, awayScore: o.awayScore, winner: o.winner, ...(o.beyond === true ? { beyond: true } : {}) };
+  } catch {
+    return null;
+  }
 }

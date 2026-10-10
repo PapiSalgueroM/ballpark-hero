@@ -2,11 +2,12 @@
  * for the front offices, before any board mounts them.
  *
  * The libraries: src/lib/gmGameScore.ts (a score for a game an engine has
- * decided: the quick path), src/lib/gmGameDay.ts (the story of that final:
- * the told path, and the one save field), src/lib/gmBracket.ts (a postseason
- * as a saved state machine over src/lib/finalsBracket.ts), with the NFL's law
- * and data (src/lib/gameLaws/nflScore.ts, nfl.ts and nflGameDay.ts,
- * src/data/gmBrackets/nfl.ts).
+ * decided: the quick path, and the one save field of Game Day),
+ * src/lib/gmGameDay.ts (the story of that final: the told path),
+ * src/lib/gmBracket.ts (a postseason as a saved state machine over
+ * src/lib/finalsBracket.ts), with the NFL's law and data
+ * (src/lib/gameLaws/nflScore.ts, nfl.ts and nflGameDay.ts,
+ * src/data/gmBrackets/nfl.ts and the words of its "?" in nflHelp.ts).
  *
  * THE FLEET (scripts/lib/gmGameDayFleet.mjs): seed sets 0 to 4, each 40
  * seasons on each of the two leagues the engine makes (fifteen man, and full
@@ -102,7 +103,8 @@ const DAY = 'src/lib/gmGameDay.ts';
 const BRACKET = 'src/lib/gmBracket.ts';
 const NFL_DAY = 'src/lib/gameLaws/nflGameDay.ts';
 const NFL_DATA = 'src/data/gmBrackets/nfl.ts';
-const NEW_FILES = [SCORE, DAY, BRACKET, NFL_DAY, NFL_DATA];
+const NFL_HELP = 'src/data/gmBrackets/nflHelp.ts';
+const NEW_FILES = [SCORE, DAY, BRACKET, NFL_DAY, NFL_DATA, NFL_HELP];
 const ROUTE_FILE = 'src/pages/FrontOffice.tsx';
 
 /* `labels`: pieces of the check labels that must ALL be among the reds of the control's section for it to count
@@ -318,7 +320,7 @@ for (const set of SEEDSETS) {
     count(s1.paths, t !== null && same(t.told, quick), () => `${id} ${key}: told ${t ? `${t.told.homeScore}-${t.told.awayScore}` : 'nothing'}, quick ${quick.homeScore}-${quick.awayScore}`);
     const story = t ? t.story : null;
     count(s5.twice, same(S.quickGame(LAW, f), quick) && same(D.gameStory(GAME_DAY, quick, view), story), () => `${id} ${key}`);
-    const saved = D.readGmLastGame(JSON.parse(JSON.stringify(D.makeGmLastGame(quick, 'w'))), isClub);
+    const saved = S.readGmLastGame(JSON.parse(JSON.stringify(S.makeGmLastGame(quick, 'w'))), isClub);
     count(s5.reload, saved !== null && same(D.gameStory(GAME_DAY, saved, view), story), () => `${id} ${key}`);
     count(s2.story, story !== null, () => `${id} ${key}: no story for ${quick.homeScore}-${quick.awayScore}`);
     if (story) {
