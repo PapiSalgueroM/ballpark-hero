@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+# Round 1228, the reviewer who runs things: the built site holds none of the new libraries, and Club Manager's own Champions League is what it was.
+deadcode: n=$(grep -rl -E "Level on points goes to goal difference|10268,10327,10360|recorded pattern" dist/assets | wc -l); echo "built chunks that hold the new libraries: $n of $(ls dist/assets | wc -l) files"; test "$n" = 0
+walk: node .rc/x/rwalk.mjs
