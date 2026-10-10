@@ -1,0 +1,6 @@
+#!serial
+guard-now: R848_CONTROL=guard node scripts/simDailySaveHardening.mjs
+guard-attr: node .rc/x/mutNba.mjs && R848_CONTROL=guard node scripts/simDailySaveHardening.mjs; s=$?; git checkout -q HEAD -- src; exit $s
+stale-now: R848_CONTROL=stale node scripts/simDailySaveHardening.mjs
+verdict-now: R848_CONTROL=verdict node scripts/simDailySaveHardening.mjs
+clean: git diff --quiet HEAD -- src scripts && echo "tree back at head"
