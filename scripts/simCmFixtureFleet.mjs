@@ -161,6 +161,7 @@ async function nofetch() {
   for (const league of LEAGUES) {
     const base = fresh(baseFile), cand = await candidate(fetch);
     for (const club of clubsOf(probe, league.id, 2)) for (const seed of [1101, 2202, 3303]) compareCareer(league.id, `${club} seed ${seed}`, base, cand, cm => cm.startCareer(club), seed);
+    console.log(`  nofetch ${league.id}: ${reds.nofetch.has(league.id) ? 'RED' : 'equal to the base'} (${clubsOf(probe, league.id, 2).join(', ')}; 3 seeds each, twelve entries, saved bytes)`);
   }
   for (const eraId of ['era2020', 'era2015', 'era2010', 'era2005']) {
     const base = fresh(baseFile), cand = await candidate(fetch);
@@ -232,6 +233,7 @@ async function oldsaves() {
         }
       }
     }
+    console.log(`  oldsaves ${reg.leagueId}: ${reds.oldsaves.has(reg.leagueId) ? 'RED' : 'carried to the same bytes as the base'} (${clubsOf(probe, reg.leagueId, 2).join(', ')}; 2 seeds each, three stages)`);
   }
 }
 
@@ -262,6 +264,7 @@ async function dailies() {
     const plain = await dealt(club, false), fetched = await dealt(club, true);
     if (plain.keyed || fetched.keyed) red('dailies', leagueId, `${club}: the day carries the real fixture key${fetched.keyed && !plain.keyed ? ' once the lists are fetched' : ''}`);
     else if (plain.digest !== fetched.digest) red('dailies', leagueId, `${club}: the day is dealt differently once the lists are fetched (${plain.digest} and ${fetched.digest})`);
+    console.log(`  dailies ${leagueId} ${club}: ${reds.dailies.has(leagueId) ? 'RED' : `no key, the same day with and without the lists (${plain.digest})`}`);
   }
 }
 

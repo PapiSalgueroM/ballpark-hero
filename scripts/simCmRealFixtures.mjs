@@ -553,10 +553,12 @@ async function main() {
     const rows = [];
     for (const [name, title] of Object.entries(cases)) {
       if (control && name !== controls[control].test && name !== 'baseline' && name !== 'uncopied') { rows.push({ title, status: 'skipped' }); continue; }
-      if (!BASE && NEEDS_BASE.includes(name)) { rows.push({ title, status: 'not run' }); continue; }
-      if (LEAGUE !== 'premier' && PREMIER_ONLY.includes(name)) { rows.push({ title, status: 'not applicable' }); continue; }
+      if (!BASE && NEEDS_BASE.includes(name)) { rows.push({ title, status: 'not run' }); console.log(`  NOT RUN ${LEAGUE} ${name}: it compares with a base engine and no CM_FIXTURE_BASE was given`); continue; }
+      if (LEAGUE !== 'premier' && PREMIER_ONLY.includes(name)) { rows.push({ title, status: 'not applicable' }); console.log(`  n/a  ${LEAGUE} ${name}: the neutral-only probe can only stand in the Premier League`); continue; }
       try { await outcomes[name](); rows.push({ title, status: 'passed' }); }
       catch (error) { rows.push({ title, status: 'failed', errorName: error.name, message: error.message, stack: error.stack }); }
+      /* One line a group, so a run shows what it ran: the suite runner counts a quiet harness as one that did not run. */
+      console.log(`  ${rows.at(-1).status === 'passed' ? 'ok  ' : 'RED '} ${LEAGUE} ${name}: ${title}`);
     }
     await new Promise(resolve => setImmediate(resolve));
     for (const verify of verifyBytes) await verify();
