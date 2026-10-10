@@ -1,0 +1,5 @@
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+simNoInventedQuotes exit=0 16s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simNumberFormatting exit=0 109s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
+simLegalPages exit=0 1s | simLegalPages: all green
+simStorageWrites exit=0 1s | simStorageWrites: all green
