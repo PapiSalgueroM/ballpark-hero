@@ -1,0 +1,16 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+fixbal: node scripts/simFixtureBalance.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+fixbal-controls: bad=0; for c in $(grep -oE "^  [a-z]+: \{$" scripts/simFixtureBalance.mjs | tr -d ' :{'); do FIXTURE_CONTROL=$c node scripts/simFixtureBalance.mjs > /tmp/fb-$c.log 2>&1; s=$?; echo "$c exit=$s $(tail -1 /tmp/fb-$c.log | cut -c1-160)"; [ $s -eq 0 ] || bad=1; done; exit $bad
+cmfix-all: TZ=UTC CM_REAL_FIXTURE_CONTROL=all node scripts/simCmRealFixtures.mjs > /tmp/ca.log 2>&1; s=$?; cp /tmp/ca.log "$RC_OUT/cmfix-all-s1.log"; grep -E "^(PASS|FAIL) real fixtures" /tmp/ca.log | tr '\n' ' '; tail -1 /tmp/ca.log | cut -c1-300; exit $s
+daily: node scripts/simDailyDeals.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+daily-bind: DAILY_DEALS_CONTROL=bind node scripts/simDailyDeals.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+daily-binddeadline: DAILY_DEALS_CONTROL=binddeadline node scripts/simDailyDeals.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+leaguefx: CM_LEAGUE_FIXTURES_EXPECT=10 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=9 node scripts/simCmLeagueFixtures.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+simLiveScores: node scripts/simLiveScores.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+simNoRivalNames: node scripts/simNoRivalNames.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+simLiveMatch: node scripts/simLiveMatch.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+simWorldEditor: node scripts/simWorldEditor.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+simCmVar: node scripts/simCmVar.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
