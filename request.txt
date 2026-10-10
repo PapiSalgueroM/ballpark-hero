@@ -1,0 +1,28 @@
+#!serial
+a1-rookie: node .rc/x/rv-mut.mjs rookie
+a2-rookie-sense: node scripts/simNbaAwardsSense.mjs
+a3-rookie-vitest: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+a4-restore: node .rc/x/rv-mut.mjs restore
+b1-rookie0: node .rc/x/rv-mut.mjs rookie0
+b2-rookie0-sense: node scripts/simNbaAwardsSense.mjs
+b4-restore: node .rc/x/rv-mut.mjs restore
+c1-tickstale: node .rc/x/rv-mut.mjs tickstale
+c2-tickstale-sense: node scripts/simNbaAwardsSense.mjs
+c3-tickstale-rivalry: node scripts/simCareerRivalryEvents.mjs
+c4-restore: node .rc/x/rv-mut.mjs restore
+d1-gateyear: node .rc/x/rv-mut.mjs gateyear
+d3-gateyear-rivalry: node scripts/simCareerRivalryEvents.mjs
+d4-restore: node .rc/x/rv-mut.mjs restore
+e1-fansd: node .rc/x/rv-mut.mjs fansd
+e2-fansd-sense: node scripts/simNbaAwardsSense.mjs
+e3-fansd-rivalry: node scripts/simCareerRivalryEvents.mjs
+e4-restore: node .rc/x/rv-mut.mjs restore
+f1-hisallstar: node .rc/x/rv-mut.mjs hisallstar
+f2-hisallstar-sense: node scripts/simNbaAwardsSense.mjs
+f3-hisallstar-rivalry: node scripts/simCareerRivalryEvents.mjs
+f5-hisallstar-vitest: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+f6-restore: node .rc/x/rv-mut.mjs restore
+g1-applysign: node .rc/x/rv-mut.mjs applysign
+g3-applysign-rivalry: node scripts/simCareerRivalryEvents.mjs
+g4-restore: node .rc/x/rv-mut.mjs restore
+z-clean: git status --short -- src | head -5; test -z "$(git status --short -- src)"

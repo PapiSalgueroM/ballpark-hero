@@ -1,0 +1,27 @@
+a1-rookie exit=0 1s | mutation rookie applied to src/lib/nbaMyCareer.ts
+a2-rookie-sense exit=1 108s | simNbaAwardsSense: 158 checks, 1 failed (full size), 107s
+a3-rookie-vitest exit=1 36s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career t
+a4-restore exit=0 0s | restored src/lib/nbaMyCareer.ts
+b1-rookie0 exit=0 0s | mutation rookie0 applied to src/lib/nbaMyCareer.ts
+b2-rookie0-sense exit=1 106s | simNbaAwardsSense: 158 checks, 2 failed (full size), 105s
+b4-restore exit=0 0s | restored src/lib/nbaMyCareer.ts
+c1-tickstale exit=0 0s | mutation tickstale applied to src/lib/nbaCareerRivalryEvents.ts
+c2-tickstale-sense exit=1 101s | simNbaAwardsSense: 158 checks, 1 failed (full size), 101s
+c3-tickstale-rivalry exit=0 6s | simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.
+c4-restore exit=0 0s | restored src/lib/nbaCareerRivalryEvents.ts
+d1-gateyear exit=0 1s | mutation gateyear applied to src/lib/nbaCareerRivalryEvents.ts
+d3-gateyear-rivalry exit=1 6s | simCareerRivalryEvents: 1 failure
+d4-restore exit=0 1s | restored src/lib/nbaCareerRivalryEvents.ts
+e1-fansd exit=0 0s | mutation fansd applied to src/lib/nbaMyCareer.ts
+e2-fansd-sense exit=0 105s | simNbaAwardsSense: 158 checks, 0 failed (full size), 105s
+e3-fansd-rivalry exit=0 5s | simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.
+e4-restore exit=0 0s | restored src/lib/nbaMyCareer.ts
+f1-hisallstar exit=0 0s | mutation hisallstar applied to src/lib/careerRival.ts
+f2-hisallstar-sense exit=0 105s | simNbaAwardsSense: 158 checks, 0 failed (full size), 105s
+f3-hisallstar-rivalry exit=0 6s | simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.
+f5-hisallstar-vitest exit=1 37s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career t
+f6-restore exit=0 0s | restored src/lib/careerRival.ts
+g1-applysign exit=0 0s | mutation applysign applied to src/lib/nbaCareerRivalryEvents.ts
+g3-applysign-rivalry exit=1 6s | simCareerRivalryEvents: 8 failures
+g4-restore exit=0 0s | restored src/lib/nbaCareerRivalryEvents.ts
+z-clean exit=0 1s | 

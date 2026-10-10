@@ -1,0 +1,51 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [2m[90m↓[39m[22m src/test/usBoardFixture.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[33m4 skipped[39m[2m)[22m
+ [31m❯[39m src/test/usCareerTruthDigest.test.ts [2m([22m[2m1 test[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 33570[2mms[22m[39m
+[31m   [31m×[31m Round 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it[39m[33m 33569[2mms[22m[39m
+[31m     → keys that moved against the committed fixture: expected [ 'nba|now|PG', 'nba|now|SG', …(8) ] to deeply equal [][39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerTruthDigest.test.ts[2m > [22mRound 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it
+[31m[1mAssertionError[22m: keys that moved against the committed fixture: expected [ 'nba|now|PG', 'nba|now|SG', …(8) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "nba|now|PG",[39m
+[31m+   "nba|now|SG",[39m
+[31m+   "nba|now|SF",[39m
+[31m+   "nba|now|PF",[39m
+[31m+   "nba|now|C",[39m
+[31m+   "nba|y2004|PG",[39m
+[31m+   "nba|y2004|SG",[39m
+[31m+   "nba|y2004|SF",[39m
+[31m+   "nba|y2004|PF",[39m
+[31m+   "nba|y2004|C",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/usCareerTruthDigest.test.ts:[2m120:70[22m[39m
+    [90m118| [39m    const moved = names.filter(k => committed.keys[k].digest !== now.k…
+    [90m119| [39m    [35mif[39m ([33m![39mrecord) {
+    [90m120| [39m      expect(moved, 'keys that moved against the committed fixture').t…
+    [90m   | [39m                                                                     [31m^[39m
+    [90m121| [39m      [35mreturn[39m[33m;[39m
+    [90m122| [39m    }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[33m1 skipped[39m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[33m4 skipped[39m[90m (5)[39m
+[2m   Start at [22m 03:56:42
+[2m   Duration [22m 36.12s[2m (transform 2.04s, setup 111ms, collect 3.43s, tests 33.57s, environment 657ms, prepare 146ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career truth digest > every key equals the committed fixture%2C or moved only where this step is allowed to move it,line=120,column=70::AssertionError: keys that moved against the committed fixture: expected [ 'nba|now|PG', 'nba|now|SG', …(8) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "nba|now|PG",%0A+   "nba|now|SG",%0A+   "nba|now|SF",%0A+   "nba|now|PF",%0A+   "nba|now|C",%0A+   "nba|y2004|PG",%0A+   "nba|y2004|SG",%0A+   "nba|y2004|SF",%0A+   "nba|y2004|PF",%0A+   "nba|y2004|C",%0A+ ]%0A%0A ❯ src/test/usCareerTruthDigest.test.ts:120:70%0A%0A
