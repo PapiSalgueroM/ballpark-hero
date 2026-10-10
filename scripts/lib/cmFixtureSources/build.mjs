@@ -14,8 +14,9 @@ import * as tuttomercatoweb from './tuttomercatoweb.mjs';
 import * as dflPdf from './dflPdf.mjs';
 import * as tff from './tff.mjs';
 import * as walfoot from './walfoot.mjs';
+import * as hessenschau from './hessenschau.mjs';
 
-export const PARSERS = { feedJson, maxifoot, tuttomercatoweb, dflPdf, tff, walfoot };
+export const PARSERS = { feedJson, maxifoot, tuttomercatoweb, dflPdf, tff, walfoot, hessenschau };
 
 export const COVERAGE = 'Real league opponent order and home/away venues only. Calendar dates and match results are simulated.';
 export const DIGEST_FIELDS = ['key', 'leagueId', 'seasonStartYear', 'clubs', 'rounds'];

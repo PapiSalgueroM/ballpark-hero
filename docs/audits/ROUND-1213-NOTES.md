@@ -128,6 +128,23 @@ reviewer has done this; whoever does it records `{ on, by, rounds compared, diff
   stamped address is known), so next summer it will show another season. The receipt records the day read, and
   the ledger's sources are outside the frozen digest so the link can be mended. Data file
   `src/data/clubManagerSuperLigFixtures2026.ts` 11,032 bytes; receipt 69,057 bytes.
+- **bundesliga2: IN, under the same owed ruling as the Bundesliga.** 18 clubs, 34 matchdays, 306 fixtures.
+  Sources: the DFL's own PDF (`https://media.dfl.de/sites/2/2026/07/DE_mgKX2qjj_2.-Bundesliga_Spielplan_2026_27.pdf`,
+  637,177 bytes, sha256 `06287b32026d...`, parser `dflPdf`; the ledger ships the same league page as the
+  Bundesliga's, which links this PDF too) and hessenschau.de, the public broadcaster Hessischer Rundfunk, ONE
+  PAGE A MATCHDAY (`https://www.hessenschau.de/sport/ergebnisse-tabellen/fussball-2bl100~_matchday-1.html` to
+  `...matchday-34.html`, 34 files, 9,981,937 bytes in all, each with its own hash in the receipt and one hash (`e211fb8c9bb9...`)
+  over the 34; parser `hessenschau`, which reads the full club name from the title attribute and refuses a page
+  that does not itself state "Fußball 2. Bundesliga 2026/2027" and the matchday its address asks for, because
+  those addresses are ROLLING ones). All read 2026-10-10. Zero tuple differences in 306. Name table: 15 lines
+  for the DFL ("VfL Bochum 1848", "1. FC Heidenheim 1846"), 14 for hessenschau ("Hertha BSC Berlin"). Data file
+  `src/data/clubManagerBundesliga2Fixtures2026.ts` 11,607 bytes; receipt 86,872 bytes.
+  A FINDING ABOUT THE PDF PARSER, kept because it shows the self check working: the first draft took the club
+  columns from the heading row, and on page 1 of THIS list the label "Heim" sits 51 points right of the home
+  clubs, so matchdays 1 and 2 (18 rows) were skipped. The parser refused its own output (`the match numbers are
+  not 1 to 288 without a hole`). It now takes the two column starts from the rows themselves, and the
+  Bundesliga's ledger was rebuilt with it byte for byte the same (`check bundesliga`: 34 matchdays compared, 0
+  tuple differences, digest equal; `write bundesliga`: no diff).
 - **proleague: OUT of this round (held), one source is one row short.** Both sources were fetched and parsed.
   Maxifoot (`https://www.maxifoot.fr/calendrier-belgique-2026-2027.htm`, 109,946 bytes, sha256
   `54e47a7245e1...`): 306 rows, 34 matchdays of 9, 18 clubs that map onto the game's row, a whole double round

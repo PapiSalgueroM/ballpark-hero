@@ -211,11 +211,27 @@ export const CM_FIXTURE_LEAGUES = [
       },
       {
         id: 'hessenschau', kind: 'broadcaster', label: 'hessenschau', ext: 'html', parser: 'hessenschau',
+        competition: 'Fußball 2. Bundesliga 2026/2027',
         url: 'https://www.hessenschau.de/sport/ergebnisse-tabellen/fussball-2bl100~_matchday-1.html',
         pages: Array.from({ length: 34 }, (_, i) => `https://www.hessenschau.de/sport/ergebnisse-tabellen/fussball-2bl100~_matchday-${i + 1}.html`),
       },
     ],
-    names: [{}, {}],
+    names: [
+      {
+        '1. FC Heidenheim 1846': 'Heidenheim', '1. FC Kaiserslautern': 'Kaiserslautern', '1. FC Magdeburg': 'Magdeburg',
+        '1. FC Nürnberg': 'Nürnberg', 'DSC Arminia Bielefeld': 'Arminia Bielefeld', 'Eintracht Braunschweig': 'Braunschweig',
+        'FC Energie Cottbus': 'Energie Cottbus', 'FC St. Pauli': 'St. Pauli', 'Karlsruher SC': 'Karlsruhe',
+        'SG Dynamo Dresden': 'Dynamo Dresden', 'SV Darmstadt 98': 'Darmstadt', 'SpVgg Greuther Fürth': 'Greuther Fürth',
+        'VfL Bochum 1848': 'Bochum', 'VfL Osnabrück': 'Osnabrück', 'VfL Wolfsburg': 'Wolfsburg',
+      },
+      {
+        '1. FC Heidenheim': 'Heidenheim', '1. FC Kaiserslautern': 'Kaiserslautern', '1. FC Magdeburg': 'Magdeburg',
+        '1. FC Nürnberg': 'Nürnberg', 'DSC Arminia Bielefeld': 'Arminia Bielefeld', 'Eintracht Braunschweig': 'Braunschweig',
+        'FC St. Pauli': 'St. Pauli', 'Hertha BSC Berlin': 'Hertha BSC', 'Karlsruher SC': 'Karlsruhe',
+        'SV Darmstadt 98': 'Darmstadt', 'SpVgg Greuther Fürth': 'Greuther Fürth', 'VfL Bochum': 'Bochum',
+        'VfL Osnabrück': 'Osnabrück', 'VfL Wolfsburg': 'Wolfsburg',
+      },
+    ],
   },
   {
     leagueId: 'championship', exportName: 'CHAMPIONSHIP_FIXTURES_2026', file: 'clubManagerChampionshipFixtures2026', orderSource: 1,
