@@ -677,6 +677,38 @@ describe('a held year, a banned year, and the sports with no Season Center', () 
     }
     expect(walked, 'no keyed career of eight played 2020 and 2021 in full view').toBe(true);
   }, 60000);
+  /* Round 1212: the held function is handed who is asking (his position and his club of that season), so a
+     binding can hold a position or a club the view cannot show yet. The NBA and NFL bindings take the year
+     alone and ignore the rest: the three tests above are that proof. */
+  it('hands the held function his position and his club, and shows its line with no button', async () => {
+    const asked: unknown[] = [];
+    const HOLDS_POS: UsCareerSport = {
+      ...NBA_CAREER_SPORT,
+      seasonCentreHeld: (year, eraId, who) => { asked.push([year, eraId, who]); return who?.pos === 'SG' ? '📺 No week by week for this position yet.' : null; },
+    };
+    seedSave(NBA_CAREER_SPORT, 'SG', 'held-pos');
+    render(<MemoryRouter><UsCareerBoard sport={HOLDS_POS} /></MemoryRouter>);
+    await flush();
+    const c = savedCareer(NBA_CAREER_SPORT);
+    expect(q('[data-season-centre-held]')!.textContent).toBe('📺 No week by week for this position yet.');
+    expect(q('[data-week-by-week]')).toBeNull();
+    expect(playButton()).toBeDefined();
+    expect(asked[0]).toEqual([c.year, c.eraId, { pos: 'SG', team: c.team }]);
+  });
+  it('holds one club and not another through the same function', async () => {
+    seedSave(NBA_CAREER_SPORT, 'SG', 'held-club');
+    const club = savedCareer(NBA_CAREER_SPORT).team;
+    const holds = (team: string): UsCareerSport => ({ ...NBA_CAREER_SPORT, seasonCentreHeld: (_y, _e, who) => (who?.team === team ? '📺 No week by week for this club this season.' : null) });
+    render(<MemoryRouter><UsCareerBoard sport={holds(club)} /></MemoryRouter>);
+    await flush();
+    expect(q('[data-season-centre-held]')!.textContent).toBe('📺 No week by week for this club this season.');
+    expect(q('[data-week-by-week]')).toBeNull();
+    cleanup();
+    render(<MemoryRouter><UsCareerBoard sport={holds(`${club}-other`)} /></MemoryRouter>);
+    await flush();
+    expect(q('[data-season-centre-held]')).toBeNull();
+    expect(q('[data-week-by-week]')).not.toBeNull();
+  });
   it('has the NBA and the NFL both bound, so neither arm above can drop out through its own filter', () => {
     expect(BOUND.map(b => b.name)).toEqual(['NBA', 'NFL']);
   });

@@ -65,7 +65,7 @@ export function UsSeasonCentreEntry({ sport, career, busy, onPlay, played }: {
   useEffect(() => { alive.current = true; return () => { alive.current = false; }; }, []);
   if (!sport.loadSeasonCentre) return null;
   const banned = (career.suspendedSeasons ?? 0) > 0;
-  const held = banned ? '📺 Nothing to watch this year: you are suspended.' : sport.seasonCentreHeld?.(career.year, career.eraId) ?? null;
+  const held = banned ? '📺 Nothing to watch this year: you are suspended.' : sport.seasonCentreHeld?.(career.year, career.eraId, { pos: career.pos, team: career.team }) ?? null;
   const press = async (e: MouseEvent<HTMLButtonElement>) => {
     if (busy || loading) return;
     const from = e.currentTarget;
@@ -95,7 +95,7 @@ export function UsSeasonCentreEntry({ sport, career, busy, onPlay, played }: {
   };
   /* a season he already played (he answered a contract talk with "play it out", or just wants it again) */
   const last = career.seasons.length ? career.seasons[career.seasons.length - 1] : null;
-  const watchLast = centre && playable(last) && !sport.seasonCentreHeld?.(last.year, career.eraId) ? last : null;
+  const watchLast = centre && playable(last) && !sport.seasonCentreHeld?.(last.year, career.eraId, { pos: career.pos, team: last.team }) ? last : null;
   const watch = async (e: MouseEvent<HTMLButtonElement>) => {
     if (busy || loading || !centre || !watchLast) return;
     const from = e.currentTarget;

@@ -314,6 +314,8 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
    *  watches a season. Optional: a binding without it shows no button, which is MLB and the NHL today. */
   loadSeasonCentre?: () => Promise<UsSeasonBind>;
   /** Round 1048: why the coming season has no game by game view (its real length is not the one this
-   *  career plays), or null. Tiny and eager, from src/data/usSeasonLengths.ts. Absent: never held. */
-  seasonCentreHeld?: (year: number, eraId?: string) => string | null;
+   *  career plays), or null. Tiny and eager, from src/data/usSeasonLengths.ts. Absent: never held.
+   *  Round 1212: handed who is asking as well (his position and his club of that season), for a position
+   *  or a club the view cannot show yet. A binding that takes fewer arguments ignores the rest. */
+  seasonCentreHeld?: (year: number, eraId?: string, who?: { pos: string; team: string }) => string | null;
 }

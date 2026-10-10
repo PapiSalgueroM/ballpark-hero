@@ -52,6 +52,7 @@ export function buildUsModel(sport: UsCareerSport, bind: UsSeasonBind, career: U
   const review = sport.reviewStats(row, pos);
   const title = bind.results.length > 0 && row.teamResult === bind.results[bind.results.length - 1];
   const path = usPlayoffPath(bind, row, ctx, key);
+  const noPath = !path && view.noPathNote ? view.noPathNote(row) : null;
   /* Round 1147: the NFL saves its playoff line as a sentence ("512 yds, 4 TD, 1 INT"), printed as it is, and one game is "1 game" */
   const post = review.postseason.filter(x => x.value !== 'Not recorded')
     .map(x => (x.label === 'Performance' ? x.value : x.label === 'Games' && x.value === '1' ? '1 game' : `${x.value} ${x.label.toLowerCase()}`));
@@ -76,7 +77,8 @@ export function buildUsModel(sport: UsCareerSport, bind: UsSeasonBind, career: U
       /* no trophy emoji here: the title card draws its own */
       trophies: [...(title ? [`${bind.league} champions`] : []), ...(Array.isArray(row.awards) ? row.awards : [])],
       title,
-      notes: [],
+      /* Round 1212: a season with no path may say why, in the sport's own words (baseball: a year before today's rounds) */
+      notes: noPath ? [noPath] : [],
       path: path ? {
         head: 'Playoffs',
         steps: path.steps.map(st => ({ label: st.round, text: pathStepText(st, view.words.unnamed), won: st.won })),
@@ -96,12 +98,12 @@ export function buildUsModel(sport: UsCareerSport, bind: UsSeasonBind, career: U
       markChip: g => view.markChip(g, pos),
       markText: g => view.markText(g, pos),
       soFar: so => view.soFar(so, pos),
-      half: so => view.half(so, pos),
+      half: so => view.half(so, pos, row),
       bucket: () => '',
     },
     copy: view.copy,
     helpKey: `seasonCentre:help:${bind.slug}`,
-    groups: named ? [{ label: 'Division', slots: range(ctx.divSlots) }, { label: 'Conference', slots: range(ctx.confSlots) }] : undefined,
+    groups: named ? [{ label: view.groupWords?.[0] ?? 'Division', slots: range(ctx.divSlots) }, { label: view.groupWords?.[1] ?? 'Conference', slots: range(ctx.confSlots) }] : undefined,
     /* the worked example names a team of THIS season that is not his (his first division rival), or nobody */
     help: view.help(named, named ? ctx.names[1] : undefined),
     momentKey: `centre|${key}`,

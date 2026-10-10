@@ -1,7 +1,17 @@
 /* Round 1048: the US binding of the season core. One file turns any US career
    season line into a SeasonSport for src/lib/season/core.ts; a sport hands it
-   a UsSeasonBind (its number file: src/lib/season/nba.ts, nfl.ts; MLB and the
-   NHL later, as number files, with no change here).
+   a UsSeasonBind (its number file: src/lib/season/nba.ts, nfl.ts, mlb.ts; the
+   NHL later).
+
+   Round 1212 bound baseball, and the bind's surface grew for it. Every new
+   member is optional and absent means what this file did before, which the
+   NBA and NFL digests of scripts/simUsSeasonCentre.mjs (the seam receipt)
+   and the recorded screens of src/test/usSeasonCentreScreens.test.tsx hold:
+   the held gate is asked about his club as well as the year, a position can
+   be held (`heldFor`), the league's shape can come from the sport's own
+   ledger (`shapeOf`), a postseason whose rounds changed over the years hands
+   the year's own (`formatOf`), and a path can start in a year (`pathFrom`),
+   need the saved games to fit (`pathNeedsFit`) and name nobody (`pathNamed`).
 
    The season shown is derived AFTER the fact from generators keyed on the
    saved line, so it lands on every number the save holds and stores nothing.
@@ -57,7 +67,12 @@ export interface UsSeasonView {
   markChip(g: DerivedGame, pos: string): string;
   markText(g: DerivedGame, pos: string): string;
   soFar(so: Record<string, number>, pos: string): [string, string][];
-  half(so: Record<string, number>, pos: string): string;
+  /** The halfway poster's line. Round 1212: handed the saved line too (baseball's All-Star sentence reads its awards). */
+  half(so: Record<string, number>, pos: string, row?: UsRow): string;
+  /** Round 1212: the record panel's two group labels; absent: 'Division' and 'Conference'. */
+  groupWords?: readonly [string, string];
+  /** Round 1212: one line under the review for a season that shows no playoff path, or null; absent: none. */
+  noPathNote?(row: UsRow): string | null;
   /** The board's review labels by their short tile label ('Points per game' to 'PPG'); a label not here prints as it is. */
   tileLabels: Record<string, string>;
   /** The "?" sheet. `named`: opponents are named this season. `opp`: a team of
@@ -87,10 +102,25 @@ export interface UsSeasonBind {
   /** The season the game by game view is built for: 82, 17. */
   fullSeason: number;
   /** The real season's games a team that year, from the sport's own two sourced ledger
-   *  (src/data/usSeasonLengths.ts); null: no single length, or a year the ledger does not hold. */
-  realLength(year: number): number | null;
+   *  (src/data/usSeasonLengths.ts); null: no single length, or a year the ledger does not hold.
+   *  Round 1212: handed his club of that season too, for a ledger that knows a club's own length. */
+  realLength(year: number, team?: string): number | null;
   /** Why that year has no game by game view, in the words the hub already shows; null: it has one. */
-  heldLine(year: number): string | null;
+  heldLine(year: number, team?: string): string | null;
+  /** Round 1212: why a position has no game by game view yet, in the hub's words; null or absent: it has one. */
+  heldFor?(pos: string): string | null;
+  /** Round 1212: the league's shape from the sport's own ledger; absent: src/data/usLeagueShape.ts by slug. */
+  shapeOf?(eraId: string | undefined, year: number): UsShape | null;
+  /** Round 1212: a sport whose postseason changed shape over the years a career plays hands the year's own
+   *  results, bands, series and rounds; absent: the four members below stand for every year. */
+  formatOf?(year: number): UsSeasonFormat;
+  /** Round 1212: no playoff path is drawn for a season before this year; absent: every year. */
+  pathFrom?: number;
+  /** Round 1212: no path at all when the saved playoff games do not fit the rounds played; absent: the
+   *  rounds are drawn with no scores, as they always were. */
+  pathNeedsFit?: boolean;
+  /** Round 1212: false names no playoff opponent (the ledger cannot place a round in a league); absent: named. */
+  pathNamed?: boolean;
   /** The ENGINE'S exported word for a missed postseason, never a copy. */
   missed: string;
   /** The engine's exported results, in playoff depth order. */
@@ -124,6 +154,16 @@ export interface UsSeasonBind {
   finish(games: DerivedGame[], row: UsRow, pos: string, rng: Rng, ctx: UsSeasonCtx): boolean;
   check(row: UsRow, pos: string, s: DerivedSeason, ctx: UsSeasonCtx): string[];
   view: UsSeasonView;
+}
+
+/** Round 1212: the four members of a bind that describe one year's postseason. */
+export type UsSeasonFormat = Pick<UsSeasonBind, 'results' | 'bands' | 'series' | 'rounds'>;
+
+/** Round 1212: the bind as it stands for one season. The same object when the
+ *  sport has one format for every year (the NBA, the NFL), so nothing of
+ *  theirs moves; the year's own results, bands, series and rounds otherwise. */
+export function usBindOf(bind: UsSeasonBind, year: number): UsSeasonBind {
+  return bind.formatOf ? { ...bind, ...bind.formatOf(year) } : bind;
 }
 
 export type UsSeasonBuild =
@@ -217,15 +257,19 @@ export function buildUsSeason(
 ): UsSeasonBuild {
   const eraId = career.eraId;
   const pos = career.pos;
-  const length = bind.realLength(row.year);
+  /* Round 1212: a position this number file cannot lay out yet is held before anything else */
+  const posLine = bind.heldFor ? bind.heldFor(pos) : null;
+  if (posLine !== null) return { ok: false, why: 'held', line: posLine };
+  const length = bind.realLength(row.year, row.team);
   if (length === null || length !== bind.fullSeason) {
-    const line = bind.heldLine(row.year) ?? '📺 No week by week this season: the game has no verified length for the real season.';
+    const line = bind.heldLine(row.year, row.team) ?? '📺 No week by week this season: the game has no verified length for the real season.';
     return { ok: false, why: 'held', line };
   }
   if (!(row.games > 0) || row.teamResult === 'SUSPENDED') return { ok: false, why: 'empty', line: 'There are no games to show for this season.' };
   const key = usSeasonKey(bind, career, row);
-  const slots = slotOrder(bind, usLeagueShape(bind.slug, eraId, row.year), eraId, row.team);
-  const shape = slots ? usLeagueShape(bind.slug, eraId, row.year) : null;
+  const shapeAt = bind.shapeOf ? bind.shapeOf(eraId, row.year) : usLeagueShape(bind.slug, eraId, row.year);
+  const slots = slotOrder(bind, shapeAt, eraId, row.team);
+  const shape = slots ? shapeAt : null;
   const teamLabel = labelOf(row.team, eraId);
   const unnamed = bind.view.words.unnamed;
   const order = slots ? slots.order : [];
@@ -235,7 +279,7 @@ export function buildUsSeason(
     name: career.name, pos, eraId, team: row.team, teamLabel, year: row.year, length, shape, order, names,
     divSlots: slots ? slots.divSlots : 0, confSlots: slots ? slots.confSlots : 0,
   };
-  const band = usBandOf(bind, row.teamResult);
+  const band = usBandOf(usBindOf(bind, row.year), row.teamResult);
   const target: TeamTarget = band ? { kind: 'record', winsMin: band[0], winsMax: band[1] } : { kind: 'none' };
   const frame: Frame = { mode: 'record', teams, games: length, rule: null, cap: bind.cap };
   const sport: SeasonSport<UsRow, UsSeasonCtx> = {
@@ -290,7 +334,10 @@ export function usPlayoffDepth(bind: UsSeasonBind, teamResult: string): { rounds
  *  out of it is made here, in the same order, so the path is what it was. null:
  *  no postseason, an unknown result, or playoff numbers on the save that
  *  disagree with the result (then nothing is drawn). */
-export function usPlayoffLay(bind: UsSeasonBind, row: UsRow, ctx: UsSeasonCtx, key: string): UsPlayoffLay | null {
+export function usPlayoffLay(given: UsSeasonBind, row: UsRow, ctx: UsSeasonCtx, key: string): UsPlayoffLay | null {
+  /* Round 1212: the bind as it stands for that season (the same object for a sport with one format) */
+  const bind = usBindOf(given, row.year);
+  if (bind.pathFrom !== undefined && row.year < bind.pathFrom) return null;
   const depth = usPlayoffDepth(bind, row.teamResult);
   if (!depth) return null;
   const n = depth.rounds;
@@ -300,7 +347,7 @@ export function usPlayoffLay(bind: UsSeasonBind, row: UsRow, ctx: UsSeasonCtx, k
   /* opponents: the last round of the bracket is the other conference's team, every earlier round his own */
   const unnamed = bind.view.words.unnamed;
   let slots: (number | null)[] = Array.from({ length: n }, () => null);
-  if (ctx.shape && ctx.order.length > 1) {
+  if (ctx.shape && ctx.order.length > 1 && bind.pathNamed !== false) {
     const conf = shuffled(Array.from({ length: ctx.confSlots }, (_, i) => i + 1), rng);
     const other = shuffled(Array.from({ length: ctx.order.length - 1 - ctx.confSlots }, (_, i) => ctx.confSlots + 1 + i), rng);
     slots = Array.from({ length: n }, (_, r) => {
@@ -324,6 +371,9 @@ export function usPlayoffLay(bind: UsSeasonBind, row: UsRow, ctx: UsSeasonCtx, k
   } else if (po !== null && po !== n) return null;
   /* one game a round: the count is the rounds played, or the save holds none and nothing is laid out */
   else if (po === n) games.fill(1);
+  /* Round 1212: a sport may ask for no path at all when the saved games do not fit (baseball: a save
+     from before the engine held October to the year's rounds can hold a count they cannot) */
+  if (bind.pathNeedsFit && games.some(g => g === null)) return null;
   return {
     champion: depth.champion,
     series: Array.from({ length: n }, (_, r) => {
@@ -337,8 +387,9 @@ export function usPlayoffLay(bind: UsSeasonBind, row: UsRow, ctx: UsSeasonCtx, k
 /** The playoff path round by round: the lay above, as the review's list
  *  prints it. null where the lay is. A series shows its score only when the
  *  saved playoff games fit the rounds played. */
-export function usPlayoffPath(bind: UsSeasonBind, row: UsRow, ctx: UsSeasonCtx, key: string): UsPlayoffPath | null {
-  const lay = usPlayoffLay(bind, row, ctx, key);
+export function usPlayoffPath(given: UsSeasonBind, row: UsRow, ctx: UsSeasonCtx, key: string): UsPlayoffPath | null {
+  const bind = usBindOf(given, row.year);
+  const lay = usPlayoffLay(given, row, ctx, key);
   if (!lay) return null;
   const n = lay.series.length;
   const wonAt = (r: number) => lay.series[r].won;
