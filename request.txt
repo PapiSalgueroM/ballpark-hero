@@ -1,0 +1,4 @@
+# keeper-libs reviewer, request F: the keeper harness on the first save a new NFL career writes (the prospect journey), head and Round 1219's own head
+#!serial
+prospect-head: node .rc/x/klProspect.mjs && node scripts/simSaveKeeper.mjs; s=$?; git checkout -- scripts src; exit $s
+prospect-r1219: git worktree add -q /tmp/r1219 f6bb6010 && ln -s "$PWD/node_modules" /tmp/r1219/node_modules && mkdir -p /tmp/r1219/.rc/x && cp .rc/x/klProspect.mjs /tmp/r1219/.rc/x/ && cd /tmp/r1219 && node .rc/x/klProspect.mjs && node scripts/simSaveKeeper.mjs
