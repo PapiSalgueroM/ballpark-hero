@@ -1,0 +1,4 @@
+fleet: TZ=UTC CM_FIXTURE_BASE=46e4231cc82b6c047da6e0b4bdb5dfae5628a928 node scripts/simCmFixtureFleet.mjs > /tmp/fl.log 2>&1; s=$?; cp /tmp/fl.log "$RC_OUT/fleet-pl-only-2.log"; tail -5 /tmp/fl.log | cut -c1-400; exit $s
+fleet-nobase: TZ=UTC node scripts/simCmFixtureFleet.mjs 2>&1 | tail -3 | cut -c1-300; exit ${PIPESTATUS[0]}
+fleet-keyless: TZ=UTC CM_FIXTURE_BASE=46e4231cc82b6c047da6e0b4bdb5dfae5628a928 CM_FIXTURE_FLEET_CONTROL=keyless node scripts/simCmFixtureFleet.mjs 2>&1 | tail -3 | cut -c1-400; exit ${PIPESTATUS[0]}
+fleet-nostrip: TZ=UTC CM_FIXTURE_FLEET_CONTROL=nostrip node scripts/simCmFixtureFleet.mjs 2>&1 | tail -3 | cut -c1-400; exit ${PIPESTATUS[0]}
