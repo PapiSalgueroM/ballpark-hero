@@ -1,0 +1,8 @@
+storage exit=0 3s | simStorageWrites: all green (owed: 12)
+vitest-footle exit=0 4s |    Duration  3.92s (transform 754ms, setup 77ms, collect 1.27s, tests 1.52s, environment 442ms, prepare 182ms)
+sw-deadhold exit=1 3s | simStorageWrites (control deadhold): 1 failed, the control FIRED on src/components/us-career/UsCareerBoard.tsx state:saveFailure (owed: 12)
+sw-partial exit=1 2s | simStorageWrites (control partial): 1 failed, the control FIRED on src/components/FlagImg.tsx partly: state:plantedOneBlocked named, state:plantedTwoBlocked still owed (o
+sw-stale exit=1 3s | simStorageWrites (control stale): 1 failed, the control FIRED on src/pages/SoccerCareer.tsx state:saveFailed (owed: 12)
+sw-unnamed exit=1 3s | simStorageWrites (control unnamed): 1 failed, the control FIRED on src/components/us-career/UsCareerBoard.tsx state:saveFailure (owed: 12)
+anchors exit=0 30s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 54s | 

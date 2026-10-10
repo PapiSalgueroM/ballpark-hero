@@ -1,0 +1,20 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstderr[2m | src/test/footlePractice.test.tsx[2m > [22m[2mFootle practice mounted outcomes[2m > [22m[2mshows worked rules and derives examples from a loaded non-answer player
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/footlePractice.test.tsx[2m > [22m[2mFootle practice mounted outcomes[2m > [22m[2mprints the answer nationality with its flag in the feedback line, the Nation row and the example
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/footlePractice.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 1516[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle practice mounted outcomes[2m > [22mfinishes five puzzles with the exact receipt and untouched daily record [33m 797[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m11 passed[39m[22m[90m (11)[39m
+[2m   Start at [22m 10:53:09
+[2m   Duration [22m 3.92s[2m (transform 754ms, setup 77ms, collect 1.27s, tests 1.52s, environment 442ms, prepare 182ms)[22m
+
