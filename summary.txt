@@ -1,0 +1,3 @@
+vitest-1 exit=0 430s |    Duration  427.30s (transform 48.43s, setup 23.24s, collect 168.57s, tests 810.36s, environment 163.57s, prepare 33.78s)
+vitest-3 exit=1 468s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/dailySaveShapes.test.tsx,title=src/test/dailySaveShapes.test.tsx > a damaged daily save resets itself 
+vitest-2 exit=1 523s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/throughBallDrill.test.ts,title=src/test/throughBallDrill.test.ts > seeded Through Ball rules > settles
