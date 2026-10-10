@@ -1,0 +1,6 @@
+0) every useDailyPuzzle consumer is mounted by one of the two tests
+   39 consumers: 36 routes in the shapes test, 3 unrouted (useFootballDraft.ts, useGuessTransferValue.ts, useWorldCup.ts) in the hardening test; 19 hand in their own check
+saves) two tabs, damaged saves on the hooks, saves from before this round
+   74 rows green, the fixture writer skipped
+   src/test/fixtures/dailySavesPre848.json: 6 saves, byte for byte what the hooks at 617b8354 write (afl-higher-lower, nfl-higher-lower, shirt-number, footle, ufc, nba-connections)
+simDailySaveHardening: part saves green
