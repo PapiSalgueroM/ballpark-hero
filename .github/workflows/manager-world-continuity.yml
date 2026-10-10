@@ -1,0 +1,154 @@
+name: Club Manager world roster continuity
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/manager-world-continuity.yml
+      - src/lib/clubManager.ts
+      - src/lib/clubManagerCalendar.ts
+      - src/lib/clubManagerEras.ts
+      - src/lib/clubManagerWorldRoster.ts
+      - src/lib/clubManagerWorldRoster.test.ts
+      - src/lib/clubManagerTrajectory.ts
+      - src/lib/clubManagerTrajectory.test.ts
+      - src/components/club-manager/ClubDetailScreen.tsx
+      - scripts/simManagerWorldContinuity.mjs
+      - scripts/qa/managerWorldContinuityKit.mjs
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: manager-world-continuity-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      SEO_SPLIT_BASE_REF: HEAD
+      MANAGER_WORLD_CONTINUITY_ARTIFACTS: manager-world-continuity-artifacts/outcomes
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Retain exact source and prepare remote dependencies
+        run: |
+          mkdir -p manager-world-continuity-artifacts
+          git rev-parse HEAD > manager-world-continuity-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > manager-world-continuity-artifacts/source-tree.txt
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          test "$(git rev-parse 09df145abfb241679022b41903d2f19bc254ebf9^{tree})" = 3d527d2a120e909132bbbde53148d140b6a014e1
+          git archive --format=zip --output=manager-world-continuity-artifacts/source.zip HEAD
+          git ls-tree -r HEAD -- src scripts .github/workflows > manager-world-continuity-artifacts/source-inventory.txt
+          sha256sum package.json package-lock.json > manager-world-continuity-artifacts/packages-before.txt
+          npm ci
+          node scripts/qa/managerWorldContinuityKit.mjs dependencies before
+          npm install --no-save playwright@1.64.0
+          node scripts/qa/managerWorldContinuityKit.mjs dependencies after
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          sha256sum package.json package-lock.json > manager-world-continuity-artifacts/packages-after.txt
+          cmp manager-world-continuity-artifacts/packages-before.txt manager-world-continuity-artifacts/packages-after.txt
+      - name: Actual app types then production build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee manager-world-continuity-artifacts/types.log
+          npm run build:seo 2>&1 | tee manager-world-continuity-artifacts/build.log
+          git diff --binary HEAD -- public scripts/data/lastmod.json > manager-world-continuity-artifacts/generated-public.patch
+          find public -type f -print0 | sort -z | xargs -0 sha256sum > manager-world-continuity-artifacts/generated-public-sha256.txt
+          tar -czf manager-world-continuity-artifacts/generated-public-and-lastmod.tar.gz public scripts/data/lastmod.json
+          sha256sum manager-world-continuity-artifacts/generated-public-and-lastmod.tar.gz > manager-world-continuity-artifacts/generated-public-archive-sha256.txt
+      - name: Focused units and full current versus original outcomes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerTrajectory.test.ts --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=manager-world-continuity-artifacts/focused-unit.json 2>&1 | tee manager-world-continuity-artifacts/focused-unit.log || failed=1
+          MANAGER_WORLD_CONTINUITY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerWorldContinuity.mjs 2>&1 | tee manager-world-continuity-artifacts/simManagerWorldContinuity.log || failed=1
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simHarnessAnchors.mjs 2>&1 | tee manager-world-continuity-artifacts/simHarnessAnchors.log || failed=1
+          node --input-type=module - <<'JS' || failed=1
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {createHash} from 'node:crypto';
+          import {gunzipSync} from 'node:zlib';
+          const root='manager-world-continuity-artifacts',read=file=>JSON.parse(fs.readFileSync(path.join(root,file),'utf8')),sha=value=>createHash('sha256').update(value).digest('hex');
+          const head=fs.readFileSync(root+'/source-head.txt','utf8').trim(),tree=fs.readFileSync(root+'/source-tree.txt','utf8').trim(),units=read('focused-unit.json'),controls=read('outcomes/controls.json');
+          assert.equal(units.success,true);assert.equal(units.numFailedTests,0);assert.equal(units.numTotalTests,91);assert.equal(units.numPassedTests,91);assert.equal(units.numPendingTests,0);assert.equal(units.numTodoTests??0,0);
+          for(const [file,count]of[['/src/lib/clubManagerWorldRoster.test.ts',47],['/src/lib/clubManagerTrajectory.test.ts',44]]){const suite=units.testResults.find(row=>row.name.replaceAll('\\','/').endsWith(file));assert(suite,file);assert.equal(suite.assertionResults.length,count);assert(suite.assertionResults.every(row=>row.status==='passed'));}
+          const groups=['inactive','constructors','identity','buy-job','year-away','sale','option','release','refresh','seeded-world'];
+          const maps={purchase:['buy-job','year-away','sale','release'],ownership:['identity','buy-job','year-away','sale','option','release'],snapshot:['buy-job','year-away'],stale:['year-away','sale','option','refresh'],sale:['sale'],option:['option'],release:['release'],identity:['identity'],seed:['seeded-world'],draw:['refresh']};
+          assert.equal(controls.head,head);assert.equal(controls.tree,tree);assert.equal(controls.base,'09df145abfb241679022b41903d2f19bc254ebf9');assert.equal(controls.baseTree,'3d527d2a120e909132bbbde53148d140b6a014e1');assert.deepEqual(controls.sourceBefore,controls.sourceAfter);assert.equal(Object.keys(controls.sourceBefore).length,16);assert.equal(controls.controls.length,11);
+          assert.deepEqual(controls.controls.map(row=>row.control),['',...Object.keys(maps)]);
+          for(const control of ['',...Object.keys(maps)]){
+            const dir='outcomes/'+(control||'healthy'),report=read(dir+'/report.json');assert.equal(report.head,head);assert.equal(report.tree,tree);assert.equal(report.base,controls.base);assert.equal(report.baseTree,controls.baseTree);assert.equal(report.sourceHeld,true);assert.deepEqual(report.sourceBefore,controls.sourceBefore);assert.deepEqual(report.sourceAfter,controls.sourceAfter);
+            assert.deepEqual(report.groups.map(row=>row.id),groups);assert.equal(report.originalLoaded.length>0,true);assert(report.originalLoaded.every(row=>row.sourceSha256===row.compiledSha256));assert.equal(report.currentLoaded.length>0,true);assert.equal(report.originalScopes.length,71);assert.equal(report.currentScopes.length,53);assert.equal(new Set(report.originalScopes.map(row=>row.label)).size,71);assert.equal(new Set(report.currentScopes.map(row=>row.label)).size,53);assert(report.originalScopes.every(row=>row.bundleSha256===report.originalBundle));assert(report.currentScopes.every(row=>row.bundleSha256===report.currentBundle));
+            for(const [key,count]of Object.entries({inactivePairs:24,constructorPairs:6,legacyWorldPairs:15}))assert.equal(report.counts[key],count,key);
+            if(control){assert.equal(report.status,'expected-fault');assert.deepEqual(report.failures.map(row=>row.id),maps[control]);assert(report.failures.every(row=>row.name==='AssertionError'));assert.equal(report.patches.length,1);const patch=report.patches[0];assert.equal(patch.count,1);assert.equal(patch.effective,true);assert.notEqual(patch.beforeSha256,patch.afterSha256);const changed=report.currentLoaded.filter(row=>row.sourceSha256!==row.compiledSha256);assert.equal(changed.length,1);assert.equal(changed[0].file,patch.file);assert.equal(changed[0].sourceSha256,patch.beforeSha256);assert.equal(changed[0].compiledSha256,patch.afterSha256);}else{assert.equal(report.status,'passed');assert.deepEqual(report.failures,[]);assert(report.groups.every(row=>row.passed));assert.equal(report.patches.length,0);assert(report.currentLoaded.every(row=>row.sourceSha256===row.compiledSha256));assert.equal(report.counts.completeSeasons,2);assert.equal(report.counts.exercisedOptions,2);assert(report.counts.seededRows>4000);assert.equal(report.measurement.length,6);assert(report.measurement.every(row=>row.variedClubs>0));}
+            assert.deepEqual(Object.keys(report.evidence),groups);
+            for(const receipt of Object.values(report.evidence)){const packed=fs.readFileSync(path.join(root,dir,receipt.file)),bytes=gunzipSync(packed);assert.equal(sha(packed),receipt.archiveSha256);assert.equal(sha(bytes),receipt.sha256);assert.equal(bytes.length,receipt.bytes);const full=JSON.parse(bytes.toString('utf8'));assert(Array.isArray(full)&&full.length>0,'Complete inputs/outcomes/vectors retained even for intended failures');}
+          }
+          console.log('Receipt:91 units,11 arms with ten full outcome groups,10 effective loaded faults,24 inactive complete save/vector pairs,6 constructors and15 full legacy worlds in every arm.');
+          JS
+          exit "$failed"
+      - name: Upload early exact-source diagnostics
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: manager-world-continuity-early-${{ github.run_id }}-${{ github.run_attempt }}
+          path: manager-world-continuity-artifacts/
+          retention-days: 5
+      - name: Existing transaction calendar save and era outcomes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simClubManagerDeals simTransfers simClubManagerSave simClubManagerStart simClubManagerCalendar simClubManagerEraMidSeason simClubManagerEraUcl simCmApplications simEras simEraWorldTables simManagerCareer simNoInventedQuotes; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "manager-world-continuity-artifacts/$harness.log" || failed=1
+            grep -Eq "PASS[[:space:]]+$harness\.mjs([[:space:]]|$)" "manager-world-continuity-artifacts/$harness.log" || failed=1
+            if grep -Eq '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "manager-world-continuity-artifacts/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: All fifteen built-output readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "manager-world-continuity-artifacts/$harness.log" || failed=1
+            grep -Eq "PASS[[:space:]]+$harness\.mjs([[:space:]]|$)" "manager-world-continuity-artifacts/$harness.log" || failed=1
+            if grep -Eq '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "manager-world-continuity-artifacts/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: Exact head sources and packages remain held
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --exit-code HEAD -- src scripts .github/workflows package.json package-lock.json index.html ':!scripts/data/lastmod.json' 2>&1 | tee manager-world-continuity-artifacts/source-held.log
+          test "$(git rev-parse HEAD)" = "$(cat manager-world-continuity-artifacts/source-head.txt)"
+          test "$(git rev-parse HEAD^{tree})" = "$(cat manager-world-continuity-artifacts/source-tree.txt)"
+          node scripts/qa/managerWorldContinuityKit.mjs dependencies final 2>&1 | tee manager-world-continuity-artifacts/dependencies-held.log
+          sha256sum package.json package-lock.json > manager-world-continuity-artifacts/packages-final.txt
+          cmp manager-world-continuity-artifacts/packages-before.txt manager-world-continuity-artifacts/packages-final.txt
+          du -sb manager-world-continuity-artifacts | tee manager-world-continuity-artifacts/artifact-size.log
+          test "$(du -sb manager-world-continuity-artifacts | cut -f1)" -lt 500000000
+      - name: Upload final complete evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: manager-world-continuity-final-${{ github.run_id }}-${{ github.run_attempt }}
+          path: manager-world-continuity-artifacts/
+          retention-days: 5
