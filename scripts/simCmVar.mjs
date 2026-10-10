@@ -249,10 +249,16 @@ async function main() {
       },
       async baseline() {
         const pre = fresh(original);
+        /* Round 1229: the league book (leagueBook) is a save field newer than the PRIOR engine this test reads
+           from git. That engine carries the book it is handed untouched, while the engine of today writes the
+           round's rows into it. So the two comparisons against the prior engine below, and no other comparison
+           in this file, leave that one field out on both sides. scripts/simCmLeagueBook.mjs holds the book
+           itself, and that the match stream does not move with it. */
+        const sansBook = played => { const state = { ...played.state }; delete state.leagueBook; return { ...played, state }; };
         for (const seed of [7110, 7111, 7112]) {
           const current = withCmVarSeed(seed, () => candidateFactory().playNextEntry(pre, { skipHalftime: true, noCoach: true }));
           const prior = withCmVarSeed(seed, () => oldFactory().playNextEntry(pre, { skipHalftime: true, noCoach: true }));
-          assert.deepEqual(current, prior, 'Default callers retain every prior report, stat, player credit and save byte');
+          assert.deepEqual(sansBook(current), sansBook(prior), 'Default callers retain every prior report, stat, player credit and save byte');
         }
         const before2026 = { ...clone(pre), startYear: 2025 };
         const plainBefore2026 = withCmVarSeed(7113, () => originalFactory().playNextEntry(before2026));
@@ -267,7 +273,7 @@ async function main() {
         const enabledHistoric = withCmVarSeed(7113, () => historicalCandidate.playNextEntry(historical, { varReviews: true }));
         const priorHistoric = withCmVarSeed(7113, () => historicalPrior.playNextEntry(historical));
         assert.deepEqual(enabledHistoric, plainHistoric, 'Actual loaded historic squads ignore review opt-in even on a 2026 simulation clock');
-        assert.deepEqual(plainHistoric, priorHistoric, 'Loaded historic squads retain the entire prior default match');
+        assert.deepEqual(sansBook(plainHistoric), sansBook(priorHistoric), 'Loaded historic squads retain the entire prior default match');
         const oldLive = withCmVarSeed(7114, () => originalFactory().playNextEntry(pre));
         const before = clone(oldLive.state.live);
         const plain = withCmVarSeed(7115, () => candidateFactory().playNextEntry(oldLive.state, { skipHalftime: true }));
