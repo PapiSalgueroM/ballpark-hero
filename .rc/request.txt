@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+varscreen1: node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx --testTimeout=300000 --hookTimeout=120000
+varscreen2: node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx --testTimeout=300000 --hookTimeout=120000
+varscreen3: node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx --testTimeout=300000 --hookTimeout=120000
+livemotion: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx src/test/managerScorerMarks.test.tsx src/test/clubManagerSave.test.tsx src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
