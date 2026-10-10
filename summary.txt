@@ -1,0 +1,8 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+rwalk exit=0 163s | rwalk: 27 cases, 0 error(s)
+bwalk exit=0 153s | playDraftNight: ALL GREEN, 40 nights walked
+bwalk-late exit=1 7s | playDraftNight [control late]: 1 FAILURE(S) of its own check (height), as it must
+bwalk-spoiler exit=1 7s | playDraftNight [control spoiler]: 1 FAILURE(S) of its own check (spoiler), as it must
+bwalk-fold exit=1 7s | playDraftNight [control fold]: 2 FAILURE(S) of its own check (fold), as it must
+bwalk-hidden exit=1 2s | playDraftNight [control hidden]: 2 FAILURE(S) of its own check (reduced), as it must
+weight exit=1 27s | sweepWeight: 1 failure

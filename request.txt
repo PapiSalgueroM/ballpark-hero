@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+#!serial
+rwalk: node .rc/x/rwalk.mjs
+bwalk: ENGINES=chromium RC_OUT="$RC_OUT/bwalk" node scripts/playDraftNight.mjs
+bwalk-late: PLAY_DRAFT_NIGHT_CONTROL=late RC_OUT="$RC_OUT/c-late" node scripts/playDraftNight.mjs
+bwalk-spoiler: PLAY_DRAFT_NIGHT_CONTROL=spoiler RC_OUT="$RC_OUT/c-spoiler" node scripts/playDraftNight.mjs
+bwalk-fold: PLAY_DRAFT_NIGHT_CONTROL=fold RC_OUT="$RC_OUT/c-fold" node scripts/playDraftNight.mjs
+bwalk-hidden: PLAY_DRAFT_NIGHT_CONTROL=hidden RC_OUT="$RC_OUT/c-hidden" node scripts/playDraftNight.mjs
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs

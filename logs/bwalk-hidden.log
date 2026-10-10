@@ -1,0 +1,4 @@
+  FAIL [reduced] nba-390-late-reduced: with less motion the first frame is skipped with a row at 0, the title at 1, the club at 1, the result at 1
+  FAIL [reduced] nba-390-late-reduced: the last frame has a row at 0, the title at 1, the club at 1, the result at 1
+  walked nba-390-late-reduced: pick 35, 5 rows and 4 lottery tiles, card 810 high, 43 frames
+playDraftNight [control hidden]: 2 FAILURE(S) of its own check (reduced), as it must
