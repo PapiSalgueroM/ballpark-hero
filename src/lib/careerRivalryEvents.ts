@@ -70,7 +70,9 @@ export interface RivalryEventDef<P, R> {
   emoji: string;
   title: string;
   description: (p: P, r: R) => string;
-  consequence: string;
+  /** Round 1112: a beat whose outcome is a fact of the season (who made the roster) says exactly what it
+   *  does, so its consequence may be read off the same two facts its description is. */
+  consequence: string | ((p: P, r: R) => string);
   when: (p: P, r: R) => boolean;
   apply: (s: P, r: R, rng: () => number, pushLine: (line: string) => void) => void;
 }
@@ -80,7 +82,7 @@ export interface RivalryEventDef<P, R> {
 export function rivalryEventPool<P, R>(p: P, r: R, defs: RivalryEventDef<P, R>[]): RivalryEvent[] {
   return defs
     .filter(d => d.when(p, r))
-    .map(d => ({ id: d.id, emoji: d.emoji, title: d.title, description: d.description(p, r), consequence: d.consequence }));
+    .map(d => ({ id: d.id, emoji: d.emoji, title: d.title, description: d.description(p, r), consequence: typeof d.consequence === 'function' ? d.consequence(p, r) : d.consequence }));
 }
 
 /**

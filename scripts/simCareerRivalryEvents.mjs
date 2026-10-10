@@ -68,6 +68,9 @@
  *              section 9, the new beats' words, must name it.
  *   beatheat   (Round 988) NHL beat 319 heats the rivalry while its line
  *              says nothing of it: section 9 must name it.
+ *   coin306    (Round 1112) NBA beat 306 decides who made the All-Star
+ *              roster on a coin again instead of the two seasons: section
+ *              7's All-Star check must name it.
  *
  *   Each control asserts the text it rewrites is present first, so a
  *   control that rewrites a string the file does not contain cannot pass
@@ -85,7 +88,7 @@ import { US_CAREER_BOARD, allWrapperProblems } from './lib/usCareerFiles.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.RIVALRY_CONTROL || '';
-const CONTROLS = ['deaf', 'collision', 'beatlie', 'beatheat'];
+const CONTROLS = ['deaf', 'collision', 'beatlie', 'beatheat', 'coin306'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`RIVALRY_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`);
   process.exit(1);
@@ -224,6 +227,11 @@ const BEAT_CONTROLS = {
     from: '      s.morale = clamp(s.morale - 2, 0, 100);\n      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 6, 0, 100);',
     to: '      s.morale = clamp(s.morale - 5, 0, 100);\n      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 6, 0, 100);',
   },
+  coin306: { /* NBA 306 back on a coin: the card's own facts no longer decide what it does */
+    file: 'src/lib/nbaCareerRivalryEvents.ts',
+    from: '    apply: (s, r, _rng, pushLine) => {\n      const f = nbaAllStarFacts(s, r);\n      if (!f) return;',
+    to: '    apply: (s, r, _rng, pushLine) => {\n      const f = _rng() < 0.5 ? { mine: true, his: false } : { mine: false, his: true };',
+  },
   beatheat: { /* NHL 319 heats the rivalry and its line says nothing of it */
     file: 'src/lib/nhlCareerRivalryEvents.ts',
     from: '      s.morale = clamp(s.morale - 4, 0, 100);\n      s.fanbase = clamp(s.fanbase + 2, 0, 100);\n    },\n  },\n  {\n    id: 320,',
@@ -246,7 +254,7 @@ const redirectPlugin = {
   name: 'rivalry-control',
   setup(b) {
     b.onResolve({ filter: /careerRivalryEvents(\.ts)?$/ }, () => (redirects.careerRivalryEvents ? { path: redirects.careerRivalryEvents } : undefined));
-    b.onLoad({ filter: /(nfl|nhl)CareerRivalryEvents\.ts$/ }, args => {
+    b.onLoad({ filter: /(nfl|nhl|nba)CareerRivalryEvents\.ts$/ }, args => {
       if (!beatPatch || path.resolve(args.path) !== path.resolve(beatPatch.path)) return undefined;
       return { contents: beatPatch.contents, loader: 'ts', resolveDir: path.dirname(args.path) };
     });
@@ -871,7 +879,8 @@ console.log('7) The NBA binding: every beat reachable and correct, and the tick 
     303: [nbaFixture(), rivalFixture()],
     304: [nbaFixture(), rivalFixture()],
     305: [nbaFixture(), rivalFixture({ retired: true })],
-    306: [nbaFixture({ ovr: 85 }), rivalFixture({ ovr: 85 })],
+    /* Round 1112: 306 is dealt on the season's two All-Star facts, never on the ratings. */
+    306: [nbaFixture({ seasons: [{ year: 2030, allStar: 'reserve', awards: ['All-Star'] }] }), rivalFixture({ lastYear: 2030, lastAllStar: false })],
     307: [nbaFixture({ rings: 0 }), rivalFixture({ rings: 2 })],
     308: [nbaFixture({ ovr: 90 }), rivalFixture({ ovr: 85 })],
     309: [nbaFixture({ team: 'LAL' }), rivalFixture({ team: 'LAL' })],
@@ -892,6 +901,53 @@ console.log('7) The NBA binding: every beat reachable and correct, and the tick 
     323: [nbaFixture({ rings: 1 }), rivalFixture({ rings: 1 })],
   };
   beatWords('NBA', nbaRivalry.NBA_RIVALRY_EVENTS, gates); /* Round 988, before the loop below mutates the fixtures */
+  /* Round 1112: the All-Star beat. It flipped a coin for who made the roster, in a game whose engine picks
+     All-Stars for real, so the card could contradict the season card of the same year. Every pair of facts,
+     as a card and as an apply: dealt only when one of you made it and the two facts are one season's, the
+     words say those facts, the consequence is exactly what moves, and nothing is drawn. Deterministic: 3
+     cases that must not be dealt and 3 that must, each applied at 4 rolls. */
+  {
+    const def306 = nbaRivalry.NBA_RIVALRY_EVENTS.find(d => d.id === 306);
+    const season = (allStar, year = 2030) => ({ year, awards: allStar ? ['All-Star'] : [], ...(allStar ? { allStar: 'reserve' } : {}) });
+    const cases = [
+      { mine: true, his: false, says: /You are on one and Rival NBA is not/, reads: 'Morale +5', move: { morale: 5, fanbase: 0 } },
+      { mine: false, his: true, says: /Rival NBA is on one and you are not/, reads: 'Morale -5', move: { morale: -5, fanbase: 0 } },
+      { mine: true, his: true, says: /you and Rival NBA are both on them/, reads: 'Fanbase +3', move: { morale: 0, fanbase: 3 } },
+    ];
+    let dealt = 0;
+    if (!def306) fail('NBA beat 306 is missing from its table');
+    else {
+      const neither = [nbaFixture({ ovr: 90, seasons: [season(false)] }), rivalFixture({ ovr: 90, lastYear: 2030, lastAllStar: false })];
+      if (def306.when(...neither)) fail('NBA beat 306 is dealt in a season neither of you made the All-Star roster');
+      const otherYear = [nbaFixture({ seasons: [season(true, 2031)] }), rivalFixture({ lastYear: 2030, lastAllStar: true })];
+      if (def306.when(...otherYear)) fail('NBA beat 306 is dealt on two different seasons (mine of 2031, his of 2030)');
+      const oldSave = [nbaFixture({ ovr: 90, seasons: [season(false)] }), rivalFixture({ ovr: 90 })];
+      if (def306.when(...oldSave)) fail('NBA beat 306 is dealt on the two ratings again (both at 90, nobody on the roster, a rival from before Round 1112)');
+      for (const k of cases) {
+        const p = nbaFixture({ seasons: [season(k.mine)] });
+        const r = rivalFixture({ lastYear: 2030, lastAllStar: k.his });
+        const built = rivalryMod.rivalryEventPool(p, r, nbaRivalry.NBA_RIVALRY_EVENTS).find(e => e.id === 306);
+        if (!built) { fail(`NBA beat 306 is not dealt when mine=${k.mine} his=${k.his}`); continue; }
+        dealt += 1;
+        if (!k.says.test(built.description)) fail(`NBA beat 306 (mine=${k.mine} his=${k.his}) reads "${built.description}"`);
+        if (built.consequence !== k.reads) fail(`NBA beat 306 (mine=${k.mine} his=${k.his}) promises "${built.consequence}", expected "${k.reads}"`);
+        for (const roll of [0.25, 0.4999, 0.5001, 0.75]) {
+          const s = jclone(p); const lines = []; let draws = 0;
+          rivalryMod.applyRivalryEvent(s, jclone(r), built, nbaRivalry.NBA_RIVALRY_EVENTS, () => { draws += 1; return roll; }, l => lines.push(l));
+          const moved = { morale: s.morale - p.morale, fanbase: s.fanbase - p.fanbase };
+          if (draws !== 0) fail(`NBA beat 306 (mine=${k.mine} his=${k.his}) drew ${draws} times: it has no coin to flip`);
+          if (moved.morale !== k.move.morale || moved.fanbase !== k.move.fanbase) fail(`NBA beat 306 (mine=${k.mine} his=${k.his}, roll ${roll}) promised "${built.consequence}" and moved morale ${moved.morale}, fanbase ${moved.fanbase}`);
+          if (beatKey(beatNumbers(built.consequence)) !== beatKey({ morale: moved.morale, fanbase: moved.fanbase, health: 0, rating: 0, netWorth: 0 })) fail(`NBA beat 306: the consequence "${built.consequence}" does not read as what moved`);
+          const told = k.mine && k.his ? /both made the All-Star roster/ : k.mine ? /You made the All-Star roster and Rival NBA did not/ : /Rival NBA made the All-Star roster and you did not/;
+          if (!lines.some(l => told.test(l))) fail(`NBA beat 306 (mine=${k.mine} his=${k.his}) pushed "${lines.join(' | ')}"`);
+          const others = o => { const x = { ...o }; delete x.morale; delete x.fanbase; return JSON.stringify(x); };
+          if (others(s) !== others(p)) fail('NBA beat 306 moved something its words do not name');
+        }
+      }
+    }
+    console.log(`   the All-Star beat: ${dealt} of 3 fact pairs dealt and applied at 4 rolls each, never on a coin, never when neither made it`);
+    if (dealt < 3) fail(`only ${dealt} of 3 All-Star fact pairs were dealt`);
+  }
   let reachable = 0, correct = 0;
   const total = nbaRivalry.NBA_RIVALRY_EVENTS.length;
   for (const def of nbaRivalry.NBA_RIVALRY_EVENTS) {

@@ -54,6 +54,9 @@
        R2  every rival line reads back off its printed text and is in the player's own shape, and the verdict
            NEVER disagrees with the two printed lines scored the same way (exact, at every size; the tree
            before Round 1112 read 32.6 to 33.1 percent of judged years).
+       R4  the All-Star beat (306) never contradicts the two seasons it is about: every card dealt in the fleet
+           says and promises what the player's own selection and the rival's support, and none is dealt when
+           neither made the roster (exact). It is still dealt in all three cases on every seed (floors).
        R3  unit checks on 400 made up seasons: his season takes exactly one draw of the season's stream, his
            line replays as nbaStatLineFor's through the player's printer, the same inputs give the same
            season, and his kind is fixed and his position's own.
@@ -153,6 +156,7 @@
      oldscale         the rival scored on the line before Round 1112   R red
      neutralmine      my side of the verdict off the era neutral line  R red (the 2003-04 careers tell)
      rivaldraws       the rival's season taking a second draw          R red
+     oldgate306       the All-Star beat dealt on the two ratings again R red
      noscale          the legacy constant back to 1                    H red (refuses when it is 1)
      nomvpworth       an MVP worth nothing to the legacy score         H red
      independent      MVP with no First Team gate and no playoff gate  B1 red (may: B3, B4, B6, H)
@@ -288,6 +292,9 @@ const CONTROLS = {
      season the two are the same number, so only the 2003-04 careers can tell (one career in four). */
   neutralmine: { file: 'src/lib/nbaMyCareer.ts', find: "    for (const n of judgeRivalSeason(c.rival, nbaSeasonScore(line), c.name, 'nba', rng, nbaRivalSeason(c.year, seasonsPlayed))) notes.push(n);",
     put: "    for (const n of judgeRivalSeason(c.rival, statScore, c.name, 'nba', rng, nbaRivalSeason(c.year, seasonsPlayed))) notes.push(n);", needs: 'R' },
+  /* R: the All-Star beat dealt on the two ratings again (both at 80), as it was while it flipped a coin. It then
+     turns up in years neither made the roster, saying one of them did. */
+  oldgate306: { file: 'src/lib/nbaCareerRivalryEvents.ts', find: '    when: (s, r) => { const f = nbaAllStarFacts(s, r); return !!f && (f.mine || f.his); },', put: '    when: (s, r) => s.ovr >= 80 && r.ovr >= 80,', needs: 'R' },
   /* R: the rival's season taking a second draw of the season's stream (every draw of the player's after it moves). */
   rivaldraws: { file: 'src/lib/nbaMyCareer.ts', find: "    const keyed = keyedRng(`nba-rival|${r.name}|${year}|${rng()}`);", put: "    const keyed = keyedRng(`nba-rival|${r.name}|${year}|${rng() + rng()}`);", needs: 'R' },
   /* H: the legacy constant back to 1. Refuses when it already is 1 (then nomvpworth is the control H has). */
@@ -473,8 +480,13 @@ function playFleet(seed, careers, M = E) {
         nba.nbaCampBattle(c, tq, rnd);
         const prev = c.seasons[c.seasons.length - 1];
         const pre = { ovr: c.ovr, morale: c.morale, age: c.age, role: c.role ?? 'starter', n: c.seasons.length, fan: c.fanbase, everAllNba: c.allNbas > 0, my: c.rival?.myYears ?? 0, his: c.rival?.hisYears ?? 0 };
+        /* The fleet never answers a rivalry card, so the pending one can be an older season's: a beat is this
+           season's only when the object is new. */
+        const pendingBefore = c.pendingRivalryEvent;
         const { line } = nba.simNbaSeason(c, tq, rnd);
-        seasons.push({ i, pos, arch: arch.id, era, tq, ...pre, prev, line, won: (c.rival?.myYears ?? 0) - pre.my, lost: (c.rival?.hisYears ?? 0) - pre.his, rivalScore: c.rival?.lastScore ?? null, rivalLine: c.rival?.lastLine ?? null });
+        const beat = c.pendingRivalryEvent && c.pendingRivalryEvent !== pendingBefore ? c.pendingRivalryEvent : null;
+        seasons.push({ i, pos, arch: arch.id, era, tq, ...pre, prev, line, won: (c.rival?.myYears ?? 0) - pre.my, lost: (c.rival?.hisYears ?? 0) - pre.his, rivalScore: c.rival?.lastScore ?? null, rivalLine: c.rival?.lastLine ?? null,
+          rivalAllStar: c.rival?.lastAllStar === true, beat306: beat && beat.id === 306 ? { says: beat.description, does: beat.consequence } : null, beatDealt: !!beat });
       }
       nba.nbaProgress(c, rnd);
       const ev = nba.drawNbaEvent(c, rnd);
@@ -544,6 +556,20 @@ function measure(f, M = E) {
     if ((M.awards.nbaSeasonScore(mine) > M.awards.nbaSeasonScore(his)) !== (s.won === 1)) disagree++;
   }
   m.rivalJudged = judged.length; m.rivalUnread = unread; m.rivalOffShape = offShape; m.rivalDisagreeN = disagree;
+  /* R4 (Round 1112): the All-Star beat against the two seasons it is about. Mine is the season card's own
+     selection, his the rival's of the same year. */
+  const b306 = S.filter(s => s.beat306);
+  const kindOf = s => (s.line.allStar && s.rivalAllStar ? 'both' : s.line.allStar ? 'mine' : s.rivalAllStar ? 'his' : 'neither');
+  const SAYS = { both: /are both on them/, mine: /You are on one and .+ is not/, his: /is on one and you are not/ };
+  const DOES = { both: 'Fanbase +3', mine: 'Morale +5', his: 'Morale -5' };
+  m.beat306 = { dealt: b306.length, both: 0, mine: 0, his: 0, neither: 0, lies: 0 };
+  for (const s of b306) {
+    const k = kindOf(s);
+    m.beat306[k] += 1;
+    if (k === 'neither' || !SAYS[k].test(s.beat306.says) || s.beat306.does !== DOES[k]) m.beat306.lies += 1;
+  }
+  m.beatsDealt = S.filter(s => s.beatDealt).length;
+  m.allStarSeasons = { mine: r2(share(judged.filter(s => s.line.allStar).length, judged.length)), his: r2(share(judged.filter(s => s.rivalAllStar).length, judged.length)) };
   m.rivalDisagree = r2(share(disagree, judged.length - unread));
   m.starters = {};
   for (const b of ['80-83', '88-91']) {
@@ -961,6 +987,8 @@ const HELD_TOL = {
 };
 /* R: my share of the head to head years as Round 1112 shipped it, five full size seeds (see the header). */
 const RIVAL_1112 = { myShare: [60.9, 60.9, 60.9, 60.9, 60.9] };
+/* R4: how often a full size seed must still deal the All-Star beat in each of its three cases (see the header). */
+const BEAT306_FLOOR = { mine: 1, his: 1, both: 1 };
 /* R: how many of the fifteen kinds eight names at five positions must reach (measured: see the header). */
 const RIVAL_KINDS_FLOOR = 10;
 const HELD_WIDEN = Math.sqrt(Math.max(1, (6000 * 5) / (CAREERS * SEEDS.length)));
@@ -1203,6 +1231,10 @@ else {
   exact('R', per.every(m => m.rivalJudged > 0 && m.rivalUnread === 0 && m.rivalOffShape === 0), `every rival line reads back off its printed text and is in the player's own shape, three parts at one decimal (judged years ${per.map(m => m.rivalJudged).join(', ')}; unreadable ${per.map(m => m.rivalUnread).join(', ')}; off shape ${per.map(m => m.rivalOffShape).join(', ')})`);
   exact('R', per.every(m => m.rivalDisagreeN === 0), `the verdict never disagrees with the two printed lines scored the same way: ${per.map(m => m.rivalDisagreeN).join(', ')} of ${per.map(m => m.rivalJudged).join(', ')} judged years`);
   rivalUnit();
+  /* R4: the All-Star beat says only what the two seasons support, and is never dealt when neither made it. */
+  exact('R', per.every(m => m.beat306.lies === 0 && m.beat306.neither === 0), `the All-Star beat never contradicts the two seasons: dealt ${per.map(m => m.beat306.dealt).join(', ')} times (only me ${per.map(m => m.beat306.mine).join(', ')}; only him ${per.map(m => m.beat306.his).join(', ')}; both ${per.map(m => m.beat306.both).join(', ')}; neither ${per.map(m => m.beat306.neither).join(', ')}), cards that say or promise something else ${per.map(m => m.beat306.lies).join(', ')}`);
+  banded('R', per.every(m => m.beat306.mine >= BEAT306_FLOOR.mine && m.beat306.his >= BEAT306_FLOOR.his && m.beat306.both >= BEAT306_FLOOR.both), `the All-Star beat is still dealt in all three of its cases on every seed (floors: only me ${BEAT306_FLOOR.mine}, only him ${BEAT306_FLOOR.his}, both ${BEAT306_FLOOR.both})`);
+  console.log(`  note [R] All-Star seasons, percent of judged years: mine ${per.map(m => m.allStarSeasons.mine).join(', ')}; the rival's ${per.map(m => m.allStarSeasons.his).join(', ')}. Rivalry beats dealt a seed: ${per.map(m => m.beatsDealt).join(', ')}`);
   /* H, the Hall: inducted and first ballot stay where main had them. */
   heldAtMain('H', base.nba, per, 'inducted', 'Hall of Fame inducted, percent');
   heldAtMain('H', base.nba, per, 'firstBallot', 'first ballot, percent');
