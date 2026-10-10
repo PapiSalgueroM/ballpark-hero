@@ -1,0 +1,9 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-oldline exit=1 42s | playUsRivalLines: 24 checks, 8 failed (control oldline)
+sweepWeight exit=0 27s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+playGames-nfl exit=0 51s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-mlb exit=0 76s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-nhl exit=0 52s | Played 1 games. 0 findings, 0 the harness could not drive.
+walk-rivalflip exit=1 263s | playUsRivalLines: 229 checks, 18 failed (control rivalflip)
+playGames-nba exit=0 64s | Played 1 games. 0 findings, 0 the harness could not drive.
+walk exit=0 1043s | playUsRivalLines: 821 checks, 0 failed
