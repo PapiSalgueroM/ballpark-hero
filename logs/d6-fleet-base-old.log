@@ -1,0 +1,74 @@
+  nofetch premier: RED (Arsenal, Hull City; 3 seeds each, twelve entries, saved bytes)
+  nofetch championship: RED (West Ham, Lincoln City; 3 seeds each, twelve entries, saved bytes)
+  nofetch laliga: RED (Real Madrid, Málaga; 3 seeds each, twelve entries, saved bytes)
+  nofetch seriea: RED (Inter Milan, Frosinone; 3 seeds each, twelve entries, saved bytes)
+  nofetch bundesliga: RED (Bayern Munich, Elversberg; 3 seeds each, twelve entries, saved bytes)
+  nofetch ligue1: RED (PSG, Le Mans; 3 seeds each, twelve entries, saved bytes)
+  nofetch eredivisie: RED (Ajax, Excelsior; 3 seeds each, twelve entries, saved bytes)
+  nofetch saudi: RED (Al-Hilal, Al-Riyadh; 3 seeds each, twelve entries, saved bytes)
+  nofetch mlsEast: RED (Inter Miami, D.C. United; 3 seeds each, twelve entries, saved bytes)
+  nofetch mlsWest: RED (Seattle Sounders, Sporting Kansas City; 3 seeds each, twelve entries, saved bytes)
+  nofetch primeira: RED (Porto, Nacional; 3 seeds each, twelve entries, saved bytes)
+  nofetch scottish: RED (Rangers, Dundee; 3 seeds each, twelve entries, saved bytes)
+  nofetch superlig: RED (Galatasaray, Erzurumspor; 3 seeds each, twelve entries, saved bytes)
+  nofetch bundesliga2: RED (Wolfsburg, Dynamo Dresden; 3 seeds each, twelve entries, saved bytes)
+  nofetch proleague: RED (Club Brugge, Beveren; 3 seeds each, twelve entries, saved bytes)
+  nofetch austria: RED (RB Salzburg, WSG Tirol; 3 seeds each, twelve entries, saved bytes)
+  nofetch greece: RED (Olympiacos, Panetolikos; 3 seeds each, twelve entries, saved bytes)
+  nofetch denmark: RED (FC Midtjylland, OB; 3 seeds each, twelve entries, saved bytes)
+  nofetch switzerland: RED (Young Boys, Vaduz; 3 seeds each, twelve entries, saved bytes)
+  nofetch croatia: RED (Hajduk Split, Rudeš; 3 seeds each, twelve entries, saved bytes)
+  nofetch brasileirao: RED (Flamengo, Chapecoense; 3 seeds each, twelve entries, saved bytes)
+  nofetch ligamx: RED (América, Atlante; 3 seeds each, twelve entries, saved bytes)
+  nofetch aleague: RED (Adelaide United, Central Coast Mariners; 3 seeds each, twelve entries, saved bytes)
+  nofetch serieb: RED (Pisa, Ascoli; 3 seeds each, twelve entries, saved bytes)
+  nofetch ligue2: RED (Nantes, Dunkerque; 3 seeds each, twelve entries, saved bytes)
+  nofetch segunda: RED (Girona, Albacete; 3 seeds each, twelve entries, saved bytes)
+  nofetch russia: RED (Zenit, Fakel Voronezh; 3 seeds each, twelve entries, saved bytes)
+nofetch: RED for premier, championship, laliga, seriea, bundesliga, ligue1, eredivisie, saudi, mlsEast, mlsWest, primeira, scottish, superlig, bundesliga2, proleague, austria, greece, denmark, switzerland, croatia, brasileirao, ligamx, aleague, serieb, ligue2, segunda, russia, premier2020, laliga2020, seriea2020, bundesliga2020, ligue12020, premier2015, laliga2015, seriea2015, bundesliga2015, ligue12015, premier2010, laliga2010, seriea2010, bundesliga2010, ligue12010, premier2005, laliga2005, seriea2005, bundesliga2005, ligue12005 (250 careers)
+  FAIL premier: Arsenal seed 1101: the fresh save is not the base's
+  FAIL championship: West Ham seed 1101: the fresh save is not the base's
+  FAIL laliga: Real Madrid seed 1101: the fresh save is not the base's
+  FAIL seriea: Inter Milan seed 1101: the fresh save is not the base's
+  FAIL bundesliga: Bayern Munich seed 1101: the fresh save is not the base's
+  FAIL ligue1: PSG seed 1101: the fresh save is not the base's
+  FAIL eredivisie: Ajax seed 1101: the fresh save is not the base's
+  FAIL saudi: Al-Hilal seed 1101: the fresh save is not the base's
+  FAIL mlsEast: Inter Miami seed 1101: the fresh save is not the base's
+  FAIL mlsWest: Seattle Sounders seed 1101: the fresh save is not the base's
+  FAIL primeira: Porto seed 1101: the fresh save is not the base's
+  FAIL scottish: Rangers seed 1101: the fresh save is not the base's
+  oldsaves premier: RED (Arsenal, Hull City; 2 seeds each, three stages)
+  oldsaves championship: RED (West Ham, Lincoln City; 2 seeds each, three stages)
+  oldsaves laliga: RED (Real Madrid, Málaga; 2 seeds each, three stages)
+  oldsaves seriea: RED (Inter Milan, Frosinone; 2 seeds each, three stages)
+  oldsaves bundesliga: RED (Bayern Munich, Elversberg; 2 seeds each, three stages)
+  oldsaves eredivisie: RED (Ajax, Excelsior; 2 seeds each, three stages)
+  oldsaves primeira: RED (Porto, Nacional; 2 seeds each, three stages)
+  oldsaves superlig: RED (Galatasaray, Erzurumspor; 2 seeds each, three stages)
+  oldsaves bundesliga2: RED (Wolfsburg, Dynamo Dresden; 2 seeds each, three stages)
+  oldsaves ligue2: RED (Nantes, Dunkerque; 2 seeds each, three stages)
+oldsaves: RED for premier, championship, laliga, seriea, bundesliga, eredivisie, primeira, superlig, bundesliga2, ligue2 (132 saves)
+  FAIL premier: Arsenal seed 41, week 54 of 54, the end of season one: base {"bytes":"59a579215a5ca9b8f76d","draws":"0,1487,21,823,1338,1199,1396","season":2,"week":3}, candidate {"bytes":"0f606fdfff908f5ed527","draws":"0,1487,21,823,1338,1199,1396","season":2,"week":3}
+  FAIL championship: West Ham seed 41, week 62 of 62, the end of season one: base {"bytes":"186ab44faf634def2aa1","draws":"0,1305,24,815,1349,1282,1363","season":2,"week":3}, candidate {"bytes":"b7ddca31c3a644e6dbe1","draws":"0,1305,24,815,1349,1282,1363","season":2,"week":3}
+  FAIL laliga: Real Madrid seed 41, week 54 of 54, the end of season one: base {"bytes":"6504f3094eb951084697","draws":"0,1397,21,824,1288,1169,1411","season":2,"week":3}, candidate {"bytes":"d756b95448fbebef7a27","draws":"0,1397,21,824,1288,1169,1411","season":2,"week":3}
+  FAIL seriea: Inter Milan seed 41, week 54 of 54, the end of season one: base {"bytes":"a1cc011a198fe3f9a413","draws":"0,1452,20,851,1559,1207,1415","season":2,"week":3}, candidate {"bytes":"a5773874cbea437aa13f","draws":"0,1452,20,851,1559,1207,1415","season":2,"week":3}
+  FAIL bundesliga: Bayern Munich seed 41, week 50 of 50, the end of season one: base {"bytes":"862f554f9abf29cd8ae2","draws":"0,1435,19,836,1336,1269,1378","season":2,"week":3}, candidate {"bytes":"f6d23edf466e249b80a1","draws":"0,1435,19,836,1336,1269,1378","season":2,"week":3}
+  FAIL eredivisie: Ajax seed 41, week 50 of 50, the end of season one: base {"bytes":"aac152544e29bf5d2900","draws":"0,1425,18,784,1365,1431,1307","season":2,"week":3}, candidate {"bytes":"a03cf6779d84a4dbd9c6","draws":"0,1425,18,784,1365,1431,1307","season":2,"week":3}
+  FAIL primeira: Porto seed 41, week 50 of 50, the end of season one: base {"bytes":"c67e5d8450b2263a25d8","draws":"0,1465,43,792,1336,1267,1402","season":2,"week":3}, candidate {"bytes":"45255b994a89dce7466a","draws":"0,1465,43,792,1336,1267,1402","season":2,"week":3}
+  FAIL superlig: Galatasaray seed 41, week 50 of 50, the end of season one: base {"bytes":"1f7085577b9929dad830","draws":"0,1408,43,825,1465,1285,1400","season":2,"week":3}, candidate {"bytes":"2d45a476f7d1806563f4","draws":"0,1408,43,825,1465,1285,1400","season":2,"week":3}
+  FAIL bundesliga2: Wolfsburg seed 41, week 50 of 50, the end of season one: base {"bytes":"0eecc9ad785ed0ccb401","draws":"0,1353,84,729,1364,1367,1500","season":2,"week":3}, candidate {"bytes":"972a531a28dac3dc253e","draws":"0,1353,84,729,1364,1367,1500","season":2,"week":3}
+  FAIL ligue2: Nantes seed 41, week 50 of 50, the end of season one: base {"bytes":"86768f50a1169ed6b9c6","draws":"0,1329,84,781,1496,1187,1384","season":2,"week":3}, candidate {"bytes":"8d36b05290889f9159c1","draws":"0,1329,84,781,1496,1187,1384","season":2,"week":3}
+  dailies premier Arsenal: no key, the same day with and without the lists (326a279ea416d32bb468)
+  dailies championship West Ham: no key, the same day with and without the lists (51a087b0d5d78e0767ef)
+  dailies laliga Real Madrid: no key, the same day with and without the lists (b86037a58a06babae635)
+  dailies seriea Inter Milan: no key, the same day with and without the lists (6a90ed12986fba6e50e6)
+  dailies bundesliga Bayern Munich: no key, the same day with and without the lists (3113a0a3df722b93748d)
+  dailies eredivisie Ajax: no key, the same day with and without the lists (4301b10bb1ae144a28ad)
+  dailies primeira Porto: no key, the same day with and without the lists (64c9837ac59bd1cdd09f)
+  dailies superlig Galatasaray: no key, the same day with and without the lists (d8226d32f8be17744d5d)
+  dailies bundesliga2 Wolfsburg: no key, the same day with and without the lists (cacc6e40ab1d6be9132d)
+  dailies ligue2 Nantes: no key, the same day with and without the lists (994ae8561a90ec4a0734)
+  dailies scottish Rangers: no key, the same day with and without the lists (458cbe407c45fbacb407)
+dailies: green (11 clubs)
+simCmFixtureFleet: 57 FAILURE(S): nofetch [premier, championship, laliga, seriea, bundesliga, ligue1, eredivisie, saudi, mlsEast, mlsWest, primeira, scottish, superlig, bundesliga2, proleague, austria, greece, denmark, switzerland, croatia, brasileirao, ligamx, aleague, serieb, ligue2, segunda, russia, premier2020, laliga2020, seriea2020, bundesliga2020, ligue12020, premier2015, laliga2015, seriea2015, bundesliga2015, ligue12015, premier2010, laliga2010, seriea2010, bundesliga2010, ligue12010, premier2005, laliga2005, seriea2005, bundesliga2005, ligue12005], oldsaves [premier, championship, laliga, seriea, bundesliga, eredivisie, primeira, superlig, bundesliga2, ligue2]

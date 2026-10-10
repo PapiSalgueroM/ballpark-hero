@@ -1,0 +1,11 @@
+init exit=0 0s | 6bfd816ae33e7a82ae55660c5edf926daa619a1d
+m1225 exit=0 0s | 5
+d1-default exit=0 3s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+d2-base-head exit=0 8s | simCmRealFixtures normal premier: 13 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, generated baseline held against the base 2c88545a1583a9d2cc7fc24139
+d3-base-head-all exit=0 54s | simCmRealFixtures premier: 13 actual outcome groups, 760 fixture reads, 760 calendar reads and 11 effective controls passed against the base 2c88545a1583a9d2cc7fc24139337
+d4-fleet-base-head exit=0 113s | simCmFixtureFleet: green. 10 registered league(s), 9 in a file of their own. nofetch 250 careers, oldsaves 132 saves, dailies 11 clubs, against the base 2c88545a1583a9d2c
+d5-base-old-asis exit=1 7s | Node.js v24.21.0
+d6-fleet-base-old exit=1 55s | simCmFixtureFleet: 57 FAILURE(S): nofetch [premier, championship, laliga, seriea, bundesliga, ligue1, eredivisie, saudi, mlsEast, mlsWest, primeira, scottish, superlig, b
+d7-book exit=0 30s | simCmLeagueBook: green, 7 sections, 5 careers x 2 seasons (30s)
+d8-tsc exit=0 58s | 
+back exit=0 0s | 2c88545a1 rc request r1229-v2b for 1b1cbae64aef9a36b22132a0e51a2a0e2ba87a08
