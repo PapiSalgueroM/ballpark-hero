@@ -1,0 +1,5 @@
+own-head exit=1 4s |     616|     console.log(`[1216 digest] OWN ${digest(frames)}`);
+own-corner-reverted exit=1 4s |     616|     console.log(`[1216 digest] OWN ${digest(frames)}`);
+own-up-reverted exit=1 4s |     616|     console.log(`[1216 digest] OWN ${digest(frames)}`);
+own-both-reverted exit=0 4s | [1216 digest] OWN 669ef935
+restored exit=0 0s | 0

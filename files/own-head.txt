@@ -1,0 +1,54 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: the recorded own goal[2m > [22m[2mOWN: every own goal frame of the hand made scenes is the recorded one
+[22m[39m[1216 digest] OWN c648618c
+
+ [31m❯[39m src/test/pitchOwnGoal.test.tsx [2m([22m[2m16 tests[22m[2m | [22m[31m1 failed[39m[2m | [22m[33m15 skipped[39m[2m)[22m[32m 46[2mms[22m[39m
+   [2m[90m↓[39m[22m Round 1216: an own goal on real feeds[2m > [22mthe material is a dense fleet of own goals, each on the cast the viewer holds for it
+   [2m[90m↓[39m[22m Round 1216: an own goal on real feeds[2m > [22mOG1: the ball goes in off the man the line names
+   [2m[90m↓[39m[22m Round 1216: an own goal on real feeds[2m > [22mOG9: from the touch to the net the ball passes nobody else
+   [2m[90m↓[39m[22m Round 1216: an own goal on real feeds[2m > [22mOG2: the instants are the goal it always was
+   [2m[90m↓[39m[22m Round 1216: an own goal on real feeds[2m > [22mOG3: nobody is the scorer, and the man holds his head
+   [2m[90m↓[39m[22m Round 1216: an own goal on real feeds[2m > [22mOG4: nobody stands on a team mate while it plays
+   [2m[90m↓[39m[22m Round 1216: an own goal on real feeds[2m > [22mOG5: the turn can be seen, and the ball comes to the man
+   [2m[90m↓[39m[22m Round 1216: an own goal on scenes made by hand[2m > [22mOG6: who it goes in off, and a man who is not there moves nobody
+   [2m[90m↓[39m[22m Round 1216: an own goal on scenes made by hand[2m > [22mOG7: reduced motion shows the last frame at once, the man with his head in his hands
+   [2m[90m↓[39m[22m Round 1216: an own goal on scenes made by hand[2m > [22mOG8: a goal from the spot or from a direct free kick is never drawn as an own goal
+   [2m[90m↓[39m[22m Round 1216: an own goal on scenes made by hand[2m > [22mOG10: a back meets it in a band in front of his own goal, wherever he stands
+[31m   [31m×[31m Round 1216: the recorded own goal[2m > [22mOWN: every own goal frame of the hand made scenes is the recorded one[39m[32m 45[2mms[22m[39m
+[31m     → expected 'c648618c' to be '669ef935' // Object.is equality[39m
+   [2m[90m↓[39m[22m Round 1216: the recorded own goal[2m > [22mRUE: the figure with his head in his hands is the recorded one, and at rue 0 it is the figure it was
+   [2m[90m↓[39m[22m Round 1216: an own goal in the live match[2m > [22mthe live match draws an own goal for me off the man on its card
+   [2m[90m↓[39m[22m Round 1216: an own goal in the live match[2m > [22mthe live match draws an own goal for opp off the man on its card
+   [2m[90m↓[39m[22m Round 1216: an own goal and a change of line up off the clock[2m > [22man own goal still on its way when the line up changes off the clock keeps its net, its card and its men
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/pitchOwnGoal.test.tsx[2m > [22mRound 1216: the recorded own goal[2m > [22mOWN: every own goal frame of the hand made scenes is the recorded one
+[31m[1mAssertionError[22m: expected 'c648618c' to be '669ef935' // Object.is equality[39m
+
+Expected: [32m"669ef935"[39m
+Received: [31m"c648618c"[39m
+
+[36m [2m❯[22m src/test/pitchOwnGoal.test.tsx:[2m617:28[22m[39m
+    [90m615| [39m    [34mexpect[39m(frames)[33m.[39m[34mtoHaveLength[39m([34m2[39m [33m*[39m [34m8[39m [33m*[39m [34m22[39m)[33m;[39m
+    [90m616| [39m    console[33m.[39m[34mlog[39m([32m`[1216 digest] OWN [39m[36m${[39m[34mdigest[39m(frames)[36m}[39m[32m`[39m)[33m;[39m
+    [90m617| [39m    [34mexpect[39m([34mdigest[39m(frames))[33m.[39m[34mtoBe[39m([33mOWN_DIGEST[39m)[33m;[39m
+    [90m   | [39m                           [31m^[39m
+    [90m618| [39m  })[33m;[39m
+    [90m619| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[33m15 skipped[39m[90m (16)[39m
+[2m   Start at [22m 15:21:38
+[2m   Duration [22m 2.87s[2m (transform 1.59s, setup 55ms, collect 2.02s, tests 46ms, environment 304ms, prepare 138ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/pitchOwnGoal.test.tsx,title=src/test/pitchOwnGoal.test.tsx > Round 1216%3A the recorded own goal > OWN%3A every own goal frame of the hand made scenes is the recorded one,line=617,column=28::AssertionError: expected 'c648618c' to be '669ef935' // Object.is equality%0A%0AExpected: "669ef935"%0AReceived: "c648618c"%0A%0A ❯ src/test/pitchOwnGoal.test.tsx:617:28%0A%0A

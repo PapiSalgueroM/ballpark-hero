@@ -1,0 +1,6 @@
+#!serial
+own-head: node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx -t "OWN: every own goal frame" --testTimeout=300000 > $RC_OUT/own-head.txt 2>&1; s=$?; grep -h "1216 digest. OWN" $RC_OUT/own-head.txt | tail -1; exit $s
+own-corner-reverted: node .rc/x/mut-keeper.mjs corner && node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx -t "OWN: every own goal frame" --testTimeout=300000 > $RC_OUT/own-corner.txt 2>&1; s=$?; grep -h "1216 digest. OWN" $RC_OUT/own-corner.txt | tail -1; git checkout -- src; exit $s
+own-up-reverted: node .rc/x/mut-keeper.mjs up && node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx -t "OWN: every own goal frame" --testTimeout=300000 > $RC_OUT/own-up.txt 2>&1; s=$?; grep -h "1216 digest. OWN" $RC_OUT/own-up.txt | tail -1; git checkout -- src; exit $s
+own-both-reverted: node .rc/x/mut-keeper.mjs both && node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx -t "OWN: every own goal frame" --testTimeout=300000 > $RC_OUT/own-both.txt 2>&1; s=$?; grep -h "1216 digest. OWN" $RC_OUT/own-both.txt | tail -1; git checkout -- src; exit $s
+restored: git status --short | grep -v "^??" | wc -l
