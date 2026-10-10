@@ -1,0 +1,13 @@
+#!serial
+m1: bash .rc/x/review-run-mrun.sh m1
+m2: bash .rc/x/review-run-mrun.sh m2
+m3: bash .rc/x/review-run-mrun.sh m3
+m4: bash .rc/x/review-run-mrun.sh m4
+m5: bash .rc/x/review-run-mrun.sh m5
+m6: bash .rc/x/review-run-mrun.sh m6 lay
+m7: bash .rc/x/review-run-mrun.sh m7
+m9: bash .rc/x/review-run-mrun.sh m9
+m10: bash .rc/x/review-run-mrun.sh m10
+m11: bash .rc/x/review-run-mrun.sh m11
+m8: node .rc/x/review-run-mut.mjs m8 && { US_POST_CONTROL=sum node scripts/simUsPostseason.mjs > /tmp/m8.log 2>&1; a=$?; node scripts/simUsPostseason.mjs > /tmp/m8b.log 2>&1; b=$?; tail -6 /tmp/m8.log | cut -c1-300; tail -1 /tmp/m8b.log; git checkout -- src scripts; echo "MUT m8 control-sum-exit=$a plain-exit=$b"; }
+clean: git status --porcelain --untracked-files=no | wc -l; node scripts/simUsPostseason.mjs | tail -1
