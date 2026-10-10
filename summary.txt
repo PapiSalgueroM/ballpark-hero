@@ -1,0 +1,5 @@
+build-base exit=0 29s | 532
+build-head exit=0 29s | 532
+build-head2 exit=0 29s | 532
+compare exit=0 0s | cmpAssets: INERT. The head builds the very files the base builds, name for name and byte for byte.
+diffstat exit=0 0s | A	src/test/fixtures/cmValueCurve.json
