@@ -1,0 +1,40 @@
+1) Source: careerRivalryEvents.ts is the only home for the rule
+   7 rule fingerprints checked, 13 bindings confirmed
+2) Soccer unchanged: same facts in, same pool and same mutation out
+   600 fixtures, 18 of 18 beat ids appeared, 0 pool mismatches, 0 apply mismatches
+3) Soccer end to end: a real career, the pending slot, the no-repeat rule, the forced beat
+   60 of 60 careers drafted a rival, 518 pending beats seen, 518 dismissed cleanly, 60 of 60 careers never repeated the last beat back to back, 41 saw the forced retirement beat
+4) The NFL binding: every beat reachable and correct, and the tick fires in real careers
+  FAIL: NFL beat 206 is dealt two years after you were last on it (both rated 90)
+  FAIL: NFL beat 206 is not dealt you are off it a year after you were on it (both rated 60)
+   the roster beat (206, read off your own seasons' "All-Pro"): 1 of 2 cards dealt and applied at 4 rolls each, 4 fixtures it must stay shut on, never on a coin, never on the ratings, never a word on the rival's roster, and a card from the old coin resolves with no effect
+  FAIL: NFL beat 206: only 1 of 2 cards were dealt
+   the joint practice (219): 1 of 1 card dealt and applied at 4 rolls, no winner named and no coin, and a card from the old coin resolves with no effect
+   23 of 23 beats reachable with a built fixture, 23 of 23 actually mutated state when applied
+   40 of 40 NFL careers drafted a rival, 40 showed at least one pending beat, 283 pending beats total over 560 career-seasons (rate 0.505), 283 dismissed cleanly, 16 saw the forced retirement beat
+
+5) THE INVENTED-NAME COLLISION GUARD: the rival can never be a real player
+   19651 real names harvested (src/data plus the sealed Club Manager worlds and the international pools)
+   24 first names x 24 surnames = 576 combinations, 0 collide with a real name
+   6000 live draftRival rolls, 576 distinct names, 0 of them real
+6) The MLB binding: every beat reachable and correct, and the tick fires in real careers
+  FAIL: MLB beat 206 is dealt two years after you were last on it (both rated 90)
+  FAIL: MLB beat 206 is not dealt you are off it a year after you were on it (both rated 60)
+   the roster beat (206, read off your own seasons' "All-Star"): 1 of 2 cards dealt and applied at 4 rolls each, 4 fixtures it must stay shut on, never on a coin, never on the ratings, never a word on the rival's roster, and a card from the old coin resolves with no effect
+  FAIL: MLB beat 206: only 1 of 2 cards were dealt
+   23 of 23 beats reachable with a built fixture, 23 of 23 actually mutated state when applied
+   40 of 40 MLB careers drafted a rival, 40 showed at least one pending beat, 308 pending beats total over 560 career-seasons (rate 0.550), 308 dismissed cleanly, 10 saw the forced retirement beat
+7) The NBA binding: every beat reachable and correct, and the tick fires in real careers
+   the All-Star beat: 3 of 3 fact pairs dealt and applied at 4 rolls each, never on a coin, never when neither made it, and a card from the old coin resolves with no effect
+   23 of 23 beats reachable with a built fixture, 23 of 23 actually mutated state when applied
+   40 of 40 NBA careers drafted a rival, 40 showed at least one pending beat, 276 pending beats total over 560 career-seasons (rate 0.493), 276 dismissed cleanly, 4 saw the forced retirement beat
+8) The NHL binding: every beat reachable and correct, and the tick fires in real careers
+  FAIL: NHL beat 306 is dealt two years after you were last on it (both rated 90)
+  FAIL: NHL beat 306 is not dealt you are off it a year after you were on it (both rated 60)
+   the roster beat (306, read off your own seasons' "All-Star"): 1 of 2 cards dealt and applied at 4 rolls each, 4 fixtures it must stay shut on, never on a coin, never on the ratings, never a word on the rival's roster, and a card from the old coin resolves with no effect
+  FAIL: NHL beat 306: only 1 of 2 cards were dealt
+   23 of 23 beats reachable with a built fixture, 23 of 23 actually mutated state when applied
+   40 of 40 NHL careers drafted a rival, 40 showed at least one pending beat, 273 pending beats total over 560 career-seasons (rate 0.487), 273 dismissed cleanly, 0 saw the forced retirement beat
+9) The 24 new beats, words against effects: 160 applies over NFL and MLB 218 to 223, NBA and NHL 318 to 323
+
+simCareerRivalryEvents: 9 failures

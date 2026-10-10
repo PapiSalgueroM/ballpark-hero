@@ -1,0 +1,7 @@
+#!serial
+apply: cp .rc/x/m1-careerRivalryEvents.ts src/lib/careerRivalryEvents.ts && git diff --stat -- src | tail -1
+rivalry: node scripts/simCareerRivalryEvents.mjs
+sense: node scripts/simNbaAwardsSense.mjs
+vitest: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts src/test/usTrophyTile.test.ts --testTimeout=300000 --hookTimeout=120000
+parity: node scripts/simUsBoardParity.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
