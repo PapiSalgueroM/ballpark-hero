@@ -1,0 +1,52 @@
+1) Every path that puts a player in the squad leaves exactly one of him, under an id nobody else holds
+   Real Madrid, budget 195, squad 26, market 5075
+   the pair: Éderson CM @Atalanta 35.5 | Ederson GK @Fenerbahçe 9.5
+   both signed: squad 26 -> 28, duplicate ids 0
+   reloaded: 28 players, duplicate ids 0, squad identical true, second trip identical true
+   instant buy                        Erling Haaland           in the squad 1x, squad 27, duplicate ids 0
+   release clause                     Alexander Isak           in the squad 1x, squad 27, duplicate ids 0
+   loan in                            Abdukodir Khusanov       in the squad 1x, squad 27, duplicate ids 0
+   option to buy on a loanee          Abdukodir Khusanov       in the squad 1x, squad 27, duplicate ids 0
+   the personal terms table           Achraf Hakimi            in the squad 1x, squad 27, duplicate ids 0
+   academy promotion                  Theo Lindqvist           in the squad 1x, squad 23, duplicate ids 0
+   recall from a loan out             Daniel Carvajal          in the squad 1x, squad 26, duplicate ids 0
+   loan out, then the summer (no buy back) Daniel Carvajal          in the squad 1x, squad 22, duplicate ids 0
+   a mid season takeover, then a signing Erling Haaland           in the squad 1x, squad 27, duplicate ids 0
+   purchase paths leaving exactly one of him under his own id: 9 of 9
+2) No club anywhere starts a career with two players under one id
+   454 clubs checked, 0 start with a duplicate id
+3) The market universe, grouped by the id a signing would produce
+   5075 market entries, 5073 distinct base ids, 2 names folding together
+     sign-ederson-s1 <= Éderson@Atalanta | Ederson@Fenerbahçe
+     sign-michal-karbownik-s1 <= Michal Karbownik@Hertha BSC | Michał Karbownik@Hertha BSC
+4) The hook and the viewer, rendered: the save after every transition, and after leaving the site
+    the pair: Éderson CM @Atalanta 35.5 | Ederson GK @Fenerbahçe 9.5
+    squad 26 -> 28 duplicate ids: []
+    Hertha BSC: 16 players, duplicate ids: []
+    AC Milan: 21 players, duplicate ids: []
+    Real Madrid: 26 players, duplicate ids: []
+    a shape: on disk, 54516 bytes, week 0
+    a mentality: on disk, 54517 bytes, week 0
+    an XI change: on disk, 54519 bytes, week 0
+    a training plan: on disk, 54516 bytes, week 0
+    a squad role: on disk, 54523 bytes, week 0
+    a transfer status: on disk, 54549 bytes, week 0
+    a signing: on disk, 54986 bytes, week 0
+    kick off: on disk, 70214 bytes, week 0
+    the second half: on disk, 68293 bytes, week 1
+    leaving the report: on disk, 68293 bytes, week 1
+    a quick sim: on disk, 72412 bytes, week 2
+    leaving that report: on disk, 72412 bytes, week 2
+    a run of weeks: on disk, 85401 bytes, week 8
+    leaving that report too: on disk, 85401 bytes, week 8
+    reloaded: identical, 85401 bytes
+    on screen 19', save at 0'
+    after leaving, save at 19'
+    on screen 19', page still up, the match finished at week 1 and the save matches memory
+    after Start Fresh and leaving, the slot is empty
+   Test Files  1 passed (1)
+   Tests  6 passed (6)
+    npx update-browserslist-db@latest
+    Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+simClubManagerSave: all sections green

@@ -1,0 +1,28 @@
+1) digest, every modern league: a seeded season, the summer, and the pyramids twice
+   27 entries compared, 0 differ
+2) digest, every league of every historic era
+   20 entries compared, 0 differ
+3) digest, the pure rules: drop zones, European places, board demands, the exported views
+   drop counts: premier 3, championship 3, laliga 3, seriea 3, bundesliga 2, ligue1 2, eredivisie 2, saudi 3, mlsEast 0, mlsWest 0, primeira 2, scottish 1, superlig 3, bundesliga2 2, proleague 1, austria 1, greece 2, denmark 2, switzerland 1, croatia 1, brasileirao 4, ligamx 0, aleague 0, serieb 3, ligue2 2, segunda 4, russia 2, premier2010 3, laliga2010 3, seriea2010 3, bundesliga2010 2, ligue12010 3, premier2015 3, laliga2015 3, seriea2015 3, bundesliga2015 2, ligue12015 3, premier2005 3, laliga2005 3, seriea2005 3, bundesliga2005 3, ligue12005 3, premier2020 3, laliga2020 3, seriea2020 3, bundesliga2020 2, ligue12020 2
+   48 entries compared, 0 differ
+3b) the rules table: a row for every league, every row used, every reference real
+   47 rows for 47 leagues, 21 nations, 5 pyramids
+3c) the era names the filler could build are listed exactly
+   6911 era players, 22 buildable names, 22 listed
+3d) no league or nation id is branched on outside the rules table
+   81 sources read, 61 ids, 0 finding(s)
+4a) a synthetic top flight that sends 4 down into a modelled second tier, ten seasons
+   bottom of the ladder: "Stay up. Avoid relegation" target 16
+   10 summers, 80 club moves, my club changed division 3 times
+4b) a synthetic league with no domestic cup, ten seasons
+   10 summers, 340 matches, 0 cup weeks, 0 cup objectives, 0 cup matches; the cup league next door still plays its four rounds
+4c) a three tier chain and a cupless league in a nation with a cup, ten seasons
+   10 summers, 0 broken, my club changed division 2 times; 10 cup brackets, 0 cupless clubs in them
+5) the built chunks: each era in its own chunk, reached only by a dynamic import
+   era2010: clubManagerEra2010-CiScj6R7.js, 40 probe rows, reached by import() from 1 file(s), statically from 0
+   era2015: clubManagerEra2015-BUxVBSOC.js, 40 probe rows, reached by import() from 1 file(s), statically from 0
+   era2005: clubManagerEra2005-DZSwQTfX.js, 40 probe rows, reached by import() from 1 file(s), statically from 0
+   era2020: clubManagerEra2020-Bej21k8N.js, 40 probe rows, reached by import() from 1 file(s), statically from 0
+   today's rosters: clubManager-DcxvRgsA.js
+
+simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)

@@ -1,0 +1,29 @@
+material: 34 careers walked, 1425 matches played, 60 deciders captured (modern 19, era2005 17, era2010 14, era2015 10; 52 second legs)
+1) Extra time is played exactly when it is due, in the manager's deciders
+   3000 decider replays over 60 fixtures x 50 seeds: 332 level at 90 (P = 0.111), 332 played extra time
+2) No league, group, domestic cup or first leg match ever gets extra time
+   1060 league (200 level), 160 group (35 level), 93 domestic cup (16 level, 16 straight to penalties), 52 first legs (14 level): none past 90
+3) Goals per decider do not move: A within tolerance of B, and C clears B
+   expected goals per decider (lambdas summed): A 2.721, B 2.718, C 2.816; A - B 0.003 (tolerance 0.04), C - B 0.098 (floor 0.06); n 3000, 3000, 3000
+   actual goals per decider: A 2.686, B 2.691, C 2.781; A - B -0.005 (tolerance 0.1)
+   AI second legs: A 2.605, B 2.628, C 2.681 goals; A - B -0.024 (tolerance 0.08), C - B 0.052 (floor 0.02); n 9300, 9300, 9300; extra time in 8.0 percent under A
+   solved deflator: mine 0.964, the AI's 0.974 (the constant is 0.965)
+4) The result after extra time is read the way the competition reads it
+   332 extra time matches read: 176 settled in extra time, 156 to penalties after it (coverage is section 1's); 5 folded outcomes driven directly
+5) Every AI tie settled by these replays plays extra time before penalties
+   9593 AI ties read (9300 over two legs): 417 settled in extra time, 393 to penalties after it
+   of them 293 AI finals, one legged (the walk's own, and 12 final weeks my club was not in, replayed 25 times each): 67 went to extra time, 34 of those to penalties
+6) The report card, the viewer and the bracket say that extra time happened
+   report card: (AET), the AET 120+3' chip, the extra time line, the aggregate after it, the shootout after it, none of it on a regular match; viewer ET 97' and AET at the end; bracket aet line and the old line on an old tie
+7) The live path and the quick sim are one match, extra time included
+   40 extra time matches and 10 others equal both ways down to the report and the bracket; 12 changes at 100 kept the past and redrew 101..120
+8) Extra time is played by men with names, on the pitch at the minute
+   332 extra time matches, 5228 events of mine past 90 (3932 from the 99th minute on), each naming a man on my pitch
+9) Possession in extra time is read off rates, and a change that alters nothing leaves it
+   332 extra time matches: possession moved -0.042 points further from 50 on average when extra time was drawn (tolerance 0.5); the same shape at 100 left it exactly where it was in 252 of 252 (80 skipped, something of mine changed after 90)
+10) What announces extra time is true: level on the night, or level on aggregate on a second leg
+   92 one legged ties and 240 second legs to extra time (151 of those not level on the night, 110 in the away goals eras): the banner line and the timeline marker say what the tie says
+   a second leg shootout after extra time: the report card reads "Still level 1-1 on aggregate after extra time", the bracket "Level on aggregate after extra time. Real Madrid win on penalties."
+   a one legged shootout after extra time: the report card and the bracket say it was level after it
+
+simExtraTime: PASS. A level Champions League decider plays thirty minutes of extra time before penalties, nothing else does, goals per decider hold, the AI plays it too (finals included), the screens say so, the two ways of playing it are one match, named men play it, its possession is read off rates, and what announces it says level on the night or level on aggregate, whichever is true.
