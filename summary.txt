@@ -1,0 +1,10 @@
+vitest exit=0 3s |    Duration  2.45s (transform 138ms, setup 185ms, collect 204ms, tests 1.26s, environment 994ms, prepare 386ms)
+simClubManagerSaveSize exit=0 44s | simClubManagerSaveSize: all sections green
+book-base-full exit=0 60s | simCmLeagueBook: green, 1 section(s), 24 careers x 2 seasons (59s)
+simDailyDeals exit=0 3s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+tsc exit=0 65s | 
+simLiveMatch exit=0 5s | simLiveMatch: PASS. Each half is committed as one stream, the report is counted off it, a change keeps the past and redraws the future, and the other dugout fields eleven
+simCmRealFixtures exit=1 1s | Node.js v24.21.0
+simStatsCentre exit=0 3s | ALL STATS CENTRE CHECKS PASSED
+simAwardRaces exit=0 8s | ALL AWARD RACE CHECKS PASSED
+simCmOwnGoals exit=0 50s | simCmOwnGoals: PASS, 8 sections green
