@@ -1,0 +1,14 @@
+#!serve
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+rivals: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+weight-branch: ENGINES=chromium SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/wb.log 2>&1; s=$?; grep -E "footle|FAIL" /tmp/wb.log | cut -c1-200; tail -1 /tmp/wb.log; exit $s
+row-apply: node .rc/x/footleRow.mjs scripts/sweepWeight.mjs 348 .rc/x/footleRowNote.txt && git diff --stat HEAD -- scripts | tail -1 && node --check scripts/sweepWeight.mjs && echo "row applied with the note, the file still parses"
+weight-row348: ENGINES=chromium SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/wr.log 2>&1; s=$?; grep -E "footle|FAIL" /tmp/wr.log | cut -c1-200; tail -1 /tmp/wr.log; exit $s
+rivals-row348: node scripts/simNoRivalNames.mjs
+anchors-row348: node scripts/simHarnessAnchors.mjs
+row-restore: git checkout -q HEAD -- scripts && git diff --quiet HEAD -- src scripts && echo "tree back at head"

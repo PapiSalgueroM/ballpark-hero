@@ -1,0 +1,12 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 43s | 
+rivals exit=0 9s | No rival product names found. 0 findings.
+anchors exit=0 27s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+storage exit=0 2s | simStorageWrites: all green (owed: 12)
+quotes exit=0 14s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+weight-branch exit=1 27s | sweepWeight: 1 failure
+row-apply exit=0 0s | row applied with the note, the file still parses
+weight-row348 exit=0 26s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+rivals-row348 exit=0 9s | No rival product names found. 0 findings.
+anchors-row348 exit=0 26s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+row-restore exit=0 0s | tree back at head
