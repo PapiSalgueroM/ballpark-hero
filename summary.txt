@@ -1,0 +1,4 @@
+awards-inv3 exit=0 70s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+finish-inv3 exit=0 14s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4809 in a verified league; finish and title agree, the ladder holds, the historical stream holds after documented
+social-inv3 exit=0 24s | ALL SOCIAL AND BRAND CHECKS PASSED
+restored exit=0 0s | restored-check-done

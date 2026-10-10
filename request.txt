@@ -1,0 +1,5 @@
+#!serial
+awards-inv3: node .rc/x/inv3.mjs && node scripts/simCareerAwardsNight.mjs; s=$?; git checkout -- src scripts; exit $s
+finish-inv3: node .rc/x/inv3.mjs && node scripts/simCareerLeagueFinish.mjs; s=$?; git checkout -- src scripts; exit $s
+social-inv3: node .rc/x/inv3.mjs && node scripts/simCareerSocialBrands.mjs; s=$?; git checkout -- src scripts; exit $s
+restored: git status --short | head -5; git diff --stat | tail -1; echo restored-check-done
