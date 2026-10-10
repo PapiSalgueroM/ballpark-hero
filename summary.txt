@@ -1,0 +1,24 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simInventedNames exit=0 13s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simNoRivalNames exit=0 21s | No rival product names found. 0 findings.
+simNoInventedConduct exit=0 1s | simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board in it.
+simLegalPages exit=0 0s | simLegalPages: all green
+simSingleFooter exit=0 0s | simSingleFooter: green. One footer, rendered once, on every page.
+simCompletionSlugs exit=0 2s | simCompletionSlugs: green. Every recorded slug names a game the site can find.
+simCompletionOnce exit=0 6s | simCompletionOnce: all green
+simNoInventedQuotes exit=0 25s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simDailyPuzzleContract exit=0 0s | simDailyPuzzleContract: green. Every caller honours the contract the selection memo depends on.
+simHarnessAnchors exit=0 47s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simWritesAreSent exit=1 0s | Node.js v24.21.0
+simSchemaNames exit=1 1s | SUPABASE UNREACHABLE. NOTHING WAS CHECKED.
+simFetchRetry exit=0 4s | simFetchRetry: green. A transient page failure costs a retry and the rows come back whole.
+simNoDoubleRecord exit=0 31s | simNoDoubleRecord: all green (67 rows and checks, each recorded once across the finish, the toggles, the coaching, the reveals and the reloads; 115 recorders read)
+simReportRelay exit=0 0s | simReportRelay: green. Both buttons ask the same questions, every report records whether it reached him, and the queue has a real workflow.
+simNavbarStatsReads exit=0 2s | Artifacts: /home/runner/work/_temp/t-simNavbarStatsReads/navbar-stats-MOrc90
+simLeaderboardCaps exit=1 2s | the database refused game_score_caps?select=game,max_score&limit=2000: TypeError: fetch failed
+simScoringCoverage exit=0 0s | simScoringCoverage: all green
+simSiteSearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simResultMoment exit=1 1s | Node.js v24.21.0
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simDailySaveHardening exit=1 67s | simDailySaveHardening: 2 failure(s)
+simGoogleOnlyReturn exit=0 88s |    8 of 8 rendered checks pass, no dash in the round's files, and all 11 controls turned exactly their own checks red.
