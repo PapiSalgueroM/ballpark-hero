@@ -1,0 +1,5 @@
+#!playwright
+#!serial
+f-holdoff: bash .rc/x/frun.sh holdoff walk
+f-holdshort: bash .rc/x/frun.sh holdshort walk
+f-fileearly: bash .rc/x/frun.sh fileearly walk
