@@ -1,0 +1,90 @@
+{
+ "nba|desktop|help": {
+  "sha1": "e15b28ef358d5f7fcd0ee43614c220d7ec977cce",
+  "length": 39302
+ },
+ "nba|desktop|start": {
+  "sha1": "b9bc34238dcc9794d267f7e67b49b8b93a52de59",
+  "length": 36400
+ },
+ "nba|desktop|game": {
+  "sha1": "23eadc94185d97b2a0f43158cb1812abc3fe0470",
+  "length": 38833
+ },
+ "nba|desktop|poster": {
+  "sha1": "59b867d2b4d45d901596c493c1a9f90ee9c9ba18",
+  "length": 56338
+ },
+ "nba|desktop|review": {
+  "sha1": "5c2dd6bcc78436de425631523023ce3752b8d88a",
+  "length": 77447
+ },
+ "nba|phone|help": {
+  "sha1": "959595cc6d5560d357af1c9ac3ce3eb0d8b63f76",
+  "length": 39220
+ },
+ "nba|phone|start": {
+  "sha1": "3fd9f9e4fb1b34175ffbaaef3fd9899cbaba6875",
+  "length": 36318
+ },
+ "nba|phone|game": {
+  "sha1": "88b818325596008865efc1270ff0a35e81fc1d25",
+  "length": 38437
+ },
+ "nba|phone|log": {
+  "sha1": "0f4f0029bc9a546e8c3572cd8cd05ce22e144bbf",
+  "length": 38218
+ },
+ "nba|phone|poster": {
+  "sha1": "9ea5c0f8ac475ab9f7f8a2e86fe4ca36a6b7c513",
+  "length": 55026
+ },
+ "nba|phone|review": {
+  "sha1": "1898de99b57b6cc4d5c1479744dbdc967455fb4e",
+  "length": 76109
+ },
+ "nfl|desktop|help": {
+  "sha1": "67ee01421565182706d7865b3dbeb58643f8444d",
+  "length": 16814
+ },
+ "nfl|desktop|start": {
+  "sha1": "c30ae37651896b24776c010fcf4938063faf83c7",
+  "length": 13353
+ },
+ "nfl|desktop|game": {
+  "sha1": "d449426f5437880e95c09aa005f5f23a3071e294",
+  "length": 15578
+ },
+ "nfl|desktop|poster": {
+  "sha1": "ff59b4b37f02008aec26c79e6c5925d5e91faca4",
+  "length": 17315
+ },
+ "nfl|desktop|review": {
+  "sha1": "b18914e59ea7872f18a2c9ed1827ed4755b6a95a",
+  "length": 23197
+ },
+ "nfl|phone|help": {
+  "sha1": "be87aa112db9b0f173cd310e4331c923bdd74a0e",
+  "length": 16732
+ },
+ "nfl|phone|start": {
+  "sha1": "e3224e468a6c924e5ee6772a38aff0bf322a461e",
+  "length": 13271
+ },
+ "nfl|phone|game": {
+  "sha1": "94b5028aecee71179770440eaf947d4318f5bf6f",
+  "length": 15176
+ },
+ "nfl|phone|log": {
+  "sha1": "421ea762b359e7f6941e16f2ef43917b028a0b2c",
+  "length": 14955
+ },
+ "nfl|phone|poster": {
+  "sha1": "5ec0807b4373bf0f25134fa907e64c344a2fb1c1",
+  "length": 16156
+ },
+ "nfl|phone|review": {
+  "sha1": "d5a6c429fbda5acc82b45698013101fa7ca4be4e",
+  "length": 21892
+ }
+}

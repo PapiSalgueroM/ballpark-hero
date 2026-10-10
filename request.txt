@@ -1,0 +1,6 @@
+# Round 1212 step 0b: record the NBA and NFL screens on the base's viewer; the seam receipt compares and its control fires
+screens-record: RECORD_US_CENTRE_SCREENS=1 RECORD_US_CENTRE_SCREENS_OUT=$RC_OUT/usSeasonCentreScreens.recorded.json node_modules/.bin/vitest run src/test/usSeasonCentreScreens.test.tsx --testTimeout=300000 --hookTimeout=120000
+screens-record-twice: RECORD_US_CENTRE_SCREENS=1 RECORD_US_CENTRE_SCREENS_OUT=$RC_OUT/usSeasonCentreScreens.second.json node_modules/.bin/vitest run src/test/usSeasonCentreScreens.test.tsx --testTimeout=300000 --hookTimeout=120000
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+seam-compare: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs
+seam-control: US_SEASON_CONTROL=seam US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs

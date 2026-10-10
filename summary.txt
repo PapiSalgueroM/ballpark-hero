@@ -1,0 +1,5 @@
+screens-record exit=0 6s |    Duration  5.14s (transform 1.96s, setup 90ms, collect 2.61s, tests 873ms, environment 551ms, prepare 334ms)
+screens-record-twice exit=0 6s |    Duration  5.04s (transform 2.04s, setup 76ms, collect 2.68s, tests 871ms, environment 529ms, prepare 274ms)
+seam-compare exit=0 29s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1212's seam, in no gate)
+seam-control exit=1 31s | simUsSeasonCentre digest compare: 11 digests, 10 moved (control seam)
+tsc exit=0 71s | 
