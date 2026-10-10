@@ -1,0 +1,263 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/usProgrammeCardTruth.test.ts [2m([22m[2m12 tests[22m[2m | [22m[31m12 failed[39m[2m)[22m[32m 26[2mms[22m[39m
+[31m   [31m×[31m 'NFL' season plan cards[2m > [22meach card states the season inputs the season really gets, on every input a career can hold[39m[32m 12[2mms[22m[39m
+[31m     → expected { pos: 'QB', …(7) } to deeply equal { pos: 'QB', …(7) }[39m
+[31m   [31m×[31m 'NFL' season plan cards[2m > [22ma plan whose whole gain a cap cuts away says so and is not charged[39m[32m 1[2mms[22m[39m
+[31m     → expected 'Season health +8, morale -6. Less inj…' to match /Nothing to add/[39m
+[31m   [31m×[31m 'NFL' season plan cards[2m > [22ma paid bonus is banked in the bank's own unit: a season later the bank holds exactly the share the card printed[39m[32m 3[2mms[22m[39m
+[31m     → expected '20 passing touchdowns and 10 games: 2…' to contain '$0.0M of it reaches the bank'[39m
+[31m   [31m×[31m 'NBA' season plan cards[2m > [22meach card states the season inputs the season really gets, on every input a career can hold[39m[32m 2[2mms[22m[39m
+[31m     → expected { pos: 'PG', …(7) } to deeply equal { pos: 'PG', …(7) }[39m
+[31m   [31m×[31m 'NBA' season plan cards[2m > [22ma plan whose whole gain a cap cuts away says so and is not charged[39m[32m 1[2mms[22m[39m
+[31m     → expected 'Season health +8, morale -6. Less inj…' to match /Nothing to add/[39m
+[31m   [31m×[31m 'NBA' season plan cards[2m > [22ma paid bonus is banked in the bank's own unit: a season later the bank holds exactly the share the card printed[39m[32m 1[2mms[22m[39m
+[31m     → expected '4 assists per game and 55 games: 2% o…' to contain '$0.0M of it reaches the bank'[39m
+[31m   [31m×[31m 'MLB' season plan cards[2m > [22meach card states the season inputs the season really gets, on every input a career can hold[39m[32m 1[2mms[22m[39m
+[31m     → expected { pos: 'CF', …(7) } to deeply equal { pos: 'CF', …(7) }[39m
+[31m   [31m×[31m 'MLB' season plan cards[2m > [22ma plan whose whole gain a cap cuts away says so and is not charged[39m[32m 0[2mms[22m[39m
+[31m     → expected 'Season health +8, morale -6. Less inj…' to match /Nothing to add/[39m
+[31m   [31m×[31m 'MLB' season plan cards[2m > [22ma paid bonus is banked in the bank's own unit: a season later the bank holds exactly the share the card printed[39m[32m 1[2mms[22m[39m
+[31m     → expected '15 home runs and 100 games: 2% of sea…' to contain '$0.0M of it reaches the bank'[39m
+[31m   [31m×[31m 'NHL' season plan cards[2m > [22meach card states the season inputs the season really gets, on every input a career can hold[39m[32m 1[2mms[22m[39m
+[31m     → expected { pos: 'C', …(7) } to deeply equal { pos: 'C', …(7) }[39m
+[31m   [31m×[31m 'NHL' season plan cards[2m > [22ma plan whose whole gain a cap cuts away says so and is not charged[39m[32m 0[2mms[22m[39m
+[31m     → expected 'Season health +8, morale -6. Less inj…' to match /Nothing to add/[39m
+[31m   [31m×[31m 'NHL' season plan cards[2m > [22ma paid bonus is banked in the bank's own unit: a season later the bank holds exactly the share the card printed[39m[32m 1[2mms[22m[39m
+[31m     → expected '20 goals and 55 games: 2% of season s…' to contain '$0.0M of it reaches the bank'[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 12 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usProgrammeCardTruth.test.ts[2m > [22m'NFL' season plan cards[2m > [22meach card states the season inputs the season really gets, on every input a career can hold
+[31m[1mAssertionError[22m: expected { pos: 'QB', …(7) } to deeply equal { pos: 'QB', …(7) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -5,10 +5,10 @@[39m
+[2m      "morale": 100,[22m
+[2m    },[22m
+[2m    "choice": "push",[22m
+[2m    "durability": 0,[22m
+[2m    "health": -8,[22m
+[32m-   "morale": 0,[39m
+[31m+   "morale": 6,[39m
+[2m    "pos": "QB",[22m
+[2m    "section": "workload",[22m
+[2m    "text": "Season health -8, morale +6. More form, more injury risk.",[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/usProgrammeCardTruth.test.ts:[2m59:59[22m[39m
+    [90m 57| [39m      const got = { health: c.health - at.health, morale: c.morale - a…
+    [90m 58| [39m      const said = { health: printed(text, 'health'), morale: printed(…
+    [90m 59| [39m      expect({ pos, at, section, choice, text, ...said }).toEqual({ po…
+    [90m   | [39m                                                          [31m^[39m
+    [90m 60| [39m      [34mrestoreUsCareerProgramme[39m(c[33m,[39m prepared)[33m;[39m
+    [90m 61| [39m      expect([c.health, c.morale, c.archetype?.durability ?? at.durabi…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/12]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usProgrammeCardTruth.test.ts[2m > [22m'NFL' season plan cards[2m > [22ma plan whose whole gain a cap cuts away says so and is not charged
+[41m[1m FAIL [22m[49m src/test/usProgrammeCardTruth.test.ts[2m > [22m'NBA' season plan cards[2m > [22ma plan whose whole gain a cap cuts away says so and is not charged
+[41m[1m FAIL [22m[49m src/test/usProgrammeCardTruth.test.ts[2m > [22m'MLB' season plan cards[2m > [22ma plan whose whole gain a cap cuts away says so and is not charged
+[41m[1m FAIL [22m[49m src/test/usProgrammeCardTruth.test.ts[2m > [22m'NHL' season plan cards[2m > [22ma plan whose whole gain a cap cuts away says so and is not charged
+[31m[1mAssertionError[22m: expected 'Season health +8, morale -6. Less inj…' to match /Nothing to add/[39m
+
+[32m- Expected:[39m 
+/Nothing to add/
+
+[31m+ Received:[39m 
+"Season health +8, morale -6. Less injury risk, less form."
+
+[36m [2m❯[22m src/test/usProgrammeCardTruth.test.ts:[2m74:47[22m[39m
+    [90m 72| [39m    [35mfor[39m ([35mconst[39m [at[33m,[39m section[33m,[39m choice] [35mof[39m cases) {
+    [90m 73| [39m      [35mconst[39m c [33m=[39m [34mplan[39m([34mcareer[39m(sport[33m,[39m at)[33m,[39m sport[33m,[39m { [section][33m:[39m choice })[33m;[39m
+    [90m 74| [39m      expect(card(c, sport, section, choice)).toMatch(/Nothing to add/…
+    [90m   | [39m                                              [31m^[39m
+    [90m 75| [39m      [34mexpect[39m([34mcard[39m(c[33m,[39m sport[33m,[39m section[33m,[39m choice))[33m.[39m[34mtoMatch[39m([36m/costs nothing/[39m)[33m;[39m
+    [90m 76| [39m      [35mconst[39m prepared [33m=[39m [34mprepareUsCareerProgramme[39m(c[33m,[39m sport[33m.[39mslug)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/12]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usProgrammeCardTruth.test.ts[2m > [22m'NFL' season plan cards[2m > [22ma paid bonus is banked in the bank's own unit: a season later the bank holds exactly the share the card printed
+[31m[1mAssertionError[22m: expected '20 passing touchdowns and 10 games: 2…' to contain '$0.0M of it reaches the bank'[39m
+
+Expected: [32m"$0.0M of it reaches the bank"[39m
+Received: [31m"20 passing touchdowns and 10 games: 2% of season salary as a gross bonus."[39m
+
+[36m [2m❯[22m src/test/usProgrammeCardTruth.test.ts:[2m95:38[22m[39m
+    [90m 93| [39m      expect(result?.bonusGross).toBeCloseTo(salary * (bonus === 'stre…
+    [90m 94| [39m      [35mconst[39m banked [33m=[39m result[33m![39m[33m.[39mbonusNet[33m;[39m
+    [90m 95| [39m      if (banked > 0) { expect(text).toContain('$' + banked.toFixed(1)…
+    [90m   | [39m                                     [31m^[39m
+    [90m 96| [39m      [35melse[39m [34mexpect[39m(text)[33m.[39m[34mtoMatch[39m([36m/none of it reaches the bank/[39m)[33m;[39m
+    [90m 97| [39m      /* The twin never got the bonus. Both play one more season on on…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/12]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usProgrammeCardTruth.test.ts[2m > [22m'NBA' season plan cards[2m > [22meach card states the season inputs the season really gets, on every input a career can hold
+[31m[1mAssertionError[22m: expected { pos: 'PG', …(7) } to deeply equal { pos: 'PG', …(7) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -5,10 +5,10 @@[39m
+[2m      "morale": 100,[22m
+[2m    },[22m
+[2m    "choice": "push",[22m
+[2m    "durability": 0,[22m
+[2m    "health": -8,[22m
+[32m-   "morale": 0,[39m
+[31m+   "morale": 6,[39m
+[2m    "pos": "PG",[22m
+[2m    "section": "workload",[22m
+[2m    "text": "Season health -8, morale +6. More form, more injury risk.",[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/usProgrammeCardTruth.test.ts:[2m59:59[22m[39m
+    [90m 57| [39m      const got = { health: c.health - at.health, morale: c.morale - a…
+    [90m 58| [39m      const said = { health: printed(text, 'health'), morale: printed(…
+    [90m 59| [39m      expect({ pos, at, section, choice, text, ...said }).toEqual({ po…
+    [90m   | [39m                                                          [31m^[39m
+    [90m 60| [39m      [34mrestoreUsCareerProgramme[39m(c[33m,[39m prepared)[33m;[39m
+    [90m 61| [39m      expect([c.health, c.morale, c.archetype?.durability ?? at.durabi…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/12]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usProgrammeCardTruth.test.ts[2m > [22m'NBA' season plan cards[2m > [22ma paid bonus is banked in the bank's own unit: a season later the bank holds exactly the share the card printed
+[31m[1mAssertionError[22m: expected '4 assists per game and 55 games: 2% o…' to contain '$0.0M of it reaches the bank'[39m
+
+Expected: [32m"$0.0M of it reaches the bank"[39m
+Received: [31m"4 assists per game and 55 games: 2% of season salary as a gross bonus."[39m
+
+[36m [2m❯[22m src/test/usProgrammeCardTruth.test.ts:[2m95:38[22m[39m
+    [90m 93| [39m      expect(result?.bonusGross).toBeCloseTo(salary * (bonus === 'stre…
+    [90m 94| [39m      [35mconst[39m banked [33m=[39m result[33m![39m[33m.[39mbonusNet[33m;[39m
+    [90m 95| [39m      if (banked > 0) { expect(text).toContain('$' + banked.toFixed(1)…
+    [90m   | [39m                                     [31m^[39m
+    [90m 96| [39m      [35melse[39m [34mexpect[39m(text)[33m.[39m[34mtoMatch[39m([36m/none of it reaches the bank/[39m)[33m;[39m
+    [90m 97| [39m      /* The twin never got the bonus. Both play one more season on on…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/12]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usProgrammeCardTruth.test.ts[2m > [22m'MLB' season plan cards[2m > [22meach card states the season inputs the season really gets, on every input a career can hold
+[31m[1mAssertionError[22m: expected { pos: 'CF', …(7) } to deeply equal { pos: 'CF', …(7) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -5,10 +5,10 @@[39m
+[2m      "morale": 100,[22m
+[2m    },[22m
+[2m    "choice": "push",[22m
+[2m    "durability": 0,[22m
+[2m    "health": -8,[22m
+[32m-   "morale": 0,[39m
+[31m+   "morale": 6,[39m
+[2m    "pos": "CF",[22m
+[2m    "section": "workload",[22m
+[2m    "text": "Season health -8, morale +6. More form, more injury risk.",[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/usProgrammeCardTruth.test.ts:[2m59:59[22m[39m
+    [90m 57| [39m      const got = { health: c.health - at.health, morale: c.morale - a…
+    [90m 58| [39m      const said = { health: printed(text, 'health'), morale: printed(…
+    [90m 59| [39m      expect({ pos, at, section, choice, text, ...said }).toEqual({ po…
+    [90m   | [39m                                                          [31m^[39m
+    [90m 60| [39m      [34mrestoreUsCareerProgramme[39m(c[33m,[39m prepared)[33m;[39m
+    [90m 61| [39m      expect([c.health, c.morale, c.archetype?.durability ?? at.durabi…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/12]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usProgrammeCardTruth.test.ts[2m > [22m'MLB' season plan cards[2m > [22ma paid bonus is banked in the bank's own unit: a season later the bank holds exactly the share the card printed
+[31m[1mAssertionError[22m: expected '15 home runs and 100 games: 2% of sea…' to contain '$0.0M of it reaches the bank'[39m
+
+Expected: [32m"$0.0M of it reaches the bank"[39m
+Received: [31m"15 home runs and 100 games: 2% of season salary as a gross bonus."[39m
+
+[36m [2m❯[22m src/test/usProgrammeCardTruth.test.ts:[2m95:38[22m[39m
+    [90m 93| [39m      expect(result?.bonusGross).toBeCloseTo(salary * (bonus === 'stre…
+    [90m 94| [39m      [35mconst[39m banked [33m=[39m result[33m![39m[33m.[39mbonusNet[33m;[39m
+    [90m 95| [39m      if (banked > 0) { expect(text).toContain('$' + banked.toFixed(1)…
+    [90m   | [39m                                     [31m^[39m
+    [90m 96| [39m      [35melse[39m [34mexpect[39m(text)[33m.[39m[34mtoMatch[39m([36m/none of it reaches the bank/[39m)[33m;[39m
+    [90m 97| [39m      /* The twin never got the bonus. Both play one more season on on…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/12]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usProgrammeCardTruth.test.ts[2m > [22m'NHL' season plan cards[2m > [22meach card states the season inputs the season really gets, on every input a career can hold
+[31m[1mAssertionError[22m: expected { pos: 'C', …(7) } to deeply equal { pos: 'C', …(7) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -5,10 +5,10 @@[39m
+[2m      "morale": 100,[22m
+[2m    },[22m
+[2m    "choice": "push",[22m
+[2m    "durability": 0,[22m
+[2m    "health": -8,[22m
+[32m-   "morale": 0,[39m
+[31m+   "morale": 6,[39m
+[2m    "pos": "C",[22m
+[2m    "section": "workload",[22m
+[2m    "text": "Season health -8, morale +6. More form, more injury risk.",[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/usProgrammeCardTruth.test.ts:[2m59:59[22m[39m
+    [90m 57| [39m      const got = { health: c.health - at.health, morale: c.morale - a…
+    [90m 58| [39m      const said = { health: printed(text, 'health'), morale: printed(…
+    [90m 59| [39m      expect({ pos, at, section, choice, text, ...said }).toEqual({ po…
+    [90m   | [39m                                                          [31m^[39m
+    [90m 60| [39m      [34mrestoreUsCareerProgramme[39m(c[33m,[39m prepared)[33m;[39m
+    [90m 61| [39m      expect([c.health, c.morale, c.archetype?.durability ?? at.durabi…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/12]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usProgrammeCardTruth.test.ts[2m > [22m'NHL' season plan cards[2m > [22ma paid bonus is banked in the bank's own unit: a season later the bank holds exactly the share the card printed
+[31m[1mAssertionError[22m: expected '20 goals and 55 games: 2% of season s…' to contain '$0.0M of it reaches the bank'[39m
+
+Expected: [32m"$0.0M of it reaches the bank"[39m
+Received: [31m"20 goals and 55 games: 2% of season salary as a gross bonus."[39m
+
+[36m [2m❯[22m src/test/usProgrammeCardTruth.test.ts:[2m95:38[22m[39m
+    [90m 93| [39m      expect(result?.bonusGross).toBeCloseTo(salary * (bonus === 'stre…
+    [90m 94| [39m      [35mconst[39m banked [33m=[39m result[33m![39m[33m.[39mbonusNet[33m;[39m
+    [90m 95| [39m      if (banked > 0) { expect(text).toContain('$' + banked.toFixed(1)…
+    [90m   | [39m                                     [31m^[39m
+    [90m 96| [39m      [35melse[39m [34mexpect[39m(text)[33m.[39m[34mtoMatch[39m([36m/none of it reaches the bank/[39m)[33m;[39m
+    [90m 97| [39m      /* The twin never got the bonus. Both play one more season on on…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/12]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m12 failed[39m[22m[90m (12)[39m
+[2m   Start at [22m 23:37:48
+[2m   Duration [22m 1.99s[2m (transform 959ms, setup 37ms, collect 1.22s, tests 26ms, environment 295ms, prepare 122ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usProgrammeCardTruth.test.ts,title=src/test/usProgrammeCardTruth.test.ts > 'NFL' season plan cards > each card states the season inputs the season really gets%2C on every input a career can hold,line=59,column=59::AssertionError: expected { pos: 'QB', …(7) } to deeply equal { pos: 'QB', …(7) }%0A%0A- Expected%0A+ Received%0A%0A@@ -5,10 +5,10 @@%0A      "morale": 100,%0A    },%0A    "choice": "push",%0A    "durability": 0,%0A    "health": -8,%0A-   "morale": 0,%0A+   "morale": 6,%0A    "pos": "QB",%0A    "section": "workload",%0A    "text": "Season health -8, morale +6. More form, more injury risk.",%0A  }%0A%0A ❯ src/test/usProgrammeCardTruth.test.ts:59:59%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usProgrammeCardTruth.test.ts,title=src/test/usProgrammeCardTruth.test.ts > 'NFL' season plan cards > a plan whose whole gain a cap cuts away says so and is not charged,line=74,column=47::AssertionError: expected 'Season health +8, morale -6. Less inj…' to match /Nothing to add/%0A%0A- Expected: %0A/Nothing to add/%0A%0A+ Received: %0A"Season health +8, morale -6. Less injury risk, less form."%0A%0A ❯ src/test/usProgrammeCardTruth.test.ts:74:47%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usProgrammeCardTruth.test.ts,title=src/test/usProgrammeCardTruth.test.ts > 'NFL' season plan cards > a paid bonus is banked in the bank's own unit%3A a season later the bank holds exactly the share the card printed,line=95,column=38::AssertionError: expected '20 passing touchdowns and 10 games: 2…' to contain '$0.0M of it reaches the bank'%0A%0AExpected: "$0.0M of it reaches the bank"%0AReceived: "20 passing touchdowns and 10 games: 2%25 of season salary as a gross bonus."%0A%0A ❯ src/test/usProgrammeCardTruth.test.ts:95:38%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usProgrammeCardTruth.test.ts,title=src/test/usProgrammeCardTruth.test.ts > 'NBA' season plan cards > each card states the season inputs the season really gets%2C on every input a career can hold,line=59,column=59::AssertionError: expected { pos: 'PG', …(7) } to deeply equal { pos: 'PG', …(7) }%0A%0A- Expected%0A+ Received%0A%0A@@ -5,10 +5,10 @@%0A      "morale": 100,%0A    },%0A    "choice": "push",%0A    "durability": 0,%0A    "health": -8,%0A-   "morale": 0,%0A+   "morale": 6,%0A    "pos": "PG",%0A    "section": "workload",%0A    "text": "Season health -8, morale +6. More form, more injury risk.",%0A  }%0A%0A ❯ src/test/usProgrammeCardTruth.test.ts:59:59%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usProgrammeCardTruth.test.ts,title=src/test/usProgrammeCardTruth.test.ts > 'NBA' season plan cards > a plan whose whole gain a cap cuts away says so and is not charged,line=74,column=47::AssertionError: expected 'Season health +8, morale -6. Less inj…' to match /Nothing to add/%0A%0A- Expected: %0A/Nothing to add/%0A%0A+ Received: %0A"Season health +8, morale -6. Less injury risk, less form."%0A%0A ❯ src/test/usProgrammeCardTruth.test.ts:74:47%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usProgrammeCardTruth.test.ts,title=src/test/usProgrammeCardTruth.test.ts > 'NBA' season plan cards > a paid bonus is banked in the bank's own unit%3A a season later the bank holds exactly the share the card printed,line=95,column=38::AssertionError: expected '4 assists per game and 55 games: 2%25 o…' to contain '$0.0M of it reaches the bank'%0A%0AExpected: "$0.0M of it reaches the bank"%0AReceived: "4 assists per game and 55 games: 2%25 of season salary as a gross bonus."%0A%0A ❯ src/test/usProgrammeCardTruth.test.ts:95:38%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usProgrammeCardTruth.test.ts,title=src/test/usProgrammeCardTruth.test.ts > 'MLB' season plan cards > each card states the season inputs the season really gets%2C on every input a career can hold,line=59,column=59::AssertionError: expected { pos: 'CF', …(7) } to deeply equal { pos: 'CF', …(7) }%0A%0A- Expected%0A+ Received%0A%0A@@ -5,10 +5,10 @@%0A      "morale": 100,%0A    },%0A    "choice": "push",%0A    "durability": 0,%0A    "health": -8,%0A-   "morale": 0,%0A+   "morale": 6,%0A    "pos": "CF",%0A    "section": "workload",%0A    "text": "Season health -8, morale +6. More form, more injury risk.",%0A  }%0A%0A ❯ src/test/usProgrammeCardTruth.test.ts:59:59%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usProgrammeCardTruth.test.ts,title=src/test/usProgrammeCardTruth.test.ts > 'MLB' season plan cards > a plan whose whole gain a cap cuts away says so and is not charged,line=74,column=47::AssertionError: expected 'Season health +8, morale -6. Less inj…' to match /Nothing to add/%0A%0A- Expected: %0A/Nothing to add/%0A%0A+ Received: %0A"Season health +8, morale -6. Less injury risk, less form."%0A%0A ❯ src/test/usProgrammeCardTruth.test.ts:74:47%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usProgrammeCardTruth.test.ts,title=src/test/usProgrammeCardTruth.test.ts > 'MLB' season plan cards > a paid bonus is banked in the bank's own unit%3A a season later the bank holds exactly the share the card printed,line=95,column=38::AssertionError: expected '15 home runs and 100 games: 2%25 of sea…' to contain '$0.0M of it reaches the bank'%0A%0AExpected: "$0.0M of it reaches the bank"%0AReceived: "15 home runs and 100 games: 2%25 of season salary as a gross bonus."%0A%0A ❯ src/test/usProgrammeCardTruth.test.ts:95:38%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usProgrammeCardTruth.test.ts,title=src/test/usProgrammeCardTruth.test.ts > 'NHL' season plan cards > each card states the season inputs the season really gets%2C on every input a career can hold,line=59,column=59::AssertionError: expected { pos: 'C', …(7) } to deeply equal { pos: 'C', …(7) }%0A%0A- Expected%0A+ Received%0A%0A@@ -5,10 +5,10 @@%0A      "morale": 100,%0A    },%0A    "choice": "push",%0A    "durability": 0,%0A    "health": -8,%0A-   "morale": 0,%0A+   "morale": 6,%0A    "pos": "C",%0A    "section": "workload",%0A    "text": "Season health -8, morale +6. More form, more injury risk.",%0A  }%0A%0A ❯ src/test/usProgrammeCardTruth.test.ts:59:59%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usProgrammeCardTruth.test.ts,title=src/test/usProgrammeCardTruth.test.ts > 'NHL' season plan cards > a plan whose whole gain a cap cuts away says so and is not charged,line=74,column=47::AssertionError: expected 'Season health +8, morale -6. Less inj…' to match /Nothing to add/%0A%0A- Expected: %0A/Nothing to add/%0A%0A+ Received: %0A"Season health +8, morale -6. Less injury risk, less form."%0A%0A ❯ src/test/usProgrammeCardTruth.test.ts:74:47%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usProgrammeCardTruth.test.ts,title=src/test/usProgrammeCardTruth.test.ts > 'NHL' season plan cards > a paid bonus is banked in the bank's own unit%3A a season later the bank holds exactly the share the card printed,line=95,column=38::AssertionError: expected '20 goals and 55 games: 2%25 of season s…' to contain '$0.0M of it reaches the bank'%0A%0AExpected: "$0.0M of it reaches the bank"%0AReceived: "20 goals and 55 games: 2%25 of season salary as a gross bonus."%0A%0A ❯ src/test/usProgrammeCardTruth.test.ts:95:38%0A%0A

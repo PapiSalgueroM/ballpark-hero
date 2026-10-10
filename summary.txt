@@ -1,0 +1,2 @@
+r1-red exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usProgrammeCardTruth.test.ts,title=src/test/usProgrammeCardTruth.test.ts > 'NHL' season plan cards > a
+tsc exit=0 41s | 
