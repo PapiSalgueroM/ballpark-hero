@@ -1,3 +1,23 @@
+## Codex 1230-1234 READY (qualified source): press rooms and saved negotiations, 2026-10-10
+
+Draft PR217: https://github.com/PapiSalgueroM/ballpark-hero/pull/217.
+Five features: Soccer press conferences and next-season promises; persistent
+US contract talks, exact saved-result wheels and live offer comparison.
+Accepted source f76ccb4650e2fff3392f07103a2bae3c4be281ba,
+tree ca983dfa34e1a85909e31de4efbce2f3b9ed286a. Engine baseline faf0a5f3;
+09df145a carried forward its board note only, product/proof bytes held.
+Remote run38043289682/job114187666894: actual app types/build,244 actual tests,
+27 entire original/current states/RNG,372 loaded sources,6 effective faults,
+54 native journeys,225 whole-save pairs,252 exact reloads,147 RNG vectors,
+93 individually reviewed PNGs,186 layouts,30 Soccer restorations all passed.
+All15 built readers and18/19 related harnesses passed. Historical
+simUsBoardParity is red and unchanged, so the entire workflow is FAILURE.
+Its old walker/phase/save contract needs an explicit migration and new proof
+at integration. This is not all CI green, full-suite, database or live credit.
+Details, artifact hashes and limits: docs/ROUND1230-1234.md. G owns integration
+after AT and PR216, final gates/main/merge/publish. Earlier sources stay frozen.
+Root app/index/stashes and F PROJECT-STATE held. All runtime remote-only.
+
 ## Release AS LIVE, 2026-10-10 02:34 EDT: NBA My Career, the numbers tell the truth and the rival plays on your scale
 
 Claude lane (session F). main 808dbbdc, deployment b0d516e6-6d64-4ee2-8e97-a5fa27f7fca5, entry index-CDom0l2f.js (was index-DNvMbg1w.js, Release AR,
