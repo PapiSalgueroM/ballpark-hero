@@ -1,0 +1,3 @@
+ctl-list exit=0 0s | mlbyear mlbsum mlbid mlbspan mlbclub mlbspanyear mlbrivalswap mlbfirstround mlbown mlbdiv mlbformula mlbhome firstnull otherseason host nhlfrom nhlpoint mlbrival mlbplayo
+ledger exit=0 0s | simUsSeasonLedger: green. 1389 checks passed over 23 MLB and 21 NHL seasons; 9 notes for the binding rounds.
+tsc exit=0 56s | 
