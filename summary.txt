@@ -1,0 +1,4 @@
+cmvar-as-is exit=1 15s | Node.js v24.21.0
+realfix-as-is exit=1 2s | Node.js v24.21.0
+attr-cmvar-bookoff exit=0 15s | simCmVar normal: actual review outcomes and full prior baseline passed.
+attr-realfix-bookoff exit=0 5s | simCmRealFixtures normal: real fixture outcomes and independent generated baseline passed.

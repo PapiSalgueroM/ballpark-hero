@@ -1,0 +1,2421 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   {
++     errorName: 'AssertionError',
++     message: 'Only the optional fixture key changes the fresh save\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  {\n' +
++       '    academy: {\n' +
++       '      candidates: [\n' +
++       '        {\n' +
++       '          fee: 3,\n' +
++       '...\n' +
++       '    },\n' +
++       '+   leagueBook: {\n' +
++       '+     c: {},\n' +
++       '+     my: [],\n' +
++       "+     s: 'premier|1rfw42'\n" +
++       '+   },\n' +
++       '    leagueClubs: [\n' +
++       "      'Manchester City',\n" +
++       "      'Newcastle',\n" +
++       "      'Brentford',\n" +
++       "      'Sunderland',\n",
++     stack: 'AssertionError [ERR_ASSERTION]: Only the optional fixture key changes the fresh save\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  {\n' +
++       '    academy: {\n' +
++       '      candidates: [\n' +
++       '        {\n' +
++       '          fee: 3,\n' +
++       '...\n' +
++       '    },\n' +
++       '+   leagueBook: {\n' +
++       '+     c: {},\n' +
++       '+     my: [],\n' +
++       "+     s: 'premier|1rfw42'\n" +
++       '+   },\n' +
++       '    leagueClubs: [\n' +
++       "      'Manchester City',\n" +
++       "      'Newcastle',\n" +
++       "      'Brentford',\n" +
++       "      'Sunderland',\n" +
++       '\n' +
++       '    at Object.legacy (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:369:86)\n' +
++       '    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:423:33)\n' +
++       '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:443:54',
++     status: 'failed',
++     title: 'preserves the whole generated old save, random draws, match outcome and reload bytes'
++   },
++   {
++     errorName: 'AssertionError',
++     message: 'A generated future season preserves the full independent rollover state and random stream\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  {\n' +
++       '    academy: {\n' +
++       '      candidates: [\n' +
++       '        {\n' +
++       '          fee: 4,\n' +
++       '...\n' +
++       '    leagueBook: {\n' +
++       '+     c: {},\n' +
++       '+     my: [],\n' +
++       "+     s: 'premier|ebcqnv'\n" +
++       '-     c: {\n' +
++       "-       'Aston Villa': {\n" +
++       '-         m: {\n' +
++       "-           'Aaron Wan-Bissaka|RB': [\n" +
++       '-             3,\n' +
++       '-             2,\n' +
++       '-             11,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Alejandro Garnacho|LW': [\n" +
++       '-             12,\n' +
++       '-             7,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Amadou Onana|CDM': [\n" +
++       '-             1,\n' +
++       '-             2,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Boubacar Kamara|CDM': [\n" +
++       '-             3,\n' +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Ian Maatsen|LB': [\n" +
++       '-             2,\n' +
++       '-             3,\n' +
++       '-             11,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Johan Manzambi|CM': [\n" +
++       '-             4,\n' +
++       '-             2,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'João Gomes|CM': [\n" +
++       '-             3,\n' +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Matty Cash|RB': [\n" +
++       '-             3,\n' +
++       '-             2,\n' +
++       '-             11,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Nicolas Jackson|ST': [\n" +
++       '-             18,\n' +
++       '-             7,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Pau Torres|CB': [\n" +
++       '-             0,\n' +
++       '-             2,\n' +
++       '-             11,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Zion Suzuki|GK': [\n" +
++       '-             0,\n' +
++       '-             0,\n' +
++       '-             11,\n' +
++       '-             0\n' +
++       '-           ]\n' +
++       '-         },\n' +
++       '-         og: 0,\n' +
++       '-         u: 0\n' +
++       '-       },\n' +
++       "-       'Coventry City': {\n" +
++       '-         m: {\n' +
++       "-           'Aurèle Amenda|CB': [\n" +
++       '-             1,\n' +
++       '-             2,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Bobby Thomas|CB': [\n" +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Carl Rushworth|GK': [\n" +
++       '-             0,\n' +
++       '-             0,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Ephron Mason-Clark|LM': [\n" +
++       '-             3,\n' +
++       '-             3,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Ethan Pinnock|CB': [\n" +
++       '-             0,\n' +
++       '-             0,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Gustavo Hamer|CM': [\n" +
++       '-             1,\n' +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Jack Rudoni|CAM': [\n" +
++       '-             9,\n' +
++       '-             4,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Milan van Ewijk|RB': [\n" +
++       '-             1,\n' +
++       '-             2,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Sidiki Chérif|ST': [\n" +
++       '-             8,\n' +
++       '-             2,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Victor Torp|CM': [\n" +
++       '-             4,\n' +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Yann Gboho|LW': [\n" +
++       '-             6,\n' +
++       '-             7,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ]\n' +
++       '-         },\n' +
++       '-         og: 0,\n' +
++       '-         u: 0\n' +
++       '-       },\n' +
++       "-       'Crystal Palace': {\n" +
++       '-         m: {\n' +
++       "-           'Adam Wharton|CDM': [\n" +
++       '-             3,\n' +
++       '-             0,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Anan Khalaili|RM': [\n" +
++       '-             4,\n' +
++       '-             3,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Chris Richards|CB': [\n" +
++       '-             1,\n' +
++       '-             3,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Daichi Kamada|CAM': [\n" +
++       '-             7,\n' +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Dean Henderson|GK': [\n" +
++       '-             0,\n' +
++       '-             0,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Honest Ahanor|CB': [\n" +
++       '-             0,\n' +
++       '-             1,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Ismaïla Sarr|RW': [\n" +
++       '-             2,\n' +
++       '-             5,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Jaydee Canvot|CB': [\n" +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Jørgen Strand Larsen|ST': [\n" +
++       '-             17,\n' +
++       '-             10,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Quinten Timber|CM': [\n" +
++       '-             1,\n' +
++       '-             2,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Tyrick Mitchell|LB': [\n" +
++       '-             3,\n' +
++       '-             2,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ]\n' +
++       '-         },\n' +
++       '-         og: 1,\n' +
++       '-         u: 0\n' +
++       '-       },\n' +
++       "-       'Hull City': {\n" +
++       '-         m: {\n' +
++       "-           'Brooke Norton-Cuffy|RB': [\n" +
++       '-             5,\n' +
++       '-             1,\n' +
++       '-             11,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Charlie Hughes|CB': [\n" +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             11,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Christos Mouzakitis|CM': [\n" +
++       '-             1,\n' +
++       '-             3,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Hidemasa Morita|CM': [\n" +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Jens Hjertø-Dahl|CM': [\n" +
++       '-             5,\n' +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Konstantinos Tzolakis|GK': [\n" +
++       '-             0,\n' +
++       '-             0,\n' +
++       '-             11,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Mohamed-Ali Cho|RW': [\n" +
++       '-             10,\n' +
++       '-             4,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Nobel Mendy|CB': [\n" +
++       '-             1,\n' +
++       '-             1,\n' +
++       '-             11,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Robinio Vaz|ST': [\n" +
++       '-             13,\n' +
++       '-             10,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Ryan Giles|LB': [\n" +
++       '-             1,\n' +
++       '-             1,\n' +
++       '-             11,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Tim Iroegbunam|CM': [\n" +
++       '-             4,\n' +
++       '-             6,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ]\n' +
++       '-         },\n' +
++       '-         og: 2,\n' +
++       '-         u: 0\n' +
++       '-       },\n' +
++       "-       'Ipswich Town': {\n" +
++       '-         m: {\n' +
++       `-           "Dara O'Shea|CB": [\n` +
++       '-             5,\n' +
++       '-             2,\n' +
++       '-             10,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Abdoul Ouattara|RB': [\n" +
++       '-             2,\n' +
++       '-             3,\n' +
++       '-             10,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Abdul Fatawu|RW': [\n" +
++       '-             10,\n' +
++       '-             6,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Anis Mehmeti|CAM': [\n" +
++       '-             6,\n' +
++       '-             2,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Exequiel Palacios|CM': [\n" +
++       '-             7,\n' +
++       '-             2,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Florentino|CDM': [\n" +
++       '-             1,\n' +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Jack Clarke|LW': [\n" +
++       '-             8,\n' +
++       '-             4,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Jacob Greaves|CB': [\n" +
++       '-             2,\n' +
++       '-             0,\n' +
++       '-             10,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Julio Enciso|CAM': [\n" +
++       '-             5,\n' +
++       '-             7,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Kjell Scherpen|GK': [\n" +
++       '-             0,\n' +
++       '-             0,\n' +
++       '-             10,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Leif Davis|LB': [\n" +
++       '-             4,\n' +
++       '-             3,\n' +
++       '-             10,\n' +
++       '-             0\n' +
++       '-           ]\n' +
++       '-         },\n' +
++       '-         og: 1,\n' +
++       '-         u: 0\n' +
++       '-       },\n' +
++       "-       'Leeds United': {\n" +
++       '-         m: {\n' +
++       "-           'Anton Stach|CDM': [\n" +
++       '-             1,\n' +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Brenden Aaronson|CAM': [\n" +
++       '-             10,\n' +
++       '-             6,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Ethan Ampadu|CDM': [\n" +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Gabriel Gudmundsson|LB': [\n" +
++       '-             2,\n' +
++       '-             1,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Harry Wilson|RW': [\n" +
++       '-             14,\n' +
++       '-             3,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Jaka Bijol|CB': [\n" +
++       '-             0,\n' +
++       '-             1,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'James Trafford|GK': [\n" +
++       '-             0,\n' +
++       '-             0,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Jean-Mattéo Bahoya|LW': [\n" +
++       '-             14,\n' +
++       '-             3,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Joe Rodon|CB': [\n" +
++       '-             1,\n' +
++       '-             1,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Sean Longstaff|CM': [\n" +
++       '-             5,\n' +
++       '-             4,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Tarik Muharemović|CB': [\n" +
++       '-             1,\n' +
++       '-             1,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ]\n' +
++       '-         },\n' +
++       '-         og: 2,\n' +
++       '-         u: 0\n' +
++       '-       },\n' +
++       "-       'Manchester City': {\n" +
++       '-         m: {\n' +
++       `-           "Nico O'Reilly|LB": [\n` +
++       '-             1,\n' +
++       '-             3,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Antoine Semenyo|RW': [\n" +
++       '-             13,\n' +
++       '-             7,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Elliot Anderson|CM': [\n" +
++       '-             3,\n' +
++       '-             2,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Enzo Fernández|CM': [\n" +
++       '-             7,\n' +
++       '-             7,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Erling Haaland|ST': [\n" +
++       '-             26,\n' +
++       '-             6,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Gianluigi Donnarumma|GK': [\n" +
++       '-             0,\n' +
++       '-             0,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Josko Gvardiol|CB': [\n" +
++       '-             1,\n' +
++       '-             1,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Marc Guéhi|CB': [\n" +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Phil Foden|CAM': [\n" +
++       '-             12,\n' +
++       '-             9,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Rayan Cherki|CAM': [\n" +
++       '-             7,\n' +
++       '-             11,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Rúben Dias|CB': [\n" +
++       '-             2,\n' +
++       '-             1,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ]\n' +
++       '-         },\n' +
++       '-         og: 2,\n' +
++       '-         u: 0\n' +
++       '-       },\n' +
++       "-       'Manchester United': {"... 17779 more characters,
++     stack: 'AssertionError [ERR_ASSERTION]: A generated future season preserves the full independent rollover state and random stream\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  {\n' +
++       '    academy: {\n' +
++       '      candidates: [\n' +
++       '        {\n' +
++       '          fee: 4,\n' +
++       '...\n' +
++       '    leagueBook: {\n' +
++       '+     c: {},\n' +
++       '+     my: [],\n' +
++       "+     s: 'premier|ebcqnv'\n" +
++       '-     c: {\n' +
++       "-       'Aston Villa': {\n" +
++       '-         m: {\n' +
++       "-           'Aaron Wan-Bissaka|RB': [\n" +
++       '-             3,\n' +
++       '-             2,\n' +
++       '-             11,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Alejandro Garnacho|LW': [\n" +
++       '-             12,\n' +
++       '-             7,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Amadou Onana|CDM': [\n" +
++       '-             1,\n' +
++       '-             2,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Boubacar Kamara|CDM': [\n" +
++       '-             3,\n' +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Ian Maatsen|LB': [\n" +
++       '-             2,\n' +
++       '-             3,\n' +
++       '-             11,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Johan Manzambi|CM': [\n" +
++       '-             4,\n' +
++       '-             2,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'João Gomes|CM': [\n" +
++       '-             3,\n' +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Matty Cash|RB': [\n" +
++       '-             3,\n' +
++       '-             2,\n' +
++       '-             11,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Nicolas Jackson|ST': [\n" +
++       '-             18,\n' +
++       '-             7,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Pau Torres|CB': [\n" +
++       '-             0,\n' +
++       '-             2,\n' +
++       '-             11,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Zion Suzuki|GK': [\n" +
++       '-             0,\n' +
++       '-             0,\n' +
++       '-             11,\n' +
++       '-             0\n' +
++       '-           ]\n' +
++       '-         },\n' +
++       '-         og: 0,\n' +
++       '-         u: 0\n' +
++       '-       },\n' +
++       "-       'Coventry City': {\n" +
++       '-         m: {\n' +
++       "-           'Aurèle Amenda|CB': [\n" +
++       '-             1,\n' +
++       '-             2,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Bobby Thomas|CB': [\n" +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Carl Rushworth|GK': [\n" +
++       '-             0,\n' +
++       '-             0,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Ephron Mason-Clark|LM': [\n" +
++       '-             3,\n' +
++       '-             3,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Ethan Pinnock|CB': [\n" +
++       '-             0,\n' +
++       '-             0,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Gustavo Hamer|CM': [\n" +
++       '-             1,\n' +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Jack Rudoni|CAM': [\n" +
++       '-             9,\n' +
++       '-             4,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Milan van Ewijk|RB': [\n" +
++       '-             1,\n' +
++       '-             2,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Sidiki Chérif|ST': [\n" +
++       '-             8,\n' +
++       '-             2,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Victor Torp|CM': [\n" +
++       '-             4,\n' +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Yann Gboho|LW': [\n" +
++       '-             6,\n' +
++       '-             7,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ]\n' +
++       '-         },\n' +
++       '-         og: 0,\n' +
++       '-         u: 0\n' +
++       '-       },\n' +
++       "-       'Crystal Palace': {\n" +
++       '-         m: {\n' +
++       "-           'Adam Wharton|CDM': [\n" +
++       '-             3,\n' +
++       '-             0,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Anan Khalaili|RM': [\n" +
++       '-             4,\n' +
++       '-             3,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Chris Richards|CB': [\n" +
++       '-             1,\n' +
++       '-             3,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Daichi Kamada|CAM': [\n" +
++       '-             7,\n' +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Dean Henderson|GK': [\n" +
++       '-             0,\n' +
++       '-             0,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Honest Ahanor|CB': [\n" +
++       '-             0,\n' +
++       '-             1,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Ismaïla Sarr|RW': [\n" +
++       '-             2,\n' +
++       '-             5,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Jaydee Canvot|CB': [\n" +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Jørgen Strand Larsen|ST': [\n" +
++       '-             17,\n' +
++       '-             10,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Quinten Timber|CM': [\n" +
++       '-             1,\n' +
++       '-             2,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Tyrick Mitchell|LB': [\n" +
++       '-             3,\n' +
++       '-             2,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ]\n' +
++       '-         },\n' +
++       '-         og: 1,\n' +
++       '-         u: 0\n' +
++       '-       },\n' +
++       "-       'Hull City': {\n" +
++       '-         m: {\n' +
++       "-           'Brooke Norton-Cuffy|RB': [\n" +
++       '-             5,\n' +
++       '-             1,\n' +
++       '-             11,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Charlie Hughes|CB': [\n" +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             11,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Christos Mouzakitis|CM': [\n" +
++       '-             1,\n' +
++       '-             3,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Hidemasa Morita|CM': [\n" +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Jens Hjertø-Dahl|CM': [\n" +
++       '-             5,\n' +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Konstantinos Tzolakis|GK': [\n" +
++       '-             0,\n' +
++       '-             0,\n' +
++       '-             11,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Mohamed-Ali Cho|RW': [\n" +
++       '-             10,\n' +
++       '-             4,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Nobel Mendy|CB': [\n" +
++       '-             1,\n' +
++       '-             1,\n' +
++       '-             11,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Robinio Vaz|ST': [\n" +
++       '-             13,\n' +
++       '-             10,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Ryan Giles|LB': [\n" +
++       '-             1,\n' +
++       '-             1,\n' +
++       '-             11,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Tim Iroegbunam|CM': [\n" +
++       '-             4,\n' +
++       '-             6,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ]\n' +
++       '-         },\n' +
++       '-         og: 2,\n' +
++       '-         u: 0\n' +
++       '-       },\n' +
++       "-       'Ipswich Town': {\n" +
++       '-         m: {\n' +
++       `-           "Dara O'Shea|CB": [\n` +
++       '-             5,\n' +
++       '-             2,\n' +
++       '-             10,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Abdoul Ouattara|RB': [\n" +
++       '-             2,\n' +
++       '-             3,\n' +
++       '-             10,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Abdul Fatawu|RW': [\n" +
++       '-             10,\n' +
++       '-             6,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Anis Mehmeti|CAM': [\n" +
++       '-             6,\n' +
++       '-             2,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Exequiel Palacios|CM': [\n" +
++       '-             7,\n' +
++       '-             2,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Florentino|CDM': [\n" +
++       '-             1,\n' +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Jack Clarke|LW': [\n" +
++       '-             8,\n' +
++       '-             4,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Jacob Greaves|CB': [\n" +
++       '-             2,\n' +
++       '-             0,\n' +
++       '-             10,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Julio Enciso|CAM': [\n" +
++       '-             5,\n' +
++       '-             7,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Kjell Scherpen|GK': [\n" +
++       '-             0,\n' +
++       '-             0,\n' +
++       '-             10,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Leif Davis|LB': [\n" +
++       '-             4,\n' +
++       '-             3,\n' +
++       '-             10,\n' +
++       '-             0\n' +
++       '-           ]\n' +
++       '-         },\n' +
++       '-         og: 1,\n' +
++       '-         u: 0\n' +
++       '-       },\n' +
++       "-       'Leeds United': {\n" +
++       '-         m: {\n' +
++       "-           'Anton Stach|CDM': [\n" +
++       '-             1,\n' +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Brenden Aaronson|CAM': [\n" +
++       '-             10,\n' +
++       '-             6,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Ethan Ampadu|CDM': [\n" +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Gabriel Gudmundsson|LB': [\n" +
++       '-             2,\n' +
++       '-             1,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Harry Wilson|RW': [\n" +
++       '-             14,\n' +
++       '-             3,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Jaka Bijol|CB': [\n" +
++       '-             0,\n' +
++       '-             1,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'James Trafford|GK': [\n" +
++       '-             0,\n' +
++       '-             0,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Jean-Mattéo Bahoya|LW': [\n" +
++       '-             14,\n' +
++       '-             3,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Joe Rodon|CB': [\n" +
++       '-             1,\n' +
++       '-             1,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Sean Longstaff|CM': [\n" +
++       '-             5,\n' +
++       '-             4,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Tarik Muharemović|CB': [\n" +
++       '-             1,\n' +
++       '-             1,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ]\n' +
++       '-         },\n' +
++       '-         og: 2,\n' +
++       '-         u: 0\n' +
++       '-       },\n' +
++       "-       'Manchester City': {\n" +
++       '-         m: {\n' +
++       `-           "Nico O'Reilly|LB": [\n` +
++       '-             1,\n' +
++       '-             3,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Antoine Semenyo|RW': [\n" +
++       '-             13,\n' +
++       '-             7,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Elliot Anderson|CM': [\n" +
++       '-             3,\n' +
++       '-             2,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Enzo Fernández|CM': [\n" +
++       '-             7,\n' +
++       '-             7,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Erling Haaland|ST': [\n" +
++       '-             26,\n' +
++       '-             6,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Gianluigi Donnarumma|GK': [\n" +
++       '-             0,\n' +
++       '-             0,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Josko Gvardiol|CB': [\n" +
++       '-             1,\n' +
++       '-             1,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Marc Guéhi|CB': [\n" +
++       '-             1,\n' +
++       '-             0,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Phil Foden|CAM': [\n" +
++       '-             12,\n' +
++       '-             9,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Rayan Cherki|CAM': [\n" +
++       '-             7,\n' +
++       '-             11,\n' +
++       '-             0,\n' +
++       '-             0\n' +
++       '-           ],\n' +
++       "-           'Rúben Dias|CB': [\n" +
++       '-             2,\n' +
++       '-             1,\n' +
++       '-             6,\n' +
++       '-             0\n' +
++       '-           ]\n' +
++       '-         },\n' +
++       '-         og: 2,\n' +
++       '-         u: 0\n' +
++       '-       }'... 18133 more characters,
++     status: 'failed',
++     title: 'clears the real fixture key after a fully played season before generating the next season'
++   },
++   {
++     errorName: 'AssertionError',
++     message: 'Unsupported fresh save stays byte-for-byte at the pre-change baseline\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  {\n' +
++       '    academy: {\n' +
++       '      candidates: [\n' +
++       '        {\n' +
++       '          fee: 3,\n' +
++       '...\n' +
++       '    },\n' +
++       '+   leagueBook: {\n' +
++       '+     c: {},\n' +
++       '+     my: [],\n' +
++       "+     s: 'laliga|ptyd2x'\n" +
++       '+   },\n' +
++       '    leagueClubs: [\n' +
++       "      'Real Betis',\n" +
++       "      'Athletic Club',\n" +
++       "      'Villarreal',\n" +
++       "      'Racing Santander',\n",
++     stack: 'AssertionError [ERR_ASSERTION]: Unsupported fresh save stays byte-for-byte at the pre-change baseline\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  {\n' +
++       '    academy: {\n' +
++       '      candidates: [\n' +
++       '        {\n' +
++       '          fee: 3,\n' +
++       '...\n' +
++       '    },\n' +
++       '+   leagueBook: {\n' +
++       '+     c: {},\n' +
++       '+     my: [],\n' +
++       "+     s: 'laliga|ptyd2x'\n" +
++       '+   },\n' +
++       '    leagueClubs: [\n' +
++       "      'Real Betis',\n" +
++       "      'Athletic Club',\n" +
++       "      'Villarreal',\n" +
++       "      'Racing Santander',\n" +
++       '\n' +
++       '    at baselineFor (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:271:48)\n' +
++       '    at async Object.baseline (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:414:9)\n' +
++       '    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:423:13)\n' +
++       '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:443:54',
++     status: 'failed',
++     title: 'matches the independent pre-change engine for unsupported starts and genuine match outcomes'
++   },
++   {
++     errorName: 'AssertionError',
++     message: 'Unsupported fresh save stays byte-for-byte at the pre-change baseline\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  {\n' +
++       '    academy: {\n' +
++       '      candidates: [\n' +
++       '        {\n' +
++       '          fee: 3,\n' +
++       '...\n' +
++       '    },\n' +
++       '+   leagueBook: {\n' +
++       '+     c: {},\n' +
++       '+     my: [],\n' +
++       "+     s: 'laliga|ptyd2x'\n" +
++       '+   },\n' +
++       '    leagueClubs: [\n' +
++       "      'Real Betis',\n" +
++       "      'Athletic Club',\n" +
++       "      'Villarreal',\n" +
++       "      'Racing Santander',\n",
++     stack: 'AssertionError [ERR_ASSERTION]: Unsupported fresh save stays byte-for-byte at the pre-change baseline\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  {\n' +
++       '    academy: {\n' +
++       '      candidates: [\n' +
++       '        {\n' +
++       '          fee: 3,\n' +
++       '...\n' +
++       '    },\n' +
++       '+   leagueBook: {\n' +
++       '+     c: {},\n' +
++       '+     my: [],\n' +
++       "+     s: 'laliga|ptyd2x'\n" +
++       '+   },\n' +
++       '    leagueClubs: [\n' +
++       "      'Real Betis',\n" +
++       "      'Athletic Club',\n" +
++       "      'Villarreal',\n" +
++       "      'Racing Santander',\n" +
++       '\n' +
++       '    at baselineFor (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:271:48)\n' +
++       '    at async Object.uncopied (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:417:9)\n' +
++       '    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:423:13)\n' +
++       '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:443:54',
++     status: 'failed',
++     title: 'passes the whole independent generated baseline with untouched current source under every copied fault'
++   }
++ ]
+- []
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:434:21)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:443:54 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    {
+      title: 'preserves the whole generated old save, random draws, match outcome and reload bytes',
+      status: 'failed',
+      errorName: 'AssertionError',
+      message: 'Only the optional fixture key changes the fresh save\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        '    academy: {\n' +
+        '      candidates: [\n' +
+        '        {\n' +
+        '          fee: 3,\n' +
+        '...\n' +
+        '    },\n' +
+        '+   leagueBook: {\n' +
+        '+     c: {},\n' +
+        '+     my: [],\n' +
+        "+     s: 'premier|1rfw42'\n" +
+        '+   },\n' +
+        '    leagueClubs: [\n' +
+        "      'Manchester City',\n" +
+        "      'Newcastle',\n" +
+        "      'Brentford',\n" +
+        "      'Sunderland',\n",
+      stack: 'AssertionError [ERR_ASSERTION]: Only the optional fixture key changes the fresh save\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        '    academy: {\n' +
+        '      candidates: [\n' +
+        '        {\n' +
+        '          fee: 3,\n' +
+        '...\n' +
+        '    },\n' +
+        '+   leagueBook: {\n' +
+        '+     c: {},\n' +
+        '+     my: [],\n' +
+        "+     s: 'premier|1rfw42'\n" +
+        '+   },\n' +
+        '    leagueClubs: [\n' +
+        "      'Manchester City',\n" +
+        "      'Newcastle',\n" +
+        "      'Brentford',\n" +
+        "      'Sunderland',\n" +
+        '\n' +
+        '    at Object.legacy (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:369:86)\n' +
+        '    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:423:33)\n' +
+        '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:443:54'
+    },
+    {
+      title: 'clears the real fixture key after a fully played season before generating the next season',
+      status: 'failed',
+      errorName: 'AssertionError',
+      message: 'A generated future season preserves the full independent rollover state and random stream\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        '    academy: {\n' +
+        '      candidates: [\n' +
+        '        {\n' +
+        '          fee: 4,\n' +
+        '...\n' +
+        '    leagueBook: {\n' +
+        '+     c: {},\n' +
+        '+     my: [],\n' +
+        "+     s: 'premier|ebcqnv'\n" +
+        '-     c: {\n' +
+        "-       'Aston Villa': {\n" +
+        '-         m: {\n' +
+        "-           'Aaron Wan-Bissaka|RB': [\n" +
+        '-             3,\n' +
+        '-             2,\n' +
+        '-             11,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Alejandro Garnacho|LW': [\n" +
+        '-             12,\n' +
+        '-             7,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Amadou Onana|CDM': [\n" +
+        '-             1,\n' +
+        '-             2,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Boubacar Kamara|CDM': [\n" +
+        '-             3,\n' +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Ian Maatsen|LB': [\n" +
+        '-             2,\n' +
+        '-             3,\n' +
+        '-             11,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Johan Manzambi|CM': [\n" +
+        '-             4,\n' +
+        '-             2,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'João Gomes|CM': [\n" +
+        '-             3,\n' +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Matty Cash|RB': [\n" +
+        '-             3,\n' +
+        '-             2,\n' +
+        '-             11,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Nicolas Jackson|ST': [\n" +
+        '-             18,\n' +
+        '-             7,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Pau Torres|CB': [\n" +
+        '-             0,\n' +
+        '-             2,\n' +
+        '-             11,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Zion Suzuki|GK': [\n" +
+        '-             0,\n' +
+        '-             0,\n' +
+        '-             11,\n' +
+        '-             0\n' +
+        '-           ]\n' +
+        '-         },\n' +
+        '-         og: 0,\n' +
+        '-         u: 0\n' +
+        '-       },\n' +
+        "-       'Coventry City': {\n" +
+        '-         m: {\n' +
+        "-           'Aurèle Amenda|CB': [\n" +
+        '-             1,\n' +
+        '-             2,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Bobby Thomas|CB': [\n" +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Carl Rushworth|GK': [\n" +
+        '-             0,\n' +
+        '-             0,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Ephron Mason-Clark|LM': [\n" +
+        '-             3,\n' +
+        '-             3,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Ethan Pinnock|CB': [\n" +
+        '-             0,\n' +
+        '-             0,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Gustavo Hamer|CM': [\n" +
+        '-             1,\n' +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Jack Rudoni|CAM': [\n" +
+        '-             9,\n' +
+        '-             4,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Milan van Ewijk|RB': [\n" +
+        '-             1,\n' +
+        '-             2,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Sidiki Chérif|ST': [\n" +
+        '-             8,\n' +
+        '-             2,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Victor Torp|CM': [\n" +
+        '-             4,\n' +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Yann Gboho|LW': [\n" +
+        '-             6,\n' +
+        '-             7,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ]\n' +
+        '-         },\n' +
+        '-         og: 0,\n' +
+        '-         u: 0\n' +
+        '-       },\n' +
+        "-       'Crystal Palace': {\n" +
+        '-         m: {\n' +
+        "-           'Adam Wharton|CDM': [\n" +
+        '-             3,\n' +
+        '-             0,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Anan Khalaili|RM': [\n" +
+        '-             4,\n' +
+        '-             3,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Chris Richards|CB': [\n" +
+        '-             1,\n' +
+        '-             3,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Daichi Kamada|CAM': [\n" +
+        '-             7,\n' +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Dean Henderson|GK': [\n" +
+        '-             0,\n' +
+        '-             0,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Honest Ahanor|CB': [\n" +
+        '-             0,\n' +
+        '-             1,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Ismaïla Sarr|RW': [\n" +
+        '-             2,\n' +
+        '-             5,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Jaydee Canvot|CB': [\n" +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Jørgen Strand Larsen|ST': [\n" +
+        '-             17,\n' +
+        '-             10,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Quinten Timber|CM': [\n" +
+        '-             1,\n' +
+        '-             2,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Tyrick Mitchell|LB': [\n" +
+        '-             3,\n' +
+        '-             2,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ]\n' +
+        '-         },\n' +
+        '-         og: 1,\n' +
+        '-         u: 0\n' +
+        '-       },\n' +
+        "-       'Hull City': {\n" +
+        '-         m: {\n' +
+        "-           'Brooke Norton-Cuffy|RB': [\n" +
+        '-             5,\n' +
+        '-             1,\n' +
+        '-             11,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Charlie Hughes|CB': [\n" +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             11,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Christos Mouzakitis|CM': [\n" +
+        '-             1,\n' +
+        '-             3,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Hidemasa Morita|CM': [\n" +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Jens Hjertø-Dahl|CM': [\n" +
+        '-             5,\n' +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Konstantinos Tzolakis|GK': [\n" +
+        '-             0,\n' +
+        '-             0,\n' +
+        '-             11,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Mohamed-Ali Cho|RW': [\n" +
+        '-             10,\n' +
+        '-             4,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Nobel Mendy|CB': [\n" +
+        '-             1,\n' +
+        '-             1,\n' +
+        '-             11,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Robinio Vaz|ST': [\n" +
+        '-             13,\n' +
+        '-             10,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Ryan Giles|LB': [\n" +
+        '-             1,\n' +
+        '-             1,\n' +
+        '-             11,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Tim Iroegbunam|CM': [\n" +
+        '-             4,\n' +
+        '-             6,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ]\n' +
+        '-         },\n' +
+        '-         og: 2,\n' +
+        '-         u: 0\n' +
+        '-       },\n' +
+        "-       'Ipswich Town': {\n" +
+        '-         m: {\n' +
+        `-           "Dara O'Shea|CB": [\n` +
+        '-             5,\n' +
+        '-             2,\n' +
+        '-             10,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Abdoul Ouattara|RB': [\n" +
+        '-             2,\n' +
+        '-             3,\n' +
+        '-             10,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Abdul Fatawu|RW': [\n" +
+        '-             10,\n' +
+        '-             6,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Anis Mehmeti|CAM': [\n" +
+        '-             6,\n' +
+        '-             2,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Exequiel Palacios|CM': [\n" +
+        '-             7,\n' +
+        '-             2,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Florentino|CDM': [\n" +
+        '-             1,\n' +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Jack Clarke|LW': [\n" +
+        '-             8,\n' +
+        '-             4,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Jacob Greaves|CB': [\n" +
+        '-             2,\n' +
+        '-             0,\n' +
+        '-             10,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Julio Enciso|CAM': [\n" +
+        '-             5,\n' +
+        '-             7,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Kjell Scherpen|GK': [\n" +
+        '-             0,\n' +
+        '-             0,\n' +
+        '-             10,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Leif Davis|LB': [\n" +
+        '-             4,\n' +
+        '-             3,\n' +
+        '-             10,\n' +
+        '-             0\n' +
+        '-           ]\n' +
+        '-         },\n' +
+        '-         og: 1,\n' +
+        '-         u: 0\n' +
+        '-       },\n' +
+        "-       'Leeds United': {\n" +
+        '-         m: {\n' +
+        "-           'Anton Stach|CDM': [\n" +
+        '-             1,\n' +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Brenden Aaronson|CAM': [\n" +
+        '-             10,\n' +
+        '-             6,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Ethan Ampadu|CDM': [\n" +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Gabriel Gudmundsson|LB': [\n" +
+        '-             2,\n' +
+        '-             1,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Harry Wilson|RW': [\n" +
+        '-             14,\n' +
+        '-             3,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Jaka Bijol|CB': [\n" +
+        '-             0,\n' +
+        '-             1,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'James Trafford|GK': [\n" +
+        '-             0,\n' +
+        '-             0,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Jean-Mattéo Bahoya|LW': [\n" +
+        '-             14,\n' +
+        '-             3,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Joe Rodon|CB': [\n" +
+        '-             1,\n' +
+        '-             1,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Sean Longstaff|CM': [\n" +
+        '-             5,\n' +
+        '-             4,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Tarik Muharemović|CB': [\n" +
+        '-             1,\n' +
+        '-             1,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ]\n' +
+        '-         },\n' +
+        '-         og: 2,\n' +
+        '-         u: 0\n' +
+        '-       },\n' +
+        "-       'Manchester City': {\n" +
+        '-         m: {\n' +
+        `-           "Nico O'Reilly|LB": [\n` +
+        '-             1,\n' +
+        '-             3,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Antoine Semenyo|RW': [\n" +
+        '-             13,\n' +
+        '-             7,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Elliot Anderson|CM': [\n" +
+        '-             3,\n' +
+        '-             2,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Enzo Fernández|CM': [\n" +
+        '-             7,\n' +
+        '-             7,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Erling Haaland|ST': [\n" +
+        '-             26,\n' +
+        '-             6,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Gianluigi Donnarumma|GK': [\n" +
+        '-             0,\n' +
+        '-             0,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Josko Gvardiol|CB': [\n" +
+        '-             1,\n' +
+        '-             1,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Marc Guéhi|CB': [\n" +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Phil Foden|CAM': [\n" +
+        '-             12,\n' +
+        '-             9,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Rayan Cherki|CAM': [\n" +
+        '-             7,\n' +
+        '-             11,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Rúben Dias|CB': [\n" +
+        '-             2,\n' +
+        '-             1,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ]\n' +
+        '-         },\n' +
+        '-         og: 2,\n' +
+        '-         u: 0\n' +
+        '-       },\n' +
+        "-       'Manchester United': {"... 17779 more characters,
+      stack: 'AssertionError [ERR_ASSERTION]: A generated future season preserves the full independent rollover state and random stream\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        '    academy: {\n' +
+        '      candidates: [\n' +
+        '        {\n' +
+        '          fee: 4,\n' +
+        '...\n' +
+        '    leagueBook: {\n' +
+        '+     c: {},\n' +
+        '+     my: [],\n' +
+        "+     s: 'premier|ebcqnv'\n" +
+        '-     c: {\n' +
+        "-       'Aston Villa': {\n" +
+        '-         m: {\n' +
+        "-           'Aaron Wan-Bissaka|RB': [\n" +
+        '-             3,\n' +
+        '-             2,\n' +
+        '-             11,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Alejandro Garnacho|LW': [\n" +
+        '-             12,\n' +
+        '-             7,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Amadou Onana|CDM': [\n" +
+        '-             1,\n' +
+        '-             2,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Boubacar Kamara|CDM': [\n" +
+        '-             3,\n' +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Ian Maatsen|LB': [\n" +
+        '-             2,\n' +
+        '-             3,\n' +
+        '-             11,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Johan Manzambi|CM': [\n" +
+        '-             4,\n' +
+        '-             2,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'João Gomes|CM': [\n" +
+        '-             3,\n' +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Matty Cash|RB': [\n" +
+        '-             3,\n' +
+        '-             2,\n' +
+        '-             11,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Nicolas Jackson|ST': [\n" +
+        '-             18,\n' +
+        '-             7,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Pau Torres|CB': [\n" +
+        '-             0,\n' +
+        '-             2,\n' +
+        '-             11,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Zion Suzuki|GK': [\n" +
+        '-             0,\n' +
+        '-             0,\n' +
+        '-             11,\n' +
+        '-             0\n' +
+        '-           ]\n' +
+        '-         },\n' +
+        '-         og: 0,\n' +
+        '-         u: 0\n' +
+        '-       },\n' +
+        "-       'Coventry City': {\n" +
+        '-         m: {\n' +
+        "-           'Aurèle Amenda|CB': [\n" +
+        '-             1,\n' +
+        '-             2,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Bobby Thomas|CB': [\n" +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Carl Rushworth|GK': [\n" +
+        '-             0,\n' +
+        '-             0,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Ephron Mason-Clark|LM': [\n" +
+        '-             3,\n' +
+        '-             3,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Ethan Pinnock|CB': [\n" +
+        '-             0,\n' +
+        '-             0,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Gustavo Hamer|CM': [\n" +
+        '-             1,\n' +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Jack Rudoni|CAM': [\n" +
+        '-             9,\n' +
+        '-             4,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Milan van Ewijk|RB': [\n" +
+        '-             1,\n' +
+        '-             2,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Sidiki Chérif|ST': [\n" +
+        '-             8,\n' +
+        '-             2,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Victor Torp|CM': [\n" +
+        '-             4,\n' +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Yann Gboho|LW': [\n" +
+        '-             6,\n' +
+        '-             7,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ]\n' +
+        '-         },\n' +
+        '-         og: 0,\n' +
+        '-         u: 0\n' +
+        '-       },\n' +
+        "-       'Crystal Palace': {\n" +
+        '-         m: {\n' +
+        "-           'Adam Wharton|CDM': [\n" +
+        '-             3,\n' +
+        '-             0,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Anan Khalaili|RM': [\n" +
+        '-             4,\n' +
+        '-             3,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Chris Richards|CB': [\n" +
+        '-             1,\n' +
+        '-             3,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Daichi Kamada|CAM': [\n" +
+        '-             7,\n' +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Dean Henderson|GK': [\n" +
+        '-             0,\n' +
+        '-             0,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Honest Ahanor|CB': [\n" +
+        '-             0,\n' +
+        '-             1,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Ismaïla Sarr|RW': [\n" +
+        '-             2,\n' +
+        '-             5,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Jaydee Canvot|CB': [\n" +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Jørgen Strand Larsen|ST': [\n" +
+        '-             17,\n' +
+        '-             10,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Quinten Timber|CM': [\n" +
+        '-             1,\n' +
+        '-             2,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Tyrick Mitchell|LB': [\n" +
+        '-             3,\n' +
+        '-             2,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ]\n' +
+        '-         },\n' +
+        '-         og: 1,\n' +
+        '-         u: 0\n' +
+        '-       },\n' +
+        "-       'Hull City': {\n" +
+        '-         m: {\n' +
+        "-           'Brooke Norton-Cuffy|RB': [\n" +
+        '-             5,\n' +
+        '-             1,\n' +
+        '-             11,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Charlie Hughes|CB': [\n" +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             11,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Christos Mouzakitis|CM': [\n" +
+        '-             1,\n' +
+        '-             3,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Hidemasa Morita|CM': [\n" +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Jens Hjertø-Dahl|CM': [\n" +
+        '-             5,\n' +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Konstantinos Tzolakis|GK': [\n" +
+        '-             0,\n' +
+        '-             0,\n' +
+        '-             11,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Mohamed-Ali Cho|RW': [\n" +
+        '-             10,\n' +
+        '-             4,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Nobel Mendy|CB': [\n" +
+        '-             1,\n' +
+        '-             1,\n' +
+        '-             11,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Robinio Vaz|ST': [\n" +
+        '-             13,\n' +
+        '-             10,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Ryan Giles|LB': [\n" +
+        '-             1,\n' +
+        '-             1,\n' +
+        '-             11,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Tim Iroegbunam|CM': [\n" +
+        '-             4,\n' +
+        '-             6,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ]\n' +
+        '-         },\n' +
+        '-         og: 2,\n' +
+        '-         u: 0\n' +
+        '-       },\n' +
+        "-       'Ipswich Town': {\n" +
+        '-         m: {\n' +
+        `-           "Dara O'Shea|CB": [\n` +
+        '-             5,\n' +
+        '-             2,\n' +
+        '-             10,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Abdoul Ouattara|RB': [\n" +
+        '-             2,\n' +
+        '-             3,\n' +
+        '-             10,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Abdul Fatawu|RW': [\n" +
+        '-             10,\n' +
+        '-             6,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Anis Mehmeti|CAM': [\n" +
+        '-             6,\n' +
+        '-             2,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Exequiel Palacios|CM': [\n" +
+        '-             7,\n' +
+        '-             2,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Florentino|CDM': [\n" +
+        '-             1,\n' +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Jack Clarke|LW': [\n" +
+        '-             8,\n' +
+        '-             4,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Jacob Greaves|CB': [\n" +
+        '-             2,\n' +
+        '-             0,\n' +
+        '-             10,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Julio Enciso|CAM': [\n" +
+        '-             5,\n' +
+        '-             7,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Kjell Scherpen|GK': [\n" +
+        '-             0,\n' +
+        '-             0,\n' +
+        '-             10,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Leif Davis|LB': [\n" +
+        '-             4,\n' +
+        '-             3,\n' +
+        '-             10,\n' +
+        '-             0\n' +
+        '-           ]\n' +
+        '-         },\n' +
+        '-         og: 1,\n' +
+        '-         u: 0\n' +
+        '-       },\n' +
+        "-       'Leeds United': {\n" +
+        '-         m: {\n' +
+        "-           'Anton Stach|CDM': [\n" +
+        '-             1,\n' +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Brenden Aaronson|CAM': [\n" +
+        '-             10,\n' +
+        '-             6,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Ethan Ampadu|CDM': [\n" +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Gabriel Gudmundsson|LB': [\n" +
+        '-             2,\n' +
+        '-             1,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Harry Wilson|RW': [\n" +
+        '-             14,\n' +
+        '-             3,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Jaka Bijol|CB': [\n" +
+        '-             0,\n' +
+        '-             1,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'James Trafford|GK': [\n" +
+        '-             0,\n' +
+        '-             0,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Jean-Mattéo Bahoya|LW': [\n" +
+        '-             14,\n' +
+        '-             3,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Joe Rodon|CB': [\n" +
+        '-             1,\n' +
+        '-             1,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Sean Longstaff|CM': [\n" +
+        '-             5,\n' +
+        '-             4,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Tarik Muharemović|CB': [\n" +
+        '-             1,\n' +
+        '-             1,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ]\n' +
+        '-         },\n' +
+        '-         og: 2,\n' +
+        '-         u: 0\n' +
+        '-       },\n' +
+        "-       'Manchester City': {\n" +
+        '-         m: {\n' +
+        `-           "Nico O'Reilly|LB": [\n` +
+        '-             1,\n' +
+        '-             3,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Antoine Semenyo|RW': [\n" +
+        '-             13,\n' +
+        '-             7,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Elliot Anderson|CM': [\n" +
+        '-             3,\n' +
+        '-             2,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Enzo Fernández|CM': [\n" +
+        '-             7,\n' +
+        '-             7,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Erling Haaland|ST': [\n" +
+        '-             26,\n' +
+        '-             6,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Gianluigi Donnarumma|GK': [\n" +
+        '-             0,\n' +
+        '-             0,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Josko Gvardiol|CB': [\n" +
+        '-             1,\n' +
+        '-             1,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Marc Guéhi|CB': [\n" +
+        '-             1,\n' +
+        '-             0,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Phil Foden|CAM': [\n" +
+        '-             12,\n' +
+        '-             9,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Rayan Cherki|CAM': [\n" +
+        '-             7,\n' +
+        '-             11,\n' +
+        '-             0,\n' +
+        '-             0\n' +
+        '-           ],\n' +
+        "-           'Rúben Dias|CB': [\n" +
+        '-             2,\n' +
+        '-             1,\n' +
+        '-             6,\n' +
+        '-             0\n' +
+        '-           ]\n' +
+        '-         },\n' +
+        '-         og: 2,\n' +
+        '-         u: 0\n' +
+        '-       }'... 18133 more characters
+    },
+    {
+      title: 'matches the independent pre-change engine for unsupported starts and genuine match outcomes',
+      status: 'failed',
+      errorName: 'AssertionError',
+      message: 'Unsupported fresh save stays byte-for-byte at the pre-change baseline\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        '    academy: {\n' +
+        '      candidates: [\n' +
+        '        {\n' +
+        '          fee: 3,\n' +
+        '...\n' +
+        '    },\n' +
+        '+   leagueBook: {\n' +
+        '+     c: {},\n' +
+        '+     my: [],\n' +
+        "+     s: 'laliga|ptyd2x'\n" +
+        '+   },\n' +
+        '    leagueClubs: [\n' +
+        "      'Real Betis',\n" +
+        "      'Athletic Club',\n" +
+        "      'Villarreal',\n" +
+        "      'Racing Santander',\n",
+      stack: 'AssertionError [ERR_ASSERTION]: Unsupported fresh save stays byte-for-byte at the pre-change baseline\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        '    academy: {\n' +
+        '      candidates: [\n' +
+        '        {\n' +
+        '          fee: 3,\n' +
+        '...\n' +
+        '    },\n' +
+        '+   leagueBook: {\n' +
+        '+     c: {},\n' +
+        '+     my: [],\n' +
+        "+     s: 'laliga|ptyd2x'\n" +
+        '+   },\n' +
+        '    leagueClubs: [\n' +
+        "      'Real Betis',\n" +
+        "      'Athletic Club',\n" +
+        "      'Villarreal',\n" +
+        "      'Racing Santander',\n" +
+        '\n' +
+        '    at baselineFor (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:271:48)\n' +
+        '    at async Object.baseline (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:414:9)\n' +
+        '    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:423:13)\n' +
+        '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:443:54'
+    },
+    {
+      title: 'passes the whole independent generated baseline with untouched current source under every copied fault',
+      status: 'failed',
+      errorName: 'AssertionError',
+      message: 'Unsupported fresh save stays byte-for-byte at the pre-change baseline\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        '    academy: {\n' +
+        '      candidates: [\n' +
+        '        {\n' +
+        '          fee: 3,\n' +
+        '...\n' +
+        '    },\n' +
+        '+   leagueBook: {\n' +
+        '+     c: {},\n' +
+        '+     my: [],\n' +
+        "+     s: 'laliga|ptyd2x'\n" +
+        '+   },\n' +
+        '    leagueClubs: [\n' +
+        "      'Real Betis',\n" +
+        "      'Athletic Club',\n" +
+        "      'Villarreal',\n" +
+        "      'Racing Santander',\n",
+      stack: 'AssertionError [ERR_ASSERTION]: Unsupported fresh save stays byte-for-byte at the pre-change baseline\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        '    academy: {\n' +
+        '      candidates: [\n' +
+        '        {\n' +
+        '          fee: 3,\n' +
+        '...\n' +
+        '    },\n' +
+        '+   leagueBook: {\n' +
+        '+     c: {},\n' +
+        '+     my: [],\n' +
+        "+     s: 'laliga|ptyd2x'\n" +
+        '+   },\n' +
+        '    leagueClubs: [\n' +
+        "      'Real Betis',\n" +
+        "      'Athletic Club',\n" +
+        "      'Villarreal',\n" +
+        "      'Racing Santander',\n" +
+        '\n' +
+        '    at baselineFor (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:271:48)\n' +
+        '    at async Object.uncopied (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:417:9)\n' +
+        '    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:423:13)\n' +
+        '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:443:54'
+    }
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
