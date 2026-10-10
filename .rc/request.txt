@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+# Reviewer (run lens), Round 1215, head 36f333be: one seed on another day and in another time zone (the page's clock moved by an init script).
+probe2: node .rc/x/rprobe2.mjs
+probe2-7: mkdir -p "$RC_OUT/p7" && PROBE_SEED=7 RC_OUT="$RC_OUT/p7" node .rc/x/rprobe2.mjs
