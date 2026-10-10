@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/components/lottery/LotteryReveal.test.tsx src/components/front-office-shared/GmLotteryCard.test.tsx src/lib/gmLotteryNight.test.ts src/lib/gmDraftOrder.test.ts src/lib/gmDraftNight.test.ts src/lib/gmPicks.test.ts --testTimeout=300000 --hookTimeout=120000
+scm: node scripts/simSeasonCentreMotion.mjs
+sim: node scripts/simGmDraftOrder.mjs
+controls-0: SIM_GM_DRAFT_ORDER_CONTROL=all SIM_GM_DRAFT_ORDER_SHARD=0/3 node scripts/simGmDraftOrder.mjs
+controls-1: SIM_GM_DRAFT_ORDER_CONTROL=all SIM_GM_DRAFT_ORDER_SHARD=1/3 node scripts/simGmDraftOrder.mjs
+controls-2: SIM_GM_DRAFT_ORDER_CONTROL=all SIM_GM_DRAFT_ORDER_SHARD=2/3 node scripts/simGmDraftOrder.mjs
+reveal: node scripts/simRevealMoments.mjs
+livescores: node scripts/simLiveScores.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rivals: node scripts/simNoRivalNames.mjs
+flagship: node scripts/simFlagshipWeight.mjs
+head: git rev-parse HEAD~1; git log --oneline -3 | cut -c1-90; test ! -e src/components/motion/LotteryReveal.tsx && test ! -e src/components/motion/LotteryReveal.test.tsx && test -e src/components/lottery/LotteryReveal.tsx && echo "presenter is in src/components/lottery only"
+fence-untouched: git fetch -q origin main; n=$(git diff --name-only origin/main...HEAD~1 -- scripts/simSeasonCentreMotion.mjs scripts/simFlagshipWeight.mjs | wc -l); echo "fence harness files changed by the round: $n"; test "$n" = "0"
+added-only: git fetch -q origin main; n=$(git diff --name-status origin/main...HEAD~1 -- src scripts docs | grep -vc "^A"); echo "files that are not added: $n"; test "$n" = "0"

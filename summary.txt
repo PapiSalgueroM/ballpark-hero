@@ -1,0 +1,15 @@
+vitest exit=0 4s |    Duration  2.77s (transform 510ms, setup 291ms, collect 1.10s, tests 938ms, environment 2.45s, prepare 795ms)
+scm exit=0 11s | simSeasonCentreMotion: 17 checks, 0 failed
+sim exit=0 7s | simGmDraftOrder: green. 602997 checks over 10 sections: the order is the league's, the lottery is drawn once on its own stream and saved, and nothing mounts the lift yet.
+tsc exit=0 50s | 
+controls-1 exit=0 79s | simGmDraftOrder controls (shard 1/3 of 40): all 13 fired, each in exactly its own sections.
+controls-0 exit=0 86s | simGmDraftOrder controls (shard 0/3 of 40): all 14 fired, each in exactly its own sections.
+livescores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+reveal exit=0 6s | simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's 
+rivals exit=0 12s | No rival product names found. 0 findings.
+flagship exit=0 0s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+head exit=0 0s | presenter is in src/components/lottery only
+fence-untouched exit=0 0s | fence harness files changed by the round: 0
+added-only exit=0 0s | files that are not added: 0
+anchors exit=0 26s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+controls-2 exit=0 75s | simGmDraftOrder controls (shard 2/3 of 40): all 13 fired, each in exactly its own sections.
