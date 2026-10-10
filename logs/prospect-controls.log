@@ -1,0 +1,15 @@
+before exit=0 simUsCareerProspect control before: 4 named assertion failures and 4 independent legacy passes
+save exit=0 simUsCareerProspect control save: 4 named assertion failures and 4 independent legacy passes
+restore exit=0 simUsCareerProspect control restore: 4 named assertion failures and 4 independent legacy passes
+handoff exit=0 simUsCareerProspect control handoff: 4 named assertion failures and 4 independent legacy passes
+duplicate exit=0 simUsCareerProspect control duplicate: 4 named assertion failures and 4 independent legacy passes
+choice exit=0 simUsCareerProspect control choice: 4 named assertion failures and 4 independent legacy passes
+invalid exit=0 simUsCareerProspect control invalid: 4 named assertion failures and 4 independent legacy passes
+showcase exit=0 simUsCareerProspect control showcase: 4 named assertion failures and 4 independent legacy passes
+undrafted exit=0 simUsCareerProspect control undrafted: 4 named assertion failures and 4 independent legacy passes
+archive exit=0 simUsCareerProspect control archive: 4 named assertion failures and 4 independent legacy passes
+corrupt exit=0 simUsCareerProspect control corrupt: 4 named assertion failures and 4 independent legacy passes
+back exit=0 simUsCareerProspect control back: 4 named assertion failures and 4 independent legacy passes
+rules exit=0 simUsCareerProspect control rules: 4 named assertion failures and 4 independent legacy passes
+historical exit=0 simUsCareerProspect control historical: 4 named assertion failures and 4 independent legacy passes
+outcome exit=0 simUsCareerProspect control outcome: 4 named assertion failures and 4 independent legacy passes

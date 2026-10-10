@@ -1,0 +1,16 @@
+vitest-new exit=0 10s |    Duration  8.98s (transform 3.91s, setup 483ms, collect 7.95s, tests 5.82s, environment 3.05s, prepare 935ms)
+seeds exit=0 21s | seed e exit=0 simCareerPreDraft [seed set e]: ALL GREEN
+prospect exit=0 16s | simUsCareerProspect: 36 actual-board outcomes passed across all four sports
+vitest-old exit=0 72s |    Duration  71.61s (transform 3.92s, setup 795ms, collect 14.34s, tests 100.18s, environment 4.55s, prepare 1.31s)
+reveal exit=0 11s | simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's 
+draftnight exit=1 0s | simDraftNight: 2 FAILURES
+tsc exit=0 105s | 
+rivals exit=0 18s | No rival product names found. 0 findings.
+livescores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+anchors exit=0 47s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+names exit=0 8s | simInventedNames: green. Every invented man on this site is invented all the way down.
+trust exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+quotes exit=0 26s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+a11y exit=0 0s | simAccessibility: all green
+prospect-controls exit=0 104s | outcome exit=0 simUsCareerProspect control outcome: 4 named assertion failures and 4 independent legacy passes
+nfltruth exit=0 47s | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves

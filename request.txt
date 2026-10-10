@@ -1,0 +1,16 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-new: node_modules/.bin/vitest run src/test/careerDraftNight.test.tsx src/test/usCareerDraftNightBoard.test.tsx src/components/motion/LotteryReveal.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-old: node_modules/.bin/vitest run src/test/careerPreDraft.test.tsx src/test/usCareerProspect.test.tsx src/test/usCareerSaveRetry.test.tsx src/test/usBoardFixture.test.tsx src/test/usCareerTruthDigest.test.ts --testTimeout=300000 --hookTimeout=120000
+seeds: for s in a b c d e; do SEEDSET=$s node scripts/simCareerPreDraft.mjs > "$RC_OUT/seed-$s.log" 2>&1; c=$?; echo "seed $s exit=$c $(tail -1 "$RC_OUT/seed-$s.log")"; [ $c -eq 0 ] || bad=1; done; exit ${bad:-0}
+prospect: node scripts/simUsCareerProspect.mjs
+prospect-controls: for c in before save restore handoff duplicate choice invalid showcase undrafted archive corrupt back rules historical outcome; do US_CAREER_PROSPECT_CONTROL=$c node scripts/simUsCareerProspect.mjs > "$RC_OUT/prospect-$c.log" 2>&1; x=$?; echo "$c exit=$x $(tail -1 "$RC_OUT/prospect-$c.log" | cut -c1-150)"; [ $x -eq 0 ] || bad=1; done; exit ${bad:-0}
+reveal: node scripts/simRevealMoments.mjs
+draftnight: node scripts/simDraftNight.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rivals: node scripts/simNoRivalNames.mjs
+livescores: node scripts/simLiveScores.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+names: node scripts/simInventedNames.mjs
+trust: node scripts/simTrustCopy.mjs
+nfltruth: node scripts/simNflTruth.mjs
+a11y: node scripts/simAccessibility.mjs
