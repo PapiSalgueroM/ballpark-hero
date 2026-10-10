@@ -1,0 +1,13 @@
+#!serial
+init: git rev-parse HEAD > /tmp/h1229 && cat /tmp/h1229 && echo 'src/pages/WhatsNew.tsx merge=union' >> .git/info/attributes && git fetch -q origin r1218-cm-var-true r1225-cm-fixtures-bind && git rev-parse origin/r1218-cm-var-true origin/r1225-cm-fixtures-bind
+m1218: git -c user.name=rc -c user.email=rc@users.noreply.github.com merge -q --no-edit origin/r1218-cm-var-true && git rev-parse HEAD > /tmp/m1 && git log --oneline -1 && git status --short | grep -v '^??' | wc -l
+m1225-3way: git -c user.name=rc -c user.email=rc@users.noreply.github.com merge -q --no-edit origin/r1225-cm-fixtures-bind; git status --short | grep -v '^??' | grep '^[A-Z][A-Z] '; node .rc/x/resolve1218x1225-1229.mjs && git add src/lib/clubManager.ts src/components/club-manager/ClubManagerHelp.tsx && git -c user.name=rc -c user.email=rc@users.noreply.github.com commit -q --no-edit && git log --oneline -1 && git status --short | grep -v '^??' | wc -l
+c0-engine-sha: sed 's/\r$//' src/lib/clubManager.ts | sha256sum && git diff --stat $(cat /tmp/h1229) HEAD -- src/lib/clubManager.ts | tail -1
+c1-3way-tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+c2-3way-pin-asis: node scripts/simManagerAppealIsolation.mjs
+c3-3way-pin-dry: node .rc/x/repin1081-1229.mjs --dry && git status --short | grep -v '^??' | wc -l
+c4-3way-pin-retaken: node .rc/x/repin1081-1229.mjs && node scripts/simManagerAppealIsolation.mjs; s=$?; git diff --stat -- scripts/fixtures | tail -2; git checkout -- scripts; exit $s
+c5-3way-realfix-base-m1: CM_FIXTURE_BASE=$(cat /tmp/m1) node scripts/simCmRealFixtures.mjs
+c6-3way-fleet-base-m1: CM_FIXTURE_BASE=$(cat /tmp/m1) node scripts/simCmFixtureFleet.mjs
+c7-3way-book: node scripts/simCmLeagueBook.mjs
+end: git reset -q --hard $(cat /tmp/h1229) && git log --oneline -1
