@@ -1,0 +1,146 @@
+old saves (built by the base code), a season played on this tree
+  seen old-EDGE 390r: before the season the Rival screen reads "Last season he went 128 tackles, 8.5 sacks, 3 INT."
+  ok   old-EDGE 390r: the old save's own last line is printed as saved ("128 tackles, 8.5 sacks, 3 INT")
+  seen old-EDGE 390r: season card, mine "10.5 sacks, 58 tackles, 3 forced fumbles", note "🪞 Jonah Salvatore went 11 sacks, 51 tackles, 3 forced fumbles. Nothing in it again. He leads the head to head 5-1."
+  ok   old-EDGE 390r: the rival's line on the season card is a EDGE's own shape ("11 sacks, 51 tackles, 3 forced fumbles")
+  ok   old-EDGE 390r: what the note says about the year is what the two printed lines say (mine 143.50, his 143.38)
+  ok   old-EDGE 390r: the note sits inside the season card and is not cut ({"left":33,"right":357,"cut":false} in 16 to 374)
+  ok   old-EDGE 390r: nothing scrolls sideways on the season card (0)
+  seen old-EDGE 390r: scroll before Play 185, with the season card up 185, card top at 12
+  ok   old-EDGE 390r: the Rival screen's last season line is the note's line ("11 sacks, 51 tackles, 3 forced fumbles")
+  ok   old-EDGE 390r: that line is inside its card, not cut, nothing sideways ({"cut":false,"left":29,"right":361,"cardLeft":16,"cardRight":374}, over 0)
+  ok   old-EDGE 390r: the tally kept its record and added one year (0-5 to 1-5)
+  seen old-K 1280m: before the season the Rival screen reads "Last season he went 34 field goals."
+  ok   old-K 1280m: the old save's own last line is printed as saved ("34 field goals")
+  seen old-K 1280m: season card, mine "28 of 30 FG, long of 66", note "🪞 Emmett Moreau went 22 of 27 FG, long of 55. You had the better year. Head to head 2-4."
+  ok   old-K 1280m: the rival's line on the season card is a K's own shape ("22 of 27 FG, long of 55")
+  ok   old-K 1280m: what the note says about the year is what the two printed lines say (mine 128.80, his 90.80)
+  ok   old-K 1280m: the note sits inside the season card and is not cut ({"left":337,"right":943,"cut":false} in 320 to 960)
+  ok   old-K 1280m: nothing scrolls sideways on the season card (0)
+  seen old-K 1280m: scroll before Play 0, with the season card up 0, card top at 177
+  ok   old-K 1280m: the Rival screen's last season line is the note's line ("22 of 27 FG, long of 55")
+  ok   old-K 1280m: that line is inside its card, not cut, nothing sideways ({"cut":false,"left":333,"right":947,"cardLeft":320,"cardRight":960}, over 0)
+  ok   old-K 1280m: the tally kept its record and added one year (1-4 to 2-4)
+  seen old-CB 390r: before the season the Rival screen reads "Last season he went 146 tackles, 10.6 sacks, 3 INT."
+  ok   old-CB 390r: the old save's own last line is printed as saved ("146 tackles, 10.6 sacks, 3 INT")
+  seen old-CB 390r: season card, mine "5 INT, 23 passes defended, 75 tackles", note "🪞 Dominic Vasquez went 4 INT, 20 passes defended, 67 tackles. You had the better year. Head to head 1-5."
+  ok   old-CB 390r: the rival's line on the season card is a CB's own shape ("4 INT, 20 passes defended, 67 tackles")
+  ok   old-CB 390r: what the note says about the year is what the two printed lines say (mine 186.10, his 157.50)
+  ok   old-CB 390r: the note sits inside the season card and is not cut ({"left":33,"right":357,"cut":false} in 16 to 374)
+  ok   old-CB 390r: nothing scrolls sideways on the season card (0)
+  seen old-CB 390r: scroll before Play 185, with the season card up 185, card top at 12
+  ok   old-CB 390r: the Rival screen's last season line is the note's line ("4 INT, 20 passes defended, 67 tackles")
+  ok   old-CB 390r: that line is inside its card, not cut, nothing sideways ({"cut":false,"left":29,"right":361,"cardLeft":16,"cardRight":374}, over 0)
+  ok   old-CB 390r: the tally kept its record and added one year (0-5 to 1-5)
+saves of this tree, a season played
+  seen new-QB 390r: before the season the Rival screen reads "Last season he went 3,677 yds, 23 TD, 14 INT."
+  seen new-QB 390r: season card, mine "1,568 yds, 12 TD, 6 INT", note "🪞 Quinn Salvatore went 3,649 yds, 26 TD, 14 INT and had the better year of the two of you. Head to head 1-2."
+  ok   new-QB 390r: the rival's line on the season card is a QB's own shape ("3,649 yds, 26 TD, 14 INT")
+  ok   new-QB 390r: what the note says about the year is what the two printed lines say (mine 55.47, his 124.42)
+  ok   new-QB 390r: the note sits inside the season card and is not cut ({"left":33,"right":357,"cut":false} in 16 to 374)
+  ok   new-QB 390r: nothing scrolls sideways on the season card (0)
+  seen new-QB 390r: scroll before Play 185, with the season card up 185, card top at 12
+  ok   new-QB 390r: the Rival screen's last season line is the note's line ("3,649 yds, 26 TD, 14 INT")
+  ok   new-QB 390r: that line is inside its card, not cut, nothing sideways ({"cut":false,"left":29,"right":361,"cardLeft":16,"cardRight":374}, over 0)
+  ok   new-QB 390r: the tally kept its record and added one year (1-1 to 1-2)
+  seen new-RB 1280m: before the season the Rival screen reads "Last season he went 910 rush yds, 8 TD, 32 rec."
+  seen new-RB 1280m: season card, mine "708 rush yds, 5 TD, 22 rec", note "🪞 Andre Delgado went 1,220 rush yds, 9 TD, 40 rec and had the better year of the two of you. Head to head 0-3."
+  ok   new-RB 1280m: the rival's line on the season card is a RB's own shape ("1,220 rush yds, 9 TD, 40 rec")
+  ok   new-RB 1280m: what the note says about the year is what the two printed lines say (mine 70.25, his 123.25)
+  ok   new-RB 1280m: the note sits inside the season card and is not cut ({"left":337,"right":943,"cut":false} in 320 to 960)
+  ok   new-RB 1280m: nothing scrolls sideways on the season card (0)
+  seen new-RB 1280m: scroll before Play 0, with the season card up 0, card top at 177
+  ok   new-RB 1280m: the Rival screen's last season line is the note's line ("1,220 rush yds, 9 TD, 40 rec")
+  ok   new-RB 1280m: that line is inside its card, not cut, nothing sideways ({"cut":false,"left":333,"right":947,"cardLeft":320,"cardRight":960}, over 0)
+  ok   new-RB 1280m: the tally kept its record and added one year (0-2 to 0-3)
+  seen new-TE 390r: before the season the Rival screen reads "Last season he went 39 rec, 476 yds, 5 TD."
+  seen new-TE 390r: season card, mine "57 rec, 647 yds, 7 TD", note "🪞 Devon Novak went 37 rec, 347 yds, 6 TD. You had the better year. Head to head 2-1."
+  ok   new-TE 390r: the rival's line on the season card is a TE's own shape ("37 rec, 347 yds, 6 TD")
+  ok   new-TE 390r: what the note says about the year is what the two printed lines say (mine 79.21, his 54.79)
+  ok   new-TE 390r: the note sits inside the season card and is not cut ({"left":33,"right":357,"cut":false} in 16 to 374)
+  ok   new-TE 390r: nothing scrolls sideways on the season card (0)
+  seen new-TE 390r: scroll before Play 185, with the season card up 185, card top at 12
+  ok   new-TE 390r: the Rival screen's last season line is the note's line ("37 rec, 347 yds, 6 TD")
+  ok   new-TE 390r: that line is inside its card, not cut, nothing sideways ({"cut":false,"left":29,"right":361,"cardLeft":16,"cardRight":374}, over 0)
+  ok   new-TE 390r: the tally kept its record and added one year (1-1 to 2-1)
+  seen new-LB 1280m: before the season the Rival screen reads "Last season he went 139 tackles, 5 sacks, 2 INT."
+  seen new-LB 1280m: season card, mine "125 tackles, 3.5 sacks, 1 INT", note "🪞 Andre Okafor went 125 tackles, 4 sacks, 1 INT. Nothing in it again. You lead the head to head 2-1."
+  ok   new-LB 1280m: the rival's line on the season card is a LB's own shape ("125 tackles, 4 sacks, 1 INT")
+  ok   new-LB 1280m: what the note says about the year is what the two printed lines say (mine 135.20, his 137.70)
+  ok   new-LB 1280m: the note sits inside the season card and is not cut ({"left":337,"right":943,"cut":false} in 320 to 960)
+  ok   new-LB 1280m: nothing scrolls sideways on the season card (0)
+  seen new-LB 1280m: scroll before Play 0, with the season card up 0, card top at 177
+  ok   new-LB 1280m: the Rival screen's last season line is the note's line ("125 tackles, 4 sacks, 1 INT")
+  ok   new-LB 1280m: that line is inside its card, not cut, nothing sideways ({"cut":false,"left":333,"right":947,"cardLeft":320,"cardRight":960}, over 0)
+  ok   new-LB 1280m: the tally kept its record and added one year (2-0 to 2-1)
+  seen new-WR 390r: before the season the Rival screen reads "Last season he went 50 rec, 689 yds, 5 TD."
+  seen new-WR 390r: season card, mine "82 rec, 1,077 yds, 7 TD", note "🪞 Rowan Moreau went 87 rec, 1,131 yds, 10 TD and had the better year of the two of you. Head to head 1-2."
+  ok   new-WR 390r: the rival's line on the season card is a WR's own shape ("87 rec, 1,131 yds, 10 TD")
+  ok   new-WR 390r: what the note says about the year is what the two printed lines say (mine 97.93, his 110.79)
+  ok   new-WR 390r: the note sits inside the season card and is not cut ({"left":33,"right":357,"cut":false} in 16 to 374)
+  ok   new-WR 390r: nothing scrolls sideways on the season card (0)
+  seen new-WR 390r: scroll before Play 185, with the season card up 185, card top at 12
+  ok   new-WR 390r: the Rival screen's last season line is the note's line ("87 rec, 1,131 yds, 10 TD")
+  ok   new-WR 390r: that line is inside its card, not cut, nothing sideways ({"cut":false,"left":29,"right":361,"cardLeft":16,"cardRight":374}, over 0)
+  ok   new-WR 390r: the tally kept its record and added one year (1-1 to 1-2)
+saves the base code left sitting on a card
+  ok   the base code left a save on each of its three cards (made, dropped, old221)
+  seen oldcard-old221 390r: the card reads "🪞 RIVALRY 🌺 All Star Week You and Brody Amaro both make the all star roster and spend the week around each other. It turns out he is easy to like. Fanbase +4, the feud softens Drive rvc-54 86 VS Brody Amaro 84 Continue"
+  ok   oldcard-old221 390r: the card shows its saved title, words and chip
+  ok   oldcard-old221 390r: Continue is above the fold and nothing scrolls sideways (bottom 556 of 844)
+  ok   oldcard-old221 390r: the tap moved what the chip says (morale 91 to 91, fanbase 75 to 79)
+  seen oldcard-old221 390r: after the tap the screen reads "NFL My Career Draft night to retirement speech. Every choice bends the career. Drive rvc-54 · EDGE Carolina Panthers 2035 · age 31 OVR 86 $30.4M x0 ⭐ Starter Play the 2035 season 📺 Week by week↺ Watch the 2034 season again Career so far: 0 rings · 1 DPOY · 1 "; newest feed entries on the save: []
+  seen oldcard-made 1280m: the card reads "🪞 RIVALRY 🗳️ All-Pro Team The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and Beau Salvatore. Morale +5 Drive rvc-2 90 VS Beau Salvatore 84 Continue"
+  ok   oldcard-made 1280m: the card shows its saved title, words and chip
+  ok   oldcard-made 1280m: Continue is above the fold and nothing scrolls sideways (bottom 517 of 900)
+  ok   oldcard-made 1280m: the tap moved what the chip says (morale 99 to 100, fanbase 65 to 65)
+  seen oldcard-made 1280m: after the tap the screen reads "NFL My Career Draft night to retirement speech. Every choice bends the career. Drive rvc-2 · WR Seattle Seahawks 2035 · age 31 OVR 90 $43.2M x2 ⭐ Starter Play the 2035 season📺 Week by week↺ Watch the 2034 season again Career so far: 0 rings · 0 MVPs · 3 All-P"; newest feed entries on the save: []
+  seen oldcard-dropped 390r: the card reads "🪞 RIVALRY 🗳️ All-Pro Team The All-Pro team is out and you are not on the first team, a year after you were. It goes down as one more line in the argument between you and Theo Boudreau. Morale -5 Drive rvc-19 87 VS Theo Boudreau 80 Continue"
+  ok   oldcard-dropped 390r: the card shows its saved title, words and chip
+  ok   oldcard-dropped 390r: Continue is above the fold and nothing scrolls sideways (bottom 575 of 844)
+  ok   oldcard-dropped 390r: the tap moved what the chip says (morale 100 to 95, fanbase 100 to 100)
+  seen oldcard-dropped 390r: after the tap the screen reads "NFL My Career Draft night to retirement speech. Every choice bends the career. Drive rvc-19 · TE Tampa Bay Buccaneers 2037 · age 33 OVR 87 $27.4M x0 ⭐ Starter Play the 2037 season 📺 Week by week↺ Watch the 2036 season again Career so far: 0 rings · 0 MVPs · 1"; newest feed entries on the save: []
+cards this tree deals
+  ok   this tree dealt only you, only him and the new 221, and no other All-Pro card (onlyYou, new221, onlyHim)
+  seen cards: no career in 2,500 was dealt the "both" card
+  ok   card onlyYou: the save's two seasons support its words (mine true, his false, WR, "The All-Pro team is out. You are on the first team and Beau Salvatore is not.")
+  seen card-onlyYou 390r: the card reads "🪞 RIVALRY 🗳️ All-Pro Team The All-Pro team is out. You are on the first team and Beau Salvatore is not. Morale +5 Drive rvc-2 90 VS Beau Salvatore 84 Continue"
+  ok   card-onlyYou 390r: the card shows its saved title, words and chip
+  ok   card-onlyYou 390r: Continue is above the fold and nothing scrolls sideways (bottom 537 of 844)
+  ok   card-onlyYou 390r: the tap moved what the chip says (morale 99 to 100, fanbase 65 to 65)
+  seen card-onlyYou 390r: after the tap the screen reads "NFL My Career Draft night to retirement speech. Every choice bends the career. Drive rvc-2 · WR Seattle Seahawks 2035 · age 31 OVR 90 $43.2M x2 ⭐ Starter Play the 2035 season 📺 Week by week↺ Watch the 2034 season again Career so far: 0 rings · 0 MVPs · 3 All-"; newest feed entries on the save: []
+  ok   card onlyHim: the save's two seasons support its words (mine false, his true, CB, "The All-Pro team is out. Theo Whitaker is on the first team and you are not.")
+  seen card-onlyHim 1280m: the card reads "🪞 RIVALRY 🗳️ All-Pro Team The All-Pro team is out. Theo Whitaker is on the first team and you are not. Morale -5 Drive rvc-221 83 VS Theo Whitaker 82 Continue"
+  ok   card-onlyHim 1280m: the card shows its saved title, words and chip
+  ok   card-onlyHim 1280m: Continue is above the fold and nothing scrolls sideways (bottom 497 of 900)
+  ok   card-onlyHim 1280m: the tap moved what the chip says (morale 94 to 89, fanbase 93 to 93)
+  seen card-onlyHim 1280m: after the tap the screen reads "NFL My Career Draft night to retirement speech. Every choice bends the career. Drive rvc-221 · CB Miami Dolphins 2031 · age 27 OVR 83 $23.1M x2 ⭐ Starter Play the 2031 season📺 Week by week↺ Watch the 2030 season again Career so far: 1 ring · 0 DPOYs · 0 All-P"; newest feed entries on the save: []
+  seen card-new221 1280m: the card reads "🪞 RIVALRY 🎗️ The Charity Weekend You and Brody Amaro end up on the same side at an offseason charity weekend and spend it around each other. It turns out he is easy to like. Fanbase +4, the feud softens Drive rvc-54 86 VS Brody Amaro 84 Continue"
+  ok   card-new221 1280m: the card shows its saved title, words and chip
+  ok   card-new221 1280m: Continue is above the fold and nothing scrolls sideways (bottom 517 of 900)
+  ok   card-new221 1280m: the tap moved what the chip says (morale 91 to 91, fanbase 77 to 81)
+  seen card-new221 1280m: after the tap the screen reads "NFL My Career Draft night to retirement speech. Every choice bends the career. Drive rvc-54 · EDGE Carolina Panthers 2035 · age 31 OVR 86 $30.4M x0 ⭐ Starter Play the 2035 season📺 Week by week↺ Watch the 2034 season again Career so far: 0 rings · 1 DPOY · 1 A"; newest feed entries on the save: []
+  ok   card onlyHim: the save's two seasons support its words (mine false, his true, CB, "The All-Pro team is out. Theo Whitaker is on the first team and you are not.")
+  seen card-onlyHim 390r: the card reads "🪞 RIVALRY 🗳️ All-Pro Team The All-Pro team is out. Theo Whitaker is on the first team and you are not. Morale -5 Drive rvc-221 83 VS Theo Whitaker 82 Continue"
+  ok   card-onlyHim 390r: the card shows its saved title, words and chip
+  ok   card-onlyHim 390r: Continue is above the fold and nothing scrolls sideways (bottom 537 of 844)
+  ok   card-onlyHim 390r: the tap moved what the chip says (morale 94 to 89, fanbase 93 to 93)
+  seen card-onlyHim 390r: after the tap the screen reads "NFL My Career Draft night to retirement speech. Every choice bends the career. Drive rvc-221 · CB Miami Dolphins 2031 · age 27 OVR 83 $23.1M x2 ⭐ Starter Play the 2031 season 📺 Week by week↺ Watch the 2030 season again Career so far: 1 ring · 0 DPOYs · 0 All-"; newest feed entries on the save: []
+  ok   card onlyYou: the save's two seasons support its words (mine true, his false, WR, "The All-Pro team is out. You are on the first team and Beau Salvatore is not.")
+  seen card-onlyYou 1280m: the card reads "🪞 RIVALRY 🗳️ All-Pro Team The All-Pro team is out. You are on the first team and Beau Salvatore is not. Morale +5 Drive rvc-2 90 VS Beau Salvatore 84 Continue"
+  ok   card-onlyYou 1280m: the card shows its saved title, words and chip
+  ok   card-onlyYou 1280m: Continue is above the fold and nothing scrolls sideways (bottom 497 of 900)
+  ok   card-onlyYou 1280m: the tap moved what the chip says (morale 99 to 100, fanbase 65 to 65)
+  seen card-onlyYou 1280m: after the tap the screen reads "NFL My Career Draft night to retirement speech. Every choice bends the career. Drive rvc-2 · WR Seattle Seahawks 2035 · age 31 OVR 90 $43.2M x2 ⭐ Starter Play the 2035 season📺 Week by week↺ Watch the 2034 season again Career so far: 0 rings · 0 MVPs · 3 All-P"; newest feed entries on the save: []
+an old save whose rival had already retired
+  seen retired K: the Rival screen of an old save whose rival retired reads "NFL My Career Draft night to retirement speech. Every choice bends the career. Hub 📰 News Feed 📰 Paper 📸 SocialGram 🪞 Rival 🪞 YOUR RIVAL, DRAFTED THE SAME YEAR Elias Hendricks K · Los Angeles Rams · retired 70 overall 1 ring 1-13 head to head Elias Hendricks leads after 14 seasons measured side"
+  ok   whats-new 390r: the entry is on the page and carries no dash
+  seen whats-new entry: "NFL My Career: your rival finally plays your position. In NFL My Career the rival from your draft class was always drafted at your position, but his season line never really was. A corner's rival printed sacks. A kicker's rival had no attempts and no long. A tight end's rival put up a wide receiver's numbers, and every one of them played a 17 game year even in a 16 game season. Corners, linebackers and edge rushers almost never won a year against him because of it. Now his season is made by the same thing that makes yours, so he prints the same line you do at your position, over as many games as that season really had. Who had the better year is read straight off the two lines on your screen: yards, touchdowns and interceptions for a quarterback, rushing yards, touchdowns and catches for a back (each catch counts as eight yards), catches, yards and touchdowns for receivers and tight ends, and for a defender or a kicker the numbers his own line shows. A linebacker's or a corner's forced fumbles and a kicker's misses are not on the line, so they do not count. The All-Pro Team card knows both seasons now: it tells you if you both made the first team, only you, or only him, and at quarterback, running back, tight end and kicker there is one spot, so it is never both. The old All Star Week card, about a roster the game never picked, is The Charity Weekend now. On a save you already have, the head to head record stays as it is and the new way starts with your next season."
+  ok   whats-new 390r: nothing scrolls sideways
+  ok   whats-new 1280m: the entry is on the page and carries no dash
+  ok   whats-new 1280m: nothing scrolls sideways
+  ok   390r: no page errors (clean)
+  ok   390r: no request to the live database finished (0)
+  ok   1280m: no page errors (clean)
+  ok   1280m: no request to the live database finished (0)
+rvwalk: 97 checks, 0 failed

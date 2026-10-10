@@ -1,0 +1,10 @@
+old saves, 390 wide
+  ok   old nflCB: the save is loaded
+  FAIL old nflCB: (control) the line of the save from before the round is held to the new shape ("131 tackles, 8.9 sacks, 4 INT")
+  ok   old nflK: the save is loaded
+  FAIL old nflK: (control) the line of the save from before the round is held to the new shape ("35 field goals")
+  ok   old saves: no page errors (clean)
+  ok   old saves: no request to the live database finished (0)
+
+control oldline: FIRED, its own checks went red and no other
+playUsRivalLines: 6 checks, 2 failed (control oldline)
