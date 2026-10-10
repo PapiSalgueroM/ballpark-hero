@@ -64,6 +64,19 @@
  * an afternoon each. SWEEP_BASE=http://127.0.0.1:4174 overrides the port.
  *
  * VERBOSE=1 prints every scroll stop instead of just the interesting ones.
+ *
+ * Release AT: the bar's button is found by its whole label. Part two used to
+ * take the first button on the page whose words CONTAINED "next season". The
+ * commit for Rounds 1179 to 1183 added a Season target tile above the bar that
+ * reads "Choose a personal challenge for next season", a 64px button in the
+ * page, so the walk measured that tile at every stop and called a bar that was
+ * still pinned unpinned (the bar's own markup did not change in the train). The
+ * label must now BE "Next Season" or "Next Year" and exactly one button may
+ * carry it; two is reported, never guessed between.
+ * SIM_MOBILE_CONTROL=unpin proves part two still catches the bug it was written
+ * for: it puts the bar back in the page flow before every measurement, and the
+ * run must go red on the unreachable stops and on the pinned proof. Its last
+ * line says FIRED, DID NOT FIRE or ABORTED, because all three exit non zero.
  */
 import pw from './lib/playwrightLoader.mjs';
 const { chromium } = pw;
@@ -81,6 +94,14 @@ const VERBOSE = process.env.VERBOSE === '1';
    must go red at the phone widths or the name check is measuring nothing. */
 const NOWRAP_CONTROL = process.env.SIM_MOBILE_CONTROL === 'nowrap';
 if (NOWRAP_CONTROL) console.log('CONTROL: re-applying the single row career header, this run must go red\n');
+/* Release AT: SIM_MOBILE_CONTROL=unpin takes the action bar out of its fixed
+   position before every measurement, which is the bug part two exists for. */
+const UNPIN_CONTROL = process.env.SIM_MOBILE_CONTROL === 'unpin';
+if (UNPIN_CONTROL) console.log('CONTROL: unpinning the Soccer Career action bar, this run must go red\n');
+if (process.env.SIM_MOBILE_CONTROL && !NOWRAP_CONTROL && !UNPIN_CONTROL) {
+  console.error(`SIM_MOBILE_CONTROL=${process.env.SIM_MOBILE_CONTROL} is not a control this harness knows (nowrap, unpin)`);
+  process.exit(2);
+}
 
 /* His phone first, then the two ends of the phone range, then the two desktop
    widths where the bar switches back to a single row. 320 is the narrowest
@@ -335,14 +356,29 @@ if (!save || save.phase !== 'playing') {
 /* Finds the bar without knowing anything about how it is styled, so the same
    file measures the version before the fix and the version after it. Walk up
    from the Next Season button until you hit the box that also holds the AGE
-   tile: that is the action bar in both versions. */
+   tile: that is the action bar in both versions.
+   Release AT: the button is the one whose whole label is Next Season or Next
+   Year. A tile that only mentions next season in a sentence is not it, and is
+   counted in "mentions" so the report can say it was seen and passed over. */
 const MEASURE_BAR = `(() => {
   const btns = [...document.querySelectorAll('button')];
-  const next = btns.find((b) => /next (year|season)/i.test(b.innerText || ''));
-  if (!next) return { err: 'no Next Season button on the page' };
+  const named = btns.filter((b) => /^\\s*next (year|season)\\s*$/i.test(b.innerText || ''));
+  const mentions = btns.filter((b) => /next (year|season)/i.test(b.innerText || '')).length - named.length;
+  if (!named.length) return { err: 'no Next Season button on the page' };
+  if (named.length > 1) return { err: named.length + ' buttons are labelled Next Season or Next Year, so the bar cannot be told from the rest' };
+  const next = named[0];
   let bar = next.parentElement;
   while (bar && !/\\bAge\\b/i.test(bar.innerText || '')) bar = bar.parentElement;
   if (!bar) return { err: 'found Next Season but not the bar around it' };
+  /* The unpin control. It only counts as applied when the bar it found was
+     pinned to begin with, so a run that had nothing to unpin says so. */
+  let unpinned = false;
+  if (window.__simMobileUnpin && (bar.dataset.simUnpinned === '1' || getComputedStyle(bar).position === 'fixed')) {
+    bar.dataset.simUnpinned = '1';
+    bar.style.position = 'static';
+    bar.style.transform = 'none';
+    unpinned = true;
+  }
   const vh = window.innerHeight;
   const br = bar.getBoundingClientRect();
   const nr = next.getBoundingClientRect();
@@ -380,6 +416,8 @@ const MEASURE_BAR = `(() => {
     coversFooter: Math.round(overlap),
     floatersCoverFooter: Math.round(floaters),
     floaterName: floaterName.replace('button[aria-label="', '').replace('"]', ''),
+    mentions,
+    unpinned,
   };
 })()`;
 
@@ -389,7 +427,8 @@ async function measureActionBar(browser, width) {
   await ctx.addInitScript(`try { localStorage.setItem('soccerCareerSave', ${JSON.stringify(JSON.stringify(save))}); } catch (e) {}`);
   const page = await ctx.newPage();
   const tag = `action bar @${width}`;
-  const rec = { width, stops: 0, unreachable: [], covering: [], heights: new Set(), barH: null, released: 0 };
+  if (UNPIN_CONTROL) await ctx.addInitScript('window.__simMobileUnpin = true;');
+  const rec = { width, stops: 0, unreachable: [], covering: [], heights: new Set(), barH: null, released: 0, mentions: 0, unpinned: 0 };
   try {
     await page.goto(BASE + '/soccer-career', { waitUntil: 'domcontentloaded', timeout: 25000 });
     await page.waitForTimeout(1600);
@@ -402,6 +441,7 @@ async function measureActionBar(browser, width) {
       return rec;
     }
     rec.barH = first.barH;
+    rec.mentions = first.mentions;
 
     /* Round 330: the identity row. At 320 the Retire and New Career buttons
        plus the OVR block crushed the player's own name to a single letter,
@@ -443,6 +483,7 @@ async function measureActionBar(browser, width) {
       if (r.err) { failures.push(`${tag}: ${r.err} at scrollY ${y}`); break; }
       rec.stops += 1;
       rec.heights.add(r.docH);
+      if (r.unpinned) rec.unpinned += 1;
       if (r.position !== 'fixed') rec.released += 1;
       barRows.push({ width, ...r });
 
@@ -551,7 +592,8 @@ for (const rec of barRecs) {
   console.log(
     `  ${String(rec.width).padStart(4)}  ${String(rec.stops).padStart(3)} scroll stops, bar ${rec.barH}px tall, ` +
     `page ${hs[0]}px${hs.length > 1 ? ` to ${hs[hs.length - 1]}px (${rec.heightSpread}px of drift)` : ''}, ` +
-    `controls unreachable at ${rec.unreachable.length} of them, covering the footer at ${rec.covering.length}`,
+    `controls unreachable at ${rec.unreachable.length} of them, covering the footer at ${rec.covering.length}` +
+    (rec.mentions ? `, ${rec.mentions} other button${rec.mentions === 1 ? '' : 's'} on the page mention next season and ${rec.mentions === 1 ? 'was' : 'were'} not taken for the bar` : ''),
   );
 }
 const reach = barRows.filter((r) => r.reachable).length;
@@ -574,6 +616,22 @@ if (!provenPinned) {
   );
 }
 
+/* Release AT: what the unpin control did, said on the last line. A control that
+   found nothing to unpin and a control that fired both leave a red run behind,
+   and only the words tell them apart. */
+function unpinVerdict() {
+  if (!UNPIN_CONTROL) return null;
+  const edits = barRecs.reduce((n, r) => n + r.unpinned, 0);
+  if (!edits) return { code: 2, line: 'CONTROL unpin ABORTED: no pinned action bar was found to unpin, so this run proves nothing' };
+  const unreachable = failures.filter((f) => f.includes('the Next Season button is not reachable')).length;
+  const noProof = failures.some((f) => f.includes('never seen pinned and reachable'));
+  if (unreachable && noProof) {
+    return { code: 1, line: `CONTROL unpin FIRED: the bar was unpinned at ${edits} scroll stops, ${unreachable} of them could not reach Next Season, and the pinned proof went red` };
+  }
+  return { code: 3, line: `CONTROL unpin DID NOT FIRE: the bar was unpinned at ${edits} scroll stops and the run did not go red on both the reachable check and the pinned proof` };
+}
+const control = unpinVerdict();
+
 console.log('');
 if (failures.length) {
   console.log(`RED: ${failures.length} finding${failures.length === 1 ? '' : 's'}`);
@@ -583,6 +641,11 @@ if (failures.length) {
     seen.add(f);
     console.log('  - ' + f);
   }
-  process.exit(1);
+  if (control) console.log(control.line);
+  process.exit(control ? control.code : 1);
+}
+if (control) {
+  console.log(control.line);
+  process.exit(control.code);
 }
 console.log(`GREEN: ${navRows.length} top bar measurements and ${barRows.length} scroll stops, no overlaps, nothing off the side of the screen, controls reachable everywhere, footer never covered.`);
