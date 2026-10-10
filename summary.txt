@@ -1,0 +1,10 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+clean exit=0 99s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+replay exit=0 40s | playLiveMatchFit: the replay is green. Seed 3208792607 opened one match three times (digest 421656fa, 1869 draws at kick off) and seed 3208792608 opened another (digest e
+noseed exit=1 30s | playLiveMatchFit: control noseed turned the replay red on the line it must (with no seed, three contexts opened three different matches: 5fecfd1a, 20df1d6a, bd2c8e33).
+forced-nocard exit=0 122s | FORCED RED REPLAYED: control nocard went red twice on one goal of one match (exits 1 and 1)
+bar exit=1 58s | playLiveMatchFit: control bar turned section 3 red and left sections 1, 2 and 4 green, as it must.
+silentlist exit=1 70s | playLiveMatchFit: control silentlist turned section 7 red on the line it must (the list never said this goal, 2 GOAL! rewritten) and left the rest green.
+tsc exit=0 44s | 
+rivals exit=0 10s | No rival product names found. 0 findings.
+anchors exit=0 27s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
