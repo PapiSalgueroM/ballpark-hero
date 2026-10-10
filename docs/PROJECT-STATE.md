@@ -1,6 +1,12 @@
-## Codex rounds1244-1246 in progress: deliberate agent review (2026-10-10)
+## Codex rounds1244-1246 READY (qualified source): deliberate agent review (2026-10-10)
 
-Branch codex/career-agent-review starts from main09df145abfb241679022b41903d2f19bc254ebf9. Existing chosen Soccer agents already alter wages, commissions and offer chances; this round adds an intentional reviewed switch using the same catalog. Once per real recorded season, no instant economics or draws, strict optional save receipt and stale/duplicate action guards. Only fully verified isolated draft source may become READY. G owns integration/main/merge/publish, combined seams remain unclaimed. Contract docs/ROUND1244-1246.md. All runtime remote-only. No ROOT PROJECT-STATE write.
+Draft PR221, codex/career-agent-review, base main09df145abfb241679022b41903d2f19bc254ebf9. Tested frozen sourceba7dc35968cbdd7e84b516a57960cc5492f16509/treec4af44a9b7163aa3564443a9666800a51d16a8f4; later acceptance commits are docs only.
+
+Soccer Career players with a chosen agent can compare catalog wage and commission terms and switch deliberately once per real recorded season. Existing wages/paid fees/offers stay held; future signings and income use existing economics. Strict optional receipt, pending/stale/duplicate/cooldown guards, first/reopenable rules/example and exact modal return.
+
+Dedicated run38062431119/job114243236226 SUCCESS: app types/build,129 tests,8groups/7actualsourcefaults,120 whole original/current pairs,12nativejourneys/1832checks/39originalPNG,21relatedharnesses+15builtreaders actualPASS. Fresh independent source/pure/page/dependency/native/pixel and finalartifact audits accepted. Final11673998603:875files/26172912bytes/SHA479D34981B25A86BA1928578A4773018A95D4CD1DE2ABD9EF766964F1BD82D2D, expiry2026-10-15T15:26:06Z; all838earlycanonicalmembers exact. See docs/ROUND1244-1246.md and own WORKBOARD block for exact receipts, failed first-candidate history and shared red qualifications.
+
+Qualified isolated feature source only. Shared older Offer/SaveRetry/Number/Practice/Hub workflows are red and need release review. Existing mobile utility overlap is retained; new controls pass their44px/five-point checks. G owns integration/main/merge/publish; PR216 through220 stay frozen. No all-CI, combined-release, live DB, full-site or published claim. ROOT PROJECT-STATE left alone; all site runtime on Actions.
 
 ## Release AS LIVE, 2026-10-10 02:34 EDT: NBA My Career, the numbers tell the truth and the rival plays on your scale
 
