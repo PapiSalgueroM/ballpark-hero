@@ -38,9 +38,24 @@ purpose moves it.
 
 | Step | What | Commit | Runner result |
 |---|---|---|---|
-| a1 | this file, the digest mode and `lawdrift` in the harness, no `src` line moved | (this commit) | pending |
-| a2 | the record, made on a runner at a1 | pending | pending |
+| a1 | this file, the digest mode and `lawdrift` in the harness, no `src` line moved | `c211113f` | `r1221-a1`: the type gate 0, the default run 0 (98 checks, 0 failed), simHarnessAnchors 0, two prints 0 and byte equal |
+| a2 | the record, made on a runner at a1 (`scripts/data/usSeasonLawDigest.json`, the file the runner wrote, byte for byte) | (this commit) | pending |
 | b | the move | pending | pending |
+
+## The record (made on `c211113f`, runner result `r1221-a1`, 2026-10-10)
+
+Forty careers and eight targeted ones a sport and a seed set, seed sets 0 to 4, both runs of the fleet.
+
+| Sport | Seed set | Seasons | Derived |
+|---|---|---|---|
+| NBA | 0, 1, 2, 3, 4 | 904, 900, 902, 890, 897 | 812, 809, 810, 802, 809 |
+| NFL | 0, 1, 2, 3, 4 | 786, 787, 790, 781, 799 | 500, 502, 505, 500, 515 |
+
+A season that is not derived is one the Season Center does not open (a held season length, or a line that cannot
+be laid out): the digest holds its answer too. 2,522 NFL seasons are derived, 42,874 games, each with its score,
+its drives, its minutes and his line. 68 source files are in the bundle; 66 of them are recorded by blob and may
+not change under a compare, and the other two (`season/nfl.ts` at `9fc77010557c`, `season/core.ts` at
+`02513e627fb5`) are the ones the move edits. Stray draws: 0.
 
 ## What a later session must not trust
 
