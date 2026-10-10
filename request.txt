@@ -1,0 +1,9 @@
+simUsCareerActionConfirm: node scripts/simUsCareerActionConfirm.mjs
+simUsCareerAnnualBenefits: node scripts/simUsCareerAnnualBenefits.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simUsCoachCareer: node scripts/simUsCoachCareer.mjs
+simUsCoaching: node scripts/simUsCoaching.mjs
+simNflTruth: node scripts/simNflTruth.mjs
+simUsCareerSummer: node scripts/simUsCareerSummer.mjs
+simUsCareerRecovery: node scripts/simUsCareerRecovery.mjs
+simUsCareerBank: node scripts/simUsCareerBank.mjs

@@ -1,0 +1,9 @@
+simUsCareerWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+simUsCoachCareer exit=0 3s | PASS: ALL US COACHING CAREER CHECKS PASSED
+simUsCareerAnnualBenefits exit=0 4s | Career yearly support: fictional offline engine fixtures only, no native UI, full career completion or historical-data validation claim.
+simUsCareerActionConfirm exit=0 9s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+simUsCoaching exit=0 6s | PASS: ALL US COACHING CHECKS PASSED
+simUsCareerRecovery exit=0 6s | Career recovery: fictional offline engine fixtures, no native UI, full-career completion, medical effect or real sports-stat claim.
+simNflTruth exit=0 70s | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves
+simUsCareerBank exit=0 152s | simUsCareerBank: green. No call leaves a bank below zero in any of the four careers, savings pay a bill before anything is written off, and a reload never adds money.
+simUsCareerSummer exit=1 3527s | simUsCareerSummer: 1 failure(s) in sections 6

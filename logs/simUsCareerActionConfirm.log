@@ -1,0 +1,6 @@
+Career confirmation:18/18 actual-board/shared-confirmation cases passed; no cases skipped.
+Career confirmation: all four engine-made six-season saves stay byte-identical through prompt opening, Cancel and Escape.
+Career confirmation: explicit retirement changes only the retired flag/phase, preserves the real legacy score once and reload cannot repay it.
+Career confirmation: explicit restart deletes only its own key, leaves unrelated storage intact and reload returns to the actual draft screen without a completion.
+Career confirmation: initial Cancel, exact opener preventScroll, explicit Tab boundaries, one same-frame acceptance/new-open rearming and unmount cleanup hold.
+Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, viewport and keyboard defaults.
