@@ -1,0 +1,33 @@
+1) Play opens the curtain, not the crossroads
+  PASS  the season reveal card is up
+  PASS  the header names the year (CSS uppercases it, so match case-blind)
+  PASS  the sub header carries the age line
+  PASS  the true stat line is on the card from frame one
+  PASS  the Continue button is on the card
+2) Continue hands over to the crossroads
+  PASS  the curtain came down
+  PASS  the rivalry card, the crossroads or the hub is on screen behind it
+3) A reload mid-curtain lands on the real screen
+  PASS  a rival choice card came up: 3 options, and after the tap the card says what happened and offers Continue
+  PASS  the rival choice card closed on its Continue
+  (the draw raised a rival choice card; answered it)
+  PASS  the crossroads or the hub is behind the rival choice card
+  PASS  every card of the summer answered, and the hub came back
+  PASS  the second season raised the curtain
+  PASS  the reveal did not survive the reload, transient by design
+  PASS  the save reopened on a real screen
+4) A suspended season gets the muted card
+  (the second season's rivalry card was back after the reload; clicked through it)
+  PASS  the summer left open by the reload answered, and the hub came back
+  PASS  the banned year still gets its card
+  CAUGHT  the muted card says what the year was
+  PASS  no page errors on the NFL walk (clean)
+5) The shared card serves the NBA
+  PASS  the NBA season reveal card is up
+  PASS  the NBA card carries the year and the true stat line
+  PASS  Continue works in the NBA too
+  PASS  no page errors on the NBA walk (clean)
+
+Rival cards met on this run: 1 beat, 1 choice (the draw decides; both are walked when they come).
+
+playSeasonReveal control muted: all 1 guarded checks fired (mutations landed: {"mutedLine":3})

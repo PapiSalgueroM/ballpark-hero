@@ -1,0 +1,7 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+headprobe exit=0 26s | atgProbe head-nofonts parts bar,help finished, exit 0
+simMobileChrome exit=0 204s | GREEN: 34 top bar measurements and 117 scroll stops, no overlaps, nothing off the side of the screen, controls reachable everywhere, footer never covered.
+simMobileChrome-unpin exit=1 205s | CONTROL unpin FIRED: the bar was unpinned at 117 scroll stops, 110 of them could not reach Next Season, and the pinned proof went red
+reveal-muted exit=0 22s | playSeasonReveal control muted: all 1 guarded checks fired (mutations landed: {"mutedLine":3})
+simMobileChrome-nowrap exit=1 204s |   - action bar @320: the player's own name is not whole on the career header (shows "Playtest", truncated)
+reveal-x6 exit=0 128s | 6 of 6 runs green
