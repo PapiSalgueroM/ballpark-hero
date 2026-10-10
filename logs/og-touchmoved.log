@@ -1,0 +1,57 @@
+Negative control changed temporary source: touchmoved (src/components/pitch-motion/motion.tsx)
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+stdout | src/test/pitchOwnGoal.test.tsx > Round 1216: an own goal on real feeds > the material is a dense fleet of own goals, each on the cast the viewer holds for it
+[1216 material] 100 matches, 200 half feeds; own goals staged 163 (goals left as they were: 118), for me 79, against me 84; the named man on the viewer's cast 163, not on it 0; by a back 139, by the keeper 24; actions that start outside the goal's own minute 0, wound up as a last kick 0
+
+stdout | src/test/pitchOwnGoal.test.tsx > Round 1216: the recorded own goal > OWN: every own goal frame of the hand made scenes is the recorded one
+[1216 digest] OWN 8ae4c7d9
+
+ ❯ src/test/pitchOwnGoal.test.tsx (15 tests | 1 failed | 13 skipped) 2280ms
+   ✓ Round 1216: an own goal on real feeds > the material is a dense fleet of own goals, each on the cast the viewer holds for it  2211ms
+   ↓ Round 1216: an own goal on real feeds > OG1: the ball goes in off the man the line names
+   ↓ Round 1216: an own goal on real feeds > OG9: from the touch to the net the ball passes nobody else
+   ↓ Round 1216: an own goal on real feeds > OG2: the instants are the goal it always was
+   ↓ Round 1216: an own goal on real feeds > OG3: nobody is the scorer, and the man holds his head
+   ↓ Round 1216: an own goal on real feeds > OG4: nobody stands on a team mate while it plays
+   ↓ Round 1216: an own goal on real feeds > OG5: the turn can be seen, and the ball comes to the man
+   ↓ Round 1216: an own goal on scenes made by hand > OG6: who it goes in off, and a man who is not there moves nobody
+   ↓ Round 1216: an own goal on scenes made by hand > OG7: reduced motion shows the last frame at once, the man with his head in his hands
+   ↓ Round 1216: an own goal on scenes made by hand > OG8: a goal from the spot or from a direct free kick is never drawn as an own goal
+   × Round 1216: the recorded own goal > OWN: every own goal frame of the hand made scenes is the recorded one 67ms
+     → expected '8ae4c7d9' to be '669ef935' // Object.is equality
+   ↓ Round 1216: the recorded own goal > RUE: the figure with his head in his hands is the recorded one, and at rue 0 it is the figure it was
+   ↓ Round 1216: an own goal in the live match > the live match draws an own goal for me off the man on its card
+   ↓ Round 1216: an own goal in the live match > the live match draws an own goal for opp off the man on its card
+   ↓ Round 1216: an own goal and a change of line up off the clock > an own goal still on its way when the line up changes off the clock keeps its net, its card and its men
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed | 13 skipped (15)
+   Start at  13:44:14
+   Duration  6.20s (transform 2.36s, setup 53ms, collect 3.05s, tests 2.28s, environment 340ms, prepare 180ms)
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.sim-control/own-goal-aqtd65/result.json
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/pitchOwnGoal.test.tsx > Round 1216: the recorded own goal > OWN: every own goal frame of the hand made scenes is the recorded one
+AssertionError: expected '8ae4c7d9' to be '669ef935' // Object.is equality
+
+Expected: "669ef935"
+Received: "8ae4c7d9"
+
+ ❯ src/test/pitchOwnGoal.test.tsx:478:28
+    476|     expect(frames).toHaveLength(2 * 8 * 22);
+    477|     console.log(`[1216 digest] OWN ${digest(frames)}`);
+    478|     expect(digest(frames)).toBe(OWN_DIGEST);
+       |                            ^
+    479|   });
+    480| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+simOwnGoalMotion: control touchmoved turned "OWN: every own goal frame of the hand made scenes" red on an assertion (1 failed) and the material stayed green, as it must.
