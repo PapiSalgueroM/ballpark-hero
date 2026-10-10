@@ -1,0 +1,80 @@
+  walked nfl-390-first-watch: pick 1, 1 rows, card 345 high, 163 frames
+  walked nfl-390-late-watch: pick 123, 8 rows, card 636 high, 331 frames
+  walked nfl-390-undrafted-watch: pick none, 6 rows, card 561 high, 283 frames
+  walked nfl-390-late-skip: pick 123, 8 rows, card 636 high, 80 frames
+  walked nfl-390-undrafted-reduced: pick none, 6 rows, card 561 high, 43 frames
+  FAIL [save] nba-390-first-watch: the lottery tiles say ["1 | Washington Wizards | Seed 11 · Up 10","2 | Chicago Bulls | Seed 7 · Up 5","3 | LA Clippers | Seed 3 · Held","4 | Memphis Grizzlies | Seed 9 · Up 5"], the order says ["1 | Wizards | Seed 11 · Up 10","2 | Bulls | Seed 7 · Up 5","3 | Clippers | Seed 3 · Held","4 | Grizzlies | Seed 9 · Up 5"]
+  FAIL [cut] nba-390-first-watch: a lottery tile cuts "Washington Wizards": 120 px of words in 106 px
+  FAIL [cut] nba-390-first-watch: a lottery tile cuts "Memphis Grizzlies": 108 px of words in 106 px
+  walked nba-390-first-watch: pick 1, 1 rows and 4 lottery tiles, card 621 high, 288 frames
+  FAIL [save] nba-390-late-watch: the lottery tiles say ["1 | Houston Rockets | Seed 4 · Up 3","2 | Denver Nuggets | Seed 5 · Up 3","3 | Utah Jazz | Seed 8 · Up 5","4 | Oklahoma City Thunder | Seed 1 · Down 3"], the order says ["1 | Rockets | Seed 4 · Up 3","2 | Nuggets | Seed 5 · Up 3","3 | Jazz | Seed 8 · Up 5","4 | Thunder | Seed 1 · Down 3"]
+  FAIL [cut] nba-390-late-watch: a lottery tile cuts "Oklahoma City Thunder": 136 px of words in 106 px
+  walked nba-390-late-watch: pick 35, 5 rows and 4 lottery tiles, card 783 high, 371 frames
+  FAIL [save] nba-390-undrafted-watch: the lottery tiles say ["1 | Memphis Grizzlies | Seed 14 · Up 13","2 | Toronto Raptors | Seed 13 · Up 11","3 | Atlanta Hawks | Seed 5 · Up 2","4 | Denver Nuggets | Seed 3 · Down 1"], the order says ["1 | Grizzlies | Seed 14 · Up 13","2 | Raptors | Seed 13 · Up 11","3 | Hawks | Seed 5 · Up 2","4 | Nuggets | Seed 3 · Down 1"]
+  FAIL [cut] nba-390-undrafted-watch: a lottery tile cuts "Memphis Grizzlies": 108 px of words in 106 px
+  walked nba-390-undrafted-watch: pick none, 3 rows and 4 lottery tiles, card 715 high, 335 frames
+  FAIL [save] nba-390-late-skip: the lottery tiles say ["1 | Houston Rockets | Seed 4 · Up 3","2 | Denver Nuggets | Seed 5 · Up 3","3 | Utah Jazz | Seed 8 · Up 5","4 | Oklahoma City Thunder | Seed 1 · Down 3"], the order says ["1 | Rockets | Seed 4 · Up 3","2 | Nuggets | Seed 5 · Up 3","3 | Jazz | Seed 8 · Up 5","4 | Thunder | Seed 1 · Down 3"]
+  FAIL [cut] nba-390-late-skip: a lottery tile cuts "Oklahoma City Thunder": 136 px of words in 106 px
+  walked nba-390-late-skip: pick 35, 5 rows and 4 lottery tiles, card 783 high, 76 frames
+  FAIL [save] nba-390-undrafted-reduced: the lottery tiles say ["1 | Memphis Grizzlies | Seed 14 · Up 13","2 | Toronto Raptors | Seed 13 · Up 11","3 | Atlanta Hawks | Seed 5 · Up 2","4 | Denver Nuggets | Seed 3 · Down 1"], the order says ["1 | Grizzlies | Seed 14 · Up 13","2 | Raptors | Seed 13 · Up 11","3 | Hawks | Seed 5 · Up 2","4 | Nuggets | Seed 3 · Down 1"]
+  FAIL [cut] nba-390-undrafted-reduced: a lottery tile cuts "Memphis Grizzlies": 108 px of words in 106 px
+  walked nba-390-undrafted-reduced: pick none, 3 rows and 4 lottery tiles, card 715 high, 43 frames
+  walked mlb-390-first-watch: pick 1, 1 rows, card 413 high, 167 frames
+  walked mlb-390-late-watch: pick 432, 8 rows, card 744 high, 335 frames
+  walked mlb-390-undrafted-watch: pick none, 6 rows, card 689 high, 283 frames
+  walked mlb-390-late-skip: pick 432, 8 rows, card 744 high, 76 frames
+  walked mlb-390-undrafted-reduced: pick none, 6 rows, card 689 high, 43 frames
+  walked nhl-390-first-watch: pick 1, 1 rows, card 453 high, 163 frames
+  walked nhl-390-late-watch: pick 128, 8 rows, card 764 high, 331 frames
+  walked nhl-390-undrafted-watch: pick none, 6 rows, card 749 high, 283 frames
+  walked nhl-390-late-skip: pick 128, 8 rows, card 764 high, 77 frames
+  walked nhl-390-undrafted-reduced: pick none, 6 rows, card 749 high, 45 frames
+  walked nfl-1280-first-watch: pick 1, 1 rows, card 325 high, 164 frames
+  walked nfl-1280-late-watch: pick 123, 8 rows, card 557 high, 332 frames
+  walked nfl-1280-undrafted-watch: pick none, 6 rows, card 493 high, 283 frames
+  walked nfl-1280-late-skip: pick 123, 8 rows, card 557 high, 84 frames
+  walked nfl-1280-undrafted-reduced: pick none, 6 rows, card 493 high, 43 frames
+  FAIL [save] nba-1280-first-watch: the lottery tiles say ["1 | Washington Wizards | Seed 11 · Up 10","2 | Chicago Bulls | Seed 7 · Up 5","3 | LA Clippers | Seed 3 · Held","4 | Memphis Grizzlies | Seed 9 · Up 5"], the order says ["1 | Wizards | Seed 11 · Up 10","2 | Bulls | Seed 7 · Up 5","3 | Clippers | Seed 3 · Held","4 | Grizzlies | Seed 9 · Up 5"]
+  walked nba-1280-first-watch: pick 1, 1 rows and 4 lottery tiles, card 565 high, 291 frames
+  FAIL [save] nba-1280-late-watch: the lottery tiles say ["1 | Houston Rockets | Seed 4 · Up 3","2 | Denver Nuggets | Seed 5 · Up 3","3 | Utah Jazz | Seed 8 · Up 5","4 | Oklahoma City Thunder | Seed 1 · Down 3"], the order says ["1 | Rockets | Seed 4 · Up 3","2 | Nuggets | Seed 5 · Up 3","3 | Jazz | Seed 8 · Up 5","4 | Thunder | Seed 1 · Down 3"]
+  walked nba-1280-late-watch: pick 35, 5 rows and 4 lottery tiles, card 695 high, 373 frames
+  FAIL [save] nba-1280-undrafted-watch: the lottery tiles say ["1 | Memphis Grizzlies | Seed 14 · Up 13","2 | Toronto Raptors | Seed 13 · Up 11","3 | Atlanta Hawks | Seed 5 · Up 2","4 | Denver Nuggets | Seed 3 · Down 1"], the order says ["1 | Grizzlies | Seed 14 · Up 13","2 | Raptors | Seed 13 · Up 11","3 | Hawks | Seed 5 · Up 2","4 | Nuggets | Seed 3 · Down 1"]
+  walked nba-1280-undrafted-watch: pick none, 3 rows and 4 lottery tiles, card 631 high, 338 frames
+  FAIL [save] nba-1280-late-skip: the lottery tiles say ["1 | Houston Rockets | Seed 4 · Up 3","2 | Denver Nuggets | Seed 5 · Up 3","3 | Utah Jazz | Seed 8 · Up 5","4 | Oklahoma City Thunder | Seed 1 · Down 3"], the order says ["1 | Rockets | Seed 4 · Up 3","2 | Nuggets | Seed 5 · Up 3","3 | Jazz | Seed 8 · Up 5","4 | Thunder | Seed 1 · Down 3"]
+  walked nba-1280-late-skip: pick 35, 5 rows and 4 lottery tiles, card 695 high, 76 frames
+  FAIL [save] nba-1280-undrafted-reduced: the lottery tiles say ["1 | Memphis Grizzlies | Seed 14 · Up 13","2 | Toronto Raptors | Seed 13 · Up 11","3 | Atlanta Hawks | Seed 5 · Up 2","4 | Denver Nuggets | Seed 3 · Down 1"], the order says ["1 | Grizzlies | Seed 14 · Up 13","2 | Raptors | Seed 13 · Up 11","3 | Hawks | Seed 5 · Up 2","4 | Nuggets | Seed 3 · Down 1"]
+  walked nba-1280-undrafted-reduced: pick none, 3 rows and 4 lottery tiles, card 631 high, 43 frames
+  walked mlb-1280-first-watch: pick 1, 1 rows, card 393 high, 171 frames
+  walked mlb-1280-late-watch: pick 432, 8 rows, card 665 high, 339 frames
+  walked mlb-1280-undrafted-watch: pick none, 6 rows, card 601 high, 283 frames
+  walked mlb-1280-late-skip: pick 432, 8 rows, card 665 high, 75 frames
+  walked mlb-1280-undrafted-reduced: pick none, 6 rows, card 601 high, 43 frames
+  walked nhl-1280-first-watch: pick 1, 1 rows, card 393 high, 163 frames
+  walked nhl-1280-late-watch: pick 128, 8 rows, card 645 high, 332 frames
+  walked nhl-1280-undrafted-watch: pick none, 6 rows, card 601 high, 283 frames
+  walked nhl-1280-late-skip: pick 128, 8 rows, card 645 high, 76 frames
+  walked nhl-1280-undrafted-reduced: pick none, 6 rows, card 601 high, 46 frames
+  walked nfl-y2005-390-late-watch: pick 123, 8 rows, card 636 high, 331 frames
+  FAIL [save] nba-y2004-390-late-watch: the lottery tiles say ["1 | Portland Trail Blazers | Seed 3 · Up 2","2 | Atlanta Hawks | Seed 4 · Up 2","3 | Boston Celtics | Seed 6 · Up 3"], the order says ["1 | Trail Blazers | Seed 3 · Up 2","2 | Hawks | Seed 4 · Up 2","3 | Celtics | Seed 6 · Up 3"]
+  FAIL [cut] nba-y2004-390-late-watch: a lottery tile cuts "Portland Trail Blazers": 124 px of words in 106 px
+  walked nba-y2004-390-late-watch: pick 36, 5 rows and 3 lottery tiles, card 783 high, 356 frames
+  walked mlb-y2004-390-late-watch: pick 1079, 8 rows, card 764 high, 331 frames
+  walked nhl-y2006-390-late-watch: pick 120, 8 rows, card 784 high, 331 frames
+  FAIL [save] nba-360-late-watch: the lottery tiles say ["1 | Houston Rockets | Seed 4 · Up 3","2 | Denver Nuggets | Seed 5 · Up 3","3 | Utah Jazz | Seed 8 · Up 5","4 | Oklahoma City Thunder | Seed 1 · Down 3"], the order says ["1 | Rockets | Seed 4 · Up 3","2 | Nuggets | Seed 5 · Up 3","3 | Jazz | Seed 8 · Up 5","4 | Thunder | Seed 1 · Down 3"]
+  FAIL [cut] nba-360-late-watch: a lottery tile cuts "Houston Rockets": 98 px of words in 91 px
+  FAIL [cut] nba-360-late-watch: a lottery tile cuts "Denver Nuggets": 95 px of words in 91 px
+  FAIL [cut] nba-360-late-watch: a lottery tile cuts "Oklahoma City Thunder": 136 px of words in 91 px
+  walked nba-360-late-watch: pick 35, 5 rows and 4 lottery tiles, card 825 high, 370 frames
+  FAIL [save] nba-360-late-skip: the lottery tiles say ["1 | Houston Rockets | Seed 4 · Up 3","2 | Denver Nuggets | Seed 5 · Up 3","3 | Utah Jazz | Seed 8 · Up 5","4 | Oklahoma City Thunder | Seed 1 · Down 3"], the order says ["1 | Rockets | Seed 4 · Up 3","2 | Nuggets | Seed 5 · Up 3","3 | Jazz | Seed 8 · Up 5","4 | Thunder | Seed 1 · Down 3"]
+  FAIL [cut] nba-360-late-skip: a lottery tile cuts "Houston Rockets": 98 px of words in 91 px
+  FAIL [cut] nba-360-late-skip: a lottery tile cuts "Denver Nuggets": 95 px of words in 91 px
+  FAIL [cut] nba-360-late-skip: a lottery tile cuts "Oklahoma City Thunder": 136 px of words in 91 px
+  walked nba-360-late-skip: pick 35, 5 rows and 4 lottery tiles, card 825 high, 77 frames
+  FAIL [save] nba-320-late-watch: the lottery tiles say ["1 | Houston Rockets | Seed 4 · Up 3","2 | Denver Nuggets | Seed 5 · Up 3","3 | Utah Jazz | Seed 8 · Up 5","4 | Oklahoma City Thunder | Seed 1 · Down 3"], the order says ["1 | Rockets | Seed 4 · Up 3","2 | Nuggets | Seed 5 · Up 3","3 | Jazz | Seed 8 · Up 5","4 | Thunder | Seed 1 · Down 3"]
+  noted nba-320-late-watch: the tile has 73 px for a club, 4 line(s) on screen and 1 of 30 clubs do not fit (not judged at this width)
+  walked nba-320-late-watch: pick 35, 5 rows and 4 lottery tiles, card 861 high, 369 frames
+  FAIL [save] nba-320-late-skip: the lottery tiles say ["1 | Houston Rockets | Seed 4 · Up 3","2 | Denver Nuggets | Seed 5 · Up 3","3 | Utah Jazz | Seed 8 · Up 5","4 | Oklahoma City Thunder | Seed 1 · Down 3"], the order says ["1 | Rockets | Seed 4 · Up 3","2 | Nuggets | Seed 5 · Up 3","3 | Jazz | Seed 8 · Up 5","4 | Thunder | Seed 1 · Down 3"]
+  noted nba-320-late-skip: the tile has 73 px for a club, 4 line(s) on screen and 1 of 30 clubs do not fit (not judged at this width)
+  walked nba-320-late-skip: pick 35, 5 rows and 4 lottery tiles, card 861 high, 76 frames
+
+playDraftNight: 28 FAILURE(S) in 48 nights

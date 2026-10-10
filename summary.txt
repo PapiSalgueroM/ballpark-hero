@@ -1,0 +1,3 @@
+f-rowswap exit=1 240s | MUT rowswap vitest=1 build=0 walk=1 | | playDraftNight: 24 FAILURE(S) in 48 nights |  24 FAIL [save];
+f-movedflip exit=1 239s | MUT movedflip vitest=1 build=0 walk=1 | | playDraftNight: 15 FAILURE(S) in 48 nights |  15 FAIL [save];
+f-labelfull exit=1 239s | MUT labelfull vitest=1 build=0 walk=1 | | playDraftNight: 28 FAILURE(S) in 48 nights |  13 FAIL [cut]; 15 FAIL [save];

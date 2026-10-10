@@ -1,0 +1,116 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [31m❯[39m src/test/careerDraftNight.test.tsx [2m([22m[2m48 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 1243[2mms[22m[39m
+   [32m✓[39m the clock is the component's, and every night lands inside the ceiling[2m > [22mNFL now: picks 1 to 12, the last four and undrafted[32m 8[2mms[22m[39m
+   [32m✓[39m the clock is the component's, and every night lands inside the ceiling[2m > [22mNFL 2005: picks 1 to 12, the last four and undrafted[32m 3[2mms[22m[39m
+   [32m✓[39m the clock is the component's, and every night lands inside the ceiling[2m > [22mNBA now: picks 1 to 12, the last four and undrafted[32m 4[2mms[22m[39m
+   [32m✓[39m the clock is the component's, and every night lands inside the ceiling[2m > [22mNBA 2003: picks 1 to 12, the last four and undrafted[32m 4[2mms[22m[39m
+   [32m✓[39m the clock is the component's, and every night lands inside the ceiling[2m > [22mMLB now: picks 1 to 12, the last four and undrafted[32m 4[2mms[22m[39m
+   [32m✓[39m the clock is the component's, and every night lands inside the ceiling[2m > [22mMLB 2004: picks 1 to 12, the last four and undrafted[32m 5[2mms[22m[39m
+   [32m✓[39m the clock is the component's, and every night lands inside the ceiling[2m > [22mNHL now: picks 1 to 12, the last four and undrafted[32m 5[2mms[22m[39m
+   [32m✓[39m the clock is the component's, and every night lands inside the ceiling[2m > [22mNHL 2006: picks 1 to 12, the last four and undrafted[32m 4[2mms[22m[39m
+   [32m✓[39m the first frame holds the whole night[2m > [22mNFL now: every row, both buttons and no spoiler[32m 140[2mms[22m[39m
+   [32m✓[39m the first frame holds the whole night[2m > [22mNFL 2005: every row, both buttons and no spoiler[32m 61[2mms[22m[39m
+   [32m✓[39m the first frame holds the whole night[2m > [22mNBA now: every row, both buttons and no spoiler[32m 69[2mms[22m[39m
+   [32m✓[39m the first frame holds the whole night[2m > [22mNBA 2003: every row, both buttons and no spoiler[32m 36[2mms[22m[39m
+   [32m✓[39m the first frame holds the whole night[2m > [22mMLB now: every row, both buttons and no spoiler[32m 35[2mms[22m[39m
+   [32m✓[39m the first frame holds the whole night[2m > [22mMLB 2004: every row, both buttons and no spoiler[32m 36[2mms[22m[39m
+   [32m✓[39m the first frame holds the whole night[2m > [22mNHL now: every row, both buttons and no spoiler[32m 24[2mms[22m[39m
+   [32m✓[39m the first frame holds the whole night[2m > [22mNHL 2006: every row, both buttons and no spoiler[32m 23[2mms[22m[39m
+   [32m✓[39m the first frame holds the whole night[2m > [22mthe closing row landing is what ends the night, and only that row[32m 15[2mms[22m[39m
+   [33m[2m✓[22m[39m the first frame holds the whole night[2m > [22mskipped is the last frame: no delays, no skip, the result said once [33m 530[2mms[22m[39m
+   [32m✓[39m the first frame holds the whole night[2m > [22man undrafted night ends on the last pick and names the club that signs him[32m 3[2mms[22m[39m
+   [32m✓[39m the row that ends the night, word for word[2m > [22mNFL now: a pick past round one prints its round and its pick in that round[32m 13[2mms[22m[39m
+   [32m✓[39m the row that ends the night, word for word[2m > [22mNFL 2005: a pick past round one prints its round and its pick in that round[32m 15[2mms[22m[39m
+   [32m✓[39m the row that ends the night, word for word[2m > [22mNBA now: a pick past round one prints its round and its pick in that round[32m 27[2mms[22m[39m
+   [32m✓[39m the row that ends the night, word for word[2m > [22mNBA 2003: a pick past round one prints its round and its pick in that round[32m 16[2mms[22m[39m
+   [32m✓[39m the row that ends the night, word for word[2m > [22mMLB now: a pick past round one prints its round and its pick in that round[32m 11[2mms[22m[39m
+   [32m✓[39m the row that ends the night, word for word[2m > [22mMLB 2004: a pick past round one prints its round and its pick in that round[32m 17[2mms[22m[39m
+   [32m✓[39m the row that ends the night, word for word[2m > [22mNHL now: a pick past round one prints its round and its pick in that round[32m 13[2mms[22m[39m
+   [32m✓[39m the row that ends the night, word for word[2m > [22mNHL 2006: a pick past round one prints its round and its pick in that round[32m 11[2mms[22m[39m
+   [32m✓[39m the row that ends the night, word for word[2m > [22mNFL now, typed out: the 85th pick is the 21st pick of round 3[32m 2[2mms[22m[39m
+   [32m✓[39m the row that ends the night, word for word[2m > [22mNFL now: a night without his name says so and names the club that signs him[32m 5[2mms[22m[39m
+   [32m✓[39m the row that ends the night, word for word[2m > [22mNFL 2005: a night without his name says so and names the club that signs him[32m 5[2mms[22m[39m
+   [32m✓[39m the row that ends the night, word for word[2m > [22mNBA now: a night without his name says so and names the club that signs him[32m 6[2mms[22m[39m
+   [32m✓[39m the row that ends the night, word for word[2m > [22mNBA 2003: a night without his name says so and names the club that signs him[32m 6[2mms[22m[39m
+   [32m✓[39m the row that ends the night, word for word[2m > [22mMLB now: a night without his name says so and names the club that signs him[32m 5[2mms[22m[39m
+   [32m✓[39m the row that ends the night, word for word[2m > [22mMLB 2004: a night without his name says so and names the club that signs him[32m 6[2mms[22m[39m
+   [32m✓[39m the row that ends the night, word for word[2m > [22mNHL now: a night without his name says so and names the club that signs him[32m 7[2mms[22m[39m
+   [32m✓[39m the row that ends the night, word for word[2m > [22mNHL 2006: a night without his name says so and names the club that signs him[32m 5[2mms[22m[39m
+   [32m✓[39m two sentences, typed out[2m > [22mthe range line changes its words exactly where the range passes the last pick[32m 0[2mms[22m[39m
+   [32m✓[39m two sentences, typed out[2m > [22mwhat a screen reader hears puts the round, the pick in it and the overall pick in their places[32m 0[2mms[22m[39m
+   [32m✓[39m the lottery tile names each winner in words that fit[2m > [22monly the NBA has a lottery here, in both eras[32m 0[2mms[22m[39m
+   [32m✓[39m the lottery tile names each winner in words that fit[2m > [22mNBA now: every club has a name of its own, the end of its full name[32m 1[2mms[22m[39m
+   [32m✓[39m the lottery tile names each winner in words that fit[2m > [22mNBA 2003: every club has a name of its own, the end of its full name[32m 1[2mms[22m[39m
+[31m   [31m×[31m the lottery tile names each winner in words that fit[2m > [22mNBA now: each tile is the winner by that name, its seed and which way it moved[39m[32m 16[2mms[22m[39m
+[31m     → expected [ 'Minnesota Timberwolves', …(1) ] to deeply equal [ 'Timberwolves', 'Seed 3 · Up 2' ][39m
+[31m   [31m×[31m the lottery tile names each winner in words that fit[2m > [22mNBA 2003: each tile is the winner by that name, its seed and which way it moved[39m[32m 7[2mms[22m[39m
+[31m     → expected [ 'Detroit Pistons', 'Seed 2 · Up 1' ] to deeply equal [ 'Pistons', 'Seed 2 · Up 1' ][39m
+   [32m✓[39m the lottery tile names each winner in words that fit[2m > [22mtyped out: the fifth worst record winning the second pick reads "Up 3", and the worst record at pick 4 "Down 3"[32m 14[2mms[22m[39m
+   [32m✓[39m the card that hosts the night[2m > [22mwithout the new props it is the card it was[32m 9[2mms[22m[39m
+   [32m✓[39m the card that hosts the night[2m > [22mprints the range before the draft, from the arithmetic the draft draws with[32m 2[2mms[22m[39m
+   [32m✓[39m the card that hosts the night[2m > [22mwith a night: the night sits above the result, the result waits, and the way on is the night's own[32m 8[2mms[22m[39m
+   [32m✓[39m one lottery table, typed twice on main[2m > [22mthe career road and the front office use the same NBA odds[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/usCareerDraftNightBoard.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[33m 1397[2mms[22m[39m
+   [33m[2m✓[22m[39m draft night on the actual boards[2m > [22m'NFL' the night plays, holds its ending, lands, and starts the career it showed [33m 377[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/careerDraftNight.test.tsx[2m > [22mthe lottery tile names each winner in words that fit[2m > [22mNBA now: each tile is the winner by that name, its seed and which way it moved
+[31m[1mAssertionError[22m: expected [ 'Minnesota Timberwolves', …(1) ] to deeply equal [ 'Timberwolves', 'Seed 3 · Up 2' ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[32m-   "Timberwolves",[39m
+[31m+   "Minnesota Timberwolves",[39m
+[2m    "Seed 3 · Up 2",[22m
+[2m  ][22m
+
+[36m [2m❯[22m src/test/careerDraftNight.test.tsx:[2m258:80[22m[39m
+    [90m256| [39m        ways[33m.[39m[34madd[39m(way[33m.[39m[34msplit[39m([32m' '[39m)[[34m0[39m])[33m;[39m
+    [90m257| [39m        const face = view.container.querySelector<HTMLElement>(`[data-…
+    [90m258| [39m        expect([...face.lastElementChild!.children].map(el => el.textC…
+    [90m   | [39m                                                                               [31m^[39m
+    [90m259| [39m      }
+    [90m260| [39m      [90m// The line under the tiles keeps the city.[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/careerDraftNight.test.tsx[2m > [22mthe lottery tile names each winner in words that fit[2m > [22mNBA 2003: each tile is the winner by that name, its seed and which way it moved
+[31m[1mAssertionError[22m: expected [ 'Detroit Pistons', 'Seed 2 · Up 1' ] to deeply equal [ 'Pistons', 'Seed 2 · Up 1' ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[32m-   "Pistons",[39m
+[31m+   "Detroit Pistons",[39m
+[2m    "Seed 2 · Up 1",[22m
+[2m  ][22m
+
+[36m [2m❯[22m src/test/careerDraftNight.test.tsx:[2m258:80[22m[39m
+    [90m256| [39m        ways[33m.[39m[34madd[39m(way[33m.[39m[34msplit[39m([32m' '[39m)[[34m0[39m])[33m;[39m
+    [90m257| [39m        const face = view.container.querySelector<HTMLElement>(`[data-…
+    [90m258| [39m        expect([...face.lastElementChild!.children].map(el => el.textC…
+    [90m   | [39m                                                                               [31m^[39m
+    [90m259| [39m      }
+    [90m260| [39m      [90m// The line under the tiles keeps the city.[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m62 passed[39m[22m[90m (64)[39m
+[2m   Start at [22m 15:28:06
+[2m   Duration [22m 4.00s[2m (transform 1.94s, setup 101ms, collect 3.55s, tests 2.64s, environment 664ms, prepare 298ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerDraftNight.test.tsx,title=src/test/careerDraftNight.test.tsx > the lottery tile names each winner in words that fit > NBA now%3A each tile is the winner by that name%2C its seed and which way it moved,line=258,column=80::AssertionError: expected [ 'Minnesota Timberwolves', …(1) ] to deeply equal [ 'Timberwolves', 'Seed 3 · Up 2' ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A-   "Timberwolves",%0A+   "Minnesota Timberwolves",%0A    "Seed 3 · Up 2",%0A  ]%0A%0A ❯ src/test/careerDraftNight.test.tsx:258:80%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerDraftNight.test.tsx,title=src/test/careerDraftNight.test.tsx > the lottery tile names each winner in words that fit > NBA 2003%3A each tile is the winner by that name%2C its seed and which way it moved,line=258,column=80::AssertionError: expected [ 'Detroit Pistons', 'Seed 2 · Up 1' ] to deeply equal [ 'Pistons', 'Seed 2 · Up 1' ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A-   "Pistons",%0A+   "Detroit Pistons",%0A    "Seed 2 · Up 1",%0A  ]%0A%0A ❯ src/test/careerDraftNight.test.tsx:258:80%0A%0A
