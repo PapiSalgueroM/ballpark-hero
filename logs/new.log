@@ -1,0 +1,14 @@
+new-first: score 1; seed 1 ST 0 senior seasons; phase playing; club Real Madrid; mentor none; cup rows 0; derby rows 0; book apps 0; derby meetings 0
+new-summary: score 14; seed 6 ST 5 senior seasons; phase season_summary; club Liverpool; mentor none; cup rows 0; derby rows 5; book apps 225; derby meetings 20
+new-home: score 34; seed 9 ST 18 senior seasons; phase playing; club Bayern Munich; mentor Marius Hollerbach active 0; cup rows 3; derby rows 18; book apps 618; derby meetings 36
+new-one-season: score 1; seed 1 ST 1 senior seasons; phase playing; club Real Madrid; mentor none; cup rows 0; derby rows 1; book apps 24; derby meetings 4
+new-summary-milestone: score 3; seed 1 ST 9 senior seasons milestone {"threshold":100,"previous":91,"total":104}; phase season_summary; club Real Madrid; mentor none; cup rows 0; derby rows 9; book apps 290; derby meetings 28
+new-ceremony: score 15; seed 1 ST 17 senior seasons; phase retirement_ceremony; club Real Madrid; mentor none; cup rows 0; derby rows 17; book apps 527; derby meetings 60
+new-retired: score 30; seed 9 ST 18 senior seasons; phase retired; club Bayern Munich; mentor Marius Hollerbach ended 0; cup rows 3; derby rows 18; book apps 618; derby meetings 36
+new-news-milestone: score 1; seed 2 CM 12 senior seasons; phase newspaper; club Flamengo; mentor none; cup rows 0; derby rows 8; book apps 516; derby meetings 48
+new-event-mentor: score 6; seed 2 CM 19 senior seasons; phase random_events; club Flamengo; mentor none; cup rows 2; derby rows 15; book apps 825; derby meetings 90
+new-gk: score 9; seed 3 GK 9 senior seasons; phase playing; club Bayern Munich; mentor Hendrik Reinhardt graduated 3; cup rows 0; derby rows 9; book apps 427; derby meetings 18
+new-event-manager: score 6; seed 3 GK 6 senior seasons; phase random_events; club Bayern Munich; mentor Hendrik Reinhardt graduated 3; cup rows 0; derby rows 6; book apps 281; derby meetings 12
+new-role-plan: score 10; seed 16 ST 17 senior seasons; phase playing; club Lyon; mentor none; cup rows 0; derby rows 17; book apps 590; derby meetings 34
+new-summary-role: score 2; seed 3 GK 7 senior seasons role served; phase season_summary; club Bayern Munich; mentor Hendrik Reinhardt graduated 3; cup rows 0; derby rows 7; book apps 325; derby meetings 14
+scMake new: 13 saves from 40 careers and 687 senior seasons, by the code in /home/runner/work/ballpark-hero/ballpark-hero
