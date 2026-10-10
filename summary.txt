@@ -1,0 +1,1 @@
+hall-nhl exit=3 3s | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks])
