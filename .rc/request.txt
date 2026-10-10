@@ -1,0 +1,10 @@
+#!playwright
+#!serial
+w1-main: bash .rc/x/review-fences-weigh.sh faf0a5f3 4301
+w2-after-pr209-fixtures: bash .rc/x/review-fences-weigh.sh 484ee1d3 4302
+w3-after-pr208-var-dart-stat: bash .rc/x/review-fences-weigh.sh 5d31eaa6 4303
+w4-after-pr210: bash .rc/x/review-fences-weigh.sh de39ef18 4304
+w5-after-pr212: bash .rc/x/review-fences-weigh.sh 2ee41bd6 4305
+w6-after-pr213: bash .rc/x/review-fences-weigh.sh f57763a6 4306
+w7-after-pr214: bash .rc/x/review-fences-weigh.sh 3df03db1 4307
+w8-head: bash .rc/x/review-fences-weigh.sh dfe9f2c1 4308
