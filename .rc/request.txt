@@ -1,0 +1,33 @@
+#!serve
+#!playwright
+#!serial
+n1: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n1" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n2: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n2" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n3: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n3" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n4: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n4" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n5: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n5" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n6: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n6" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n7: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n7" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n8: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n8" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n9: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n9" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n10: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n10" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n11: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n11" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n12: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n12" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n13: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n13" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n14: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n14" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n15: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n15" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n16: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n16" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n17: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n17" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n18: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n18" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n19: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n19" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n20: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n20" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n21: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n21" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n22: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n22" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n23: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n23" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n24: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n24" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n25: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n25" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n26: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n26" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n27: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n27" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n28: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n28" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n29: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n29" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
+n30: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n30" node scripts/playDraftNight.mjs 2>&1 | grep -i "measured\|control"; exit ${PIPESTATUS[0]}
