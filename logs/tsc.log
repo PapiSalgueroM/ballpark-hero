@@ -1,0 +1,2 @@
+src/lib/nbaMyCareer.ts(697,29): error TS2345: Argument of type 'NbaLineNumbers' is not assignable to parameter of type 'AwardSeasonLine'.
+  Property 'games' is missing in type 'NbaLineNumbers' but required in type 'AwardSeasonLine'.

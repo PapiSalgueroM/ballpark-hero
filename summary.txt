@@ -1,0 +1,2 @@
+tsc exit=2 41s |   Property 'games' is missing in type 'NbaLineNumbers' but required in type 'AwardSeasonLine'.
+sense-full exit=0 71s | simNbaAwardsSense: 146 checks, 0 failed (full size), 71s
