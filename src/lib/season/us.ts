@@ -132,6 +132,12 @@ export type UsSeasonBuild =
 
 export interface UsPlayoffStep { round: string; opp: string; won: boolean; score: string | null }
 export interface UsPlayoffPath { steps: UsPlayoffStep[] }
+/** Round 1300: one playoff round as NUMBERS. `slot`: the opponent's slot of ctx.order, or null (unnamed).
+ *  `need` and `most`: wins needed and the most games the round can hold (1 and 1: one game).
+ *  `games`: the games that round ran to, or null when the save's playoff games count is absent or
+ *  does not fit the rounds played (then nothing can be laid out game by game). */
+export interface UsPlayoffSeries { round: string; opp: string; slot: number | null; won: boolean; need: number; most: number; games: number | null }
+export interface UsPlayoffLay { champion: boolean; series: UsPlayoffSeries[] }
 
 /** Whole numbers summing to `total`, shared out by weight (largest remainder),
  *  each at least its minimum and at most its cap. null when the caps or the
@@ -278,11 +284,13 @@ export function usPlayoffDepth(bind: UsSeasonBind, teamResult: string): { rounds
   return { rounds: Math.min(bind.rounds.length, i + 1), champion: i === bind.results.length - 1 };
 }
 
-/** The playoff path round by round, keyed on `|po` (nothing of the regular
- *  season moves). null: no postseason, an unknown result, or playoff numbers
- *  on the save that disagree with the result (then nothing is drawn). A series
- *  shows its score only when the saved playoff games fit the rounds played. */
-export function usPlayoffPath(bind: UsSeasonBind, row: UsRow, ctx: UsSeasonCtx, key: string): UsPlayoffPath | null {
+/** Round 1300: the playoff run as numbers, keyed on `|po` (nothing of the
+ *  regular season moves): who he met in each round, whether he won it, and how
+ *  many games it ran to. Every draw `usPlayoffPath` made before this was lifted
+ *  out of it is made here, in the same order, so the path is what it was. null:
+ *  no postseason, an unknown result, or playoff numbers on the save that
+ *  disagree with the result (then nothing is drawn). */
+export function usPlayoffLay(bind: UsSeasonBind, row: UsRow, ctx: UsSeasonCtx, key: string): UsPlayoffLay | null {
   const depth = usPlayoffDepth(bind, row.teamResult);
   if (!depth) return null;
   const n = depth.rounds;
@@ -291,16 +299,16 @@ export function usPlayoffPath(bind: UsSeasonBind, row: UsRow, ctx: UsSeasonCtx, 
   const wonAt = (r: number) => r < n - 1 || depth.champion;
   /* opponents: the last round of the bracket is the other conference's team, every earlier round his own */
   const unnamed = bind.view.words.unnamed;
-  let opps: string[] = Array.from({ length: n }, () => unnamed);
+  let slots: (number | null)[] = Array.from({ length: n }, () => null);
   if (ctx.shape && ctx.order.length > 1) {
     const conf = shuffled(Array.from({ length: ctx.confSlots }, (_, i) => i + 1), rng);
     const other = shuffled(Array.from({ length: ctx.order.length - 1 - ctx.confSlots }, (_, i) => ctx.confSlots + 1 + i), rng);
-    opps = Array.from({ length: n }, (_, r) => {
+    slots = Array.from({ length: n }, (_, r) => {
       const slot = r === bind.rounds.length - 1 ? other[0] : conf[r];
-      return slot === undefined ? unnamed : ctx.names[slot];
+      return slot === undefined ? null : slot;
     });
   }
-  const scores: (string | null)[] = Array.from({ length: n }, () => null);
+  const games: (number | null)[] = Array.from({ length: n }, () => null);
   if (bind.series) {
     const need = bind.series.slice(0, n);
     const lo = need.reduce((a, s) => a + s[0], 0);
@@ -311,9 +319,31 @@ export function usPlayoffPath(bind: UsSeasonBind, row: UsRow, ctx: UsSeasonCtx, 
         const room = len.map((v, r) => (v < need[r][1] ? r : -1)).filter(r => r >= 0);
         len[room[Math.floor(rng() * room.length)]] += 1;
       }
-      len.forEach((L, r) => { const w = need[r][0]; scores[r] = wonAt(r) ? `${w}-${L - w}` : `${L - w}-${w}`; });
+      len.forEach((L, r) => { games[r] = L; });
     }
   } else if (po !== null && po !== n) return null;
+  /* one game a round: the count is the rounds played, or the save holds none and nothing is laid out */
+  else if (po === n) games.fill(1);
+  return {
+    champion: depth.champion,
+    series: Array.from({ length: n }, (_, r) => {
+      const pair = bind.series ? bind.series[r] : ([1, 1] as const);
+      const slot = slots[r];
+      return { round: bind.rounds[r], opp: slot === null ? unnamed : ctx.names[slot], slot, won: wonAt(r), need: pair ? pair[0] : 0, most: pair ? pair[1] : 0, games: games[r] };
+    }),
+  };
+}
+
+/** The playoff path round by round: the lay above, as the review's list
+ *  prints it. null where the lay is. A series shows its score only when the
+ *  saved playoff games fit the rounds played. */
+export function usPlayoffPath(bind: UsSeasonBind, row: UsRow, ctx: UsSeasonCtx, key: string): UsPlayoffPath | null {
+  const lay = usPlayoffLay(bind, row, ctx, key);
+  if (!lay) return null;
+  const n = lay.series.length;
+  const wonAt = (r: number) => lay.series[r].won;
+  const opps = lay.series.map(s => s.opp);
+  const scores: (string | null)[] = lay.series.map(s => (bind.series && s.games !== null ? (s.won ? `${s.need}-${s.games - s.need}` : `${s.games - s.need}-${s.need}`) : null));
   /* One game a round: no score is drawn. The save holds his playoff numbers
      as a sentence (so many touchdowns, so many field goals) and no score, and
      a keyed score that is not held to those numbers can contradict them (two
