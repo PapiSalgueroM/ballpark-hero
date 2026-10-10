@@ -1,0 +1,53 @@
+  walked nfl-390-first-watch: pick 1, 1 rows, card 345 high, 163 frames
+  walked nfl-390-late-watch: pick 123, 8 rows, card 636 high, 331 frames
+  walked nfl-390-undrafted-watch: pick none, 6 rows, card 561 high, 283 frames
+  walked nfl-390-late-skip: pick 123, 8 rows, card 636 high, 80 frames
+  walked nfl-390-undrafted-reduced: pick none, 6 rows, card 561 high, 43 frames
+  walked nba-390-first-watch: pick 1, 1 rows and 4 lottery tiles, card 621 high, 287 frames
+  walked nba-390-late-watch: pick 35, 5 rows and 4 lottery tiles, card 783 high, 371 frames
+  walked nba-390-undrafted-watch: pick none, 3 rows and 4 lottery tiles, card 715 high, 335 frames
+  walked nba-390-late-skip: pick 35, 5 rows and 4 lottery tiles, card 783 high, 76 frames
+  walked nba-390-undrafted-reduced: pick none, 3 rows and 4 lottery tiles, card 715 high, 43 frames
+  walked mlb-390-first-watch: pick 1, 1 rows, card 413 high, 167 frames
+  walked mlb-390-late-watch: pick 432, 8 rows, card 744 high, 335 frames
+  walked mlb-390-undrafted-watch: pick none, 6 rows, card 689 high, 283 frames
+  walked mlb-390-late-skip: pick 432, 8 rows, card 744 high, 76 frames
+  walked mlb-390-undrafted-reduced: pick none, 6 rows, card 689 high, 43 frames
+  walked nhl-390-first-watch: pick 1, 1 rows, card 453 high, 163 frames
+  walked nhl-390-late-watch: pick 128, 8 rows, card 764 high, 331 frames
+  walked nhl-390-undrafted-watch: pick none, 6 rows, card 749 high, 283 frames
+  walked nhl-390-late-skip: pick 128, 8 rows, card 764 high, 76 frames
+  walked nhl-390-undrafted-reduced: pick none, 6 rows, card 749 high, 45 frames
+  walked nfl-1280-first-watch: pick 1, 1 rows, card 325 high, 163 frames
+  walked nfl-1280-late-watch: pick 123, 8 rows, card 557 high, 331 frames
+  walked nfl-1280-undrafted-watch: pick none, 6 rows, card 493 high, 283 frames
+  walked nfl-1280-late-skip: pick 123, 8 rows, card 557 high, 82 frames
+  walked nfl-1280-undrafted-reduced: pick none, 6 rows, card 493 high, 43 frames
+  walked nba-1280-first-watch: pick 1, 1 rows and 4 lottery tiles, card 565 high, 291 frames
+  walked nba-1280-late-watch: pick 35, 5 rows and 4 lottery tiles, card 695 high, 374 frames
+  walked nba-1280-undrafted-watch: pick none, 3 rows and 4 lottery tiles, card 631 high, 338 frames
+  walked nba-1280-late-skip: pick 35, 5 rows and 4 lottery tiles, card 695 high, 76 frames
+  walked nba-1280-undrafted-reduced: pick none, 3 rows and 4 lottery tiles, card 631 high, 43 frames
+  walked mlb-1280-first-watch: pick 1, 1 rows, card 393 high, 171 frames
+  walked mlb-1280-late-watch: pick 432, 8 rows, card 665 high, 340 frames
+  walked mlb-1280-undrafted-watch: pick none, 6 rows, card 601 high, 283 frames
+  walked mlb-1280-late-skip: pick 432, 8 rows, card 665 high, 76 frames
+  walked mlb-1280-undrafted-reduced: pick none, 6 rows, card 601 high, 43 frames
+  walked nhl-1280-first-watch: pick 1, 1 rows, card 393 high, 163 frames
+  walked nhl-1280-late-watch: pick 128, 8 rows, card 645 high, 331 frames
+  walked nhl-1280-undrafted-watch: pick none, 6 rows, card 601 high, 283 frames
+  walked nhl-1280-late-skip: pick 128, 8 rows, card 645 high, 76 frames
+  walked nhl-1280-undrafted-reduced: pick none, 6 rows, card 601 high, 46 frames
+  walked nfl-y2005-390-late-watch: pick 123, 8 rows, card 636 high, 331 frames
+  walked nba-y2004-390-late-watch: pick 36, 5 rows and 3 lottery tiles, card 783 high, 356 frames
+  walked mlb-y2004-390-late-watch: pick 1079, 8 rows, card 764 high, 331 frames
+  walked nhl-y2006-390-late-watch: pick 120, 8 rows, card 784 high, 331 frames
+  walked nba-360-late-watch: pick 35, 5 rows and 4 lottery tiles, card 825 high, 370 frames
+  walked nba-360-late-skip: pick 35, 5 rows and 4 lottery tiles, card 825 high, 77 frames
+  measured nba-320-late-watch: a tile has 83 px for a club (widest "Timberwolves", 77 px) and 83 px for a seed line (widest "Seed 2 · Down 2", 78 px)
+  walked nba-320-late-watch: pick 35, 5 rows and 4 lottery tiles, card 861 high, 369 frames
+  measured nba-320-late-skip: a tile has 83 px for a club (widest "Timberwolves", 77 px) and 83 px for a seed line (widest "Seed 2 · Down 2", 78 px)
+  walked nba-320-late-skip: pick 35, 5 rows and 4 lottery tiles, card 861 high, 77 frames
+  walked nba-844-late-watch: pick 35, 5 rows and 4 lottery tiles, card 695 high, 370 frames
+
+playDraftNight: ALL GREEN, 49 nights walked

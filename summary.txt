@@ -1,0 +1,4 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 212s | playDraftNight: ALL GREEN, 49 nights walked
+walk-ending exit=1 7s | playDraftNight [control ending]: 2 FAILURE(S) of its own check (fold), as it must
+walk-nottall exit=2 7s | Control nottall changed nothing its check can see (no failure at all). Refusing to call that a result.
