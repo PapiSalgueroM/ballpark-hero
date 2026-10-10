@@ -1,0 +1,12 @@
+build exit=0 19s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+draftnight-base exit=1 0s | simDraftNight: 2 FAILURES
+weight exit=1 26s | sweepWeight: 1 failure
+play-nfl exit=0 51s | Played 1 games. 0 findings, 0 the harness could not drive.
+play-nba exit=0 50s | Played 1 games. 0 findings, 0 the harness could not drive.
+play-mlb exit=0 50s | Played 1 games. 0 findings, 0 the harness could not drive.
+vitest-new exit=0 3s |    Duration  3.07s (transform 1.64s, setup 71ms, collect 2.89s, tests 1.71s, environment 495ms, prepare 203ms)
+tsc exit=0 34s | 
+reveal exit=0 5s | simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's 
+rivals exit=0 10s | No rival product names found. 0 findings.
+play-nhl exit=0 51s | Played 1 games. 0 findings, 0 the harness could not drive.
+anchors exit=0 21s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
