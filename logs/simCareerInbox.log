@@ -1,0 +1,21 @@
+1) Source: careerInbox.ts is the only home for the rule
+   4 rule fingerprints checked, 13 bindings confirmed
+2) Soccer unchanged: same state and seed in, same messages and meter moves out
+   1200 seeded season-scenarios compared field for field, 0 diverged
+3) Soccer end to end: a real career, the cap, the dedupe, the thread mirror
+   12 careers played to a guard limit or retirement, 0 cap violations, 0 duplicate ids, 12 showed the Round 130 mirror still firing
+4) The NFL binding: messages actually arrive, are not always empty, and answering works
+   30 NFL careers, 30 delivered at least one message, 510 messages total over 240 career-seasons (rate 2.125 against a wantPerSeason of 3), 0 cap violations, 30 answers accepted, 30 double answers correctly refused
+   14618 real names harvested from src/data, 0 collisions in harvested inbox text, 41 distinct senders in the bank, 0 shaped like a person's name
+5) The MLB binding: messages actually arrive, are not always empty, and answering works
+   30 MLB careers, 30 delivered at least one message, 510 messages total over 240 career-seasons (rate 2.125 against a wantPerSeason of 3), 0 cap violations, 30 answers accepted, 30 double answers correctly refused
+   14618 real names harvested from src/data, 0 collisions in harvested inbox text, 48 distinct senders in the bank, 0 shaped like a person's name
+6) The NBA binding: messages actually arrive, are not always empty, and answering works
+   30 NBA careers, 30 delivered at least one message, 510 messages total over 240 career-seasons (rate 2.125 against a wantPerSeason of 3), 0 cap violations, 30 answers accepted, 30 double answers correctly refused
+   14618 real names harvested from src/data, 0 collisions in harvested NBA inbox text, 39 distinct senders in the bank, 0 shaped like a person's name
+7) The NHL binding: messages actually arrive, are not always empty, and answering works
+   30 NHL careers, 30 delivered at least one message, 510 messages total over 240 career-seasons (rate 2.125 against a wantPerSeason of 3), 0 cap violations, 30 answers accepted, 30 double answers correctly refused
+   14618 real names harvested from src/data, 0 collisions in harvested inbox text, 46 distinct senders in the bank, 0 shaped like a person's name
+
+
+simCareerInbox: green. Soccer is unchanged, and the NFL, MLB, NBA and NHL inboxes fire.
