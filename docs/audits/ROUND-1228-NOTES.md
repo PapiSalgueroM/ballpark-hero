@@ -35,6 +35,10 @@ Marked and used by nothing:
 - F14, who is in and the two European Performance Spots: NOT READ. The lead's ruling on Liverpool and Real
   Betis (the critic's answer 10) still needs its second publisher.
 - F17, a five step table in the middle of the phase: no text found, not built.
+- F18 (added by the fix pass), the order of the home and away nights, Article 17.02: no club plays more than
+  two home or two away matches in a row, and each has one home and one away match across the first two
+  matchdays and across the last two. The regulations alone, NOT BUILT: `layMatchdays` ignores venue. Round B
+  or C builds it into the matchday layer or its card says the order of the nights is the game's own.
 
 The bracket rule is not typed anywhere. Annex B of the regulations could not be opened, so section 0 derives
 the rule from the two seasons as played (2024-25 on ESPN and CBS Sports, 2025-26 on UEFA.com and SuperSport,
@@ -88,7 +92,8 @@ correction 5). A draw takes about 3 ms on the owner's PC, the slowest seen 52 ms
 
 Fields the game as shipped cannot make and a world editor can (one association swollen to 8, 10, 12, 18 and all
 36 clubs, eight fields each): never null, always a legal slate with honest counts. 8 clubs: 8 of 8 at the
-floor. 10 clubs: 6 of 8 at the floor, the other two inside the budget. 12 clubs: 7 of 8. 18 clubs: none at the
+floor. 10 clubs: 8 of 8. 12 clubs: 8 of 8 (6 and 7 of 8 before the fix pass corrected the floor a second time,
+see the last section). 18 clubs: none at the
 floor and 5 of 8 on the recorded pattern, which is the bounded last resort doing its job. 36 clubs: 8 of 8
 (every match is a break and the builder says so). These fields found a fault in the first writing of the
 counting floor (it forgot the matches forced ACROSS pots and put a one association field 216 over a cap
@@ -126,8 +131,19 @@ assumption that the engine is still unbound.
 
 ## For whoever builds Round B
 
-- Section 4 reads the engine's field at 36 by editing the BUNDLE line `const UCL_FIELD_SIZE = 32;`. The moment
-  that constant becomes an argument the harness exits 2 and says why: call `seasonOneUclField` with 36 there.
+- Section 4 reads the engine's field at 36 by editing the BUNDLE line `const UCL_FIELD_SIZE = 32;`, but only
+  when the engine itself still answers with 32 clubs. When the engine already answers with 36 (PR223 passes 36
+  and keeps that line; the binding round will pass it as an argument) the section takes the field as it comes
+  and patches nothing. CORRECTED BY THE FIX PASS: these notes first promised "exits 2" on PR223's tree. That was
+  wrong: the line is still there, the engine answers 36, and the first writing of section 4 demanded exactly 32
+  and went red (one failed check) on a tree holding both lanes' work. Only if the size becomes an argument while
+  the engine still answers 32 and the line is gone does the harness exit 2: call `seasonOneUclField` with 36
+  there.
+- The order of the home and away nights is not built (ledger row F18, Article 17.02). Build it in
+  `layMatchdays` or say on the card that the order of the nights is the game's own.
+- Time one draw that walks every budget and seats the pattern before calling the builder on the main thread: a
+  world editor's field can take a few hundred milliseconds on a runner core (the review saw 666 ms for 30 clubs
+  of one association); no field the shipped game makes comes near it.
 - `slateOpponents` answers an empty list for a club that is not in the slate, and `slateFixtureOf` null. A field
   of 36 that does not name my club must never reach the builder (critic 8).
 - `drawUclLeaguePhase` answers null for a field that is not 36 different clubs each with an association. The

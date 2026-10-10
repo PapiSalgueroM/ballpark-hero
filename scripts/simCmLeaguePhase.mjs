@@ -46,7 +46,10 @@
  *      bundled as it is and never edited; the field of 36 is its own rule read at the league phase's size.
  *      240 seeded saves: the pots of three by name, the fullest pot, what each draw had to give up. Each of
  *      the 240 must be drawn exactly at its counting floor ([EXACT]).
- *      THE BINDING ROUND MUST CHANGE section 4 when it makes the field size an argument: see FIELD_LINE.
+ *      WHEN THE ENGINE ITSELF ANSWERS WITH 36 CLUBS (the other lane's draft PR223 does, the binding round
+ *      will) the section takes that field as it comes and patches nothing. If the size becomes an argument
+ *      while the engine still answers 32 and FIELD_LINE is gone, the harness exits 2 and says so: call
+ *      seasonOneUclField with 36 there.
  *
  * Exit 0 green, 1 red or a control that fired, 2 could not run, 3 a control that did not fire.
  * A control is CM_LEAGUE_PHASE_CONTROL=<name>; it runs its own section only and must turn its own check
@@ -787,12 +790,18 @@ async function section4() {
   const { engine } = await bundle('engine', { engine: ENGINE });
   const { ucl: lib } = await bundle('ucl4', { ucl: UCL });
   const field32 = engine.seasonOneUclField('now') ?? [];
-  const { engine: wide } = await bundle('engine36', { engine: ENGINE }, [widePlugin]);
+  /* The engine may ALREADY answer with 36 clubs: the other lane's draft of this feature (PR223) passes 36
+     to the same rule and keeps FIELD_LINE, and the binding round will make the size an argument. Then the
+     engine's own field is the field, nothing is patched and no second bundle is made. The first writing
+     demanded exactly 32 here and went RED on a tree that held both lanes' work, for nobody's fault (the
+     review of Round 1228). Only a field that is neither 32 nor 36 clubs is a fault. */
+  const wide = field32.length === 36 ? engine : (await bundle('engine36', { engine: ENGINE }, [widePlugin])).engine;
   const field = wide.seasonOneUclField('now') ?? [];
   const holder = engine.CM_FINAL_TABLES_2025_26.holders;
-  ok(field32.length === 32 && field.length === 36 && new Set(field).size === 36, `[FIELD] the season one field is ${field32.length} clubs today and ${field.length} at the league phase's size`);
-  ok(field32.every(c => field.includes(c)), '[FIELD] the 36 do not contain the 32');
+  ok([32, 36].includes(field32.length) && field.length === 36 && new Set(field).size === 36, `[FIELD] the season one field is ${field32.length} clubs today and ${field.length} at the league phase's size`);
+  ok(field32.every(c => field.includes(c)), '[FIELD] the 36 do not contain the field the engine draws today');
   ok(field.includes(holder), `[FIELD] the holders (${holder}) are not in the field`);
+  if (field32.length === 0 || field.length !== 36) return;
   const added = field.filter(c => !field32.includes(c));
   const realRandom = Math.random;
   const realNow = Date.now;
@@ -838,7 +847,7 @@ async function section4() {
   ok(drawn >= 200, `[FIELD] only ${drawn} season one fields were drawn`);
   const share = n => `${n} of ${drawn} (${(100 * n / Math.max(1, drawn)).toFixed(1)}%)`;
   console.log(`  4 the season one field at 36: ${Object.entries(nations ?? {}).sort((a, b) => b[1] - a[1]).map(([a, n]) => `${a} ${n}`).join(', ')}`);
-  console.log(`  4 the 36 add to today's 32: ${added.join(', ')}. Holders: ${holder}.`);
+  console.log(field32.length === 36 ? `  4 the engine already draws the field at 36, so it is taken as it comes. Holders: ${holder}.` : `  4 the 36 add to today's 32: ${added.join(', ')}. Holders: ${holder}.`);
   samples.forEach((s, i) => { console.log(`  4 sample save ${i + 1} (started at ${s.club}): ${s.slate.breaks} same association matches, ${s.slate.overCap} over the cap`); s.pots.forEach((pot, p) => console.log(`      pot ${p + 1}: ${pot.join('; ')}`)); });
   console.log(`  4 most clubs of one association in one pot, over ${drawn} seeded saves: ${Object.entries(fullest).sort().map(([k, n]) => `${k} in ${share(n)}`).join(' | ')}`);
   console.log(`  4 which association fills it: ${Object.entries(fullestWho).sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k} ${n}`).join(', ')}`);
