@@ -1,0 +1,1 @@
+bind exit=0 119s | review-cm-bind compare base.json vs base2.json: 0 case(s) different
