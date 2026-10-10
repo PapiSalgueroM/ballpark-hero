@@ -495,12 +495,16 @@ export function useClubManager() {
     };
     /* Round 1225: startCareer opens a career on its league's real list only
        when that list is here. It nearly always is (chooseClub fetched it); when
-       it is not, wait for it on the loading screen. A fetch that fails starts
-       the career on generated fixtures, which is what the calendar then says. */
+       it is not, wait for it on the loading screen. A fetch that fails, or one
+       still out after eight seconds, starts the career on generated fixtures,
+       which is what the calendar then says. */
     const fixtureKey = edit ? null : startFixtureKey(club, era);
     if (realLeagueFixturesLoaded(fixtureKey)) { begin(); return; }
     setPhase('boot');
-    ensureRealLeagueFixtures(fixtureKey).then(begin, begin);
+    let begun = false;
+    const beginOnce = () => { if (!begun) { begun = true; begin(); } };
+    ensureRealLeagueFixtures(fixtureKey).then(beginOnce, beginOnce);
+    setTimeout(beginOnce, 8000);
   }, [pendingClub]);
 
   /* Round 154: founding your own club skips the pending-club dance, because
