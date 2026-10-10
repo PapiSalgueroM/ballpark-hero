@@ -1,0 +1,6 @@
+#!serial
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+genkw-noop: node scripts/genSearchKeywords.mjs > /tmp/genkw.log 2>&1; tail -3 /tmp/genkw.log; git diff --stat --exit-code -- src/data/searchKeywords.json && echo KEYWORDS-UNCHANGED-BY-REGENERATION
+guide-refresh-probe: node scripts/simGuideHeadings.mjs --refresh /soccer-career; git diff --stat -- scripts/data/guideHeadingsFrozen.json; node scripts/simGuideHeadings.mjs; s=$?; git checkout -- scripts/data/guideHeadingsFrozen.json; echo "after-refresh exit=$s"; exit $s
+simGuideHeadings-traininglocation: GUIDE_HEADINGS_CONTROL=traininglocation node scripts/simGuideHeadings.mjs
+simDailySaveHardening-2: node scripts/simDailySaveHardening.mjs

@@ -1,0 +1,5 @@
+simNumberFormatting exit=0 77s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
+genkw-noop exit=0 1s | KEYWORDS-UNCHANGED-BY-REGENERATION
+guide-refresh-probe exit=2 1s | after-refresh exit=2
+simGuideHeadings-traininglocation exit=1 1s | simGuideHeadings control traininglocation: section 1 red and every other section green, the break was caught where it should be (exit 1)
+simDailySaveHardening-2 exit=0 38s | simDailySaveHardening: part all green

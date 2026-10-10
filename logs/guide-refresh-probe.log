@@ -1,0 +1,5 @@
+simGuideHeadings: refreshed /soccer-career from its actual guide (howToPlay 12, rules 19, example 3, tips 7)
+ scripts/data/guideHeadingsFrozen.json | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+simGuideHeadings: cannot run: Reviewed training location requires exactly one original frozen instruction
+after-refresh exit=2
