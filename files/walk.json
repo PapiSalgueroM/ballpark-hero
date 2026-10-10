@@ -1,0 +1,574 @@
+[
+ {
+  "ok": true,
+  "what": "nhl-new-390-1-hub: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-new-390: the season reveal is up after Play"
+ },
+ {
+  "ok": true,
+  "what": "nhl-new-390-2-reveal: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "note": "nhl-new-390: reveal says: THE 2026 SEASON Toronto Maple Leafs · age 18 · C Lost in Round 1 33 G, 31 A, 64 P 📊 Playoffs: 5 games, 3G 3A 6P. 🪞 Cruz Bergeron went 24G 28A 52P. You had the better year. Head to head 1-0. Continue"
+ },
+ {
+  "note": "nhl-new-390: saved line: 2026 TOR: 82 games, slate 84, Lost in Round 1, October 5 games \"undefined\""
+ },
+ {
+  "ok": true,
+  "what": "nhl-new-390: a new 2026-27 NHL line carries slate 84 (it carries 84)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-new-390: the line holds 82 games, no more than 84"
+ },
+ {
+  "ok": true,
+  "what": "nhl-new-390: a reload with the reveal open leaves the saved line as it was"
+ },
+ {
+  "ok": true,
+  "what": "nhl-new-390-3-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-new-390: the season review prints 82 games, the saved line holds 82"
+ },
+ {
+  "ok": true,
+  "what": "nhl-new-390: no page errors (clean)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-new-390-1-hub: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-new-390: the season reveal is up after Play"
+ },
+ {
+  "ok": true,
+  "what": "mlb-new-390-2-reveal: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "note": "mlb-new-390: reveal says: THE 2026 SEASON Chicago Cubs · age 21 · CF Missed October .267, 15 HR, 73 RBI 🪞 Elias Rylander went 0.264, 14 HR. You had the better year. Head to head 1-0. Continue"
+ },
+ {
+  "note": "mlb-new-390: saved line: 2026 CHC: 161 games, slate none, Missed October"
+ },
+ {
+  "ok": true,
+  "what": "mlb-new-390: a new 2026 MLB line carries no slate, or 161 for the Orioles and the Yankees (team CHC, slate undefined)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-new-390: the line holds 161 games, no more than its season"
+ },
+ {
+  "ok": true,
+  "what": "mlb-new-390: a reload with the reveal open leaves the saved line as it was"
+ },
+ {
+  "ok": true,
+  "what": "mlb-new-390-3-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-new-390: the season review prints 161 games, the saved line holds 161"
+ },
+ {
+  "ok": true,
+  "what": "mlb-new-390: no page errors (clean)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-new-1280-rm-1-hub: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-new-1280-rm: the season reveal is up after Play"
+ },
+ {
+  "ok": true,
+  "what": "nhl-new-1280-rm-2-reveal: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "note": "nhl-new-1280-rm: reveal says: THE 2026 SEASON Los Angeles Kings · age 18 · C Lost in Round 1 24 G, 28 A, 52 P 📊 Playoffs: 6 games, 2G 2A 4P. 🪞 Marcus Brennan went 19G 26A 45P. You had the better year. Head to head 1-0. Continue"
+ },
+ {
+  "note": "nhl-new-1280-rm: saved line: 2026 LAK: 82 games, slate 84, Lost in Round 1, October 6 games \"undefined\""
+ },
+ {
+  "ok": true,
+  "what": "nhl-new-1280-rm: a new 2026-27 NHL line carries slate 84 (it carries 84)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-new-1280-rm: the line holds 82 games, no more than 84"
+ },
+ {
+  "ok": true,
+  "what": "nhl-new-1280-rm: a reload with the reveal open leaves the saved line as it was"
+ },
+ {
+  "ok": true,
+  "what": "nhl-new-1280-rm-3-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-new-1280-rm: the season review prints 82 games, the saved line holds 82"
+ },
+ {
+  "ok": true,
+  "what": "nhl-new-1280-rm: no page errors (clean)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-new-1280-rm-1-hub: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-new-1280-rm: the season reveal is up after Play"
+ },
+ {
+  "ok": true,
+  "what": "mlb-new-1280-rm-2-reveal: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "note": "mlb-new-1280-rm: reveal says: THE 2026 SEASON Kansas City Royals · age 21 · CF Missed October .269, 10 HR, 29 RBI 🪑 Another spring on the bench. The gap is closing. 🪑 A bench season: 82 games of pinch hits and spot starts. 🪞 Rowan Castellanos went 0.259, 11 HR. You had the better year. Head to head 1-0. Continue"
+ },
+ {
+  "note": "mlb-new-1280-rm: saved line: 2026 KCR: 82 games, slate none, Missed October"
+ },
+ {
+  "ok": true,
+  "what": "mlb-new-1280-rm: a new 2026 MLB line carries no slate, or 161 for the Orioles and the Yankees (team KCR, slate undefined)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-new-1280-rm: the line holds 82 games, no more than its season"
+ },
+ {
+  "ok": true,
+  "what": "mlb-new-1280-rm: a reload with the reveal open leaves the saved line as it was"
+ },
+ {
+  "ok": true,
+  "what": "mlb-new-1280-rm-3-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-new-1280-rm: the season review prints 82 games, the saved line holds 82"
+ },
+ {
+  "ok": true,
+  "what": "mlb-new-1280-rm: no page errors (clean)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390: the old save opens on the hub"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-1-hub: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390: loading did not touch the 3 saved lines"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-2-old-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390: the review of the old 2028 season prints 82 games, the save holds 82"
+ },
+ {
+  "ok": false,
+  "what": "nhl-old-nhl-390: the hub's Play button is not on screen. Words: "
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-rm: the old save opens on the hub"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-rm-1-hub: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-rm: loading did not touch the 3 saved lines"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-rm-2-old-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-rm: the review of the old 2028 season prints 82 games, the save holds 82"
+ },
+ {
+  "ok": false,
+  "what": "nhl-old-nhl-390-rm: the hub's Play button is not on screen. Words: "
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280: the old save opens on the hub"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-1-hub: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280: loading did not touch the 3 saved lines"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-2-old-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280: the review of the old 2028 season prints 82 games, the save holds 82"
+ },
+ {
+  "ok": false,
+  "what": "nhl-old-nhl-1280: the hub's Play button is not on screen. Words: "
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-rm: the old save opens on the hub"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-rm-1-hub: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-rm: loading did not touch the 3 saved lines"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-rm-2-old-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-rm: the review of the old 2028 season prints 82 games, the save holds 82"
+ },
+ {
+  "ok": false,
+  "what": "nhl-old-nhl-1280-rm: the hub's Play button is not on screen. Words: "
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-390: the old save opens on the hub"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-390-1-hub: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-390: loading did not touch the 3 saved lines"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-390-2-old-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-390: the review of the old 2028 season prints 83 games, the save holds 83"
+ },
+ {
+  "ok": false,
+  "what": "mlb-old-mlb-390: the hub's Play button is not on screen. Words: "
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-1280: the old save opens on the hub"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-1280-1-hub: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-1280: loading did not touch the 3 saved lines"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-1280-2-old-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-1280: the review of the old 2028 season prints 83 games, the save holds 83"
+ },
+ {
+  "ok": false,
+  "what": "mlb-old-mlb-1280: the hub's Play button is not on screen. Words: "
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-390: the old save opens on the hub"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-390-1-hub: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-390: loading did not touch the 6 saved lines"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-390-2-old-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-390: the review of the old 2011 season prints 82 games, the save holds 82"
+ },
+ {
+  "ok": false,
+  "what": "nhl-old-nhl-2012-390: the hub's Play button is not on screen. Words: "
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-1280-rm: the old save opens on the hub"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-1280-rm-1-hub: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-1280-rm: loading did not touch the 6 saved lines"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-1280-rm-2-old-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-1280-rm: the review of the old 2011 season prints 82 games, the save holds 82"
+ },
+ {
+  "ok": false,
+  "what": "nhl-old-nhl-2012-1280-rm: the hub's Play button is not on screen. Words: "
+ },
+ {
+  "ok": false,
+  "what": "mlb-old-mlb-2020-390: the old save opens on the hub"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-390-1-hub: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-390: loading did not touch the 16 saved lines"
+ },
+ {
+  "note": "mlb-old-mlb-2020-390: no Career Log button on this screen"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-390-2-old-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": false,
+  "what": "mlb-old-mlb-2020-390: the review of the old 2019 season prints null games, the save holds 158"
+ },
+ {
+  "ok": false,
+  "what": "mlb-old-mlb-2020-390: the hub's Play button is not on screen. Words: "
+ },
+ {
+  "ok": false,
+  "what": "mlb-old-mlb-2020-1280-rm: the old save opens on the hub"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-1280-rm-1-hub: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-1280-rm: loading did not touch the 16 saved lines"
+ },
+ {
+  "note": "mlb-old-mlb-2020-1280-rm: no Career Log button on this screen"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-1280-rm-2-old-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": false,
+  "what": "mlb-old-mlb-2020-1280-rm: the review of the old 2019 season prints null games, the save holds 158"
+ },
+ {
+  "ok": false,
+  "what": "mlb-old-mlb-2020-1280-rm: the hub's Play button is not on screen. Words: "
+ },
+ {
+  "note": "mlb-october-mlb-390: results of the 2029 seasons played: Lost the Wild Card series (2)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-october-mlb-390-1-reveal: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "note": "mlb-october-mlb-390: reveal says: THE 2029 SEASON Milwaukee Brewers · age 24 · CF Lost the Wild Card series .328, 34 HR, 108 RBI 📊 Postseason: 2 games, 3 for 8 (.375), 0 HR. ⭐ All-Star. 👑 MVP. 🧤 Gold Glove. 🥈 Silver Slugger. 🪞 Tyrell Novak went 0.243, 9 HR. You had the better year. Head to head 2-2. Continue"
+ },
+ {
+  "note": "mlb-october-mlb-390: line: 2029 MIL: 162 games, slate none, Lost the Wild Card series, October 2 games \"3 for 8 (.375), 0 HR\""
+ },
+ {
+  "ok": true,
+  "what": "mlb-october-mlb-390: the October line of a hitter has the shape \"H for AB (.xxx), N HR\": \"3 for 8 (.375), 0 HR\""
+ },
+ {
+  "ok": true,
+  "what": "mlb-october-mlb-390: 3 for 8 is .375, the card prints .375"
+ },
+ {
+  "ok": true,
+  "what": "mlb-october-mlb-390: 0 home runs inside 3 hits"
+ },
+ {
+  "ok": true,
+  "what": "mlb-october-mlb-390: the reveal shows the saved October line"
+ },
+ {
+  "ok": true,
+  "what": "mlb-october-mlb-390-2-review-postseason: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "note": "mlb-october-mlb-390: review tabs: Overview | Regular season | Postseason; review says: Back to seasons 2029 season Milwaukee Brewers · CF Overview Regular season Postseason Postseason performance Team postseason games 2 Performance 3 for 8 (.375), 0 HR These are the numbers kept in your save. Older saves may not have every field."
+ },
+ {
+  "ok": true,
+  "what": "mlb-october-mlb-390: no page errors (clean)"
+ },
+ {
+  "note": "mlb-october-mlb-2008-1280: results of the 2008 seasons played: Missed October | Missed October | WON THE WORLD SERIES (14)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-october-mlb-2008-1280: no 2008 season ended in a wild card round"
+ },
+ {
+  "ok": true,
+  "what": "mlb-october-mlb-2008-1280-1-reveal: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "note": "mlb-october-mlb-2008-1280: reveal says: THE 2008 SEASON San Diego Padres · age 25 · CF WON THE WORLD SERIES .342, 19 HR, 33 RBI 🚑 Injured list stints ate the season. 💍 A RING. The parade is downtown. 📊 Postseason: 14 games, 18 for 56 (.321), 4 HR. 😬 You could not buy a hit in October. It will follow you all winter. 🪞 Tyrell Castellanos went 0.300, 24 HR. You had the better year. Head to head 3-4. Continue"
+ },
+ {
+  "note": "mlb-october-mlb-2008-1280: line: 2008 SDP: 78 games, slate none, WON THE WORLD SERIES, October 14 games \"18 for 56 (.321), 4 HR\""
+ },
+ {
+  "ok": true,
+  "what": "mlb-october-mlb-2008-1280: the October line of a hitter has the shape \"H for AB (.xxx), N HR\": \"18 for 56 (.321), 4 HR\""
+ },
+ {
+  "ok": true,
+  "what": "mlb-october-mlb-2008-1280: 18 for 56 is .321, the card prints .321"
+ },
+ {
+  "ok": true,
+  "what": "mlb-october-mlb-2008-1280: 4 home runs inside 18 hits"
+ },
+ {
+  "ok": true,
+  "what": "mlb-october-mlb-2008-1280: the reveal shows the saved October line"
+ },
+ {
+  "ok": true,
+  "what": "mlb-october-mlb-2008-1280-2-review-postseason: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "note": "mlb-october-mlb-2008-1280: review tabs: Overview | Regular season | Postseason; review says: Back to seasons 2008 season San Diego Padres · CF Overview Regular season Postseason Postseason performance Team postseason games 14 Performance 18 for 56 (.321), 4 HR These are the numbers kept in your save. Older saves may not have every field."
+ },
+ {
+  "ok": true,
+  "what": "mlb-october-mlb-2008-1280: no page errors (clean)"
+ },
+ {
+  "note": "mlb-october-mlb-2015-390-rm: results of the 2015 seasons played: Lost the Wild Card Game (1)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-october-mlb-2015-390-rm-1-reveal: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "note": "mlb-october-mlb-2015-390-rm: reveal says: THE 2015 SEASON Los Angeles Dodgers · age 32 · CF Lost the Wild Card Game .342, 37 HR, 104 RBI 📊 Postseason: 1 game, 1 for 4 (.250), 0 HR. ⭐ All-Star. 👑 MVP. 🧤 Gold Glove. 🥈 Silver Slugger. 🏅 Batting title. 🪞 Rowan Delgado went 0.293, 28 HR. You had the better year. Head to head 2-10. Continue"
+ },
+ {
+  "note": "mlb-october-mlb-2015-390-rm: line: 2015 LAD: 155 games, slate none, Lost the Wild Card Game, October 1 games \"1 for 4 (.250), 0 HR\""
+ },
+ {
+  "ok": true,
+  "what": "mlb-october-mlb-2015-390-rm: the October line of a hitter has the shape \"H for AB (.xxx), N HR\": \"1 for 4 (.250), 0 HR\""
+ },
+ {
+  "ok": true,
+  "what": "mlb-october-mlb-2015-390-rm: 1 for 4 is .250, the card prints .250"
+ },
+ {
+  "ok": true,
+  "what": "mlb-october-mlb-2015-390-rm: 0 home runs inside 1 hits"
+ },
+ {
+  "ok": true,
+  "what": "mlb-october-mlb-2015-390-rm: the reveal shows the saved October line"
+ },
+ {
+  "ok": true,
+  "what": "mlb-october-mlb-2015-390-rm: a lost Wild Card Game is one game (1)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-october-mlb-2015-390-rm-2-review-postseason: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "note": "mlb-october-mlb-2015-390-rm: review tabs: Overview | Regular season | Postseason; review says: Back to seasons 2015 season Los Angeles Dodgers · CF Overview Regular season Postseason Postseason performance Team postseason games 1 Performance 1 for 4 (.250), 0 HR These are the numbers kept in your save. Older saves may not have every field."
+ },
+ {
+  "ok": true,
+  "what": "mlb-october-mlb-2015-390-rm: no page errors (clean)"
+ },
+ {
+  "ok": true,
+  "what": "whatsnew-390: the entry is on the page"
+ },
+ {
+  "ok": true,
+  "what": "whatsnew-390: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "note": "whatsnew-390: MLB and NHL My Career: the season is as long as the real one. In NHL My Career a season is 84 games now, the way the league plays it from 2026-27, and a throwback career goes through the real short years: 48 games in 2012-13, 56 in 2020-21, and the 68 to 71 a club had played when 2019-20 stopped. In MLB My Career the 2020 season is 60 games, and a club that really finished a game short or played a 163rd does the same in your career, the 2026 Orioles and Yankees on 161 included. October follows the year too: no wild card round before 2012, one Wild Card Game from 2012 to 2019 and in 2021, and from 2022 a best of three, five, seven and seven, so losing the Wild Card Series is two or three games and never five. Awards in a short season are judged like a full one, and a hitter's postseason line adds up now (4 for 16 reads .250). Seasons you already played stay exactly as they were."
+ },
+ {
+  "ok": true,
+  "what": "whatsnew-390: no dash of either kind in the entry"
+ },
+ {
+  "ok": true,
+  "what": "whatsnew-1280: the entry is on the page"
+ },
+ {
+  "ok": true,
+  "what": "whatsnew-1280: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "note": "whatsnew-1280: MLB and NHL My Career: the season is as long as the real one. In NHL My Career a season is 84 games now, the way the league plays it from 2026-27, and a throwback career goes through the real short years: 48 games in 2012-13, 56 in 2020-21, and the 68 to 71 a club had played when 2019-20 stopped. In MLB My Career the 2020 season is 60 games, and a club that really finished a game short or played a 163rd does the same in your career, the 2026 Orioles and Yankees on 161 included. October follows the year too: no wild card round before 2012, one Wild Card Game from 2012 to 2019 and in 2021, and from 2022 a best of three, five, seven and seven, so losing the Wild Card Series is two or three games and never five. Awards in a short season are judged like a full one, and a hitter's postseason line adds up now (4 for 16 reads .250). Seasons you already played stay exactly as they were."
+ },
+ {
+  "ok": true,
+  "what": "whatsnew-1280: no dash of either kind in the entry"
+ }
+]
