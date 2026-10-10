@@ -64,6 +64,8 @@
    run if its rewrite found nothing to rewrite.
      MATCH_SCREEN_CONTROL=noclock     the clock row leaves the card, the
        pre-472 screen. Section 1 must go red.
+     MATCH_SCREEN_CONTROL=flatboard   the engine copy leaves the half's stoppages
+       out of the board (base plus the roll only). Section 1 must go red.
      MATCH_SCREEN_CONTROL=bareposs    possession loses its percent sign and
        the two shares stop summing to 100. Section 2 must go red.
      MATCH_SCREEN_CONTROL=them        the opposition's headings go back to
@@ -107,7 +109,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const TMP = os.tmpdir().replaceAll('\\', '/');
 const CONTROL = process.env.MATCH_SCREEN_CONTROL || '';
-const CONTROLS = ['noclock', 'bareposs', 'them', 'ragged', 'flat', 'twoengines'];
+const CONTROLS = ['noclock', 'flatboard', 'bareposs', 'them', 'ragged', 'flat', 'twoengines'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`MATCH_SCREEN_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
@@ -164,6 +166,11 @@ if (CONTROL === 'noclock') {
   cardPath = rewrite(CARD, [['        {detail?.added && (\n', '        {false && detail?.added && (\n']],
     'MatchReportCard.noclock.tsx', 'the clock row');
   console.log('NEGATIVE CONTROL ON: the report carries no clock row, the pre-472 screen; section 1 must go red');
+}
+if (CONTROL === 'flatboard') {
+  enginePath = rewrite(ENGINE, [['  return clamp(b.base + stoppages + roll, b.lo, b.hi);\n', '  return clamp(b.base + roll, b.lo, b.hi);\n']],
+    'clubManager.flatboard.ts', "the board's stoppage count");
+  console.log('NEGATIVE CONTROL ON: the board ignores the stoppages of its half; section 1 must go red');
 }
 if (CONTROL === 'bareposs') {
   cardPath = rewrite(CARD, [
@@ -312,6 +319,25 @@ const screens = played.map(p => ({
 section = 1;
 console.log('1) The clock: stoppage time on the screen, for both halves, from the half it followed');
 let clocks = 0;
+/* Release AT (ruling R5). The board against the half it followed was a bound EVERY half had to meet, and one
+   match could trip it: red on origin/main on one seed in six, and on the integrated head's default seed.
+   Measured on both trees with this harness's own walk, six seeds each, 174 reports and 348 halves a run
+   (remote check rAT-fx-k):
+     origin/main   2,088 halves, 2 outside the rule, both on one seed (45+5 after 2 stoppages, 90+5 after 5)
+     the head      2,088 halves, 1 outside (90+7 after 2 stoppages)
+   Everywhere else the rule is exact: the board is the base, a minute a stoppage (goals, cards and injuries,
+   those inside the board included) and the roll. All three exceptions are halves where a change was made at
+   the period's last minute (an injury at 45+2, at 90 and at 90, and the substitution it forces). That is the
+   engine's stated rule and not a slip: a change inside a board keeps the board's length and draws the rest of
+   the board again (recutBoard), so the board that was already up can end with more or fewer stoppages under
+   it than it counted. So the check is two things now:
+     strict  a half with no change at its last minute must meet the rule, every one;
+     a rate  the halves a late change took off the rule are counted and held to BOARD_RECUT_MAX of all halves.
+   The largest share seen is 2 of 348 (0.57 percent); the line is that over 0.6, which three halves a run stay
+   under and four do not. A wider bound of the old kind would have hidden a board that ignores its half;
+   MATCH_SCREEN_CONTROL=flatboard is that fault and turns this section red. */
+const BOARD_RECUT_MAX = 0.0096;
+const boards = { halves: 0, recut: [] };
 for (const s of screens) {
   const d = s.report.detail;
   const ctx = `${s.clubName} ${s.report.home} ${s.report.homeGoals}-${s.report.awayGoals} ${s.report.away}`;
@@ -323,8 +349,13 @@ for (const s of screens) {
     && (e.kind === 'goal' || e.kind === 'yellow' || e.kind === 'red' || e.kind === 'injury')).length;
   const h1Lo = Math.min(5, 1 + stops(0, 45));
   const h2Lo = Math.min(8, 2 + stops(45, 90));
-  if (d.added.h1 < h1Lo || d.added.h1 > Math.min(5, h1Lo + 1)) fail(`${ctx}: 45+${d.added.h1} after a half with ${stops(0, 45)} stoppages`);
-  if (d.added.h2 < h2Lo || d.added.h2 > Math.min(8, h2Lo + 2)) fail(`${ctx}: 90+${d.added.h2} after a half with ${stops(45, 90)} stoppages`);
+  for (const [to, added, lo, up, count] of [[45, d.added.h1, h1Lo, Math.min(5, h1Lo + 1), stops(0, 45)], [90, d.added.h2, h2Lo, Math.min(8, h2Lo + 2), stops(45, 90)]]) {
+    boards.halves += 1;
+    if (added >= lo && added <= up) continue;
+    const line = `${ctx}: ${to}+${added} after a half with ${count} stoppages`;
+    if (d.timeline.some(e => e.kind === 'sub' && e.minute === to)) boards.recut.push(line);
+    else fail(`${line}, and no change was made at the end of it`);
+  }
   const one = addedShown(s.html, 'h1');
   const two = addedShown(s.html, 'h2');
   if (one !== `45+${d.added.h1}'`) fail(`${ctx}: the screen's first half clock reads "${one}", the report says 45+${d.added.h1}'`);
@@ -336,6 +367,12 @@ for (const s of screens) {
   clocks += 1;
 }
 if (clocks < 60) fail(`only ${clocks} screens showed a clock`);
+{
+  const share = boards.recut.length / Math.max(1, boards.halves);
+  console.log(`   ${boards.halves} halves: the board is the base, the half's stoppages and the roll in ${boards.halves - boards.recut.length}; ${boards.recut.length} (${(100 * share).toFixed(2)}%) kept a board that a change at the half's last minute played out differently`);
+  for (const line of boards.recut) console.log(`     late change: ${line}`);
+  if (share > BOARD_RECUT_MAX) fail(`${boards.recut.length} of ${boards.halves} halves (${(100 * share).toFixed(2)}%) ended off their board after a late change; the line is ${(100 * BOARD_RECUT_MAX).toFixed(2)}%`);
+}
 console.log(`   ${clocks} reports rendered, every one showing 45+n' and 90+m' as the screen's own row`);
 {
   const h1s = screens.map(s => s.report.detail?.added?.h1).filter(isNum);
@@ -576,7 +613,7 @@ for (const verify of verifySources) verify();
 assert.deepEqual(runtimeErrors, [], 'Runtime errors never receive match-screen control credit');
 const artifacts = path.resolve(process.env.MATCH_SCREEN_ARTIFACTS || path.join(ROOT, 'cm-quick-subs-artifacts/match-screen'));
 fs.mkdirSync(artifacts, { recursive: true });
-const intended = { noclock: 1, bareposs: 2, them: 3, ragged: 4, flat: 5, twoengines: 6 };
+const intended = { noclock: 1, flatboard: 1, bareposs: 2, them: 3, ragged: 4, flat: 5, twoengines: 6 };
 let independentBaseline = null;
 if (CONTROL) {
   const baseline = spawnSync(process.execPath, [fileURLToPath(import.meta.url)], {
