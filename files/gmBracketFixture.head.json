@@ -1,0 +1,743 @@
+{
+ "what": "The NFL Front Office engine one press postseason (runPlayoffs) over the fleet of scripts/lib/gmGameDayFleet.mjs. Recorded by scripts/recordGmBracketFixture.mjs; read by scripts/simGmGameDay.mjs section 4.",
+ "commit": "5d6ffbefd0b7ddc3df4b48ff9e2e2ce2157e4f79",
+ "engine": "aa0b61644b902859a48ef7a60a2d73b867a97b56",
+ "finalsBracket": "7440a69b041e40da61041dfedf01182b1e94b4c6",
+ "fleet": {
+  "sets": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ],
+  "kinds": [
+   "fifteen",
+   "deep"
+  ],
+  "perKind": 40,
+  "nextDraws": 64
+ },
+ "sets": {
+  "0": {
+   "seasons": 80,
+   "digest": "dc5143a979646a880b1d9bc76f34296b899cb238",
+   "kept": [
+    {
+     "id": "set 0 fifteen 0",
+     "user": "ARI",
+     "seeds": "BAL,LAC,NE,JAX,DEN,KC,BUF,LA,TB,DAL,DET,NO,SF,CAR",
+     "games": [
+      "AFC Wild Card|LAC|BUF|27|36|BUF",
+      "AFC Wild Card|NE|KC|27|23|NE",
+      "AFC Wild Card|JAX|DEN|30|27|JAX",
+      "NFC Wild Card|TB|CAR|34|22|TB",
+      "NFC Wild Card|DAL|SF|25|24|DAL",
+      "NFC Wild Card|DET|NO|29|37|NO",
+      "AFC Divisional|BAL|BUF|21|23|BUF",
+      "AFC Divisional|NE|JAX|29|16|NE",
+      "NFC Divisional|LA|NO|23|18|LA",
+      "NFC Divisional|TB|DAL|38|27|TB",
+      "AFC Championship|NE|BUF|40|25|NE",
+      "NFC Championship|LA|TB|23|16|LA",
+      "Super Bowl|NE|LA|20|25|LA"
+     ],
+     "champion": "LA",
+     "next": "afd5c90d309fdd30c7e6cabdc9b7f724f4622da7",
+     "records": "c85aad74e52cf2fd4712a50bb4974c34ac7a15db"
+    },
+    {
+     "id": "set 0 fifteen 1",
+     "user": "BUF",
+     "seeds": "NE,DEN,CIN,HOU,BUF,KC,BAL,DET,LA,PHI,NO,SF,DAL,GB",
+     "games": [
+      "AFC Wild Card|DEN|BAL|33|23|DEN",
+      "AFC Wild Card|CIN|KC|31|18|CIN",
+      "AFC Wild Card|HOU|BUF|29|39|BUF",
+      "NFC Wild Card|LA|GB|24|34|GB",
+      "NFC Wild Card|PHI|DAL|39|23|PHI",
+      "NFC Wild Card|NO|SF|20|29|SF",
+      "AFC Divisional|NE|BUF|30|43|BUF",
+      "AFC Divisional|DEN|CIN|18|31|CIN",
+      "NFC Divisional|DET|GB|23|16|DET",
+      "NFC Divisional|PHI|SF|24|39|SF",
+      "AFC Championship|CIN|BUF|17|32|BUF",
+      "NFC Championship|DET|SF|19|27|SF",
+      "Super Bowl|BUF|SF|25|34|SF"
+     ],
+     "champion": "SF",
+     "next": "c22d1287d5dfbc16f49c26bb00ea4bf167b8b027",
+     "records": "c0fc7c61a2d91dbde5716499c42e616cd683f501"
+    },
+    {
+     "id": "set 0 fifteen 2",
+     "user": "CIN",
+     "seeds": "BUF,CIN,KC,HOU,NE,LAC,DEN,TB,DET,SF,DAL,LA,WAS,PHI",
+     "games": [
+      "AFC Wild Card|CIN|DEN|29|39|DEN",
+      "AFC Wild Card|KC|LAC|28|23|KC",
+      "AFC Wild Card|HOU|NE|29|44|NE",
+      "NFC Wild Card|DET|PHI|24|17|DET",
+      "NFC Wild Card|SF|WAS|34|21|SF",
+      "NFC Wild Card|DAL|LA|30|40|LA",
+      "AFC Divisional|BUF|DEN|19|24|DEN",
+      "AFC Divisional|KC|NE|28|35|NE",
+      "NFC Divisional|TB|LA|25|35|LA",
+      "NFC Divisional|DET|SF|40|23|DET",
+      "AFC Championship|NE|DEN|44|27|NE",
+      "NFC Championship|DET|LA|28|24|DET",
+      "Super Bowl|NE|DET|46|30|NE"
+     ],
+     "champion": "NE",
+     "next": "ad5cef44b678a41abcb69b29763b3dad5230a76a",
+     "records": "6a61f67915e2aba0babbfb2b6ad41832072c1d33"
+    },
+    {
+     "id": "set 0 deep 0",
+     "user": "GB",
+     "seeds": "BUF,PIT,KC,JAX,NE,BAL,CIN,DET,DAL,LA,ATL,PHI,SF,SEA",
+     "games": [
+      "AFC Wild Card|PIT|CIN|26|30|CIN",
+      "AFC Wild Card|KC|BAL|23|35|BAL",
+      "AFC Wild Card|JAX|NE|30|23|JAX",
+      "NFC Wild Card|DAL|SEA|41|24|DAL",
+      "NFC Wild Card|LA|SF|31|16|LA",
+      "NFC Wild Card|ATL|PHI|27|23|ATL",
+      "AFC Divisional|BUF|CIN|40|30|BUF",
+      "AFC Divisional|JAX|BAL|30|18|JAX",
+      "NFC Divisional|DET|ATL|38|24|DET",
+      "NFC Divisional|DAL|LA|33|16|DAL",
+      "AFC Championship|BUF|JAX|44|30|BUF",
+      "NFC Championship|DET|DAL|19|31|DAL",
+      "Super Bowl|BUF|DAL|22|24|DAL"
+     ],
+     "champion": "DAL",
+     "next": "77dc0fee198014087eed20cd88292647d78c7a54",
+     "records": "f1d6ccc2ef03ffe6568613b4b6406c04bc604230"
+    },
+    {
+     "id": "set 0 deep 1",
+     "user": "JAX",
+     "seeds": "DEN,BUF,BAL,JAX,NE,LAC,CIN,DAL,SF,TB,DET,LA,PHI,GB",
+     "games": [
+      "AFC Wild Card|BUF|CIN|26|20|BUF",
+      "AFC Wild Card|BAL|LAC|42|30|BAL",
+      "AFC Wild Card|JAX|NE|34|30|JAX",
+      "NFC Wild Card|SF|GB|34|18|SF",
+      "NFC Wild Card|TB|PHI|24|41|PHI",
+      "NFC Wild Card|DET|LA|28|32|LA",
+      "AFC Divisional|DEN|JAX|18|16|DEN",
+      "AFC Divisional|BUF|BAL|31|22|BUF",
+      "NFC Divisional|DAL|PHI|21|18|DAL",
+      "NFC Divisional|SF|LA|27|32|LA",
+      "AFC Championship|DEN|BUF|24|18|DEN",
+      "NFC Championship|DAL|LA|20|32|LA",
+      "Super Bowl|DEN|LA|17|20|LA"
+     ],
+     "champion": "LA",
+     "next": "edd90956bbcf834fc7b3b9c16fcd40166051a3fb",
+     "records": "c0822d45a471976df5aca9e4567aac75b6f6d2e9"
+    },
+    {
+     "id": "set 0 deep 2",
+     "user": "LAC",
+     "seeds": "HOU,DEN,NE,BAL,JAX,KC,NYJ,ATL,CHI,LA,PHI,DET,DAL,TB",
+     "games": [
+      "AFC Wild Card|DEN|NYJ|24|34|NYJ",
+      "AFC Wild Card|NE|KC|33|17|NE",
+      "AFC Wild Card|BAL|JAX|17|34|JAX",
+      "NFC Wild Card|CHI|TB|34|30|CHI",
+      "NFC Wild Card|LA|DAL|29|25|LA",
+      "NFC Wild Card|PHI|DET|25|28|DET",
+      "AFC Divisional|HOU|NYJ|29|18|HOU",
+      "AFC Divisional|NE|JAX|36|19|NE",
+      "NFC Divisional|ATL|DET|26|24|ATL",
+      "NFC Divisional|CHI|LA|20|23|LA",
+      "AFC Championship|HOU|NE|16|32|NE",
+      "NFC Championship|ATL|LA|20|25|LA",
+      "Super Bowl|NE|LA|18|25|LA"
+     ],
+     "champion": "LA",
+     "next": "1d42caa1415532f785ac19b1ce8061a70f2ea083",
+     "records": "2af3fa49bddf7670b2b60fc92b70ba4592e85e91"
+    }
+   ]
+  },
+  "1": {
+   "seasons": 80,
+   "digest": "987fac88e871cb7f7d8816611b82e78e517a7d6b",
+   "kept": [
+    {
+     "id": "set 1 fifteen 0",
+     "user": "CLE",
+     "seeds": "NE,DEN,PIT,IND,KC,BAL,HOU,DET,DAL,TB,LA,MIN,WAS,PHI",
+     "games": [
+      "AFC Wild Card|DEN|HOU|29|16|DEN",
+      "AFC Wild Card|PIT|BAL|20|37|BAL",
+      "AFC Wild Card|IND|KC|42|26|IND",
+      "NFC Wild Card|DAL|PHI|24|41|PHI",
+      "NFC Wild Card|TB|WAS|24|32|WAS",
+      "NFC Wild Card|LA|MIN|38|26|LA",
+      "AFC Divisional|NE|BAL|33|25|NE",
+      "AFC Divisional|DEN|IND|36|30|DEN",
+      "NFC Divisional|DET|PHI|37|30|DET",
+      "NFC Divisional|LA|WAS|20|24|WAS",
+      "AFC Championship|NE|DEN|41|27|NE",
+      "NFC Championship|DET|WAS|30|27|DET",
+      "Super Bowl|NE|DET|27|39|DET"
+     ],
+     "champion": "DET",
+     "next": "bfdf818f906f0a2cc42fabeee7ba91cda08b9e39",
+     "records": "9dfb57cd5edcfd0c631ad888a3ce3a2beb893d76"
+    },
+    {
+     "id": "set 1 fifteen 1",
+     "user": "DET",
+     "seeds": "KC,BUF,CIN,JAX,LAC,NE,IND,DET,LA,DAL,TB,SF,CHI,PHI",
+     "games": [
+      "AFC Wild Card|BUF|IND|24|32|IND",
+      "AFC Wild Card|CIN|NE|29|42|NE",
+      "AFC Wild Card|JAX|LAC|16|33|LAC",
+      "NFC Wild Card|LA|PHI|26|16|LA",
+      "NFC Wild Card|DAL|CHI|35|19|DAL",
+      "NFC Wild Card|TB|SF|21|36|SF",
+      "AFC Divisional|KC|IND|32|21|KC",
+      "AFC Divisional|LAC|NE|40|24|LAC",
+      "NFC Divisional|DET|SF|24|39|SF",
+      "NFC Divisional|LA|DAL|20|28|DAL",
+      "AFC Championship|KC|LAC|36|22|KC",
+      "NFC Championship|DAL|SF|31|30|DAL",
+      "Super Bowl|KC|DAL|26|24|KC"
+     ],
+     "champion": "KC",
+     "next": "e499f4198a996ba2e879e3621d0ea8276c42e897",
+     "records": "808174f35958ada4c15d7f1a399b334139405719"
+    },
+    {
+     "id": "set 1 fifteen 2",
+     "user": "IND",
+     "seeds": "BUF,CIN,DEN,HOU,NE,LAC,PIT,SF,GB,TB,PHI,LA,DET,NO",
+     "games": [
+      "AFC Wild Card|CIN|PIT|20|19|CIN",
+      "AFC Wild Card|DEN|LAC|16|32|LAC",
+      "AFC Wild Card|HOU|NE|28|41|NE",
+      "NFC Wild Card|GB|NO|37|22|GB",
+      "NFC Wild Card|TB|DET|32|25|TB",
+      "NFC Wild Card|PHI|LA|19|32|LA",
+      "AFC Divisional|BUF|LAC|41|29|BUF",
+      "AFC Divisional|CIN|NE|19|34|NE",
+      "NFC Divisional|SF|LA|30|31|LA",
+      "NFC Divisional|GB|TB|37|27|GB",
+      "AFC Championship|BUF|NE|27|44|NE",
+      "NFC Championship|GB|LA|29|43|LA",
+      "Super Bowl|NE|LA|32|18|NE"
+     ],
+     "champion": "NE",
+     "next": "15cc2977e4b4b40ea621abc7dc08299c0444ecc2",
+     "records": "2930ad064b791decfcff28ffc1890a81ba04e0fb"
+    },
+    {
+     "id": "set 1 deep 0",
+     "user": "LV",
+     "seeds": "KC,BUF,JAX,CIN,LAC,NE,DEN,DAL,DET,LA,TB,SF,SEA,PHI",
+     "games": [
+      "AFC Wild Card|BUF|DEN|40|26|BUF",
+      "AFC Wild Card|JAX|NE|24|35|NE",
+      "AFC Wild Card|CIN|LAC|20|31|LAC",
+      "NFC Wild Card|DET|PHI|20|19|DET",
+      "NFC Wild Card|LA|SEA|37|23|LA",
+      "NFC Wild Card|TB|SF|24|39|SF",
+      "AFC Divisional|KC|NE|25|35|NE",
+      "AFC Divisional|BUF|LAC|19|25|LAC",
+      "NFC Divisional|DAL|SF|36|28|DAL",
+      "NFC Divisional|DET|LA|29|45|LA",
+      "AFC Championship|LAC|NE|26|25|LAC",
+      "NFC Championship|DAL|LA|45|30|DAL",
+      "Super Bowl|LAC|DAL|35|24|LAC"
+     ],
+     "champion": "LAC",
+     "next": "01d9e59d1dc97c13012bc881d7e28dd8efbfc4f4",
+     "records": "3466e3e02ecc70df8b112747d9827cf6247f2c61"
+    },
+    {
+     "id": "set 1 deep 1",
+     "user": "NE",
+     "seeds": "DEN,BUF,JAX,BAL,PIT,LV,NE,DAL,DET,LA,ATL,PHI,CHI,SF",
+     "games": [
+      "AFC Wild Card|BUF|NE|19|18|BUF",
+      "AFC Wild Card|JAX|LV|34|18|JAX",
+      "AFC Wild Card|BAL|PIT|40|24|BAL",
+      "NFC Wild Card|DET|SF|35|23|DET",
+      "NFC Wild Card|LA|CHI|21|33|CHI",
+      "NFC Wild Card|ATL|PHI|36|22|ATL",
+      "AFC Divisional|DEN|BAL|23|31|BAL",
+      "AFC Divisional|BUF|JAX|27|25|BUF",
+      "NFC Divisional|DAL|CHI|36|20|DAL",
+      "NFC Divisional|DET|ATL|38|22|DET",
+      "AFC Championship|BUF|BAL|42|25|BUF",
+      "NFC Championship|DAL|DET|26|21|DAL",
+      "Super Bowl|BUF|DAL|23|40|DAL"
+     ],
+     "champion": "DAL",
+     "next": "29cf2a74d1dc3a6e0e6896949d5ac693922e4bdb",
+     "records": "602ce8ac3b28431b2f1dce90a2319528e615a769"
+    },
+    {
+     "id": "set 1 deep 2",
+     "user": "NYJ",
+     "seeds": "BUF,KC,IND,BAL,NE,DEN,CIN,LA,DAL,DET,NO,SF,SEA,PHI",
+     "games": [
+      "AFC Wild Card|KC|CIN|37|26|KC",
+      "AFC Wild Card|IND|DEN|18|28|DEN",
+      "AFC Wild Card|BAL|NE|33|18|BAL",
+      "NFC Wild Card|DAL|PHI|22|36|PHI",
+      "NFC Wild Card|DET|SEA|20|32|SEA",
+      "NFC Wild Card|NO|SF|28|43|SF",
+      "AFC Divisional|BUF|DEN|29|41|DEN",
+      "AFC Divisional|KC|BAL|44|29|KC",
+      "NFC Divisional|LA|PHI|32|16|LA",
+      "NFC Divisional|SF|SEA|29|19|SF",
+      "AFC Championship|KC|DEN|28|17|KC",
+      "NFC Championship|LA|SF|17|28|SF",
+      "Super Bowl|KC|SF|44|30|KC"
+     ],
+     "champion": "KC",
+     "next": "d0f8001bc16715cde2835526ff9addb88ace7ee5",
+     "records": "87e42b45fd0d1f6819f43eb4eab6d98079eab6c4"
+    }
+   ]
+  },
+  "2": {
+   "seasons": 80,
+   "digest": "4de2cdbc60e4cd76ad43edc804ad319e741f2630",
+   "kept": [
+    {
+     "id": "set 2 fifteen 0",
+     "user": "JAX",
+     "seeds": "JAX,BUF,BAL,KC,IND,NE,CIN,WAS,LA,GB,TB,DET,PHI,SEA",
+     "games": [
+      "AFC Wild Card|BUF|CIN|30|33|CIN",
+      "AFC Wild Card|BAL|NE|36|28|BAL",
+      "AFC Wild Card|KC|IND|30|37|IND",
+      "NFC Wild Card|LA|SEA|16|18|SEA",
+      "NFC Wild Card|GB|PHI|26|24|GB",
+      "NFC Wild Card|TB|DET|39|25|TB",
+      "AFC Divisional|JAX|CIN|31|28|JAX",
+      "AFC Divisional|BAL|IND|45|30|BAL",
+      "NFC Divisional|WAS|SEA|22|32|SEA",
+      "NFC Divisional|GB|TB|37|23|GB",
+      "AFC Championship|JAX|BAL|28|45|BAL",
+      "NFC Championship|GB|SEA|28|27|GB",
+      "Super Bowl|BAL|GB|16|26|GB"
+     ],
+     "champion": "GB",
+     "next": "8d6a66c89c491d0adbe802be5cd4befa9e21595a",
+     "records": "68bd2cb9cef0c17a15aa0fae34c108778431e0c0"
+    },
+    {
+     "id": "set 2 fifteen 1",
+     "user": "LAC",
+     "seeds": "BUF,DEN,HOU,CIN,IND,NE,BAL,GB,NO,PHI,SEA,DET,ATL,DAL",
+     "games": [
+      "AFC Wild Card|DEN|BAL|33|22|DEN",
+      "AFC Wild Card|HOU|NE|26|23|HOU",
+      "AFC Wild Card|CIN|IND|24|36|IND",
+      "NFC Wild Card|NO|DAL|22|31|DAL",
+      "NFC Wild Card|PHI|ATL|25|18|PHI",
+      "NFC Wild Card|SEA|DET|18|28|DET",
+      "AFC Divisional|BUF|IND|24|27|IND",
+      "AFC Divisional|DEN|HOU|29|21|DEN",
+      "NFC Divisional|GB|DAL|19|25|DAL",
+      "NFC Divisional|PHI|DET|35|24|PHI",
+      "AFC Championship|DEN|IND|27|32|IND",
+      "NFC Championship|PHI|DAL|17|19|DAL",
+      "Super Bowl|IND|DAL|29|26|IND"
+     ],
+     "champion": "IND",
+     "next": "80fe2ee89f5e78f8c1c6d6a54d8a51f8c69ab0bc",
+     "records": "92235e3ec68c99dbc036cfbc06a914243feef15d"
+    },
+    {
+     "id": "set 2 fifteen 2",
+     "user": "MIN",
+     "seeds": "IND,BUF,DEN,PIT,KC,NE,JAX,DET,SF,DAL,TB,LA,CHI,NO",
+     "games": [
+      "AFC Wild Card|BUF|JAX|38|25|BUF",
+      "AFC Wild Card|DEN|NE|39|22|DEN",
+      "AFC Wild Card|PIT|KC|32|25|PIT",
+      "NFC Wild Card|SF|NO|26|20|SF",
+      "NFC Wild Card|DAL|CHI|34|27|DAL",
+      "NFC Wild Card|TB|LA|34|27|TB",
+      "AFC Divisional|IND|PIT|24|29|PIT",
+      "AFC Divisional|BUF|DEN|19|25|DEN",
+      "NFC Divisional|DET|TB|28|19|DET",
+      "NFC Divisional|SF|DAL|26|43|DAL",
+      "AFC Championship|DEN|PIT|30|29|DEN",
+      "NFC Championship|DET|DAL|42|29|DET",
+      "Super Bowl|DEN|DET|24|37|DET"
+     ],
+     "champion": "DET",
+     "next": "73764544e86a62f3994025af27d42e21ff7c7466",
+     "records": "dc786ae30db28d2dc9dfdd4d1f18f205e8126d68"
+    },
+    {
+     "id": "set 2 deep 0",
+     "user": "PHI",
+     "seeds": "NE,BAL,JAX,LAC,TEN,BUF,PIT,PHI,SF,GB,ATL,LA,WAS,DAL",
+     "games": [
+      "AFC Wild Card|BAL|PIT|20|16|BAL",
+      "AFC Wild Card|JAX|BUF|33|22|JAX",
+      "AFC Wild Card|LAC|TEN|26|32|TEN",
+      "NFC Wild Card|SF|DAL|38|28|SF",
+      "NFC Wild Card|GB|WAS|24|28|WAS",
+      "NFC Wild Card|ATL|LA|33|18|ATL",
+      "AFC Divisional|NE|TEN|20|16|NE",
+      "AFC Divisional|BAL|JAX|27|30|JAX",
+      "NFC Divisional|PHI|WAS|33|29|PHI",
+      "NFC Divisional|SF|ATL|32|28|SF",
+      "AFC Championship|NE|JAX|19|17|NE",
+      "NFC Championship|PHI|SF|25|35|SF",
+      "Super Bowl|NE|SF|19|26|SF"
+     ],
+     "champion": "SF",
+     "next": "3345d0b16726a7fc6dcda01a6d6a422d9660dc1f",
+     "records": "a157bdd74725bfbfd92644d9714011b62d290d15"
+    },
+    {
+     "id": "set 2 deep 1",
+     "user": "SF",
+     "seeds": "JAX,BUF,CIN,LAC,NE,BAL,PIT,DET,SEA,PHI,TB,SF,GB,LA",
+     "games": [
+      "AFC Wild Card|BUF|PIT|16|31|PIT",
+      "AFC Wild Card|CIN|BAL|26|41|BAL",
+      "AFC Wild Card|LAC|NE|42|27|LAC",
+      "NFC Wild Card|SEA|LA|41|25|SEA",
+      "NFC Wild Card|PHI|GB|27|33|GB",
+      "NFC Wild Card|TB|SF|20|31|SF",
+      "AFC Divisional|JAX|PIT|27|42|PIT",
+      "AFC Divisional|LAC|BAL|41|26|LAC",
+      "NFC Divisional|DET|GB|20|31|GB",
+      "NFC Divisional|SEA|SF|18|20|SF",
+      "AFC Championship|LAC|PIT|29|32|PIT",
+      "NFC Championship|SF|GB|37|28|SF",
+      "Super Bowl|PIT|SF|28|18|PIT"
+     ],
+     "champion": "PIT",
+     "next": "901bb6f2eb4a7f69d61e0c2a7e2dd08a9d2a4d67",
+     "records": "c2162fc4e07b87a23ba3e8d870e4ce7170b3515a"
+    },
+    {
+     "id": "set 2 deep 2",
+     "user": "WAS",
+     "seeds": "BUF,KC,CIN,JAX,NE,PIT,TEN,DET,TB,DAL,LA,SF,PHI,GB",
+     "games": [
+      "AFC Wild Card|KC|TEN|37|27|KC",
+      "AFC Wild Card|CIN|PIT|25|29|PIT",
+      "AFC Wild Card|JAX|NE|33|18|JAX",
+      "NFC Wild Card|TB|GB|29|39|GB",
+      "NFC Wild Card|DAL|PHI|23|28|PHI",
+      "NFC Wild Card|LA|SF|37|22|LA",
+      "AFC Divisional|BUF|PIT|29|24|BUF",
+      "AFC Divisional|KC|JAX|31|24|KC",
+      "NFC Divisional|DET|GB|20|16|DET",
+      "NFC Divisional|LA|PHI|24|32|PHI",
+      "AFC Championship|BUF|KC|41|30|BUF",
+      "NFC Championship|DET|PHI|22|20|DET",
+      "Super Bowl|BUF|DET|24|36|DET"
+     ],
+     "champion": "DET",
+     "next": "567e0bb802aac85267203b67946349da83ed4dca",
+     "records": "5bb34647317388b3fe5f6c539166a9f914efecd0"
+    }
+   ]
+  },
+  "3": {
+   "seasons": 80,
+   "digest": "3be06e01aa09ee5ec6945fb730da6d84c4232936",
+   "kept": [
+    {
+     "id": "set 3 fifteen 0",
+     "user": "NE",
+     "seeds": "NE,DEN,BAL,IND,KC,CIN,NYJ,LA,GB,NO,DAL,SF,DET,PHI",
+     "games": [
+      "AFC Wild Card|DEN|NYJ|23|17|DEN",
+      "AFC Wild Card|BAL|CIN|31|28|BAL",
+      "AFC Wild Card|IND|KC|24|23|IND",
+      "NFC Wild Card|GB|PHI|40|30|GB",
+      "NFC Wild Card|NO|DET|19|16|NO",
+      "NFC Wild Card|DAL|SF|27|21|DAL",
+      "AFC Divisional|NE|IND|21|18|NE",
+      "AFC Divisional|DEN|BAL|19|29|BAL",
+      "NFC Divisional|LA|DAL|30|24|LA",
+      "NFC Divisional|GB|NO|30|18|GB",
+      "AFC Championship|NE|BAL|35|19|NE",
+      "NFC Championship|LA|GB|36|20|LA",
+      "Super Bowl|NE|LA|25|38|LA"
+     ],
+     "champion": "LA",
+     "next": "af87f7aedb574e6f1d3bd5ef5aea9c7b3458c2a9",
+     "records": "fc6fb2f8c9e8ca867402281c8d44b9452e7f7a66"
+    },
+    {
+     "id": "set 3 fifteen 1",
+     "user": "NYJ",
+     "seeds": "JAX,KC,BUF,BAL,IND,DEN,CIN,DET,SF,PHI,NO,LA,DAL,MIN",
+     "games": [
+      "AFC Wild Card|KC|CIN|34|21|KC",
+      "AFC Wild Card|BUF|DEN|26|32|DEN",
+      "AFC Wild Card|BAL|IND|47|30|BAL",
+      "NFC Wild Card|SF|MIN|36|27|SF",
+      "NFC Wild Card|PHI|DAL|36|27|PHI",
+      "NFC Wild Card|NO|LA|26|43|LA",
+      "AFC Divisional|JAX|DEN|39|27|JAX",
+      "AFC Divisional|KC|BAL|18|24|BAL",
+      "NFC Divisional|DET|LA|21|30|LA",
+      "NFC Divisional|SF|PHI|35|25|SF",
+      "AFC Championship|JAX|BAL|47|30|JAX",
+      "NFC Championship|SF|LA|32|20|SF",
+      "Super Bowl|JAX|SF|29|42|SF"
+     ],
+     "champion": "SF",
+     "next": "c5ec65344e3f37280eb19b1785c6df3bc97489f8",
+     "records": "7571b410bf48191675e097a2a2e89115c9ba4ded"
+    },
+    {
+     "id": "set 3 fifteen 2",
+     "user": "SEA",
+     "seeds": "JAX,DEN,BUF,BAL,IND,PIT,LAC,DAL,LA,GB,TB,CHI,DET,SF",
+     "games": [
+      "AFC Wild Card|DEN|LAC|19|35|LAC",
+      "AFC Wild Card|BUF|PIT|32|30|BUF",
+      "AFC Wild Card|BAL|IND|20|31|IND",
+      "NFC Wild Card|LA|SF|37|20|LA",
+      "NFC Wild Card|GB|DET|16|17|DET",
+      "NFC Wild Card|TB|CHI|42|27|TB",
+      "AFC Divisional|JAX|LAC|33|22|JAX",
+      "AFC Divisional|BUF|IND|35|20|BUF",
+      "NFC Divisional|DAL|DET|34|29|DAL",
+      "NFC Divisional|LA|TB|33|19|LA",
+      "AFC Championship|JAX|BUF|27|39|BUF",
+      "NFC Championship|DAL|LA|31|28|DAL",
+      "Super Bowl|BUF|DAL|32|19|BUF"
+     ],
+     "champion": "BUF",
+     "next": "464b15831f4c70e2a40271c5fc4e45903f506afc",
+     "records": "e43e55fb55c704968ad120f31ef3b11b6edfaaff"
+    },
+    {
+     "id": "set 3 deep 0",
+     "user": "ARI",
+     "seeds": "NE,BAL,DEN,HOU,BUF,IND,CIN,DET,LA,PHI,TB,CHI,WAS,SF",
+     "games": [
+      "AFC Wild Card|BAL|CIN|33|27|BAL",
+      "AFC Wild Card|DEN|IND|33|29|DEN",
+      "AFC Wild Card|HOU|BUF|29|35|BUF",
+      "NFC Wild Card|LA|SF|22|16|LA",
+      "NFC Wild Card|PHI|WAS|24|20|PHI",
+      "NFC Wild Card|TB|CHI|26|42|CHI",
+      "AFC Divisional|NE|BUF|34|29|NE",
+      "AFC Divisional|BAL|DEN|33|29|BAL",
+      "NFC Divisional|DET|CHI|25|38|CHI",
+      "NFC Divisional|LA|PHI|30|26|LA",
+      "AFC Championship|NE|BAL|28|40|BAL",
+      "NFC Championship|LA|CHI|27|16|LA",
+      "Super Bowl|BAL|LA|17|16|BAL"
+     ],
+     "champion": "BAL",
+     "next": "ab9f792b10da97447db33a5ccad0bbed30dcce24",
+     "records": "6980c5db20b1962dadb149a851a1415c639bb207"
+    },
+    {
+     "id": "set 3 deep 1",
+     "user": "BUF",
+     "seeds": "BUF,CIN,LV,JAX,BAL,HOU,IND,LA,DET,PHI,ATL,SF,MIN,DAL",
+     "games": [
+      "AFC Wild Card|CIN|IND|25|38|IND",
+      "AFC Wild Card|LV|HOU|23|29|HOU",
+      "AFC Wild Card|JAX|BAL|17|22|BAL",
+      "NFC Wild Card|DET|DAL|32|25|DET",
+      "NFC Wild Card|PHI|MIN|23|22|PHI",
+      "NFC Wild Card|ATL|SF|24|26|SF",
+      "AFC Divisional|BUF|IND|18|27|IND",
+      "AFC Divisional|BAL|HOU|34|24|BAL",
+      "NFC Divisional|LA|SF|29|24|LA",
+      "NFC Divisional|DET|PHI|24|16|DET",
+      "AFC Championship|BAL|IND|24|17|BAL",
+      "NFC Championship|LA|DET|30|35|DET",
+      "Super Bowl|BAL|DET|38|21|BAL"
+     ],
+     "champion": "BAL",
+     "next": "49accd798aa8e51f316b3964e9d91459b5538572",
+     "records": "ae0e1150730db290a85453db4fe92636e9128b60"
+    },
+    {
+     "id": "set 3 deep 2",
+     "user": "CIN",
+     "seeds": "LV,BUF,BAL,HOU,DEN,KC,PIT,PHI,SF,DET,CAR,LA,DAL,SEA",
+     "games": [
+      "AFC Wild Card|BUF|PIT|16|31|PIT",
+      "AFC Wild Card|BAL|KC|28|29|KC",
+      "AFC Wild Card|HOU|DEN|27|34|DEN",
+      "NFC Wild Card|SF|SEA|23|18|SF",
+      "NFC Wild Card|DET|DAL|23|37|DAL",
+      "NFC Wild Card|CAR|LA|19|17|CAR",
+      "AFC Divisional|LV|PIT|39|28|LV",
+      "AFC Divisional|DEN|KC|35|25|DEN",
+      "NFC Divisional|PHI|DAL|18|26|DAL",
+      "NFC Divisional|SF|CAR|24|19|SF",
+      "AFC Championship|LV|DEN|19|33|DEN",
+      "NFC Championship|SF|DAL|23|33|DAL",
+      "Super Bowl|DEN|DAL|16|32|DAL"
+     ],
+     "champion": "DAL",
+     "next": "1e3da89bcb39c07a47a28b6558f16620d7ebd89c",
+     "records": "52b37782d732ac7149f6fc9f35131a2951f88e12"
+    }
+   ]
+  },
+  "4": {
+   "seasons": 80,
+   "digest": "d37612fc704ac45519e3d54ad187b51fa0bd4c90",
+   "kept": [
+    {
+     "id": "set 4 fifteen 0",
+     "user": "SF",
+     "seeds": "DEN,BUF,JAX,BAL,NE,KC,HOU,LA,TB,DAL,GB,SF,WAS,DET",
+     "games": [
+      "AFC Wild Card|BUF|HOU|34|29|BUF",
+      "AFC Wild Card|JAX|KC|28|41|KC",
+      "AFC Wild Card|BAL|NE|36|24|BAL",
+      "NFC Wild Card|TB|DET|17|31|DET",
+      "NFC Wild Card|DAL|WAS|18|16|DAL",
+      "NFC Wild Card|GB|SF|23|18|GB",
+      "AFC Divisional|DEN|KC|41|28|DEN",
+      "AFC Divisional|BUF|BAL|26|36|BAL",
+      "NFC Divisional|LA|DET|25|18|LA",
+      "NFC Divisional|DAL|GB|20|33|GB",
+      "AFC Championship|DEN|BAL|18|24|BAL",
+      "NFC Championship|LA|GB|29|19|LA",
+      "Super Bowl|BAL|LA|19|27|LA"
+     ],
+     "champion": "LA",
+     "next": "64580263da6d23a70a1c51379127774b7960613c",
+     "records": "4fc73105fb7f304aacaeec16a35f3ed50eeb08e9"
+    },
+    {
+     "id": "set 4 fifteen 1",
+     "user": "WAS",
+     "seeds": "CIN,DEN,BUF,IND,LAC,KC,NE,DET,LA,PHI,TB,SF,DAL,CHI",
+     "games": [
+      "AFC Wild Card|DEN|NE|16|20|NE",
+      "AFC Wild Card|BUF|KC|29|21|BUF",
+      "AFC Wild Card|IND|LAC|26|20|IND",
+      "NFC Wild Card|LA|CHI|19|21|CHI",
+      "NFC Wild Card|PHI|DAL|33|17|PHI",
+      "NFC Wild Card|TB|SF|28|39|SF",
+      "AFC Divisional|CIN|NE|41|29|CIN",
+      "AFC Divisional|BUF|IND|31|20|BUF",
+      "NFC Divisional|DET|CHI|29|18|DET",
+      "NFC Divisional|PHI|SF|31|19|PHI",
+      "AFC Championship|CIN|BUF|25|30|BUF",
+      "NFC Championship|DET|PHI|28|30|PHI",
+      "Super Bowl|BUF|PHI|18|20|PHI"
+     ],
+     "champion": "PHI",
+     "next": "c3c5c5814f51af339566fd0683b5efca3254953e",
+     "records": "15b218a411e33fab414fe2d6f5d4754502bc6c6d"
+    },
+    {
+     "id": "set 4 fifteen 2",
+     "user": "BAL",
+     "seeds": "NE,BAL,HOU,KC,BUF,DEN,IND,DAL,SF,TB,CHI,LA,PHI,SEA",
+     "games": [
+      "AFC Wild Card|BAL|IND|35|23|BAL",
+      "AFC Wild Card|HOU|DEN|37|28|HOU",
+      "AFC Wild Card|KC|BUF|40|25|KC",
+      "NFC Wild Card|SF|SEA|20|30|SEA",
+      "NFC Wild Card|TB|PHI|31|20|TB",
+      "NFC Wild Card|CHI|LA|25|40|LA",
+      "AFC Divisional|NE|KC|38|21|NE",
+      "AFC Divisional|BAL|HOU|30|22|BAL",
+      "NFC Divisional|DAL|SEA|30|28|DAL",
+      "NFC Divisional|TB|LA|32|25|TB",
+      "AFC Championship|NE|BAL|29|26|NE",
+      "NFC Championship|DAL|TB|21|26|TB",
+      "Super Bowl|NE|TB|16|28|TB"
+     ],
+     "champion": "TB",
+     "next": "02cc99cc883271c9902139337b4ac5d57ef57da3",
+     "records": "fb846e7c1c6417a28c42597326d6b91cb0b09599"
+    },
+    {
+     "id": "set 4 deep 0",
+     "user": "CLE",
+     "seeds": "PIT,BUF,LV,JAX,NE,CIN,DEN,WAS,DET,SF,ATL,LA,DAL,SEA",
+     "games": [
+      "AFC Wild Card|BUF|DEN|30|23|BUF",
+      "AFC Wild Card|LV|CIN|46|30|LV",
+      "AFC Wild Card|JAX|NE|24|41|NE",
+      "NFC Wild Card|DET|SEA|21|23|SEA",
+      "NFC Wild Card|SF|DAL|25|19|SF",
+      "NFC Wild Card|ATL|LA|26|22|ATL",
+      "AFC Divisional|PIT|NE|30|21|PIT",
+      "AFC Divisional|BUF|LV|40|25|BUF",
+      "NFC Divisional|WAS|SEA|30|22|WAS",
+      "NFC Divisional|SF|ATL|24|41|ATL",
+      "AFC Championship|PIT|BUF|25|38|BUF",
+      "NFC Championship|WAS|ATL|37|28|WAS",
+      "Super Bowl|BUF|WAS|27|18|BUF"
+     ],
+     "champion": "BUF",
+     "next": "f395f82cf6b89e9b401f0f11c46253927af5e2c4",
+     "records": "dc20df2b7b0363f9f76e789274bb53daab41f1ac"
+    },
+    {
+     "id": "set 4 deep 1",
+     "user": "DET",
+     "seeds": "BUF,JAX,KC,CIN,NE,HOU,DEN,DET,LA,TB,DAL,GB,ATL,ARI",
+     "games": [
+      "AFC Wild Card|JAX|DEN|28|19|JAX",
+      "AFC Wild Card|KC|HOU|16|27|HOU",
+      "AFC Wild Card|CIN|NE|18|19|NE",
+      "NFC Wild Card|LA|ARI|17|21|ARI",
+      "NFC Wild Card|TB|ATL|39|22|TB",
+      "NFC Wild Card|DAL|GB|27|41|GB",
+      "AFC Divisional|BUF|HOU|27|20|BUF",
+      "AFC Divisional|JAX|NE|35|22|JAX",
+      "NFC Divisional|DET|ARI|26|25|DET",
+      "NFC Divisional|TB|GB|26|40|GB",
+      "AFC Championship|BUF|JAX|25|18|BUF",
+      "NFC Championship|DET|GB|37|30|DET",
+      "Super Bowl|BUF|DET|28|17|BUF"
+     ],
+     "champion": "BUF",
+     "next": "b3227166ed67e9e51e1ff2885ee05ceebcf2763e",
+     "records": "d5d4d9a6298ae3c716b43c2f989dca2a4f9caf5d"
+    },
+    {
+     "id": "set 4 deep 2",
+     "user": "IND",
+     "seeds": "BAL,NE,DEN,IND,LAC,BUF,CIN,DET,LA,NYG,TB,SEA,SF,CHI",
+     "games": [
+      "AFC Wild Card|NE|CIN|19|24|CIN",
+      "AFC Wild Card|DEN|BUF|32|29|DEN",
+      "AFC Wild Card|IND|LAC|32|17|IND",
+      "NFC Wild Card|LA|CHI|37|30|LA",
+      "NFC Wild Card|NYG|SF|27|29|SF",
+      "NFC Wild Card|TB|SEA|34|30|TB",
+      "AFC Divisional|BAL|CIN|32|30|BAL",
+      "AFC Divisional|DEN|IND|32|25|DEN",
+      "NFC Divisional|DET|SF|23|35|SF",
+      "NFC Divisional|LA|TB|23|38|TB",
+      "AFC Championship|BAL|DEN|23|33|DEN",
+      "NFC Championship|TB|SF|20|23|SF",
+      "Super Bowl|DEN|SF|31|28|DEN"
+     ],
+     "champion": "DEN",
+     "next": "e34df642e19e6baaefc5cc0650930c29bcfda8a0",
+     "records": "534b79c917d5890a3c4602fc33305976c433f367"
+    }
+   ]
+  }
+ }
+}

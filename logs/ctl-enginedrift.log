@@ -1,0 +1,29 @@
+bundled in 103 ms; seed sets 0, 1, 2, 3, 4; 40 seasons a league kind a set; CONTROL enginedrift
+  FAIL (section 4): set 0: the engine's postseason over the set is the recorded one (scripts/data/gmBracketFixture.json): digest c36060b6487c against the recorded dc5143a97964; the first kept season that differs: set 0 fifteen 0; src/lib/frontOffice.ts is the file the fixture was recorded from; src/lib/finalsBracket.ts is the file the fixture was recorded from. If the change is meant, record again in the same commit: node scripts/recordGmBracketFixture.mjs
+  FAIL (section 4): set 0: the fixture's kept seasons are played to the letter
+set 0: 80 seasons, 22800 games told in 6584 ms; points a team game 22.71 (free 22.66); losers on 15 or fewer 0.4263 (free 0.4275); shutouts 0.0124 (free 0.0139); sides on 40 or more 0.0522 (free 0.0515); swapped 0.00053; the AFC champion won 38 of 80 title games
+  FAIL (section 4): set 1: the engine's postseason over the set is the recorded one (scripts/data/gmBracketFixture.json): digest bd1f05437ffd against the recorded 987fac88e871; the first kept season that differs: set 1 fifteen 0; src/lib/frontOffice.ts is the file the fixture was recorded from; src/lib/finalsBracket.ts is the file the fixture was recorded from. If the change is meant, record again in the same commit: node scripts/recordGmBracketFixture.mjs
+  FAIL (section 4): set 1: the fixture's kept seasons are played to the letter
+set 1: 80 seasons, 22800 games told in 6372 ms; points a team game 22.71 (free 22.71); losers on 15 or fewer 0.4275 (free 0.4263); shutouts 0.0137 (free 0.0154); sides on 40 or more 0.0540 (free 0.0512); swapped 0.00057; the AFC champion won 46 of 80 title games
+  FAIL (section 4): set 2: the engine's postseason over the set is the recorded one (scripts/data/gmBracketFixture.json): digest edb0eb9fd89a against the recorded 4de2cdbc60e4; the first kept season that differs: set 2 fifteen 0; src/lib/frontOffice.ts is the file the fixture was recorded from; src/lib/finalsBracket.ts is the file the fixture was recorded from. If the change is meant, record again in the same commit: node scripts/recordGmBracketFixture.mjs
+  FAIL (section 4): set 2: the fixture's kept seasons are played to the letter
+set 2: 80 seasons, 22800 games told in 6957 ms; points a team game 22.69 (free 22.56); losers on 15 or fewer 0.4268 (free 0.4392); shutouts 0.0146 (free 0.0154); sides on 40 or more 0.0527 (free 0.0495); swapped 0.00070; the AFC champion won 47 of 80 title games
+  FAIL (section 4): set 3: the engine's postseason over the set is the recorded one (scripts/data/gmBracketFixture.json): digest 5d4e129f6178 against the recorded 3be06e01aa09; the first kept season that differs: set 3 fifteen 0; src/lib/frontOffice.ts is the file the fixture was recorded from; src/lib/finalsBracket.ts is the file the fixture was recorded from. If the change is meant, record again in the same commit: node scripts/recordGmBracketFixture.mjs
+  FAIL (section 4): set 3: the fixture's kept seasons are played to the letter
+set 3: 80 seasons, 22800 games told in 7305 ms; points a team game 22.63 (free 22.59); losers on 15 or fewer 0.4345 (free 0.4356); shutouts 0.0132 (free 0.0153); sides on 40 or more 0.0530 (free 0.0515); swapped 0.00048; the AFC champion won 43 of 80 title games
+  FAIL (section 4): set 4: the engine's postseason over the set is the recorded one (scripts/data/gmBracketFixture.json): digest c4a79c1e2009 against the recorded d37612fc704a; the first kept season that differs: set 4 fifteen 0; src/lib/frontOffice.ts is the file the fixture was recorded from; src/lib/finalsBracket.ts is the file the fixture was recorded from. If the change is meant, record again in the same commit: node scripts/recordGmBracketFixture.mjs
+  FAIL (section 4): set 4: the fixture's kept seasons are played to the letter
+set 4: 80 seasons, 22800 games told in 6198 ms; points a team game 22.62 (free 22.69); losers on 15 or fewer 0.4344 (free 0.4273); shutouts 0.0138 (free 0.0140); sides on 40 or more 0.0517 (free 0.0527); swapped 0.00053; the AFC champion won 47 of 80 title games
+
+MEASURED over seed sets 0, 1, 2, 3, 4 (114000 games):
+  points: told 22.6166 to 22.7118, free 22.5600 to 22.7090, told less free -0.0766 to 0.1288 (band 0.25 either side)
+  losers15: told 0.4263 to 0.4345, free 0.4263 to 0.4392, told less free -0.0124 to 0.0071 (band 0.02 either side)
+  shutouts: told 0.0124 to 0.0146, free 0.0139 to 0.0154, told less free -0.0021 to -0.0002 (band 0.005 either side)
+  forty: told 0.0517 to 0.0540, free 0.0495 to 0.0527, told less free -0.0010 to 0.0032 (band 0.006 either side)
+  swapped share 0.0005 to 0.0007 (band: under 0.002)
+  tries a game by decile of the home chance (games, mean tries, swapped): 0: 0, none, 0 | 0.1: 633, 1.89, 3 | 0.2: 5384, 1.94, 0 | 0.3: 11548, 1.96, 0 | 0.4: 19174, 1.98, 0 | 0.5: 24477, 2.01, 0 | 0.6: 25576, 2.02, 1 | 0.7: 19186, 2.05, 12 | 0.8: 7775, 2.15, 45 | 0.9: 247, 1.81, 3
+  shapes of 114000 stories: trade 0.301, wire 0.217, rout 0.170, late 0.168, comeback 0.144
+  the AFC champion's share of title games 0.4750 to 0.5875 a set (a level title game is 0.582 by the engine's arithmetic; printed, never asserted)
+
+control enginedrift: RED AT THE NAMED CHECK (section 4); its named checks red: 1 of 1 ("is the recorded one"); checks that had to stay green and did not: none; sections red: 4
+simGmGameDay: 169 checks, 10 failed (control enginedrift)
