@@ -91,3 +91,65 @@ leaves the registry: a save that holds it would read a generated season (section
 
 A trap met three times in one day, for whoever writes the next comparison: the engine keeps counters in its
 module (generated ids). Two engines are only comparable when BOTH are fresh copies that made the same calls.
+
+## What was proven, and where (GitHub runners, the lane's remote check kit)
+
+Read a log with `git show origin/rc-results/<name>:logs/<label>.log | tail -60`; files a run kept are under
+`files/`. The base of every comparison is `46e4231cc82b6c047da6e0b4bdb5dfae5628a928` (origin/release-at-gate).
+
+- `r1225-base` (the base itself): the type gate 0; simDailyDeals 0 and both controls fire; the weight rows
+  BEFORE (below); the clubs the daily window deals (`files/daily-base.log`).
+- `r1225-s1` (the lift, Premier League alone, `b3a9752f`): the type gate 0; simFixtureBalance 0 and all eight
+  of its controls fire; simCmRealFixtures normal and its nine faults; simDailyDeals 0, both controls fire.
+- `r1225-fleet2` (`7953ea48`, still the Premier League alone): the fleet green, 250 careers in every league of
+  the game equal to the base with no field taken out. So the lift moved nothing.
+- `r1225-bind-<league>` (nine results, one a bind commit): the type gate 0, simDailyDeals 0 with both controls
+  firing, the data harness green with the bound count that commit expects (2 to 10), the Premier League's
+  engine proof 0, simFixtureBalance 0, in every one. The engine proof of the league itself was RED in eight
+  of the nine for a fault of the HARNESS (its new group compared a copy of the engine that had already
+  played with a fresh one; the engine keeps counters in its module), fixed in `90f0e063` and green for all
+  nine at that head in `r1225-final-b1`.
+- `r1225-final-b1` (`90f0e063`): the type gate 0. The engine proof with every fault: premier (12 groups, 760
+  fixture reads, 9 faults), championship (11 groups, 1,104 reads, 9 faults), bundesliga (11 groups, 612
+  reads, 9 faults). The engine proof for the other seven leagues, each 11 groups against the base. The fleet:
+  nofetch 250 careers, oldsaves 132 saves, dailies 11 clubs; prefetch fired for exactly the nine lazy
+  leagues, keyless and nostrip for all ten. simDailyDeals 0, both controls fire. The data harness: 10 ledgers,
+  10 frozen, 10 bound, 236 of 236 controls; a bound count of 9 is exit 1.
+- `r1225-final-a` (`fd9cbc9b`, a served build): nine list chunks in the build; the weight rows AFTER; the
+  Premier League walk green; simCmDataOnDemand green; and two builds mutated on the runner whose walk must
+  fail and does: the boot no longer waiting for a saved key's list (every journey stops after its reload),
+  and a start that neither fetches nor waits (no save holds a key).
+- `r1225-confirm` (`03160800`): the type gate 0; the three league walk green, 6 journeys, 90 checks, 3 pages
+  that fetch no list; the suite runner calls all five fixture harnesses green; no en or em dash on any line
+  the round added.
+
+## Weight (gzipped JavaScript, `SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs` on a served build)
+
+| route | before (base) | after | budget row today |
+|---|---|---|---|
+| /club-manager | 581.7K | 582.9K | 578 |
+| /manager-hot-seat | 599.6K | 600.6K | 596 |
+| /deadline-day | 609.7K | 610.7K | 606 |
+
+None of the growth is a list: the nine lists are nine chunks of their own (1,649 to 2,851 bytes gzipped,
+17,290 in all) that these pages do not fetch, which the walk checks request by request. The 1.0K to 1.2K is
+the registry itself in the engine's chunk: ten lines, nine loaders with their chunk names, and the rules
+around them. All three rows were already over their budget on the base (the lead is setting them for
+Release AT); each needs one more K than the base did. The budget numbers are the lead's.
+
+## A measurement the lead should read: outcomes on a real list (not a gate)
+
+`r1225-f4`: 20 seeded full seasons on the real list beside the same 20 seeds with the key taken out, league
+wide, against a yardstick of ten disjoint pairs of generated fleets (the "null sd").
+
+| league | goals a match, real minus generated | in null sd | home win share, real minus generated | in null sd |
+|---|---|---|---|---|
+| championship (24) | 2.6188 - 2.6314 = -0.0126 | -0.92 | 0.4442 - 0.4454 = -0.0012 | -0.20 |
+| laliga (20) | 2.6445 - 2.6399 = +0.0046 | +0.28 | 0.4554 - 0.4374 = +0.0180 | +3.83 |
+| bundesliga (18) | 2.6536 - 2.6619 = -0.0083 | -0.23 | 0.4577 - 0.4384 = +0.0193 | +1.90 |
+
+Goals a match do not move. The home win share is about two points higher on the real list in two of the
+three leagues, and in La Liga that is well outside the measured noise. Nothing was tuned: the brief says such
+a move is a finding about the engine and its calendar, not something to adjust in a data round. A larger run
+that includes the Premier League (already live on its real list since Release AT) was sent as `r1225-f4b`;
+its numbers are in the closing report `finish-1225.md` if it came back in time.

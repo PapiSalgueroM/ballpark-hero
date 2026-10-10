@@ -449,6 +449,8 @@ async function main() {
         const coverage = cm.careerFixtureCoverage(state);
         assert.equal(state.realLeagueFixtures, key); assert.equal(coverage?.key, key);
         assert.ok(coverage.label.startsWith(`Real 2026/27 ${leagueName} opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as `), 'The calendar line names the league and says what is real and what is simulated');
+        /* The Premier League's sentence is Release AT's, to the letter: the registry builds it now and must not reword it. */
+        if (LEAGUE === 'premier') assert.equal(coverage.label, 'Real 2026/27 Premier League opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in June 2026.');
         assert.deepEqual(clone(coverage.sources), data.sources, 'The calendar line links the two sources the ledger ships');
         for (const altered of [{ ...state, customClub: { name: 'Test custom club' } }, { ...state, leagueOverrides: { [LEAGUE]: [...clubs] } }]) {
           assert.equal(cm.__canBindLedger(altered, data, LEAGUE, [...clubs]), false, 'Custom and edited saves cannot claim untouched real fixtures');
