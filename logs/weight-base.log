@@ -1,0 +1,15 @@
+  FAIL: /club-manager: 55K against a 578K budget, so the budget is stale and should be lowered in this round
+  FAIL: /soccer-career: 76K against a 786K budget, so the budget is stale and should be lowered in this round
+  FAIL: /stadium-tycoon: 23K against a 297K budget, so the budget is stale and should be lowered in this round
+  FAIL: /wonderkid-factory: 11K against a 271K budget, so the budget is stale and should be lowered in this round
+  FAIL: /minefield: 27K against a 289K budget, so the budget is stale and should be lowered in this round
+  FAIL: /footle: 59K against a 345K budget, so the budget is stale and should be lowered in this round
+  FAIL: /nfl-my-career: 49K against a 468K budget, so the budget is stale and should be lowered in this round
+  FAIL: /front-office: 37K against a 359K budget, so the budget is stale and should be lowered in this round
+  FAIL: /soccer-grid: 38K against a 313K budget, so the budget is stale and should be lowered in this round
+  FAIL: /manager-hot-seat: 82K against a 596K budget, so the budget is stale and should be lowered in this round
+  FAIL: /deadline-day: 82K against a 606K budget, so the budget is stale and should be lowered in this round
+  FAIL: /transfer-path: 86K against a 374K budget, so the budget is stale and should be lowered in this round
+   /footle              59K gz over  39 files (budget 345K, 59.0K to the tenth)
+  FAIL: /soccer-career fetches no file with the national team pools, and it is the page that reads them: either they moved or the probes cannot see them
+sweepWeight: 13 failures

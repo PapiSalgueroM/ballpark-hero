@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+hub: ENGINES=chromium node scripts/playCareerHub.mjs
+hub-revert: CAREER_HUB_CONTROL=revert ENGINES=chromium node scripts/playCareerHub.mjs
+hub-logback: CAREER_HUB_CONTROL=logback ENGINES=chromium node scripts/playCareerHub.mjs
+hub-deadback: CAREER_HUB_CONTROL=deadback ENGINES=chromium node scripts/playCareerHub.mjs
+weight-branch: ENGINES=chromium SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/wb.log 2>&1; s=$?; grep -E "footle|FAIL" /tmp/wb.log | cut -c1-200; tail -1 /tmp/wb.log; exit $s
+weight-base: git worktree add -q /tmp/base faf0a5f3e4bdce3d7ca0f1350911f4e20c0903b2 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && npm run build > /tmp/basebuild.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/base/dist 4174 > /tmp/baseserver.log 2>&1 &) ; sleep 5; BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 ENGINES=chromium SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/w0.log 2>&1; s=$?; grep -E "footle|FAIL" /tmp/w0.log | cut -c1-200; tail -1 /tmp/w0.log; exit $s
