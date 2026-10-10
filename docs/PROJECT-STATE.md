@@ -1,3 +1,17 @@
+## Pending maintenance: retire shipped AT candidate workflow drivers, 2026-10-10
+
+Recovery lane, codex/retire-career-proofs, base f78037dcddea12c1a02586c7d5c0e185efb86121.
+G assigned retirement or repointing after AT shipped. Remove only the seven
+candidate workflow drivers: career-next-batch, cm-real-fixtures, career-development,
+career-story-role, career-trophy-runs, career-season-history and career-derby-history.
+Several hold old proof bases/trees; next-batch requires the VAR live mode that AT
+intentionally disables. These automatic candidate jobs are retired for later PRs.
+All product code, tests, proof scripts, packages, public files and other workflows
+are unchanged. Original frozen branches and accepted artifacts remain replayable.
+Native Git scope checks and independent static review support this metadata change;
+accepted G AT gates/live evidence is reused, without another app runtime or CI run.
+This maintenance is pending G integration, not a new main or live acceptance.
+
 ## Release AT LIVE, 2026-10-10 16:53 EDT: eighteen Soccer Career and Club Manager rounds from the other lane (the real Premier League fixture list, a record book, targets, a mentor, story chapters, trophy runs, season and derby history), and six of this lane's (the US rivalry beats and Trophy Case, flags in Footle, three new data ledgers)
 
 Claude lane (session G). main fb8d6811, deployment cc93f227-a456-4b34-b843-561aff7a9a74, entry index-pUtEpMvo.js (was index-CDom0l2f.js, Release AS,
