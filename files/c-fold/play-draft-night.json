@@ -1,0 +1,58 @@
+{
+  "control": "fold",
+  "results": [
+    {
+      "id": "mlb-390-late-watch",
+      "mode": "watch",
+      "kind": "late",
+      "pick": 432,
+      "team": "TEX",
+      "closeAtS": 3.5,
+      "frames": 332,
+      "cardHeight": [
+        744.1875,
+        744.1875
+      ],
+      "journeyHeight": [
+        1230.1875,
+        1230.1875
+      ],
+      "scroll": [
+        0,
+        0
+      ],
+      "nightHeight": 441,
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollSettledMs": 0,
+      "heldFrames": 199,
+      "landing": {
+        "ms": 3583,
+        "top": 995,
+        "bottom": 1049,
+        "vh": 844
+      },
+      "rows": 8,
+      "tiles": 0,
+      "closing": [
+        995,
+        1049
+      ],
+      "nightRect": 441
+    }
+  ],
+  "failures": [
+    {
+      "id": "mlb-390-late-watch",
+      "check": "fold",
+      "message": "the closing row landed at 995 to 1049 in a 844 high viewport"
+    },
+    {
+      "id": "mlb-390-late-watch",
+      "check": "fold",
+      "message": "the closing row sits at 995 to 1049 in a 844 high viewport, covered"
+    }
+  ]
+}

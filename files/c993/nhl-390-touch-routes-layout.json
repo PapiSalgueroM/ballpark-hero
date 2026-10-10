@@ -1,0 +1,56 @@
+{
+  "width": 390,
+  "scrollWidth": 390,
+  "scrollY": 129,
+  "headings": [
+    {
+      "text": "Your career starts here.",
+      "top": 219.109375,
+      "bottom": 277.890625,
+      "height": 58.78125
+    }
+  ],
+  "overflow": [
+    {
+      "tag": "DIV",
+      "className": "_stadium_irvo8_17",
+      "text": "",
+      "width": 356,
+      "scrollWidth": 468
+    },
+    {
+      "tag": "H3",
+      "className": "sr-only",
+      "text": "Your career starts here.",
+      "width": 1,
+      "scrollWidth": 187
+    }
+  ],
+  "controls": [
+    {
+      "text": " Back to player",
+      "width": 111.90625,
+      "height": 44
+    },
+    {
+      "text": "Road to the draft help",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "text": "2 seasonsMajor juniorLong season, long bus rides, scouts in every rink. Enter the draft at 18.Start at age 16 · Draft at 18",
+      "width": 324,
+      "height": 143.34375
+    },
+    {
+      "text": "2 seasonsUS junior, then collegeTwo seasons of US junior, enter the draft at 18, then take your college place.Start at age 16 · Draft at 18",
+      "width": 324,
+      "height": 143.34375
+    },
+    {
+      "text": "2 seasonsEuropeTwo seasons in a European junior league, enter the draft at 18, then develop at home.Start at age 16 · Draft at 18",
+      "width": 324,
+      "height": 143.34375
+    }
+  ]
+}

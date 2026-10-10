@@ -1,0 +1,148 @@
+{
+  "control": "narrowtile",
+  "results": [
+    {
+      "id": "nba-320-late-watch",
+      "mode": "watch",
+      "kind": "late",
+      "pick": 35,
+      "team": "DEN",
+      "closeAtS": 4.1,
+      "frames": 367,
+      "cardHeight": [
+        861.1875,
+        861.1875
+      ],
+      "journeyHeight": [
+        1340.1875,
+        1340.1875
+      ],
+      "scroll": [
+        428,
+        692
+      ],
+      "nightHeight": 646,
+      "viewport": [
+        320,
+        640
+      ],
+      "scrollSettledMs": 283,
+      "heldFrames": 235,
+      "landing": {
+        "ms": 4183,
+        "top": 503,
+        "bottom": 557,
+        "vh": 640
+      },
+      "rows": 5,
+      "tiles": 4,
+      "closing": [
+        503,
+        557
+      ],
+      "nightRect": 646,
+      "tileFit": {
+        "room": 73,
+        "widest": {
+          "text": "Timberwolves",
+          "need": 83
+        },
+        "seedRoom": 73,
+        "widestSeed": {
+          "text": "Seed 2 · Down 2",
+          "need": 78
+        },
+        "font": "Inter",
+        "inter": true,
+        "cut": [
+          {
+            "text": "Seed 1 · Down 3",
+            "need": 76,
+            "room": 73
+          }
+        ],
+        "clubs": [
+          {
+            "text": "Timberwolves",
+            "need": 83,
+            "room": 73
+          }
+        ],
+        "seeds": [
+          {
+            "text": "Seed 1 · Down 1",
+            "need": 74,
+            "room": 73
+          },
+          {
+            "text": "Seed 1 · Down 2",
+            "need": 76,
+            "room": 73
+          },
+          {
+            "text": "Seed 1 · Down 3",
+            "need": 76,
+            "room": 73
+          },
+          {
+            "text": "Seed 2 · Down 1",
+            "need": 76,
+            "room": 73
+          },
+          {
+            "text": "Seed 2 · Down 2",
+            "need": 78,
+            "room": 73
+          },
+          {
+            "text": "Seed 3 · Down 1",
+            "need": 76,
+            "room": 73
+          }
+        ]
+      }
+    }
+  ],
+  "failures": [
+    {
+      "id": "nba-320-late-watch",
+      "check": "cut",
+      "message": "a lottery tile cuts \"Seed 1 · Down 3\": 76 px of words in 73 px"
+    },
+    {
+      "id": "nba-320-late-watch",
+      "check": "cut",
+      "message": "\"Timberwolves\" would be cut on a lottery tile: 83 px of words in 73 px"
+    },
+    {
+      "id": "nba-320-late-watch",
+      "check": "cut",
+      "message": "\"Seed 1 · Down 1\" would be cut on a lottery tile: 74 px of words in 73 px"
+    },
+    {
+      "id": "nba-320-late-watch",
+      "check": "cut",
+      "message": "\"Seed 1 · Down 2\" would be cut on a lottery tile: 76 px of words in 73 px"
+    },
+    {
+      "id": "nba-320-late-watch",
+      "check": "cut",
+      "message": "\"Seed 1 · Down 3\" would be cut on a lottery tile: 76 px of words in 73 px"
+    },
+    {
+      "id": "nba-320-late-watch",
+      "check": "cut",
+      "message": "\"Seed 2 · Down 1\" would be cut on a lottery tile: 76 px of words in 73 px"
+    },
+    {
+      "id": "nba-320-late-watch",
+      "check": "cut",
+      "message": "\"Seed 2 · Down 2\" would be cut on a lottery tile: 78 px of words in 73 px"
+    },
+    {
+      "id": "nba-320-late-watch",
+      "check": "cut",
+      "message": "\"Seed 3 · Down 1\" would be cut on a lottery tile: 76 px of words in 73 px"
+    }
+  ]
+}

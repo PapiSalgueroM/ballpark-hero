@@ -1,0 +1,838 @@
+{
+  "control": "cut",
+  "results": [
+    {
+      "id": "nba-390-late-watch",
+      "mode": "watch",
+      "kind": "late",
+      "pick": 35,
+      "team": "DEN",
+      "closeAtS": 4.1,
+      "frames": 368,
+      "cardHeight": [
+        782.59375,
+        782.59375
+      ],
+      "journeyHeight": [
+        1268.59375,
+        1268.59375
+      ],
+      "scroll": [
+        0,
+        442
+      ],
+      "nightHeight": 595,
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollSettledMs": 349,
+      "heldFrames": 235,
+      "landing": {
+        "ms": 4183,
+        "top": 707,
+        "bottom": 761,
+        "vh": 844
+      },
+      "rows": 5,
+      "tiles": 4,
+      "closing": [
+        707,
+        761
+      ],
+      "nightRect": 595,
+      "tileFit": {
+        "room": 44,
+        "widest": {
+          "text": "Timberwolves",
+          "need": 83
+        },
+        "seedRoom": 44,
+        "widestSeed": {
+          "text": "Seed 2 · Down 2",
+          "need": 78
+        },
+        "font": "Inter",
+        "inter": true,
+        "cut": [
+          {
+            "text": "Rockets",
+            "need": 47,
+            "room": 44
+          },
+          {
+            "text": "Seed 4 · Up 3",
+            "need": 64,
+            "room": 44
+          },
+          {
+            "text": "Nuggets",
+            "need": 50,
+            "room": 44
+          },
+          {
+            "text": "Seed 5 · Up 3",
+            "need": 64,
+            "room": 44
+          },
+          {
+            "text": "Seed 8 · Up 5",
+            "need": 64,
+            "room": 44
+          },
+          {
+            "text": "Thunder",
+            "need": 49,
+            "room": 44
+          },
+          {
+            "text": "Seed 1 · Down 3",
+            "need": 76,
+            "room": 44
+          }
+        ],
+        "clubs": [
+          {
+            "text": "Nuggets",
+            "need": 50,
+            "room": 44
+          },
+          {
+            "text": "Thunder",
+            "need": 49,
+            "room": 44
+          },
+          {
+            "text": "Timberwolves",
+            "need": 83,
+            "room": 44
+          },
+          {
+            "text": "Rockets",
+            "need": 47,
+            "room": 44
+          },
+          {
+            "text": "Cavaliers",
+            "need": 55,
+            "room": 44
+          },
+          {
+            "text": "Warriors",
+            "need": 50,
+            "room": 44
+          },
+          {
+            "text": "Mavericks",
+            "need": 61,
+            "room": 44
+          },
+          {
+            "text": "Grizzlies",
+            "need": 51,
+            "room": 44
+          },
+          {
+            "text": "Clippers",
+            "need": 50,
+            "room": 44
+          },
+          {
+            "text": "Pelicans",
+            "need": 49,
+            "room": 44
+          },
+          {
+            "text": "Raptors",
+            "need": 46,
+            "room": 44
+          },
+          {
+            "text": "Hornets",
+            "need": 46,
+            "room": 44
+          },
+          {
+            "text": "Wizards",
+            "need": 49,
+            "room": 44
+          },
+          {
+            "text": "Trail Blazers",
+            "need": 72,
+            "room": 44
+          }
+        ],
+        "seeds": [
+          {
+            "text": "Seed 1 · Held",
+            "need": 61,
+            "room": 44
+          },
+          {
+            "text": "Seed 1 · Down 1",
+            "need": 74,
+            "room": 44
+          },
+          {
+            "text": "Seed 1 · Down 2",
+            "need": 76,
+            "room": 44
+          },
+          {
+            "text": "Seed 1 · Down 3",
+            "need": 76,
+            "room": 44
+          },
+          {
+            "text": "Seed 2 · Up 1",
+            "need": 62,
+            "room": 44
+          },
+          {
+            "text": "Seed 2 · Held",
+            "need": 63,
+            "room": 44
+          },
+          {
+            "text": "Seed 2 · Down 1",
+            "need": 76,
+            "room": 44
+          },
+          {
+            "text": "Seed 2 · Down 2",
+            "need": 78,
+            "room": 44
+          },
+          {
+            "text": "Seed 3 · Up 2",
+            "need": 64,
+            "room": 44
+          },
+          {
+            "text": "Seed 3 · Up 1",
+            "need": 62,
+            "room": 44
+          },
+          {
+            "text": "Seed 3 · Held",
+            "need": 63,
+            "room": 44
+          },
+          {
+            "text": "Seed 3 · Down 1",
+            "need": 76,
+            "room": 44
+          },
+          {
+            "text": "Seed 4 · Up 3",
+            "need": 64,
+            "room": 44
+          },
+          {
+            "text": "Seed 4 · Up 2",
+            "need": 64,
+            "room": 44
+          },
+          {
+            "text": "Seed 4 · Up 1",
+            "need": 62,
+            "room": 44
+          },
+          {
+            "text": "Seed 4 · Held",
+            "need": 63,
+            "room": 44
+          },
+          {
+            "text": "Seed 5 · Up 4",
+            "need": 64,
+            "room": 44
+          },
+          {
+            "text": "Seed 5 · Up 3",
+            "need": 64,
+            "room": 44
+          },
+          {
+            "text": "Seed 5 · Up 2",
+            "need": 64,
+            "room": 44
+          },
+          {
+            "text": "Seed 5 · Up 1",
+            "need": 62,
+            "room": 44
+          },
+          {
+            "text": "Seed 6 · Up 5",
+            "need": 64,
+            "room": 44
+          },
+          {
+            "text": "Seed 6 · Up 4",
+            "need": 64,
+            "room": 44
+          },
+          {
+            "text": "Seed 6 · Up 3",
+            "need": 64,
+            "room": 44
+          },
+          {
+            "text": "Seed 6 · Up 2",
+            "need": 64,
+            "room": 44
+          },
+          {
+            "text": "Seed 7 · Up 6",
+            "need": 64,
+            "room": 44
+          },
+          {
+            "text": "Seed 7 · Up 5",
+            "need": 64,
+            "room": 44
+          },
+          {
+            "text": "Seed 7 · Up 4",
+            "need": 64,
+            "room": 44
+          },
+          {
+            "text": "Seed 7 · Up 3",
+            "need": 64,
+            "room": 44
+          },
+          {
+            "text": "Seed 8 · Up 7",
+            "need": 64,
+            "room": 44
+          },
+          {
+            "text": "Seed 8 · Up 6",
+            "need": 64,
+            "room": 44
+          },
+          {
+            "text": "Seed 8 · Up 5",
+            "need": 64,
+            "room": 44
+          },
+          {
+            "text": "Seed 8 · Up 4",
+            "need": 64,
+            "room": 44
+          },
+          {
+            "text": "Seed 9 · Up 8",
+            "need": 64,
+            "room": 44
+          },
+          {
+            "text": "Seed 9 · Up 7",
+            "need": 64,
+            "room": 44
+          },
+          {
+            "text": "Seed 9 · Up 6",
+            "need": 64,
+            "room": 44
+          },
+          {
+            "text": "Seed 9 · Up 5",
+            "need": 64,
+            "room": 44
+          },
+          {
+            "text": "Seed 10 · Up 9",
+            "need": 68,
+            "room": 44
+          },
+          {
+            "text": "Seed 10 · Up 8",
+            "need": 68,
+            "room": 44
+          },
+          {
+            "text": "Seed 10 · Up 7",
+            "need": 68,
+            "room": 44
+          },
+          {
+            "text": "Seed 10 · Up 6",
+            "need": 68,
+            "room": 44
+          },
+          {
+            "text": "Seed 11 · Up 10",
+            "need": 70,
+            "room": 44
+          },
+          {
+            "text": "Seed 11 · Up 9",
+            "need": 66,
+            "room": 44
+          },
+          {
+            "text": "Seed 11 · Up 8",
+            "need": 66,
+            "room": 44
+          },
+          {
+            "text": "Seed 11 · Up 7",
+            "need": 66,
+            "room": 44
+          },
+          {
+            "text": "Seed 12 · Up 11",
+            "need": 70,
+            "room": 44
+          },
+          {
+            "text": "Seed 12 · Up 10",
+            "need": 72,
+            "room": 44
+          },
+          {
+            "text": "Seed 12 · Up 9",
+            "need": 68,
+            "room": 44
+          },
+          {
+            "text": "Seed 12 · Up 8",
+            "need": 68,
+            "room": 44
+          },
+          {
+            "text": "Seed 13 · Up 12",
+            "need": 72,
+            "room": 44
+          },
+          {
+            "text": "Seed 13 · Up 11",
+            "need": 70,
+            "room": 44
+          },
+          {
+            "text": "Seed 13 · Up 10",
+            "need": 72,
+            "room": 44
+          },
+          {
+            "text": "Seed 13 · Up 9",
+            "need": 68,
+            "room": 44
+          },
+          {
+            "text": "Seed 14 · Up 13",
+            "need": 72,
+            "room": 44
+          },
+          {
+            "text": "Seed 14 · Up 12",
+            "need": 72,
+            "room": 44
+          },
+          {
+            "text": "Seed 14 · Up 11",
+            "need": 70,
+            "room": 44
+          },
+          {
+            "text": "Seed 14 · Up 10",
+            "need": 72,
+            "room": 44
+          }
+        ]
+      }
+    }
+  ],
+  "failures": [
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "a lottery tile cuts \"Rockets\": 47 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "a lottery tile cuts \"Seed 4 · Up 3\": 64 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "a lottery tile cuts \"Nuggets\": 50 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "a lottery tile cuts \"Seed 5 · Up 3\": 64 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "a lottery tile cuts \"Seed 8 · Up 5\": 64 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "a lottery tile cuts \"Thunder\": 49 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "a lottery tile cuts \"Seed 1 · Down 3\": 76 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Nuggets\" would be cut on a lottery tile: 50 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Thunder\" would be cut on a lottery tile: 49 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Timberwolves\" would be cut on a lottery tile: 83 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Rockets\" would be cut on a lottery tile: 47 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Cavaliers\" would be cut on a lottery tile: 55 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Warriors\" would be cut on a lottery tile: 50 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Mavericks\" would be cut on a lottery tile: 61 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Grizzlies\" would be cut on a lottery tile: 51 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Clippers\" would be cut on a lottery tile: 50 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Pelicans\" would be cut on a lottery tile: 49 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Raptors\" would be cut on a lottery tile: 46 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Hornets\" would be cut on a lottery tile: 46 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Wizards\" would be cut on a lottery tile: 49 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Trail Blazers\" would be cut on a lottery tile: 72 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 1 · Held\" would be cut on a lottery tile: 61 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 1 · Down 1\" would be cut on a lottery tile: 74 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 1 · Down 2\" would be cut on a lottery tile: 76 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 1 · Down 3\" would be cut on a lottery tile: 76 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 2 · Up 1\" would be cut on a lottery tile: 62 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 2 · Held\" would be cut on a lottery tile: 63 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 2 · Down 1\" would be cut on a lottery tile: 76 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 2 · Down 2\" would be cut on a lottery tile: 78 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 3 · Up 2\" would be cut on a lottery tile: 64 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 3 · Up 1\" would be cut on a lottery tile: 62 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 3 · Held\" would be cut on a lottery tile: 63 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 3 · Down 1\" would be cut on a lottery tile: 76 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 4 · Up 3\" would be cut on a lottery tile: 64 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 4 · Up 2\" would be cut on a lottery tile: 64 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 4 · Up 1\" would be cut on a lottery tile: 62 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 4 · Held\" would be cut on a lottery tile: 63 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 5 · Up 4\" would be cut on a lottery tile: 64 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 5 · Up 3\" would be cut on a lottery tile: 64 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 5 · Up 2\" would be cut on a lottery tile: 64 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 5 · Up 1\" would be cut on a lottery tile: 62 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 6 · Up 5\" would be cut on a lottery tile: 64 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 6 · Up 4\" would be cut on a lottery tile: 64 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 6 · Up 3\" would be cut on a lottery tile: 64 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 6 · Up 2\" would be cut on a lottery tile: 64 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 7 · Up 6\" would be cut on a lottery tile: 64 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 7 · Up 5\" would be cut on a lottery tile: 64 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 7 · Up 4\" would be cut on a lottery tile: 64 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 7 · Up 3\" would be cut on a lottery tile: 64 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 8 · Up 7\" would be cut on a lottery tile: 64 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 8 · Up 6\" would be cut on a lottery tile: 64 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 8 · Up 5\" would be cut on a lottery tile: 64 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 8 · Up 4\" would be cut on a lottery tile: 64 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 9 · Up 8\" would be cut on a lottery tile: 64 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 9 · Up 7\" would be cut on a lottery tile: 64 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 9 · Up 6\" would be cut on a lottery tile: 64 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 9 · Up 5\" would be cut on a lottery tile: 64 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 10 · Up 9\" would be cut on a lottery tile: 68 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 10 · Up 8\" would be cut on a lottery tile: 68 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 10 · Up 7\" would be cut on a lottery tile: 68 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 10 · Up 6\" would be cut on a lottery tile: 68 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 11 · Up 10\" would be cut on a lottery tile: 70 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 11 · Up 9\" would be cut on a lottery tile: 66 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 11 · Up 8\" would be cut on a lottery tile: 66 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 11 · Up 7\" would be cut on a lottery tile: 66 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 12 · Up 11\" would be cut on a lottery tile: 70 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 12 · Up 10\" would be cut on a lottery tile: 72 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 12 · Up 9\" would be cut on a lottery tile: 68 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 12 · Up 8\" would be cut on a lottery tile: 68 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 13 · Up 12\" would be cut on a lottery tile: 72 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 13 · Up 11\" would be cut on a lottery tile: 70 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 13 · Up 10\" would be cut on a lottery tile: 72 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 13 · Up 9\" would be cut on a lottery tile: 68 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 14 · Up 13\" would be cut on a lottery tile: 72 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 14 · Up 12\" would be cut on a lottery tile: 72 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 14 · Up 11\" would be cut on a lottery tile: 70 px of words in 44 px"
+    },
+    {
+      "id": "nba-390-late-watch",
+      "check": "cut",
+      "message": "\"Seed 14 · Up 10\" would be cut on a lottery tile: 72 px of words in 44 px"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+#!serve
+#!playwright
+#!serial
+walk: ENGINES=chromium node scripts/playDraftNight.mjs
+walk-late: PLAY_DRAFT_NIGHT_CONTROL=late RC_OUT="$RC_OUT/c-late" node scripts/playDraftNight.mjs
+walk-spoiler: PLAY_DRAFT_NIGHT_CONTROL=spoiler RC_OUT="$RC_OUT/c-spoiler" node scripts/playDraftNight.mjs
+walk-fold: PLAY_DRAFT_NIGHT_CONTROL=fold RC_OUT="$RC_OUT/c-fold" node scripts/playDraftNight.mjs
+walk-hidden: PLAY_DRAFT_NIGHT_CONTROL=hidden RC_OUT="$RC_OUT/c-hidden" node scripts/playDraftNight.mjs
+walk-cut: PLAY_DRAFT_NIGHT_CONTROL=cut RC_OUT="$RC_OUT/c-cut" node scripts/playDraftNight.mjs
+walk-again: PLAY_DRAFT_NIGHT_CONTROL=again RC_OUT="$RC_OUT/c-again" node scripts/playDraftNight.mjs
+walk-narrowtile: PLAY_DRAFT_NIGHT_CONTROL=narrowtile RC_OUT="$RC_OUT/c-narrowtile" node scripts/playDraftNight.mjs
+walk-ending: PLAY_DRAFT_NIGHT_CONTROL=ending RC_OUT="$RC_OUT/c-ending" node scripts/playDraftNight.mjs
+walk-nottall: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/c-nottall" node scripts/playDraftNight.mjs
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+uscareerweight: node scripts/simUsCareerWeight.mjs
+play-nfl: ENGINES=chromium ONLY=/nfl-my-career node scripts/playGames.mjs
+play-nba: ENGINES=chromium ONLY=/nba-my-career node scripts/playGames.mjs
+play-mlb: ENGINES=chromium ONLY=/mlb-my-career node scripts/playGames.mjs
+play-nhl: ENGINES=chromium ONLY=/nhl-my-career node scripts/playGames.mjs
+revealscroll: ENGINES=chromium node scripts/simRevealScroll.mjs
+career993: ENGINES=chromium CAREER993_ARTIFACTS="$RC_OUT/c993" node scripts/qa/career993.mjs; code=$?; node -e "const r=require('$RC_OUT/c993/report.json'); for (const c of r.cases) console.log(c.id, 'passed=' + c.passed, 'steps=' + c.steps.map(s=>s.stage).join(','), (c.error||'').split('\n')[0].slice(0,90))"; exit $code

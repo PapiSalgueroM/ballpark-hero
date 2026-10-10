@@ -1,0 +1,68 @@
+{
+  "control": "spoiler",
+  "results": [
+    {
+      "id": "mlb-390-late-watch",
+      "mode": "watch",
+      "kind": "late",
+      "pick": 432,
+      "team": "TEX",
+      "closeAtS": 3.5,
+      "frames": 332,
+      "cardHeight": [
+        744.1875,
+        744.1875
+      ],
+      "journeyHeight": [
+        1230.1875,
+        1230.1875
+      ],
+      "scroll": [
+        0,
+        288
+      ],
+      "nightHeight": 441,
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollSettledMs": 284,
+      "heldFrames": 199,
+      "landing": {
+        "ms": 3583,
+        "top": 707,
+        "bottom": 761,
+        "vh": 844
+      },
+      "rows": 8,
+      "tiles": 0,
+      "closing": [
+        707,
+        761
+      ],
+      "nightRect": 441
+    }
+  ],
+  "failures": [
+    {
+      "id": "mlb-390-late-watch",
+      "check": "spoiler",
+      "message": "the title is held for 0 s and the closing row only starts to land at 3.5 s"
+    },
+    {
+      "id": "mlb-390-late-watch",
+      "check": "spoiler",
+      "message": "the club is held for 0 s and the closing row only starts to land at 3.5 s"
+    },
+    {
+      "id": "mlb-390-late-watch",
+      "check": "spoiler",
+      "message": "the result is held for 0 s and the closing row only starts to land at 3.5 s"
+    },
+    {
+      "id": "mlb-390-late-watch",
+      "check": "spoiler",
+      "message": "at 0 ms of 3500 the title is at 1, the club at 1, the result at 1, the closing row at 0"
+    }
+  ]
+}

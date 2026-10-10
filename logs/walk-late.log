@@ -1,0 +1,4 @@
+  FAIL [height] mlb-390-late-watch: the card went from 470.1875 to 744.96875 and the journey from 956.1875 to 1230.96875 while the night played
+  FAIL [scroll] mlb-390-late-watch: the page stood still at 14 from 67 ms and then moved between 14 and 279
+  walked mlb-390-late-watch: pick 432, 8 rows, card 745 high, 332 frames
+playDraftNight [control late]: 1 FAILURE(S) of its own check (height), as it must

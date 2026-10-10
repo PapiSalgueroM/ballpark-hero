@@ -1,0 +1,6 @@
+  FAIL [spoiler] mlb-390-late-watch: the title is held for 0 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] mlb-390-late-watch: the club is held for 0 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] mlb-390-late-watch: the result is held for 0 s and the closing row only starts to land at 3.5 s
+  FAIL [spoiler] mlb-390-late-watch: at 0 ms of 3500 the title is at 1, the club at 1, the result at 1, the closing row at 0
+  walked mlb-390-late-watch: pick 432, 8 rows, card 744 high, 332 frames
+playDraftNight [control spoiler]: 4 FAILURE(S) of its own check (spoiler), as it must

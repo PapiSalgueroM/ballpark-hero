@@ -1,0 +1,19 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 214s | playDraftNight: ALL GREEN, 49 nights walked
+walk-late exit=1 7s | playDraftNight [control late]: 1 FAILURE(S) of its own check (height), as it must
+walk-spoiler exit=1 7s | playDraftNight [control spoiler]: 4 FAILURE(S) of its own check (spoiler), as it must
+walk-fold exit=1 7s | playDraftNight [control fold]: 2 FAILURE(S) of its own check (fold), as it must
+walk-hidden exit=1 2s | playDraftNight [control hidden]: 2 FAILURE(S) of its own check (reduced), as it must
+walk-cut exit=1 8s | playDraftNight [control cut]: 77 FAILURE(S) of its own check (cut), as it must
+walk-again exit=1 7s | playDraftNight [control again]: 1 FAILURE(S) of its own check (scroll), as it must
+walk-narrowtile exit=1 8s | playDraftNight [control narrowtile]: 8 FAILURE(S) of its own check (cut), as it must
+walk-ending exit=1 8s | playDraftNight [control ending]: 2 FAILURE(S) of its own check (fold), as it must
+walk-nottall exit=1 8s | playDraftNight [control nottall]: 1 FAILURE(S) of its own check (fold), as it must
+weight exit=1 27s | sweepWeight: 1 failure
+uscareerweight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+play-nfl exit=0 51s | Played 1 games. 0 findings, 0 the harness could not drive.
+play-nba exit=0 52s | Played 1 games. 0 findings, 0 the harness could not drive.
+play-mlb exit=0 52s | Played 1 games. 0 findings, 0 the harness could not drive.
+play-nhl exit=0 51s | Played 1 games. 0 findings, 0 the harness could not drive.
+revealscroll exit=0 217s | Green. 56 presses measured, nothing dragged the page down on content that was already readable, no panel lost its top, and 4 presses proved the feature still does its job
+career993 exit=1 23s | nba-1440-keyboard passed=false steps=rules,entry-visible,routes,choice-1,restored-choice-1,showcase,draft-result AssertionError [ERR_ASSERTION]: Whole save differs from t

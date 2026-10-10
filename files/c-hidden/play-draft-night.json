@@ -1,0 +1,68 @@
+{
+  "control": "hidden",
+  "results": [
+    {
+      "id": "nba-390-late-reduced",
+      "mode": "reduced",
+      "kind": "late",
+      "pick": 35,
+      "team": "DEN",
+      "closeAtS": 0,
+      "frames": 43,
+      "cardHeight": [
+        782.59375,
+        782.59375
+      ],
+      "journeyHeight": [
+        1268.59375,
+        1268.59375
+      ],
+      "scroll": [
+        0,
+        442
+      ],
+      "nightHeight": 595,
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollSettledMs": 33,
+      "rows": 5,
+      "tiles": 4,
+      "closing": [
+        707,
+        761
+      ],
+      "nightRect": 595,
+      "tileFit": {
+        "room": 106,
+        "widest": {
+          "text": "Timberwolves",
+          "need": 83
+        },
+        "seedRoom": 106,
+        "widestSeed": {
+          "text": "Seed 2 · Down 2",
+          "need": 78
+        },
+        "font": "Inter",
+        "inter": true,
+        "cut": [],
+        "clubs": [],
+        "seeds": []
+      }
+    }
+  ],
+  "failures": [
+    {
+      "id": "nba-390-late-reduced",
+      "check": "reduced",
+      "message": "with less motion the first frame is skipped with a row at 0, the title at 1, the club at 1, the result at 1"
+    },
+    {
+      "id": "nba-390-late-reduced",
+      "check": "reduced",
+      "message": "the last frame has a row at 0, the title at 1, the club at 1, the result at 1"
+    }
+  ]
+}

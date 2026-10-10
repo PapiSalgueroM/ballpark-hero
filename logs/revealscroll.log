@@ -1,0 +1,27 @@
+Reveal scroll, 390x844, 5 games, base http://localhost:4173
+A press is a YANK if the page went down while the new panel was already readable,
+LOSTTOP if the panel's top ended up above the screen, PROOF if something hidden was brought into view.
+
+  PROOF   /club-manager    step  2  scrollY   507 ->   101 (-406)  panel top  -394 h   798 -> top    12  block=start  [📼 2005-06 Ronaldinho's Ballon d'O]
+  PROOF   /club-manager    step  4  scrollY   507 ->   101 (-406)  panel top  -394 h   798 -> top    12  block=start  [📼 2005-06 Ronaldinho's Ballon d'O]
+  PROOF   /club-manager    step  6  scrollY   384 ->   101 (-283)  panel top  -271 h   798 -> top    12  block=start  [🕰️ 2010-11 Prime Messi. Mourinho']
+  PROOF   /club-manager    step 12  scrollY   261 ->   101 (-160)  panel top  -148 h   798 -> top    12  block=start  [🦊 2015-16 The Leicester season. M]
+
+What each game did
+  /soccer-career    8 presses,  0 of them scrolled,  8 left the page alone, 0 yanks, 0 lost tops, 0 rescued  (ran out of controls after 8 presses, screen was offering: Review contract | Review contract | Review contract | Review contract | Full attributes 183 cm · | 🏆 0 Leagues | 🏆 0 Cups | ⭐ 0 UCL)
+                   measured insets (top/bottom px): 0/143, 0/0
+  /club-manager    16 presses,  4 of them scrolled, 12 left the page alone, 0 yanks, 0 lost tops, 4 rescued
+                   measured insets (top/bottom px): 0/143, 0/0
+  /dart-draft      10 presses,  0 of them scrolled, 10 left the page alone, 0 yanks, 0 lost tops, 0 rescued
+                   measured insets (top/bottom px): 0/143, 0/0
+  /cfb-dynasty     12 presses,  0 of them scrolled, 12 left the page alone, 0 yanks, 0 lost tops, 0 rescued
+                   measured insets (top/bottom px): 0/0
+  /clue-auction    10 presses,  0 of them scrolled, 10 left the page alone, 0 yanks, 0 lost tops, 0 rescued
+                   measured insets (top/bottom px): 0/143, 0/0
+
+Of 56 presses across 5 games, 4 asked for a scroll and 52 did not. 0 moved the page down.
+Panel tops after a scroll ran from 12px to 12px down the screen.
+
+The feature still works: 4 presses took content that could not be read where it was and put it back under the top of the screen, 0 of them from completely off screen.
+
+Green. 56 presses measured, nothing dragged the page down on content that was already readable, no panel lost its top, and 4 presses proved the feature still does its job.

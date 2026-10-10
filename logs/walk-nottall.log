@@ -1,0 +1,4 @@
+  FAIL [fold] nba-844-late-watch: the night starts off screen: once the page is at rest its top is at -169 in a 390 high viewport
+  measured nba-844-late-watch: the night is 547 high on a 390 high screen (at its first frame the page was at 529 with the play area's top at 69); the page was at rest 300 ms in with the night's top at -169, and moved 0 px for the ending (the closing row started to land at 253 to 307, and ends at 253 to 307)
+  walked nba-844-late-watch: pick 35, 5 rows and 4 lottery tiles, card 695 high, 368 frames
+playDraftNight [control nottall]: 1 FAILURE(S) of its own check (fold), as it must
