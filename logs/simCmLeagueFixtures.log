@@ -1,0 +1,11 @@
+simCmLeagueFixtures: 2 ledger(s) on disk: laliga, ligue2
+A) shape: green for 2 ledger(s)
+B) no club twice in a matchday: green for 2 ledger(s)
+C) each pair once at each ground: green for 2 ledger(s)
+D) the game's own clubs: green for 2 ledger(s)
+E) the drift guard: ledger equals each source in the receipt: green for 2 ledger(s)
+F) two independent sources: green for 2 ledger(s)
+G) nothing excluded got in: green for 2 ledger(s)
+I) frozen: green for 2 ledger(s)
+K) the controls: 22 of 22 fired exactly as written (11 controls on each of 2 frozen ledger(s))
+simCmLeagueFixtures: OK, sections A to G and I green: 2 ledger(s), 2 frozen, 0 pending, 686 fixtures, 22 of 22 controls fired
