@@ -1,0 +1,13 @@
+build exit=0 20s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 35s | 
+walk3 exit=0 27s | playCmLeagueFixtures: green. 6 journeys (EFL Championship, La Liga, Bundesliga at 390 and 1280) and one with its list three seconds late, 93 checks, and 3 pages that fetc
+act exit=1 3s | simActivityNotCompletion: 2 failure(s)
+save exit=0 5s | simClubManagerSave: all sections green
+size exit=0 22s | simClubManagerSaveSize: all sections green
+vitest-cm exit=0 30s |       Tests  188 passed (188)
+weight exit=1 29s | sweepWeight: 6 failures
+mut-nowait-walk-must-fail exit=1 46s | playCmLeagueFixtures: 2 FAILURE(S) over 7 journeys and 3 quiet pages
+mut-start-walk-must-fail exit=1 45s | playCmLeagueFixtures: 56 FAILURE(S) over 7 journeys and 3 quiet pages
+mut-boot-walk-must-fail exit=1 198s | playCmLeagueFixtures: 6 FAILURE(S) over 7 journeys and 3 quiet pages
+tree-clean exit=0 0s | src and scripts are as committed
+cmfix-premier-and-walk exit=1 15s | RESULT sim=0 walk=1

@@ -1,0 +1,57 @@
+FAIL championship-390: the save holds the key of its league's real list (undefined)
+FAIL championship-390: the page fetched that league's list and no other
+FAIL championship-390: the next match card shows the real first fixture: Wrexham vs Cardiff City, Away (Wrexham vs Southampton Away · their strength ~79 · your XI avg 72 Play Live ⚡ Qu)
+FAIL championship-390: the Calendar names the league and says what is real and what is simulated
+FAIL championship-390: the Calendar links the two sources the ledger ships
+FAIL championship-390: the Calendar grid holds the real first fixture as a day
+FAIL championship-390: after a reload the boot fetched the saved key's list and no other
+FAIL championship-390: after a reload the Calendar still carries the line
+FAIL championship-390: the save still holds its key
+FAIL championship-1280: the save holds the key of its league's real list (undefined)
+FAIL championship-1280: the page fetched that league's list and no other
+FAIL championship-1280: the next match card shows the real first fixture: Wrexham vs Cardiff City, Away (Wrexham vs Lincoln City Home · their strength ~63 · your XI avg 72 Play Live ⚡ Q)
+FAIL championship-1280: the Calendar names the league and says what is real and what is simulated
+FAIL championship-1280: the Calendar links the two sources the ledger ships
+FAIL championship-1280: the Calendar grid holds the real first fixture as a day
+FAIL championship-1280: after a reload the boot fetched the saved key's list and no other
+FAIL championship-1280: after a reload the Calendar still carries the line
+FAIL championship-1280: the save still holds its key
+FAIL laliga-390: the save holds the key of its league's real list (undefined)
+FAIL laliga-390: the page fetched that league's list and no other
+FAIL laliga-390: the next match card shows the real first fixture: Barcelona vs Athletic Club, Home (Barcelona vs Real Sociedad Home · their strength ~82 · your XI avg 87 Play Live )
+FAIL laliga-390: the Calendar names the league and says what is real and what is simulated
+FAIL laliga-390: the Calendar links the two sources the ledger ships
+FAIL laliga-390: the Calendar grid holds the real first fixture as a day
+FAIL laliga-390: after a reload the boot fetched the saved key's list and no other
+FAIL laliga-390: after a reload the Calendar still carries the line
+FAIL laliga-390: the save still holds its key
+FAIL laliga-1280: the save holds the key of its league's real list (undefined)
+FAIL laliga-1280: the page fetched that league's list and no other
+FAIL laliga-1280: the next match card shows the real first fixture: Barcelona vs Athletic Club, Home (Barcelona vs Rayo Vallecano Away · their strength ~75 · your XI avg 87 Play Live)
+FAIL laliga-1280: the Calendar names the league and says what is real and what is simulated
+FAIL laliga-1280: the Calendar links the two sources the ledger ships
+FAIL laliga-1280: the Calendar grid holds the real first fixture as a day
+FAIL laliga-1280: after a reload the boot fetched the saved key's list and no other
+FAIL laliga-1280: after a reload the Calendar still carries the line
+FAIL laliga-1280: the save still holds its key
+FAIL bundesliga-390: the save holds the key of its league's real list (undefined)
+FAIL bundesliga-390: the page fetched that league's list and no other
+FAIL bundesliga-390: the next match card shows the real first fixture: Bayern Munich vs Stuttgart, Home (Bayern Munich vs Augsburg Home · their strength ~76 · your XI avg 87 Play Live ⚡)
+FAIL bundesliga-390: the Calendar names the league and says what is real and what is simulated
+FAIL bundesliga-390: the Calendar links the two sources the ledger ships
+FAIL bundesliga-390: the Calendar grid holds the real first fixture as a day
+FAIL bundesliga-390: after a reload the boot fetched the saved key's list and no other
+FAIL bundesliga-390: after a reload the Calendar still carries the line
+FAIL bundesliga-390: the save still holds its key
+FAIL bundesliga-1280: the save holds the key of its league's real list (undefined)
+FAIL bundesliga-1280: the page fetched that league's list and no other
+FAIL bundesliga-1280: the next match card shows the real first fixture: Bayern Munich vs Stuttgart, Home (Bayern Munich vs Union Berlin Home · their strength ~77 · your XI avg 87 Play Li)
+FAIL bundesliga-1280: the Calendar names the league and says what is real and what is simulated
+FAIL bundesliga-1280: the Calendar links the two sources the ledger ships
+FAIL bundesliga-1280: the Calendar grid holds the real first fixture as a day
+FAIL bundesliga-1280: after a reload the boot fetched the saved key's list and no other
+FAIL bundesliga-1280: after a reload the Calendar still carries the line
+FAIL bundesliga-1280: the save still holds its key
+FAIL laliga-1280-slow-list: with its list three seconds late the career still opens on it: the save holds the key (undefined)
+FAIL laliga-1280-slow-list: and the Calendar carries the line
+playCmLeagueFixtures: 56 FAILURE(S) over 7 journeys and 3 quiet pages

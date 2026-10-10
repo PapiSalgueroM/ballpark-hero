@@ -1,0 +1,10 @@
+1) The real hook, rendered: a match is activity, a season end is one completion
+   vitest exit 0, 2 passed (2)
+2) Soccer Career, as code: the season advance pings activity and the file owns no completion
+  FAIL: the season advance (advanceProSeason(career, clubs)) is not in the file, the check needs re-anchoring
+  FAIL: the season advance no longer pings recordActivity('/soccer-career') within 600 characters
+   advance ping present: false, own completions: 0
+3) The ping is light, as code: recordActivity reaches neither the streak record nor the signed in save
+   body 755 characters, writes the anonymous row: true
+
+simActivityNotCompletion: 2 failure(s)

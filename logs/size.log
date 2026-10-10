@@ -1,0 +1,4 @@
+4) The hook, rendered: the pagehide write, the hidden tab write, the same bytes, and saveFailed
+    with a throwing store, saveFailed is true
+    with the store back, saveFailed is false and the disk matches memory: true
+simClubManagerSaveSize: all sections green

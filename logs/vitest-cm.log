@@ -1,0 +1,24 @@
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mmotion leaves committed state and settled results identical [33m 351[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'goal' reduced=false) [33m 1891[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'goal' reduced=true) [33m 646[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'save' reduced=false) [33m 696[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'save' reduced=true) [33m 578[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'goal' reduced=false) [33m 1647[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'goal' reduced=true) [33m 1610[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'save' reduced=false) [33m 732[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'save' reduced=true) [33m 511[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal resume shows contact and Skip keeps immediate exactly-once whistle callbacks [33m 3297[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22ma tactics redraw cancels a terminal action that is no longer committed [33m 319[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mthe ninetieth minute asks the latest save: refused means full time, never thirty empty minutes [33m 1373[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mthe ninetieth minute asks the latest save: extra time drawn there is played, whatever this render was given [33m 696[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mthe extra time banner says what is true: a second leg is level on aggregate [33m 643[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22ma goal in the board is announced with its plus, GOAL! ... 90+N [33m 604[2mms[22m[39m
+   [33m[2m✓[22m[39m The pitch part on real feeds[2m > [22mthe material is 200 half feeds from five clubs in five leagues [33m 1779[2mms[22m[39m
+   [33m[2m✓[22m[39m The pitch part on real feeds[2m > [22mR5: nothing is decided here [33m 483[2mms[22m[39m
+   [33m[2m✓[22m[39m The goal sequence[2m > [22ma goal with the last kick of a period takes nothing off the score while it winds up [33m 3415[2mms[22m[39m
+   [33m[2m✓[22m[39m The goal sequence[2m > [22munder reduced motion the card is held for its first stretch only, and then the match runs on [33m 303[2mms[22m[39m
+   [33m[2m✓[22m[39m The goal sequence[2m > [22ma goal still on its way when the line up changes off the clock keeps its net, its card and its men [33m 1010[2mms[22m[39m
+   [33m[2m✓[22m[39m Match mode[2m > [22mBack folds the match to a card and pauses it, and the card puts it back [33m 474[2mms[22m[39m
+   [33m[2m✓[22m[39m Match mode[2m > [22mthe stats line a phone keeps in view reads the same count as the full stats [33m 417[2mms[22m[39m
+[2m Test Files [22m [1m[32m16 passed[39m[22m[90m (16)[39m
+[2m      Tests [22m [1m[32m188 passed[39m[22m[90m (188)[39m

@@ -1,0 +1,7 @@
+FAIL championship-390: the journey ran to its end (locator.tap: Timeout 25000ms exceeded.)
+FAIL championship-1280: the journey ran to its end (locator.focus: Timeout 25000ms exceeded.)
+FAIL laliga-390: the journey ran to its end (locator.tap: Timeout 25000ms exceeded.)
+FAIL laliga-1280: the journey ran to its end (locator.focus: Timeout 25000ms exceeded.)
+FAIL bundesliga-390: the journey ran to its end (locator.tap: Timeout 25000ms exceeded.)
+FAIL bundesliga-1280: the journey ran to its end (locator.focus: Timeout 25000ms exceeded.)
+playCmLeagueFixtures: 6 FAILURE(S) over 7 journeys and 3 quiet pages
