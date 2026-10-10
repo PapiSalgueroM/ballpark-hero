@@ -73,21 +73,34 @@
  *
  * MEASURED 2026-10-10 on a GitHub runner, three seed sets of three (1,2,3 /
  * 4,5,6 / 7,8,9), three seasons a seed a sport. Every count is exact for its
- * seeds; all three sets pass every check.
+ * seeds; all three sets pass every check (measured again after the review's
+ * fix pass, runner result r1223-m1).
  *   real leagues read        84 each       real saves read        240 each
+ *   club reads with a tax cheque the room holds back (the NBA)   68 / 64 / 64
  *   keyed feeds with offers  34 / 38 / 37 of 48
  *   markets on the ladder    16800 each: offers 12057 / 12052 / 12045, after a badly season 2260 / 2245 / 2262,
  *                            quiet 3310 / 3331 / 3337, quiet on a climb 811 / 801 / 805, closed 4766 / 4770 / 4781
+ *   with offers on the table and next year NOT open: the last calls (next year shut) 514 / 510 / 499, on a
+ *                            climb 473 / 483 / 479. So about one market with offers in eight (987, 993 and 978 of
+ *                            7913, 7898 and 7877) is one where passing costs next year, which is why the line, the
+ *                            box and the stay out line say so and the year out is refused on a last call.
+ *   offers from a club whose roster rank is not its standings place   10466 / 10646 / 10654
  *   real seasons graded      1116 each: short of the ask 498 / 511 / 507, every one a firing from trust 12
  *   men / room to grow       3281 / 3275 / 3276 in the first league a sport; 10995 / 11049 / 10964 over nine leagues
  *   asks on the re-sign desk 8824 / 8868 / 8838     trade pairs 1045286 / 1047531 / 1047082
- *   cuts charged as quoted   288 each      gambles 24 each (six answers a sport, each exactly 30 more landings a point)
- *   seats taken 12, years out refused 36, years out played 12, each set
- *   pace on the four fed sources (wins, titles, playoff rounds, the ask): the median club earns 101 to 106 XP a
- *   season in every sport, and 20 to 37 percent of clubs hold the first point (400 XP) after three seasons, so
- *   the median GM is about four seasons from it. The GM level help says so (hostXpHelp computes it).
- * Every floor in T sits near 70 percent of the lowest set. The two processes of one seed set print one feed
- * digest (seeds 1,2,3: 4639809b50a97cedd2ac870d05cfdb6d59a4b6e4).
+ *   cuts charged as quoted   288 each, 144 of them past a retained row under the same man
+ *   gambles 24 each (six answers a sport, each exactly 30 more landings a point)
+ *   seats taken 12, years out refused 36 and 12 more on a last call, years out played 12, each set
+ *   hub boxes read 17828 each (372 Career boxes under real club names); the longest value read is 13 letters
+ *   against a ceiling of 17, the longest sub 32 against 32
+ *   pace on the four fed sources (wins, titles, playoff rounds, the ask), over the three sets: the median club
+ *   earns 95 to 106 XP a season (seeds 1,2,3: 101 to 106; 4,5,6: 101 to 105; 7,8,9: 95 to 105), and 20 to 40
+ *   percent of clubs hold the first point (400 XP) after three seasons (20 to 37, 24 to 34, 21 to 40), so the
+ *   median GM is about four seasons from it. The GM level help says so (hostXpHelp computes it).
+ * Every floor in T sits near 70 percent of the lowest set and is held at the run's own seed count: one seed
+ * (77, and 5), two (13,14) and six (21 to 26) pass every check as well, each walk about 43 percent over its
+ * floor on one seed. The two processes of one seed set print one feed digest (seeds 1,2,3:
+ * 4639809b50a97cedd2ac870d05cfdb6d59a4b6e4).
  * CONTROLS, each run alone on seeds 1,2,3, failures counted in its own check: see CONTROL COUNTS below T.
  */
 import './lib/seedRandom.mjs';
@@ -457,7 +470,7 @@ const SPORTS = Object.keys(DRIVE);
 const PER3 = {
   minLeagues: 58, minRealSaves: 168, minOffers: 8400, minBadlyOffers: 1570, minClimb: 560, minClosed: 3300, minQuietOpen: 2300,
   minReach: 455, minVerdicts: 780, minLosing: 348, minFiredCloses: 348, minCases: 6100, minYoung: 7600, minPairs: 730000,
-  minLastCalls: 350, minPassClimb: 330, minRankApart: 3,
+  minLastCalls: 345, minPassClimb: 330, minRankApart: 7300,
 };
 const FIXED = { minFeedsWithOffers: 23, minMen: 2290, minCuts: 200 };
 const T = { ...FIXED, ...Object.fromEntries(Object.entries(PER3).map(([k, v]) => [k, Math.floor((v * SEEDS.length) / 3)])) };
@@ -786,7 +799,7 @@ console.log(`   with offers on the table and next year not open: ${M4.lastCalls}
 console.log(`   the ceiling six clubs at a time: ${reach} offers in ${reachFeeds} feeds of the most decorated careers, none from the top tier`);
 
 /* ================================================================== */
-begin('5', 'closed means closed: no tier his old club can reach and no year out reopens it, and a quiet market is never in that set');
+begin('5', 'shut means shut, closed or on a last call: no tier his old club can reach and no year out reopens it, a quiet market is never in that set, and the year out is on offer only while next year can hold a call');
 /** The league's clubs with one club's strength moved so it ranks inside tier t. */
 function placeInTier(teams, id, t) {
   const others = teams.filter(x => x.id !== id).sort((a, b) => b.strength - a.strength || a.id.localeCompare(b.id));
@@ -1262,7 +1275,7 @@ ok(C9.seats >= SPORTS.length && C9.years >= SPORTS.length && C9.refusals >= SPOR
 console.log(`   ${C9.seats} seats taken, ${C9.refusals} years out refused with the league untouched (and ${C9.lastCalls} more on a last call, offers on the table), ${C9.years} played by the engines in the host's order`);
 
 /* ================================================================== */
-begin('10', 'the words: never empty, no dash, no quote, no placeholder; a closed line never says sit; no line states fewer seasons than he played');
+begin('10', 'the words: never empty, no dash, no quote, no placeholder; a closed line never says sit; no line states fewer seasons than he played; what passing costs is said; every box fits its box');
 const NOT_ALLOWED = [[String.fromCharCode(0x2013), 'an en dash'], [String.fromCharCode(0x2014), 'an em dash'], ['"', 'a quote mark'],
   [String.fromCharCode(0x201c), 'a quote mark'], [String.fromCharCode(0x201d), 'a quote mark']];
 const FIRST_PERSON = /\b(I|me|my|mine|we|our|us)\b/;

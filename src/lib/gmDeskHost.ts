@@ -1252,7 +1252,7 @@ export function hostStintEndWords(s: SeatStint): string {
 export interface HostStintView {
   team: string;
   name: string;
-  /** 'Took over in 2027, top tier' or just 'Since 2027 or earlier' on an old save. */
+  /** 'Took over in 2027, top tier', or 'In the chair since 2027' with no tier on a record older than the block. */
   arrival: string;
   /** One mark a graded season, oldest first. */
   marks: string[];
