@@ -1,0 +1,45 @@
+ok   390x844: turn 1 has eight distinct choices
+ok   390x844: strongest three remain after used-player exclusion
+ok   390x844: every country choice belongs to its recorded nation and CM pool
+ok   390x844: turn 2 has eight distinct choices
+ok   390x844: strongest three remain after used-player exclusion
+ok   390x844: every country choice belongs to its recorded nation and CM pool
+ok   390x844: second throw reaches deeper names with no already drafted player
+ok   390x844: actual global request is the first 2,000 rows as two pages and nothing past them
+ok   390x844: country pages beyond 120 and 1000 with stable id order and 2026 scope
+ok   390x844: Dart Draft has no horizontal overflow
+ok   390x844: the career span scope appears before play
+ok   390x844: both difficulty buttons are on the first screen (Deep Cuts ends at 835 of 844)
+ok   390x844: the clue is the complete span in season end years, the 80 minute stint of 2000-01 included
+ok   390x844: the franchise count sits beside its stated scope
+ok   390x844: no 500 minute label and no visible answer spoiler
+ok   390x844: reopened help repeats the career span scope
+ok   390x844: Escape returns native help focus
+ok   390x844: intercepted report identifies exact random puzzle and mode
+ok   390x844: report includes visible scope and actual guesses
+ok   390x844: existing mystery eligibility remains 500 minutes
+ok   390x844: the spans view is read in whole pages from the first row, in its key order (6 requests)
+ok   390x844: no page errors or sideways Stat Detective scroll
+ok   1280x900: turn 1 has eight distinct choices
+ok   1280x900: strongest three remain after used-player exclusion
+ok   1280x900: every country choice belongs to its recorded nation and CM pool
+ok   1280x900: turn 2 has eight distinct choices
+ok   1280x900: strongest three remain after used-player exclusion
+ok   1280x900: every country choice belongs to its recorded nation and CM pool
+ok   1280x900: second throw reaches deeper names with no already drafted player
+ok   1280x900: actual global request is the first 2,000 rows as two pages and nothing past them
+ok   1280x900: country pages beyond 120 and 1000 with stable id order and 2026 scope
+ok   1280x900: Dart Draft has no horizontal overflow
+ok   1280x900: the career span scope appears before play
+ok   1280x900: both difficulty buttons are on the first screen (Deep Cuts ends at 549 of 900)
+ok   1280x900: the clue is the complete span in season end years, the 80 minute stint of 2000-01 included
+ok   1280x900: the franchise count sits beside its stated scope
+ok   1280x900: no 500 minute label and no visible answer spoiler
+ok   1280x900: reopened help repeats the career span scope
+ok   1280x900: Escape returns native help focus
+ok   1280x900: intercepted report identifies exact random puzzle and mode
+ok   1280x900: report includes visible scope and actual guesses
+ok   1280x900: existing mystery eligibility remains 500 minutes
+ok   1280x900: the spans view is read in whole pages from the first row, in its key order (6 requests)
+ok   1280x900: no page errors or sideways Stat Detective scroll
+playDraftDetectiveReports: 44 checks, 0 failed. Screenshots and evidence: /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/draft-detective-shots

@@ -1,0 +1,16 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+simSoccerCareerDevelopment-forwalk exit=0 3s | simSoccerCareerDevelopment: 18 outcome groups, 16+16 complete baseline saves/RNG, 16 form draws, 16 played plan seasons, 7 interruption paths, 0 failed
+simCareerStoryRole-forwalk exit=0 36s | simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
+simCareerTrophyRuns-forwalk exit=0 3s | Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/ca
+simSoccerSeasonHistory-forwalk exit=0 2s | Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-
+simSoccerDerbyHistory-forwalk exit=0 2s | Derby history: 11 groups,24 full main season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derby
+simCmRealFixtures-forwalk exit=0 7s | simCmRealFixtures normal: real fixture outcomes and independent generated baseline passed.
+playSoccerCareerDepth exit=0 12s | playSoccerCareerDepth: 80 checks, 0 failed
+playSoccerCareerDevelopment exit=0 48s | Soccer Career development native: 301 checks, 0 failed, 6 actual journeys. Screenshots and complete saved-state evidence: /home/runner/work/ballpark-hero/ballpark-hero/ca
+playCareerStoryRole exit=0 40s | Career Story native: 554 checks, 0 failed, 9/9 journeys; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/career-story-role/native
+playCareerTrophyRuns exit=0 38s | Trophy Cabinet native: 407 checks,0 failed,12/12 journeys,3 copied detector controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/career-trophy-runs/n
+playDerbyHistory1195 exit=0 53s | Derby history native: 904 checks,0 failed,9/9 journeys,4 copied observation controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derby-history/native
+playSeasonHistory1193 exit=0 43s | Season history native: 598 checks,0 failed,9/9 journeys,4 copied observation controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-history/nati
+playCmRealFixtures exit=0 22s | playCmRealFixtures: 2 viewports, 6 real/legacy/later-season calendar and actual Quick Sim journeys, 18 neutral real-opening results, 2 effective controls; full saved stat
+playDraftDetectiveReports exit=0 9s | playDraftDetectiveReports: 44 checks, 0 failed. Screenshots and evidence: /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/draft-detective-shots
