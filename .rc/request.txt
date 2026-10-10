@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+hall-nhl: SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nhl 2000 > "$RC_OUT/hall-nhl.log" 2>&1; s=$?; grep -E "FAIL|hallshare" "$RC_OUT/hall-nhl.log" | cut -c1-300 | head -12; tail -1 "$RC_OUT/hall-nhl.log" | cut -c1-200; exit $s
+ledger: node scripts/simUsSeasonLedger.mjs
+hallfiles: n=$(git diff --stat 980654facb2d41a6c9ddc029c43710178b9d49b8 HEAD~1 -- scripts/data/careerHallMarks.json src/lib/careerHallOfFame.ts scripts/data/careerHallV2.json scripts/simCareerHall.mjs scripts/genCareerHallMarks.mjs | wc -l); echo "hall files diff lines against base 980654fa: $n"; test "$n" = "0"
+head: git log -1 --format=%H HEAD~1; git log -1 --format=%s HEAD~1 | cut -c1-160
