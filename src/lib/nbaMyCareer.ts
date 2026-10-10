@@ -15,9 +15,8 @@ import { usSeasonLength } from '@/data/usSeasonLengths';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
 import { nbaSeasonScore, wonAward } from './careerAwards';
 import { decideNbaAwards, NBA_FIELD } from './nbaCareerAwards';
-import { draftRival, judgeRivalSeason } from './careerRival';
+import { draftRival, judgeRivalSeason, rivalKindOf, rivalSeasonDraws, rivalSeasonStream } from './careerRival';
 import type { CareerRival, RivalSeasonPlay } from './careerRival';
-import { keyedRng } from './keyedRng';
 import { nbaStatLine } from './usCareerStatLine';
 
 import type { PlayerAppearance } from './soccerCareerAppearance';
@@ -677,7 +676,7 @@ function gamesFor(c: NbaCareerState, rng: () => number): { games: number; note: 
 /** The rival's kind of player. Fixed for him. */
 export function nbaRivalArchetype(r: Pick<CareerRival, 'name' | 'pos'>): NbaArchetype {
   const list = NBA_ARCHETYPES[r.pos as NbaCareerPos] ?? NBA_ARCHETYPES.PG;
-  return list[Math.floor(keyedRng(`nba-rival-kind|${r.name}|${r.pos}`)() * list.length)];
+  return rivalKindOf('nba-rival-kind', r, list);
 }
 /** The rival's job. Fixed for every rival (see above). */
 export const NBA_RIVAL_ROLE: NbaLineInput['role'] = 'starter';
@@ -686,7 +685,7 @@ export const NBA_RIVAL_ROLE: NbaLineInput['role'] = 'starter';
  *  `seasonsPlayed` is the player's own count going in: the two were drafted together. */
 export function nbaRivalSeason(year: number, seasonsPlayed: number): RivalSeasonPlay {
   return (r, form, rng) => {
-    const keyed = keyedRng(`nba-rival|${r.name}|${year}|${rng()}`);
+    const keyed = rivalSeasonStream('nba-rival', r, year, rng, rivalSeasonDraws('nba', r.pos));
     const archetype = nbaRivalArchetype(r);
     const pos = (r.pos in NBA_ARCHETYPES ? r.pos : 'PG') as NbaCareerPos;
     const stat = nbaStatLineFor({ form, pos, archetype, role: NBA_RIVAL_ROLE, seasonsPlayed, year }, keyed);

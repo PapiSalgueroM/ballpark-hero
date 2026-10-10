@@ -388,16 +388,16 @@ const CONTROLS = {
     put: "    for (const n of judgeRivalSeason(c.rival, statScore, c.name, 'nba', rng, nbaRivalSeason(c.year, seasonsPlayed))) notes.push(n);", needs: 'R' },
   /* R: the All-Star beat dealt on the two ratings again (both at 80), as it was while it flipped a coin. It then
      turns up in years neither made the roster, saying one of them did. */
-  oldgate306: { file: 'src/lib/nbaCareerRivalryEvents.ts', find: '        when: (s, r) => { const f = nbaAllStarFacts(s, r); return !!f && !f.mine && f.his; },', put: '        when: (s, r) => s.ovr >= 80 && r.ovr >= 80,', needs: 'R' },
+  oldgate306: { file: 'src/lib/careerRivalryEvents.ts', find: '        when: (s, r) => { const f = facts(s, r); return !!f && !f.mine && f.his; },', put: '        when: (s, r) => (s as { ovr?: number }).ovr! >= 80 && (r as { ovr?: number }).ovr! >= 80,', needs: 'R' },
   /* Q, Round 1149: the MLB tick taking one more draw of the season's stream (every draw of the player's after it
      moves). Judged under SENSE_PROVE_1149=<commit> only, like othersport under SENSE_PROVE_OTHERS. */
   tickdraws: { file: 'src/lib/mlbCareerRivalryEvents.ts', find: '  const rolled = rollRivalryEvent(p, c.rival, lastId, MLB_RIVALRY_EVENTS, rng);', put: '  rng(); const rolled = rollRivalryEvent(p, c.rival, lastId, MLB_RIVALRY_EVENTS, rng);', needs: 'Q' },
   /* S, Round 1149: the own season roster beat dealt on the two ratings again, as it was while it flipped a coin
      (the card for making the roster then turns up in seasons the season card says he missed it). The swap is
      in the shared builder, so every sport on it goes red. */
-  oldgateown: { file: 'src/lib/careerRivalryEvents.ts', find: '        when: s => lastSeasonHolds(s, spec.award) === true,', put: '        when: (s, r) => (s as { ovr?: number }).ovr! >= 80 && (r as { ovr?: number }).ovr! >= 80,', needs: 'S' },
+  oldgateown: { file: 'src/lib/careerRivalryEvents.ts', find: '      when: s => lastSeasonHolds(s, spec.award) === true,', put: '      when: (s, r) => (s as { ovr?: number }).ovr! >= 80 && (r as { ovr?: number }).ovr! >= 80,', needs: 'S' },
   /* S: the card for dropping off the roster dealt in any year without the award, whatever the year before held. */
-  droppedanyyear: { file: 'src/lib/careerRivalryEvents.ts', find: '        when: s => lastSeasonHolds(s, spec.award) === false && seasonBeforeHolds(s, spec.award),', put: '        when: s => lastSeasonHolds(s, spec.award) === false,', needs: 'S' },
+  droppedanyyear: { file: 'src/lib/careerRivalryEvents.ts', find: '      when: s => lastSeasonHolds(s, spec.award) === false && seasonBeforeHolds(s, spec.award),', put: '      when: s => lastSeasonHolds(s, spec.award) === false,', needs: 'S' },
   /* S: the MLB tick rolling on the bare save, so the beat reads the season BEFORE the one just played. */
   lastyearmlb: { file: 'src/lib/mlbCareerRivalryEvents.ts', find: '  const p = withSeasonPlayed(c, season);', put: '  const p = withSeasonPlayed(c, undefined);', needs: 'S' },
   lastyearnhl: { file: 'src/lib/nhlCareerRivalryEvents.ts', find: '  const p = withSeasonPlayed(c, season);', put: '  const p = withSeasonPlayed(c, undefined);', needs: 'S' },
@@ -405,7 +405,7 @@ const CONTROLS = {
   /* S: one beat sold as a coin again (the NHL's head to head win promising "50/50 outcome" in place of what it does). */
   soldascoin: { file: 'src/lib/nhlCareerRivalryEvents.ts', find: '    consequence: "Fanbase +5, confidence boost",', put: '    consequence: "50/50 outcome",', needs: 'S' },
   /* R: the rival's season taking a second draw of the season's stream (every draw of the player's after it moves). */
-  rivaldraws: { file: 'src/lib/nbaMyCareer.ts', find: "    const keyed = keyedRng(`nba-rival|${r.name}|${year}|${rng()}`);", put: "    const keyed = keyedRng(`nba-rival|${r.name}|${year}|${rng() + rng()}`);", needs: PROVE_AGAINST ? 'R,P' : 'R' },
+  rivaldraws: { file: 'src/lib/nbaMyCareer.ts', find: "    const keyed = rivalSeasonStream('nba-rival', r, year, rng, rivalSeasonDraws('nba', r.pos));", put: "    const keyed = rivalSeasonStream('nba-rival', r, year, rng, rivalSeasonDraws('nba', r.pos) + 1);", needs: PROVE_AGAINST ? 'R,P' : 'R' },
   /* K: the Trophy Case tile's row for the lesser awards taken out. */
   norow: { file: 'src/lib/nbaCareerSport.ts', find: "    otherAwardsRow(c.seasons, NBA_TILE_NAMED),", put: "    { label: 'in other awards', n: 0 },", needs: 'K' },
   /* K, Round 1149: the same row taken out of each of the other three careers, and one award named twice (a Cy

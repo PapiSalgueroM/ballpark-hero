@@ -23,6 +23,7 @@
 */
 
 import { seasonSwing } from './careerVariance';
+import { keyedRng } from './keyedRng';
 
 export type RivalSport = 'mlb' | 'nba' | 'nfl' | 'nhl';
 
@@ -42,8 +43,10 @@ export interface CareerRival {
   lastLine: string;
   /** His score last season, so the comparison is on the record. */
   lastScore: number;
-  /** Round 1112: the season his last line belongs to, and whether that season made the All-Star roster. Only a
-   *  sport that plays its rival through a RivalSeasonPlay writes them (the NBA); a save from before has neither. */
+  /** Round 1112: the season his last line belongs to, and whether that season made the sport's roster honour
+   *  (Round 1227 widened the meaning, not the name, because NBA saves hold the field: the All-Star roster in the
+   *  NBA, MLB and the NHL, the first team All-Pro in the NFL). Only a sport that plays its rival through a
+   *  RivalSeasonPlay writes them; a save from before has neither. */
   lastYear?: number;
   lastAllStar?: boolean;
 }
@@ -60,6 +63,43 @@ export interface RivalSeasonResult { line: string; score: number; year?: number;
  * by one draw. The NBA binding is nbaRivalSeason in nbaMyCareer.ts.
  */
 export type RivalSeasonPlay = (r: CareerRival, form: number, rng: () => number) => RivalSeasonResult;
+
+/* ─── Round 1227: what every sport's rival season shares ──────────────────────
+
+   Round 1112 wrote the NBA's binding by hand. These three are that binding's
+   own lines, lifted so the other sports bind to the same law instead of a
+   copy of it, and the NBA calls them (proven byte equal: scripts/
+   simUsRivalSense.mjs section P1, scripts/simNbaAwardsSense.mjs section R). */
+
+/**
+ * THE DRAW COUNT LAW. How many draws of the season's stream a sport's rival season takes after the swing: what
+ * that sport's built in line took (read off simRivalSeason below: the NHL's goals and assists, MLB's home runs
+ * and average, the NFL's three parts or a kicker's one; the NBA's line took one before Round 1112). A binding
+ * takes exactly this many and pays for everything else from a stream keyed on the rival, so the player's own
+ * stream is where it always was. It outlives the built in lines: the count is the law, not the lines.
+ */
+export function rivalSeasonDraws(sport: RivalSport, pos: string): number {
+  if (sport === 'nba') return 1;
+  if (sport === 'nfl') return pos === 'K' ? 1 : 3;
+  return 2;
+}
+
+/** The stream a rival's season draws on: `draws` draws of the season's stream, then a generator keyed on the
+ *  tag, his name, the year and each of those draws in order. With one draw the key is the NBA's own of Round
+ *  1112, character for character. */
+export function rivalSeasonStream(
+  tag: string, r: Pick<CareerRival, 'name'>, year: number, rng: () => number, draws: number,
+): () => number {
+  let key = `${tag}|${r.name}|${year}`;
+  for (let i = 0; i < draws; i += 1) key += `|${rng()}`;
+  return keyedRng(key);
+}
+
+/** The rival's kind of player among his position's kinds: fixed for him, by a hash of his name and position
+ *  (never his rating or his age, which move). ONE rule for every sport that deals a rival a kind. */
+export function rivalKindOf<K>(tag: string, r: Pick<CareerRival, 'name' | 'pos'>, kinds: readonly K[]): K {
+  return kinds[Math.floor(keyedRng(`${tag}|${r.name}|${r.pos}`)() * kinds.length)];
+}
 
 /** Round 1112: who had the better year, from the scores of the two printed lines. THE one comparison: the
  *  season note and the head to head tally are both written from it, and every card that says who is ahead

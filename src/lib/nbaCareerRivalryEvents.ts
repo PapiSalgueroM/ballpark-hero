@@ -40,7 +40,8 @@
 import type { NbaCareerState, NbaSeasonLine } from "./nbaMyCareer";
 import type { CareerRival } from "./careerRival";
 import {
-  rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor, factBeat, withSeasonPlayed,
+  rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor, withSeasonPlayed,
+  rosterBeat, rosterFacts, ALL_STAR_ROSTER,
 } from "./careerRivalryEvents";
 import type { RivalryEvent, RivalryEventDef } from "./careerRivalryEvents";
 import { rivalryChoiceTick, resolvePendingRivalryChoice, meterOption } from "./careerRivalryChoices";
@@ -56,10 +57,10 @@ export const NBA_RIVAL_RETIRE_ID = 305;
    (nbaRivalSeason in nbaMyCareer.ts writes it on the rival). Null when the save's last season is not that
    year, so a beat that reads this is never dealt on two different seasons. */
 export function nbaAllStarFacts(s: Pick<NbaCareerState, 'seasons'>, r: Pick<CareerRival, 'lastYear' | 'lastAllStar'>): { mine: boolean; his: boolean } | null {
-  const last = s.seasons[s.seasons.length - 1];
-  if (!last || r.lastYear !== last.year) return null;
-  return { mine: !!last.allStar, his: r.lastAllStar === true };
+  return rosterFacts(s, r, nbaMadeAllStar);
 }
+/** The player's own All-Star season, off the season line the engine wrote. */
+const nbaMadeAllStar = (last: Pick<NbaSeasonLine, 'allStar'>): boolean => !!last.allStar;
 
 /* Seventeen beats, gated on what an NBA rival's save actually tracks: rings,
    overall, team, age, and the head to head record judgeRivalSeason already
@@ -107,33 +108,9 @@ export const NBA_RIVALRY_EVENTS: RivalryEventDef<NbaCareerState, CareerRival>[] 
      engine has picked All-Stars for real since Round 1103, so the card could say you made it in a year your
      season card said you did not. Now it is dealt only when at least one of you made it, and it says and does
      only what those two facts support. Round 1149 moved it onto the shared builder (factBeat in
-     careerRivalryEvents.ts), one card a pair of facts, with not a word or a number changed. */
-  factBeat<NbaCareerState, CareerRival>({
-    id: 306, emoji: "🗳️", title: "All-Star Rosters",
-    cards: [
-      {
-        when: (s, r) => { const f = nbaAllStarFacts(s, r); return !!f && f.mine && f.his; },
-        description: (_s, r) => `The All-Star rosters are out, and you and ${r.name} are both on them.`,
-        consequence: "Fanbase +3",
-        move: s => { s.fanbase = clamp(s.fanbase + 3, 0, 100); },
-        line: (_s, r) => `🗳️ You and ${r.name} both made the All-Star roster.`,
-      },
-      {
-        when: (s, r) => { const f = nbaAllStarFacts(s, r); return !!f && f.mine && !f.his; },
-        description: (_s, r) => `The All-Star rosters are out. You are on one and ${r.name} is not.`,
-        consequence: "Morale +5",
-        move: s => { s.morale = clamp(s.morale + 5, 0, 100); },
-        line: (_s, r) => `🗳️ You made the All-Star roster and ${r.name} did not.`,
-      },
-      {
-        when: (s, r) => { const f = nbaAllStarFacts(s, r); return !!f && !f.mine && f.his; },
-        description: (_s, r) => `The All-Star rosters are out. ${r.name} is on one and you are not.`,
-        consequence: "Morale -5",
-        move: s => { s.morale = clamp(s.morale - 5, 0, 100); },
-        line: (_s, r) => `🗳️ ${r.name} made the All-Star roster and you did not.`,
-      },
-    ],
-  }),
+     careerRivalryEvents.ts), one card a pair of facts, with not a word or a number changed. Round 1227 lifted
+     the three cards themselves into rosterBeat there, for the sports that follow, again with nothing changed. */
+  rosterBeat<NbaSeasonLine, NbaCareerState, CareerRival>({ id: 306, ...ALL_STAR_ROSTER, mine: nbaMadeAllStar }),
   {
     id: 307, emoji: "⭐", title: "Rival's Ring",
     description: (_s, r) => `${r.name}'s team wins it all. Yours came up short.`,

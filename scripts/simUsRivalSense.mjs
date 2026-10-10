@@ -49,7 +49,20 @@ const BOUND = [];
 /* NEGATIVE CONTROLS, US_RIVAL_CONTROL=<name>. Each swaps one line of source in memory (an esbuild plugin, never
    a file), refuses to run when the anchor is not there exactly once or the swap changed nothing (exit 2, "Refusing
    to run"), and must turn its own section red: the closing line names the sections that went red. */
-const CONTROLS = {};
+const CONTROLS = {
+  /* P1, P2 (Round 1149's control, moved here with the proof it fires in): the MLB rivalry tick takes one more
+     draw of the season's stream, so every draw of the player's after it moves. */
+  tickdraws: { file: 'src/lib/mlbCareerRivalryEvents.ts', prove: true, needs: 'P1,P2',
+    find: '  const rolled = rollRivalryEvent(p, c.rival, lastId, MLB_RIVALRY_EVENTS, rng);', put: '  rng(); const rolled = rollRivalryEvent(p, c.rival, lastId, MLB_RIVALRY_EVENTS, rng);' },
+  /* P1: the lifted stream keyed one character off the NBA's own key of Round 1112 (the NBA rival's whole trail
+     moves, and nothing of the player's does). */
+  liftkey: { file: 'src/lib/careerRival.ts', prove: true, needs: 'P1',
+    find: '  let key = `${tag}|${r.name}|${year}`;', put: '  let key = `${tag}|${r.name}|${year}|`;' },
+  /* L: one word of the lifted All-Star cards changed (the NBA's "both" card no longer reads as it did). */
+  liftcard: { file: 'src/lib/careerRivalryEvents.ts', prove: true, needs: 'L',
+    find: 'description: (r: { name: string }) => `The All-Star rosters are out, and you and ${r.name} are both on them.`,', put: 'description: (r: { name: string }) => `The All-Star rosters are out, and you and ${r.name} both made it.`,' },
+};
+if (CONTROL && CONTROLS[CONTROL]?.prove && !PROVE) { console.error(`control ${CONTROL} is judged against a tree before: set RIVAL_PROVE. Refusing to run.`); process.exit(2); }
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown US_RIVAL_CONTROL "${CONTROL}", expected one of: ${Object.keys(CONTROLS).join(', ') || '(none yet)'}`); process.exit(2); }
 const edits = CONTROL ? [{ label: `control ${CONTROL}`, ...CONTROLS[CONTROL] }] : [];
 
@@ -378,6 +391,50 @@ if (PROVE) {
   for (const sport of BOUND) {
     const t = Object.values(WAS[sport].total.by).reduce((a, m) => a + m.off, 0);
     check('B', t > 0, `${sport}: the tree before was not clean (${t} rival lines off the player's shape), so this proof is against the old line`);
+  }
+
+  /* P2: the same proof with EVERY card answered, the way the board drives a career (src/test/helpers/
+     usCareerDrive.ts, the truth digest's own driver: free agency, the camp, the season, the summer's cards, the
+     inbox, the rivalry beat and the rival choice, each answered). Round 1149's proof never answered a card.
+     A sport this step does not name: whole saves byte equal. A sport it names (RIVAL_MOVED or RIVAL_CARDS): the
+     careers are driven one season further at a time, and at the first season where anything OFF the rival
+     differs (a different beat was dealt or answered), every season line played so far is still byte equal. */
+  const P2N = FULL ? 1000 : Math.min(200, CAREERS);
+  console.log(`P2) with every card answered: ${P2N} careers a sport, driven through the sport's binding`);
+  const driven = (M, sport, i, seasons) => {
+    const F = FLEET[sport]; const S = F.desc(M); const pos = F.pos[i % F.pos.length];
+    const era = F.eras[Math.floor(i / F.pos.length) % F.eras.length];
+    let cards = 0; let choices = 0;
+    const counted = { ...S,
+      dismissRivalryEvent: c => { cards += 1; return S.dismissRivalryEvent(c); },
+      resolveRivalryChoice: (...a) => { const res = S.resolveRivalryChoice(...a); if (res) choices += 1; return res; } };
+    const out = M.drive.driveCareer(counted, { key: `p2-${i}`, pos, arch: i, eraId: era === 'now' ? undefined : era, seasons });
+    return { json: out.json, cards, choices, seasons: out.seasons };
+  };
+  const offRival = json => { const c = JSON.parse(json); const seasons = JSON.stringify(c.seasons); delete c.rival; return { rest: JSON.stringify(c), seasons, c }; };
+  for (const sport of ALL) {
+    const named = MOVED.includes(sport) || CARDS.includes(sport);
+    let cards = 0; let choices = 0; let equal = 0; let parted = 0; let linesHeld = 0; const firstKeys = {}; let seasons = 0;
+    for (let i = 0; i < P2N; i += 1) {
+      const now = driven(E, sport, i, 40); const was = driven(B.mod, sport, i, 40);
+      cards += now.cards; choices += now.choices; seasons += now.seasons;
+      if (now.json === was.json) { equal += 1; continue; }
+      if (!named) continue;
+      for (let k = 1; k <= 40; k += 1) {
+        const a = offRival(driven(E, sport, i, k).json); const b = offRival(driven(B.mod, sport, i, k).json);
+        if (a.rest === b.rest) continue;
+        parted += 1; if (a.seasons === b.seasons) linesHeld += 1;
+        for (const key of new Set([...Object.keys(a.c), ...Object.keys(b.c)])) if (JSON.stringify(a.c[key]) !== JSON.stringify(b.c[key])) firstKeys[key] = (firstKeys[key] ?? 0) + 1;
+        break;
+      }
+    }
+    check('P2', cards > 0 && seasons > 0, `${sport}: the drive answered ${cards} rivalry cards and ${choices} rival choices over ${seasons} seasons (more than none)`);
+    if (!named) check('P2', equal === P2N, `${sport}: ${equal} of ${P2N} whole saves are byte equal`);
+    else {
+      check('P2', equal < P2N, `${sport}: the saves moved, as this step says they do (${P2N - equal} of ${P2N} differ)`);
+      check('P2', linesHeld === parted, `${sport}: at the first season where anything off the rival differs, every season line so far is byte equal (${linesHeld} of ${parted} careers that part; ${P2N - equal - parted} differ under the rival alone)`);
+      console.log(`     ${sport}: what differs off the rival at that first season, by top level key: ${Object.entries(firstKeys).sort((x, y) => y[1] - x[1]).map(([k, n]) => `${k} ${n}`).join(', ') || 'nothing'}`);
+    }
   }
 }
 
