@@ -99,20 +99,63 @@ by reading. What each one does and what this round did about it:
 | `scripts/simCmLeagueRules.mjs` | hashes of whole saves in `scripts/data/cmLeagueRulesDigest.json` | the digest is taken again in its own commit, after the attribution legs its header describes (see below) |
 | `scripts/simManagerAppealIsolation.mjs` | the sha256 of `src/lib/clubManager.ts` in `scripts/fixtures/managerAppealIsolation1081/manifest.json` | the one pin follows the file, in its own commit, as Round 1146 did. IT MUST BE TAKEN AGAIN AT THE MERGE: Rounds 1218 and 1225 edit the same file |
 | `scripts/simCmVar.mjs` | `playNextEntry` on a fresh save against the engine at c33d0139 ("Default callers retain every prior report, stat, player credit and save byte") | EDITED BY THE FIXER (61ee53dd): the two comparisons with the prior engine, and no other, leave the field out on both sides. Round 1218 keeps both lines and the file merges with its branches cleanly (see "After the adversarial reviews") |
-| `scripts/simCmRealFixtures.mjs` | fresh saves and played entries against the engine at 79c729cd | NOT EDITED: on the brief's must not touch list and rewritten by Round 1225, whose version takes its base from `CM_FIXTURE_BASE` and so pins nothing by default |
+| `scripts/simCmRealFixtures.mjs` | fresh saves, played entries and a rollover against the engine at 79c729cd | EDITED BY THE SECOND FIX PASS (c0db41a8): the block below, under the assert import. The brief had it on the must not touch list because Round 1225 rewrites the file; the block is the one edit that merges with Round 1225's version with no conflict (see below) |
 
-THE BLOCK FOR THE LEAD (not committed anywhere in the repo; it is in the closing report and at
+THE BLOCK (the builder wrote it for the lead as
 `C:/Users/antho/dukb-handoff/2026-10-10/results-g/patchSaveCompare-1229.mjs`): fourteen lines under
 `import assert from 'node:assert/strict';` that wrap `assert.deepEqual` so a save, or a play result holding
-one, is compared without its `leagueBook`. SINCE THE REVIEW FIXES IT IS NO LONGER WANTED FOR `simCmVar.mjs`
-AND MUST NOT BE RUN ON IT: that file carries a narrower fix now. The block wraps `assert.deepEqual` for the
-whole process, so it would also take the book out of every comparison of today's engine with itself, and
-out of `scripts/playCmVar.mjs`, which imports `simCmVar.mjs` and shares the same assert object.
+one, is compared without its `leagueBook`. IT IS NOT WANTED FOR `simCmVar.mjs` AND MUST NOT BE RUN ON IT:
+that file carries a narrower fix. The block wraps `assert.deepEqual` for the whole process, so there it
+would also take the book out of every comparison of today's engine with itself, and out of
+`scripts/playCmVar.mjs`, which imports `simCmVar.mjs` and shares the same assert object.
 
-So on THIS BRANCH ALONE one harness is still red: `simCmRealFixtures`, for one reason, the new field. It is
-on the brief's must not touch list and Round 1225 rewrites it; Round 1225's version is green beside this
-round as the suite runs it. The block is still the remedy for the gate's version of THAT file, and only if
-this round reaches a gate without Round 1225.
+SINCE THE SECOND FIX PASS THE BLOCK IS IN `scripts/simCmRealFixtures.mjs` ON THIS BRANCH (c0db41a8), and of
+the five harnesses of the table none is red on this branch alone any more (`r1229-f2c`; what is still over
+its line is the weight sweep's three budget rows, part 6 of the numbers). Why that file may carry the wide
+block where `simCmVar.mjs` may not:
+nothing imports it, so the wrap reaches no other harness; and the one comparison of today's engine with
+itself that it reaches ("Playing never changes any raw input field") has a text twin on the next line
+(`JSON.stringify(pre)` against the input bytes), so nothing is hidden. Why the block and not a narrow edit
+of the seven comparisons with the older engine: Round 1225 rewrites the file, and a mock edit of those
+seven lines conflicts with its version in three places (`git merge-file`, base 980654fa), where the block
+conflicts in none. With the file as it was at 5e96c4ca the harness is red on this head, and with the block
+green, so the block alone is what turns it (`r1229-f2c`, lines `realfix-block-out` and `realfix`).
+`patchSaveCompare-1229.mjs` is no longer to be run on this branch's file.
+
+BESIDE ROUND 1225 THE REMEDY IS THE BASE (second fix pass; trial merges of this branch with
+`origin/r1225-cm-fixtures-bind` at 6bfd816a, no conflict, the block riding into Round 1225's version of the
+file: `r1229-f2a` before the block was committed, `r1229-f2d` after). Round 1225 brings TWO harnesses that
+compare with the engine of a commit named by `CM_FIXTURE_BASE`: its version of
+`scripts/simCmRealFixtures.mjs` (the groups legacy, rollover, baseline and uncopied, and every control) and
+a new `scripts/simCmFixtureFleet.mjs` (sections nofetch and oldsaves: a fresh career, twelve entries and
+the saved bytes equal the base's with no field taken out, in every league). Run with no base, as the suite
+runs them, both are green beside this round. Named a base from before this round (980654fa), both are red
+on the one new field: the first in its group legacy alone (12 of 13 green: that group compares saved
+bytes as text, which the block does not reach), the second with 57 failures, nofetch red in every league.
+`patchSaveCompare-1229.mjs` run on the MERGED file takes the book out of that text comparison too (13
+groups and 11 effective controls against 980654fa), but nothing should strip a field from the second
+harness, whose point is that nothing is stripped.
+What needs no edit anywhere: MERGE THIS ROUND BEFORE ROUND 1225 AND NAME AS THE BASE THE COMMIT JUST BEFORE
+ROUND 1225'S MERGE. That base holds the book, so both harnesses compare like with like. With the base set
+to this branch's head on that trial merge: `simCmRealFixtures` 13 of 13 groups, and 11 effective controls
+under `CM_REAL_FIXTURE_CONTROL=all`; `simCmFixtureFleet` green over 250 careers, 132 saves and 11 daily
+clubs in 10 registered leagues, and its three controls (prefetch, keyless, nostrip) each FIRED for exactly
+their own leagues. On the same merged tree, with no base to name: `simCmLeagueFixtures` green (268 of 268
+controls) and `simCmLeagueBook` green. If Round 1225 is already in, make the base: revert its merge on a
+side branch and name that commit.
+
+THE THREE ROUNDS ON ONE TREE (`r1229-f2b`, `r1229-f2d`: this branch, then `origin/r1218-cm-var-true` at
+116faaaf, then Round 1225). This round merges with each of the two with no conflict. THEY CONFLICT WITH
+EACH OTHER, with or without this round (`git merge-tree` of the two branches): lines 3 and 4 of
+`src/lib/clubManager.ts` (Round 1225 rewrote the `clubManagerFixtures` import, Round 1218 the
+`clubManagerVar` import under it: keep 1225's line 3 and 1218's line 4) and line 3 of
+`src/components/club-manager/ClubManagerHelp.tsx` (both add lines: keep both). Resolved that way, the tree
+of the three: the type gate 0; `simCmVar` 0 and 12 outcomes with 20 effective controls; `simCmLeagueBook`,
+`simClubManagerSaveSize`, `simCmShootoutOrder`, `simCmLeagueRules` and the two book test files 0; Round
+1225's two base harnesses 0 against the commit that holds this round and Round 1218 (13 groups, 11
+effective controls, 250 careers, 132 saves). The one red is the Round 1081 pin, as it must be: the engine
+file of the three hashes to d4aa57b9f99dc73244593f25405b023442f6f88f757f86f658e382ceb136c624 (CRLF read as
+LF), and with the pin moved to that value `simManagerAppealIsolation` is 0 again.
 
 ## THE NUMBERS, for the lead's rulings before the round that reads the book
 
@@ -358,11 +401,14 @@ was looked up for it: it is printed, never gated.
 
 ## Owed
 
-- TO THE LEAD AT THE MERGE: the Round 1081 manifest pin again (three rounds edit the engine file); the
-  three budget rows of `scripts/sweepWeight.mjs`; NOTHING for `scripts/simCmVar.mjs` any more (do not run
-  the block on it); the block for `scripts/simCmRealFixtures.mjs` only if this round reaches a gate without
-  Round 1225, or if Round 1225's version is run with a base older than this round; a ruling on clubs with
-  no named eleven before Round B, and a sourced number a league before a keepers' board.
+- TO THE LEAD AT THE MERGE: this round BEFORE Round 1225, and `CM_FIXTURE_BASE` named as the commit just
+  before Round 1225's merge, wherever its base groups, its fleet harness or their controls are part of a
+  gate (see "Beside Round 1225 the remedy is the base"); the two conflicts Rounds 1218 and 1225 have with
+  each other (the import lines of `src/lib/clubManager.ts`, the top of `ClubManagerHelp.tsx`); the Round
+  1081 manifest pin again, last, after the three rounds are in the engine file; the three budget rows of
+  `scripts/sweepWeight.mjs`; NOTHING for `scripts/simCmVar.mjs` or `scripts/simCmRealFixtures.mjs` on this
+  branch (both carry their fix; do not run the block script on either); a ruling on clubs with no named
+  eleven before Round B, and a sourced number a league before a keepers' board.
 - TO ROUND B, FROM THE REVIEWS: the reader holds the first law against the table before it trusts a book
   (see "must not trust"); the facts file carries the second sources named in this file, each opened.
 - TO ROUND B: the readers, the Stats card, the awards, the team of the season, What's New, the facts file
