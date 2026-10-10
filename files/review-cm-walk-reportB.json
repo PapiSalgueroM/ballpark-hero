@@ -1,0 +1,404 @@
+{
+ "base": "http://localhost:4173",
+ "seed": 86421,
+ "journeys": [],
+ "own": [
+  {
+   "id": "own-me-390-motion",
+   "club": "Sevilla",
+   "opponent": "Alavés",
+   "minute": 29,
+   "man": "Jonny Otto",
+   "notes": [],
+   "start": {
+    "motion": "pass",
+    "phase": "pass",
+    "own": null,
+    "rue": 0,
+    "card": null,
+    "score": "0 - 0",
+    "minute": "27",
+    "anims": 0,
+    "y": 0
+   },
+   "cardFrame": {
+    "motion": "goal",
+    "phase": "net",
+    "own": "o4",
+    "rue": 1,
+    "card": "GOAL! Jonny Otto 29' (O.G)SevillaTap to carry on",
+    "score": "1 - 0",
+    "minute": "29",
+    "anims": 0,
+    "y": 0
+   },
+   "first": {
+    "motion": "goal",
+    "phase": "plant",
+    "own": "o4",
+    "rue": 0,
+    "card": null,
+    "score": "0 - 0",
+    "minute": "29",
+    "anims": 0,
+    "y": 0
+   },
+   "frames": 36,
+   "phases": [
+    "plant",
+    "flight",
+    "net"
+   ],
+   "scoreAtFirst": "0 - 0",
+   "card": "GOAL! Jonny Otto 29' (O.G)SevillaTap to carry on",
+   "scoreAtCard": "1 - 0"
+  },
+  {
+   "id": "own-me-390-reduced",
+   "club": "Sevilla",
+   "opponent": "Alavés",
+   "minute": 29,
+   "man": "Jonny Otto",
+   "notes": [],
+   "start": {
+    "motion": "pass",
+    "phase": "pass",
+    "own": null,
+    "rue": 0,
+    "card": null,
+    "score": "0 - 0",
+    "minute": "27",
+    "anims": 0,
+    "y": 0
+   },
+   "cardFrame": {
+    "motion": "goal",
+    "phase": "net",
+    "own": "o4",
+    "rue": 1,
+    "card": "GOAL! Jonny Otto 29' (O.G)SevillaTap to carry on",
+    "score": "1 - 0",
+    "minute": "29",
+    "anims": 0,
+    "y": 0
+   },
+   "first": {
+    "motion": "goal",
+    "phase": "net",
+    "own": "o4",
+    "rue": 1,
+    "card": "GOAL! Jonny Otto 29' (O.G)SevillaTap to carry on",
+    "score": "1 - 0",
+    "minute": "29",
+    "anims": 0,
+    "y": 0
+   },
+   "frames": 18,
+   "phases": [
+    "net"
+   ],
+   "scoreAtFirst": "1 - 0",
+   "card": "GOAL! Jonny Otto 29' (O.G)SevillaTap to carry on",
+   "scoreAtCard": "1 - 0"
+  },
+  {
+   "id": "own-me-1280-motion",
+   "club": "Sevilla",
+   "opponent": "Alavés",
+   "minute": 29,
+   "man": "Jonny Otto",
+   "notes": [],
+   "start": {
+    "motion": "pass",
+    "phase": "pass",
+    "own": null,
+    "rue": 0,
+    "card": null,
+    "score": "0 - 0",
+    "minute": "27",
+    "anims": 0,
+    "y": 0
+   },
+   "cardFrame": {
+    "motion": "goal",
+    "phase": "net",
+    "own": "o4",
+    "rue": 1,
+    "card": "GOAL! Jonny Otto 29' (O.G)SevillaTap to carry on",
+    "score": "1 - 0",
+    "minute": "29",
+    "anims": 0,
+    "y": 0
+   },
+   "first": {
+    "motion": "goal",
+    "phase": "plant",
+    "own": "o4",
+    "rue": 0,
+    "card": null,
+    "score": "0 - 0",
+    "minute": "29",
+    "anims": 0,
+    "y": 0
+   },
+   "frames": 35,
+   "phases": [
+    "plant",
+    "flight",
+    "net"
+   ],
+   "scoreAtFirst": "0 - 0",
+   "card": "GOAL! Jonny Otto 29' (O.G)SevillaTap to carry on",
+   "scoreAtCard": "1 - 0"
+  },
+  {
+   "id": "own-me-1280-reduced",
+   "club": "Sevilla",
+   "opponent": "Alavés",
+   "minute": 29,
+   "man": "Jonny Otto",
+   "notes": [],
+   "start": {
+    "motion": "pass",
+    "phase": "pass",
+    "own": null,
+    "rue": 0,
+    "card": null,
+    "score": "0 - 0",
+    "minute": "27",
+    "anims": 0,
+    "y": 0
+   },
+   "cardFrame": {
+    "motion": "goal",
+    "phase": "net",
+    "own": "o4",
+    "rue": 1,
+    "card": "GOAL! Jonny Otto 29' (O.G)SevillaTap to carry on",
+    "score": "1 - 0",
+    "minute": "29",
+    "anims": 0,
+    "y": 0
+   },
+   "first": {
+    "motion": "goal",
+    "phase": "net",
+    "own": "o4",
+    "rue": 1,
+    "card": "GOAL! Jonny Otto 29' (O.G)SevillaTap to carry on",
+    "score": "1 - 0",
+    "minute": "29",
+    "anims": 0,
+    "y": 0
+   },
+   "frames": 18,
+   "phases": [
+    "net"
+   ],
+   "scoreAtFirst": "1 - 0",
+   "card": "GOAL! Jonny Otto 29' (O.G)SevillaTap to carry on",
+   "scoreAtCard": "1 - 0"
+  },
+  {
+   "id": "own-opp-390-motion",
+   "club": "PSV",
+   "opponent": "Manchester United",
+   "minute": 36,
+   "man": "Mauro Júnior",
+   "notes": [],
+   "start": {
+    "motion": "pass",
+    "phase": "pass",
+    "own": null,
+    "rue": 0,
+    "card": null,
+    "score": "0 - 0",
+    "minute": "34",
+    "anims": 0,
+    "y": 0
+   },
+   "cardFrame": {
+    "motion": "goal",
+    "phase": "net",
+    "own": "m4",
+    "rue": 1,
+    "card": "GOAL! Mauro Júnior 36' (O.G)Manchester UnitedTap to carry on",
+    "score": "0 - 1",
+    "minute": "36",
+    "anims": 0,
+    "y": 0
+   },
+   "first": {
+    "motion": "goal",
+    "phase": "plant",
+    "own": "m4",
+    "rue": 0,
+    "card": null,
+    "score": "0 - 0",
+    "minute": "36",
+    "anims": 0,
+    "y": 0
+   },
+   "frames": 36,
+   "phases": [
+    "plant",
+    "flight",
+    "net"
+   ],
+   "scoreAtFirst": "0 - 0",
+   "card": "GOAL! Mauro Júnior 36' (O.G)Manchester UnitedTap to carry on",
+   "scoreAtCard": "0 - 1"
+  },
+  {
+   "id": "own-opp-390-reduced",
+   "club": "PSV",
+   "opponent": "Manchester United",
+   "minute": 36,
+   "man": "Mauro Júnior",
+   "notes": [],
+   "start": {
+    "motion": "pass",
+    "phase": "pass",
+    "own": null,
+    "rue": 0,
+    "card": null,
+    "score": "0 - 0",
+    "minute": "34",
+    "anims": 0,
+    "y": 0
+   },
+   "cardFrame": {
+    "motion": "goal",
+    "phase": "net",
+    "own": "m4",
+    "rue": 1,
+    "card": "GOAL! Mauro Júnior 36' (O.G)Manchester UnitedTap to carry on",
+    "score": "0 - 1",
+    "minute": "36",
+    "anims": 0,
+    "y": 0
+   },
+   "first": {
+    "motion": "goal",
+    "phase": "net",
+    "own": "m4",
+    "rue": 1,
+    "card": "GOAL! Mauro Júnior 36' (O.G)Manchester UnitedTap to carry on",
+    "score": "0 - 1",
+    "minute": "36",
+    "anims": 0,
+    "y": 0
+   },
+   "frames": 18,
+   "phases": [
+    "net"
+   ],
+   "scoreAtFirst": "0 - 1",
+   "card": "GOAL! Mauro Júnior 36' (O.G)Manchester UnitedTap to carry on",
+   "scoreAtCard": "0 - 1"
+  },
+  {
+   "id": "own-opp-1280-motion",
+   "club": "PSV",
+   "opponent": "Manchester United",
+   "minute": 36,
+   "man": "Mauro Júnior",
+   "notes": [],
+   "start": {
+    "motion": "pass",
+    "phase": "pass",
+    "own": null,
+    "rue": 0,
+    "card": null,
+    "score": "0 - 0",
+    "minute": "34",
+    "anims": 0,
+    "y": 0
+   },
+   "cardFrame": {
+    "motion": "goal",
+    "phase": "net",
+    "own": "m4",
+    "rue": 1,
+    "card": "GOAL! Mauro Júnior 36' (O.G)Manchester UnitedTap to carry on",
+    "score": "0 - 1",
+    "minute": "36",
+    "anims": 0,
+    "y": 0
+   },
+   "first": {
+    "motion": "goal",
+    "phase": "plant",
+    "own": "m4",
+    "rue": 0,
+    "card": null,
+    "score": "0 - 0",
+    "minute": "36",
+    "anims": 0,
+    "y": 0
+   },
+   "frames": 35,
+   "phases": [
+    "plant",
+    "flight",
+    "net"
+   ],
+   "scoreAtFirst": "0 - 0",
+   "card": "GOAL! Mauro Júnior 36' (O.G)Manchester UnitedTap to carry on",
+   "scoreAtCard": "0 - 1"
+  },
+  {
+   "id": "own-opp-1280-reduced",
+   "club": "PSV",
+   "opponent": "Manchester United",
+   "minute": 36,
+   "man": "Mauro Júnior",
+   "notes": [],
+   "start": {
+    "motion": "pass",
+    "phase": "pass",
+    "own": null,
+    "rue": 0,
+    "card": null,
+    "score": "0 - 0",
+    "minute": "34",
+    "anims": 0,
+    "y": 0
+   },
+   "cardFrame": {
+    "motion": "goal",
+    "phase": "net",
+    "own": "m4",
+    "rue": 1,
+    "card": "GOAL! Mauro Júnior 36' (O.G)Manchester UnitedTap to carry on",
+    "score": "0 - 1",
+    "minute": "36",
+    "anims": 0,
+    "y": 0
+   },
+   "first": {
+    "motion": "goal",
+    "phase": "net",
+    "own": "m4",
+    "rue": 1,
+    "card": "GOAL! Mauro Júnior 36' (O.G)Manchester UnitedTap to carry on",
+    "score": "0 - 1",
+    "minute": "36",
+    "anims": 0,
+    "y": 0
+   },
+   "frames": 18,
+   "phases": [
+    "net"
+   ],
+   "scoreAtFirst": "0 - 1",
+   "card": "GOAL! Mauro Júnior 36' (O.G)Manchester UnitedTap to carry on",
+   "scoreAtCard": "0 - 1"
+  }
+ ],
+ "shots": {
+  "count": 20,
+  "bytes": 678686,
+  "dropped": []
+ }
+}
