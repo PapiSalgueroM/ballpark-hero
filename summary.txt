@@ -1,0 +1,8 @@
+h1-hiscoin exit=0 0s | mutation hiscoin applied to src/lib/nbaMyCareer.ts
+h2-hiscoin-sense exit=1 105s | simNbaAwardsSense: 158 checks, 1 failed (full size), 105s
+h3-hiscoin-rivalry exit=0 6s | simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.
+h4-hiscoin-vitest exit=1 37s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career t
+h5-hiscoin-parity exit=1 37s | simUsBoardParity: 3 failures
+h6-hiscoin-inboxbeats exit=0 53s | simCareerInboxBeats: green. Soccer is unchanged, the NFL, NBA, MLB and NHL inboxes each run on their own calendar, and every rival choice does what it says.
+h9-restore exit=0 0s | restored src/lib/nbaMyCareer.ts
+z-clean exit=0 0s | 

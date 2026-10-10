@@ -1,0 +1,9 @@
+#!serial
+h1-hiscoin: node .rc/x/rv-mut.mjs hiscoin
+h2-hiscoin-sense: node scripts/simNbaAwardsSense.mjs
+h3-hiscoin-rivalry: node scripts/simCareerRivalryEvents.mjs
+h4-hiscoin-vitest: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts src/test/usBoardFixture.test.tsx src/test/nbaTrophyTile.test.ts --testTimeout=300000 --hookTimeout=120000
+h5-hiscoin-parity: node scripts/simUsBoardParity.mjs
+h6-hiscoin-inboxbeats: node scripts/simCareerInboxBeats.mjs
+h9-restore: node .rc/x/rv-mut.mjs restore
+z-clean: git status --short -- src | head -5; test -z "$(git status --short -- src)"
