@@ -114,8 +114,22 @@ object).
   purpose (Round 1149's rivalry beats, the MLB and NHL week by week round) moves its inputs, and the compare then
   answers "inputs moved under the digest" with exit 3. That is the mode working, not a red.
 
+## Run after the table above
+
+- The whole vitest suite on `2388a06d`, three shards (`r1221-b7`): 387 files passed, 2 skipped, 1 failed; 5,340
+  tests passed, 55 skipped, 1 failed. The one failure is `src/test/dailySaveShapes.test.tsx`, "a damaged daily
+  save resets itself", on /olympics: the same failure the base commit has (`r1221-b5` runs
+  simDailySaveHardening, which runs that file, on `09df145a` alone: the same two lines).
+- The six browser walks that read the season core (`r1221-b8`, on `7a911efb`): playSeasonCentre 40 checks,
+  playSeasonCentreMotion 77, playSeasonMoments 117, playSoccerCareerDiscipline 178, playSoccerCareerLeagueWorld
+  249, playSoccerCareerOpponents 164, each 0 failed and exit 0.
+- `origin/main` did not move during the round (`09df145a` throughout), so the merge after the compare had
+  nothing to merge. On `7a911efb` (`r1221-c1`): the type gate 0, the compare 0 (11 digests, 0 moved), `lawdrift`
+  1 and red at its named check, the default run 0, the five test files 0 (88 tests), simNoRivalNames 0,
+  simLiveScores 0, simHarnessAnchors 0.
+
 ## What a later session must not trust
 
-- The whole vitest suite and the six browser walks of the Soccer Career Season Centre were not part of the proof
-  above when this was written; the closing report says what was run after.
 - Nothing here measures a front office: no front office file is touched and none imports the law yet.
+- The record is true for the tree it was made on. After any merge that changes a bundled file the compare
+  answers exit 3 and proves nothing either way.
