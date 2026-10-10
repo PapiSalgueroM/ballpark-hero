@@ -1,0 +1,13 @@
+c-streamgoal exit=0 2s | simCmVar streamgoal: actual review outcomes and full prior baseline passed.
+c-streamfoul exit=0 2s | simCmVar streamfoul: actual review outcomes and full prior baseline passed.
+c-everywhere exit=0 2s | simCmVar everywhere: actual review outcomes and full prior baseline passed.
+c-historic exit=0 7s | simCmVar historic: actual review outcomes and full prior baseline passed.
+anchors exit=0 42s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+varlive exit=0 5s |    Duration  4.15s (transform 1.64s, setup 65ms, collect 2.06s, tests 1.12s, environment 365ms, prepare 291ms)
+varlive-on1 exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR ships dar
+varlive-on2 exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR ships dar
+varlive-on3 exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR ships dar
+varlive-on4 exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR ships dar
+varlive-on5 exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR ships dar
+tsc exit=0 76s | 
+simCmVar exit=0 87s | simCmVar normal: actual review outcomes and full prior baseline passed.

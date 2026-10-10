@@ -1,0 +1,13 @@
+simCmVar: CM_VAR_ARTIFACTS=/tmp/n node scripts/simCmVar.mjs
+c-historic: CM_VAR_ARTIFACTS=/tmp/c-historic CM_VAR_CONTROL=historic node scripts/simCmVar.mjs
+c-streamgoal: CM_VAR_ARTIFACTS=/tmp/c-streamgoal CM_VAR_CONTROL=streamgoal node scripts/simCmVar.mjs
+c-streamfoul: CM_VAR_ARTIFACTS=/tmp/c-streamfoul CM_VAR_CONTROL=streamfoul node scripts/simCmVar.mjs
+c-everywhere: CM_VAR_ARTIFACTS=/tmp/c-everywhere CM_VAR_CONTROL=everywhere node scripts/simCmVar.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+varlive: node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+varlive-on1: CM_VAR_LIVE_CONTROL=on node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+varlive-on2: CM_VAR_LIVE_CONTROL=on node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+varlive-on3: CM_VAR_LIVE_CONTROL=on node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+varlive-on4: CM_VAR_LIVE_CONTROL=on node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+varlive-on5: CM_VAR_LIVE_CONTROL=on node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
