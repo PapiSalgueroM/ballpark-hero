@@ -423,18 +423,22 @@ for (const id of RIVAL_BEATS) {
       const r = { name: 'Words Rival', team: s.team === 'KC' ? 'DAL' : 'KC', ovr: above ? 80 : 86, age: 28, retired: false };
       const before = { ...snapshot(s), heat: s.rivalryIntensity };
       const lines = [];
+      /* Round 1149: a fact beat's promise is read off the save and the rival, like its words (219 is one now). */
+      const promise = typeof def.consequence === 'function' ? def.consequence(s, r) : def.consequence;
       def.apply(s, r, () => roll, line => lines.push(line));
       rivalApplies++;
       const moved = Object.fromEntries(FIELDS.map(f => [f, Math.round((snapshot(s)[f] - before[f]) * 10) / 10]));
       const heat = s.rivalryIntensity - before.heat;
-      const read = lines.length ? lines.join(' ') : def.consequence;
+      const read = lines.length ? lines.join(' ') : promise;
       const said = parseWords(read);
       if (vecKey(said) !== vecKey(moved)) rivalFails.push(`beat ${id}: the player reads "${read}" and the save moved [${vecKey(moved)}]`);
-      const heatWord = /intensif/i.test(def.consequence) ? 1 : /soften/i.test(def.consequence) ? -1 : 0;
-      if (Math.sign(heat) !== heatWord) rivalFails.push(`beat ${id}: "${def.consequence}" and the rivalry moved ${heat}`);
+      const heatWord = /intensif/i.test(promise) ? 1 : /soften/i.test(promise) ? -1 : 0;
+      if (Math.sign(heat) !== heatWord) rivalFails.push(`beat ${id}: "${promise}" and the rivalry moved ${heat}`);
       ends.push(vecKey(moved));
     }
-    if (/50\/50/.test(def.consequence) && ends[1] === ends[2]) rivalFails.push(`beat ${id}: sold as 50/50 and rolls of 0.4999 and 0.5001 land the same end`);
+    if (typeof def.consequence === 'string' && /50\/50/.test(def.consequence) && ends[1] === ends[2]) rivalFails.push(`beat ${id}: sold as 50/50 and rolls of 0.4999 and 0.5001 land the same end`);
+    /* Round 1149: none of the six flips a coin any more (219 was the last), so a roll can never choose the end. */
+    if (new Set(ends).size !== 1) rivalFails.push(`beat ${id}: four different rolls landed ${new Set(ends).size} different ends, so something is still drawn`);
   }
 }
 const RIVAL_APPLIES_MIN = 48;

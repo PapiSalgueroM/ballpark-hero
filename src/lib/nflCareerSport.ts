@@ -16,6 +16,7 @@ import {
   type CareerPos, type CareerState, type SeasonLine,
 } from '@/lib/nflMyCareer';
 import { countOf, nflCareerSoFar, nflMajorAward, nflStatLine } from '@/lib/usCareerStatLine';
+import { otherAwardsRow } from '@/lib/careerHub';
 import { nflHeatLabel } from '@/lib/nflCareerCorruption';
 import { NFL_MONEY, nflMoneyAct, nflMoneyWealth } from '@/lib/nflCareerMoney';
 import { nflEarnedBadges, nflFanComments, nflFollowers, nflHeadlinesFor } from '@/lib/nflCareerLoop';
@@ -32,6 +33,9 @@ import { usSeasonHeldLine } from '@/data/usSeasonLengths';
    page's Continue fence (simHomeFront section 7) can find where every save
    key in src is declared; the value is the one the old board used. */
 const SAVE_KEY = 'nfl-my-career-save-v1';
+/** Round 1149: the awards the Trophy Case tile already counts in a row of their own (the honours below), as
+ *  the engine writes them. The league MVP and Defensive Player of the Year share one counter. */
+const NFL_TILE_NAMED = ['MVP', 'Defensive Player of the Year', 'All-Pro'];
 
 /* Round 1104: built through withBankFloor, the one bank rule the four US
    careers share (src/lib/usCareerBank.ts). */
@@ -120,7 +124,7 @@ export const NFL_CAREER_SPORT: UsCareerSport<CareerState, SeasonLine> = withBank
   ringsOf: c => c.rings,
   ringWord: 'ring',
   ringsLabel: 'rings',
-  honours: c => [{ label: nflMajorAward(c.pos).many, n: c.mvps }, { label: 'All-Pros', n: c.allPros }],
+  honours: c => [{ label: nflMajorAward(c.pos).many, n: c.mvps }, { label: 'All-Pros', n: c.allPros }, otherAwardsRow(c.seasons, NFL_TILE_NAMED)],
   /* Round 182: the depth chart, on the shirt. */
   roleBadge: c => (c.role === 'backup' ? '🪑 Backup' : '⭐ Starter'),
   careerSoFar: c =>

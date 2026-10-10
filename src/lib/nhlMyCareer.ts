@@ -586,7 +586,7 @@ export function simNhlSeason(
      own. A fired beat waits as a pending card; the board applies it through
      dismissNhlRivalryEvent, never here, so the state this function hands
      back stays the pure season sim it always was. */
-  const rivalryEvent = nhlRivalryTick(c, rng);
+  const rivalryEvent = nhlRivalryTick(c, rng, line);
   if (rivalryEvent) c.pendingRivalryEvent = rivalryEvent;
   /* Round 796: a season the beat roll left empty can put a rival choice in
      front of you instead, answered on the board, never applied here. It

@@ -41,10 +41,10 @@
    that as its own explicit check and its header now says plainly that MLB
    needs nothing added there. */
 
-import type { MlbCareerState } from "./mlbMyCareer";
+import type { MlbCareerState, MlbSeasonLine } from "./mlbMyCareer";
 import type { CareerRival } from "./careerRival";
 import {
-  rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor,
+  rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor, withSeasonPlayed, ownRosterBeat, ALL_STAR_OWN_ROSTER,
 } from "./careerRivalryEvents";
 import type { RivalryEvent, RivalryEventDef } from "./careerRivalryEvents";
 import { rivalryChoiceTick, resolvePendingRivalryChoice, meterOption } from "./careerRivalryChoices";
@@ -54,6 +54,8 @@ const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v
 
 /** The beat that fires forced, once, the season the rival retires. */
 export const MLB_RIVAL_RETIRE_ID = 205;
+/** Round 1149: the award word simMlbSeason writes on a season that made the All-Star roster. Beat 206 reads it. */
+export const MLB_ROSTER_AWARD = 'All-Star';
 
 /* Seventeen beats (six more since Round 919), gated on what an MLB rival's save actually tracks:
    rings, overall, team, age, and the head to head (season series) record
@@ -97,16 +99,15 @@ export const MLB_RIVALRY_EVENTS: RivalryEventDef<MlbCareerState, CareerRival>[] 
     when: (_s, r) => r.retired,
     apply: s => { s.fanbase = clamp(s.fanbase + 10, 0, 100); },
   },
-  {
-    id: 206, emoji: "🗳️", title: "All-Star Ballot Squeeze",
-    description: (_s, r) => `Only one of you is making the All-Star roster at the position this year, and it comes down to ${r.name}.`,
-    consequence: "50/50 outcome",
-    when: (s, r) => s.ovr >= 80 && r.ovr >= 80,
-    apply: (s, r, rng, pushLine) => {
-      if (rng() < 0.5) { s.morale = clamp(s.morale + 5, 0, 100); pushLine(`🗳️ You made the All-Star roster over ${r.name}!`); }
-      else { s.morale = clamp(s.morale - 5, 0, 100); pushLine(`🗳️ ${r.name} made the All-Star roster over you.`); }
-    },
-  },
+  /* Round 1149: no coin. The beat flipped one for which of you made the All-Star roster, in a game whose
+     engine picks All-Stars for real (mlbAllStar in careerAwards.ts), so the card could say you made it in a
+     year your own season card said you did not. It is read off your own season now, the one just played. The
+     MLB rival's season is not on your stat line yet (only the NBA rival's is, since Round 1112), so nothing here
+     says whether HE made a roster: you made it, or you are off it a year after you were on it. The round that
+     moves the MLB rival onto the player's line can add the cards that name his roster, the way the NBA's 306
+     does. The two cards and their words are the shared ones (ownRosterBeat and ALL_STAR_OWN_ROSTER in
+     careerRivalryEvents.ts, where the rule is written): the NHL deals the same beat. */
+  ownRosterBeat<MlbCareerState, CareerRival>({ id: 206, award: MLB_ROSTER_AWARD, ...ALL_STAR_OWN_ROSTER }),
   {
     id: 207, emoji: "⭐", title: "Rival's Ring",
     description: (_s, r) => `${r.name}'s team wins it all. Yours came up short.`,
@@ -287,12 +288,16 @@ export const MLB_RIVALRY_EVENTS: RivalryEventDef<MlbCareerState, CareerRival>[] 
  * flagship and the NFL career roll their own. Returns null on a season with
  * nothing to show.
  */
-export function mlbRivalryTick(c: MlbCareerState, rng: () => number = Math.random): RivalryEvent | null {
+export function mlbRivalryTick(c: MlbCareerState, rng: () => number, season: MlbSeasonLine): RivalryEvent | null {
   if (!c.rival) return null;
+  /* Round 1149: simMlbSeason rolls this before the season is on the save, and beat 206 reads the season, so
+     the gates and the words see the save as it stands once the season is on it (the season is required: a
+     roll without it would read last year's). Nothing is drawn for it and nothing is written. */
+  const p = withSeasonPlayed(c, season);
   const lastId = c.lastRivalryEventId ?? null;
-  const rolled = rollRivalryEvent(c, c.rival, lastId, MLB_RIVALRY_EVENTS, rng);
+  const rolled = rollRivalryEvent(p, c.rival, lastId, MLB_RIVALRY_EVENTS, rng);
   if (rolled) return rolled;
-  return forcedRetirementEvent(c, c.rival, lastId, MLB_RIVALRY_EVENTS, MLB_RIVAL_RETIRE_ID);
+  return forcedRetirementEvent(p, c.rival, lastId, MLB_RIVALRY_EVENTS, MLB_RIVAL_RETIRE_ID);
 }
 
 /**

@@ -17,6 +17,7 @@ import {
   type NbaCareerPos, type NbaCareerState, type NbaSeasonLine,
 } from '@/lib/nbaMyCareer';
 import { countOf, nbaStatLine } from '@/lib/usCareerStatLine';
+import { otherAwardsRow } from '@/lib/careerHub';
 import { nbaHeatLabel } from '@/lib/nbaCareerCorruption';
 import { NBA_MONEY, nbaMoneyAct, nbaMoneyWealth } from '@/lib/nbaCareerMoney';
 import { nbaEarnedBadges, nbaFanComments, nbaFollowers, nbaHeadlinesFor } from '@/lib/nbaCareerLoop';
@@ -133,7 +134,7 @@ export const NBA_CAREER_SPORT: UsCareerSport<NbaCareerState, NbaSeasonLine> = wi
      the case itself reads them. */
   honours: c => [
     { label: 'MVPs', n: c.mvps }, { label: 'All-NBA nods', n: c.allNbas }, { label: 'All-Star nods', n: c.allStars ?? 0 },
-    { label: 'in other awards', n: c.seasons.reduce((n, s) => n + (s.awards ?? []).filter(a => !NBA_TILE_NAMED.includes(a)).length, 0) },
+    otherAwardsRow(c.seasons, NBA_TILE_NAMED),
   ],
   roleBadge: c => (c.role === 'backup' ? '🪑 Second unit' : '⭐ Starting five'),
   careerSoFar: c =>

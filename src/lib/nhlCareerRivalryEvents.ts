@@ -33,10 +33,10 @@
    collisions. scripts/simCareerRivalryEvents.mjs re-proves that as its own
    explicit section rather than trusting the existing green run. */
 
-import type { NhlCareerState } from "./nhlMyCareer";
+import type { NhlCareerState, NhlSeasonLine } from "./nhlMyCareer";
 import type { CareerRival } from "./careerRival";
 import {
-  rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor,
+  rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor, withSeasonPlayed, ownRosterBeat, ALL_STAR_OWN_ROSTER,
 } from "./careerRivalryEvents";
 import type { RivalryEvent, RivalryEventDef } from "./careerRivalryEvents";
 import { rivalryChoiceTick, resolvePendingRivalryChoice, meterOption } from "./careerRivalryChoices";
@@ -46,6 +46,8 @@ const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v
 
 /** The beat that fires forced, once, the season the rival retires. */
 export const NHL_RIVAL_RETIRE_ID = 305;
+/** Round 1149: the award word simNhlSeason writes on a season that made the All-Star roster. Beat 306 reads it. */
+export const NHL_ROSTER_AWARD = 'All-Star';
 
 /* Seventeen beats, gated on what an NHL rival's save actually tracks: rings
    (the Cup), overall, team, age, and the head to head record judgeRivalSeason
@@ -89,16 +91,13 @@ export const NHL_RIVALRY_EVENTS: RivalryEventDef<NhlCareerState, CareerRival>[] 
     when: (_s, r) => r.retired,
     apply: s => { s.fanbase = clamp(s.fanbase + 10, 0, 100); },
   },
-  {
-    id: 306, emoji: "🗳️", title: "All-Star Ballot Squeeze",
-    description: (_s, r) => `Only one of you is making the All-Star ballot at the position this year, and it comes down to ${r.name}.`,
-    consequence: "50/50 outcome",
-    when: (s, r) => s.ovr >= 80 && r.ovr >= 80,
-    apply: (s, r, rng, pushLine) => {
-      if (rng() < 0.5) { s.morale = clamp(s.morale + 5, 0, 100); pushLine(`🗳️ You made the ballot over ${r.name}!`); }
-      else { s.morale = clamp(s.morale - 5, 0, 100); pushLine(`🗳️ ${r.name} made the ballot over you.`); }
-    },
-  },
+  /* Round 1149: no coin. The beat flipped one for which of you made the All-Star ballot, in a game whose
+     engine picks All-Stars for real (nhlAllStar in careerAwards.ts), so the card could say you made it in a
+     year your own season card said you did not. It is read off your own season now, the one just played, on
+     the builder MLB's 206 uses (ownRosterBeat in careerRivalryEvents.ts, where the rule is written): you made
+     it, or you are off it a year after you were on it. The NHL rival's season is not on your stat line yet, so
+     nothing here says whether HE made a roster. */
+  ownRosterBeat<NhlCareerState, CareerRival>({ id: 306, award: NHL_ROSTER_AWARD, ...ALL_STAR_OWN_ROSTER }),
   {
     id: 307, emoji: "⭐", title: "Rival's Cup",
     description: (_s, r) => `${r.name}'s team wins it all. Yours came up short.`,
@@ -275,12 +274,16 @@ export const NHL_RIVALRY_EVENTS: RivalryEventDef<NhlCareerState, CareerRival>[] 
  * flagship and the NFL career roll their own. Returns null on a season with
  * nothing to show.
  */
-export function nhlRivalryTick(c: NhlCareerState, rng: () => number = Math.random): RivalryEvent | null {
+export function nhlRivalryTick(c: NhlCareerState, rng: () => number, season: NhlSeasonLine): RivalryEvent | null {
   if (!c.rival) return null;
+  /* Round 1149: simNhlSeason rolls this before the season is on the save, and beat 306 reads the season, so
+     the gates and the words see the save as it stands once the season is on it (the season is required: a
+     roll without it would read last year's). Nothing is drawn for it and nothing is written. */
+  const p = withSeasonPlayed(c, season);
   const lastId = c.lastRivalryEventId ?? null;
-  const rolled = rollRivalryEvent(c, c.rival, lastId, NHL_RIVALRY_EVENTS, rng);
+  const rolled = rollRivalryEvent(p, c.rival, lastId, NHL_RIVALRY_EVENTS, rng);
   if (rolled) return rolled;
-  return forcedRetirementEvent(c, c.rival, lastId, NHL_RIVALRY_EVENTS, NHL_RIVAL_RETIRE_ID);
+  return forcedRetirementEvent(p, c.rival, lastId, NHL_RIVALRY_EVENTS, NHL_RIVAL_RETIRE_ID);
 }
 
 /**
