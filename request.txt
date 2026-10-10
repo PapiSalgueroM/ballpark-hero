@@ -1,0 +1,19 @@
+storage: node scripts/simStorageWrites.mjs
+c-unnamed: SIM_STORAGE_WRITES_CONTROL=unnamed node scripts/simStorageWrites.mjs
+c-newsite: SIM_STORAGE_WRITES_CONTROL=newsite node scripts/simStorageWrites.mjs
+c-stale: SIM_STORAGE_WRITES_CONTROL=stale node scripts/simStorageWrites.mjs
+c-unguard: SIM_STORAGE_WRITES_CONTROL=unguard node scripts/simStorageWrites.mjs
+c-order: SIM_STORAGE_WRITES_CONTROL=order node scripts/simStorageWrites.mjs
+c-client: SIM_STORAGE_WRITES_CONTROL=client node scripts/simStorageWrites.mjs
+c-caller: SIM_STORAGE_WRITES_CONTROL=caller node scripts/simStorageWrites.mjs
+c-nocatch: SIM_STORAGE_WRITES_CONTROL=nocatch node scripts/simStorageWrites.mjs
+c-probe: SIM_STORAGE_WRITES_CONTROL=probe node scripts/simStorageWrites.mjs
+c-recheck: SIM_STORAGE_WRITES_CONTROL=recheck node scripts/simStorageWrites.mjs
+c-once: SIM_STORAGE_WRITES_CONTROL=once node scripts/simStorageWrites.mjs
+c-unlearn: SIM_STORAGE_WRITES_CONTROL=unlearn node scripts/simStorageWrites.mjs
+c-held: SIM_STORAGE_WRITES_CONTROL=held node scripts/simStorageWrites.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+anchors: node scripts/simHarnessAnchors.mjs
+rivals: node scripts/simNoRivalNames.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+src-untouched: git diff --name-only 074a9054 HEAD -- src

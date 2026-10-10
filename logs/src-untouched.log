@@ -1,0 +1,4 @@
+src/lib/confederationGroups.ts
+src/pages/Footle.tsx
+src/test/dailySaveShapes.test.tsx
+src/test/footlePractice.test.tsx
