@@ -1,0 +1,14 @@
+init exit=0 0s | caf29432e9ae8c51ffb9a6c24ada8e1438b151db
+m1218 exit=0 0s | 1f39358c3 Merge remote-tracking branch 'origin/r1218-cm-var-true' into rc/r1229-fin4
+m1218-tsc exit=0 58s | 
+m1218-book exit=0 28s | simCmLeagueBook: green, 7 sections, 4 careers x 2 seasons (28s)
+m1218-cmvar-block exit=0 74s | simCmVar normal: actual review outcomes and full prior baseline passed.
+m1225 exit=0 0s | 5758e3b42 Merge remote-tracking branch 'origin/r1225-cm-fixtures-bind' into rc/r1229-fin4
+m1225-tsc exit=0 60s | 
+m1225-book exit=0 29s | simCmLeagueBook: green, 7 sections, 4 careers x 2 seasons (29s)
+m1225-realfix exit=0 3s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+m1225-realfix-base-block exit=1 7s | Node.js v24.21.0
+m1225-rules exit=0 24s | simCmLeagueRules: all checks passed (modern, eras, pure)
+m1216 exit=0 0s | fd40d2cfc Merge remote-tracking branch 'origin/r1216-own-goal-motion' into rc/r1229-fin4
+m1216-tsc exit=0 58s | 
+m1216-book exit=0 29s | simCmLeagueBook: green, 7 sections, 4 careers x 2 seasons (29s)
