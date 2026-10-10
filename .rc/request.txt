@@ -1,0 +1,4 @@
+#!playwright
+#!serial
+base-weight: git worktree add -q /tmp/base origin/main && git -C /tmp/base rev-parse --short HEAD && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && (node_modules/.bin/vite build > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log) && (node scripts/lib/hostLikeServer.mjs dist 4174 > /tmp/base-server.log 2>&1 &) && sleep 4 && SWEEP_OFFLINE=1 ENGINES=chromium BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 node scripts/sweepWeight.mjs
+base-writes: cd /tmp/base && node scripts/simWritesAreSent.mjs
