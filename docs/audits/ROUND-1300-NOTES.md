@@ -92,7 +92,7 @@ not fit). Every draw `usPlayoffPath` made is made there, in the same order on th
 is now a mapping over it with its signature and its result unchanged.
 
 THE LINES OF `src/lib/season/us.ts` THIS ROUND CHANGED, and no other: 135 to 140 (the comment and the two types
-`UsPlayoffSeries` and `UsPlayoffLay`) and 287 to 357 (`usPlayoffLay`, then `usPlayoffPath` as a mapping). The
+`UsPlayoffSeries` and `UsPlayoffLay`) and 287 to 354 (`usPlayoffLay`, then `usPlayoffPath` as a mapping). The
 header, `buildUsSeason` and `usHelp` are as they were. The key streams the deriver adds are written in the header
 of `src/lib/season/usPlayoffs.ts` and not in this file's, to keep this file's diff to those two places (Rounds
 1226 and 1212 edit it next).
@@ -226,11 +226,11 @@ Every heavy check ran on a GitHub runner as a remote check; a result is read wit
 | 2 | `4d3ebd80` | `r1300-s2` | the type gate 0; the lay compare 0 (11 digests, 0 moved: the path of every season is what it was); `lay` 1 at its named check; the default run 0 (98 checks, 0 failed); `conf` 1 at its named check (1,585 seasons); `poscore` 1 at its named check (1,220 seasons); five test files 0 (122 tests); simHarnessAnchors 0 |
 | 3 | `956ab63d` | `r1300-s3b` | the type gate 0; the deriver's and the format's tests 0 (29 tests); the lay compare 0. (`r1300-s3` on `293ba603` was red on three defects of the test file itself: the name of the NFL label function, the way a build is narrowed, and a float example that was not one) |
 | 4 | `63b95c7f` | `r1300-s4b` | one at a time: simNoRivalNames 0, simNoInventedQuotes 0, simNumberFormatting 0, simLegalPages 0, simStorageWrites 0 |
+| 4 | `63b95c7f` | `r1300-s4` | the type gate 0; six test files 0 (141 tests); `node scripts/simUsPostseason.mjs` 0 (26 checks, 0 failed, 0 findings); its nine controls each 1, each RED AT THE NAMED CHECK with only its own section red (`onesrc` D; `sum`, `drop`, `clinch`, `allhome` S; `open` C; `tries` F; `thin` K; `stream` X); the variants print the table above figure for figure (one, three and six tries exit 1 because they are over the bar, as they must be); one seed set alone 0; a fleet of ten careers 1 in section K only, by design; the lay compare 0; the default run of `simUsSeasonCentre` 0 (98 checks, 0 failed); simHarnessAnchors 0; simLiveScores 0 |
 
-Step 4's own request (`r1300-s4`: the type gate, six test files, the harness, its nine controls, eight variants,
-one seed set alone, a small fleet, the lay compare, the default run of `simUsSeasonCentre`, simHarnessAnchors and
-simLiveScores) and the browser walk of the Season Center (`r1300-walk`) are recorded in the closing report of the
-round, `finish-1300.md` in the lane's handoff folder, with their exit codes.
+The browser walk of the Season Center on a build (`r1300-walk`) and the checks of the final head
+(`r1300-final`) are recorded in the closing report of the round, `finish-1300.md` in the lane's handoff folder,
+with their exit codes: they were still queued on the runners when this file was last committed.
 
 ## What this round did not do, and what is owed
 
