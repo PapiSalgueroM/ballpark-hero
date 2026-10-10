@@ -1,0 +1,10 @@
+simSeasonCentreMotion exit=0 18s | simSeasonCentreMotion: 17 checks, 0 failed
+simSeasonCentreAgreement exit=0 20s | simSeasonCentreAgreement: 24 checks, 0 failed
+simSeasonCentreTable exit=0 14s | simSeasonCentreTable: 7 checks, 0 failed
+simSeasonCentreNeutral exit=0 29s | simSeasonCentreNeutral: 34 checks, 0 failed
+simSeasonMoments exit=0 20s | simSeasonMoments: 54 checks, 0 failed
+simSoccerLeagueWorldLookup exit=0 23s | simSoccerLeagueWorldLookup: identical full outcomes, deterministic lookup reduction, both effective controls caught
+simSoccerDiscipline exit=0 40s | simSoccerDiscipline: 11 outcome assertions green, 9 effective copied defects caught
+simSeasonLaw exit=0 0s | simSeasonLaw: 14 checks, 0 failed
+simSoccerOwnGoals exit=0 87s | simSoccerOwnGoals: 4923844 checks, 0 failed
+simCareerLeagueWorld exit=0 496s | simCareerLeagueWorld: all sections green (495.6 s)
