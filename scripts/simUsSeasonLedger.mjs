@@ -186,9 +186,10 @@ const OWN = {
   nhlRules: { minutes: 5, skatersFrom2015: 3, shootoutRounds: 3, loserGetsAPoint: true, playoffPeriodMinutes: 20, playoffShootout: false },
   /* How many entries each THIN list holds: one cannot quietly lose a line. */
   thin: { mlb: 10, nhl: 9 },
-  /* The one first round whose length is thin (played, and only one source gave its length): the
-     third window, the series of 2020. By its place in the list, so a moved year cannot hide it. */
-  mlbThinFirstRound: [2],
+  /* The first rounds whose length is thin (played, and only one source gave its length), by their
+     place in the list, so a moved year cannot hide one. None since Round 1226's fix pass filled the
+     best of three of 2020 on two sources (ESPN and CBS Sports). */
+  mlbThinFirstRound: [],
   /* Club seasons whose schedule page was read for the home and away numbers. */
   mlbPlayed: 'DET 2023|TEX 2024|DET 2025|DET 2026|TOR 2026|TEX 2026|HOU 2026',
   /* The NHL playoff block: its first season, the two modified tournaments, its round names. */
@@ -701,8 +702,8 @@ const ENGINE_OWN = 82;
 /* ===== Round 1226, the reverse check for October (MLB). =====
    E3  the reader hands back the ledger's rounds for every MLB season, held to
        THIS FILE'S OWN TABLE: no wild card round to 2011 (three rounds), one
-       game in 2012 to 2019 and 2021, a series of a thin length in 2020, and
-       the best of three, five, seven and seven from 2022.
+       game in 2012 to 2019 and 2021, a best of three in 2020, and the best
+       of three, five, seven and seven from 2022.
    E4  the MLB engine plays it: no Wild Card result in a year with no wild
        card round, a Wild Card Game that is one game, and from 2022 every run
        inside the rounds it went through, with a swept Wild Card Series among
@@ -710,7 +711,7 @@ const ENGINE_OWN = 82;
        over three years of 6,000 seasons each and about 1,900 exits a year;
        the law makes it 42.4; the band is 34 to 51). Controls: mlbrounds,
        mlbladder. */
-const OWN_OCTOBER = { names: ['Wild Card Series', 'Division Series', 'Championship Series', 'World Series'], series: [[2, 3], [3, 5], [4, 7], [4, 7]], from: 2022, game: [1, 1] };
+const OWN_OCTOBER = { names: ['Wild Card Series', 'Division Series', 'Championship Series', 'World Series'], series: [[2, 3], [3, 5], [4, 7], [4, 7]], from: 2022, game: [1, 1], series2020: [2, 3] };
 {
   const S = game.shape; const M = game.mlbEngine;
   const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
@@ -720,7 +721,7 @@ const OWN_OCTOBER = { names: ['Wild Card Series', 'Division Series', 'Championsh
     const w = OWN.mlbFirstRound.find(x => y >= x[0] && (x[1] === null || y <= x[1]));
     if (!w) return open(4);
     if (w[2] === null) return open(3);
-    return [{ name: w[2], series: w[2] === 'Wild Card Game' ? OWN_OCTOBER.game : null }, ...open(3)];
+    return [{ name: w[2], series: w[2] === 'Wild Card Game' ? OWN_OCTOBER.game : OWN_OCTOBER.series2020 }, ...open(3)];
   };
   for (const y of rangeOf(2000, 2040)) check('E3', same(S.postseasonRounds('mlb', y), wantRounds(y)), `the reader's rounds for the MLB ${y} postseason are ${JSON.stringify(S.postseasonRounds('mlb', y))}; this file's own table says ${JSON.stringify(wantRounds(y))}`);
   for (const y of rangeOf(2000, 2040)) {
@@ -1006,7 +1007,7 @@ const MLB_OWN = 162;
   const nhlWords = (nhlSrc.match(/const stages = \[([^\]]*)\]/) ?? [])[1] ?? '';
   const say = (sport, words, rows) => rows.map(r => `stage ${r.stage} saves ${r.counts[0]} to ${r.counts[r.counts.length - 1]} games, the real rounds hold ${r.lo} to ${r.hi}: ${r.bad} percent cannot fit`).join('; ');
   const mlbAsks = mlbSrc.includes("playoffRunGames('mlb', c.year, depth, rng)");
-  if (mlbAsks) notes.push(`MLB engine: the games of an October are held to the ledger's rounds (Round 1226, src/lib/usSeasonShape.ts): from ${mlb.MLB_PLAYOFF_FORMAT.from} every run fits its rounds, the wild card of ${yearsOf('Wild Card Game')} is one game, and no Wild Card result is written in ${yearsOf(null)}. What it still plays by its own law, because the ledger does not hold the length: every round after the first before ${mlb.MLB_PLAYOFF_FORMAT.from}, and the Wild Card Series of ${mlb.MLB_FIRST_ROUND.filter(w => w.wildCard && w.series === null).map(w => w.from).join(', ')} (MLB_THIN). It models no first round bye (MLB_PLAYOFF_FORMAT.byesPerLeague): a career's club always plays the first round.`);
+  if (mlbAsks) notes.push(`MLB engine: the games of an October are held to the ledger's rounds (Round 1226, src/lib/usSeasonShape.ts): from ${mlb.MLB_PLAYOFF_FORMAT.from} every run fits its rounds, the wild card of ${yearsOf('Wild Card Game')} is one game, and no Wild Card result is written in ${yearsOf(null)}. What it still plays by its own law, because the ledger does not hold the length: every round after the first before ${mlb.MLB_PLAYOFF_FORMAT.from}${mlb.MLB_FIRST_ROUND.some(w => w.wildCard && w.series === null) ? `, and the Wild Card Series of ${mlb.MLB_FIRST_ROUND.filter(w => w.wildCard && w.series === null).map(w => w.from).join(', ')}` : ''} (MLB_THIN). It models no first round bye (MLB_PLAYOFF_FORMAT.byesPerLeague): a career's club always plays the first round.`);
   else notes.push(`MLB playoff games (careerVariance.playoffGames against MLB_PLAYOFF_FORMAT): ${say('mlb', mlbWords, fits('mlb', mlb.MLB_PLAYOFF_FORMAT.series))}. Stages are the engine results in order: ${mlbWords}.`);
   notes.push(`NHL playoff games (the same law against four best of sevens): ${say('nhl', nhlWords, fits('nhl', nhl.NHL_PLAYOFF_FORMAT.series))}. Stages: ${nhlWords}.`);
   const npf = nhl.NHL_PLAYOFF_FORMAT;
