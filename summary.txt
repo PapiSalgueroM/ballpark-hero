@@ -1,0 +1,5 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 673s | playSaveKeeper: green. A save put back with a game in memory survives the load, and an ordinary visit stores nothing new.
+walk-inplace exit=1 28s | playSaveKeeper control inplace: FIRED. 2 of 2 walk(s) LOST the save.
+walk-tamper exit=1 92s | playSaveKeeper control tamper: FIRED. 6 of 6 walk(s) stopped reading SURVIVED once one character changed.
+walk-extrakey exit=1 75s | playSaveKeeper control extrakey: FIRED. Journey K saw the key the branch arm added.

@@ -1,0 +1,7 @@
+#!build
+#!playwright
+#!serial
+walk: git worktree add -q /tmp/base origin/main && git -C /tmp/base rev-parse --short HEAD && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log) && KEEPER_BASE_DIST=/tmp/base-dist node scripts/playSaveKeeper.mjs
+walk-inplace: KEEPER_CONTROL=inplace node scripts/playSaveKeeper.mjs
+walk-tamper: KEEPER_CONTROL=tamper ONLY=/idle-arena,/stadium-tycoon,/wonderkid-factory node scripts/playSaveKeeper.mjs
+walk-extrakey: KEEPER_CONTROL=extrakey KEEPER_BASE_DIST=/tmp/base-dist node scripts/playSaveKeeper.mjs

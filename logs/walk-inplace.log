@@ -1,0 +1,10 @@
+playSaveKeeper: mode assert, CONTROL inplace, parts cross, 21 route(s), widths 390 and 1280
+  branch build /home/runner/work/ballpark-hero/ballpark-hero/dist
+  no build of origin/main was given, so the base arm and journey K are not run
+
+Journey L, the cross flow: an academy backup put back from /stadium-tycoon with the Academy tab open (CONTROL: swapped in the open page, as Round 958 did)
+  LOST      [branch] cross /wonderkid-factory from /stadium-tycoon 390: A (333 chars) is in NO KEY; A is the game on screen: false; the game he had is kept aside: true; writes to the key: x' A' x' x'; backups 1
+  LOST      [branch] cross /wonderkid-factory from /stadium-tycoon 1280: A (346 chars) is in NO KEY; A is the game on screen: false; the game he had is kept aside: true; writes to the key: x' A' x' x'; backups 1
+
+playSaveKeeper, branch: 2 walk(s) judged (0 fresh, 0 planted, 2 cross): 2 LOST the save that was put back, 0 partly, 0 survived; 0 not judged
+playSaveKeeper control inplace: FIRED. 2 of 2 walk(s) LOST the save.
