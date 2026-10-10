@@ -76,6 +76,7 @@ console.log('ok   full old-save loading and younger deals unchanged; exact older
 const cameo = subject(38, 90, 8.2);
 Object.assign(cameo.seasons.at(-1), { apps: 2 });
 assert.equal(B.contracts.soccerExtensionQuote(cameo).weeklyWage, 100000, 'an excellent cameo cannot earn a veteran raise');
+console.log('ok   veteran raise needs enough appearances; an excellent cameo keeps the current wage');
 
 for (const age of [21, 26]) {
   const state = subject(age, 66, 5.9);

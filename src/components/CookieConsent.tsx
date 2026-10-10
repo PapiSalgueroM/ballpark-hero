@@ -144,20 +144,20 @@ export function CookieConsent() {
         {/* Round 286: the banner used to say "by continuing you agree", which
             was never how it worked: nothing to do with ads loads until Accept
             is pressed. It says what it does now. */}
-        <p className="flex-1 text-center sm:text-left">
+        <p className="min-w-0 self-stretch text-center sm:text-left">
           Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same.{' '}
           <Link to="/privacy" className="underline hover:text-foreground font-medium">Learn more</Link>
         </p>
-        <div className="flex items-center gap-2 whitespace-nowrap">
+        <div className="flex shrink-0 items-center gap-2 whitespace-nowrap">
           <button
             onClick={essentialOnly}
-            className="px-4 py-2 rounded-lg bg-transparent border border-border text-foreground font-medium text-sm hover:bg-muted transition-colors"
+            className="min-h-11 px-4 py-2 rounded-lg bg-transparent border border-border text-foreground font-medium text-sm hover:bg-muted transition-colors"
           >
             Essential only
           </button>
           <button
             onClick={accept}
-            className="px-5 py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity"
+            className="min-h-11 px-5 py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity"
           >
             Accept
           </button>
