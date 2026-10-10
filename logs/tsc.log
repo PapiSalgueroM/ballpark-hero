@@ -1,0 +1,7 @@
+src/test/usPlayoffs.test.ts(15,31): error TS2724: '"@/lib/nflMyCareer"' has no exported member named 'nflTeamLabelOf'. Did you mean 'teamLabelOf'?
+src/test/usPlayoffs.test.ts(25,32): error TS2339: Property 'line' does not exist on type 'UsSeasonBuild'.
+  Property 'line' does not exist on type '{ ok: true; sport: SeasonSport<UsRow, UsSeasonCtx>; ctx: UsSeasonCtx; key: string; }'.
+src/test/usPlayoffs.test.ts(198,34): error TS2339: Property 'line' does not exist on type 'UsSeasonBuild'.
+  Property 'line' does not exist on type '{ ok: true; sport: SeasonSport<UsRow, UsSeasonCtx>; ctx: UsSeasonCtx; key: string; }'.
+src/test/usPlayoffs.test.ts(330,36): error TS2339: Property 'line' does not exist on type 'UsSeasonBuild'.
+  Property 'line' does not exist on type '{ ok: true; sport: SeasonSport<UsRow, UsSeasonCtx>; ctx: UsSeasonCtx; key: string; }'.

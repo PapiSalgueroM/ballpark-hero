@@ -1,0 +1,3 @@
+vitest exit=1 6s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/season/us.ts,title=src/test/usPlayoffs.test.ts > usPostseason%2C sport neutral > lays out an NFL line t
+lay-compare exit=0 25s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1300's playoff lay, in no gate)
+tsc exit=2 61s |   Property 'line' does not exist on type '{ ok: true; sport: SeasonSport<UsRow, UsSeasonCtx>; ctx: UsSeasonCtx; key: string; }'.
