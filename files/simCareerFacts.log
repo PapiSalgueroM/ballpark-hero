@@ -1,0 +1,20 @@
+
+1. RECORDS: INT_SCORING_RECORDS equals the verified file, both ways
+  18 engine rows, 18 verified rows, 1 held (Senegal)
+
+2. PICKER: every nation on the creation screen, the award only on a verified row
+  134 nations on the picker: 18 can win it on a verified record, 116 cannot win it at all
+
+3. WIRING: the season calls the award, nothing else grants it, no fallback number
+  1 call from the season, after the summer tournament, 1 grant, inside awardAllTimeTopScorer, no fallback
+
+4. LABELS: every HAND_CLUBS league label verified, pinned or listed as unverified
+  188 labels verified across 82 evidence groups (all 2026-27 or 2026), 0 pinned to their old label (ratchet 0), 2 unverified (ratchet 2)
+
+5. PLAYED: seeded careers, the award the season his goals pass HIS nation's record
+  48 careers (seed 1), 1134 full seasons, 44 awards, every one the season his goals passed his own record (22 while abroad, 36 ina tournament season)
+
+6. LEAGUE WORLD: the pool generator and the facts file say the same thing
+  26 leagues, 454 member names, each lineup read from two hosts; 11 with a format read from two hosts, 3 with no format page and so no shape stated, 3 with no points rule stated; 1 colour(s) in words; 51 shipped, 275 held before 2026, 0 with a first season
+
+simCareerFacts: all sections green

@@ -1,0 +1,17 @@
+simAllocation exit=0 0s | ALL ALLOCATION CHECKS PASSED
+simBallonDorFairness exit=0 2s | PASS: 100.0% of must-win seasons won, every monster season podiumed, every night on the ballot judged the rivals it seats
+simBallonDorTruth exit=0 3s | simBallonDorTruth: green. Every medal on the ceremony was won by the club that holds it, and the player's card is the record.
+simCareerAcademy exit=0 2s | simCareerAcademy: ALL CHECKS PASSED in 2.8s
+simCareerCleanSheets exit=0 7s | simCareerCleanSheets: green. 24 careers a position, 8 seasons each. Defenders keep clean sheets at the keeper's rate, forwards keep none.
+simCareerContinental exit=0 8s | simCareerContinental: all green
+simCareerDilemmaTruth exit=0 5s | simCareerDilemmaTruth: all green
+simCareerEras exit=0 0s | simCareerEras: all green
+simCareerFacts exit=0 6s | simCareerFacts: all sections green
+simCareerEngaged exit=0 17s | ALL ENGAGED CAREER CHECKS PASSED
+simCareerMoments exit=1 1s | HEAD RED exit 1: Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/home/claude/.npm-global/lib/node_modules/playwright/index.js' imported from /home/runner/work/ballp ||
+simCareerMoneyAfterRetirement exit=0 3s | All good: the money app keeps running for the whole retirement tail.
+simCareerNoDeadEnd exit=0 0s | simCareerNoDeadEnd: green. A convicted career is still a career, and a stranded save comes back.
+simCareerLife exit=0 16s | simCareerLife: green. Every peak is reachable, the critic has an opinion and it is about the football, and nothing about either of them is on the save.
+simCareerDilemmaReach exit=0 40s | simCareerDilemmaReach: all green
+simClubCaptaincy exit=0 18s | simClubCaptaincy: green. The armband is earned, counted, and never travels.
+simCareerPositionRatings exit=0 48s | all sections green: defenders and holding midfielders are rated on their defending

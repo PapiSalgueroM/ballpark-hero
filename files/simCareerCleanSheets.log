@@ -1,0 +1,17 @@
+1) the back line records clean sheets, measured over every season it played
+   CB: 1916 clean sheets in 5839 apps over 192 seasons, 32.8% of apps
+   LB: 2063 clean sheets in 6390 apps over 192 seasons, 32.3% of apps
+   RB: 2063 clean sheets in 6390 apps over 192 seasons, 32.3% of apps
+2) the keeper and the back line draw the same share
+   GK: 2017 in 6563 apps over 192 seasons, 30.7%
+3) midfielders and forwards record none, every season
+   CDM: 0 over 192 pro and 48 youth seasons
+   CM: 0 over 192 pro and 48 youth seasons
+   CAM: 0 over 192 pro and 48 youth seasons
+   LW: 0 over 192 pro and 48 youth seasons
+   RW: 0 over 192 pro and 48 youth seasons
+   ST: 0 over 192 pro and 48 youth seasons
+4) the youth season follows the same rule
+   back line youth clean sheets: CB 110/48, LB 110/48, RB 110/48
+
+simCareerCleanSheets: green. 24 careers a position, 8 seasons each. Defenders keep clean sheets at the keeper's rate, forwards keep none.

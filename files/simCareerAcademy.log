@@ -1,0 +1,27 @@
+bundled this tree twice, with and without the academy line, in 0.5s
+
+1) No focus changes nothing, byte for byte
+   60 careers, 2896 saves compared against the tree without the academy line, 60 academy years, 60 reports built
+
+2) Every focus moves only its own family, by the printed amount
+   printed: +2, +1 within 3 of the ceiling (keeper card: {"bonus":2,"nearBonus":1,"near":3})
+   70 careers, 427 focused academy years, moved by: +2 x184, +1 x157, 0 x86
+   427 of 427 focused years saved the overall of their own skills
+
+3) Potential stays the ceiling
+   44 rungs walked against four ceilings; 0 real careers lifted past their ceiling by a focus; 243 focused years started the rule within 3 of the ceiling
+
+4) The report tells the truth
+   427 reports, 2611 lines (0 wrong), 2611 card lines, 0 draws, 0 unstable, cup moved by a focus 0 times
+
+5) Old and corrupt saves
+   177 academy years on corrupt focus values, 30 focused saves read back from storage
+
+6) The page's wiring
+   press (career, next), guard shown 20 of 20 and hid 20 of 20 stale reports, focus handler right in 5 of 5 phases
+
+7) Real careers: the verdict spreads, and the overall line is the skills'
+   600 real academy years (540 saved an overall apart from their skills): big 18.2%, solid 60.7%, quiet 17.3%, flat 3.7%, flat near the ceiling 0.2%
+   card starts from the skills 600 of 600, overall line within the skills' range 600 of 600, verdict unmoved by a focus 600 of 600
+
+simCareerAcademy: ALL CHECKS PASSED in 2.8s

@@ -1,0 +1,21 @@
+
+1) Every ban the card states is the ban served
+  ok   1 match_fixing#0: the card says 1 season and all 12 saves served exactly that, then played
+  ok   1 match_fixer_approach#0: the card says 1 season and all 12 saves served exactly that, then played
+  ok   1 mafia_second_ask#0: the card says 2 seasons and all 12 saves served exactly that, then played
+  ok   1 mafia_second_ask#1: the card says 1 season and all 12 saves served exactly that, then played
+  ok   1 ped_offer#0: 13 failed tests in 40 careers, every one 1 season as the card says
+
+2) Every promise the review fixed is kept
+  ok   2a rival move: kept on all 10 saves
+  ok   2b armband: kept on all 10 saves
+  ok   2c agent: kept on all 10 saves
+  ok   2d insurance: kept on all 10 saves
+  ok   2e tunnel swing: kept on all 10 saves
+  ok   2e tunnel words: kept on all 10 saves
+
+3) THE SNUB comes on the podium close and only then
+  ok   3 stale: never offered over 200 rolls on 10 saves carrying the old flag
+  ok   3 podium: offered on all 10 saves with a 2nd place this season
+
+simCareerDilemmaTruth: all green

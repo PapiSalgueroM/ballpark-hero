@@ -1,0 +1,18 @@
+1) No club outside UEFA plays the Champions League, and they play their own cup
+   0 Champions League campaigns outside UEFA; 12660 campaigns in their own cups (libertadores, afc, concacaf, caf); 26891 UEFA campaigns all the Champions League
+2) Every opponent shares the club's confederation, and each cup carries its name for the season
+   28213 games outside UEFA, every opponent from the club's own confederation; 12 season names as the sources give them
+3) Europe is untouched for UEFA clubs: the Champions League is won as often as on main
+   Real Madrid 5.892% (main 5.92 +/- 0.370), Ajax 3.483% (main 3.385 +/- 0.290), Sevilla 0.689% (main 0.656 +/- 0.130)
+4) A cup won outside UEFA is kept under its own name, never as a Champions League
+   Boca Juniors: 17 Copa Libertadores in 150 seasons and 0 Champions Leagues; legacy line 10 points; Real Madrid: 11 Champions Leagues and 0 other cups in 150
+5) The pass curves the first stage is solved against are fresh
+   45 points across six curves, all inside their gate (largest at 34% of it)
+6) The Ballon d'Or scores a cup won outside UEFA under its own name, worth less than a Champions League
+   28 Boca cup nights scored as a club cup, 11 Real Madrid nights as a Champions League; the scorer gives the club cup 8 and the Champions League 25
+7) The final is one match or two legs as the season had it, and 2001 has no CONCACAF cup
+   360 finals over 18 seasons, each over the legs the record gives; no CONCACAF cup in 2001
+8) Through the play-off or straight through, each knockout round is played at the same target
+   ties won 0.4352 of 115441 straight through and 0.4326 of 16749 through the play-off (gap 0.0026, margin 0.02)
+
+simCareerContinental: all green

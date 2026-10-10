@@ -1,0 +1,11 @@
+   the page draws 22 phases, 5 carry the action button, 15 draw only under another field
+1) after a conviction, the career is still playable
+   convicted -> newspaper -> dismissed lands on "playing" (drawn: true, needs another field: false, has buttons: true)
+   an ordinary news season still lands on "season_summary"
+2) a save that is already stranded is healed on load
+   stranded save loads as "playing"
+3) every phase the engine can assign is a phase the page can draw
+   the engine assigns 20 distinct phases
+   20/20 assignable phases are drawable, 0 orphaned
+
+simCareerNoDeadEnd: green. A convicted career is still a career, and a stranded save comes back.

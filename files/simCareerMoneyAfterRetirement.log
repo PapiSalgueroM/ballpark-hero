@@ -1,0 +1,18 @@
+1) 40 seeded careers played to retirement, then 25 post retirement seasons on each path
+   40 usable careers, mean vault at retirement €7.65M, mean invested €6.58M
+   86 retirement tails (6 of them club owners), 759 playing seasons of market baseline
+   while playing, prices move 13.26% a season on average
+2) Every season of retirement is a season of market
+   over 25 seasons the market clock is behind by 0 seasons at worst, the calendar by 0
+3) Savings pays 2.5% a season after retirement, the way the bank screen says it does
+   86 of 86 vaults grew; promised factor over 25 seasons is 1.8539x
+   worst shortfall €27k (0.2% of the promised balance), total unpaid across every tail €0k
+4) Prices move every season after retirement, the way the market screen says they do
+   retirement seasons move 14.21% against the playing baseline's 13.26% (ratio 1.071)
+   0 of 2150 retirement seasons had every price frozen to the penny
+5) The bank statement keeps recording while money is moving
+   86 of 86 tails wrote something to the statement over 25 seasons, 0 handed back the same lines they started with
+6) "Everything you have" matches what the two screens promise
+   worst drift after 25 seasons: €27k (0.0% of the honest total, on the owner path)
+
+All good: the money app keeps running for the whole retirement tail.
