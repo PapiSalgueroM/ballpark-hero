@@ -548,8 +548,15 @@ describe('Club Manager ages for August 2026', () => {
         { name: 'Leander Dendoncker', field: 'age', fotmob: { born: '1995-04-15' } },
       ],
     },
-    missing: [{ name: 'Serge Gnabry', to: 'Bayern Munich', db: 'Bayern Munich', born: '1995-07-14' }],
-    dbToEngine: { 'SC Corinthians': 'Corinthians', 'Old Table FC': 'Old Table', 'HNK Hajduk Split': 'Hajduk Split', 'Bayern Munich': 'Bayern Munich' },
+    missing: [
+      { name: 'Serge Gnabry', to: 'Bayern Munich', db: 'Bayern Munich', born: '1995-07-14' },
+      /* the window ledger ties a date to TWO clubs: the one he joined and the one his table row names */
+      { name: 'Window Two Clubs', to: 'Joined Club', db: 'Table Side FC', born: '1998-02-02' },
+    ],
+    dbToEngine: {
+      'SC Corinthians': 'Corinthians', 'Old Table FC': 'Old Table', 'HNK Hajduk Split': 'Hajduk Split', 'Bayern Munich': 'Bayern Munich',
+      'Table Side FC': 'Table Side',
+    },
   });
 
   it('counts whole years to a day', () => {
@@ -615,6 +622,17 @@ describe('Club Manager ages for August 2026', () => {
     /* the birth date ledger knows him at the club he is baked at; his table row is elsewhere */
     expect(augustAge2026({ name: 'Moved By Overlay', club: 'Chelsea', tableClub: 'Aston Villa', age: 25, year: 2026, id: 4000 }, births))
       .toEqual({ age: 26, basis: 'born', born: '2000-03-03' });
+    /* the window ledger, both halves of its join. The club he joined finds him... */
+    expect(augustAge2026({ name: 'Window Two Clubs', club: 'Joined Club', tableClub: 'Somewhere Else', age: 28, year: 2026, id: 177300 }, births))
+      .toEqual({ age: 28, basis: 'born', born: '1998-02-02' });
+    /* ...and so does the club of his table row, alone: baked at a third club (a later move), with a
+       table row at the club the ledger's db column names. Drop that half of the join and he falls
+       back to the age as written. */
+    expect(augustAge2026({ name: 'Window Two Clubs', club: 'Third Club', tableClub: 'Table Side', age: 27, year: 2026, id: 177300 }, births))
+      .toEqual({ age: 28, basis: 'born', born: '1998-02-02' });
+    expect([...births.get('Window Two Clubs')![0].clubs].sort()).toEqual(['Joined Club', 'Table Side']);
+    /* at neither of the two he is another man of that name */
+    expect(augustAge2026({ name: 'Window Two Clubs', club: 'Third Club', tableClub: 'Fourth Club', age: 27, year: 2026, id: 177300 }, births).basis).toBe('written');
     /* a date tied to a club the game does not model matches nobody */
     const loose = augustAge2026({ name: 'Unmodelled Man', club: 'Everton', tableClub: 'Everton', age: 35, year: 2026, id: 300 }, births);
     expect(loose.basis).toBe('moved');
