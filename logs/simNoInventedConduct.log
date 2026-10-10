@@ -1,0 +1,10 @@
+1) no template array in src pairs a name placeholder with a conduct verb
+   1 template arrays across 1446 files
+   none pairs {name} with conduct
+2) the real World XI engine never prints conduct beside a squad member's name
+   400 seasons (400 distinct), 9405 narrative and month lines, 2277 naming a squad member (goals and injuries are allowed to)
+   none of them beside a conduct verb
+3) World XI and Build Your XI show the same report
+   both pages render seasonReport.narrative unfiltered
+
+simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board in it.
