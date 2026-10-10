@@ -12,9 +12,13 @@ confederation (step 1), the Career Hub walk (step 2), the daily save flake (step
 - Nothing here was run on the tree that holds Release AT, Round 1149 or PR216. `playCareerHub` counts every button
   holding a `div.uppercase` on the board, and PR216 adds a section to `UsCareerBoard.tsx`: rerun the walk there before
   trusting it. Round 1149 gives the Trophy Case tile a row "in other awards": same rerun.
-- The Footle screenshots the brief asks for do not exist. Footle's pool comes from the database, which a runner cannot
-  reach and which this round may not touch, and with the host blocked the pool is empty. The proof is the jsdom test and
-  its swap control. A look at the live page belongs to the lead's live pass.
+- The builder took no Footle screenshots, and the reason first written here was false: with the database host blocked
+  the pool is NOT empty. `src/hooks/useGame.ts` starts the pool as the committed `players.ts` and keeps it when the
+  fetch answers nothing, and `scripts/qa/footle995.mjs` already walks the built page on a runner with the pool
+  fulfilled from fixtures. The reviewer walked Footle on a runner at 390 and 1280 with the host blocked
+  (`r1210-run-walk`: the example, sixteen feedback lines and Nation boxes, the receipt, each with its flag, 0 px of
+  sideways scroll) and the screenshots are in `dukb-handoff/2026-10-10/review-shots/r1210/`. The jsdom test and its
+  swap control stay the committed proof.
 - `simNationalityFlags` is green WITH ONE OWED BARE PRINT, not with none (see step 1).
 
 ## Step 1: a flag beside every nationality in Footle, six nations under their confederation
@@ -202,3 +206,45 @@ For the lead to assign: Stadium Tycoon's ticket policy save, the tycoon rewards 
 three low ones (the two Connections scratch notes, the pinned games list).
 
 At release: the saved page of /whats-new is redrawn by the lead (this round writes nothing into `public/`).
+
+## After the review: the fix pass (2026-10-10)
+Two adversarial reviews (one that runs, one that reads) found two majors and a list of minors. What changed, each in
+its own commit, each proven on a runner (`origin/rc-results/<name>`):
+
+1. `scripts/simFootlePractice995.mjs` was RED on this round and nobody had run it: it pins the exact case list of
+   `src/test/footlePractice.test.tsx`, and step 1 added two cases there. Re-recorded (commit `9776104a`): the two
+   titles join the `mounted` list and nothing else moves. Proof before (`r1210-fix-p995a`): the branch exit 1 with
+   the two titles the only `+` lines; the branch with only the test file taken from the merge base, exit 0. Proof
+   after (`r1210-fix-p995b`): `FOOTLE_PRACTICE_CONTROL=all`, "28 modes completed", exit 0.
+2. `scripts/simStorageWrites.mjs`, section 7 (commit `53dd2474`): a NAMED save is judged at its hold, one key at a
+   time, and the climb stops at the function that calls `holdPendingSave`. An OWED entry with one of two saves named is
+   "partly stale" and the message says which key moves. A function's second remembered refusal is a key of its own
+   (`write:owner#2`; one today, step 3 of `switchSlot`). One file filter for sections 1 and 7, on forward slashes.
+   Six new controls: `deadhold`, `partial`, `second`, `twolists`, `gone`, `floor` (19 in all). `r1210-fix-storage`:
+   plain exit 0, 19 controls exit 1 with FIRED, and the reviewer's own mutations now read as the header promises
+   (the hold moved to a function that reads nothing: red; a second save claimed NAMED with nothing holding it: red;
+   Footle naming its practice run with the unlimited session honestly left owed: green).
+3. `scripts/playCareerHub.mjs` (commit `c7a82516`): a way back that is there and does nothing costs one check, a
+   reload and the walk goes on; the Trophy Case click is guarded; a game that throws fails by name and the next game
+   runs. New control `deadback`. `r1210-fix-hub`: plain green, `revert` 36, `logback` 4, `deadback` 4, and with the
+   season review's back button given an empty handler and the site rebuilt, exit 1 on exactly four failures, one a
+   game, where the walk used to die in the first.
+4. Two rules got the control they lacked (commit `bbcc2d3c`): `owedsecond` in `simNationalityFlags` (a second bare
+   print in a file with an OWED_BARE entry is named, the first stays owed) and `guidepart` in
+   `simDailySaveHardening` (the shapes part's own judgement names every row whose guide word is "skipped").
+   `r1210-fix-ctl`: both exit 0 "green" and "fired as designed". What's New lost "same as everywhere else on the
+   site", which was wider than the code.
+5. The `guard` control of `simDailySaveHardening` had been red on main since Round 1003, which made NBA Connections'
+   submit ask `takeNewerSave` before its own click: its click row of section 7 has two layers now. Re-recorded
+   (commit `a1f07707`): eight target rows, and `stale` still turns the ninth. Proof before (`r1210-fix-guard`): 8 of 9
+   red as it stood; 9 of 9 with that one line taken out of the hook.
+
+Measured and owed to the lead, not changed here (the budget rows are the lead's): `/footle` weighs 348K of gzipped
+JavaScript against its ceiling of 345K (`r1210-fix-weight`, exit 1, the only failure). Footle loads the flag component
+for the first time in this round. The row in `scripts/sweepWeight.mjs` moves to 348 at the gate.
+
+Not changed, and why: the two new Footle cases have no control inside `simFootlePractice995` (their control is the one
+off swap, run by the builder and again by the reviewer, 3 of 3 fired); section 7's state keys are still one key a
+state, so a second write that sets an already listed state rides on its entry (the state is what a hold reads, so it
+is the unit); the fence cannot see whether a hold's condition is the right way round (a test holds that for the US
+board, see above).
