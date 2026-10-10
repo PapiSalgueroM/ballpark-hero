@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+walk: node .rc/x/walk1211.mjs
+distgrep: n=$(grep -rlE "one short of the 162 on the schedule|clubs finished on 68 to 71 games|played a 163rd game|has no single length|usSeasonLedger" dist | wc -l); echo "dist files: $(find dist -type f | wc -l); files holding a ledger sentence: $n"; test "$n" = "0"
+samecode: git diff --stat origin/main HEAD -- src/lib src/components src/pages src/hooks src/test src/integrations src/types public index.html package.json package-lock.json vite.config.ts scripts/data/usBoardFixture.json | tail -3; git diff --quiet origin/main HEAD -- src/lib src/components src/pages src/hooks src/test src/integrations src/types public index.html package.json package-lock.json vite.config.ts scripts/data/usBoardFixture.json && echo "engines, pages, tests, public and packages are byte equal with origin/main"
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+basebuild: git worktree add /tmp/base origin/main > /dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/base/node_modules; (cd /tmp/base && npm run build > /tmp/base-build.log 2>&1; echo "base build exit=$?"); (cd dist && find assets -type f | sort | xargs sha256sum) > /tmp/head.sums; (cd /tmp/base/dist && find assets -type f | sort | xargs sha256sum) > /tmp/base.sums; echo "head asset files $(wc -l < /tmp/head.sums), base asset files $(wc -l < /tmp/base.sums)"; diff /tmp/head.sums /tmp/base.sums | head -12; d=$(diff /tmp/head.sums /tmp/base.sums | grep -c '^[<>]'); cp /tmp/head.sums /tmp/base.sums "$RC_OUT"/ 2>/dev/null; echo "asset lines that differ between the head build and the base build: $d"

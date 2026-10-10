@@ -1,0 +1,89 @@
+ok   mlb-390-rm0: the hub shows one "Play the season" button (saw 1)
+ok   mlb-390-rm0: no week by week entry on a sport that is not bound
+ok   mlb-390-rm0: the hub does not say "week by week"
+ok   mlb-390-rm0: the hub fits the width (0px of overflow)
+ok   mlb-390-rm0: one press put a season on the save (1 season(s))
+     mlb-390-rm0: the season line reads {"year":2026,"team":"TEX","games":157,"result":"Missed October","pos":"CF"}
+ok   mlb-390-rm0: the save is byte equal after a reload (3482 characters)
+FAIL mlb-390-rm0: the hub is back after the reload
+ok   mlb-390-rm0: none of the 96 scripts the page loaded holds a ledger sentence
+ok   mlb-390-rm0: no page error
+     mlb-390-rm0: 3 request(s) to the live database were refused by the walk
+ok   mlb-390-rm1: the hub shows one "Play the season" button (saw 1)
+ok   mlb-390-rm1: no week by week entry on a sport that is not bound
+ok   mlb-390-rm1: the hub does not say "week by week"
+ok   mlb-390-rm1: the hub fits the width (0px of overflow)
+ok   mlb-390-rm1: one press put a season on the save (1 season(s))
+     mlb-390-rm1: the season line reads {"year":2026,"team":"WSN","games":156,"result":"Missed October","pos":"CF"}
+ok   mlb-390-rm1: the save is byte equal after a reload (4084 characters)
+FAIL mlb-390-rm1: the hub is back after the reload
+ok   mlb-390-rm1: none of the 96 scripts the page loaded holds a ledger sentence
+ok   mlb-390-rm1: no page error
+     mlb-390-rm1: 3 request(s) to the live database were refused by the walk
+ok   mlb-1280-rm0: the hub shows one "Play the season" button (saw 1)
+ok   mlb-1280-rm0: no week by week entry on a sport that is not bound
+ok   mlb-1280-rm0: the hub does not say "week by week"
+ok   mlb-1280-rm0: the hub fits the width (0px of overflow)
+ok   mlb-1280-rm0: one press put a season on the save (1 season(s))
+     mlb-1280-rm0: the season line reads {"year":2026,"team":"CLE","games":158,"result":"Missed October","pos":"CF"}
+ok   mlb-1280-rm0: the save is byte equal after a reload (3286 characters)
+FAIL mlb-1280-rm0: the hub is back after the reload
+ok   mlb-1280-rm0: none of the 96 scripts the page loaded holds a ledger sentence
+ok   mlb-1280-rm0: no page error
+     mlb-1280-rm0: 3 request(s) to the live database were refused by the walk
+ok   mlb-1280-rm1: the hub shows one "Play the season" button (saw 1)
+ok   mlb-1280-rm1: no week by week entry on a sport that is not bound
+ok   mlb-1280-rm1: the hub does not say "week by week"
+ok   mlb-1280-rm1: the hub fits the width (0px of overflow)
+ok   mlb-1280-rm1: one press put a season on the save (1 season(s))
+     mlb-1280-rm1: the season line reads {"year":2026,"team":"ATL","games":72,"result":"Lost the Wild Card series","pos":"CF"}
+ok   mlb-1280-rm1: the save is byte equal after a reload (4017 characters)
+FAIL mlb-1280-rm1: the hub is back after the reload
+ok   mlb-1280-rm1: none of the 96 scripts the page loaded holds a ledger sentence
+ok   mlb-1280-rm1: no page error
+     mlb-1280-rm1: 3 request(s) to the live database were refused by the walk
+ok   nhl-390-rm0: the hub shows one "Play the season" button (saw 1)
+ok   nhl-390-rm0: no week by week entry on a sport that is not bound
+ok   nhl-390-rm0: the hub does not say "week by week"
+ok   nhl-390-rm0: the hub fits the width (0px of overflow)
+ok   nhl-390-rm0: one press put a season on the save (1 season(s))
+     nhl-390-rm0: the season line reads {"year":2026,"team":"NJD","games":81,"result":"Missed the playoffs","pos":"C"}
+ok   nhl-390-rm0: the save is byte equal after a reload (3694 characters)
+FAIL nhl-390-rm0: the hub is back after the reload
+ok   nhl-390-rm0: none of the 96 scripts the page loaded holds a ledger sentence
+ok   nhl-390-rm0: no page error
+     nhl-390-rm0: 3 request(s) to the live database were refused by the walk
+ok   nhl-390-rm1: the hub shows one "Play the season" button (saw 1)
+ok   nhl-390-rm1: no week by week entry on a sport that is not bound
+ok   nhl-390-rm1: the hub does not say "week by week"
+ok   nhl-390-rm1: the hub fits the width (0px of overflow)
+ok   nhl-390-rm1: one press put a season on the save (1 season(s))
+     nhl-390-rm1: the season line reads {"year":2026,"team":"VAN","games":79,"result":"Missed the playoffs","pos":"C"}
+ok   nhl-390-rm1: the save is byte equal after a reload (3695 characters)
+FAIL nhl-390-rm1: the hub is back after the reload
+ok   nhl-390-rm1: none of the 96 scripts the page loaded holds a ledger sentence
+ok   nhl-390-rm1: no page error
+     nhl-390-rm1: 3 request(s) to the live database were refused by the walk
+ok   nhl-1280-rm0: the hub shows one "Play the season" button (saw 1)
+ok   nhl-1280-rm0: no week by week entry on a sport that is not bound
+ok   nhl-1280-rm0: the hub does not say "week by week"
+ok   nhl-1280-rm0: the hub fits the width (0px of overflow)
+ok   nhl-1280-rm0: one press put a season on the save (1 season(s))
+     nhl-1280-rm0: the season line reads {"year":2026,"team":"SEA","games":79,"result":"Missed the playoffs","pos":"C"}
+ok   nhl-1280-rm0: the save is byte equal after a reload (3989 characters)
+FAIL nhl-1280-rm0: the hub is back after the reload
+ok   nhl-1280-rm0: none of the 96 scripts the page loaded holds a ledger sentence
+ok   nhl-1280-rm0: no page error
+     nhl-1280-rm0: 3 request(s) to the live database were refused by the walk
+ok   nhl-1280-rm1: the hub shows one "Play the season" button (saw 1)
+ok   nhl-1280-rm1: no week by week entry on a sport that is not bound
+ok   nhl-1280-rm1: the hub does not say "week by week"
+ok   nhl-1280-rm1: the hub fits the width (0px of overflow)
+ok   nhl-1280-rm1: one press put a season on the save (1 season(s))
+     nhl-1280-rm1: the season line reads {"year":2026,"team":"SJS","games":81,"result":"Missed the playoffs","pos":"C"}
+ok   nhl-1280-rm1: the save is byte equal after a reload (3510 characters)
+FAIL nhl-1280-rm1: the hub is back after the reload
+ok   nhl-1280-rm1: none of the 96 scripts the page loaded holds a ledger sentence
+ok   nhl-1280-rm1: no page error
+     nhl-1280-rm1: 3 request(s) to the live database were refused by the walk
+walk1211: RED. 8 failed, 64 passed.

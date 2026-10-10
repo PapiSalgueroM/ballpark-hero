@@ -1,0 +1,10 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+samecode exit=0 0s | engines, pages, tests, public and packages are byte equal with origin/main
+distgrep exit=0 0s | dist files: 749; files holding a ledger sentence: 0
+simResultMoment exit=0 6s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+simWritesAreSent exit=1 14s | simWritesAreSent: 2 failures
+simMlbCareer exit=0 19s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, every life card tagged
+simUsBoardParity exit=0 43s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+simNhlCareer exit=0 16s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged
+walk exit=1 61s | walk1211: RED. 8 failed, 64 passed.
+basebuild exit=0 32s | asset lines that differ between the head build and the base build: 0

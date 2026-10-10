@@ -1,0 +1,3 @@
+base build exit=0
+head asset files 532, base asset files 532
+asset lines that differ between the head build and the base build: 0
