@@ -1,0 +1,14 @@
+ok   personal-best targets, ten-game rating eligibility, binding, consumption, transfer/loan cancellation and one earned point
+ok   16 exact old saves/RNG and 16 paired opt-in seasons, achieved 14, missed 2, interrupted 0
+simSoccerCareerAmbitions: all 16 paired careers, exact target results, future rewards once and seven actual interruption paths passed
+ok   copied consume defect fired in its required outcome check
+ok   copied reward defect fired in its required outcome check
+ok   copied duplicate defect fired in its required outcome check
+ok   copied binding defect fired in its required outcome check
+ok   copied rating defect fired in its required outcome check
+ok   copied ratingCompletion defect fired in its required outcome check
+ok   copied phase defect fired in its required outcome check
+ok   copied move defect fired in its required outcome check
+ok   copied regular defect fired in its required outcome check
+ok   copied interruption defect fired in its required outcome check
+simSoccerCareerAmbitions: healthy outcomes green, ten effective controls caught

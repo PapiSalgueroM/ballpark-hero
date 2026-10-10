@@ -1,0 +1,164 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerCareerRecords.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 687[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career record book[2m > [22mopens the actual best season and leaves an old unknown overall unstated [33m 418[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m12 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 08:01:48
+[2m   Duration [22m 2.46s[2m (transform 165ms, setup 87ms, collect 369ms, tests 687ms, environment 535ms, prepare 329ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/career-records-tests.json
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerCareerRecords.test.tsx [2m([22m[2m12 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 826[2mms[22m[39m
+[31m   [31m×[31m Soccer Career record book[2m > [22mcounts only saved senior club stats and never academy or manager seasons[39m[32m 25[2mms[22m[39m
+[31m     → expected { apps: 120, goals: 300, …(2) } to deeply equal { apps: 30, goals: 12, …(2) }[39m
+   [32m✓[39m Soccer Career record book[2m > [22mkeeps a return to the club separate from the first spell[32m 5[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mseparates a loan from a permanent spell and preserves the parent[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mdoes not merge years that the save does not hold[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22muses actual records, keeps ties earliest and requires ten apps for rating[32m 3[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mgives keepers clean-sheet records without inventing attacking records[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mhandles no appearances without inventing a best season[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mreads a save without adding records or changing frozen data[32m 1[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career record book[2m > [22mopens the actual best season and leaves an old unknown overall unstated [33m 490[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mdrills into a club spell and shows the loan parent and played overall[32m 154[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mkeeps help, worked example, close and Escape reachable[32m 137[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mrestores body scrolling when the sheet closes[32m 7[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m11 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 08:01:51
+[2m   Duration [22m 2.34s[2m (transform 156ms, setup 100ms, collect 326ms, tests 826ms, environment 648ms, prepare 171ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/career-records-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerRecords.test.tsx[2m > [22mSoccer Career record book[2m > [22mcounts only saved senior club stats and never academy or manager seasons
+[31m[1mAssertionError[22m: expected { apps: 120, goals: 300, …(2) } to deeply equal { apps: 30, goals: 12, …(2) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[32m-   "apps": 30,[39m
+[32m-   "assists": 4,[39m
+[31m+   "apps": 120,[39m
+[31m+   "assists": 16,[39m
+[2m    "cleanSheets": 0,[22m
+[32m-   "goals": 12,[39m
+[31m+   "goals": 300,[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/soccerCareerRecords.test.tsx:[2m21:25[22m[39m
+
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok copied academy counted defect fired in its required outcome check
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerCareerRecords.test.tsx [2m([22m[2m12 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 779[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mcounts only saved senior club stats and never academy or manager seasons[32m 7[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mkeeps a return to the club separate from the first spell[32m 1[2mms[22m[39m
+[31m   [31m×[31m Soccer Career record book[2m > [22mseparates a loan from a permanent spell and preserves the parent[39m[32m 19[2mms[22m[39m
+[31m     → expected [ { club: 'Test City', …(8) } ] to have a length of 2 but got 1[39m
+   [32m✓[39m Soccer Career record book[2m > [22mdoes not merge years that the save does not hold[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22muses actual records, keeps ties earliest and requires ten apps for rating[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mgives keepers clean-sheet records without inventing attacking records[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mhandles no appearances without inventing a best season[32m 3[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mreads a save without adding records or changing frozen data[32m 1[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career record book[2m > [22mopens the actual best season and leaves an old unknown overall unstated [33m 481[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mdrills into a club spell and shows the loan parent and played overall[32m 156[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mkeeps help, worked example, close and Escape reachable[32m 98[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mrestores body scrolling when the sheet closes[32m 9[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m11 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 08:01:54
+[2m   Duration [22m 2.34s[2m (transform 166ms, setup 111ms, collect 308ms, tests 779ms, environment 592ms, prepare 170ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/career-records-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerRecords.test.tsx[2m > [22mSoccer Career record book[2m > [22mseparates a loan from a permanent spell and preserves the parent
+[31m[1mAssertionError[22m: expected [ { club: 'Test City', …(8) } ] to have a length of 2 but got 1[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 2[39m
+[31m+ 1[39m
+
+[36m [2m❯[22m src/test/soccerCareerRecords.test.tsx:[2m31:25[22m[39m
+    [90m 29| [39m  it('separates a loan from a permanent spell and preserves the parent…
+    [90m 30| [39m    const book = careerRecordBook(source([row({ onLoanFrom: 'Parent Un…
+    [90m 31| [39m    [34mexpect[39m(book[33m.[39mstints)[33m.[39m[34mtoHaveLength[39m([34m2[39m)[33m;[39m
+    [90m   | [39m                        [31m^[39m
+    [90m 32| [39m    [34mexpect[39m(book[33m.[39mstints[[34m0[39m][33m.[39mparent)[33m.[39m[34mtoBe[39m([32m'Parent United'[39m)[33m;[39m
+    [90m 33| [39m    [34mexpect[39m(book[33m.[39mstints[[34m1[39m][33m.[39mparent)[33m.[39m[34mtoBeNull[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok copied loan merged defect fired in its required outcome check
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerCareerRecords.test.tsx [2m([22m[2m12 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 441[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mcounts only saved senior club stats and never academy or manager seasons[32m 4[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mkeeps a return to the club separate from the first spell[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mseparates a loan from a permanent spell and preserves the parent[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mdoes not merge years that the save does not hold[32m 0[2mms[22m[39m
+[31m   [31m×[31m Soccer Career record book[2m > [22muses actual records, keeps ties earliest and requires ten apps for rating[39m[32m 19[2mms[22m[39m
+[31m     → expected { label: 'Best season rating', …(4) } to match object { value: 8.4, index: +0, ties: 2 }
+(27 matching properties omitted from actual)[39m
+   [32m✓[39m Soccer Career record book[2m > [22mgives keepers clean-sheet records without inventing attacking records[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mhandles no appearances without inventing a best season[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mreads a save without adding records or changing frozen data[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mopens the actual best season and leaves an old unknown overall unstated[32m 195[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mdrills into a club spell and shows the loan parent and played overall[32m 115[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mkeeps help, worked example, close and Escape reachable[32m 91[2mms[22m[39m
+   [32m✓[39m Soccer Career record book[2m > [22mrestores body scrolling when the sheet closes[32m 9[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m11 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 08:01:57
+[2m   Duration [22m 2.06s[2m (transform 168ms, setup 144ms, collect 336ms, tests 441ms, environment 450ms, prepare 217ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/career-records-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerRecords.test.tsx[2m > [22mSoccer Career record book[2m > [22muses actual records, keeps ties earliest and requires ten apps for rating
+[31m[1mAssertionError[22m: expected { label: 'Best season rating', …(4) } to match object { value: 8.4, index: +0, ties: 2 }
+(27 matching properties omitted from actual)[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[32m-   "index": 0,[39m
+[32m-   "ties": 2,[39m
+[32m-   "value": 8.4,[39m
+[31m+   "index": 1,[39m
+[31m+   "ties": 1,[39m
+[31m+   "value": 10,[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/soccerCareerRecords.test.tsx:[2m42:68[22m[39m
+    [90m 40| [39m    const book = careerRecordBook(source([row({ goals: 58, rating: 8.4…
+    [90m 41| [39m    expect(book.bests.find(b => b.label === 'Most goals')).toMatchObje…
+    [90m 42| [39m    expect(book.bests.find(b => b.label === 'Best season rating')).toM…
+    [90m   | [39m                                                                   [31m^[39m
+    [90m 43| [39m  })[33m;[39m
+    [90m 44| [39m  it('gives keepers clean-sheet records without inventing attacking re…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok copied short rating season defect fired in its required outcome check
+simSoccerCareerRecords: 12 outcome checks green, three effective controls caught
