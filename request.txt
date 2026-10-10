@@ -1,0 +1,19 @@
+#!serial
+init: git rev-parse HEAD > /tmp/h1229 && echo 'src/pages/WhatsNew.tsx merge=union' >> .git/info/attributes && git fetch -q origin r1218-cm-var-true r1225-cm-fixtures-bind && git rev-parse origin/r1218-cm-var-true origin/r1225-cm-fixtures-bind
+m1218: git -c user.name=rc -c user.email=rc@users.noreply.github.com merge -q --no-edit origin/r1218-cm-var-true && git rev-parse HEAD > /tmp/m1 && git log --oneline -1
+m1225: git -c user.name=rc -c user.email=rc@users.noreply.github.com merge -q --no-edit origin/r1225-cm-fixtures-bind; git status --short | grep -v '^??' | grep '^[A-Z][A-Z] ' ; node .rc/x/resolve3way.mjs && git add src/lib/clubManager.ts src/components/club-manager/ClubManagerHelp.tsx && git -c user.name=rc -c user.email=rc@users.noreply.github.com commit -q --no-edit && git log --oneline -1 && sed -n '3,4p' src/lib/clubManager.ts | cut -c1-120
+b0-engine-sha: sed 's/\r$//' src/lib/clubManager.ts | sha256sum && git diff --stat $(cat /tmp/h1229) HEAD -- src/lib/clubManager.ts | tail -1
+b1-3way-realfix-base-m1: CM_FIXTURE_BASE=$(cat /tmp/m1) node scripts/simCmRealFixtures.mjs
+b2-3way-realfix-all-base-m1: CM_FIXTURE_BASE=$(cat /tmp/m1) CM_REAL_FIXTURE_CONTROL=all node scripts/simCmRealFixtures.mjs
+b3-3way-fleet-base-m1: CM_FIXTURE_BASE=$(cat /tmp/m1) node scripts/simCmFixtureFleet.mjs
+b4-3way-realfix-old-base-block: node .rc/x/patchSaveCompare-1229.mjs scripts/simCmRealFixtures.mjs && CM_FIXTURE_BASE=980654fa node scripts/simCmRealFixtures.mjs; s=$?; git checkout -- scripts; exit $s
+b5-3way-cmvar: node scripts/simCmVar.mjs
+b6-3way-cmvar-controls: CM_VAR_CONTROL=all node scripts/simCmVar.mjs
+b7-3way-book: node scripts/simCmLeagueBook.mjs
+b8-3way-tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+b9-3way-pin-asis: node scripts/simManagerAppealIsolation.mjs
+b10-3way-pin-retaken: node .rc/x/repin1081.mjs && node scripts/simManagerAppealIsolation.mjs; s=$?; git diff --stat -- scripts/fixtures | tail -2; git checkout -- scripts; exit $s
+b11-3way-savesize: node scripts/simClubManagerSaveSize.mjs
+b12-3way-vitest-book: node_modules/.bin/vitest run src/lib/clubManagerGoalWeight.test.ts src/lib/clubManagerLeagueBook.test.ts --testTimeout=300000 --hookTimeout=120000
+b13-3way-shootout-rules: node scripts/simCmShootoutOrder.mjs && node scripts/simCmLeagueRules.mjs
+end: git reset -q --hard $(cat /tmp/h1229) && git log --oneline -1
