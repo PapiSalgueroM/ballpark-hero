@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import type { ContinueSave } from '@/data/continueSaves';
 import {
-  backupDate, browserStorage, deleteBackup, dismissBackup, offeredBackup, openGame, restoreBackup, routeSaveEntry,
+  backupDate, browserStorage, deleteBackup, dismissBackup, offeredBackup, routeSaveEntry,
 } from '@/lib/brokenSaveRecovery';
+import { reopenGame, restoreNow, takeOutcome, type KeeperOutcome } from '@/lib/saveKeeper';
 
 /**
  * Round 958 review: the way back from a fresh start.
@@ -30,13 +31,37 @@ import {
  * no scroll rule), read after mount so a saved page never captures it (no
  * backups exist under the prerenderer anyway), and every storage call goes
  * through the library, which never throws.
+ *
+ * Round 1219: "Put that save back" no longer swaps the saves in the open
+ * page. Measured in a real browser, a game left open (Stadium Tycoon, the
+ * academy, the arena) wrote itself over the save that had just been put back
+ * as the page reloaded, and the backup it came from was already gone. The
+ * button now only STAGES the put back (src/lib/saveKeeper.ts), the page is
+ * replaced by a full load of the game, and the swap is made while that load
+ * starts, before any game is in memory. This card then says, once, what
+ * happened. A backup that is exactly the save now being played is not
+ * offered: there would be nothing to put back.
  */
 type Offer = { entry: ContinueSave; backupKey: string; hasSave: boolean; when: string | null };
+
+/** What the load did with a put back, in plain words. */
+function outcomeWords(o: KeeperOutcome): string {
+  if (o.ok) {
+    return o.kept
+      ? 'The game you had before is kept aside in this browser, so nothing was deleted.'
+      : 'This is the save that was kept aside.';
+  }
+  if (o.why === 'no-room') return 'Your browser is out of room, so the save could not be put back. It is still kept aside.';
+  if (o.why === 'gone') return 'That kept aside save is not in this browser any more, so nothing was put back.';
+  if (o.why === 'stale') return 'The page took too long to load, so the save was not put back. It is still kept aside, and you can press the button again.';
+  return 'This browser would not let the site read its storage, so nothing was put back.';
+}
 
 export function BrokenSaveRestore({ pathname }: { pathname: string }) {
   const [offer, setOffer] = useState<Offer | null>(null);
   const [failed, setFailed] = useState<'swap' | 'delete' | null>(null);
   const [confirming, setConfirming] = useState(false);
+  const [outcome, setOutcome] = useState<KeeperOutcome | null>(null);
   /* Holds "Leave it aside" for this visit even where storage refuses to remember it. */
   const hidden = useRef(new Set<string>());
 
@@ -44,20 +69,45 @@ export function BrokenSaveRestore({ pathname }: { pathname: string }) {
     setFailed(null);
     setConfirming(false);
     const entry = routeSaveEntry(pathname);
+    /* Asked once per load: what a staged put back did on the way in. */
+    const told = takeOutcome(pathname);
+    setOutcome(prev => told ?? (prev && entry && prev.path === entry.path ? prev : null));
     const storage = browserStorage();
     const backupKey = entry ? offeredBackup(entry, storage) : null;
     if (!entry || !storage || !backupKey || hidden.current.has(backupKey)) { setOffer(null); return; }
     let hasSave = false;
-    try { hasSave = storage.getItem(entry.saveKey) !== null; } catch { /* treat as no save */ }
+    let playing = false;
+    try {
+      const current = storage.getItem(entry.saveKey);
+      hasSave = current !== null;
+      playing = hasSave && storage.getItem(backupKey) === current;
+    } catch { /* treat as no save */ }
+    if (playing) { setOffer(null); return; }
     const made = backupDate(backupKey);
     const when = made ? made.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : null;
     setOffer({ entry, backupKey, hasSave, when });
   }, [pathname]);
 
+  const primary = 'px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity';
+  const plain = 'px-4 py-2 rounded-lg bg-transparent border border-border text-foreground font-medium text-sm hover:bg-muted transition-colors';
+  const shell = 'fixed bottom-4 left-4 right-4 sm:left-auto sm:max-w-sm z-50 p-4 bg-card border border-border rounded-xl shadow-lg text-sm text-muted-foreground';
+
+  if (outcome) {
+    return (
+      <div data-dukb-set-aside="" data-dukb-put-back={outcome.ok ? 'done' : 'refused'} role="region" aria-label="Your kept aside save" className={shell}>
+        <p className="font-semibold text-foreground mb-1">{outcome.ok ? 'Your save is back' : 'Nothing changed'}</p>
+        <p role="status" className="mb-3">{outcomeWords(outcome)}</p>
+        <div className="flex flex-wrap gap-2">
+          <button type="button" onClick={() => setOutcome(null)} className={primary}>OK</button>
+        </div>
+      </div>
+    );
+  }
+
   if (!offer) return null;
 
   const putBack = () => {
-    if (restoreBackup(offer.entry, offer.backupKey, browserStorage()).ok) openGame(offer.entry.path);
+    if (restoreNow(offer.entry, offer.backupKey).ok) reopenGame(offer.entry.path);
     else setFailed('swap');
   };
   const notNow = () => {
@@ -70,15 +120,12 @@ export function BrokenSaveRestore({ pathname }: { pathname: string }) {
     else { setConfirming(false); setFailed('delete'); }
   };
 
-  const primary = 'px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity';
-  const plain = 'px-4 py-2 rounded-lg bg-transparent border border-border text-foreground font-medium text-sm hover:bg-muted transition-colors';
-
   return (
     <div
       data-dukb-set-aside=""
       role="region"
       aria-label="Your kept aside save"
-      className="fixed bottom-4 left-4 right-4 sm:left-auto sm:max-w-sm z-50 p-4 bg-card border border-border rounded-xl shadow-lg text-sm text-muted-foreground"
+      className={shell}
     >
       <p className="font-semibold text-foreground mb-1">You have a save kept aside</p>
       {confirming ? (

@@ -23,6 +23,10 @@
  *  8. The way back: BrokenSaveRestore offers the newest backup on the game's
  *     page, restoreBackup sets any newer save aside first, and a fresh start
  *     followed by "Put my old save back" returns the original bytes.
+ *  9. Round 1219: the card's button only STAGES the put back. Nothing is
+ *     written under the open page, the game's address is loaded, the swap is
+ *     made by runSaveKeeper on the way in (src/lib/saveKeeper.ts), the backup
+ *     it came from stays, and the card says once what happened.
  */
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -32,6 +36,11 @@ vi.mock('@/lib/brokenSaveRecovery', async (importOriginal) => ({
   /* jsdom cannot navigate, so the full load is recorded instead. */
   openGame: vi.fn(),
 }));
+vi.mock('@/lib/saveKeeper', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/lib/saveKeeper')>()),
+  /* Round 1219: the load after a put back, recorded for the same reason. */
+  reopenGame: vi.fn(),
+}));
 
 import RouteErrorBoundary from '@/components/RouteErrorBoundary';
 import { CONTINUE_SAVES } from '@/data/continueSaves';
@@ -40,6 +49,7 @@ import {
   BACKUPS_KEPT, BROKEN_SAVE_MARK, SET_ASIDE_SEEN_KEY, backupDate, backupKeysOf, deleteBackup, dismissBackup, heldSaveEntry,
   offeredBackup, openGame, restoreBackup, setAsideSave, type SaveStorage,
 } from '@/lib/brokenSaveRecovery';
+import { PENDING_RESTORE_KEY, reopenGame, runSaveKeeper } from '@/lib/saveKeeper';
 
 const Boom = () => { throw new Error('deliberate test throw'); };
 /* What a lazy route throws when its chunk cannot load: the network or a
@@ -74,6 +84,7 @@ function backupsOf(saveKey: string): string[] {
 beforeEach(() => {
   localStorage.clear();
   vi.mocked(openGame).mockClear();
+  vi.mocked(reopenGame).mockClear();
 });
 
 afterEach(() => {
@@ -290,24 +301,82 @@ describe('BrokenSaveRestore, the way back (Round 958 review)', () => {
     expect(localStorage.getItem('fight-gym-save-v1')).toBeNull();
     crashed.unmount();
     vi.mocked(openGame).mockClear();
-    render(<BrokenSaveRestore pathname="/fight-gym" />);
+    const card = render(<BrokenSaveRestore pathname="/fight-gym" />);
     expect(screen.getByRole('region', { name: 'Your kept aside save' })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Put that save back' }));
+    /* Round 1219: the press only stages. Nothing is written under the open
+       page; the game's address is loaded and the swap is made on the way in. */
+    expect(localStorage.getItem('fight-gym-save-v1')).toBeNull();
+    expect(localStorage.getItem(PENDING_RESTORE_KEY)).not.toBeNull();
+    expect(reopenGame).toHaveBeenCalledWith('/fight-gym');
+    expect(openGame).not.toHaveBeenCalled();
+    card.unmount();
+    runSaveKeeper();
     expect(localStorage.getItem('fight-gym-save-v1')).toBe(OLD);
-    expect(backupsOf('fight-gym-save-v1')).toHaveLength(0);
-    expect(openGame).toHaveBeenCalledWith('/fight-gym');
+    expect(localStorage.getItem(PENDING_RESTORE_KEY)).toBeNull();
+    /* The backup it came from stays (another tab can still write over the key). */
+    const kept = backupsOf('fight-gym-save-v1');
+    expect(kept).toHaveLength(1);
+    expect(localStorage.getItem(kept[0])).toBe(OLD);
+    /* The game's page says what happened, once, and does not offer back the game already being played. */
+    const after = render(<BrokenSaveRestore pathname="/fight-gym" />);
+    expect(screen.getByRole('status')).toHaveTextContent('This is the save that was kept aside.');
+    fireEvent.click(screen.getByRole('button', { name: 'OK' }));
+    expect(after.container).toBeEmptyDOMElement();
+    after.unmount();
+    const again = render(<BrokenSaveRestore pathname="/fight-gym" />);
+    expect(again.container).toBeEmptyDOMElement();
   });
 
   it('says the save the player has now is kept aside, and keeps it', () => {
     localStorage.setItem(backup, OLD);
     localStorage.setItem('fight-gym-save-v1', 'new gym');
-    render(<BrokenSaveRestore pathname="/fight-gym/" />);
+    const card = render(<BrokenSaveRestore pathname="/fight-gym/" />);
     expect(screen.getByText(/nothing is deleted/)).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Put that save back' }));
+    expect(localStorage.getItem('fight-gym-save-v1')).toBe('new gym');
+    expect(reopenGame).toHaveBeenCalledWith('/fight-gym');
+    card.unmount();
+    runSaveKeeper();
     expect(localStorage.getItem('fight-gym-save-v1')).toBe(OLD);
     const kept = backupsOf('fight-gym-save-v1');
-    expect(kept).toHaveLength(1);
-    expect(localStorage.getItem(kept[0])).toBe('new gym');
+    expect(kept.map(k => localStorage.getItem(k)).sort()).toEqual([OLD, 'new gym'].sort());
+    /* After the load: the outcome first, then the game that was replaced is on offer, as it was after a swap before. */
+    render(<BrokenSaveRestore pathname="/fight-gym" />);
+    expect(screen.getByText('Your save is back')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent(/kept aside in this browser, so nothing was deleted/);
+    expect(screen.queryByRole('button', { name: 'Put that save back' })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'OK' }));
+    expect(screen.getByRole('button', { name: 'Put that save back' })).toBeInTheDocument();
+  });
+
+  it('does not offer back a backup that is exactly the save being played', () => {
+    localStorage.setItem(backup, OLD);
+    localStorage.setItem('fight-gym-save-v1', OLD);
+    const { container } = render(<BrokenSaveRestore pathname="/fight-gym" />);
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it('says so when the load could not put the save back, and still offers it', () => {
+    localStorage.setItem(backup, OLD);
+    localStorage.setItem('fight-gym-save-v1', 'new gym');
+    const card = render(<BrokenSaveRestore pathname="/fight-gym" />);
+    fireEvent.click(screen.getByRole('button', { name: 'Put that save back' }));
+    card.unmount();
+    /* The load meets a browser with no room for the copy aside. */
+    const full = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new DOMException('full', 'QuotaExceededError');
+    });
+    runSaveKeeper();
+    full.mockRestore();
+    expect(localStorage.getItem('fight-gym-save-v1')).toBe('new gym');
+    expect(localStorage.getItem(backup)).toBe(OLD);
+    expect(backupsOf('fight-gym-save-v1')).toHaveLength(1);
+    render(<BrokenSaveRestore pathname="/fight-gym" />);
+    expect(screen.getByText('Nothing changed')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent(/out of room/);
+    fireEvent.click(screen.getByRole('button', { name: 'OK' }));
+    expect(screen.getByRole('button', { name: 'Put that save back' })).toBeInTheDocument();
   });
 
   it('shows nothing without a backup, or on a route that keeps no long save', () => {

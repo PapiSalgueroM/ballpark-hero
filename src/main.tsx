@@ -9,6 +9,14 @@ import "./index.css";
 import { watchForNewBuild } from "./lib/freshBuild";
 import { applyTheme, storedTheme } from "./lib/theme";
 import { installTranslateGuard } from "./lib/translateGuard";
+import { runSaveKeeper } from "./lib/saveKeeper";
+
+// Round 1219: a kept aside save a player asked to put back is swapped in
+// here, before React mounts and before any game is in memory, because a
+// game left open writes itself over its save as the page goes. Also the
+// copy a held save gets before a newer version of its game refuses it.
+// An ordinary load reads a few keys and writes nothing.
+runSaveKeeper();
 
 // Round 1140: a browser that translates the page swaps text nodes under
 // React, and the next update used to throw and take the whole route down.
