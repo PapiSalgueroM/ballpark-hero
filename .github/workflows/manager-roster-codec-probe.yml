@@ -18,6 +18,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          git rev-parse HEAD > source-head.txt
+          git rev-parse HEAD^{tree} > source-tree.txt
+          sha256sum scripts/qa/managerRosterCodecProbe.mjs .github/workflows/manager-roster-codec-probe.yml package.json package-lock.json > sources-before.txt
           npm ci --ignore-scripts --no-audit --no-fund
           curl --fail --location --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/11680328655/zip -o source-artifact.zip
           python3 - <<'PY'
@@ -37,9 +40,20 @@ jobs:
           PY
       - name: Compare exact full JSON round trips and actual budgets
         run: node scripts/qa/managerRosterCodecProbe.mjs observations
+      - name: Hold source and package bytes
+        if: always()
+        run: |
+          sha256sum scripts/qa/managerRosterCodecProbe.mjs .github/workflows/manager-roster-codec-probe.yml package.json package-lock.json > sources-after.txt
+          cmp sources-before.txt sources-after.txt
+          git diff --exit-code HEAD -- scripts/qa/managerRosterCodecProbe.mjs .github/workflows/manager-roster-codec-probe.yml package.json package-lock.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: manager-roster-codec-probe-${{ github.run_id }}
-          path: probe-results.json
+          path: |
+            probe-results.json
+            source-head.txt
+            source-tree.txt
+            sources-before.txt
+            sources-after.txt
           retention-days: 5

@@ -66,15 +66,15 @@ for (const harness of ['simClubManagerSaveSize.mjs', 'simClubManagerSlots.mjs'])
     const states = observation.value?.state ? [observation.value.state] : observation.value?.fin
       ? [observation.value.input, observation.value.fin, observation.value.next] : [];
     if (row.kind === 'whole-storage') {
-      report.originalStorageTotal = observation.value.entries.reduce((total, [, text]) => total + text.length, 0);
+      report.originalStorageTotal = observation.value.entries.reduce((total, [key, text]) => total + key.length + text.length, 0);
       assert.equal(report.originalStorageTotal, 502507, 'All four actual stored keys are counted');
       report.totals[harness] = Object.fromEntries(['keys', 'rows'].map(name => [name, observation.value.entries.reduce((total, [key, text]) => {
-        let state; try { state = JSON.parse(text); } catch { return total + text.length; }
-        if (!state?.worldRoster?.packedRecords) return total + text.length;
+        let state; try { state = JSON.parse(text); } catch { return total + key.length + text.length; }
+        if (!state?.worldRoster?.packedRecords) return total + key.length + text.length;
         const records = JSON.parse(decompressFromUTF16(state.worldRoster.packedRecords));
         const encoding = variants[name](records);
         const next = { ...state, worldRoster: { ...state.worldRoster, packedRecords: compressToUTF16(encoding.text), packedFormat: 'rows-v1' } };
-        return total + JSON.stringify(next).length;
+        return total + key.length + JSON.stringify(next).length;
       }, 0)]));
     }
     states.forEach((state, stateIndex) => {
