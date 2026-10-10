@@ -1,0 +1,142 @@
+{
+  "base": "http://localhost:4173",
+  "cases": [
+    {
+      "tag": "m390-laliga",
+      "steps": [
+        "pressed the 2026-27 season",
+        "pressed the country",
+        "pressed the league",
+        "pressed Real Madrid",
+        "pressed the confirm bar",
+        "pressed skip the dugout form",
+        "pressed the calendar tile"
+      ],
+      "shots": [
+        "m390-laliga-01-picker.png",
+        "m390-laliga-02-leagues.png",
+        "m390-laliga-03-club.png",
+        "m390-laliga-04-hub.png",
+        "m390-laliga-05-calendar.png",
+        "m390-laliga-06-help.png"
+      ],
+      "inJob": true,
+      "hubHead": "Skip to main content DOUKNOWBALL Back Track stats Real Madrid 2026-27 · Season 1 Season not started £195m No matches yet Managers Board Safe Fans Hopeful Home S",
+      "saveClub": "Real Madrid",
+      "saveHasKey": false,
+      "calendarOpened": true,
+      "calendarHead": "Skip to main content DOUKNOWBALL Back Track stats Real Madrid 2026-27 · Season 1 Season not started £195m No matches yet Managers Board Safe Fans Hopeful Home Squad Tactics Table Market ☀️ Transfer window open. Tap to do",
+      "calendarClaimsReal": false,
+      "overflowX": 0,
+      "helpOpened": true,
+      "helpNamesRealFixtures": false,
+      "pageErrors": [],
+      "filesFetched": 52,
+      "filesWithLedgerKey": [],
+      "filesWithCoverageSentence": []
+    },
+    {
+      "tag": "m390rm-championship",
+      "steps": [
+        "pressed the 2026-27 season",
+        "pressed the country",
+        "pressed the league",
+        "pressed Wrexham",
+        "pressed the confirm bar",
+        "pressed skip the dugout form",
+        "pressed the calendar tile"
+      ],
+      "shots": [
+        "m390rm-championship-01-picker.png",
+        "m390rm-championship-02-leagues.png",
+        "m390rm-championship-03-club.png",
+        "m390rm-championship-04-hub.png",
+        "m390rm-championship-05-calendar.png",
+        "m390rm-championship-06-help.png"
+      ],
+      "inJob": true,
+      "hubHead": "Skip to main content DOUKNOWBALL Back Track stats Wrexham 2026-27 · Season 1 Season not started £8m No matches yet Managers Board Safe Fans Hopeful Home Squad T",
+      "saveClub": "Wrexham",
+      "saveHasKey": false,
+      "calendarOpened": true,
+      "calendarHead": "Skip to main content DOUKNOWBALL Back Track stats Wrexham 2026-27 · Season 1 Season not started £8m No matches yet Managers Board Safe Fans Hopeful Home Squad Tactics Table Market ☀️ Transfer window open. Tap to do busin",
+      "calendarClaimsReal": false,
+      "overflowX": 0,
+      "helpOpened": true,
+      "helpNamesRealFixtures": false,
+      "pageErrors": [],
+      "filesFetched": 52,
+      "filesWithLedgerKey": [],
+      "filesWithCoverageSentence": []
+    },
+    {
+      "tag": "d1280-bundesliga",
+      "steps": [
+        "pressed the 2026-27 season",
+        "pressed the country",
+        "pressed the league",
+        "pressed Bayern Munich",
+        "pressed the confirm bar",
+        "pressed skip the dugout form",
+        "pressed the calendar tile"
+      ],
+      "shots": [
+        "d1280-bundesliga-01-picker.png",
+        "d1280-bundesliga-02-leagues.png",
+        "d1280-bundesliga-03-club.png",
+        "d1280-bundesliga-04-hub.png",
+        "d1280-bundesliga-05-calendar.png",
+        "d1280-bundesliga-06-help.png"
+      ],
+      "inJob": true,
+      "hubHead": "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats Bayern Munich 2026-27 · Season 1 Season not started £",
+      "saveClub": "Bayern Munich",
+      "saveHasKey": false,
+      "calendarOpened": true,
+      "calendarHead": "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats Bayern Munich 2026-27 · Season 1 Season not started £130m No matches yet Managers Board Safe Fans Hopeful Home Sq",
+      "calendarClaimsReal": false,
+      "overflowX": 0,
+      "helpOpened": true,
+      "helpNamesRealFixtures": false,
+      "pageErrors": [],
+      "filesFetched": 52,
+      "filesWithLedgerKey": [],
+      "filesWithCoverageSentence": []
+    },
+    {
+      "tag": "d1280rm-laliga",
+      "steps": [
+        "pressed the 2026-27 season",
+        "pressed the country",
+        "pressed the league",
+        "pressed Barcelona",
+        "pressed the confirm bar",
+        "pressed skip the dugout form",
+        "pressed the calendar tile"
+      ],
+      "shots": [
+        "d1280rm-laliga-01-picker.png",
+        "d1280rm-laliga-02-leagues.png",
+        "d1280rm-laliga-03-club.png",
+        "d1280rm-laliga-04-hub.png",
+        "d1280rm-laliga-05-calendar.png",
+        "d1280rm-laliga-06-help.png"
+      ],
+      "inJob": true,
+      "hubHead": "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats Barcelona 2026-27 · Season 1 Season not started £158m",
+      "saveClub": "Barcelona",
+      "saveHasKey": false,
+      "calendarOpened": true,
+      "calendarHead": "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats Barcelona 2026-27 · Season 1 Season not started £158m No matches yet Managers Board Safe Fans Hopeful Home Squad ",
+      "calendarClaimsReal": false,
+      "overflowX": 0,
+      "helpOpened": true,
+      "helpNamesRealFixtures": false,
+      "pageErrors": [],
+      "filesFetched": 52,
+      "filesWithLedgerKey": [],
+      "filesWithCoverageSentence": []
+    }
+  ],
+  "failures": []
+}
