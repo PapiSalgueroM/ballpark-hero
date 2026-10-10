@@ -1,0 +1,37 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
+sense-full: SENSE_PROVE_AGAINST=cd9c3d50 SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+rivalry: node scripts/simCareerRivalryEvents.mjs
+rivalry-coin306: RIVALRY_CONTROL=coin306 node scripts/simCareerRivalryEvents.mjs
+rivalry-deaf: RIVALRY_CONTROL=deaf node scripts/simCareerRivalryEvents.mjs
+rivalry-collision: RIVALRY_CONTROL=collision node scripts/simCareerRivalryEvents.mjs
+rivalry-beatlie: RIVALRY_CONTROL=beatlie node scripts/simCareerRivalryEvents.mjs
+rivalry-beatheat: RIVALRY_CONTROL=beatheat node scripts/simCareerRivalryEvents.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre-s0: SEEDSET=0 node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre-s1: SEEDSET=1 node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre-s2: SEEDSET=2 node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre-s3: SEEDSET=3 node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre-s4: SEEDSET=4 node scripts/simUsSeasonCentre.mjs
+simNbaCareer: node scripts/simNbaCareer.mjs
+simNflCareer: node scripts/simNflCareer.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+simCareerHall: node scripts/simCareerHall.mjs
+simCareerRealism: node scripts/simCareerRealism.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simAwards: node scripts/simAwards.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simCareerHub: node scripts/simCareerHub.mjs
+simCareerInbox: node scripts/simCareerInbox.mjs
+simCareerInboxBeats: node scripts/simCareerInboxBeats.mjs
+simFightCareer: node scripts/simFightCareer.mjs
