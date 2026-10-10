@@ -1,0 +1,16 @@
+MUTATED scripts/lib/pageSeed.mjs (flatstream): "let a = start >>> 0;" became "let a = 1;"
+playLiveMatchFit: seed 3208792607 (the walk's own, from its file name). Replay this run with: LIVE_FIT_SEED=3208792607 LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs
+8) The replay: the first match in three fresh contexts on seed 3208792607 and in one on seed 3208792608
+  [match replay A] seed 3208792607, 1803 draws at kick off, digest 994064a9 over 4272 characters of drawn match: Crystal Palace v Everton, goals of the first half none; own goals among them 0
+  [draws replay A] 7 once the page had settled, 7 after 2.5 seconds untouched, 734 with the job taken, 1803 at kick off, 1803 after 2.5 seconds of the match
+  [match replay B] seed 3208792607, 1803 draws at kick off, digest 994064a9 over 4272 characters of drawn match: Crystal Palace v Everton, goals of the first half none; own goals among them 0
+  [draws replay B] 7 once the page had settled, 7 after 2.5 seconds untouched, 734 with the job taken, 1803 at kick off, 1803 after 2.5 seconds of the match
+  [match replay C] seed 3208792607, 1803 draws at kick off, digest 994064a9 over 4272 characters of drawn match: Crystal Palace v Everton, goals of the first half none; own goals among them 0
+  [draws replay C] 7 once the page had settled, 7 after 2.5 seconds untouched, 734 with the job taken, 1803 at kick off, 1803 after 2.5 seconds of the match
+  [match replay D] seed 3208792608, 1803 draws at kick off, digest 994064a9 over 4272 characters of drawn match: Crystal Palace v Everton, goals of the first half none; own goals among them 0
+  [draws replay D] 7 once the page had settled, 7 after 2.5 seconds untouched, 734 with the job taken, 1803 at kick off, 1803 after 2.5 seconds of the match
+  ok    one seed, one match, three times: seed 3208792607 gave digest 994064a9 in A, B and C (Crystal Palace v Everton)
+  ok    the page drew 1803 times before kick off in A, B and C
+  FAIL: another seed opened the same match: seed 3208792608 gave digest 994064a9, so the digest tells nothing apart
+  ok    the page drew nothing in five idle seconds of any context (2.5 before the job, 2.5 into the match)
+playLiveMatchFit: the replay is RED, 1 failure.

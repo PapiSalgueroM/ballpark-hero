@@ -1,0 +1,7 @@
+MUTATED scripts/playLiveMatchFit.mjs (thindigest): "const text = JSON.stringify(plain(drawn));" became "const text = JSON.stringify(plain({ opponent: drawn.opponent }));"
+playLiveMatchFit: seed 3208792607 (the walk's own, from its file name). Replay this run with: LIVE_FIT_SEED=3208792607 LIVE_FIT_REPLAY=1 LIVE_FIT_CONTROL=noseed node scripts/playLiveMatchFit.mjs
+8) The replay, NEGATIVE CONTROL noseed: the first match in three fresh contexts with no seed at all
+  [match replay A] seed none, draws not counted, digest 07a3e249 over 28 characters of drawn match: Crystal Palace v Coventry City, goals of the first half 7' Dwight McNeil, 13' Jack Rudoni, 36' Sidiki Chérif; own goals among them 0
+  [match replay B] seed none, draws not counted, digest 28cda4bb over 22 characters of drawn match: Crystal Palace v Everton, goals of the first half 23' Jørgen Strand Larsen; own goals among them 0
+  [match replay C] seed none, draws not counted, digest 7e428d7f over 21 characters of drawn match: Crystal Palace v Fulham, goals of the first half 4' Josh King, 45+2' Jørgen Strand Larsen; own goals among them 0
+playLiveMatchFit: control noseed turned the replay red on the line it must (with no seed, three contexts opened three different matches: 07a3e249, 28cda4bb, 7e428d7f).
