@@ -1,0 +1,22 @@
+#!serve
+#!playwright
+#!serial
+# Round 1215 control: the walks that exited non zero under the draw counter, run again WITHOUT it.
+x-playCareerHub: timeout -k 5 300 node scripts/playCareerHub.mjs
+x-playClubManager: timeout -k 5 300 node scripts/playClubManager.mjs
+x-playEra2005: timeout -k 5 300 node scripts/playEra2005.mjs
+x-playEra2010: timeout -k 5 300 node scripts/playEra2010.mjs
+x-playEra2015: timeout -k 5 300 node scripts/playEra2015.mjs
+x-playEra2020: timeout -k 5 300 node scripts/playEra2020.mjs
+x-playFoHub: timeout -k 5 300 node scripts/playFoHub.mjs
+x-playGmPress: timeout -k 5 300 node scripts/playGmPress.mjs
+x-playGridCellGeometry: timeout -k 5 300 node scripts/playGridCellGeometry.mjs
+x-playIphone: timeout -k 5 300 node scripts/playIphone.mjs
+x-playLiveTicker: timeout -k 5 300 node scripts/playLiveTicker.mjs
+x-playNationJob: timeout -k 5 300 node scripts/playNationJob.mjs
+x-playNationalities: timeout -k 5 300 node scripts/playNationalities.mjs
+x-playReleaseClause: timeout -k 5 300 node scripts/playReleaseClause.mjs
+x-playSeasonReveal: timeout -k 5 300 node scripts/playSeasonReveal.mjs
+x-playSponsors: timeout -k 5 300 node scripts/playSponsors.mjs
+x-playStartingXi: timeout -k 5 300 node scripts/playStartingXi.mjs
+x-playWilderness: timeout -k 5 300 node scripts/playWilderness.mjs
