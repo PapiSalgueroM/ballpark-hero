@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+walk: mkdir -p .tmp-fx/font-cache && export FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache"; ENGINES=chromium TZ=UTC node scripts/playCmLeagueFixtures.mjs > /tmp/walk.log 2>&1; s=$?; cp /tmp/walk.log "$RC_OUT/walk.log"; grep -E "^FAIL" /tmp/walk.log | head -14 | cut -c1-300; tail -1 /tmp/walk.log | cut -c1-460; exit $s
+tree-clean: git status --short | grep -v "^?? .rc\|^?? dist\|^?? .tmp-fx" | head -5; echo "tracked files changed: $(git status --short | grep -vc '^??')"
