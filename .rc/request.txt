@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+# Round 1215: playClubManager three times under the draw counter.
+c-1: timeout -k 5 420 node --import ./.rc/x/drawcount.mjs scripts/playClubManager.mjs
+c-2: timeout -k 5 420 node --import ./.rc/x/drawcount.mjs scripts/playClubManager.mjs
+c-3: timeout -k 5 420 node --import ./.rc/x/drawcount.mjs scripts/playClubManager.mjs
