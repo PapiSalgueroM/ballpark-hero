@@ -1,0 +1,14 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+varlive: node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+varlive-control: CM_VAR_LIVE_CONTROL=on node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+save5: f=0; for i in 1 2 3 4 5; do node_modules/.bin/vitest run src/test/clubManagerSave.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/save-$i.log 2>&1 || f=$((f+1)); grep -E "Tests " /tmp/save-$i.log | tail -1; done; echo "clubManagerSave alone: $f of 5 runs red"; exit $f
+dailydeals: node scripts/simDailyDeals.mjs
+dailydeals-bind: DAILY_DEALS_CONTROL=bind node scripts/simDailyDeals.mjs
+dailydeals-binddeadline: DAILY_DEALS_CONTROL=binddeadline node scripts/simDailyDeals.mjs
+dailydeals-verify-as: git worktree add -f /tmp/base 54e3820a >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/base/node_modules; node scripts/simDailyDeals.mjs --root /tmp/base --print --verify
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simCmVar: node scripts/simCmVar.mjs
+vitest-cm: node_modules/.bin/vitest run src/test/managerHotSeat src/test/deadlineDay src/test/clubManagerHelp src/test/whatsNew --testTimeout=300000 --hookTimeout=120000 --passWithNoTests
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs

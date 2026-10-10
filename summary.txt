@@ -1,0 +1,14 @@
+varlive-control exit=1 6s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR ships dar
+varlive exit=0 6s |    Duration  4.90s (transform 2.23s, setup 83ms, collect 2.79s, tests 681ms, environment 458ms, prepare 196ms)
+dailydeals exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+dailydeals-bind exit=1 4s | simDailyDeals: CONTROL bind FIRED: its 5 Premier League dates went red (2026-10-27, 2026-11-14, 2027-01-19, 2027-01-30, 2027-02-06) and no other date moved
+dailydeals-binddeadline exit=1 4s | simDailyDeals: CONTROL binddeadline FIRED: its 3 Premier League dates went red (2026-10-18, 2026-11-01, 2026-11-09) and no other date moved
+dailydeals-verify-as exit=0 4s | simDailyDeals: the recorded deals ARE the deals of the source at /tmp/base (12 Hot Seat dates, 6 Deadline Day dates)
+save5 exit=0 30s | clubManagerSave alone: 0 of 5 runs red
+simDeadlineDay exit=0 6s | simDeadlineDay: green. The brief is real, the desk pays, the clock binds, the daily is one window a day, the budget holds, a Club Manager save keeps its registrations, ri
+simCmVar exit=0 28s | simCmVar normal: actual review outcomes and full prior baseline passed.
+vitest-cm exit=0 6s |    Duration  5.06s (transform 2.26s, setup 176ms, collect 5.00s, tests 1.81s, environment 1.00s, prepare 452ms)
+tsc exit=0 93s | 
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+simManagerHotSeat exit=0 79s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+simHarnessAnchors exit=0 35s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
