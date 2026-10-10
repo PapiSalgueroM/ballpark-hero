@@ -1,0 +1,36 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: the write when the page goes[2m > [22m[2mpagehide writes the career held in memory, with nothing else able to
+[22m[39m  after pagehide the disk holds 54100 bytes, memory 54100
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: the write when the page goes[2m > [22m[2mthe tab going hidden writes it too
+[22m[39m  after the tab went hidden the disk holds 54077 bytes, memory 54077
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: the write when the page goes[2m > [22m[2mtwo writes of one career are the same bytes
+[22m[39m  three writes, 54090 bytes each, identical
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: a refused write is said out loud[2m > [22m[2msaveFailed goes up when the store throws and comes down when a write lands
+[22m[39m  with a throwing store, saveFailed is true
+  with the store back, saveFailed is false and the disk matches memory: true
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: a refused write is said out loud[2m > [22m[2ma refused press on the transfer desk says why, and one that goes through clears it
+[22m[39m  second press on Serge Gnabry: "Serge Gnabry is already in your squad."
+  loan out again after the recall: "Christian Pulisic has already been out on loan once this season. One loan out a season."
+
+ [32m✓[39m src/test/clubManagerSaveSize.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 386[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerWorldEditor.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 464[2mms[22m[39m
+[90mstderr[2m | src/test/managerMatchPlans.test.tsx[2m > [22m[2mClub Manager saved match plans[2m > [22m[2mshows the worked example and current assignments then restores focus when the plan tile closes
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/managerMatchPlans.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 1717[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager saved match plans[2m > [22msaves applies and reloads the actual mounted tactics atomically through the real hook [33m 470[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager saved match plans[2m > [22mshows the worked example and current assignments then restores focus when the plan tile closes [33m 323[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerWorldEditorPage.test.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 1677[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager page: the world editor reaches the career[2m > [22mstarts Celtic in the Premier League after a swap made on the World editor tile [33m 1674[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m33 passed[39m[22m[90m (33)[39m
+[2m   Start at [22m 18:19:22
+[2m   Duration [22m 6.39s[2m (transform 2.73s, setup 302ms, collect 6.95s, tests 4.24s, environment 1.52s, prepare 616ms)[22m
+
