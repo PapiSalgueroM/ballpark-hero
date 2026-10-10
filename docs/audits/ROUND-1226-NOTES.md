@@ -164,6 +164,41 @@ from now on (the recipe in the header of `scripts/genCareerHallMarks.mjs`; it mo
 digest and the retired states of the board fixture again) or the band moved to the measured share with its
 headroom written beside it.
 
+**The second fix pass measured it so the lead can rule (the round branch itself is unchanged: still red at
+`marks`, calibration 2 and its ledger byte equal to the base).** Runner result `r1226-f2-a` on 573ea1ff:
+
+- The cause, to the byte. With the one number put back (84 to 82, the row and the formula of
+  `src/data/usSeasonLedgerNhl.ts`) the Hall harness's rows on this branch (one a career: position, seasons,
+  awards, every total, both legacy scores) are the base's rows on six seeds of six by sha256; the head itself
+  on none. On the present day fleet that harness plays, the round changes the season's length and nothing else.
+- Six runs each (the default seed, then SIM_SEED 1 to 5), 2,000 careers:
+
+| NHL | Default | 1 | 2 | 3 | 4 | 5 | Mean |
+|---|---|---|---|---|---|---|---|
+| at or over `from`, pooled, base 980654fa | 10.35 | 10.17 | 9.33 | 9.58 | 10.85 | 9.73 | 10.00 |
+| at or over `from`, pooled, head | 12.08 | 13.44 | 12.81 | 11.54 | 12.23 | 12.35 | 12.41 |
+| Hall share on calibration 2, base | 31.0 | 31.9 | 31.1 | 31.4 | 33.3 | 30.8 | 31.6 |
+| Hall share on calibration 2, head | 30.8 | 31.1 | 32.5 | 32.3 | 32.6 | 31.1 | 31.7 |
+| in the Hall on 2 and not on 1, of 2,000, base | 25 | 32 | 17 | 30 | 26 | 28 | 26 |
+| the same, head | 45 | 40 | 42 | 42 | 29 | 36 | 39 |
+
+  The Hall share does not move. What moves is the tripwire's own number (about one career in eight over a
+  standout mark where it was one in ten) and the careers the standout alone carries in (about 13 more of 2,000).
+- "The band moved" is three bands, not one: section 17 (a) also holds a cell band, and on the head it is
+  crossed on seeds 1, 2 and 4. By the generator's own recipe against the marks calibration 2 holds: a cell
+  6.13 to 14.38 becomes 6.06 to 20.69 (measured 8.5 to 18.3 over 72 cell runs), pooled `from` 8.59 to 11.89
+  becomes 10.59 to 14.39, pooled `to` 0.27 to 1.69 becomes 0.85 to 1.69.
+- That ruling is built and proven on a side branch that is NOT merged, `r1226-hall-ruling-b` (one commit on
+  573ea1ff, nothing under `src/`): the generator gains `MARKS_KEEP=<sport>` (the bands measured again, the marks
+  kept, the reason recorded in the ledger), the ledger's NHL bands are written by it, and the harness's 17 (a)
+  line says so. On it the default seed and SIM_SEED 1 to 11 are green and the controls `markdrift` and
+  `todrift` fire (`r1226-f2-b`).
+- A third way, with a live precedent (Round 1103, `nbaLegacyTableFor` in `src/lib/nbaMyCareer.ts`: the standout
+  marks follow the line the career was played on): the marks carried to the season's length the way the counts
+  are. A probe on the head's rows with a skater's marks times 84 over 82 reads 8.90, 10.60, 9.83, 8.92, 9.23
+  and 9.58 percent at or over `from`, inside the band calibration 2 already holds. It is a new rule a player
+  can see (and the digest and the board fixture move again), so it is a round of its own, not built here.
+
 **The awards of the seasons the round changes** (the review's finding: the first build handed a short season
 about twice the awards). The reviewer's own instrument, a natural fleet of 2,000 careers a position played
 to a target year, that one season then played from the same copy and stream by the base (82 or 162 games)
