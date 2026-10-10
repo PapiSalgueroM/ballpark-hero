@@ -1,0 +1,8 @@
+book-default-s0: node scripts/simCmLeagueBook.mjs
+c-wrongman: BOOK_CONTROL=wrongman node scripts/simCmLeagueBook.mjs
+c-unnamed: BOOK_CONTROL=unnamed node scripts/simCmLeagueBook.mjs
+c-offbyone: BOOK_CONTROL=offbyone node scripts/simCmLeagueBook.mjs
+c-penassistmine: BOOK_CONTROL=penassistmine node scripts/simCmLeagueBook.mjs
+c-assistbench: BOOK_CONTROL=assistbench node scripts/simCmLeagueBook.mjs
+c-keyindex: BOOK_CONTROL=keyindex node scripts/simCmLeagueBook.mjs
+anchors: node scripts/simHarnessAnchors.mjs

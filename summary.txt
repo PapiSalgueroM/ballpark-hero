@@ -1,0 +1,8 @@
+book-default-s0 exit=0 41s | simCmLeagueBook: green, 7 sections, 4 careers x 2 seasons (41s)
+c-wrongman exit=1 44s | simCmLeagueBook: CONTROL wrongman FIRED: section names went red (619 failures) and no other section did (44s)
+c-unnamed exit=1 45s | simCmLeagueBook: CONTROL unnamed FIRED: section names went red (350 failures) and no other section did (45s)
+c-penassistmine exit=1 41s | simCmLeagueBook: CONTROL penassistmine FIRED: section names went red (35 failures) and no other section did (41s)
+c-offbyone exit=1 45s | simCmLeagueBook: CONTROL offbyone FIRED: section names went red (240 failures) and no other section did (45s)
+c-assistbench exit=1 43s | simCmLeagueBook: CONTROL assistbench FIRED: section names went red (69 failures) and no other section did (43s)
+c-keyindex exit=1 35s | simCmLeagueBook: CONTROL keyindex FIRED: section shapes went red (1 failures) and no other section did (35s)
+anchors exit=0 41s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

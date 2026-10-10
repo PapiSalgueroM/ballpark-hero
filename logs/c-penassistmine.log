@@ -1,0 +1,45 @@
+simCmLeagueBook: 4 careers x 2 seasons (default fleet, seed set 0), CONTROL penassistmine
+stream  16 of 16 faces (the whole save but the book, and the count of draws) equal with the book taken out
+        wall time of the fleet: 6.6s with the book and this harness watching every entry, 5.5s with the book out and nothing watching
+        the book's own cost: 4 careers x 2 seasons took 6054ms with the book and 5061ms with it out (19.6% more)
+stream  base arm NOT RUN: set BOOK_BASE to a worktree of the base commit
+shapes  credited rival goals 5585: forwards 56.1%, midfielders 34.0%, defenders 9.8%, keepers 0 goals
+        between other clubs (5423 goals), dealt against the weight: ATT 2981 vs 2991.0 (z -0.27), MID 1773 vs 1755.4 (z 0.51), DEF 514 vs 527.4 (z -0.61)
+        clubs with an eleven: assists 3408 on 5506 credited goals = 0.619 a goal (the rule 0.614, z 0.81); own goals 161 of 5667 = 2.84% (the rule 2.75%, z 0.42); every club: 3408 assists on 5585 credited goals = 0.610 a goal
+        every goal its own roll: one man took every goal in 203 of 1547 matches a club with an eleven scored two or more in = 13.1% (the weight says 12.9%, z 0.22)
+        unnamed goals 2249 (club weeks with no named eleven: 1992); my league matches 312, reports whose lines did not add up to the score: 0
+        no named eleven in championship: 828 of 2116 club weeks, 9 of 26 rival clubs seen (Blackburn Rovers 7 men, 1 keepers; Bolton Wanderers 3 men, 0 keepers; Cardiff City 4 men, 1 keepers; Charlton Athletic 8 men, 1 keepers; Lincoln City 2 men, 0 keepers; Millwall 11 men, 0 keepers; ...)
+        no named eleven in bundesliga2: 1088 of 1156 club weeks, 17 of 19 rival clubs seen (Arminia Bielefeld 3 men, 1 keepers; Bochum 4 men, 0 keepers; Braunschweig 2 men, 1 keepers; Darmstadt 4 men, 0 keepers; Dynamo Dresden 1 men, 0 keepers; Elversberg 10 men, 1 keepers; ...)
+        no named eleven in laliga2010: 76 of 1444 club weeks, 1 of 19 rival clubs seen (Levante 10 men, 1 keepers)
+        top ten of the Goals board held by forwards and wingers: 9.13 on the book, 5.63 on the old race, rise 3.50 (floor 1.5) over 8 seasons
+names   20500 checks; 4 purchases probed of 4 saves kept (the best scorer of the rivals signed at week 22, twelve entries played on)
+        the book against the report of 312 league matches of mine: 347 goal lines, 317 naming a man of that club's roster (each on his row), 21 naming nobody its roster holds, 42 from the spot or a free kick, 163 assists (each by a man on their pitch); 0 matches not judged, the opponent played twice in the entry
+oldsave 763 checks: 4 saves with no book finished on the candidate and on the book out engine, the season after each, and five unreadable books
+doors   2439 checks: three takeovers and two joined jobs (season one and season three), the law at the handover and after every entry to the end of the season
+dailies 50 checks: 4 Hot Seat dates played to a verdict, handed over and played on, 3 Deadline Day dates, each state byte equal to the book out engine's
+boards  by league, the book against the old race on the same seasons (penalties and free kicks to the taker)
+        premier      20 clubs,  2 seasons: top scorer mean 26.0 (28 24), old race mean 30.0, most assists mean 11.5, leading keeper's clean sheets mean 16.0
+        championship 24 clubs,  2 seasons: top scorer mean 41.0 (39 43), old race mean 36.0, most assists mean 16.0, leading keeper's clean sheets mean 26.0
+        bundesliga2  18 clubs,  2 seasons: top scorer mean 29.0 (28 30), old race mean 27.5, most assists mean 10.0, leading keeper's clean sheets mean 17.0
+        laliga2010   20 clubs,  2 seasons: top scorer mean 32.0 (33 31), old race mean 35.5, most assists mean 14.0, leading keeper's clean sheets mean 22.0
+        38 game leagues: 4 seasons, top scorer mean 29.00, standard deviation 3.39, standard error 1.70; old race mean 32.75
+        34 game leagues: 2 seasons, top scorer mean 29.00, standard deviation 1.00, standard error 0.71; old race mean 27.50
+        46 game leagues: 2 seasons, top scorer mean 41.00, standard deviation 2.00, standard error 1.41; old race mean 36.00
+        the top scorer was a: ATT 8, MID 0, DEF 0 (of 8 seasons)
+        the old race on the same seasons: 5026 of 7998 rival goals given to anybody (62.8%), of those forwards 53.0%, midfielders 47.0%; the book names a man for 69.8% and marks 164 own goals and 2249 unnamed
+        a Clean sheets board of every man (keepers and defenders): its top ten holds men of 2.25 clubs and 2.13 keepers on average
+        a back four picked by clean sheets + goals + assists: 2.88 men of one club on average; by goals + assists (club clean sheets, then table place, to split): 1.88, with 0.00 of the four on no goal and no assist
+law     9537 checks over 342 entries of 4 careers, and 91 entries of 2 seasons with the video referee on (84 league matches of mine, 55 reviews, 0 reports whose lines did not add up to the score)
+green stream   16 checks
+green law      9537 checks
+RED   names    20500 checks, 35 failed
+        Everton (now, seed 4649) season 1 week 11: 4 assists for Arsenal on 3 goals that may carry one (1 from the spot or a free kick)
+        Everton (now, seed 4649) season 1 week 27: 3 assists for Leeds United on 2 goals that may carry one (1 from the spot or a free kick)
+        Everton (now, seed 4649) season 1 week 42: 2 assists for Tottenham on 1 goals that may carry one (1 from the spot or a free kick)
+        Everton (now, seed 4649) season 2 week 47: 1 assists for Middlesbrough on 0 goals that may carry one (1 from the spot or a free kick)
+        Everton (now, seed 4649) season 2 week 47: Jeremy Sarmiento of Middlesbrough is given 1 assist(s), and was on their pitch for 0 goal(s) he could have set up
+green shapes   8 checks
+green oldsave  763 checks
+green doors    2439 checks
+green dailies  50 checks
+simCmLeagueBook: CONTROL penassistmine FIRED: section names went red (35 failures) and no other section did (41s)
