@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+weight-branch: ENGINES=chromium SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/wb.log 2>&1; s=$?; grep -E "footle|FAIL" /tmp/wb.log | cut -c1-200; tail -1 /tmp/wb.log; exit $s
+weight-attr: git checkout faf0a5f3e4bdce3d7ca0f1350911f4e20c0903b2 -- src/pages/Footle.tsx && npm run build > /tmp/battr.log 2>&1 && ENGINES=chromium SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/wa.log 2>&1; s=$?; grep -E "footle|FAIL" /tmp/wa.log | cut -c1-200; tail -1 /tmp/wa.log; git checkout -q HEAD -- src; exit $s
+clean: git diff --quiet HEAD -- src scripts && echo "tree back at head"
