@@ -1,0 +1,11 @@
+#!playwright
+#!serial
+# Round 1215 step (a): the same readings on origin/release-at-int (Release AT, the tree Round 1216 is built on).
+# The tree is laid over this checkout (src, scripts, public, index.html: nothing else differs but workflows).
+overlay: git checkout origin/release-at-int -- src scripts public index.html && git rev-parse origin/release-at-int && ls scripts/play*.mjs | wc -l
+build-at: npm run build 2>&1 | tail -4
+walk-at: node scripts/playLiveMatchFit.mjs
+walk-at-2: node scripts/playLiveMatchFit.mjs
+bundle-at: LIVE_MOTION_ONLY=bundle node scripts/simLiveSimMotion.mjs
+motion-at: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx --testTimeout=300000 --hookTimeout=120000
+weight-at: (node scripts/lib/hostLikeServer.mjs dist 4173 > /dev/null 2>&1 &) ; sleep 4; SWEEP_OFFLINE=1 BASE=http://localhost:4173 node scripts/sweepWeight.mjs
