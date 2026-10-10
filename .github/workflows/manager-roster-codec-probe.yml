@@ -11,6 +11,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -20,7 +22,7 @@ jobs:
         run: |
           git rev-parse HEAD > source-head.txt
           git rev-parse HEAD^{tree} > source-tree.txt
-          sha256sum scripts/qa/managerRosterCodecProbe.mjs .github/workflows/manager-roster-codec-probe.yml package.json package-lock.json > sources-before.txt
+          sha256sum scripts/qa/managerRosterCodecProbe.mjs scripts/qa/managerWorldSizeDiagnostic.mjs scripts/qa/managerWorldRosterDigest.cjs .github/workflows/manager-roster-codec-probe.yml package.json package-lock.json > sources-before.txt
           npm ci --ignore-scripts --no-audit --no-fund
           curl --fail --location --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/11680328655/zip -o source-artifact.zip
           python3 - <<'PY'
@@ -31,7 +33,7 @@ jobs:
           root = pathlib.Path('observations').resolve()
           with zipfile.ZipFile(source) as archive:
               for item in archive.infolist():
-                  if not item.filename.startswith('current/simClubManager') or not (item.filename.endswith('.json.gz') or item.filename.endswith('/observer.json')):
+                  if not item.filename.startswith('current/simClubManager') or not (item.filename.startswith('current/simClubManagerSlots.mjs/') or item.filename.endswith('.json.gz') or item.filename.endswith('/observer.json')):
                       continue
                   target = (root / item.filename).resolve()
                   assert target.is_relative_to(root)
@@ -40,12 +42,17 @@ jobs:
           PY
       - name: Compare exact full JSON round trips and actual budgets
         run: node scripts/qa/managerRosterCodecProbe.mjs observations
+      - name: Compare complete decoded historical digests with effective fault and undo
+        env:
+          MANAGER_DIGEST_CONTROL_INPUT: observations/current/simClubManagerSlots.mjs
+          MANAGER_SIZE_DIAGNOSTICS: digest-probe
+        run: node scripts/qa/managerWorldSizeDiagnostic.mjs
       - name: Hold source and package bytes
         if: always()
         run: |
-          sha256sum scripts/qa/managerRosterCodecProbe.mjs .github/workflows/manager-roster-codec-probe.yml package.json package-lock.json > sources-after.txt
+          sha256sum scripts/qa/managerRosterCodecProbe.mjs scripts/qa/managerWorldSizeDiagnostic.mjs scripts/qa/managerWorldRosterDigest.cjs .github/workflows/manager-roster-codec-probe.yml package.json package-lock.json > sources-after.txt
           cmp sources-before.txt sources-after.txt
-          git diff --exit-code HEAD -- scripts/qa/managerRosterCodecProbe.mjs .github/workflows/manager-roster-codec-probe.yml package.json package-lock.json
+          git diff --exit-code HEAD -- scripts/qa/managerRosterCodecProbe.mjs scripts/qa/managerWorldSizeDiagnostic.mjs scripts/qa/managerWorldRosterDigest.cjs .github/workflows/manager-roster-codec-probe.yml package.json package-lock.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -56,4 +63,5 @@ jobs:
             source-tree.txt
             sources-before.txt
             sources-after.txt
+            digest-probe/
           retention-days: 5
