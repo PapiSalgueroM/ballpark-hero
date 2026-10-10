@@ -1,0 +1,9 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+depth exit=0 9s | playSoccerCareerDepth: 80 checks, 0 failed
+play-career exit=0 54s | Played 1 games. 0 findings, 0 the harness could not drive.
+play-nfl exit=0 52s | Played 1 games. 0 findings, 0 the harness could not drive.
+simHarnessAnchors exit=0 30s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 10s | No rival product names found. 0 findings.
+simStorageWrites exit=0 1s | simStorageWrites: all green (owed: 12)
+weight exit=0 27s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
