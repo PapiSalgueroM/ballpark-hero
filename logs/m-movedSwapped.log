@@ -1,0 +1,11 @@
+rmut movedSwapped: applied to src/lib/gmLotteryNight.ts
+  FAIL: league 0: a tile's club, seed or move is not what the saved order holds
+  FAIL: league 1: a tile's club, seed or move is not what the saved order holds
+  FAIL: league 2: a tile's club, seed or move is not what the saved order holds
+  FAIL: league 3: a tile's club, seed or move is not what the saved order holds
+simGmDraftOrder: 600 FAILURES, by section 7: 600.
+[41m[1m FAIL [22m[49m src/lib/gmLotteryNight.test.ts[2m > [22mlottery night[2m > [22mturns over every lottery club once, the last slot first and the first pick last
+[31m[1mAssertionError[22m: expected 2 to be -2 // Object.is equality[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmLotteryNight.test.ts,title=src/lib/gmLotteryNight.test.ts > lottery night > turns over every lottery club once%2C the last slot first and the first pick last,line=35,column=25::AssertionError: expected 2 to be -2 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- -2%0A+ 2%0A%0A ❯ src/lib/gmLotteryNight.test.ts:35:25%0A%0A
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m67 passed[39m[22m[90m (68)[39m
+MUT movedSwapped sim=1 vitest=1 KILLED

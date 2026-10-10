@@ -1,0 +1,14 @@
+rmut consumeSkipped: applied to src/lib/gmDraftNight.ts
+  FAIL: night 0: a club did not sign one man a pick it held
+  FAIL: night 1: a club did not sign one man a pick it held
+  FAIL: night 2: a club did not sign one man a pick it held
+  FAIL: night 3: a club did not sign one man a pick it held
+simGmDraftOrder: 400 FAILURES, by section 10: 400.
+[41m[1m FAIL [22m[49m src/lib/gmDraftNight.test.ts[2m > [22mthe night, played through a host[2m > [22mputs him on the clock with exactly the men ahead of him gone, twice, and uses every slot once
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/lib/gmDraftNight.test.ts[2m > [22mthe night, played through a host[2m > [22mlets a slot pass when the club holds no marker or the class is empty, and still ends
+[31m[1mAssertionError[22m: expected 11 to be 10 // Object.is equality[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmDraftNight.test.ts,title=src/lib/gmDraftNight.test.ts > the night%2C played through a host > puts him on the clock with exactly the men ahead of him gone%2C twice%2C and uses every slot once,line=133,column=70::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/lib/gmDraftNight.test.ts:133:70%0A%0A
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmDraftNight.test.ts,title=src/lib/gmDraftNight.test.ts > the night%2C played through a host > lets a slot pass when the club holds no marker or the class is empty%2C and still ends,line=208,column=30::AssertionError: expected 11 to be 10 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 10%0A+ 11%0A%0A ❯ src/lib/gmDraftNight.test.ts:208:30%0A%0A
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m66 passed[39m[22m[90m (68)[39m
+MUT consumeSkipped sim=1 vitest=1 KILLED

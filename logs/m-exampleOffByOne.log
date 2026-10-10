@@ -1,0 +1,15 @@
+rmut exampleOffByOne: applied to src/lib/gmLotteryNight.ts
+  FAIL: nba: the worked example does not print the 4 drawn picks and the floor ("The worst record's chance at the first pick is 14%. The best record in the lottery gets 0.5%. 4 picks are drawn, so the worst record can be passed 4 times at most and picks no lower than 4th.")
+  FAIL: the worked example on the card is not the NBA table's
+simGmDraftOrder: 2 FAILURES, by section 8: 2.
+simGmDraftOrder: 2 FAILURES, by section 8: 2.
+[41m[1m FAIL [22m[49m src/lib/gmLotteryNight.test.ts[2m > [22mthe rules behind the "?"[2m > [22mbuilds the league block from the table, keeps the game block apart, and computes the example
+[31m[1mAssertionError[22m: expected [ …(2) ] to deeply equal [ …(2) ][39m
+[41m[1m FAIL [22m[49m src/lib/gmLotteryNight.test.ts[2m > [22mthe rules behind the "?"[2m > [22mcomputes the example from whatever table it is handed
+[31m[1mAssertionError[22m: expected 'One pick is drawn, so the worst recor…' to be 'One pick is drawn, so the worst recor…' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/components/front-office-shared/GmLotteryCard.test.tsx[2m > [22mGmLotteryCard[2m > [22mkeeps the rules one tap away inside its own box: the league, the game, a worked example
+[31m[1mAssertionError[22m: picks no lower than 5th: expected 'The league\'s rule14 clubs are in the…' to contain 'picks no lower than 5th'[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmLotteryNight.test.ts,title=src/lib/gmLotteryNight.test.ts > the rules behind the "?" > builds the league block from the table%2C keeps the game block apart%2C and computes the example,line=107,column=29::AssertionError: expected [ …(2) ] to deeply equal [ …(2) ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A    "The worst record's chance at the first pick is 14%25. The best record in the lottery gets 0.5%25.",%0A-   "4 picks are drawn, so the worst record can be passed 4 times at most and picks no lower than 5th.",%0A+   "4 picks are drawn, so the worst record can be passed 4 times at most and picks no lower than 4th.",%0A  ]%0A%0A ❯ src/lib/gmLotteryNight.test.ts:107:29%0A%0A
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmLotteryNight.test.ts,title=src/lib/gmLotteryNight.test.ts > the rules behind the "?" > computes the example from whatever table it is handed,line=119,column=8::AssertionError: expected 'One pick is drawn, so the worst recor…' to be 'One pick is drawn, so the worst recor…' // Object.is equality%0A%0AExpected: "One pick is drawn, so the worst record can be passed once at most and picks no lower than 2nd."%0AReceived: "One pick is drawn, so the worst record can be passed once at most and picks no lower than 1st."%0A%0A ❯ src/lib/gmLotteryNight.test.ts:119:8%0A%0A
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m65 passed[39m[22m[90m (68)[39m
+MUT exampleOffByOne sim=1 vitest=1 KILLED

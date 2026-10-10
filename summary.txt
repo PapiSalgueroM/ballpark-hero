@@ -1,0 +1,12 @@
+m-base exit=0 9s | MUT NONE sim=0 vitest=0 SURVIVED
+m-movedSwapped exit=0 9s | MUT movedSwapped sim=1 vitest=1 KILLED
+m-headlineSwapped exit=0 9s | MUT headlineSwapped sim=0 vitest=1 KILLED
+m-exampleOffByOne exit=0 9s | MUT exampleOffByOne sim=1 vitest=1 KILLED
+m-lotteryNightSeedOrder exit=0 9s | MUT lotteryNightSeedOrder sim=1 vitest=1 KILLED
+m-userOutOfTurn exit=0 9s | MUT userOutOfTurn sim=0 vitest=1 KILLED
+m-staleYear exit=0 9s | MUT staleYear sim=1 vitest=1 KILLED
+m-consumeSkipped exit=0 9s | MUT consumeSkipped sim=1 vitest=1 KILLED
+m-poolNotShrunk exit=0 9s | MUT poolNotShrunk sim=1 vitest=1 KILLED
+m-staffNotMine exit=0 9s | MUT staffNotMine sim=0 vitest=1 KILLED
+m-madeBeyondSlots exit=0 9s | MUT madeBeyondSlots sim=1 vitest=1 KILLED
+clean exit=0 0s | tracked changes above (none expected)

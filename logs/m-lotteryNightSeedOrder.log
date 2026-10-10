@@ -1,0 +1,14 @@
+rmut lotteryNightSeedOrder: applied to src/lib/gmLotteryNight.ts
+  FAIL: league 0: a tile's club, seed or move is not what the saved order holds
+  FAIL: league 1: a tile's club, seed or move is not what the saved order holds
+  FAIL: league 2: a tile's club, seed or move is not what the saved order holds
+  FAIL: league 3: a tile's club, seed or move is not what the saved order holds
+simGmDraftOrder: 600 FAILURES, by section 7: 600.
+[41m[1m FAIL [22m[49m src/lib/gmLotteryNight.test.ts[2m > [22mlottery night[2m > [22mturns over every lottery club once, the last slot first and the first pick last
+[31m[1mAssertionError[22m: expected 'The C09' to be 'The C07' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/components/front-office-shared/GmLotteryCard.test.tsx[2m > [22mGmLotteryCard[2m > [22mdraws the saved night: fourteen tiles, his marked, the rule line off the table, where his club landed
+[31m[1mAssertionError[22m: expected '11Club C01Seed 1 · Held' to contain 'Club C04'[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmLotteryNight.test.ts,title=src/lib/gmLotteryNight.test.ts > lottery night > turns over every lottery club once%2C the last slot first and the first pick last,line=33,column=25::AssertionError: expected 'The C09' to be 'The C07' // Object.is equality%0A%0AExpected: "The C07"%0AReceived: "The C09"%0A%0A ❯ src/lib/gmLotteryNight.test.ts:33:25%0A%0A
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmLotteryCard.test.tsx,title=src/components/front-office-shared/GmLotteryCard.test.tsx > GmLotteryCard > draws the saved night%3A fourteen tiles%2C his marked%2C the rule line off the table%2C where his club landed,line=27,column=51::AssertionError: expected '11Club C01Seed 1 · Held' to contain 'Club C04'%0A%0AExpected: "Club C04"%0AReceived: "11Club C01Seed 1 · Held"%0A%0A ❯ forEach src/components/front-office-shared/GmLotteryCard.test.tsx:27:51%0A ❯ src/components/front-office-shared/GmLotteryCard.test.tsx:27:11%0A%0A
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m66 passed[39m[22m[90m (68)[39m
+MUT lotteryNightSeedOrder sim=1 vitest=1 KILLED

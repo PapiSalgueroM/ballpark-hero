@@ -1,0 +1,7 @@
+rmut headlineSwapped: applied to src/lib/gmLotteryNight.ts
+simGmDraftOrder: green. 512050 checks over 10 sections: the order is the league's, the lottery is drawn once on its own stream and saved, and nothing mounts the lift yet.
+[41m[1m FAIL [22m[49m src/lib/gmLotteryNight.test.ts[2m > [22mlottery night[2m > [22msays where his club landed in words about a club and a slot, each kind of move
+[31m[1mAssertionError[22m: expected 'Your club lands 2nd, up 1 place.' to be 'Your club lands 2nd, down 1 place.' // Object.is equality[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmLotteryNight.test.ts,title=src/lib/gmLotteryNight.test.ts > lottery night > says where his club landed in words about a club and a slot%2C each kind of move,line=57,column=33::AssertionError: expected 'Your club lands 2nd, up 1 place.' to be 'Your club lands 2nd, down 1 place.' // Object.is equality%0A%0AExpected: "Your club lands 2nd, down 1 place."%0AReceived: "Your club lands 2nd, up 1 place."%0A%0A ❯ src/lib/gmLotteryNight.test.ts:57:33%0A%0A
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m67 passed[39m[22m[90m (68)[39m
+MUT headlineSwapped sim=0 vitest=1 KILLED

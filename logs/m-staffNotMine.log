@@ -1,0 +1,7 @@
+rmut staffNotMine: applied to src/lib/gmDraftNight.ts
+simGmDraftOrder: green. 512050 checks over 10 sections: the order is the league's, the lottery is drawn once on its own stream and saved, and nothing mounts the lift yet.
+[41m[1m FAIL [22m[49m src/lib/gmDraftNight.test.ts[2m > [22mthe night, played through a host[2m > [22mlets the staff make every pick he has left, flags them his, and draws nothing
+[31m[1mAssertionError[22m: expected [] to deeply equal [ 12, 42 ][39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmDraftNight.test.ts,title=src/lib/gmDraftNight.test.ts > the night%2C played through a host > lets the staff make every pick he has left%2C flags them his%2C and draws nothing,line=230,column=63::AssertionError: expected [] to deeply equal [ 12, 42 ]%0A%0A- Expected%0A+ Received%0A%0A- [%0A-   12,%0A-   42,%0A- ]%0A+ []%0A%0A ❯ src/lib/gmDraftNight.test.ts:230:63%0A%0A
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m67 passed[39m[22m[90m (68)[39m
+MUT staffNotMine sim=0 vitest=1 KILLED

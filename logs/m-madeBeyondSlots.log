@@ -1,0 +1,9 @@
+rmut madeBeyondSlots: applied to src/lib/gmDraftNight.ts
+  FAIL: a saved night with the cursor past the last slot was accepted
+simGmDraftOrder: 1 FAILURES, by section 6: 1.
+simGmDraftOrder: 1 FAILURES, by section 6: 1.
+[41m[1m FAIL [22m[49m src/lib/gmDraftNight.test.ts[2m > [22ma saved night is trusted only whole[2m > [22mrefuses another year and every corruption
+[31m[1mAssertionError[22m: expected true to be false // Object.is equality[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmDraftNight.test.ts,title=src/lib/gmDraftNight.test.ts > a saved night is trusted only whole > refuses another year and every corruption,line=98,column=40::AssertionError: expected true to be false // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- false%0A+ true%0A%0A ❯ src/lib/gmDraftNight.test.ts:98:40%0A%0A
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m67 passed[39m[22m[90m (68)[39m
+MUT madeBeyondSlots sim=1 vitest=1 KILLED
