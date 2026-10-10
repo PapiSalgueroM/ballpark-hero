@@ -48,6 +48,11 @@ import { ownGoalRole, ownGoalTagged } from '@/lib/ownGoalRule';
 import { keyedRng } from '@/lib/keyedRng';
 /* Round 1229: the one scorer weight table. It imports a type and nothing else, so there is no cycle. */
 import { goalWeight, ASSIST_SHARE } from '@/lib/clubManagerGoalWeight';
+/* Round 1229: the league book, pure. It imports the keyed generator, the own goal rule and the weight table. */
+import {
+  bookSalt, creditAssist, creditCleanSheet, creditDeal, creditGoal, creditMine, creditOwnGoal, dealAssist, dealGoals,
+  liveBook, openBook, readBook, type BookRules, type LeagueBook,
+} from '@/lib/clubManagerLeagueBook';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
 // from the Transfermarkt style market value data in Supabase. The bake file
@@ -308,6 +313,142 @@ function creditRaceGoals(state: CareerState, club: string, goals: number): void 
     if (r < RACE_TOP_SHARE) men[0].goals += 1;
     else if (r < RACE_TOP_SHARE + RACE_SECOND_SHARE && men[1]) men[1].goals += 1;
   }
+}
+
+/* ---------- Round 1229: the league keeps its book ---------- */
+/*
+ * The race above tracks two men a club on fixed shares, leaves a third of every rival club's goals with
+ * nobody, and never hears of a rival's goals against me. The book (src/lib/clubManagerLeagueBook.ts)
+ * writes every rival goal of the league season down against a named man of that club's eleven, by the
+ * weight my own squad is shared out by, with assists and clean sheets, at the moment the result is known.
+ *
+ * Three things hold, and scripts/simCmLeagueBook.mjs holds them:
+ *  - THE MATCH STREAM DOES NOT MOVE. The race above is left exactly as it was, draws and all, and stays
+ *    what every screen and award reads until the round that reads the book. Every roll the book makes is
+ *    keyed on the match and the goal (keyedRng), never Math.random.
+ *  - THE FIRST LAW. For every rival club at every moment: the goals on its rows + its own goals + its
+ *    unnamed goals = its goals for in the league table. Each applyResult of a league round has one note
+ *    call beside it (noteBookResult for two other clubs, noteBookMine for my match).
+ *  - A BOOK IS A WHOLE SEASON OR NOTHING. It opens where a season starts and nowhere else. A save in mid
+ *    season with no book (an old save, a hot seat run handed over) finishes the season without one.
+ */
+
+/** A rival's penalties and direct free kicks go to the taker of its eleven (takerOf), the man the engine
+ *  already names when a review awards the opposition a penalty against me. My own squad's rule is the
+ *  same idea with an assigned taker (markSetPieceGoals). False deals them by the weight like any goal. */
+export const CM_BOOK_TAKER = true;
+
+const bookStampOf = (season: number, leagueId: string): string => `${season}|${leagueId}`;
+
+/** Opens the book of the season that is starting. Called by startCareer and startNextSeason only. */
+function openLeagueBook(state: CareerState): void {
+  state.leagueBook = openBook(bookStampOf(state.season, careerLeagueOf(state).id), bookSalt(state.leagueClubs));
+}
+
+/** The book of the season in play, or null: no book, a damaged one, or another season's. The full shape
+ *  walk, for a reader; the match week asks liveBook instead (a stamp check). */
+export function leagueBookOf(state: CareerState): LeagueBook | null {
+  return readBook(state.leagueBook, bookStampOf(state.season, careerLeagueOf(state).id));
+}
+
+/**
+ * The job you join today (joinClubNow) plays the new club's run-in as a fresh season one career and then
+ * takes the number of the season you were in. The book that run-in filled is whole and lawful, so it is
+ * carried under the new number rather than read as last season's and dropped. A `from` with no good
+ * book leaves `to` with none.
+ */
+export function carryLeagueBook(from: CareerState, to: CareerState): void {
+  const book = leagueBookOf(from);
+  if (book) to.leagueBook = { ...book, s: bookStampOf(to.season, careerLeagueOf(to).id) };
+  else delete to.leagueBook;
+}
+
+/** The eleven the book deals a rival's goals over this week: the one the Match Centre and the viewer
+ *  already show, minus any man now in my squad. Null for a club that cannot field a named eleven. */
+export function leagueBookEleven(state: CareerState, club: string, mine: ReadonlySet<string> = mySquadNames(state)): OppXiLine[] | null {
+  return pickOppSquad(oppRosterFor(state, club, mine))?.xi ?? null;
+}
+
+/* Built per call, never at module scope: the shares are constants declared far below. */
+const bookRules = (): BookRules => ({
+  pen: PENALTY_GOAL_SHARE, fk: FREE_KICK_GOAL_SHARE, ownGoalOneIn: CM_OWN_GOAL_ONE_IN, assist: ASSIST_SHARE, taker: CM_BOOK_TAKER,
+});
+
+/** One match of one round, as a key. The club, the season, the round and the pair are unique inside a
+ *  save; the salt (the league's own saved order) tells two careers at one club apart. */
+const bookMatchKey = (state: CareerState, book: LeagueBook, leagueId: string, round: number, home: string, away: string, hg: number, ag: number): string =>
+  `cmbook|${state.eraId ?? 'now'}|${state.clubName}|${book.k}|${state.season}|${leagueId}|${round}|${home}|${away}|${hg}-${ag}`;
+
+const bookKeeper = (xi: OppXiLine[]): OppXiLine | null => xi.find(p => p.p === 'GK') ?? null;
+const bookBacks = (xi: OppXiLine[]): OppXiLine[] => xi.filter(p => groupOf(p.p) === 'DEF');
+/** A man by name: the outfield one first, so a keeper who shares a scorer's name never takes his goal. */
+const bookNamed = <T extends { n: string; p: Position }>(men: readonly T[], name: string): T | null =>
+  men.find(p => p.n === name && p.p !== 'GK') ?? men.find(p => p.n === name) ?? null;
+
+/** One side of a match between two other clubs: its goals dealt over its eleven, and its clean sheet. */
+function noteBookSide(state: CareerState, book: LeagueBook, key: string, club: string, goals: number, against: number, mine: ReadonlySet<string>): void {
+  const xi = leagueBookEleven(state, club, mine);
+  if (!xi) {
+    /* Nobody to name: counted, never invented. */
+    for (let i = 0; i < goals; i++) creditGoal(book, club, null);
+    return;
+  }
+  if (goals > 0) creditDeal(book, club, dealGoals(key, goals, xi, bookRules()));
+  if (against === 0) creditCleanSheet(book, club, bookKeeper(xi), bookBacks(xi));
+}
+
+/** A league result between two other clubs goes into the book. Nothing happens on a save with no book. */
+function noteBookResult(state: CareerState, leagueId: string, round: number, home: string, away: string, hg: number, ag: number): void {
+  const book = liveBook(state.leagueBook, bookStampOf(state.season, leagueId));
+  if (!book) return;
+  const mine = mySquadNames(state);
+  const key = bookMatchKey(state, book, leagueId, round, home, away, hg, ag);
+  noteBookSide(state, book, `${key}|h`, home, hg, ag, mine);
+  noteBookSide(state, book, `${key}|a`, away, ag, hg, mine);
+}
+
+/**
+ * MY league match goes into the book. Their scorers are NOT dealt again: the report already named them
+ * (oppScorers, the lines the viewer and the report print), so each line is credited to the man it names
+ * and the book can never disagree with a report. A line marked as an own goal (one of mine put it in) is
+ * nobody's. A name is looked for among their men on the pitch at that minute, then their eleven and
+ * bench, then their roster (a side with no named eleven is reported off its roster); a name found
+ * nowhere (a shirt number line) is counted unnamed. The report names no assist for their goals, so the
+ * book deals one on its own key over the men who were on their pitch, never for a goal from the spot or
+ * a direct free kick. A clean sheet goes to their starting keeper and back line when I did not score,
+ * and to my keeper and defenders who played (the squad's own rule) when they did not.
+ */
+function noteBookMine(
+  state: CareerState, leagueId: string, round: number, fx: MyFixture, live: LiveMatch,
+  played: CMPlayer[], myGoals: number, oppGoals: number, oppScorers: ScorerLine[],
+): void {
+  const book = liveBook(state.leagueBook, bookStampOf(state.season, leagueId));
+  if (!book) return;
+  const opp = fx.opponent;
+  const home = fx.home ? state.clubName : opp;
+  const away = fx.home ? opp : state.clubName;
+  const key = `${bookMatchKey(state, book, leagueId, round, home, away, fx.home ? myGoals : oppGoals, fx.home ? oppGoals : myGoals)}|mine`;
+  const theirs: OppXiLine[] = [...(live.oppXi ?? []), ...(live.oppBench ?? [])];
+  const rules = bookRules();
+  let roster: ProjectedPlayer[] | null = null;
+  /* Never more credits than the table holds, and never fewer: a line short is counted unnamed below. */
+  const lines = oppScorers.slice(0, oppGoals);
+  lines.forEach((line, i) => {
+    if (line.og) { creditOwnGoal(book, opp); return; }
+    const there = oppAt(live, line.minute) ?? [];
+    let man: OppXiLine | null = bookNamed(there, line.name) ?? bookNamed(theirs, line.name);
+    if (!man) {
+      roster ??= oppRosterFor(state, opp);
+      const p = bookNamed(roster, line.name);
+      man = p ? { n: p.n, p: p.p, r: p.r, ...(p.g ? { g: true } : {}) } : null;
+    }
+    if (!creditGoal(book, opp, man) || !man || line.penalty || line.freeKick) return;
+    const assist = dealAssist(`${key}|${i}`, man, there, rules);
+    if (assist) creditAssist(book, opp, assist);
+  });
+  for (let i = lines.length; i < oppGoals; i++) creditGoal(book, opp, null);
+  if (myGoals === 0 && live.oppXi) creditCleanSheet(book, opp, bookKeeper(live.oppXi), bookBacks(live.oppXi));
+  if (oppGoals === 0) creditMine(book, played.filter(p => p.position === 'GK' || groupOf(p.position) === 'DEF').map(p => p.id));
 }
 
 /**
@@ -2231,6 +2372,14 @@ export interface CareerState {
   transferLog?: TransferNews[];
   /** Round 73: this season's played fixtures, newest last, capped at 60. */
   resultLog?: ResultLogEntry[];
+  /** Round 1229: the league book of the season in play: every rival's league goals, assists and clean
+   *  sheets by man, and my men's league clean sheets. Opened where a season starts (startCareer,
+   *  startNextSeason) and replaced every summer, so it never grows season over season. Absent on a save
+   *  whose season began before the round, on a daily, and on a hot seat run handed over: those play the
+   *  season out without one and get theirs at the next season start, never a rebuilt one. Read it
+   *  through leagueBookOf, which reads a damaged or stale book as none. Nothing reads it for a screen
+   *  yet: the old race (scorerRace) is still what the board and the awards show. */
+  leagueBook?: LeagueBook;
   /** Round 73: player messages, newest first, capped at 8. */
   inbox?: PlayerMessage[];
   /** Round 979: the decisions desk (red card appeals and situations), newest
@@ -16081,6 +16230,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
         const ag = fx.home ? oppGoals : myGoals;
         applyResult(state.table, h, a, hg, ag);
         notePair(state, myLeagueId, h, a, hg, ag);
+        noteBookMine(state, myLeagueId, entry.round, fx, live, xi, myGoals, oppGoals, oppScorers);
         /* My own form entry is written once, below, for every competition. */
       } else {
         const [hg, ag] = simAiMatch(state, h, a);
@@ -16089,6 +16239,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
         noteForm(state, h, a, hg, ag);
         creditRaceGoals(state, h, hg);
         creditRaceGoals(state, a, ag);
+        noteBookResult(state, myLeagueId, entry.round, h, a, hg, ag);
         otherResults.push({ home: h, away: a, hg, ag });
       }
     }
@@ -17534,6 +17685,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   state.uclWorld = initUclWorld(state);
   // Round 165: the golden boot race starts at zero with the season.
   state.scorerRace = initScorerRace(state);
+  openLeagueBook(state);
   // Round 832: and a league with no domestic cup draws none.
   if (league.cupName !== null) {
     state.cupBracket = buildCupBracket(state);
@@ -17663,6 +17815,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
           noteForm(state, h, a, hg, ag);
           creditRaceGoals(state, h, hg);
           creditRaceGoals(state, a, ag);
+          noteBookResult(state, myLeagueId, entry.round, h, a, hg, ag);
         }
         syncWorld(state, myRoundsPlayed(state, state.week + 1));
       }
@@ -19936,6 +20089,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   state.uclWorld = initUclWorld(state);
   // Round 165: a fresh golden boot race too (the new table is all zeros).
   state.scorerRace = initScorerRace(state);
+  openLeagueBook(state);
   // Round 168: last season's phone calls do not follow you into the new one.
   state.approach = null;
   state.pendingMove = null;

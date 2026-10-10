@@ -346,6 +346,10 @@ export function startDeadlineDay(setup: DeadlineSetup): DeadlineRun {
        managerHotSeat.ts). Deadline Day plays no match, so the key was inert here; it comes off so the
        day's state is the shape it was before Round 1184. scripts/simDailyDeals.mjs holds it. */
     delete state0.realLeagueFixtures;
+    /* Round 1229: nor a league book (startCareer opens one for every new career). Deadline Day plays no
+       match, so it would only ever be an empty block in the day's state; it comes off so the state is
+       the shape it was. scripts/simCmLeagueBook.mjs (section dailies) holds it. */
+    delete state0.leagueBook;
     const rng = mulberry32(mixSeed(setup.seed, SEED_BRIEF));
     const count = rng() < 0.5 ? 3 : 4;
     const market = buildMarket(state0);

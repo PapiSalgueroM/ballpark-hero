@@ -482,6 +482,13 @@ function startOnStaticWorld(setup: HotSeatSetup): HotSeatRun {
      career handed to Club Manager (handoverState) says generated fixtures, which is how the day was
      played. scripts/simDailyDeals.mjs holds the deals and its bind control puts this line back out. */
   delete s.realLeagueFixtures;
+  /* Round 1229: and a hot seat day keeps no league book. startCareer above opens one for every new
+     career; it comes off here, before the first week is played, so the day's state and its saved bytes
+     are what they were, and the engine writes nothing into a save that has none. The career handed to
+     Club Manager (handoverState) is then a season in flight with no book, exactly like a save from
+     before the round: it finishes the season on the old race and opens its book at the next season
+     start. scripts/simCmLeagueBook.mjs (section dailies) holds this, and its control puts the line out. */
+  delete s.leagueBook;
   const rounds = leagueRounds(s);
   const lastWeek = Math.max(HOT_SEAT_TAKEOVER_MIN, Math.min(HOT_SEAT_TAKEOVER_MAX, rounds - HOT_SEAT_LEASH - 1));
   let best: { state: CareerState; formPts: number; week: number } | null = null;

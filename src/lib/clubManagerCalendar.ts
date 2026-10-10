@@ -30,6 +30,8 @@ import {
   cupProgressRank, uclProgressRank, objectiveStatuses,
   /* Round 783: the mid season takeover an accepted application walks into. */
   startCareer, interimManagerName,
+  /* Round 1229: the league book of the run-in, carried under the season you were in. */
+  carryLeagueBook,
 } from '@/lib/clubManager';
 import type { CareerState, CalendarEntry, Competition, FormResult, MatchWeekReport, PlayerMessage } from '@/lib/clubManager';
 import { CM_BASE_YEAR, DEFAULT_ERA_ID, eraById, isHistoricEra } from '@/lib/clubManagerEras';
@@ -979,6 +981,10 @@ export function joinClubNow(career: CareerState): CareerState | null {
   delete joined.customClub;
   delete joined.customValues;
   delete joined.founderWageRoom;
+  /* Round 1229: the run-in was played as a season one career, so its league book is stamped season 1.
+     It is whole (every round of the new club's league so far is in it), so it takes this season's
+     number here; left alone it would read as last season's from season two on and be dropped. */
+  carryLeagueBook(s, joined);
   return joined;
 }
 
