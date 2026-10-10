@@ -1,0 +1,13 @@
+simLiveScores: node scripts/simLiveScores.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simGmSeat: node scripts/simGmSeat.mjs
+simGmDesk: node scripts/simGmDesk.mjs
+dashes: ! grep -rnP '[\x{2010}-\x{2015}\x{2212}]' scripts/simGmDeskHost.mjs src/lib/gmDeskHost.ts src/lib/gmDeskHost.test.ts src/lib/gmDeskHostNhl.ts src/lib/gmDeskHostNba.ts src/lib/gmDeskHostMlb.ts src/lib/gmDeskHostNfl.ts src/components/front-office-shared/GmJobMarketPanel.tsx src/components/front-office-shared/GmCareerPanel.tsx src/components/front-office-shared/GmXpDeskPanel.tsx src/components/front-office-shared/gmCareerDesk.tsx src/components/front-office-shared/gmLazyPanel.tsx src/components/front-office-shared/GmCareerDesk.test.tsx docs/audits/ROUND-1223-NOTES.md
+dash-control: printf 'a \xe2\x80\x94 b\n' > /tmp/d.txt && grep -cP '[\x{2010}-\x{2015}\x{2212}]' /tmp/d.txt
+inert: git diff --name-status origin/main...HEAD | tee /dev/stderr | awk '$1!="A"{bad=1} END{exit bad}'
+importers: ! grep -rlE "gmDeskHost|gmLazyPanel|GmJobMarketPanel|GmCareerPanel|GmXpDeskPanel|gmCareerDesk|GmCareerDesk" src index.html | grep -vE "src/lib/gmDeskHost(Nhl|Nba|Mlb|Nfl)?\.ts$|src/lib/gmDeskHost\.test\.ts$|src/components/front-office-shared/(gmLazyPanel|GmJobMarketPanel|GmCareerPanel|GmXpDeskPanel|gmCareerDesk)\.tsx$|src/components/front-office-shared/GmCareerDesk\.test\.tsx$"
