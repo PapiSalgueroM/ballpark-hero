@@ -1,0 +1,3 @@
+enginesame exit=0 0s | files under src that differ from the base, the four new ones aside: 0
+fleet exit=0 23s | rfleet: EQUAL, 16 old saves (8 in the Champions League) made by the base, loaded and played on by fresh copies of both engines, 0 differ (two fresh base copies agreed on 
+fleet-control exit=0 23s | rfleet control: FIRED (16 of 16 cases differ with the head's field read at 36; two fresh base copies agreed on all 16)
