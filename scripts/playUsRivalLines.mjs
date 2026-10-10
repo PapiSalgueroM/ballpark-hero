@@ -2,9 +2,8 @@
 
    scripts/simUsRivalSense.mjs proves the engine: the rival plays the player's position on the player's own stat
    line and the verdict is read off the two printed lines. This walk reads what a PLAYER sees, in Chromium, with
-   the live database's host aborted. The stretch that plays seasons (new) runs at all four pairs: 390 by 844 and
-   1280 by 900, each with motion on and with reduced motion. The old saves and the roster cards are walked at
-   390 with motion on and at 1280 with reduced motion.
+   the live database's host aborted. Every stretch (new, old, cards) runs at all four pairs: 390 by 844 and
+   1280 by 900, each with motion on and with reduced motion.
 
    new    for each of the eight positions, a career built by this tree's own code (two seasons driven the way
           the board drives them) is put in localStorage and two more seasons are played through the real UI.
@@ -239,11 +238,10 @@ async function close(w, what) {
 }
 const shot = (page, name) => page.screenshot({ path: path.join(SHOTS, `${name}.png`) }).catch(() => {});
 
-/* Every size with motion on AND reduced for the stretch that plays seasons (the brief names all four pairs; the
-   first walk held two, 390 with motion on and 1280 reduced, and the run reviewer walked the other two by hand).
-   The old saves and the roster cards are walked at both widths, one motion setting each (SIDE_SIZES). */
+/* Every size with motion on AND reduced, for every stretch (the brief names all four pairs). The first walk held
+   two of them; the fix pass gave the stretch that plays seasons all four and left the old saves and the roster
+   cards at two; the closing fix walks those at all four as well, so no state is read at half the pairs. */
 const SIZES = [[390, 844, false], [390, 844, true], [1280, 900, false], [1280, 900, true]];
-const SIDE_SIZES = [[390, 844, false], [1280, 900, true]];
 const tagOf = (wd, reduced) => `${wd}${reduced ? 'r' : 'm'}`;
 if (STRETCH === 'all' || STRETCH === 'new') {
   for (const [wd, ht, reduced] of SIZES) {
@@ -296,7 +294,7 @@ const MOVES = { 'Morale +5': { morale: 5 }, 'Morale -5': { morale: -5 }, 'Fanbas
 
 if (STRETCH === 'all' || STRETCH === 'old') {
   const old = JSON.parse(readFileSync(path.join(ROOT, 'src/test/fixtures/usRivalOldSaves.json'), 'utf8')).saves;
-  for (const [wd, ht, reduced] of SIDE_SIZES) {
+  for (const [wd, ht, reduced] of SIZES) {
     const w = await open(wd, ht, reduced); const { page } = w;
     console.log(`old saves, ${w.label}`);
     if (CONTROL !== 'oldline') {
@@ -330,7 +328,7 @@ if (STRETCH === 'all' || STRETCH === 'cards') {
     const says = { both: /are both on the first team[.]/, onlyYou: /You are on the first team and .+ is not[.]/, onlyHim: /is on the first team and you are not[.]/ }[kind];
     say(says.test(save.pendingRivalryEvent.description), `card ${kind}: the save's card reads the ${kind} words ("${save.pendingRivalryEvent.description}")`);
   }
-  for (const [wd, ht, reduced] of SIDE_SIZES) {
+  for (const [wd, ht, reduced] of SIZES) {
     const w = await open(wd, ht, reduced);
     for (const [kind, save] of Object.entries(found)) await cardPays(w.page, save, `card ${kind} (${save.pos}), ${w.label}`, MOVES[save.pendingRivalryEvent.consequence]);
     await close(w, `roster cards, ${w.label}`);
