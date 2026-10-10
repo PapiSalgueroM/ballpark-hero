@@ -1,0 +1,122 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal on real feeds[2m > [22m[2mthe material is a dense fleet of own goals, each on the cast the viewer holds for it
+[22m[39m[1216 material] 100 matches, 200 half feeds; own goals staged 196 (goals left as they were: 113), for me 96, against me 100; the named man on the viewer's cast 196, not on it 0; by a back 170, by the keeper 26; actions that start outside the goal's own minute 0, wound up as a last kick 0
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal on real feeds[2m > [22m[2mOG1: the ball goes in off the man the line names
+[22m[39m[1216 OG1] own goals with the man on the grass 196; at the touch the figure nearest the ball is the named man, within 1: own goal arm 196, baseline arm 0; the man's gap to the ball at the touch: least 0.0, median 0.1, 90th percentile 0.1, most 0.1
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal on real feeds[2m > [22m[2mOG9: from the touch to the net the ball passes nobody else
+[22m[39m[1216 OG9] own goals whose ball comes within 2 of another figure between the touch and the net: 0 of 196 (a keeper 0, a man of the side that got it 0); the man placed on that line by hand is never nearer the ball than 3.60
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal on real feeds[2m > [22m[2mOG2: the instants are the goal it always was
+[22m[39m[1216 OG2] own goals 196, samples 8428; samples whose phase, action, net, net pulse or holder differ from the baseline arm's 0; frames with the ball in the goal mouth 2573, outside flight and net 0; own goals with a frame in the net 196
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal on real feeds[2m > [22m[2mOG3: nobody is the scorer, and the man holds his head
+[22m[39m[1216 OG3] own goals 196; with a hop on a net frame: own goal arm 0, baseline arm 196; net frames where the man has no rue 0, where he celebrates 0, where a man of his side celebrates 0, where the raised arms are more than three or not alike 0, where a man with raised arms has moved 0; net frames with arms raised 2352
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal on real feeds[2m > [22m[2mOG4: nobody stands on a team mate while it plays
+[22m[39m[1216 OG4] own goals 196; pairs of one side overlapping two samples running 0; the scene made by hand: the man covers 28.0 past a team mate, pairs overlapping two samples running 0
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal on real feeds[2m > [22m[2mOG5: the turn can be seen, and the ball comes to the man
+[22m[39m[run turn] KEEPER turn 104.5 | Aston Villa 20' opp Zion Suzuki | flank none minute 20 | the man at 50.4, 84.0 | the holder at 53.2, 25.4
+[run turn] KEEPER turn 82.8 | Aston Villa 76' opp Zion Suzuki | flank none minute 76 | the man at 48.8, 93.0 | the holder at 39.9, 74.9
+[run turn] KEEPER turn 38.1 | Aston Villa 89' opp Zion Suzuki | flank none minute 89 | the man at 48.9, 93.0 | the holder at 41.2, 71.5
+[run turn] KEEPER turn 39.0 | Aston Villa 29' opp Zion Suzuki | flank none minute 29 | the man at 49.0, 93.0 | the holder at 41.5, 70.6
+[run turn] KEEPER turn 26.6 | Aston Villa 89' opp Zion Suzuki | flank none minute 89 | the man at 48.4, 93.0 | the holder at 36.9, 70.7
+[run turn] KEEPER turn 54.7 | Aston Villa 90+2' me Giorgi Mamardashvili | flank none minute 90 | the man at 50.0, 7.0 | the holder at 50.4, 22.4
+[run turn] KEEPER turn 46.8 | Real Madrid 35' me Kayne van Oevelen | flank none minute 35 | the man at 49.3, 7.0 | the holder at 44.1, 22.8
+[run turn] KEEPER turn 46.6 | Real Madrid 54' me Álvaro Valles | flank none minute 54 | the man at 50.4, 7.0 | the holder at 53.0, 26.0
+[run turn] KEEPER turn 40.8 | Real Madrid 20' me Mathew Ryan | flank none minute 20 | the man at 50.6, 7.0 | the holder at 54.9, 28.2
+[run turn] KEEPER turn 58.5 | Real Madrid 78' me Jonas Urbig | flank none minute 78 | the man at 49.9, 7.0 | the holder at 49.1, 26.7
+[run turn] KEEPER turn 29.4 | Lyon 1' opp Dominik Greif | flank none minute 1 | the man at 48.6, 93.0 | the holder at 38.0, 75.4
+[run turn] KEEPER turn 23.4 | Lyon 15' opp Dominik Greif | flank none minute 15 | the man at 48.3, 93.0 | the holder at 35.5, 71.9
+[run turn] KEEPER turn 22.0 | Lyon 13' opp Dominik Greif | flank none minute 13 | the man at 48.2, 93.0 | the holder at 34.9, 75.7
+[run turn] KEEPER turn 24.5 | Lyon 43' opp Dominik Greif | flank none minute 43 | the man at 48.3, 93.0 | the holder at 36.0, 71.1
+[run turn] KEEPER turn 55.9 | Lyon 86' me Robin Risser | flank none minute 86 | the man at 50.0, 7.0 | the holder at 50.0, 51.5
+[run turn] KEEPER turn 2.2 | Lyon 84' me Guillaume Restes | flank none minute 84 | the man at 53.0, 7.0 | the holder at 75.0, 29.9
+[run turn] KEEPER turn 48.5 | Lyon 20' me Lucas Chevalier | flank none minute 20 | the man at 50.3, 7.0 | the holder at 52.4, 29.3
+[run turn] KEEPER turn 36.6 | Lyon 41' opp Dominik Greif | flank none minute 41 | the man at 48.9, 93.0 | the holder at 40.7, 71.9
+[run turn] KEEPER turn 62.1 | Lyon 53' me Berke Özer | flank none minute 53 | the man at 49.9, 7.0 | the holder at 49.1, 28.1
+[run turn] KEEPER turn 88.9 | Lyon 88' opp Dominik Greif | flank none minute 88 | the man at 48.4, 93.0 | the holder at 36.7, 75.2
+[run turn] KEEPER turn 40.2 | Ajax 46' me Rome-Jayden Owusu-Oduro | flank none minute 46 | the man at 50.6, 7.0 | the holder at 55.1, 27.7
+[run turn] KEEPER turn 74.7 | Ajax 25' me Bernt Klaverboer | flank none minute 25 | the man at 50.4, 7.0 | the holder at 53.6, 28.6
+[run turn] KEEPER turn 45.1 | Ajax 12' me Vasilios Barkas | flank none minute 12 | the man at 50.4, 7.0 | the holder at 53.5, 27.0
+[run turn] KEEPER turn 23.7 | Ajax 27' opp Vitezslav Jaros | flank none minute 27 | the man at 48.3, 93.0 | the holder at 35.6, 73.0
+[run turn] KEEPER turn 25.6 | Ajax 87' opp Vitezslav Jaros | flank none minute 87 | the man at 48.4, 93.0 | the holder at 36.5, 73.4
+[run turn] KEEPER turn 49.5 | Celtic 77' me Thibaut Courtois | flank none minute 77 | the man at 49.4, 7.0 | the holder at 45.0, 29.6
+[1216 OG5] the sharpest turn of the ball in flight, degrees: own goal arm least 2.2, median 63.9, 90th percentile 123.7, most 129.9; baseline arm least 1.1, median 3.0, 90th percentile 3.2, most 3.3; the floor is 20
+[1216 OG5 walk] how far the man goes to meet it: least 0.0, median 0.3, 90th percentile 5.5, most 31.5; from his own third (193 of 196): least 0.0, median 0.2, 90th percentile 5.3, most 8.4; standing further up when it starts 3; shown by his number alone at the touch 0
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: the recorded own goal[2m > [22m[2mOWN: every own goal frame of the hand made scenes is the recorded one
+[22m[39m[1216 digest] OWN 669ef935
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: the recorded own goal[2m > [22m[2mRUE: the figure with his head in his hands is the recorded one, and at rue 0 it is the figure it was
+[22m[39m[1216 digest] RUE c9817b1a
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal in the live match[2m > [22m[2mthe live match draws an own goal for me off the man on its card
+[22m[39m[1216 viewer] an own goal for me, match 3 of the search, 7' Nobel Mendy: card "GOAL! Nobel Mendy 7' (O.G)" under "Aston Villa"
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal in the live match[2m > [22m[2mthe live match draws an own goal for opp off the man on its card
+[22m[39m[1216 viewer] an own goal for opp, match 17 of the search, 10' Zion Suzuki: card "GOAL! Zion Suzuki 10' (O.G)" under "Ipswich Town"
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal and a change of line up off the clock[2m > [22m[2man own goal still on its way when the line up changes off the clock keeps its net, its card and its men
+[22m[39m[1216 held cast] 326 halves redrawn (cap 4000); the own goal found on attempt 274; one whose man is the one leaving on attempt 325
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal and a change of line up off the clock[2m > [22m[2man own goal still on its way when the line up changes off the clock keeps its net, its card and its men
+[22m[39m[1216 held cast] 82' for opp, Taylor Harwood-Bellis: staged at 82.300, the ball in at 83.056, card "GOAL! Taylor Harwood-Bellis 82' (O.G)"
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal and a change of line up off the clock[2m > [22m[2man own goal still on its way when the line up changes off the clock keeps its net, its card and its men
+[22m[39m[1216 held cast] 71' for me, Maxim De Cuyper (he is the man who leaves at 72): staged at 71.300, the ball in at 72.056, card "GOAL! Maxim De Cuyper 71' (O.G)"
+
+ [31m❯[39m src/test/pitchOwnGoal.test.tsx [2m([22m[2m15 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 7959[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1216: an own goal on real feeds[2m > [22mthe material is a dense fleet of own goals, each on the cast the viewer holds for it [33m 1235[2mms[22m[39m
+   [32m✓[39m Round 1216: an own goal on real feeds[2m > [22mOG1: the ball goes in off the man the line names[32m 234[2mms[22m[39m
+   [32m✓[39m Round 1216: an own goal on real feeds[2m > [22mOG9: from the touch to the net the ball passes nobody else[32m 242[2mms[22m[39m
+   [32m✓[39m Round 1216: an own goal on real feeds[2m > [22mOG2: the instants are the goal it always was[32m 202[2mms[22m[39m
+   [32m✓[39m Round 1216: an own goal on real feeds[2m > [22mOG3: nobody is the scorer, and the man holds his head[32m 192[2mms[22m[39m
+   [32m✓[39m Round 1216: an own goal on real feeds[2m > [22mOG4: nobody stands on a team mate while it plays[32m 228[2mms[22m[39m
+[31m   [31m×[31m Round 1216: an own goal on real feeds[2m > [22mOG5: the turn can be seen, and the ball comes to the man[39m[32m 270[2mms[22m[39m
+[31m     → expected 1 to be +0 // Object.is equality[39m
+   [32m✓[39m Round 1216: an own goal on scenes made by hand[2m > [22mOG6: who it goes in off, and a man who is not there moves nobody[32m 36[2mms[22m[39m
+   [32m✓[39m Round 1216: an own goal on scenes made by hand[2m > [22mOG7: reduced motion shows the last frame at once, the man with his head in his hands[32m 14[2mms[22m[39m
+   [32m✓[39m Round 1216: an own goal on scenes made by hand[2m > [22mOG8: a goal from the spot or from a direct free kick is never drawn as an own goal[32m 20[2mms[22m[39m
+   [32m✓[39m Round 1216: the recorded own goal[2m > [22mOWN: every own goal frame of the hand made scenes is the recorded one[32m 21[2mms[22m[39m
+   [32m✓[39m Round 1216: the recorded own goal[2m > [22mRUE: the figure with his head in his hands is the recorded one, and at rue 0 it is the figure it was[32m 16[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1216: an own goal in the live match[2m > [22mthe live match draws an own goal for me off the man on its card [33m 626[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1216: an own goal in the live match[2m > [22mthe live match draws an own goal for opp off the man on its card [33m 521[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1216: an own goal and a change of line up off the clock[2m > [22man own goal still on its way when the line up changes off the clock keeps its net, its card and its men [33m 4101[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/pitchOwnGoal.test.tsx[2m > [22mRound 1216: an own goal on real feeds[2m > [22mOG5: the turn can be seen, and the ball comes to the man
+[31m[1mAssertionError[22m: expected 1 to be +0 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 0[39m
+[31m+ 1[39m
+
+[36m [2m❯[22m src/test/pitchOwnGoal.test.tsx:[2m340:55[22m[39m
+    [90m338| [39m    /* Measured on 163 own goals: the own goal arm never under 34.1 (m…
+    [90m339| [39m       3.3. The floor of 20 sits between them, a bound of the geometry…
+    [90m340| [39m    [34mexpect[39m(ownTurns[33m.[39m[34mfilter[39m(turn [33m=>[39m turn [33m<[39m [34m20[39m)[33m.[39mlength)[33m.[39m[34mtoBe[39m([34m0[39m)[33m;[39m
+    [90m   | [39m                                                      [31m^[39m
+    [90m341| [39m    [34mexpect[39m(plainTurns[33m.[39m[34mfilter[39m(turn [33m=>[39m turn [33m>=[39m [34m20[39m)[33m.[39mlength)[33m.[39m[34mtoBe[39m([34m0[39m)[33m;[39m
+    [90m342| [39m    /* Bounds of the geometry, on every own goal: a back in his own th…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m14 passed[39m[22m[90m (15)[39m
+[2m   Start at [22m 14:17:27
+[2m   Duration [22m 10.59s[2m (transform 1.56s, setup 39ms, collect 1.99s, tests 7.96s, environment 243ms, prepare 134ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/pitchOwnGoal.test.tsx,title=src/test/pitchOwnGoal.test.tsx > Round 1216%3A an own goal on real feeds > OG5%3A the turn can be seen%2C and the ball comes to the man,line=340,column=55::AssertionError: expected 1 to be +0 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 0%0A+ 1%0A%0A ❯ src/test/pitchOwnGoal.test.tsx:340:55%0A%0A
