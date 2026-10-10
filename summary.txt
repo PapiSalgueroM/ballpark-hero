@@ -1,0 +1,8 @@
+simOwnGoalMotion exit=0 22s | simOwnGoalMotion: green. 15 tests passed: the dense fleet, OG1 to OG9 against their baseline arm, the scenes made by hand, the two recorded digests, the live match on an 
+simLiveSimCelebration exit=0 3s | simLiveSimCelebration: 17 outcome checks passed, correct side, net-first, real figure, freeze/expiry, reduced motion, the three recorded digests of the lift, the part beh
+simHarnessAnchors exit=0 49s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simLiveSimMotion exit=0 75s | simLiveSimMotion: green. 55 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+tsc exit=0 92s | 
+simLiveScores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+simNoInventedQuotes exit=0 23s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
