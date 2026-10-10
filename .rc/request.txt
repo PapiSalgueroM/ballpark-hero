@@ -1,0 +1,5 @@
+print: US_SEASON_DIGEST=print US_SEASON_DIGEST_OUT=$RC_OUT/usSeasonLawDigest.json US_SEASON_DIGEST_COMMIT=$(git rev-parse HEAD^) node scripts/simUsSeasonCentre.mjs
+print-again: US_SEASON_DIGEST=print US_SEASON_DIGEST_OUT=$RC_OUT/usSeasonLawDigest-again.json US_SEASON_DIGEST_COMMIT=$(git rev-parse HEAD^) node scripts/simUsSeasonCentre.mjs
+default: node scripts/simUsSeasonCentre.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+anchors: node scripts/simHarnessAnchors.mjs
