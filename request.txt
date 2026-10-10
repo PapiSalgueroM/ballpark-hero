@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+chunks: ls -la dist/assets | grep -i -E "NbaFrontOffice|LotteryReveal|GmLotteryCard|gmDraft" | awk '{print $5, $9}'; echo "chunks listed"

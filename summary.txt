@@ -1,0 +1,7 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simCompletionOnce exit=0 4s | simCompletionOnce: all green
+simWritesAreSent exit=1 14s | simWritesAreSent: 2 failures
+simResultMoment exit=0 4s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+chunks exit=0 0s | chunks listed
+simNoDoubleRecord exit=0 27s | simNoDoubleRecord: all green (67 rows and checks, each recorded once across the finish, the toggles, the coaching, the reveals and the reloads; 115 recorders read)
+simGoogleOnlyReturn exit=0 78s |    8 of 8 rendered checks pass, no dash in the round's files, and all 11 controls turned exactly their own checks red.
