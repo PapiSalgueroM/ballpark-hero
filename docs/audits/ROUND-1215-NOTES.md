@@ -271,7 +271,10 @@ The 18 walks that exited non zero under the counter, and the same walks without 
   window(s) opened and not one signing completed", 1 finding) and exit 0 after 267 seconds without it (0
   findings). It is an unseeded walk through a whole career, so each run plays another career. Whether the counter
   or the draw made the difference was put to three more runs each way (results r1215-pc1 and r1215-pc2):
-  not read yet when this line was written; the closing report of the round has the answer.
+  under the counter exit 0, 0 and 0 (48,082, 26,546 and 41,097 draws in 279, 158 and 231 seconds), without it
+  exit 0, 0 and 0. So one run in eight was red, and its own log says why: "ending: was sacked, which is a real
+  ending" with 0 signings in 16 windows. The counter hands back the page's own numbers, so the likelier reading
+  is the career that run was dealt, which is the coin toss a seed would end; eight runs do not prove a rate.
 
 What the counts say that the reading could not:
 
