@@ -1,0 +1,3 @@
+5:AssertionError [ERR_ASSERTION]: All three save kinds are reached at both widths
+Node.js v24.21.0
+BASE RESULT sim=0 walk=1

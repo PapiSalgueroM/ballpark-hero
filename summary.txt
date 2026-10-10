@@ -1,0 +1,6 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+sim exit=0 5s | simCmRealFixtures normal premier: 12 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, generated baseline held against the base 46e4231cc82b6c047da6e0b4bd
+plwalk-1 exit=0 20s | playCmRealFixtures: 2 viewports, 6 real/legacy/later-season calendar and actual Quick Sim journeys, 18 neutral real-opening results, 2 effective controls; full saved stat
+plwalk-2 exit=0 18s | playCmRealFixtures: 2 viewports, 6 real/legacy/later-season calendar and actual Quick Sim journeys, 18 neutral real-opening results, 2 effective controls; full saved stat
+act-base exit=1 3s | simActivityNotCompletion: 2 failure(s)
+plwalk-base exit=1 114s | BASE RESULT sim=0 walk=1
