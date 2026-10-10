@@ -1,0 +1,18 @@
+#!serial
+plain-before: node scripts/simUsSeasonLedger.mjs
+mutA: node .rc/x/mut.mjs A && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutB: node .rc/x/mut.mjs B && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutD: node .rc/x/mut.mjs D && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutE: node .rc/x/mut.mjs E && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutG: node .rc/x/mut.mjs G && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutH: node .rc/x/mut.mjs H && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutO: node .rc/x/mut.mjs O && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutN: node .rc/x/mut.mjs N && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutC: node .rc/x/mut.mjs C && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutJ: node .rc/x/mut.mjs J && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutK: node .rc/x/mut.mjs K && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutP: node .rc/x/mut.mjs P && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutQ: node .rc/x/mut.mjs Q && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutR: node .rc/x/mut.mjs R && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutS: node .rc/x/mut.mjs S && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+plain-after: git status --short | head -5; node scripts/simUsSeasonLedger.mjs
