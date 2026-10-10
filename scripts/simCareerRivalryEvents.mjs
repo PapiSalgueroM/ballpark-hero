@@ -241,6 +241,31 @@ function factBeatCheck(label, defs, id, { never = [], deal }) {
   return dealt;
 }
 
+/* ─── Round 1149: the roster beat of a sport that knows only the player's own season ───
+   The MLB, NHL and NFL rivals do not play their season on the player's stat line yet (only the NBA rival
+   does), so their roster beat is dealt on one fact: the award word the engine wrote on the player's own last
+   season. This builds that beat's fixtures the same way for each of them and hands them to factBeatCheck:
+   never dealt on a save with no season, the card for making it dealt whatever the two ratings are, the card
+   for missing it (a sport that has one) only while both are rated 80 or better, and both read off the LAST
+   season (each fixture's season before it holds the opposite fact). `silent` is what no card may claim: that
+   the rival is or is not on a roster, or that one of you made it over the other. */
+function ownRosterBeatCheck(label, defs, id, { p, r, award, rivalName, made, missed }) {
+  const season = (has, year = 2030) => ({ year, awards: has ? [award] : [] });
+  const silent = new RegExp(`${rivalName} (is|made|did|was)\\b|over (you|${rivalName})`);
+  const never = [{ name: 'on a save with no season played (both rated 90)', p: p({ ovr: 90, seasons: [] }), r: r({ ovr: 90 }) }];
+  const deal = [{ name: 'you made it (both rated 70, left off the year before)', p: p({ ovr: 70, seasons: [season(false, 2029), season(true)] }), r: r({ ovr: 70 }), silent, ...made }];
+  if (missed) {
+    never.push({ name: 'when you missed it and you are rated 79', p: p({ ovr: 79, seasons: [season(false)] }), r: r({ ovr: 90 }) });
+    never.push({ name: 'when you missed it and he is rated 79', p: p({ ovr: 90, seasons: [season(false)] }), r: r({ ovr: 79 }) });
+    deal.push({ name: 'you missed it (both rated 85, on it the year before)', p: p({ ovr: 85, seasons: [season(true, 2029), season(false)] }), r: r({ ovr: 85 }), silent, ...missed });
+  } else {
+    never.push({ name: 'when you missed it (both rated 90, on it the year before)', p: p({ ovr: 90, seasons: [season(true, 2029), season(false)] }), r: r({ ovr: 90 }) });
+  }
+  const dealt = factBeatCheck(label, defs, id, { never, deal });
+  console.log(`   the roster beat (${id}, read off your own season's "${award}"): ${dealt} of ${deal.length} cards dealt and applied at 4 rolls each, ${never.length} fixtures it must stay shut on, never on a coin, never a word on the rival's roster, and a card from the old coin resolves with no effect`);
+  if (dealt < deal.length) fail(`${label} beat ${id}: only ${dealt} of ${deal.length} cards were dealt`);
+}
+
 const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'careerrivalry-'));
 process.on('exit', () => { try { fs.rmSync(tmpDir, { recursive: true, force: true }); } catch { /* best effort */ } });
 
@@ -838,8 +863,9 @@ console.log('6) The MLB binding: every beat reachable and correct, and the tick 
      against a fixture built to satisfy its gate. Same badge-style
      reachability proof as section 4a: a beat nobody can trigger is dead
      words. */
+  /* seasons: every MLB save carries the list, and since Round 1149 beat 206 reads its last entry. */
   const mlbFixture = over => ({
-    ovr: 80, age: 25, rings: 0, morale: 60, fanbase: 50, netWorth: 5, rivalryIntensity: 30, team: 'BOS', ...over,
+    ovr: 80, age: 25, rings: 0, morale: 60, fanbase: 50, netWorth: 5, rivalryIntensity: 30, team: 'BOS', seasons: [], ...over,
   });
   const rivalFixture = over => ({
     name: 'Rival MLB', pos: 'SP', team: 'NYY', ovr: 80, pot: 90, age: 25, rings: 0,
@@ -851,7 +877,8 @@ console.log('6) The MLB binding: every beat reachable and correct, and the tick 
     203: [mlbFixture(), rivalFixture()],
     204: [mlbFixture(), rivalFixture()],
     205: [mlbFixture(), rivalFixture({ retired: true })],
-    206: [mlbFixture({ ovr: 85 }), rivalFixture({ ovr: 85 })],
+    /* Round 1149: 206 is dealt on the season's own All-Star fact, never on a coin. */
+    206: [mlbFixture({ seasons: [{ year: 2030, awards: ['All-Star'] }] }), rivalFixture()],
     207: [mlbFixture({ rings: 0 }), rivalFixture({ rings: 2 })],
     208: [mlbFixture({ ovr: 90 }), rivalFixture({ ovr: 85 })],
     209: [mlbFixture({ team: 'NYY' }), rivalFixture({ team: 'NYY' })],
@@ -872,6 +899,12 @@ console.log('6) The MLB binding: every beat reachable and correct, and the tick 
     223: [mlbFixture({ age: 34 }), rivalFixture({ age: 35 })],
   };
   beatWords('MLB', mlbRivalry.MLB_RIVALRY_EVENTS, gates); /* Round 988, before the loop below mutates the fixtures */
+  /* Round 1149: the All-Star beat, read off the player's own season (see ownRosterBeatCheck). */
+  ownRosterBeatCheck('MLB', mlbRivalry.MLB_RIVALRY_EVENTS, 206, {
+    p: mlbFixture, r: rivalFixture, award: mlbRivalry.MLB_ROSTER_AWARD, rivalName: 'Rival MLB',
+    made: { says: /The All-Star rosters are out and you are on one\./, reads: 'Morale +5', move: { morale: 5 }, told: /You made the All-Star roster\./ },
+    missed: { says: /The All-Star rosters are out and you are not on one,/, reads: 'Morale -5', move: { morale: -5 }, told: /You were left off the All-Star roster\./ },
+  });
   let reachable = 0, correct = 0;
   const total = mlbRivalry.MLB_RIVALRY_EVENTS.length;
   for (const def of mlbRivalry.MLB_RIVALRY_EVENTS) {

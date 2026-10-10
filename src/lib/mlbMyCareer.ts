@@ -649,7 +649,7 @@ export function simMlbSeason(
      own. A fired beat waits as a pending card; the board applies it through
      dismissMlbRivalryEvent, never here, so the state this function hands
      back stays the pure season sim it always was. */
-  const rivalryEvent = mlbRivalryTick(c, rng);
+  const rivalryEvent = mlbRivalryTick(c, rng, line);
   if (rivalryEvent) c.pendingRivalryEvent = rivalryEvent;
   /* Round 796: a season the beat roll left empty can put a rival choice in
      front of you instead, answered on the board, never applied here. It

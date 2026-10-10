@@ -9,8 +9,8 @@ step, so a later session can finish from it. What is not listed under DONE is no
 | Step | What | State |
 |---|---|---|
 | a | The Trophy Case tile row for every award, NFL, MLB and NHL, with its test and harness section | DONE, green on runners at 8da17c5f |
-| b | The shared lift: one fact beat builder in `careerRivalryEvents.ts`, the NBA's beat 306 moved onto it | BUILT, see below |
-| c | MLB beat 206 read off the season, no coin | not started |
+| b | The shared lift: one fact beat builder in `careerRivalryEvents.ts`, the NBA's beat 306 moved onto it | BUILT at aea08239, see below |
+| c | MLB beat 206 read off the season, no coin | BUILT, see below; the two recordings follow in their own commits |
 | d | NHL beat 306 read off the season, no coin | not started |
 | e | NFL beats 206 and 219, no coin | not started |
 | f | One What's New entry, the merge of origin/main, the last gates | not started |
@@ -69,11 +69,41 @@ Local, shrunk (seed 1): Q all ok, 2,230 NBA beats and 4,614 NFL, 5,624 MLB, 6,22
 Controls fired locally: coin306 (45 failures), oldcard (6), oldgate306 (92 of 157 cards dealt when neither made
 it), tickdraws (Q red, MLB).
 
+## Step c, MLB beat 206 (built)
+
+The beat is `factBeat` with two cards, titled "All-Star Rosters" like the NBA's, read off the award word
+`simMlbSeason` writes on the season just played (`MLB_ROSTER_AWARD`, "All-Star"):
+
+- he made it: "The All-Star rosters are out and you are on one. It goes down as one more line in the argument
+  between you and (rival)." Morale +5. Dealt whatever the two ratings are.
+- he missed it, while both are rated 80 or better (the old gate): "The All-Star rosters are out and you are not on
+  one, in a year people had you and (rival) both in the conversation." Morale -5.
+
+No card says anything about the rival's roster. `mlbRivalryTick` now REQUIRES the season just played (a roll
+without it would read last year's season), and `simMlbSeason` hands it over.
+
+THE PART LEFT for the round that moves the MLB rival onto the player's stat line: the cards that name his roster
+(only you, only him, both), as the NBA's 306 has them.
+
+Measured locally (500 careers a seed, seeds 1 to 5): dealt 51, 52, 55, 66, 50 times a seed; he made it 16, 15,
+13, 11, 15; he missed it 35, 37, 42, 55, 35; none contradicts its season. 4.1 to 5.0 percent of judged MLB
+seasons hold an All-Star, so the honest card is the miss about seven times in ten where the coin said five.
+Against 808dbbdc: players, rivals and notes byte equal, a beat dealt in the same seasons, 407 of 28,193 beats
+read differently (a different pool some seasons, so a different card is picked).
+
+Harness: `ownRosterBeatCheck` in the rivalry harness (shared by the three sports), section S in
+`simNbaAwardsSense.mjs`, controls `oldgate206mlb` and `lastyearmlb` (S red), `tickdraws` re-anchored.
+
 ## Decisions taken (the lead may overrule)
 
 1. The tap finds its card by the promise printed on the pending card (not by a new save field and not by a new
    beat id). That gives the old card rule with no change to any save, so a recording moves only where a card
    really changed.
+2. In a sport whose rival has no season on the player's line, the roster beat has two cards: he made it (always
+   dealt), and he missed it while both are rated 80 or better (the gate the coin beat had, so the beat is in the
+   pool about as often as before). Neither says a word about the rival's roster. Morale +5 and -5, the coin's
+   own two ends.
+3. The title becomes "All-Star Rosters" in MLB and the NHL, the NBA's title since Round 1112.
 
 ## Owed to the other lane (guide sentences that become false)
 
