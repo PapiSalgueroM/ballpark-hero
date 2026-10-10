@@ -1,0 +1,5 @@
+vitest exit=0 4s |    Duration  3.40s (transform 410ms, setup 451ms, collect 1.07s, tests 1.17s, environment 3.12s, prepare 1.10s)
+reveal exit=0 10s | simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's 
+scm exit=0 15s | simSeasonCentreMotion: 17 checks, 0 failed
+sim exit=0 6s | simGmDraftOrder: green. 512051 checks over 10 sections: the order is the league's, the lottery is drawn once on its own stream and saved, and nothing mounts the lift yet.
+tsc exit=0 51s | 

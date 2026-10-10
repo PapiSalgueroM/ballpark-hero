@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/components/lottery/LotteryReveal.test.tsx src/components/front-office-shared/GmLotteryCard.test.tsx src/lib/gmLotteryNight.test.ts src/lib/gmDraftOrder.test.ts src/lib/gmDraftNight.test.ts src/lib/gmPicks.test.ts --testTimeout=300000 --hookTimeout=120000
+scm: node scripts/simSeasonCentreMotion.mjs
+reveal: node scripts/simRevealMoments.mjs
+sim: node scripts/simGmDraftOrder.mjs
