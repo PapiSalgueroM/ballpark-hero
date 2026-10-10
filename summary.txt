@@ -1,0 +1,8 @@
+ledger exit=0 5s | simUsSeasonLedger: green. 3001 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+ctl-unknown exit=2 0s | unknown US_LEDGER_CONTROL "nosuchcontrol", expected one of: mlbyear, mlbsum, mlbid, mlbspan, mlbclub, mlbspanyear, mlbrivalswap, mlbfirstround, mlbown, mlbdiv, mlbformula
+slate exit=0 3s |    Duration  2.33s (transform 793ms, setup 86ms, collect 987ms, tests 33ms, environment 559ms, prepare 275ms)
+simNhlCareer exit=0 24s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged
+simMlbCareer exit=0 22s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, every life card tagged
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+tsc exit=0 82s | 
+ctl-all exit=0 188s | controls fired: 56 of 56
