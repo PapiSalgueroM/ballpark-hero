@@ -1,0 +1,86 @@
+
+1. FRESH: the committed pool equals a fresh derive from Club Manager
+  270 generated rows, the file matches a fresh derive line for line
+
+2. MEMBERSHIP: each label carries Club Manager's lineup in the 2026 view
+  22 labels, each carrying Club Manager's lineup and the facts file's members in the 2026 view: Premier League 20, Championship 24, La Liga 20, Brasileirao 20, Serie A 20, Bundesliga 18, Ligue 1 18, Eredivisie 18, Saudi Pro League 18, MLS 30, Primeira Liga 18, Scottish Premiership 12, Super Lig 18, 2. Bundesliga 18, Belgian Pro League 18, Austrian Bundesliga 12, Super League Greece 14, Danish Superliga 12, Swiss Super League 12, HNL 10, Liga MX 18, A-League 12
+  held, none of their clubs generated: Serie B, Ligue 2, Segunda Division, Russian Premier League
+  a two league fixture (a top flight with a hand club and two thin squads, a second flight) derives rows and ladders from its table rows alone; with no rankable it ranks nobody
+
+3. IDENTITY: names, ids, careerEras strings, colours, countries, labels
+  95 careerEras contender names, 91 of them in the pool, all byte identical
+  540 colours checked (derived and bundled rows), none is the fallback grey
+  1 colour(s) supplied where Club Manager is grey (Macarthur FC), each in the facts file
+  270 generated countries checked, 5 of them not their league's (Cardiff City Wales, Swansea City Wales, Wrexham Wales, CF Montreal Canada, Vaduz Liechtenstein)
+  since: 50 shipped clubs in every list 1980 to 2060, 216 held out of every list before 2026, 0 from a two sourced first season, 4 under a typed row (Red Bull Bragantino 2020, New York City FC 2015, Austin FC 2021, Charlotte FC 2022)
+
+4. TIERS: the rule worked again, hand rows frozen, Forest across eras
+  22 leagues re-derived club by club, 34 generated clubs above tier 4 (POOL_TABLE=1 prints every club with its XI and tier)
+  Forest XI 83.8 vs Aston Villa (t3) 83.7: margin 0.1. At or below 0 Forest drops to tier 3 on the next regenerate.
+  HAND_CLUBS 190 rows, fingerprint e12e673153af2568; Forest t2, t4 in 1993, 1997 and 1999 to 2021, checked every season 1988 to 2060
+
+4L. LADDER: thin squads share one unranked group a tier, ranked clubs stand alone by XI
+  22 ladders equal the rule worked from Club Manager's data: 236 clubs ranked on their own, 144 thin squads in 19 shared groups
+  ranked clubs a league: Premier League 20 of 20, Championship 19 of 24, La Liga 19 of 20, Brasileirao 16 of 20, Serie A 20 of 20, Bundesliga 18 of 18, Ligue 1 16 of 18, Eredivisie 7 of 18, Saudi Pro League 7 of 18, MLS 21 of 30, Primeira Liga 8 of 18, Scottish Premiership 2 of 12, Super Lig 9 of 18, 2. Bundesliga 5 of 18, Belgian Pro League 10 of 18, Austrian Bundesliga 3 of 12, Super League Greece 4 of 14, Danish Superliga 4 of 12, Swiss Super League 2 of 12, HNL 2 of 10, Liga MX 12 of 18, A-League 12 of 12
+
+5. WEIGHTS: exact odds from leagueDrawGroups, as rationals
+  HAND_CLUBS tier 1: 18 clubs, 9 league groups (largest 5), every club exactly 1/18; the sampler matched it on a 192 draw grid
+  HAND_CLUBS tier 2: 36 clubs, 19 league groups (largest 3), every club exactly 1/36; the sampler matched it on a 320 draw grid
+  HAND_CLUBS tier 3: 49 clubs, 33 league groups (largest 3), every club exactly 1/49; the sampler matched it on a 340 draw grid
+  HAND_CLUBS tier 4: 87 clubs, 70 league groups (largest 3), every club exactly 1/87; the sampler matched it on a 508 draw grid
+  HAND_CLUBS tier 1+2: 54 clubs, 28 league groups (largest 5), every club exactly 1/54; the sampler matched it on a 512 draw grid
+  HAND_CLUBS tier 2+3: 85 clubs, 52 league groups (largest 3), every club exactly 1/85; the sampler matched it on a 660 draw grid
+  HAND_CLUBS tier 3+4: 136 clubs, 103 league groups (largest 3), every club exactly 1/136; the sampler matched it on a 848 draw grid
+  HAND_CLUBS by season 1980 to 2060: 81 seasons every club exactly 1/n; Premier League tier 3 over the cap in 0 seasons, as pinned
+  pickAcrossLeagues over tier 4: 76 league groups, both Math.random calls on a 5548 draw grid, every club drawn exactly weight/167 x 1/size
+  full pool tier 4: four leagues 20/167 capped; a plain pick would give them 57/323
+  hand tier 4 clubs before: each 1/87; now 1/167 outside the four leagues, Norwich 5/3674, Brentford 5/1336, Betis 5/2171, Cruzeiro 5/2338
+
+6. OFFERS: 6 seeds x 48 careers from 2020 through the real loop
+  seed 65850: 1183 draws (four leagues 274 vs 279.0), 408 where the cap bites (four leagues 57 vs 50.9, ratio 1.119, z 0.91); 1227 offers; distinct generated clubs offered: Premier League 4, Championship 5, La Liga 3, Brasileirao 5; uncovered 0
+    9 careers started at a worldwide academy fallback, uncovered 0
+  seed 73769: 1224 draws (four leagues 282 vs 290.2), 457 where the cap bites (four leagues 63 vs 58.3, ratio 1.081, z 0.66); 1255 offers; distinct generated clubs offered: Premier League 4, Championship 9, La Liga 5, Brasileirao 8; uncovered 0
+    9 careers started at a worldwide academy fallback, uncovered 0
+  seed 81688: 1163 draws (four leagues 286 vs 287.8), 379 where the cap bites (four leagues 36 vs 49.1, ratio 0.734, z -2.01); 1205 offers; distinct generated clubs offered: Premier League 2, Championship 7, La Liga 5, Brasileirao 5; uncovered 0
+    9 careers started at a worldwide academy fallback, uncovered 0
+  seed 89607: 1208 draws (four leagues 271 vs 296.3), 388 where the cap bites (four leagues 45 vs 49.9, ratio 0.903, z -0.74); 1245 offers; distinct generated clubs offered: Premier League 5, Championship 5, La Liga 6, Brasileirao 4; uncovered 0
+    9 careers started at a worldwide academy fallback, uncovered 0
+  seed 97526: 1197 draws (four leagues 294 vs 304.7), 361 where the cap bites (four leagues 50 vs 47.5, ratio 1.053, z 0.40); 1227 offers; distinct generated clubs offered: Premier League 6, Championship 5, La Liga 5, Brasileirao 6; uncovered 0
+    9 careers started at a worldwide academy fallback, uncovered 0
+  seed 105445: 1198 draws (four leagues 262 vs 271.2), 449 where the cap bites (four leagues 50 vs 55.8, ratio 0.896, z -0.84); 1228 offers; distinct generated clubs offered: Premier League 4, Championship 8, La Liga 3, Brasileirao 3; uncovered 0
+    9 careers started at a worldwide academy fallback, uncovered 0
+  over all 6 seeds, where the cap bites: four leagues won 301 against 311.4 expected (ratio 0.966, z -0.64)
+  Premier League: 4.17 distinct generated clubs offered per seed over 6 seeds (floor 2)
+  Championship: 6.50 distinct generated clubs offered per seed over 6 seeds (floor 4)
+  La Liga: 4.50 distinct generated clubs offered per seed over 6 seeds (floor 2.5)
+  Brasileirao: 5.17 distinct generated clubs offered per seed over 6 seeds (floor 2)
+  ratio range 0.734 to 1.119; per league minimum distinct generated clubs: Premier League 2, Championship 5, La Liga 3, Brasileirao 3; 38 s
+  (printed, not gated) market offers from the four leagues 1645/7058; rivals 70/286
+  (printed, not gated) manager and owner clubs are a plain pick over tier 3 and 4: four leagues 66/403 (before this round 16/136)
+  (printed, not gated) a 1995 start: four leagues won 111 of 406 draws (104.1 expected); market offers 110/401; uncovered 0
+  academies, youths rated 40 to 54, 2020 pool:
+    before England: home list 10, tier 3 7/10 (70.0%), generated 0.0%; largest seed deviation 0.0143
+    before Spain: home list 5, tier 3 2/5 (40.0%), generated 0.0%; largest seed deviation 0.0190
+    before Brazil: home list 4, tier 3 2/4 (50.0%), generated 0.0%; largest seed deviation 0.0140
+    before Wales: no home club at tier 3 or 4
+    after  England: home list 35, tier 3 7/35 (20.0%), generated 71.4%; largest seed deviation 0.0230
+    after  Spain: home list 16, tier 3 2/16 (12.5%), generated 68.8%; largest seed deviation 0.0185
+    after  Brazil: home list 16, tier 3 2/16 (12.5%), generated 75.0%; largest seed deviation 0.0160
+    after  Wales: home list 3, tier 3 0/3 (0.0%), generated 100.0%; largest seed deviation 0.0000
+  worldwide academy fallbacks (exact grid):
+    Nigeria 70 on the 2020 pool: 50 candidates, 488 grid draws; four leagues 15/50 capped, 15/50 by a plain pick
+    Nigeria 60 on the 2020 pool: 82 candidates, 688 grid draws; four leagues 17/82 capped, 17/82 by a plain pick
+    Montenegro 47 on the 2020 pool: 191 candidates, 2052 grid draws; four leagues 31/153 capped, 69/191 by a plain pick
+    Montenegro 30 on the 2020 pool: 141 candidates, 1660 grid draws; four leagues 20/103 capped, 58/141 by a plain pick
+    Montenegro 80 on a pool with no elite club: 12 candidates, 104 grid draws; four leagues 5/12 capped, 5/12 by a plain pick
+    Montenegro 30 on a pool with no tier 4 club: 50 candidates, 392 grid draws; four leagues 11/50 capped, 11/50 by a plain pick
+
+7. OLD SAVES: careers signed on the pre-round pool load and play on
+  West Ham: 3 seasons on the new pool, still West Ham|Championship|3
+  Wolves: 3 seasons on the new pool, still Wolves|Championship|3
+  Girona: 3 seasons on the new pool, still Girona|Segunda Division|2
+  Norwich City: 3 seasons on the new pool, still Norwich City|Championship|4
+  Flamengo: 3 seasons on the new pool, still Flamengo|Brasileirao|1
+  Real Madrid: 3 seasons on the new pool, still Real Madrid|La Liga|1
+
+simCareerClubPool: all sections green

@@ -1,0 +1,5 @@
+ok exact paired outcomes:75season worlds, 75 complete tables, 0 unavailable, five pyramids over15years
+lookup calls: current 1481529, original scans 63683484, reduction 97.67%; time only current 1631ms, baseline 24793ms
+ok effective copied old scans keep all outcomes but fail the deterministic reduction check
+ok copied last-entry tier defect changes actual league order and is caught
+simSoccerLeagueWorldLookup: identical full outcomes, deterministic lookup reduction, both effective controls caught

@@ -1,0 +1,37 @@
+1) coverage: 171 routes in the sitemap
+   171 of 171 routes have a document
+2) each document is a page, not the empty shell
+   thinnest page /contact at 2004 characters of text
+3) the documents are not all the same page
+   171 distinct documents across 171 routes
+4) each sampled page carries its OWN words
+   10 sampled pages each carry their own words
+5) nothing stale or broken was baked in
+   no error cards and no personal state in any of the 171 documents
+6) no snapshot pins itself to one build
+   170 snapshots, 0 carrying a hashed path
+7) no dated real world line was frozen into a snapshot
+   the calendar is retired and stays retired; drift is held by section 13 and playSnapshotDrift
+8) nothing a page renders is thrown away for being long
+   351 of 351 changelog entries reach the shipped page
+9) no link is written into a snapshot twice
+   the consumed-anchor guard is in place; 1 block-then-same-link adjacencies (reported, not asserted on: honest repeat linking looks identical)
+10) the snapshot styling does not outlive the snapshot
+   170 snapshots, 0 leaking padding onto the live app, 0 missing the wrapper
+11) exactly one canonical per shipped document
+   171 documents, 0 with more than one canonical, worst 1
+12) no shipped page has a running clock frozen into it
+   171 documents, 0 carrying a frozen clock
+13) everything the ticker computes declares itself volatile
+   no push list, 2 computed elements checked for data-no-prerender, LIVE chip present
+   171 documents, 0 carrying a frozen score card
+14) no page in the sitemap ships a noindex
+   171 sitemap documents, 0 carrying a noindex
+   the snapshot write holds: it replaces, it rides out a transient hold, it throws rather than
+   damage the old page, it does not retry a genuine error, and it leaves no litter
+16) no random pick seeds React state directly
+   1830 source files scanned, 23 raw random initialiser(s), 22 file(s) on the frozen baseline, 0 new
+17) no saved page opens on a frozen loading line
+   171 documents read, 0 waiting lines found
+
+simPrerender: green. Every page answers with its own words, no JavaScript required.

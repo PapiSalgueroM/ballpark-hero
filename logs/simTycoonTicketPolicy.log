@@ -1,0 +1,22 @@
+PASS independent upgrade purchase keeps original cost and money accounting
+PASS Standard keeps exact original trajectories events and random draws
+PASS existing save corpus keeps the exact original normalized shape
+PASS policy migration accepts only supported values and remains readable by the old loader
+PASS actual tick earnings and crowd follow the offered gate and finite demand
+PASS parking and payroll never receive the gate multiplier and concessions use actual crowd
+PASS supporter growth changes once and preserves capacity pressure and legacy roots
+PASS switches conserve existing money clocks bonuses and all unrelated state
+PASS all offers keep the same actual scorelines league results and match draw counts
+PASS offline uses the saved offer once with unchanged caps and no live boosts or fan growth
+PASS serialized offers continue identical earnings and matches after restore
+PASS a new ground resets the offer without changing the original prestige award
+PASS mounted choices drive actual hook rates and every displayed accounting line
+PASS rules describe the actual finite example and selected tradeoffs before play
+PASS rules modal keeps distinct Premium gate demand and growth cells separate
+PASS a changed offer marks one unscored session while viewing and repeated choices stay quiet
+PASS selection saves immediately and restores the same offer without resetting progress
+PASS refused save retains old bytes and explicit retry writes the latest live state
+PASS autosave recovers failure and hide settlement pays the chosen saved rate only once
+PASS hide banks the latest offer and earned money before the next autosave
+PASS records finite early expanding and mature policy outcomes from actual clocks
+Ticket policy: 21/21 normal outcomes; 0/0 effective copied faults, each with independent purchase baseline. Raw reports, logs, copied sources and hashes retained at /home/runner/work/ballpark-hero/ballpark-hero/tycoon-ticket-policy-artifacts/outcomes
