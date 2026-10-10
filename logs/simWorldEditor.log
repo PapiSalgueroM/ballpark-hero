@@ -1,0 +1,19 @@
+0) no edit is today's game, byte for byte
+   4 kickoffs x 4 call shapes and two seasons plus their summers compared (303291 bytes)
+1) a long chain of swaps keeps every league its size and every club once
+   189 swaps applied and checked one at a time, 246 clubs away from home at the end
+3) the board reads the club against its NEW league
+   nationality asks, home and moved: Celtic Scotland/Scotland, Brentford England/England
+   title asks for Premier League clubs in Scotland 20, at home 5
+   Scottish clubs in the PL: 17 17 17 17 17 17 17 17 17 17 17 17
+   middle asks across the two Bundesliga ladders: 8 (floor 4)
+   Bundesliga into the Premier League: 1 5 10 17 17 17 17 17 17 17 17 17 17 17 17 17 17 17
+   Premier League into the Bundesliga: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 4 4 5 5 6 6
+4) the save keeps the edited world
+   6 league matches played across the reload
+2) full seasons play the edited world
+   Celtic in the Premier League: 38 league rounds, 15 cup ties, season one Europe true, next field 32 (Celtic moved premier to championship), 0.7s
+   Real Madrid in the Championship for Lincoln City: 46 league rounds, 15 cup ties, season one Europe true, next field 32 (Real Madrid moved championship to premier), 0.8s
+   Brisbane Roar in premier on a 246 move world: 38 league rounds, 15 cup ties, season one Europe false, next field 32 (Brisbane Roar moved premier to championship), 0.6s
+
+simWorldEditor: 2478 checks, 0 failures

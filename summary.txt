@@ -1,0 +1,21 @@
+simSeasonLaw exit=0 1s | simSeasonLaw: 14 checks, 0 failed
+simSponsors exit=0 1s | simSponsors: green. The commercial desk pays real money for real reasons, and every brand is made up.
+simSquadRows exit=0 3s | simSquadRows: all green
+simStadiumTycoon exit=0 1s | simStadiumTycoon: green. The turnstiles spin and the math holds.
+simSoccerConquest exit=1 9s | 1 FAILURES
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simTransfers exit=0 79s | ALL TRANSFER CHECKS PASSED
+simTacticsEngine exit=0 107s | simTacticsEngine: PASS. A man is read in his slot, a second position is earned over counted weeks, the armband and the takers reach the stream, a duty moves the football 
+simUclField exit=0 4s | simUclField: all green
+simUclFormatHistory exit=0 1s | simUclFormatHistory: green. The timeline is whole, twice sourced, the generated block is fresh, and the engine plays what it says.
+simUclLegMigration exit=0 0s | simUclLegMigration: all green
+simUclLegs exit=0 4s | simUclLegs: green. Two legs, the right ground each week, and each season judged by its own rule for a level tie.
+simUclPlaces exit=0 0s | simUclPlaces: all green
+simUclSeasonOne exit=0 15s | simUclSeasonOne: all green
+simWilderness exit=0 1s | simWilderness: green. The sack is the start of something now, and the phone always rings in the end.
+simWindow2026Bundesliga exit=1 5s | SUPABASE unreachable (TypeError: fetch failed) for player_market_values?select=club&year=eq.2026&club=eq.RB%20Leipzig&limit=1 after 3 attempts. NOTHING WAS CHECKED.
+simTycoonLeague exit=0 111s |    Every older save lands in the division it had earned, no club that can compete is walled in, and all ten controls fired.
+simWorldEditor exit=0 6s | simWorldEditor: 2478 checks, 0 failures
+simWorld exit=0 67s | ALL WORLD CHECKS PASSED
+simYouthPadding exit=0 30s | simYouthPadding: 12 checks, 0 failures
+simRoles exit=0 1176s | ALL ROLE CHECKS PASSED

@@ -1,0 +1,19 @@
+1) The 96 clubs are the five top flights Club Manager plays
+   96 clubs, 96 names matched across 5 leagues
+2) Strength is the market value on record, never a typed number
+   96 of 96 clubs match the saved 2026 pull (2026-09-05, 36 days old); overalls 55 to 95, median 76; 0 not derived from the value, 0 outside 55..95, 0 value order inversions; partial: DEP,ELV,FRO,LEM,MAL,MNZ,PAD,RAC,TRO
+3) The map is whole: borders, homes, seeding, viewBox, guide counts
+   154 regions, viewBox 407x360, 0 one way borders, 0 border rows without a drawing, 0 labels outside the viewBox
+   96 of 96 clubs open on their home region, 0 regions unseeded, 0 seeded to an owner the engine does not know, 0 seeded across a border
+   guide says 154 regions: yes; says 10 matchdays: yes; says 96 clubs: yes; registry entry present, daily
+4) 300 seeded seasons: one champion each, no dead club, no frozen region
+   300 seasons ended with one champion, 0 by total conquest; 13.0 rounds per season, 13.6 clubs landed at the playoff
+   46 different champions, top MCI 26, LIV 22, RMA 22, PSG 20, ARS 20; clubs that never annexed: none; regions that never changed hands: none
+5) The daily deals the same season twice, and another day deals another
+   2026-09-05 twice: identical (13 rounds, champion BAR, score 125); 2026-09-06: a different season
+6) Win rate follows the market strength, and shuffling the strengths changes who wins
+   win rate vs market strength r = 0.998; with the strengths shuffled r = -0.035; top 8 champions overlap 1 of 8; 297 of 300 seasons crown a different club under the shuffle
+7) The leaderboard cap row is the measured perfect run
+  FAIL: the database refused game_score_caps?select=game,max_score&game=eq.conquest-soccer-imperialism: TypeError: fetch failed
+
+1 FAILURES

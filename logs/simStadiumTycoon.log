@@ -1,0 +1,32 @@
+1) Something is always affordable soon
+   worst wait pre-prestige: 6.9s, post (the intended wall): 162.6s
+2) The curve moves and the carrot arrives
+   income at 1 min: 32.2/s, at 30 min: 21505.3/s (668.2x)
+   first prestige reachable at minute 13
+   star kept the counters, reset the money, and pays x1.5
+3) Pure idling progresses too
+   45 min no-tap income: 19502.5/s, lifetime 18691433
+4) Away earnings are capped and honest
+   blip $0, hour $5069166, week capped at $40553330
+5) Save plumbing
+   roundtrip identity holds, corruption falls back safely
+6) The boost is honest
+   x2.00 while lit, no stacking, burns out on time, away pay unchanged
+7) Milestones are exactly-once and exploit-proof
+   7 milestones fired on the way to the first prestige
+   exactly-once holds through prestige and saves; payouts match their labels
+8) The opposition is invented, provably
+   every league of n clubs meets its n-1 rivals, once a leg
+   288 possible names (167 short enough for the table) checked against 483 real clubs, 0 collisions
+9) Ten divisions, exact multipliers, promotion pays
+   x2.25 exact at Silverline, promotion paid 1104 to the champion only, ladder resets on sale, record survives
+10) Payroll math is exact and resets on sale
+   steward pays back in 167s, delta exact to the rate card, payroll resets on sale
+11) Golden whistle effects are exact, unstackable, and save-safe
+   x7 exact for 77s, taps x25 exact, windfall 156990 on the nose, no stacking, saves sane
+12) Badges pay 2% each and never fire twice
+   15 badges in 30 min, x1.30 exact, exactly-once, forever, tamper-proof
+13) Legacy points pay by the climb and every perk does exactly what it says
+   board costs exactly 100, Summit sale pays 10, every effect exact, migration seeds once
+
+simStadiumTycoon: green. The turnstiles spin and the math holds.
