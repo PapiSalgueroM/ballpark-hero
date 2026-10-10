@@ -1,0 +1,9 @@
+pr216-alone 320x568 close: page at 0 before, 0 after (held); tile top 397 then 397; page height 15211 then 15211; view 568; focus back on the tile true; page errors 0
+pr216-alone 320x568 eleven: page at 0 before, 0 after (held); tile top 397 then 397; page height 15211 then 15211; view 568; focus back on the tile true; page errors 0
+pr216-alone 360x740 close: page at 0 before, 0 after (held); tile top 397 then 397; page height 13778 then 13778; view 740; focus back on the tile true; page errors 0
+pr216-alone 360x740 eleven: page at 0 before, 0 after (held); tile top 397 then 397; page height 13778 then 13778; view 740; focus back on the tile true; page errors 0
+pr216-alone 390x844 close: page at 0 before, 0 after (held); tile top 397 then 397; page height 13004 then 13004; view 844; focus back on the tile true; page errors 0
+pr216-alone 390x844 eleven: page at 0 before, 0 after (held); tile top 397 then 397; page height 13004 then 13004; view 844; focus back on the tile true; page errors 0
+pr216-alone 1280x900 close: page at 0 before, 0 after (held); tile top 345 then 345; page height 9181 then 9181; view 900; focus back on the tile true; page errors 0
+pr216-alone 1280x900 eleven: page at 0 before, 0 after (held); tile top 345 then 345; page height 9181 then 9181; view 900; focus back on the tile true; page errors 0
+squadBackProbe pr216-alone: the page held at every width

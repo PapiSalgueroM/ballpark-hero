@@ -1,0 +1,9 @@
+release-at-gate 320x568 close: page at 3 before, 245 after (MOVED 242); tile top 482 then 240; page height 15559 then 15559; view 568; focus back on the tile true; page errors 0
+release-at-gate 320x568 eleven: (no Starting 11 button on this build) page at 3 before, 245 after (MOVED 242); tile top 482 then 240; page height 15559 then 15559; view 568; focus back on the tile true; page errors 0
+release-at-gate 360x740 close: page at 0 before, 0 after (held); tile top 485 then 485; page height 14108 then 14108; view 740; focus back on the tile true; page errors 0
+release-at-gate 360x740 eleven: (no Starting 11 button on this build) page at 0 before, 0 after (held); tile top 485 then 485; page height 14108 then 14108; view 740; focus back on the tile true; page errors 0
+release-at-gate 390x844 close: page at 0 before, 0 after (held); tile top 485 then 485; page height 13335 then 13335; view 844; focus back on the tile true; page errors 0
+release-at-gate 390x844 eleven: (no Starting 11 button on this build) page at 0 before, 0 after (held); tile top 485 then 485; page height 13335 then 13335; view 844; focus back on the tile true; page errors 0
+release-at-gate 1280x900 close: page at 0 before, 0 after (held); tile top 345 then 345; page height 9381 then 9381; view 900; focus back on the tile true; page errors 0
+release-at-gate 1280x900 eleven: (no Starting 11 button on this build) page at 0 before, 0 after (held); tile top 345 then 345; page height 9381 then 9381; view 900; focus back on the tile true; page errors 0
+squadBackProbe release-at-gate: the page MOVED in 2 journey(s)

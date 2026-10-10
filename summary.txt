@@ -1,0 +1,7 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fixtures exit=0 75s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,164 unchanged original
+probe-head exit=1 17s | squadBackProbe head: the page MOVED in 2 journey(s)
+base-setup exit=0 36s | served
+probe-release-at-gate exit=1 17s | squadBackProbe release-at-gate: the page MOVED in 2 journey(s)
+pr216-setup exit=0 35s | served
+probe-pr216-alone exit=0 17s | squadBackProbe pr216-alone: the page held at every width
