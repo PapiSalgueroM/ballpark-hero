@@ -1,0 +1,75 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/gmDeskHost.test.ts [2m([22m[2m39 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 83[2mms[22m[39m
+[31m   [31m×[31m the record of a save older than the block[2m > [22mfills nothing in: titles out are titles in, the rest is a count, and it passes the career validator[39m[32m 14[2mms[22m[39m
+[31m     → expected 1 to be +0 // Object.is equality[39m
+   [32m✓[39m the record of a save older than the block[2m > [22mstarts the stint in the season he started, whichever way the counters were read (the B7 contract)[32m 0[2mms[22m[39m
+   [32m✓[39m the record of a save older than the block[2m > [22mknows the arrival tier only on a record written the day he took the club[32m 0[2mms[22m[39m
+   [32m✓[39m the record of a save older than the block[2m > [22mreads the tier through the adapter and never writes[32m 0[2mms[22m[39m
+   [32m✓[39m the stored record against the save beside it[2m > [22mis read as stored when it fits, and a read never writes[32m 0[2mms[22m[39m
+   [32m✓[39m the stored record against the save beside it[2m > [22mfails closed to the legacy record when its open stint is at another club, or is open on a fired save[32m 1[2mms[22m[39m
+   [32m✓[39m the stored record against the save beside it[2m > [22mcosts one block when one block is corrupt[32m 1[2mms[22m[39m
+   [32m✓[39m the season close[2m > [22mrecords a season once, pays what gmSeasonXp pays, and survives JSON[32m 1[2mms[22m[39m
+   [32m✓[39m the season close[2m > [22mends the stint on a firing and records nothing after it[32m 0[2mms[22m[39m
+   [32m✓[39m the season close[2m > [22mreports the level before and after[32m 0[2mms[22m[39m
+   [32m✓[39m the season verdict[2m > [22mwith no mandate hands back the trust and the flag it was given[32m 1[2mms[22m[39m
+   [32m✓[39m the season verdict[2m > [22mwith no desk is the two engine calls a board makes today, tax cheque included[32m 6[2mms[22m[39m
+   [32m✓[39m the season verdict[2m > [22mwalks Ownership one step a point, and a gain or a tax cheque is never cushioned[32m 4[2mms[22m[39m
+   [32m✓[39m the season verdict[2m > [22mon a new save starts the stint in the season he started and is not an arrival (B7)[32m 0[2mms[22m[39m
+   [32m✓[39m the season verdict[2m > [22mcloses the stint when the verdict fires him[32m 0[2mms[22m[39m
+   [32m✓[39m the season verdict[2m > [22mworks a last grade out again only from this season: its own mandate and a decided champion[32m 0[2mms[22m[39m
+   [32m✓[39m the season verdict[2m > [22mkeeps the ask he was shown through the next summer, and only that one[32m 0[2mms[22m[39m
+   [32m✓[39m the seven effects[2m > [22mhand back what they were given with no point, and draw nothing[32m 1[2mms[22m[39m
+   [32m✓[39m the seven effects[2m > [22mat every level equal gmXp fed the keyed roll, and no two trees share a roll[32m 2[2mms[22m[39m
+   [32m✓[39m spending a point[2m > [22mis refused off the live list, with no point, and past five[32m 5[2mms[22m[39m
+   [32m✓[39m spending a point[2m > [22mtiles pulse only when a live tree can take a point he has[32m 1[2mms[22m[39m
+   [32m✓[39m the job market[2m > [22mis null while he holds a seat[32m 0[2mms[22m[39m
+   [32m✓[39m the job market[2m > [22mreads the same feed every time and a new one a year or a season on[32m 5[2mms[22m[39m
+   [32m✓[39m the job market[2m > [22mnever offers the club that let him go, asks for next season, and carries facts for every offer[32m 9[2mms[22m[39m
+   [32m✓[39m the job market[2m > [22mtells offers, quiet and closed apart, and a closed line never tells him to sit[32m 7[2mms[22m[39m
+   [32m✓[39m the job market[2m > [22mcounts the seasons known only as a count in the line (B6)[32m 1[2mms[22m[39m
+   [32m✓[39m taking a seat[2m > [22mmoves his club, his trust, the ask and the club owned blocks, and nothing else[32m 1[2mms[22m[39m
+   [32m✓[39m taking a seat[2m > [22mrefuses a club that is not in the feed, the club that let him go, and a man who holds a seat[32m 0[2mms[22m[39m
+   [32m✓[39m taking a seat[2m > [22mlists every club block once and keeps the first rule for a key[32m 0[2mms[22m[39m
+   [32m✓[39m a year out[2m > [22mplays the draft, the summer, every period and the postseason in that order, then writes the year[32m 7[2mms[22m[39m
+   [32m✓[39m a year out[2m > [22mis refused, league untouched, in a seat, on an open season and on a closed market[32m 1[2mms[22m[39m
+   [32m✓[39m a year out[2m > [22msays so when the sport does not leave the league one decided season on[32m 1[2mms[22m[39m
+   [32m✓[39m a year out[2m > [22msitting out is written only between seats[32m 0[2mms[22m[39m
+   [32m✓[39m the press, the cut and the ask[2m > [22meases a gamble and nothing else, and hands the same object back with no point[32m 1[2mms[22m[39m
+   [32m✓[39m the press, the cut and the ask[2m > [22mcharges exactly the cut it quoted, on the last entry for the man[32m 1[2mms[22m[39m
+   [32m✓[39m the press, the cut and the ask[2m > [22meases the ask of a man he can negotiate with and of nobody else[32m 3[2mms[22m[39m
+   [32m✓[39m the words on the boxes[2m > [22mare never empty and carry no dash or raw placeholder[32m 6[2mms[22m[39m
+   [32m✓[39m the words on the boxes[2m > [22msay only what a desk pays for[32m 0[2mms[22m[39m
+   [32m✓[39m the words on the boxes[2m > [22mcompute the worked examples from the lib they describe[32m 0[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmCareerDesk.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[32m 138[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmDeskHost.test.ts[2m > [22mthe record of a save older than the block[2m > [22mfills nothing in: titles out are titles in, the rest is a count, and it passes the career validator
+[31m[1mAssertionError[22m: expected 1 to be +0 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 0[39m
+[31m+ 1[39m
+
+[36m [2m❯[22m src/lib/gmDeskHost.test.ts:[2m93:59[22m[39m
+    [90m 91| [39m              [34mexpect[39m([34msanitizeGmCareer[39m(b[33m.[39mcareer))[33m.[39mnot[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m 92| [39m              [35mconst[39m g [33m=[39m b[33m.[39mcareer[33m.[39mstints[[34m0[39m][33m.[39mgrades[33m;[39m
+    [90m 93| [39m              [34mexpect[39m(g[33m.[39m[34mfilter[39m(x [33m=>[39m x [33m===[39m [32m'title'[39m)[33m.[39mlength)[33m.[39m[34mtoBe[39m(titles)[33m;[39m
+    [90m   | [39m                                                          [31m^[39m
+    [90m 94| [39m              expect(g.length + (b.before?.seasons ?? 0)).toBe(seasons…
+    [90m 95| [39m              [34mexpect[39m([34mhostSeasonsRecorded[39m(b))[33m.[39m[34mtoBe[39m(seasons)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m51 passed[39m[22m[90m (52)[39m
+[2m   Start at [22m 14:19:56
+[2m   Duration [22m 999ms[2m (transform 221ms, setup 78ms, collect 495ms, tests 221ms, environment 491ms, prepare 160ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmDeskHost.test.ts,title=src/lib/gmDeskHost.test.ts > the record of a save older than the block > fills nothing in%3A titles out are titles in%2C the rest is a count%2C and it passes the career validator,line=93,column=59::AssertionError: expected 1 to be +0 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 0%0A+ 1%0A%0A ❯ src/lib/gmDeskHost.test.ts:93:59%0A%0A

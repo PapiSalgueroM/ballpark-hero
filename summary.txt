@@ -1,0 +1,5 @@
+m-nhlrecord exit=0 33s | MUT nhlrecord: harness exit=0 vitest exit=0 restored=yes
+m-nhlpct exit=0 33s | MUT nhlpct: harness exit=0 vitest exit=0 restored=yes
+m-arrivege exit=0 33s | MUT arrivege: harness exit=1 vitest exit=1 restored=yes
+m-legacylast exit=0 33s | MUT legacylast: harness exit=1 vitest exit=1 restored=yes
+m-legacyfired exit=0 33s | MUT legacyfired: harness exit=1 vitest exit=1 restored=yes

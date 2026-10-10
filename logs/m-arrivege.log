@@ -1,0 +1,21 @@
+MUTATION ON: arrivege in src/lib/gmDeskHost.ts
+ src/lib/gmDeskHost.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness, first failures
+  FAIL [6]: nhl seed 1 season 1 ANA (missed): the recap of his own season reads as an arrival
+  FAIL [6]: nhl seed 1 season 1 BOS (missed): the recap of his own season reads as an arrival
+  FAIL [6]: nhl seed 1 season 1 BUF (met): the recap of his own season reads as an arrival
+  FAIL [6]: nhl seed 1 season 1 CAR (overachieved): the recap of his own season reads as an arrival
+  FAIL [6]: nhl seed 1 season 1 CBJ (met): the recap of his own season reads as an arrival
+simGmDeskHost: FAILED, red checks 6:372
+--- vitest
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/gmDeskHost.test.ts[2m > [22mthe season verdict[2m > [22mon a new save starts the stint in the season he started and is not an arrival (B7)
+[31m[1mAssertionError[22m: expected true to be false // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/lib/gmDeskHost.test.ts[2m > [22mtaking a seat[2m > [22mmoves his club, his trust, the ask and the club owned blocks, and nothing else
+[31m[1mAssertionError[22m: expected true to be false // Object.is equality[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m50 passed[39m[22m[90m (52)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmDeskHost.test.ts,title=src/lib/gmDeskHost.test.ts > the season verdict > on a new save starts the stint in the season he started and is not an arrival (B7),line=270,column=43::AssertionError:
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmDeskHost.test.ts,title=src/lib/gmDeskHost.test.ts > taking a seat > moves his club%2C his trust%2C the ask and the club owned blocks%2C and nothing else,line=486,column=46::AssertionError: ex
+MUT arrivege: harness exit=1 vitest exit=1 restored=yes

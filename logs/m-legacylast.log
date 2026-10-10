@@ -1,0 +1,18 @@
+MUTATION ON: legacylast in src/lib/gmDeskHost.ts
+ src/lib/gmDeskHost.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness, first failures
+  FAIL [2]: seasons 1 titles 0 last title fired false counted false: 0 titles in, 1 out
+  FAIL [2]: seasons 1 titles 0 last title fired false counted true: 0 titles in, 1 out
+  FAIL [2]: seasons 1 titles 0 last title fired true counted false: 0 titles in, 1 out
+  FAIL [2]: seasons 1 titles 0 last title fired true counted true: 0 titles in, 1 out
+  FAIL [2]: seasons 2 titles 0 last title fired false counted false: 0 titles in, 1 out
+simGmDeskHost: FAILED, red checks 2:484
+--- vitest
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/gmDeskHost.test.ts[2m > [22mthe record of a save older than the block[2m > [22mfills nothing in: titles out are titles in, the rest is a count, and it passes the career validator
+[31m[1mAssertionError[22m: expected 1 to be +0 // Object.is equality[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m51 passed[39m[22m[90m (52)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmDeskHost.test.ts,title=src/lib/gmDeskHost.test.ts > the record of a save older than the block > fills nothing in%3A titles out are titles in%2C the rest is a count%2C and it passes the career
+MUT legacylast: harness exit=1 vitest exit=1 restored=yes

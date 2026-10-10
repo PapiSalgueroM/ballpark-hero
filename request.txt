@@ -1,0 +1,6 @@
+#!serial
+m-nhlrecord: bash .rc/x/runmut.sh nhlrecord
+m-nhlpct: bash .rc/x/runmut.sh nhlpct
+m-arrivege: bash .rc/x/runmut.sh arrivege
+m-legacylast: bash .rc/x/runmut.sh legacylast
+m-legacyfired: bash .rc/x/runmut.sh legacyfired
