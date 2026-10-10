@@ -1,0 +1,14 @@
+
+9 takeovers across 3 clubs and 3 entry points.
+1) The run-in really happened
+   every entry point deeper than the last, real matches and real points behind each
+2) The whole world moved, not just my club
+   every other league is as far through its own season as I am through mine
+3) The handover is clean: nothing of the last manager follows you in
+   9 handovers, all clean
+4) It terminates, and it reaches where it said it would
+   slowest 711ms (Real Madrid 2026-27 runIn), every run reached its target with a season left to play
+5) The save and the copy both say the run-in was simulated
+   the save records it, the dugout says simulated, the hub keeps saying it
+
+simMidSeasonStart: all green

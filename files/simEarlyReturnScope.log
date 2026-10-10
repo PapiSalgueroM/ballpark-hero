@@ -1,0 +1,12 @@
+1. What was read: src/pages, src/components, src/hooks
+   746 source files listed, 746 parsed by the TypeScript program, 5690 functions with a block body
+   223525 identifier references examined, declaration names, property names and JSX tags skipped
+2. Narrowing, one rule at a time
+   34433 of those resolve to a const or let declared at their own function's statement level
+   36 of those sit textually ABOVE that declaration, so the binding has not run yet
+   0 of those are allowed on purpose: inside a JSX on* handler, which runs on a tap, long after the declaration
+   0 of the rest sit inside a block that can return first, which is the hazard
+3. The verdict, against a baseline of 0
+   no hazard anywhere in the tree: nothing reads a body level binding from above it inside a block that can return
+
+simEarlyReturnScope: all green
