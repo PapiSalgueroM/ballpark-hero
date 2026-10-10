@@ -1,0 +1,6 @@
+apply exit=0 0s |  1 file changed, 1 insertion(+), 1 deletion(-)
+tsc exit=0 40s | 
+rivalry exit=1 4s | simCareerRivalryEvents: 20 failures
+sense exit=0 72s | simNbaAwardsSense: 171 checks, 0 failed (full size), 72s
+vitest exit=0 24s |    Duration  23.43s (transform 912ms, setup 67ms, collect 1.39s, tests 22.07s, environment 415ms, prepare 201ms)
+parity exit=0 28s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
