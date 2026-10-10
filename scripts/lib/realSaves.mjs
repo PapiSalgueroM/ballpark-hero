@@ -122,7 +122,8 @@ export function makeSaves(seed, rebuildClubs) {
   out['/stadium-tycoon'] = ST.serializeTycoon(ST.newTycoon(NOW + seed), NOW + seed);
   out['/wonderkid-factory'] = WF.serialize(WF.newFactory(NOW + seed, seed + 7));
   store.clear();
-  const table = RBT.drawClubs(RBT.createTable(seed % 2 ? ['human', 'cpu'] : ['human'], seed + 3), rebuildClubs);
+  /* The human seat picks a club (the CPU seat then draws its own): the first moment Rebuild has something to save. */
+  const table = RBT.pickClub(RBT.createTable(seed % 2 ? ['human', 'cpu'] : ['human'], seed + 3), rebuildClubs[seed % rebuildClubs.length], rebuildClubs);
   const save = RBS.toSave({ table, moves: table.seats.map(() => []) }, 'none');
   if (!save) throw new Error('Rebuild had nothing to save after the clubs were drawn');
   RBS.writeRebuildSave(save);
