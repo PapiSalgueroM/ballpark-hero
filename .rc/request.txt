@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk: git worktree add /tmp/rbw 09df145a > /dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/rbw/node_modules; (cd /tmp/rbw && npm run build > "$TMPDIR/base-build.log" 2>&1; echo "base build exit=$? at $(git rev-parse --short HEAD)"; tail -2 "$TMPDIR/base-build.log"; echo "base assets $(ls dist/assets | wc -l)"); echo "head assets $(ls dist/assets | wc -l)"; (cd /tmp/rbw && nohup node scripts/lib/hostLikeServer.mjs dist 4174 > "$TMPDIR/base-server.log" 2>&1 &); sleep 5; curl -s -o /dev/null -w "base server %{http_code}\n" http://localhost:4174/nfl-my-career; curl -s -o /dev/null -w "head server %{http_code}\n" http://localhost:4173/nfl-my-career; BASE_OLD=http://localhost:4174 BASE_ROOT=/tmp/rbw node .rc/x/review-run-walk3.mjs
