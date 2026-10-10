@@ -1,0 +1,17 @@
+vitest exit=0 61s |    Duration  60.51s (transform 2.15s, setup 210ms, collect 2.94s, tests 56.87s, environment 1.34s, prepare 663ms)
+tsc exit=2 86s |     Type '{ year: number; }' has no properties in common with type 'Pick<NbaSeasonLine, "allStar">'.
+rival-tickdraws exit=1 1054s | simUsRivalSense: 33 checks, 7 failed (full size), red sections: P1, P2
+rival-liftkey exit=1 1065s | simUsRivalSense: 33 checks, 4 failed (full size), red sections: P1, L, P2
+rival-p exit=0 1161s | simUsRivalSense: 33 checks, 0 failed (full size)
+sense-c exit=0 149s | simNbaAwardsSense: 174 checks, 0 failed (full size), 149s
+sense-rivaldraws exit=1 163s | simNbaAwardsSense: 171 checks, 2 failed (full size, control rivaldraws), 163s
+sense-oldgate306 exit=1 155s | simNbaAwardsSense: 171 checks, 1 failed (full size, control oldgate306), 154s
+sense-oldgateown exit=1 134s | simNbaAwardsSense: 171 checks, 5 failed (full size, control oldgateown), 134s
+rivalry exit=0 9s | simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.
+parity exit=0 59s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+simNflCareer exit=0 3s | PASS: no crashes, every position produces stats, shop fully reachable, deck C drawn, every card dealt only where its words hold (its words, odds and money: simUsCareerDec
+simMlbCareer exit=0 20s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, every life card tagged
+simNhlCareer exit=0 14s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged
+simNbaCareer exit=0 23s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest
+sense-droppedanyyear exit=1 143s | simNbaAwardsSense: 171 checks, 3 failed (full size, control droppedanyyear), 142s
+rival-liftcard exit=1 915s | simUsRivalSense: 33 checks, 1 failed (full size), red sections: L

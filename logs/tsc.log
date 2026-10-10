@@ -1,0 +1,3 @@
+src/lib/nbaCareerRivalryEvents.ts(60,28): error TS2345: Argument of type '(last: Pick<NbaSeasonLine, "allStar">) => boolean' is not assignable to parameter of type '(last: { year: number; }) => boolean'.
+  Types of parameters 'last' and 'last' are incompatible.
+    Type '{ year: number; }' has no properties in common with type 'Pick<NbaSeasonLine, "allStar">'.

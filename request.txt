@@ -1,0 +1,17 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/usRivalLine.test.ts src/test/usCareerTruthDigest.test.ts --testTimeout=300000 --hookTimeout=120000
+rival-p: RIVAL_PROVE=6779cfad RIVAL_MOVED=none node scripts/simUsRivalSense.mjs
+rival-tickdraws: US_RIVAL_CONTROL=tickdraws RIVAL_PROVE=6779cfad RIVAL_MOVED=none node scripts/simUsRivalSense.mjs
+rival-liftkey: US_RIVAL_CONTROL=liftkey RIVAL_PROVE=6779cfad RIVAL_MOVED=none node scripts/simUsRivalSense.mjs
+rival-liftcard: US_RIVAL_CONTROL=liftcard RIVAL_PROVE=6779cfad RIVAL_MOVED=none node scripts/simUsRivalSense.mjs
+sense-c: SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+sense-rivaldraws: SIM_NBA_SENSE_CONTROL=rivaldraws node scripts/simNbaAwardsSense.mjs
+sense-oldgate306: SIM_NBA_SENSE_CONTROL=oldgate306 node scripts/simNbaAwardsSense.mjs
+sense-oldgateown: SIM_NBA_SENSE_CONTROL=oldgateown node scripts/simNbaAwardsSense.mjs
+sense-droppedanyyear: SIM_NBA_SENSE_CONTROL=droppedanyyear node scripts/simNbaAwardsSense.mjs
+rivalry: node scripts/simCareerRivalryEvents.mjs
+parity: node scripts/simUsBoardParity.mjs
+simNflCareer: node scripts/simNflCareer.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+simNbaCareer: node scripts/simNbaCareer.mjs
