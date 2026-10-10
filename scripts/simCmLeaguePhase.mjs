@@ -6,7 +6,8 @@
  *
  * SECTIONS (CM_LEAGUE_PHASE_ONLY=0,2 runs some of them; the default is all):
  *   0  the ledger. A verified row stands on two publishers on two hosts, none a wiki; a figure is printed by
- *      two of them; a row that is not verified carries no constant; the receipt holds the ledger's hash; the
+ *      two of them, each in a line about that figure, and every number of a cup's shape is such a figure; a
+ *      row that is not verified carries no constant; the receipt holds the ledger's hash; the
  *      two seasons as played add up (points are three a win and one a draw, goals for equal goals against,
  *      two publishers agree on the top 24); and the BRACKET RULE IS DERIVED from those two seasons, never
  *      typed: which play-off pairing feeds which seeded pair, which ties meet in the quarter-finals and the
@@ -41,7 +42,9 @@
  * Exit 0 green, 1 red or a control that fired, 2 could not run, 3 a control that did not fire.
  * A control is CM_LEAGUE_PHASE_CONTROL=<name>; it runs its own section only and must turn its own check
  * red and nothing that is not its own (the last line says FIRED, DID NOT FIRE CLEANLY or ABORTED).
- *   section 0, the data twisted in memory: onesource wiki thinused figure receipt steps feed points;
+ *   section 0, the data twisted in memory: onesource wiki thinused figure receipt steps feed points
+ *              capsource (the cap of the two other cups back on the regulations alone) shapefigure (a
+ *              number of a shape listed under no row's figures);
  *              the library edited in the bundle: const (a direct place too many)
  *   section 1, src/lib/leagueSlate.ts edited in the bundle: ninth sameassoc cap twoaday pot lie nosearch
  *   section 2: gdonly (the stand in order: steps 3 to 8 go red, 1 and 2 stay green)
@@ -72,6 +75,8 @@ const CONTROLS = {
   feed: [0, /fed by two play-off pairings/, /fed by two play-off pairings|disagree on|is not one round of 16 tie|do not give one bracket rule|too few readings|^BRACKET_LINES are not|^HALF_SLOTS pairs lines/],
   const: [0, /^ucl\.direct is 9 in uclLeaguePhase\.ts and 8 in the ledger/],
   points: [0, /points are not three a win/, /points are not three a win|disagree on the points of place 1$/],
+  capsource: [0, /^F15[ab]: capPerAssociation 2 is not printed by two publishers/, /^F15[ab]: capPerAssociation 2 is not printed by two publishers|^F15a: potSize 9 is not printed by two publishers/],
+  shapefigure: [0, /^LEAGUE_PHASE_SHAPES\.uecl\.capPerAssociation is a figure of no verified row/],
   /* Section 1. These edit the bundled source of src/lib/leagueSlate.ts: see EDITS. */
   ninth: [1, /^\[EIGHT\]/, /^\[(EIGHT|COUNT|HOMEAWAY|POT|DAY|BUDGET|RATE)\]/], sameassoc: [1, /^\[BUDGET\].*breaks/, /^\[(BUDGET|RATE)\]/],
   cap: [1, /^\[BUDGET\].*over the cap/, /^\[(BUDGET|RATE)\]/], twoaday: [1, /^\[DAY\]/, /^\[(DAY|COUNT)\]/],
@@ -149,6 +154,18 @@ const domainOf = url => { const h = new URL(url).host; return h.split('.').slice
 const WORDS = { one: 1, two: 2, three: 3, four: 4, six: 6, eight: 8, nine: 9 };
 const printed = (s, n) => new RegExp(`(^|[^0-9])${n}([^0-9]|$)`).test(s)
   || Object.entries(WORDS).some(([w, v]) => v === n && new RegExp(`\\b${w}\\b`, 'i').test(s));
+/* A figure counts for a publisher only when ONE of its quoted lines prints the number in words about that
+   figure: a "two" in a line about pots is not a cap of two. That is how the cap of the Europa League and of
+   the Conference League once stood on the regulations alone with section 0 green (the review of Round 1228).
+   A key with no pattern here (the points of a place in F16) is read off the joined lines. */
+const FIGURE_WORDS = {
+  clubs: /club|team|side/i, games: /match|fixture|opponent|game/i, home: /home/i, away: /away/i,
+  pots: /pot/i, potSize: /pot/i, perPot: /pot/i, direct: /round of 16|last 16/i, playoffTo: /play-?off/i,
+  capPerAssociation: /association|countr|nation/i,
+};
+const printsFigure = (source, key, n) => (FIGURE_WORDS[key]
+  ? source.literal.some(l => FIGURE_WORDS[key].test(l) && printed(l, n))
+  : printed(source.literal.join(' | '), n));
 const STEP_WORDS = {
   goalDifference: [/goal difference/i, null], goalsFor: [/goals scored/i, /away/i], awayGoalsFor: [/goals scored.*away|away goals/i, null],
   wins: [/wins/i, /away/i], awayWins: [/wins.*away|away wins/i, null], opponentsPoints: [/points/i, null],
@@ -205,6 +222,9 @@ function section0() {
   if (CONTROL === 'steps') { const t = ledger.tableSteps; changed = t[2] !== t[3]; [t[2], t[3]] = [t[3], t[2]]; }
   if (CONTROL === 'points') { const r = ledger.asPlayed['2024-25'].table.espn.rows[0]; r[6] += 1; changed = true; }
   if (CONTROL === 'feed') { const t = ledger.asPlayed['2025-26'].r16[0].ties; changed = t[0][0] !== t[1][0]; [t[0][0], t[1][0]] = [t[1][0], t[0][0]]; }
+  /* capsource: the ledger as the review found it, the cap of the two other cups on the regulations alone. */
+  if (CONTROL === 'capsource') { for (const id of ['F15a', 'F15b']) { const r = row(id); const kept = r.sources.filter(s => !/goal[.]com|premierleague[.]com/.test(s.url)); changed ||= kept.length < r.sources.length; r.sources = kept; } }
+  if (CONTROL === 'shapefigure') { const f = row('F15b').figures; changed = Object.hasOwn(f, 'capPerAssociation'); delete f.capPerAssociation; }
 
   /* 0.1 Every row is a reading somebody can open, and a verified row stands on two publishers. */
   const ids = new Set();
@@ -222,7 +242,7 @@ function section0() {
     if (r.status === 'verified') ok(domains.size >= 2, `${r.id} is verified and stands on fewer than two publishers`);
     else ok(r.usedBy.length === 0, `${r.id} is not verified and carries ${r.usedBy.join(', ')}`);
     for (const [key, n] of Object.entries(r.figures ?? {})) {
-      const by = new Set(r.sources.filter(s => printed(s.literal.join(' | '), n)).map(s => domainOf(s.url)));
+      const by = new Set(r.sources.filter(s => printsFigure(s, key, n)).map(s => domainOf(s.url)));
       ok(by.size >= 2, `${r.id}: ${key} ${n} is not printed by two publishers`);
       for (const c of r.competition.split('+')) if (Object.hasOwn(ledger.competitions[c] ?? {}, key)) ok(ledger.competitions[c][key] === n, `${r.id}: ${key} is ${n} and competitions.${c}.${key} is ${ledger.competitions[c][key]}`);
     }
@@ -474,6 +494,11 @@ async function section0b() {
   for (const name of used) ok(Object.hasOwn(lib, name.split('.')[0]), `a row names ${name}, which uclLeaguePhase.ts does not export`);
   for (const key of Object.keys(lib.UCL_LEAGUE)) ok(used.has(`UCL_LEAGUE.${key}`), `UCL_LEAGUE.${key} stands on no verified row`);
   for (const name of ['LEAGUE_PHASE_STEPS', 'PLAYOFF_PAIRS', 'BRACKET_LINES', 'HALF_SLOTS', 'drawUclKnockout', 'nextRoundTie', 'LEAGUE_PHASE_SHAPES.uel', 'LEAGUE_PHASE_SHAPES.uecl']) ok(used.has(name), `${name} stands on no verified row`);
+  /* Every number of every shape is a FIGURE of a verified row of that cup, so 0.1 holds it to two publishers
+     that print it. A row naming the shape is not enough: that is how a cap could ride in on one source. */
+  for (const [c, shape] of Object.entries(lib.LEAGUE_PHASE_SHAPES)) for (const key of Object.keys(shape)) {
+    ok(ledger.rows.some(r => r.status === 'verified' && r.competition.split('+').includes(c) && Object.hasOwn(r.figures ?? {}, key)), `LEAGUE_PHASE_SHAPES.${c}.${key} is a figure of no verified row`);
+  }
   /* Soccer Career keeps four of the same numbers in its own file (the other lane's). Read, never edited. */
   const theirs = /export const LEAGUE_PHASE = \{([^}]*)\}/.exec(stripComments(text('src/lib/soccerCareerContinental.ts')));
   ok(theirs !== null, 'Soccer Career\'s LEAGUE_PHASE constant was not found');
