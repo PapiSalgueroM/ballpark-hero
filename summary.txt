@@ -1,0 +1,5 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+hub-revert exit=0 44s | playCareerHub control revert: all 36 guarded checks fired (mutations landed: {"inboxBox":8,"moneyHeadline":8})
+hub-unknown exit=1 0s | CAREER_HUB_CONTROL=nonsense is not a control this harness knows (revert, logback)
+hub exit=0 48s | playCareerHub: green. Four career games on live boxes, and every award on the screen has a year on it.
+hub-logback exit=0 54s | playCareerHub control logback: all 4 guarded checks fired (mutations landed: {"logBack":12})
