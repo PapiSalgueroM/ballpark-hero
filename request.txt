@@ -1,0 +1,3 @@
+lay-compare: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs
+lay-control: US_SEASON_CONTROL=lay US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs
+lay-wrong-receipt: US_SEASON_CONTROL=lay US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs

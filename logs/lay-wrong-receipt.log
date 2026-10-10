@@ -1,0 +1,1 @@
+control lay is a digest control: US_SEASON_CONTROL=lay US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay, refusing to run

@@ -1,0 +1,26 @@
+bundled in 166 ms; sports nba, nfl; 40 careers a sport and a seed set; seed sets 0, 1, 2, 3, 4; CONTROL lay
+played 480 careers twice in 20624 ms; 8436 seasons observed
+digest nba seed set 0: 904 seasons, 812 derived, season 6edccf9493d4c41885b0c1a8763bb428dcc1b50d, careers 1a511c865af817c60f642c3a793414aaa1055d73
+digest nba seed set 1: 900 seasons, 809 derived, season a7ae9d252f078a18c33e7e8f4b2f1ca1358bbc0a, careers 6c40d9a97274f344b3c1b7f83d1ed9f6967321f5
+digest nba seed set 2: 902 seasons, 810 derived, season e7a3ede09a276bc3d340b4b3b313e6f4433191e0, careers f5f417f43ab5ff32999435dabf431321a40c0ecc
+digest nba seed set 3: 890 seasons, 802 derived, season a35b459f2caa636544fe6c2a3f0e769e16f759ae, careers 09f295da3e2813b491009494b3e0943c067defde
+digest nba seed set 4: 897 seasons, 809 derived, season 1dea454ba3b269fd73f0403f8e62804a75c14c1f, careers 63600159e862f8f6d7f288f2560c6802c8604864
+digest nfl seed set 0: 786 seasons, 500 derived, season 9813d1bbd3256515d7b037a171aae3d34ac16726, careers fc04351b8a8a281fcbc7876b15556fdd61a8df2b
+digest nfl seed set 1: 787 seasons, 502 derived, season 0eef76f5755c36a956122b609337854129092225, careers db0e7a9c26966fbd48634c8820b761a7c0d5268a
+digest nfl seed set 2: 790 seasons, 505 derived, season 4b7d169e1f6bcfc1e7b254ec881c336dc099630e, careers 341ecc333b88edcdb05e463f698c05d537eed631
+digest nfl seed set 3: 781 seasons, 500 derived, season ba8dc01759ef018df626de91f6657ef331042ef5, careers 25a0dd5cc67053766ab3758e3c93fc65ffe668b8
+digest nfl seed set 4: 799 seasons, 515 derived, season f8ae14da4ce57d7b1422b11c95bc3bc910a01eb7, careers 5dc7fb3573f3c605147c6f8758e6a275934070c5
+digest stray draws (Math.random calls while a season was derived): 0
+FAIL digest nba seed set 0: season 6edccf9493d4c41885b0c1a8763bb428dcc1b50d now, 4bdd47afaf16f8f04e8d6d79bf1a6d6425b5e2bc at the record
+FAIL digest nba seed set 1: season a7ae9d252f078a18c33e7e8f4b2f1ca1358bbc0a now, 97a15a51f854372c4ebb5d273850e9c3e07140a1 at the record
+FAIL digest nba seed set 2: season e7a3ede09a276bc3d340b4b3b313e6f4433191e0 now, cbae49c9b3cffd59b24c9c6ea62b6dbf6d59c223 at the record
+FAIL digest nba seed set 3: season a35b459f2caa636544fe6c2a3f0e769e16f759ae now, 927f1ae499ee3e40cb075ba92a934d902dd0b31f at the record
+FAIL digest nba seed set 4: season 1dea454ba3b269fd73f0403f8e62804a75c14c1f now, daa19f6fd02f7ba7e98265073564cb0d5fc5c168 at the record
+FAIL digest nfl seed set 0: season 9813d1bbd3256515d7b037a171aae3d34ac16726 now, 7a20cde138dc6d0945d7b68aa9a105e8126dc9fe at the record
+FAIL digest nfl seed set 1: season 0eef76f5755c36a956122b609337854129092225 now, 4f2fd0fa8f71336d4af08ad5d86a02d70ce14abe at the record
+FAIL digest nfl seed set 2: season 4b7d169e1f6bcfc1e7b254ec881c336dc099630e now, 2d9db73e2c744d5d81e7a07eb225a470ffcce222 at the record
+FAIL digest nfl seed set 3: season ba8dc01759ef018df626de91f6657ef331042ef5 now, af115f6f56e6d834deafccb72c1d8bc35e6ccdc0 at the record
+FAIL digest nfl seed set 4: season f8ae14da4ce57d7b1422b11c95bc3bc910a01eb7 now, 6e0f577a8914feef3ee4b3332621a048770a70fb at the record
+ok   digest stray draws are the record's (0)
+control lay: RED AT THE NAMED CHECK (the season digest of every sport moved on every seed set of this run; the careers, the counts and the stray draws held)
+simUsSeasonCentre digest compare: 11 digests, 10 moved (control lay)

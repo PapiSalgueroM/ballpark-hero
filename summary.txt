@@ -1,0 +1,3 @@
+lay-wrong-receipt exit=2 1s | control lay is a digest control: US_SEASON_CONTROL=lay US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay, refusing to run
+lay-control exit=1 21s | simUsSeasonCentre digest compare: 11 digests, 10 moved (control lay)
+lay-compare exit=0 21s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1300's playoff lay, in no gate)
