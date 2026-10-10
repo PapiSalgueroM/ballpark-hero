@@ -1,0 +1,40 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json; s=$?; echo "TSC_EXIT=$s"; exit $s
+default: node scripts/simUsSeasonCentre.mjs
+compare-all: US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+lawdrift: US_SEASON_CONTROL=lawdrift US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-minutes: US_SEASON_CONTROL=minutes node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-points: US_SEASON_CONTROL=points node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-forty: US_SEASON_CONTROL=forty node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-level: US_SEASON_CONTROL=level node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-oddtd: US_SEASON_CONTROL=oddtd node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-sum: US_SEASON_CONTROL=sum node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-kick: US_SEASON_CONTROL=kick node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-days: US_SEASON_CONTROL=days node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-nflformula: US_SEASON_CONTROL=nflformula node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-lumpy: US_SEASON_CONTROL=lumpy node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-flat: US_SEASON_CONTROL=flat node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-tdform: US_SEASON_CONTROL=tdform node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-order: US_SEASON_CONTROL=order node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-bigkick: US_SEASON_CONTROL=bigkick node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-oddsack: US_SEASON_CONTROL=oddsack node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-nflstage: US_SEASON_CONTROL=nflstage node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-poscore: US_SEASON_CONTROL=poscore node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-nflheld: US_SEASON_CONTROL=nflheld node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-stream: US_SEASON_CONTROL=stream node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-record: US_SEASON_CONTROL=record node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-length: US_SEASON_CONTROL=length node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-stage: US_SEASON_CONTROL=stage node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-short82: US_SEASON_CONTROL=short82 node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-names: US_SEASON_CONTROL=names node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-window: US_SEASON_CONTROL=window node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-formula: US_SEASON_CONTROL=formula node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-conf: US_SEASON_CONTROL=conf node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-hot: US_SEASON_CONTROL=hot node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+ctl-static: US_SEASON_CONTROL=static node scripts/simUsSeasonCentre.mjs 2>&1 | tee "$TMPDIR/o.log"; s=${PIPESTATUS[0]}; echo "FAILS=$(grep -c "^FAIL" "$TMPDIR/o.log")"; grep "^control " "$TMPDIR/o.log" | tail -1 | cut -c1-165; exit $s
+vitest-law: node_modules/.bin/vitest run src/test/gameLawNfl.test.ts src/test/usSeasonNfl.test.ts src/test/usSeasonCentre.test.tsx src/test/seasonCore.test.ts src/test/seasonCentreWords.test.tsx --testTimeout=300000 --hookTimeout=120000
+anchors: node scripts/simHarnessAnchors.mjs
+norival: node scripts/simNoRivalNames.mjs
+livescores: node scripts/simLiveScores.mjs
+noquotes: node scripts/simNoInventedQuotes.mjs
+seasonlaw: node scripts/simSeasonLaw.mjs
+agreement: node scripts/simSeasonCentreAgreement.mjs
