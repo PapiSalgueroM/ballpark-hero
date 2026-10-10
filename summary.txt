@@ -1,0 +1,2 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk2 exit=0 111s | rv-walk second run: 20 checks, 0 failed
