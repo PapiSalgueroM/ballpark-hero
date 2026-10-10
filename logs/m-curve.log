@@ -1,0 +1,670 @@
+MUTATION curve APPLIED to scripts/lib/cmValueCurve.mjs
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/cmValueCurve.test.ts[2m > [22m[2mlevelFrom: the age read run backwards, total[2m > [22m[2mit inverts the read wherever no clamp bit, and the clamped cells are counted
+[22m[39mlevelFrom: clamped cells of 1,664 a top (52 levels by 32 ages): {"94":299,"96":235,"97":203,"98":171}
+
+[90mstdout[2m | src/test/cmValueCurve.test.ts[2m > [22m[2mone order in every world: the stretch first, then the age points[2m > [22m[2mover every row of the four past seasons: never more than six down or eight up, nobody past the top
+[22m[39mera2005: 829 of 1727 rows change, swing -6 to 8, on the top of 96: Ronaldinho, Thierry Henry
+era2010: 890 of 1751 rows change, swing -6 to 8, on the top of 97: Cristiano Ronaldo, Lionel Messi
+era2015: 738 of 1659 rows change, swing -6 to 8, on the top of 98: Cristiano Ronaldo, Lionel Messi
+era2020: 862 of 1774 rows change, swing -6 to 8, on the top of 94: Kylian Mbappé, Lionel Messi
+
+[90mstdout[2m | src/test/cmValueCurve.test.ts[2m > [22m[2mwhat every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22m[2mevery line is what the ages rule resolves from the committed ledgers, and its last item is the value rating
+[22m[39m2026 at the flip: 2078 of 4401 ratings change; by points {"0":2323,"1":230,"2":324,"3":110,"4":76,"5":44,"6":20,"7":11,"8":13,"-1":379,"-2":306,"-3":245,"-4":182,"-6":50,"-5":88}
+
+ [31m❯[39m src/test/cmValueCurve.test.ts [2m([22m[2m51 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 448[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mthe fixture is whole, so nothing below can pass empty[32m 2[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mthe constants and the position map are the recorded ones[32m 0[2mms[22m[39m
+[31m   [31m×[31m Club Manager value curve (recorded before any age read)[2m > [22mevery recorded dollar value still gets its recorded value rating[39m[32m 13[2mms[22m[39m
+[31m     → expected [ '60256: 48 became 49', …(272) ] to deeply equal [][39m
+[31m   [31m×[31m Club Manager value curve (recorded before any age read)[2m > [22mratingOf with one argument is still that value rating, so no generator writes a new byte[39m[32m 4[2mms[22m[39m
+[31m     → expected [ '60256: 48 became 49', …(272) ] to deeply equal [][39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mthe two anchors read as the header says[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mpounds, at one and at two decimals, are the recorded ones[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22meuros convert at the recorded rate[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mthe constants are the measured ones[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mevery age from 14 to 45 is the table typed out by hand, at tops 94, 96, 97 and 98[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mwith no top given the top is 94, and rateFrom is that read for a generator[32m 6[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mthe age points alone: a point a year under 24, nothing to 29, one at 30 rising to eight[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mthe half distance limit reads the top of the man own world, never the constant 94[32m 76[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mthe upper clamp reads the same top: nobody passes the best of his world for being old[32m 71[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mposition is checked and changes nothing[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mratingOf with an age and a position is the value rating read with the age[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mfails closed on a bad value rating, age or position, naming the inputs[32m 2[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mthe three reads throw on anything that is not a whole number, so no NaN reaches a save[32m 2[2mms[22m[39m
+   [32m✓[39m levelFrom: the age read run backwards, total[2m > [22manswers a whole level from 48 to the top for every rating 48 to 99, every age 14 to 45, every top[32m 7[2mms[22m[39m
+   [32m✓[39m levelFrom: the age read run backwards, total[2m > [22mit is the smallest level whose read is at least the rating, and the top when there is none[32m 6[2mms[22m[39m
+   [32m✓[39m levelFrom: the age read run backwards, total[2m > [22mthe ratings the read skips for a young man are the enumerated ones, and each takes the next level up[32m 3[2mms[22m[39m
+   [32m✓[39m levelFrom: the age read run backwards, total[2m > [22mit inverts the read wherever no clamp bit, and the clamped cells are counted[32m 6[2mms[22m[39m
+   [32m✓[39m one order in every world: the stretch first, then the age points[2m > [22mreadInWorld stretches, then reads the age on the stretched scale and its own top[32m 1[2mms[22m[39m
+   [32m✓[39m one order in every world: the stretch first, then the age points[2m > [22meach past season top is the stretch of the highest rating in its file: 96, 97, 98 and 94[32m 1[2mms[22m[39m
+   [32m✓[39m one order in every world: the stretch first, then the age points[2m > [22mthe 29 men of the brief table, row for row, from the files main ships[32m 4[2mms[22m[39m
+   [32m✓[39m one order in every world: the stretch first, then the age points[2m > [22mover every row of the four past seasons: never more than six down or eight up, nobody past the top[32m 3[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mcounts whole years to a day[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mcase 1, a birth date on file: the exact age, whichever way the table rule would err[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mcase 2, a bulk row: plus one for a 2026 row and plus two for a 2025 row[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mcase 3, a hand written row: the age as written[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mcase 4, no table row: the age as typed, marked unknown[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22ma ledger row marked thin is left out: the man keeps the table rule and nothing reads his date[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mAllan twice: the Corinthians man gets his date, the Palmeiras namesake keeps the table rule[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22ma moved man is found by his table club, and by his baked club[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mthrows on a club matched date more than two years from the table, naming both ages[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mthrows on a row the rule was never measured on[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mtwo ledgers that disagree about one man are fatal, and a date with no club must have a twin[32m 1[2mms[22m[39m
+   [32m✓[39m the two script libraries stay pure, because the app imports them[2m > [22mscripts/lib/cmValueCurve.mjs has no import, no require, no file, clock, random or network read[32m 1[2mms[22m[39m
+   [32m✓[39m the two script libraries stay pure, because the app imports them[2m > [22mscripts/lib/cmAges.mjs has no import, no require, no file, clock, random or network read[32m 0[2mms[22m[39m
+   [32m✓[39m the birth date ledger: two publishers of two kinds a man, neither a wiki[2m > [22mthe checker itself fires: two statistics sites, a wiki, a date the page never printed, a thin row with no reason[32m 3[2mms[22m[39m
+   [32m✓[39m the birth date ledger: two publishers of two kinds a man, neither a wiki[2m > [22mevery one of the 105 rows meets the rule, and none is thin[32m 20[2mms[22m[39m
+   [32m✓[39m the birth date ledger: two publishers of two kinds a man, neither a wiki[2m > [22mevery bulk table row holds the age on 1 January of its year, which is what the rule stands on[32m 1[2mms[22m[39m
+   [32m✓[39m the birth date ledger: two publishers of two kinds a man, neither a wiki[2m > [22mthe three ledgers join with no two dates for one man, and every ledger man is in his squad once[32m 5[2mms[22m[39m
+   [32m✓[39m what every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22mholds exactly the men of the squads file, in its order[32m 1[2mms[22m[39m
+   [32m✓[39m what every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22mevery line is what the ages rule resolves from the committed ledgers, and its last item is the value rating[32m 10[2mms[22m[39m
+   [32m✓[39m what every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22mthe eight 2026 men of the brief table come out of the files alone: squads file, basis, ages rule, age read[32m 5[2mms[22m[39m
+   [32m✓[39m the folded final tables: two table publishers a league, neither a wiki[2m > [22mthe checker itself fires: one table publisher, a wiki as the second, a thin league with no reason[32m 1[2mms[22m[39m
+   [32m✓[39m the folded final tables: two table publishers a league, neither a wiki[2m > [22mall 27 leagues meet the rule, none is thin, and every game club named is a club of the game[32m 12[2mms[22m[39m
+   [32m✓[39m the folded final tables: two table publishers a league, neither a wiki[2m > [22magrees place for place with the final tables the game already ships (Round 612, a separate research run)[32m 0[2mms[22m[39m
+   [32m✓[39m the typed door the engine will import (src/lib/cmAgeRead.ts)[2m > [22mis the script library itself, not a second implementation[32m 0[2mms[22m[39m
+   [32m✓[39m the typed door the engine will import (src/lib/cmAgeRead.ts)[2m > [22mreads a man through its types the way the engine will[32m 0[2mms[22m[39m
+   [32m✓[39m the typed door the engine will import (src/lib/cmAgeRead.ts)[2m > [22mnothing shipped imports it, or either script library, yet (part two deletes this test with its first import)[32m 168[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mClub Manager value curve (recorded before any age read)[2m > [22mevery recorded dollar value still gets its recorded value rating
+[31m[1mAssertionError[22m: expected [ '60256: 48 became 49', …(272) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "60256: 48 became 49",[39m
+[31m+   "60954: 48 became 49",[39m
+[31m+   "61660: 48 became 49",[39m
+[31m+   "71614: 49 became 50",[39m
+[31m+   "72444: 49 became 50",[39m
+[31m+   "73282: 49 became 50",[39m
+[31m+   "74131: 49 became 50",[39m
+[31m+   "86099: 50 became 51",[39m
+[31m+   "87096: 50 became 51",[39m
+[31m+   "88105: 50 became 51",[39m
+[31m+   "102329: 51 became 52",[39m
+[31m+   "103514: 51 became 52",[39m
+[31m+   "104713: 51 became 52",[39m
+[31m+   "105925: 51 became 52",[39m
+[31m+   "123027: 52 became 53",[39m
+[31m+   "124451: 52 became 53",[39m
+[31m+   "125893: 52 became 53",[39m
+[31m+   "127350: 52 became 53",[39m
+[31m+   "146218: 53 became 54",[39m
+[31m+   "147911: 53 became 54",[39m
+[31m+   "149624: 53 became 54",[39m
+[31m+   "151356: 53 became 54",[39m
+[31m+   "175792: 54 became 55",[39m
+[31m+   "177828: 54 became 55",[39m
+[31m+   "179887: 54 became 55",[39m
+[31m+   "181970: 54 became 55",[39m
+[31m+   "208930: 55 became 56",[39m
+[31m+   "211349: 55 became 56",[39m
+[31m+   "213796: 55 became 56",[39m
+[31m+   "216272: 55 became 56",[39m
+[31m+   "251189: 56 became 57",[39m
+[31m+   "254097: 56 became 57",[39m
+[31m+   "257040: 56 became 57",[39m
+[31m+   "260016: 56 became 57",[39m
+[31m+   "298538: 57 became 58",[39m
+[31m+   "301995: 57 became 58",[39m
+[31m+   "305492: 57 became 58",[39m
+[31m+   "309030: 57 became 58",[39m
+[31m+   "358922: 58 became 59",[39m
+[31m+   "363078: 58 became 59",[39m
+[31m+   "367282: 58 became 59",[39m
+[31m+   "371535: 58 became 59",[39m
+[31m+   "426580: 59 became 60",[39m
+[31m+   "431519: 59 became 60",[39m
+[31m+   "436516: 59 became 60",[39m
+[31m+   "441570: 59 became 60",[39m
+[31m+   "512861: 60 became 61",[39m
+[31m+   "518800: 60 became 61",[39m
+[31m+   "524807: 60 became 61",[39m
+[31m+   "530884: 60 became 61",[39m
+[31m+   "609537: 61 became 62",[39m
+[31m+   "616595: 61 became 62",[39m
+[31m+   "623735: 61 became 62",[39m
+[31m+   "630957: 61 became 62",[39m
+[31m+   "638263: 61 became 62",[39m
+[31m+   "732825: 62 became 63",[39m
+[31m+   "741310: 62 became 63",[39m
+[31m+   "749894: 62 became 63",[39m
+[31m+   "758578: 62 became 63",[39m
+[31m+   "870964: 63 became 64",[39m
+[31m+   "881049: 63 became 64",[39m
+[31m+   "891251: 63 became 64",[39m
+[31m+   "901571: 63 became 64",[39m
+[31m+   "912011: 63 became 64",[39m
+[31m+   "1047129: 64 became 65",[39m
+[31m+   "1059254: 64 became 65",[39m
+[31m+   "1071519: 64 became 65",[39m
+[31m+   "1083927: 64 became 65",[39m
+[31m+   "1244515: 65 became 66",[39m
+[31m+   "1258925: 65 became 66",[39m
+[31m+   "1273503: 65 became 66",[39m
+[31m+   "1288250: 65 became 66",[39m
+[31m+   "1303167: 65 became 66",[39m
+[31m+   "1496236: 66 became 67",[39m
+[31m+   "1513561: 66 became 67",[39m
+[31m+   "1531087: 66 became 67",[39m
+[31m+   "1548817: 66 became 67",[39m
+[31m+   "1778279: 67 became 68",[39m
+[31m+   "1798871: 67 became 68",[39m
+[31m+   "1819701: 67 became 68",[39m
+[31m+   "1840772: 67 became 68",[39m
+[31m+   "1862087: 67 became 68",[39m
+[31m+   "2137962: 68 became 69",[39m
+[31m+   "2162719: 68 became 69",[39m
+[31m+   "2187762: 68 became 69",[39m
+[31m+   "2213095: 68 became 69",[39m
+[31m+   "2238721: 68 became 69",[39m
+[31m+   "2540973: 69 became 70",[39m
+[31m+   "2570396: 69 became 70",[39m
+[31m+   "2600160: 69 became 70",[39m
+[31m+   "2630268: 69 became 70",[39m
+[31m+   "2660725: 69 became 70",[39m
+[31m+   "3054921: 70 became 71",[39m
+[31m+   "3090295: 70 became 71",[39m
+[31m+   "3126079: 70 became 71",[39m
+[31m+   "3162278: 70 became 71",[39m
+[31m+   "3198895: 70 became 71",[39m
+[31m+   "3630781: 71 became 72",[39m
+[31m+   "3672823: 71 became 72",[39m
+[31m+   "3715352: 71 became 72",[39m
+[31m+   "3758374: 71 became 72",[39m
+[31m+   "3801894: 71 became 72",[39m
+[31m+   "4365158: 72 became 73",[39m
+[31m+   "4415704: 72 became 73",[39m
+[31m+   "4466836: 72 became 73",[39m
+[31m+   "4518559: 72 became 73",[39m
+[31m+   "4570882: 72 became 73",[39m
+[31m+   "5188000: 73 became 74",[39m
+[31m+   "5248075: 73 became 74",[39m
+[31m+   "5308844: 73 became 74",[39m
+[31m+   "5370318: 73 became 74",[39m
+[31m+   "5432503: 73 became 74",[39m
+[31m+   "6237348: 74 became 75",[39m
+[31m+   "6309573: 74 became 75",[39m
+[31m+   "6382635: 74 became 75",[39m
+[31m+   "6456542: 74 became 75",[39m
+[31m+   "6531306: 74 became 75",[39m
+[31m+   "7413102: 75 became 76",[39m
+[31m+   "7498942: 75 became 76",[39m
+[31m+   "7585776: 75 became 76",[39m
+[31m+   "7673615: 75 became 76",[39m
+[31m+   "7762471: 75 became 76",[39m
+[31m+   "8912509: 76 became 77",[39m
+[31m+   "9015711: 76 became 77",[39m
+[31m+   "9120108: 76 became 77",[39m
+[31m+   "9225714: 76 became 77",[39m
+[31m+   "9332543: 76 became 77",[39m
+[31m+   "10592537: 77 became 78",[39m
+[31m+   "10715193: 77 became 78",[39m
+[31m+   "10839269: 77 became 78",[39m
+[31m+   "10964782: 77 became 78",[39m
+[31m+   "11091748: 77 became 78",[39m
+[31m+   "11220185: 77 became 78",[39m
+[31m+   "12735031: 78 became 79",[39m
+[31m+   "12882496: 78 became 79",[39m
+[31m+   "13031668: 78 became 79",[39m
+[31m+   "13182567: 78 became 79",[39m
+[31m+   "13335214: 78 became 79",[39m
+[31m+   "15135612: 79 became 80",[39m
+[31m+   "15310875: 79 became 80",[39m
+[31m+   "15488166: 79 became 80",[39m
+[31m+   "15667511: 79 became 80",[39m
+[31m+   "15848932: 79 became 80",[39m
+[31m+   "16032454: 79 became 80",[39m
+[31m+   "18197009: 80 became 81",[39m
+[31m+   "18407720: 80 became 81",[39m
+[31m+   "18620871: 80 became 81",[39m
+[31m+   "18836491: 80 became 81",[39m
+[31m+   "19054607: 80 became 81",[39m
+[31m+   "21627185: 81 became 82",[39m
+[31m+   "21877616: 81 became 82",[39m
+[31m+   "22130947: 81 became 82",[39m
+[31m+   "22387211: 81 became 82",[39m
+[31m+   "22646443: 81 became 82",[39m
+[31m+   "22908677: 81 became 82",[39m
+[31m+   "26001596: 82 became 83",[39m
+[31m+   "26302680: 82 became 83",[39m
+[31m+   "26607251: 82 became 83",[39m
+[31m+   "26915348: 82 became 83",[39m
+[31m+   "27227013: 82 became 83",[39m
+[31m+   "30902954: 83 became 84",[39m
+[31m+   "31260794: 83 became 84",[39m
+[31m+   "31622777: 83 became 84",[39m
+[31m+   "31988951: 83 became 84",[39m
+[31m+   "32359366: 83 became 84",[39m
+[31m+   "32734069: 83 became 84",[39m
+[31m+   "37153523: 84 became 85",[39m
+[31m+   "37583740: 84 became 85",[39m
+[31m+   "38018940: 84 became 85",[39m
+[31m+   "38459178: 84 became 85",[39m
+[31m+   "38904514: 84 became 85",[39m
+[31m+   "39355008: 84 became 85",[39m
+[31m+   "44157045: 85 became 86",[39m
+[31m+   "44668359: 85 became 86",[39m
+[31m+   "45185594: 85 became 86",[39m
+[31m+   "45708819: 85 became 86",[39m
+[31m+   "46238102: 85 became 86",[39m
+[31m+   "46773514: 85 became 86",[39m
+[31m+   "53088444: 86 became 87",[39m
+[31m+   "53703180: 86 became 87",[39m
+[31m+   "54325033: 86 became 87",[39m
+[31m+   "54954087: 86 became 87",[39m
+[31m+   "55590426: 86 became 87",[39m
+[31m+   "56234133: 86 became 87",[39m
+[31m+   "63095734: 87 became 88",[39m
+[31m+   "63826349: 87 became 88",[39m
+[31m+   "64565423: 87 became 88",[39m
+[31m+   "65313055: 87 became 88",[39m
+[31m+   "66069345: 87 became 88",[39m
+[31m+   "66834392: 87 became 88",[39m
+[31m+   "75857758: 88 became 89",[39m
+[31m+   "76736149: 88 became 89",[39m
+[31m+   "77624712: 88 became 89",[39m
+[31m+   "78523563: 88 became 89",[39m
+[31m+   "79432823: 88 became 89",[39m
+[31m+   "80352612: 88 became 89",[39m
+[31m+   "90157114: 89 became 90",[39m
+[31m+   "91201084: 89 became 90",[39m
+[31m+   "92257143: 89 became 90",[39m
+[31m+   "93325430: 89 became 90",[39m
+[31m+   "94406088: 89 became 90",[39m
+[31m+   "95499259: 89 became 90",[39m
+[31m+   "108392691: 90 became 91",[39m
+[31m+   "109647820: 90 became 91",[39m
+[31m+   "110917482: 90 became 91",[39m
+[31m+   "112201845: 90 became 91",[39m
+[31m+   "113501082: 90 became 91",[39m
+[31m+   "114815362: 90 became 91",[39m
+[31m+   "128824955: 91 became 92",[39m
+[31m+   "130316678: 91 became 92",[39m
+[31m+   "131825674: 91 became 92",[39m
+[31m+   "133352143: 91 became 92",[39m
+[31m+   "134896288: 91 became 92",[39m
+[31m+   "136458314: 91 became 92",[39m
+[31m+   "154881662: 92 became 93",[39m
+[31m+   "156675107: 92 became 93",[39m
+[31m+   "158489319: 92 became 93",[39m
+[31m+   "160324539: 92 became 93",[39m
+[31m+   "162181010: 92 became 93",[39m
+[31m+   "164058977: 92 became 93",[39m
+[31m+   "184077200: 93 became 94",[39m
+[31m+   "186208714: 93 became 94",[39m
+[31m+   "188364909: 93 became 94",[39m
+[31m+   "190546072: 93 became 94",[39m
+[31m+   "192752491: 93 became 94",[39m
+[31m+   "194984460: 93 became 94",[39m
+[31m+   "197242274: 93 became 94",[39m
+[31m+   "62211: 48 became 49",[39m
+[31m+   "74418: 49 became 50",[39m
+[31m+   "89022: 50 became 51",[39m
+[31m+   "106491: 51 became 52",[39m
+[31m+   "127387: 52 became 53",[39m
+[31m+   "152385: 53 became 54",[39m
+[31m+   "182287: 54 became 55",[39m
+[31m+   "218058: 55 became 56",[39m
+[31m+   "260848: 56 became 57",[39m
+[31m+   "312034: 57 became 58",[39m
+[31m+   "373265: 58 became 59",[39m
+[31m+   "446511: 59 became 60",[39m
+[31m+   "534130: 60 became 61",[39m
+[31m+   "638943: 61 became 62",[39m
+[31m+   "764324: 62 became 63",[39m
+[31m+   "914308: 63 became 64",[39m
+[31m+   "1093723: 64 became 65",[39m
+[31m+   "1308345: 65 became 66",[39m
+[31m+   "1565083: 66 became 67",[39m
+[31m+   "1872200: 67 became 68",[39m
+[31m+   "2239583: 68 became 69",[39m
+[31m+   "2679058: 69 became 70",[39m
+[31m+   "3204772: 70 became 71",[39m
+[31m+   "3833647: 71 became 72",[39m
+[31m+   "4585926: 72 became 73",[39m
+[31m+   "5485826: 73 became 74",[39m
+[31m+   "6562314: 74 became 75",[39m
+[31m+   "7850042: 75 became 76",[39m
+[31m+   "9390461: 76 became 77",[39m
+[31m+   "11233159: 77 became 78",[39m
+[31m+   "13437450: 78 became 79",[39m
+[31m+   "16074290: 79 became 80",[39m
+[31m+   "19228560: 80 became 81",[39m
+[31m+   "23001795: 81 became 82",[39m
+[31m+   "27515454: 82 became 83",[39m
+[31m+   "32914831: 83 became 84",[39m
+[31m+   "39373733: 84 became 85",[39m
+[31m+   "47100070: 85 became 86",[39m
+[31m+   "56342551: 86 became 87",[39m
+[31m+   "67398691: 87 became 88",[39m
+[31m+   "80624386: 88 became 89",[39m
+[31m+   "96445368: 89 became 90",[39m
+[31m+   "115370914: 90 became 91",[39m
+[31m+   "138010233: 91 became 92",[39m
+[31m+   "165092082: 92 became 93",[39m
+[31m+   "197488223: 93 became 94",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/cmValueCurve.test.ts:[2m84:19[22m[39m
+    [90m 82| [39m      [35mif[39m (got [33m!==[39m want) moved[33m.[39m[34mpush[39m([32m`[39m[36m${[39musd[36m}[39m[32m: [39m[36m${[39mwant[36m}[39m[32m became [39m[36m${[39mgot[36m}[39m[32m`[39m)[33m;[39m
+    [90m 83| [39m    }
+    [90m 84| [39m    [34mexpect[39m(moved)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m 85| [39m  })[33m;[39m
+    [90m 86| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mClub Manager value curve (recorded before any age read)[2m > [22mratingOf with one argument is still that value rating, so no generator writes a new byte
+[31m[1mAssertionError[22m: expected [ '60256: 48 became 49', …(272) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "60256: 48 became 49",[39m
+[31m+   "60954: 48 became 49",[39m
+[31m+   "61660: 48 became 49",[39m
+[31m+   "71614: 49 became 50",[39m
+[31m+   "72444: 49 became 50",[39m
+[31m+   "73282: 49 became 50",[39m
+[31m+   "74131: 49 became 50",[39m
+[31m+   "86099: 50 became 51",[39m
+[31m+   "87096: 50 became 51",[39m
+[31m+   "88105: 50 became 51",[39m
+[31m+   "102329: 51 became 52",[39m
+[31m+   "103514: 51 became 52",[39m
+[31m+   "104713: 51 became 52",[39m
+[31m+   "105925: 51 became 52",[39m
+[31m+   "123027: 52 became 53",[39m
+[31m+   "124451: 52 became 53",[39m
+[31m+   "125893: 52 became 53",[39m
+[31m+   "127350: 52 became 53",[39m
+[31m+   "146218: 53 became 54",[39m
+[31m+   "147911: 53 became 54",[39m
+[31m+   "149624: 53 became 54",[39m
+[31m+   "151356: 53 became 54",[39m
+[31m+   "175792: 54 became 55",[39m
+[31m+   "177828: 54 became 55",[39m
+[31m+   "179887: 54 became 55",[39m
+[31m+   "181970: 54 became 55",[39m
+[31m+   "208930: 55 became 56",[39m
+[31m+   "211349: 55 became 56",[39m
+[31m+   "213796: 55 became 56",[39m
+[31m+   "216272: 55 became 56",[39m
+[31m+   "251189: 56 became 57",[39m
+[31m+   "254097: 56 became 57",[39m
+[31m+   "257040: 56 became 57",[39m
+[31m+   "260016: 56 became 57",[39m
+[31m+   "298538: 57 became 58",[39m
+[31m+   "301995: 57 became 58",[39m
+[31m+   "305492: 57 became 58",[39m
+[31m+   "309030: 57 became 58",[39m
+[31m+   "358922: 58 became 59",[39m
+[31m+   "363078: 58 became 59",[39m
+[31m+   "367282: 58 became 59",[39m
+[31m+   "371535: 58 became 59",[39m
+[31m+   "426580: 59 became 60",[39m
+[31m+   "431519: 59 became 60",[39m
+[31m+   "436516: 59 became 60",[39m
+[31m+   "441570: 59 became 60",[39m
+[31m+   "512861: 60 became 61",[39m
+[31m+   "518800: 60 became 61",[39m
+[31m+   "524807: 60 became 61",[39m
+[31m+   "530884: 60 became 61",[39m
+[31m+   "609537: 61 became 62",[39m
+[31m+   "616595: 61 became 62",[39m
+[31m+   "623735: 61 became 62",[39m
+[31m+   "630957: 61 became 62",[39m
+[31m+   "638263: 61 became 62",[39m
+[31m+   "732825: 62 became 63",[39m
+[31m+   "741310: 62 became 63",[39m
+[31m+   "749894: 62 became 63",[39m
+[31m+   "758578: 62 became 63",[39m
+[31m+   "870964: 63 became 64",[39m
+[31m+   "881049: 63 became 64",[39m
+[31m+   "891251: 63 became 64",[39m
+[31m+   "901571: 63 became 64",[39m
+[31m+   "912011: 63 became 64",[39m
+[31m+   "1047129: 64 became 65",[39m
+[31m+   "1059254: 64 became 65",[39m
+[31m+   "1071519: 64 became 65",[39m
+[31m+   "1083927: 64 became 65",[39m
+[31m+   "1244515: 65 became 66",[39m
+[31m+   "1258925: 65 became 66",[39m
+[31m+   "1273503: 65 became 66",[39m
+[31m+   "1288250: 65 became 66",[39m
+[31m+   "1303167: 65 became 66",[39m
+[31m+   "1496236: 66 became 67",[39m
+[31m+   "1513561: 66 became 67",[39m
+[31m+   "1531087: 66 became 67",[39m
+[31m+   "1548817: 66 became 67",[39m
+[31m+   "1778279: 67 became 68",[39m
+[31m+   "1798871: 67 became 68",[39m
+[31m+   "1819701: 67 became 68",[39m
+[31m+   "1840772: 67 became 68",[39m
+[31m+   "1862087: 67 became 68",[39m
+[31m+   "2137962: 68 became 69",[39m
+[31m+   "2162719: 68 became 69",[39m
+[31m+   "2187762: 68 became 69",[39m
+[31m+   "2213095: 68 became 69",[39m
+[31m+   "2238721: 68 became 69",[39m
+[31m+   "2540973: 69 became 70",[39m
+[31m+   "2570396: 69 became 70",[39m
+[31m+   "2600160: 69 became 70",[39m
+[31m+   "2630268: 69 became 70",[39m
+[31m+   "2660725: 69 became 70",[39m
+[31m+   "3054921: 70 became 71",[39m
+[31m+   "3090295: 70 became 71",[39m
+[31m+   "3126079: 70 became 71",[39m
+[31m+   "3162278: 70 became 71",[39m
+[31m+   "3198895: 70 became 71",[39m
+[31m+   "3630781: 71 became 72",[39m
+[31m+   "3672823: 71 became 72",[39m
+[31m+   "3715352: 71 became 72",[39m
+[31m+   "3758374: 71 became 72",[39m
+[31m+   "3801894: 71 became 72",[39m
+[31m+   "4365158: 72 became 73",[39m
+[31m+   "4415704: 72 became 73",[39m
+[31m+   "4466836: 72 became 73",[39m
+[31m+   "4518559: 72 became 73",[39m
+[31m+   "4570882: 72 became 73",[39m
+[31m+   "5188000: 73 became 74",[39m
+[31m+   "5248075: 73 became 74",[39m
+[31m+   "5308844: 73 became 74",[39m
+[31m+   "5370318: 73 became 74",[39m
+[31m+   "5432503: 73 became 74",[39m
+[31m+   "6237348: 74 became 75",[39m
+[31m+   "6309573: 74 became 75",[39m
+[31m+   "6382635: 74 became 75",[39m
+[31m+   "6456542: 74 became 75",[39m
+[31m+   "6531306: 74 became 75",[39m
+[31m+   "7413102: 75 became 76",[39m
+[31m+   "7498942: 75 became 76",[39m
+[31m+   "7585776: 75 became 76",[39m
+[31m+   "7673615: 75 became 76",[39m
+[31m+   "7762471: 75 became 76",[39m
+[31m+   "8912509: 76 became 77",[39m
+[31m+   "9015711: 76 became 77",[39m
+[31m+   "9120108: 76 became 77",[39m
+[31m+   "9225714: 76 became 77",[39m
+[31m+   "9332543: 76 became 77",[39m
+[31m+   "10592537: 77 became 78",[39m
+[31m+   "10715193: 77 became 78",[39m
+[31m+   "10839269: 77 became 78",[39m
+[31m+   "10964782: 77 became 78",[39m
+[31m+   "11091748: 77 became 78",[39m
+[31m+   "11220185: 77 became 78",[39m
+[31m+   "12735031: 78 became 79",[39m
+[31m+   "12882496: 78 became 79",[39m
+[31m+   "13031668: 78 became 79",[39m
+[31m+   "13182567: 78 became 79",[39m
+[31m+   "13335214: 78 became 79",[39m
+[31m+   "15135612: 79 became 80",[39m
+[31m+   "15310875: 79 became 80",[39m
+[31m+   "15488166: 79 became 80",[39m
+[31m+   "15667511: 79 became 80",[39m
+[31m+   "15848932: 79 became 80",[39m
+[31m+   "16032454: 79 became 80",[39m
+[31m+   "18197009: 80 became 81",[39m
+[31m+   "18407720: 80 became 81",[39m
+[31m+   "18620871: 80 became 81",[39m
+[31m+   "18836491: 80 became 81",[39m
+[31m+   "19054607: 80 became 81",[39m
+[31m+   "21627185: 81 became 82",[39m
+[31m+   "21877616: 81 became 82",[39m
+[31m+   "22130947: 81 became 82",[39m
+[31m+   "22387211: 81 became 82",[39m
+[31m+   "22646443: 81 became 82",[39m
+[31m+   "22908677: 81 became 82",[39m
+[31m+   "26001596: 82 became 83",[39m
+[31m+   "26302680: 82 became 83",[39m
+[31m+   "26607251: 82 became 83",[39m
+[31m+   "26915348: 82 became 83",[39m
+[31m+   "27227013: 82 became 83",[39m
+[31m+   "30902954: 83 became 84",[39m
+[31m+   "31260794: 83 became 84",[39m
+[31m+   "31622777: 83 became 84",[39m
+[31m+   "31988951: 83 became 84",[39m
+[31m+   "32359366: 83 became 84",[39m
+[31m+   "32734069: 83 became 84",[39m
+[31m+   "37153523: 84 became 85",[39m
+[31m+   "37583740: 84 became 85",[39m
+[31m+   "38018940: 84 became 85",[39m
+[31m+   "38459178: 84 became 85",[39m
+[31m+   "38904514: 84 became 85",[39m
+[31m+   "39355008: 84 became 85",[39m
+[31m+   "44157045: 85 became 86",[39m
+[31m+   "44668359: 85 became 86",[39m
+[31m+   "45185594: 85 became 86",[39m
+[31m+   "45708819: 85 became 86",[39m
+[31m+   "46238102: 85 became 86",[39m
+[31m+   "46773514: 85 became 86",[39m
+[31m+   "53088444: 86 became 87",[39m
+[31m+   "53703180: 86 became 87",[39m
+[31m+   "54325033: 86 became 87",[39m
+[31m+   "54954087: 86 became 87",[39m
+[31m+   "55590426: 86 became 87",[39m
+[31m+   "56234133: 86 became 87",[39m
+[31m+   "63095734: 87 became 88",[39m
+[31m+   "63826349: 87 became 88",[39m
+[31m+   "64565423: 87 became 88",[39m
+[31m+   "65313055: 87 became 88",[39m
+[31m+   "66069345: 87 became 88",[39m
+[31m+   "66834392: 87 became 88",[39m
+[31m+   "75857758: 88 became 89",[39m
+[31m+   "76736149: 88 became 89",[39m
+[31m+   "77624712: 88 became 89",[39m
+[31m+   "78523563: 88 became 89",[39m
+[31m+   "79432823: 88 became 89",[39m
+[31m+   "80352612: 88 became 89",[39m
+[31m+   "90157114: 89 became 90",[39m
+[31m+   "91201084: 89 became 90",[39m
+[31m+   "92257143: 89 became 90",[39m
+[31m+   "93325430: 89 became 90",[39m
+[31m+   "94406088: 89 became 90",[39m
+[31m+   "95499259: 89 became 90",[39m
+[31m+   "108392691: 90 became 91",[39m
+[31m+   "109647820: 90 became 91",[39m
+[31m+   "110917482: 90 became 91",[39m
+[31m+   "112201845: 90 became 91",[39m
+[31m+   "113501082: 90 became 91",[39m
+[31m+   "114815362: 90 became 91",[39m
+[31m+   "128824955: 91 became 92",[39m
+[31m+   "130316678: 91 became 92",[39m
+[31m+   "131825674: 91 became 92",[39m
+[31m+   "133352143: 91 became 92",[39m
+[31m+   "134896288: 91 became 92",[39m
+[31m+   "136458314: 91 became 92",[39m
+[31m+   "154881662: 92 became 93",[39m
+[31m+   "156675107: 92 became 93",[39m
+[31m+   "158489319: 92 became 93",[39m
+[31m+   "160324539: 92 became 93",[39m
+[31m+   "162181010: 92 became 93",[39m
+[31m+   "164058977: 92 became 93",[39m
+[31m+   "184077200: 93 became 94",[39m
+[31m+   "186208714: 93 became 94",[39m
+[31m+   "188364909: 93 became 94",[39m
+[31m+   "190546072: 93 became 94",[39m
+[31m+   "192752491: 93 became 94",[39m
+[31m+   "194984460: 93 became 94",[39m
+[31m+   "197242274: 93 became 94",[39m
+[31m+   "62211: 48 became 49",[39m
+[31m+   "74418: 49 became 50",[39m
+[31m+   "89022: 50 became 51",[39m
+[31m+   "106491: 51 became 52",[39m
+[31m+   "127387: 52 became 53",[39m
+[31m+   "152385: 53 became 54",[39m
+[31m+   "182287: 54 became 55",[39m
+[31m+   "218058: 55 became 56",[39m
+[31m+   "260848: 56 became 57",[39m
+[31m+   "312034: 57 became 58",[39m
+[31m+   "373265: 58 became 59",[39m
+[31m+   "446511: 59 became 60",[39m
+[31m+   "534130: 60 became 61",[39m
+[31m+   "638943: 61 became 62",[39m
+[31m+   "764324: 62 became 63",[39m
+[31m+   "914308: 63 became 64",[39m
+[31m+   "1093723: 64 became 65",[39m
+[31m+   "1308345: 65 became 66",[39m
+[31m+   "1565083: 66 became 67",[39m
+[31m+   "1872200: 67 became 68",[39m
+[31m+   "2239583: 68 became 69",[39m
+[31m+   "2679058: 69 became 70",[39m
+[31m+   "3204772: 70 became 71",[39m
+[31m+   "3833647: 71 became 72",[39m
+[31m+   "4585926: 72 became 73",[39m
+[31m+   "5485826: 73 became 74",[39m
+[31m+   "6562314: 74 became 75",[39m
+[31m+   "7850042: 75 became 76",[39m
+[31m+   "9390461: 76 became 77",[39m
+[31m+   "11233159: 77 became 78",[39m
+[31m+   "13437450: 78 became 79",[39m
+[31m+   "16074290: 79 became 80",[39m
+[31m+   "19228560: 80 became 81",[39m
+[31m+   "23001795: 81 became 82",[39m
+[31m+   "27515454: 82 became 83",[39m
+[31m+   "32914831: 83 became 84",[39m
+[31m+   "39373733: 84 became 85",[39m
+[31m+   "47100070: 85 became 86",[39m
+[31m+   "56342551: 86 became 87",[39m
+[31m+   "67398691: 87 became 88",[39m
+[31m+   "80624386: 88 became 89",[39m
+[31m+   "96445368: 89 became 90",[39m
+[31m+   "115370914: 90 became 91",[39m
+[31m+   "138010233: 91 became 92",[39m
+[31m+   "165092082: 92 became 93",[39m
+[31m+   "197488223: 93 became 94",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/cmValueCurve.test.ts:[2m95:19[22m[39m
+    [90m 93| [39m      [35mif[39m (got [33m!==[39m want) moved[33m.[39m[34mpush[39m([32m`[39m[36m${[39musd[36m}[39m[32m: [39m[36m${[39mwant[36m}[39m[32m became [39m[36m${[39mgot[36m}[39m[32m`[39m)[33m;[39m
+    [90m 94| [39m    }
+    [90m 95| [39m    [34mexpect[39m(moved)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m 96| [39m    [34mexpect[39m((ratingOf [35mas[39m any)([35mnull[39m))[33m.[39m[34mtoBe[39m([34m48[39m)[33m;[39m
+    [90m 97| [39m    [34mexpect[39m((ratingOf [35mas[39m any)(undefined))[33m.[39m[34mtoBe[39m([34m48[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m49 passed[39m[22m[90m (51)[39m
+[2m   Start at [22m 09:54:08
+[2m   Duration [22m 2.31s[2m (transform 943ms, setup 49ms, collect 1.11s, tests 448ms, environment 292ms, prepare 67ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > Club Manager value curve (recorded before any age read) > every recorded dollar value still gets its recorded value rating,line=84,column=19::AssertionError: expected [ '60256: 48 became 49', …(272) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "60256: 48 became 49",%0A+   "60954: 48 became 49",%0A+   "61660: 48 became 49",%0A+   "71614: 49 became 50",%0A+   "72444: 49 became 50",%0A+   "73282: 49 became 50",%0A+   "74131: 49 became 50",%0A+   "86099: 50 became 51",%0A+   "87096: 50 became 51",%0A+   "88105: 50 became 51",%0A+   "102329: 51 became 52",%0A+   "103514: 51 became 52",%0A+   "104713: 51 became 52",%0A+   "105925: 51 became 52",%0A+   "123027: 52 became 53",%0A+   "124451: 52 became 53",%0A+   "125893: 52 became 53",%0A+   "127350: 52 became 53",%0A+   "146218: 53 became 54",%0A+   "147911: 53 became 54",%0A+   "149624: 53 became 54",%0A+   "151356: 53 became 54",%0A+   "175792: 54 became 55",%0A+   "177828: 54 became 55",%0A+   "179887: 54 became 55",%0A+   "181970: 54 became 55",%0A+   "208930: 55 became 56",%0A+   "211349: 55 became 56",%0A+   "213796: 55 became 56",%0A+   "216272: 55 became 56",%0A+   "251189: 56 became 57",%0A+   "254097: 56 became 57",%0A+   "257040: 56 became 57",%0A+   "260016: 56 became 57",%0A+   "298538: 57 became 58",%0A+   "301995: 57 became 58",%0A+   "305492: 57 became 58",%0A+   "309030: 57 became 58",%0A+   "358922: 58 became 59",%0A+   "363078: 58 became 59",%0A+   "367282: 58 became 59",%0A+   "371535: 58 became 59",%0A+   "426580: 59 became 60",%0A+   "431519: 59 became 60",%0A+   "436516: 59 became 60",%0A+   "441570: 59 became 60",%0A+   "512861: 60 became 61",%0A+   "518800: 60 became 61",%0A+   "524807: 60 became 61",%0A+   "530884: 60 became 61",%0A+   "609537: 61 became 62",%0A+   "616595: 61 became 62",%0A+   "623735: 61 became 62",%0A+   "630957: 61 became 62",%0A+   "638263: 61 became 62",%0A+   "732825: 62 became 63",%0A+   "741310: 62 became 63",%0A+   "749894: 62 became 63",%0A+   "758578: 62 became 63",%0A+   "870964: 63 became 64",%0A+   "881049: 63 became 64",%0A+   "891251: 63 became 64",%0A+   "901571: 63 became 64",%0A+   "912011: 63 became 64",%0A+   "1047129: 64 became 65",%0A+   "1059254: 64 became 65",%0A+   "1071519: 64 became 65",%0A+   "1083927: 64 became 65",%0A+   "1244515: 65 became 66",%0A+   "1258925: 65 became 66",%0A+   "1273503: 65 became 66",%0A+   "1288250: 65 became 66",%0A+   "1303167: 65 became 66",%0A+   "1496236: 66 became 67",%0A+   "1513561: 66 became 67",%0A+   "1531087: 66 became 67",%0A+   "1548817: 66 became 67",%0A+   "1778279: 67 became 68",%0A+   "1798871: 67 became 68",%0A+   "1819701: 67 became 68",%0A+   "1840772: 67 became 68",%0A+   "1862087: 67 became 68",%0A+   "2137962: 68 became 69",%0A+   "2162719: 68 became 69",%0A+   "2187762: 68 became 69",%0A+   "2213095: 68 became 69",%0A+   "2238721: 68 became 69",%0A+   "2540973: 69 became 70",%0A+   "2570396: 69 became 70",%0A+   "2600160: 69 became 70",%0A+   "2630268: 69 became 70",%0A+   "2660725: 69 became 70",%0A+   "3054921: 70 became 71",%0A+   "3090295: 70 became 71",%0A+   "3126079: 70 became 71",%0A+   "3162278: 70 became 71",%0A+   "3198895: 70 became 71",%0A+   "3630781: 71 became 72",%0A+   "3672823: 71 became 72",%0A+   "3715352: 71 became 72",%0A+   "3758374: 71 became 72",%0A+   "3801894: 71 became 72",%0A+   "4365158: 72 became 73",%0A+   "4415704: 72 became 73",%0A+   "4466836: 72 became 73",%0A+   "4518559: 72 became 73",%0A+   "4570882: 72 became 73",%0A+   "5188000: 73 became 74",%0A+   "5248075: 73 became 74",%0A+   "5308844: 73 became 74",%0A+   "5370318: 73 became 74",%0A+   "5432503: 73 became 74",%0A+   "6237348: 74 became 75",%0A+   "6309573: 74 became 75",%0A+   "6382635: 74 became 75",%0A+   "6456542: 74 became 75",%0A+   "6531306: 74 became 75",%0A+   "7413102: 75 became 76",%0A+   "7498942: 75 became 76",%0A+   "7585776: 75 became 76",%0A+   "7673615: 75 became 76",%0A+   "7762471: 75 became 76",%0A+   "8912509: 76 became 77",%0A+   "9015711: 76 became 77",%0A+   "9120108: 76 became 77",%0A+   "9225714: 76 became 77",%0A+   "9332543: 76 became 77",%0A+   "10592537: 77 became 78",%0A+   "10715193: 77 became 78",%0A+   "10839269: 77 became 78",%0A+   "10964782: 77 became 78",%0A+   "11091748: 77 became 78",%0A+   "11220185: 77 became 78",%0A+   "12735031: 78 became 79",%0A+   "12882496: 78 became 79",%0A+   "13031668: 78 became 79",%0A+   "13182567: 78 became 79",%0A+   "13335214: 78 became 79",%0A+   "15135612: 79 became 80",%0A+   "15310875: 79 became 80",%0A+   "15488166: 79 became 80",%0A+   "15667511: 79 became 80",%0A+   "15848932: 79 became 80",%0A+   "16032454: 79 became 80",%0A+   "18197009: 80 became 81",%0A+   "18407720: 80 became 81",%0A+   "18620871: 80 became 81",%0A+   "18836491: 80 became 81",%0A+   "19054607: 80 became 81",%0A+   "21627185: 81 became 82",%0A+   "21877616: 81 became 82",%0A+   "22130947: 81 became 82",%0A+   "22387211: 81 became 82",%0A+   "22646443: 81 became 82",%0A+   "22908677: 81 became 82",%0A+   "26001596: 82 became 83",%0A+   "26302680: 82 became 83",%0A+   "26607251: 82 became 83",%0A+   "26915348: 82 became 83",%0A+   "27227013: 82 became 83",%0A+   "30902954: 83 became 84",%0A+   "31260794: 83 became 84",%0A+   "31622777: 83 became 84",%0A+   "31988951: 83 became 84",%0A+   "32359366: 83 became 84",%0A+   "32734069: 83 became 84",%0A+   "37153523: 84 became 85",%0A+   "37583740: 84 became 85",%0A+   "38018940: 84 became 85",%0A+   "38459178: 84 became 85",%0A+   "38904514: 84 became 85",%0A+   "39355008: 84 became 85",%0A+   "44157045: 85 became 86",%0A+   "44668359: 85 became 86",%0A+   "45185594: 85 became 86",%0A+   "45708819: 85 became 86",%0A+   "46238102: 85 became 86",%0A+   "46773514: 85 became 86",%0A+   "53088444: 86 became 87",%0A+   "53703180: 86 became 87",%0A+   "54325033: 86 became 87",%0A+   "54954087: 86 became 87",%0A+   "55590426: 86 became 87",%0A+   "56234133: 86 became 87",%0A+   "63095734: 87 became 88",%0A+   "63826349: 87 became 88",%0A+   "64565423: 87 became 88",%0A+   "65313055: 87 became 88",%0A+   "66069345: 87 became 88",%0A+   "66834392: 87 became 88",%0A+   "75857758: 88 became 89",%0A+   "76736149: 88 became 89",%0A+   "77624712: 88 became 89",%0A+   "78523563: 88 became 89",%0A+   "79432823: 88 became 89",%0A+   "80352612: 88 became 89",%0A+   "90157114: 89 became 90",%0A+   "91201084: 89 became 90",%0A+   "92257143: 89 became 90",%0A+   "93325430: 89 became 90",%0A+   "94406088: 89 became 90",%0A+   "95499259: 89 became 90",%0A+   "108392691: 90 became 91",%0A+   "109647820: 90 became 91",%0A+   "110917482: 90 became 91",%0A+   "112201845: 90 became 91",%0A+   "113501082: 90 became 91",%0A+   "114815362: 90 became 91",%0A+   "128824955: 91 became 92",%0A+   "130316678: 91 became 92",%0A+   "131825674: 91 became 92",%0A+   "133352143: 91 became 92",%0A+   "134896288: 91 became 92",%0A+   "136458314: 91 became 92",%0A+   "154881662: 92 became 93",%0A+   "156675107: 92 became 93",%0A+   "158489319: 92 became 93",%0A+   "160324539: 92 became 93",%0A+   "162181010: 92 became 93",%0A+   "164058977: 92 became 93",%0A+   "184077200: 93 became 94",%0A+   "186208714: 93 became 94",%0A+   "188364909: 93 became 94",%0A+   "190546072: 93 became 94",%0A+   "192752491: 93 became 94",%0A+   "194984460: 93 became 94",%0A+   "197242274: 93 became 94",%0A+   "62211: 48 became 49",%0A+   "74418: 49 became 50",%0A+   "89022: 50 became 51",%0A+   "106491: 51 became 52",%0A+   "127387: 52 became 53",%0A+   "152385: 53 became 54",%0A+   "182287: 54 became 55",%0A+   "218058: 55 became 56",%0A+   "260848: 56 became 57",%0A+   "312034: 57 became 58",%0A+   "373265: 58 became 59",%0A+   "446511: 59 became 60",%0A+   "534130: 60 became 61",%0A+   "638943: 61 became 62",%0A+   "764324: 62 became 63",%0A+   "914308: 63 became 64",%0A+   "1093723: 64 became 65",%0A+   "1308345: 65 became 66",%0A+   "1565083: 66 became 67",%0A+   "1872200: 67 became 68",%0A+   "2239583: 68 became 69",%0A+   "2679058: 69 became 70",%0A+   "3204772: 70 became 71",%0A+   "3833647: 71 became 72",%0A+   "4585926: 72 became 73",%0A+   "5485826: 73 became 74",%0A+   "6562314: 74 became 75",%0A+   "7850042: 75 became 76",%0A+   "9390461: 76 became 77",%0A+   "11233159: 77 became 78",%0A+   "13437450: 78 became 79",%0A+   "16074290: 79 became 80",%0A+   "19228560: 80 became 81",%0A+   "23001795: 81 became 82",%0A+   "27515454: 82 became 83",%0A+   "32914831: 83 became 84",%0A+   "39373733: 84 became 85",%0A+   "47100070: 85 became 86",%0A+   "56342551: 86 became 87",%0A+   "67398691: 87 became 88",%0A+   "80624386: 88 became 89",%0A+   "96445368: 89 became 90",%0A+   "115370914: 90 became 91",%0A+   "138010233: 91 became 92",%0A+   "165092082: 92 became 93",%0A+   "197488223: 93 became 94",%0A+ ]%0A%0A ❯ src/test/cmValueCurve.test.ts:84:19%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > Club Manager value curve (recorded before any age read) > ratingOf with one argument is still that value rating%2C so no generator writes a new byte,line=95,column=19::AssertionError: expected [ '60256: 48 became 49', …(272) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "60256: 48 became 49",%0A+   "60954: 48 became 49",%0A+   "61660: 48 became 49",%0A+   "71614: 49 became 50",%0A+   "72444: 49 became 50",%0A+   "73282: 49 became 50",%0A+   "74131: 49 became 50",%0A+   "86099: 50 became 51",%0A+   "87096: 50 became 51",%0A+   "88105: 50 became 51",%0A+   "102329: 51 became 52",%0A+   "103514: 51 became 52",%0A+   "104713: 51 became 52",%0A+   "105925: 51 became 52",%0A+   "123027: 52 became 53",%0A+   "124451: 52 became 53",%0A+   "125893: 52 became 53",%0A+   "127350: 52 became 53",%0A+   "146218: 53 became 54",%0A+   "147911: 53 became 54",%0A+   "149624: 53 became 54",%0A+   "151356: 53 became 54",%0A+   "175792: 54 became 55",%0A+   "177828: 54 became 55",%0A+   "179887: 54 became 55",%0A+   "181970: 54 became 55",%0A+   "208930: 55 became 56",%0A+   "211349: 55 became 56",%0A+   "213796: 55 became 56",%0A+   "216272: 55 became 56",%0A+   "251189: 56 became 57",%0A+   "254097: 56 became 57",%0A+   "257040: 56 became 57",%0A+   "260016: 56 became 57",%0A+   "298538: 57 became 58",%0A+   "301995: 57 became 58",%0A+   "305492: 57 became 58",%0A+   "309030: 57 became 58",%0A+   "358922: 58 became 59",%0A+   "363078: 58 became 59",%0A+   "367282: 58 became 59",%0A+   "371535: 58 became 59",%0A+   "426580: 59 became 60",%0A+   "431519: 59 became 60",%0A+   "436516: 59 became 60",%0A+   "441570: 59 became 60",%0A+   "512861: 60 became 61",%0A+   "518800: 60 became 61",%0A+   "524807: 60 became 61",%0A+   "530884: 60 became 61",%0A+   "609537: 61 became 62",%0A+   "616595: 61 became 62",%0A+   "623735: 61 became 62",%0A+   "630957: 61 became 62",%0A+   "638263: 61 became 62",%0A+   "732825: 62 became 63",%0A+   "741310: 62 became 63",%0A+   "749894: 62 became 63",%0A+   "758578: 62 became 63",%0A+   "870964: 63 became 64",%0A+   "881049: 63 became 64",%0A+   "891251: 63 became 64",%0A+   "901571: 63 became 64",%0A+   "912011: 63 became 64",%0A+   "1047129: 64 became 65",%0A+   "1059254: 64 became 65",%0A+   "1071519: 64 became 65",%0A+   "1083927: 64 became 65",%0A+   "1244515: 65 became 66",%0A+   "1258925: 65 became 66",%0A+   "1273503: 65 became 66",%0A+   "1288250: 65 became 66",%0A+   "1303167: 65 became 66",%0A+   "1496236: 66 became 67",%0A+   "1513561: 66 became 67",%0A+   "1531087: 66 became 67",%0A+   "1548817: 66 became 67",%0A+   "1778279: 67 became 68",%0A+   "1798871: 67 became 68",%0A+   "1819701: 67 became 68",%0A+   "1840772: 67 became 68",%0A+   "1862087: 67 became 68",%0A+   "2137962: 68 became 69",%0A+   "2162719: 68 became 69",%0A+   "2187762: 68 became 69",%0A+   "2213095: 68 became 69",%0A+   "2238721: 68 became 69",%0A+   "2540973: 69 became 70",%0A+   "2570396: 69 became 70",%0A+   "2600160: 69 became 70",%0A+   "2630268: 69 became 70",%0A+   "2660725: 69 became 70",%0A+   "3054921: 70 became 71",%0A+   "3090295: 70 became 71",%0A+   "3126079: 70 became 71",%0A+   "3162278: 70 became 71",%0A+   "3198895: 70 became 71",%0A+   "3630781: 71 became 72",%0A+   "3672823: 71 became 72",%0A+   "3715352: 71 became 72",%0A+   "3758374: 71 became 72",%0A+   "3801894: 71 became 72",%0A+   "4365158: 72 became 73",%0A+   "4415704: 72 became 73",%0A+   "4466836: 72 became 73",%0A+   "4518559: 72 became 73",%0A+   "4570882: 72 became 73",%0A+   "5188000: 73 became 74",%0A+   "5248075: 73 became 74",%0A+   "5308844: 73 became 74",%0A+   "5370318: 73 became 74",%0A+   "5432503: 73 became 74",%0A+   "6237348: 74 became 75",%0A+   "6309573: 74 became 75",%0A+   "6382635: 74 became 75",%0A+   "6456542: 74 became 75",%0A+   "6531306: 74 became 75",%0A+   "7413102: 75 became 76",%0A+   "7498942: 75 became 76",%0A+   "7585776: 75 became 76",%0A+   "7673615: 75 became 76",%0A+   "7762471: 75 became 76",%0A+   "8912509: 76 became 77",%0A+   "9015711: 76 became 77",%0A+   "9120108: 76 became 77",%0A+   "9225714: 76 became 77",%0A+   "9332543: 76 became 77",%0A+   "10592537: 77 became 78",%0A+   "10715193: 77 became 78",%0A+   "10839269: 77 became 78",%0A+   "10964782: 77 became 78",%0A+   "11091748: 77 became 78",%0A+   "11220185: 77 became 78",%0A+   "12735031: 78 became 79",%0A+   "12882496: 78 became 79",%0A+   "13031668: 78 became 79",%0A+   "13182567: 78 became 79",%0A+   "13335214: 78 became 79",%0A+   "15135612: 79 became 80",%0A+   "15310875: 79 became 80",%0A+   "15488166: 79 became 80",%0A+   "15667511: 79 became 80",%0A+   "15848932: 79 became 80",%0A+   "16032454: 79 became 80",%0A+   "18197009: 80 became 81",%0A+   "18407720: 80 became 81",%0A+   "18620871: 80 became 81",%0A+   "18836491: 80 became 81",%0A+   "19054607: 80 became 81",%0A+   "21627185: 81 became 82",%0A+   "21877616: 81 became 82",%0A+   "22130947: 81 became 82",%0A+   "22387211: 81 became 82",%0A+   "22646443: 81 became 82",%0A+   "22908677: 81 became 82",%0A+   "26001596: 82 became 83",%0A+   "26302680: 82 became 83",%0A+   "26607251: 82 became 83",%0A+   "26915348: 82 became 83",%0A+   "27227013: 82 became 83",%0A+   "30902954: 83 became 84",%0A+   "31260794: 83 became 84",%0A+   "31622777: 83 became 84",%0A+   "31988951: 83 became 84",%0A+   "32359366: 83 became 84",%0A+   "32734069: 83 became 84",%0A+   "37153523: 84 became 85",%0A+   "37583740: 84 became 85",%0A+   "38018940: 84 became 85",%0A+   "38459178: 84 became 85",%0A+   "38904514: 84 became 85",%0A+   "39355008: 84 became 85",%0A+   "44157045: 85 became 86",%0A+   "44668359: 85 became 86",%0A+   "45185594: 85 became 86",%0A+   "45708819: 85 became 86",%0A+   "46238102: 85 became 86",%0A+   "46773514: 85 became 86",%0A+   "53088444: 86 became 87",%0A+   "53703180: 86 became 87",%0A+   "54325033: 86 became 87",%0A+   "54954087: 86 became 87",%0A+   "55590426: 86 became 87",%0A+   "56234133: 86 became 87",%0A+   "63095734: 87 became 88",%0A+   "63826349: 87 became 88",%0A+   "64565423: 87 became 88",%0A+   "65313055: 87 became 88",%0A+   "66069345: 87 became 88",%0A+   "66834392: 87 became 88",%0A+   "75857758: 88 became 89",%0A+   "76736149: 88 became 89",%0A+   "77624712: 88 became 89",%0A+   "78523563: 88 became 89",%0A+   "79432823: 88 became 89",%0A+   "80352612: 88 became 89",%0A+   "90157114: 89 became 90",%0A+   "91201084: 89 became 90",%0A+   "92257143: 89 became 90",%0A+   "93325430: 89 became 90",%0A+   "94406088: 89 became 90",%0A+   "95499259: 89 became 90",%0A+   "108392691: 90 became 91",%0A+   "109647820: 90 became 91",%0A+   "110917482: 90 became 91",%0A+   "112201845: 90 became 91",%0A+   "113501082: 90 became 91",%0A+   "114815362: 90 became 91",%0A+   "128824955: 91 became 92",%0A+   "130316678: 91 became 92",%0A+   "131825674: 91 became 92",%0A+   "133352143: 91 became 92",%0A+   "134896288: 91 became 92",%0A+   "136458314: 91 became 92",%0A+   "154881662: 92 became 93",%0A+   "156675107: 92 became 93",%0A+   "158489319: 92 became 93",%0A+   "160324539: 92 became 93",%0A+   "162181010: 92 became 93",%0A+   "164058977: 92 became 93",%0A+   "184077200: 93 became 94",%0A+   "186208714: 93 became 94",%0A+   "188364909: 93 became 94",%0A+   "190546072: 93 became 94",%0A+   "192752491: 93 became 94",%0A+   "194984460: 93 became 94",%0A+   "197242274: 93 became 94",%0A+   "62211: 48 became 49",%0A+   "74418: 49 became 50",%0A+   "89022: 50 became 51",%0A+   "106491: 51 became 52",%0A+   "127387: 52 became 53",%0A+   "152385: 53 became 54",%0A+   "182287: 54 became 55",%0A+   "218058: 55 became 56",%0A+   "260848: 56 became 57",%0A+   "312034: 57 became 58",%0A+   "373265: 58 became 59",%0A+   "446511: 59 became 60",%0A+   "534130: 60 became 61",%0A+   "638943: 61 became 62",%0A+   "764324: 62 became 63",%0A+   "914308: 63 became 64",%0A+   "1093723: 64 became 65",%0A+   "1308345: 65 became 66",%0A+   "1565083: 66 became 67",%0A+   "1872200: 67 became 68",%0A+   "2239583: 68 became 69",%0A+   "2679058: 69 became 70",%0A+   "3204772: 70 became 71",%0A+   "3833647: 71 became 72",%0A+   "4585926: 72 became 73",%0A+   "5485826: 73 became 74",%0A+   "6562314: 74 became 75",%0A+   "7850042: 75 became 76",%0A+   "9390461: 76 became 77",%0A+   "11233159: 77 became 78",%0A+   "13437450: 78 became 79",%0A+   "16074290: 79 became 80",%0A+   "19228560: 80 became 81",%0A+   "23001795: 81 became 82",%0A+   "27515454: 82 became 83",%0A+   "32914831: 83 became 84",%0A+   "39373733: 84 became 85",%0A+   "47100070: 85 became 86",%0A+   "56342551: 86 became 87",%0A+   "67398691: 87 became 88",%0A+   "80624386: 88 became 89",%0A+   "96445368: 89 became 90",%0A+   "115370914: 90 became 91",%0A+   "138010233: 91 became 92",%0A+   "165092082: 92 became 93",%0A+   "197488223: 93 became 94",%0A+ ]%0A%0A ❯ src/test/cmValueCurve.test.ts:95:19%0A%0A
+mutation curve = exit 1 (1 the test went red, 3 the mutation did not apply, 0 the test missed it)
