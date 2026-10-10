@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+walk: ENGINES=chromium node scripts/playNbaNumbers.mjs
+walk-rivalflip: ENGINES=chromium PLAY_NBA_NUMBERS_CONTROL=rivalflip node scripts/playNbaNumbers.mjs
