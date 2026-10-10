@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-footle: node_modules/.bin/vitest run src/test/footlePractice.test.tsx --testTimeout=300000 --hookTimeout=120000
+storage: node scripts/simStorageWrites.mjs
+sw-deadhold: SIM_STORAGE_WRITES_CONTROL=deadhold node scripts/simStorageWrites.mjs
+sw-partial: SIM_STORAGE_WRITES_CONTROL=partial node scripts/simStorageWrites.mjs
+sw-unnamed: SIM_STORAGE_WRITES_CONTROL=unnamed node scripts/simStorageWrites.mjs
+sw-stale: SIM_STORAGE_WRITES_CONTROL=stale node scripts/simStorageWrites.mjs
+anchors: node scripts/simHarnessAnchors.mjs
