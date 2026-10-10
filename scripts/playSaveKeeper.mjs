@@ -63,10 +63,15 @@
  * pass over an empty store. Printed for the lead, not asserted.
  *
  * CONTROLS, none of them in shipped code.
- *   The base arm (KEEPER_BASE_DIST=<a build of origin/main>): the fresh and
- *     planted flows run on it and every route in LOSS_ON_MAIN must be LOST
- *     again, or the run fails. So the proof that this walk can see the loss
- *     is a measurement repeated on every run, not a memory.
+ *   The base arm (KEEPER_BASE_DIST=<a build of the tree BEFORE this round>):
+ *     the fresh and planted flows run on it and every route in LOSS_ON_MAIN
+ *     must be LOST again, or the run fails. So the proof that this walk can
+ *     see the loss is a measurement repeated on every run, not a memory.
+ *     "origin/main" in this file's output means that build: origin/main at
+ *     09df145a, the commit this round was cut from. Once the round is merged
+ *     a build of main's head has the keeper in it and loses nothing, so the
+ *     base arm must be given a build of 09df145a (git worktree add, vite
+ *     build), never of main's head.
  *   KEEPER_CONTROL=inplace   the cross flow swaps in the open page the way
  *     Round 958 did (the library's restoreBackup, then a load): the academy
  *     save must be LOST, so the control exits 1 and says FIRED.

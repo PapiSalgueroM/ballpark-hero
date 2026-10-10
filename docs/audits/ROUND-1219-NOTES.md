@@ -111,6 +111,48 @@ one of the ten changes its number, until the table says so. Club Manager's numbe
 three places (`clubManager.ts` SAVE_VERSION, `clubManagerSlots.ts`, this table); the harness
 holds this one to a real save.
 
+## The proof (GitHub runner results; `git show origin/rc-results/<name>:summary.txt`)
+
+- `r1219-s0a`: the loss on a build of origin/main's source, 6 of 6 walks.
+- `r1219-s2`, `r1219-s3`: the type gate, the unit tests and the first asserting walk, step by
+  step (the walk went from 6 LOST to 6 survived at the commit that wired the boot call).
+- `r1219-sim1`, `r1219-simc`: `simSaveKeeper` all green on 84 real saves (21 games, 4 seeds) and
+  its eight controls each FIRED. 777 crash points: 735 ended applied, 42 untouched, none lost a
+  save, emptied a key or stacked a copy twice. An ordinary boot: zero writes in 7 storage calls,
+  22 stored values byte equal, the keys read exactly the journal and six saves.
+- `r1219-walk2`: the asserting walk green with its base arm. Branch 52 of 52 walks survived (8
+  fresh, 42 planted over all 21 routes, 2 cross route); origin/main lost the save again on the
+  five routes; journey K 27 keys on both builds, none added; the three walk controls FIRED
+  (`inplace`: the cross route swapped under the open page loses the academy save, 2 of 2).
+- `r1219-batA`, `r1219-batB`, `r1219-fin`: the batteries (the whole unit suite, the 24 rule
+  fences, every harness that names a file this round edits with its controls, the browser
+  harnesses on a served build).
+- The boot pass costs, with the largest day one save of all 21 games held: 0.78 ms a pass in
+  node; in Chromium at a 4x CPU throttle 1.9 ms a pass (first pass 4.6 to 5.6 ms); nothing
+  measurable on an empty store. A played Club Manager save is about three times its day one
+  size, so a player holding one pays more: about 3 to 5 ms on a slow phone.
+
+## For the lead at the gate
+
+- Redraw the saved page for `/whats-new` (`simPrerender` is red on this branch for exactly that:
+  the saved page does not carry the new entry).
+- `sweepWeight`: thirteen rows are 1K to 2K over budget because the entry chunk every page loads
+  grew by the keeper and the card. The measured sizes are in the closing report; the budgets are
+  yours.
+- When this round and Round 1210 are both merged, Round 1210's `simStorageWrites.mjs` section 7
+  needs two rows under NOTHING_HELD (measured, remote check `r1219-r1210`): the
+  `brokenSaveRecovery.ts` entry's `write:moveAside` becomes `write:copyAside`, and a new entry
+  for `src/lib/saveKeeper.ts` with `write:stageRestore` and `write:applyPending` (a put back that
+  cannot be staged or applied changes nothing and holds nothing in the page).
+- Gate lists: add `scripts/simSaveKeeper.mjs` (with its eight controls) and
+  `scripts/playSaveKeeper.mjs` (it needs a build, Chromium, and for its base arm and journey K a
+  build of origin/main: `KEEPER_BASE_DIST`; controls `inplace`, `tamper`, `extrakey`). After this
+  round is on main the base arm has nothing to lose any more: point it at the commit before the
+  merge, or run the walk without it.
+- Owed to the other lane, listed and not written: no guide sentence is needed for this round
+  (nothing a player does changed, the button is the same button). For Round B: a version field
+  in Soccer Career's save.
+
 ## Things a later reader must not trust without checking
 
 - The fixtures of the thirteen board wrapped games carry the board's opening values (a phase,
