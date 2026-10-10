@@ -1,0 +1,12 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 58s | 
+walk3 exit=0 24s | playCmLeagueFixtures: green. 6 journeys (EFL Championship, La Liga, Bundesliga at 390 and 1280), 90 checks, and 3 pages that fetch no fixture list.
+weight exit=1 28s | sweepWeight: 6 failures
+suite-runner exit=0 12s | All 5 harnesses green.
+cmfix-nobase exit=0 2s | simCmRealFixtures normal premier: 9 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+cmfix-laliga exit=0 6s | simCmRealFixtures normal laliga: 11 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, generated baseline held against the base 46e4231cc82b6c047da6e0b4bdb
+fleet exit=0 105s | simCmFixtureFleet: green. 10 registered league(s), 9 in a file of their own. nofetch 250 careers, oldsaves 132 saves, dailies 11 clubs, against the base 46e4231cc82b6c047
+simHarnessAnchors exit=0 34s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+simLiveScores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+dashes exit=0 0s | added lines with an en or em dash: 0

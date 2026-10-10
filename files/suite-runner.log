@@ -1,0 +1,9 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 5 node harnesses
+  PASS  simCmFixtureFleet.mjs           7.5s
+  PASS  simCmLeagueFixtures.mjs        11.7s
+  PASS  simCmRealFixtures.mjs           3.3s
+  PASS  simDailyDeals.mjs               3.8s
+  PASS  simFixtureBalance.mjs           2.7s
+
+All 5 harnesses green.
