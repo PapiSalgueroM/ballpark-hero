@@ -1,0 +1,4 @@
+varlive-control exit=1 6s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR ships dar
+gencheck exit=0 0s | genCmVarRates --check: 3 file(s) in step with the ledgers.
+varlive exit=0 6s |    Duration  5.47s (transform 2.29s, setup 88ms, collect 2.90s, tests 1.01s, environment 553ms, prepare 360ms)
+tsc exit=0 63s | 
