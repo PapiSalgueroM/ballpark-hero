@@ -322,7 +322,7 @@ open(1);
   check(NBA.lottery.combinations === COMBINATIONS_TYPED, 'the NBA rule set does not draw in 1,000 combinations');
   check(NBA.real.from === 2019 && NBA.real.to === 2026 && NBA.plays.from === 2027 && NBA.plays.to === null, 'the NBA spans are not the league through 2026 and the game from 2027');
   check(O.draftRulesFor('nba', 2027)?.id === 'nba-2019' && O.draftRulesFor('nba', 2026) === null, 'the lookup selects on the wrong span');
-  for (const rel of [...MOUNT_ALLOW, 'src/lib/lotteryReveal.ts', 'src/components/motion/LotteryReveal.tsx']) {
+  for (const rel of [...MOUNT_ALLOW, 'src/lib/lotteryReveal.ts', 'src/components/lottery/LotteryReveal.tsx']) {
     check(!/https?:\/\/|www\.[a-z0-9-]+\.[a-z]/i.test(readRepo(rel)), `${rel} carries an address; addresses live in the ledger only`);
   }
   console.log(`   ${facts} facts and ${reads} reads joined by key; spans held from each game's first draft to 2060; no address in the ${MOUNT_ALLOW.length + 2} owned files`);
@@ -866,7 +866,7 @@ open(9);
   checks += files.size;
   /* the one lottery presenter knows no sport, no GM and no career: it may import these and nothing else */
   const PRESENTER = {
-    'src/components/motion/LotteryReveal.tsx': ['react', '@/lib/utils', '@/components/club-manager/Celebration', '@/lib/lotteryReveal'],
+    'src/components/lottery/LotteryReveal.tsx': ['react', '@/lib/utils', '@/components/club-manager/Celebration', '@/lib/lotteryReveal'],
     'src/lib/lotteryReveal.ts': [],
   };
   for (const [rel, allowed] of Object.entries(PRESENTER)) {

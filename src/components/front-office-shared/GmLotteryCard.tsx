@@ -2,7 +2,7 @@
    sport's bind mounts it (lazily) at the top of its draft screen.
 
    A thin binding and nothing more. The one lottery presenter
-   (src/components/motion/LotteryReveal.tsx) draws the card; gmLotteryNight
+   (src/components/lottery/LotteryReveal.tsx) draws the card; gmLotteryNight
    decides the rows and every word from the SAVED order. This file only joins
    the two, so the front offices and the US My Careers show one reveal and
    not two copies of it.
@@ -10,7 +10,7 @@
    It reads a saved order and never draws: a second look, a reload or a
    re-render shows the same night. `seen` draws the last frame at once, so a
    night somebody already watched is not staged again. */
-import LotteryReveal from '@/components/motion/LotteryReveal';
+import LotteryReveal from '@/components/lottery/LotteryReveal';
 import { lotteryHelp, lotteryNight } from '@/lib/gmLotteryNight';
 import { lotteryFactsFromWeights, lotteryRuleLine } from '@/lib/lotteryReveal';
 import type { SavedDraftOrder } from '@/lib/gmDraftOrder';

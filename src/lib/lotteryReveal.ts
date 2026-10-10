@@ -2,7 +2,7 @@
 
    Two rounds wanted a lottery reveal on the same day: draft night in the four
    US My Careers and lottery night in the front offices. It is one presenter
-   (src/components/motion/LotteryReveal.tsx) and this is the half of it that
+   (src/components/lottery/LotteryReveal.tsx) and this is the half of it that
    decides, so a harness can hold the pace and the words without drawing
    anything. The same split as draftNight.ts and DraftNightCard.
 

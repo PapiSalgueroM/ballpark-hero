@@ -3,7 +3,7 @@
    Reads a SavedDraftOrder and nothing else: the draw is over by the time
    anything here runs, and a second look reads the same saved object, so no
    card can ever show a night that was not the one drawn. It decides the
-   rows, their order and every word; src/components/motion/LotteryReveal.tsx
+   rows, their order and every word; src/components/lottery/LotteryReveal.tsx
    presents them. Clubs and slots only: nobody is quoted and nothing here is
    a person speaking.
 
