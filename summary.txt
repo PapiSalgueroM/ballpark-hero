@@ -1,0 +1,7 @@
+vitest exit=0 4s |    Duration  3.26s (transform 584ms, setup 177ms, collect 1.36s, tests 1.57s, environment 1.38s, prepare 306ms)
+simGmDeskHost exit=0 66s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+simGmDeskHost-456 exit=0 68s | simGmDeskHost: all 10 checks passed on seeds 4,5,6 (4 engines, 3 seasons a seed)
+tsc exit=0 87s | 
+c-shutbutton exit=1 53s | simGmDeskHost CONTROL shutbutton FIRED: check 10 went red with 4 failures (red checks 5:514 9:13 10:4)
+c-lastcall exit=1 62s | simGmDeskHost CONTROL lastcall FIRED: check 9 went red with 13 failures (red checks 9:13)
+c-passquiet exit=1 58s | simGmDeskHost CONTROL passquiet FIRED: check 10 went red with 473 failures (red checks 10:473)
