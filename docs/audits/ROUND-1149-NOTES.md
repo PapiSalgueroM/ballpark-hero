@@ -242,8 +242,8 @@ as designed (exit 1; the sense harness would exit 3 had it not).
 | f85c97e7 | simNflCareer, simMlbCareer, simNhlCareer, simNbaCareer, simUsCareerDeckC, simCareerParity, simAwards, simCareerRealism | exit 0 each |
 | f85c97e7 | simHarnessAnchors, simNoRivalNames (0 findings), simNoInventedQuotes, simNoInventedConduct, simInventedNames, simTrustCopy, simSiteSearch | exit 0 each |
 | f85c97e7 | served build, playGames ONLY=/nfl-my-career, /mlb-my-career, /nhl-my-career, /nba-my-career | 0 findings each |
-| f85c97e7 | the whole vitest suite | NOT BACK when this file was last written: read origin/rc-results/r1149-v |
-| f85c97e7 | simCareerHall | NOT BACK when this file was last written: read origin/rc-results/r1149-v |
+| f85c97e7 | the whole vitest suite | exit 0: 388 files passed, 2 skipped; 5,334 tests passed, 55 skipped |
+| f85c97e7 | simCareerHall | exit 0, all four sports green (879 s) |
 
 The commits after f85c97e7 change this notes file only.
 
