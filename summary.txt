@@ -1,0 +1,6 @@
+vitest exit=0 6s |    Duration  4.88s (transform 1.82s, setup 477ms, collect 2.79s, tests 2.86s, environment 3.03s, prepare 1.00s)
+norival exit=0 18s | No rival product names found. 0 findings.
+sim exit=0 42s | simGmGameDay: 171 checks, 0 failed
+livescores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+anchors exit=0 40s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 80s | 
