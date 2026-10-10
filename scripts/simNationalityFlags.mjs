@@ -24,9 +24,10 @@
  *            internal short keys nothing paints) is never referenced from a
  *            page or component.
  * SECTION 3  Confederation groups: every nation in Soccer Career's picker and
- *            every nationality string in the four market maps belongs to
- *            exactly one confederation, the picker covers all six, and both
- *            grouped lists exist in source.
+ *            every nationality string in every map nationalityOf reads
+ *            (today's world, each past world's file, each gathered league's
+ *            own map) belongs to exactly one confederation, the picker covers
+ *            all six, and both grouped lists exist in source.
  *
  * It reads code, not comments: block and line comments are blanked before any
  * matching, and CRLF is normalised first because a fresh checkout is CRLF.
@@ -45,7 +46,34 @@
  * NEGATIVE CONTROL: NATIONALITY_FLAGS_CONTROL=code writes a three letter code
  *   into a nationality literal in memory; section 2 must go red.
  * NEGATIVE CONTROL: NATIONALITY_FLAGS_CONTROL=confed drops one nation from the
- *   confederation table in memory; section 3 must go red.
+ *   confederation table in memory; section 3 must go red and name it.
+ * NEGATIVE CONTROL: NATIONALITY_FLAGS_CONTROL=league (Round 1210) drops from
+ *   the confederation tables, in memory, one nation that ONLY a gathered
+ *   league's own map carries; section 3 must name it. The nation is computed,
+ *   never typed, and the run refuses if no such nation exists.
+ * NEGATIVE CONTROL: NATIONALITY_FLAGS_CONTROL=owedstale (Round 1210) gives the
+ *   first OWED_BARE site its flag in memory; section 1 must call that entry
+ *   stale and say which entry to delete.
+ *
+ * Round 1210, what changed and why.
+ *   The fence had been red on main since 2026-10-03 and everybody read past it.
+ *   Measured on origin/main 074a9054 on a GitHub runner (result r1210-base):
+ *   8 failures, three bare prints (Footle.tsx:190 and :372, and
+ *   src/components/soccer-career/TrophyCabinet.tsx:135, which nobody had
+ *   listed) and four market nations with no confederation (Niger, Namibia,
+ *   French Guiana, Mauritius).
+ *   And it had a blind spot. nationalityOf (src/data/playerNationalities.ts)
+ *   also answers from each gathered league's own map (the A-League's and the
+ *   Russian Premier League's today), and section 3 never opened those files,
+ *   so two more nations (Southern Sudan, Turkmenistan) sat under "Elsewhere"
+ *   in the default Club Manager world behind a fence that could not see them.
+ *   Section 3 now reads EVERY map nationalityOf reads. The list is taken from
+ *   that function's own return line and the file's imports, never typed, and
+ *   each map is read as its own block (the whole file also holds dates and
+ *   league names that look like nationality rows to a line regex).
+ *   OWED_BARE is a ratchet for a bare print in a file this lane may not edit:
+ *   it is named on every run, a second bare print in the same file still
+ *   fails, and the entry fails as stale the day the print gets its flag.
  */
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -55,14 +83,15 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.NATIONALITY_FLAGS_CONTROL || '';
-const CONTROLS = ['bare', 'code', 'confed'];
+const CONTROLS = ['bare', 'code', 'confed', 'league', 'owedstale'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`NATIONALITY_FLAGS_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`);
   process.exit(1);
 }
 
 let failures = 0;
-const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
+const messages = [];
+const fail = m => { failures += 1; messages.push(m); console.error('  FAIL: ' + m); };
 const refuse = m => { console.error('simNationalityFlags: REFUSING TO RUN. ' + m); process.exit(2); };
 
 const norm = s => s.replace(/\r\n?/g, '\n');
@@ -206,26 +235,80 @@ function printSites(line) {
   return sites;
 }
 
-let totalSites = 0;
-const filesWithSites = new Set();
-const bare = [];
-for (const [file, raw] of sources) {
+/* Round 1210: bare prints in files this lane may not edit, each with its owner
+   and the day it was listed. A RATCHET, like RAW_RANDOM_BASELINE in
+   simPrerender: an entry covers exactly ONE bare print of that expression in
+   that file (a second one fails), the summary names every entry on every run,
+   and an entry whose print has its flag fails as stale until it is deleted
+   from this list. An entry is matched by file and expression, never by line,
+   because the other lane's rounds move the line. */
+const OWED_BARE = [
+  {
+    file: 'src/components/soccer-career/TrophyCabinet.tsx', site: 'career.nationality',
+    owner: 'the other lane (Soccer Career)', listed: '2026-10-10',
+    why: 'the opened trophy prints "Won with {career.nationality}" bare since Round 1170; the cure is <FlagImg name={career.nationality} size={12} showLabel /> in its place',
+  },
+];
+for (const o of OWED_BARE) if (!sources.has(o.file)) refuse(`OWED_BARE lists ${o.file}, which is not a page or component in this tree: delete that entry`);
+
+/** The bare print sites of one file's text: [{ line, site }]. With all set, every site and whether it wears a flag. */
+function scanFile(raw, all = false) {
+  const out = [];
   const lines = stripComments(raw).split('\n');
   for (let i = 0; i < lines.length; i++) {
     const sites = printSites(lines[i]);
     if (!sites.length) continue;
-    totalSites += sites.length;
-    filesWithSites.add(file);
     let prev = i - 1;
     while (prev >= 0 && !lines[prev].trim()) prev--;
     const flagged = RX.flag.test(lines[i]) || (prev >= 0 && RX.flag.test(lines[prev]));
-    if (LIST) for (const s of sites) console.log(`   ${flagged ? 'flag' : 'BARE'} ${file}:${i + 1} {${s}}`);
-    if (!flagged) for (const s of sites) bare.push(`${file}:${i + 1} prints {${s}} with no flag beside it`);
+    for (const s of sites) if (all || !flagged) out.push({ line: i + 1, site: s, flagged });
+  }
+  return out;
+}
+
+if (CONTROL === 'owedstale') {
+  const o = OWED_BARE[0];
+  if (!o) refuse('the owedstale control has nothing to make stale: OWED_BARE is empty');
+  const src = sources.get(o.file);
+  const hit = scanFile(src).find(b => b.site === o.site);
+  if (!hit) refuse(`the owedstale control has nothing to make stale: ${o.file} has no bare {${o.site}}`);
+  const lines = src.split('\n');
+  const old = `{${o.site}}`;
+  if (!lines[hit.line - 1].includes(old)) refuse(`the owedstale control cannot find "${old}" on ${o.file}:${hit.line}`);
+  lines[hit.line - 1] = lines[hit.line - 1].replace(old, `<FlagImg name={${o.site}} size={12} showLabel />`);
+  sources.set(o.file, lines.join('\n'));
+  controlTarget = `${o.file} {${o.site}}`;
+  console.log(`   NEGATIVE CONTROL ON: ${o.file}:${hit.line} wears its flag in memory, section 1 must call its OWED_BARE entry stale`);
+}
+
+let totalSites = 0;
+const filesWithSites = new Set();
+const bare = [];
+for (const [file, raw] of sources) {
+  for (const s of scanFile(raw, true)) {
+    totalSites += 1;
+    filesWithSites.add(file);
+    if (LIST) console.log(`   ${s.flagged ? 'flag' : 'BARE'} ${file}:${s.line} {${s.site}}`);
+    if (!s.flagged) bare.push({ file, line: s.line, site: s.site, msg: `${file}:${s.line} prints {${s.site}} with no flag beside it` });
   }
 }
 if (totalSites < SITE_FLOOR) refuse(`the scanner found ${totalSites} nationality print sites, under the ${SITE_FLOOR} floor measured when it was written, so it is not reading the tree it thinks it is`);
-for (const b of bare) fail(b);
-if (!bare.length) console.log(`1. Flags: ${totalSites} print sites across ${filesWithSites.size} files, every one with a flag on its line or the line before (${PINS.length} Round 453 sites pinned)`);
+const owedNotes = [];
+const staleOwed = [];
+for (const o of OWED_BARE) {
+  const mine = bare.filter(b => b.file === o.file && b.site === o.site);
+  if (!mine.length) {
+    staleOwed.push(o);
+    fail(`OWED_BARE is stale: ${o.file} no longer prints {${o.site}} bare. Delete the entry { file: '${o.file}', site: '${o.site}' } from OWED_BARE in scripts/simNationalityFlags.mjs (the fix is good, the list is behind)`);
+    continue;
+  }
+  mine[0].owed = true;
+  owedNotes.push(`${o.file}:${mine[0].line} {${o.site}}, owner ${o.owner}, listed ${o.listed}`);
+}
+const unowed = bare.filter(b => !b.owed);
+for (const b of unowed) fail(b.msg);
+for (const n of owedNotes) console.log(`   OWED (a bare print this harness knows about and does not fail on): ${n}`);
+if (!unowed.length && !staleOwed.length) console.log(`1. Flags: ${totalSites} print sites across ${filesWithSites.size} files, every one with a flag on its line or the line before, bar ${owedNotes.length} owed (${PINS.length} Round 453 sites pinned)`);
 
 /* ─── Section 2: never a three letter code where a country name belongs ──── */
 
@@ -284,6 +367,7 @@ const M = await import(pathToFileURL(BUNDLE).href);
 if (CONTROL === 'confed') {
   if (!('Argentina' in M.NATION_CONFED)) refuse('the confed control has nothing to drop: Argentina is not in NATION_CONFED');
   delete M.NATION_CONFED.Argentina;
+  controlTarget = 'Argentina';
   console.log('   NEGATIVE CONTROL ON: Argentina dropped from the confederation table in memory, section 3 must go red');
 }
 
@@ -304,8 +388,61 @@ const ERA_NAT_FILES = fs.readdirSync(path.join(ROOT, 'src/data/nationalities')).
 if (ERA_NAT_FILES.length < 4) refuse(`only ${ERA_NAT_FILES.length} era nationality files under src/data/nationalities, expected at least four, so the market maps are not all being read`);
 const marketText = ['src/data/playerNationalities.ts', ...ERA_NAT_FILES.map(f => `src/data/nationalities/${f}`)]
   .map(f => stripComments(read(f))).join('\n');
-const market = [...new Set([...marketText.matchAll(/:\s*'((?:[^'\\]|\\.)*)',?\s*$/gm)].map(m => m[1].replace(/\\'/g, "'")))];
+const NAT_ROW = /:\s*'((?:[^'\\]|\\.)*)',?\s*$/gm;
+const natValues = text => [...text.matchAll(NAT_ROW)].map(m => m[1].replace(/\\'/g, "'"));
+const worldNations = new Set(natValues(marketText));
+
+/* Round 1210: the maps nationalityOf reads beyond today's world and the past
+   worlds. They are found from the function itself: the identifiers its last
+   return line indexes with [name], each traced through the file's imports to
+   the file that declares it. A typed list here would be the third one this
+   repo has written and the third to fall behind (the first league map was
+   added in Round 1035, the second in Round 1052, and this section read
+   neither until Round 1210). */
+const pn = stripComments(read('src/data/playerNationalities.ts'));
+const fnAt = pn.indexOf('export function nationalityOf(');
+if (fnAt < 0) refuse('src/data/playerNationalities.ts no longer declares nationalityOf where this harness reads it');
+const fnEnd = pn.indexOf('\n}', fnAt);
+const returns = pn.slice(fnAt, fnEnd).split('\n').filter(l => /^\s*return\b/.test(l) && /\[name\]/.test(l) && /\?\?/.test(l));
+if (returns.length !== 1) refuse(`nationalityOf has ${returns.length} return lines that fall through maps with ??, expected exactly one, so the maps it reads cannot be listed`);
+const mapIds = [...returns[0].matchAll(/([A-Za-z_$][\w$]*)(?:\.\w+)*\[name\]/g)].map(m => m[1]);
+if (mapIds.length < 3 || mapIds[0] !== 'NATIONALITY_WORLD_NOW') refuse(`nationalityOf's return line reads ${mapIds.join(', ') || 'nothing'}: expected today's world first and at least the two league maps measured on 2026-10-10 after it`);
+/** One declared map's own block, from its "export const ID" to the "};" that closes it. */
+function mapBlock(file, id) {
+  const text = stripComments(read(file));
+  const at = text.search(new RegExp(`export const ${id}\\b[^=]*=\\s*\\{`));
+  if (at < 0) refuse(`${file} does not declare ${id}, which nationalityOf reads`);
+  const end = text.indexOf('\n};', at);
+  if (end < 0) refuse(`${file}: the block of ${id} has no closing line`);
+  return text.slice(at, end);
+}
+const LEAGUE_MAP_FLOOR = 50;
+const leagueMaps = [];
+for (const id of mapIds.slice(1)) {
+  const imp = new RegExp(`import\\s*\\{[^}]*\\b${id}\\b[^}]*\\}\\s*from\\s*'@/([^']+)'`).exec(pn);
+  if (!imp) refuse(`nationalityOf reads ${id} and src/data/playerNationalities.ts has no import that names it, so its file cannot be found`);
+  const file = `src/${imp[1]}.ts`;
+  if (!fs.existsSync(path.join(ROOT, file))) refuse(`nationalityOf reads ${id} from ${file}, which is not in this tree`);
+  const nations = natValues(mapBlock(file, id));
+  if (nations.length < LEAGUE_MAP_FLOOR) refuse(`only ${nations.length} rows read from ${id} in ${file}, under the floor of ${LEAGUE_MAP_FLOOR} (the smaller of the two maps held 299 on 2026-10-10), the parse is off`);
+  leagueMaps.push({ id, file, rows: nations.length, nations: new Set(nations) });
+}
+const market = [...new Set([...worldNations, ...leagueMaps.flatMap(m => [...m.nations])])];
 if (market.length < 100) refuse(`only ${market.length} distinct nationalities read from the market maps, the parse is off`);
+
+if (CONTROL === 'league') {
+  /* A nation only a gathered league's map carries: if section 3 did not read
+     those maps, dropping it from the tables would change nothing. */
+  const only = leagueMaps.flatMap(m => [...m.nations].filter(n => !worldNations.has(n)).map(n => ({ n, id: m.id }))).sort((a, b) => a.n.localeCompare(b.n));
+  if (!only.length) refuse('the league control has nothing to drop: no nation is carried by a gathered league map alone');
+  const { n, id } = only[0];
+  const had = (n in M.NATION_CONFED) || (n in M.DISPLAY_CONFED);
+  if (!had) refuse(`the league control has nothing to drop: ${n} (only in ${id}) is in neither confederation table, so section 3 is already red on it`);
+  delete M.NATION_CONFED[n];
+  delete M.DISPLAY_CONFED[n];
+  controlTarget = n;
+  console.log(`   NEGATIVE CONTROL ON: ${n}, a nation only ${id} carries, dropped from the confederation tables in memory, section 3 must name it`);
+}
 
 function checkGrouping(label, names) {
   const groups = M.groupByConfederation(names, n => n);
@@ -327,13 +464,14 @@ if (!/groupByConfederation\(NATIONALITIES/.test(sc) || !/<SelectGroup\b/.test(sc
 const ts = stripComments(read('src/components/club-manager/TransferScreen.tsx'));
 if (!/groupByConfederation\(marketNations/.test(ts) || !/<optgroup\b/.test(ts)) fail('TransferScreen.tsx no longer renders the nationality filter in confederation groups');
 
-if (failures === 0) console.log(`3. Confederations: ${picker.length} picker nations and ${market.length} market nationalities each in exactly one of six groups (picker: ${pickerGroups.map(g => `${g.conf} ${g.items.length}`).join(', ')}); grouped in SoccerCareer's picker and TransferScreen's filter`);
+const section3Clean = !messages.some(m => /^(?:Soccer Career picker|market nationalities|the picker has no nation|SoccerCareer\.tsx no longer renders|TransferScreen\.tsx no longer renders)/.test(m) || / two confederations for one nation$/.test(m));
+if (section3Clean) console.log(`3. Confederations: ${picker.length} picker nations and ${market.length} market nationalities each in exactly one of six groups (picker: ${pickerGroups.map(g => `${g.conf} ${g.items.length}`).join(', ')}); the market is today's world, ${ERA_NAT_FILES.length} past worlds and ${leagueMaps.length} gathered league maps nationalityOf reads (${leagueMaps.map(m => `${m.id} ${m.rows} rows`).join(', ')}); grouped in SoccerCareer's picker and TransferScreen's filter`);
 
 /* ─── Verdict ─────────────────────────────────────────────────────────────── */
 
 console.log('');
 if (CONTROL === 'bare') {
-  const named = bare.some(b => b.startsWith(controlTarget + ' '));
+  const named = unowed.some(b => b.msg.startsWith(controlTarget + ' '));
   if (named) { console.log(`simNationalityFlags control: green. The bare site was reported and named as ${controlTarget} (${failures} finding${failures === 1 ? '' : 's'}).`); process.exit(0); }
   console.error(`simNationalityFlags control: RED. ${controlTarget} printed its nationality bare and section 1 did not name it, so green proves nothing.`);
   process.exit(1);
@@ -343,13 +481,23 @@ if (CONTROL === 'code') {
   console.error('simNationalityFlags control: RED. A nationality set to a three letter code went unreported.');
   process.exit(1);
 }
-if (CONTROL === 'confed') {
-  if (failures > 0) { console.log(`simNationalityFlags control: green. The nation with no confederation was reported (${failures} finding${failures === 1 ? '' : 's'}).`); process.exit(0); }
-  console.error('simNationalityFlags control: RED. A nation dropped from the confederation table went unreported.');
+if (CONTROL === 'confed' || CONTROL === 'league') {
+  /* Round 1210: the control fires only when section 3 NAMES the dropped nation.
+     Before, any failure anywhere counted, so while the fence was red on main
+     this control was green whatever section 3 did. */
+  const named = messages.some(m => m === `market nationalities: ${controlTarget} has no confederation` || m === `Soccer Career picker: ${controlTarget} has no confederation`);
+  if (named) { console.log(`simNationalityFlags control: green. ${controlTarget} was dropped from the confederation table${CONTROL === 'league' ? 's, a nation only a gathered league map carries,' : ''} and section 3 named it (${failures} finding${failures === 1 ? '' : 's'}).`); process.exit(0); }
+  console.error(`simNationalityFlags control: RED. ${controlTarget} was dropped from the confederation table and section 3 did not name it.`);
+  process.exit(1);
+}
+if (CONTROL === 'owedstale') {
+  const named = staleOwed.some(o => `${o.file} {${o.site}}` === controlTarget);
+  if (named) { console.log(`simNationalityFlags control: green. ${controlTarget} got its flag in memory and its OWED_BARE entry was called stale (${failures} finding${failures === 1 ? '' : 's'}).`); process.exit(0); }
+  console.error(`simNationalityFlags control: RED. ${controlTarget} got its flag and its OWED_BARE entry was not called stale, so a dead allowance could hide the next bare print.`);
   process.exit(1);
 }
 if (failures > 0) {
   console.error(`simNationalityFlags: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);
 }
-console.log('simNationalityFlags: green. Every nationality the site prints wears its flag, no code stands in for a name, and the long lists sit under their confederation.');
+console.log(`simNationalityFlags: green. Every nationality the site prints wears its flag (owed: ${owedNotes.length}), no code stands in for a name, and the long lists sit under their confederation.`);
