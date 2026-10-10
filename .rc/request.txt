@@ -1,0 +1,31 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ledger: node scripts/simUsSeasonLedger.mjs
+ctl-all: n=0; f=0; for k in $(US_LEDGER_CONTROL=list node scripts/simUsSeasonLedger.mjs); do n=$((n+1)); US_LEDGER_CONTROL=$k node scripts/simUsSeasonLedger.mjs | tail -1 | grep -q "FIRED, red at exactly" && f=$((f+1)) || echo "NOT FIRED: $k"; done; echo "controls fired: $f of $n"; [ "$f" = "$n" ]
+ctl-unknown: US_LEDGER_CONTROL=nosuchcontrol node scripts/simUsSeasonLedger.mjs
+slate: node_modules/.bin/vitest run src/test/usSeasonSlate.test.ts --testTimeout=900000 --hookTimeout=120000
+simNhlCareer: node scripts/simNhlCareer.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNbaAwardsSense: node scripts/simNbaAwardsSense.mjs
+simAwards: node scripts/simAwards.mjs
+hall-nhl: SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nhl 2000
+hall-mlb: SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs mlb 2000
+simCareerInbox: node scripts/simCareerInbox.mjs
+simCareerInboxBeats: node scripts/simCareerInboxBeats.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simCareerRivalryEvents: node scripts/simCareerRivalryEvents.mjs
+simCareerRealism: node scripts/simCareerRealism.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNflTruth: node scripts/simNflTruth.mjs
+simSeasonReveal: node scripts/simSeasonReveal.mjs
+simSportEras: node scripts/simSportEras.mjs
+simUsCareerBank: node scripts/simUsCareerBank.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+simUsCoachCareer: node scripts/simUsCoachCareer.mjs
+simUsCareerDefects: node scripts/simUsCareerDefects.mjs
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+simCareerBanking: node scripts/simCareerBanking.mjs
+simCareerPress: node scripts/simCareerPress.mjs
+simUsCareerRecovery: node scripts/simUsCareerRecovery.mjs
