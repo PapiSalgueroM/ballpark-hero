@@ -1,0 +1,5 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+simCmVar-all exit=0 47s | simCmVar: 9 actual outcomes and 10 effective controls passed.
+simCmVar exit=0 19s | simCmVar normal: actual review outcomes and full prior baseline passed.
+playCmVar exit=0 137s | playCmVar: 2 viewports, 4 actual review outcomes, 8 settled live reports, 2 actual quick reports, 2 mid-match reloads, 3 effective controls; zero external forwarding and 
