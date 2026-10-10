@@ -1,0 +1,2 @@
+eq exit=0 303s | eq[inverse form+event6+event12+newsTally+news100+newsReturn]: GREEN. 1000 of 1000 whole careers byte equal to Release AS at every one of 188384 steps (state JSON and draw
+eqr exit=0 415s | eqr[inverse form+event6+event12+newsTally+news100+newsReturn]: GREEN. 1000 of 1000 whole careers byte equal to Release AS at every one of 187741 steps (state JSON and dra

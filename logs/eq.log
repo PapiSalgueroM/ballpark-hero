@@ -1,0 +1,4 @@
+54e3820a2
+{"careers":1000,"equal":1000,"different":0,"steps":188384,"rows":18099,"draws":29073756,"formWouldMove":8305,"event6":565,"event12":416,"tallyNews":68,"reloads":0,"retiredCareers":1000}
+phases {"youth":1000,"contract_offer":1000,"playing":19099,"newspaper":17428,"season_summary":17428,"ballon_dor":17402,"social_media_action":17428,"random_events":55940,"transfer_window":17428,"rehab_choice":645,"international_debut":1179,"world_cup":8249,"rivalry_event":7863,"moral_dilemma":4728,"retirement_suggestion":1147,"red_card_appeal_result":420}
+eq[inverse form+event6+event12+newsTally+news100+newsReturn]: GREEN. 1000 of 1000 whole careers byte equal to Release AS at every one of 188384 steps (state JSON and draw count), 18099 playing rows, 29073756 draws.
