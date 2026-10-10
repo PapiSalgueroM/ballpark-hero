@@ -77,6 +77,19 @@ jobs:
           npx playwright install --with-deps chromium
           python -m pip install fonttools pillow
           node scripts/qa/managerWorldBrowser1077.mjs --prefetch-fonts-only 2>&1 | tee manager-ucl-league-artifacts/fonts.log
+      - name: Diagnostic-only engine preflight before the full SEO build
+        run: |
+          mkdir -p manager-ucl-preflight-artifacts
+          cp manager-ucl-league-artifacts/source-head.txt manager-ucl-preflight-artifacts/source-head.txt
+          cp manager-ucl-league-artifacts/source-tree.txt manager-ucl-preflight-artifacts/source-tree.txt
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" MANAGER_UCL_ARTIFACTS=manager-ucl-preflight-artifacts node scripts/simManagerUclLeague.mjs 2>&1 | tee manager-ucl-preflight-artifacts/preflight.log
+      - name: Separate diagnostic preflight evidence, no final acceptance credit
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: manager-ucl-league-preflight-${{ github.run_id }}
+          path: manager-ucl-preflight-artifacts/
+          retention-days: 5
       - name: Actual app types, generated engine shapes and SEO build
         id: build
         run: |
@@ -185,6 +198,50 @@ jobs:
             grep -Eq "PASS[[:space:]]+$harness\.mjs([[:space:]]|$)" "manager-ucl-league-artifacts/$harness.log" || failed=1
             if grep -Eq '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "manager-ucl-league-artifacts/$harness.log"; then failed=1; fi
           done
+          for control in modern legacy; do
+            status=0
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" CM_UCL_PATH_CONTROL="$control" node scripts/simClubManagerEraUcl.mjs 2>&1 | tee "manager-ucl-league-artifacts/card-path-control-$control.log" || status=$?
+            test "$status" = 1 || failed=1
+            grep -Fq "CONTROL card-path-$control FIRED: exactly $control-reader, card-read-count." "manager-ucl-league-artifacts/card-path-control-$control.log" || failed=1
+          done
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import {createHash} from 'node:crypto';
+          const hash = raw => createHash('sha256').update(raw).digest('hex');
+          const out = 'manager-ucl-league-artifacts/';
+          for (const mode of ['modern', 'legacy']) {
+            const r = JSON.parse(fs.readFileSync(out + 'card-path-control-' + mode + '.json', 'utf8'));
+            assert.equal(r.type, 'copied-code-observation-detector');
+            assert.equal(r.mode, mode);
+            assert.equal(r.head, fs.readFileSync(out + 'source-head.txt', 'utf8').trim());
+            assert.equal(r.tree, fs.readFileSync(out + 'source-tree.txt', 'utf8').trim());
+            assert.deepEqual(r.healthyFailures, []);
+            assert.deepEqual(r.expectedKeys, [mode + '-reader', 'card-read-count']);
+            assert.deepEqual(r.faultFailures.map(f => f.key), r.expectedKeys);
+            assert.equal(r.changed, true);
+            assert.equal(r.undo, true);
+            assert.equal(r.fault.count, 1);
+            const card = r.originalSources.cards.find(([name]) => name === 'UclGroupsCard.tsx');
+            assert(card);
+            assert.equal(card[1].split(r.fault.from).length - 1, 1);
+            assert.equal(hash(card[1]), r.fault.beforeSha256);
+            const copied = structuredClone(r.originalSources);
+            copied.cards.find(([name]) => name === 'UclGroupsCard.tsx')[1] = card[1].replace(r.fault.from, r.fault.to);
+            assert.deepEqual(r.faultySources, copied);
+            assert.equal(hash(copied.cards.find(([name]) => name === 'UclGroupsCard.tsx')[1]), r.fault.afterSha256);
+            assert.notEqual(r.fault.beforeSha256, r.fault.afterSha256);
+            assert.deepEqual(r.restoredSources, r.originalSources);
+            assert.deepEqual(r.sourceAfter, r.sourceBefore);
+            const sources = [['src/lib/clubManager.ts', r.originalSources.engine], ...r.originalSources.cards.map(([name, raw]) => ['src/components/club-manager/' + name, raw])];
+            assert.equal(r.sourceBefore.length, sources.length);
+            for (const [file, raw] of sources) {
+              assert.equal(r.sourceBefore.find(s => s.file === file)?.sha256, hash(raw));
+              assert.equal(fs.readFileSync(file, 'utf8'), raw);
+            }
+          }
+          console.log('PASS both exact copied-code card reader detectors, complete raw sources and full undo held.');
+          NODE
           for control in observer tablecount historycount calendarcount; do
             status=0
             NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_WORLD_EDITOR_CONTROL="$control" node scripts/simWorldEditor.mjs 2>&1 | tee "manager-ucl-league-artifacts/world-editor-control-$control.log" || status=$?
