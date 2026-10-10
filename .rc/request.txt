@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+base-build: git worktree add -q /tmp/base origin/main && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && npm run build > /tmp/basebuild.log 2>&1; s=$?; tail -1 /tmp/basebuild.log; exit $s
+oldsaves: (node scripts/lib/hostLikeServer.mjs /tmp/base/dist 4174 > /tmp/oldserver.log 2>&1 &) ; sleep 4; OLD_BASE=http://localhost:4174 node .rc/x/reviewOldSaves.mjs
