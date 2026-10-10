@@ -1,0 +1,6 @@
+simCareerParity exit=0 13s | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+rival exit=0 32s | simUsRivalSense: 11 checks, 0 failed (full size)
+simSiteSearch exit=0 3s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simUsSeasonCentre exit=0 27s | simUsSeasonCentre: 98 checks, 0 failed
+simUsCareerDeckC exit=0 63s | simUsCareerDeckC: all checks passed
+parity exit=0 39s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.

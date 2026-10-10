@@ -1,0 +1,6 @@
+rival: node scripts/simUsRivalSense.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+parity: node scripts/simUsBoardParity.mjs
