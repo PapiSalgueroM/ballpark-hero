@@ -1,0 +1,1 @@
+measure: cp .rc/x/ogMeasure.test.tsx src/test/ogMeasure.test.tsx && node_modules/.bin/vitest run src/test/ogMeasure.test.tsx --testTimeout=600000 --hookTimeout=120000

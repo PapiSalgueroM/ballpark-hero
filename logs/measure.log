@@ -1,0 +1,30 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/ogMeasure.test.tsx[2m > [22m[2mRound 1216 measuring pass[2m > [22m[2mprints where the man stands and what each geometry costs
+[22m[39m[1216 measure] matches 100, halves 200, own goals staged 163 (plain goals left 118), for me 79, against me 84
+[1216 measure] the named man on the viewer's cast: 163, absent 0; a back 139 (line {"defence":136,"attack":3}), the keeper 24
+[1216 measure] action starts outside the goal's own minute: 0; wound up as the last kick: 0
+[1216 measure] back, from his own goal line: n 139 min 14.8 p10 15.3 med 16.8 p90 18.9 max 47.2
+[1216 measure] back, across from the middle: n 139 min 1.5 p10 6.7 med 11.5 p90 28.7 max 31.6
+[1216 measure] back, across from the deliverer: n 139 min 0.2 p10 5.1 med 15.6 p90 30.5 max 61.2
+[1216 measure] keeper who is the man, from his line: n 24 min 7.0 p10 7.0 med 7.0 p90 7.0 max 16.0; across from the middle: n 24 min 0.0 p10 0.2 med 0.6 p90 1.4 max 3.0
+[1216 measure] deliverer, from that goal line: n 163 min 22.1 p10 22.7 med 26.6 p90 29.3 max 82.8; across from the middle: n 163 min 0.0 p10 1.3 med 5.0 p90 13.0 max 35.6
+[1216 measure] man to ball, 13 out (the draft): walk n 139 min 2.6 p10 7.3 med 13.7 p90 30.7 max 46.7 | turn n 139 min 26.3 p10 43.6 med 53.0 p90 55.0 max 55.0 | own goals with a team mate stood on two samples running 12, in the keeper's box 0, another figure within 2 of the second leg 22 (the keeper in 22), the man short at the touch 45 | Aston Villa 50 me Jan Paul van Hecke walk 23.9; Aston Villa 83 opp Ian Maatsen walk 24.4; Aston Villa 7 opp Ian Maatsen walk 23.3
+[1216 measure] ball to man, band 14, off 4, 13..16: walk n 139 min 0.0 p10 0.0 med 0.9 p90 15.0 max 31.2 | turn n 139 min 36.2 p10 52.7 med 89.3 p90 108.1 max 125.0 | own goals with a team mate stood on two samples running 8, in the keeper's box 0, another figure within 2 of the second leg 21 (the keeper in 8), the man short at the touch 5 | Aston Villa 83 me James Hill walk 31.2; Real Madrid 90+4 opp Álvaro Carreras walk 16.5; Real Madrid 33 me Jonny Otto walk 15.9
+[1216 measure] ball to man, band 18, off 4, 13..16: walk n 139 min 0.0 p10 0.0 med 0.8 p90 11.1 max 31.2 | turn n 139 min 36.2 p10 52.7 med 96.4 p90 120.0 max 132.0 | own goals with a team mate stood on two samples running 1, in the keeper's box 0, another figure within 2 of the second leg 39 (the keeper in 33), the man short at the touch 0 | Aston Villa 83 me James Hill walk 31.2
+[1216 measure] ball to man, band 22, off 4, 13..16: walk n 139 min 0.0 p10 0.0 med 0.8 p90 7.1 max 31.2 | turn n 139 min 36.2 p10 52.7 med 99.8 p90 128.7 max 137.6 | own goals with a team mate stood on two samples running 1, in the keeper's box 0, another figure within 2 of the second leg 15 (the keeper in 9), the man short at the touch 2 | Aston Villa 83 me James Hill walk 31.2
+[1216 measure] ball to man, band 18, off 5, 13..18: walk n 139 min 0.0 p10 0.0 med 0.0 p90 10.9 max 29.2 | turn n 139 min 36.2 p10 52.8 med 96.9 p90 121.9 max 132.4 | own goals with a team mate stood on two samples running 1, in the keeper's box 0, another figure within 2 of the second leg 40 (the keeper in 33), the man short at the touch 0 | Aston Villa 83 me James Hill walk 29.2
+[1216 measure] ball to man, band 26, off 5, 13..18: walk n 139 min 0.0 p10 0.0 med 0.0 p90 2.9 max 29.2 | turn n 139 min 36.2 p10 52.8 med 99.8 p90 135.9 max 140.3 | own goals with a team mate stood on two samples running 1, in the keeper's box 0, another figure within 2 of the second leg 16 (the keeper in 9), the man short at the touch 0 | Aston Villa 83 me James Hill walk 29.2
+
+ [32m✓[39m src/test/ogMeasure.test.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 1355[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1216 measuring pass[2m > [22mprints where the man stands and what each geometry costs [33m 1352[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m   Start at [22m 12:21:36
+[2m   Duration [22m 4.00s[2m (transform 1.47s, setup 54ms, collect 1.86s, tests 1.35s, environment 308ms, prepare 108ms)[22m
+

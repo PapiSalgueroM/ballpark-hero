@@ -1,0 +1,1 @@
+measure exit=0 5s |    Duration  4.00s (transform 1.47s, setup 54ms, collect 1.86s, tests 1.35s, environment 308ms, prepare 108ms)
