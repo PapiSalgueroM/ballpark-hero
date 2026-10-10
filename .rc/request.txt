@@ -1,0 +1,16 @@
+# Round 1212 step 0c: the seam is neutral for the NBA and the NFL
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-us: node_modules/.bin/vitest run src/test/usSeasonCentreScreens.test.tsx src/test/usCareerTruthDigest.test.ts src/test/usSeason.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/usSeasonNfl.test.ts src/test/usSeasonSlate.test.ts src/test/usPlayoffs.test.ts src/test/usPostseasonFormat.test.ts src/test/seasonCentreWords.test.tsx src/test/seasonCore.test.ts src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=300000
+seam-compare: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+ctl-length: US_SEASON_CONTROL=length node scripts/simUsSeasonCentre.mjs
+ctl-record: US_SEASON_CONTROL=record node scripts/simUsSeasonCentre.mjs
+ctl-conf: US_SEASON_CONTROL=conf node scripts/simUsSeasonCentre.mjs
+ctl-poscore: US_SEASON_CONTROL=poscore node scripts/simUsSeasonCentre.mjs
+ctl-names: US_SEASON_CONTROL=names node scripts/simUsSeasonCentre.mjs
+ctl-seam: US_SEASON_CONTROL=seam US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simUsPostseason: node scripts/simUsPostseason.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simLiveScores: node scripts/simLiveScores.mjs
