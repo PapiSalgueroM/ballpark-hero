@@ -1,0 +1,12 @@
+mutation m1 applied to src/lib/nflMyCareer.ts
+--- tsc exit=0 | 
+--- rival exit=1 | simUsRivalSense: 11 checks, 1 failed (full size), red sections: N.F5
+--- rivalry exit=0 | simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.
+--- parity exit=0 | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+--- vitest exit=0 | 
+--- nfltruth exit=0 | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves, and no receiver passes the record book.
+--- others exit=0 | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+--- sensec exit=0 | simNbaAwardsSense: 172 checks, 0 failed (full size), 69s
+--- probe exit=1 | probe1: BROKEN, two men on a first team that names one
+   FAIL N.F5: every All-Pro card dealt says and promises what the two seasons support: 1 of 64 wrong (a seed: both 0, 0, 1, 0, 0; only you 4, 8, 8, 9, 13; only him 5, 4, 8, 1, 3); the first, a QB in 2036: "The All-Pro team is out, and you and Beau Boudreau are both on the first team." promising "Fanbase +3" with mine true, his true
+MUT m1: tsc=0 rival=1 rivalry=0 parity=0 vitest=0 nfltruth=0 others=0 sensec=0 probe=1

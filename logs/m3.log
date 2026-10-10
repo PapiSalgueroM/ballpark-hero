@@ -1,0 +1,11 @@
+mutation m3 applied to src/lib/careerRivalryEvents.ts
+--- tsc exit=0 | 
+--- rival exit=0 | simUsRivalSense: 11 checks, 0 failed (full size)
+--- rivalry exit=1 | simCareerRivalryEvents: 16 failures
+--- parity exit=0 | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+--- vitest exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career truth digest > every key equals the committed fixture%2C or moved only 
+--- nfltruth exit=0 | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves, and no receiver passes the record book.
+--- others exit=0 | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+--- sensec exit=0 | simNbaAwardsSense: 172 checks, 0 failed (full size), 67s
+--- probe exit=0 | probe1: HELD, the rule holds at the real call site
+MUT m3: tsc=0 rival=0 rivalry=1 parity=0 vitest=1 nfltruth=0 others=0 sensec=0 probe=0

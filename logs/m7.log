@@ -1,0 +1,13 @@
+mutation m7 applied to src/lib/nflMyCareer.ts
+--- tsc exit=0 | 
+--- rival exit=1 | simUsRivalSense: 11 checks, 2 failed (full size), red sections: N.F2, N.F3
+--- rivalry exit=0 | simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.
+--- parity exit=1 | simUsBoardParity: 3 failures
+--- vitest exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career truth digest > every key equals the committed fixture%2C or moved only 
+--- nfltruth exit=0 | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves, and no receiver passes the record book.
+--- others exit=0 | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+--- sensec exit=skipped | skipped
+--- probe exit=0 | probe1: HELD, the rule holds at the real call site
+   FAIL N.F2: the verdict on the save never disagrees with the two printed lines scored the one way (3537 of 107618 judged years disagree, 0 unread)
+   FAIL N.F3: my share of the head to head years: mean 42.23 (42.0, 43.2, 42.3, 41.5, 42.2) against Round 1227's 38.94 (38.7, 40, 39, 38.1, 38.9), 3.29 apart, allowed 0.81 (a fixed width, three standard errors over careers)
+MUT m7: tsc=0 rival=1 rivalry=0 parity=1 vitest=1 nfltruth=0 others=0 sensec=skipped probe=0

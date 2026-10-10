@@ -1,0 +1,45 @@
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/usRivalOldSaves.test.ts:[2m55:83[22m[39m
+    [90m 53| [39m    [34mexpect[39m(out[33m.[39mstate[33m.[39mmorale)[33m.[39m[34mtoBe[39m([34mcap[39m(save[33m.[39mmorale [33m+[39m [34m5[39m))[33m;[39m
+    [90m 54| [39m    [34mexpect[39m(out[33m.[39mstate[33m.[39mfanbase)[33m.[39m[34mtoBe[39m(save[33m.[39mfanbase)[33m;[39m
+    [90m 55| [39m    expect(out.lines.some(l => l.includes('You were named first team A…
+    [90m   | [39m                                                                                  [31m^[39m
+    [90m 56| [39m    [34mexpect[39m(out[33m.[39mstate[33m.[39mpendingRivalryEvent)[33m.[39m[34mtoBeFalsy[39m()[33m;[39m
+    [90m 57| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usRivalOldSaves.test.ts[2m > [22mRound 1227: a save from before the round[2m > [22msitting on "Morale -5" (off the first team a year after) is paid Morale -5
+[31m[1mAssertionError[22m: expected 100 to be 95 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 95[39m
+[31m+ 100[39m
+
+[36m [2m❯[22m src/test/usRivalOldSaves.test.ts:[2m63:30[22m[39m
+    [90m 61| [39m    expect(save.pendingRivalryEvent).toMatchObject({ id: 206, conseque…
+    [90m 62| [39m    [35mconst[39m out [33m=[39m [34mtap[39m(save)[33m;[39m
+    [90m 63| [39m    [34mexpect[39m(out[33m.[39mstate[33m.[39mmorale)[33m.[39m[34mtoBe[39m([34mcap[39m(save[33m.[39mmorale [33m-[39m [34m5[39m))[33m;[39m
+    [90m   | [39m                             [31m^[39m
+    [90m 64| [39m    expect(out.lines.some(l => l.includes('You were left off the All-P…
+    [90m 65| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m19 passed[39m[22m[90m (21)[39m
+[2m   Start at [22m 20:35:21
+[2m   Duration [22m 25.13s[2m (transform 1.30s, setup 190ms, collect 2.80s, tests 23.41s, environment 1.45s, prepare 554ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usRivalOldSaves.test.ts,title=src/test/usRivalOldSaves.test.ts > Round 1227%3A a save from before the round > sitting on "Morale +5" (you made the first team) is paid Morale +5,line=55,column=83::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/usRivalOldSaves.test.ts:55:83%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usRivalOldSaves.test.ts,title=src/test/usRivalOldSaves.test.ts > Round 1227%3A a save from before the round > sitting on "Morale -5" (off the first team a year after) is paid Morale -5,line=63,column=30::AssertionError: expected 100 to be 95 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 95%0A+ 100%0A%0A ❯ src/test/usRivalOldSaves.test.ts:63:30%0A%0A

@@ -1,0 +1,10 @@
+--- tsc exit=0 | 
+--- rival exit=0 | simUsRivalSense: 11 checks, 0 failed (full size)
+--- rivalry exit=0 | simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.
+--- parity exit=0 | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+--- vitest exit=0 | 
+--- nfltruth exit=0 | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves, and no receiver passes the record book.
+--- others exit=0 | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+--- sensec exit=0 | simNbaAwardsSense: 172 checks, 0 failed (full size), 68s
+--- probe exit=0 | probe1: HELD, the rule holds at the real call site
+MUT m0: tsc=0 rival=0 rivalry=0 parity=0 vitest=0 nfltruth=0 others=0 sensec=0 probe=0

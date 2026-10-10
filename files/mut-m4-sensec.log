@@ -1,0 +1,45 @@
+  ok   [D] nbaSeasonStats.ts and nbaCareerAwards.ts both import from ./awardDecision (comments stripped)
+  ok   [D] nbaSeasonStats.ts no longer adds points and rebounds a game itself
+  ok   [D] the career's MVP win weight (20) is NBA Front Office's (20)
+  ok   [D] NBA Front Office ranks the winner over the better producer on the worst club (true), and stops when the shared score loses its winning term (true)
+  ok   [D] the career's MVPs over 400 careers change with the same swap (114 against 0)
+  ok   [F] the worked example recomputed through the shared score: production 38.8 (printed 38.8), winning share 0.659 (printed .659), weight 20, total 52.0 (printed 52.0)
+  ok   [F] the example's 54-28 club is a playoff club by the engine's record bands (41 to 67 wins) and its 34-48 club is not (17 to 40)
+  ok   [F] the help says 65 games from the 2023-24 season, 24 All-Star picks and the fans alone before 2016-17; the real rules are 65, 24 and 2016-17 (the rule table holds 65 from 2023, 24 and 2016)
+  ok   [F] the page says the Trophy Case holds 23 badges; NBA_BADGES has 23
+  ok   [F] the page hands the award rules to its "?"
+  ok   [F] no em or en dash in the help rules
+  note [F] the guide for /nba-my-career still says, and its owner owes the change: nothing stale
+  ok   [K] the Trophy Case tile counts the rings plus every award on the seasons, so it reads Empty only over an empty case: 0 of 30000 careers off
+  ok   [K] careers whose only awards are the lesser ones (no ring, MVP, All-NBA or All-Star), the ones the tile read Empty for: 389, 418, 402, 395, 389 a seed (floor 230)
+  ok   [K] NFL: the Trophy Case tile counts the rings plus every award on the seasons: 0 of 2500 careers off
+  ok   [K] NFL: careers whose only awards are the lesser ones, the ones the tile read Empty for: 12, 20, 19, 22, 12 a seed of 500 (floor 7)
+  ok   [K] MLB: the Trophy Case tile counts the rings plus every award on the seasons: 0 of 2500 careers off
+  ok   [K] MLB: careers whose only awards are the lesser ones, the ones the tile read Empty for: 22, 22, 16, 17, 13 a seed of 500 (floor 7)
+  ok   [K] NHL: the Trophy Case tile counts the rings plus every award on the seasons: 0 of 2500 careers off
+  ok   [K] NHL: careers whose only awards are the lesser ones, the ones the tile read Empty for: 16, 17, 6, 16, 11 a seed of 500 (floor 3)
+  ok   [T] NBA: 57757 near tie notes, each naming the leader the tally gives (you lead 26668, he leads 24983, level 6106, unreadable 0)
+  ok   [T] NBA: all three ways a near tie can read turn up (floor 200 each over the run)
+  ok   [T] NFL: 6560 near tie notes, each naming the leader the tally gives (you lead 3289, he leads 2425, level 846, unreadable 0)
+  ok   [T] NFL: all three ways a near tie can read turn up (floor 200 each over the run)
+  ok   [T] MLB: 4115 near tie notes, each naming the leader the tally gives (you lead 1832, he leads 1862, level 421, unreadable 0)
+  ok   [T] MLB: all three ways a near tie can read turn up (floor 200 each over the run)
+  ok   [T] NHL: 5626 near tie notes, each naming the leader the tally gives (you lead 3588, he leads 1506, level 532, unreadable 0)
+  ok   [T] NHL: all three ways a near tie can read turn up (floor 200 each over the run)
+  ok   [S] MLB: beat 206 never contradicts the seasons it is dealt on: dealt 28, 24, 24, 29, 30 times a seed (he made it 16, 15, 13, 11, 15; he dropped off 12, 9, 11, 18, 15), cards that say or promise something else 0
+  ok   [S] MLB: both cards of beat 206 still turn up over the run: 70 and 65 on 5 seeds (floors 42 and 39, six tenths of the measured means)
+  note [S, printed] MLB: judged seasons that hold "All-Star": 4.14, 4.98, 4.47, 4.86, 5.01 percent a seed; that do not, a year after one that did: 3.4, 3.78, 3.45, 3.91, 3.79 percent
+  ok   [S] NHL: beat 306 never contradicts the seasons it is dealt on: dealt 42, 30, 34, 35, 35 times a seed (he made it 29, 19, 15, 21, 20; he dropped off 13, 11, 19, 14, 15), cards that say or promise something else 0
+  ok   [S] NHL: both cards of beat 306 still turn up over the run: 104 and 72 on 5 seeds (floors 62 and 43, six tenths of the measured means)
+  note [S, printed] NHL: judged seasons that hold "All-Star": 5.18, 5.74, 5.82, 5.55, 5.1 percent a seed; that do not, a year after one that did: 3.76, 4.19, 4.43, 4.18, 3.96 percent
+  ok   [S] no rivalry beat dealt in a sport the round has moved promises a "50/50 outcome": 0 of 82278 beats
+  note [P] the before and after proof: not judged in a plain run (SENSE_PROVE_AGAINST=<commit> plays both trees)
+  note [Q] the before and after proof of Round 1149: not judged in a plain run (SENSE_PROVE_1149=<commit> plays both trees)
+  ok   [C] NFL careers hash equal to the baseline on every seed (70382099, e8fb8651, 33aa9745, 6255bddf, 5438ed56)
+  ok   [C] MLB careers hash equal to the baseline on every seed (7eca2172, 23fab5fa, b02a0882, 9c08d606, 5a098bef)
+  ok   [C] NHL careers hash equal to the baseline on every seed (6f7b2075, b1a45ab2, 16dbc4fe, a6c6114a, 06cb3426)
+  note [C, printed for the legacy recalibration round] NFL: 9 seasons won MVP over 2500 careers; 1 of them (11.1 percent) on a club that missed the playoffs, 2 (22.2 percent) without that season's All-Pro
+  note [C, printed for the legacy recalibration round] MLB: 42 seasons won MVP or Cy Young over 2500 careers; 21 of them (50.0 percent) on a club that missed the playoffs, 3 (7.1 percent) without that season's All-Star
+  note [C, printed for the legacy recalibration round] NHL: 169 seasons won Hart or Norris or Vezina over 2500 careers; 47 of them (27.8 percent) on a club that missed the playoffs, 23 (13.6 percent) without that season's All-Star
+
+simNbaAwardsSense: 172 checks, 0 failed (full size), 64s

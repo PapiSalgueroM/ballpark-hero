@@ -1,0 +1,42 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/usRivalLine.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 383[2mms[22m[39m
+ [32m✓[39m src/test/nflTruthRules1104.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 589[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: awards and injuries read the season length[2m > [22m2005: the gate is the schedule less two, and an injury is counted off the schedule [33m 327[2mms[22m[39m
+ [32m✓[39m src/test/usRivalOldSaves.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [31m❯[39m src/test/usCareerTruthDigest.test.ts [2m([22m[2m1 test[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 25680[2mms[22m[39m
+[31m   [31m×[31m Round 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it[39m[33m 25679[2mms[22m[39m
+[31m     → keys that moved against the committed fixture: expected [ 'nba|now|C' ] to deeply equal [][39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerTruthDigest.test.ts[2m > [22mRound 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it
+[31m[1mAssertionError[22m: keys that moved against the committed fixture: expected [ 'nba|now|C' ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "nba|now|C",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/usCareerTruthDigest.test.ts:[2m120:70[22m[39m
+    [90m118| [39m    const moved = names.filter(k => committed.keys[k].digest !== now.k…
+    [90m119| [39m    [35mif[39m ([33m![39mrecord) {
+    [90m120| [39m      expect(moved, 'keys that moved against the committed fixture').t…
+    [90m   | [39m                                                                     [31m^[39m
+    [90m121| [39m      [35mreturn[39m[33m;[39m
+    [90m122| [39m    }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m20 passed[39m[22m[90m (21)[39m
+[2m   Start at [22m 20:32:55
+[2m   Duration [22m 28.54s[2m (transform 1.55s, setup 249ms, collect 3.07s, tests 26.68s, environment 1.55s, prepare 506ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career truth digest > every key equals the committed fixture%2C or moved only where this step is allowed to move it,line=120,column=70::AssertionError: keys that moved against the committed fixture: expected [ 'nba|now|C' ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "nba|now|C",%0A+ ]%0A%0A ❯ src/test/usCareerTruthDigest.test.ts:120:70%0A%0A

@@ -1,0 +1,12 @@
+mutation m5 applied to src/lib/nflMyCareer.ts
+--- tsc exit=0 | 
+--- rival exit=1 | simUsRivalSense: 11 checks, 1 failed (full size), red sections: N.U2
+--- rivalry exit=0 | simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.
+--- parity exit=0 | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+--- vitest exit=0 | 
+--- nfltruth exit=0 | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves, and no receiver passes the record book.
+--- others exit=0 | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+--- sensec exit=skipped | skipped
+--- probe exit=0 | probe1: HELD, the rule holds at the real call site
+   FAIL N.U2: his season is nflStatLineFor's own on his keyed stream at the season's real length (16 and 17 games seen), printed by the player's printer, scored off the printed text, with wonAward's answer: QB 2020 form 90: the hook gave "4,496 yds, 35 TD, 9 INT" 168.66666666666669 false, rebuilt "4,496 yds, 35 TD, 9 INT" 168.66666666666669 true | RB 2020 form 90: the hook gave "1,604 rush yds, 14 TD, 47 rec" 165.75 
+MUT m5: tsc=0 rival=1 rivalry=0 parity=0 vitest=0 nfltruth=0 others=0 sensec=skipped probe=0

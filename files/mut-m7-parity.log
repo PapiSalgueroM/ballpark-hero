@@ -1,0 +1,17 @@
+A) the fixture is whole
+   recorded from 5bdd0a9c21f2bfd1e893cbfe1ef32f12c83228e4 (not main: src differs from 09df145abfb241679022b41903d2f19bc254ebf9)
+   nfl: 459 clicks, 24 seasons, 15 fixed saves, 685 screen steps
+   nba: 507 clicks, 24 seasons, 15 fixed saves, 705 screen steps
+   mlb: 449 clicks, 24 seasons, 15 fixed saves, 688 screen steps
+   nhl: 415 clicks, 24 seasons, 15 fixed saves, 688 screen steps
+B) the replay: every click, every save, every screen
+   Vitest exit 1, passed [nba, mlb, nhl], failed [nfl]
+   nfl click path step 325 (after "hub: Play the 2009 season"): the markup differs under the same words ("The 2009 seasonNew Orleans Saints · age 26 · CBMissed the pl")
+  FAIL: the replay exited 1
+  FAIL: the replay passed [nba, mlb, nhl], not all four sports
+  FAIL: 1 step differ from the fixture
+
+  If your round meant to change what a US career does, re-record from your tree
+  (node scripts/recordUsBoardFixture.mjs), commit the fixture with the change and say so in the
+  commit. If it did not, the red is a real change: read the first differing step above.
+simUsBoardParity: 3 failures

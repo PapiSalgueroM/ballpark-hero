@@ -1,0 +1,8 @@
+m0 exit=0 146s | MUT m0: tsc=0 rival=0 rivalry=0 parity=0 vitest=0 nfltruth=0 others=0 sensec=0 probe=0
+m1 exit=0 151s | MUT m1: tsc=0 rival=1 rivalry=0 parity=0 vitest=0 nfltruth=0 others=0 sensec=0 probe=1
+m2 exit=0 96s | MUT m2: tsc=0 rival=1 rivalry=0 parity=1 vitest=1 nfltruth=0 others=0 sensec=skipped probe=0
+m3 exit=0 146s | MUT m3: tsc=0 rival=0 rivalry=1 parity=0 vitest=1 nfltruth=0 others=0 sensec=0 probe=0
+m4 exit=0 142s | MUT m4: tsc=0 rival=1 rivalry=1 parity=0 vitest=1 nfltruth=0 others=0 sensec=0 probe=0
+m5 exit=0 88s | MUT m5: tsc=0 rival=1 rivalry=0 parity=0 vitest=0 nfltruth=0 others=0 sensec=skipped probe=0
+m6 exit=0 88s | MUT m6: tsc=0 rival=0 rivalry=0 parity=0 vitest=1 nfltruth=0 others=0 sensec=skipped probe=0
+m7 exit=0 84s | MUT m7: tsc=0 rival=1 rivalry=0 parity=1 vitest=1 nfltruth=0 others=0 sensec=skipped probe=0

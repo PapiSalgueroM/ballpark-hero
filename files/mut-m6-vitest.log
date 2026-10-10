@@ -1,0 +1,40 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/usRivalLine.test.ts [2m([22m[2m8 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 347[2mms[22m[39m
+   [32m✓[39m Round 1227: a picker returns exactly what its printer prints[2m > [22mNFL: every position, printed parts only, a back's catches at the bridge[32m 162[2mms[22m[39m
+   [32m✓[39m Round 1227: a picker returns exactly what its printer prints[2m > [22mNFL: the bridge is the mean yards a catch of the engine's own running back line[32m 7[2mms[22m[39m
+   [32m✓[39m Round 1227: nflStatLineFor is the cut of simSeason's stat block[2m > [22mwrites only its position's keys, in the order the block wrote them, and every one a number[32m 11[2mms[22m[39m
+   [32m✓[39m Round 1227: nflStatLineFor is the cut of simSeason's stat block[2m > [22mtakes exactly its position's draws and reads nothing but its input[32m 0[2mms[22m[39m
+[31m   [31m×[31m Round 1227: nflStatLineFor is the cut of simSeason's stat block[2m > [22mprints no number below zero down to form 40 (the lowest a season can reach is 42), on the lowest draws[39m[32m 12[2mms[22m[39m
+[31m     → RB rushYds at form 40, 1 games: expected -44 to be greater than or equal to 0[39m
+   [32m✓[39m Round 1227: nflStatLineFor is the cut of simSeason's stat block[2m > [22ma 16 game season is sixteen seventeenths of the same draws[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1227: the other two sports[2m > [22mMLB: a starter, a reliever and a bat[32m 90[2mms[22m[39m
+   [32m✓[39m Round 1227: the other two sports[2m > [22mNHL: a goalie and a skater[32m 61[2mms[22m[39m
+ [32m✓[39m src/test/nflTruthRules1104.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 526[2mms[22m[39m
+ [32m✓[39m src/test/usRivalOldSaves.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m src/test/usCareerTruthDigest.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 24548[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it [33m 24547[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usRivalLine.test.ts[2m > [22mRound 1227: nflStatLineFor is the cut of simSeason's stat block[2m > [22mprints no number below zero down to form 40 (the lowest a season can reach is 42), on the lowest draws
+[31m[1mAssertionError[22m: RB rushYds at form 40, 1 games: expected -44 to be greater than or equal to 0[39m
+[36m [2m❯[22m src/test/usRivalLine.test.ts:[2m127:109[22m[39m
+    [90m125| [39m      for (let form = 40; form <= 62; form += 1) for (const games of […
+    [90m126| [39m        [35mconst[39m line [33m=[39m [34mnflStatLineFor[39m({ form[33m,[39m pos[33m,[39m games }[33m,[39m () [33m=>[39m [34m0[39m)[33m;[39m
+    [90m127| [39m        for (const [k, v] of Object.entries(line)) expect(v, `${pos} $…
+    [90m   | [39m                                                                                                            [31m^[39m
+    [90m128| [39m      }
+    [90m129| [39m    }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m20 passed[39m[22m[90m (21)[39m
+[2m   Start at [22m 20:39:11
+[2m   Duration [22m 27.45s[2m (transform 1.50s, setup 242ms, collect 3.25s, tests 25.44s, environment 1.71s, prepare 643ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usRivalLine.test.ts,title=src/test/usRivalLine.test.ts > Round 1227%3A nflStatLineFor is the cut of simSeason's stat block > prints no number below zero down to form 40 (the lowest a season can reach is 42)%2C on the lowest draws,line=127,column=109::AssertionError: RB rushYds at form 40, 1 games: expected -44 to be greater than or equal to 0%0A ❯ src/test/usRivalLine.test.ts:127:109%0A%0A

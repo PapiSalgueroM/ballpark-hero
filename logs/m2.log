@@ -1,0 +1,12 @@
+mutation m2 applied to src/lib/nflMyCareer.ts
+--- tsc exit=0 | 
+--- rival exit=1 | simUsRivalSense: 11 checks, 1 failed (full size), red sections: N.U2
+--- rivalry exit=0 | simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.
+--- parity exit=1 | simUsBoardParity: 3 failures
+--- vitest exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career truth digest > every key equals the committed fixture%2C or moved only 
+--- nfltruth exit=0 | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves, and no receiver passes the record book.
+--- others exit=0 | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+--- sensec exit=skipped | skipped
+--- probe exit=0 | probe1: HELD, the rule holds at the real call site
+   FAIL N.U2: his season is nflStatLineFor's own on his keyed stream at the season's real length (16 and 17 games seen), printed by the player's printer, scored off the printed text, with wonAward's answer: QB 2005 form 70: the hook gave "2,980 yds, 15 TD, 17 INT" 81.08333333333334 false, rebuilt "2,804 yds, 14 TD, 16 INT" 76.01666666666667 false | QB 2021 form 91: the hook gave "4,423 yds, 35 TD, 8 INT" 168.14583333
+MUT m2: tsc=0 rival=1 rivalry=0 parity=1 vitest=1 nfltruth=0 others=0 sensec=skipped probe=0

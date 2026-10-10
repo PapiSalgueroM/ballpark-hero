@@ -1,0 +1,12 @@
+mutation m4 applied to src/lib/careerRivalryEvents.ts
+--- tsc exit=0 | 
+--- rival exit=1 | simUsRivalSense: 11 checks, 1 failed (full size), red sections: N.O
+--- rivalry exit=1 | simCareerRivalryEvents: 14 failures
+--- parity exit=0 | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+--- vitest exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usRivalOldSaves.test.ts,title=src/test/usRivalOldSaves.test.ts > Round 1227%3A a save from before the round > sitting on "Morale -5" (off the first team a year after) is pa
+--- nfltruth exit=0 | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves, and no receiver passes the record book.
+--- others exit=0 | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+--- sensec exit=0 | simNbaAwardsSense: 172 checks, 0 failed (full size), 64s
+--- probe exit=0 | probe1: HELD, the rule holds at the real call site
+   FAIL N.O: saves built by 980654fa: a pending "Morale +5", "Morale -5" and old 221 card each pay what they printed, and a corner's and a kicker's old shape rival line becomes his position's own after one season with the tally kept: the "Morale +5" card paid 5 and logged "🗳️ You were named first team All-Pro and Beau Brennan was not. | 🗳️ All-Pro Team" | the "Morale -5" card paid 0 and logged "🗳️ All-
+MUT m4: tsc=0 rival=1 rivalry=1 parity=0 vitest=1 nfltruth=0 others=0 sensec=0 probe=0
