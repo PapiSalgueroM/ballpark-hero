@@ -1,0 +1,7 @@
+[31m     → keys that moved against the committed fixture: expected [ 'mlb|now|SP', 'mlb|now|RP', …(20) ] to deeply equal [][39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[31m[1mAssertionError[22m: keys that moved against the committed fixture: expected [ 'mlb|now|SP', 'mlb|now|RP', …(20) ] to deeply equal [][39m
+    [90m120| [39m      expect(moved, 'keys that moved against the committed fixture').t…
+[2m      Tests [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career truth digest > every key equals
+      2 'mlb RESULT att-nhl-only (NHL files at base, old digest) vitest=1

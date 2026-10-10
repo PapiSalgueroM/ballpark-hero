@@ -1,0 +1,3 @@
+att-all exit=0 46s | RESULT att-all old-digest=0 old-board-fixture=0
+att-nhl-only exit=0 21s |       2 'mlb RESULT att-nhl-only (NHL files at base, old digest) vitest=1
+att-mlb-only exit=0 21s |       2 'nhl RESULT att-mlb-only (MLB files at base, old digest) vitest=1
