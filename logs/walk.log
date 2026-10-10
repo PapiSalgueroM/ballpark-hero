@@ -1,0 +1,45 @@
+walk 390-motion
+  PASS  390-motion: the hub offers This week
+  PASS  390-motion: Play Week 1 is on the panel
+  PASS  390-motion: after the press the panel offers Play Week 2
+  PASS  390-motion: no Game Day card and no bracket card is on the page (nothing mounts them yet)
+  PASS  390-motion: the page does not scroll sideways (0px over)
+  PASS  390-motion: a save was written
+  PASS  390-motion: the save holds no new field (draftClass,fired,gm,league,mandate,myTeam,phase,picksLeft,postseason,pressTilt,seasonTradeLine,seasonsPlayed,titles,trust)
+  PASS  390-motion: the save opens after a reload
+  PASS  390-motion: no page error ()
+  (3 requests to the database host were blocked)
+walk 390-reduced
+  PASS  390-reduced: the hub offers This week
+  PASS  390-reduced: Play Week 1 is on the panel
+  PASS  390-reduced: after the press the panel offers Play Week 2
+  PASS  390-reduced: no Game Day card and no bracket card is on the page (nothing mounts them yet)
+  PASS  390-reduced: the page does not scroll sideways (0px over)
+  PASS  390-reduced: a save was written
+  PASS  390-reduced: the save holds no new field (draftClass,fired,gm,league,mandate,myTeam,phase,picksLeft,postseason,pressTilt,seasonTradeLine,seasonsPlayed,titles,trust)
+  PASS  390-reduced: the save opens after a reload
+  PASS  390-reduced: no page error ()
+  (3 requests to the database host were blocked)
+walk 1280-motion
+  PASS  1280-motion: the hub offers This week
+  PASS  1280-motion: Play Week 1 is on the panel
+  PASS  1280-motion: after the press the panel offers Play Week 2
+  PASS  1280-motion: no Game Day card and no bracket card is on the page (nothing mounts them yet)
+  PASS  1280-motion: the page does not scroll sideways (0px over)
+  PASS  1280-motion: a save was written
+  PASS  1280-motion: the save holds no new field (draftClass,fired,gm,league,mandate,myTeam,phase,picksLeft,postseason,pressTilt,seasonTradeLine,seasonsPlayed,titles,trust)
+  PASS  1280-motion: the save opens after a reload
+  PASS  1280-motion: no page error ()
+  (3 requests to the database host were blocked)
+walk 1280-reduced
+  PASS  1280-reduced: the hub offers This week
+  PASS  1280-reduced: Play Week 1 is on the panel
+  PASS  1280-reduced: after the press the panel offers Play Week 2
+  PASS  1280-reduced: no Game Day card and no bracket card is on the page (nothing mounts them yet)
+  PASS  1280-reduced: the page does not scroll sideways (0px over)
+  PASS  1280-reduced: a save was written
+  PASS  1280-reduced: the save holds no new field (draftClass,fired,gm,league,mandate,myTeam,phase,picksLeft,postseason,pressTilt,seasonTradeLine,seasonsPlayed,titles,trust)
+  PASS  1280-reduced: the save opens after a reload
+  PASS  1280-reduced: no page error ()
+  (3 requests to the database host were blocked)
+walk: green, 4 walks of /front-office on the head build

@@ -1,0 +1,18 @@
+base build exit=0
+1) the base build makes a save: a new franchise, three weeks played
+  PASS  the base build wrote a save at week 4 (655335 characters, edac00dfa2c5)
+  PASS  no page error on the base build ()
+2) the same save opened and played to the recap, Math.random seeded alike
+  base-a: opened edac00dfa2c5, refused false, Play Week 4 offered 1, 14 presses, phase recap, save after two presses 75d9ad5d4a9e, at the end 82df551ea911 (656771 characters), champions [{"season":2026,"team":"SF"}], page errors 0
+  base-b: opened edac00dfa2c5, refused false, Play Week 4 offered 1, 14 presses, phase recap, save after two presses 75d9ad5d4a9e, at the end 82df551ea911 (656771 characters), champions [{"season":2026,"team":"SF"}], page errors 0
+  head: opened edac00dfa2c5, refused false, Play Week 4 offered 1, 14 presses, phase recap, save after two presses 75d9ad5d4a9e, at the end 82df551ea911 (656771 characters), champions [{"season":2026,"team":"SF"}], page errors 0
+  head-other-seed: opened edac00dfa2c5, refused false, Play Week 4 offered 1, 14 presses, phase recap, save after two presses 27e3b001b449, at the end e034ace48027 (656770 characters), champions [{"season":2026,"team":"BUF"}], page errors 0
+  PASS  the head build opens the base-made save where it was left (Play Week 4 is offered, nothing refused, the stored string untouched by the load)
+  PASS  no page error on the head build ()
+  PASS  the head build played it to the end of the season (14 presses, phase recap)
+  PASS  the method is steady: the base build twice gives the same two saves, character for character
+  PASS  two weeks on: the head build writes the save the base build writes, character for character
+  PASS  at the recap (the one press final week and postseason): the head build writes the save the base build writes, character for character
+  PASS  the comparison can see a move: another seed writes other saves
+  PASS  the head build's save holds no new field (draftClass,fired,gm,league,mandate,myTeam,phase,picksLeft,postseason,pressTilt,seasonTradeLine,seasonsPlayed,titles,trust)
+oldsave: green. A save made by the base build opens on the head build and both builds play it to the same saves.

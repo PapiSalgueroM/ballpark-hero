@@ -1,0 +1,14 @@
+draftClass
+fired
+gm
+league
+mandate
+myTeam
+phase
+picksLeft
+postseason
+pressTilt
+seasonTradeLine
+seasonsPlayed
+titles
+trust
