@@ -1,0 +1,9 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playUsSeasonCentre exit=0 149s | playUsSeasonCentre: 144 checks, 0 failed
+playGames-nba exit=0 63s | Played 1 games. 0 findings, 0 the harness could not drive.
+playCareerPress exit=0 14s | ALL CAREER PRESS WALK CHECKS PASSED
+walk exit=0 61s | playNbaNumbers: 85 checks, 0 failed
+walk-rivalflip exit=1 62s | playNbaNumbers: 85 checks, 7 failed (control rivalflip)
+walk-oldrow exit=1 11s | playNbaNumbers: 14 checks, 2 failed (control oldrow)
+walk-wide exit=1 65s | playNbaNumbers: 85 checks, 8 failed (control wide)
+sweepWeight exit=1 27s | sweepWeight: 1 failure

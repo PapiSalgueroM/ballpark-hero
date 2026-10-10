@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+#!serial
+playUsSeasonCentre: ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+playGames-nba: ENGINES=chromium ONLY=/nba-my-career SWEEP_BASE=http://localhost:4173 node scripts/playGames.mjs
+playCareerPress: ENGINES=chromium node scripts/playCareerPress.mjs
+walk: ENGINES=chromium node scripts/playNbaNumbers.mjs
+walk-rivalflip: ENGINES=chromium PLAY_NBA_NUMBERS_CONTROL=rivalflip node scripts/playNbaNumbers.mjs
+walk-oldrow: ENGINES=chromium PLAY_NBA_NUMBERS_CONTROL=oldrow node scripts/playNbaNumbers.mjs
+walk-wide: ENGINES=chromium PLAY_NBA_NUMBERS_CONTROL=wide node scripts/playNbaNumbers.mjs
+sweepWeight: ENGINES=chromium SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
