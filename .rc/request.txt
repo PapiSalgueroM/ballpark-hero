@@ -1,0 +1,33 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-sc: node_modules/.bin/vitest run src/test/soccerCareerAmbitions.test.ts src/test/soccerCareerDevelopment.test.ts src/test/soccerCareerRecords.test.tsx src/test/soccerCareerStoryRole.test.ts src/test/careerMilestones.test.ts src/test/careerStory.test.tsx src/test/soccerCareerContracts.test.ts src/test/soccerCareerLeagueWorld.test.ts src/test/soccerCareerWorldSettle.test.ts src/test/soccerCareerSaveRecovery.test.tsx src/test/soccerCareerSaveRetry.test.tsx src/test/soccerCareerDebutLegacy.test.tsx src/test/careerSeasonRatings.test.tsx src/lib/soccerClubSquad.test.ts src/lib/soccerCareerDerbyHistory.test.ts src/lib/soccerCareerSeasonHistory.test.ts src/lib/soccerCareerLeagueSeasons.test.ts src/lib/soccerCareerLeague.test.ts --testTimeout=300000 --hookTimeout=120000
+simSoccerCareerAmbitions-all: SIM_CAREER_AMBITION_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerAmbitions.mjs
+simSoccerCareerAmbitions: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerAmbitions.mjs
+simSoccerCareerRecords: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerRecords.mjs
+simSoccerCareerDevelopment: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerDevelopment.mjs
+simSoccerCareerDevelopment-all: CAREER_DEVELOPMENT_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerDevelopment.mjs
+simCareerStoryRole: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerStoryRole.mjs
+simCareerStoryRole-all: CAREER_STORY_ROLE_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerStoryRole.mjs
+simCareerKeepPlaying: node scripts/simCareerKeepPlaying.mjs
+simCareerSquad: node scripts/simCareerSquad.mjs
+simClubSquads: node scripts/simClubSquads.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerLeagueSeasons-future: SIM_LEAGUE_SEASONS_CONTROL=future node scripts/simCareerLeagueSeasons.mjs
+simSoccerCareer: node scripts/simSoccerCareer.mjs
+simCareerRealism: node scripts/simCareerRealism.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simCareerStory: node scripts/simCareerStory.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simSeasonLaw: node scripts/simSeasonLaw.mjs
+simSoccerCareerSaveRetry: node scripts/simSoccerCareerSaveRetry.mjs
+simSoccerCareerSaveRecovery: node scripts/simSoccerCareerSaveRecovery.mjs
+simSoccerCareerUcl: node scripts/simSoccerCareerUcl.mjs
+simSoccerCareerOpponents: node scripts/simSoccerCareerOpponents.mjs
+simSoccerCareerLeagueWorld: node scripts/simSoccerCareerLeagueWorld.mjs
+simSeasonCentreAgreement: node scripts/simSeasonCentreAgreement.mjs
+simSeasonCentreTable: node scripts/simSeasonCentreTable.mjs
+simSoccerSeasonHistory-all: SEASON_HISTORY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonHistory.mjs
+simSoccerDerbyHistory-all: DERBY_HISTORY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerDerbyHistory.mjs
+simCareerTrophyRuns-all: CAREER_TROPHY_RUNS_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs
