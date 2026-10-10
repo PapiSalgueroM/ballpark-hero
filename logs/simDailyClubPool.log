@@ -1,0 +1,28 @@
+ledger 260 lines (260 founding, from origin/main), first move 2026-11-05; today 2026-10-10 ET
+1) Every day from 2026-09-01 to 2026-10-10 deals what main dealt, in both dailies
+   40 of 40 days deal main's club, league and seed in both dailies (the fixture to 2026-10-10)
+   ok  no day already dealt, and no day before the first new line, is re-dealt
+2) The ledger is what scripts/genDailyClubPool.mjs writes: nothing to append against the engine
+   engine 258 eligible clubs, 258 open ledger lines, 0 to append
+   node scripts/genDailyClubPool.mjs --check exited 0
+   ok  the ledger holds every eligible club and nothing else open
+3) Append only: real dates, every leave closes a join, nobody in twice, main's lines kept, every new line after today
+   founding lines: origin/main's ledger, 260, all kept in order; 0 new, 0 of them dated today or earlier
+   ok  every line is real and dated, the founding lines are untouched and every new line is in the future
+4) Before a club joins, no daily market or buyer names it; from its join date it is in the pool and dealt
+   200 daily windows from 2026-04-19 to 2026-11-04: 2103 candidates (0 windows short of a full brief), 600 buyers and 590 hourly rivals (in 191 windows, over 2400 hours), 0 from outside the day's pool (0 of them rivals)
+   11 clubs join on 2026-11-05: in the pool every day of the next 365 (0 club days missing); dealt by Manager Hot Seat on 17 days and Deadline Day on 16 (about 16 expected, floor 5); in 23 of the first 60 daily markets
+   7 clubs join on 2026-11-06: in the pool every day of the next 553 (0 club days missing); dealt by Manager Hot Seat on 13 days and Deadline Day on 12 (about 15 expected, floor 5)
+   16 clubs join on 2026-11-07: in the pool every day of the next 365 (0 club days missing); dealt by Manager Hot Seat on 24 days and Deadline Day on 21 (about 23 expected, floor 5)
+   ok  no club reaches a daily before its join date, and every join is dealt from it
+5) Every club the ledger deals from today on is a club the engine runs, in that league
+   259 ledger lines live today or later, 0 naming a club the engine does not run there
+   ok  the engine runs every club the ledger can still deal
+6) A leave line closes a club from its until day; a rejoin and a league move read right; the generator writes each once
+   10 checks on an in memory ledger of 258 founding lines plus leave, rejoin and move lines, 0 failed
+   ok  the leave line form reads and is written the way the ledger says
+7) A device clock before the ledger's first day still deals both dailies, from the founding pool
+   1970-01-01 and 1999-12-31 checked against the 225 clubs live on 2000-01-01
+   ok  a reset clock gets a daily, never a crash
+
+simDailyClubPool: all sections green

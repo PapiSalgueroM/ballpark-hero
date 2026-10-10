@@ -1,0 +1,25 @@
+1) Club Manager's date helpers and calendar replay the pre-lift fixture
+  FAIL: Everton seasonDays: hash 158dee139333cccc41abdbfc != recorded 4f6e77bb426d72edb25d0123; first lines now ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\ recorded ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\
+  FAIL: Everton monthGrid: hash 998eed009784b43682c66dfd != recorded 191228a15047c811f0735e7a; first lines now ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\" recorded ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\"
+  FAIL: Augsburg seasonDays: hash 29e2211231b009dd2c13593e != recorded d004198f9594eff7c0c3edf6; first lines now ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\ recorded ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\
+  FAIL: Augsburg monthGrid: hash 486aafe84bae636d46f7d710 != recorded ecebc393e3df7ebcd664c12a; first lines now ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\" recorded ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\"
+  FAIL: Norwich City seasonDays: hash 60f96d2fd871650b92af5ea0 != recorded 2e65e78a8e253e2db78b214a; first lines now ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\ recorded ["{\"worldYear\":2026,\"entryDates\":[{\"y\":2026,\"m\":8,\"d\":8},{\"y\":2026,\"m\":8,\"d\":15},{\"y\":2026,\"m\":8,\"d\":22},{\"y\":2026,\"m\":8,\"d\":26},{\"y\":2026,\"m\":8,\"d\":29},{\"y\":2026,\
+  FAIL: Norwich City monthGrid: hash 6921469a250cd670b7984977 != recorded 6ce8f2f8c3734c582c00f4b1; first lines now ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\" recorded ["2026-8 light [null,null,null,null,null,null,{\"date\":{\"y\":2026,\"m\":8,\"d\":1},\"key\":20260801,\"weekIdx\":null,\"kind\":\"rest\",\"windowOpen\":false,\"isToday\":false,\"past\":true},{\"date\"
+   20 sections compared against the record from 82d1d7f7, 25933 days, date rule 55/51/63
+2) Every phase one range, two sourced or marked thin; the deadline inside the season; periods back to back
+   35 phases over four years, 14 thin (listed partial), 14 in GM_CALENDAR_PARTIAL, 4 estimates (no source); every sport stops for cutDown,deadline,draft,freeAgency,resign,seasonOver
+   22 phases two sourced without Wikipedia, 19 cite Wikipedia as a spot check; every regular season span two sourced without it
+3) Periods and games per period match the four front office engines
+   engines: nfl 17 x 1, nba 20 x 4, mlb 27 x 6, nhl 20 x 4
+4) Every pair of days: the plan stops at the first stop after the start or reaches the target; a chained walk halts on every stop
+   301302 pairs of days planned over the four years
+   chained walks, seeds 1 to 5: nfl 10 to 10 stops, 17 periods; nba 10 to 10 stops, 20 periods; mlb 10 to 10 stops, 27 periods; nhl 10 to 10 stops, 20 periods
+   mid run stops, seeds 1 to 5, three a year: nfl 15 raised, nba 15 raised, mlb 15 raised, nhl 15 raised, every one ended its run and held the next
+   deadline periods: nfl 8, nba 13, mlb 19, nhl 15
+5) The real order, as facts of each league, not read from GM_PHASE_ORDER
+   29 order facts across the four leagues
+6) Every month drawn: each season day in one period, each period its games, each phase and stop on one day
+   1582 days drawn across the four years
+7) The offseason is dated steps in order, and baseball drafts in season
+   offseason steps: nfl resign>freeAgency>draft>camp>cutDown; nba lottery>draft>resign>freeAgency>camp>cutDown; mlb resign>freeAgency>lottery>camp>cutDown; nhl lottery>draft>resign>freeAgency>camp>cutDown
+simGmCalendar: 6 failure(s)
