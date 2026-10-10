@@ -1,0 +1,17 @@
+1) The board meter is the sacking rule, after every entry of every career
+   1477 calendar entries across 50 seasons, 514 press answers, 24 sackings, every one exactly when the meter read zero
+   single week falls in board confidence: median 4.9, p99 11.1, largest 11.8 (the bottom band starts under 10)
+2) A broken promise, a press answer or a handshake can never leave the meter on zero with the manager in a job
+   9 mid season base(s) and 10 promise base(s) kept from managers still in a job, 0 keep point(s) skipped for a sacking
+   170 one match probes with a promise on record: the promise broke in 82, 38 of those landed on zero and every landing was a sacking
+   18 press answers from half a point (6 of them the board disliked) and 19 handshakes from three: none reached zero
+   144 finance desk switches from a last point or less (6 of them docked the board): none reached zero
+3) The fan meter moves with results the way a fan would
+   640 match weeks sampled: fan meter vs last ten PPG r = 0.888
+   mean fan move after a win +6.72 (326), after a draw -2.78 (153), after a defeat -10.58 (161)
+4) Every league table row prints goals for and against beside the difference they make
+   84 rows across 5 tables rendered through react-dom/server, every pair its row's own goals and every GD the pair's difference
+5) The How to Play copy and the game content say what the meters do
+   15 claims read off the meters module and found in the copy
+
+simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.

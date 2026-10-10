@@ -1,0 +1,19 @@
+1) Three careers, 20 switches round robin with a season after each (7, 7, 6 seasons), every season equal to the same career played alone
+   slots after creation: Everton | Lincoln City | Barcelona; manager in slot 2: Harness Manager
+   Everton (today)                      alone: #7 54pts 0T, #17 42pts 0T, #20 17pts 0T, #14 61pts 0T, #21 29pts 0T, #21 35pts 0T, #21 32pts 0T
+                                        slots: #7 54pts 0T, #17 42pts 0T, #20 17pts 0T, #14 61pts 0T, #21 29pts 0T, #21 35pts 0T, #21 32pts 0T
+   Lincoln City (today, named manager)  alone: #24 15pts 0T, #23 31pts 0T, #24 16pts 0T, #24 13pts 0T, #24 8pts 0T, #24 10pts 0T, #24 17pts 0T
+                                        slots: #24 15pts 0T, #23 31pts 0T, #24 16pts 0T, #24 13pts 0T, #24 8pts 0T, #24 10pts 0T, #24 17pts 0T
+   Barcelona (2010-11 era)              alone: #2 91pts 1T, #2 86pts 1T, #5 64pts 0T, #16 39pts 0T, #20 18pts 0T, #19 19pts 0T
+                                        slots: #2 91pts 1T, #2 86pts 1T, #5 64pts 0T, #16 39pts 0T, #20 18pts 0T, #19 19pts 0T
+   20 of 20 season digests identical to the career played alone; board nudges 232; alone arm 9 s, total 18 s
+2) The three careers played on, switching, to season 15 each: everything on the device under 495000 characters
+   seasons played: 15, 15, 15; keys: dukb-club-manager-save 109580, dukb-cm-slot-1 179980, dukb-cm-slots 31, dukb-cm-slot-2 176598
+   total 466189 characters across 4 keys (budget 495000)
+3) A store that refuses: every refused swap answers false and moves nothing
+   6 refused swaps from slot 3; holdings unchanged: Everton s15 | Lincoln City s15 | Barcelona s15
+4) An old save, from before slots: slot 1, and reading writes nothing
+   old save (season 5, week 19, 190 h2h rows, 128722 chars) in slot 1, 1 key on the device, bytes untouched: true
+   through slot 2 and back: equal but h2h true, h2h 190 -> 186 rows, last six per opponent kept true
+
+simClubManagerSlots: all sections green
