@@ -54,7 +54,7 @@
  *   flatlevel (7) sharedroll (7) flatowner (7) flatmedia (7) flatcut (7) flatask (7)
  *   spendany (8) stalestaff (9) halfseason (9) noyear (9) lastcall (9)
  *   emptytile (10) closedsit (10) fewseasons (10) shutbutton (10) passquiet (10)
- *   longtile (10) clubvalue (10)
+ *   longtile (10) clubvalue (10) openpromise (10)
  * SIM_GM_DESK_HOST_ANCHORS=1 checks every control's anchor and stops (light).
  *
  * THE YEAR OUT HERE IS NOT THE BIND'S. Section 9 plays it with each engine's
@@ -162,6 +162,7 @@ const EDITS = {
   shutbutton: ['10', 'host', "  return !!market && market.nextYear !== 'shut';", "  return !!market && (market as HostMarket).state !== 'closed';"],
   passquiet: ['10', 'host', "    return climb !== null ? `${called} Pass, and next year ${climb}` : called;", '    return called;'],
   emptytile: ['10', 'host', "value: 'No more calls',", "value: '',"],
+  openpromise: ['10', 'host', 'As things stand next year is still open, and every year out', 'Next year is still open, and every year out'],
   longtile: ['10', 'host', "value: 'Nobody called',", "value: 'Nobody called this year',"],
   clubvalue: ['10', 'host', 'value: `Season ${hostStintSeasons(seat, index) + 1}`,', 'value: `Season ${hostStintSeasons(seat, index) + 1} with the ${name}`,'],
   closedsit: ['10', 'host', 'Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.',
@@ -1214,6 +1215,12 @@ for (const k of LINES) {
   if (k.state === 'closed' && SIT.test(`${k.line} ${k.value} ${k.sub}`)) fail(`${k.at}: a closed market tells him to sit (${k.line.slice(-70)})`);
   const told = /after (\d+) seasons?/.exec(k.line);
   if (k.out === 0 && (!told || Number(told[1]) !== k.seasons)) fail(`${k.at}: the line states ${told ? told[1] : 'no'} seasons, he ran the club for ${k.seasons}`);
+  /* Open is read at his old club's tier today and a year out can move it, so wherever the screen says next year is
+     open it says "as things stand": the quiet line, the quiet box, and the stay out line. */
+  if (k.m.nextYear === 'open') {
+    const said = [k.state === 'quiet' ? k.line : null, k.state === 'quiet' ? k.sub : null, H.hostSitArmLine(k.m, true)].filter(s => s !== null);
+    if (said.some(s => !/as things stand/i.test(s))) fail(`${k.at}: next year reads open with no "as things stand" (${said.find(s => !/as things stand/i.test(s)).slice(-70)})`);
+  }
   /* Somebody called: the line says what passing costs whenever next year is not open, and nothing more when it is.
      Judged against the line the same market prints with next year open, so no wording is pinned here. */
   if (k.state === 'offers') {

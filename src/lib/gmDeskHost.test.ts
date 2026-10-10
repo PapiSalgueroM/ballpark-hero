@@ -417,6 +417,9 @@ describe('the job market', () => {
         expect(mid.state).toBe('quiet');
         expect(mid.nextYear).toBe('open');
         expect(mid.line).toContain('Nobody called this year');
+        /* Open is read at his old club's tier today, and a year out can move it: the words never promise more. */
+        expect(mid.line).toContain('As things stand next year is still open');
+        expect(hostMarketTile(mid)).toMatchObject({ value: 'Nobody called', sub: 'Next year open, as things stand' });
       }
       /* Two seasons nowhere near the ask at the bottom: under the floor today, and a climb reopens next year. */
       const climb = hostMarket(host, lg, firedFrom(BOTTOM, ['badly', 'badly'], from), nameOf)!;

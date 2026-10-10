@@ -690,6 +690,13 @@ export function hostFeedKey(sport: GmSportKey, seat: GmSeatBlock, season: number
  * `climbTo` is the lowest tier his old club must have reached by then for
  * the market to look at him again (a better tier is a bigger pedigree, so the
  * first tier that works, counting up from where the club is, is the easiest).
+ *
+ * 'open' is read at his old club's tier TODAY. The year out is a real season
+ * and the club can drop a tier in it, which takes 4 or 5 points off his
+ * standing, so a man near the floor can meet a closed market a year after
+ * reading open (measured by the review on real seasons: about 1 in 40 quiet
+ * markets that read open). Every line that prints it therefore says "as
+ * things stand", and none promises more.
  */
 export function hostNextYear(seat: GmSeatBlock, tiers: Map<string, ClubTier>): { nextYear: HostNextYear; climbTo: ClubTier | null } {
   const p = careerProfile(seat.career, tiers);
@@ -751,7 +758,7 @@ export function hostMarketLine(
   if (state === 'closed') return `${head} Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.`;
   return climb !== null
     ? `${head} Nobody called this year. Next year ${climb}`
-    : `${head} Nobody called this year. Next year is still open, and every year out makes the phone quieter.`;
+    : `${head} Nobody called this year. As things stand next year is still open, and every year out makes the phone quieter.`;
 }
 
 /**
@@ -1104,7 +1111,7 @@ export function hostMarketTile(market: HostMarket | null): GmTileFace | null {
   }
   return {
     icon: '\u{1F4DE}', value: 'Nobody called',
-    sub: market.nextYear === 'climb' ? hangs : 'Next year is still open',
+    sub: market.nextYear === 'climb' ? hangs : 'Next year open, as things stand',
     accent: false,
   };
 }
