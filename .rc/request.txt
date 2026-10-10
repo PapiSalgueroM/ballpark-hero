@@ -1,0 +1,5 @@
+hall-nhl-s1: SIM_SEED=1 SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nhl 2000
+hall-nhl-s2: SIM_SEED=2 SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nhl 2000
+hall-nhl-s3: SIM_SEED=3 SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nhl 2000
+hall-nhl-s4: SIM_SEED=4 SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nhl 2000
+hall-nhl-s5: SIM_SEED=5 SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nhl 2000
