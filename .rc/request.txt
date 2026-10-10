@@ -1,0 +1,22 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/usPlayoffs.test.ts src/test/usPostseasonFormat.test.ts src/test/usSeason.test.ts src/test/usSeasonNfl.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/gameLawNfl.test.ts --testTimeout=300000 --hookTimeout=120000
+post: node scripts/simUsPostseason.mjs
+post-onesrc: US_POST_CONTROL=onesrc node scripts/simUsPostseason.mjs
+post-sum: US_POST_CONTROL=sum node scripts/simUsPostseason.mjs
+post-drop: US_POST_CONTROL=drop node scripts/simUsPostseason.mjs
+post-clinch: US_POST_CONTROL=clinch node scripts/simUsPostseason.mjs
+post-allhome: US_POST_CONTROL=allhome node scripts/simUsPostseason.mjs
+post-open: US_POST_CONTROL=open node scripts/simUsPostseason.mjs
+post-tries: US_POST_CONTROL=tries node scripts/simUsPostseason.mjs
+post-thin: US_POST_CONTROL=thin node scripts/simUsPostseason.mjs
+post-stream: US_POST_CONTROL=stream node scripts/simUsPostseason.mjs
+post-bogus: US_POST_CONTROL=nosuch node scripts/simUsPostseason.mjs
+post-seed3: SEEDSET=3 node scripts/simUsPostseason.mjs
+post-80: CAREERS=80 node scripts/simUsPostseason.mjs
+centre: node scripts/simUsSeasonCentre.mjs
+centre-conf: US_SEASON_CONTROL=conf node scripts/simUsSeasonCentre.mjs
+centre-poscore: US_SEASON_CONTROL=poscore node scripts/simUsSeasonCentre.mjs
+lay-compare: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs
+lay-control: US_SEASON_CONTROL=lay US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs
+law-compare: US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+law-control: US_SEASON_CONTROL=lawdrift US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
