@@ -1,0 +1,23 @@
+# Release AT, the committed head as the host will build it (a plain build, saved pages from the repo): the fences
+# that read dist and the saved pages, and the weight.
+#!serve
+#!playwright
+simSitemap: node scripts/simSitemap.mjs
+simPrerender: node scripts/simPrerender.mjs
+simIndexNow: node scripts/simIndexNow.mjs
+simIndexing: node scripts/simIndexing.mjs
+simHubs: node scripts/simHubs.mjs
+simHeadTags: node scripts/simHeadTags.mjs
+simSnapshotAssets: node scripts/simSnapshotAssets.mjs
+simPrerenderBoot: node scripts/simPrerenderBoot.mjs
+simSeoTitles: node scripts/simSeoTitles.mjs
+simSchema: node scripts/simSchema.mjs
+simInternalLinks: node scripts/simInternalLinks.mjs
+simHiddenPages: node scripts/simHiddenPages.mjs
+simRetiredRoutes: node scripts/simRetiredRoutes.mjs
+simAdsense: node scripts/simAdsense.mjs
+simHomeCopy: node scripts/simHomeCopy.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simBrand: pip3 install --quiet fonttools pillow && node scripts/simBrand.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
