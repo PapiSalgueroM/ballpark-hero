@@ -1,0 +1,2 @@
+  FAIL championship: West Ham seed 41, week 0: base {"bytes":"32b6d3702c3d334598e3","draws":"0,1106,942,1052,1444","season":1,"week":5}, candidate {"bytes":"fcd98ea81d47a77acadc","draws":"0,1147,820,1002,1372","season":1,"week":5}
+simCmFixtureFleet: CONTROL keyless FIRED: section oldsaves went red for exactly its 2 league(s) (championship, premier) and no other

@@ -1,0 +1,2 @@
+  FAIL championship: West Ham seed 1101: the fresh save is not the base's (it holds a fixture key the base does not)
+simCmFixtureFleet: CONTROL prefetch FIRED: section nofetch went red for exactly its 1 league(s) (championship) and no other

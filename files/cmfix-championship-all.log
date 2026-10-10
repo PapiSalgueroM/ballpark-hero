@@ -1,0 +1,103 @@
+FAIL real fixtures championship normal
+
+FAIL championship: gives no key while the list is not here, and refuses to read a saved key without its list
+AssertionError [ERR_ASSERTION]: Fetching the list changes exactly one field of a fresh save
++ actual - expected
+... Skipped lines
+
+  {
+    academy: {
+      candidates: [
+        {
+          fee: 2,
+...
+        fitness: 100,
++       id: 'youth-muwv75s0-19-490',
+-       id: 'youth-muwv75s0-1-490',
+        injuryWeeks: 0,
+        isYouth: true,
+        lastTen: [],
+        morale: 72,
+        name: 'Kwame Sundgren (Youth)',
+...
+        fitness: 100,
++       id: 'youth-muwv75s0-20-756',
+-       id: 'youth-muwv75s0-2-756',
+        injuryWeeks: 0,
+        isYouth: true,
+        lastTen: [],
+        morale: 72,
+        name: 'Ravi Calvet (Youth)',
+...
+        fitness: 100,
++       id: 'youth-muwv75s0-21-601',
+-       id: 'youth-muwv75s0-3-601',
+        injuryWeeks: 0,
+        isYouth: true,
+        lastTen: [],
+        morale: 72,
+        name: 'Kaan Reyes (Youth)',
+
+    at Object.unloaded (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:474:16)
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:555:33)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:584:54
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'gives no key while the list is not here, and refuses to read a saved key without its list'
++ ]
+- []
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:570:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:584:54 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'gives no key while the list is not here, and refuses to read a saved key without its list'
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+PASS real fixtures championship venues
+simCmRealFixtures venues championship: the copied fault failed exactly its own outcome (ledger) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures championship card
+simCmRealFixtures card championship: the copied fault failed exactly its own outcome (calendar) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures championship settlement
+simCmRealFixtures settlement championship: the copied fault failed exactly its own outcome (settlement) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+SKIP real fixtures championship bye: the neutral-only probe can only stand in the Premier League
+PASS real fixtures championship world
+simCmRealFixtures world championship: the copied fault failed exactly its own outcome (world) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures championship edited
+simCmRealFixtures edited championship: the copied fault failed exactly its own outcome (eligibility) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures championship legacy
+simCmRealFixtures legacy championship: the copied fault failed exactly its own outcome (legacy, baseline) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures championship future
+simCmRealFixtures future championship: the copied fault failed exactly its own outcome (future) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures championship rollover
+simCmRealFixtures rollover championship: the copied fault failed exactly its own outcome (rollover) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures championship silent
+simCmRealFixtures silent championship: the copied fault failed exactly its own outcome (unloaded) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Normal and every effective copied control execute their exact assertions
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:177:12)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:584:54 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
