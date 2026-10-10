@@ -1,0 +1,22 @@
+# Release AU proof, lane C, part 2 of 3: a plain build, three at a time
+#!build
+#!playwright
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simClubManagerDeskCues: node scripts/simClubManagerDeskCues.mjs
+simClubManagerCalendar: node scripts/simClubManagerCalendar.mjs
+simExtraTime: node scripts/simExtraTime.mjs
+simTacticsEngine: node scripts/simTacticsEngine.mjs
+simCmDataOnDemand: node scripts/simCmDataOnDemand.mjs
+simNationalPools: node scripts/simNationalPools.mjs
+simNationalities: node scripts/simNationalities.mjs
+simClubManagerClubList: node scripts/simClubManagerClubList.mjs
+simNflTruth: node scripts/simNflTruth.mjs
+simUsCareerBank: node scripts/simUsCareerBank.mjs
+simCareerBanking: node scripts/simCareerBanking.mjs
+simNflCareer: node scripts/simNflCareer.mjs
+simCareerRealism: node scripts/simCareerRealism.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simAwards: node scripts/simAwards.mjs
+simRoles: node scripts/simRoles.mjs
+simCareerLeagueWorld: node scripts/simCareerLeagueWorld.mjs
+simCareerLifeCooldowns: node scripts/simCareerLifeCooldowns.mjs
