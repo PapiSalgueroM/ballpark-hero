@@ -1,0 +1,5 @@
+# Release AU: the one red of lane B part 1, alone, with the wheel receipt off, and on origin/release-at-gate (24f57a98fa44e280f1c848276a27d86e0a3e2745)
+#!serial
+inbox-head: node scripts/simCareerInboxBeats.mjs
+inbox-nowheel: node .rc/x/mutAU.mjs nowheel && node scripts/simCareerInboxBeats.mjs; s=$?; git checkout HEAD -- src; exit $s
+base-inbox: git worktree add -f /tmp/atg5 24f57a98fa44e280f1c848276a27d86e0a3e2745 >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/atg5/node_modules; cd /tmp/atg5 && git rev-parse --short HEAD && node scripts/simCareerInboxBeats.mjs
