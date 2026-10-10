@@ -1,0 +1,8 @@
+daily-bind exit=1 4s | simDailyDeals: CONTROL bind FIRED: its 5 Premier League dates went red (2026-10-27, 2026-11-14, 2027-01-19, 2027-01-30, 2027-02-06) and no other date moved
+daily exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+daily-binddeadline exit=1 4s | simDailyDeals: CONTROL binddeadline FIRED: its 3 Premier League dates went red (2026-10-18, 2026-11-01, 2026-11-09) and no other date moved
+cmfix-ligue2 exit=1 9s | Node.js v24.21.0
+leaguefx exit=0 14s | simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 227 of 227 controls fired
+fixbal exit=0 3s | simFixtureBalance: PASS. Generated schedules keep the run-of-two contract at every league size, old saves keep their generated list, rollovers converge the flag, the AI w
+cmfix-premier exit=0 8s | simCmRealFixtures normal premier: 12 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, generated baseline held against the base 46e4231cc82b6c047da6e0b4bd
+tsc exit=0 66s | 
