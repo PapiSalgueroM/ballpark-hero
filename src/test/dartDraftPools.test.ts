@@ -84,15 +84,27 @@ describe('Dart Draft wider existing pools and varied picks', () => {
     expect(JSON.stringify(LEGENDS)).toBe(before);
   });
 
-  it('pages global 2026 rows past 900 and 1000 while excluding other years and unknown positions', async () => {
+  /* Release AT (ruling R3): the global pool is the first 2,000 rows of 2026, Round 1145's roster, read as two
+     pages and nothing past them. The other lane's Round 1182 read the whole table (this case wanted 2,105 rows
+     and a third page); the lead kept the 2,000 and Round 1182's id order key rides on it.
+     The three decoys are worth more than every real row, so each sits INSIDE the first 2,000 by value if its
+     filter is lost: a 2025 row (the year filter), a row with no age (the age filter) and a row whose position
+     the game does not know (it passes both filters, takes one of the 2,000 places and is dropped on the way
+     in, which is why 1,999 players come out). With the year filter deleted this case goes red; before this
+     rewrite that mutation hid behind the row count (remote check rAT-pools-m, line poolyear). */
+  it('reads exactly the first 2,000 global 2026 rows in two pages while excluding other years and unknown positions', async () => {
     source.rows = Array.from({ length: 2105 }, (_, index) => row(index));
-    source.rows.push({ ...row(5000), player_name: 'Fixture old season', year: 2025 }, { ...row(5001), player_name: 'Fixture missing position', position: 'Unknown' }, { ...row(5002), player_name: 'Fixture missing age', age: null });
+    source.rows.push({ ...row(5000), player_name: 'Fixture old season', year: 2025, market_value_usd: 9999000000 },
+      { ...row(5001), player_name: 'Fixture missing position', position: 'Unknown', market_value_usd: 9998000000 },
+      { ...row(5002), player_name: 'Fixture missing age', age: null, market_value_usd: 9997000000 });
     const result = await fetchDartDraftPool();
-    expect(result.current).toHaveLength(2105); expect(result.current.at(-1)?.name).toBe('Fixture Player 2104');
+    expect(result.current).toHaveLength(1999);
+    expect(result.current[0]?.name).toBe('Fixture Player 0000'); expect(result.current.at(-1)?.name).toBe('Fixture Player 1998');
     expect(result.current.some(value => value.name.includes('missing') || value.name.includes('old season'))).toBe(false);
     expect(result.legends).toBe(LEGENDS);
-    expect(source.calls.map(call => call.from)).toEqual([0, 1000, 2000]);
-    expect(source.calls.every(call => call.year === 2026 && call.orders.join(',') === 'market_value_usd,player_name,id')).toBe(true);
+    expect(source.calls.map(call => call.from).sort((x, y) => x - y)).toEqual([0, 1000]);
+    expect(source.calls.every(call => call.to - call.from === 999)).toBe(true);
+    expect(source.calls.every(call => call.year === 2026 && call.ageRequired === true && call.orders.join(',') === 'market_value_usd,player_name,id')).toBe(true);
   });
 
   it('pages a country beyond 120 and 1000 and keeps nationality and era in the actual choice path', async () => {

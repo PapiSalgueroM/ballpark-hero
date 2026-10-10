@@ -151,8 +151,10 @@ describe('actual Stat Detective committed feedback and access', () => {
       else expect(view.getByText(`Next clue unlocks after miss ${pointers[misses]}`)).toBeVisible();
       if (misses < 6) choose(view, wrong[misses]);
     }
-    expect(view.container.querySelector('[data-stat-clue="Recorded seasons"]')).toBeNull();
-    expect(view.container.querySelector('[data-stat-clue="Recorded franchises"]')).toBeNull();
+    /* Release AT: these two name the labels that ship (Career span, Career franchises), as on main. The merge
+       had left the other lane's labels here, which exist nowhere in the tree, so the lines could not fail. */
+    expect(view.container.querySelector('[data-stat-clue="Career span"]')).toBeNull();
+    expect(view.container.querySelector('[data-stat-clue="Career franchises"]')).toBeNull();
     expect(recordCompletion).not.toHaveBeenCalled();
   });
 

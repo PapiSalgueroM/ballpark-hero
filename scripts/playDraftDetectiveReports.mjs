@@ -31,7 +31,17 @@ market.push({ ...market[0], id: 9999, year: 2025, player_name: 'Fixture wrong ye
 const nbaRow = (id, name, star) => ({ id, season: '1994-95', player_name: name, position: 'PG', team: 'BOS', minutes: 2200, pts: star ? 2000 : 800, trb: star ? 600 : 300, ast: star ? 500 : 200, stl: 50, blk: 10 });
 const nba = [...Array.from({ length: 501 }, (_, index) => nbaRow(index, `Fixture Star ${index}`, true)), ...Array.from({ length: 2201 }, (_, index) => nbaRow(10000 + index, index < 3 ? ['Fixture Guess One', 'Fixture Guess Two', 'Fixture Guess Three'][index] : `Fixture Rotation ${index}`, false))];
 nba.push({ ...nbaRow(999998, 'Fixture Case Anchor', true), season: '1989-90', team: 'LAL' }, { ...nbaRow(999999, 'Fixture Case Anchor', true), season: '1995-96' }, { ...nbaRow(1000000, 'Fixture Case Anchor', false), season: '2000-01', minutes: 80 });
-const scope = 'Recorded seasons and franchises cover NBA seasons with 500+ minutes in these case files. Years are season end years. Short stints and other seasons can be missing.';
+/* Release AT (ruling R3): this walk follows what ships. Stat Detective's span and franchise count are complete since
+   Round 1145 (the view bref_nba_career_spans, labels Career span and Career franchises), so the other lane's Round
+   1183 sentence about 500 minute seasons would be false and the integrator's sentence stands. The page fails closed
+   without the view, so the fixture answers it: one row a name, and the anchor's row runs from 1989-90 to the 80
+   minute stint of 2000-01, which the old 500 minute window (1990 to 1996) left out. The global Dart Draft pool is
+   the first 2,000 rows in two pages (Round 1145), not the whole table. */
+const scope = 'Career span and Career franchises count every NBA season on file for the player, short stints included. Years are season end years. The files run from 1949-50 to 2024-25, so a career that started earlier or is still going shows only those seasons.';
+const spans = [...new Set(nba.map(row => row.player_name))].map(name => name === 'Fixture Case Anchor'
+  ? { player_name: name, first_season: '1989-90', last_season: '2000-01', cohort: 1967, rows_500: 2, teams: 'LAL,BOS' }
+  : { player_name: name, first_season: '1994-95', last_season: '1994-95', cohort: 1970, rows_500: 1, teams: 'BOS' })
+  .sort((a, b) => (a.player_name < b.player_name ? -1 : a.player_name > b.player_name ? 1 : 0) || a.cohort - b.cohort);
 const evidence = { fixture: 'Fictional response rows, no live database calls', target, viewports: [], checks: [] };
 let checks = 0, failed = 0;
 const check = (ok, label) => { checks += 1; if (!ok) failed += 1; evidence.checks.push({ ok, label }); console.log(`${ok ? 'ok  ' : 'FAIL'} ${label}`); };
@@ -60,7 +70,7 @@ async function walk(width, height) {
       return route.fulfill({ status: 200, headers: cors, body: '{"ok":true}' });
     }
     const table = url.pathname.split('/').at(-1);
-    if (!['player_market_values', 'bref_nba_player_seasons'].includes(table)) return route.abort();
+    if (!['player_market_values', 'bref_nba_player_seasons', 'bref_nba_career_spans'].includes(table)) return route.abort();
     const offset = Number(url.searchParams.get('offset') || 0), limit = Number(url.searchParams.get('limit') || 1000);
     requests.push({ table, offset, limit, year: url.searchParams.get('year'), nationality: url.searchParams.get('nationality'), position: url.searchParams.get('position'), order: url.searchParams.get('order'), minutes: url.searchParams.get('minutes') });
     let rows;
@@ -69,6 +79,8 @@ async function walk(width, height) {
       const positions = url.searchParams.get('position')?.replace(/^in\.\(|\)$/g, '').split(',').map(value => value.replaceAll('"', ''));
       rows = market.filter(row => (!url.searchParams.has('year') || `eq.${row.year}` === url.searchParams.get('year')) && (!nations || nations.includes(row.nationality)) && (!positions || positions.includes(row.position)))
         .sort((a, b) => b.market_value_usd - a.market_value_usd || a.player_name.localeCompare(b.player_name) || a.id - b.id);
+    } else if (table === 'bref_nba_career_spans') {
+      rows = spans;
     } else {
       const floor = Number(url.searchParams.get('minutes')?.split('.').at(-1) || 0);
       rows = nba.filter(row => row.minutes >= floor).sort((a, b) => b.id - a.id);
@@ -108,28 +120,29 @@ async function walk(width, height) {
     }
     const global = requests.filter(request => request.table === 'player_market_values' && !request.nationality);
     const national = requests.filter(request => request.table === 'player_market_values' && request.nationality);
-    check(global.map(request => request.offset).join() === '0,1000,2000', `${tag}: actual global request pages beyond 900 and 1000`);
+    check(global.map(request => request.offset).sort((a, b) => a - b).join() === '0,1000' && global.every(request => request.limit === 1000), `${tag}: actual global request is the first 2,000 rows as two pages and nothing past them`);
     check(national.map(request => request.offset).join() === '0,1000' && [...global, ...national].every(request => request.year === 'eq.2026' && request.order?.endsWith('id.asc')), `${tag}: country pages beyond 120 and 1000 with stable id order and 2026 scope`);
     check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${tag}: Dart Draft has no horizontal overflow`);
 
     await page.goto(`${BASE}/stat-detective`, { waitUntil: 'domcontentloaded' });
     await page.getByRole('button', { name: /^Stars/ }).waitFor({ timeout: 30000 });
-    check(await page.getByText(scope, { exact: true }).first().isVisible(), `${tag}: recorded 500 minute scope appears before play`);
+    check(await page.getByText(scope, { exact: true }).first().isVisible(), `${tag}: the career span scope appears before play`);
+    { const box = await page.getByRole('button', { name: /^Deep Cuts/ }).boundingBox(); check(!!box && box.y + box.height <= height, `${tag}: both difficulty buttons are on the first screen (Deep Cuts ends at ${box ? Math.round(box.y + box.height) : 'nowhere'} of ${height})`); }
     await page.evaluate(() => { window.__sample = 0; });
     await page.getByRole('button', { name: /^Stars/ }).click();
     for (const name of ['Fixture Guess One', 'Fixture Guess Two', 'Fixture Guess Three']) {
       await page.getByRole('textbox', { name: 'Guess the mystery player' }).fill(name);
       await page.getByRole('textbox', { name: 'Guess the mystery player' }).press('Enter');
     }
-    check(await page.locator('[data-stat-clue="Recorded seasons"]').innerText() === 'Recorded seasons: 1990-1996', `${tag}: clue labels the actual eligible end-year window`);
-    check(await page.locator('[data-stat-clue="Recorded franchises"]').innerText() === 'Recorded franchises: 2' && await page.locator('[data-stat-profile-scope]').innerText() === scope, `${tag}: profile franchise count retains its stated scope`);
-    check(await page.locator('[data-stat-clue="Career span"], [data-stat-clue="Career franchises"]').count() === 0 && await page.getByText('Fixture Case Anchor', { exact: true }).count() === 0, `${tag}: no full-career claim or visible answer spoiler`);
+    check(await page.locator('[data-stat-clue="Career span"]').innerText() === 'Career span: 1990-2001', `${tag}: the clue is the complete span in season end years, the 80 minute stint of 2000-01 included`);
+    check(await page.locator('[data-stat-clue="Career franchises"]').innerText() === 'Career franchises: 2' && await page.locator('[data-stat-profile-scope]').innerText() === scope, `${tag}: the franchise count sits beside its stated scope`);
+    check(await page.locator('[data-stat-clue="Recorded seasons"], [data-stat-clue="Recorded franchises"]').count() === 0 && await page.getByText('Fixture Case Anchor', { exact: true }).count() === 0, `${tag}: no 500 minute label and no visible answer spoiler`);
     await page.screenshot({ path: path.join(SHOTS, `detective-${tag}.png`) });
     const help = page.getByRole('button', { name: 'How to play' });
     const helpTrigger = await help.elementHandle({ timeout: 2000 });
     await help.focus(); await page.keyboard.press('Enter');
     const dialog = page.getByRole('dialog', { name: 'Stat Detective rules' });
-    check(await dialog.getByText(scope, { exact: true }).isVisible(), `${tag}: reopened help repeats accurate recorded scope`);
+    check(await dialog.getByText(scope, { exact: true }).isVisible(), `${tag}: reopened help repeats the career span scope`);
     record.help = { phase: 'focus readiness' };
     try {
       await dialog.waitFor({ state: 'visible', timeout: 2000 });
@@ -154,8 +167,9 @@ async function walk(width, height) {
     await page.getByText('Thanks for reporting!', { exact: true }).waitFor();
     const report = reports.at(-1);
     check(report?.game_type === 'stat-detective' && report.game_context.puzzleId === 'Fixture Case Anchor|1995-96|BOS' && report.game_context.player === 'Fixture Case Anchor' && report.game_context.difficulty === 'stars', `${tag}: intercepted report identifies exact random puzzle and mode`);
-    check(report?.game_context.recordedSeasons === '1990-1996' && report.game_context.profileScope === 'recorded-500-minute-seasons' && report.game_context.guesses.join() === 'Fixture Guess One,Fixture Guess Two,Fixture Guess Three', `${tag}: report includes visible scope and actual guesses`);
+    check(report?.game_context.recordedSeasons === '1990-2001' && report.game_context.profileScope === 'career-span-every-season-on-file' && report.game_context.guesses.join() === 'Fixture Guess One,Fixture Guess Two,Fixture Guess Three', `${tag}: report includes visible scope and actual guesses`);
     check(requests.filter(request => request.table === 'bref_nba_player_seasons').length === 25 && requests.filter(request => request.table === 'bref_nba_player_seasons').every(request => request.minutes === 'gte.500'), `${tag}: existing mystery eligibility remains 500 minutes`);
+    { const view = requests.filter(request => request.table === 'bref_nba_career_spans'); check(view.length >= 3 && view.some(request => request.offset === 0) && view.every(request => request.offset % 1000 === 0 && request.order === 'player_name.asc,cohort.asc'), `${tag}: the spans view is read in whole pages from the first row, in its key order (${view.length} requests)`); }
     check(errors.length === 0 && await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${tag}: no page errors or sideways Stat Detective scroll`);
   } finally { await context.close(); }
 }

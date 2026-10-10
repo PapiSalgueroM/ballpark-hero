@@ -9,32 +9,36 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const mode = process.env.REPORTED_POOLS_CONTROL || '';
 const outcomes = {
-  help: 'explains the eligible season window before play and in reopened help',
-  profile: 'shows recorded seasons and franchises without claiming complete career dates',
+  /* Release AT (ruling R3): the outcomes and controls below follow what ships. Stat Detective keeps Round 1145's
+     complete career span and its labels (the other lane's Round 1183 words about 500 minute seasons would be false of
+     it), and the global Dart Draft pool stays the first 2,000 rows. Every control still has to turn exactly its
+     own outcomes red, so each was re-anchored on text the merged tree holds. */
+  help: 'explains what the career span covers before play and in reopened help',
+  profile: 'shows the complete career span and franchises under their shipped labels',
   context: 'captures the exact random case and mode while keeping the answer out of visible play',
   variety: 'keeps the strongest three and varies five without replacement beyond the old best eight',
   eligible: 'keeps used names and wrong positions out while preserving distinct accented names',
   bonus: 'uses the same compact variety policy for bonus slots and leaves the shared legends intact',
-  global: 'pages global 2026 rows past 900 and 1000 while excluding other years and unknown positions',
+  global: 'reads exactly the first 2,000 global 2026 rows in two pages while excluding other years and unknown positions',
   country: 'pages a country beyond 120 and 1000 and keeps nationality and era in the actual choice path',
   position: 'pages the targeted position fallback beyond 12 after an unavailable country read',
   partial: 'fails closed rather than returning a partial global or country pool after a later page fails',
 };
 const spec = {
-  'stat-span': { file: 'src/lib/statDetective.ts', alias: '@/lib/statDetective', old: "label: 'Recorded seasons'", replacement: "label: 'Career span'", outcomes: ['profile'] },
-  'stat-franchises': { file: 'src/lib/statDetective.ts', alias: '@/lib/statDetective', old: "label: 'Recorded franchises'", replacement: "label: 'Career franchises'", outcomes: ['profile'] },
-  'stat-scope': { file: 'src/lib/statDetective.ts', alias: '@/lib/statDetective', old: 'Short stints and other seasons can be missing.', replacement: 'These are complete career dates.', outcomes: ['help', 'profile'] },
+  'stat-span': { file: 'src/lib/statDetective.ts', alias: '@/lib/statDetective', old: "label: 'Career span'", replacement: "label: 'Recorded seasons'", outcomes: ['profile'] },
+  'stat-franchises': { file: 'src/lib/statDetective.ts', alias: '@/lib/statDetective', old: "label: 'Career franchises'", replacement: "label: 'Recorded franchises'", outcomes: ['profile'] },
+  'stat-scope': { file: 'src/lib/statDetective.ts', alias: '@/lib/statDetective', old: 'count every NBA season on file for the player, short stints included.', replacement: 'count seasons with 500+ minutes only.', outcomes: ['help', 'profile'] },
   'stat-context': { file: 'src/pages/StatDetective.tsx', alias: '@/pages/StatDetective', old: 'puzzleId: mystery?.key ?? null, player: mystery?.player ?? null,', replacement: 'puzzleId: null, player: null,', outcomes: ['context'] },
-  'dart-variety': { file: 'src/lib/dartMap.ts', alias: '@/lib/dartMap', old: 'const index = Math.floor(Math.random() * remaining.length);', replacement: 'const index = 0;', outcomes: ['variety', 'bonus', 'country', 'position'] },
+  'dart-variety': { file: 'src/lib/dartMap.ts', alias: '@/lib/dartMap', old: 'const index = Math.floor(Math.random() * remaining.length);', replacement: 'const index = 0;', outcomes: ['variety', 'bonus'] }, /* a country hit keeps Round 1145's own tiles (countryTiles), so this draw is the gold zones' alone */
   'dart-best': { file: 'src/lib/dartMap.ts', alias: '@/lib/dartMap', old: 'const picks = eligible.slice(0, 3);', replacement: 'const picks = eligible.slice(-3);', outcomes: ['variety', 'bonus'] },
   'dart-used': { file: 'src/lib/dartMap.ts', alias: '@/lib/dartMap', old: 'used.has(key) || seen.has(key)', replacement: 'false', outcomes: ['eligible', 'bonus'] },
   'dart-slot': { file: 'src/lib/dartMap.ts', alias: '@/lib/dartMap', old: '!fitsSlot(player, slot)', replacement: 'false', outcomes: ['eligible', 'bonus'] },
-  'dart-global': { file: 'src/lib/dartDraft.ts', alias: '@/lib/dartDraft', old: '.range(from, to));', replacement: '.range(from, to).limit(900));', outcomes: ['global', 'partial'] },
+  'dart-global': { file: 'src/lib/dartDraft.ts', alias: '@/lib/dartDraft', old: '.range(from, to),', replacement: '.range(from, to).limit(900),', outcomes: ['global'] },
   'dart-country': { file: 'src/lib/dartMap.ts', alias: '@/lib/dartMap', old: ".in('nationality', names)", replacement: ".in('nationality', names).limit(120)", outcomes: ['country', 'partial'] },
   'dart-position': { file: 'src/lib/dartMap.ts', alias: '@/lib/dartMap', old: ".in('position', rawPositionsFor(slot))", replacement: ".in('position', rawPositionsFor(slot)).limit(12)", outcomes: ['position'] },
-  'dart-year': { file: 'src/lib/dartDraft.ts', alias: '@/lib/dartDraft', old: ".eq('year', 2026)", replacement: ".eq('year', 2025)", outcomes: ['global', 'partial'] },
+  'dart-year': { file: 'src/lib/dartDraft.ts', alias: '@/lib/dartDraft', old: ".eq('year', 2026)", replacement: ".eq('year', 2025)", outcomes: ['global'] },
   'dart-nation': { file: 'src/lib/dartMap.ts', alias: '@/lib/dartMap', old: ".in('nationality', names)", replacement: '', outcomes: ['country', 'position'] },
-  'dart-partial': { file: 'src/lib/dartDraft.ts', alias: '@/lib/dartDraft', old: 'if (error || !data || data.length === 0)', replacement: 'if (!data || data.length === 0)', outcomes: ['partial'] },
+  'dart-partial': { file: 'src/lib/dartDraft.ts', alias: '@/lib/dartDraft', old: 'if (error || data.length === 0) return empty;', replacement: 'if (data.length === 0) return empty;', outcomes: ['partial'] },
 };
 assert.ok(!mode || mode in spec, 'Unknown copied control');
 const files = ['src/lib/statDetective.ts', 'src/pages/StatDetective.tsx', 'src/lib/dartMap.ts', 'src/lib/dartDraft.ts'];

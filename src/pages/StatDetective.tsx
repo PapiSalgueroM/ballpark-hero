@@ -248,7 +248,6 @@ const StatDetective = () => {
           <div className="bg-card border border-border rounded-2xl p-4 mb-4 text-sm text-muted-foreground space-y-2">
             <p>Study the stat line, then type at least two letters and pick a player. You have eight guesses.</p>
             <p>{CLUE_RULES}</p>
-            <p>{RECORDED_PROFILE_SCOPE}</p>
             <p>{WORKED_EXAMPLE}</p>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -266,6 +265,10 @@ const StatDetective = () => {
               </button>
             ))}
           </div>
+          {/* Release AT: the scope line sits under the two difficulty buttons. Above them it pushed Deep Cuts
+              under the fold of a 390 by 844 phone (Stars at 675 to 813, Deep Cuts at 825 to 963). It is still
+              on the pick screen before play, in the rules behind the ?, beside a case and in the guide. */}
+          <p data-stat-pick-scope className="mt-4 text-xs text-muted-foreground">{RECORDED_PROFILE_SCOPE}</p>
           </>
         )}
 

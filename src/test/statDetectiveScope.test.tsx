@@ -17,7 +17,11 @@ const mystery: MysterySeason = { key: 'fixture-case|1994-95|FXB', player: 'Fixtu
 const target: PlayerProfile = { name: mystery.player, firstYear: 1990, lastYear: 1996, positions: ['PG'], franchises: ['fixture-bay', 'fixture-hill'], peak: 95 };
 const wrong: PlayerProfile[] = ['One', 'Two', 'Three'].map(name => ({ ...target, name: `Fixture Guess ${name}`, peak: 70, franchises: ['fixture-away'] }));
 let data: StatDetectiveData;
-const scope = 'Recorded seasons and franchises cover NBA seasons with 500+ minutes in these case files. Years are season end years. Short stints and other seasons can be missing.';
+/* Release AT (ruling R3): the sentence that ships. Round 1145 made the span and the franchise count complete (every
+   NBA season on file, from the view bref_nba_career_spans), so the other lane's Round 1183 sentence about 500 minute
+   seasons and missing stints would be false. It is written out here, not imported, so a change to the shipped words
+   turns these cases red (simReportedGamePools control stat-scope). */
+const scope = 'Career span and Career franchises count every NBA season on file for the player, short stints included. Years are season end years. The files run from 1949-50 to 2024-25, so a career that started earlier or is still going shows only those seasons.';
 
 beforeEach(() => {
   vi.spyOn(Math, 'random').mockReturnValue(0);
@@ -37,7 +41,7 @@ const choose = (view: ReturnType<typeof render>, profile: PlayerProfile) => {
 const context = (view: ReturnType<typeof render>) => JSON.parse(view.getByRole('button', { name: 'Fixture report' }).getAttribute('data-report-context')!);
 
 describe('Stat Detective recorded profile scope', () => {
-  it('explains the eligible season window before play and in reopened help', async () => {
+  it('explains what the career span covers before play and in reopened help', async () => {
     const view = await ready();
     expect(view.getByText(scope)).toBeVisible();
     const help = view.getByRole('button', { name: 'How to play' });
@@ -51,15 +55,15 @@ describe('Stat Detective recorded profile scope', () => {
     });
   });
 
-  it('shows recorded seasons and franchises without claiming complete career dates', async () => {
+  it('shows the complete career span and franchises under their shipped labels', async () => {
     const before = JSON.stringify(data);
     const view = await ready(); fireEvent.click(view.getByRole('button', { name: /^Stars/ }));
     for (const profile of wrong) choose(view, profile);
-    expect(view.container.querySelector('[data-stat-clue="Recorded seasons"]')).toHaveTextContent('Recorded seasons: 1990-1996');
-    expect(view.container.querySelector('[data-stat-clue="Recorded franchises"]')).toHaveTextContent('Recorded franchises: 2');
+    expect(view.container.querySelector('[data-stat-clue="Career span"]')).toHaveTextContent('Career span: 1990-1996');
+    expect(view.container.querySelector('[data-stat-clue="Career franchises"]')).toHaveTextContent('Career franchises: 2');
     expect(view.container.querySelector('[data-stat-profile-scope]')).toHaveTextContent(scope);
-    expect(view.container.querySelector('[data-stat-clue="Career span"]')).toBeNull();
-    expect(view.container.querySelector('[data-stat-clue="Career franchises"]')).toBeNull();
+    expect(view.container.querySelector('[data-stat-clue="Recorded seasons"]')).toBeNull();
+    expect(view.container.querySelector('[data-stat-clue="Recorded franchises"]')).toBeNull();
     expect(hintsFor(mystery, 3)).toEqual([{ label: 'Surname starts with', value: 'A' }]);
     expect(JSON.stringify(data)).toBe(before);
   });
@@ -68,7 +72,7 @@ describe('Stat Detective recorded profile scope', () => {
     const view = await ready();
     expect(context(view)).toMatchObject({ puzzleId: null, player: null, phase: 'pick' });
     fireEvent.click(view.getByRole('button', { name: /^Deep Cuts/ }));
-    expect(context(view)).toEqual({ puzzleId: mystery.key, player: mystery.player, season: mystery.season, team: 'FXB', difficulty: 'deep', phase: 'playing', guesses: [], profileScope: 'recorded-500-minute-seasons', recordedSeasons: '1990-1996' });
+    expect(context(view)).toEqual({ puzzleId: mystery.key, player: mystery.player, season: mystery.season, team: 'FXB', difficulty: 'deep', phase: 'playing', guesses: [], profileScope: 'career-span-every-season-on-file', recordedSeasons: '1990-1996' });
     expect(view.queryByText(mystery.player)).toBeNull();
     choose(view, wrong[0]);
     expect(context(view).guesses).toEqual([wrong[0].name]);
